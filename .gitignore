@@ -1,0 +1,14 @@
+# Commercial game data. Never commit. The player imports data they own.
+Content/
+*.dat
+*.DAT
+*.exe
+*.EXE
+
+# Build output
+.build/
+main
+*.app
+
+# macOS
+.DS_Store
