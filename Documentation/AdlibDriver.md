@@ -37,12 +37,43 @@ Ad-Lib Music/FX Driver - (c) 1991 Sound Images   Tel. 061 773 4541
 | Offset | Contents |
 | --- | --- |
 | `0x0000` | x86 driver code |
+| `0x0040` | Chip initialization. Loads the table at `0x6d` and clears the voice array |
+| `0x0045` | `mov dx, 0x388`, the Ad-Lib base port |
+| `0x006d` | Initialization table. 27 words that silence every voice |
+| `0x00a6` | Ad-Lib card detection |
+| `0x0559` | Register write helper |
 | `0x0600` | OPL2 channel register table. The `b4`-`b8` values are OPL registers |
 | `0x0660` | Banner and the test menu |
 | `0x0828` | Scancode to ASCII table for the test menu |
-| `0x08a3` | Logarithmic volume table, descending from `0x3f` |
+| `0x08a3` | Base I/O port, holding `0x0388` |
+| `0x08a7` | Logarithmic volume table, descending from `0x3f` |
 | `0x0927` | Ascending 16-bit table, 110 entries from `0x02b2`. Probably pitch |
+| `0x05ac` | Voice state array. Nine entries of 20 bytes |
 | `0x0e1a`-`0x55e3` | FM instrument patches and tune data |
+
+## How the driver writes registers
+
+The helper at `0x0559` takes the register in `AL` and the value in `AH`:
+
+```
+push dx
+mov  dx, [0x08a3]   ; base port, 0x388
+out  dx, al         ; select the register
+in   al, dx  (x12)  ; the chip needs a delay here
+mov  al, ah
+inc  dx             ; the data port is base + 1
+out  dx, al         ; write the value
+```
+
+Callers load both halves at once, so `mov ax, 0x6004` writes `0x60` to
+register `0x04`.
+
+The initialization table at `0x006d` confirms the register model. It sets every
+sustain and release register from `0x80` to `0x95` to `0x0f`, then clears every
+key-on register from `0xb0` to `0xb8`.
+
+The detection routine at `0x00a6` is the standard Ad-Lib test. It resets the
+timers, reads the status port, runs timer 1, and reads the status again.
 
 ## The tunes
 
