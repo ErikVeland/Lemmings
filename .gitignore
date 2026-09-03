@@ -2,6 +2,7 @@
 Content/
 Sources/Music/
 Sources/Ports/
+Sources/lemmings_*/
 *.mod
 *.ipf
 *.adf
