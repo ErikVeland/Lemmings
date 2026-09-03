@@ -46,7 +46,8 @@ reported rather than ignored.
 | NeoLemmix `.nxlv` data | Parsed, style-resolved, rendered, and played through the NeoLemmix engine |
 | NeoLemmix verification | Verified against synthetic content only. No fan pack has been tested |
 | NeoLemmix lemming sprites | Not loaded. NeoLemmix levels borrow the imported DOS sprites |
-| Sound and music | Not implemented |
+| FM synthesis | Native YM3812 implemented and tested. Frequency tracks the hardware formula |
+| Original tunes | Not playable. The Sound Images sequencer format is undecoded |
 | Distribution | Local ad-hoc signed universal build for macOS 13+. Developer ID signing and notarization are not configured |
 
 ## Build and run
@@ -78,7 +79,7 @@ On a healthy SwiftPM installation, `swift test` remains available.
 Run every suite:
 
 ```sh
-for s in portable-tests classic-dos-simulation-regressions classic-dos-campaign-smoke classic-dos-replay-tests neolemmix-simulation-tests neolemmix-end-to-end nxlv-renderer-tests nxlv-style-resolver-tests; do zsh Scripts/run-$s.sh; done
+for s in portable-tests classic-dos-simulation-regressions classic-dos-campaign-smoke classic-dos-replay-tests neolemmix-simulation-tests neolemmix-end-to-end nxlv-renderer-tests nxlv-style-resolver-tests opl2-tests; do zsh Scripts/run-$s.sh; done
 ```
 
 Render a frame of the real views to a PNG, which needs no screen-capture
@@ -92,6 +93,16 @@ Measure how far the engine gets on every official level:
 
 ```sh
 zsh Scripts/run-classic-dos-solvability-probe.sh
+```
+
+Inspect the imported audio driver, and hear the synthesizer:
+
+```sh
+zsh Scripts/probe-audio.sh
+```
+
+```sh
+zsh Scripts/render-opl2-demo.sh opl2.wav
 ```
 
 The suites verify:
@@ -108,14 +119,16 @@ The suites verify:
 - a NeoLemmix level from text through styles, rendering, and simulation to a
   win;
 - extended NeoLemmix parsing, typed sections, diagnostics, and dependency
-  scans.
+  scans;
+- OPL2 frequency against the hardware formula, envelope stages, a nine-channel
+  mix, and patch loading on every channel.
 
 ## Remaining work
 
 1. Record replays for every official level, then gate physics changes on them.
    Three levels are covered. The other 117 need multi-skill replays.
-2. Decode and play the audio that the player imports. Do not bundle commercial
-   assets.
+2. Decode the Sound Images sequencer format so the driver's own tunes feed the
+   synthesizer. See `Documentation/AdlibDriver.md`.
 3. Load NeoLemmix lemming sprites from style packs.
 4. Test against real NeoLemmix packs, including missing-dependency and
    malformed content.
@@ -132,6 +145,7 @@ The suites verify:
 - `Sources/NxlvKit/ClassicMainDAT.swift`: `MAIN.DAT` sprites, palettes, and
   destruction masks.
 - `Sources/NxlvKit/ClassicDOSSimulation.swift`: the DOS-accurate engine.
+- `Sources/NxlvKit/OPL2.swift`: the native YM3812 FM synthesizer.
 - `Sources/NxlvKit/NxlvDocument.swift`: ordered NeoLemmix document parser.
 - `Sources/NxlvKit/NxlvLevel.swift`: typed NeoLemmix level model.
 - `Sources/LemmingsLocal/main.swift`: the native AppKit app and run loop.
