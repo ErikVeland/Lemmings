@@ -31,6 +31,13 @@ private struct LevelReport {
 private let ticksToRun = ClassicDOSRules.ticksPerSecond * 30
 
 private func run(dataDirectory: URL) throws -> [LevelReport] {
+    // The scanner must find every physical record without an order table.
+    let scanned = try ClassicCampaign.scan(directory: dataDirectory)
+    try require(
+        scanned.levels.count == 80,
+        "scan found \(scanned.levels.count) physical levels, expected 80")
+    print("Scanner found \(scanned.levels.count) physical levels with no order table.")
+
     let campaign = try ClassicCampaignDefinition.originalDOSLemmings.load(from: dataDirectory)
     let assets = try ClassicMainDATAssets.load(from: dataDirectory)
 

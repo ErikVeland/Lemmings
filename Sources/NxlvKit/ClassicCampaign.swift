@@ -7,6 +7,7 @@ public enum ClassicCampaignError: Error, Equatable, CustomStringConvertible {
     case invalidEncodedReference(Int)
     case invalidLevelReference(rank: String, number: Int, file: Int, section: Int)
     case missingOddTableEntry(index: Int)
+    case noLevelFiles(prefix: String)
 
     public var description: String {
         switch self {
@@ -22,6 +23,8 @@ public enum ClassicCampaignError: Error, Equatable, CustomStringConvertible {
             return "\(rank) \(number) refers to missing LEVEL\(String(format: "%03d", file)).DAT section \(section)."
         case let .missingOddTableEntry(index):
             return "ODDTABLE.DAT has no property record at index \(index)."
+        case let .noLevelFiles(prefix):
+            return "No \(prefix)###.DAT files were found in the directory."
         }
     }
 }
@@ -220,5 +223,65 @@ public struct ClassicCampaignDefinition: Codable, Equatable, Sendable {
             }
         }
         return ClassicCampaign(name: name, levels: campaignLevels)
+    }
+}
+
+extension ClassicCampaign {
+    /// Discovers every level in a directory without a hand-authored order.
+    ///
+    /// Retail Lemmings needs its authored order, because `ODDTABLE.DAT`
+    /// overrides and the shipped sequence do not follow file order. Other data
+    /// sets in the same container format can be listed by scanning, which
+    /// means a new title needs no order table before it becomes playable.
+    ///
+    /// Sections that are not level records are skipped, so padding and
+    /// non-level data do not stop the scan.
+    public static func scan(
+        directory: URL,
+        name: String = "Scanned levels",
+        levelFilePrefix: String = "LEVEL"
+    ) throws -> ClassicCampaign {
+        let contents = try FileManager.default.contentsOfDirectory(
+            at: directory,
+            includingPropertiesForKeys: nil,
+            options: [.skipsHiddenFiles]
+        )
+
+        let prefix = levelFilePrefix.lowercased()
+        let levelFiles = contents
+            .filter { url in
+                let filename = url.lastPathComponent.lowercased()
+                guard filename.hasPrefix(prefix), filename.hasSuffix(".dat") else { return false }
+                let middle = filename.dropFirst(prefix.count).dropLast(4)
+                return middle.count == 3 && middle.allSatisfy(\.isNumber)
+            }
+            .sorted { $0.lastPathComponent.lowercased() < $1.lastPathComponent.lowercased() }
+
+        guard !levelFiles.isEmpty else {
+            throw ClassicCampaignError.noLevelFiles(prefix: levelFilePrefix.uppercased())
+        }
+
+        var levels: [ClassicCampaignLevel] = []
+        for url in levelFiles {
+            let filename = url.lastPathComponent.lowercased()
+            let digits = filename.dropFirst(prefix.count).dropLast(4)
+            let fileID = Int(digits) ?? 0
+            let sections = try ClassicDATArchive.decode(
+                Data(contentsOf: url, options: .mappedIfSafe))
+
+            for (sectionIndex, section) in sections.enumerated() {
+                guard section.data.count == ClassicLevel.recordSize else { continue }
+                guard let level = try? ClassicLevel(data: section.data) else { continue }
+                levels.append(ClassicCampaignLevel(
+                    rank: "All",
+                    number: levels.count + 1,
+                    archiveFile: fileID,
+                    archiveSection: sectionIndex,
+                    usesOddTableProperties: false,
+                    level: level
+                ))
+            }
+        }
+        return ClassicCampaign(name: name, levels: levels)
     }
 }
