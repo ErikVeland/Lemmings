@@ -33,7 +33,7 @@ for architecture in "${architectures[@]}"; do
     -framework AppKit \
     -Xlinker -rpath -Xlinker @executable_path/../Frameworks -Xlinker -w \
     -o "$architecture_dir/LemmingsLocal" \
-    "$project_dir/Sources/LemmingsLocal/main.swift"
+    "$project_dir"/Sources/LemmingsLocal/*.swift
 
   library_inputs+=("$architecture_dir/libNxlvKit.dylib")
   executable_inputs+=("$architecture_dir/LemmingsLocal")
