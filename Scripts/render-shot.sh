@@ -15,12 +15,14 @@ swiftc -swift-version 6 -parse-as-library \
 
 swiftc -swift-version 6 \
   -I "$build_dir/modules" -L "$build_dir" -lNxlvKit \
-  -framework AppKit \
+  -framework AppKit -framework Metal -framework QuartzCore \
   -Xlinker -rpath -Xlinker "$build_dir" -Xlinker -w \
   -o "$build_dir/LemmingsShot" \
   "$project_dir/Sources/LemmingsLocal/PlayfieldView.swift" \
   "$project_dir/Sources/LemmingsLocal/PanelView.swift" \
   "$project_dir/Sources/LemmingsLocal/GameSession.swift" \
+  "$project_dir/Sources/LemmingsLocal/CRTShaders.swift" \
+  "$project_dir/Sources/LemmingsLocal/CRTView.swift" \
   "$project_dir/Tools/LemmingsShot/main.swift"
 
 "$build_dir/LemmingsShot" "$@"

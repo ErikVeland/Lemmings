@@ -1,0 +1,213 @@
+import Foundation
+
+/// Metal source for the display stage.
+///
+/// The Command Line Tools do not ship the offline Metal compiler, so this is
+/// compiled at launch with `makeLibrary(source:)`.
+///
+/// This reconstructs a picture tube rather than drawing lines over the image.
+/// Each output pixel asks which scan lines light it and by how much, using a
+/// beam profile whose width grows with brightness. All of it happens in linear
+/// light, which is why bright areas bleed and dark areas stay tight.
+enum CRTShaders {
+  static let source = """
+  #include <metal_stdlib>
+  using namespace metal;
+
+  struct Uniforms {
+      float2 sourceSize;      // pixels in the game image
+      float2 outputSize;      // pixels on screen
+      float  curvature;       // 0 flat, higher is flatter barrel
+      float  scanlineDepth;   // 0 none, 1 full
+      float  beamWidth;       // scan line beam sigma, in source lines
+      float  beamBloom;       // how much brightness widens the beam
+      float  maskStrength;    // phosphor mask depth
+      float  maskType;        // 0 aperture grille, 1 shadow mask
+      float  bloomAmount;     // halation added back
+      float  gamma;           // tube gamma
+      float  brightness;
+      float  convergence;     // colour misalignment, in output pixels
+      float  vignette;
+      float  pixelAspect;     // horizontal stretch, PAL is not square
+  };
+
+  struct VOut {
+      float4 position [[position]];
+      float2 uv;
+  };
+
+  vertex VOut crt_vertex(uint vid [[vertex_id]]) {
+      float2 quad[4] = { float2(-1,-1), float2(1,-1), float2(-1,1), float2(1,1) };
+      VOut out;
+      out.position = float4(quad[vid], 0.0, 1.0);
+      // Flip vertically: image rows run top down, clip space runs bottom up.
+      out.uv = float2(quad[vid].x * 0.5 + 0.5, 0.5 - quad[vid].y * 0.5);
+      return out;
+  }
+
+  static inline float3 toLinear(float3 c, float g) { return pow(max(c, 0.0), g); }
+  static inline float3 toGamma(float3 c, float g) { return pow(max(c, 0.0), 1.0 / g); }
+
+  // Barrel distortion, as the glass of a real tube bends the image.
+  static inline float2 curveUV(float2 uv, float amount) {
+      if (amount <= 0.0) { return uv; }
+      float2 c = uv * 2.0 - 1.0;
+      float2 offset = abs(c.yx) / amount;
+      c += c * offset * offset;
+      return c * 0.5 + 0.5;
+  }
+
+  // Gaussian beam. Brighter lines spread wider, which is the halation that
+  // makes highlights glow on a tube.
+  static inline float beamWeight(float distance, float sigma, float luma, float bloom) {
+      float widened = sigma * (1.0 + bloom * luma);
+      float x = distance / max(widened, 0.0001);
+      return exp(-0.5 * x * x);
+  }
+
+  // ---- Bloom passes -------------------------------------------------------
+
+  fragment float4 crt_bright(
+      VOut in [[stage_in]],
+      texture2d<float> src [[texture(0)]],
+      constant Uniforms &u [[buffer(0)]]
+  ) {
+      constexpr sampler smp(filter::linear, address::clamp_to_edge);
+      float3 c = toLinear(src.sample(smp, in.uv).rgb, u.gamma);
+      float luma = dot(c, float3(0.299, 0.587, 0.114));
+      // Keep only the part above mid level, which is what scatters in glass.
+      float excess = max(luma - 0.35, 0.0) / 0.65;
+      return float4(c * excess, 1.0);
+  }
+
+  fragment float4 crt_blur_h(
+      VOut in [[stage_in]],
+      texture2d<float> src [[texture(0)]],
+      constant Uniforms &u [[buffer(0)]]
+  ) {
+      constexpr sampler smp(filter::linear, address::clamp_to_edge);
+      float2 step = float2(1.0 / u.sourceSize.x, 0.0);
+      float weights[5] = { 0.227, 0.194, 0.121, 0.054, 0.016 };
+      float3 sum = src.sample(smp, in.uv).rgb * weights[0];
+      for (int i = 1; i < 5; ++i) {
+          float o = float(i) * 1.5;
+          sum += src.sample(smp, in.uv + step * o).rgb * weights[i];
+          sum += src.sample(smp, in.uv - step * o).rgb * weights[i];
+      }
+      return float4(sum, 1.0);
+  }
+
+  fragment float4 crt_blur_v(
+      VOut in [[stage_in]],
+      texture2d<float> src [[texture(0)]],
+      constant Uniforms &u [[buffer(0)]]
+  ) {
+      constexpr sampler smp(filter::linear, address::clamp_to_edge);
+      float2 step = float2(0.0, 1.0 / u.sourceSize.y);
+      float weights[5] = { 0.227, 0.194, 0.121, 0.054, 0.016 };
+      float3 sum = src.sample(smp, in.uv).rgb * weights[0];
+      for (int i = 1; i < 5; ++i) {
+          float o = float(i) * 1.5;
+          sum += src.sample(smp, in.uv + step * o).rgb * weights[i];
+          sum += src.sample(smp, in.uv - step * o).rgb * weights[i];
+      }
+      return float4(sum, 1.0);
+  }
+
+  // ---- Composite ----------------------------------------------------------
+
+  fragment float4 crt_composite(
+      VOut in [[stage_in]],
+      texture2d<float> src [[texture(0)]],
+      texture2d<float> bloom [[texture(1)]],
+      constant Uniforms &u [[buffer(0)]]
+  ) {
+      constexpr sampler smp(filter::linear, address::clamp_to_edge);
+      float2 uv = curveUV(in.uv, u.curvature);
+
+      // Outside the glass there is no picture.
+      if (uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0) {
+          return float4(0.0, 0.0, 0.0, 1.0);
+      }
+
+      // Which source scan line are we between?
+      float linePos = uv.y * u.sourceSize.y - 0.5;
+      float baseLine = floor(linePos);
+      float frac = linePos - baseLine;
+
+      // Limited video bandwidth softens horizontally, not vertically.
+      float2 texel = 1.0 / u.sourceSize;
+      float3 accumulated = float3(0.0);
+      float weightSum = 0.0;
+
+      // Gather the neighbouring scan lines and weight each by the beam.
+      for (int i = -1; i <= 2; ++i) {
+          float line = baseLine + float(i);
+          float2 sampleUV = float2(uv.x, (line + 0.5) * texel.y);
+
+          float3 c = toLinear(src.sample(smp, sampleUV).rgb, u.gamma);
+          // A little horizontal smear, as the beam has finite width.
+          float smear = texel.x * 0.5 * u.pixelAspect;
+          c += toLinear(src.sample(smp, sampleUV + float2(smear, 0.0)).rgb, u.gamma) * 0.35;
+          c += toLinear(src.sample(smp, sampleUV - float2(smear, 0.0)).rgb, u.gamma) * 0.35;
+          c /= 1.7;
+
+          float luma = dot(c, float3(0.299, 0.587, 0.114));
+          float w = beamWeight(float(i) - frac, u.beamWidth, luma, u.beamBloom);
+          accumulated += c * w;
+          weightSum += w;
+      }
+
+      float3 color = weightSum > 0.0 ? accumulated / weightSum : float3(0.0);
+
+      // Scan line depth: how dark the gaps between lines go.
+      float lineProfile = beamWeight(frac - 0.5, u.beamWidth, 1.0, 0.0);
+      color *= mix(1.0, lineProfile / max(beamWeight(0.0, u.beamWidth, 1.0, 0.0), 0.0001),
+                   u.scanlineDepth);
+
+      // Phosphor mask. The tube lights red, green and blue stripes or dots,
+      // so full white is never one flat colour.
+      float3 mask = float3(1.0);
+      float px = in.uv.x * u.outputSize.x;
+      if (u.maskType < 0.5) {
+          // Aperture grille: vertical RGB stripes.
+          int phase = int(floor(fmod(px, 3.0)));
+          mask = float3(phase == 0 ? 1.0 : 0.0, phase == 1 ? 1.0 : 0.0, phase == 2 ? 1.0 : 0.0);
+          mask = mix(float3(1.0), mask * 3.0, u.maskStrength * 0.33);
+      } else {
+          // Shadow mask: the dots stagger every other row.
+          float py = in.uv.y * u.outputSize.y;
+          float rowShift = fmod(floor(py * 0.5), 2.0) * 1.5;
+          int phase = int(floor(fmod(px + rowShift, 3.0)));
+          mask = float3(phase == 0 ? 1.0 : 0.0, phase == 1 ? 1.0 : 0.0, phase == 2 ? 1.0 : 0.0);
+          mask = mix(float3(1.0), mask * 3.0, u.maskStrength * 0.33);
+      }
+      color *= mask;
+
+      // Convergence: the three guns never align perfectly.
+      if (u.convergence > 0.0) {
+          float2 shift = float2(u.convergence / u.outputSize.x, 0.0);
+          float r = toLinear(src.sample(smp, uv + shift).rgb, u.gamma).r;
+          float b = toLinear(src.sample(smp, uv - shift).rgb, u.gamma).b;
+          color.r = mix(color.r, r * mask.r, 0.35);
+          color.b = mix(color.b, b * mask.b, 0.35);
+      }
+
+      // Halation from the bloom passes.
+      float3 glow = bloom.sample(smp, uv).rgb;
+      color += glow * u.bloomAmount;
+
+      // The mask eats light, so put some back.
+      color *= u.brightness;
+
+      // Vignette, from the shadow of the tube edge.
+      if (u.vignette > 0.0) {
+          float2 c = in.uv * 2.0 - 1.0;
+          float falloff = 1.0 - u.vignette * dot(c, c) * 0.25;
+          color *= clamp(falloff, 0.0, 1.0);
+      }
+
+      return float4(toGamma(color, u.gamma), 1.0);
+  }
+  """
+}
