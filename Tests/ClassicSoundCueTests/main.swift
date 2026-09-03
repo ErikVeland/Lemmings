@@ -87,13 +87,27 @@ private func testMappingReportsGaps() throws {
 }
 
 private func testPitchRatio() throws {
-    let mapping = ClassicSoundMapping(recordedRate: 11_025, playbackRate: 22_050)
+    // A Sound Blaster derived its rate from a time constant, so the round
+    // numbers people quote were never what the hardware ran at.
+    let recorded = ClassicSoundMapping.soundBlasterRate(timeConstant: 165)
+    let played = ClassicSoundMapping.soundBlasterRate(timeConstant: 208)
     try require(
-        abs(mapping.pitchRatio - 2.0) < 0.0001,
-        "playing back at twice the recorded rate gave a ratio of \(mapping.pitchRatio)")
+        abs(recorded - 10_989.0) < 1.0,
+        "time constant 165 gave \(recorded) Hz, expected about 10989")
+    try require(
+        abs(played - 20_833.0) < 1.0,
+        "time constant 208 gave \(played) Hz, expected about 20833")
+
+    let mapping = ClassicSoundMapping()
+    try require(
+        abs(mapping.pitchRatio - 1.896) < 0.002,
+        "the default pitch ratio is \(mapping.pitchRatio), expected about 1.896")
+
     let flat = ClassicSoundMapping(recordedRate: 11_025, playbackRate: 11_025)
     try require(abs(flat.pitchRatio - 1.0) < 0.0001, "matched rates should not shift pitch")
-    print("PASS playback at twice the recorded rate doubles the speed")
+    print(String(
+        format: "PASS playback pitch — %.0f Hz recorded, %.0f Hz played, ratio %.3f",
+        recorded, played, mapping.pitchRatio))
 }
 
 do {

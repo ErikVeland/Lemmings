@@ -78,10 +78,30 @@ public struct ClassicSoundMapping: Codable, Equatable, Sendable {
     public var recordedRate: Double
     public var playbackRate: Double
 
+    /// The rate a Sound Blaster produced for a given time constant.
+    ///
+    /// The card could not play arbitrary rates. It took a time constant and
+    /// the rate followed from it, so the round numbers people quote were never
+    /// the rates the hardware actually ran at.
+    public static func soundBlasterRate(timeConstant: Int) -> Double {
+        let clamped = min(255, max(0, timeConstant))
+        return 1_000_000.0 / Double(256 - clamped)
+    }
+
+    /// The rate these effects were recorded at, about 11 kHz.
+    public static let recordedTimeConstant = 165
+    /// The rate they were played back at, about 21 kHz.
+    ///
+    /// Playing faster than the recording is what lifts the voices and makes
+    /// them sound like cartoon characters rather than people.
+    public static let playbackTimeConstant = 208
+
     public init(
         indices: [ClassicSoundEffect: Int] = [:],
-        recordedRate: Double = 11_025,
-        playbackRate: Double = 22_050
+        recordedRate: Double = ClassicSoundMapping.soundBlasterRate(
+            timeConstant: ClassicSoundMapping.recordedTimeConstant),
+        playbackRate: Double = ClassicSoundMapping.soundBlasterRate(
+            timeConstant: ClassicSoundMapping.playbackTimeConstant)
     ) {
         self.indices = indices
         self.recordedRate = recordedRate
