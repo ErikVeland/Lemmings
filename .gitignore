@@ -1,5 +1,11 @@
 # Commercial game data. Never commit. The player imports data they own.
 Content/
+Sources/Music/
+Sources/Ports/
+*.mod
+*.ipf
+*.adf
+*.dms
 *.dat
 *.DAT
 *.exe
