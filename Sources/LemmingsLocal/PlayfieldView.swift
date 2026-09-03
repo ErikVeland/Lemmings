@@ -33,14 +33,31 @@ struct Viewport {
     clamp()
   }
 
+  /// Centers the level when it does not fill the view.
+  ///
+  /// Classic levels are 160 pixels tall, so at most zoom levels they leave
+  /// space above and below.
+  var contentOffset: CGPoint {
+    let drawn = CGSize(width: levelSize.width * zoom, height: levelSize.height * zoom)
+    return CGPoint(
+      x: drawn.width < viewSize.width ? (viewSize.width - drawn.width) / 2 : 0,
+      y: drawn.height < viewSize.height ? (viewSize.height - drawn.height) / 2 : 0)
+  }
+
   /// Converts a view point to level pixels. The view is flipped, so both
   /// coordinate systems increase downward.
   func levelPoint(from viewPoint: CGPoint) -> CGPoint {
-    CGPoint(x: scrollX + viewPoint.x / zoom, y: scrollY + viewPoint.y / zoom)
+    let offset = contentOffset
+    return CGPoint(
+      x: scrollX + (viewPoint.x - offset.x) / zoom,
+      y: scrollY + (viewPoint.y - offset.y) / zoom)
   }
 
   func viewPoint(fromLevel point: CGPoint) -> CGPoint {
-    CGPoint(x: (point.x - scrollX) * zoom, y: (point.y - scrollY) * zoom)
+    let offset = contentOffset
+    return CGPoint(
+      x: (point.x - scrollX) * zoom + offset.x,
+      y: (point.y - scrollY) * zoom + offset.y)
   }
 
   var visibleLevelRect: CGRect {
@@ -172,7 +189,7 @@ struct Viewport {
       x: origin.x, y: origin.y,
       width: crop.width * viewport.zoom, height: crop.height * viewport.zoom)
     NSImage(cgImage: cropped, size: crop.size)
-      .draw(in: destination, from: .zero, operation: .copy, fraction: 1)
+      .draw(in: destination, from: .zero, operation: .sourceOver, fraction: 1)
   }
 
   private func drawLemmings() {

@@ -194,6 +194,10 @@ let progressKey = "ModernCampaignProgress"
         playfield.viewport.center(on: Double(entrance.x))
       }
       panel.simulation = built
+      // Arm the first skill the level actually provides.
+      if let first = ClassicSkill.allCases.first(where: { built.remainingSkillCount($0) > 0 }) {
+        panel.selectedSkill = first
+      }
       syncPanelViewport()
       updateStatus()
       playfield.needsDisplay = true

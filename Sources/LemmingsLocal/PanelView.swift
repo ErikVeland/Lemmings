@@ -100,7 +100,7 @@ enum PanelButton: Equatable {
       title = "▶"
       subtitle = "rate"
     case let .skill(skill):
-      title = String(skill.rawValue.prefix(5)).capitalized
+      title = skill.rawValue.capitalized
       subtitle = simulation.map { "\($0.remainingSkillCount(skill))" } ?? "0"
       highlighted = skill == selectedSkill
     case .pause:
@@ -120,7 +120,7 @@ enum PanelButton: Equatable {
     path.stroke()
 
     let titleAttributes: [NSAttributedString.Key: Any] = [
-      .font: NSFont.systemFont(ofSize: 11, weight: .medium),
+      .font: NSFont.systemFont(ofSize: 10, weight: .medium),
       .foregroundColor: NSColor.white,
     ]
     let titleSize = (title as NSString).size(withAttributes: titleAttributes)
