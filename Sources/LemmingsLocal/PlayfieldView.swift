@@ -67,7 +67,7 @@ struct Viewport {
 
 @MainActor final class PlayfieldView: NSView {
   var levelImage: CGImage?
-  var simulation: ClassicDOSSimulation?
+  var session: (any GameSession)?
   var assets: ClassicMainDATAssets?
   var palette: [ClassicRGBColor] = []
   var viewport = Viewport()
@@ -140,19 +140,18 @@ struct Viewport {
   }
 
   /// Returns the lemming nearest the point, inside a small pick radius.
-  func lemming(at point: CGPoint) -> ClassicDOSLemming? {
-    guard let simulation else { return nil }
-    let candidates = simulation.lemmings.filter(\.isActive)
-    let nearest = candidates.min {
+  func lemming(at point: CGPoint) -> SessionLemming? {
+    guard let session else { return nil }
+    let nearest = session.lemmings.min {
       distance(from: $0, to: point) < distance(from: $1, to: point)
     }
     guard let nearest, distance(from: nearest, to: point) <= 10 else { return nil }
     return nearest
   }
 
-  private func distance(from lemming: ClassicDOSLemming, to point: CGPoint) -> CGFloat {
+  private func distance(from lemming: SessionLemming, to point: CGPoint) -> CGFloat {
     // The pick point sits slightly above the foot, over the lemming's body.
-    hypot(CGFloat(lemming.foot.x) - point.x, CGFloat(lemming.foot.y) - 5 - point.y)
+    hypot(CGFloat(lemming.x) - point.x, CGFloat(lemming.y) - 5 - point.y)
   }
 
   func invalidateSprites() { spriteCache.removeAll() }
@@ -193,23 +192,21 @@ struct Viewport {
   }
 
   private func drawLemmings() {
-    guard let simulation else { return }
-    for lemming in simulation.lemmings where lemming.isActive {
-      draw(lemming)
-    }
+    guard let session else { return }
+    for lemming in session.lemmings { draw(lemming) }
   }
 
-  private func draw(_ lemming: ClassicDOSLemming) {
+  private func draw(_ lemming: SessionLemming) {
     guard let assets, !palette.isEmpty else { return }
-    let direction: ClassicSpriteDirection = lemming.direction == .left ? .left : .right
-    let pose = spritePose(for: lemming.action)
+    let direction: ClassicSpriteDirection = lemming.facingLeft ? .left : .right
+    let pose = lemming.pose
     guard
       let animation = assets.animation(for: pose, direction: direction)
         ?? assets.animation(for: pose, direction: .none),
       !animation.frames.isEmpty
     else { return }
 
-    let index = lemming.animationFrame % animation.frames.count
+    let index = abs(lemming.animationFrame) % animation.frames.count
     let key = "\(pose.rawValue)-\(direction.rawValue)-\(index)"
     let sprite: NSImage
     if let cached = spriteCache[key] {
@@ -221,8 +218,8 @@ struct Viewport {
     }
 
     let levelOrigin = CGPoint(
-      x: CGFloat(lemming.foot.x + animation.offsetX),
-      y: CGFloat(lemming.foot.y + animation.offsetY))
+      x: CGFloat(lemming.x + animation.offsetX),
+      y: CGFloat(lemming.y + animation.offsetY))
     let origin = viewport.viewPoint(fromLevel: levelOrigin)
     let rect = CGRect(
       x: origin.x, y: origin.y,
@@ -230,7 +227,7 @@ struct Viewport {
     guard rect.intersects(bounds) else { return }
     sprite.draw(in: rect, from: .zero, operation: .sourceOver, fraction: 1)
 
-    if let countdown = lemming.bomberCountdown {
+    if let countdown = lemming.countdown {
       drawCountdown(countdown, above: rect)
     }
   }
@@ -252,7 +249,7 @@ struct Viewport {
     guard let point = cursorLevelPoint else { return }
     let target = lemming(at: point)
     let center = viewport.viewPoint(
-      fromLevel: target.map { CGPoint(x: CGFloat($0.foot.x), y: CGFloat($0.foot.y) - 5) } ?? point)
+      fromLevel: target.map { CGPoint(x: CGFloat($0.x), y: CGFloat($0.y) - 5) } ?? point)
     let side = 14 * viewport.zoom
     let box = CGRect(
       x: center.x - side / 2, y: center.y - side / 2, width: side, height: side)

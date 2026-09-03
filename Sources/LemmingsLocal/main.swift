@@ -1,12 +1,9 @@
 import AppKit
 import NxlvKit
 
-// The DOS game advances logic in fixed 17 Hz ticks. The display refreshes far
-// faster, so the run loop accumulates real time and steps whole ticks only.
-// Any drift here desynchronises release intervals and hatch timing.
-let logicTickInterval = 1.0 / Double(ClassicDOSRules.ticksPerSecond)
 let displayInterval = 1.0 / 60.0
 let contentPathKey = "ClassicDataDirectory"
+let stylesPathKey = "NeoLemmixStylesDirectory"
 let progressKey = "ModernCampaignProgress"
 
 @MainActor final class AppDelegate: NSObject, NSApplicationDelegate {
@@ -19,13 +16,16 @@ let progressKey = "ModernCampaignProgress"
   private var grounds: [Int: ClassicGroundSet] = [:]
   private var specials: [Int: ClassicSpecialGraphic] = [:]
   private var assets: ClassicMainDATAssets?
-  private var simulation: ClassicDOSSimulation?
   private var contentDirectory: URL?
+  private var stylesDirectory: URL?
 
+  private var session: (any GameSession)?
   private var timer: Timer?
   private var accumulator = 0.0
   private var isPaused = false
   private var progress = ModernCampaignProgress()
+  /// Set while an unofficial level is loaded, so retry reloads that file.
+  private var currentNxlvURL: URL?
 
   func applicationDidFinishLaunching(_ notification: Notification) {
     buildInterface()
@@ -33,6 +33,9 @@ let progressKey = "ModernCampaignProgress"
 
     if let saved = UserDefaults.standard.string(forKey: contentPathKey) {
       contentDirectory = URL(fileURLWithPath: saved, isDirectory: true)
+    }
+    if let saved = UserDefaults.standard.string(forKey: stylesPathKey) {
+      stylesDirectory = URL(fileURLWithPath: saved, isDirectory: true)
     }
     if let data = UserDefaults.standard.data(forKey: progressKey),
       let saved = try? ModernCampaignProgress(encoded: data) {
@@ -47,11 +50,13 @@ let progressKey = "ModernCampaignProgress"
   private func buildInterface() {
     let root = NSView()
     let importButton = NSButton(
-      title: "Import original DOS data…", target: self, action: #selector(chooseContent))
+      title: "Import DOS data…", target: self, action: #selector(chooseContent))
+    let openNxlv = NSButton(
+      title: "Open .nxlv…", target: self, action: #selector(chooseNxlvLevel))
     let zoomOut = NSButton(title: "−", target: self, action: #selector(zoomOut))
     let zoomIn = NSButton(title: "+", target: self, action: #selector(zoomIn))
 
-    for view in [picker, importButton, zoomOut, zoomIn, playfield, panel] {
+    for view in [picker, importButton, openNxlv, zoomOut, zoomIn, playfield, panel] {
       view.translatesAutoresizingMaskIntoConstraints = false
       root.addSubview(view)
     }
@@ -59,10 +64,12 @@ let progressKey = "ModernCampaignProgress"
     NSLayoutConstraint.activate([
       picker.leadingAnchor.constraint(equalTo: root.leadingAnchor, constant: 12),
       picker.topAnchor.constraint(equalTo: root.topAnchor, constant: 12),
-      picker.widthAnchor.constraint(equalToConstant: 340),
+      picker.widthAnchor.constraint(equalToConstant: 300),
       importButton.leadingAnchor.constraint(equalTo: picker.trailingAnchor, constant: 8),
       importButton.centerYAnchor.constraint(equalTo: picker.centerYAnchor),
-      zoomOut.leadingAnchor.constraint(equalTo: importButton.trailingAnchor, constant: 12),
+      openNxlv.leadingAnchor.constraint(equalTo: importButton.trailingAnchor, constant: 6),
+      openNxlv.centerYAnchor.constraint(equalTo: picker.centerYAnchor),
+      zoomOut.leadingAnchor.constraint(equalTo: openNxlv.trailingAnchor, constant: 12),
       zoomOut.centerYAnchor.constraint(equalTo: picker.centerYAnchor),
       zoomIn.leadingAnchor.constraint(equalTo: zoomOut.trailingAnchor, constant: 4),
       zoomIn.centerYAnchor.constraint(equalTo: picker.centerYAnchor),
@@ -84,9 +91,10 @@ let progressKey = "ModernCampaignProgress"
     playfield.onViewportChanged = { [weak self] in self?.syncPanelViewport() }
     panel.onButton = { [weak self] button in self?.handle(button) }
     panel.onMinimapScroll = { [weak self] centerX in
-      self?.playfield.viewport.center(on: centerX)
-      self?.playfield.needsDisplay = true
-      self?.syncPanelViewport()
+      guard let self else { return }
+      self.playfield.viewport.center(on: centerX)
+      self.playfield.needsDisplay = true
+      self.syncPanelViewport()
     }
 
     window = NSWindow(
@@ -103,21 +111,26 @@ let progressKey = "ModernCampaignProgress"
   // MARK: - Content
 
   @objc private func chooseContent() {
-    let openPanel = NSOpenPanel()
-    openPanel.canChooseDirectories = true
-    openPanel.canChooseFiles = false
-    openPanel.allowsMultipleSelection = false
-    openPanel.message = "Choose the directory containing LEVEL000.DAT, GROUND0O.DAT and MAIN.DAT."
-    guard openPanel.runModal() == .OK, let url = openPanel.url else { return }
+    guard let url = pickDirectory("Choose the directory holding LEVEL000.DAT and MAIN.DAT.")
+    else { return }
     contentDirectory = url
     UserDefaults.standard.set(url.path, forKey: contentPathKey)
     loadContent()
   }
 
+  private func pickDirectory(_ message: String) -> URL? {
+    let openPanel = NSOpenPanel()
+    openPanel.canChooseDirectories = true
+    openPanel.canChooseFiles = false
+    openPanel.allowsMultipleSelection = false
+    openPanel.message = message
+    guard openPanel.runModal() == .OK else { return nil }
+    return openPanel.url
+  }
+
   private func loadContent() {
     guard let directory = contentDirectory else {
-      panel.statusText = "Choose a DOS data directory to begin."
-      panel.needsDisplay = true
+      setStatus("Import DOS data, or open a .nxlv level.")
       return
     }
     do {
@@ -142,15 +155,15 @@ let progressKey = "ModernCampaignProgress"
       picker.selectItem(at: 0)
       levelChanged()
     } catch {
-      panel.statusText = "Content error: \(error)"
-      panel.needsDisplay = true
+      setStatus("Content error: \(error)")
     }
   }
 
-  // MARK: - Level
+  // MARK: - Official levels
 
   @objc private func levelChanged() {
     guard let campaign, picker.indexOfSelectedItem < campaign.levels.count else { return }
+    currentNxlvURL = nil
     let entry = campaign.levels[picker.indexOfSelectedItem]
     let level = entry.level
     do {
@@ -158,14 +171,9 @@ let progressKey = "ModernCampaignProgress"
       let rendered = try ClassicLevelRenderer.render(
         level, groundSet: ground, specialGraphic: specials[level.specialStyle])
 
-      guard let provider = CGDataProvider(data: rendered.rgba as CFData),
-        let image = CGImage(
-          width: rendered.width, height: rendered.height, bitsPerComponent: 8, bitsPerPixel: 32,
-          bytesPerRow: rendered.width * 4, space: CGColorSpaceCreateDeviceRGB(),
-          bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.last.rawValue),
-          provider: provider, decode: nil, shouldInterpolate: false, intent: .defaultIntent)
+      guard let image = makeImage(
+        width: rendered.width, height: rendered.height, rgba: [UInt8](rendered.rgba))
       else { return }
-
       playfield.levelImage = image
       if let palette = try? ClassicLemmingPalette.inLevelVGA(terrainPalette: ground.terrainPalette) {
         playfield.palette = palette
@@ -174,41 +182,114 @@ let progressKey = "ModernCampaignProgress"
 
       // The DOS engine derives entrances, exits and hazards from the level's
       // own trigger zones, so nothing is positioned by hand here.
-      let built: ClassicDOSSimulation
+      let simulation: ClassicDOSSimulation
       if let assets {
-        built = try ClassicDOSSimulation(
+        simulation = try ClassicDOSSimulation(
           level: level, renderedLevel: rendered, mainDATAssets: assets)
       } else {
-        built = try ClassicDOSSimulation(level: level, renderedLevel: rendered)
+        simulation = try ClassicDOSSimulation(level: level, renderedLevel: rendered)
       }
-      simulation = built
-      accumulator = 0
-      isPaused = false
-      panel.isPaused = false
-
-      playfield.simulation = built
-      playfield.viewport.levelSize = CGSize(width: rendered.width, height: rendered.height)
-      panel.levelSize = playfield.viewport.levelSize
-      // Start the view over the first hatch, as the original game does.
-      if let entrance = built.configuration.entrances.first {
-        playfield.viewport.center(on: Double(entrance.x))
-      }
-      panel.simulation = built
-      // Arm the first skill the level actually provides.
-      if let first = ClassicSkill.allCases.first(where: { built.remainingSkillCount($0) > 0 }) {
-        panel.selectedSkill = first
-      }
-      syncPanelViewport()
-      updateStatus()
-      playfield.needsDisplay = true
+      adopt(
+        ClassicSession(
+          simulation: simulation, width: rendered.width, height: rendered.height))
     } catch {
-      panel.statusText = "Level error: \(error)"
-      panel.needsDisplay = true
+      setStatus("Level error: \(error)")
     }
+  }
+
+  // MARK: - Unofficial levels
+
+  @objc private func chooseNxlvLevel() {
+    let openPanel = NSOpenPanel()
+    openPanel.canChooseFiles = true
+    openPanel.canChooseDirectories = false
+    openPanel.allowedFileTypes = ["nxlv"]
+    openPanel.message = "Choose a NeoLemmix level file."
+    guard openPanel.runModal() == .OK, let url = openPanel.url else { return }
+    loadNxlv(url)
+  }
+
+  private func loadNxlv(_ url: URL) {
+    // A NeoLemmix level draws every piece from a style pack, so the styles
+    // directory must be known before the level can render.
+    if stylesDirectory == nil {
+      guard let styles = pickDirectory("Choose the NeoLemmix 'styles' directory.") else {
+        setStatus("A styles directory is needed to draw NeoLemmix levels.")
+        return
+      }
+      stylesDirectory = styles
+      UserDefaults.standard.set(styles.path, forKey: stylesPathKey)
+    }
+    guard let stylesDirectory else { return }
+
+    do {
+      let text = try String(contentsOf: url, encoding: .utf8)
+      guard let level = NxlvLevel(text: text) else {
+        setStatus("Could not parse \(url.lastPathComponent).")
+        return
+      }
+      let resolution = NxlvStyleResolver(stylesRootURL: stylesDirectory).resolve(level: level)
+      let missing = resolution.diagnostics.filter { $0.severity == .error }
+      guard resolution.isComplete else {
+        setStatus("Missing style data: \(missing.first?.message ?? "unknown")")
+        return
+      }
+      let result = NxlvRenderer().render(level: level, resolution: resolution)
+      guard let rendered = result.renderedLevel, !result.hasErrors else {
+        setStatus("Could not render \(url.lastPathComponent).")
+        return
+      }
+      guard let image = makeImage(
+        width: rendered.width, height: rendered.height, rgba: rendered.rgba)
+      else { return }
+
+      playfield.levelImage = image
+      currentNxlvURL = url
+      let simulation = try NeoLemmixSimulation(level: level, renderedLevel: rendered)
+      adopt(
+        NeoLemmixSession(
+          simulation: simulation, width: rendered.width, height: rendered.height))
+      window.title = "Lemmings — \(level.title)"
+    } catch {
+      setStatus("NeoLemmix error: \(error)")
+    }
+  }
+
+  // MARK: - Session handling
+
+  private func adopt(_ new: any GameSession) {
+    session = new
+    accumulator = 0
+    isPaused = false
+    panel.isPaused = false
+    panel.session = new
+    panel.selectedSkillIndex = new.skills.firstIndex { $0.count > 0 || $0.isInfinite } ?? 0
+    panel.levelSize = CGSize(width: new.levelWidth, height: new.levelHeight)
+    playfield.session = new
+    playfield.viewport.levelSize = panel.levelSize
+    // Start the view over the first hatch, as the original game does.
+    if let entrance = new.entranceX { playfield.viewport.center(on: Double(entrance)) }
+    syncPanelViewport()
+    updateStatus()
+    playfield.needsDisplay = true
+  }
+
+  private func makeImage(width: Int, height: Int, rgba: [UInt8]) -> CGImage? {
+    guard let provider = CGDataProvider(data: Data(rgba) as CFData) else { return nil }
+    return CGImage(
+      width: width, height: height, bitsPerComponent: 8, bitsPerPixel: 32,
+      bytesPerRow: width * 4, space: CGColorSpaceCreateDeviceRGB(),
+      bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.last.rawValue),
+      provider: provider, decode: nil, shouldInterpolate: false, intent: .defaultIntent)
   }
 
   private func syncPanelViewport() {
     panel.visibleLevelRect = playfield.viewport.visibleLevelRect
+    panel.needsDisplay = true
+  }
+
+  private func setStatus(_ text: String) {
+    panel.statusText = text
     panel.needsDisplay = true
   }
 
@@ -223,25 +304,25 @@ let progressKey = "ModernCampaignProgress"
 
   private func step() {
     applyEdgeScroll()
-    guard !isPaused, var simulation, !simulation.isComplete else { return }
+    guard !isPaused, let session, !session.isComplete else { return }
 
+    // Each ruleset states its own logic rate. Whole ticks only, so timing does
+    // not drift with the display.
+    let interval = 1.0 / Double(session.ticksPerSecond)
     accumulator += displayInterval
     var advanced = false
-    while accumulator >= logicTickInterval {
-      accumulator -= logicTickInterval
-      _ = simulation.tick()
+    while accumulator >= interval {
+      accumulator -= interval
+      session.tick()
       advanced = true
-      if simulation.isComplete { break }
+      if session.isComplete { break }
     }
     guard advanced else { return }
 
-    self.simulation = simulation
-    playfield.simulation = simulation
-    panel.simulation = simulation
     playfield.needsDisplay = true
+    panel.needsDisplay = true
     updateStatus()
-
-    if simulation.isComplete { recordCompletion(simulation) }
+    if session.isComplete { recordCompletion(session) }
   }
 
   private func applyEdgeScroll() {
@@ -251,58 +332,45 @@ let progressKey = "ModernCampaignProgress"
     syncPanelViewport()
   }
 
-  private func recordCompletion(_ simulation: ClassicDOSSimulation) {
+  private func recordCompletion(_ session: any GameSession) {
+    guard currentNxlvURL == nil else { return }
     progress.record(
-      levelIndex: picker.indexOfSelectedItem,
-      saved: simulation.savedCount,
-      required: simulation.configuration.requiredToSave)
+      levelIndex: picker.indexOfSelectedItem, saved: session.saved, required: session.required)
     if let data = try? progress.encoded() {
       UserDefaults.standard.set(data, forKey: progressKey)
     }
   }
 
   private func updateStatus() {
-    guard let simulation else { return }
-    let time = simulation.remainingTimeSeconds.map { String(format: "%d:%02d", $0 / 60, $0 % 60) }
+    guard let session else { return }
     var parts = [
-      "Out \(simulation.releasedCount)/\(simulation.configuration.totalLemmings)",
-      "Home \(simulation.savedCount)/\(simulation.configuration.requiredToSave)",
-      "Rate \(simulation.releaseRate)",
+      "Out \(session.released)/\(session.total)",
+      "Home \(session.saved)/\(session.required)",
+      "\(session.rateLabel) \(session.rate)",
     ]
-    if let time { parts.append("Time \(time)") }
-    if simulation.isNuking { parts.append("NUKING") }
-    if simulation.isComplete {
-      parts.append(simulation.didWin ? "COMPLETE — press N" : "FAILED — press R")
+    if let seconds = session.remainingSeconds {
+      parts.append(String(format: "Time %d:%02d", seconds / 60, seconds % 60))
     }
-    panel.statusText = parts.joined(separator: "   ")
-    panel.needsDisplay = true
+    if session.isNuking { parts.append("NUKING") }
+    if session.isComplete {
+      parts.append(session.didWin ? "COMPLETE — press N" : "FAILED — press R")
+    }
+    setStatus(parts.joined(separator: "   "))
   }
 
   // MARK: - Commands
 
   private func handle(_ button: PanelButton) {
+    guard let session else { return }
     switch button {
-    case .rateDown: adjustReleaseRate(-1)
-    case .rateUp: adjustReleaseRate(1)
-    case let .skill(skill):
-      panel.selectedSkill = skill
+    case .rateDown: session.adjustRate(by: -1)
+    case .rateUp: session.adjustRate(by: 1)
+    case let .skill(index):
+      panel.selectedSkillIndex = index
       panel.needsDisplay = true
     case .pause: togglePause()
-    case .nuke:
-      guard var simulation else { return }
-      simulation.beginNuke()
-      self.simulation = simulation
-      playfield.simulation = simulation
-      panel.simulation = simulation
-      updateStatus()
+    case .nuke: session.nuke()
     }
-  }
-
-  private func adjustReleaseRate(_ delta: Int) {
-    guard var simulation else { return }
-    simulation.setReleaseRate(simulation.releaseRate + delta)
-    self.simulation = simulation
-    panel.simulation = simulation
     updateStatus()
   }
 
@@ -313,17 +381,14 @@ let progressKey = "ModernCampaignProgress"
   }
 
   private func assign(_ id: Int) {
-    guard var simulation else { return }
-    let result = simulation.assign(panel.selectedSkill, to: id)
-    self.simulation = simulation
-    playfield.simulation = simulation
-    panel.simulation = simulation
+    guard let session else { return }
+    let rejection = session.assign(skillIndex: panel.selectedSkillIndex, to: id)
     playfield.needsDisplay = true
-    if result == .assigned {
-      updateStatus()
+    panel.needsDisplay = true
+    if let rejection {
+      setStatus("Cannot assign: \(rejection)")
     } else {
-      panel.statusText = "Cannot assign \(panel.selectedSkill.rawValue): \(result.rawValue)"
-      panel.needsDisplay = true
+      updateStatus()
     }
   }
 
@@ -337,10 +402,16 @@ let progressKey = "ModernCampaignProgress"
     syncPanelViewport()
   }
 
-  private func retry() { levelChanged() }
+  private func retry() {
+    if let url = currentNxlvURL {
+      loadNxlv(url)
+    } else {
+      levelChanged()
+    }
+  }
 
   private func nextLevel() {
-    guard let campaign else { return }
+    guard currentNxlvURL == nil, let campaign else { return }
     let next = picker.indexOfSelectedItem + 1
     guard next < campaign.levels.count else { return }
     picker.selectItem(at: next)
@@ -350,7 +421,6 @@ let progressKey = "ModernCampaignProgress"
   private func installKeyboardShortcuts() {
     NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
       guard let self else { return event }
-      // Let text fields and the level popup keep their own key handling.
       if self.window?.firstResponder is NSTextView { return event }
 
       let scrollStep = 24.0
@@ -360,19 +430,16 @@ let progressKey = "ModernCampaignProgress"
       default: break
       }
 
-      switch event.charactersIgnoringModifiers?.lowercased() {
+      guard let characters = event.charactersIgnoringModifiers?.lowercased() else { return event }
+      if let digit = Int(characters), digit >= 1, digit <= 9 {
+        self.handle(.skill(digit - 1))
+        return nil
+      }
+      switch characters {
       case "n": self.nextLevel()
       case "r": self.retry()
       case "p", " ": self.togglePause()
       case "x": self.handle(.nuke)
-      case "1": self.handle(.skill(.climber))
-      case "2": self.handle(.skill(.floater))
-      case "3": self.handle(.skill(.bomber))
-      case "4": self.handle(.skill(.blocker))
-      case "5": self.handle(.skill(.builder))
-      case "6": self.handle(.skill(.basher))
-      case "7": self.handle(.skill(.miner))
-      case "8": self.handle(.skill(.digger))
       default: return event
       }
       return nil

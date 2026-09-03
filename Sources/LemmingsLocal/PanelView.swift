@@ -5,14 +5,16 @@ import NxlvKit
 enum PanelButton: Equatable {
   case rateDown
   case rateUp
-  case skill(ClassicSkill)
+  /// Index into the session's skill list. NeoLemmix levels expose a different
+  /// set and count of skills than the DOS ruleset does.
+  case skill(Int)
   case pause
   case nuke
 }
 
 @MainActor final class PanelView: NSView {
-  var simulation: ClassicDOSSimulation?
-  var selectedSkill: ClassicSkill = .builder
+  var session: (any GameSession)?
+  var selectedSkillIndex = 0
   var isPaused = false
   var statusText = ""
   var levelSize = CGSize(width: 1, height: 1)
@@ -33,8 +35,9 @@ enum PanelButton: Equatable {
   // MARK: - Layout
 
   private func layoutButtons() {
+    let skillCount = session?.skills.count ?? 0
     var order: [PanelButton] = [.rateDown, .rateUp]
-    order.append(contentsOf: ClassicSkill.allCases.map(PanelButton.skill))
+    order.append(contentsOf: (0..<skillCount).map(PanelButton.skill))
     order.append(contentsOf: [.pause, .nuke])
 
     // The minimap takes the right quarter, as it does in the original panel.
@@ -95,14 +98,15 @@ enum PanelButton: Equatable {
     switch button {
     case .rateDown:
       title = "◀"
-      subtitle = "rate"
+      subtitle = session?.rateLabel.lowercased() ?? "rate"
     case .rateUp:
       title = "▶"
-      subtitle = "rate"
-    case let .skill(skill):
-      title = skill.rawValue.capitalized
-      subtitle = simulation.map { "\($0.remainingSkillCount(skill))" } ?? "0"
-      highlighted = skill == selectedSkill
+      subtitle = session?.rateLabel.lowercased() ?? "rate"
+    case let .skill(index):
+      let skill = session?.skills[safe: index]
+      title = skill?.name ?? "—"
+      subtitle = skill.map { $0.isInfinite ? "∞" : "\($0.count)" } ?? "0"
+      highlighted = index == selectedSkillIndex
     case .pause:
       title = isPaused ? "Play" : "Pause"
       subtitle = ""
@@ -142,7 +146,7 @@ enum PanelButton: Equatable {
   private func drawMinimap() {
     NSColor(calibratedWhite: 0.05, alpha: 1).setFill()
     NSBezierPath(roundedRect: minimapFrame, xRadius: 3, yRadius: 3).fill()
-    guard levelSize.width > 0, levelSize.height > 0, let simulation else { return }
+    guard levelSize.width > 0, levelSize.height > 0, let session else { return }
 
     let scale = min(
       minimapFrame.width / levelSize.width, minimapFrame.height / levelSize.height)
@@ -152,10 +156,10 @@ enum PanelButton: Equatable {
       y: minimapFrame.minY + (minimapFrame.height - drawn.height) / 2)
 
     NSColor.systemGreen.setFill()
-    for lemming in simulation.lemmings where lemming.isActive {
+    for lemming in session.lemmings {
       let dot = CGRect(
-        x: origin.x + CGFloat(lemming.foot.x) * scale - 1,
-        y: origin.y + CGFloat(lemming.foot.y) * scale - 1,
+        x: origin.x + CGFloat(lemming.x) * scale - 1,
+        y: origin.y + CGFloat(lemming.y) * scale - 1,
         width: 2, height: 2)
       dot.fill()
     }
@@ -181,4 +185,12 @@ enum PanelButton: Equatable {
   }
 
   var intrinsicHeight: CGFloat { inset * 2 + buttonHeight + 22 }
+}
+
+
+extension Array {
+  /// Panel layout can lag a session swap by one frame, so index safely.
+  subscript(safe index: Int) -> Element? {
+    indices.contains(index) ? self[index] : nil
+  }
 }

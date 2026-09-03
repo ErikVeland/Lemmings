@@ -50,7 +50,9 @@ private func render(
     playfield.assets = assets
     playfield.palette = (try? ClassicLemmingPalette.inLevelVGA(
         terrainPalette: ground.terrainPalette)) ?? []
-    playfield.simulation = simulation
+    let session = ClassicSession(
+        simulation: simulation, width: rendered.width, height: rendered.height)
+    playfield.session = session
     playfield.viewport.zoom = zoom
     playfield.viewport.levelSize = CGSize(width: rendered.width, height: rendered.height)
     playfield.viewport.viewSize = playfield.frame.size
@@ -58,11 +60,9 @@ private func render(
         playfield.viewport.center(on: Double(entrance.x))
     }
 
-    panel.simulation = simulation
+    panel.session = session
     // Mirror the app: arm the first skill the level actually provides.
-    if let first = ClassicSkill.allCases.first(where: { simulation.remainingSkillCount($0) > 0 }) {
-        panel.selectedSkill = first
-    }
+    panel.selectedSkillIndex = session.skills.firstIndex { $0.count > 0 } ?? 0
     panel.levelSize = playfield.viewport.levelSize
     panel.visibleLevelRect = playfield.viewport.visibleLevelRect
     panel.statusText =

@@ -20,6 +20,7 @@ swiftc -swift-version 6 \
   -o "$build_dir/LemmingsShot" \
   "$project_dir/Sources/LemmingsLocal/PlayfieldView.swift" \
   "$project_dir/Sources/LemmingsLocal/PanelView.swift" \
+  "$project_dir/Sources/LemmingsLocal/GameSession.swift" \
   "$project_dir/Tools/LemmingsShot/main.swift"
 
 "$build_dir/LemmingsShot" "$@"
