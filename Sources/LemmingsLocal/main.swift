@@ -3,6 +3,7 @@ import NxlvKit
 
 let displayInterval = 1.0 / 60.0
 let contentPathKey = "ClassicDataDirectory"
+let gamePathsKey = "ClassicGameDirectories"
 let stylesPathKey = "NeoLemmixStylesDirectory"
 let progressKey = "ModernCampaignProgress"
 let musicPathKey = "MusicDirectory"
@@ -17,6 +18,9 @@ let musicPresetKey = "MusicUsesModernPreset"
   private var campaign: ClassicCampaign?
   private var grounds: [Int: ClassicGroundSet] = [:]
   private var specials: [Int: ClassicSpecialGraphic] = [:]
+  /// Every imported game, in the order they were added.
+  private var dataSets: [(set: ClassicDataSet, directory: URL)] = []
+  private let gamePicker = NSPopUpButton()
   private var assets: ClassicMainDATAssets?
   private var contentDirectory: URL?
   private var stylesDirectory: URL?
@@ -69,7 +73,7 @@ let musicPresetKey = "MusicUsesModernPreset"
   private func buildInterface() {
     let root = NSView()
     let importButton = NSButton(
-      title: "Import DOS data…", target: self, action: #selector(chooseContent))
+      title: "Add game…", target: self, action: #selector(chooseContent))
     let openNxlv = NSButton(
       title: "Open .nxlv…", target: self, action: #selector(chooseNxlvLevel))
     let zoomOut = NSButton(title: "−", target: self, action: #selector(zoomOut))
@@ -83,7 +87,7 @@ let musicPresetKey = "MusicUsesModernPreset"
     presetButton = preset
 
     let views: [NSView] = [
-      picker, importButton, openNxlv, zoomOut, zoomIn,
+      gamePicker, picker, importButton, openNxlv, zoomOut, zoomIn,
       musicButton, mute, preset, playfield, panel,
     ]
     for view in views {
@@ -92,9 +96,12 @@ let musicPresetKey = "MusicUsesModernPreset"
     }
 
     NSLayoutConstraint.activate([
-      picker.leadingAnchor.constraint(equalTo: root.leadingAnchor, constant: 12),
-      picker.topAnchor.constraint(equalTo: root.topAnchor, constant: 12),
-      picker.widthAnchor.constraint(equalToConstant: 300),
+      gamePicker.leadingAnchor.constraint(equalTo: root.leadingAnchor, constant: 12),
+      gamePicker.topAnchor.constraint(equalTo: root.topAnchor, constant: 12),
+      gamePicker.widthAnchor.constraint(equalToConstant: 210),
+      picker.leadingAnchor.constraint(equalTo: gamePicker.trailingAnchor, constant: 8),
+      picker.centerYAnchor.constraint(equalTo: gamePicker.centerYAnchor),
+      picker.widthAnchor.constraint(equalToConstant: 260),
       importButton.leadingAnchor.constraint(equalTo: picker.trailingAnchor, constant: 8),
       importButton.centerYAnchor.constraint(equalTo: picker.centerYAnchor),
       openNxlv.leadingAnchor.constraint(equalTo: importButton.trailingAnchor, constant: 6),
@@ -123,6 +130,8 @@ let musicPresetKey = "MusicUsesModernPreset"
 
     picker.target = self
     picker.action = #selector(levelChanged)
+    gamePicker.target = self
+    gamePicker.action = #selector(selectDataSet)
     playfield.onAssign = { [weak self] id in self?.assign(id) }
     playfield.onViewportChanged = { [weak self] in self?.syncPanelViewport() }
     panel.onButton = { [weak self] button in self?.handle(button) }
@@ -149,9 +158,17 @@ let musicPresetKey = "MusicUsesModernPreset"
   @objc private func chooseContent() {
     guard let url = pickDirectory("Choose the directory holding LEVEL000.DAT and MAIN.DAT.")
     else { return }
-    contentDirectory = url
-    UserDefaults.standard.set(url.path, forKey: contentPathKey)
+    var directories = gameDirectories
+    if !directories.contains(where: { $0.path == url.path }) {
+      directories.append(url)
+      gameDirectories = directories
+    }
     loadContent()
+    // Show the game that was just added.
+    if let index = dataSets.firstIndex(where: { $0.directory.path == url.path }) {
+      gamePicker.selectItem(at: index)
+      selectDataSet()
+    }
   }
 
   private func pickDirectory(_ message: String) -> URL? {
@@ -164,34 +181,84 @@ let musicPresetKey = "MusicUsesModernPreset"
     return openPanel.url
   }
 
+  /// Directories the player has imported, newest last.
+  private var gameDirectories: [URL] {
+    get {
+      (UserDefaults.standard.array(forKey: gamePathsKey) as? [String] ?? [])
+        .map { URL(fileURLWithPath: $0, isDirectory: true) }
+    }
+    set {
+      UserDefaults.standard.set(newValue.map(\.path), forKey: gamePathsKey)
+    }
+  }
+
   private func loadContent() {
-    guard let directory = contentDirectory else {
-      setStatus("Import DOS data, or open a .nxlv level.")
+    // Accept the older single-directory preference so nothing is lost.
+    var directories = gameDirectories
+    if directories.isEmpty, let legacy = contentDirectory {
+      directories = [legacy]
+      gameDirectories = directories
+    }
+    guard !directories.isEmpty else {
+      setStatus("Add a game folder, or open a .nxlv level.")
       return
     }
+
+    // A folder is identified rather than assumed, so any title in this
+    // format loads without a hand-written order table.
+    dataSets = []
+    var problems: [String] = []
+    for directory in directories {
+      do {
+        let set = try ClassicDataSet.detect(directory: directory)
+        dataSets.append((set, directory))
+      } catch {
+        problems.append("\(directory.lastPathComponent): \(error)")
+      }
+    }
+
+    gamePicker.removeAllItems()
+    for entry in dataSets {
+      gamePicker.addItem(
+        withTitle: "\(entry.set.name) (\(entry.set.campaign.levels.count))")
+    }
+    guard !dataSets.isEmpty else {
+      setStatus("No Lemmings data found. \(problems.first ?? "")")
+      return
+    }
+    gamePicker.selectItem(at: 0)
+    selectDataSet()
+  }
+
+  @objc private func selectDataSet() {
+    let index = max(0, min(gamePicker.indexOfSelectedItem, dataSets.count - 1))
+    guard index < dataSets.count else { return }
+    let entry = dataSets[index]
     do {
-      let loaded = try ClassicCampaignDefinition.originalDOSLemmings.load(from: directory)
-      campaign = loaded
+      // Titles ship different numbers of ground and special sets, so load
+      // exactly what the folder holds instead of a fixed count.
       grounds = [:]
       specials = [:]
-      for style in 0..<5 {
-        grounds[style] = try ClassicGroundSet.load(style: style, from: directory)
+      for style in entry.set.groundStyles {
+        grounds[style] = try ClassicGroundSet.load(style: style, from: entry.directory)
       }
-      for index in 0..<4 {
-        specials[index + 1] = try ClassicSpecialGraphic.load(index: index, from: directory)
+      for special in entry.set.specialIndices {
+        specials[special + 1] = try ClassicSpecialGraphic.load(
+          index: special, from: entry.directory)
       }
-      assets = try ClassicMainDATAssets.load(from: directory)
+      assets = try ClassicMainDATAssets.load(from: entry.directory)
       playfield.assets = assets
       playfield.invalidateSprites()
 
+      campaign = entry.set.campaign
       picker.removeAllItems()
-      for (offset, entry) in loaded.levels.enumerated() {
-        picker.addItem(withTitle: "\(offset + 1). \(entry.rank) — \(entry.level.title)")
+      for (offset, level) in entry.set.campaign.levels.enumerated() {
+        picker.addItem(withTitle: "\(offset + 1). \(level.rank) — \(level.level.title)")
       }
       picker.selectItem(at: 0)
       levelChanged()
     } catch {
-      setStatus("Content error: \(error)")
+      setStatus("\(entry.set.name): \(error)")
     }
   }
 
