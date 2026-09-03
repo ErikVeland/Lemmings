@@ -10,11 +10,9 @@ closed it in 2012. Read `THIRD_PARTY_NOTICES.md` before you distribute anything.
 
 ## Current result
 
-The app imports an original DOS Lemmings data directory. It validates and lists
-the complete 120-level campaign across Fun, Tricky, Taxing, and Mayhem. It
-decodes and renders every physical level record. This covers repeat level
-parameters from `ODDTABLE.DAT`, all five ground styles, all four special
-graphics, steel, animated objects, draw flags, entrances, and trigger zones.
+The app is a native macOS build. It runs no emulator and interprets no DOS
+code. It imports an original DOS Lemmings data directory, then lists and plays
+the complete 120-level campaign across Fun, Tricky, Taxing, and Mayhem.
 
 The app runs the DOS-accurate engine, `ClassicDOSSimulation`. The engine steps
 in fixed 17 Hz logic ticks through an accumulator, so the logic rate does not
@@ -22,27 +20,32 @@ follow the display rate. The engine reads entrances, exits, and hazards from
 each level's own trigger zones.
 
 A smoke harness runs all 120 official levels. Every level builds a simulation,
-releases lemmings, and moves them. Every level decodes an exit trigger. The
-engine still lacks replay validation, so the port does not yet guarantee that
-every intended solution works.
+releases lemmings, and moves them. Every level decodes an exit trigger.
 
-The NeoLemmix loader targets NeoLemmix 12.14 and Community Edition 1.1.2. It
-parses the level structure and dependencies. The app does not yet load
-NeoLemmix style packs or run NeoLemmix physics. Fan `.nxlv` levels are
-therefore not playable yet.
+The engine completes real levels. A search over single skill assignments finds
+the known solution to three levels with three different skills. Fun 1 needs a
+digger. Fun 2 needs a floater. Fun 9 needs a basher. Replays of those runs
+reproduce exactly.
+
+The app also opens unofficial NeoLemmix `.nxlv` levels. The player chooses a
+NeoLemmix styles directory once. The app then resolves style assets, renders
+the level, and plays it under the NeoLemmix ruleset. Missing style data is
+reported rather than ignored.
 
 | Area | Current support |
 | --- | --- |
 | Original DOS campaign data | All 120 campaign slots, 80 physical records, and 40 repeat overrides validated |
 | DOS terrain graphics | All five ground sets and all four `VGASPEC` backgrounds decoded and golden-tested |
 | DOS object graphics | Frames, palettes, upside-down objects, animation, `NoOverwrite`, and `OnlyOnTerrain` supported |
-| Official level selection | All 120 levels appear after the player imports original data |
 | Classic gameplay | The DOS engine drives the app at a fixed 17 Hz tick with the eight DOS skills |
-| Campaign coverage | All 120 levels build, spawn, and run for 30 seconds without failure |
-| Exact DOS physics | Rules pass unit regressions. Replay validation is absent |
+| Campaign coverage | All 120 levels build, spawn, and run |
+| Verified solutions | Three official levels solved and replayed. The rest need multi-skill replays |
+| Replays | Deterministic format with an initial state hash and an outcome hash |
+| Interface | Scrolling viewport, zoom, control panel, live skill counts, minimap, and cursor |
 | Lemming sprites | Decoded from `MAIN.DAT` and drawn per pose and direction |
-| NeoLemmix `.nxlv` data | Typed parser covers terrain, groups, gadgets, lemmings, talismans, text, transforms, skills, and dependencies |
-| NeoLemmix styles and physics | Not implemented |
+| NeoLemmix `.nxlv` data | Parsed, style-resolved, rendered, and played through the NeoLemmix engine |
+| NeoLemmix verification | Verified against synthetic content only. No fan pack has been tested |
+| NeoLemmix lemming sprites | Not loaded. NeoLemmix levels borrow the imported DOS sprites |
 | Sound and music | Not implemented |
 | Distribution | Local ad-hoc signed universal build for macOS 13+. Developer ID signing and notarization are not configured |
 
@@ -72,22 +75,23 @@ On a healthy SwiftPM installation, `swift test` remains available.
 
 ## Verification
 
-Run the portable suite:
+Run every suite:
 
 ```sh
-zsh Scripts/run-portable-tests.sh
+for s in portable-tests classic-dos-simulation-regressions classic-dos-campaign-smoke classic-dos-replay-tests neolemmix-simulation-tests neolemmix-end-to-end nxlv-renderer-tests nxlv-style-resolver-tests; do zsh Scripts/run-$s.sh; done
 ```
 
-Run the DOS rule regressions:
+Render a frame of the real views to a PNG, which needs no screen-capture
+permission:
 
 ```sh
-zsh Scripts/run-classic-dos-simulation-regressions.sh
+zsh Scripts/render-shot.sh --level 1 --ticks 260 --out shot.png
 ```
 
-Run the engine against every official level:
+Measure how far the engine gets on every official level:
 
 ```sh
-zsh Scripts/run-classic-dos-campaign-smoke.sh
+zsh Scripts/run-classic-dos-solvability-probe.sh
 ```
 
 The suites verify:
@@ -96,36 +100,27 @@ The suites verify:
 - checksums and sizes for all 80 physical level records;
 - the exact 120-level campaign order and all 40 `ODDTABLE` overrides;
 - all ground sets, special backgrounds, objects, steel, entrances, and exits;
-- full rendered-map, mask, terrain-piece, and object-frame SHA-256 goldens from
-  independent decoders;
+- full rendered-map, mask, terrain-piece, and object-frame SHA-256 goldens;
 - DOS release intervals, hatch order, safe fall distance, destruction masks,
   blocker fields, trap cooldowns, and deterministic continuation;
 - every official level builds a simulation, releases lemmings, and moves them;
-- extended NeoLemmix parsing, full-width IDs, hexadecimal values, infinite
-  quantities, typed sections, diagnostics, and dependency scans.
-
-Use the data inspection tool for a detailed campaign listing:
-
-```sh
-zsh Scripts/verify-classic-data.sh
-```
+- replay determinism, the initial state hash guard, and a JSON round trip;
+- a NeoLemmix level from text through styles, rendering, and simulation to a
+  win;
+- extended NeoLemmix parsing, typed sections, diagnostics, and dependency
+  scans.
 
 ## Remaining work
 
-The port is complete only when both rulesets pass deterministic replay tests.
-The remaining work is:
-
-1. Build a replay format that records skill assignments per tick. Add state
-   hashes so each level's known-good solution becomes a regression test.
-2. Validate every official level against those replays.
-3. Decode and play the audio that the player imports. Do not bundle commercial
+1. Record replays for every official level, then gate physics changes on them.
+   Three levels are covered. The other 117 need multi-skill replays.
+2. Decode and play the audio that the player imports. Do not bundle commercial
    assets.
-4. Add the classic control panel, cursor, minimap, and scrolling viewport.
-5. Load NeoLemmix style metadata and graphics. Implement the NeoLemmix 12.14
-   ruleset and replay format.
-6. Validate a broad fan-level corpus, including missing-dependency and
-   malformed content cases.
-7. Produce hardened, Developer ID signed, and notarized macOS builds.
+3. Load NeoLemmix lemming sprites from style packs.
+4. Test against real NeoLemmix packs, including missing-dependency and
+   malformed content.
+5. Produce hardened, Developer ID signed, and notarized macOS builds. This
+   needs an Apple Developer account.
 
 ## Source layout
 
