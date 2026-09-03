@@ -97,13 +97,72 @@ public enum ClassicDOSReplayError: Error, Equatable, CustomStringConvertible {
 public enum ClassicDOSReplayRecorder {
     /// Hashes a simulation into a stable fingerprint.
     ///
-    /// Sorted-key JSON keeps the byte order stable across runs and platforms,
-    /// so the digest depends on simulation state alone.
+    /// This walks the state in a fixed order rather than encoding it. Encoding
+    /// looked simpler, but `skills` is keyed by an enum, and Swift writes such
+    /// a dictionary as an unkeyed array whose order follows dictionary
+    /// iteration. Sorted JSON keys do not reorder array elements, so two loads
+    /// of the same level could hash differently and a saved replay would stop
+    /// verifying. Every collection below is walked in a defined order.
     public static func stateHash(of simulation: ClassicDOSSimulation) -> String {
-        let encoder = JSONEncoder()
-        encoder.outputFormatting = [.sortedKeys]
-        guard let data = try? encoder.encode(simulation) else { return "unencodable" }
-        return SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined()
+        var bytes = Data()
+
+        func append(_ value: Int) {
+            withUnsafeBytes(of: Int64(value).littleEndian) { bytes.append(contentsOf: $0) }
+        }
+        func append(_ value: Bool) { bytes.append(value ? 1 : 0) }
+        func append(_ value: Int?) {
+            bytes.append(value == nil ? 0 : 1)
+            append(value ?? 0)
+        }
+        func append(_ value: String) { bytes.append(contentsOf: Array(value.utf8)); bytes.append(0) }
+
+        append(simulation.tickCount)
+        append(simulation.releasedCount)
+        append(simulation.savedCount)
+        append(simulation.lostCount)
+        append(simulation.releaseRate)
+        append(simulation.isNuking)
+        append(simulation.remainingTimeTicks)
+
+        // Fixed skill order, never dictionary order.
+        for skill in ClassicSkill.allCases {
+            append(skill.rawValue)
+            append(simulation.remainingSkillCount(skill))
+        }
+
+        append(simulation.lemmings.count)
+        for lemming in simulation.lemmings {
+            append(lemming.id)
+            append(lemming.foot.x)
+            append(lemming.foot.y)
+            append(lemming.direction.rawValue)
+            append(lemming.action.rawValue)
+            append(lemming.animationFrame)
+            append(lemming.fallDistance)
+            append(lemming.hasClimber)
+            append(lemming.hasFloater)
+            append(lemming.bomberCountdown)
+            append(lemming.bricksRemaining)
+            append(lemming.outcome.rawValue)
+            append(lemming.objectBelow.rawValue)
+            append(lemming.objectInFront.rawValue)
+            append(lemming.ownsBlockerField)
+            append(lemming.blockerAnchor?.x)
+            append(lemming.blockerAnchor?.y)
+            append(lemming.hasZeroHorizontalVelocity)
+            append(lemming.isNewDigger)
+            append(lemming.floatTableIndex)
+        }
+
+        append(simulation.configuration.totalLemmings)
+        append(simulation.configuration.requiredToSave)
+        append(simulation.configuration.initialReleaseRate)
+        append(simulation.configuration.maximumX)
+        append(simulation.configuration.maximumY)
+
+        bytes.append(simulation.terrain.canonicalMaskBytes)
+
+        return SHA256.hash(data: bytes).map { String(format: "%02x", $0) }.joined()
     }
 }
 

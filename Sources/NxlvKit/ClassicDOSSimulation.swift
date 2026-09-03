@@ -298,6 +298,17 @@ public struct ClassicDOSTerrain: Codable, Equatable, Sendable {
     public var solidMask: Data { Data(solidPixels) }
     public var steelMask: Data { Data(steelPixels) }
 
+    /// The two masks end to end, for canonical hashing.
+    ///
+    /// The pixel arrays are private, so this is the only way a digest can
+    /// cover terrain without exposing the storage.
+    var canonicalMaskBytes: Data {
+        var bytes = Data(capacity: solidPixels.count + steelPixels.count)
+        bytes.append(contentsOf: solidPixels)
+        bytes.append(contentsOf: steelPixels)
+        return bytes
+    }
+
     public func isSolid(x: Int, y: Int) -> Bool {
         guard contains(x: x, y: y) else { return false }
         return solidPixels[y * width + x] != 0
