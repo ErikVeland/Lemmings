@@ -5,6 +5,8 @@ let displayInterval = 1.0 / 60.0
 let contentPathKey = "ClassicDataDirectory"
 let stylesPathKey = "NeoLemmixStylesDirectory"
 let progressKey = "ModernCampaignProgress"
+let musicPathKey = "MusicDirectory"
+let musicPresetKey = "MusicUsesModernPreset"
 
 @MainActor final class AppDelegate: NSObject, NSApplicationDelegate {
   private var window: NSWindow!
@@ -24,6 +26,9 @@ let progressKey = "ModernCampaignProgress"
   private var accumulator = 0.0
   private var isPaused = false
   private var progress = ModernCampaignProgress()
+  private let music = ModuleMusicPlayer()
+  private var muteButton: NSButton!
+  private var presetButton: NSButton!
   /// Set while an unofficial level is loaded, so retry reloads that file.
   private var currentNxlvURL: URL?
 
@@ -41,6 +46,20 @@ let progressKey = "ModernCampaignProgress"
       let saved = try? ModernCampaignProgress(encoded: data) {
       progress = saved
     }
+    if let saved = UserDefaults.standard.string(forKey: musicPathKey) {
+      music.loadLibrary(at: URL(fileURLWithPath: saved, isDirectory: true))
+    }
+    if UserDefaults.standard.bool(forKey: musicPresetKey) {
+      music.setEnhancements(.modern)
+    }
+    do {
+      try music.start()
+    } catch {
+      // Audio is optional. The game stays playable without it.
+      setStatus("Audio unavailable: \(error.localizedDescription)")
+    }
+    updateMusicButtons()
+
     loadContent()
     startTimer()
   }
@@ -55,8 +74,19 @@ let progressKey = "ModernCampaignProgress"
       title: "Open .nxlv…", target: self, action: #selector(chooseNxlvLevel))
     let zoomOut = NSButton(title: "−", target: self, action: #selector(zoomOut))
     let zoomIn = NSButton(title: "+", target: self, action: #selector(zoomIn))
+    let musicButton = NSButton(
+      title: "Music…", target: self, action: #selector(chooseMusic))
+    let mute = NSButton(title: "Mute", target: self, action: #selector(toggleMute))
+    let preset = NSButton(
+      title: "Faithful", target: self, action: #selector(toggleMusicPreset))
+    muteButton = mute
+    presetButton = preset
 
-    for view in [picker, importButton, openNxlv, zoomOut, zoomIn, playfield, panel] {
+    let views: [NSView] = [
+      picker, importButton, openNxlv, zoomOut, zoomIn,
+      musicButton, mute, preset, playfield, panel,
+    ]
+    for view in views {
       view.translatesAutoresizingMaskIntoConstraints = false
       root.addSubview(view)
     }
@@ -73,6 +103,12 @@ let progressKey = "ModernCampaignProgress"
       zoomOut.centerYAnchor.constraint(equalTo: picker.centerYAnchor),
       zoomIn.leadingAnchor.constraint(equalTo: zoomOut.trailingAnchor, constant: 4),
       zoomIn.centerYAnchor.constraint(equalTo: picker.centerYAnchor),
+      musicButton.leadingAnchor.constraint(equalTo: zoomIn.trailingAnchor, constant: 12),
+      musicButton.centerYAnchor.constraint(equalTo: picker.centerYAnchor),
+      mute.leadingAnchor.constraint(equalTo: musicButton.trailingAnchor, constant: 6),
+      mute.centerYAnchor.constraint(equalTo: picker.centerYAnchor),
+      preset.leadingAnchor.constraint(equalTo: mute.trailingAnchor, constant: 6),
+      preset.centerYAnchor.constraint(equalTo: picker.centerYAnchor),
 
       playfield.leadingAnchor.constraint(equalTo: root.leadingAnchor),
       playfield.trailingAnchor.constraint(equalTo: root.trailingAnchor),
@@ -178,6 +214,7 @@ let progressKey = "ModernCampaignProgress"
       if let palette = try? ClassicLemmingPalette.inLevelVGA(terrainPalette: ground.terrainPalette) {
         playfield.palette = palette
         playfield.invalidateSprites()
+        panel.panelImage = makePanelImage()
       }
 
       // The DOS engine derives entrances, exits and hazards from the level's
@@ -272,6 +309,19 @@ let progressKey = "ModernCampaignProgress"
     syncPanelViewport()
     updateStatus()
     playfield.needsDisplay = true
+    playMusicForCurrentLevel()
+  }
+
+  /// Builds the status bar image from the imported panel graphics.
+  private func makePanelImage() -> CGImage? {
+    guard let graphics = assets?.panel else { return nil }
+    let bytes = graphics.rgba(using: ClassicLemmingPalette.panelVGA)
+    guard !bytes.isEmpty, let provider = CGDataProvider(data: bytes as CFData) else { return nil }
+    return CGImage(
+      width: graphics.width, height: graphics.height, bitsPerComponent: 8, bitsPerPixel: 32,
+      bytesPerRow: graphics.width * 4, space: CGColorSpaceCreateDeviceRGB(),
+      bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.last.rawValue),
+      provider: provider, decode: nil, shouldInterpolate: false, intent: .defaultIntent)
   }
 
   private func makeImage(width: Int, height: Int, rgba: [UInt8]) -> CGImage? {
@@ -389,6 +439,45 @@ let progressKey = "ModernCampaignProgress"
       setStatus("Cannot assign: \(rejection)")
     } else {
       updateStatus()
+    }
+  }
+
+  // MARK: - Music
+
+  @objc private func chooseMusic() {
+    guard let url = pickDirectory("Choose a folder of ProTracker .mod files.") else { return }
+    UserDefaults.standard.set(url.path, forKey: musicPathKey)
+    music.loadLibrary(at: url)
+    if music.library.isEmpty {
+      setStatus("No .mod files were found in that folder.")
+    } else {
+      playMusicForCurrentLevel()
+    }
+  }
+
+  @objc private func toggleMute() {
+    music.setMuted(!music.muted)
+    updateMusicButtons()
+  }
+
+  @objc private func toggleMusicPreset() {
+    let useModern = !music.usesModernPreset
+    music.setEnhancements(useModern ? .modern : .faithful)
+    UserDefaults.standard.set(useModern, forKey: musicPresetKey)
+    updateMusicButtons()
+  }
+
+  private func updateMusicButtons() {
+    muteButton?.title = music.muted ? "Unmute" : "Mute"
+    presetButton?.title = music.usesModernPreset ? "Modern" : "Faithful"
+  }
+
+  /// The original cycles through its tunes as the campaign advances.
+  private func playMusicForCurrentLevel() {
+    guard !music.library.isEmpty else { return }
+    let index = currentNxlvURL == nil ? max(0, picker.indexOfSelectedItem) : 0
+    if let title = music.play(index: index) {
+      setStatus("♪ \(title)")
     }
   }
 

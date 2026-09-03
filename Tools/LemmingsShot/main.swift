@@ -60,6 +60,19 @@ private func render(
         playfield.viewport.center(on: Double(entrance.x))
     }
 
+    let panelPalette = ClassicLemmingPalette.panelVGA
+    if let graphics = assets.panel {
+        let bytes = graphics.rgba(using: panelPalette)
+        if let provider = CGDataProvider(data: bytes as CFData) {
+            panel.panelImage = CGImage(
+                width: graphics.width, height: graphics.height, bitsPerComponent: 8,
+                bitsPerPixel: 32, bytesPerRow: graphics.width * 4,
+                space: CGColorSpaceCreateDeviceRGB(),
+                bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.last.rawValue),
+                provider: provider, decode: nil, shouldInterpolate: false,
+                intent: .defaultIntent)
+        }
+    }
     panel.session = session
     // Mirror the app: arm the first skill the level actually provides.
     panel.selectedSkillIndex = session.skills.firstIndex { $0.count > 0 } ?? 0

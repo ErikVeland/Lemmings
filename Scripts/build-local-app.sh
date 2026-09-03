@@ -30,7 +30,7 @@ for architecture in "${architectures[@]}"; do
   swiftc -swift-version 6 -target "$target" \
     -module-cache-path "$build_dir/ModuleCache" \
     -I "$module_dir" -L "$architecture_dir" -lNxlvKit \
-    -framework AppKit \
+    -framework AppKit -framework AVFoundation \
     -Xlinker -rpath -Xlinker @executable_path/../Frameworks -Xlinker -w \
     -o "$architecture_dir/LemmingsLocal" \
     "$project_dir"/Sources/LemmingsLocal/*.swift

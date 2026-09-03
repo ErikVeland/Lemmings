@@ -20,11 +20,21 @@ enum PanelButton: Equatable {
   var levelSize = CGSize(width: 1, height: 1)
   var visibleLevelRect = CGRect.zero
 
+  /// The original status bar, when the imported data provides it.
+  var panelImage: CGImage?
   var onButton: ((PanelButton) -> Void)?
   var onMinimapScroll: ((Double) -> Void)?
 
   private var buttonFrames: [(PanelButton, CGRect)] = []
   private var minimapFrame = CGRect.zero
+  private var panelFrame = CGRect.zero
+  private var panelScale = 1.0
+
+  /// The authentic skin fits the eight DOS skills only. A NeoLemmix level can
+  /// grant far more, so those fall back to the drawn panel.
+  private var usesClassicSkin: Bool {
+    panelImage != nil && session?.skills.count == 8
+  }
 
   override var isFlipped: Bool { true }
 
@@ -33,6 +43,34 @@ enum PanelButton: Equatable {
   private let gap = 4.0
 
   // MARK: - Layout
+
+  /// Places the twelve original buttons over the drawn status bar.
+  private func layoutClassicButtons() {
+    guard let panelImage else { return }
+    let scale = max(1, floor(bounds.width / CGFloat(panelImage.width)))
+    panelScale = Double(scale)
+    let size = CGSize(
+      width: CGFloat(panelImage.width) * scale, height: CGFloat(panelImage.height) * scale)
+    panelFrame = CGRect(
+      x: (bounds.width - size.width) / 2, y: 0, width: size.width, height: size.height)
+    _ = statusStripHeight
+
+    let order: [PanelButton] = [.rateDown, .rateUp]
+      + (0..<8).map(PanelButton.skill) + [.pause, .nuke]
+    let cell = CGFloat(ClassicPanelGraphics.buttonWidth) * scale
+    buttonFrames = order.enumerated().map { index, button in
+      (button, CGRect(
+        x: panelFrame.minX + cell * CGFloat(index), y: panelFrame.minY,
+        width: cell, height: panelFrame.height))
+    }
+    // The original reserves the right of the bar for the level map.
+    let mapLeft = panelFrame.minX + cell * CGFloat(order.count) + 16 * scale
+    minimapFrame = CGRect(
+      x: mapLeft,
+      y: panelFrame.minY + 4 * scale,
+      width: max(0, panelFrame.maxX - mapLeft - 4 * scale),
+      height: panelFrame.height - 8 * scale)
+  }
 
   private func layoutButtons() {
     let skillCount = session?.skills.count ?? 0
@@ -81,13 +119,63 @@ enum PanelButton: Equatable {
   // MARK: - Drawing
 
   override func draw(_ dirtyRect: NSRect) {
+    NSColor.black.setFill()
+    dirtyRect.fill()
+
+    if usesClassicSkin {
+      layoutClassicButtons()
+      drawClassicPanel()
+      drawClassicCounts()
+      drawMinimap()
+      drawStatus()
+      return
+    }
+
     NSColor(calibratedWhite: 0.11, alpha: 1).setFill()
     dirtyRect.fill()
     layoutButtons()
-
     for (button, frame) in buttonFrames { draw(button, in: frame) }
     drawMinimap()
     drawStatus()
+  }
+
+  private func drawClassicPanel() {
+    guard let panelImage else { return }
+    NSGraphicsContext.current?.imageInterpolation = .none
+    NSImage(cgImage: panelImage, size: NSSize(width: panelImage.width, height: panelImage.height))
+      .draw(in: panelFrame, from: .zero, operation: .sourceOver, fraction: 1)
+
+    // Mark the armed skill, which the original showed with a lit border.
+    guard let match = buttonFrames.first(where: { $0.0 == .skill(selectedSkillIndex) })
+    else { return }
+    // The art occupies the upper rows of each cell, so the marker follows it.
+    let art = CGRect(
+      x: match.1.minX, y: match.1.minY,
+      width: match.1.width, height: match.1.height * 0.72)
+    NSColor.white.setStroke()
+    let outline = NSBezierPath(rect: art.insetBy(dx: 1, dy: 1))
+    outline.lineWidth = 2
+    outline.stroke()
+  }
+
+  /// Draws the live counts into the boxes above each button.
+  private func drawClassicCounts() {
+    guard let session else { return }
+    let attributes: [NSAttributedString.Key: Any] = [
+      .font: NSFont.monospacedDigitSystemFont(
+        ofSize: max(8, 8 * panelScale / 2), weight: .bold),
+      .foregroundColor: NSColor.white,
+    ]
+    for (button, frame) in buttonFrames {
+      guard case let .skill(index) = button, let skill = session.skills[safe: index] else {
+        continue
+      }
+      let text = (skill.isInfinite ? "∞" : "\(skill.count)") as NSString
+      let size = text.size(withAttributes: attributes)
+      text.draw(
+        at: CGPoint(x: frame.midX - size.width / 2, y: frame.minY + 2),
+        withAttributes: attributes)
+    }
   }
 
   private func draw(_ button: PanelButton, in frame: CGRect) {
@@ -144,8 +232,12 @@ enum PanelButton: Equatable {
   }
 
   private func drawMinimap() {
-    NSColor(calibratedWhite: 0.05, alpha: 1).setFill()
-    NSBezierPath(roundedRect: minimapFrame, xRadius: 3, yRadius: 3).fill()
+    // The original bar already draws the map surround, so only the dots and
+    // the view rectangle go on top of it.
+    if !usesClassicSkin {
+      NSColor(calibratedWhite: 0.05, alpha: 1).setFill()
+      NSBezierPath(roundedRect: minimapFrame, xRadius: 3, yRadius: 3).fill()
+    }
     guard levelSize.width > 0, levelSize.height > 0, let session else { return }
 
     let scale = min(
@@ -180,11 +272,17 @@ enum PanelButton: Equatable {
       .font: NSFont.monospacedDigitSystemFont(ofSize: 11, weight: .regular),
       .foregroundColor: NSColor(calibratedWhite: 0.85, alpha: 1),
     ]
+    let y = usesClassicSkin ? panelFrame.maxY + 4 : inset + buttonHeight + 6
     (statusText as NSString).draw(
-      at: CGPoint(x: inset, y: inset + buttonHeight + 6), withAttributes: attributes)
+      at: CGPoint(x: inset, y: y), withAttributes: attributes)
   }
 
-  var intrinsicHeight: CGFloat { inset * 2 + buttonHeight + 22 }
+  /// Tall enough for the original bar at 3x, plus a status strip beneath it.
+  var intrinsicHeight: CGFloat {
+    CGFloat(ClassicPanelGraphics.height) * 3 + statusStripHeight
+  }
+
+  private let statusStripHeight: CGFloat = 22
 }
 
 

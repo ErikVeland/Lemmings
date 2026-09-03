@@ -167,12 +167,76 @@ public enum ClassicLemmingPalette {
         ClassicRGBColor(red: classicMainVGAComponent(32), green: classicMainVGAComponent(32), blue: classicMainVGAComponent(32)),
     ]
 
+    /// Returns palette indices 0...15 for the status bar.
+    ///
+    /// The bar does not follow the level. Feeding it the terrain palette tints
+    /// its upper indices with whatever style is loaded, which is wrong. The
+    /// low eight entries are the known fixed colors. The upper eight are a
+    /// provisional neutral ramp, because the original bar palette has not been
+    /// established from the data yet.
+    public static var panelVGA: [ClassicRGBColor] {
+        // fixedVGAColors holds seven entries, so nine more complete the set.
+        let neutral: [ClassicRGBColor] = [
+            ClassicRGBColor(red: 0, green: 0, blue: 0),
+            ClassicRGBColor(red: 48, green: 48, blue: 56),
+            ClassicRGBColor(red: 80, green: 80, blue: 92),
+            ClassicRGBColor(red: 112, green: 112, blue: 124),
+            ClassicRGBColor(red: 144, green: 144, blue: 156),
+            ClassicRGBColor(red: 176, green: 176, blue: 188),
+            ClassicRGBColor(red: 208, green: 208, blue: 216),
+            ClassicRGBColor(red: 232, green: 232, blue: 240),
+            ClassicRGBColor(red: 255, green: 255, blue: 255),
+        ]
+        return fixedVGAColors + neutral
+    }
+
     /// Returns palette indices 0...15 for the selected DOS ground style.
     public static func inLevelVGA(terrainPalette: [ClassicRGBColor]) throws -> [ClassicRGBColor] {
         guard terrainPalette.count == 8 else {
             throw ClassicMainDATError.invalidTerrainPaletteSize(actual: terrainPalette.count)
         }
         return fixedVGAColors + [terrainPalette[0]] + terrainPalette
+    }
+}
+
+/// The status bar drawn along the bottom of the classic screen.
+///
+/// Section 2 of `MAIN.DAT` holds it as 320 by 40 pixels in four bitplanes.
+/// The twelve buttons sit on the left, each 16 pixels wide, and the wide
+/// status area follows them.
+public struct ClassicPanelGraphics: Codable, Equatable, Sendable {
+    public static let width = 320
+    public static let height = 40
+    public static let buttonCount = 12
+    public static let buttonWidth = 16
+
+    /// One palette index per pixel, top to bottom and left to right.
+    public let indexedPixels: Data
+    /// Bytes after the panel image. These hold the count digits.
+    public let trailingData: Data
+
+    public var width: Int { Self.width }
+    public var height: Int { Self.height }
+
+    /// Expands the panel to non-premultiplied RGBA, one byte per component.
+    ///
+    /// This mirrors how sprite bitmaps are expanded, so both follow one path.
+    public func rgba(using palette: [ClassicRGBColor]) -> Data {
+        guard palette.count >= 16 else { return Data() }
+        var output = Data(capacity: indexedPixels.count * 4)
+        for value in indexedPixels {
+            let color = palette[Int(value) & 0x0F]
+            output.append(color.red)
+            output.append(color.green)
+            output.append(color.blue)
+            output.append(255)
+        }
+        return output
+    }
+
+    /// The area of one panel button, for slicing the image.
+    public static func buttonRect(_ index: Int) -> (x: Int, y: Int, width: Int, height: Int) {
+        (x: index * buttonWidth, y: 0, width: buttonWidth, height: height)
     }
 }
 
@@ -183,17 +247,19 @@ public struct ClassicMainDATAssets: Codable, Equatable, Sendable {
     public let destructionMasks: ClassicDestructionMasks
     /// The source stores these glyphs in descending order from 9 to 0.
     public let countdownGlyphs: [ClassicCountdownGlyph]
+    /// Present when the archive carries section 2.
+    public let panel: ClassicPanelGraphics?
     public let sectionSizes: [Int]
 
     public var totalSpriteFrameCount: Int {
         animations.reduce(0) { $0 + $1.frames.count }
     }
 
-    /// Sections 2...6 contain panels, fonts, menu graphics, or unknown data.
-    /// Their indices are reported so clients do not mistake this gameplay
-    /// decoder for a complete menu-asset decoder.
+    /// Sections 3...6 contain fonts, menu graphics, or unknown data. Their
+    /// indices are reported so clients do not mistake this decoder for a
+    /// complete menu-asset decoder.
     public var unsupportedSectionIndices: [Int] {
-        Array(sectionSizes.indices.dropFirst(2))
+        Array(sectionSizes.indices.dropFirst(3))
     }
 
     public func animation(
@@ -237,6 +303,14 @@ public struct ClassicMainDATAssets: Codable, Equatable, Sendable {
         sectionSizes = decompressedSections.map(\.count)
         let section0 = [UInt8](decompressedSections[0])
         let section1 = [UInt8](decompressedSections[1])
+
+        // Section 2 carries the status bar. Data sets without it still load,
+        // because gameplay does not depend on the panel image.
+        if decompressedSections.count > 2 {
+            panel = try Self.decodePanel([UInt8](decompressedSections[2]))
+        } else {
+            panel = nil
+        }
 
         animations = try Self.animationDescriptors.map { descriptor in
             ClassicLemmingAnimation(
@@ -341,6 +415,31 @@ public struct ClassicMainDATAssets: Codable, Equatable, Sendable {
         AnimationDescriptor(pose: .ohNo, direction: .none, sourceOffset: 0x4E70, frameCount: 16, width: 16, height: 10, bitsPerPixel: 2, offsetX: -8, offsetY: -10),
         AnimationDescriptor(pose: .explosion, direction: .none, sourceOffset: 0x50F0, frameCount: 1, width: 32, height: 32, bitsPerPixel: 3, offsetX: -8, offsetY: -10),
     ]
+
+    /// Unpacks the four-bitplane status bar from section 2.
+    private static func decodePanel(_ data: [UInt8]) throws -> ClassicPanelGraphics? {
+        let width = ClassicPanelGraphics.width
+        let height = ClassicPanelGraphics.height
+        let planes = 4
+        let pixelCount = width * height
+        let bytesPerPlane = (pixelCount + 7) / 8
+        let needed = bytesPerPlane * planes
+        guard data.count >= needed else { return nil }
+
+        var pixels = [UInt8](repeating: 0, count: pixelCount)
+        for plane in 0..<planes {
+            let planeOffset = plane * bytesPerPlane
+            for pixel in 0..<pixelCount {
+                let byte = data[planeOffset + pixel / 8]
+                let bit = (byte >> UInt8(7 - pixel % 8)) & 1
+                pixels[pixel] |= bit << UInt8(plane)
+            }
+        }
+        return ClassicPanelGraphics(
+            indexedPixels: Data(pixels),
+            trailingData: Data(data[needed...])
+        )
+    }
 
     private static func decodePlanarFrames(
         _ data: [UInt8],
