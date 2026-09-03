@@ -30,6 +30,7 @@ let macImageKey = "MacintoshDiskImage"
   private var timer: Timer?
   private var accumulator = 0.0
   private var isPaused = false
+  private var phase: GamePhase = .briefing
   private var progress = ModernCampaignProgress()
   private let music = ModuleMusicPlayer()
   private let effects = SoundEffectPlayer()
@@ -148,6 +149,7 @@ let macImageKey = "MacintoshDiskImage"
     gamePicker.action = #selector(selectDataSet)
     playfield.onAssign = { [weak self] id in self?.assign(id) }
     playfield.onViewportChanged = { [weak self] in self?.syncPanelViewport() }
+    playfield.onAdvancePhase = { [weak self] in self?.advancePhase() }
     panel.onButton = { [weak self] button in self?.handle(button) }
     panel.onMinimapScroll = { [weak self] centerX in
       guard let self else { return }
@@ -389,9 +391,92 @@ let macImageKey = "MacintoshDiskImage"
     if let entrance = new.entranceX { playfield.viewport.center(on: Double(entrance)) }
     syncPanelViewport()
     updateStatus()
-    playfield.needsDisplay = true
     playMusicForCurrentLevel()
+    showBriefing()
+  }
+
+  // MARK: - Between levels
+
+  /// Shows what the level asks for before the clock starts.
+  private func showBriefing() {
+    guard let session else { return }
+    let title = campaign.flatMap { campaign -> String? in
+      let index = picker.indexOfSelectedItem
+      guard index < campaign.levels.count else { return nil }
+      let entry = campaign.levels[index]
+      return "\(entry.rank) \(entry.number)"
+    }
+    let name = campaign.flatMap { campaign -> String? in
+      let index = picker.indexOfSelectedItem
+      guard index < campaign.levels.count else { return nil }
+      return campaign.levels[index].level.title.trimmingCharacters(in: .whitespaces)
+    }
+
+    let percent = session.total > 0
+      ? Int((Double(session.required) / Double(session.total) * 100).rounded())
+      : 0
+    var lines = [
+      "\(session.total) lemmings",
+      "Save \(session.required)  (\(percent)%)",
+      "Release rate \(session.rate)",
+    ]
+    if let seconds = session.remainingSeconds {
+      lines.append(String(format: "Time %d:%02d", seconds / 60, seconds % 60))
+    }
+
+    phase = .briefing
+    playfield.phase = .briefing
+    playfield.overlayTitle = name ?? "Level"
+    playfield.overlayLines = lines
+    playfield.overlayFooter = [title, "Click or press space to begin"]
+      .compactMap { $0 }.joined(separator: "   •   ")
+    playfield.needsDisplay = true
+    setStatus("")
+  }
+
+  private func beginPlaying() {
+    guard phase == .briefing else { return }
+    phase = .playing
+    playfield.phase = .playing
+    playfield.overlayTitle = nil
+    playfield.overlayLines = []
+    playfield.overlayFooter = nil
+    accumulator = 0
+    playfield.needsDisplay = true
     effects.play(.levelStart)
+    updateStatus()
+  }
+
+  /// Shows how it went, in the terms the game judges you by.
+  private func showResults(_ session: any GameSession) {
+    let rescued = session.total > 0
+      ? Int((Double(session.saved) / Double(session.total) * 100).rounded())
+      : 0
+    let needed = session.total > 0
+      ? Int((Double(session.required) / Double(session.total) * 100).rounded())
+      : 0
+
+    phase = .results
+    playfield.phase = .results
+    playfield.overlayTitle = session.didWin ? "Level complete" : "Not this time"
+    playfield.overlayLines = [
+      "Rescued \(session.saved) of \(session.total)  (\(rescued)%)",
+      "Needed \(session.required)  (\(needed)%)",
+    ]
+    playfield.overlayFooter = session.didWin
+      ? "Click or press N for the next level"
+      : "Click or press R to try again"
+    playfield.needsDisplay = true
+  }
+
+  /// A click or a key moves past a briefing or a result.
+  private func advancePhase() {
+    switch phase {
+    case .briefing: beginPlaying()
+    case .results:
+      if session?.didWin == true { nextLevel() } else { retry() }
+    case .playing: break
+    }
   }
 
   /// Builds the status bar image from the imported panel graphics.
@@ -436,7 +521,7 @@ let macImageKey = "MacintoshDiskImage"
 
   private func step() {
     applyEdgeScroll()
-    guard !isPaused, let session, !session.isComplete else { return }
+    guard phase == .playing, !isPaused, let session, !session.isComplete else { return }
 
     // Each ruleset states its own logic rate. Whole ticks only, so timing does
     // not drift with the display.
@@ -455,7 +540,10 @@ let macImageKey = "MacintoshDiskImage"
     playfield.needsDisplay = true
     panel.needsDisplay = true
     updateStatus()
-    if session.isComplete { recordCompletion(session) }
+    if session.isComplete {
+      recordCompletion(session)
+      showResults(session)
+    }
   }
 
   private func applyEdgeScroll() {
@@ -635,9 +723,12 @@ let macImageKey = "MacintoshDiskImage"
       case "z": self.rewind(seconds: 2)
       case ",": self.stepBackward()
       case ".": self.stepForward()
+      case "\r": self.advancePhase()
       case "n": self.nextLevel()
       case "r": self.retry()
-      case "p", " ": self.togglePause()
+      case " ":
+        if self.phase == .playing { self.togglePause() } else { self.advancePhase() }
+      case "p": self.togglePause()
       case "x": self.handle(.nuke)
       default: return event
       }

@@ -65,7 +65,19 @@ struct Viewport {
   }
 }
 
+/// What the screen is showing between levels.
+enum GamePhase: Equatable {
+  case briefing
+  case playing
+  case results
+}
+
 @MainActor final class PlayfieldView: NSView {
+  /// Lines drawn over the level before it starts or after it ends.
+  var overlayTitle: String?
+  var overlayLines: [String] = []
+  var overlayFooter: String?
+  var phase: GamePhase = .playing
   var levelImage: CGImage?
   var session: (any GameSession)?
   var assets: ClassicMainDATAssets?
@@ -73,6 +85,8 @@ struct Viewport {
   var viewport = Viewport()
   var onAssign: ((Int) -> Void)?
   var onViewportChanged: (() -> Void)?
+  /// Called when a click should dismiss a briefing or a result.
+  var onAdvancePhase: (() -> Void)?
 
   private var spriteCache: [String: NSImage] = [:]
   private var cursorLevelPoint: CGPoint?
@@ -125,6 +139,10 @@ struct Viewport {
   }
 
   override func mouseDown(with event: NSEvent) {
+    guard phase == .playing else {
+      onAdvancePhase?()
+      return
+    }
     let viewPoint = convert(event.locationInWindow, from: nil)
     let point = viewport.levelPoint(from: viewPoint)
     cursorViewPoint = viewPoint
@@ -170,7 +188,61 @@ struct Viewport {
     NSGraphicsContext.current?.imageInterpolation = .none
     drawLevel(levelImage)
     drawLemmings()
-    drawCursor()
+    if phase == .playing { drawCursor() }
+    if phase != .playing { drawOverlay() }
+  }
+
+  /// Dims the level and shows the briefing or the result over it.
+  ///
+  /// The original put these on their own screens. Keeping the level visible
+  /// behind them means the player can already read the terrain while the
+  /// briefing is up, which is the one thing the original made you wait for.
+  private func drawOverlay() {
+    NSColor.black.withAlphaComponent(0.72).setFill()
+    bounds.fill()
+
+    let titleAttributes: [NSAttributedString.Key: Any] = [
+      .font: NSFont.systemFont(ofSize: 30, weight: .bold),
+      .foregroundColor: NSColor.white,
+    ]
+    let lineAttributes: [NSAttributedString.Key: Any] = [
+      .font: NSFont.monospacedDigitSystemFont(ofSize: 15, weight: .regular),
+      .foregroundColor: NSColor(calibratedWhite: 0.92, alpha: 1),
+    ]
+    let footerAttributes: [NSAttributedString.Key: Any] = [
+      .font: NSFont.systemFont(ofSize: 13, weight: .medium),
+      .foregroundColor: NSColor.systemGreen,
+    ]
+
+    var height: CGFloat = 0
+    if let overlayTitle {
+      height += (overlayTitle as NSString).size(withAttributes: titleAttributes).height + 18
+    }
+    height += CGFloat(overlayLines.count) * 24
+    if overlayFooter != nil { height += 34 }
+
+    var y = (bounds.height - height) / 2
+    if let overlayTitle {
+      let text = overlayTitle as NSString
+      let size = text.size(withAttributes: titleAttributes)
+      text.draw(at: CGPoint(x: (bounds.width - size.width) / 2, y: y),
+                withAttributes: titleAttributes)
+      y += size.height + 18
+    }
+    for line in overlayLines {
+      let text = line as NSString
+      let size = text.size(withAttributes: lineAttributes)
+      text.draw(at: CGPoint(x: (bounds.width - size.width) / 2, y: y),
+                withAttributes: lineAttributes)
+      y += 24
+    }
+    if let overlayFooter {
+      y += 10
+      let text = overlayFooter as NSString
+      let size = text.size(withAttributes: footerAttributes)
+      text.draw(at: CGPoint(x: (bounds.width - size.width) / 2, y: y),
+                withAttributes: footerAttributes)
+    }
   }
 
   private func drawLevel(_ image: CGImage) {
