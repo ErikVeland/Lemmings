@@ -17,6 +17,33 @@ public struct ClassicRGBColor: Codable, Equatable, Sendable {
         self.green = green
         self.blue = blue
     }
+
+    /// Reduces the color to the depth an Amiga OCS or ECS chipset could show.
+    ///
+    /// Those machines held four bits per channel, so sixteen levels each and
+    /// 4,096 colors in total. VGA held six bits per channel. Quantizing here
+    /// rather than at the pixel level means terrain, sprites and the status
+    /// bar all shift together, which is what a real palette change did.
+    public var quantizedToAmigaOCS: ClassicRGBColor {
+        func snap(_ value: UInt8) -> UInt8 {
+            // Round to the nearest of the sixteen levels, then spread back so
+            // level 15 lands on 255.
+            //
+            // Truncating the low bits is what the hardware does when a
+            // twelve bit register is written, but this is converting art that
+            // was authored at a higher depth. Truncation would darken every
+            // shade by up to fifteen, which reads as a washed out picture
+            // rather than an Amiga one.
+            let level = (Int(value) * 15 + 127) / 255
+            return UInt8(level << 4 | level)
+        }
+        return ClassicRGBColor(red: snap(red), green: snap(green), blue: snap(blue))
+    }
+}
+
+extension Array where Element == ClassicRGBColor {
+    /// Applies the Amiga color depth across a whole palette.
+    public var quantizedToAmigaOCS: [ClassicRGBColor] { map(\.quantizedToAmigaOCS) }
 }
 
 public struct ClassicTerrainGraphic: Codable, Equatable, Sendable {

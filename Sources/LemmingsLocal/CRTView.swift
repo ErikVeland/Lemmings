@@ -18,6 +18,9 @@ struct CRTSettings {
   var convergence: Float
   var vignette: Float
   var pixelAspect: Float
+  /// 0 keeps full depth. 16 matches the Amiga OCS and ECS palette, which
+  /// held four bits per channel.
+  var colorLevels: Float
 
   /// A Commodore 1084 style monitor, which is how most people saw an A500.
   ///
@@ -35,7 +38,8 @@ struct CRTSettings {
     brightness: 1.32,
     convergence: 0.55,
     vignette: 0.22,
-    pixelAspect: 1.0)
+    pixelAspect: 1.0,
+    colorLevels: 16)
 
   /// A television fed over composite, which is blurrier and bloomier.
   static let television = CRTSettings(
@@ -50,7 +54,8 @@ struct CRTSettings {
     brightness: 1.28,
     convergence: 1.4,
     vignette: 0.34,
-    pixelAspect: 1.35)
+    pixelAspect: 1.35,
+    colorLevels: 16)
 }
 
 private struct CRTUniforms {
@@ -68,6 +73,7 @@ private struct CRTUniforms {
   var convergence: Float = 0
   var vignette: Float = 0
   var pixelAspect: Float = 1
+  var colorLevels: Float = 0
 }
 
 /// Draws a game frame through a simulated picture tube.
@@ -224,6 +230,7 @@ private struct CRTUniforms {
     uniforms.convergence = settings.convergence
     uniforms.vignette = settings.vignette
     uniforms.pixelAspect = settings.pixelAspect
+    uniforms.colorLevels = settings.colorLevels
 
     func pass(
       _ pipeline: MTLRenderPipelineState,

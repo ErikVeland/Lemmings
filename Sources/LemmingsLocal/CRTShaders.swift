@@ -29,6 +29,7 @@ enum CRTShaders {
       float  convergence;     // colour misalignment, in output pixels
       float  vignette;
       float  pixelAspect;     // horizontal stretch, PAL is not square
+      float  colorLevels;     // 0 keeps full depth, 16 is Amiga OCS
   };
 
   struct VOut {
@@ -159,6 +160,15 @@ enum CRTShaders {
       }
 
       float3 color = weightSum > 0.0 ? accumulated / weightSum : float3(0.0);
+
+      // Reduce colour depth before the tube, as a machine with a shallower
+      // palette would have fed it. OCS and ECS held four bits per channel.
+      if (u.colorLevels > 1.0) {
+          float steps = u.colorLevels - 1.0;
+          float3 display = toGamma(color, u.gamma);
+          display = round(display * steps) / steps;
+          color = toLinear(display, u.gamma);
+      }
 
       // Scan line depth: how dark the gaps between lines go.
       float lineProfile = beamWeight(frac - 0.5, u.beamWidth, 1.0, 0.0);

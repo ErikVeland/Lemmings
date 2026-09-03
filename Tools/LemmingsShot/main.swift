@@ -157,6 +157,7 @@ private struct ShotCRTUniforms {
     var convergence: Float = 0
     var vignette: Float = 0
     var pixelAspect: Float = 1
+    var colorLevels: Float = 0
 }
 
 /// Runs the tube shaders without a window, so the result can be inspected.
@@ -230,6 +231,7 @@ private func applyCRT(
     uniforms.convergence = settings.convergence
     uniforms.vignette = settings.vignette
     uniforms.pixelAspect = settings.pixelAspect
+    uniforms.colorLevels = settings.colorLevels
 
     func pass(
         _ state: MTLRenderPipelineState, target: MTLTexture, textures: [MTLTexture]
