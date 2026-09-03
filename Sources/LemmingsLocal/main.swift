@@ -8,6 +8,7 @@ let stylesPathKey = "NeoLemmixStylesDirectory"
 let progressKey = "ModernCampaignProgress"
 let musicPathKey = "MusicDirectory"
 let musicPresetKey = "MusicUsesModernPreset"
+let macImageKey = "MacintoshDiskImage"
 
 @MainActor final class AppDelegate: NSObject, NSApplicationDelegate {
   private var window: NSWindow!
@@ -31,6 +32,7 @@ let musicPresetKey = "MusicUsesModernPreset"
   private var isPaused = false
   private var progress = ModernCampaignProgress()
   private let music = ModuleMusicPlayer()
+  private let effects = SoundEffectPlayer()
   private var muteButton: NSButton!
   private var presetButton: NSButton!
   /// Set while an unofficial level is loaded, so retry reloads that file.
@@ -57,6 +59,14 @@ let musicPresetKey = "MusicUsesModernPreset"
       music.setEnhancements(.modern)
     }
     do {
+      try effects.start()
+      if let saved = UserDefaults.standard.string(forKey: macImageKey) {
+        loadSoundEffects(from: URL(fileURLWithPath: saved))
+      }
+    } catch {
+      setStatus("Sound unavailable: \(error.localizedDescription)")
+    }
+    do {
       try music.start()
     } catch {
       // Audio is optional. The game stays playable without it.
@@ -80,6 +90,8 @@ let musicPresetKey = "MusicUsesModernPreset"
     let zoomIn = NSButton(title: "+", target: self, action: #selector(zoomIn))
     let musicButton = NSButton(
       title: "Music…", target: self, action: #selector(chooseMusic))
+    let soundButton = NSButton(
+      title: "Sounds…", target: self, action: #selector(chooseSounds))
     let mute = NSButton(title: "Mute", target: self, action: #selector(toggleMute))
     let preset = NSButton(
       title: "Faithful", target: self, action: #selector(toggleMusicPreset))
@@ -88,7 +100,7 @@ let musicPresetKey = "MusicUsesModernPreset"
 
     let views: [NSView] = [
       gamePicker, picker, importButton, openNxlv, zoomOut, zoomIn,
-      musicButton, mute, preset, playfield, panel,
+      musicButton, soundButton, mute, preset, playfield, panel,
     ]
     for view in views {
       view.translatesAutoresizingMaskIntoConstraints = false
@@ -112,7 +124,9 @@ let musicPresetKey = "MusicUsesModernPreset"
       zoomIn.centerYAnchor.constraint(equalTo: picker.centerYAnchor),
       musicButton.leadingAnchor.constraint(equalTo: zoomIn.trailingAnchor, constant: 12),
       musicButton.centerYAnchor.constraint(equalTo: picker.centerYAnchor),
-      mute.leadingAnchor.constraint(equalTo: musicButton.trailingAnchor, constant: 6),
+      soundButton.leadingAnchor.constraint(equalTo: musicButton.trailingAnchor, constant: 6),
+      soundButton.centerYAnchor.constraint(equalTo: picker.centerYAnchor),
+      mute.leadingAnchor.constraint(equalTo: soundButton.trailingAnchor, constant: 6),
       mute.centerYAnchor.constraint(equalTo: picker.centerYAnchor),
       preset.leadingAnchor.constraint(equalTo: mute.trailingAnchor, constant: 6),
       preset.centerYAnchor.constraint(equalTo: picker.centerYAnchor),
@@ -377,6 +391,7 @@ let musicPresetKey = "MusicUsesModernPreset"
     updateStatus()
     playfield.needsDisplay = true
     playMusicForCurrentLevel()
+    effects.play(.levelStart)
   }
 
   /// Builds the status bar image from the imported panel graphics.
@@ -436,6 +451,7 @@ let musicPresetKey = "MusicUsesModernPreset"
     }
     guard advanced else { return }
 
+    effects.play(session.lastCues)
     playfield.needsDisplay = true
     panel.needsDisplay = true
     updateStatus()
@@ -468,6 +484,7 @@ let musicPresetKey = "MusicUsesModernPreset"
     if let seconds = session.remainingSeconds {
       parts.append(String(format: "Time %d:%02d", seconds / 60, seconds % 60))
     }
+    if session.supportsRewind { parts.append("t\(session.currentTick)") }
     if session.isNuking { parts.append("NUKING") }
     if session.isComplete {
       parts.append(session.didWin ? "COMPLETE — press N" : "FAILED — press R")
@@ -522,8 +539,31 @@ let musicPresetKey = "MusicUsesModernPreset"
     }
   }
 
+  @objc private func chooseSounds() {
+    let openPanel = NSOpenPanel()
+    openPanel.canChooseFiles = true
+    openPanel.canChooseDirectories = false
+    openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
+    openPanel.message = "Choose a Macintosh Lemmings disk image."
+    guard openPanel.runModal() == .OK, let url = openPanel.url else { return }
+    UserDefaults.standard.set(url.path, forKey: macImageKey)
+    loadSoundEffects(from: url)
+  }
+
+  /// The Macintosh release names its sounds, so they bind without guessing.
+  private func loadSoundEffects(from url: URL) {
+    do {
+      let loaded = try effects.loadMacintoshSounds(imageURL: url)
+      setStatus("Loaded \(loaded.count) sound effects.")
+    } catch {
+      setStatus("Sound effects: \(error)")
+    }
+  }
+
   @objc private func toggleMute() {
-    music.setMuted(!music.muted)
+    let muted = !music.muted
+    music.setMuted(muted)
+    effects.setMuted(muted)
     updateMusicButtons()
   }
 
@@ -592,6 +632,9 @@ let musicPresetKey = "MusicUsesModernPreset"
         return nil
       }
       switch characters {
+      case "z": self.rewind(seconds: 2)
+      case ",": self.stepBackward()
+      case ".": self.stepForward()
       case "n": self.nextLevel()
       case "r": self.retry()
       case "p", " ": self.togglePause()
@@ -600,6 +643,44 @@ let musicPresetKey = "MusicUsesModernPreset"
       }
       return nil
     }
+  }
+
+  // MARK: - Rewind
+
+  private func rewind(seconds: Double) {
+    guard let session, session.supportsRewind else {
+      setStatus("This ruleset cannot rewind yet.")
+      return
+    }
+    guard session.rewind(seconds: seconds) else {
+      setStatus("Already at the start of the history.")
+      return
+    }
+    isPaused = true
+    panel.isPaused = true
+    refreshAfterSeek()
+  }
+
+  private func stepBackward() {
+    guard let session, session.supportsRewind, session.stepBackward() else { return }
+    isPaused = true
+    panel.isPaused = true
+    refreshAfterSeek()
+  }
+
+  private func stepForward() {
+    guard let session, session.stepForward() else { return }
+    isPaused = true
+    panel.isPaused = true
+    refreshAfterSeek()
+  }
+
+  /// Redraws after moving through history, without playing sounds again.
+  private func refreshAfterSeek() {
+    accumulator = 0
+    playfield.needsDisplay = true
+    panel.needsDisplay = true
+    updateStatus()
   }
 
   private func scrollBy(_ dx: Double) {

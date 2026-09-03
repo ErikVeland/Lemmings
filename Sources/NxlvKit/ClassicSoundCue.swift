@@ -6,6 +6,7 @@ import Foundation
 /// know which index holds which recording. A data set supplies that mapping,
 /// so a different bank can be substituted without touching gameplay.
 public enum ClassicSoundEffect: String, CaseIterable, Codable, Sendable {
+    case levelStart
     case doorOpen
     case assignSkill
     case ohNo
@@ -123,4 +124,28 @@ public struct ClassicSoundMapping: Codable, Equatable, Sendable {
     public var missingEffects: [ClassicSoundEffect] {
         ClassicSoundEffect.allCases.filter { indices[$0] == nil }
     }
+}
+
+
+extension ClassicSoundMapping {
+    /// Binds effects to the names the Macintosh release uses.
+    ///
+    /// Most are unambiguous. The three marked below are reasoned guesses from
+    /// the name and the length, because nothing in the data says what a sound
+    /// is for. They are listed apart so they are easy to correct.
+    public static let macintoshNames: [ClassicSoundEffect: String] = [
+        .levelStart: "LetsGo",
+        .doorOpen: "Door",
+        .assignSkill: "MousePress",
+        .ohNo: "OhNo",
+        .explode: "Explode",
+        .splat: "Splat",
+        .drown: "Splash",
+        .vaporize: "Fire",
+        .hitSteel: "Chink",
+        // Reasoned from name and length rather than stated by the data.
+        .exitLevel: "Ting",
+        .builderWarning: "Oing",
+        .nuke: "Die",
+    ]
 }

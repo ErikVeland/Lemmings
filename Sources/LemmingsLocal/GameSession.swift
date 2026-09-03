@@ -45,23 +45,55 @@ protocol GameSession: AnyObject {
   var skills: [SessionSkill] { get }
 
   func tick()
+  /// Sounds the last tick asked for. Empty when nothing happened.
+  var lastCues: [ClassicSoundEffect] { get }
   /// Returns nil when the assignment lands, or a reason when it does not.
   func assign(skillIndex: Int, to lemmingID: Int) -> String?
   func adjustRate(by delta: Int)
   func nuke()
+
+  /// Rewind needs a deterministic engine. Not every ruleset has one yet.
+  var supportsRewind: Bool { get }
+  var currentTick: Int { get }
+  @discardableResult func rewind(seconds: Double) -> Bool
+  @discardableResult func stepBackward() -> Bool
+  @discardableResult func stepForward() -> Bool
 }
 
 // MARK: - Classic DOS
 
 final class ClassicSession: GameSession {
-  private(set) var simulation: ClassicDOSSimulation
+  /// Wraps the engine so any earlier tick can be reached exactly.
+  private var history: ClassicDOSRewind
+  var simulation: ClassicDOSSimulation { history.simulation }
   let levelWidth: Int
   let levelHeight: Int
 
   init(simulation: ClassicDOSSimulation, width: Int, height: Int) {
-    self.simulation = simulation
+    history = ClassicDOSRewind(simulation: simulation)
     levelWidth = width
     levelHeight = height
+  }
+
+  var supportsRewind: Bool { true }
+  var currentTick: Int { history.currentTick }
+
+  @discardableResult func rewind(seconds: Double) -> Bool {
+    let moved = history.rewind(seconds: seconds)
+    if moved { lastCues = [] }
+    return moved
+  }
+
+  @discardableResult func stepBackward() -> Bool {
+    let moved = history.stepBackward()
+    if moved { lastCues = [] }
+    return moved
+  }
+
+  @discardableResult func stepForward() -> Bool {
+    guard !history.simulation.isComplete else { return false }
+    tick()
+    return true
   }
 
   var ticksPerSecond: Int { ClassicDOSRules.ticksPerSecond }
@@ -98,16 +130,18 @@ final class ClassicSession: GameSession {
     }
   }
 
-  func tick() { _ = simulation.tick() }
+  private(set) var lastCues: [ClassicSoundEffect] = []
+
+  func tick() { lastCues = ClassicSoundCue.cues(for: history.tick()) }
 
   func assign(skillIndex: Int, to lemmingID: Int) -> String? {
     guard skillIndex < ClassicSkill.allCases.count else { return "no such skill" }
-    let result = simulation.assign(ClassicSkill.allCases[skillIndex], to: lemmingID)
+    let result = history.assign(ClassicSkill.allCases[skillIndex], to: lemmingID)
     return result == .assigned ? nil : result.rawValue
   }
 
-  func adjustRate(by delta: Int) { simulation.setReleaseRate(simulation.releaseRate + delta) }
-  func nuke() { simulation.beginNuke() }
+  func adjustRate(by delta: Int) { history.setReleaseRate(simulation.releaseRate + delta) }
+  func nuke() { history.beginNuke() }
 }
 
 // MARK: - NeoLemmix
@@ -195,6 +229,19 @@ final class NeoLemmixSession: GameSession {
         return SessionSkill(name: skill.rawValue.capitalized, count: 0, isInfinite: false)
       }
     }
+  }
+
+  /// NeoLemmix events are not mapped to sounds yet.
+  let lastCues: [ClassicSoundEffect] = []
+
+  var supportsRewind: Bool { false }
+  var currentTick: Int { simulation.tickCount }
+  @discardableResult func rewind(seconds: Double) -> Bool { false }
+  @discardableResult func stepBackward() -> Bool { false }
+  @discardableResult func stepForward() -> Bool {
+    guard !simulation.isComplete else { return false }
+    tick()
+    return true
   }
 
   func tick() { _ = simulation.tick() }
