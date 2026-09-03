@@ -9,6 +9,7 @@ let progressKey = "ModernCampaignProgress"
 let musicPathKey = "MusicDirectory"
 let musicPresetKey = "MusicUsesModernPreset"
 let macImageKey = "MacintoshDiskImage"
+let flowProgressKey = "ClassicGameProgress"
 
 @MainActor final class AppDelegate: NSObject, NSApplicationDelegate {
   private var window: NSWindow!
@@ -31,6 +32,9 @@ let macImageKey = "MacintoshDiskImage"
   private var accumulator = 0.0
   private var isPaused = false
   private var phase: GamePhase = .briefing
+  /// The whole game, from title to end.
+  private var flow: ClassicGameFlow?
+  private var rankChoice = 0
   private var progress = ModernCampaignProgress()
   private let music = ModuleMusicPlayer()
   private let effects = SoundEffectPlayer()
@@ -267,12 +271,20 @@ let macImageKey = "MacintoshDiskImage"
       playfield.invalidateSprites()
 
       campaign = entry.set.campaign
+      var built = ClassicGameFlow(campaign: entry.set.campaign)
+      if let data = UserDefaults.standard.data(
+        forKey: "\(flowProgressKey).\(entry.set.identifierKey)"),
+        let saved = try? JSONDecoder().decode(ClassicGameFlow.Progress.self, from: data) {
+        built.restore(saved)
+      }
+      flow = built
+      rankChoice = 0
       picker.removeAllItems()
       for (offset, level) in entry.set.campaign.levels.enumerated() {
         picker.addItem(withTitle: "\(offset + 1). \(level.rank) — \(level.level.title)")
       }
       picker.selectItem(at: 0)
-      levelChanged()
+      showTitle()
     } catch {
       setStatus("\(entry.set.name): \(error)")
     }
@@ -280,10 +292,30 @@ let macImageKey = "MacintoshDiskImage"
 
   // MARK: - Official levels
 
+  /// Loads the level at a campaign index without changing the flow.
+  private func loadLevel(at index: Int) {
+    guard let campaign, index < campaign.levels.count else { return }
+    picker.selectItem(at: index)
+    buildLevel(campaign.levels[index])
+  }
+
   @objc private func levelChanged() {
-    guard let campaign, picker.indexOfSelectedItem < campaign.levels.count else { return }
+    guard var current = flow, let campaign,
+      picker.indexOfSelectedItem < campaign.levels.count else { return }
+    // Choosing from the list jumps there, keeping the run intact.
+    let target = picker.indexOfSelectedItem
+    for (rankIndex, rank) in current.ranks.enumerated() {
+      if let position = rank.levelIndices.firstIndex(of: target) {
+        current.selectLevel(rank: rankIndex, position: position)
+        flow = current
+        renderScreen()
+        return
+      }
+    }
+  }
+
+  private func buildLevel(_ entry: ClassicCampaignLevel) {
     currentNxlvURL = nil
-    let entry = campaign.levels[picker.indexOfSelectedItem]
     let level = entry.level
     do {
       guard let ground = grounds[level.groundStyle] else { return }
@@ -392,26 +424,106 @@ let macImageKey = "MacintoshDiskImage"
     syncPanelViewport()
     updateStatus()
     playMusicForCurrentLevel()
-    showBriefing()
   }
 
-  // MARK: - Between levels
+  // MARK: - The game shell
 
-  /// Shows what the level asks for before the clock starts.
-  private func showBriefing() {
-    guard let session else { return }
-    let title = campaign.flatMap { campaign -> String? in
-      let index = picker.indexOfSelectedItem
-      guard index < campaign.levels.count else { return nil }
-      let entry = campaign.levels[index]
-      return "\(entry.rank) \(entry.number)"
-    }
-    let name = campaign.flatMap { campaign -> String? in
-      let index = picker.indexOfSelectedItem
-      guard index < campaign.levels.count else { return nil }
-      return campaign.levels[index].level.title.trimmingCharacters(in: .whitespaces)
-    }
+  private func showTitle() {
+    flow?.screen == .title ? () : flow?.acknowledgeGameComplete()
+    renderScreen()
+  }
 
+  /// Saves progress for the game currently loaded.
+  private func saveProgress() {
+    guard let flow, gamePicker.indexOfSelectedItem < dataSets.count else { return }
+    let key = "\(flowProgressKey).\(dataSets[gamePicker.indexOfSelectedItem].set.identifierKey)"
+    if let data = try? JSONEncoder().encode(flow.progress) {
+      UserDefaults.standard.set(data, forKey: key)
+    }
+  }
+
+  /// Draws whichever screen the game is on.
+  private func renderScreen() {
+    guard let flow else { return }
+    playfield.overlayHighlight = nil
+
+    switch flow.screen {
+    case .title:
+      phase = .briefing
+      playfield.phase = .briefing
+      let name = dataSets.indices.contains(gamePicker.indexOfSelectedItem)
+        ? dataSets[gamePicker.indexOfSelectedItem].set.name : "Lemmings"
+      playfield.overlayTitle = name
+      playfield.overlayLines = ["A native macOS port", "Data supplied by the player"]
+      playfield.overlayFooter = "Click or press space to begin   •   Q to quit"
+
+    case .rankSelect:
+      phase = .briefing
+      playfield.phase = .briefing
+      playfield.overlayTitle = "Choose a rating"
+      playfield.overlayLines = flow.ranks.map { rank in
+        let done = flow.passedCount(inRank: rank.name)
+        return "\(rank.name)  \(done)/\(rank.levelIndices.count)"
+      }
+      playfield.overlayHighlight = rankChoice
+      playfield.overlayFooter = "Up and down to choose   •   Enter to start"
+
+    case let .briefing(level):
+      loadLevel(at: level)
+      showBriefingOverlay()
+
+    case .playing:
+      phase = .playing
+      playfield.phase = .playing
+      playfield.overlayTitle = nil
+      playfield.overlayLines = []
+      playfield.overlayFooter = nil
+      updateStatus()
+
+    case let .results(_, saved, required, total):
+      phase = .results
+      playfield.phase = .results
+      let rescued = total > 0 ? Int((Double(saved) / Double(total) * 100).rounded()) : 0
+      let needed = total > 0 ? Int((Double(required) / Double(total) * 100).rounded()) : 0
+      let passed = saved >= required
+      playfield.overlayTitle = passed ? "Level complete" : "Not this time"
+      playfield.overlayLines = [
+        "Rescued \(saved) of \(total)  (\(rescued)%)",
+        "Needed \(required)  (\(needed)%)",
+      ]
+      playfield.overlayFooter = passed
+        ? "Click or press Enter to continue"
+        : "Click or press Enter to try again"
+
+    case let .rankComplete(rank):
+      phase = .results
+      playfield.phase = .results
+      playfield.overlayTitle = "\(rank) complete"
+      playfield.overlayLines = ["Every level in this rating is done."]
+      playfield.overlayFooter = "Click or press Enter to continue"
+
+    case .gameComplete:
+      phase = .results
+      playfield.phase = .results
+      playfield.overlayTitle = "Game complete"
+      playfield.overlayLines = ["Every rating is finished."]
+      playfield.overlayFooter = "Click or press Enter to return to the title"
+
+    case .quitConfirm:
+      phase = .results
+      playfield.phase = .results
+      playfield.overlayTitle = "Quit?"
+      playfield.overlayLines = ["Progress is saved."]
+      playfield.overlayFooter = "Q again to quit   •   Escape to stay"
+    }
+    playfield.needsDisplay = true
+    panel.needsDisplay = true
+  }
+
+  private func showBriefingOverlay() {
+    guard let session, let flow else { return }
+    phase = .briefing
+    playfield.phase = .briefing
     let percent = session.total > 0
       ? Int((Double(session.required) / Double(session.total) * 100).rounded())
       : 0
@@ -423,60 +535,59 @@ let macImageKey = "MacintoshDiskImage"
     if let seconds = session.remainingSeconds {
       lines.append(String(format: "Time %d:%02d", seconds / 60, seconds % 60))
     }
-
-    phase = .briefing
-    playfield.phase = .briefing
-    playfield.overlayTitle = name ?? "Level"
+    let title = campaign.flatMap { campaign -> String? in
+      guard let index = flow.currentLevelIndex, index < campaign.levels.count else { return nil }
+      return campaign.levels[index].level.title.trimmingCharacters(in: .whitespaces)
+    }
+    playfield.overlayTitle = title ?? "Level"
     playfield.overlayLines = lines
-    playfield.overlayFooter = [title, "Click or press space to begin"]
-      .compactMap { $0 }.joined(separator: "   •   ")
-    playfield.needsDisplay = true
+    playfield.overlayFooter =
+      "\(flow.currentRank?.name ?? "") \(flow.currentNumber)   •   Click or space to begin"
     setStatus("")
   }
 
-  private func beginPlaying() {
-    guard phase == .briefing else { return }
-    phase = .playing
-    playfield.phase = .playing
-    playfield.overlayTitle = nil
-    playfield.overlayLines = []
-    playfield.overlayFooter = nil
-    accumulator = 0
-    playfield.needsDisplay = true
-    effects.play(.levelStart)
-    updateStatus()
-  }
-
-  /// Shows how it went, in the terms the game judges you by.
-  private func showResults(_ session: any GameSession) {
-    let rescued = session.total > 0
-      ? Int((Double(session.saved) / Double(session.total) * 100).rounded())
-      : 0
-    let needed = session.total > 0
-      ? Int((Double(session.required) / Double(session.total) * 100).rounded())
-      : 0
-
-    phase = .results
-    playfield.phase = .results
-    playfield.overlayTitle = session.didWin ? "Level complete" : "Not this time"
-    playfield.overlayLines = [
-      "Rescued \(session.saved) of \(session.total)  (\(rescued)%)",
-      "Needed \(session.required)  (\(needed)%)",
-    ]
-    playfield.overlayFooter = session.didWin
-      ? "Click or press N for the next level"
-      : "Click or press R to try again"
-    playfield.needsDisplay = true
-  }
-
-  /// A click or a key moves past a briefing or a result.
+  /// Moves past whichever screen is showing.
   private func advancePhase() {
-    switch phase {
-    case .briefing: beginPlaying()
+    guard var current = flow else { return }
+    switch current.screen {
+    case .title: current.startGame()
+    case .rankSelect: current.selectRank(rankChoice)
+    case .briefing:
+      current.beginPlaying()
+      flow = current
+      renderScreen()
+      effects.play(.levelStart)
+      return
     case .results:
-      if session?.didWin == true { nextLevel() } else { retry() }
-    case .playing: break
+      current.acknowledgeResults()
+    case .rankComplete: current.acknowledgeRankComplete()
+    case .gameComplete: current.acknowledgeGameComplete()
+    case .quitConfirm: NSApplication.shared.terminate(nil)
+    case .playing: return
     }
+    flow = current
+    saveProgress()
+    renderScreen()
+  }
+
+  private func requestQuit() {
+    guard var current = flow else { return }
+    current.requestQuit()
+    flow = current
+    renderScreen()
+  }
+
+  private func cancelQuit() {
+    guard var current = flow else { return }
+    current.cancelQuit()
+    flow = current
+    renderScreen()
+  }
+
+  private func moveRankChoice(_ delta: Int) {
+    guard let flow, flow.screen == .rankSelect, !flow.ranks.isEmpty else { return }
+    rankChoice = (rankChoice + delta + flow.ranks.count) % flow.ranks.count
+    renderScreen()
   }
 
   /// Builds the status bar image from the imported panel graphics.
@@ -542,7 +653,13 @@ let macImageKey = "MacintoshDiskImage"
     updateStatus()
     if session.isComplete {
       recordCompletion(session)
-      showResults(session)
+      if var current = flow {
+        current.finishLevel(
+          saved: session.saved, required: session.required, total: session.total)
+        flow = current
+        saveProgress()
+        renderScreen()
+      }
     }
   }
 
@@ -719,11 +836,32 @@ let macImageKey = "MacintoshDiskImage"
         self.handle(.skill(digit - 1))
         return nil
       }
+      // Screen keys come first, so they are not eaten by gameplay bindings.
+      if let screen = self.flow?.screen, !screen.isPlaying {
+        switch event.keyCode {
+        case 125: self.moveRankChoice(1); return nil     // down
+        case 126: self.moveRankChoice(-1); return nil    // up
+        case 36, 76: self.advancePhase(); return nil     // return, enter
+        case 53:                                          // escape
+          if screen == .quitConfirm { self.cancelQuit() }
+          return nil
+        default: break
+        }
+        if characters == " " { self.advancePhase(); return nil }
+        if characters == "q" { self.requestQuit(); return nil }
+      }
+
       switch characters {
       case "z": self.rewind(seconds: 2)
       case ",": self.stepBackward()
       case ".": self.stepForward()
       case "\r": self.advancePhase()
+      case "q":
+        if var current = self.flow {
+          current.abandonLevel()
+          self.flow = current
+          self.renderScreen()
+        }
       case "n": self.nextLevel()
       case "r": self.retry()
       case " ":

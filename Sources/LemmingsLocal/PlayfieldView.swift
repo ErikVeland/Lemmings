@@ -77,6 +77,8 @@ enum GamePhase: Equatable {
   var overlayTitle: String?
   var overlayLines: [String] = []
   var overlayFooter: String?
+  /// Which overlay line is currently chosen, when the screen offers a choice.
+  var overlayHighlight: Int?
   var phase: GamePhase = .playing
   var levelImage: CGImage?
   var session: (any GameSession)?
@@ -229,11 +231,17 @@ enum GamePhase: Equatable {
                 withAttributes: titleAttributes)
       y += size.height + 18
     }
-    for line in overlayLines {
-      let text = line as NSString
-      let size = text.size(withAttributes: lineAttributes)
+    for (index, line) in overlayLines.enumerated() {
+      let chosen = index == overlayHighlight
+      var attributes = lineAttributes
+      if chosen {
+        attributes[.foregroundColor] = NSColor.systemGreen
+        attributes[.font] = NSFont.monospacedDigitSystemFont(ofSize: 15, weight: .bold)
+      }
+      let text = (chosen ? "> \(line)" : line) as NSString
+      let size = text.size(withAttributes: attributes)
       text.draw(at: CGPoint(x: (bounds.width - size.width) / 2, y: y),
-                withAttributes: lineAttributes)
+                withAttributes: attributes)
       y += 24
     }
     if let overlayFooter {

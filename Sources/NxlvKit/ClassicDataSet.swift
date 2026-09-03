@@ -25,6 +25,11 @@ public struct ClassicDataSet: Sendable {
     /// Special graphic indices the directory actually provides.
     public let specialIndices: [Int]
 
+    /// A stable key for storing progress against this game.
+    public var identifierKey: String {
+        "\(kind.rawValue)-\(levelFilePrefix)-\(campaign.levels.count)"
+    }
+
     /// Prefixes worth trying, longest first so `DLVEL` wins over `LEVEL`.
     private static let knownPrefixes = ["DLVEL", "LEVEL"]
 

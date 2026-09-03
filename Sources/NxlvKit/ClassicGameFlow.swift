@@ -24,6 +24,15 @@ public enum ClassicGameScreen: Equatable, Sendable {
     /// Shown after the last rank is passed.
     case gameComplete
     case quitConfirm
+
+    /// True while a level is actually running.
+    ///
+    /// Comparing against `.playing` directly does not work, because the case
+    /// carries the level it is running.
+    public var isPlaying: Bool {
+        if case .playing = self { return true }
+        return false
+    }
 }
 
 /// One rank and the levels it holds.
