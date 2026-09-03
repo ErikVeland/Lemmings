@@ -62,42 +62,49 @@ The menu names 21 tunes and states that shifted A to Q play 17 sound effects.
 | J | Mountain | U | Tim10 |
 | K | Ten Lemmings | | |
 
-## Instrument patches
+## Instrument patch records
 
-Patches are 16 bytes. The first 10 bytes are the FM voice. The remaining 6
-bytes are a level followed by `00` padding, which makes `7f 00 00 00 00 00` a
-reliable marker to find them.
+Records are 16 bytes. Ten bytes carry the voice. The remaining six are
+`7f 00 00 00 00 00`, which makes the records easy to find.
 
 ```
 b9 c9 05 06 01 00 00 02 0c 01 | 7f 00 00 00 00 00
 99 59 09 02 01 01 01 03 00 0a | 7f 00 00 00 00 00
 ```
 
-The 10 voice bytes follow the Ad-Lib layout. Bytes 0 and 1 hold the tremolo,
-vibrato, sustain, envelope-scaling and multiplier bits for the modulator and
-the carrier. Bytes 2 and 3 hold key-scale level and output level. Bytes 4 and 5
-hold attack and decay. Bytes 6 and 7 hold sustain and release. Bytes 8 and 9
-hold the waveform select.
+`ADLIB.DAT` holds 74 records. `TANDYSND.DAT` holds 15.
 
-`ADLIB.DAT` holds 74 patches. `TANDYSND.DAT` holds 15.
+The byte order inside a record is **not** established. The obvious reading is
+the Ad-Lib order, where bytes 4 and 5 hold attack and decay for the modulator
+and the carrier. That reading fails. Under it, every record in the file gives
+an attack rate of 0, and the hardware renders an attack rate of 0 as silence.
+A file of 74 silent instruments is not credible, so the order must differ.
+
+`Tests/OPL2Tests/main.swift` records this as a test. If the test starts to
+fail, a patch has decoded to a nonzero attack rate and the layout is solved.
 
 ## What is still unknown
 
-The tune pointer table has not been found. Without it, no tune has a known
-start address. The sequencer byte format is also undecoded. Note streams are
-visible from about `0x0a00`, where note values fall between `0x18` and `0x33`
-and control bytes use the high bit, but the meaning of each control byte is not
-established.
+Three things block playback of the original tunes.
+
+1. The tune pointer table has not been found, so no tune has a known start
+   address.
+2. The sequencer byte format is undecoded. Note streams are visible from about
+   `0x0a00`, where note values fall between `0x18` and `0x33` and control bytes
+   use the high bit, but the meaning of each control byte is not established.
+3. The patch byte order is undecoded, as described above.
 
 ## What playback needs
 
-Two separate pieces of work remain.
+Two pieces of work. One is done.
 
-1. Decode the Sound Images sequencer format into note events.
-2. Produce sound from those events.
+1. **Done.** Produce sound from FM voice and note data. `Sources/NxlvKit/OPL2.swift`
+   implements the Yamaha YM3812. It reproduces the hardware frequency formula
+   to better than 0.3 percent across the register range, runs the envelope
+   through attack, decay, sustain and release, and mixes nine channels without
+   clipping. Run `zsh Scripts/run-opl2-tests.sh` to check it.
+2. **Open.** Decode the Sound Images format so the driver's own tunes can feed
+   that synthesizer.
 
-Step 2 needs FM synthesis. The music is written for the Yamaha YM3812, so
-faithful playback means implementing that chip's operators, envelopes and
-waveforms. A general-purpose synthesizer does not sound the same. This is worth
-stating plainly, because it is chip-level work even though the rest of the port
-uses no emulation.
+Until step 2 is finished, the synthesizer can play any FM voice the port
+supplies, but not the original Lemmings tunes.
