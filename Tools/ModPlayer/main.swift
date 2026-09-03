@@ -5,25 +5,31 @@ import NxlvKit
 // The unit tests use a module built by hand. This checks the parser against
 // files it did not create.
 
-private func writeWAV(samples: [Float], sampleRate: Double, to url: URL) throws {
+private func writeStereoWAV(
+    left: [Float], right: [Float], sampleRate: Double, to url: URL
+) throws {
     var data = Data()
     func append<T: FixedWidthInteger>(_ value: T) {
         withUnsafeBytes(of: value.littleEndian) { data.append(contentsOf: $0) }
     }
-    let byteCount = samples.count * 2
+    let frames = min(left.count, right.count)
+    let byteCount = frames * 4
     data.append(contentsOf: Array("RIFF".utf8))
     append(UInt32(36 + byteCount))
     data.append(contentsOf: Array("WAVEfmt ".utf8))
     append(UInt32(16))
     append(UInt16(1))
-    append(UInt16(1))
-    append(UInt32(sampleRate))
-    append(UInt32(sampleRate * 2))
     append(UInt16(2))
+    append(UInt32(sampleRate))
+    append(UInt32(sampleRate * 4))
+    append(UInt16(4))
     append(UInt16(16))
     data.append(contentsOf: Array("data".utf8))
     append(UInt32(byteCount))
-    for sample in samples { append(Int16(max(-1, min(1, sample)) * 32000)) }
+    for index in 0..<frames {
+        append(Int16(max(-1, min(1, left[index])) * 32000))
+        append(Int16(max(-1, min(1, right[index])) * 32000))
+    }
     try data.write(to: url)
 }
 
@@ -128,14 +134,29 @@ if let renderTarget {
         exit(1)
     }
     let module = try ProTrackerModule(data: try Data(contentsOf: match))
-    var player = ProTrackerPlayer(module: module, sampleRate: 44100)
-    var samples = [Float](repeating: 0, count: Int(44100 * seconds))
-    player.render(into: &samples)
-    try writeWAV(samples: samples, sampleRate: 44100, to: URL(fileURLWithPath: outputPath))
-    let peak = samples.map { abs($0) }.max() ?? 0
+    let presetName = flag("--preset") ?? "faithful"
+    let enhancements: ProTrackerEnhancements
+    switch presetName.lowercased() {
+    case "modern": enhancements = .modern
+    case "faithful": enhancements = .faithful
+    default:
+        FileHandle.standardError.write(
+            Data("Unknown preset '\(presetName)'. Use faithful or modern.\n".utf8))
+        exit(1)
+    }
+
+    var player = ProTrackerEnhancedPlayer(
+        module: module, sampleRate: 44100, enhancements: enhancements)
+    let frames = Int(44100 * seconds)
+    var left = [Float](repeating: 0, count: frames)
+    var right = [Float](repeating: 0, count: frames)
+    player.render(left: &left, right: &right)
+    try writeStereoWAV(
+        left: left, right: right, sampleRate: 44100, to: URL(fileURLWithPath: outputPath))
+    let peak = max(left.map { abs($0) }.max() ?? 0, right.map { abs($0) }.max() ?? 0)
     print(String(
-        format: "\nrendered '%@' (%@) -> %@, %.1fs, peak %.3f",
-        match.lastPathComponent, module.title, outputPath, seconds, peak))
+        format: "\nrendered '%@' (%@) as %@ -> %@, %.1fs stereo, peak %.3f",
+        match.lastPathComponent, module.title, presetName, outputPath, seconds, peak))
 }
 
 exit(failed.isEmpty ? 0 : 1)

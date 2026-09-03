@@ -164,6 +164,25 @@ public struct ProTrackerModule: Sendable {
     }
 }
 
+/// How a voice reads between sample points.
+///
+/// The Amiga hardware repeats the nearest byte, which is part of the sound.
+/// Linear reading removes some of the aliasing for modern listening.
+public enum ProTrackerInterpolation: String, Codable, Sendable {
+    case none
+    case linear
+}
+
+/// One voice's output for a single frame, before mixing.
+public struct ProTrackerVoiceOutput: Sendable {
+    public let value: Double
+    public let sampleIndex: Int
+    public let isActive: Bool
+
+    public static let silent = ProTrackerVoiceOutput(
+        value: 0, sampleIndex: -1, isActive: false)
+}
+
 /// Renders a module to audio.
 ///
 /// Effect coverage follows what the Lemmings modules actually use: set volume,
@@ -190,8 +209,11 @@ public struct ProTrackerPlayer: Sendable {
 
     public let module: ProTrackerModule
     public let sampleRate: Double
+    /// Defaults to the hardware behavior.
+    public var interpolation: ProTrackerInterpolation = .none
 
     private var voices: [Voice]
+    private var scratch: [ProTrackerVoiceOutput]
     private var orderIndex = 0
     private var row = 0
     private var tick = 0
@@ -208,6 +230,8 @@ public struct ProTrackerPlayer: Sendable {
         self.module = module
         self.sampleRate = sampleRate
         voices = [Voice](repeating: Voice(), count: module.channelCount)
+        scratch = [ProTrackerVoiceOutput](
+            repeating: .silent, count: module.channelCount)
     }
 
     private var samplesPerTick: Double {
@@ -381,21 +405,45 @@ public struct ProTrackerPlayer: Sendable {
         }
     }
 
-    /// Produces the next sample, in the range -1 to 1.
-    public mutating func nextSample() -> Float {
+    /// Reads one frame from a voice, honoring the loop and the interpolation.
+    private func read(_ voice: Voice, _ sample: ProTrackerSample) -> Double {
+        let count = sample.data.count
+        guard count > 0 else { return 0 }
+        let position = Int(voice.position)
+        guard position < count else { return 0 }
+        let first = Double(sample.data[position])
+
+        guard interpolation == .linear else { return first }
+        var nextIndex = position + 1
+        if nextIndex >= count {
+            nextIndex = sample.loops ? sample.repeatStart : position
+        }
+        guard nextIndex < count else { return first }
+        let fraction = voice.position - Double(position)
+        return first + (Double(sample.data[nextIndex]) - first) * fraction
+    }
+
+    /// Advances one frame and writes each voice's output separately.
+    ///
+    /// Keeping the voices apart lets a caller pan, filter or send them
+    /// individually, which mixing them here would prevent.
+    public mutating func nextVoiceOutputs(into outputs: inout [ProTrackerVoiceOutput]) {
         if samplesUntilTick <= 0 {
             processTick()
             samplesUntilTick += samplesPerTick
         }
         samplesUntilTick -= 1
 
-        var mix = 0.0
         for index in voices.indices {
             var voice = voices[index]
-            guard voice.isActive, voice.sampleIndex < module.samples.count else { continue }
+            guard voice.isActive, voice.sampleIndex < module.samples.count else {
+                if index < outputs.count { outputs[index] = .silent }
+                continue
+            }
             let sample = module.samples[voice.sampleIndex]
             guard !sample.data.isEmpty else {
                 voices[index] = voice
+                if index < outputs.count { outputs[index] = .silent }
                 continue
             }
 
@@ -409,15 +457,30 @@ public struct ProTrackerPlayer: Sendable {
                 } else {
                     voice.isActive = false
                     voices[index] = voice
+                    if index < outputs.count { outputs[index] = .silent }
                     continue
                 }
             }
 
-            mix += Double(sample.data[position]) / 128.0 * Double(voice.volume) / 64.0
+            let value = read(voice, sample) / 128.0 * Double(voice.volume) / 64.0
             voice.position += voice.increment
             voices[index] = voice
+            if index < outputs.count {
+                outputs[index] = ProTrackerVoiceOutput(
+                    value: value, sampleIndex: voice.sampleIndex, isActive: true)
+            }
         }
+    }
 
+    /// Produces the next mono sample, in the range -1 to 1.
+    public mutating func nextSample() -> Float {
+        // Move the buffer out of self so the inout access does not overlap the
+        // mutating call, and so no copy is made.
+        var buffer = scratch
+        scratch = []
+        nextVoiceOutputs(into: &buffer)
+        let mix = buffer.reduce(0.0) { $0 + $1.value }
+        scratch = buffer
         // Divide by the channel count so a full module cannot clip.
         return Float(max(-1, min(1, mix / Double(module.channelCount))))
     }
