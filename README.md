@@ -52,7 +52,15 @@ reported rather than ignored.
 | NeoLemmix lemming sprites | Not loaded. NeoLemmix levels borrow the imported DOS sprites |
 | FM synthesis | Native YM3812 implemented and tested. Frequency tracks the hardware formula |
 | Original tunes | Not playable. The Sound Images sequencer format is undecoded |
-| Distribution | Local ad-hoc signed universal build for macOS 13+. Developer ID signing and notarization are not configured |
+| Music playback | Amiga ProTracker modules play. A folder of audio files the player supplies also plays |
+| SNES and Genesis music | Not playable. `SNESAudioPlayer` and `GenesisFMPlayer` hold track lists and render silence |
+| Macintosh MIDI | Not playable. No MIDI player exists, so the source is not offered |
+| Sound effects | Macintosh `snd` resources only. Amiga voices are not extracted from the disks |
+| Adaptive DJ | Plays. Mixes between the soundtracks the player supplied, cued by what the game does. Offered only when a soundtrack is installed |
+| Lemmings 3 movies | Decoded. All 3333 frames of the five `.FLI` files read, and match a decoder written separately. Not yet shown in the game |
+| Graphics sources | DOS VGA, Amiga OCS, and Macintosh artwork all decode and can be chosen |
+| DOS CGA | Not available. The DOS data holds CGA sets, and no decoder reads them. There are no EGA sets |
+| Distribution | Local ad-hoc signed universal build for macOS 13+. Developer ID signing and notarization are not configured. See [beta testing](Documentation/BetaTesting.md) |
 
 ## Unified game library
 

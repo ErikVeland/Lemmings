@@ -13,7 +13,6 @@ import Foundation
 /// Where the level and sprite artwork comes from.
 public enum ClassicGraphicsSource: Equatable, Codable, Sendable {
     case dosVGA
-    case dosEGA
     case amiga
     case macintosh
     /// A folder of replacement artwork the player supplied.
@@ -22,7 +21,6 @@ public enum ClassicGraphicsSource: Equatable, Codable, Sendable {
     public var displayName: String {
         switch self {
         case .dosVGA: return "DOS (VGA)"
-        case .dosEGA: return "DOS (EGA)"
         case .amiga: return "Amiga"
         case .macintosh: return "Macintosh"
         case let .custom(name): return name
@@ -32,6 +30,7 @@ public enum ClassicGraphicsSource: Equatable, Codable, Sendable {
 
 /// Where the music comes from.
 public enum ClassicMusicSource: Equatable, Codable, Sendable {
+    case adaptiveDJ
     case amigaModules
     case macintoshMIDI
     case dosAdlib
@@ -44,6 +43,7 @@ public enum ClassicMusicSource: Equatable, Codable, Sendable {
 
     public var displayName: String {
         switch self {
+        case .adaptiveDJ: return "Adaptive DJ Mix (The True Choice) 🎧"
         case .amigaModules: return "Amiga Modules"
         case .macintoshMIDI: return "Macintosh MIDI"
         case .dosAdlib: return "DOS Ad-Lib (OPL2)"
@@ -202,8 +202,24 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
     public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         let fallback = ClassicSettings()
-        graphics = try values.decodeIfPresent(
-            ClassicGraphicsSource.self, forKey: .graphics) ?? fallback.graphics
+
+        /// Reads one source, and falls back when the stored case is gone.
+        ///
+        /// A missing key means an older build that did not write the setting.
+        /// A key that fails to decode means a build that wrote a source this
+        /// one has removed, such as the DOS EGA artwork that never shipped.
+        /// Both cases fall back to the default rather than throwing, because a
+        /// throw here discards every other choice the player made.
+        func source<T: Decodable>(_ key: CodingKeys, _ fallbackValue: T) -> T {
+            // `try?` flattens the optional the decoder returns, so a missing
+            // key and a case that will not decode both arrive here as nil.
+            guard let decoded = try? values.decodeIfPresent(T.self, forKey: key) else {
+                return fallbackValue
+            }
+            return decoded
+        }
+
+        graphics = source(.graphics, fallback.graphics)
         colorDepth = try values.decodeIfPresent(
             ClassicColorDepth.self, forKey: .colorDepth) ?? fallback.colorDepth
         display = try values.decodeIfPresent(
@@ -214,14 +230,12 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
             Double.self, forKey: .pixelAspect) ?? fallback.pixelAspect
         integerScaling = try values.decodeIfPresent(
             Bool.self, forKey: .integerScaling) ?? fallback.integerScaling
-        music = try values.decodeIfPresent(
-            ClassicMusicSource.self, forKey: .music) ?? fallback.music
+        music = source(.music, fallback.music)
         musicStyle = try values.decodeIfPresent(
             ClassicMusicStyle.self, forKey: .musicStyle) ?? fallback.musicStyle
         musicVolume = try values.decodeIfPresent(
             Double.self, forKey: .musicVolume) ?? fallback.musicVolume
-        sound = try values.decodeIfPresent(
-            ClassicSoundSource.self, forKey: .sound) ?? fallback.sound
+        sound = source(.sound, fallback.sound)
         soundVolume = try values.decodeIfPresent(
             Double.self, forKey: .soundVolume) ?? fallback.soundVolume
         shuffleGraphics = try values.decodeIfPresent(
@@ -277,6 +291,15 @@ public struct ClassicSettingsOptions: Sendable {
         self.sound = sound
     }
 
+    /// Sources with a decoder behind them today.
+    ///
+    /// A source stays out of the offered list until something can play it. A
+    /// control that changes nothing is worse than a control that is missing,
+    /// because the player cannot tell which of their choices took effect.
+    /// Adding a decoder means adding its source here.
+    public static let playableMusic: [ClassicMusicSource] = [.amigaModules, .adaptiveDJ, .silent]
+    public static let playableSound: [ClassicSoundSource] = [.macintoshResources, .silent]
+
     /// What the installed data supports.
     ///
     /// Sources that are not decoded yet are left out rather than listed and
@@ -288,7 +311,8 @@ public struct ClassicSettingsOptions: Sendable {
         hasMacintoshDisk: Bool,
         moduleCount: Int,
         remixFolders: [String] = [],
-        customGraphics: [String] = []
+        customGraphics: [String] = [],
+        hasSoundtracks: Bool = false
     ) -> ClassicSettingsOptions {
         var graphics: [ClassicGraphicsSource] = []
         if hasMacintoshDisk { graphics.append(.macintosh) }
@@ -296,22 +320,23 @@ public struct ClassicSettingsOptions: Sendable {
         if hasDOSData { graphics.append(.dosVGA) }
         graphics.append(contentsOf: customGraphics.map { .custom(name: $0) })
 
+        // Only sources with both a decoder and installed data are offered.
+        // `playableMusic` and `playableSound` name the decoders that exist;
+        // the conditions below name the data that is present.
         var music: [ClassicMusicSource] = []
         if moduleCount > 0 { music.append(.amigaModules) }
         if hasMacintoshDisk { music.append(.macintoshMIDI) }
-        music.append(.dosAdlib)
-        music.append(.snesSPC)
-        music.append(.genesisFM)
-        music.append(.cdAudio)
+        // The mix moves between the soundtracks the player supplied, so it
+        // needs at least one of them to have anything to play.
+        if hasSoundtracks { music.append(.adaptiveDJ) }
+        music = music.filter { playableMusic.contains($0) }
+        // A soundtrack the player supplied always plays, whatever the machine.
         music.append(contentsOf: remixFolders.map { .remix(name: $0) })
         music.append(.silent)
 
         var sound: [ClassicSoundSource] = []
         if hasMacintoshDisk { sound.append(.macintoshResources) }
-        sound.append(.amigaVoices)
-        sound.append(.dosAdlib)
-        sound.append(.snes)
-        sound.append(.arcade)
+        sound = sound.filter { playableSound.contains($0) }
         sound.append(.silent)
 
         return ClassicSettingsOptions(graphics: graphics, music: music, sound: sound)

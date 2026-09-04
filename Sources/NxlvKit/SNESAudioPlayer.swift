@@ -1,9 +1,14 @@
 import Foundation
 
-/// Audio player engine for Super Nintendo SPC700 music tracks.
+/// Track list for the Super Nintendo soundtrack. Not a player yet.
 ///
-/// Super Nintendo Lemmings features 16-bit ADPCM sampled music composed by Hiroyuki Masuno,
-/// including 5 exclusive tracks for the SNES-only levels (Sunsoft Special 1–5).
+/// `render(into:)` writes silence. There is no SPC700 core and no BRR sample
+/// decoder behind this type, so `.snesSPC` is not offered as a music source.
+/// The track titles below record what the release contains, including the five
+/// tracks written for the Super Nintendo levels.
+///
+/// To finish this: emulate the SPC700 and the S-DSP, then read the sample
+/// directory and the note data out of the ROM.
 public struct SNESAudioPlayer: Sendable {
     public struct SNESTrack: Sendable, Equatable, Identifiable {
         public let id: Int

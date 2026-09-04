@@ -1,10 +1,15 @@
 import Foundation
 
-/// Decodes and sequences original DOS AdLib music tracks from `ADLIB.DAT`.
+/// Tune list for the DOS AdLib soundtrack. Not a sequencer yet.
 ///
-/// `ADLIB.DAT` uses the Sound Images driver format. This sequencer reads tune
-/// definitions, channel voice patches, note frequencies, and step delays,
-/// feeding parameter updates directly into a native `OPL2` synthesizer instance.
+/// `ADLIB.DAT` uses the Sound Images driver format, which is undecoded.
+/// `loadDriver(data:)` ignores its argument, and `playTune(index:)` reads no
+/// note data, so `render(into:)` runs a reset `OPL2` with no keys down and
+/// produces silence. `.dosAdlib` is not offered as a music source.
+///
+/// The `OPL2` synthesizer this drives is real and tested. What is missing is
+/// the layer that reads voice patches, note frequencies, and step delays out
+/// of `ADLIB.DAT` and writes them to the synthesizer's registers.
 public struct AdlibSequencer: Sendable {
     /// Information about a tune found in the Ad-Lib driver.
     public struct TuneInfo: Sendable, Equatable, Identifiable {

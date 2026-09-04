@@ -1,8 +1,12 @@
 import Foundation
 
-/// Audio player engine for Sega Genesis / Mega Drive YM2612 FM music tracks.
+/// Track list for the Sega Genesis soundtrack. Not a player yet.
 ///
-/// Sega Genesis Lemmings features Matt Furniss's iconic 6-channel FM soundtrack.
+/// `render(into:)` writes silence. There is no YM2612 core behind this type,
+/// so `.genesisFM` is not offered as a music source.
+///
+/// To finish this: implement the six FM channels of the YM2612, then read the
+/// driver's sequence data out of the ROM.
 public struct GenesisFMPlayer: Sendable {
     public struct GenesisTrack: Sendable, Equatable, Identifiable {
         public let id: Int

@@ -58,6 +58,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private let music = ModuleMusicPlayer()
   /// Plays recordings the player supplied, as an alternative to the modules.
   private let soundtrack = SoundtrackPlayer()
+  /// Mixes across the supplied soundtracks, moving on what the game does.
+  private let dj = AdaptiveDJPlayer()
   /// Soundtracks found next to the modules, keyed by folder name.
   private var soundtrackLibrary: [String: [URL]] = [:]
   /// The artwork this level is drawn with. It differs from the chosen setting
@@ -345,7 +347,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
       hasAmigaDisk: Bundle.main.resourceURL.map { FileManager.default.fileExists(atPath: $0.appendingPathComponent("AmigaArtwork/lemmings/manifest.json").path) } == true,
       hasMacintoshDisk: hasMac,
       moduleCount: music.library.count,
-      remixFolders: soundtrackLibrary.keys.sorted())
+      remixFolders: soundtrackLibrary.keys.sorted(),
+      hasSoundtracks: !soundtrackLibrary.isEmpty)
   }
 
   @objc private func showSettings() {
@@ -375,9 +378,12 @@ let achievementProgressKey = "ClassicAchievementProgress"
     music.setEnhancements(updated.musicStyle == .modern ? .modern : .faithful)
     music.setVolume(updated.musicVolume)
     soundtrack.setVolume(updated.musicVolume)
+    dj.setVolume(updated.musicVolume)
     effects.setVolume(updated.soundVolume)
     music.setMuted(updated.music == .silent)
     soundtrack.setMuted(updated.music == .silent)
+    dj.setMuted(updated.music == .silent)
+    if updated.music != .adaptiveDJ { dj.stop() }
     if case .remix = updated.music {} else { soundtrack.stop() }
     effects.setMuted(updated.sound == .silent)
     updateMusicButtons()
@@ -1356,6 +1362,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     if tubeIsActive, let frame = composeNativeFrame() {
       crtView.setSource(frame)
     }
+    if let session, phase == .playing { dj.updateTelemetry(djTelemetry(session)) }
     guard phase == .playing, !isPaused, let session, !session.isComplete else { return }
 
     // Each ruleset states its own logic rate. Whole ticks only, so timing does
@@ -1531,10 +1538,37 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private func loadSoundtracks() {
     guard let root = Bundle.main.resourceURL?.appendingPathComponent("Music") else { return }
     soundtrackLibrary = SoundtrackPlayer.soundtracks(at: root)
+    dj.load(soundtracks: soundtrackLibrary)
+    dj.onTrackChange = { [weak self] name in self?.setStatus("* \(name)") }
+  }
+
+  /// Describes the level to the mix, so it can decide when to move.
+  private func djTelemetry(_ session: any GameSession) -> AdaptiveDJEngine.Telemetry {
+    AdaptiveDJEngine.Telemetry(
+      releasedCount: session.released,
+      totalCount: session.total,
+      savedCount: session.saved,
+      requiredCount: session.required,
+      releaseRate: session.rate,
+      // A lemming counting down is the clearest danger the session exposes.
+      dangerCount: session.lemmings.filter { $0.countdown != nil }.count,
+      remainingSeconds: session.remainingSeconds,
+      isNuking: session.isNuking,
+      didWin: session.saved >= session.required)
   }
 
   /// The original cycles through its tunes as the campaign advances.
   private func playMusicForCurrentLevel() {
+    // The mix runs across every supplied soundtrack and moves on its own.
+    if settings.music == .adaptiveDJ, dj.hasTracks {
+      music.stop()
+      soundtrack.stop()
+      dj.resetLevel()
+      dj.start()
+      return
+    }
+    dj.stop()
+
     // A chosen soundtrack replaces the modules for the whole session.
     if case let .remix(name) = activeMusic, let tracks = soundtrackLibrary[name] {
       music.stop()

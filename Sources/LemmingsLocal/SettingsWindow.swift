@@ -18,6 +18,7 @@ import NxlvKit
   /// Called whenever a choice changes, so the game can follow immediately.
   var onChange: ((ClassicSettings) -> Void)?
 
+  private var presetPopUp: NSPopUpButton?
   private var graphicsPopUp: NSPopUpButton?
   private var depthPopUp: NSPopUpButton?
   private var displayPopUp: NSPopUpButton?
@@ -33,11 +34,7 @@ import NxlvKit
   private var musicShuffleCheck: NSButton?
 
   /// Whether the tube simulation is in the live drawing path.
-  ///
-  /// The shaders exist and are tested, but the playing view does not run them
-  /// yet. Rather than show controls that change nothing, they are disabled
-  /// and say so.
-  var videoIsConnected = false
+  var videoIsConnected = true
 
   init(settings: ClassicSettings, options: ClassicSettingsOptions) {
     self.settings = options.correcting(settings)
@@ -137,6 +134,13 @@ import NxlvKit
   }
 
   private func graphicsPane() -> NSView {
+    // A preset sets every choice at once, the way one machine sounded and
+    // looked. Anything changed afterwards moves the list back to Custom.
+    let preset = popUp(#selector(presetChanged))
+    preset.addItem(withTitle: "Custom")
+    for profile in PlatformProfile.all { preset.addItem(withTitle: profile.name) }
+    presetPopUp = preset
+
     let graphics = popUp(#selector(graphicsChanged))
     let depth = popUp(#selector(depthChanged))
     for option in ClassicColorDepth.allCases { depth.addItem(withTitle: option.displayName) }
@@ -147,7 +151,9 @@ import NxlvKit
     graphicsPopUp = graphics
     depthPopUp = depth
     graphicsShuffleCheck = shuffle
-    return pane([("Artwork", graphics), ("Colour Depth", depth), ("Shuffle", shuffle)])
+    return pane([
+      ("Machine", preset), ("Artwork", graphics), ("Colour Depth", depth), ("Shuffle", shuffle),
+    ])
   }
 
   private func videoPane() -> NSView {
@@ -249,10 +255,32 @@ import NxlvKit
 
   private func changed() { onChange?(settings) }
 
+  /// Marks the preset list as Custom after a single control is changed.
+  private func markCustom() { presetPopUp?.selectItem(at: 0) }
+
+  /// Applies a machine's look and sound in one move.
+  ///
+  /// The preset is corrected against what is installed, so choosing a machine
+  /// whose data is missing lands on something that works rather than failing.
+  @objc private func presetChanged(_ sender: NSPopUpButton) {
+    let index = sender.indexOfSelectedItem - 1
+    guard PlatformProfile.all.indices.contains(index) else { return }
+    let wanted = ClassicSettings.matching(PlatformProfile.all[index])
+    var applied = options.correcting(wanted)
+    // A preset describes a machine, not a session, so shuffling stays as set.
+    applied.shuffleGraphics = settings.shuffleGraphics
+    applied.shuffleMusic = settings.shuffleMusic
+    settings = applied
+    rebuildSources()
+    presetPopUp?.selectItem(at: index + 1)
+    changed()
+  }
+
   @objc private func graphicsChanged(_ sender: NSPopUpButton) {
     let index = sender.indexOfSelectedItem
     guard options.graphics.indices.contains(index) else { return }
     settings.graphics = options.graphics[index]
+    markCustom()
     changed()
   }
 
@@ -260,6 +288,7 @@ import NxlvKit
     let all = ClassicColorDepth.allCases
     guard all.indices.contains(sender.indexOfSelectedItem) else { return }
     settings.colorDepth = all[sender.indexOfSelectedItem]
+    markCustom()
     changed()
   }
 
@@ -267,6 +296,7 @@ import NxlvKit
     let all = ClassicDisplayMode.allCases
     guard all.indices.contains(sender.indexOfSelectedItem) else { return }
     settings.display = all[sender.indexOfSelectedItem]
+    markCustom()
     changed()
   }
 
@@ -277,11 +307,13 @@ import NxlvKit
 
   @objc private func aspectChanged(_ sender: NSSlider) {
     settings.pixelAspect = sender.doubleValue
+    markCustom()
     changed()
   }
 
   @objc private func integerChanged(_ sender: NSButton) {
     settings.integerScaling = sender.state == .on
+    markCustom()
     changed()
   }
 
@@ -289,6 +321,7 @@ import NxlvKit
     let index = sender.indexOfSelectedItem
     guard options.music.indices.contains(index) else { return }
     settings.music = options.music[index]
+    markCustom()
     changed()
   }
 
@@ -296,6 +329,7 @@ import NxlvKit
     let all = ClassicMusicStyle.allCases
     guard all.indices.contains(sender.indexOfSelectedItem) else { return }
     settings.musicStyle = all[sender.indexOfSelectedItem]
+    markCustom()
     changed()
   }
 
@@ -318,6 +352,7 @@ import NxlvKit
     let index = sender.indexOfSelectedItem
     guard options.sound.indices.contains(index) else { return }
     settings.sound = options.sound[index]
+    markCustom()
     changed()
   }
 

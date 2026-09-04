@@ -38,7 +38,10 @@ private func testOptionsFollowInstalledData() throws {
         try require(full.correcting(restored).graphics == choice, "A saved artwork choice was replaced")
     }
     try require(full.music.contains(.amigaModules), "modules should be offered")
-    try require(full.music.contains(.macintoshMIDI), "Macintosh music should be offered")
+    // Macintosh MIDI is deliberately absent. The release carries the data but
+    // nothing plays it yet, and the rule below is that an unplayable source is
+    // never offered.
+    try require(!full.music.contains(.macintoshMIDI), "Macintosh music has no player yet")
     try require(full.sound.contains(.macintoshResources), "Macintosh sound should be offered")
     print("PASS the options offered follow the data installed")
 }
@@ -54,6 +57,22 @@ private func testUndecodedSourcesAreNotOffered() throws {
     try require(
         !options.sound.contains(.dosAdlib),
         "DOS sound was offered while its sequencer is undecoded")
+
+    // The rule holds for every source, not only the ones named above. A new
+    // source added to the enum must not reach the menu before its decoder
+    // does. Soundtracks the player supplied are exempt, because a folder of
+    // audio files always plays.
+    for choice in options.music {
+        if case .remix = choice { continue }
+        try require(
+            ClassicSettingsOptions.playableMusic.contains(choice),
+            "\(choice.displayName) was offered with nothing to play it")
+    }
+    for choice in options.sound {
+        try require(
+            ClassicSettingsOptions.playableSound.contains(choice),
+            "\(choice.displayName) was offered with nothing to play it")
+    }
     print("PASS sources that are not decoded yet are not offered")
 }
 
@@ -151,6 +170,29 @@ private func testOlderSettingsStillLoad() throws {
     print("PASS settings written by an older build still load")
 }
 
+private func testRemovedSourcesDoNotDiscardSettings() throws {
+    // A file written before DOS EGA artwork was removed names a case this
+    // build does not have. The removed source falls back to the default and
+    // every other choice survives.
+    let stored = """
+    {
+      "graphics": { "dosEGA": {} },
+      "musicVolume": 0.25,
+      "soundVolume": 0.5,
+      "integerScaling": false
+    }
+    """
+    let settings = try JSONDecoder().decode(
+        ClassicSettings.self, from: Data(stored.utf8))
+    try require(
+        settings.graphics == ClassicSettings().graphics,
+        "A removed artwork source did not fall back to the default")
+    try require(settings.musicVolume == 0.25, "Music volume was discarded")
+    try require(settings.soundVolume == 0.5, "Sound volume was discarded")
+    try require(settings.integerScaling == false, "Integer scaling was discarded")
+    print("PASS a removed source falls back without discarding other settings")
+}
+
 do {
     try testOptionsFollowInstalledData()
     try testUndecodedSourcesAreNotOffered()
@@ -160,6 +202,7 @@ do {
     try testRemixesAndCustomArtwork()
     try testRoundTrip()
     try testOlderSettingsStillLoad()
+    try testRemovedSourcesDoNotDiscardSettings()
     print("Classic settings tests passed.")
 } catch {
     FileHandle.standardError.write(Data("Settings tests failed: \(error)\n".utf8))

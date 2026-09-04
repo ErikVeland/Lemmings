@@ -15,6 +15,14 @@ final class SoundEffectPlayer: @unchecked Sendable {
     var samples: [Float] = []
     var position: Double = 0
     var increment: Double = 1
+    /// Channel gains for this voice, worked out once when it starts.
+    ///
+    /// Panning is constant power: the two gains are a cosine and a sine of the
+    /// same angle, so their squares sum to one and a sound keeps its loudness
+    /// as it moves across the stereo field. The trigonometry belongs here, not
+    /// in the render loop, because the angle cannot change while a voice runs.
+    var leftGain: Float = 1
+    var rightGain: Float = 1
     var isActive = false
   }
 
@@ -33,7 +41,7 @@ final class SoundEffectPlayer: @unchecked Sendable {
   private(set) var isRunning = false
   private(set) var loadedEffects: [ClassicSoundEffect] = []
 
-  init(voiceCount: Int = 8) {
+  init(voiceCount: Int = 16) {
     voices = [Voice](repeating: Voice(), count: max(1, voiceCount))
   }
 
@@ -74,7 +82,8 @@ final class SoundEffectPlayer: @unchecked Sendable {
     let right = buffers.count > 1 ? buffers[1].mData?.assumingMemoryBound(to: Float.self) : left
 
     for index in 0..<frames {
-      var mix: Float = 0
+      var mixLeft: Float = 0
+      var mixRight: Float = 0
       if !isMuted {
         for voiceIndex in voices.indices where voices[voiceIndex].isActive {
           var voice = voices[voiceIndex]
@@ -84,15 +93,16 @@ final class SoundEffectPlayer: @unchecked Sendable {
             voices[voiceIndex] = voice
             continue
           }
-          mix += voice.samples[position]
+          let rawSample = voice.samples[position]
+          mixLeft += rawSample * voice.leftGain
+          mixRight += rawSample * voice.rightGain
           voice.position += voice.increment
           voices[voiceIndex] = voice
         }
       }
-      // Several effects can overlap, so leave headroom rather than clip.
-      let value = max(-1, min(1, mix * 0.6 * Float(level)))
-      left?[index] = value
-      right?[index] = value
+      let finalLevel = Float(level) * 0.6
+      left?[index] = max(-1, min(1, mixLeft * finalLevel))
+      right?[index] = max(-1, min(1, mixRight * finalLevel))
     }
   }
 
@@ -131,8 +141,18 @@ final class SoundEffectPlayer: @unchecked Sendable {
 
   // MARK: - Playing
 
-  /// Starts an effect, taking the quietest voice when all are busy.
-  func play(_ effect: ClassicSoundEffect) {
+  /// Turns a stereo position into a pair of channel gains.
+  ///
+  /// A pan of -1 is hard left, 0 is centre, and +1 is hard right. Values
+  /// outside that range are brought back into it.
+  static func constantPowerGains(pan: Float) -> (left: Float, right: Float) {
+    let clamped = max(-1, min(1, pan))
+    let angle = (clamped + 1) * Float.pi / 4
+    return (cos(angle), sin(angle))
+  }
+
+  /// Starts an effect with optional spatial stereo panning (-1.0 left to +1.0 right).
+  func play(_ effect: ClassicSoundEffect, pan: Float = 0.0) {
     lock.lock()
     defer { lock.unlock() }
     guard !isMuted, let samples = library[effect], !samples.isEmpty else { return }
@@ -148,12 +168,14 @@ final class SoundEffectPlayer: @unchecked Sendable {
       }
     }
     guard let index = slot else { return }
+    let gains = Self.constantPowerGains(pan: pan)
     voices[index] = Voice(
-      samples: samples, position: 0, increment: rate / sampleRate, isActive: true)
+      samples: samples, position: 0, increment: rate / sampleRate,
+      leftGain: gains.left, rightGain: gains.right, isActive: true)
   }
 
-  func play(_ effects: [ClassicSoundEffect]) {
-    for effect in effects { play(effect) }
+  func play(_ effects: [ClassicSoundEffect], pan: Float = 0.0) {
+    for effect in effects { play(effect, pan: pan) }
   }
 
   /// Sets the output level, from silent to full.
