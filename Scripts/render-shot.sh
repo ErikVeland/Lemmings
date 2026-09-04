@@ -19,6 +19,7 @@ swiftc -swift-version 6 \
   -Xlinker -rpath -Xlinker "$build_dir" -Xlinker -w \
   -o "$build_dir/LemmingsShot" \
   "$project_dir/Sources/LemmingsLocal/PlayfieldView.swift" \
+  "$project_dir/Sources/LemmingsLocal/MacInterfaceRenderer.swift" \
   "$project_dir/Sources/LemmingsLocal/PanelView.swift" \
   "$project_dir/Sources/LemmingsLocal/GameSession.swift" \
   "$project_dir/Sources/LemmingsLocal/CRTShaders.swift" \

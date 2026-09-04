@@ -1,22 +1,20 @@
 import Foundation
 
-/// Works out which Lemmings data set a directory holds, and loads it.
-///
-/// Titles in this container format differ in small ways. Retail Lemmings names
-/// its levels `LEVEL###.DAT` and needs its authored order, because `ODDTABLE`
-/// overrides and the shipped sequence do not follow file order. Oh No! More
-/// Lemmings names them `DLVEL###.DAT`, ships no odd table, and can be listed
-/// by scanning. Detecting this means the player picks a folder and the right
-/// thing happens.
+/// Detects official campaigns and applies their retail level order. Custom
+/// classic archives can still be scanned in physical order.
 public struct ClassicDataSet: Sendable {
     public enum Kind: String, Sendable {
         /// Retail Lemmings, loaded through its authored rank order.
         case originalLemmings
         /// Any other set in the same format, listed by scanning.
         case scanned
+        case officialCampaign
+        case macintoshHoliday
     }
 
     public let kind: Kind
+    /// The official release this data belongs to, when it can be identified.
+    public let title: ClassicTitle?
     public let name: String
     public let levelFilePrefix: String
     public let campaign: ClassicCampaign
@@ -27,7 +25,34 @@ public struct ClassicDataSet: Sendable {
 
     /// A stable key for storing progress against this game.
     public var identifierKey: String {
-        "\(kind.rawValue)-\(levelFilePrefix)-\(campaign.levels.count)"
+        "\(title?.rawValue ?? kind.rawValue)-\(levelFilePrefix)-\(campaign.levels.count)"
+    }
+
+    /// The key used before releases with the same-sized campaigns were told
+    /// apart. Kept only so existing progress migrates on first load.
+    public var legacyIdentifierKey: String {
+        "\(kind == .officialCampaign ? Kind.scanned.rawValue : kind.rawValue)-\(levelFilePrefix)-\(campaign.levels.count)"
+    }
+
+    /// Map saves from the former physical-file order to the retail ratings.
+    public func migrateProgress(_ saved: ClassicGameFlow.Progress) -> ClassicGameFlow.Progress {
+        guard kind == .officialCampaign,
+              saved.furthestReached["All"] != nil || saved.passed.contains(where: { $0.hasPrefix("All#") }) else { return saved }
+        let physical = campaign.levels.sorted {
+            ($0.archiveFile, $0.archiveSection) < ($1.archiveFile, $1.archiveSection)
+        }
+        var reached: [String: Int] = [:]
+        var passed: [String] = []
+        for (index, level) in physical.enumerated() {
+            if saved.passed.contains("All#\(index)") {
+                passed.append("\(level.rank)#\(level.number - 1)")
+                reached[level.rank] = max(reached[level.rank] ?? 0, level.number - 1)
+            }
+            if saved.furthestReached["All"] == index {
+                reached[level.rank] = max(reached[level.rank] ?? 0, level.number - 1)
+            }
+        }
+        return .init(furthestReached: reached, passed: passed)
     }
 
     /// Prefixes worth trying, longest first so `DLVEL` wins over `LEVEL`.
@@ -37,6 +62,15 @@ public struct ClassicDataSet: Sendable {
         let contents = try FileManager.default.contentsOfDirectory(
             at: directory, includingPropertiesForKeys: nil, options: [.skipsHiddenFiles])
         let names = Set(contents.map { $0.lastPathComponent.lowercased() })
+
+        for (title, filename) in [(ClassicTitle.holidayLemmings1993, "holiday1993.rsrc"),
+                                  (.holidayLemmings1994, "holiday1994.rsrc")] {
+            if let file = contents.first(where: { $0.lastPathComponent.lowercased() == filename }) {
+                let campaign = try ClassicHolidayCampaign.load(resourceFork: Data(contentsOf: file), title: title)
+                return .init(kind: .macintoshHoliday, title: title, name: title.displayName,
+                    levelFilePrefix: "MACLEVL", campaign: campaign, groundStyles: [2], specialIndices: [])
+            }
+        }
 
         func hasLevels(prefix: String) -> Bool {
             names.contains { name in
@@ -66,6 +100,7 @@ public struct ClassicDataSet: Sendable {
             let campaign = try ClassicCampaignDefinition.originalDOSLemmings.load(from: directory)
             return ClassicDataSet(
                 kind: .originalLemmings,
+                title: .lemmings,
                 name: "Lemmings",
                 levelFilePrefix: prefix,
                 campaign: campaign,
@@ -73,13 +108,29 @@ public struct ClassicDataSet: Sendable {
                 specialIndices: specialIndices)
         }
 
-        let campaign = try ClassicCampaign.scan(
+        let scanned = try ClassicCampaign.scan(
             directory: directory,
             name: directory.lastPathComponent,
             levelFilePrefix: prefix)
+        let titles = scanned.levels.map { $0.level.title }
+        let title: ClassicTitle?
+        if titles == ["Merry Christmas Mr Lemming", "Christmas Bonus", "Time waits for no Lemming", "This Corrosion"] {
+            title = .xmasLemmings1991
+        } else if titles == ["Jingle Lemming", "Happy Holidays Mr Lemming!", "A Lemming Holiday", "The North Poles"] {
+            title = .xmasLemmings1992
+        } else {
+            title = ClassicTitle.identify(levelPrefix: prefix, levelCount: scanned.levels.count,
+                                          folderName: directory.lastPathComponent)
+        }
+        let definition = title == .ohNoMoreLemmings
+            ? ClassicCampaignDefinition.ohNoMoreLemmings
+            : title.flatMap { ClassicCampaignDefinition.festive($0) }
+        let campaign = try definition?.load(from: directory) ?? scanned
         return ClassicDataSet(
-            kind: .scanned,
-            name: prefix == "DLVEL" ? "Oh No! More Lemmings" : directory.lastPathComponent,
+            kind: definition == nil ? .scanned : .officialCampaign,
+            title: title,
+            name: title?.displayName
+                ?? (prefix == "DLVEL" ? "Oh No! More Lemmings" : directory.lastPathComponent),
             levelFilePrefix: prefix,
             campaign: campaign,
             groundStyles: groundStyles,

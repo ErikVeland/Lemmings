@@ -42,6 +42,7 @@ done
 lipo -create "${library_inputs[@]}" -output "$contents_dir/Frameworks/libNxlvKit.dylib"
 lipo -create "${executable_inputs[@]}" -output "$contents_dir/MacOS/LemmingsLocal"
 cp "$project_dir/Resources/Info.plist" "$contents_dir/Info.plist"
+zsh "$project_dir/Scripts/bundle-game-data.sh" "$contents_dir/Resources" all
 
 # Seal the finished bundle after resources are copied. This local ad-hoc
 # signature is replaced by a Developer ID signature for distribution builds.

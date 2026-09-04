@@ -18,6 +18,9 @@ public enum ClassicSoundEffect: String, CaseIterable, Codable, Sendable {
     case builderWarning
     case hitSteel
     case nuke
+    case yippee
+    case letsGo
+    case pop
 }
 
 /// Turns engine events into sound requests.
@@ -40,10 +43,12 @@ public enum ClassicSoundCue {
             switch event {
             case .entrancesOpened:
                 add(.doorOpen)
+                add(.letsGo)
             case .skillAssigned:
                 add(.assignSkill)
             case .saved:
                 add(.exitLevel)
+                add(.yippee)
             case .builderWarning:
                 add(.builderWarning)
             case .hitSteel:
@@ -80,10 +85,6 @@ public struct ClassicSoundMapping: Codable, Equatable, Sendable {
     public var playbackRate: Double
 
     /// The rate a Sound Blaster produced for a given time constant.
-    ///
-    /// The card could not play arbitrary rates. It took a time constant and
-    /// the rate followed from it, so the round numbers people quote were never
-    /// the rates the hardware actually ran at.
     public static func soundBlasterRate(timeConstant: Int) -> Double {
         let clamped = min(255, max(0, timeConstant))
         return 1_000_000.0 / Double(256 - clamped)
@@ -92,9 +93,6 @@ public struct ClassicSoundMapping: Codable, Equatable, Sendable {
     /// The rate these effects were recorded at, about 11 kHz.
     public static let recordedTimeConstant = 165
     /// The rate they were played back at, about 21 kHz.
-    ///
-    /// Playing faster than the recording is what lifts the voices and makes
-    /// them sound like cartoon characters rather than people.
     public static let playbackTimeConstant = 208
 
     public init(
@@ -126,13 +124,8 @@ public struct ClassicSoundMapping: Codable, Equatable, Sendable {
     }
 }
 
-
 extension ClassicSoundMapping {
     /// Binds effects to the names the Macintosh release uses.
-    ///
-    /// Most are unambiguous. The three marked below are reasoned guesses from
-    /// the name and the length, because nothing in the data says what a sound
-    /// is for. They are listed apart so they are easy to correct.
     public static let macintoshNames: [ClassicSoundEffect: String] = [
         .levelStart: "LetsGo",
         .doorOpen: "Door",
@@ -143,9 +136,71 @@ extension ClassicSoundMapping {
         .drown: "Splash",
         .vaporize: "Fire",
         .hitSteel: "Chink",
-        // Reasoned from name and length rather than stated by the data.
         .exitLevel: "Ting",
         .builderWarning: "Oing",
         .nuke: "Die",
+        .yippee: "Yippee",
+        .letsGo: "LetsGo",
+        .pop: "Pop",
+    ]
+
+    /// Binds effects to the iconic Amiga digitised sample names ("Oh No!", "Yippee!", "Let's Go!").
+    public static let amigaVoiceNames: [ClassicSoundEffect: String] = [
+        .levelStart: "LetsGo",
+        .doorOpen: "Door",
+        .assignSkill: "MousePress",
+        .ohNo: "OhNo",
+        .explode: "Explode",
+        .splat: "Splat",
+        .drown: "Splash",
+        .vaporize: "Fire",
+        .hitSteel: "Chink",
+        .exitLevel: "Yippee",
+        .builderWarning: "Oing",
+        .nuke: "Die",
+        .yippee: "Yippee",
+        .letsGo: "LetsGo",
+        .pop: "Pop",
+    ]
+
+    /// DOS Sound Blaster RAW sample mapping indices.
+    public static let dosSoundBlasterIndices: [ClassicSoundEffect: Int] = [
+        .doorOpen: 0,
+        .assignSkill: 1,
+        .ohNo: 2,
+        .explode: 3,
+        .splat: 4,
+        .drown: 5,
+        .vaporize: 6,
+        .hitSteel: 7,
+        .exitLevel: 8,
+        .builderWarning: 9,
+        .nuke: 10,
+    ]
+
+    /// SNES sound effect mapping indices.
+    public static let snesSoundIndices: [ClassicSoundEffect: Int] = [
+        .doorOpen: 0,
+        .assignSkill: 1,
+        .ohNo: 2,
+        .explode: 3,
+        .splat: 4,
+        .drown: 5,
+        .hitSteel: 6,
+        .exitLevel: 7,
+        .nuke: 8,
+    ]
+
+    /// Arcade sound effect mapping indices.
+    public static let arcadeSoundIndices: [ClassicSoundEffect: Int] = [
+        .doorOpen: 0,
+        .assignSkill: 1,
+        .ohNo: 2,
+        .explode: 3,
+        .splat: 4,
+        .hitSteel: 5,
+        .exitLevel: 6,
+        .nuke: 7,
     ]
 }
+

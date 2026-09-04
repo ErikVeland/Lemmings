@@ -16,7 +16,7 @@ private func render(
     directory: URL, levelIndex: Int, ticks: Int, zoom: Double, size: CGSize, output: URL,
     crtMode: String?, crtScale: Int, isNative: Bool, isLaunch: Bool, noLevel: Bool
 ) throws {
-    let campaign = try ClassicCampaignDefinition.originalDOSLemmings.load(from: directory)
+    let campaign = try ClassicDataSet.detect(directory: directory).campaign
     let assets = try ClassicMainDATAssets.load(from: directory)
     guard levelIndex < campaign.levels.count else {
         throw ShotError(description: "level index out of range")
@@ -48,10 +48,21 @@ private func render(
     // The original screen is 320 by 200: a 320 by 160 playfield above a
     // 320 by 40 status bar. Composing at that size lets the tube stage do the
     // upscaling, which is the only way the scan line count comes out right.
-    let panelHeight = isNative ? CGFloat(ClassicPanelGraphics.height) : panel.intrinsicHeight
+    let panelHeight = isNative ? CGFloat(ClassicPanelGraphics.height) : (isLaunch ? 0 : panel.intrinsicHeight)
     playfield.frame = CGRect(x: 0, y: 0, width: size.width, height: size.height - panelHeight)
     panel.frame = CGRect(x: 0, y: 0, width: size.width, height: panelHeight)
 
+    if let option = CommandLine.arguments.firstIndex(of: "--mac-art"), option + 1 < CommandLine.arguments.count {
+        let art = try ClassicMacArtwork(directory: URL(fileURLWithPath: CommandLine.arguments[option + 1]))
+        playfield.macArtwork = art
+        panel.macArtwork = art
+        // The menus draw from the release's own lettering, which is held
+        // separately from the artwork a level uses.
+        playfield.interfaceArtwork = art
+        panel.interfaceArtwork = art
+        playfield.macScene = try ClassicMacScene(level: level, rendered: rendered, artwork: art, groundSet: ground)
+    }
+    playfield.classicScene = rendered
     playfield.levelImage = image
     playfield.assets = assets
     playfield.palette = (try? ClassicLemmingPalette.inLevelVGA(
@@ -79,6 +90,7 @@ private func render(
                 intent: .defaultIntent)
         }
     }
+    panel.terrainImage = image
     panel.session = session
     // Mirror the app: arm the first skill the level actually provides.
     panel.selectedSkillIndex = session.skills.firstIndex { $0.count > 0 } ?? 0
@@ -101,18 +113,22 @@ private func render(
         return rep
     }
 
-    if noLevel { playfield.levelImage = nil }
+    if noLevel { playfield.classicScene = nil; playfield.levelImage = nil }
     if isLaunch {
         playfield.phase = .briefing
         playfield.overlayShowsLemmings = true
         playfield.overlayFrame = 24
         playfield.overlayTitle = "LEMMINGS"
         playfield.overlayLines = [
-            "FULL QUEST  8/228",
+            "FULL QUEST  8/502",
             "LEMMINGS  8/120",
             "XMAS LEMMINGS 1991  0/4",
             "OH NO! MORE LEMMINGS  0/100",
             "XMAS LEMMINGS 1992  0/4",
+            "Lemmings 2: The Tribes  0/120  — Classic tribe playable",
+            "Holiday Lemmings 1993  0/32",
+            "Lemmings 3: The Chronicles  0/90  — Native preview",
+            "Holiday Lemmings 1994  0/32",
         ]
         playfield.overlayHighlight = 0
         playfield.overlayFooter =
@@ -122,7 +138,8 @@ private func render(
     }
 
     let playfieldRep = try bitmap(of: playfield)
-    let panelRep = try bitmap(of: panel)
+    panel.terrainImage = playfield.levelImage
+    let panelRep = panelHeight > 0 ? try bitmap(of: panel) : nil
 
     // Compose in the default bottom-left origin space. The panel sits below
     // the playfield, so it draws at y = 0.
@@ -131,7 +148,7 @@ private func render(
     NSGraphicsContext.current?.imageInterpolation = .none
     NSColor.black.setFill()
     CGRect(origin: .zero, size: size).fill()
-    panelRep.draw(in: CGRect(x: 0, y: 0, width: size.width, height: panelHeight))
+    panelRep?.draw(in: CGRect(x: 0, y: 0, width: size.width, height: panelHeight))
     playfieldRep.draw(in: CGRect(
         x: 0, y: panelHeight, width: size.width, height: playfield.frame.height))
     composed.unlockFocus()

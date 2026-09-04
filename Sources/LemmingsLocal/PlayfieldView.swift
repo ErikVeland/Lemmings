@@ -83,8 +83,49 @@ enum GamePhase: Equatable {
   var overlayShowsLemmings = false
   /// Advanced by the run loop so the march animates while a menu is up.
   var overlayFrame = 0
-  var phase: GamePhase = .playing
+  var phase: GamePhase = .playing {
+    didSet {
+      if phase != oldValue { cursorViewPoint = nil; cursorLevelPoint = nil }
+    }
+  }
   var levelImage: CGImage?
+  var imageScale = 1.0
+  var macArtwork: ClassicMacArtwork? { didSet { invalidateSprites() } }
+  /// Artwork for the menus, which outlives any level.
+  ///
+  /// A level's artwork is chosen in the settings and is thrown away between
+  /// levels. The menus need lettering before a level is loaded and after one
+  /// ends, so the front end holds its own reference.
+  var interfaceArtwork: ClassicMacArtwork? {
+    didSet {
+      macInterface = interfaceArtwork
+        .flatMap(ClassicMacUserInterface.init(artwork:))
+        .map(MacInterfaceRenderer.init(interface:))
+    }
+  }
+  private var macInterface: MacInterfaceRenderer?
+  var macScene: ClassicMacScene? { didSet { sceneTick = nil } }
+  var classicScene: ClassicRenderedLevel? {
+    didSet { sceneTick = nil }
+  }
+  private var sceneTick: Int?
+
+  private func refreshClassicScene() {
+    guard let classicScene, let session = session as? ClassicSession,
+          sceneTick != session.currentTick else { return }
+    let rgba = macScene?.rgba(simulation: session.simulation)
+      ?? ClassicSceneFrame.rgba(classicScene, simulation: session.simulation)
+    imageScale = macScene == nil ? 1 : 2
+    let width = macScene?.width ?? classicScene.width
+    let height = macScene?.height ?? classicScene.height
+    guard let provider = CGDataProvider(data: rgba as CFData),
+          let image = CGImage(width: width, height: height,
+            bitsPerComponent: 8, bitsPerPixel: 32, bytesPerRow: width * 4,
+            space: CGColorSpaceCreateDeviceRGB(), bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.last.rawValue),
+            provider: provider, decode: nil, shouldInterpolate: false, intent: .defaultIntent) else { return }
+    levelImage = image
+    sceneTick = session.currentTick
+  }
   var session: (any GameSession)?
   var assets: ClassicMainDATAssets?
   var palette: [ClassicRGBColor] = []
@@ -93,6 +134,8 @@ enum GamePhase: Equatable {
   var onViewportChanged: (() -> Void)?
   /// Called when a click should dismiss a briefing or a result.
   var onAdvancePhase: (() -> Void)?
+  var onSelectOverlayLine: ((Int) -> Void)?
+  private var overlayLineRects: [CGRect] = []
 
   private var spriteCache: [String: NSImage] = [:]
   private var cursorLevelPoint: CGPoint?
@@ -101,6 +144,15 @@ enum GamePhase: Equatable {
 
   override var isFlipped: Bool { true }
   override var acceptsFirstResponder: Bool { true }
+
+  override func setFrameSize(_ newSize: NSSize) {
+    let center = viewport.scrollX + viewport.visibleSize.width / 2
+    let hadSize = viewport.viewSize.width > 1
+    super.setFrameSize(newSize)
+    viewport.viewSize = newSize
+    if hadSize { viewport.center(on: center) }
+    onViewportChanged?()
+  }
 
   // MARK: - Tracking
 
@@ -128,7 +180,9 @@ enum GamePhase: Equatable {
   /// Takes a click position directly.
   func handleClick(at point: CGPoint) {
     guard phase == .playing else {
-      onAdvancePhase?()
+      if overlayHighlight != nil {
+        if let index = overlayLineRects.firstIndex(where: { $0.contains(point) }) { onSelectOverlayLine?(index) }
+      } else { onAdvancePhase?() }
       return
     }
     cursorViewPoint = point
@@ -154,7 +208,7 @@ enum GamePhase: Equatable {
   /// The classic game scrolls while the cursor sits in the outer margin. The
   /// speed rises closer to the edge.
   var edgeScrollDelta: Double? {
-    guard let point = cursorViewPoint, bounds.width > 0 else { return nil }
+    guard let point = cursorViewPoint, bounds.width > 0, bounds.contains(point) else { return nil }
     let margin = 48.0
     if point.x < margin {
       return -((margin - Double(point.x)) / margin) * 8
@@ -166,15 +220,7 @@ enum GamePhase: Equatable {
   }
 
   override func mouseDown(with event: NSEvent) {
-    guard phase == .playing else {
-      onAdvancePhase?()
-      return
-    }
-    let viewPoint = convert(event.locationInWindow, from: nil)
-    let point = viewport.levelPoint(from: viewPoint)
-    cursorViewPoint = viewPoint
-    cursorLevelPoint = point
-    if let target = lemming(at: point) { onAssign?(target.id) }
+    handleClick(at: convert(event.locationInWindow, from: nil))
   }
 
   override func scrollWheel(with event: NSEvent) {
@@ -204,19 +250,35 @@ enum GamePhase: Equatable {
   // MARK: - Drawing
 
   override func draw(_ dirtyRect: NSRect) {
+    refreshClassicScene()
+    // Fill the view's own area, not the dirty rectangle. AppKit passes a
+    // rectangle that can cover the whole window, because these views share one
+    // backing layer.
     NSColor.black.setFill()
-    dirtyRect.fill()
+    bounds.fill()
 
     // A menu can appear before any level is loaded, so the overlay must not
     // depend on there being a picture behind it.
     if let levelImage {
       viewport.viewSize = bounds.size
-      viewport.levelSize = CGSize(width: levelImage.width, height: levelImage.height)
+      viewport.levelSize = CGSize(width: Double(levelImage.width) / imageScale, height: Double(levelImage.height) / imageScale)
       viewport.clamp()
 
       NSGraphicsContext.current?.imageInterpolation = .none
-      drawLevel(levelImage)
-      drawLemmings()
+      if phase != .playing, overlayShowsLemmings {
+        let scale = max(viewport.zoom / imageScale, bounds.height / CGFloat(levelImage.height))
+        let width = min(CGFloat(levelImage.width), bounds.width / scale)
+        let center = viewport.visibleLevelRect.midX * imageScale
+        let x = max(0, min(CGFloat(levelImage.width) - width, center - width / 2))
+        if let cropped = levelImage.cropping(to: CGRect(x: x, y: 0,
+          width: width, height: CGFloat(levelImage.height))) {
+          NSImage(cgImage: cropped, size: .zero).draw(in: bounds, from: .zero,
+            operation: .sourceOver, fraction: 1, respectFlipped: true, hints: nil)
+        }
+      } else {
+        drawLevel(levelImage)
+        drawLemmings()
+      }
       if phase == .playing { drawCursor() }
     }
     if phase != .playing { drawOverlay() }
@@ -243,77 +305,158 @@ enum GamePhase: Equatable {
   }
 
   private func drawOverlay() {
-    NSColor.black.withAlphaComponent(0.82).setFill()
+    overlayLineRects = []
+    NSColor.black.withAlphaComponent(0.42).setFill()
     bounds.fill()
-    if overlayShowsLemmings { drawMarchingLemmings() }
+    let scale = min(2.5, bounds.width / 1100,
+      bounds.height / CGFloat(190 + overlayLines.count * 42))
+    let rowHeight = 42 * scale
+    let width = min(bounds.width - 28 * scale, 820 * scale)
+    // The release's title art needs a deeper band than a line of text does.
+    let showsLogo = overlayTitle == "LEMMINGS" && macInterface?.interface.logo != nil
+    let headerHeight = (showsLogo ? 116 : 62) * scale
+    let height = CGFloat(88 + overlayLines.count * 42) * scale + headerHeight
+    let board = CGRect(x: (bounds.width - width) / 2, y: (bounds.height - height) / 2,
+      width: width, height: height)
 
-    // The game's own text is chunky and upper case, so the menu follows it.
+    // Chunky stone edging and a moss cap echo the level terrain.
+    (macInterface == nil ? NSColor(calibratedRed: 0.09, green: 0.12, blue: 0.16, alpha: 0.97)
+      : NSColor(calibratedWhite: 0.015, alpha: 0.96)).setFill()
+    board.fill()
+    NSColor(calibratedRed: 0.36, green: 0.39, blue: 0.43, alpha: 1).setFill()
+    for x in stride(from: board.minX, to: board.maxX, by: 28 * scale) {
+      CGRect(x: x, y: board.minY, width: min(26 * scale, board.maxX - x), height: 7 * scale).fill()
+      CGRect(x: x, y: board.maxY - 7 * scale,
+        width: min(26 * scale, board.maxX - x), height: 7 * scale).fill()
+    }
+    NSColor(calibratedRed: 0.27, green: 0.62, blue: 0.12, alpha: 1).setFill()
+    CGRect(x: board.minX, y: board.minY - 3 * scale, width: board.width, height: 4 * scale).fill()
+    for x in stride(from: board.minX, to: board.maxX - 8 * scale, by: 19 * scale) {
+      CGRect(x: x, y: board.minY, width: 6 * scale, height: 5 * scale).fill()
+    }
+
     let titleAttributes: [NSAttributedString.Key: Any] = [
-      .font: NSFont.monospacedSystemFont(ofSize: 30, weight: .heavy),
-      .foregroundColor: paletteColor(3, fallback: .white),
-    ]
+      .font: NSFont.systemFont(ofSize: 38 * scale, weight: .black),
+      .foregroundColor: NSColor(calibratedRed: 0.48, green: 0.92, blue: 0.20, alpha: 1),
+      .kern: 2 * scale]
     let lineAttributes: [NSAttributedString.Key: Any] = [
-      .font: NSFont.monospacedSystemFont(ofSize: 15, weight: .medium),
-      .foregroundColor: paletteColor(3, fallback: NSColor(calibratedWhite: 0.9, alpha: 1)),
-    ]
+      .font: NSFont.monospacedSystemFont(ofSize: 13 * scale, weight: .bold),
+      .foregroundColor: NSColor(calibratedRed: 0.90, green: 0.89, blue: 0.77, alpha: 1)]
     let footerAttributes: [NSAttributedString.Key: Any] = [
-      .font: NSFont.monospacedSystemFont(ofSize: 12, weight: .medium),
-      .foregroundColor: paletteColor(2, fallback: .systemGreen),
-    ]
+      .font: NSFont.monospacedSystemFont(ofSize: 10 * scale, weight: .medium),
+      .foregroundColor: NSColor(calibratedRed: 0.68, green: 0.75, blue: 0.64, alpha: 1)]
 
-    var height: CGFloat = 0
-    if let overlayTitle {
-      height += (overlayTitle as NSString).size(withAttributes: titleAttributes).height + 18
+    var y = board.minY + 19 * scale
+    if showsLogo, let macInterface {
+      _ = macInterface.drawLogo(
+        centerX: bounds.midX, top: y - 4 * scale,
+        maximumWidth: board.width - 40 * scale, maximumHeight: headerHeight - 26 * scale)
+    } else if let overlayTitle {
+      let text = overlayTitle.uppercased() as NSString
+      let heading = CGRect(x: board.minX + 18 * scale, y: y,
+        width: board.width - 36 * scale, height: headerHeight - 18 * scale)
+      if !drawMacText(overlayTitle, in: heading, minimumScale: 2) {
+        let size = text.size(withAttributes: titleAttributes)
+        let point = CGPoint(x: bounds.midX - size.width / 2, y: y)
+        var shadow = titleAttributes
+        shadow[.foregroundColor] = NSColor.black
+        text.draw(
+          at: CGPoint(x: point.x + 3 * scale, y: point.y + 3 * scale), withAttributes: shadow)
+        text.draw(at: point, withAttributes: titleAttributes)
+      }
     }
-    height += CGFloat(overlayLines.count) * 24
-    if overlayFooter != nil { height += 34 }
-
-    var y = (bounds.height - height) / 2
-    if let overlayTitle {
-      let text = overlayTitle as NSString
-      let size = text.size(withAttributes: titleAttributes)
-      text.draw(at: CGPoint(x: (bounds.width - size.width) / 2, y: y),
-                withAttributes: titleAttributes)
-      y += size.height + 18
-    }
+    y += headerHeight
     for (index, line) in overlayLines.enumerated() {
+      let row = CGRect(x: board.minX + 18 * scale, y: y,
+        width: board.width - 36 * scale, height: rowHeight - 5 * scale)
+      overlayLineRects.append(row)
       let chosen = index == overlayHighlight
       var attributes = lineAttributes
-      if chosen {
-        attributes[.foregroundColor] = paletteColor(4, fallback: .systemYellow)
-        attributes[.font] = NSFont.monospacedSystemFont(ofSize: 15, weight: .bold)
+      if overlayHighlight != nil {
+        (chosen
+          ? (macInterface == nil
+            ? NSColor(calibratedRed: 0.23, green: 0.32, blue: 0.17, alpha: 1)
+            : NSColor(calibratedRed: 0.78, green: 0.82, blue: 0.88, alpha: 1))
+          : NSColor(calibratedWhite: macInterface == nil ? 0.17 : 0.025, alpha: 1)).setFill()
+        row.fill()
+        (chosen
+          ? (macInterface == nil
+            ? NSColor(calibratedRed: 0.70, green: 0.84, blue: 0.29, alpha: 1)
+            : NSColor(calibratedWhite: 0.96, alpha: 1))
+          : NSColor(calibratedWhite: 0.29, alpha: 1)).setStroke()
+        let outline = NSBezierPath(rect: row.insetBy(dx: 0.5, dy: 0.5))
+        outline.lineWidth = max(1, scale)
+        outline.stroke()
       }
-      let text = (chosen ? "> \(line)" : line) as NSString
+      if chosen { attributes[.foregroundColor] = NSColor(calibratedRed: 1, green: 0.93, blue: 0.53, alpha: 1) }
+      let text = line as NSString
       let size = text.size(withAttributes: attributes)
-      text.draw(at: CGPoint(x: (bounds.width - size.width) / 2, y: y),
-                withAttributes: attributes)
-      y += 24
+      if !drawMacText(line, in: row.insetBy(dx: 14 * scale, dy: 5 * scale)) {
+        text.draw(at: CGPoint(x: bounds.midX - size.width / 2, y: row.midY - size.height / 2),
+          withAttributes: attributes)
+      }
+      y += rowHeight
     }
     if let overlayFooter {
-      y += 10
-      let text = overlayFooter as NSString
-      let size = text.size(withAttributes: footerAttributes)
-      text.draw(at: CGPoint(x: (bounds.width - size.width) / 2, y: y),
-                withAttributes: footerAttributes)
+      let top = y + 13 * scale
+      if let macInterface, macInterface.font(.small)?.covers(overlayFooter) == true {
+        macInterface.drawCentered(
+          overlayFooter, face: .small, centerX: bounds.midX, top: top, scale: 1, alpha: 0.9)
+      } else {
+        let text = overlayFooter as NSString
+        let size = text.size(withAttributes: footerAttributes)
+        text.draw(at: CGPoint(x: bounds.midX - size.width / 2, y: top),
+          withAttributes: footerAttributes)
+      }
     }
+    if overlayShowsLemmings { drawMarchingLemmings() }
+  }
+
+  /// Draws a menu line in the release's own character set.
+  ///
+  /// Both Macintosh character sets are monospaced, so every glyph advances one
+  /// cell no matter how wide its own pixels are. The scale stays a whole
+  /// number, because a fraction blurs pixels the original never blurred.
+  private func drawMacText(
+    _ text: String, in rect: CGRect, minimumScale: Int = 1
+  ) -> Bool {
+    guard let macInterface else { return false }
+    // The original menus are upper case throughout.
+    let normalized = text.uppercased()
+      .replacingOccurrences(of: "—", with: "-")
+      .replacingOccurrences(of: "’", with: "'")
+
+    for face in [ClassicMacUserInterface.Face.large, .small] {
+      guard let font = macInterface.font(face), font.covers(normalized) else { continue }
+      let wide = font.cellWidth * max(1, normalized.count)
+      let fit = min(Int(rect.height) / max(1, font.cellHeight), Int(rect.width) / max(1, wide))
+      guard fit >= minimumScale else { continue }
+      macInterface.drawCentered(
+        normalized, face: face, centerX: rect.midX,
+        top: rect.midY - macInterface.height(face: face, scale: fit) / 2, scale: fit)
+      return true
+    }
+    return false
   }
 
   private func drawLevel(_ image: CGImage) {
     // Crop in image pixels. CGImage uses a top-left origin, which matches the
     // level coordinate system, so no vertical flip is needed here.
-    let visible = viewport.visibleLevelRect
+    let logical = viewport.visibleLevelRect
+    let visible = CGRect(x: logical.minX * imageScale, y: logical.minY * imageScale,
+      width: logical.width * imageScale, height: logical.height * imageScale)
     let crop = CGRect(
       x: floor(visible.minX), y: floor(visible.minY),
       width: min(ceil(visible.width) + 1, CGFloat(image.width) - floor(visible.minX)),
       height: min(ceil(visible.height) + 1, CGFloat(image.height) - floor(visible.minY)))
     guard crop.width > 0, crop.height > 0, let cropped = image.cropping(to: crop) else { return }
 
-    let origin = viewport.viewPoint(fromLevel: CGPoint(x: crop.minX, y: crop.minY))
+    let origin = viewport.viewPoint(fromLevel: CGPoint(x: crop.minX / imageScale, y: crop.minY / imageScale))
     let destination = CGRect(
       x: origin.x, y: origin.y,
-      width: crop.width * viewport.zoom, height: crop.height * viewport.zoom)
+      width: crop.width * viewport.zoom / imageScale, height: crop.height * viewport.zoom / imageScale)
     NSImage(cgImage: cropped, size: crop.size)
-      .draw(in: destination, from: .zero, operation: .sourceOver, fraction: 1)
+      .draw(in: destination, from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true, hints: nil)
   }
 
   private func drawLemmings() {
@@ -330,6 +473,22 @@ enum GamePhase: Equatable {
         ?? assets.animation(for: pose, direction: .none),
       !animation.frames.isEmpty
     else { return }
+
+    if let frame = macArtwork?.lemming(pose: pose, left: lemming.facingLeft, tick: lemming.animationFrame) {
+      let key = "mac-\(pose.rawValue)-\(direction.rawValue)-\(lemming.animationFrame)"
+      let sprite = spriteCache[key] ?? frame.makeNSImage()
+      if let sprite {
+        if spriteCache.count < 1500 { spriteCache[key] = sprite }
+        let origin = viewport.viewPoint(fromLevel: CGPoint(
+          x: Double(lemming.x + animation.offsetX) + Double(frame.x) / 2,
+          y: Double(lemming.y + animation.offsetY) + Double(frame.y) / 2))
+        let rect = CGRect(x: origin.x, y: origin.y,
+          width: Double(frame.width) * viewport.zoom / 2, height: Double(frame.height) * viewport.zoom / 2)
+        sprite.draw(in: rect, from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true, hints: nil)
+        if let countdown = lemming.countdown { drawCountdown(countdown, above: rect) }
+        return
+      }
+    }
 
     let index = abs(lemming.animationFrame) % animation.frames.count
     let key = "\(pose.rawValue)-\(direction.rawValue)-\(index)"
@@ -350,7 +509,7 @@ enum GamePhase: Equatable {
       x: origin.x, y: origin.y,
       width: sprite.size.width * viewport.zoom, height: sprite.size.height * viewport.zoom)
     guard rect.intersects(bounds) else { return }
-    sprite.draw(in: rect, from: .zero, operation: .sourceOver, fraction: 1)
+    sprite.draw(in: rect, from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true, hints: nil)
 
     if let countdown = lemming.countdown {
       drawCountdown(countdown, above: rect)
@@ -401,6 +560,23 @@ enum GamePhase: Equatable {
   /// These are the decoded walking frames the game uses in play, not artwork
   /// made for the menu, so the screen is built from the same sprites.
   private func drawMarchingLemmings() {
+    if let macArtwork {
+      let scale = max(1.5, min(3, bounds.width / 900))
+      let spacing = 32 * scale
+      var x = -spacing + (CGFloat(overlayFrame) * scale / 3).truncatingRemainder(dividingBy: spacing)
+      var index = 0
+      while x < bounds.width {
+        if let frame = macArtwork.lemming(pose: .walking, left: false, tick: overlayFrame / 4 + index * 3),
+          let image = frame.makeNSImage() {
+          image.draw(in: CGRect(x: x + CGFloat(frame.x) * scale,
+            y: bounds.height - CGFloat(20 - frame.y) * scale,
+            width: CGFloat(frame.width) * scale, height: CGFloat(frame.height) * scale),
+            from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true, hints: nil)
+        }
+        x += spacing; index += 1
+      }
+      return
+    }
     guard let assets, !palette.isEmpty,
       let walk = assets.animation(for: .walking, direction: .right),
       !walk.frames.isEmpty
@@ -430,7 +606,7 @@ enum GamePhase: Equatable {
         in: NSRect(
           x: x, y: baseline,
           width: sprite.size.width * scale, height: sprite.size.height * scale),
-        from: .zero, operation: .sourceOver, fraction: 0.85)
+        from: .zero, operation: .sourceOver, fraction: 0.85, respectFlipped: true, hints: nil)
       x += spacing
       index += 1
     }
@@ -470,5 +646,16 @@ func spritePose(for action: ClassicDOSAction) -> ClassicLemmingPose {
   case .digging: return .digging
   case .ohNo: return .ohNo
   case .exploding: return .explosion
+  }
+}
+
+@MainActor extension ClassicMacArtwork.Frame {
+  func makeNSImage() -> NSImage? {
+    guard let provider = CGDataProvider(data: rgba as CFData),
+      let image = CGImage(width: width, height: height, bitsPerComponent: 8, bitsPerPixel: 32,
+        bytesPerRow: width * 4, space: CGColorSpaceCreateDeviceRGB(),
+        bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.last.rawValue),
+        provider: provider, decode: nil, shouldInterpolate: false, intent: .defaultIntent) else { return nil }
+    return NSImage(cgImage: image, size: CGSize(width: width, height: height))
   }
 }

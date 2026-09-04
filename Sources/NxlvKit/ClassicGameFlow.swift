@@ -107,6 +107,17 @@ public struct ClassicGameFlow: Sendable {
         screen = .rankSelect
     }
 
+    /// Resume the first unfinished level, including gaps left by direct selection.
+    public mutating func resumeCampaign() {
+        for (rankIndex, rank) in ranks.enumerated() {
+            if let position = rank.levelIndices.indices.first(where: { !hasPassed(rank: rank.name, position: $0) }) {
+                selectLevel(rank: rankIndex, position: position)
+                return
+            }
+        }
+        selectLevel(rank: 0, position: 0)
+    }
+
     /// Begins a rank, resuming at the furthest level reached in it.
     public mutating func selectRank(_ index: Int) {
         guard ranks.indices.contains(index) else { return }
@@ -172,7 +183,8 @@ public struct ClassicGameFlow: Sendable {
         guard case .rankComplete = screen else { return }
         let next = currentRankIndex + 1
         guard next < ranks.count else {
-            screen = .gameComplete
+            screen = ranks.allSatisfy { passedCount(inRank: $0.name) == $0.levelIndices.count }
+                ? .gameComplete : .rankSelect
             return
         }
         currentRankIndex = next
@@ -222,7 +234,10 @@ public struct ClassicGameFlow: Sendable {
     }
 
     public mutating func restore(_ progress: Progress) {
-        furthestReached = progress.furthestReached
-        passed = Set(progress.passed)
+        furthestReached = Dictionary(uniqueKeysWithValues: ranks.map { rank in
+            (rank.name, min(max(0, progress.furthestReached[rank.name] ?? 0), max(0, rank.levelIndices.count - 1)))
+        })
+        let valid = Set(ranks.flatMap { rank in rank.levelIndices.indices.map { key(rank: rank.name, position: $0) } })
+        passed = Set(progress.passed).intersection(valid)
     }
 }

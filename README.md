@@ -1,7 +1,8 @@
 # Lemmings Local
 
-Lemmings Local is an unofficial native macOS port of Lemmings. It contains no
-commercial game data. Players import data that they lawfully possess.
+Lemmings Local is an unofficial native macOS port of Lemmings. Commercial game
+data is not committed to the source repository. Local builds embed the game
+assets already provided under `Sources/Ports` and `Sources/Music`.
 
 The project is not affiliated with, endorsed by, or licensed by Sony
 Interactive Entertainment, which holds the Lemmings rights today. Psygnosis no
@@ -11,8 +12,11 @@ closed it in 2012. Read `THIRD_PARTY_NOTICES.md` before you distribute anything.
 ## Current result
 
 The app is a native macOS build. It runs no emulator and interprets no DOS
-code. It imports an original DOS Lemmings data directory, then lists and plays
-the complete 120-level campaign across Fun, Tricky, Taxing, and Mayhem.
+code. It loads embedded original game data, puts recognised releases in
+canon order, and lets the player start at any installed release or level.
+Completing one installed release continues into the next. The original DOS
+Lemmings campaign is complete: all 120 levels across Fun, Tricky, Taxing, and
+Mayhem are present.
 
 The app runs the DOS-accurate engine, `ClassicDOSSimulation`. The engine steps
 in fixed 17 Hz logic ticks through an accumulator, so the logic rate does not
@@ -50,9 +54,25 @@ reported rather than ignored.
 | Original tunes | Not playable. The Sound Images sequencer format is undecoded |
 | Distribution | Local ad-hoc signed universal build for macOS 13+. Developer ID signing and notarization are not configured |
 
+## Unified game library
+
+All eight releases now appear in one game library and share one window.
+Click a game to start, or use the arrow keys and Enter. Press Command-Shift-L
+at any time to return to the library. Full Quest resumes unfinished campaigns
+and continues between engines. Single-game mode returns to the library.
+
+Oh No! now has its five retail ratings and authored level order. Both Xmas
+demos and both retail Holiday campaigns are included, for 292 classic-family
+levels. Holiday 1993/1994 use the supplied Macintosh level records and DOS
+festive graphics. The build extracts the existing installer with `unar`.
+The finished app needs no external assets or extraction tools.
+
+The library retains each sequel's current gameplay limits: L2 is Classic-only,
+and L3 remains a native preview. See [integration details](Documentation/UnifiedGame.md).
+
 ## Build and run
 
-Requires macOS 13 or later and the Apple Command Line Tools.
+Requires macOS 13 or later, the Apple Command Line Tools, and `unar` for the supplied Holiday installer.
 
 ```sh
 zsh Scripts/build-local-app.sh
@@ -62,13 +82,23 @@ zsh Scripts/build-local-app.sh
 open ".build/local/Lemmings Local.app"
 ```
 
-In the app, select **Import original DOS data**. Choose the directory that
-contains files such as `LEVEL000.DAT`, `GROUND0O.DAT`, `VGAGR0.DAT`,
-`ODDTABLE.DAT`, and `MAIN.DAT`. The app remembers the directory for later
-launches.
+The build embeds the available game assets and music in `Contents/Resources`.
+Normal launches need no data-folder selection and do not depend on the source
+checkout or working directory. Additional custom data can still be imported.
+Macintosh resource forks are preserved as ordinary `.rsrc` files under
+`Ports/MacResourceForks`, so code signing does not discard their graphics or levels.
+Choose **Play Lemmings 2…** (Command-Shift-2) for its native player.
+Both standalone sequel builds also embed their data. Copying the app does not
+require copying separate data folders. These local bundles contain the supplied
+commercial assets; they are not data-free source releases.
 
 Click a skill button to arm a skill. Click a lemming to assign it. Press `N`
 for the next level, `R` to retry, and `X` to nuke.
+
+Passing levels in campaign order unlocks persistent achievements for each
+release. Completing the festive games, the original trilogy, and the full
+canon unlocks additional achievements. Choose **Achievements** from the app
+menu, or press Command-Shift-A, to see them.
 
 The build script compiles the Swift targets directly. This also works around a
 `PackageDescription` binary mismatch in some Command Line Tools installations.
@@ -125,14 +155,49 @@ The suites verify:
 
 ## Remaining work
 
-1. Record replays for every official level, then gate physics changes on them.
+1. Add native data loaders, rendering, and game mechanics for Lemmings 2: The
+   Tribes and Lemmings 3: The Chronicles. They are represented in the canon,
+   but their original data formats do not run through the Lemmings 1 engine.
+   Native level readers are now implemented for both games, including Lemmings
+   2 decompression and Lemmings 3 object placements. Native terrain tiles and
+   regular L2 object animations now decode. L3 object graphics and static
+   scenes also render. L2 now uses the original menu artwork, font and in-game
+   panel, without developer button strips. Twelve-tribe progress, medal rules,
+   survivor carry-over, autosave and eight manual save slots are implemented.
+   The interpreter has the eight Classic skills plus tested stacker and
+   platformer mechanics. Only Classic is enabled for gameplay; the other 41
+   skills and interactive objects remain incomplete. Intro, practice, full
+   preferences and the original ending scripts also remain incomplete.
+   All ten Classic levels start. The object/terrain border mismatch is fixed,
+   and each exit passes alignment and interaction tests. Only level 1 has a
+   full-level completion test.
+   Build it with
+   `zsh Scripts/build-native-l2.sh`, or use the full app's
+   **Play Lemmings 2…** menu. It does not award verified achievements.
+   L3 now starts all 90 campaign levels (30 per tribe), with brick/spade tools, climbing and
+   ceiling traversal, bombs, grenades, Hadoken projectiles, umbrellas,
+   swimming aids, clocks, nine trap types, four creature types, multiple
+   entrances, reserves, extra lemmings,
+   terrain changes, tribe selection, and separate saved progress for each tribe.
+   Completed-run tests cover Classic levels 1–3, Egyptian level 1, and Shadow
+   level 1 (nine rescued, one abandoned). The End run control retains rescued
+   lemmings and reserves after confirmation. Traps use native frame delays and cycle pauses.
+   Build it with `zsh Scripts/build-native-l3.sh`, or choose
+   **Play Lemmings 3 Native Preview…**. It does not award achievements.
+   Other L2 tribes remain unavailable. Neither sequel
+   has verified 1:1 physics.
+   See [Sequel interpreters](Documentation/SequelInterpreters.md).
+2. Record full solution replays for Oh No!, Xmas 1991–1992, and Holiday
+   1993–1994. Their retail ratings and campaign order now load in the shared
+   library. All 292 classic-family levels pass rendering and release checks.
+3. Record replays for every official level, then gate physics changes on them.
    Three levels are covered. The other 117 need multi-skill replays.
-2. Decode the Sound Images sequencer format so the driver's own tunes feed the
+4. Decode the Sound Images sequencer format so the driver's own tunes feed the
    synthesizer. See `Documentation/AdlibDriver.md`.
-3. Load NeoLemmix lemming sprites from style packs.
-4. Test against real NeoLemmix packs, including missing-dependency and
+5. Load NeoLemmix lemming sprites from style packs.
+6. Test against real NeoLemmix packs, including missing-dependency and
    malformed content.
-5. Produce hardened, Developer ID signed, and notarized macOS builds. This
+7. Produce hardened, Developer ID signed, and notarized macOS builds. This
    needs an Apple Developer account.
 
 ## Source layout
@@ -153,3 +218,15 @@ The suites verify:
 - `Tests/ClassicDOSCampaignSmoke/main.swift`: all-120-level engine harness.
 
 See `THIRD_PARTY_NOTICES.md` for research sources and licensing notes.
+
+### Macintosh artwork
+
+The combined app now prefers the supplied Mac artwork for Lemmings, Oh No,
+Xmas, and Holiday: 2× terrain and objects, Mac lemmings, logos, and menu fonts.
+The simulation and saves remain compatible. See
+[the asset sources and fallback details](Documentation/UnifiedGame.md#display-and-navigation).
+Builds also require Python 3 and ImageMagick (`magick`); the packaged app does not.
+
+Classic artwork can be changed in **Options → Graphics → Artwork**: Macintosh
+(default), Amiga, or DOS (VGA). Selections persist between launches. The Mac and
+Amiga skill buttons have shaded stone frames and a pressed selection state.

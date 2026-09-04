@@ -21,7 +21,19 @@ enum PanelButton: Equatable {
   var visibleLevelRect = CGRect.zero
 
   /// The original status bar, when the imported data provides it.
+  var macArtwork: ClassicMacArtwork?
+  /// The release's own character set, used for every label on the bar. It
+  /// outlives a level, because the bar shows status on the menus too.
+  var interfaceArtwork: ClassicMacArtwork? {
+    didSet {
+      macInterface = interfaceArtwork
+        .flatMap(ClassicMacUserInterface.init(artwork:))
+        .map(MacInterfaceRenderer.init(interface:))
+    }
+  }
+  private var macInterface: MacInterfaceRenderer?
   var panelImage: CGImage?
+  var terrainImage: CGImage?
   /// The skill bar belongs to a level in progress, not to a menu.
   var isMenuMode = false
   var onButton: ((PanelButton) -> Void)?
@@ -49,7 +61,9 @@ enum PanelButton: Equatable {
   /// Places the twelve original buttons over the drawn status bar.
   private func layoutClassicButtons() {
     guard let panelImage else { return }
-    let scale = max(1, floor(bounds.width / CGFloat(panelImage.width)))
+    let statusHeight: CGFloat = bounds.height <= 40 ? 0 : statusStripHeight
+    let scale = max(1, floor(min(bounds.width / CGFloat(panelImage.width),
+      (bounds.height - statusHeight) / CGFloat(panelImage.height))))
     panelScale = Double(scale)
     let size = CGSize(
       width: CGFloat(panelImage.width) * scale, height: CGFloat(panelImage.height) * scale)
@@ -62,16 +76,16 @@ enum PanelButton: Equatable {
     let cell = CGFloat(ClassicPanelGraphics.buttonWidth) * scale
     buttonFrames = order.enumerated().map { index, button in
       (button, CGRect(
-        x: panelFrame.minX + cell * CGFloat(index), y: panelFrame.minY,
-        width: cell, height: panelFrame.height))
+        x: panelFrame.minX + cell * CGFloat(index), y: panelFrame.minY + 16 * scale,
+        width: cell, height: 24 * scale))
     }
     // The original reserves the right of the bar for the level map.
     let mapLeft = panelFrame.minX + cell * CGFloat(order.count) + 16 * scale
     minimapFrame = CGRect(
       x: mapLeft,
-      y: panelFrame.minY + 4 * scale,
+      y: panelFrame.minY + 18 * scale,
       width: max(0, panelFrame.maxX - mapLeft - 4 * scale),
-      height: panelFrame.height - 8 * scale)
+      height: 20 * scale)
   }
 
   private func layoutButtons() {
@@ -130,8 +144,11 @@ enum PanelButton: Equatable {
   // MARK: - Drawing
 
   override func draw(_ dirtyRect: NSRect) {
+    // Fill the view's own area, not the dirty rectangle. These views share one
+    // window-sized backing layer, so AppKit passes a rectangle that covers the
+    // whole window. A fill of that rectangle paints over the playfield above.
     NSColor.black.setFill()
-    dirtyRect.fill()
+    bounds.fill()
 
     // A menu shows no skills, no counts and no map.
     if isMenuMode {
@@ -143,13 +160,14 @@ enum PanelButton: Equatable {
       layoutClassicButtons()
       drawClassicPanel()
       drawClassicCounts()
+      drawButtonLabels()
       drawMinimap()
       drawStatus()
       return
     }
 
     NSColor(calibratedWhite: 0.11, alpha: 1).setFill()
-    dirtyRect.fill()
+    bounds.fill()
     layoutButtons()
     for (button, frame) in buttonFrames { draw(button, in: frame) }
     drawMinimap()
@@ -159,8 +177,9 @@ enum PanelButton: Equatable {
   private func drawClassicPanel() {
     guard let panelImage else { return }
     NSGraphicsContext.current?.imageInterpolation = .none
+    if let macArtwork { drawMacPanel(macArtwork); return }
     NSImage(cgImage: panelImage, size: NSSize(width: panelImage.width, height: panelImage.height))
-      .draw(in: panelFrame, from: .zero, operation: .sourceOver, fraction: 1)
+      .draw(in: panelFrame, from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true, hints: nil)
 
     // Mark the armed skill, which the original showed with a lit border.
     guard let match = buttonFrames.first(where: { $0.0 == .skill(selectedSkillIndex) })
@@ -168,11 +187,105 @@ enum PanelButton: Equatable {
     // The art occupies the upper rows of each cell, so the marker follows it.
     let art = CGRect(
       x: match.1.minX, y: match.1.minY,
-      width: match.1.width, height: match.1.height * 0.72)
+      width: match.1.width, height: match.1.height)
     NSColor.white.setStroke()
     let outline = NSBezierPath(rect: art.insetBy(dx: 1, dy: 1))
     outline.lineWidth = 2
     outline.stroke()
+  }
+
+  private func drawMacPanel(_ artwork: ClassicMacArtwork) {
+    let poses: [ClassicLemmingPose] = [.climbing, .floating, .ohNo, .blocking,
+      .building, .bashing, .mining, .digging]
+    for (button, frame) in buttonFrames {
+      let selected = button == .skill(selectedSkillIndex) || (button == .pause && isPaused)
+      drawStoneButton(frame, selected: selected)
+      if case let .skill(index) = button, let source = artwork.lemming(
+        pose: poses[index], left: false, tick: index == 2 ? 12 : 0), let image = source.makeNSImage() {
+        let box = CGRect(x: frame.minX + 2 * panelScale, y: frame.minY + 7 * panelScale,
+          width: frame.width - 4 * panelScale, height: frame.height - 9 * panelScale)
+        let scale = min(box.width / image.size.width, box.height / image.size.height)
+        let size = CGSize(width: image.size.width * scale, height: image.size.height * scale)
+        image.draw(in: CGRect(x: box.midX - size.width / 2, y: box.maxY - size.height,
+          width: size.width, height: size.height), from: .zero, operation: .sourceOver,
+          fraction: 1, respectFlipped: true, hints: nil)
+      } else {
+        let symbol: String
+        switch button {
+        case .rateDown: symbol = "−"
+        case .rateUp: symbol = "+"
+        case .pause: symbol = isPaused ? "▶" : "Ⅱ"
+        case .nuke: symbol = "!"
+        case .skill: symbol = ""
+        }
+        let attributes: [NSAttributedString.Key: Any] = [
+          .font: NSFont.systemFont(ofSize: 10 * panelScale, weight: .black),
+          .foregroundColor: button == .nuke ? NSColor.systemOrange : NSColor.systemGreen]
+        let text = symbol as NSString
+        let size = text.size(withAttributes: attributes)
+        text.draw(at: CGPoint(x: frame.midX - size.width / 2, y: frame.midY - size.height / 2),
+          withAttributes: attributes)
+      }
+    }
+    NSColor(calibratedWhite: 0.42, alpha: 1).setStroke()
+    NSBezierPath(rect: minimapFrame).stroke()
+  }
+
+  /// Pixel bevels keep the controls in the same visual period as the sprites.
+  private func drawStoneButton(_ frame: CGRect, selected: Bool) {
+    let pixel = max(1, panelScale / 2)
+    let rim = frame.insetBy(dx: pixel, dy: pixel)
+    func fill(_ rect: CGRect, _ color: NSColor) {
+      color.setFill()
+      rect.fill()
+    }
+    let light = NSColor(calibratedRed: 0.65, green: 0.66, blue: 0.59, alpha: 1)
+    let stone = NSColor(calibratedRed: 0.35, green: 0.37, blue: 0.32, alpha: 1)
+    let shadow = NSColor(calibratedRed: 0.11, green: 0.13, blue: 0.10, alpha: 1)
+    fill(rim, stone)
+    // Top and left catch the light; the selected button sinks into its socket.
+    let upper = selected ? shadow : light
+    let lower = selected ? light : shadow
+    for step in 0..<2 {
+      let edge = rim.insetBy(dx: CGFloat(step) * pixel, dy: CGFloat(step) * pixel)
+      fill(CGRect(x: edge.minX, y: edge.minY, width: edge.width, height: pixel), upper)
+      fill(CGRect(x: edge.minX, y: edge.minY, width: pixel, height: edge.height), upper)
+      fill(CGRect(x: edge.minX, y: edge.maxY - pixel, width: edge.width, height: pixel), lower)
+      fill(CGRect(x: edge.maxX - pixel, y: edge.minY, width: pixel, height: edge.height), lower)
+    }
+    let well = rim.insetBy(dx: 3 * pixel, dy: 3 * pixel)
+    fill(well.insetBy(dx: -pixel, dy: -pixel), shadow)
+    fill(CGRect(x: well.minX, y: well.maxY, width: well.width, height: pixel), light)
+    fill(CGRect(x: well.maxX, y: well.minY, width: pixel, height: well.height), light)
+    fill(well, selected
+      ? NSColor(calibratedRed: 0.17, green: 0.25, blue: 0.10, alpha: 1)
+      : NSColor(calibratedRed: 0.07, green: 0.09, blue: 0.06, alpha: 1))
+    if selected {
+      fill(CGRect(x: well.minX + pixel, y: well.maxY - 2 * pixel,
+        width: well.width - 2 * pixel, height: pixel),
+        NSColor(calibratedRed: 0.62, green: 0.85, blue: 0.22, alpha: 1))
+    }
+  }
+
+  private func drawButtonLabels() {
+    guard panelScale >= 2 else { return }
+    let names = ["− RATE", "+ RATE", "CLIMB", "FLOAT", "BOMB", "BLOCK",
+      "BUILD", "BASH", "MINE", "DIG", "PAUSE", "NUKE"]
+    let attributes: [NSAttributedString.Key: Any] = [
+      .font: NSFont.monospacedSystemFont(ofSize: 3.1 * panelScale, weight: .bold),
+      .foregroundColor: NSColor(calibratedRed: 0.76, green: 0.88, blue: 0.62, alpha: 1)]
+    for (index, item) in buttonFrames.enumerated() {
+      // The original bar carried no wording, so a label that does not fit its
+      // button is dropped rather than shrunk or overlapped.
+      let box = CGRect(x: item.1.minX - 2, y: item.1.minY - 9 * panelScale / 2,
+        width: item.1.width + 4, height: 9 * panelScale / 2)
+      if drawMacLabel(names[index], centeredIn: box) { continue }
+      guard macInterface == nil else { continue }
+      let text = names[index] as NSString
+      let size = text.size(withAttributes: attributes)
+      text.draw(at: CGPoint(x: item.1.midX - size.width / 2, y: item.1.minY - size.height - 4),
+        withAttributes: attributes)
+    }
   }
 
   /// Draws the live counts into the boxes above each button.
@@ -184,10 +297,19 @@ enum PanelButton: Equatable {
       .foregroundColor: NSColor.white,
     ]
     for (button, frame) in buttonFrames {
-      guard case let .skill(index) = button, let skill = session.skills[safe: index] else {
+      let value: String
+      switch button {
+      case .rateDown, .rateUp:
+        value = "\(session.rate)"
+      case let .skill(index):
+        guard let skill = session.skills[safe: index] else { continue }
+        value = skill.isInfinite ? "∞" : "\(skill.count)"
+      case .pause, .nuke:
         continue
       }
-      let text = (skill.isInfinite ? "∞" : "\(skill.count)") as NSString
+      let box = CGRect(x: frame.minX, y: frame.minY + 1, width: frame.width, height: 14 * panelScale / 2)
+      if drawMacLabel(value, centeredIn: box) { continue }
+      let text = value as NSString
       let size = text.size(withAttributes: attributes)
       text.draw(
         at: CGPoint(x: frame.midX - size.width / 2, y: frame.minY + 2),
@@ -203,10 +325,10 @@ enum PanelButton: Equatable {
     switch button {
     case .rateDown:
       title = "◀"
-      subtitle = session?.rateLabel.lowercased() ?? "rate"
+      subtitle = session.map { "\($0.rate)" } ?? "—"
     case .rateUp:
       title = "▶"
-      subtitle = session?.rateLabel.lowercased() ?? "rate"
+      subtitle = session.map { "\($0.rate)" } ?? "—"
     case let .skill(index):
       let skill = session?.skills[safe: index]
       title = skill?.name ?? "—"
@@ -264,6 +386,12 @@ enum PanelButton: Equatable {
       x: minimapFrame.minX + (minimapFrame.width - drawn.width) / 2,
       y: minimapFrame.minY + (minimapFrame.height - drawn.height) / 2)
 
+    if let terrainImage {
+      NSGraphicsContext.current?.imageInterpolation = .none
+      NSImage(cgImage: terrainImage, size: levelSize).draw(
+        in: CGRect(origin: origin, size: drawn), from: .zero,
+        operation: .sourceOver, fraction: 0.8, respectFlipped: true, hints: nil)
+    }
     NSColor.systemGreen.setFill()
     for lemming in session.lemmings {
       let dot = CGRect(
@@ -277,21 +405,55 @@ enum PanelButton: Equatable {
       x: origin.x + visibleLevelRect.minX * scale,
       y: origin.y + visibleLevelRect.minY * scale,
       width: visibleLevelRect.width * scale,
-      height: visibleLevelRect.height * scale)
+      height: visibleLevelRect.height * scale).intersection(CGRect(origin: origin, size: drawn))
     NSColor.white.withAlphaComponent(0.8).setStroke()
     let outline = NSBezierPath(rect: window)
     outline.lineWidth = 1
     outline.stroke()
   }
 
+  /// Draws a label in the release's small face, centered in a box.
+  ///
+  /// Returns false when the release has no character set or the text does not
+  /// fit, so the caller can fall back to a system font.
+  /// Punctuation the character set does not carry, mapped to what it does.
+  private func gameText(_ text: String) -> String {
+    text.uppercased()
+      .replacingOccurrences(of: "—", with: "-")
+      .replacingOccurrences(of: "–", with: "-")
+      .replacingOccurrences(of: "’", with: "'")
+      .replacingOccurrences(of: "∞", with: "*")
+  }
+
+  private func drawMacLabel(_ text: String, centeredIn box: CGRect, scale wanted: Int = 0) -> Bool {
+    guard let macInterface, let font = macInterface.font(.small) else { return false }
+    let upper = gameText(text)
+    guard font.covers(upper) else { return false }
+    let fit = min(
+      Int(box.width) / max(1, font.cellWidth * max(1, upper.count)),
+      Int(box.height) / max(1, font.cellHeight))
+    let scale = wanted > 0 ? wanted : fit
+    guard scale >= 1 else { return false }
+    macInterface.drawCentered(
+      upper, face: .small, centerX: box.midX,
+      top: box.midY - macInterface.height(face: .small, scale: scale) / 2, scale: scale)
+    return true
+  }
+
   private func drawStatus() {
     let attributes: [NSAttributedString.Key: Any] = [
-      .font: NSFont.monospacedDigitSystemFont(ofSize: 11, weight: .regular),
+      .font: NSFont.monospacedDigitSystemFont(ofSize: min(16, max(11, panelScale * 3)), weight: .regular),
       .foregroundColor: NSColor(calibratedWhite: 0.85, alpha: 1),
     ]
     let y = usesClassicSkin ? panelFrame.maxY + 4 : inset + buttonHeight + 6
-    (statusText as NSString).draw(
-      at: CGPoint(x: inset, y: y), withAttributes: attributes)
+    let box = CGRect(x: inset, y: y, width: bounds.width - inset * 2, height: 20)
+    if let macInterface, let font = macInterface.font(.small), font.covers(gameText(statusText)) {
+      macInterface.draw(gameText(statusText), face: .small, at: CGPoint(x: inset, y: y), scale: 1)
+    } else {
+      _ = box
+      (statusText as NSString).draw(
+        at: CGPoint(x: inset, y: y), withAttributes: attributes)
+    }
   }
 
   /// Tall enough for the original bar at 3x, plus a status strip beneath it.

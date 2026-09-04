@@ -167,27 +167,12 @@ public enum ClassicLemmingPalette {
         ClassicRGBColor(red: classicMainVGAComponent(32), green: classicMainVGAComponent(32), blue: classicMainVGAComponent(32)),
     ]
 
-    /// Returns palette indices 0...15 for the status bar.
-    ///
-    /// The bar does not follow the level. Feeding it the terrain palette tints
-    /// its upper indices with whatever style is loaded, which is wrong. The
-    /// low eight entries are the known fixed colors. The upper eight are a
-    /// provisional neutral ramp, because the original bar palette has not been
-    /// established from the data yet.
+    /// Readable display palette for the DOS toolbar. The original panel palette
+    /// is not yet recovered; these dark stone shades keep the colored figures
+    /// distinct without changing the source bitmap or the in-level palette.
     public static var panelVGA: [ClassicRGBColor] {
-        // fixedVGAColors holds seven entries, so nine more complete the set.
-        let neutral: [ClassicRGBColor] = [
-            ClassicRGBColor(red: 0, green: 0, blue: 0),
-            ClassicRGBColor(red: 48, green: 48, blue: 56),
-            ClassicRGBColor(red: 80, green: 80, blue: 92),
-            ClassicRGBColor(red: 112, green: 112, blue: 124),
-            ClassicRGBColor(red: 144, green: 144, blue: 156),
-            ClassicRGBColor(red: 176, green: 176, blue: 188),
-            ClassicRGBColor(red: 208, green: 208, blue: 216),
-            ClassicRGBColor(red: 232, green: 232, blue: 240),
-            ClassicRGBColor(red: 255, green: 255, blue: 255),
-        ]
-        return fixedVGAColors + neutral
+        let stone: [UInt8] = [0, 18, 25, 32, 40, 49, 60, 74, 94]
+        return fixedVGAColors + stone.map { ClassicRGBColor(red: $0, green: $0, blue: $0) }
     }
 
     /// Returns palette indices 0...15 for the selected DOS ground style.

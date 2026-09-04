@@ -109,6 +109,17 @@ for name in ["adlib.dat", "tandysnd.dat"] {
         continue
     }
     do {
+        // A raw copy makes the driver available to other tools.
+        if let option = CommandLine.arguments.firstIndex(of: "--dump"),
+            option + 1 < CommandLine.arguments.count {
+            let sections = try ClassicDATArchive.decode(raw)
+            if let section = sections.first {
+                let target = URL(fileURLWithPath: CommandLine.arguments[option + 1])
+                    .appendingPathComponent(name + ".bin")
+                try? section.data.write(to: target)
+                print("wrote \(target.lastPathComponent), \(section.data.count) bytes")
+            }
+        }
         let sections = try ClassicDATArchive.decode(raw)
         guard let section = sections.first else {
             print("\(name): no sections")

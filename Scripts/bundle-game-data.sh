@@ -1,0 +1,47 @@
+#!/bin/zsh
+set -euo pipefail
+project_dir="${0:A:h:h}"
+if (( $# != 2 )) || [[ "$2" != all && "$2" != l2 && "$2" != l3 ]]; then
+  echo "Usage: bundle-game-data.sh /absolute/App.app/Contents/Resources all|l2|l3" >&2
+  exit 1
+fi
+resources_dir="${1:A}"
+if [[ "$resources_dir" != *.app/Contents/Resources ]]; then
+  echo "Game data must be copied into an app's Contents/Resources directory." >&2
+  exit 1
+fi
+for required in LEVELS/LEVEL000.DAT STYLES/CLASSIC.DAT VLEMMS.DAT MASKS.DAT INTERN.DAT FONT.DAT PANEL.DAT ICONS.DAT FRONTEND/GFXIFFS/MENU.IFF FRONTEND/SCREENS/MENU.DAT; do
+  if [[ "$2" != l3 && ! -f "$project_dir/Sources/Ports/Lemm2/$required" ]]; then
+    echo "Missing L2 source asset: $required" >&2
+    exit 1
+  fi
+done
+mkdir -p "$resources_dir/Ports" "$resources_dir/Music"
+# Assets stay in the ignored app bundle. Original executable engines, machine
+# settings and development overlays are not needed by the native interpreters.
+copy_options=(-a --exclude=.DS_Store --exclude='*.[Ee][Xx][Ee]' --exclude='*.[Cc][Oo][Mm]'
+  --exclude='*.[Bb][Aa][Tt]' --exclude='*.[Rr][Kk][Oo]' --exclude='*.[Rr][Kk][Bb]'
+  --exclude='*.[Ii][Nn][Ii]' --exclude='*.[Ss][Aa][Vv]' --exclude='LEM3CD-2/')
+case "$2" in
+  all)
+    rsync "${copy_options[@]}" "$project_dir/Sources/Ports/" "$resources_dir/Ports/"
+    rsync -a --exclude=.DS_Store "$project_dir/Sources/Music/" "$resources_dir/Music/"
+    zsh "$project_dir/Scripts/prepare-holiday-data.sh" "$resources_dir"
+    python3 "$project_dir/Tools/MacArtwork/prepare.py" "$resources_dir/MacArtwork"
+    python3 "$project_dir/Tools/AmigaArtwork/prepare.py" "$resources_dir/AmigaArtwork"
+    mkdir -p "$project_dir/.build/asset-packager"
+    swiftc -swift-version 6 -warnings-as-errors "$project_dir/Tools/BundleGameAssets/main.swift" \
+      -o "$project_dir/.build/asset-packager/CopyResourceForks"
+    "$project_dir/.build/asset-packager/CopyResourceForks" "$project_dir/Sources/Ports" "$resources_dir/Ports"
+    ;;
+  l2)
+    mkdir -p "$resources_dir/Ports/Lemm2" "$resources_dir/Music/lemmings_2_music_mod_tsyu"
+    rsync "${copy_options[@]}" "$project_dir/Sources/Ports/Lemm2/" "$resources_dir/Ports/Lemm2/"
+    rsync -a --exclude=.DS_Store "$project_dir/Sources/Music/lemmings_2_music_mod_tsyu/" "$resources_dir/Music/lemmings_2_music_mod_tsyu/"
+    ;;
+  l3)
+    mkdir -p "$resources_dir/Ports/LEM3CD" "$resources_dir/Music/lemmings_3_music_mod_tsyu"
+    rsync "${copy_options[@]}" "$project_dir/Sources/Ports/LEM3CD/" "$resources_dir/Ports/LEM3CD/"
+    rsync -a --exclude=.DS_Store "$project_dir/Sources/Music/lemmings_3_music_mod_tsyu/" "$resources_dir/Music/lemmings_3_music_mod_tsyu/"
+    ;;
+esac

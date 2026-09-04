@@ -29,6 +29,8 @@ import NxlvKit
   private var musicSlider: NSSlider?
   private var soundPopUp: NSPopUpButton?
   private var soundSlider: NSSlider?
+  private var graphicsShuffleCheck: NSButton?
+  private var musicShuffleCheck: NSButton?
 
   /// Whether the tube simulation is in the live drawing path.
   ///
@@ -138,9 +140,14 @@ import NxlvKit
     let graphics = popUp(#selector(graphicsChanged))
     let depth = popUp(#selector(depthChanged))
     for option in ClassicColorDepth.allCases { depth.addItem(withTitle: option.displayName) }
+    let shuffle = NSButton(
+      checkboxWithTitle: "Change artwork every level", target: self,
+      action: #selector(graphicsShuffleChanged))
+    shuffle.state = settings.shuffleGraphics ? .on : .off
     graphicsPopUp = graphics
     depthPopUp = depth
-    return pane([("Artwork", graphics), ("Colour Depth", depth)])
+    graphicsShuffleCheck = shuffle
+    return pane([("Artwork", graphics), ("Colour Depth", depth), ("Shuffle", shuffle)])
   }
 
   private func videoPane() -> NSView {
@@ -190,10 +197,16 @@ import NxlvKit
     musicSlider = musicLevel
     soundPopUp = sound
     soundSlider = soundLevel
+    let shuffle = NSButton(
+      checkboxWithTitle: "Change soundtrack every level", target: self,
+      action: #selector(musicShuffleChanged))
+    shuffle.state = settings.shuffleMusic ? .on : .off
+    musicShuffleCheck = shuffle
     return pane([
       ("Music", music),
       ("Music Style", style),
       ("Music Volume", musicLevel),
+      ("Shuffle", shuffle),
       ("Sound Effects", sound),
       ("Effects Volume", soundLevel),
     ])
@@ -225,6 +238,11 @@ import NxlvKit
       at: ClassicDisplayMode.allCases.firstIndex(of: settings.display) ?? 0)
     stylePopUp?.selectItem(
       at: ClassicMusicStyle.allCases.firstIndex(of: settings.musicStyle) ?? 0)
+    graphicsShuffleCheck?.state = settings.shuffleGraphics ? .on : .off
+    musicShuffleCheck?.state = settings.shuffleMusic ? .on : .off
+    // Shuffling needs something to choose between.
+    graphicsShuffleCheck?.isEnabled = options.graphics.count > 1
+    musicShuffleCheck?.isEnabled = options.music.count > 2
   }
 
   // MARK: - Changes
@@ -278,6 +296,16 @@ import NxlvKit
     let all = ClassicMusicStyle.allCases
     guard all.indices.contains(sender.indexOfSelectedItem) else { return }
     settings.musicStyle = all[sender.indexOfSelectedItem]
+    changed()
+  }
+
+  @objc private func graphicsShuffleChanged(_ sender: NSButton) {
+    settings.shuffleGraphics = sender.state == .on
+    changed()
+  }
+
+  @objc private func musicShuffleChanged(_ sender: NSButton) {
+    settings.shuffleMusic = sender.state == .on
     changed()
   }
 

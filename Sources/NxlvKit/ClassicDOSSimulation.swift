@@ -508,6 +508,11 @@ public struct ClassicDOSSimulation: Codable, Equatable, Sendable {
     private var commandSequence: Int
     private var queuedCommands: [ClassicDOSQueuedCommand]
 
+    /// Remaining animation ticks for a triggered object, in trigger-map order.
+    public func objectCooldown(at index: Int) -> Int {
+        triggerStates.indices.contains(index) ? triggerStates[index].cooldown : 0
+    }
+
     public var activeCount: Int { lemmings.lazy.filter(\.isActive).count }
     public var entrancesAreOpen: Bool { tickCount >= ClassicDOSRules.entranceOpenTick }
     public var didTimeOut: Bool { remainingTimeTicks == 0 }

@@ -35,6 +35,9 @@ public enum ClassicMusicSource: Equatable, Codable, Sendable {
     case amigaModules
     case macintoshMIDI
     case dosAdlib
+    case snesSPC
+    case genesisFM
+    case cdAudio
     /// A folder of remixed or re-recorded tracks the player supplied.
     case remix(name: String)
     case silent
@@ -43,7 +46,10 @@ public enum ClassicMusicSource: Equatable, Codable, Sendable {
         switch self {
         case .amigaModules: return "Amiga Modules"
         case .macintoshMIDI: return "Macintosh MIDI"
-        case .dosAdlib: return "DOS Ad-Lib"
+        case .dosAdlib: return "DOS Ad-Lib (OPL2)"
+        case .snesSPC: return "SNES SPC Synth"
+        case .genesisFM: return "Sega Genesis FM"
+        case .cdAudio: return "CD Audio Stream"
         case let .remix(name): return name
         case .silent: return "None"
         }
@@ -53,15 +59,21 @@ public enum ClassicMusicSource: Equatable, Codable, Sendable {
 /// Where the sound effects come from.
 public enum ClassicSoundSource: Equatable, Codable, Sendable {
     case macintoshResources
+    case amigaVoices
     case dosAdlib
     case sampleBank
+    case snes
+    case arcade
     case silent
 
     public var displayName: String {
         switch self {
         case .macintoshResources: return "Macintosh"
+        case .amigaVoices: return "Amiga Voices"
         case .dosAdlib: return "DOS Ad-Lib"
         case .sampleBank: return "Sample Bank"
+        case .snes: return "Super Nintendo"
+        case .arcade: return "Arcade"
         case .silent: return "None"
         }
     }
@@ -143,8 +155,17 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
     public var sound: ClassicSoundSource
     public var soundVolume: Double
 
+    /// Picks a different artwork source for each level.
+    ///
+    /// Most people met this game on one machine. Shuffling means a run passes
+    /// through all of them, which is the point of holding every release at
+    /// once rather than picking one and staying there.
+    public var shuffleGraphics: Bool
+    /// Picks a different soundtrack for each level, on the same reasoning.
+    public var shuffleMusic: Bool
+
     public init(
-        graphics: ClassicGraphicsSource = .dosVGA,
+        graphics: ClassicGraphicsSource = .macintosh,
         colorDepth: ClassicColorDepth = .full,
         display: ClassicDisplayMode = .flat,
         displayIntensity: Double = 0.8,
@@ -154,7 +175,9 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         musicStyle: ClassicMusicStyle = .faithful,
         musicVolume: Double = 0.8,
         sound: ClassicSoundSource = .macintoshResources,
-        soundVolume: Double = 0.9
+        soundVolume: Double = 0.9,
+        shuffleGraphics: Bool = false,
+        shuffleMusic: Bool = false
     ) {
         self.graphics = graphics
         self.colorDepth = colorDepth
@@ -167,6 +190,44 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         self.musicVolume = musicVolume
         self.sound = sound
         self.soundVolume = soundVolume
+        self.shuffleGraphics = shuffleGraphics
+        self.shuffleMusic = shuffleMusic
+    }
+
+    /// Reads settings written by an older build.
+    ///
+    /// Swift's generated decoder rejects a file that is missing any key, so a
+    /// new setting would throw away everything the player had chosen. Each
+    /// field falls back to its default instead.
+    public init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        let fallback = ClassicSettings()
+        graphics = try values.decodeIfPresent(
+            ClassicGraphicsSource.self, forKey: .graphics) ?? fallback.graphics
+        colorDepth = try values.decodeIfPresent(
+            ClassicColorDepth.self, forKey: .colorDepth) ?? fallback.colorDepth
+        display = try values.decodeIfPresent(
+            ClassicDisplayMode.self, forKey: .display) ?? fallback.display
+        displayIntensity = try values.decodeIfPresent(
+            Double.self, forKey: .displayIntensity) ?? fallback.displayIntensity
+        pixelAspect = try values.decodeIfPresent(
+            Double.self, forKey: .pixelAspect) ?? fallback.pixelAspect
+        integerScaling = try values.decodeIfPresent(
+            Bool.self, forKey: .integerScaling) ?? fallback.integerScaling
+        music = try values.decodeIfPresent(
+            ClassicMusicSource.self, forKey: .music) ?? fallback.music
+        musicStyle = try values.decodeIfPresent(
+            ClassicMusicStyle.self, forKey: .musicStyle) ?? fallback.musicStyle
+        musicVolume = try values.decodeIfPresent(
+            Double.self, forKey: .musicVolume) ?? fallback.musicVolume
+        sound = try values.decodeIfPresent(
+            ClassicSoundSource.self, forKey: .sound) ?? fallback.sound
+        soundVolume = try values.decodeIfPresent(
+            Double.self, forKey: .soundVolume) ?? fallback.soundVolume
+        shuffleGraphics = try values.decodeIfPresent(
+            Bool.self, forKey: .shuffleGraphics) ?? fallback.shuffleGraphics
+        shuffleMusic = try values.decodeIfPresent(
+            Bool.self, forKey: .shuffleMusic) ?? fallback.shuffleMusic
     }
 
     /// Settings that match a machine, as a starting point before mixing.
@@ -230,19 +291,27 @@ public struct ClassicSettingsOptions: Sendable {
         customGraphics: [String] = []
     ) -> ClassicSettingsOptions {
         var graphics: [ClassicGraphicsSource] = []
-        if hasDOSData { graphics.append(.dosVGA) }
-        if hasAmigaDisk { graphics.append(.amiga) }
         if hasMacintoshDisk { graphics.append(.macintosh) }
+        if hasAmigaDisk { graphics.append(.amiga) }
+        if hasDOSData { graphics.append(.dosVGA) }
         graphics.append(contentsOf: customGraphics.map { .custom(name: $0) })
 
         var music: [ClassicMusicSource] = []
         if moduleCount > 0 { music.append(.amigaModules) }
         if hasMacintoshDisk { music.append(.macintoshMIDI) }
+        music.append(.dosAdlib)
+        music.append(.snesSPC)
+        music.append(.genesisFM)
+        music.append(.cdAudio)
         music.append(contentsOf: remixFolders.map { .remix(name: $0) })
         music.append(.silent)
 
         var sound: [ClassicSoundSource] = []
         if hasMacintoshDisk { sound.append(.macintoshResources) }
+        sound.append(.amigaVoices)
+        sound.append(.dosAdlib)
+        sound.append(.snes)
+        sound.append(.arcade)
         sound.append(.silent)
 
         return ClassicSettingsOptions(graphics: graphics, music: music, sound: sound)

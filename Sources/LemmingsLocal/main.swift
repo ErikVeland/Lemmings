@@ -10,11 +10,18 @@ let musicPathKey = "MusicDirectory"
 let musicPresetKey = "MusicUsesModernPreset"
 let macImageKey = "MacintoshDiskImage"
 let flowProgressKey = "ClassicGameProgress"
+let settingsKey = "ClassicSettings"
+let achievementProgressKey = "ClassicAchievementProgress"
 
-@MainActor final class AppDelegate: NSObject, NSApplicationDelegate {
+@MainActor final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
   private var window: NSWindow!
   private let playfield = PlayfieldView()
   private let panel = PanelView()
+  private let crtView = CRTView()
+  /// The plain view hierarchy, used when the tube is off.
+  private var plainRoot: NSView?
+  private var panelHeightConstraint: NSLayoutConstraint?
+  private var tubeIsActive = false
   private let picker = NSPopUpButton()
 
   private var campaign: ClassicCampaign?
@@ -24,6 +31,7 @@ let flowProgressKey = "ClassicGameProgress"
   private var dataSets: [(set: ClassicDataSet, directory: URL)] = []
   private let gamePicker = NSPopUpButton()
   private var assets: ClassicMainDATAssets?
+  private var macArtworkCache: [String: ClassicMacArtwork] = [:]
   private var contentDirectory: URL?
   private var stylesDirectory: URL?
 
@@ -34,16 +42,42 @@ let flowProgressKey = "ClassicGameProgress"
   private var phase: GamePhase = .briefing
   /// The whole game, from title to end.
   private var flow: ClassicGameFlow?
+  private var launchChoice = 0
+  private var launchMode: UnifiedGameLibrary.Mode = .quest
+  private var library = UnifiedGameLibrary(entries: [])
+  private var activeTitle: ClassicTitle?
+  private var sequelIsActive: Bool { nativeL2Window != nil || nativeL3Window != nil }
+  private var classicContent: NSView?
+  private var sequelCompletion: [ClassicTitle: Int] = [:]
+  private var settingsWindow: SettingsWindow?
+  private var settings = ClassicSettings()
+  private var previousDepth = ClassicColorDepth.full
   private var rankChoice = 0
   private var progress = ModernCampaignProgress()
+  private var achievements = ClassicAchievementProgress()
   private let music = ModuleMusicPlayer()
+  /// Plays recordings the player supplied, as an alternative to the modules.
+  private let soundtrack = SoundtrackPlayer()
+  /// Soundtracks found next to the modules, keyed by folder name.
+  private var soundtrackLibrary: [String: [URL]] = [:]
+  /// The artwork this level is drawn with. It differs from the chosen setting
+  /// only while shuffle is on.
+  private var levelGraphics: ClassicGraphicsSource?
+  /// The soundtrack this level plays, on the same basis.
+  private var levelMusic: ClassicMusicSource?
   private let effects = SoundEffectPlayer()
-  private var muteButton: NSButton!
-  private var presetButton: NSButton!
+  private var muteItem: NSMenuItem?
+  private var presetItem: NSMenuItem?
+  private var gamesMenu: NSMenu?
+  private var levelsMenu: NSMenu?
   /// Set while an unofficial level is loaded, so retry reloads that file.
   private var currentNxlvURL: URL?
+  private var nativeL2Window: Lemmings2PlayWindow?
+  private var nativeL3Window: Lemmings3PlayWindow?
 
   func applicationDidFinishLaunching(_ notification: Notification) {
+    migrateStandaloneSaves()
+    buildMenu()
     buildInterface()
     installKeyboardShortcuts()
 
@@ -53,13 +87,29 @@ let flowProgressKey = "ClassicGameProgress"
     if let saved = UserDefaults.standard.string(forKey: stylesPathKey) {
       stylesDirectory = URL(fileURLWithPath: saved, isDirectory: true)
     }
+    if let data = UserDefaults.standard.data(forKey: settingsKey),
+      let stored = try? JSONDecoder().decode(ClassicSettings.self, from: data) {
+      settings = stored
+    }
+    if !UserDefaults.standard.bool(forKey: "PreferMacArtworkV1") {
+      settings.graphics = .macintosh
+      UserDefaults.standard.set(true, forKey: "PreferMacArtworkV1")
+      if let data = try? JSONEncoder().encode(settings) { UserDefaults.standard.set(data, forKey: settingsKey) }
+    }
     if let data = UserDefaults.standard.data(forKey: progressKey),
       let saved = try? ModernCampaignProgress(encoded: data) {
       progress = saved
     }
+    if let data = UserDefaults.standard.data(forKey: achievementProgressKey),
+      let saved = try? JSONDecoder().decode(ClassicAchievementProgress.self, from: data) {
+      achievements = saved
+    }
     if let saved = UserDefaults.standard.string(forKey: musicPathKey) {
       music.loadLibrary(at: URL(fileURLWithPath: saved, isDirectory: true))
+    } else if let bundled = BundledGameResources.music("lemmings_music_mod") {
+      music.loadLibrary(at: bundled)
     }
+    loadSoundtracks()
     if UserDefaults.standard.bool(forKey: musicPresetKey) {
       music.setEnhancements(.modern)
     }
@@ -67,6 +117,8 @@ let flowProgressKey = "ClassicGameProgress"
       try effects.start()
       if let saved = UserDefaults.standard.string(forKey: macImageKey) {
         loadSoundEffects(from: URL(fileURLWithPath: saved))
+      } else if let bundled = BundledGameResources.macintoshSoundImage() {
+        loadSoundEffects(from: bundled)
       }
     } catch {
       setStatus("Sound unavailable: \(error.localizedDescription)")
@@ -81,70 +133,487 @@ let flowProgressKey = "ClassicGameProgress"
 
     loadContent()
     startTimer()
+    window.collectionBehavior.insert(.fullScreenPrimary)
+    DispatchQueue.main.async { [weak self] in
+      guard let self, !self.window.styleMask.contains(.fullScreen) else { return }
+      self.window.toggleFullScreen(nil)
+    }
+    if let index = CommandLine.arguments.firstIndex(of: "--native-l2") {
+      let path = index + 1 < CommandLine.arguments.count ? CommandLine.arguments[index + 1] : nil
+      openNativeL2(path.flatMap { $0.hasPrefix("--") ? nil : URL(fileURLWithPath: $0) })
+    }
+    if let index = CommandLine.arguments.firstIndex(of: "--native-l3") {
+      let path = index + 1 < CommandLine.arguments.count ? CommandLine.arguments[index + 1] : nil
+      openNativeL3(path.flatMap { $0.hasPrefix("--") ? nil : URL(fileURLWithPath: $0) })
+    }
+  }
+
+  private func migrateStandaloneSaves() {
+    guard Bundle.main.bundleIdentifier == "org.lemmingslocal.LemmingsLocal" else { return }
+    for domain in ["org.lemmingslocal.NativeL2", "org.lemmingslocal.NativeL3Preview"] {
+      let values = UserDefaults.standard.persistentDomain(forName: domain) ?? [:]
+      for (key, value) in values where (key.hasPrefix("nativeL2") || key.hasPrefix("nativeL3"))
+          && key.contains(".bundled") && UserDefaults.standard.object(forKey: key) == nil {
+        UserDefaults.standard.set(value, forKey: key)
+      }
+    }
   }
 
   // MARK: - Interface
 
-  private func buildInterface() {
-    let root = NSView()
-    let importButton = NSButton(
-      title: "Add game…", target: self, action: #selector(chooseContent))
-    let openNxlv = NSButton(
-      title: "Open .nxlv…", target: self, action: #selector(chooseNxlvLevel))
-    let zoomOut = NSButton(title: "−", target: self, action: #selector(zoomOut))
-    let zoomIn = NSButton(title: "+", target: self, action: #selector(zoomIn))
-    let musicButton = NSButton(
-      title: "Music…", target: self, action: #selector(chooseMusic))
-    let soundButton = NSButton(
-      title: "Sounds…", target: self, action: #selector(chooseSounds))
-    let mute = NSButton(title: "Mute", target: self, action: #selector(toggleMute))
-    let preset = NSButton(
-      title: "Faithful", target: self, action: #selector(toggleMusicPreset))
-    muteButton = mute
-    presetButton = preset
+  private func buildMenu() {
+    let mainMenu = NSMenu()
+    let appItem = NSMenuItem()
+    mainMenu.addItem(appItem)
 
-    let views: [NSView] = [
-      gamePicker, picker, importButton, openNxlv, zoomOut, zoomIn,
-      musicButton, soundButton, mute, preset, playfield, panel,
-    ]
-    for view in views {
+    let appMenu = NSMenu()
+    let achievementsItem = NSMenuItem(
+      title: "Achievements…", action: #selector(showAchievements), keyEquivalent: "a")
+    achievementsItem.keyEquivalentModifierMask = [.command, .shift]
+    achievementsItem.target = self
+    appMenu.addItem(achievementsItem)
+    let nativeL2 = NSMenuItem(title: "Play Lemmings 2…", action: #selector(chooseNativeL2), keyEquivalent: "2")
+    nativeL2.keyEquivalentModifierMask = [.command, .shift]
+    nativeL2.target = self
+    appMenu.addItem(nativeL2)
+    let nativeL3 = NSMenuItem(title: "Play Lemmings 3 Native Preview…", action: #selector(chooseNativeL3), keyEquivalent: "3")
+    nativeL3.keyEquivalentModifierMask = [.command, .shift]
+    nativeL3.target = self
+    appMenu.addItem(nativeL3)
+    appMenu.addItem(.separator())
+    let settingsItem = NSMenuItem(
+      title: "Settings…", action: #selector(showSettings), keyEquivalent: ",")
+    settingsItem.target = self
+    appMenu.addItem(settingsItem)
+    appMenu.addItem(.separator())
+    appMenu.addItem(
+      withTitle: "Quit Lemmings Local",
+      action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
+    appItem.submenu = appMenu
+
+    func addMenu(_ title: String) -> NSMenu {
+      let item = NSMenuItem()
+      let menu = NSMenu(title: title)
+      item.submenu = menu
+      mainMenu.addItem(item)
+      return menu
+    }
+    func add(
+      _ menu: NSMenu, _ title: String, _ action: Selector, _ key: String = "",
+      modifiers: NSEvent.ModifierFlags = [.command]
+    ) -> NSMenuItem {
+      let item = NSMenuItem(title: title, action: action, keyEquivalent: key)
+      item.keyEquivalentModifierMask = modifiers
+      item.target = self
+      menu.addItem(item)
+      return item
+    }
+
+    let fileMenu = addMenu("File")
+    _ = add(fileMenu, "Game Library", #selector(returnToLibrary), "l", modifiers: [.command, .shift])
+    fileMenu.addItem(.separator())
+    _ = add(fileMenu, "Add Game…", #selector(chooseContent), "o")
+    _ = add(fileMenu, "Open Level File…", #selector(chooseNxlvLevel), "O",
+            modifiers: [.command, .shift])
+    fileMenu.addItem(.separator())
+    let games = NSMenu(title: "Games")
+    let gamesItem = NSMenuItem(title: "Game", action: nil, keyEquivalent: "")
+    gamesItem.submenu = games
+    fileMenu.addItem(gamesItem)
+    gamesMenu = games
+    let levels = NSMenu(title: "Levels")
+    let levelsItem = NSMenuItem(title: "Level", action: nil, keyEquivalent: "")
+    levelsItem.submenu = levels
+    fileMenu.addItem(levelsItem)
+    levelsMenu = levels
+
+    let viewMenu = addMenu("View")
+    _ = add(viewMenu, "Zoom In", #selector(zoomIn), "+")
+    _ = add(viewMenu, "Zoom Out", #selector(zoomOut), "-")
+
+    let audioMenu = addMenu("Audio")
+    _ = add(audioMenu, "Choose Music Folder…", #selector(chooseMusic))
+    _ = add(audioMenu, "Choose Sound Effects…", #selector(chooseSounds))
+    audioMenu.addItem(.separator())
+    muteItem = add(audioMenu, "Mute", #selector(toggleMute), "m")
+    presetItem = add(audioMenu, "Modern Sound", #selector(toggleMusicPreset))
+
+    NSApplication.shared.mainMenu = mainMenu
+  }
+
+  // MARK: - Display path
+
+  /// Chooses between drawing straight to the window and drawing through the
+  /// tube.
+  ///
+  /// The tube needs the game drawn at its own size first. Feeding it an
+  /// already enlarged picture produces one scan line per screen row instead of
+  /// one per game row, which is both wrong and invisible.
+  private func applyDisplayMode() {
+    guard !sequelIsActive else { return }
+    let wantsTube = settings.display != .flat && crtView.isAvailable
+    guard wantsTube != tubeIsActive else {
+      if wantsTube { crtView.settings = tubeSettings() }
+      return
+    }
+    tubeIsActive = wantsTube
+
+    if wantsTube {
+      crtView.settings = tubeSettings()
+      // The game views leave the window and draw at their own size.
+      playfield.removeFromSuperview()
+      panel.removeFromSuperview()
+      playfield.translatesAutoresizingMaskIntoConstraints = true
+      panel.translatesAutoresizingMaskIntoConstraints = true
+      playfield.frame = CGRect(x: 0, y: 0, width: 320, height: 160)
+      panel.frame = CGRect(x: 0, y: 0, width: 320, height: 40)
+      playfield.viewport.zoom = 1
+      crtView.onMouseDown = { [weak self] point in self?.tubeClick(point) }
+      crtView.onMouseMoved = { [weak self] point in self?.tubeMove(point) }
+      crtView.onScroll = { [weak self] dx, _ in
+        guard let self else { return }
+        self.playfield.viewport.scroll(dx: -Double(dx), dy: 0)
+        self.syncPanelViewport()
+      }
+      window.contentView = crtView
+      window.makeFirstResponder(crtView)
+    } else {
+      window.contentView = plainRoot
+      window.makeFirstResponder(playfield)
+    }
+  }
+
+  /// Turns the chosen settings into tube settings.
+  private func tubeSettings() -> CRTSettings {
+    var tube = settings.display == .television
+      ? CRTSettings.television : CRTSettings.amiga1084
+    let strength = Float(min(1, max(0, settings.displayIntensity)))
+    tube.scanlineDepth *= strength
+    tube.maskStrength *= strength
+    tube.bloomAmount *= strength
+    tube.curvature = tube.curvature / max(0.15, strength)
+    tube.pixelAspect = Float(settings.pixelAspect)
+    tube.colorLevels = Float(settings.colorDepth.levels)
+    return tube
+  }
+
+  /// Draws the game at its own size for the tube to enlarge.
+  private func composeNativeFrame() -> CGImage? {
+    guard let playfieldRep = playfield.bitmapImageRepForCachingDisplay(in: playfield.bounds),
+      let panelRep = panel.bitmapImageRepForCachingDisplay(in: panel.bounds)
+    else { return nil }
+    playfield.cacheDisplay(in: playfield.bounds, to: playfieldRep)
+    panel.cacheDisplay(in: panel.bounds, to: panelRep)
+
+    let size = CGSize(width: 320, height: 200)
+    let composed = NSImage(size: size)
+    composed.lockFocus()
+    NSGraphicsContext.current?.imageInterpolation = .none
+    NSColor.black.setFill()
+    CGRect(origin: .zero, size: size).fill()
+    panelRep.draw(in: CGRect(x: 0, y: 0, width: 320, height: 40))
+    playfieldRep.draw(in: CGRect(x: 0, y: 40, width: 320, height: 160))
+    composed.unlockFocus()
+
+    var rect = CGRect(origin: .zero, size: size)
+    return composed.cgImage(forProposedRect: &rect, context: nil, hints: nil)
+  }
+
+  /// Sends a click through the tube to whichever part it landed on.
+  private func tubeClick(_ point: CGPoint) {
+    if point.y < 40 {
+      panel.handleClick(at: CGPoint(x: point.x, y: point.y))
+    } else {
+      playfield.handleClick(at: CGPoint(x: point.x, y: point.y - 40))
+    }
+  }
+
+  private func tubeMove(_ point: CGPoint) {
+    guard point.y >= 40 else { return }
+    playfield.handleMove(to: CGPoint(x: point.x, y: point.y - 40))
+  }
+
+  // MARK: - Settings
+
+  /// What the installed data actually supports.
+  private func settingsOptions() -> ClassicSettingsOptions {
+    let macImage = UserDefaults.standard.string(forKey: macImageKey)
+    let hasMac = (macImage.map { FileManager.default.fileExists(atPath: $0) } ?? false)
+      || Bundle.main.resourceURL.map { FileManager.default.fileExists(atPath: $0.appendingPathComponent("MacArtwork/lemmings/manifest.json").path) } == true
+    return ClassicSettingsOptions.available(
+      hasDOSData: !dataSets.isEmpty,
+      hasAmigaDisk: Bundle.main.resourceURL.map { FileManager.default.fileExists(atPath: $0.appendingPathComponent("AmigaArtwork/lemmings/manifest.json").path) } == true,
+      hasMacintoshDisk: hasMac,
+      moduleCount: music.library.count,
+      remixFolders: soundtrackLibrary.keys.sorted())
+  }
+
+  @objc private func showSettings() {
+    let options = settingsOptions()
+    if settingsWindow == nil {
+      let created = SettingsWindow(settings: settings, options: options)
+      created.videoIsConnected = crtView.isAvailable
+      created.onChange = { [weak self] updated in self?.apply(updated) }
+      settingsWindow = created
+    } else {
+      settingsWindow?.update(options: options)
+    }
+    settingsWindow?.show()
+  }
+
+  /// Puts a settings change into effect and remembers it.
+  ///
+  /// Only the parts the engine can honour today are acted on. A control that
+  /// changed nothing would be worse than one that is absent.
+  private func apply(_ updated: ClassicSettings) {
+    let artworkChanged = settings.graphics != updated.graphics
+    settings = updated
+    if let data = try? JSONEncoder().encode(updated) {
+      UserDefaults.standard.set(data, forKey: settingsKey)
+    }
+
+    music.setEnhancements(updated.musicStyle == .modern ? .modern : .faithful)
+    music.setVolume(updated.musicVolume)
+    soundtrack.setVolume(updated.musicVolume)
+    effects.setVolume(updated.soundVolume)
+    music.setMuted(updated.music == .silent)
+    soundtrack.setMuted(updated.music == .silent)
+    if case .remix = updated.music {} else { soundtrack.stop() }
+    effects.setMuted(updated.sound == .silent)
+    updateMusicButtons()
+
+    applyDisplayMode()
+    if artworkChanged, !sequelIsActive, let level = artworkLevel,
+      let rendered = playfield.classicScene {
+      configureArtwork(level, rendered: rendered)
+      panel.needsDisplay = true
+      playfield.needsDisplay = true
+    }
+
+    // Colour depth changes the palette, so the level has to be rebuilt.
+    if !sequelIsActive, updated.colorDepth != previousDepth {
+      previousDepth = updated.colorDepth
+      if let flow, let level = flow.currentLevelIndex { loadLevel(at: level) }
+      playfield.needsDisplay = true
+    }
+  }
+
+  @objc private func showAchievements() {
+    let lines = ClassicAchievement.catalog.map { achievement in
+      let mark = achievements.isUnlocked(achievement.id) ? "✓" : "○"
+      return "\(mark)  \(achievement.title) — \(achievement.detail)"
+    }
+    let unlocked = achievements.unlocked.count
+    let alert = NSAlert()
+    alert.messageText = "Achievements  \(unlocked)/\(ClassicAchievement.catalog.count)"
+    alert.informativeText = lines.joined(separator: "\n")
+    alert.addButton(withTitle: "Done")
+    alert.runModal()
+  }
+
+  @objc private func chooseNativeL2() {
+    launchMode = .singleTitle
+    openNativeL2()
+  }
+
+  private func suspendCurrentEngine() {
+    saveProgress()
+    nativeL2Window?.stop()
+    nativeL3Window?.stop()
+    nativeL2Window = nil
+    nativeL3Window = nil
+    music.stop()
+    effects.stop()
+    accumulator = 0
+  }
+
+  private func openNativeL2(_ root: URL? = nil) {
+    do {
+      let next = try Lemmings2PlayWindow(root: root ?? BundledGameResources.lemmings2())
+      if !sequelIsActive { classicContent = window.contentView }
+      suspendCurrentEngine()
+      nativeL2Window = next
+      activeTitle = .lemmings2TheTribes
+      next.onReturnToLibrary = { [weak self] in self?.returnToLibrary() }
+      next.onProgressChanged = { [weak self] in self?.refreshSequelProgress() }
+      next.onCampaignCompleted = { [weak self] in self?.finishNativeTitle() }
+      next.attach(to: window)
+      if music.muted { next.setMuted(true) }
+      window.title = "Lemmings 2 — The Tribes"
+      window.contentAspectRatio = NSSize(width: 4, height: 3)
+      window.minSize = NSSize(width: 640, height: 502)
+      next.present()
+      rebuildNavigationMenus()
+    } catch { showLaunchError("Cannot open Lemmings 2", error) }
+  }
+
+  @objc private func chooseNativeL3() { launchMode = .singleTitle; openNativeL3() }
+
+  private func openNativeL3(_ root: URL? = nil) {
+    do {
+      let next = try Lemmings3PlayWindow(root: root ?? BundledGameResources.lemmings3())
+      if !sequelIsActive { classicContent = window.contentView }
+      suspendCurrentEngine()
+      nativeL3Window = next
+      activeTitle = .lemmings3TheChronicles
+      next.onReturnToLibrary = { [weak self] in self?.returnToLibrary() }
+      next.onProgressChanged = { [weak self] in self?.refreshSequelProgress() }
+      next.onCampaignCompleted = { [weak self] in self?.finishNativeTitle() }
+      next.attach(to: window)
+      window.title = "Lemmings 3 — The Chronicles"
+      window.resizeIncrements = NSSize(width: 1, height: 1)
+      window.minSize = NSSize(width: 1050, height: 680)
+      next.present()
+      rebuildNavigationMenus()
+    } catch { showLaunchError("Cannot open Lemmings 3", error) }
+  }
+
+  private func showLaunchError(_ title: String, _ error: Error) {
+    let alert = NSAlert()
+    alert.messageText = title
+    alert.informativeText = String(describing: error)
+    alert.runModal()
+  }
+
+  @objc private func returnToLibrary() {
+    suspendCurrentEngine()
+    activeTitle = nil
+    currentNxlvURL = nil
+    window.contentView = classicContent ?? plainRoot
+    window.resizeIncrements = NSSize(width: 1, height: 1)
+    window.minSize = NSSize(width: 900, height: 620)
+    window.title = "Lemmings — Game Library"
+    window.makeFirstResponder(playfield)
+    try? music.start()
+    try? effects.start()
+    refreshSequelProgress()
+    flow?.acknowledgeGameComplete()
+    rebuildLibrary()
+    renderScreen()
+    window.makeKeyAndOrderFront(nil)
+  }
+
+  private func refreshSequelProgress() {
+    if let root = try? BundledGameResources.lemmings2() {
+      sequelCompletion[.lemmings2TheTribes] = Lemmings2PlayWindow.savedCompletion(root: root)
+    }
+    if let root = try? BundledGameResources.lemmings3() {
+      sequelCompletion[.lemmings3TheChronicles] = Lemmings3PlayWindow.savedCompletion(root: root)
+    }
+    rebuildLibrary()
+  }
+
+  private func rebuildLibrary() {
+    library = UnifiedGameLibrary(entries: ClassicTitle.allCases.map { title in
+      if let entry = dataSets.first(where: { $0.set.title == title }) {
+        var savedFlow = ClassicGameFlow(campaign: entry.set.campaign)
+        if let data = UserDefaults.standard.data(forKey: "\(flowProgressKey).\(entry.set.identifierKey)")
+            ?? UserDefaults.standard.data(forKey: "\(flowProgressKey).\(entry.set.legacyIdentifierKey)"),
+           let saved = try? JSONDecoder().decode(ClassicGameFlow.Progress.self, from: data) { savedFlow.restore(entry.set.migrateProgress(saved)) }
+        let count = savedFlow.ranks.reduce(0) { $0 + savedFlow.passedCount(inRank: $1.name) }
+        return .init(title: title, total: entry.set.campaign.levels.count, passed: count)
+      }
+      let available = title == .lemmings2TheTribes ? (try? BundledGameResources.lemmings2()) != nil
+        : title == .lemmings3TheChronicles ? (try? BundledGameResources.lemmings3()) != nil : false
+      // The menu is set in the game's own fixed-width font, so a row holds
+      // only a short note. One word says as much as a sentence here.
+      let detail = title == .lemmings2TheTribes ? "PARTIAL"
+        : title == .lemmings3TheChronicles ? "PREVIEW" : "NO DATA"
+      return .init(title: title, total: title.expectedLevelCount ?? 0,
+        passed: sequelCompletion[title] ?? 0, available: available, detail: detail)
+    })
+    rebuildNavigationMenus()
+  }
+
+  private func launchTitle(_ title: ClassicTitle) {
+    guard library.entries.contains(where: { $0.title == title && $0.available }) else { return }
+    switch title {
+    case .lemmings2TheTribes: openNativeL2()
+    case .lemmings3TheChronicles: openNativeL3()
+    default:
+      if sequelIsActive { returnToLibrary() }
+      activeTitle = title
+      openChapter(title)
+      flow?.startGame()
+      if launchMode == .quest { flow?.resumeCampaign() }
+      renderScreen()
+    }
+  }
+
+  private func finishNativeTitle() {
+    guard let title = activeTitle else { return }
+    refreshSequelProgress()
+    let destination = library.next(after: title, mode: launchMode)
+    returnToLibrary()
+    if case let .title(next) = destination { launchTitle(next) }
+  }
+
+  private func rebuildNavigationMenus() {
+    gamesMenu?.removeAllItems()
+    for entry in library.entries {
+      let item = NSMenuItem(title: entry.title.displayName + (entry.available ? "" : " — Import needed"),
+        action: #selector(selectGameFromMenu(_:)), keyEquivalent: "")
+      item.target = self
+      item.representedObject = entry.title.rawValue
+      item.isEnabled = entry.available
+      item.state = activeTitle == entry.title ? .on : .off
+      gamesMenu?.addItem(item)
+    }
+    gamesMenu?.autoenablesItems = false
+    levelsMenu?.removeAllItems()
+    guard !sequelIsActive, let campaign else { return }
+    for rank in campaign.ranks {
+      let submenu = NSMenu(title: rank)
+      for (index, entry) in campaign.levels.enumerated() where entry.rank == rank {
+        let item = NSMenuItem(title: "\(entry.number). \(entry.level.title)",
+          action: #selector(selectLevelFromMenu(_:)), keyEquivalent: "")
+        item.target = self
+        item.tag = index
+        submenu.addItem(item)
+      }
+      let item = NSMenuItem(title: rank, action: nil, keyEquivalent: "")
+      item.submenu = submenu
+      levelsMenu?.addItem(item)
+    }
+  }
+
+  @objc private func selectGameFromMenu(_ sender: NSMenuItem) {
+    guard let value = sender.representedObject as? String, let title = ClassicTitle(rawValue: value) else { return }
+    launchMode = .singleTitle
+    saveProgress()
+    launchTitle(title)
+  }
+
+  @objc private func selectLevelFromMenu(_ sender: NSMenuItem) {
+    guard !sequelIsActive else { return }
+    launchMode = .singleTitle
+    activeTitle = dataSets.indices.contains(gamePicker.indexOfSelectedItem) ? dataSets[gamePicker.indexOfSelectedItem].set.title : nil
+    picker.selectItem(at: sender.tag)
+    levelChanged()
+  }
+
+  private func buildInterface() {
+    // The window holds the playfield and the status bar, nothing else.
+    // Everything a player configures lives in the menu bar, so the game fills
+    // the window the way it always did.
+    let root = NSView()
+    for view in [playfield, panel] as [NSView] {
       view.translatesAutoresizingMaskIntoConstraints = false
       root.addSubview(view)
     }
 
+    let panelHeight = panel.heightAnchor.constraint(equalToConstant: panel.intrinsicHeight)
+    panelHeightConstraint = panelHeight
     NSLayoutConstraint.activate([
-      gamePicker.leadingAnchor.constraint(equalTo: root.leadingAnchor, constant: 12),
-      gamePicker.topAnchor.constraint(equalTo: root.topAnchor, constant: 12),
-      gamePicker.widthAnchor.constraint(equalToConstant: 210),
-      picker.leadingAnchor.constraint(equalTo: gamePicker.trailingAnchor, constant: 8),
-      picker.centerYAnchor.constraint(equalTo: gamePicker.centerYAnchor),
-      picker.widthAnchor.constraint(equalToConstant: 260),
-      importButton.leadingAnchor.constraint(equalTo: picker.trailingAnchor, constant: 8),
-      importButton.centerYAnchor.constraint(equalTo: picker.centerYAnchor),
-      openNxlv.leadingAnchor.constraint(equalTo: importButton.trailingAnchor, constant: 6),
-      openNxlv.centerYAnchor.constraint(equalTo: picker.centerYAnchor),
-      zoomOut.leadingAnchor.constraint(equalTo: openNxlv.trailingAnchor, constant: 12),
-      zoomOut.centerYAnchor.constraint(equalTo: picker.centerYAnchor),
-      zoomIn.leadingAnchor.constraint(equalTo: zoomOut.trailingAnchor, constant: 4),
-      zoomIn.centerYAnchor.constraint(equalTo: picker.centerYAnchor),
-      musicButton.leadingAnchor.constraint(equalTo: zoomIn.trailingAnchor, constant: 12),
-      musicButton.centerYAnchor.constraint(equalTo: picker.centerYAnchor),
-      soundButton.leadingAnchor.constraint(equalTo: musicButton.trailingAnchor, constant: 6),
-      soundButton.centerYAnchor.constraint(equalTo: picker.centerYAnchor),
-      mute.leadingAnchor.constraint(equalTo: soundButton.trailingAnchor, constant: 6),
-      mute.centerYAnchor.constraint(equalTo: picker.centerYAnchor),
-      preset.leadingAnchor.constraint(equalTo: mute.trailingAnchor, constant: 6),
-      preset.centerYAnchor.constraint(equalTo: picker.centerYAnchor),
-
       playfield.leadingAnchor.constraint(equalTo: root.leadingAnchor),
       playfield.trailingAnchor.constraint(equalTo: root.trailingAnchor),
-      playfield.topAnchor.constraint(equalTo: picker.bottomAnchor, constant: 10),
+      playfield.topAnchor.constraint(equalTo: root.topAnchor),
       playfield.bottomAnchor.constraint(equalTo: panel.topAnchor),
 
       panel.leadingAnchor.constraint(equalTo: root.leadingAnchor),
       panel.trailingAnchor.constraint(equalTo: root.trailingAnchor),
       panel.bottomAnchor.constraint(equalTo: root.bottomAnchor),
-      panel.heightAnchor.constraint(equalToConstant: panel.intrinsicHeight),
+      panelHeight,
     ])
 
     picker.target = self
@@ -154,6 +623,12 @@ let flowProgressKey = "ClassicGameProgress"
     playfield.onAssign = { [weak self] id in self?.assign(id) }
     playfield.onViewportChanged = { [weak self] in self?.syncPanelViewport() }
     playfield.onAdvancePhase = { [weak self] in self?.advancePhase() }
+    playfield.onSelectOverlayLine = { [weak self] index in
+      guard let self else { return }
+      if self.flow?.screen == .title { self.launchChoice = index }
+      else if self.flow?.screen == .rankSelect { self.rankChoice = index }
+      self.advancePhase()
+    }
     panel.onButton = { [weak self] button in self?.handle(button) }
     panel.onMinimapScroll = { [weak self] centerX in
       guard let self else { return }
@@ -166,11 +641,31 @@ let flowProgressKey = "ClassicGameProgress"
       contentRect: NSRect(x: 0, y: 0, width: 1000, height: 620),
       styleMask: [.titled, .closable, .resizable, .miniaturizable],
       backing: .buffered, defer: false)
+    window.delegate = self
     window.title = "Lemmings — Native macOS Port"
+    plainRoot = root
     window.contentView = root
     window.center()
     window.makeKeyAndOrderFront(nil)
     window.makeFirstResponder(playfield)
+  }
+
+  func windowDidResize(_ notification: Notification) {
+    fitClassicDisplay()
+  }
+
+  private func fitClassicDisplay() {
+    guard !tubeIsActive, !sequelIsActive, let root = plainRoot,
+      window.contentView === root else { return }
+    let center = playfield.viewport.visibleLevelRect.midX
+    let scale = max(1, floor(min(root.bounds.width / 320, (root.bounds.height - 20) / 200)))
+    playfield.viewport.zoom = scale
+    panelHeightConstraint?.constant = panel.isMenuMode ? 0 : 40 * scale + 22
+    root.layoutSubtreeIfNeeded()
+    playfield.viewport.viewSize = playfield.bounds.size
+    playfield.viewport.center(on: center)
+    syncPanelViewport()
+    playfield.needsDisplay = true
   }
 
   // MARK: - Content
@@ -178,6 +673,7 @@ let flowProgressKey = "ClassicGameProgress"
   @objc private func chooseContent() {
     guard let url = pickDirectory("Choose the directory holding LEVEL000.DAT and MAIN.DAT.")
     else { return }
+    if sequelIsActive { returnToLibrary() }
     var directories = gameDirectories
     if !directories.contains(where: { $0.path == url.path }) {
       directories.append(url)
@@ -219,6 +715,8 @@ let flowProgressKey = "ClassicGameProgress"
       directories = [legacy]
       gameDirectories = directories
     }
+    let bundled = BundledGameResources.classicDirectories()
+    directories = bundled + directories.filter { !bundled.contains($0) }
     guard !directories.isEmpty else {
       setStatus("Add a game folder, or open a .nxlv level.")
       return
@@ -228,14 +726,26 @@ let flowProgressKey = "ClassicGameProgress"
     // format loads without a hand-written order table.
     dataSets = []
     var problems: [String] = []
-    for directory in directories {
+    var loaded: [(offset: Int, set: ClassicDataSet, directory: URL)] = []
+    for (offset, directory) in directories.enumerated() {
       do {
         let set = try ClassicDataSet.detect(directory: directory)
-        dataSets.append((set, directory))
+        // Prefer the embedded copy of an official release over an old import.
+        if set.title != nil, loaded.contains(where: { $0.set.identifierKey == set.identifierKey }) { continue }
+        loaded.append((offset, set, directory))
       } catch {
         problems.append("\(directory.lastPathComponent): \(error)")
       }
     }
+
+    // Imported folders may be added in any order. The game list is always the
+    // authored canon; unknown/custom data follows it in import order.
+    loaded.sort { lhs, rhs in
+      let left = lhs.set.title?.canonOrder ?? Int.max
+      let right = rhs.set.title?.canonOrder ?? Int.max
+      return left == right ? lhs.offset < rhs.offset : left < right
+    }
+    dataSets = loaded.map { ($0.set, $0.directory) }
 
     gamePicker.removeAllItems()
     for entry in dataSets {
@@ -248,12 +758,61 @@ let flowProgressKey = "ClassicGameProgress"
     }
     gamePicker.selectItem(at: 0)
     selectDataSet()
+    returnToLibrary()
+  }
+
+  /// Points the app at the release a launch choice refers to.
+  private func openChapter(_ title: ClassicTitle) {
+    guard let index = dataSets.firstIndex(where: { entry in
+      entry.set.title == title
+    }) else { return }
+    gamePicker.selectItem(at: index)
+    selectDataSet()
+  }
+
+  /// The Macintosh artwork folder a release uses.
+  private func macArtworkFamily(for title: ClassicTitle) -> String? {
+    switch title {
+    case .lemmings: return "lemmings"
+    case .ohNoMoreLemmings: return "ohno"
+    case .xmasLemmings1991, .xmasLemmings1992: return "xmas"
+    case .holidayLemmings1993, .holidayLemmings1994: return "holiday"
+    default: return nil
+    }
+  }
+
+  /// Gives the menus the release's own lettering, logo and icons.
+  ///
+  /// This does not depend on the artwork chosen for levels. The Macintosh
+  /// release is the only one whose character set is decoded, so its lettering
+  /// is what every menu uses. Without it the menus fall back to a system font.
+  private func configureFrontEndArtwork() {
+    guard let resources = Bundle.main.resourceURL,
+      dataSets.indices.contains(gamePicker.indexOfSelectedItem),
+      let title = dataSets[gamePicker.indexOfSelectedItem].set.title,
+      let family = macArtworkFamily(for: title)
+    else { return }
+    let key = "MacArtwork/" + family
+    let art: ClassicMacArtwork
+    if let cached = macArtworkCache[key] {
+      art = cached
+    } else {
+      guard let loaded = try? ClassicMacArtwork(
+        directory: resources.appendingPathComponent("MacArtwork").appendingPathComponent(family))
+      else { return }
+      macArtworkCache[key] = loaded
+      art = loaded
+    }
+    playfield.interfaceArtwork = art
+    panel.interfaceArtwork = art
   }
 
   @objc private func selectDataSet() {
     let index = max(0, min(gamePicker.indexOfSelectedItem, dataSets.count - 1))
     guard index < dataSets.count else { return }
+    defer { configureFrontEndArtwork() }
     let entry = dataSets[index]
+    currentNxlvURL = nil
     do {
       // Titles ship different numbers of ground and special sets, so load
       // exactly what the folder holds instead of a fixed count.
@@ -269,15 +828,29 @@ let flowProgressKey = "ClassicGameProgress"
       assets = try ClassicMainDATAssets.load(from: entry.directory)
       playfield.assets = assets
       playfield.invalidateSprites()
+      if UserDefaults.standard.string(forKey: musicPathKey) == nil {
+        let folder: String
+        switch entry.set.title {
+        case .ohNoMoreLemmings: folder = "oh_no_more_lemmings_music_mod"
+        case .xmasLemmings1991, .xmasLemmings1992, .holidayLemmings1993, .holidayLemmings1994:
+          folder = "holiday_lemmings_music_mod"
+        default: folder = "lemmings_music_mod"
+        }
+        if let bundled = BundledGameResources.music(folder) { music.loadLibrary(at: bundled) }
+      }
 
       campaign = entry.set.campaign
       var built = ClassicGameFlow(campaign: entry.set.campaign)
-      if let data = UserDefaults.standard.data(
-        forKey: "\(flowProgressKey).\(entry.set.identifierKey)"),
+      let savedData = UserDefaults.standard.data(
+        forKey: "\(flowProgressKey).\(entry.set.identifierKey)")
+        ?? UserDefaults.standard.data(
+          forKey: "\(flowProgressKey).\(entry.set.legacyIdentifierKey)")
+      if let data = savedData,
         let saved = try? JSONDecoder().decode(ClassicGameFlow.Progress.self, from: data) {
-        built.restore(saved)
+        built.restore(entry.set.migrateProgress(saved))
       }
       flow = built
+      saveProgress()
       rankChoice = 0
       picker.removeAllItems()
       for (offset, level) in entry.set.campaign.levels.enumerated() {
@@ -285,6 +858,7 @@ let flowProgressKey = "ClassicGameProgress"
       }
       picker.selectItem(at: 0)
       showTitle()
+      rebuildLibrary()
     } catch {
       setStatus("\(entry.set.name): \(error)")
     }
@@ -296,8 +870,30 @@ let flowProgressKey = "ClassicGameProgress"
   private func loadLevel(at index: Int) {
     guard let campaign, index < campaign.levels.count else { return }
     picker.selectItem(at: index)
+    chooseShuffledSources()
     buildLevel(campaign.levels[index])
   }
+
+  /// Draws the artwork and soundtrack for a level when shuffle is on.
+  ///
+  /// The choice is made once per level rather than once per frame, so a level
+  /// keeps one look and one tune from beginning to end. Sources the data does
+  /// not provide never come up, because the list comes from what is installed.
+  private func chooseShuffledSources() {
+    let options = settingsOptions()
+    levelGraphics = settings.shuffleGraphics ? options.graphics.randomElement() : nil
+    if settings.shuffleMusic {
+      // Silence is a valid setting but a poor thing to shuffle into.
+      let playable = options.music.filter { $0 != .silent }
+      levelMusic = playable.randomElement()
+    } else {
+      levelMusic = nil
+    }
+  }
+
+  /// The artwork in force, which is the shuffled choice when there is one.
+  private var activeGraphics: ClassicGraphicsSource { levelGraphics ?? settings.graphics }
+  private var activeMusic: ClassicMusicSource { levelMusic ?? settings.music }
 
   @objc private func levelChanged() {
     guard var current = flow, let campaign,
@@ -314,6 +910,8 @@ let flowProgressKey = "ClassicGameProgress"
     }
   }
 
+  private var artworkLevel: ClassicLevel?
+
   private func buildLevel(_ entry: ClassicCampaignLevel) {
     currentNxlvURL = nil
     let level = entry.level
@@ -325,8 +923,14 @@ let flowProgressKey = "ClassicGameProgress"
       guard let image = makeImage(
         width: rendered.width, height: rendered.height, rgba: [UInt8](rendered.rgba))
       else { return }
+      playfield.classicScene = rendered
       playfield.levelImage = image
-      if let palette = try? ClassicLemmingPalette.inLevelVGA(terrainPalette: ground.terrainPalette) {
+      configureArtwork(level, rendered: rendered)
+      if var palette = try? ClassicLemmingPalette.inLevelVGA(
+        terrainPalette: ground.terrainPalette) {
+        // Reducing the palette rather than the pixels means terrain, sprites
+        // and the status bar all shift together, as a palette change did.
+        if settings.colorDepth == .amigaOCS { palette = palette.quantizedToAmigaOCS }
         playfield.palette = palette
         playfield.invalidateSprites()
         panel.panelImage = makePanelImage()
@@ -344,8 +948,46 @@ let flowProgressKey = "ClassicGameProgress"
       adopt(
         ClassicSession(
           simulation: simulation, width: rendered.width, height: rendered.height))
+      // startX is the authored left edge of the original 320-pixel view.
+      playfield.viewport.center(on: Double(level.startX) + 160)
+      syncPanelViewport()
     } catch {
       setStatus("Level error: \(error)")
+    }
+  }
+
+  private func configureArtwork(_ level: ClassicLevel, rendered: ClassicRenderedLevel) {
+    playfield.macScene = nil
+    playfield.macArtwork = nil
+    playfield.imageScale = 1
+    panel.macArtwork = nil
+    artworkLevel = level
+    guard [.macintosh, .amiga].contains(activeGraphics),
+      dataSets.indices.contains(gamePicker.indexOfSelectedItem),
+      let resources = Bundle.main.resourceURL else { return }
+    let source = activeGraphics == .amiga ? "AmigaArtwork" : "MacArtwork"
+    let root = resources.appendingPathComponent(source)
+    let family: String
+    switch dataSets[gamePicker.indexOfSelectedItem].set.title {
+    case .lemmings: family = "lemmings"
+    case .ohNoMoreLemmings: family = "ohno"
+    case .xmasLemmings1991, .xmasLemmings1992: family = "xmas"
+    case .holidayLemmings1993, .holidayLemmings1994: family = "holiday"
+    default: return
+    }
+    do {
+      let key = source + "/" + family
+      let art: ClassicMacArtwork
+      if let cached = macArtworkCache[key] { art = cached }
+      else {
+        art = try ClassicMacArtwork(directory: root.appendingPathComponent(family))
+        macArtworkCache[key] = art
+      }
+      playfield.macArtwork = art
+      panel.macArtwork = art
+      playfield.macScene = try ClassicMacScene(level: level, rendered: rendered, artwork: art, groundSet: grounds[level.groundStyle])
+    } catch {
+      setStatus("\(settings.graphics.displayName) artwork unavailable for this level: \(error)")
     }
   }
 
@@ -358,6 +1000,8 @@ let flowProgressKey = "ClassicGameProgress"
     openPanel.allowedFileTypes = ["nxlv"]
     openPanel.message = "Choose a NeoLemmix level file."
     guard openPanel.runModal() == .OK, let url = openPanel.url else { return }
+    if sequelIsActive { returnToLibrary() }
+    activeTitle = nil
     loadNxlv(url)
   }
 
@@ -395,6 +1039,11 @@ let flowProgressKey = "ClassicGameProgress"
         width: rendered.width, height: rendered.height, rgba: rendered.rgba)
       else { return }
 
+      playfield.classicScene = nil
+      playfield.macScene = nil
+      playfield.macArtwork = nil
+      panel.macArtwork = nil
+      playfield.imageScale = 1
       playfield.levelImage = image
       currentNxlvURL = url
       let simulation = try NeoLemmixSimulation(level: level, renderedLevel: rendered)
@@ -419,8 +1068,11 @@ let flowProgressKey = "ClassicGameProgress"
     panel.levelSize = CGSize(width: new.levelWidth, height: new.levelHeight)
     playfield.session = new
     playfield.viewport.levelSize = panel.levelSize
-    // Start the view over the first hatch, as the original game does.
+    window.contentView?.layoutSubtreeIfNeeded()
+    playfield.viewport.viewSize = playfield.bounds.size
+    playfield.viewport.scrollY = 0
     if let entrance = new.entranceX { playfield.viewport.center(on: Double(entrance)) }
+    panel.terrainImage = playfield.levelImage
     syncPanelViewport()
     updateStatus()
     playMusicForCurrentLevel()
@@ -435,38 +1087,54 @@ let flowProgressKey = "ClassicGameProgress"
 
   /// Saves progress for the game currently loaded.
   private func saveProgress() {
-    guard let flow, gamePicker.indexOfSelectedItem < dataSets.count else { return }
+    guard let flow, dataSets.indices.contains(gamePicker.indexOfSelectedItem) else { return }
     let key = "\(flowProgressKey).\(dataSets[gamePicker.indexOfSelectedItem].set.identifierKey)"
     if let data = try? JSONEncoder().encode(flow.progress) {
       UserDefaults.standard.set(data, forKey: key)
     }
+    rebuildLibrary()
   }
 
   /// Draws whichever screen the game is on.
   private func renderScreen() {
     guard let flow else { return }
+    if !sequelIsActive {
+      window.title = flow.screen == .title ? "Lemmings — Game Library"
+        : activeTitle?.displayName ?? campaign?.name ?? "Lemmings"
+    }
     playfield.overlayHighlight = nil
+    panel.isMenuMode = !flow.screen.isPlaying
+    fitClassicDisplay()
 
     switch flow.screen {
     case .title:
+      if playfield.levelImage == nil, let entry = campaign?.levels.first {
+        buildLevel(entry)
+      }
+      setStatus("")
       phase = .briefing
       playfield.phase = .briefing
-      let name = dataSets.indices.contains(gamePicker.indexOfSelectedItem)
-        ? dataSets[gamePicker.indexOfSelectedItem].set.name : "Lemmings"
-      playfield.overlayTitle = name
-      playfield.overlayLines = ["A native macOS port", "Data supplied by the player"]
-      playfield.overlayFooter = "Click or press space to begin   •   Q to quit"
+      playfield.overlayShowsLemmings = true
+      playfield.overlayTitle = "LEMMINGS"
+      playfield.overlayLines = ["FULL QUEST  \(library.passed)/\(library.total)"] + library.entries.map { entry in
+        let progress = entry.available ? "  \(entry.passed)/\(entry.total)" : ""
+        let detail = entry.detail.isEmpty ? "" : "  — \(entry.detail)"
+        return entry.title.displayName + progress + detail
+      }
+      playfield.overlayHighlight = min(launchChoice, library.entries.count)
+      playfield.overlayFooter = "CLICK TO PLAY  *  UP DOWN ENTER  *  LIBRARY CMD-SHIFT-L"
 
     case .rankSelect:
       phase = .briefing
       playfield.phase = .briefing
+      playfield.overlayShowsLemmings = false
       playfield.overlayTitle = "Choose a rating"
       playfield.overlayLines = flow.ranks.map { rank in
         let done = flow.passedCount(inRank: rank.name)
         return "\(rank.name)  \(done)/\(rank.levelIndices.count)"
       }
       playfield.overlayHighlight = rankChoice
-      playfield.overlayFooter = "Up and down to choose   •   Enter to start"
+      playfield.overlayFooter = "UP AND DOWN TO CHOOSE  *  ENTER TO START"
 
     case let .briefing(level):
       loadLevel(at: level)
@@ -492,29 +1160,39 @@ let flowProgressKey = "ClassicGameProgress"
         "Needed \(required)  (\(needed)%)",
       ]
       playfield.overlayFooter = passed
-        ? "Click or press Enter to continue"
+        ? "CLICK OR PRESS ENTER TO CONTINUE"
         : "Click or press Enter to try again"
 
     case let .rankComplete(rank):
       phase = .results
       playfield.phase = .results
-      playfield.overlayTitle = "\(rank) complete"
-      playfield.overlayLines = ["Every level in this rating is done."]
-      playfield.overlayFooter = "Click or press Enter to continue"
+      let total = flow.ranks.first(where: { $0.name == rank })?.levelIndices.count ?? 0
+      let passed = flow.passedCount(inRank: rank)
+      playfield.overlayTitle = passed == total ? "\(rank) complete" : "\(rank) run finished"
+      playfield.overlayLines = ["\(passed)/\(total) levels passed in this rating."]
+      playfield.overlayFooter = "CLICK OR PRESS ENTER TO CONTINUE"
 
     case .gameComplete:
       phase = .results
       playfield.phase = .results
-      playfield.overlayTitle = "Game complete"
-      playfield.overlayLines = ["Every rating is finished."]
-      playfield.overlayFooter = "Click or press Enter to return to the title"
+      let current = gamePicker.indexOfSelectedItem
+      let name = dataSets.indices.contains(current) ? dataSets[current].set.name : "Game"
+      playfield.overlayTitle = "\(name) complete"
+      if launchMode == .quest, let title = activeTitle,
+         case let .title(next) = library.next(after: title, mode: launchMode) {
+        playfield.overlayLines = ["Every rating is finished.", "Next: \(next.displayName)"]
+        playfield.overlayFooter = "CLICK OR PRESS ENTER TO CONTINUE"
+      } else {
+        playfield.overlayLines = ["Every rating is finished."]
+        playfield.overlayFooter = "CLICK OR PRESS ENTER FOR THE GAME LIBRARY"
+      }
 
     case .quitConfirm:
       phase = .results
       playfield.phase = .results
       playfield.overlayTitle = "Quit?"
       playfield.overlayLines = ["Progress is saved."]
-      playfield.overlayFooter = "Q again to quit   •   Escape to stay"
+      playfield.overlayFooter = "Q AGAIN TO QUIT  *  ESCAPE TO STAY"
     }
     playfield.needsDisplay = true
     panel.needsDisplay = true
@@ -550,7 +1228,23 @@ let flowProgressKey = "ClassicGameProgress"
   private func advancePhase() {
     guard var current = flow else { return }
     switch current.screen {
-    case .title: current.startGame()
+    case .title:
+      if launchChoice == 0 {
+        launchMode = .quest
+        if let title = library.questStart { launchTitle(title) }
+      } else if library.entries.indices.contains(launchChoice - 1) {
+        let entry = library.entries[launchChoice - 1]
+        guard entry.available else {
+          let alert = NSAlert()
+          alert.messageText = entry.title.displayName
+          alert.informativeText = "This release is archived in the bundle but has no playable data import yet."
+          alert.runModal()
+          return
+        }
+        launchMode = .singleTitle
+        launchTitle(entry.title)
+      }
+      return
     case .rankSelect: current.selectRank(rankChoice)
     case .briefing:
       current.beginPlaying()
@@ -561,7 +1255,10 @@ let flowProgressKey = "ClassicGameProgress"
     case .results:
       current.acknowledgeResults()
     case .rankComplete: current.acknowledgeRankComplete()
-    case .gameComplete: current.acknowledgeGameComplete()
+    case .gameComplete:
+      if advanceToNextTitle() { return }
+      returnToLibrary()
+      return
     case .quitConfirm: NSApplication.shared.terminate(nil)
     case .playing: return
     }
@@ -585,9 +1282,26 @@ let flowProgressKey = "ClassicGameProgress"
   }
 
   private func moveRankChoice(_ delta: Int) {
+    if let flow, flow.screen == .title {
+      let count = library.entries.count + 1
+      guard count > 0 else { return }
+      launchChoice = (launchChoice + delta + count) % count
+      renderScreen()
+      return
+    }
     guard let flow, flow.screen == .rankSelect, !flow.ranks.isEmpty else { return }
     rankChoice = (rankChoice + delta + flow.ranks.count) % flow.ranks.count
     renderScreen()
+  }
+
+  /// Carries a completed release into the first rating of the next installed
+  /// release. The game picker remains a direct chapter selector at all times.
+  private func advanceToNextTitle() -> Bool {
+    saveProgress()
+    guard let title = activeTitle,
+          case let .title(next) = library.next(after: title, mode: launchMode) else { return false }
+    launchTitle(next)
+    return true
   }
 
   /// Builds the status bar image from the imported panel graphics.
@@ -612,6 +1326,7 @@ let flowProgressKey = "ClassicGameProgress"
   }
 
   private func syncPanelViewport() {
+    panel.terrainImage = playfield.levelImage
     panel.visibleLevelRect = playfield.viewport.visibleLevelRect
     panel.needsDisplay = true
   }
@@ -631,7 +1346,16 @@ let flowProgressKey = "ClassicGameProgress"
   }
 
   private func step() {
+    guard !sequelIsActive else { return }
     applyEdgeScroll()
+    // Menus animate even though the level clock is stopped.
+    if phase != .playing, playfield.overlayShowsLemmings {
+      playfield.overlayFrame &+= 1
+      playfield.needsDisplay = true
+    }
+    if tubeIsActive, let frame = composeNativeFrame() {
+      crtView.setSource(frame)
+    }
     guard phase == .playing, !isPaused, let session, !session.isComplete else { return }
 
     // Each ruleset states its own logic rate. Whole ticks only, so timing does
@@ -648,6 +1372,7 @@ let flowProgressKey = "ClassicGameProgress"
     guard advanced else { return }
 
     effects.play(session.lastCues)
+    panel.terrainImage = playfield.levelImage
     playfield.needsDisplay = true
     panel.needsDisplay = true
     updateStatus()
@@ -664,7 +1389,7 @@ let flowProgressKey = "ClassicGameProgress"
   }
 
   private func applyEdgeScroll() {
-    guard let delta = playfield.edgeScrollDelta, delta != 0 else { return }
+    guard phase == .playing, let delta = playfield.edgeScrollDelta, delta != 0 else { return }
     playfield.viewport.scroll(dx: delta, dy: 0)
     playfield.needsDisplay = true
     syncPanelViewport()
@@ -676,6 +1401,21 @@ let flowProgressKey = "ClassicGameProgress"
       levelIndex: picker.indexOfSelectedItem, saved: session.saved, required: session.required)
     if let data = try? progress.encoded() {
       UserDefaults.standard.set(data, forKey: progressKey)
+    }
+    guard session.didWin,
+      dataSets.indices.contains(gamePicker.indexOfSelectedItem),
+      let title = dataSets[gamePicker.indexOfSelectedItem].set.title,
+      let campaign
+    else { return }
+    let earned = achievements.recordWin(
+      title: title,
+      levelIndex: picker.indexOfSelectedItem,
+      levelCount: campaign.levels.count)
+    if let data = try? JSONEncoder().encode(achievements) {
+      UserDefaults.standard.set(data, forKey: achievementProgressKey)
+    }
+    if !earned.isEmpty {
+      setStatus("Achievement unlocked: \(earned.map(\.title).joined(separator: ", "))")
     }
   }
 
@@ -689,7 +1429,6 @@ let flowProgressKey = "ClassicGameProgress"
     if let seconds = session.remainingSeconds {
       parts.append(String(format: "Time %d:%02d", seconds / 60, seconds % 60))
     }
-    if session.supportsRewind { parts.append("t\(session.currentTick)") }
     if session.isNuking { parts.append("NUKING") }
     if session.isComplete {
       parts.append(session.didWin ? "COMPLETE — press N" : "FAILED — press R")
@@ -769,6 +1508,7 @@ let flowProgressKey = "ClassicGameProgress"
     let muted = !music.muted
     music.setMuted(muted)
     effects.setMuted(muted)
+    nativeL2Window?.setMuted(muted)
     updateMusicButtons()
   }
 
@@ -780,12 +1520,32 @@ let flowProgressKey = "ClassicGameProgress"
   }
 
   private func updateMusicButtons() {
-    muteButton?.title = music.muted ? "Unmute" : "Mute"
-    presetButton?.title = music.usesModernPreset ? "Modern" : "Faithful"
+    muteItem?.state = music.muted ? .on : .off
+    presetItem?.state = music.usesModernPreset ? .on : .off
+  }
+
+  /// Every folder of recordings beside the modules is one soundtrack.
+  ///
+  /// The player adds these. A folder of Amiga rips, a console version or a
+  /// remix all work the same way, and each appears in the settings by name.
+  private func loadSoundtracks() {
+    guard let root = Bundle.main.resourceURL?.appendingPathComponent("Music") else { return }
+    soundtrackLibrary = SoundtrackPlayer.soundtracks(at: root)
   }
 
   /// The original cycles through its tunes as the campaign advances.
   private func playMusicForCurrentLevel() {
+    // A chosen soundtrack replaces the modules for the whole session.
+    if case let .remix(name) = activeMusic, let tracks = soundtrackLibrary[name] {
+      music.stop()
+      soundtrack.load(tracks)
+      let index = settings.shuffleMusic
+        ? Int.random(in: 0..<max(1, tracks.count))
+        : (currentNxlvURL == nil ? max(0, picker.indexOfSelectedItem) : 0)
+      if let title = soundtrack.play(index: index) { setStatus("* \(title)") }
+      return
+    }
+    soundtrack.stop()
     guard !music.library.isEmpty else { return }
     let index = currentNxlvURL == nil ? max(0, picker.indexOfSelectedItem) : 0
     if let title = music.play(index: index) {
@@ -814,7 +1574,10 @@ let flowProgressKey = "ClassicGameProgress"
   private func nextLevel() {
     guard currentNxlvURL == nil, let campaign else { return }
     let next = picker.indexOfSelectedItem + 1
-    guard next < campaign.levels.count else { return }
+    guard next < campaign.levels.count else {
+      _ = advanceToNextTitle()
+      return
+    }
     picker.selectItem(at: next)
     levelChanged()
   }
@@ -822,6 +1585,8 @@ let flowProgressKey = "ClassicGameProgress"
   private func installKeyboardShortcuts() {
     NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
       guard let self else { return event }
+      guard !self.sequelIsActive, event.window === self.window,
+        event.modifierFlags.intersection([.command, .control, .option]).isEmpty else { return event }
       if self.window?.firstResponder is NSTextView { return event }
 
       let scrollStep = 24.0
@@ -844,6 +1609,7 @@ let flowProgressKey = "ClassicGameProgress"
         case 36, 76: self.advancePhase(); return nil     // return, enter
         case 53:                                          // escape
           if screen == .quitConfirm { self.cancelQuit() }
+          else { self.returnToLibrary() }
           return nil
         default: break
         }

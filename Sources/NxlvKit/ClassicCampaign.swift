@@ -142,6 +142,46 @@ public struct ClassicCampaignDefinition: Codable, Equatable, Sendable {
         usesOddTable: true
     )
 
+    /// Retail DOS references, grouped by rating. See Documentation/UnifiedGame.md.
+    public static let ohNoMoreLemmings = ClassicCampaignDefinition(
+        name: "Oh No! More Lemmings", levelFilePrefix: "DLVEL", ranks: [
+            .init(name: "Tame", order: [100,101,102,103,104,105,106,107,110,111,112,113,114,115,116,117,120,121,122,123]),
+            .init(name: "Crazy", order: [1,10,14,20,21,30,31,35,51,54,57,67,4,15,16,26,34,37,43,64]),
+            .init(name: "Wild", order: [92,70,71,72,73,75,86,7,22,25,33,36,40,42,44,50,63,65,66,47]),
+            .init(name: "Wicked", order: [96,46,90,91,5,94,61,6,12,87,41,55,60,62,77,81,97,93,80,76]),
+            .init(name: "Havoc", order: [74,53,32,27,24,23,52,17,11,3,2,0,45,85,13,82,83,56,84,95]),
+        ], usesOddTable: false)
+
+    public static func festive(_ title: ClassicTitle) -> ClassicCampaignDefinition? {
+        let names: [String]
+        switch title {
+        case .xmasLemmings1991, .xmasLemmings1992: names = ["Xmas"]
+        case .holidayLemmings1993: names = ["Flurry", "Blizzard"]
+        case .holidayLemmings1994: names = ["Frost", "Hail"]
+        case .snesSunsoftSpecial: names = ["Sunsoft Special"]
+        case .genesisPresenter: names = ["Presenter"]
+        case .arcadeBonus: names = ["Arcade Stage"]
+        case .amigaTwoPlayer: names = ["Two Player"]
+        default: return nil
+        }
+        let count: Int
+        switch title {
+        case .xmasLemmings1991, .xmasLemmings1992: count = 4
+        case .snesSunsoftSpecial: count = 5
+        case .arcadeBonus: count = 10
+        case .amigaTwoPlayer: count = 20
+        case .genesisPresenter: count = 30
+        default: count = 16
+        }
+        return .init(name: title.displayName, levelFilePrefix: "LEVEL",
+            ranks: names.enumerated().map { rank, name in
+                .init(name: name, order: (0..<count).map { index in
+                    let physical = rank * count + index
+                    return physical / 8 * 10 + physical % 8
+                })
+            }, usesOddTable: false)
+    }
+
     public func load(from directory: URL) throws -> ClassicCampaign {
         let fileURLs = try FileManager.default.contentsOfDirectory(
             at: directory,
@@ -165,7 +205,7 @@ public struct ClassicCampaignDefinition: Codable, Equatable, Sendable {
                 throw ClassicCampaignError.missingFile(filename)
             }
             let sections = try ClassicDATArchive.decode(Data(contentsOf: url, options: .mappedIfSafe))
-            guard sections.count == 8 else {
+            guard sections.count == 8 || (!usesOddTable && (1..<8).contains(sections.count)) else {
                 throw ClassicCampaignError.archiveSectionCount(file: url.lastPathComponent, expected: 8, actual: sections.count)
             }
             sectionsByFile[fileID] = sections
@@ -229,10 +269,9 @@ public struct ClassicCampaignDefinition: Codable, Equatable, Sendable {
 extension ClassicCampaign {
     /// Discovers every level in a directory without a hand-authored order.
     ///
-    /// Retail Lemmings needs its authored order, because `ODDTABLE.DAT`
-    /// overrides and the shipped sequence do not follow file order. Other data
-    /// sets in the same container format can be listed by scanning, which
-    /// means a new title needs no order table before it becomes playable.
+    /// Scanning exposes physical records for diagnostics and custom packs.
+    /// Official campaigns use their authored definitions, because file order
+    /// does not establish the retail rating or level order.
     ///
     /// Sections that are not level records are skipped, so padding and
     /// non-level data do not stop the scan.

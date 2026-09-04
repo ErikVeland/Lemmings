@@ -28,7 +28,15 @@ private func testOptionsFollowInstalledData() throws {
 
     let full = ClassicSettingsOptions.available(
         hasDOSData: true, hasAmigaDisk: true, hasMacintoshDisk: true, moduleCount: 22)
-    try require(full.graphics.count == 3, "three artwork sources should be offered")
+    try require(full.graphics == [.macintosh, .amiga, .dosVGA], "Mac artwork should be listed first")
+    try require(ClassicSettings().graphics == .macintosh, "Mac artwork should be the default")
+    for choice in full.graphics {
+        var selected = ClassicSettings()
+        selected.graphics = choice
+        let saved = try JSONEncoder().encode(selected)
+        let restored = try JSONDecoder().decode(ClassicSettings.self, from: saved)
+        try require(full.correcting(restored).graphics == choice, "A saved artwork choice was replaced")
+    }
     try require(full.music.contains(.amigaModules), "modules should be offered")
     try require(full.music.contains(.macintoshMIDI), "Macintosh music should be offered")
     try require(full.sound.contains(.macintoshResources), "Macintosh sound should be offered")
@@ -116,6 +124,33 @@ private func testRoundTrip() throws {
     print("PASS settings survive being saved and loaded")
 }
 
+/// A build that adds a setting must not throw away what the player chose.
+private func testOlderSettingsStillLoad() throws {
+    // Written by a build with no shuffle settings.
+    let older = """
+    {"graphics":{"dosVGA":{}},"colorDepth":"full","display":"monitor",
+     "displayIntensity":0.5,"pixelAspect":1.2,"integerScaling":false,
+     "music":{"amigaModules":{}},"musicStyle":"modern","musicVolume":0.25,
+     "sound":{"macintoshResources":{}},"soundVolume":0.4}
+    """
+    let restored = try JSONDecoder().decode(ClassicSettings.self, from: Data(older.utf8))
+    try require(restored.display == .monitor, "the chosen screen was lost")
+    try require(restored.musicVolume == 0.25, "the chosen music volume was lost")
+    try require(restored.pixelAspect == 1.2, "the chosen pixel width was lost")
+    try require(!restored.integerScaling, "the chosen scaling was lost")
+    try require(!restored.shuffleGraphics, "a missing setting should default to off")
+    try require(!restored.shuffleMusic, "a missing setting should default to off")
+
+    // And the new settings survive a round trip.
+    var shuffled = restored
+    shuffled.shuffleGraphics = true
+    shuffled.shuffleMusic = true
+    let again = try JSONDecoder().decode(
+        ClassicSettings.self, from: try JSONEncoder().encode(shuffled))
+    try require(again.shuffleGraphics && again.shuffleMusic, "shuffle did not survive saving")
+    print("PASS settings written by an older build still load")
+}
+
 do {
     try testOptionsFollowInstalledData()
     try testUndecodedSourcesAreNotOffered()
@@ -124,6 +159,7 @@ do {
     try testPresetsMatchMachines()
     try testRemixesAndCustomArtwork()
     try testRoundTrip()
+    try testOlderSettingsStillLoad()
     print("Classic settings tests passed.")
 } catch {
     FileHandle.standardError.write(Data("Settings tests failed: \(error)\n".utf8))
