@@ -14,7 +14,7 @@ private struct ShotError: Error, CustomStringConvertible {
 @MainActor
 private func render(
     directory: URL, levelIndex: Int, ticks: Int, zoom: Double, size: CGSize, output: URL,
-    crtMode: String?, crtScale: Int, isNative: Bool
+    crtMode: String?, crtScale: Int, isNative: Bool, isLaunch: Bool
 ) throws {
     let campaign = try ClassicCampaignDefinition.originalDOSLemmings.load(from: directory)
     let assets = try ClassicMainDATAssets.load(from: directory)
@@ -99,6 +99,25 @@ private func render(
         }
         view.cacheDisplay(in: view.bounds, to: rep)
         return rep
+    }
+
+    if isLaunch {
+        playfield.phase = .briefing
+        playfield.overlayShowsLemmings = true
+        playfield.overlayFrame = 24
+        playfield.overlayTitle = "LEMMINGS"
+        playfield.overlayLines = [
+            "FULL QUEST  8/228",
+            "LEMMINGS  8/120",
+            "XMAS LEMMINGS 1991  0/4",
+            "OH NO! MORE LEMMINGS  0/100",
+            "XMAS LEMMINGS 1992  0/4",
+        ]
+        playfield.overlayHighlight = 0
+        playfield.overlayFooter =
+            "UP AND DOWN TO CHOOSE   \u{2022}   ENTER TO BEGIN   \u{2022}   Q TO QUIT"
+        panel.statusText = ""
+        panel.isMenuMode = true
     }
 
     let playfieldRep = try bitmap(of: playfield)
@@ -296,6 +315,7 @@ let output = URL(fileURLWithPath: value("--out", "shot.png"))
 let crtMode: String? = arguments.contains("--crt") ? value("--crt", "amiga") : nil
 let crtScale = Int(value("--crt-scale", "2"))!
 let isNative = arguments.contains("--native")
+let isLaunch = arguments.contains("--launch")
 let frameSize = isNative
     ? CGSize(width: 320, height: 200)
     : CGSize(width: 1000, height: 620)
@@ -308,7 +328,8 @@ do {
         try render(
             directory: directory, levelIndex: levelIndex, ticks: ticks, zoom: zoom,
             size: frameSize, output: output,
-            crtMode: crtMode, crtScale: crtScale, isNative: isNative)
+            crtMode: crtMode, crtScale: crtScale, isNative: isNative,
+            isLaunch: isLaunch)
     }
 } catch {
     FileHandle.standardError.write(Data("Shot failed: \(error)\n".utf8))

@@ -79,6 +79,10 @@ enum GamePhase: Equatable {
   var overlayFooter: String?
   /// Which overlay line is currently chosen, when the screen offers a choice.
   var overlayHighlight: Int?
+  /// Marches real lemmings along the foot of the screen.
+  var overlayShowsLemmings = false
+  /// Advanced by the run loop so the march animates while a menu is up.
+  var overlayFrame = 0
   var phase: GamePhase = .playing
   var levelImage: CGImage?
   var session: (any GameSession)?
@@ -199,21 +203,38 @@ enum GamePhase: Equatable {
   /// The original put these on their own screens. Keeping the level visible
   /// behind them means the player can already read the terrain while the
   /// briefing is up, which is the one thing the original made you wait for.
-  private func drawOverlay() {
-    NSColor.black.withAlphaComponent(0.72).setFill()
-    bounds.fill()
+  /// A colour from the level palette, so menus and levels share one table.
+  ///
+  /// Using system colours here is what makes a menu read as an application
+  /// rather than as the game. Everything on screen comes from the same
+  /// sixteen entries the terrain uses.
+  private func paletteColor(_ index: Int, fallback: NSColor) -> NSColor {
+    guard palette.indices.contains(index) else { return fallback }
+    let entry = palette[index]
+    return NSColor(
+      calibratedRed: CGFloat(entry.red) / 255,
+      green: CGFloat(entry.green) / 255,
+      blue: CGFloat(entry.blue) / 255,
+      alpha: 1)
+  }
 
+  private func drawOverlay() {
+    NSColor.black.withAlphaComponent(0.82).setFill()
+    bounds.fill()
+    if overlayShowsLemmings { drawMarchingLemmings() }
+
+    // The game's own text is chunky and upper case, so the menu follows it.
     let titleAttributes: [NSAttributedString.Key: Any] = [
-      .font: NSFont.systemFont(ofSize: 30, weight: .bold),
-      .foregroundColor: NSColor.white,
+      .font: NSFont.monospacedSystemFont(ofSize: 30, weight: .heavy),
+      .foregroundColor: paletteColor(3, fallback: .white),
     ]
     let lineAttributes: [NSAttributedString.Key: Any] = [
-      .font: NSFont.monospacedDigitSystemFont(ofSize: 15, weight: .regular),
-      .foregroundColor: NSColor(calibratedWhite: 0.92, alpha: 1),
+      .font: NSFont.monospacedSystemFont(ofSize: 15, weight: .medium),
+      .foregroundColor: paletteColor(3, fallback: NSColor(calibratedWhite: 0.9, alpha: 1)),
     ]
     let footerAttributes: [NSAttributedString.Key: Any] = [
-      .font: NSFont.systemFont(ofSize: 13, weight: .medium),
-      .foregroundColor: NSColor.systemGreen,
+      .font: NSFont.monospacedSystemFont(ofSize: 12, weight: .medium),
+      .foregroundColor: paletteColor(2, fallback: .systemGreen),
     ]
 
     var height: CGFloat = 0
@@ -235,8 +256,8 @@ enum GamePhase: Equatable {
       let chosen = index == overlayHighlight
       var attributes = lineAttributes
       if chosen {
-        attributes[.foregroundColor] = NSColor.systemGreen
-        attributes[.font] = NSFont.monospacedDigitSystemFont(ofSize: 15, weight: .bold)
+        attributes[.foregroundColor] = paletteColor(4, fallback: .systemYellow)
+        attributes[.font] = NSFont.monospacedSystemFont(ofSize: 15, weight: .bold)
       }
       let text = (chosen ? "> \(line)" : line) as NSString
       let size = text.size(withAttributes: attributes)
@@ -349,6 +370,46 @@ enum GamePhase: Equatable {
     path.lineWidth = max(1, viewport.zoom / 2)
     (target == nil ? NSColor.white.withAlphaComponent(0.5) : NSColor.systemGreen).setStroke()
     path.stroke()
+  }
+
+  /// Walks a row of real lemmings across the foot of a menu.
+  ///
+  /// These are the decoded walking frames the game uses in play, not artwork
+  /// made for the menu, so the screen is built from the same sprites.
+  private func drawMarchingLemmings() {
+    guard let assets, !palette.isEmpty,
+      let walk = assets.animation(for: .walking, direction: .right),
+      !walk.frames.isEmpty
+    else { return }
+
+    let scale: CGFloat = 3
+    let spacing: CGFloat = 46
+    let baseline = bounds.height - 34 * scale / 3
+    let drift = CGFloat(overlayFrame) * 0.6
+    var x = -spacing + drift.truncatingRemainder(dividingBy: spacing)
+
+    var index = 0
+    while x < bounds.width + spacing {
+      // Stagger the frames so they are not all in step, as a crowd would be.
+      let frame = walk.frames[(overlayFrame / 4 + index * 3) % walk.frames.count]
+      let key = "menu-\(frame.width)x\(frame.height)-\((overlayFrame / 4 + index * 3) % walk.frames.count)"
+      let sprite: NSImage
+      if let cached = spriteCache[key] {
+        sprite = cached
+      } else if let made = image(from: frame) {
+        spriteCache[key] = made
+        sprite = made
+      } else {
+        return
+      }
+      sprite.draw(
+        in: NSRect(
+          x: x, y: baseline,
+          width: sprite.size.width * scale, height: sprite.size.height * scale),
+        from: .zero, operation: .sourceOver, fraction: 0.85)
+      x += spacing
+      index += 1
+    }
   }
 
   private func image(from frame: ClassicIndexedBitmap) -> NSImage? {

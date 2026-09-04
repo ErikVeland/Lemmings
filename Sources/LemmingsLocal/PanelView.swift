@@ -22,6 +22,8 @@ enum PanelButton: Equatable {
 
   /// The original status bar, when the imported data provides it.
   var panelImage: CGImage?
+  /// The skill bar belongs to a level in progress, not to a menu.
+  var isMenuMode = false
   var onButton: ((PanelButton) -> Void)?
   var onMinimapScroll: ((Double) -> Void)?
 
@@ -121,6 +123,12 @@ enum PanelButton: Equatable {
   override func draw(_ dirtyRect: NSRect) {
     NSColor.black.setFill()
     dirtyRect.fill()
+
+    // A menu shows no skills, no counts and no map.
+    if isMenuMode {
+      drawStatus()
+      return
+    }
 
     if usesClassicSkin {
       layoutClassicButtons()
