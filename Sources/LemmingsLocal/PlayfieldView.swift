@@ -115,6 +115,27 @@ enum GamePhase: Equatable {
     trackingArea = area
   }
 
+  /// Takes a cursor position directly.
+  ///
+  /// When the picture is drawn through the tube the events land on that view,
+  /// not this one, so a point arrives already converted.
+  func handleMove(to point: CGPoint) {
+    cursorViewPoint = point
+    cursorLevelPoint = viewport.levelPoint(from: point)
+    needsDisplay = true
+  }
+
+  /// Takes a click position directly.
+  func handleClick(at point: CGPoint) {
+    guard phase == .playing else {
+      onAdvancePhase?()
+      return
+    }
+    cursorViewPoint = point
+    cursorLevelPoint = viewport.levelPoint(from: point)
+    if let target = lemming(at: viewport.levelPoint(from: point)) { onAssign?(target.id) }
+  }
+
   override func mouseMoved(with event: NSEvent) {
     let point = convert(event.locationInWindow, from: nil)
     cursorViewPoint = point

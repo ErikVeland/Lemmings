@@ -98,6 +98,15 @@ enum PanelButton: Equatable {
 
   // MARK: - Input
 
+  /// Takes a click position directly, for input arriving from the tube view.
+  func handleClick(at point: CGPoint) {
+    if let match = buttonFrames.first(where: { $0.1.contains(point) }) {
+      onButton?(match.0)
+      return
+    }
+    if minimapFrame.contains(point) { scrollFromMinimap(point) }
+  }
+
   override func mouseDown(with event: NSEvent) {
     let point = convert(event.locationInWindow, from: nil)
     if let match = buttonFrames.first(where: { $0.1.contains(point) }) {

@@ -97,6 +97,16 @@ private struct CRTUniforms {
   private var sourceSize = CGSize.zero
 
   var settings = CRTSettings.amiga1084
+
+  /// Input, reported in source image pixels rather than view points.
+  ///
+  /// The picture is curved and letterboxed on its way to the screen, so a
+  /// click has to travel back through both before it means anything to the
+  /// game.
+  var onMouseDown: ((CGPoint) -> Void)?
+  var onMouseMoved: ((CGPoint) -> Void)?
+  var onScroll: ((CGFloat, CGFloat) -> Void)?
+  private var trackingArea: NSTrackingArea?
   private(set) var failureReason: String?
   var isAvailable: Bool { compositePipeline != nil }
 
@@ -110,7 +120,6 @@ private struct CRTUniforms {
     setUp()
   }
 
-  override var isFlipped: Bool { true }
 
   private func setUp() {
     wantsLayer = true
@@ -150,6 +159,81 @@ private struct CRTUniforms {
     } catch {
       failureReason = "\(error)"
     }
+  }
+
+  // MARK: - Input
+
+  override func updateTrackingAreas() {
+    super.updateTrackingAreas()
+    if let trackingArea { removeTrackingArea(trackingArea) }
+    let area = NSTrackingArea(
+      rect: bounds,
+      options: [.activeInKeyWindow, .mouseMoved, .mouseEnteredAndExited, .inVisibleRect],
+      owner: self)
+    addTrackingArea(area)
+    trackingArea = area
+  }
+
+  override var acceptsFirstResponder: Bool { true }
+
+  /// Undoes the barrel distortion the shader applies.
+  ///
+  /// The forward bend has no neat inverse, so this settles on the answer by
+  /// repeatedly bending a guess and correcting it. A few rounds are enough at
+  /// the curvatures used here.
+  private func straighten(_ uv: CGPoint) -> CGPoint {
+    let amount = CGFloat(settings.curvature)
+    guard amount > 0 else { return uv }
+
+    func bend(_ point: CGPoint) -> CGPoint {
+      var x = point.x * 2 - 1
+      var y = point.y * 2 - 1
+      let offsetX = abs(y) / amount
+      let offsetY = abs(x) / amount
+      x += x * offsetX * offsetX
+      y += y * offsetY * offsetY
+      return CGPoint(x: x * 0.5 + 0.5, y: y * 0.5 + 0.5)
+    }
+
+    var guess = uv
+    for _ in 0..<6 {
+      let bent = bend(guess)
+      guess.x -= bent.x - uv.x
+      guess.y -= bent.y - uv.y
+    }
+    return guess
+  }
+
+  /// Converts a point in this view to a pixel in the game image.
+  private func sourcePoint(from viewPoint: CGPoint) -> CGPoint? {
+    guard sourceSize.width > 0, bounds.width > 0, bounds.height > 0 else { return nil }
+    // The view uses a bottom left origin while the image runs top down.
+    let uv = CGPoint(
+      x: viewPoint.x / bounds.width,
+      y: 1 - viewPoint.y / bounds.height)
+    let straightened = straighten(uv)
+    guard straightened.x >= 0, straightened.x <= 1,
+      straightened.y >= 0, straightened.y <= 1
+    else { return nil }
+    return CGPoint(
+      x: straightened.x * sourceSize.width,
+      y: straightened.y * sourceSize.height)
+  }
+
+  override func mouseDown(with event: NSEvent) {
+    guard let point = sourcePoint(from: convert(event.locationInWindow, from: nil))
+    else { return }
+    onMouseDown?(point)
+  }
+
+  override func mouseMoved(with event: NSEvent) {
+    guard let point = sourcePoint(from: convert(event.locationInWindow, from: nil))
+    else { return }
+    onMouseMoved?(point)
+  }
+
+  override func scrollWheel(with event: NSEvent) {
+    onScroll?(event.scrollingDeltaX, event.scrollingDeltaY)
   }
 
   // MARK: - Source
