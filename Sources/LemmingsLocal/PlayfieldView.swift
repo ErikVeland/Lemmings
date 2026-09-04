@@ -206,16 +206,19 @@ enum GamePhase: Equatable {
   override func draw(_ dirtyRect: NSRect) {
     NSColor.black.setFill()
     dirtyRect.fill()
-    guard let levelImage else { return }
 
-    viewport.viewSize = bounds.size
-    viewport.levelSize = CGSize(width: levelImage.width, height: levelImage.height)
-    viewport.clamp()
+    // A menu can appear before any level is loaded, so the overlay must not
+    // depend on there being a picture behind it.
+    if let levelImage {
+      viewport.viewSize = bounds.size
+      viewport.levelSize = CGSize(width: levelImage.width, height: levelImage.height)
+      viewport.clamp()
 
-    NSGraphicsContext.current?.imageInterpolation = .none
-    drawLevel(levelImage)
-    drawLemmings()
-    if phase == .playing { drawCursor() }
+      NSGraphicsContext.current?.imageInterpolation = .none
+      drawLevel(levelImage)
+      drawLemmings()
+      if phase == .playing { drawCursor() }
+    }
     if phase != .playing { drawOverlay() }
   }
 

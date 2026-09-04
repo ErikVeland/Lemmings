@@ -14,7 +14,7 @@ private struct ShotError: Error, CustomStringConvertible {
 @MainActor
 private func render(
     directory: URL, levelIndex: Int, ticks: Int, zoom: Double, size: CGSize, output: URL,
-    crtMode: String?, crtScale: Int, isNative: Bool, isLaunch: Bool
+    crtMode: String?, crtScale: Int, isNative: Bool, isLaunch: Bool, noLevel: Bool
 ) throws {
     let campaign = try ClassicCampaignDefinition.originalDOSLemmings.load(from: directory)
     let assets = try ClassicMainDATAssets.load(from: directory)
@@ -101,6 +101,7 @@ private func render(
         return rep
     }
 
+    if noLevel { playfield.levelImage = nil }
     if isLaunch {
         playfield.phase = .briefing
         playfield.overlayShowsLemmings = true
@@ -316,6 +317,8 @@ let crtMode: String? = arguments.contains("--crt") ? value("--crt", "amiga") : n
 let crtScale = Int(value("--crt-scale", "2"))!
 let isNative = arguments.contains("--native")
 let isLaunch = arguments.contains("--launch")
+// Reproduces the launch screen before any level is loaded.
+let noLevel = arguments.contains("--no-level")
 let frameSize = isNative
     ? CGSize(width: 320, height: 200)
     : CGSize(width: 1000, height: 620)
@@ -329,7 +332,7 @@ do {
             directory: directory, levelIndex: levelIndex, ticks: ticks, zoom: zoom,
             size: frameSize, output: output,
             crtMode: crtMode, crtScale: crtScale, isNative: isNative,
-            isLaunch: isLaunch)
+            isLaunch: isLaunch, noLevel: noLevel)
     }
 } catch {
     FileHandle.standardError.write(Data("Shot failed: \(error)\n".utf8))
