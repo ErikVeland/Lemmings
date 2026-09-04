@@ -27,6 +27,7 @@ final class SoundEffectPlayer: @unchecked Sendable {
   private var rates: [ClassicSoundEffect: Double] = [:]
   private var voices: [Voice]
   private var isMuted = false
+  private var level: Double = 1.0
 
   private let sampleRate = 44100.0
   private(set) var isRunning = false
@@ -89,7 +90,7 @@ final class SoundEffectPlayer: @unchecked Sendable {
         }
       }
       // Several effects can overlap, so leave headroom rather than clip.
-      let value = max(-1, min(1, mix * 0.6))
+      let value = max(-1, min(1, mix * 0.6 * Float(level)))
       left?[index] = value
       right?[index] = value
     }
@@ -153,6 +154,13 @@ final class SoundEffectPlayer: @unchecked Sendable {
 
   func play(_ effects: [ClassicSoundEffect]) {
     for effect in effects { play(effect) }
+  }
+
+  /// Sets the output level, from silent to full.
+  func setVolume(_ value: Double) {
+    lock.lock()
+    level = min(1, max(0, value))
+    lock.unlock()
   }
 
   func setMuted(_ muted: Bool) {

@@ -17,6 +17,7 @@ final class ModuleMusicPlayer: @unchecked Sendable {
   private var player: ProTrackerEnhancedPlayer?
   private var enhancements: ProTrackerEnhancements = .faithful
   private var isMuted = false
+  private var level: Double = 1.0
 
   private let sampleRate = 44100.0
   private(set) var isRunning = false
@@ -73,8 +74,8 @@ final class ModuleMusicPlayer: @unchecked Sendable {
 
     for index in 0..<frames {
       let frame = player!.nextFrame()
-      left?[index] = frame.left
-      right?[index] = frame.right
+      left?[index] = frame.left * Float(level)
+      right?[index] = frame.right * Float(level)
       // A module ends by running off its order list. Loop it, as the game does.
       if player!.hasFinished { restartLocked() }
     }
@@ -124,6 +125,13 @@ final class ModuleMusicPlayer: @unchecked Sendable {
   }
 
   // MARK: - Controls
+
+  /// Sets the output level, from silent to full.
+  func setVolume(_ value: Double) {
+    lock.lock()
+    level = min(1, max(0, value))
+    lock.unlock()
+  }
 
   func setMuted(_ muted: Bool) {
     lock.lock()

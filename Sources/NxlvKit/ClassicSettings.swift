@@ -1,0 +1,274 @@
+import Foundation
+
+/// What the player has chosen, and what they are allowed to choose.
+///
+/// A platform profile bundles a machine's look and sound together, which is
+/// the right default. This lets those choices come apart, so Amiga music can
+/// play over DOS graphics, or a modern remix over either.
+///
+/// Options are derived from what is installed rather than listed by the
+/// interface. An interface that lists every source will offer Macintosh music
+/// to someone who has no Macintosh disk, and then fail when they pick it.
+
+/// Where the level and sprite artwork comes from.
+public enum ClassicGraphicsSource: Equatable, Codable, Sendable {
+    case dosVGA
+    case dosEGA
+    case amiga
+    case macintosh
+    /// A folder of replacement artwork the player supplied.
+    case custom(name: String)
+
+    public var displayName: String {
+        switch self {
+        case .dosVGA: return "DOS (VGA)"
+        case .dosEGA: return "DOS (EGA)"
+        case .amiga: return "Amiga"
+        case .macintosh: return "Macintosh"
+        case let .custom(name): return name
+        }
+    }
+}
+
+/// Where the music comes from.
+public enum ClassicMusicSource: Equatable, Codable, Sendable {
+    case amigaModules
+    case macintoshMIDI
+    case dosAdlib
+    /// A folder of remixed or re-recorded tracks the player supplied.
+    case remix(name: String)
+    case silent
+
+    public var displayName: String {
+        switch self {
+        case .amigaModules: return "Amiga Modules"
+        case .macintoshMIDI: return "Macintosh MIDI"
+        case .dosAdlib: return "DOS Ad-Lib"
+        case let .remix(name): return name
+        case .silent: return "None"
+        }
+    }
+}
+
+/// Where the sound effects come from.
+public enum ClassicSoundSource: Equatable, Codable, Sendable {
+    case macintoshResources
+    case dosAdlib
+    case sampleBank
+    case silent
+
+    public var displayName: String {
+        switch self {
+        case .macintoshResources: return "Macintosh"
+        case .dosAdlib: return "DOS Ad-Lib"
+        case .sampleBank: return "Sample Bank"
+        case .silent: return "None"
+        }
+    }
+}
+
+/// How the picture is presented.
+public enum ClassicDisplayMode: String, Equatable, Codable, CaseIterable, Sendable {
+    /// No tube simulation. Sharp pixels on a flat panel.
+    case flat
+    /// A monitor of the period, as most people saw an Amiga.
+    case monitor
+    /// A television over composite, which is softer and bloomier.
+    case television
+
+    public var displayName: String {
+        switch self {
+        case .flat: return "Flat Panel"
+        case .monitor: return "Monitor"
+        case .television: return "Television"
+        }
+    }
+}
+
+/// Colour depth of the output.
+public enum ClassicColorDepth: String, Equatable, Codable, CaseIterable, Sendable {
+    /// Whatever the artwork already holds.
+    case full
+    /// Four bits per channel, as an Amiga OCS or ECS chipset showed.
+    case amigaOCS
+
+    public var displayName: String {
+        switch self {
+        case .full: return "Full"
+        case .amigaOCS: return "Amiga (4 bit)"
+        }
+    }
+
+    /// Levels per channel, or zero to leave the artwork alone.
+    public var levels: Int {
+        switch self {
+        case .full: return 0
+        case .amigaOCS: return 16
+        }
+    }
+}
+
+/// How music is treated on the way out.
+public enum ClassicMusicStyle: String, Equatable, Codable, CaseIterable, Sendable {
+    /// Exactly as the hardware played it.
+    case faithful
+    /// Widened, equalised and given a small room.
+    case modern
+
+    public var displayName: String {
+        switch self {
+        case .faithful: return "Faithful"
+        case .modern: return "Modern"
+        }
+    }
+}
+
+public struct ClassicSettings: Equatable, Codable, Sendable {
+    // Graphics
+    public var graphics: ClassicGraphicsSource
+    public var colorDepth: ClassicColorDepth
+
+    // Video
+    public var display: ClassicDisplayMode
+    /// Strength of the tube simulation, from 0 to 1.
+    public var displayIntensity: Double
+    /// Horizontal stretch. PAL pixels are not square.
+    public var pixelAspect: Double
+    public var integerScaling: Bool
+
+    // Audio
+    public var music: ClassicMusicSource
+    public var musicStyle: ClassicMusicStyle
+    public var musicVolume: Double
+    public var sound: ClassicSoundSource
+    public var soundVolume: Double
+
+    public init(
+        graphics: ClassicGraphicsSource = .dosVGA,
+        colorDepth: ClassicColorDepth = .full,
+        display: ClassicDisplayMode = .flat,
+        displayIntensity: Double = 0.8,
+        pixelAspect: Double = 1.0,
+        integerScaling: Bool = true,
+        music: ClassicMusicSource = .amigaModules,
+        musicStyle: ClassicMusicStyle = .faithful,
+        musicVolume: Double = 0.8,
+        sound: ClassicSoundSource = .macintoshResources,
+        soundVolume: Double = 0.9
+    ) {
+        self.graphics = graphics
+        self.colorDepth = colorDepth
+        self.display = display
+        self.displayIntensity = displayIntensity
+        self.pixelAspect = pixelAspect
+        self.integerScaling = integerScaling
+        self.music = music
+        self.musicStyle = musicStyle
+        self.musicVolume = musicVolume
+        self.sound = sound
+        self.soundVolume = soundVolume
+    }
+
+    /// Settings that match a machine, as a starting point before mixing.
+    public static func matching(_ profile: PlatformProfile) -> ClassicSettings {
+        var settings = ClassicSettings()
+        settings.colorDepth = profile.colorLevels == 16 ? .amigaOCS : .full
+        settings.pixelAspect = profile.pixelAspect
+        switch profile.display {
+        case .rgbMonitor: settings.display = .monitor
+        case .television: settings.display = .television
+        case .flatPanel: settings.display = .flat
+        }
+        switch profile.music {
+        case .protrackerModule: settings.music = .amigaModules
+        case .midiWithSamples: settings.music = .macintoshMIDI
+        case .adlibFM: settings.music = .dosAdlib
+        case .none: settings.music = .silent
+        }
+        switch profile.sound {
+        case .macResourceSounds: settings.sound = .macintoshResources
+        case .adlibFM: settings.sound = .dosAdlib
+        case .sampleBank: settings.sound = .sampleBank
+        case .none: settings.sound = .silent
+        }
+        switch profile.identifier {
+        case "amiga": settings.graphics = .amiga
+        case "macintosh": settings.graphics = .macintosh
+        default: settings.graphics = .dosVGA
+        }
+        return settings
+    }
+}
+
+/// What can actually be chosen, given the data present.
+public struct ClassicSettingsOptions: Sendable {
+    public let graphics: [ClassicGraphicsSource]
+    public let music: [ClassicMusicSource]
+    public let sound: [ClassicSoundSource]
+
+    public init(
+        graphics: [ClassicGraphicsSource],
+        music: [ClassicMusicSource],
+        sound: [ClassicSoundSource]
+    ) {
+        self.graphics = graphics
+        self.music = music
+        self.sound = sound
+    }
+
+    /// What the installed data supports.
+    ///
+    /// Sources that are not decoded yet are left out rather than listed and
+    /// then failing when chosen. DOS music is the current example: the
+    /// synthesizer exists but its sequencer is not decoded.
+    public static func available(
+        hasDOSData: Bool,
+        hasAmigaDisk: Bool,
+        hasMacintoshDisk: Bool,
+        moduleCount: Int,
+        remixFolders: [String] = [],
+        customGraphics: [String] = []
+    ) -> ClassicSettingsOptions {
+        var graphics: [ClassicGraphicsSource] = []
+        if hasDOSData { graphics.append(.dosVGA) }
+        if hasAmigaDisk { graphics.append(.amiga) }
+        if hasMacintoshDisk { graphics.append(.macintosh) }
+        graphics.append(contentsOf: customGraphics.map { .custom(name: $0) })
+
+        var music: [ClassicMusicSource] = []
+        if moduleCount > 0 { music.append(.amigaModules) }
+        if hasMacintoshDisk { music.append(.macintoshMIDI) }
+        music.append(contentsOf: remixFolders.map { .remix(name: $0) })
+        music.append(.silent)
+
+        var sound: [ClassicSoundSource] = []
+        if hasMacintoshDisk { sound.append(.macintoshResources) }
+        sound.append(.silent)
+
+        return ClassicSettingsOptions(graphics: graphics, music: music, sound: sound)
+    }
+
+    public func allows(_ settings: ClassicSettings) -> Bool {
+        graphics.contains(settings.graphics)
+            && music.contains(settings.music)
+            && sound.contains(settings.sound)
+    }
+
+    /// Moves any unavailable choice to something that works.
+    ///
+    /// Data can disappear between runs when a folder is moved, so a stored
+    /// setting is corrected rather than left pointing at nothing.
+    public func correcting(_ settings: ClassicSettings) -> ClassicSettings {
+        var corrected = settings
+        if !graphics.contains(settings.graphics), let first = graphics.first {
+            corrected.graphics = first
+        }
+        if !music.contains(settings.music) {
+            corrected.music = music.first ?? .silent
+        }
+        if !sound.contains(settings.sound) {
+            corrected.sound = sound.first ?? .silent
+        }
+        return corrected
+    }
+}
