@@ -65,6 +65,25 @@ do {
             format: "     OhNo: %.0f Hz, %d frames, %.2f seconds",
             ohNo.sampleRate, ohNo.pcm.count, ohNo.duration))
     }
+    // Decoding a sound is not the same as an event having one bound to it.
+    // This checks the mapping the game actually plays through.
+    var bound: [ClassicSoundEffect] = []
+    var unbound: [ClassicSoundEffect] = []
+    for effect in ClassicSoundEffect.allCases {
+        if let name = ClassicSoundMapping.macintoshNames[effect], byName[name] != nil {
+            bound.append(effect)
+        } else {
+            unbound.append(effect)
+        }
+    }
+    print("PASS \(bound.count) of \(ClassicSoundEffect.allCases.count) game events have a sound")
+    if !unbound.isEmpty {
+        print("     unbound: \(unbound.map(\.rawValue).joined(separator: ", "))")
+    }
+    try require(
+        unbound.isEmpty,
+        "these events would be silent: \(unbound.map(\.rawValue).joined(separator: ", "))")
+
     print("Classic Mac sound tests passed.")
 } catch {
     FileHandle.standardError.write(Data("Mac sound tests failed: \(error)\n".utf8))

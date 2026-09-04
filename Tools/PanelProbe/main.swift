@@ -22,6 +22,9 @@ let height = Int(flag("--height", "40"))!
 let bpp = Int(flag("--bpp", "4"))!
 let offset = Int(flag("--offset", "0"))!
 let output = flag("--out", "panel.png")
+// Some images store the four planes per row instead of one whole plane
+// after another. This tries that arrangement.
+let rowInterleaved = arguments.contains("--interleave")
 
 let files = try FileManager.default.contentsOfDirectory(
     at: directory, includingPropertiesForKeys: nil, options: [.skipsHiddenFiles])
@@ -35,6 +38,10 @@ guard sectionIndex < sections.count else {
     exit(1)
 }
 let data = [UInt8](sections[sectionIndex].data)
+if let dump = ProcessInfo.processInfo.environment["DUMP_SECTION"] {
+    try? Data(data).write(to: URL(fileURLWithPath: dump))
+    print("dumped section \(sectionIndex): \(data.count) bytes -> \(dump)")
+}
 
 let pixelCount = width * height
 let bytesPerPlane = (pixelCount + 7) / 8
@@ -46,12 +53,28 @@ guard data.count >= needed else {
 }
 
 var pixels = [UInt8](repeating: 0, count: pixelCount)
-for plane in 0..<bpp {
-    let planeOffset = offset + plane * bytesPerPlane
-    for pixel in 0..<pixelCount {
-        let byte = data[planeOffset + pixel / 8]
-        let bit = (byte >> UInt8(7 - pixel % 8)) & 1
-        pixels[pixel] |= bit << UInt8(plane)
+if rowInterleaved {
+    let rowBytes = (width + 7) / 8
+    for y in 0..<height {
+        let rowStart = offset + y * rowBytes * bpp
+        for plane in 0..<bpp {
+            let planeStart = rowStart + plane * rowBytes
+            for x in 0..<width {
+                let index = planeStart + x / 8
+                guard index < data.count else { continue }
+                let bit = (data[index] >> UInt8(7 - x % 8)) & 1
+                pixels[y * width + x] |= bit << UInt8(plane)
+            }
+        }
+    }
+} else {
+    for plane in 0..<bpp {
+        let planeOffset = offset + plane * bytesPerPlane
+        for pixel in 0..<pixelCount {
+            let byte = data[planeOffset + pixel / 8]
+            let bit = (byte >> UInt8(7 - pixel % 8)) & 1
+            pixels[pixel] |= bit << UInt8(plane)
+        }
     }
 }
 
