@@ -10,7 +10,7 @@ func navigation() throws {
     let all = ClassicTitle.allCases.map { UnifiedGameLibrary.Entry(title: $0,
         total: $0.expectedLevelCount!, passed: $0.expectedLevelCount!) }
     let library = UnifiedGameLibrary(entries: all.reversed())
-    try require(library.total == 502 && library.passed == 502, "Canon count must include each Holiday release once")
+    try require(library.total == 562 && library.passed == 562, "Canon count must include each Holiday release once")
     for (index, title) in ClassicTitle.allCases.enumerated() {
         try require(library.next(after: title, mode: .singleTitle) == .library, "Single title must return to library")
         let expected: UnifiedGameLibrary.Destination = index + 1 < all.count
