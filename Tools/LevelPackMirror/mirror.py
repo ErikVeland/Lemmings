@@ -33,6 +33,21 @@ RETRIES = 3
 TIMEOUT = 60
 
 
+UNSAFE = re.compile(r"[^A-Za-z0-9_-]+")
+
+
+def component(text, fallback):
+    """Reduces a name from the site to one harmless path component.
+
+    The slug and the download filename both arrive from the server, and the
+    slug is read straight out of the page markup. Neither is allowed to choose
+    where a file lands, so a separator or a parent reference is replaced rather
+    than escaped. A name that holds nothing usable falls back.
+    """
+    name = UNSAFE.sub("-", text).strip("-")
+    return name or fallback
+
+
 def get(url, binary=False):
     request = urllib.request.Request(url, headers={"User-Agent": AGENT})
     last = None
@@ -85,7 +100,7 @@ def main():
 
     got = skipped = failed = 0
     for number, (identifier, slug, title) in enumerate(listing, start=1):
-        target = root / f"{identifier:04d}-{slug}"
+        target = root / f"{identifier:04d}-{component(slug, 'pack')}"
         existing = list(root.glob(f"{identifier:04d}-*"))
         if any(path.stat().st_size > 0 for path in existing):
             skipped += 1
@@ -99,8 +114,14 @@ def main():
             failed += 1
             continue
         # Keep the extension the server gives, since packs are not all zips.
-        suffix = Path(filename).suffix if filename else ".zip"
-        path = target.with_suffix(suffix or ".zip")
+        given = Path(filename).suffix.lstrip(".") if filename else ""
+        suffix = "." + component(given, "zip")
+        path = target.with_suffix(suffix)
+        # The names above are already reduced to one component each. This says
+        # so out loud, so a later change to either cannot quietly write outside
+        # the output directory.
+        if not path.resolve().is_relative_to(root.resolve()):
+            raise SystemExit(f"refusing to write outside {root}: {path}")
         path.write_bytes(data)
         got += 1
         print(f"  [{number}/{len(listing)}] {identifier:4d} {title[:44]:<44} "
