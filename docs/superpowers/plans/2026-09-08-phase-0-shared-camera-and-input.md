@@ -18,6 +18,7 @@
 - Target selection is input, not simulation. Task 8 records divergences. It changes no behavior.
 - Execution happens in a git worktree. A peer session is editing `PlayfieldView.swift`, `Lemmings2PlayWindow.swift` and `Lemmings3PlayWindow.swift` in the main checkout.
 - Line numbers in this plan are hints only. Anchor every edit on the quoted code, because the files move.
+- The Macintosh 2x work for the sequels is already in the tree. `Sources/NxlvKit/Lemmings2MacArtwork.swift`, `Lemmings2MacRuleTables.swift` and `Tools/SequelMacArtwork/` exist. Do not change them. Phase 2 adopts them.
 
 ## Spec refinement
 
@@ -132,6 +133,19 @@ do {
     let filled = small.contentOffset(levelWidth: 1600, levelHeight: 160)
     try require(near(filled.x, 0), "a wide level does not offset")
     print("PASS GameViewport centers small levels")
+
+    // Migrated from Tests/Lemmings2ViewportTests, which Task 5 deletes.
+    // The old code divided height by 240. This divides by 200 and snaps down.
+    // Both give the same scale and camera width at these two sizes.
+    let old43 = GameViewport(configuration: config, viewWidth: 960, viewHeight: 720)
+    try require(near(old43.scale, 3), "960x720 still scales to 3")
+    try require(near(old43.logicalWidth, 320), "960x720 still shows exactly the base width")
+    try require(near(old43.panelX, 0), "960x720 still centers the panel at zero")
+    let old169 = GameViewport(configuration: config, viewWidth: 1280, viewHeight: 720)
+    try require(near(old169.scale, 3), "1280x720 still scales to 3")
+    try require(near(old169.logicalWidth, 1280.0 / 3), "1280x720 still widens to 426.67")
+    try require(near(old169.panelX * old169.scale, 160), "1280x720 still centers the panel at 160 points")
+    print("PASS GameViewport keeps the Lemmings 2 viewport geometry")
 
     // View and level points round trip through the camera.
     let camera = GameViewport.Point(x: 100, y: 20)
@@ -363,6 +377,12 @@ Append inside the `do` block of `Tests/GameViewportTests/main.swift`, before the
     try require(near(outside.x, 0) && near(outside.y, 0), "a point outside the camera does not scroll")
     let panel = scroller.edgeVelocity(at: GameViewport.Point(x: 160, y: scroller.logicalPlayfieldHeight + 10))
     try require(near(panel.x, 0) && near(panel.y, 0), "the panel band does not scroll")
+    // Migrated from Tests/Lemmings2ViewportTests. In a widescreen camera the
+    // old 320-pixel boundary is ordinary level, not an edge.
+    let widescreen = GameViewport(configuration: edge, viewWidth: 1280, viewHeight: 720)
+    try require(widescreen.logicalWidth > 320, "the widescreen camera is wider than the base")
+    try require(near(widescreen.edgeVelocity(at: GameViewport.Point(x: 320, y: 80)).x, 0),
+        "the old 320-pixel boundary does not scroll")
     print("PASS GameViewport edge velocity")
 ```
 
@@ -833,14 +853,28 @@ box. Search for `192 * zoom` and `48 * zoom` and change them to `160 * zoom` and
 grep -n "192 \* zoom\|48 \* zoom" Sources/LemmingsLocal/Lemmings2PlayWindow.swift
 ```
 
-- [ ] **Step 5: Delete the old viewport**
+- [ ] **Step 5: Delete the old viewport and the suite it fed**
+
+`Tests/Lemmings2ViewportTests/main.swift` tests `Lemmings2Viewport` directly, and
+`Scripts/run-lemmings2-viewport-tests.sh` builds it against that one file. Both
+go with the type. Task 1 and Task 2 already carry its distinctive assertions,
+under the two `PASS` lines that name the Lemmings 2 geometry and the old
+320-pixel boundary. Confirm those two lines print before deleting anything.
 
 ```bash
-git rm Sources/NxlvKit/Lemmings2Viewport.swift 2>/dev/null || rm Sources/NxlvKit/Lemmings2Viewport.swift
-grep -rn "Lemmings2Viewport" Sources Tests
+zsh Scripts/run-game-viewport-tests.sh | grep -c "keeps the Lemmings 2 viewport geometry"
 ```
 
-Expected: the grep prints nothing. The file was never committed, so no history changes.
+Expected: `1`. If it prints `0`, stop. Task 1 is incomplete and the coverage
+would be lost.
+
+```bash
+git rm -r --ignore-unmatch Sources/NxlvKit/Lemmings2Viewport.swift Tests/Lemmings2ViewportTests Scripts/run-lemmings2-viewport-tests.sh
+rm -rf Sources/NxlvKit/Lemmings2Viewport.swift Tests/Lemmings2ViewportTests Scripts/run-lemmings2-viewport-tests.sh
+grep -rn "Lemmings2Viewport" Sources Tests Scripts
+```
+
+Expected: the grep prints nothing.
 
 - [ ] **Step 6: Build and test**
 
