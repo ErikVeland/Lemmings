@@ -1407,7 +1407,7 @@ public struct ClassicDOSSimulation: Codable, Equatable, Sendable {
         ))
         switch trigger.effect {
         case .exit:
-            if lemming.action != .falling {
+            if lemming.action != .falling, hasWalkedIntoExit(lemming, zone: trigger.bounds) {
                 transition(&lemming, to: .exiting, events: &events)
             }
         case .forceLeft:
@@ -1449,6 +1449,35 @@ public struct ClassicDOSSimulation: Codable, Equatable, Sendable {
         }
         if terrain.isSteelProtected(x: point.x, y: point.y) { return .steel }
         return .none
+    }
+
+    /// Whether the lemming has reached the middle of the exit.
+    ///
+    /// A lemming drops in at the middle of the hole, whichever way it is
+    /// walking. Anything else looks wrong, because the exit is drawn around
+    /// that point and the eye follows the picture rather than the trigger.
+    ///
+    /// Measuring a fixed depth from the near edge cannot do this. Trigger zones
+    /// are not all the same width: most exits use four pixels, but some use
+    /// eight, and the zone does not sit at the middle of the object either. A
+    /// depth that lands centrally in one style lands at the edge in another,
+    /// and it lands on opposite sides for a lemming walking left and one
+    /// walking right.
+    ///
+    /// Taking the middle of the zone fixes both. The two directions converge on
+    /// the same pixel, so a lemming vanishes in the same place whichever way it
+    /// arrived.
+    ///
+    /// The middle always lies inside the zone, so no exit becomes impossible to
+    /// enter. Walking moves one pixel per tick, so that pixel cannot be stepped
+    /// over. The one place that moves two pixels turns the lemming into a
+    /// faller, and a faller is already excluded from entering.
+    private func hasWalkedIntoExit(_ lemming: ClassicDOSLemming, zone: ClassicDOSRect) -> Bool {
+        let middle = (zone.x1 + zone.x2) / 2
+        switch lemming.direction {
+        case .right: return lemming.foot.x >= middle
+        case .left: return lemming.foot.x <= middle
+        }
     }
 
     private func lastTriggerIndex(at point: ClassicDOSPoint) -> Int? {

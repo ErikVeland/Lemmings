@@ -230,19 +230,34 @@ enum GamePhase: Equatable {
     needsDisplay = true
   }
 
-  /// Returns the lemming nearest the point, inside a small pick radius.
+  /// The box around a lemming that the cursor must be inside to pick it.
+  ///
+  /// The anchor is the foot, so the box reaches upwards over the body. These
+  /// bounds follow the original: a little narrower than the drawn sprite,
+  /// because the sprite includes swinging arms and a pick area that wide makes
+  /// neighbouring lemmings impossible to tell apart.
+  private static let pickBox = (halfWidth: CGFloat(4), top: CGFloat(12), bottom: CGFloat(4))
+
+  /// Returns the lemming under the point, or nothing when the cursor is clear.
+  ///
+  /// The cursor does not snap. Picking the nearest lemming within a radius
+  /// looks like the cursor sticking to a lemming it is not over, and it makes
+  /// two lemmings standing side by side impossible to choose between. Only a
+  /// lemming the cursor is actually inside can be picked.
+  ///
+  /// When several overlap, the last one wins. That is the one drawn on top, so
+  /// the choice matches what the player sees.
   func lemming(at point: CGPoint) -> SessionLemming? {
     guard let session else { return nil }
-    let nearest = session.lemmings.min {
-      distance(from: $0, to: point) < distance(from: $1, to: point)
-    }
-    guard let nearest, distance(from: nearest, to: point) <= 10 else { return nil }
-    return nearest
+    return session.lemmings.last { contains($0, point) }
   }
 
-  private func distance(from lemming: SessionLemming, to point: CGPoint) -> CGFloat {
-    // The pick point sits slightly above the foot, over the lemming's body.
-    hypot(CGFloat(lemming.x) - point.x, CGFloat(lemming.y) - 5 - point.y)
+  private func contains(_ lemming: SessionLemming, _ point: CGPoint) -> Bool {
+    let box = Self.pickBox
+    let x = CGFloat(lemming.x)
+    let y = CGFloat(lemming.y)
+    return point.x >= x - box.halfWidth && point.x <= x + box.halfWidth
+      && point.y >= y - box.top && point.y <= y + box.bottom
   }
 
   func invalidateSprites() { spriteCache.removeAll() }
@@ -266,10 +281,14 @@ enum GamePhase: Equatable {
 
       NSGraphicsContext.current?.imageInterpolation = .none
       if phase != .playing, overlayShowsLemmings {
-        let scale = max(viewport.zoom / imageScale, bounds.height / CGFloat(levelImage.height))
+        // The backdrop behind a menu is decoration, not a view onto a level,
+        // so it ignores the viewport. Feeding zoom into the crop width and the
+        // scroll position into the crop origin made zooming on a menu move the
+        // picture sideways, and change its size only past a threshold.
+        // The picture fills the height and is centred on its own width.
+        let scale = bounds.height / CGFloat(levelImage.height)
         let width = min(CGFloat(levelImage.width), bounds.width / scale)
-        let center = viewport.visibleLevelRect.midX * imageScale
-        let x = max(0, min(CGFloat(levelImage.width) - width, center - width / 2))
+        let x = (CGFloat(levelImage.width) - width) / 2
         if let cropped = levelImage.cropping(to: CGRect(x: x, y: 0,
           width: width, height: CGFloat(levelImage.height))) {
           NSImage(cgImage: cropped, size: .zero).draw(in: bounds, from: .zero,
@@ -464,6 +483,33 @@ enum GamePhase: Equatable {
     for lemming in session.lemmings { draw(lemming) }
   }
 
+  /// How long the engine holds a lemming in the exploding pose.
+  ///
+  /// The artwork for it is a single frame, so without this the same starburst
+  /// sits on screen for three seconds and then vanishes on one tick. Shrinking
+  /// and fading it over that time turns it into a puff that clears itself.
+  private static let explosionTicks = 51.0
+
+  /// Shrinks and fades the explosion as it ages.
+  ///
+  /// The burst holds its size briefly, so the flash still reads, then draws
+  /// down toward its own middle. Returns the rectangle to draw into and how
+  /// opaque to draw it.
+  private func puff(_ rect: CGRect, tick: Int) -> (rect: CGRect, alpha: CGFloat) {
+    let progress = min(1, max(0, Double(tick) / Self.explosionTicks))
+    // Nothing happens for the first fifth, then it collapses.
+    let collapse = max(0, (progress - 0.2) / 0.8)
+    let scale = CGFloat(1 - collapse * 0.85)
+    let alpha = CGFloat(1 - collapse)
+    let width = rect.width * scale
+    let height = rect.height * scale
+    return (
+      CGRect(
+        x: rect.midX - width / 2, y: rect.midY - height / 2,
+        width: width, height: height),
+      alpha)
+  }
+
   private func draw(_ lemming: SessionLemming) {
     guard let assets, !palette.isEmpty else { return }
     let direction: ClassicSpriteDirection = lemming.facingLeft ? .left : .right
@@ -482,9 +528,12 @@ enum GamePhase: Equatable {
         let origin = viewport.viewPoint(fromLevel: CGPoint(
           x: Double(lemming.x + animation.offsetX) + Double(frame.x) / 2,
           y: Double(lemming.y + animation.offsetY) + Double(frame.y) / 2))
-        let rect = CGRect(x: origin.x, y: origin.y,
+        var rect = CGRect(x: origin.x, y: origin.y,
           width: Double(frame.width) * viewport.zoom / 2, height: Double(frame.height) * viewport.zoom / 2)
-        sprite.draw(in: rect, from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true, hints: nil)
+        var fraction: CGFloat = 1
+        if pose == .explosion { (rect, fraction) = puff(rect, tick: lemming.animationFrame) }
+        guard fraction > 0.01 else { return }
+        sprite.draw(in: rect, from: .zero, operation: .sourceOver, fraction: fraction, respectFlipped: true, hints: nil)
         if let countdown = lemming.countdown { drawCountdown(countdown, above: rect) }
         return
       }
@@ -505,11 +554,13 @@ enum GamePhase: Equatable {
       x: CGFloat(lemming.x + animation.offsetX),
       y: CGFloat(lemming.y + animation.offsetY))
     let origin = viewport.viewPoint(fromLevel: levelOrigin)
-    let rect = CGRect(
+    var rect = CGRect(
       x: origin.x, y: origin.y,
       width: sprite.size.width * viewport.zoom, height: sprite.size.height * viewport.zoom)
-    guard rect.intersects(bounds) else { return }
-    sprite.draw(in: rect, from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true, hints: nil)
+    var fraction: CGFloat = 1
+    if pose == .explosion { (rect, fraction) = puff(rect, tick: lemming.animationFrame) }
+    guard rect.intersects(bounds), fraction > 0.01 else { return }
+    sprite.draw(in: rect, from: .zero, operation: .sourceOver, fraction: fraction, respectFlipped: true, hints: nil)
 
     if let countdown = lemming.countdown {
       drawCountdown(countdown, above: rect)

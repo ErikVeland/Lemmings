@@ -21,6 +21,7 @@ swiftc -swift-version 6 \
   "$project_dir/Sources/LemmingsLocal/PlayfieldView.swift" \
   "$project_dir/Sources/LemmingsLocal/MacInterfaceRenderer.swift" \
   "$project_dir/Sources/LemmingsLocal/PanelView.swift" \
+  "$project_dir/Sources/LemmingsLocal/PanelGlyphs.swift" \
   "$project_dir/Sources/LemmingsLocal/GameSession.swift" \
   "$project_dir/Sources/LemmingsLocal/CRTShaders.swift" \
   "$project_dir/Sources/LemmingsLocal/CRTView.swift" \

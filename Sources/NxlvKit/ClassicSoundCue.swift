@@ -144,24 +144,37 @@ extension ClassicSoundMapping {
         .pop: "Pop",
     ]
 
-    /// Binds effects to the iconic Amiga digitised sample names ("Oh No!", "Yippee!", "Let's Go!").
+    /// Binds effects to the names the Amiga sound banks actually use.
+    ///
+    /// These are read from `basicfx` and `fullfx` on the Amiga disk, not
+    /// invented. Several sounds in those banks carry an empty NAME chunk, so
+    /// they cannot be bound here and the effects that would need them are
+    /// absent: the game falls back to another source for those. An earlier
+    /// version of this table guessed at names such as "MousePress" and
+    /// "Splash", none of which exist in the files.
+    ///
+    /// Matching ignores case, because the banks mix `Splat` with `chink`.
     public static let amigaVoiceNames: [ClassicSoundEffect: String] = [
         .levelStart: "LetsGo",
-        .doorOpen: "Door",
-        .assignSkill: "MousePress",
-        .ohNo: "OhNo",
-        .explode: "Explode",
-        .splat: "Splat",
-        .drown: "Splash",
-        .vaporize: "Fire",
-        .hitSteel: "Chink",
-        .exitLevel: "Yippee",
-        .builderWarning: "Oing",
-        .nuke: "Die",
-        .yippee: "Yippee",
         .letsGo: "LetsGo",
-        .pop: "Pop",
+        .doorOpen: "Door2",
+        .assignSkill: "ChangeOpt2",
+        .ohNo: "OHNO1",
+        .splat: "Splat",
+        .hitSteel: "chink",
+        .builderWarning: "ting",
+        .drown: "water1",
+        .vaporize: "TenTonn",
+        .pop: "oing",
     ]
+
+    /// Effects with no named Amiga sample behind them.
+    ///
+    /// The banks hold nine sounds with an empty name, and some of these
+    /// effects are certainly among them. They stay unbound until somebody
+    /// identifies them by ear, rather than being bound to a guess.
+    public static let amigaUnboundEffects: [ClassicSoundEffect] =
+        ClassicSoundEffect.allCases.filter { amigaVoiceNames[$0] == nil }
 
     /// DOS Sound Blaster RAW sample mapping indices.
     public static let dosSoundBlasterIndices: [ClassicSoundEffect: Int] = [

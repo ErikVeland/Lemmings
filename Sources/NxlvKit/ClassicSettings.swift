@@ -298,7 +298,9 @@ public struct ClassicSettingsOptions: Sendable {
     /// because the player cannot tell which of their choices took effect.
     /// Adding a decoder means adding its source here.
     public static let playableMusic: [ClassicMusicSource] = [.amigaModules, .adaptiveDJ, .silent]
-    public static let playableSound: [ClassicSoundSource] = [.macintoshResources, .silent]
+    public static let playableSound: [ClassicSoundSource] = [
+        .macintoshResources, .amigaVoices, .silent,
+    ]
 
     /// What the installed data supports.
     ///
@@ -336,6 +338,8 @@ public struct ClassicSettingsOptions: Sendable {
 
         var sound: [ClassicSoundSource] = []
         if hasMacintoshDisk { sound.append(.macintoshResources) }
+        // The Amiga banks ship with the artwork, so the same flag covers both.
+        if hasAmigaDisk { sound.append(.amigaVoices) }
         sound = sound.filter { playableSound.contains($0) }
         sound.append(.silent)
 

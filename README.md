@@ -55,7 +55,10 @@ reported rather than ignored.
 | Music playback | Amiga ProTracker modules play. A folder of audio files the player supplies also plays |
 | SNES and Genesis music | Not playable. `SNESAudioPlayer` and `GenesisFMPlayer` hold track lists and render silence |
 | Macintosh MIDI | Not playable. No MIDI player exists, so the source is not offered |
-| Sound effects | Macintosh `snd` resources only. Amiga voices are not extracted from the disks |
+| Sound effects | Macintosh `snd` resources, and the Amiga banks. `basicfx` and `fullfx` are IFF 8SVX, decoded and selectable |
+| Amiga sound names | Eleven of twenty-one sounds carry a name and are bound. Nine have an empty name and stay unbound rather than guessed |
+| Port-exclusive levels | "Oh Yes! More Lemmings!" gathers the 30 Amiga versus levels. Loaded and tested. Not yet in the game library |
+| SNES and Genesis levels | Not extracted. `SNESLevelDecoder` returns a fixed list whatever ROM it is given, and `GenesisLevelDecoder` builds entries from a formula. Neither carries terrain |
 | Adaptive DJ | Plays. Mixes between the soundtracks the player supplied, cued by what the game does. Offered only when a soundtrack is installed |
 | Lemmings 3 movies | Decoded. All 3333 frames of the five `.FLI` files read, and match a decoder written separately. Not yet shown in the game |
 | Graphics sources | DOS VGA, Amiga OCS, and Macintosh artwork all decode and can be chosen |

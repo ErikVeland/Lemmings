@@ -164,13 +164,36 @@ def main():
         data = tracks(lib,source,dos=family=='holiday')
         files = adf_files(data) if family=='holiday' else custom_files(data)
         folder = output/family; folder.mkdir(parents=True,exist_ok=True)
+        listing = []
         for key,value in files.items():
-            if key.startswith(('ground','objects','special','leveldata','panel')):
-                (folder/key).write_bytes(unpack(value))
+            # Keep every file, not only the artwork the renderer needs. A full
+            # dump is the only way to learn what else a disk holds, such as the
+            # data behind the second panel layout.
+            try:
+                content = unpack(value); packed = True
+            except (ValueError, IndexError, struct.error):
+                # Not every file is ByteKiller packed. Write the stored bytes
+                # so a file that cannot be unpacked is still there to look at.
+                content = value; packed = False
+            (folder/key).write_bytes(content)
+            listing.append(dict(name=key,stored=len(value),size=len(content),packed=packed))
+        (folder/'contents.json').write_text(json.dumps(listing,indent=2)+'\n')
         provenance[name] = hashlib.sha256(source.read_bytes()).hexdigest()
     name = 'lemmings_amiga_0132/Lemmings_Disk1.ipf'; source = PORTS/name
-    code = custom_files(tracks(lib,source))['code']
-    (output/'lemmings/code').write_bytes(unpack(code))
+    # Disk 1 holds the code and the front end. Keep all of it for the same
+    # reason as above, under its own folder so it cannot collide with disk 2.
+    folder = output/'disk1'; folder.mkdir(parents=True,exist_ok=True)
+    listing = []
+    for key,value in custom_files(tracks(lib,source)).items():
+        try:
+            content = unpack(value); packed = True
+        except (ValueError, IndexError, struct.error):
+            content = value; packed = False
+        (folder/key).write_bytes(content)
+        listing.append(dict(name=key,stored=len(value),size=len(content),packed=packed))
+    (folder/'contents.json').write_text(json.dumps(listing,indent=2)+'\n')
+    # The renderer still expects the code where it has always been.
+    (output/'lemmings/code').write_bytes((folder/'code').read_bytes())
     provenance[name] = hashlib.sha256(source.read_bytes()).hexdigest()
     (output/'sources.json').write_text(json.dumps(provenance,indent=2)+'\n')
     lib.CAPSExit()

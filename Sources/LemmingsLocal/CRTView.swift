@@ -27,34 +27,34 @@ struct CRTSettings {
   /// A shadow mask tube, mild curvature, and only slight convergence error.
   /// It is sharper than a television, so the smear stays low.
   static let amiga1084 = CRTSettings(
-    curvature: 9.0,
-    scanlineDepth: 0.72,
-    beamWidth: 0.36,
-    beamBloom: 0.55,
-    maskStrength: 0.62,
+    curvature: 14.0,
+    scanlineDepth: 0.38,
+    beamWidth: 0.42,
+    beamBloom: 0.34,
+    maskStrength: 0.30,
     maskType: 1,
-    bloomAmount: 0.28,
-    gamma: 2.4,
-    brightness: 1.32,
-    convergence: 0.55,
-    vignette: 0.22,
+    bloomAmount: 0.14,
+    gamma: 2.2,
+    brightness: 1.16,
+    convergence: 0.25,
+    vignette: 0.12,
     pixelAspect: 1.0,
     colorLevels: 16)
 
   /// A television fed over composite, which is blurrier and bloomier.
   static let television = CRTSettings(
-    curvature: 6.0,
-    scanlineDepth: 0.60,
-    beamWidth: 0.48,
-    beamBloom: 0.95,
-    maskStrength: 0.45,
+    curvature: 10.0,
+    scanlineDepth: 0.34,
+    beamWidth: 0.52,
+    beamBloom: 0.50,
+    maskStrength: 0.22,
     maskType: 0,
-    bloomAmount: 0.45,
-    gamma: 2.4,
-    brightness: 1.28,
-    convergence: 1.4,
-    vignette: 0.34,
-    pixelAspect: 1.35,
+    bloomAmount: 0.22,
+    gamma: 2.2,
+    brightness: 1.14,
+    convergence: 0.55,
+    vignette: 0.18,
+    pixelAspect: 1.15,
     colorLevels: 16)
 }
 
@@ -274,7 +274,11 @@ private struct CRTUniforms {
     sourceTexture.replace(
       region: MTLRegionMake2D(0, 0, width, height), mipmapLevel: 0,
       withBytes: bytes, bytesPerRow: width * 4)
-    needsDisplay = true
+    // Draw straight away rather than asking for a redraw. Assigning a
+    // CAMetalLayer to `layer` makes this view layer-hosting, and a
+    // layer-hosting view never receives `draw(_:)`, so `needsDisplay` here
+    // would mark a redraw that never arrives and the tube would stay black.
+    render()
   }
 
   // MARK: - Drawing
@@ -285,6 +289,8 @@ private struct CRTUniforms {
     metalLayer?.contentsScale = scale
     metalLayer?.drawableSize = CGSize(
       width: bounds.width * scale, height: bounds.height * scale)
+    // A resize changes the drawable, so what was on screen no longer fits it.
+    render()
   }
 
   override func draw(_ dirtyRect: NSRect) {

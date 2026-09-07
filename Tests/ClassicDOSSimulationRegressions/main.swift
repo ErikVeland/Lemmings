@@ -439,10 +439,15 @@ private func testBombedBlockerOnSteelSuppressesExplosion() throws {
 }
 
 private func testBlockerCenterSuppressesAndUncoversExit() throws {
+    // This checks that a blocker hides the exit under it and that clearing the
+    // blocker reveals it again. The walker below steps from 39 to 40, so the
+    // zone starts three pixels earlier than 40: a lemming enters an exit three
+    // pixels in, and the point of interest here is the blocker at 40, not the
+    // pixel the exit accepts on.
     let trigger = ClassicDOSTrigger(
         id: 7,
         effect: .exit,
-        bounds: ClassicDOSRect(x1: 40, y1: 40, x2: 44, y2: 44)
+        bounds: ClassicDOSRect(x1: 37, y1: 40, x2: 44, y2: 44)
     )
     var seed = try ClassicDOSSimulation(
         terrain: floorTerrain(floorY: 40),
@@ -645,6 +650,74 @@ private func testReleaseRateZeroCanBeRestored() throws {
     simulation.setReleaseRate(0)
     try require(simulation.releaseRate == 0, "an RR-0 level could not restore its initial rate")
     try require(simulation.lastTickEvents == [.releaseRateChanged(0)], "restoring RR 0 emitted wrong events")
+}
+
+/// A lemming drops into an exit at the middle of the hole, whichever way it is
+/// walking.
+///
+/// An earlier version measured a fixed depth from the near edge of the trigger.
+/// That cannot work: trigger zones are four pixels wide in most styles and
+/// eight in others, and they do not sit at the middle of the exit either. The
+/// same depth therefore landed centrally in one style and at the edge in
+/// another, and it landed on opposite sides depending on the way the lemming
+/// walked.
+private func testExitTakesTheLemmingAtTheMiddle() throws {
+    /// Walks a lemming in from one side and reports where it vanished.
+    func entryPoint(zone: ClassicDOSRect, from startX: Int, facing: ClassicDOSDirection) throws -> Int? {
+        let exitTrigger = ClassicDOSTrigger(id: 1, effect: .exit, bounds: zone)
+        var simulation = try ClassicDOSSimulation(
+            terrain: floorTerrain(floorY: 40),
+            configuration: configuration(
+                totalLemmings: 1, releaseRate: 99,
+                entrances: [ClassicDOSPoint(x: 32, y: 39)],
+                triggers: [exitTrigger], maximumX: 191, maximumY: 95))
+        while simulation.tickCount < 58 { simulation.tick() }
+        simulation = try modifiedSimulation(simulation) { root in
+            try modifyLemmings(in: &root) { lemmings in
+                for index in lemmings.indices {
+                    lemmings[index]["foot"] = ["x": startX, "y": 40]
+                    lemmings[index]["direction"] = facing.rawValue
+                    lemmings[index]["action"] = ClassicDOSAction.walking.rawValue
+                    lemmings[index]["animationFrame"] = 0
+                }
+            }
+        }
+        // Walk until it enters, and report the x it entered at.
+        for _ in 0..<40 {
+            let x = simulation.lemmings.first?.foot.x
+            let entered = simulation.tick().contains {
+                if case let .actionChanged(_, _, to) = $0, to == .exiting { return true }
+                return false
+            }
+            if entered { return (x ?? 0) + facing.delta }
+        }
+        return nil
+    }
+
+    // A four pixel zone and an eight pixel zone, which both occur in the games.
+    for zone in [
+        ClassicDOSRect(x1: 20, y1: 40, x2: 24, y2: 44),
+        ClassicDOSRect(x1: 20, y1: 40, x2: 28, y2: 44),
+    ] {
+        let middle = (zone.x1 + zone.x2) / 2
+        let fromLeft = try entryPoint(zone: zone, from: zone.x1 - 6, facing: .right)
+        let fromRight = try entryPoint(zone: zone, from: zone.x2 + 5, facing: .left)
+        try require(
+            fromLeft == middle,
+            "walking right, the lemming entered at \(fromLeft.map(String.init) ?? "never") "
+                + "rather than the middle at \(middle)")
+        try require(
+            fromRight == middle,
+            "walking left, the lemming entered at \(fromRight.map(String.init) ?? "never") "
+                + "rather than the middle at \(middle)")
+    }
+
+    // A zone one pixel wide still has to accept a lemming.
+    let narrow = ClassicDOSRect(x1: 20, y1: 40, x2: 21, y2: 44)
+    let narrowEntry = try entryPoint(zone: narrow, from: 17, facing: .right)
+    try require(
+        narrowEntry != nil, "a one pixel exit rejected a lemming walking into it")
+    print("PASS a lemming enters an exit at its middle from either direction")
 }
 
 private func testCoolingTrapEmitsOneActivation() throws {
@@ -899,6 +972,7 @@ private func run() throws {
     try testActiveBombedBlockerCodableContinuation()
     try testReleaseRateZeroCanBeRestored()
     try testCoolingTrapEmitsOneActivation()
+    try testExitTakesTheLemmingAtTheMiddle()
     try testSplatterWaterUsesZeroHorizontalVelocity()
     try testDeterministicCodableContinuation()
     try testReplayInsertionOrdering()

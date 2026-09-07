@@ -20,9 +20,10 @@ set -euo pipefail
 
 project_dir="${0:A:h:h}"
 build_dir="$project_dir/.build/local"
-app_dir="$build_dir/Lemmings Local.app"
+app_dir="$build_dir/Ultimate Lemmings.app"
 version="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$project_dir/Resources/Info.plist")"
-zip_path="$build_dir/LemmingsLocal-$version-beta.zip"
+build_number="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleVersion' "$project_dir/Resources/Info.plist")"
+zip_path="$build_dir/UltimateLemmings-$version-beta$build_number.zip"
 
 # Use the Developer ID in the keychain unless the caller names another one.
 if [[ -z "${BETA_SIGNING_IDENTITY:-}" ]]; then
@@ -66,7 +67,10 @@ echo "==> Checking the signature"
 codesign --verify --deep --strict --verbose=1 "$app_dir"
 
 echo "==> Compressing"
-rm -f "$zip_path"
+# Remove every earlier zip, not just this one. A stale build sitting beside the
+# new one is how an unnotarized copy reached the beta testers once already: it
+# had the simpler name and looked like the obvious file to send.
+rm -f "$build_dir"/LemmingsLocal*.zip(N) "$build_dir"/UltimateLemmings*.zip(N)
 ditto -c -k --sequesterRsrc --keepParent "$app_dir" "$zip_path"
 
 if [[ -n "${BETA_NOTARY_PROFILE:-}" ]]; then
@@ -78,6 +82,26 @@ if [[ -n "${BETA_NOTARY_PROFILE:-}" ]]; then
   ditto -c -k --sequesterRsrc --keepParent "$app_dir" "$zip_path"
   echo "==> Notarized and stapled."
 fi
+
+# Check the zip a tester would actually download, rather than the app on this
+# machine. Unpack it somewhere fresh, mark it as downloaded, and ask Gatekeeper.
+echo "==> Verifying the finished zip the way a tester receives it"
+verify_dir="$(mktemp -d)"
+ditto -x -k "$zip_path" "$verify_dir"
+verify_app="$verify_dir/$(basename "$app_dir")"
+xattr -w com.apple.quarantine "0083;00000000;Safari;" "$verify_app"
+if verdict="$(spctl -a -vv "$verify_app" 2>&1)"; then
+  echo "    $(echo "$verdict" | tr '\n' ' ')"
+else
+  echo "    $(echo "$verdict" | tr '\n' ' ')"
+  if [[ -n "${BETA_NOTARY_PROFILE:-}" ]]; then
+    rm -rf "$verify_dir"
+    echo "FAILED: this zip is not accepted by Gatekeeper. Do not send it." >&2
+    exit 1
+  fi
+  echo "    (expected: this build was not notarized)"
+fi
+rm -rf "$verify_dir"
 
 echo
 echo "Zip:  $zip_path"
@@ -96,6 +120,6 @@ Then run this script again with BETA_NOTARY_PROFILE=lemmings-beta.
 
 Until then, a tester must clear the quarantine flag by hand:
 
-    xattr -dr com.apple.quarantine "/Applications/Lemmings Local.app"
+    xattr -dr com.apple.quarantine "/Applications/Ultimate Lemmings.app"
 NOTE
 fi

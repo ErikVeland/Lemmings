@@ -35,26 +35,38 @@ private func testArcadeLevelDecoder() throws {
     print("PASS ArcadeLevelDecoder bonus stages verified")
 }
 
-private func testSagaPlatformTitleIntegration() throws {
-    let titles: [ClassicTitle] = [
-        .snesSunsoftSpecial,
-        .genesisPresenter,
-        .arcadeBonus,
-        .amigaTwoPlayer
-    ]
-    for title in titles {
-        try require(title.expectedLevelCount != nil, "Missing expected level count for \(title.displayName)")
-        let campaignDef = ClassicCampaignDefinition.festive(title)
-        try require(campaignDef != nil, "Missing campaign definition for \(title.displayName)")
+/// These four titles were retired, and this records why.
+///
+/// Three of them never had levels. `SNESLevelDecoder` returns a fixed list
+/// whatever ROM it is handed, `GenesisLevelDecoder` builds its entries from a
+/// formula, and neither carries terrain, so nothing could be drawn or played.
+/// The arcade set has a ROM on disk but no decoder.
+///
+/// The fourth, the Amiga two-player levels, is real and did not go away: those
+/// twenty levels live in "Oh Yes! More Lemmings!" alongside ten more from Oh
+/// No! and the thirty Mega Drive levels Sunsoft wrote. Keeping the old title as
+/// well would have listed the same levels twice and counted them twice.
+///
+/// Restore a title here only when its levels load with terrain.
+private func testRetiredTitlesAreGone() throws {
+    let names = ClassicTitle.allCases.map(\.rawValue)
+    for retired in ["snesSunsoftSpecial", "genesisPresenter", "arcadeBonus", "amigaTwoPlayer"] {
+        try require(
+            !names.contains(retired),
+            "\(retired) is back in the library. It needs levels that load, not just a name")
     }
-    print("PASS ClassicSaga and ClassicCampaign integration for platform titles verified")
+    // The pack that replaced the one real title is still there.
+    try require(
+        names.contains("ohYesMoreLemmings"),
+        "the port-exclusive pack is missing from the library")
+    print("PASS the four titles with no playable levels stay out of the library")
 }
 
 do {
     try testSNESLevelDecoder()
     try testGenesisLevelDecoder()
     try testArcadeLevelDecoder()
-    try testSagaPlatformTitleIntegration()
+    try testRetiredTitlesAreGone()
     print("Platform exclusive tests passed successfully.")
 } catch {
     FileHandle.standardError.write(Data("Platform exclusive tests failed: \(error)\n".utf8))

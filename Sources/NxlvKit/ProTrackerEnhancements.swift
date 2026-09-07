@@ -14,11 +14,23 @@ public struct ProTrackerVoiceTuning: Codable, Equatable, Sendable {
     public var reverbSend: Double
     /// Shifts this instrument across the stereo field, from -1 to 1.
     public var panOffset: Double
+    /// Pulls this instrument toward the middle, from 0 to 1.
+    ///
+    /// This is a pull rather than a position because a module plays the same
+    /// sample on whichever channel is free, and the channels are panned apart.
+    /// A fixed offset would centre the sample on one side and push it further
+    /// out on the other. Scaling the channel's own pan works wherever the
+    /// note lands.
+    public var centering: Double
 
-    public init(gain: Double = 1, reverbSend: Double = 0, panOffset: Double = 0) {
+    public init(
+        gain: Double = 1, reverbSend: Double = 0, panOffset: Double = 0,
+        centering: Double = 0
+    ) {
         self.gain = gain
         self.reverbSend = reverbSend
         self.panOffset = panOffset
+        self.centering = centering
     }
 }
 
@@ -44,6 +56,13 @@ public struct ProTrackerEnhancements: Codable, Equatable, Sendable {
     public var reverbDamping: Double
 
     public var outputGain: Double
+    /// How far percussion is pulled toward the middle, from 0 to 1.
+    ///
+    /// The Amiga panned its four channels hard apart, so a kick drum sat in
+    /// one ear. Modern mixes put the beat in the middle. Which samples count
+    /// as percussion is worked out per module, because a module names its own
+    /// samples.
+    public var percussionCentering: Double
     /// Keyed by sample index, counting from zero.
     public var voiceTuning: [Int: ProTrackerVoiceTuning]
 
@@ -61,6 +80,7 @@ public struct ProTrackerEnhancements: Codable, Equatable, Sendable {
         reverbRoomSize: Double = 0.72,
         reverbDamping: Double = 0.45,
         outputGain: Double = 1,
+        percussionCentering: Double = 0,
         voiceTuning: [Int: ProTrackerVoiceTuning] = [:]
     ) {
         self.interpolation = interpolation
@@ -76,30 +96,42 @@ public struct ProTrackerEnhancements: Codable, Equatable, Sendable {
         self.reverbRoomSize = reverbRoomSize
         self.reverbDamping = reverbDamping
         self.outputGain = outputGain
+        self.percussionCentering = percussionCentering
         self.voiceTuning = voiceTuning
     }
 
     /// Exactly what the Amiga did.
     public static let faithful = ProTrackerEnhancements()
 
-    /// A restrained modern setting.
+    /// A modern setting with weight and attack.
     ///
-    /// It lifts the low end that 8-bit samples lack, opens the top a little,
-    /// pulls the hard panning inward, and adds a short room. The aim is a
-    /// track that still sounds like the original, played on modern speakers.
+    /// The earlier version of this dulled the music rather than lifting it. It
+    /// scooped the mids, narrowed the stereo field, washed the transients in
+    /// reverb, and turned the output down, all on top of the smoothing that
+    /// linear interpolation already applies to an 8-bit sample. Next to the
+    /// faithful setting it sounded muffled, which is the opposite of the point.
+    ///
+    /// This keeps the interpolation, because it removes the aliasing whine,
+    /// and answers it with air at the top instead of a cut in the middle. The
+    /// low shelf sits lower so it adds weight rather than mud, the reverb is
+    /// short enough to leave attacks alone, and the field opens back up.
+    ///
+    /// The output gain leaves room for the boosts. The mixer clips rather than
+    /// limits, so the headroom has to come from somewhere.
     public static let modern = ProTrackerEnhancements(
         interpolation: .linear,
-        stereoSeparation: 0.62,
-        lowGainDB: 3.5,
-        lowFrequency: 110,
-        midGainDB: -1.0,
-        midFrequency: 800,
-        highGainDB: 2.5,
-        highFrequency: 7000,
-        reverbMix: 0.16,
-        reverbRoomSize: 0.70,
-        reverbDamping: 0.5,
-        outputGain: 0.92
+        stereoSeparation: 0.80,
+        lowGainDB: 4.0,
+        lowFrequency: 90,
+        midGainDB: 0,
+        midFrequency: 900,
+        highGainDB: 3.5,
+        highFrequency: 8000,
+        reverbMix: 0.07,
+        reverbRoomSize: 0.60,
+        reverbDamping: 0.45,
+        outputGain: 0.85,
+        percussionCentering: 0.85
     )
 
     public var isFaithful: Bool { self == .faithful }
@@ -259,7 +291,17 @@ public struct ProTrackerEnhancedPlayer: Sendable {
         var player = ProTrackerPlayer(module: module, sampleRate: sampleRate)
         player.interpolation = enhancements.interpolation
         self.player = player
-        self.enhancements = enhancements
+
+        // Which samples are drums depends on the module, so the tuning is
+        // worked out here rather than living in a shared preset.
+        var resolved = enhancements
+        if enhancements.percussionCentering > 0 {
+            resolved.voiceTuning = ProTrackerPercussion.centering(
+                for: module,
+                amount: enhancements.percussionCentering,
+                existing: enhancements.voiceTuning)
+        }
+        self.enhancements = resolved
         outputs = [ProTrackerVoiceOutput](
             repeating: .silent, count: module.channelCount)
 
@@ -306,6 +348,8 @@ public struct ProTrackerEnhancedPlayer: Sendable {
 
             // -1 is hard left, 1 is hard right.
             var pan = Self.isLeftChannel(index) ? -separation : separation
+            // Pull toward the middle first, then apply any deliberate shift.
+            pan *= 1 - min(1, max(0, tuning?.centering ?? 0))
             pan = min(1, max(-1, pan + (tuning?.panOffset ?? 0)))
             let leftGain = (1 - pan) / 2
             let rightGain = (1 + pan) / 2

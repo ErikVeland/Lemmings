@@ -4,15 +4,12 @@ import Foundation
 public enum ClassicAchievementID: String, CaseIterable, Codable, Sendable {
     case firstRescue
     case lemmingsComplete
-    case snesSpecialComplete
     case xmas1991Complete
     case ohNoComplete
-    case genesisPresenterComplete
     case xmas1992Complete
-    case arcadeBonusComplete
     case lemmings2Complete
     case holiday1993Complete
-    case amigaTwoPlayerComplete
+    case ohYesMoreLemmingsComplete
     case lemmings3Complete
     case holiday1994Complete
     case festiveComplete
@@ -41,23 +38,14 @@ public extension ClassicAchievement {
             id: .lemmingsComplete, title: "The Original",
             detail: "Pass every Lemmings level in order."),
         ClassicAchievement(
-            id: .snesSpecialComplete, title: "Sunsoft Master",
-            detail: "Pass every SNES Sunsoft Special level."),
-        ClassicAchievement(
             id: .xmas1991Complete, title: "A 1991 Christmas",
             detail: "Pass every Xmas Lemmings 1991 level in order."),
         ClassicAchievement(
             id: .ohNoComplete, title: "Oh No! No More",
             detail: "Pass every Oh No! More Lemmings level in order."),
         ClassicAchievement(
-            id: .genesisPresenterComplete, title: "Genesis Presenter",
-            detail: "Pass every Genesis Presenter level."),
-        ClassicAchievement(
             id: .xmas1992Complete, title: "A 1992 Christmas",
             detail: "Pass every Xmas Lemmings 1992 level in order."),
-        ClassicAchievement(
-            id: .arcadeBonusComplete, title: "Arcade Champion",
-            detail: "Pass every Arcade extra level."),
         ClassicAchievement(
             id: .lemmings2Complete, title: "Twelve Tribes",
             detail: "Pass every Lemmings 2 level in order."),
@@ -65,8 +53,8 @@ public extension ClassicAchievement {
             id: .holiday1993Complete, title: "Holiday 1993",
             detail: "Pass every Holiday Lemmings 1993 level in order."),
         ClassicAchievement(
-            id: .amigaTwoPlayerComplete, title: "Dual Master",
-            detail: "Pass every Amiga 2-Player split-screen level."),
+            id: .ohYesMoreLemmingsComplete, title: "Collector",
+            detail: "Pass every level the other machines kept to themselves."),
         ClassicAchievement(
             id: .lemmings3Complete, title: "A New World",
             detail: "Pass every Lemmings 3 level in order."),
@@ -184,15 +172,12 @@ public struct ClassicAchievementProgress: Codable, Equatable, Sendable {
     ) -> ClassicAchievementID {
         switch title {
         case .lemmings: return .lemmingsComplete
-        case .snesSunsoftSpecial: return .snesSpecialComplete
         case .xmasLemmings1991: return .xmas1991Complete
         case .ohNoMoreLemmings: return .ohNoComplete
-        case .genesisPresenter: return .genesisPresenterComplete
         case .xmasLemmings1992: return .xmas1992Complete
-        case .arcadeBonus: return .arcadeBonusComplete
         case .lemmings2TheTribes: return .lemmings2Complete
         case .holidayLemmings1993: return .holiday1993Complete
-        case .amigaTwoPlayer: return .amigaTwoPlayerComplete
+        case .ohYesMoreLemmings: return .ohYesMoreLemmingsComplete
         case .lemmings3TheChronicles: return .lemmings3Complete
         case .holidayLemmings1994: return .holiday1994Complete
         }

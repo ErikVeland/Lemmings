@@ -13,30 +13,24 @@ import Foundation
 /// A release in the combined canon, in the order it appeared.
 public enum ClassicTitle: String, CaseIterable, Codable, Sendable {
     case lemmings
-    case snesSunsoftSpecial
     case xmasLemmings1991
     case ohNoMoreLemmings
-    case genesisPresenter
     case xmasLemmings1992
-    case arcadeBonus
     case lemmings2TheTribes
     case holidayLemmings1993
-    case amigaTwoPlayer
+    case ohYesMoreLemmings
     case lemmings3TheChronicles
     case holidayLemmings1994
 
     public var displayName: String {
         switch self {
         case .lemmings: return "Lemmings"
-        case .snesSunsoftSpecial: return "SNES Sunsoft Special"
         case .xmasLemmings1991: return "Xmas Lemmings 1991"
         case .ohNoMoreLemmings: return "Oh No! More Lemmings"
-        case .genesisPresenter: return "Genesis Presenter & Bonus"
         case .xmasLemmings1992: return "Xmas Lemmings 1992"
-        case .arcadeBonus: return "Arcade Extra Levels"
         case .lemmings2TheTribes: return "Lemmings 2: The Tribes"
         case .holidayLemmings1993: return "Holiday Lemmings 1993"
-        case .amigaTwoPlayer: return "Amiga 2-Player Split-Screen"
+        case .ohYesMoreLemmings: return "Oh Yes! More Lemmings!"
         case .lemmings3TheChronicles: return "Lemmings 3: The Chronicles"
         case .holidayLemmings1994: return "Holiday Lemmings 1994"
         }
@@ -51,13 +45,12 @@ public enum ClassicTitle: String, CaseIterable, Codable, Sendable {
     public var expectedLevelCount: Int? {
         switch self {
         case .lemmings: return 120
-        case .snesSunsoftSpecial: return 5
         case .ohNoMoreLemmings: return 100
-        case .genesisPresenter: return 60
         case .xmasLemmings1991, .xmasLemmings1992: return 4
         case .holidayLemmings1993, .holidayLemmings1994: return 32
-        case .arcadeBonus: return 10
-        case .amigaTwoPlayer: return 20
+        // Twenty Amiga versus levels, ten from Oh No!, and thirty
+        // Mega Drive levels Sunsoft wrote for the Japanese release.
+        case .ohYesMoreLemmings: return 60
         case .lemmings2TheTribes: return 120
         case .lemmings3TheChronicles: return 90
         }

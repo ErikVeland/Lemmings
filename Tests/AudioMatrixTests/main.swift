@@ -82,7 +82,16 @@ private func testAudioSettingsOptions() throws {
     try require(!options.music.contains(.macintoshMIDI), "Macintosh MIDI was offered with no player")
     try require(
         options.sound.contains(.macintoshResources), "Macintosh sound should be offered")
-    try require(!options.sound.contains(.amigaVoices), "Amiga voices were offered with no data")
+    // The Amiga banks are decoded now, so this source is offered wherever the
+    // Amiga data is installed. It used to be absent for want of a reader.
+    try require(
+        options.sound.contains(.amigaVoices),
+        "Amiga voices should be offered once the Amiga data is installed")
+    let withoutAmiga = ClassicSettingsOptions.available(
+        hasDOSData: true, hasAmigaDisk: false, hasMacintoshDisk: true, moduleCount: 14)
+    try require(
+        !withoutAmiga.sound.contains(.amigaVoices),
+        "Amiga voices were offered with no Amiga data installed")
 
     print("PASS only sources with a decoder behind them are offered")
 }

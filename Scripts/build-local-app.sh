@@ -3,7 +3,7 @@ set -euo pipefail
 
 project_dir="${0:A:h:h}"
 build_dir="$project_dir/.build/local"
-app_dir="$build_dir/Lemmings Local.app"
+app_dir="$build_dir/Ultimate Lemmings.app"
 contents_dir="$app_dir/Contents"
 deployment_target="13.0"
 architectures=(arm64 x86_64)
@@ -42,6 +42,7 @@ done
 lipo -create "${library_inputs[@]}" -output "$contents_dir/Frameworks/libNxlvKit.dylib"
 lipo -create "${executable_inputs[@]}" -output "$contents_dir/MacOS/LemmingsLocal"
 cp "$project_dir/Resources/Info.plist" "$contents_dir/Info.plist"
+zsh "$project_dir/Scripts/build-app-icon.sh" "$contents_dir/Resources/AppIcon.icns"
 zsh "$project_dir/Scripts/bundle-game-data.sh" "$contents_dir/Resources" all
 
 # Seal the finished bundle after resources are copied. This local ad-hoc

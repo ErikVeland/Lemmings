@@ -19,6 +19,18 @@ public struct ProTrackerSample: Sendable, Equatable {
     public let repeatStart: Int
     public let repeatLength: Int
 
+    public init(
+        name: String, data: [Int8], finetune: Int, volume: Int,
+        repeatStart: Int, repeatLength: Int
+    ) {
+        self.name = name
+        self.data = data
+        self.finetune = finetune
+        self.volume = volume
+        self.repeatStart = repeatStart
+        self.repeatLength = repeatLength
+    }
+
     public var loops: Bool { repeatLength > 2 }
 }
 

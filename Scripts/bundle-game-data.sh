@@ -25,7 +25,10 @@ copy_options=(-a --exclude=.DS_Store --exclude='*.[Ee][Xx][Ee]' --exclude='*.[Cc
 case "$2" in
   all)
     rsync "${copy_options[@]}" "$project_dir/Sources/Ports/" "$resources_dir/Ports/"
-    rsync -a --exclude=.DS_Store "$project_dir/Sources/Music/" "$resources_dir/Music/"
+    rsync -a --exclude=.DS_Store --exclude='*.wav' \
+      "$project_dir/Sources/Music/" "$resources_dir/Music/"
+    zsh "$project_dir/Scripts/encode-soundtracks.sh" \
+      "$project_dir/Sources/Music" "$resources_dir/Music"
     zsh "$project_dir/Scripts/prepare-holiday-data.sh" "$resources_dir"
     python3 "$project_dir/Tools/MacArtwork/prepare.py" "$resources_dir/MacArtwork"
     python3 "$project_dir/Tools/AmigaArtwork/prepare.py" "$resources_dir/AmigaArtwork"

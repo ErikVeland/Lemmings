@@ -2,6 +2,16 @@
 
 This page tells you how to make a beta build and how a tester opens it.
 
+## Beta 4
+
+Beta 4 is version `0.1`, build `4`. It includes the new application icon.
+The tester package is `LemmingsLocal-0.1-beta4.zip` for Intel and Apple silicon
+Macs running macOS 13 or later. The slim package retains the game music modules
+and omits the studio soundtrack recordings.
+
+The build number in `Resources/Info.plist` also sets the beta number in the
+package filename. Increase it before each new beta release.
+
 ## Make a build
 
 Run this command in the project directory:
@@ -28,25 +38,28 @@ macOS blocks a downloaded app that Apple has not notarized. An unsigned build
 runs on your computer. It does not run on the computer of a tester.
 
 The script finds the Developer ID in your keychain and signs the app with it.
-Notarization needs one more step, which you must do yourself. The command asks
-for an app-specific password.
+Notarization uses an App Store Connect API key. The key is already stored in
+the keychain under the profile name `lemmings-beta`.
 
-1. Make an app-specific password at <https://account.apple.com>.
-2. Store the credentials one time:
+To make a notarized build, set the profile:
 
-   ```sh
-   xcrun notarytool store-credentials lemmings-beta \
-     --apple-id wigwammultimedia@mac.com --team-id 54WU29TRTY
-   ```
+```sh
+BETA_SLIM=1 BETA_NOTARY_PROFILE=lemmings-beta zsh Scripts/package-beta.sh
+```
 
-3. Run the script again with the profile:
+The script uploads the build, waits for Apple, and staples the ticket to the
+app. A stapled app passes Gatekeeper with no network connection.
 
-   ```sh
-   BETA_NOTARY_PROFILE=lemmings-beta zsh Scripts/package-beta.sh
-   ```
+App-specific passwords do not work for this account. Use the API key.
 
-The script then uploads the build, waits for Apple, and staples the ticket.
-After this, the zip opens on any Mac with no warning.
+To store the key again on another computer, use the key file, the key ID, and
+the issuer ID:
+
+```sh
+xcrun notarytool store-credentials lemmings-beta \
+  --key AuthKey_MNWTSU7QGZ.p8 --key-id MNWTSU7QGZ \
+  --issuer 7b152c28-1a8d-4980-834f-7cb8530365b0
+```
 
 ## Instructions for a tester
 
@@ -54,17 +67,17 @@ Send these four steps with the zip file.
 
 1. Download the zip file.
 2. Double-click the zip file to unpack it.
-3. Move `Lemmings Local.app` to your Applications folder.
+3. Move `Ultimate Lemmings.app` to your Applications folder.
 4. Open the app.
 
-If the build is not notarized, macOS shows a warning. The tester must run this
-command one time:
+A notarized build opens with no warning and needs no other step.
+
+If you send a build that is not notarized, macOS stops it. The tester must then
+run this command one time:
 
 ```sh
-xattr -dr com.apple.quarantine "/Applications/Lemmings Local.app"
+xattr -dr com.apple.quarantine "/Applications/Ultimate Lemmings.app"
 ```
-
-After this command, the app opens normally.
 
 ## What to test
 

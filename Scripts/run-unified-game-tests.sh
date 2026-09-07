@@ -12,4 +12,4 @@ swiftc -swift-version 6 -warnings-as-errors \
   -I "$build_dir/modules" -L "$build_dir" -lNxlvKit \
   -Xlinker -rpath -Xlinker "$build_dir" \
   -o "$build_dir/UnifiedGameTests" "$project_dir/Tests/UnifiedGameTests/main.swift"
-"$build_dir/UnifiedGameTests" "${1:-$project_dir/.build/local/Lemmings Local.app/Contents/Resources}"
+"$build_dir/UnifiedGameTests" "${1:-$project_dir/.build/local/Ultimate Lemmings.app/Contents/Resources}"

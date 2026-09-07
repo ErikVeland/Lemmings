@@ -139,6 +139,40 @@ final class SoundEffectPlayer: @unchecked Sendable {
     return loaded
   }
 
+  /// Loads the Amiga digitised sounds from the two banks on the game disk.
+  ///
+  /// `basicfx` holds the voices and the common effects. `fullfx` holds the
+  /// trap sounds. Names are matched without case, because the banks mix
+  /// `Splat` with `chink`. Sounds whose name is empty are skipped: nothing
+  /// says which effect they belong to, and binding them to a guess would play
+  /// the wrong sound rather than none.
+  @discardableResult
+  func loadAmigaSounds(directory: URL) throws -> [ClassicSoundEffect] {
+    var byName: [String: AmigaSound] = [:]
+    for bank in ["basicfx", "fullfx"] {
+      let url = directory.appendingPathComponent(bank)
+      guard let data = try? Data(contentsOf: url, options: .mappedIfSafe) else { continue }
+      for sound in try AmigaSoundBank.decode(data) {
+        guard let name = sound.name else { continue }
+        byName[name.lowercased()] = sound
+      }
+    }
+
+    lock.lock()
+    library = [:]
+    rates = [:]
+    for (effect, name) in ClassicSoundMapping.amigaVoiceNames {
+      guard let sound = byName[name.lowercased()] else { continue }
+      library[effect] = sound.samples
+      rates[effect] = sound.sampleRate
+    }
+    let loaded = library.keys.sorted { $0.rawValue < $1.rawValue }
+    lock.unlock()
+
+    loadedEffects = loaded
+    return loaded
+  }
+
   // MARK: - Playing
 
   /// Turns a stereo position into a pair of channel gains.

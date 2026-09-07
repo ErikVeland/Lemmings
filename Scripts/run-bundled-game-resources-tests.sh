@@ -2,7 +2,7 @@
 set -euo pipefail
 project_dir="${0:A:h:h}"
 build_dir="$project_dir/.build/bundle-tests"
-library_dir="$project_dir/.build/local/Lemmings Local.app/Contents/Frameworks"
+library_dir="$project_dir/.build/local/Ultimate Lemmings.app/Contents/Frameworks"
 module_dir="$project_dir/.build/local/$(uname -m)/modules"
 mkdir -p "$build_dir"
 swiftc -swift-version 6 -warnings-as-errors \
@@ -16,5 +16,5 @@ cd /private/tmp
 if (( $# )); then
   "$build_dir/BundleTests" "${app_paths[@]}"
 else
-  "$build_dir/BundleTests" "$project_dir/.build/native-l2/Lemmings 2 Native.app" "$project_dir/.build/local/Lemmings Local.app"
+  "$build_dir/BundleTests" "$project_dir/.build/native-l2/Lemmings 2 Native.app" "$project_dir/.build/local/Ultimate Lemmings.app"
 fi

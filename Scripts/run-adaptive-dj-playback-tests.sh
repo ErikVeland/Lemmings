@@ -18,4 +18,4 @@ swiftc -swift-version 6 -warnings-as-errors \
   "$project_dir/Sources/LemmingsLocal/AdaptiveDJPlayer.swift" \
   "$project_dir/Sources/LemmingsLocal/SoundtrackPlayer.swift" \
   "$project_dir/Tests/AdaptiveDJPlaybackTests/main.swift"
-"$build_dir/AdaptiveDJPlaybackTests" "${1:-$project_dir/.build/local/Lemmings Local.app/Contents/Resources/Music}"
+"$build_dir/AdaptiveDJPlaybackTests" "${1:-$project_dir/.build/local/Ultimate Lemmings.app/Contents/Resources/Music}"

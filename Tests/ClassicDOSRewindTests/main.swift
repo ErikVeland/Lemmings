@@ -122,7 +122,16 @@ private func testProducesAValidReplay(_ directory: URL) throws {
     var session = ClassicDOSRewind(simulation: start)
     for _ in 0..<60 { session.tick() }
     _ = session.assign(.digger, to: 0)
-    for _ in 0..<600 where !session.simulation.isComplete { session.tick() }
+    // Play to the end, the same rule the replay player uses. A fixed budget
+    // here made the test depend on the level finishing inside it: any change
+    // that cost a few ticks left this session stopped mid-level while the
+    // replay ran on to the end, and the two states then differed.
+    var played = 0
+    while !session.simulation.isComplete, played < ClassicDOSReplayPlayer.defaultTickLimit {
+        session.tick()
+        played += 1
+    }
+    print("     (level one finished after \(session.simulation.tickCount) ticks)")
 
     let replay = session.replay(
         rank: "Fun", number: 1, title: "Just dig!", initialStateHash: initial)

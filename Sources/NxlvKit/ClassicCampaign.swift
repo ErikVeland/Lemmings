@@ -78,6 +78,19 @@ public struct ClassicCampaignLevel: Codable, Equatable, Sendable {
     public let archiveSection: Int
     public let usesOddTableProperties: Bool
     public let level: ClassicLevel
+
+    /// Wraps a level that came from somewhere other than a campaign archive.
+    ///
+    /// A fan level is read from its own file, so it has no archive to point
+    /// back at. The archive fields are zero here and nothing should follow
+    /// them: they exist for levels the game reads out of a `.DAT`.
+    public static func standalone(
+        _ level: ClassicLevel, rank: String = "Fan", number: Int = 1
+    ) -> ClassicCampaignLevel {
+        ClassicCampaignLevel(
+            rank: rank, number: number, archiveFile: 0, archiveSection: 0,
+            usesOddTableProperties: false, level: level)
+    }
 }
 
 public struct ClassicCampaign: Codable, Equatable, Sendable {
@@ -158,19 +171,11 @@ public struct ClassicCampaignDefinition: Codable, Equatable, Sendable {
         case .xmasLemmings1991, .xmasLemmings1992: names = ["Xmas"]
         case .holidayLemmings1993: names = ["Flurry", "Blizzard"]
         case .holidayLemmings1994: names = ["Frost", "Hail"]
-        case .snesSunsoftSpecial: names = ["Sunsoft Special"]
-        case .genesisPresenter: names = ["Presenter"]
-        case .arcadeBonus: names = ["Arcade Stage"]
-        case .amigaTwoPlayer: names = ["Two Player"]
         default: return nil
         }
         let count: Int
         switch title {
         case .xmasLemmings1991, .xmasLemmings1992: count = 4
-        case .snesSunsoftSpecial: count = 5
-        case .arcadeBonus: count = 10
-        case .amigaTwoPlayer: count = 20
-        case .genesisPresenter: count = 30
         default: count = 16
         }
         return .init(name: title.displayName, levelFilePrefix: "LEVEL",

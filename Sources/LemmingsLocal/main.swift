@@ -68,6 +68,30 @@ let achievementProgressKey = "ClassicAchievementProgress"
   /// The soundtrack this level plays, on the same basis.
   private var levelMusic: ClassicMusicSource?
   private let effects = SoundEffectPlayer()
+
+  /// Which fan level screen is showing, if any.
+  ///
+  /// Browsing sits on top of the title screen rather than inside the game
+  /// flow. The flow tracks progress through the finished releases and is
+  /// saved; wandering through hundreds of fan packs is not progress and does
+  /// not belong in it.
+  private enum FanScreen { case off, packs, levels }
+  private var fanScreen: FanScreen = .off
+  private var fanPacks: [URL] = []
+  private var fanEntries: [FanLevelLibrary.Entry] = []
+  private var fanPack: URL?
+  private var fanChoice = 0
+  /// First row of the visible window, so a click maps back to the right item.
+  private var fanWindowStart = 0
+  /// Rows on screen at once. The menu font shrinks to fit whatever it is
+  /// given, and hundreds of rows would shrink it to nothing.
+  private static let fanRowsPerScreen = 12
+  /// True while a fan level is on screen, which keeps the campaign flow from
+  /// redrawing over it. A fan level has no flow: it is not part of any run.
+  private var fanPlaying = false
+  /// Levels still to play, when a whole pack was started at once.
+  private var fanQueue: [FanLevelLibrary.Entry] = []
+  private var fanQueueIndex = 0
   private var muteItem: NSMenuItem?
   private var presetItem: NSMenuItem?
   private var gamesMenu: NSMenu?
@@ -117,7 +141,12 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
     do {
       try effects.start()
-      if let saved = UserDefaults.standard.string(forKey: macImageKey) {
+      // Load the bank the saved settings ask for. Only the Macintosh source
+      // falls back to a bundled image, because it is the one that needs a disk
+      // the player may not have chosen yet.
+      if settings.sound == .amigaVoices {
+        loadSoundEffects(for: .amigaVoices)
+      } else if let saved = UserDefaults.standard.string(forKey: macImageKey) {
         loadSoundEffects(from: URL(fileURLWithPath: saved))
       } else if let bundled = BundledGameResources.macintoshSoundImage() {
         loadSoundEffects(from: bundled)
@@ -189,7 +218,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     appMenu.addItem(settingsItem)
     appMenu.addItem(.separator())
     appMenu.addItem(
-      withTitle: "Quit Lemmings Local",
+      withTitle: "Quit Ultimate Lemmings",
       action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
     appItem.submenu = appMenu
 
@@ -215,6 +244,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
     _ = add(fileMenu, "Game Library", #selector(returnToLibrary), "l", modifiers: [.command, .shift])
     fileMenu.addItem(.separator())
     _ = add(fileMenu, "Add Game…", #selector(chooseContent), "o")
+    // Not Shift-Command-L: that already returns to the game library, and the
+    // two chords are the same once AppKit has folded the shift in.
+    _ = add(fileMenu, "Fan Levels…", #selector(showFanLevels), "f",
+      modifiers: [.command, .shift])
     _ = add(fileMenu, "Open Level File…", #selector(chooseNxlvLevel), "O",
             modifiers: [.command, .shift])
     fileMenu.addItem(.separator())
@@ -245,6 +278,33 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   // MARK: - Display path
 
+  /// Puts the playfield and panel back into a container under Auto Layout.
+  ///
+  /// The tube takes these views out of the window and gives them fixed frames.
+  /// Removing a view from its superview throws away every constraint that
+  /// mentioned it, so coming back to the flat screen has to build them again.
+  /// Without this the flat setting showed an empty window.
+  private func layOutPlainViews(in root: NSView) {
+    for view in [playfield, panel] as [NSView] {
+      view.removeFromSuperview()
+      view.translatesAutoresizingMaskIntoConstraints = false
+      root.addSubview(view)
+    }
+    let panelHeight = panel.heightAnchor.constraint(equalToConstant: panel.intrinsicHeight)
+    panelHeightConstraint = panelHeight
+    NSLayoutConstraint.activate([
+      playfield.leadingAnchor.constraint(equalTo: root.leadingAnchor),
+      playfield.trailingAnchor.constraint(equalTo: root.trailingAnchor),
+      playfield.topAnchor.constraint(equalTo: root.topAnchor),
+      playfield.bottomAnchor.constraint(equalTo: panel.topAnchor),
+
+      panel.leadingAnchor.constraint(equalTo: root.leadingAnchor),
+      panel.trailingAnchor.constraint(equalTo: root.trailingAnchor),
+      panel.bottomAnchor.constraint(equalTo: root.bottomAnchor),
+      panelHeight,
+    ])
+  }
+
   /// Chooses between drawing straight to the window and drawing through the
   /// tube.
   ///
@@ -253,7 +313,16 @@ let achievementProgressKey = "ClassicAchievementProgress"
   /// one per game row, which is both wrong and invisible.
   private func applyDisplayMode() {
     guard !sequelIsActive else { return }
+    // The tube stands in for the screen the game was played on, so it applies
+    // to the game. Menus stay flat.
+    //
+    // A menu is drawn with text laid out for a large view, and the tube is fed
+    // a 320 by 200 picture, so routing menus through it renders that text a
+    // few pixels tall and then magnifies it. The result is unreadable however
+    // gentle the tube settings are: it is a resolution problem, not a
+    // brightness one.
     let wantsTube = settings.display != .flat && crtView.isAvailable
+      && phase == .playing
     guard wantsTube != tubeIsActive else {
       if wantsTube { crtView.settings = tubeSettings() }
       return
@@ -267,8 +336,11 @@ let achievementProgressKey = "ClassicAchievementProgress"
       panel.removeFromSuperview()
       playfield.translatesAutoresizingMaskIntoConstraints = true
       panel.translatesAutoresizingMaskIntoConstraints = true
-      playfield.frame = CGRect(x: 0, y: 0, width: 320, height: 160)
+      // A menu hides the panel, and the picture should use those rows rather
+      // than leaving a black band where the panel would be.
       panel.frame = CGRect(x: 0, y: 0, width: 320, height: 40)
+      playfield.frame = CGRect(
+        x: 0, y: 0, width: 320, height: panel.isMenuMode ? 200 : 160)
       playfield.viewport.zoom = 1
       crtView.onMouseDown = { [weak self] point in self?.tubeClick(point) }
       crtView.onMouseMoved = { [weak self] point in self?.tubeMove(point) }
@@ -280,8 +352,11 @@ let achievementProgressKey = "ClassicAchievementProgress"
       window.contentView = crtView
       window.makeFirstResponder(crtView)
     } else {
-      window.contentView = plainRoot
+      guard let root = plainRoot else { return }
+      layOutPlainViews(in: root)
+      window.contentView = root
       window.makeFirstResponder(playfield)
+      fitClassicDisplay()
     }
   }
 
@@ -313,8 +388,13 @@ let achievementProgressKey = "ClassicAchievementProgress"
     NSGraphicsContext.current?.imageInterpolation = .none
     NSColor.black.setFill()
     CGRect(origin: .zero, size: size).fill()
-    panelRep.draw(in: CGRect(x: 0, y: 0, width: 320, height: 40))
-    playfieldRep.draw(in: CGRect(x: 0, y: 40, width: 320, height: 160))
+    if panel.isMenuMode {
+      // No panel on a menu, so the picture fills the screen.
+      playfieldRep.draw(in: CGRect(x: 0, y: 0, width: 320, height: 200))
+    } else {
+      panelRep.draw(in: CGRect(x: 0, y: 0, width: 320, height: 40))
+      playfieldRep.draw(in: CGRect(x: 0, y: 40, width: 320, height: 160))
+    }
     composed.unlockFocus()
 
     var rect = CGRect(origin: .zero, size: size)
@@ -371,6 +451,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private func apply(_ updated: ClassicSettings) {
     let artworkChanged = settings.graphics != updated.graphics
     settings = updated
+    let previousSound = settings.sound
     if let data = try? JSONEncoder().encode(updated) {
       UserDefaults.standard.set(data, forKey: settingsKey)
     }
@@ -386,6 +467,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     if updated.music != .adaptiveDJ { dj.stop() }
     if case .remix = updated.music {} else { soundtrack.stop() }
     effects.setMuted(updated.sound == .silent)
+    if updated.sound != previousSound { loadSoundEffects(for: updated.sound) }
     updateMusicButtons()
 
     applyDisplayMode()
@@ -482,19 +564,26 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   @objc private func returnToLibrary() {
+    fanScreen = .off
+    fanPlaying = false
+    fanQueue = []
     suspendCurrentEngine()
     activeTitle = nil
     currentNxlvURL = nil
     window.contentView = classicContent ?? plainRoot
     window.resizeIncrements = NSSize(width: 1, height: 1)
     window.minSize = NSSize(width: 900, height: 620)
-    window.title = "Lemmings — Game Library"
+    window.title = "Ultimate Lemmings"
     window.makeFirstResponder(playfield)
     try? music.start()
     try? effects.start()
     refreshSequelProgress()
     flow?.acknowledgeGameComplete()
     rebuildLibrary()
+    // Put the saved screen setting into force. Without this the tube only
+    // engages when the setting is next touched, so a player who chose a
+    // monitor last time comes back to a flat picture.
+    applyDisplayMode()
     renderScreen()
     window.makeKeyAndOrderFront(nil)
   }
@@ -507,6 +596,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       sequelCompletion[.lemmings3TheChronicles] = Lemmings3PlayWindow.savedCompletion(root: root)
     }
     rebuildLibrary()
+    measureFanPacks()
   }
 
   private func rebuildLibrary() {
@@ -603,24 +693,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     // Everything a player configures lives in the menu bar, so the game fills
     // the window the way it always did.
     let root = NSView()
-    for view in [playfield, panel] as [NSView] {
-      view.translatesAutoresizingMaskIntoConstraints = false
-      root.addSubview(view)
-    }
-
-    let panelHeight = panel.heightAnchor.constraint(equalToConstant: panel.intrinsicHeight)
-    panelHeightConstraint = panelHeight
-    NSLayoutConstraint.activate([
-      playfield.leadingAnchor.constraint(equalTo: root.leadingAnchor),
-      playfield.trailingAnchor.constraint(equalTo: root.trailingAnchor),
-      playfield.topAnchor.constraint(equalTo: root.topAnchor),
-      playfield.bottomAnchor.constraint(equalTo: panel.topAnchor),
-
-      panel.leadingAnchor.constraint(equalTo: root.leadingAnchor),
-      panel.trailingAnchor.constraint(equalTo: root.trailingAnchor),
-      panel.bottomAnchor.constraint(equalTo: root.bottomAnchor),
-      panelHeight,
-    ])
+    layOutPlainViews(in: root)
 
     picker.target = self
     picker.action = #selector(levelChanged)
@@ -631,6 +704,12 @@ let achievementProgressKey = "ClassicAchievementProgress"
     playfield.onAdvancePhase = { [weak self] in self?.advancePhase() }
     playfield.onSelectOverlayLine = { [weak self] index in
       guard let self else { return }
+      if self.fanScreen != .off {
+        // The visible rows are a window onto a longer list.
+        self.fanChoice = self.fanWindowStart + index
+        self.advancePhase()
+        return
+      }
       if self.flow?.screen == .title { self.launchChoice = index }
       else if self.flow?.screen == .rankSelect { self.rankChoice = index }
       self.advancePhase()
@@ -648,7 +727,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       styleMask: [.titled, .closable, .resizable, .miniaturizable],
       backing: .buffered, defer: false)
     window.delegate = self
-    window.title = "Lemmings — Native macOS Port"
+    window.title = "Ultimate Lemmings"
     plainRoot = root
     window.contentView = root
     window.center()
@@ -752,6 +831,18 @@ let achievementProgressKey = "ClassicAchievementProgress"
       return left == right ? lhs.offset < rhs.offset : left < right
     }
     dataSets = loaded.map { ($0.set, $0.directory) }
+
+    // The port-exclusive pack is built from levels held in memory rather than
+    // scanned from a folder, so it is appended after the scan instead of being
+    // discovered by it. Its directory is the ports tree it was read from, which
+    // is what the artwork loader needs.
+    if let root = Bundle.main.resourceURL?.appendingPathComponent("Ports", isDirectory: true) {
+      let amigaRoot = root.appendingPathComponent("amiga_extracted", isDirectory: true)
+      if let pack = try? PortExclusivePack.dataSet(amigaRoot: amigaRoot, portsRoot: root),
+        pack.campaign.levels.count > 0 {
+        dataSets.append((pack, root))
+      }
+    }
 
     gamePicker.removeAllItems()
     for entry in dataSets {
@@ -918,11 +1009,19 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   private var artworkLevel: ClassicLevel?
 
-  private func buildLevel(_ entry: ClassicCampaignLevel) {
+  /// Builds and starts a level.
+  ///
+  /// `groundOverride` is for levels that do not belong to the loaded game. A
+  /// fan level names its own ground set, which is usually from a different
+  /// release than the one currently open, so it arrives with the set already
+  /// resolved rather than being looked up in this game's styles.
+  private func buildLevel(
+    _ entry: ClassicCampaignLevel, groundOverride: ClassicGroundSet? = nil
+  ) {
     currentNxlvURL = nil
     let level = entry.level
     do {
-      guard let ground = grounds[level.groundStyle] else { return }
+      guard let ground = groundOverride ?? grounds[level.groundStyle] else { return }
       let rendered = try ClassicLevelRenderer.render(
         level, groundSet: ground, specialGraphic: specials[level.specialStyle])
 
@@ -999,6 +1098,308 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   // MARK: - Unofficial levels
 
+  /// The front screen's fan level row.
+  ///
+  /// The total counts only the packs measured so far, because measuring means
+  /// opening every archive. While that is still running the row says so rather
+  /// than showing a total that keeps changing under the player.
+  private func fanLibraryRow() -> String {
+    guard FanLevelLibrary.folder != nil else { return "FAN LEVELS  — CHOOSE FOLDER" }
+    let packs = fanPacks.isEmpty ? FanLevelLibrary.packs() : fanPacks
+    guard !packs.isEmpty else { return "FAN LEVELS  — NO PACKS" }
+    let passed = FanLevelLibrary.Progress.passedTotal
+    if FanLevelLibrary.Progress.isComplete(for: packs) {
+      return "FAN LEVELS  \(passed)/\(FanLevelLibrary.Progress.knownTotal)"
+    }
+    return "FAN LEVELS  \(passed)/\(FanLevelLibrary.Progress.knownTotal)  — COUNTING"
+  }
+
+  /// Measures any unmeasured packs, refreshing the front screen as it goes.
+  private func measureFanPacks() {
+    let packs = fanPacks.isEmpty ? FanLevelLibrary.packs() : fanPacks
+    guard !packs.isEmpty, !FanLevelLibrary.Progress.isComplete(for: packs) else { return }
+    FanLevelLibrary.Progress.measure(packs) { [weak self] in
+      guard let self, self.flow?.screen == .title, self.fanScreen == .off,
+        !self.fanPlaying else { return }
+      self.renderScreen()
+    }
+  }
+
+  /// Shows the fan level packs as a menu screen.
+  @objc private func showFanLevels() {
+    guard FanLevelLibrary.folder != nil else {
+      chooseFanFolder()
+      return
+    }
+    fanPacks = FanLevelLibrary.packs()
+    fanChoice = 0
+    fanScreen = .packs
+    renderScreen()
+  }
+
+  /// Asks once for the folder the packs were downloaded into.
+  ///
+  /// Nothing ships with the app: the packs are other people's work, so the
+  /// player supplies them the same way they supply a NeoLemmix styles folder.
+  @objc private func chooseFanFolder() {
+    let panel = NSOpenPanel()
+    panel.canChooseFiles = false
+    panel.canChooseDirectories = true
+    panel.message = "Choose the folder holding the level packs."
+    guard panel.runModal() == .OK, let url = panel.url else { return }
+    UserDefaults.standard.set(url.path, forKey: FanLevelLibrary.folderKey)
+    showFanLevels()
+  }
+
+  /// Draws whichever fan screen is showing.
+  private func renderFanScreen() {
+    phase = .briefing
+    playfield.phase = .briefing
+    playfield.overlayShowsLemmings = true
+
+    let heading: String
+    let rows: [String]
+    switch fanScreen {
+    case .off: return
+    case .packs:
+      heading = "FAN LEVELS"
+      rows = fanPacks.map { FanLevelLibrary.displayName(of: $0).uppercased() }
+    case .levels:
+      heading = fanPack.map { FanLevelLibrary.displayName(of: $0).uppercased() } ?? "LEVELS"
+      // Two ways to take the whole pack, then the levels themselves.
+      // A passed level keeps a mark, so a long pack shows what is left.
+      let pack = fanPack
+      rows = ["PLAY ALL", "SHUFFLE"] + fanEntries.map { entry in
+        let done = pack.map {
+          FanLevelLibrary.Progress.hasPassed(pack: $0, label: entry.label)
+        } ?? false
+        return (done ? "* " : "") + entry.label.uppercased()
+      }
+    }
+
+    if rows.isEmpty {
+      fanWindowStart = 0
+      playfield.overlayTitle = heading
+      playfield.overlayLines = ["NOTHING HERE"]
+      playfield.overlayHighlight = 0
+    } else {
+      // Keep the highlight near the middle of the window, so a long list
+      // scrolls under the cursor rather than jumping a page at a time.
+      let size = min(Self.fanRowsPerScreen, rows.count)
+      fanWindowStart = max(0, min(fanChoice - size / 2, rows.count - size))
+      playfield.overlayTitle = "\(heading)   \(fanChoice + 1)/\(rows.count)"
+      playfield.overlayLines = Array(rows[fanWindowStart..<(fanWindowStart + size)])
+      playfield.overlayHighlight = fanChoice - fanWindowStart
+    }
+    playfield.overlayFooter = "UP DOWN ENTER  *  ESC BACK"
+    playfield.needsDisplay = true
+  }
+
+  /// Moves within a fan screen. Returns false when no fan screen is showing.
+  private func moveFanChoice(_ delta: Int) -> Bool {
+    guard fanScreen != .off else { return false }
+    let count = fanScreen == .packs ? fanPacks.count : fanEntries.count + 2
+    guard count > 0 else { return true }
+    fanChoice = (fanChoice + delta + count) % count
+    renderFanScreen()
+    return true
+  }
+
+  /// Acts on the highlighted row. Returns false when no fan screen is showing.
+  private func advanceFanScreen() -> Bool {
+    switch fanScreen {
+    case .off:
+      return false
+    case .packs:
+      guard fanPacks.indices.contains(fanChoice) else { return true }
+      let pack = fanPacks[fanChoice]
+      fanPack = pack
+      fanEntries = FanLevelLibrary.entries(in: pack)
+      FanLevelLibrary.Progress.setCount(fanEntries.count, for: pack)
+      fanChoice = 0
+      fanScreen = .levels
+      renderFanScreen()
+      return true
+    case .levels:
+      guard fanPack != nil else { return true }
+      switch fanChoice {
+      case 0:
+        startFanRun(fanEntries)
+      case 1:
+        startFanRun(fanEntries.shuffled())
+      default:
+        let index = fanChoice - 2
+        guard fanEntries.indices.contains(index) else { return true }
+        startFanRun([fanEntries[index]])
+      }
+      return true
+    }
+  }
+
+  /// Starts a run of one or more fan levels.
+  ///
+  /// A run is not a campaign. Nothing is saved and no progress is recorded,
+  /// because these levels belong to other people's packs rather than to a
+  /// release the library tracks.
+  private func startFanRun(_ entries: [FanLevelLibrary.Entry]) {
+    guard !entries.isEmpty else { return }
+    fanQueue = entries
+    fanQueueIndex = 0
+    fanScreen = .off
+    loadCurrentFanLevel()
+  }
+
+  /// Builds the level the run is up to and shows its briefing.
+  private func loadCurrentFanLevel() {
+    guard let pack = fanPack, fanQueue.indices.contains(fanQueueIndex) else {
+      endFanRun()
+      return
+    }
+    let entry = fanQueue[fanQueueIndex]
+    do {
+      let (level, styleName) = try FanLevelLibrary.level(entry, in: pack)
+      let ground = fanGroundSet(styleNamed: styleName, index: level.groundStyle)
+      let packName = FanLevelLibrary.displayName(of: pack)
+      fanPlaying = true
+      buildLevel(
+        ClassicCampaignLevel.standalone(level, rank: packName), groundOverride: ground)
+      showFanBriefing(title: level.title, pack: packName)
+    } catch {
+      setStatus("\(entry.label): \(error)")
+      fanPlaying = false
+      fanScreen = .levels
+      renderFanScreen()
+    }
+  }
+
+  /// The briefing before a fan level, which cannot use the campaign one
+  /// because that reads the level's position in a run that does not exist.
+  private func showFanBriefing(title: String, pack: String) {
+    guard let session else { return }
+    phase = .briefing
+    playfield.phase = .briefing
+    playfield.overlayShowsLemmings = false
+    // The skill panel is collapsed to nothing while a menu is up, and only
+    // `fitClassicDisplay` gives it its height back. A fan level skips the
+    // usual redraw, so it has to ask for that itself or it plays with no
+    // controls at all.
+    panel.isMenuMode = false
+    fitClassicDisplay()
+    let percent = session.total > 0
+      ? Int((Double(session.required) / Double(session.total) * 100).rounded()) : 0
+    var lines = [
+      "\(session.total) LEMMINGS",
+      "SAVE \(session.required)  (\(percent)%)",
+      "RELEASE RATE \(session.rate)",
+    ]
+    if fanQueue.count > 1 {
+      lines.append("LEVEL \(fanQueueIndex + 1) OF \(fanQueue.count)")
+    }
+    playfield.overlayTitle = title.isEmpty ? pack.uppercased() : title.uppercased()
+    playfield.overlayLines = lines
+    playfield.overlayHighlight = nil
+    playfield.overlayFooter = "ENTER TO START  *  ESC BACK"
+    playfield.needsDisplay = true
+    panel.needsDisplay = true
+  }
+
+  /// Shows how a fan level ended, and what happens next.
+  private func showFanResults() {
+    guard let session else { return }
+    panel.isMenuMode = false
+    let passed = session.saved >= session.required
+    if passed, let pack = fanPack, fanQueue.indices.contains(fanQueueIndex) {
+      FanLevelLibrary.Progress.record(pack: pack, label: fanQueue[fanQueueIndex].label)
+    }
+    phase = .results
+    playfield.phase = .results
+    var lines = ["SAVED \(session.saved) OF \(session.required)"]
+    let more = fanQueueIndex + 1 < fanQueue.count
+    lines.append(more ? "ENTER FOR THE NEXT LEVEL" : "ENTER TO GO BACK")
+    playfield.overlayTitle = passed ? "LEVEL COMPLETE" : "NOT THIS TIME"
+    playfield.overlayLines = lines
+    playfield.overlayHighlight = nil
+    playfield.overlayFooter = "ENTER  *  ESC BACK"
+    playfield.needsDisplay = true
+  }
+
+  /// Enter, while a fan level is on screen. Returns false when none is.
+  private func advanceFanPlay() -> Bool {
+    guard fanPlaying else { return false }
+    switch phase {
+    case .briefing:
+      phase = .playing
+      playfield.phase = .playing
+      playfield.overlayTitle = nil
+      playfield.overlayLines = []
+      playfield.overlayFooter = nil
+      panel.isMenuMode = false
+      fitClassicDisplay()
+      effects.play(.levelStart)
+      playfield.needsDisplay = true
+      panel.needsDisplay = true
+    case .results:
+      if fanQueueIndex + 1 < fanQueue.count {
+        fanQueueIndex += 1
+        loadCurrentFanLevel()
+      } else {
+        endFanRun()
+      }
+    case .playing:
+      break
+    }
+    return true
+  }
+
+  /// Leaves a fan run and returns to the pack's level list.
+  private func endFanRun() {
+    fanPlaying = false
+    panel.isMenuMode = true
+    fitClassicDisplay()
+    fanQueue = []
+    fanQueueIndex = 0
+    fanScreen = .levels
+    renderFanScreen()
+  }
+
+  /// Steps back out of the fan screens. Returns false when none is showing.
+  private func retreatFanScreen() -> Bool {
+    if fanPlaying {
+      endFanRun()
+      return true
+    }
+    switch fanScreen {
+    case .off: return false
+    case .levels:
+      fanScreen = .packs
+      fanChoice = fanPacks.firstIndex(where: { $0 == fanPack }) ?? 0
+      renderFanScreen()
+      return true
+    case .packs:
+      fanScreen = .off
+      renderScreen()
+      return true
+    }
+  }
+
+  /// Finds the artwork a fan level asks for.
+  ///
+  /// A text level names its ground set, so the name is resolved against the
+  /// installed releases. A binary level only has a number, which is read as a
+  /// slot in the original Lemmings artwork, because that is what the editors
+  /// that wrote those files assumed.
+  private func fanGroundSet(styleNamed name: String?, index: Int) -> ClassicGroundSet? {
+    guard let ports = Bundle.main.resourceURL?
+      .appendingPathComponent("Ports", isDirectory: true) else { return nil }
+    let resolver = ClassicStyleResolver(portsRoot: ports)
+    if let name, let set = try? resolver.groundSet(styleNamed: name) { return set }
+    // Fall back to the loaded game's own styles, then to the slot number.
+    if let set = grounds[index] { return set }
+    let byNumber = ClassicStyleResolver.knownStyles
+      .first { $0.value.release == .lemmings && $0.value.index == index }?.key
+    return byNumber.flatMap { try? resolver.groundSet(styleNamed: $0) }
+  }
+
   @objc private func chooseNxlvLevel() {
     let openPanel = NSOpenPanel()
     openPanel.canChooseFiles = true
@@ -1056,7 +1457,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       adopt(
         NeoLemmixSession(
           simulation: simulation, width: rendered.width, height: rendered.height))
-      window.title = "Lemmings — \(level.title)"
+      window.title = "Ultimate Lemmings — \(level.title)"
     } catch {
       setStatus("NeoLemmix error: \(error)")
     }
@@ -1105,9 +1506,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private func renderScreen() {
     guard let flow else { return }
     if !sequelIsActive {
-      window.title = flow.screen == .title ? "Lemmings — Game Library"
+      window.title = flow.screen == .title ? "Ultimate Lemmings"
         : activeTitle?.displayName ?? campaign?.name ?? "Lemmings"
     }
+    if fanPlaying { return }
     playfield.overlayHighlight = nil
     panel.isMenuMode = !flow.screen.isPlaying
     fitClassicDisplay()
@@ -1116,6 +1518,11 @@ let achievementProgressKey = "ClassicAchievementProgress"
     case .title:
       if playfield.levelImage == nil, let entry = campaign?.levels.first {
         buildLevel(entry)
+      }
+      // Fan browsing sits over the title screen rather than replacing it.
+      if fanScreen != .off {
+        renderFanScreen()
+        return
       }
       setStatus("")
       phase = .briefing
@@ -1127,7 +1534,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
         let detail = entry.detail.isEmpty ? "" : "  — \(entry.detail)"
         return entry.title.displayName + progress + detail
       }
-      playfield.overlayHighlight = min(launchChoice, library.entries.count)
+      playfield.overlayLines.append(fanLibraryRow())
+      playfield.overlayHighlight = min(launchChoice, library.entries.count + 1)
       playfield.overlayFooter = "CLICK TO PLAY  *  UP DOWN ENTER  *  LIBRARY CMD-SHIFT-L"
 
     case .rankSelect:
@@ -1232,9 +1640,15 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   /// Moves past whichever screen is showing.
   private func advancePhase() {
+    if advanceFanPlay() { return }
+    if advanceFanScreen() { return }
     guard var current = flow else { return }
     switch current.screen {
     case .title:
+      if launchChoice == library.entries.count + 1 {
+        showFanLevels()
+        return
+      }
       if launchChoice == 0 {
         launchMode = .quest
         if let title = library.questStart { launchTitle(title) }
@@ -1288,8 +1702,11 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   private func moveRankChoice(_ delta: Int) {
+    if fanPlaying { return }
+    if moveFanChoice(delta) { return }
     if let flow, flow.screen == .title {
-      let count = library.entries.count + 1
+      // One row for Full Quest, one per release, and one for the fan packs.
+      let count = library.entries.count + 2
       guard count > 0 else { return }
       launchChoice = (launchChoice + delta + count) % count
       renderScreen()
@@ -1353,14 +1770,24 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   private func step() {
     guard !sequelIsActive else { return }
+    // The tube follows the phase, and the phase changes from many places, so
+    // it is settled here rather than at every one of them. This returns at
+    // once unless the answer actually changed.
+    applyDisplayMode()
     applyEdgeScroll()
     // Menus animate even though the level clock is stopped.
     if phase != .playing, playfield.overlayShowsLemmings {
       playfield.overlayFrame &+= 1
       playfield.needsDisplay = true
     }
-    if tubeIsActive, let frame = composeNativeFrame() {
-      crtView.setSource(frame)
+    if tubeIsActive {
+      let wanted = CGRect(
+        x: 0, y: 0, width: 320, height: panel.isMenuMode ? 200 : 160)
+      if playfield.frame != wanted {
+        playfield.frame = wanted
+        playfield.viewport.viewSize = wanted.size
+      }
+      if let frame = composeNativeFrame() { crtView.setSource(frame) }
     }
     if let session, phase == .playing { dj.updateTelemetry(djTelemetry(session)) }
     guard phase == .playing, !isPaused, let session, !session.isComplete else { return }
@@ -1384,6 +1811,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
     panel.needsDisplay = true
     updateStatus()
     if session.isComplete {
+      if fanPlaying {
+        showFanResults()
+        return
+      }
       recordCompletion(session)
       if var current = flow {
         current.finishLevel(
@@ -1473,6 +1904,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
     if let rejection {
       setStatus("Cannot assign: \(rejection)")
     } else {
+      // The click is acknowledged straight away rather than on the next tick,
+      // so the sound lands with the press.
+      effects.play(session.lastCues)
       updateStatus()
     }
   }
@@ -1508,6 +1942,29 @@ let achievementProgressKey = "ClassicAchievementProgress"
       setStatus("Loaded \(loaded.count) sound effects.")
     } catch {
       setStatus("Sound effects: \(error)")
+    }
+  }
+
+  /// Loads the bank the chosen sound source names.
+  ///
+  /// Each source owns the whole set, so switching replaces every effect rather
+  /// than mixing two machines together.
+  private func loadSoundEffects(for source: ClassicSoundSource) {
+    switch source {
+    case .macintoshResources:
+      guard let path = UserDefaults.standard.string(forKey: macImageKey) else { return }
+      loadSoundEffects(from: URL(fileURLWithPath: path))
+    case .amigaVoices:
+      guard let root = Bundle.main.resourceURL else { return }
+      let directory = root.appendingPathComponent("Ports/amiga_extracted/lemmings")
+      do {
+        let loaded = try effects.loadAmigaSounds(directory: directory)
+        setStatus("Loaded \(loaded.count) Amiga sound effects.")
+      } catch {
+        setStatus("Amiga sound effects: \(error)")
+      }
+    default:
+      break
     }
   }
 
@@ -1591,6 +2048,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
   @objc private func zoomOut() { setZoom(playfield.viewport.zoom - 1) }
 
   private func setZoom(_ value: Double) {
+    // Zoom applies to a level being played. On a menu there is nothing to zoom,
+    // and changing it there would only surprise the player when the next level
+    // opened at a size they did not choose.
+    guard playfield.phase == .playing else { return }
     playfield.viewport.zoom = min(8, max(1, value))
     playfield.viewport.clamp()
     playfield.needsDisplay = true
@@ -1642,6 +2103,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
         case 126: self.moveRankChoice(-1); return nil    // up
         case 36, 76: self.advancePhase(); return nil     // return, enter
         case 53:                                          // escape
+          if self.retreatFanScreen() { return nil }
           if screen == .quitConfirm { self.cancelQuit() }
           else { self.returnToLibrary() }
           return nil

@@ -137,6 +137,10 @@ final class ClassicSession: GameSession {
   func assign(skillIndex: Int, to lemmingID: Int) -> String? {
     guard skillIndex < ClassicSkill.allCases.count else { return "no such skill" }
     let result = history.assign(ClassicSkill.allCases[skillIndex], to: lemmingID)
+    // An assignment happens between ticks and produces its own events. Publish
+    // them here, or the click that starts a digger would make no sound: the
+    // next tick overwrites `lastTickEvents` before anything reads it.
+    lastCues = ClassicSoundCue.cues(for: simulation.lastTickEvents)
     return result == .assigned ? nil : result.rawValue
   }
 

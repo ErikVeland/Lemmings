@@ -125,10 +125,66 @@ enum PanelButton: Equatable {
     let point = convert(event.locationInWindow, from: nil)
     if let match = buttonFrames.first(where: { $0.1.contains(point) }) {
       onButton?(match.0)
+      // The release rate is the one control a player holds rather than taps.
+      // Stepping it one at a time makes crossing the whole range a chore.
+      if match.0 == .rateDown || match.0 == .rateUp { startRepeating(match.0) }
       return
     }
     if minimapFrame.contains(point) { scrollFromMinimap(point) }
   }
+
+  override func mouseUp(with event: NSEvent) { stopRepeating() }
+
+  // MARK: - Held buttons
+
+  /// Wait before a held button starts repeating, so a tap stays a single step.
+  private static let repeatDelay = 0.3
+  /// Gap between repeats. Fifty a second crosses the whole rate range in about
+  /// a second, which is how fast the original moves.
+  private static let repeatInterval = 0.02
+
+  private var repeatTimer: Timer?
+
+  /// Both timers are scheduled from a mouse event, so they fire on the main
+  /// run loop and their work is already where it belongs. The compiler cannot
+  /// see that through a `Sendable` closure, which is what the assertion states.
+  /// The timer itself stays out of the assertion, because it is not `Sendable`
+  /// and passing it in would be sending it across an isolation boundary.
+  private func startRepeating(_ button: PanelButton) {
+    stopRepeating()
+    repeatTimer = Timer.scheduledTimer(
+      withTimeInterval: Self.repeatDelay, repeats: false
+    ) { [weak self] _ in
+      MainActor.assumeIsolated {
+        guard let self, self.window != nil else { return }
+        self.beginRepeats(button)
+      }
+    }
+  }
+
+  /// Starts the fast phase, once a hold has outlasted the delay.
+  private func beginRepeats(_ button: PanelButton) {
+    repeatTimer = Timer.scheduledTimer(
+      withTimeInterval: Self.repeatInterval, repeats: true
+    ) { [weak self] _ in
+      MainActor.assumeIsolated {
+        // A button held past the end of its range stops rather than spinning.
+        guard let self, self.window != nil else { self?.stopRepeating(); return }
+        self.onButton?(button)
+      }
+    }
+  }
+
+  private func stopRepeating() {
+    repeatTimer?.invalidate()
+    repeatTimer = nil
+  }
+
+  /// A bar torn down while a button is held would otherwise leave a timer
+  /// firing for the life of the run loop, with nothing left to clear it: the
+  /// closure holds the bar weakly, so it cannot stop the timer once the bar
+  /// has gone.
+  isolated deinit { repeatTimer?.invalidate() }
 
   override func mouseDragged(with event: NSEvent) {
     let point = convert(event.locationInWindow, from: nil)
@@ -209,18 +265,30 @@ enum PanelButton: Equatable {
         image.draw(in: CGRect(x: box.midX - size.width / 2, y: box.maxY - size.height,
           width: size.width, height: size.height), from: .zero, operation: .sourceOver,
           fraction: 1, respectFlipped: true, hints: nil)
+      } else if let glyph = PanelGlyph.forButton(button, isPaused: isPaused),
+        // Pause and nuke carry no count, so the glyph sits in the whole well
+        // rather than the lower part a skill button leaves free. The inset is
+        // the one `drawStoneButton` sinks that well by, so the two agree. It
+        // is drawn at its natural size, having been rasterised to fit.
+        let image = glyph.image(
+          fitting: frame.insetBy(
+            dx: 4 * max(1, panelScale / 2), dy: 4 * max(1, panelScale / 2)).size) {
+        image.draw(
+          in: CGRect(x: frame.midX - image.size.width / 2,
+            y: frame.midY - image.size.height / 2,
+            width: image.size.width, height: image.size.height),
+          from: .zero, operation: .sourceOver, fraction: 1,
+          respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none])
       } else {
         let symbol: String
         switch button {
         case .rateDown: symbol = "−"
         case .rateUp: symbol = "+"
-        case .pause: symbol = isPaused ? "▶" : "Ⅱ"
-        case .nuke: symbol = "!"
-        case .skill: symbol = ""
+        case .pause, .nuke, .skill: symbol = ""
         }
         let attributes: [NSAttributedString.Key: Any] = [
           .font: NSFont.systemFont(ofSize: 10 * panelScale, weight: .black),
-          .foregroundColor: button == .nuke ? NSColor.systemOrange : NSColor.systemGreen]
+          .foregroundColor: NSColor.systemGreen]
         let text = symbol as NSString
         let size = text.size(withAttributes: attributes)
         text.draw(at: CGPoint(x: frame.midX - size.width / 2, y: frame.midY - size.height / 2),

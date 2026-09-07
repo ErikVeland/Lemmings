@@ -19,3 +19,9 @@ main
 
 # macOS
 .DS_Store
+
+# App Store Connect API private keys. Never commit.
+*.p8
+
+# Python bytecode from the one-time asset import tools.
+__pycache__/
