@@ -78,8 +78,8 @@ levels. Holiday 1993/1994 use the supplied Macintosh level records and DOS
 festive graphics. The build extracts the existing installer with `unar`.
 The finished app needs no external assets or extraction tools.
 
-The library retains each sequel's current gameplay limits: L2 is Classic-only,
-and L3 remains a native preview. See [integration details](Documentation/UnifiedGame.md).
+L2 is a native beta with all 120 levels, all twelve tribes and four practice maps. Full campaign solution
+verification is still in progress. L3 remains a native preview. See [integration details](Documentation/UnifiedGame.md).
 
 ## Build and run
 
@@ -166,37 +166,14 @@ The suites verify:
 
 ## Remaining work
 
-1. Add native data loaders, rendering, and game mechanics for Lemmings 2: The
-   Tribes and Lemmings 3: The Chronicles. They are represented in the canon,
-   but their original data formats do not run through the Lemmings 1 engine.
-   Native level readers are now implemented for both games, including Lemmings
-   2 decompression and Lemmings 3 object placements. Native terrain tiles and
-   regular L2 object animations now decode. L3 object graphics and static
-   scenes also render. L2 now uses the original menu artwork, font and in-game
-   panel, without developer button strips. Twelve-tribe progress, medal rules,
-   survivor carry-over, autosave and eight manual save slots are implemented.
-   The interpreter has the eight Classic skills plus tested stacker and
-   platformer mechanics. Only Classic is enabled for gameplay; the other 41
-   skills and interactive objects remain incomplete. Intro, practice, full
-   preferences and the original ending scripts also remain incomplete.
-   All ten Classic levels start. The object/terrain border mismatch is fixed,
-   and each exit passes alignment and interaction tests. Only level 1 has a
-   full-level completion test.
-   Build it with
-   `zsh Scripts/build-native-l2.sh`, or use the full app's
-   **Play Lemmings 2…** menu. It does not award verified achievements.
-   L3 now starts all 90 campaign levels (30 per tribe), with brick/spade tools, climbing and
-   ceiling traversal, bombs, grenades, Hadoken projectiles, umbrellas,
-   swimming aids, clocks, nine trap types, four creature types, multiple
-   entrances, reserves, extra lemmings,
-   terrain changes, tribe selection, and separate saved progress for each tribe.
-   Completed-run tests cover Classic levels 1–3, Egyptian level 1, and Shadow
-   level 1 (nine rescued, one abandoned). The End run control retains rescued
-   lemmings and reserves after confirmation. Traps use native frame delays and cycle pauses.
-   Build it with `zsh Scripts/build-native-l3.sh`, or choose
-   **Play Lemmings 3 Native Preview…**. It does not award achievements.
-   Other L2 tribes remain unavailable. Neither sequel
-   has verified 1:1 physics.
+1. Broaden sequel fidelity and complete-level validation. L2 is a native beta
+   with all twelve tribes, 120 campaign levels, 51 skills, interactive objects,
+   four practice maps, original audio, introduction and ending scripts.
+   All campaign starts and exits pass checks; 64 levels have recorded solutions.
+   Full walkthrough coverage and original-engine equivalence remain unverified.
+   L3 remains a native preview with 90 campaign levels, separate tribe progress,
+   and completed-run checks for Classic 1–3, Egyptian 1 and Shadow 1. Its audio,
+   movies and remaining mechanics need further work.
    See [Sequel interpreters](Documentation/SequelInterpreters.md).
 2. Record full solution replays for Oh No!, Xmas 1991–1992, and Holiday
    1993–1994. Their retail ratings and campaign order now load in the shared
@@ -208,8 +185,8 @@ The suites verify:
 5. Load NeoLemmix lemming sprites from style packs.
 6. Test against real NeoLemmix packs, including missing-dependency and
    malformed content.
-7. Produce hardened, Developer ID signed, and notarized macOS builds. This
-   needs an Apple Developer account.
+7. Extend live checks to Tahoe and physical Intel Macs. The beta packaging
+   script already creates hardened, Developer ID signed and notarized builds.
 
 ## Source layout
 

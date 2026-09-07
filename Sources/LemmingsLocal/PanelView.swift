@@ -10,12 +10,14 @@ enum PanelButton: Equatable {
   case skill(Int)
   case pause
   case nuke
+  case fastForward
 }
 
 @MainActor final class PanelView: NSView {
   var session: (any GameSession)?
   var selectedSkillIndex = 0
   var isPaused = false
+  var isFastForward = false
   var statusText = ""
   var levelSize = CGSize(width: 1, height: 1)
   var visibleLevelRect = CGRect.zero
@@ -58,7 +60,7 @@ enum PanelButton: Equatable {
 
   // MARK: - Layout
 
-  /// Places the twelve original buttons over the drawn status bar.
+  /// Places the original controls and speed button over the status bar.
   private func layoutClassicButtons() {
     guard let panelImage else { return }
     let statusHeight: CGFloat = bounds.height <= 40 ? 0 : statusStripHeight
@@ -72,7 +74,7 @@ enum PanelButton: Equatable {
     _ = statusStripHeight
 
     let order: [PanelButton] = [.rateDown, .rateUp]
-      + (0..<8).map(PanelButton.skill) + [.pause, .nuke]
+      + (0..<8).map(PanelButton.skill) + [.pause, .nuke, .fastForward]
     let cell = CGFloat(ClassicPanelGraphics.buttonWidth) * scale
     buttonFrames = order.enumerated().map { index, button in
       (button, CGRect(
@@ -92,7 +94,7 @@ enum PanelButton: Equatable {
     let skillCount = session?.skills.count ?? 0
     var order: [PanelButton] = [.rateDown, .rateUp]
     order.append(contentsOf: (0..<skillCount).map(PanelButton.skill))
-    order.append(contentsOf: [.pause, .nuke])
+    order.append(contentsOf: [.pause, .nuke, .fastForward])
 
     // The minimap takes the right quarter, as it does in the original panel.
     let minimapWidth = max(120, bounds.width * 0.24)
@@ -122,7 +124,12 @@ enum PanelButton: Equatable {
   }
 
   override func mouseDown(with event: NSEvent) {
-    let point = convert(event.locationInWindow, from: nil)
+    handlePointerDown(at: convert(event.locationInWindow, from: nil))
+  }
+
+  func handlePointerDown(at point: CGPoint) {
+    stopRepeating()
+    pointerIsDown = true
     if let match = buttonFrames.first(where: { $0.1.contains(point) }) {
       onButton?(match.0)
       // The release rate is the one control a player holds rather than taps.
@@ -133,7 +140,12 @@ enum PanelButton: Equatable {
     if minimapFrame.contains(point) { scrollFromMinimap(point) }
   }
 
-  override func mouseUp(with event: NSEvent) { stopRepeating() }
+  override func mouseUp(with event: NSEvent) { handlePointerUp() }
+
+  func handlePointerUp() {
+    pointerIsDown = false
+    stopRepeating()
+  }
 
   // MARK: - Held buttons
 
@@ -144,6 +156,7 @@ enum PanelButton: Equatable {
   private static let repeatInterval = 0.02
 
   private var repeatTimer: Timer?
+  private var pointerIsDown = false
 
   /// Both timers are scheduled from a mouse event, so they fire on the main
   /// run loop and their work is already where it belongs. The compiler cannot
@@ -156,7 +169,7 @@ enum PanelButton: Equatable {
       withTimeInterval: Self.repeatDelay, repeats: false
     ) { [weak self] _ in
       MainActor.assumeIsolated {
-        guard let self, self.window != nil else { return }
+        guard let self, self.pointerIsDown else { return }
         self.beginRepeats(button)
       }
     }
@@ -169,7 +182,7 @@ enum PanelButton: Equatable {
     ) { [weak self] _ in
       MainActor.assumeIsolated {
         // A button held past the end of its range stops rather than spinning.
-        guard let self, self.window != nil else { self?.stopRepeating(); return }
+        guard let self, self.pointerIsDown else { self?.stopRepeating(); return }
         self.onButton?(button)
       }
     }
@@ -187,7 +200,10 @@ enum PanelButton: Equatable {
   isolated deinit { repeatTimer?.invalidate() }
 
   override func mouseDragged(with event: NSEvent) {
-    let point = convert(event.locationInWindow, from: nil)
+    handlePointerDrag(at: convert(event.locationInWindow, from: nil))
+  }
+
+  func handlePointerDrag(at point: CGPoint) {
     if minimapFrame.contains(point) { scrollFromMinimap(point) }
   }
 
@@ -237,6 +253,15 @@ enum PanelButton: Equatable {
     NSImage(cgImage: panelImage, size: NSSize(width: panelImage.width, height: panelImage.height))
       .draw(in: panelFrame, from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true, hints: nil)
 
+    if let speed = buttonFrames.first(where: { $0.0 == .fastForward }) {
+      drawStoneButton(speed.1, selected: isFastForward)
+      if let image = PanelGlyph.fastForward.image(fitting: speed.1.insetBy(dx: 2 * panelScale, dy: 2 * panelScale).size) {
+        image.draw(in: CGRect(x: speed.1.midX - image.size.width / 2,
+          y: speed.1.midY - image.size.height / 2, width: image.size.width, height: image.size.height),
+          from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true, hints: nil)
+      }
+    }
+
     // Mark the armed skill, which the original showed with a lit border.
     guard let match = buttonFrames.first(where: { $0.0 == .skill(selectedSkillIndex) })
     else { return }
@@ -254,7 +279,7 @@ enum PanelButton: Equatable {
     let poses: [ClassicLemmingPose] = [.climbing, .floating, .ohNo, .blocking,
       .building, .bashing, .mining, .digging]
     for (button, frame) in buttonFrames {
-      let selected = button == .skill(selectedSkillIndex) || (button == .pause && isPaused)
+      let selected = button == .skill(selectedSkillIndex) || (button == .pause && isPaused) || (button == .fastForward && isFastForward)
       drawStoneButton(frame, selected: selected)
       if case let .skill(index) = button, let source = artwork.lemming(
         pose: poses[index], left: false, tick: index == 2 ? 12 : 0), let image = source.makeNSImage() {
@@ -284,7 +309,7 @@ enum PanelButton: Equatable {
         switch button {
         case .rateDown: symbol = "−"
         case .rateUp: symbol = "+"
-        case .pause, .nuke, .skill: symbol = ""
+        case .pause, .nuke, .fastForward, .skill: symbol = ""
         }
         let attributes: [NSAttributedString.Key: Any] = [
           .font: NSFont.systemFont(ofSize: 10 * panelScale, weight: .black),
@@ -337,19 +362,27 @@ enum PanelButton: Equatable {
 
   private func drawButtonLabels() {
     guard panelScale >= 2 else { return }
-    let names = ["− RATE", "+ RATE", "CLIMB", "FLOAT", "BOMB", "BLOCK",
-      "BUILD", "BASH", "MINE", "DIG", "PAUSE", "NUKE"]
+    let skillNames = ["CLIMB", "FLOAT", "BOMB", "BLOCK", "BUILD", "BASH", "MINE", "DIG"]
     let attributes: [NSAttributedString.Key: Any] = [
       .font: NSFont.monospacedSystemFont(ofSize: 3.1 * panelScale, weight: .bold),
       .foregroundColor: NSColor(calibratedRed: 0.76, green: 0.88, blue: 0.62, alpha: 1)]
-    for (index, item) in buttonFrames.enumerated() {
+    for item in buttonFrames {
+      let name: String
+      switch item.0 {
+      case .rateDown: name = "− RATE"
+      case .rateUp: name = "+ RATE"
+      case let .skill(index): name = skillNames[safe: index] ?? "SKILL"
+      case .pause: name = isPaused ? "PLAY" : "PAUSE"
+      case .nuke: name = "NUKE"
+      case .fastForward: name = isFastForward ? "3×" : "SPEED"
+      }
       // The original bar carried no wording, so a label that does not fit its
       // button is dropped rather than shrunk or overlapped.
       let box = CGRect(x: item.1.minX - 2, y: item.1.minY - 9 * panelScale / 2,
         width: item.1.width + 4, height: 9 * panelScale / 2)
-      if drawMacLabel(names[index], centeredIn: box) { continue }
+      if drawMacLabel(name, centeredIn: box) { continue }
       guard macInterface == nil else { continue }
-      let text = names[index] as NSString
+      let text = name as NSString
       let size = text.size(withAttributes: attributes)
       text.draw(at: CGPoint(x: item.1.midX - size.width / 2, y: item.1.minY - size.height - 4),
         withAttributes: attributes)
@@ -372,7 +405,7 @@ enum PanelButton: Equatable {
       case let .skill(index):
         guard let skill = session.skills[safe: index] else { continue }
         value = skill.isInfinite ? "∞" : "\(skill.count)"
-      case .pause, .nuke:
+      case .pause, .nuke, .fastForward:
         continue
       }
       let box = CGRect(x: frame.minX, y: frame.minY + 1, width: frame.width, height: 14 * panelScale / 2)
@@ -405,6 +438,10 @@ enum PanelButton: Equatable {
     case .pause:
       title = isPaused ? "Play" : "Pause"
       subtitle = ""
+    case .fastForward:
+      title = "⏩"
+      subtitle = isFastForward ? "3×" : "1×"
+      highlighted = isFastForward
     case .nuke:
       title = "Nuke"
       subtitle = ""

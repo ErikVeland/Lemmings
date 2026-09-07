@@ -1,0 +1,146 @@
+{
+  "lemmings/terrain": {
+    "pairs": 272,
+    "pixels": 1362112,
+    "alpha_different": 43915,
+    "rgba_different": 638349,
+    "occupied_blocks": 158570,
+    "split_blocks": 91619,
+    "exact_dimensions": 36
+  },
+  "lemmings/object": {
+    "pairs": 201,
+    "pixels": 779072,
+    "alpha_different": 30660,
+    "rgba_different": 236065,
+    "occupied_blocks": 60394,
+    "split_blocks": 27310,
+    "exact_dimensions": 9
+  },
+  "lemmings/liquid": {
+    "pairs": 40,
+    "pixels": 190464,
+    "alpha_different": 124113,
+    "rgba_different": 153389,
+    "occupied_blocks": 8990,
+    "split_blocks": 3067,
+    "exact_dimensions": 0
+  },
+  "lemmings/trap": {
+    "pairs": 159,
+    "pixels": 439552,
+    "alpha_different": 16936,
+    "rgba_different": 139214,
+    "occupied_blocks": 35292,
+    "split_blocks": 22656,
+    "exact_dimensions": 3
+  },
+  "lemmings/sprite": {
+    "pairs": 30,
+    "pixels": 26176,
+    "alpha_different": 953,
+    "rgba_different": 6228,
+    "occupied_blocks": 1699,
+    "split_blocks": 764,
+    "exact_dimensions": 0
+  },
+  "ohno/terrain": {
+    "pairs": 225,
+    "pixels": 778496,
+    "alpha_different": 13242,
+    "rgba_different": 473125,
+    "occupied_blocks": 120914,
+    "split_blocks": 26241,
+    "exact_dimensions": 87
+  },
+  "ohno/object": {
+    "pairs": 131,
+    "pixels": 483456,
+    "alpha_different": 5505,
+    "rgba_different": 154877,
+    "occupied_blocks": 41167,
+    "split_blocks": 8446,
+    "exact_dimensions": 0
+  },
+  "ohno/liquid": {
+    "pairs": 27,
+    "pixels": 164352,
+    "alpha_different": 43171,
+    "rgba_different": 108364,
+    "occupied_blocks": 17057,
+    "split_blocks": 4263,
+    "exact_dimensions": 1
+  },
+  "ohno/trap": {
+    "pairs": 106,
+    "pixels": 469376,
+    "alpha_different": 6387,
+    "rgba_different": 131838,
+    "occupied_blocks": 33905,
+    "split_blocks": 9255,
+    "exact_dimensions": 0
+  },
+  "ohno/sprite": {
+    "pairs": 30,
+    "pixels": 26176,
+    "alpha_different": 953,
+    "rgba_different": 6228,
+    "occupied_blocks": 1699,
+    "split_blocks": 764,
+    "exact_dimensions": 0
+  },
+  "xmas/terrain": {
+    "pairs": 37,
+    "pixels": 284480,
+    "alpha_different": 10010,
+    "rgba_different": 175785,
+    "occupied_blocks": 44703,
+    "split_blocks": 3457,
+    "exact_dimensions": 12
+  },
+  "xmas/object": {
+    "pairs": 60,
+    "pixels": 260160,
+    "alpha_different": 9246,
+    "rgba_different": 73406,
+    "occupied_blocks": 19663,
+    "split_blocks": 6140,
+    "exact_dimensions": 10
+  },
+  "xmas/sprite": {
+    "pairs": 30,
+    "pixels": 26176,
+    "alpha_different": 1202,
+    "rgba_different": 6600,
+    "occupied_blocks": 1773,
+    "split_blocks": 844,
+    "exact_dimensions": 0
+  },
+  "holiday/terrain": {
+    "pairs": 37,
+    "pixels": 284480,
+    "alpha_different": 10010,
+    "rgba_different": 175785,
+    "occupied_blocks": 44703,
+    "split_blocks": 3457,
+    "exact_dimensions": 12
+  },
+  "holiday/object": {
+    "pairs": 60,
+    "pixels": 260160,
+    "alpha_different": 9246,
+    "rgba_different": 73406,
+    "occupied_blocks": 19663,
+    "split_blocks": 6140,
+    "exact_dimensions": 10
+  },
+  "holiday/sprite": {
+    "pairs": 30,
+    "pixels": 26176,
+    "alpha_different": 1202,
+    "rgba_different": 6600,
+    "occupied_blocks": 1773,
+    "split_blocks": 844,
+    "exact_dimensions": 0
+  }
+}

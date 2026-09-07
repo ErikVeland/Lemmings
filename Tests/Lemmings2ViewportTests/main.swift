@@ -1,0 +1,21 @@
+func check(_ condition: Bool, _ message: String) {
+    precondition(condition, message)
+}
+let classic = Lemmings2Viewport(viewWidth: 960, viewHeight: 720)
+check(classic.width == 320 && classic.scale == 3 && classic.panelX == 0, "4:3 geometry changed")
+let wide = Lemmings2Viewport(viewWidth: 1280, viewHeight: 720)
+check(abs(wide.width - 426.6666667) < 0.001, "Widescreen does not expose more level")
+check(abs(wide.panelX * wide.scale - 160) < 0.001, "Panel is not centred")
+check(wide.edgeVelocity(x: 1, y: 80).x < 0, "Left edge does not scroll")
+check(wide.edgeVelocity(x: wide.width - 1, y: 80).x > 0, "Wide right edge does not scroll")
+check(wide.edgeVelocity(x: 320, y: 80).x == 0, "Old 320-pixel boundary still scrolls")
+check(wide.edgeVelocity(x: 100, y: 1).y < 0, "Top edge does not scroll")
+check(wide.edgeVelocity(x: 100, y: 159).y > 0, "Bottom edge does not scroll")
+check(wide.edgeVelocity(x: 0, y: 180).x == 0, "Panel triggers edge scrolling")
+check(wide.edgeVelocity(x: -1, y: 80).x == 0, "Pointer outside view triggers scrolling")
+check(wide.edgeVelocity(x: 2, y: 80).x < wide.edgeVelocity(x: 10, y: 80).x, "Edge speed does not ramp")
+check(abs(wide.clampedX(1000, minimum: 80, maximum: 704, levelWidth: 1024) + wide.width - 1024) < 0.001,
+      "Camera reveals space beyond the level")
+check(wide.clampedX(-10, minimum: 80, maximum: 704, levelWidth: 1024) == 80, "Camera ignores minimum")
+check(wide.clampedX(500, minimum: 80, maximum: 80, levelWidth: 1024) == 80, "Narrow camera range reverses limits")
+print("PASS 4:3 and widescreen geometry, panel alignment, four-edge scrolling, and camera limits")

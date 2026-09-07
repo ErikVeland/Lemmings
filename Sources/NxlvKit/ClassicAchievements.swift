@@ -66,7 +66,7 @@ public extension ClassicAchievement {
             detail: "Pass all four festive releases."),
         ClassicAchievement(
             id: .trilogyComplete, title: "The Trilogy",
-            detail: "Complete Lemmings, Oh No!, and the festive series."),
+            detail: "Complete Lemmings, Lemmings 2, and Lemmings 3."),
         ClassicAchievement(
             id: .fullCanonComplete, title: "Master of Lemmings",
             detail: "Complete the entire series from start to finish."),

@@ -18,7 +18,7 @@ for architecture in "${architectures[@]}"; do
   mkdir -p "$module_dir"
   target="$architecture-apple-macosx$deployment_target"
 
-  swiftc -swift-version 6 -target "$target" -parse-as-library \
+  swiftc -swift-version 6 -O -target "$target" -parse-as-library \
     -module-cache-path "$build_dir/ModuleCache" \
     -emit-module -emit-library \
     -module-name NxlvKit \
@@ -27,7 +27,7 @@ for architecture in "${architectures[@]}"; do
     -o "$architecture_dir/libNxlvKit.dylib" \
     "$project_dir"/Sources/NxlvKit/*.swift
 
-  swiftc -swift-version 6 -target "$target" \
+  swiftc -swift-version 6 -O -target "$target" \
     -module-cache-path "$build_dir/ModuleCache" \
     -I "$module_dir" -L "$architecture_dir" -lNxlvKit \
     -framework AppKit -framework AVFoundation -framework Metal -framework QuartzCore \
@@ -48,5 +48,8 @@ zsh "$project_dir/Scripts/bundle-game-data.sh" "$contents_dir/Resources" all
 # Seal the finished bundle after resources are copied. This local ad-hoc
 # signature is replaced by a Developer ID signature for distribution builds.
 codesign --force --deep --sign - "$app_dir"
+
+# Refresh the bundle timestamp so Finder can detect rebuilt app icons.
+touch "$app_dir"
 
 echo "$app_dir"

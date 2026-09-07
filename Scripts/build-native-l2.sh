@@ -10,10 +10,7 @@ swiftc -O -swift-version 6 -warnings-as-errors -parse-as-library \
   -emit-module-path "$build_dir/modules/NxlvKit.swiftmodule" \
   -Xlinker -install_name -Xlinker @rpath/libNxlvKit.dylib \
   -o "$app_dir/Contents/Frameworks/libNxlvKit.dylib" \
-  "$project_dir/Sources/NxlvKit/SequelBinary.swift" \
-  "$project_dir/Sources/NxlvKit/BundledGameResources.swift" \
-  "$project_dir"/Sources/NxlvKit/Lemmings2*.swift \
-  "$project_dir"/Sources/NxlvKit/ProTracker*.swift
+  "$project_dir"/Sources/NxlvKit/*.swift
 # The shared music player retains a macOS 13-compatible AVAudioEngine call.
 swiftc -O -swift-version 6 -warnings-as-errors -Wwarning DeprecatedDeclaration \
   -I "$build_dir/modules" -L "$app_dir/Contents/Frameworks" -lNxlvKit \
@@ -21,6 +18,7 @@ swiftc -O -swift-version 6 -warnings-as-errors -Wwarning DeprecatedDeclaration \
   -o "$app_dir/Contents/MacOS/Lemmings2Native" \
   "$project_dir/Tools/Lemmings2Native/main.swift" \
   "$project_dir/Sources/LemmingsLocal/Lemmings2PlayWindow.swift" \
+  "$project_dir/Sources/LemmingsLocal/SequelArtworkRenderer.swift" \
   "$project_dir/Sources/LemmingsLocal/Lemmings2SoundPlayer.swift" \
   "$project_dir/Sources/LemmingsLocal/MusicPlayer.swift"
 cp "$project_dir/Tools/Lemmings2Native/Info.plist" "$app_dir/Contents/Info.plist"

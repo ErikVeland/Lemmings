@@ -195,6 +195,13 @@ public struct ClassicMacScene: Sendable {
                 index = cooldown > 0 ? min(max(0, seq.count - cooldown), seq.count - 1) : seq.first
             }
             guard let frame = artwork.frame(1600 + style, seq.base + index) else { continue }
+            if graphic.triggerEffect == ClassicDOSObjectEffect.water.rawValue,
+               !placement.draw.isUpsideDown, !placement.draw.onlyOverwrite {
+                ClassicLiquidFill.draw(source: [UInt8](frame.rgba), sourceWidth: frame.width,
+                    sourceHeight: frame.height, x: placement.x * 2 + frame.x,
+                    y: placement.y * 2 + frame.y, into: &pixels, width: width,
+                    height: height, solid: solid, scale: 2)
+            }
             Self.blit(frame, into: &pixels, width: width, height: height,
                 x: placement.x * 2 + frame.x, y: placement.y * 2 + frame.y,
                 flipped: placement.draw.isUpsideDown, behind: placement.draw.noOverwrite,

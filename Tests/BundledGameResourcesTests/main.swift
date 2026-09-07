@@ -31,6 +31,13 @@ do {
         check(front.pointers.frames.count == 18, "Embedded original selection cursors are missing")
         let sounds = try Lemmings2SoundBank(data: Data(contentsOf: root.appendingPathComponent("MUSIC/SBLAST.VOC")))
         check(sounds.clips.count == 80, "Embedded L2 sound bank is incomplete")
+        let explosion = try Lemmings2Explosion(root:root)
+        check(explosion.frames.count == 52 && !explosion.frames[0].isEmpty, "Embedded L2 explosion animation is incomplete")
+        _ = try Lemmings2Introduction(root:root,font:Lemmings2FrontEndFont(data:Data(contentsOf:root.appendingPathComponent("FONT.DAT"))))
+        _ = try Lemmings2Award(root:root,assets:front,campaign:campaign,newPiece:false)
+        _ = try Lemmings2Ending(root:root,assets:front,golden:true)
+        _ = try Lemmings2Ending(root:root,assets:front,golden:false)
+        _ = try Lemmings2Walker(data:Data(contentsOf:root.appendingPathComponent("WALKER.DAT")))
         _ = try Lemmings2TerrainMasks(root: root)
         _ = try Lemmings2Sprites(data: Data(contentsOf: root.appendingPathComponent("VLEMMS.DAT")))
         guard let music = BundledGameResources.music("lemmings_2_music_mod_tsyu", in: bundle) else {

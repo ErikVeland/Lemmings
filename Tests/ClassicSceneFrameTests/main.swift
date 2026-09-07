@@ -1,5 +1,5 @@
 import Foundation
-import NxlvKit
+@testable import NxlvKit
 
 struct Failure: Error { let message: String }
 func check(_ condition: @autoclosure () -> Bool, _ message: String) throws {
@@ -39,5 +39,26 @@ do {
     for _ in 0..<10 { _ = history.tick() }
     _ = history.rewind(seconds: 10.0 / Double(ClassicDOSRules.ticksPerSecond))
     try check(ClassicSceneFrame.rgba(scene, simulation: history.simulation) == before, "Rewind did not restore the frame")
+    let blue: [UInt8] = [32, 64, 192, 255]
+    let surface = [UInt8](repeating: 0, count: 8) + blue + blue
+    var liquidPixels = [UInt8](repeating: 0, count: 4 * 6 * 4)
+    var liquidMask = [UInt8](repeating: 0, count: 4 * 6)
+    liquidMask[4 * 4 + 1] = 1
+    liquidPixels[(4 * 4 + 1) * 4] = 200
+    liquidPixels[(4 * 4 + 1) * 4 + 3] = 255
+    ClassicLiquidFill.draw(source: surface, sourceWidth: 2, sourceHeight: 2,
+        x: 1, y: 0, into: &liquidPixels, width: 4, height: 6, solid: liquidMask, scale: 1)
+    try check(Array(liquidPixels[(3 * 4 + 1) * 4..<(3 * 4 + 1) * 4 + 4]) == blue,
+        "Liquid did not extend in its own colour")
+    try check(liquidPixels[(4 * 4 + 1) * 4] == 200, "Liquid covered its floor")
+    try check(liquidPixels[(5 * 4 + 1) * 4 + 3] == 0, "Liquid leaked below its floor")
+    try check(liquidPixels[(5 * 4 + 2) * 4 + 3] == 255, "Open liquid did not reach the level bottom")
+    try check(liquidPixels[(5 * 4) * 4 + 3] == 0, "Liquid extended beyond the tile width")
+    var covered = [UInt8](repeating: 0, count: 4 * 6 * 4)
+    liquidMask[1 * 4 + 1] = 1
+    ClassicLiquidFill.draw(source: surface, sourceWidth: 2, sourceHeight: 2,
+        x: 1, y: 0, into: &covered, width: 4, height: 6, solid: liquidMask, scale: 1)
+    try check(covered[(2 * 4 + 1) * 4 + 3] == 0, "Liquid leaked through terrain covering the source tile")
+    print("PASS liquid colour, bounds, open depth, and terrain floors")
     print("PASS visible entrance and exit, animated objects, digging, and frame restoration after rewind")
 } catch { print("FAIL \(error)"); exit(1) }

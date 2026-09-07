@@ -8,6 +8,7 @@ final class Lemmings2SoundPlayer: @unchecked Sendable {
     private var source: AVAudioSourceNode?
     private let lock = NSLock()
     private var mixer: Lemmings2SoundMixer
+    private var volume: Float = 1
     init(root: URL) throws {
         mixer = Lemmings2SoundMixer(bank: try Lemmings2SoundBank(data:
             Data(contentsOf: root.appendingPathComponent("MUSIC/SBLAST.VOC"))))
@@ -24,17 +25,25 @@ final class Lemmings2SoundPlayer: @unchecked Sendable {
             self.lock.lock()
             defer { self.lock.unlock() }
             for i in 0..<Int(frames) {
-                let value = self.mixer.nextSample()
+                let value = self.mixer.nextSample() * self.volume
                 for buffer in list { buffer.mData?.assumingMemoryBound(to: Float.self)[i] = value }
             }
             return noErr
         }
         engine.attach(node); engine.connect(node, to: engine.mainMixerNode, format: format)
         source = node
-        try engine.start()
+        do { try engine.start() }
+        catch { engine.detach(node); source = nil; throw error }
     }
-    func stop() { engine.stop(); silence() }
+    func stop() {
+        engine.stop()
+        if let source { engine.detach(source) }
+        source = nil
+        silence()
+    }
     func silence() { lock.lock(); defer { lock.unlock() }; mixer.silence() }
+    func suspendOutput() { if source != nil { engine.pause() } }
+    func resumeOutput() throws { if source != nil && !engine.isRunning { try engine.start() } }
     func play(_ requests: [Lemmings2SoundRequest]) {
         lock.lock(); defer { lock.unlock() }
         // Simultaneous lemmings share a cue, without stacking dozens of copies.
@@ -42,5 +51,6 @@ final class Lemmings2SoundPlayer: @unchecked Sendable {
         for request in requests where played.insert(request).inserted { mixer.play(request) }
     }
     func setMuted(_ muted: Bool) { lock.lock(); defer { lock.unlock() }; mixer.setMuted(muted) }
+    func setVolume(_ value: Double) { lock.lock(); defer { lock.unlock() }; volume = Float(min(1, max(0, value))) }
     var muted: Bool { lock.lock(); defer { lock.unlock() }; return mixer.muted }
 }

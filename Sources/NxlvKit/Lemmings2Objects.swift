@@ -16,7 +16,7 @@ public struct Lemmings2Objects: Sendable {
     public static func trigger(flags: Int, interaction: Int, x: Int, y: Int) -> Lemmings2Runtime.Rect? {
         let mode = flags & 0x18
         guard flags & 0xc000 != 0xc000,
-              mode == 0x10 || (mode == 8 && (6...12).contains(interaction)) else { return nil }
+              mode == 0x10 || (mode == 8 && ([2,5].contains(interaction) || (6...12).contains(interaction))) else { return nil }
         let size = (flags >> 12) & 3
         if size == 0 { return .init(x: x, y: y, width: 16, height: 8) }
         let cx = (flags >> 5) & 15, cy = (flags >> 9) & 7
@@ -39,13 +39,16 @@ public struct Lemmings2Objects: Sendable {
             // Native object coordinates include that same border.
             let originX = placed.x - 16, originY = placed.y - 16
             var previousX = originX, previousY = originY
-            for (partIndex, c) in object.components.enumerated() {
-                let relativeX = c.positioningFlags & 0x40 != 0
-                let relativeY = c.positioningFlags & 0x80 != 0
-                let x = relativeX ? previousX + (partIndex == 0 ? 0 : c.x) : originX + c.x
-                let y = relativeY ? previousY + (partIndex == 0 ? 0 : c.y) : originY + c.y
-                let columns = c.positioningFlags & 0x20 != 0 ? placed.parameter1 + 1 : 1
-                let rows = c.positioningFlags & 0x10 != 0 ? placed.parameter2 + 1 : 1
+            for c in object.components {
+                // L2.RKO 178f–183d: 0x80 uses the preceding X and 0x40
+                // uses the preceding Y. Repeated parts use record deltas,
+                // independent of sprite dimensions.
+                let relativeX = c.positioningFlags & 0x80 != 0
+                let relativeY = c.positioningFlags & 0x40 != 0
+                let repeatedX = c.positioningFlags & 0x20 != 0
+                let repeatedY = c.positioningFlags & 0x10 != 0
+                let columns = repeatedX ? placed.parameter1 + 1 : 1
+                let rows = repeatedY ? placed.parameter2 + 1 : 1
                 guard columns <= 256, rows <= 256, columns * rows <= 4096, result.count + columns * rows <= 16384 else {
                     throw SequelDataError.invalid("Native L2 object extension exceeds the safety limit.")
                 }
@@ -62,15 +65,23 @@ public struct Lemmings2Objects: Sendable {
                     }
                     frames = animations[key]!
                 }
-                let dx = frames.first?.width ?? 16, dy = frames.first?.height ?? 8
-                for row in 0..<rows { for column in 0..<columns {
-                    let px = x + column * dx, py = y + row * dy
-                    result.append(Part(objectIndex: index, type: object.type, x: px, y: py,
-                        component: c, frames: frames,
-                        trigger: Self.trigger(flags: c.triggerFlags, interaction: c.interaction, x: px, y: py)))
-                } }
-                previousX = x + (columns - 1) * dx
-                previousY = y + (rows - 1) * dy
+                let initialX = previousX
+                var rowY = repeatedY ? previousY : (relativeY ? previousY : originY) + c.y
+                for _ in 0..<rows {
+                    var columnX = repeatedX ? initialX : (relativeX ? initialX : originX) + c.x
+                    for _ in 0..<columns {
+                        if repeatedX && relativeX { columnX += c.x }
+                        result.append(Part(objectIndex:index,type:object.type,x:columnX,y:rowY,
+                            component:c,frames:frames,
+                            trigger:Self.trigger(flags:c.triggerFlags,interaction:c.interaction,x:columnX,y:rowY)))
+                        previousX = columnX; previousY = rowY
+                    }
+                    if repeatedY {
+                        previousX = initialX
+                        if relativeY { rowY += c.y }
+                        previousY = rowY
+                    }
+                }
             }
         }
         parts = result

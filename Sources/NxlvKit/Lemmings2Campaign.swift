@@ -41,6 +41,12 @@ public struct Lemmings2Campaign: Sendable {
     public var isComplete: Bool { (0..<12).allSatisfy { tribeMedal($0) != .none } }
     public var hasGoldenTalisman: Bool { (0..<12).allSatisfy { tribeMedal($0) == .gold } }
 
+    /// The ark ending requires a golden talisman and at least thirty survivors
+    /// from each tribe. Completing the levels alone still permits replays.
+    public var canLaunchArk: Bool {
+        hasGoldenTalisman && (0..<12).allSatisfy { (results[$0*10+9]?.saved ?? 0) >= 30 }
+    }
+
     public init(root: URL) throws {
         levels = try (0..<120).map { number in
             let data = try Data(contentsOf: root.appendingPathComponent(String(format: "LEVELS/LEVEL%03d.DAT", number)))

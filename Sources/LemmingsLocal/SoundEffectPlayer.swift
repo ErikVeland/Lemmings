@@ -62,7 +62,8 @@ final class SoundEffectPlayer: @unchecked Sendable {
     engine.attach(node)
     engine.connect(node, to: engine.mainMixerNode, format: format)
     sourceNode = node
-    try engine.start()
+    do { try engine.start() }
+    catch { engine.detach(node); sourceNode = nil; throw error }
     isRunning = true
   }
 
@@ -72,6 +73,12 @@ final class SoundEffectPlayer: @unchecked Sendable {
     if let sourceNode { engine.detach(sourceNode) }
     sourceNode = nil
     isRunning = false
+  }
+
+  func suspendOutput() { if isRunning { engine.pause() } }
+
+  func resumeOutput() throws {
+    if isRunning && !engine.isRunning { try engine.start() }
   }
 
   private func fill(_ buffers: UnsafeMutableAudioBufferListPointer, frames: Int) {
@@ -230,5 +237,11 @@ final class SoundEffectPlayer: @unchecked Sendable {
     lock.lock()
     defer { lock.unlock() }
     return isMuted
+  }
+
+  var volume: Double {
+    lock.lock()
+    defer { lock.unlock() }
+    return level
   }
 }

@@ -1,95 +1,58 @@
 # Beta testing
 
-This page tells you how to make a beta build and how a tester opens it.
+Beta 8 is version `0.1`, build `8`. The app supports Intel and Apple silicon,
+with a minimum deployment target of macOS 13. See `ReleaseNotes-beta8.md` for
+changes and preview limitations.
 
-## Beta 4
+## Validate the build
 
-Beta 4 is version `0.1`, build `4`. It includes the new application icon.
-The tester package is `LemmingsLocal-0.1-beta4.zip` for Intel and Apple silicon
-Macs running macOS 13 or later. The slim package retains the game music modules
-and omits the studio soundtrack recordings.
-
-The build number in `Resources/Info.plist` also sets the beta number in the
-package filename. Increase it before each new beta release.
-
-## Make a build
-
-Run this command in the project directory:
+Run from the project directory:
 
 ```sh
-zsh Scripts/package-beta.sh
+zsh Scripts/build-local-app.sh
+zsh Scripts/run-app-integration-tests.sh
+zsh Scripts/run-beta-regressions.sh
+zsh Scripts/run-swift-tests.sh
 ```
 
-The script builds the app, signs it, and writes a zip file. The script prints
-the path and the size of the zip file at the end.
+Integration tests use their own app identifier and preferences, plus assets from
+the local app bundle. The Swift Testing runner works around stale Command Line
+Tools manifest interfaces in a local copy; it does not modify the installed tools.
 
-To leave out the studio soundtrack recordings, set `BETA_SLIM` first:
+## Package for testers
 
 ```sh
-BETA_SLIM=1 zsh Scripts/package-beta.sh
+BETA_NOTARY_PROFILE=lemmings-beta zsh Scripts/package-beta.sh
 ```
 
-A slim build is about 128 MB. A full build is about 504 MB. The recordings are
-the difference. The game modules stay in both builds, so every level has music.
+The script builds both architectures, signs with the Developer ID in the
+keychain, submits to Apple, staples the ticket, and checks the extracted zip
+with Gatekeeper. Earlier zip files move into `.build/local/archive/`.
+The final archive is `.build/local/UltimateLemmings-0.1-beta8.zip`.
 
-## Sign the build for other computers
-
-macOS blocks a downloaded app that Apple has not notarized. An unsigned build
-runs on your computer. It does not run on the computer of a tester.
-
-The script finds the Developer ID in your keychain and signs the app with it.
-Notarization uses an App Store Connect API key. The key is already stored in
-the keychain under the profile name `lemmings-beta`.
-
-To make a notarized build, set the profile:
+For a package without recorded soundtracks:
 
 ```sh
 BETA_SLIM=1 BETA_NOTARY_PROFILE=lemmings-beta zsh Scripts/package-beta.sh
 ```
 
-The script uploads the build, waits for Apple, and staples the ticket to the
-app. A stapled app passes Gatekeeper with no network connection.
+The slim package retains module music. Both variants use the same filename;
+keep only the intended variant in the handoff folder. Always notarize the
+variant you distribute.
 
-App-specific passwords do not work for this account. Use the API key.
+## Tester instructions
 
-To store the key again on another computer, use the key file, the key ID, and
-the issuer ID:
+1. Unpack the zip.
+2. Move `Ultimate Lemmings.app` to Applications.
+3. Open the app.
 
-```sh
-xcrun notarytool store-credentials lemmings-beta \
-  --key AuthKey_MNWTSU7QGZ.p8 --key-id MNWTSU7QGZ \
-  --issuer 7b152c28-1a8d-4980-834f-7cb8530365b0
-```
+No extra game files are needed for the bundled campaigns. Fan packs and
+NeoLemmix styles use separately selected folders.
 
-## Instructions for a tester
+Check a fresh profile and an upgrade from beta 7. Exercise all display modes,
+fullscreen and resizing, music-source changes, mute, sound-bank changes,
+single-step completion, and transitions into and out of the sequels.
+Report the game and level, settings, and whether restarting changes the result.
 
-Send these four steps with the zip file.
-
-1. Download the zip file.
-2. Double-click the zip file to unpack it.
-3. Move `Ultimate Lemmings.app` to your Applications folder.
-4. Open the app.
-
-A notarized build opens with no warning and needs no other step.
-
-If you send a build that is not notarized, macOS stops it. The tester must then
-run this command one time:
-
-```sh
-xattr -dr com.apple.quarantine "/Applications/Ultimate Lemmings.app"
-```
-
-## What to test
-
-The app needs no other files. All game data is inside the app.
-
-Report these things:
-
-- The level and the game where a problem happens.
-- The artwork, music, and sound settings in use.
-- Whether the problem repeats after a restart.
-
-## Before you distribute
-
-The app contains commercial game data. Read `THIRD_PARTY_NOTICES.md` first.
-Keep the test group private and small.
+The app contains commercial game data. Keep the beta test group private and
+follow `THIRD_PARTY_NOTICES.md`.

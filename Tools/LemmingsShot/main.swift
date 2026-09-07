@@ -77,6 +77,12 @@ private func render(
         playfield.viewport.center(on: Double(entrance.x))
     }
 
+    if let index = CommandLine.arguments.firstIndex(of: "--scroll-x"),
+       index + 1 < CommandLine.arguments.count,
+       let x = Double(CommandLine.arguments[index + 1]) {
+        playfield.viewport.scrollX = x
+    }
+
     let panelPalette = ClassicLemmingPalette.panelVGA
     if let graphics = assets.panel {
         let bytes = graphics.rgba(using: panelPalette)

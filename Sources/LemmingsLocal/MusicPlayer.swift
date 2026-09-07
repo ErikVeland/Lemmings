@@ -21,6 +21,7 @@ final class ModuleMusicPlayer: @unchecked Sendable {
 
   private let sampleRate = 44100.0
   private(set) var isRunning = false
+  var isOutputRunning: Bool { engine.isRunning }
   private(set) var currentTitle: String?
 
   /// Modules found in the chosen directory, sorted by name.
@@ -48,7 +49,13 @@ final class ModuleMusicPlayer: @unchecked Sendable {
     engine.attach(node)
     engine.connect(node, to: engine.mainMixerNode, format: format)
     sourceNode = node
-    try engine.start()
+    do {
+      try engine.start()
+    } catch {
+      engine.detach(node)
+      sourceNode = nil
+      throw error
+    }
     isRunning = true
   }
 
@@ -58,6 +65,12 @@ final class ModuleMusicPlayer: @unchecked Sendable {
     if let sourceNode { engine.detach(sourceNode) }
     sourceNode = nil
     isRunning = false
+  }
+
+  func suspendOutput() { if isRunning { engine.pause() } }
+
+  func resumeOutput() throws {
+    if isRunning && !engine.isRunning { try engine.start() }
   }
 
   private func fill(_ buffers: UnsafeMutableAudioBufferListPointer, frames: Int) {
@@ -143,6 +156,12 @@ final class ModuleMusicPlayer: @unchecked Sendable {
     lock.lock()
     defer { lock.unlock() }
     return isMuted
+  }
+
+  var volume: Double {
+    lock.lock()
+    defer { lock.unlock() }
+    return level
   }
 
   /// Applies new processing, keeping the tune playing from the start.

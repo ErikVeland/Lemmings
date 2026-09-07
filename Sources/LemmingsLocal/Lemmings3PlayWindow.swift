@@ -41,6 +41,7 @@ import NxlvKit
     private let endRun = NSButton(title: "End run…", target: nil, action: nil)
     private let canvas = Lemmings3Canvas()
     private let status = NSTextField(labelWithString: "")
+    private let artworkButton = NSButton(title: "", target: nil, action: nil)
     private let pause = NSButton(title: "Start", target: nil, action: nil)
     private let speed = NSButton(title: "Fast ×8 (F)", target: nil, action: nil)
     private var actions: [NSButton] = []
@@ -113,10 +114,19 @@ import NxlvKit
         rebuildLevels()
         levels.target = self; levels.action = #selector(chooseLevel)
         next.target = self; next.action = #selector(advance)
+        artworkButton.target = self; artworkButton.action = #selector(toggleArtwork)
+        artworkButton.title = SequelArtworkPreference.enabled ? "Mac-style 2×" : "Original PC"
+        artworkButton.toolTip = "Switch artwork for Lemmings 2 and 3. Gameplay stays at its original resolution."
+        NotificationCenter.default.addObserver(self, selector: #selector(artworkChanged),
+            name: SequelArtworkPreference.changed, object: nil)
         let controls = NSStackView(views: [pause, step, speed, retry, tribes, levels, next])
         controls.spacing = 8
         let notice = NSTextField(labelWithString: "Experimental physics, tool limits and animation mapping · Unsupported levels disabled · No achievement credit")
         notice.font = .systemFont(ofSize: 12); notice.textColor = .secondaryLabelColor
+        notice.maximumNumberOfLines = 2
+        notice.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        let noticeRow = NSStackView(views: [notice, artworkButton])
+        noticeRow.spacing = 8
         for (index, action) in Lemmings3Runtime.Action.allCases.enumerated() {
             let button = NSButton(title: "\(index + 1) \(action.rawValue.capitalized)", target: self, action: #selector(selectAction(_:)))
             button.tag = index; button.setButtonType(.pushOnPushOff); actions.append(button)
@@ -130,15 +140,16 @@ import NxlvKit
         status.font = .monospacedSystemFont(ofSize: 12, weight: .regular)
         status.maximumNumberOfLines = 2
         let rootView = NSView()
-        for view in [controls, notice, canvas, bar, status] {
+        for view in [controls, noticeRow, canvas, bar, status] {
             view.translatesAutoresizingMaskIntoConstraints = false; rootView.addSubview(view)
         }
         NSLayoutConstraint.activate([
             controls.topAnchor.constraint(equalTo: rootView.topAnchor, constant: 12),
             controls.leadingAnchor.constraint(equalTo: rootView.leadingAnchor, constant: 12),
-            notice.topAnchor.constraint(equalTo: controls.bottomAnchor, constant: 8),
-            notice.leadingAnchor.constraint(equalTo: controls.leadingAnchor),
-            canvas.topAnchor.constraint(equalTo: notice.bottomAnchor, constant: 8),
+            noticeRow.topAnchor.constraint(equalTo: controls.bottomAnchor, constant: 8),
+            noticeRow.leadingAnchor.constraint(equalTo: controls.leadingAnchor),
+            noticeRow.trailingAnchor.constraint(equalTo: rootView.trailingAnchor, constant: -12),
+            canvas.topAnchor.constraint(equalTo: noticeRow.bottomAnchor, constant: 8),
             canvas.leadingAnchor.constraint(equalTo: rootView.leadingAnchor),
             canvas.trailingAnchor.constraint(equalTo: rootView.trailingAnchor),
             canvas.bottomAnchor.constraint(equalTo: bar.topAnchor, constant: -8),
@@ -150,7 +161,7 @@ import NxlvKit
             status.heightAnchor.constraint(equalToConstant: 36)
         ])
         window.contentView = rootView
-        try canvas.load(scene: scene, style: style, permanent: permanent, temporary: temporary, sprites: sprites, root: dataRoot)
+        try canvas.load(scene: scene, style: style, permanent: permanent, temporary: temporary, sprites: sprites, root: dataRoot, terrainStyle: level.style)
         canvas.resetCamera(level)
         canvas.onClick = { [weak self] x, y in self?.assign(x: x, y: y) }
         canvas.onKey = { [weak self] key in
@@ -170,7 +181,17 @@ import NxlvKit
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
     func present() { showWindow(nil); window?.makeKeyAndOrderFront(nil); window?.makeFirstResponder(canvas) }
     func windowWillClose(_ notification: Notification) { stop() }
-    func stop() { timer?.invalidate(); timer = nil; save() }
+    func stop() {
+        NotificationCenter.default.removeObserver(self, name: SequelArtworkPreference.changed, object: nil)
+        timer?.invalidate(); timer = nil; save()
+    }
+    @objc private func toggleArtwork() { SequelArtworkPreference.setEnabled(!SequelArtworkPreference.enabled) }
+    @objc private func artworkChanged() {
+        do { try canvas.refreshArtwork() }
+        catch { message = "Artwork could not be loaded: \(error)" }
+        artworkButton.title = SequelArtworkPreference.enabled ? "Mac-style 2×" : "Original PC"
+        refresh()
+    }
     static func savedCompletion(root: URL) -> Int {
         Lemmings3ClassicCampaign.Tribe.allCases.reduce(0) { count, tribe in
             guard var campaign = try? Lemmings3ClassicCampaign(root: root, tribe: tribe) else { return count }
@@ -227,7 +248,7 @@ import NxlvKit
             let temp = try Lemmings3Objects(data: Data(contentsOf: dataRoot.appendingPathComponent(String(format: "LEVELS/TEMP%03d.OBS", level.temporaryObjectsReference))))
             let replacement = try Lemmings3Runtime(level: level, style: session.style, permanent: perm, temporary: temp, total: session.campaign.population)
             let scene = try Lemmings3Scene(level: level, style: session.style, permanent: perm, temporary: temp)
-            try canvas.load(scene: scene, style: session.style, permanent: perm, temporary: temp, sprites: session.sprites, root: dataRoot)
+            try canvas.load(scene: scene, style: session.style, permanent: perm, temporary: temp, sprites: session.sprites, root: dataRoot, terrainStyle: level.style)
             save()
             style = session.style; sprites = session.sprites; availability = session.availability; progressKey = session.progressKey
             campaign = session.campaign; initial = replacement
@@ -257,7 +278,7 @@ import NxlvKit
         let temp = try Lemmings3Objects(data: Data(contentsOf: dataRoot.appendingPathComponent(String(format: "LEVELS/TEMP%03d.OBS", level.temporaryObjectsReference))))
         let replacement = try Lemmings3Runtime(level: level, style: style, permanent: perm, temporary: temp, total: proposed.population)
         let scene = try Lemmings3Scene(level: level, style: style, permanent: perm, temporary: temp)
-        try canvas.load(scene: scene, style: style, permanent: perm, temporary: temp, sprites: sprites, root: dataRoot)
+        try canvas.load(scene: scene, style: style, permanent: perm, temporary: temp, sprites: sprites, root: dataRoot, terrainStyle: level.style)
         campaign = proposed; initial = replacement; save()
         window?.title = "Lemmings 3 — \(campaign.tribe.title) \(campaign.index + 1) — Experimental native preview"
         restart()
@@ -326,17 +347,23 @@ import NxlvKit
     override var acceptsFirstResponder: Bool { true }
     private var zoom: CGFloat { max(0.1, min(bounds.width / 320, bounds.height / 160)) }
     private var origin: NSPoint { NSPoint(x: (bounds.width - 320 * zoom) / 2, y: (bounds.height - 160 * zoom) / 2) }
-    private func image(width: Int, height: Int, pixels: [UInt8], palette: [UInt8], opaque: [Bool]? = nil) throws -> NSImage {
-        var bytes = pixels.flatMap { colour in Array(palette[Int(colour) * 4..<(Int(colour) * 4 + 4)]) }
-        if let opaque { for index in opaque.indices where !opaque[index] { bytes[index * 4 + 3] = 0 } }
-        guard let provider = CGDataProvider(data: Data(bytes) as CFData), let cg = CGImage(width: width, height: height,
-            bitsPerComponent: 8, bitsPerPixel: 32, bytesPerRow: width * 4, space: CGColorSpaceCreateDeviceRGB(),
-            bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.last.rawValue), provider: provider, decode: nil,
-            shouldInterpolate: false, intent: .defaultIntent) else { throw SequelDataError.invalid("Cannot create a Chronicles frame.") }
-        return NSImage(cgImage: cg, size: NSSize(width: width, height: height))
+    private let artworkRenderer = SequelArtworkRenderer()
+    private var terrainCategory: SequelMacCategory = .organic
+    private var reloadArtwork: (() throws -> Void)?
+    private func image(width: Int, height: Int, pixels: [UInt8], palette: [UInt8], opaque: [Bool]? = nil,
+                       category: SequelMacCategory = .sprite) throws -> NSImage {
+        try artworkRenderer.image(width: width, height: height, pixels: pixels,
+            palette: palette, opaque: opaque, category: category)
     }
-    func load(scene: Lemmings3Scene, style: Lemmings3Style, permanent: Lemmings3Objects, temporary: Lemmings3Objects, sprites bank: Lemmings3Sprites, root: URL) throws {
+    func refreshArtwork() throws { try reloadArtwork?(); needsDisplay = true }
+
+    func load(scene: Lemmings3Scene, style: Lemmings3Style, permanent: Lemmings3Objects, temporary: Lemmings3Objects, sprites bank: Lemmings3Sprites, root: URL, terrainStyle: Int) throws {
+        terrainCategory = .lemmings3Terrain(style: terrainStyle)
+        reloadArtwork = { [weak self] in
+            try self?.load(scene: scene, style: style, permanent: permanent, temporary: temporary, sprites: bank, root: root, terrainStyle: terrainStyle)
+        }
         let staged = Lemmings3Canvas()
+        staged.terrainCategory = terrainCategory
         try staged.populate(scene: scene, style: style, permanent: permanent, temporary: temporary, sprites: bank, root: root)
         terrain = staged.terrain; sprites = staged.sprites; objects = staged.objects
         foreground = staged.foreground; foregroundPixels = staged.foregroundPixels
@@ -347,7 +374,7 @@ import NxlvKit
     private func populate(scene: Lemmings3Scene, style: Lemmings3Style, permanent: Lemmings3Objects, temporary: Lemmings3Objects, sprites bank: Lemmings3Sprites, root: URL) throws {
         objects = []; pickupImages = [:]; creatureImages = [:]; renderedEdits = [:]
         mapWidth = scene.image.width; mapHeight = scene.image.height; palette = style.palette
-        terrain = try image(width: mapWidth, height: mapHeight, pixels: scene.background.pixels, palette: style.palette)
+        terrain = try image(width: mapWidth, height: mapHeight, pixels: scene.background.pixels, palette: style.palette, category: terrainCategory)
         foregroundPixels = Array(repeating: 255, count: mapWidth * mapHeight)
         // Native 8x8 construction tile. Its placement rules remain experimental.
         brickPixels = try style.constructionTile().pixels
@@ -363,13 +390,13 @@ import NxlvKit
                 let colours = try Lemmings3Sprites.palette(Data(contentsOf: root.appendingPathComponent(prefix + ".PAL")), over: palette)
                 creatureImages[kind.rawValue] = try creatureBank.animations.map { animation in
                     try animation.frames.map { try image(width: animation.width, height: animation.height,
-                        pixels: $0.pixels, palette: colours, opaque: $0.opaque) }
+                        pixels: $0.pixels, palette: colours, opaque: $0.opaque, category: .mechanical) }
                 }
             }
             guard let object = style.permanent.objects[placed.identifier], placed.identifier < 5000, object.frameCount > 1 else { continue }
             let frames = try (0..<object.frameCount).map { index in
                 let frame = try style.permanent.image(object: placed.identifier, frame: index, palette: style.palette)
-                return try image(width: frame.width, height: frame.height, pixels: frame.pixels, palette: style.palette, opaque: frame.pixels.map { $0 != 255 })
+                return try image(width: frame.width, height: frame.height, pixels: frame.pixels, palette: style.palette, opaque: frame.pixels.map { $0 != 255 }, category: .mechanical)
             }
             objects.append((placementIndex, placed.x, placed.y, object.flags == 0x0402, frames))
         }
@@ -382,13 +409,14 @@ import NxlvKit
                 }
             }
         }
-        foreground = try image(width: mapWidth, height: mapHeight, pixels: foregroundPixels, palette: palette, opaque: foregroundPixels.map { $0 != 255 })
+        foreground = try image(width: mapWidth, height: mapHeight, pixels: foregroundPixels, palette: palette, opaque: foregroundPixels.map { $0 != 255 }, category: terrainCategory)
         for tool in Lemmings3Runtime.Tool.allCases {
             let frame = try style.permanent.image(object: tool.rawValue, palette: palette)
-            pickupImages[tool.rawValue] = try image(width: frame.width, height: frame.height, pixels: frame.pixels, palette: palette, opaque: frame.pixels.map { $0 != 255 })
+            pickupImages[tool.rawValue] = try image(width: frame.width, height: frame.height, pixels: frame.pixels, palette: palette, opaque: frame.pixels.map { $0 != 255 }, category: .mechanical)
         }
     }
     func resetCamera(_ level: Lemmings3Level) {
+        terrainCategory = .lemmings3Terrain(style: level.style)
         cameraX = CGFloat(min(max(0, mapWidth - 320), level.screenX))
         cameraY = CGFloat(min(max(0, mapHeight - 160), level.screenY))
     }
@@ -413,7 +441,7 @@ import NxlvKit
             for (index, filled) in game.terrainEdits {
                 pixels[index] = filled ? brickPixels[(index / mapWidth % 8) * 8 + index % mapWidth % 8] : 255
             }
-            if let frame = try? image(width: mapWidth, height: mapHeight, pixels: pixels, palette: palette, opaque: pixels.map { $0 != 255 }) {
+            if let frame = try? image(width: mapWidth, height: mapHeight, pixels: pixels, palette: palette, opaque: pixels.map { $0 != 255 }, category: terrainCategory) {
                 foreground = frame; renderedEdits = game.terrainEdits
             }
         }

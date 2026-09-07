@@ -198,6 +198,10 @@ enum GamePhase: Equatable {
   }
 
   override func mouseExited(with event: NSEvent) {
+    clearPointer()
+  }
+
+  func clearPointer() {
     cursorLevelPoint = nil
     cursorViewPoint = nil
     needsDisplay = true

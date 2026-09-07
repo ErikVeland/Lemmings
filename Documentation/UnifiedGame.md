@@ -51,8 +51,9 @@ save migration, campaign counts and all 292 classic level renders, entrances,
 exits and releases. These are load-and-run checks, not complete solution
 replays for every level.
 
-Lemmings 2 remains Classic-only for gameplay. Its other tribes still need
-skills and interactive objects. Lemmings 3 retains its native preview status.
+Lemmings 2 is a native beta with all twelve tribes, all 51 skills, native interactive
+objects and four original practice maps. All 120 levels pass load-and-run
+checks; full solution coverage is still incomplete. Lemmings 3 retains its native preview status.
 The shared library does not remove either engine's existing limitations.
 
 ## Display and navigation

@@ -9,10 +9,7 @@
 #   BETA_SIGNING_IDENTITY  "Developer ID Application: Name (TEAMID)"
 #   BETA_NOTARY_PROFILE    a profile stored by `xcrun notarytool store-credentials`
 #
-# Set BETA_SLIM=1 to leave out the studio soundtrack recordings. They are
-# 406 MB of the bundle, about four fifths of the download, and the game's own
-# ProTracker modules already play the same music. A slim build is the smaller
-# and legally safer thing to hand round; a full build sounds better.
+# Set BETA_SLIM=1 to leave out the studio recordings. Module music remains.
 #
 # Without them the script still produces a working zip, and prints the steps a
 # tester must take by hand to open it.
@@ -40,15 +37,7 @@ zsh "$project_dir/Scripts/build-local-app.sh" >/dev/null
 
 if [[ "${BETA_SLIM:-0}" == 1 ]]; then
   echo "==> Slim build. Removing the studio soundtrack recordings."
-  # Only folders of plain audio files are removed. The ProTracker modules the
-  # game itself shipped with stay, so every level still has its music.
-  find "$app_dir/Contents/Resources/Music" -type d -depth 1 -print0 |
-    while IFS= read -r -d '' folder; do
-      if [[ -n "$(find "$folder" -maxdepth 1 -iname '*.wav' -print -quit)" ]]; then
-        echo "    dropping ${folder:t}"
-        rm -rf "$folder"
-      fi
-    done
+  zsh "$project_dir/Scripts/strip-recorded-music.sh" "$app_dir/Contents/Resources/Music"
 fi
 
 if [[ -n "${BETA_SIGNING_IDENTITY:-}" ]]; then
@@ -67,10 +56,13 @@ echo "==> Checking the signature"
 codesign --verify --deep --strict --verbose=1 "$app_dir"
 
 echo "==> Compressing"
-# Remove every earlier zip, not just this one. A stale build sitting beside the
-# new one is how an unnotarized copy reached the beta testers once already: it
-# had the simpler name and looked like the obvious file to send.
-rm -f "$build_dir"/LemmingsLocal*.zip(N) "$build_dir"/UltimateLemmings*.zip(N)
+# Keep earlier builds out of the handoff folder without deleting them.
+earlier_zips=("$build_dir"/LemmingsLocal*.zip(N) "$build_dir"/UltimateLemmings*.zip(N))
+if (( ${#earlier_zips} )); then
+  archive_dir="$build_dir/archive/$(date +%Y%m%d-%H%M%S)"
+  mkdir -p "$archive_dir"
+  mv "${earlier_zips[@]}" "$archive_dir/"
+fi
 ditto -c -k --sequesterRsrc --keepParent "$app_dir" "$zip_path"
 
 if [[ -n "${BETA_NOTARY_PROFILE:-}" ]]; then

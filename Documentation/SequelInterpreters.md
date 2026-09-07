@@ -1,11 +1,12 @@
 # Lemmings 2 and 3 interpreters
 
 The native readers do not execute DOS binaries or convert sequel levels to
-Lemmings 1 physics. An experimental L2 runtime now starts all ten Classic levels.
-Only the first has an automated full-rescue replay (60/60, no nuke). L3 now starts all 90 campaign
+Lemmings 1 physics. The L2 runtime now starts all 120 campaign levels and four practice maps.
+Classic 1 has an automated full-rescue replay (60/60, no nuke); Cavelem 1–3
+have a continuous one-survivor completion replay chain. L3 now starts all 90 campaign
 levels. Classic levels 1–3, Egyptian level 1, and Shadow level 1 have completed-run
-replays. The Shadow replay abandons one lemming after rescuing nine. Neither sequel
-is a complete or verified 1:1 interpreter yet.
+replays. The Shadow replay abandons one lemming after rescuing nine. L2 is available as a native beta; L3 remains a preview. Neither claims
+verified 1:1 original-engine behaviour.
 
 ## Play L2
 
@@ -37,16 +38,14 @@ Shift-scroll moves horizontally with a mouse wheel.
 
 Preferences has separate Music and Sound FX toggles. The native PCM mixer plays
 panel clicks, assignments, entrance cues, explosions, falls, water/fire deaths,
-steel hits and construction warnings. Unimplemented skills and objects still
-need their own sound events; this is not complete sound parity with the original.
+steel hits, construction warnings, machine launches, rope, valves and teleporters.
+Some skill and object effects still need sound parity checks.
 
 The original map selects a tribe. Briefing arrows select unlocked levels.
-All ten Classic levels can start, including levels 5 and 6.
-Each exit has a passing alignment and interaction test. Levels 2–10 still
-need full solution replays and original-engine comparisons.
-The runtime includes eight Classic skills plus stacker and platformer
-mechanics, terrain changes, entrances, exits, time limits, rescue counts and
-retry. Other tribes remain disabled until their skills and objects work.
+All 120 campaign levels start and pass an initial physics smoke check. All 51
+skills and object types 0–14 have native implementations. The extended physics
+still needs broader full-level and original-engine comparison. A successful
+load is not a verified solution.
 The campaign model covers all twelve tribes, carries the best survivor count
 forward, and applies the original gold/silver/bronze thresholds. Progress uses
 the separate `nativeL2Campaign.v1` store, with autosave and eight manual slots.
@@ -60,11 +59,11 @@ See [L2 physics evidence and remaining work](Lemmings2PhysicsEvidence.md).
 This is not a 1:1 engine yet. It does not award verified
 campaign achievements or change original saves.
 
-The menu, font, panel, map and briefing use original assets, but this is not a
-complete original front-end interpreter. Intro and practice are not implemented.
-Preferences, medal presentation, talisman placement and ending screens need
-their complete original script behaviour. A decoded asset is not evidence
-that the corresponding game flow works.
+The menu, font, panel, map and briefing use original assets. Practice supports
+choosing eight skills on the four original training maps, with separate progress.
+The eight-scene introduction, talisman award and ending screens run their original
+GAL scripts. The ark movie decodes all 100 original frames. The ark ending requires
+a golden talisman and at least 30 survivors from each tribe.
 
 ## Play the L3 preview
 
@@ -222,7 +221,7 @@ achievements remain unfinished.
   retry, and speed.
 
 The readers retain numeric IDs and unknown fields. The experimental runtime
-maps eight Classic skills, stacker, platformer, and object types 2, 3, 5, 6, and 11. It rejects other
+maps eight Classic skills, stacker, platformer, stomper, and object types 2, 3, 5, 6, and 11. It rejects other
 types instead of silently assigning them unrelated behaviour.
 
 ## Verification
@@ -374,7 +373,7 @@ This aligns all ten native exits to their terrain without enlarging any
 trigger or buffer. Camera movement uses the native header's limits instead
 of exposing unused columns. Original-engine movement comparisons remain due.
 
-1. Implement L2's remaining skills and interactive objects; its terrain records and special graphics now decode.
+1. Broaden L2's complete-level solutions and original-engine comparisons; all stocked skills and campaign object types are implemented.
 2. Validate L3 attribute semantics and resolve remaining object interactions.
 3. Implement each game's fixed-tick simulation and skill mechanics separately.
 4. Validate movement and outcomes against recorded runs of the original games.

@@ -21,6 +21,7 @@ enum PanelGlyph: String {
   /// reduction to a button of this size nor sits with a bar this flat.
   case nuke
   case pause
+  case fastForward
   /// Shown on the pause button while the level is held, so the button says
   /// what it will do rather than what it did.
   case play
@@ -44,6 +45,8 @@ enum PanelGlyph: String {
         "..oo++++oo..",
         "============",
       ]
+    case .fastForward:
+      return ["#.....#.....", "##....##....", "###...###...", "####..####..", "#####.#####.", "############", "#####.#####.", "####..####..", "###...###...", "##....##....", "#.....#.....", "............"]
     case .pause:
       return Array(repeating: "..###..###..", count: 12)
     case .play:
@@ -73,7 +76,7 @@ enum PanelGlyph: String {
     switch self {
     case .nuke:
       return ["+": (255, 236, 170), "o": (232, 116, 24), "=": (226, 178, 40)]
-    case .pause, .play:
+    case .pause, .play, .fastForward:
       return ["#": (194, 224, 158)]
     }
   }
@@ -149,6 +152,7 @@ enum PanelGlyph: String {
     switch button {
     case .pause: return isPaused ? .play : .pause
     case .nuke: return .nuke
+    case .fastForward: return .fastForward
     case .rateDown, .rateUp, .skill: return nil
     }
   }

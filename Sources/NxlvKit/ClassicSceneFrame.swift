@@ -37,6 +37,13 @@ public enum ClassicSceneFrame {
                 frame = cooldown > 0 ? min(object.rgbaFrames.count - cooldown, object.rgbaFrames.count - 1) : first
             }
             let source = [UInt8](object.rgbaFrames[max(0, frame)])
+            if graphic.triggerEffect == ClassicDOSObjectEffect.water.rawValue,
+               !placement.draw.isUpsideDown, !placement.draw.onlyOverwrite {
+                ClassicLiquidFill.draw(source: source, sourceWidth: graphic.width,
+                    sourceHeight: graphic.height, x: placement.x, y: placement.y,
+                    into: &pixels, width: level.width, height: level.height,
+                    solid: solid, scale: 1)
+            }
             for y in 0..<graphic.height {
                 let targetY = placement.y + y
                 guard (0..<level.height).contains(targetY) else { continue }
@@ -56,5 +63,44 @@ public enum ClassicSceneFrame {
             }
         }
         return Data(pixels)
+    }
+}
+
+/// Extends the liquid body behind terrain without changing collision masks.
+enum ClassicLiquidFill {
+    static func draw(source: [UInt8], sourceWidth: Int, sourceHeight: Int,
+        x: Int, y: Int, into pixels: inout [UInt8], width: Int, height: Int,
+        solid: [UInt8], scale: Int) {
+        guard sourceWidth > 0, sourceHeight > 0,
+              source.count == sourceWidth * sourceHeight * 4 else { return }
+        // Use the dominant colour in the lowest opaque row, below the wave highlights.
+        var bottom = sourceHeight - 1
+        var colours: [UInt32: Int] = [:]
+        while bottom >= 0 {
+            for column in 0..<sourceWidth {
+                let p = (bottom * sourceWidth + column) * 4
+                guard source[p + 3] == 255 else { continue }
+                let colour = UInt32(source[p]) << 16 | UInt32(source[p + 1]) << 8 | UInt32(source[p + 2])
+                colours[colour, default: 0] += 1
+            }
+            if !colours.isEmpty { break }
+            bottom -= 1
+        }
+        guard let colour = colours.keys.sorted().max(by: { colours[$0]! < colours[$1]! }) else { return }
+        let left = max(0, x), right = min(width, x + sourceWidth)
+        let top = max(0, y + bottom + 1)
+        guard left < right, top < height else { return }
+        for column in left..<right {
+            for row in max(0, y)..<height {
+                let p = (row * width + column) * 4
+                // A pool ends at its floor, including newly built terrain.
+                if solid[(row / scale) * (width / scale) + column / scale] != 0 { break }
+                guard row >= top, pixels[p + 3] == 0 else { continue }
+                pixels[p] = UInt8((colour >> 16) & 255)
+                pixels[p + 1] = UInt8((colour >> 8) & 255)
+                pixels[p + 2] = UInt8(colour & 255)
+                pixels[p + 3] = 255
+            }
+        }
     }
 }

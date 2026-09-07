@@ -1,0 +1,42 @@
+{
+  "architectural": {
+    "samples": 94194,
+    "rules": 405,
+    "boundary_rules": 128,
+    "heldout_blocks": 17276,
+    "heldout_pixel_errors": 12491,
+    "nearest_pixel_errors": 13198
+  },
+  "liquid": {
+    "samples": 20620,
+    "rules": 3,
+    "boundary_rules": 1,
+    "heldout_blocks": 1216,
+    "heldout_pixel_errors": 667,
+    "nearest_pixel_errors": 667
+  },
+  "mechanical": {
+    "samples": 132683,
+    "rules": 62,
+    "boundary_rules": 23,
+    "heldout_blocks": 31784,
+    "heldout_pixel_errors": 21147,
+    "nearest_pixel_errors": 21159
+  },
+  "organic": {
+    "samples": 135741,
+    "rules": 488,
+    "boundary_rules": 193,
+    "heldout_blocks": 32978,
+    "heldout_pixel_errors": 24861,
+    "nearest_pixel_errors": 25709
+  },
+  "sprite": {
+    "samples": 8678,
+    "rules": 80,
+    "boundary_rules": 8,
+    "heldout_blocks": 1811,
+    "heldout_pixel_errors": 1751,
+    "nearest_pixel_errors": 1774
+  }
+}

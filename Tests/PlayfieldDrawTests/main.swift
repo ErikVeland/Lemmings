@@ -100,10 +100,40 @@ private func require(
   try require(view.edgeScrollDelta == nil, "menu cursor scrolled the new level")
 }
 
+@MainActor private func testClassicPanelLabels() throws {
+  let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
+  let directory = root.appendingPathComponent("Sources/Ports/xmas_dos_XmasLemmingsV1.9")
+  let level = try ClassicDataSet.detect(directory: directory).campaign.levels[0].level
+  let assets = try ClassicMainDATAssets.load(from: directory)
+  let ground = try ClassicGroundSet.load(style: level.groundStyle, from: directory)
+  let scene = try ClassicLevelRenderer.render(level, groundSet: ground)
+  let simulation = try ClassicDOSSimulation(level: level, renderedLevel: scene, mainDATAssets: assets)
+  let panel = PanelView(frame: NSRect(x: 0, y: 0, width: 960, height: 160))
+  panel.session = ClassicSession(simulation: simulation, width: scene.width, height: scene.height)
+  let graphics = assets.panel!
+  let pixels = graphics.rgba(using: ClassicLemmingPalette.panelVGA)
+  let provider = CGDataProvider(data: pixels as CFData)!
+  panel.panelImage = CGImage(width: graphics.width, height: graphics.height, bitsPerComponent: 8,
+    bitsPerPixel: 32, bytesPerRow: graphics.width * 4, space: CGColorSpaceCreateDeviceRGB(),
+    bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.last.rawValue), provider: provider,
+    decode: nil, shouldInterpolate: false, intent: .defaultIntent)
+  for width in [640.0, 960.0, 1920.0] {
+    panel.setFrameSize(NSSize(width: width, height: 240))
+    for fast in [false, true] {
+      panel.isFastForward = fast
+      let bitmap = panel.bitmapImageRepForCachingDisplay(in: panel.bounds)!
+      panel.cacheDisplay(in: panel.bounds, to: bitmap)
+      try require(bitmap.pixelsWide > 0, "Classic panel did not render")
+    }
+  }
+}
+
 @MainActor private func run() {
   let app = NSApplication.shared
   app.setActivationPolicy(.accessory)
   do {
+    try testClassicPanelLabels()
+    print("PASS Xmas panel labels at multiple sizes with speed control")
     try testCameraResize()
     print("PASS camera survives resizing and clears menu edge scrolling")
     try testMenuSurvivesThePanel()

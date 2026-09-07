@@ -2,6 +2,7 @@ import Foundation
 
 /// Sample indices resolved through L2.RKO's FXNumber table at 4877.
 public enum Lemmings2SoundCue: Int, Sendable, Hashable {
+    case launched = 0, rope = 2, balloonPop = 3, countdown = 22, valve = 31, teleporter = 34
     case levelStart = 18, doorOpen = 10, assignSkill = 21, explode = 11
     case splat = 27, drown = 37, fire = 35, fallOut = 17, builderWarning = 33, hitSteel = 8
 }
@@ -11,6 +12,21 @@ public struct Lemmings2SoundRequest: Sendable, Hashable {
     public let timeConstant: UInt8?
     public init(_ cue: Lemmings2SoundCue) { sample = cue.rawValue; timeConstant = nil }
     private init(sample: Int, timeConstant: UInt8) { self.sample = sample; self.timeConstant = timeConstant }
+    public static func assignment(skill: Lemmings2Runtime.Skill, tribe: Int) -> Self {
+        let sample: Int
+        switch skill {
+        case .jumper: sample = 15
+        case .superlem: sample = 30
+        case .surfer: sample = 36
+        case .attractor where (1..<12).contains(tribe): sample = 37+tribe
+        default: return Self(.assignSkill)
+        }
+        return Self(sample:sample)
+    }
+    public static func introduction(sample: Int) -> Self? {
+        (0..<79).contains(sample) ? Self(sample:sample) : nil
+    }
+    private init(sample: Int) { self.sample = sample; timeConstant = nil }
     public static func panel(slot: Int) -> Self? {
         // Native panel clicks transpose one sample for each of the twelve slots.
         let pitches: [UInt8] = [136,142,149,155,160,166,171,176,180,184,188,192]

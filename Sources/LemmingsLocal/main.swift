@@ -1,4 +1,5 @@
 import AppKit
+import AVFoundation
 import NxlvKit
 
 let displayInterval = 1.0 / 60.0
@@ -38,7 +39,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private var session: (any GameSession)?
   private var timer: Timer?
   private var accumulator = 0.0
+  private var lastStepTime: TimeInterval?
   private var isPaused = false
+  private var isFastForward = false
   private var phase: GamePhase = .briefing
   /// The whole game, from title to end.
   private var flow: ClassicGameFlow?
@@ -51,10 +54,13 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private var sequelCompletion: [ClassicTitle: Int] = [:]
   private var settingsWindow: SettingsWindow?
   private var settings = ClassicSettings()
+  private var audioMuted = false
+  private var audioIsSleeping = false
   private var previousDepth = ClassicColorDepth.full
   private var rankChoice = 0
   private var progress = ModernCampaignProgress()
   private var achievements = ClassicAchievementProgress()
+  private let achievementsWindow = AchievementsWindow()
   private let music = ModuleMusicPlayer()
   /// Plays recordings the player supplied, as an alternative to the modules.
   private let soundtrack = SoundtrackPlayer()
@@ -106,6 +112,12 @@ let achievementProgressKey = "ClassicAchievementProgress"
     buildMenu()
     buildInterface()
     installKeyboardShortcuts()
+    NotificationCenter.default.addObserver(self, selector: #selector(resumeAudioOutput),
+      name: .AVAudioEngineConfigurationChange, object: nil)
+    NSWorkspace.shared.notificationCenter.addObserver(self, selector: #selector(suspendAudioOutput),
+      name: NSWorkspace.willSleepNotification, object: nil)
+    NSWorkspace.shared.notificationCenter.addObserver(self, selector: #selector(wakeAudioOutput),
+      name: NSWorkspace.didWakeNotification, object: nil)
 
     if let saved = UserDefaults.standard.string(forKey: contentPathKey) {
       contentDirectory = URL(fileURLWithPath: saved, isDirectory: true)
@@ -113,10 +125,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     if let saved = UserDefaults.standard.string(forKey: stylesPathKey) {
       stylesDirectory = URL(fileURLWithPath: saved, isDirectory: true)
     }
-    if let data = UserDefaults.standard.data(forKey: settingsKey),
-      let stored = try? JSONDecoder().decode(ClassicSettings.self, from: data) {
-      settings = stored
-    }
+    restoreSettings()
     if !UserDefaults.standard.bool(forKey: "PreferMacArtworkV1") {
       settings.graphics = .macintosh
       UserDefaults.standard.set(true, forKey: "PreferMacArtworkV1")
@@ -136,29 +145,12 @@ let achievementProgressKey = "ClassicAchievementProgress"
       music.loadLibrary(at: bundled)
     }
     loadSoundtracks()
-    if UserDefaults.standard.bool(forKey: musicPresetKey) {
-      music.setEnhancements(.modern)
-    }
+    applyAudioSettings()
     do {
       try effects.start()
-      // Load the bank the saved settings ask for. Only the Macintosh source
-      // falls back to a bundled image, because it is the one that needs a disk
-      // the player may not have chosen yet.
-      if settings.sound == .amigaVoices {
-        loadSoundEffects(for: .amigaVoices)
-      } else if let saved = UserDefaults.standard.string(forKey: macImageKey) {
-        loadSoundEffects(from: URL(fileURLWithPath: saved))
-      } else if let bundled = BundledGameResources.macintoshSoundImage() {
-        loadSoundEffects(from: bundled)
-      }
+      loadSoundEffects(for: settings.sound)
     } catch {
       setStatus("Sound unavailable: \(error.localizedDescription)")
-    }
-    do {
-      try music.start()
-    } catch {
-      // Audio is optional. The game stays playable without it.
-      setStatus("Audio unavailable: \(error.localizedDescription)")
     }
     updateMusicButtons()
 
@@ -198,6 +190,11 @@ let achievementProgressKey = "ClassicAchievementProgress"
     mainMenu.addItem(appItem)
 
     let appMenu = NSMenu()
+    let aboutItem = NSMenuItem(title: "About Ultimate Lemmings",
+      action: #selector(showAbout), keyEquivalent: "")
+    aboutItem.target = self
+    appMenu.addItem(aboutItem)
+    appMenu.addItem(.separator())
     let achievementsItem = NSMenuItem(
       title: "Achievements…", action: #selector(showAchievements), keyEquivalent: "a")
     achievementsItem.keyEquivalentModifierMask = [.command, .shift]
@@ -328,6 +325,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
       return
     }
     tubeIsActive = wantsTube
+    panel.handlePointerUp()
+    playfield.clearPointer()
 
     if wantsTube {
       crtView.settings = tubeSettings()
@@ -343,6 +342,12 @@ let achievementProgressKey = "ClassicAchievementProgress"
         x: 0, y: 0, width: 320, height: panel.isMenuMode ? 200 : 160)
       playfield.viewport.zoom = 1
       crtView.onMouseDown = { [weak self] point in self?.tubeClick(point) }
+      crtView.onMouseUp = { [weak self] in self?.panel.handlePointerUp() }
+      crtView.onMouseDragged = { [weak self] point in
+        guard let self, point.y >= 160 else { return }
+        self.panel.handlePointerDrag(at: CGPoint(x: point.x, y: point.y - 160))
+      }
+      crtView.onMouseExited = { [weak self] in self?.playfield.clearPointer() }
       crtView.onMouseMoved = { [weak self] point in self?.tubeMove(point) }
       crtView.onScroll = { [weak self] dx, _ in
         guard let self else { return }
@@ -382,37 +387,33 @@ let achievementProgressKey = "ClassicAchievementProgress"
     playfield.cacheDisplay(in: playfield.bounds, to: playfieldRep)
     panel.cacheDisplay(in: panel.bounds, to: panelRep)
 
-    let size = CGSize(width: 320, height: 200)
-    let composed = NSImage(size: size)
-    composed.lockFocus()
-    NSGraphicsContext.current?.imageInterpolation = .none
-    NSColor.black.setFill()
-    CGRect(origin: .zero, size: size).fill()
+    guard let context = CGContext(data: nil, width: 320, height: 200,
+      bitsPerComponent: 8, bytesPerRow: 320 * 4, space: CGColorSpaceCreateDeviceRGB(),
+      bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue),
+      let fieldImage = playfieldRep.cgImage, let barImage = panelRep.cgImage else { return nil }
+    context.interpolationQuality = .none
     if panel.isMenuMode {
       // No panel on a menu, so the picture fills the screen.
-      playfieldRep.draw(in: CGRect(x: 0, y: 0, width: 320, height: 200))
+      context.draw(fieldImage, in: CGRect(x: 0, y: 0, width: 320, height: 200))
     } else {
-      panelRep.draw(in: CGRect(x: 0, y: 0, width: 320, height: 40))
-      playfieldRep.draw(in: CGRect(x: 0, y: 40, width: 320, height: 160))
+      context.draw(barImage, in: CGRect(x: 0, y: 0, width: 320, height: 40))
+      context.draw(fieldImage, in: CGRect(x: 0, y: 40, width: 320, height: 160))
     }
-    composed.unlockFocus()
-
-    var rect = CGRect(origin: .zero, size: size)
-    return composed.cgImage(forProposedRect: &rect, context: nil, hints: nil)
+    return context.makeImage()
   }
 
   /// Sends a click through the tube to whichever part it landed on.
   private func tubeClick(_ point: CGPoint) {
-    if point.y < 40 {
-      panel.handleClick(at: CGPoint(x: point.x, y: point.y))
+    if point.y >= 160 {
+      panel.handlePointerDown(at: CGPoint(x: point.x, y: point.y - 160))
     } else {
-      playfield.handleClick(at: CGPoint(x: point.x, y: point.y - 40))
+      playfield.handleClick(at: point)
     }
   }
 
   private func tubeMove(_ point: CGPoint) {
-    guard point.y >= 40 else { return }
-    playfield.handleMove(to: CGPoint(x: point.x, y: point.y - 40))
+    guard point.y < 160 else { playfield.clearPointer(); return }
+    playfield.handleMove(to: point)
   }
 
   // MARK: - Settings
@@ -439,7 +440,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       created.onChange = { [weak self] updated in self?.apply(updated) }
       settingsWindow = created
     } else {
-      settingsWindow?.update(options: options)
+      settingsWindow?.update(options: options, settings: settings)
     }
     settingsWindow?.show()
   }
@@ -450,25 +451,21 @@ let achievementProgressKey = "ClassicAchievementProgress"
   /// changed nothing would be worse than one that is absent.
   private func apply(_ updated: ClassicSettings) {
     let artworkChanged = settings.graphics != updated.graphics
-    settings = updated
+    let musicChanged = settings.music != updated.music || settings.shuffleMusic != updated.shuffleMusic
     let previousSound = settings.sound
+    settings = updated
     if let data = try? JSONEncoder().encode(updated) {
       UserDefaults.standard.set(data, forKey: settingsKey)
     }
 
-    music.setEnhancements(updated.musicStyle == .modern ? .modern : .faithful)
-    music.setVolume(updated.musicVolume)
-    soundtrack.setVolume(updated.musicVolume)
-    dj.setVolume(updated.musicVolume)
-    effects.setVolume(updated.soundVolume)
-    music.setMuted(updated.music == .silent)
-    soundtrack.setMuted(updated.music == .silent)
-    dj.setMuted(updated.music == .silent)
-    if updated.music != .adaptiveDJ { dj.stop() }
-    if case .remix = updated.music {} else { soundtrack.stop() }
-    effects.setMuted(updated.sound == .silent)
+    applyAudioSettings()
     if updated.sound != previousSound { loadSoundEffects(for: updated.sound) }
     updateMusicButtons()
+
+    if musicChanged, !sequelIsActive {
+      levelMusic = nil
+      playMusicForCurrentLevel()
+    }
 
     applyDisplayMode()
     if artworkChanged, !sequelIsActive, let level = artworkLevel,
@@ -486,17 +483,45 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
   }
 
-  @objc private func showAchievements() {
-    let lines = ClassicAchievement.catalog.map { achievement in
-      let mark = achievements.isUnlocked(achievement.id) ? "✓" : "○"
-      return "\(mark)  \(achievement.title) — \(achievement.detail)"
+  private func restoreSettings() {
+    audioMuted = UserDefaults.standard.bool(forKey: "AudioMuted")
+    if let data = UserDefaults.standard.data(forKey: settingsKey),
+      let stored = try? JSONDecoder().decode(ClassicSettings.self, from: data) {
+      settings = stored
+    } else if UserDefaults.standard.bool(forKey: musicPresetKey) {
+      settings.musicStyle = .modern
     }
-    let unlocked = achievements.unlocked.count
-    let alert = NSAlert()
-    alert.messageText = "Achievements  \(unlocked)/\(ClassicAchievement.catalog.count)"
-    alert.informativeText = lines.joined(separator: "\n")
-    alert.addButton(withTitle: "Done")
-    alert.runModal()
+    previousDepth = settings.colorDepth
+  }
+
+  private func applyAudioSettings() {
+    if music.usesModernPreset != (settings.musicStyle == .modern) {
+      music.setEnhancements(settings.musicStyle == .modern ? .modern : .faithful)
+    }
+    music.setVolume(settings.musicVolume)
+    soundtrack.setVolume(settings.musicVolume)
+    dj.setVolume(settings.musicVolume)
+    effects.setVolume(settings.soundVolume)
+    music.setMuted(audioMuted || settings.music == .silent)
+    soundtrack.setMuted(audioMuted || settings.music == .silent)
+    dj.setMuted(audioMuted || settings.music == .silent)
+    effects.setMuted(audioMuted || settings.sound == .silent)
+    nativeL2Window?.setAudioSettings(settings, muted: audioMuted)
+  }
+
+  @objc private func showAbout() {
+    let info = Bundle.main.infoDictionary ?? [:]
+    let version = info["CFBundleShortVersionString"] as? String ?? "Unknown"
+    let build = info["CFBundleVersion"] as? String ?? "Unknown"
+    NSApp.orderFrontStandardAboutPanel(options: [
+      .applicationName: "Ultimate Lemmings",
+      .applicationVersion: "\(version) Beta \(build)",
+      .version: build,
+    ])
+  }
+
+  @objc private func showAchievements() {
+    achievementsWindow.show(progress: achievements)
   }
 
   @objc private func chooseNativeL2() {
@@ -505,12 +530,16 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   private func suspendCurrentEngine() {
+    panel.handlePointerUp()
+    playfield.clearPointer()
     saveProgress()
     nativeL2Window?.stop()
     nativeL3Window?.stop()
     nativeL2Window = nil
     nativeL3Window = nil
     music.stop()
+    soundtrack.stop()
+    dj.stop()
     effects.stop()
     accumulator = 0
   }
@@ -526,9 +555,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
       next.onProgressChanged = { [weak self] in self?.refreshSequelProgress() }
       next.onCampaignCompleted = { [weak self] in self?.finishNativeTitle() }
       next.attach(to: window)
-      if music.muted { next.setMuted(true) }
+      next.setAudioSettings(settings, muted: audioMuted)
       window.title = "Lemmings 2 — The Tribes"
-      window.contentAspectRatio = NSSize(width: 4, height: 3)
+      window.resizeIncrements = NSSize(width: 1, height: 1)
       window.minSize = NSSize(width: 640, height: 502)
       next.present()
       rebuildNavigationMenus()
@@ -575,7 +604,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     window.minSize = NSSize(width: 900, height: 620)
     window.title = "Ultimate Lemmings"
     window.makeFirstResponder(playfield)
-    try? music.start()
+    applyAudioSettings()
     try? effects.start()
     refreshSequelProgress()
     flow?.acknowledgeGameComplete()
@@ -585,6 +614,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     // monitor last time comes back to a flat picture.
     applyDisplayMode()
     renderScreen()
+    playMusicForCurrentLevel()
     window.makeKeyAndOrderFront(nil)
   }
 
@@ -613,7 +643,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
         : title == .lemmings3TheChronicles ? (try? BundledGameResources.lemmings3()) != nil : false
       // The menu is set in the game's own fixed-width font, so a row holds
       // only a short note. One word says as much as a sentence here.
-      let detail = title == .lemmings2TheTribes ? "PARTIAL"
+      let detail = title == .lemmings2TheTribes ? "BETA"
         : title == .lemmings3TheChronicles ? "PREVIEW" : "NO DATA"
       return .init(title: title, total: title.expectedLevelCount ?? 0,
         passed: sequelCompletion[title] ?? 0, available: available, detail: detail)
@@ -737,6 +767,40 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   func windowDidResize(_ notification: Notification) {
     fitClassicDisplay()
+  }
+
+  func windowDidResignKey(_ notification: Notification) {
+    panel.handlePointerUp()
+    playfield.clearPointer()
+  }
+
+  @objc private func suspendAudioOutput() {
+    audioIsSleeping = true
+    music.suspendOutput()
+    soundtrack.suspendOutput()
+    dj.suspendOutput()
+    effects.suspendOutput()
+    nativeL2Window?.suspendAudioOutput()
+    lastStepTime = nil
+  }
+
+  @objc nonisolated private func resumeAudioOutput() {
+    Task { @MainActor [weak self] in
+      guard let self, !self.audioIsSleeping else { return }
+      do {
+        try self.music.resumeOutput()
+        self.soundtrack.resumeOutput()
+        self.dj.resumeOutput()
+        try self.effects.resumeOutput()
+        try self.nativeL2Window?.resumeAudioOutput()
+      } catch { self.setStatus("Audio unavailable: \(error.localizedDescription)") }
+    }
+  }
+
+  @objc private func wakeAudioOutput() {
+    audioIsSleeping = false
+    lastStepTime = nil
+    resumeAudioOutput()
   }
 
   private func fitClassicDisplay() {
@@ -1470,6 +1534,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
     accumulator = 0
     isPaused = false
     panel.isPaused = false
+    isFastForward = false
+    panel.isFastForward = false
+    lastStepTime = nil
     panel.session = new
     panel.selectedSkillIndex = new.skills.firstIndex { $0.count > 0 || $0.isInfinite } ?? 0
     panel.levelSize = CGSize(width: new.levelWidth, height: new.levelHeight)
@@ -1763,12 +1830,16 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   private func startTimer() {
     timer?.invalidate()
+    lastStepTime = nil
     timer = Timer.scheduledTimer(withTimeInterval: displayInterval, repeats: true) { [weak self] _ in
       MainActor.assumeIsolated { self?.step() }
     }
   }
 
-  private func step() {
+  private func step(at now: TimeInterval = ProcessInfo.processInfo.systemUptime) {
+    // Limit catch-up after sleep or a long modal interaction.
+    let elapsed = min(0.25, max(0, lastStepTime.map { now - $0 } ?? displayInterval))
+    lastStepTime = now
     guard !sequelIsActive else { return }
     // The tube follows the phase, and the phase changes from many places, so
     // it is settled here rather than at every one of them. This returns at
@@ -1795,34 +1866,41 @@ let achievementProgressKey = "ClassicAchievementProgress"
     // Each ruleset states its own logic rate. Whole ticks only, so timing does
     // not drift with the display.
     let interval = 1.0 / Double(session.ticksPerSecond)
-    accumulator += displayInterval
+    accumulator += elapsed * (isFastForward ? 3 : 1)
     var advanced = false
     while accumulator >= interval {
       accumulator -= interval
       session.tick()
+      effects.play(session.lastCues)
       advanced = true
       if session.isComplete { break }
     }
     guard advanced else { return }
 
-    effects.play(session.lastCues)
     panel.terrainImage = playfield.levelImage
     playfield.needsDisplay = true
     panel.needsDisplay = true
     updateStatus()
-    if session.isComplete {
-      if fanPlaying {
-        showFanResults()
-        return
-      }
-      recordCompletion(session)
-      if var current = flow {
-        current.finishLevel(
-          saved: session.saved, required: session.required, total: session.total)
-        flow = current
-        saveProgress()
-        renderScreen()
-      }
+    finishSessionIfNeeded()
+  }
+
+  private func finishSessionIfNeeded() {
+    guard phase == .playing, let session, session.isComplete else { return }
+    if fanPlaying {
+      showFanResults()
+      return
+    }
+    if currentNxlvURL != nil {
+      showFanResults()
+      return
+    }
+    recordCompletion(session)
+    if var current = flow {
+      current.finishLevel(
+        saved: session.saved, required: session.required, total: session.total)
+      flow = current
+      saveProgress()
+      renderScreen()
     }
   }
 
@@ -1852,6 +1930,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     if let data = try? JSONEncoder().encode(achievements) {
       UserDefaults.standard.set(data, forKey: achievementProgressKey)
     }
+    achievementsWindow.update(progress: achievements)
     if !earned.isEmpty {
       setStatus("Achievement unlocked: \(earned.map(\.title).joined(separator: ", "))")
     }
@@ -1867,6 +1946,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     if let seconds = session.remainingSeconds {
       parts.append(String(format: "Time %d:%02d", seconds / 60, seconds % 60))
     }
+    if isFastForward { parts.append("SPEED 3×") }
     if session.isNuking { parts.append("NUKING") }
     if session.isComplete {
       parts.append(session.didWin ? "COMPLETE — press N" : "FAILED — press R")
@@ -1885,8 +1965,18 @@ let achievementProgressKey = "ClassicAchievementProgress"
       panel.selectedSkillIndex = index
       panel.needsDisplay = true
     case .pause: togglePause()
+    case .fastForward: toggleFastForward()
     case .nuke: session.nuke()
     }
+    updateStatus()
+  }
+
+  private func toggleFastForward() {
+    guard phase == .playing, let session, !session.isComplete else { return }
+    isFastForward.toggle()
+    panel.isFastForward = isFastForward
+    lastStepTime = nil
+    panel.needsDisplay = true
     updateStatus()
   }
 
@@ -1952,8 +2042,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private func loadSoundEffects(for source: ClassicSoundSource) {
     switch source {
     case .macintoshResources:
-      guard let path = UserDefaults.standard.string(forKey: macImageKey) else { return }
-      loadSoundEffects(from: URL(fileURLWithPath: path))
+      let custom = UserDefaults.standard.string(forKey: macImageKey).map { URL(fileURLWithPath: $0) }
+      guard let image = custom ?? BundledGameResources.macintoshSoundImage() else { return }
+      loadSoundEffects(from: image)
     case .amigaVoices:
       guard let root = Bundle.main.resourceURL else { return }
       let directory = root.appendingPathComponent("Ports/amiga_extracted/lemmings")
@@ -1969,22 +2060,20 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   @objc private func toggleMute() {
-    let muted = !music.muted
-    music.setMuted(muted)
-    effects.setMuted(muted)
-    nativeL2Window?.setMuted(muted)
+    audioMuted.toggle()
+    UserDefaults.standard.set(audioMuted, forKey: "AudioMuted")
+    applyAudioSettings()
     updateMusicButtons()
   }
 
   @objc private func toggleMusicPreset() {
-    let useModern = !music.usesModernPreset
-    music.setEnhancements(useModern ? .modern : .faithful)
-    UserDefaults.standard.set(useModern, forKey: musicPresetKey)
-    updateMusicButtons()
+    var updated = settings
+    updated.musicStyle = settings.musicStyle == .modern ? .faithful : .modern
+    apply(updated)
   }
 
   private func updateMusicButtons() {
-    muteItem?.state = music.muted ? .on : .off
+    muteItem?.state = audioMuted ? .on : .off
     presetItem?.state = music.usesModernPreset ? .on : .off
   }
 
@@ -2016,8 +2105,15 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   /// The original cycles through its tunes as the campaign advances.
   private func playMusicForCurrentLevel() {
+    guard !sequelIsActive else { return }
+    if settings.music == .silent {
+      music.stop()
+      soundtrack.stop()
+      dj.stop()
+      return
+    }
     // The mix runs across every supplied soundtrack and moves on its own.
-    if settings.music == .adaptiveDJ, dj.hasTracks {
+    if activeMusic == .adaptiveDJ, dj.hasTracks {
       music.stop()
       soundtrack.stop()
       dj.resetLevel()
@@ -2038,6 +2134,12 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
     soundtrack.stop()
     guard !music.library.isEmpty else { return }
+    do {
+      try music.start()
+    } catch {
+      setStatus("Audio unavailable: \(error.localizedDescription)")
+      return
+    }
     let index = currentNxlvURL == nil ? max(0, picker.indexOfSelectedItem) : 0
     if let title = music.play(index: index) {
       setStatus("♪ \(title)")
@@ -2129,6 +2231,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       case " ":
         if self.phase == .playing { self.togglePause() } else { self.advancePhase() }
       case "p": self.togglePause()
+      case "f": self.toggleFastForward()
       case "x": self.handle(.nuke)
       default: return event
       }
@@ -2160,10 +2263,11 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   private func stepForward() {
-    guard let session, session.stepForward() else { return }
+    guard phase == .playing, let session, session.stepForward() else { return }
     isPaused = true
     panel.isPaused = true
     refreshAfterSeek()
+    finishSessionIfNeeded()
   }
 
   /// Redraws after moving through history, without playing sounds again.
@@ -2183,8 +2287,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
   func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool { true }
 }
 
+#if !APP_INTEGRATION_TESTS
 let app = NSApplication.shared
 let delegate = AppDelegate()
 app.delegate = delegate
 app.setActivationPolicy(.regular)
 app.run()
+#endif

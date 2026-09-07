@@ -1,7 +1,7 @@
-import XCTest
+import Testing
 @testable import NxlvKit
 
-final class NxlvKitTests: XCTestCase {
+struct NxlvKitTests {
     private let sample = """
     TITLE Sample Proving Ground
     AUTHOR Test Fixture
@@ -27,36 +27,36 @@ final class NxlvKitTests: XCTestCase {
     $END
     """
 
-    func testLevelParses() throws {
-        let level = try XCTUnwrap(NxlvLevel(text: sample))
-        XCTAssertEqual(level.title, "Sample Proving Ground")
-        XCTAssertEqual(level.author, "Test Fixture")
-        XCTAssertEqual(level.lemmingsCount, 20)
-        XCTAssertEqual(level.saveRequirement, 15)
-        XCTAssertEqual(level.spawnInterval, 30)
-        XCTAssertEqual(level.skillset["builder"], 10)
-        XCTAssertEqual(level.gadgets.first?.piece, "exit")
-        XCTAssertEqual(level.gadgets.first?.x, 700)
+    @Test func testLevelParses() throws {
+        let level = try #require(NxlvLevel(text: sample))
+        #expect(level.title == "Sample Proving Ground")
+        #expect(level.author == "Test Fixture")
+        #expect(level.lemmingsCount == 20)
+        #expect(level.saveRequirement == 15)
+        #expect(level.spawnInterval == 30)
+        #expect(level.skillset["builder"] == 10)
+        #expect(level.gadgets.first?.piece == "exit")
+        #expect(level.gadgets.first?.x == 700)
     }
 
-    func testTabsAndNestedSectionsParse() {
+    @Test func testTabsAndNestedSectionsParse() {
         let root = NxlvParser.parse("$OUTER\n\tVALUE\t42\n$INNER\nNAME nested\n$END\n$END")
-        XCTAssertEqual(root.section("outer")?.numeric("value"), 42)
-        XCTAssertEqual(root.section("outer")?.section("inner")?.line("name"), "nested")
+        #expect(root.section("outer")?.numeric("value") == 42)
+        #expect(root.section("outer")?.section("inner")?.line("name") == "nested")
     }
 
-    func testLastValueWins() {
+    @Test func testLastValueWins() {
         let root = NxlvParser.parse("TITLE first\nTITLE second")
-        XCTAssertEqual(root.line("title"), "second")
-        XCTAssertEqual(root.allLines("title"), ["first", "second"])
+        #expect(root.line("title") == "second")
+        #expect(root.allLines("title") == ["first", "second"])
     }
 
-    func testReleaseRateFallback() throws {
-        let level = try XCTUnwrap(NxlvLevel(text: "TITLE Test\nRELEASE_RATE 50"))
-        XCTAssertEqual(level.spawnInterval, 28)
+    @Test func testReleaseRateFallback() throws {
+        let level = try #require(NxlvLevel(text: "TITLE Test\nRELEASE_RATE 50"))
+        #expect(level.spawnInterval == 28)
     }
 
-    func testMissingTitleReturnsNil() {
-        XCTAssertNil(NxlvLevel(text: "AUTHOR only"))
+    @Test func testMissingTitleReturnsNil() {
+        #expect(NxlvLevel(text: "AUTHOR only") == nil)
     }
 }

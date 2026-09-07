@@ -32,6 +32,7 @@ import NxlvKit
   private var soundSlider: NSSlider?
   private var graphicsShuffleCheck: NSButton?
   private var musicShuffleCheck: NSButton?
+  private var sequelArtworkCheck: NSButton?
 
   /// Whether the tube simulation is in the live drawing path.
   var videoIsConnected = true
@@ -39,12 +40,15 @@ import NxlvKit
   init(settings: ClassicSettings, options: ClassicSettingsOptions) {
     self.settings = options.correcting(settings)
     self.options = options
+    super.init()
+    NotificationCenter.default.addObserver(self, selector: #selector(refreshSequelArtwork),
+                                          name: SequelArtworkPreference.changed, object: nil)
   }
 
   /// Replaces the options after a game is added or removed.
-  func update(options newOptions: ClassicSettingsOptions) {
+  func update(options newOptions: ClassicSettingsOptions, settings latest: ClassicSettings? = nil) {
     options = newOptions
-    settings = newOptions.correcting(settings)
+    settings = newOptions.correcting(latest ?? settings)
     guard window != nil else { return }
     rebuildSources()
     onChange?(settings)
@@ -151,9 +155,22 @@ import NxlvKit
     graphicsPopUp = graphics
     depthPopUp = depth
     graphicsShuffleCheck = shuffle
+    let sequel = NSButton(checkboxWithTitle: "Macintosh-style 2× artwork", target: self,
+                          action: #selector(sequelArtworkChanged))
+    sequelArtworkCheck = sequel
+    sequel.state = SequelArtworkPreference.enabled ? .on : .off
     return pane([
       ("Machine", preset), ("Artwork", graphics), ("Colour Depth", depth), ("Shuffle", shuffle),
+      ("Lemmings 2 + 3", sequel),
     ])
+  }
+
+  @objc private func sequelArtworkChanged(_ sender: NSButton) {
+    SequelArtworkPreference.setEnabled(sender.state == .on)
+  }
+
+  @objc private func refreshSequelArtwork() {
+    sequelArtworkCheck?.state = SequelArtworkPreference.enabled ? .on : .off
   }
 
   private func videoPane() -> NSView {

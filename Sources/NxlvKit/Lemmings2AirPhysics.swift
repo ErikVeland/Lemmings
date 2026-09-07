@@ -26,6 +26,14 @@ public struct Lemmings2AirPhysics: Equatable, Sendable {
         self.fallDistance = fallDistance
     }
 
+    mutating func resolve(x: Int, y: Int, velocityX: Int? = nil, velocityY: Int? = nil,
+                          fallDistance: Int? = nil) {
+        self.x = Int16(truncatingIfNeeded: x); self.y = Int16(truncatingIfNeeded: y)
+        if let velocityX { self.velocityX = Int16(truncatingIfNeeded: velocityX) }
+        if let velocityY { self.velocityY = Int16(truncatingIfNeeded: velocityY) }
+        if let fallDistance { self.fallDistance = Int16(truncatingIfNeeded: fallDistance) }
+    }
+
     public mutating func step() {
         // Position consumes the old velocity. Changing this order shifts arcs.
         x = x &+ velocityX

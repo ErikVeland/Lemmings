@@ -48,3 +48,8 @@ case "$2" in
     rsync -a --exclude=.DS_Store "$project_dir/Sources/Music/lemmings_3_music_mod_tsyu/" "$resources_dir/Music/lemmings_3_music_mod_tsyu/"
     ;;
 esac
+
+if [[ "$2" == all || "$2" == l2 ]]; then
+  python3 "$project_dir/Tools/Lemmings2Reference/prepare-assets.py" \
+    "$project_dir/Sources/Ports/Lemm2" "$resources_dir/Ports/Lemm2"
+fi

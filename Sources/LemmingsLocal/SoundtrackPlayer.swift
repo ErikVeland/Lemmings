@@ -15,9 +15,10 @@ import NxlvKit
   static let audioExtensions: Set<String> = ["wav", "aif", "aiff", "mp3", "m4a", "caf", "flac"]
 
   private var player: AVAudioPlayer?
+  private var resumeAfterSleep = false
   private(set) var tracks: [URL] = []
-  private var volume: Float = 0.8
-  private var muted = false
+  private(set) var volume: Float = 0.8
+  private(set) var muted = false
 
   /// The soundtracks found under a root, one per folder.
   ///
@@ -69,8 +70,19 @@ import NxlvKit
   }
 
   func stop() {
+    resumeAfterSleep = false
     player?.stop()
     player = nil
+  }
+
+  func suspendOutput() {
+    if isPlaying { resumeAfterSleep = true }
+    player?.pause()
+  }
+
+  func resumeOutput() {
+    if resumeAfterSleep { player?.play() }
+    resumeAfterSleep = false
   }
 
   func setVolume(_ value: Double) {

@@ -104,6 +104,9 @@ private struct CRTUniforms {
   /// click has to travel back through both before it means anything to the
   /// game.
   var onMouseDown: ((CGPoint) -> Void)?
+  var onMouseUp: (() -> Void)?
+  var onMouseDragged: ((CGPoint) -> Void)?
+  var onMouseExited: (() -> Void)?
   var onMouseMoved: ((CGPoint) -> Void)?
   var onScroll: ((CGFloat, CGFloat) -> Void)?
   private var trackingArea: NSTrackingArea?
@@ -176,12 +179,8 @@ private struct CRTUniforms {
 
   override var acceptsFirstResponder: Bool { true }
 
-  /// Undoes the barrel distortion the shader applies.
-  ///
-  /// The forward bend has no neat inverse, so this settles on the answer by
-  /// repeatedly bending a guess and correcting it. A few rounds are enough at
-  /// the curvatures used here.
-  private func straighten(_ uv: CGPoint) -> CGPoint {
+  /// Matches the shader's display-to-source sampling coordinates.
+  private func sourceUV(_ uv: CGPoint) -> CGPoint {
     let amount = CGFloat(settings.curvature)
     guard amount > 0 else { return uv }
 
@@ -195,23 +194,17 @@ private struct CRTUniforms {
       return CGPoint(x: x * 0.5 + 0.5, y: y * 0.5 + 0.5)
     }
 
-    var guess = uv
-    for _ in 0..<6 {
-      let bent = bend(guess)
-      guess.x -= bent.x - uv.x
-      guess.y -= bent.y - uv.y
-    }
-    return guess
+    return bend(uv)
   }
 
   /// Converts a point in this view to a pixel in the game image.
-  private func sourcePoint(from viewPoint: CGPoint) -> CGPoint? {
+  func sourcePoint(from viewPoint: CGPoint) -> CGPoint? {
     guard sourceSize.width > 0, bounds.width > 0, bounds.height > 0 else { return nil }
     // The view uses a bottom left origin while the image runs top down.
     let uv = CGPoint(
       x: viewPoint.x / bounds.width,
       y: 1 - viewPoint.y / bounds.height)
-    let straightened = straighten(uv)
+    let straightened = sourceUV(uv)
     guard straightened.x >= 0, straightened.x <= 1,
       straightened.y >= 0, straightened.y <= 1
     else { return nil }
@@ -228,9 +221,18 @@ private struct CRTUniforms {
 
   override func mouseMoved(with event: NSEvent) {
     guard let point = sourcePoint(from: convert(event.locationInWindow, from: nil))
-    else { return }
+    else { onMouseExited?(); return }
     onMouseMoved?(point)
   }
+
+  override func mouseUp(with event: NSEvent) { onMouseUp?() }
+
+  override func mouseDragged(with event: NSEvent) {
+    guard let point = sourcePoint(from: convert(event.locationInWindow, from: nil)) else { return }
+    onMouseDragged?(point)
+  }
+
+  override func mouseExited(with event: NSEvent) { onMouseExited?() }
 
   override func scrollWheel(with event: NSEvent) {
     onScroll?(event.scrollingDeltaX, event.scrollingDeltaY)
