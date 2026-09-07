@@ -55,6 +55,19 @@ and right. A tall window shows more level above and below. Lemmings 2 letterboxe
 vertically today. That behavior ends. Camera clamping keeps the view inside the
 level. A level shorter than the view centers.
 
+**The viewport works in simulation space.** Artwork resolution is separate. The
+Macintosh sets render at 2x, and `ClassicMacScene` already models this. It sets
+`width = rendered.width * 2` and multiplies each placement, but the collision
+mask stays at 1x and terrain edits paint as 2x2 blocks. `GameViewport` therefore
+reports `scale` in view points for each *simulation* pixel. The drawing code
+applies the artwork factor on top.
+
+The type carries an `artworkScale` value for one purpose. Free zoom snaps to
+steps that keep artwork pixels on whole device pixels. A zoom that puts a 2x
+artwork pixel on a fractional device pixel makes the sprites shimmer. The
+Lemmings 2 and Lemmings 3 Macintosh sets now in progress make this rule apply
+to all three engines, not only classic.
+
 **Classic keeps its sibling panel view.** `PanelView` stays a separate view under
 Auto Layout, as `main.swift` sets up at lines 293 to 300. Classic therefore
 configures a panel height of zero. Lemmings 2 and Lemmings 3 draw their panel
@@ -87,6 +100,7 @@ public struct GameViewport: Sendable {
         public var edgeBand = 12.0
         public var edgeSpeed = 160.0
         public var zoomLimits = 0.5...8.0
+        public var artworkScale = 1.0
     }
 }
 ```
@@ -95,7 +109,7 @@ public struct GameViewport: Sendable {
 
 | Member | Meaning |
 | --- | --- |
-| `scale` | View points for each logical pixel |
+| `scale` | View points for each simulation pixel |
 | `logicalWidth` | `viewWidth / scale`. More level fits. The level does not stretch |
 | `logicalPlayfieldHeight` | `viewHeight / scale - panelHeight` |
 | `originY` | Letterbox offset |
@@ -175,6 +189,7 @@ The type is pure geometry, so these tests need no game assets:
 5. Round trip from `levelPoint` to `viewPoint` and back.
 6. Centering for a level shorter and narrower than the view.
 7. Zoom clamped to `zoomLimits` in `free` mode.
+8. Zoom snapping keeps 2x artwork pixels on whole device pixels.
 
 Then run the existing harnesses as a regression pass:
 `run-playfield-draw-tests.sh`, `run-lemmings2-runtime-tests.sh`,
