@@ -35,8 +35,11 @@ public struct Lemmings3Scene: Sendable {
                     for x in 0..<frame.width {
                         let px = placed.x + x
                         guard px >= 0 && px < level.width else { continue }
-                        attributes[py * level.width + px] = tags[y / 2 * columns + x / 8]
                         let colour = frame.pixels[y * frame.width + x]
+                        let tag = tags[y / 2 * columns + x / 8]
+                        // Empty cells in sparse overlays leave the existing block intact.
+                        // Keep nonzero event tags even when their graphics are transparent.
+                        if colour != 255 || tag != 0 { attributes[py * level.width + px] = tag }
                         if colour != 255 { pixels[py * level.width + px] = colour }
                     }
                 }

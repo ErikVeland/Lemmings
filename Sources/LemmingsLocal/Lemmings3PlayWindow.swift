@@ -396,7 +396,7 @@ import NxlvKit
             guard let object = style.permanent.objects[placed.identifier], placed.identifier < 5000, object.frameCount > 1 else { continue }
             let frames = try (0..<object.frameCount).map { index in
                 let frame = try style.permanent.image(object: placed.identifier, frame: index, palette: style.palette)
-                return try image(width: frame.width, height: frame.height, pixels: frame.pixels, palette: style.palette, opaque: frame.pixels.map { $0 != 255 }, category: .mechanical)
+                return try image(width: frame.width, height: frame.height, pixels: frame.pixels, palette: style.palette, opaque: frame.pixels.map { $0 != 255 }, category: object.flags == 0x4001 ? .liquid : .mechanical)
             }
             objects.append((placementIndex, placed.x, placed.y, object.flags == 0x0402, frames))
         }

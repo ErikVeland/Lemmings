@@ -12,7 +12,7 @@ swiftc -O -swift-version 6 -warnings-as-errors -target "$(uname -m)-apple-macos1
 swiftc -O -swift-version 6 -warnings-as-errors -target "$(uname -m)-apple-macos13.0" \
   -I "$build_dir/modules" -L "$build_dir" -lNxlvKit \
   -Xlinker -rpath -Xlinker "$build_dir" -o "$build_dir/tests" Tests/SequelMacArtworkTests/main.swift
-"$build_dir/tests"
+"$build_dir/tests" "$@"
 cat Sources/LemmingsLocal/Lemmings2PlayWindow.swift Sources/LemmingsLocal/Lemmings3PlayWindow.swift \
   Tests/SequelMacArtworkAppTests/checks.swift > "$build_dir/app-test/main.swift"
 swiftc -O -swift-version 6 -target "$(uname -m)-apple-macos13.0" \

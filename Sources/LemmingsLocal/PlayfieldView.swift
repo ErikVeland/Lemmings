@@ -73,6 +73,27 @@ enum GamePhase: Equatable {
 }
 
 @MainActor final class PlayfieldView: NSView {
+  private var hdrOverlay: ExplosionHDRView?
+  private(set) var hdrFlashes: [ExplosionFlash] = []
+  private var hdrBirths: [Int:(tick:Int,expires:TimeInterval)] = [:]
+  private var hdrLastTick = 0
+  var presentsHDR = true {
+    didSet {
+      hdrOverlay?.isHidden = !presentsHDR
+      hdrOverlay?.update(presentsHDR ? hdrFlashes : [],force:true)
+    }
+  }
+  override func viewDidMoveToWindow() {
+    super.viewDidMoveToWindow()
+    if window != nil, hdrOverlay == nil {
+      let overlay = ExplosionHDRView(frame:bounds)
+      overlay.autoresizingMask = [.width,.height]
+      overlay.isHidden = !presentsHDR
+      addSubview(overlay)
+      hdrOverlay = overlay
+    }
+    hdrOverlay?.update(presentsHDR ? hdrFlashes : [],force:true)
+  }
   /// Lines drawn over the level before it starts or after it ends.
   var overlayTitle: String?
   var overlayLines: [String] = []
@@ -126,7 +147,9 @@ enum GamePhase: Equatable {
     levelImage = image
     sceneTick = session.currentTick
   }
-  var session: (any GameSession)?
+  var session: (any GameSession)? {
+    didSet { if oldValue !== session { hdrBirths.removeAll(); hdrLastTick = 0 } }
+  }
   var assets: ClassicMainDATAssets?
   var palette: [ClassicRGBColor] = []
   var viewport = Viewport()
@@ -269,6 +292,11 @@ enum GamePhase: Equatable {
   // MARK: - Drawing
 
   override func draw(_ dirtyRect: NSRect) {
+    hdrFlashes.removeAll(keepingCapacity:true)
+    let tick = session?.currentTick ?? 0
+    if tick < hdrLastTick { hdrBirths.removeAll() }
+    hdrLastTick = tick
+    defer { hdrOverlay?.update(presentsHDR ? hdrFlashes : []) }
     refreshClassicScene()
     // Fill the view's own area, not the dirty rectangle. AppKit passes a
     // rectangle that can cover the whole window, because these views share one
@@ -487,31 +515,33 @@ enum GamePhase: Equatable {
     for lemming in session.lemmings { draw(lemming) }
   }
 
-  /// How long the engine holds a lemming in the exploding pose.
-  ///
-  /// The artwork for it is a single frame, so without this the same starburst
-  /// sits on screen for three seconds and then vanishes on one tick. Shrinking
-  /// and fading it over that time turns it into a puff that clears itself.
-  private static let explosionTicks = 51.0
+  /// Four opaque ticks, then an immediate cut. The engine's longer explosion
+  /// state still controls terrain damage and removal timing.
+  static func bombPopIsVisible(tick: Int) -> Bool { (0..<4).contains(tick) }
 
-  /// Shrinks and fades the explosion as it ages.
-  ///
-  /// The burst holds its size briefly, so the flash still reads, then draws
-  /// down toward its own middle. Returns the rectangle to draw into and how
-  /// opaque to draw it.
-  private func puff(_ rect: CGRect, tick: Int) -> (rect: CGRect, alpha: CGFloat) {
-    let progress = min(1, max(0, Double(tick) / Self.explosionTicks))
-    // Nothing happens for the first fifth, then it collapses.
-    let collapse = max(0, (progress - 0.2) / 0.8)
-    let scale = CGFloat(1 - collapse * 0.85)
-    let alpha = CGFloat(1 - collapse)
-    let width = rect.width * scale
-    let height = rect.height * scale
-    return (
-      CGRect(
-        x: rect.midX - width / 2, y: rect.midY - height / 2,
-        width: width, height: height),
-      alpha)
+  private func bombPop(_ rect: CGRect, tick: Int) -> (rect: CGRect, alpha: CGFloat) {
+    (rect, Self.bombPopIsVisible(tick: tick) ? 1 : 0)
+  }
+
+  /// A short white-hot core, followed by one yellow tick. Solid pixel blocks
+  /// keep the pop sharp without a screen-wide flash or a translucent tail.
+  private func drawBombCore(in rect: CGRect, tick: Int, actor: Int) {
+    guard (0..<2).contains(tick) else { return }
+    let pixel = max(1, floor(viewport.zoom))
+    let x = floor(rect.midX/pixel)*pixel, y = floor(rect.midY/pixel)*pixel
+    (tick == 0 ? NSColor.white : NSColor.yellow).setFill()
+    CGRect(x:x-3*pixel,y:y-pixel,width:6*pixel,height:2*pixel).fill()
+    CGRect(x:x-pixel,y:y-3*pixel,width:2*pixel,height:6*pixel).fill()
+    if phase == .playing {
+      let birthTick = (session?.currentTick ?? 0)-tick
+      if hdrBirths[actor]?.tick != birthTick {
+        hdrBirths[actor] = (birthTick,ProcessInfo.processInfo.systemUptime+0.14)
+      }
+      let expires = hdrBirths[actor]!.expires
+      let strength: Float = tick == 0 ? 1 : 0.5
+      hdrFlashes.append(.init(rect:CGRect(x:x-3*pixel,y:y-pixel,width:6*pixel,height:2*pixel).intersection(bounds),strength:strength,expiresAt:expires))
+      hdrFlashes.append(.init(rect:CGRect(x:x-pixel,y:y-3*pixel,width:2*pixel,height:6*pixel).intersection(bounds),strength:strength,expiresAt:expires))
+    }
   }
 
   private func draw(_ lemming: SessionLemming) {
@@ -535,9 +565,10 @@ enum GamePhase: Equatable {
         var rect = CGRect(x: origin.x, y: origin.y,
           width: Double(frame.width) * viewport.zoom / 2, height: Double(frame.height) * viewport.zoom / 2)
         var fraction: CGFloat = 1
-        if pose == .explosion { (rect, fraction) = puff(rect, tick: lemming.animationFrame) }
+        if pose == .explosion { (rect, fraction) = bombPop(rect, tick: lemming.animationFrame) }
         guard fraction > 0.01 else { return }
         sprite.draw(in: rect, from: .zero, operation: .sourceOver, fraction: fraction, respectFlipped: true, hints: nil)
+        if pose == .explosion { drawBombCore(in: rect, tick: lemming.animationFrame, actor:lemming.id) }
         if let countdown = lemming.countdown { drawCountdown(countdown, above: rect) }
         return
       }
@@ -562,9 +593,10 @@ enum GamePhase: Equatable {
       x: origin.x, y: origin.y,
       width: sprite.size.width * viewport.zoom, height: sprite.size.height * viewport.zoom)
     var fraction: CGFloat = 1
-    if pose == .explosion { (rect, fraction) = puff(rect, tick: lemming.animationFrame) }
+    if pose == .explosion { (rect, fraction) = bombPop(rect, tick: lemming.animationFrame) }
     guard rect.intersects(bounds), fraction > 0.01 else { return }
     sprite.draw(in: rect, from: .zero, operation: .sourceOver, fraction: fraction, respectFlipped: true, hints: nil)
+    if pose == .explosion { drawBombCore(in: rect, tick: lemming.animationFrame, actor:lemming.id) }
 
     if let countdown = lemming.countdown {
       drawCountdown(countdown, above: rect)

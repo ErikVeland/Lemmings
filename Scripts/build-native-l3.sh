@@ -3,6 +3,7 @@ set -euo pipefail
 project_dir="${0:A:h:h}"
 build_dir="$project_dir/.build/native-l3"
 app_dir="$build_dir/Lemmings 3 Native.app"
+export MACOSX_DEPLOYMENT_TARGET=13.0
 mkdir -p "$build_dir/modules" "$app_dir/Contents/MacOS" "$app_dir/Contents/Frameworks"
 swiftc -O -swift-version 6 -warnings-as-errors -parse-as-library \
   -emit-module -emit-library -module-name NxlvKit \

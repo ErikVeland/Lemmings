@@ -59,7 +59,8 @@ import NxlvKit
     private var fastForward = false
     private var fanSelected = false
     private var selected = 0
-    private var nukeGesture = Lemmings2NukeGesture()
+    private var nukeGesture = NukeClickGesture()
+    private var beforeNuke: Lemmings2Runtime?
     private var selectedSlot = 0
     private var ending: Lemmings2Ending?
     private var award: Lemmings2Award?
@@ -227,6 +228,7 @@ import NxlvKit
                 : Lemmings2Runtime(level:level,style:style,masks:masks,total:campaign.population)
             try canvas.load(level: level, style: style, sprites: sprites, intern: intern, explosion: explosion, walker: walker)
             game = replacement; initial = replacement
+            beforeNuke = nil
             selected = 0; paused = false; fastForward = false; fanSelected = false; nukeGesture.reset()
             sounds.silence()
             show(.playing)
@@ -248,7 +250,10 @@ import NxlvKit
     private func panelAction(_ slot: Int, clickCount: Int = 1, time: TimeInterval = ProcessInfo.processInfo.systemUptime) {
         guard (0..<12).contains(slot), screen == .playing, game?.isComplete == false else { return }
         if let click = Lemmings2SoundRequest.panel(slot: slot) { sounds.play([click]) }
-        let confirmedNuke = nukeGesture.click(slot: slot, count: clickCount, time: time, interval: NSEvent.doubleClickInterval)
+        let nukeAction: NukeClickGesture.Action
+        if slot == Lemmings2Control.nuke.rawValue {
+            nukeAction = nukeGesture.click(canUndo: beforeNuke != nil, time: time, interval: NSEvent.doubleClickInterval)
+        } else { nukeGesture.reset(); nukeAction = .none }
         if slot < 8 {
             selected = slot; fanSelected = false
         } else {
@@ -256,7 +261,12 @@ import NxlvKit
             case .pause: paused.toggle(); accumulator = 0
             case .fan: fanSelected.toggle()
             case .nuke:
-                if confirmedNuke { game?.nuke(); paused = false; fanSelected = false; accumulator = 0 }
+                if nukeAction == .undo, let beforeNuke {
+                    game = beforeNuke; self.beforeNuke = nil; sounds.silence(); accumulator = 0
+                } else if nukeAction == .activate {
+                    beforeNuke = game
+                    game?.nuke(); paused = false; fanSelected = false; accumulator = 0
+                }
             case .fastForward: fastForward.toggle()
             case nil: break
             }
@@ -407,6 +417,7 @@ import NxlvKit
             else if key.lowercased() == "f" { panelAction(11) }
             else if key.lowercased() == "r", let initial {
                 game = initial; canvas.resetCamera(level: level)
+                beforeNuke = nil
                 paused = false; fastForward = false; fanSelected = false; nukeGesture.reset(); sounds.silence()
                 accumulator = 0; refreshGame()
             }

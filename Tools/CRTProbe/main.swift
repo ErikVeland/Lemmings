@@ -26,7 +26,7 @@ do {
     try pipeline("crt_bright", format: .rgba16Float)
     try pipeline("crt_blur_h", format: .rgba16Float)
     try pipeline("crt_blur_v", format: .rgba16Float)
-    try pipeline("crt_composite", format: .bgra8Unorm)
+    try pipeline("crt_composite", format: .rgba16Float)
 } catch {
     print("FAILED: \(error)")
     exit(1)

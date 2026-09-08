@@ -1,5 +1,29 @@
 import Foundation
 
+/// Double-click to start; one click restores the saved game. Swallow the
+/// remaining clicks of an undo gesture so they cannot arm another nuke.
+public struct NukeClickGesture: Sendable {
+    public enum Action: Equatable, Sendable { case none, activate, undo }
+    public private(set) var armedAt: TimeInterval?
+    private var undoneAt: TimeInterval?
+    public init() {}
+    public mutating func reset() { armedAt = nil; undoneAt = nil }
+    public mutating func click(canUndo: Bool, time: TimeInterval, interval: TimeInterval) -> Action {
+        if let undoneAt, time >= undoneAt, time-undoneAt <= interval {
+            self.undoneAt = time
+            return .none
+        }
+        undoneAt = nil
+        if canUndo { armedAt = nil; undoneAt = time; return .undo }
+        if let armedAt, time >= armedAt, time-armedAt <= interval {
+            self.armedAt = nil
+            return .activate
+        }
+        armedAt = time
+        return .none
+    }
+}
+
 /// Physical order in PANEL.DAT and L2.RKO's control-name table at 3077.
 public enum Lemmings2Control: Int, CaseIterable, Sendable {
     case pause = 8, nuke = 9, fan = 10, fastForward = 11

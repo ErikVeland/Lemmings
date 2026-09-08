@@ -130,7 +130,18 @@ for number in Array(0..<120)+[904,906,908,910] {
     let level = try Lemmings2Level(data:read(l2,String(format:"LEVELS/LEVEL%03d.DAT",number)))
     let style = styles[level.style]
     let terrain = try Lemmings2Terrain(level:level,style:style)
-    try check("l2/level/\(number)",frame(terrain.image),.lemmings2Terrain(tribe:level.style),store:false)
+    let renderedTerrain = try check("l2/level/\(number)",frame(terrain.image),.lemmings2Terrain(tribe:level.style),store:false)
+    if number == 20, let changed = terrain.image.pixels.firstIndex(where:{$0 != 0}) {
+        var pixels = terrain.image.pixels; pixels[changed] = 0
+        let edited = try SequelMacArtwork.reconstruct(.init(width:terrain.image.width,height:terrain.image.height,
+            pixels:pixels,palette:terrain.image.palette),category:.organic)
+        let cx = changed % terrain.image.width, cy = changed / terrain.image.width
+        for y in 0..<edited.height { for x in 0..<edited.width
+            where abs(x/2-cx)>1 || abs(y/2-cy)>1 {
+            let p = (y*edited.width+x)*4
+            try require(edited.rgba[p..<p+4] == renderedTerrain.rgba[p..<p+4],"Terrain detail changed outside the edit neighbourhood")
+        } }
+    }
     // A rendered frame cannot mutate the engine or its 1x terrain masks.
     var game = try Lemmings2Runtime(level:level,style:style,masks:masks,
         practiceSkills:number >= 900 ? [.jumper,.runner,.builder,.basher,.digger,.climber,.floater,.roper] : nil)
@@ -153,7 +164,7 @@ for styleNumber in 1...3 {
             for f in 0..<o.frameCount {
                 let image = try bank.image(object:o.identifier,frame:f,palette:style.palette)
                 try check("l3/\(styleNumber)/\(name)/\(o.identifier)/\(f)",frame(image,transparent:255),
-                          o.frameCount>1 ? .mechanical : .lemmings3Terrain(style:styleNumber))
+                          o.flags == 0x4001 ? .liquid : o.frameCount>1 ? .mechanical : .lemmings3Terrain(style:styleNumber))
             }
         }
     }
@@ -191,4 +202,24 @@ try require((modified["sprite"] ?? 0)>100 && (modified["organic"] ?? 0)>100,"Art
 let report: [String: Any] = ["revision":SequelMacArtwork.revision,"levels":levelCount,
     "frames":inventory.count,"uniqueCachedFrames":cached.count,"categories":categories,"modifiedFrames":modified,"assets":inventory]
 try JSONSerialization.data(withJSONObject:report,options:[.prettyPrinted,.sortedKeys]).write(to:out.appendingPathComponent("manifest.json"),options:.atomic)
+let goldenPath = root.appendingPathComponent("Tests/SequelMacArtworkTests/goldens.json")
+if CommandLine.arguments.contains("--record-goldens") {
+    let prefixes = ["l2/CLASSIC/tile/", "l2/CAVEMAN/tile/", "l2/EGYPTIAN/tile/", "l2/OUTDOOR/tile/",
+        "l2/tribe0/walker/", "l2/tribe0/LM05/", "l2/tribe0/LM19/", "l2/tribe0/LM26/",
+        "l2/CLASSIC/object/", "l2/BEACH/object/", "l2/frontend/MENU/", "l2/panel/skill/",
+        "l3/TRIBE004/", "l3/TRIBE005/", "l3/TRIBE010/", "l3/CREAT000/", "l3/1/perm/", "l3/2/temp/", "l3/3/perm/"]
+    let selected = prefixes.flatMap { prefix in inventory.filter { ($0["asset"] as! String).hasPrefix(prefix) }.prefix(4) }
+    try JSONSerialization.data(withJSONObject:selected,options:[.prettyPrinted,.sortedKeys]).write(to:goldenPath,options:.atomic)
+} else {
+    let expected = try JSONSerialization.jsonObject(with:Data(contentsOf:goldenPath)) as! [[String:Any]]
+    let actual = Dictionary(uniqueKeysWithValues:inventory.map { ($0["asset"] as! String,$0) })
+    for record in expected {
+        let name = record["asset"] as! String
+        guard let current = actual[name] else { throw SequelDataError.invalid("Missing artwork golden: \(name)") }
+        for key in ["sourceSHA256","outputSHA256"] {
+            try require(current[key] as? String == record[key] as? String,"Artwork golden changed: \(name), \(key)")
+        }
+    }
+    print("PASS \(expected.count) checked-in visual hashes")
+}
 print("PASS \(inventory.count) frames, \(cached.count) generated cache entries, \(levelCount) levels")

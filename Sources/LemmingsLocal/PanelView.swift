@@ -14,7 +14,10 @@ enum PanelButton: Equatable {
 }
 
 @MainActor final class PanelView: NSView {
-  var session: (any GameSession)?
+  var session: (any GameSession)? {
+    didSet { if oldValue !== session { nukeGesture.reset() } }
+  }
+  private var nukeGesture = NukeClickGesture()
   var selectedSkillIndex = 0
   var isPaused = false
   var isFastForward = false
@@ -115,32 +118,48 @@ enum PanelButton: Equatable {
   // MARK: - Input
 
   /// Takes a click position directly, for input arriving from the tube view.
-  func handleClick(at point: CGPoint) {
+  func handleClick(at point: CGPoint, time: TimeInterval = ProcessInfo.processInfo.systemUptime) {
     if let match = buttonFrames.first(where: { $0.1.contains(point) }) {
-      onButton?(match.0)
+      press(match.0, time: time)
       return
     }
+    nukeGesture.reset()
     if minimapFrame.contains(point) { scrollFromMinimap(point) }
   }
 
   override func mouseDown(with event: NSEvent) {
-    handlePointerDown(at: convert(event.locationInWindow, from: nil))
+    handlePointerDown(at: convert(event.locationInWindow, from: nil), time: event.timestamp)
   }
 
-  func handlePointerDown(at point: CGPoint) {
+  func handlePointerDown(at point: CGPoint, time: TimeInterval = ProcessInfo.processInfo.systemUptime) {
     stopRepeating()
     pointerIsDown = true
     if let match = buttonFrames.first(where: { $0.1.contains(point) }) {
-      onButton?(match.0)
+      press(match.0, time: time)
       // The release rate is the one control a player holds rather than taps.
       // Stepping it one at a time makes crossing the whole range a chore.
       if match.0 == .rateDown || match.0 == .rateUp { startRepeating(match.0) }
       return
     }
+    nukeGesture.reset()
     if minimapFrame.contains(point) { scrollFromMinimap(point) }
   }
 
   override func mouseUp(with event: NSEvent) { handlePointerUp() }
+
+  func resetNukeGesture() { nukeGesture.reset() }
+
+  private func press(_ button: PanelButton, time: TimeInterval) {
+    if button == .nuke {
+      let action = nukeGesture.click(canUndo: session?.canUndoNuke == true,
+        time: time, interval: NSEvent.doubleClickInterval)
+      if action != .none { onButton?(button) }
+    } else {
+      nukeGesture.reset()
+      onButton?(button)
+    }
+    needsDisplay = true
+  }
 
   func handlePointerUp() {
     pointerIsDown = false
@@ -279,7 +298,8 @@ enum PanelButton: Equatable {
     let poses: [ClassicLemmingPose] = [.climbing, .floating, .ohNo, .blocking,
       .building, .bashing, .mining, .digging]
     for (button, frame) in buttonFrames {
-      let selected = button == .skill(selectedSkillIndex) || (button == .pause && isPaused) || (button == .fastForward && isFastForward)
+      let selected = button == .skill(selectedSkillIndex) || (button == .pause && isPaused)
+        || (button == .fastForward && isFastForward) || (button == .nuke && session?.canUndoNuke == true)
       drawStoneButton(frame, selected: selected)
       if case let .skill(index) = button, let source = artwork.lemming(
         pose: poses[index], left: false, tick: index == 2 ? 12 : 0), let image = source.makeNSImage() {
@@ -444,7 +464,8 @@ enum PanelButton: Equatable {
       highlighted = isFastForward
     case .nuke:
       title = "Nuke"
-      subtitle = ""
+      subtitle = session?.canUndoNuke == true ? "Undo" : "2 clicks"
+      highlighted = session?.canUndoNuke == true
     }
 
     let path = NSBezierPath(roundedRect: frame.insetBy(dx: 0.5, dy: 0.5), xRadius: 4, yRadius: 4)

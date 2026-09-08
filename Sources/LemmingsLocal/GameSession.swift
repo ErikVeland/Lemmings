@@ -51,6 +51,8 @@ protocol GameSession: AnyObject {
   func assign(skillIndex: Int, to lemmingID: Int) -> String?
   func adjustRate(by delta: Int)
   func nuke()
+  var canUndoNuke: Bool { get }
+  func undoNuke()
 
   /// Rewind needs a deterministic engine. Not every ruleset has one yet.
   var supportsRewind: Bool { get }
@@ -65,6 +67,7 @@ protocol GameSession: AnyObject {
 final class ClassicSession: GameSession {
   /// Wraps the engine so any earlier tick can be reached exactly.
   private var history: ClassicDOSRewind
+  private var beforeNuke: ClassicDOSRewind?
   var simulation: ClassicDOSSimulation { history.simulation }
   let levelWidth: Int
   let levelHeight: Int
@@ -80,13 +83,13 @@ final class ClassicSession: GameSession {
 
   @discardableResult func rewind(seconds: Double) -> Bool {
     let moved = history.rewind(seconds: seconds)
-    if moved { lastCues = [] }
+    if moved { lastCues = []; if !simulation.isNuking { beforeNuke = nil } }
     return moved
   }
 
   @discardableResult func stepBackward() -> Bool {
     let moved = history.stepBackward()
-    if moved { lastCues = [] }
+    if moved { lastCues = []; if !simulation.isNuking { beforeNuke = nil } }
     return moved
   }
 
@@ -145,7 +148,19 @@ final class ClassicSession: GameSession {
   }
 
   func adjustRate(by delta: Int) { history.setReleaseRate(simulation.releaseRate + delta) }
-  func nuke() { history.beginNuke() }
+  var canUndoNuke: Bool { beforeNuke != nil }
+  func nuke() {
+    guard !simulation.isComplete, !simulation.isNuking, beforeNuke == nil else { return }
+    beforeNuke = history
+    history.beginNuke()
+    lastCues = ClassicSoundCue.cues(for: simulation.lastTickEvents)
+  }
+  func undoNuke() {
+    guard let beforeNuke else { return }
+    history = beforeNuke
+    self.beforeNuke = nil
+    lastCues = []
+  }
 }
 
 // MARK: - NeoLemmix
@@ -181,6 +196,7 @@ func spritePose(for action: NeoLemmixAction) -> ClassicLemmingPose {
 
 final class NeoLemmixSession: GameSession {
   private(set) var simulation: NeoLemmixSimulation
+  private var beforeNuke: NeoLemmixSimulation?
   let levelWidth: Int
   let levelHeight: Int
   private let skillOrder: [NeoLemmixSkill]
@@ -263,5 +279,15 @@ final class NeoLemmixSession: GameSession {
     _ = simulation.enqueue(.setSpawnInterval(simulation.spawnInterval + delta))
   }
 
-  func nuke() { _ = simulation.enqueue(.nuke) }
+  var canUndoNuke: Bool { beforeNuke != nil }
+  func nuke() {
+    guard !simulation.isComplete, !simulation.isNuking, beforeNuke == nil else { return }
+    beforeNuke = simulation
+    _ = simulation.enqueue(.nuke)
+  }
+  func undoNuke() {
+    guard let beforeNuke else { return }
+    simulation = beforeNuke
+    self.beforeNuke = nil
+  }
 }

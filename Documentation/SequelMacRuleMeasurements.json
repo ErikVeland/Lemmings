@@ -38,5 +38,17 @@
     "heldout_blocks": 1811,
     "heldout_pixel_errors": 1751,
     "nearest_pixel_errors": 1774
+  },
+  "organic_texture": {
+    "rules": 153,
+    "development_blocks": 11944,
+    "changed_development_blocks": 2472
+  },
+  "organic_brush": {
+    "reference": "lemmings-terrain-0-0",
+    "source_x": 13,
+    "source_y": 12,
+    "light_marks": 12,
+    "shadow_marks": 12
   }
 }

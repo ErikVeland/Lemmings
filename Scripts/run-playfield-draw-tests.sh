@@ -16,6 +16,7 @@ swiftc -swift-version 6 -warnings-as-errors \
   -Xlinker -rpath -Xlinker "$build_dir" \
   -o "$build_dir/PlayfieldDrawTests" \
   "$project_dir/Sources/LemmingsLocal/PlayfieldView.swift" \
+  "$project_dir/Sources/LemmingsLocal/ExplosionHDR.swift" \
   "$project_dir/Sources/LemmingsLocal/MacInterfaceRenderer.swift" \
   "$project_dir/Sources/LemmingsLocal/PanelView.swift" \
   "$project_dir/Sources/LemmingsLocal/PanelGlyphs.swift" \

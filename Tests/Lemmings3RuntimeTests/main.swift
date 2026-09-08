@@ -361,6 +361,27 @@ do {
         try require(native.configuration.entrance.x == 44 && native.configuration.entrance.y == 20, "L3 native entrance cell")
         try require(native.configuration.exits.contains { $0.x == 88 && $0.y == 142 }, "L3 native exit cell")
         try require(!native.isSolid(200, 40) && native.isSolid(32, 64), "L3 background and terrain attributes")
+        // The final sparse corner at x=144 overlaps the earlier cap at x=152.
+        // Its empty upper-right cells must preserve the visible cap's collision.
+        for x in 144..<160 {
+            try require(native.isSolid(x, 144), "L3 level 1 sparse corner erased the floor at \(x)")
+        }
+        var floorReplay = native
+        var crossedCorner = false
+        for _ in 0..<320 {
+            if let lem = floorReplay.lemmings.first, lem.state == .walking && lem.y == 144 {
+                if lem.x == 184 && lem.direction == 1 { _ = floorReplay.assign(.walker, to: lem.id) }
+                if (144..<160).contains(lem.x) {
+                    crossedCorner = true
+                    try require(lem.y == 144, "L3 walker sank through the visible floor")
+                }
+            }
+            floorReplay.step()
+            if let lem = floorReplay.lemmings.first, (144..<160).contains(lem.x), floorReplay.tick > 200 {
+                try require(lem.y == 144 && lem.state == .walking, "L3 walker fell into the sparse corner")
+            }
+        }
+        try require(crossedCorner, "L3 floor regression did not cross the overlapping corner")
         for _ in 0..<5000 where !native.isComplete {
             for lem in native.lemmings where lem.state == .walking && lem.y >= 144 && lem.x > 104 {
                 if lem.direction == 1 { _ = native.assign(.walker, to: lem.id) }

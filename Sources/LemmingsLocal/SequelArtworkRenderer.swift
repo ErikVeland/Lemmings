@@ -3,9 +3,10 @@ import CryptoKit
 import NxlvKit
 
 @MainActor enum SequelArtworkPreference {
-    static let key = "SequelMacArtworkEnabledV1"
+    // Start the default-on release enabled, including installs with the old opt-in setting.
+    static let key = "SequelMacArtworkEnabledV2"
     static let changed = Notification.Name("SequelMacArtworkChanged")
-    static var enabled: Bool { UserDefaults.standard.bool(forKey: key) }
+    static var enabled: Bool { UserDefaults.standard.object(forKey: key) as? Bool ?? true }
     static func setEnabled(_ enabled: Bool) {
         UserDefaults.standard.set(enabled, forKey: key)
         NotificationCenter.default.post(name: changed, object: nil)

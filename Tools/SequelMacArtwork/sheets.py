@@ -44,18 +44,31 @@ def choose_ref(name):
     if 'walker' in name or 'sprite' in name:return 'lemmings-sprite-walking-right-0'
     if '-LM' in name:return 'lemmings-sprite-building-right-0'
     if 'type2-' in name:return 'lemmings-object-0-1-0'
-    if 'type6-' in name:return 'lemmings-object-0-5-0'
+    if 'type6-' in name or 'liquid-hazard' in name:return 'lemmings-object-0-5-0'
+    if any(kind in name for kind in ('type9-','type10-','type11-')):return 'lemmings-object-0-6-0'
     if 'object' in name:return 'lemmings-object-0-0-0'
     if '20-' in name or '70-' in name:return 'lemmings-terrain-0-0'
     if name.startswith('l3-level-1'):return 'ohno-terrain-1-0'
     return 'ohno-terrain-0-0'
 
+def object_pose(prefix):
+    """Include an active pose when an idle trap only exposes small eye pixels."""
+    names=[r['name'] for r in records if r['name'].startswith(prefix+'-')]
+    if not names:return prefix+'-0'
+    first=np.asarray(Image.open(proof/(names[0]+'-pc.png')).convert('RGBA'))
+    def changed(name):
+        frame=np.asarray(Image.open(proof/(name+'-pc.png')).convert('RGBA'))
+        return int(np.any(frame!=first,axis=2).sum())
+    return max(names,key=changed)
+
 selections={
  'l2':['l2-walker-0','l2-walker-1','l2-walker-2','l2-LM05-0','l2-LM19-0','l2-LM26-0']+
-     [r['name'] for r in records if r['name'].startswith('l2-object-tribe0') and r['name'].endswith('-0')]+
+     [object_pose(prefix) for prefix in ['l2-object-tribe0-type2','l2-object-tribe0-type3','l2-object-tribe0-type6',
+      'l2-object-tribe2-type9','l2-object-tribe4-type9']]+
      ['l2-level-20-terrain','l2-level-40-terrain','l2-level-70-terrain'],
  'l3':['l3-sprite-1-0-0','l3-sprite-1-0-1','l3-sprite-1-0-2','l3-sprite-2-4-0','l3-sprite-3-8-0']+
      [r['name'] for r in records if r['name'].startswith('l3-object-') and r['name'].endswith('-0')][:6]+
+     [r['name'] for r in records if r['name'].startswith('l3-liquid-hazard-') and r['name'].endswith('-0')][:3]+
      ['l3-level-1','l3-level-101','l3-level-201']}
 for game,names in selections.items():
     names=[n for n in names if n in byname]
@@ -75,7 +88,8 @@ for game,names in selections.items():
                 for i in range(1,4):images[i]=images[i].crop((0,0,images[0].width*2,images[0].height*2))
             images += [a,b]
             y=78+row*202
-            draw.text((12,y),ref+'   ->   '+name+(' (registered crop)' if cropped else ''),fill='white')
+            context=' (trap with terrain body)' if 'type9-' in name else ''
+            draw.text((12,y),ref+'   ->   '+name+context+(' (registered crop)' if cropped else ''),fill='white')
             maximum=max(im.width*(2 if i in (0,4) else 1) for i,im in enumerate(images))
             height=max(im.height*(2 if i in (0,4) else 1) for i,im in enumerate(images))
             scale=max(1,min(4,270//maximum,170//height))
@@ -89,13 +103,31 @@ for game,names in selections.items():
 # Adjacent frames at native reconstruction size and at 4x integer zoom.
 for game,prefix in [('l2','l2-walker-'),('l3','l3-sprite-1-0-')]:
     names=[r['name'] for r in records if r['name'].startswith(prefix)]
-    sheet=Image.new('RGB',(1200,560),(22,24,30));draw=ImageDraw.Draw(sheet)
+    sheet=Image.new('RGB',(1280,640),(22,24,30));draw=ImageDraw.Draw(sheet)
     draw.text((10,10),f'{game.upper()} animation: top native 2x artwork; below integer 4x zoom',fill='white')
     for i,name in enumerate(names[:8]):
         im=Image.open(proof/(name+'-mac.png')).convert('RGBA')
-        x=12+i*145
-        sheet.paste(im,(x,45),im)
-        big=im.resize((im.width*4,im.height*4),Image.Resampling.NEAREST)
-        sheet.paste(big,(x,150),big)
+        record=byname[name]
+        registered=Image.new('RGBA',(72,52))
+        registered.paste(im,(24+record['x']*2,8+record['y']*2))
+        x=12+(i%4)*320;y=(i//4)*310
+        sheet.paste(registered,(x,y+45),registered)
+        big=registered.resize((288,208),Image.Resampling.NEAREST)
+        sheet.paste(big,(x,y+100),big)
     sheet.save(out/f'{game}-animation.png')
+
+if (proof/'original-mac-viewport.png').exists():
+    reference=Image.open(proof/'original-mac-viewport.png').convert('RGBA')
+    for game,number in [('l2',20),('l3',1)]:
+        original=Image.open(base/'levels'/f'{game}-{number}-pc.png').convert('RGBA')
+        upgraded=Image.open(base/'levels'/f'{game}-{number}-mac.png').convert('RGBA')
+        width=max(original.width,upgraded.width,reference.width*2)
+        height=reference.height*2+original.height+upgraded.height+120
+        sheet=Image.new('RGB',(width,height),(22,24,30));draw=ImageDraw.Draw(sheet)
+        y=0
+        for label,im in [('Original Macintosh Lemmings (integer 2x display zoom)',reference.resize((reference.width*2,reference.height*2),Image.Resampling.NEAREST)),
+                         (game.upper()+' original PC artwork - live canvas, tick 110',original),
+                         (game.upper()+' Macintosh-style artwork - same live state',upgraded)]:
+            draw.text((12,y+8),label,fill='white');sheet.paste(im,(0,y+35),im);y+=im.height+40
+        sheet.save(out/f'{game}-level-comparison.png')
 print(f'Wrote comparison sheets to {out}')

@@ -34,6 +34,19 @@ let l2masks = try Lemmings2TerrainMasks(root:l2root)
 let l2explosion = try Lemmings2Explosion(data:readAsset(l2root,"EXPLOSION.DAT"))
 let l2walker = try Lemmings2Walker(data:readAsset(l2root,"WALKER.DAT"))
 let l2front = try Lemmings2FrontEnd(root:l2root)
+UserDefaults.standard.removeObject(forKey: SequelArtworkPreference.key)
+try assertArtwork(SequelArtworkPreference.enabled, "Sequel artwork must default to Macintosh-style")
+let menuCanvas = Lemmings2MenuCanvas(frame: NSRect(x: 0, y: 0, width: 640, height: 400))
+for (name, pixels) in l2front.pictures {
+    let colours = l2front.banks["MENU"]!.palettes[0]
+    let upgraded = menuCanvas.makeImage(pixels, width: 320, height: 200, palette: colours)
+    let backing = upgraded.cgImage(forProposedRect: nil, context: nil, hints: nil)!
+    try assertArtwork(backing.width == 640 && backing.height == 400 && upgraded.size == NSSize(width: 320, height: 200),
+                      "L2 \(name) must use 2x artwork by default without changing layout")
+}
+SequelArtworkPreference.setEnabled(false)
+try assertArtwork(!SequelArtworkPreference.enabled, "Explicit original artwork choice must persist")
+print("PASS default-on artwork, explicit opt-out, and all L2 front-end picture backing sizes")
 for number in [0,20,40,70,100] {
     let level = try Lemmings2Level(data:readAsset(l2root,String(format:"LEVELS/LEVEL%03d.DAT",number)))
     let style = try Lemmings2Style(data:readAsset(l2root,"STYLES/\(Lemmings2Campaign.styleNames[level.style]).DAT"))

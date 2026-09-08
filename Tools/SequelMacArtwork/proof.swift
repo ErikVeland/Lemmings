@@ -27,8 +27,8 @@ func png(_ f: SequelMacFrame, _ path: URL) throws {
     CGImageDestinationAddImage(d,cg,nil)
     guard CGImageDestinationFinalize(d) else { throw SequelDataError.invalid("Cannot write artwork proof.") }
 }
-@MainActor func save(_ name: String, _ f: SequelMacFrame, _ category: SequelMacCategory) throws {
-    let mac = try SequelMacArtwork.reconstruct(f, category: category)
+@MainActor func save(_ name: String, _ f: SequelMacFrame, _ category: SequelMacCategory, reconstructed: SequelMacFrame? = nil) throws {
+    let mac = try reconstructed ?? SequelMacArtwork.reconstruct(f, category: category)
     try png(f, out.appendingPathComponent(name+"-pc.png"))
     try png(mac, out.appendingPathComponent(name+"-mac.png"))
     records.append(["name":name,"category":category.rawValue,"width":f.width,"height":f.height,"x":f.x,"y":f.y])
@@ -44,6 +44,51 @@ for key in ["LM00","LM01","LM05","LM0E","LM19","LM26","LM20"] {
     }
 }
 var objectKinds = Set<String>()
+@MainActor func saveObject(_ name: String, parts: [Lemmings2Objects.Part], palette: [UInt8], category: SequelMacCategory,
+                          backdrop: SequelMacFrame? = nil, terrainCategory: SequelMacCategory = .organic) throws {
+    let extents = parts.flatMap { p in p.frames.map { f in (p.x+f.x,p.y+f.y,f.width,f.height) } }
+    guard var left = extents.map({$0.0}).min(), var top = extents.map({$0.1}).min(),
+          var right = extents.map({$0.0+$0.2}).max(), var bottom = extents.map({$0.1+$0.3}).max() else { return }
+    // Some traps animate only their eyes; their body is authored as terrain.
+    // Include that body in the proof, preserving the real component placement.
+    if backdrop != nil { left -= 24; top -= 24; right += 24; bottom += 24 }
+    let w = right-left, h = bottom-top
+    let highBackdrop = try backdrop.map { try SequelMacArtwork.reconstruct($0,category:terrainCategory) }
+    func backdropPixels(_ f: SequelMacFrame?, scale: Int) -> [UInt8] {
+        var pixels = [UInt8](repeating:0,count:w*h*scale*scale*4)
+        guard let f else { return pixels }
+        for row in 0..<(h*scale) { for col in 0..<(w*scale) {
+            let x = left*scale+col, y = top*scale+row
+            guard x >= 0, x < f.width, y >= 0, y < f.height else { continue }
+            let s = (y*f.width+x)*4, d = (row*w*scale+col)*4
+            pixels.replaceSubrange(d..<d+4,with:f.rgba[s..<s+4])
+        } }
+        return pixels
+    }
+    let background = backdropPixels(backdrop,scale:1), highBackground = backdropPixels(highBackdrop,scale:2)
+    func paste(_ f: SequelMacFrame, into canvas: inout [UInt8], width: Int, x: Int, y: Int) {
+        for row in 0..<f.height { for col in 0..<f.width {
+            let s = (row*f.width+col)*4
+            if f.rgba[s+3] != 0 {
+                let d = ((y+row)*width+x+col)*4
+                canvas.replaceSubrange(d..<d+4,with:f.rgba[s..<s+4])
+            }
+        } }
+    }
+    let count = parts.map({$0.frames.count}).max() ?? 0
+    let phases = Set(Array(0..<min(3,count)) + [count/2,max(0,count-1)]).sorted()
+    for phase in phases {
+        var pc = background, mac = highBackground
+        for p in parts {
+            let f = p.frames[phase % p.frames.count], source = try frame(f,palette)
+            let upgraded = try SequelMacArtwork.reconstruct(source,category:category)
+            paste(source,into:&pc,width:w,x:p.x+f.x-left,y:p.y+f.y-top)
+            paste(upgraded,into:&mac,width:w*2,x:(p.x+f.x-left)*2,y:(p.y+f.y-top)*2)
+        }
+        try save(name+"-\(phase)",.init(width:w,height:h,x:left,y:top,rgba:pc),category,
+                 reconstructed:.init(width:w*2,height:h*2,x:left*2,y:top*2,rgba:mac))
+    }
+}
 for number in 0..<120 {
     let level = try Lemmings2Level(data: read(l2,String(format:"LEVELS/LEVEL%03d.DAT",number)))
     guard [0,2,4,7,10].contains(level.style) else { continue }
@@ -59,9 +104,10 @@ for number in 0..<120 {
     for p in objects.parts where [2,3,4,6,9,11].contains(p.type) && !p.frames.isEmpty {
         let key="l2-object-tribe\(level.style)-type\(p.type)"
         guard objectKinds.insert(key).inserted else { continue }
-        for (i,f) in p.frames.prefix(3).enumerated() {
-            try save(key+"-\(i)",frame(f,style.palette),p.type == 6 ? .liquid : .mechanical)
-        }
+        try saveObject(key,parts:objects.parts.filter {$0.objectIndex == p.objectIndex && !$0.frames.isEmpty},
+                       palette:style.palette,category:p.type == 6 ? .liquid : .mechanical,
+                       backdrop:p.type == 9 ? frame(Lemmings2Terrain(level:level,style:style).image) : nil,
+                       terrainCategory:.lemmings2Terrain(tribe:level.style))
     }
 }
 for styleNumber in 1...3 {
@@ -76,6 +122,11 @@ for styleNumber in 1...3 {
         }
     }
     var chosen=0
+    for o in style.permanent.objects.values.sorted(by:{$0.identifier<$1.identifier}) where o.flags == 0x4001 && o.frameCount>0 {
+        for i in 0..<min(3,o.frameCount) {
+            try save("l3-liquid-hazard-\(styleNumber)-\(o.identifier)-\(i)",frame(style.permanent.image(object:o.identifier,frame:i,palette:style.palette),transparent:255),.liquid)
+        }
+    }
     for o in style.permanent.objects.values.sorted(by:{$0.identifier<$1.identifier}) where o.frameCount>1 {
         for i in 0..<min(3,o.frameCount) {
             try save("l3-object-\(styleNumber)-\(o.identifier)-\(i)",frame(style.permanent.image(object:o.identifier,frame:i,palette:style.palette),transparent:255),.mechanical)
@@ -101,7 +152,24 @@ let macRoot = CommandLine.arguments.count > 2 ? URL(fileURLWithPath:CommandLine.
     : root.appendingPathComponent(".build/local/Ultimate Lemmings.app/Contents/Resources/MacArtwork")
 let originalMac = try ClassicMacArtwork(directory:macRoot.appendingPathComponent("lemmings"))
 let classicMac = try ClassicMacScene(level:classicLevel,rendered:classicRendered,artwork:originalMac,groundSet:classicGround)
-try png(.init(width:classicMac.width,height:classicMac.height,rgba:Array(classicMac.rgba(simulation:classicSimulation))),out.appendingPathComponent("original-mac-level.png"))
+var classicPixels = Array(classicMac.rgba(simulation:classicSimulation))
+for lem in classicSimulation.lemmings where lem.isActive && (lem.action == .walking || lem.action == .falling) {
+    let pose: ClassicLemmingPose = lem.action == .walking ? .walking : .falling
+    let left = lem.direction == .left
+    guard let f = originalMac.lemming(pose:pose,left:left,tick:lem.animationFrame),
+          let a = classicAssets.animation(for:pose,direction:left ? .left : .right) else { continue }
+    let ox = (lem.foot.x+a.offsetX)*2+f.x, oy = (lem.foot.y+a.offsetY)*2+f.y
+    for y in 0..<f.height { for x in 0..<f.width {
+        let px = ox+x, py = oy+y, s = (y*f.width+x)*4
+        guard px>=0,py>=0,px<classicMac.width,py<classicMac.height,f.rgba[s+3] != 0 else { continue }
+        let d = (py*classicMac.width+px)*4
+        classicPixels.replaceSubrange(d..<d+4,with:f.rgba[s..<s+4])
+    } }
+}
+try png(.init(width:classicMac.width,height:classicMac.height,rgba:classicPixels),out.appendingPathComponent("original-mac-level.png"))
+let viewX = min(classicRendered.width-320,max(0,classicLevel.startX))*2
+let viewport = (0..<320).flatMap { y in Array(classicPixels[(y*classicMac.width+viewX)*4..<(y*classicMac.width+viewX+640)*4]) }
+try png(.init(width:640,height:320,rgba:viewport),out.appendingPathComponent("original-mac-viewport.png"))
 try png(.init(width:classicRendered.width,height:classicRendered.height,rgba:Array(ClassicSceneFrame.rgba(classicRendered,simulation:classicSimulation))),out.appendingPathComponent("original-dos-level.png"))
 let referenceRecords = try JSONSerialization.jsonObject(with:read(referenceRoot,"manifest.json")) as! [[String:Any]]
 let selectedReferences: [String:SequelMacCategory] = [
@@ -109,7 +177,7 @@ let selectedReferences: [String:SequelMacCategory] = [
     "lemmings-terrain-0-0":.organic,"ohno-terrain-1-0":.organic,
     "ohno-terrain-0-0":.architectural,"holiday-terrain-2-0":.organic,
     "lemmings-object-0-0-0":.mechanical,"lemmings-object-0-1-0":.mechanical,
-    "lemmings-object-0-5-0":.liquid,"lemmings-object-0-4-0":.mechanical]
+    "lemmings-object-0-5-0":.liquid,"lemmings-object-0-6-0":.mechanical]
 for r in referenceRecords {
     let name = r["name"] as! String
     guard let category = selectedReferences[name] else { continue }

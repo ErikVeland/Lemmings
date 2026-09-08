@@ -24,6 +24,8 @@ private final class FinalTickSession: GameSession {
   func assign(skillIndex: Int, to lemmingID: Int) -> String? { nil }
   func adjustRate(by delta: Int) {}
   func nuke() {}
+  let canUndoNuke = false
+  func undoNuke() {}
   func rewind(seconds: Double) -> Bool { false }
   func stepBackward() -> Bool { false }
   func stepForward() -> Bool { tick(); return true }

@@ -58,7 +58,7 @@ struct CRTSettings {
     colorLevels: 16)
 }
 
-private struct CRTUniforms {
+struct CRTUniforms {
   var sourceSize: SIMD2<Float> = .zero
   var outputSize: SIMD2<Float> = .zero
   var curvature: Float = 0
@@ -74,6 +74,7 @@ private struct CRTUniforms {
   var vignette: Float = 0
   var pixelAspect: Float = 1
   var colorLevels: Float = 0
+  var hdrHeadroom: Float = 1
 }
 
 /// Draws a game frame through a simulated picture tube.
@@ -92,6 +93,7 @@ private struct CRTUniforms {
   private var compositePipeline: MTLRenderPipelineState?
 
   private var sourceTexture: MTLTexture?
+  private var flashTexture: MTLTexture?
   private var scratchA: MTLTexture?
   private var scratchB: MTLTexture?
   private var sourceSize = CGSize.zero
@@ -135,7 +137,9 @@ private struct CRTUniforms {
 
     let layer = CAMetalLayer()
     layer.device = device
-    layer.pixelFormat = .bgra8Unorm
+    layer.pixelFormat = .rgba16Float
+    layer.colorspace = CGColorSpace(name:CGColorSpace.extendedLinearSRGB)
+    layer.wantsExtendedDynamicRangeContent = true
     layer.framebufferOnly = false
     layer.isOpaque = true
     self.layer = layer
@@ -157,7 +161,7 @@ private struct CRTUniforms {
       let final = MTLRenderPipelineDescriptor()
       final.vertexFunction = library.makeFunction(name: "crt_vertex")
       final.fragmentFunction = library.makeFunction(name: "crt_composite")
-      final.colorAttachments[0].pixelFormat = .bgra8Unorm
+      final.colorAttachments[0].pixelFormat = .rgba16Float
       compositePipeline = try device.makeRenderPipelineState(descriptor: final)
     } catch {
       failureReason = "\(error)"
@@ -241,7 +245,7 @@ private struct CRTUniforms {
   // MARK: - Source
 
   /// Uploads the composed game frame.
-  func setSource(_ image: CGImage) {
+  func setSource(_ image: CGImage, flashes: [ExplosionFlash] = []) {
     guard let device else { return }
     let width = image.width
     let height = image.height
@@ -276,6 +280,14 @@ private struct CRTUniforms {
     sourceTexture.replace(
       region: MTLRegionMake2D(0, 0, width, height), mipmapLevel: 0,
       withBytes: bytes, bytesPerRow: width * 4)
+    let mask = ExplosionHDR.mask(width:width,height:height,flashes:flashes)
+    let flash = MTLTextureDescriptor.texture2DDescriptor(pixelFormat:.r8Unorm,width:width,height:height,mipmapped:false)
+    flash.usage = .shaderRead
+    flashTexture = device.makeTexture(descriptor:flash)
+    mask.withUnsafeBytes { bytes in
+      flashTexture?.replace(region:MTLRegionMake2D(0,0,width,height),mipmapLevel:0,
+        withBytes:bytes.baseAddress!,bytesPerRow:width)
+    }
     // Draw straight away rather than asking for a redraw. Assigning a
     // CAMetalLayer to `layer` makes this view layer-hosting, and a
     // layer-hosting view never receives `draw(_:)`, so `needsDisplay` here
@@ -300,7 +312,7 @@ private struct CRTUniforms {
   }
 
   func render() {
-    guard let queue, let layer = metalLayer, let sourceTexture,
+    guard let queue, let layer = metalLayer, let sourceTexture, let flashTexture,
       let bright = brightPipeline, let blurH = blurHPipeline, let blurV = blurVPipeline,
       let composite = compositePipeline, let scratchA, let scratchB,
       let drawable = layer.nextDrawable(), let buffer = queue.makeCommandBuffer()
@@ -323,6 +335,8 @@ private struct CRTUniforms {
     uniforms.vignette = settings.vignette
     uniforms.pixelAspect = settings.pixelAspect
     uniforms.colorLevels = settings.colorLevels
+    uniforms.hdrHeadroom = ExplosionHDR.headroom(window?.screen?.maximumExtendedDynamicRangeColorComponentValue ?? 1)
+    layer.wantsExtendedDynamicRangeContent = (window?.screen?.maximumPotentialExtendedDynamicRangeColorComponentValue ?? 1) > 1
 
     func pass(
       _ pipeline: MTLRenderPipelineState,
@@ -349,7 +363,7 @@ private struct CRTUniforms {
     pass(bright, target: scratchA, textures: [sourceTexture])
     pass(blurH, target: scratchB, textures: [scratchA])
     pass(blurV, target: scratchA, textures: [scratchB])
-    pass(composite, target: drawable.texture, textures: [sourceTexture, scratchA])
+    pass(composite, target: drawable.texture, textures: [sourceTexture, scratchA, flashTexture])
 
     buffer.present(drawable)
     buffer.commit()

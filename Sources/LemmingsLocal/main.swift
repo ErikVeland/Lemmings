@@ -325,6 +325,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       return
     }
     tubeIsActive = wantsTube
+    playfield.presentsHDR = !wantsTube
     panel.handlePointerUp()
     playfield.clearPointer()
 
@@ -407,6 +408,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     if point.y >= 160 {
       panel.handlePointerDown(at: CGPoint(x: point.x, y: point.y - 160))
     } else {
+      panel.resetNukeGesture()
       playfield.handleClick(at: point)
     }
   }
@@ -1858,7 +1860,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
         playfield.frame = wanted
         playfield.viewport.viewSize = wanted.size
       }
-      if let frame = composeNativeFrame() { crtView.setSource(frame) }
+      if let frame = composeNativeFrame() { crtView.setSource(frame, flashes: playfield.hdrFlashes) }
     }
     if let session, phase == .playing { dj.updateTelemetry(djTelemetry(session)) }
     guard phase == .playing, !isPaused, let session, !session.isComplete else { return }
@@ -1966,7 +1968,16 @@ let achievementProgressKey = "ClassicAchievementProgress"
       panel.needsDisplay = true
     case .pause: togglePause()
     case .fastForward: toggleFastForward()
-    case .nuke: session.nuke()
+    case .nuke:
+      if session.canUndoNuke {
+        session.undoNuke()
+        accumulator = 0; lastStepTime = nil
+      } else {
+        session.nuke()
+        effects.play(session.lastCues)
+      }
+      playfield.needsDisplay = true
+      panel.needsDisplay = true
     }
     updateStatus()
   }
@@ -1987,6 +1998,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   private func assign(_ id: Int) {
+    panel.resetNukeGesture()
     guard let session else { return }
     let rejection = session.assign(skillIndex: panel.selectedSkillIndex, to: id)
     playfield.needsDisplay = true

@@ -25,3 +25,6 @@ main
 
 # Python bytecode from the one-time asset import tools.
 __pycache__/
+
+# Claude Code worktrees are their own checkouts, not content of this one.
+.claude/worktrees/

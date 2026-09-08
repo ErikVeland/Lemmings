@@ -104,7 +104,15 @@ require copying separate data folders. These local bundles contain the supplied
 commercial assets; they are not data-free source releases.
 
 Click a skill button to arm a skill. Click a lemming to assign it. Press `N`
-for the next level, `R` to retry, and `X` to nuke.
+for the next level, `R` to retry, and `X` to nuke or undo the active nuke.
+The nuke button requires a double-click. Once activated, a single click or
+double-click restores the game to just before the nuke, including terrain and
+timers. The same mouse controls apply in Lemmings 2. Bomb pops in the classic
+playfield flash briefly, then disappear without shrinking or fading.
+On EDR-capable displays, their cores briefly reach up to 4× SDR white, limited
+by the screen's current headroom. This works in flat and CRT modes. Terrain
+and UI stay at SDR brightness, and the boost expires even while paused.
+SDR displays retain the ordinary flash.
 
 Passing levels in campaign order unlocks persistent achievements for each
 release. Completing the festive games, the original trilogy, and the full
@@ -218,3 +226,11 @@ Builds also require Python 3 and ImageMagick (`magick`); the packaged app does n
 Classic artwork can be changed in **Options → Graphics → Artwork**: Macintosh
 (default), Amiga, or DOS (VGA). Selections persist between launches. The Mac and
 Amiga skill buttons have shaded stone frames and a pressed selection state.
+
+Lemmings 2 and 3 have a separate optional **Macintosh-style 2× artwork** setting
+under **Options → Graphics → Lemmings 2 + 3**. L2 Preferences and the L3 artwork
+button use the same saved choice. It reconstructs discrete pixels from measured
+Macintosh reference rules and retains the original gameplay geometry. The
+default is Macintosh-style artwork, including L2 menus and loading/briefing screens.
+You can switch back to the original PC artwork. See [the reference study, conversion and
+visual checks](Documentation/SequelMacArtwork.md).

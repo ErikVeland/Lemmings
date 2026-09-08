@@ -30,6 +30,7 @@ enum CRTShaders {
       float  vignette;
       float  pixelAspect;     // horizontal stretch, PAL is not square
       float  colorLevels;     // 0 keeps full depth, 16 is Amiga OCS
+      float  hdrHeadroom;     // display-relative peak, capped at 4x SDR white
   };
 
   struct VOut {
@@ -121,6 +122,7 @@ enum CRTShaders {
       VOut in [[stage_in]],
       texture2d<float> src [[texture(0)]],
       texture2d<float> bloom [[texture(1)]],
+      texture2d<float> flash [[texture(2)]],
       constant Uniforms &u [[buffer(0)]]
   ) {
       constexpr sampler smp(filter::linear, address::clamp_to_edge);
@@ -217,7 +219,17 @@ enum CRTShaders {
           color *= clamp(falloff, 0.0, 1.0);
       }
 
-      return float4(toGamma(color, u.gamma), 1.0);
+      // Preserve the old SDR appearance in an extended-linear sRGB drawable.
+      // The previous UNorm target clipped these encoded values at SDR white.
+      float3 encoded = clamp(toGamma(color, u.gamma),0.0,1.0);
+      color = select(pow((encoded+.055)/1.055,float3(2.4)), encoded/12.92, encoded <= .04045);
+      constexpr sampler nearest(filter::nearest,address::clamp_to_zero);
+      float strength = flash.sample(nearest,uv).r;
+      if (strength > 0 && u.hdrHeadroom > 1) {
+          float3 tint = strength > .75 ? float3(1) : float3(1,1,0);
+          color = tint * (1 + (u.hdrHeadroom-1)*strength);
+      }
+      return float4(color, 1.0);
   }
   """
 }

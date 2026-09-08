@@ -56,9 +56,9 @@ public struct SequelMacFrame: Equatable, Sendable {
 
 /// Exact discrete reconstruction. Each table entry was measured from DOS/Mac
 /// pairs. Uncertain neighbourhoods retain their source block. There is no
-/// interpolation, time seed, global position seed or generated palette colour.
+/// interpolation or animation seed. Static texture uses an authored pixel phase.
 public enum SequelMacArtwork {
-    public static let revision = 3
+    public static let revision = 4
     private static let offsets = [(0,0),(-1,-1),(0,-1),(1,-1),(-1,0),(1,0),(-1,1),(0,1),(1,1)]
 
     public struct PixelEdit: Sendable {
@@ -155,6 +155,7 @@ public enum SequelMacArtwork {
         } }
         if category == .organic { organicTexture(source, colours: colours, light: light, output: &output) }
         if category == .sprite { characterDetails(source, output: &output) }
+        if category == .mechanical { metalDetails(source, colours: colours, light: light, output: &output) }
         if category == .liquid { liquidDetails(source, output: &output) }
         for edit in edits {
             guard edit.x >= 0, edit.y >= 0, edit.x < w*2, edit.y < h*2 else {
@@ -180,7 +181,8 @@ public enum SequelMacArtwork {
 
     /// Mac dirt subdivides existing mottled regions into small palette clusters.
     /// The measured table selects a 2x2 mark from source gradient directions.
-    /// Flat fills and silhouettes are excluded. No coordinate or random seed is used.
+    /// Flat fills and silhouettes are excluded. The fallback phase stays fixed
+    /// in terrain coordinates; there is no random seed or animation clock.
     private static func organicTexture(_ source: SequelMacFrame, colours: [UInt32], light: [Int], output: inout [UInt8]) {
         let w = source.width, h = source.height
         guard w >= 3, h >= 3 else { return }
@@ -195,10 +197,13 @@ public enum SequelMacArtwork {
             (Int(c >> 24),Int((c >> 16)&255),Int((c >> 8)&255))
         }
         var ramps: [UInt32:(UInt32,UInt32)] = [:]
+        let background: UInt32? = source.sourcePalette.map { p in
+            UInt32(p[0]) << 24 | UInt32(p[1]) << 16 | UInt32(p[2]) << 8 | 255
+        }
         for colour in palette {
             let (r,g,b) = components(colour), lum = r*3+g*6+b
             var up = colour, down = colour, upDistance = Int.max, downDistance = Int.max
-            for candidate in palette where candidate >> 8 != 0 && colourHue(candidate) == colourHue(colour) {
+            for candidate in palette where candidate >> 8 != 0 && candidate != background {
                 let (cr,cg,cb) = components(candidate), cl = cr*3+cg*6+cb
                 let distance = (cr-r)*(cr-r)+(cg-g)*(cg-g)+(cb-b)*(cb-b)
                 if cl > lum && distance < upDistance { up = candidate; upDistance = distance }
@@ -219,15 +224,21 @@ public enum SequelMacArtwork {
                 for i in 0..<count where local[i] == c { found = true; break }
                 if !found { local[count] = c; count += 1 }
             } }
-            guard !transparent, count >= 3 else { continue }
+            guard !transparent, count >= 2 else { continue }
             var key = UInt64(min(5,count)) << 8 | colourHue(colour) << 11
             for (i,offset) in adjacent.enumerated() {
                 let value: UInt64 = light[center+offset] == light[center] ? 0 : light[center+offset] > light[center] ? 1 : 2
                 key |= value << (i*2)
             }
-            guard let recipe = Lemmings2MacRuleTables.texture[key], let ramp = ramps[colour] else { continue }
+            guard let ramp = ramps[colour] else { continue }
+            let recipe = Lemmings2MacRuleTables.texture[key]
+            let (r,g,b) = components(colour)
+            let rough = max(r,max(g,b))-min(r,min(g,b)) >= 48 && r+g+b >= 80
             for i in 0..<4 {
-                let token = (recipe >> (i*2)) & 3
+                let brushX = ((source.x+x)*2+i%2) & 7
+                let brushY = ((source.y+y)*2+i/2) & 7
+                let token = recipe.map { ($0 >> (i*2)) & 3 }
+                    ?? (rough ? UInt16(Lemmings2MacRuleTables.organicBrush[brushY*8+brushX]) : 0)
                 guard token != 0 else { continue }
                 let pixel = token == 1 ? ramp.0 : ramp.1
                 let p = ((y*2+i/2)*w*2+x*2+i%2)*4
@@ -239,25 +250,72 @@ public enum SequelMacArtwork {
     }
 
     /// Mac wave glints use one-pixel horizontal marks above a flat body.
-    /// Thin an existing pale glint using its own liquid colour underneath it.
+    /// Thin an existing bright glint using its own liquid colour underneath it.
+    /// Isolated glints become one pixel; connected crests keep a horizontal pair.
     private static func liquidDetails(_ source: SequelMacFrame, output: inout [UInt8]) {
         let w = source.width, h = source.height
         guard w >= 3, h >= 2 else { return }
         for y in 0..<(h-1) { for x in 1..<(w-1) {
             let i = (y*w+x)*4, below = i+w*4
             guard source.rgba[i+3] == 255 && source.rgba[below+3] == 255 else { continue }
-            let high = min(source.rgba[i],min(source.rgba[i+1],source.rgba[i+2]))
+            let high = Int(source.rgba[i])*3+Int(source.rgba[i+1])*6+Int(source.rgba[i+2])
+            let belowLight = Int(source.rgba[below])*3+Int(source.rgba[below+1])*6+Int(source.rgba[below+2])
             let low = min(source.rgba[below],min(source.rgba[below+1],source.rgba[below+2]))
             let bright = max(source.rgba[below],max(source.rgba[below+1],source.rgba[below+2]))
-            guard high >= 180 && Int(bright)-Int(low) >= 60 && Int(high)-Int(low) >= 80 else { continue }
+            guard high >= 1280 && Int(bright)-Int(low) >= 60 && high-belowLight >= 160 else { continue }
             let neighbour = source.rgba[i-4..<i-1] == source.rgba[i..<i+3]
                 || source.rgba[i+4..<i+7] == source.rgba[i..<i+3]
-            guard neighbour else { continue }
-            for dx in 0..<2 {
-                let p = ((y*2+1)*w*2+x*2+dx)*4
+            for pixel in (neighbour ? 2 : 1)..<4 {
+                let p = ((y*2+pixel/2)*w*2+x*2+pixel%2)*4
                 for c in 0..<3 { output[p+c] = source.rgba[below+c] }
             }
         } }
+    }
+
+    /// Macintosh metal uses small faceted studs inside its dark joints.
+    /// Round only compact neutral highlights, using their existing dark rim.
+    /// Large flat panels, coloured surfaces and the opacity boundary are excluded.
+    private static func metalDetails(_ source: SequelMacFrame, colours: [UInt32], light: [Int], output: inout [UInt8]) {
+        let w = source.width, h = source.height
+        guard w >= 3, h >= 3 else { return }
+        func neutral(_ c: UInt32) -> Bool {
+            let r = Int(c >> 24), g = Int((c >> 16)&255), b = Int((c >> 8)&255)
+            return c != 0 && max(r,max(g,b))-min(r,min(g,b)) <= 32
+        }
+        var visited = [Bool](repeating: false, count: colours.count)
+        for start in colours.indices where !visited[start] && light[start] >= 960 && neutral(colours[start]) {
+            var component = [start], cursor = 0
+            visited[start] = true
+            while cursor < component.count {
+                let p = component[cursor]; cursor += 1
+                for (dx,dy) in [(-1,0),(1,0),(0,-1),(0,1)] {
+                    let x = p%w+dx, y = p/w+dy
+                    guard x >= 0, x < w, y >= 0, y < h else { continue }
+                    let n = y*w+x
+                    if !visited[n] && colours[n] == colours[start] { visited[n] = true; component.append(n) }
+                }
+            }
+            guard component.count <= 9,
+                  component.map({$0%w}).max()!-component.map({$0%w}).min()! < 3,
+                  component.map({$0/w}).max()!-component.map({$0/w}).min()! < 3 else { continue }
+            for p in component {
+                let x = p%w, y = p/w
+                guard x > 0, x < w-1, y > 0, y < h-1 else { continue }
+                var marks: [(Int,Int)] = []
+                for corner in 0..<4 {
+                    let a = p+(corner%2 == 0 ? -1 : 1), b = p+(corner/2 == 0 ? -w : w)
+                    guard neutral(colours[a]), neutral(colours[b]),
+                          light[p]-light[a] >= 120, light[p]-light[b] >= 120 else { continue }
+                    marks.append((corner,light[a] >= light[b] ? a : b))
+                }
+                // A one-pixel stud keeps its upper highlight rather than vanishing.
+                if marks.count > 2 { marks = marks.filter {$0.0 >= 2} }
+                for (corner,n) in marks {
+                    let d = ((y*2+corner/2)*w*2+x*2+corner%2)*4
+                    for c in 0..<3 { output[d+c] = source.rgba[n*4+c] }
+                }
+            }
+        }
     }
 
     /// The Mac walker separates the face from pale sleeves and shoes, then
