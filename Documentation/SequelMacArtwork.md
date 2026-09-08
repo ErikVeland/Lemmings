@@ -86,8 +86,11 @@ Four curated treatments supplement the tables:
 
 1. Characters separate the warm face from pale sleeves and shoes. The exact
    Macintosh face and eye colours are `#FFAA22` and `#660011`. Green hair and
-   nearby pale pixels identify the head. A centred face receives no guessed
-   facing direction. L3 creatures use the general object rules.
+   nearby pale pixels identify the head. The three-colour L2 walker uses its
+   defined palette roles for clothing, hair and skin. This also handles tan
+   skin and red, blue or dark hair. Its cuffs and shoes become pale while
+   the hair keeps its tribe colour. A centred face receives no guessed facing
+   direction. L3 creatures use the general object rules.
 2. Organic terrain uses measured small highlight and shadow clusters. Gradient
    tables select marks for recognised neighbourhoods. A tone stencil records
    mark spacing from the opaque dirt patch at source coordinate `(13, 12)`.
@@ -159,10 +162,14 @@ terrain-edit check compares untouched pixels outside the changed neighbourhood.
 Paired simulation runs check that rendering does not affect terrain, ticks or
 outcomes. Existing sequel runtime tests remain separate physics checks.
 
-The app harness captures the actual canvases at tick 110 in five L2 tribes and
+The app harness captures the actual canvases at tick 110 in all twelve L2 tribes and
 all three L3 environments. It captures PC artwork, the reconstruction, then PC
 artwork again. The first and last PNGs must match exactly. This checks the mode
 switch, camera, registration and scene state through the live views.
+All 192 L2 walker variants must contain the Macintosh face, eye and pale cuffs,
+and retain their tribe hair colour. A separate check clicks the actual Settings
+checkbox while the Beach player is attached to a shared window. It verifies
+the artwork change and restoration without changing gameplay or camera state.
 
 Rebuild the reference analysis and A–F sheets with Python, Pillow and NumPy:
 

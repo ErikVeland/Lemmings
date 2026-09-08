@@ -97,7 +97,15 @@ for (tribe,name) in Lemmings2Campaign.styleNames.enumerated() {
     for (name,frames) in bank.animations.sorted(by:{$0.key<$1.key}) {
         for (i,f) in frames.enumerated() { try check("l2/tribe\(tribe)/\(name)/\(i)",frame(f,style.palette),.sprite) }
     }
-    for (i,f) in walker.frames.enumerated() { try check("l2/tribe\(tribe)/walker/\(i)",frame(f,style.palette),.sprite) }
+    for (i,f) in walker.frames.enumerated() {
+        let upgraded = try check("l2/tribe\(tribe)/walker/\(i)",frame(f,style.palette),.lemmings2Walker)
+        let colours = Set(stride(from: 0, to: upgraded.rgba.count, by: 4)
+            .filter { upgraded.rgba[$0+3] != 0 }
+            .map { Array(upgraded.rgba[$0..<$0+3]) })
+        try require(colours.contains([255,170,34]) && colours.contains([102,0,17]) && colours.contains([255,255,255]),
+                    "Walker lacks Macintosh face, eye or cuffs: \(name), frame \(i)")
+        try require(colours.contains(Array(style.palette[8..<11])), "Walker lost its tribe hair colour: \(name), frame \(i)")
+    }
     for i in 0..<(try intern.animationCount) {
         for (f,pixels) in try intern.animation(i).enumerated() {
             try check("l2/tribe\(tribe)/intern/\(i)/\(f)",frame(pixels,style.palette),.mechanical)
@@ -208,6 +216,7 @@ if CommandLine.arguments.contains("--record-goldens") {
         "l2/tribe0/walker/", "l2/tribe0/LM05/", "l2/tribe0/LM19/", "l2/tribe0/LM26/",
         "l2/CLASSIC/object/", "l2/BEACH/object/", "l2/frontend/MENU/", "l2/panel/skill/",
         "l3/TRIBE004/", "l3/TRIBE005/", "l3/TRIBE010/", "l3/CREAT000/", "l3/1/perm/", "l3/2/temp/", "l3/3/perm/"]
+        + (1..<12).map { "l2/tribe\($0)/walker/" }
     let selected = prefixes.flatMap { prefix in inventory.filter { ($0["asset"] as! String).hasPrefix(prefix) }.prefix(4) }
     try JSONSerialization.data(withJSONObject:selected,options:[.prettyPrinted,.sortedKeys]).write(to:goldenPath,options:.atomic)
 } else {

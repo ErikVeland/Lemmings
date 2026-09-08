@@ -1008,7 +1008,7 @@ import NxlvKit
         }
         if let walker {
             sprites["WALKER"] = walker.frames.map { frame in
-                (image(width:frame.width,height:frame.height,pixels:frame.pixels,palette:style.palette,opaque:frame.opaque,category:.sprite),frame.x,frame.y)
+                (image(width:frame.width,height:frame.height,pixels:frame.pixels,palette:style.palette,opaque:frame.opaque,category:.lemmings2Walker),frame.x,frame.y)
             }
         }
         sprites["BALLOON"] = try intern.animation(0).map { frame in

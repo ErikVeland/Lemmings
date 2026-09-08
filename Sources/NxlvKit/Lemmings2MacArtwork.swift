@@ -2,7 +2,7 @@ import Foundation
 
 /// Rendering categories inferred from the original Macintosh pixel artwork.
 public enum SequelMacCategory: String, CaseIterable, Codable, Sendable {
-    case sprite, organic, architectural, mechanical, liquid
+    case sprite, lemmings2Walker, organic, architectural, mechanical, liquid
 
     public static func lemmings2Terrain(tribe: Int) -> Self {
         [1, 2, 5, 7, 8].contains(tribe) ? .organic : .architectural
@@ -58,7 +58,7 @@ public struct SequelMacFrame: Equatable, Sendable {
 /// pairs. Uncertain neighbourhoods retain their source block. There is no
 /// interpolation or animation seed. Static texture uses an authored pixel phase.
 public enum SequelMacArtwork {
-    public static let revision = 4
+    public static let revision = 5
     private static let offsets = [(0,0),(-1,-1),(0,-1),(1,-1),(-1,0),(1,0),(-1,1),(0,1),(1,1)]
 
     public struct PixelEdit: Sendable {
@@ -76,8 +76,9 @@ public enum SequelMacArtwork {
         guard w <= 4096, h <= 4096, w * h <= 4 * 1024 * 1024 else {
             throw SequelDataError.invalid("Sequel reconstruction exceeds the image limit.")
         }
-        let table = Lemmings2MacRuleTables.tables[category] ?? [:]
-        let boundaries = Lemmings2MacRuleTables.boundaries[category] ?? [:]
+        let ruleCategory: SequelMacCategory = category == .lemmings2Walker ? .sprite : category
+        let table = Lemmings2MacRuleTables.tables[ruleCategory] ?? [:]
+        let boundaries = Lemmings2MacRuleTables.boundaries[ruleCategory] ?? [:]
         // Zero is transparent. Opaque black has a nonzero alpha byte.
         var colours = [UInt32](repeating: 0, count: w*h)
         var light = [Int](repeating: 0, count: w*h)
@@ -112,7 +113,7 @@ public enum SequelMacArtwork {
                 key |= UInt64(slot) << (i*4)
                 if colour != 0 && light[position] > light[center] { key |= UInt64(1) << (36+i) }
             }
-            if category == .sprite {
+            if ruleCategory == .sprite {
                 if r >= 200 && g >= 160 && b >= 160 && r > g+15 && abs(g-b) < 24 {
                     key |= UInt64(1) << 45
                 }
@@ -142,9 +143,9 @@ public enum SequelMacArtwork {
                 let slot = Int((recipe >> ((dy*2+dx)*4)) & 15)
                 // A malformed generated rule must never erase an opaque pixel.
                 let colour: UInt32
-                if category == .sprite && key & (UInt64(1) << 45) != 0 && slot == 10 {
+                if ruleCategory == .sprite && key & (UInt64(1) << 45) != 0 && slot == 10 {
                     colour = 0xffaa22ff // Authored Macintosh face colour.
-                } else if category == .sprite && key & (UInt64(1) << 45) != 0 && slot == 11 {
+                } else if ruleCategory == .sprite && key & (UInt64(1) << 45) != 0 && slot == 11 {
                     colour = 0x660011ff // Authored Macintosh eye colour.
                 } else { colour = slot > 0 && slot < count ? unique[slot] : colours[center] }
                 let p = ((y*2+dy)*w*2+x*2+dx)*4
@@ -154,7 +155,9 @@ public enum SequelMacArtwork {
             } }
         } }
         if category == .organic { organicTexture(source, colours: colours, light: light, output: &output) }
-        if category == .sprite { characterDetails(source, output: &output) }
+        if ruleCategory == .sprite {
+            characterDetails(source, indexedWalker: category == .lemmings2Walker, output: &output)
+        }
         if category == .mechanical { metalDetails(source, colours: colours, light: light, output: &output) }
         if category == .liquid { liquidDetails(source, output: &output) }
         for edit in edits {
@@ -321,13 +324,22 @@ public enum SequelMacArtwork {
     /// The Mac walker separates the face from pale sleeves and shoes, then
     /// places a single dark eye below the hair. This curated rule follows that
     /// arrangement. It reads actor-local colours, never the animation clock.
-    private static func characterDetails(_ source: SequelMacFrame, output: inout [UInt8]) {
+    private static func characterDetails(_ source: SequelMacFrame, indexedWalker: Bool, output: inout [UInt8]) {
         let w = source.width, h = source.height
         guard w <= 64, h <= 64 else { return }
+        // WALKER.DAT defines clothing, hair and skin as indices 1, 2 and 3.
+        // Tribe palettes include tan skin and red, blue or dark hair.
+        let walkerPalette = indexedWalker ? source.sourcePalette : nil
+        func matches(_ pixel: Int, colour: Int) -> Bool {
+            guard let walkerPalette else { return false }
+            return source.rgba[pixel*4..<pixel*4+3] == walkerPalette[colour*4..<colour*4+3]
+        }
         var hair: [Int] = []
         for i in 0..<(w*h) where source.rgba[i*4+3] != 0 {
             let r = Int(source.rgba[i*4]), g = Int(source.rgba[i*4+1]), b = Int(source.rgba[i*4+2])
-            if g > 70 && g > r*3/2 && g > b*3/2 { hair.append(i) }
+            if walkerPalette != nil ? matches(i, colour: 2) : g > 70 && g > r*3/2 && g > b*3/2 {
+                hair.append(i)
+            }
         }
         guard hair.count >= 2, hair.count <= 96 else { return }
         let left = hair.map { $0%w }.min()!, right = hair.map { $0%w }.max()!
@@ -336,10 +348,20 @@ public enum SequelMacArtwork {
         var face: [Int] = []
         for y in top...min(h-1,bottom+1) { for x in max(0,left-1)...min(w-1,right+2) {
             let i = y*w+x, r = Int(source.rgba[i*4]), g = Int(source.rgba[i*4+1]), b = Int(source.rgba[i*4+2])
-            if source.rgba[i*4+3] != 0 && r >= 140 && g >= 120 && b >= 120
-                && r >= g && max(r,max(g,b))-min(r,min(g,b)) < 80 { face.append(i) }
+            let skin = walkerPalette != nil ? matches(i, colour: 3)
+                : r >= 140 && g >= 120 && b >= 120 && r >= g && max(r,max(g,b))-min(r,min(g,b)) < 80
+            if source.rgba[i*4+3] != 0 && skin { face.append(i) }
         } }
         guard !face.isEmpty, face.count <= 24 else { return }
+        if walkerPalette != nil {
+            // Separate pale cuffs and shoes from the warm face in every tribe.
+            for i in 0..<(w*h) where source.rgba[i*4+3] != 0 && matches(i, colour: 3) {
+                for dy in 0..<2 { for dx in 0..<2 {
+                    let p = (((i/w)*2+dy)*w*2+(i%w)*2+dx)*4
+                    output[p] = 255; output[p+1] = 255; output[p+2] = 255
+                } }
+            }
+        }
         let faceTop = face.map { $0/w }.min()!
         // Retain the pale forehead row. The broad cheek uses the authored gold.
         for i in face { for dy in 0..<2 { for dx in 0..<2 {

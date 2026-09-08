@@ -36,7 +36,7 @@ let l2walker = try Lemmings2Walker(data:readAsset(l2root,"WALKER.DAT"))
 let l2front = try Lemmings2FrontEnd(root:l2root)
 UserDefaults.standard.removeObject(forKey: SequelArtworkPreference.key)
 try assertArtwork(SequelArtworkPreference.enabled, "Sequel artwork must default to Macintosh-style")
-let menuCanvas = Lemmings2MenuCanvas(frame: NSRect(x: 0, y: 0, width: 640, height: 400))
+private let menuCanvas = Lemmings2MenuCanvas(frame: NSRect(x: 0, y: 0, width: 640, height: 400))
 for (name, pixels) in l2front.pictures {
     let colours = l2front.banks["MENU"]!.palettes[0]
     let upgraded = menuCanvas.makeImage(pixels, width: 320, height: 200, palette: colours)
@@ -47,7 +47,7 @@ for (name, pixels) in l2front.pictures {
 SequelArtworkPreference.setEnabled(false)
 try assertArtwork(!SequelArtworkPreference.enabled, "Explicit original artwork choice must persist")
 print("PASS default-on artwork, explicit opt-out, and all L2 front-end picture backing sizes")
-for number in [0,20,40,70,100] {
+for number in stride(from: 0, to: 120, by: 10) {
     let level = try Lemmings2Level(data:readAsset(l2root,String(format:"LEVELS/LEVEL%03d.DAT",number)))
     let style = try Lemmings2Style(data:readAsset(l2root,"STYLES/\(Lemmings2Campaign.styleNames[level.style]).DAT"))
     var game = try Lemmings2Runtime(level:level,style:style,masks:l2masks)
@@ -101,3 +101,56 @@ for number in [1,101,201] {
     window.contentView = nil
     print("PASS L3 live canvas \(number), 110 ticks, original/2x/toggle restoration")
 }
+
+extension SettingsWindow {
+    fileprivate func artworkCheckboxForTest() -> NSButton {
+        _ = graphicsPane()
+        return sequelArtworkCheck!
+    }
+}
+
+extension Lemmings2PlayWindow {
+    fileprivate func checkSettingsArtwork() throws {
+        timer?.invalidate(); timer = nil
+        setMuted(true)
+        let savedProgress = UserDefaults.standard.object(forKey: progressKey)
+        defer {
+            stop()
+            if let savedProgress { UserDefaults.standard.set(savedProgress, forKey: progressKey) }
+            else { UserDefaults.standard.removeObject(forKey: progressKey) }
+        }
+        let host = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 960, height: 720),
+                            styleMask: [], backing: .buffered, defer: false)
+        attach(to: host)
+        campaign = try Lemmings2Campaign(root: root)
+        try campaign.select(tribe: 1)
+        SequelArtworkPreference.setEnabled(false)
+        prepareBriefing(); startLevel()
+        for _ in 0..<110 { game?.step() }
+        paused = true; selected = 3; refreshGame()
+        let before = game!
+        let oldX = canvas.cameraX, oldY = canvas.cameraY
+        let original = try shot(canvas, "l2-beach-settings-pc")
+        let options = ClassicSettingsOptions.available(hasDOSData: true, hasAmigaDisk: false,
+            hasMacintoshDisk: false, moduleCount: 0, remixFolders: [], hasSoundtracks: false)
+        let settings = SettingsWindow(settings: ClassicSettings(), options: options)
+        let checkbox = settings.artworkCheckboxForTest()
+        checkbox.performClick(nil)
+        try assertArtwork(checkbox.state == .on && SequelArtworkPreference.enabled,
+                          "Settings checkbox did not enable sequel artwork")
+        let upgraded = try shot(canvas, "l2-beach-settings-mac")
+        try assertArtwork(original != upgraded, "Settings did not refresh the attached L2 player")
+        checkbox.performClick(nil)
+        let restored = try shot(canvas, "l2-beach-settings-restored")
+        try assertArtwork(original == restored, "Settings did not restore the original L2 artwork")
+        try assertArtwork(game!.tick == before.tick && game!.lemmings == before.lemmings
+            && game!.pixels == before.pixels && game!.solid == before.solid
+            && game!.supplies == before.supplies && selected == 3 && paused
+            && canvas.cameraX == oldX && canvas.cameraY == oldY,
+            "Settings artwork switch changed L2 gameplay or camera state")
+        host.contentView = nil
+        print("PASS actual Settings checkbox updates the attached Beach player and preserves its state")
+    }
+}
+
+try Lemmings2PlayWindow(root: l2root).checkSettingsArtwork()

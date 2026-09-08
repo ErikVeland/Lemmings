@@ -63,7 +63,7 @@ reported rather than ignored.
 | Lemmings 3 movies | Decoded. All 3333 frames of the five `.FLI` files read, and match a decoder written separately. Not yet shown in the game |
 | Graphics sources | DOS VGA, Amiga OCS, and Macintosh artwork all decode and can be chosen |
 | DOS CGA | Not available. The DOS data holds CGA sets, and no decoder reads them. There are no EGA sets |
-| Distribution | Local ad-hoc signed universal build for macOS 13+. Developer ID signing and notarization are not configured. See [beta testing](Documentation/BetaTesting.md) |
+| Distribution | Beta 9 universal build for macOS 13+. The packaging script supports Developer ID signing and Apple notarization. See [beta testing](Documentation/BetaTesting.md) |
 
 ## Unified game library
 
@@ -90,7 +90,7 @@ zsh Scripts/build-local-app.sh
 ```
 
 ```sh
-open ".build/local/Lemmings Local.app"
+open ".build/local/Ultimate Lemmings.app"
 ```
 
 The build embeds the available game assets and music in `Contents/Resources`.
