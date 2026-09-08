@@ -105,6 +105,8 @@ public struct Lemmings2FrontEndFont: Sendable {
 
 /// The original 320×40 skill panel, including its icons and bitmap font.
 public struct Lemmings2Panel: Sendable {
+    public static let backgroundIndex: UInt8 = 143
+
     /// VGA.RKO 3397: common panel colours and its cycling yellow/red outline.
     public static func palette(over palette: [UInt8], phase: Int = 0) -> [UInt8] {
         guard palette.count == 1024 else { return palette }
@@ -168,7 +170,7 @@ public struct Lemmings2Panel: Sendable {
               identifiers.allSatisfy({ (0...51).contains($0) }), supplies.allSatisfy({ (0...99).contains($0) }) else {
             throw SequelDataError.invalid("Invalid L2 panel state.")
         }
-        var pixels = [UInt8](repeating: 143, count: 320 * 40)
+        var pixels = [UInt8](repeating: Self.backgroundIndex, count: 320 * 40)
         func put(_ source: [UInt8], width: Int, x: Int, y: Int, mask: [Bool]? = nil) {
             for i in source.indices where mask?[i] ?? true {
                 let px = x + i % width, py = y + i / width

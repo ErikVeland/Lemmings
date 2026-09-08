@@ -14,6 +14,7 @@ explosion cores on compatible displays. It includes the beta 8 changes.
   to switch styles. Lemmings 2 Preferences and the Lemmings 3 artwork button
   share the same saved choice.
 - Switching artwork during play preserves the camera, selected skill and game state.
+- The Lemmings 2 control-panel background fills the side margins in widescreen windows.
 - Fixed walkers that kept their PC appearance in Beach and other tribes despite
   the artwork setting. All tribes now show the Macintosh-style face, eye,
   cuffs and shoes while retaining their own hair colours.

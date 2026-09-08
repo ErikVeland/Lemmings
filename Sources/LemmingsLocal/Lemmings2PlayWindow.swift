@@ -816,6 +816,7 @@ import NxlvKit
     private var terrain: NSImage?
     private var terrainRevision: Int?
     private var panel: NSImage?
+    private var panelBackground = NSColor.black
     private var sprites: [String: [(image: NSImage, x: Int, y: Int)]] = [:]
     private var objects: [(id: Int, type: Int, x: Int, y: Int, entrance: Bool, animated: Bool, special: Bool,
                            frames: [(image: NSImage, x: Int, y: Int)])] = []
@@ -1044,6 +1045,10 @@ import NxlvKit
         needsDisplay = true
     }
     func setPanel(_ panel: SequelIndexedImage) {
+        let colour = Int(Lemmings2Panel.backgroundIndex) * 4
+        panelBackground = NSColor(deviceRed: CGFloat(panel.palette[colour]) / 255,
+            green: CGFloat(panel.palette[colour + 1]) / 255,
+            blue: CGFloat(panel.palette[colour + 2]) / 255, alpha: 1)
         self.panel = image(width: panel.width, height: panel.height, pixels: panel.pixels, palette: panel.palette, category: .architectural)
         needsDisplay = true
     }
@@ -1379,9 +1384,13 @@ import NxlvKit
             }
         }
         NSGraphicsContext.restoreGraphicsState()
-        panel?.draw(in: NSRect(x: panelX, y: origin.y + 192 * zoom, width: 320 * zoom, height: 48 * zoom),
-                    from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true,
-                    hints: [.interpolation: NSImageInterpolation.none.rawValue])
+        if let panel {
+            panelBackground.setFill()
+            NSRect(x: bounds.minX, y: origin.y + 192 * zoom, width: bounds.width, height: 48 * zoom).fill()
+            panel.draw(in: NSRect(x: panelX, y: origin.y + 192 * zoom, width: 320 * zoom, height: 48 * zoom),
+                       from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true,
+                       hints: [.interpolation: NSImageInterpolation.none.rawValue])
+        }
     }
     override func mouseDown(with event: NSEvent) {
         window?.makeFirstResponder(self)
