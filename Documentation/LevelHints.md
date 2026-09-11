@@ -34,6 +34,10 @@ Each click reveals one tier:
 2. **The approach** identifies the opening skills and skills to keep for later.
 3. **Opening moves** shows the first three assignments from a winning route, with numbered locations on a cropped level map.
 
+The final tier also shows recorded release-rate changes before each opening move.
+Changes at the same simulation tick show only the final rate. Repeated rates are omitted.
+These details stay hidden in the first two tiers.
+
 Opening moves are examples. Timing, release rate and changes to the terrain can affect them.
 The third tier does not reveal the complete solution. Reopening the page starts with the nudge again.
 Return and repeated F1 presses do not reveal another tier.
@@ -63,3 +67,6 @@ spoiler boundaries, native keys, pause restoration, flat/CRT presentation and mi
 The checks exercise all 360 original hint tiers, verify complete text and accessible values,
 and test keyboard scrolling and scroll reset with an oversized coaching page.
 They also render the three tiers under `.build/hints` for visual inspection.
+
+Run `Scripts/test-level-hint-catalogue.sh` for headless checks of all 120 decks,
+release-rate ordering and the first two tiers’ spoiler boundaries.

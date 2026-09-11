@@ -30,11 +30,33 @@ struct LevelHintCatalogue: Decodable {
                 else { worker = "lemming \(move.lemmingID + 1) in the release order" }
                 instructions.append("\(index + 1). Give \(worker) \(move.skill.capitalized) at marker \(index + 1), facing \(move.facingLeft ? "left" : "right").")
             }
+            // Only the last rate at a tick affects the next simulation step.
+            var effectiveRates: [Rate] = []
+            for rate in rates {
+                if effectiveRates.last?.tick == rate.tick { effectiveRates.removeLast() }
+                effectiveRates.append(rate)
+            }
+            var rateNotes: [String] = []
+            var previousRate: Int?
+            for (index, move) in opening.enumerated() {
+                let earlierTick = index == 0 ? -1 : opening[index - 1].tick
+                let values = effectiveRates.filter { $0.tick > earlierTick && $0.tick <= move.tick }
+                    .compactMap { rate -> String? in
+                        defer { previousRate = rate.value }
+                        return previousRate == rate.value ? nil : String(rate.value)
+                    }
+                if !values.isEmpty {
+                    rateNotes.append("Before move \(index + 1): \(values.joined(separator: " → ")).")
+                }
+            }
+            let rateContext = rateNotes.isEmpty ? "" : "\n\nRelease rate in this example:\n"
+                + rateNotes.joined(separator: "\n")
+                + "\n\nThese changes affect crowd spacing. Their timing matters too. Pause to check the worker and direction at each marker."
             let openingText = instructions.isEmpty ? "Let the lemmings walk. Watch the route before using skills." : instructions.joined(separator: "\n")
             return LevelHintDeck(title: "\(rank) \(number) · \(title)", checked: true, stages: [
                 .init(title: "A gentle nudge", body: nudge),
                 .init(title: "The approach", body: approach),
-                .init(title: "Opening moves", body: "Examples from the start of a winning route:\n\n" + openingText,
+                .init(title: "Opening moves", body: "Examples from the start of a winning route:\n\n" + openingText + rateContext,
                       moves: opening, width: width, height: height)
             ])
         }
