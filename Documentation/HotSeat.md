@@ -3,6 +3,20 @@
 Two or more players take turns on one Mac. Each turn keeps its own scores,
 records and achievements. Campaign progress belongs to the host.
 
+## A hot seat is its own game
+
+A new hot seat always begins at the first level. It does not continue the host's
+campaign, and it does not change it. The hot seat keeps its own campaign, so two
+players who sit down together start together whatever either of them has cleared
+alone.
+
+That campaign lasts as long as the session. Ending the hot seat clears it and
+gives the host back their own campaign untouched. Quitting the app ends the
+session, so a hot seat cannot be resumed after a relaunch.
+
+Records, statistics and achievements are separate for every player, in a hot seat
+and alone. Only the campaign position is shared, and only inside the session.
+
 ## Start a session
 
 A hot seat starts from the start menu, not from inside a level.
@@ -10,7 +24,8 @@ A hot seat starts from the start menu, not from inside a level.
 1. Leave the level you are playing and return to the start menu.
 2. Add every player in Player Profiles first. A hot seat cannot create profiles.
 3. Open **Hot Seat…** from the app menu, **Hot seat** in Player Profiles, or
-   **Players** on a result page.
+   **Players** on a result page. The page selects the host and one other profile
+   for you, because one player is not a hot seat.
 4. Press 1 to 8 to add or remove players. The order you choose is the turn order.
 5. Select **Done**. The hot seat starts at the next level.
 
@@ -47,4 +62,6 @@ the same turn owner. Joining or leaving cannot change the owner of a run already
 in progress. Guest profiles do not inherit the host's campaign saves.
 
 The roster lasts until the app closes, the host changes, or **Play solo** is
-selected. A handover is unavailable while records have a save error.
+selected. Dropping below two players ends the hot seat. A player who leaves
+cannot still be holding the turn. A handover is unavailable while records have a
+save error.

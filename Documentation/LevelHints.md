@@ -1,13 +1,32 @@
 # Level hints
 
-Choose **Help > Level hints**, press **F1** (Fn-F1 on keyboards with brightness keys),
-or choose **Level hints** from the controls help. Classic also offers hints in its pause menu.
+Press **i**, or choose **Help > Level hints**, or press **F1** (Fn-F1 on keyboards
+with brightness keys), or choose **Level hints** from the controls help. Classic also offers hints in its pause menu.
 **Command-/** opens the same page from the menu bar.
 On a controller, use **LT + Y**. Choose a button with the D-pad, press **A** to reveal one tier,
 and press **B** to return to the game. Held buttons do not reveal hints when the page opens.
 
+`i` is reserved for this page, so no skill uses it as a shortcut.
+
 Hints are optional. They never appear automatically or assign skills.
 The game pauses while the page is open. Closing it restores the previous pause state.
+
+## Coverage
+
+Checked hints exist for the 120 original Lemmings levels. All three tiers come
+from a verified winning route for that level, so they cannot send a player down a
+route the engine does not accept.
+
+Every other campaign gets labelled general coaching instead: Oh No! More Lemmings,
+the Xmas and Holiday campaigns, Lemmings 2, Lemmings 3, converted levels and fan
+packs. That text is honest advice about the mechanics in play. It is not derived
+from a solution for the level in front of you, and it is labelled so no player
+mistakes it for one.
+
+This is a beta limitation, not a design choice. Checked hints follow recorded
+winning routes, so a campaign gains them when its routes are recorded. 214 core
+campaign routes remain unverified, which is the same gap the release gates track.
+See the [1.0 gap evaluation](ReleaseReadiness/OneZeroGapEvaluation.md).
 
 Each click reveals one tier:
 

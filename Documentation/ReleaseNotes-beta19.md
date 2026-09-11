@@ -1,5 +1,9 @@
 # Ultimate Lemmings — beta 19
 
+**Do not distribute this build.** The archive was packaged while the speed
+control code was being rewritten, so its speed button behavior is not the
+behavior described here and has not been verified. Wait for beta 20.
+
 Version 0.1, build 19. Universal Mac app for Intel and Apple silicon, macOS 13 or later.
 
 Beta 17 carries everything from betas 15 to 18, which were built but never handed
@@ -72,12 +76,8 @@ shows one, the roster did not take.
 - Fast-forward ghosting is much stronger. The earlier change removed the bright
   wake and left the ghosts too faint to see. They now carry the effect on their
   own, visible at 2x and clearly heavier as the speed climbs.
-- A click on the speed button waits for the double-click window before it changes
-  tier. A double click turns the speed off. A second double click puts it back at
-  the speed you were using.
-- Mashing the button or the F key is still an emergency stop. It does not flicker
-  the speed on and off.
-- The F key still changes tier at once. Only clicking waits.
+- Mashing the button or the F key is an emergency stop. It does not flicker the
+  speed on and off.
 
 ### Presentation
 

@@ -1,7 +1,11 @@
 # Beta testing
 
-Beta 14 is version `0.1`, build `14`. The app supports Intel and Apple silicon,
-with a minimum deployment target of macOS 13. See `ReleaseNotes-beta14.md` for
+Beta 19 is the current build number, but **beta 19 must not be distributed**. It
+was packaged while the speed control code was being rewritten. Wait for beta 20.
+See [beta 19 notes](ReleaseNotes-beta19.md).
+
+The last archive fit to hand out is version `0.1`, build `14`. The app supports Intel and Apple silicon,
+with a minimum deployment target of macOS 13. See `ReleaseNotes-beta14.md` for its
 changes and preview limitations. Beta 14 ships two archives: the Developer ID
 archive and the Game Center archive. The earlier beta 13 handoff is recorded in
 [Beta 13 readiness](Beta13Readiness.md).
