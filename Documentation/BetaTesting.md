@@ -1,6 +1,6 @@
 # Beta testing
 
-Beta 20 is the current candidate: version `0.1`, build `20`, for Intel and Apple silicon on macOS 13 or later. See [beta 20 notes](ReleaseNotes-beta20.md). Beta 19 must not be distributed.
+Beta 20 is ready for private testing: version `0.1`, build `20`, for Intel and Apple silicon on macOS 13 or later. See [beta 20 notes](ReleaseNotes-beta20.md) and [verified archives and checks](Beta20Readiness.md). Beta 19 must not be distributed.
 
 ## Validate the build
 
