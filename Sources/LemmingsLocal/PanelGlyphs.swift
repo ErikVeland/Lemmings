@@ -157,3 +157,29 @@ enum PanelGlyph: String {
     }
   }
 }
+
+/// Shared speed control geometry for flat, CRT and sequel panels.
+@MainActor enum SpeedPanelControls {
+    static let help = "Click speed to toggle. Hold to boost; release to return. Arrows choose 2×, 3×, 5× or 10×."
+    static func part(at point: CGPoint, in rect: CGRect) -> Int? {
+        guard rect.contains(point) else { return nil }
+        if point.x < rect.minX + rect.width * 0.22 { return -1 }
+        if point.x >= rect.maxX - rect.width * 0.22 { return 1 }
+        return 0
+    }
+    static func draw(in rect: CGRect, label: String, active: Bool) {
+        let side = rect.width * 0.22
+        let boxes = [CGRect(x: rect.minX, y: rect.minY, width: side, height: rect.height),
+            CGRect(x: rect.minX + side, y: rect.minY, width: rect.width - 2 * side, height: rect.height),
+            CGRect(x: rect.maxX - side, y: rect.minY, width: side, height: rect.height)]
+        for (index, box) in boxes.enumerated() {
+            (index == 1 && active ? NSColor(calibratedRed: 0.08, green: 0.32, blue: 0.16, alpha: 1) : NSColor(calibratedWhite: 0.10, alpha: 1)).setFill()
+            box.insetBy(dx: 0.5, dy: 0.5).fill()
+            let text = (["‹", label, "›"][index]) as NSString
+            let font = NSFont.monospacedSystemFont(ofSize: min(rect.height * 0.42, box.width / (index == 1 ? 2.1 : 0.8)), weight: .bold)
+            let attributes: [NSAttributedString.Key: Any] = [.font: font, .foregroundColor: NSColor(calibratedRed: 0.65, green: 1, blue: 0.65, alpha: 1)]
+            let size = text.size(withAttributes: attributes)
+            text.draw(at: CGPoint(x: box.midX - size.width / 2, y: box.midY - size.height / 2), withAttributes: attributes)
+        }
+    }
+}

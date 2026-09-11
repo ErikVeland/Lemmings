@@ -18,7 +18,7 @@ enum PanelButton: Equatable {
     didSet {
       if oldValue !== session { nukeGesture.reset() }
       let names = session?.skills.map(\.name) ?? []
-      toolTip = SkillShortcuts(names: names).hint(names: names, modern: modernControlsEnabled)
+      toolTip = SkillShortcuts(names: names).hint(names: names, modern: modernControlsEnabled) + "\n" + SpeedPanelControls.help
     }
   }
   private var nukeGesture = NukeClickGesture()
@@ -27,6 +27,11 @@ enum PanelButton: Equatable {
   var isFastForward = false
   var modernControlsEnabled = true
   var speedLabel = "1×" { didSet { if oldValue != speedLabel { needsDisplay = true } } }
+  var variableSpeedEnabled = true
+  var onSpeedPress: ((TimeInterval, Int) -> Void)?
+  var onSpeedRelease: ((TimeInterval) -> Void)?
+  var onSpeedStep: ((Int, TimeInterval) -> Void)?
+  private var speedPointerDown = false
   var onSpeedClick: ((TimeInterval, Int) -> Void)?
   var statusText = ""
   var levelSize = CGSize(width: 1, height: 1)
@@ -93,8 +98,11 @@ enum PanelButton: Equatable {
         x: panelFrame.minX + cell * CGFloat(index), y: panelFrame.minY + 16 * scale,
         width: cell, height: 24 * scale))
     }
-    // The original reserves the right of the bar for the level map.
-    let mapLeft = panelFrame.minX + cell * CGFloat(order.count) + 16 * scale
+    if variableSpeedEnabled, let index = buttonFrames.firstIndex(where: { $0.0 == .fastForward }) {
+      buttonFrames[index].1.size.width = cell * 3
+    }
+    // Leave space for the speed arrows before the map.
+    let mapLeft = panelFrame.minX + cell * CGFloat(order.count + (variableSpeedEnabled ? 2 : 0)) + 16 * scale
     minimapFrame = CGRect(
       x: mapLeft,
       y: panelFrame.minY + 18 * scale,
@@ -144,6 +152,12 @@ enum PanelButton: Equatable {
     stopRepeating()
     pointerIsDown = true
     if let match = buttonFrames.first(where: { $0.1.contains(point) }) {
+      if match.0 == .fastForward, variableSpeedEnabled, let part = SpeedPanelControls.part(at: point, in: match.1) {
+        nukeGesture.reset()
+        if part == 0 { speedPointerDown = true; onSpeedPress?(time, clickCount) }
+        else { onSpeedStep?(part, time) }
+        return
+      }
       press(match.0, time: time, clickCount: clickCount)
       // The release rate is the one control a player holds rather than taps.
       // Stepping it one at a time makes crossing the whole range a chore.
@@ -154,7 +168,7 @@ enum PanelButton: Equatable {
     if minimapFrame.contains(point) { scrollFromMinimap(point) }
   }
 
-  override func mouseUp(with event: NSEvent) { handlePointerUp() }
+  override func mouseUp(with event: NSEvent) { handlePointerUp(time: event.timestamp) }
 
   func resetNukeGesture() { nukeGesture.reset() }
 
@@ -171,7 +185,8 @@ enum PanelButton: Equatable {
     needsDisplay = true
   }
 
-  func handlePointerUp() {
+  func handlePointerUp(time: TimeInterval = ProcessInfo.processInfo.systemUptime) {
+    if speedPointerDown { speedPointerDown = false; onSpeedRelease?(time) }
     pointerIsDown = false
     stopRepeating()
   }
@@ -264,6 +279,7 @@ enum PanelButton: Equatable {
       drawButtonLabels()
       drawMinimap()
       drawStatus()
+      drawSpeedControls()
       return
     }
 
@@ -273,6 +289,12 @@ enum PanelButton: Equatable {
     for (button, frame) in buttonFrames { draw(button, in: frame) }
     drawMinimap()
     drawStatus()
+    drawSpeedControls()
+  }
+
+  private func drawSpeedControls() {
+    guard variableSpeedEnabled, let frame = buttonFrames.first(where: { $0.0 == .fastForward })?.1 else { return }
+    SpeedPanelControls.draw(in: frame, label: speedLabel, active: isFastForward)
   }
 
   private func drawClassicPanel() {

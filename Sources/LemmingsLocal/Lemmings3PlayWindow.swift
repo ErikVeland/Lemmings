@@ -233,6 +233,9 @@ import NxlvKit
                 self.refresh()
             } else { self.applyAction(to: id, direction: .right); self.selected = previous; self.refresh() }
         }
+        canvas.onSpeedPress = { [weak self] time, count in self?.speedControl.pointerDown(at: time, clickCount: count) }
+        canvas.onSpeedRelease = { [weak self] time in self?.speedControl.release(.mouse, at: time) }
+        canvas.onSpeedStep = { [weak self] direction, time in self?.speedControl.step(direction, at: time) }
         keyboard.speedControl = speedControl
         keyboard.modern = { [weak self] in self?.audioSettings.modernControlsEnabled ?? true }
         speedControl.onChange = { [weak self] in self?.accumulator = 0; self?.refresh() }
@@ -391,7 +394,7 @@ import NxlvKit
     }
     @objc private func restart() {
         saveCheckpoint(immediately: true)
-        speedControl.reset()
+        speedControl.stateNewLevel()
         canvas.menuRows = nil; pendingTool = nil; canvas.directionPoint = nil; game = initial; beginReplay(); recorded = false; paused = false; accumulator = 0; canvas.resetCamera(campaign.levels[campaign.index]); message = "Choose an action. Bricks and spades ask for a direction. Arrow keys move the camera."; refresh() }
     private func save() { if let data = try? JSONEncoder().encode(campaign.progress) { UserDefaults.standard.set(data, forKey: progressKey) } }
     @objc private func chooseTribe() {
@@ -532,7 +535,8 @@ import NxlvKit
         let playing = !paused && !game.isComplete && !GameScreen.shared.isPresented && canvas.menuRows == nil && pendingTool == nil
         speedControl.update(at: now, active: !game.isComplete && !GameScreen.shared.isPresented && canvas.menuRows == nil && pendingTool == nil)
         canvas.speedMultiplier = speedControl.multiplier
-        canvas.speedLabel = speedControl.label
+        canvas.speedLabel = speedControl.panelLabel
+        canvas.variableSpeedEnabled = speedControl.variableEnabled
         canvas.capturePointer(active: playing)
         guard !GameScreen.shared.isPresented, canvas.menuRows == nil, pendingTool == nil else { accumulator = 0; return }
         canvas.panAtPointer(seconds: elapsed)
@@ -652,7 +656,8 @@ import NxlvKit
         canvas.selectedAction = selected; canvas.paused = paused; canvas.fast = fast
         canvas.setAccessibilityLabel("Lemmings 3. \(campaign.tribe.title) level \(campaign.index + 1). \(game.saved) saved, \(game.reserve) in reserve, \(game.remainingSeconds) seconds. Selected \(Lemmings3Panel.names[selected]). \(message) Space pauses. F changes speed. Escape opens the game menu. Double-click End Run to finish.")
         canvas.speedMultiplier = speedControl.multiplier
-        canvas.speedLabel = speedControl.label
+        canvas.speedLabel = speedControl.panelLabel
+        canvas.variableSpeedEnabled = speedControl.variableEnabled
         canvas.isFastForward = fast && !paused && !game.isComplete
         canvas.game = game; canvas.needsDisplay = true
         if justCompleted { recordArcadeResult() }
@@ -682,7 +687,11 @@ import NxlvKit
     }
     private var usesSpeedEffects: Bool { hdEffectsEnabled && !reduceMotion && isFastForward }
     var speedMultiplier: Double = 3 { didSet { speedTrails.multiplier = speedMultiplier; syncSpeedEffects() } }
-    var speedLabel = "1×"
+    var speedLabel = "2×"
+    var variableSpeedEnabled = true
+    var onSpeedPress: ((TimeInterval, Int) -> Void)?
+    var onSpeedRelease: ((TimeInterval) -> Void)?
+    var onSpeedStep: ((Int, TimeInterval) -> Void)?
     var isFastForward = false { didSet { syncSpeedEffects() } }
     var fullScreenHDRFlashes = true { didSet { if !fullScreenHDRFlashes { hdrOverlay?.clearExplosions() } } }
     private let speedTrails = SpeedTrails()
@@ -999,11 +1008,17 @@ import NxlvKit
             } else { directionPoint = nil; onCancelDirection?() }
             needsDisplay = true; return
         }
+        if variableSpeedEnabled, let part = SpeedPanelControls.part(at: CGPoint(x: sx, y: sy), in: CGRect(x: 214, y: 172, width: 35, height: 40)) {
+            if part == 0 { onSpeedPress?(event.timestamp, event.clickCount) }
+            else { onSpeedStep?(part, event.timestamp) }
+            return
+        }
         if sy >= 172 && sy < 212, let slot = Lemmings3Panel.slot(at: sx) { onPanel?(slot, event.clickCount); return }
         if sy >= 0 && sy < 12 && sx >= 280 && sx < 320 { onMenu?(); return }
         guard playfieldRect.contains(point) else { return }
         onClick?(Int(sx + cameraX), Int(sy - 12 + cameraY))
     }
+    override func mouseUp(with event: NSEvent) { onSpeedRelease?(event.timestamp) }
     override func keyDown(with event: NSEvent) {
         guard event.modifierFlags.intersection([.command, .control, .option]).isEmpty else { super.keyDown(with: event); return }
         if let rows = menuRows {
@@ -1066,7 +1081,8 @@ import NxlvKit
             art.pressed.draw(in: CGRect(x: 0, y: 172, width: 320, height: 40), from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none])
             NSGraphicsContext.restoreGraphicsState()
         }
-        if fast { art.text(speedLabel.replacingOccurrences(of: "×", with: "X"), x: 218, y: 198, scale: 0.7) }
+        if variableSpeedEnabled { SpeedPanelControls.draw(in: CGRect(x: 214, y: 172, width: 35, height: 40), label: speedLabel, active: fast) }
+        else if fast { art.text(speedLabel.replacingOccurrences(of: "×", with: "X"), x: 218, y: 198, scale: 0.7) }
         // Time stays inside its own panel cell, never above a lemming.
         let seconds = max(0, game.remainingSeconds)
         art.text(String(format: "%02d", seconds / 60), x: 187, y: 183, scale: 0.85)

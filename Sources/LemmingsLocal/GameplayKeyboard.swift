@@ -17,6 +17,12 @@ import NxlvKit
     var multiplier: Double { state.multiplier }
     var label: String { state.label }
     var target: Double { state.target }
+    var panelLabel: String { state.isFast ? state.label : "\(Int(state.cruise))×" }
+    func pointerDown(at now: TimeInterval, clickCount: Int) {
+        if clickCount > 1 { state.reset(at: now) }
+        else { state.press(.mouse, at: now) }
+        onChange()
+    }
     func update(at now: TimeInterval, active: Bool) {
         if active { state.update(at: now) } else { state.suspend(at: now) }
     }
@@ -26,12 +32,13 @@ import NxlvKit
     func step(_ direction: Int, at now: TimeInterval) { state.step(direction, at: now); onChange() }
     func press(_ key: GameplaySpeed.Hold, at now: TimeInterval, tapEnabled: Bool = true) { state.press(key, at: now, tapEnabled: tapEnabled); onChange() }
     func release(_ key: GameplaySpeed.Hold, at now: TimeInterval, allowTap: Bool = true) { state.release(key, at: now, allowTap: allowTap); onChange() }
+    func stateNewLevel() { state.newLevel(at: ProcessInfo.processInfo.systemUptime); onChange() }
     func reset(at now: TimeInterval = ProcessInfo.processInfo.systemUptime) { state.reset(at: now); onChange() }
     func cancelInput() { state.cancelInput(at: ProcessInfo.processInfo.systemUptime); onChange() }
     func setFast(_ enabled: Bool) { state.setFast(enabled, at: ProcessInfo.processInfo.systemUptime); onChange() }
     var help: String {
         variableEnabled
-            ? "F / Speed: 2×, 3×, 5×, 10×, then 1×\nHold F or Shift: ramp up; release: return to your selected speed\nShift+[ / Shift+]: slower / faster\nDouble-tap F, double-click Speed, Shift+\\ or Escape: 1×"
+            ? "F / Speed: toggle fast-forward\nHold Shift, Speed or RT: ramp up; release: previous speed\nSpeed arrows or Shift+[ / Shift+]: choose 2×, 3×, 5× or 10×\nF, Escape or controller B: immediately return to 1×"
             : "F / Speed: toggle fast-forward"
     }
 }
@@ -140,8 +147,7 @@ import NxlvKit
         if event.charactersIgnoringModifiers?.lowercased() == "f" {
             if !event.isARepeat {
                 pressedF = true; fKeyCode = event.keyCode
-                if speedControl?.variableEnabled == true { speedControl?.press(.key, at: now) }
-                else { speedControl?.tap(at: now) }
+                speedControl?.tap(at: now)
             }
             return nil
         }

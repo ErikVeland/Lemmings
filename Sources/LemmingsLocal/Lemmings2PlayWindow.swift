@@ -205,6 +205,9 @@ import NxlvKit
             }
             self.sounds.play(self.game?.drainSoundEvents() ?? []); self.refreshGame()
         }
+        canvas.onSpeedPress = { [weak self] time, count in self?.speedControl.pointerDown(at: time, clickCount: count) }
+        canvas.onSpeedRelease = { [weak self] time in self?.speedControl.release(.mouse, at: time) }
+        canvas.onSpeedStep = { [weak self] direction, time in self?.speedControl.step(direction, at: time) }
         keyboard.speedControl = speedControl
         keyboard.modern = { [weak self] in self?.audioSettings.modernControlsEnabled ?? true }
         speedControl.onChange = { [weak self] in self?.accumulator = 0; self?.refreshGame() }
@@ -586,7 +589,8 @@ import NxlvKit
     private func refreshGame() {
         guard let game else { return }
         canvas.speedMultiplier = speedControl.multiplier
-        canvas.speedLabel = speedControl.label
+        canvas.speedLabel = speedControl.panelLabel
+        canvas.variableSpeedEnabled = speedControl.variableEnabled
         canvas.isFastForward = fastForward && !paused && screen == .playing && !game.isComplete
         canvas.update(game)
         let palette = Lemmings2Panel.palette(over: game.configuration.palette, phase: frontTicks / 4)
@@ -603,7 +607,7 @@ import NxlvKit
             seconds: game.remainingSeconds, label: label, palette: palette, highlightedControls: controls) {
             canvas.setPanel(rendered)
         }
-        canvas.toolTip = SkillShortcuts(names: game.configuration.skills.map(\.name)).hint(names: game.configuration.skills.map(\.name), modern: audioSettings.modernControlsEnabled)
+        canvas.toolTip = SkillShortcuts(names: game.configuration.skills.map(\.name)).hint(names: game.configuration.skills.map(\.name), modern: audioSettings.modernControlsEnabled) + "\n" + SpeedPanelControls.help
         canvas.setAccessibilityLabel("Lemmings 2. \(game.configuration.skills[selected].name) selected. \(label). \(paused ? "Paused." : "Running.") \(game.isNuking ? "Nuke active." : "") \(game.released) released, \(game.saved) saved.")
     }
     private func update() {
@@ -612,7 +616,8 @@ import NxlvKit
         let playing = screen == .playing && !paused && game?.isComplete == false && !GameScreen.shared.isPresented
         speedControl.update(at: now, active: screen == .playing && game?.isComplete == false && !GameScreen.shared.isPresented)
         canvas.speedMultiplier = speedControl.multiplier
-        canvas.speedLabel = speedControl.label
+        canvas.speedLabel = speedControl.panelLabel
+        canvas.variableSpeedEnabled = speedControl.variableEnabled
         canvas.capturePointer(active: playing && audioSettings.confinePointer)
         guard !GameScreen.shared.isPresented else { accumulator = 0; return }
         frontTicks += 1
@@ -1361,7 +1366,11 @@ import NxlvKit
     }
     private var usesSpeedEffects: Bool { hdEffectsEnabled && !reduceMotion && isFastForward }
     var speedMultiplier: Double = 3 { didSet { speedTrails.multiplier = speedMultiplier; syncSpeedEffects() } }
-    var speedLabel = "1×"
+    var speedLabel = "2×"
+    var variableSpeedEnabled = true
+    var onSpeedPress: ((TimeInterval, Int) -> Void)?
+    var onSpeedRelease: ((TimeInterval) -> Void)?
+    var onSpeedStep: ((Int, TimeInterval) -> Void)?
     var isFastForward = false { didSet { syncSpeedEffects() } }
     var fullScreenHDRFlashes = true { didSet { if !fullScreenHDRFlashes { hdrOverlay?.clearExplosions() } } }
     private let speedTrails = SpeedTrails()
@@ -1777,8 +1786,10 @@ import NxlvKit
             panel.draw(in: NSRect(x: panelX, y: origin.y + 192 * zoom, width: 320 * zoom, height: 48 * zoom),
                        from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true,
                        hints: [.interpolation: NSImageInterpolation.none.rawValue])
+            if variableSpeedEnabled { SpeedPanelControls.draw(in: speedRect, label: speedLabel, active: speedMultiplier > 1.001) }
         }
     }
+    private var speedRect: CGRect { CGRect(x: panelX + 288 * zoom, y: origin.y + 216 * zoom, width: 32 * zoom, height: 24 * zoom) }
     private func drawWorld(_ game: Lemmings2Runtime, terrain: NSImage) {
         NSGraphicsContext.saveGraphicsState()
         NSBezierPath(rect: NSRect(x: origin.x, y: origin.y, width: visibleWidth * zoom, height: 192 * zoom)).addClip()
@@ -1862,6 +1873,10 @@ import NxlvKit
         let y = (p.y - origin.y) / (zoom * 1.2)
         guard x >= 0, x < visibleWidth, y >= 0, y < 200 else { return }
         if y < 160 { onClick?(Int(x + cameraX), Int(y + cameraY)); onPointer?(Int(x + cameraX), Int(y + cameraY), true) }
+        else if variableSpeedEnabled, let part = SpeedPanelControls.part(at: p, in: speedRect) {
+            if part == 0 { onSpeedPress?(event.timestamp, event.clickCount) }
+            else { onSpeedStep?(part, event.timestamp) }
+        }
         else if let slot = Lemmings2Control.slot(x: Int(floor(x - CGFloat(viewport.panelX))), y: Int(y)) { onPanel?(slot, event.clickCount, event.timestamp) }
     }
     private func trackPointer(_ event: NSEvent, held: Bool) {
@@ -1875,7 +1890,7 @@ import NxlvKit
         onPointer?(Int(x+cameraX),Int(y+cameraY),held)
     }
     override func mouseDragged(with event: NSEvent) { trackPointer(event,held:true); onHover?() }
-    override func mouseUp(with event: NSEvent) { trackPointer(event,held:false); onRelease?() }
+    override func mouseUp(with event: NSEvent) { onSpeedRelease?(event.timestamp); trackPointer(event,held:false); onRelease?() }
     override func keyDown(with event: NSEvent) {
         guard event.modifierFlags.intersection([.command, .control, .option]).isEmpty else { super.keyDown(with: event); return }
         switch event.keyCode {

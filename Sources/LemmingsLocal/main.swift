@@ -2207,7 +2207,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
     lastStepTime = now
     speedControl.update(at: now, active: phase == .playing && !sequelIsActive && !GameScreen.shared.isPresented && session?.isComplete == false)
     panel.isFastForward = isFastForward
-    panel.speedLabel = speedControl.label
+    panel.speedLabel = speedControl.panelLabel
+    panel.variableSpeedEnabled = speedControl.variableEnabled
     playfield.speedMultiplier = speedControl.multiplier
     // Settle the display before an open page can suspend the simulation.
     applyDisplayMode()
@@ -2860,9 +2861,15 @@ let achievementProgressKey = "ClassicAchievementProgress"
       guard let self else { return }
       self.accumulator = 0
       self.panel.isFastForward = self.isFastForward
-      self.panel.speedLabel = self.speedControl.label
+      self.panel.speedLabel = self.speedControl.panelLabel
       self.panel.needsDisplay = true; self.updateStatus()
     }
+    panel.onSpeedPress = { [weak self] time, count in
+      guard let self, self.phase == .playing, self.session?.isComplete == false else { return }
+      self.speedControl.pointerDown(at: time, clickCount: count)
+    }
+    panel.onSpeedRelease = { [weak self] time in self?.speedControl.release(.mouse, at: time) }
+    panel.onSpeedStep = { [weak self] direction, time in self?.speedControl.step(direction, at: time) }
     panel.onSpeedClick = { [weak self] time, count in
       guard let self, self.phase == .playing, self.session?.isComplete == false else { return }
       self.speedControl.tap(at: time, clickCount: count)
