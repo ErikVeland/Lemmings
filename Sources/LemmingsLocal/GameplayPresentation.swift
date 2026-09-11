@@ -273,3 +273,94 @@ import NxlvKit
     }
   }
 }
+
+/// A non-interactive identity badge. The owner supplies the active attempt's player.
+@MainActor final class TurnBadgeView: NSView {
+    private(set) var initials: String?
+    private var portrait: NSImage?
+    override var isFlipped: Bool { true }
+    override func hitTest(_ point: NSPoint) -> NSView? { nil }
+    init() {
+        super.init(frame: .zero)
+        isHidden = true
+        setAccessibilityElement(true)
+        setAccessibilityRole(.staticText)
+    }
+    required init?(coder: NSCoder) { fatalError("init(coder:) is unavailable") }
+    func show(initials: String?, portrait: NSImage?) {
+        guard self.initials != initials || self.portrait !== portrait else { return }
+        self.initials = initials; self.portrait = portrait
+        isHidden = initials == nil
+        setAccessibilityLabel(initials.map { "\($0)'s turn" })
+        needsDisplay = true
+        NSAccessibility.post(element: self, notification: .valueChanged)
+    }
+    func place(in area: CGRect) {
+        let width = min(area.width, 132)
+        frame = CGRect(x: area.maxX - width - 10, y: area.maxY - 42, width: width, height: 32)
+    }
+    override func draw(_ dirtyRect: NSRect) {
+        guard let initials else { return }
+        NSColor.black.withAlphaComponent(0.8).setFill()
+        NSBezierPath(roundedRect: bounds, xRadius: 4, yRadius: 4).fill()
+        if let portrait {
+            let width = min(28, portrait.size.width / portrait.size.height * 28)
+            portrait.draw(in: CGRect(x: 4, y: 2, width: width, height: 28), from: .zero,
+                operation: .sourceOver, fraction: 1, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none])
+        }
+        ("\(initials)'s turn" as NSString).draw(at: CGPoint(x: 36, y: 8),
+            withAttributes: [.font: NSFont.monospacedSystemFont(ofSize: 12, weight: .bold), .foregroundColor: NSColor.white])
+    }
+}
+
+@MainActor enum GameAccessibility {
+    static var interfaceSize: ClassicInterfaceSize = .standard
+    static var scale: CGFloat { CGFloat(interfaceSize.scale) }
+}
+
+/// Stable accessibility objects for controls drawn directly into a game view.
+@MainActor final class GameAccessibleElement: NSAccessibilityElement {
+    weak var owner: NSView?
+    var localFrame = CGRect.zero
+    var press: (() -> Void)?
+    var readValue: (() -> String)?
+    var writeValue: ((String) -> Void)?
+    init(owner: NSView, label: String, frame: CGRect, press: (() -> Void)? = nil) {
+        self.owner = owner; self.localFrame = frame; self.press = press
+        super.init()
+        setAccessibilityParent(owner)
+        setAccessibilityRole(press == nil ? .staticText : .button)
+        setAccessibilityLabel(label)
+    }
+    override func accessibilityFrame() -> NSRect {
+        guard let owner, let window = owner.window else { return .zero }
+        return window.convertToScreen(owner.convert(localFrame, to: nil))
+    }
+    override func accessibilityPerformPress() -> Bool {
+        guard let owner, owner.window != nil, !owner.isHiddenOrHasHiddenAncestor, let press else { return false }
+        owner.scrollToVisible(localFrame)
+        press()
+        return true
+    }
+    override func accessibilityValue() -> Any? { readValue?() ?? super.accessibilityValue() }
+    override func setAccessibilityValue(_ value: Any?) {
+        if let value = value as? String, let writeValue { writeValue(value) }
+        else { super.setAccessibilityValue(value) }
+    }
+    override func setAccessibilityFocused(_ focused: Bool) {
+        if focused { owner?.scrollToVisible(localFrame) }
+        super.setAccessibilityFocused(focused)
+    }
+}
+
+@MainActor final class GameAccessibleElements {
+    private var elements: [String: GameAccessibleElement] = [:]
+    func element(id: String, owner: NSView, label: String, frame: CGRect, press: (() -> Void)? = nil) -> GameAccessibleElement {
+        let element = elements[id] ?? GameAccessibleElement(owner: owner, label: label, frame: frame, press: press)
+        element.owner = owner; element.localFrame = frame; element.press = press
+        element.setAccessibilityParent(owner); element.setAccessibilityLabel(label)
+        element.setAccessibilityRole(press == nil ? .staticText : .button)
+        elements[id] = element
+        return element
+    }
+}

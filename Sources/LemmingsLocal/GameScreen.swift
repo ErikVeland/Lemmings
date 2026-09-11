@@ -10,6 +10,7 @@ import NxlvKit
         let view: NSView
         let focus: NSResponder?
         let dismiss: (() -> Void)?
+        let container: GamePageContainer
     }
     private var pages: [Page] = []
     private weak var gameFocus: NSResponder?
@@ -30,7 +31,8 @@ import NxlvKit
         } else {
             if pages.isEmpty { gameFocus = window.firstResponder }
             pages.last?.view.isHidden = true
-            pages.append(Page(view: view, focus: focus ?? view, dismiss: onDismiss))
+            pages.last?.container.isHidden = true
+            pages.append(Page(view: view, focus: focus ?? view, dismiss: onDismiss, container: GamePageContainer(page: view)))
         }
         reattach()
         window.makeFirstResponder(focus ?? view)
@@ -38,13 +40,17 @@ import NxlvKit
     }
     func reattach() {
         guard let root = gameWindow?.contentView, let current = pages.last else { return }
-        if current.view.superview !== root {
-            current.view.removeFromSuperview()
-            current.view.frame = root.bounds
-            current.view.autoresizingMask = [.width, .height]
-            root.addSubview(current.view, positioned: .above, relativeTo: nil)
+        let container = current.container
+        if container.superview !== root {
+            container.removeFromSuperview()
+            container.frame = root.bounds
+            container.autoresizingMask = [.width, .height]
+            root.addSubview(container, positioned: .above, relativeTo: nil)
             gameWindow?.makeFirstResponder(current.focus)
         }
+        container.isHidden = false
+        container.needsLayout = true
+        container.layoutSubtreeIfNeeded()
         current.view.isHidden = false
     }
     func dismiss(_ view: NSView) {
@@ -52,6 +58,7 @@ import NxlvKit
         while pages.count > index {
             let page = pages.removeLast()
             page.view.removeFromSuperview()
+            page.container.removeFromSuperview()
             page.dismiss?()
         }
         reattach()
@@ -85,6 +92,30 @@ import NxlvKit
     }
 }
 
+/// Enlarged pages retain their full layout and scroll instead of clipping controls.
+@MainActor private final class GamePageContainer: NSScrollView {
+    private let page: NSView
+    init(page: NSView) {
+        self.page = page
+        super.init(frame: .zero)
+        drawsBackground = false
+        documentView = page
+        page.autoresizingMask = []
+    }
+    required init?(coder: NSCoder) { fatalError("init(coder:) is unavailable") }
+    override func layout() {
+        super.layout()
+        let enlarged = GameAccessibility.scale > 1
+        if hasHorizontalScroller != enlarged { hasHorizontalScroller = enlarged }
+        if hasVerticalScroller != enlarged { hasVerticalScroller = enlarged }
+        autohidesScrollers = true
+        let size = contentSize
+        page.frame = CGRect(origin: .zero, size: CGSize(width: size.width * GameAccessibility.scale, height: size.height * GameAccessibility.scale))
+        page.needsLayout = true
+        if !enlarged { contentView.scroll(to: .zero) }
+    }
+}
+
 @MainActor enum GameStyle {
     static let background = NSColor(calibratedRed: 0.035, green: 0.055, blue: 0.085, alpha: 1)
     static let panel = NSColor(calibratedRed: 0.065, green: 0.10, blue: 0.14, alpha: 1)
@@ -110,6 +141,8 @@ import NxlvKit
     init(title: String, subtitle: String = "") {
         canvas = GameMenuCanvas(title: title, subtitle: subtitle)
         super.init(frame: .zero)
+        setAccessibilityRole(.group)
+        setAccessibilityLabel(title)
         addSubview(canvas)
         appearance = NSAppearance(named: .darkAqua)
         body.frame = CGRect(x: 64, y: 152, width: 992, height: 480)
@@ -161,6 +194,10 @@ import NxlvKit
         button.frame = CGRect(x: 40, y: 400 - index * 76, width: 860, height: 56)
         body.addSubview(button)
     }
+    override func performKeyEquivalent(with event: NSEvent) -> Bool {
+        if event.isARepeat, [36, 76, 49].contains(event.keyCode) { return true }
+        return super.performKeyEquivalent(with: event)
+    }
     override func cancelOperation(_ sender: Any?) { onBack?() }
     override func keyDown(with event: NSEvent) {
         if event.keyCode == 53 { onBack?() } else { super.keyDown(with: event) }
@@ -177,6 +214,8 @@ import NxlvKit
     init(title: String, subtitle: String) {
         self.title = title; self.subtitle = subtitle
         super.init(frame: CGRect(x: 0, y: 0, width: 1120, height: 720))
+        setAccessibilityRole(.group)
+        setAccessibilityLabel(title + ". " + subtitle)
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) is unavailable") }
     override func draw(_ dirtyRect: NSRect) {

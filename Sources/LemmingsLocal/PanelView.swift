@@ -27,13 +27,18 @@ enum PanelButton: Equatable {
   var isFastForward = false
   var modernControlsEnabled = true
   var speedLabel = "1×" { didSet { if oldValue != speedLabel { needsDisplay = true } } }
-  var variableSpeedEnabled = true
+  var speedChoiceLabel = "2×"
+    var variableSpeedEnabled = true
   var onSpeedPress: ((TimeInterval, Int) -> Void)?
   var onSpeedRelease: ((TimeInterval) -> Void)?
   var onSpeedStep: ((Int, TimeInterval) -> Void)?
   private var speedPointerDown = false
   var onSpeedClick: ((TimeInterval, Int) -> Void)?
   var statusText = ""
+  /// Right-hand half of the status strip. Tells the player where they are in the
+  /// journey at a glance: rank position, rescue progress against the target and
+  /// the best known result, and the play style the run is shaping into.
+  var progressText = ""
   var levelSize = CGSize(width: 1, height: 1)
   var visibleLevelRect = CGRect.zero
 
@@ -58,6 +63,46 @@ enum PanelButton: Equatable {
   var onButton: ((PanelButton) -> Void)?
   var onMinimapScroll: ((Double) -> Void)?
 
+  var speedControlBounds: CGRect { buttonFrames.first(where: { $0.0 == .fastForward })?.1 ?? .zero }
+  private let accessibleElements = GameAccessibleElements()
+  override func isAccessibilityElement() -> Bool { true }
+    override func accessibilityRole() -> NSAccessibility.Role? { .group }
+    override func accessibilityChildren() -> [Any]? { accessibleControls(owner: self) }
+  func accessibleControls(owner: NSView, transform: (CGRect) -> CGRect = { $0 }) -> [Any] {
+    guard !isMenuMode else { return [] }
+    if usesClassicSkin { layoutClassicButtons() } else { layoutButtons() }
+    var result: [Any] = []
+    for (index, item) in buttonFrames.enumerated() {
+      let label: String
+      switch item.0 {
+      case .rateDown: label = "Decrease release rate"
+      case .rateUp: label = "Increase release rate"
+      case .skill(let skill):
+        guard let value = session?.skills[safe: skill] else { continue }
+        label = "\(value.name), \(value.isInfinite ? "unlimited" : String(value.count)) remaining" + (selectedSkillIndex == skill ? ", selected" : "")
+      case .pause: label = isPaused ? "Resume" : "Pause"
+      case .nuke: label = session?.canUndoNuke == true ? "Undo end run" : "End run"
+      case .fastForward: label = isFastForward ? "Return to normal speed" : "Start fast-forward at " + speedChoiceLabel
+      }
+      let action = item.0
+      result.append(accessibleElements.element(id: "button-\(index)", owner: owner, label: label, frame: transform(item.1)) { [weak self] in
+        guard let self else { return }
+        if action == .fastForward { self.onSpeedClick?(ProcessInfo.processInfo.systemUptime, 1) }
+        else { self.onButton?(action) }
+      })
+      if action == .fastForward, variableSpeedEnabled {
+        for direction in [-1, 1] {
+          let rect = CGRect(x: direction < 0 ? item.1.minX : item.1.maxX - item.1.width * 0.22,
+            y: item.1.minY, width: item.1.width * 0.22, height: item.1.height)
+          result.append(accessibleElements.element(id: "speed-\(direction)", owner: owner,
+            label: direction < 0 ? "Decrease fast speed" : "Increase fast speed", frame: transform(rect)) { [weak self] in
+              self?.onSpeedStep?(direction, ProcessInfo.processInfo.systemUptime)
+            })
+        }
+      }
+    }
+    return result
+  }
   private var buttonFrames: [(PanelButton, CGRect)] = []
   private var minimapFrame = CGRect.zero
   private var panelFrame = CGRect.zero
@@ -294,7 +339,7 @@ enum PanelButton: Equatable {
 
   private func drawSpeedControls() {
     guard variableSpeedEnabled, let frame = buttonFrames.first(where: { $0.0 == .fastForward })?.1 else { return }
-    SpeedPanelControls.draw(in: frame, label: speedLabel, active: isFastForward)
+    SpeedPanelControls.draw(in: frame, label: speedLabel, active: isFastForward, next: speedChoiceLabel)
   }
 
   private func drawClassicPanel() {
@@ -600,6 +645,23 @@ enum PanelButton: Equatable {
     } else {
       GamePixelText.draw(gameText(statusText), in: box)
     }
+    drawProgress(in: box, y: y)
+  }
+
+  /// Drawn from the right edge inward, so it cannot collide with the status text
+  /// on the left however long either grows. It is dropped rather than truncated
+  /// when the panel is too narrow to hold both.
+  private func drawProgress(in box: CGRect, y: CGFloat) {
+    guard !progressText.isEmpty else { return }
+    let text = gameText(progressText)
+    guard let macInterface, let font = macInterface.font(.small), font.covers(text) else {
+      return
+    }
+    let width = macInterface.width(of: text, face: .small, scale: 1)
+    let statusWidth = macInterface.width(of: gameText(statusText), face: .small, scale: 1)
+    let x = bounds.width - inset - width
+    guard x > inset + statusWidth + 12 else { return }
+    macInterface.draw(text, face: .small, at: CGPoint(x: x, y: y), scale: 1)
   }
 
   /// Tall enough for the original bar at 3x, plus a status strip beneath it.

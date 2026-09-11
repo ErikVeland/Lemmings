@@ -120,7 +120,7 @@ func testSkillAccounting() throws {
     for copy in copies { try FileManager.default.removeItem(at: copy) }
     try bytes.write(to: file)
     let view = ArcadeView(frame: NSRect(x: 0, y: 0, width: 1120, height: 720))
-    let artwork = try ClassicMacArtwork(directory: URL(fileURLWithPath: ".build/local/Ultimate Lemmings.app/Contents/Resources/MacArtwork/lemmings"))
+    let artwork = try ClassicMacArtwork(directory: URL(fileURLWithPath: ProcessInfo.processInfo.environment["LEMMINGS_TEST_APP"] ?? ".build/local/Ultimate Lemmings.app").appendingPathComponent("Contents/Resources/MacArtwork/lemmings"))
     view.useArtwork(artwork)
     view.mode = .profiles; view.selectProfile(profile)
     let window = NSWindow(contentRect: view.frame, styleMask: [.titled], backing: .buffered, defer: false)
@@ -224,6 +224,21 @@ func testSkillAccounting() throws {
     try require(store.records.activeProfileID == host && store.progressKey("campaign") == namespace, "Shared progress changed owner")
     store.toggleSessionProfile(partner.id)
     try require(store.nextSessionProfile(after: host)?.id == friend.id, "Removed guest stayed in rotation")
+    let sharedKey = store.progressKey("campaign")
+    UserDefaults.standard.set("shared progress", forKey: sharedKey)
+    store.turnPolicy = .atFirstFail
+    let resumed = ArcadeStore(file: directory.appendingPathComponent("records.json"), bundledProofs: nil)
+    try require(resumed.hotSeatID == store.hotSeatID && resumed.sessionProfileIDs == store.sessionProfileIDs,
+        "Relaunch lost shared campaign or roster")
+    try require(resumed.playingProfileID == store.playingProfileID, "Relaunch lost the next turn")
+    store.endHotSeat()
+    try require(store.progressKey("campaign") != sharedKey && UserDefaults.standard.string(forKey: sharedKey) == "shared progress",
+        "Solo transition erased shared progress or retained its namespace")
+    try require(store.turnPolicy == .atFirstFail, "Solo transition erased the house rule")
+    store.prepareHotSeat()
+    try require(store.progressKey("campaign") == sharedKey, "Rejoining created an empty shared campaign")
+    UserDefaults.standard.removeObject(forKey: sharedKey)
+    store.turnPolicy = .everyLevel
     store.toggleSessionProfile("missing")
     try require(store.sessionProfiles.count == 2, "Unknown profile entered session")
     let level = ArcadeLevel(id: "shared", title: "Shared level", game: "Classic", rules: "test", total: 10, required: 5)
@@ -235,7 +250,7 @@ func testSkillAccounting() throws {
     try require(view.primaryResultTitle == "Retry as TRI", "Next player missing from retry label")
     view.performDefaultResultAction()
     try require(retries == 1 && store.playingProfileID == friend.id && report.run.profileID == host, "Default result handoff changed old results")
-    let artwork = try ClassicMacArtwork(directory: URL(fileURLWithPath: ".build/local/Ultimate Lemmings.app/Contents/Resources/MacArtwork/lemmings"))
+    let artwork = try ClassicMacArtwork(directory: URL(fileURLWithPath: ProcessInfo.processInfo.environment["LEMMINGS_TEST_APP"] ?? ".build/local/Ultimate Lemmings.app").appendingPathComponent("Contents/Resources/MacArtwork/lemmings"))
     view.useArtwork(artwork)
     let window = NSWindow(contentRect: view.frame, styleMask: [.titled], backing: .buffered, defer: false)
     window.contentView = view
@@ -247,16 +262,38 @@ func testSkillAccounting() throws {
         try bitmap.representation(using: .png, properties: [:])!.write(to: output.appendingPathComponent(name + ".png"))
     }
     try shot("retry")
+    view.performDefaultResultAction()
+    guard let handover = GameScreen.shared.controllerPage(in: window) as? GameMenuPage else {
+        throw SequelDataError.invalid("Handover did not wait for Ready")
+    }
+    func buttons(_ view: NSView) -> [NSButton] { (view as? NSButton).map { [$0] } ?? view.subviews.flatMap(buttons) }
+    let ready = buttons(handover).first { $0.title == "Ready, TRI" }
+    try require(ready != nil && handover.onBack == nil, "Handover has no explicit Ready action")
+    let navigator = ControllerMenuNavigator()
+    navigator.handle(.rate(-1), in: handover)
+    try require(navigator.selected === ready, "Controller selected the hidden Back button during handover")
+    let repeated = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 0,
+        windowNumber: window.windowNumber, context: nil, characters: "\r", charactersIgnoringModifiers: "\r", isARepeat: true, keyCode: 36)!
+    try require(handover.performKeyEquivalent(with: repeated) && GameScreen.shared.isPresented,
+        "A held Return key skipped the handover")
+    navigator.handle(.assign, in: handover)
+    try require(!GameScreen.shared.isPresented, "Ready did not release the handover")
     view.openSession()
     try shot("players")
     try require(view.mode == .hotSeat, "Players did not open session setup")
     view.closeSession()
     try require(view.mode == .result, "Done lost the result page")
+    let winningReport = store.record(ArcadeRun(profileID: host, level: level, saved: 10, didWin: true, skills: [:], seconds: 2))!
+    view.report = winningReport
+    var advances = 0
+    view.onContinue = { advances += 1 }
     try Data("external change".utf8).write(to: directory.appendingPathComponent("records.json"))
     store.save()
     let turnBeforeFailure = store.playingProfileID
     try require(!store.passSessionTurn(after: friend.id) && store.playingProfileID == turnBeforeFailure,
         "Storage failure changed the player")
+    view.continueAsNextProfile()
+    try require(advances == 0, "Failed handover advanced the level with the wrong player")
     store.endHotSeat()
     try require(store.playingProfileID == host && store.nextSessionProfile(after: host) == nil, "Play solo did not end rotation")
     print("PASS hot-seat roster, three-player rotation, removal, shared progress owner, separate result owner and retry action")

@@ -34,7 +34,7 @@ public struct ControllerBindings {
         case .leftShoulder: return "Previous skill"
         case .rightShoulder: return "Next skill"
         case .leftTrigger: return "Modifier for extra actions"
-        case .rightTrigger: return "Tap / hold speed control"
+        case .rightTrigger: return "Tap: toggle fast-forward; hold: temporary boost"
         case .up: return "Increase release rate"
         case .down: return "Decrease release rate"
         case .left: return "Previous unassigned lemming"
@@ -86,8 +86,8 @@ public struct ControllerBindings {
     LB / RB: previous / next available skill
     D-pad left / right: previous / next unassigned lemming
     D-pad up / down: increase / decrease release rate (where supported)
-    Tap RT: next speed • Hold RT: ramp up; release: selected speed
-    Double-tap RT: return to 1× • Menu: pause / resume
+    Tap RT: toggle fast-forward • Hold RT: ramp up; release: previous speed
+    B: immediately return to 1× • Menu: pause / resume
     L3 / R3: entrance / exit • View / Options: help
     Hold LT + D-pad left / right: decrease / increase speed
     Hold LT + D-pad up / down: entrance / exit

@@ -13,8 +13,7 @@ import NxlvKit
     private let bundledProofs: TrolleyBundledProofs?
     var profilesAreWritable: Bool { canWrite }
 
-    /// How a hot seat passes play on. The choice outlives the roster, so the
-    /// house rule survives a quit while the players are picked again each time.
+    /// The house rule and shared campaign survive app restarts.
     enum TurnPolicy: String, CaseIterable, Sendable {
         case everyLevel = "Every level", atFirstFail = "At first fail"
         var title: String { rawValue }
@@ -44,6 +43,7 @@ import NxlvKit
     }
     func toggleSessionProfile(_ id: String) {
         guard id != records.activeProfileID, records.profile(id) != nil else { return }
+        if sessionProfileIDs.count == 2, sessionProfileIDs.contains(id) { endHotSeat(); return }
         if sessionProfileIDs.isEmpty { sessionProfileIDs = [records.activeProfileID] }
         if sessionProfileIDs.contains(id) { sessionProfileIDs.removeAll { $0 == id } }
         else { sessionProfileIDs.append(id) }
@@ -51,34 +51,47 @@ import NxlvKit
         if let turn = sessionTurnID, !sessionProfileIDs.contains(turn) { sessionTurnID = nil }
         if sessionProfileIDs.count < 2 { endHotSeat() } else { startHotSeatProgress() }
     }
-    /// A hot seat keeps its own campaign, separate from every solo profile. The
-    /// id is new for each session, so a new hot seat has no saved progress and
-    /// starts at the first level instead of inheriting the host's campaign.
+    private struct SavedHotSeat: Codable {
+        let id: String
+        let host: String
+        let players: [String]
+        let turn: String?
+        let active: Bool
+    }
     private(set) var hotSeatID: String?
-
+    private var hotSeatHostID: String?
+    private func sessionKey(host: String) -> String {
+        let fileID = SHA256.hash(data: Data(file.path.utf8)).map { String(format: "%02x", $0) }.joined()
+        return "HotSeat.saved.\(fileID).\(host)"
+    }
+    private func persistSession(active: Bool = true) {
+        guard let id = hotSeatID, let host = hotSeatHostID else { return }
+        let saved = SavedHotSeat(id: id, host: host, players: sessionProfileIDs, turn: sessionTurnID, active: active)
+        if let data = try? JSONEncoder().encode(saved) { defaults.set(data, forKey: sessionKey(host: host)) }
+    }
+    private func restoreSession(activeOnly: Bool) -> Bool {
+        let host = records.activeProfileID
+        guard let data = defaults.data(forKey: sessionKey(host: host)),
+              let saved = try? JSONDecoder().decode(SavedHotSeat.self, from: data),
+              saved.host == host, !activeOnly || saved.active else { return false }
+        let players = saved.players.filter { records.profile($0) != nil }
+        guard Set(players).count == players.count, players.count >= 2, players.contains(host) else { return false }
+        hotSeatID = saved.id; hotSeatHostID = host; sessionProfileIDs = players
+        sessionTurnID = saved.turn.flatMap { players.contains($0) ? $0 : nil }
+        return true
+    }
     func endHotSeat() {
-        sessionProfileIDs = []; sessionTurnID = nil
-        clearHotSeatProgress()
+        persistSession(active: false)
+        sessionProfileIDs = []; sessionTurnID = nil; hotSeatID = nil; hotSeatHostID = nil
     }
-
-    /// Hot seat progress lives only as long as the session, like the roster.
-    func clearHotSeatProgress() {
-        for key in defaults.dictionaryRepresentation().keys where key.hasPrefix("HotSeat.") {
-            defaults.removeObject(forKey: key)
-        }
-        hotSeatID = nil
-    }
-
     private func startHotSeatProgress() {
-        guard hotSeatID == nil else { return }
-        clearHotSeatProgress()
-        hotSeatID = UUID().uuidString
+        if hotSeatID == nil { hotSeatID = UUID().uuidString; hotSeatHostID = records.activeProfileID }
+        persistSession()
     }
-    /// Opening the page means the player wants a hot seat, and one player is not
-    /// one. Seed the roster with the host and the next profile so the page opens
-    /// ready to play. Deselecting back below two ends it, as before.
+    /// Resume the shared campaign before offering a new roster.
     func prepareHotSeat() {
         guard sessionProfileIDs.count < 2, records.profiles.count >= 2 else { return }
+        if restoreSession(activeOnly: false) { persistSession(); return }
         let host = records.activeProfileID
         let guest = records.profiles.map(\.id).first { $0 != host }
         sessionProfileIDs = [host] + (guest.map { [$0] } ?? [])
@@ -94,6 +107,7 @@ import NxlvKit
     @discardableResult func passSessionTurn(after id: String) -> Bool {
         guard let next = nextSessionProfile(after: id), canWrite, storageError == nil else { return false }
         sessionTurnID = next.id
+        persistSession()
         return true
     }
 
@@ -115,6 +129,7 @@ import NxlvKit
                 ?? "Records could not be read. Existing files have been preserved."
             canWrite = false
         }
+        _ = restoreSession(activeOnly: true)
         records.retainBundledTrolleyMaxima(bundledProofs?.maxima ?? [:])
         for entry in bundledProofs?.catalogue.levels ?? [] {
             if let conditions = entry.conditions { acceptBundledProof(for: conditions) }

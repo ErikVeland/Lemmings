@@ -7,6 +7,7 @@ struct RunRecovery: Codable, Sendable {
     var version = 1
     let engine: String
     let profileID: String
+    var hotSeatID: String? = nil
     let runID: UUID
     let dataSetID: String
     let levelIndex: Int
@@ -176,7 +177,7 @@ final class RunRecoveryStore: @unchecked Sendable {
         if immediately { queue.sync(execute: operation) } else { queue.async(execute: operation) }
     }
     func clear(_ id: UUID) throws { try queue.sync { try file(id).save(nil) } }
-    func latest(profileID: String) throws -> RunRecovery? {
+    func latest(profileID: String, hotSeatID: String? = nil) throws -> RunRecovery? {
         try queue.sync {
             guard FileManager.default.fileExists(atPath: directory.path) else { return nil }
             let urls = try FileManager.default.contentsOfDirectory(at: directory, includingPropertiesForKeys: nil)
@@ -190,7 +191,7 @@ final class RunRecoveryStore: @unchecked Sendable {
             for id in ids {
                 do {
                     let item = try file(id)
-                    guard let value = try item.load(), value.profileID == profileID else { continue }
+                    guard let value = try item.load(), value.profileID == profileID, value.hotSeatID == hotSeatID else { continue }
                     if latest == nil || value.savedAt > latest!.savedAt { latest = value }
                 } catch { if firstError == nil { firstError = error } }
             }

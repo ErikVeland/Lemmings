@@ -167,7 +167,7 @@ enum PanelGlyph: String {
         if point.x >= rect.maxX - rect.width * 0.22 { return 1 }
         return 0
     }
-    static func draw(in rect: CGRect, label: String, active: Bool) {
+    static func draw(in rect: CGRect, label: String, active: Bool, next: String = "2×") {
         let side = rect.width * 0.22
         let boxes = [CGRect(x: rect.minX, y: rect.minY, width: side, height: rect.height),
             CGRect(x: rect.minX + side, y: rect.minY, width: rect.width - 2 * side, height: rect.height),
@@ -179,7 +179,13 @@ enum PanelGlyph: String {
             let font = NSFont.monospacedSystemFont(ofSize: min(rect.height * 0.42, box.width / (index == 1 ? 2.1 : 0.8)), weight: .bold)
             let attributes: [NSAttributedString.Key: Any] = [.font: font, .foregroundColor: NSColor(calibratedRed: 0.65, green: 1, blue: 0.65, alpha: 1)]
             let size = text.size(withAttributes: attributes)
-            text.draw(at: CGPoint(x: box.midX - size.width / 2, y: box.midY - size.height / 2), withAttributes: attributes)
+            text.draw(at: CGPoint(x: box.midX - size.width / 2, y: box.midY - size.height / 2 - (index == 1 && !active ? rect.height * 0.12 : 0)), withAttributes: attributes)
+            if index == 1 && !active {
+                let detail = ("→" + next) as NSString
+                let small: [NSAttributedString.Key: Any] = [.font: NSFont.monospacedSystemFont(ofSize: font.pointSize * 0.65, weight: .regular), .foregroundColor: NSColor.lightGray]
+                let size = detail.size(withAttributes: small)
+                detail.draw(at: CGPoint(x: box.midX - size.width / 2, y: box.midY + rect.height * 0.1), withAttributes: small)
+            }
         }
     }
 }

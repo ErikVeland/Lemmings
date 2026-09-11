@@ -49,7 +49,9 @@ private final class BombPreviewSession: GameSession {
   view.palette = ClassicLemmingPalette.panelVGA
   view.levelImage = CGContext(data:nil,width:320,height:160,bitsPerComponent:8,bytesPerRow:1280,
     space:CGColorSpaceCreateDeviceRGB(),bitmapInfo:CGImageAlphaInfo.premultipliedLast.rawValue)!.makeImage()
-  let macRoot = root.appendingPathComponent(".build/local/Ultimate Lemmings.app/Contents/Resources/MacArtwork/lemmings")
+  let testApp = ProcessInfo.processInfo.environment["LEMMINGS_TEST_APP"].map { URL(fileURLWithPath: $0) }
+    ?? root.appendingPathComponent(".build/local/Ultimate Lemmings.app")
+  let macRoot = testApp.appendingPathComponent("Contents/Resources/MacArtwork/lemmings")
   let modes = FileManager.default.fileExists(atPath:macRoot.path) ? ["pc","mac"] : ["pc"]
   for mode in modes {
     view.macArtwork = mode == "mac" ? try ClassicMacArtwork(directory:macRoot) : nil

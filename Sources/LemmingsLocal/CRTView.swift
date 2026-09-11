@@ -247,6 +247,10 @@ struct CRTUniforms {
     onMouseMoved?(point)
   }
 
+  var accessibleContent: (() -> [Any])?
+  override func isAccessibilityElement() -> Bool { true }
+    override func accessibilityRole() -> NSAccessibility.Role? { .group }
+    override func accessibilityChildren() -> [Any]? { accessibleContent?() ?? super.accessibilityChildren() }
   override func mouseUp(with event: NSEvent) { onMouseUp?() }
 
   override func mouseDragged(with event: NSEvent) {

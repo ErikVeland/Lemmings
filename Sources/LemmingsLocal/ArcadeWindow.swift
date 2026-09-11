@@ -4,12 +4,14 @@ import NxlvKit
 @MainActor final class ArcadeWindow {
     static let shared = ArcadeWindow()
     let arcadeView = ArcadeView()
+    var prepareSession: (() -> NSWindow?)?
+    var finishSession: (() -> Void)?
     private init() { arcadeView.onClose = { [weak self] in self?.close() } }
     static func captureScene(_ view: NSView) -> CGImage? {
         let size = CGSize(width: max(1, view.bounds.width), height: max(1, view.bounds.height))
         return ReplayFrameCapture.image(size: size) { ReplayFrameCapture.draw(view, in: CGRect(origin: .zero, size: size)) }
     }
-    func close() { arcadeView.finishCelebration(); arcadeView.affinityPopover?.close(); GameScreen.shared.dismiss(arcadeView) }
+    func close() { if arcadeView.mode == .hotSeat { finishSession?() }; arcadeView.finishCelebration(); arcadeView.affinityPopover?.close(); GameScreen.shared.dismiss(arcadeView) }
     private func present(owner: NSWindow? = nil) {
         arcadeView.needsDisplay = true
         GameScreen.shared.present(arcadeView, owner: owner)
@@ -38,8 +40,10 @@ import NxlvKit
         present(owner: owner)
     }
     func showSession(owner: NSWindow? = nil) {
-        ArcadeStore.shared.prepareHotSeat()
+        let owner = prepareSession?() ?? owner
         arcadeView.sessionReturnMode = nil
+        arcadeView.report = nil; arcadeView.onRetry = nil; arcadeView.onContinue = nil
+        ArcadeStore.shared.prepareHotSeat()
         arcadeView.mode = .hotSeat
         present(owner: owner)
     }
@@ -57,7 +61,7 @@ import NxlvKit
 @MainActor final class ArcadeView: NSView {
     enum Mode { case result, profiles, records, awards, details, goals, career, hotSeat }
     enum BoardScope { case level, career, worldwide }
-    var mode = Mode.records
+    var mode = Mode.records { didSet { if mode != oldValue { keyboardButton = nil } } }
     var report: ArcadeReport? {
         didSet {
             finishCelebration()
@@ -120,15 +124,28 @@ import NxlvKit
         if cleared { return handsOverAfterClear.map { "\(continueTitle): \($0.initials)" } ?? continueTitle }
         return nextSessionPlayer.map { "Retry as \($0.initials)" } ?? "Try again"
     }
+    private func showHandover(_ next: ArcadeProfile, owner: NSWindow?) {
+        guard let owner else { return }
+        let page = GameMenuPage(title: "\(next.initials)'s turn", subtitle: "PASS THE CONTROLS")
+        page.controllerBackButton.isHidden = true
+        page.setDetail("The game will wait. Give the controls to \(next.initials), then choose Ready.")
+        page.addPrimaryAction("Ready, \(next.initials)") { [weak page] in
+            if let page { GameScreen.shared.dismiss(page) }
+        }
+        GameScreen.shared.present(page, owner: owner)
+    }
     func retryAsNextProfile() {
+        guard let next = nextSessionPlayer else { return }
+        let owner = window
         guard ArcadeStore.shared.passSessionTurn(after: player.id) else { needsDisplay = true; return }
         onRetry?()
+        showHandover(next, owner: owner)
     }
-    /// A refused handover must not swallow the level change, so the turn is
-    /// passed first and the level advances either way.
     func continueAsNextProfile() {
-        if handsOverAfterClear != nil { ArcadeStore.shared.passSessionTurn(after: player.id) }
+        let next = handsOverAfterClear, owner = window
+        if next != nil, !ArcadeStore.shared.passSessionTurn(after: player.id) { needsDisplay = true; return }
         onContinue?()
+        if let next { showHandover(next, owner: owner) }
     }
     func performDefaultResultAction() { if cleared { continueAsNextProfile() } else if nextSessionPlayer != nil { retryAsNextProfile() } else { onRetry?() } }
     private(set) var selectedProfileID: String?
@@ -140,6 +157,34 @@ import NxlvKit
     var background: CGImage?
     private var portraits: [Int: NSImage] = [:]
     private var buttons: [(String, CGRect, () -> Void)] = []
+    private let accessibleElements = GameAccessibleElements()
+    private var accessibleText: [(String, CGRect)] = []
+    private var keyboardButton: Int?
+    override func isAccessibilityElement() -> Bool { true }
+    override func accessibilityRole() -> NSAccessibility.Role? { .group }
+    override func accessibilityChildren() -> [Any]? {
+        func mapped(_ rect: CGRect) -> CGRect { CGRect(x: offset.x + rect.minX * scale, y: offset.y + rect.minY * scale, width: rect.width * scale, height: rect.height * scale) }
+        var result: [Any] = accessibleText.enumerated().map { index, item in
+            accessibleElements.element(id: "text-\(index)", owner: self, label: item.0, frame: mapped(item.1))
+        }
+        result += buttons.enumerated().map { index, item in
+            var name = item.0
+            if name.hasPrefix("player-"), let profile = ArcadeStore.shared.records.profile(String(name.dropFirst(7))) { name = "Select player " + profile.initials }
+            if name.hasPrefix("portrait-"), let index = Int(name.dropFirst(9)), ArcadeProfile.portraitNames.indices.contains(index) { name = "Portrait: " + ArcadeProfile.portraitNames[index] }
+            return accessibleElements.element(id: "button-\(index)", owner: self, label: name, frame: mapped(item.1), press: item.2)
+        }
+        if mode == .profiles {
+            let field = accessibleElements.element(id: "initials", owner: self, label: "Player initials", frame: mapped(CGRect(x: 564, y: 204, width: 430, height: 60)))
+            field.setAccessibilityRole(.textField)
+            field.readValue = { [weak self] in self?.initials ?? "" }
+            field.writeValue = { [weak self] value in
+                self?.initials = String(value.uppercased().filter { $0.isASCII && ($0.isLetter || $0.isNumber) }.prefix(3))
+                self?.replaceInitials = false; self?.needsDisplay = true
+            }
+            result.insert(field, at: 0)
+        }
+        return result
+    }
     private var hover: String?
     private var tracking: NSTrackingArea?
     override var isFlipped: Bool { true }
@@ -163,7 +208,7 @@ import NxlvKit
     private var scale: CGFloat { max(0.01, min(bounds.width / 1120, bounds.height / 720)) }
     private var offset: CGPoint { CGPoint(x: (bounds.width - 1120 * scale) / 2, y: (bounds.height - 720 * scale) / 2) }
     override func draw(_ dirtyRect: NSRect) {
-        NSColor.black.setFill(); bounds.fill(); buttons = []
+        NSColor.black.setFill(); bounds.fill(); buttons = []; accessibleText = []
         if let background {
             let image = NSImage(cgImage: background, size: CGSize(width: background.width, height: background.height))
             let fit = max(bounds.width / image.size.width, bounds.height / image.size.height)
@@ -201,11 +246,17 @@ import NxlvKit
             text(notice, 64, 695, 980, height: 20)
         }
         setAccessibilityHelp(ArcadeStore.shared.storageError ?? ArcadeStore.shared.storageNotice)
+        if let keyboardButton, buttons.indices.contains(keyboardButton) {
+            NSColor.systemYellow.setStroke()
+            let outline = NSBezierPath(rect: buttons[keyboardButton].1.insetBy(dx: -2, dy: -2))
+            outline.lineWidth = 2; outline.stroke()
+        }
         NSGraphicsContext.restoreGraphicsState()
     }
     func text(_ value: String, _ x: CGFloat, _ y: CGFloat, _ width: CGFloat,
         alignment: NSTextAlignment = .left, height: CGFloat = 36, alpha: CGFloat = 1, palette: MacInterfaceRenderer.Palette = .blue) {
         let rect = CGRect(x: x, y: y, width: width, height: height)
+        accessibleText.append((value, rect))
         if let font { font.menuLine(value, in: rect, alignment: alignment, alpha: alpha, palette: palette) }
         else {
             NSGraphicsContext.saveGraphicsState()
@@ -221,6 +272,7 @@ import NxlvKit
     }
     func title(_ value: String, x: CGFloat = 64, y: CGFloat, width: CGFloat = 992, height: CGFloat = 36) {
         let rect = CGRect(x: x, y: y, width: width, height: height)
+        accessibleText.append((value, rect))
         if let font {
             let scale = max(1, min(Int(height / 20), Int(width / max(1, font.width(of: MacInterfaceRenderer.menuText(value), face: .large, scale: 1)))))
             font.menuLine(value, in: rect, face: .large, scale: scale, palette: .green)
@@ -281,19 +333,19 @@ import NxlvKit
     func resultActions() {
         if let next = nextSessionPlayer {
             let canHandOver = ArcadeStore.shared.profilesAreWritable && ArcadeStore.shared.storageError == nil
-            // A win offers the same player another go. A loss offers the next one.
-            let owner = retryOwner ?? next
-            button("Retry as \(owner.initials)", CGRect(x: 64, y: 573, width: 330, height: 48), primary: !cleared,
-                   enabled: cleared || canHandOver) { [weak self] in
-                guard let self else { return }
-                if self.cleared { self.onRetry?() } else { self.retryAsNextProfile() }
+            button("Retry as \(player.initials)", CGRect(x: 64, y: 573, width: 330, height: 48)) { [weak self] in self?.onRetry?() }
+            if cleared {
+                let owner = handsOverAfterClear ?? player
+                button("\(continueTitle): \(owner.initials)", CGRect(x: 412, y: 573, width: 330, height: 48), primary: true,
+                       enabled: handsOverAfterClear == nil || canHandOver) { [weak self] in self?.continueAsNextProfile() }
+                button("Retry as \(next.initials)", CGRect(x: 760, y: 573, width: 296, height: 48), enabled: canHandOver) { [weak self] in self?.retryAsNextProfile() }
+            } else {
+                button("Retry as \(next.initials)", CGRect(x: 412, y: 573, width: 330, height: 48), primary: true,
+                       enabled: canHandOver) { [weak self] in self?.retryAsNextProfile() }
+                button("Back to library", CGRect(x: 760, y: 573, width: 296, height: 48)) { [weak self] in
+                    if let prepare = ArcadeWindow.shared.prepareSession { _ = prepare() } else { self?.onClose?() }
+                }
             }
-            let onwards = cleared ? (handsOverAfterClear.map { "\(continueTitle): \($0.initials)" } ?? continueTitle) : "Back"
-            button(onwards, CGRect(x: 412, y: 573, width: 330, height: 48), primary: cleared) { [weak self] in
-                guard let self else { return }
-                if self.cleared { self.continueAsNextProfile() } else { self.onClose?() }
-            }
-            button("Retry", CGRect(x: 760, y: 573, width: 296, height: 48)) { [weak self] in self?.onRetry?() }
         } else {
         button(primaryResultTitle, CGRect(x: cleared ? 592 : 248, y: 573, width: 360, height: 48), primary: true) { [weak self] in self?.performDefaultResultAction() }
         button(cleared ? "Retry" : "Back", CGRect(x: cleared ? 168 : 688, y: 573, width: 256, height: 48)) { [weak self] in
@@ -342,7 +394,7 @@ import NxlvKit
         guard let report else { page(.records); return }
         drawGameResult(report)
     }
-    private func portraitImage(_ index: Int) -> NSImage? {
+    func portraitImage(_ index: Int) -> NSImage? {
         if let cached = portraits[index] { return cached }
         let poses: [ClassicLemmingPose] = [.walking, .climbing, .floating, .building, .bashing, .mining, .digging, .blocking]
         guard poses.indices.contains(index), let frame = artwork?.lemming(pose: poses[index], left: false, tick: 3),
@@ -376,7 +428,11 @@ import NxlvKit
         if canSwitch { afterSwitch?() }
         onClose?()
     }
-    func openSession() { ArcadeStore.shared.prepareHotSeat(); sessionReturnMode = mode; page(.hotSeat) }
+    func openSession() {
+        guard mode != .profiles || canSwitch else { return }
+        if ArcadeWindow.shared.prepareSession != nil { ArcadeWindow.shared.showSession(owner: window); return }
+        ArcadeStore.shared.prepareHotSeat(); sessionReturnMode = mode; page(.hotSeat)
+    }
     func closeSession() { if let previous = sessionReturnMode { page(previous) } else { onClose?() } }
     private func drawSession() {
         let store = ArcadeStore.shared
@@ -412,17 +468,17 @@ import NxlvKit
             ? ("Add another player in Player Profiles to take turns.", .blue)
             : chosen < 2
             ? ("Press a number to add a second player. A hot seat needs at least two.", .green)
-            : ("\(chosen) players ready. Return to the start menu. The hot seat starts at the next level.", .green)
+            : ("\(chosen) players ready. Your shared campaign is saved.", .green)
         let footerTop: CGFloat = 620
         let reserved: CGFloat = guidance == nil ? 0 : 30
         if y + 30 + reserved <= footerTop {
-            text("Shared campaign progress: \(store.records.activeProfile.initials)", 64, y, 992); y += 30
+            text("Shared campaign saved separately from solo play", 64, y, 992); y += 30
         }
         if y + 30 + reserved <= footerTop {
             text("Each turn keeps its own scores, records and achievements.", 64, y, 992); y += 30
         }
         if let guidance { text(guidance.0, 64, min(y, footerTop - 30), 992, palette: guidance.1) }
-        button("Play solo", CGRect(x: 64, y: 634, width: 270, height: 48)) { [weak self] in store.endHotSeat(); self?.closeSession() }
+        button("Return to solo", CGRect(x: 64, y: 634, width: 270, height: 48)) { [weak self] in store.endHotSeat(); self?.closeSession() }
         button("Done", CGRect(x: 736, y: 634, width: 320, height: 48), primary: true) { [weak self] in self?.closeSession() }
         setAccessibilityLabel("Hot seat. " + store.sessionProfiles.map(\.initials).joined(separator: ", ")
             + ". Pass the turn \(store.turnPolicy.title). \(store.turnPolicy.detail)"
@@ -438,7 +494,8 @@ import NxlvKit
             GameStyle.fill(rect, selected ? NSColor(calibratedWhite: 0.22, alpha: 1) : .clear)
             drawPortrait(profile.portrait, in: CGRect(x: 73, y: rect.minY + 2, width: 30, height: 34))
             rowText(profile.initials, x: 119, width: 94, row: rect)
-            if profile.id == records.activeProfileID { rowText("Playing", x: 216, width: 100, row: rect) }
+            if profile.id == ArcadeStore.shared.playingProfileID { rowText("Playing", x: 216, width: 100, row: rect) }
+            else if profile.id == records.activeProfileID { rowText("Host", x: 216, width: 100, row: rect) }
             buttons.append(("player-" + profile.id, rect, { [weak self] in self?.selectProfile(profile) }))
         }
         if records.profiles.count < 8 && canSwitch {
@@ -462,7 +519,7 @@ import NxlvKit
         }
         text(canSwitch ? "Each player keeps their own progress and records." : "Finish this run before changing players.", 64, 575, 992)
         button(canSwitch ? "Play as \(initials.isEmpty ? "LEM" : initials)" : "Save portrait", CGRect(x: 418, y: 627, width: 336, height: 55), primary: true, enabled: canSwitch || selectedProfileID == records.activeProfileID) { [weak self] in self?.saveProfile() }
-        button("Hot seat", CGRect(x: 774, y: 627, width: 282, height: 55)) { [weak self] in self?.openSession() }
+        button("Hot seat", CGRect(x: 774, y: 627, width: 282, height: 55), enabled: canSwitch) { [weak self] in self?.openSession() }
         button("Back", CGRect(x: 64, y: 627, width: 220, height: 55)) { [weak self] in self?.onClose?() }
         setAccessibilityLabel("Choose your lemming. \(records.profiles.map(\.initials).joined(separator: ", ")). Type initials. Arrow keys choose portraits. Enter saves. Escape goes back.")
     }
@@ -575,6 +632,17 @@ import NxlvKit
     }
     override func mouseExited(with event: NSEvent) { hover = nil; needsDisplay = true; NSCursor.arrow.set() }
     override func keyDown(with event: NSEvent) {
+        if event.keyCode == 48, !buttons.isEmpty {
+            let direction = event.modifierFlags.contains(.shift) ? -1 : 1
+            keyboardButton = ((keyboardButton ?? (direction > 0 ? -1 : 0)) + direction + buttons.count) % buttons.count
+            let item = buttons[keyboardButton!]
+            scrollToVisible(CGRect(x: offset.x + item.1.minX * scale, y: offset.y + item.1.minY * scale, width: item.1.width * scale, height: item.1.height * scale))
+            needsDisplay = true; return
+        }
+        if [36, 76, 49].contains(event.keyCode), !event.isARepeat, let keyboardButton, buttons.indices.contains(keyboardButton) {
+            buttons[keyboardButton].2(); return
+        }
+
         if event.keyCode == 53, affinityPopover?.isShown == true { affinityPopover?.close(); return }
         guard event.modifierFlags.intersection([.command, .control, .option]).isEmpty else { super.keyDown(with: event); return }
         if event.isARepeat && [36, 76, 49].contains(event.keyCode) { return }

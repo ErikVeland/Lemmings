@@ -3,7 +3,7 @@
 Controller actions share the keyboard command handlers in Classic, Lemmings 2 and Lemmings 3.
 See the [binding table](../README.md#controller-controls) for the complete layout.
 
-The defaults include variable-speed taps, temporary held boosts, quick exits, skill cycling,
+The defaults include fast-forward toggles, temporary held boosts, quick exits, skill cycling,
 unassigned and last-assigned focus, repeat assignment, entrance/exit focus, hints, settings and retry.
 Rewind and backward stepping remain limited to engines with history support. Lemmings 3 also supports forward stepping.
 Unsupported engine actions do not mutate the game.
@@ -26,7 +26,7 @@ The first page selection is the back/default control. Hint details still require
 - `Scripts/run-controller-qol-tests.sh` runs the pure button and trigger tests without requiring SwiftPM.
 - `Scripts/run-gameplay-speed-tests.sh` checks shared speed behaviour, including keyboard regressions.
 - `TEST_SCOPE=controller Scripts/run-app-integration-tests.sh` drives the production controller dispatch with simulated button frames.
-  It checks tap/hold/rapid exits, legacy speed reset, disconnect/reconnect, ownership, hint tiers, help sheets and settings controls.
+  It checks toggle/hold/rapid exits, legacy speed reset, disconnect/reconnect, ownership, hint tiers, help sheets and settings controls.
 - Classic settings checks cover defaults, persistence, migration and OG/modern resets.
 - Sequel app checks cover the attached-window command handlers and presentation state.
 
@@ -47,3 +47,27 @@ Changing mappings or moving between gameplay and menus clears held input.
 The remapping list uses the connected controller's reported button names and SF Symbols.
 Controls help uses the current mapping and device names. Standard Xbox-style names are the fallback when no device is connected.
 Physical Xbox, PlayStation and Switch-layout journeys remain to be tested.
+
+## Menu parity and accessibility
+
+Controls help follows the current engine and preferences. OG mode omits modern skill and focus shortcuts;
+controller support, trigger taps, variable speed, hints and history actions appear only when available.
+The L2 and L3 playfields show the active Hot Seat attempt owner's portrait and initials. The badge changes
+when the next attempt starts, and disappears outside Hot Seat.
+
+**Settings > Accessibility > Text and menu size** offers 100%, 125% and 150%. It enlarges shared menu pages
+(settings, hints, profiles, records and dialogs) and controls-help text. Enlarged pages scroll so their controls
+remain reachable. The choice persists and experience presets preserve it. Original engine artwork and live
+playfields retain their existing scale controls.
+
+VoiceOver can navigate the individual controls in drawn Classic menus and panels, L2 front-end pages and
+panels, L3 menus and direction controls, and Arcade profile/result/record pages. Profile initials are editable
+through accessibility. The CRT view exposes the same Classic controls. Tab and Shift-Tab also select Arcade
+buttons, with Return or Space to activate. This adds menu navigation; it does not provide a complete spoken
+representation of terrain or moving lemmings.
+
+Automated coverage checks conditional help, size persistence and migration, scrollable pages, accessible
+actions and initials editing, and sequel badge ownership across handoff and solo play. Controller validation
+uses standard extended-gamepad button frames and remapped actions. No physical controller was available;
+model-specific button labels, Bluetooth behavior and hands-on comfort remain unverified. A full VoiceOver
+listening journey also remains a manual release check.

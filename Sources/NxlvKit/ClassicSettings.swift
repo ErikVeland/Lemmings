@@ -135,6 +135,12 @@ public enum ClassicMusicStyle: String, Equatable, Codable, CaseIterable, Sendabl
     }
 }
 
+public enum ClassicInterfaceSize: String, Codable, CaseIterable, Sendable {
+    case standard, large, extraLarge
+    public var scale: Double { switch self { case .standard: 1; case .large: 1.25; case .extraLarge: 1.5 } }
+    public var title: String { switch self { case .standard: "Standard (100%)"; case .large: "Large (125%)"; case .extraLarge: "Extra large (150%)" } }
+}
+
 public struct ClassicSettings: Equatable, Codable, Sendable {
     // Graphics
     public var graphics: ClassicGraphicsSource
@@ -154,6 +160,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
     public var controllerTapSpeed: Bool
     public var controllerMappings: [String: String]
     public var controllerSwapSticks: Bool
+    public var interfaceSize: ClassicInterfaceSize
     public var reduceMotion: Bool
     public var reduceFlashes: Bool
     public var speedEffectsEnabled: Bool { hdEffectsEnabled && !reduceMotion }
@@ -194,6 +201,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         controllerTapSpeed: Bool = true,
         controllerSwapSticks: Bool = false,
         controllerMappings: [String: String] = [:],
+        interfaceSize: ClassicInterfaceSize = .standard,
         reduceMotion: Bool = false,
         reduceFlashes: Bool = false,
         hdEffectsEnabled: Bool = true,
@@ -221,6 +229,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         self.controllerTapSpeed = controllerTapSpeed
         self.controllerSwapSticks = controllerSwapSticks
         self.controllerMappings = ControllerBindings.validatedMapping(controllerMappings)
+        self.interfaceSize = interfaceSize
         self.reduceMotion = reduceMotion
         self.reduceFlashes = reduceFlashes
         self.hdEffectsEnabled = hdEffectsEnabled
@@ -279,6 +288,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         controllerTapSpeed = try values.decodeIfPresent(Bool.self, forKey: .controllerTapSpeed) ?? fallback.controllerTapSpeed
         controllerSwapSticks = try values.decodeIfPresent(Bool.self, forKey: .controllerSwapSticks) ?? fallback.controllerSwapSticks
         controllerMappings = ControllerBindings.validatedMapping((try? values.decodeIfPresent([String: String].self, forKey: .controllerMappings)) ?? [:])
+        interfaceSize = (try? values.decodeIfPresent(ClassicInterfaceSize.self, forKey: .interfaceSize)) ?? .standard
         reduceMotion = try values.decodeIfPresent(Bool.self, forKey: .reduceMotion) ?? false
         reduceFlashes = try values.decodeIfPresent(Bool.self, forKey: .reduceFlashes) ?? false
         hdEffectsEnabled = try values.decodeIfPresent(Bool.self, forKey: .hdEffectsEnabled) ?? fallback.hdEffectsEnabled

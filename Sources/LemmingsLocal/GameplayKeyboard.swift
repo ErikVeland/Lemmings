@@ -17,7 +17,8 @@ import NxlvKit
     var multiplier: Double { state.multiplier }
     var label: String { state.label }
     var target: Double { state.target }
-    var panelLabel: String { state.isFast ? state.label : "\(Int(state.cruise))×" }
+    var panelLabel: String { state.label }
+    var choiceLabel: String { "\(Int(state.cruise))×" }
     func pointerDown(at now: TimeInterval, clickCount: Int) {
         if clickCount > 1 { state.reset(at: now) }
         else { state.press(.mouse, at: now) }
@@ -32,7 +33,7 @@ import NxlvKit
     func step(_ direction: Int, at now: TimeInterval) { state.step(direction, at: now); onChange() }
     func press(_ key: GameplaySpeed.Hold, at now: TimeInterval, tapEnabled: Bool = true) { state.press(key, at: now, tapEnabled: tapEnabled); onChange() }
     func release(_ key: GameplaySpeed.Hold, at now: TimeInterval, allowTap: Bool = true) { state.release(key, at: now, allowTap: allowTap); onChange() }
-    func stateNewLevel() { state.newLevel(at: ProcessInfo.processInfo.systemUptime); onChange() }
+    func newLevel() { state.newLevel(at: ProcessInfo.processInfo.systemUptime); onChange() }
     func reset(at now: TimeInterval = ProcessInfo.processInfo.systemUptime) { state.reset(at: now); onChange() }
     func cancelInput() { state.cancelInput(at: ProcessInfo.processInfo.systemUptime); onChange() }
     func setFast(_ enabled: Bool) { state.setFast(enabled, at: ProcessInfo.processInfo.systemUptime); onChange() }
@@ -151,11 +152,12 @@ import NxlvKit
             }
             return nil
         }
+        if speedControl?.variableEnabled == true,
+           key == "|" || event.keyCode == 53 && (speedControl?.isFast == true || speedControl?.state.isHeld == true) {
+            speedControl?.reset(at: now); return nil
+        }
         if event.modifierFlags.contains(.shift) { speedControl?.release(.shift, at: now) }
         if speedControl?.variableEnabled == true {
-            if key == "|" || event.keyCode == 53 && speedControl?.isFast == true {
-                speedControl?.reset(at: now); return nil
-            }
             if key == "{" || key == "}" {
                 if !event.isARepeat { speedControl?.step(key == "{" ? -1 : 1, at: now) }
                 return nil
@@ -228,7 +230,7 @@ import NxlvKit
         case .assign: assignSelected()
         case .repeatAssignment: repeatAssignment()
         case .cancel:
-            if speedControl?.isFast == true { speedControl?.reset() }
+            if speedControl?.isFast == true || speedControl?.state.isHeld == true { speedControl?.reset() }
             else { speedControl?.cancelInput(); escape() }
         case .pause: togglePause()
         case .help: showHelp()
@@ -248,20 +250,34 @@ import NxlvKit
         case .boost: break
         }
     }
+    var helpText: String {
+        let speedHelp = (speedControl?.help ?? "").replacingOccurrences(of: " or RT", with: "").replacingOccurrences(of: "F, Escape or controller B", with: "F or Escape")
+        var sections = [help(), speedHelp]
+        if modern() {
+            sections.append("Tab / Shift-Tab: next / previous available skill\nHome / End: entrance / exit\n[ / ]: previous / next unassigned lemming\n\\: focus last assignment\nReturn: repeat last skill")
+        } else { sections.append("Modern keyboard shortcuts are off. Number keys select skills.") }
+        sections.append("Escape: cancel or pause menu\n?: controls help")
+        if hints != nil { sections.append("F1 or i: level goals and tiered hints") }
+        if rate != nil { sections.append("− / +: release rate") }
+        if controllerEnabled() {
+            sections.append(ControllerDevicePresentation.help(mapping: controllerMappings(),
+                variableSpeed: speedControl?.variableEnabled == true, tapSpeed: controllerTapSpeed(),
+                rewind: rewind != nil, stepping: step != nil, hints: hints != nil))
+        } else { sections.append("Controller support is off. Enable it in Settings > Controller.") }
+        return sections.filter { !$0.isEmpty }.joined(separator: "\n\n")
+    }
     private func showHelp() {
         guard let window, window.attachedSheet == nil else { return }
         let resume = pauseForHelp()
         let alert = NSAlert()
         alert.messageText = "Keyboard and controller shortcuts"
-        let instructions = help() + "\n\n" + (speedControl?.help ?? "")
-            + "\nTab / Shift-Tab: next / previous available skill\nHome / End: entrance / exit\n[ / ]: previous / next unassigned lemming\n\\: focus last assignment\nReturn: repeat last skill\nEscape: cancel or pause menu\n?: controls help\nF1 or i: level goals and tiered hints"
-            + (rate == nil ? "" : "\n− / +: release rate") + "\n\n" + ControllerDevicePresentation.help(mapping: controllerMappings())
+        let instructions = helpText
         alert.informativeText = "Keyboard and controller mappings for the current game."
         let scroll = NSScrollView(frame: NSRect(x: 0, y: 0, width: 530, height: 360))
         scroll.hasVerticalScroller = true
         let text = NSTextView(frame: scroll.bounds)
         text.isEditable = false; text.isSelectable = true
-        text.font = .systemFont(ofSize: 13); text.string = instructions
+        text.font = .systemFont(ofSize: 13 * GameAccessibility.scale); text.string = instructions
         text.isVerticallyResizable = true; text.isHorizontallyResizable = false
         text.autoresizingMask = [.width]; text.textContainer?.widthTracksTextView = true
         text.textContainerInset = NSSize(width: 8, height: 8)

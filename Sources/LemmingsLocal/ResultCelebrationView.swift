@@ -45,7 +45,7 @@ import NxlvKit
         guard let c = celebration else { return }
         let run = report.run, outcome = run.qualifies ? "LEVEL COMPLETE" : "TRY AGAIN"
         title(outcome, x: 80, y: 46, width: 960, height: 40)
-        text(run.level.title + (run.assisted ? " - Rewinds used" : ""), 80, 96, 960, alignment: .center, alpha: 0.75)
+        text("\(player.initials)'s attempt - " + run.level.title + (run.assisted ? " - Rewinds used" : ""), 80, 96, 960, alignment: .center, alpha: 0.75)
         title("\(run.saved)", x: 98, y: 138, width: 218, height: 60)
         text("RESCUED", 98, 201, 218, alignment: .center)
         for index in 0..<3 {
@@ -75,7 +75,7 @@ import NxlvKit
         resultActions()
         let maximum = run.level.conditions.map { ArcadeStore.shared.records.trolley.maximum(conditions: $0, assisted: run.assisted) } ?? TrolleyMaximum()
         let awardText = c.newAwards.map { "New career award: \($0.award.title). \($0.award.detail)" }.joined(separator: " ")
-        setAccessibilityLabel("\(outcome). \(run.level.title). \(rescueSummary(run, maximum: maximum)) \(c.goals.stars) of 3 stars this run. Level best: \(c.bestStars) stars. \(c.nextGoal) \(c.recordMessage). New level awards: \(c.levelAwards.map(\.title).joined(separator: ", ")). \(awardText) Career: \(c.career.stars) stars, plus \(c.addedStars). \(c.nextCareerGoal.map { $0.award.title + ": " + $0.status + ". " + $0.next } ?? "") Local Most Saved: \(c.ranks.first?.label ?? "No record"). Enter: \(primaryResultTitle). R retries. N retries as the next session player. P opens session players. V opens replay. B opens records. A opens achievements. G opens level goals. C opens career progress. D opens details. Escape returns.")
+        setAccessibilityLabel("\(player.initials)'s attempt. \(outcome). \(run.level.title). \(rescueSummary(run, maximum: maximum)) \(c.goals.stars) of 3 stars this run. Level best: \(c.bestStars) stars. \(c.nextGoal) \(c.recordMessage). New level awards: \(c.levelAwards.map(\.title).joined(separator: ", ")). \(awardText) Career: \(c.career.stars) stars, plus \(c.addedStars). \(c.nextCareerGoal.map { $0.award.title + ": " + $0.status + ". " + $0.next } ?? "") Local Most Saved: \(c.ranks.first?.label ?? "No record"). Enter: \(primaryResultTitle). R retries. N retries as the next session player. P opens session players. V opens replay. B opens records. A opens achievements. G opens level goals. C opens career progress. D opens details. Escape returns.")
     }
     private func drawResultLevelCard(_ c: TrolleyCelebration) {
         let rect = CGRect(x: 80, y: 369, width: 466, height: 116)

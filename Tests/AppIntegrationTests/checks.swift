@@ -9,10 +9,68 @@ private func check(_ value: @autoclosure () throws -> Bool, _ message: String) t
 }
 
 extension AppDelegate {
+  fileprivate func testAccessibleMenusAndHelp() throws {
+    let host = SpeedTestWindow(contentRect: CGRect(x: 0, y: 0, width: 640, height: 400), styleMask: [], backing: .buffered, defer: false)
+    host.contentView = NSView(frame: CGRect(x: 0, y: 0, width: 640, height: 400))
+    let keys = GameplayKeyboard(window: host)
+    keys.speedControl = GameSpeedControl()
+    keys.modern = { false }; keys.controllerEnabled = { false }
+    try check(!keys.helpText.contains("Tab / Shift-Tab") && !keys.helpText.contains("RT") && !keys.helpText.contains("level hints"), "Help advertised disabled controls")
+    keys.modern = { true }; keys.controllerEnabled = { true }; keys.hints = {}
+    try check(keys.helpText.contains("Tab / Shift-Tab") && keys.helpText.contains("level hints"), "Help omitted enabled controls")
+    keys.speedControl?.variableEnabled = false; keys.controllerTapSpeed = { false }
+    try check(!keys.helpText.contains("ramp up") && !keys.helpText.contains("Tap: toggle"), "Help advertised disabled speed modes")
+    let savedSize = GameAccessibility.interfaceSize
+    defer { GameAccessibility.interfaceSize = savedSize; GameScreen.shared.dismissAll() }
+    for size in ClassicInterfaceSize.allCases {
+      GameAccessibility.interfaceSize = size
+      let page = GameMenuPage(title: "Accessible settings")
+      GameScreen.shared.present(page, owner: host)
+      host.contentView?.layoutSubtreeIfNeeded()
+      guard let scroll = page.enclosingScrollView else { throw IntegrationFailure(message: "Page cannot scroll at larger sizes") }
+      try check(abs(page.frame.width - scroll.contentSize.width * size.scale) < 1, "Menu size was not applied")
+      GameScreen.shared.dismiss(page)
+    }
+    let arcade = ArcadeView(frame: host.contentView!.bounds)
+    arcade.mode = .profiles
+    arcade.selectProfile(ArcadeStore.shared.records.activeProfile)
+    GameScreen.shared.present(arcade, owner: host)
+    host.contentView?.layoutSubtreeIfNeeded()
+    let bitmap = arcade.bitmapImageRepForCachingDisplay(in: arcade.bounds)!
+    arcade.cacheDisplay(in: arcade.bounds, to: bitmap)
+    let output = URL(fileURLWithPath: ".build/qol-parity/profiles-large.png")
+    try FileManager.default.createDirectory(at: output.deletingLastPathComponent(), withIntermediateDirectories: true)
+    try bitmap.representation(using: .png, properties: [:])!.write(to: output)
+    let elements = arcade.accessibilityChildren()?.compactMap { $0 as? GameAccessibleElement } ?? []
+    guard let initials = elements.first(where: { $0.accessibilityRole() == .textField }) else {
+      throw IntegrationFailure(message: "Profiles has no accessible initials field")
+    }
+    initials.setAccessibilityValue("ab12")
+    try check(initials.accessibilityValue() as? String == "AB1", "Accessible initials editing failed")
+    try check(elements.contains(where: { $0.accessibilityRole() == .button && $0.accessibilityFrame().width > 0 }), "Profiles has no accessible buttons")
+    GameScreen.shared.dismiss(arcade)
+    let owner = NSView(frame: CGRect(x: 0, y: 0, width: 640, height: 400))
+    host.contentView?.addSubview(owner)
+    var presses = 0
+    let button = GameAccessibleElement(owner: owner, label: "Retry", frame: CGRect(x: 10, y: 10, width: 80, height: 30), press: { presses += 1 })
+    try check(button.accessibilityPerformPress() && presses == 1 && button.accessibilityFrame().width == 80, "Accessible action or screen frame failed")
+    owner.isHidden = true
+    try check(!button.accessibilityPerformPress(), "Hidden accessibility control remained active")
+    owner.isHidden = false; owner.removeFromSuperview()
+    try check(!button.accessibilityPerformPress(), "Detached accessibility control remained active")
+    let badge = TurnBadgeView()
+    badge.show(initials: "ABC", portrait: nil)
+    try check(!badge.isHidden && badge.accessibilityLabel() == "ABC's turn", "Turn badge did not identify player")
+    badge.show(initials: nil, portrait: nil)
+    try check(badge.isHidden, "Solo game retained turn badge")
+    print("PASS context-aware help, scalable pages, accessible actions and turn badge")
+  }
   fileprivate func testControllerQoL() async throws {
     GameScreen.shared.dismissAll()
     let host = SpeedTestWindow(contentRect: CGRect(x: 0, y: 0, width: 1000, height: 620), styleMask: [], backing: .buffered, defer: false)
     host.contentView = NSView(frame: CGRect(x: 0, y: 0, width: 1000, height: 620))
+    host.makeKeyAndOrderFront(nil)
+    defer { host.orderOut(nil) }
     let keyboard = GameplayKeyboard(window: host), speed = GameSpeedControl()
     keyboard.active = { true }; keyboard.speedControl = speed
     let driver = GameplayController(keyboard: keyboard, pollsAutomatically: false)
@@ -24,7 +82,7 @@ extension AppDelegate {
     keyboard.assignSelected = { assigned += 1 }; keyboard.escape = { escaped += 1 }
     keyboard.retry = { retried += 1 }; keyboard.rewind = { rewound += 1 }; keyboard.step = { steps.append($0) }
     driver.processButtons([], at: 0, playing: true)
-    for (index, rate) in [2.0, 3, 5, 10, 1].enumerated() {
+    for (index, rate) in [2.0, 1, 2, 1].enumerated() {
       let time = Double(index + 1)
       driver.processButtons([.rightTrigger], at: time, playing: true)
       driver.processButtons([], at: time + 0.05, playing: true)
@@ -37,8 +95,8 @@ extension AppDelegate {
     try check(speed.multiplier == 1, "RT release did not ease back to cruising speed")
     driver.processButtons([.rightTrigger], at: 10, playing: true); driver.processButtons([], at: 10.05, playing: true)
     driver.processButtons([.rightTrigger], at: 10.2, playing: true)
-    try check(speed.multiplier == 1, "Double-tap RT did not exit immediately")
     driver.processButtons([], at: 10.25, playing: true)
+    try check(speed.multiplier == 1, "RT tap did not exit immediately on release")
     speed.variableEnabled = false; speed.setFast(true)
     driver.processButtons([.rightTrigger], at: 12, playing: true)
     driver.processButtons([.rightTrigger, .b], at: 12.5, playing: true)
@@ -136,7 +194,45 @@ extension AppDelegate {
     print("PASS actual controller dispatch: RT tiers/hold/release, rapid and B exits, reconnect, hints, sheets, settings and ownership")
   }
 
+  fileprivate func testHotSeatBoundaries() throws {
+    GameScreen.shared.dismissAll()
+    let previous = ArcadeStore.shared
+    let directory = FileManager.default.temporaryDirectory.appendingPathComponent("seat-boundaries-\(UUID().uuidString)")
+    let store = ArcadeStore(file: directory.appendingPathComponent("records.json"), bundledProofs: nil)
+    ArcadeStore.shared = store
+    defer { GameScreen.shared.dismissAll(); store.endHotSeat(); ArcadeStore.shared = previous }
+    let host = store.records.activeProfileID
+    let guest = store.addProfile(initials: "PAL", portrait: 2)!
+    store.selectProfile(host); store.toggleSessionProfile(guest.id)
+    loadContent()
+    gamePicker.selectItem(at: dataSets.firstIndex(where: { $0.set.title == .lemmings })!)
+    selectDataSet(); loadLevel(at: 30); phase = .playing
+    installKeyboardShortcuts()
+    _ = store.passSessionTurn(after: host)
+    refreshTurnDisplay()
+    try check(arcadeProfileID == host && playfield.turnInitials == store.records.profile(host)?.initials,
+      "Classic badge displayed the queued player instead of the attempt owner")
+    showHotSeat()
+    try check(store.hotSeatIsActive && GameScreen.shared.controllerPage(in: window) is GameMenuPage,
+      "Changing players skipped the safe exit confirmation")
+    func buttons(_ view: NSView) -> [NSButton] { (view as? NSButton).map { [$0] } ?? view.subviews.flatMap(buttons) }
+    guard let confirm = GameScreen.shared.controllerPage(in: window),
+      let leave = buttons(confirm).first(where: { $0.title == "Save and return to library" }) else {
+      throw IntegrationFailure(message: "Safe Hot Seat exit has no action")
+    }
+    leave.performClick(nil)
+    let view = ArcadeWindow.shared.arcadeView
+    try check(view.mode == .hotSeat && view.report == nil && view.onRetry == nil, "Player setup retained an old result action")
+    let bitmap = view.bitmapImageRepForCachingDisplay(in: view.bounds)!
+    view.cacheDisplay(in: view.bounds, to: bitmap)
+    let solo = view.accessibilityChildren()?.compactMap { $0 as? GameAccessibleElement }.first { $0.accessibilityLabel() == "Return to solo" }
+    try check(solo?.accessibilityPerformPress() == true && !store.hotSeatIsActive && !GameScreen.shared.isPresented,
+      "Return to solo failed to leave shared play safely")
+    print("PASS frozen Classic turn identity, confirmed player changes, cleared result actions and solo transition")
+  }
+
   fileprivate func testInterruptionPolicy() throws {
+    if gameplayKeyboard == nil { installKeyboardShortcuts() }
     GameScreen.shared.dismissAll()
     loadContent()
     gamePicker.selectItem(at: dataSets.firstIndex(where: { $0.set.title == .lemmings })!)
@@ -444,6 +540,17 @@ extension AppDelegate {
     do { _ = try RunRecoveryFile(url: url).load(); throw IntegrationFailure(message: "Unsupported checkpoint version was replaced") }
     catch RunRecoveryError.version {}
     try check(try Data(contentsOf: url) == unknown, "Unsupported checkpoint bytes changed")
+    let scoped = RunRecoveryStore(directory: directory.appendingPathComponent("scoped"))
+    var sharedCheckpoint = checkpoint
+    sharedCheckpoint.hotSeatID = "shared-campaign"
+    scoped.save(sharedCheckpoint, immediately: true) { _ in }
+    try check(try scoped.latest(profileID: checkpoint.profileID) == nil, "Solo recovery exposed a shared attempt")
+    try check(try scoped.latest(profileID: checkpoint.profileID, hotSeatID: "shared-campaign")?.runID == checkpoint.runID,
+      "Shared recovery lost its attempt")
+    let beforeScopeRestore = session
+    restoreRun(sharedCheckpoint)
+    try check(session === beforeScopeRestore, "A shared checkpoint replaced a solo game")
+    GameScreen.shared.dismissAll()
     let mixed = RunRecoveryStore(directory: directory.appendingPathComponent("mixed"))
     mixed.save(checkpoint, immediately: true) { _ in }
     let bad = mixed.directory.appendingPathComponent(UUID().uuidString + ".json")
@@ -623,18 +730,17 @@ extension AppDelegate {
     try check(keyboard.handle(key(.keyDown, 10)) == nil, "F leaked to the skill or window handler")
     _ = keyboard.handle(key(.keyUp, 10.1))
     try check(controller.target == 2, "Tap F did not select 2x")
-    _ = keyboard.handle(key(.keyDown, 11))
+    _ = keyboard.handle(key(.flagsChanged, 11, text: "", code: 56, flags: .shift))
     for time in [11.3, 11.8, 12.3, 12.8, 13.1] { controller.update(at: time, active: true) }
     _ = keyboard.handle(key(.keyDown, 13.2, repeatKey: true))
-    try check(controller.target == 10, "A held F or OS repeat changed the ramp")
-    _ = keyboard.handle(key(.keyUp, 13.3))
-    controller.update(at: 13.6, active: true)
-    try check(controller.target == 2 && abs(controller.multiplier - 2) < 0.001, "F release failed to restore cruising speed")
+    try check(controller.target == 10, "Shift did not boost or an F repeat changed speed")
+    _ = keyboard.handle(key(.flagsChanged, 13.3, text: "", code: 56))
+    try check(controller.multiplier == 2, "Shift release did not immediately restore cruise")
     _ = keyboard.handle(key(.keyDown, 14)); _ = keyboard.handle(key(.keyUp, 14.1))
     _ = keyboard.handle(key(.keyDown, 14.2)); _ = keyboard.handle(key(.keyUp, 14.25))
-    try check(!controller.isFast, "Double-tap F failed to stop")
+    try check(!controller.isFast, "Rapid F restarted a stopped game")
     _ = keyboard.handle(key(.keyDown, 15, text: "}", code: 30, flags: .shift))
-    try check(controller.target == 2, "Shift+] did not step up")
+    try check(controller.target == 1 && controller.state.cruise == 3, "Shift+] did not prepare the next tier")
     _ = keyboard.handle(key(.keyDown, 16, text: "|", code: 42, flags: .shift))
     try check(!controller.isFast, "Shift+backslash did not reset")
     controller.tap(at: 17)
@@ -643,16 +749,54 @@ extension AppDelegate {
     try check(!controller.isFast && !escaped, "Escape failed to stop speed before opening the pause menu")
     _ = keyboard.handle(key(.keyDown, 19, text: "\u{1b}", code: 53))
     try check(escaped, "Escape at 1x failed to open the pause menu")
+    escaped = false
+    _ = keyboard.handle(key(.flagsChanged, 19.1, text: "", code: 56, flags: .shift))
+    controller.update(at: 19.5, active: true)
+    _ = keyboard.handle(key(.keyDown, 19.6, text: "\u{1b}", code: 53, flags: .shift))
+    _ = keyboard.handle(key(.flagsChanged, 19.7, text: "", code: 56))
+    try check(controller.multiplier == 1 && !escaped, "Escape while holding Shift opened a menu or restarted speed")
     let attached = SpeedTestWindow(contentRect: host.frame, styleMask: [], backing: .buffered, defer: false)
     keyboard.bind(to: attached)
     try check(keyboard.handle(key(.keyDown, 20)) != nil, "The detached window retained speed control")
     _ = keyboard.handle(key(.keyDown, 21, in: attached)); _ = keyboard.handle(key(.keyUp, 21.1, in: attached))
-    try check(controller.target == 2, "Speed keys failed after attaching to the shared game window")
+    try check(controller.target == 3, "Speed keys failed after attaching to the shared game window")
     NotificationCenter.default.post(name: NSWindow.didResignKeyNotification, object: attached)
     try check(!controller.isFast, "Focus loss left the game accelerated")
     keyboard.modern = { false }; controller.variableEnabled = false
     _ = keyboard.handle(key(.keyDown, 22, in: attached)); _ = keyboard.handle(key(.keyUp, 22.1, in: attached))
     try check(controller.multiplier == 3, "OG mode did not retain the fixed speed")
+    controller.variableEnabled = true; controller.newLevel()
+    let speedPanel = PanelView(frame: CGRect(x: 0, y: 0, width: 640, height: 80))
+    host.contentView = speedPanel
+    speedPanel.onSpeedPress = { controller.pointerDown(at: $0, clickCount: $1) }
+    speedPanel.onSpeedRelease = { controller.release(.mouse, at: $0) }
+    speedPanel.onSpeedStep = { controller.step($0, at: $1) }
+    speedPanel.cacheDisplay(in: speedPanel.bounds, to: speedPanel.bitmapImageRepForCachingDisplay(in: speedPanel.bounds)!)
+    let rect = speedPanel.speedControlBounds
+    try check(rect.width > 0, "Speed control has no mouse target")
+    func mouse(_ type: NSEvent.EventType, _ time: Double, fraction: Double = 0.5, clicks: Int = 1) {
+      let point = speedPanel.convert(CGPoint(x: rect.minX + rect.width * fraction, y: rect.midY), to: nil)
+      let event = NSEvent.mouseEvent(with: type, location: point, modifierFlags: [], timestamp: time,
+        windowNumber: host.windowNumber, context: nil, eventNumber: 0, clickCount: clicks, pressure: 1)!
+      if type == .leftMouseDown { speedPanel.mouseDown(with: event) } else { speedPanel.mouseUp(with: event) }
+    }
+    mouse(.leftMouseDown, 30); mouse(.leftMouseUp, 30.05)
+    try check(controller.target == 2, "Mouse tap did not engage immediately")
+    mouse(.leftMouseDown, 31, fraction: 0.9); mouse(.leftMouseUp, 31.05)
+    try check(controller.target == 3, "Mouse arrow did not increase speed")
+    mouse(.leftMouseDown, 32); mouse(.leftMouseUp, 32.05)
+    mouse(.leftMouseDown, 32.1, clicks: 2); mouse(.leftMouseUp, 32.15, clicks: 2)
+    try check(controller.multiplier == 1, "A real double-click restarted speed")
+    mouse(.leftMouseDown, 33); mouse(.leftMouseUp, 33.05)
+    try check(controller.target == 3, "Mouse toggle lost the chosen tier")
+    mouse(.leftMouseDown, 34); controller.update(at: 36, active: true)
+    try check(controller.target == 10, "Mouse hold did not boost")
+    mouse(.leftMouseUp, 36.1)
+    try check(controller.multiplier == 3, "Mouse release did not restore cruise immediately")
+    mouse(.leftMouseDown, 37); controller.update(at: 39, active: true); controller.reset(at: 39.1)
+    mouse(.leftMouseUp, 39.2)
+    try check(controller.multiplier == 1, "Mouse release undid an emergency exit")
+    print("PASS native mouse toggle, arrows, complete double-click sequence, hold and emergency release")
     print("PASS real key events: tap/hold/release, repeats, rapid exits, shortcut routing, window attachment and OG mode")
   }
 
@@ -695,7 +839,8 @@ extension AppDelegate {
     lastStepTime = 100; accumulator = 0
     for (index, rate) in [2, 3, 5, 10].enumerated() {
       let time = 101 + Double(index) * 2
-      speedControl.step(1, at: time)
+      if index == 0 { speedControl.newLevel(); speedControl.tap(at: time) }
+      else { speedControl.step(1, at: time) }
       step(at: time + 0.25)
       let before = game.currentTick
       for frame in 1...10 { step(at: time + 0.25 + Double(frame) / 10) }
@@ -752,7 +897,7 @@ extension AppDelegate {
     let welcome = EffectsWelcome(defaults: defaults)
     welcome.showIfNeeded(in: window, onChoose: choose)
     let root = window.contentView!
-    guard let page = root.subviews.last as? GameMenuPage,
+    guard let page = GameScreen.shared.controllerPage(in: window) as? GameMenuPage,
           let oldSchool = button("Old school", in: page), let hd = button("Play with modern defaults", in: page) else {
       throw IntegrationFailure(message: "First launch did not offer both effects choices")
     }
@@ -788,7 +933,7 @@ extension AppDelegate {
     for mode in [ClassicDisplayMode.flat,.monitor,.television] {
       settings.display = mode
       step(at:1)
-      toggleFastForward()
+      speedControl.setFast(!isFastForward)
       step(at:1.01)
       try check(playfield.isFastForward && screenFlash.isSuperSpeedActive,
         "3x did not engage the sprite wakes and screen effects in \(mode)")
@@ -817,10 +962,10 @@ extension AppDelegate {
         "pause left the speed effects running")
       isPaused = false; step(at:1.03)
       try check(screenFlash.isSuperSpeedActive, "unpausing did not resume super speed")
-      toggleFastForward(); step(at:1.04)
+      speedControl.setFast(!isFastForward); step(at:1.04)
       try check(!screenFlash.isSuperSpeedActive, "returning to 1x retained super speed")
     }
-    toggleFastForward(); step(at:2)
+    speedControl.setFast(!isFastForward); step(at:2)
     let page = GameMenuPage(title:"Speed test")
     GameScreen.shared.present(page,owner:window)
     step(at:2.1)
@@ -1144,16 +1289,16 @@ extension AppDelegate {
     crtView.settings.curvature = 10
     let edge = crtView.sourcePoint(from: CGPoint(x: crtView.bounds.width * 0.9, y: crtView.bounds.height * 0.2))
     try check(abs((edge?.x ?? 0) - 576.9216) < 0.01, "CRT input disagrees with shader sampling")
-    let speedClick = panel.onSpeedClick
+    let speedClick = panel.onSpeedPress
     var forwardedSpeedClick: (TimeInterval, Int)?
-    panel.onSpeedClick = { forwardedSpeedClick = ($0, $1) }
-    let speedPoint = crtView.viewPoint(fromSource: CGPoint(x: 426, y: 340))!
+    panel.onSpeedPress = { forwardedSpeedClick = ($0, $1) }
+    let speedPoint = crtView.viewPoint(fromSource: CGPoint(x: 450, y: 360))!
     let doubleClick = NSEvent.mouseEvent(with: .leftMouseDown,
       location: crtView.convert(speedPoint, to: nil), modifierFlags: [], timestamp: 42,
       windowNumber: window.windowNumber, context: nil, eventNumber: 1, clickCount: 2, pressure: 1)!
     crtView.mouseDown(with: doubleClick)
     panel.handlePointerUp()
-    panel.onSpeedClick = speedClick
+    panel.onSpeedPress = speedClick
     try check(forwardedSpeedClick?.0 == 42 && forwardedSpeedClick?.1 == 2,
       "CRT speed button lost the native double-click count or timestamp")
     var presses = 0
@@ -1276,8 +1421,13 @@ Task { @MainActor in
     subject.prepareArcadeTests()
     try subject.testSteppedCompletion()
     try subject.testFirstLaunchEffects()
+    try subject.testAccessibleMenusAndHelp()
     #if PERFORMANCE_TESTS
     try await subject.testReleasePerformance()
+    #elseif HOT_SEAT_TESTS
+    try subject.testHotSeatBoundaries()
+    try subject.testRunRecovery()
+    print("Hot Seat boundary integration tests passed.")
     #elseif CONTROLLER_QOL_TESTS
     try await subject.testControllerQoL()
     try subject.testVariableSpeedInput()
@@ -1328,6 +1478,7 @@ Task { @MainActor in
     try subject.testNeoRunRecovery()
     try subject.testRunRecovery()
     try subject.testInterruptionPolicy()
+    try subject.testHotSeatBoundaries()
     print("App integration tests passed.")
     #endif
     exit(0)

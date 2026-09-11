@@ -293,6 +293,8 @@ See [THE TROLLEY](Documentation/TheTrolley.md) for evidence rules, seven local
 boards, profile history, migration, and validation. Run
 `Scripts/run-trolley-tests.sh` for its model, persistence, replay, and UI tests.
 
+Speed controls: **F**, the **Speed** button and controller **RT** toggle fast-forward. Hold **Shift**, **Speed** or **RT** for a temporary boost. Use the speed arrows, **Shift+[ / Shift+]**, or **LT + D-pad left/right** to choose a fast tier. **Escape** or controller **B** immediately returns to 1×. See [speed controls](Documentation/SuperSpeed.md).
+
 ### Skill keyboard shortcuts
 
 During play, number keys select skills in panel order (1–9, then 0 for the tenth slot). Letter keys also select skills. Initials take priority; skills with a duplicate or reserved initial use the next available letter in their name. The bindings follow the current level’s skill list. Hover over the skill panel to see its shortcuts.
@@ -319,8 +321,8 @@ Connected extended gamepads (including supported Xbox and PlayStation controller
 | LB / RB | Previous / next available skill |
 | D-pad left / right | Previous / next unassigned lemming |
 | D-pad up / down | Increase / decrease release rate where supported |
-| Tap RT | 2× → 3× → 5× → 10× → 1×; optional in Controller settings |
-| Hold RT / double-tap RT | Ramp up and ease back on release / immediately return to 1× |
+| Tap RT | Toggle fast-forward; optional in Controller settings |
+| Hold RT | Ramp up; release immediately restores the previous speed |
 | Menu | Pause / resume |
 | Left / right stick click | Centre on entrance / exit |
 | View / Options | Show keyboard and controller help |

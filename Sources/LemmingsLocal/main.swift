@@ -80,6 +80,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private var arcadeLevel: ArcadeLevel?
   private var hintMap: CGImage?
   private var arcadeProfileID = ArcadeProfile.legacyID
+  private var arcadeHotSeatID: String?
   private var arcadeRunID = UUID()
   private var arcadeReport: ArcadeReport?
   private var arcadeAutoPresent = true
@@ -169,6 +170,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       checkpoint.neo = neo.recovery; checkpoint.sourcePath = url.path
     } else { return }
     lastCheckpointTime = now
+    checkpoint.hotSeatID = arcadeHotSeatID
     recoveryStore.save(checkpoint, immediately: immediately) { [weak self] message in
       self?.setStatus("Run recovery save failed: " + message)
     }
@@ -177,7 +179,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   @objc private func resumeSavedRun() {
     saveRunCheckpoint(immediately: true)
     do {
-      guard let checkpoint = try recoveryStore.latest(profileID: ArcadeStore.shared.playingProfileID) else {
+      guard let checkpoint = try recoveryStore.latest(profileID: ArcadeStore.shared.playingProfileID, hotSeatID: ArcadeStore.shared.hotSeatID) else {
         GameScreen.shared.message("No saved run", detail: "A checkpoint is saved every five seconds during classic, NeoLemmix or sequel campaign play.")
         return
       }
@@ -189,7 +191,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private func restoreRun(_ checkpoint: RunRecovery) {
     do {
       _ = try checkpoint.validated()
-      guard checkpoint.profileID == ArcadeStore.shared.playingProfileID,
+      guard checkpoint.profileID == ArcadeStore.shared.playingProfileID, checkpoint.hotSeatID == ArcadeStore.shared.hotSeatID,
         checkpoint.engine == recoveryEngine else { throw RunRecoveryError.differentGame }
       if checkpoint.l2 != nil {
         guard let path = checkpoint.sourcePath else { throw RunRecoveryError.invalid }
@@ -233,7 +235,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       }
       guard let restored = session else { throw RunRecoveryError.invalid }
       runMovie.discard()
-      arcadeRunID = checkpoint.runID; arcadeProfileID = checkpoint.profileID
+      arcadeRunID = checkpoint.runID; arcadeProfileID = checkpoint.profileID; arcadeHotSeatID = checkpoint.hotSeatID
       panel.selectedSkillIndex = checkpoint.selectedSkill
       playfield.viewport.scrollX = max(0, min(checkpoint.scrollX, Double(restored.levelWidth)))
       playfield.viewport.scrollY = max(0, min(checkpoint.scrollY, Double(restored.levelHeight)))
@@ -317,7 +319,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       openNativeL3(path.flatMap { $0.hasPrefix("--") ? nil : URL(fileURLWithPath: $0) })
     }
     if !sequelIsActive, UserDefaults.standard.bool(forKey: EffectsWelcome.choiceKey),
-      (try? recoveryStore.latest(profileID: ArcadeStore.shared.playingProfileID)) != nil { resumeSavedRun() }
+      (try? recoveryStore.latest(profileID: ArcadeStore.shared.playingProfileID, hotSeatID: ArcadeStore.shared.hotSeatID)) != nil { resumeSavedRun() }
     effectsWelcome.showIfNeeded(in: window) { [weak self] enabled in
       self?.setExperiencePreset(enabled)
     }
@@ -514,6 +516,19 @@ let achievementProgressKey = "ClassicAchievementProgress"
       playfield.frame = CGRect(
         x: 0, y: 0, width: 640, height: 320)
       playfield.viewport.zoom = 2
+      crtView.accessibleContent = { [weak self] in
+        guard let self else { return [] }
+        @MainActor func convert(_ rect: CGRect, panel: Bool = false) -> CGRect {
+          let shift: CGFloat = panel ? 320 : 0
+          let points = [CGPoint(x: rect.minX, y: rect.minY + shift), CGPoint(x: rect.maxX, y: rect.maxY + shift)]
+            .compactMap { self.crtView.viewPoint(fromSource: $0) }
+          guard points.count == 2 else { return .zero }
+          return CGRect(x: min(points[0].x, points[1].x), y: min(points[0].y, points[1].y),
+            width: abs(points[1].x - points[0].x), height: abs(points[1].y - points[0].y))
+        }
+        return self.playfield.accessibleControls(owner: self.crtView, transform: { convert($0) })
+          + self.panel.accessibleControls(owner: self.crtView, transform: { convert($0, panel: true) })
+      }
       crtView.onMouseDown = { [weak self] point, time, count in
         self?.tubeClick(point, time: time, clickCount: count)
       }
@@ -632,6 +647,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
     let djPoolChanged = settings.djIncludesOtherSoundtracks != updated.djIncludesOtherSoundtracks
     let previousSound = settings.sound
     settings = updated
+    GameAccessibility.interfaceSize = settings.interfaceSize
+    GameScreen.shared.reattach()
     if let data = try? JSONEncoder().encode(updated) {
       UserDefaults.standard.set(data, forKey: settingsKey)
     }
@@ -677,6 +694,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     } else if UserDefaults.standard.bool(forKey: musicPresetKey) {
       settings.musicStyle = .modern
     }
+    GameAccessibility.interfaceSize = settings.interfaceSize
     previousDepth = settings.colorDepth
     speedControl.variableEnabled = settings.modernControlsEnabled && settings.variableSpeedEnabled
     panel.modernControlsEnabled = settings.modernControlsEnabled
@@ -1835,7 +1853,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       ? (dataSets[gamePicker.indexOfSelectedItem].set.identifierKey, picker.indexOfSelectedItem) : nil
     hintMap = playfield.levelImage
     let previousAttemptID = arcadeRunID
-    arcadeRunID = UUID(); arcadeProfileID = ArcadeStore.shared.playingProfileID; arcadeReport = nil
+    arcadeRunID = UUID(); arcadeProfileID = ArcadeStore.shared.playingProfileID; arcadeHotSeatID = ArcadeStore.shared.hotSeatID; arcadeReport = nil
     let source = currentNxlvURL.flatMap { try? Data(contentsOf: $0) }
     let fingerprint = TrolleyCapture.sessionFingerprint(new, source: source)
     let gameID = fanPlaying || currentNxlvURL != nil ? "fan" : activeTitle?.rawValue ?? "lemmings"
@@ -2191,22 +2209,50 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
   }
 
-  /// Keeps the on-screen turn owner current. Pushed every frame so ending a hot
-  /// seat, passing the turn or changing the roster cannot leave a stale name.
+  /// Show the attempt owner, even when another player is queued for the next turn.
   private func refreshTurnDisplay() {
     let store = ArcadeStore.shared
-    let turn = store.hotSeatIsActive ? store.playingProfile : nil
+    let turn = store.hotSeatIsActive ? store.records.profile(arcadeProfileID) : nil
     playfield.turnInitials = turn?.initials
     playfield.turnPortrait = turn?.portrait
   }
 
+  /// Where the player is in the journey, on the right of the status strip.
+  /// Rank position, rescue progress against the target, the best known result
+  /// for this level, and the play style the run is shaping into.
+  private func refreshProgressText() {
+    guard phase == .playing, let session, !sequelIsActive else {
+      panel.progressText = ""
+      return
+    }
+    var parts: [String] = []
+    if let flow, let rank = flow.currentRank {
+      parts.append("\(rank.name.uppercased()) \(flow.currentNumber)/\(rank.levelIndices.count)")
+    }
+    parts.append("SAVED \(session.saved)/\(session.required)")
+    if let conditions = arcadeLevel?.conditions {
+      let best = ArcadeStore.shared.records.trolley.maximum(
+        conditions: conditions, assisted: session.usedRewind)
+      if best.isRescueTarget, let value = best.value {
+        // Proven maximum and merely best observed are different claims, so the
+        // panel does not present one as the other.
+        let proven = best.status == TrolleyMaximumStatus.verified
+        parts.append("\(proven ? "BEST" : "KNOWN") \(value)")
+      }
+    }
+    if session.released < session.total { parts.append("OUT \(session.released)/\(session.total)") }
+    panel.progressText = parts.joined(separator: "   ")
+  }
+
   private func step(at now: TimeInterval = ProcessInfo.processInfo.systemUptime) {
     refreshTurnDisplay()
+    refreshProgressText()
     // Limit catch-up after sleep or a long modal interaction.
     let elapsed = min(0.25, max(0, lastStepTime.map { now - $0 } ?? displayInterval))
     lastStepTime = now
     speedControl.update(at: now, active: phase == .playing && !sequelIsActive && !GameScreen.shared.isPresented && session?.isComplete == false)
     panel.isFastForward = isFastForward
+    panel.speedChoiceLabel = speedControl.choiceLabel
     panel.speedLabel = speedControl.panelLabel
     panel.variableSpeedEnabled = speedControl.variableEnabled
     playfield.speedMultiplier = speedControl.multiplier
@@ -2467,7 +2513,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   private func toggleFastForward() {
     guard phase == .playing, let session, !session.isComplete else { return }
-    speedControl.setFast(!isFastForward)
+    speedControl.tap()
     panel.isFastForward = isFastForward
     lastStepTime = nil
     panel.needsDisplay = true
@@ -2727,7 +2773,17 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   @objc private func showHotSeat() {
-    ArcadeWindow.shared.showSession(owner: nativeL2Window?.window ?? nativeL3Window?.window ?? window)
+    let canSwitch = nativeL2Window?.canSwitchProfile ?? nativeL3Window?.canSwitchProfile
+      ?? (phase != .playing || session == nil || session?.isComplete == true)
+    if !canSwitch {
+      GameScreen.shared.confirm("Change Hot Seat players?", detail: "Return to the library to change players. The current attempt keeps its owner and is saved for later.",
+        actionTitle: "Save and return to library", owner: window) { [weak self] in
+          guard let self else { return }
+          ArcadeWindow.shared.showSession(owner: self.window)
+        }
+      return
+    }
+    ArcadeWindow.shared.showSession(owner: window)
   }
 
   @objc private func showProfiles() {
@@ -2789,6 +2845,20 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   private func installKeyboardShortcuts() {
+    ArcadeWindow.shared.prepareSession = { [weak self] in
+      guard let self else { return nil }
+      self.returnToLibrary()
+      return self.window
+    }
+    ArcadeWindow.shared.finishSession = { [weak self] in
+      guard let self else { return }
+      self.progress = UserDefaults.standard.data(forKey: ArcadeStore.shared.progressKey(progressKey))
+        .flatMap { try? ModernCampaignProgress(encoded: $0) } ?? ModernCampaignProgress()
+      self.achievements = UserDefaults.standard.data(forKey: ArcadeStore.shared.progressKey(achievementProgressKey))
+        .flatMap { try? JSONDecoder().decode(ClassicAchievementProgress.self, from: $0) } ?? ClassicAchievementProgress()
+      self.achievementsWindow.update(progress: self.achievements)
+      self.refreshSequelProgress(); self.rebuildLibrary()
+    }
     let keyboard = GameplayKeyboard(window: window)
     gameplayKeyboard = keyboard
     keyboard.hints = { [weak self] in self?.showLevelHints() }
@@ -2861,6 +2931,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       guard let self else { return }
       self.accumulator = 0
       self.panel.isFastForward = self.isFastForward
+      self.panel.speedChoiceLabel = self.speedControl.choiceLabel
       self.panel.speedLabel = self.speedControl.panelLabel
       self.panel.needsDisplay = true; self.updateStatus()
     }

@@ -24,8 +24,10 @@ cp "$project_dir/Resources/Info.plist" "$test_app/Contents/Info.plist"
 /usr/libexec/PlistBuddy -c "Set :CFBundleName Lemmings Integration Tests ($test_arch)" "$test_app/Contents/Info.plist"
 /usr/libexec/PlistBuddy -c 'Delete :CFBundleIconFile' "$test_app/Contents/Info.plist"
 /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier academy.glasscode.lemmings.integration-tests.$test_arch" "$test_app/Contents/Info.plist"
-ln -sfn "$project_dir/.build/local/Ultimate Lemmings.app/Contents/Resources" "$test_app/Contents/Resources"
+resource_app="${LEMMINGS_TEST_APP:-$project_dir/.build/local/Ultimate Lemmings.app}"
+ln -sfn "$resource_app/Contents/Resources" "$test_app/Contents/Resources"
 test_flags=()
+if [[ "${TEST_SCOPE:-all}" == hot-seat ]]; then test_flags+=(-D HOT_SEAT_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == hd-effects ]]; then test_flags+=(-D HD_EFFECTS_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == variable-speed ]]; then test_flags+=(-D VARIABLE_SPEED_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == performance ]]; then test_flags+=(-D PERFORMANCE_TESTS); fi

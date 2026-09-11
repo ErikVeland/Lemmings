@@ -5,25 +5,31 @@ or clear **Settings > Video > Effects > Enable HD effects**, to remove the speed
 streaks and ghost trails. The HD switch preserves your chosen gameplay speed.
 Old school also restores the original fixed-speed controls.
 
-Modern controls and variable speed are enabled by default. Set a cruising speed
-with deliberate taps, or hold a boost key temporarily.
+Modern controls and variable speed are enabled by default. Tap to keep fast-forward
+on, or hold for a temporary boost. The first fast tier is 2×.
 
 | Control | Action |
 | --- | --- |
-| Tap **F** or click **Speed** | 1× → 2× → 3× → 5× → 10× → 1× |
-| Hold **F** or **Shift** | Ramp through the speed tiers; release to return to the selected cruising speed |
-| **Shift+[ / Shift+]** | Step down / up |
-| Double-tap **F**, double-click **Speed**, **Shift+\\**, or **Escape** | Return to 1× immediately |
+| Tap **F**, click **Speed**, or tap controller **RT** | Toggle fast-forward on/off |
+| Hold **Shift**, **Speed**, or **RT** | Ramp through tiers; release to restore the previous speed immediately |
+| Speed **‹ / ›**, **Shift+[ / Shift+]**, or **LT + D-pad left/right** | Choose 2×, 3×, 5× or 10× |
+| **F**, **Escape**, controller **B**, or click **Speed** while fast | Return to 1× |
 
-Controller **RT** follows the same tap, hold, release and double-tap behaviour.
-**LT + D-pad left / right** steps the selected speed. **B** or **LT + X** returns to 1×.
-**Settings > Controller** can make RT hold-only. A quick exit cancels a held boost so releasing RT cannot restore fast-forward.
+The arrows stop at 2× and 10×. While fast-forward is off, they choose the tier
+for the next toggle without accelerating play. The panel shows the current multiplier and lights green while fast-forward is active.
+At 1×, a smaller arrow label shows the tier for the next toggle. Its tooltip explains the hold.
+Each level starts at 1× with a 2× first fast tier. Within a level, toggling off
+preserves the chosen tier. Temporary boosts never replace it.
 
-Rapid taps are presses within 0.3 seconds. OS key repeat does not count as a tap.
-Holding starts the ramp after 0.25 seconds, with a new tier every 0.5 seconds.
-Ordinary speed changes ease over 0.24 seconds. Quick exits clear pending fast
-updates. Focus loss also returns to 1×. Pausing stops simulation time and keeps
-the selected cruising speed.
+**Settings > Controller** can make RT hold-only. Escape, B and **LT + X** cancel
+held boosts. Releasing a cancelled hold cannot restart speed. **Shift+\\** also
+returns to 1×. Extra clicks and rapid taps after stopping cannot restart speed.
+Double-click has no separate command and single clicks have no double-click wait.
+
+A hold starts ramping after 0.25 seconds, with a new tier every 0.5 seconds.
+Speed increases ease over 0.24 seconds. Speed decreases and hold releases take
+effect immediately. Focus loss clears speed and held input. Pausing stops the
+simulation and preserves the selected cruising speed.
 
 The cyan engagement ring appears once. Streak motion continues across tier
 changes, while brightness, colour and ghost strength blend with speed.
@@ -36,8 +42,7 @@ music enhancements. Saves, the chosen machine and volumes stay as set.
 **Use modern defaults** restores the convenience switches. The original fixed
 fast speeds remain 3× for Classic/L2 and 8× for L3 when variable speed is off.
 
-Moving lemmings leave longer energy wakes with an amber filament, cyan glow,
-and three fading sprite echoes. The wakes follow actual movement, including
+Moving lemmings leave fading sprite echoes. The ghosts follow actual movement, including
 slopes, falls, climbs, and direction changes. Stationary actors and teleports
 do not create a wake. All solid sprites draw after the wakes.
 

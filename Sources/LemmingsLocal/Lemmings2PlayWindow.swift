@@ -71,6 +71,7 @@ import NxlvKit
     private var replaySize = CGSize(width: 1280, height: 960)
     private var arcadeRunID = UUID()
     private var arcadeProfileID = ArcadeProfile.legacyID
+    private var arcadeHotSeatID: String?
     private var arcadeReport: ArcadeReport?
     private var usedRewind = false
     private var nukeCount = 0
@@ -116,7 +117,7 @@ import NxlvKit
     init(root: URL, recovery: RunRecovery? = nil, expectedRecoveryEngine: String = RunRecovery.bundledEngine) throws {
         if let recovery {
             _ = try recovery.validated()
-            guard recovery.l2 != nil, recovery.profileID == ArcadeStore.shared.playingProfileID,
+            guard recovery.l2 != nil, recovery.profileID == ArcadeStore.shared.playingProfileID, recovery.hotSeatID == ArcadeStore.shared.hotSeatID,
                 recovery.engine == expectedRecoveryEngine else { throw RunRecoveryError.differentGame }
         }
         self.root = root
@@ -146,6 +147,7 @@ import NxlvKit
         window.minSize = NSSize(width: 640, height: 502)
         window.contentView = front
         front.onDraw = { [weak self] in self?.drawFront() }
+        front.menuActions = { [weak self] in self?.accessibleFrontActions() ?? [] }
         front.onClick = { [weak self] x, y in self?.clickFront(x, y) }
         front.onMove = { [weak self] x, y in
             guard let self else { return }
@@ -224,7 +226,7 @@ import NxlvKit
         }
         keyboard.help = { [weak self] in
             let names = self?.game?.configuration.skills.map(\.name) ?? []
-            return SkillShortcuts(names: names).hint(names: names) + "\n\nSpace / P: pause\nR: retry"
+            return SkillShortcuts(names: names).hint(names: names, modern: self?.audioSettings.modernControlsEnabled ?? false) + "\n\nSpace / P: pause\nR: retry"
         }
         keyboard.hints = { [weak self] in self?.showLevelHints() }
         keyboard.settings = { [weak self] in self?.onShowSettings?() }
@@ -279,7 +281,7 @@ import NxlvKit
             game = restored.0; beforeNuke = restored.1; beforeNukeInputCount = restored.2
             recoveryInputs = saved.inputs; recoveryProgress = saved.progress
             recoveryInitialHash = recovery.initialStateHash
-            arcadeRunID = recovery.runID; arcadeProfileID = recovery.profileID
+            arcadeRunID = recovery.runID; arcadeProfileID = recovery.profileID; arcadeHotSeatID = recovery.hotSeatID
             usedRewind = recovery.usedRewind; nukeCount = recovery.nukeCount; undoCount = recovery.undoCount
             selected = recovery.selectedSkill; paused = true; fanSelected = false
             canvas.cameraX = CGFloat(recovery.scrollX); canvas.cameraY = CGFloat(recovery.scrollY)
@@ -455,7 +457,7 @@ import NxlvKit
         lastCheckpointTime = 0
         assignmentFocus = AssignmentFocus(); canvas.assignmentHighlight.clear()
         let previousAttemptID = arcadeRunID
-        arcadeRunID = UUID(); arcadeProfileID = ArcadeStore.shared.playingProfileID
+        arcadeRunID = UUID(); arcadeProfileID = ArcadeStore.shared.playingProfileID; arcadeHotSeatID = ArcadeStore.shared.hotSeatID
         arcadeReport = nil; usedRewind = false; nukeCount = 0; undoCount = 0
         arcadeLevelSnapshot = arcadeLevel
         if let arcadeLevel { ArcadeStore.shared.beginAttempt(id: arcadeRunID, profileID: arcadeProfileID,
@@ -570,6 +572,7 @@ import NxlvKit
             checkpoint.sourcePath = root.path
             checkpoint.l2 = L2RunRecovery(progress: progress, inputs: recoveryInputs)
             lastCheckpointTime = now
+            checkpoint.hotSeatID = arcadeHotSeatID
             recoveryStore.save(checkpoint, immediately: immediately) { [weak self] error in self?.message = error }
         } catch { message = error.localizedDescription }
     }
@@ -588,7 +591,10 @@ import NxlvKit
     }
     private func refreshGame() {
         guard let game else { return }
+        let turn = ArcadeStore.shared.hotSeatIsActive ? ArcadeStore.shared.records.profile(arcadeProfileID) : nil
+        canvas.turnBadge.show(initials: turn?.initials, portrait: turn.flatMap { ArcadeWindow.shared.arcadeView.portraitImage($0.portrait) })
         canvas.speedMultiplier = speedControl.multiplier
+        canvas.speedChoiceLabel = speedControl.choiceLabel
         canvas.speedLabel = speedControl.panelLabel
         canvas.variableSpeedEnabled = speedControl.variableEnabled
         canvas.isFastForward = fastForward && !paused && screen == .playing && !game.isComplete
@@ -615,7 +621,10 @@ import NxlvKit
         let elapsed = min(0.25, now - lastTime); lastTime = now
         let playing = screen == .playing && !paused && game?.isComplete == false && !GameScreen.shared.isPresented
         speedControl.update(at: now, active: screen == .playing && game?.isComplete == false && !GameScreen.shared.isPresented)
+        let turn = ArcadeStore.shared.hotSeatIsActive ? ArcadeStore.shared.records.profile(arcadeProfileID) : nil
+        canvas.turnBadge.show(initials: turn?.initials, portrait: turn.flatMap { ArcadeWindow.shared.arcadeView.portraitImage($0.portrait) })
         canvas.speedMultiplier = speedControl.multiplier
+        canvas.speedChoiceLabel = speedControl.choiceLabel
         canvas.speedLabel = speedControl.panelLabel
         canvas.variableSpeedEnabled = speedControl.variableEnabled
         canvas.capturePointer(active: playing && audioSettings.confinePointer)
@@ -812,6 +821,33 @@ import NxlvKit
         guard (4..<316).contains(x), (28..<108).contains(y) else { return nil }
         let id = (y-28)/20*13+(x-4)/24+1
         return id <= 51 ? id : nil
+    }
+    private func accessibleFrontActions() -> [(String, CGRect, () -> Void)] {
+        var entries: [(String, CGRect)] = []
+        switch screen {
+        case .menu:
+            entries = [("Play", CGRect(x: 10, y: 125, width: 70, height: 22)), ("Choose tribe", CGRect(x: 10, y: 150, width: 70, height: 22)), ("Preferences", CGRect(x: 10, y: 175, width: 70, height: 22)),
+                ("Load game", CGRect(x: 240, y: 125, width: 70, height: 22)), ("Save game", CGRect(x: 240, y: 150, width: 70, height: 22)), ("Return to library", CGRect(x: 240, y: 175, width: 70, height: 22)),
+                ("Introduction", CGRect(x: 120, y: 150, width: 70, height: 22)), ("Practice", CGRect(x: 100, y: 175, width: 110, height: 22))]
+        case .map:
+            entries = tribePoints.enumerated().map { index, point in (Lemmings2Campaign.tribeNames[index], CGRect(x: point.0 - 5, y: point.1 - 5, width: 10, height: 10)) }
+        case .practice:
+            entries = (1...51).compactMap { id in Lemmings2Runtime.Skill(rawValue: id).map { ($0.name, CGRect(x: 4 + (id - 1) % 13 * 24, y: 28 + (id - 1) / 13 * 20, width: 24, height: 20)) } }
+            for (index, tribe) in Lemmings2Practice.tribes.enumerated() { entries.append((Lemmings2Campaign.tribeNames[tribe], CGRect(x: index * 80, y: 133, width: 80, height: 36))) }
+            if practiceSkills.count == 8 { entries.append(("Start practice", CGRect(x: 100, y: 180, width: 120, height: 18))) }
+        case .load, .save:
+            entries = (0..<8).map { ("Slot \($0 + 1)", CGRect(x: 20, y: 40 + $0 * 16, width: 280, height: 16)) }
+            entries += [(screen == .load ? "Load selected slot" : "Save to selected slot", CGRect(x: 10, y: 180, width: 140, height: 18)), ("Cancel", CGRect(x: 170, y: 180, width: 140, height: 18))]
+        case .preferences:
+            entries = [("Toggle music", CGRect(x: 20, y: 110, width: 135, height: 24)), ("Toggle sounds", CGRect(x: 160, y: 110, width: 135, height: 24)), ("Toggle enhanced artwork", CGRect(x: 20, y: 148, width: 280, height: 24)), ("Back", CGRect(x: 20, y: 180, width: 280, height: 18))]
+        case .playing: break
+        default: entries = [("Continue", CGRect(x: 100, y: 180, width: 120, height: 18))]
+        }
+        let current = screen
+        return entries.map { title, rect in (title, rect, { [weak self] in
+            guard let self, self.screen == current else { return }
+            self.clickFront(Int(rect.midX), Int(rect.midY))
+        }) }
     }
     private func clickFront(_ x: Int, _ y: Int) {
         func inside(_ a: Int, _ b: Int, _ w: Int, _ h: Int) -> Bool { x >= a && x < a+w && y >= b && y < b+h }
@@ -1063,6 +1099,16 @@ import NxlvKit
 
 @MainActor private final class Lemmings2MenuCanvas: NSView {
     private let artworkRenderer = SequelArtworkRenderer()
+    var menuActions: (() -> [(String, CGRect, () -> Void)])?
+    private let accessibleElements = GameAccessibleElements()
+    override func isAccessibilityElement() -> Bool { true }
+    override func accessibilityRole() -> NSAccessibility.Role? { .group }
+    override func accessibilityChildren() -> [Any]? {
+        (menuActions?() ?? []).enumerated().map { index, item in
+            accessibleElements.element(id: "action-\(index)", owner: self, label: item.0,
+                frame: CGRect(x: origin.x + item.1.minX * zoom, y: origin.y + item.1.minY * zoom * 1.2, width: item.1.width * zoom, height: item.1.height * zoom * 1.2), press: item.2)
+        }
+    }
     var onDraw: (() -> Void)?
     var onClick: ((Int, Int) -> Void)?
     var onMove: ((Int, Int) -> Void)?
@@ -1167,6 +1213,31 @@ import NxlvKit
     var onRelease: (() -> Void)?
     var onPointer: ((Int, Int, Bool) -> Void)?
     var onClick: ((Int, Int) -> Void)?
+    private let accessibleElements = GameAccessibleElements()
+    override func isAccessibilityElement() -> Bool { true }
+    override func accessibilityRole() -> NSAccessibility.Role? { .group }
+    override func accessibilityChildren() -> [Any]? {
+        guard let game else { return [] }
+        let names = game.configuration.skills.map(\.name) + ["Pause", "End run", "Fan", "Fast-forward"]
+        var children: [Any] = turnBadge.isHidden ? [] : [turnBadge]
+        for slot in 0..<12 {
+            let x = slot < 8 ? slot * 32 : 256 + (slot % 2) * 32
+            let y = slot < 10 ? 160 : 180
+            let height = slot < 8 ? 40 : 20
+            let frame = CGRect(x: panelX + CGFloat(x) * zoom, y: origin.y + CGFloat(y) * zoom * 1.2, width: 32 * zoom, height: CGFloat(height) * zoom * 1.2)
+            children.append(accessibleElements.element(id: "panel-\(slot)", owner: self, label: names[slot], frame: frame) { [weak self] in
+                let time = ProcessInfo.processInfo.systemUptime
+                self?.onPanel?(slot, 1, time)
+                if slot == 9 { self?.onPanel?(slot, 2, time + 0.01) }
+            })
+        }
+        if variableSpeedEnabled {
+            for direction in [-1, 1] {
+                children.append(accessibleElements.element(id: "speed-\(direction)", owner: self, label: direction < 0 ? "Decrease fast speed" : "Increase fast speed", frame: speedRect) { [weak self] in self?.onSpeedStep?(direction, ProcessInfo.processInfo.systemUptime) })
+            }
+        }
+        return children
+    }
     var onPanel: ((Int, Int, TimeInterval) -> Void)?
     var onHover: (() -> Void)?
     var onKey: ((String) -> Void)?
@@ -1366,7 +1437,14 @@ import NxlvKit
     }
     private var usesSpeedEffects: Bool { hdEffectsEnabled && !reduceMotion && isFastForward }
     var speedMultiplier: Double = 3 { didSet { speedTrails.multiplier = speedMultiplier; syncSpeedEffects() } }
+    let turnBadge = TurnBadgeView()
+    override init(frame: NSRect) {
+        super.init(frame: frame)
+        addSubview(turnBadge)
+    }
+    required init?(coder: NSCoder) { fatalError("init(coder:) is unavailable") }
     var speedLabel = "2×"
+    var speedChoiceLabel = "2×"
     var variableSpeedEnabled = true
     var onSpeedPress: ((TimeInterval, Int) -> Void)?
     var onSpeedRelease: ((TimeInterval) -> Void)?
@@ -1380,7 +1458,7 @@ import NxlvKit
         if window != nil, hdrOverlay == nil {
             let overlay = ExplosionHDRView(frame: bounds)
             overlay.autoresizingMask = [.width, .height]
-            addSubview(overlay); hdrOverlay = overlay
+            addSubview(overlay, positioned: .below, relativeTo: turnBadge); hdrOverlay = overlay
         }
         syncSpeedEffects()
     }
@@ -1773,6 +1851,8 @@ import NxlvKit
             }
             if let focusNotice { (focusNotice as NSString).draw(at: CGPoint(x: 12, y: 12), withAttributes: [.foregroundColor: NSColor.yellow, .font: NSFont.boldSystemFont(ofSize: 16)]) }
         }
+        if turnBadge.superview == nil { addSubview(turnBadge) }
+        turnBadge.place(in: CGRect(x: origin.x, y: origin.y, width: visibleWidth * zoom, height: 192 * zoom))
         updateSpeedTrails()
         NSColor.black.setFill(); bounds.fill()
         guard let game, let terrain else { return }
@@ -1786,7 +1866,7 @@ import NxlvKit
             panel.draw(in: NSRect(x: panelX, y: origin.y + 192 * zoom, width: 320 * zoom, height: 48 * zoom),
                        from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true,
                        hints: [.interpolation: NSImageInterpolation.none.rawValue])
-            if variableSpeedEnabled { SpeedPanelControls.draw(in: speedRect, label: speedLabel, active: speedMultiplier > 1.001) }
+            if variableSpeedEnabled { SpeedPanelControls.draw(in: speedRect, label: speedLabel, active: isFastForward, next: speedChoiceLabel) }
         }
     }
     private var speedRect: CGRect { CGRect(x: panelX + 288 * zoom, y: origin.y + 216 * zoom, width: 32 * zoom, height: 24 * zoom) }

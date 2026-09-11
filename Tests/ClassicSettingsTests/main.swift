@@ -268,6 +268,20 @@ private func testReducedEffects() throws {
 }
 
 do {
+    for size in ClassicInterfaceSize.allCases {
+        var settings = ClassicSettings()
+        settings.interfaceSize = size
+        settings.applyExperiencePreset(modern: false)
+        settings.applyExperiencePreset(modern: true)
+        try require(settings.interfaceSize == size, "Preset discarded interface size")
+        let decoded = try JSONDecoder().decode(ClassicSettings.self, from: JSONEncoder().encode(settings))
+        try require(decoded.interfaceSize == size, "Interface size did not persist")
+    }
+    for json in ["{}", "{\"interfaceSize\":\"future\"}"] {
+        let decoded = try JSONDecoder().decode(ClassicSettings.self, from: Data(json.utf8))
+        try require(decoded.interfaceSize == .standard, "Interface size migration failed")
+    }
+    print("PASS interface size persistence, migration and presets")
     try testReducedEffects()
     try testHDEffectsPreference()
     try testPointerCapturePreference()

@@ -38,7 +38,7 @@ struct ControllerBindingsTests {
 
     @Test func triggerMatchesFTapHoldAndRapidExit() {
         var speed = GameplaySpeed()
-        for (index, target) in [2.0, 3, 5, 10, 1].enumerated() {
+        for (index, target) in [2.0, 1, 2, 1].enumerated() {
             let time = Double(index)
             speed.press(.controller, at: time)
             speed.release(.controller, at: time + 0.05)
@@ -52,7 +52,6 @@ struct ControllerBindingsTests {
         #expect(speed.multiplier == 1)
         speed.press(.controller, at: 10); speed.release(.controller, at: 10.05)
         speed.press(.controller, at: 10.2)
-        #expect(speed.multiplier == 1)
         speed.release(.controller, at: 10.25)
         #expect(speed.target == 1)
     }
@@ -94,7 +93,7 @@ struct ControllerBindingsTests {
     }
     @Test func controllerSpeedHoldRestoresSelection() {
         var speed = GameplaySpeed()
-        speed.step(1, at: 0)
+        speed.tap(at: 0)
         speed.press(.controller, at: 1)
         speed.update(at: 2)
         #expect(speed.target > 2)

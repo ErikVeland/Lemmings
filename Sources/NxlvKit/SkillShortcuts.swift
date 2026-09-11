@@ -10,7 +10,9 @@ public struct SkillShortcuts {
     /// floater takes U for umbrella.
     public static let preferredLetters: [String: String] = ["floater": "u"]
 
-    public init(names: [String], reserved: String = "zqnrpfx") {
+    /// `i` is reserved because it opens the level hints. Without it a skill can be
+    /// handed `i` as a fallback and its shortcut silently stops working.
+    public init(names: [String], reserved: String = "zqnrpfxi") {
         var used = Set(reserved.map(String.init))
         var result = [String?](repeating: nil, count: names.count)
         let candidates = names.map { $0.lowercased().filter { $0.isASCII && $0.isLetter }.map(String.init) }

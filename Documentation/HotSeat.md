@@ -1,67 +1,56 @@
-# Hot seat
+# Hot Seat
 
-Two or more players take turns on one Mac. Each turn keeps its own scores,
-records and achievements. Campaign progress belongs to the host.
+Two or more players take turns on one Mac. Each attempt keeps its own player,
+scores, records and achievements. The shared campaign has a separate save from
+all solo profiles.
 
-## A hot seat is its own game
+## Start or resume shared play
 
-A new hot seat always begins at the first level. It does not continue the host's
-campaign, and it does not change it. The hot seat keeps its own campaign, so two
-players who sit down together start together whatever either of them has cleared
-alone.
+Add players in Player Profiles, then open **Hot Seat**. The previous shared
+campaign, roster and next turn return when available. Otherwise, the host and
+one other profile form the first roster. Number keys 1–8 add or remove guests.
+The host stays in the roster.
 
-That campaign lasts as long as the session. Ending the hot seat clears it and
-gives the host back their own campaign untouched. Quitting the app ends the
-session, so a hot seat cannot be resumed after a relaunch.
+Changing players during a level first offers **Save and return to library**.
+The current attempt keeps its owner. Player changes take effect from the library,
+so an old result cannot restart a shared attempt inside a solo campaign.
 
-Records, statistics and achievements are separate for every player, in a hot seat
-and alone. Only the campaign position is shared, and only inside the session.
+Shared campaign progress, the roster and the next turn survive quitting.
+**Return to solo** returns to the host's solo saves and keeps the shared campaign
+for later. Opening Hot Seat again resumes that shared campaign.
 
-## Start a session
+## Results and handovers
 
-A hot seat starts from the start menu, not from inside a level.
-
-1. Leave the level you are playing and return to the start menu.
-2. Add every player in Player Profiles first. A hot seat cannot create profiles.
-3. Open **Hot Seat…** from the app menu, **Hot seat** in Player Profiles, or
-   **Players** on a result page. The page selects the host and one other profile
-   for you, because one player is not a hot seat.
-4. Press 1 to 8 to add or remove players. The order you choose is the turn order.
-5. Select **Done**. The hot seat starts at the next level.
-
-The page says `Return to the start menu to begin` until a second player joins.
-**Play solo** ends the session and gives the Mac back to the host.
-
-## Whose turn it is
-
-The level briefing names the player before the level starts. The first line reads
-`YOUR TURN, ` and the player's initials. The Hot Seat page also shows the current
-turn.
-
-## Pass the turn
-
-**Pass the turn** on the Hot Seat page selects the house rule. The choice is
-remembered after you quit. The roster is not, so players join again each session.
-
-| Setting | After a clear | After a loss |
+| Result | Primary action | Other choices |
 | --- | --- | --- |
-| Every level | The next player starts the next level. | The next player retries the same level. |
-| At first fail | The same player continues to the next level. | The next player retries the same level. |
+| Loss | Retry as the next player | Retry as the current player; Back to library |
+| Clear, Every level | Next level as the next player | Retry as either player |
+| Clear, At first fail | Next level as the current player | Retry as either player |
 
-`Every level` is the default.
+Buttons name the player who will act. Enter uses the primary action. R retries
+as the current player. **Every level** is the default house rule. **At first fail**
+lets a winner keep playing. The rule survives quitting and returning to solo.
 
-The result page names the player who is about to receive the Mac. **Retry as
-[initials]** restarts the same level for the next player. **Retry** keeps the
-current player. After a loss, Enter passes the turn and R keeps the current
-player. Turn order wraps through the selected profiles.
+After a handover, the game waits behind a page naming the next player. That
+player chooses **Ready** before play can continue. Held Return does not dismiss
+this page. Controller navigation selects Ready, and Back does not skip it.
+A failed records save blocks the handover and level advancement.
 
-## Rules that do not change
+Classic, L2 and L3 playfields show the active attempt owner. Selecting the next
+player does not rename an attempt already in progress. Shared checkpoints can
+only resume in their matching shared campaign. Solo recovery cannot load them.
 
-Classic campaigns, imported levels, NeoLemmix, Lemmings 2 and Lemmings 3 all use
-the same turn owner. Joining or leaving cannot change the owner of a run already
-in progress. Guest profiles do not inherit the host's campaign saves.
+## Later work
 
-The roster lasts until the app closes, the host changes, or **Play solo** is
-selected. Dropping below two players ends the hot seat. A player who leaves
-cannot still be holding the turn. A handover is unavailable while records have a
-save error.
+Mid-level takeovers remain deferred. They need shared-attempt attribution so a
+solution completed by two people does not become one person's individual record.
+
+## Validation
+
+- `Scripts/run-arcade-records-tests.sh`: roster, rotation, relaunch, shared-save
+  persistence, solo namespaces, explicit Ready, keyboard repeats, controller
+  focus and failed-save handovers.
+- `TEST_SCOPE=hot-seat Scripts/run-app-integration-tests.sh`: Classic turn
+  identity, confirmed player changes, old result actions, solo transitions and
+  checkpoint scope isolation.
+- Sequel app checks cover turn ownership and retry boundaries in L2 and L3.

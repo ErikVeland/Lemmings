@@ -97,7 +97,7 @@ public struct GameplaySpeed: Sendable {
     }
 
     public mutating func cancelInput(at now: TimeInterval) {
-        reset(at: now)
+        reset(at: now); ignored.removeAll()
     }
 
     public mutating func suspend(at now: TimeInterval) {

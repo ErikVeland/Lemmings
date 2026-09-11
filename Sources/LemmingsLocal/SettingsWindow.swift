@@ -36,6 +36,7 @@ import NxlvKit
   private var controllerHelpText: NSTextView?
   private var remapSource: NSPopUpButton?
   private var remapRole: NSPopUpButton?
+  private var interfaceSizePopUp: NSPopUpButton?
   private var reduceMotionCheck: NSButton?
   private var reduceFlashesCheck: NSButton?
   private var hdEffectsCheck: NSButton?
@@ -106,6 +107,9 @@ import NxlvKit
     var previous: NSView?
     for (label, control) in rows {
       let caption = NSTextField(labelWithString: label)
+      if control.accessibilityLabel() == nil {
+        control.setAccessibilityLabel((control as? NSButton).map { label + ": " + $0.title } ?? label)
+      }
       caption.alignment = .right
       caption.font = .systemFont(ofSize: 17)
       caption.translatesAutoresizingMaskIntoConstraints = false
@@ -154,7 +158,7 @@ import NxlvKit
     let interruption = NSButton(checkboxWithTitle: "Pause when switching apps or a controller disconnects", target: self, action: #selector(interruptionChanged))
     interruption.state = settings.pauseOnInterruption ? .on : .off
     interruptionCheck = interruption
-    let help = NSTextField(wrappingLabelWithString: "Tap F or Speed to step up. Hold F or Shift to ramp up; release to ease back.\nShift+[ / Shift+] step down / up. Double-tap F, double-click Speed, Shift+\\ or Escape returns to 1×.")
+    let help = NSTextField(wrappingLabelWithString: "Tap F, Speed or RT to toggle fast-forward. Hold Shift, Speed or RT to boost; release to return.\nSpeed arrows, Shift+[ / Shift+] or LT + D-pad left/right choose the fast tier. F, Escape or B exits immediately.")
     help.font = .systemFont(ofSize: 16)
     let og = NSButton(title: "Use OG settings", target: self, action: #selector(useOGSettings))
     let defaults = NSButton(title: "Use modern defaults", target: self, action: #selector(useModernDefaults))
@@ -180,7 +184,7 @@ import NxlvKit
   @objc private func useModernDefaults() { applyExperiencePreset(modern: true) }
   private func controllerPane() -> NSView {
     let enabled = NSButton(checkboxWithTitle: "Enable gamepad controls", target: self, action: #selector(controllerChanged))
-    let tap = NSButton(checkboxWithTitle: "Tap RT to change speed; hold RT for a temporary boost", target: self, action: #selector(controllerTapChanged))
+    let tap = NSButton(checkboxWithTitle: "Tap RT to toggle fast-forward; hold RT for a temporary boost", target: self, action: #selector(controllerTapChanged))
     let swap = NSButton(checkboxWithTitle: "Swap sticks: right aims, left moves the camera", target: self, action: #selector(controllerSwapChanged))
     controllerCheck = enabled; controllerTapCheck = tap; controllerSwapCheck = swap
     enabled.state = settings.controllerEnabled ? .on : .off
@@ -357,7 +361,12 @@ import NxlvKit
     reducedFlashes.toolTip = "Disable added bright explosion cores, HDR flashes and cinematic explosions. Original game sprites remain."
     reducedFlashes.state = settings.reduceFlashes ? .on : .off
     reduceFlashesCheck = reducedFlashes
-    return pane([("Motion", motion), ("Flashes", reducedFlashes)])
+    let size = popUp(#selector(interfaceSizeChanged))
+    size.addItems(withTitles: ClassicInterfaceSize.allCases.map(\.title))
+    size.selectItem(at: ClassicInterfaceSize.allCases.firstIndex(of: settings.interfaceSize) ?? 0)
+    size.toolTip = "Enlarge menu pages and controls help. Scroll enlarged pages to reach every control."
+    interfaceSizePopUp = size
+    return pane([("Text and menu size", size), ("Motion", motion), ("Flashes", reducedFlashes)])
   }
 
   private func audioPane() -> NSView {
@@ -447,7 +456,16 @@ import NxlvKit
 
   // MARK: - Changes
 
-  private func changed() { onChange?(settings) }
+  private func changed() {
+    GameAccessibility.interfaceSize = settings.interfaceSize
+    GameScreen.shared.reattach()
+    onChange?(settings)
+  }
+  @objc private func interfaceSizeChanged(_ sender: NSPopUpButton) {
+    guard ClassicInterfaceSize.allCases.indices.contains(sender.indexOfSelectedItem) else { return }
+    settings.interfaceSize = ClassicInterfaceSize.allCases[sender.indexOfSelectedItem]
+    changed()
+  }
 
   /// Marks the preset list as Custom after a single control is changed.
   private func markCustom() { presetPopUp?.selectItem(at: 0) }
@@ -471,6 +489,7 @@ import NxlvKit
     applied.controllerTapSpeed = settings.controllerTapSpeed
     applied.controllerSwapSticks = settings.controllerSwapSticks
     applied.controllerMappings = settings.controllerMappings
+    applied.interfaceSize = settings.interfaceSize
     applied.reduceMotion = settings.reduceMotion
     applied.reduceFlashes = settings.reduceFlashes
     applied.hdEffectsEnabled = settings.hdEffectsEnabled

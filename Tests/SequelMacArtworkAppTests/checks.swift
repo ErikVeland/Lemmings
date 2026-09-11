@@ -5,8 +5,10 @@ import CryptoKit
 let app = NSApplication.shared
 ArcadeStore.shared = ArcadeStore(file: FileManager.default.temporaryDirectory.appendingPathComponent("arcade-sequel-tests-\(UUID().uuidString).json"))
 let sourceRoot = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
+let testAppRoot = ProcessInfo.processInfo.environment["LEMMINGS_TEST_APP"].map { URL(fileURLWithPath: $0) }
+    ?? sourceRoot.appendingPathComponent(".build/local/Ultimate Lemmings.app")
 ArcadeWindow.shared.arcadeView.useArtwork(try ClassicMacArtwork(directory:
-    sourceRoot.appendingPathComponent(".build/local/Ultimate Lemmings.app/Contents/Resources/MacArtwork/lemmings")))
+    testAppRoot.appendingPathComponent("Contents/Resources/MacArtwork/lemmings")))
 let shotRoot = sourceRoot.appendingPathComponent(".build/sequel-mac-artwork/levels")
 try FileManager.default.createDirectory(at:shotRoot,withIntermediateDirectories:true)
 let previousPreference = UserDefaults.standard.object(forKey:SequelArtworkPreference.key)
@@ -212,6 +214,7 @@ for number in [1,101,201] {
     try assertArtwork(view.playfieldRect.maxY == view.panelRect.minY, "L3 playfield must stop at the panel")
     var panelClick: Int?, gameClicks = 0
     view.onPanel = { slot, _ in panelClick = slot }
+    view.onSpeedPress = { _, _ in panelClick = 6 }
     view.onClick = { _, _ in gameClicks += 1 }
     for slot in 0..<9 {
         let x = CGFloat(Lemmings3Panel.edges[slot] + Lemmings3Panel.edges[slot + 1]) / 2
@@ -767,7 +770,7 @@ extension Lemmings2PlayWindow {
         print("PASS bundled Tribes proof matches live assets, population, skills and level-start metadata")
     }
 }
-try Lemmings2PlayWindow(root: sourceRoot.appendingPathComponent(".build/local/Ultimate Lemmings.app/Contents/Resources/Ports/Lemm2")).checkBundledRescueTarget()
+try Lemmings2PlayWindow(root: testAppRoot.appendingPathComponent("Contents/Resources/Ports/Lemm2")).checkBundledRescueTarget()
 
 
 extension Lemmings3PlayWindow {
@@ -826,6 +829,15 @@ extension Lemmings3PlayWindow {
             "Sequel hot-seat retry changed the level or kept the old owner")
         try assertArtwork(progressKey == oldProgressKey && store.records.activeProfileID == host,
             "Sequel hot-seat retry changed the shared campaign owner")
+        refresh()
+        try assertArtwork(canvas.turnBadge.initials == guest.initials && !canvas.turnBadge.isHidden,
+            "Hot-seat badge did not follow the new attempt owner")
+        _ = try shot(canvas, "hot-seat-" + String(describing: type(of: canvas)))
+        _ = store.passSessionTurn(after: guest.id)
+        refresh()
+        try assertArtwork(canvas.turnBadge.initials == guest.initials, "Badge changed owner during an active attempt")
+        store.endHotSeat(); refresh()
+        try assertArtwork(canvas.turnBadge.isHidden, "Solo sequel retained hot-seat badge")
         print("PASS L3 hot-seat restart preserves level conditions and campaign ownership with a new guest attempt")
         print("PASS L3 checkpoint round trip, original assets, campaign state, input journal, exact paused restore, continuation and rejected journal")
     }
@@ -898,8 +910,71 @@ extension Lemmings2PlayWindow {
             "Sequel hot-seat retry changed the level or kept the old owner")
         try assertArtwork(progressKey == oldProgressKey && store.records.activeProfileID == host,
             "Sequel hot-seat retry changed the shared campaign owner")
+        refreshGame()
+        try assertArtwork(canvas.turnBadge.initials == guest.initials && !canvas.turnBadge.isHidden,
+            "Hot-seat badge did not follow the new attempt owner")
+        _ = try shot(canvas, "hot-seat-" + String(describing: type(of: canvas)))
+        _ = store.passSessionTurn(after: guest.id)
+        refreshGame()
+        try assertArtwork(canvas.turnBadge.initials == guest.initials, "Badge changed owner during an active attempt")
+        store.endHotSeat(); refreshGame()
+        try assertArtwork(canvas.turnBadge.isHidden, "Solo sequel retained hot-seat badge")
         print("PASS L2 hot-seat restart preserves level conditions and campaign ownership with a new guest attempt")
         print("PASS L2 checkpoint round trip, campaign, assignments, fan/aim/release, nuke undo, exact paused restore, continuation and rejection")
     }
 }
 try Lemmings2PlayWindow(root: l2root).checkRunRecovery()
+
+// Drive real panel pointer events through each sequel's production callbacks.
+@MainActor private func checkSpeedMouse(view: NSView, rect: CGRect, speed: GameSpeedControl) throws {
+    speed.variableEnabled = true; speed.newLevel()
+    func event(_ type: NSEvent.EventType, _ time: Double, fraction: Double = 0.5, clicks: Int = 1) {
+        let p = view.convert(CGPoint(x: rect.minX + rect.width * fraction, y: rect.midY), to: nil)
+        let e = NSEvent.mouseEvent(with: type, location: p, modifierFlags: [], timestamp: time,
+            windowNumber: view.window?.windowNumber ?? 0, context: nil, eventNumber: 0, clickCount: clicks, pressure: 1)!
+        if type == .leftMouseDown { view.mouseDown(with: e) } else { view.mouseUp(with: e) }
+    }
+    event(.leftMouseDown, 100); event(.leftMouseUp, 100.05)
+    try assertArtwork(speed.target == 2, "Sequel mouse toggle did not engage")
+    event(.leftMouseDown, 101, fraction: 0.9); event(.leftMouseUp, 101.05)
+    try assertArtwork(speed.target == 3, "Sequel speed arrow did not increase")
+    let output = URL(fileURLWithPath: ".build/speed-controls")
+    try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
+    let bitmap = view.bitmapImageRepForCachingDisplay(in: view.bounds)!
+    view.cacheDisplay(in: view.bounds, to: bitmap)
+    try bitmap.representation(using: .png, properties: [:])!.write(to: output.appendingPathComponent("\(type(of: view)).png"))
+    event(.leftMouseDown, 102); event(.leftMouseUp, 102.05)
+    event(.leftMouseDown, 102.1, clicks: 2); event(.leftMouseUp, 102.15, clicks: 2)
+    try assertArtwork(speed.multiplier == 1, "Sequel double-click restarted speed")
+    event(.leftMouseDown, 103); speed.update(at: 105, active: true)
+    try assertArtwork(speed.target == 10, "Sequel mouse hold failed")
+    event(.leftMouseUp, 105.1)
+    try assertArtwork(speed.multiplier == 1, "Sequel hold release did not return to normal")
+}
+extension Lemmings2PlayWindow {
+    fileprivate func checkSpeedMouseControls() throws {
+        defer { stop() }
+        timer?.invalidate(); timer = nil
+        prepareBriefing(); startLevel()
+        canvas.variableSpeedEnabled = true
+        try checkSpeedMouse(view: canvas, rect: canvas.speedTestRect, speed: speedControl)
+        print("PASS L2 native mouse speed controls")
+    }
+}
+extension Lemmings3PlayWindow {
+    fileprivate func checkSpeedMouseControls() throws {
+        defer { stop() }
+        timer?.invalidate(); timer = nil
+        canvas.menuRows = nil; canvas.variableSpeedEnabled = true
+        let rect = canvas.speedTestRect
+        try checkSpeedMouse(view: canvas, rect: rect, speed: speedControl)
+        print("PASS L3 native mouse speed controls")
+    }
+}
+try Lemmings2PlayWindow(root: l2root).checkSpeedMouseControls()
+try Lemmings3PlayWindow(root: l3root).checkSpeedMouseControls()
+
+extension Lemmings2Canvas { fileprivate var speedTestRect: CGRect { speedRect } }
+extension Lemmings3Canvas { fileprivate var speedTestRect: CGRect {
+    CGRect(x: screenOrigin.x + 214 * zoom, y: screenOrigin.y + 172 * zoom, width: 35 * zoom, height: 40 * zoom)
+} }

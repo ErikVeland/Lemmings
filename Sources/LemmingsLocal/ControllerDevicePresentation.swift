@@ -39,26 +39,32 @@ import NxlvKit
         case .up, .down, .left, .right: return "D-pad " + button.rawValue
         }
     }
-    static func help(mapping: [String: String]) -> String {
+    static func help(mapping: [String: String], variableSpeed: Bool = true, tapSpeed: Bool = true,
+                     rewind: Bool = true, stepping: Bool = true, hints: Bool = true) -> String {
         let mapping = ControllerBindings.validatedMapping(mapping)
         func physical(_ role: ControllerBindings.Button) -> String {
             name(ControllerBindings.Button.allCases.first { (mapping[$0.rawValue] ?? $0.rawValue) == role.rawValue }!)
         }
         let device = GCController.controllers().first(where: { $0.extendedGamepad != nil })?.vendorName ?? "Extended gamepad"
-        let rows = ControllerBindings.Button.allCases.map { "\(physical($0)): \(ControllerBindings.roleName($0))" }
+        let rows = ControllerBindings.Button.allCases.map { button in
+            let action = button == .rightTrigger
+                ? ((tapSpeed ? "Tap: toggle fast-forward; " : "") + (variableSpeed ? "hold: ramp up; release: previous speed" : "hold: fixed fast-forward"))
+                : ControllerBindings.roleName(button)
+            return "\(physical(button)): \(action)"
+        }
         let modifier = physical(.leftTrigger)
         return ([device, "Sticks: aim and pan, following the Swap sticks setting."] + rows + [
-            "\(modifier) + \(physical(.y)): level hints",
+            hints ? "\(modifier) + \(physical(.y)): level hints" : "",
             "\(modifier) + \(physical(.x)): reset speed",
-            "\(modifier) + \(physical(.left)) / \(physical(.right)): decrease / increase speed",
+            variableSpeed ? "\(modifier) + \(physical(.left)) / \(physical(.right)): decrease / increase speed" : "",
             "\(modifier) + \(physical(.up)) / \(physical(.down)): entrance / exit",
-            "\(modifier) + \(physical(.leftShoulder)) / \(physical(.rightShoulder)): step back / forward",
-            "\(modifier) + \(physical(.b)): rewind where supported",
+            stepping ? "\(modifier) + \(physical(.leftShoulder)) / \(physical(.rightShoulder)): step back / forward where supported" : "",
+            rewind ? "\(modifier) + \(physical(.b)): rewind" : "",
             "\(modifier) + \(physical(.menu)): retry",
             "\(modifier) + \(physical(.a)): end run / undo nuke",
             "\(modifier) + \(physical(.options)): settings",
             "Menus always use standard controls: D-pad selects, \(name(.a)) confirms, \(name(.b)) returns.",
             "Shoulder buttons change tabs. Right stick scrolls. Release buttons when changing pages."
-        ]).joined(separator: "\n")
+        ]).filter { !$0.isEmpty }.joined(separator: "\n")
     }
 }

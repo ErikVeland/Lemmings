@@ -113,6 +113,36 @@ enum GamePhase: Equatable {
     hdrOverlay?.update(presentsHDR ? hdrFlashes : [],force:true)
   }
   /// Lines drawn over the level before it starts or after it ends.
+  private let accessibleElements = GameAccessibleElements()
+  override func isAccessibilityElement() -> Bool { true }
+    override func accessibilityRole() -> NSAccessibility.Role? { .group }
+    override func accessibilityChildren() -> [Any]? { accessibleControls(owner: self) }
+  func accessibleControls(owner: NSView, transform: (CGRect) -> CGRect = { $0 }) -> [Any] {
+    guard phase != .playing else {
+      let text = "Game playfield" + (turnInitials.map { ". \($0)'s turn" } ?? "")
+      return [accessibleElements.element(id: "status", owner: owner, label: text, frame: transform(bounds))]
+    }
+    var items: [Any] = []
+    if let overlayTitle { items.append(accessibleElements.element(id: "title", owner: owner, label: overlayTitle, frame: transform(bounds))) }
+    for (index, line) in overlayLines.enumerated() {
+      let rect = overlayLineRects.indices.contains(index) ? overlayLineRects[index] : bounds
+      let actionable = overlayHighlight != nil || overlayRetryLine == index || overlayReplayLine == index
+      let action: (() -> Void)? = actionable ? { [weak self] in
+        guard let self else { return }
+        if self.overlayRetryLine == index { self.onRetry?() }
+        else if self.overlayReplayLine == index { self.onReplay?(false) }
+        else { self.onSelectOverlayLine?(index) }
+      } : nil
+      items.append(accessibleElements.element(id: "line-\(index)", owner: owner, label: line, frame: transform(rect), press: action))
+    }
+    if overlayHighlight == nil { items.append(accessibleElements.element(id: "continue", owner: owner, label: "Continue", frame: transform(bounds)) { [weak self] in self?.onAdvancePhase?() }) }
+    for (index, rect) in overlayFooterButtons.enumerated() {
+      items.append(accessibleElements.element(id: "footer-\(index)", owner: owner, label: index == 0 ? "Player profiles" : "Records", frame: transform(rect)) { [weak self] in
+        if index == 0 { self?.onProfiles?() } else { self?.onRecords?() }
+      })
+    }
+    return items
+  }
   var overlayTitle: String?
   var overlayLines: [String] = []
   var overlayFooter: String? { didSet { overlayProfileInitials = nil } }
