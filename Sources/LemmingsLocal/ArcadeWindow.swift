@@ -109,12 +109,24 @@ import NxlvKit
     var continueTitle = "Next level"
     var cleared: Bool { report?.run.qualifies == true }
     var nextSessionPlayer: ArcadeProfile? { ArcadeStore.shared.nextSessionProfile(after: player.id) }
-    var primaryResultTitle: String { cleared ? continueTitle : nextSessionPlayer.map { "Retry as \($0.initials)" } ?? "Try again" }
+    /// Every level hands over after a clear too. At first fail keeps the winner in.
+    var passesTurnOnClear: Bool { ArcadeStore.shared.turnPolicy == .everyLevel }
+    var handsOverAfterClear: ArcadeProfile? { passesTurnOnClear ? nextSessionPlayer : nil }
+    var primaryResultTitle: String {
+        if cleared { return handsOverAfterClear.map { "\(continueTitle) as \($0.initials)" } ?? continueTitle }
+        return nextSessionPlayer.map { "Retry as \($0.initials)" } ?? "Try again"
+    }
     func retryAsNextProfile() {
         guard ArcadeStore.shared.passSessionTurn(after: player.id) else { needsDisplay = true; return }
         onRetry?()
     }
-    func performDefaultResultAction() { if cleared { onContinue?() } else if nextSessionPlayer != nil { retryAsNextProfile() } else { onRetry?() } }
+    /// A refused handover must not swallow the level change, so the turn is
+    /// passed first and the level advances either way.
+    func continueAsNextProfile() {
+        if handsOverAfterClear != nil { ArcadeStore.shared.passSessionTurn(after: player.id) }
+        onContinue?()
+    }
+    func performDefaultResultAction() { if cleared { continueAsNextProfile() } else if nextSessionPlayer != nil { retryAsNextProfile() } else { onRetry?() } }
     private(set) var selectedProfileID: String?
     private(set) var initials = "LEM"
     private(set) var portrait = 0
@@ -267,9 +279,10 @@ import NxlvKit
             button("Retry", CGRect(x: 64, y: 573, width: 248, height: 48)) { [weak self] in self?.onRetry?() }
             button("Retry as \(next.initials)", CGRect(x: 330, y: 573, width: 394, height: 48), primary: !cleared,
                    enabled: ArcadeStore.shared.profilesAreWritable && ArcadeStore.shared.storageError == nil) { [weak self] in self?.retryAsNextProfile() }
-            button(cleared ? continueTitle : "Back", CGRect(x: 742, y: 573, width: 314, height: 48), primary: cleared) { [weak self] in
+            let onwards = cleared ? (handsOverAfterClear.map { "\(continueTitle) as \($0.initials)" } ?? continueTitle) : "Back"
+            button(onwards, CGRect(x: 742, y: 573, width: 314, height: 48), primary: cleared) { [weak self] in
                 guard let self else { return }
-                if self.cleared { self.onContinue?() } else { self.onClose?() }
+                if self.cleared { self.continueAsNextProfile() } else { self.onClose?() }
             }
         } else {
         button(primaryResultTitle, CGRect(x: cleared ? 592 : 248, y: 573, width: 360, height: 48), primary: true) { [weak self] in self?.performDefaultResultAction() }
@@ -357,7 +370,7 @@ import NxlvKit
     func closeSession() { if let previous = sessionReturnMode { page(previous) } else { onClose?() } }
     private func drawSession() {
         let store = ArcadeStore.shared
-        header("Take turns", subtitle: "SHARED SESSION")
+        header("Take turns", subtitle: "HOT SEAT")
         text("Choose players in turn order. Press 1-8 to join or leave.", 64, 142, 992)
         for (index, profile) in store.records.profiles.enumerated() {
             let chosen = store.sessionProfiles.contains { $0.id == profile.id }
@@ -367,13 +380,28 @@ import NxlvKit
                 store.toggleSessionProfile(profile.id); self?.needsDisplay = true
             }
         }
-        text("Current turn: \(store.records.profile(store.playingProfileID)?.initials ?? "LEM")", 64, 484, 992)
-        text("Shared campaign progress: \(store.records.activeProfile.initials)", 64, 516, 992)
-        text("Each turn keeps its own scores, records and achievements.", 64, 552, 992)
-        if store.records.profiles.count < 2 { text("Add another player in Player Profiles to take turns.", 64, 588, 992) }
-        button("Play solo", CGRect(x: 64, y: 634, width: 270, height: 48)) { [weak self] in store.endSharedSession(); self?.closeSession() }
-        button("Done", CGRect(x: 736, y: 634, width: 320, height: 48), primary: true) { [weak self] in self?.closeSession() }
-        setAccessibilityLabel("Shared session. " + store.sessionProfiles.map(\.initials).joined(separator: ", ") + ". Number keys choose players. Enter returns to the game.")
+        text("Pass the turn", 64, 470, 300, palette: .green)
+        let policies = ArcadeStore.TurnPolicy.allCases
+        for (index, policy) in policies.enumerated() {
+            button(policy.title, CGRect(x: 370 + CGFloat(index) * 348, y: 464, width: 336, height: 44),
+                   selected: store.turnPolicy == policy) { [weak self] in
+                store.turnPolicy = policy; self?.needsDisplay = true
+            }
+        }
+        text(store.turnPolicy.detail, 64, 518, 992, alpha: 0.8)
+        text("Current turn: \(store.records.profile(store.playingProfileID)?.initials ?? "LEM")", 64, 554, 992)
+        text("Shared campaign progress: \(store.records.activeProfile.initials)", 64, 586, 992)
+        text("Each turn keeps its own scores, records and achievements.", 64, 618, 992)
+        if store.records.profiles.count < 2 {
+            text("Add another player in Player Profiles to take turns.", 64, 650, 992)
+        } else if !store.hotSeatIsActive {
+            text("Return to the start menu to begin. A hot seat starts at the next level.", 64, 650, 992, palette: .green)
+        }
+        button("Play solo", CGRect(x: 64, y: 690, width: 270, height: 48)) { [weak self] in store.endHotSeat(); self?.closeSession() }
+        button("Done", CGRect(x: 736, y: 690, width: 320, height: 48), primary: true) { [weak self] in self?.closeSession() }
+        setAccessibilityLabel("Hot seat. " + store.sessionProfiles.map(\.initials).joined(separator: ", ")
+            + ". Pass the turn \(store.turnPolicy.title). \(store.turnPolicy.detail)"
+            + " Number keys choose players. Return to the start menu to begin. Enter returns to the game.")
     }
     private func drawProfiles() {
         header("Choose your lemming", subtitle: "PLAYER SELECT")
@@ -409,7 +437,7 @@ import NxlvKit
         }
         text(canSwitch ? "Each player keeps their own progress and records." : "Finish this run before changing players.", 64, 575, 992)
         button(canSwitch ? "Play as \(initials.isEmpty ? "LEM" : initials)" : "Save portrait", CGRect(x: 418, y: 627, width: 336, height: 55), primary: true, enabled: canSwitch || selectedProfileID == records.activeProfileID) { [weak self] in self?.saveProfile() }
-        button("Shared session", CGRect(x: 774, y: 627, width: 282, height: 55)) { [weak self] in self?.openSession() }
+        button("Hot seat", CGRect(x: 774, y: 627, width: 282, height: 55)) { [weak self] in self?.openSession() }
         button("Back", CGRect(x: 64, y: 627, width: 220, height: 55)) { [weak self] in self?.onClose?() }
         setAccessibilityLabel("Choose your lemming. \(records.profiles.map(\.initials).joined(separator: ", ")). Type initials. Arrow keys choose portraits. Enter saves. Escape goes back.")
     }

@@ -10,8 +10,8 @@ still incomplete, read the [1.0 gap evaluation](ReleaseReadiness/OneZeroGapEvalu
 - Local arcade profiles have initials, sprite portraits and separate campaign
   progress. Each level tracks rescue records, skill use, achievements and retry
   targets.
-- Shared sessions let two or more profiles alternate attempts on one level. Open
-  **Shared Session…** from the app menu, **Shared session** in Player Profiles, or
+- Hot seat let two or more profiles alternate attempts on one level. Open
+  **Hot Seat…** from the app menu, **Hot seat** in Player Profiles, or
   **Players** on a result page.
 - **Retry as [initials]** hands the same level to the next player. Turn order wraps
   through the selected profiles.

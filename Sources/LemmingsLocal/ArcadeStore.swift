@@ -13,8 +13,30 @@ import NxlvKit
     private let bundledProofs: TrolleyBundledProofs?
     var profilesAreWritable: Bool { canWrite }
 
+    /// How a hot seat passes play on. The choice outlives the roster, so the
+    /// house rule survives a quit while the players are picked again each time.
+    enum TurnPolicy: String, CaseIterable, Sendable {
+        case everyLevel = "Every level", atFirstFail = "At first fail"
+        var title: String { rawValue }
+        var detail: String {
+            switch self {
+            case .everyLevel: return "The turn passes when a level ends, won or lost."
+            case .atFirstFail: return "A player keeps going until they lose a level."
+            }
+        }
+    }
+    private static let turnPolicyKey = "HotSeat.turnPolicy"
+    private let defaults: UserDefaults
+    var turnPolicy: TurnPolicy {
+        get { defaults.string(forKey: Self.turnPolicyKey).flatMap(TurnPolicy.init(rawValue:)) ?? .everyLevel }
+        set { defaults.set(newValue.rawValue, forKey: Self.turnPolicyKey) }
+    }
+
     private(set) var sessionProfileIDs: [String] = []
     private var sessionTurnID: String?
+    /// True only with a real roster. One player is not a hot seat.
+    var hotSeatIsActive: Bool { sessionProfileIDs.count > 1 }
+    var playingProfile: ArcadeProfile? { records.profile(playingProfileID) }
     var playingProfileID: String { sessionTurnID ?? records.activeProfileID }
     var sessionProfiles: [ArcadeProfile] {
         let ids = sessionProfileIDs.isEmpty ? [records.activeProfileID] : sessionProfileIDs
@@ -26,7 +48,7 @@ import NxlvKit
         if sessionProfileIDs.contains(id) { sessionProfileIDs.removeAll { $0 == id } }
         else { sessionProfileIDs.append(id) }
     }
-    func endSharedSession() { sessionProfileIDs = []; sessionTurnID = nil }
+    func endHotSeat() { sessionProfileIDs = []; sessionTurnID = nil }
     func nextSessionProfile(after id: String) -> ArcadeProfile? {
         let players = sessionProfiles
         guard players.count > 1 else { return nil }
@@ -40,8 +62,9 @@ import NxlvKit
     }
 
 
-    init(file: URL? = nil, bundledProofs: TrolleyBundledProofs? = .load()) {
+    init(file: URL? = nil, bundledProofs: TrolleyBundledProofs? = .load(), defaults: UserDefaults = .standard) {
         self.bundledProofs = bundledProofs
+        self.defaults = defaults
         let support = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
         let preview = Bundle.main.bundleIdentifier?.contains("preview") == true ? "Arcade Preview" : "Arcade"
         self.file = file ?? support.appendingPathComponent("Ultimate Lemmings/\(preview)/records-v1.json")
@@ -140,7 +163,7 @@ import NxlvKit
         }
         save()
         guard storageError == nil else { records = previous; return nil }
-        if select && previous.activeProfileID != records.activeProfileID { endSharedSession() }
+        if select && previous.activeProfileID != records.activeProfileID { endHotSeat() }
         return records.profile(profileID)
     }
     func updateProfile(_ id: String, initials: String, portrait: Int) {

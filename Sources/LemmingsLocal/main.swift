@@ -53,6 +53,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private var replaySize = CGSize(width: 1280, height: 720)
   private let pointerCapture = GamePointerCapture()
   private let screenFlash = ExplosionHDRView(frame: .zero)
+  /// True only for the transition that takes the launch straight to full screen.
+  private var launchingFullScreen = false
   private var phase: GamePhase = .briefing {
     didSet { if phase != oldValue && phase != .playing { screenFlash.clear() } }
   }
@@ -299,10 +301,12 @@ let achievementProgressKey = "ClassicAchievementProgress"
     loadContent()
     startFanUpdates()
     startTimer()
-    window.collectionBehavior.insert(.fullScreenPrimary)
-    DispatchQueue.main.async { [weak self] in
-      guard let self, !self.window.styleMask.contains(.fullScreen) else { return }
-      self.window.toggleFullScreen(nil)
+    // Enter full screen while the window is still unordered, so the player never
+    // sees the windowed state. launchingFullScreen makes this one transition
+    // instant; a later toggle by the player keeps the normal animation.
+    if !window.styleMask.contains(.fullScreen) {
+      launchingFullScreen = true
+      window.toggleFullScreen(nil)
     }
     if let index = CommandLine.arguments.firstIndex(of: "--native-l2") {
       let path = index + 1 < CommandLine.arguments.count ? CommandLine.arguments[index + 1] : nil
@@ -350,8 +354,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
     appMenu.addItem(achievementsItem)
     let profiles = NSMenuItem(title: "Player Profiles…", action: #selector(showProfiles), keyEquivalent: "p")
     profiles.keyEquivalentModifierMask = [.command, .shift]; profiles.target = self; appMenu.addItem(profiles)
-    let sharedSession = NSMenuItem(title: "Shared Session…", action: #selector(showSharedSession), keyEquivalent: "")
-    sharedSession.target = self; appMenu.addItem(sharedSession)
+    let hotSeat = NSMenuItem(title: "Hot Seat…", action: #selector(showHotSeat), keyEquivalent: "")
+    hotSeat.target = self; appMenu.addItem(hotSeat)
     let records = NSMenuItem(title: "Level Records…", action: #selector(showLevelRecords), keyEquivalent: "b")
     records.keyEquivalentModifierMask = [.command, .shift]; records.target = self; appMenu.addItem(records)
     let replay = NSMenuItem(title: "Replay Last Game", action: #selector(reviewLastGame), keyEquivalent: "v")
@@ -959,9 +963,37 @@ let achievementProgressKey = "ClassicAchievementProgress"
     window.title = "Ultimate Lemmings"
     plainRoot = root
     window.contentView = root
-    window.center()
-    window.makeKeyAndOrderFront(nil)
+    // Size the window to its screen and mark it full-screen capable before it is
+    // ever shown. Ordering a small window front here and animating afterwards is
+    // what made the launch flash a window and reshuffle the displays.
+    window.collectionBehavior.insert(.fullScreenPrimary)
+    if let frame = (window.screen ?? NSScreen.main)?.frame {
+      window.setFrame(frame, display: false)
+    } else {
+      window.center()
+    }
     window.makeFirstResponder(playfield)
+  }
+
+  /// Skips the launch transition. AppKit animates into full screen over about a
+  /// second, and on a multi-display Mac every screen redraws while it does. The
+  /// player asked for the game, not for the animation.
+  func customWindows(toEnterFullScreenFor window: NSWindow) -> [NSWindow]? {
+    launchingFullScreen ? [window] : nil
+  }
+
+  func window(_ window: NSWindow, startCustomAnimationToEnterFullScreenWithDuration duration: TimeInterval) {
+    window.setFrame(window.screen?.frame ?? window.frame, display: true)
+  }
+
+  func windowDidEnterFullScreen(_ notification: Notification) {
+    launchingFullScreen = false
+  }
+
+  func windowDidFailToEnterFullScreen(_ window: NSWindow) {
+    // Leave the window usable rather than hidden if the transition is refused.
+    launchingFullScreen = false
+    window.makeKeyAndOrderFront(nil)
   }
 
   func windowDidResize(_ notification: Notification) {
@@ -1914,7 +1946,11 @@ let achievementProgressKey = "ClassicAchievementProgress"
       playfield.overlayLines.append(fanLibraryRow())
       playfield.overlayHighlight = min(launchChoice, library.entries.count + 1)
       playfield.overlayFooter = nil
-      playfield.overlayProfileInitials = ArcadeStore.shared.records.activeProfile.initials
+      // A hot seat names everyone in turn order, so the menu shows who is playing
+      // rather than only whose campaign it is.
+      playfield.overlayProfileInitials = ArcadeStore.shared.hotSeatIsActive
+        ? ArcadeStore.shared.sessionProfiles.map(\.initials).joined(separator: " v ")
+        : ArcadeStore.shared.records.activeProfile.initials
 
     case .rankSelect:
       phase = .briefing
@@ -2014,6 +2050,12 @@ let achievementProgressKey = "ClassicAchievementProgress"
       return campaign.levels[index].level.title.trimmingCharacters(in: .whitespaces)
     }
     playfield.overlayTitle = title ?? "Level"
+    // A hot seat changes hands between levels, so the briefing has to say who is
+    // holding the mouse before the level starts, not after the result.
+    if ArcadeStore.shared.hotSeatIsActive,
+       let turn = ArcadeStore.shared.playingProfile {
+      lines.insert("YOUR TURN, \(turn.initials)", at: 0)
+    }
     playfield.overlayLines = lines
     playfield.overlayFooter =
       "\(flow.currentRank?.name ?? "") \(flow.currentNumber)   •   Click or space to begin   •   F1: hints"
@@ -2672,7 +2714,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     ArcadeWindow.shared.showRecords(level: arcadeLevel, owner: window, background: playfield.levelImage)
   }
 
-  @objc private func showSharedSession() {
+  @objc private func showHotSeat() {
     ArcadeWindow.shared.showSession(owner: nativeL2Window?.window ?? nativeL3Window?.window ?? window)
   }
 

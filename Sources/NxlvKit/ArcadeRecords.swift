@@ -199,6 +199,9 @@ public struct ArcadeRecords: Codable, Equatable, Sendable {
     public func stats(level: ArcadeLevel, profileID: String, assisted: Bool) -> ArcadeLevelStats {
         statistics[Self.statsKey(level: level, profileID: profileID, assisted: assisted)] ?? ArcadeLevelStats()
     }
+    /// The first profile created on this Mac. Worldwide scores belong to it, so a
+    /// guest cannot overwrite the owner's ranking from the same copy of the game.
+    public var mainProfileID: String { profiles.first?.id ?? activeProfileID }
     public func careerAchievements(profileID: String) -> Set<ArcadeLevelAchievement> {
         statistics.reduce(into: []) { awards, entry in
             if entry.key.hasSuffix("|\(profileID)|false") || entry.key.hasSuffix("|\(profileID)|true") {

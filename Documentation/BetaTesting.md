@@ -1,8 +1,10 @@
 # Beta testing
 
-Beta 13 is version `0.1`, build `13`. The app supports Intel and Apple silicon,
-with a minimum deployment target of macOS 13. See `ReleaseNotes-beta13.md` for
-changes and preview limitations. The beta 13 handoff is recorded in [Beta 13 readiness](Beta13Readiness.md).
+Beta 14 is version `0.1`, build `14`. The app supports Intel and Apple silicon,
+with a minimum deployment target of macOS 13. See `ReleaseNotes-beta14.md` for
+changes and preview limitations. Beta 14 ships two archives: the Developer ID
+archive and the Game Center archive. The earlier beta 13 handoff is recorded in
+[Beta 13 readiness](Beta13Readiness.md).
 
 ## Validate the build
 
@@ -39,7 +41,7 @@ BETA_NOTARY_PROFILE=lemmings-beta zsh Scripts/package-beta.sh
 The script builds both architectures, signs with the Developer ID in the
 keychain, submits to Apple, staples the ticket, and checks the extracted zip
 with Gatekeeper. Earlier zip files move into `.build/local/archive/`.
-The default archive is `.build/local/UltimateLemmings-0.1-beta13.zip`. The checked frozen beta 13 is under `.build/beta13/package/`. Release notes are included in the zip and beside it.
+The default archive is `.build/local/UltimateLemmings-0.1-beta14.zip`. The checked frozen beta 13 is under `.build/beta13/package/`. Release notes are included in the zip and beside it.
 
 For a package without recorded soundtracks:
 
@@ -51,6 +53,47 @@ The slim package retains module music. Both variants use the same filename;
 keep only the intended variant in the handoff folder. Always notarize the
 variant you distribute.
 
+## Package with worldwide rankings
+
+The Developer ID archive above has Game Center turned off. Apple does not allow
+App Store Game Center services under a Developer ID signature, so the packaging
+script disables the leaderboard catalogue and drops the provisioning profile.
+Testers of that archive keep local records only.
+
+To test worldwide rankings, build the Game Center variant:
+
+```sh
+BETA_GAME_CENTER=1 \
+APPLE_PROVISIONING_PROFILE="$HOME/Library/Developer/Xcode/UserData/Provisioning Profiles/<profile>.provisionprofile" \
+zsh Scripts/package-beta.sh
+```
+
+This build uses an Apple Development signature and carries the profile. It runs
+only on the Macs that the profile lists. [Beta testers](BetaTesters.md) is the
+roster that profile must match. It writes
+`UltimateLemmings-<version>-beta<build>-gamecenter.zip` and leaves the Developer
+ID archive in place.
+
+Before a tester can use it:
+
+1. Get the tester's Mac UDID. The tester finds it in **Apple menu → About This
+   Mac → More Info → System Report → Hardware → Provisioning UDID**.
+2. Add that UDID to the devices list in the Apple Developer portal.
+3. Regenerate the `Lemmings macOS Development` profile and download it.
+4. Rebuild with `APPLE_PROVISIONING_PROFILE` set to the new file.
+
+Apple's notary service accepts Developer ID signatures only. This build uses an
+Apple Development signature, so it cannot be notarized and Gatekeeper stops it on
+first run. Each tester must clear the quarantine flag:
+
+```sh
+xattr -dr com.apple.quarantine "/Applications/Ultimate Lemmings.app"
+```
+
+The profile holds at most 100 Macs for each membership year. Worldwide rankings
+in this build use the Game Center sandbox. Those scores stay separate from
+production scores.
+
 ## Tester instructions
 
 1. Unpack the zip.
@@ -60,7 +103,7 @@ variant you distribute.
 No extra game files are needed for the bundled campaigns. Fan packs are included and new compatible packs are checked at launch.
 Optional external NeoLemmix styles still use a separately selected folder.
 
-Check a fresh profile and an upgrade from beta 12. Exercise all display modes,
+Check a fresh profile and an upgrade from beta 13. Exercise all display modes,
 fullscreen and resizing, music-source changes, mute, sound-bank changes,
 single-step completion, and transitions into and out of the sequels.
 Check the sequel artwork setting during play and after relaunch. Try nuke undo

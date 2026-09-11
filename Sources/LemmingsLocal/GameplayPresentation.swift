@@ -1,7 +1,7 @@
 import AppKit
 import NxlvKit
 
-/// Energy wakes and afterimages follow moving actors. Solid sprites stay sharp.
+/// Afterimages follow moving actors. Solid sprites stay sharp.
 @MainActor final class SpeedTrails {
   static let maximumTrails = 24
   var multiplier: Double = 3
@@ -170,22 +170,24 @@ import NxlvKit
       width: trail.bounds.width * scaleX, height: trail.bounds.height * scaleY)
     context.clip(to: clip)
     context.setBlendMode(.plusLighter)
-    context.setAlpha(0.7 * CGFloat(min(1.3, sqrt(max(0, multiplier - 1) / 2))))
+    // Ghosting alone reads the speed, so it spans a wider range than it did
+    // beside a wake: barely there at 2x, fully present from about 5x.
+    context.setAlpha(0.9 * CGFloat(min(1, sqrt(max(0, multiplier - 1) / 3.2))))
     context.interpolationQuality = .none
     context.translateBy(x: tail.minX, y: tail.maxY)
     context.scaleBy(x: 1, y: -1)
     context.draw(trail.image, in: CGRect(origin: .zero, size: tail.size))
   }
 
-  /// Bake the energy wake and three echoes into one texture per pose and direction.
+  /// Bake three echoes into one texture per pose and direction.
   /// This runs only on a cache miss, at the sprite's own artwork resolution.
   private static func makeTrail(source: CGImage, key: TrailKey) -> TrailImage? {
-    // Leave room for the longer wake and its soft electrical glow.
+    // Leave room for the furthest echo and its stretch.
     let motion = key.motion
     let dx = motion.dx * CGFloat(key.pixelX), dy = motion.dy * CGFloat(key.pixelY)
     let paddingX = CGFloat(key.pixelX)*2, paddingY = CGFloat(key.pixelY)*2
-    let width = source.width + Int(ceil(abs(dx) * 18) + 2 * paddingX)
-    let height = source.height + Int(ceil(abs(dy) * 18) + 2 * paddingY)
+    let width = source.width + Int(ceil(abs(dx) * 16) + 2 * paddingX)
+    let height = source.height + Int(ceil(abs(dy) * 16) + 2 * paddingY)
     guard let context = CGContext(data: nil, width: width, height: height,
       bitsPerComponent: 8, bytesPerRow: width * 4, space: CGColorSpaceCreateDeviceRGB(),
       bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue) else { return nil }
@@ -193,41 +195,7 @@ import NxlvKit
     context.scaleBy(x: 1, y: -1)
     context.setBlendMode(.plusLighter)
     context.interpolationQuality = .low
-    let origin = CGPoint(x: ceil(max(0, dx) * 18) + paddingX, y: ceil(max(0, dy) * 18) + paddingY)
-    let centre = CGPoint(x:origin.x+CGFloat(source.width)/2,y:origin.y+CGFloat(source.height)/2)
-    let nx = -motion.dy*CGFloat(key.pixelX), ny = motion.dx*CGFloat(key.pixelY)
-    func point(_ distance: CGFloat, _ across: CGFloat = 0) -> CGPoint {
-      CGPoint(x:centre.x-dx*distance+nx*across,y:centre.y-dy*distance+ny*across)
-    }
-    let ribbon = CGMutablePath()
-    ribbon.move(to:point(1,0.4))
-    ribbon.addQuadCurve(to:point(18),control:point(9,2))
-    ribbon.addQuadCurve(to:point(1,-0.4),control:point(9,-2))
-    ribbon.closeSubpath()
-    context.saveGState()
-    context.addPath(ribbon); context.clip()
-    let colours = [CGColor(red:0.02,green:0.3,blue:1,alpha:0),
-      CGColor(red:0.03,green:0.6,blue:1,alpha:0.32),
-      CGColor(red:0.55,green:1,blue:1,alpha:0.64)]
-    if let gradient = CGGradient(colorsSpace:CGColorSpaceCreateDeviceRGB(),colors:colours as CFArray,locations:[0,0.6,1]) {
-      context.drawLinearGradient(gradient,start:point(18),end:point(1),options:[])
-    }
-    context.restoreGState()
-    // The amber filament gives the wake a sharp core beneath its cyan glow.
-    context.saveGState()
-    let bolt = CGMutablePath()
-    bolt.move(to:point(16))
-    for (distance, offset): (CGFloat,CGFloat) in [(12,-0.35),(10,0.5),(8,-0.5),(5,0.3),(2,0)] {
-      bolt.addLine(to:point(distance,offset))
-    }
-    context.addPath(bolt)
-    context.setLineWidth(CGFloat(min(key.pixelX,key.pixelY))*0.75)
-    context.setLineCap(.round); context.setLineJoin(.round)
-    context.setStrokeColor(CGColor(red:1,green:0.8,blue:0.22,alpha:0.78))
-    context.setShadow(offset:.zero,blur:CGFloat(max(key.pixelX,key.pixelY)),
-      color:CGColor(red:0.15,green:0.65,blue:1,alpha:0.65))
-    context.strokePath()
-    context.restoreGState()
+    let origin = CGPoint(x: ceil(max(0, dx) * 16) + paddingX, y: ceil(max(0, dy) * 16) + paddingY)
     func echo(distance: CGFloat, stretch: CGFloat, alpha: CGFloat) {
       let rect = CGRect(x: origin.x - dx * distance - max(0, dx * stretch),
         y: origin.y - dy * distance - max(0, dy * stretch),
@@ -246,9 +214,9 @@ import NxlvKit
     // their total brightness unchanged, and this work runs only on a cache miss.
     let samples: [(CGFloat, CGFloat)] = [(-1, 0.0625), (-0.5, 0.25), (0, 0.375), (0.5, 0.25), (1, 0.0625)]
     for (offset, weight) in samples {
-      echo(distance: 12 + offset, stretch: 3, alpha: 0.035 * weight)
-      echo(distance: 7 + offset, stretch: 2, alpha: 0.075 * weight)
-      echo(distance: 3 + offset, stretch: 1, alpha: 0.16 * weight)
+      echo(distance: 12 + offset, stretch: 3, alpha: 0.05 * weight)
+      echo(distance: 7 + offset, stretch: 2, alpha: 0.11 * weight)
+      echo(distance: 3 + offset, stretch: 1, alpha: 0.22 * weight)
     }
     // Remove transparent margins so additive blending touches fewer screen pixels.
     let pixels = context.data!.assumingMemoryBound(to: UInt8.self)

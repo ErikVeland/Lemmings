@@ -897,7 +897,7 @@ extension AppDelegate {
       "Hot-seat retry moved shared campaign progress to the guest")
     try check(store.records.runs.first(where: { $0.id == previousRun })?.profileID == host,
       "Hot-seat retry reassigned the completed host run")
-    store.endSharedSession()
+    store.endHotSeat()
     try check(phase == .playing && session?.currentTick == 0 && panel.selectedSkillIndex == 3,
       "Results Retry changed the selected skill")
     levelChanged()

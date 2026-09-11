@@ -816,7 +816,7 @@ extension Lemmings3PlayWindow {
         let host = store.records.activeProfileID
         let guest = store.addProfile(initials: "PAL", portrait: 2)!
         store.selectProfile(host); store.toggleSessionProfile(guest.id)
-        defer { store.endSharedSession() }
+        defer { store.endHotSeat() }
         let oldRun = arcadeRunID
         let oldConditions = arcadeLevel.conditions
         let oldProgressKey = progressKey
@@ -888,7 +888,7 @@ extension Lemmings2PlayWindow {
         let host = store.records.activeProfileID
         let guest = store.addProfile(initials: "PAL", portrait: 2)!
         store.selectProfile(host); store.toggleSessionProfile(guest.id)
-        defer { store.endSharedSession() }
+        defer { store.endHotSeat() }
         let oldRun = arcadeRunID
         let oldConditions = arcadeLevel?.conditions
         let oldProgressKey = progressKey

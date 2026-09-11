@@ -137,11 +137,35 @@ import NxlvKit
             }
         }
         drawAwardEntries(entries, annotations: annotations, affinities: local.map { _ in nil } + awards.map(\.philosopherID), highlighted: highlighted)
-        text("1 RESCUE   2 PHILOSOPHY   3 RIVALRIES   4 MASTERY", 64, 608, 992, alignment: .center)
+        drawAwardGroupLinks()
         pageFooter()
-        setAccessibilityLabel("\(awardGroup.rawValue) achievements across all levels. Left and right change pages. Up and down or 1 to 4 change collections. "
+        setAccessibilityLabel("\(awardGroup.rawValue) achievements across all levels. Left and right change pages. Up and down or 1 to 4 change collections, and the collection names at the bottom of the page select them directly. "
             + (newAwards.isEmpty ? "" : "New awards from this run are highlighted. \(newAwards.count > 1 ? "Next new moves to the next new award. " : "")")
             + entries.enumerated().map { "\(annotations[$0.offset]): \($0.element.0). \($0.element.1)" }.joined(separator: " "))
+    }
+
+    /// The collection row doubles as the keyboard legend, so each entry keeps its
+    /// number and becomes its own target. Widths come from the bitmap font so the
+    /// row stays centred whatever the collection names are.
+    func drawAwardGroupLinks(y: CGFloat = 598) {
+        let groups = TrolleyAchievementGroup.allCases
+        let labels = groups.enumerated().map { "\($0.offset + 1) \($0.element.rawValue)" }
+        let gap: CGFloat = 44, padding: CGFloat = 16
+        let widths = labels.map { label in
+            font.map { $0.width(of: MacInterfaceRenderer.menuText(label), face: .small, scale: 1) + padding }
+                ?? (992 - gap * CGFloat(labels.count - 1)) / CGFloat(labels.count)
+        }
+        let span = widths.reduce(0, +) + gap * CGFloat(labels.count - 1)
+        var x = (64 + (992 - span) / 2).rounded()
+        for (index, label) in labels.enumerated() {
+            let group = groups[index]
+            link(label, CGRect(x: x, y: y, width: widths[index], height: 38),
+                 alpha: awardGroup == group ? 1 : 0.55) { [weak self] in
+                guard let self else { return }
+                self.awardGroup = group; self.awardPage = 0; self.needsDisplay = true
+            }
+            x += widths[index] + gap
+        }
     }
 
     func drawAwardEntries(_ entries: [(String, String, Bool)], annotations: [String] = [], affinities: [String?] = [], highlighted: Set<Int> = []) {
@@ -180,7 +204,7 @@ import NxlvKit
         let attempt = stored.map { $0.assessed(using: history.maximum(conditions: conditions, assisted: runAssisted)) }
         let personal = history.personal(profileID: player.id, comparisonID: key)
         let maximum = attempt?.maximum ?? history.maximum(conditions: conditions, assisted: runAssisted)
-        text("This run", 64, 222, 480, palette: .green)
+        text("This run", 64, 222, 480)
         var rows: [(String, String)] = [
             ("Rescued", attempt.map { String($0.run.saved) } ?? "-"),
             ("Lost", attempt.map { String($0.metrics.lost) } ?? "-"),
@@ -196,10 +220,10 @@ import NxlvKit
         }
         for (index, row) in rows.enumerated() {
             let y = CGFloat(270 + index * 34)
-            text(row.0, 64, y, 266, palette: .green)
-            text(row.1, 344, y, 248)
+            text(row.0, 64, y, 266)
+            text(row.1, 344, y, 248, palette: .green)
         }
-        text("This level", 654, 222, 402, palette: .green)
+        text("This level", 654, 222, 402)
         let clears = history.attempts.filter { $0.comparisonID == key && $0.run.profileID == player.id && $0.run.qualifies }.count
         let levelRows: [(String, String)] = [
             ("Required", String(conditions.rescueRequirement)),
@@ -209,8 +233,8 @@ import NxlvKit
             ("Clears", String(clears))]
         for (index, row) in levelRows.enumerated() {
             let y = CGFloat(270 + index * 34)
-            text(row.0, 654, y, 248, palette: .green)
-            text(row.1, 910, y, 146, alignment: .right)
+            text(row.0, 654, y, 248)
+            text(row.1, 910, y, 146, alignment: .right, palette: .green)
         }
         if let attempt {
             affinityLink(attempt.philosophy.primaryID, in: CGRect(x: 64, y: 571, width: 992, height: 36))

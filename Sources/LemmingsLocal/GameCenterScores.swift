@@ -100,7 +100,15 @@ struct GameCenterAccount: Equatable, Sendable {
     var onChange: (() -> Void)?
     var available: Bool { configuration?.enabled == true && configuration?.isValid == true }
     var account: GameCenterAccount? { transport.account }
-    var linkedProfileID: String? { account.flatMap { defaults.string(forKey: "GameCenter.profile." + $0.id) } }
+    /// Game Center ranks one person, so exactly one local profile owns the
+    /// worldwide scores: the first one created on this Mac. Every other profile
+    /// on the same copy keeps local records only. The stored account binding
+    /// still records which Apple account was used, so an account change is
+    /// detected, but it no longer decides which profile submits.
+    var linkedProfileID: String? { ArcadeStore.shared.records.mainProfileID }
+    var linkedProfileInitials: String? {
+        linkedProfileID.flatMap { ArcadeStore.shared.records.profile($0)?.initials }
+    }
     init(configuration: TrolleyOnlineConfiguration? = nil, transport: (any GameCenterTransport)? = nil, defaults: UserDefaults = .standard) {
         self.configuration = configuration ?? Bundle.main.url(forResource: "leaderboards", withExtension: "json", subdirectory: "GameCenter")
             .flatMap { try? Data(contentsOf: $0) }.flatMap { try? JSONDecoder().decode(TrolleyOnlineConfiguration.self, from: $0) }
@@ -137,7 +145,9 @@ struct GameCenterAccount: Equatable, Sendable {
         guard available, let account else { onChange?(); return }
         let ticket = generation
         let linked = linkedProfileID == profileID
-        busy = true; status = linked ? "Syncing your saved records..." : "Viewing worldwide scores. This account is linked to another local player."
+        busy = true
+        status = linked ? "Syncing your saved records..."
+            : "Viewing worldwide scores. \(linkedProfileInitials ?? "The main profile") holds this Mac's worldwide place. This player keeps local records."
         onChange?()
         operation = Task { @MainActor [weak self] in
             guard let self else { return }

@@ -503,8 +503,14 @@ enum GamePhase: Equatable {
         width: board.width - 40 * scale, height: max(36, 48 * scale))
       let footerScale = max(1, Int(scale.rounded()))
       let gap: CGFloat = 12 * scale
-      let initialsWidth: CGFloat = 64 * scale
-      let buttonWidth = min(180 * scale, (footer.width - initialsWidth - gap * 2) / 2)
+      // The badge carries a hot seat roster like EKV V UVA, so it grows with the
+      // text instead of holding one fixed set of initials. The two buttons keep
+      // a workable width, and menuLine shortens the roster if it still runs out.
+      let cell = CGFloat((macInterface?.font(.small)?.cellWidth ?? 8) * footerScale)
+      let natural = CGFloat(MacInterfaceRenderer.menuText(initials).count) * cell + 12 * scale
+      let widest = max(64 * scale, footer.width - 2 * (110 * scale) - gap * 2)
+      let initialsWidth = max(64 * scale, min(natural, widest))
+      let buttonWidth = min(180 * scale, max(0, (footer.width - initialsWidth - gap * 2) / 2))
       let start = floor(footer.midX - (initialsWidth + 2 * buttonWidth + 2 * gap) / 2)
       drawMenuGameText(initials, in: CGRect(x: start, y: footer.minY,
         width: initialsWidth, height: footer.height), face: .small, scale: footerScale, palette: .green)

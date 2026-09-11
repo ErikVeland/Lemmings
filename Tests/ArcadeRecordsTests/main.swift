@@ -257,7 +257,7 @@ func testSkillAccounting() throws {
     let turnBeforeFailure = store.playingProfileID
     try require(!store.passSessionTurn(after: friend.id) && store.playingProfileID == turnBeforeFailure,
         "Storage failure changed the player")
-    store.endSharedSession()
+    store.endHotSeat()
     try require(store.playingProfileID == host && store.nextSessionProfile(after: host) == nil, "Play solo did not end rotation")
     print("PASS hot-seat roster, three-player rotation, removal, shared progress owner, separate result owner and retry action")
 }

@@ -54,7 +54,7 @@ import NxlvKit
             drawStar(at: CGPoint(x: 466 + CGFloat(index * 166) - (stamp ? 5 : 0), y: 143 - (stamp ? 4 : 0)),
                      earned: index < c.goals.stars && index < revealedStars, size: size)
         }
-        text("\(c.goals.stars)/3 this run     \(c.bestStars)/3 level best", 410, 210, 600, alignment: .center)
+        text("\(c.goals.stars)/3 this run     \(c.bestStars)/3 level best", 410, 210, 600, alignment: .center, palette: .green)
         let target = c.goals.fullSaved
         let thirdTitle = c.goals.fullRescueBasis == .bestKnownRecord ? "Best known" : c.goals.fullRescueBasis == .everyoneHome ? "Everyone home" : "Best possible"
         let rows: [(String, Int?, Bool)] = [("1 STAR - Clear", c.goals.requiredSaved, c.goals.stars >= 1),
@@ -68,7 +68,7 @@ import NxlvKit
             progressBar(value: row.2 ? row.1 ?? 1 : min(run.saved, row.1 ?? 0), goal: row.1 ?? 1,
                         in: CGRect(x: x, y: 306, width: 304, height: 5), earned: row.2)
         }
-        text(c.nextGoal, 80, 329, 960, alignment: .center, height: 24)
+        text(c.nextGoal, 80, 329, 960, alignment: .center, height: 24, palette: .green)
         drawResultLevelCard(c)
         drawResultCareerCard(c)
         drawResultRanks(c)
@@ -80,7 +80,7 @@ import NxlvKit
     private func drawResultLevelCard(_ c: TrolleyCelebration) {
         let rect = CGRect(x: 80, y: 369, width: 466, height: 116)
         GameStyle.fill(rect, GameStyle.accent.withAlphaComponent(0.065))
-        text("THIS LEVEL", 96, 380, 418, height: 22, alpha: 0.7)
+        text("THIS LEVEL", 96, 380, 418, height: 22, alpha: 0.85, palette: .green)
         text(c.recordMessage, 96, 407, 418, height: 24)
         let names = c.levelAwards.first.map { $0.title.capitalized + (c.levelAwards.count > 1 ? " (+\(c.levelAwards.count - 1))" : "") } ?? ""
         link(names.isEmpty ? "Level goals and bests >" : "NEW: \(names) >",
@@ -89,7 +89,7 @@ import NxlvKit
     private func drawResultCareerCard(_ c: TrolleyCelebration) {
         GameStyle.fill(CGRect(x: 566, y: 369, width: 474, height: 116), GameStyle.gold.withAlphaComponent(0.09))
         let new = c.newAwards
-        text("\(report?.run.assisted == true ? "REWIND CAREER" : "CAREER")  \(c.career.stars) STARS" + (c.addedStars > 0 ? "  (+\(c.addedStars))" : ""), 582, 380, 442, height: 22, alpha: 0.85)
+        text("\(report?.run.assisted == true ? "REWIND CAREER" : "CAREER")  \(c.career.stars) STARS" + (c.addedStars > 0 ? "  (+\(c.addedStars))" : ""), 582, 380, 442, height: 22, alpha: 0.85, palette: .green)
         if !new.isEmpty {
             let selected = new[featuredAwardIndex % new.count]
             link("NEW: \(selected.award.title) >", CGRect(x: 582, y: 404, width: 442, height: 30), alignment: .left) { [weak self] in
