@@ -16,7 +16,7 @@
   "priority": "P0",
   "status": "partial",
   "exitCriteria": "Verify app and controller interruption on real hardware. Add versioned in-progress checkpoints and crash recovery before mobile suspend/termination support. Verify save migrations and rollback with real prior releases.",
-  "progress": "Versioned checkpoints now cover Classic campaigns, NeoLemmix files, and native L2/L3 campaigns. Disk round trips, exact paused restoration, continuation, journal rejection and preserved attempt identity pass. Atomic writes, backups, size limits and stale-writer rejection are implemented. Classic fan imports, L2 practice, physical power-loss and installed-release migration trials remain. The isolated 1.0 follow-up also repairs oversized-primary backup recovery and stale file-size caching, with headless file-level regressions. These changes are not in beta 20."
+  "progress": "Versioned checkpoints cover Classic campaigns and fan imports, NeoLemmix files, native L2/L3 campaigns and L2 practice. The local follow-up preserves fan queue order and practice map/skills, restores paused, and keeps attempt identity. Atomic writes, backups, size limits and stale-writer rejection remain. Oversized-primary recovery and stale file-size caching are repaired. Physical power-loss and installed-release migration trials remain open. See ReleaseReadiness/OneZeroLocalClosure.md. These follow-up changes are not in beta 20."
  },
  {
   "area": "Input and accessibility",

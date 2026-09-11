@@ -79,7 +79,7 @@ Switch-layout controller.
 ### 5. Save and interruption recovery (P0, partial)
 
 Versioned checkpoints cover Classic, NeoLemmix and native L2 and L3 campaigns.
-Classic fan imports and L2 practice remain uncovered. Power-loss trials and
+Classic fan imports and L2 practice are now covered by the local follow-up. Power-loss trials and
 migration from an installed earlier release remain untested.
 
 ### 6. Release package (P0, partial)
@@ -127,5 +127,5 @@ A Mac 1.0 does not imply any of them.
    and three controller brands.
 4. Close the 10x shortfall or restate the advertised limit to a measured number.
 5. Validate the implemented text scaling and VoiceOver navigation with full user journeys.
-6. Extend checkpoints to classic fan imports and L2 practice.
+6. Validate recovery under physical power loss and migrations from installed prior releases.
 7. Keep the publishing conversation separate and running. It does not wait on code.

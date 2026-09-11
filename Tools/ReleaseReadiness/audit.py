@@ -127,6 +127,8 @@ def main():
             checks.extend(pool.map(suite, SUITES))
         checks.append(run("save-recovery", [["zsh", "Scripts/run-save-recovery-tests.sh"]],
                           dict(os.environ, SAVE_TEST_LIBRARY_DIR=str(library))))
+        checks.append(run("run-recovery-files", [["zsh", "Scripts/run-run-recovery-file-tests.sh"]],
+                          dict(os.environ, SAVE_TEST_LIBRARY_DIR=str(library))))
         verifier = library / "ClassicCompletion"
         data = ports / "lemmings_dos_1991-07-30"
         checks.append(run("original-120-solutions", [compile_command(ROOT / "Tools/ClassicCompletion/main.swift", verifier),
@@ -137,6 +139,7 @@ def main():
                           dict(os.environ, L3_TEST_LIBRARY_DIR=str(library))))
     for name, command in [
         ("audit-integrity", [sys.executable, "Tests/ReleaseReadinessTests/test_audit.py"]),
+        ("hint-catalogue", ["zsh", "Scripts/test-level-hint-catalogue.sh"]),
         ("controller", ["zsh", "Scripts/run-controller-qol-tests.sh"]),
         ("variable-speed", ["zsh", "Scripts/run-gameplay-speed-tests.sh"]),
         ("pointer-capture", ["zsh", "Scripts/run-pointer-capture-tests.sh"]),

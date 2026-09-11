@@ -77,3 +77,20 @@ try conflict.save(nil)
 try Data("broken".utf8).write(to: conflict.url)
 try check(try RunRecoveryFile(url: conflict.url).load() == nil, "Backup revived a cleared run")
 print("PASS stale writer, busy lock and cleared-run protection")
+
+var fanCheckpoint = recovery
+fanCheckpoint = RunRecovery(engine: "test", profileID: "player", runID: UUID(), dataSetID: "fan-classic",
+    levelIndex: 0, levelFingerprint: "level", initialStateHash: "initial", tick: 10, events: [],
+    stateHash: "current", usedRewind: false, nukeCount: 0, rewindCount: 0, undoCount: 0,
+    selectedSkill: 0, scrollX: 0, scrollY: 0)
+fanCheckpoint.sourcePath = "/test.zip"
+let validEntry = FanRunRecovery.Entry(file: "levels/test.lvl", section: nil, label: "Test")
+fanCheckpoint.fan = FanRunRecovery(queue: [validEntry], index: 0)
+_ = try fanCheckpoint.validated()
+for invalid in [FanRunRecovery(queue: [], index: 0), .init(queue: [validEntry], index: 1),
+                .init(queue: [.init(file: "../test.lvl", section: nil, label: "Test")], index: 0),
+                .init(queue: [.init(file: "test.dat", section: -1, label: "Test")], index: 0)] {
+    fanCheckpoint.fan = invalid
+    try rejects { _ = try fanCheckpoint.validated() }
+}
+print("PASS fan checkpoint queue bounds and archive-member validation")

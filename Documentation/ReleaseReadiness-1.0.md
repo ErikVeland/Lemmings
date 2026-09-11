@@ -36,8 +36,8 @@ That earlier follow-up predates the in-progress checkpoints added in the [curren
 | Lemmings 2 | Record the remaining 56 routes, verify continuous carry-over progression and resolve fidelity differences against original-engine evidence. |
 | Lemmings 3 | Record the remaining 74 routes, resolve provisional mechanics, and complete environmental effects, movie soundtracks and story transitions. |
 | Converted and imported levels | Complete converted-level winning evidence and representative supported NeoLemmix pack playthroughs. Render/release checks alone do not prove a solution. |
-| Recovery and upgrades | Extend the implemented Classic, NeoLemmix and sequel campaign checkpoints to classic fan imports and L2 practice. Verify power-loss recovery, migrations and rollback against installed prior releases. |
-| Accessibility and input | Remapping and device prompts are implemented. Finish scalable text and VoiceOver navigation. Verify full journeys with physical controllers and novice players. |
+| Recovery and upgrades | Classic, fan, NeoLemmix, sequel campaign and L2 practice checkpoints are implemented. Verify power-loss recovery, migrations and rollback against installed prior releases. |
+| Accessibility and input | Remapping, device prompts, text/menu scaling and broader VoiceOver navigation are implemented. Verify full journeys with VoiceOver, physical controllers and novice players. |
 | Hardware and performance | Test physical Intel, macOS 13, SDR/HDR, multiple displays, high refresh rates, sustained 10× play, memory growth and audio stability. |
 | Online services | Validate provisioned Game Center, network failure and offline behaviour. |
 | Distribution | Freeze the actual candidate, build both architectures, sign, notarise and verify its downloaded archive. Resolve the recorded publishing and asset-distribution gate. |
@@ -90,3 +90,11 @@ hardware, service and distribution gates above remain open.
 ## Checkpoint, controller and packaging follow-up
 
 [The blocker follow-up](ReleaseReadiness/BlockerFollowup.md) records Classic campaign disk recovery, persistent controller remapping, device prompts and corrected Developer ID packaging. It also records the passing regression checks and the measured high-speed shortfall with replay recording enabled. These changes do not close the remaining campaign, sequel, accessibility, hardware or external approval gates.
+
+
+## Post-beta-20 local closure
+
+The [local closure record](ReleaseReadiness/OneZeroLocalClosure.md) covers Classic
+fan and L2 practice checkpoints, a fresh-start Hot Seat action, accessibility
+callback isolation, and the earlier checkpoint-file and hint fixes. These changes
+follow beta 20. Its frozen archives do not include them.

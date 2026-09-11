@@ -9,7 +9,7 @@ private func check(_ value: @autoclosure () throws -> Bool, _ message: String) t
 }
 
 extension AppDelegate {
-  fileprivate func testAccessibleMenusAndHelp() throws {
+  fileprivate func testAccessibleMenusAndHelp() async throws {
     let host = SpeedTestWindow(contentRect: CGRect(x: 0, y: 0, width: 640, height: 400), styleMask: [], backing: .buffered, defer: false)
     host.contentView = NSView(frame: CGRect(x: 0, y: 0, width: 640, height: 400))
     let keys = GameplayKeyboard(window: host)
@@ -54,6 +54,17 @@ extension AppDelegate {
     var presses = 0
     let button = GameAccessibleElement(owner: owner, label: "Retry", frame: CGRect(x: 10, y: 10, width: 80, height: 30), press: { presses += 1 })
     try check(button.accessibilityPerformPress() && presses == 1 && button.accessibilityFrame().width == 80, "Accessible action or screen frame failed")
+    let backgroundPress = await Task.detached { button.accessibilityPerformPress() }.value
+    try check(backgroundPress && presses == 2, "Background accessibility action failed")
+    var editedValue = "Before"
+    button.readValue = { editedValue }
+    button.writeValue = { editedValue = $0 }
+    let backgroundValue = await Task.detached {
+      button.setAccessibilityValue("After")
+      button.setAccessibilityFocused(true)
+      return button.accessibilityValue() as? String
+    }.value
+    try check(backgroundValue == "After" && editedValue == "After", "Background accessibility value failed")
     owner.isHidden = true
     try check(!button.accessibilityPerformPress(), "Hidden accessibility control remained active")
     owner.isHidden = false; owner.removeFromSuperview()
@@ -465,6 +476,74 @@ extension AppDelegate {
     print("PASS Neo checkpoint round trip, assignment, queued rate/nuke, undo, counters, continuation and transactional rejection")
   }
 
+  fileprivate func testFanRunRecovery() throws {
+    GameScreen.shared.dismissAll()
+    returnToLibrary()
+    settings.music = .silent; loadContent()
+    gamePicker.selectItem(at: dataSets.firstIndex { $0.set.title == .lemmings }!)
+    selectDataSet()
+    let folder = FileManager.default.temporaryDirectory.appendingPathComponent("fan-recovery-\(UUID())")
+    try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+    defer { try? FileManager.default.removeItem(at: folder) }
+    let archive = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
+      .appendingPathComponent("Content/lemming1.pc/level000.dat")
+    let sections = try ClassicDATArchive.decode(Data(contentsOf: archive))
+    for index in 0..<2 {
+      try Data(sections[index].data.prefix(ClassicLevel.recordSize))
+        .write(to: folder.appendingPathComponent("test\(index).lvl"))
+    }
+    let zip = Process()
+    zip.executableURL = URL(fileURLWithPath: "/usr/bin/zip")
+    zip.currentDirectoryURL = folder
+    zip.arguments = ["-q", "pack.zip", "test0.lvl", "test1.lvl"]
+    try zip.run(); zip.waitUntilExit()
+    try check(zip.terminationStatus == 0, "Could not create fan fixture")
+    let pack = folder.appendingPathComponent("pack.zip")
+    let entries = FanLevelLibrary.entries(in: pack)
+    try check(entries.count == 2, "Fan fixture has no levels")
+    fanPack = pack
+    startFanRun([entries[1], entries[0], entries[1]])
+    fanQueueIndex = 1; loadCurrentFanLevel(); _ = advanceFanPlay()
+    guard let original = session as? ClassicSession else { throw IntegrationFailure(message: "No fan recovery session") }
+    for _ in 0..<100 { original.tick() }
+    original.adjustRate(by: 5)
+    for _ in 0..<20 { original.tick() }
+    panel.selectedSkillIndex = 4
+    saveRunCheckpoint(immediately: true)
+    guard let checkpoint = try recoveryStore.latest(profileID: arcadeProfileID, hotSeatID: arcadeHotSeatID) else {
+      throw IntegrationFailure(message: "Fan run did not save a checkpoint")
+    }
+    try check(checkpoint.fan?.index == 1 && checkpoint.fan?.queue.count == 3 && checkpoint.sourcePath == pack.path,
+      "Fan checkpoint lost pack or queue")
+    let expectedState = ClassicDOSReplayRecorder.stateHash(of: original.simulation)
+    endFanRun()
+    if let alternate = dataSets.firstIndex(where: { $0.set.title == .ohNoMoreLemmings }) {
+      gamePicker.selectItem(at: alternate); selectDataSet()
+    }
+    let starts = ArcadeStore.shared.records.trolley.starts.count
+    restoreRun(checkpoint)
+    guard let restored = session as? ClassicSession else { throw IntegrationFailure(message: "Fan checkpoint did not restore") }
+    try check(fanPlaying && phase == .playing && isPaused && panel.selectedSkillIndex == 4
+      && fanQueueIndex == 1 && fanQueue.map(\.file) == [entries[1].file, entries[0].file, entries[1].file],
+      "Fan restoration lost pause, skill selection or shuffled queue")
+    try check(arcadeRunID == checkpoint.runID && ArcadeStore.shared.records.trolley.starts.count == starts,
+      "Fan recovery counted a new attempt")
+    try check(ClassicDOSReplayRecorder.stateHash(of: restored.simulation) == expectedState, "Fan recovery changed state")
+    for _ in 0..<25 { original.tick(); restored.tick() }
+    try check(ClassicDOSReplayRecorder.stateHash(of: restored.simulation)
+      == ClassicDOSReplayRecorder.stateHash(of: original.simulation), "Fan recovery diverged on continuation")
+    GameScreen.shared.dismissAll()
+    let hiddenPack = folder.appendingPathComponent("missing.zip")
+    try FileManager.default.moveItem(at: pack, to: hiddenPack)
+    restoreRun(checkpoint)
+    try check(session === restored, "Missing fan pack replaced live play")
+    GameScreen.shared.dismissAll()
+    try FileManager.default.moveItem(at: hiddenPack, to: pack)
+    phase = .results; _ = advanceFanPlay()
+    try check(fanQueueIndex == 2 && phase == .briefing, "Restored fan queue lost the next level")
+    returnToLibrary()
+    print("PASS Classic fan checkpoint, shuffled queue, exact paused restore, identity, continuation and missing-pack rejection")
+  }
   fileprivate func testRunRecovery() throws {
     GameScreen.shared.dismissAll()
     settings.music = .silent; loadContent()
@@ -1421,12 +1500,13 @@ Task { @MainActor in
     subject.prepareArcadeTests()
     try subject.testSteppedCompletion()
     try subject.testFirstLaunchEffects()
-    try subject.testAccessibleMenusAndHelp()
+    try await subject.testAccessibleMenusAndHelp()
     #if PERFORMANCE_TESTS
     try await subject.testReleasePerformance()
     #elseif HOT_SEAT_TESTS
     try subject.testHotSeatBoundaries()
     try subject.testRunRecovery()
+    try subject.testFanRunRecovery()
     print("Hot Seat boundary integration tests passed.")
     #elseif CONTROLLER_QOL_TESTS
     try await subject.testControllerQoL()
@@ -1435,12 +1515,14 @@ Task { @MainActor in
     try subject.testControllerRemapping()
     try subject.testNeoRunRecovery()
     try subject.testRunRecovery()
+    try subject.testFanRunRecovery()
     try subject.testInterruptionPolicy()
     print("Controller QoL integration tests passed.")
     #elseif RELEASE_BLOCKER_TESTS
     try subject.testControllerRemapping()
     try subject.testNeoRunRecovery()
     try subject.testRunRecovery()
+    try subject.testFanRunRecovery()
     print("Release blocker integration tests passed.")
     #elseif HINT_TESTS
     try subject.testLevelHints()
@@ -1477,6 +1559,7 @@ Task { @MainActor in
     try subject.testControllerRemapping()
     try subject.testNeoRunRecovery()
     try subject.testRunRecovery()
+    try subject.testFanRunRecovery()
     try subject.testInterruptionPolicy()
     try subject.testHotSeatBoundaries()
     print("App integration tests passed.")

@@ -98,6 +98,15 @@ import NxlvKit
         sessionTurnID = nil
         if sessionProfileIDs.count >= 2 { startHotSeatProgress() }
     }
+    /// A fresh namespace starts every shared campaign at the beginning.
+    @discardableResult func startNewHotSeat() -> Bool {
+        guard hotSeatIsActive, canWrite, storageError == nil else { return false }
+        hotSeatID = UUID().uuidString
+        hotSeatHostID = records.activeProfileID
+        sessionTurnID = nil
+        persistSession()
+        return true
+    }
     func nextSessionProfile(after id: String) -> ArcadeProfile? {
         let players = sessionProfiles
         guard players.count > 1 else { return nil }

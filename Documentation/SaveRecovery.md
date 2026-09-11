@@ -109,8 +109,24 @@ L2 and L3 campaign recovery retains campaign progress, input history, selected a
 
 L2 state verification encodes runtime values deterministically, including private stored state. It excludes transient sound output and binds the file to the exact engine fingerprint. Recovery across a changed engine requires an explicit migration; it is not silently accepted. Replayed sound events are drained so resume does not play old sounds again.
 
-Native campaigns save every five seconds and on pause, help, interruption, restart, level changes and close. These checkpoints do not yet cover classic fan imports or L2 practice runs. Movie recordings are not restored.
+Native campaigns save every five seconds and on pause, help, interruption, restart, level changes and close. Classic fan imports and L2 practice now also have checkpoints. Movie recordings are not restored.
 
 Checkpoint reads and writes are limited to 64 MiB. Searching for the latest run ignores an unrelated damaged file when another valid run exists, while retaining the damaged bytes. If no valid run exists, the app reports the error.
 
 The app integration tests exercise an actual NeoLemmix file through open, save and resume. The sequel UI tests round-trip checkpoint files with original game assets, verify continuation, preserve attempt identity and reject altered input journals. UI test executables share a process lock so test apps cannot steal focus from one another.
+
+
+## Fan levels and L2 practice
+
+Classic fan checkpoints retain the pack path, asset dataset, selected queue order
+and current position. Resume rebuilds the current level and validates its simulation before
+continuing. The pack must remain available. The restored run stays paused, retains
+its selected skill and keeps its attempt identity. Leaving a fan run requests an
+immediate checkpoint.
+
+L2 practice checkpoints retain the training map and the chosen eight-skill panel.
+Restore recreates practice play without applying its saved campaign progress to
+the campaign. It restores the selected slot, pauses and retains the original attempt.
+Invalid map indices, duplicate skills and incomplete panels are rejected.
+
+See [the 1.0 follow-up](ReleaseReadiness/OneZeroLocalClosure.md) for validation.

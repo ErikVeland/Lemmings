@@ -978,3 +978,55 @@ extension Lemmings2Canvas { fileprivate var speedTestRect: CGRect { speedRect } 
 extension Lemmings3Canvas { fileprivate var speedTestRect: CGRect {
     CGRect(x: screenOrigin.x + 214 * zoom, y: screenOrigin.y + 172 * zoom, width: 35 * zoom, height: 40 * zoom)
 } }
+
+
+extension Lemmings2PlayWindow {
+    fileprivate func checkPracticeRecovery() throws {
+        defer { stop() }
+        let originalProgress = campaign.progress
+        practiceChoice = 2
+        practiceSkills = [.roper, .floater, .climber, .digger, .basher, .builder, .runner, .jumper]
+        practiceLevel = practice.levels[practiceChoice]
+        prepareBriefing(); startLevel()
+        for _ in 0..<100 { game?.step() }
+        guard let current = game, let worker = current.lemmings.first(where: { $0.active }),
+            let slot = current.configuration.skills.indices.first(where: { current.canAssign(slot: $0, to: worker.id) }) else {
+            throw SequelDataError.invalid("Practice fixture has no assignable worker")
+        }
+        try assertArtwork(performRecoveryInput(.assign(slot: slot, lemming: worker.id)), "Practice assignment failed")
+        for _ in 0..<3 { game?.step() }
+        selected = 5
+        releasePointerInput()
+        guard var checkpoint = try makeCheckpoint(engine: "recovery-test") else {
+            throw SequelDataError.invalid("Practice did not produce a checkpoint")
+        }
+        let starts = ArcadeStore.shared.records.trolley.starts.count
+        let folder = FileManager.default.temporaryDirectory.appendingPathComponent("practice-recovery-\(UUID())")
+        defer { try? FileManager.default.removeItem(at: folder) }
+        let file = RunRecoveryFile(url: folder.appendingPathComponent("run.json"))
+        _ = try file.load(); try file.save(checkpoint)
+        guard let decoded = try RunRecoveryFile(url: file.url).load() else { throw RunRecoveryError.invalid }
+        let restored = try Lemmings2PlayWindow(root: root, recovery: decoded, expectedRecoveryEngine: "recovery-test")
+        defer { restored.stop() }
+        try assertArtwork(restored.game?.configuration.isPractice == true && restored.practiceChoice == 2
+            && restored.practiceSkills == practiceSkills && restored.selected == 5 && restored.paused,
+            "Practice recovery lost map, skills, selection or pause")
+        try assertArtwork(restored.arcadeRunID == arcadeRunID && ArcadeStore.shared.records.trolley.starts.count == starts,
+            "Practice recovery counted a new attempt")
+        try assertArtwork(try L2RunRecovery.stateHash(restored.game!) == L2RunRecovery.stateHash(game!),
+            "Practice recovery changed state")
+        for _ in 0..<25 { game?.step(); restored.game?.step() }
+        try assertArtwork(try L2RunRecovery.stateHash(restored.game!) == L2RunRecovery.stateHash(game!),
+            "Practice recovery diverged on continuation")
+        try assertArtwork(try { let encoder = JSONEncoder(); encoder.outputFormatting = [.sortedKeys]; return try encoder.encode(campaign.progress) == encoder.encode(originalProgress) }(),
+            "Practice changed campaign progress")
+        for bad in [L2RunRecovery.Practice(choice: 4, skills: practiceSkills.map(\.rawValue)),
+                    .init(choice: 0, skills: [1]), .init(choice: 0, skills: Array(repeating: 1, count: 8))] {
+            checkpoint.l2 = L2RunRecovery(progress: originalProgress, inputs: recoveryInputs, practice: bad)
+            do { _ = try checkpoint.validated(); throw SequelDataError.invalid("Bad practice metadata accepted") }
+            catch RunRecoveryError.invalid {}
+        }
+        print("PASS L2 practice disk checkpoint, map/skills, pause, attempt identity, continuation and invalid metadata")
+    }
+}
+try Lemmings2PlayWindow(root: l2root).checkPracticeRecovery()

@@ -26,6 +26,7 @@ struct RunRecovery: Codable, Sendable {
     var l2: L2RunRecovery? = nil
     var l3: L3RunRecovery? = nil
     var neo: NeoRunRecovery? = nil
+    var fan: FanRunRecovery? = nil
     var sourcePath: String? = nil
     var savedAt = Date()
 
@@ -45,6 +46,11 @@ struct RunRecovery: Codable, Sendable {
               zip(events, events.dropFirst()).allSatisfy({ $0.tick <= $1.tick }) else {
             throw RunRecoveryError.invalid
         }
+        if let fan {
+            guard l2 == nil, l3 == nil, neo == nil, dataSetID == "fan-classic",
+                sourcePath?.hasPrefix("/") == true, levelIndex == fan.index else { throw RunRecoveryError.invalid }
+            try fan.validate()
+        }
         if let l2 {
             guard neo == nil, l3 == nil, events.isEmpty, sourcePath?.hasPrefix("/") == true,
                 dataSetID == "lemmings2" else { throw RunRecoveryError.invalid }
@@ -61,6 +67,25 @@ struct RunRecovery: Codable, Sendable {
             try neo.validate()
         }
         return self
+    }
+}
+
+struct FanRunRecovery: Codable, Sendable {
+    struct Entry: Codable, Sendable {
+        let file: String
+        let section: Int?
+        let label: String
+    }
+    let queue: [Entry]
+    let index: Int
+    var baseDataSetID: String? = nil
+    func validate() throws {
+        guard queue.count <= 10_000, queue.indices.contains(index),
+            baseDataSetID.map({ !$0.isEmpty && $0.utf8.count <= 4096 }) ?? true,
+            queue.allSatisfy({ !$0.file.isEmpty && $0.file.utf8.count <= 4096
+                && !$0.file.hasPrefix("/") && !$0.file.split(separator: "/").contains("..")
+                && ($0.section.map { (0..<10_000).contains($0) } ?? true)
+                && $0.label.utf8.count <= 4096 }) else { throw RunRecoveryError.invalid }
     }
 }
 
@@ -366,6 +391,16 @@ private enum RecoveryValueEncoding {
 }
 
 struct L2RunRecovery: Codable, Sendable {
+    struct Practice: Codable, Sendable {
+        let choice: Int
+        let skills: [Int]
+        func validate() throws {
+            guard Lemmings2Practice.tribes.indices.contains(choice), skills.count == 8,
+                Set(skills).count == 8,
+                skills.allSatisfy({ Lemmings2Runtime.Skill(rawValue: $0).map { $0 != .unused } == true })
+                else { throw RunRecoveryError.invalid }
+        }
+    }
     struct Input: Codable, Sendable {
         enum Action: Codable, Equatable, Sendable {
             case assign(slot: Int, lemming: Int)
@@ -381,6 +416,7 @@ struct L2RunRecovery: Codable, Sendable {
     }
     let progress: Lemmings2Campaign.Progress
     let inputs: [Input]
+    var practice: Practice? = nil
     static func stateHash(_ game: Lemmings2Runtime, includeConfiguration: Bool = false) throws -> String {
         var digest = SHA256()
         for child in Mirror(reflecting: game).children {
@@ -391,6 +427,7 @@ struct L2RunRecovery: Codable, Sendable {
         return digest.finalize().map { String(format: "%02x", $0) }.joined()
     }
     func validate(tick: Int) throws {
+        try practice?.validate()
         guard progress.version == 1, (0..<12).contains(progress.tribe), (0..<10).contains(progress.level),
             inputs.count <= 100_000, inputs.allSatisfy({ (0...tick).contains($0.tick) }),
             zip(inputs, inputs.dropFirst()).allSatisfy({ $0.tick <= $1.tick }) else { throw RunRecoveryError.invalid }

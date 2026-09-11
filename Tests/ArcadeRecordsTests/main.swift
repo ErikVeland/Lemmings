@@ -237,6 +237,22 @@ func testSkillAccounting() throws {
     try require(store.turnPolicy == .atFirstFail, "Solo transition erased the house rule")
     store.prepareHotSeat()
     try require(store.progressKey("campaign") == sharedKey, "Rejoining created an empty shared campaign")
+    let previousID = store.hotSeatID
+    let roster = store.sessionProfileIDs
+    try require(store.passSessionTurn(after: host), "New-session fixture could not pass the turn")
+    let soloKey = ArcadeStore.progressKey("campaign", profileID: host)
+    UserDefaults.standard.set("solo progress", forKey: soloKey)
+    defer { UserDefaults.standard.removeObject(forKey: soloKey) }
+    try require(store.startNewHotSeat(), "Could not start a new Hot Seat")
+    try require(store.hotSeatID != previousID && store.sessionProfileIDs == roster && store.playingProfileID == host,
+        "New Hot Seat retained old identity/turn or changed players")
+    try require(UserDefaults.standard.object(forKey: store.progressKey("campaign")) == nil
+        && UserDefaults.standard.string(forKey: soloKey) == "solo progress"
+        && UserDefaults.standard.string(forKey: sharedKey) == "shared progress",
+        "New Hot Seat reused shared progress or erased prior/solo data")
+    let fresh = ArcadeStore(file: directory.appendingPathComponent("records.json"), bundledProofs: nil)
+    try require(fresh.hotSeatID == store.hotSeatID && fresh.playingProfileID == host,
+        "Relaunch returned to the replaced Hot Seat")
     UserDefaults.standard.removeObject(forKey: sharedKey)
     store.turnPolicy = .everyLevel
     store.toggleSessionProfile("missing")
@@ -281,6 +297,21 @@ func testSkillAccounting() throws {
     view.openSession()
     try shot("players")
     try require(view.mode == .hotSeat, "Players did not open session setup")
+    let beforeCancel = store.hotSeatID
+    view.confirmNewHotSeat()
+    guard let confirmation = GameScreen.shared.controllerPage(in: window) as? GameMenuPage else {
+        throw SequelDataError.invalid("New Hot Seat did not show confirmation")
+    }
+    confirmation.onBack?()
+    try require(store.hotSeatID == beforeCancel, "Cancelling replaced the shared campaign")
+    view.confirmNewHotSeat()
+    guard let accepted = GameScreen.shared.controllerPage(in: window) as? GameMenuPage,
+        let start = buttons(accepted).first(where: { $0.title == "Start new Hot Seat" }) else {
+        throw SequelDataError.invalid("New Hot Seat confirmation has no explicit start action")
+    }
+    start.performClick(nil)
+    try require(store.hotSeatID != beforeCancel && !GameScreen.shared.isPresented,
+        "Confirmed New Hot Seat did not start a fresh campaign")
     view.closeSession()
     try require(view.mode == .result, "Done lost the result page")
     let winningReport = store.record(ArcadeRun(profileID: host, level: level, saved: 10, didWin: true, skills: [:], seconds: 2))!
@@ -289,6 +320,8 @@ func testSkillAccounting() throws {
     view.onContinue = { advances += 1 }
     try Data("external change".utf8).write(to: directory.appendingPathComponent("records.json"))
     store.save()
+    let idBeforeFailure = store.hotSeatID
+    try require(!store.startNewHotSeat() && store.hotSeatID == idBeforeFailure, "Storage failure replaced the shared campaign")
     let turnBeforeFailure = store.playingProfileID
     try require(!store.passSessionTurn(after: friend.id) && store.playingProfileID == turnBeforeFailure,
         "Storage failure changed the player")

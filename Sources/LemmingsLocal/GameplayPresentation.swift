@@ -319,38 +319,69 @@ import NxlvKit
 }
 
 /// Stable accessibility objects for controls drawn directly into a game view.
-@MainActor final class GameAccessibleElement: NSAccessibilityElement {
-    weak var owner: NSView?
-    var localFrame = CGRect.zero
-    var press: (() -> Void)?
-    var readValue: (() -> String)?
-    var writeValue: ((String) -> Void)?
+@MainActor final class GameAccessibleElement: NSAccessibilityElement, @unchecked Sendable {
+    @MainActor private final class State {
+        weak var owner: NSView?
+        var localFrame = CGRect.zero
+        var press: (() -> Void)?
+        var readValue: (() -> String)?
+        var writeValue: ((String) -> Void)?
+    }
+    private nonisolated let state: State
+    var owner: NSView? { get { state.owner } set { state.owner = newValue } }
+    var localFrame: CGRect { get { state.localFrame } set { state.localFrame = newValue } }
+    var press: (() -> Void)? { get { state.press } set { state.press = newValue } }
+    var readValue: (() -> String)? { get { state.readValue } set { state.readValue = newValue } }
+    var writeValue: ((String) -> Void)? { get { state.writeValue } set { state.writeValue = newValue } }
     init(owner: NSView, label: String, frame: CGRect, press: (() -> Void)? = nil) {
-        self.owner = owner; self.localFrame = frame; self.press = press
+        state = State()
         super.init()
+        self.owner = owner; self.localFrame = frame; self.press = press
         setAccessibilityParent(owner)
         setAccessibilityRole(press == nil ? .staticText : .button)
         setAccessibilityLabel(label)
     }
+    // AppKit accessibility overrides are nonisolated. All game-view state stays on the main actor.
+    nonisolated private func onMain<T: Sendable>(_ operation: @MainActor @Sendable () -> T) -> T {
+        if Thread.isMainThread { return MainActor.assumeIsolated(operation) }
+        return DispatchQueue.main.sync { MainActor.assumeIsolated(operation) }
+    }
     override func accessibilityFrame() -> NSRect {
-        guard let owner, let window = owner.window else { return .zero }
-        return window.convertToScreen(owner.convert(localFrame, to: nil))
+        onMain { [state] in
+            guard let owner = state.owner, let window = owner.window else { return .zero }
+            return window.convertToScreen(owner.convert(state.localFrame, to: nil))
+        }
     }
     override func accessibilityPerformPress() -> Bool {
-        guard let owner, owner.window != nil, !owner.isHiddenOrHasHiddenAncestor, let press else { return false }
-        owner.scrollToVisible(localFrame)
-        press()
-        return true
+        onMain { [state] in
+            guard let owner = state.owner, owner.window != nil, !owner.isHiddenOrHasHiddenAncestor,
+                let press = state.press else { return false }
+            owner.scrollToVisible(state.localFrame)
+            press()
+            return true
+        }
     }
-    override func accessibilityValue() -> Any? { readValue?() ?? super.accessibilityValue() }
+    override func accessibilityValue() -> Any? {
+        let value: String? = onMain { [state] in state.readValue?() }
+        return value ?? super.accessibilityValue()
+    }
     override func setAccessibilityValue(_ value: Any?) {
-        if let value = value as? String, let writeValue { writeValue(value) }
-        else { super.setAccessibilityValue(value) }
+        if let text = value as? String, onMain({ [state] in
+            guard let write = state.writeValue else { return false }
+            write(text)
+            return true
+        }) { return }
+        super.setAccessibilityValue(value)
     }
     override func setAccessibilityFocused(_ focused: Bool) {
-        if focused { owner?.scrollToVisible(localFrame) }
         super.setAccessibilityFocused(focused)
+        guard focused else { return }
+        onMain { [state] in
+            guard let owner = state.owner, owner.window != nil, !owner.isHiddenOrHasHiddenAncestor else { return }
+            owner.scrollToVisible(state.localFrame)
+        }
     }
+
 }
 
 @MainActor final class GameAccessibleElements {

@@ -479,10 +479,25 @@ import NxlvKit
         }
         if let guidance { text(guidance.0, 64, min(y, footerTop - 30), 992, palette: guidance.1) }
         button("Return to solo", CGRect(x: 64, y: 634, width: 270, height: 48)) { [weak self] in store.endHotSeat(); self?.closeSession() }
-        button("Done", CGRect(x: 736, y: 634, width: 320, height: 48), primary: true) { [weak self] in self?.closeSession() }
+        if store.hotSeatIsActive {
+            button("New Hot Seat", CGRect(x: 350, y: 634, width: 360, height: 48)) { [weak self] in self?.confirmNewHotSeat() }
+        }
+        button("Choose a game", CGRect(x: 736, y: 634, width: 320, height: 48), primary: true) { [weak self] in self?.closeSession() }
         setAccessibilityLabel("Hot seat. " + store.sessionProfiles.map(\.initials).joined(separator: ", ")
             + ". Pass the turn \(store.turnPolicy.title). \(store.turnPolicy.detail)"
-            + " Number keys choose players. Return to the start menu to begin. Enter returns to the game.")
+            + " Number keys choose players. Choose a game keeps this shared campaign. New Hot Seat starts from the beginning.")
+    }
+    func confirmNewHotSeat() {
+        GameScreen.shared.confirm("Start a new Hot Seat?",
+            detail: "Start every shared campaign from the beginning with these players. This replaces the Hot Seat you can resume. Solo progress, scores and records stay saved.",
+            actionTitle: "Start new Hot Seat", owner: window) { [weak self] in
+                guard ArcadeStore.shared.startNewHotSeat() else {
+                    GameScreen.shared.message("Cannot start Hot Seat", detail: ArcadeStore.shared.storageError
+                        ?? "Choose at least two players, then try again.")
+                    return
+                }
+                self?.needsDisplay = true
+            }
     }
     private func drawProfiles() {
         header("Choose your lemming", subtitle: "PLAYER SELECT")

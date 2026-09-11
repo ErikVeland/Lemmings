@@ -99,6 +99,7 @@ import NxlvKit
     private var nukeGesture = NukeClickGesture()
     private let recoveryStore = RunRecoveryStore()
     private var recoveryInputs: [L2RunRecovery.Input] = []
+    private var recoveryPractice: L2RunRecovery.Practice?
     private var recoveryProgress: Lemmings2Campaign.Progress?
     private var recoveryInitialHash = ""
     private var lastFanInput: L2RunRecovery.Input.Action?
@@ -272,14 +273,20 @@ import NxlvKit
             name:NSWindow.didResignKeyNotification,object:nil)
         window.center()
         if let recovery, let saved = recovery.l2 {
-            try campaign.restore(saved.progress)
+            if let savedPractice = saved.practice {
+                practiceChoice = savedPractice.choice
+                practiceSkills = savedPractice.skills.compactMap(Lemmings2Runtime.Skill.init(rawValue:))
+                practiceLevel = practice.levels[practiceChoice]
+            } else {
+                try campaign.restore(saved.progress)
+            }
             restoringRun = true
             prepareBriefing(); startLevel()
             guard let initial, let fingerprint = arcadeLevel?.conditions?.levelFingerprint,
                 fingerprint == recovery.levelFingerprint else { throw RunRecoveryError.differentGame }
             let restored = try saved.restore(initial: initial, checkpoint: recovery)
             game = restored.0; beforeNuke = restored.1; beforeNukeInputCount = restored.2
-            recoveryInputs = saved.inputs; recoveryProgress = saved.progress
+            recoveryInputs = saved.inputs; recoveryProgress = saved.progress; recoveryPractice = saved.practice
             recoveryInitialHash = recovery.initialStateHash
             arcadeRunID = recovery.runID; arcadeProfileID = recovery.profileID; arcadeHotSeatID = recovery.hotSeatID
             usedRewind = recovery.usedRewind; nukeCount = recovery.nukeCount; undoCount = recovery.undoCount
@@ -452,7 +459,9 @@ import NxlvKit
     private func beginReplay() {
         if restoringRun { return }
         lastFanInput = nil; lastAimInput = nil
-        recoveryInputs = []; recoveryProgress = practiceLevel == nil ? campaign.progress : nil
+        recoveryInputs = []; recoveryProgress = campaign.progress
+        recoveryPractice = practiceLevel == nil ? nil
+            : L2RunRecovery.Practice(choice: practiceChoice, skills: practiceSkills.map(\.rawValue))
         recoveryInitialHash = initial.flatMap { try? L2RunRecovery.stateHash($0, includeConfiguration: true) } ?? ""
         lastCheckpointTime = 0
         assignmentFocus = AssignmentFocus(); canvas.assignmentHighlight.clear()
@@ -556,23 +565,27 @@ import NxlvKit
     }
     private func releasePointerInput() { performRecoveryInput(.releasePointer) }
 
-    func saveCheckpoint(immediately: Bool = false) {
-        let engine = RunRecovery.bundledEngine, now = ProcessInfo.processInfo.systemUptime
+    private func makeCheckpoint(engine: String) throws -> RunRecovery? {
         guard !restoringRun, !engine.isEmpty, let game, game.tick > 0, !game.isComplete,
             let progress = recoveryProgress, !recoveryInitialHash.isEmpty,
-            let fingerprint = arcadeLevel?.conditions?.levelFingerprint,
-            immediately || now - lastCheckpointTime >= 5 else { return }
+            let fingerprint = arcadeLevelSnapshot?.conditions?.levelFingerprint else { return nil }
+        var checkpoint = RunRecovery(engine: engine, profileID: arcadeProfileID, runID: arcadeRunID,
+            dataSetID: "lemmings2", levelIndex: recoveryPractice?.choice ?? progress.level,
+            levelFingerprint: fingerprint, initialStateHash: recoveryInitialHash, tick: game.tick,
+            events: [], stateHash: try L2RunRecovery.stateHash(game), usedRewind: usedRewind,
+            nukeCount: nukeCount, rewindCount: 0, undoCount: undoCount, selectedSkill: selected,
+            scrollX: Double(canvas.cameraX), scrollY: Double(canvas.cameraY))
+        checkpoint.sourcePath = root.path
+        checkpoint.l2 = L2RunRecovery(progress: progress, inputs: recoveryInputs, practice: recoveryPractice)
+        checkpoint.hotSeatID = arcadeHotSeatID
+        return checkpoint
+    }
+    func saveCheckpoint(immediately: Bool = false) {
+        let now = ProcessInfo.processInfo.systemUptime
+        guard immediately || now - lastCheckpointTime >= 5 else { return }
         do {
-            var checkpoint = RunRecovery(engine: engine, profileID: arcadeProfileID, runID: arcadeRunID,
-                dataSetID: "lemmings2", levelIndex: progress.level,
-                levelFingerprint: fingerprint, initialStateHash: recoveryInitialHash, tick: game.tick,
-                events: [], stateHash: try L2RunRecovery.stateHash(game), usedRewind: usedRewind,
-                nukeCount: nukeCount, rewindCount: 0, undoCount: undoCount, selectedSkill: selected,
-                scrollX: Double(canvas.cameraX), scrollY: Double(canvas.cameraY))
-            checkpoint.sourcePath = root.path
-            checkpoint.l2 = L2RunRecovery(progress: progress, inputs: recoveryInputs)
+            guard let checkpoint = try makeCheckpoint(engine: RunRecovery.bundledEngine) else { return }
             lastCheckpointTime = now
-            checkpoint.hotSeatID = arcadeHotSeatID
             recoveryStore.save(checkpoint, immediately: immediately) { [weak self] error in self?.message = error }
         } catch { message = error.localizedDescription }
     }

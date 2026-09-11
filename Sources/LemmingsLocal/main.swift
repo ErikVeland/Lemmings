@@ -138,6 +138,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   #if PERFORMANCE_TESTS
   private var replayCaptureSeconds = 0.0
   #endif
+  private var checkpointFan: FanRunRecovery?
   private var checkpointSourceURL: URL?
   private var checkpointLocation: (dataSetID: String, levelIndex: Int)?
 
@@ -160,6 +161,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
         usedRewind: classic.usedRewind, nukeCount: classic.nukeCount, rewindCount: classic.rewindCount,
         undoCount: classic.undoCount, selectedSkill: panel.selectedSkillIndex,
         scrollX: playfield.viewport.scrollX, scrollY: playfield.viewport.scrollY)
+      checkpoint.fan = checkpointFan
+      if checkpointFan != nil { checkpoint.sourcePath = checkpointSourceURL?.path }
     } else if let neo = session as? NeoLemmixSession, let url = checkpointSourceURL {
       checkpoint = RunRecovery(engine: recoveryEngine, profileID: arcadeProfileID, runID: arcadeRunID,
         dataSetID: "neolemmix", levelIndex: 0, levelFingerprint: fingerprint,
@@ -180,7 +183,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     saveRunCheckpoint(immediately: true)
     do {
       guard let checkpoint = try recoveryStore.latest(profileID: ArcadeStore.shared.playingProfileID, hotSeatID: ArcadeStore.shared.hotSeatID) else {
-        GameScreen.shared.message("No saved run", detail: "A checkpoint is saved every five seconds during classic, NeoLemmix or sequel campaign play.")
+        GameScreen.shared.message("No saved run", detail: "A checkpoint is saved every five seconds during Classic, fan-level, NeoLemmix, sequel campaign or L2 practice play.")
         return
       }
       GameScreen.shared.confirm("Resume saved run?", detail: "Restore the latest saved run at tick \(checkpoint.tick). The game will stay paused until you resume.",
@@ -208,7 +211,17 @@ let achievementProgressKey = "ClassicAchievementProgress"
         return
       }
       let classicIndex = dataSets.firstIndex { $0.set.identifierKey == checkpoint.dataSetID }
-      if checkpoint.neo == nil {
+      if let fan = checkpoint.fan {
+        if let base = fan.baseDataSetID, !dataSets.contains(where: { $0.set.identifierKey == base }) {
+          throw RunRecoveryError.differentGame
+        }
+        guard let path = checkpoint.sourcePath, FileManager.default.fileExists(atPath: path) else {
+          throw RunRecoveryError.differentGame
+        }
+        let entry = fan.queue[fan.index]
+        _ = try FanLevelLibrary.level(.init(file: entry.file, section: entry.section, label: entry.label),
+            in: URL(fileURLWithPath: path))
+      } else if checkpoint.neo == nil {
         guard let index = classicIndex,
           dataSets[index].set.campaign.levels.indices.contains(checkpoint.levelIndex) else { throw RunRecoveryError.differentGame }
       } else {
@@ -219,7 +232,21 @@ let achievementProgressKey = "ClassicAchievementProgress"
       restoringCheckpoint = true
       defer { restoringCheckpoint = false }
       returnToLibrary()
-      if checkpoint.neo != nil, let path = checkpoint.sourcePath {
+      if let fan = checkpoint.fan, let path = checkpoint.sourcePath {
+        if let base = fan.baseDataSetID, let index = dataSets.firstIndex(where: { $0.set.identifierKey == base }) {
+          gamePicker.selectItem(at: index); selectDataSet()
+        }
+        fanPack = URL(fileURLWithPath: path)
+        fanQueue = fan.queue.map { .init(file: $0.file, section: $0.section, label: $0.label) }
+        fanQueueIndex = fan.index
+        fanEntries = FanLevelLibrary.entries(in: fanPack!)
+        fanScreen = .off
+        loadCurrentFanLevel()
+        guard fanPlaying, phase == .briefing, let classic = session as? ClassicSession,
+          arcadeLevel?.conditions?.levelFingerprint == checkpoint.levelFingerprint else { throw RunRecoveryError.differentGame }
+        _ = advanceFanPlay()
+        try classic.restore(checkpoint)
+      } else if checkpoint.neo != nil, let path = checkpoint.sourcePath {
         loadNxlv(URL(fileURLWithPath: path))
         guard let neo = session as? NeoLemmixSession,
           arcadeLevel?.conditions?.levelFingerprint == checkpoint.levelFingerprint else { throw RunRecoveryError.differentGame }
@@ -1597,9 +1624,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   /// Starts a run of one or more fan levels.
   ///
-  /// A run is not a campaign. Nothing is saved and no progress is recorded,
-  /// because these levels belong to other people's packs rather than to a
-  /// release the library tracks.
+  /// Checkpoints retain the chosen order. Completed levels keep their pack progress.
   private func startFanRun(_ entries: [FanLevelLibrary.Entry]) {
     guard !entries.isEmpty else { return }
     fanQueue = entries
@@ -1716,6 +1741,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   /// Leaves a fan run and returns to the pack's level list.
   private func endFanRun() {
+    saveRunCheckpoint(immediately: true)
     fanPlaying = false
     panel.isMenuMode = true
     fitClassicDisplay()
@@ -1848,9 +1874,14 @@ let achievementProgressKey = "ClassicAchievementProgress"
     assignmentFocus = AssignmentFocus()
     playfield.assignmentHighlight.clear()
     session = new
-    checkpointSourceURL = new is NeoLemmixSession ? currentNxlvURL : nil
-    checkpointLocation = !fanPlaying && currentNxlvURL == nil && dataSets.indices.contains(gamePicker.indexOfSelectedItem)
-      ? (dataSets[gamePicker.indexOfSelectedItem].set.identifierKey, picker.indexOfSelectedItem) : nil
+    checkpointFan = fanPlaying && new is ClassicSession && fanQueue.indices.contains(fanQueueIndex)
+      ? FanRunRecovery(queue: fanQueue.map { .init(file: $0.file, section: $0.section, label: $0.label) }, index: fanQueueIndex,
+          baseDataSetID: dataSets.indices.contains(gamePicker.indexOfSelectedItem)
+            ? dataSets[gamePicker.indexOfSelectedItem].set.identifierKey : nil) : nil
+    checkpointSourceURL = checkpointFan != nil ? fanPack : new is NeoLemmixSession ? currentNxlvURL : nil
+    checkpointLocation = checkpointFan != nil ? ("fan-classic", fanQueueIndex)
+      : !fanPlaying && currentNxlvURL == nil && dataSets.indices.contains(gamePicker.indexOfSelectedItem)
+        ? (dataSets[gamePicker.indexOfSelectedItem].set.identifierKey, picker.indexOfSelectedItem) : nil
     hintMap = playfield.levelImage
     let previousAttemptID = arcadeRunID
     arcadeRunID = UUID(); arcadeProfileID = ArcadeStore.shared.playingProfileID; arcadeHotSeatID = ArcadeStore.shared.hotSeatID; arcadeReport = nil
