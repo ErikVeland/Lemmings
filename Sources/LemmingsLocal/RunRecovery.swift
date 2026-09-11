@@ -97,7 +97,9 @@ final class RunRecoveryFile {
         return try document.payload.map { try JSONDecoder().decode(RunRecovery.self, from: $0).validated() }
     }
     private func read(_ path: URL) throws -> Data {
-        let size = try path.resourceValues(forKeys: [.fileSizeKey]).fileSize ?? 0
+        var freshPath = path
+        freshPath.removeAllCachedResourceValues()
+        let size = try freshPath.resourceValues(forKeys: [.fileSizeKey]).fileSize ?? 0
         guard size <= 64 * 1024 * 1024 else { throw RunRecoveryError.invalid }
         let bytes = try Data(contentsOf: path, options: .mappedIfSafe)
         guard bytes.count <= 64 * 1024 * 1024 else { throw RunRecoveryError.invalid }
@@ -117,16 +119,26 @@ final class RunRecoveryFile {
     }
     func load() throws -> RunRecovery? {
         try locked {
-            let data = try current()
-            if let data {
-                do { let value = try decode(data); expected = data; return value }
-                catch RunRecoveryError.version { throw RunRecoveryError.version }
-                catch { if !FileManager.default.fileExists(atPath: backupURL.path) { throw error } }
+            recoveredBackup = false
+            do {
+                if let data = try current() {
+                    let value = try decode(data)
+                    expected = data
+                    return value
+                }
+            } catch RunRecoveryError.version {
+                throw RunRecoveryError.version
+            } catch {
+                guard FileManager.default.fileExists(atPath: backupURL.path) else { throw error }
             }
             guard FileManager.default.fileExists(atPath: backupURL.path) else { expected = nil; return nil }
             let backup = try read(backupURL)
             let value = try decode(backup)
-            if let data { try data.write(to: url.appendingPathExtension("unreadable-\(UUID().uuidString)"), options: .atomic) }
+            if FileManager.default.fileExists(atPath: url.path) {
+                // Preserve oversized files without loading their contents into memory.
+                try FileManager.default.copyItem(at: url,
+                    to: url.appendingPathExtension("unreadable-\(UUID().uuidString)"))
+            }
             try backup.write(to: url, options: .atomic)
             expected = backup; recoveredBackup = true
             return value

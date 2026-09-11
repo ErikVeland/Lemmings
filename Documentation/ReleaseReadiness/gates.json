@@ -16,14 +16,14 @@
   "priority": "P0",
   "status": "partial",
   "exitCriteria": "Verify app and controller interruption on real hardware. Add versioned in-progress checkpoints and crash recovery before mobile suspend/termination support. Verify save migrations and rollback with real prior releases.",
-  "progress": "Versioned checkpoints now cover Classic campaigns, NeoLemmix files, and native L2/L3 campaigns. Disk round trips, exact paused restoration, continuation, journal rejection and preserved attempt identity pass. Atomic writes, backups, size limits and stale-writer rejection are implemented. Classic fan imports, L2 practice, physical power-loss and installed-release migration trials remain."
+  "progress": "Versioned checkpoints now cover Classic campaigns, NeoLemmix files, and native L2/L3 campaigns. Disk round trips, exact paused restoration, continuation, journal rejection and preserved attempt identity pass. Atomic writes, backups, size limits and stale-writer rejection are implemented. Classic fan imports, L2 practice, physical power-loss and installed-release migration trials remain. The isolated 1.0 follow-up also repairs oversized-primary backup recovery and stale file-size caching, with headless file-level regressions. These changes are not in beta 20."
  },
  {
   "area": "Input and accessibility",
   "priority": "P0",
   "status": "partial",
   "exitCriteria": "Test the complete first-launch-to-results flow with physical Xbox, PlayStation and Switch-layout controllers. Add remapping and device glyphs, touch targeting, readable UI scaling, reduced motion/flash controls and VoiceOver navigation without forcing OG gameplay.",
-  "progress": "Button remapping, persistent conflict-swapping bindings, held-input reset and device-reported names/glyphs are implemented. Physical device journeys, scalable text and broader VoiceOver navigation remain."
+  "progress": "Beta 20 includes persistent button remapping, conflict swapping, held-input reset, device glyphs, 100/125/150% text and menu sizing, scrollable shared pages, and individual VoiceOver controls in Classic, sequel menus and Arcade. Physical controller journeys and a full VoiceOver listening journey remain unverified. Live terrain and lemmings do not have a complete spoken representation."
  },
  {
   "area": "Performance and hardware",
@@ -36,7 +36,7 @@
   "priority": "P0",
   "status": "partial",
   "exitCriteria": "Freeze the final source and assets. Build both Mac architectures, sign, notarise and verify the downloaded archive. Earlier beta notarisation is not evidence for later local builds.",
-  "progress": "Beta 13 is packaged from its own frozen source. Both architectures built, the Developer ID signature verified, Apple accepted both notarization submissions, the tickets stapled, and Gatekeeper accepted a fresh quarantined extraction of each archive. The packaging is not bit-reproducible. The 1.0 candidate still needs its own freeze, build and checked archive. Beta notarization is not evidence for a later build."
+  "progress": "Beta 20 was built from frozen source 732c0a9 for arm64 and x86_64. The standard archive passed Developer ID signing, Apple notarisation, stapling and Gatekeeper after quarantined extraction. A separate development-signed Game Center archive covers both registered test Macs. See Beta20Readiness.md. The 1.0 candidate still needs its own freeze, build and verified archive."
  },
  {
   "area": "Publishing agreement and assets",

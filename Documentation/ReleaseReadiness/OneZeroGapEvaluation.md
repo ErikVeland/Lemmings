@@ -1,7 +1,7 @@
-# 1.0 gap evaluation after beta 13
+# 1.0 gap evaluation after beta 20
 
 11 September 2026. Scope: the macOS game in this repository. This document does not
-declare a 1.0 release. It measures the distance from beta 13 to one.
+declare a 1.0 release. It measures the distance from beta 20 to one.
 
 The [gate register](gates.json) holds the exit criteria. The
 [1.0 gap review](../ReleaseReadiness-1.0.md) holds the change history. This
@@ -9,13 +9,19 @@ document ranks the open work and names the decision that controls the schedule.
 
 ## Position
 
-Beta 13 is a complete beta. The source is frozen, every automated gate passes, and
-the archive is signed, notarized and checked through Gatekeeper. That closes the
-packaging question for a beta. It does not move the product near 1.0.
+Beta 20 has verified standard and Game Center archives. The standard archive is
+notarised and Gatekeeper verified. The Game Center archive is development signed
+for the registered test Macs. See [beta 20 readiness](../Beta20Readiness.md).
 
-Six P0 gates remain open or partial. Four of them need new evidence or new work,
-not another regression run. One of them, the publishing agreement, is outside
-engineering control. A passing test suite cannot close any of them.
+The beta now includes explicit Hot Seat results, paused handovers, persistent
+shared saves, consistent turn identity, speed controls, scalable menus and wider
+VoiceOver navigation. These implementation gaps are closed. Physical controller
+journeys, full VoiceOver listening and novice play remain unverified.
+
+The remaining release work centres on campaign evidence, sequel fidelity,
+recovery coverage and sustained hardware/performance validation. Public distribution
+also has the existing external publishing gate. A final 1.0 package must be built
+from the combined, tested source after these scope decisions and fixes.
 
 ## Route evidence
 
@@ -57,16 +63,18 @@ depends on evidence from the original engines. It is the main schedule risk.
 
 ### 3. Performance and hardware (P0, open)
 
-Nothing in the matrix is measured on physical hardware. The one measured number is
-a shortfall: recent local samples reached 6.8x to 8.7x when the game requested 10x
-with replay recording on. Physical Intel, macOS 13, SDR and HDR, multiple displays
-and high refresh rates all remain untested. This work needs machines, not code.
+Short local samples on the M4 Pro reached 6.8x to 8.7x when the game requested
+10x with replay recording on. These older samples do not establish current
+sustained performance. Physical Intel, minimum macOS, multiple displays, high
+refresh rates and sustained audio/memory behaviour still need validation.
 
 ### 4. Input and accessibility (P0, partial)
 
 Remapping, conflict swapping, device glyphs and held-input reset are complete.
-Scalable text and VoiceOver navigation are not. No journey has been tested with a
-physical Xbox, PlayStation or Switch-layout controller.
+Beta 20 also adds 100/125/150% text and menu sizing and individual VoiceOver
+controls across shared menus, panels and Arcade. A full listening journey remains
+unverified. No journey has been tested with a physical Xbox, PlayStation or
+Switch-layout controller.
 
 ### 5. Save and interruption recovery (P0, partial)
 
@@ -76,7 +84,7 @@ migration from an installed earlier release remain untested.
 
 ### 6. Release package (P0, partial)
 
-Beta 13 proves the pipeline. The 1.0 candidate still needs its own freeze, build,
+Beta 20 proves the current packaging pipeline. The 1.0 candidate still needs its own freeze, build,
 signature, notarization and Gatekeeper check. Beta notarization is not evidence for
 a later build.
 
@@ -118,6 +126,6 @@ A Mac 1.0 does not imply any of them.
 3. Book physical hardware time: an Intel Mac, a macOS 13 machine, an HDR display
    and three controller brands.
 4. Close the 10x shortfall or restate the advertised limit to a measured number.
-5. Add scalable text and VoiceOver navigation.
+5. Validate the implemented text scaling and VoiceOver navigation with full user journeys.
 6. Extend checkpoints to classic fan imports and L2 practice.
 7. Keep the publishing conversation separate and running. It does not wait on code.
