@@ -1,0 +1,25 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 204
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 50,
+    "required" : 25,
+    "saved" : 50,
+    "stateHash" : "12da5697057cc92b80f5f61aa9baf4f99c9b664f3eb02839353eb576ddb5a443",
+    "ticks" : 3099
+  },
+  "initialStateHash" : "8eb7cb168bee8bb4249ca48ec0b49846250f580f1ce8a083bcfc023e185523e1",
+  "number" : 4,
+  "rank" : "Tame",
+  "title" : "Downwardly Mobile Lemmings"
+}

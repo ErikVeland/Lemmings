@@ -1,0 +1,43 @@
+# Additional campaign completion evidence
+
+Beta 12 adds 104 fixed-input winning replays. These supplement the original
+[120-level DOS gate](../ClassicCompletion/README.md) and the existing L2 tests.
+
+| Campaign | Winning replays | Levels without a fixture |
+| --- | ---: | ---: |
+| Oh No! More Lemmings | 54/100 | 46 |
+| Xmas 1991 | 4/4 | 0 |
+| Xmas 1992 | 2/4 | 2 |
+| Holiday 1993 | 13/32 | 19 |
+| Holiday 1994 | 15/32 | 17 |
+| Lemmings 3 | 16/90 | 74 |
+
+Run `zsh Scripts/verify-campaign-completion.sh` after building the local app.
+The script uses its native NxlvKit library, checks the committed
+[fixture manifest](evidence.json), then replays every known solution. Missing
+or changed committed fixtures fail. Levels without recorded evidence are
+reported separately. Add `--require-all` to fail on any uncovered level.
+An uncovered level is not evidence of a broken level.
+
+Classic-family replays use the existing strict DOS replay format and real
+campaign data. Local reference candidates and small route searches supplied
+the inputs; only routes that completed in this engine were retained. The gate
+does not need the reference downloads. It checks level identity, accepted
+assignments, completion and exact recorded outcome.
+
+L3 fixtures record inputs at simulation ticks, a level-data hash, initial state
+and final state hashes, and rescue, loss and reserve counts. Every retained
+route is replayed twice with 20 carried-in lemmings, plus the extra lemmings
+placed in that level. The verifier rejects
+invalid actions, changed data, wrong level numbers and changed outcomes. Its
+negative tests deliberately damage each kind of evidence. Some routes use the
+game's End Run action after rescuing at least one lemming. Reserves are reported
+separately; they are not counted as rescues. These are standalone winning
+witnesses, not continuous campaign runs or original-engine equivalence proofs.
+
+`Tools/ClassicCompletion` and `Tools/Lemmings3Completion` can discover routes.
+After deliberately adding or improving a fixture, run
+`python3 Tools/CampaignCompletion/report.py`, the replay gate, and
+`zsh Scripts/verify-trolley-maxima.sh`. The rescue audit imports and verifies
+these fixtures, then stamps its results with the current engine fingerprint.
+Do not refresh the manifest to hide an unexplained regression.

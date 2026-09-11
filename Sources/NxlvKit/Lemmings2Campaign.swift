@@ -32,7 +32,8 @@ public struct Lemmings2Campaign: Sendable {
         }
     }
     public let levels: [Lemmings2Level]
-    public private(set) var tribe = 0
+    // Storage IDs follow the data files. New players begin with Beach.
+    public private(set) var tribe = 1
     public private(set) var level = 0
     public private(set) var results: [Int: Result] = [:]
     public var current: Lemmings2Level { levels[tribe * 10 + level] }

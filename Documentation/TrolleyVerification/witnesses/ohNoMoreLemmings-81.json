@@ -1,0 +1,175 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 1
+        }
+      },
+      "tick" : 51
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 120
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 226
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 455
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 489
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 1
+        }
+      },
+      "tick" : 605
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 28,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 696
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 29,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 774
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 29,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 808
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 28,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 942
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 28,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 986
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 28,
+          "skill" : "blocker"
+        }
+      },
+      "tick" : 1152
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 29,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1365
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 29,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1558
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 29,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1752
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 29,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1946
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 29,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 2154
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 21,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 2242
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 30,
+    "required" : 29,
+    "saved" : 29,
+    "stateHash" : "bad11e5179e4a699fc59775e7910234bce877a3af60a5b6991b4ff520f242460",
+    "ticks" : 4080
+  },
+  "initialStateHash" : "ac075b75bd2b06a00149ad051801d8f0f9a36bcde533d10b6a3a5c45fc186230",
+  "number" : 2,
+  "rank" : "Havoc",
+  "title" : "Be more than just a number"
+}

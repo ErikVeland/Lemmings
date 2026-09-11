@@ -12,8 +12,8 @@ swiftc -swift-version 6 -O -parse-as-library -emit-module -emit-library \
 suites=(ClassicGameFlowTests ClassicSettingsTests ClassicSoundCueTests AudioMatrixTests
   NeoLemmixSimulationTests NxlvRendererTests NxlvStyleResolverTests ClassicDOSSimulationRegressions
   ClassicDOSRewindTests ClassicDOSReplayTests ProTrackerTests PercussionTests AdaptiveDJDirectorTests
-  FLICTests Lemmings2RuntimeTests Lemmings2IntroTests Lemmings3RuntimeTests UnifiedGameTests ClassicSagaTests
-  PlatformProfileTests AmigaSoundTests BundledGameResourcesTests)
+  FLICTests Lemmings2RuntimeTests Lemmings2IntroTests Lemmings3RuntimeTests Lemmings3SoundTests UnifiedGameTests ClassicSagaTests
+  PlatformProfileTests AmigaSoundTests BundledGameResourcesTests PlatformExclusiveTests NeoLemmixEndToEnd)
 failed=0
 for suite in "${suites[@]}"; do
   flags=()
@@ -45,4 +45,5 @@ zsh Scripts/run-slim-packaging-tests.sh
 zsh Scripts/run-crt-probe.sh
 zsh Scripts/run-lemmings2-viewport-tests.sh
 zsh Scripts/run-playfield-draw-tests.sh
+CAMPAIGN_TEST_LIBRARY_DIR="$build_dir" zsh Scripts/verify-campaign-completion.sh
 echo "All ${#suites} beta regression suites passed."

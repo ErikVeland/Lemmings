@@ -1,0 +1,111 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 1
+        }
+      },
+      "tick" : 51
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 81
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 89
+        }
+      },
+      "tick" : 83
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 1
+        }
+      },
+      "tick" : 112
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 203
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 217
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 271
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 291
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 369
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 409
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 414
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 70,
+    "required" : 68,
+    "saved" : 68,
+    "stateHash" : "fccc5649103c2c4f1f0be78f2ba08a08855a3d53376bbd13d2087465aa8f53a1",
+    "ticks" : 950
+  },
+  "initialStateHash" : "4051850caec695c32f31c9178721b017a0b3b94bbd37f1e40a05dee63a148bbc",
+  "number" : 20,
+  "rank" : "Wicked",
+  "title" : "The Lemming Funhouse"
+}

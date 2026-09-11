@@ -1,0 +1,1024 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 20
+        }
+      },
+      "tick" : 94
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "climber"
+        }
+      },
+      "tick" : 94
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "climber"
+        }
+      },
+      "tick" : 131
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "climber"
+        }
+      },
+      "tick" : 159
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "climber"
+        }
+      },
+      "tick" : 192
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "floater"
+        }
+      },
+      "tick" : 227
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "floater"
+        }
+      },
+      "tick" : 233
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "floater"
+        }
+      },
+      "tick" : 240
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "floater"
+        }
+      },
+      "tick" : 247
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "blocker"
+        }
+      },
+      "tick" : 328
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 415
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 609
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 622
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "miner"
+        }
+      },
+      "tick" : 702
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 807
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "miner"
+        }
+      },
+      "tick" : 835
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 932
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1000
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1007
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1133
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1196
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1333
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1532
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 41,
+          "skill" : "miner"
+        }
+      },
+      "tick" : 1907
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 21
+        }
+      },
+      "tick" : 1993
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 22
+        }
+      },
+      "tick" : 1994
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 23
+        }
+      },
+      "tick" : 1995
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 24
+        }
+      },
+      "tick" : 1996
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 25
+        }
+      },
+      "tick" : 1997
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 26
+        }
+      },
+      "tick" : 1998
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 27
+        }
+      },
+      "tick" : 1999
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 28
+        }
+      },
+      "tick" : 2000
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 29
+        }
+      },
+      "tick" : 2001
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 30
+        }
+      },
+      "tick" : 2002
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 31
+        }
+      },
+      "tick" : 2003
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 32
+        }
+      },
+      "tick" : 2004
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 33
+        }
+      },
+      "tick" : 2005
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 34
+        }
+      },
+      "tick" : 2006
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 35
+        }
+      },
+      "tick" : 2007
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 36
+        }
+      },
+      "tick" : 2008
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 37
+        }
+      },
+      "tick" : 2009
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 38
+        }
+      },
+      "tick" : 2010
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 39
+        }
+      },
+      "tick" : 2011
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 40
+        }
+      },
+      "tick" : 2012
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 41
+        }
+      },
+      "tick" : 2013
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 42
+        }
+      },
+      "tick" : 2014
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 43
+        }
+      },
+      "tick" : 2015
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 44
+        }
+      },
+      "tick" : 2016
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 45
+        }
+      },
+      "tick" : 2017
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 46
+        }
+      },
+      "tick" : 2018
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 47
+        }
+      },
+      "tick" : 2019
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 48
+        }
+      },
+      "tick" : 2020
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 49
+        }
+      },
+      "tick" : 2021
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 50
+        }
+      },
+      "tick" : 2022
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 51
+        }
+      },
+      "tick" : 2023
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 52
+        }
+      },
+      "tick" : 2024
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 53
+        }
+      },
+      "tick" : 2025
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 54
+        }
+      },
+      "tick" : 2026
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 55
+        }
+      },
+      "tick" : 2027
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 56
+        }
+      },
+      "tick" : 2028
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 57
+        }
+      },
+      "tick" : 2029
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 58
+        }
+      },
+      "tick" : 2030
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 59
+        }
+      },
+      "tick" : 2031
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 60
+        }
+      },
+      "tick" : 2032
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 61
+        }
+      },
+      "tick" : 2033
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 62
+        }
+      },
+      "tick" : 2034
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 63
+        }
+      },
+      "tick" : 2035
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 64
+        }
+      },
+      "tick" : 2036
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 65
+        }
+      },
+      "tick" : 2037
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 66
+        }
+      },
+      "tick" : 2038
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 67
+        }
+      },
+      "tick" : 2039
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 68
+        }
+      },
+      "tick" : 2040
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 69
+        }
+      },
+      "tick" : 2041
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 70
+        }
+      },
+      "tick" : 2042
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 71
+        }
+      },
+      "tick" : 2043
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 72
+        }
+      },
+      "tick" : 2044
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 73
+        }
+      },
+      "tick" : 2045
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 74
+        }
+      },
+      "tick" : 2046
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 75
+        }
+      },
+      "tick" : 2047
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 76
+        }
+      },
+      "tick" : 2048
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 77
+        }
+      },
+      "tick" : 2049
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 78
+        }
+      },
+      "tick" : 2050
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 79
+        }
+      },
+      "tick" : 2051
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 80
+        }
+      },
+      "tick" : 2052
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 81
+        }
+      },
+      "tick" : 2053
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 82
+        }
+      },
+      "tick" : 2054
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 83
+        }
+      },
+      "tick" : 2055
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 84
+        }
+      },
+      "tick" : 2056
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 85
+        }
+      },
+      "tick" : 2057
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 86
+        }
+      },
+      "tick" : 2058
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 87
+        }
+      },
+      "tick" : 2059
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 88
+        }
+      },
+      "tick" : 2060
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 89
+        }
+      },
+      "tick" : 2061
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 90
+        }
+      },
+      "tick" : 2062
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 91
+        }
+      },
+      "tick" : 2063
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 92
+        }
+      },
+      "tick" : 2064
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 93
+        }
+      },
+      "tick" : 2065
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 94
+        }
+      },
+      "tick" : 2066
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 95
+        }
+      },
+      "tick" : 2067
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 96
+        }
+      },
+      "tick" : 2068
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 97
+        }
+      },
+      "tick" : 2069
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 98
+        }
+      },
+      "tick" : 2070
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 2071
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 2072
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 2073
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 2074
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 2075
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 2076
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 2077
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 2078
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 2079
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 2080
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 2081
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 2082
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 2083
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 2084
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 2085
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 2086
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 2087
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 2088
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 2089
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 2090
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "miner"
+        }
+      },
+      "tick" : 2200
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 80,
+    "required" : 72,
+    "saved" : 80,
+    "stateHash" : "50c6cb725707cde566bd3c4103f41244a75fd45c1a8ae0d97f84f04536d2ff5a",
+    "ticks" : 3156
+  },
+  "initialStateHash" : "7bf776a1e6166d1fcf8ab3ed1d1c54e543e857e0b923ddd3c007910762826a53",
+  "number" : 30,
+  "rank" : "Tricky",
+  "title" : "The Crankshaft"
+}

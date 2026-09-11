@@ -1,0 +1,87 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 1
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "blocker"
+        }
+      },
+      "tick" : 75
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 133
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 246
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 49,
+          "skill" : "climber"
+        }
+      },
+      "tick" : 285
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "miner"
+        }
+      },
+      "tick" : 541
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "climber"
+        }
+      },
+      "tick" : 542
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 49,
+          "skill" : "miner"
+        }
+      },
+      "tick" : 771
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 50,
+    "required" : 50,
+    "saved" : 50,
+    "stateHash" : "a0cf2ebe21e3f9b0c11ca698cc730dc1a1754038a00586158e7338cc98c71050",
+    "ticks" : 1233
+  },
+  "initialStateHash" : "07aa60c5d5d33c7b2e6f59ef3183a1b011e50504057ee89733f39a6dd1a6ce4e",
+  "number" : 20,
+  "rank" : "Mayhem",
+  "title" : "No added colours or Lemmings"
+}

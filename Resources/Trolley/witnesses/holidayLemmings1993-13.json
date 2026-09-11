@@ -1,0 +1,68 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 10
+        }
+      },
+      "tick" : 122
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 122
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 200
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 318
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 62,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 680
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 62,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 1312
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 80,
+    "required" : 75,
+    "saved" : 80,
+    "stateHash" : "126b76ea99fe27850050c730c369d19bcea71d9017b299b63a90b479148e3f54",
+    "ticks" : 2173
+  },
+  "initialStateHash" : "0afe288a95c579d37bcb25d6808324218b85df06e5137c9e590d095ba15a20a1",
+  "number" : 14,
+  "rank" : "Flurry",
+  "title" : "Marshmallow Land"
+}

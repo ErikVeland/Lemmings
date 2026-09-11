@@ -1,0 +1,59 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 1
+        }
+      },
+      "tick" : 17
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "miner"
+        }
+      },
+      "tick" : 302
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "miner"
+        }
+      },
+      "tick" : 367
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "miner"
+        }
+      },
+      "tick" : 432
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 441
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 50,
+    "required" : 50,
+    "saved" : 50,
+    "stateHash" : "f5745966f98b0a4f3776c3f367143b7156a730fc90c477811e5946f8d68bf1bb",
+    "ticks" : 970
+  },
+  "initialStateHash" : "85bdeb3bf2fd6a7675159a58b1e66ba600bfaccd39c073d495ffae417515fe4c",
+  "number" : 6,
+  "rank" : "Havoc",
+  "title" : "Now get out of that!"
+}

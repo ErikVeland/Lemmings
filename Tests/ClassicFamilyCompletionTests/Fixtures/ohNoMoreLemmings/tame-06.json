@@ -1,0 +1,25 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 180
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 50,
+    "required" : 25,
+    "saved" : 50,
+    "stateHash" : "48534341fe876298dd396dfa10109612ffd919b0bac529eaa91cf715e3fd4154",
+    "ticks" : 3061
+  },
+  "initialStateHash" : "2de47a8da92826cb15a6eb895bcb71c215041f30af69067ea45f5f316f767896",
+  "number" : 6,
+  "rank" : "Tame",
+  "title" : "Intsy-Wintsy...Lemming?"
+}

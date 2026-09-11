@@ -1,0 +1,77 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 80
+        }
+      },
+      "tick" : 4
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 4
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 50,
+          "skill" : "bomber"
+        }
+      },
+      "tick" : 633
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 54,
+          "skill" : "bomber"
+        }
+      },
+      "tick" : 657
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 65,
+          "skill" : "bomber"
+        }
+      },
+      "tick" : 763
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 68,
+          "skill" : "bomber"
+        }
+      },
+      "tick" : 786
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "bomber"
+        }
+      },
+      "tick" : 873
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 70,
+    "required" : 50,
+    "saved" : 65,
+    "stateHash" : "5349a08734fa3a20c54adaa2b881a90aac3bbb75b2b46af130f440aa278abd1d",
+    "ticks" : 1293
+  },
+  "initialStateHash" : "07d24ae5dd0d1c89e9814858116f0644c7da10fd5ce1e5c35a6ead45d6fac574",
+  "number" : 18,
+  "rank" : "Fun",
+  "title" : "Let's block and blow"
+}

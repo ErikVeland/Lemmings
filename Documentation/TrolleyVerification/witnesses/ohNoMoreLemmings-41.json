@@ -1,0 +1,201 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 1
+        }
+      },
+      "tick" : 7
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 121
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 324
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 408
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "bomber"
+        }
+      },
+      "tick" : 585
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 5,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 779
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 9,
+          "skill" : "bomber"
+        }
+      },
+      "tick" : 973
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 5,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 975
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 6,
+          "skill" : "bomber"
+        }
+      },
+      "tick" : 1007
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 10,
+          "skill" : "bomber"
+        }
+      },
+      "tick" : 1038
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 5,
+          "skill" : "bomber"
+        }
+      },
+      "tick" : 1105
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 11,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1181
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 14,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1421
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 17,
+          "skill" : "bomber"
+        }
+      },
+      "tick" : 1533
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 18,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1656
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 22,
+          "skill" : "bomber"
+        }
+      },
+      "tick" : 1806
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 24,
+          "skill" : "bomber"
+        }
+      },
+      "tick" : 1932
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 23,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1936
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 1989
+    },
+    {
+      "action" : {
+        "nuke" : {
+
+        }
+      },
+      "tick" : 2897
+    },
+    {
+      "action" : {
+        "nuke" : {
+
+        }
+      },
+      "tick" : 2901
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 80,
+    "required" : 60,
+    "saved" : 60,
+    "stateHash" : "ad308e616605c474af0db3f2f9755388e7e6ead7a9286d5dfa8ab5870cc0a183",
+    "ticks" : 3045
+  },
+  "initialStateHash" : "f070a3f4a5dbb2917e40134c8e85565a2230ccaca04363e807bc313fedff2d8f",
+  "number" : 2,
+  "rank" : "Wild",
+  "title" : "Lemming Hotel"
+}

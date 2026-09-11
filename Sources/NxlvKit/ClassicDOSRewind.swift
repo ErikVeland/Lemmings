@@ -34,6 +34,7 @@ public struct ClassicDOSRewind: Sendable {
     public private(set) var commands: [LoggedCommand] = []
 
     private var keyframes: [Keyframe] = []
+    private var appliedCommandCount = 0
     private let interval: Int
     private let maximumKeyframes: Int
 
@@ -57,6 +58,7 @@ public struct ClassicDOSRewind: Sendable {
     @discardableResult
     public mutating func tick() -> [ClassicDOSEvent] {
         let events = simulation.tick()
+        applyPendingCommands()
         captureIfNeeded()
         return events
     }
@@ -67,9 +69,11 @@ public struct ClassicDOSRewind: Sendable {
     {
         let result = simulation.assign(skill, to: lemmingID)
         if result == .assigned {
+            discardFutureCommands()
             commands.append(LoggedCommand(
                 tick: simulation.tickCount,
                 action: .assign(lemmingID: lemmingID, skill: skill)))
+            appliedCommandCount = commands.count
         }
         return result
     }
@@ -78,21 +82,25 @@ public struct ClassicDOSRewind: Sendable {
         let before = simulation.releaseRate
         simulation.setReleaseRate(value)
         guard simulation.releaseRate != before else { return }
+        discardFutureCommands()
         commands.append(LoggedCommand(
             tick: simulation.tickCount, action: .releaseRate(simulation.releaseRate)))
+        appliedCommandCount = commands.count
     }
 
     public mutating func beginNuke() {
         guard !simulation.isNuking else { return }
         simulation.beginNuke()
+        discardFutureCommands()
         commands.append(LoggedCommand(tick: simulation.tickCount, action: .nuke))
+        appliedCommandCount = commands.count
     }
 
     private mutating func captureIfNeeded() {
         guard simulation.tickCount % interval == 0 else { return }
         guard keyframes.last?.tick != simulation.tickCount else { return }
         keyframes.append(Keyframe(
-            tick: simulation.tickCount, state: simulation, commandCount: commands.count))
+            tick: simulation.tickCount, state: simulation, commandCount: appliedCommandCount))
         if keyframes.count > maximumKeyframes { keyframes.removeFirst() }
     }
 
@@ -113,15 +121,17 @@ public struct ClassicDOSRewind: Sendable {
 
         // Seeking forward from here is cheaper than restarting from a keyframe.
         if target > simulation.tickCount {
-            advance(to: target, from: commandIndexAfter(tick: simulation.tickCount))
+            advance(to: target)
             return simulation.tickCount == target
         }
 
         guard let keyframe = keyframes.last(where: { $0.tick <= target }) else { return false }
         simulation = keyframe.state
+        appliedCommandCount = keyframe.commandCount
+        applyPendingCommands()
         // Drop keyframes that are now in the future, so history stays ordered.
         keyframes.removeAll { $0.tick > target }
-        advance(to: target, from: keyframe.commandCount)
+        advance(to: target)
         return simulation.tickCount == target
     }
 
@@ -142,26 +152,31 @@ public struct ClassicDOSRewind: Sendable {
     /// Rewinds by a number of seconds, clamped to what history holds.
     @discardableResult
     public mutating func rewind(seconds: Double) -> Bool {
-        let ticks = Int((Double(ClassicDOSRules.ticksPerSecond) * seconds).rounded())
-        return seek(toTick: max(earliestTick, simulation.tickCount - ticks))
+        guard seconds.isFinite, seconds >= 0 else { return false }
+        let available = simulation.tickCount - earliestTick
+        let requested = (Double(ClassicDOSRules.ticksPerSecond) * seconds).rounded()
+        let ticks = requested >= Double(available) ? available : Int(requested)
+        return seek(toTick: simulation.tickCount - ticks)
     }
 
-    private func commandIndexAfter(tick: Int) -> Int {
-        commands.firstIndex { $0.tick > tick } ?? commands.count
+    /// A successful new command replaces the abandoned future branch.
+    private mutating func discardFutureCommands() {
+        commands.removeSubrange(appliedCommandCount...)
+        keyframes.removeAll { $0.tick > simulation.tickCount }
     }
 
-    /// Simulates forward to a tick, applying logged commands as they come up.
-    private mutating func advance(to target: Int, from commandIndex: Int) {
-        var index = commandIndex
-        while simulation.tickCount < target {
-            _ = simulation.tick()
-            while index < commands.count, commands[index].tick == simulation.tickCount {
-                apply(commands[index].action)
-                index += 1
-            }
-            captureIfNeeded()
-            // A finished level cannot advance further.
-            if simulation.isComplete { break }
+    private mutating func applyPendingCommands() {
+        while appliedCommandCount < commands.count,
+              commands[appliedCommandCount].tick == simulation.tickCount {
+            apply(commands[appliedCommandCount].action)
+            appliedCommandCount += 1
+        }
+    }
+
+    /// Simulates forward with the same command timing as normal playback.
+    private mutating func advance(to target: Int) {
+        while simulation.tickCount < target, !simulation.isComplete {
+            tick()
         }
     }
 
@@ -195,7 +210,7 @@ public struct ClassicDOSRewind: Sendable {
             number: number,
             title: title,
             initialStateHash: initialStateHash,
-            events: commands.map { ClassicDOSReplayEvent(tick: $0.tick, action: $0.action) }
+            events: commands.prefix(appliedCommandCount).map { ClassicDOSReplayEvent(tick: $0.tick, action: $0.action, afterTick: true) }
         )
     }
 }

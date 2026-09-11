@@ -1,0 +1,1 @@
+[{"id":0,"skill":"basher","x":719,"y":128,"direction":1},{"id":0,"skill":"climber"},{"id":0,"skill":"floater"},{"id":0,"skill":"digger","x":1044,"y":96,"direction":1},{"id":0,"skill":"builder","y":100,"action":"digging"},{"id":0,"skill":"miner","direction":-1,"action":"walking"}]

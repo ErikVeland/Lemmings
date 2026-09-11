@@ -1,7 +1,7 @@
 import Foundation
 import NxlvKit
 
-/// Reads the fan level packs a player has downloaded.
+/// Combines embedded packs, automatic downloads and optional local packs.
 ///
 /// A pack is a zip holding levels in one of three shapes. A `.lvl` file is one
 /// level. A `.ini` file is one level written as text. A `.dat` file is a DOS
@@ -22,7 +22,7 @@ enum FanLevelLibrary {
   ///
   /// `section` names which level inside a DOS archive, and is nil for the
   /// shapes that keep one level per file.
-  struct Entry {
+  struct Entry: Sendable {
     let file: String
     let section: Int?
     let label: String
@@ -41,7 +41,7 @@ enum FanLevelLibrary {
   /// found, and the total on the front screen counts the packs measured so far.
   enum Progress {
     private static let passedKey = "FanLevelsPassed"
-    private static let countsKey = "FanLevelCounts"
+    private static let countsKey = "FanLevelCountsV2"
 
     /// A stable name for one level, so a pack can be renamed on disk without
     /// losing its record.
@@ -49,18 +49,22 @@ enum FanLevelLibrary {
       "\(displayName(of: pack))|\(label)"
     }
 
-    static var passed: Set<String> {
-      Set(UserDefaults.standard.stringArray(forKey: passedKey) ?? [])
+    @MainActor static var passed: Set<String> {
+      Set(UserDefaults.standard.stringArray(forKey: ArcadeStore.shared.progressKey(passedKey)) ?? [])
     }
 
-    static func record(pack: URL, label: String) {
+    @MainActor static func record(pack: URL, label: String) {
       var all = passed
       guard all.insert(identifier(pack: pack, label: label)).inserted else { return }
-      UserDefaults.standard.set(Array(all).sorted(), forKey: passedKey)
+      UserDefaults.standard.set(Array(all).sorted(), forKey: ArcadeStore.shared.progressKey(passedKey))
     }
 
-    static func hasPassed(pack: URL, label: String) -> Bool {
+    @MainActor static func hasPassed(pack: URL, label: String) -> Bool {
       passed.contains(identifier(pack: pack, label: label))
+    }
+
+    static func countKey(_ pack: URL) -> String {
+      packID(pack).map { "catalogue:\($0)" } ?? "file:" + pack.lastPathComponent.lowercased()
     }
 
     static var counts: [String: Int] {
@@ -69,20 +73,41 @@ enum FanLevelLibrary {
 
     static func setCount(_ count: Int, for pack: URL) {
       var all = counts
-      let key = displayName(of: pack)
+      let key = countKey(pack)
       guard all[key] != count else { return }
       all[key] = count
       UserDefaults.standard.set(all, forKey: countsKey)
     }
 
     /// Levels in the packs measured so far.
-    static var knownTotal: Int { counts.values.reduce(0, +) }
-    static var passedTotal: Int { passed.count }
+    static func total(for packs: [URL]) -> Int {
+      let known = counts
+      return packs.reduce(0) { $0 + (known[countKey($1)] ?? 0) }
+    }
+
+    static func mergeCounts(_ measured: [String: Int]) {
+      var all = counts
+      all.merge(measured) { _, new in new }
+      UserDefaults.standard.set(all, forKey: countsKey)
+    }
+
+    static func seedBundledCounts() {
+      guard let folder = bundledFolder,
+        let data = try? Data(contentsOf: folder.appendingPathComponent("level-counts.json")),
+        let index = try? JSONDecoder().decode([String: Int].self, from: data) else { return }
+      var all = counts
+      for (filename, count) in index where count >= 0 {
+        let pack = folder.appendingPathComponent(filename)
+        if FileManager.default.fileExists(atPath: pack.path) { all[countKey(pack)] = count }
+      }
+      UserDefaults.standard.set(all, forKey: countsKey)
+    }
+    @MainActor static var passedTotal: Int { passed.count }
 
     /// Whether every pack in the folder has been measured.
     static func isComplete(for packs: [URL]) -> Bool {
       let known = counts
-      return packs.allSatisfy { known[displayName(of: $0)] != nil }
+      return packs.allSatisfy { known[countKey($0)] != nil }
     }
 
     /// Measures any pack not yet counted. Slow, so it runs off the main thread.
@@ -90,7 +115,7 @@ enum FanLevelLibrary {
       _ packs: [URL], onProgress: @escaping @MainActor @Sendable () -> Void
     ) {
       DispatchQueue.global(qos: .utility).async {
-        for pack in packs where counts[displayName(of: pack)] == nil {
+        for pack in packs where counts[countKey(pack)] == nil {
           let total = entries(in: pack).count
           DispatchQueue.main.async {
             MainActor.assumeIsolated {
@@ -103,13 +128,36 @@ enum FanLevelLibrary {
     }
   }
 
-  /// Every pack in the chosen folder, by name.
+  static var bundledFolder: URL? { Bundle.main.resourceURL?.appendingPathComponent("LevelPacks") }
+  static var downloadFolder: URL {
+    FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
+      .appendingPathComponent("Ultimate Lemmings/Fan Levels", isDirectory: true)
+  }
+
+  static func packID(_ url: URL) -> Int? {
+    let prefix = url.lastPathComponent.prefix { $0.isNumber }
+    guard url.lastPathComponent.dropFirst(prefix.count).first == "-" else { return nil }
+    return Int(prefix)
+  }
+
+  /// Embedded packs stay available even when a chosen folder is missing.
   static func packs() -> [URL] {
-    guard let folder else { return [] }
-    return ((try? FileManager.default.contentsOfDirectory(
-      at: folder, includingPropertiesForKeys: nil)) ?? [])
-      .filter { $0.pathExtension.lowercased() == "zip" }
-      .sorted { $0.lastPathComponent < $1.lastPathComponent }
+    packs(in: [bundledFolder, downloadFolder, folder].compactMap { $0 })
+  }
+
+  static func packs(in folders: [URL]) -> [URL] {
+    var result: [String: URL] = [:]
+    for folder in folders {
+      let files = (try? FileManager.default.contentsOfDirectory(at: folder,
+        includingPropertiesForKeys: [.isRegularFileKey], options: [.skipsHiddenFiles])) ?? []
+      for file in files.sorted(by: { $0.lastPathComponent < $1.lastPathComponent })
+        where file.pathExtension.lowercased() == "zip"
+          && (try? file.resourceValues(forKeys: [.isRegularFileKey]).isRegularFile) == true {
+        let key = packID(file).map { "id:\($0)" } ?? "file:" + file.lastPathComponent.lowercased()
+        if result[key] == nil { result[key] = file }
+      }
+    }
+    return result.values.sorted { $0.lastPathComponent < $1.lastPathComponent }
   }
 
   /// A pack's name without the filing number the mirror gives it.
@@ -129,8 +177,9 @@ enum FanLevelLibrary {
       let base = (name as NSString).lastPathComponent.lowercased()
       if lower.hasSuffix(".lvl")
         || (lower.hasSuffix(".ini") && !lower.hasSuffix("levelpack.ini")) {
-        found.append(Entry(
-          file: name, section: nil, label: (name as NSString).lastPathComponent))
+        guard let raw = contents(of: name, in: pack) else { continue }
+        guard (try? singleLevel(raw, name: name)) != nil else { continue }
+        found.append(Entry(file: name, section: nil, label: (name as NSString).lastPathComponent))
       } else if lower.hasSuffix(".dat") {
         // Graphics archives sit beside the levels and hold no level records.
         guard !base.hasPrefix("vgaspec"), !base.hasPrefix("vgagr"),
@@ -164,10 +213,15 @@ enum FanLevelLibrary {
         try ClassicLevel(data: sections[section].data.prefix(ClassicLevel.recordSize)),
         nil)
     }
-    if entry.file.lowercased().hasSuffix(".lvl") {
+    return try singleLevel(raw, name: entry.file)
+  }
+
+  private static func singleLevel(_ raw: Data, name: String) throws -> (ClassicLevel, String?) {
+    // Some archived binary levels were given an .ini extension by their author.
+    if name.lowercased().hasSuffix(".lvl") || (raw.count == ClassicLevel.recordSize && raw.prefix(32).contains(0)) {
       return (try FanLevelReader.level(fromLVL: raw), nil)
     }
-    let text = String(decoding: raw, as: UTF8.self)
+    let text = String(data: raw, encoding: .utf8) ?? (String(data: raw, encoding: .isoLatin1) ?? String(decoding: raw, as: UTF8.self))
     return (try FanLevelReader.level(fromINI: text), FanLevelReader.styleName(fromINI: text))
   }
 
@@ -181,9 +235,16 @@ enum FanLevelLibrary {
     process.standardOutput = pipe
     process.standardError = FileHandle.nullDevice
     guard (try? process.run()) != nil else { return nil }
-    let out = pipe.fileHandleForReading.readDataToEndOfFile()
+    var out = Data()
+    while let chunk = try? pipe.fileHandleForReading.read(upToCount: 64 * 1024), !chunk.isEmpty {
+      guard out.count + chunk.count <= 4 * 1024 * 1024 else {
+        process.terminate(); try? pipe.fileHandleForReading.close(); process.waitUntilExit()
+        return nil
+      }
+      out.append(chunk)
+    }
     process.waitUntilExit()
-    return out.isEmpty ? nil : out
+    return process.terminationStatus == 0 && !out.isEmpty ? out : nil
   }
 
   private static func shell(_ arguments: [String]) -> String {

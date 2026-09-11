@@ -1,0 +1,85 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 1
+        }
+      },
+      "tick" : 14
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 60
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 239
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 453
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 7,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 584
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 7,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 800
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 1015
+    },
+    {
+      "action" : {
+        "nuke" : {
+
+        }
+      },
+      "tick" : 1442
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 50,
+    "required" : 40,
+    "saved" : 40,
+    "stateHash" : "741d2fe9b734cfb7e6b2538965d54228aaa4c486772d10ad36ed198c2bbd4f40",
+    "ticks" : 1589
+  },
+  "initialStateHash" : "894a9d21ad9493fab0216b25f1561b32c04b9378659b2993cf4fb7a86ad777dd",
+  "number" : 14,
+  "rank" : "Frost",
+  "title" : "Happy New Year II!"
+}

@@ -73,6 +73,24 @@ enum GamePhase: Equatable {
 }
 
 @MainActor final class PlayfieldView: NSView {
+  var hdEffectsEnabled = true {
+    didSet {
+      if !hdEffectsEnabled {
+        speedTrails.reset(); hdrBirths.removeAll(); hdrFlashes.removeAll(); hdrOverlay?.clear()
+      }
+      needsDisplay = true
+    }
+  }
+  var reduceMotion = false { didSet { if reduceMotion { speedTrails.reset() }; needsDisplay = true } }
+  var reduceFlashes = false {
+    didSet {
+      if reduceFlashes { hdrBirths.removeAll(); hdrFlashes.removeAll(); hdrOverlay?.clear() }
+      needsDisplay = true
+    }
+  }
+  var speedMultiplier: Double = 3 { didSet { speedTrails.multiplier = speedMultiplier } }
+  var isFastForward = false
+  private let speedTrails = SpeedTrails()
   private var hdrOverlay: ExplosionHDRView?
   private(set) var hdrFlashes: [ExplosionFlash] = []
   private var hdrBirths: [Int:(tick:Int,expires:TimeInterval)] = [:]
@@ -97,7 +115,11 @@ enum GamePhase: Equatable {
   /// Lines drawn over the level before it starts or after it ends.
   var overlayTitle: String?
   var overlayLines: [String] = []
-  var overlayFooter: String?
+  var overlayFooter: String? { didSet { overlayProfileInitials = nil } }
+  var overlayProfileInitials: String?
+  var onProfiles: (() -> Void)?
+  var onRecords: (() -> Void)?
+  private var overlayFooterButtons: [CGRect] = []
   /// Which overlay line is currently chosen, when the screen offers a choice.
   var overlayHighlight: Int?
   /// Marches real lemmings along the foot of the screen.
@@ -106,7 +128,7 @@ enum GamePhase: Equatable {
   var overlayFrame = 0
   var phase: GamePhase = .playing {
     didSet {
-      if phase != oldValue { cursorViewPoint = nil; cursorLevelPoint = nil }
+      if phase != oldValue { cursorViewPoint = nil; cursorLevelPoint = nil; overlayReplayLine = nil; overlayRetryLine = nil }
     }
   }
   var levelImage: CGImage?
@@ -130,10 +152,17 @@ enum GamePhase: Equatable {
     didSet { sceneTick = nil }
   }
   private var sceneTick: Int?
+  #if PERFORMANCE_TESTS
+  var sceneRenderSeconds = 0.0
+  #endif
 
   private func refreshClassicScene() {
     guard let classicScene, let session = session as? ClassicSession,
           sceneTick != session.currentTick else { return }
+    #if PERFORMANCE_TESTS
+    let sceneStarted = ProcessInfo.processInfo.systemUptime
+    defer { sceneRenderSeconds += ProcessInfo.processInfo.systemUptime - sceneStarted }
+    #endif
     let rgba = macScene?.rgba(simulation: session.simulation)
       ?? ClassicSceneFrame.rgba(classicScene, simulation: session.simulation)
     imageScale = macScene == nil ? 1 : 2
@@ -148,7 +177,7 @@ enum GamePhase: Equatable {
     sceneTick = session.currentTick
   }
   var session: (any GameSession)? {
-    didSet { if oldValue !== session { hdrBirths.removeAll(); hdrLastTick = 0 } }
+    didSet { if oldValue !== session { hdrBirths.removeAll(); hdrLastTick = 0; speedTrails.reset() } }
   }
   var assets: ClassicMainDATAssets?
   var palette: [ClassicRGBColor] = []
@@ -158,9 +187,24 @@ enum GamePhase: Equatable {
   /// Called when a click should dismiss a briefing or a result.
   var onAdvancePhase: (() -> Void)?
   var onSelectOverlayLine: ((Int) -> Void)?
+  var overlayReplayLine: Int?
+  var onReplay: ((Bool) -> Void)?
+  var overlayRetryLine: Int?
+  var onRetry: (() -> Void)?
   private var overlayLineRects: [CGRect] = []
 
   private var spriteCache: [String: NSImage] = [:]
+  private var spritePixels: [String: CGImage] = [:]
+  var usesControllerPointer: Bool { controllerPointer != nil }
+  private var controllerPointer: CGPoint?
+  func moveControllerPointer(_ dx: Double, _ dy: Double) {
+    let p = controllerPointer ?? CGPoint(x: bounds.midX, y: bounds.midY)
+    let next = CGPoint(x: max(0, min(bounds.width - 1, p.x + dx * viewport.zoom)),
+                       y: max(0, min(bounds.height - 1, p.y + dy * viewport.zoom)))
+    handleMove(to: next); controllerPointer = next
+  }
+  let assignmentHighlight = LemmingFocusHighlight()
+  var pointerLemmingID: Int? { cursorViewPoint.flatMap { lemming(at: viewport.levelPoint(from: $0))?.id } }
   private var cursorLevelPoint: CGPoint?
   private var cursorViewPoint: CGPoint?
   private var trackingArea: NSTrackingArea?
@@ -195,6 +239,8 @@ enum GamePhase: Equatable {
   /// When the picture is drawn through the tube the events land on that view,
   /// not this one, so a point arrives already converted.
   func handleMove(to point: CGPoint) {
+    controllerPointer = nil
+    assignmentHighlight.clear()
     cursorViewPoint = point
     cursorLevelPoint = viewport.levelPoint(from: point)
     needsDisplay = true
@@ -203,18 +249,32 @@ enum GamePhase: Equatable {
   /// Takes a click position directly.
   func handleClick(at point: CGPoint) {
     guard phase == .playing else {
+      if overlayProfileInitials != nil,
+        let index = overlayFooterButtons.firstIndex(where: { $0.contains(point) }) {
+        if index == 0 { onProfiles?() } else { onRecords?() }
+        return
+      }
+      if let line = overlayRetryLine, overlayLineRects.indices.contains(line), overlayLineRects[line].contains(point) {
+        onRetry?(); return
+      }
+      if let line = overlayReplayLine, overlayLineRects.indices.contains(line), overlayLineRects[line].contains(point) {
+        onReplay?(point.x > bounds.midX); return
+      }
       if overlayHighlight != nil {
         if let index = overlayLineRects.firstIndex(where: { $0.contains(point) }) { onSelectOverlayLine?(index) }
       } else { onAdvancePhase?() }
       return
     }
+    assignmentHighlight.clear()
     cursorViewPoint = point
     cursorLevelPoint = viewport.levelPoint(from: point)
     if let target = lemming(at: viewport.levelPoint(from: point)) { onAssign?(target.id) }
   }
 
   override func mouseMoved(with event: NSEvent) {
+    controllerPointer = nil
     let point = convert(event.locationInWindow, from: nil)
+    assignmentHighlight.clear()
     cursorViewPoint = point
     cursorLevelPoint = viewport.levelPoint(from: point)
     needsDisplay = true
@@ -287,11 +347,18 @@ enum GamePhase: Equatable {
       && point.y >= y - box.top && point.y <= y + box.bottom
   }
 
-  func invalidateSprites() { spriteCache.removeAll() }
+  func invalidateSprites() { spriteCache.removeAll(); spritePixels.removeAll() }
 
   // MARK: - Drawing
 
   override func draw(_ dirtyRect: NSRect) {
+    defer {
+      ControllerPointer.draw(controllerPointer)
+      if let id = assignmentHighlight.target, let lem = session?.lemmings.first(where: { $0.id == id }) {
+        assignmentHighlight.draw(at: viewport.viewPoint(fromLevel: CGPoint(x: lem.x, y: lem.y - 6)), scale: viewport.zoom)
+      }
+    }
+    updateSpeedTrails()
     hdrFlashes.removeAll(keepingCapacity:true)
     let tick = session?.currentTick ?? 0
     if tick < hdrLastTick { hdrBirths.removeAll() }
@@ -328,7 +395,7 @@ enum GamePhase: Equatable {
         }
       } else {
         drawLevel(levelImage)
-        drawLemmings()
+        speedTrails.draw(enabled: hdEffectsEnabled && !reduceMotion && isFastForward && phase == .playing, in: bounds) { drawLemmings() }
       }
       if phase == .playing { drawCursor() }
     }
@@ -357,45 +424,45 @@ enum GamePhase: Equatable {
 
   private func drawOverlay() {
     overlayLineRects = []
+    overlayFooterButtons = []
     NSColor.black.withAlphaComponent(0.42).setFill()
     bounds.fill()
-    let scale = min(2.5, bounds.width / 1100,
-      bounds.height / CGFloat(190 + overlayLines.count * 42))
-    let rowHeight = 42 * scale
-    let width = min(bounds.width - 28 * scale, 820 * scale)
-    // The release's title art needs a deeper band than a line of text does.
     let showsLogo = overlayTitle == "LEMMINGS" && macInterface?.interface.logo != nil
-    let headerHeight = (showsLogo ? 116 : 62) * scale
-    let height = CGFloat(88 + overlayLines.count * 42) * scale + headerHeight
-    let board = CGRect(x: (bounds.width - width) / 2, y: (bounds.height - height) / 2,
-      width: width, height: height)
+    let headerUnits: CGFloat = showsLogo ? 116 : 62
+    // Reserve separate space for the footer and the marching sprites.
+    let marchHeight: CGFloat = overlayShowsLemmings ? 64 : 0
+    let scale = min(2.5, bounds.width / 1100,
+      max(1, bounds.height - marchHeight - 24) / (headerUnits + 106 + CGFloat(overlayLines.count) * 42))
+    let rowHeight = 42 * scale
+    let width = min(bounds.width - 28 * scale, 900 * scale)
+    let headerHeight = headerUnits * scale
+    let height = (106 + CGFloat(overlayLines.count) * 42) * scale + headerHeight
+    let board = CGRect(x: (bounds.width - width) / 2,
+      y: max(12, (bounds.height - marchHeight - height) / 2), width: width, height: height)
 
     // Chunky stone edging and a moss cap echo the level terrain.
     (macInterface == nil ? NSColor(calibratedRed: 0.09, green: 0.12, blue: 0.16, alpha: 0.97)
       : NSColor(calibratedWhite: 0.015, alpha: 0.96)).setFill()
     board.fill()
-    NSColor(calibratedRed: 0.36, green: 0.39, blue: 0.43, alpha: 1).setFill()
-    for x in stride(from: board.minX, to: board.maxX, by: 28 * scale) {
-      CGRect(x: x, y: board.minY, width: min(26 * scale, board.maxX - x), height: 7 * scale).fill()
-      CGRect(x: x, y: board.maxY - 7 * scale,
-        width: min(26 * scale, board.maxX - x), height: 7 * scale).fill()
-    }
-    NSColor(calibratedRed: 0.27, green: 0.62, blue: 0.12, alpha: 1).setFill()
-    CGRect(x: board.minX, y: board.minY - 3 * scale, width: board.width, height: 4 * scale).fill()
-    for x in stride(from: board.minX, to: board.maxX - 8 * scale, by: 19 * scale) {
-      CGRect(x: x, y: board.minY, width: 6 * scale, height: 5 * scale).fill()
-    }
+    GameMenuFrame.draw(board, scale: scale)
 
-    let titleAttributes: [NSAttributedString.Key: Any] = [
-      .font: NSFont.systemFont(ofSize: 38 * scale, weight: .black),
-      .foregroundColor: NSColor(calibratedRed: 0.48, green: 0.92, blue: 0.20, alpha: 1),
-      .kern: 2 * scale]
-    let lineAttributes: [NSAttributedString.Key: Any] = [
-      .font: NSFont.monospacedSystemFont(ofSize: 13 * scale, weight: .bold),
-      .foregroundColor: NSColor(calibratedRed: 0.90, green: 0.89, blue: 0.77, alpha: 1)]
-    let footerAttributes: [NSAttributedString.Key: Any] = [
-      .font: NSFont.monospacedSystemFont(ofSize: 10 * scale, weight: .medium),
-      .foregroundColor: NSColor(calibratedRed: 0.68, green: 0.75, blue: 0.64, alpha: 1)]
+    // Use one face and scale for every row, fitted to the longest label.
+    let longest = overlayLines.map { MacInterfaceRenderer.menuText($0).count }.max() ?? 1
+    let rowTextWidth = width - 64 * scale
+    let rowTextHeight = rowHeight - 12 * scale
+    var menuFace = ClassicMacUserInterface.Face.small
+    var menuScale = 1
+    if let macInterface {
+      var bestHeight = 0
+      for face in [ClassicMacUserInterface.Face.large, .small] {
+        guard let font = macInterface.font(face) else { continue }
+        let fit = min(Int(rowTextHeight) / font.cellHeight,
+          Int(rowTextWidth) / max(1, longest * font.cellWidth))
+        if fit >= 1, fit * font.cellHeight > bestHeight {
+          menuFace = face; menuScale = fit; bestHeight = fit * font.cellHeight
+        }
+      }
+    }
 
     var y = board.minY + 19 * scale
     if showsLogo, let macInterface {
@@ -403,17 +470,10 @@ enum GamePhase: Equatable {
         centerX: bounds.midX, top: y - 4 * scale,
         maximumWidth: board.width - 40 * scale, maximumHeight: headerHeight - 26 * scale)
     } else if let overlayTitle {
-      let text = overlayTitle.uppercased() as NSString
       let heading = CGRect(x: board.minX + 18 * scale, y: y,
         width: board.width - 36 * scale, height: headerHeight - 18 * scale)
-      if !drawMacText(overlayTitle, in: heading, minimumScale: 2) {
-        let size = text.size(withAttributes: titleAttributes)
-        let point = CGPoint(x: bounds.midX - size.width / 2, y: y)
-        var shadow = titleAttributes
-        shadow[.foregroundColor] = NSColor.black
-        text.draw(
-          at: CGPoint(x: point.x + 3 * scale, y: point.y + 3 * scale), withAttributes: shadow)
-        text.draw(at: point, withAttributes: titleAttributes)
+      if !drawMacText(overlayTitle, in: heading, minimumScale: 1) {
+        GamePixelText.draw(overlayTitle, in: heading)
       }
     }
     y += headerHeight
@@ -422,45 +482,78 @@ enum GamePhase: Equatable {
         width: board.width - 36 * scale, height: rowHeight - 5 * scale)
       overlayLineRects.append(row)
       let chosen = index == overlayHighlight
-      var attributes = lineAttributes
       if overlayHighlight != nil {
         (chosen
-          ? (macInterface == nil
-            ? NSColor(calibratedRed: 0.23, green: 0.32, blue: 0.17, alpha: 1)
-            : NSColor(calibratedRed: 0.78, green: 0.82, blue: 0.88, alpha: 1))
-          : NSColor(calibratedWhite: macInterface == nil ? 0.17 : 0.025, alpha: 1)).setFill()
+          ? NSColor(calibratedRed: 0.18, green: 0.27, blue: 0.12, alpha: 1)
+          : NSColor(calibratedWhite: 0.07, alpha: 1)).setFill()
         row.fill()
         (chosen
-          ? (macInterface == nil
-            ? NSColor(calibratedRed: 0.70, green: 0.84, blue: 0.29, alpha: 1)
-            : NSColor(calibratedWhite: 0.96, alpha: 1))
+          ? NSColor(calibratedRed: 0.70, green: 0.84, blue: 0.29, alpha: 1)
           : NSColor(calibratedWhite: 0.29, alpha: 1)).setStroke()
         let outline = NSBezierPath(rect: row.insetBy(dx: 0.5, dy: 0.5))
         outline.lineWidth = max(1, scale)
         outline.stroke()
       }
-      if chosen { attributes[.foregroundColor] = NSColor(calibratedRed: 1, green: 0.93, blue: 0.53, alpha: 1) }
-      let text = line as NSString
-      let size = text.size(withAttributes: attributes)
-      if !drawMacText(line, in: row.insetBy(dx: 14 * scale, dy: 5 * scale)) {
-        text.draw(at: CGPoint(x: bounds.midX - size.width / 2, y: row.midY - size.height / 2),
-          withAttributes: attributes)
-      }
+      drawMenuGameText(line, in: row.insetBy(dx: 14 * scale, dy: 0),
+        face: menuFace, scale: menuScale)
       y += rowHeight
     }
-    if let overlayFooter {
-      let top = y + 13 * scale
-      if let macInterface, macInterface.font(.small)?.covers(overlayFooter) == true {
-        macInterface.drawCentered(
-          overlayFooter, face: .small, centerX: bounds.midX, top: top, scale: 1, alpha: 0.9)
-      } else {
-        let text = overlayFooter as NSString
-        let size = text.size(withAttributes: footerAttributes)
-        text.draw(at: CGPoint(x: bounds.midX - size.width / 2, y: top),
-          withAttributes: footerAttributes)
+    if let initials = overlayProfileInitials {
+      let footer = CGRect(x: board.minX + 20 * scale, y: y + 12 * scale,
+        width: board.width - 40 * scale, height: max(36, 48 * scale))
+      let footerScale = max(1, Int(scale.rounded()))
+      let gap: CGFloat = 12 * scale
+      let initialsWidth: CGFloat = 64 * scale
+      let buttonWidth = min(180 * scale, (footer.width - initialsWidth - gap * 2) / 2)
+      let start = floor(footer.midX - (initialsWidth + 2 * buttonWidth + 2 * gap) / 2)
+      drawMenuGameText(initials, in: CGRect(x: start, y: footer.minY,
+        width: initialsWidth, height: footer.height), face: .small, scale: footerScale, palette: .green)
+      for (index, label) in ["PROFILES", "RECORDS"].enumerated() {
+        let rect = CGRect(x: start + initialsWidth + gap + CGFloat(index) * (buttonWidth + gap),
+          y: footer.minY, width: buttonWidth, height: footer.height)
+        overlayFooterButtons.append(rect)
+        let hovered = cursorViewPoint.map { rect.contains($0) } ?? false
+        (hovered ? NSColor(calibratedRed: 0.06, green: 0.16, blue: 0.035, alpha: 1)
+          : NSColor(calibratedWhite: 0.025, alpha: 1)).setFill()
+        rect.fill()
+        (hovered ? NSColor(calibratedRed: 0.48, green: 0.80, blue: 0.24, alpha: 1)
+          : NSColor(calibratedWhite: 0.35, alpha: 1)).setStroke()
+        NSBezierPath(rect: rect.insetBy(dx: 0.5, dy: 0.5)).stroke()
+        drawMenuGameText(label, in: rect, face: .small, scale: footerScale,
+          palette: hovered ? .green : .blue)
       }
+    } else if let overlayFooter {
+      let footer = CGRect(x: board.minX + 20 * scale, y: y + 12 * scale,
+        width: board.width - 40 * scale, height: max(36, 48 * scale))
+      drawMenuGameText(overlayFooter, in: footer, face: .small, scale: 1, wrap: true)
     }
     if overlayShowsLemmings { drawMarchingLemmings() }
+  }
+
+  /// Draw the original glyphs on whole pixels and keep long text inside its band.
+  private func drawMenuGameText(_ text: String, in rect: CGRect,
+    face: ClassicMacUserInterface.Face, scale: Int, wrap: Bool = false,
+    palette: MacInterfaceRenderer.Palette = .blue) {
+    guard let macInterface, let font = macInterface.font(face) else {
+      GamePixelText.draw(MacInterfaceRenderer.menuText(text), in: rect)
+      return
+    }
+    let height = font.cellHeight * scale
+    let columns = max(1, Int(rect.width) / (font.cellWidth * scale))
+    let lines = wrap ? MacInterfaceRenderer.menuLines(text, columns: columns) : [text]
+    let rows = max(1, Int(rect.height) / height)
+    let shown = min(rows, lines.count)
+    let top = floor(rect.midY - CGFloat(shown * height) / 2)
+    NSGraphicsContext.saveGraphicsState()
+    NSBezierPath(rect: rect).addClip()
+    for (index, line) in lines.prefix(rows).enumerated() {
+      let value = index == rows - 1 && lines.count > rows
+        ? String(line.prefix(max(0, columns - 3))) + "..." : line
+      macInterface.menuLine(value,
+        in: CGRect(x: rect.minX, y: top + CGFloat(index * height),
+          width: rect.width, height: CGFloat(height)), face: face, scale: scale, palette: palette)
+    }
+    NSGraphicsContext.restoreGraphicsState()
   }
 
   /// Draws a menu line in the release's own character set.
@@ -506,13 +599,46 @@ enum GamePhase: Equatable {
     let destination = CGRect(
       x: origin.x, y: origin.y,
       width: crop.width * viewport.zoom / imageScale, height: crop.height * viewport.zoom / imageScale)
-    NSImage(cgImage: cropped, size: crop.size)
-      .draw(in: destination, from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true, hints: nil)
+    drawPixels(cropped, in: destination)
+  }
+
+  private func drawPixels(_ image: CGImage, in rect: CGRect, alpha: CGFloat = 1) {
+    guard let context = NSGraphicsContext.current?.cgContext else { return }
+    context.saveGState()
+    context.interpolationQuality = .none
+    context.setAlpha(alpha)
+    context.translateBy(x: rect.minX, y: rect.maxY)
+    context.scaleBy(x: 1, y: -1)
+    context.draw(image, in: CGRect(origin: .zero, size: rect.size))
+    context.restoreGState()
+  }
+
+  private func drawSprite(_ sprite: NSImage, key: String, in rect: CGRect, alpha: CGFloat) {
+    guard let pixels = spritePixels[key] ?? sprite.cgImage(forProposedRect: nil, context: nil, hints: nil) else { return }
+    if spritePixels.count < 1500 { spritePixels[key] = pixels }
+    drawPixels(pixels, in: rect, alpha: alpha)
   }
 
   private func drawLemmings() {
     guard let session else { return }
-    for lemming in session.lemmings { draw(lemming) }
+    let lemmings = session.lemmings
+    if hdEffectsEnabled && !reduceMotion && isFastForward && phase == .playing {
+      for lemming in lemmings { draw(lemming, ghostsOnly: true) }
+    }
+    // Every solid lemming and its labels cover every ghost, including neighbours.
+    for lemming in lemmings { draw(lemming) }
+  }
+
+  func updateSpeedTrails() {
+    let enabled = hdEffectsEnabled && !reduceMotion && isFastForward && phase == .playing
+    let actors: [SpeedTrails.Actor] = enabled ? (session?.lemmings ?? []).compactMap { lemming in
+      switch lemming.pose {
+      case .walking, .jumping, .postClimb, .falling, .umbrellaOpening, .floating, .climbing:
+        return .init(id: lemming.id, position: CGPoint(x: lemming.x, y: lemming.y), movement: lemming.pose.rawValue)
+      default: return nil
+      }
+    } : []
+    speedTrails.update(tick: session?.currentTick ?? 0, enabled: enabled, actors: actors)
   }
 
   /// Four opaque ticks, then an immediate cut. The engine's longer explosion
@@ -520,18 +646,15 @@ enum GamePhase: Equatable {
   static func bombPopIsVisible(tick: Int) -> Bool { (0..<4).contains(tick) }
 
   private func bombPop(_ rect: CGRect, tick: Int) -> (rect: CGRect, alpha: CGFloat) {
-    (rect, Self.bombPopIsVisible(tick: tick) ? 1 : 0)
+    (rect, !hdEffectsEnabled || Self.bombPopIsVisible(tick: tick) ? 1 : 0)
   }
 
-  /// A short white-hot core, followed by one yellow tick. Solid pixel blocks
-  /// keep the pop sharp without a screen-wide flash or a translucent tail.
+  /// A white-hot core followed by a yellow tick.
   private func drawBombCore(in rect: CGRect, tick: Int, actor: Int) {
-    guard (0..<2).contains(tick) else { return }
+    guard hdEffectsEnabled, !reduceFlashes, (0..<2).contains(tick) else { return }
     let pixel = max(1, floor(viewport.zoom))
     let x = floor(rect.midX/pixel)*pixel, y = floor(rect.midY/pixel)*pixel
-    (tick == 0 ? NSColor.white : NSColor.yellow).setFill()
-    CGRect(x:x-3*pixel,y:y-pixel,width:6*pixel,height:2*pixel).fill()
-    CGRect(x:x-pixel,y:y-3*pixel,width:2*pixel,height:6*pixel).fill()
+    ExplosionHDR.drawCore(at: CGPoint(x: x, y: y), pixel: CGSize(width: pixel, height: pixel), phase: tick)
     if phase == .playing {
       let birthTick = (session?.currentTick ?? 0)-tick
       if hdrBirths[actor]?.tick != birthTick {
@@ -544,7 +667,9 @@ enum GamePhase: Equatable {
     }
   }
 
-  private func draw(_ lemming: SessionLemming) {
+  private func draw(_ lemming: SessionLemming, ghostsOnly: Bool = false) {
+    let motion = ghostsOnly ? speedTrails.motion(actor: lemming.id) : .zero
+    if ghostsOnly && motion == .zero { return }
     guard let assets, !palette.isEmpty else { return }
     let direction: ClassicSpriteDirection = lemming.facingLeft ? .left : .right
     let pose = lemming.pose
@@ -566,8 +691,13 @@ enum GamePhase: Equatable {
           width: Double(frame.width) * viewport.zoom / 2, height: Double(frame.height) * viewport.zoom / 2)
         var fraction: CGFloat = 1
         if pose == .explosion { (rect, fraction) = bombPop(rect, tick: lemming.animationFrame) }
-        guard fraction > 0.01 else { return }
-        sprite.draw(in: rect, from: .zero, operation: .sourceOver, fraction: fraction, respectFlipped: true, hints: nil)
+        guard rect.intersects(bounds), fraction > 0.01 else { return }
+        if ghostsOnly {
+          speedTrails.drawBehind(actor: lemming.id, sprite: sprite, in: rect, motion: motion,
+            pixelSize: CGSize(width: viewport.zoom, height: viewport.zoom))
+          return
+        }
+        drawSprite(sprite, key: key, in: rect, alpha: fraction)
         if pose == .explosion { drawBombCore(in: rect, tick: lemming.animationFrame, actor:lemming.id) }
         if let countdown = lemming.countdown { drawCountdown(countdown, above: rect) }
         return
@@ -595,7 +725,12 @@ enum GamePhase: Equatable {
     var fraction: CGFloat = 1
     if pose == .explosion { (rect, fraction) = bombPop(rect, tick: lemming.animationFrame) }
     guard rect.intersects(bounds), fraction > 0.01 else { return }
-    sprite.draw(in: rect, from: .zero, operation: .sourceOver, fraction: fraction, respectFlipped: true, hints: nil)
+    if ghostsOnly {
+      speedTrails.drawBehind(actor: lemming.id, sprite: sprite, in: rect, motion: motion,
+        pixelSize: CGSize(width: viewport.zoom, height: viewport.zoom))
+      return
+    }
+    drawSprite(sprite, key: key, in: rect, alpha: fraction)
     if pose == .explosion { drawBombCore(in: rect, tick: lemming.animationFrame, actor:lemming.id) }
 
     if let countdown = lemming.countdown {

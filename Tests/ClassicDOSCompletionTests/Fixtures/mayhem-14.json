@@ -1,0 +1,185 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 70
+        }
+      },
+      "tick" : 21
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 81
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 154
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 23,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 281
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 67,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 481
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 79,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 969
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1064
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1260
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1458
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1677
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1888
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 2090
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 2292
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 2488
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 2720
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 2918
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 3116
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 3313
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 24,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 3566
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 80,
+    "required" : 75,
+    "saved" : 80,
+    "stateHash" : "9ca3da6ec4a6015f98793e78a553f8291993f59d81083bf868f562bc96400b18",
+    "ticks" : 4506
+  },
+  "initialStateHash" : "356dddb39573a0552d345f58ef869b6785200fc8548a8d6f5ebdc5dcb4ef5ae8",
+  "number" : 14,
+  "rank" : "Mayhem",
+  "title" : "Pea Soup"
+}

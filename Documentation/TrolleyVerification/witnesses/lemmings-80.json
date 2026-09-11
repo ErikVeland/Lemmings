@@ -1,0 +1,122 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 70
+        }
+      },
+      "tick" : 87
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 78
+        }
+      },
+      "tick" : 91
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 153
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 5,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 364
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 19,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 582
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 15,
+          "skill" : "miner"
+        }
+      },
+      "tick" : 608
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 685
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 8,
+          "skill" : "blocker"
+        }
+      },
+      "tick" : 815
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 11,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 853
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 13,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 903
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 16,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 1121
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 14,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1375
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 20,
+    "required" : 20,
+    "saved" : 20,
+    "stateHash" : "eba2c1c39de3126a12e57a4f418342bba971100afe2e10e3cb02b4c968c600b4",
+    "ticks" : 1755
+  },
+  "initialStateHash" : "1515638c3789d2f5bc8cdabfc872ff08577f34c34b4ed807e8983b5770107ef2",
+  "number" : 21,
+  "rank" : "Taxing",
+  "title" : "Feel the heat!"
+}

@@ -16,10 +16,13 @@ swiftc -O -swift-version 6 -warnings-as-errors -target "$(uname -m)-apple-macos1
 cat Sources/LemmingsLocal/Lemmings2PlayWindow.swift Sources/LemmingsLocal/Lemmings3PlayWindow.swift \
   Sources/LemmingsLocal/SettingsWindow.swift \
   Tests/SequelMacArtworkAppTests/checks.swift > "$build_dir/app-test/main.swift"
+app_sources=(Sources/LemmingsLocal/*.swift)
+app_sources=("${(@)app_sources:#*/main.swift}")
+app_sources=("${(@)app_sources:#*/Lemmings2PlayWindow.swift}")
+app_sources=("${(@)app_sources:#*/Lemmings3PlayWindow.swift}")
+app_sources=("${(@)app_sources:#*/SettingsWindow.swift}")
 swiftc -O -swift-version 6 -target "$(uname -m)-apple-macos13.0" \
   -I "$build_dir/modules" -L "$build_dir" -lNxlvKit \
-  -Xlinker -rpath -Xlinker "$build_dir" -framework AppKit -framework AVFoundation \
-  -o "$build_dir/app-test/Views" "$build_dir/app-test/main.swift" \
-  Sources/LemmingsLocal/SequelArtworkRenderer.swift Sources/LemmingsLocal/MusicPlayer.swift \
-  Sources/LemmingsLocal/Lemmings2SoundPlayer.swift
-"$build_dir/app-test/Views"
+  -Xlinker -rpath -Xlinker "$build_dir" -framework AppKit -framework AVFoundation -framework Metal -framework QuartzCore \
+  -o "$build_dir/app-test/Views" "$build_dir/app-test/main.swift" "${app_sources[@]}"
+python3 "$project_dir/Tools/UITestRunner/run.py" "$build_dir/app-test/Views"

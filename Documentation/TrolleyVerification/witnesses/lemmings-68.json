@@ -1,0 +1,77 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 50
+        }
+      },
+      "tick" : 59
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 83
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 118
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 138
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "miner"
+        }
+      },
+      "tick" : 170
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "floater"
+        }
+      },
+      "tick" : 185
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 189
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 20,
+    "required" : 20,
+    "saved" : 20,
+    "stateHash" : "cc73dcded2006fd06f417153bc3ce04a8f6b31fb3f13b653e102c6f3f6c62087",
+    "ticks" : 470
+  },
+  "initialStateHash" : "c3d4dd83b8d8d83416590780b4a11b190b2ea1e9d55628ee21b023b7460f2115",
+  "number" : 9,
+  "rank" : "Taxing",
+  "title" : "Perseverance"
+}

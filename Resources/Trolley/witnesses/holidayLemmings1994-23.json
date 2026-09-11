@@ -1,0 +1,429 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 30
+        }
+      },
+      "tick" : 9
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 17
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 98
+        }
+      },
+      "tick" : 22
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 97
+        }
+      },
+      "tick" : 23
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 96
+        }
+      },
+      "tick" : 24
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 95
+        }
+      },
+      "tick" : 25
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 94
+        }
+      },
+      "tick" : 26
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 93
+        }
+      },
+      "tick" : 27
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 92
+        }
+      },
+      "tick" : 28
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 91
+        }
+      },
+      "tick" : 29
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 90
+        }
+      },
+      "tick" : 30
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 89
+        }
+      },
+      "tick" : 31
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 88
+        }
+      },
+      "tick" : 32
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 87
+        }
+      },
+      "tick" : 33
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 86
+        }
+      },
+      "tick" : 34
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 85
+        }
+      },
+      "tick" : 35
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 79
+        }
+      },
+      "tick" : 35
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 46
+        }
+      },
+      "tick" : 75
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 87
+        }
+      },
+      "tick" : 135
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 188
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 6,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 204
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 247
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 258
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 277
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 365
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 17,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 563
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 17,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 729
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 18,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 830
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 22,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 863
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 25,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 950
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 27,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 981
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 31,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1020
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 34,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1109
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 43,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1253
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 48,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1352
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 49,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1544
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 66,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1736
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 25,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 2620
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 31,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 2785
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 25,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 2993
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 25,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 3394
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 25,
+          "skill" : "miner"
+        }
+      },
+      "tick" : 3604
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 25,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 4125
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 25,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 4328
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 25,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 4531
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 76,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 4532
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 25,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 4734
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 25,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 4928
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 80,
+    "required" : 80,
+    "saved" : 80,
+    "stateHash" : "941387e60ffa09db99410cd45b97a3f419312851e07faa3fd67ccd1372a62042",
+    "ticks" : 5640
+  },
+  "initialStateHash" : "bc90200e351266094cd97cc1483d7b1b1a271fd7f91872a9c49505a4beaad51f",
+  "number" : 8,
+  "rank" : "Hail",
+  "title" : "Sir Edmund Hilemming"
+}

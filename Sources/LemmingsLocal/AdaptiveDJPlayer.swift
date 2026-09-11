@@ -2,20 +2,38 @@ import AVFoundation
 import AppKit
 import NxlvKit
 
-/// Plays the soundtrack across two decks and crossfades between them.
-///
-/// The player owns two questions the director does not: which track comes
-/// next, and how the change is made. `AdaptiveDJDirector` decides only whether
-/// the game has earned a change.
-///
-/// The point of the mix is travel. A change moves to a different soundtrack
-/// folder where one exists, so a run drifts between the machines people played
-/// this game on rather than sitting on one for hours.
-///
-/// One limit is worth stating plainly. A phrase-aligned change needs a beat
-/// grid, and a recording carries none. Until soundtrack folders declare their
-/// tempo, `atNextPhrase` fades over a musical few seconds rather than landing
-/// on a bar line, and only `immediate` is exact.
+/// One deck can play either a recording or a native ProTracker module.
+@MainActor private final class DJDeck {
+  private var recording: AVAudioPlayer?
+  private var module: ModuleMusicPlayer?
+  var volume: Float = 0 { didSet { recording?.volume = volume; module?.setVolume(Double(volume)) } }
+  var isPlaying: Bool { recording?.isPlaying == true || module?.isOutputRunning == true }
+
+  init?(_ url: URL) {
+    if url.pathExtension.lowercased() == "mod" {
+      let player = ModuleMusicPlayer()
+      player.setVolume(0)
+      guard player.play(url: url) != nil else { return nil }
+      module = player
+    } else {
+      guard let player = try? AVAudioPlayer(contentsOf: url) else { return nil }
+      player.numberOfLoops = -1
+      player.volume = 0
+      player.prepareToPlay()
+      recording = player
+    }
+  }
+  func play() {
+    recording?.play()
+    if let module {
+      if module.isRunning { try? module.resumeOutput() } else { try? module.start() }
+    }
+  }
+  func pause() { recording?.pause(); module?.suspendOutput() }
+  func stop() { recording?.stop(); module?.stop() }
+}
+
+/// Mixes recordings and modules. The rescue target earns one victory fade.
 @MainActor final class AdaptiveDJPlayer {
   /// How long each kind of change takes.
   private enum Fade {
@@ -26,22 +44,25 @@ import NxlvKit
     static let step = 1.0 / 30.0
   }
 
-  private var deckA: AVAudioPlayer?
-  private var deckB: AVAudioPlayer?
+  private var deckA: DJDeck?
+  private var deckB: DJDeck?
   private var activeIsA = true
   private var director = AdaptiveDJDirector()
   private var fadeTask: Task<Void, Never>?
   private var fadeGeneration = 0
   private var fadePosition = 0.0
+  private var fadeSuspendedAt: TimeInterval?
+  private var fadeSuspendedDuration: TimeInterval = 0
   private var outputSuspended = false
   private var resumeDeckA = false
   private var resumeDeckB = false
-  private var fadingIn: AVAudioPlayer?
-  private var fadingOut: AVAudioPlayer?
+  private var fadingIn: DJDeck?
+  private var fadingOut: DJDeck?
 
   /// Soundtracks the player supplied, keyed by folder name.
   private var pools: [String: [URL]] = [:]
   private var currentPool: String?
+  private(set) var currentURL: URL?
   private var playedTracks: Set<String> = []
 
   private(set) var masterVolume: Float = 0.8
@@ -59,8 +80,8 @@ import NxlvKit
   /// The mix needs somewhere to travel between.
   var hasTracks: Bool { !pools.isEmpty }
 
-  private var activeDeck: AVAudioPlayer? { activeIsA ? deckA : deckB }
-  private var idleDeck: AVAudioPlayer? { activeIsA ? deckB : deckA }
+  private var activeDeck: DJDeck? { activeIsA ? deckA : deckB }
+  private var idleDeck: DJDeck? { activeIsA ? deckB : deckA }
 
   func load(soundtracks: [String: [URL]]) {
     pools = soundtracks.filter { !$0.value.isEmpty }
@@ -68,11 +89,25 @@ import NxlvKit
 
   /// Starts the mix, or leaves it alone when it is already running.
   func start() {
-    guard !pools.isEmpty, activeDeck == nil || activeDeck?.isPlaying != true else { return }
+    // A suspended or crossfading deck may not report isPlaying yet (the engine
+    // starts asynchronously), so treat those states as already running too.
+    guard !pools.isEmpty, !outputSuspended, fadeTask == nil,
+          activeDeck == nil || activeDeck?.isPlaying != true else { return }
     guard let first = pickTrack(avoiding: nil) else { return }
+    // A deck can be left behind in the other slot when a crossfade was
+    // interrupted before it finished (a level ending mid-fade, for example).
+    // Clear both decks before starting fresh, or the old one can resurface
+    // later - resumed by a later suspend/resume cycle - and play alongside
+    // the new track.
+    deckA?.stop()
+    deckB?.stop()
+    deckB = nil
+    resumeDeckA = false
+    resumeDeckB = false
     deckA = makeDeck(first.url)
     activeIsA = true
     currentPool = first.pool
+    currentURL = first.url
     deckA?.volume = isMuted ? 0 : masterVolume
     deckA?.play()
     announce(first.url)
@@ -91,38 +126,40 @@ import NxlvKit
 
   // MARK: - Decks
 
-  private func makeDeck(_ url: URL) -> AVAudioPlayer? {
-    guard let player = try? AVAudioPlayer(contentsOf: url) else { return nil }
-    // A track is shorter than a level, so it repeats until the mix moves on.
-    player.numberOfLoops = -1
-    player.prepareToPlay()
-    return player
+  private func makeDeck(_ url: URL) -> DJDeck? { DJDeck(url) }
+
+  /// Favour victory themes, then a different source and an unplayed track.
+  static func victoryPreference(_ url: URL) -> Int {
+    let name = url.deletingPathExtension().lastPathComponent.lowercased()
+    if ["endtune", "victory", "triumph", "fanfare", "ending", "success", "win"].contains(where: name.contains) { return 3 }
+    if ["cancan", "awesome", "turkish march", "rainbow", "sports", "highland", "classic3", "smile"].contains(where: name.contains) { return 2 }
+    if ["shadow", "cave", "intro", "frontend", "maintune", "game over"].contains(where: name.contains) { return 0 }
+    return 1
   }
 
-  /// Chooses the next track, preferring a soundtrack the mix is not on.
-  ///
-  /// Every track is played before any repeats, so a long run does not keep
-  /// returning to the same two tunes.
-  private func pickTrack(avoiding pool: String?) -> (pool: String, url: URL)? {
-    let others = pools.keys.filter { $0 != pool }
-    let names = others.isEmpty ? Array(pools.keys) : others
-    guard !names.isEmpty else { return nil }
-
-    var candidates: [(String, URL)] = []
-    for name in names {
-      for url in pools[name] ?? [] where !playedTracks.contains(url.path) {
-        candidates.append((name, url))
-      }
+  private func pickTrack(avoiding pool: String?, victory: Bool = false) -> (pool: String, url: URL)? {
+    var candidates = pools.flatMap { name, urls in urls.map { (pool: name, url: $0) } }
+    let different = candidates.filter { $0.url != currentURL }
+    if !different.isEmpty { candidates = different }
+    guard !candidates.isEmpty else { return nil }
+    if victory {
+      let best = candidates.map { Self.victoryPreference($0.url) }.max() ?? 0
+      candidates = candidates.filter { Self.victoryPreference($0.url) == best }
     }
-    if candidates.isEmpty {
-      playedTracks.removeAll()
-      for name in names {
-        for url in pools[name] ?? [] { candidates.append((name, url)) }
+    let fresh = candidates.filter { !playedTracks.contains($0.url.path) }
+    if !fresh.isEmpty { candidates = fresh }
+    else { playedTracks.removeAll() }
+    let otherPools = candidates.filter { $0.pool != pool }
+    if !otherPools.isEmpty { candidates = otherPools }
+    // Skip unreadable tracks without taking down the running deck.
+    while let choice = candidates.randomElement() {
+      if makeDeck(choice.url) != nil {
+        playedTracks.insert(choice.url.path)
+        return choice
       }
+      candidates.removeAll { $0.url == choice.url }
     }
-    guard let choice = candidates.randomElement() else { return nil }
-    playedTracks.insert(choice.1.path)
-    return choice
+    return nil
   }
 
   /// Brings the next track up as the current one goes down.
@@ -130,7 +167,7 @@ import NxlvKit
   /// The two curves are equal power rather than linear, so the middle of the
   /// change does not sag. A linear pair sounds like a dip.
   private func crossfade(seconds: Double) {
-    guard let next = pickTrack(avoiding: currentPool), let incoming = makeDeck(next.url) else {
+    guard let next = pickTrack(avoiding: currentPool, victory: true), let incoming = makeDeck(next.url) else {
       return
     }
     fadeTask?.cancel()
@@ -146,10 +183,14 @@ import NxlvKit
     if activeIsA { deckB = incoming } else { deckA = incoming }
     activeIsA.toggle()
     currentPool = next.pool
+    currentURL = next.url
     announce(next.url)
 
     // The fade runs on the main actor, because a deck is not safe to touch
     // from anywhere else.
+    let startedAt = ProcessInfo.processInfo.systemUptime
+    fadeSuspendedAt = nil
+    fadeSuspendedDuration = 0
     fadeTask = Task { @MainActor [weak self] in
       var elapsed = 0.0
       while elapsed < seconds, !Task.isCancelled {
@@ -157,7 +198,7 @@ import NxlvKit
         catch { return }
         guard !Task.isCancelled, self?.fadeGeneration == generation else { return }
         if self?.outputSuspended == true { continue }
-        elapsed += Fade.step
+        elapsed = ProcessInfo.processInfo.systemUptime - startedAt - (self?.fadeSuspendedDuration ?? 0)
         self?.applyFade(position: min(1, elapsed / seconds))
       }
       guard !Task.isCancelled, self?.fadeGeneration == generation else { return }
@@ -182,6 +223,8 @@ import NxlvKit
     fadingIn = nil
     fadingOut = nil
     fadeTask = nil
+    fadeSuspendedAt = nil
+    fadeSuspendedDuration = 0
   }
 
   private func announce(_ url: URL) {
@@ -210,6 +253,8 @@ import NxlvKit
     fadeTask?.cancel()
     fadeGeneration += 1
     fadeTask = nil
+    fadeSuspendedAt = nil
+    fadeSuspendedDuration = 0
     fadingIn = nil
     fadingOut = nil
     deckA?.stop()
@@ -217,12 +262,14 @@ import NxlvKit
     deckA = nil
     deckB = nil
     currentPool = nil
+    currentURL = nil
     director.reset()
   }
 
   func suspendOutput() {
     guard !outputSuspended else { return }
     outputSuspended = true
+    if fadeTask != nil { fadeSuspendedAt = ProcessInfo.processInfo.systemUptime }
     resumeDeckA = deckA?.isPlaying == true
     resumeDeckB = deckB?.isPlaying == true
     deckA?.pause()
@@ -232,6 +279,10 @@ import NxlvKit
   func resumeOutput() {
     guard outputSuspended else { return }
     outputSuspended = false
+    if let suspendedAt = fadeSuspendedAt {
+      fadeSuspendedDuration += ProcessInfo.processInfo.systemUptime - suspendedAt
+      fadeSuspendedAt = nil
+    }
     if resumeDeckA { deckA?.play() }
     if resumeDeckB { deckB?.play() }
     resumeDeckA = false

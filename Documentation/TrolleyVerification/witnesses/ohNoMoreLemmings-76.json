@@ -1,0 +1,86 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 10
+        }
+      },
+      "tick" : 17
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "bomber"
+        }
+      },
+      "tick" : 59
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 199
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 204
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 211
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 386
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 409
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 459
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 30,
+    "required" : 29,
+    "saved" : 29,
+    "stateHash" : "b27ebe45c4b177efee99ea33aa524639c083811fdaff68ffa7c88d201eb2db20",
+    "ticks" : 824
+  },
+  "initialStateHash" : "059636c3bfe68e3236c4573d27fc42cfede41f68f0fccce43bdbea07070ea728",
+  "number" : 17,
+  "rank" : "Wicked",
+  "title" : "Down the tube"
+}

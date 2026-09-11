@@ -1,0 +1,237 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 50
+        }
+      },
+      "tick" : 24
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 97
+        }
+      },
+      "tick" : 24
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 96
+        }
+      },
+      "tick" : 25
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 50
+        }
+      },
+      "tick" : 56
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "miner"
+        }
+      },
+      "tick" : 77
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "blocker"
+        }
+      },
+      "tick" : 78
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 79
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 92
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 249
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "blocker"
+        }
+      },
+      "tick" : 252
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 281
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 488
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 491
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "miner"
+        }
+      },
+      "tick" : 640
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "blocker"
+        }
+      },
+      "tick" : 641
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 643
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 655
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 682
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "miner"
+        }
+      },
+      "tick" : 719
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "miner"
+        }
+      },
+      "tick" : 794
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "blocker"
+        }
+      },
+      "tick" : 795
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 825
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 867
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "miner"
+        }
+      },
+      "tick" : 1014
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 1112
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 5,
+    "required" : 4,
+    "saved" : 5,
+    "stateHash" : "a81352b4de988346399a584c6a1ae873ca516077b8aa0fdc32ff6ba98222151e",
+    "ticks" : 1258
+  },
+  "initialStateHash" : "052b6f893c861d6dffbde0e0bdd79c2ed9be9c88070fc208a5d4e5814f1f1200",
+  "number" : 6,
+  "rank" : "Tricky",
+  "title" : "Lemmingology"
+}

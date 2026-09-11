@@ -1,0 +1,239 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 50
+        }
+      },
+      "tick" : 13
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "bomber"
+        }
+      },
+      "tick" : 123
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 205
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "blocker"
+        }
+      },
+      "tick" : 332
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 414
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 606
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 79,
+          "skill" : "bomber"
+        }
+      },
+      "tick" : 921
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1059
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1252
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "blocker"
+        }
+      },
+      "tick" : 1463
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 78,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1493
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 78,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1511
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 78,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1594
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 78,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1624
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 78,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1641
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 78,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1658
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 78,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1675
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 78,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1695
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 78,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1890
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 78,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 2087
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 78,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 2289
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 78,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 2490
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 78,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 2853
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 77,
+          "skill" : "bomber"
+        }
+      },
+      "tick" : 3166
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 78,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 3730
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 80,
+    "required" : 60,
+    "saved" : 76,
+    "stateHash" : "26b6a64ea548f97b33fe4332725167bae6bf0ab0a52e7aa7578a527c59ca8510",
+    "ticks" : 8160
+  },
+  "initialStateHash" : "6590defbe2a0cbf0653a8a7fea48b0e9b37c039c4ba42262542470a8517430b4",
+  "number" : 26,
+  "rank" : "Mayhem",
+  "title" : "The Steel Mines of Kessel"
+}

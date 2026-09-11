@@ -24,36 +24,35 @@ struct CRTSettings {
 
   /// A Commodore 1084 style monitor, which is how most people saw an A500.
   ///
-  /// A shadow mask tube, mild curvature, and only slight convergence error.
-  /// It is sharper than a television, so the smear stays low.
+  /// A fine shadow mask, mild curvature, and aligned colour channels.
   static let amiga1084 = CRTSettings(
-    curvature: 14.0,
-    scanlineDepth: 0.38,
-    beamWidth: 0.42,
-    beamBloom: 0.34,
-    maskStrength: 0.30,
+    curvature: 24.0,
+    scanlineDepth: 0.16,
+    beamWidth: 0.30,
+    beamBloom: 0.10,
+    maskStrength: 0.10,
     maskType: 1,
-    bloomAmount: 0.14,
+    bloomAmount: 0.025,
     gamma: 2.2,
-    brightness: 1.16,
-    convergence: 0.25,
-    vignette: 0.12,
+    brightness: 1.02,
+    convergence: 0,
+    vignette: 0.025,
     pixelAspect: 1.0,
     colorLevels: 16)
 
-  /// A television fed over composite, which is blurrier and bloomier.
+  /// A softer television with restrained glow and a fine aperture grille.
   static let television = CRTSettings(
-    curvature: 10.0,
-    scanlineDepth: 0.34,
-    beamWidth: 0.52,
-    beamBloom: 0.50,
-    maskStrength: 0.22,
+    curvature: 18.0,
+    scanlineDepth: 0.22,
+    beamWidth: 0.34,
+    beamBloom: 0.16,
+    maskStrength: 0.13,
     maskType: 0,
-    bloomAmount: 0.22,
+    bloomAmount: 0.045,
     gamma: 2.2,
-    brightness: 1.14,
-    convergence: 0.55,
-    vignette: 0.18,
+    brightness: 1.03,
+    convergence: 0.10,
+    vignette: 0.04,
     pixelAspect: 1.15,
     colorLevels: 16)
 }
@@ -105,7 +104,7 @@ struct CRTUniforms {
   /// The picture is curved and letterboxed on its way to the screen, so a
   /// click has to travel back through both before it means anything to the
   /// game.
-  var onMouseDown: ((CGPoint) -> Void)?
+  var onMouseDown: ((CGPoint, TimeInterval, Int) -> Void)?
   var onMouseUp: (() -> Void)?
   var onMouseDragged: ((CGPoint) -> Void)?
   var onMouseExited: (() -> Void)?
@@ -202,13 +201,18 @@ struct CRTUniforms {
   }
 
   /// Converts a point in this view to a pixel in the game image.
-  func sourcePoint(from viewPoint: CGPoint) -> CGPoint? {
+  func sourcePoint(from viewPoint: CGPoint, clampingToImage: Bool = false) -> CGPoint? {
     guard sourceSize.width > 0, bounds.width > 0, bounds.height > 0 else { return nil }
     // The view uses a bottom left origin while the image runs top down.
     let uv = CGPoint(
       x: viewPoint.x / bounds.width,
       y: 1 - viewPoint.y / bounds.height)
-    let straightened = sourceUV(uv)
+    var straightened = sourceUV(uv)
+    // Keep edge scrolling active over the black border of the curved image.
+    if clampingToImage {
+      straightened.x = min(1 - 0.001 / sourceSize.width, max(0, straightened.x))
+      straightened.y = min(1 - 0.001 / sourceSize.height, max(0, straightened.y))
+    }
     guard straightened.x >= 0, straightened.x <= 1,
       straightened.y >= 0, straightened.y <= 1
     else { return nil }
@@ -217,10 +221,24 @@ struct CRTUniforms {
       y: straightened.y * sourceSize.height)
   }
 
+  /// Places screen effects at the same curved position as their source sprite.
+  func viewPoint(fromSource point: CGPoint) -> CGPoint? {
+    guard sourceSize.width > 0, sourceSize.height > 0 else { return nil }
+    let target = CGPoint(x:point.x/sourceSize.width,y:point.y/sourceSize.height)
+    guard (0...1).contains(target.x), (0...1).contains(target.y) else { return nil }
+    var uv = target
+    for _ in 0..<12 {
+      let projected = sourceUV(uv)
+      uv.x += (target.x-projected.x)*0.75
+      uv.y += (target.y-projected.y)*0.75
+    }
+    return CGPoint(x:uv.x*bounds.width,y:(1-uv.y)*bounds.height)
+  }
+
   override func mouseDown(with event: NSEvent) {
     guard let point = sourcePoint(from: convert(event.locationInWindow, from: nil))
     else { return }
-    onMouseDown?(point)
+    onMouseDown?(point, event.timestamp, event.clickCount)
   }
 
   override func mouseMoved(with event: NSEvent) {
@@ -367,5 +385,8 @@ struct CRTUniforms {
 
     buffer.present(drawable)
     buffer.commit()
+    #if PERFORMANCE_TESTS
+    buffer.waitUntilCompleted()
+    #endif
   }
 }

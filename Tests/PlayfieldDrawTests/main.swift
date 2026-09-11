@@ -16,9 +16,10 @@ private struct Failure: Error, CustomStringConvertible {
 private final class BombPreviewSession: GameSession {
   var animationTick = 0
   var y = 80
+  var actors: [SessionLemming]?
   let levelWidth = 320, levelHeight = 160, ticksPerSecond = 17
   var lemmings: [SessionLemming] {
-    [.init(id:0,x:160,y:y,pose:.explosion,facingLeft:false,animationFrame:animationTick,countdown:nil)]
+    actors ?? [.init(id:0,x:160,y:y,pose:.explosion,facingLeft:false,animationFrame:animationTick,countdown:nil)]
   }
   let entranceX: Int? = nil
   let released = 1, total = 1, saved = 0, required = 1, rate = 50
@@ -71,6 +72,17 @@ private final class BombPreviewSession: GameSession {
       try require(tick < 4 ? lit > 0 : lit == 0, "\(mode) bomb pop at tick \(tick) has \(lit) lit pixels")
     }
   }
+  view.hdEffectsEnabled = false
+  session.animationTick = 0
+  view.cacheDisplay(in: view.bounds, to: view.bitmapImageRepForCachingDisplay(in: view.bounds)!)
+  try require(view.hdrFlashes.isEmpty, "Old-school mode retained the HDR core")
+  session.animationTick = 4
+  let oldSchool = view.bitmapImageRepForCachingDisplay(in: view.bounds)!
+  view.cacheDisplay(in: view.bounds, to: oldSchool)
+  try require((0..<oldSchool.pixelsHigh).contains { y in
+    (0..<oldSchool.pixelsWide).contains { x in oldSchool.colorAt(x: x, y: y)!.brightnessComponent > 0.1 }
+  }, "Old-school mode did not restore the original explosion animation")
+  view.hdEffectsEnabled = true
   session.y = 165; session.animationTick = 0
   view.cacheDisplay(in:view.bounds,to:view.bitmapImageRepForCachingDisplay(in:view.bounds)!)
   let composedMask = ExplosionHDR.mask(width:640,height:400,flashes:view.hdrFlashes)
@@ -212,16 +224,17 @@ private func require(
   for _ in 0..<200 { session.tick() }
   panel.handlePointerDown(at:nuke,time:10)
   panel.handlePointerUp()
-  try require(session.currentTick == tick && ClassicDOSReplayRecorder.stateHash(of:session.simulation) == original,
-    "undo did not restore the exact pre-nuke game")
+  try require(session.canUndoNuke && session.currentTick != tick, "single click undid nuke")
   panel.handlePointerDown(at:nuke,time:10+gap)
   panel.handlePointerUp()
-  try require(!session.isNuking && !session.canUndoNuke, "second undo click reactivated nuke")
+  try require(session.currentTick == tick && ClassicDOSReplayRecorder.stateHash(of:session.simulation) == original,
+    "double-click undo did not restore the exact pre-nuke game")
+  try require(!session.isNuking && !session.canUndoNuke, "double-click did not undo nuke")
   var control = session.simulation
   for _ in 0..<100 { session.tick(); _ = control.tick() }
   try require(ClassicDOSReplayRecorder.stateHash(of:session.simulation) == ClassicDOSReplayRecorder.stateHash(of:control),
     "the undone nuke remained in replay history")
-  print("PASS real panel double-click activation, single/double-click undo and exact restored history")
+  print("PASS real panel double-click activation, double-click undo and exact restored history")
 }
 
 @MainActor private func testNukeGesturesAndQueuedUndo() throws {
@@ -229,11 +242,17 @@ private func require(
   try require(gesture.click(canUndo:false,time:1,interval:0.5) == .none, "first click activated")
   try require(gesture.click(canUndo:false,time:2,interval:0.5) == .none, "slow clicks activated")
   try require(gesture.click(canUndo:false,time:2.2,interval:0.5) == .activate, "double-click failed")
-  try require(gesture.click(canUndo:true,time:2.3,interval:0.5) == .undo, "single undo failed")
-  try require(gesture.click(canUndo:false,time:2.4,interval:0.5) == .none, "undo's second click armed nuke")
+  try require(gesture.click(canUndo:true,time:2.3,interval:0.5) == .none, "third click undid nuke")
+  try require(gesture.click(canUndo:true,time:2.4,interval:0.5) == .undo, "second double-click did not undo")
+  try require(gesture.click(canUndo:false,time:2.5,interval:0.5) == .none, "extra undo click armed nuke")
   try require(gesture.armedAt == nil, "undo left an armed click")
   try require(gesture.click(canUndo:false,time:4,interval:0.5) == .none, "new gesture activated immediately")
   try require(gesture.click(canUndo:false,time:4.2,interval:0.5) == .activate, "new double-click failed")
+  try require(gesture.click(canUndo:true,time:5,interval:0.5) == .none, "first undo click restored game")
+  try require(gesture.click(canUndo:true,time:6,interval:0.5) == .none, "slow undo clicks restored game")
+  gesture.reset()
+  try require(gesture.click(canUndo:true,time:6.1,interval:0.5) == .none, "reset preserved armed undo")
+  try require(gesture.click(canUndo:true,time:6.2,interval:0.5) == .undo, "fresh undo double-click failed")
   let terrain = try NeoLemmixTerrain(width:64,height:64)
   let configuration = try NeoLemmixConfiguration(totalLemmings:2,requiredToSave:1,spawnInterval:20,
     entrances:[.init(id:0,position:.init(x:20,y:10))])
@@ -252,10 +271,235 @@ private func require(
   print("PASS nuke gesture boundaries, queued undo and abrupt four-tick bomb pop")
 }
 
+@MainActor private func testSpeedAfterimages() throws {
+  let trails = SpeedTrails()
+  let bounds = CGRect(x: 0, y: 0, width: 640, height: 360)
+  let playfield = CGRect(x: 20, y: 20, width: 600, height: 280)
+  let bitmap = CGContext(data: nil, width: 640, height: 360, bitsPerComponent: 8,
+    bytesPerRow: 640 * 4, space: CGColorSpaceCreateDeviceRGB(),
+    bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)!
+  bitmap.translateBy(x: 0, y: 360)
+  bitmap.scaleBy(x: 1, y: -1)
+  NSGraphicsContext.saveGraphicsState()
+  defer { NSGraphicsContext.restoreGraphicsState() }
+  NSGraphicsContext.current = NSGraphicsContext(cgContext: bitmap, flipped: true)
+  let originalContext = NSGraphicsContext.current!
+  let sprite = CGRect(x: 292, y: 120, width: 16, height: 20)
+  let source = CGContext(data: nil, width: 8, height: 10, bitsPerComponent: 8,
+    bytesPerRow: 32, space: CGColorSpaceCreateDeviceRGB(),
+    bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)!
+  source.setFillColor(red: 0, green: 1, blue: 0, alpha: 1)
+  source.fill(CGRect(x: 2, y: 0, width: 4, height: 10))
+  let image = NSImage(cgImage: source.makeImage()!, size: CGSize(width: 8, height: 10))
+  func render(tick: Int, enabled: Bool, left: Bool = false, showActor: Bool = true) throws -> [UInt8] {
+    bitmap.clear(bounds)
+    var calls = 0
+    trails.draw(enabled: enabled, in: playfield) {
+      calls += 1
+      if showActor {
+        trails.drawBehind(actor: 0, sprite: image, in: sprite,
+          motion: CGVector(dx: left ? -1 : 1, dy: 0), pixelSize: CGSize(width: 2, height: 2))
+        image.draw(in: sprite, from: .zero, operation: .sourceOver, fraction: 1,
+          respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
+      }
+    }
+    try require(calls == 1 && NSGraphicsContext.current === originalContext,
+      "fast-forward redirected or repeated the normal draw pass")
+    return Array(UnsafeBufferPointer(start: bitmap.data!.assumingMemoryBound(to: UInt8.self), count: 640 * 360 * 4))
+  }
+  let normal = try render(tick: 4, enabled: false)
+  try require(normal[(130 * 640 + 300) * 4 + 3] == 255,
+    "the test bitmap's rows do not match view coordinates")
+  let fast = try render(tick: 4, enabled: true)
+  try require(fast != normal && trails.drawnTrailCount == 1, "fast-forward has no afterimages")
+  // Opaque sprite pixels must remain byte-for-byte identical at fast speed.
+  for index in stride(from: 0, to: normal.count, by: 4) where normal[index + 3] != 0 {
+    try require(normal[index..<index + 4] == fast[index..<index + 4], "afterimages changed a sprite pixel")
+  }
+  var tailPixels = 0, energyPixels = 0, farTailPixels = 0
+  var peakAlpha: UInt8 = 0
+  for index in stride(from: 0, to: fast.count, by: 4) where normal[index + 3] == 0 && fast[index + 3] > 0 {
+    tailPixels += 1
+    peakAlpha = max(peakAlpha,fast[index+3])
+    if fast[index+2] > 4 { energyPixels += 1 }
+    if (index/4)%640 < Int(sprite.minX)-18 { farTailPixels += 1 }
+    try require(fast[index+3] <= 192, "the energy wake became opaque")
+  }
+  try require(tailPixels > 0 && farTailPixels > 0 && energyPixels > 0 && peakAlpha > 40,
+    "super speed lost its long, bright energy wake")
+  let repeated = try render(tick: 4, enabled: true)
+  try require(repeated == fast, "redrawing one tick changed the afterimages")
+  let left = try render(tick: 4, enabled: true, left: true)
+  try require(left != fast, "afterimages did not follow direction")
+  bitmap.clear(bounds)
+  trails.draw(enabled: true, in: playfield) {
+    trails.drawBehind(actor: 0, sprite: image, in: sprite, motion: CGVector(dx: 0, dy: 1),
+      pixelSize: CGSize(width: 2, height: 2))
+  }
+  let vertical = Array(UnsafeBufferPointer(start: bitmap.data!.assumingMemoryBound(to: UInt8.self), count: fast.count))
+  try require(vertical != fast && trails.drawnTrailCount == 1, "falling actors did not leave a vertical tail")
+  for motion in [CGVector(dx: 3, dy: 1), CGVector(dx: 3, dy: -1),
+    CGVector(dx: -3, dy: 1), CGVector(dx: -1, dy: -3)] {
+    bitmap.clear(bounds)
+    trails.draw(enabled: true, in: playfield) {
+      trails.drawBehind(actor: 0, sprite: image, in: sprite, motion: motion,
+        pixelSize: CGSize(width: 2, height: 2))
+    }
+    let pixels = bitmap.data!.assumingMemoryBound(to: UInt8.self)
+    var total: CGFloat = 0, weightedX: CGFloat = 0, weightedY: CGFloat = 0
+    for y in 0..<360 { for x in 0..<640 {
+      let alpha = CGFloat(pixels[(y * 640 + x) * 4 + 3])
+      total += alpha; weightedX += (CGFloat(x) + 0.5) * alpha; weightedY += (CGFloat(y) + 0.5) * alpha
+    } }
+    try require(total > 0, "the diagonal ghost disappeared")
+    let dx = weightedX / total - sprite.midX, dy = weightedY / total - sprite.midY
+    let dot = dx * motion.dx + dy * motion.dy
+    let cross = dx * motion.dy - dy * motion.dx
+    try require(dot < 0 && abs(cross / dot) < 0.2,
+      "the ghost did not follow the shallow diagonal: \(motion), offset \(dx),\(dy)")
+  }
+  let rewound = try render(tick: 4, enabled: true)
+  try require(rewound == fast, "rewinding retained a previous effect")
+  let paused = try render(tick: 8, enabled: false)
+  try require(paused == normal, "pause or normal speed retained trails")
+  let empty = try render(tick: 9, enabled: true, showActor: false)
+  try require(empty.allSatisfy { $0 == 0 },
+    "an absent actor left a ghost frame")
+  bitmap.clear(bounds)
+  trails.draw(enabled: true, in: playfield) {
+    for id in 0..<1000 {
+      trails.drawBehind(actor: id, sprite: image, in: sprite.offsetBy(dx: -1000, dy: 0),
+        motion: CGVector(dx: 1, dy: 0), pixelSize: CGSize(width: 2, height: 2))
+    }
+  }
+  try require(trails.drawnTrailCount == 0, "offscreen actors used the effect budget")
+  trails.draw(enabled: true, in: playfield) {
+    for id in 0..<1000 {
+      trails.drawBehind(actor: id, sprite: image, in: sprite,
+        motion: CGVector(dx: 1, dy: 0), pixelSize: CGSize(width: 2, height: 2))
+    }
+  }
+  try require(trails.drawnTrailCount == 1, "a dense crowd stacked afterimages in one cell")
+  trails.draw(enabled: true, in: playfield) {
+    for id in 0..<1000 {
+      let point = CGPoint(x: 21 + CGFloat(id % 16) * 37.5, y: 21 + CGFloat(id / 16 % 4) * 70)
+      trails.drawBehind(actor: id, sprite: image,
+        in: CGRect(x: point.x, y: point.y, width: 16, height: 20),
+        motion: CGVector(dx: id % 2 == 0 ? -1 : 1, dy: 0), pixelSize: CGSize(width: 2, height: 2))
+    }
+  }
+  try require(trails.drawnTrailCount == SpeedTrails.maximumTrails, "the crowd effect exceeded its fixed budget")
+  let bytes = bitmap.data!.assumingMemoryBound(to: UInt8.self)
+  for y in 0..<360 { for x in 0..<640 where !playfield.contains(CGPoint(x: x, y: y)) {
+    try require(bytes[(y * 640 + x) * 4 + 3] == 0, "afterimages painted outside the playfield at \(x),\(y)")
+  } }
+  trails.reset()
+  try require(trails.drawnTrailCount == 0, "reset retained the previous frame")
+  func measured(tick: Int, x: Int, y: Int, enabled: Bool = true) -> CGVector {
+    trails.update(tick: tick, enabled: enabled, actors: [.init(id: 1, position: CGPoint(x: x, y: y))])
+    return trails.motion(actor: 1)
+  }
+  try require(measured(tick: 20, x: 100, y: 100) == .zero, "a new actor guessed a direction")
+  try require(measured(tick: 22, x: 106, y: 98) == CGVector(dx: 3, dy: -1), "uphill movement lost its slope")
+  try require(measured(tick: 22, x: 106, y: 98) == CGVector(dx: 3, dy: -1), "a redraw lost its motion")
+  try require(measured(tick: 23, x: 106, y: 98) == .zero, "a stationary actor retained a ghost")
+  try require(measured(tick: 24, x: 104, y: 101) == CGVector(dx: -2, dy: 3), "a reversal retained the old direction")
+  try require(measured(tick: 25, x: 1000, y: 100) == .zero, "a teleport produced a trail")
+  try require(measured(tick: 21, x: 103, y: 99) == .zero, "rewinding reused future movement")
+  _ = measured(tick: 22, x: 106, y: 98, enabled: false)
+  try require(measured(tick: 23, x: 109, y: 97) == .zero, "normal speed retained movement history")
+  trails.update(tick: 24, enabled: true, actors: [])
+  try require(measured(tick: 25, x: 115, y: 95) == .zero, "a removed actor retained movement history")
+  print("PASS speed afterimages: sharp sprites, direct draw, direction, pause, rewind, clipping and bounded crowd cost")
+}
+
+@MainActor private func testTickDirectionContinuity() throws {
+  let trails = SpeedTrails()
+  var position = CGPoint(x: 100, y: 100)
+  func sample(_ tick: Int, dx: CGFloat, dy: CGFloat, movement: String = "walking") -> CGVector {
+    position.x += dx; position.y += dy
+    trails.update(tick: tick, enabled: true, actors: [.init(id: 1, position: position, movement: movement)])
+    return trails.motion(actor: 1)
+  }
+  _ = sample(0, dx: 0, dy: 0)
+  _ = sample(1, dx: 3, dy: -1)
+  _ = sample(2, dx: 3, dy: 0)
+  let uphill = sample(3, dx: 3, dy: -1)
+  let angle = trails.direction(actor: 1)
+  let next = sample(4, dx: 3, dy: 0)
+  try require(trails.direction(actor: 1) == angle, "The cached trail angle flickered across a shallow slope")
+  try require(uphill.dx > 0 && uphill.dy < 0 && next.dx > 0 && next.dy < 0,
+    "Pixel stair steps made the ghosts alternate between horizontal and uphill")
+  let left = sample(5, dx: -3, dy: 0)
+  try require(left == CGVector(dx: -3, dy: 0) && trails.direction(actor: 1) == 8, "Smoothing delayed a direction reversal")
+  let fall = sample(6, dx: 0, dy: 3, movement: "falling")
+  try require(fall == CGVector(dx: 0, dy: 3), "Falling retained a horizontal wake")
+  let climb = sample(7, dx: 0, dy: -2, movement: "climbing")
+  try require(climb == CGVector(dx: 0, dy: -2), "Climbing retained the falling direction")
+  for _ in 0..<20 {
+    trails.update(tick: 7, enabled: true, actors: [.init(id: 1, position: position, movement: "climbing")])
+    try require(trails.motion(actor: 1) == climb, "Repeated live or replay sampling changed a tick's direction")
+  }
+  trails.update(tick: 7, enabled: true, actors: [])
+  try require(trails.motion(actor: 1) == .zero, "A skill assignment between ticks retained its old wake")
+  _ = sample(8, dx: 0, dy: 0)
+  try require(sample(9, dx: 0, dy: 0) == .zero, "A stopped actor retained motion")
+  print("PASS tick-based direction: stable slopes, immediate turns, falls, climbs and repeated capture")
+}
+
+@MainActor private func testSpeedSpritesStayOnTop() throws {
+  let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
+  let view = PlayfieldView(frame: CGRect(x: 0, y: 0, width: 640, height: 320))
+  let session = BombPreviewSession()
+  // Neighbours straddle effect cells so the later actor's ghost crosses the earlier sprite.
+  session.actors = [159, 161, 179, 181].enumerated().map { index, x in
+    SessionLemming(id: index, x: x, y: 80, pose: .walking, facingLeft: false,
+      animationFrame: index * 2, countdown: nil)
+  }
+  view.session = session; view.phase = .playing; view.viewport.zoom = 2
+  view.assets = try ClassicMainDATAssets.load(from: root.appendingPathComponent("Content/lemming1.pc"))
+  view.palette = ClassicLemmingPalette.panelVGA
+  view.levelImage = CGContext(data: nil, width: 320, height: 160, bitsPerComponent: 8,
+    bytesPerRow: 1280, space: CGColorSpaceCreateDeviceRGB(),
+    bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)!.makeImage()
+  func render(fast: Bool) -> NSBitmapImageRep {
+    view.isFastForward = fast
+    let bitmap = view.bitmapImageRepForCachingDisplay(in: view.bounds)!
+    view.cacheDisplay(in: view.bounds, to: bitmap)
+    return bitmap
+  }
+  let normal = render(fast: false)
+  let actors = session.actors!
+  session.actors = actors.map { actor in
+    SessionLemming(id: actor.id, x: actor.x - 3, y: actor.y + 1, pose: actor.pose,
+      facingLeft: actor.facingLeft, animationFrame: actor.animationFrame, countdown: nil)
+  }
+  _ = render(fast: true)
+  session.actors = actors; session.tick()
+  let fast = render(fast: true)
+  var spritePixels = 0, ghostPixels = 0
+  for y in 0..<normal.pixelsHigh { for x in 0..<normal.pixelsWide {
+    let original = normal.colorAt(x: x, y: y)!, updated = fast.colorAt(x: x, y: y)!
+    if original.brightnessComponent > 0 {
+      spritePixels += 1
+      try require(original == updated, "a neighbouring ghost painted over a solid sprite at \(x),\(y)")
+    } else if updated.brightnessComponent > 0 { ghostPixels += 1 }
+  } }
+  try require(spritePixels > 0 && ghostPixels > 0, "the overlap test did not draw both sprites and ghosts")
+  view.hdEffectsEnabled = false
+  let oldSchool = render(fast: true)
+  try require(oldSchool.representation(using: .png, properties: [:]) == normal.representation(using: .png, properties: [:]),
+    "Old-school speed mode retained ghost pixels")
+  print("PASS every solid sprite stays above neighbouring additive ghosts")
+}
+
 @MainActor private func run() {
   let app = NSApplication.shared
   app.setActivationPolicy(.accessory)
   do {
+    try testTickDirectionContinuity()
+    try testSpeedSpritesStayOnTop()
+    try testSpeedAfterimages()
     try testBombFlashFrames()
     try testNukeGesturesAndQueuedUndo()
     try testClassicPanelLabels()

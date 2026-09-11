@@ -1,0 +1,141 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 90
+        }
+      },
+      "tick" : 12
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 79
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "blocker"
+        }
+      },
+      "tick" : 82
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 155
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 208
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 27,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 378
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 20,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 422
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 79,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1017
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 79,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 1280
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 79,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1298
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 76,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 1523
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 79,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1953
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 79,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 2160
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 79,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 2370
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 80,
+    "required" : 79,
+    "saved" : 80,
+    "stateHash" : "fc49ad5e94e3e820be4f01a6c6fb97c5ae34f0196b79555c0e2ef433812a13d9",
+    "ticks" : 2817
+  },
+  "initialStateHash" : "86200ea9d19348e69bb1ac3b3e270819ea8ee9c578e5f17e5ed52285b073fa06",
+  "number" : 9,
+  "rank" : "Mayhem",
+  "title" : "Curse of the Pharaohs"
+}

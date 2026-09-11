@@ -120,17 +120,21 @@ change dimensions, opacity or registration. Partial alpha is rejected. No
 continuous-image filter is used.
 
 L2 front-end pictures, panel icons, bitmap text and cursors receive separate 2×
-backing images. L3's AppKit controls retain system rendering. The classic DOS
+backing images. L3's original panel and bitmap font now receive the same artwork treatment. The classic DOS
 decoder exposes its status panel but not the full menu font/artwork, so there
 is no complete matched DOS/Mac UI corpus here. UI inference preserves the
-original layout and uses architectural colour-boundary rules.
+original layout and uses architectural colour-boundary rules. A presentation-only
+contour pass refines matching diagonal colour edges in illustrations and lettering
+at 2× resolution. It can refine binary silhouettes in front-end assets, which
+have no collision masks. It never runs on gameplay terrain or actors. This is
+discrete reconstruction, not hand-drawn Macintosh sequel artwork.
 
 ## Using the artwork
 
 The option is on by default, including upgrades from the earlier opt-in release.
 It covers gameplay, menus, intro screens and level briefings. Choose **Options → Graphics → Lemmings 2 + 3 →
 Macintosh-style 2× artwork**. L2 also exposes it on its Preferences screen.
-L3 has an artwork button below the level controls. All controls use the same
+L3 has an artwork choice in its in-game menu. All controls use the same
 saved preference. Switching during play preserves the simulation, camera,
 skill selection and progress.
 
@@ -219,3 +223,34 @@ missing decisions of an official sequel port. The original Mac artists also
 redrew proportions, silhouettes and liquids, which this upgrade preserves from
 the PC games. The A–F sheets expose those differences rather than treating
 dimensions or test counts as proof of visual authenticity.
+
+## L3 native control panel
+
+L3 now uses the bundled `PAN004`, `PAN010` and `PAN005` panel artwork for
+Classic, Shadow and Egyptian tribes. The normal and pressed panels decode the
+original four VGA planes into a 320×40 image. The small `FONT.DEL` glyphs use
+`FONT.DIN` lengths and bottom-up rows. Artwork preferences apply to the panel
+as well as the playfield.
+
+The five action icons, fast-forward and pause control the existing runtime.
+Double-clicking the last icon opens the existing end-run confirmation. The
+clock cell shows minutes and seconds. Hovering over a lemming with a tool shows
+its icon and quantity in the Use Tool cell. Bricks and spades open a contextual
+eight-direction picker; simulation waits until the direction is chosen or cancelled.
+
+The top counter strip, 320×160 playfield and bottom panel occupy separate
+rectangles. All world rendering, including overhead counters, is clipped to
+the playfield. The direction picker is also bounded within it. Panel clicks
+cannot assign actions to lemmings underneath the panel. L2's system-font
+countdown is now a fallback only when its original COUNTDOWN sprite bank is absent.
+
+Menu or Escape opens the bitmap game menu for resume, retry, tribe and level
+selection, artwork and return to the library. Mouse-edge scrolling, wheel
+scrolling and arrow keys move the camera. The menu retains the experimental
+gameplay notice; this presentation change does not change L3 physics or
+campaign-credit rules. Single-step remains a keyboard-only developer shortcut.
+
+Validation covers all three tribe panels, original/2× artwork restoration,
+nine panel hit regions, pause and fast-forward callbacks, double-click end-run,
+menu pause, direction-picker isolation from panel pixels, and existing sequel
+result/progression checks.

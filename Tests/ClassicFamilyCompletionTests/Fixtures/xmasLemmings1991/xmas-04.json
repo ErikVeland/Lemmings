@@ -1,0 +1,77 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 1
+        }
+      },
+      "tick" : 35
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 148
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 194
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 324
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 881
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 9,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 973
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 1023
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 50,
+    "required" : 50,
+    "saved" : 50,
+    "stateHash" : "319c267179eeb4620a18e38eb1ba6e7129bfb4a63fb103ae2147c694ae44c7b1",
+    "ticks" : 1378
+  },
+  "initialStateHash" : "6ff1db7d2fbd867711590dcc475a66e92453a5e19c66aab4ec67ab8b77c58ef6",
+  "number" : 4,
+  "rank" : "Xmas",
+  "title" : "This Corrosion"
+}

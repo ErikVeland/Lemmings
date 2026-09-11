@@ -1,0 +1,17 @@
+{
+  "events" : [
+
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 100,
+    "required" : 90,
+    "saved" : 100,
+    "stateHash" : "ec5534a024dabdf4678fa1444193bc6102dc17b695d74ec7c99bbb86526080e6",
+    "ticks" : 2765
+  },
+  "initialStateHash" : "6217e6954db2d61b9e978b2dabfb18da4452a70de71aff1fbf9b9b4cc2a4c451",
+  "number" : 14,
+  "rank" : "Lemmings Versus",
+  "title" : "The Pipe Room..."
+}

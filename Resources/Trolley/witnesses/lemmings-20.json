@@ -1,0 +1,59 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 50
+        }
+      },
+      "tick" : 8
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 8
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "miner"
+        }
+      },
+      "tick" : 334
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 49,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 1185
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 49,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1528
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 80,
+    "required" : 48,
+    "saved" : 80,
+    "stateHash" : "bae51a2faa3b32c31703180b5b7c7b39b9a2b50eef8cf8da09fd4c40c05ff337",
+    "ticks" : 2781
+  },
+  "initialStateHash" : "20f4befec6b0f140dfaa7539df8abf8b82f09bc2526e61bcc95321ad97bbc61c",
+  "number" : 21,
+  "rank" : "Fun",
+  "title" : "You Live and Lem"
+}

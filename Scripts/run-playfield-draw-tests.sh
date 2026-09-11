@@ -15,11 +15,15 @@ swiftc -swift-version 6 -warnings-as-errors \
   -framework AppKit -framework AVFoundation -framework Metal -framework QuartzCore \
   -Xlinker -rpath -Xlinker "$build_dir" \
   -o "$build_dir/PlayfieldDrawTests" \
+  "$project_dir/Sources/LemmingsLocal/ControllerPointer.swift" \
+  "$project_dir/Sources/LemmingsLocal/LemmingFocusHighlight.swift" \
+  "$project_dir/Sources/LemmingsLocal/GameplayPresentation.swift" \
   "$project_dir/Sources/LemmingsLocal/PlayfieldView.swift" \
   "$project_dir/Sources/LemmingsLocal/ExplosionHDR.swift" \
   "$project_dir/Sources/LemmingsLocal/MacInterfaceRenderer.swift" \
   "$project_dir/Sources/LemmingsLocal/PanelView.swift" \
   "$project_dir/Sources/LemmingsLocal/PanelGlyphs.swift" \
+  "$project_dir/Sources/LemmingsLocal/RunRecovery.swift" \
   "$project_dir/Sources/LemmingsLocal/GameSession.swift" \
   "$project_dir/Tests/PlayfieldDrawTests/main.swift"
 "$build_dir/PlayfieldDrawTests"

@@ -1,0 +1,203 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 50
+        }
+      },
+      "tick" : 3
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 3
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 74,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 605
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 74,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 799
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 74,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1045
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 74,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1257
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 74,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1452
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 74,
+          "skill" : "miner"
+        }
+      },
+      "tick" : 1566
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 74,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 1651
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 74,
+          "skill" : "miner"
+        }
+      },
+      "tick" : 1925
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 74,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 2060
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 74,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 2103
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 74,
+          "skill" : "miner"
+        }
+      },
+      "tick" : 2125
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 74,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 2368
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 74,
+          "skill" : "miner"
+        }
+      },
+      "tick" : 2515
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 74,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 2657
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 74,
+          "skill" : "miner"
+        }
+      },
+      "tick" : 2779
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 74,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 2780
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 74,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 2939
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 74,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 3085
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 74,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 3193
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 75,
+    "required" : 70,
+    "saved" : 75,
+    "stateHash" : "3ea321272365830c8e862048c0ce1edc2d2159cd47ea7fe3922de88ab6b2f9bf",
+    "ticks" : 3641
+  },
+  "initialStateHash" : "64767e370055fc31a98672dcbbc5d855c7f1b6dd11f51d2d55cd61c05374f603",
+  "number" : 9,
+  "rank" : "Tricky",
+  "title" : "They just keep on coming"
+}

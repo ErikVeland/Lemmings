@@ -1,0 +1,230 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 1
+        }
+      },
+      "tick" : 13
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 2
+        }
+      },
+      "tick" : 21
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 3
+        }
+      },
+      "tick" : 22
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 4
+        }
+      },
+      "tick" : 23
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 5
+        }
+      },
+      "tick" : 24
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 6
+        }
+      },
+      "tick" : 25
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 7
+        }
+      },
+      "tick" : 26
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 8
+        }
+      },
+      "tick" : 27
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 9
+        }
+      },
+      "tick" : 28
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 10
+        }
+      },
+      "tick" : 29
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 9
+        }
+      },
+      "tick" : 35
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 100
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 160
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 220
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 280
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 316
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "climber"
+        }
+      },
+      "tick" : 360
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1248
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1530
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1995
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 3082
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 76,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 4138
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 4173
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 4317
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 4509
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 80,
+    "required" : 80,
+    "saved" : 80,
+    "stateHash" : "3f19f3f09b6fe472ffb784f80c8750818e210bdb5df3549364b1ffcc34297834",
+    "ticks" : 5067
+  },
+  "initialStateHash" : "ec446c4d97c7a2a4846e078a4946e771349fdbed4fb7d977103b89e39a7cbd46",
+  "number" : 7,
+  "rank" : "Hail",
+  "title" : "Steel Ice Span"
+}

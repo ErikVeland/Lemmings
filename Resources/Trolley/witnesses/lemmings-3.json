@@ -1,0 +1,115 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "climber"
+        }
+      },
+      "tick" : 54
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "miner"
+        }
+      },
+      "tick" : 65
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "climber"
+        }
+      },
+      "tick" : 107
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "climber"
+        }
+      },
+      "tick" : 160
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "climber"
+        }
+      },
+      "tick" : 213
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "climber"
+        }
+      },
+      "tick" : 266
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 5,
+          "skill" : "climber"
+        }
+      },
+      "tick" : 319
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 6,
+          "skill" : "climber"
+        }
+      },
+      "tick" : 372
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 7,
+          "skill" : "climber"
+        }
+      },
+      "tick" : 425
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 8,
+          "skill" : "climber"
+        }
+      },
+      "tick" : 478
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 9,
+          "skill" : "climber"
+        }
+      },
+      "tick" : 531
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 10,
+    "required" : 10,
+    "saved" : 10,
+    "stateHash" : "6ddaef0392f62dba457d39160e4e4296fdd477eaa5fbd8c4b4cf49091a0f19a8",
+    "ticks" : 874
+  },
+  "initialStateHash" : "e29122adc6d345914c52b43c479983f26282c3e49cca925bd452f61b07f54aa1",
+  "number" : 4,
+  "rank" : "Fun",
+  "title" : "Now use miners and climbers"
+}

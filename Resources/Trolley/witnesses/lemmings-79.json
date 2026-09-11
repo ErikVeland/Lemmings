@@ -1,0 +1,542 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 50
+        }
+      },
+      "tick" : 57
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "climber"
+        }
+      },
+      "tick" : 57
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 119
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 139
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 159
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 220
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 259
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 291
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 308
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 366
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 399
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 422
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 51
+        }
+      },
+      "tick" : 1088
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 52
+        }
+      },
+      "tick" : 1089
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 53
+        }
+      },
+      "tick" : 1090
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 54
+        }
+      },
+      "tick" : 1091
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 55
+        }
+      },
+      "tick" : 1092
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 56
+        }
+      },
+      "tick" : 1093
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 57
+        }
+      },
+      "tick" : 1094
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 58
+        }
+      },
+      "tick" : 1095
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 59
+        }
+      },
+      "tick" : 1096
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 60
+        }
+      },
+      "tick" : 1097
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 61
+        }
+      },
+      "tick" : 1098
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 62
+        }
+      },
+      "tick" : 1099
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 63
+        }
+      },
+      "tick" : 1100
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 64
+        }
+      },
+      "tick" : 1101
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 65
+        }
+      },
+      "tick" : 1102
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 66
+        }
+      },
+      "tick" : 1103
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 67
+        }
+      },
+      "tick" : 1104
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 68
+        }
+      },
+      "tick" : 1105
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 69
+        }
+      },
+      "tick" : 1106
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 70
+        }
+      },
+      "tick" : 1107
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 71
+        }
+      },
+      "tick" : 1108
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 72
+        }
+      },
+      "tick" : 1109
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 73
+        }
+      },
+      "tick" : 1110
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 74
+        }
+      },
+      "tick" : 1111
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 75
+        }
+      },
+      "tick" : 1112
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 76
+        }
+      },
+      "tick" : 1113
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 77
+        }
+      },
+      "tick" : 1114
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 78
+        }
+      },
+      "tick" : 1115
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 79
+        }
+      },
+      "tick" : 1116
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 80
+        }
+      },
+      "tick" : 1117
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 81
+        }
+      },
+      "tick" : 1118
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 82
+        }
+      },
+      "tick" : 1119
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 83
+        }
+      },
+      "tick" : 1120
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 84
+        }
+      },
+      "tick" : 1121
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 85
+        }
+      },
+      "tick" : 1122
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 86
+        }
+      },
+      "tick" : 1123
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 87
+        }
+      },
+      "tick" : 1124
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 88
+        }
+      },
+      "tick" : 1125
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 89
+        }
+      },
+      "tick" : 1126
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 90
+        }
+      },
+      "tick" : 1127
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 91
+        }
+      },
+      "tick" : 1128
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 92
+        }
+      },
+      "tick" : 1129
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 93
+        }
+      },
+      "tick" : 1130
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 94
+        }
+      },
+      "tick" : 1131
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 95
+        }
+      },
+      "tick" : 1132
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 96
+        }
+      },
+      "tick" : 1133
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 97
+        }
+      },
+      "tick" : 1134
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 98
+        }
+      },
+      "tick" : 1135
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 1136
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 1165
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 1360
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 67,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1390
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 80,
+    "required" : 70,
+    "saved" : 80,
+    "stateHash" : "25cff1896bdfb325ec9dd2d4cffd3e20fc0cbc77f6692e3c7443aa083087ed14",
+    "ticks" : 2551
+  },
+  "initialStateHash" : "7631171fb078be8ea7fa889561a36d60d1bae37af174f545c8273861e5d6bbc8",
+  "number" : 20,
+  "rank" : "Taxing",
+  "title" : "Walk the web rope"
+}

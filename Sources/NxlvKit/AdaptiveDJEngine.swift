@@ -54,7 +54,7 @@ public struct AdaptiveDJEngine: Sendable {
 
     /// Evaluates current telemetry and returns the target DJ energy state.
     public mutating func evaluate(telemetry: Telemetry) -> DJEnergyLevel {
-        if telemetry.didWin {
+        if telemetry.requiredCount > 0 && telemetry.savedCount >= telemetry.requiredCount {
             currentEnergy = .victory
             return .victory
         }

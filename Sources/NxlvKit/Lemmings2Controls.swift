@@ -1,24 +1,27 @@
 import Foundation
 
-/// Double-click to start; one click restores the saved game. Swallow the
+/// Double-click to start, then double-click again to restore the saved game. Swallow the
 /// remaining clicks of an undo gesture so they cannot arm another nuke.
 public struct NukeClickGesture: Sendable {
     public enum Action: Equatable, Sendable { case none, activate, undo }
     public private(set) var armedAt: TimeInterval?
+    private var armedForUndo: Bool?
     private var undoneAt: TimeInterval?
     public init() {}
-    public mutating func reset() { armedAt = nil; undoneAt = nil }
+    public mutating func reset() { armedAt = nil; armedForUndo = nil; undoneAt = nil }
     public mutating func click(canUndo: Bool, time: TimeInterval, interval: TimeInterval) -> Action {
         if let undoneAt, time >= undoneAt, time-undoneAt <= interval {
             self.undoneAt = time
             return .none
         }
         undoneAt = nil
-        if canUndo { armedAt = nil; undoneAt = time; return .undo }
-        if let armedAt, time >= armedAt, time-armedAt <= interval {
+        if let armedAt, armedForUndo == canUndo, time >= armedAt, time-armedAt <= interval {
             self.armedAt = nil
+            armedForUndo = nil
+            if canUndo { undoneAt = time; return .undo }
             return .activate
         }
+        armedForUndo = canUndo
         armedAt = time
         return .none
     }

@@ -1,0 +1,69 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 9
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "miner"
+        }
+      },
+      "tick" : 81
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "floater"
+        }
+      },
+      "tick" : 108
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 135
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "blocker"
+        }
+      },
+      "tick" : 137
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 376
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 25,
+    "required" : 25,
+    "saved" : 25,
+    "stateHash" : "a6467ee4f39a8842fd5c230a8cbc35f5b44c3e56fe73563198ac42e927f32b77",
+    "ticks" : 872
+  },
+  "initialStateHash" : "9e00139f5c704d8b075d2c2b5659f886776874a48768dcd6c1d07dc92dad4821",
+  "number" : 3,
+  "rank" : "Mayhem",
+  "title" : "It`s hero time!"
+}

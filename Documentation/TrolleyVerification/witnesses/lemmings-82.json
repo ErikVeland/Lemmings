@@ -1,0 +1,167 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 40
+        }
+      },
+      "tick" : 63
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 148
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 226
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 265
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 343
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 564
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 630
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 5,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 669
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 757
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1163
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1377
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 26,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1749
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 1910
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 26,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1942
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 36,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 2125
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 37,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 2160
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 38,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 2195
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 80,
+    "required" : 76,
+    "saved" : 80,
+    "stateHash" : "e8505b5dcac45b24f5a5824757f655acf6ed7ca4d9e4a081fd632d2dd471b81e",
+    "ticks" : 2932
+  },
+  "initialStateHash" : "7a2af3014cd1ca9c6b3f9361dc99a6a14242d37e45dab693ba080e406c1c0a27",
+  "number" : 23,
+  "rank" : "Taxing",
+  "title" : "King of the castle"
+}

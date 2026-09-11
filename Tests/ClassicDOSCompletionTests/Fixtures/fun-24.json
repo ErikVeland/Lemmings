@@ -1,0 +1,69 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 9
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "miner"
+        }
+      },
+      "tick" : 81
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "floater"
+        }
+      },
+      "tick" : 108
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 135
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "blocker"
+        }
+      },
+      "tick" : 137
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 376
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 30,
+    "required" : 20,
+    "saved" : 30,
+    "stateHash" : "723a262219551c319b8c4e5437987340d3c96caeb34d3eb9d5716b3295fbe2a5",
+    "ticks" : 872
+  },
+  "initialStateHash" : "b06c22b8d4a0ecab2a999d4365938f8f5b3191ae37e12a5a36d1fa4a250d4ee9",
+  "number" : 24,
+  "rank" : "Fun",
+  "title" : "Konbanwa Lemming san"
+}

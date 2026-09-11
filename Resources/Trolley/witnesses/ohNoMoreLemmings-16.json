@@ -1,0 +1,25 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "miner"
+        }
+      },
+      "tick" : 68
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 50,
+    "required" : 25,
+    "saved" : 50,
+    "stateHash" : "b39e6ae233991564619460fb5b5af685333b76fb4cb0e2b43b92fe4ccaf06e61",
+    "ticks" : 2964
+  },
+  "initialStateHash" : "f042085ab2b252b4bebc471646c2432fa496d73f6b3000ac662e3502ed6b3cbe",
+  "number" : 17,
+  "rank" : "Tame",
+  "title" : "Honey, I Saved The Lemmings"
+}

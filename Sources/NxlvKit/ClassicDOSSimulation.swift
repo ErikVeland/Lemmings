@@ -329,12 +329,22 @@ public struct ClassicDOSTerrain: Codable, Equatable, Sendable {
         return true
     }
 
-    /// Destructive actions cannot remove any pixel in the full steel mask.
+    /// Direct terrain edits preserve steel. DOS skills use their own steel probes.
     @discardableResult
     public mutating func removeSolid(x: Int, y: Int) -> Bool {
         guard contains(x: x, y: y) else { return false }
         let index = y * width + x
         guard solidPixels[index] != 0, steelPixels[index] == 0 else { return false }
+        solidPixels[index] = 0
+        return true
+    }
+
+    /// DOS checks steel at skill-specific probe points before applying a mask.
+    /// A mask can overlap protected pixels when its probe is outside steel.
+    fileprivate mutating func removeDOSPixel(x: Int, y: Int) -> Bool {
+        guard contains(x: x, y: y) else { return false }
+        let index = y * width + x
+        guard solidPixels[index] != 0 else { return false }
         solidPixels[index] = 0
         return true
     }
@@ -502,6 +512,7 @@ public struct ClassicDOSSimulation: Codable, Equatable, Sendable {
     private var releaseLimit: Int
     private var nextReleaseCountdown: Int
     private var triggerStates: [ClassicDOSTriggerState]
+    public var comparisonDestructionMasks: ClassicDOSDestructionMaskSet? { destructionMasks }
     private var destructionMasks: ClassicDOSDestructionMaskSet?
     private var nukeCursor: Int
     private let hatchTable: [Int]
@@ -1548,7 +1559,7 @@ public struct ClassicDOSSimulation: Codable, Equatable, Sendable {
         var removed = 0
         for maskY in 0..<mask.height {
             for maskX in 0..<mask.width where pixels[maskY * mask.width + maskX] != 0 {
-                if terrain.removeSolid(x: x + maskX, y: y + maskY) { removed += 1 }
+                if terrain.removeDOSPixel(x: x + maskX, y: y + maskY) { removed += 1 }
             }
         }
         return removed
@@ -1584,7 +1595,7 @@ public struct ClassicDOSSimulation: Codable, Equatable, Sendable {
         var removed = 0
         for pixelX in (x - 4)...(x + 4) {
             if terrain.isSolid(x: pixelX, y: row) { foundTerrain = true }
-            if terrain.removeSolid(x: pixelX, y: row) { removed += 1 }
+            if terrain.removeDOSPixel(x: pixelX, y: row) { removed += 1 }
         }
         return (foundTerrain, removed)
     }

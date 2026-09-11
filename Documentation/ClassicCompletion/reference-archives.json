@@ -1,0 +1,39 @@
+{
+  "retrieved": "2026-09-09",
+  "purpose": "Candidate provenance; native replay verification is required.",
+  "archives": [
+    {
+      "url": "https://www.camanis.net/lemmings/lemmingswelt/index.php?cmd=get&file=challenge_replays/Replay4.zip",
+      "sha256": "0fa60f359df127cff0611164003dc04f70af382643e55d127e57d79fef363532",
+      "files": [
+        "Walk the web rope.lrb",
+        "Walk the web rope.txt"
+      ]
+    },
+    {
+      "url": "https://www.camanis.net/lemmings/lemmingswelt/index.php?cmd=get&file=challenge_replays/70taxing28.zip",
+      "sha256": "e6347a5e978dc943712d1b6667aba7a81879ff092674d4f5b235f7bc4e3f3995",
+      "files": [
+        "POOR WEE CREATURES!.lrb",
+        "POOR WEE CREATURES!.txt"
+      ]
+    },
+    {
+      "url": "https://www.camanis.net/lemmings/lemmingswelt/index.php?cmd=get&file=challenge_replays/tricky23_save79.zip",
+      "sha256": "cf7cd6b65a6196220ff596f414870516a4d5f41f20a715d7ed0035c0526730e4",
+      "files": [
+        "Tricky23_save79.txt",
+        "Tricky23_save79.lrb"
+      ]
+    }
+  ],
+  "adaptedRecordings": [
+    {
+      "url": "https://www.lemmingsforums.net/index.php?action=dlattach;attach=627",
+      "discussion": "https://www.lemmingsforums.net/index.php?topic=1601.15",
+      "file": "tricky16-save1-4skills-n.lrb",
+      "sha256": "255eee41cf3be9eb5341894175e6460ef0fd940fc22be8babcbef3bf1a00733d",
+      "adaptation": "Retained the initial miner and basher assignments, then used four individually timed bombers instead of the one-survivor recording\u2019s later inputs and nuke. The resulting native replay saves 46 of 50."
+    }
+  ]
+}

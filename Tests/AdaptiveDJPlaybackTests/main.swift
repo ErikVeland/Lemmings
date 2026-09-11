@@ -21,11 +21,15 @@ private func require(
 private typealias Telemetry = AdaptiveDJEngine.Telemetry
 
 @MainActor private func run(_ root: URL) throws {
-  let soundtracks = SoundtrackPlayer.soundtracks(at: root)
+  let soundtracks = SoundtrackPlayer.djSoundtracks(at: root)
   guard !soundtracks.isEmpty else {
     print("No soundtrack folders installed. Nothing to mix.")
     return
   }
+  try require(soundtracks.keys.contains { $0.contains("lemmings_2") }, "L2 modules missing from DJ")
+  try require(soundtracks.keys.contains { $0.contains("lemmings_3") }, "L3 modules missing from DJ")
+  let restricted = SoundtrackPlayer.djSoundtracks(at: root, includeOtherSoundtracks: false)
+  try require(!restricted.keys.contains { $0.contains("lemmings_2") || $0.contains("lemmings_3") }, "DJ opt-out did not remove sequels")
   let tracks = soundtracks.values.reduce(0) { $0 + $1.count }
   print("  soundtracks: \(soundtracks.count), tracks: \(tracks)")
 
@@ -42,21 +46,21 @@ private typealias Telemetry = AdaptiveDJEngine.Telemetry
 
   // A quiet level must not move the music.
   let quiet = Telemetry(
-    releasedCount: 10, totalCount: 10, savedCount: 0, requiredCount: 1,
+    releasedCount: 10, totalCount: 10, savedCount: 0, requiredCount: 5,
     releaseRate: 50, dangerCount: 0, remainingSeconds: 300)
   for _ in 0..<60 { player.updateTelemetry(quiet) }
   try require(
     player.currentTrackName == opening,
     "a quiet level moved the mix to \(player.currentTrackName)")
 
-  // The first lemming home is the cue this design exists for.
+  // The rescue target is the cue this design exists for.
   var rescued = quiet
-  rescued.savedCount = 1
+  rescued.savedCount = 5
   player.updateTelemetry(rescued)
   try require(
     player.currentTrackName != opening,
-    "the first rescue did not move the mix off \(opening)")
-  print("  first rescue moved to: \(player.currentTrackName)")
+    "the rescue target did not move the mix off \(opening)")
+  print("  rescue target moved to: \(player.currentTrackName)")
 
   // And it moves once, not on every frame that follows.
   let afterCue = player.currentTrackName
@@ -71,9 +75,32 @@ private typealias Telemetry = AdaptiveDJEngine.Telemetry
 
   // Both decks run during a crossfade, and the old one is retired after it.
   try require(player.isPlaying, "the mix stopped during the crossfade")
+  try require(player.playingDeckCount == 2, "both decks were not audible mid-crossfade")
+  let crossfadingTrack = player.currentTrackName
+
+  // Suspending pauses both fading decks without retiring either - resuming
+  // should pick the crossfade back up exactly where it left off.
+  player.suspendOutput()
+  try require(player.playingDeckCount == 0, "suspending output did not pause both fading decks")
+
+  // The game can call start() again for the next level without stopping the
+  // DJ first (playMusicForCurrentLevel only stops the other music sources).
+  // Calling it here, while suspended, must neither sneak in an audible deck
+  // behind the suspension nor maroon the crossfade's other deck so it can
+  // resurface later playing alongside a different track.
+  player.resetLevel()
+  player.start()
+  try require(player.playingDeckCount == 0, "start() produced audible output while the mix was suspended")
+
+  player.resumeOutput()
+  try require(
+    player.isCrossfading && player.playingDeckCount == 2 && player.currentTrackName == crossfadingTrack,
+    "resuming did not continue the original crossfade cleanly - a stray start() call left "
+      + "\(player.playingDeckCount) deck(s) playing on \"\(player.currentTrackName)\" instead")
+
   player.stop()
   try require(!player.isPlaying, "the mix kept playing after stop")
-  print("PASS the mix starts, moves on the first rescue, and moves only once")
+  print("PASS the mix starts, moves on the rescue target, moves only once, and start() cannot disturb a suspended crossfade")
 }
 
 let app = NSApplication.shared

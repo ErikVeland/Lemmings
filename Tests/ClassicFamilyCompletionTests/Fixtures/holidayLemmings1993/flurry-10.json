@@ -1,0 +1,122 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 32
+        }
+      },
+      "tick" : 13
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 69
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 89
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 148
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 29,
+          "skill" : "miner"
+        }
+      },
+      "tick" : 665
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 29,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1013
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 29,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1215
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1797
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 31,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1975
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 31,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 2168
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 31,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 2361
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 31,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 2823
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 32,
+    "required" : 25,
+    "saved" : 32,
+    "stateHash" : "eb4aa60053eb5048db10603f4c9831daf9a1cb11520840d29cd5df4b19f1c5f9",
+    "ticks" : 3833
+  },
+  "initialStateHash" : "145b1666f2fc129f45de50950bee400c5643f726d0cf2b99cd7d14237b6b966f",
+  "number" : 10,
+  "rank" : "Flurry",
+  "title" : "32 Lemmings Below Zero"
+}

@@ -1,0 +1,185 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 1
+        }
+      },
+      "tick" : 21
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 74
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 140
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 338
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 5,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 369
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "bomber"
+        }
+      },
+      "tick" : 387
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 6,
+          "skill" : "bomber"
+        }
+      },
+      "tick" : 467
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 8,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 581
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 13,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 814
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 12,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 839
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 16,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1090
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 22,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1335
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 26,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1571
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 30,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 1844
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 1849
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 49,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 2005
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 45,
+          "skill" : "bomber"
+        }
+      },
+      "tick" : 2012
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 28,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 2132
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 32,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 2300
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 50,
+    "required" : 30,
+    "saved" : 41,
+    "stateHash" : "0543a07d47d34f5b041ba3f0d0afd88ec5c6d7462539efd00e313e7194ad3951",
+    "ticks" : 2637
+  },
+  "initialStateHash" : "23f9d04da23da3e7f9d5f85f803dbf5e21e6f89f97bcef06570d24283181a7df",
+  "number" : 4,
+  "rank" : "Wicked",
+  "title" : "Oh No! It`s the 4TH DIMENSION!"
+}

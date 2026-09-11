@@ -1,0 +1,43 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "blocker"
+        }
+      },
+      "tick" : 216
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "blocker"
+        }
+      },
+      "tick" : 526
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "blocker"
+        }
+      },
+      "tick" : 796
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 50,
+    "required" : 5,
+    "saved" : 47,
+    "stateHash" : "6dc4bdaffa6da3c79d6bf261cc679832f0ca5a03426abccfc8ee70acce8c4fc2",
+    "ticks" : 5100
+  },
+  "initialStateHash" : "5c3056ff39d3e35878378eb7bba2d75649164769a49526858d6cb9d0ee6561d6",
+  "number" : 3,
+  "rank" : "Fun",
+  "title" : "Tailor-made for blockers"
+}

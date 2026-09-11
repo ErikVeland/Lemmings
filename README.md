@@ -26,10 +26,12 @@ each level's own trigger zones.
 A smoke harness runs all 120 official levels. Every level builds a simulation,
 releases lemmings, and moves them. Every level decodes an exit trigger.
 
-The engine completes real levels. A search over single skill assignments finds
-the known solution to three levels with three different skills. Fun 1 needs a
-digger. Fun 2 needs a floater. Fun 9 needs a basher. Replays of those runs
-reproduce exactly.
+All 120 Classic levels have saved winning replays on the native engine.
+`zsh Scripts/verify-classic-completion.sh` checks every recorded assignment and
+reproduces every win from a fresh simulation. Missing or invalid replays fail
+the check. See [the completion evidence](Documentation/ClassicCompletion/README.md).
+A winning rescue count is not an optimality proof; maximum-rescue targets remain
+separate from the original pass requirements.
 
 The app also opens unofficial NeoLemmix `.nxlv` levels. The player chooses a
 NeoLemmix styles directory once. The app then resolves style assets, renders
@@ -42,9 +44,10 @@ reported rather than ignored.
 | DOS terrain graphics | All five ground sets and all four `VGASPEC` backgrounds decoded and golden-tested |
 | DOS object graphics | Frames, palettes, upside-down objects, animation, `NoOverwrite`, and `OnlyOnTerrain` supported |
 | Classic gameplay | The DOS engine drives the app at a fixed 17 Hz tick with the eight DOS skills |
-| Campaign coverage | All 120 levels build, spawn, and run |
-| Verified solutions | Three official levels solved and replayed. The rest need multi-skill replays |
-| Replays | Deterministic format with an initial state hash and an outcome hash |
+| Campaign coverage | All 120 levels have repeatable winning native-engine replays |
+| Completion evidence | All 120 original levels have verified winning replays. Additional classic campaigns have 88 winning routes; full coverage remains open |
+| Replays | End-of-run playback from 0.25× to 8× and MP4 movie export; separate deterministic DOS replay tools |
+| Arcade records | Local player profiles, sprite portraits, per-level rescue and skill boards, achievements and retry challenges |
 | Interface | Scrolling viewport, zoom, control panel, live skill counts, minimap, and cursor |
 | Lemming sprites | Decoded from `MAIN.DAT` and drawn per pose and direction |
 | NeoLemmix `.nxlv` data | Parsed, style-resolved, rendered, and played through the NeoLemmix engine |
@@ -57,13 +60,13 @@ reported rather than ignored.
 | Macintosh MIDI | Not playable. No MIDI player exists, so the source is not offered |
 | Sound effects | Macintosh `snd` resources, and the Amiga banks. `basicfx` and `fullfx` are IFF 8SVX, decoded and selectable |
 | Amiga sound names | Eleven of twenty-one sounds carry a name and are bound. Nine have an empty name and stay unbound rather than guessed |
-| Port-exclusive levels | "Oh Yes! More Lemmings!" gathers the 30 Amiga versus levels. Loaded and tested. Not yet in the game library |
+| Port-exclusive levels | "Oh Yes! More Lemmings!" is in the library with 60 bundled converted levels. All render and release lemmings; full winning-route coverage remains open |
 | SNES and Genesis levels | Not extracted. `SNESLevelDecoder` returns a fixed list whatever ROM it is given, and `GenesisLevelDecoder` builds entries from a formula. Neither carries terrain |
 | Adaptive DJ | Plays. Mixes between the soundtracks the player supplied, cued by what the game does. Offered only when a soundtrack is installed |
-| Lemmings 3 movies | Decoded. All 3333 frames of the five `.FLI` files read, and match a decoder written separately. Not yet shown in the game |
+| Lemmings 3 movies | All five original `.FLI` movies are available from the in-game movie gallery. Streaming playback supports pause and return; story triggers and movie soundtracks remain unconnected |
 | Graphics sources | DOS VGA, Amiga OCS, and Macintosh artwork all decode and can be chosen |
 | DOS CGA | Not available. The DOS data holds CGA sets, and no decoder reads them. There are no EGA sets |
-| Distribution | Beta 9 universal build for macOS 13+. The packaging script supports Developer ID signing and Apple notarization. See [beta testing](Documentation/BetaTesting.md) |
+| Distribution | Beta 13 (0.1, build 13), targeting macOS 13+. The archive is signed, notarized, stapled and accepted by Gatekeeper. See [release notes](Documentation/ReleaseNotes-beta13.md) and [build evidence](Documentation/Beta13Readiness.md). The final 1.0 archive still needs its own build, signing and notarization checks. See [release gates](Documentation/ReleaseReadiness/gates.json) and the [1.0 gap evaluation](Documentation/ReleaseReadiness/OneZeroGapEvaluation.md) |
 
 ## Unified game library
 
@@ -123,6 +126,20 @@ The build script compiles the Swift targets directly. This also works around a
 `PackageDescription` binary mismatch in some Command Line Tools installations.
 On a healthy SwiftPM installation, `swift test` remains available.
 
+## Release readiness
+
+The [1.0 gap review](Documentation/ReleaseReadiness-1.0.md) records this hardening pass, test evidence and the remaining release blockers.
+
+The [modern release plan](Documentation/ModernReleasePlan.md) records verified features, open gaps and the path from the Mac reference build to iOS and consoles. The [partner evaluation brief](Documentation/PartnerEvaluation.md) describes the proposed demonstration and collaboration scope.
+
+Run `python3 Tools/ReleaseReadiness/audit.py --app` for fresh regression logs, input hashes and campaign checks. A green regression run does not close hardware, complete-campaign or platform delivery gates.
+
+Arcade records now retain a validated backup and recover it when the primary file is unreadable. Failed profile saves remain open for retry. Legacy campaign saves and preferences migrate into the current app without replacing current choices. See [save recovery and migration](Documentation/SaveRecovery.md).
+
+**Settings → Accessibility** provides independent **Reduce added motion** and **Reduce added flashes** controls. Motion reduction disables speed trails and cinematic explosions. Flash reduction disables added bright explosion cores, HDR flashes and cinematic explosions. Original game sprites remain. These settings preserve gameplay speed and controller support, survive relaunch, and remain set when changing presets.
+
+**Settings → Gameplay → Pause** enables automatic pause on focus loss or an active controller disconnect. Return to the game and resume explicitly. Hints, help and replay windows preserve an interruption pause when closed. The modern preset enables this option; the OG preset turns it off.
+
 ## Verification
 
 Run every suite:
@@ -180,14 +197,17 @@ The suites verify:
    All campaign starts and exits pass checks; 64 levels have recorded solutions.
    Full walkthrough coverage and original-engine equivalence remain unverified.
    L3 remains a native preview with 90 campaign levels, separate tribe progress,
-   and completed-run checks for Classic 1–3, Egyptian 1 and Shadow 1. Its audio,
-   movies and remaining mechanics need further work.
+   and 16 fixed-input winning replays. Its tribe module music, six named original
+   voice samples and five original movies are connected. Environmental effects,
+   movie soundtracks, story triggers and remaining mechanics need further work.
    See [Sequel interpreters](Documentation/SequelInterpreters.md).
-2. Record full solution replays for Oh No!, Xmas 1991–1992, and Holiday
-   1993–1994. Their retail ratings and campaign order now load in the shared
-   library. All 292 classic-family levels pass rendering and release checks.
-3. Record replays for every official level, then gate physics changes on them.
-   Three levels are covered. The other 117 need multi-skill replays.
+2. Complete solution coverage for Oh No!, Xmas and Holiday. The new
+   [campaign gate](Documentation/CampaignCompletion/README.md) verifies 88 winning
+   replays: Oh No! 54/100, Xmas 1991 4/4, Xmas 1992 2/4, Holiday 1993 13/32 and
+   Holiday 1994 15/32. All 292 classic-family levels pass rendering and release checks.
+3. Keep the strict original DOS completion gate green. All 120 levels have
+   winning replays, including 103 full rescues. Extend this gate to the other
+   campaigns. See [completion evidence](Documentation/ClassicCompletion/README.md).
 4. Decode the Sound Images sequencer format so the driver's own tunes feed the
    synthesizer. See `Documentation/AdlibDriver.md`.
 5. Load NeoLemmix lemming sprites from style packs.
@@ -215,6 +235,35 @@ The suites verify:
 
 See `THIRD_PARTY_NOTICES.md` for research sources and licensing notes.
 
+### Modern defaults and OG settings
+
+New players start with HD effects, variable speed and modern keyboard controls.
+The first launch offers **Play with modern defaults** and **Old school**.
+**Settings → Gameplay → Use OG settings** switches the added conveniences off
+in one action. The selected machine, volumes and saves stay as set.
+
+Tap **F** or click **Speed** for 2× → 3× → 5× → 10× → 1×. Hold **F** or **Shift**
+to ramp up, then release to ease back to the selected speed. Double-tap **F**,
+double-click **Speed**, or press **Escape** to return to 1× immediately.
+
+Variable speed can be disabled independently in **Settings → Gameplay**.
+HD effects have their own switch in **Settings → Video → Effects**.
+See [speed controls and effects](Documentation/SuperSpeed.md).
+
+### Optional level hints
+
+Choose **Help → Level hints**, press **F1**, or choose hints from the controls help.
+Reveal a gentle nudge, then the approach, then opening moves with marked locations.
+The game pauses while you read. Each tier needs a separate click.
+All 120 original levels have hints drawn from checked winning routes.
+Other levels offer clearly labelled general coaching. See [level hints](Documentation/LevelHints.md).
+
+### Pointer capture
+
+During play, the pointer stays inside the game so edge scrolling continues beside
+another monitor. Hold **Option**, pause, or open a menu to release it. The setting
+is under **Settings → Video → Pointer**. See [pointer capture](Documentation/PointerCapture.md).
+
 ### Macintosh artwork
 
 The combined app now prefers the supplied Mac artwork for Lemmings, Oh No,
@@ -234,3 +283,62 @@ Macintosh reference rules and retains the original gameplay geometry. The
 default is Macintosh-style artwork, including L2 menus and loading/briefing screens.
 You can switch back to the original PC artwork. See [the reference study, conversion and
 visual checks](Documentation/SequelMacArtwork.md).
+
+### THE TROLLEY
+
+Completed attempts now have a persistent philosophical rescue analysis, including
+failed attempts. The existing game result page shows saved versus best known or
+verified maximum, an affinity for the solution, and an adaptive Retry challenge.
+See [THE TROLLEY](Documentation/TheTrolley.md) for evidence rules, seven local
+boards, profile history, migration, and validation. Run
+`Scripts/run-trolley-tests.sh` for its model, persistence, replay, and UI tests.
+
+### Skill keyboard shortcuts
+
+During play, number keys select skills in panel order (1–9, then 0 for the tenth slot). Letter keys also select skills. Initials take priority; skills with a duplicate or reserved initial use the next available letter in their name. The bindings follow the current level’s skill list. Hover over the skill panel to see its shortcuts.
+
+For the classic eight skills: **1/C** Climber, **2/L** Floater, **3/B** Bomber, **4/O** Blocker, **5/U** Builder, **6/A** Basher, **7/M** Miner, **8/D** Digger. F remains fast-forward.
+
+Lemmings 3 uses **1/W** Walker, **2/B** Blocker, **3/J** Jumper, **4/U** Use tool, and **5/D** Drop tool.
+
+During play, **Tab / Shift-Tab** cycles through available skills and skips empty supplies. **Hold Shift** for temporary fast-forward; release it to restore the previous speed. **Home / End** centres the camera on the first entrance / exit. **− / +** changes the release rate in classic and NeoLemmix levels. The sequels use fixed release timing.
+
+**Escape** cancels a pending Lemmings 3 direction choice or Lemmings 2 fan selection, then opens the pause menu on the next press. In classic play, it opens a pause menu with Resume and Retry. **?** pauses play and shows the current level’s shortcuts; closing help restores the previous pause state.
+
+**] / [** snaps to the next / previous active lemming that has never received a successful skill assignment, in release order. **\** snaps to the last successfully assigned lemming. A yellow ring marks the camera target for two seconds. **Return / Enter** applies the last successfully assigned skill to that highlighted target, or to the lemming under the pointer when no highlight is active. Moving the pointer clears the highlight. These keys never assign on key repeat, and normal skill eligibility and supply limits still apply. Lemmings 3 tools still ask for a direction when needed.
+
+### Controller controls
+
+Connected extended gamepads (including supported Xbox and PlayStation controllers) use the same gameplay actions as the keyboard. Button names below follow the Xbox layout; PlayStation uses the corresponding button positions.
+
+| Controller | Action |
+| --- | --- |
+| Left stick / right stick | Aim / pan camera |
+| A / B | Assign selected skill / return to 1×, then cancel or open pause menu |
+| X / Y | Repeat last successful skill / focus last assignment |
+| LB / RB | Previous / next available skill |
+| D-pad left / right | Previous / next unassigned lemming |
+| D-pad up / down | Increase / decrease release rate where supported |
+| Tap RT | 2× → 3× → 5× → 10× → 1×; optional in Controller settings |
+| Hold RT / double-tap RT | Ramp up and ease back on release / immediately return to 1× |
+| Menu | Pause / resume |
+| Left / right stick click | Centre on entrance / exit |
+| View / Options | Show keyboard and controller help |
+| LT + Y | Open tiered level hints |
+| LT + D-pad left / right | Decrease / increase selected speed |
+| LT + D-pad up / down | Centre on entrance / exit |
+| LT + X | Reset speed to 1× |
+| LT + LB / RB | Step back / forward where supported |
+| LT + B | Rewind two seconds where supported |
+| LT + Menu | Retry the level |
+| LT + A | Confirm ending the run, or undo a nuke where supported |
+| LT + View / Options | Open Settings |
+
+**Settings → Controller** has gamepad support, tap-to-change-speed and stick-swap switches, plus the full binding list.
+The modern preset enables controller QoL. **Use OG settings** disables gamepad support along with the other added conveniences.
+
+In game menus, the D-pad navigates, A confirms, and B returns. The same controls work on hint pages and help sheets.
+In Settings, use LB / RB to change tabs, D-pad up / down to choose a control, left / right to adjust values, and A to toggle or activate.
+The right stick scrolls long help pages. Hint tiers require separate presses. Held buttons do not carry into a new page.
+
+In Lemmings 3, aim at a direction-picker cell and press A to confirm a tool direction. Skill selection cycles through the current level’s available skills, so every skill remains reachable without a dedicated button. Assignments fire once per press. Reconnecting a controller or returning to the game does not replay held buttons. Disconnecting or leaving the game window cancels speed input.

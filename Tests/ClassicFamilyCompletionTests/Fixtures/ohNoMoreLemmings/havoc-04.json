@@ -1,0 +1,163 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 1
+        }
+      },
+      "tick" : 33
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 19
+        }
+      },
+      "tick" : 33
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 58
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 75
+        }
+      },
+      "tick" : 102
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 105
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 79
+        }
+      },
+      "tick" : 122
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 124
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 79
+        }
+      },
+      "tick" : 140
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 142
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 75
+        }
+      },
+      "tick" : 156
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 160
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 51
+        }
+      },
+      "tick" : 176
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 180
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 11
+        }
+      },
+      "tick" : 211
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 215
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 285
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 398
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 2581
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 20,
+    "required" : 20,
+    "saved" : 20,
+    "stateHash" : "3a66958510148c6e9124e8052bc1eebe8ce4b487194a970bf98d8ecda4e859f7",
+    "ticks" : 3026
+  },
+  "initialStateHash" : "1f06391f86afe1e9e52399de223e615b591e1402c3b3259b449b2440e7c06da2",
+  "number" : 4,
+  "rank" : "Havoc",
+  "title" : "The race against cliches"
+}

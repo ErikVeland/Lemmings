@@ -1,0 +1,52 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "blocker"
+        }
+      },
+      "tick" : 73
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "bomber"
+        }
+      },
+      "tick" : 74
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "blocker"
+        }
+      },
+      "tick" : 372
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "bomber"
+        }
+      },
+      "tick" : 373
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 50,
+    "required" : 10,
+    "saved" : 48,
+    "stateHash" : "37f93e3b6be7912cb390a05debdebe03e1f5e1f8748e728685f1aae834cec2f0",
+    "ticks" : 1695
+  },
+  "initialStateHash" : "207d55ea84ce5c3d4a27bd162f0ee430cf782123b07a2d779b510e0ed3a0f922",
+  "number" : 6,
+  "rank" : "Fun",
+  "title" : "A task for blockers and bombers"
+}

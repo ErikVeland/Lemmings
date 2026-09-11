@@ -17,6 +17,8 @@ for required in LEVELS/LEVEL000.DAT STYLES/CLASSIC.DAT VLEMMS.DAT MASKS.DAT INTE
   fi
 done
 mkdir -p "$resources_dir/Ports" "$resources_dir/Music"
+mkdir -p "$resources_dir/Hints"
+cp "$project_dir/Resources/Hints/classic.json" "$resources_dir/Hints/classic.json"
 # Assets stay in the ignored app bundle. Original executable engines, machine
 # settings and development overlays are not needed by the native interpreters.
 copy_options=(-a --exclude=.DS_Store --exclude='*.[Ee][Xx][Ee]' --exclude='*.[Cc][Oo][Mm]'
@@ -24,6 +26,13 @@ copy_options=(-a --exclude=.DS_Store --exclude='*.[Ee][Xx][Ee]' --exclude='*.[Cc
   --exclude='*.[Ii][Nn][Ii]' --exclude='*.[Ss][Aa][Vv]' --exclude='LEM3CD-2/')
 case "$2" in
   all)
+    if [[ ! -f "$project_dir/Content/LevelPacks/packs.json" ]]; then
+      echo "Missing embedded fan level packs in Content/LevelPacks." >&2
+      exit 1
+    fi
+    mkdir -p "$resources_dir/LevelPacks"
+    rsync -a --include='*.zip' --include='*.json' --exclude='*' \
+      "$project_dir/Content/LevelPacks/" "$resources_dir/LevelPacks/"
     rsync "${copy_options[@]}" "$project_dir/Sources/Ports/" "$resources_dir/Ports/"
     rsync -a --exclude=.DS_Store --exclude='*.wav' \
       "$project_dir/Sources/Music/" "$resources_dir/Music/"
@@ -49,7 +58,17 @@ case "$2" in
     ;;
 esac
 
+# Standalone sequel players share the in-game profile and Trolley artwork.
+if [[ "$2" == l2 || "$2" == l3 ]]; then
+  python3 "$project_dir/Tools/MacArtwork/prepare.py" "$resources_dir/MacArtwork"
+fi
+
 if [[ "$2" == all || "$2" == l2 ]]; then
   python3 "$project_dir/Tools/Lemmings2Reference/prepare-assets.py" \
     "$project_dir/Sources/Ports/Lemm2" "$resources_dir/Ports/Lemm2"
 fi
+
+python3 "$project_dir/Tools/TrolleyVerification/catalogue.py" bundle "$resources_dir/Trolley"
+
+mkdir -p "$resources_dir/GameCenter"
+cp "$project_dir/Resources/GameCenter/leaderboards.json" "$resources_dir/GameCenter/leaderboards.json"

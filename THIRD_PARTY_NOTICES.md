@@ -47,7 +47,10 @@ include copied LemmixPlayer source or assets.
 ## Sequel format research
 
 The native Lemmings 2 and 3 readers use format research by GuyPerfect,
-geoo89, and Mindless. No game binaries, levels, or graphics are bundled.
+geoo89, and Mindless. Private beta packages include supplied game data.
+Those files retain their original ownership and are not covered by the source
+code licences listed here. Public distribution requires the relevant rights
+or a player-import workflow, as described below.
 See [SequelInterpreters.md](Documentation/SequelInterpreters.md) for the exact
 references and the current implementation boundary.
 The Chronicles graphics format was also investigated using the `lem3edit`

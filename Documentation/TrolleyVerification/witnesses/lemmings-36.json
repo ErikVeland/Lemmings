@@ -1,0 +1,320 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 20
+        }
+      },
+      "tick" : 13
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 74
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 138
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "blocker"
+        }
+      },
+      "tick" : 165
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 202
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 244
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "climber"
+        }
+      },
+      "tick" : 260
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 340
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 341
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 543
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 576
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 745
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 812
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 947
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1046
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1150
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 1229
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 1262
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 27,
+          "skill" : "climber"
+        }
+      },
+      "tick" : 1273
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1283
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1534
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 1568
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 27,
+          "skill" : "floater"
+        }
+      },
+      "tick" : 1586
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "floater"
+        }
+      },
+      "tick" : 1602
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1666
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "blocker"
+        }
+      },
+      "tick" : 1735
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 27,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1755
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 27,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1956
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 27,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 2156
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 45,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 2396
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 2446
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 27,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 2523
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 27,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 2535
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 27,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 2545
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 75,
+    "required" : 55,
+    "saved" : 75,
+    "stateHash" : "73fbaed890d427100cca8d894856008ccd2a389bbb124526b7420ebb8109e1c5",
+    "ticks" : 3423
+  },
+  "initialStateHash" : "a08b4dcd622f44ccbe59f37afa6ae6b65c4375d2b2461fd4573ce677df842d32",
+  "number" : 7,
+  "rank" : "Tricky",
+  "title" : "Been there, seen it, done it"
+}

@@ -1,0 +1,103 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 1
+        }
+      },
+      "tick" : 8
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 87
+        }
+      },
+      "tick" : 8
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 826
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 79,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 1074
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 79,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 1599
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 79,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1614
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 79,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 1680
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 79,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 1748
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 79,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1758
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 79,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1847
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 80,
+    "required" : 75,
+    "saved" : 80,
+    "stateHash" : "f257ceea7c331de857684f9be8d3af5ce797c2a0733fc34192dcb44d26bbb41e",
+    "ticks" : 1995
+  },
+  "initialStateHash" : "029e65c64e7975d8676f07cc00631b48c94fe0a829f5a3f90eb94711137d060c",
+  "number" : 12,
+  "rank" : "Crazy",
+  "title" : "Lemming Friendly"
+}

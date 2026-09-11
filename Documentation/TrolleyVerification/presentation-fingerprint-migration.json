@@ -1,0 +1,18 @@
+{
+  "previousFingerprint": "30654a68a6e9744b1ed5c7d8178b0aa8d3be2077f5b4f15d8b2541293b357efb",
+  "physicsFingerprint": "0b21e21b2e59ee69ef018de4bfce50963d3caa16d8a882317787e6f8e8a48328",
+  "unchangedEngineFiles": 101,
+  "excludedPresentationFiles": [
+    "ClassicSettings.swift",
+    "Lemmings2Controls.swift",
+    "SkillShortcuts.swift"
+  ],
+  "changedPresentationFiles": [
+    "ClassicSettings.swift",
+    "Lemmings2Controls.swift",
+    "SkillShortcuts.swift"
+  ],
+  "witnesses": 178,
+  "witnessHashesValidated": true,
+  "verifiedSourceSnapshot": "/Users/veland/Lemmings/.build/beta12-followup/source-snapshot/Sources/NxlvKit"
+}

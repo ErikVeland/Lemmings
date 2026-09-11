@@ -1,0 +1,25 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 132
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 50,
+    "required" : 25,
+    "saved" : 50,
+    "stateHash" : "dc8d09cd45d42baf0f60a12ebba38da383b23c7502d613c3e22ea93f976e3abf",
+    "ticks" : 1605
+  },
+  "initialStateHash" : "5b25351401282fe53297b80b4d1cc5441c6560a938d42b32122b4f97d2501acb",
+  "number" : 1,
+  "rank" : "Xmas",
+  "title" : "Jingle Lemming"
+}

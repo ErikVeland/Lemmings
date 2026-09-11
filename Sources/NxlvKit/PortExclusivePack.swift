@@ -38,6 +38,22 @@ public enum PortExclusivePack {
     public static let sunsoftFolder = "Genesis-Sunsoft"
     public static let sunsoftArchive = "Genesis Sunsoft.dat"
 
+    /// Ground numbers overlap between the original game and Oh No. Keep the
+    /// level records unchanged and select the source release for each rank.
+    public static func artworkDirectory(for entry: ClassicCampaignLevel, portsRoot: URL) -> URL {
+        if entry.rank == "Mega Drive Sunsoft" { return portsRoot.appendingPathComponent(sunsoftFolder, isDirectory: true) }
+        let release: ClassicStyleResolver.Release = entry.rank == "Oh No! More Lemmings Versus"
+            ? .ohNoMore : .lemmings
+        return portsRoot.appendingPathComponent(release.folders[0], isDirectory: true)
+    }
+
+    /// The conversion supplies ground metadata and its special picture. It
+    /// shares the original game's planar graphics and lemming sprites.
+    public static func fallbackArtworkDirectory(for entry: ClassicCampaignLevel, portsRoot: URL) -> URL? {
+        entry.rank == "Mega Drive Sunsoft"
+            ? portsRoot.appendingPathComponent(ClassicStyleResolver.Release.lemmings.folders[0], isDirectory: true) : nil
+    }
+
     /// Reads the Mega Drive levels out of their converted archive.
     ///
     /// Each section of the archive is one 2048 byte level record, the same

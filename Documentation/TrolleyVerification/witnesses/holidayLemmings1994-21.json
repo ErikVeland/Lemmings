@@ -1,0 +1,200 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 20
+        }
+      },
+      "tick" : 6
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 93
+        }
+      },
+      "tick" : 6
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 55
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 69
+        }
+      },
+      "tick" : 186
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 83
+        }
+      },
+      "tick" : 190
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 31
+        }
+      },
+      "tick" : 210
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 83
+        }
+      },
+      "tick" : 224
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 258
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 39
+        }
+      },
+      "tick" : 270
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 274
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 91
+        }
+      },
+      "tick" : 309
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 312
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 47
+        }
+      },
+      "tick" : 324
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 329
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 63
+        }
+      },
+      "tick" : 382
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 387
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 95
+        }
+      },
+      "tick" : 432
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 436
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 83
+        }
+      },
+      "tick" : 443
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 448
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 95
+        }
+      },
+      "tick" : 485
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 488
+    },
+    {
+      "action" : {
+        "nuke" : {
+
+        }
+      },
+      "tick" : 567
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 80,
+    "required" : 27,
+    "saved" : 33,
+    "stateHash" : "a82d10dc50f2a1a148883110d4a6c92dd4c2e7141e9bc5a7624fd7b995bebe65",
+    "ticks" : 790
+  },
+  "initialStateHash" : "40249d54877df06aaf075b59f195551980aecc0e2e71175b991599fdccbf03f9",
+  "number" : 6,
+  "rank" : "Hail",
+  "title" : "Surprise Package?"
+}

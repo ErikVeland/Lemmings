@@ -1,0 +1,76 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 50
+        }
+      },
+      "tick" : 15
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 65
+        }
+      },
+      "tick" : 89
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 50
+        }
+      },
+      "tick" : 113
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "floater"
+        }
+      },
+      "tick" : 139
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 172
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 239
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 272
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 10,
+    "required" : 9,
+    "saved" : 9,
+    "stateHash" : "1d834a1c54cd97866cdfb13cecde49fd2bc8c408f57b031f5816d628395393da",
+    "ticks" : 902
+  },
+  "initialStateHash" : "b906807883d7f1a492d1a1bc4ad1db0c733f9f6fcd98719fc6f011d2c4e5eec7",
+  "number" : 18,
+  "rank" : "Tricky",
+  "title" : "It's Lemmingentry Watson"
+}

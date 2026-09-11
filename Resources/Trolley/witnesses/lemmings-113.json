@@ -1,0 +1,43 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 64
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 116
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 6,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 200
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 50,
+    "required" : 50,
+    "saved" : 50,
+    "stateHash" : "8d9c305678511a5178ad420599c7f0b7cad88cc7fea33408a6760d0685be6424",
+    "ticks" : 411
+  },
+  "initialStateHash" : "45135156604246deb9844d431da224c109c364a25a32048b0b4e9b0c05e23e63",
+  "number" : 24,
+  "rank" : "Mayhem",
+  "title" : "All or Nothing"
+}

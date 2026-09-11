@@ -1,0 +1,50 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 70
+        }
+      },
+      "tick" : 4
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 4
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 71,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 552
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 71,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 970
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 80,
+    "required" : 80,
+    "saved" : 80,
+    "stateHash" : "7ffc43fc62c811e3ab69c81444bfa58f38ad2b47c36cea944df17e39861bc62e",
+    "ticks" : 1605
+  },
+  "initialStateHash" : "76269ef951e2b1a6241f4088a0ed84631cb207a9b8e615efceaf5aaae6af2b78",
+  "number" : 6,
+  "rank" : "Blizzard",
+  "title" : "A Single Lemming..."
+}

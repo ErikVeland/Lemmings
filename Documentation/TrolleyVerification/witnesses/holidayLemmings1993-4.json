@@ -1,0 +1,25 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "miner"
+        }
+      },
+      "tick" : 420
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 75,
+    "required" : 25,
+    "saved" : 75,
+    "stateHash" : "951dc78719c32cbe8a4fa25349130cf46bdd3bcff3dc6076020e6ef07ed48d1b",
+    "ticks" : 2977
+  },
+  "initialStateHash" : "bf88e41b06de646af4694ab0c9cf4bc60c856fdc8ea158a9785fb81983895ddf",
+  "number" : 5,
+  "rank" : "Flurry",
+  "title" : "Christmas South of the Equator"
+}

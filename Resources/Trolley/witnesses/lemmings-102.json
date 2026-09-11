@@ -1,0 +1,78 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 50
+        }
+      },
+      "tick" : 61
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 87
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "floater"
+        }
+      },
+      "tick" : 100
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 203
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "climber"
+        }
+      },
+      "tick" : 340
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 414
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 610
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 2,
+    "required" : 2,
+    "saved" : 2,
+    "stateHash" : "b2c163fcfff44509ceb9aa09e2c6f9799cf81e8d58f42550de37f4eebc17a6c8",
+    "ticks" : 860
+  },
+  "initialStateHash" : "b6027e2a6b2119db3ad7989babcbbd746f0e7ee767ed25e425647d1f279c88b2",
+  "number" : 13,
+  "rank" : "Mayhem",
+  "title" : "The Great Lemming Caper"
+}

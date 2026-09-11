@@ -2,29 +2,22 @@ import AppKit
 import NxlvKit
 
 @MainActor final class AchievementsWindow {
-  private var window: NSWindow?
+  private var page: GameMenuPage?
   private var current = ClassicAchievementProgress()
 
   func show(progress: ClassicAchievementProgress) {
-    if window == nil {
-      let made = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 570, height: 650),
-        styleMask: [.titled, .closable, .resizable], backing: .buffered, defer: false)
-      made.title = "Achievements"
-      made.minSize = NSSize(width: 500, height: 400)
-      made.isReleasedWhenClosed = false
-      made.collectionBehavior = [.fullScreenAuxiliary]
-      made.center()
-      window = made
-    }
     update(progress: progress)
-    window?.makeKeyAndOrderFront(nil)
+    if let page { GameScreen.shared.present(page) }
   }
 
   func update(progress: ClassicAchievementProgress) {
     current = progress
-    guard let window else { return }
-    let root = NSView()
-    window.contentView = root
+    let previous = page
+    let wasVisible = previous.map { GameScreen.shared.contains($0) } ?? false
+    let page = GameMenuPage(title: "Your rescue story", subtitle: "Campaign achievements · \(ArcadeStore.shared.records.activeProfile.initials)")
+    page.onBack = { [weak page] in if let page { GameScreen.shared.dismiss(page) } }
+    self.page = page
+    let root = page.body
     let earned = ClassicAchievement.catalog.filter { progress.isUnlocked($0.id) }.count
     let title = label("Your rescue story", size: 26, weight: .bold)
     let subtitle = label("\(earned) of \(ClassicAchievement.catalog.count) achievements earned", size: 14)
@@ -70,6 +63,10 @@ import NxlvKit
       rows.bottomAnchor.constraint(equalTo: document.bottomAnchor, constant: -24),
     ])
 
+    if wasVisible, let previous {
+      GameScreen.shared.dismiss(previous)
+      GameScreen.shared.present(page)
+    }
   }
 
   private func card(_ achievement: ClassicAchievement) -> NSView {

@@ -1,0 +1,106 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "floater"
+        }
+      },
+      "tick" : 54
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "floater"
+        }
+      },
+      "tick" : 82
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "floater"
+        }
+      },
+      "tick" : 110
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "floater"
+        }
+      },
+      "tick" : 138
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "floater"
+        }
+      },
+      "tick" : 166
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 5,
+          "skill" : "floater"
+        }
+      },
+      "tick" : 194
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 6,
+          "skill" : "floater"
+        }
+      },
+      "tick" : 222
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 7,
+          "skill" : "floater"
+        }
+      },
+      "tick" : 250
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 8,
+          "skill" : "floater"
+        }
+      },
+      "tick" : 278
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 9,
+          "skill" : "floater"
+        }
+      },
+      "tick" : 306
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 10,
+    "required" : 1,
+    "saved" : 10,
+    "stateHash" : "32473471821b0ad5d3e5cc14e98a84ad97c915459d813bc9df926eae4c2e7669",
+    "ticks" : 605
+  },
+  "initialStateHash" : "ae06382aafa7b5c970b8c3bbfe1f8e0aab940f31b657e262b254b8b6ccf01612",
+  "number" : 2,
+  "rank" : "Fun",
+  "title" : "Only floaters can survive this"
+}

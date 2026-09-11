@@ -1,0 +1,166 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 50
+        }
+      },
+      "tick" : 15
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 85
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 119
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 81
+        }
+      },
+      "tick" : 132
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 79
+        }
+      },
+      "tick" : 145
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 251
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 294
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 299
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 8,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 1012
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 48,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 1031
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 43,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 1062
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 48,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 1084
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 38,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 1116
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 38,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1127
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 47,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 1186
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 47,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1207
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1210
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 50,
+    "required" : 45,
+    "saved" : 50,
+    "stateHash" : "199ed9d5587918db06918024405c377de965814287d941629d55b0e88a1dc19b",
+    "ticks" : 1573
+  },
+  "initialStateHash" : "4f7486dfa67a07d59d8b7292af4a4318c06ffca548d2cde44c82d3cbed2b9968",
+  "number" : 7,
+  "rank" : "Mayhem",
+  "title" : "Poles Apart"
+}

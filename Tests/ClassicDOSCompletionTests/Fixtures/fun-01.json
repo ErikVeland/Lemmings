@@ -1,0 +1,25 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 60
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 10,
+    "required" : 1,
+    "saved" : 10,
+    "stateHash" : "303077de5e71a3397294191c85ec06973670d65e65e02192db5b67ff3850b221",
+    "ticks" : 662
+  },
+  "initialStateHash" : "3b1385c1a8bbbf695c9f77a750e83edd40fb188a04b86c3a995d37c3b371e57e",
+  "number" : 1,
+  "rank" : "Fun",
+  "title" : "Just dig!"
+}

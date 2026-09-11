@@ -1,0 +1,249 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 16
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 79
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 89
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 8,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 100
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 27,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 209
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 27,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 408
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 27,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 602
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 16,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 797
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 63,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 997
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 17,
+          "skill" : "blocker"
+        }
+      },
+      "tick" : 1203
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 69,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1217
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 69,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1416
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 79,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1606
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 79,
+          "skill" : "climber"
+        }
+      },
+      "tick" : 1813
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 79,
+          "skill" : "floater"
+        }
+      },
+      "tick" : 1861
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 79,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 2019
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 79,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 2216
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 79,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 2409
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 79,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 2603
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 79,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 2670
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 79,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 2871
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 78,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 2967
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 79,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 3231
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 79,
+          "skill" : "miner"
+        }
+      },
+      "tick" : 3353
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 17,
+          "skill" : "climber"
+        }
+      },
+      "tick" : 3418
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 79,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 3428
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 80,
+    "required" : 40,
+    "saved" : 80,
+    "stateHash" : "794ca364e2567bd7cc3e0ed7c1a3bede690f045f35ba19cecd1411fb7efaa639",
+    "ticks" : 3832
+  },
+  "initialStateHash" : "6c0c1cd0b870b23c9b98e7ac2c61ce13eef652971f02959c3b5d0c8000f1977c",
+  "number" : 12,
+  "rank" : "Fun",
+  "title" : "Patience"
+}

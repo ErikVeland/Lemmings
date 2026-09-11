@@ -1,0 +1,24 @@
+{
+  "date": "2026-09-11",
+  "appID": "6810873426",
+  "bundleID": "academy.glasscode.lemmings",
+  "boards": 181,
+  "boardIDsFNV1a64": "518ea0a0fe9b6265",
+  "macOSVersion": "1.0",
+  "gameCenterEnabled": true,
+  "sets": [
+    {
+      "id": "ul.v1.set.1",
+      "appleID": "0117a709-ea7f-4258-b9b2-9056f09a77c3",
+      "boards": 100
+    },
+    {
+      "id": "ul.v1.set.2",
+      "appleID": "4b91035e-155f-48a0-aa58-c76ca01d9608",
+      "boards": 81
+    }
+  ],
+  "localisation": "en-GB",
+  "status": "PREPARE_FOR_SUBMISSION",
+  "liveAccountTest": "pending"
+}

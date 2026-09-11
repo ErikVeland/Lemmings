@@ -15,7 +15,9 @@ import NxlvKit
   static let audioExtensions: Set<String> = ["wav", "aif", "aiff", "mp3", "m4a", "caf", "flac"]
 
   private var player: AVAudioPlayer?
+  private(set) var currentURL: URL?
   private var resumeAfterSleep = false
+  private var outputSuspended = false
   private(set) var tracks: [URL] = []
   private(set) var volume: Float = 0.8
   private(set) var muted = false
@@ -45,6 +47,28 @@ import NxlvKit
     return found
   }
 
+  /// Include installed sequel modules and recordings from other ports.
+  /// Additional soundtrack folders can live in Application Support.
+  static func djSoundtracks(at root: URL, includeOtherSoundtracks: Bool = true) -> [String: [URL]] {
+    let roots = [root] + (FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first.map {
+      [$0.appendingPathComponent("Ultimate Lemmings/Soundtracks", isDirectory: true)]
+    } ?? [])
+    var found: [String: [URL]] = [:]
+    for directory in roots {
+      guard let walker = FileManager.default.enumerator(at: directory,
+        includingPropertiesForKeys: [.isRegularFileKey], options: [.skipsHiddenFiles]) else { continue }
+      for case let url as URL in walker {
+        guard audioExtensions.union(["mod"]).contains(url.pathExtension.lowercased()),
+              (try? url.resourceValues(forKeys: [.isRegularFileKey]))?.isRegularFile == true else { continue }
+        let relative = url.deletingLastPathComponent().path.replacingOccurrences(of: directory.path + "/", with: "")
+        let classic = relative == "lemmings_music_mod" || relative.hasPrefix("CoLD SToRAGE - Lemmings - the original AMIGA")
+        guard includeOtherSoundtracks || classic else { continue }
+        found[relative, default: []].append(url)
+      }
+    }
+    return found.mapValues { $0.sorted { $0.path < $1.path } }
+  }
+
   func load(_ urls: [URL]) {
     stop()
     tracks = urls
@@ -61,8 +85,13 @@ import NxlvKit
       made.numberOfLoops = -1
       made.volume = muted ? 0 : volume
       made.prepareToPlay()
-      made.play()
+      // Stop the old player explicitly before releasing it. AVAudioPlayer does
+      // not drain its output buffer synchronously on deallocation, so simply
+      // replacing `player` can leave both tracks audible at the same time.
+      player?.stop()
       player = made
+      player?.play()
+      currentURL = url
       return url.deletingPathExtension().lastPathComponent
     } catch {
       return nil
@@ -71,16 +100,21 @@ import NxlvKit
 
   func stop() {
     resumeAfterSleep = false
+    outputSuspended = false
     player?.stop()
     player = nil
   }
 
   func suspendOutput() {
-    if isPlaying { resumeAfterSleep = true }
+    guard !outputSuspended else { return }
+    outputSuspended = true
+    resumeAfterSleep = isPlaying
     player?.pause()
   }
 
   func resumeOutput() {
+    guard outputSuspended else { return }
+    outputSuspended = false
     if resumeAfterSleep { player?.play() }
     resumeAfterSleep = false
   }

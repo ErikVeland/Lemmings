@@ -1,0 +1,984 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 1
+        }
+      },
+      "tick" : 2
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "floater"
+        }
+      },
+      "tick" : 87
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 115
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 117
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 136
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "climber"
+        }
+      },
+      "tick" : 155
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 163
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 359
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 367
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 569
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "miner"
+        }
+      },
+      "tick" : 704
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 12,
+          "skill" : "blocker"
+        }
+      },
+      "tick" : 756
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 810
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1002
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 1224
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 12,
+          "skill" : "bomber"
+        }
+      },
+      "tick" : 1969
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 2
+        }
+      },
+      "tick" : 1987
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 3
+        }
+      },
+      "tick" : 1988
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 4
+        }
+      },
+      "tick" : 1989
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 5
+        }
+      },
+      "tick" : 1990
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 6
+        }
+      },
+      "tick" : 1991
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 7
+        }
+      },
+      "tick" : 1992
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 8
+        }
+      },
+      "tick" : 1993
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 9
+        }
+      },
+      "tick" : 1994
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 10
+        }
+      },
+      "tick" : 1995
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 11
+        }
+      },
+      "tick" : 1996
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 12
+        }
+      },
+      "tick" : 1997
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 13
+        }
+      },
+      "tick" : 1998
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 14
+        }
+      },
+      "tick" : 1999
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 15
+        }
+      },
+      "tick" : 2000
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 16
+        }
+      },
+      "tick" : 2001
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 17
+        }
+      },
+      "tick" : 2002
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 18
+        }
+      },
+      "tick" : 2003
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 19
+        }
+      },
+      "tick" : 2004
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 20
+        }
+      },
+      "tick" : 2005
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 21
+        }
+      },
+      "tick" : 2006
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 22
+        }
+      },
+      "tick" : 2007
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 23
+        }
+      },
+      "tick" : 2008
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 24
+        }
+      },
+      "tick" : 2009
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 25
+        }
+      },
+      "tick" : 2010
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 26
+        }
+      },
+      "tick" : 2011
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 27
+        }
+      },
+      "tick" : 2012
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 28
+        }
+      },
+      "tick" : 2013
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 29
+        }
+      },
+      "tick" : 2014
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 30
+        }
+      },
+      "tick" : 2015
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 31
+        }
+      },
+      "tick" : 2016
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 32
+        }
+      },
+      "tick" : 2017
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 33
+        }
+      },
+      "tick" : 2018
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 34
+        }
+      },
+      "tick" : 2019
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 35
+        }
+      },
+      "tick" : 2020
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 36
+        }
+      },
+      "tick" : 2021
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 37
+        }
+      },
+      "tick" : 2022
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 38
+        }
+      },
+      "tick" : 2023
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 39
+        }
+      },
+      "tick" : 2024
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 40
+        }
+      },
+      "tick" : 2025
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 41
+        }
+      },
+      "tick" : 2026
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 42
+        }
+      },
+      "tick" : 2027
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 43
+        }
+      },
+      "tick" : 2028
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 44
+        }
+      },
+      "tick" : 2029
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 45
+        }
+      },
+      "tick" : 2030
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 46
+        }
+      },
+      "tick" : 2031
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 47
+        }
+      },
+      "tick" : 2032
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 48
+        }
+      },
+      "tick" : 2033
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 49
+        }
+      },
+      "tick" : 2034
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 50
+        }
+      },
+      "tick" : 2035
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 51
+        }
+      },
+      "tick" : 2036
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 52
+        }
+      },
+      "tick" : 2037
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 53
+        }
+      },
+      "tick" : 2038
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 54
+        }
+      },
+      "tick" : 2039
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 55
+        }
+      },
+      "tick" : 2040
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 56
+        }
+      },
+      "tick" : 2041
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 57
+        }
+      },
+      "tick" : 2042
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 58
+        }
+      },
+      "tick" : 2043
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 59
+        }
+      },
+      "tick" : 2044
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 60
+        }
+      },
+      "tick" : 2045
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 61
+        }
+      },
+      "tick" : 2046
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 62
+        }
+      },
+      "tick" : 2047
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 63
+        }
+      },
+      "tick" : 2048
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 64
+        }
+      },
+      "tick" : 2049
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 65
+        }
+      },
+      "tick" : 2050
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 66
+        }
+      },
+      "tick" : 2051
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 67
+        }
+      },
+      "tick" : 2052
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 68
+        }
+      },
+      "tick" : 2053
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 69
+        }
+      },
+      "tick" : 2054
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 70
+        }
+      },
+      "tick" : 2055
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 71
+        }
+      },
+      "tick" : 2056
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 72
+        }
+      },
+      "tick" : 2057
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 73
+        }
+      },
+      "tick" : 2058
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 74
+        }
+      },
+      "tick" : 2059
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 75
+        }
+      },
+      "tick" : 2060
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 76
+        }
+      },
+      "tick" : 2061
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 77
+        }
+      },
+      "tick" : 2062
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 78
+        }
+      },
+      "tick" : 2063
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 79
+        }
+      },
+      "tick" : 2064
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 80
+        }
+      },
+      "tick" : 2065
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 81
+        }
+      },
+      "tick" : 2066
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 82
+        }
+      },
+      "tick" : 2067
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 83
+        }
+      },
+      "tick" : 2068
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 84
+        }
+      },
+      "tick" : 2069
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 85
+        }
+      },
+      "tick" : 2070
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 86
+        }
+      },
+      "tick" : 2071
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 87
+        }
+      },
+      "tick" : 2072
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 88
+        }
+      },
+      "tick" : 2073
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 89
+        }
+      },
+      "tick" : 2074
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 90
+        }
+      },
+      "tick" : 2075
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 91
+        }
+      },
+      "tick" : 2076
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 92
+        }
+      },
+      "tick" : 2077
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 93
+        }
+      },
+      "tick" : 2078
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 94
+        }
+      },
+      "tick" : 2079
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 95
+        }
+      },
+      "tick" : 2080
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 96
+        }
+      },
+      "tick" : 2081
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 97
+        }
+      },
+      "tick" : 2082
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 98
+        }
+      },
+      "tick" : 2083
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 2084
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 2085
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 2086
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 2087
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 2088
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 2143
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 80,
+    "required" : 56,
+    "saved" : 70,
+    "stateHash" : "5941fc9663608298c28105b86180bf797240449c816907b3b2c8fd47f31016f7",
+    "ticks" : 2877
+  },
+  "initialStateHash" : "2484a968fd78f2384533e9fe0b1f3c3ecba35c2e6a05bb0a37b06b55d51f05fb",
+  "number" : 28,
+  "rank" : "Taxing",
+  "title" : "POOR WEE CREATURES!"
+}

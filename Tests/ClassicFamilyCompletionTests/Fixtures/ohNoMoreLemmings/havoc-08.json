@@ -1,0 +1,178 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 1
+        }
+      },
+      "tick" : 3
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 2
+        }
+      },
+      "tick" : 4
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 3
+        }
+      },
+      "tick" : 5
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 6
+        }
+      },
+      "tick" : 59
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "climber"
+        }
+      },
+      "tick" : 156
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "miner"
+        }
+      },
+      "tick" : 409
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 636
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1063
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 1388
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1417
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "miner"
+        }
+      },
+      "tick" : 1543
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "miner"
+        }
+      },
+      "tick" : 1893
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "miner"
+        }
+      },
+      "tick" : 2248
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 89
+        }
+      },
+      "tick" : 2249
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 6
+        }
+      },
+      "tick" : 2250
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 91
+        }
+      },
+      "tick" : 2309
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 23
+        }
+      },
+      "tick" : 2359
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 7
+        }
+      },
+      "tick" : 2368
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 47,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 2896
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 50,
+    "required" : 45,
+    "saved" : 50,
+    "stateHash" : "2a0d8c099388c791b704e70c9549927650323cb32843cd192cd299df9c6b9274",
+    "ticks" : 3551
+  },
+  "initialStateHash" : "3072eb93466b14e0077330d46cb1a815b1dd3c2f92c1ceb6caa85db9a9821835",
+  "number" : 8,
+  "rank" : "Havoc",
+  "title" : "Lemming about town"
+}

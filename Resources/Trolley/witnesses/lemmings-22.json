@@ -1,0 +1,451 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 50
+        }
+      },
+      "tick" : 73
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 87
+        }
+      },
+      "tick" : 113
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 50
+        }
+      },
+      "tick" : 142
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 87
+        }
+      },
+      "tick" : 160
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 175
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 50
+        }
+      },
+      "tick" : 179
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 87
+        }
+      },
+      "tick" : 192
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 196
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 50
+        }
+      },
+      "tick" : 216
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 87
+        }
+      },
+      "tick" : 228
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 241
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 50
+        }
+      },
+      "tick" : 255
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 425
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 445
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 457
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 462
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 5,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 477
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 5,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 497
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 6,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 509
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 6,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 519
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 7,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 530
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 7,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 550
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 8,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 562
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 8,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 569
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 9,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 582
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 9,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 602
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 10,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 614
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 10,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 618
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 9,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 629
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 87
+        }
+      },
+      "tick" : 1025
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 9,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 1050
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 50
+        }
+      },
+      "tick" : 1052
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 87
+        }
+      },
+      "tick" : 1070
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 50
+        }
+      },
+      "tick" : 1088
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 87
+        }
+      },
+      "tick" : 1097
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 50
+        }
+      },
+      "tick" : 1125
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 13,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 1451
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 13,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 1471
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 31,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 1488
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 31,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 1493
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 38,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 1676
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 38,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 1696
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 39,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 1708
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 39,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 1712
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 23,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 2073
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 23,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 2093
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 8,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 2113
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 8,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 2118
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 24,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 2146
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 30,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 2636
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 80,
+    "required" : 20,
+    "saved" : 80,
+    "stateHash" : "000419bda1c789c1228f6bbff50178d7d7c4149a60b9cb1a6e800d9ff106f852",
+    "ticks" : 4028
+  },
+  "initialStateHash" : "fcbce5fe52df153fcf75342119e5ad15993414ea7b5fa92ca121cddc748f491e",
+  "number" : 23,
+  "rank" : "Fun",
+  "title" : "I've lost that Lemming feeling"
+}

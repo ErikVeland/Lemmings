@@ -1,0 +1,105 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 13
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 64
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 82
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 85
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 104
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 107
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "miner"
+        }
+      },
+      "tick" : 128
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 15,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 132
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 15,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 159
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 30,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 244
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 80,
+    "required" : 72,
+    "saved" : 80,
+    "stateHash" : "6cb9381fe9cb17e1cff3e44177885dd06634ff49e9b655c1aeec336058225eba",
+    "ticks" : 535
+  },
+  "initialStateHash" : "2f8599e3dd81fec9831e5f0e229a1bd2d8c865d455f2cc83ae8b0194201031b0",
+  "number" : 9,
+  "rank" : "Fun",
+  "title" : "As long as you try your best"
+}

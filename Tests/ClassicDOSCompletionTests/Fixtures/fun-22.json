@@ -1,0 +1,186 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 50
+        }
+      },
+      "tick" : 39
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 66
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 124
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 209
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 393
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 10,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 699
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 13,
+          "skill" : "blocker"
+        }
+      },
+      "tick" : 811
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 10,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 841
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 10,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 955
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 10,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 1121
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 10,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1199
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 10,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1395
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 10,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 1440
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 10,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1510
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 10,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1704
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 10,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1898
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 60,
+          "skill" : "miner"
+        }
+      },
+      "tick" : 2116
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 60,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 2149
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 13,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 2455
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 80,
+    "required" : 64,
+    "saved" : 80,
+    "stateHash" : "2c9f47662ca1731ec47ecc2138e8534652dd80f4b8af23c144042da75387c835",
+    "ticks" : 3991
+  },
+  "initialStateHash" : "58051d16e9ca8411e6dca5c72a651f48274b2523dd57f1a67770d1da6ab4d6e6",
+  "number" : 22,
+  "rank" : "Fun",
+  "title" : "A Beast of a level"
+}

@@ -23,6 +23,7 @@ final class ModuleMusicPlayer: @unchecked Sendable {
   private(set) var isRunning = false
   var isOutputRunning: Bool { engine.isRunning }
   private(set) var currentTitle: String?
+  private(set) var currentURL: URL?
 
   /// Modules found in the chosen directory, sorted by name.
   private(set) var library: [URL] = []
@@ -121,6 +122,11 @@ final class ModuleMusicPlayer: @unchecked Sendable {
   func play(index: Int) -> String? {
     guard !library.isEmpty else { return nil }
     let url = library[((index % library.count) + library.count) % library.count]
+    return play(url: url)
+  }
+
+  @discardableResult
+  func play(url: URL) -> String? {
     guard let data = try? Data(contentsOf: url),
       let module = try? ProTrackerModule(data: data)
     else { return nil }
@@ -131,6 +137,7 @@ final class ModuleMusicPlayer: @unchecked Sendable {
       module: module, sampleRate: sampleRate, enhancements: enhancements)
     lock.unlock()
 
+    currentURL = url
     currentTitle = module.title.isEmpty
       ? url.deletingPathExtension().lastPathComponent
       : module.title

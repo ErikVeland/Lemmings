@@ -45,10 +45,9 @@ private func render(
     let panel = PanelView()
     let playfield = PlayfieldView()
 
-    // The original screen is 320 by 200: a 320 by 160 playfield above a
-    // 320 by 40 status bar. Composing at that size lets the tube stage do the
-    // upscaling, which is the only way the scan line count comes out right.
-    let panelHeight = isNative ? CGFloat(ClassicPanelGraphics.height) : (isLaunch ? 0 : panel.intrinsicHeight)
+    // Match the app's 640x400 CRT source, including the full 80-pixel panel.
+    panel.isCRTSource = isNative
+    let panelHeight = isLaunch ? 0 : (isNative ? 80 : panel.intrinsicHeight)
     playfield.frame = CGRect(x: 0, y: 0, width: size.width, height: size.height - panelHeight)
     panel.frame = CGRect(x: 0, y: 0, width: size.width, height: panelHeight)
 
@@ -70,7 +69,7 @@ private func render(
     let session = ClassicSession(
         simulation: simulation, width: rendered.width, height: rendered.height)
     playfield.session = session
-    playfield.viewport.zoom = zoom
+    playfield.viewport.zoom = isNative ? 2 : zoom
     playfield.viewport.levelSize = CGSize(width: rendered.width, height: rendered.height)
     playfield.viewport.viewSize = playfield.frame.size
     if let entrance = simulation.configuration.entrances.first {
@@ -131,14 +130,15 @@ private func render(
             "XMAS LEMMINGS 1991  0/4",
             "OH NO! MORE LEMMINGS  0/100",
             "XMAS LEMMINGS 1992  0/4",
-            "Lemmings 2: The Tribes  0/120  — Classic tribe playable",
+            "Lemmings 2: The Tribes  0/120  — NATIVE",
+            "Lemmings 2: The Tribes DOS  0/120",
             "Holiday Lemmings 1993  0/32",
-            "Lemmings 3: The Chronicles  0/90  — Native preview",
+            "Lemmings 3: The Chronicles  0/90  — NATIVE",
             "Holiday Lemmings 1994  0/32",
+            "FAN LEVELS  0/0  — BROWSE",
         ]
         playfield.overlayHighlight = 0
-        playfield.overlayFooter =
-            "UP AND DOWN TO CHOOSE   \u{2022}   ENTER TO BEGIN   \u{2022}   Q TO QUIT"
+        playfield.overlayProfileInitials = "AAA"
         panel.statusText = ""
         panel.isMenuMode = true
     }
@@ -147,24 +147,24 @@ private func render(
     panel.terrainImage = playfield.levelImage
     let panelRep = panelHeight > 0 ? try bitmap(of: panel) : nil
 
-    // Compose in the default bottom-left origin space. The panel sits below
-    // the playfield, so it draws at y = 0.
-    let composed = NSImage(size: size)
-    composed.lockFocus()
-    NSGraphicsContext.current?.imageInterpolation = .none
-    NSColor.black.setFill()
-    CGRect(origin: .zero, size: size).fill()
-    panelRep?.draw(in: CGRect(x: 0, y: 0, width: size.width, height: panelHeight))
-    playfieldRep.draw(in: CGRect(
-        x: 0, y: panelHeight, width: size.width, height: playfield.frame.height))
-    composed.unlockFocus()
-
-    guard let tiff = composed.tiffRepresentation,
-        let rep = NSBitmapImageRep(data: tiff)
-    else { throw ShotError(description: "could not encode the frame") }
+    // Match the app's explicit source dimensions, independent of Retina scale.
+    guard let context = CGContext(data: nil, width: Int(size.width), height: Int(size.height),
+        bitsPerComponent: 8, bytesPerRow: Int(size.width) * 4,
+        space: CGColorSpaceCreateDeviceRGB(),
+        bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue),
+        let fieldImage = playfieldRep.cgImage
+    else { throw ShotError(description: "could not compose the frame") }
+    context.interpolationQuality = .none
+    if let barImage = panelRep?.cgImage {
+        context.draw(barImage, in: CGRect(x: 0, y: 0, width: size.width, height: panelHeight))
+    }
+    context.draw(fieldImage, in: CGRect(x: 0, y: panelHeight,
+        width: size.width, height: size.height - panelHeight))
+    guard let frame = context.makeImage() else { throw ShotError(description: "no frame") }
+    let rep = NSBitmapImageRep(cgImage: frame)
 
     var finalRep = rep
-    if let mode = crtMode {
+    if let mode = crtMode, !isLaunch {
         guard let flat = rep.cgImage else {
             throw ShotError(description: "no frame image for the tube stage")
         }
@@ -184,24 +184,6 @@ private func render(
             + " tick \(simulation.tickCount), \(active) active, \(png.count) bytes")
 }
 
-
-private struct ShotCRTUniforms {
-    var sourceSize: SIMD2<Float> = .zero
-    var outputSize: SIMD2<Float> = .zero
-    var curvature: Float = 0
-    var scanlineDepth: Float = 0
-    var beamWidth: Float = 0.4
-    var beamBloom: Float = 0
-    var maskStrength: Float = 0
-    var maskType: Float = 0
-    var bloomAmount: Float = 0
-    var gamma: Float = 2.4
-    var brightness: Float = 1
-    var convergence: Float = 0
-    var vignette: Float = 0
-    var pixelAspect: Float = 1
-    var colorLevels: Float = 0
-}
 
 /// Runs the tube shaders without a window, so the result can be inspected.
 @MainActor
@@ -251,7 +233,7 @@ private func applyCRT(
         pixelFormat: .rgba16Float, width: width, height: height, mipmapped: false)
     scratchDescriptor.usage = [.shaderRead, .renderTarget]
     let outDescriptor = MTLTextureDescriptor.texture2DDescriptor(
-        pixelFormat: .bgra8Unorm, width: outWidth, height: outHeight, mipmapped: false)
+        pixelFormat: .bgra8Unorm_srgb, width: outWidth, height: outHeight, mipmapped: false)
     outDescriptor.usage = [.shaderRead, .renderTarget]
     guard let scratchA = device.makeTexture(descriptor: scratchDescriptor),
         let scratchB = device.makeTexture(descriptor: scratchDescriptor),
@@ -259,7 +241,15 @@ private func applyCRT(
         let buffer = queue.makeCommandBuffer()
     else { throw ShotError(description: "no textures") }
 
-    var uniforms = ShotCRTUniforms()
+    let flashDescriptor = MTLTextureDescriptor.texture2DDescriptor(
+        pixelFormat: .r8Unorm, width: 1, height: 1, mipmapped: false)
+    guard let flash = device.makeTexture(descriptor: flashDescriptor) else {
+        throw ShotError(description: "no flash texture")
+    }
+    var black: UInt8 = 0
+    flash.replace(region: MTLRegionMake2D(0, 0, 1, 1), mipmapLevel: 0,
+        withBytes: &black, bytesPerRow: 1)
+    var uniforms = CRTUniforms()
     uniforms.sourceSize = SIMD2(Float(width), Float(height))
     uniforms.outputSize = SIMD2(Float(outWidth), Float(outHeight))
     uniforms.curvature = settings.curvature
@@ -290,7 +280,7 @@ private func applyCRT(
             encoder.setFragmentTexture(texture, index: index)
         }
         encoder.setFragmentBytes(
-            &uniforms, length: MemoryLayout<ShotCRTUniforms>.stride, index: 0)
+            &uniforms, length: MemoryLayout<CRTUniforms>.stride, index: 0)
         encoder.drawPrimitives(type: .triangleStrip, vertexStart: 0, vertexCount: 4)
         encoder.endEncoding()
     }
@@ -299,8 +289,8 @@ private func applyCRT(
     pass(try pipeline("crt_blur_h", format: .rgba16Float), target: scratchB, textures: [scratchA])
     pass(try pipeline("crt_blur_v", format: .rgba16Float), target: scratchA, textures: [scratchB])
     pass(
-        try pipeline("crt_composite", format: .bgra8Unorm),
-        target: target, textures: [source, scratchA])
+        try pipeline("crt_composite", format: .bgra8Unorm_srgb),
+        target: target, textures: [source, scratchA, flash])
 
     buffer.commit()
     buffer.waitUntilCompleted()
@@ -342,9 +332,9 @@ let isNative = arguments.contains("--native")
 let isLaunch = arguments.contains("--launch")
 // Reproduces the launch screen before any level is loaded.
 let noLevel = arguments.contains("--no-level")
-let frameSize = isNative
-    ? CGSize(width: 320, height: 200)
-    : CGSize(width: 1000, height: 620)
+let frameSize = isNative && !isLaunch
+    ? CGSize(width: 640, height: 400)
+    : CGSize(width: Double(value("--width", "1000"))!, height: Double(value("--height", "620"))!)
 
 _ = NSApplication.shared
 NSApplication.shared.setActivationPolicy(.prohibited)

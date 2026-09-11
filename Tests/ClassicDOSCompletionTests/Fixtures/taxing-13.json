@@ -1,0 +1,123 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 40
+        }
+      },
+      "tick" : 45
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 84
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 118
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "blocker"
+        }
+      },
+      "tick" : 130
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 141
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 213
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "miner"
+        }
+      },
+      "tick" : 758
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 1185
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 20,
+          "skill" : "climber"
+        }
+      },
+      "tick" : 1893
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 20,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 2176
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 20,
+          "skill" : "miner"
+        }
+      },
+      "tick" : 2203
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 20,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 2455
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 80,
+    "required" : 79,
+    "saved" : 80,
+    "stateHash" : "e76057f6875e2b5ed908848861d03219bd24cc653f0fa633260177de76c4f25a",
+    "ticks" : 3506
+  },
+  "initialStateHash" : "7380593dabf888bcabb3e7a7df864f727fecb5d99b3ded31077855158c5225ae",
+  "number" : 13,
+  "rank" : "Taxing",
+  "title" : "Upsidedown World"
+}

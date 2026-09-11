@@ -1613,7 +1613,8 @@ do {
             && run.released == 60 && run.tick == input.expectedTicks, "Classic 1 full-rescue replay changed")
         check(run.supplies == [19, 19, 20, 19, 13, 14, 19, 17], "Replay skill use changed")
         var tribes = try Lemmings2Campaign(root: root)
-        check(tribes.levels.count == 120 && tribes.population == 60 && !tribes.isComplete, "Initial twelve-tribe campaign")
+        check(tribes.levels.count == 120 && tribes.population == 60 && tribes.tribe == 1 && tribes.current.style == 1 && !tribes.isComplete, "Initial twelve-tribe campaign starts at Beach")
+        try tribes.select(tribe: 0)
         do { try tribes.select(tribe: 0, level: 1); check(false, "Unplayed level unlocked") } catch {}
         check(tribes.record(run) && tribes.results[0]?.medal == .gold, "Full rescue did not earn native gold")
         check(tribes.advance(after: run) && tribes.level == 1 && tribes.population == 60, "Native campaign survivor carry")

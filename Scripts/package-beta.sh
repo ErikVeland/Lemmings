@@ -16,11 +16,23 @@
 set -euo pipefail
 
 project_dir="${0:A:h:h}"
-build_dir="$project_dir/.build/local"
+build_dir="${LEMMINGS_BUILD_DIR:-$project_dir/.build/local}"
+build_dir="${build_dir:A}"
 app_dir="$build_dir/Ultimate Lemmings.app"
 version="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$project_dir/Resources/Info.plist")"
 build_number="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleVersion' "$project_dir/Resources/Info.plist")"
 zip_path="$build_dir/UltimateLemmings-$version-beta$build_number.zip"
+notes_path="$project_dir/Documentation/ReleaseNotes-beta$build_number.md"
+[[ -f "$notes_path" ]] || { echo "Missing release notes: $notes_path" >&2; exit 1; }
+write_release_archive() {
+  ditto -c -k --sequesterRsrc --keepParent "$app_dir" "$zip_path"
+  python3 - "$zip_path" "$notes_path" <<'PYNOTES'
+import sys, zipfile
+with zipfile.ZipFile(sys.argv[1], 'a', compression=zipfile.ZIP_DEFLATED) as archive:
+    archive.write(sys.argv[2], 'Release Notes.md')
+PYNOTES
+  cp "$notes_path" "$build_dir/ReleaseNotes-beta$build_number.md"
+}
 
 # Use the Developer ID in the keychain unless the caller names another one.
 if [[ -z "${BETA_SIGNING_IDENTITY:-}" ]]; then
@@ -33,7 +45,9 @@ if [[ -z "${BETA_SIGNING_IDENTITY:-}" ]]; then
 fi
 
 echo "==> Building"
-zsh "$project_dir/Scripts/build-local-app.sh" >/dev/null
+# Developer ID distribution does not support App Store Game Center services.
+# Build without the development provisioning profile before applying this signature.
+ENABLE_APPLE_CAPABILITIES=0 LEMMINGS_BUILD_DIR="$build_dir" zsh "$project_dir/Scripts/build-local-app.sh" >/dev/null
 
 if [[ "${BETA_SLIM:-0}" == 1 ]]; then
   echo "==> Slim build. Removing the studio soundtrack recordings."
@@ -63,7 +77,7 @@ if (( ${#earlier_zips} )); then
   mkdir -p "$archive_dir"
   mv "${earlier_zips[@]}" "$archive_dir/"
 fi
-ditto -c -k --sequesterRsrc --keepParent "$app_dir" "$zip_path"
+write_release_archive
 
 if [[ -n "${BETA_NOTARY_PROFILE:-}" ]]; then
   echo "==> Notarizing. This uploads the zip to Apple and can take several minutes."
@@ -71,7 +85,7 @@ if [[ -n "${BETA_NOTARY_PROFILE:-}" ]]; then
   # The ticket is stapled to the app, so the zip has to be rebuilt around it.
   xcrun stapler staple "$app_dir"
   rm -f "$zip_path"
-  ditto -c -k --sequesterRsrc --keepParent "$app_dir" "$zip_path"
+  write_release_archive
   echo "==> Notarized and stapled."
 fi
 

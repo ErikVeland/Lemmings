@@ -30,6 +30,9 @@ protocol GameSession: AnyObject {
 
   var lemmings: [SessionLemming] { get }
   var entranceX: Int? { get }
+  var exitX: Int? { get }
+  var entranceY: Int? { get }
+  var exitY: Int? { get }
 
   var released: Int { get }
   var total: Int { get }
@@ -43,6 +46,11 @@ protocol GameSession: AnyObject {
   var isNuking: Bool { get }
 
   var skills: [SessionSkill] { get }
+  var skillAssignments: [String: Int] { get }
+  var usedRewind: Bool { get }
+  var nukeCount: Int { get }
+  var rewindCount: Int { get }
+  var undoCount: Int { get }
 
   func tick()
   /// Sounds the last tick asked for. Empty when nothing happened.
@@ -62,20 +70,86 @@ protocol GameSession: AnyObject {
   @discardableResult func stepForward() -> Bool
 }
 
+extension GameSession {
+  var exitX: Int? { nil }
+  var entranceY: Int? { nil }
+  var exitY: Int? { nil }
+  var skillAssignments: [String: Int] { [:] }
+  var usedRewind: Bool { false }
+  var nukeCount: Int { 0 }
+  var rewindCount: Int { 0 }
+  var undoCount: Int { 0 }
+}
+
 // MARK: - Classic DOS
 
 final class ClassicSession: GameSession {
   /// Wraps the engine so any earlier tick can be reached exactly.
+  let initialStateHash: String
   private var history: ClassicDOSRewind
   private var beforeNuke: ClassicDOSRewind?
+  private(set) var usedRewind = false
+  private(set) var nukeCount = 0
+  private(set) var rewindCount = 0
+  private(set) var undoCount = 0
+  var skillAssignments: [String: Int] {
+    var result: [String: Int] = [:]
+    for skill in ClassicSkill.allCases {
+      let used = (simulation.configuration.initialSkills[skill] ?? 0) - simulation.remainingSkillCount(skill)
+      if used > 0 { result[skill.rawValue] = used }
+    }
+    return result
+  }
   var simulation: ClassicDOSSimulation { history.simulation }
   let levelWidth: Int
   let levelHeight: Int
 
   init(simulation: ClassicDOSSimulation, width: Int, height: Int) {
+    initialStateHash = ClassicDOSReplayRecorder.stateHash(of: simulation)
     history = ClassicDOSRewind(simulation: simulation)
     levelWidth = width
     levelHeight = height
+  }
+
+  var recoveryEvents: [ClassicDOSReplayEvent] {
+    history.commands.map { ClassicDOSReplayEvent(tick: $0.tick, action: $0.action, afterTick: true) }
+  }
+
+  /// Rebuild from valid level data and reject any input or final-state mismatch.
+  func restore(_ recovery: RunRecovery) throws {
+    _ = try recovery.validated()
+    guard currentTick == 0, recovery.initialStateHash == initialStateHash else { throw RunRecoveryError.differentGame }
+    let restored = ClassicSession(simulation: simulation, width: levelWidth, height: levelHeight)
+    func advance(to tick: Int) throws {
+      while restored.currentTick < tick && !restored.isComplete { restored.tick() }
+      guard restored.currentTick == tick else { throw RunRecoveryError.invalid }
+    }
+    for event in recovery.events {
+      try advance(to: event.tick)
+      guard !restored.isComplete else { throw RunRecoveryError.invalid }
+      switch event.action {
+      case let .assign(id, skill):
+        guard let index = ClassicSkill.allCases.firstIndex(of: skill),
+          restored.assign(skillIndex: index, to: id) == nil else { throw RunRecoveryError.invalid }
+      case let .releaseRate(value):
+        restored.history.setReleaseRate(value)
+        guard restored.rate == value else { throw RunRecoveryError.invalid }
+      case .nuke:
+        guard !restored.isNuking else { throw RunRecoveryError.invalid }
+        restored.nuke()
+      }
+    }
+    if restored.currentTick > recovery.tick {
+      guard restored.history.seek(toTick: recovery.tick) else { throw RunRecoveryError.invalid }
+      if !restored.isNuking { restored.beforeNuke = nil }
+    } else { try advance(to: recovery.tick) }
+    guard !restored.isComplete, ClassicDOSReplayRecorder.stateHash(of: restored.simulation) == recovery.stateHash else {
+      throw RunRecoveryError.invalid
+    }
+    history = restored.history; beforeNuke = restored.beforeNuke
+    usedRewind = recovery.usedRewind; nukeCount = recovery.nukeCount
+    rewindCount = recovery.rewindCount; undoCount = recovery.undoCount
+    lastCues = []
   }
 
   var supportsRewind: Bool { true }
@@ -83,13 +157,13 @@ final class ClassicSession: GameSession {
 
   @discardableResult func rewind(seconds: Double) -> Bool {
     let moved = history.rewind(seconds: seconds)
-    if moved { lastCues = []; if !simulation.isNuking { beforeNuke = nil } }
+    if moved { usedRewind = true; rewindCount += 1; lastCues = []; if !simulation.isNuking { beforeNuke = nil } }
     return moved
   }
 
   @discardableResult func stepBackward() -> Bool {
     let moved = history.stepBackward()
-    if moved { lastCues = []; if !simulation.isNuking { beforeNuke = nil } }
+    if moved { usedRewind = true; rewindCount += 1; lastCues = []; if !simulation.isNuking { beforeNuke = nil } }
     return moved
   }
 
@@ -113,6 +187,13 @@ final class ClassicSession: GameSession {
   }
 
   var entranceX: Int? { simulation.configuration.entrances.first?.x }
+  var entranceY: Int? { simulation.configuration.entrances.first?.y }
+  var exitY: Int? {
+    simulation.configuration.triggers.first { $0.effect == .exit }.map { ($0.bounds.y1 + $0.bounds.y2) / 2 }
+  }
+  var exitX: Int? {
+    simulation.configuration.triggers.first { $0.effect == .exit }.map { ($0.bounds.x1 + $0.bounds.x2) / 2 }
+  }
   var released: Int { simulation.releasedCount }
   var total: Int { simulation.configuration.totalLemmings }
   var saved: Int { simulation.savedCount }
@@ -138,7 +219,7 @@ final class ClassicSession: GameSession {
   func tick() { lastCues = ClassicSoundCue.cues(for: history.tick()) }
 
   func assign(skillIndex: Int, to lemmingID: Int) -> String? {
-    guard skillIndex < ClassicSkill.allCases.count else { return "no such skill" }
+    guard ClassicSkill.allCases.indices.contains(skillIndex) else { return "no such skill" }
     let result = history.assign(ClassicSkill.allCases[skillIndex], to: lemmingID)
     // An assignment happens between ticks and produces its own events. Publish
     // them here, or the click that starts a digger would make no sound: the
@@ -151,12 +232,14 @@ final class ClassicSession: GameSession {
   var canUndoNuke: Bool { beforeNuke != nil }
   func nuke() {
     guard !simulation.isComplete, !simulation.isNuking, beforeNuke == nil else { return }
+    nukeCount += 1
     beforeNuke = history
     history.beginNuke()
     lastCues = ClassicSoundCue.cues(for: simulation.lastTickEvents)
   }
   func undoNuke() {
     guard let beforeNuke else { return }
+    usedRewind = true; undoCount += 1
     history = beforeNuke
     self.beforeNuke = nil
     lastCues = []
@@ -197,16 +280,62 @@ func spritePose(for action: NeoLemmixAction) -> ClassicLemmingPose {
 final class NeoLemmixSession: GameSession {
   private(set) var simulation: NeoLemmixSimulation
   private var beforeNuke: NeoLemmixSimulation?
+  private let initialSimulation: NeoLemmixSimulation
+  private var recoveryInputs: [NeoRunRecovery.Input] = []
+  private var beforeNukeInputCount = 0
+  private var beforeNukeSkills: [String: Int] = [:]
+  private(set) var skillAssignments: [String: Int] = [:]
+  private(set) var usedRewind = false
+  private(set) var nukeCount = 0
+  private(set) var rewindCount = 0
+  private(set) var undoCount = 0
   let levelWidth: Int
   let levelHeight: Int
   private let skillOrder: [NeoLemmixSkill]
 
   init(simulation: NeoLemmixSimulation, width: Int, height: Int) {
     self.simulation = simulation
+    initialSimulation = simulation
     levelWidth = width
     levelHeight = height
     // Show only the skills this level grants, in a stable order.
     skillOrder = NeoLemmixSkill.allCases.filter { simulation.skills[$0] != nil }
+  }
+
+  var recovery: NeoRunRecovery {
+    NeoRunRecovery(initialState: initialSimulation, state: simulation, inputs: recoveryInputs)
+  }
+
+  func restore(_ checkpoint: RunRecovery) throws {
+    _ = try checkpoint.validated()
+    guard let saved = checkpoint.neo, currentTick == 0,
+      saved.initialState == initialSimulation else { throw RunRecoveryError.differentGame }
+    let restored = NeoLemmixSession(simulation: initialSimulation, width: levelWidth, height: levelHeight)
+    func advance(to tick: Int) throws {
+      while restored.currentTick < tick && !restored.isComplete { restored.tick() }
+      guard restored.currentTick == tick else { throw RunRecoveryError.invalid }
+    }
+    for input in saved.inputs {
+      try advance(to: input.tick)
+      switch input.action {
+      case let .assign(skill, lemming):
+        guard restored.assign(skillIndex: skill, to: lemming) == nil else { throw RunRecoveryError.invalid }
+      case let .rate(delta):
+        guard (-10_000...10_000).contains(delta) else { throw RunRecoveryError.invalid }
+        restored.adjustRate(by: delta)
+      case .nuke:
+        guard !restored.isNuking, !restored.canUndoNuke else { throw RunRecoveryError.invalid }
+        restored.nuke()
+      }
+    }
+    try advance(to: checkpoint.tick)
+    guard !restored.isComplete, restored.simulation == saved.state else { throw RunRecoveryError.invalid }
+    simulation = restored.simulation; recoveryInputs = restored.recoveryInputs
+    beforeNuke = restored.beforeNuke; beforeNukeSkills = restored.beforeNukeSkills
+    beforeNukeInputCount = restored.beforeNukeInputCount
+    skillAssignments = restored.skillAssignments
+    usedRewind = checkpoint.usedRewind; nukeCount = checkpoint.nukeCount
+    rewindCount = checkpoint.rewindCount; undoCount = checkpoint.undoCount
   }
 
   var ticksPerSecond: Int { NeoLemmixRules.ticksPerSecond }
@@ -223,6 +352,13 @@ final class NeoLemmixSession: GameSession {
   }
 
   var entranceX: Int? { simulation.configuration.entrances.first?.position.x }
+  var entranceY: Int? { simulation.configuration.entrances.first?.position.y }
+  var exitY: Int? {
+    simulation.configuration.zones.first { $0.effect == .exit }.map { $0.bounds.y + $0.bounds.height / 2 }
+  }
+  var exitX: Int? {
+    simulation.configuration.zones.first { $0.effect == .exit }.map { $0.bounds.x + $0.bounds.width / 2 }
+  }
   var released: Int { simulation.releasedCount }
   var total: Int { simulation.configuration.totalLemmings }
   var saved: Int { simulation.savedCount }
@@ -267,27 +403,36 @@ final class NeoLemmixSession: GameSession {
   func tick() { _ = simulation.tick() }
 
   func assign(skillIndex: Int, to lemmingID: Int) -> String? {
-    guard skillIndex < skillOrder.count else { return "no such skill" }
+    guard skillOrder.indices.contains(skillIndex) else { return "no such skill" }
     let result = simulation.assign(skill: skillOrder[skillIndex], to: lemmingID)
     if case let .rejected(_, _, reason) = result { return "\(reason)" }
+    recoveryInputs.append(.init(tick: currentTick, action: .assign(skill: skillIndex, lemming: lemmingID)))
+    skillAssignments[skillOrder[skillIndex].rawValue, default: 0] += 1
     return nil
   }
 
   // NeoLemmix routes rate and nuke through the replay command queue, so both
   // stay reproducible.
   func adjustRate(by delta: Int) {
+    recoveryInputs.append(.init(tick: currentTick, action: .rate(delta: delta)))
     _ = simulation.enqueue(.setSpawnInterval(simulation.spawnInterval + delta))
   }
 
   var canUndoNuke: Bool { beforeNuke != nil }
   func nuke() {
     guard !simulation.isComplete, !simulation.isNuking, beforeNuke == nil else { return }
+    nukeCount += 1
+    beforeNukeInputCount = recoveryInputs.count
+    recoveryInputs.append(.init(tick: currentTick, action: .nuke))
     beforeNuke = simulation
+    beforeNukeSkills = skillAssignments
     _ = simulation.enqueue(.nuke)
   }
   func undoNuke() {
     guard let beforeNuke else { return }
+    recoveryInputs = Array(recoveryInputs.prefix(beforeNukeInputCount))
     simulation = beforeNuke
+    skillAssignments = beforeNukeSkills; usedRewind = true; undoCount += 1
     self.beforeNuke = nil
   }
 }

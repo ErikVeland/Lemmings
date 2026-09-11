@@ -1,0 +1,221 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 50
+        }
+      },
+      "tick" : 46
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "blocker"
+        }
+      },
+      "tick" : 140
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 67
+        }
+      },
+      "tick" : 199
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 50
+        }
+      },
+      "tick" : 227
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 67
+        }
+      },
+      "tick" : 359
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 50
+        }
+      },
+      "tick" : 390
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 67
+        }
+      },
+      "tick" : 519
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 50
+        }
+      },
+      "tick" : 547
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 67
+        }
+      },
+      "tick" : 678
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 71
+        }
+      },
+      "tick" : 708
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 50
+        }
+      },
+      "tick" : 747
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 26,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 902
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 27,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 932
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 27,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 969
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 25,
+          "skill" : "blocker"
+        }
+      },
+      "tick" : 1256
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 34,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 1313
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 19,
+          "skill" : "blocker"
+        }
+      },
+      "tick" : 1351
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 13,
+          "skill" : "blocker"
+        }
+      },
+      "tick" : 1369
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 7,
+          "skill" : "blocker"
+        }
+      },
+      "tick" : 1381
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 37,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 1416
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "blocker"
+        }
+      },
+      "tick" : 1438
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 22,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 1476
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 1504
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 51,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 1515
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 80,
+    "required" : 75,
+    "saved" : 80,
+    "stateHash" : "7b9b88546f18222f82fd5518a0a62ccd2bbff04cba5f4a971cfdeeac3fed1e4e",
+    "ticks" : 2135
+  },
+  "initialStateHash" : "cb56f6218deea55e9beafe97c63f1d3f4458650a0623d1c962dabfce17d376f3",
+  "number" : 3,
+  "rank" : "Frost",
+  "title" : "CindyLand"
+}

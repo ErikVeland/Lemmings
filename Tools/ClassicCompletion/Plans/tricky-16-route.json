@@ -1,0 +1,78 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 76
+        }
+      },
+      "tick" : 1
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 76
+        }
+      },
+      "tick" : 15
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "miner"
+        }
+      },
+      "tick" : 159
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 246
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 25,
+          "skill" : "bomber"
+        }
+      },
+      "tick" : 903
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 16,
+          "skill" : "bomber"
+        }
+      },
+      "tick" : 1406
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 30,
+          "skill" : "bomber"
+        }
+      },
+      "tick" : 1804
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 21,
+          "skill" : "bomber"
+        }
+      },
+      "tick" : 2209
+    }
+  ],
+  "initialStateHash" : "69cd2ac6ca6eb9910f734ea432374d8a20310e433e5a764bd80964b95ec74b91",
+  "number" : 16,
+  "rank" : "Tricky",
+  "title" : "Luvly Jubly"
+}

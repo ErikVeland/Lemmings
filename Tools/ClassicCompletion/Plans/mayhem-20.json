@@ -1,0 +1,1 @@
+[{"id": 1, "skill": "blocker", "x": 670, "action": "walking"}, {"id": 0, "skill": "basher", "x": 732, "direction": 1}, {"id": 0, "skill": "builder", "x": 774, "direction": 1}, {"id": 49, "skill": "climber", "direction": -1, "x": 640}, {"id": 0, "skill": "miner", "x": 676, "direction": -1}, {"id": 0, "skill": "climber"}, {"id": 49, "skill": "miner", "x": 788, "direction": 1}]

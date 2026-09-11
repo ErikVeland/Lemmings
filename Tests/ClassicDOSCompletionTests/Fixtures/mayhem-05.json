@@ -1,0 +1,173 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 80
+        }
+      },
+      "tick" : 40
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 40
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 80
+        }
+      },
+      "tick" : 57
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "blocker"
+        }
+      },
+      "tick" : 106
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 290
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 496
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 869
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 70,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 965
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1085
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "blocker"
+        }
+      },
+      "tick" : 1101
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "blocker"
+        }
+      },
+      "tick" : 1340
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 68,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1362
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 79,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1532
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 77,
+          "skill" : "blocker"
+        }
+      },
+      "tick" : 1603
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 73,
+          "skill" : "blocker"
+        }
+      },
+      "tick" : 1748
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 79,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1817
+    },
+    {
+      "action" : {
+        "nuke" : {
+
+        }
+      },
+      "tick" : 2086
+    },
+    {
+      "action" : {
+        "nuke" : {
+
+        }
+      },
+      "tick" : 2089
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 80,
+    "required" : 60,
+    "saved" : 76,
+    "stateHash" : "65d44e469511361fe52ae8a89e2d56eb103e15334e6bbdbb242fc524d487cf6c",
+    "ticks" : 2236
+  },
+  "initialStateHash" : "489c145e9bf29a65744db9be87a5f0c3cae39101935f438796ac496ae897e59d",
+  "number" : 5,
+  "rank" : "Mayhem",
+  "title" : "Down, along, up. In that order"
+}

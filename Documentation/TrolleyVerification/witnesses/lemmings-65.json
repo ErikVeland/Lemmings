@@ -1,0 +1,69 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 44
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 79
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 7,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 103
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 11,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 115
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 131
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 47,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 911
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 50,
+    "required" : 30,
+    "saved" : 50,
+    "stateHash" : "765c42be893c3ee27c2e09f26f728609b11656b759c832587f2ca20b7f11f9d4",
+    "ticks" : 1517
+  },
+  "initialStateHash" : "7a468e893edfbd6c848817f1aa64979189aea68f1fe3b0d03f721b6cfb28e07d",
+  "number" : 6,
+  "rank" : "Taxing",
+  "title" : "Compression Method 1"
+}

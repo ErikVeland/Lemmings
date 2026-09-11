@@ -1,0 +1,68 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 70
+        }
+      },
+      "tick" : 245
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 368
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "miner"
+        }
+      },
+      "tick" : 634
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 18,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 718
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 24,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 843
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 1013
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 80,
+    "required" : 72,
+    "saved" : 80,
+    "stateHash" : "8c4764a69feb4d0b5c731843f8da56821d4872496653d9dddcf66dfe5d372ade",
+    "ticks" : 1525
+  },
+  "initialStateHash" : "6f656d39c9685d5bf0759db210d85983115811b6759c7af53cf8f253cff2b678",
+  "number" : 28,
+  "rank" : "Tricky",
+  "title" : "Lost something?"
+}

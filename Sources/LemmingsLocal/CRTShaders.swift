@@ -5,6 +5,11 @@ import Foundation
 /// The Command Line Tools do not ship the offline Metal compiler, so this is
 /// compiled at launch with `makeLibrary(source:)`.
 ///
+/// Independent Metal implementation informed by CRT Guest Advanced HD:
+/// https://github.com/libretro/slang-shaders/tree/master/crt/shaders/guest/hd
+/// Uses sharp reconstruction, brightness-dependent beams, and separate glow.
+/// No upstream shader code is copied.
+///
 /// This reconstructs a picture tube rather than drawing lines over the image.
 /// Each output pixel asks which scan lines light it and by how much, using a
 /// beam profile whose width grows with brightness. All of it happens in linear
@@ -30,7 +35,7 @@ enum CRTShaders {
       float  vignette;
       float  pixelAspect;     // horizontal stretch, PAL is not square
       float  colorLevels;     // 0 keeps full depth, 16 is Amiga OCS
-      float  hdrHeadroom;     // display-relative peak, capped at 4x SDR white
+      float  hdrHeadroom;     // display-relative peak, capped at 8x SDR white
   };
 
   struct VOut {
@@ -148,12 +153,13 @@ enum CRTShaders {
           float line = baseLine + float(i);
           float2 sampleUV = float2(uv.x, (line + 0.5) * texel.y);
 
+          // Limit interpolation to the output pixel footprint. This preserves
+          // single-pixel lettering without a sharpen filter's ringing.
+          float x = sampleUV.x * u.sourceSize.x;
+          float footprint = min(1.0, u.sourceSize.x / u.outputSize.x);
+          float phase = (fract(x) - 0.5) / max(footprint, 0.0001);
+          sampleUV.x = (floor(x) + 0.5 + clamp(phase, -0.5, 0.5)) * texel.x;
           float3 c = toLinear(src.sample(smp, sampleUV).rgb, u.gamma);
-          // A little horizontal smear, as the beam has finite width.
-          float smear = texel.x * 0.5 * u.pixelAspect;
-          c += toLinear(src.sample(smp, sampleUV + float2(smear, 0.0)).rgb, u.gamma) * 0.35;
-          c += toLinear(src.sample(smp, sampleUV - float2(smear, 0.0)).rgb, u.gamma) * 0.35;
-          c /= 1.7;
 
           float luma = dot(c, float3(0.299, 0.587, 0.114));
           float w = beamWeight(float(i) - frac, u.beamWidth, luma, u.beamBloom);
@@ -172,10 +178,14 @@ enum CRTShaders {
           color = toLinear(display, u.gamma);
       }
 
-      // Scan line depth: how dark the gaps between lines go.
-      float lineProfile = beamWeight(frac - 0.5, u.beamWidth, 1.0, 0.0);
-      color *= mix(1.0, lineProfile / max(beamWeight(0.0, u.beamWidth, 1.0, 0.0), 0.0001),
-                   u.scanlineDepth);
+      // Source-aligned scanlines fade out when the display cannot resolve
+      // them. Integrate the cosine over a pixel to avoid moire on resizing.
+      float lineFootprint = max(fwidth(linePos), 0.0001);
+      float resolved = smoothstep(1.25, 2.5, 1.0 / lineFootprint);
+      float phaseWidth = min(lineFootprint, 1.0) * M_PI_F;
+      float attenuation = sin(phaseWidth) / phaseWidth;
+      float gap = 0.5 - 0.5 * cos(2.0 * M_PI_F * linePos) * attenuation;
+      color *= 1.0 - u.scanlineDepth * resolved * gap;
 
       // Phosphor mask. The tube lights red, green and blue stripes or dots,
       // so full white is never one flat colour.
@@ -185,14 +195,14 @@ enum CRTShaders {
           // Aperture grille: vertical RGB stripes.
           int phase = int(floor(fmod(px, 3.0)));
           mask = float3(phase == 0 ? 1.0 : 0.0, phase == 1 ? 1.0 : 0.0, phase == 2 ? 1.0 : 0.0);
-          mask = mix(float3(1.0), mask * 3.0, u.maskStrength * 0.33);
+          mask = mix(float3(1.0), mask * 3.0, u.maskStrength * 0.33 * resolved);
       } else {
           // Shadow mask: the dots stagger every other row.
           float py = in.uv.y * u.outputSize.y;
           float rowShift = fmod(floor(py * 0.5), 2.0) * 1.5;
           int phase = int(floor(fmod(px + rowShift, 3.0)));
           mask = float3(phase == 0 ? 1.0 : 0.0, phase == 1 ? 1.0 : 0.0, phase == 2 ? 1.0 : 0.0);
-          mask = mix(float3(1.0), mask * 3.0, u.maskStrength * 0.33);
+          mask = mix(float3(1.0), mask * 3.0, u.maskStrength * 0.33 * resolved);
       }
       color *= mask;
 

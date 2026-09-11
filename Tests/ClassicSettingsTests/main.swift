@@ -193,7 +193,84 @@ private func testRemovedSourcesDoNotDiscardSettings() throws {
     print("PASS a removed source falls back without discarding other settings")
 }
 
+private func testPointerCapturePreference() throws {
+    let old = try JSONDecoder().decode(ClassicSettings.self, from: Data("{\"musicVolume\":0.25}".utf8))
+    try require(old.confinePointer && old.musicVolume == 0.25, "Older settings must enable capture and retain other choices")
+    var disabled = old
+    disabled.confinePointer = false
+    let restored = try JSONDecoder().decode(ClassicSettings.self, from: try JSONEncoder().encode(disabled))
+    try require(!restored.confinePointer && restored.musicVolume == 0.25, "The pointer capture preference was not saved")
+    print("PASS pointer capture defaults and saved opt-out")
+}
+
+private func testHDEffectsPreference() throws {
+    let defaults = ClassicSettings()
+    try require(defaults.pauseOnInterruption, "Interruptions should pause by default")
+    var interruptionChoice = defaults; interruptionChoice.pauseOnInterruption = false
+    let restoredInterruption = try JSONDecoder().decode(ClassicSettings.self, from: JSONEncoder().encode(interruptionChoice))
+    try require(restoredInterruption == interruptionChoice,
+                "Interruption preference did not survive persistence")
+    try require(defaults.controllerEnabled && defaults.controllerTapSpeed && !defaults.controllerSwapSticks,
+        "Controller QoL must default on")
+    let oldControllerSettings = try JSONDecoder().decode(ClassicSettings.self, from: Data("{\"modernControlsEnabled\":false}".utf8))
+    try require(!oldControllerSettings.pauseOnInterruption, "Migration re-enabled automatic pause for OG settings")
+    try require(!oldControllerSettings.controllerEnabled, "Migration re-enabled a saved OG controller choice")
+    let controllerChoice = ClassicSettings(controllerEnabled: true, controllerTapSpeed: false, controllerSwapSticks: true, controllerMappings: ["a": "b", "b": "a"])
+    let restoredControllerChoice = try JSONDecoder().decode(ClassicSettings.self, from: JSONEncoder().encode(controllerChoice))
+    try require(restoredControllerChoice == controllerChoice,
+        "Controller settings did not round trip")
+    try require(defaults.hdEffectsEnabled && defaults.fullScreenHDRFlashes, "New players must start with HD explosions and speed effects")
+    let legacy = try JSONDecoder().decode(ClassicSettings.self, from: Data("{\"fullScreenHDRFlashes\":false,\"musicVolume\":0.25}".utf8))
+    try require(legacy.hdEffectsEnabled && !legacy.fullScreenHDRFlashes && legacy.musicVolume == 0.25,
+        "Migration must retain a saved explosion choice and unrelated settings")
+    var oldSchool = defaults
+    oldSchool.hdEffectsEnabled = false
+    let saved = try JSONEncoder().encode(oldSchool)
+    let restored = try JSONDecoder().decode(ClassicSettings.self, from: saved)
+    try require(!restored.hdEffectsEnabled && restored.fullScreenHDRFlashes,
+        "Old-school mode must persist without discarding the individual effect choices")
+    print("PASS HD defaults, legacy preference migration and saved old-school mode")
+    try require(defaults.modernControlsEnabled && defaults.variableSpeedEnabled,
+      "Modern controls and variable speed must default on")
+    var experience = ClassicSettings(graphics: .amiga, musicVolume: 0.25, soundVolume: 0.4)
+    experience.applyExperiencePreset(modern: false)
+    try require(!experience.pauseOnInterruption && !experience.modernControlsEnabled && !experience.variableSpeedEnabled && !experience.controllerEnabled && !experience.hdEffectsEnabled
+      && !experience.confinePointer && !experience.fullScreenHDRFlashes && !experience.djIncludesOtherSoundtracks,
+      "OG did not disable the added conveniences together")
+    try require(experience.graphics == .amiga && experience.musicVolume == 0.25 && experience.soundVolume == 0.4,
+      "OG discarded the chosen machine or volumes")
+    let savedExperience = try JSONDecoder().decode(ClassicSettings.self, from: JSONEncoder().encode(experience))
+    try require(savedExperience == experience, "The OG preset did not survive relaunch")
+    experience.applyExperiencePreset(modern: true)
+    try require(experience.pauseOnInterruption && experience.modernControlsEnabled && experience.variableSpeedEnabled && experience.controllerEnabled && experience.hdEffectsEnabled
+      && experience.confinePointer, "Modern defaults failed to restore the conveniences")
+    print("PASS modern defaults, OG bundle, saved preference and preserved machine/volumes")
+}
+
+private func testReducedEffects() throws {
+    let old = try JSONDecoder().decode(ClassicSettings.self, from: Data("{\"musicVolume\":0.25}".utf8))
+    try require(!old.reduceMotion && !old.reduceFlashes && old.musicVolume == 0.25, "Older settings lost their values")
+    for motion in [false, true] {
+        for flashes in [false, true] {
+            var value = ClassicSettings(reduceMotion: motion, reduceFlashes: flashes)
+            try require(value.speedEffectsEnabled == !motion, "Motion control changed flash policy")
+            try require(value.explosionEffectsEnabled == !flashes, "Flash control changed motion policy")
+            try require(value.cinematicExplosionsEnabled == (!motion && !flashes), "Cinematic effects bypass reductions")
+            try require(value.modernControlsEnabled && value.variableSpeedEnabled && value.controllerEnabled, "Effects disabled controls")
+            let restored = try JSONDecoder().decode(ClassicSettings.self, from: JSONEncoder().encode(value))
+            try require(restored == value, "Reduced effects did not survive relaunch")
+            value.applyExperiencePreset(modern: false)
+            value.applyExperiencePreset(modern: true)
+            try require(value.reduceMotion == motion && value.reduceFlashes == flashes, "Experience preset erased accessibility choices")
+        }
+    }
+    print("PASS independent reduced effects, migration, persistence and preserved controls")
+}
+
 do {
+    try testReducedEffects()
+    try testHDEffectsPreference()
+    try testPointerCapturePreference()
     try testOptionsFollowInstalledData()
     try testUndecodedSourcesAreNotOffered()
     try testMixingAcrossMachines()

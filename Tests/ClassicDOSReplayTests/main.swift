@@ -178,7 +178,7 @@ do {
         print("NOTE no single-assignment win found for level 1.")
         print("     The engine runs but cannot yet complete Fun 1 unaided.")
         print("     This is the next physics gap to close.")
-        exit(0)
+        exit(1)
     }
 
     print(

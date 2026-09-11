@@ -15,12 +15,19 @@ enum PanelButton: Equatable {
 
 @MainActor final class PanelView: NSView {
   var session: (any GameSession)? {
-    didSet { if oldValue !== session { nukeGesture.reset() } }
+    didSet {
+      if oldValue !== session { nukeGesture.reset() }
+      let names = session?.skills.map(\.name) ?? []
+      toolTip = SkillShortcuts(names: names).hint(names: names, modern: modernControlsEnabled)
+    }
   }
   private var nukeGesture = NukeClickGesture()
   var selectedSkillIndex = 0
   var isPaused = false
   var isFastForward = false
+  var modernControlsEnabled = true
+  var speedLabel = "1×" { didSet { if oldValue != speedLabel { needsDisplay = true } } }
+  var onSpeedClick: ((TimeInterval, Int) -> Void)?
   var statusText = ""
   var levelSize = CGSize(width: 1, height: 1)
   var visibleLevelRect = CGRect.zero
@@ -41,6 +48,8 @@ enum PanelButton: Equatable {
   var terrainImage: CGImage?
   /// The skill bar belongs to a level in progress, not to a menu.
   var isMenuMode = false
+  /// The CRT source reserves exactly 80 pixels for the controls.
+  var isCRTSource = false
   var onButton: ((PanelButton) -> Void)?
   var onMinimapScroll: ((Double) -> Void)?
 
@@ -66,7 +75,7 @@ enum PanelButton: Equatable {
   /// Places the original controls and speed button over the status bar.
   private func layoutClassicButtons() {
     guard let panelImage else { return }
-    let statusHeight: CGFloat = bounds.height <= 40 ? 0 : statusStripHeight
+    let statusHeight: CGFloat = isCRTSource || bounds.height <= 40 ? 0 : statusStripHeight
     let scale = max(1, floor(min(bounds.width / CGFloat(panelImage.width),
       (bounds.height - statusHeight) / CGFloat(panelImage.height))))
     panelScale = Double(scale)
@@ -128,14 +137,14 @@ enum PanelButton: Equatable {
   }
 
   override func mouseDown(with event: NSEvent) {
-    handlePointerDown(at: convert(event.locationInWindow, from: nil), time: event.timestamp)
+    handlePointerDown(at: convert(event.locationInWindow, from: nil), time: event.timestamp, clickCount: event.clickCount)
   }
 
-  func handlePointerDown(at point: CGPoint, time: TimeInterval = ProcessInfo.processInfo.systemUptime) {
+  func handlePointerDown(at point: CGPoint, time: TimeInterval = ProcessInfo.processInfo.systemUptime, clickCount: Int = 1) {
     stopRepeating()
     pointerIsDown = true
     if let match = buttonFrames.first(where: { $0.1.contains(point) }) {
-      press(match.0, time: time)
+      press(match.0, time: time, clickCount: clickCount)
       // The release rate is the one control a player holds rather than taps.
       // Stepping it one at a time makes crossing the whole range a chore.
       if match.0 == .rateDown || match.0 == .rateUp { startRepeating(match.0) }
@@ -149,14 +158,15 @@ enum PanelButton: Equatable {
 
   func resetNukeGesture() { nukeGesture.reset() }
 
-  private func press(_ button: PanelButton, time: TimeInterval) {
+  private func press(_ button: PanelButton, time: TimeInterval, clickCount: Int = 1) {
     if button == .nuke {
       let action = nukeGesture.click(canUndo: session?.canUndoNuke == true,
         time: time, interval: NSEvent.doubleClickInterval)
       if action != .none { onButton?(button) }
     } else {
       nukeGesture.reset()
-      onButton?(button)
+      if button == .fastForward, let onSpeedClick { onSpeedClick(time, clickCount) }
+      else { onButton?(button) }
     }
     needsDisplay = true
   }
@@ -303,18 +313,15 @@ enum PanelButton: Equatable {
       drawStoneButton(frame, selected: selected)
       if case let .skill(index) = button, let source = artwork.lemming(
         pose: poses[index], left: false, tick: index == 2 ? 12 : 0), let image = source.makeNSImage() {
-        let box = CGRect(x: frame.minX + 2 * panelScale, y: frame.minY + 7 * panelScale,
-          width: frame.width - 4 * panelScale, height: frame.height - 9 * panelScale)
+        let box = CGRect(x: frame.minX + 2 * panelScale, y: frame.minY + 2 * panelScale,
+          width: frame.width - 4 * panelScale, height: frame.height - 4 * panelScale)
         let scale = min(box.width / image.size.width, box.height / image.size.height)
         let size = CGSize(width: image.size.width * scale, height: image.size.height * scale)
         image.draw(in: CGRect(x: box.midX - size.width / 2, y: box.maxY - size.height,
           width: size.width, height: size.height), from: .zero, operation: .sourceOver,
           fraction: 1, respectFlipped: true, hints: nil)
       } else if let glyph = PanelGlyph.forButton(button, isPaused: isPaused),
-        // Pause and nuke carry no count, so the glyph sits in the whole well
-        // rather than the lower part a skill button leaves free. The inset is
-        // the one `drawStoneButton` sinks that well by, so the two agree. It
-        // is drawn at its natural size, having been rasterised to fit.
+        // Rasterise the control glyph to fit the recessed well.
         let image = glyph.image(
           fitting: frame.insetBy(
             dx: 4 * max(1, panelScale / 2), dy: 4 * max(1, panelScale / 2)).size) {
@@ -394,7 +401,7 @@ enum PanelButton: Equatable {
       case let .skill(index): name = skillNames[safe: index] ?? "SKILL"
       case .pause: name = isPaused ? "PLAY" : "PAUSE"
       case .nuke: name = "NUKE"
-      case .fastForward: name = isFastForward ? "3×" : "SPEED"
+      case .fastForward: name = isFastForward ? speedLabel : "SPEED"
       }
       // The original bar carried no wording, so a label that does not fit its
       // button is dropped rather than shrunk or overlapped.
@@ -412,11 +419,6 @@ enum PanelButton: Equatable {
   /// Draws the live counts into the boxes above each button.
   private func drawClassicCounts() {
     guard let session else { return }
-    let attributes: [NSAttributedString.Key: Any] = [
-      .font: NSFont.monospacedDigitSystemFont(
-        ofSize: max(8, 8 * panelScale / 2), weight: .bold),
-      .foregroundColor: NSColor.white,
-    ]
     for (button, frame) in buttonFrames {
       let value: String
       switch button {
@@ -428,13 +430,13 @@ enum PanelButton: Equatable {
       case .pause, .nuke, .fastForward:
         continue
       }
-      let box = CGRect(x: frame.minX, y: frame.minY + 1, width: frame.width, height: 14 * panelScale / 2)
+      // Keep quantities in a separate strip above labels and skill artwork.
+      let box = CGRect(x: frame.minX, y: panelFrame.minY + panelScale,
+        width: frame.width, height: 9 * panelScale)
+      NSColor.black.setFill()
+      box.fill()
       if drawMacLabel(value, centeredIn: box) { continue }
-      let text = value as NSString
-      let size = text.size(withAttributes: attributes)
-      text.draw(
-        at: CGPoint(x: frame.midX - size.width / 2, y: frame.minY + 2),
-        withAttributes: attributes)
+      GamePixelText.draw(value, in: box)
     }
   }
 
@@ -460,11 +462,11 @@ enum PanelButton: Equatable {
       subtitle = ""
     case .fastForward:
       title = "⏩"
-      subtitle = isFastForward ? "3×" : "1×"
+      subtitle = speedLabel
       highlighted = isFastForward
     case .nuke:
-      title = "Nuke"
-      subtitle = session?.canUndoNuke == true ? "Undo" : "2 clicks"
+      title = session?.canUndoNuke == true ? "Undo" : "Nuke"
+      subtitle = "2 clicks"
       highlighted = session?.canUndoNuke == true
     }
 
@@ -549,6 +551,8 @@ enum PanelButton: Equatable {
       .replacingOccurrences(of: "–", with: "-")
       .replacingOccurrences(of: "’", with: "'")
       .replacingOccurrences(of: "∞", with: "*")
+      .replacingOccurrences(of: "×", with: "X")
+      .replacingOccurrences(of: "•", with: "*")
   }
 
   private func drawMacLabel(_ text: String, centeredIn box: CGRect, scale wanted: Int = 0) -> Bool {
@@ -567,18 +571,12 @@ enum PanelButton: Equatable {
   }
 
   private func drawStatus() {
-    let attributes: [NSAttributedString.Key: Any] = [
-      .font: NSFont.monospacedDigitSystemFont(ofSize: min(16, max(11, panelScale * 3)), weight: .regular),
-      .foregroundColor: NSColor(calibratedWhite: 0.85, alpha: 1),
-    ]
     let y = usesClassicSkin ? panelFrame.maxY + 4 : inset + buttonHeight + 6
     let box = CGRect(x: inset, y: y, width: bounds.width - inset * 2, height: 20)
     if let macInterface, let font = macInterface.font(.small), font.covers(gameText(statusText)) {
       macInterface.draw(gameText(statusText), face: .small, at: CGPoint(x: inset, y: y), scale: 1)
     } else {
-      _ = box
-      (statusText as NSString).draw(
-        at: CGPoint(x: inset, y: y), withAttributes: attributes)
+      GamePixelText.draw(gameText(statusText), in: box)
     }
   }
 

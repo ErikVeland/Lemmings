@@ -1,0 +1,11 @@
+import Foundation
+let player = try Lemmings2SoundPlayer(root: URL(fileURLWithPath: "Sources/Ports/Lemm2"))
+try player.start()
+player.setVolume(0.25)
+player.setMuted(true)
+player.suspendOutput()
+try player.resumeOutput()
+player.stop()
+try player.start()
+player.stop()
+print("Lemmings 2 spatial graph start, stop, restart, mute and pause/resume passed")

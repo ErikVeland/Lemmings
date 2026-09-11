@@ -1,0 +1,25 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 132
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 50,
+    "required" : 25,
+    "saved" : 50,
+    "stateHash" : "8822616c11e661457bae23222b031b3aa41dafc7bd95f2c23fee6cebca456c2d",
+    "ticks" : 3192
+  },
+  "initialStateHash" : "045d1b696126ae2cbccd1c31beec0ff7f0300016291aace1b21ad274c46804a4",
+  "number" : 10,
+  "rank" : "Tame",
+  "title" : "New Lemmings On The Block"
+}

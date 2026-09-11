@@ -1,0 +1,105 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 9
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 80
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 7,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 103
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 11,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 126
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 140
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 178
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 49,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 270
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 43,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 313
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 41,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 469
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 41,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 507
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 50,
+    "required" : 20,
+    "saved" : 50,
+    "stateHash" : "6f9de0945f36d189cf5d042d9471c1298598fa072a30d7d4f97c26b1e8661e1f",
+    "ticks" : 1226
+  },
+  "initialStateHash" : "d9878dcf9ec6caf23fcc069b8b14a41df75c425511b1a83f4c5a43f87e2dc1f4",
+  "number" : 17,
+  "rank" : "Fun",
+  "title" : "Easy when you know how"
+}

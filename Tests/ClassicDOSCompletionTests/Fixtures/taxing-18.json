@@ -1,0 +1,132 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 50
+        }
+      },
+      "tick" : 39
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 170
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 387
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 19,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 604
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 25,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 796
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1009
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 70,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 2018
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 70,
+          "skill" : "floater"
+        }
+      },
+      "tick" : 2294
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 70,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 2452
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 70,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 2650
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 70,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 2980
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 65,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 3035
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 70,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 3147
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 75,
+    "required" : 65,
+    "saved" : 75,
+    "stateHash" : "496fc1138f661893022856fa1ae91159ff0e593e8f3963b56b48a6d33bf74ac7",
+    "ticks" : 3612
+  },
+  "initialStateHash" : "87c11f0797563c34301eb0a3670f158221e2122cf0ace98ecf1a4d65d1e943fd",
+  "number" : 18,
+  "rank" : "Taxing",
+  "title" : "Tribute to M.C.Escher"
+}

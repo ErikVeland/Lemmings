@@ -120,8 +120,12 @@ private func testProducesAValidReplay(_ directory: URL) throws {
     let start = try loadLevelOne(directory)
     let initial = hash(start)
     var session = ClassicDOSRewind(simulation: start)
+    session.setReleaseRate(99)
     for _ in 0..<60 { session.tick() }
     _ = session.assign(.digger, to: 0)
+    session.setReleaseRate(70)
+    for _ in 0..<40 { session.tick() }
+    session.beginNuke()
     // Play to the end, the same rule the replay player uses. A fixed budget
     // here made the test depend on the level finishing inside it: any change
     // that cost a few ticks left this session stopped mid-level while the
@@ -135,12 +139,56 @@ private func testProducesAValidReplay(_ directory: URL) throws {
 
     let replay = session.replay(
         rank: "Fun", number: 1, title: "Just dig!", initialStateHash: initial)
+    let encoded = try JSONEncoder().encode(replay)
+    let decoded = try JSONDecoder().decode(ClassicDOSReplay.self, from: encoded)
     let outcome = try ClassicDOSReplayPlayer.run(
-        replay, simulation: try loadLevelOne(directory), verify: true)
+        decoded, simulation: try loadLevelOne(directory), verify: true)
     try require(
         outcome.stateHash == hash(session.simulation),
         "the exported replay did not reproduce the played session")
     print("PASS a rewound session still exports a replay that verifies")
+}
+
+private func testCommandBoundariesAndBranches(_ directory: URL) throws {
+    let start = try loadLevelOne(directory)
+    var session = ClassicDOSRewind(simulation: start, keyframeInterval: 20)
+    session.setReleaseRate(99)
+    for _ in 0..<60 { session.tick() }
+    try require(session.assign(.digger, to: 0) == .assigned, "boundary digger refused")
+    session.setReleaseRate(80)
+    let boundary = hash(session.simulation)
+    for _ in 0..<140 { session.tick() }
+    let reference = hash(session.simulation)
+    try require(session.seek(toTick: 60), "boundary seek failed")
+    try require(hash(session.simulation) == boundary, "commands after keyframe capture were lost")
+    try require(session.seek(toTick: 0), "tick zero seek failed")
+    try require(session.simulation.releaseRate == 99, "tick zero command was lost")
+    for _ in 0..<200 { session.tick() }
+    try require(hash(session.simulation) == reference, "normal playback lost future commands")
+    try require(session.seek(toTick: 20), "branch seek failed")
+    try require(session.assign(.digger, to: -1) != .assigned, "invalid assignment accepted")
+    try require(session.commands.count == 3, "refused command erased future history")
+    let partial = session.replay(rank: "Fun", number: 1, title: "Just dig!", initialStateHash: hash(start))
+    try require(partial.events.count == 1, "replay exported an unplayed future")
+    session.setReleaseRate(70)
+    try require(session.commands.count == 2, "new branch retained old future commands")
+    var expected = ClassicDOSRewind(simulation: start, keyframeInterval: 20)
+    expected.setReleaseRate(99)
+    for _ in 0..<20 { expected.tick() }
+    expected.setReleaseRate(70)
+    for _ in 0..<180 { session.tick(); expected.tick() }
+    try require(hash(session.simulation) == hash(expected.simulation), "abandoned future changed the new branch")
+    try require(session.seek(toTick: 40), "branch round trip failed")
+    try require(session.seek(toTick: 200), "branch forward seek failed")
+    try require(hash(session.simulation) == hash(expected.simulation), "rebuilt keyframes used the wrong command count")
+    let before = hash(session.simulation)
+    for seconds in [Double.nan, Double.infinity, -Double.infinity, -1] {
+        try require(!session.rewind(seconds: seconds), "invalid rewind duration accepted")
+        try require(hash(session.simulation) == before, "invalid duration changed state")
+    }
+    try require(session.rewind(seconds: Double.greatestFiniteMagnitude), "large duration did not clamp")
+    try require(session.currentTick == session.earliestTick, "large duration missed earliest tick")
+    print("PASS keyframe boundaries, tick zero, resumed playback, branching, replay prefix and invalid durations")
 }
 
 let arguments = CommandLine.arguments
@@ -149,6 +197,7 @@ let directory = arguments.count > 1
     : URL(fileURLWithPath: "Content/lemming1.pc", isDirectory: true)
 
 do {
+    try testCommandBoundariesAndBranches(directory)
     try testRewindIsExact(directory)
     try testCommandsSurviveRewind(directory)
     try testStepping(directory)

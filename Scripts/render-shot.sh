@@ -18,11 +18,15 @@ swiftc -swift-version 6 \
   -framework AppKit -framework Metal -framework QuartzCore \
   -Xlinker -rpath -Xlinker "$build_dir" -Xlinker -w \
   -o "$build_dir/LemmingsShot" \
+  "$project_dir/Sources/LemmingsLocal/ControllerPointer.swift" \
+  "$project_dir/Sources/LemmingsLocal/LemmingFocusHighlight.swift" \
+  "$project_dir/Sources/LemmingsLocal/GameplayPresentation.swift" \
   "$project_dir/Sources/LemmingsLocal/PlayfieldView.swift" \
   "$project_dir/Sources/LemmingsLocal/ExplosionHDR.swift" \
   "$project_dir/Sources/LemmingsLocal/MacInterfaceRenderer.swift" \
   "$project_dir/Sources/LemmingsLocal/PanelView.swift" \
   "$project_dir/Sources/LemmingsLocal/PanelGlyphs.swift" \
+  "$project_dir/Sources/LemmingsLocal/RunRecovery.swift" \
   "$project_dir/Sources/LemmingsLocal/GameSession.swift" \
   "$project_dir/Sources/LemmingsLocal/CRTShaders.swift" \
   "$project_dir/Sources/LemmingsLocal/CRTView.swift" \

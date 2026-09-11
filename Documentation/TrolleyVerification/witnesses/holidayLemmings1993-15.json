@@ -1,0 +1,104 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 20
+        }
+      },
+      "tick" : 44
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 92
+        }
+      },
+      "tick" : 67
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "blocker"
+        }
+      },
+      "tick" : 505
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 49,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 883
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 49,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1222
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 49,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 1460
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 48,
+          "skill" : "blocker"
+        }
+      },
+      "tick" : 1950
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 49,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 2031
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 49,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 2355
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 49,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 2599
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 50,
+    "required" : 45,
+    "saved" : 48,
+    "stateHash" : "3d4ece7c452268ef45b578d259ff6f349cbceffb4b0d3d12ad78243e14098d17",
+    "ticks" : 4080
+  },
+  "initialStateHash" : "55f64276fa7c2b11603a0790a8b56706a78255c66a3504acf373c0db66d851ca",
+  "number" : 16,
+  "rank" : "Flurry",
+  "title" : "The Long Way Around"
+}

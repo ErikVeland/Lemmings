@@ -62,11 +62,42 @@ private func testRetiredTitlesAreGone() throws {
     print("PASS the four titles with no playable levels stay out of the library")
 }
 
+private func testPortArtwork() throws {
+    let ports = URL(fileURLWithPath: CommandLine.arguments.count > 1 ? CommandLine.arguments[1]
+        : ".build/local/Ultimate Lemmings.app/Contents/Resources/Ports")
+    guard let pack = try PortExclusivePack.dataSet(amigaRoot: ports.appendingPathComponent("amiga_extracted"), portsRoot: ports) else {
+        throw Failure(description: "The bundled Oh Yes! pack is missing")
+    }
+    try require(pack.campaign.levels.count == 60, "Oh Yes! lost bundled levels")
+    var groundCache: [String: ClassicGroundSet] = [:]
+    var mainCache: [URL: ClassicMainDATAssets] = [:]
+    var ranks = Set<String>()
+    for entry in pack.campaign.levels {
+        let directory = PortExclusivePack.artworkDirectory(for: entry, portsRoot: ports)
+        let fallback = PortExclusivePack.fallbackArtworkDirectory(for: entry, portsRoot: ports)
+        let key = directory.path + "/\(entry.level.groundStyle)"
+        if groundCache[key] == nil {
+            groundCache[key] = try ClassicGroundSet.load(style: entry.level.groundStyle, from: directory, fallbackDirectory: fallback)
+        }
+        if mainCache[directory] == nil { mainCache[directory] = try ClassicMainDATAssets.load(from: fallback ?? directory) }
+        let special = entry.level.specialStyle == 0 ? nil
+            : try ClassicSpecialGraphic.load(index: entry.level.specialStyle - 1, from: directory, fallbackDirectory: fallback)
+        let scene = try ClassicLevelRenderer.render(entry.level, groundSet: groundCache[key]!, specialGraphic: special)
+        var simulation = try ClassicDOSSimulation(level: entry.level, renderedLevel: scene, mainDATAssets: mainCache[directory]!)
+        for _ in 0..<510 { _ = simulation.tick() }
+        try require(simulation.releasedCount > 0, "Oh Yes! did not release lemmings: \(entry.rank) \(entry.number)")
+        ranks.insert(entry.rank)
+    }
+    try require(ranks.count == 3 && mainCache.count == 3, "Oh Yes! did not use all three artwork sources")
+    print("PASS all 60 Oh Yes! levels render and release lemmings using their source artwork")
+}
+
 do {
     try testSNESLevelDecoder()
     try testGenesisLevelDecoder()
     try testArcadeLevelDecoder()
     try testRetiredTitlesAreGone()
+    try testPortArtwork()
     print("Platform exclusive tests passed successfully.")
 } catch {
     FileHandle.standardError.write(Data("Platform exclusive tests failed: \(error)\n".utf8))

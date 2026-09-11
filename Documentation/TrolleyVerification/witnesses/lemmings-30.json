@@ -1,0 +1,70 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "blocker"
+        }
+      },
+      "tick" : 311
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 338
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 530
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 910
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 23,
+          "skill" : "miner"
+        }
+      },
+      "tick" : 915
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 23,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 987
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 80,
+    "required" : 40,
+    "saved" : 80,
+    "stateHash" : "7579e6867b9c7e87088482c7dc94e34e3cff75b68f4ac291e0812accdfb740dd",
+    "ticks" : 2943
+  },
+  "initialStateHash" : "ec2664f8a81e1d39663a998be6a4c155c692715e33e32a254be968d7b9acf8c1",
+  "number" : 1,
+  "rank" : "Tricky",
+  "title" : "This should be a doddle!"
+}

@@ -49,12 +49,19 @@ Run `zsh Scripts/run-unified-game-tests.sh` after building the app. It checks
 all eight navigation routes, incomplete sequel handling, skipped levels,
 save migration, campaign counts and all 292 classic level renders, entrances,
 exits and releases. These are load-and-run checks, not complete solution
-replays for every level.
+replays for every level. The original 120 Classic levels now also have a separate
+[strict winning-replay gate](ClassicCompletion/README.md).
+The [additional campaign gate](CampaignCompletion/README.md) checks 88 Oh No!,
+Xmas and Holiday replays and 16 Lemmings 3 levels. It reports uncovered levels
+separately and fails on a changed or missing recorded fixture.
 
 Lemmings 2 is a native beta with all twelve tribes, all 51 skills, native interactive
 objects and four original practice maps. All 120 levels pass load-and-run
 checks; full solution coverage is still incomplete. Lemmings 3 retains its native preview status.
 The shared library does not remove either engine's existing limitations.
+L3 now connects tribe music, six original voices and a gallery of its five
+original movies. See [original media support](Lemmings3OriginalMedia.md) for the
+remaining audio and front-end limits.
 
 ## Display and navigation
 

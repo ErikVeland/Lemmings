@@ -114,16 +114,22 @@ public struct ClassicGroundSet: Codable, Equatable, Sendable {
     public let terrain: [Int: ClassicTerrainGraphic]
     public let objects: [Int: ClassicObjectGraphic]
 
-    public static func load(style: Int, from directory: URL) throws -> ClassicGroundSet {
+    public static func load(style: Int, from directory: URL, fallbackDirectory: URL? = nil) throws -> ClassicGroundSet {
         let files = try FileManager.default.contentsOfDirectory(
             at: directory,
             includingPropertiesForKeys: nil,
             options: [.skipsHiddenFiles]
         )
-        let byName = Dictionary(
+        var byName = Dictionary(
             files.map { ($0.lastPathComponent.lowercased(), $0) },
             uniquingKeysWith: { first, _ in first }
         )
+        if let fallbackDirectory {
+            for file in try FileManager.default.contentsOfDirectory(at: fallbackDirectory, includingPropertiesForKeys: nil)
+                where byName[file.lastPathComponent.lowercased()] == nil {
+                byName[file.lastPathComponent.lowercased()] = file
+            }
+        }
         let groundName = "ground\(style)o.dat"
         let graphicsName = "vgagr\(style).dat"
         guard let groundURL = byName[groundName] else { throw ClassicGraphicsError.missingFile(groundName) }
@@ -313,7 +319,7 @@ public struct ClassicSpecialGraphic: Codable, Equatable, Sendable {
     public let rgba: Data
     public let solidMask: Data
 
-    public static func load(index: Int, from directory: URL) throws -> ClassicSpecialGraphic {
+    public static func load(index: Int, from directory: URL, fallbackDirectory: URL? = nil) throws -> ClassicSpecialGraphic {
         let files = try FileManager.default.contentsOfDirectory(
             at: directory,
             includingPropertiesForKeys: nil,
@@ -321,6 +327,7 @@ public struct ClassicSpecialGraphic: Codable, Equatable, Sendable {
         )
         let filename = "vgaspec\(index).dat"
         guard let url = files.first(where: { $0.lastPathComponent.lowercased() == filename }) else {
+            if let fallbackDirectory { return try load(index: index, from: fallbackDirectory) }
             throw ClassicGraphicsError.missingFile(filename)
         }
         return try ClassicSpecialGraphic(archiveData: Data(contentsOf: url, options: .mappedIfSafe))

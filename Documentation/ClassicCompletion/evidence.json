@@ -1,0 +1,2841 @@
+{
+  "engineSourceFingerprint": "30654a68a6e9744b1ed5c7d8178b0aa8d3be2077f5b4f15d8b2541293b357efb",
+  "dataFiles": {
+    "ADLIB.DAT": "43eceee3e88fde48c679c635ee208d2af9ade1ed789dc291d647e7d314ffdcfe",
+    "CGAGR0.DAT": "d0d1d08b117dbaa5a61bb7488b141d5d901ea084b8d4c859697139e4dc3be6d5",
+    "CGAGR1.DAT": "1ad9cb595dfcf66ba6473776ccff6612f3ec6b4d9e6f534323caa0265b09f44f",
+    "CGAGR2.DAT": "58268e1479fb8b3d2fbf2b6bf8a7c9a77a9614e5f190324db17d7d6ef1e37180",
+    "CGAGR3.DAT": "a702f30bd44761b37d6498524e452044ed17cdc4a86a807981dde7bc688019ea",
+    "CGAGR4.DAT": "ab2de1785c6afd8d46533cb28ac56afaa6ffe0f14e2962e22880719a31910c02",
+    "CGAMAIN.DAT": "1e4b08f606546938b1eede4a0587943a07c3777c8c95bf50a7a9c31623995094",
+    "CGASPEC0.DAT": "aa2ad89a0c3edb7d8f110447815e917031b5921b8035a64d74ddc7fce79dc72f",
+    "CGASPEC1.DAT": "11a2d0d2b797bb63ce142d9e3600c89ad542aac35398020e34eca8a60b0bbcad",
+    "CGASPEC2.DAT": "667ca13f1ddee9dbb9a33e33154d02d1c950a5687bd6f49513c1712fb270fbb2",
+    "CGASPEC3.DAT": "589875f7de9b5a41c1033f06fe82c9b628663c31ad9a4f31298b5d15110f09a1",
+    "GROUND0O.DAT": "86ecce12dea563b97d07339028780a0a50fc2cc75a67f682bf4d9aff8cf4b24a",
+    "GROUND1O.DAT": "baf7a2ea30b07d2dc7968a5fb590987b3775840c57e6268437d3dce969b64d65",
+    "GROUND2O.DAT": "52e62aeefd6cd548690c02af6474936c5e16112e115ca7808c3748e500a9412d",
+    "GROUND3O.DAT": "f4df8579a30cb55dae4a06f606e0453cb0931219efadf3e9465d681a43a2722c",
+    "GROUND4O.DAT": "9669ee978e5adf5f8d5bfeb80ccc5d6c20e75e32f55e2a5c1c738f64af8faa91",
+    "LEVEL000.DAT": "2b9d4502ae1837faa3a6ff7a8b11eb75cbb6a555aa0e5c9f266f0e33a4cf444f",
+    "LEVEL001.DAT": "52c60bf66d31514ba7f05970901cbde98e10e4020b8cc5d99c5bdf0eca43a2a9",
+    "LEVEL002.DAT": "3216e70e91b5a1f8fc34d92e90167762df018f56dbd253b02e655e2beb1e0854",
+    "LEVEL003.DAT": "6a4984e3ef13e8450c65dffe67baf9b7dee22f2f97af42072c60c8965d7ba94c",
+    "LEVEL004.DAT": "c4c103ef26a275918586eed9e9fc63ba1f91125fe7bd70c0c1f97614367f50df",
+    "LEVEL005.DAT": "ba7ae3d24331e1a0d87b46d1332b4cf74a09c9e584ad12ea672ee555da1a52cc",
+    "LEVEL006.DAT": "34052d7c5ea66748c5a81fe69060bbf081d3be3232dce05945b51bf2cb4f0472",
+    "LEVEL007.DAT": "f827359ac4a66e5e945d74f322982e8419d7c55f2e47044674fe10fd423a9cde",
+    "LEVEL008.DAT": "b014f73c65aa57c7a014c896ac4f7dd58291946526db5ebb059ebbd3ea80d174",
+    "LEVEL009.DAT": "0cb73f259510c25c29f21103ac1d04c0643756b6ea81b91b47d0c46259fe1a83",
+    "MAIN.DAT": "2aec688c334e60322998811a8b6f9d5c13f8090b46ca6c2a6cb1c8db3b733545",
+    "ODDTABLE.DAT": "e6d425592fe2cda43ec1169995cd8deeb0bdb74eb464728f4c05eb1ddefae8d0",
+    "RUSSELL.DAT": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "TANDYSND.DAT": "93f56c4c0d61e560353d3f050398ceaafef19389ad929ff2d53eb8c9e5732a9b",
+    "TGAMAIN.DAT": "5a7776a66b858d5936f314a2105aa7ab83ad9e17a946c458f94d467548216896",
+    "VGAGR0.DAT": "9bd5ae2e0aed013bd369a469ac14afeb1beb22524fc820920d6e38766ea48680",
+    "VGAGR1.DAT": "bf49fc528b68d00c5738b6e7cd9244812bc74b0fc03ea9f862009a11009149e5",
+    "VGAGR2.DAT": "f8305e71295c5909ee7692e4391aae65443298faef4d96e5fe17b24afa0eadcc",
+    "VGAGR3.DAT": "19d3e2ba0db60bf855d8ce83459f53d83a2048763124932f533eb1c42f7809d9",
+    "VGAGR4.DAT": "40a99d3d9540609da9d6a74c07a832786818aed361326e37c01a909a1615921d",
+    "VGASPEC0.DAT": "a647110ca059fd18917e8a289668167a3a77975ca1096d7f7fdd9557fee95ce0",
+    "VGASPEC1.DAT": "b0a8ce1a8888feda8720c7df1222911ae9241f3acbfd42adda243bd5ba5a2306",
+    "VGASPEC2.DAT": "602fde697bb49df8d86fd800643cc3439a4f136223af0bf1ee46e2bff5e0e3cd",
+    "VGASPEC3.DAT": "918f21db3a16741f1a58b06bcef2b4ff63dc16f0e8746d0393dc023ea57cb2d4"
+  },
+  "referenceRecordSource": {
+    "url": "https://www.lemmingsforums.net/index.php?topic=1383.0",
+    "retrieved": "2026-09-09",
+    "scope": "Original DOS; documented glitches included; not an upper-bound proof"
+  },
+  "counts": {
+    "PROVED_FULL_RESCUE": 103,
+    "REFERENCE_RECORD_MATCHED": 120,
+    "UPPER_BOUND_UNPROVEN": 17
+  },
+  "fixtures": [
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/fun-01.json",
+      "sha256": "2465bd0927556f786e0804f86d4884c105bbdd03043684163ed4bbe5851817a1",
+      "population": 10,
+      "expected": {
+        "didWin": true,
+        "released": 10,
+        "required": 1,
+        "saved": 10,
+        "stateHash": "303077de5e71a3397294191c85ec06973670d65e65e02192db5b67ff3850b221",
+        "ticks": 662
+      },
+      "matchingReferenceCandidates": [],
+      "publishedDOSRecord": 10,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/fun-02.json",
+      "sha256": "af565532453e78c49449688a9b375b5a62e298ae683f770794a1afb2504f90c6",
+      "population": 10,
+      "expected": {
+        "didWin": true,
+        "released": 10,
+        "required": 1,
+        "saved": 10,
+        "stateHash": "32473471821b0ad5d3e5cc14e98a84ad97c915459d813bc9df926eae4c2e7669",
+        "ticks": 605
+      },
+      "matchingReferenceCandidates": [],
+      "publishedDOSRecord": 10,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/fun-03.json",
+      "sha256": "5a5de0d60caeb6318b00ea76c5e2d35d804457958e8f1edf4bfe679dca4bb042",
+      "population": 50,
+      "expected": {
+        "didWin": true,
+        "released": 50,
+        "required": 5,
+        "saved": 47,
+        "stateHash": "6dc4bdaffa6da3c79d6bf261cc679832f0ca5a03426abccfc8ee70acce8c4fc2",
+        "ticks": 5100
+      },
+      "matchingReferenceCandidates": [],
+      "publishedDOSRecord": 47,
+      "maximumStatus": "UPPER_BOUND_UNPROVEN"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/fun-04.json",
+      "sha256": "3093c495b7b9e04aa1cacdd1a56064c2fdde339e5a0dfcaed67f58c5e0c7bca9",
+      "population": 10,
+      "expected": {
+        "didWin": true,
+        "released": 10,
+        "required": 10,
+        "saved": 10,
+        "stateHash": "6ddaef0392f62dba457d39160e4e4296fdd477eaa5fbd8c4b4cf49091a0f19a8",
+        "ticks": 874
+      },
+      "matchingReferenceCandidates": [],
+      "publishedDOSRecord": 10,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/fun-05.json",
+      "sha256": "1081f365263b5e98fdf3bac9c7f54f9f95cb5c4f5a51c258869e6f1d302fe3e0",
+      "population": 50,
+      "expected": {
+        "didWin": true,
+        "released": 50,
+        "required": 5,
+        "saved": 50,
+        "stateHash": "b2940a7077afc89f2fa413071131a3067b4918958ee8d4fc2ac468e75f8162f6",
+        "ticks": 1929
+      },
+      "matchingReferenceCandidates": [],
+      "publishedDOSRecord": 50,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/fun-06.json",
+      "sha256": "50c19af4e7be89ce7e81be7394c8e074c22ea85e9aa2fa4c87ac614e6032a01f",
+      "population": 50,
+      "expected": {
+        "didWin": true,
+        "released": 50,
+        "required": 10,
+        "saved": 48,
+        "stateHash": "37f93e3b6be7912cb390a05debdebe03e1f5e1f8748e728685f1aae834cec2f0",
+        "ticks": 1695
+      },
+      "matchingReferenceCandidates": [],
+      "publishedDOSRecord": 48,
+      "maximumStatus": "UPPER_BOUND_UNPROVEN"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/fun-07.json",
+      "sha256": "482793d74cdd349dc82f469ec1e2a7caa6cd698dc3eacdf1a1de5073eb8d62fc",
+      "population": 50,
+      "expected": {
+        "didWin": true,
+        "released": 50,
+        "required": 25,
+        "saved": 50,
+        "stateHash": "acb40c3cfc528529f8dace007e643b623adaabcd0330ab08a50cfcb204d63650",
+        "ticks": 924
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Fun7_saveall_1min.lrb",
+            "sha256": "0b84d8ab938593e91c5cbddee6106c1e22fc8bb6f5377f6f28d173ac74e0595b"
+          },
+          "tickOffset": 0,
+          "title": "Builders will help you here"
+        }
+      ],
+      "publishedDOSRecord": 50,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/fun-08.json",
+      "sha256": "1187207f784b0490d83b358ae9e43cc8a2c5a8165ca7672532a44755af2f0e80",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 76,
+        "saved": 80,
+        "stateHash": "b3ac2016fcabacf3d837996102a69b42734af7775233f7424d68e9620632262a",
+        "ticks": 1448
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Tricky22-100%.lrb",
+            "sha256": "94a75cb89085e82e6e6c383b64252377c8b26dfb40c874df868db6baa6bd24c0"
+          },
+          "tickOffset": 0,
+          "title": "Turn around young lemmings!"
+        }
+      ],
+      "publishedDOSRecord": 80,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/fun-09.json",
+      "sha256": "806b6420ecbfc7325529efc40eb646680d5423745342f6f895c5233ebb1e5488",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 72,
+        "saved": 80,
+        "stateHash": "6cb9381fe9cb17e1cff3e44177885dd06634ff49e9b655c1aeec336058225eba",
+        "ticks": 535
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Fun09_1lem_100.lrb",
+            "sha256": "4befebf9ffd3e76f046f72dce1fef33977c423b2419277059e827106178bd069"
+          },
+          "tickOffset": 0,
+          "title": "As long as you try your best"
+        }
+      ],
+      "publishedDOSRecord": 80,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/fun-10.json",
+      "sha256": "ceaa9e1aa054b9a6ec4c1d8378a63bec389653a63a0f0281275842d498086ed7",
+      "population": 20,
+      "expected": {
+        "didWin": true,
+        "released": 20,
+        "required": 10,
+        "saved": 20,
+        "stateHash": "2e89d19f3d8e1cd88813df0481d9816d963609f32b644fcb5c58d90e2c2db8be",
+        "ticks": 470
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Taxing9-undamaged.lrb",
+            "sha256": "d6856fb20a4c509d96d41f36c10b9037279d7e4484a8ac78429f9d6d39200411"
+          },
+          "tickOffset": 0,
+          "title": "Perseverance"
+        }
+      ],
+      "publishedDOSRecord": 20,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/fun-11.json",
+      "sha256": "12e339442a8d3798c3b7556881c50ba8fd7b4c4318ed6d3de8d118a8972bc9d0",
+      "population": 60,
+      "expected": {
+        "didWin": true,
+        "released": 60,
+        "required": 50,
+        "saved": 60,
+        "stateHash": "fc0ecb628e891a6e7121bc12880c6310d5d40dad9c763f6c41061c0235980d16",
+        "ticks": 1332
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Fun11_L_100.lrb",
+            "sha256": "96b27ff098ee73bd07605ff9c738f5afb43c9a6914a027b1603a2d5992f3b466"
+          },
+          "tickOffset": 0,
+          "title": "Keep your hair on Mr. Lemming"
+        }
+      ],
+      "publishedDOSRecord": 60,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/fun-12.json",
+      "sha256": "0f73dffc1645bae22f86166a8a65d138c1faf3a09daba8a9954a8512018850fb",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 40,
+        "saved": 80,
+        "stateHash": "794ca364e2567bd7cc3e0ed7c1a3bede690f045f35ba19cecd1411fb7efaa639",
+        "ticks": 3832
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Fun12-undamaged-100%.lrb",
+            "sha256": "f910f467b382e43dcd4ba613110db1da22037331bd93e2de98b45bee3b4c4f33"
+          },
+          "tickOffset": 0,
+          "title": "Patience"
+        }
+      ],
+      "publishedDOSRecord": 80,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/fun-13.json",
+      "sha256": "bb0f4c00aa4224340a22bea69d90c601d9b796a226101035c8cdfbc6306a576e",
+      "population": 20,
+      "expected": {
+        "didWin": true,
+        "released": 20,
+        "required": 20,
+        "saved": 20,
+        "stateHash": "2d27643aacf9e0b73b7a92b3887d7b7a56997a1ff1696914f5e45077b93466d8",
+        "ticks": 1753
+      },
+      "matchingReferenceCandidates": [],
+      "publishedDOSRecord": 20,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/fun-14.json",
+      "sha256": "7359e9a60df8912414a91493f4cf3256fd9768e3efdb514547bce2186348ffd4",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 60,
+        "saved": 80,
+        "stateHash": "b67e136747fba3bd6f117a414ac4cd38ae3e7026cfb26ce1cdba8b4075d9f02d",
+        "ticks": 4259
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "fun14-undamaged.lrb",
+            "sha256": "5a93642ef164853c0eb53febf9460d099bec64767ea137c0d887944337db9411"
+          },
+          "tickOffset": 0,
+          "title": "Origins and Lemmings"
+        }
+      ],
+      "publishedDOSRecord": 80,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/fun-15.json",
+      "sha256": "96f882c665eb70bbeea8bf9e5bb102b2c334a7c74dc3a5cdb18575e4fa355805",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 40,
+        "saved": 80,
+        "stateHash": "824989a4f75898962c69c8d91aa20d14d19f9842c0fcba3ebab98c56fd15671f",
+        "ticks": 6347
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "fun15-undamaged.lrb",
+            "sha256": "b1d96758908193d432da8a082193071b6342f970c009a8405fa7e733b8e35653"
+          },
+          "tickOffset": 0,
+          "title": "Don't let your eyes deceive you"
+        }
+      ],
+      "publishedDOSRecord": 80,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/fun-16.json",
+      "sha256": "89573639fa84b9e74147f0dea283b6f63b1464a118994075906c8b3b53d39231",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 50,
+        "saved": 80,
+        "stateHash": "c8cb3f99c19dde6a0995cb62cc77cc820e95e76a38775d1c1344a42b863b300b",
+        "ticks": 3470
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Fun16_4builders_100.lrb",
+            "sha256": "050c137ae12606b274bfa0e82538280b263ce0977bcf7f822e45c35fc8fddbe9"
+          },
+          "tickOffset": 0,
+          "title": "Don't do anything too hasty"
+        }
+      ],
+      "publishedDOSRecord": 80,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/fun-17.json",
+      "sha256": "530c638e240209776823eb9203a7e2dc612b1c53721e018160e4a15bb40eb916",
+      "population": 50,
+      "expected": {
+        "didWin": true,
+        "released": 50,
+        "required": 20,
+        "saved": 50,
+        "stateHash": "6f9de0945f36d189cf5d042d9471c1298598fa072a30d7d4f97c26b1e8661e1f",
+        "ticks": 1226
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Fun_17_100.lrb",
+            "sha256": "6ebaae667278c3ac62252007138b98c2d9bcefb1862c4532b6bcace155db7685"
+          },
+          "tickOffset": 0,
+          "title": "Easy when you know how"
+        }
+      ],
+      "publishedDOSRecord": 50,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/fun-18.json",
+      "sha256": "3a90d40344d96b56bab874715c1334304604d4da7acdd07c35dff188245e068d",
+      "population": 70,
+      "expected": {
+        "didWin": true,
+        "released": 70,
+        "required": 50,
+        "saved": 65,
+        "stateHash": "5349a08734fa3a20c54adaa2b881a90aac3bbb75b2b46af130f440aa278abd1d",
+        "ticks": 1293
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "taxing19_left.lrb",
+            "sha256": "85f77f4a645ae028fac9220f06a8738a1ba8ee51f5a4c838b8245399dd1c3e60"
+          },
+          "tickOffset": 0,
+          "title": "Bomboozal"
+        }
+      ],
+      "publishedDOSRecord": 65,
+      "maximumStatus": "UPPER_BOUND_UNPROVEN"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/fun-19.json",
+      "sha256": "bce560b74f7dc55ea9073bba209d25d58f786b1cbd3b3c6e821e83ed465a5827",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 56,
+        "saved": 80,
+        "stateHash": "4bb825e651728c52286bf1e2ac6634aa47f0f734f357b7ef7cd8a50892638728",
+        "ticks": 3313
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "taxing25-1bash-100%.lrb",
+            "sha256": "4a781251f996bb417ad96c94084d5c2a01baaeb3dcd1658f26b6d90023cde784"
+          },
+          "tickOffset": 0,
+          "title": "Follow the leader..."
+        }
+      ],
+      "publishedDOSRecord": 80,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/fun-20.json",
+      "sha256": "e9dbfc847f4fca7b6b950314a667061e9e9d929033a1562423401f918b77337b",
+      "population": 50,
+      "expected": {
+        "didWin": true,
+        "released": 50,
+        "required": 30,
+        "saved": 50,
+        "stateHash": "36af6882f50c9b8a0e18ac95fcedce64afcda1ed5581e832fe647817ead92fe8",
+        "ticks": 1573
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Mayhem7_100_noclimber_nodirectdrop.lrb",
+            "sha256": "0ff2aa247b2e9aa25b852f3d65aa7e77cff12bf8d6f0a6f8b20b47606cb3616b"
+          },
+          "tickOffset": 0,
+          "title": "Poles Apart"
+        }
+      ],
+      "publishedDOSRecord": 50,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/fun-21.json",
+      "sha256": "41fcd30f4adb503083da9bb19f22a4fb7f98ff60a3b08ddf26373d2e4b91680a",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 48,
+        "saved": 80,
+        "stateHash": "bae51a2faa3b32c31703180b5b7c7b39b9a2b50eef8cf8da09fd4c40c05ff337",
+        "ticks": 2781
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Fun21_3skills_saveall.lrb",
+            "sha256": "61066cc6b6818ed93e7ddb46dc6ac951217c611ea55c04c1e1d3821a9c10b82c"
+          },
+          "tickOffset": 0,
+          "title": "You Live and Lem"
+        }
+      ],
+      "publishedDOSRecord": 80,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/fun-22.json",
+      "sha256": "2bd21f87cfdca610d6a96d730f4ebf4024a10f8ab4e0642b01a7260da2452679",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 64,
+        "saved": 80,
+        "stateHash": "2c9f47662ca1731ec47ecc2138e8534652dd80f4b8af23c144042da75387c835",
+        "ticks": 3991
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Fun_22_100.lrb",
+            "sha256": "da50c78dc22c0cdeaae33f64cde52a8daa47f166d3106a00add44020f2b58aef"
+          },
+          "tickOffset": 0,
+          "title": "A Beast of a level"
+        }
+      ],
+      "publishedDOSRecord": 80,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/fun-23.json",
+      "sha256": "829d8875e61dbd0197a4c7d39afc08b0a6c1e245de192004a40c23dc741661ee",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 20,
+        "saved": 80,
+        "stateHash": "000419bda1c789c1228f6bbff50178d7d7c4149a60b9cb1a6e800d9ff106f852",
+        "ticks": 4028
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Fun23_bashers_diggers_100.lrb",
+            "sha256": "993ccd87fd16d1aad5d62fbb54e64237708c4affa9597fa06fec5294a202602f"
+          },
+          "tickOffset": 0,
+          "title": "I've lost that Lemming feeling"
+        }
+      ],
+      "publishedDOSRecord": 80,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/fun-24.json",
+      "sha256": "f84f12ba9bf0251ecb6c24d3eb6bc919173c5b278492b546ffa3f68803bb1133",
+      "population": 30,
+      "expected": {
+        "didWin": true,
+        "released": 30,
+        "required": 20,
+        "saved": 30,
+        "stateHash": "723a262219551c319b8c4e5437987340d3c96caeb34d3eb9d5716b3295fbe2a5",
+        "ticks": 872
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Mayhem03_nobashers.lrb",
+            "sha256": "90a71f2e75ad5baf8007715331278f0464bbaf40cd014a9fef26832d925c635f"
+          },
+          "tickOffset": 0,
+          "title": "It`s hero time!"
+        }
+      ],
+      "publishedDOSRecord": 30,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/fun-25.json",
+      "sha256": "05235c8258b98e53bb9d46c0c09db79ad4d05dad1c7a33d97743863acc50919d",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 40,
+        "saved": 80,
+        "stateHash": "818b3aabd67fcce0812d424e9e6b6a5e29f76ee9f74b82eb6c396b762a1a458a",
+        "ticks": 1037
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Mayhem4_1lem_almost.lrb",
+            "sha256": "e2c14eb8cdf5080da3916de8d5758a6b717a2194542325cbe3ab78c6f208d27b"
+          },
+          "tickOffset": 0,
+          "title": "The Crossroads"
+        }
+      ],
+      "publishedDOSRecord": 80,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/fun-26.json",
+      "sha256": "4fd3570c30dd8ae230f88c558cab13bb716789599a2ebe10a7b504b0ba69e8d7",
+      "population": 2,
+      "expected": {
+        "didWin": true,
+        "released": 2,
+        "required": 2,
+        "saved": 2,
+        "stateHash": "79aa164928bdb9879971a57a0547db2b0c115eb049cab2a5b4812573c7515c0a",
+        "ticks": 2315
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Mayhem13_bubadi.lrb",
+            "sha256": "e7c35235b8213f7f2c9309d72967e0ef6406aedc91f194740a69626b2727117d"
+          },
+          "tickOffset": 0,
+          "title": "The Great Lemming Caper"
+        }
+      ],
+      "publishedDOSRecord": 2,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/fun-27.json",
+      "sha256": "014e829383739997cb113ad8e888f0ababc4c5d18541e4355fb807e297801f84",
+      "population": 50,
+      "expected": {
+        "didWin": true,
+        "released": 50,
+        "required": 25,
+        "saved": 50,
+        "stateHash": "9574b8ca7d54d0aa43177ef5a029bad838f16da31e1b53da5be0f4ef1d497e6d",
+        "ticks": 814
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Fun27_R_100_noglitch.lrb",
+            "sha256": "01a643de1ac5eda54009790d469a84102a0e4603f1666c4b650a95a9bfc5d0ee"
+          },
+          "tickOffset": 0,
+          "title": "Let's be careful out there"
+        }
+      ],
+      "publishedDOSRecord": 50,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/fun-28.json",
+      "sha256": "a4cfc8e8a04d4f98f32b3ba3e0a1c7099ab50d2be55e262393cf3e434fb20f03",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 48,
+        "saved": 80,
+        "stateHash": "73101ade88b3964c1bb8281b0635bad5bbb3fee94aaa426251d3c11f8b5164e9",
+        "ticks": 2622
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Fun28_10skills_saveall.lrb",
+            "sha256": "a290825717f988b6a6237094a8172dc2bbf9da3f128bff9efa121f78aa00e894"
+          },
+          "tickOffset": 0,
+          "title": "If only they could fly"
+        }
+      ],
+      "publishedDOSRecord": 80,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/fun-29.json",
+      "sha256": "4d69a9347d5a219997ae28503fe69293ef29def750a7f003d8e12e82e78a1690",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 48,
+        "saved": 80,
+        "stateHash": "71851b071c7db8247b84b671558b0cf52a2d0e2a2f809d1156af3ba6b5a37103",
+        "ticks": 2714
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Fun29_12skills_100.lrb",
+            "sha256": "d102b0ac562cfa8fc1f6149ac1a8e5856c2f9d81be269306c10b8eb75aa43d8d"
+          },
+          "tickOffset": 0,
+          "title": "worra lorra lemmings"
+        }
+      ],
+      "publishedDOSRecord": 80,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/fun-30.json",
+      "sha256": "bd04d797766fc1f01f8465da4d91bf84f92aa1edf3a841aa5bb09c55de026b57",
+      "population": 60,
+      "expected": {
+        "didWin": true,
+        "released": 60,
+        "required": 40,
+        "saved": 60,
+        "stateHash": "275f4f168ecc26e8ac8b0a10ce0258f4d9cf329883bf349753200b29a6eacbb4",
+        "ticks": 661
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Fun30_R_100.lrb",
+            "sha256": "2313eed57857b32d4b0c259c096b145c60bc97bcdfa344d5e56c177f3320e217"
+          },
+          "tickOffset": 0,
+          "title": "Lock up your Lemmings"
+        }
+      ],
+      "publishedDOSRecord": 60,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/tricky-01.json",
+      "sha256": "07fdb6a29335103749a5711fd1c616f1dfa664507a63cb965460d1c583439fb3",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 40,
+        "saved": 80,
+        "stateHash": "7579e6867b9c7e87088482c7dc94e34e3cff75b68f4ac291e0812accdfb740dd",
+        "ticks": 2943
+      },
+      "matchingReferenceCandidates": [],
+      "publishedDOSRecord": 80,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/tricky-02.json",
+      "sha256": "16c3bdfae40e48919fed4c19b5978bf896bf82ecaa88ed35008b02fc91298df9",
+      "population": 40,
+      "expected": {
+        "didWin": true,
+        "released": 40,
+        "required": 40,
+        "saved": 40,
+        "stateHash": "d9ca10b078815f9adf3b64d4e94fb6443317b704a5228d3da2699e365dbb2f7b",
+        "ticks": 2813
+      },
+      "matchingReferenceCandidates": [],
+      "publishedDOSRecord": 40,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/tricky-03.json",
+      "sha256": "4e10677c2c32eda090fd0c39998f60c1a15d02650fd93ea05eb89cf3b22211d4",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 40,
+        "saved": 80,
+        "stateHash": "9296c6d12fa590964c674eceb5dbe14fedc02e4c7d321afb34659fcf59d441dd",
+        "ticks": 2784
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Taxing29_8skills_saveall.lrb",
+            "sha256": "19d11b4c8c0d4849ec2dd51cc86e446b7f8ceb110e73d1a732b25eb0c72fb86b"
+          },
+          "tickOffset": 0,
+          "title": "How do I dig up the way?"
+        }
+      ],
+      "publishedDOSRecord": 80,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/tricky-04.json",
+      "sha256": "45f44ccd26182c6c04a16e29556fd0af2a147e6a51802c1188541e49b921303e",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 16,
+        "saved": 80,
+        "stateHash": "d189acf1131ee49d65aa81c992f5db9e1abea686997fc05707ec36228cf0e823",
+        "ticks": 5341
+      },
+      "matchingReferenceCandidates": [],
+      "publishedDOSRecord": 80,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/tricky-05.json",
+      "sha256": "1a631bb955e279f426b591db4fa984122e4e2149e41b75daa01eeb9f77dbe769",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 16,
+        "saved": 80,
+        "stateHash": "40df4d0740a6e3c9c37f6972ee5f36278df403b3d13d96a6b6a856f2e1e8fd27",
+        "ticks": 2018
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Taxing08_3builders.lrb",
+            "sha256": "d50f2cfbc0111189f5699f66ecc75299730d148a487c6834c507569851e17948"
+          },
+          "tickOffset": 0,
+          "title": "The Art Gallery"
+        }
+      ],
+      "publishedDOSRecord": 80,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/tricky-06.json",
+      "sha256": "0bf78c16d512109bf2fdd7c44393eedf66990ffe0f08e3cb15e3b31d9685e3f8",
+      "population": 5,
+      "expected": {
+        "didWin": true,
+        "released": 5,
+        "required": 4,
+        "saved": 5,
+        "stateHash": "a81352b4de988346399a584c6a1ae873ca516077b8aa0fdc32ff6ba98222151e",
+        "ticks": 1258
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Taxing 10 - 2 Builders.lrb",
+            "sha256": "432ab66b2bbbb17c52a386cb384b81e7e19228f811c3d0baf5be4f7144ce85e8"
+          },
+          "tickOffset": 0,
+          "title": "Izzie Wizzie lemmings get busy"
+        }
+      ],
+      "publishedDOSRecord": 5,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/tricky-07.json",
+      "sha256": "1bf86297e207daf940149efcf747d498b6277c511af1e0b4fe84159deadd0e2a",
+      "population": 75,
+      "expected": {
+        "didWin": true,
+        "released": 75,
+        "required": 55,
+        "saved": 75,
+        "stateHash": "73fbaed890d427100cca8d894856008ccd2a389bbb124526b7420ebb8109e1c5",
+        "ticks": 3423
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Tricky7-undamaged-100%.lrb",
+            "sha256": "5b7a4cf1631edb7634829436913a0e8754a4190717dde4d8cbdff6153f36350f"
+          },
+          "tickOffset": 0,
+          "title": "Been there, seen it, done it"
+        }
+      ],
+      "publishedDOSRecord": 75,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/tricky-08.json",
+      "sha256": "bac121a8f199375e390e157e57cfc656b3edb0ae1878e97c578c94e844a8744b",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 48,
+        "saved": 80,
+        "stateHash": "ef52b0ea374c123e048c284d4ebdcfdfa4c65e47d681977f9a53ecadecd43627",
+        "ticks": 2932
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Taxing23_15skills_saveall.lrb",
+            "sha256": "66ea7ec7e91a8fb96a376c3f7b570a866fde812d3880e8325ecfd6eb152e0d98"
+          },
+          "tickOffset": 0,
+          "title": "King of the castle"
+        }
+      ],
+      "publishedDOSRecord": 80,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/tricky-09.json",
+      "sha256": "eeb8f311700fc21deb7dde39ee77ccb575ecfe2198f30c720d5d562460935721",
+      "population": 75,
+      "expected": {
+        "didWin": true,
+        "released": 75,
+        "required": 70,
+        "saved": 75,
+        "stateHash": "3ea321272365830c8e862048c0ce1edc2d2159cd47ea7fe3922de88ab6b2f9bf",
+        "ticks": 3641
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "mayhem6_1lem.lrb",
+            "sha256": "f5f84f4c206b6f1751bd55e2c9f808ee52f9706785b560468d05a38ce8ef04d4"
+          },
+          "tickOffset": 0,
+          "title": "One way or another"
+        }
+      ],
+      "publishedDOSRecord": 75,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/tricky-10.json",
+      "sha256": "1cf405f5f99cb395edcd46311a5eec7d40a6c7004ccc4c9437bb1ea3d7b03101",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 74,
+        "saved": 80,
+        "stateHash": "a34bdf601e63b66612ca5a504cc1dec254190b4bd4cc6fbd23b86d0189fb1a61",
+        "ticks": 3594
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Tricky10-undamaged-100%.lrb",
+            "sha256": "75cc0cb5e009a7d6a905d43820b01ca3a5a284fc0ac29b9ca753f2e7247ef510"
+          },
+          "tickOffset": 0,
+          "title": "There's a lot of them about"
+        }
+      ],
+      "publishedDOSRecord": 80,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/tricky-11.json",
+      "sha256": "a9a3b9b458b89345b931af91d68a61fefa9467eeee6ae27f3f776a6f33ccb651",
+      "population": 50,
+      "expected": {
+        "didWin": true,
+        "released": 50,
+        "required": 42,
+        "saved": 50,
+        "stateHash": "a686b828a69b0afb6d333f80bf238f9b22a0f81376f4a9eda4c983343f7e3a51",
+        "ticks": 2549
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Tricky11_9skills_saveall.lrb",
+            "sha256": "50f17763f10eef10b84ec3e88f275f29901d26adaa49099e0a7842843c9bb044"
+          },
+          "tickOffset": 0,
+          "title": "Lemmings in the attic"
+        }
+      ],
+      "publishedDOSRecord": 50,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/tricky-12.json",
+      "sha256": "7ec8d08f4f2084d6ce431647cae9c3f5ce2d849c250b94e7e431c55c9b4e7e2c",
+      "population": 50,
+      "expected": {
+        "didWin": true,
+        "released": 50,
+        "required": 40,
+        "saved": 50,
+        "stateHash": "a50a169565f4f61de581ff951b8f460d0b560cd1c9571bbc977b06f0184e5446",
+        "ticks": 3867
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Mayhem21_noclimber.lrb",
+            "sha256": "d1ea8bdc527dc905287647c5452cac96cd7cd4a936464040a60bb90cbc539e7d"
+          },
+          "tickOffset": 0,
+          "title": "With a twist of lemming please"
+        }
+      ],
+      "publishedDOSRecord": 50,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/tricky-13.json",
+      "sha256": "b2fc6d0523448653df71fed46e2485417b4b82bc3b7967a11eee07cfc4c0acc8",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 56,
+        "saved": 80,
+        "stateHash": "acc4c43813a84a90bf2e0679e41414ae087183a54706e28d7486ddf218ee26b5",
+        "ticks": 2895
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "tricky13_right.lrb",
+            "sha256": "f2af627f65dcb1702df61a169e6eea235f02a61964e94d9d540c75e5996c1709"
+          },
+          "tickOffset": 0,
+          "title": "Lemming Drops"
+        }
+      ],
+      "publishedDOSRecord": 80,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/tricky-14.json",
+      "sha256": "d7d013b9c72ae5dda75729430ace031c62fdb93c9bad5e3c408e94fbc2ce3c6c",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 70,
+        "saved": 80,
+        "stateHash": "812f2c247290234166c91054341d1f4f1ea7b1f941501ba19e162364eb5b1745",
+        "ticks": 4653
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Tricky14_5builders_100.lrb",
+            "sha256": "e30a1cf2d181e3797fe492988781c40995c6c2924dabe8838f26d6eaa115ab12"
+          },
+          "tickOffset": 0,
+          "title": "MENACING !!"
+        }
+      ],
+      "publishedDOSRecord": 80,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/tricky-15.json",
+      "sha256": "89556d0df9ec4a46393834b8e6a5d4a609c0f0d60dcd3c18aa88e87b9a5f2358",
+      "population": 10,
+      "expected": {
+        "didWin": true,
+        "released": 10,
+        "required": 6,
+        "saved": 7,
+        "stateHash": "5b225b27a4a87ef98813262f12a05152370d170eeed2084ad4a80f06dc9b13c2",
+        "ticks": 835
+      },
+      "matchingReferenceCandidates": [],
+      "publishedDOSRecord": 7,
+      "maximumStatus": "UPPER_BOUND_UNPROVEN"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/tricky-16.json",
+      "sha256": "372ea6d6e009342a634448620a6260ec52fd873002dfefc7d97adec48167eae8",
+      "population": 50,
+      "expected": {
+        "didWin": true,
+        "released": 50,
+        "required": 40,
+        "saved": 46,
+        "stateHash": "c0fe727b92278d1c994d6c9a40cdceee95f08fb0d16605f5f35cde4635ecda24",
+        "ticks": 2968
+      },
+      "matchingReferenceCandidates": [],
+      "publishedDOSRecord": 46,
+      "maximumStatus": "UPPER_BOUND_UNPROVEN"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/tricky-17.json",
+      "sha256": "aabf2b21c8f92cfa530edad82c000f16daa104f69d961aff613d7463aac911dc",
+      "population": 50,
+      "expected": {
+        "didWin": true,
+        "released": 50,
+        "required": 48,
+        "saved": 48,
+        "stateHash": "010ce3ff472a52052bd4ef9eaeb3b464f659a1c51c8225d8bf78cee98168d8f4",
+        "ticks": 1694
+      },
+      "matchingReferenceCandidates": [],
+      "publishedDOSRecord": 48,
+      "maximumStatus": "UPPER_BOUND_UNPROVEN"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/tricky-18.json",
+      "sha256": "eafb71148b883c684ee6bd6592fa924bf947731d2242308a0e336e94469b7cb3",
+      "population": 10,
+      "expected": {
+        "didWin": true,
+        "released": 10,
+        "required": 9,
+        "saved": 9,
+        "stateHash": "1d834a1c54cd97866cdfb13cecde49fd2bc8c408f57b031f5816d628395393da",
+        "ticks": 902
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Tricky_18.lrb",
+            "sha256": "30088fe17e2d54943bb316487a8d276ea55ebe1ad161b11734656c7c258fe618"
+          },
+          "tickOffset": 0,
+          "title": "It's Lemmingentry Watson"
+        }
+      ],
+      "publishedDOSRecord": 9,
+      "maximumStatus": "UPPER_BOUND_UNPROVEN"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/tricky-19.json",
+      "sha256": "899971477146e0036eb845099f5db92544c7bae66aaf2c10c0cc7bb5043c4ffb",
+      "population": 50,
+      "expected": {
+        "didWin": true,
+        "released": 50,
+        "required": 50,
+        "saved": 50,
+        "stateHash": "b25a799bfbe72dc7180188852568ac56f93d171abda1ce0546aef6c12ea52a3b",
+        "ticks": 2938
+      },
+      "matchingReferenceCandidates": [],
+      "publishedDOSRecord": 50,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/tricky-20.json",
+      "sha256": "3ecc04eadff374d079fd5e740f91fba3b7f345536ca64676bab6ec16e2bb5171",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 76,
+        "saved": 80,
+        "stateHash": "3db62af119bed35330ea58e14dd3828108106258da30d9045b9be0c7a5387918",
+        "ticks": 1822
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Tricky20_1lem_saveall.lrb",
+            "sha256": "421346fab38920f179a6cbc39e6683817483fcef1fdfd25bdd38979618aa8871"
+          },
+          "tickOffset": 0,
+          "title": "One way digging to freedom"
+        }
+      ],
+      "publishedDOSRecord": 80,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/tricky-21.json",
+      "sha256": "113252336b6facd4dbff7520dea59dd324dae59e18d5d00e7c5a1086991532ba",
+      "population": 66,
+      "expected": {
+        "didWin": true,
+        "released": 66,
+        "required": 44,
+        "saved": 66,
+        "stateHash": "a19fc5b4c3b4e1a1dc28e54840c3cd83531f2198e27e5d6dae47544d99c133a5",
+        "ticks": 3899
+      },
+      "matchingReferenceCandidates": [],
+      "publishedDOSRecord": 66,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/tricky-22.json",
+      "sha256": "06a524d9568c44c72f5ceb70f1085a1f522e20fc6bb86fc7ad9c7b5a94c0adbb",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 72,
+        "saved": 80,
+        "stateHash": "b21ec06be117a561019d55f2edb3648e6f27de5d4ff2bbd8c60ef744c3dbe606",
+        "ticks": 1448
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Tricky22-100%.lrb",
+            "sha256": "94a75cb89085e82e6e6c383b64252377c8b26dfb40c874df868db6baa6bd24c0"
+          },
+          "tickOffset": 0,
+          "title": "Turn around young lemmings!"
+        }
+      ],
+      "publishedDOSRecord": 80,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/tricky-23.json",
+      "sha256": "49da1d0bd9c9931d579707d9b70195f9e5fe723ffeaae13ef3cca489507f18a7",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 48,
+        "saved": 79,
+        "stateHash": "8a3fb6586f1857c844547c0fdf91281f03dc209638b5cb224132a8e33fd2fa98",
+        "ticks": 847
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Tricky23_save79.lrb",
+            "sha256": "fcce10b649aa0cc41f9f8030cb76d9ee21361bbea954c214b82e7a95c3d2b26a"
+          },
+          "tickOffset": 0,
+          "title": "From The Boundary Line"
+        }
+      ],
+      "publishedDOSRecord": 79,
+      "maximumStatus": "UPPER_BOUND_UNPROVEN"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/tricky-24.json",
+      "sha256": "933a50776330939156294e8798a47608d8c4610b9310ce2b0d254255748e05b4",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 75,
+        "saved": 80,
+        "stateHash": "1df2df7fd7fbd0b9136cb90ee52ba02067c4df54f19b867a128677abd5ed7af1",
+        "ticks": 1874
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Tricky24_7skills_saveall.lrb",
+            "sha256": "41a61ee37c22483e2db3585686056e4114a550aa3d24bbd55b02ee495c0ca609"
+          },
+          "tickOffset": 0,
+          "title": "Tightrope City"
+        }
+      ],
+      "publishedDOSRecord": 80,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/tricky-25.json",
+      "sha256": "416cd47d8a220aa966dfd6dfac2501e8598f0a411a78a54b65414af9ae321b01",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 10,
+        "saved": 80,
+        "stateHash": "5ccfad0d2e8983257f34e67e3b2def66f70bf213d30dad476366d73b3f4c1ae9",
+        "ticks": 2434
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Tricky25_8builders_100.lrb",
+            "sha256": "db3ace282717b9203187529bc1f1d7f8f6de930df668f63888efe3f363f3fdb6"
+          },
+          "tickOffset": 0,
+          "title": "Cascade"
+        }
+      ],
+      "publishedDOSRecord": 80,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/tricky-26.json",
+      "sha256": "18869bebc5842949f258d4565b2e0190a4adb9e8a15fb855baf5c86ded512571",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 80,
+        "saved": 80,
+        "stateHash": "da70eac720543556b3d3fa4762bf222c5f203c2f926f6dd41de91312cd29a6e6",
+        "ticks": 696
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Tricky26_L_100.lrb",
+            "sha256": "487c0ebd67e5cd5827cbecbd39b71b0e9ec65a6b0058a53bbcf7daf8af9e4876"
+          },
+          "tickOffset": 0,
+          "title": "I have a cunning plan"
+        }
+      ],
+      "publishedDOSRecord": 80,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/tricky-27.json",
+      "sha256": "17a217ee37e0609fc49bb7b8e7478fddcc4d6c99719cfbc4fffc50917ab18eb9",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 72,
+        "saved": 80,
+        "stateHash": "111030fc0315fad0f3978118d17ecdd23134e2c265ca63e7ce38733d3e0a10c4",
+        "ticks": 3840
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Tricky27_1lem_saveall.lrb",
+            "sha256": "11c0e18b887f645bde81113b4b906fe07de262481791e4d2d1b47b55070a6d8e"
+          },
+          "tickOffset": 0,
+          "title": "The Island of the Wicker people"
+        }
+      ],
+      "publishedDOSRecord": 80,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/tricky-28.json",
+      "sha256": "eda0c340b0e4ff2794c7c6d7ba06b05b9d23e0365bd70f95002ebdeb5d12f868",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 72,
+        "saved": 80,
+        "stateHash": "8c4764a69feb4d0b5c731843f8da56821d4872496653d9dddcf66dfe5d372ade",
+        "ticks": 1525
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Tricky28_4skills_saveall.lrb",
+            "sha256": "e12bb9f8af6f51895df976353beb3b05b50d81d75c2859b6ee2444d90b455671"
+          },
+          "tickOffset": 0,
+          "title": "Lost something?"
+        }
+      ],
+      "publishedDOSRecord": 80,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/tricky-29.json",
+      "sha256": "289466ebcf51b23ac8617701a6fbe48d8a52fce49a7d9dab7a8b5fd7b6838883",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 79,
+        "saved": 80,
+        "stateHash": "5b4b230980a937d1e3ab3a0e02e3c740e40faa464d20527c72a1df6530b650b4",
+        "ticks": 2799
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Tricky29_undamaged_100.lrb",
+            "sha256": "d89d1b1498782677df56bdd1b859a31d514baa8178cff1959ed9c875f4d93ff7"
+          },
+          "tickOffset": 0,
+          "title": "Rainbow Island"
+        }
+      ],
+      "publishedDOSRecord": 80,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/tricky-30.json",
+      "sha256": "46645bfbf549d42cb6d1e3ce30ac9010b2cc15ed7465643d10deb197e2c43b1e",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 72,
+        "saved": 80,
+        "stateHash": "50c6cb725707cde566bd3c4103f41244a75fd45c1a8ae0d97f84f04536d2ff5a",
+        "ticks": 3156
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Tricky_30.lrb",
+            "sha256": "f513023122dc11d4a032d8746dbbdee1714e4c0a0eceb0a5d60f1316c2d4894e"
+          },
+          "tickOffset": 0,
+          "title": "The Crankshaft"
+        }
+      ],
+      "publishedDOSRecord": 80,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/taxing-01.json",
+      "sha256": "969bf94e1ca089c762f59fbbed8aaca55a3a0d23ec4b31dd37fccc2da9643551",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 79,
+        "saved": 80,
+        "stateHash": "84868190d806ee179f77e8457a31fed6739720931a150037000d9d873947658f",
+        "ticks": 4043
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "taxing1-9skills-max%.lrb",
+            "sha256": "a8af30628a871183a3d1034c1cd8d4da3e76a9866d665cb28e6234d979bf5a24"
+          },
+          "tickOffset": 0,
+          "title": "Don't let your eyes deceive you"
+        }
+      ],
+      "publishedDOSRecord": 80,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/taxing-02.json",
+      "sha256": "ce7620eec6531b6ba2dad0c71462f393bb7ca9af26b5a6dc95619a3dfb653730",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 64,
+        "saved": 80,
+        "stateHash": "bfc42f39045884b7f2cc5c369dd14913be7e4ded0e24bcbd85a967a9c5953390",
+        "ticks": 4041
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "taxing2_right.lrb",
+            "sha256": "04b623b79ee785b4985ef6ea5632d363e1e18c72b0b6f3e4e222d360256240e3"
+          },
+          "tickOffset": 0,
+          "title": "Watch out, there`s traps about"
+        }
+      ],
+      "publishedDOSRecord": 80,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/taxing-03.json",
+      "sha256": "eceb5bd2c24197a0b5a02e84a8245638eda4de6a80ae091ddec9e3cb0f815c1f",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 80,
+        "saved": 80,
+        "stateHash": "ea3d7fb950e5919d3c036562cbba19bb74876285747b7812cfcc4a8546738f4d",
+        "ticks": 2028
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Taxing3-undamaged.lrb",
+            "sha256": "c621ef5962a43a25f7580eb631ef72e58d9b0c7637bee8fba91e3129e7d928c7"
+          },
+          "tickOffset": 0,
+          "title": "Heaven can wait (we hope!!!!)"
+        }
+      ],
+      "publishedDOSRecord": 80,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/taxing-04.json",
+      "sha256": "7e5a7ae59f8977c009bac66b8cef7665350bd4625664f5f892ee5b2d671e6d15",
+      "population": 40,
+      "expected": {
+        "didWin": true,
+        "released": 40,
+        "required": 30,
+        "saved": 40,
+        "stateHash": "0b73140fee30bde023cf6a9e8c27949399fcce0d07e15d9f22d998e0f4f28844",
+        "ticks": 3952
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Taxing4_13skills_saveall_DOS.lrb",
+            "sha256": "b6f8c335e40e0a2216cf01e95c8569f0a966593ce81457f236419dbee384231e"
+          },
+          "tickOffset": 0,
+          "title": "Lend a helping hand...."
+        }
+      ],
+      "publishedDOSRecord": 40,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/taxing-05.json",
+      "sha256": "c00e0cfa0f7937f0cb3d70b50152a5987d533cc0f5d922b7977ca21a86b6c39f",
+      "population": 60,
+      "expected": {
+        "didWin": true,
+        "released": 60,
+        "required": 45,
+        "saved": 60,
+        "stateHash": "bd1b3ec56ce214b3784e77c6733491c76a331bfeb329f6cb532f09cec4798ac6",
+        "ticks": 1799
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Taxing5_5builders_100.lrb",
+            "sha256": "16f2aebc36635924b28aaad107b33e76d0c270fa50443bf2bc80bf78247a34aa"
+          },
+          "tickOffset": 0,
+          "title": "The Prison!"
+        }
+      ],
+      "publishedDOSRecord": 60,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/taxing-06.json",
+      "sha256": "a7af25d80781c17fe3181b1d0b633010b520c0f33589c2171e099f98486f822e",
+      "population": 50,
+      "expected": {
+        "didWin": true,
+        "released": 50,
+        "required": 30,
+        "saved": 50,
+        "stateHash": "765c42be893c3ee27c2e09f26f728609b11656b759c832587f2ca20b7f11f9d4",
+        "ticks": 1517
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Taxing6_100.lrb",
+            "sha256": "c9316789382bb1532fc368a8e56f9d43232ffbd7f7a8983d7248d761725f0183"
+          },
+          "tickOffset": 0,
+          "title": "Compression Method 1"
+        }
+      ],
+      "publishedDOSRecord": 50,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/taxing-07.json",
+      "sha256": "3d4fd83f07c26569b68b148673738bd1ffe71da3102b1c35fc7c41fbcbe11f16",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 78,
+        "saved": 79,
+        "stateHash": "89273d9846d9a062da691447792cbf3fbe78cf7e54f4078884a448c5a14ae976",
+        "ticks": 2773
+      },
+      "matchingReferenceCandidates": [],
+      "publishedDOSRecord": 79,
+      "maximumStatus": "UPPER_BOUND_UNPROVEN"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/taxing-08.json",
+      "sha256": "e73f6a63378af31cf9fb7c334fe34525139b6a619a95ccba39c99a36298807e0",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 80,
+        "saved": 80,
+        "stateHash": "5e4c9c1095733b279033852132e75468d01d955072fdd79189d09da2567fa5f1",
+        "ticks": 2018
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Taxing08_3builders.lrb",
+            "sha256": "d50f2cfbc0111189f5699f66ecc75299730d148a487c6834c507569851e17948"
+          },
+          "tickOffset": 0,
+          "title": "The Art Gallery"
+        }
+      ],
+      "publishedDOSRecord": 80,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/taxing-09.json",
+      "sha256": "8c2a5364a5b99782128ce5e10d546f890ce80e513cb92b8e582952ae4ca714a0",
+      "population": 20,
+      "expected": {
+        "didWin": true,
+        "released": 20,
+        "required": 20,
+        "saved": 20,
+        "stateHash": "cc73dcded2006fd06f417153bc3ce04a8f6b31fb3f13b653e102c6f3f6c62087",
+        "ticks": 470
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Taxing9-undamaged.lrb",
+            "sha256": "d6856fb20a4c509d96d41f36c10b9037279d7e4484a8ac78429f9d6d39200411"
+          },
+          "tickOffset": 0,
+          "title": "Perseverance"
+        }
+      ],
+      "publishedDOSRecord": 20,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/taxing-10.json",
+      "sha256": "c9860028a0294491911eeaab275fbf17a84820bb5242e4efd2535e77aa60941e",
+      "population": 5,
+      "expected": {
+        "didWin": true,
+        "released": 5,
+        "required": 5,
+        "saved": 5,
+        "stateHash": "dfcd07edd2a4da2dd06c082bda61b1b3d751b85a87b4d671f70e2e0597b8b09f",
+        "ticks": 1258
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Taxing 10 - 2 Builders.lrb",
+            "sha256": "432ab66b2bbbb17c52a386cb384b81e7e19228f811c3d0baf5be4f7144ce85e8"
+          },
+          "tickOffset": 0,
+          "title": "Izzie Wizzie lemmings get busy"
+        }
+      ],
+      "publishedDOSRecord": 5,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/taxing-11.json",
+      "sha256": "520d5860a57689e61d0038ffa37d0c557b628dce7bdf5998e9d2431f9055f89c",
+      "population": 50,
+      "expected": {
+        "didWin": true,
+        "released": 50,
+        "required": 50,
+        "saved": 50,
+        "stateHash": "088e06322f2de638f286b05b80e7edddca8f98c641a6549a3bb7ef4b9dfef092",
+        "ticks": 2603
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "taxing11-undamaged.lrb",
+            "sha256": "9659527111727f18192123c458711f1ddb7fb9d5601700bd75f0c56d60679266"
+          },
+          "tickOffset": 0,
+          "title": "The ascending pillar scenario"
+        }
+      ],
+      "publishedDOSRecord": 50,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/taxing-12.json",
+      "sha256": "685205cca7fa633a58914ed146354d225f677e915ad434dfd2260a513b0930e1",
+      "population": 10,
+      "expected": {
+        "didWin": true,
+        "released": 10,
+        "required": 8,
+        "saved": 10,
+        "stateHash": "81b4ac9b7b3e255f15a4ec714930b8c9c39da04a4f1e2073358711c2d3da650a",
+        "ticks": 1995
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Taxing12_builders+bashers_100.lrb",
+            "sha256": "fbfa1b19658b179ff875f257f9306238f64974456a326b92cb33795c9f1e4913"
+          },
+          "tickOffset": 0,
+          "title": "Livin` On The Edge"
+        }
+      ],
+      "publishedDOSRecord": 10,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/taxing-13.json",
+      "sha256": "6243e2898caf1d8b88058b8fa2e79a2ef46aa76d037d60444d5ca899e1fedf30",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 79,
+        "saved": 80,
+        "stateHash": "e76057f6875e2b5ed908848861d03219bd24cc653f0fa633260177de76c4f25a",
+        "ticks": 3506
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Taxing13_2miners_100.lrb",
+            "sha256": "c716e157b4b644b7c753ebee5f7c0221b22b10bdfa4df0336072aca84f888479"
+          },
+          "tickOffset": 0,
+          "title": "Upsidedown World"
+        }
+      ],
+      "publishedDOSRecord": 80,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/taxing-14.json",
+      "sha256": "0b3df7d31151dc78c4d58948817179d3a74261f9d99af7d84cd8fb4f04bd1751",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 76,
+        "saved": 80,
+        "stateHash": "e6dcbc3cb4cd2eb7540a5f505ae7b35a00e2724eadca5caedfa0be4c714f24dd",
+        "ticks": 6566
+      },
+      "matchingReferenceCandidates": [],
+      "publishedDOSRecord": 80,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/taxing-15.json",
+      "sha256": "422dccaeef83807f0b3687c04e9523eca766f75a0b0cb46768360ff186774227",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 64,
+        "saved": 80,
+        "stateHash": "b6658e65fecb183232c76aab6bc758087f138f81aff31f991be2cd0351a542c4",
+        "ticks": 4672
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "taxing15-build.lrb",
+            "sha256": "50b006a04b6680aec97f95127fecdae78c5a400f8db2a0f6ae71d007bad259d9"
+          },
+          "tickOffset": 0,
+          "title": "What an AWESOME level"
+        }
+      ],
+      "publishedDOSRecord": 80,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/taxing-16.json",
+      "sha256": "a9fdfc98320d68d946b1a5260967ccb2c0efe1d4caa1506c3fa5bba6ca993656",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 77,
+        "saved": 80,
+        "stateHash": "b47106d94681f4cde5246035ae1629839bedc52a5e0180546633020b0ad63654",
+        "ticks": 2370
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Taxing16-100%.lrb",
+            "sha256": "5b1b201575e1eff78bc58abf8a7ab329eff510a486517b5363ef9ac282540174"
+          },
+          "tickOffset": 0,
+          "title": "Mary Poppins` land"
+        }
+      ],
+      "publishedDOSRecord": 80,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/taxing-17.json",
+      "sha256": "4c96bbb8b84c6f53d07859ace3686571e4218f2b49eda82f853091bd06337f6e",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 72,
+        "saved": 80,
+        "stateHash": "47c7517e0ff3a735bfb0a0a11c49bdc09bce57118af29cfb0f5c8c97f520369d",
+        "ticks": 5427
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Taxing17_nobashers_100.lrb",
+            "sha256": "9fdf30acde2be7db63f7335b48bf35a78cc0a8516e495c94c2fa0fc3f8042af8"
+          },
+          "tickOffset": 0,
+          "title": "X marks the spot"
+        }
+      ],
+      "publishedDOSRecord": 80,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/taxing-18.json",
+      "sha256": "4364397c1e451b27449c9caf377511a18f61e7b9802faaf58d2c7f2a5f932db1",
+      "population": 75,
+      "expected": {
+        "didWin": true,
+        "released": 75,
+        "required": 65,
+        "saved": 75,
+        "stateHash": "496fc1138f661893022856fa1ae91159ff0e593e8f3963b56b48a6d33bf74ac7",
+        "ticks": 3612
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Taxing18_10builders_100.lrb",
+            "sha256": "1b20dee30612772b364ba52b420cc045af0d08f1fb5c6535f7ac7b2e6f476c50"
+          },
+          "tickOffset": 0,
+          "title": "Tribute to M.C.Escher"
+        }
+      ],
+      "publishedDOSRecord": 75,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/taxing-19.json",
+      "sha256": "34213caa09ceb07faf14061332ee577f3cc2f60de0395effcf113ef0fa1d7cce",
+      "population": 70,
+      "expected": {
+        "didWin": true,
+        "released": 70,
+        "required": 64,
+        "saved": 65,
+        "stateHash": "052d7f5912e0a869d6736bdf06c6882e32ec09246d3903605402b6d77c22f308",
+        "ticks": 1293
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "taxing19_left.lrb",
+            "sha256": "85f77f4a645ae028fac9220f06a8738a1ba8ee51f5a4c838b8245399dd1c3e60"
+          },
+          "tickOffset": 0,
+          "title": "Bomboozal"
+        }
+      ],
+      "publishedDOSRecord": 65,
+      "maximumStatus": "UPPER_BOUND_UNPROVEN"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/taxing-20.json",
+      "sha256": "5aa597e3ef8482943bd028ab4e79e22a55dcfa67ecc71db687a5038e5cd15115",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 70,
+        "saved": 80,
+        "stateHash": "25cff1896bdfb325ec9dd2d4cffd3e20fc0cbc77f6692e3c7443aa083087ed14",
+        "ticks": 2551
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Walk the web rope.lrb",
+            "sha256": "438aaf1aa10864568c971e3b3b4981a456cfa53508bdb1bc58af72434a26a9be"
+          },
+          "tickOffset": 0,
+          "title": "Walk the web rope"
+        }
+      ],
+      "publishedDOSRecord": 80,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/taxing-21.json",
+      "sha256": "1bd3c79efc389226671828b915b37667279fa7ab0f7f3249d5c7a4cb604cde58",
+      "population": 20,
+      "expected": {
+        "didWin": true,
+        "released": 20,
+        "required": 20,
+        "saved": 20,
+        "stateHash": "eba2c1c39de3126a12e57a4f418342bba971100afe2e10e3cb02b4c968c600b4",
+        "ticks": 1755
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Taxing21_1skillperlem.lrb",
+            "sha256": "4df49c06f0eb5c920617ad2e48a285960762ba6895af7cdd14c1b4fdb6c3ab6f"
+          },
+          "tickOffset": 0,
+          "title": "Feel the heat!"
+        }
+      ],
+      "publishedDOSRecord": 20,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/taxing-22.json",
+      "sha256": "e9df0dcad81898fe0c7c2f4b71a5b8ad7eee06d4d55af15bf757ad0d352206a2",
+      "population": 50,
+      "expected": {
+        "didWin": true,
+        "released": 50,
+        "required": 40,
+        "saved": 50,
+        "stateHash": "cc63a7c49f45e8abfe4d89889d6bd17b46dac1c6894d77097c8272cf1686453e",
+        "ticks": 855
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Taxing22_1builder_100.lrb",
+            "sha256": "be68dc34cb4ce4ec99e6a6d6d4389d12b9fed179acaf79769d6246d803d1af8f"
+          },
+          "tickOffset": 0,
+          "title": "Come on over to my place"
+        }
+      ],
+      "publishedDOSRecord": 50,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/taxing-23.json",
+      "sha256": "1ebd0c2ad79fa1485d637ccead7ed7c60f21b3cb8f4966f13b76a18c52510619",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 76,
+        "saved": 80,
+        "stateHash": "e8505b5dcac45b24f5a5824757f655acf6ed7ca4d9e4a081fd632d2dd471b81e",
+        "ticks": 2932
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Taxing23_15skills_saveall.lrb",
+            "sha256": "66ea7ec7e91a8fb96a376c3f7b570a866fde812d3880e8325ecfd6eb152e0d98"
+          },
+          "tickOffset": 0,
+          "title": "King of the castle"
+        }
+      ],
+      "publishedDOSRecord": 80,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/taxing-24.json",
+      "sha256": "af8b2536092448977d573c0c82fa86d9c616f873ca2e60141d8a2a467862289f",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 79,
+        "saved": 80,
+        "stateHash": "8b59e889083c44043c95652bb684d2628826d70666aa1a796cd307eeec412bd1",
+        "ticks": 2092
+      },
+      "matchingReferenceCandidates": [],
+      "publishedDOSRecord": 80,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/taxing-25.json",
+      "sha256": "6a99b2c3cc7b93b61efefd4455624efa1ec8b2ba63733653d914262c62e26e0e",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 72,
+        "saved": 80,
+        "stateHash": "1aa9a00a5dcbd416d35652b1ee82ef3b508cf04f6ad63a7d1c683ab2232316ae",
+        "ticks": 3313
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "taxing25-1bash-100%.lrb",
+            "sha256": "4a781251f996bb417ad96c94084d5c2a01baaeb3dcd1658f26b6d90023cde784"
+          },
+          "tickOffset": 0,
+          "title": "Follow the leader..."
+        }
+      ],
+      "publishedDOSRecord": 80,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/taxing-26.json",
+      "sha256": "98a84c519b87aecef73b545ab3c6299fda4a634d8cbb0c22b6fbbf73f5bec6dc",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 79,
+        "saved": 80,
+        "stateHash": "7c945035d66e9826cea2915934a6885ae2722e9ea7b67ecbdb9e307c3fefeb9a",
+        "ticks": 2108
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Taxing26-12skills.lrb",
+            "sha256": "dafb6f5adfbcd64bdd8fc73be1950f7a57745df0b1855dc843f5450e376b77a6"
+          },
+          "tickOffset": 0,
+          "title": "Triple Trouble"
+        }
+      ],
+      "publishedDOSRecord": 80,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/taxing-27.json",
+      "sha256": "116f5ea81590b1ec512c1af1313d1f7bde6a55a761441ebdebb1b31e0296434c",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 48,
+        "saved": 77,
+        "stateHash": "db767c5b426800883ec6e976ff125625dc4ef94735b87a47cc74f367abd1031d",
+        "ticks": 2579
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Taxing27_1blocker_lose3.lrb",
+            "sha256": "0af9406744eee84a88ba15cd10df583c3cecb0b8f40984f0e4119a5cad932779"
+          },
+          "tickOffset": 0,
+          "title": "Call in the bomb squad"
+        }
+      ],
+      "publishedDOSRecord": 77,
+      "maximumStatus": "UPPER_BOUND_UNPROVEN"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/taxing-28.json",
+      "sha256": "3ae998a0afb8317bf2430b9e1f42f5d4403517f0d10fe44a6a1a8259360b965f",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 56,
+        "saved": 70,
+        "stateHash": "5941fc9663608298c28105b86180bf797240449c816907b3b2c8fd47f31016f7",
+        "ticks": 2877
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "POOR WEE CREATURES!.lrb",
+            "sha256": "d45b08593b288d54830ed7e5b9e88d32ac6f5f0ae9be1f6bb3dcfc5f8c673b0f"
+          },
+          "tickOffset": 0,
+          "title": "POOR WEE CREATURES!"
+        }
+      ],
+      "publishedDOSRecord": 70,
+      "maximumStatus": "UPPER_BOUND_UNPROVEN"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/taxing-29.json",
+      "sha256": "4576db03a540f2947203c36996cd919784d84722a5fff80c492905120f2a008b",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 76,
+        "saved": 80,
+        "stateHash": "18da944ab02878938c20a4c7b9e6c97f35cde6944f5b96a2729018311ad5a13b",
+        "ticks": 2784
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Taxing29_8skills_saveall.lrb",
+            "sha256": "19d11b4c8c0d4849ec2dd51cc86e446b7f8ceb110e73d1a732b25eb0c72fb86b"
+          },
+          "tickOffset": 0,
+          "title": "How do I dig up the way?"
+        }
+      ],
+      "publishedDOSRecord": 80,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/taxing-30.json",
+      "sha256": "647a723dd1afd8a773e8079bd0d5453196aad785051aa86c51e44e73187849ae",
+      "population": 60,
+      "expected": {
+        "didWin": true,
+        "released": 60,
+        "required": 60,
+        "saved": 60,
+        "stateHash": "0c199c8761c64ce96fc96079809d2030704e37ce76dd9de96a81c81d02584046",
+        "ticks": 1513
+      },
+      "matchingReferenceCandidates": [],
+      "publishedDOSRecord": 60,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/mayhem-01.json",
+      "sha256": "7467da9e2d08f593f3294633bfd542004e60cd459173bafaffb9270bcec30b26",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 72,
+        "saved": 80,
+        "stateHash": "8ed762932822b29c53dfb0ece04011412af4c8e3ef3c7471aaf59713ac9cc8f1",
+        "ticks": 5328
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "mayhem1-23build-100%.lrb",
+            "sha256": "10b6efa18110efb13e533afdfae1f5c507c66a4659313695a1eeab82b4ff0ec9"
+          },
+          "tickOffset": 0,
+          "title": "Steel Works"
+        }
+      ],
+      "publishedDOSRecord": 80,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/mayhem-02.json",
+      "sha256": "0a0f28b6e55e5ae5e4d329d8eca87c8f6bda78a66c5939e25d3f22d28a55b17e",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 72,
+        "saved": 80,
+        "stateHash": "df4531ff815d623c1d1e1d570d17cd6acdb1e04493904c32d9880f5829ecbdf7",
+        "ticks": 2248
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Mayhem2_15builders_100.lrb",
+            "sha256": "9ee7b126618ad9421f806d9980af304d79255eaabe908b43429670c25d4c7bda"
+          },
+          "tickOffset": 0,
+          "title": "The Boiler Room"
+        }
+      ],
+      "publishedDOSRecord": 80,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/mayhem-03.json",
+      "sha256": "219f16347719bd5ddf246c6aa5ec9b32b39b46ff4daa5c4cb6cafe883b64da2b",
+      "population": 25,
+      "expected": {
+        "didWin": true,
+        "released": 25,
+        "required": 25,
+        "saved": 25,
+        "stateHash": "a6467ee4f39a8842fd5c230a8cbc35f5b44c3e56fe73563198ac42e927f32b77",
+        "ticks": 872
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Mayhem03_nobashers.lrb",
+            "sha256": "90a71f2e75ad5baf8007715331278f0464bbaf40cd014a9fef26832d925c635f"
+          },
+          "tickOffset": 0,
+          "title": "It`s hero time!"
+        }
+      ],
+      "publishedDOSRecord": 25,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/mayhem-04.json",
+      "sha256": "3046026d52d6176c7bef3cd0914a7c5cca3fcf406ce265b050242e3f2fbbeec9",
+      "population": 50,
+      "expected": {
+        "didWin": true,
+        "released": 50,
+        "required": 40,
+        "saved": 50,
+        "stateHash": "94f47c5cbcba40173c1e5bb8bc422f84d0d1f9abffe801a72fe27bb4ba5fef28",
+        "ticks": 818
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Mayhem4_4skills_saveall.lrb",
+            "sha256": "399eb699ed22e5226a158d6fd556a631c26492f2ad6b691790ce6408840e078c"
+          },
+          "tickOffset": 0,
+          "title": "The Crossroads"
+        }
+      ],
+      "publishedDOSRecord": 50,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/mayhem-05.json",
+      "sha256": "3d02e9fc00d68b44a6536aa068a0a6e51ac22104a139ab9d66ec1103eeba9ba9",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 60,
+        "saved": 76,
+        "stateHash": "65d44e469511361fe52ae8a89e2d56eb103e15334e6bbdbb242fc524d487cf6c",
+        "ticks": 2236
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Mayhem5_13skills_lose4_DOS.lrb",
+            "sha256": "e987f4daeb7f1c5dfc888e77389c6ce0109549a76eb6c3f5b5dbcb97b74121c4"
+          },
+          "tickOffset": 0,
+          "title": "Down, along, up. In that order"
+        }
+      ],
+      "publishedDOSRecord": 76,
+      "maximumStatus": "UPPER_BOUND_UNPROVEN"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/mayhem-06.json",
+      "sha256": "8af045e2516de6d8d8fdef0da4885a838288e6ba0462d1d9ecbff0898173c804",
+      "population": 75,
+      "expected": {
+        "didWin": true,
+        "released": 75,
+        "required": 75,
+        "saved": 75,
+        "stateHash": "6825a0cd9ed8065791f5be28de402b4ea0aff357988f41d161539068eb5a3d67",
+        "ticks": 3641
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "mayhem6_1lem.lrb",
+            "sha256": "f5f84f4c206b6f1751bd55e2c9f808ee52f9706785b560468d05a38ce8ef04d4"
+          },
+          "tickOffset": 0,
+          "title": "One way or another"
+        }
+      ],
+      "publishedDOSRecord": 75,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/mayhem-07.json",
+      "sha256": "4beefd275d6d13b1bd78dc2af207f5ea8df9b1027d2f33b54af5673e9d0daedd",
+      "population": 50,
+      "expected": {
+        "didWin": true,
+        "released": 50,
+        "required": 45,
+        "saved": 50,
+        "stateHash": "199ed9d5587918db06918024405c377de965814287d941629d55b0e88a1dc19b",
+        "ticks": 1573
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Mayhem7_100_noclimber_nodirectdrop.lrb",
+            "sha256": "0ff2aa247b2e9aa25b852f3d65aa7e77cff12bf8d6f0a6f8b20b47606cb3616b"
+          },
+          "tickOffset": 0,
+          "title": "Poles Apart"
+        }
+      ],
+      "publishedDOSRecord": 50,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/mayhem-08.json",
+      "sha256": "c5a28abb22db0f91d0eb4a2e0bf41dfc39e5d5008afa197f51a0bba914abfb9e",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 72,
+        "saved": 80,
+        "stateHash": "6605c0a867f12f74794be56356a866a1d5ac6aeef41f664271f49e3534f3f526",
+        "ticks": 3163
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Mayhem08_1lem_100.lrb",
+            "sha256": "9b8a3cb2d097725b9069300e926ebdc15a0524396cc3a73e2cff052176e5952f"
+          },
+          "tickOffset": 0,
+          "title": "Last one out is a rotten egg!"
+        }
+      ],
+      "publishedDOSRecord": 80,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/mayhem-09.json",
+      "sha256": "3981e3e1b646eec1b909fdcde54a627712d1424eeb56bb813e06c4b707b2d502",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 79,
+        "saved": 80,
+        "stateHash": "fc49ad5e94e3e820be4f01a6c6fb97c5ae34f0196b79555c0e2ef433812a13d9",
+        "ticks": 2817
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Mayhem9_13skills_6builders_100.lrb",
+            "sha256": "cc5517fec35b459f6f5ea36a299994ca9900ba2681d56ba3249e91d7689d79ff"
+          },
+          "tickOffset": 0,
+          "title": "Curse of the Pharaohs"
+        }
+      ],
+      "publishedDOSRecord": 80,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/mayhem-10.json",
+      "sha256": "1939435bb77a0d3a1191f7a9a4aa43ae34144579932227f29ab04f8d68a5755d",
+      "population": 75,
+      "expected": {
+        "didWin": true,
+        "released": 75,
+        "required": 50,
+        "saved": 73,
+        "stateHash": "1a33c00c1d732468f38eb63d3bc43c82d0192adfdca017d2435d91dbf7d96ca2",
+        "ticks": 2233
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Mayhem10-1block.lrb",
+            "sha256": "c93f14901e8748eb72af8033038e27cb8a7b4d4df17a41c41be835c0e082fb34"
+          },
+          "tickOffset": 0,
+          "title": "Pillars of Hercules"
+        }
+      ],
+      "publishedDOSRecord": 73,
+      "maximumStatus": "UPPER_BOUND_UNPROVEN"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/mayhem-11.json",
+      "sha256": "90532b8a2a3bd650dd17e55e7c7464f5b8b4b21d5bfd435409dbb03fcf7cb0ce",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 80,
+        "saved": 80,
+        "stateHash": "bbb15d9557bce23a6abb035234589334b5b15f57cd0e140f52954a1293d8d957",
+        "ticks": 1773
+      },
+      "matchingReferenceCandidates": [],
+      "publishedDOSRecord": 80,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/mayhem-12.json",
+      "sha256": "8178af2961d93b500691c362bff698387a404f706c8f5e7d47c986eba21eb943",
+      "population": 75,
+      "expected": {
+        "didWin": true,
+        "released": 75,
+        "required": 75,
+        "saved": 75,
+        "stateHash": "0c81dc9cc3f2ff44ea5733b5cd21f1b6fa4ff29499ab908581d92f1aff89c053",
+        "ticks": 3337
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Mayhem12_1lem.lrb",
+            "sha256": "ea1e26a5e11e49d6cc9cf005813f4df8f9ebe46d8583cf9dc41413a591c18450"
+          },
+          "tickOffset": 0,
+          "title": "The Far Side"
+        }
+      ],
+      "publishedDOSRecord": 75,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/mayhem-13.json",
+      "sha256": "6cd5434e616aca7a0bedd461f12057787a0b2b8805093f1e35ea7c2a33acf63d",
+      "population": 2,
+      "expected": {
+        "didWin": true,
+        "released": 2,
+        "required": 2,
+        "saved": 2,
+        "stateHash": "b2c163fcfff44509ceb9aa09e2c6f9799cf81e8d58f42550de37f4eebc17a6c8",
+        "ticks": 860
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Mayhem_13.lrb",
+            "sha256": "378bde6b7c19a7bc59d675a8997200c66574ca5db78ec47e4ea3795078a8c5cd"
+          },
+          "tickOffset": 0,
+          "title": "The Great Lemming Caper"
+        }
+      ],
+      "publishedDOSRecord": 2,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/mayhem-14.json",
+      "sha256": "bc7946c0560f24f6f6d67a4b123b4148fd467aa7ea6f234b4cf18bef23d28fea",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 75,
+        "saved": 80,
+        "stateHash": "9ca3da6ec4a6015f98793e78a553f8291993f59d81083bf868f562bc96400b18",
+        "ticks": 4506
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Mayhem14_17skills_saveall.lrb",
+            "sha256": "7ff0eb7b0814e0732dd5cab8570f552a52d7d5ded6aee77ccafeb77e17c2d44a"
+          },
+          "tickOffset": 0,
+          "title": "Pea Soup"
+        }
+      ],
+      "publishedDOSRecord": 80,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/mayhem-15.json",
+      "sha256": "6c197c8849bd115b402d231e91de5a1b225e07885fb99384ddab4c051d3906d5",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 60,
+        "saved": 80,
+        "stateHash": "8f9f28d959f2780cad2b24260950a0759fe642de566f57b8a34a0c40140d2bdc",
+        "ticks": 2357
+      },
+      "matchingReferenceCandidates": [],
+      "publishedDOSRecord": 80,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/mayhem-16.json",
+      "sha256": "3e7311226f3ec242ec7e9255c3e169e71827b537bfaadce2291a1aba4fc6869b",
+      "population": 50,
+      "expected": {
+        "didWin": true,
+        "released": 50,
+        "required": 50,
+        "saved": 50,
+        "stateHash": "3498bbc55e743d48e813f661ffb9f6f95ae8270d85a8631a6d1603c33713c59b",
+        "ticks": 1000
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Mayhem16_1lem.lrb",
+            "sha256": "3ede5f6c43d3c1715581c6b36cf992ff00fb175e715c25fa91b4257f259ff0e9"
+          },
+          "tickOffset": 0,
+          "title": "Just a Minute..."
+        }
+      ],
+      "publishedDOSRecord": 50,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/mayhem-17.json",
+      "sha256": "b40ccd8169a89382dd6911e346765c21bcf1ca708aacca338383d2e51ee1405e",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 70,
+        "saved": 80,
+        "stateHash": "c158a64fc942c4b024fd0a8e684068ff6d95f5dbc1af69d3a93b532bfbbaff3b",
+        "ticks": 3623
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "mayhem17-2build-100%.lrb",
+            "sha256": "3a4306a3e2eee73d85ae1bbd50cbc80260f70c225e8ee389c946190d01044706"
+          },
+          "tickOffset": 0,
+          "title": "Stepping Stones"
+        }
+      ],
+      "publishedDOSRecord": 80,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/mayhem-18.json",
+      "sha256": "96be1173e7c15219f00ec5883f6cf9f76af5c858c4ca6a4ead17f4e892112c91",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 72,
+        "saved": 80,
+        "stateHash": "24f3e2b75d9d4522d104a0bb677930fe5d860fde3bb035a2f0fc5bcb312d4a63",
+        "ticks": 4982
+      },
+      "matchingReferenceCandidates": [],
+      "publishedDOSRecord": 80,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/mayhem-19.json",
+      "sha256": "bd13285063a84d6c147ba7297befac291faa07c4464012faec7a3a987521c759",
+      "population": 50,
+      "expected": {
+        "didWin": true,
+        "released": 50,
+        "required": 46,
+        "saved": 48,
+        "stateHash": "0a1bf71544b065cca5bb20ad15e49b0cd67360c636b103d5e5b9aa0fd63f9e00",
+        "ticks": 3113
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Mayhem19_lose2_DOS.lrb",
+            "sha256": "cd624a5153a31fa2e62e854e95caaba2c17a588502ea9e817a0e1d2a91325743"
+          },
+          "tickOffset": 0,
+          "title": "Time to get up!"
+        }
+      ],
+      "publishedDOSRecord": 48,
+      "maximumStatus": "UPPER_BOUND_UNPROVEN"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/mayhem-20.json",
+      "sha256": "88747b6f6715c24e5c5415fecbdb346e7290756aa2886758f91e3eae9b9b2f37",
+      "population": 50,
+      "expected": {
+        "didWin": true,
+        "released": 50,
+        "required": 50,
+        "saved": 50,
+        "stateHash": "a0cf2ebe21e3f9b0c11ca698cc730dc1a1754038a00586158e7338cc98c71050",
+        "ticks": 1233
+      },
+      "matchingReferenceCandidates": [],
+      "publishedDOSRecord": 50,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/mayhem-21.json",
+      "sha256": "09b1e2be0a2f7a5266d9d0e8163fabc8294871a5e0f18c033a9e52085ae8a26f",
+      "population": 50,
+      "expected": {
+        "didWin": true,
+        "released": 50,
+        "required": 50,
+        "saved": 50,
+        "stateHash": "f811f2734ac41f40fef6aa05c073d1cc0a7a697fe1280d83f3f05c0386b31f65",
+        "ticks": 3867
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Mayhem21_noclimber.lrb",
+            "sha256": "d1ea8bdc527dc905287647c5452cac96cd7cd4a936464040a60bb90cbc539e7d"
+          },
+          "tickOffset": 0,
+          "title": "With a twist of lemming please"
+        }
+      ],
+      "publishedDOSRecord": 50,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/mayhem-22.json",
+      "sha256": "f8515171f15b0a02f62cdc43d14f8834444298a1ce1067d25dd8599c220ccc48",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 68,
+        "saved": 80,
+        "stateHash": "92728c33b36fc5cb02eb04b5bcdde92b065fdb65017670fa44300cae1994211c",
+        "ticks": 5091
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Mayhem22_1lem_100.lrb",
+            "sha256": "eb2b4dc774b95f2ed18a3c482b1a3ef2c17630eea5873f75b30def3f2e55774f"
+          },
+          "tickOffset": 0,
+          "title": "A BeastII of a level"
+        }
+      ],
+      "publishedDOSRecord": 80,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/mayhem-23.json",
+      "sha256": "fa2990e38dc0914b12aa44ca6bbc8da4737eaed9a8d9c3ac3ff73e08667252a8",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 64,
+        "saved": 80,
+        "stateHash": "89db4095d39e9a90803beca3dd078161e1fd4622744a4f6091469b52d8262b71",
+        "ticks": 5750
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Mayhem 23 - Builders & Bashers.lrb",
+            "sha256": "e0d503fa17c96c282debe0516ca7257c2bec12a82b9af4366e572e1a8635a256"
+          },
+          "tickOffset": 0,
+          "title": "Going up......."
+        }
+      ],
+      "publishedDOSRecord": 80,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/mayhem-24.json",
+      "sha256": "e7bc7655f75f0464c9dc2758189a615d3de539a579c1b2291838946853301301",
+      "population": 50,
+      "expected": {
+        "didWin": true,
+        "released": 50,
+        "required": 50,
+        "saved": 50,
+        "stateHash": "8d9c305678511a5178ad420599c7f0b7cad88cc7fea33408a6760d0685be6424",
+        "ticks": 411
+      },
+      "matchingReferenceCandidates": [],
+      "publishedDOSRecord": 50,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/mayhem-25.json",
+      "sha256": "f324bfb271cf236bbe09386ad681955542d41d67d273fd8cf959d54ddfff9950",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 72,
+        "saved": 80,
+        "stateHash": "4815d4acf35acd3b35f0122c73b7c705f3587660983d45f3a1d82693b316ee1a",
+        "ticks": 2601
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Mayhem25_right_100.lrb",
+            "sha256": "3447bfe2063f910c18579a7f25ffa5b5842b02ce1505fcc1faec2b107ecd014e"
+          },
+          "tickOffset": 0,
+          "title": "Have a nice day!"
+        }
+      ],
+      "publishedDOSRecord": 80,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/mayhem-26.json",
+      "sha256": "96f5657a04161e8f674c1a17c50608e80afe954296c5891ee004186de8c88d55",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 60,
+        "saved": 76,
+        "stateHash": "26b6a64ea548f97b33fe4332725167bae6bf0ab0a52e7aa7578a527c59ca8510",
+        "ticks": 8160
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "mayhem26-3bomb-95%.lrb",
+            "sha256": "5e85983583a76165378615f154117f2adaf646ddce38bac943c5df3be9150cd8"
+          },
+          "tickOffset": 0,
+          "title": "The Steel Mines of Kessel"
+        }
+      ],
+      "publishedDOSRecord": 76,
+      "maximumStatus": "UPPER_BOUND_UNPROVEN"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/mayhem-27.json",
+      "sha256": "753446ebe53fb2d9e14a19d220e04bb0b46944f8127171929f014b782e7dc636",
+      "population": 50,
+      "expected": {
+        "didWin": true,
+        "released": 50,
+        "required": 50,
+        "saved": 50,
+        "stateHash": "dfc024f4a148c7f860a89abc739e01a1940309306cdb1a64c4efceda00afd9a7",
+        "ticks": 972
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Mayhem27_3skills.lrb",
+            "sha256": "32d360976179b975103e40754540d8e7364f6c6c01a0d8b399c8a155f910128c"
+          },
+          "tickOffset": 0,
+          "title": "Just a Minute (Part Two)"
+        }
+      ],
+      "publishedDOSRecord": 50,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/mayhem-28.json",
+      "sha256": "4def0420e2a3f364ee0cdb6f26b74746fef93e99adbacfee844eafb729ba79ad",
+      "population": 1,
+      "expected": {
+        "didWin": true,
+        "released": 1,
+        "required": 1,
+        "saved": 1,
+        "stateHash": "00ae2f1fda04310b68d5e0ed79a679f2939dd7a0314526da46ddf87b42526815",
+        "ticks": 2827
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "mayhem28_7skills.lrb",
+            "sha256": "854a65206a591a709e21c5db6cfc135ea2f740a1ecbb344139e22f7dab0fe954"
+          },
+          "tickOffset": 0,
+          "title": "Mind the step....."
+        }
+      ],
+      "publishedDOSRecord": 1,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/mayhem-29.json",
+      "sha256": "18f8c2f88db5aa4a0a5068fa9cc00b7a14b3e99163f07749577bad2fc131b20b",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 64,
+        "saved": 78,
+        "stateHash": "38b2a3601e45bfe2138be71f91463c1e04bbb98a3314704fcad9f52f6fbb419e",
+        "ticks": 5100
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Mayhem29-12build.lrb",
+            "sha256": "db664c49197a056998c1af702b966998cd0abfb8c6339343f1d3ff51f246e4c0"
+          },
+          "tickOffset": 0,
+          "title": "Save Me"
+        }
+      ],
+      "publishedDOSRecord": 78,
+      "maximumStatus": "UPPER_BOUND_UNPROVEN"
+    },
+    {
+      "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/mayhem-30.json",
+      "sha256": "c5072a5c87035184ccc811c410fe5c6741d8a835c6697b5d5c7875b4e9cb4050",
+      "population": 80,
+      "expected": {
+        "didWin": true,
+        "released": 80,
+        "required": 60,
+        "saved": 80,
+        "stateHash": "06365df1a17a09e68732ae4cf5b9f36dccde2dd6be3dce891987614aebb7e8d3",
+        "ticks": 6175
+      },
+      "matchingReferenceCandidates": [
+        {
+          "origin": {
+            "file": "Mayhem30_100%nobashers.lrb",
+            "sha256": "54f8233225742fe93f957b44a34a03e99551917c54782a1fdc85ddc702f187bd"
+          },
+          "tickOffset": 0,
+          "title": "Rendezvous at the Mountain"
+        }
+      ],
+      "publishedDOSRecord": 80,
+      "maximumStatus": "PROVED_FULL_RESCUE"
+    }
+  ]
+}

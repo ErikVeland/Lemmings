@@ -1,0 +1,132 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 80
+        }
+      },
+      "tick" : 7
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 92
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "climber"
+        }
+      },
+      "tick" : 116
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 166
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 362
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 555
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 36,
+          "skill" : "climber"
+        }
+      },
+      "tick" : 821
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 36,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 857
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 876
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 36,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1059
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 36,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1293
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 76,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1321
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 75,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1461
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 80,
+    "required" : 79,
+    "saved" : 80,
+    "stateHash" : "7c945035d66e9826cea2915934a6885ae2722e9ea7b67ecbdb9e307c3fefeb9a",
+    "ticks" : 2108
+  },
+  "initialStateHash" : "9ecab5fec05d3f7579da0dcb0d1d89f02c0a2e9d7c3e289e2fa005e431f0da21",
+  "number" : 26,
+  "rank" : "Taxing",
+  "title" : "Triple Trouble"
+}

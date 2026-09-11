@@ -18,10 +18,13 @@ public enum ClassicDOSReplayAction: Codable, Equatable, Sendable {
 public struct ClassicDOSReplayEvent: Codable, Equatable, Sendable {
     public let tick: Int
     public let action: ClassicDOSReplayAction
+    /// Live input occurs after the current tick. Missing values preserve legacy replay timing.
+    public let afterTick: Bool?
 
-    public init(tick: Int, action: ClassicDOSReplayAction) {
+    public init(tick: Int, action: ClassicDOSReplayAction, afterTick: Bool? = nil) {
         self.tick = tick
         self.action = action
+        self.afterTick = afterTick
     }
 }
 
@@ -193,7 +196,12 @@ public enum ClassicDOSReplayPlayer {
         }
 
         var immediate: [Int: [ClassicDOSReplayAction]] = [:]
+        var afterTick: [Int: [ClassicDOSReplayAction]] = [:]
         for event in replay.events {
+            if event.afterTick == true {
+                afterTick[event.tick, default: []].append(event.action)
+                continue
+            }
             switch event.action {
             case let .assign(lemmingID, skill):
                 let command = ClassicDOSSkillCommand(
@@ -207,6 +215,19 @@ public enum ClassicDOSReplayPlayer {
             }
         }
 
+        func applyLiveCommands(at tick: Int, to simulation: inout ClassicDOSSimulation) throws {
+            for action in afterTick[tick] ?? [] {
+                switch action {
+                case let .assign(lemmingID, skill):
+                    guard simulation.assign(skill, to: lemmingID) == .assigned else {
+                        throw ClassicDOSReplayError.commandRejected(tick: tick, lemmingID: lemmingID, skill: skill)
+                    }
+                case let .releaseRate(value): simulation.setReleaseRate(value)
+                case .nuke: simulation.beginNuke()
+                }
+            }
+        }
+        try applyLiveCommands(at: simulation.tickCount, to: &simulation)
         var ticks = 0
         while !simulation.isComplete {
             if ticks >= tickLimit { throw ClassicDOSReplayError.tickLimitReached(tickLimit) }
@@ -219,6 +240,7 @@ public enum ClassicDOSReplayPlayer {
                 }
             }
             _ = simulation.tick()
+            try applyLiveCommands(at: simulation.tickCount, to: &simulation)
             ticks += 1
         }
 

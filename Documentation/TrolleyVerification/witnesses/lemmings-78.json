@@ -1,0 +1,77 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 80
+        }
+      },
+      "tick" : 4
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 4
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 50,
+          "skill" : "bomber"
+        }
+      },
+      "tick" : 633
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 54,
+          "skill" : "bomber"
+        }
+      },
+      "tick" : 657
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 65,
+          "skill" : "bomber"
+        }
+      },
+      "tick" : 763
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 68,
+          "skill" : "bomber"
+        }
+      },
+      "tick" : 786
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "bomber"
+        }
+      },
+      "tick" : 873
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 70,
+    "required" : 64,
+    "saved" : 65,
+    "stateHash" : "052d7f5912e0a869d6736bdf06c6882e32ec09246d3903605402b6d77c22f308",
+    "ticks" : 1293
+  },
+  "initialStateHash" : "94cb342319a3d8f17d20791d4e20d383a10398053c8c290c384177004b3acca5",
+  "number" : 19,
+  "rank" : "Taxing",
+  "title" : "Bomboozal"
+}

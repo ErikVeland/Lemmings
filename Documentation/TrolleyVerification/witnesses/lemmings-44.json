@@ -1,0 +1,43 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "bomber"
+        }
+      },
+      "tick" : 60
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "bomber"
+        }
+      },
+      "tick" : 445
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "bomber"
+        }
+      },
+      "tick" : 550
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 10,
+    "required" : 6,
+    "saved" : 7,
+    "stateHash" : "5b225b27a4a87ef98813262f12a05152370d170eeed2084ad4a80f06dc9b13c2",
+    "ticks" : 835
+  },
+  "initialStateHash" : "4f12276f9cbd9e63e3d38934689d53af875fcd499650ad58f6f3fbb97642a4eb",
+  "number" : 15,
+  "rank" : "Tricky",
+  "title" : "Ozone friendly Lemmings"
+}

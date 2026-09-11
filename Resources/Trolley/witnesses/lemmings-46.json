@@ -1,0 +1,34 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "bomber"
+        }
+      },
+      "tick" : 168
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 7,
+          "skill" : "bomber"
+        }
+      },
+      "tick" : 377
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 50,
+    "required" : 48,
+    "saved" : 48,
+    "stateHash" : "010ce3ff472a52052bd4ef9eaeb3b464f659a1c51c8225d8bf78cee98168d8f4",
+    "ticks" : 1694
+  },
+  "initialStateHash" : "67369273ff4cb3d62454d1d03426bf27e7501dde2efdf53a733de770d9a2ad20",
+  "number" : 17,
+  "rank" : "Tricky",
+  "title" : "Diet Lemmingaid"
+}

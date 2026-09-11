@@ -1,0 +1,132 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 90
+        }
+      },
+      "tick" : 17
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "blocker"
+        }
+      },
+      "tick" : 67
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "miner"
+        }
+      },
+      "tick" : 97
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 13,
+          "skill" : "miner"
+        }
+      },
+      "tick" : 226
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 41,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 458
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 34,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 504
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 24,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1033
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 24,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 1296
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 24,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1315
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 24,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 1617
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 24,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 2017
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 24,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 2224
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 24,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 2433
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 80,
+    "required" : 48,
+    "saved" : 80,
+    "stateHash" : "71851b071c7db8247b84b671558b0cf52a2d0e2a2f809d1156af3ba6b5a37103",
+    "ticks" : 2714
+  },
+  "initialStateHash" : "e0dc25f9f8d5c3c08f2d0116319b04d64d9f2c01af7bfe882b70b390a3dba553",
+  "number" : 29,
+  "rank" : "Fun",
+  "title" : "worra lorra lemmings"
+}

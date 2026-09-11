@@ -1,0 +1,435 @@
+{
+  "title": "Hunt the Nessy....",
+  "events": [
+    {
+      "tick": 36,
+      "action": {
+        "releaseRate": {
+          "_0": 30
+        }
+      }
+    },
+    {
+      "tick": 106,
+      "action": {
+        "assign": {
+          "lemmingID": 1,
+          "skill": "blocker"
+        }
+      }
+    },
+    {
+      "tick": 158,
+      "action": {
+        "assign": {
+          "lemmingID": 2,
+          "skill": "blocker"
+        }
+      }
+    },
+    {
+      "tick": 174,
+      "action": {
+        "assign": {
+          "lemmingID": 0,
+          "skill": "builder"
+        }
+      }
+    },
+    {
+      "tick": 436,
+      "action": {
+        "assign": {
+          "lemmingID": 0,
+          "skill": "builder"
+        }
+      }
+    },
+    {
+      "tick": 632,
+      "action": {
+        "assign": {
+          "lemmingID": 0,
+          "skill": "builder"
+        }
+      }
+    },
+    {
+      "tick": 979,
+      "action": {
+        "assign": {
+          "lemmingID": 0,
+          "skill": "builder"
+        }
+      }
+    },
+    {
+      "tick": 1239,
+      "action": {
+        "assign": {
+          "lemmingID": 0,
+          "skill": "builder"
+        }
+      }
+    },
+    {
+      "tick": 1436,
+      "action": {
+        "assign": {
+          "lemmingID": 0,
+          "skill": "builder"
+        }
+      }
+    },
+    {
+      "tick": 1770,
+      "action": {
+        "assign": {
+          "lemmingID": 0,
+          "skill": "builder"
+        }
+      }
+    },
+    {
+      "tick": 2025,
+      "action": {
+        "assign": {
+          "lemmingID": 0,
+          "skill": "builder"
+        }
+      }
+    },
+    {
+      "tick": 2221,
+      "action": {
+        "assign": {
+          "lemmingID": 0,
+          "skill": "builder"
+        }
+      }
+    },
+    {
+      "tick": 2478,
+      "action": {
+        "assign": {
+          "lemmingID": 0,
+          "skill": "builder"
+        }
+      }
+    },
+    {
+      "tick": 2681,
+      "action": {
+        "assign": {
+          "lemmingID": 0,
+          "skill": "builder"
+        }
+      }
+    },
+    {
+      "tick": 2883,
+      "action": {
+        "assign": {
+          "lemmingID": 0,
+          "skill": "builder"
+        }
+      }
+    },
+    {
+      "tick": 3085,
+      "action": {
+        "assign": {
+          "lemmingID": 0,
+          "skill": "builder"
+        }
+      }
+    },
+    {
+      "tick": 3287,
+      "action": {
+        "assign": {
+          "lemmingID": 0,
+          "skill": "builder"
+        }
+      }
+    },
+    {
+      "tick": 3493,
+      "action": {
+        "assign": {
+          "lemmingID": 0,
+          "skill": "basher"
+        }
+      }
+    },
+    {
+      "tick": 3824,
+      "action": {
+        "assign": {
+          "lemmingID": 0,
+          "skill": "miner"
+        }
+      }
+    },
+    {
+      "tick": 3904,
+      "action": {
+        "assign": {
+          "lemmingID": 0,
+          "skill": "builder"
+        }
+      }
+    },
+    {
+      "tick": 4102,
+      "action": {
+        "assign": {
+          "lemmingID": 0,
+          "skill": "builder"
+        }
+      }
+    },
+    {
+      "tick": 4299,
+      "action": {
+        "assign": {
+          "lemmingID": 0,
+          "skill": "builder"
+        }
+      }
+    },
+    {
+      "tick": 4595,
+      "action": {
+        "assign": {
+          "lemmingID": 0,
+          "skill": "basher"
+        }
+      }
+    },
+    {
+      "tick": 4615,
+      "action": {
+        "assign": {
+          "lemmingID": 0,
+          "skill": "blocker"
+        }
+      }
+    },
+    {
+      "tick": 4623,
+      "action": {
+        "assign": {
+          "lemmingID": 0,
+          "skill": "bomber"
+        }
+      }
+    },
+    {
+      "tick": 4732,
+      "action": {
+        "assign": {
+          "lemmingID": 2,
+          "skill": "bomber"
+        }
+      }
+    },
+    {
+      "tick": 4762,
+      "action": {
+        "assign": {
+          "lemmingID": 1,
+          "skill": "bomber"
+        }
+      }
+    }
+  ],
+  "cues": [
+    {
+      "tick": 106,
+      "id": 1,
+      "skill": "blocker",
+      "x": 201,
+      "y": 118
+    },
+    {
+      "tick": 158,
+      "id": 2,
+      "skill": "blocker",
+      "x": 215,
+      "y": 115
+    },
+    {
+      "tick": 174,
+      "id": 0,
+      "skill": "builder",
+      "x": 306,
+      "y": 147
+    },
+    {
+      "tick": 436,
+      "id": 0,
+      "skill": "builder",
+      "x": 377,
+      "y": 147
+    },
+    {
+      "tick": 632,
+      "id": 0,
+      "skill": "builder",
+      "x": 401,
+      "y": 135
+    },
+    {
+      "tick": 979,
+      "id": 0,
+      "skill": "builder",
+      "x": 570,
+      "y": 141
+    },
+    {
+      "tick": 1239,
+      "id": 0,
+      "skill": "builder",
+      "x": 639,
+      "y": 144
+    },
+    {
+      "tick": 1436,
+      "id": 0,
+      "skill": "builder",
+      "x": 663,
+      "y": 132
+    },
+    {
+      "tick": 1770,
+      "id": 0,
+      "skill": "builder",
+      "x": 819,
+      "y": 142
+    },
+    {
+      "tick": 2025,
+      "id": 0,
+      "skill": "builder",
+      "x": 885,
+      "y": 156
+    },
+    {
+      "tick": 2221,
+      "id": 0,
+      "skill": "builder",
+      "x": 909,
+      "y": 144
+    },
+    {
+      "tick": 2478,
+      "id": 0,
+      "skill": "builder",
+      "x": 1026,
+      "y": 118
+    },
+    {
+      "tick": 2681,
+      "id": 0,
+      "skill": "builder",
+      "x": 1053,
+      "y": 106
+    },
+    {
+      "tick": 2883,
+      "id": 0,
+      "skill": "builder",
+      "x": 1079,
+      "y": 94
+    },
+    {
+      "tick": 3085,
+      "id": 0,
+      "skill": "builder",
+      "x": 1105,
+      "y": 82
+    },
+    {
+      "tick": 3287,
+      "id": 0,
+      "skill": "builder",
+      "x": 1131,
+      "y": 70
+    },
+    {
+      "tick": 3493,
+      "id": 0,
+      "skill": "basher",
+      "x": 1158,
+      "y": 52
+    },
+    {
+      "tick": 3824,
+      "id": 0,
+      "skill": "miner",
+      "x": 1264,
+      "y": 53
+    },
+    {
+      "tick": 3904,
+      "id": 0,
+      "skill": "builder",
+      "x": 1291,
+      "y": 140
+    },
+    {
+      "tick": 4102,
+      "id": 0,
+      "skill": "builder",
+      "x": 1315,
+      "y": 128
+    },
+    {
+      "tick": 4299,
+      "id": 0,
+      "skill": "builder",
+      "x": 1339,
+      "y": 116
+    },
+    {
+      "tick": 4595,
+      "id": 0,
+      "skill": "basher",
+      "x": 1458,
+      "y": 117
+    },
+    {
+      "tick": 4615,
+      "id": 0,
+      "skill": "blocker",
+      "x": 1463,
+      "y": 117
+    },
+    {
+      "tick": 4623,
+      "id": 0,
+      "skill": "bomber",
+      "x": 1463,
+      "y": 117
+    },
+    {
+      "tick": 4732,
+      "id": 2,
+      "skill": "bomber",
+      "x": 215,
+      "y": 115
+    },
+    {
+      "tick": 4762,
+      "id": 1,
+      "skill": "bomber",
+      "x": 201,
+      "y": 118
+    }
+  ],
+  "origin": {
+    "file": "Taxing14_17builders.lrb",
+    "sha256": "dac3ba98d66a0c876d7cf2a4becdf73cfab5185e90f8a1ff84ccf68eb5a920b1"
+  }
+}

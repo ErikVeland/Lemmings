@@ -388,6 +388,31 @@ private func testImmutableSteelAndDestructionMasks() throws {
     try require(solid.count == width * height, "terrain fixture size changed")
 }
 
+private func testDiggerMaskCanOverlapSteel() throws {
+    let width = 64, height = 48
+    var solid = Data(repeating: 0, count: width * height)
+    var steel = Data(repeating: 0, count: width * height)
+    for y in 40..<height { for x in 0..<width { solid[y * width + x] = 1 } }
+    // The digger stands outside steel, but the edge of its nine-pixel row overlaps it.
+    steel[40 * width + 37] = 1
+    let terrain = try ClassicDOSTerrain(width: width, height: height, solidMask: solid, steelMask: steel)
+    var simulation = try ClassicDOSSimulation(
+        terrain: terrain,
+        configuration: configuration(totalLemmings: 1, releaseRate: 99,
+            entrances: [ClassicDOSPoint(x: 33, y: 20)], skills: [.digger: 1],
+            maximumX: width - 1, maximumY: height - 1),
+        destructionMasks: try destructionMaskSet())
+    for _ in 0..<100 {
+        _ = simulation.tick()
+        if simulation.lemmings.first?.action == .walking { break }
+    }
+    try require(simulation.lemmings.first?.foot.x == 33, "unexpected digger position")
+    try require(simulation.assign(.digger, to: 0) == .assigned, "digger outside steel was refused")
+    _ = simulation.tick()
+    try require(!simulation.terrain.isSolid(x: 37, y: 40), "DOS digger mask incorrectly clipped its steel overlap")
+    try require(simulation.terrain.steelMask == steel, "digger changed steel metadata")
+}
+
 private func testBombedBlockerOnSteelSuppressesExplosion() throws {
     let width = 96
     let height = 80
@@ -965,6 +990,7 @@ private func run() throws {
     try testHalfOpenTriggerBounds()
     try testMaximumSafeFallDistance()
     try testImmutableSteelAndDestructionMasks()
+    try testDiggerMaskCanOverlapSteel()
     try testBombedBlockerOnSteelSuppressesExplosion()
     try testBlockerCenterSuppressesAndUncoversExit()
     try testFallingOhNoKeepsFixedBlockerAnchor()

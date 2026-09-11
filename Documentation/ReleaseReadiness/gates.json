@@ -1,0 +1,77 @@
+[
+ {
+  "area": "All advertised campaign solutions",
+  "priority": "P0",
+  "status": "open",
+  "exitCriteria": "Replay a winning route for every advertised level. Close the remaining Oh No!, Xmas 1992, Holiday, L2, L3 and conversion gaps. Distinguish individual solutions from continuous campaign progression."
+ },
+ {
+  "area": "Sequel fidelity",
+  "priority": "P0",
+  "status": "open",
+  "exitCriteria": "Resolve provisional L3 tool, movement and trap semantics against original-engine evidence. Complete environmental effects, original movie audio and story transitions. Extend L2 original-engine comparisons."
+ },
+ {
+  "area": "Save and interruption recovery",
+  "priority": "P0",
+  "status": "partial",
+  "exitCriteria": "Verify app and controller interruption on real hardware. Add versioned in-progress checkpoints and crash recovery before mobile suspend/termination support. Verify save migrations and rollback with real prior releases.",
+  "progress": "Versioned checkpoints now cover Classic campaigns, NeoLemmix files, and native L2/L3 campaigns. Disk round trips, exact paused restoration, continuation, journal rejection and preserved attempt identity pass. Atomic writes, backups, size limits and stale-writer rejection are implemented. Classic fan imports, L2 practice, physical power-loss and installed-release migration trials remain."
+ },
+ {
+  "area": "Input and accessibility",
+  "priority": "P0",
+  "status": "partial",
+  "exitCriteria": "Test the complete first-launch-to-results flow with physical Xbox, PlayStation and Switch-layout controllers. Add remapping and device glyphs, touch targeting, readable UI scaling, reduced motion/flash controls and VoiceOver navigation without forcing OG gameplay.",
+  "progress": "Button remapping, persistent conflict-swapping bindings, held-input reset and device-reported names/glyphs are implemented. Physical device journeys, scalable text and broader VoiceOver navigation remain."
+ },
+ {
+  "area": "Performance and hardware",
+  "priority": "P0",
+  "status": "open",
+  "exitCriteria": "Measure complete frame times, memory growth and audio under sustained 10x play, nukes, replays and repeated engine switches. Test physical Intel, minimum supported macOS, SDR/HDR, multiple displays and high refresh rates."
+ },
+ {
+  "area": "Release package",
+  "priority": "P0",
+  "status": "partial",
+  "exitCriteria": "Freeze the final source and assets. Build both Mac architectures, sign, notarise and verify the downloaded archive. Earlier beta notarisation is not evidence for later local builds.",
+  "progress": "Beta 13 is packaged from its own frozen source. Both architectures built, the Developer ID signature verified, Apple accepted both notarization submissions, the tickets stapled, and Gatekeeper accepted a fresh quarantined extraction of each archive. The packaging is not bit-reproducible. The 1.0 candidate still needs its own freeze, build and checked archive. Beta notarization is not evidence for a later build."
+ },
+ {
+  "area": "Publishing agreement and assets",
+  "priority": "P0",
+  "status": "external",
+  "exitCriteria": "Agree the proposed official product scope, brand use and asset distribution with the rights holder. Record code and asset provenance, third-party dependencies and approved distribution inputs. Obtain the required platform publishing access."
+ },
+ {
+  "area": "Novice experience",
+  "priority": "P1",
+  "status": "partial",
+  "exitCriteria": "Validate first-play onboarding with novice players. Extend verified tiered hints beyond the original 120 levels and show supported mechanics clearly in imported packs."
+ },
+ {
+  "area": "iPhone and iPad",
+  "priority": "P1",
+  "status": "not-implemented",
+  "exitCriteria": "Build and test the shared library with the iOS SDK. Implement a UIKit/Metal app shell, precise touch selection, safe-area layouts, audio/session interruptions, checkpoints, thermal budgets and device tests. A Package.swift deployment declaration is not an iOS app."
+ },
+ {
+  "area": "Switch and consoles",
+  "priority": "P1",
+  "status": "not-implemented",
+  "exitCriteria": "Use approved SDKs and hardware to establish the supported runtime and engine boundary. Implement native rendering, input, save/user services and suspend/resume adapters. Pass each platform's current requirements. Mac controller support is not a console port."
+ },
+ {
+  "area": "Online services and localisation",
+  "priority": "P1",
+  "status": "partial",
+  "exitCriteria": "Validate Game Center on provisioned builds, network loss and offline records. Externalise product strings and verify layouts with translated text. Define platform account and cloud-save conflict handling."
+ },
+ {
+  "area": "Partner evaluation build",
+  "priority": "P1",
+  "status": "open",
+  "exitCriteria": "Deliver an approved, reproducible demonstration build with a short feature tour, current evidence matrix, known limits, asset provenance and a platform delivery plan. Keep demonstration claims within verified scope."
+ }
+]

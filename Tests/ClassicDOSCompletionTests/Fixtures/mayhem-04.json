@@ -1,0 +1,60 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 16
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 359
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 436
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 493
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 49,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 735
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 50,
+    "required" : 40,
+    "saved" : 50,
+    "stateHash" : "94f47c5cbcba40173c1e5bb8bc422f84d0d1f9abffe801a72fe27bb4ba5fef28",
+    "ticks" : 818
+  },
+  "initialStateHash" : "4d3ef6cd4334f26f91bc5260d08825aee380d9e4b6a6fb00e357d08e66745e2b",
+  "number" : 4,
+  "rank" : "Mayhem",
+  "title" : "The Crossroads"
+}

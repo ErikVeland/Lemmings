@@ -1,0 +1,77 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 30
+        }
+      },
+      "tick" : 211
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 225
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "miner"
+        }
+      },
+      "tick" : 351
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "blocker"
+        }
+      },
+      "tick" : 409
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 6,
+          "skill" : "bomber"
+        }
+      },
+      "tick" : 862
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 20,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 1016
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 1030
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 50,
+    "required" : 47,
+    "saved" : 48,
+    "stateHash" : "768925ea1742b9e542c061be9979deecacfe0eeef1b184ff524adda88636f7c1",
+    "ticks" : 1760
+  },
+  "initialStateHash" : "66d23243f39de13556720b734f7ed5705ba96a62e4b818d7c0e76061ba99654f",
+  "number" : 16,
+  "rank" : "Blizzard",
+  "title" : "The Next Lemeration"
+}

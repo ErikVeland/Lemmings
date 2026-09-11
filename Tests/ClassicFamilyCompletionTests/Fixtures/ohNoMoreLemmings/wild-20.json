@@ -1,0 +1,68 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 1
+        }
+      },
+      "tick" : 24
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 102
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 151
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 239
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 245
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 557
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 30,
+    "required" : 29,
+    "saved" : 29,
+    "stateHash" : "c4b9f40100d44b61387c5b150c0fedf742199e06d7d8d6aded793be1c530dcd9",
+    "ticks" : 1151
+  },
+  "initialStateHash" : "8340bea3ee860461ceae9f096bc1124f980fc8f8816dedd97ff833143958c928",
+  "number" : 20,
+  "rank" : "Wild",
+  "title" : "Got anything....Lemmingy???"
+}

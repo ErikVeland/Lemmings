@@ -171,6 +171,33 @@ do {
         "PASS render — \(rendered.width)x\(rendered.height),"
             + " \(solidCount) solid pixels, \(rendered.gadgets.count) gadgets")
 
+    for skill in ["FENCER", "LASERER"] {
+        let unsupported = NxlvLevel(text: levelText.replacingOccurrences(of: "BASHER 5", with: "\(skill) 1"))!
+        do {
+            _ = try NeoLemmixSimulation(level: unsupported, renderedLevel: rendered)
+            throw Failure(description: "A level requiring \(skill) was allowed to start")
+        } catch let error as NeoLemmixSimulationError {
+            try require(error.description.contains(skill.capitalized), "Unsupported skill error did not name the missing action")
+        }
+        let unused = NxlvLevel(text: levelText.replacingOccurrences(of: "BASHER 5", with: "\(skill) 0"))!
+        _ = try NeoLemmixSimulation(level: unused, renderedLevel: rendered)
+    }
+    let hatchMetadata = styles.appendingPathComponent("testpack/objects/hatch.nxmo")
+    let originalMetadata = try String(contentsOf: hatchMetadata, encoding: .utf8)
+    for effect in ["TELEPORTER", "LOCKEDEXIT", "UPDRAFT", "FORCELEFT"] {
+        try write(originalMetadata.replacingOccurrences(of: "ENTRANCE", with: effect), to: hatchMetadata)
+        let changed = NxlvRenderer().render(level: level, resolution: NxlvStyleResolver(stylesRootURL: styles).resolve(level: level))
+        guard let image = changed.renderedLevel else { throw Failure(description: "Unsupported gadget test did not render") }
+        do {
+            _ = try NeoLemmixSimulation(level: level, renderedLevel: image)
+            throw Failure(description: "A level requiring \(effect) was allowed to start")
+        } catch let error as NeoLemmixSimulationError {
+            try require(error.description.contains("not yet supported"), "Missing gadget was not explained")
+        }
+    }
+    try write(originalMetadata, to: hatchMetadata)
+    print("PASS unsupported skills and gadgets are rejected before gameplay; zero-stock skills remain allowed")
+
     // 4. Simulate
     var simulation = try NeoLemmixSimulation(level: level, renderedLevel: rendered)
     try require(

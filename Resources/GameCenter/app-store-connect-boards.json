@@ -1,0 +1,1815 @@
+{
+  "bundleID": "academy.glasscode.lemmings",
+  "leaderboards": [
+    {
+      "id": "ul.v1.career.three_star",
+      "name": "Ranked Three-Star Levels",
+      "unit": "levels",
+      "minimum": 0,
+      "maximum": 178,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.career.cleared",
+      "name": "Ranked Levels Cleared",
+      "unit": "levels",
+      "minimum": 0,
+      "maximum": 178,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.career.stars",
+      "name": "Ranked Career Stars",
+      "unit": "stars",
+      "minimum": 0,
+      "maximum": 534,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.11ee56bd6273ca7db123",
+      "name": "Just dig! - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 10,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.6df09116da653ddc1463",
+      "name": "Only floaters can survive this - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 10,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.ed34674a10c271423f03",
+      "name": "Now use miners and climbers - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 10,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.201778fbd41a2e943c9c",
+      "name": "You need bashers this time - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 50,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.074ceecc8b543fcf7842",
+      "name": "Builders will help you here - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 50,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.dae658275c59a545cca4",
+      "name": "Not as complicated as it looks - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.59249b70d8242ec00f39",
+      "name": "As long as you try your best - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.247ce9cfaa79893bed8f",
+      "name": "Smile if you love lemmings - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 20,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.debc9d9202f850bed96e",
+      "name": "Keep your hair on Mr. Lemming - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 60,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.d39706ac9ae2b1e09a9a",
+      "name": "Patience - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.f6d34b16e5a4c2c3330c",
+      "name": "We all fall down - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 20,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.e866424a26d6aea11569",
+      "name": "Origins and Lemmings - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.2ba1eed5dc35013fdfe8",
+      "name": "Don't let your eyes deceive you - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.625fbb5e141bbfda4c0a",
+      "name": "Don't do anything too hasty - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.868f6413bb2e7db6e2d8",
+      "name": "Easy when you know how - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 50,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.59bb2246985dd5032118",
+      "name": "Take good care of my Lemmings - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.8f2a4187380c5babef72",
+      "name": "We are now at LEMCON ONE - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 50,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.9bb3c5e3ddb29f834ed9",
+      "name": "You Live and Lem - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.da0b0462af69bdb8209d",
+      "name": "A Beast of a level - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.149981273545a0b0f639",
+      "name": "I've lost that Lemming feeling - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.7fc91fd4afa45f476cac",
+      "name": "Konbanwa Lemming san - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 30,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.895c580c04418fcc5fc2",
+      "name": "Lemmings Lemmings everywhere - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.64ef7502e60445b7b02a",
+      "name": "Nightmare on Lem street - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 2,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.45e41bcc9de6d73e4b13",
+      "name": "Let's be careful out there - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 50,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.91d5ca4d14efa2ce5942",
+      "name": "If only they could fly - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.a6b78599fc92749cc368",
+      "name": "worra lorra lemmings - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.3db765c3f7fcdb6d7349",
+      "name": "Lock up your Lemmings - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 60,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.2b533b33fc174d79a927",
+      "name": "Steel Works - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.8ee8c2d558ba06e4a99c",
+      "name": "The Boiler Room - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.c8cc599d598bcb070fd8",
+      "name": "It`s hero time! - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 25,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.0a4f79122d5fdacd3a75",
+      "name": "The Crossroads - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 50,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.0a9b81bc64f8439b95de",
+      "name": "One way or another - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 75,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.00ed39521f78e1a69d56",
+      "name": "Poles Apart - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 50,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.e1ce023e351a8a30ebd6",
+      "name": "Last one out is a rotten egg! - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.c819d7b559b6704a9307",
+      "name": "Curse of the Pharaohs - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.f81ce4044366425f5062",
+      "name": "We all fall down (80) - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.a5aa84085f1dac2a97c1",
+      "name": "The Far Side - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 75,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.4d10ef8d7ebd01a62715",
+      "name": "The Great Lemming Caper - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 2,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.e613fdf974944c4d98ad",
+      "name": "Pea Soup - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.a1ae304f2df1817d7282",
+      "name": "The Fast Food Kitchen... - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.17ec076b0dbcdbef7130",
+      "name": "Just a Minute... - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 50,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.77cdc5be6558ab70600d",
+      "name": "Stepping Stones - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.8fa585380461ecd7d587",
+      "name": "And then there were four.... - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.f0566e3fca2c56537f50",
+      "name": "No added colours or Lemmings - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 50,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.c7d189fecb1016106681",
+      "name": "With a twist of lemming please - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 50,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.d01a9fd0e28a3b559cd6",
+      "name": "A BeastII of a level - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.6a80a5ba8bbcf8bbc5ec",
+      "name": "Going up....... - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.8453ceaedabeaa514a86",
+      "name": "All or Nothing - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 50,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.7c8ae4132758d44ab188",
+      "name": "Have a nice day! - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.5d6e64405897fcea7e56",
+      "name": "Just a Minute (Part Two) - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 50,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.a40edd953846775a9a71",
+      "name": "Mind the step..... - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 1,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.b92a98e63ff3ee26e127",
+      "name": "Rendezvous at the Mountain - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.fb27c39cf269da52b8d9",
+      "name": "If at first you don`t succeed.. - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.4a37e593fd829e391419",
+      "name": "Watch out, there`s traps about - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.805872b6cfd5c589218b",
+      "name": "Heaven can wait (we hope!!!!) - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.cd6526d8c80b1d3cf1a3",
+      "name": "Lend a helping hand.... - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 40,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.54e0b2a7c1b1cd4d37c2",
+      "name": "The Prison! - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 60,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.7c06e23f08f5d0fe3993",
+      "name": "Compression Method 1 - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 50,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.7559e5573dae426476bd",
+      "name": "The Art Gallery - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.d576961c582b3c66fd70",
+      "name": "Perseverance - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 20,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.bfa82a3f193b3f8c05a9",
+      "name": "Izzie Wizzie lemmings get busy - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 5,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.3286e31c243fcbde9ed4",
+      "name": "The ascending pillar scenario - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 50,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.4dba3e89b6b1311d1841",
+      "name": "Livin` On The Edge - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 10,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.ac332133d5da7fdfe787",
+      "name": "Upsidedown World - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.1683b8f402db223b313c",
+      "name": "Hunt the Nessy.... - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.21401739460589b01cac",
+      "name": "What an AWESOME level - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.6db94a16dd1059f2b664",
+      "name": "Mary Poppins` land - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.e92a22bc26d2ab627d7f",
+      "name": "X marks the spot - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.380deb858df2d5a97c9d",
+      "name": "Tribute to M.C.Escher - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 75,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.43b4feefcd4d21b06203",
+      "name": "Walk the web rope - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.774053957af4701d0b11",
+      "name": "Feel the heat! - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 20,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.0e0a385d34e321073d35",
+      "name": "Come on over to my place - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 50,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.82482cd1b15ee76be3f0",
+      "name": "King of the castle - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.c234770756c27abba617",
+      "name": "Take a running jump..... - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.d5cbc7a3c75573abfc68",
+      "name": "Follow the leader... - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.bafae50fb3800a57b0b3",
+      "name": "Triple Trouble - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.ea244952e48f8d4e6f9d",
+      "name": "How do I dig up the way? - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.01bc4487b197741dfbf7",
+      "name": "We all fall down (60) - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 60,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.e4ae4e01e7e981e84d4a",
+      "name": "This should be a doddle! - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.1fc47f14184a0f2a27dd",
+      "name": "We all fall down (40) - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 40,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.ee2aa952f0853ce13907",
+      "name": "A ladder would be handy - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.6cb5ef7c3d11a4d99ccc",
+      "name": "Here's one I prepared earlier - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.adf4684428e363e31e3c",
+      "name": "Careless clicking costs lives - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.6cad4a49bccbaa4b2bd6",
+      "name": "Lemmingology - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 5,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.9e6b791cca4465b654a4",
+      "name": "Been there, seen it, done it - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 75,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.9270430580e3d2e76c15",
+      "name": "Lemming sanctuary in sight - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.043270f1947e0eb1a985",
+      "name": "They just keep on coming - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 75,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.11a0b3cb924108413461",
+      "name": "There's a lot of them about - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.44260ce0ad9ec9a2307d",
+      "name": "Lemmings in the attic - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 50,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.cc35579e75dfd5d66bdd",
+      "name": "Bitter Lemming - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 50,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.a889423165279fbc44f9",
+      "name": "Lemming Drops - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.38c98757e0a4a28e5e05",
+      "name": "MENACING !! - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.9a0a69ac1098a4473c69",
+      "name": "Postcard from Lemmingland - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 50,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.d1eb7063efec1ac8192c",
+      "name": "One way digging to freedom - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.b96e8eba00e15980d501",
+      "name": "All the 6`s ........ - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 66,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.e3a5598e35f4011bb3dc",
+      "name": "Turn around young lemmings! - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.610a618b51d166b182b1",
+      "name": "Tightrope City - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.1"
+    },
+    {
+      "id": "ul.v1.level.416d24a84a8ba7ec4ec8",
+      "name": "Cascade - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.80f981bbe599707bdd23",
+      "name": "I have a cunning plan - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.2a9178d25f53b63914d5",
+      "name": "The Island of the Wicker people - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.ae14805d1ad3f2b980c6",
+      "name": "Lost something? - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.74bc93b5a74cfd1e060e",
+      "name": "Rainbow Island - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.302b6d5d1113c80b8032",
+      "name": "The Crankshaft - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.ce03d3e800d764c4ad9c",
+      "name": "Merry Christmas Mr Lemming - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 50,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.545841f9087abcf900fe",
+      "name": "Christmas Bonus - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 50,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.07faaa0ca36fba0e1112",
+      "name": "This Corrosion - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 50,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.f3d048bb7565c995f82e",
+      "name": "24 hour Lemathon - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.a22949a5490302b68ec3",
+      "name": "On the Antarctic Coast - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 20,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.4de920470a85ffadb727",
+      "name": "Lemming Friendly - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.882e1608759b98d67c10",
+      "name": "Across The Gap - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 16,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.a6d2d7e2a513a01179d1",
+      "name": "It`s the price you have to pay - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 50,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.52f74d2ca1d894fd2821",
+      "name": "The race against cliches - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 20,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.5f1a8b0a4969281b3871",
+      "name": "Now get out of that! - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 50,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.6e2280a9996ac2585015",
+      "name": "Lemming about town - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 50,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.ddce138741687fecbc56",
+      "name": "Welcome to the party, pal! - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.83cb05c9999c7d58438a",
+      "name": "It`s all a matter of timing - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.823d2b7cea512158ce70",
+      "name": "Have an ice day - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 10,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.5f18f58c335c5dd2cd8d",
+      "name": "Looks a Bit Nippy Out There - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.1dade31356e3cc69d70b",
+      "name": "Downwardly Mobile Lemmings - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 50,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.46a118ba6a65dfd6e468",
+      "name": "Intsy-Wintsy...Lemming? - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 50,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.001b48f9e6016a2fb930",
+      "name": "New Lemmings On The Block - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 50,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.2c41799eb35a1104e6c1",
+      "name": "Get a little extra help - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 50,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.993c75c281c331a37da6",
+      "name": "Honey, I Saved The Lemmings - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 50,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.893bc90ebcb6229f2c4d",
+      "name": "This Corrosion (Oh No) - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 50,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.e0c50024e5042f562286",
+      "name": "The Lemming Learning Curve - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.fd7c0c9d68dcbe11d9fd",
+      "name": "LoTs moRe wHeRe TheY caMe fRom - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 60,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.0cb49e3e7d38536d87db",
+      "name": "PoP YoR ToP!!! - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 60,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.858fa4265ab25070846b",
+      "name": "Meeting Adjourned - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.b768b0192e429da233d1",
+      "name": "Just A Quicky - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.382a5f4ef551ca3b7b7d",
+      "name": "ICE SPY - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.87a2215baba6b685c6ef",
+      "name": "The Chain with no name - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.539876a00e255c6dd10e",
+      "name": "Jingle Lemming - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 50,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.eee82298f93200bd52a3",
+      "name": "A Lemming Holiday - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.6f20d8dc78e65222ca68",
+      "name": "The North Poles - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 2,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.b406b77365b98170565d",
+      "name": "Successive division - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 1,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.7bd530e01392d57e4f96",
+      "name": "Mortal men doomed to die - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 1,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.ff38ae24ef52a42fb57f",
+      "name": "Lemmings In The Family - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 1,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.2b58ddeb1e47476bfcca",
+      "name": "Do You Remember? - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 60,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.85c1a6c562bb9764b591",
+      "name": "CREAM OF LEMMING SOUP - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 60,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.446de6a80a5714ea38b7",
+      "name": "Lemmings Up High - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.4010661a14fe2f8824cd",
+      "name": "A Single Lemming... - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.c4cb963f311de34eee35",
+      "name": "Break on through... - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 60,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.37d40935cd926e5e8f0f",
+      "name": "Lemmings...The Motion Picture - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.0c9b7975405a49244b47",
+      "name": "Climbing to the Top! - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 10,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.f2506710f836fe87e27b",
+      "name": "Holiday Mining - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.f94b8d9e50a171cedf87",
+      "name": "Christmas South of the Equator - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 75,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.8c3a24367e3fba7f05a7",
+      "name": "32 Lemmings Below Zero - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 32,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.779d849d73b66189e5e6",
+      "name": "Marshmallow Land - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.6b775a7fa8788a812193",
+      "name": "The Pipe Room... - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 100,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.94845fe1effefe4533f9",
+      "name": "Test Of Skill - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 40,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.3a11387bc4738d14644e",
+      "name": "Give And Take - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 40,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.a1fd6d42c2e0c6588e29",
+      "name": "Chains of Command - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 50,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.dece2def0ce245f5e355",
+      "name": "CindyLand - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.0908e70ca41a97d44ff1",
+      "name": "Four Play - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 4,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.46a545984eb5a1a9e498",
+      "name": "Maybe not such a doddle - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.f5597e29ffd0513aca26",
+      "name": "Steel Ice Span - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.0b85f6855b4130e93db6",
+      "name": "Sir Edmund Hilemming - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.f2955755377b7622193d",
+      "name": "Up, up, and away! - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 50,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.84060f2bcd72437a2b38",
+      "name": "Lemmy in the cold, cold ground - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.3c9195c624520d29b724",
+      "name": "Rendezvous II - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 65,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.d7fb90b42f44c1d0ff6f",
+      "name": "Steel Block Party - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 60,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.7d54d6c15799461aeb4d",
+      "name": "Tailor-made for blockers - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 50,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.4412459efe9cca602f27",
+      "name": "A task for blockers and bombers - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 50,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.38b700698a6bf781dfcd",
+      "name": "Let's block and blow - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 70,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.50c3a76915bc21669c39",
+      "name": "Down, along, up. In that order - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.2e87e54c0ba737998573",
+      "name": "Pillars of Hercules - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 75,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.5eb3411512c35be26274",
+      "name": "Time to get up! - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 50,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.d5df4cfb0619b7e7461a",
+      "name": "The Steel Mines of Kessel - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.b82338ffd92812602286",
+      "name": "Save Me - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.81ea8b30c1d2d2b9fd2f",
+      "name": "Every Lemming for himself!!! - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.3af20feff31233ae8fee",
+      "name": "Bomboozal - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 70,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.144b726f2e7c35951579",
+      "name": "Call in the bomb squad - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.0d39cac901d56ff4c3da",
+      "name": "POOR WEE CREATURES! - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.45d9179ecdcf6203fd3a",
+      "name": "Ozone friendly Lemmings - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 10,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.18a58ad811ad54383f68",
+      "name": "Luvly Jubly - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 50,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.e5eedbf9249ed5b96326",
+      "name": "Diet Lemmingaid - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 50,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.50c5ed975a5869fd0469",
+      "name": "It's Lemmingentry Watson - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 10,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    },
+    {
+      "id": "ul.v1.level.b54ae9b62d4ab6fead4c",
+      "name": "From The Boundary Line - Most Saved",
+      "unit": "rescued",
+      "minimum": 0,
+      "maximum": 80,
+      "sort": "descending",
+      "submission": "best-score",
+      "set": "ul.v1.set.2"
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 4
+        }
+      },
+      "tick" : 8
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 8
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 106
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 833
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 1012
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 1058
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1709
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 4,
+    "required" : 4,
+    "saved" : 4,
+    "stateHash" : "90baefa2eb0b54607ebb6b899c43207f7dac569922ebc2e72e7c1aecb88502ed",
+    "ticks" : 2017
+  },
+  "initialStateHash" : "916d946397c3e6c4761a040890c324518fe87a9b3f0ea3d870c7025ef05af897",
+  "number" : 10,
+  "rank" : "Frost",
+  "title" : "Four Play"
+}

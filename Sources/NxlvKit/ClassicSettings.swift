@@ -147,6 +147,22 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
     /// Horizontal stretch. PAL pixels are not square.
     public var pixelAspect: Double
     public var integerScaling: Bool
+    public var modernControlsEnabled: Bool
+    public var variableSpeedEnabled: Bool
+    public var pauseOnInterruption: Bool
+    public var controllerEnabled: Bool
+    public var controllerTapSpeed: Bool
+    public var controllerMappings: [String: String]
+    public var controllerSwapSticks: Bool
+    public var reduceMotion: Bool
+    public var reduceFlashes: Bool
+    public var speedEffectsEnabled: Bool { hdEffectsEnabled && !reduceMotion }
+    public var explosionEffectsEnabled: Bool { hdEffectsEnabled && !reduceFlashes }
+    public var cinematicExplosionsEnabled: Bool { explosionEffectsEnabled && !reduceMotion && fullScreenHDRFlashes }
+    public var hdEffectsEnabled: Bool
+    public var confinePointer: Bool
+    public var fullScreenHDRFlashes: Bool
+    public var djIncludesOtherSoundtracks: Bool
 
     // Audio
     public var music: ClassicMusicSource
@@ -171,6 +187,19 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         displayIntensity: Double = 0.8,
         pixelAspect: Double = 1.0,
         integerScaling: Bool = true,
+        modernControlsEnabled: Bool = true,
+        variableSpeedEnabled: Bool = true,
+        pauseOnInterruption: Bool = true,
+        controllerEnabled: Bool = true,
+        controllerTapSpeed: Bool = true,
+        controllerSwapSticks: Bool = false,
+        controllerMappings: [String: String] = [:],
+        reduceMotion: Bool = false,
+        reduceFlashes: Bool = false,
+        hdEffectsEnabled: Bool = true,
+        confinePointer: Bool = true,
+        fullScreenHDRFlashes: Bool = true,
+        djIncludesOtherSoundtracks: Bool = true,
         music: ClassicMusicSource = .amigaModules,
         musicStyle: ClassicMusicStyle = .faithful,
         musicVolume: Double = 0.8,
@@ -185,6 +214,19 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         self.displayIntensity = displayIntensity
         self.pixelAspect = pixelAspect
         self.integerScaling = integerScaling
+        self.modernControlsEnabled = modernControlsEnabled
+        self.variableSpeedEnabled = variableSpeedEnabled
+        self.pauseOnInterruption = pauseOnInterruption
+        self.controllerEnabled = controllerEnabled
+        self.controllerTapSpeed = controllerTapSpeed
+        self.controllerSwapSticks = controllerSwapSticks
+        self.controllerMappings = ControllerBindings.validatedMapping(controllerMappings)
+        self.reduceMotion = reduceMotion
+        self.reduceFlashes = reduceFlashes
+        self.hdEffectsEnabled = hdEffectsEnabled
+        self.confinePointer = confinePointer
+        self.fullScreenHDRFlashes = fullScreenHDRFlashes
+        self.djIncludesOtherSoundtracks = djIncludesOtherSoundtracks
         self.music = music
         self.musicStyle = musicStyle
         self.musicVolume = musicVolume
@@ -230,6 +272,19 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
             Double.self, forKey: .pixelAspect) ?? fallback.pixelAspect
         integerScaling = try values.decodeIfPresent(
             Bool.self, forKey: .integerScaling) ?? fallback.integerScaling
+        modernControlsEnabled = try values.decodeIfPresent(Bool.self, forKey: .modernControlsEnabled) ?? fallback.modernControlsEnabled
+        variableSpeedEnabled = try values.decodeIfPresent(Bool.self, forKey: .variableSpeedEnabled) ?? fallback.variableSpeedEnabled
+        pauseOnInterruption = try values.decodeIfPresent(Bool.self, forKey: .pauseOnInterruption) ?? modernControlsEnabled
+        controllerEnabled = try values.decodeIfPresent(Bool.self, forKey: .controllerEnabled) ?? modernControlsEnabled
+        controllerTapSpeed = try values.decodeIfPresent(Bool.self, forKey: .controllerTapSpeed) ?? fallback.controllerTapSpeed
+        controllerSwapSticks = try values.decodeIfPresent(Bool.self, forKey: .controllerSwapSticks) ?? fallback.controllerSwapSticks
+        controllerMappings = ControllerBindings.validatedMapping((try? values.decodeIfPresent([String: String].self, forKey: .controllerMappings)) ?? [:])
+        reduceMotion = try values.decodeIfPresent(Bool.self, forKey: .reduceMotion) ?? false
+        reduceFlashes = try values.decodeIfPresent(Bool.self, forKey: .reduceFlashes) ?? false
+        hdEffectsEnabled = try values.decodeIfPresent(Bool.self, forKey: .hdEffectsEnabled) ?? fallback.hdEffectsEnabled
+        confinePointer = try values.decodeIfPresent(Bool.self, forKey: .confinePointer) ?? fallback.confinePointer
+        fullScreenHDRFlashes = try values.decodeIfPresent(Bool.self, forKey: .fullScreenHDRFlashes) ?? fallback.fullScreenHDRFlashes
+        djIncludesOtherSoundtracks = try values.decodeIfPresent(Bool.self, forKey: .djIncludesOtherSoundtracks) ?? fallback.djIncludesOtherSoundtracks
         music = source(.music, fallback.music)
         musicStyle = try values.decodeIfPresent(
             ClassicMusicStyle.self, forKey: .musicStyle) ?? fallback.musicStyle
@@ -242,6 +297,25 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
             Bool.self, forKey: .shuffleGraphics) ?? fallback.shuffleGraphics
         shuffleMusic = try values.decodeIfPresent(
             Bool.self, forKey: .shuffleMusic) ?? fallback.shuffleMusic
+    }
+
+    /// Changes the added conveniences while preserving the chosen machine and volumes.
+    public mutating func applyExperiencePreset(modern: Bool) {
+        modernControlsEnabled = modern
+        variableSpeedEnabled = modern
+        pauseOnInterruption = modern
+        controllerEnabled = modern
+        controllerTapSpeed = modern
+        controllerSwapSticks = false
+        controllerMappings = [:]
+        hdEffectsEnabled = modern
+        fullScreenHDRFlashes = modern
+        confinePointer = modern
+        djIncludesOtherSoundtracks = modern
+        shuffleGraphics = false
+        shuffleMusic = false
+        musicStyle = .faithful
+        if !modern, music == .adaptiveDJ { music = .amigaModules }
     }
 
     /// Settings that match a machine, as a starting point before mixing.

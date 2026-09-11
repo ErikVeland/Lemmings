@@ -1,0 +1,744 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 80
+        }
+      },
+      "tick" : 1
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 499
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 507
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 515
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 523
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 531
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 5,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 539
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 6,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 547
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 7,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 555
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 8,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 563
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 9,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 571
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 10,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 579
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 11,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 587
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 12,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 595
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 13,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 603
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 14,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 611
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 15,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 619
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 16,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 627
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 17,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 635
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 18,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 643
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 19,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 651
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 20,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 659
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 21,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 667
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 22,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 675
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 23,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 683
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 24,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 691
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 25,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 699
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 26,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 707
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 27,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 715
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 28,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 723
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 29,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 731
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 30,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 739
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 31,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 747
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 32,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 755
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 33,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 763
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 34,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 771
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 35,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 779
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 36,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 787
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 37,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 795
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 38,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 803
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 39,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 811
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 40,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 819
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 41,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 827
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 42,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 835
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 43,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 843
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 44,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 851
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 45,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 859
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 46,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 867
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 47,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 875
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 48,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 883
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 49,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 891
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 50,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 899
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 51,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 907
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 52,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 915
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 53,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 923
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 54,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 931
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 55,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 939
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 56,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 947
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 57,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 955
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 58,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 963
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 59,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 971
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 60,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 979
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 61,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 987
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 62,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 995
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 63,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 1003
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 64,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 1011
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 65,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 1019
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 66,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 1027
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 67,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 1035
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 68,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 1043
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 69,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 1051
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 70,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 1059
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 71,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 1067
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 72,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 1075
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 73,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 1083
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 74,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 1091
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 75,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 1099
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 76,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 1107
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 77,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 1115
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 78,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 1123
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 79,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 1131
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 80,
+    "required" : 80,
+    "saved" : 80,
+    "stateHash" : "bbb15d9557bce23a6abb035234589334b5b15f57cd0e140f52954a1293d8d957",
+    "ticks" : 1773
+  },
+  "initialStateHash" : "1ecbde3eca9a64bf698fa5fbe8c7a3f0a7a8e6d11d4f7d6a1a04429c0072236d",
+  "number" : 11,
+  "rank" : "Mayhem",
+  "title" : "We all fall down"
+}

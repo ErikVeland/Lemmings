@@ -1,0 +1,87 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 1
+        }
+      },
+      "tick" : 282
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 360
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 556
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 753
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 950
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1064
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 1082
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 2476
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 1,
+    "required" : 1,
+    "saved" : 1,
+    "stateHash" : "00ae2f1fda04310b68d5e0ed79a679f2939dd7a0314526da46ddf87b42526815",
+    "ticks" : 2827
+  },
+  "initialStateHash" : "06d22601b4b845081fab64319716b0eb63fd98a91a94a041d8d4cf02cad92cfb",
+  "number" : 28,
+  "rank" : "Mayhem",
+  "title" : "Mind the step....."
+}

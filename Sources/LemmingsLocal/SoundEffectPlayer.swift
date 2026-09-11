@@ -2,32 +2,21 @@ import AVFoundation
 import Foundation
 import NxlvKit
 
-/// Plays one-shot sound effects.
-///
-/// A fixed pool of voices mixes in one render callback rather than attaching a
-/// player node per sound. Attaching and detaching nodes during play is the
-/// usual source of clicks and stalls in this kind of engine.
-///
-/// Sounds arrive already decoded, each with the rate its own resource records,
-/// so playback resamples per voice instead of assuming one rate for the set.
+/// Plays effects through a fixed pool of spatial mono sources.
+/// Nodes remain attached during play to avoid graph changes between effects.
 final class SoundEffectPlayer: @unchecked Sendable {
   private struct Voice {
     var samples: [Float] = []
     var position: Double = 0
     var increment: Double = 1
-    /// Channel gains for this voice, worked out once when it starts.
-    ///
-    /// Panning is constant power: the two gains are a cosine and a sine of the
-    /// same angle, so their squares sum to one and a sound keeps its loudness
-    /// as it moves across the stereo field. The trigonometry belongs here, not
-    /// in the render loop, because the angle cannot change while a voice runs.
-    var leftGain: Float = 1
-    var rightGain: Float = 1
     var isActive = false
   }
 
+  var onPlay: (@Sendable ([Float], Double, Float) -> Void)?
   private let engine = AVAudioEngine()
-  private var sourceNode: AVAudioSourceNode?
+  private let environment = AVAudioEnvironmentNode()
+  private var sourceNodes: [AVAudioSourceNode] = []
+  private var spatialMixers: [AVAudioMixerNode] = []
   private let lock = NSLock()
 
   // Guarded by `lock`.
@@ -43,35 +32,64 @@ final class SoundEffectPlayer: @unchecked Sendable {
 
   init(voiceCount: Int = 16) {
     voices = [Voice](repeating: Voice(), count: max(1, voiceCount))
+    // A short builder-like chink is available even in previews without a bank.
+    library[.builderWarning] = (0..<3528).map { i in
+      let t = Double(i) / 44100
+      return Float(sin(2 * .pi * 1320 * t) * exp(-t * 65) * 0.45)
+    }
+    rates[.builderWarning] = 44100
   }
 
   // MARK: - Engine
 
   func start() throws {
     guard !isRunning else { return }
-    let format = AVAudioFormat(standardFormatWithSampleRate: sampleRate, channels: 2)!
-    let node = AVAudioSourceNode(format: format) { [weak self] _, _, frameCount, buffers in
-      let list = UnsafeMutableAudioBufferListPointer(buffers)
-      guard let self else {
-        for buffer in list { memset(buffer.mData, 0, Int(buffer.mDataByteSize)) }
+    let mono = AVAudioFormat(standardFormatWithSampleRate: sampleRate, channels: 1)!
+    let stereo = AVAudioFormat(standardFormatWithSampleRate: sampleRate, channels: 2)!
+    engine.attach(environment)
+    environment.outputType = .auto
+    environment.distanceAttenuationParameters.rolloffFactor = 0
+    environment.reverbParameters.enable = false
+    engine.connect(environment, to: engine.mainMixerNode, format: stereo)
+    for index in voices.indices {
+      let mixer = AVAudioMixerNode()
+      let node = AVAudioSourceNode(format: mono) { [weak self] _, _, frameCount, buffers in
+        let list = UnsafeMutableAudioBufferListPointer(buffers)
+        guard let self else {
+          for buffer in list { memset(buffer.mData, 0, Int(buffer.mDataByteSize)) }
+          return noErr
+        }
+        self.fillVoice(index, buffers: list, frames: Int(frameCount))
         return noErr
       }
-      self.fill(list, frames: Int(frameCount))
-      return noErr
+      engine.attach(node)
+      engine.attach(mixer)
+      engine.connect(node, to: mixer, format: mono)
+      engine.connect(mixer, to: environment, fromBus: 0, toBus: AVAudioNodeBus(index), format: mono)
+      mixer.renderingAlgorithm = .auto
+      mixer.sourceMode = .pointSource
+      mixer.position = AVAudio3DPoint(x: 0, y: 0, z: -1)
+      sourceNodes.append(node)
+      spatialMixers.append(mixer)
     }
-    engine.attach(node)
-    engine.connect(node, to: engine.mainMixerNode, format: format)
-    sourceNode = node
     do { try engine.start() }
-    catch { engine.detach(node); sourceNode = nil; throw error }
+    catch { detachSources(); throw error }
     isRunning = true
+  }
+
+  private func detachSources() {
+    for node in sourceNodes { engine.detach(node) }
+    for mixer in spatialMixers { engine.detach(mixer) }
+    engine.detach(environment)
+    sourceNodes = []
+    spatialMixers = []
   }
 
   func stop() {
     guard isRunning else { return }
     engine.stop()
-    if let sourceNode { engine.detach(sourceNode) }
-    sourceNode = nil
+    detachSources()
+    silence()
     isRunning = false
   }
 
@@ -81,36 +99,24 @@ final class SoundEffectPlayer: @unchecked Sendable {
     if isRunning && !engine.isRunning { try engine.start() }
   }
 
-  private func fill(_ buffers: UnsafeMutableAudioBufferListPointer, frames: Int) {
+  private func fillVoice(_ index: Int, buffers: UnsafeMutableAudioBufferListPointer, frames: Int) {
     lock.lock()
     defer { lock.unlock() }
-
-    let left = buffers.count > 0 ? buffers[0].mData?.assumingMemoryBound(to: Float.self) : nil
-    let right = buffers.count > 1 ? buffers[1].mData?.assumingMemoryBound(to: Float.self) : left
-
-    for index in 0..<frames {
-      var mixLeft: Float = 0
-      var mixRight: Float = 0
-      if !isMuted {
-        for voiceIndex in voices.indices where voices[voiceIndex].isActive {
-          var voice = voices[voiceIndex]
-          let position = Int(voice.position)
-          if position >= voice.samples.count {
-            voice.isActive = false
-            voices[voiceIndex] = voice
-            continue
-          }
-          let rawSample = voice.samples[position]
-          mixLeft += rawSample * voice.leftGain
-          mixRight += rawSample * voice.rightGain
+    var voice = voices[index]
+    for frame in 0..<frames {
+      var sample: Float = 0
+      if !isMuted && voice.isActive {
+        let position = Int(voice.position)
+        if position < voice.samples.count {
+          sample = voice.samples[position] * Float(level) * 0.6
           voice.position += voice.increment
-          voices[voiceIndex] = voice
+        } else {
+          voice.isActive = false
         }
       }
-      let finalLevel = Float(level) * 0.6
-      left?[index] = max(-1, min(1, mixLeft * finalLevel))
-      right?[index] = max(-1, min(1, mixRight * finalLevel))
+      for buffer in buffers { buffer.mData?.assumingMemoryBound(to: Float.self)[frame] = sample }
     }
+    voices[index] = voice
   }
 
   // MARK: - Library
@@ -182,6 +188,24 @@ final class SoundEffectPlayer: @unchecked Sendable {
 
   // MARK: - Playing
 
+  /// Keep the countdown warning while installing the sequel's named voices.
+  func loadLemmings3Sounds(root: URL) throws {
+    let bank = try Lemmings3SoundBank(root: root)
+    lock.lock()
+    defer { lock.unlock() }
+    for (effect, clip) in bank.clips {
+      library[effect] = clip.samples
+      rates[effect] = clip.sampleRate
+    }
+    loadedEffects = library.keys.sorted { $0.rawValue < $1.rawValue }
+  }
+
+  func silence() {
+    lock.lock()
+    defer { lock.unlock() }
+    for index in voices.indices { voices[index].isActive = false }
+  }
+
   /// Turns a stereo position into a pair of channel gains.
   ///
   /// A pan of -1 is hard left, 0 is centre, and +1 is hard right. Values
@@ -192,12 +216,13 @@ final class SoundEffectPlayer: @unchecked Sendable {
     return (cos(angle), sin(angle))
   }
 
-  /// Starts an effect with optional spatial stereo panning (-1.0 left to +1.0 right).
+  /// Places an effect across the sound stage (-1.0 left to +1.0 right).
   func play(_ effect: ClassicSoundEffect, pan: Float = 0.0) {
     lock.lock()
     defer { lock.unlock() }
     guard !isMuted, let samples = library[effect], !samples.isEmpty else { return }
     let rate = rates[effect] ?? sampleRate
+    onPlay?(samples, rate, Float(level) * 0.6)
 
     var slot = voices.firstIndex { !$0.isActive }
     if slot == nil {
@@ -209,10 +234,13 @@ final class SoundEffectPlayer: @unchecked Sendable {
       }
     }
     guard let index = slot else { return }
-    let gains = Self.constantPowerGains(pan: pan)
+    let clampedPan = pan.isFinite ? max(-1, min(1, pan)) : 0
+    if spatialMixers.indices.contains(index) {
+      let angle = clampedPan * Float.pi / 3
+      spatialMixers[index].position = AVAudio3DPoint(x: sin(angle), y: 0, z: -cos(angle))
+    }
     voices[index] = Voice(
-      samples: samples, position: 0, increment: rate / sampleRate,
-      leftGain: gains.left, rightGain: gains.right, isActive: true)
+      samples: samples, position: 0, increment: rate / sampleRate, isActive: true)
   }
 
   func play(_ effects: [ClassicSoundEffect], pan: Float = 0.0) {
