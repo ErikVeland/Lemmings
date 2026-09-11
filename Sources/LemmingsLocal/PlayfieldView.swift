@@ -124,6 +124,15 @@ enum GamePhase: Equatable {
   var overlayHighlight: Int?
   /// Marches real lemmings along the foot of the screen.
   var overlayShowsLemmings = false
+  /// The hot seat player holding the Mac. Nil in solo play, where there is
+  /// nobody to tell apart and the badge would only be clutter. The game pushes
+  /// this in every frame, so ending a hot seat or passing the turn cannot leave
+  /// a stale name on screen. It is passed in rather than read from the record
+  /// store because this view is also compiled on its own by the draw tests.
+  var turnInitials: String?
+  var turnPortrait: Int?
+  private var turnSprite: NSImage?
+  private var turnSpriteIndex: Int?
   /// Advanced by the run loop so the march animates while a menu is up.
   var overlayFrame = 0
   var phase: GamePhase = .playing {
@@ -397,7 +406,7 @@ enum GamePhase: Equatable {
         drawLevel(levelImage)
         speedTrails.draw(enabled: hdEffectsEnabled && !reduceMotion && isFastForward && phase == .playing, in: bounds) { drawLemmings() }
       }
-      if phase == .playing { drawCursor() }
+      if phase == .playing { drawTurnBadge(); drawCursor() }
     }
     if phase != .playing { drawOverlay() }
   }
@@ -496,6 +505,7 @@ enum GamePhase: Equatable {
       }
       drawMenuGameText(line, in: row.insetBy(dx: 14 * scale, dy: 0),
         face: menuFace, scale: menuScale)
+      if index == 0, turnInitials != nil { drawTurnPortrait(in: row, scale: scale) }
       y += rowHeight
     }
     if let initials = overlayProfileInitials {
@@ -787,6 +797,55 @@ enum GamePhase: Equatable {
   ///
   /// These are the decoded walking frames the game uses in play, not artwork
   /// made for the menu, so the screen is built from the same sprites.
+  private func turnPortraitImage() -> NSImage? {
+    guard let index = turnPortrait else { return nil }
+    if turnSpriteIndex == index, let cached = turnSprite { return cached }
+    let poses: [ClassicLemmingPose] = [.walking, .climbing, .floating, .building,
+                                       .bashing, .mining, .digging, .blocking]
+    guard poses.indices.contains(index),
+      let frame = macArtwork?.lemming(pose: poses[index], left: false, tick: 3),
+      let image = frame.makeNSImage() else { return nil }
+    turnSprite = image; turnSpriteIndex = index
+    return image
+  }
+
+  /// Names the player on the briefing, beside the line that announces the turn.
+  private func drawTurnPortrait(in row: CGRect, scale: CGFloat) {
+    guard let image = turnPortraitImage() else { return }
+    let height = min(row.height * 1.6, 40 * scale)
+    let size = NSSize(width: image.size.width / image.size.height * height, height: height)
+    image.draw(in: CGRect(x: row.minX + 8 * scale, y: row.midY - size.height / 2,
+        width: size.width, height: size.height),
+      from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true,
+      hints: [.interpolation: NSImageInterpolation.none])
+  }
+
+  /// A quiet reminder during play. It must not compete with the level.
+  private func drawTurnBadge() {
+    guard let initials = turnInitials else { return }
+    let scale = max(1, min(2, bounds.width / 960))
+    let height = 22 * scale
+    let image = turnPortraitImage()
+    let spriteWidth = image.map { $0.size.width / $0.size.height * height } ?? 0
+    let textWidth = CGFloat(MacInterfaceRenderer.menuText(initials).count + 1)
+      * CGFloat((macInterface?.font(.small)?.cellWidth ?? 8) * Int(scale))
+    let badge = CGRect(x: bounds.maxX - (spriteWidth + textWidth + 14 * scale) - 10 * scale,
+      y: bounds.maxY - height - 10 * scale,
+      width: spriteWidth + textWidth + 14 * scale, height: height)
+    NSGraphicsContext.saveGraphicsState()
+    NSGraphicsContext.current?.cgContext.setAlpha(0.55)
+    NSColor.black.withAlphaComponent(0.5).setFill()
+    NSBezierPath(rect: badge).fill()
+    if let image {
+      image.draw(in: CGRect(x: badge.minX + 5 * scale, y: badge.minY, width: spriteWidth, height: height),
+        from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true,
+        hints: [.interpolation: NSImageInterpolation.none])
+    }
+    drawMenuGameText(initials, in: CGRect(x: badge.minX + spriteWidth + 9 * scale,
+      y: badge.minY, width: textWidth, height: height), face: .small, scale: Int(scale))
+    NSGraphicsContext.restoreGraphicsState()
+  }
+
   private func drawMarchingLemmings() {
     if let macArtwork {
       let scale = max(1.5, min(3, bounds.width / 900))

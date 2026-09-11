@@ -38,6 +38,7 @@ import NxlvKit
         present(owner: owner)
     }
     func showSession(owner: NSWindow? = nil) {
+        ArcadeStore.shared.prepareHotSeat()
         arcadeView.sessionReturnMode = nil
         arcadeView.mode = .hotSeat
         present(owner: owner)
@@ -112,8 +113,11 @@ import NxlvKit
     /// Every level hands over after a clear too. At first fail keeps the winner in.
     var passesTurnOnClear: Bool { ArcadeStore.shared.turnPolicy == .everyLevel }
     var handsOverAfterClear: ArcadeProfile? { passesTurnOnClear ? nextSessionPlayer : nil }
+    /// A win keeps the seat: retrying is how a player improves their own score.
+    /// A loss gives it up, so retrying hands the Mac to the next player.
+    var retryOwner: ArcadeProfile? { cleared ? player : nextSessionPlayer }
     var primaryResultTitle: String {
-        if cleared { return handsOverAfterClear.map { "\(continueTitle) as \($0.initials)" } ?? continueTitle }
+        if cleared { return handsOverAfterClear.map { "\(continueTitle): \($0.initials)" } ?? continueTitle }
         return nextSessionPlayer.map { "Retry as \($0.initials)" } ?? "Try again"
     }
     func retryAsNextProfile() {
@@ -276,14 +280,20 @@ import NxlvKit
     }
     func resultActions() {
         if let next = nextSessionPlayer {
-            button("Retry", CGRect(x: 64, y: 573, width: 248, height: 48)) { [weak self] in self?.onRetry?() }
-            button("Retry as \(next.initials)", CGRect(x: 330, y: 573, width: 394, height: 48), primary: !cleared,
-                   enabled: ArcadeStore.shared.profilesAreWritable && ArcadeStore.shared.storageError == nil) { [weak self] in self?.retryAsNextProfile() }
-            let onwards = cleared ? (handsOverAfterClear.map { "\(continueTitle) as \($0.initials)" } ?? continueTitle) : "Back"
-            button(onwards, CGRect(x: 742, y: 573, width: 314, height: 48), primary: cleared) { [weak self] in
+            let canHandOver = ArcadeStore.shared.profilesAreWritable && ArcadeStore.shared.storageError == nil
+            // A win offers the same player another go. A loss offers the next one.
+            let owner = retryOwner ?? next
+            button("Retry as \(owner.initials)", CGRect(x: 64, y: 573, width: 330, height: 48), primary: !cleared,
+                   enabled: cleared || canHandOver) { [weak self] in
+                guard let self else { return }
+                if self.cleared { self.onRetry?() } else { self.retryAsNextProfile() }
+            }
+            let onwards = cleared ? (handsOverAfterClear.map { "\(continueTitle): \($0.initials)" } ?? continueTitle) : "Back"
+            button(onwards, CGRect(x: 412, y: 573, width: 330, height: 48), primary: cleared) { [weak self] in
                 guard let self else { return }
                 if self.cleared { self.continueAsNextProfile() } else { self.onClose?() }
             }
+            button("Retry", CGRect(x: 760, y: 573, width: 296, height: 48)) { [weak self] in self?.onRetry?() }
         } else {
         button(primaryResultTitle, CGRect(x: cleared ? 592 : 248, y: 573, width: 360, height: 48), primary: true) { [weak self] in self?.performDefaultResultAction() }
         button(cleared ? "Retry" : "Back", CGRect(x: cleared ? 168 : 688, y: 573, width: 256, height: 48)) { [weak self] in
@@ -366,12 +376,12 @@ import NxlvKit
         if canSwitch { afterSwitch?() }
         onClose?()
     }
-    func openSession() { sessionReturnMode = mode; page(.hotSeat) }
+    func openSession() { ArcadeStore.shared.prepareHotSeat(); sessionReturnMode = mode; page(.hotSeat) }
     func closeSession() { if let previous = sessionReturnMode { page(previous) } else { onClose?() } }
     private func drawSession() {
         let store = ArcadeStore.shared
         header("Take turns", subtitle: "HOT SEAT")
-        text("Choose players in turn order. Press 1-8 to join or leave.", 64, 142, 992)
+        text("A hot seat needs at least two players. Press 1-8 to join or leave.", 64, 142, 992)
         for (index, profile) in store.records.profiles.enumerated() {
             let chosen = store.sessionProfiles.contains { $0.id == profile.id }
             let position = store.sessionProfiles.firstIndex { $0.id == profile.id }.map { String($0 + 1) } ?? "-"
@@ -380,25 +390,40 @@ import NxlvKit
                 store.toggleSessionProfile(profile.id); self?.needsDisplay = true
             }
         }
-        text("Pass the turn", 64, 470, 300, palette: .green)
-        let policies = ArcadeStore.TurnPolicy.allCases
-        for (index, policy) in policies.enumerated() {
-            button(policy.title, CGRect(x: 370 + CGFloat(index) * 348, y: 464, width: 336, height: 44),
+        // The roster grid is as tall as the profiles need, so two players do not
+        // leave a hole in the middle and eight do not push the buttons off screen.
+        let rows = min(4, (store.records.profiles.count + 1) / 2)
+        var y = 195 + CGFloat(rows) * 75 + 14
+        text("Pass the turn", 64, y + 6, 300, palette: .green)
+        for (index, policy) in ArcadeStore.TurnPolicy.allCases.enumerated() {
+            button(policy.title, CGRect(x: 370 + CGFloat(index) * 348, y: y, width: 336, height: 44),
                    selected: store.turnPolicy == policy) { [weak self] in
                 store.turnPolicy = policy; self?.needsDisplay = true
             }
         }
-        text(store.turnPolicy.detail, 64, 518, 992, alpha: 0.8)
-        text("Current turn: \(store.records.profile(store.playingProfileID)?.initials ?? "LEM")", 64, 554, 992)
-        text("Shared campaign progress: \(store.records.activeProfile.initials)", 64, 586, 992)
-        text("Each turn keeps its own scores, records and achievements.", 64, 618, 992)
-        if store.records.profiles.count < 2 {
-            text("Add another player in Player Profiles to take turns.", 64, 650, 992)
-        } else if !store.hotSeatIsActive {
-            text("Return to the start menu to begin. A hot seat starts at the next level.", 64, 650, 992, palette: .green)
+        y += 54
+        text(store.turnPolicy.detail, 64, y, 992, alpha: 0.8); y += 30
+        text("Current turn: \(store.records.profile(store.playingProfileID)?.initials ?? "LEM")", 64, y, 992); y += 30
+        // The last lines are dropped rather than drawn over the buttons.
+        // A hot seat needs a second player. Saying so beats a silent no-op when
+        // only the host is selected, which looks identical to a started session.
+        let chosen = store.hotSeatIsActive ? store.sessionProfiles.count : 0
+        let guidance: (String, MacInterfaceRenderer.Palette)? = store.records.profiles.count < 2
+            ? ("Add another player in Player Profiles to take turns.", .blue)
+            : chosen < 2
+            ? ("Press a number to add a second player. A hot seat needs at least two.", .green)
+            : ("\(chosen) players ready. Return to the start menu. The hot seat starts at the next level.", .green)
+        let footerTop: CGFloat = 620
+        let reserved: CGFloat = guidance == nil ? 0 : 30
+        if y + 30 + reserved <= footerTop {
+            text("Shared campaign progress: \(store.records.activeProfile.initials)", 64, y, 992); y += 30
         }
-        button("Play solo", CGRect(x: 64, y: 690, width: 270, height: 48)) { [weak self] in store.endHotSeat(); self?.closeSession() }
-        button("Done", CGRect(x: 736, y: 690, width: 320, height: 48), primary: true) { [weak self] in self?.closeSession() }
+        if y + 30 + reserved <= footerTop {
+            text("Each turn keeps its own scores, records and achievements.", 64, y, 992); y += 30
+        }
+        if let guidance { text(guidance.0, 64, min(y, footerTop - 30), 992, palette: guidance.1) }
+        button("Play solo", CGRect(x: 64, y: 634, width: 270, height: 48)) { [weak self] in store.endHotSeat(); self?.closeSession() }
+        button("Done", CGRect(x: 736, y: 634, width: 320, height: 48), primary: true) { [weak self] in self?.closeSession() }
         setAccessibilityLabel("Hot seat. " + store.sessionProfiles.map(\.initials).joined(separator: ", ")
             + ". Pass the turn \(store.turnPolicy.title). \(store.turnPolicy.detail)"
             + " Number keys choose players. Return to the start menu to begin. Enter returns to the game.")

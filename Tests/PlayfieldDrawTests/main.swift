@@ -322,11 +322,14 @@ private func require(
     tailPixels += 1
     peakAlpha = max(peakAlpha,fast[index+3])
     if fast[index+2] > 4 { energyPixels += 1 }
-    if (index/4)%640 < Int(sprite.minX)-18 { farTailPixels += 1 }
+    if (index/4)%640 < Int(sprite.minX)-10 { farTailPixels += 1 }
     try require(fast[index+3] <= 192, "the energy wake became opaque")
   }
+  // The tapering wake was removed on purpose. Ghosting alone carries the speed,
+  // so the contract is: afterimages exist, they trail behind the sprite, they
+  // are visible, and they never become opaque enough to hide the terrain.
   try require(tailPixels > 0 && farTailPixels > 0 && energyPixels > 0 && peakAlpha > 40,
-    "super speed lost its long, bright energy wake")
+    "super speed lost its trailing afterimages")
   let repeated = try render(tick: 4, enabled: true)
   try require(repeated == fast, "redrawing one tick changed the afterimages")
   let left = try render(tick: 4, enabled: true, left: true)

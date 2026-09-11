@@ -47,8 +47,44 @@ import NxlvKit
         if sessionProfileIDs.isEmpty { sessionProfileIDs = [records.activeProfileID] }
         if sessionProfileIDs.contains(id) { sessionProfileIDs.removeAll { $0 == id } }
         else { sessionProfileIDs.append(id) }
+        // A player who leaves cannot still be holding the turn.
+        if let turn = sessionTurnID, !sessionProfileIDs.contains(turn) { sessionTurnID = nil }
+        if sessionProfileIDs.count < 2 { endHotSeat() } else { startHotSeatProgress() }
     }
-    func endHotSeat() { sessionProfileIDs = []; sessionTurnID = nil }
+    /// A hot seat keeps its own campaign, separate from every solo profile. The
+    /// id is new for each session, so a new hot seat has no saved progress and
+    /// starts at the first level instead of inheriting the host's campaign.
+    private(set) var hotSeatID: String?
+
+    func endHotSeat() {
+        sessionProfileIDs = []; sessionTurnID = nil
+        clearHotSeatProgress()
+    }
+
+    /// Hot seat progress lives only as long as the session, like the roster.
+    func clearHotSeatProgress() {
+        for key in defaults.dictionaryRepresentation().keys where key.hasPrefix("HotSeat.") {
+            defaults.removeObject(forKey: key)
+        }
+        hotSeatID = nil
+    }
+
+    private func startHotSeatProgress() {
+        guard hotSeatID == nil else { return }
+        clearHotSeatProgress()
+        hotSeatID = UUID().uuidString
+    }
+    /// Opening the page means the player wants a hot seat, and one player is not
+    /// one. Seed the roster with the host and the next profile so the page opens
+    /// ready to play. Deselecting back below two ends it, as before.
+    func prepareHotSeat() {
+        guard sessionProfileIDs.count < 2, records.profiles.count >= 2 else { return }
+        let host = records.activeProfileID
+        let guest = records.profiles.map(\.id).first { $0 != host }
+        sessionProfileIDs = [host] + (guest.map { [$0] } ?? [])
+        sessionTurnID = nil
+        if sessionProfileIDs.count >= 2 { startHotSeatProgress() }
+    }
     func nextSessionProfile(after id: String) -> ArcadeProfile? {
         let players = sessionProfiles
         guard players.count > 1 else { return nil }
@@ -85,7 +121,10 @@ import NxlvKit
         }
     }
     func progressKey(_ key: String) -> String {
-        Self.progressKey(key, profileID: records.activeProfileID)
+        // A hot seat campaign is nobody's solo campaign, so it never reads or
+        // writes a profile's own progress.
+        if let hotSeatID { return "HotSeat.\(hotSeatID).\(key)" }
+        return Self.progressKey(key, profileID: records.activeProfileID)
     }
     static func progressKey(_ key: String, profileID: String) -> String {
         profileID == ArcadeProfile.legacyID ? key : "ArcadeProfile.\(profileID).\(key)"

@@ -184,7 +184,7 @@ import NxlvKit
             guard let self else { return }
             if self.game.isComplete, key.lowercased() == "v" { self.runMovie.review(); return }
             if self.game.isComplete, key.lowercased() == "s" { self.runMovie.review(save: true); return }
-            if let index = SkillShortcuts(names: Array(Lemmings3Panel.names.prefix(5))).index(for: key, modern: self.audioSettings.modernControlsEnabled) { self.pendingTool = nil; self.canvas.directionPoint = nil; self.selected = index; self.refresh() }
+            if let index = SkillShortcuts(names: Array(Lemmings3Panel.names.prefix(5))).index(for: key, current: self.selected, modern: self.audioSettings.modernControlsEnabled) { self.pendingTool = nil; self.canvas.directionPoint = nil; self.selected = index; self.refresh() }
             else if key == " " { self.togglePause() }
             else if key == "." { self.singleStep() }
             else if key.lowercased() == "r" { self.restart() }

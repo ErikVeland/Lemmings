@@ -129,7 +129,10 @@ import NxlvKit
             return event
         }
         guard event.type == .keyDown else { return event }
-        if event.keyCode == 122, let hints {
+        // F1 or i. The function key is easy to miss, and i is where a player
+        // reaches for information.
+        if event.keyCode == 122 || event.charactersIgnoringModifiers?.lowercased() == "i",
+           let hints {
             if !event.isARepeat { hints() }
             return nil
         }
@@ -245,7 +248,7 @@ import NxlvKit
         let alert = NSAlert()
         alert.messageText = "Keyboard and controller shortcuts"
         let instructions = help() + "\n\n" + (speedControl?.help ?? "")
-            + "\nTab / Shift-Tab: next / previous available skill\nHome / End: entrance / exit\n[ / ]: previous / next unassigned lemming\n\\: focus last assignment\nReturn: repeat last skill\nEscape: cancel or pause menu\n?: controls help\nF1: tiered level hints"
+            + "\nTab / Shift-Tab: next / previous available skill\nHome / End: entrance / exit\n[ / ]: previous / next unassigned lemming\n\\: focus last assignment\nReturn: repeat last skill\nEscape: cancel or pause menu\n?: controls help\nF1 or i: level goals and tiered hints"
             + (rate == nil ? "" : "\n− / +: release rate") + "\n\n" + ControllerDevicePresentation.help(mapping: controllerMappings())
         alert.informativeText = "Keyboard and controller mappings for the current game."
         let scroll = NSScrollView(frame: NSRect(x: 0, y: 0, width: 530, height: 360))

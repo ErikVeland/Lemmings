@@ -2051,14 +2051,15 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
     playfield.overlayTitle = title ?? "Level"
     // A hot seat changes hands between levels, so the briefing has to say who is
-    // holding the mouse before the level starts, not after the result.
+    // holding the mouse before the level starts, not after the result. Solo play
+    // shows nothing: there is nobody to tell apart.
     if ArcadeStore.shared.hotSeatIsActive,
        let turn = ArcadeStore.shared.playingProfile {
       lines.insert("YOUR TURN, \(turn.initials)", at: 0)
     }
     playfield.overlayLines = lines
     playfield.overlayFooter =
-      "\(flow.currentRank?.name ?? "") \(flow.currentNumber)   •   Click or space to begin   •   F1: hints"
+      "\(flow.currentRank?.name ?? "") \(flow.currentNumber)   •   Click or space to begin   •   i: goals and hints"
     setStatus("")
   }
 
@@ -2190,7 +2191,17 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
   }
 
+  /// Keeps the on-screen turn owner current. Pushed every frame so ending a hot
+  /// seat, passing the turn or changing the roster cannot leave a stale name.
+  private func refreshTurnDisplay() {
+    let store = ArcadeStore.shared
+    let turn = store.hotSeatIsActive ? store.playingProfile : nil
+    playfield.turnInitials = turn?.initials
+    playfield.turnPortrait = turn?.portrait
+  }
+
   private func step(at now: TimeInterval = ProcessInfo.processInfo.systemUptime) {
+    refreshTurnDisplay()
     // Limit catch-up after sleep or a long modal interaction.
     let elapsed = min(0.25, max(0, lastStepTime.map { now - $0 } ?? displayInterval))
     lastStepTime = now
@@ -2756,7 +2767,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     if let nativeL2Window { nativeL2Window.showLevelHints(); return }
     if let nativeL3Window { nativeL3Window.showLevelHints(); return }
     guard let session, phase == .playing || phase == .briefing else {
-      GameScreen.shared.message("Level hints", detail: "Start a level, then choose Help > Level hints or press F1.")
+      GameScreen.shared.message("Level hints", detail: "Start a level, then choose Help > Level hints or press i.")
       return
     }
     let checked = LevelHintCatalogue.load().flatMap { catalogue, engine in
@@ -2894,8 +2905,16 @@ let achievementProgressKey = "ClassicAchievementProgress"
       let alert = NSAlert(); alert.messageText = "Paused"
       alert.addButton(withTitle: "Resume"); alert.addButton(withTitle: "Retry level")
       alert.addButton(withTitle: "Level hints")
+      alert.addButton(withTitle: "Quit to main menu")
+      let quitResponse = NSApplication.ModalResponse(
+        rawValue: NSApplication.ModalResponse.alertThirdButtonReturn.rawValue + 1)
       alert.beginSheetModal(for: self.window) { [weak self] response in
         if response == .alertSecondButtonReturn { self?.retry() }
+        else if response == quitResponse {
+          // Leave the run rather than resume it. The checkpoint stays on disk,
+          // so File > Resume Saved Run can still pick it up.
+          self?.showTitle()
+        }
         else {
           resume()
           if response == .alertThirdButtonReturn {
@@ -2911,7 +2930,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
         event.modifierFlags.intersection([.command, .control, .option]).isEmpty else { return event }
       if self.window?.firstResponder is NSTextView { return event }
 
-      if event.keyCode == 122 {
+      if event.keyCode == 122 || event.charactersIgnoringModifiers?.lowercased() == "i" {
         if !event.isARepeat { self.showLevelHints() }
         return nil
       }
@@ -2929,7 +2948,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
         if characters == "s" { self.runMovie.review(save: true); return nil }
       }
       if self.phase == .playing, let session = self.session,
-        let index = SkillShortcuts(names: session.skills.map(\.name)).index(for: characters, modern: self.settings.modernControlsEnabled) {
+        let index = SkillShortcuts(names: session.skills.map(\.name)).index(for: characters, current: self.panel.selectedSkillIndex, modern: self.settings.modernControlsEnabled) {
         self.handle(.skill(index))
         return nil
       }

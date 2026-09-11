@@ -170,9 +170,9 @@ import NxlvKit
       width: trail.bounds.width * scaleX, height: trail.bounds.height * scaleY)
     context.clip(to: clip)
     context.setBlendMode(.plusLighter)
-    // Ghosting alone reads the speed, so it spans a wider range than it did
-    // beside a wake: barely there at 2x, fully present from about 5x.
-    context.setAlpha(0.9 * CGFloat(min(1, sqrt(max(0, multiplier - 1) / 3.2))))
+    // Ghosting alone reads the speed. It must be visible at 2x, not merely
+    // present, and clearly heavier as the speed climbs.
+    context.setAlpha(CGFloat(min(0.92, 0.5 + 0.42 * sqrt(max(0, multiplier - 1) / 4))))
     context.interpolationQuality = .none
     context.translateBy(x: tail.minX, y: tail.maxY)
     context.scaleBy(x: 1, y: -1)
@@ -214,9 +214,9 @@ import NxlvKit
     // their total brightness unchanged, and this work runs only on a cache miss.
     let samples: [(CGFloat, CGFloat)] = [(-1, 0.0625), (-0.5, 0.25), (0, 0.375), (0.5, 0.25), (1, 0.0625)]
     for (offset, weight) in samples {
-      echo(distance: 12 + offset, stretch: 3, alpha: 0.05 * weight)
-      echo(distance: 7 + offset, stretch: 2, alpha: 0.11 * weight)
-      echo(distance: 3 + offset, stretch: 1, alpha: 0.22 * weight)
+      echo(distance: 12 + offset, stretch: 3, alpha: 0.15 * weight)
+      echo(distance: 7 + offset, stretch: 2, alpha: 0.28 * weight)
+      echo(distance: 3 + offset, stretch: 1, alpha: 0.46 * weight)
     }
     // Remove transparent margins so additive blending touches fewer screen pixels.
     let pixels = context.data!.assumingMemoryBound(to: UInt8.self)
