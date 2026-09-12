@@ -233,9 +233,9 @@ import NxlvKit
         case .career: drawCareerProgress()
         }
         if let error = ArcadeStore.shared.storageError {
-            text(error, 64, 695, 814, height: 20)
+            text(error, 64, mode == .result ? 583 : 695, 814, height: 20)
             if ArcadeStore.shared.profilesAreWritable {
-                button("Retry save", CGRect(x: 886, y: 688, width: 170, height: 30)) { [weak self] in
+                button("Retry save", CGRect(x: 886, y: mode == .result ? 578 : 688, width: 170, height: mode == .result ? 26 : 30)) { [weak self] in
                     guard let self else { return }
                     if self.mode == .profiles { self.saveProfile() }
                     else { ArcadeStore.shared.save() }
@@ -243,7 +243,7 @@ import NxlvKit
                 }
             }
         } else if let notice = ArcadeStore.shared.storageNotice {
-            text(notice, 64, 695, 980, height: 20)
+            text(notice, 64, mode == .result ? 583 : 695, 980, height: 20)
         }
         setAccessibilityHelp(ArcadeStore.shared.storageError ?? ArcadeStore.shared.storageNotice)
         if let keyboardButton, buttons.indices.contains(keyboardButton) {
