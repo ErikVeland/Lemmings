@@ -49,7 +49,19 @@ import NxlvKit
 
   /// Include installed sequel modules and recordings from other ports.
   /// Additional soundtrack folders can live in Application Support.
-  static func djSoundtracks(at root: URL, includeOtherSoundtracks: Bool = true) -> [String: [URL]] {
+  static func isSeasonal(_ name: String) -> Bool {
+    let name = name.lowercased()
+    return ["holiday", "xmas", "christmas"].contains { name.contains($0) }
+  }
+
+  static func isSeasonal(_ title: ClassicTitle?) -> Bool {
+    switch title {
+    case .xmasLemmings1991, .xmasLemmings1992, .holidayLemmings1993, .holidayLemmings1994: return true
+    default: return false
+    }
+  }
+
+  static func djSoundtracks(at root: URL, includeOtherSoundtracks: Bool = true, seasonal: Bool = false) -> [String: [URL]] {
     let roots = [root] + (FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first.map {
       [$0.appendingPathComponent("Ultimate Lemmings/Soundtracks", isDirectory: true)]
     } ?? [])
@@ -62,7 +74,9 @@ import NxlvKit
               (try? url.resourceValues(forKeys: [.isRegularFileKey]))?.isRegularFile == true else { continue }
         let relative = url.deletingLastPathComponent().path.replacingOccurrences(of: directory.path + "/", with: "")
         let classic = relative == "lemmings_music_mod" || relative.hasPrefix("CoLD SToRAGE - Lemmings - the original AMIGA")
-        guard includeOtherSoundtracks || classic else { continue }
+        let trackPath = relative + "/" + url.lastPathComponent
+        guard isSeasonal(trackPath) == seasonal else { continue }
+        guard seasonal || includeOtherSoundtracks || classic else { continue }
         found[relative, default: []].append(url)
       }
     }

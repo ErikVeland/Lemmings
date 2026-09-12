@@ -1292,6 +1292,50 @@ extension AppDelegate {
     print("PASS all 16 music source transitions and settings applied during shuffled playback")
   }
 
+  fileprivate func testSeasonalMusic() throws {
+    let recording = ClassicMusicSource.remix(name: soundtrackLibrary.keys.sorted()[0])
+    levelMusic = nil
+    let root = URL(fileURLWithPath: "Sources/Music")
+    for includeOthers in [false, true] {
+      let regular = SoundtrackPlayer.djSoundtracks(at: root, includeOtherSoundtracks: includeOthers)
+      let seasonal = SoundtrackPlayer.djSoundtracks(at: root, includeOtherSoundtracks: includeOthers, seasonal: true)
+      try check(!regular.isEmpty && !seasonal.isEmpty, "missing regular or seasonal DJ pool")
+      try check(regular.values.flatMap { $0 }.allSatisfy { !SoundtrackPlayer.isSeasonal($0.path) }, "regular DJ includes Christmas tracks")
+      try check(seasonal.values.flatMap { $0 }.allSatisfy { SoundtrackPlayer.isSeasonal($0.path) }, "Christmas DJ includes regular tracks")
+    }
+    loadContent()
+    let selected = gamePicker.indexOfSelectedItem
+    let oldFan = fanPlaying
+    let oldURL = currentNxlvURL
+    defer {
+      gamePicker.selectItem(at: selected)
+      fanPlaying = oldFan
+      currentNxlvURL = oldURL
+      settings.music = .amigaModules
+      levelMusic = nil
+      suspendCurrentEngine()
+    }
+    fanPlaying = false
+    currentNxlvURL = nil
+    for title in [ClassicTitle.holidayLemmings1994, .lemmings, .xmasLemmings1991, .ohNoMoreLemmings, .xmasLemmings1992, .holidayLemmings1993] {
+      guard let index = dataSets.firstIndex(where: { $0.set.title == title }) else {
+        throw NSError(domain: "MusicTests", code: 1, userInfo: [NSLocalizedDescriptionKey: "Missing campaign \(title)"])
+      }
+      gamePicker.selectItem(at: index)
+      for source in [ClassicMusicSource.amigaModules, recording, .adaptiveDJ] {
+        settings.music = source
+        playMusicForCurrentLevel()
+        let url = dj.isPlaying ? dj.currentURL : soundtrack.isPlaying ? soundtrack.currentURL : music.currentURL
+        try check(url != nil && SoundtrackPlayer.isSeasonal(url!.path) == SoundtrackPlayer.isSeasonal(title), "wrong seasonal music for \(title), \(source)")
+      }
+    }
+    fanPlaying = true
+    settings.music = .amigaModules
+    playMusicForCurrentLevel()
+    try check(music.currentURL.map { !SoundtrackPlayer.isSeasonal($0.path) } == true, "fan level retained Christmas modules")
+    print("PASS all 16 music source transitions, seasonal DJ pools and campaign music boundaries")
+  }
+
   fileprivate func testSavedAudioAndBanks() throws {
     UserDefaults.standard.set(false, forKey: "AudioMuted")
     UserDefaults.standard.set(true, forKey: musicPresetKey)
@@ -1596,6 +1640,7 @@ Task { @MainActor in
     try subject.testEscapeToMainMenu()
     try subject.testInterruptionPolicy()
     try subject.testHotSeatBoundaries()
+    try subject.testSeasonalMusic()
     print("App integration tests passed.")
     #endif
     exit(0)

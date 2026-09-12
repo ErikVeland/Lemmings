@@ -83,3 +83,10 @@ Text and menu size uses a fixed base size in points: 100% no longer grows to fil
 a large window. 125% and 150% enlarge that base size. Small windows fit the base
 layout, and enlarged pages scroll when needed. Retina rendering does not add
 another UI size multiplier.
+
+Xmas 1991/1992 and Holiday 1993/1994 retain their seasonal soundtrack when
+shuffle or DJ mode is enabled. Regular DJ and shuffle pools exclude tracks
+labelled Holiday, Xmas or Christmas, including the L2 DJ pool. Leaving a seasonal
+campaign refreshes the module library, including when entering a fan level.
+Silence and mute remain available. A manually chosen soundtrack in a regular
+campaign remains an explicit override.

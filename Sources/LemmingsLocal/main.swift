@@ -1318,7 +1318,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
     levelGraphics = settings.shuffleGraphics ? options.graphics.randomElement() : nil
     if settings.shuffleMusic {
       // Silence is a valid setting but a poor thing to shuffle into.
-      let playable = options.music.filter { $0 != .silent }
+      let playable = options.music.filter {
+        if case let .remix(name) = $0 { return SoundtrackPlayer.isSeasonal(name) == seasonalMusic }
+        return $0 != .silent
+      }
       levelMusic = playable.randomElement()
     } else {
       levelMusic = nil
@@ -1327,7 +1330,17 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   /// The artwork in force, which is the shuffled choice when there is one.
   private var activeGraphics: ClassicGraphicsSource { levelGraphics ?? settings.graphics }
-  private var activeMusic: ClassicMusicSource { levelMusic ?? settings.music }
+  private var musicTitle: ClassicTitle? {
+    guard !fanPlaying, currentNxlvURL == nil,
+      dataSets.indices.contains(gamePicker.indexOfSelectedItem) else { return nil }
+    return dataSets[gamePicker.indexOfSelectedItem].set.title
+  }
+  private var seasonalMusic: Bool { SoundtrackPlayer.isSeasonal(musicTitle) }
+  private var activeMusic: ClassicMusicSource {
+    let source = levelMusic ?? settings.music
+    if seasonalMusic, source != .silent, source != .adaptiveDJ { return .amigaModules }
+    return source
+  }
 
   @objc private func levelChanged() {
     guard var current = flow, let campaign,
@@ -2693,7 +2706,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private func reloadDJLibrary() {
     guard let root = Bundle.main.resourceURL?.appendingPathComponent("Music") else { return }
     dj.load(soundtracks: SoundtrackPlayer.djSoundtracks(at: root,
-      includeOtherSoundtracks: settings.djIncludesOtherSoundtracks))
+      includeOtherSoundtracks: settings.djIncludesOtherSoundtracks, seasonal: seasonalMusic))
   }
 
   /// Describes the level to the mix, so it can decide when to move.
@@ -2742,7 +2755,14 @@ let achievementProgressKey = "ClassicAchievementProgress"
       return
     }
     soundtrack.stop()
-    guard !music.library.isEmpty else { return }
+    // Refresh on every level so leaving a seasonal campaign cannot retain its library.
+    let folder = seasonalMusic ? "holiday_lemmings_music_mod"
+      : musicTitle == .ohNoMoreLemmings ? "oh_no_more_lemmings_music_mod" : "lemmings_music_mod"
+    let directory = !seasonalMusic ? UserDefaults.standard.string(forKey: musicPathKey)
+      .map { URL(fileURLWithPath: $0, isDirectory: true) } : nil
+    guard let root = directory ?? BundledGameResources.music(folder) else { music.stop(); return }
+    music.loadLibrary(at: root)
+    guard !music.library.isEmpty else { music.stop(); return }
     do {
       try music.start()
     } catch {
