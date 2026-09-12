@@ -46,67 +46,55 @@ import NxlvKit
         let run = report.run, outcome = run.qualifies ? "LEVEL COMPLETE" : "TRY AGAIN"
         title(outcome, x: 80, y: 46, width: 960, height: 40)
         text("\(player.initials)'s attempt - " + run.level.title + (run.assisted ? " - Rewinds used" : ""), 80, 96, 960, alignment: .center, alpha: 0.75)
-        title("\(run.saved)", x: 98, y: 183, width: 218, height: 60)
-        text("RESCUED", 98, 246, 218, alignment: .center)
+        title("\(run.saved)/\(run.population)", x: 80, y: 145, width: 270, height: 60)
+        text("RESCUED", 80, 208, 270, alignment: .center)
         for index in 0..<3 {
             let stamp = stampedStar == index + 1
             let size: CGFloat = stamp ? 9 : 8
-            drawStar(at: CGPoint(x: 466 + CGFloat(index * 166) - (stamp ? 5 : 0), y: 185 - (stamp ? 4 : 0)),
+            drawStar(at: CGPoint(x: 466 + CGFloat(index * 166) - (stamp ? 5 : 0), y: 149 - (stamp ? 4 : 0)),
                      earned: index < c.goals.stars && index < revealedStars, size: size)
-        }
-        if c.goals.stars < 3 {
-            text(c.nextGoal, 80, 329, 960, alignment: .center, height: 24, palette: .green)
+            if index == 2 && c.goals.stars < 3 && c.goals.fullSaved == nil {
+                link("?", CGRect(x: 798 + 3 * size, y: 149 + 2 * size, width: 5 * size, height: 5 * size)) { [weak self] in self?.page(.goals) }
+            }
         }
         drawResultLevelCard(c)
         drawResultCareerCard(c)
-        drawResultRanks(c)
-        resultActions()
+        resultActions(y: 453)
         let maximum = run.level.conditions.map { ArcadeStore.shared.records.trolley.maximum(conditions: $0, assisted: run.assisted) } ?? TrolleyMaximum()
         let awardText = c.newAwards.map { "New career award: \($0.award.title). \($0.award.detail)" }.joined(separator: " ")
         setAccessibilityLabel("\(player.initials)'s attempt. \(outcome). \(run.level.title). \(rescueSummary(run, maximum: maximum)) \(c.goals.stars) of 3 stars this run. Level best: \(c.bestStars) stars. \(c.nextGoal) \(c.recordMessage). New level awards: \(c.levelAwards.map(\.title).joined(separator: ", ")). \(awardText) Career: \(c.career.stars) stars, plus \(c.addedStars). \(c.nextCareerGoal.map { $0.award.title + ": " + $0.status + ". " + $0.next } ?? "") Local Most Saved: \(c.ranks.first?.label ?? "No record"). Enter: \(primaryResultTitle). R retries. N retries as the next session player. P opens session players. V opens replay. B opens records. A opens achievements. G opens level goals. C opens career progress. D opens details. Escape returns.")
     }
     private func drawResultLevelCard(_ c: TrolleyCelebration) {
-        let rect = CGRect(x: 80, y: 369, width: 466, height: 116)
+        let rect = CGRect(x: 80, y: 285, width: 466, height: 116)
         GameStyle.fill(rect, GameStyle.accent.withAlphaComponent(0.065))
-        text("THIS LEVEL", 96, 380, 418, height: 22, alpha: 0.85, palette: .green)
-        text(c.recordMessage, 96, 407, 418, height: 24)
+        text("THIS LEVEL", 96, 296, 418, height: 22, alpha: 0.85, palette: .green)
+        text(c.recordMessage, 96, 323, 418, height: 24)
         let newGoals = c.levelAwards.filter { $0 != .firstClear }
         let names = newGoals.first.map { $0.title.capitalized + (newGoals.count > 1 ? " (+\(newGoals.count - 1))" : "") } ?? ""
         link(names.isEmpty ? "Level goals and bests >" : "NEW: \(names) >",
-             CGRect(x: 96, y: 440, width: 418, height: 32), alignment: .left) { [weak self] in self?.page(.goals) }
+             CGRect(x: 96, y: 356, width: 418, height: 32), alignment: .left) { [weak self] in self?.page(.goals) }
     }
     private func drawResultCareerCard(_ c: TrolleyCelebration) {
-        GameStyle.fill(CGRect(x: 566, y: 369, width: 474, height: 116), GameStyle.gold.withAlphaComponent(0.09))
+        GameStyle.fill(CGRect(x: 566, y: 285, width: 474, height: 116), GameStyle.gold.withAlphaComponent(0.09))
         let new = c.newAwards
         link("\(report?.run.assisted == true ? "REWIND CAREER" : "CAREER")  \(c.career.stars) STARS" + (c.addedStars > 0 ? "  (+\(c.addedStars))" : "") + " >",
-             CGRect(x: 582, y: 376, width: 442, height: 30), alignment: .left, palette: .green) { [weak self] in self?.page(.career) }
+             CGRect(x: 582, y: 292, width: 442, height: 30), alignment: .left, palette: .green) { [weak self] in self?.page(.career) }
         if !new.isEmpty {
             let selected = new[featuredAwardIndex % new.count]
-            link("NEW: \(selected.award.title) >", CGRect(x: 582, y: 404, width: 442, height: 30), alignment: .left) { [weak self] in
+            link("NEW: \(selected.award.title) >", CGRect(x: 582, y: 320, width: 442, height: 30), alignment: .left) { [weak self] in
                 self?.highlightedAwards = Set(new.map(\.award)); self?.showAchievement(selected.award)
             }
-            link("\(new.count) new \(new.count == 1 ? "award" : "awards") >", CGRect(x: 582, y: 444, width: 266, height: 30), alignment: .left) { [weak self] in self?.showNewAwards() }
+            link("\(new.count) new \(new.count == 1 ? "award" : "awards") >", CGRect(x: 582, y: 360, width: 266, height: 30), alignment: .left) { [weak self] in self?.showNewAwards() }
             if new.count > 1 {
-                link("\(featuredAwardIndex % new.count + 1)/\(new.count) Next >", CGRect(x: 861, y: 444, width: 163, height: 30)) { [weak self] in
+                link("\(featuredAwardIndex % new.count + 1)/\(new.count) Next >", CGRect(x: 861, y: 360, width: 163, height: 30)) { [weak self] in
                     self?.featuredAwardIndex += 1; self?.needsDisplay = true
                 }
             }
         } else if let next = c.nextCareerGoal {
-            link(next.award.title + " >", CGRect(x: 582, y: 405, width: 442, height: 30), alignment: .left) { [weak self] in self?.showAchievement(next.award) }
-            text(next.status, 582, 444, 442, height: 22)
-            progressBar(value: next.after.value, goal: next.after.goal, in: CGRect(x: 582, y: 475, width: 442, height: 4))
-        } else { text("All career milestones earned!", 582, 422, 442) }
-    }
-    private func drawResultRanks(_ c: TrolleyCelebration) {
-        link("Local: \(c.ranks.first?.label ?? "No record") >", CGRect(x: 80, y: 493, width: 310, height: 30), alignment: .left) { [weak self] in
-            self?.boardScope = .level; self?.trolleyBoard = .mostSaved; self?.page(.records)
-        }
-        let online = GameCenterScores.shared
-        let onlineTitle = online.linkedProfileID == player.id && online.boardID == online.configuration?.starsID
-            ? online.rankLabel.map { "Worldwide career: " + $0 + " >" } ?? "Game Center >" : "Game Center >"
-        link(onlineTitle, CGRect(x: 738, y: 493, width: 302, height: 30), alignment: .right) { [weak self] in
-            self?.openWorldwideBoard()
-        }
+            link(next.award.title + " >", CGRect(x: 582, y: 321, width: 442, height: 30), alignment: .left) { [weak self] in self?.showAchievement(next.award) }
+            text(next.status, 582, 360, 442, height: 22)
+            progressBar(value: next.after.value, goal: next.after.goal, in: CGRect(x: 582, y: 391, width: 442, height: 4))
+        } else { text("All career milestones earned!", 582, 338, 442) }
     }
     func drawLevelGoals() {
         header("Level goals", subtitle: level?.title); tabs()

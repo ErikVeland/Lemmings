@@ -581,7 +581,11 @@ extension AppDelegate {
     selectDataSet(); loadLevel(at: 30); phase = .playing
     for _ in 0..<120 { session?.tick() }
     let run = arcadeRunID
-    gameplayKeyboard?.mainMenu?()
+    installKeyboardShortcuts()
+    guard let mainMenu = gameplayKeyboard?.mainMenu else {
+      throw IntegrationFailure(message: "Escape callback was not installed")
+    }
+    mainMenu()
     try check(activeTitle == nil && !sequelIsActive && !fanPlaying && window.attachedSheet == nil,
       "Escape did not return directly to the library")
     try check(try recoveryStore.latest(profileID: arcadeProfileID, hotSeatID: arcadeHotSeatID)?.runID == run,

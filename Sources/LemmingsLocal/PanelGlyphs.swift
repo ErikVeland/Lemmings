@@ -21,6 +21,7 @@ enum PanelGlyph: String {
   /// reduction to a button of this size nor sits with a bar this flat.
   case nuke
   case pause
+  case undo
   case fastForward
   /// Shown on the pause button while the level is held, so the button says
   /// what it will do rather than what it did.
@@ -45,6 +46,8 @@ enum PanelGlyph: String {
         "..oo++++oo..",
         "============",
       ]
+    case .undo:
+      return [".....####...", "...########.", "..###....###", "..##......##", "#.##........", "####........", "###.........", "####........", "#####.......", "...........#", "...#########", ".....#####.."]
     case .fastForward:
       return ["#.....#.....", "##....##....", "###...###...", "####..####..", "#####.#####.", "############", "#####.#####.", "####..####..", "###...###...", "##....##....", "#.....#.....", "............"]
     case .pause:
@@ -76,7 +79,7 @@ enum PanelGlyph: String {
     switch self {
     case .nuke:
       return ["+": (255, 236, 170), "o": (232, 116, 24), "=": (226, 178, 40)]
-    case .pause, .play, .fastForward:
+    case .pause, .play, .fastForward, .undo:
       return ["#": (194, 224, 158)]
     }
   }
@@ -148,10 +151,10 @@ enum PanelGlyph: String {
   }
 
   /// The glyph a button wears, or nil when the button carries wording instead.
-  static func forButton(_ button: PanelButton, isPaused: Bool) -> PanelGlyph? {
+  static func forButton(_ button: PanelButton, isPaused: Bool, canUndoNuke: Bool = false) -> PanelGlyph? {
     switch button {
     case .pause: return isPaused ? .play : .pause
-    case .nuke: return .nuke
+    case .nuke: return canUndoNuke ? .undo : .nuke
     case .fastForward: return .fastForward
     case .rateDown, .rateUp, .skill: return nil
     }

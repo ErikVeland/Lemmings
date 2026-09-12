@@ -206,7 +206,7 @@ import NxlvKit
         replaceInitials = true; needsDisplay = true
     }
     private var scale: CGFloat { GamePageLayout.scale(in: bounds.size) }
-    private var offset: CGPoint { CGPoint(x: (bounds.width - 1120 * scale) / 2, y: (bounds.height - 720 * scale) / 2) }
+    private var offset: CGPoint { CGPoint(x: (bounds.width - 1120 * scale) / 2, y: (bounds.height - (mode == .result ? 604 : 720) * scale) / 2) }
     override func draw(_ dirtyRect: NSRect) {
         NSColor.black.setFill(); bounds.fill(); buttons = []; accessibleText = []
         if let background {
@@ -219,7 +219,7 @@ import NxlvKit
         NSGraphicsContext.saveGraphicsState()
         let transform = NSAffineTransform(); transform.translateX(by: offset.x, yBy: offset.y)
         transform.scale(by: scale); transform.concat()
-        let panel = CGRect(x: 44, y: 20, width: 1032, height: 676)
+        let panel = CGRect(x: 44, y: 20, width: 1032, height: mode == .result ? 556 : 676)
         GameStyle.fill(panel, NSColor.black.withAlphaComponent(0.94))
         GameMenuFrame.draw(panel)
         switch mode {
@@ -283,7 +283,20 @@ import NxlvKit
         let chosen = enabled && (primary || selected || hover == label)
         GameStyle.fill(rect, chosen ? NSColor(calibratedRed: 0.06, green: 0.16, blue: 0.035, alpha: 1) : NSColor(calibratedWhite: 0.025, alpha: 1))
         (chosen ? NSColor(calibratedRed: 0.48, green: 0.80, blue: 0.24, alpha: 1) : NSColor(calibratedWhite: 0.29, alpha: 1)).setStroke()
-        NSBezierPath(rect: rect.insetBy(dx: 0.5, dy: 0.5)).stroke()
+        let border = NSBezierPath(rect: rect.insetBy(dx: 1, dy: 1))
+        border.lineWidth = enabled && (primary || selected) ? 2 : 1
+        border.stroke()
+        if selected {
+            GameStyle.fill(CGRect(x: rect.minX + 8, y: rect.maxY - 6, width: rect.width - 16, height: 3), GameStyle.accent)
+        }
+        if primary && enabled {
+            GameStyle.accent.setFill()
+            let arrow = NSBezierPath()
+            arrow.move(to: CGPoint(x: rect.minX + 12, y: rect.midY - 6))
+            arrow.line(to: CGPoint(x: rect.minX + 20, y: rect.midY))
+            arrow.line(to: CGPoint(x: rect.minX + 12, y: rect.midY + 6))
+            arrow.close(); arrow.fill()
+        }
         let caption = CGRect(x: rect.minX + 12, y: rect.midY - 10, width: rect.width - 24, height: 20)
         if let font {
             let face: ClassicMacUserInterface.Face = font.width(of: MacInterfaceRenderer.menuText(label), face: .large, scale: 1) <= caption.width ? .large : .small
@@ -330,36 +343,33 @@ import NxlvKit
                             width: rect.width * scale, height: rect.height * scale)
         popover.show(relativeTo: anchor, of: self, preferredEdge: .maxY)
     }
-    func resultActions() {
+    func resultActions(y: CGFloat = 573) {
         if let next = nextSessionPlayer {
             let canHandOver = ArcadeStore.shared.profilesAreWritable && ArcadeStore.shared.storageError == nil
-            button("Retry as \(player.initials)", CGRect(x: 64, y: 573, width: 330, height: 48)) { [weak self] in self?.onRetry?() }
+            button("Retry as \(player.initials)", CGRect(x: 64, y: y, width: 330, height: 48)) { [weak self] in self?.onRetry?() }
             if cleared {
                 let owner = handsOverAfterClear ?? player
-                button("\(continueTitle): \(owner.initials)", CGRect(x: 412, y: 573, width: 330, height: 48), primary: true,
+                button("\(continueTitle): \(owner.initials)", CGRect(x: 412, y: y, width: 330, height: 48), primary: true,
                        enabled: handsOverAfterClear == nil || canHandOver) { [weak self] in self?.continueAsNextProfile() }
-                button("Retry as \(next.initials)", CGRect(x: 760, y: 573, width: 296, height: 48), enabled: canHandOver) { [weak self] in self?.retryAsNextProfile() }
+                button("Retry as \(next.initials)", CGRect(x: 760, y: y, width: 296, height: 48), enabled: canHandOver) { [weak self] in self?.retryAsNextProfile() }
             } else {
-                button("Retry as \(next.initials)", CGRect(x: 412, y: 573, width: 330, height: 48), primary: true,
+                button("Retry as \(next.initials)", CGRect(x: 412, y: y, width: 330, height: 48), primary: true,
                        enabled: canHandOver) { [weak self] in self?.retryAsNextProfile() }
-                button("Back to library", CGRect(x: 760, y: 573, width: 296, height: 48)) { [weak self] in
+                button("Back to library", CGRect(x: 760, y: y, width: 296, height: 48)) { [weak self] in
                     if let prepare = ArcadeWindow.shared.prepareSession { _ = prepare() } else { self?.onClose?() }
                 }
             }
         } else {
-        button(primaryResultTitle, CGRect(x: cleared ? 592 : 248, y: 573, width: 360, height: 48), primary: true) { [weak self] in self?.performDefaultResultAction() }
-        button(cleared ? "Retry" : "Back", CGRect(x: cleared ? 168 : 688, y: 573, width: 256, height: 48)) { [weak self] in
+        button(primaryResultTitle, CGRect(x: cleared ? 592 : 248, y: y, width: 360, height: 48), primary: true) { [weak self] in self?.performDefaultResultAction() }
+        button(cleared ? "Retry" : "Back", CGRect(x: cleared ? 168 : 688, y: y, width: 256, height: 48)) { [weak self] in
             guard let self else { return }
             if self.cleared { self.onRetry?() } else { self.onClose?() }
         }
         }
-        link("Replay", CGRect(x: 64, y: 640, width: 110, height: 36), alpha: 0.8) { [weak self] in self?.onReplay?(false) }
-        link("Records", CGRect(x: 190, y: 640, width: 140, height: 36), alpha: 0.8) { [weak self] in self?.page(.records) }
-        link("Details", CGRect(x: 350, y: 640, width: 140, height: 36), alpha: 0.8) { [weak self] in self?.page(.details) }
-        link("Players", CGRect(x: 510, y: 640, width: 140, height: 36), alpha: 0.8) { [weak self] in self?.openSession() }
-        if let id = report?.trolley?.attempt.philosophy.primaryID {
-            affinityLink(id, in: CGRect(x: 680, y: 640, width: 350, height: 36))
-        }
+        link("Replay", CGRect(x: 64, y: y + 67, width: 110, height: 36), alpha: 0.8) { [weak self] in self?.onReplay?(false) }
+        link("Records", CGRect(x: 190, y: y + 67, width: 140, height: 36), alpha: 0.8) { [weak self] in self?.page(.records) }
+        link("Details", CGRect(x: 350, y: y + 67, width: 140, height: 36), alpha: 0.8) { [weak self] in self?.page(.details) }
+        link("Players", CGRect(x: 510, y: y + 67, width: 140, height: 36), alpha: 0.8) { [weak self] in self?.openSession() }
     }
     var player: ArcadeProfile {
         let records = ArcadeStore.shared.records
