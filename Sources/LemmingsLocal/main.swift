@@ -2152,6 +2152,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     picker.selectItem(at: retry.levelIndex)
     levelChanged()
     if phase == .briefing { advancePhase() }
+    isPaused = true; panel.isPaused = true; accumulator = 0; lastStepTime = nil
   }
 
   private func showBriefingOverlay() {
@@ -2883,6 +2884,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
       levelChanged()
     }
     if phase == .briefing { advancePhase() }
+    if ArcadeStore.shared.hotSeatIsActive {
+      isPaused = true; panel.isPaused = true; accumulator = 0; lastStepTime = nil
+    }
     if let selectedSkill, let index = session?.skills.firstIndex(where: { $0.name == selectedSkill }) {
       panel.selectedSkillIndex = index
       panel.needsDisplay = true

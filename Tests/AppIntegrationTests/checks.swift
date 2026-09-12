@@ -334,6 +334,11 @@ extension AppDelegate {
     playfield.handleClick(at: point)
     try check(flow?.currentLevelIndex == 2 && phase == .playing && session?.currentTick == 0 && arcadeProfileID == guest.id,
       "Retry last level did not start the previous level as UVA")
+    try check(isPaused && panel.isPaused, "Classic incoming-player retry did not wait for the player")
+    let sameOwner = arcadeProfileID
+    self.retry()
+    try check(isPaused && session?.currentTick == 0 && arcadeProfileID == sameOwner,
+      "Classic same-player Hot Seat retry started running or changed owner")
     try check(flow?.passedCount(inRank: "Fun") == completed.passedCount(inRank: "Fun"), "Retry erased shared completion")
     completed = flow!; completed.finishLevel(saved: 10, required: 1, total: 10)
     flow = completed; phase = .results; advancePhase()

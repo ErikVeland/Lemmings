@@ -1,0 +1,69 @@
+# QoL and Hot Seat parity
+
+QoL and Hot Seat are shared product requirements for Classic, Lemmings 2 and
+Lemmings 3. A new feature must be checked in all three. Shared controls and
+result pages define the behaviour. Engine limitations must remain explicit.
+This requirement is also recorded in `AGENTS.md`.
+
+| Behaviour | Classic | L2 | L3 |
+| --- | --- | --- | --- |
+| Shared speed controls, held ramp, latched speed and quick reset | Yes | Yes | Yes |
+| Keyboard guide over paused play and searchable commands | Yes | Yes | Yes |
+| Controller mapping, menu navigation and interruption pause | Yes | Yes | Yes |
+| Assignment focus, last target and repeat assignment | Yes | Yes | Yes |
+| Active Hot Seat owner badge | Yes | Yes | Yes |
+| Explicit retry/continue result choices | Shared result page | Shared result page | Shared result page |
+| Shared progress separate from solo progress | Yes | Yes | Yes |
+| Saved attempts and paused recovery from the main library | Yes | Yes | Yes |
+| Guarded Players/solo transitions through shared library UI | Yes | Yes | Yes |
+| Paused Hot Seat retry | Yes | Yes | Yes |
+| New-level handover | Briefing | Briefing | Paused play |
+| Forward single step | Yes | Yes, added in this pass | Yes |
+| Rewind/backward step | Classic DOS history | Not implemented | Not implemented |
+| Tiered hints | Checked hints and general coaching | General coaching | General coaching |
+| Verified solution playback | Matching bundled routes only | Not implemented | Not implemented |
+
+## Gaps closed in this pass
+
+- Hot Seat retries now wait paused in all three games, including Classic's
+  previous-level retry for the incoming player. Attempt ownership stays fixed.
+- L2 briefings show the incoming player's badge above the original artwork,
+  without covering the skill list or level preview.
+- L2 starts and retries clear held speed state. Direct L2 and L3 retries wait paused
+  at normal speed. Starting an L2 briefing is the player's ready action, as in Classic. Solo retry behaviour is retained.
+- L2 supports forward single stepping through the shared keyboard/controller
+  command. A final step uses the normal completion, recording and results path.
+  Held fan and aim input is released before stepping.
+- L3's in-game Resume action now resumes the same attempt in one action.
+  Main-library checkpoint recovery still restores paused, as in the other games.
+
+## Remaining limits
+
+L2 and L3 do not yet have a verified solution playback path or full rewind
+history. Their hints must not claim to be checked winning solutions. The new
+Classic solution viewer must not be reused with sequel data without engine-specific
+input timing and outcome validation.
+
+Mid-level player takeovers need shared-attempt attribution before they can be
+added consistently. L2's fan and L3's direction/tool choices remain engine-specific
+controls. Engine fidelity and winning-route coverage are separate from UI parity.
+
+Automated controller tests use simulated input. No physical controller was
+available. Physical-device and complete VoiceOver listening journeys remain open.
+
+Validation evidence for this pass: `.build/parity/qol.log`,
+`.build/parity/focused-final.log` and `.build/parity/classic.log`.
+The final focused run checks the completed briefing, retry, recovery, stepping
+and Resume behaviour. The sequel checks also capture the Hot Seat badges,
+paused panels, game artwork and control layouts.
+
+The broader sequel suite stopped on a pre-existing bundled L2 proof identity
+mismatch, recorded in `.build/parity/sequels.log`. The installed L2 asset fingerprint
+is `0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4`;
+the proof catalogue names `6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0`.
+The focused QoL run excludes that separate proof check in its generated test
+executable. The checked-in test remains enabled. No proof metadata was changed,
+and the full sequel gate is not reported as passed.
+
+An older settings assertion also assumed native tabs were direct page children.
+It now finds the tab view inside the game's drawn tab controls.

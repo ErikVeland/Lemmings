@@ -410,7 +410,7 @@ import NxlvKit
     @objc private func restart() {
         saveCheckpoint(immediately: true)
         speedControl.newLevel()
-        canvas.menuRows = nil; pendingTool = nil; canvas.directionPoint = nil; game = initial; beginReplay(); recorded = false; paused = false; accumulator = 0; canvas.resetCamera(campaign.levels[campaign.index]); message = "Choose an action. Bricks and spades ask for a direction. Arrow keys move the camera."; refresh() }
+        canvas.menuRows = nil; pendingTool = nil; canvas.directionPoint = nil; game = initial; beginReplay(); recorded = false; paused = ArcadeStore.shared.hotSeatIsActive; accumulator = 0; canvas.resetCamera(campaign.levels[campaign.index]); message = "Choose an action. Bricks and spades ask for a direction. Arrow keys move the camera."; refresh() }
     private func save() { if let data = try? JSONEncoder().encode(campaign.progress) { UserDefaults.standard.set(data, forKey: progressKey) } }
     @objc private func chooseTribe() {
         guard let tribe = Lemmings3ClassicCampaign.Tribe(rawValue: menuTribe + 1), tribe != campaign.tribe else { return }
@@ -500,7 +500,7 @@ import NxlvKit
     }
     private func menuAction(_ row: Int) {
         switch row {
-        case 0: canvas.menuRows = nil
+        case 0: canvas.menuRows = nil; paused = false; accumulator = 0; lastTime = ProcessInfo.processInfo.systemUptime; refresh()
         case 1: restart()
         case 2: menuTribe = (menuTribe + 1) % 3; menuLevel = 0; rebuildMenu()
         case 3: menuLevel = (menuLevel + 29) % 30; rebuildMenu()

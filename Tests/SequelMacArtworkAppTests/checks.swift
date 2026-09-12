@@ -825,6 +825,10 @@ extension Lemmings3PlayWindow {
         let oldProgressKey = progressKey
         try assertArtwork(store.passSessionTurn(after: host), "Sequel hot-seat handoff failed")
         restart()
+        try assertArtwork(paused && speedControl.multiplier == 1, "Hot Seat retry did not wait at normal speed")
+        let handoverTick = game.tick
+        update()
+        try assertArtwork((game.tick) == handoverTick, "Paused handover advanced before the player was ready")
         try assertArtwork(arcadeProfileID == guest.id && arcadeRunID != oldRun && arcadeLevel.conditions == oldConditions,
             "Sequel hot-seat retry changed the level or kept the old owner")
         try assertArtwork(progressKey == oldProgressKey && store.records.activeProfileID == host,
@@ -905,7 +909,18 @@ extension Lemmings2PlayWindow {
         let oldConditions = arcadeLevel?.conditions
         let oldProgressKey = progressKey
         try assertArtwork(store.passSessionTurn(after: host), "Sequel hot-seat handoff failed")
+        prepareBriefing()
+        front.layoutSubtreeIfNeeded()
+        try assertArtwork(front.turnBadge.initials == guest.initials && !front.turnBadge.isHidden,
+            "L2 briefing did not identify the incoming player")
+        _ = try shot(front, "hot-seat-l2-briefing")
+        startLevel()
+        try assertArtwork(!paused && self.game?.tick == 0, "L2 briefing required another action after Begin")
         restart()
+        try assertArtwork(paused && speedControl.multiplier == 1, "Hot Seat retry did not wait at normal speed")
+        let handoverTick = self.game?.tick ?? 0
+        update()
+        try assertArtwork((self.game?.tick ?? 0) == handoverTick, "Paused handover advanced before the player was ready")
         try assertArtwork(arcadeProfileID == guest.id && arcadeRunID != oldRun && arcadeLevel?.conditions == oldConditions,
             "Sequel hot-seat retry changed the level or kept the old owner")
         try assertArtwork(progressKey == oldProgressKey && store.records.activeProfileID == host,
@@ -1069,7 +1084,10 @@ extension SettingsWindow {
         host.contentView = NSView(frame: CGRect(x: 0, y: 0, width: 2390, height: 1436))
         GameScreen.shared.gameWindow = host
         show()
-        guard let page, let tabs = page.body.subviews.compactMap({ $0 as? NSTabView }).first else {
+        func tabView(in view: NSView) -> NSTabView? {
+            (view as? NSTabView) ?? view.subviews.compactMap { tabView(in: $0) }.first
+        }
+        guard let page, let tabs = tabView(in: page.body) else {
             throw SequelDataError.invalid("Settings did not create its page")
         }
         tabs.selectTabViewItem(at: 5)
@@ -1083,3 +1101,44 @@ extension SettingsWindow {
 let scaleOptions = ClassicSettingsOptions.available(hasDOSData: true, hasAmigaDisk: false,
     hasMacintoshDisk: false, moduleCount: 0, remixFolders: [], hasSoundtracks: false)
 try SettingsWindow(settings: ClassicSettings(), options: scaleOptions).checkStandardSizeAtLargeWindow()
+
+
+extension Lemmings2PlayWindow {
+    fileprivate func checkForwardStepParity() throws {
+        defer { GameScreen.shared.dismissAll(); stop() }
+        prepareBriefing(); startLevel()
+        guard let original = game else { throw SequelDataError.invalid("Missing L2 step fixture") }
+        let run = arcadeRunID
+        speedControl.variableEnabled = true; speedControl.step(1, at: 1)
+        gameplayKeyboard?.step?(-1)
+        try assertArtwork(game?.tick == original.tick, "Unsupported backward step changed L2")
+        gameplayKeyboard?.step?(1)
+        try assertArtwork(game?.tick == original.tick + 1 && paused && arcadeRunID == run,
+            "L2 forward step did not advance exactly one tick in the same paused attempt")
+        _ = performRecoveryInput(.nuke)
+        for _ in 0..<10000 {
+            guard var probe = game, !probe.isComplete else { break }
+            probe.step()
+            if probe.isComplete { singleStep(); break }
+            game = probe
+        }
+        try assertArtwork(game?.isComplete == true && arcadeReport != nil && screen == .results,
+            "Final L2 single step did not finish and record the run")
+        print("PASS L2 forward stepping, unsupported backward step, paused ownership and final result")
+    }
+}
+try Lemmings2PlayWindow(root: l2root).checkForwardStepParity()
+
+
+extension Lemmings3PlayWindow {
+    fileprivate func checkMenuResumeParity() throws {
+        defer { GameScreen.shared.dismissAll(); stop() }
+        paused = true
+        let run = arcadeRunID, tick = game.tick
+        showGameMenu(); menuAction(0)
+        try assertArtwork(!paused && canvas.menuRows == nil && arcadeRunID == run && game.tick == tick,
+            "L3 Resume failed to return to the same running attempt")
+        print("PASS L3 menu Resume preserves attempt and starts play")
+    }
+}
+try Lemmings3PlayWindow(root: l3root).checkMenuResumeParity()

@@ -237,7 +237,7 @@ import NxlvKit
         keyboard.skillNames = { [weak self] in self?.game?.configuration.skills.map(\.name) ?? [] }
         keyboard.help = { [weak self] in
             let names = self?.game?.configuration.skills.map(\.name) ?? []
-            return SkillShortcuts(names: names).hint(names: names, modern: self?.audioSettings.modernControlsEnabled ?? false) + "\n\nSpace / P: pause\nR: retry"
+            return SkillShortcuts(names: names).hint(names: names, modern: self?.audioSettings.modernControlsEnabled ?? false) + "\n\nSpace / P: pause\nR: retry\n.: single step"
         }
         keyboard.contextCommands = {
             [KeyboardCommand(keys: "← / → / ↑ / ↓", action: "Pan the level", group: "Camera"),
@@ -259,6 +259,7 @@ import NxlvKit
         keyboard.controllerMappings = { [weak self] in self?.audioSettings.controllerMappings ?? [:] }
         keyboard.controllerSwapSticks = { [weak self] in self?.audioSettings.controllerSwapSticks ?? false }
         keyboard.retry = { [weak self] in self?.restart() }
+        keyboard.step = { [weak self] direction in if direction > 0 { self?.singleStep() } }
         keyboard.endRun = { [weak self] in
             guard let self else { return }
             let nuke = Lemmings2Control.nuke.rawValue
@@ -419,6 +420,11 @@ import NxlvKit
         nukeGesture.reset()
         if screen != .playing { sounds.silence(); releasePointerInput() }
         self.screen = screen; frontTicks = 0
+        let incoming = screen == .briefing && ArcadeStore.shared.hotSeatIsActive
+            ? ArcadeStore.shared.records.profile(ArcadeStore.shared.playingProfileID) : nil
+        front.turnBadge.show(initials: incoming?.initials,
+            portrait: incoming.flatMap { ArcadeWindow.shared.arcadeView.portraitImage($0.portrait) })
+        front.needsLayout = true
         accumulator = 0; lastTime = ProcessInfo.processInfo.systemUptime
         let view: NSView = screen == .playing ? canvas : front
         window?.contentView = view; window?.makeFirstResponder(view)
@@ -457,7 +463,7 @@ import NxlvKit
             dj.resetLevel()
             countdownWarning.reset(seconds: replacement.remainingSeconds)
             beforeNuke = nil
-            selected = 0; paused = false; fastForward = false; fanSelected = false; nukeGesture.reset()
+            selected = 0; paused = false; speedControl.newLevel(); fanSelected = false; nukeGesture.reset()
             sounds.silence()
             show(.playing)
             beginReplay()
@@ -472,7 +478,7 @@ import NxlvKit
         game = initial; beginReplay(); dj.resetLevel(); canvas.resetCamera(level: level)
         countdownWarning.reset(seconds: initial.remainingSeconds)
         beforeNuke = nil
-        paused = false; fastForward = false; nukeGesture.reset(); sounds.silence()
+        paused = ArcadeStore.shared.hotSeatIsActive; speedControl.newLevel(); accumulator = 0; nukeGesture.reset(); sounds.silence()
         show(.playing)
         if !wasPlaying { playTribeMusic() }
         refreshGame()
@@ -733,6 +739,9 @@ import NxlvKit
         }
         sounds.play(game.drainSoundEvents())
         self.game = game; refreshGame(); saveCheckpoint()
+        finishIfComplete(game)
+    }
+    private func finishIfComplete(_ game: Lemmings2Runtime) {
         if game.isComplete {
             do { try recoveryStore.clear(arcadeRunID) } catch { message = error.localizedDescription }
             runMovie.finish()
@@ -740,6 +749,18 @@ import NxlvKit
             show(.results)
             recordArcadeResult(game)
         }
+    }
+    private func singleStep() {
+        guard screen == .playing, var game, !game.isComplete, !GameScreen.shared.isPresented else { return }
+        paused = true; accumulator = 0; releasePointerInput()
+        // Release held fan/aim input before taking the single physics step.
+        game = self.game!
+        countdownWarning.reset(seconds: game.remainingSeconds)
+        game.step()
+        if countdownWarning.update(seconds: game.remainingSeconds) { sounds.play([.init(.builderWarning)]) }
+        sounds.play(game.drainSoundEvents()); canvas.flashExplosions(game)
+        self.game = game; refreshGame(); captureReplayFrame(); saveCheckpoint(immediately: true)
+        finishIfComplete(game)
     }
     private func startIntroduction() {
         do {
@@ -1132,13 +1153,20 @@ import NxlvKit
 }
 
 @MainActor private final class Lemmings2MenuCanvas: NSView {
+    let turnBadge = TurnBadgeView()
+    private var turnHeader: CGFloat { turnBadge.isHidden ? 0 : 40 }
+    override func layout() {
+        super.layout()
+        if turnBadge.superview == nil { addSubview(turnBadge) }
+        turnBadge.place(in: CGRect(x: 0, y: 0, width: bounds.width, height: 42))
+    }
     private let artworkRenderer = SequelArtworkRenderer()
     var menuActions: (() -> [(String, CGRect, () -> Void)])?
     private let accessibleElements = GameAccessibleElements()
     override func isAccessibilityElement() -> Bool { true }
     override func accessibilityRole() -> NSAccessibility.Role? { .group }
     override func accessibilityChildren() -> [Any]? {
-        (menuActions?() ?? []).enumerated().map { index, item in
+        (turnBadge.isHidden ? [] : [turnBadge] as [Any]) + (menuActions?() ?? []).enumerated().map { index, item in
             accessibleElements.element(id: "action-\(index)", owner: self, label: item.0,
                 frame: CGRect(x: origin.x + item.1.minX * zoom, y: origin.y + item.1.minY * zoom * 1.2, width: item.1.width * zoom, height: item.1.height * zoom * 1.2), press: item.2)
         }
@@ -1149,8 +1177,8 @@ import NxlvKit
     var onKey: ((String) -> Void)?
     override var isFlipped: Bool { true }
     override var acceptsFirstResponder: Bool { true }
-    private var zoom: CGFloat { max(0.1, min(bounds.width / 320, bounds.height / 240)) }
-    private var origin: NSPoint { NSPoint(x: (bounds.width - 320 * zoom) / 2, y: (bounds.height - 240 * zoom) / 2) }
+    private var zoom: CGFloat { max(0.1, min(bounds.width / 320, (bounds.height - turnHeader) / 240)) }
+    private var origin: NSPoint { NSPoint(x: (bounds.width - 320 * zoom) / 2, y: turnHeader + (bounds.height - turnHeader - 240 * zoom) / 2) }
     override func updateTrackingAreas() {
         for area in trackingAreas { removeTrackingArea(area) }
         addTrackingArea(NSTrackingArea(rect: bounds, options: [.mouseMoved, .activeInKeyWindow, .inVisibleRect], owner: self))

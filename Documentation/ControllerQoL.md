@@ -5,7 +5,7 @@ See the [binding table](../README.md#controller-controls) for the complete layou
 
 The defaults include fast-forward toggles, temporary held boosts, quick exits, skill cycling,
 unassigned and last-assigned focus, repeat assignment, entrance/exit focus, hints, settings and retry.
-Rewind and backward stepping remain limited to engines with history support. Lemmings 3 also supports forward stepping.
+Rewind and backward stepping remain limited to engines with history support. Classic, Lemmings 2 and Lemmings 3 support forward stepping.
 Unsupported engine actions do not mutate the game.
 
 **Settings > Controller** controls gamepad support, trigger taps and stick layout.
@@ -103,3 +103,10 @@ the paused game. Number, pause, speed and release-rate badges align with the
 actual controls. Closing the overlay restores the previous pause state. All
 commands opens the searchable reference, and Level hints opens the current
 hint page. Outside gameplay, the command reference opens directly.
+
+
+Hot Seat handovers and retries wait for the player across all three games. L2's
+briefing also identifies the incoming player, and its forward-step command handles
+completion through the normal results path. L3's in-game Resume action resumes
+the existing attempt directly. See [cross-game parity](ReleaseReadiness/CrossGameParity.md)
+for shared behaviour, engine-specific limits and validation status.
