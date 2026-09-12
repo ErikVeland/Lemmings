@@ -4,7 +4,7 @@
   "priority": "P0",
   "status": "open",
   "exitCriteria": "Replay a winning route for every advertised level. Close the remaining Oh No!, Xmas 1992, Holiday, L2, L3 and conversion gaps. Distinguish individual solutions from continuous campaign progression.",
-  "progress": "Beta 23 reran all 6,395 indexed pre-L2 levels: 292 official Classic, 60 conversions and 6,043 fan levels. It reproduced 223 official Classic and 294 fan wins. Compared with the prior full-corpus audit, no winning routes were lost, no new load/render failures appeared, and eight more official routes won. The existing 94 fan load/start failures remain. 5,878 levels still lack verified winning replays, so the full-completion gate remains open. Input hashes did not drift. See Beta23Readiness.md and .build/beta23/classic-validation."
+  "progress": "Beta 23 reran all 6,395 indexed pre-L2 levels: 292 official Classic, 60 conversions and 6,043 fan levels. It reproduced 223 official Classic and 294 fan wins. Compared with the prior full-corpus audit, no winning routes were lost, no new load/render failures appeared, and eight more official routes won. The existing 94 fan load/start failures remain. 5,878 levels still lack verified winning replays, so the full-completion gate remains open. Input hashes did not drift. See Beta23Readiness.md and .build/beta23/classic-validation. The committed manifests now record 223 of 292 official Classic routes (Oh No! 66/100, Xmas 1992 3/4, Holiday 1993 14/32, Holiday 1994 16/32), 64 of 120 Lemmings 2 routes and 16 of 90 Lemmings 3 routes. 69 official Classic routes and 130 sequel routes remain unrecorded. Run python3 Tools/CampaignCompletion/report.py --check to confirm these counts."
  },
  {
   "area": "Sequel fidelity",

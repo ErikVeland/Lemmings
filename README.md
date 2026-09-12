@@ -45,7 +45,7 @@ reported rather than ignored.
 | DOS object graphics | Frames, palettes, upside-down objects, animation, `NoOverwrite`, and `OnlyOnTerrain` supported |
 | Classic gameplay | The DOS engine drives the app at a fixed 17 Hz tick with the eight DOS skills |
 | Campaign coverage | All 120 levels have repeatable winning native-engine replays |
-| Completion evidence | All 120 original levels have verified winning replays. Additional classic campaigns have 88 winning routes; full coverage remains open |
+| Completion evidence | All 120 original levels have verified winning replays. Additional classic campaigns have 103 winning routes. Full coverage remains open |
 | Replays | End-of-run playback from 0.25× to 8× and MP4 movie export; separate deterministic DOS replay tools |
 | Arcade records | Local player profiles, sprite portraits, per-level rescue and skill boards, achievements and retry challenges |
 | Interface | Scrolling viewport, zoom, control panel, live skill counts, minimap, and cursor |
@@ -201,10 +201,10 @@ The suites verify:
    voice samples and five original movies are connected. Environmental effects,
    movie soundtracks, story triggers and remaining mechanics need further work.
    See [Sequel interpreters](Documentation/SequelInterpreters.md).
-2. Complete solution coverage for Oh No!, Xmas and Holiday. The new
-   [campaign gate](Documentation/CampaignCompletion/README.md) verifies 88 winning
-   replays: Oh No! 54/100, Xmas 1991 4/4, Xmas 1992 2/4, Holiday 1993 13/32 and
-   Holiday 1994 15/32. All 292 classic-family levels pass rendering and release checks.
+2. Complete solution coverage for Oh No!, Xmas and Holiday. The
+   [campaign gate](Documentation/CampaignCompletion/README.md) verifies 103 winning
+   replays: Oh No! 66/100, Xmas 1991 4/4, Xmas 1992 3/4, Holiday 1993 14/32 and
+   Holiday 1994 16/32. All 292 classic-family levels pass rendering and release checks.
 3. Keep the strict original DOS completion gate green. All 120 levels have
    winning replays, including 103 full rescues. Extend this gate to the other
    campaigns. See [completion evidence](Documentation/ClassicCompletion/README.md).

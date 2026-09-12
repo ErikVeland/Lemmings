@@ -32,7 +32,7 @@ That earlier follow-up predates the in-progress checkpoints added in the [curren
 | Area | Work needed for closure |
 | --- | --- |
 | Original campaign | Keep all 120 winning routes passing. Original-engine equivalence remains a separate claim. |
-| Oh No!, Xmas and Holiday | Preserve winning routes for 84 remaining levels: Oh No! 46, Xmas 1992 two, Holiday 1993 nineteen, Holiday 1994 seventeen. |
+| Oh No!, Xmas and Holiday | Preserve winning routes for 69 remaining levels: Oh No! 34, Xmas 1992 one, Holiday 1993 eighteen, Holiday 1994 sixteen. |
 | Lemmings 2 | Record the remaining 56 routes, verify continuous carry-over progression and resolve fidelity differences against original-engine evidence. |
 | Lemmings 3 | Record the remaining 74 routes, resolve provisional mechanics, and complete environmental effects, movie soundtracks and story transitions. |
 | Converted and imported levels | Complete converted-level winning evidence and representative supported NeoLemmix pack playthroughs. Render/release checks alone do not prove a solution. |
@@ -42,7 +42,7 @@ That earlier follow-up predates the in-progress checkpoints added in the [curren
 | Online services | Validate provisioned Game Center, network failure and offline behaviour. |
 | Distribution | Freeze the actual candidate, build both architectures, sign, notarise and verify its downloaded archive. Resolve the recorded publishing and asset-distribution gate. |
 
-The 214 missing core campaign routes exclude converted levels. Missing evidence does not prove a level is broken. Do not replace these gates with passing smoke tests or a version-number change.
+The 199 missing core campaign routes exclude converted levels. Route counts come from the committed campaign manifests, read on 12 September 2026. Missing evidence does not prove a level is broken. Do not replace these gates with passing smoke tests or a version-number change.
 
 iPhone, iPad and consoles remain separate delivery projects. The current repository has no working app target for those platforms. They are not implied by a future Mac 1.0 release.
 

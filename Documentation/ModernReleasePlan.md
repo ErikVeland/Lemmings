@@ -9,7 +9,7 @@ The objective is an official-quality edition that preserves the original puzzles
 | Area | Current implementation | Evidence and limits |
 | --- | --- | --- |
 | Original Lemmings | All 120 levels, replayable solutions, rewind, achievements and rescue records | Strict winning-replay gate, including rejection of invalid evidence. Original-engine equivalence is a separate claim. |
-| Other classic campaigns | Oh No!, Xmas and Holiday campaigns in the unified library | 88 preserved winning routes: Oh No! 54/100, Xmas 1991 4/4, Xmas 1992 2/4, Holiday 1993 13/32, Holiday 1994 15/32. Load/render coverage is broader than solution coverage. |
+| Other classic campaigns | Oh No!, Xmas and Holiday campaigns in the unified library | 103 preserved winning routes: Oh No! 66/100, Xmas 1991 4/4, Xmas 1992 3/4, Holiday 1993 14/32, Holiday 1994 16/32. Load/render coverage is broader than solution coverage. |
 | Lemmings 2 | Twelve tribes, native skills, original interfaces, music and campaign progression | Native beta. Existing runtime tests cover 64 standalone level completions. Remaining routes, carry-over campaigns and fidelity comparisons need evidence. |
 | Lemmings 3 | Three tribes, tools, reserves, original music, voices and movie gallery | Native preview. 16/90 preserved winning routes. Several mechanics and original-media transitions remain provisional. |
 | Modern play | HD explosions, directional speed ghosts, smooth 2/3/5/10× speed, hold/release and rapid exits | Shared clocks preserve whole simulation ticks. Effects, keyboard routing and recorded presentation have separate checks. |

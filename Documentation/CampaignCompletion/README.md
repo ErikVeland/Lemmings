@@ -1,16 +1,19 @@
 # Additional campaign completion evidence
 
-Beta 12 adds 104 fixed-input winning replays. These supplement the original
+The manifest holds 119 fixed-input winning replays. These supplement the original
 [120-level DOS gate](../ClassicCompletion/README.md) and the existing L2 tests.
 
 | Campaign | Winning replays | Levels without a fixture |
 | --- | ---: | ---: |
-| Oh No! More Lemmings | 54/100 | 46 |
+| Oh No! More Lemmings | 66/100 | 34 |
 | Xmas 1991 | 4/4 | 0 |
-| Xmas 1992 | 2/4 | 2 |
-| Holiday 1993 | 13/32 | 19 |
-| Holiday 1994 | 15/32 | 17 |
+| Xmas 1992 | 3/4 | 1 |
+| Holiday 1993 | 14/32 | 18 |
+| Holiday 1994 | 16/32 | 16 |
 | Lemmings 3 | 16/90 | 74 |
+
+These counts come from the committed [fixture manifest](evidence.json).
+To confirm them, run `python3 Tools/CampaignCompletion/report.py --check`.
 
 Run `zsh Scripts/verify-campaign-completion.sh` after building the local app.
 The script uses its native NxlvKit library, checks the committed

@@ -24,7 +24,7 @@ from a solution for the level in front of you, and it is labelled so no player
 mistakes it for one.
 
 This is a beta limitation, not a design choice. Checked hints follow recorded
-winning routes, so a campaign gains them when its routes are recorded. 214 core
+winning routes, so a campaign gains them when its routes are recorded. 199 core
 campaign routes remain unverified, which is the same gap the release gates track.
 See the [1.0 gap evaluation](ReleaseReadiness/OneZeroGapEvaluation.md).
 

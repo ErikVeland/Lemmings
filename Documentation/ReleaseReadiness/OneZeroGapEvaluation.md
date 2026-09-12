@@ -7,11 +7,19 @@ The [gate register](gates.json) holds the exit criteria. The
 [1.0 gap review](../ReleaseReadiness-1.0.md) holds the change history. This
 document ranks the open work and names the decision that controls the schedule.
 
+Route counts refreshed on 12 September 2026 from the committed manifests. The
+ranking below and the scope decision did not change.
+
 ## Position
 
 Beta 20 has verified standard and Game Center archives. The standard archive is
 notarised and Gatekeeper verified. The Game Center archive is development signed
 for the registered test Macs. See [beta 20 readiness](../Beta20Readiness.md).
+
+Beta 25 is now the current packaged build. Apple notarised and stapled its
+standard archive, and Gatekeeper accepted the extracted app. Its Game Center
+archive stays development signed for two registered Macs. See
+[beta 25 readiness](../Beta25Readiness.md).
 
 The beta now includes explicit Hot Seat results, paused handovers, persistent
 shared saves, consistent turn identity, speed controls, scalable menus and wider
@@ -31,14 +39,20 @@ a fresh run reproduces the outcome and the state hash.
 | Campaign | Levels | Verified routes | Missing |
 | --- | ---: | ---: | ---: |
 | Lemmings (DOS original) | 120 | 120 | 0 |
-| Oh No! More Lemmings | 100 | 54 | 46 |
+| Oh No! More Lemmings | 100 | 66 | 34 |
 | Xmas 1991 | 4 | 4 | 0 |
-| Xmas 1992 | 4 | 2 | 2 |
-| Holiday 1993 | 32 | 13 | 19 |
-| Holiday 1994 | 32 | 15 | 17 |
+| Xmas 1992 | 4 | 3 | 1 |
+| Holiday 1993 | 32 | 14 | 18 |
+| Holiday 1994 | 32 | 16 | 16 |
 | Lemmings 2 | 120 | 64 | 56 |
 | Lemmings 3 | 90 | 16 | 74 |
-| **Total** | **502** | **288** | **214** |
+| **Total** | **502** | **303** | **199** |
+
+The classic-family rows come from the committed
+[campaign manifest](../CampaignCompletion/evidence.json) and the
+[original completion manifest](../ClassicCompletion/evidence.json), read on
+12 September 2026. The Lemmings 2 row counts the committed runtime fixtures.
+Earlier beta readiness reports and audit records keep the counts of their own run.
 
 Missing evidence does not prove a level is broken. It proves nobody recorded a win.
 
@@ -50,7 +64,7 @@ carry their own separate evidence gap.
 
 ### 1. Campaign routes (P0, open)
 
-214 routes. This is the largest measurable item and the easiest to plan, because
+199 routes. This is the largest measurable item and the easiest to plan, because
 each route is independent and the gate already rejects bad evidence. Route search
 and manual play both work today. The cost is time, not design.
 
@@ -96,15 +110,15 @@ date it closes as unknown and independent of the other six items.
 
 ## The scope decision
 
-The 214-route figure hides a choice. The classic family and the sequels are in very
+The 199-route figure hides a choice. The classic family and the sequels are in very
 different states, and 1.0 does not have to include both.
 
 **Option A. Classic 1.0.** Ship Lemmings, Oh No!, Xmas and Holiday as complete.
 Keep L2 and L3 in the app with their current preview labels. The route gap falls
-from 214 to 84, all in a known engine with a working gate. Sequel fidelity leaves
+from 199 to 69, all in a known engine with a working gate. Sequel fidelity leaves
 the critical path and becomes post-1.0 work.
 
-**Option B. Four-game 1.0.** Ship all four games as complete. This requires all 214
+**Option B. Four-game 1.0.** Ship all four games as complete. This requires all 199
 routes plus an open-ended fidelity program against two original engines.
 
 Option A is the recommendation. It converts the largest open item from research
@@ -121,7 +135,7 @@ A Mac 1.0 does not imply any of them.
 ## Next actions
 
 1. Choose Option A or Option B. Every estimate below depends on this.
-2. Under Option A, record the 84 remaining classic-family routes. Start with the 46
+2. Under Option A, record the 69 remaining classic-family routes. Start with the 34
    Oh No! levels.
 3. Book physical hardware time: an Intel Mac, a macOS 13 machine, an HDR display
    and three controller brands.
