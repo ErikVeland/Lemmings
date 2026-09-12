@@ -3,7 +3,7 @@
   "coverage": {
     "holidayLemmings1993": 14,
     "holidayLemmings1994": 16,
-    "ohNoMoreLemmings": 65,
+    "ohNoMoreLemmings": 66,
     "xmasLemmings1991": 4,
     "xmasLemmings1992": 3,
     "lemmings3": 16
@@ -718,6 +718,16 @@
       "lost": 0,
       "reserves": 0,
       "ticks": 2964
+    },
+    {
+      "fixture": "Tests/ClassicFamilyCompletionTests/Fixtures/ohNoMoreLemmings/tame-19.json",
+      "sha256": "a4e58a012b66c3eb7293b0eae2925c7247c534c621866d18bdfa6e4708f42784",
+      "game": "ohNoMoreLemmings",
+      "level": "Tame 19",
+      "saved": 49,
+      "lost": 1,
+      "reserves": 0,
+      "ticks": 3115
     },
     {
       "fixture": "Tests/ClassicFamilyCompletionTests/Fixtures/ohNoMoreLemmings/wicked-03.json",

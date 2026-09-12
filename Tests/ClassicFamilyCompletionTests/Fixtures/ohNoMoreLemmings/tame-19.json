@@ -1,0 +1,133 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "blocker"
+        }
+      },
+      "tick" : 120
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "miner"
+        }
+      },
+      "tick" : 128
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "blocker"
+        }
+      },
+      "tick" : 176
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "miner"
+        }
+      },
+      "tick" : 280
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "miner"
+        }
+      },
+      "tick" : 424
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "miner"
+        }
+      },
+      "tick" : 432
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 11,
+          "skill" : "miner"
+        }
+      },
+      "tick" : 928
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 49,
+          "skill" : "climber"
+        }
+      },
+      "tick" : 2952
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 49,
+          "skill" : "bomber"
+        }
+      },
+      "tick" : 2960
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "bomber"
+        }
+      },
+      "tick" : 2968
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 49,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 2976
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 49,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 2984
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "climber"
+        }
+      },
+      "tick" : 3056
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 50,
+    "required" : 25,
+    "saved" : 49,
+    "stateHash" : "1a4434d574133b681ce7b2428d3eac4ddaf37a25bbf76bbfd2891efe7bddd35c",
+    "ticks" : 3115
+  },
+  "initialStateHash" : "3caa28176a86bcee4eb5df3508c5b9213b5d38de711a344ffb747298fe182afd",
+  "number" : 19,
+  "rank" : "Tame",
+  "title" : "Lemming Productions Present..."
+}
