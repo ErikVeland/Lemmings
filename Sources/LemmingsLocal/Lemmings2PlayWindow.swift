@@ -233,6 +233,7 @@ import NxlvKit
             else { self.releasePointerInput(); self.key("\u{1b}") }
         }
         keyboard.cyclesSharedSkillLetters = false
+        keyboard.overlayControls = { [weak self] in self?.canvas.accessibilityChildren() ?? [] }
         keyboard.skillNames = { [weak self] in self?.game?.configuration.skills.map(\.name) ?? [] }
         keyboard.help = { [weak self] in
             let names = self?.game?.configuration.skills.map(\.name) ?? []

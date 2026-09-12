@@ -82,6 +82,7 @@ import NxlvKit
     var help: () -> String = { "" }
     var skillNames: () -> [String] = { [] }
     var cyclesSharedSkillLetters = true
+    var overlayControls: () -> [Any] = { [] }
     var contextCommands: () -> [KeyboardCommand] = { [] }
     var hints: (() -> Void)?
     var settings: (() -> Void)?
@@ -218,6 +219,7 @@ import NxlvKit
     func controllerMenuScroll(_ delta: Double) { if let root = controllerMenuRoot { menuNavigator.scroll(delta, in: root) } }
     func controllerMenuAction(_ action: ControllerBindings.Action) {
         if let root = controllerMenuRoot {
+            if let overlay = root as? KeyboardOverlayView, action == .cancel || action == .pause { overlay.onClose(); return }
             menuNavigator.handle(action, in: root, sheet: window?.attachedSheet)
             return
         }
@@ -323,7 +325,42 @@ import NxlvKit
         return rows
     }
 
+    private(set) var overlay: KeyboardOverlayView?
     func showHelp() {
+        guard active() else { showCommandList(); return }
+        guard let window, window.attachedSheet == nil, overlay == nil else { return }
+        let resume = pauseForHelp()
+        speedControl?.cancelInput()
+        let view = KeyboardOverlayView(commands: commandRows, modern: modern(), hints: hints != nil)
+        overlay = view
+        view.anchors = { [weak self, weak view] in
+            guard let self, let view else { return [] }
+            let names = self.skillNames()
+            return self.overlayControls().compactMap { raw in
+                guard let element = raw as? GameAccessibleElement, let owner = element.owner else { return nil }
+                let label = element.accessibilityLabel() ?? ""
+                let key: String
+                if let index = names.firstIndex(where: { label == $0 || label.hasPrefix($0 + ",") }), index < 10 { key = String((index + 1) % 10) }
+                else if label == "Pause" || label == "Resume" { key = "Space" }
+                else if label.lowercased().contains("fast-forward") || label == "Return to normal speed" { key = "F" }
+                else if label == "Decrease release rate" { key = "−" }
+                else if label == "Increase release rate" { key = "+" }
+                else { return nil }
+                return (key, owner.convert(element.localFrame, to: view))
+            }
+        }
+        view.onClose = { [weak view] in if let view { GameScreen.shared.dismiss(view) } }
+        view.onCommands = { [weak self] in self?.showCommandList() }
+        view.onHints = { [weak self, weak view] in
+            if let view { GameScreen.shared.dismiss(view) }
+            self?.hints?()
+        }
+        if !GameScreen.shared.present(view, owner: window, onDismiss: { [weak self] in self?.overlay = nil; resume() }) {
+            overlay = nil; resume()
+        }
+    }
+
+    private func showCommandList() {
         guard let window, window.attachedSheet == nil else { return }
         let resume = pauseForHelp()
         let alert = NSAlert()
@@ -337,7 +374,10 @@ import NxlvKit
         alert.beginSheetModal(for: window) { [weak self] response in
             resume()
             if response == .alertSecondButtonReturn {
-                DispatchQueue.main.async { [weak self] in self?.hints?() }
+                DispatchQueue.main.async { [weak self] in
+                    if let overlay = self?.overlay { GameScreen.shared.dismiss(overlay) }
+                    self?.hints?()
+                }
             }
         }
     }

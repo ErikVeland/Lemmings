@@ -911,9 +911,42 @@ extension AppDelegate {
 
   fileprivate func testHintsFromControlsHelp() async throws {
     GameScreen.shared.dismissAll()
+    launchMode = .singleTitle; activeTitle = .lemmings
+    gamePicker.selectItem(at: dataSets.firstIndex { $0.set.title == .lemmings }!)
+    selectDataSet()
+    settings.display = .flat
+    window.setContentSize(NSSize(width: 1280, height: 800))
+    picker.selectItem(at: 30); levelChanged()
+    if phase == .briefing { advancePhase() }
     phase = .playing; isPaused = false
+    applyDisplayMode()
     installKeyboardShortcuts()
     gameplayKeyboard?.controllerAction(.help)
+    guard let overlay = gameplayKeyboard?.overlay else { throw IntegrationFailure(message: "Visual controls overlay did not open") }
+    try check(isPaused && GameScreen.shared.contains(overlay), "Visual help did not freeze the level")
+    try check(overlay.anchors().count >= 8, "Overlay did not attach key badges to the skill bar")
+    let frozenSpeed = speedControl.target
+    let speedEvent = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 1, windowNumber: window.windowNumber, context: nil, characters: "f", charactersIgnoringModifiers: "f", isARepeat: false, keyCode: 3)!
+    overlay.keyDown(with: speedEvent)
+    try check(speedControl.target == frozenSpeed, "A speed key acted through visual help")
+    let frozenTick = session?.currentTick
+    step(at: ProcessInfo.processInfo.systemUptime + 10)
+    try check(session?.currentTick == frozenTick, "The level advanced under visual help")
+    window.contentView?.layoutSubtreeIfNeeded()
+    if let content = window.contentView, let bitmap = content.bitmapImageRepForCachingDisplay(in: content.bounds) {
+      content.cacheDisplay(in: content.bounds, to: bitmap)
+      try bitmap.representation(using: .png, properties: [:])?.write(to: URL(fileURLWithPath: ".build/keyboard-overlay.png"))
+    }
+    let escapeEvent = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 1, windowNumber: window.windowNumber, context: nil, characters: "\u{1b}", charactersIgnoringModifiers: "\u{1b}", isARepeat: false, keyCode: 53)!
+    overlay.keyDown(with: escapeEvent)
+    try check(!isPaused && gameplayKeyboard?.overlay == nil, "Closing visual help failed to restore play")
+    isPaused = true
+    gameplayKeyboard?.showHelp()
+    gameplayKeyboard?.controllerMenuAction(.cancel)
+    try check(isPaused, "Visual help resumed a previously paused level")
+    isPaused = false
+    gameplayKeyboard?.showHelp()
+    gameplayKeyboard?.overlay?.onCommands()
     guard let sheet = window.attachedSheet else { throw IntegrationFailure(message: "Controls help did not open") }
     func findGuide(_ view: NSView) -> KeyboardCommandsView? {
       if let guide = view as? KeyboardCommandsView { return guide }

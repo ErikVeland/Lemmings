@@ -3021,6 +3021,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
       }
       self.scrollBy(Double(x) - self.playfield.viewport.scrollX - self.playfield.viewport.visibleSize.width / 2)
     }
+    keyboard.overlayControls = { [weak self] in
+      guard let self else { return [] }
+      return self.tubeIsActive ? (self.crtView.accessibleContent?() ?? []) : self.panel.accessibleControls(owner: self.panel)
+    }
     keyboard.skillNames = { [weak self] in self?.session?.skills.map(\.name) ?? [] }
     keyboard.contextCommands = {
       [KeyboardCommand(keys: "← / →", action: "Pan the level", group: "Camera"),

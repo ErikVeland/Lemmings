@@ -260,6 +260,7 @@ import NxlvKit
                 self.pendingTool = nil; self.canvas.directionPoint = nil; self.refresh()
             } else { self.showGameMenu() }
         }
+        keyboard.overlayControls = { [weak self] in self?.canvas.accessibilityChildren() ?? [] }
         keyboard.skillNames = { Array(Lemmings3Panel.names.prefix(5)) }
         keyboard.help = { [weak self] in
             let names = Array(Lemmings3Panel.names.prefix(5))
