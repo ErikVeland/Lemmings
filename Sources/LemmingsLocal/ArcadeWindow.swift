@@ -4,6 +4,7 @@ import NxlvKit
 @MainActor final class ArcadeWindow {
     static let shared = ArcadeWindow()
     let arcadeView = ArcadeView()
+    var confirmSessionChange: ((@escaping () -> Void) -> Void)?
     var prepareSession: (() -> NSWindow?)?
     var finishSession: (() -> Void)?
     private init() { arcadeView.onClose = { [weak self] in self?.close() } }
@@ -40,6 +41,11 @@ import NxlvKit
         present(owner: owner)
     }
     func showSession(owner: NSWindow? = nil) {
+        let show = { [weak self] in self?.presentSession(owner: owner) }
+        if let confirmSessionChange { confirmSessionChange { show() } }
+        else { show() }
+    }
+    private func presentSession(owner: NSWindow?) {
         let owner = prepareSession?() ?? owner
         arcadeView.sessionReturnMode = nil
         arcadeView.report = nil; arcadeView.onRetry = nil; arcadeView.onContinue = nil
@@ -439,7 +445,7 @@ import NxlvKit
         onClose?()
     }
     func openSession() {
-        guard mode != .profiles || canSwitch else { return }
+        guard mode != .profiles || canSwitch || ArcadeStore.shared.hotSeatIsActive else { return }
         if ArcadeWindow.shared.prepareSession != nil { ArcadeWindow.shared.showSession(owner: window); return }
         ArcadeStore.shared.prepareHotSeat(); sessionReturnMode = mode; page(.hotSeat)
     }
@@ -453,7 +459,7 @@ import NxlvKit
             let position = store.sessionProfiles.firstIndex { $0.id == profile.id }.map { String($0 + 1) } ?? "-"
             let rect = CGRect(x: 64 + (index % 2) * 506, y: 195 + (index / 2) * 75, width: 486, height: 60)
             button("\(index + 1). \(profile.initials)\(chosen ? " - Turn " + position : "")\(profile.id == store.records.activeProfileID ? " (host)" : "")", rect, selected: chosen) { [weak self] in
-                store.toggleSessionProfile(profile.id); self?.needsDisplay = true
+                self?.changeSessionPlayer(profile.id)
             }
         }
         // The roster grid is as tall as the profiles need, so two players do not
@@ -488,7 +494,7 @@ import NxlvKit
             text("Each turn keeps its own scores, records and achievements.", 64, y, 992); y += 30
         }
         if let guidance { text(guidance.0, 64, min(y, footerTop - 30), 992, palette: guidance.1) }
-        button("Return to solo", CGRect(x: 64, y: 634, width: 270, height: 48)) { [weak self] in store.endHotSeat(); self?.closeSession() }
+        button("Return to solo", CGRect(x: 64, y: 634, width: 270, height: 48)) { [weak self] in self?.confirmReturnToSolo() }
         if store.hotSeatIsActive {
             button("New Hot Seat", CGRect(x: 350, y: 634, width: 360, height: 48)) { [weak self] in self?.confirmNewHotSeat() }
         }
@@ -496,6 +502,23 @@ import NxlvKit
         setAccessibilityLabel("Hot seat. " + store.sessionProfiles.map(\.initials).joined(separator: ", ")
             + ". Pass the turn \(store.turnPolicy.title). \(store.turnPolicy.detail)"
             + " Number keys choose players. Choose a game keeps this shared campaign. New Hot Seat starts from the beginning.")
+    }
+    func changeSessionPlayer(_ id: String) {
+        let store = ArcadeStore.shared
+        guard id != store.records.activeProfileID else { return }
+        if store.hotSeatIsActive && store.sessionProfiles.count == 2 && store.sessionProfiles.contains(where: { $0.id == id }) {
+            confirmReturnToSolo()
+            return
+        }
+        store.toggleSessionProfile(id)
+        needsDisplay = true
+    }
+    func confirmReturnToSolo() {
+        GameScreen.shared.confirm("Leave Hot Seat?", detail: "Your shared campaign stays saved for later.",
+            actionTitle: "Return to solo", owner: window) { [weak self] in
+                ArcadeStore.shared.endHotSeat()
+                self?.closeSession()
+            }
     }
     func confirmNewHotSeat() {
         GameScreen.shared.confirm("Start a new Hot Seat?",
@@ -542,9 +565,9 @@ import NxlvKit
             text(ArcadeProfile.portraitNames[index], rect.minX, rect.minY + 66, rect.width, alignment: .center)
             buttons.append(("portrait-\(index)", rect, { [weak self] in self?.portrait = index; self?.needsDisplay = true }))
         }
-        text(canSwitch ? "Each player keeps their own progress and records." : "Finish this run before changing players.", 64, 575, 992)
+        text(canSwitch ? "Each player keeps their own progress and records." : ArcadeStore.shared.hotSeatIsActive ? "Use Hot Seat to change players." : "Finish this run before changing players.", 64, 575, 992)
         button(canSwitch ? "Play as \(initials.isEmpty ? "LEM" : initials)" : "Save portrait", CGRect(x: 418, y: 627, width: 336, height: 55), primary: true, enabled: canSwitch || selectedProfileID == records.activeProfileID) { [weak self] in self?.saveProfile() }
-        button("Hot seat", CGRect(x: 774, y: 627, width: 282, height: 55), enabled: canSwitch) { [weak self] in self?.openSession() }
+        button("Hot seat", CGRect(x: 774, y: 627, width: 282, height: 55), enabled: canSwitch || ArcadeStore.shared.hotSeatIsActive) { [weak self] in self?.openSession() }
         button("Back", CGRect(x: 64, y: 627, width: 220, height: 55)) { [weak self] in self?.onClose?() }
         setAccessibilityLabel("Choose your lemming. \(records.profiles.map(\.initials).joined(separator: ", ")). Type initials. Arrow keys choose portraits. Enter saves. Escape goes back.")
     }
@@ -676,7 +699,7 @@ import NxlvKit
         if mode == .hotSeat {
             if [36, 76].contains(event.keyCode) { closeSession(); return }
             if let number = Int(key), (1...ArcadeStore.shared.records.profiles.count).contains(number) {
-                ArcadeStore.shared.toggleSessionProfile(ArcadeStore.shared.records.profiles[number - 1].id)
+                changeSessionPlayer(ArcadeStore.shared.records.profiles[number - 1].id)
                 needsDisplay = true
             }
             return

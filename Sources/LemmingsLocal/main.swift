@@ -2880,22 +2880,12 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   @objc private func showHotSeat() {
-    let canSwitch = nativeL2Window?.canSwitchProfile ?? nativeL3Window?.canSwitchProfile
-      ?? (phase != .playing || session == nil || session?.isComplete == true)
-    if !canSwitch {
-      GameScreen.shared.confirm("Change Hot Seat players?", detail: "Return to the library to change players. The current attempt keeps its owner and is saved for later.",
-        actionTitle: "Save and return to library", owner: window) { [weak self] in
-          guard let self else { return }
-          ArcadeWindow.shared.showSession(owner: self.window)
-        }
-      return
-    }
     ArcadeWindow.shared.showSession(owner: window)
   }
 
   @objc private func showProfiles() {
-    let canSwitch = nativeL2Window?.canSwitchProfile ?? nativeL3Window?.canSwitchProfile
-      ?? (phase != .playing || session == nil || session?.isComplete == true)
+    let canSwitch = !ArcadeStore.shared.hotSeatIsActive && (nativeL2Window?.canSwitchProfile ?? nativeL3Window?.canSwitchProfile
+      ?? (phase != .playing || session == nil || session?.isComplete == true))
     ArcadeWindow.shared.showProfiles(canSwitch: canSwitch, owner: window, beforeSwitch: { [weak self] in
         ReplayMovieWindow.shared.close(); self?.returnToLibrary()
       },
@@ -2958,6 +2948,16 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   private func installKeyboardShortcuts() {
+    ArcadeWindow.shared.confirmSessionChange = { [weak self] proceed in
+      guard let self else { return }
+      let playing = !(self.nativeL2Window?.canSwitchProfile ?? self.nativeL3Window?.canSwitchProfile
+        ?? (self.phase != .playing || self.session == nil || self.session?.isComplete == true))
+      let sharedRun = ArcadeStore.shared.hotSeatIsActive && (self.session != nil || self.sequelIsActive)
+      guard playing || sharedRun else { proceed(); return }
+      GameScreen.shared.confirm("Change Hot Seat players?",
+        detail: "Return to the library to change players. The current attempt keeps its owner and is saved for later.",
+        actionTitle: "Save and return to library", owner: self.window, action: proceed)
+    }
     ArcadeWindow.shared.prepareSession = { [weak self] in
       guard let self else { return nil }
       self.returnToLibrary()

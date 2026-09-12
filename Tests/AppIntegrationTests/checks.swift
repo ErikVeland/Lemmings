@@ -239,6 +239,32 @@ extension AppDelegate {
     refreshTurnDisplay()
     try check(arcadeProfileID == host && playfield.turnInitials == store.records.profile(host)?.initials,
       "Classic badge displayed the queued player instead of the attempt owner")
+    let sharedID = store.hotSeatID
+    let runID = arcadeRunID
+    let tick = session!.currentTick
+    let view = ArcadeWindow.shared.arcadeView
+    for screen: GamePhase in [.playing, .briefing, .results] {
+      phase = screen
+      view.mode = .details
+      view.openSession()
+      guard let confirmation = GameScreen.shared.controllerPage(in: window) as? GameMenuPage else {
+        throw IntegrationFailure(message: "Info Players link skipped Hot Seat confirmation")
+      }
+      confirmation.onBack?()
+      try check(store.hotSeatID == sharedID && arcadeRunID == runID && session?.currentTick == tick && phase == screen,
+        "Cancelling player setup changed the shared run")
+    }
+    showProfiles()
+    try check(!view.canSwitch && store.hotSeatID == sharedID && arcadeRunID == runID,
+      "Profile selection could switch an active Hot Seat to solo")
+    view.openSession()
+    guard let profileConfirmation = GameScreen.shared.controllerPage(in: window) as? GameMenuPage else {
+      throw IntegrationFailure(message: "Profiles Hot Seat action bypassed confirmation")
+    }
+    profileConfirmation.onBack?()
+    try check(store.hotSeatID == sharedID && arcadeRunID == runID, "Profiles Hot Seat action changed the run on cancel")
+    GameScreen.shared.dismissAll()
+    phase = .playing
     showHotSeat()
     try check(store.hotSeatIsActive && GameScreen.shared.controllerPage(in: window) is GameMenuPage,
       "Changing players skipped the safe exit confirmation")
@@ -248,13 +274,22 @@ extension AppDelegate {
       throw IntegrationFailure(message: "Safe Hot Seat exit has no action")
     }
     leave.performClick(nil)
-    let view = ArcadeWindow.shared.arcadeView
     try check(view.mode == .hotSeat && view.report == nil && view.onRetry == nil, "Player setup retained an old result action")
     let bitmap = view.bitmapImageRepForCachingDisplay(in: view.bounds)!
     view.cacheDisplay(in: view.bounds, to: bitmap)
     let solo = view.accessibilityChildren()?.compactMap { $0 as? GameAccessibleElement }.first { $0.accessibilityLabel() == "Return to solo" }
-    try check(solo?.accessibilityPerformPress() == true && !store.hotSeatIsActive && !GameScreen.shared.isPresented,
-      "Return to solo failed to leave shared play safely")
+    try check(solo?.accessibilityPerformPress() == true && store.hotSeatIsActive,
+      "Return to solo ended Hot Seat before confirmation")
+    (GameScreen.shared.controllerPage(in: window) as? GameMenuPage)?.onBack?()
+    view.changeSessionPlayer(guest.id)
+    try check(store.hotSeatID == sharedID, "Removing the second player ended Hot Seat before confirmation")
+    guard let soloPage = GameScreen.shared.controllerPage(in: window),
+      let leaveSolo = buttons(soloPage).first(where: { $0.title == "Return to solo" }) else {
+      throw IntegrationFailure(message: "Leaving Hot Seat has no confirmation action")
+    }
+    leaveSolo.performClick(nil)
+    try check(!store.hotSeatIsActive && !GameScreen.shared.isPresented,
+      "Confirmed return to solo failed to leave shared play safely")
     print("PASS frozen Classic turn identity, confirmed player changes, cleared result actions and solo transition")
   }
 
