@@ -56,6 +56,52 @@ public enum ClassicTitle: String, CaseIterable, Codable, Sendable {
         }
     }
 
+    /// One rung of the classic ladder: a title, and one of its ranks where the
+    /// title has them. The festive releases are short and unranked, so they
+    /// appear whole.
+    public struct ClassicQuestStage: Equatable, Sendable {
+        public let title: ClassicTitle
+        public let rank: String?
+        public let levels: Int
+        public init(title: ClassicTitle, rank: String?, levels: Int) {
+            self.title = title
+            self.rank = rank
+            self.levels = levels
+        }
+        public var label: String { rank.map { "\($0) — \(title.displayName)" } ?? title.displayName }
+    }
+
+    /// The classic releases in one climb, before the sequels.
+    ///
+    /// Release order alone puts all 100 Oh No! levels after all 120 original
+    /// ones, so a player finishes Mayhem and is dropped back into Tame. Pure
+    /// difficulty order loses the releases entirely. This interleaves the two
+    /// ranked campaigns tier by tier, and places each festive set near the
+    /// release it shipped beside, because those sets are short and gentle.
+    ///
+    /// Havoc ends the climb. It is the hardest rank either campaign offers.
+    public static let classicQuest: [ClassicQuestStage] = [
+        .init(title: .lemmings, rank: "Fun", levels: 30),
+        .init(title: .ohNoMoreLemmings, rank: "Tame", levels: 20),
+        .init(title: .xmasLemmings1991, rank: nil, levels: 4),
+        .init(title: .xmasLemmings1992, rank: nil, levels: 4),
+        .init(title: .lemmings, rank: "Tricky", levels: 30),
+        .init(title: .ohNoMoreLemmings, rank: "Crazy", levels: 20),
+        .init(title: .holidayLemmings1993, rank: nil, levels: 32),
+        .init(title: .lemmings, rank: "Taxing", levels: 30),
+        .init(title: .ohNoMoreLemmings, rank: "Wild", levels: 20),
+        .init(title: .holidayLemmings1994, rank: nil, levels: 32),
+        .init(title: .lemmings, rank: "Mayhem", levels: 30),
+        .init(title: .ohNoMoreLemmings, rank: "Wicked", levels: 20),
+        .init(title: .ohNoMoreLemmings, rank: "Havoc", levels: 20),
+    ]
+
+    /// Every level the classic climb covers. Oh Yes! is a conversion of levels
+    /// that already appear above, so it is not counted again here.
+    public static var classicQuestLevelCount: Int {
+        classicQuest.reduce(0) { $0 + $1.levels }
+    }
+
     /// Identifies a release from what was found on disk.
     ///
     /// The level count separates most of them. The festive releases share

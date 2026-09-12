@@ -447,7 +447,7 @@ do {
             }
             let beamWidth = tuning("SOLVE_BEAM", 24)
             let branchStride = tuning("SOLVE_STRIDE", 8)
-            let maxAssignments = tuning("SOLVE_DEPTH", 8)
+            let maxAssignments = tuning("SOLVE_DEPTH", 14)
             let lemmingFanout = tuning("SOLVE_FANOUT", 10)
             let tickLimit = min(ClassicDOSReplayPlayer.defaultTickLimit, tuning("SOLVE_TICKS", 4200))
             let trace = ProcessInfo.processInfo.environment["SOLVE_TRACE"] == "1"
@@ -471,7 +471,9 @@ do {
             // Rescues dominate. Then keep lemmings alive, then get someone near an
             // exit, then prefer the route that spent fewer skills.
             func score(_ node: Node, jitter: Int) -> Int {
-                let distances = node.sim.lemmings.lazy.filter(\.isActive).map { exitDistance($0.foot) }
+                let distances = node.sim.lemmings.lazy
+                    .filter { $0.isActive && $0.action != .blocking }
+                    .map { exitDistance($0.foot) }
                 let nearest = distances.min() ?? 4096
                 let count = distances.count
                 let mean = count > 0 ? distances.reduce(0, +) / count : 4096
@@ -504,10 +506,15 @@ do {
                 for node in beam {
                     frontier.append(Node(sim: node.sim, events: node.events,
                                          assignments: node.assignments, pending: nil))
-                    guard node.assignments < maxAssignments, tick % branchStride == 0 else { continue }
-                    let ordered = node.sim.lemmings.filter(\.isActive)
+                    let shrugging = node.sim.lemmings.filter { $0.isActive && $0.action == .shrugging }
+                    // Branch on the tick grid, and always at a shrug so bridges
+                    // can be extended instead of stopping one brick short.
+                    guard node.assignments < maxAssignments,
+                          tick % branchStride == 0 || !shrugging.isEmpty else { continue }
+                    let travelling = node.sim.lemmings
+                        .filter { $0.isActive && $0.action != .shrugging }
                         .sorted { exitDistance($0.foot) < exitDistance($1.foot) }
-                        .prefix(lemmingFanout)
+                    let ordered = (shrugging + travelling).prefix(lemmingFanout)
                     for lemming in ordered {
                         for skill in ClassicSkill.allCases where node.sim.remainingSkillCount(skill) > 0 {
                             var fork = node.sim
@@ -541,11 +548,19 @@ do {
                     advanced.append(node)
                 }
                 if advanced.isEmpty { break }
-                beam = Array(advanced
-                    .map { (node: $0, rank: score($0, jitter: nextJitter())) }
-                    .sorted { $0.rank > $1.rank }
-                    .prefix(beamWidth)
-                    .map(\.node))
+                // Ranking the whole population together let states that had spent
+                // every skill crowd out frugal ones, so the search burned its
+                // budget in the first few hundred ticks and then had nothing left
+                // to play. Keeping a share of the beam for each number of skills
+                // spent means a route can still hold skills back for later.
+                let ranked = advanced.map { (node: $0, rank: score($0, jitter: nextJitter())) }
+                var buckets: [Int: [(node: Node, rank: Int)]] = [:]
+                for entry in ranked { buckets[entry.node.assignments, default: []].append(entry) }
+                let share = max(2, beamWidth / max(1, buckets.count))
+                let kept = buckets.values.flatMap { bucket in
+                    bucket.sorted { $0.rank > $1.rank }.prefix(share)
+                }
+                beam = Array(kept.sorted { $0.rank > $1.rank }.prefix(beamWidth).map(\.node))
                 if trace && tick % 240 == 0 {
                     let top = beam[0]
                     FileHandle.standardError.write(Data("  tick \(tick) beam \(beam.count) saved \(top.sim.savedCount) lost \(top.sim.lostCount) skills \(top.assignments) expanded \(expanded)\n".utf8))

@@ -288,6 +288,42 @@ private func testQuestCarriesOnThenCompletes() throws {
     print("PASS the quest carries on between releases, then ends")
 }
 
+/// The classic climb has to cover the classic releases exactly once, ascend in
+/// difficulty within each campaign, and finish on the hardest rank.
+func testClassicQuestLadder() throws {
+    let quest = ClassicTitle.classicQuest
+    try require(ClassicTitle.classicQuestLevelCount == 292,
+                "the classic climb should cover 292 levels, found \(ClassicTitle.classicQuestLevelCount)")
+
+    // Every classic release appears, and no sequel does.
+    let titles = Set(quest.map(\.title))
+    try require(titles == [.lemmings, .ohNoMoreLemmings, .xmasLemmings1991,
+                           .xmasLemmings1992, .holidayLemmings1993, .holidayLemmings1994],
+                "the climb covers the wrong set of releases")
+    try require(!titles.contains(.lemmings2TheTribes) && !titles.contains(.lemmings3TheChronicles),
+                "a sequel leaked into the classic climb")
+
+    // Ranks stay in their own campaign's order, hardest last.
+    func order(_ title: ClassicTitle, _ names: [String]) throws {
+        let seen = quest.filter { $0.title == title }.compactMap(\.rank)
+        try require(seen == names, "\(title.displayName) ranks out of order: \(seen)")
+    }
+    try order(.lemmings, ["Fun", "Tricky", "Taxing", "Mayhem"])
+    try order(.ohNoMoreLemmings, ["Tame", "Crazy", "Wild", "Wicked", "Havoc"])
+    try require(quest.last?.rank == "Havoc", "the climb should end on the hardest rank")
+
+    // A festive set is short and unranked, so it is played whole.
+    for stage in quest where stage.rank == nil {
+        try require(stage.levels <= 32, "an unranked stage is too long to play whole")
+        try require(stage.label == stage.title.displayName, "an unranked stage should be named by its release")
+    }
+    // No stage repeats a campaign's rank.
+    var seen = Set<String>()
+    for stage in quest {
+        try require(seen.insert(stage.label).inserted, "duplicate stage \(stage.label)")
+    }
+}
+
 do {
     try testIdentification()
     try testCanonOrder()
@@ -301,6 +337,7 @@ do {
     try testQuestResumesAtUnfinished()
     try testSingleTitleReturnsToLaunch()
     try testQuestCarriesOnThenCompletes()
+    try testClassicQuestLadder()
     print("Classic saga tests passed.")
 } catch {
     FileHandle.standardError.write(Data("Saga tests failed: \(error)\n".utf8))
