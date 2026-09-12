@@ -830,6 +830,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   @objc private func returnToLibrary() {
+    handoverRetry = nil
     saveRunCheckpoint(immediately: true)
     GameScreen.shared.dismissAll()
     fanScreen = .off
@@ -972,6 +973,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     playfield.onAssign = { [weak self] id in self?.assign(id) }
     playfield.onViewportChanged = { [weak self] in self?.syncPanelViewport() }
     playfield.onAdvancePhase = { [weak self] in self?.advancePhase() }
+    playfield.onHandoverRetry = { [weak self] in self?.retryPreviousHandoverLevel() }
     playfield.onReplay = { [weak self] save in self?.runMovie.review(save: save) }
     playfield.onRetry = { [weak self] in self?.retry() }
     playfield.onProfiles = { [weak self] in self?.showProfiles() }
@@ -2103,6 +2105,35 @@ let achievementProgressKey = "ClassicAchievementProgress"
     panel.needsDisplay = true
   }
 
+  private struct HandoverRetry {
+    let hotSeatID: String
+    let profileID: String
+    let dataSetID: String
+    let levelIndex: Int
+  }
+  private var handoverRetry: HandoverRetry?
+
+  private var availableHandoverRetry: HandoverRetry? {
+    guard let retry = handoverRetry, ArcadeStore.shared.hotSeatIsActive,
+      retry.hotSeatID == ArcadeStore.shared.hotSeatID,
+      retry.profileID == ArcadeStore.shared.playingProfileID else { return nil }
+    return retry
+  }
+
+  private func retryPreviousHandoverLevel() {
+    guard phase == .briefing, let retry = availableHandoverRetry,
+      let dataSet = dataSets.firstIndex(where: { $0.set.identifierKey == retry.dataSetID }),
+      dataSets[dataSet].set.campaign.levels.indices.contains(retry.levelIndex) else { return }
+    handoverRetry = nil
+    if gamePicker.indexOfSelectedItem != dataSet {
+      gamePicker.selectItem(at: dataSet)
+      selectDataSet()
+    }
+    picker.selectItem(at: retry.levelIndex)
+    levelChanged()
+    if phase == .briefing { advancePhase() }
+  }
+
   private func showBriefingOverlay() {
     guard let session, let flow else { return }
     phase = .briefing
@@ -2129,6 +2160,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
     if ArcadeStore.shared.hotSeatIsActive,
        let turn = ArcadeStore.shared.playingProfile {
       lines.insert("YOUR TURN, \(turn.initials)", at: 0)
+      playfield.overlayTurnInitials = turn.initials
+      if availableHandoverRetry != nil {
+        playfield.overlayHandoverRetryTitle = "Retry last level as \(turn.initials)"
+      }
     }
     playfield.overlayLines = lines
     playfield.overlayFooter =
@@ -2162,12 +2197,20 @@ let achievementProgressKey = "ClassicAchievementProgress"
       return
     case .rankSelect: current.selectRank(rankChoice)
     case .briefing:
+      handoverRetry = nil
       current.beginPlaying()
       flow = current
       renderScreen()
       effects.play(.levelStart)
       return
-    case .results:
+    case let .results(_, saved, required, _):
+      handoverRetry = nil
+      if saved >= required, let hotSeatID = ArcadeStore.shared.hotSeatID, ArcadeStore.shared.hotSeatIsActive,
+        let levelIndex = current.currentLevelIndex,
+        dataSets.indices.contains(gamePicker.indexOfSelectedItem) {
+        handoverRetry = HandoverRetry(hotSeatID: hotSeatID, profileID: ArcadeStore.shared.playingProfileID,
+          dataSetID: dataSets[gamePicker.indexOfSelectedItem].set.identifierKey, levelIndex: levelIndex)
+      }
       current.acknowledgeResults()
     case .rankComplete: current.acknowledgeRankComplete()
     case .gameComplete:
@@ -2802,6 +2845,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   private func retry() {
+    if phase == .briefing, availableHandoverRetry != nil { retryPreviousHandoverLevel(); return }
     let skills = session?.skills ?? []
     let selectedSkill = skills.indices.contains(panel.selectedSkillIndex)
       ? skills[panel.selectedSkillIndex].name : nil

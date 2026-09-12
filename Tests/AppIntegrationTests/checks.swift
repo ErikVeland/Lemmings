@@ -258,6 +258,66 @@ extension AppDelegate {
     print("PASS frozen Classic turn identity, confirmed player changes, cleared result actions and solo transition")
   }
 
+  fileprivate func testHandoverPreviousLevel() throws {
+    GameScreen.shared.dismissAll()
+    let previousStore = ArcadeStore.shared
+    let directory = FileManager.default.temporaryDirectory.appendingPathComponent("handover-retry-\(UUID().uuidString)")
+    let store = ArcadeStore(file: directory.appendingPathComponent("records.json"), bundledProofs: nil)
+    ArcadeStore.shared = store
+    defer { handoverRetry = nil; store.endHotSeat(); ArcadeStore.shared = previousStore }
+    let host = store.records.activeProfileID
+    let guest = store.addProfile(initials: "UVA", portrait: 2)!
+    store.selectProfile(host); store.toggleSessionProfile(guest.id)
+    loadContent()
+    gamePicker.selectItem(at: dataSets.firstIndex(where: { $0.set.title == .lemmings })!)
+    selectDataSet()
+    settings.display = .flat
+    picker.selectItem(at: 2); levelChanged(); advancePhase()
+    var completed = flow!
+    completed.finishLevel(saved: 10, required: 1, total: 10)
+    flow = completed; phase = .results
+    _ = store.passSessionTurn(after: host)
+    advancePhase()
+    try check(flow?.currentLevelIndex == 3 && phase == .briefing && arcadeProfileID == guest.id,
+      "Handover did not prepare the next level for UVA")
+    try check(playfield.overlayTurnInitials == "UVA" && playfield.overlayHandoverRetryTitle == "Retry last level as UVA",
+      "Handover omitted the highlighted player or previous-level retry")
+    window.contentView?.layoutSubtreeIfNeeded()
+    let bitmap = playfield.bitmapImageRepForCachingDisplay(in: playfield.bounds)!
+    playfield.cacheDisplay(in: playfield.bounds, to: bitmap)
+    let folder = URL(fileURLWithPath: ".build/handover-retry")
+    try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+    try bitmap.representation(using: .png, properties: [:])!.write(to: folder.appendingPathComponent("handover.png"))
+    let controls = playfield.accessibilityChildren()?.compactMap { $0 as? GameAccessibleElement } ?? []
+    guard let retry = controls.first(where: { $0.accessibilityLabel() == "Retry last level as UVA" }),
+      let begin = controls.first(where: { $0.accessibilityLabel() == "Begin level" }) else {
+      throw IntegrationFailure(message: "Handover actions have no accessible targets")
+    }
+    try check(retry.accessibilityFrame().maxX <= begin.accessibilityFrame().minX, "Begin level is not the rightmost action")
+    let rect = retry.accessibilityFrame()
+    let point = playfield.convert(window.convertPoint(fromScreen: CGPoint(x: rect.midX, y: rect.midY)), from: nil)
+    playfield.handleClick(at: point)
+    try check(flow?.currentLevelIndex == 2 && phase == .playing && session?.currentTick == 0 && arcadeProfileID == guest.id,
+      "Retry last level did not start the previous level as UVA")
+    try check(flow?.passedCount(inRank: "Fun") == completed.passedCount(inRank: "Fun"), "Retry erased shared completion")
+    completed = flow!; completed.finishLevel(saved: 10, required: 1, total: 10)
+    flow = completed; phase = .results; advancePhase()
+    advancePhase()
+    try check(flow?.currentLevelIndex == 3 && phase == .playing && handoverRetry == nil,
+      "Beginning the next level retained the old handover retry")
+    completed = flow!; completed.finishLevel(saved: 0, required: 1, total: 10)
+    flow = completed; phase = .results; advancePhase()
+    try check(flow?.currentLevelIndex == 3 && playfield.overlayHandoverRetryTitle == nil,
+      "A failed level offered two identical retry actions")
+    advancePhase()
+    completed = flow!; completed.finishLevel(saved: 10, required: 1, total: 10)
+    flow = completed; phase = .results; advancePhase()
+    let next = flow?.currentLevelIndex
+    store.endHotSeat(); retryPreviousHandoverLevel()
+    try check(flow?.currentLevelIndex == next && phase == .briefing, "A stale shared retry crossed into solo play")
+    print("PASS green handover identity, mouse retry of the previous level as UVA, rightmost begin action, shared progress and solo boundaries")
+  }
+
   fileprivate func testInterruptionPolicy() throws {
     if gameplayKeyboard == nil { installKeyboardShortcuts() }
     GameScreen.shared.dismissAll()
@@ -1800,6 +1860,7 @@ Task { @MainActor in
     try await subject.testReleasePerformance()
     #elseif HOT_SEAT_TESTS
     try subject.testHotSeatBoundaries()
+    try subject.testHandoverPreviousLevel()
     try subject.testRunRecovery()
     try subject.testFanRunRecovery()
     try subject.testEscapeToMainMenu()
@@ -1861,6 +1922,7 @@ Task { @MainActor in
     try subject.testEscapeToMainMenu()
     try subject.testInterruptionPolicy()
     try subject.testHotSeatBoundaries()
+    try subject.testHandoverPreviousLevel()
     try subject.testSeasonalMusic()
     print("App integration tests passed.")
     #endif

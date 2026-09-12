@@ -155,7 +155,13 @@ struct ReticleFeedback {
       } : nil
       items.append(accessibleElements.element(id: "line-\(index)", owner: owner, label: line, frame: transform(rect), press: action))
     }
-    if overlayHighlight == nil { items.append(accessibleElements.element(id: "continue", owner: owner, label: "Continue", frame: transform(bounds)) { [weak self] in self?.onAdvancePhase?() }) }
+    if overlayHighlight == nil {
+      let rect = handoverButtons.count == 2 && overlayHandoverRetryTitle != nil ? handoverButtons[1] : bounds
+      items.append(accessibleElements.element(id: "continue", owner: owner, label: overlayHandoverRetryTitle == nil ? "Continue" : "Begin level", frame: transform(rect)) { [weak self] in self?.onAdvancePhase?() })
+    }
+    if let title = overlayHandoverRetryTitle, let rect = handoverButtons.first {
+      items.append(accessibleElements.element(id: "handover-retry", owner: owner, label: title, frame: transform(rect)) { [weak self] in self?.onHandoverRetry?() })
+    }
     for (index, rect) in overlayFooterButtons.enumerated() {
       items.append(accessibleElements.element(id: "footer-\(index)", owner: owner, label: index == 0 ? "Player profiles" : "Records", frame: transform(rect)) { [weak self] in
         if index == 0 { self?.onProfiles?() } else { self?.onRecords?() }
@@ -163,7 +169,13 @@ struct ReticleFeedback {
     }
     return items
   }
-  var overlayTitle: String?
+  var overlayTitle: String? {
+    didSet { overlayTurnInitials = nil; overlayHandoverRetryTitle = nil }
+  }
+  var overlayTurnInitials: String?
+  var overlayHandoverRetryTitle: String?
+  var onHandoverRetry: (() -> Void)?
+  private var handoverButtons: [CGRect] = []
   var overlayLines: [String] = []
   var overlayFooter: String? { didSet { overlayProfileInitials = nil } }
   var overlayProfileInitials: String?
@@ -339,6 +351,10 @@ struct ReticleFeedback {
   /// Takes a click position directly.
   func handleClick(at point: CGPoint) {
     guard phase == .playing else {
+      if overlayHandoverRetryTitle != nil, let index = handoverButtons.firstIndex(where: { $0.contains(point) }) {
+        if index == 0 { onHandoverRetry?() } else { onAdvancePhase?() }
+        return
+      }
       if overlayProfileInitials != nil,
         let index = overlayFooterButtons.firstIndex(where: { $0.contains(point) }) {
         if index == 0 { onProfiles?() } else { onRecords?() }
@@ -525,6 +541,7 @@ struct ReticleFeedback {
   private func drawOverlay() {
     overlayLineRects = []
     overlayFooterButtons = []
+    handoverButtons = []
     NSColor.black.withAlphaComponent(0.42).setFill()
     bounds.fill()
     let showsLogo = overlayTitle == "LEMMINGS" && macInterface?.interface.logo != nil
@@ -596,10 +613,33 @@ struct ReticleFeedback {
       }
       drawMenuGameText(line, in: row.insetBy(dx: 14 * scale, dy: 0),
         face: menuFace, scale: menuScale)
+      if index == 0, let initials = overlayTurnInitials, let macInterface,
+        let font = macInterface.font(menuFace) {
+        let value = MacInterfaceRenderer.menuText(line)
+        let name = MacInterfaceRenderer.menuText(initials)
+        let start = row.midX - macInterface.width(of: value, face: menuFace, scale: menuScale) / 2
+        let offset = CGFloat((value.count - name.count) * font.cellWidth * menuScale)
+        macInterface.draw(name, face: menuFace,
+          at: CGPoint(x: start + offset, y: floor(row.midY - CGFloat(font.cellHeight * menuScale) / 2)),
+          scale: menuScale, palette: .green)
+      }
       if index == 0, turnInitials != nil { drawTurnPortrait(in: row, scale: scale) }
       y += rowHeight
     }
-    if let initials = overlayProfileInitials {
+    if let retryTitle = overlayHandoverRetryTitle {
+      let footer = CGRect(x: board.minX + 20 * scale, y: y + 12 * scale,
+        width: board.width - 40 * scale, height: max(36, 48 * scale))
+      let gap = 16 * scale
+      let retryWidth = (footer.width - gap) * 0.64
+      handoverButtons = [CGRect(x: footer.minX, y: footer.minY, width: retryWidth, height: footer.height),
+        CGRect(x: footer.minX + retryWidth + gap, y: footer.minY, width: footer.width - retryWidth - gap, height: footer.height)]
+      for (index, label) in [retryTitle, "Begin level"].enumerated() {
+        let rect = handoverButtons[index]
+        GameStoneButton.draw(rect, selected: index == 1, pixel: max(1, floor(scale)))
+        drawMenuGameText(label, in: rect.insetBy(dx: 10 * scale, dy: 6 * scale), face: .small,
+          scale: max(1, Int(scale)), palette: index == 1 ? .green : .blue)
+      }
+    } else if let initials = overlayProfileInitials {
       let footer = CGRect(x: board.minX + 20 * scale, y: y + 12 * scale,
         width: board.width - 40 * scale, height: max(36, 48 * scale))
       let footerScale = max(1, Int(scale.rounded()))
