@@ -1,6 +1,6 @@
 # Release scope
 
-The beta 23 release boundary. Automated checks support the recorded routes;
+The beta 24 release boundary. Automated checks support the recorded routes;
 remaining compatibility and hardware claims still need validation. See the [gate register](ReleaseReadiness/gates.json)
 and the [1.0 gap evaluation](ReleaseReadiness/OneZeroGapEvaluation.md).
 

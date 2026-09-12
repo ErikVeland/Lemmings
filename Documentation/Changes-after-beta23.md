@@ -13,4 +13,4 @@
 - Draw the speed arrows and indicator within one continuous stone control.
 - Keep Next Level at the far right, after both Hot Seat retry choices.
 
-The beta 23 archives remain unchanged. These changes are in the subsequent development build.
+These changes ship in beta 24. See ReleaseNotes-beta24.md for the cumulative notes since beta 18.
