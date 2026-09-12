@@ -49,13 +49,13 @@ public struct GameplaySpeed: Sendable {
         changeTarget(selected, at: now, immediate: !variableEnabled)
     }
 
-    /// Adjust the remembered tier. While off, arrows prepare the next fast run.
+    /// Apply the chosen tier, including when starting from normal speed.
     public mutating func step(_ direction: Int, at now: TimeInterval) {
         guard variableEnabled else { return }
         cancelHolds()
         let index = Self.steps.firstIndex(of: cruise) ?? 1
         cruise = Self.steps[min(Self.steps.count - 1, max(1, index + (direction < 0 ? -1 : 1)))]
-        if selected > 1 { selected = cruise }
+        selected = cruise
         changeTarget(selected, at: now)
     }
 
@@ -69,6 +69,12 @@ public struct GameplaySpeed: Sendable {
 
     public mutating func release(_ input: Hold, at now: TimeInterval, allowTap: Bool = true) {
         if ignored.remove(input) != nil { return }
+        if variableEnabled, input == .key, held.contains(input),
+           now - (holdStartedAt ?? now) >= Self.holdDelay {
+            update(at: now)
+            selected = target
+            if target > 1 { cruise = target }
+        }
         let canTap = tapCandidates.remove(input) != nil
         guard held.remove(input) != nil, held.isEmpty else { return }
         let wasTap = allowTap && canTap && now - (holdStartedAt ?? now) < Self.holdDelay

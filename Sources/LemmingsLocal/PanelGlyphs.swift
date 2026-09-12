@@ -163,7 +163,7 @@ enum PanelGlyph: String {
 
 /// Shared speed control geometry for flat, CRT and sequel panels.
 @MainActor enum SpeedPanelControls {
-    static let help = "Click speed to toggle. Hold to boost; release to return. Arrows choose 2×, 3×, 5× or 10×."
+    static let help = "Click speed to toggle. Hold to boost; release to return. Arrows apply 2×, 3×, 5× or 10× immediately."
     static func part(at point: CGPoint, in rect: CGRect) -> Int? {
         guard rect.contains(point) else { return nil }
         if point.x < rect.minX + rect.width * 0.22 { return -1 }

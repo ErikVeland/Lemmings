@@ -867,7 +867,7 @@ extension AppDelegate {
     _ = keyboard.handle(key(.keyDown, 14.2)); _ = keyboard.handle(key(.keyUp, 14.25))
     try check(!controller.isFast, "Rapid F restarted a stopped game")
     _ = keyboard.handle(key(.keyDown, 15, text: "}", code: 30, flags: .shift))
-    try check(controller.target == 1 && controller.state.cruise == 3, "Shift+] did not prepare the next tier")
+    try check(controller.target == 3 && controller.state.cruise == 3, "Shift+] did not apply the selected tier")
     _ = keyboard.handle(key(.keyDown, 16, text: "|", code: 42, flags: .shift))
     try check(!controller.isFast, "Shift+backslash did not reset")
     controller.tap(at: 17)
@@ -930,10 +930,16 @@ extension AppDelegate {
     try check(controller.target == 10, "Holding the second mouse press could not ramp to 10x")
     mouse(.leftMouseUp, 42.2, clicks: 2)
     try check(controller.multiplier == 1, "Second-click hold did not restore normal speed")
+    controller.newLevel()
+    mouse(.leftMouseDown, 50, fraction: 0.9); mouse(.leftMouseUp, 50.05)
+    controller.update(at: 50.4, active: true)
+    try check(controller.multiplier == 3, "Mouse speed choice from 1x did not affect the clock")
+    mouse(.leftMouseDown, 51, fraction: 0.1); mouse(.leftMouseUp, 51.05)
+    try check(controller.multiplier == 2, "Mouse decrease did not apply immediately")
     keyboard.bind(to: host)
     for initialSpeed in [1.0, 3.0] {
       controller.newLevel()
-      if initialSpeed > 1 { controller.step(1, at: 99); controller.tap(at: 99.5) }
+      if initialSpeed > 1 { controller.step(1, at: 99); controller.update(at: 99.5, active: true) }
       _ = keyboard.handle(key(.keyDown, 100))
       try check(controller.target == initialSpeed, "F press toggled before distinguishing a hold")
       for (time, tier) in [(100.26, initialSpeed == 1 ? 2.0 : 5.0),
@@ -944,7 +950,7 @@ extension AppDelegate {
         try check(controller.target == tier, "Held F did not ramp through the same tiers as the mouse and RT")
       }
       _ = keyboard.handle(key(.keyUp, 105.1))
-      try check(controller.multiplier == initialSpeed, "F release did not restore the previous speed")
+      try check(controller.multiplier == 10 && controller.state.cruise == 10, "F release did not retain the reached speed")
     }
     controller.newLevel()
     _ = keyboard.handle(key(.keyDown, 110)); controller.update(at: 112, active: true)

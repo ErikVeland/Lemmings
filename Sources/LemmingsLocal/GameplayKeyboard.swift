@@ -41,7 +41,7 @@ import NxlvKit
     func setFast(_ enabled: Bool) { state.setFast(enabled, at: ProcessInfo.processInfo.systemUptime); onChange() }
     var help: String {
         variableEnabled
-            ? "F / Speed: toggle fast-forward\nHold F, Shift, Speed or RT: ramp up to 10×; release: previous speed\nSpeed arrows or Shift+[ / Shift+]: choose 2×, 3×, 5× or 10×\nF or controller B: immediately return to 1×"
+            ? "F / Speed: toggle fast-forward\nHold F: ramp up to 10×; release: keep speed\nHold Shift, Speed or RT: temporary boost; release: previous speed\nSpeed arrows or Shift+[ / Shift+]: apply 2×, 3×, 5× or 10×\nF or controller B: immediately return to 1×"
             : "F / Speed: toggle fast-forward"
     }
 }

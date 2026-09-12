@@ -16,8 +16,8 @@ check(speed.target == 10, "Toggle must remember the chosen tier")
 for time in 8...12 { speed.step(-1, at: Double(time)) }
 check(speed.selected == 2 && speed.multiplier == 2, "Decreasing must stop at 2× immediately")
 speed.reset(at: 13); speed.step(1, at: 14)
-check(speed.target == 1 && speed.cruise == 3, "Choosing a tier while off must not start speed")
-speed.tap(at: 15); check(speed.target == 3, "Toggle must use the prepared tier")
+check(speed.target == 3 && speed.cruise == 3, "Choosing a tier must start the selected speed")
+speed.update(at: 15); check(speed.multiplier == 3, "Selected speed must affect the clock")
 print("PASS immediate toggle, remembered tiers, bounded arrows and double-click absorption")
 
 for input in [GameplaySpeed.Hold.key, .mouse, .shift, .controller] {
@@ -28,14 +28,22 @@ for input in [GameplaySpeed.Hold.key, .mouse, .shift, .controller] {
         speed.update(at: time); check(speed.target == tier, "Hold must ramp through tiers")
     }
     speed.release(input, at: 23)
-    check(speed.multiplier == 1 && speed.selected == 1, "Release must immediately restore the previous speed")
-    speed.tap(at: 24); speed.step(1, at: 25)
+    check(speed.multiplier == (input == .key ? 10 : 1), "F must keep the reached speed; temporary boosts must restore it")
+    speed.newLevel(at: 24); speed.step(1, at: 25)
     speed.press(input, at: 26); speed.update(at: 28)
     speed.release(input, at: 29)
-    check(speed.multiplier == 3, "Boost from cruise must restore cruise")
+    check(speed.multiplier == (input == .key ? 10 : 3), "F must retain the reached tier from an existing cruise")
     speed.press(input, at: 30); speed.update(at: 32); speed.reset(at: 32.1)
     speed.release(input, at: 32.2)
     check(speed.multiplier == 1, "Release after an emergency exit must not restart")
+}
+for (duration, tier) in [(0.3, 2.0), (0.8, 3), (1.3, 5), (1.8, 10)] {
+    speed.newLevel(at: 0); speed.press(.key, at: 1)
+    speed.release(.key, at: 1 + duration)
+    speed.update(at: 5)
+    check(speed.selected == tier && speed.multiplier == tier && speed.cruise == tier,
+          "F release must keep each reached tier even between render updates")
+    speed.tap(at: 6); check(speed.multiplier == 1, "F tap must stop a retained speed")
 }
 speed.newLevel(at: 40); speed.press(.shift, at: 41); speed.press(.controller, at: 41.1)
 speed.update(at: 43); speed.release(.shift, at: 43.1)
