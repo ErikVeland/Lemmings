@@ -8,6 +8,7 @@ struct RunRecovery: Codable, Sendable {
     let engine: String
     let profileID: String
     var hotSeatID: String? = nil
+    var fullQuest: Bool? = nil
     let runID: UUID
     let dataSetID: String
     let levelIndex: Int

@@ -587,7 +587,7 @@ import NxlvKit
     private func releasePointerInput() { performRecoveryInput(.releasePointer) }
 
     private func makeCheckpoint(engine: String) throws -> RunRecovery? {
-        guard !restoringRun, !engine.isEmpty, let game, game.tick > 0, !game.isComplete,
+        guard !restoringRun, !engine.isEmpty, let game, game.tick >= 0, !game.isComplete,
             let progress = recoveryProgress, !recoveryInitialHash.isEmpty,
             let fingerprint = arcadeLevelSnapshot?.conditions?.levelFingerprint else { return nil }
         var checkpoint = RunRecovery(engine: engine, profileID: arcadeProfileID, runID: arcadeRunID,

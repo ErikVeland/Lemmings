@@ -147,8 +147,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private func saveRunCheckpoint(immediately: Bool = false) {
     if let nativeL2Window { nativeL2Window.saveCheckpoint(immediately: immediately); return }
     if let nativeL3Window { nativeL3Window.saveCheckpoint(immediately: immediately); return }
-    guard !restoringCheckpoint, !sequelIsActive, phase == .playing,
-      let session, !session.isComplete, session.currentTick > 0, !recoveryEngine.isEmpty,
+    let atBriefing: Bool
+    if case .briefing? = flow?.screen { atBriefing = true } else { atBriefing = false }
+    guard !restoringCheckpoint, !sequelIsActive, (phase == .playing || atBriefing),
+      let session, !session.isComplete, session.currentTick >= 0, !recoveryEngine.isEmpty,
       let fingerprint = arcadeLevel?.conditions?.levelFingerprint else { return }
     let now = ProcessInfo.processInfo.systemUptime
     guard immediately || now - lastCheckpointTime >= 5 else { return }
@@ -174,10 +176,13 @@ let achievementProgressKey = "ClassicAchievementProgress"
     } else { return }
     lastCheckpointTime = now
     checkpoint.hotSeatID = arcadeHotSeatID
+    checkpoint.fullQuest = launchMode == .quest
     recoveryStore.save(checkpoint, immediately: immediately) { [weak self] message in
       self?.setStatus("Run recovery save failed: " + message)
     }
   }
+
+  private var menuRecovery: RunRecovery?
 
   @objc private func resumeSavedRun() {
     saveRunCheckpoint(immediately: true)
@@ -186,8 +191,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
         GameScreen.shared.message("No saved run", detail: "A checkpoint is saved every five seconds during Classic, fan-level, NeoLemmix, sequel campaign or L2 practice play.")
         return
       }
-      GameScreen.shared.confirm("Resume saved run?", detail: "Restore the latest saved run at tick \(checkpoint.tick). The game will stay paused until you resume.",
-        actionTitle: "Restore run", owner: window) { [weak self] in self?.restoreRun(checkpoint) }
+      if phase == .playing && session?.isComplete == false && !panel.isMenuMode {
+        GameScreen.shared.confirm("Resume saved run?", detail: "Your current attempt stays saved. The restored run starts paused.",
+          actionTitle: "Resume run", owner: window) { [weak self] in self?.restoreRun(checkpoint) }
+      } else { restoreRun(checkpoint) }
     } catch { GameScreen.shared.message("Cannot read saved run", detail: error.localizedDescription) }
   }
 
@@ -262,6 +269,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       }
       guard let restored = session else { throw RunRecoveryError.invalid }
       runMovie.discard()
+      launchMode = checkpoint.fullQuest == true ? .quest : .singleTitle
       arcadeRunID = checkpoint.runID; arcadeProfileID = checkpoint.profileID; arcadeHotSeatID = checkpoint.hotSeatID
       panel.selectedSkillIndex = checkpoint.selectedSkill
       playfield.viewport.scrollX = max(0, min(checkpoint.scrollX, Double(restored.levelWidth)))
@@ -270,7 +278,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       lastCheckpointTime = 0
       syncPanelViewport(); playfield.needsDisplay = true; panel.needsDisplay = true
       updateStatus()
-      GameScreen.shared.message("Run restored", detail: "The restored run is paused. Resume when you are ready. A replay movie starts with your next attempt.")
+      window.makeFirstResponder(playfield)
     } catch {
       isPaused = true; panel.isPaused = true
       GameScreen.shared.message("Cannot restore run", detail: error.localizedDescription)
@@ -345,8 +353,6 @@ let achievementProgressKey = "ClassicAchievementProgress"
       let path = index + 1 < CommandLine.arguments.count ? CommandLine.arguments[index + 1] : nil
       openNativeL3(path.flatMap { $0.hasPrefix("--") ? nil : URL(fileURLWithPath: $0) })
     }
-    if !sequelIsActive, UserDefaults.standard.bool(forKey: EffectsWelcome.choiceKey),
-      (try? recoveryStore.latest(profileID: ArcadeStore.shared.playingProfileID, hotSeatID: ArcadeStore.shared.hotSeatID)) != nil { resumeSavedRun() }
     effectsWelcome.showIfNeeded(in: window) { [weak self] enabled in
       self?.setExperiencePreset(enabled)
     }
@@ -830,6 +836,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   @objc private func returnToLibrary() {
+    launchChoice = 0
     handoverRetry = nil
     saveRunCheckpoint(immediately: true)
     GameScreen.shared.dismissAll()
@@ -2019,7 +2026,12 @@ let achievementProgressKey = "ClassicAchievementProgress"
         return entry.title.displayName + progress + detail
       }
       playfield.overlayLines.append(fanLibraryRow())
-      playfield.overlayHighlight = min(launchChoice, library.entries.count + 1)
+      menuRecovery = try? recoveryStore.latest(profileID: ArcadeStore.shared.playingProfileID, hotSeatID: ArcadeStore.shared.hotSeatID)
+      if let checkpoint = menuRecovery {
+        let initials = ArcadeStore.shared.records.profile(checkpoint.profileID)?.initials ?? "LEM"
+        playfield.overlayLines.insert("RESUME - " + initials, at: 0)
+      }
+      playfield.overlayHighlight = min(launchChoice, playfield.overlayLines.count - 1)
       playfield.overlayFooter = nil
       // A hot seat names everyone in turn order, so the menu shows who is playing
       // rather than only whose campaign it is.
@@ -2178,15 +2190,20 @@ let achievementProgressKey = "ClassicAchievementProgress"
     guard var current = flow else { return }
     switch current.screen {
     case .title:
-      if launchChoice == library.entries.count + 1 {
+      if let checkpoint = menuRecovery, launchChoice == 0 {
+        restoreRun(checkpoint)
+        return
+      }
+      let choice = launchChoice - (menuRecovery == nil ? 0 : 1)
+      if choice == library.entries.count + 1 {
         showFanLevels()
         return
       }
-      if launchChoice == 0 {
+      if choice == 0 {
         launchMode = .quest
         if let title = library.questStart { launchTitle(title) }
-      } else if library.entries.indices.contains(launchChoice - 1) {
-        let entry = library.entries[launchChoice - 1]
+      } else if library.entries.indices.contains(choice - 1) {
+        let entry = library.entries[choice - 1]
         guard entry.available else {
           GameScreen.shared.message(entry.title.displayName, detail: "This release is archived in the bundle but has no playable data import yet.")
           return
@@ -2244,7 +2261,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     if moveFanChoice(delta) { return }
     if let flow, flow.screen == .title {
       // One row for Full Quest, one per release, and one for the fan packs.
-      let count = library.entries.count + 2
+      let count = library.entries.count + 2 + (menuRecovery == nil ? 0 : 1)
       guard count > 0 else { return }
       launchChoice = (launchChoice + delta + count) % count
       renderScreen()

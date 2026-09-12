@@ -675,6 +675,7 @@ extension AppDelegate {
     gamePicker.selectItem(at: dataSets.firstIndex { $0.set.title == .lemmings }!)
     selectDataSet(); loadLevel(at: 30); phase = .playing
     for _ in 0..<120 { session?.tick() }
+    launchMode = .quest
     let run = arcadeRunID
     installKeyboardShortcuts()
     guard let mainMenu = gameplayKeyboard?.mainMenu else {
@@ -685,6 +686,34 @@ extension AppDelegate {
       "Escape did not return directly to the library")
     try check(try recoveryStore.latest(profileID: arcadeProfileID, hotSeatID: arcadeHotSeatID)?.runID == run,
       "Escape discarded the active run")
+    try check(menuRecovery?.runID == run && playfield.overlayLines.first?.hasPrefix("RESUME - ") == true && launchChoice == 0,
+      "Main screen did not prioritise the saved run")
+    let image = ReplayFrameCapture.image(size: playfield.bounds.size) { ReplayFrameCapture.draw(playfield, in: playfield.bounds) }
+    let output = URL(fileURLWithPath: ".build/resume-main-screen.png")
+    try NSBitmapImageRep(cgImage: image!).representation(using: .png, properties: [:])!.write(to: output)
+    advancePhase()
+    try check(arcadeRunID == run && session?.currentTick == 120 && phase == .playing && launchMode == .quest && isPaused && !GameScreen.shared.isPresented,
+      "Main screen resume did not restore the exact paused attempt in one action")
+    let previous = ArcadeStore.shared
+    let directory = FileManager.default.temporaryDirectory.appendingPathComponent("resume-seat-\(UUID().uuidString)")
+    let store = ArcadeStore(file: directory.appendingPathComponent("records.json"), bundledProofs: nil)
+    ArcadeStore.shared = store
+    defer { ArcadeStore.shared = previous }
+    let host = store.records.activeProfileID
+    let guest = store.addProfile(initials: "UVA", portrait: 2)!
+    store.selectProfile(host); store.toggleSessionProfile(guest.id)
+    _ = store.passSessionTurn(after: host)
+    loadLevel(at: 30); phase = .playing
+    let sharedRun = arcadeRunID, sharedID = store.hotSeatID
+    returnToLibrary()
+    try check(menuRecovery?.runID == sharedRun && menuRecovery?.tick == 0 && playfield.overlayLines.first == "RESUME - UVA",
+      "Fresh Hot Seat attempt was lost or resume showed the wrong player")
+    advancePhase()
+    try check(arcadeRunID == sharedRun && arcadeProfileID == guest.id && arcadeHotSeatID == sharedID && session?.currentTick == 0 && isPaused,
+      "Hot Seat resume changed the owner, shared session or fresh attempt")
+    returnToLibrary()
+    store.endHotSeat(); renderScreen()
+    try check(menuRecovery?.hotSeatID == nil && menuRecovery?.runID != sharedRun, "Solo menu offered another Hot Seat's saved attempt")
     print("PASS Escape returns directly to the main menu and saves the active run")
   }
   fileprivate func testRunRecovery() throws {

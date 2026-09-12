@@ -627,7 +627,7 @@ import NxlvKit
     func saveCheckpoint(immediately: Bool = false) {
         let engine = RunRecovery.bundledEngine
         let now = ProcessInfo.processInfo.systemUptime
-        guard !engine.isEmpty, game.tick > 0, !game.isComplete,
+        guard !engine.isEmpty, game.tick >= 0, !game.isComplete,
           let progress = recoveryProgress, !recoveryInitialHash.isEmpty,
           let fingerprint = arcadeLevel.conditions?.levelFingerprint,
           immediately || now - lastCheckpointTime >= 5 else { return }
