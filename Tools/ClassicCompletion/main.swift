@@ -470,17 +470,33 @@ do {
             }
             // Rescues dominate. Then keep lemmings alive, then get someone near an
             // exit, then prefer the route that spent fewer skills.
-            func score(_ node: Node) -> Int {
-                let nearest = node.sim.lemmings.lazy.filter(\.isActive)
-                    .map { exitDistance($0.foot) }.min() ?? 4096
+            func score(_ node: Node, jitter: Int) -> Int {
+                let distances = node.sim.lemmings.lazy.filter(\.isActive).map { exitDistance($0.foot) }
+                let nearest = distances.min() ?? 4096
+                let count = distances.count
+                let mean = count > 0 ? distances.reduce(0, +) / count : 4096
+                // Nearest gets somebody to the exit at all. Mean moves the crowd,
+                // which is what actually clears a rescue requirement.
                 return node.sim.savedCount * 1_000_000
                     - node.sim.lostCount * 8_000
-                    - min(nearest, 4096) * 4
+                    - min(nearest, 4096) * 3
+                    - min(mean, 4096) * 2
                     - node.assignments
+                    + jitter
             }
 
-            var beam = [Node(sim: base, events: [], assignments: 0, pending: nil)]
+            let restarts = tuning("SOLVE_RESTARTS", 1)
             var solution: [ClassicDOSReplayEvent]?
+            // Each restart perturbs the ordering, so a deterministic beam that
+            // settles into one dead region gets other chances at a different one.
+            for attempt in 0..<restarts where solution == nil {
+            var noise = UInt64(attempt &* 2_654_435_761 &+ 1)
+            func nextJitter() -> Int {
+                guard attempt > 0 else { return 0 }
+                noise = noise &* 6_364_136_223_846_793_005 &+ 1_442_695_040_888_963_407
+                return Int(noise >> 40) % 96
+            }
+            var beam = [Node(sim: base, events: [], assignments: 0, pending: nil)]
             var expanded = 0
             search: while let head = beam.first, head.sim.tickCount < tickLimit {
                 let tick = head.sim.tickCount + 1
@@ -525,11 +541,16 @@ do {
                     advanced.append(node)
                 }
                 if advanced.isEmpty { break }
-                beam = Array(advanced.sorted { score($0) > score($1) }.prefix(beamWidth))
+                beam = Array(advanced
+                    .map { (node: $0, rank: score($0, jitter: nextJitter())) }
+                    .sorted { $0.rank > $1.rank }
+                    .prefix(beamWidth)
+                    .map(\.node))
                 if trace && tick % 240 == 0 {
                     let top = beam[0]
                     FileHandle.standardError.write(Data("  tick \(tick) beam \(beam.count) saved \(top.sim.savedCount) lost \(top.sim.lostCount) skills \(top.assignments) expanded \(expanded)\n".utf8))
                 }
+            }
             }
             if let events = solution {
                 let trial = candidate(events)

@@ -3,7 +3,7 @@
   "coverage": {
     "holidayLemmings1993": 13,
     "holidayLemmings1994": 15,
-    "ohNoMoreLemmings": 60,
+    "ohNoMoreLemmings": 61,
     "xmasLemmings1991": 4,
     "xmasLemmings1992": 2,
     "lemmings3": 16
@@ -568,6 +568,16 @@
       "lost": 1,
       "reserves": 0,
       "ticks": 2929
+    },
+    {
+      "fixture": "Tests/ClassicFamilyCompletionTests/Fixtures/ohNoMoreLemmings/tame-03.json",
+      "sha256": "43c7a055aa5c3832f028ee0b88944c6258f3b544d5c89481edc05e02adf3e64c",
+      "game": "ohNoMoreLemmings",
+      "level": "Tame 3",
+      "saved": 50,
+      "lost": 0,
+      "reserves": 0,
+      "ticks": 3360
     },
     {
       "fixture": "Tests/ClassicFamilyCompletionTests/Fixtures/ohNoMoreLemmings/tame-04.json",
