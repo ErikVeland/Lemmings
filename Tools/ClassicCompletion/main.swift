@@ -298,7 +298,7 @@ let familyMode = ProcessInfo.processInfo.environment["CLASSIC_COMPLETION_FAMILY"
 let encoder = JSONEncoder()
 encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
 do {
-    try require(["verify", "verify-known", "augment", "polish", "maximize", "maximize-adapt", "maximize-guided", "search", "import", "adapt", "guided", "tutorial", "plan", "refresh"].contains(mode), "unknown mode")
+    try require(["verify", "verify-known", "augment", "polish", "maximize", "maximize-adapt", "maximize-guided", "search", "solve", "import", "adapt", "guided", "tutorial", "plan", "refresh"].contains(mode), "unknown mode")
     if mode == "plan" { try require(args.count > 4 && selected != nil, "plan requires a level and a plan file") }
     if familyMode {
         try require(ProcessInfo.processInfo.environment["CLASSIC_COMPLETION_FIXTURES"] != nil, "family mode requires a separate fixture directory")
@@ -432,6 +432,112 @@ do {
                         replay = try JSONDecoder().decode(ClassicDOSReplay.self, from: Data(contentsOf: file))
                         print("IMPORTED \(source.lastPathComponent), tick offset \(offset)")
                     } catch { print("CANDIDATE \(source.lastPathComponent) for \(entry.rank) \(entry.number) offset \(offset): \(error)") }
+                }
+            }
+        }
+        // Beam search over multi-assignment routes. The existing search mode only
+        // ever tries a single assignment to lemming 0, which cannot reach a level
+        // that needs two skills. This keeps a population of real simulation
+        // states, branches them at a tick grid, and scores on rescues first and
+        // distance to an exit second. Every retained route still goes through the
+        // same witness replay as any other evidence.
+        if replay == nil && mode == "solve" {
+            func tuning(_ name: String, _ fallback: Int) -> Int {
+                ProcessInfo.processInfo.environment[name].flatMap(Int.init) ?? fallback
+            }
+            let beamWidth = tuning("SOLVE_BEAM", 24)
+            let branchStride = tuning("SOLVE_STRIDE", 8)
+            let maxAssignments = tuning("SOLVE_DEPTH", 8)
+            let lemmingFanout = tuning("SOLVE_FANOUT", 10)
+            let tickLimit = min(ClassicDOSReplayPlayer.defaultTickLimit, tuning("SOLVE_TICKS", 4200))
+            let trace = ProcessInfo.processInfo.environment["SOLVE_TRACE"] == "1"
+
+            let exits = base.configuration.triggers.filter { $0.effect == .exit }
+            func exitDistance(_ point: ClassicDOSPoint) -> Int {
+                guard !exits.isEmpty else { return 0 }
+                return exits.map { trigger in
+                    let cx = (trigger.bounds.x1 + trigger.bounds.x2) / 2
+                    let cy = (trigger.bounds.y1 + trigger.bounds.y2) / 2
+                    return abs(point.x - cx) + abs(point.y - cy)
+                }.min() ?? 0
+            }
+
+            struct Node {
+                var sim: ClassicDOSSimulation
+                var events: [ClassicDOSReplayEvent]
+                var assignments: Int
+                var pending: (id: Int, skill: ClassicSkill)?
+            }
+            // Rescues dominate. Then keep lemmings alive, then get someone near an
+            // exit, then prefer the route that spent fewer skills.
+            func score(_ node: Node) -> Int {
+                let nearest = node.sim.lemmings.lazy.filter(\.isActive)
+                    .map { exitDistance($0.foot) }.min() ?? 4096
+                return node.sim.savedCount * 1_000_000
+                    - node.sim.lostCount * 8_000
+                    - min(nearest, 4096) * 4
+                    - node.assignments
+            }
+
+            var beam = [Node(sim: base, events: [], assignments: 0, pending: nil)]
+            var solution: [ClassicDOSReplayEvent]?
+            var expanded = 0
+            search: while let head = beam.first, head.sim.tickCount < tickLimit {
+                let tick = head.sim.tickCount + 1
+                var frontier: [Node] = []
+                for node in beam {
+                    frontier.append(Node(sim: node.sim, events: node.events,
+                                         assignments: node.assignments, pending: nil))
+                    guard node.assignments < maxAssignments, tick % branchStride == 0 else { continue }
+                    let ordered = node.sim.lemmings.filter(\.isActive)
+                        .sorted { exitDistance($0.foot) < exitDistance($1.foot) }
+                        .prefix(lemmingFanout)
+                    for lemming in ordered {
+                        for skill in ClassicSkill.allCases where node.sim.remainingSkillCount(skill) > 0 {
+                            var fork = node.sim
+                            guard fork.schedule(.init(tick: tick, lemmingID: lemming.id, skill: skill)) else { continue }
+                            frontier.append(Node(
+                                sim: fork,
+                                events: node.events + [.init(tick: tick, action: .assign(lemmingID: lemming.id, skill: skill))],
+                                assignments: node.assignments + 1,
+                                pending: (lemming.id, skill)))
+                            expanded += 1
+                        }
+                    }
+                }
+                var advanced: [Node] = []
+                var seen = Set<String>()
+                for var node in frontier {
+                    let applied = node.sim.tick()
+                    // A scheduled assignment that never applied would fail the
+                    // witness replay later, so that branch is dropped here.
+                    if let pending = node.pending,
+                       !applied.contains(.skillAssigned(lemmingID: pending.id, skill: pending.skill)) { continue }
+                    node.pending = nil
+                    if node.sim.lostCount > node.sim.configuration.totalLemmings - node.sim.configuration.requiredToSave { continue }
+                    if node.sim.isComplete {
+                        if node.sim.didWin { solution = node.events; break search }
+                        continue
+                    }
+                    // Identical states differ only by history, so keep one.
+                    let key = ClassicDOSReplayRecorder.stateHash(of: node.sim) + ":\(node.assignments)"
+                    if !seen.insert(key).inserted { continue }
+                    advanced.append(node)
+                }
+                if advanced.isEmpty { break }
+                beam = Array(advanced.sorted { score($0) > score($1) }.prefix(beamWidth))
+                if trace && tick % 240 == 0 {
+                    let top = beam[0]
+                    FileHandle.standardError.write(Data("  tick \(tick) beam \(beam.count) saved \(top.sim.savedCount) lost \(top.sim.lostCount) skills \(top.assignments) expanded \(expanded)\n".utf8))
+                }
+            }
+            if let events = solution {
+                let trial = candidate(events)
+                if let outcome = try? run(trial, base: base), outcome.saved > (replay?.expected?.saved ?? -1) {
+                    let witness = candidate(events, expected: outcome)
+                    _ = try run(witness, base: content.simulation(at: index).0)
+                    try encoder.encode(witness).write(to: file, options: .atomic)
+                    replay = try JSONDecoder().decode(ClassicDOSReplay.self, from: Data(contentsOf: file))
                 }
             }
         }
