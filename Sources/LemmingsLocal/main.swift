@@ -1391,9 +1391,11 @@ let achievementProgressKey = "ClassicAchievementProgress"
   /// fan level names its own ground set, which is usually from a different
   /// release than the one currently open, so it arrives with the set already
   /// resolved rather than being looked up in this game's styles.
+  @discardableResult
   private func buildLevel(
-    _ entry: ClassicCampaignLevel, groundOverride: ClassicGroundSet? = nil
-  ) {
+    _ entry: ClassicCampaignLevel, groundOverride: ClassicGroundSet? = nil,
+    specialOverride: ClassicSpecialGraphic? = nil, assetsOverride: ClassicMainDATAssets? = nil
+  ) -> Bool {
     currentNxlvURL = nil
     let level = entry.level
     do {
@@ -1403,13 +1405,30 @@ let achievementProgressKey = "ClassicAchievementProgress"
           try preparePortArtwork(entry, dataSet: dataSet.set, portsRoot: dataSet.directory)
         }
       }
-      guard let ground = groundOverride ?? grounds[level.groundStyle] else { return }
+      guard let ground = groundOverride ?? grounds[level.groundStyle] else {
+        setStatus("Level error: missing graphics style \(level.groundStyle)")
+        return false
+      }
       let rendered = try ClassicLevelRenderer.render(
-        level, groundSet: ground, specialGraphic: specials[level.specialStyle])
+        level, groundSet: ground, specialGraphic: groundOverride == nil ? specials[level.specialStyle] : specialOverride)
 
+      // The DOS engine derives entrances, exits and hazards from the level's
+      // own trigger zones, so nothing is positioned by hand here.
+      let simulation: ClassicDOSSimulation
+      if let assets = assetsOverride ?? assets {
+        simulation = try ClassicDOSSimulation(
+          level: level, renderedLevel: rendered, mainDATAssets: assets)
+      } else {
+        simulation = try ClassicDOSSimulation(level: level, renderedLevel: rendered)
+      }
       guard let image = makeImage(
         width: rendered.width, height: rendered.height, rgba: [UInt8](rendered.rgba))
-      else { return }
+      else {
+        setStatus("Level error: could not create the level image")
+        return false
+      }
+      playfield.assets = assetsOverride ?? assets
+      playfield.invalidateSprites()
       playfield.classicScene = rendered
       playfield.levelImage = image
       configureArtwork(level, rendered: rendered)
@@ -1423,23 +1442,16 @@ let achievementProgressKey = "ClassicAchievementProgress"
         panel.panelImage = makePanelImage()
       }
 
-      // The DOS engine derives entrances, exits and hazards from the level's
-      // own trigger zones, so nothing is positioned by hand here.
-      let simulation: ClassicDOSSimulation
-      if let assets {
-        simulation = try ClassicDOSSimulation(
-          level: level, renderedLevel: rendered, mainDATAssets: assets)
-      } else {
-        simulation = try ClassicDOSSimulation(level: level, renderedLevel: rendered)
-      }
       adopt(
         ClassicSession(
           simulation: simulation, width: rendered.width, height: rendered.height))
       // startX is the authored left edge of the original 320-pixel view.
       playfield.viewport.center(on: Double(level.startX) + 160)
       syncPanelViewport()
+      return true
     } catch {
       setStatus("Level error: \(error)")
+      return false
     }
   }
 
@@ -1656,11 +1668,22 @@ let achievementProgressKey = "ClassicAchievementProgress"
     let entry = fanQueue[fanQueueIndex]
     do {
       let (level, styleName) = try FanLevelLibrary.level(entry, in: pack)
-      let ground = fanGroundSet(styleNamed: styleName, index: level.groundStyle)
+      guard let ports = Bundle.main.resourceURL?.appendingPathComponent("Ports") else { return }
+      let ground = try FanLevelLibrary.groundSet(for: level, styleName: styleName, portsRoot: ports)
+      let directory = ports.appendingPathComponent("lemmings_dos_1991-07-30")
+      let special = level.specialStyle == 0 ? nil
+        : try ClassicSpecialGraphic.load(index: level.specialStyle - 1, from: directory)
+      let fanAssets = try ClassicMainDATAssets.load(from: directory)
       let packName = FanLevelLibrary.displayName(of: pack)
       fanPlaying = true
-      buildLevel(
-        ClassicCampaignLevel.standalone(level, rank: packName), groundOverride: ground)
+      guard buildLevel(
+        ClassicCampaignLevel.standalone(level, rank: packName), groundOverride: ground,
+        specialOverride: special, assetsOverride: fanAssets) else {
+        fanPlaying = false
+        fanScreen = .levels
+        renderFanScreen()
+        return
+      }
       showFanBriefing(title: level.title, pack: packName)
     } catch {
       setStatus("\(entry.label): \(error)")
@@ -1783,24 +1806,6 @@ let achievementProgressKey = "ClassicAchievementProgress"
       renderScreen()
       return true
     }
-  }
-
-  /// Finds the artwork a fan level asks for.
-  ///
-  /// A text level names its ground set, so the name is resolved against the
-  /// installed releases. A binary level only has a number, which is read as a
-  /// slot in the original Lemmings artwork, because that is what the editors
-  /// that wrote those files assumed.
-  private func fanGroundSet(styleNamed name: String?, index: Int) -> ClassicGroundSet? {
-    guard let ports = Bundle.main.resourceURL?
-      .appendingPathComponent("Ports", isDirectory: true) else { return nil }
-    let resolver = ClassicStyleResolver(portsRoot: ports)
-    if let name, let set = try? resolver.groundSet(styleNamed: name) { return set }
-    // Fall back to the loaded game's own styles, then to the slot number.
-    if let set = grounds[index] { return set }
-    let byNumber = ClassicStyleResolver.knownStyles
-      .first { $0.value.release == .lemmings && $0.value.index == index }?.key
-    return byNumber.flatMap { try? resolver.groundSet(styleNamed: $0) }
   }
 
   @objc private func chooseNxlvLevel() {

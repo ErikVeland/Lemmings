@@ -508,15 +508,18 @@ extension AppDelegate {
       try Data(sections[index].data.prefix(ClassicLevel.recordSize))
         .write(to: folder.appendingPathComponent("test\(index).lvl"))
     }
+    var invalid = Data(sections[0].data.prefix(ClassicLevel.recordSize))
+    invalid[0x1B] = 200
+    try invalid.write(to: folder.appendingPathComponent("unsupported.lvl"))
     let zip = Process()
     zip.executableURL = URL(fileURLWithPath: "/usr/bin/zip")
     zip.currentDirectoryURL = folder
-    zip.arguments = ["-q", "pack.zip", "test0.lvl", "test1.lvl"]
+    zip.arguments = ["-q", "pack.zip", "test0.lvl", "test1.lvl", "unsupported.lvl"]
     try zip.run(); zip.waitUntilExit()
     try check(zip.terminationStatus == 0, "Could not create fan fixture")
     let pack = folder.appendingPathComponent("pack.zip")
     let entries = FanLevelLibrary.entries(in: pack)
-    try check(entries.count == 2, "Fan fixture has no levels")
+    try check(entries.count == 3, "Fan fixture has no levels")
     fanPack = pack
     startFanRun([entries[1], entries[0], entries[1]])
     fanQueueIndex = 1; loadCurrentFanLevel(); _ = advanceFanPlay()
@@ -558,6 +561,17 @@ extension AppDelegate {
     phase = .results; _ = advanceFanPlay()
     try check(fanQueueIndex == 2 && phase == .briefing, "Restored fan queue lost the next level")
     returnToLibrary()
+    let previousSession = session
+    fanQueue = [entries.first { $0.file == "unsupported.lvl" }!]
+    fanQueueIndex = 0
+    loadCurrentFanLevel()
+    try check(!fanPlaying && fanScreen == .levels && session === previousSession,
+      "Unsupported fan graphics opened a stale playable briefing")
+    var invalidGeometry = Data(sections[0].data.prefix(ClassicLevel.recordSize))
+    invalidGeometry[0x1B] = 200
+    let invalidLevel = try ClassicLevel(data: invalidGeometry)
+    try check(!buildLevel(.standalone(invalidLevel, rank: "Invalid")),
+      "Missing campaign graphics reported a successful level build")
     print("PASS Classic fan checkpoint, shuffled queue, exact paused restore, identity, continuation and missing-pack rejection")
   }
   fileprivate func testEscapeToMainMenu() throws {

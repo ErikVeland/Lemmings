@@ -1,4 +1,5 @@
 import Foundation
+import NxlvKit
 
 @MainActor final class ArcadeStore {
   static let shared = ArcadeStore()
@@ -84,3 +85,28 @@ if CommandLine.arguments.contains("--live") {
   let live = await FanLevelUpdates().check(existing: packs, destination: temporary.appendingPathComponent("live"))
   check(!live.unavailable, "live catalogue check completes against the embedded collection (\(live.added) new packs)")
 }
+
+let ports = URL(fileURLWithPath: ProcessInfo.processInfo.environment["FAN_TEST_PORTS_DIR"]
+  ?? root.appendingPathComponent(".build/local/Ultimate Lemmings.app/Contents/Resources/Ports").path)
+let originalStyles = ports.appendingPathComponent("lemmings_dos_1991-07-30")
+let extraStyles = ports.appendingPathComponent("oh_no_more_lemmings_dos-1991-11-14_2232")
+for slot in 0..<10 {
+  var bytes = Data(repeating: 0, count: ClassicLevel.recordSize)
+  bytes[0x1B] = UInt8(slot)
+  let level = try ClassicLevel(data: bytes)
+  let resolved = try FanLevelLibrary.groundSet(for: level, styleName: nil, portsRoot: ports)
+  let expected = try ClassicGroundSet.load(style: slot < 5 ? slot : (slot < 9 ? slot - 5 : 2),
+    from: slot < 5 ? originalStyles : (slot < 9 ? extraStyles : ports.appendingPathComponent("holiday_native_1994")))
+  check(resolved == expected, "custom graphics slot \(slot) uses its own release assets")
+}
+let emptyLevel = try ClassicLevel(data: Data(repeating: 0, count: ClassicLevel.recordSize))
+let namedSnow = try FanLevelLibrary.groundSet(for: emptyLevel, styleName: " Snow ", portsRoot: ports)
+check(namedSnow == (try ClassicGroundSet.load(style: 2, from: extraStyles)), "named graphics take precedence over the numeric slot")
+for name in ["xmas", "christmas"] {
+  let ground = try FanLevelLibrary.groundSet(for: emptyLevel, styleName: name, portsRoot: ports)
+  check(ground == (try ClassicGroundSet.load(style: 2, from: ports.appendingPathComponent("holiday_native_1994"))), "\(name) resolves Holiday graphics")
+}
+do {
+  _ = try FanLevelLibrary.groundSet(for: emptyLevel, styleName: "missing-custom-style", portsRoot: ports)
+  preconditionFailure("unknown style silently used a different style")
+} catch { check(true, "unknown named styles fail instead of silently changing level geometry") }

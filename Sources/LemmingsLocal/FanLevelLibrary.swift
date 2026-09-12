@@ -225,6 +225,22 @@ enum FanLevelLibrary {
     return (try FanLevelReader.level(fromINI: text), FanLevelReader.styleName(fromINI: text))
   }
 
+  /// Custom-level slots span the original five styles, Oh No's four, then Xmas.
+  /// Resolve them independently of whichever campaign the player last opened.
+  static func groundSet(for level: ClassicLevel, styleName: String?, portsRoot: URL) throws -> ClassicGroundSet {
+    let names = ["dirt", "fire", "marble", "pillar", "crystal", "brick", "rock", "snow", "bubble", "xmas"]
+    let named = styleName?.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+    let name = named ?? (names.indices.contains(level.groundStyle) ? names[level.groundStyle] : "slot \(level.groundStyle)")
+    if name == "xmas" || name == "christmas" {
+      // The bundled native holiday datasets retain the release's snow slot 2.
+      return try ClassicGroundSet.load(style: 2, from: portsRoot.appendingPathComponent("holiday_native_1994"))
+    }
+    guard let ground = try ClassicStyleResolver(portsRoot: portsRoot).groundSet(styleNamed: name == "special" ? "dirt" : name) else {
+      throw NSError(domain: "FanLevelLibrary", code: 1, userInfo: [NSLocalizedDescriptionKey: "Unsupported or missing fan graphics style: \(name)"])
+    }
+    return ground
+  }
+
   // MARK: - Reading zips
 
   private static func contents(of entry: String, in pack: URL) -> Data? {
