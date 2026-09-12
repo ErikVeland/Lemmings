@@ -9,10 +9,14 @@ import NxlvKit
         defer { NSGraphicsContext.restoreGraphicsState() }
         let pixels = [".....#.....", "....###....", "....###....", "###########", ".#########.",
                       "..#######..", "..#######..", ".####.####.", ".##.....##."]
-        let color = earned ? GameStyle.gold : GameStyle.muted.withAlphaComponent(0.3)
+        let color = earned ? GameStyle.gold : NSColor(calibratedWhite: 0.62, alpha: 1)
         let silhouette = NSBezierPath()
         for (y, row) in pixels.enumerated() {
             for (x, pixel) in row.enumerated() where pixel == "#" {
+                let interior = x > 0 && x + 1 < row.count && y > 0 && y + 1 < pixels.count
+                    && Array(row)[x - 1] == "#" && Array(row)[x + 1] == "#"
+                    && Array(pixels[y - 1])[x] == "#" && Array(pixels[y + 1])[x] == "#"
+                if !earned && interior { continue }
                 silhouette.appendRect(CGRect(x: origin.x + CGFloat(x) * size, y: origin.y + CGFloat(y) * size, width: size, height: size))
             }
         }

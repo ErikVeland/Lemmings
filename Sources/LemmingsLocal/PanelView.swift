@@ -321,7 +321,6 @@ enum PanelButton: Equatable {
       layoutClassicButtons()
       drawClassicPanel()
       drawClassicCounts()
-      drawButtonLabels()
       drawMinimap()
       drawStatus()
       drawSpeedControls()
@@ -349,12 +348,15 @@ enum PanelButton: Equatable {
     NSImage(cgImage: panelImage, size: NSSize(width: panelImage.width, height: panelImage.height))
       .draw(in: panelFrame, from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true, hints: nil)
 
-    if let speed = buttonFrames.first(where: { $0.0 == .fastForward }) {
-      drawStoneButton(speed.1, selected: isFastForward)
-      if let image = PanelGlyph.fastForward.image(fitting: speed.1.insetBy(dx: 2 * panelScale, dy: 2 * panelScale).size) {
-        image.draw(in: CGRect(x: speed.1.midX - image.size.width / 2,
-          y: speed.1.midY - image.size.height / 2, width: image.size.width, height: image.size.height),
-          from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true, hints: nil)
+    for (button, frame) in buttonFrames {
+      guard let glyph = PanelGlyph.forButton(button, isPaused: isPaused, canUndoNuke: session?.canUndoNuke == true) else { continue }
+      let active = (button == .pause && isPaused) || (button == .fastForward && isFastForward)
+        || (button == .nuke && session?.canUndoNuke == true)
+      drawStoneButton(frame, selected: active)
+      if let image = glyph.image(fitting: frame.insetBy(dx: 2 * panelScale, dy: 2 * panelScale).size) {
+        image.draw(in: CGRect(x: frame.midX - image.size.width / 2, y: frame.midY - image.size.height / 2,
+          width: image.size.width, height: image.size.height), from: .zero, operation: .sourceOver,
+          fraction: 1, respectFlipped: true, hints: nil)
       }
     }
 
@@ -387,7 +389,7 @@ enum PanelButton: Equatable {
         image.draw(in: CGRect(x: box.midX - size.width / 2, y: box.maxY - size.height,
           width: size.width, height: size.height), from: .zero, operation: .sourceOver,
           fraction: 1, respectFlipped: true, hints: nil)
-      } else if let glyph = PanelGlyph.forButton(button, isPaused: isPaused),
+      } else if let glyph = PanelGlyph.forButton(button, isPaused: isPaused, canUndoNuke: session?.canUndoNuke == true),
         // Rasterise the control glyph to fit the recessed well.
         let image = glyph.image(
           fitting: frame.insetBy(
@@ -454,36 +456,6 @@ enum PanelButton: Equatable {
     }
   }
 
-  private func drawButtonLabels() {
-    guard panelScale >= 2 else { return }
-    let skillNames = ["CLIMB", "FLOAT", "BOMB", "BLOCK", "BUILD", "BASH", "MINE", "DIG"]
-    let attributes: [NSAttributedString.Key: Any] = [
-      .font: NSFont.monospacedSystemFont(ofSize: 3.1 * panelScale, weight: .bold),
-      .foregroundColor: NSColor(calibratedRed: 0.76, green: 0.88, blue: 0.62, alpha: 1)]
-    for item in buttonFrames {
-      let name: String
-      switch item.0 {
-      case .rateDown: name = "− RATE"
-      case .rateUp: name = "+ RATE"
-      case let .skill(index): name = skillNames[safe: index] ?? "SKILL"
-      case .pause: name = isPaused ? "PLAY" : "PAUSE"
-      case .nuke: name = "NUKE"
-      case .fastForward: name = isFastForward ? speedLabel : "SPEED"
-      }
-      // The original bar carried no wording, so a label that does not fit its
-      // button is dropped rather than shrunk or overlapped.
-      let box = CGRect(x: item.1.minX - 2, y: item.1.minY - 9 * panelScale / 2,
-        width: item.1.width + 4, height: 9 * panelScale / 2)
-      if drawMacLabel(name, centeredIn: box) { continue }
-      guard macInterface == nil else { continue }
-      let text = name as NSString
-      let size = text.size(withAttributes: attributes)
-      text.draw(at: CGPoint(x: item.1.midX - size.width / 2, y: item.1.minY - size.height - 4),
-        withAttributes: attributes)
-    }
-  }
-
-  /// Draws the live counts into the boxes above each button.
   private func drawClassicCounts() {
     guard let session else { return }
     for (button, frame) in buttonFrames {
@@ -497,7 +469,7 @@ enum PanelButton: Equatable {
       case .pause, .nuke, .fastForward:
         continue
       }
-      // Keep quantities in a separate strip above labels and skill artwork.
+      // Keep quantities in a separate strip above the skill artwork.
       let box = CGRect(x: frame.minX, y: panelFrame.minY + panelScale,
         width: frame.width, height: 9 * panelScale)
       NSColor.black.setFill()
@@ -525,15 +497,16 @@ enum PanelButton: Equatable {
       subtitle = skill.map { $0.isInfinite ? "∞" : "\($0.count)" } ?? "0"
       highlighted = index == selectedSkillIndex
     case .pause:
-      title = isPaused ? "Play" : "Pause"
+      title = ""
       subtitle = ""
+      highlighted = isPaused
     case .fastForward:
-      title = "⏩"
+      title = ""
       subtitle = speedLabel
       highlighted = isFastForward
     case .nuke:
-      title = session?.canUndoNuke == true ? "Undo" : "Nuke"
-      subtitle = "2 clicks"
+      title = ""
+      subtitle = ""
       highlighted = session?.canUndoNuke == true
     }
 
@@ -544,6 +517,14 @@ enum PanelButton: Equatable {
     (highlighted ? NSColor.systemGreen : NSColor(calibratedWhite: 0.34, alpha: 1)).setStroke()
     path.lineWidth = highlighted ? 2 : 1
     path.stroke()
+
+    if let glyph = PanelGlyph.forButton(button, isPaused: isPaused, canUndoNuke: session?.canUndoNuke == true),
+       let image = glyph.image(fitting: CGSize(width: frame.width - 10, height: subtitle.isEmpty ? frame.height - 10 : 14)) {
+      image.draw(in: CGRect(x: frame.midX - image.size.width / 2,
+        y: subtitle.isEmpty ? frame.midY - image.size.height / 2 : frame.minY + 3,
+        width: image.size.width, height: image.size.height), from: .zero, operation: .sourceOver,
+        fraction: 1, respectFlipped: true, hints: nil)
+    }
 
     let titleAttributes: [NSAttributedString.Key: Any] = [
       .font: NSFont.systemFont(ofSize: 10, weight: .medium),
