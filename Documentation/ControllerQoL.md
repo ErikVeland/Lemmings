@@ -97,3 +97,9 @@ menus and results, app menu shortcuts, and the current controller mapping. Skill
 rows use the current level, including direct letter aliases and shared initials.
 The guide pauses play, supports text search and category filtering, and links to
 level hints. Escape closes it and restores the prior pause state.
+
+During a live level, ? and Help > Keyboard commands now show annotations over
+the paused game. Number, pause, speed and release-rate badges align with the
+actual controls. Closing the overlay restores the previous pause state. All
+commands opens the searchable reference, and Level hints opens the current
+hint page. Outside gameplay, the command reference opens directly.

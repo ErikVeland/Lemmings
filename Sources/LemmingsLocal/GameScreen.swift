@@ -122,7 +122,7 @@ import NxlvKit
         scrollerStyle = .overlay
         autohidesScrollers = true
         let size = contentSize
-        let documentSize = GamePageLayout.documentSize(in: size)
+        let documentSize = page is KeyboardOverlayView ? size : GamePageLayout.documentSize(in: size)
         hasHorizontalScroller = documentSize.width > size.width + 0.5
         hasVerticalScroller = documentSize.height > size.height + 0.5
         page.frame = CGRect(origin: .zero, size: documentSize)
