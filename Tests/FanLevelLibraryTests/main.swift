@@ -110,3 +110,51 @@ do {
   _ = try FanLevelLibrary.groundSet(for: emptyLevel, styleName: "missing-custom-style", portsRoot: ports)
   preconditionFailure("unknown style silently used a different style")
 } catch { check(true, "unknown named styles fail instead of silently changing level geometry") }
+
+func member(_ name: String, in pack: URL) throws -> Data {
+  let process = Process(); process.executableURL = URL(fileURLWithPath: "/usr/bin/unzip")
+  process.arguments = ["-p", pack.path, name]
+  let pipe = Pipe(); process.standardOutput = pipe
+  try process.run(); let data = pipe.fileHandleForReading.readDataToEndOfFile(); process.waitUntilExit()
+  check(process.terminationStatus == 0, "read fixture asset \(name)")
+  return data
+}
+let applePack = root.appendingPathComponent("Content/LevelPacks/0395-The-Apple-Computer-Level.zip")
+let appleEntry = FanLevelLibrary.entries(in: applePack)[0]
+let (apple, appleStyle) = try FanLevelLibrary.level(appleEntry, in: applePack)
+let appleGraphic = try FanLevelLibrary.specialGraphic(for: apple, entry: appleEntry, pack: applePack, portsRoot: ports)
+check(appleGraphic == (try ClassicSpecialGraphic(archiveData: member("vgaspec6.dat", in: applePack))),
+  "fan special picture comes from its own archive")
+let appleGround = try FanLevelLibrary.groundSet(for: apple, styleName: appleStyle, portsRoot: ports, pack: applePack, entry: appleEntry)
+let appleScene = try ClassicLevelRenderer.render(apple, groundSet: appleGround, specialGraphic: appleGraphic)
+_ = try ClassicDOSSimulation(level: apple, renderedLevel: appleScene, mainDATAssets: ClassicMainDATAssets.load(from: originalStyles))
+check(true, "Apple Computer fan level renders and starts with its bundled picture")
+let genesisPack = root.appendingPathComponent("Content/LevelPacks/0491-Genesis-Mayhem.zip")
+for entry in FanLevelLibrary.entries(in: genesisPack) {
+  let (level, style) = try FanLevelLibrary.level(entry, in: genesisPack)
+  let ground = try FanLevelLibrary.groundSet(for: level, styleName: style, portsRoot: ports, pack: genesisPack, entry: entry)
+  let graphicsFile = originalStyles.appendingPathComponent("VGAGR\(level.groundStyle).DAT")
+  let expected = try ClassicGroundSet(style: level.groundStyle,
+    groundData: member("GROUND\(level.groundStyle)O.DAT", in: genesisPack), graphicsArchiveData: Data(contentsOf: graphicsFile))
+  check(ground == expected, "Genesis fan pack uses its own terrain definitions for \(entry.label)")
+}
+let stockEntry = FanLevelLibrary.entries(in: source)[0]
+let stockLevel = try FanLevelLibrary.level(stockEntry, in: source)
+check(try FanLevelLibrary.groundSet(for: stockLevel.0, styleName: stockLevel.1, portsRoot: ports, pack: source, entry: stockEntry)
+  == FanLevelLibrary.groundSet(for: stockLevel.0, styleName: stockLevel.1, portsRoot: ports),
+  "packs without custom graphics retain stock terrain")
+for (name, picture) in [("0002-geooPk1.zip", "vgaspecS.dat"), ("0399-Mon0lith.zip", "vgaspecm.dat")] {
+  let pack = root.appendingPathComponent("Content/LevelPacks/" + name)
+  var checked = false
+  for entry in FanLevelLibrary.entries(in: pack) {
+    let (level, style) = try FanLevelLibrary.level(entry, in: pack)
+    guard level.specialStyle > 10 else { continue }
+    let graphic = try FanLevelLibrary.specialGraphic(for: level, entry: entry, pack: pack, portsRoot: ports)
+    check(graphic == (try ClassicSpecialGraphic(archiveData: member(picture, in: pack))), "letter-coded special graphic for \(level.title)")
+    let ground = try FanLevelLibrary.groundSet(for: level, styleName: style, portsRoot: ports, pack: pack, entry: entry)
+    let scene = try ClassicLevelRenderer.render(level, groundSet: ground, specialGraphic: graphic)
+    _ = try ClassicDOSSimulation(level: level, renderedLevel: scene, mainDATAssets: ClassicMainDATAssets.load(from: originalStyles))
+    checked = true
+  }
+  check(checked, "letter-coded pack fixture renders and starts: \(name)")
+}

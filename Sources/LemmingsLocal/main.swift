@@ -139,6 +139,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private var replayCaptureSeconds = 0.0
   #endif
   private var checkpointFan: FanRunRecovery?
+  private var fanPackGraphics = true
   private var checkpointSourceURL: URL?
   private var checkpointLocation: (dataSetID: String, levelIndex: Int)?
 
@@ -164,6 +165,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
         undoCount: classic.undoCount, selectedSkill: panel.selectedSkillIndex,
         scrollX: playfield.viewport.scrollX, scrollY: playfield.viewport.scrollY)
       checkpoint.fan = checkpointFan
+      if checkpointFan != nil { checkpoint.fanPackGraphics = fanPackGraphics }
       if checkpointFan != nil { checkpoint.sourcePath = checkpointSourceURL?.path }
     } else if let neo = session as? NeoLemmixSession, let url = checkpointSourceURL {
       checkpoint = RunRecovery(engine: recoveryEngine, profileID: arcadeProfileID, runID: arcadeRunID,
@@ -248,6 +250,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
         fanQueueIndex = fan.index
         fanEntries = FanLevelLibrary.entries(in: fanPack!)
         fanScreen = .off
+        fanPackGraphics = checkpoint.fanPackGraphics ?? false
         loadCurrentFanLevel()
         guard fanPlaying, phase == .briefing, let classic = session as? ClassicSession,
           arcadeLevel?.conditions?.levelFingerprint == checkpoint.levelFingerprint else { throw RunRecoveryError.differentGame }
@@ -1682,11 +1685,16 @@ let achievementProgressKey = "ClassicAchievementProgress"
     let entry = fanQueue[fanQueueIndex]
     do {
       let (level, styleName) = try FanLevelLibrary.level(entry, in: pack)
+      if !restoringCheckpoint { fanPackGraphics = true }
       guard let ports = Bundle.main.resourceURL?.appendingPathComponent("Ports") else { return }
-      let ground = try FanLevelLibrary.groundSet(for: level, styleName: styleName, portsRoot: ports)
+      let ground = try FanLevelLibrary.groundSet(for: level, styleName: styleName, portsRoot: ports, pack: fanPackGraphics ? pack : nil, entry: entry)
       let directory = ports.appendingPathComponent("lemmings_dos_1991-07-30")
-      let special = level.specialStyle == 0 ? nil
-        : try ClassicSpecialGraphic.load(index: level.specialStyle - 1, from: directory)
+      let special: ClassicSpecialGraphic?
+      if fanPackGraphics {
+        special = try FanLevelLibrary.specialGraphic(for: level, entry: entry, pack: pack, portsRoot: ports)
+      } else {
+        special = level.specialStyle == 0 ? nil : try ClassicSpecialGraphic.load(index: level.specialStyle - 1, from: directory)
+      }
       let fanAssets = try ClassicMainDATAssets.load(from: directory)
       let packName = FanLevelLibrary.displayName(of: pack)
       fanPlaying = true

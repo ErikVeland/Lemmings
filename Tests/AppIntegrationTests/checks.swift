@@ -667,6 +667,29 @@ extension AppDelegate {
     let invalidLevel = try ClassicLevel(data: invalidGeometry)
     try check(!buildLevel(.standalone(invalidLevel, rank: "Invalid")),
       "Missing campaign graphics reported a successful level build")
+    returnToLibrary()
+    fanPack = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
+      .appendingPathComponent("Content/LevelPacks/0491-Genesis-Mayhem.zip")
+    fanQueue = [FanLevelLibrary.entries(in: fanPack!)[0]]; fanQueueIndex = 0; fanScreen = .off
+    fanPackGraphics = false; restoringCheckpoint = true
+    loadCurrentFanLevel()
+    restoringCheckpoint = false
+    guard let legacySession = session as? ClassicSession, fanPlaying else {
+      throw IntegrationFailure(message: "Legacy Genesis fixture failed to load")
+    }
+    phase = .playing
+    for _ in 0..<30 { legacySession.tick() }
+    saveRunCheckpoint(immediately: true)
+    var legacy = try recoveryStore.latest(profileID: arcadeProfileID, hotSeatID: arcadeHotSeatID)!
+    legacy.fanPackGraphics = nil
+    let legacyHash = ClassicDOSReplayRecorder.stateHash(of: legacySession.simulation)
+    returnToLibrary(); restoreRun(legacy)
+    try check(!fanPackGraphics && isPaused && arcadeRunID == legacy.runID && (session as? ClassicSession).map {
+      ClassicDOSReplayRecorder.stateHash(of: $0.simulation) == legacyHash
+    } == true, "Custom graphics update broke an existing fan checkpoint")
+    retry()
+    try check(fanPackGraphics && fanPlaying && session?.currentTick == 0,
+      "A new fan attempt retained legacy graphics after retry")
     print("PASS Classic fan checkpoint, shuffled queue, exact paused restore, identity, continuation and missing-pack rejection")
   }
   fileprivate func testEscapeToMainMenu() throws {

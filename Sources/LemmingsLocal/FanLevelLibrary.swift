@@ -227,18 +227,81 @@ enum FanLevelLibrary {
 
   /// Custom-level slots span the original five styles, Oh No's four, then Xmas.
   /// Resolve them independently of whichever campaign the player last opened.
-  static func groundSet(for level: ClassicLevel, styleName: String?, portsRoot: URL) throws -> ClassicGroundSet {
+  static func groundSet(for level: ClassicLevel, styleName: String?, portsRoot: URL,
+                        pack: URL? = nil, entry: Entry? = nil) throws -> ClassicGroundSet {
     let names = ["dirt", "fire", "marble", "pillar", "crystal", "brick", "rock", "snow", "bubble", "xmas"]
     let named = styleName?.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
     let name = named ?? (names.indices.contains(level.groundStyle) ? names[level.groundStyle] : "slot \(level.groundStyle)")
+    let directory: URL, index: Int
     if name == "xmas" || name == "christmas" {
-      // The bundled native holiday datasets retain the release's snow slot 2.
-      return try ClassicGroundSet.load(style: 2, from: portsRoot.appendingPathComponent("holiday_native_1994"))
+      directory = portsRoot.appendingPathComponent("holiday_native_1994"); index = 2
+    } else {
+      switch ClassicStyleResolver(portsRoot: portsRoot).resolve(styleNamed: name == "special" ? "dirt" : name) {
+      case let .found(root, slot), let .packSupplied(root, slot): directory = root; index = slot
+      default: throw NSError(domain: "FanLevelLibrary", code: 1, userInfo: [NSLocalizedDescriptionKey: "Unsupported or missing fan graphics style: \(name)"])
+      }
     }
-    guard let ground = try ClassicStyleResolver(portsRoot: portsRoot).groundSet(styleNamed: name == "special" ? "dirt" : name) else {
-      throw NSError(domain: "FanLevelLibrary", code: 1, userInfo: [NSLocalizedDescriptionKey: "Unsupported or missing fan graphics style: \(name)"])
+    if let pack, let entry {
+      let slot = named == nil ? level.groundStyle : index
+      let ground = try graphicData("ground\(slot)o.dat", entry: entry, pack: pack)
+      let graphics = try graphicData("vgagr\(slot).dat", entry: entry, pack: pack)
+      if ground != nil || graphics != nil {
+        let files = try FileManager.default.contentsOfDirectory(at: directory, includingPropertiesForKeys: nil)
+        func fallback(_ name: String) throws -> Data {
+          guard let file = files.first(where: { $0.lastPathComponent.lowercased() == name }) else { throw ClassicGraphicsError.missingFile(name) }
+          return try Data(contentsOf: file)
+        }
+        return try ClassicGroundSet(style: index, groundData: ground ?? fallback("ground\(index)o.dat"),
+          graphicsArchiveData: graphics ?? fallback("vgagr\(index).dat"))
+      }
     }
-    return ground
+    return try ClassicGroundSet.load(style: index, from: directory)
+  }
+
+  static func specialGraphic(for level: ClassicLevel, entry: Entry, pack: URL, portsRoot: URL) throws -> ClassicSpecialGraphic? {
+    guard level.specialStyle != 0 else { return nil }
+    let index = level.specialStyle - 1
+    if let data = try graphicData("vgaspec\(index).dat", entry: entry, pack: pack) {
+      return try ClassicSpecialGraphic(archiveData: data)
+    }
+    // Some older packs encode a single filename character relative to ASCII zero.
+    if (17...42).contains(index), let letter = UnicodeScalar(48 + index),
+      let data = try graphicData("vgaspec\(Character(letter)).dat", entry: entry, pack: pack) {
+      return try ClassicSpecialGraphic(archiveData: data)
+    }
+    return try ClassicSpecialGraphic.load(index: index, from: portsRoot.appendingPathComponent("lemmings_dos_1991-07-30"))
+  }
+
+  private final class GraphicArchiveIndex: @unchecked Sendable {
+    private let lock = NSLock()
+    private var cached: [String: (Date?, Int?, [String])] = [:]
+    func files(in pack: URL) -> [String] {
+      lock.lock(); defer { lock.unlock() }
+      let metadata = try? pack.resourceValues(forKeys: [.contentModificationDateKey, .fileSizeKey])
+      if let saved = cached[pack.path], saved.0 == metadata?.contentModificationDate, saved.1 == metadata?.fileSize {
+        return saved.2
+      }
+      let files = FanLevelLibrary.shell(["/usr/bin/unzip", "-Z1", pack.path]).split(separator: "\n").map(String.init)
+      cached[pack.path] = (metadata?.contentModificationDate, metadata?.fileSize, files)
+      return files
+    }
+  }
+  private static let graphicArchiveIndex = GraphicArchiveIndex()
+
+  /// Read only assets beside the level or at the archive root. Never extract paths.
+  private static func graphicData(_ name: String, entry: Entry, pack: URL) throws -> Data? {
+    let parent = (entry.file as NSString).deletingLastPathComponent
+    let candidates = parent.isEmpty ? [name] : [parent + "/" + name, name]
+    let files = graphicArchiveIndex.files(in: pack)
+    for candidate in candidates {
+      let matches = files.filter { $0.lowercased() == candidate.lowercased() }
+      guard matches.count <= 1 else { throw ClassicGraphicsError.missingFile("Unambiguous " + candidate) }
+      if let path = matches.first {
+        guard let data = contents(of: path, in: pack) else { throw ClassicGraphicsError.missingFile(path) }
+        return data
+      }
+    }
+    return nil
   }
 
   // MARK: - Reading zips

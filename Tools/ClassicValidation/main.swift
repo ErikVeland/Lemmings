@@ -44,7 +44,7 @@ var counts: [String: [String: Int]] = [:]
 var groundCache: [String: ClassicGroundSet] = [:]
 var assetCache: [String: ClassicMainDATAssets] = [:]
 var specialCache: [String: ClassicSpecialGraphic] = [:]
-@MainActor func audit(_ level: ClassicLevel, collection: String, source: String, directory: URL, fallback: URL? = nil, style: String? = nil) {
+@MainActor func audit(_ level: ClassicLevel, collection: String, source: String, directory: URL, fallback: URL? = nil, style: String? = nil, pack: URL? = nil, entry: FanLevelLibrary.Entry? = nil) {
     var row = Row(collection: collection, source: source, title: level.title)
     do {
         var groundDirectory = directory
@@ -59,13 +59,15 @@ var specialCache: [String: ClassicSpecialGraphic] = [:]
         let groundKey = groundDirectory.path + ":\(groundIndex)"
         if collection == "fan" {
             // Audit the same deterministic asset selection used by the app.
-            groundCache[groundKey] = try FanLevelLibrary.groundSet(for: level, styleName: style, portsRoot: ports)
+            groundCache[groundKey] = try FanLevelLibrary.groundSet(for: level, styleName: style, portsRoot: ports, pack: pack, entry: entry)
         } else if groundCache[groundKey] == nil { groundCache[groundKey] = try ClassicGroundSet.load(style: groundIndex, from: groundDirectory, fallbackDirectory: fallback) }
         let assetDirectory = fallback ?? directory
         if assetCache[assetDirectory.path] == nil { assetCache[assetDirectory.path] = try ClassicMainDATAssets.load(from: assetDirectory) }
-        let specialKey = directory.path + ":\(level.specialStyle)"
+        let specialKey = (pack?.path ?? directory.path) + ":" + (entry?.file ?? "") + ":\(level.specialStyle)"
         if level.specialStyle != 0 && specialCache[specialKey] == nil {
-            specialCache[specialKey] = try ClassicSpecialGraphic.load(index: level.specialStyle - 1, from: directory)
+            if let pack, let entry {
+                specialCache[specialKey] = try FanLevelLibrary.specialGraphic(for: level, entry: entry, pack: pack, portsRoot: ports)
+            } else { specialCache[specialKey] = try ClassicSpecialGraphic.load(index: level.specialStyle - 1, from: directory) }
         }
         let rendered = try ClassicLevelRenderer.render(level, groundSet: groundCache[groundKey]!, specialGraphic: level.specialStyle == 0 ? nil : specialCache[specialKey])
         let base = try ClassicDOSSimulation(level: level, renderedLevel: rendered, mainDATAssets: assetCache[assetDirectory.path]!)
@@ -103,14 +105,18 @@ for (index, entry) in (converted?.campaign.levels ?? []).enumerated() {
     audit(entry.level, collection: "ohYesMoreLemmings", source: "conversion/\(index)", directory: PortExclusivePack.artworkDirectory(for: entry, portsRoot: ports), fallback: PortExclusivePack.fallbackArtworkDirectory(for: entry, portsRoot: ports))
 }
 var packs: [[String: String]] = []
+let partCount = Int(ProcessInfo.processInfo.environment["CLASSIC_AUDIT_PARTS"] ?? "1") ?? 0
+let part = Int(ProcessInfo.processInfo.environment["CLASSIC_AUDIT_PART"] ?? "0") ?? -1
+guard (1...8).contains(partCount), (0..<partCount).contains(part) else { exit(2) }
 for (index, pack) in FanLevelLibrary.packs(in: [resources.appendingPathComponent("LevelPacks")]).enumerated() {
+    if index % partCount != part { continue }
     let entries = FanLevelLibrary.entries(in: pack)
     packs.append(["pack": pack.lastPathComponent, "sha256": SHA256.hash(data: try Data(contentsOf: pack)).description, "decodedLevels": String(entries.count)])
     for entry in entries {
         let source = pack.lastPathComponent + "/" + entry.file + "#\(entry.section ?? 0)"
         do {
             let (level, style) = try FanLevelLibrary.level(entry, in: pack)
-            audit(level, collection: "fan", source: source, directory: original, style: style)
+            audit(level, collection: "fan", source: source, directory: original, style: style, pack: pack, entry: entry)
         } catch { throw error }
     }
     if index % 20 == 0 { print("Audited fan packs \(index + 1), levels \(counts["fan", default: [:]].values.reduce(0,+))"); fflush(stdout) }

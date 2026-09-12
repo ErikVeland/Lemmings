@@ -21,3 +21,10 @@ Validation: the focused app integration suite passed, including player-change ca
 - The rendered main screen was inspected. File recovery checks passed, including backups, stale writers and future-version protection.
 
 Resume validation passed in `.build/resume-safety-final.log`: one-action solo resume, Full Quest retention, a zero-tick UVA Hot Seat attempt, paused restoration and solo/shared isolation. Screenshot: `.build/resume-main-screen.png`.
+
+## Classic compatibility
+
+- Fan packs now use the terrain definitions and special pictures included in their own archives. Stock files remain the fallback when a pack supplies no replacement.
+- Older letter-coded special pictures are recognised, including Supaplex Tricks and The Mon0lith.
+- Existing saved fan attempts retain the graphics rules they started with. Retrying starts a new attempt with the corrected pack graphics.
+- The strict original-game gate reproduced all 120 winning routes. The wider Classic/fan completion gate remains open; see the current validation report for per-collection coverage and remaining failures.

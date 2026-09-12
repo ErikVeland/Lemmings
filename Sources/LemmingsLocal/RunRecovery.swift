@@ -9,6 +9,7 @@ struct RunRecovery: Codable, Sendable {
     let profileID: String
     var hotSeatID: String? = nil
     var fullQuest: Bool? = nil
+    var fanPackGraphics: Bool? = nil
     let runID: UUID
     let dataSetID: String
     let levelIndex: Int
