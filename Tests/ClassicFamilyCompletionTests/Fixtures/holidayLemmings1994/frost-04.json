@@ -1,0 +1,34 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 480
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 7,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 1368
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 50,
+    "required" : 49,
+    "saved" : 49,
+    "stateHash" : "2b238a80350aa55991052a4ad86ef001e1368127c5c1a46395a4fac3c6abdf72",
+    "ticks" : 2167
+  },
+  "initialStateHash" : "d52c4db16f88f6384ba57b60768c952cb7b3d38c58056580d51053bb61bb6807",
+  "number" : 4,
+  "rank" : "Frost",
+  "title" : "Separate Ways"
+}
