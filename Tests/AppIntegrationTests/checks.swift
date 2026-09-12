@@ -909,7 +909,10 @@ extension AppDelegate {
       }
       try check(body.frame.height >= body.requiredHeight(width: body.bounds.width), "Hint text is clipped")
       try check(body.accessibilityValue() as? String == stage.body, "Bitmap hints lost their accessible text")
-      try check(scroll.contentView.bounds.minY == 0, "New hint tier retained scroll position \(scroll.contentView.bounds.minY) for \(stage.title): \(stage.body.prefix(40))")
+      // AppKit rounds the clip origin to a backing pixel when the menu is scaled.
+      let topOffset = scroll.contentView.convertToBacking(CGRect(x: 0, y: 0, width: 1,
+        height: abs(scroll.contentView.bounds.minY))).height
+      try check(topOffset <= 1, "New hint tier retained scroll position \(scroll.contentView.bounds.minY) for \(stage.title): \(stage.body.prefix(40))")
     }
     func button(_ title: String, in view: NSView) -> NSButton? {
       if let value = view as? NSButton, value.title == title { return value }
