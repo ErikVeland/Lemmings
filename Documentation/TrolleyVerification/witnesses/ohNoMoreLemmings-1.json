@@ -1,0 +1,88 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "miner"
+        }
+      },
+      "tick" : 192
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 232
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "miner"
+        }
+      },
+      "tick" : 280
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 288
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 320
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "miner"
+        }
+      },
+      "tick" : 336
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 352
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 10,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 792
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 50,
+    "required" : 25,
+    "saved" : 49,
+    "stateHash" : "f58ea5c2297bc7ec79b5dc5a1ddbb9a934446b460829720f36941af000960014",
+    "ticks" : 2929
+  },
+  "initialStateHash" : "389f366691c0e7cde4dd39c3f68343e8251548876319a4f0911af975126900f0",
+  "number" : 2,
+  "rank" : "Tame",
+  "title" : "Rent-a-Lemming"
+}

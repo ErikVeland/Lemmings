@@ -1,6 +1,6 @@
 # Beta testing
 
-Beta 20 is ready for private testing: version `0.1`, build `20`, for Intel and Apple silicon on macOS 13 or later. See [beta 20 notes](ReleaseNotes-beta20.md) and [verified archives and checks](Beta20Readiness.md). Beta 19 must not be distributed.
+Beta 23 is ready for private testing: version `0.1`, build `23`, for Intel and Apple silicon on macOS 13 or later. See [beta 23 notes](ReleaseNotes-beta23.md) and [archive verification](Beta23Readiness.md). Earlier beta checks do not certify this build.
 
 ## Validate the build
 
@@ -37,7 +37,7 @@ BETA_NOTARY_PROFILE=lemmings-beta zsh Scripts/package-beta.sh
 The script builds both architectures, signs with the Developer ID in the
 keychain, submits to Apple, staples the ticket, and checks the extracted zip
 with Gatekeeper. Earlier zip files move into `.build/local/archive/`.
-The default archive is `.build/beta20/standard/UltimateLemmings-0.1-beta20.zip`. The checked frozen beta 13 is under `.build/beta13/package/`. Release notes are included in the zip and beside it.
+The beta 23 archive is `.build/beta23/standard/UltimateLemmings-0.1-beta23.zip`. Release notes and release scope are included in the zip and app. Frozen build inputs and validation logs are under `.build/beta23`.
 
 For a package without recorded soundtracks:
 
@@ -63,6 +63,9 @@ BETA_GAME_CENTER=1 \
 APPLE_PROVISIONING_PROFILE="$HOME/Library/Developer/Xcode/UserData/Provisioning Profiles/<profile>.provisionprofile" \
 zsh Scripts/package-beta.sh
 ```
+
+Select the profile that covers every device in BetaTesters.md. The automatically
+selected installed profile can be older than the downloaded two-device profile.
 
 This build uses an Apple Development signature and carries the profile. It runs
 only on the Macs that the profile lists. [Beta testers](BetaTesters.md) is the

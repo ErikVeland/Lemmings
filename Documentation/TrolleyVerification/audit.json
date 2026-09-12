@@ -1,7 +1,7 @@
 {
-  "engineSourceFingerprint": "dea231b41e4f2c0f789ebab1214b4130a6d4ae5efaa54e951b6919c6bd380431",
+  "engineSourceFingerprint": "40a82984a967535d9b811a18ee5b02b19070a433c26d2e8a9618029d3f62d094",
   "exhaustive": false,
-  "generatedAt": "2026-09-11T00:59:53Z",
+  "generatedAt": "2026-09-12T10:32:23Z",
   "levels": [
     {
       "bestSaved": 10,
@@ -128,15 +128,13 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 0,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 3,
       "population": 50,
       "rank": "Fun",
       "required": 5,
       "status": "OBSERVED",
-      "testedCandidates": 74,
+      "testedCandidates": 3,
       "title": "Tailor-made for blockers",
       "witness": {
         "completed": true,
@@ -275,15 +273,13 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 2,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 6,
       "population": 50,
       "rank": "Fun",
       "required": 10,
       "status": "OBSERVED",
-      "testedCandidates": 145,
+      "testedCandidates": 3,
       "title": "A task for blockers and bombers",
       "witness": {
         "completed": true,
@@ -863,15 +859,13 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 5,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 18,
       "population": 70,
       "rank": "Fun",
       "required": 50,
       "status": "OBSERVED",
-      "testedCandidates": 145,
+      "testedCandidates": 3,
       "title": "Let's block and blow",
       "witness": {
         "completed": true,
@@ -1696,15 +1690,13 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 4,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 5,
       "population": 80,
       "rank": "Mayhem",
       "required": 60,
       "status": "OBSERVED",
-      "testedCandidates": 500,
+      "testedCandidates": 3,
       "title": "Down, along, up. In that order",
       "witness": {
         "completed": true,
@@ -1941,15 +1933,13 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 2,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 10,
       "population": 75,
       "rank": "Mayhem",
       "required": 50,
       "status": "OBSERVED",
-      "testedCandidates": 500,
+      "testedCandidates": 3,
       "title": "Pillars of Hercules",
       "witness": {
         "completed": true,
@@ -2382,15 +2372,13 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 2,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 19,
       "population": 50,
       "rank": "Mayhem",
       "required": 46,
       "status": "OBSERVED",
-      "testedCandidates": 216,
+      "testedCandidates": 3,
       "title": "Time to get up!",
       "witness": {
         "completed": true,
@@ -2725,15 +2713,13 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 3,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 26,
       "population": 80,
       "rank": "Mayhem",
       "required": 60,
       "status": "OBSERVED",
-      "testedCandidates": 216,
+      "testedCandidates": 3,
       "title": "The Steel Mines of Kessel",
       "witness": {
         "completed": true,
@@ -2872,15 +2858,13 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 0,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 29,
       "population": 80,
       "rank": "Mayhem",
       "required": 64,
       "status": "OBSERVED",
-      "testedCandidates": 287,
+      "testedCandidates": 3,
       "title": "Save Me",
       "witness": {
         "completed": true,
@@ -3264,15 +3248,13 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 1,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 7,
       "population": 80,
       "rank": "Taxing",
       "required": 78,
       "status": "OBSERVED",
-      "testedCandidates": 358,
+      "testedCandidates": 3,
       "title": "Every Lemming for himself!!!",
       "witness": {
         "completed": true,
@@ -3852,15 +3834,13 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 5,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 19,
       "population": 70,
       "rank": "Taxing",
       "required": 64,
       "status": "OBSERVED",
-      "testedCandidates": 74,
+      "testedCandidates": 3,
       "title": "Bomboozal",
       "witness": {
         "completed": true,
@@ -4244,15 +4224,13 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 3,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 27,
       "population": 80,
       "rank": "Taxing",
       "required": 48,
       "status": "OBSERVED",
-      "testedCandidates": 216,
+      "testedCandidates": 3,
       "title": "Call in the bomb squad",
       "witness": {
         "completed": true,
@@ -4293,15 +4271,13 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 10,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 28,
       "population": 80,
       "rank": "Taxing",
       "required": 56,
       "status": "OBSERVED",
-      "testedCandidates": 500,
+      "testedCandidates": 3,
       "title": "POOR WEE CREATURES!",
       "witness": {
         "completed": true,
@@ -5126,15 +5102,13 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 3,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 15,
       "population": 10,
       "rank": "Tricky",
       "required": 6,
       "status": "OBSERVED",
-      "testedCandidates": 74,
+      "testedCandidates": 3,
       "title": "Ozone friendly Lemmings",
       "witness": {
         "completed": true,
@@ -5175,15 +5149,13 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 4,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 16,
       "population": 50,
       "rank": "Tricky",
       "required": 40,
       "status": "OBSERVED",
-      "testedCandidates": 216,
+      "testedCandidates": 3,
       "title": "Luvly Jubly",
       "witness": {
         "completed": true,
@@ -5224,15 +5196,13 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 2,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 17,
       "population": 50,
       "rank": "Tricky",
       "required": 48,
       "status": "OBSERVED",
-      "testedCandidates": 74,
+      "testedCandidates": 3,
       "title": "Diet Lemmingaid",
       "witness": {
         "completed": true,
@@ -5273,15 +5243,13 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 1,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 18,
       "population": 10,
       "rank": "Tricky",
       "required": 9,
       "status": "OBSERVED",
-      "testedCandidates": 287,
+      "testedCandidates": 3,
       "title": "It's Lemmingentry Watson",
       "witness": {
         "completed": true,
@@ -5518,15 +5486,13 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 1,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 23,
       "population": 80,
       "rank": "Tricky",
       "required": 48,
       "status": "OBSERVED",
-      "testedCandidates": 429,
+      "testedCandidates": 3,
       "title": "From The Boundary Line",
       "witness": {
         "completed": true,
@@ -6008,15 +5974,13 @@
       },
       "gameID": "xmasLemmings1991",
       "lossesInBestSolution": 2,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 3,
       "population": 50,
       "rank": "Xmas",
       "required": 45,
       "status": "OBSERVED",
-      "testedCandidates": 429,
+      "testedCandidates": 2,
       "title": "Time waits for no Lemming",
       "witness": {
         "completed": true,
@@ -6106,15 +6070,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 2,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 1,
       "population": 50,
       "rank": "Crazy",
       "required": 48,
       "status": "OBSERVED",
-      "testedCandidates": 358,
+      "testedCandidates": 2,
       "title": "Quote: \"That`s a good level\"",
       "witness": {
         "completed": true,
@@ -6153,15 +6115,13 @@
         "timeLimitSeconds": 240
       },
       "gameID": "ohNoMoreLemmings",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 2,
       "population": 80,
       "rank": "Crazy",
       "required": 80,
       "status": "UNKNOWN",
-      "testedCandidates": 214,
+      "testedCandidates": 1,
       "title": "Dolly Dimple"
     },
     {
@@ -6189,15 +6149,13 @@
         "timeLimitSeconds": 240
       },
       "gameID": "ohNoMoreLemmings",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 3,
       "population": 50,
       "rank": "Crazy",
       "required": 48,
       "status": "UNKNOWN",
-      "testedCandidates": 143,
+      "testedCandidates": 1,
       "title": "Many Lemmings make level work"
     },
     {
@@ -6225,15 +6183,13 @@
         "timeLimitSeconds": 180
       },
       "gameID": "ohNoMoreLemmings",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 4,
       "population": 20,
       "rank": "Crazy",
       "required": 20,
       "status": "UNKNOWN",
-      "testedCandidates": 214,
+      "testedCandidates": 1,
       "title": "Lemming Express"
     },
     {
@@ -6310,15 +6266,13 @@
         "timeLimitSeconds": 180
       },
       "gameID": "ohNoMoreLemmings",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 6,
       "population": 20,
       "rank": "Crazy",
       "required": 20,
       "status": "UNKNOWN",
-      "testedCandidates": 214,
+      "testedCandidates": 1,
       "title": "The Stack"
     },
     {
@@ -6346,15 +6300,13 @@
         "timeLimitSeconds": 180
       },
       "gameID": "ohNoMoreLemmings",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 7,
       "population": 50,
       "rank": "Crazy",
       "required": 50,
       "status": "UNKNOWN",
-      "testedCandidates": 356,
+      "testedCandidates": 1,
       "title": "And now, the end is near..."
     },
     {
@@ -6384,15 +6336,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 2,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 8,
       "population": 80,
       "rank": "Crazy",
       "required": 75,
       "status": "OBSERVED",
-      "testedCandidates": 429,
+      "testedCandidates": 2,
       "title": "KEEP ON TRUCKING",
       "witness": {
         "completed": true,
@@ -6482,15 +6432,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 1,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 10,
       "population": 80,
       "rank": "Crazy",
       "required": 79,
       "status": "OBSERVED",
-      "testedCandidates": 429,
+      "testedCandidates": 2,
       "title": "ROCKY VI",
       "witness": {
         "completed": true,
@@ -6505,6 +6453,7 @@
       }
     },
     {
+      "bestSaved": 8,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
         "levelFingerprint": "c1d7f27f4d1928d25b505d385943443aba1ff48028b46afc608d0adc925f670b",
@@ -6529,16 +6478,26 @@
         "timeLimitSeconds": 60
       },
       "gameID": "ohNoMoreLemmings",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "lossesInBestSolution": 8,
+      "notes": [],
       "number": 11,
       "population": 80,
       "rank": "Crazy",
       "required": 8,
-      "status": "UNKNOWN",
-      "testedCandidates": 143,
-      "title": "No Problemming!"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "No Problemming!",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 8,
+        "path": "witnesses/ohNoMoreLemmings-30.json",
+        "released": 19,
+        "retainedReserves": 0,
+        "saved": 8,
+        "sha256": "72f60ae842d8d79a57c3f2f84c04dacb38804429702d531c94c03510be20e553",
+        "ticks": 1020
+      }
     },
     {
       "bestSaved": 80,
@@ -6616,15 +6575,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 9,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 13,
       "population": 20,
       "rank": "Crazy",
       "required": 10,
       "status": "OBSERVED",
-      "testedCandidates": 358,
+      "testedCandidates": 2,
       "title": "It`s a trade off",
       "witness": {
         "completed": true,
@@ -6665,15 +6622,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 2,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 14,
       "population": 50,
       "rank": "Crazy",
       "required": 45,
       "status": "OBSERVED",
-      "testedCandidates": 429,
+      "testedCandidates": 2,
       "title": "Time waits for no Lemming",
       "witness": {
         "completed": true,
@@ -6714,15 +6669,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 1,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 15,
       "population": 50,
       "rank": "Crazy",
       "required": 44,
       "status": "OBSERVED",
-      "testedCandidates": 287,
+      "testedCandidates": 2,
       "title": "Worra load of old blocks!",
       "witness": {
         "completed": true,
@@ -6810,15 +6763,13 @@
         "timeLimitSeconds": 180
       },
       "gameID": "ohNoMoreLemmings",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 17,
       "population": 50,
       "rank": "Crazy",
       "required": 49,
       "status": "UNKNOWN",
-      "testedCandidates": 356,
+      "testedCandidates": 1,
       "title": "DIGGING FOR VICTORY"
     },
     {
@@ -6848,15 +6799,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 4,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 18,
       "population": 50,
       "rank": "Crazy",
       "required": 45,
       "status": "OBSERVED",
-      "testedCandidates": 429,
+      "testedCandidates": 2,
       "title": "NO PROBLEM",
       "witness": {
         "completed": true,
@@ -6897,15 +6846,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 4,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 19,
       "population": 50,
       "rank": "Crazy",
       "required": 45,
       "status": "OBSERVED",
-      "testedCandidates": 500,
+      "testedCandidates": 2,
       "title": "DON`T PANIC",
       "witness": {
         "completed": true,
@@ -6944,15 +6891,13 @@
         "timeLimitSeconds": 240
       },
       "gameID": "ohNoMoreLemmings",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 20,
       "population": 20,
       "rank": "Crazy",
       "required": 10,
       "status": "UNKNOWN",
-      "testedCandidates": 285,
+      "testedCandidates": 1,
       "title": "Ice Ice Lemming"
     },
     {
@@ -6982,15 +6927,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 4,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 1,
       "population": 80,
       "rank": "Havoc",
       "required": 76,
       "status": "OBSERVED",
-      "testedCandidates": 358,
+      "testedCandidates": 2,
       "title": "Tubular Lemmings",
       "witness": {
         "completed": true,
@@ -7031,15 +6974,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 0,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 2,
       "population": 30,
       "rank": "Havoc",
       "required": 29,
       "status": "OBSERVED",
-      "testedCandidates": 358,
+      "testedCandidates": 2,
       "title": "Be more than just a number",
       "witness": {
         "completed": true,
@@ -7176,15 +7117,13 @@
         "timeLimitSeconds": 240
       },
       "gameID": "ohNoMoreLemmings",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 5,
       "population": 20,
       "rank": "Havoc",
       "required": 20,
       "status": "UNKNOWN",
-      "testedCandidates": 427,
+      "testedCandidates": 1,
       "title": "There`s madness in the method"
     },
     {
@@ -7261,15 +7200,13 @@
         "timeLimitSeconds": 180
       },
       "gameID": "ohNoMoreLemmings",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 7,
       "population": 20,
       "rank": "Havoc",
       "required": 15,
       "status": "UNKNOWN",
-      "testedCandidates": 569,
+      "testedCandidates": 1,
       "title": "Creature Discomforts"
     },
     {
@@ -7346,15 +7283,13 @@
         "timeLimitSeconds": 240
       },
       "gameID": "ohNoMoreLemmings",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 9,
       "population": 50,
       "rank": "Havoc",
       "required": 50,
       "status": "UNKNOWN",
-      "testedCandidates": 214,
+      "testedCandidates": 1,
       "title": "AAAAAARRRRRRGGGGGGHHHHHH!!!!!!"
     },
     {
@@ -7382,15 +7317,13 @@
         "timeLimitSeconds": 60
       },
       "gameID": "ohNoMoreLemmings",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 10,
       "population": 21,
       "rank": "Havoc",
       "required": 3,
       "status": "UNKNOWN",
-      "testedCandidates": 427,
+      "testedCandidates": 1,
       "title": "Flow Control"
     },
     {
@@ -7518,15 +7451,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 4,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 13,
       "population": 80,
       "rank": "Havoc",
       "required": 75,
       "status": "OBSERVED",
-      "testedCandidates": 358,
+      "testedCandidates": 2,
       "title": "HIGHLAND FLING",
       "witness": {
         "completed": true,
@@ -7565,15 +7496,13 @@
         "timeLimitSeconds": 60
       },
       "gameID": "ohNoMoreLemmings",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 14,
       "population": 80,
       "rank": "Havoc",
       "required": 80,
       "status": "UNKNOWN",
-      "testedCandidates": 285,
+      "testedCandidates": 1,
       "title": "Synchronised Lemming"
     },
     {
@@ -7650,15 +7579,13 @@
         "timeLimitSeconds": 120
       },
       "gameID": "ohNoMoreLemmings",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 16,
       "population": 50,
       "rank": "Havoc",
       "required": 45,
       "status": "UNKNOWN",
-      "testedCandidates": 285,
+      "testedCandidates": 1,
       "title": "Scaling the Heights"
     },
     {
@@ -7688,15 +7615,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 1,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 17,
       "population": 80,
       "rank": "Havoc",
       "required": 78,
       "status": "OBSERVED",
-      "testedCandidates": 500,
+      "testedCandidates": 2,
       "title": "Where Lemmings Dare",
       "witness": {
         "completed": true,
@@ -7737,15 +7662,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 1,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 18,
       "population": 70,
       "rank": "Havoc",
       "required": 68,
       "status": "OBSERVED",
-      "testedCandidates": 500,
+      "testedCandidates": 2,
       "title": "Lemmings in a situation",
       "witness": {
         "completed": true,
@@ -7833,18 +7756,17 @@
         "timeLimitSeconds": 420
       },
       "gameID": "ohNoMoreLemmings",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 20,
       "population": 60,
       "rank": "Havoc",
       "required": 50,
       "status": "UNKNOWN",
-      "testedCandidates": 285,
+      "testedCandidates": 1,
       "title": "LOoK BeFoRe YoU LeAp!"
     },
     {
+      "bestSaved": 50,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
         "levelFingerprint": "4382872e3228b6b8003cade552b64f96817779e484d9ce6c8d85a67f3a47f294",
@@ -7869,18 +7791,31 @@
         "timeLimitSeconds": 240
       },
       "gameID": "ohNoMoreLemmings",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 50,
+      "minimumSacrifices": 0,
+      "notes": [],
       "number": 1,
       "population": 50,
       "rank": "Tame",
       "required": 25,
-      "status": "UNKNOWN",
-      "testedCandidates": 569,
-      "title": "Down And Out Lemmings"
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Down And Out Lemmings",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/ohNoMoreLemmings-0.json",
+        "released": 50,
+        "retainedReserves": 0,
+        "saved": 50,
+        "sha256": "59d72e8a3d5f9358c0774901443d4ce822c5d6f24d902c1e5d2db3d25e1df330",
+        "ticks": 2842
+      }
     },
     {
+      "bestSaved": 49,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
         "levelFingerprint": "c8ab5d7a05f9687ca88aaaf6ee1965bc8e7483eb804dcec222a281b181ec05dd",
@@ -7905,18 +7840,29 @@
         "timeLimitSeconds": 240
       },
       "gameID": "ohNoMoreLemmings",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "lossesInBestSolution": 1,
+      "notes": [],
       "number": 2,
       "population": 50,
       "rank": "Tame",
       "required": 25,
-      "status": "UNKNOWN",
-      "testedCandidates": 569,
-      "title": "Rent-a-Lemming"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "Rent-a-Lemming",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 1,
+        "path": "witnesses/ohNoMoreLemmings-1.json",
+        "released": 50,
+        "retainedReserves": 0,
+        "saved": 49,
+        "sha256": "907059c3563bf10734da9d96b50e784bd49b21ad054943402325642325ad73a0",
+        "ticks": 2929
+      }
     },
     {
+      "bestSaved": 50,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
         "levelFingerprint": "f5dda60c3c4041d53de62aa8ab96177e4f65262a222aa5be22272387343b2019",
@@ -7941,16 +7887,28 @@
         "timeLimitSeconds": 240
       },
       "gameID": "ohNoMoreLemmings",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 50,
+      "minimumSacrifices": 0,
+      "notes": [],
       "number": 3,
       "population": 50,
       "rank": "Tame",
       "required": 25,
-      "status": "UNKNOWN",
-      "testedCandidates": 569,
-      "title": "Undercover Lemming"
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Undercover Lemming",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/ohNoMoreLemmings-2.json",
+        "released": 50,
+        "retainedReserves": 0,
+        "saved": 50,
+        "sha256": "43c7a055aa5c3832f028ee0b88944c6258f3b544d5c89481edc05e02adf3e64c",
+        "ticks": 3360
+      }
     },
     {
       "bestSaved": 50,
@@ -8002,6 +7960,7 @@
       }
     },
     {
+      "bestSaved": 46,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
         "levelFingerprint": "95ca11b3326239392256ecf5389f2ad954b0a2f42ad33fbb1eff11e5f07960af",
@@ -8026,16 +7985,26 @@
         "timeLimitSeconds": 240
       },
       "gameID": "ohNoMoreLemmings",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "lossesInBestSolution": 4,
+      "notes": [],
       "number": 5,
       "population": 50,
       "rank": "Tame",
       "required": 25,
-      "status": "UNKNOWN",
-      "testedCandidates": 569,
-      "title": "Snuggle up to a Lemming"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "Snuggle up to a Lemming",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 4,
+        "path": "witnesses/ohNoMoreLemmings-4.json",
+        "released": 50,
+        "retainedReserves": 0,
+        "saved": 46,
+        "sha256": "4e215549e720e37656d3f563944e360bbc85b48401b404bde164f200f88ae712",
+        "ticks": 3075
+      }
     },
     {
       "bestSaved": 50,
@@ -8087,6 +8056,7 @@
       }
     },
     {
+      "bestSaved": 49,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
         "levelFingerprint": "dc1f43e4c06a8907c98272dd59f99227117d7ca9fbba769456ca7c97fa4ce200",
@@ -8111,18 +8081,29 @@
         "timeLimitSeconds": 240
       },
       "gameID": "ohNoMoreLemmings",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "lossesInBestSolution": 1,
+      "notes": [],
       "number": 7,
       "population": 50,
       "rank": "Tame",
       "required": 25,
-      "status": "UNKNOWN",
-      "testedCandidates": 569,
-      "title": "Who`s That Lemming"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "Who`s That Lemming",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 1,
+        "path": "witnesses/ohNoMoreLemmings-6.json",
+        "released": 50,
+        "retainedReserves": 0,
+        "saved": 49,
+        "sha256": "ff6993a73c3ecd782f769a5fe5d049dc9cc4af403dee1b33d6c89552c73a84a9",
+        "ticks": 3083
+      }
     },
     {
+      "bestSaved": 49,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
         "levelFingerprint": "b33f7649ba6c5e0a18f01482c14fe9a2615ea4aacdbb8e572eb8bebf82e91b21",
@@ -8147,18 +8128,29 @@
         "timeLimitSeconds": 240
       },
       "gameID": "ohNoMoreLemmings",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "lossesInBestSolution": 1,
+      "notes": [],
       "number": 8,
       "population": 50,
       "rank": "Tame",
       "required": 25,
-      "status": "UNKNOWN",
-      "testedCandidates": 569,
-      "title": "Dangerzone"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "Dangerzone",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 1,
+        "path": "witnesses/ohNoMoreLemmings-7.json",
+        "released": 50,
+        "retainedReserves": 0,
+        "saved": 49,
+        "sha256": "a7b5537c2f85a9074d7da7be1b26add0b40d40c2e98236ad9325207879250125",
+        "ticks": 3051
+      }
     },
     {
+      "bestSaved": 49,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
         "levelFingerprint": "2a46e8c2eca87d2079752fb6e8066117465d88e3cbc091743b286a8af7ffc16e",
@@ -8183,16 +8175,26 @@
         "timeLimitSeconds": 240
       },
       "gameID": "ohNoMoreLemmings",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "lossesInBestSolution": 0,
+      "notes": [],
       "number": 9,
       "population": 50,
       "rank": "Tame",
       "required": 25,
-      "status": "UNKNOWN",
-      "testedCandidates": 569,
-      "title": "And now this..."
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "And now this...",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/ohNoMoreLemmings-8.json",
+        "released": 50,
+        "retainedReserves": 0,
+        "saved": 49,
+        "sha256": "e75e2785d9ea95cbb094335f05138b71154c4fd133ed5ab6804a9c74c484fe64",
+        "ticks": 4080
+      }
     },
     {
       "bestSaved": 50,
@@ -8244,6 +8246,7 @@
       }
     },
     {
+      "bestSaved": 50,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
         "levelFingerprint": "5554f24636ceebea958d99870434e61e22f611d9873bb45a0957a69378aebe94",
@@ -8268,16 +8271,28 @@
         "timeLimitSeconds": 240
       },
       "gameID": "ohNoMoreLemmings",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 50,
+      "minimumSacrifices": 0,
+      "notes": [],
       "number": 11,
       "population": 50,
       "rank": "Tame",
       "required": 25,
-      "status": "UNKNOWN",
-      "testedCandidates": 569,
-      "title": "With Compliments"
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "With Compliments",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/ohNoMoreLemmings-10.json",
+        "released": 50,
+        "retainedReserves": 0,
+        "saved": 50,
+        "sha256": "d3a4ce759f38e16ec154a2964dfe0320f1c25e427f0eb4ceefdad70897e2d048",
+        "ticks": 2897
+      }
     },
     {
       "conditions": {
@@ -8304,15 +8319,13 @@
         "timeLimitSeconds": 240
       },
       "gameID": "ohNoMoreLemmings",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 12,
       "population": 50,
       "rank": "Tame",
       "required": 25,
       "status": "UNKNOWN",
-      "testedCandidates": 569,
+      "testedCandidates": 1,
       "title": "Citizen Lemming"
     },
     {
@@ -8340,15 +8353,13 @@
         "timeLimitSeconds": 240
       },
       "gameID": "ohNoMoreLemmings",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 13,
       "population": 50,
       "rank": "Tame",
       "required": 25,
       "status": "UNKNOWN",
-      "testedCandidates": 569,
+      "testedCandidates": 1,
       "title": "Thunder-Lemmings are go!"
     },
     {
@@ -8401,6 +8412,7 @@
       }
     },
     {
+      "bestSaved": 49,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
         "levelFingerprint": "9f092f21580564479708d8df08f1610f4922e4cf38b385ae5a0566111a7ec1cd",
@@ -8425,18 +8437,29 @@
         "timeLimitSeconds": 240
       },
       "gameID": "ohNoMoreLemmings",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "lossesInBestSolution": 1,
+      "notes": [],
       "number": 15,
       "population": 50,
       "rank": "Tame",
       "required": 25,
-      "status": "UNKNOWN",
-      "testedCandidates": 569,
-      "title": "Not just a pretty Lemming"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "Not just a pretty Lemming",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 1,
+        "path": "witnesses/ohNoMoreLemmings-14.json",
+        "released": 50,
+        "retainedReserves": 0,
+        "saved": 49,
+        "sha256": "f4c73227678c9f85307df64e5126eee6d87fdd392e4be2d360ae52b272e896c1",
+        "ticks": 3827
+      }
     },
     {
+      "bestSaved": 50,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
         "levelFingerprint": "d0b03c3dab5dae6494f88635724ef23a4f3f1b6f239c4f9f018ecebbf828cea9",
@@ -8461,16 +8484,28 @@
         "timeLimitSeconds": 240
       },
       "gameID": "ohNoMoreLemmings",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 50,
+      "minimumSacrifices": 0,
+      "notes": [],
       "number": 16,
       "population": 50,
       "rank": "Tame",
       "required": 25,
-      "status": "UNKNOWN",
-      "testedCandidates": 569,
-      "title": "Gone With The Lemming"
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Gone With The Lemming",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/ohNoMoreLemmings-15.json",
+        "released": 50,
+        "retainedReserves": 0,
+        "saved": 50,
+        "sha256": "ee22c1186aa2bc0c7c988ed15811af9b6a235951a24d2ccac9ac1eed2e497714",
+        "ticks": 3027
+      }
     },
     {
       "bestSaved": 50,
@@ -8546,18 +8581,17 @@
         "timeLimitSeconds": 240
       },
       "gameID": "ohNoMoreLemmings",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 18,
       "population": 50,
       "rank": "Tame",
       "required": 25,
       "status": "UNKNOWN",
-      "testedCandidates": 569,
+      "testedCandidates": 1,
       "title": "Lemmings For Presidents!"
     },
     {
+      "bestSaved": 49,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
         "levelFingerprint": "272a094508a7cabdcad1e898120d41e54adc5b62a28b6e2a70ae94d36d8c4b48",
@@ -8582,16 +8616,26 @@
         "timeLimitSeconds": 240
       },
       "gameID": "ohNoMoreLemmings",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "lossesInBestSolution": 1,
+      "notes": [],
       "number": 19,
       "population": 50,
       "rank": "Tame",
       "required": 25,
-      "status": "UNKNOWN",
-      "testedCandidates": 569,
-      "title": "Lemming Productions Present..."
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "Lemming Productions Present...",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 1,
+        "path": "witnesses/ohNoMoreLemmings-18.json",
+        "released": 50,
+        "retainedReserves": 0,
+        "saved": 49,
+        "sha256": "a4e58a012b66c3eb7293b0eae2925c7247c534c621866d18bdfa6e4708f42784",
+        "ticks": 3115
+      }
     },
     {
       "conditions": {
@@ -8618,15 +8662,13 @@
         "timeLimitSeconds": 240
       },
       "gameID": "ohNoMoreLemmings",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 20,
       "population": 50,
       "rank": "Tame",
       "required": 25,
       "status": "UNKNOWN",
-      "testedCandidates": 569,
+      "testedCandidates": 1,
       "title": "Custom built for Lemmings"
     },
     {
@@ -8654,15 +8696,13 @@
         "timeLimitSeconds": 120
       },
       "gameID": "ohNoMoreLemmings",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 1,
       "population": 60,
       "rank": "Wicked",
       "required": 48,
       "status": "UNKNOWN",
-      "testedCandidates": 427,
+      "testedCandidates": 1,
       "title": "LeMming ToMato KetchUp fAcilitY"
     },
     {
@@ -8690,15 +8730,13 @@
         "timeLimitSeconds": 240
       },
       "gameID": "ohNoMoreLemmings",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 2,
       "population": 1,
       "rank": "Wicked",
       "required": 1,
       "status": "UNKNOWN",
-      "testedCandidates": 356,
+      "testedCandidates": 1,
       "title": "Inroducing SUPERLEMMING"
     },
     {
@@ -8777,15 +8815,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 9,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 4,
       "population": 50,
       "rank": "Wicked",
       "required": 30,
       "status": "OBSERVED",
-      "testedCandidates": 358,
+      "testedCandidates": 2,
       "title": "Oh No! It`s the 4TH DIMENSION!",
       "witness": {
         "completed": true,
@@ -8824,15 +8860,13 @@
         "timeLimitSeconds": 180
       },
       "gameID": "ohNoMoreLemmings",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 5,
       "population": 20,
       "rank": "Wicked",
       "required": 20,
       "status": "UNKNOWN",
-      "testedCandidates": 356,
+      "testedCandidates": 1,
       "title": "Chill out!"
     },
     {
@@ -8860,15 +8894,13 @@
         "timeLimitSeconds": 480
       },
       "gameID": "ohNoMoreLemmings",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 6,
       "population": 80,
       "rank": "Wicked",
       "required": 30,
       "status": "UNKNOWN",
-      "testedCandidates": 285,
+      "testedCandidates": 1,
       "title": "PoP TiL YoU DrOp!"
     },
     {
@@ -8896,15 +8928,13 @@
         "timeLimitSeconds": 120
       },
       "gameID": "ohNoMoreLemmings",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 7,
       "population": 80,
       "rank": "Wicked",
       "required": 72,
       "status": "UNKNOWN",
-      "testedCandidates": 143,
+      "testedCandidates": 1,
       "title": "Last Lemming To Lemmingcentral"
     },
     {
@@ -8934,15 +8964,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 4,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 8,
       "population": 50,
       "rank": "Wicked",
       "required": 45,
       "status": "OBSERVED",
-      "testedCandidates": 358,
+      "testedCandidates": 2,
       "title": "A TOWERING PROBLEM",
       "witness": {
         "completed": true,
@@ -8983,15 +9011,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 3,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 9,
       "population": 50,
       "rank": "Wicked",
       "required": 45,
       "status": "OBSERVED",
-      "testedCandidates": 216,
+      "testedCandidates": 2,
       "title": "How on Earth?",
       "witness": {
         "completed": true,
@@ -9032,15 +9058,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 0,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 10,
       "population": 50,
       "rank": "Wicked",
       "required": 48,
       "status": "OBSERVED",
-      "testedCandidates": 429,
+      "testedCandidates": 2,
       "title": "Temple of Love",
       "witness": {
         "completed": true,
@@ -9081,15 +9105,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 6,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 11,
       "population": 50,
       "rank": "Wicked",
       "required": 40,
       "status": "OBSERVED",
-      "testedCandidates": 429,
+      "testedCandidates": 2,
       "title": "ROCKY ROAD",
       "witness": {
         "completed": true,
@@ -9128,15 +9150,13 @@
         "timeLimitSeconds": 240
       },
       "gameID": "ohNoMoreLemmings",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 12,
       "population": 80,
       "rank": "Wicked",
       "required": 78,
       "status": "UNKNOWN",
-      "testedCandidates": 285,
+      "testedCandidates": 1,
       "title": "Suicidal Tendencies"
     },
     {
@@ -9166,15 +9186,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 7,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 13,
       "population": 80,
       "rank": "Wicked",
       "required": 70,
       "status": "OBSERVED",
-      "testedCandidates": 500,
+      "testedCandidates": 2,
       "title": "Almost Nearly Virtual Reality",
       "witness": {
         "completed": true,
@@ -9262,15 +9280,13 @@
         "timeLimitSeconds": 240
       },
       "gameID": "ohNoMoreLemmings",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 15,
       "population": 50,
       "rank": "Wicked",
       "required": 40,
       "status": "UNKNOWN",
-      "testedCandidates": 498,
+      "testedCandidates": 1,
       "title": "SPAM,SPAM,SPAM,EGG AND LEMMING"
     },
     {
@@ -9298,15 +9314,13 @@
         "timeLimitSeconds": 60
       },
       "gameID": "ohNoMoreLemmings",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 16,
       "population": 6,
       "rank": "Wicked",
       "required": 5,
       "status": "UNKNOWN",
-      "testedCandidates": 356,
+      "testedCandidates": 1,
       "title": "Five Alive"
     },
     {
@@ -9336,15 +9350,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 1,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 17,
       "population": 30,
       "rank": "Wicked",
       "required": 29,
       "status": "OBSERVED",
-      "testedCandidates": 287,
+      "testedCandidates": 2,
       "title": "Down the tube",
       "witness": {
         "completed": true,
@@ -9432,15 +9444,13 @@
         "timeLimitSeconds": 120
       },
       "gameID": "ohNoMoreLemmings",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 19,
       "population": 50,
       "rank": "Wicked",
       "required": 41,
       "status": "UNKNOWN",
-      "testedCandidates": 143,
+      "testedCandidates": 1,
       "title": "Up, Down or Round and Round"
     },
     {
@@ -9470,15 +9480,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 2,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 20,
       "population": 70,
       "rank": "Wicked",
       "required": 68,
       "status": "OBSERVED",
-      "testedCandidates": 287,
+      "testedCandidates": 2,
       "title": "The Lemming Funhouse",
       "witness": {
         "completed": true,
@@ -9568,15 +9576,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 20,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 2,
       "population": 80,
       "rank": "Wild",
       "required": 60,
       "status": "OBSERVED",
-      "testedCandidates": 571,
+      "testedCandidates": 2,
       "title": "Lemming Hotel",
       "witness": {
         "completed": true,
@@ -9617,15 +9623,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 11,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 3,
       "population": 80,
       "rank": "Wild",
       "required": 65,
       "status": "OBSERVED",
-      "testedCandidates": 429,
+      "testedCandidates": 2,
       "title": "Lemming Rhythms",
       "witness": {
         "completed": true,
@@ -9713,15 +9717,13 @@
         "timeLimitSeconds": 240
       },
       "gameID": "ohNoMoreLemmings",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 5,
       "population": 80,
       "rank": "Wild",
       "required": 68,
       "status": "UNKNOWN",
-      "testedCandidates": 214,
+      "testedCandidates": 1,
       "title": "Lemming Head"
     },
     {
@@ -9798,15 +9800,13 @@
         "timeLimitSeconds": 120
       },
       "gameID": "ohNoMoreLemmings",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 7,
       "population": 80,
       "rank": "Wild",
       "required": 80,
       "status": "UNKNOWN",
-      "testedCandidates": 285,
+      "testedCandidates": 1,
       "title": "You Take the High Road"
     },
     {
@@ -9834,15 +9834,13 @@
         "timeLimitSeconds": 60
       },
       "gameID": "ohNoMoreLemmings",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 8,
       "population": 10,
       "rank": "Wild",
       "required": 10,
       "status": "UNKNOWN",
-      "testedCandidates": 356,
+      "testedCandidates": 1,
       "title": "It`s a tight fit!"
     },
     {
@@ -9870,15 +9868,13 @@
         "timeLimitSeconds": 240
       },
       "gameID": "ohNoMoreLemmings",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 9,
       "population": 40,
       "rank": "Wild",
       "required": 40,
       "status": "UNKNOWN",
-      "testedCandidates": 285,
+      "testedCandidates": 1,
       "title": "Ice Station Lemming"
     },
     {
@@ -9908,15 +9904,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 8,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 10,
       "population": 80,
       "rank": "Wild",
       "required": 60,
       "status": "OBSERVED",
-      "testedCandidates": 216,
+      "testedCandidates": 2,
       "title": "Higgledy Piggledy",
       "witness": {
         "completed": true,
@@ -9957,15 +9951,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 1,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 11,
       "population": 50,
       "rank": "Wild",
       "required": 49,
       "status": "OBSERVED",
-      "testedCandidates": 429,
+      "testedCandidates": 2,
       "title": "Mutiny On The Bounty",
       "witness": {
         "completed": true,
@@ -10006,15 +9998,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 8,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 12,
       "population": 50,
       "rank": "Wild",
       "required": 40,
       "status": "OBSERVED",
-      "testedCandidates": 358,
+      "testedCandidates": 2,
       "title": "SNOW JOKE",
       "witness": {
         "completed": true,
@@ -10055,15 +10045,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 4,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 13,
       "population": 80,
       "rank": "Wild",
       "required": 75,
       "status": "OBSERVED",
-      "testedCandidates": 429,
+      "testedCandidates": 2,
       "title": "ONWARD AND UPWARD",
       "witness": {
         "completed": true,
@@ -10151,15 +10139,13 @@
         "timeLimitSeconds": 180
       },
       "gameID": "ohNoMoreLemmings",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 15,
       "population": 50,
       "rank": "Wild",
       "required": 40,
       "status": "UNKNOWN",
-      "testedCandidates": 356,
+      "testedCandidates": 1,
       "title": "THE SILENCE OF THE LEMMINGS"
     },
     {
@@ -10187,15 +10173,13 @@
         "timeLimitSeconds": 180
       },
       "gameID": "ohNoMoreLemmings",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 16,
       "population": 1,
       "rank": "Wild",
       "required": 1,
       "status": "UNKNOWN",
-      "testedCandidates": 143,
+      "testedCandidates": 1,
       "title": "Take care, Sweetie"
     },
     {
@@ -10272,15 +10256,13 @@
         "timeLimitSeconds": 180
       },
       "gameID": "ohNoMoreLemmings",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 18,
       "population": 80,
       "rank": "Wild",
       "required": 60,
       "status": "UNKNOWN",
-      "testedCandidates": 143,
+      "testedCandidates": 1,
       "title": "Dr Lemminggood"
     },
     {
@@ -10310,15 +10292,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 15,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 19,
       "population": 80,
       "rank": "Wild",
       "required": 65,
       "status": "OBSERVED",
-      "testedCandidates": 358,
+      "testedCandidates": 2,
       "title": "Lemmingdelica",
       "witness": {
         "completed": true,
@@ -10359,15 +10339,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 1,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 20,
       "population": 30,
       "rank": "Wild",
       "required": 29,
       "status": "OBSERVED",
-      "testedCandidates": 287,
+      "testedCandidates": 2,
       "title": "Got anything....Lemmingy???",
       "witness": {
         "completed": true,
@@ -10455,15 +10433,13 @@
         "timeLimitSeconds": 300
       },
       "gameID": "xmasLemmings1992",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 2,
       "population": 80,
       "rank": "Xmas",
       "required": 70,
       "status": "UNKNOWN",
-      "testedCandidates": 427,
+      "testedCandidates": 1,
       "title": "Happy Holidays Mr Lemming!"
     },
     {
@@ -10568,7 +10544,7 @@
       "bestSaved": 29,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "f8d7c88965a8301b552fbafe84d9d03afa8ba402369d5bb6509105f622869ce3:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "f8d7c88965a8301b552fbafe84d9d03afa8ba402369d5bb6509105f622869ce3:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "1:0",
         "modifiers": {
           "firstReleaseTick": "49",
@@ -10621,7 +10597,7 @@
     {
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "11835510902dfa77b7dd30d8e7b15622a5c61c212957adbd5007bb82d7303fcb:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "11835510902dfa77b7dd30d8e7b15622a5c61c212957adbd5007bb82d7303fcb:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "1:1",
         "modifiers": {
           "firstReleaseTick": "49",
@@ -10662,7 +10638,7 @@
     {
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "1fc0f2454dcf16e1560d63ed8448291c34f33eb5a2205d36996d40e1e7892664:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "1fc0f2454dcf16e1560d63ed8448291c34f33eb5a2205d36996d40e1e7892664:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "1:2",
         "modifiers": {
           "firstReleaseTick": "49",
@@ -10704,7 +10680,7 @@
     {
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "7e065f2a37cf435e3b14ebfa67102ff027feaca1cfa430a83860dc1ef48e3d24:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "7e065f2a37cf435e3b14ebfa67102ff027feaca1cfa430a83860dc1ef48e3d24:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "1:3",
         "modifiers": {
           "firstReleaseTick": "49",
@@ -10745,7 +10721,7 @@
       "bestSaved": 54,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "c98522bc8bcc00dbf5ba1a61a184851dd97b79efa5ab14f97668b621a018d96b:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "c98522bc8bcc00dbf5ba1a61a184851dd97b79efa5ab14f97668b621a018d96b:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "1:4",
         "modifiers": {
           "firstReleaseTick": "49",
@@ -10798,7 +10774,7 @@
       "bestSaved": 54,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "7263e9fc100f5b43fa4dceba9c0979545061c94414306a68938f34d5c4a3bcf8:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "7263e9fc100f5b43fa4dceba9c0979545061c94414306a68938f34d5c4a3bcf8:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "1:5",
         "modifiers": {
           "firstReleaseTick": "49",
@@ -10851,7 +10827,7 @@
     {
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "b87fad3f6863f6a33dedad6dd2f03f83c65d3fd4e110ace56a813e39eca206b1:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "b87fad3f6863f6a33dedad6dd2f03f83c65d3fd4e110ace56a813e39eca206b1:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "1:6",
         "modifiers": {
           "firstReleaseTick": "49",
@@ -10894,7 +10870,7 @@
       "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "55adb96c4ff172eee7e0c24f93eeed4d517045447640fd6e56e2f256c6ccaf53:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "55adb96c4ff172eee7e0c24f93eeed4d517045447640fd6e56e2f256c6ccaf53:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "1:7",
         "modifiers": {
           "firstReleaseTick": "49",
@@ -10947,7 +10923,7 @@
     {
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "fe869260f7ccfe92812dc8422a75abca3b060c3ea98cdc3cd1a0e3a8888f4628:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "fe869260f7ccfe92812dc8422a75abca3b060c3ea98cdc3cd1a0e3a8888f4628:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "1:8",
         "modifiers": {
           "firstReleaseTick": "49",
@@ -10990,7 +10966,7 @@
       "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "0573a1e1272f41013ab82f39a4f1f4d63a51c509d532d2caabca0d66307799e3:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "0573a1e1272f41013ab82f39a4f1f4d63a51c509d532d2caabca0d66307799e3:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "1:9",
         "modifiers": {
           "firstReleaseTick": "49",
@@ -11044,7 +11020,7 @@
       "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "1094544c5d82d3fe95d445af818e5944ac5b63185951a49ce365444526a6d380:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "1094544c5d82d3fe95d445af818e5944ac5b63185951a49ce365444526a6d380:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "2:0",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -11094,7 +11070,7 @@
       "bestSaved": 3,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "1c6a1bfc6981e4e1d8cfcd2f4f5314a74cf34710a15ffce5fb32a71d7bc9bcfb:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "1c6a1bfc6981e4e1d8cfcd2f4f5314a74cf34710a15ffce5fb32a71d7bc9bcfb:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "2:1",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -11143,7 +11119,7 @@
       "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "1c6a1bfc6981e4e1d8cfcd2f4f5314a74cf34710a15ffce5fb32a71d7bc9bcfb:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "1c6a1bfc6981e4e1d8cfcd2f4f5314a74cf34710a15ffce5fb32a71d7bc9bcfb:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "2:1",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -11192,7 +11168,7 @@
       "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "4d3488287bfd167130d05bc41c3002b00ac71f0fafce2e51d09bfa20e2198bb0:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "4d3488287bfd167130d05bc41c3002b00ac71f0fafce2e51d09bfa20e2198bb0:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "2:2",
         "modifiers": {
           "firstReleaseTick": "35",
@@ -11242,7 +11218,7 @@
       "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "4d3488287bfd167130d05bc41c3002b00ac71f0fafce2e51d09bfa20e2198bb0:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "4d3488287bfd167130d05bc41c3002b00ac71f0fafce2e51d09bfa20e2198bb0:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "2:2",
         "modifiers": {
           "firstReleaseTick": "35",
@@ -11292,7 +11268,7 @@
       "bestSaved": 26,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "a5965c026a401a840956bbb1e6369106f278bca5a99984c9a9c88f5574094f93:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "a5965c026a401a840956bbb1e6369106f278bca5a99984c9a9c88f5574094f93:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "2:3",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -11342,7 +11318,7 @@
     {
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "7c5265672324bc36b35e507c594f23c8ef4b2bb50e5c90154e4645f9792a91c1:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "7c5265672324bc36b35e507c594f23c8ef4b2bb50e5c90154e4645f9792a91c1:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "2:4",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -11384,7 +11360,7 @@
     {
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "4bef01e752f528767a3e4adeead5e5c5d8d269495aeef9c4b4ef5028cb15feb5:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "4bef01e752f528767a3e4adeead5e5c5d8d269495aeef9c4b4ef5028cb15feb5:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "2:5",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -11426,7 +11402,7 @@
     {
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "021169eaad96afbbb4a7abd0fa5b9dce33d997e77afd93208536a391f662eca5:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "021169eaad96afbbb4a7abd0fa5b9dce33d997e77afd93208536a391f662eca5:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "2:6",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -11466,7 +11442,7 @@
     {
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "2a0f5961bb15aee1a65ee3c1aec8f0e96d2086958570a5ebd4f68494afd22353:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "2a0f5961bb15aee1a65ee3c1aec8f0e96d2086958570a5ebd4f68494afd22353:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "2:7",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -11509,7 +11485,7 @@
       "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "a385fefecdbfc7237bf7ca02c9b51376f0b2a734c2d8819029fb05648f00dc78:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "a385fefecdbfc7237bf7ca02c9b51376f0b2a734c2d8819029fb05648f00dc78:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "2:8",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -11562,7 +11538,7 @@
     {
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "5dd625405f9cd33080484461cfb7a668661775df9d62befa94ba7cd7638ed97a:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "5dd625405f9cd33080484461cfb7a668661775df9d62befa94ba7cd7638ed97a:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "2:9",
         "modifiers": {
           "firstReleaseTick": "45",
@@ -11605,7 +11581,7 @@
       "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "e1fc4007036ce327b541ccb003bd2a804df7fa5729a21c3e0e5bea8788eb61f0:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "e1fc4007036ce327b541ccb003bd2a804df7fa5729a21c3e0e5bea8788eb61f0:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "3:0",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -11656,7 +11632,7 @@
       "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "0efa4128d06d6c5f6178d3d5a43831cbcd8bb6460938fcc35540a12bf8d81dec:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "0efa4128d06d6c5f6178d3d5a43831cbcd8bb6460938fcc35540a12bf8d81dec:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "3:1",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -11710,7 +11686,7 @@
       "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "0efa4128d06d6c5f6178d3d5a43831cbcd8bb6460938fcc35540a12bf8d81dec:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "0efa4128d06d6c5f6178d3d5a43831cbcd8bb6460938fcc35540a12bf8d81dec:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "3:1",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -11763,7 +11739,7 @@
     {
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "0aa20ad58d2c69a43bfc7fe56892ab3dc6b9a7d182b698a27a1a9317401affb1:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "0aa20ad58d2c69a43bfc7fe56892ab3dc6b9a7d182b698a27a1a9317401affb1:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "3:2",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -11804,7 +11780,7 @@
     {
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "16c346f5d76d8622b65ad6850458ac52ee19e65c1ff9b512f96468daed481f4b:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "16c346f5d76d8622b65ad6850458ac52ee19e65c1ff9b512f96468daed481f4b:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "3:3",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -11847,7 +11823,7 @@
       "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "1bf9f9ee3045a1d8d1885dc45cb1c7e0f653dc8f5ee38b6fda7694f56f3e5602:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "1bf9f9ee3045a1d8d1885dc45cb1c7e0f653dc8f5ee38b6fda7694f56f3e5602:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "3:4",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -11898,7 +11874,7 @@
       "bestSaved": 3,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "fe27bc7d23af7747510ec7a69eb7ad520f6fc75ea1916b7755449be7ed3eaba7:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "fe27bc7d23af7747510ec7a69eb7ad520f6fc75ea1916b7755449be7ed3eaba7:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "3:5",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -11950,7 +11926,7 @@
       "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "5c68136fd4f41661e7239dbbae4d5bba9eb5442d67f4bc4503ff006d306f49db:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "5c68136fd4f41661e7239dbbae4d5bba9eb5442d67f4bc4503ff006d306f49db:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "3:6",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -12002,7 +11978,7 @@
       "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "e5670b4ecccf1c9d52be766c3b32a5976fdd3afc63748bd17c3ff1a76138e5f1:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "e5670b4ecccf1c9d52be766c3b32a5976fdd3afc63748bd17c3ff1a76138e5f1:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "3:7",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -12054,7 +12030,7 @@
     {
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "5545ceeb557e6932d53fcb4e6018bd77070826ca6abacbfe7d98e44d13156ec0:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "5545ceeb557e6932d53fcb4e6018bd77070826ca6abacbfe7d98e44d13156ec0:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "3:8",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -12096,7 +12072,7 @@
       "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "878fa24d76b104c453b2c0c38d3247d9ff62538c992350358ea7a6f0f9474570:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "878fa24d76b104c453b2c0c38d3247d9ff62538c992350358ea7a6f0f9474570:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "3:9",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -12150,7 +12126,7 @@
       "bestSaved": 60,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "2be6334f0423ee3ac635946ee855aa8caa4bc8cdd53190c6f16d8cc7d806cc8e:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "2be6334f0423ee3ac635946ee855aa8caa4bc8cdd53190c6f16d8cc7d806cc8e:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "0:0",
         "modifiers": {
           "firstReleaseTick": "51",
@@ -12204,7 +12180,7 @@
       "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "2fe29f898f471ef8507f7f1bbe4a21fd167e7d808cdff12b6e4ffad39d0d801c:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "2fe29f898f471ef8507f7f1bbe4a21fd167e7d808cdff12b6e4ffad39d0d801c:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "0:1",
         "modifiers": {
           "firstReleaseTick": "51",
@@ -12258,7 +12234,7 @@
       "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "83d3536c2857760ee78ed0d1993d39fdbdd4f4bba40ac7541e2d3050a65e5fe9:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "83d3536c2857760ee78ed0d1993d39fdbdd4f4bba40ac7541e2d3050a65e5fe9:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "0:2",
         "modifiers": {
           "firstReleaseTick": "51",
@@ -12312,7 +12288,7 @@
       "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "2ad1c0b8ed788a76a4f6ebabe7623005b8225d9c3584b68a844614520d931c51:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "2ad1c0b8ed788a76a4f6ebabe7623005b8225d9c3584b68a844614520d931c51:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "0:3",
         "modifiers": {
           "firstReleaseTick": "51",
@@ -12366,7 +12342,7 @@
       "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "68abf1d6cd8206beb398c4da3c3963786c245b1f5070cbf83596865a763f9c07:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "68abf1d6cd8206beb398c4da3c3963786c245b1f5070cbf83596865a763f9c07:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "0:4",
         "modifiers": {
           "firstReleaseTick": "51",
@@ -12419,7 +12395,7 @@
     {
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "9bdc0d229b90b226b4c6517582e976a5de3269acf0a83057e6c00be28fb576f5:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "9bdc0d229b90b226b4c6517582e976a5de3269acf0a83057e6c00be28fb576f5:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "0:5",
         "modifiers": {
           "firstReleaseTick": "51",
@@ -12461,7 +12437,7 @@
     {
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "5077ebd1144435ddfde4fa9f6c95452fc4a8de45797338fc57de4682f7e1ffc8:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "5077ebd1144435ddfde4fa9f6c95452fc4a8de45797338fc57de4682f7e1ffc8:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "0:6",
         "modifiers": {
           "firstReleaseTick": "51",
@@ -12504,7 +12480,7 @@
       "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "235f9bf1f9f0ab58bcefa5b90255d58a45f3afbd7a98d3bcf8dc24c42125697a:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "235f9bf1f9f0ab58bcefa5b90255d58a45f3afbd7a98d3bcf8dc24c42125697a:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "0:7",
         "modifiers": {
           "firstReleaseTick": "51",
@@ -12557,7 +12533,7 @@
     {
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "2986ae09a25b2dd8e03484fc5458c1c1235caa6acb838dd719857af252334341:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "2986ae09a25b2dd8e03484fc5458c1c1235caa6acb838dd719857af252334341:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "0:8",
         "modifiers": {
           "firstReleaseTick": "51",
@@ -12600,7 +12576,7 @@
       "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "87312373da8c0b490a694220b78d67939e721c2f56f1bc811a8e093eb927eb5e:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "87312373da8c0b490a694220b78d67939e721c2f56f1bc811a8e093eb927eb5e:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "0:9",
         "modifiers": {
           "firstReleaseTick": "51",
@@ -12654,7 +12630,7 @@
       "bestSaved": 40,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "f70e839776139f4c25eea213f475bb64532be93a3e39a002cc4281294109b666:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "f70e839776139f4c25eea213f475bb64532be93a3e39a002cc4281294109b666:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "4:0",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -12707,7 +12683,7 @@
       "bestSaved": 20,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "db576493cbfe4055acd1513fdacceba5469de5513a8a74846e13a333b403bedb:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "db576493cbfe4055acd1513fdacceba5469de5513a8a74846e13a333b403bedb:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "4:1",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -12761,7 +12737,7 @@
       "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "2d152ee268aba654b1ad9b33336559d670f606950240b616288a3e4256a48c98:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "2d152ee268aba654b1ad9b33336559d670f606950240b616288a3e4256a48c98:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "4:2",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -12815,7 +12791,7 @@
       "bestSaved": 58,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "ea030d70e3e1b5a94fe131537ff9d9787e6adb7e5a92f6561994bb8f84b06fce:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "ea030d70e3e1b5a94fe131537ff9d9787e6adb7e5a92f6561994bb8f84b06fce:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "4:3",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -12867,7 +12843,7 @@
       "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "5d16b997e62b329f365f3ef18030f4be4a6674eafa77055710b791bf6423ffc1:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "5d16b997e62b329f365f3ef18030f4be4a6674eafa77055710b791bf6423ffc1:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "4:4",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -12921,7 +12897,7 @@
       "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "4a10a4f69cf0bea800888a61b8433bc9dd86b0d4268aa93bbafbb10505334808:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "4a10a4f69cf0bea800888a61b8433bc9dd86b0d4268aa93bbafbb10505334808:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "4:5",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -12975,7 +12951,7 @@
       "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "10cb0539faaba37796abf067465132b783e8f7ce8927b5388f6b3cb098c2c26d:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "10cb0539faaba37796abf067465132b783e8f7ce8927b5388f6b3cb098c2c26d:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "4:6",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -13029,7 +13005,7 @@
       "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "cb5eeee5d19f7e4377a8155f858d1f89797852872c98ba9a2b41ebe0dfdd289e:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "cb5eeee5d19f7e4377a8155f858d1f89797852872c98ba9a2b41ebe0dfdd289e:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "4:7",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -13082,7 +13058,7 @@
     {
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "2e676419d3b7a9698a366e3ef09c762c9b3ef132cee12cd1c3797c2241a7d595:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "2e676419d3b7a9698a366e3ef09c762c9b3ef132cee12cd1c3797c2241a7d595:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "4:8",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -13123,7 +13099,7 @@
     {
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "57347101f60629435b96c12453fccf20f783333e5012c43037d1a0460ab98866:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "57347101f60629435b96c12453fccf20f783333e5012c43037d1a0460ab98866:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "4:9",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -13166,7 +13142,7 @@
       "bestSaved": 60,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "1e8c3c968995e19183dd9fc7e48ebd2605568e70d50a424215ea14de8c9317b4:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "1e8c3c968995e19183dd9fc7e48ebd2605568e70d50a424215ea14de8c9317b4:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "5:0",
         "modifiers": {
           "firstReleaseTick": "49",
@@ -13218,7 +13194,7 @@
     {
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "0b2b4b9324e1239fcaf8f48cdd758257d7aba79f9867c2999c0992608ba719e5:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "0b2b4b9324e1239fcaf8f48cdd758257d7aba79f9867c2999c0992608ba719e5:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "5:1",
         "modifiers": {
           "firstReleaseTick": "49",
@@ -13260,7 +13236,7 @@
     {
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "505b273f21deba5a44e231c0474f42d94f5e18264daac34f94c7739ef16169df:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "505b273f21deba5a44e231c0474f42d94f5e18264daac34f94c7739ef16169df:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "5:2",
         "modifiers": {
           "firstReleaseTick": "49",
@@ -13298,7 +13274,7 @@
     {
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "2e03c85e535f62163c4f1c8521eda705bcbf6e20bf62c1b8d5c8a02cdc621753:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "2e03c85e535f62163c4f1c8521eda705bcbf6e20bf62c1b8d5c8a02cdc621753:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "5:3",
         "modifiers": {
           "firstReleaseTick": "49",
@@ -13338,7 +13314,7 @@
     {
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "71bb656d051c0870647a7e667504c6830574ecba69a50e670c8e424fc19988b9:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "71bb656d051c0870647a7e667504c6830574ecba69a50e670c8e424fc19988b9:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "5:4",
         "modifiers": {
           "firstReleaseTick": "49",
@@ -13379,7 +13355,7 @@
       "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "fc20542b4a4185a7d038502c078f7834b7ff8642ba68dc0f58d30fe8febff4b2:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "fc20542b4a4185a7d038502c078f7834b7ff8642ba68dc0f58d30fe8febff4b2:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "5:5",
         "modifiers": {
           "firstReleaseTick": "49",
@@ -13431,7 +13407,7 @@
     {
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "73ee1e597cb31b65d278bf4ab9e96cdc16bc4be701f35203240381a6afe818c2:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "73ee1e597cb31b65d278bf4ab9e96cdc16bc4be701f35203240381a6afe818c2:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "5:6",
         "modifiers": {
           "firstReleaseTick": "49",
@@ -13469,7 +13445,7 @@
     {
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "c14b2786316eaed0d198efede85d5266cad11ea36ec047e2d05b7d4d8dedb5f3:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "c14b2786316eaed0d198efede85d5266cad11ea36ec047e2d05b7d4d8dedb5f3:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "5:7",
         "modifiers": {
           "firstReleaseTick": "49",
@@ -13510,7 +13486,7 @@
       "bestSaved": 2,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "13732164873d09b6b5e6b2ca2c0fb8cde525bc42b9a37d43237e4e97b36ee500:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "13732164873d09b6b5e6b2ca2c0fb8cde525bc42b9a37d43237e4e97b36ee500:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "5:8",
         "modifiers": {
           "firstReleaseTick": "49",
@@ -13563,7 +13539,7 @@
     {
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "fdc73ee404a049418416830ed016f17d91d2bf96a597e04ea7d840eacff4c8c8:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "fdc73ee404a049418416830ed016f17d91d2bf96a597e04ea7d840eacff4c8c8:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "5:9",
         "modifiers": {
           "firstReleaseTick": "49",
@@ -13606,7 +13582,7 @@
       "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "1f7788abaa004cbe0b6614f4be4a53fb935f33557496cf6732f331b2871d2121:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "1f7788abaa004cbe0b6614f4be4a53fb935f33557496cf6732f331b2871d2121:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "6:0",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -13659,7 +13635,7 @@
     {
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "d34be94c66a4cec0dd8d909f9744f9fa0b6f83abd27a24ef020c53fddc80434a:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "d34be94c66a4cec0dd8d909f9744f9fa0b6f83abd27a24ef020c53fddc80434a:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "6:1",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -13701,7 +13677,7 @@
     {
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "38279700faf311312a2d2ba09c8d8b5438803116294cb771629c48a8d7e97032:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "38279700faf311312a2d2ba09c8d8b5438803116294cb771629c48a8d7e97032:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "6:2",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -13742,7 +13718,7 @@
     {
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "3447c967fae1ff8b196dfe08c25af416d4474885fdc321fc8fbc4b2474be9c14:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "3447c967fae1ff8b196dfe08c25af416d4474885fdc321fc8fbc4b2474be9c14:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "6:3",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -13783,7 +13759,7 @@
       "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "571b986d47cb94c2b9e7095ae15055bdc4e5b10dcca5f730431d0ae699b47d3d:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "571b986d47cb94c2b9e7095ae15055bdc4e5b10dcca5f730431d0ae699b47d3d:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "6:4",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -13834,7 +13810,7 @@
     {
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "b81aa2e911ea92e72880e69ed440f2d0a5ef4aa2fbc7019a5d6ca150adb41aca:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "b81aa2e911ea92e72880e69ed440f2d0a5ef4aa2fbc7019a5d6ca150adb41aca:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "6:5",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -13876,7 +13852,7 @@
       "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "2aab4d5b14447dfcf65a2daab28dc74f18b645d6221c8d932220a37ecbbd3ce9:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "2aab4d5b14447dfcf65a2daab28dc74f18b645d6221c8d932220a37ecbbd3ce9:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "6:6",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -13929,7 +13905,7 @@
     {
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "f203f6a889a8988fc1215279c3fafc1c8451feb57c5b35167675f4d577a58e95:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "f203f6a889a8988fc1215279c3fafc1c8451feb57c5b35167675f4d577a58e95:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "6:7",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -13972,7 +13948,7 @@
       "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "7a94bda27465ae7c6cd866fe63c80bf7b7b27123f43db812d2a0e456f754878c:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "7a94bda27465ae7c6cd866fe63c80bf7b7b27123f43db812d2a0e456f754878c:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "6:8",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -14025,7 +14001,7 @@
     {
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "23b9af06c3ec4deab2a27208a0bbd984b085bfdf0d7691bcf8aaab1f5e0d2385:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "23b9af06c3ec4deab2a27208a0bbd984b085bfdf0d7691bcf8aaab1f5e0d2385:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "6:9",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -14068,7 +14044,7 @@
       "bestSaved": 58,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "72332f8e6f2a920a1648b541483901c04df60328614a560286758a37c7a79646:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "72332f8e6f2a920a1648b541483901c04df60328614a560286758a37c7a79646:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "7:0",
         "modifiers": {
           "firstReleaseTick": "49",
@@ -14122,7 +14098,7 @@
       "bestSaved": 2,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "70bafc5c89cde29f8283d04adfec2534be4e8bd4b38318dc257ee05e2b749a75:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "70bafc5c89cde29f8283d04adfec2534be4e8bd4b38318dc257ee05e2b749a75:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "7:1",
         "modifiers": {
           "firstReleaseTick": "49",
@@ -14174,7 +14150,7 @@
       "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "718d18681f1b8edee3930a25029cadef7c1b88e978a925e17c571ac538b79b7e:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "718d18681f1b8edee3930a25029cadef7c1b88e978a925e17c571ac538b79b7e:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "7:2",
         "modifiers": {
           "firstReleaseTick": "49",
@@ -14224,7 +14200,7 @@
     {
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "ef251a14bb922a1bf105c47637a5a8e6e532050a40d2a8254e0851409f388b5c:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "ef251a14bb922a1bf105c47637a5a8e6e532050a40d2a8254e0851409f388b5c:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "7:3",
         "modifiers": {
           "firstReleaseTick": "49",
@@ -14266,7 +14242,7 @@
       "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "df79c31026780abb8b589af529bc65ff91221f223208b180422bc9390bd540a7:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "df79c31026780abb8b589af529bc65ff91221f223208b180422bc9390bd540a7:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "7:4",
         "modifiers": {
           "firstReleaseTick": "37",
@@ -14320,7 +14296,7 @@
       "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "52345aa9ffb62463e9f062b4b16e8edcef5ee5afaffe0bd6dfd29645c48b5e82:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "52345aa9ffb62463e9f062b4b16e8edcef5ee5afaffe0bd6dfd29645c48b5e82:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "7:5",
         "modifiers": {
           "firstReleaseTick": "49",
@@ -14374,7 +14350,7 @@
       "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "1b9157ea1f94dca81c35cda58d408c72d753f8697c99bc5353b38fd61fe214d7:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "1b9157ea1f94dca81c35cda58d408c72d753f8697c99bc5353b38fd61fe214d7:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "7:6",
         "modifiers": {
           "firstReleaseTick": "49",
@@ -14427,7 +14403,7 @@
     {
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "34d0ec7cbeb3a96a45553885c5f48b72a9a0fe1c1dd625f1b78b04034900c703:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "34d0ec7cbeb3a96a45553885c5f48b72a9a0fe1c1dd625f1b78b04034900c703:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "7:7",
         "modifiers": {
           "firstReleaseTick": "49",
@@ -14469,7 +14445,7 @@
     {
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "0b63c80c2f7860995ea22a65daa7c198c74250ff2fe6d97c543802f4e98a03a0:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "0b63c80c2f7860995ea22a65daa7c198c74250ff2fe6d97c543802f4e98a03a0:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "7:8",
         "modifiers": {
           "firstReleaseTick": "49",
@@ -14512,7 +14488,7 @@
       "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "2518e927fc00cc347c658ba4849227b006071395cada6427e06300e097e03db9:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "2518e927fc00cc347c658ba4849227b006071395cada6427e06300e097e03db9:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "7:9",
         "modifiers": {
           "firstReleaseTick": "49",
@@ -14566,7 +14542,7 @@
       "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "c4a6e555264ffd588e987d81e0346fe7054ecf0583b4d28dc563e24820beb73a:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "c4a6e555264ffd588e987d81e0346fe7054ecf0583b4d28dc563e24820beb73a:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "8:0",
         "modifiers": {
           "firstReleaseTick": "51",
@@ -14618,7 +14594,7 @@
       "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "befc9ae6a15f8eccb17df77bd3fdb9085f56208f35a4167ee4a8a8ed3f637fec:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "befc9ae6a15f8eccb17df77bd3fdb9085f56208f35a4167ee4a8a8ed3f637fec:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "8:1",
         "modifiers": {
           "firstReleaseTick": "51",
@@ -14672,7 +14648,7 @@
       "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "318a7c56c7401edbf75da5e16da7913c7fac6b5494de09a93b7435f181ec496d:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "318a7c56c7401edbf75da5e16da7913c7fac6b5494de09a93b7435f181ec496d:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "8:2",
         "modifiers": {
           "firstReleaseTick": "51",
@@ -14726,7 +14702,7 @@
       "bestSaved": 42,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "af56bfd8ef26ba6a9809b6e2d952264c2bc3b151b0b6a2d60ea434ea89e6ded7:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "af56bfd8ef26ba6a9809b6e2d952264c2bc3b151b0b6a2d60ea434ea89e6ded7:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "8:3",
         "modifiers": {
           "firstReleaseTick": "51",
@@ -14779,7 +14755,7 @@
     {
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "2d4ef634516a52045ed11fea149971b2caf93a338c732db1bbb041583129e195:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "2d4ef634516a52045ed11fea149971b2caf93a338c732db1bbb041583129e195:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "8:4",
         "modifiers": {
           "firstReleaseTick": "51",
@@ -14822,7 +14798,7 @@
       "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "11a3604a5c4a057f1f70f1c8d100bbc75b8e53f88cb54d5e65b12cbe17015f54:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "11a3604a5c4a057f1f70f1c8d100bbc75b8e53f88cb54d5e65b12cbe17015f54:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "8:5",
         "modifiers": {
           "firstReleaseTick": "51",
@@ -14875,7 +14851,7 @@
     {
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "d45393e4aad240c3031306aa123f0502c9fa0b57eb0b7b293c10478b6b05f08d:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "d45393e4aad240c3031306aa123f0502c9fa0b57eb0b7b293c10478b6b05f08d:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "8:6",
         "modifiers": {
           "firstReleaseTick": "51",
@@ -14918,7 +14894,7 @@
       "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "920d7b8fc0af22b89da3ec2b965e167c8fac0fb26dfefc9928c3cc91003cbad4:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "920d7b8fc0af22b89da3ec2b965e167c8fac0fb26dfefc9928c3cc91003cbad4:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "8:7",
         "modifiers": {
           "firstReleaseTick": "51",
@@ -14970,7 +14946,7 @@
     {
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "fa507e9d6126196f69feb383bdb69646e299ab7fd1f41dced3c420dc8821ef62:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "fa507e9d6126196f69feb383bdb69646e299ab7fd1f41dced3c420dc8821ef62:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "8:8",
         "modifiers": {
           "firstReleaseTick": "51",
@@ -15012,7 +14988,7 @@
     {
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "bea6c0ed208b6b4153068672ba5299be30b4c225c34d811786ec87f8e824e3f9:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "bea6c0ed208b6b4153068672ba5299be30b4c225c34d811786ec87f8e824e3f9:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "8:9",
         "modifiers": {
           "firstReleaseTick": "51",
@@ -15055,7 +15031,7 @@
       "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "bc887db0eff00ad48d2c6c84b54cf29ee84403c641e10eb1421056cbe64bde88:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "bc887db0eff00ad48d2c6c84b54cf29ee84403c641e10eb1421056cbe64bde88:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "9:0",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -15104,7 +15080,7 @@
     {
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "12e6e9496d1e6e37f11d49e7cac47251527d54fd7e47d75ed67abf6747544455:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "12e6e9496d1e6e37f11d49e7cac47251527d54fd7e47d75ed67abf6747544455:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "9:1",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -15147,7 +15123,7 @@
       "bestSaved": 30,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "c7423747314e093714a89be447901c343ff0ef96600c7ee74099a52914abab3f:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "c7423747314e093714a89be447901c343ff0ef96600c7ee74099a52914abab3f:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "9:2",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -15196,7 +15172,7 @@
     {
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "8efed1e2f57f9dfbad89fb0c58f8b64aef1b9570309f181c7a118c95c4434c2a:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "8efed1e2f57f9dfbad89fb0c58f8b64aef1b9570309f181c7a118c95c4434c2a:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "9:3",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -15234,7 +15210,7 @@
     {
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "88046e055849cdbfa8e7c3e40610b46af8d2389f8d88156276a0016f73780a76:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "88046e055849cdbfa8e7c3e40610b46af8d2389f8d88156276a0016f73780a76:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "9:4",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -15275,7 +15251,7 @@
       "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "be21ef8b79e253d14e9cee15aaf3ed125cd38c42a4faf1545cb5d8cea015ac5e:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "be21ef8b79e253d14e9cee15aaf3ed125cd38c42a4faf1545cb5d8cea015ac5e:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "9:5",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -15328,7 +15304,7 @@
     {
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "32d10fcffb212caef89c7957510cc67364417b310863b0f30ea921cadaadc9b5:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "32d10fcffb212caef89c7957510cc67364417b310863b0f30ea921cadaadc9b5:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "9:6",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -15369,7 +15345,7 @@
     {
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "35e6e8288fc61402815899e189d8003671672ee9b685d9e72b137794ef0ff3b7:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "35e6e8288fc61402815899e189d8003671672ee9b685d9e72b137794ef0ff3b7:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "9:7",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -15411,7 +15387,7 @@
     {
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "9e275d7667556d22f51340daa717198248df177a42b532c288230231043ff02a:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "9e275d7667556d22f51340daa717198248df177a42b532c288230231043ff02a:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "9:8",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -15450,7 +15426,7 @@
     {
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "6e1acaf339b27ed3be9ae30d38c5cecd117c29178a63fc8cf7e95f61f5bb31c8:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "6e1acaf339b27ed3be9ae30d38c5cecd117c29178a63fc8cf7e95f61f5bb31c8:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "9:9",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -15493,7 +15469,7 @@
       "bestSaved": 51,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "27ab827405a6eabf190db44fa20379282bfadd16f6ef112289fdb58eb79f7f6b:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "27ab827405a6eabf190db44fa20379282bfadd16f6ef112289fdb58eb79f7f6b:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "10:0",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -15546,7 +15522,7 @@
     {
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "24a2c769596fe0e351984d1632e955d190e20e69d12a625cbb0673d8d05baf48:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "24a2c769596fe0e351984d1632e955d190e20e69d12a625cbb0673d8d05baf48:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "10:1",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -15586,7 +15562,7 @@
     {
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "7203b1a5586d6a276478106ecf0dda23faab9c56a8588979b01e22b7ccffeac7:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "7203b1a5586d6a276478106ecf0dda23faab9c56a8588979b01e22b7ccffeac7:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "10:2",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -15628,7 +15604,7 @@
     {
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "df7b8385c35629958cdc7eedcbf94081916ebf4efb42968dfd830065a116efb9:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "df7b8385c35629958cdc7eedcbf94081916ebf4efb42968dfd830065a116efb9:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "10:3",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -15671,7 +15647,7 @@
       "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "2d09ebbd322100ef5aa784b4b5f332789caad32ee42f979b3429f243df43f764:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "2d09ebbd322100ef5aa784b4b5f332789caad32ee42f979b3429f243df43f764:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "10:4",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -15725,7 +15701,7 @@
       "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "58a920f33e343674d1e4b386c2259baa9214edb5af191f14317ec712844f0181:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "58a920f33e343674d1e4b386c2259baa9214edb5af191f14317ec712844f0181:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "10:5",
         "modifiers": {
           "firstReleaseTick": "40",
@@ -15779,7 +15755,7 @@
       "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "da62ad291e96a9b7b95e8c3a9d3fd85ca2e7a02005fb7e291df4fdb0b5aea01e:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "da62ad291e96a9b7b95e8c3a9d3fd85ca2e7a02005fb7e291df4fdb0b5aea01e:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "10:6",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -15832,7 +15808,7 @@
     {
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "5ec798b40c9116977f747ecbfa68423b5df1d9755d45e994861d93cd65105a3e:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "5ec798b40c9116977f747ecbfa68423b5df1d9755d45e994861d93cd65105a3e:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "10:7",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -15874,7 +15850,7 @@
     {
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "0832a2fd93c576ed0268315116bee5190992f8d8ea502b80a80d9ad5759cae11:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "0832a2fd93c576ed0268315116bee5190992f8d8ea502b80a80d9ad5759cae11:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "10:8",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -15915,7 +15891,7 @@
     {
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "1fb005bcccfe68e0f70b73adc625c1fa9ef99bd0192c646b86062073510a7708:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "1fb005bcccfe68e0f70b73adc625c1fa9ef99bd0192c646b86062073510a7708:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "10:9",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -15957,7 +15933,7 @@
       "bestSaved": 2,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "d6813fdc249f43daa5ce927332a164465ea471b103dc50d481f1c3d1ebb34cdd:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "d6813fdc249f43daa5ce927332a164465ea471b103dc50d481f1c3d1ebb34cdd:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "11:0",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -16006,7 +15982,7 @@
       "bestSaved": 56,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "af7eb2bfde9d3f2ac92a65b31f526cdef73d6c11c35caa3daa8b17340395d647:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "af7eb2bfde9d3f2ac92a65b31f526cdef73d6c11c35caa3daa8b17340395d647:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "11:1",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -16059,7 +16035,7 @@
     {
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "fc1833b5ad459715f4ab1038bb65408718e517a00f8cf9b789e3bd665378814e:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "fc1833b5ad459715f4ab1038bb65408718e517a00f8cf9b789e3bd665378814e:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "11:2",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -16102,7 +16078,7 @@
       "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "aab747e53e005c7feffbed53424cfaa8480b751f956ceef00d3723daabbe2932:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "aab747e53e005c7feffbed53424cfaa8480b751f956ceef00d3723daabbe2932:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "11:3",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -16156,7 +16132,7 @@
       "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "2650a883da50c7d3cec4cdd86b388484295bcbc4337ab3973d5dd3762fc01337:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "2650a883da50c7d3cec4cdd86b388484295bcbc4337ab3973d5dd3762fc01337:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "11:4",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -16206,7 +16182,7 @@
       "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "a9c5720ac3f7b43780722e3ac8ead412b77e79edc8d6258306191711c9f2a38b:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "a9c5720ac3f7b43780722e3ac8ead412b77e79edc8d6258306191711c9f2a38b:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "11:5",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -16259,7 +16235,7 @@
     {
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "f91db43e791c105139d9fe0df075de44ea74ad700793b70fd09e4e6db938badd:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "f91db43e791c105139d9fe0df075de44ea74ad700793b70fd09e4e6db938badd:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "11:6",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -16301,7 +16277,7 @@
     {
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "426a25ff8afed40f6a0988a364e88570da01e11b85fb3e4a7425ccb6828d7355:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "426a25ff8afed40f6a0988a364e88570da01e11b85fb3e4a7425ccb6828d7355:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "11:7",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -16343,7 +16319,7 @@
     {
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "4f64ccbe3030c97247ee721f419f32a32036e0d0d7badfd46a24f3c27a2e77d3:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "4f64ccbe3030c97247ee721f419f32a32036e0d0d7badfd46a24f3c27a2e77d3:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "11:8",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -16385,7 +16361,7 @@
     {
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "7d7447f3320c94f311e7d07864ce86c6f648809bb9490a0d6a3b52f3647bf725:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+        "levelFingerprint": "7d7447f3320c94f311e7d07864ce86c6f648809bb9490a0d6a3b52f3647bf725:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
         "levelID": "11:9",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -16451,15 +16427,13 @@
       },
       "gameID": "holidayLemmings1993",
       "lossesInBestSolution": 3,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 1,
       "population": 25,
       "rank": "Blizzard",
       "required": 22,
       "status": "OBSERVED",
-      "testedCandidates": 429,
+      "testedCandidates": 2,
       "title": "Oogilemming!",
       "witness": {
         "completed": true,
@@ -16547,15 +16521,13 @@
         "timeLimitSeconds": 360
       },
       "gameID": "holidayLemmings1993",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 3,
       "population": 80,
       "rank": "Blizzard",
       "required": 80,
       "status": "UNKNOWN",
-      "testedCandidates": 356,
+      "testedCandidates": 1,
       "title": "Check Your Hints!"
     },
     {
@@ -16583,15 +16555,13 @@
         "timeLimitSeconds": 360
       },
       "gameID": "holidayLemmings1993",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 4,
       "population": 80,
       "rank": "Blizzard",
       "required": 80,
       "status": "UNKNOWN",
-      "testedCandidates": 498,
+      "testedCandidates": 1,
       "title": "Santus Lemmingus"
     },
     {
@@ -16621,15 +16591,13 @@
       },
       "gameID": "holidayLemmings1993",
       "lossesInBestSolution": 2,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 5,
       "population": 80,
       "rank": "Blizzard",
       "required": 75,
       "status": "OBSERVED",
-      "testedCandidates": 571,
+      "testedCandidates": 2,
       "title": "It Came Upon a Lemnight Clear",
       "witness": {
         "completed": true,
@@ -16766,15 +16734,13 @@
         "timeLimitSeconds": 120
       },
       "gameID": "holidayLemmings1993",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 8,
       "population": 80,
       "rank": "Blizzard",
       "required": 80,
       "status": "UNKNOWN",
-      "testedCandidates": 143,
+      "testedCandidates": 1,
       "title": "Presents of Mind II"
     },
     {
@@ -16851,15 +16817,13 @@
         "timeLimitSeconds": 240
       },
       "gameID": "holidayLemmings1993",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 10,
       "population": 80,
       "rank": "Blizzard",
       "required": 80,
       "status": "UNKNOWN",
-      "testedCandidates": 356,
+      "testedCandidates": 1,
       "title": "The Wrath of Lem"
     },
     {
@@ -16887,15 +16851,13 @@
         "timeLimitSeconds": 360
       },
       "gameID": "holidayLemmings1993",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 11,
       "population": 80,
       "rank": "Blizzard",
       "required": 80,
       "status": "UNKNOWN",
-      "testedCandidates": 498,
+      "testedCandidates": 1,
       "title": "The Search for Lem"
     },
     {
@@ -16923,15 +16885,13 @@
         "timeLimitSeconds": 420
       },
       "gameID": "holidayLemmings1993",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 12,
       "population": 80,
       "rank": "Blizzard",
       "required": 70,
       "status": "UNKNOWN",
-      "testedCandidates": 143,
+      "testedCandidates": 1,
       "title": "The Voyage Home..."
     },
     {
@@ -16961,15 +16921,13 @@
       },
       "gameID": "holidayLemmings1993",
       "lossesInBestSolution": 5,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 13,
       "population": 70,
       "rank": "Blizzard",
       "required": 65,
       "status": "OBSERVED",
-      "testedCandidates": 571,
+      "testedCandidates": 2,
       "title": "The Final Frontier",
       "witness": {
         "completed": true,
@@ -17008,15 +16966,13 @@
         "timeLimitSeconds": 540
       },
       "gameID": "holidayLemmings1993",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 14,
       "population": 80,
       "rank": "Blizzard",
       "required": 80,
       "status": "UNKNOWN",
-      "testedCandidates": 214,
+      "testedCandidates": 1,
       "title": "The Undiscovered Country"
     },
     {
@@ -17046,15 +17002,13 @@
       },
       "gameID": "holidayLemmings1993",
       "lossesInBestSolution": 5,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 15,
       "population": 15,
       "rank": "Blizzard",
       "required": 8,
       "status": "OBSERVED",
-      "testedCandidates": 358,
+      "testedCandidates": 2,
       "title": "The Needs of the Many...",
       "witness": {
         "completed": true,
@@ -17095,15 +17049,13 @@
       },
       "gameID": "holidayLemmings1993",
       "lossesInBestSolution": 2,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 16,
       "population": 50,
       "rank": "Blizzard",
       "required": 47,
       "status": "OBSERVED",
-      "testedCandidates": 358,
+      "testedCandidates": 2,
       "title": "The Next Lemeration",
       "witness": {
         "completed": true,
@@ -17191,15 +17143,13 @@
         "timeLimitSeconds": 480
       },
       "gameID": "holidayLemmings1993",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 2,
       "population": 20,
       "rank": "Flurry",
       "required": 15,
       "status": "UNKNOWN",
-      "testedCandidates": 569,
+      "testedCandidates": 1,
       "title": "Floating Lemming Flurry"
     },
     {
@@ -17252,6 +17202,7 @@
       }
     },
     {
+      "bestSaved": 50,
       "conditions": {
         "gameID": "holidayLemmings1993",
         "levelFingerprint": "260e74dab2b56e676ca9b8556382237fd5b13a8fb3ba8e4e80964830a9148732",
@@ -17276,16 +17227,28 @@
         "timeLimitSeconds": 360
       },
       "gameID": "holidayLemmings1993",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 50,
+      "minimumSacrifices": 0,
+      "notes": [],
       "number": 4,
       "population": 50,
       "rank": "Flurry",
       "required": 45,
-      "status": "UNKNOWN",
-      "testedCandidates": 569,
-      "title": "Lemming Tracks in the Snow!"
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Lemming Tracks in the Snow!",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/holidayLemmings1993-3.json",
+        "released": 50,
+        "retainedReserves": 0,
+        "saved": 50,
+        "sha256": "ccafac54af777bb02308439200a8139d6815d7074d8bc11a913da6bd51ee40a5",
+        "ticks": 2707
+      }
     },
     {
       "bestSaved": 75,
@@ -17361,15 +17324,13 @@
         "timeLimitSeconds": 540
       },
       "gameID": "holidayLemmings1993",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 6,
       "population": 80,
       "rank": "Flurry",
       "required": 40,
       "status": "UNKNOWN",
-      "testedCandidates": 569,
+      "testedCandidates": 1,
       "title": "Lemming Snowfall"
     },
     {
@@ -17397,15 +17358,13 @@
         "timeLimitSeconds": 300
       },
       "gameID": "holidayLemmings1993",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 7,
       "population": 50,
       "rank": "Flurry",
       "required": 25,
       "status": "UNKNOWN",
-      "testedCandidates": 569,
+      "testedCandidates": 1,
       "title": "Lemming Snowjourn"
     },
     {
@@ -17433,15 +17392,13 @@
         "timeLimitSeconds": 360
       },
       "gameID": "holidayLemmings1993",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 8,
       "population": 80,
       "rank": "Flurry",
       "required": 70,
       "status": "UNKNOWN",
-      "testedCandidates": 569,
+      "testedCandidates": 1,
       "title": "Clouds of Lemmings"
     },
     {
@@ -17469,15 +17426,13 @@
         "timeLimitSeconds": 240
       },
       "gameID": "holidayLemmings1993",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 9,
       "population": 80,
       "rank": "Flurry",
       "required": 75,
       "status": "UNKNOWN",
-      "testedCandidates": 569,
+      "testedCandidates": 1,
       "title": "A Block from Home"
     },
     {
@@ -17554,15 +17509,13 @@
         "timeLimitSeconds": 240
       },
       "gameID": "holidayLemmings1993",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 11,
       "population": 80,
       "rank": "Flurry",
       "required": 78,
       "status": "UNKNOWN",
-      "testedCandidates": 498,
+      "testedCandidates": 1,
       "title": "At Home in a Cave"
     },
     {
@@ -17590,15 +17543,13 @@
         "timeLimitSeconds": 240
       },
       "gameID": "holidayLemmings1993",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 12,
       "population": 80,
       "rank": "Flurry",
       "required": 77,
       "status": "UNKNOWN",
-      "testedCandidates": 143,
+      "testedCandidates": 1,
       "title": "Presents of Mind"
     },
     {
@@ -17626,15 +17577,13 @@
         "timeLimitSeconds": 240
       },
       "gameID": "holidayLemmings1993",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 13,
       "population": 80,
       "rank": "Flurry",
       "required": 80,
       "status": "UNKNOWN",
-      "testedCandidates": 214,
+      "testedCandidates": 1,
       "title": "Yo-yo Lem-lem"
     },
     {
@@ -17711,15 +17660,13 @@
         "timeLimitSeconds": 180
       },
       "gameID": "holidayLemmings1993",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 15,
       "population": 10,
       "rank": "Flurry",
       "required": 10,
       "status": "UNKNOWN",
-      "testedCandidates": 356,
+      "testedCandidates": 1,
       "title": "Head for the Hills!"
     },
     {
@@ -17749,15 +17696,13 @@
       },
       "gameID": "holidayLemmings1993",
       "lossesInBestSolution": 0,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 16,
       "population": 50,
       "rank": "Flurry",
       "required": 45,
       "status": "OBSERVED",
-      "testedCandidates": 429,
+      "testedCandidates": 2,
       "title": "The Long Way Around",
       "witness": {
         "completed": true,
@@ -21308,15 +21253,13 @@
         "timeLimitSeconds": 180
       },
       "gameID": "holidayLemmings1994",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 2,
       "population": 50,
       "rank": "Frost",
       "required": 49,
       "status": "UNKNOWN",
-      "testedCandidates": 569,
+      "testedCandidates": 1,
       "title": "Ski Jump!"
     },
     {
@@ -21369,6 +21312,7 @@
       }
     },
     {
+      "bestSaved": 49,
       "conditions": {
         "gameID": "holidayLemmings1994",
         "levelFingerprint": "c6511db9d6b8b2872f624ca0c9c471712fc5869ced1714f7cc9968429d0ff5f2",
@@ -21393,16 +21337,26 @@
         "timeLimitSeconds": 300
       },
       "gameID": "holidayLemmings1994",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "lossesInBestSolution": 1,
+      "notes": [],
       "number": 4,
       "population": 50,
       "rank": "Frost",
       "required": 49,
-      "status": "UNKNOWN",
-      "testedCandidates": 285,
-      "title": "Separate Ways"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "Separate Ways",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 1,
+        "path": "witnesses/holidayLemmings1994-3.json",
+        "released": 50,
+        "retainedReserves": 0,
+        "saved": 49,
+        "sha256": "6439dae4c81b3cb81d8ef8a6176cb47ef2c1a13db1369e209a42f994b0c6a7ad",
+        "ticks": 2167
+      }
     },
     {
       "conditions": {
@@ -21429,15 +21383,13 @@
         "timeLimitSeconds": 300
       },
       "gameID": "holidayLemmings1994",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 5,
       "population": 70,
       "rank": "Frost",
       "required": 70,
       "status": "UNKNOWN",
-      "testedCandidates": 569,
+      "testedCandidates": 1,
       "title": "Lemming Reunification"
     },
     {
@@ -21465,15 +21417,13 @@
         "timeLimitSeconds": 360
       },
       "gameID": "holidayLemmings1994",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 6,
       "population": 70,
       "rank": "Frost",
       "required": 69,
       "status": "UNKNOWN",
-      "testedCandidates": 356,
+      "testedCandidates": 1,
       "title": "The Land of the Bizarre"
     },
     {
@@ -21501,15 +21451,13 @@
         "timeLimitSeconds": 360
       },
       "gameID": "holidayLemmings1994",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 7,
       "population": 50,
       "rank": "Frost",
       "required": 25,
       "status": "UNKNOWN",
-      "testedCandidates": 356,
+      "testedCandidates": 1,
       "title": "Happy New Year!"
     },
     {
@@ -21537,15 +21485,13 @@
         "timeLimitSeconds": 60
       },
       "gameID": "holidayLemmings1994",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 8,
       "population": 80,
       "rank": "Frost",
       "required": 75,
       "status": "UNKNOWN",
-      "testedCandidates": 569,
+      "testedCandidates": 1,
       "title": "Division Bell"
     },
     {
@@ -21573,15 +21519,13 @@
         "timeLimitSeconds": 240
       },
       "gameID": "holidayLemmings1994",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 9,
       "population": 40,
       "rank": "Frost",
       "required": 40,
       "status": "UNKNOWN",
-      "testedCandidates": 356,
+      "testedCandidates": 1,
       "title": "Quest for Kieran"
     },
     {
@@ -21707,15 +21651,13 @@
         "timeLimitSeconds": 240
       },
       "gameID": "holidayLemmings1994",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 12,
       "population": 80,
       "rank": "Frost",
       "required": 78,
       "status": "UNKNOWN",
-      "testedCandidates": 214,
+      "testedCandidates": 1,
       "title": "It's Boxing Day!"
     },
     {
@@ -21743,15 +21685,13 @@
         "timeLimitSeconds": 120
       },
       "gameID": "holidayLemmings1994",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 13,
       "population": 80,
       "rank": "Frost",
       "required": 80,
       "status": "UNKNOWN",
-      "testedCandidates": 143,
+      "testedCandidates": 1,
       "title": "2 Minutes before midnight"
     },
     {
@@ -21781,15 +21721,13 @@
       },
       "gameID": "holidayLemmings1994",
       "lossesInBestSolution": 10,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 14,
       "population": 50,
       "rank": "Frost",
       "required": 40,
       "status": "OBSERVED",
-      "testedCandidates": 145,
+      "testedCandidates": 2,
       "title": "Happy New Year II!",
       "witness": {
         "completed": true,
@@ -21828,15 +21766,13 @@
         "timeLimitSeconds": 300
       },
       "gameID": "holidayLemmings1994",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 15,
       "population": 50,
       "rank": "Frost",
       "required": 49,
       "status": "UNKNOWN",
-      "testedCandidates": 356,
+      "testedCandidates": 1,
       "title": "Plethora of Presents"
     },
     {
@@ -21864,15 +21800,13 @@
         "timeLimitSeconds": 180
       },
       "gameID": "holidayLemmings1994",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 16,
       "population": 80,
       "rank": "Frost",
       "required": 79,
       "status": "UNKNOWN",
-      "testedCandidates": 356,
+      "testedCandidates": 1,
       "title": "Up on the Rooftops"
     },
     {
@@ -21900,15 +21834,13 @@
         "timeLimitSeconds": 360
       },
       "gameID": "holidayLemmings1994",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 1,
       "population": 75,
       "rank": "Hail",
       "required": 75,
       "status": "UNKNOWN",
-      "testedCandidates": 427,
+      "testedCandidates": 1,
       "title": "Go Thataway!"
     },
     {
@@ -21938,15 +21870,13 @@
       },
       "gameID": "holidayLemmings1994",
       "lossesInBestSolution": 3,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 2,
       "population": 80,
       "rank": "Hail",
       "required": 75,
       "status": "OBSERVED",
-      "testedCandidates": 358,
+      "testedCandidates": 2,
       "title": "Break On Through",
       "witness": {
         "completed": true,
@@ -21987,15 +21917,13 @@
       },
       "gameID": "holidayLemmings1994",
       "lossesInBestSolution": 15,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 3,
       "population": 50,
       "rank": "Hail",
       "required": 25,
       "status": "OBSERVED",
-      "testedCandidates": 571,
+      "testedCandidates": 2,
       "title": "And a Happy New Year!",
       "witness": {
         "completed": true,
@@ -22036,15 +21964,13 @@
       },
       "gameID": "holidayLemmings1994",
       "lossesInBestSolution": 1,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 4,
       "population": 80,
       "rank": "Hail",
       "required": 78,
       "status": "OBSERVED",
-      "testedCandidates": 500,
+      "testedCandidates": 2,
       "title": "Lemmintaschen?",
       "witness": {
         "completed": true,
@@ -22083,15 +22009,13 @@
         "timeLimitSeconds": 180
       },
       "gameID": "holidayLemmings1994",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 5,
       "population": 80,
       "rank": "Hail",
       "required": 68,
       "status": "UNKNOWN",
-      "testedCandidates": 285,
+      "testedCandidates": 1,
       "title": "Get the Point?"
     },
     {
@@ -22121,15 +22045,13 @@
       },
       "gameID": "holidayLemmings1994",
       "lossesInBestSolution": 47,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 6,
       "population": 80,
       "rank": "Hail",
       "required": 27,
       "status": "OBSERVED",
-      "testedCandidates": 74,
+      "testedCandidates": 2,
       "title": "Surprise Package?",
       "witness": {
         "completed": true,
@@ -22364,15 +22286,13 @@
         "timeLimitSeconds": 360
       },
       "gameID": "holidayLemmings1994",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 11,
       "population": 70,
       "rank": "Hail",
       "required": 70,
       "status": "UNKNOWN",
-      "testedCandidates": 498,
+      "testedCandidates": 1,
       "title": "Emmings!  (No L)"
     },
     {
@@ -22400,15 +22320,13 @@
         "timeLimitSeconds": 300
       },
       "gameID": "holidayLemmings1994",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 12,
       "population": 25,
       "rank": "Hail",
       "required": 25,
       "status": "UNKNOWN",
-      "testedCandidates": 72,
+      "testedCandidates": 1,
       "title": "Merry Christmaze"
     },
     {
@@ -22436,15 +22354,13 @@
         "timeLimitSeconds": 360
       },
       "gameID": "holidayLemmings1994",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 13,
       "population": 50,
       "rank": "Hail",
       "required": 50,
       "status": "UNKNOWN",
-      "testedCandidates": 498,
+      "testedCandidates": 1,
       "title": "Polar Expedition"
     },
     {
@@ -22570,15 +22486,13 @@
         "timeLimitSeconds": 120
       },
       "gameID": "holidayLemmings1994",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 16,
       "population": 10,
       "rank": "Hail",
       "required": 10,
       "status": "UNKNOWN",
-      "testedCandidates": 569,
+      "testedCandidates": 1,
       "title": "Peak of Performance"
     }
   ],

@@ -152,7 +152,7 @@ See [method and limitations](README.md) and [exact conditions and evidence](audi
 | Crazy 8: KEEP ON TRUCKING | 80 | 75 | 75 | — | — | [Observed](witnesses/ohNoMoreLemmings-27.json) |
 | Crazy 9: On the Antarctic Coast | 20 | 20 | 20 | 20 | 0 | [Verified](witnesses/ohNoMoreLemmings-28.json) |
 | Crazy 10: ROCKY VI | 80 | 79 | 79 | — | — | [Observed](witnesses/ohNoMoreLemmings-29.json) |
-| Crazy 11: No Problemming! | 80 | 8 | — | — | — | No witness collected |
+| Crazy 11: No Problemming! | 80 | 8 | 8 | — | — | [Observed](witnesses/ohNoMoreLemmings-30.json) |
 | Crazy 12: Lemming Friendly | 80 | 75 | 80 | 80 | 0 | [Verified](witnesses/ohNoMoreLemmings-31.json) |
 | Crazy 13: It`s a trade off | 20 | 10 | 11 | — | — | [Observed](witnesses/ohNoMoreLemmings-32.json) |
 | Crazy 14: Time waits for no Lemming | 50 | 45 | 48 | — | — | [Observed](witnesses/ohNoMoreLemmings-33.json) |
@@ -182,25 +182,25 @@ See [method and limitations](README.md) and [exact conditions and evidence](audi
 | Havoc 18: Lemmings in a situation | 70 | 68 | 69 | — | — | [Observed](witnesses/ohNoMoreLemmings-97.json) |
 | Havoc 19: Looks a Bit Nippy Out There | 80 | 80 | 80 | 80 | 0 | [Verified](witnesses/ohNoMoreLemmings-98.json) |
 | Havoc 20: LOoK BeFoRe YoU LeAp! | 60 | 50 | — | — | — | No witness collected |
-| Tame 1: Down And Out Lemmings | 50 | 25 | — | — | — | No witness collected |
-| Tame 2: Rent-a-Lemming | 50 | 25 | — | — | — | No witness collected |
-| Tame 3: Undercover Lemming | 50 | 25 | — | — | — | No witness collected |
+| Tame 1: Down And Out Lemmings | 50 | 25 | 50 | 50 | 0 | [Verified](witnesses/ohNoMoreLemmings-0.json) |
+| Tame 2: Rent-a-Lemming | 50 | 25 | 49 | — | — | [Observed](witnesses/ohNoMoreLemmings-1.json) |
+| Tame 3: Undercover Lemming | 50 | 25 | 50 | 50 | 0 | [Verified](witnesses/ohNoMoreLemmings-2.json) |
 | Tame 4: Downwardly Mobile Lemmings | 50 | 25 | 50 | 50 | 0 | [Verified](witnesses/ohNoMoreLemmings-3.json) |
-| Tame 5: Snuggle up to a Lemming | 50 | 25 | — | — | — | No witness collected |
+| Tame 5: Snuggle up to a Lemming | 50 | 25 | 46 | — | — | [Observed](witnesses/ohNoMoreLemmings-4.json) |
 | Tame 6: Intsy-Wintsy...Lemming? | 50 | 25 | 50 | 50 | 0 | [Verified](witnesses/ohNoMoreLemmings-5.json) |
-| Tame 7: Who`s That Lemming | 50 | 25 | — | — | — | No witness collected |
-| Tame 8: Dangerzone | 50 | 25 | — | — | — | No witness collected |
-| Tame 9: And now this... | 50 | 25 | — | — | — | No witness collected |
+| Tame 7: Who`s That Lemming | 50 | 25 | 49 | — | — | [Observed](witnesses/ohNoMoreLemmings-6.json) |
+| Tame 8: Dangerzone | 50 | 25 | 49 | — | — | [Observed](witnesses/ohNoMoreLemmings-7.json) |
+| Tame 9: And now this... | 50 | 25 | 49 | — | — | [Observed](witnesses/ohNoMoreLemmings-8.json) |
 | Tame 10: New Lemmings On The Block | 50 | 25 | 50 | 50 | 0 | [Verified](witnesses/ohNoMoreLemmings-9.json) |
-| Tame 11: With Compliments | 50 | 25 | — | — | — | No witness collected |
+| Tame 11: With Compliments | 50 | 25 | 50 | 50 | 0 | [Verified](witnesses/ohNoMoreLemmings-10.json) |
 | Tame 12: Citizen Lemming | 50 | 25 | — | — | — | No witness collected |
 | Tame 13: Thunder-Lemmings are go! | 50 | 25 | — | — | — | No witness collected |
 | Tame 14: Get a little extra help | 50 | 25 | 50 | 50 | 0 | [Verified](witnesses/ohNoMoreLemmings-13.json) |
-| Tame 15: Not just a pretty Lemming | 50 | 25 | — | — | — | No witness collected |
-| Tame 16: Gone With The Lemming | 50 | 25 | — | — | — | No witness collected |
+| Tame 15: Not just a pretty Lemming | 50 | 25 | 49 | — | — | [Observed](witnesses/ohNoMoreLemmings-14.json) |
+| Tame 16: Gone With The Lemming | 50 | 25 | 50 | 50 | 0 | [Verified](witnesses/ohNoMoreLemmings-15.json) |
 | Tame 17: Honey, I Saved The Lemmings | 50 | 25 | 50 | 50 | 0 | [Verified](witnesses/ohNoMoreLemmings-16.json) |
 | Tame 18: Lemmings For Presidents! | 50 | 25 | — | — | — | No witness collected |
-| Tame 19: Lemming Productions Present... | 50 | 25 | — | — | — | No witness collected |
+| Tame 19: Lemming Productions Present... | 50 | 25 | 49 | — | — | [Observed](witnesses/ohNoMoreLemmings-18.json) |
 | Tame 20: Custom built for Lemmings | 50 | 25 | — | — | — | No witness collected |
 | Wicked 1: LeMming ToMato KetchUp fAcilitY | 60 | 48 | — | — | — | No witness collected |
 | Wicked 2: Inroducing SUPERLEMMING | 1 | 1 | — | — | — | No witness collected |
@@ -403,7 +403,7 @@ See [method and limitations](README.md) and [exact conditions and evidence](audi
 | Flurry 1: Climbing to the Top! | 10 | 10 | 10 | 10 | 0 | [Verified](witnesses/holidayLemmings1993-0.json) |
 | Flurry 2: Floating Lemming Flurry | 20 | 15 | — | — | — | No witness collected |
 | Flurry 3: Holiday Mining | 80 | 50 | 80 | 80 | 0 | [Verified](witnesses/holidayLemmings1993-2.json) |
-| Flurry 4: Lemming Tracks in the Snow! | 50 | 45 | — | — | — | No witness collected |
+| Flurry 4: Lemming Tracks in the Snow! | 50 | 45 | 50 | 50 | 0 | [Verified](witnesses/holidayLemmings1993-3.json) |
 | Flurry 5: Christmas South of the Equator | 75 | 25 | 75 | 75 | 0 | [Verified](witnesses/holidayLemmings1993-4.json) |
 | Flurry 6: Lemming Snowfall | 80 | 40 | — | — | — | No witness collected |
 | Flurry 7: Lemming Snowjourn | 50 | 25 | — | — | — | No witness collected |
@@ -584,7 +584,7 @@ See [method and limitations](README.md) and [exact conditions and evidence](audi
 | Frost 1: Chains of Command | 50 | 50 | 50 | 50 | 0 | [Verified](witnesses/holidayLemmings1994-0.json) |
 | Frost 2: Ski Jump! | 50 | 49 | — | — | — | No witness collected |
 | Frost 3: CindyLand | 80 | 75 | 80 | 80 | 0 | [Verified](witnesses/holidayLemmings1994-2.json) |
-| Frost 4: Separate Ways | 50 | 49 | — | — | — | No witness collected |
+| Frost 4: Separate Ways | 50 | 49 | 49 | — | — | [Observed](witnesses/holidayLemmings1994-3.json) |
 | Frost 5: Lemming Reunification | 70 | 70 | — | — | — | No witness collected |
 | Frost 6: The Land of the Bizarre | 70 | 69 | — | — | — | No witness collected |
 | Frost 7: Happy New Year! | 50 | 25 | — | — | — | No witness collected |

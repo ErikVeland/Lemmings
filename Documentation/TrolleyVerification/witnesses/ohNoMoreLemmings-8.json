@@ -1,0 +1,142 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 72
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 104
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "blocker"
+        }
+      },
+      "tick" : 112
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 12,
+          "skill" : "climber"
+        }
+      },
+      "tick" : 792
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 19,
+          "skill" : "climber"
+        }
+      },
+      "tick" : 1168
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 16,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1176
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 32,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 2792
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 21,
+          "skill" : "climber"
+        }
+      },
+      "tick" : 2800
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 7,
+          "skill" : "floater"
+        }
+      },
+      "tick" : 2816
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 21,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 2832
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 37,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 3888
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 37,
+          "skill" : "climber"
+        }
+      },
+      "tick" : 3896
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "bomber"
+        }
+      },
+      "tick" : 3936
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "floater"
+        }
+      },
+      "tick" : 4016
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 50,
+    "required" : 25,
+    "saved" : 49,
+    "stateHash" : "c727fd847e74d163f3ac811942267ef305e92dddcb06a15cdc9bdc6358fb6a84",
+    "ticks" : 4080
+  },
+  "initialStateHash" : "72f5ebc8d9f07a2852550da8afb9004c002c6dea41393dd9b14ca43868095e6b",
+  "number" : 9,
+  "rank" : "Tame",
+  "title" : "And now this..."
+}

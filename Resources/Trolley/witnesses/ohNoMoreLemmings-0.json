@@ -1,0 +1,79 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "miner"
+        }
+      },
+      "tick" : 152
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "blocker"
+        }
+      },
+      "tick" : 176
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "miner"
+        }
+      },
+      "tick" : 240
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 248
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "blocker"
+        }
+      },
+      "tick" : 256
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "miner"
+        }
+      },
+      "tick" : 272
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "miner"
+        }
+      },
+      "tick" : 288
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 50,
+    "required" : 25,
+    "saved" : 50,
+    "stateHash" : "e43b58db258448fad5056b5198ed4ad32230a57fc02b6553794119b75f9f20c6",
+    "ticks" : 2842
+  },
+  "initialStateHash" : "dbe1f2c85f2a8fa711a68f7c9e57016b70f61050c3ec04c3495052f16a01186e",
+  "number" : 1,
+  "rank" : "Tame",
+  "title" : "Down And Out Lemmings"
+}

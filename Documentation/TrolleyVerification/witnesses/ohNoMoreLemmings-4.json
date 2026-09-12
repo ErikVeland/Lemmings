@@ -1,0 +1,142 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "miner"
+        }
+      },
+      "tick" : 64
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "blocker"
+        }
+      },
+      "tick" : 136
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "blocker"
+        }
+      },
+      "tick" : 208
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "blocker"
+        }
+      },
+      "tick" : 232
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 256
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 16,
+          "skill" : "floater"
+        }
+      },
+      "tick" : 1600
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 1608
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 1616
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 5,
+          "skill" : "bomber"
+        }
+      },
+      "tick" : 1624
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 9,
+          "skill" : "climber"
+        }
+      },
+      "tick" : 1640
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "bomber"
+        }
+      },
+      "tick" : 2904
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "bomber"
+        }
+      },
+      "tick" : 2912
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "bomber"
+        }
+      },
+      "tick" : 2928
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "climber"
+        }
+      },
+      "tick" : 3008
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 50,
+    "required" : 25,
+    "saved" : 46,
+    "stateHash" : "98868038fc11adde65fb40082a73b187ebff46097a731bfb9b16024fdb6c3634",
+    "ticks" : 3075
+  },
+  "initialStateHash" : "9a6485d7785ff77070271885c06a86de23a6fd0e2ae4ec94033b55fe21030594",
+  "number" : 5,
+  "rank" : "Tame",
+  "title" : "Snuggle up to a Lemming"
+}

@@ -1,0 +1,79 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "blocker"
+        }
+      },
+      "tick" : 160
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "blocker"
+        }
+      },
+      "tick" : 184
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 200
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 424
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 432
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 7,
+          "skill" : "miner"
+        }
+      },
+      "tick" : 440
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 18,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 2144
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 50,
+    "required" : 45,
+    "saved" : 50,
+    "stateHash" : "42ea5288600c58bbc32569a479ccc8558863636009289cf2b780bf57567c3764",
+    "ticks" : 2707
+  },
+  "initialStateHash" : "13cfce68b3f495f7e803d36cf8073ba2dd30426767cc0f1f8f624996de063c2e",
+  "number" : 4,
+  "rank" : "Flurry",
+  "title" : "Lemming Tracks in the Snow!"
+}

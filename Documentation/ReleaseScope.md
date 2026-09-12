@@ -1,7 +1,7 @@
 # Release scope
 
-What this release claims, and what it does not. Every line is checked by a gate
-that runs in the repository. See the [gate register](ReleaseReadiness/gates.json)
+The beta 23 release boundary. Automated checks support the recorded routes;
+remaining compatibility and hardware claims still need validation. See the [gate register](ReleaseReadiness/gates.json)
 and the [1.0 gap evaluation](ReleaseReadiness/OneZeroGapEvaluation.md).
 
 ## Wording
@@ -39,6 +39,14 @@ Oh Yes! More Lemmings converts levels that already appear above. Its 60 levels
 load and render. Conversion is not a solution, so it is counted with the release
 it converts, never twice.
 
+## Fan levels and conversions
+
+Fan levels are part of the Classic validation boundary. The 6,043 bundled fan
+levels are not all certified playable: the earlier full-corpus audit recorded
+94 load/start failures and many levels without a winning route. Its results do
+not certify later builds. See the beta 23 readiness report for this build’s checks.
+Oh Yes! conversions also need their own replay and progression validation.
+
 ## Sequels
 
 | Release | Levels | Proven routes | Claim |
@@ -57,7 +65,10 @@ Mac release does not imply them.
 
 ## Open before 1.0
 
-- 69 classic levels and 130 sequel levels have no recorded winning route.
+- 69 official Classic levels have no recorded winning route. Fan levels and
+  conversions also have unresolved coverage and compatibility gaps.
+- L2 and L3 retain preview status; their 130 missing routes are tracked separately
+  from the Classic 1.0 milestone.
 - Physical Intel, minimum macOS, HDR, multiple displays and high refresh rates
   are untested. Sustained 10x play is not established.
 - Scalable text and VoiceOver navigation are incomplete.

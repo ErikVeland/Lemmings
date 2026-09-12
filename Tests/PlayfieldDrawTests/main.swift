@@ -30,6 +30,7 @@ private final class BombPreviewSession: GameSession {
   var currentTick: Int { animationTick }
   func tick() { animationTick += 1 }
   func assign(skillIndex: Int, to lemmingID: Int) -> String? { nil }
+  func assignmentState(skillIndex: Int, to lemmingID: Int) -> AssignmentState { .unavailable }
   func adjustRate(by delta: Int) {}
   func nuke() {}
   func undoNuke() {}

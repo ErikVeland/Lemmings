@@ -1715,6 +1715,11 @@ extension AppDelegate {
       }
     }
     try check(bluePixels > 30, "Game selection menu fell back to plain lettering without level artwork")
+    let captures = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
+        .appendingPathComponent(".build/ui-font-check")
+    try FileManager.default.createDirectory(at: captures, withIntermediateDirectories: true)
+    try menuBitmap.representation(using: .png, properties: [:])!.write(
+        to: captures.appendingPathComponent("menu-without-level-artwork.png"))
 
 
     let floor = Data((0..<(128 * 96)).map { UInt8($0 / 128 >= 48 ? 1 : 0) })

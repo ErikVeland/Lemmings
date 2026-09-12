@@ -66,7 +66,7 @@ reported rather than ignored.
 | Lemmings 3 movies | All five original `.FLI` movies are available from the in-game movie gallery. Streaming playback supports pause and return; story triggers and movie soundtracks remain unconnected |
 | Graphics sources | DOS VGA, Amiga OCS, and Macintosh artwork all decode and can be chosen |
 | DOS CGA | Not available. The DOS data holds CGA sets, and no decoder reads them. There are no EGA sets |
-| Distribution | Beta 13 (0.1, build 13), targeting macOS 13+. The archive is signed, notarized, stapled and accepted by Gatekeeper. See [release notes](Documentation/ReleaseNotes-beta13.md) and [build evidence](Documentation/Beta13Readiness.md). The final 1.0 archive still needs its own build, signing and notarization checks. See [release gates](Documentation/ReleaseReadiness/gates.json) and the [1.0 gap evaluation](Documentation/ReleaseReadiness/OneZeroGapEvaluation.md) |
+| Distribution | Beta 23 (0.1, build 23), targeting macOS 13+. See [release notes](Documentation/ReleaseNotes-beta23.md) and [archive verification](Documentation/Beta23Readiness.md). Full Classic and fan-pack coverage, hardware checks and accessibility remain open before 1.0. See [release scope](Documentation/ReleaseScope.md). |
 
 ## Unified game library
 
