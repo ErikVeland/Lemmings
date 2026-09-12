@@ -635,14 +635,19 @@ enum PanelButton: Equatable {
   private func drawProgress(in box: CGRect, y: CGFloat) {
     guard !progressText.isEmpty else { return }
     let text = gameText(progressText)
-    guard let macInterface, let font = macInterface.font(.small), font.covers(text) else {
+    if let macInterface, let font = macInterface.font(.small), font.covers(text) {
+      let width = macInterface.width(of: text, face: .small, scale: 1)
+      let statusWidth = macInterface.width(of: gameText(statusText), face: .small, scale: 1)
+      let x = bounds.width - inset - width
+      guard x > inset + statusWidth + 12 else { return }
+      macInterface.draw(text, face: .small, at: CGPoint(x: x, y: y), scale: 1)
       return
     }
-    let width = macInterface.width(of: text, face: .small, scale: 1)
-    let statusWidth = macInterface.width(of: gameText(statusText), face: .small, scale: 1)
-    let x = bounds.width - inset - width
-    guard x > inset + statusWidth + 12 else { return }
-    macInterface.draw(text, face: .small, at: CGPoint(x: x, y: y), scale: 1)
+    // The original artwork has no Macintosh interface font. Without this the
+    // whole field silently drew nothing for every player using it, which is
+    // most of them. Fall back to the same glyphs the status line uses.
+    GamePixelText.draw(text, in: CGRect(
+      x: box.midX, y: box.minY, width: box.width / 2, height: box.height))
   }
 
   /// Tall enough for the original bar at 3x, plus a status strip beneath it.
