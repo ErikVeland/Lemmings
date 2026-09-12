@@ -172,23 +172,72 @@ enum PanelGlyph: String {
     }
     static func draw(in rect: CGRect, label: String, active: Bool, next: String = "2×") {
         let side = rect.width * 0.22
+        let pixel = max(1, floor(rect.height / 24))
         let boxes = [CGRect(x: rect.minX, y: rect.minY, width: side, height: rect.height),
             CGRect(x: rect.minX + side, y: rect.minY, width: rect.width - 2 * side, height: rect.height),
             CGRect(x: rect.maxX - side, y: rect.minY, width: side, height: rect.height)]
         for (index, box) in boxes.enumerated() {
-            (index == 1 && active ? NSColor(calibratedRed: 0.08, green: 0.32, blue: 0.16, alpha: 1) : NSColor(calibratedWhite: 0.10, alpha: 1)).setFill()
-            box.insetBy(dx: 0.5, dy: 0.5).fill()
-            let text = (["‹", label, "›"][index]) as NSString
-            let font = NSFont.monospacedSystemFont(ofSize: min(rect.height * 0.42, box.width / (index == 1 ? 2.1 : 0.8)), weight: .bold)
-            let attributes: [NSAttributedString.Key: Any] = [.font: font, .foregroundColor: NSColor(calibratedRed: 0.65, green: 1, blue: 0.65, alpha: 1)]
-            let size = text.size(withAttributes: attributes)
-            text.draw(at: CGPoint(x: box.midX - size.width / 2, y: box.midY - size.height / 2 - (index == 1 && !active ? rect.height * 0.12 : 0)), withAttributes: attributes)
-            if index == 1 && !active {
-                let detail = ("→" + next) as NSString
-                let small: [NSAttributedString.Key: Any] = [.font: NSFont.monospacedSystemFont(ofSize: font.pointSize * 0.65, weight: .regular), .foregroundColor: NSColor.lightGray]
-                let size = detail.size(withAttributes: small)
-                detail.draw(at: CGPoint(x: box.midX - size.width / 2, y: box.midY + rect.height * 0.1), withAttributes: small)
+            GameStoneButton.draw(box, selected: index == 1 && active, pixel: min(pixel, max(1, floor(box.width / 12))))
+            if index == 1 {
+                let content = box.insetBy(dx: rect.height >= 60 ? 4 * pixel : pixel, dy: 6 * pixel)
+                let glyphBox = CGRect(x: content.minX, y: content.minY, width: content.width, height: content.height * 0.45)
+                if let image = PanelGlyph.fastForward.image(fitting: glyphBox.size), image.size.width <= glyphBox.width, image.size.height <= glyphBox.height {
+                    image.draw(in: CGRect(x: glyphBox.midX - image.size.width / 2, y: glyphBox.midY - image.size.height / 2,
+                        width: image.size.width, height: image.size.height), from: .zero, operation: .sourceOver,
+                        fraction: 1, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none])
+                    GamePixelText.draw(active ? label : next, in: CGRect(x: content.minX, y: content.midY,
+                        width: content.width, height: content.height / 2), maxScale: .greatestFiniteMagnitude)
+                } else {
+                    GamePixelText.draw(active ? label : next, in: content, maxScale: .greatestFiniteMagnitude)
+                }
+            } else {
+                let step = max(1, floor(min(box.width / 8, box.height / 12)))
+                let rows = index == 0 ? ["..#", ".#.", "#..", ".#.", "..#"] : ["#..", ".#.", "..#", ".#.", "#.."]
+                NSColor(calibratedRed: 0.76, green: 0.88, blue: 0.62, alpha: 1).setFill()
+                for (y, row) in rows.enumerated() {
+                    for (x, mark) in row.enumerated() where mark == "#" {
+                        CGRect(x: floor(box.midX - 1.5 * step) + CGFloat(x) * step,
+                            y: floor(box.midY - 2.5 * step) + CGFloat(y) * step, width: step, height: step).fill()
+                    }
+                }
             }
         }
     }
+}
+
+/// Shared stone sockets for controls added beside the original panel artwork.
+@MainActor enum GameStoneButton {
+  static func draw(_ frame: CGRect, selected: Bool, pixel: CGFloat) {
+    let rim = frame.insetBy(dx: pixel, dy: pixel)
+    func fill(_ rect: CGRect, _ color: NSColor) {
+      color.setFill()
+      rect.fill()
+    }
+    let light = NSColor(calibratedRed: 0.65, green: 0.66, blue: 0.59, alpha: 1)
+    let stone = NSColor(calibratedRed: 0.35, green: 0.37, blue: 0.32, alpha: 1)
+    let shadow = NSColor(calibratedRed: 0.11, green: 0.13, blue: 0.10, alpha: 1)
+    fill(rim, stone)
+    // Top and left catch the light; the selected button sinks into its socket.
+    let upper = selected ? shadow : light
+    let lower = selected ? light : shadow
+    for step in 0..<2 {
+      let edge = rim.insetBy(dx: CGFloat(step) * pixel, dy: CGFloat(step) * pixel)
+      fill(CGRect(x: edge.minX, y: edge.minY, width: edge.width, height: pixel), upper)
+      fill(CGRect(x: edge.minX, y: edge.minY, width: pixel, height: edge.height), upper)
+      fill(CGRect(x: edge.minX, y: edge.maxY - pixel, width: edge.width, height: pixel), lower)
+      fill(CGRect(x: edge.maxX - pixel, y: edge.minY, width: pixel, height: edge.height), lower)
+    }
+    let well = rim.insetBy(dx: 3 * pixel, dy: 3 * pixel)
+    fill(well.insetBy(dx: -pixel, dy: -pixel), shadow)
+    fill(CGRect(x: well.minX, y: well.maxY, width: well.width, height: pixel), light)
+    fill(CGRect(x: well.maxX, y: well.minY, width: pixel, height: well.height), light)
+    fill(well, selected
+      ? NSColor(calibratedRed: 0.17, green: 0.25, blue: 0.10, alpha: 1)
+      : NSColor(calibratedRed: 0.07, green: 0.09, blue: 0.06, alpha: 1))
+    if selected {
+      fill(CGRect(x: well.minX + pixel, y: well.maxY - 2 * pixel,
+        width: well.width - 2 * pixel, height: pixel),
+        NSColor(calibratedRed: 0.62, green: 0.85, blue: 0.22, alpha: 1))
+    }
+  }
 }

@@ -10,15 +10,15 @@ struct KeyboardCommand {
 @MainActor final class KeyboardCommandsView: NSView, NSTableViewDataSource, NSTableViewDelegate, NSSearchFieldDelegate {
     let commands: [KeyboardCommand]
     private(set) var filtered: [KeyboardCommand] = []
-    let search = NSSearchField()
-    let category = NSPopUpButton()
+    let search = GameSearchField()
+    let category = GamePopUpButton()
     private let table = NSTableView()
-    private let count = NSTextField(labelWithString: "")
+    private let count = GameLabel(labelWithString: "")
 
     init(commands: [KeyboardCommand], modern: Bool) {
         self.commands = commands
         super.init(frame: NSRect(x: 0, y: 0, width: 780, height: 450))
-        let intro = NSTextField(wrappingLabelWithString: "Esc  •  Save and return to the main menu     Space  •  Pause     F  •  Fast-forward\n" + (modern ? "Number keys select skills by position. Letter bindings follow the current level." : "Modern shortcuts are off. Use number keys for skills; enable modern controls in Settings."))
+        let intro = GameLabel(wrappingLabelWithString: "Esc  •  Save and return to the main menu     Space  •  Pause     F  •  Fast-forward\n" + (modern ? "Number keys select skills by position. Letter bindings follow the current level." : "Modern shortcuts are off. Use number keys for skills; enable modern controls in Settings."))
         intro.font = .systemFont(ofSize: 13 * GameAccessibility.scale)
         search.placeholderString = "Find a key or command, e.g. rewind, Shift, builder"
         search.setAccessibilityLabel("Search keyboard commands")
@@ -28,14 +28,15 @@ struct KeyboardCommand {
         category.setAccessibilityLabel("Command category")
         let scroll = NSScrollView()
         scroll.hasVerticalScroller = true
-        scroll.borderType = .bezelBorder
+        scroll.borderType = .noBorder
         for (identifier, title, width) in [("keys", "Keys", 185.0), ("action", "Command", 385.0), ("group", "Where", 180.0)] {
             let column = NSTableColumn(identifier: NSUserInterfaceItemIdentifier(identifier))
-            column.title = title; column.width = width
+            column.headerCell = GameTableHeaderCell(textCell: title); column.title = title; column.width = width
             table.addTableColumn(column)
         }
-        table.rowHeight = 38 * GameAccessibility.scale
-        table.usesAlternatingRowBackgroundColors = true
+        table.rowHeight = 48 * GameAccessibility.scale
+        table.usesAlternatingRowBackgroundColors = false
+        table.backgroundColor = .black
         table.columnAutoresizingStyle = .lastColumnOnlyAutoresizingStyle
         table.dataSource = self; table.delegate = self
         table.setAccessibilityLabel("Keyboard commands")
@@ -70,7 +71,7 @@ struct KeyboardCommand {
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
         let command = filtered[row]
         let key = tableColumn?.identifier.rawValue ?? ""
-        let label = NSTextField(wrappingLabelWithString: key == "keys" ? command.keys : key == "group" ? command.group : command.action)
+        let label = GameLabel(wrappingLabelWithString: key == "keys" ? command.keys : key == "group" ? command.group : command.action)
         label.font = key == "keys" ? .monospacedSystemFont(ofSize: 12 * GameAccessibility.scale, weight: .semibold) : .systemFont(ofSize: 12 * GameAccessibility.scale)
         label.textColor = key == "group" ? .secondaryLabelColor : .labelColor
         label.setAccessibilityLabel(label.stringValue)

@@ -57,6 +57,7 @@ protocol GameSession: AnyObject {
   var lastCues: [ClassicSoundEffect] { get }
   /// Returns nil when the assignment lands, or a reason when it does not.
   func assign(skillIndex: Int, to lemmingID: Int) -> String?
+  func canAssign(skillIndex: Int, to lemmingID: Int) -> Bool
   func adjustRate(by delta: Int)
   func nuke()
   var canUndoNuke: Bool { get }
@@ -217,6 +218,13 @@ final class ClassicSession: GameSession {
   private(set) var lastCues: [ClassicSoundEffect] = []
 
   func tick() { lastCues = ClassicSoundCue.cues(for: history.tick()) }
+
+  /// Probe a value copy so targeting follows the engine without changing the run.
+  func canAssign(skillIndex: Int, to lemmingID: Int) -> Bool {
+    guard ClassicSkill.allCases.indices.contains(skillIndex) else { return false }
+    var probe = simulation
+    return probe.assign(ClassicSkill.allCases[skillIndex], to: lemmingID) == .assigned
+  }
 
   func assign(skillIndex: Int, to lemmingID: Int) -> String? {
     guard ClassicSkill.allCases.indices.contains(skillIndex) else { return "no such skill" }
@@ -401,6 +409,13 @@ final class NeoLemmixSession: GameSession {
   }
 
   func tick() { _ = simulation.tick() }
+
+  func canAssign(skillIndex: Int, to lemmingID: Int) -> Bool {
+    guard skillOrder.indices.contains(skillIndex) else { return false }
+    var probe = simulation
+    if case .rejected = probe.assign(skill: skillOrder[skillIndex], to: lemmingID) { return false }
+    return true
+  }
 
   func assign(skillIndex: Int, to lemmingID: Int) -> String? {
     guard skillOrder.indices.contains(skillIndex) else { return "no such skill" }

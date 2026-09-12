@@ -3,6 +3,9 @@
 The user's requirement: icons and states must make sense without explanatory
 sentences. Apply this to new UI and changes to existing UI.
 
+- Use the game's bitmap artwork and pixel controls throughout game pages and HUDs.
+  Do not mix system fonts, SF Symbols, rounded Aqua controls or modern gradients
+  into game artwork. AppKit can supply input and accessibility beneath game rendering.
 - Show each outcome once. A filled star already communicates an earned goal.
 - Use familiar action symbols. Pause changes to Play. A reversible action changes
   to Undo. Do not leave a destructive symbol on a button that now undoes it.

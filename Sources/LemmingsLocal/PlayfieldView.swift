@@ -167,7 +167,7 @@ enum GamePhase: Equatable {
   var overlayFrame = 0
   var phase: GamePhase = .playing {
     didSet {
-      if phase != oldValue { cursorViewPoint = nil; cursorLevelPoint = nil; overlayReplayLine = nil; overlayRetryLine = nil }
+      if phase != oldValue { displayedTarget = nil; cursorViewPoint = nil; cursorLevelPoint = nil; overlayReplayLine = nil; overlayRetryLine = nil }
     }
   }
   var levelImage: CGImage?
@@ -216,7 +216,7 @@ enum GamePhase: Equatable {
     sceneTick = session.currentTick
   }
   var session: (any GameSession)? {
-    didSet { if oldValue !== session { hdrBirths.removeAll(); hdrLastTick = 0; speedTrails.reset() } }
+    didSet { if oldValue !== session { displayedTarget = nil; hdrBirths.removeAll(); hdrLastTick = 0; speedTrails.reset() } }
   }
   var assets: ClassicMainDATAssets?
   var palette: [ClassicRGBColor] = []
@@ -243,6 +243,8 @@ enum GamePhase: Equatable {
     handleMove(to: next); controllerPointer = next
   }
   let assignmentHighlight = LemmingFocusHighlight()
+  var selectedSkill: () -> Int = { 0 }
+  private var displayedTarget: (id: Int, point: CGPoint, time: TimeInterval)?
   var pointerLemmingID: Int? { cursorViewPoint.flatMap { lemming(at: viewport.levelPoint(from: $0))?.id } }
   private var cursorLevelPoint: CGPoint?
   private var cursorViewPoint: CGPoint?
@@ -307,7 +309,11 @@ enum GamePhase: Equatable {
     assignmentHighlight.clear()
     cursorViewPoint = point
     cursorLevelPoint = viewport.levelPoint(from: point)
-    if let target = lemming(at: viewport.levelPoint(from: point)) { onAssign?(target.id) }
+    let levelPoint = viewport.levelPoint(from: point)
+    let target = clickTarget(at: levelPoint)
+    displayedTarget = nil
+    if let target { onAssign?(target.id) }
+    needsDisplay = true
   }
 
   override func mouseMoved(with event: NSEvent) {
@@ -326,6 +332,7 @@ enum GamePhase: Equatable {
   func clearPointer() {
     cursorLevelPoint = nil
     cursorViewPoint = nil
+    displayedTarget = nil
     needsDisplay = true
   }
 
@@ -356,32 +363,40 @@ enum GamePhase: Equatable {
     needsDisplay = true
   }
 
-  /// The box around a lemming that the cursor must be inside to pick it.
-  ///
-  /// The anchor is the foot, so the box reaches upwards over the body. These
-  /// bounds follow the original: a little narrower than the drawn sprite,
-  /// because the sprite includes swinging arms and a pick area that wide makes
-  /// neighbouring lemmings impossible to tell apart.
-  private static let pickBox = (halfWidth: CGFloat(4), top: CGFloat(12), bottom: CGFloat(4))
+  /// A small allowance covers sprite edges without reaching across the crowd.
+  private static let pickBox = (halfWidth: CGFloat(6), top: CGFloat(14), bottom: CGFloat(5))
 
-  /// Returns the lemming under the point, or nothing when the cursor is clear.
-  ///
-  /// The cursor does not snap. Picking the nearest lemming within a radius
-  /// looks like the cursor sticking to a lemming it is not over, and it makes
-  /// two lemmings standing side by side impossible to choose between. Only a
-  /// lemming the cursor is actually inside can be picked.
-  ///
-  /// When several overlap, the last one wins. That is the one drawn on top, so
-  /// the choice matches what the player sees.
+  /// Both the green reticle and a fresh click use the nearest eligible lemming.
   func lemming(at point: CGPoint) -> SessionLemming? {
     guard let session else { return nil }
-    return session.lemmings.last { contains($0, point) }
+    let skill = selectedSkill()
+    let candidates = session.lemmings.filter { contains($0, point) }.sorted {
+      let a = distanceSquared($0, point), b = distanceSquared($1, point)
+      return a == b ? $0.id > $1.id : a < b
+    }
+    return candidates.first { session.canAssign(skillIndex: skill, to: $0.id) }
+  }
+
+  /// Honour the green target briefly while it walks between display and input.
+  func clickTarget(at point: CGPoint) -> SessionLemming? {
+    if let displayedTarget, ProcessInfo.processInfo.systemUptime - displayedTarget.time <= 0.12,
+       hypot(point.x - displayedTarget.point.x, point.y - displayedTarget.point.y) <= 2,
+       let session, let target = session.lemmings.first(where: { $0.id == displayedTarget.id }),
+       distanceSquared(target, point) <= 16 * 16,
+       session.canAssign(skillIndex: selectedSkill(), to: target.id) {
+      return target
+    }
+    return lemming(at: point)
+  }
+
+  private func distanceSquared(_ lemming: SessionLemming, _ point: CGPoint) -> CGFloat {
+    let dx = CGFloat(lemming.x) - point.x, dy = CGFloat(lemming.y - 5) - point.y
+    return dx * dx + dy * dy
   }
 
   private func contains(_ lemming: SessionLemming, _ point: CGPoint) -> Bool {
     let box = Self.pickBox
-    let x = CGFloat(lemming.x)
-    let y = CGFloat(lemming.y)
+    let x = CGFloat(lemming.x), y = CGFloat(lemming.y)
     return point.x >= x - box.halfWidth && point.x <= x + box.halfWidth
       && point.y >= y - box.top && point.y <= y + box.bottom
   }
@@ -798,8 +813,10 @@ enum GamePhase: Equatable {
   }
 
   private func drawCursor() {
-    guard let point = cursorLevelPoint else { return }
+    guard let cursorViewPoint else { return }
+    let point = viewport.levelPoint(from: cursorViewPoint)
     let target = lemming(at: point)
+    displayedTarget = target.map { ($0.id, point, ProcessInfo.processInfo.systemUptime) }
     let center = viewport.viewPoint(
       fromLevel: target.map { CGPoint(x: CGFloat($0.x), y: CGFloat($0.y) - 5) } ?? point)
     let side = 14 * viewport.zoom

@@ -253,7 +253,7 @@ import NxlvKit
     }
 }
 
-@MainActor private final class GameActionButton: NSButton {
+@MainActor final class GameActionButton: NSButton {
     var onPress: (() -> Void)?
     private let primary: Bool
     private let renderer = GameMenuArtwork.renderer()
@@ -268,9 +268,8 @@ import NxlvKit
     override var isFlipped: Bool { true }
     override func draw(_ dirtyRect: NSRect) {
         let chosen = isEnabled && (primary || isHighlighted)
-        GameStyle.fill(bounds, chosen ? NSColor(calibratedRed: 0.78, green: 0.82, blue: 0.88, alpha: 1) : NSColor(calibratedWhite: 0.025, alpha: 1))
-        NSColor(calibratedWhite: chosen ? 0.96 : 0.29, alpha: 1).setStroke()
-        NSBezierPath(rect: bounds.insetBy(dx: 0.5, dy: 0.5)).stroke()
+        GameStoneButton.draw(bounds, selected: chosen, pixel: 1)
+        GameControlText.focus(self)
         let caption = CGRect(x: 12, y: bounds.midY - 10, width: bounds.width - 24, height: 20)
         if let renderer {
             let face: ClassicMacUserInterface.Face = renderer.width(of: MacInterfaceRenderer.menuText(title), face: .large, scale: 1) <= caption.width ? .large : .small

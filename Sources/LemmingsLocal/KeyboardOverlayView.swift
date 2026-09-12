@@ -17,23 +17,23 @@ import AppKit
             let box = NSView()
             box.wantsLayer = true
             box.layer?.backgroundColor = NSColor.black.withAlphaComponent(0.82).cgColor
-            box.layer?.cornerRadius = 10
+            box.layer?.cornerRadius = 0
             box.layer?.borderColor = NSColor.systemGreen.withAlphaComponent(0.7).cgColor
             box.layer?.borderWidth = 1
-            let heading = NSTextField(labelWithString: title)
+            let heading = GameLabel(labelWithString: title)
             heading.font = .systemFont(ofSize: 15 * GameAccessibility.scale, weight: .bold)
             heading.textColor = .systemGreen
-            let label = NSTextField(wrappingLabelWithString: text)
+            let label = GameLabel(wrappingLabelWithString: text)
             label.font = .monospacedSystemFont(ofSize: 13 * GameAccessibility.scale, weight: .medium)
             label.textColor = .white
             for view in [heading, label] { view.translatesAutoresizingMaskIntoConstraints = false; box.addSubview(view) }
             NSLayoutConstraint.activate([
                 heading.topAnchor.constraint(equalTo: box.topAnchor, constant: 12), heading.leadingAnchor.constraint(equalTo: box.leadingAnchor, constant: 14), heading.trailingAnchor.constraint(equalTo: box.trailingAnchor, constant: -14),
-                label.topAnchor.constraint(equalTo: heading.bottomAnchor, constant: 7), label.leadingAnchor.constraint(equalTo: heading.leadingAnchor), label.trailingAnchor.constraint(equalTo: heading.trailingAnchor), label.bottomAnchor.constraint(lessThanOrEqualTo: box.bottomAnchor, constant: -12)
+                label.topAnchor.constraint(equalTo: heading.bottomAnchor, constant: 7), label.leadingAnchor.constraint(equalTo: heading.leadingAnchor), label.trailingAnchor.constraint(equalTo: heading.trailingAnchor), label.bottomAnchor.constraint(equalTo: box.bottomAnchor, constant: -12)
             ])
             addSubview(box); cards.append((box, position))
         }
-        card("KEYBOARD • LEVEL FROZEN", "Esc or ? closes this overlay. Your previous pause state is restored.\nAll commands opens the searchable reference.", "title")
+        card("KEYBOARD", "ESC / ?  CLOSE", "title")
         let camera = commands.filter { $0.group == "Camera" }.map { "\($0.keys)  \($0.action)" }.joined(separator: "\n")
         card("LOOK AROUND", camera, "camera")
         let variable = commands.contains { $0.keys.contains("Shift +") }
@@ -45,8 +45,8 @@ import AppKit
         card("ASSIGN & FOCUS", focus, "focus")
         let actions = commands.filter { $0.group != "Controller" && ["R", "Z", ", / .", "X", "− / +"].contains($0.keys) }.map { "\($0.keys)  \($0.action)" }.joined(separator: "\n")
         card("LEVEL CONTROLS", actions + "\nEsc  Save run and return to main menu\n     (after closing this overlay)", "actions")
-        for (title, action) in [("Close overlay (Esc)", #selector(closeOverlay)), ("All commands…", #selector(allCommands))] + (hints ? [("Level hints…", #selector(levelHints))] : []) {
-            let button = NSButton(title: title, target: self, action: action)
+        for (title, action) in [("Close (Esc)", #selector(closeOverlay)), ("All commands", #selector(allCommands))] + (hints ? [("Level hints", #selector(levelHints))] : []) {
+            let button = GameButton(title: title, target: self, action: action)
             button.bezelStyle = .rounded
             if action == #selector(closeOverlay) { button.keyEquivalent = "\u{1b}" }
             addSubview(button); buttons.append(button)
@@ -62,7 +62,10 @@ import AppKit
         func measured(_ card: NSView, width: CGFloat) -> CGFloat {
             let labels = card.subviews.compactMap { $0 as? NSTextField }
             return labels.reduce(CGFloat(43)) { total, label in
-                total + (label.stringValue as NSString).boundingRect(with: NSSize(width: width - 28, height: 10000), options: [.usesLineFragmentOrigin, .usesFontLeading], attributes: [.font: label.font!]).height
+                if let renderer = GameMenuArtwork.renderer(), let font = renderer.font(.small) {
+                    return total + CGFloat(MacInterfaceRenderer.menuLines(label.stringValue, columns: max(1, Int(width - 28) / font.cellWidth)).count * (font.cellHeight + 6))
+                }
+                return total + label.intrinsicContentSize.height
             }
         }
         let title = cards.first { $0.1 == "title" }!.0
@@ -97,13 +100,20 @@ import AppKit
         NSColor.black.withAlphaComponent(0.22).setFill(); bounds.fill()
         for (key, rect) in anchors() where !rect.isEmpty {
             NSColor.systemGreen.setStroke()
-            let outline = NSBezierPath(roundedRect: rect.insetBy(dx: -2, dy: -2), xRadius: 3, yRadius: 3)
+            let outline = NSBezierPath(rect: rect.insetBy(dx: -2, dy: -2))
             outline.lineWidth = 2; outline.stroke()
-            let attributes: [NSAttributedString.Key: Any] = [.font: NSFont.monospacedSystemFont(ofSize: 14, weight: .bold), .foregroundColor: NSColor.black]
-            let size = (key as NSString).size(withAttributes: attributes)
-            let badge = NSRect(x: max(2, min(bounds.width - size.width - 14, rect.midX - size.width / 2 - 6)), y: max(2, min(bounds.height - 26, rect.maxY + 4)), width: size.width + 12, height: 24)
-            NSColor.systemGreen.setFill(); NSBezierPath(roundedRect: badge, xRadius: 4, yRadius: 4).fill()
-            (key as NSString).draw(at: NSPoint(x: badge.minX + 6, y: badge.minY + 3), withAttributes: attributes)
+            let badgeWidth = CGFloat(MacInterfaceRenderer.menuText(key).count * 8 + 16)
+            let badge = NSRect(x: max(2, min(bounds.width - badgeWidth - 2, rect.midX - badgeWidth / 2)),
+                y: max(2, min(bounds.height - 26, rect.maxY + 4)), width: badgeWidth, height: 24)
+            GameStoneButton.draw(badge, selected: true, pixel: 1)
+            NSGraphicsContext.saveGraphicsState()
+            let transform = NSAffineTransform()
+            transform.translateX(by: 0, yBy: badge.midY * 2); transform.scaleX(by: 1, yBy: -1); transform.concat()
+            if let context = NSGraphicsContext.current?.cgContext {
+                NSGraphicsContext.current = NSGraphicsContext(cgContext: context, flipped: true)
+            }
+            GameControlText.draw(key, in: badge.insetBy(dx: 4, dy: 2), alignment: .center)
+            NSGraphicsContext.restoreGraphicsState()
         }
     }
     override func mouseDown(with event: NSEvent) { }
