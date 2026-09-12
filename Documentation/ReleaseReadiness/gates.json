@@ -4,7 +4,7 @@
   "priority": "P0",
   "status": "open",
   "exitCriteria": "Replay a winning route for every advertised level. Close the remaining Oh No!, Xmas 1992, Holiday, L2, L3 and conversion gaps. Distinguish individual solutions from continuous campaign progression.",
-  "progress": "The user requires all pre-L2 Classic content, including conversions and fan levels, validated before development shifts exclusively to L2/L3. Original DOS: 120/120; Oh No!: 60/100; Xmas: 6/8; Holiday: 28/64. The official Classic-family gap is 78, excluding conversions and fan packs. See ClassicScopeClosure.md for the required corpus, playability, progression and compatibility checks. The gate remains open."
+  "progress": "The user requires all pre-L2 Classic content, including conversions and fan levels, validated before development shifts exclusively to L2/L3. Original DOS: 120/120; Oh No!: 61/100; Xmas: 6/8; Holiday: 28/64. The official Classic-family gap is 77, excluding conversions and fan packs. The 20.6 audit covers all 6,395 indexed levels. Fan load/start failures fell from 1,559 to 94; 5,886 levels still lack verified wins. See ClassicBetaValidation.md for exact results and ClassicScopeClosure.md for the remaining progression and compatibility checks. The gate remains open."
  },
  {
   "area": "Sequel fidelity",

@@ -10,14 +10,14 @@ L2 and L3 remain the next main development phase. They are outside this gate.
 | Collection | Current evidence | Required closure |
 | --- | --- | --- |
 | Original Lemmings | 120/120 preserved winning routes | Keep every route passing, retain original constraints, and investigate reported physics differences. |
-| Oh No! More Lemmings | 60/100 preserved winning routes | Preserve and reproduce wins for the remaining 40 levels. |
+| Oh No! More Lemmings | 61/100 preserved winning routes | Preserve and reproduce wins for the remaining 39 levels. |
 | Xmas 1991 and 1992 | 4/4 and 2/4 | Preserve and reproduce the remaining two Xmas 1992 wins. |
 | Holiday 1993 and 1994 | 13/32 and 15/32 | Preserve and reproduce the remaining 19 and 17 wins. |
 | Oh Yes! and other advertised conversions/port-exclusive levels | Completion coverage remains incomplete | Inventory every shipped level and source ruleset. Validate conversions, assets, constraints, mechanics and winning routes. |
 | Bundled classic-format fan packs | Discovery/import checks exist; whole-library completion is not established | Freeze the shipped corpus. Report each level's decoding, assets, supported mechanics and completion evidence. Preserve winning routes for levels presented as validated. Unverified levels keep the gate open. |
 | NeoLemmix fan imports | Partial engine support and explicit unsupported-feature diagnostics | Inventory the imported corpus and its required mechanics. Resolve supported-scope compatibility gaps and preserve representative reference replays for each supported mechanic and combination. Do not count rejection as successful playability. |
 
-The official Classic-family gap is 78 of 292 levels. This excludes converted and
+The official Classic-family gap is 77 of 292 levels. This excludes converted and
 fan collections. Campaign counts come from the committed completion manifests;
 the older readiness documents still contain the previous Oh No! count of 54.
 
@@ -58,3 +58,10 @@ release integration, without duplicating that solver work.
 Beta 21 remains a consolidation and validation beta. Do not mark Classic complete
 or move exclusively to L2/L3 until this gate closes. Record any changed scope
 explicitly rather than silently excluding an inconvenient pack or mechanic.
+
+## Beta validation run
+
+The [full corpus audit](ClassicBetaValidation.md) accounts for all 6,395 indexed
+levels and reports each result. Build 20.6 fixes fan graphics selection and stale
+failed-level briefings. Ninety-four fan levels still fail to load or start, and
+5,886 levels lack verified winning evidence. The completion gate remains open.
