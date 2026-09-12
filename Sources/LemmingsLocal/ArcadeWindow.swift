@@ -349,9 +349,9 @@ import NxlvKit
             button("Retry as \(player.initials)", CGRect(x: 64, y: y, width: 330, height: 48)) { [weak self] in self?.onRetry?() }
             if cleared {
                 let owner = handsOverAfterClear ?? player
-                button("\(continueTitle): \(owner.initials)", CGRect(x: 412, y: y, width: 330, height: 48), primary: true,
+                button("Retry as \(next.initials)", CGRect(x: 412, y: y, width: 296, height: 48), enabled: canHandOver) { [weak self] in self?.retryAsNextProfile() }
+                button("\(continueTitle): \(owner.initials)", CGRect(x: 726, y: y, width: 330, height: 48), primary: true,
                        enabled: handsOverAfterClear == nil || canHandOver) { [weak self] in self?.continueAsNextProfile() }
-                button("Retry as \(next.initials)", CGRect(x: 760, y: y, width: 296, height: 48), enabled: canHandOver) { [weak self] in self?.retryAsNextProfile() }
             } else {
                 button("Retry as \(next.initials)", CGRect(x: 412, y: y, width: 330, height: 48), primary: true,
                        enabled: canHandOver) { [weak self] in self?.retryAsNextProfile() }

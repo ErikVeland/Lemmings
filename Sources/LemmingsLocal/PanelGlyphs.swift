@@ -176,8 +176,8 @@ enum PanelGlyph: String {
         let boxes = [CGRect(x: rect.minX, y: rect.minY, width: side, height: rect.height),
             CGRect(x: rect.minX + side, y: rect.minY, width: rect.width - 2 * side, height: rect.height),
             CGRect(x: rect.maxX - side, y: rect.minY, width: side, height: rect.height)]
+        GameStoneButton.draw(rect, selected: active, pixel: pixel)
         for (index, box) in boxes.enumerated() {
-            GameStoneButton.draw(box, selected: index == 1 && active, pixel: min(pixel, max(1, floor(box.width / 12))))
             if index == 1 {
                 let content = box.insetBy(dx: rect.height >= 60 ? 4 * pixel : pixel, dy: 6 * pixel)
                 let glyphBox = CGRect(x: content.minX, y: content.minY, width: content.width, height: content.height * 0.45)

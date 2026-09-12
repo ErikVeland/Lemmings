@@ -27,7 +27,7 @@ sentences. Apply this to new UI and changes to existing UI.
 
 The shared result panel and Classic HUD now apply these rules. The changes cover
 star states, compact result layout, primary/selected actions, transport icon
-changes and removal of permanent HUD captions. This is not a claim that every
+changes and concise skill names beneath HUD counts. This is not a claim that every
 sequel screen or every novice-player journey has been validated.
 
 Assignment feedback follows the engine's actual eligibility rules. Grey means no

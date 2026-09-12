@@ -321,6 +321,7 @@ enum PanelButton: Equatable {
       layoutClassicButtons()
       drawClassicPanel()
       drawClassicCounts()
+      drawSkillLabels()
       drawMinimap()
       drawStatus()
       drawSpeedControls()
@@ -417,6 +418,19 @@ enum PanelButton: Equatable {
   /// Pixel bevels keep the controls in the same visual period as the sprites.
   private func drawStoneButton(_ frame: CGRect, selected: Bool) {
     GameStoneButton.draw(frame, selected: selected, pixel: max(1, panelScale / 2))
+  }
+
+  private func drawSkillLabels() {
+    guard panelScale >= 2 else { return }
+    let names = ["CLIMB", "FLOAT", "BOMB", "BLOCK", "BUILD", "BASH", "MINE", "DIG"]
+    for (button, frame) in buttonFrames {
+      guard case let .skill(index) = button, let name = names[safe: index] else { continue }
+      let box = CGRect(x: frame.minX, y: panelFrame.minY + 10 * panelScale,
+        width: frame.width, height: 5 * panelScale)
+      NSColor.black.setFill()
+      box.fill()
+      if !drawMacLabel(name, centeredIn: box) { GamePixelText.draw(name, in: box) }
+    }
   }
 
   private func drawClassicCounts() {

@@ -7,4 +7,10 @@
 - Holding the second press of a mouse double-click can also ramp up. A quick double-click still stops fast-forward without restarting it.
 - Keyboard help and the frozen-level guide include the F hold. Fixed-speed mode keeps its existing F toggle.
 
+## HUD and result layout
+
+- Restore the skill names beneath their counts in the Classic HUD.
+- Draw the speed arrows and indicator within one continuous stone control.
+- Keep Next Level at the far right, after both Hot Seat retry choices.
+
 The beta 23 archives remain unchanged. These changes are in the subsequent development build.
