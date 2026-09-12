@@ -1000,6 +1000,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       contentRect: NSRect(x: 0, y: 0, width: 1000, height: 620),
       styleMask: [.titled, .closable, .resizable, .miniaturizable],
       backing: .buffered, defer: false)
+    window.isReleasedWhenClosed = false
     window.delegate = self
     GameScreen.shared.gameWindow = window
     GameScreen.shared.onPresent = { [weak self] in

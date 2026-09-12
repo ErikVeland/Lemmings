@@ -1023,20 +1023,24 @@ extension AppDelegate {
       return view.subviews.compactMap(find).first
     }
     guard let hints = sheet.contentView.flatMap(find) else { throw IntegrationFailure(message: "Controls help omitted hints") }
+    let helpInterruption = gameplayKeyboard?.interruptionCount
     hints.performClick(nil)
     try await Task.sleep(for: .milliseconds(500))
     try check(LevelHintWindow.shared.page != nil && isPaused, "Controls help failed to hand off to hints; sheet: \(window.attachedSheet != nil)")
     GameScreen.shared.dismissAll()
-    try check(!isPaused, "Closing hints after controls help failed to resume")
+    try check(isPaused == (gameplayKeyboard?.interruptionCount != helpInterruption), "Closing hints after controls help restored the wrong pause state")
+    isPaused = false
     gameplayKeyboard?.escape()
     guard let pause = window.attachedSheet, let hints = pause.contentView.flatMap(find) else {
       throw IntegrationFailure(message: "Pause menu omitted hints")
     }
+    let pauseInterruption = gameplayKeyboard?.interruptionCount
     hints.performClick(nil)
     try await Task.sleep(for: .milliseconds(500))
     try check(LevelHintWindow.shared.page != nil && isPaused, "Pause menu failed to open hints")
     GameScreen.shared.dismissAll()
-    try check(!isPaused, "Closing hints after pause menu failed to resume")
+    try check(isPaused == (gameplayKeyboard?.interruptionCount != pauseInterruption), "Closing hints after pause menu restored the wrong pause state")
+    isPaused = false
     print("PASS controls-help and pause-menu buttons open hints and restore play")
   }
 
@@ -1617,7 +1621,12 @@ extension AppDelegate {
 
   fileprivate func testSteppedCompletion() throws {
     buildInterface()
+    autoreleasepool { window.close() }
+    window.title = "Window ownership check"
+    renderScreen()
+    try check(window.title == "Window ownership check", "Closing the main window invalidated the app-owned window")
     window.orderOut(nil)
+    print("PASS closing the main window preserves ownership for delayed screen refreshes")
     for fan in [false, true] {
       for win in [false, true] {
         let label = "step-\(fan)-\(win)-\(UUID())"
