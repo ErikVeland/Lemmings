@@ -57,13 +57,13 @@ The final focused run checks the completed briefing, retry, recovery, stepping
 and Resume behaviour. The sequel checks also capture the Hot Seat badges,
 paused panels, game artwork and control layouts.
 
-The broader sequel suite stopped on a pre-existing bundled L2 proof identity
-mismatch, recorded in `.build/parity/sequels.log`. The installed L2 asset fingerprint
-is `0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4`;
-the proof catalogue names `6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0`.
-The focused QoL run excludes that separate proof check in its generated test
-executable. The checked-in test remains enabled. No proof metadata was changed,
-and the full sequel gate is not reported as passed.
+The initial broader sequel suite stopped on a stale bundled L2 proof asset
+identity. Beta 27 closes that mismatch: all five bundled witnesses replayed twice
+against the freshly packaged assets, with identical witness bytes, input timing,
+rescue counts and other conditions. Only their asset suffix changed. The complete
+beta 27 sequel suite now passes with the live proof check enabled; there is no
+excluded check. See `Documentation/Beta27Readiness.md` and
+`Documentation/TrolleyVerification/beta27-l2-proof-refresh.json`.
 
 An older settings assertion also assumed native tabs were direct page children.
 It now finds the tab view inside the game's drawn tab controls.

@@ -21,3 +21,17 @@ replays and cross-game Hot Seat readiness fixes. Freeze source and copied game
 assets before building. Never package a mutable shared checkout. Record every
 integrated commit and the final archive hash. Published beta archives stay frozen.
 Run GUI tests through `Tools/UITestRunner/run.py`, one app at a time.
+
+## End-of-pass status
+
+Codex completed the L2 proof refresh in `c88b409`: five exact witnesses replayed
+twice, with only the asset identity changing. The release checkout is frozen at
+`a5d0f4a`; its application sources match the universal build from `1dc60d9`.
+All 25 regression suites, 120 Original routes, known campaign routes, both full
+app journeys, the complete sequel UI suite and signed-binary startup checks pass.
+
+Beta 27 is Developer ID signed but must not be distributed: `notarytool` cannot
+find `lemmings-beta` in the current login keychain. Credentials must be restored
+locally. `.build/beta27/finish-release.zsh` then notarises and verifies the existing
+candidate without rebuilding it. Beta 26 remains the notarised fallback in
+`/Users/veland/Downloads/UltimateLemmings-beta26-macOS.zip`.

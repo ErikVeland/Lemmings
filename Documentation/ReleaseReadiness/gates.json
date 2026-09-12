@@ -37,7 +37,7 @@
   "priority": "P0",
   "status": "partial",
   "exitCriteria": "Freeze the final source and assets. Build both Mac architectures, sign, notarise and verify the downloaded archive. Earlier beta notarisation is not evidence for later local builds.",
-  "progress": "Beta 25 ships from frozen inputs as a universal Mac app. Both complete app journeys passed (32 checks each; Intel under Rosetta), and all 25 core/resource suites passed. The standard archive is signed, notarised, stapled and accepted by Gatekeeper after extraction and quarantine. The separate Game Center archive is development signed for two registered Macs. Both contain matching cumulative notes since beta 18. See Beta25Readiness.md."
+  "progress": "Beta 26 remains notarised and was rechecked after extraction and quarantine. Beta 27 is frozen, universal and Developer ID signed. All 25 regression suites, 120 Original routes, known campaign routes, full app journeys on Apple silicon and Intel under Rosetta, full sequel UI and signed-app startup checks pass. Notarisation could not start because the local lemmings-beta credential profile is missing. Do not distribute the pending ZIP. Restore credentials and finish the prepared archive without rebuilding. See Documentation/Beta27Readiness.md."
  },
  {
   "area": "Publishing agreement and assets",

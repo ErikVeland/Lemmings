@@ -66,8 +66,10 @@ This beta does not close any release gate. The following remain open.
 
 - 199 core campaign routes are unrecorded: 69 Classic family, 56 Lemmings 2 and
   74 Lemmings 3. The 60 Oh Yes! conversions have no route.
-- Lemmings 2 and Lemmings 3 remain previews. They lack the keyboard overlay,
-  the minimap, menu scaling, wide VoiceOver labelling and the Hot Seat handover.
+- Lemmings 2 and Lemmings 3 remain previews. Full rewind, solution playback,
+  broader VoiceOver coverage and some Hot Seat handover flows remain incomplete.
+  Correction from the beta 27 review: keyboard overlays and menu scaling already
+  use shared implementations. The earlier file-reference count missed them.
 - No Lemmings 2 tribe chains all ten levels under the population carry-over rule.
 - Physical Intel, minimum macOS, controllers, displays and sustained performance
   remain untested.

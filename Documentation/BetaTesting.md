@@ -1,6 +1,6 @@
 # Beta testing
 
-Beta 23 is ready for private testing: version `0.1`, build `23`, for Intel and Apple silicon on macOS 13 or later. See [beta 23 notes](ReleaseNotes-beta23.md) and [archive verification](Beta23Readiness.md). Earlier beta checks do not certify this build.
+Beta 26 remains the latest notarised tester archive. Beta 27 is built and Developer ID signed, but its Apple notarisation is blocked by missing local credentials. Do not distribute the pending beta 27 ZIP. See [beta 27 readiness](Beta27Readiness.md), [cumulative notes since beta 18](ReleaseNotes-beta27.md), and [beta 26 archive verification](Beta26Readiness.md).
 
 ## Validate the build
 
@@ -37,7 +37,11 @@ BETA_NOTARY_PROFILE=lemmings-beta zsh Scripts/package-beta.sh
 The script builds both architectures, signs with the Developer ID in the
 keychain, submits to Apple, staples the ticket, and checks the extracted zip
 with Gatekeeper. Earlier zip files move into `.build/local/archive/`.
-The beta 23 archive is `.build/beta23/standard/UltimateLemmings-0.1-beta23.zip`. Release notes and release scope are included in the zip and app. Frozen build inputs and validation logs are under `.build/beta23`.
+The current distributable archive is `.build/beta26/UltimateLemmings-0.1-beta26.zip`.
+Beta 27 inputs and validation logs are under `.build/beta27`. Its source and game
+data are frozen separately from this working checkout. The prepared
+`.build/beta27/finish-release.zsh` submits the tested archive, staples the ticket,
+and verifies the downloaded ZIP after the notarisation credentials are restored.
 
 For a package without recorded soundtracks:
 
