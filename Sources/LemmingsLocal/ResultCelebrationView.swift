@@ -46,29 +46,20 @@ import NxlvKit
         let run = report.run, outcome = run.qualifies ? "LEVEL COMPLETE" : "TRY AGAIN"
         title(outcome, x: 80, y: 46, width: 960, height: 40)
         text("\(player.initials)'s attempt - " + run.level.title + (run.assisted ? " - Rewinds used" : ""), 80, 96, 960, alignment: .center, alpha: 0.75)
-        title("\(run.saved)", x: 98, y: 138, width: 218, height: 60)
-        text("RESCUED", 98, 201, 218, alignment: .center)
+        title("\(run.saved)", x: 98, y: 183, width: 218, height: 60)
+        text("RESCUED", 98, 246, 218, alignment: .center)
         for index in 0..<3 {
             let stamp = stampedStar == index + 1
-            let size: CGFloat = stamp ? 7 : 6
-            drawStar(at: CGPoint(x: 466 + CGFloat(index * 166) - (stamp ? 5 : 0), y: 143 - (stamp ? 4 : 0)),
+            let size: CGFloat = stamp ? 9 : 8
+            drawStar(at: CGPoint(x: 466 + CGFloat(index * 166) - (stamp ? 5 : 0), y: 185 - (stamp ? 4 : 0)),
                      earned: index < c.goals.stars && index < revealedStars, size: size)
         }
-        text("\(c.goals.stars)/3 this run     \(c.bestStars)/3 level best", 410, 210, 600, alignment: .center, palette: .green)
-        let target = c.goals.fullSaved
-        let thirdTitle = c.goals.fullRescueBasis == .bestKnownRecord ? "Best known" : c.goals.fullRescueBasis == .everyoneHome ? "Everyone home" : "Best possible"
-        let rows: [(String, Int?, Bool)] = [("1 STAR - Clear", c.goals.requiredSaved, c.goals.stars >= 1),
-            ("2 STARS - Extra rescue", c.goals.extraSaved, c.goals.stars >= 2),
-            ("3 STARS - \(target == nil ? "Target unknown" : thirdTitle)", target, c.goals.stars == 3)]
-        for (index, row) in rows.enumerated() {
-            let x = CGFloat(80 + index * 326)
-            text(row.0, x, 251, 304, height: 24, alpha: 0.8)
-            let status = row.2 ? "MET" : row.1 == nil ? "UNKNOWN" : run.saved >= row.1! ? "Clear needed" : "\(row.1! - run.saved) to go"
-            text(row.1.map { "Save \($0) - \(status)" } ?? "No established target", x, 277, 304, height: 24)
-            progressBar(value: row.2 ? row.1 ?? 1 : min(run.saved, row.1 ?? 0), goal: row.1 ?? 1,
-                        in: CGRect(x: x, y: 306, width: 304, height: 5), earned: row.2)
+        if c.bestStars > c.goals.stars {
+            text("Best: \(c.bestStars) stars", 410, 280, 600, alignment: .center, alpha: 0.7)
         }
-        text(c.nextGoal, 80, 329, 960, alignment: .center, height: 24, palette: .green)
+        if c.goals.stars < 3 {
+            text(c.nextGoal, 80, 329, 960, alignment: .center, height: 24, palette: .green)
+        }
         drawResultLevelCard(c)
         drawResultCareerCard(c)
         drawResultRanks(c)
@@ -82,14 +73,16 @@ import NxlvKit
         GameStyle.fill(rect, GameStyle.accent.withAlphaComponent(0.065))
         text("THIS LEVEL", 96, 380, 418, height: 22, alpha: 0.85, palette: .green)
         text(c.recordMessage, 96, 407, 418, height: 24)
-        let names = c.levelAwards.first.map { $0.title.capitalized + (c.levelAwards.count > 1 ? " (+\(c.levelAwards.count - 1))" : "") } ?? ""
+        let newGoals = c.levelAwards.filter { $0 != .firstClear }
+        let names = newGoals.first.map { $0.title.capitalized + (newGoals.count > 1 ? " (+\(newGoals.count - 1))" : "") } ?? ""
         link(names.isEmpty ? "Level goals and bests >" : "NEW: \(names) >",
              CGRect(x: 96, y: 440, width: 418, height: 32), alignment: .left) { [weak self] in self?.page(.goals) }
     }
     private func drawResultCareerCard(_ c: TrolleyCelebration) {
         GameStyle.fill(CGRect(x: 566, y: 369, width: 474, height: 116), GameStyle.gold.withAlphaComponent(0.09))
         let new = c.newAwards
-        text("\(report?.run.assisted == true ? "REWIND CAREER" : "CAREER")  \(c.career.stars) STARS" + (c.addedStars > 0 ? "  (+\(c.addedStars))" : ""), 582, 380, 442, height: 22, alpha: 0.85, palette: .green)
+        link("\(report?.run.assisted == true ? "REWIND CAREER" : "CAREER")  \(c.career.stars) STARS" + (c.addedStars > 0 ? "  (+\(c.addedStars))" : "") + " >",
+             CGRect(x: 582, y: 376, width: 442, height: 30), alignment: .left, palette: .green) { [weak self] in self?.page(.career) }
         if !new.isEmpty {
             let selected = new[featuredAwardIndex % new.count]
             link("NEW: \(selected.award.title) >", CGRect(x: 582, y: 404, width: 442, height: 30), alignment: .left) { [weak self] in
@@ -103,7 +96,7 @@ import NxlvKit
             }
         } else if let next = c.nextCareerGoal {
             link(next.award.title + " >", CGRect(x: 582, y: 405, width: 442, height: 30), alignment: .left) { [weak self] in self?.showAchievement(next.award) }
-            text(next.status + " - \(next.remaining) to go", 582, 444, 442, height: 22)
+            text(next.status, 582, 444, 442, height: 22)
             progressBar(value: next.after.value, goal: next.after.goal, in: CGRect(x: 582, y: 475, width: 442, height: 4))
         } else { text("All career milestones earned!", 582, 422, 442) }
     }
@@ -111,15 +104,11 @@ import NxlvKit
         link("Local: \(c.ranks.first?.label ?? "No record") >", CGRect(x: 80, y: 493, width: 310, height: 30), alignment: .left) { [weak self] in
             self?.boardScope = .level; self?.trolleyBoard = .mostSaved; self?.page(.records)
         }
-        link("Career: \(c.career.stars) stars >", CGRect(x: 418, y: 493, width: 290, height: 30)) { [weak self] in self?.page(.career) }
         let online = GameCenterScores.shared
         let onlineTitle = online.linkedProfileID == player.id && online.boardID == online.configuration?.starsID
             ? online.rankLabel.map { "Worldwide career: " + $0 + " >" } ?? "Game Center >" : "Game Center >"
         link(onlineTitle, CGRect(x: 738, y: 493, width: 302, height: 30), alignment: .right) { [weak self] in
             self?.openWorldwideBoard()
-        }
-        if let next = c.nextCareerGoal {
-            link("Next career award: \(next.award.title) - \(next.status) >", CGRect(x: 80, y: 531, width: 960, height: 28)) { [weak self] in self?.page(.career) }
         }
     }
     func drawLevelGoals() {
