@@ -51,7 +51,14 @@ and 8,224 bytes.
 ## Not decoded
 
 - Section 2 high-performance skill panel, numbers, and font.
-- Section 3 main-menu graphics.
+- Section 3 main-menu graphics, which hold the title logo. Decoding was
+  attempted and is not solved. Whole-image four-plane decoding at 632 pixels
+  wide produces recognisable lemming figures and the trademark mark, so the
+  width is right and the section is not encrypted. Row-interleaved planes give
+  noise. A width sweep scored 632 highest at 0.29 row-to-row coherence, far
+  below the 0.7 or better that plain artwork gives, so the pixels use an
+  encoding this project has not identified. Until that is solved the title
+  screen has no logo when the original artwork is selected.
 - Section 4 menu animations, signs, scroller graphics, and purple font.
 - Section 5 unknown data.
 - Section 6 standard skill panel and green font.
