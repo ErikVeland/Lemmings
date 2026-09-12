@@ -6769,7 +6769,7 @@
       "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "1c6a1bfc6981e4e1d8cfcd2f4f5314a74cf34710a15ffce5fb32a71d7bc9bcfb:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
+        "levelFingerprint": "1c6a1bfc6981e4e1d8cfcd2f4f5314a74cf34710a15ffce5fb32a71d7bc9bcfb:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
         "levelID": "2:1",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -6818,7 +6818,7 @@
       "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "4d3488287bfd167130d05bc41c3002b00ac71f0fafce2e51d09bfa20e2198bb0:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
+        "levelFingerprint": "4d3488287bfd167130d05bc41c3002b00ac71f0fafce2e51d09bfa20e2198bb0:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
         "levelID": "2:2",
         "modifiers": {
           "firstReleaseTick": "35",
@@ -6868,7 +6868,7 @@
       "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "0efa4128d06d6c5f6178d3d5a43831cbcd8bb6460938fcc35540a12bf8d81dec:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
+        "levelFingerprint": "0efa4128d06d6c5f6178d3d5a43831cbcd8bb6460938fcc35540a12bf8d81dec:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
         "levelID": "3:1",
         "modifiers": {
           "firstReleaseTick": "50",
@@ -6922,7 +6922,7 @@
       "bestSaved": 60,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "2be6334f0423ee3ac635946ee855aa8caa4bc8cdd53190c6f16d8cc7d806cc8e:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
+        "levelFingerprint": "2be6334f0423ee3ac635946ee855aa8caa4bc8cdd53190c6f16d8cc7d806cc8e:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
         "levelID": "0:0",
         "modifiers": {
           "firstReleaseTick": "51",
@@ -6976,7 +6976,7 @@
       "bestSaved": 60,
       "conditions": {
         "gameID": "lemmings2",
-        "levelFingerprint": "1e8c3c968995e19183dd9fc7e48ebd2605568e70d50a424215ea14de8c9317b4:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
+        "levelFingerprint": "1e8c3c968995e19183dd9fc7e48ebd2605568e70d50a424215ea14de8c9317b4:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
         "levelID": "5:0",
         "modifiers": {
           "firstReleaseTick": "49",

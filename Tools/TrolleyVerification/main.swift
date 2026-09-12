@@ -8,8 +8,8 @@ let resources = project.appendingPathComponent(".build/local/Ultimate Lemmings.a
 let ports = resources.appendingPathComponent("Ports")
 let output = project.appendingPathComponent(".build/trolley-verification/results")
 let family = CommandLine.arguments.dropFirst().first ?? "all"
-guard ["all", "classic", "ports", "l2", "l3", "fingerprint"].contains(family) else {
-    throw SequelDataError.invalid("Choose all, classic, ports, l2, l3, or fingerprint.")
+guard ["all", "classic", "ports", "l2", "l2-proofs", "l3", "fingerprint"].contains(family) else {
+    throw SequelDataError.invalid("Choose all, classic, ports, l2, l2-proofs, l3, or fingerprint.")
 }
 let search = CommandLine.arguments.contains("--search")
 let shard = CommandLine.arguments.first { $0.hasPrefix("--shard=") }?.dropFirst(8).split(separator: "/").compactMap { Int($0) }
@@ -246,13 +246,29 @@ struct L2Replay: Codable {
 @MainActor func auditL2() throws {
     let root = ports.appendingPathComponent("Lemm2"), fingerprint = try assetHash(root)
     let campaign = try Lemmings2Campaign(root: root), masks = try Lemmings2TerrainMasks(root: root)
+    struct Catalogue: Decodable { let levels: [Row] }
+    let proofRoot = project.appendingPathComponent("Resources/Trolley")
+    let bundled = family == "l2-proofs" ? try JSONDecoder().decode(Catalogue.self,
+        from: Data(contentsOf: proofRoot.appendingPathComponent("verified-maxima.json"))).levels.filter { $0.gameID == "lemmings2" } : []
     for (index, level) in campaign.levels.enumerated() {
+        let proof = bundled.first { $0.conditions?.levelID == "\(index / 10):\(index % 10)" }
+        if family == "l2-proofs" && proof == nil { continue }
         let tribe = Lemmings2Campaign.tribeNames[level.style]
         let style = try Lemmings2Style(data: Data(contentsOf: root.appendingPathComponent("STYLES/\(Lemmings2Campaign.styleNames[level.style]).DAT")))
         let prefix = level.style == 2 ? "cavelem" : tribe.lowercased()
-        let fixtureURL = project.appendingPathComponent(String(format: "Tests/Lemmings2RuntimeTests/Fixtures/\(prefix)-%02d.json", index % 10 + 1))
+        let fixtureURL = proof?.witness.map { proofRoot.appendingPathComponent($0.path) }
+            ?? project.appendingPathComponent(String(format: "Tests/Lemmings2RuntimeTests/Fixtures/\(prefix)-%02d.json", index % 10 + 1))
         let fixture = FileManager.default.fileExists(atPath: fixtureURL.path) ? try JSONDecoder().decode(L2Replay.self, from: Data(contentsOf: fixtureURL)) : nil
-        let populations = fixture.map { $0.population != 60 ? [60, $0.population] : [60] } ?? [60]
+        if let proof {
+            guard let witness = proof.witness, let fixture,
+                  try fileHash(fixtureURL) == witness.sha256,
+                  fixture.population == proof.population,
+                  fixture.expectedSaved == witness.saved, fixture.expectedTicks == witness.ticks else {
+                throw SequelDataError.invalid("Bundled Tribes witness identity or outcome is inconsistent.")
+            }
+        }
+        let populations = proof.map { [$0.population] }
+            ?? fixture.map { $0.population != 60 ? [60, $0.population] : [60] } ?? [60]
         for population in populations {
             var row = Row(gameID: "lemmings2", rank: tribe, number: index % 10 + 1, title: level.title, population: population, required: 1)
             do {
@@ -291,7 +307,7 @@ struct L2Replay: Codable {
                     guard command == inputs.count, pointer == pointers.count else { throw SequelDataError.invalid("Replay ended before all inputs were used") }
                     return trial
                 }
-                for candidate in [nil, fixture] as [L2Replay?] {
+                for candidate in (family == "l2-proofs" ? [fixture] : [nil, fixture]) as [L2Replay?] {
                     if candidate == nil && row.testedCandidates > 0 { continue }
                     row.testedCandidates += 1
                     do {
@@ -314,6 +330,11 @@ struct L2Replay: Codable {
                 if row.status != "VERIFIED" { row.notes.append("The medal loss allowance is not an optimality proof.") }
             } catch { row.notes.append(String(describing: error)) }
             try record(row)
+        }
+    }
+    if family == "l2-proofs" {
+        guard !bundled.isEmpty, rows.count == bundled.count, rows.allSatisfy({ $0.status == "VERIFIED" }) else {
+            throw SequelDataError.invalid("A bundled Tribes witness no longer proves its rescue target.")
         }
     }
 }
@@ -370,7 +391,7 @@ if family == "all" || family == "ports" {
         try auditClassic(set, directory: ports)
     }
 }
-if family == "all" || family == "l2" { try auditL2() }
+if family == "all" || family == "l2" || family == "l2-proofs" { try auditL2() }
 if family == "all" || family == "l3" { try auditL3() }
 print("AUDIT", rows.count, "configurations; verified", rows.filter { $0.status == "VERIFIED" }.count,
       "observed", rows.filter { $0.status == "OBSERVED" }.count, "unknown", rows.filter { $0.status == "UNKNOWN" }.count)

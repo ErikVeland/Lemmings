@@ -12,6 +12,7 @@ Version 0.1, build 27. Universal Mac app for Intel and Apple silicon, macOS 13 o
 - Lemmings 2 briefings now show the incoming player before play begins. Starting the level clears held speed input.
 - Lemmings 2 supports one-frame forward stepping while paused, including a final step into the result screen.
 - Resume from the Lemmings 3 pause menu continues the same attempt.
+- Lemmings 2 rescue targets now match the packaged game data. All five existing proof recordings were checked twice before updating their asset identities.
 
 ## New in beta 26: carry on where you stopped
 

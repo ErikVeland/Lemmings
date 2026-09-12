@@ -1,0 +1,92 @@
+{
+  "engineSourceFingerprint": "40a82984a967535d9b811a18ee5b02b19070a433c26d2e8a9618029d3f62d094",
+  "generatedAt": "2026-09-12T15:10:09Z",
+  "method": "Each bundled L2 witness replayed twice against fresh beta 27 packaged assets. Exact inputs, outcomes, witness bytes and all non-asset conditions unchanged. Only the asset suffix was updated.",
+  "changes": [
+    {
+      "levelID": "0:0",
+      "population": 60,
+      "oldFingerprint": "2be6334f0423ee3ac635946ee855aa8caa4bc8cdd53190c6f16d8cc7d806cc8e:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
+      "newFingerprint": "2be6334f0423ee3ac635946ee855aa8caa4bc8cdd53190c6f16d8cc7d806cc8e:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/lemmings2-0-60.json",
+        "released": 60,
+        "retainedReserves": 0,
+        "saved": 60,
+        "sha256": "2c7c765550bb6bc59933d2268dfb53ef9c8a5c1d41d7ff5fa2352d1e5e68c334",
+        "ticks": 3074
+      }
+    },
+    {
+      "levelID": "2:1",
+      "population": 1,
+      "oldFingerprint": "1c6a1bfc6981e4e1d8cfcd2f4f5314a74cf34710a15ffce5fb32a71d7bc9bcfb:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
+      "newFingerprint": "1c6a1bfc6981e4e1d8cfcd2f4f5314a74cf34710a15ffce5fb32a71d7bc9bcfb:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/lemmings2-21-1.json",
+        "released": 1,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "e185ae4de671cad9bbc8ae52806425e132fbe64dfbe90e041d81d98703589dce",
+        "ticks": 1337
+      }
+    },
+    {
+      "levelID": "2:2",
+      "population": 1,
+      "oldFingerprint": "4d3488287bfd167130d05bc41c3002b00ac71f0fafce2e51d09bfa20e2198bb0:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
+      "newFingerprint": "4d3488287bfd167130d05bc41c3002b00ac71f0fafce2e51d09bfa20e2198bb0:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/lemmings2-22-1.json",
+        "released": 1,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "83cedc249e5225088af0033f7ab5e466d02240cc2903813548a9782291095217",
+        "ticks": 555
+      }
+    },
+    {
+      "levelID": "3:1",
+      "population": 1,
+      "oldFingerprint": "0efa4128d06d6c5f6178d3d5a43831cbcd8bb6460938fcc35540a12bf8d81dec:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
+      "newFingerprint": "0efa4128d06d6c5f6178d3d5a43831cbcd8bb6460938fcc35540a12bf8d81dec:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/lemmings2-31-1.json",
+        "released": 1,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "bf74f1cbbfc1d72d8cf89764b67b6f61c6267717268ae911f9153f49016d55df",
+        "ticks": 721
+      }
+    },
+    {
+      "levelID": "5:0",
+      "population": 60,
+      "oldFingerprint": "1e8c3c968995e19183dd9fc7e48ebd2605568e70d50a424215ea14de8c9317b4:6771c5ce1c78cf95f1d4f6785955aef2752aea2411944dbbc5b6dbaa7d1dd8b0",
+      "newFingerprint": "1e8c3c968995e19183dd9fc7e48ebd2605568e70d50a424215ea14de8c9317b4:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/lemmings2-50-60.json",
+        "released": 60,
+        "retainedReserves": 0,
+        "saved": 60,
+        "sha256": "dab5cd411401442e1a5b7e3b9a58b832e031dd54faf383d6e8c8ff7a3bc6c5d5",
+        "ticks": 1941
+      }
+    }
+  ]
+}

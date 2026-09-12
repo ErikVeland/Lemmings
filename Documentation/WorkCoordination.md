@@ -1,6 +1,6 @@
 # Tonight’s tester release ownership
 
-Codex leads integration from `/Users/veland/Lemmings`, branch `main`.
+Codex leads integration from `/Users/veland/Lemmings`, branch `mac-front-end-and-shuffle`.
 The next archive is beta 27. Keep 1.0 validation limits explicit.
 
 - Codex owns source integration, release notes, serial UI checks, the frozen
