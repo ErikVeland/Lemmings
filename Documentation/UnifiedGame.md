@@ -18,6 +18,40 @@ reads validated progress from those stores. Native sequel progress does not
 award verified classic achievements. Only the active engine advances its
 simulation. Switching engines stops the previous engine's audio.
 
+## The classic climb
+
+Release order alone puts all 100 Oh No! levels after all 120 original ones, so a
+player finishes Mayhem and drops back into Tame. Difficulty order alone loses the
+releases. The classic climb interleaves the two ranked campaigns tier by tier and
+places each festive set near the release it shipped beside, because those sets
+are short and gentle.
+
+| # | Stage | Levels |
+| ---: | --- | ---: |
+| 1 | Fun — Lemmings | 30 |
+| 2 | Tame — Oh No! More Lemmings | 20 |
+| 3 | Xmas Lemmings 1991 | 4 |
+| 4 | Xmas Lemmings 1992 | 4 |
+| 5 | Tricky — Lemmings | 30 |
+| 6 | Crazy — Oh No! More Lemmings | 20 |
+| 7 | Holiday Lemmings 1993 | 32 |
+| 8 | Taxing — Lemmings | 30 |
+| 9 | Wild — Oh No! More Lemmings | 20 |
+| 10 | Holiday Lemmings 1994 | 32 |
+| 11 | Mayhem — Lemmings | 30 |
+| 12 | Wicked — Oh No! More Lemmings | 20 |
+| 13 | Havoc — Oh No! More Lemmings | 20 |
+| | **Total** | **292** |
+
+Havoc ends the climb. It is the hardest rank either campaign offers.
+
+Oh Yes! More Lemmings is a conversion of levels that already appear above, so the
+climb does not count them twice. Lemmings 2 and Lemmings 3 are separate, and the
+climb does not include them.
+
+`ClassicTitle.classicQuest` holds this order. `ClassicTitle.canonOrder` still
+holds plain release order, which the library uses to list the titles.
+
 ## Classic campaigns
 
 - Lemmings: 120 levels in the original four ratings.
