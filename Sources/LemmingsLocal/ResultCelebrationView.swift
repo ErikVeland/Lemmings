@@ -54,9 +54,6 @@ import NxlvKit
             drawStar(at: CGPoint(x: 466 + CGFloat(index * 166) - (stamp ? 5 : 0), y: 185 - (stamp ? 4 : 0)),
                      earned: index < c.goals.stars && index < revealedStars, size: size)
         }
-        if c.bestStars > c.goals.stars {
-            text("Best: \(c.bestStars) stars", 410, 280, 600, alignment: .center, alpha: 0.7)
-        }
         if c.goals.stars < 3 {
             text(c.nextGoal, 80, 329, 960, alignment: .center, height: 24, palette: .green)
         }
