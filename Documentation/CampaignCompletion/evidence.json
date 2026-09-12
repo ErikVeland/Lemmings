@@ -3,7 +3,7 @@
   "coverage": {
     "holidayLemmings1993": 13,
     "holidayLemmings1994": 15,
-    "ohNoMoreLemmings": 61,
+    "ohNoMoreLemmings": 64,
     "xmasLemmings1991": 4,
     "xmasLemmings1992": 2,
     "lemmings3": 16
@@ -590,6 +590,16 @@
       "ticks": 3099
     },
     {
+      "fixture": "Tests/ClassicFamilyCompletionTests/Fixtures/ohNoMoreLemmings/tame-05.json",
+      "sha256": "4e215549e720e37656d3f563944e360bbc85b48401b404bde164f200f88ae712",
+      "game": "ohNoMoreLemmings",
+      "level": "Tame 5",
+      "saved": 46,
+      "lost": 4,
+      "reserves": 0,
+      "ticks": 3075
+    },
+    {
       "fixture": "Tests/ClassicFamilyCompletionTests/Fixtures/ohNoMoreLemmings/tame-06.json",
       "sha256": "54724fe9a6bff8479363cdff0262faff4a5cd32c30c530d36ccbb0a1daabd22c",
       "game": "ohNoMoreLemmings",
@@ -600,6 +610,16 @@
       "ticks": 3061
     },
     {
+      "fixture": "Tests/ClassicFamilyCompletionTests/Fixtures/ohNoMoreLemmings/tame-07.json",
+      "sha256": "ff6993a73c3ecd782f769a5fe5d049dc9cc4af403dee1b33d6c89552c73a84a9",
+      "game": "ohNoMoreLemmings",
+      "level": "Tame 7",
+      "saved": 49,
+      "lost": 1,
+      "reserves": 0,
+      "ticks": 3083
+    },
+    {
       "fixture": "Tests/ClassicFamilyCompletionTests/Fixtures/ohNoMoreLemmings/tame-08.json",
       "sha256": "a7b5537c2f85a9074d7da7be1b26add0b40d40c2e98236ad9325207879250125",
       "game": "ohNoMoreLemmings",
@@ -608,6 +628,16 @@
       "lost": 1,
       "reserves": 0,
       "ticks": 3051
+    },
+    {
+      "fixture": "Tests/ClassicFamilyCompletionTests/Fixtures/ohNoMoreLemmings/tame-09.json",
+      "sha256": "e75e2785d9ea95cbb094335f05138b71154c4fd133ed5ab6804a9c74c484fe64",
+      "game": "ohNoMoreLemmings",
+      "level": "Tame 9",
+      "saved": 49,
+      "lost": 1,
+      "reserves": 0,
+      "ticks": 4080
     },
     {
       "fixture": "Tests/ClassicFamilyCompletionTests/Fixtures/ohNoMoreLemmings/tame-10.json",
