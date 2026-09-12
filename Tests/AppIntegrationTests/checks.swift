@@ -28,8 +28,24 @@ extension AppDelegate {
       GameScreen.shared.present(page, owner: host)
       host.contentView?.layoutSubtreeIfNeeded()
       guard let scroll = page.enclosingScrollView else { throw IntegrationFailure(message: "Page cannot scroll at larger sizes") }
-      try check(abs(page.frame.width - scroll.contentSize.width * size.scale) < 1, "Menu size was not applied")
+      try check(abs(page.frame.width - GamePageLayout.documentSize(in: scroll.contentSize).width) < 1, "Menu size was not applied")
       GameScreen.shared.dismiss(page)
+    }
+    for size in ClassicInterfaceSize.allCases {
+      GameAccessibility.interfaceSize = size
+      let page = GameMenuPage(title: "Settings")
+      page.frame = CGRect(x: 0, y: 0, width: 2390, height: 1436)
+      page.layoutSubtreeIfNeeded()
+      let body = page.convert(page.body.bounds, from: page.body)
+      try check(abs(body.width - 992 * size.scale) < 1,
+        "A large window magnified the requested UI size")
+      try check(GamePageLayout.documentSize(in: page.bounds.size) == page.bounds.size,
+        "A large window added unnecessary scrolling")
+      let bitmap = page.bitmapImageRepForCachingDisplay(in: page.bounds)!
+      page.cacheDisplay(in: page.bounds, to: bitmap)
+      let folder = URL(fileURLWithPath: FileManager.default.currentDirectoryPath).appendingPathComponent(".build/ui-scale-shots")
+      try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+      try bitmap.representation(using: .png, properties: [:])!.write(to: folder.appendingPathComponent("menu-\(Int(size.scale * 100)).png"))
     }
     let arcade = ArcadeView(frame: host.contentView!.bounds)
     arcade.mode = .profiles

@@ -78,3 +78,8 @@ menu in Classic, fan levels, NeoLemmix, L2 and L3. It also cancels fast-forward,
 including a held boost. Repeated key-down events do not cause further navigation.
 Use **F** or controller **B** to cancel fast-forward while staying in the level.
 Escape inside an open dialog or help page retains that page's normal Back action.
+
+Text and menu size uses a fixed base size in points: 100% no longer grows to fill
+a large window. 125% and 150% enlarge that base size. Small windows fit the base
+layout, and enlarged pages scroll when needed. Retina rendering does not add
+another UI size multiplier.

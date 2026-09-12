@@ -1057,3 +1057,29 @@ extension Lemmings3PlayWindow {
 }
 try Lemmings2PlayWindow(root: l2root).checkEscapeMainMenu()
 try Lemmings3PlayWindow(root: l3root).checkEscapeMainMenu()
+
+extension SettingsWindow {
+    fileprivate func checkStandardSizeAtLargeWindow() throws {
+        let previous = GameAccessibility.interfaceSize
+        defer { GameAccessibility.interfaceSize = previous; GameScreen.shared.dismissAll() }
+        GameAccessibility.interfaceSize = .standard
+        GameScreen.shared.dismissAll()
+        let host = NSWindow(contentRect: CGRect(x: 0, y: 0, width: 2390, height: 1436),
+            styleMask: [.titled], backing: .buffered, defer: false)
+        host.contentView = NSView(frame: CGRect(x: 0, y: 0, width: 2390, height: 1436))
+        GameScreen.shared.gameWindow = host
+        show()
+        guard let page, let tabs = page.body.subviews.compactMap({ $0 as? NSTabView }).first else {
+            throw SequelDataError.invalid("Settings did not create its page")
+        }
+        tabs.selectTabViewItem(at: 5)
+        host.contentView?.layoutSubtreeIfNeeded(); page.layoutSubtreeIfNeeded()
+        let controlBounds = page.convert(page.body.bounds, from: page.body)
+        try assertArtwork(abs(controlBounds.width - 992) < 1, "Standard settings grew with the window")
+        _ = try shot(page, "settings-standard-100-large-window")
+        print("PASS 100% Settings stays at base point size in a large Retina window")
+    }
+}
+let scaleOptions = ClassicSettingsOptions.available(hasDOSData: true, hasAmigaDisk: false,
+    hasMacintoshDisk: false, moduleCount: 0, remixFolders: [], hasSoundtracks: false)
+try SettingsWindow(settings: ClassicSettings(), options: scaleOptions).checkStandardSizeAtLargeWindow()

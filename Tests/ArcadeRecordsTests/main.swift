@@ -190,7 +190,7 @@ func testSkillAccounting() throws {
     window.setContentSize(CGSize(width: 2240, height: 1440))
     window.contentView?.layoutSubtreeIfNeeded(); nested.layoutSubtreeIfNeeded()
     let menuBounds = nested.convert(nested.body.bounds, from: nested.body)
-    try require(menuBounds.minX >= 0 && menuBounds.maxX <= nested.bounds.width && menuBounds.width > nested.bounds.width * 0.7,
+    try require(menuBounds.minX >= 0 && menuBounds.maxX <= nested.bounds.width && abs(menuBounds.width - 992 * GamePageLayout.scale(in: nested.bounds.size)) < 1,
                 "Menu controls escaped the page at the fullscreen render scale")
     try require(ArcadeWindow.shared.arcadeView.isHidden && nested.window === window, "Nested page escaped the game")
     GameScreen.shared.dismiss(nested)

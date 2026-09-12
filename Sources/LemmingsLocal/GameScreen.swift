@@ -92,6 +92,20 @@ import NxlvKit
     }
 }
 
+/// Menu size is measured in points. Large windows do not enlarge the base controls.
+@MainActor enum GamePageLayout {
+    static let reference = CGSize(width: 1120, height: 720)
+    static func scale(in size: CGSize) -> CGFloat {
+        max(0.01, min(GameAccessibility.scale, size.width / reference.width, size.height / reference.height))
+    }
+    static func documentSize(in viewport: CGSize) -> CGSize {
+        let fit = max(0.01, min(1, viewport.width / reference.width, viewport.height / reference.height))
+        let scale = fit * GameAccessibility.scale
+        return CGSize(width: max(viewport.width, reference.width * scale),
+                      height: max(viewport.height, reference.height * scale))
+    }
+}
+
 /// Enlarged pages retain their full layout and scroll instead of clipping controls.
 @MainActor private final class GamePageContainer: NSScrollView {
     private let page: NSView
@@ -105,14 +119,15 @@ import NxlvKit
     required init?(coder: NSCoder) { fatalError("init(coder:) is unavailable") }
     override func layout() {
         super.layout()
-        let enlarged = GameAccessibility.scale > 1
-        if hasHorizontalScroller != enlarged { hasHorizontalScroller = enlarged }
-        if hasVerticalScroller != enlarged { hasVerticalScroller = enlarged }
+        scrollerStyle = .overlay
         autohidesScrollers = true
         let size = contentSize
-        page.frame = CGRect(origin: .zero, size: CGSize(width: size.width * GameAccessibility.scale, height: size.height * GameAccessibility.scale))
+        let documentSize = GamePageLayout.documentSize(in: size)
+        hasHorizontalScroller = documentSize.width > size.width + 0.5
+        hasVerticalScroller = documentSize.height > size.height + 0.5
+        page.frame = CGRect(origin: .zero, size: documentSize)
         page.needsLayout = true
-        if !enlarged { contentView.scroll(to: .zero) }
+        if !hasHorizontalScroller && !hasVerticalScroller { contentView.scroll(to: .zero) }
     }
 }
 
@@ -154,7 +169,7 @@ import NxlvKit
     required init?(coder: NSCoder) { fatalError("init(coder:) is unavailable") }
     override func layout() {
         super.layout()
-        let scale = min(bounds.width / 1120, bounds.height / 720)
+        let scale = GamePageLayout.scale(in: bounds.size)
         canvas.frame = CGRect(x: (bounds.width - 1120 * scale) / 2, y: (bounds.height - 720 * scale) / 2,
                               width: 1120 * scale, height: 720 * scale)
         canvas.bounds = CGRect(x: 0, y: 0, width: 1120, height: 720)

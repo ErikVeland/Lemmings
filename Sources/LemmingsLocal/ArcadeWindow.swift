@@ -205,7 +205,7 @@ import NxlvKit
         selectedProfileID = profile.id; initials = profile.initials; portrait = profile.portrait
         replaceInitials = true; needsDisplay = true
     }
-    private var scale: CGFloat { max(0.01, min(bounds.width / 1120, bounds.height / 720)) }
+    private var scale: CGFloat { GamePageLayout.scale(in: bounds.size) }
     private var offset: CGPoint { CGPoint(x: (bounds.width - 1120 * scale) / 2, y: (bounds.height - 720 * scale) / 2) }
     override func draw(_ dirtyRect: NSRect) {
         NSColor.black.setFill(); bounds.fill(); buttons = []; accessibleText = []
