@@ -17,14 +17,14 @@
   "priority": "P0",
   "status": "partial",
   "exitCriteria": "Verify app and controller interruption on real hardware. Add versioned in-progress checkpoints and crash recovery before mobile suspend/termination support. Verify save migrations and rollback with real prior releases.",
-  "progress": "Beta 24 passed both complete app journeys, including Classic/fan checkpoints, Hot Seat identity and paused handovers, replay journals, corruption, stale writers and safe solo transitions. Physical power-loss and installed-release migration trials remain open. See Beta24Readiness.md."
+  "progress": "Beta 25 passed both complete app journeys (32 checks each), including Classic/fan checkpoints, Hot Seat identity, paused handovers, retrying the previous level as the incoming player, replay journals, corruption, stale writers and safe solo transitions. Main-window ownership was fixed after validation exposed a delayed-refresh crash; close and refresh coverage now passes. Physical power-loss and installed-release migration trials remain open. See Beta25Readiness.md."
  },
  {
   "area": "Input and accessibility",
   "priority": "P0",
   "status": "partial",
   "exitCriteria": "Test the complete first-launch-to-results flow with physical Xbox, PlayStation and Switch-layout controllers. Add remapping and device glyphs, touch targeting, readable UI scaling, reduced motion/flash controls and VoiceOver navigation without forcing OG gameplay.",
-  "progress": "Beta 24 passed complete software-driven app journeys on Apple silicon and Intel/Rosetta, including keyboard/controller routing, held-F and mouse speed ramps, exact assignment eligibility, fonts, scalable menus, hints and interruption handling. Skill captions and green shortcut letters are restored; speed uses one continuous control. Physical controllers and full VoiceOver remain unverified. See Beta24Readiness.md."
+  "progress": "Beta 25 passed complete software-driven journeys on Apple silicon and Intel/Rosetta. F retains the reached speed after release; mouse and keyboard speed arrows apply immediately from 1x. Green handover initials and the previous-level retry button were rendered and tested with real mouse events. Existing keyboard/controller routing, targeting, fonts, scalable menus, hints and interruption tests passed. Physical controllers and full VoiceOver remain unverified. See Beta25Readiness.md."
  },
  {
   "area": "Performance and hardware",
@@ -37,7 +37,7 @@
   "priority": "P0",
   "status": "partial",
   "exitCriteria": "Freeze the final source and assets. Build both Mac architectures, sign, notarise and verify the downloaded archive. Earlier beta notarisation is not evidence for later local builds.",
-  "progress": "Beta 24 ships from frozen inputs as a universal Mac app. Both complete app journeys passed (30 checks each; Intel under Rosetta), and all 25 core/resource suites passed. The standard archive is signed, notarised, stapled and accepted by Gatekeeper after extraction and quarantine. The separate Game Center archive is development signed for two registered Macs. Both contain matching cumulative notes since beta 18. See Beta24Readiness.md."
+  "progress": "Beta 25 ships from frozen inputs as a universal Mac app. Both complete app journeys passed (32 checks each; Intel under Rosetta), and all 25 core/resource suites passed. The standard archive is signed, notarised, stapled and accepted by Gatekeeper after extraction and quarantine. The separate Game Center archive is development signed for two registered Macs. Both contain matching cumulative notes since beta 18. See Beta25Readiness.md."
  },
  {
   "area": "Publishing agreement and assets",
