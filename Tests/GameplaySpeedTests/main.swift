@@ -20,7 +20,7 @@ check(speed.target == 1 && speed.cruise == 3, "Choosing a tier while off must no
 speed.tap(at: 15); check(speed.target == 3, "Toggle must use the prepared tier")
 print("PASS immediate toggle, remembered tiers, bounded arrows and double-click absorption")
 
-for input in [GameplaySpeed.Hold.mouse, .shift, .controller] {
+for input in [GameplaySpeed.Hold.key, .mouse, .shift, .controller] {
     speed.newLevel(at: 20)
     speed.press(input, at: 21)
     speed.update(at: 21.24); check(speed.target == 1, "A press must not start a boost before the hold threshold")
@@ -45,7 +45,7 @@ speed.tap(at: 44); speed.step(1, at: 45); speed.newLevel(at: 46)
 check(speed.multiplier == 1 && speed.cruise == 2, "New levels must start at 1× with a 2× first tier")
 speed.press(.controller, at: 47); speed.update(at: 49); speed.cancelInput(at: 50); speed.release(.controller, at: 51)
 check(speed.multiplier == 1, "Focus loss must clear the boost")
-print("PASS mouse, Shift and controller holds, overlapping inputs, emergency exits and level reset")
+print("PASS F, mouse, Shift and controller holds, overlapping inputs, emergency exits and level reset")
 for legacy in [3.0, 8] {
     var original = GameplaySpeed(legacyMultiplier: legacy); original.variableEnabled = false
     original.tap(at: 0); check(original.multiplier == legacy, "OG fixed speed changed")

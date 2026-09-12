@@ -20,8 +20,10 @@ import NxlvKit
     var panelLabel: String { state.label }
     var choiceLabel: String { "\(Int(state.cruise))×" }
     func pointerDown(at now: TimeInterval, clickCount: Int) {
-        if clickCount > 1 { state.reset(at: now) }
-        else { state.press(.mouse, at: now) }
+        if clickCount > 1 {
+            state.reset(at: now)
+            state.press(.mouse, at: now, tapEnabled: false)
+        } else { state.press(.mouse, at: now) }
         onChange()
     }
     func update(at now: TimeInterval, active: Bool) {
@@ -39,7 +41,7 @@ import NxlvKit
     func setFast(_ enabled: Bool) { state.setFast(enabled, at: ProcessInfo.processInfo.systemUptime); onChange() }
     var help: String {
         variableEnabled
-            ? "F / Speed: toggle fast-forward\nHold Shift, Speed or RT: ramp up; release: previous speed\nSpeed arrows or Shift+[ / Shift+]: choose 2×, 3×, 5× or 10×\nF or controller B: immediately return to 1×"
+            ? "F / Speed: toggle fast-forward\nHold F, Shift, Speed or RT: ramp up to 10×; release: previous speed\nSpeed arrows or Shift+[ / Shift+]: choose 2×, 3×, 5× or 10×\nF or controller B: immediately return to 1×"
             : "F / Speed: toggle fast-forward"
     }
 }
@@ -153,7 +155,8 @@ import NxlvKit
         if event.charactersIgnoringModifiers?.lowercased() == "f" {
             if !event.isARepeat {
                 pressedF = true; fKeyCode = event.keyCode
-                speedControl?.tap(at: now)
+                if speedControl?.variableEnabled == true { speedControl?.press(.key, at: now) }
+                else { speedControl?.tap(at: now) }
             }
             return nil
         }

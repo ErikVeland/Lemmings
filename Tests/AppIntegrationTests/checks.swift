@@ -923,6 +923,35 @@ extension AppDelegate {
     mouse(.leftMouseDown, 37); controller.update(at: 39, active: true); controller.reset(at: 39.1)
     mouse(.leftMouseUp, 39.2)
     try check(controller.multiplier == 1, "Mouse release undid an emergency exit")
+    mouse(.leftMouseDown, 40); mouse(.leftMouseUp, 40.05)
+    mouse(.leftMouseDown, 40.1, clicks: 2)
+    try check(controller.multiplier == 1, "Second mouse press did not stop fast-forward")
+    controller.update(at: 42.1, active: true)
+    try check(controller.target == 10, "Holding the second mouse press could not ramp to 10x")
+    mouse(.leftMouseUp, 42.2, clicks: 2)
+    try check(controller.multiplier == 1, "Second-click hold did not restore normal speed")
+    keyboard.bind(to: host)
+    for initialSpeed in [1.0, 3.0] {
+      controller.newLevel()
+      if initialSpeed > 1 { controller.step(1, at: 99); controller.tap(at: 99.5) }
+      _ = keyboard.handle(key(.keyDown, 100))
+      try check(controller.target == initialSpeed, "F press toggled before distinguishing a hold")
+      for (time, tier) in [(100.26, initialSpeed == 1 ? 2.0 : 5.0),
+                           (100.77, initialSpeed == 1 ? 3.0 : 10.0),
+                           (101.27, initialSpeed == 1 ? 5.0 : 10.0), (101.77, 10.0), (105, 10.0)] {
+        _ = keyboard.handle(key(.keyDown, time, repeatKey: true))
+        controller.update(at: time, active: true)
+        try check(controller.target == tier, "Held F did not ramp through the same tiers as the mouse and RT")
+      }
+      _ = keyboard.handle(key(.keyUp, 105.1))
+      try check(controller.multiplier == initialSpeed, "F release did not restore the previous speed")
+    }
+    controller.newLevel()
+    _ = keyboard.handle(key(.keyDown, 110)); controller.update(at: 112, active: true)
+    _ = keyboard.handle(key(.keyDown, 112.1, text: "\u{1b}", code: 53))
+    _ = keyboard.handle(key(.keyUp, 112.2))
+    try check(controller.multiplier == 1, "F release restarted speed after Escape")
+    try check(keyboard.helpText.contains("Hold F"), "Keyboard help omitted the F hold")
     print("PASS native mouse toggle, arrows, complete double-click sequence, hold and emergency release")
     print("PASS real key events: tap/hold/release, repeats, rapid exits, shortcut routing, window attachment and OG mode")
   }

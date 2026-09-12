@@ -37,7 +37,7 @@ import AppKit
         let camera = commands.filter { $0.group == "Camera" }.map { "\($0.keys)  \($0.action)" }.joined(separator: "\n")
         card("LOOK AROUND", camera, "camera")
         let variable = commands.contains { $0.keys.contains("Shift +") }
-        card("TIME & SPEED", "Space  Pause / resume\nF      Fast-forward / normal speed" + (variable ? "\nHold Shift  Boost; release to restore\nShift+[ / ]  Decrease / increase speed\nShift+\\     Immediately return to 1×" : ""), "speed")
+        card("TIME & SPEED", "Space  Pause / resume\nF      Fast-forward / normal speed" + (variable ? "\nHold F / Shift  Boost to 10×\nShift+[ / ]  Decrease / increase speed\nShift+\\     Immediately return to 1×" : ""), "speed")
         let skillRows = commands.filter { $0.group == "Skills" && $0.action.hasPrefix("Select ") }
         let skills = skillRows.map { "\($0.keys)  \($0.action.replacingOccurrences(of: "Select ", with: "").components(separatedBy: " (")[0])" }.joined(separator: "   •   ")
         card("SELECT A SKILL → CLICK A LEMMING", skills.isEmpty ? "Skill bindings appear when a level is loaded." : skills, "skills")
