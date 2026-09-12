@@ -9,7 +9,7 @@
 
 ## HUD and result layout
 
-- Restore the skill names beneath their counts in the Classic HUD.
+- Restore the skill names beneath their counts in the Classic HUD. Highlight active letter shortcuts in green; Floater shows U beside its umbrella. B cycles the B skills.
 - Draw the speed arrows and indicator within one continuous stone control.
 - Keep Next Level at the far right, after both Hot Seat retry choices.
 

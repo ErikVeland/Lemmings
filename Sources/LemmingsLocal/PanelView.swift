@@ -423,13 +423,34 @@ enum PanelButton: Equatable {
   private func drawSkillLabels() {
     guard panelScale >= 2 else { return }
     let names = ["CLIMB", "FLOAT", "BOMB", "BLOCK", "BUILD", "BASH", "MINE", "DIG"]
+    let shortcuts = SkillShortcuts(names: session?.skills.map(\.name) ?? [])
     for (button, frame) in buttonFrames {
       guard case let .skill(index) = button, let name = names[safe: index] else { continue }
       let box = CGRect(x: frame.minX, y: panelFrame.minY + 10 * panelScale,
         width: frame.width, height: 5 * panelScale)
       NSColor.black.setFill()
       box.fill()
-      if !drawMacLabel(name, centeredIn: box) { GamePixelText.draw(name, in: box) }
+      let key = skillShortcut(index, shortcuts: shortcuts)
+      drawSkillName(name, in: box, key: key)
+      if let key, !name.contains(key) {
+        let badge = CGRect(x: frame.maxX - 6 * panelScale, y: frame.minY + 2 * panelScale,
+          width: 4 * panelScale, height: 5 * panelScale)
+        NSColor.black.setFill(); badge.fill()
+        GamePixelText.draw(String(key), in: badge)
+      }
+    }
+  }
+
+  private func skillShortcut(_ index: Int, shortcuts: SkillShortcuts) -> Character? {
+    guard modernControlsEnabled, shortcuts.letters.indices.contains(index) else { return nil }
+    let initial = shortcuts.initials[index]
+    let shared = initial.map { letter in shortcuts.initials.filter { $0 == letter }.count > 1 } ?? false
+    return (shared ? initial : shortcuts.letters[index])?.uppercased().first
+  }
+
+  private func drawSkillName(_ name: String, in box: CGRect, key: Character?) {
+    if !drawMacLabel(name, centeredIn: box, highlighted: key) {
+      GamePixelText.draw(name, in: box, highlighted: key)
     }
   }
 
@@ -497,8 +518,14 @@ enum PanelButton: Equatable {
         fraction: 1, respectFlipped: true, hints: nil)
     }
 
+    if case let .skill(index) = button {
+      let shortcuts = SkillShortcuts(names: session?.skills.map(\.name) ?? [])
+      drawSkillName(title.uppercased(), in: CGRect(x: frame.minX + 4, y: frame.minY + 4,
+        width: frame.width - 8, height: 12), key: skillShortcut(index, shortcuts: shortcuts))
+    } else {
     GamePixelText.draw(title.replacingOccurrences(of: "◀", with: "<").replacingOccurrences(of: "▶", with: ">"),
       in: CGRect(x: frame.minX + 4, y: frame.minY + 4, width: frame.width - 8, height: 12))
+    }
     if !subtitle.isEmpty {
       GamePixelText.draw(subtitle, in: CGRect(x: frame.minX + 4, y: frame.minY + 18, width: frame.width - 8, height: 12))
     }
@@ -561,7 +588,7 @@ enum PanelButton: Equatable {
       .replacingOccurrences(of: "•", with: "*")
   }
 
-  private func drawMacLabel(_ text: String, centeredIn box: CGRect, scale wanted: Int = 0) -> Bool {
+  private func drawMacLabel(_ text: String, centeredIn box: CGRect, scale wanted: Int = 0, highlighted: Character? = nil) -> Bool {
     guard let macInterface, let font = macInterface.font(.small) else { return false }
     let upper = gameText(text)
     guard font.covers(upper) else { return false }
@@ -573,6 +600,13 @@ enum PanelButton: Equatable {
     macInterface.drawCentered(
       upper, face: .small, centerX: box.midX,
       top: box.midY - macInterface.height(face: .small, scale: scale) / 2, scale: scale)
+    if let highlighted, let index = upper.firstIndex(of: highlighted) {
+      let x = box.midX - macInterface.width(of: upper, face: .small, scale: scale) / 2
+        + CGFloat(upper.distance(from: upper.startIndex, to: index) * font.cellWidth * scale)
+      macInterface.draw(String(highlighted), face: .small,
+        at: CGPoint(x: x, y: box.midY - macInterface.height(face: .small, scale: scale) / 2),
+        scale: scale, palette: .green)
+    }
     return true
   }
 

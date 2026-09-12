@@ -253,7 +253,7 @@ import NxlvKit
     ")":[0,65,34,28,0], "'" :[0,3,0,0,0], "!" :[0,0,95,0,0],
     ",":[0,64,48,0,0], "<":[8,20,34,65,0], ">":[0,65,34,20,8],
     "∞" :[28,34,28,34,28], "?" :[2,1,81,9,6], "=" :[20,20,20,20,20]]
-  static func draw(_ text: String, in rect: CGRect, maxScale: CGFloat = 3) {
+  static func draw(_ text: String, in rect: CGRect, maxScale: CGFloat = 3, highlighted: Character? = nil) {
     let normalized = text.uppercased().replacingOccurrences(of: "×", with: "X")
     let scale = max(1, min(maxScale, floor(min(rect.height / 7, rect.width / CGFloat(max(1, normalized.count * 6))))))
     let start = floor(rect.midX - CGFloat(normalized.count * 6 - 1) * scale / 2)
@@ -263,7 +263,13 @@ import NxlvKit
     context?.setShouldAntialias(false)
     defer { context?.restoreGState() }
     NSColor(calibratedRed: 0.75, green: 0.94, blue: 0.62, alpha: 1).setFill()
+    let highlightedIndex = highlighted.flatMap { normalized.firstIndex(of: $0) }.map { normalized.distance(from: normalized.startIndex, to: $0) }
     for (index, character) in normalized.enumerated() {
+      if highlighted != nil {
+        (index == highlightedIndex
+          ? NSColor(calibratedRed: 0.45, green: 1, blue: 0.1, alpha: 1)
+          : NSColor(calibratedRed: 0.2, green: 0.5, blue: 1, alpha: 1)).setFill()
+      }
       for (x, column) in (columns[character] ?? []).enumerated() {
         for y in 0..<7 where column & (1 << y) != 0 {
           CGRect(x: start + CGFloat(index * 6 + x) * scale,
