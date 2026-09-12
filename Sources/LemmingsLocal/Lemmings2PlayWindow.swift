@@ -220,6 +220,12 @@ import NxlvKit
             self.panelAction(index)
         }
         keyboard.centre = { [weak self] entrance in self?.canvas.centre(onEntrance: entrance) }
+        keyboard.mainMenu = { [weak self] in
+            guard let self else { return }
+            self.paused = true; self.fanSelected = false; self.releasePointerInput()
+            self.saveCheckpoint(immediately: true)
+            if let exit = self.onReturnToLibrary { exit() } else { self.show(.menu) }
+        }
         keyboard.escape = { [weak self] in
             guard let self else { return }
             if self.fanSelected { self.fanSelected = false; self.releasePointerInput(); self.refreshGame() }

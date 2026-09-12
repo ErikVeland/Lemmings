@@ -1030,3 +1030,30 @@ extension Lemmings2PlayWindow {
     }
 }
 try Lemmings2PlayWindow(root: l2root).checkPracticeRecovery()
+
+
+extension Lemmings2PlayWindow {
+    fileprivate func checkEscapeMainMenu() throws {
+        defer { stop() }
+        prepareBriefing(); startLevel()
+        fanSelected = true
+        var exited = false
+        onReturnToLibrary = { exited = true }
+        gameplayKeyboard?.mainMenu?()
+        try assertArtwork(exited && paused && !fanSelected, "L2 Escape did not exit directly while using the fan")
+        print("PASS L2 Escape exits directly to the main menu")
+    }
+}
+extension Lemmings3PlayWindow {
+    fileprivate func checkEscapeMainMenu() throws {
+        defer { stop() }
+        var exited = false
+        onReturnToLibrary = { exited = true }
+        gameplayKeyboard?.mainMenu?()
+        try assertArtwork(exited && paused && pendingTool == nil && canvas.directionPoint == nil,
+            "L3 Escape did not exit directly to the main menu")
+        print("PASS L3 Escape exits directly to the main menu")
+    }
+}
+try Lemmings2PlayWindow(root: l2root).checkEscapeMainMenu()
+try Lemmings3PlayWindow(root: l3root).checkEscapeMainMenu()

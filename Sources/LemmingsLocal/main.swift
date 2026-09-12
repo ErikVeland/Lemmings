@@ -3008,6 +3008,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
         self.togglePause()
       }
     }
+    keyboard.mainMenu = { [weak self] in self?.returnToLibrary() }
     keyboard.escape = { [weak self, weak keyboard] in
       guard let self else { return }
       let resume = keyboard?.pauseForHelp() ?? {}

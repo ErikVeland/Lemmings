@@ -544,6 +544,20 @@ extension AppDelegate {
     returnToLibrary()
     print("PASS Classic fan checkpoint, shuffled queue, exact paused restore, identity, continuation and missing-pack rejection")
   }
+  fileprivate func testEscapeToMainMenu() throws {
+    GameScreen.shared.dismissAll()
+    returnToLibrary(); loadContent()
+    gamePicker.selectItem(at: dataSets.firstIndex { $0.set.title == .lemmings }!)
+    selectDataSet(); loadLevel(at: 30); phase = .playing
+    for _ in 0..<120 { session?.tick() }
+    let run = arcadeRunID
+    gameplayKeyboard?.mainMenu?()
+    try check(activeTitle == nil && !sequelIsActive && !fanPlaying && window.attachedSheet == nil,
+      "Escape did not return directly to the library")
+    try check(try recoveryStore.latest(profileID: arcadeProfileID, hotSeatID: arcadeHotSeatID)?.runID == run,
+      "Escape discarded the active run")
+    print("PASS Escape returns directly to the main menu and saves the active run")
+  }
   fileprivate func testRunRecovery() throws {
     GameScreen.shared.dismissAll()
     settings.music = .silent; loadContent()
@@ -823,17 +837,17 @@ extension AppDelegate {
     _ = keyboard.handle(key(.keyDown, 16, text: "|", code: 42, flags: .shift))
     try check(!controller.isFast, "Shift+backslash did not reset")
     controller.tap(at: 17)
-    var escaped = false; keyboard.escape = { escaped = true }
+    var escaped = false; keyboard.mainMenu = { escaped = true }
     _ = keyboard.handle(key(.keyDown, 18, text: "\u{1b}", code: 53))
-    try check(!controller.isFast && !escaped, "Escape failed to stop speed before opening the pause menu")
+    try check(!controller.isFast && escaped, "Escape failed to stop speed and reach the main menu in one press")
     _ = keyboard.handle(key(.keyDown, 19, text: "\u{1b}", code: 53))
-    try check(escaped, "Escape at 1x failed to open the pause menu")
+    try check(escaped, "Escape at 1x failed to reach the main menu")
     escaped = false
     _ = keyboard.handle(key(.flagsChanged, 19.1, text: "", code: 56, flags: .shift))
     controller.update(at: 19.5, active: true)
     _ = keyboard.handle(key(.keyDown, 19.6, text: "\u{1b}", code: 53, flags: .shift))
     _ = keyboard.handle(key(.flagsChanged, 19.7, text: "", code: 56))
-    try check(controller.multiplier == 1 && !escaped, "Escape while holding Shift opened a menu or restarted speed")
+    try check(controller.multiplier == 1 && escaped, "Escape while holding Shift missed the main menu or restarted speed")
     let attached = SpeedTestWindow(contentRect: host.frame, styleMask: [], backing: .buffered, defer: false)
     keyboard.bind(to: attached)
     try check(keyboard.handle(key(.keyDown, 20)) != nil, "The detached window retained speed control")
@@ -1507,6 +1521,7 @@ Task { @MainActor in
     try subject.testHotSeatBoundaries()
     try subject.testRunRecovery()
     try subject.testFanRunRecovery()
+    try subject.testEscapeToMainMenu()
     print("Hot Seat boundary integration tests passed.")
     #elseif CONTROLLER_QOL_TESTS
     try await subject.testControllerQoL()
@@ -1516,6 +1531,7 @@ Task { @MainActor in
     try subject.testNeoRunRecovery()
     try subject.testRunRecovery()
     try subject.testFanRunRecovery()
+    try subject.testEscapeToMainMenu()
     try subject.testInterruptionPolicy()
     print("Controller QoL integration tests passed.")
     #elseif RELEASE_BLOCKER_TESTS
@@ -1523,6 +1539,7 @@ Task { @MainActor in
     try subject.testNeoRunRecovery()
     try subject.testRunRecovery()
     try subject.testFanRunRecovery()
+    try subject.testEscapeToMainMenu()
     print("Release blocker integration tests passed.")
     #elseif HINT_TESTS
     try subject.testLevelHints()
@@ -1560,6 +1577,7 @@ Task { @MainActor in
     try subject.testNeoRunRecovery()
     try subject.testRunRecovery()
     try subject.testFanRunRecovery()
+    try subject.testEscapeToMainMenu()
     try subject.testInterruptionPolicy()
     try subject.testHotSeatBoundaries()
     print("App integration tests passed.")

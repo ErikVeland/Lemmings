@@ -71,3 +71,10 @@ actions and initials editing, and sequel badge ownership across handoff and solo
 uses standard extended-gamepad button frames and remapped actions. No physical controller was available;
 model-specific button labels, Bluetooth behavior and hands-on comfort remain unverified. A full VoiceOver
 listening journey also remains a manual release check.
+
+
+From gameplay, **Escape** now saves the active run and returns directly to the main
+menu in Classic, fan levels, NeoLemmix, L2 and L3. It also cancels fast-forward,
+including a held boost. Repeated key-down events do not cause further navigation.
+Use **F** or controller **B** to cancel fast-forward while staying in the level.
+Escape inside an open dialog or help page retains that page's normal Back action.

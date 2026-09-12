@@ -39,7 +39,7 @@ import NxlvKit
     func setFast(_ enabled: Bool) { state.setFast(enabled, at: ProcessInfo.processInfo.systemUptime); onChange() }
     var help: String {
         variableEnabled
-            ? "F / Speed: toggle fast-forward\nHold Shift, Speed or RT: ramp up; release: previous speed\nSpeed arrows or Shift+[ / Shift+]: choose 2×, 3×, 5× or 10×\nF, Escape or controller B: immediately return to 1×"
+            ? "F / Speed: toggle fast-forward\nHold Shift, Speed or RT: ramp up; release: previous speed\nSpeed arrows or Shift+[ / Shift+]: choose 2×, 3×, 5× or 10×\nF or controller B: immediately return to 1×"
             : "F / Speed: toggle fast-forward"
     }
 }
@@ -78,6 +78,7 @@ import NxlvKit
     var focusLast: () -> Void = {}
     var repeatAssignment: () -> Void = {}
     var escape: () -> Void = {}
+    var mainMenu: (() -> Void)?
     var help: () -> String = { "" }
     var hints: (() -> Void)?
     var settings: (() -> Void)?
@@ -153,7 +154,7 @@ import NxlvKit
             return nil
         }
         if speedControl?.variableEnabled == true,
-           key == "|" || event.keyCode == 53 && (speedControl?.isFast == true || speedControl?.state.isHeld == true) {
+           key == "|" {
             speedControl?.reset(at: now); return nil
         }
         if event.modifierFlags.contains(.shift) { speedControl?.release(.shift, at: now) }
@@ -180,7 +181,14 @@ import NxlvKit
             default: break
             }
         }
-        if event.keyCode == 53 { speedControl?.cancelInput(); escape(); return nil }
+        if event.keyCode == 53 {
+            if !event.isARepeat {
+                pressedF = false
+                speedControl?.reset(at: now)
+                if let mainMenu { mainMenu() } else { escape() }
+            }
+            return nil
+        }
         if key == "?" {
             if event.isARepeat { return nil }
             showHelp()
@@ -251,12 +259,12 @@ import NxlvKit
         }
     }
     var helpText: String {
-        let speedHelp = (speedControl?.help ?? "").replacingOccurrences(of: " or RT", with: "").replacingOccurrences(of: "F, Escape or controller B", with: "F or Escape")
+        let speedHelp = (speedControl?.help ?? "").replacingOccurrences(of: " or RT", with: "").replacingOccurrences(of: "F or controller B", with: "F")
         var sections = [help(), speedHelp]
         if modern() {
             sections.append("Tab / Shift-Tab: next / previous available skill\nHome / End: entrance / exit\n[ / ]: previous / next unassigned lemming\n\\: focus last assignment\nReturn: repeat last skill")
         } else { sections.append("Modern keyboard shortcuts are off. Number keys select skills.") }
-        sections.append("Escape: cancel or pause menu\n?: controls help")
+        sections.append("Escape: save run and return to main menu\n?: controls help")
         if hints != nil { sections.append("F1 or i: level goals and tiered hints") }
         if rate != nil { sections.append("− / +: release rate") }
         if controllerEnabled() {

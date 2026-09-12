@@ -247,6 +247,12 @@ import NxlvKit
             self.refresh()
         }
         keyboard.centre = { [weak self] entrance in self?.canvas.centre(onEntrance: entrance) }
+        keyboard.mainMenu = { [weak self] in
+            guard let self else { return }
+            self.paused = true; self.pendingTool = nil; self.canvas.directionPoint = nil
+            self.saveCheckpoint(immediately: true)
+            if let exit = self.onReturnToLibrary { exit() } else { self.showGameMenu() }
+        }
         keyboard.escape = { [weak self] in
             guard let self else { return }
             if self.pendingTool != nil || self.canvas.directionPoint != nil {
@@ -659,7 +665,7 @@ import NxlvKit
         canAdvance = game.isComplete && game.saved > 0 && ((campaignFinished && usesSharedWindow)
             || (availability.indices.contains(campaign.index + 1) && availability[campaign.index + 1] == nil))
         canvas.selectedAction = selected; canvas.paused = paused; canvas.fast = fast
-        canvas.setAccessibilityLabel("Lemmings 3. \(campaign.tribe.title) level \(campaign.index + 1). \(game.saved) saved, \(game.reserve) in reserve, \(game.remainingSeconds) seconds. Selected \(Lemmings3Panel.names[selected]). \(message) Space pauses. F changes speed. Escape opens the game menu. Double-click End Run to finish.")
+        canvas.setAccessibilityLabel("Lemmings 3. \(campaign.tribe.title) level \(campaign.index + 1). \(game.saved) saved, \(game.reserve) in reserve, \(game.remainingSeconds) seconds. Selected \(Lemmings3Panel.names[selected]). \(message) Space pauses. F changes speed. Escape returns to the main menu. Double-click End Run to finish.")
         let turn = ArcadeStore.shared.hotSeatIsActive ? ArcadeStore.shared.records.profile(arcadeProfileID) : nil
         canvas.turnBadge.show(initials: turn?.initials, portrait: turn.flatMap { ArcadeWindow.shared.arcadeView.portraitImage($0.portrait) })
         canvas.speedMultiplier = speedControl.multiplier
