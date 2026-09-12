@@ -1229,11 +1229,14 @@ let achievementProgressKey = "ClassicAchievementProgress"
   /// release is the only one whose character set is decoded, so its lettering
   /// is what every menu uses. Without it the menus fall back to a system font.
   private func configureFrontEndArtwork() {
-    guard let resources = Bundle.main.resourceURL,
-      dataSets.indices.contains(gamePicker.indexOfSelectedItem),
-      let title = dataSets[gamePicker.indexOfSelectedItem].set.title,
-      let family = macArtworkFamily(for: title)
-    else { return }
+    guard let resources = Bundle.main.resourceURL else { return }
+    // The menus keep their lettering whatever is selected, which is the whole
+    // point of holding this separately from the level artwork. Selecting a pack
+    // with no Macintosh artwork of its own, or a release whose data is missing,
+    // used to drop the menus back to a system font and lose the logo with them.
+    let selected = dataSets.indices.contains(gamePicker.indexOfSelectedItem)
+      ? dataSets[gamePicker.indexOfSelectedItem].set.title : nil
+    let family = selected.flatMap(macArtworkFamily(for:)) ?? "lemmings"
     let key = "MacArtwork/" + family
     let art: ClassicMacArtwork
     if let cached = macArtworkCache[key] {
