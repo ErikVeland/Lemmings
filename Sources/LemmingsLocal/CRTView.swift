@@ -302,13 +302,13 @@ struct CRTUniforms {
     sourceTexture.replace(
       region: MTLRegionMake2D(0, 0, width, height), mipmapLevel: 0,
       withBytes: bytes, bytesPerRow: width * 4)
-    let mask = ExplosionHDR.mask(width:width,height:height,flashes:flashes)
-    let flash = MTLTextureDescriptor.texture2DDescriptor(pixelFormat:.r8Unorm,width:width,height:height,mipmapped:false)
+    let mask = ExplosionHDR.textureMask(width:width,height:height,flashes:flashes)
+    let flash = MTLTextureDescriptor.texture2DDescriptor(pixelFormat:.rg8Unorm,width:width,height:height,mipmapped:false)
     flash.usage = .shaderRead
     flashTexture = device.makeTexture(descriptor:flash)
     mask.withUnsafeBytes { bytes in
       flashTexture?.replace(region:MTLRegionMake2D(0,0,width,height),mipmapLevel:0,
-        withBytes:bytes.baseAddress!,bytesPerRow:width)
+        withBytes:bytes.baseAddress!,bytesPerRow:width*2)
     }
     // Draw straight away rather than asking for a redraw. Assigning a
     // CAMetalLayer to `layer` makes this view layer-hosting, and a

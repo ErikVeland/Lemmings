@@ -239,6 +239,10 @@ enum CRTShaders {
           float3 tint = strength > .75 ? float3(1) : float3(1,1,0);
           color = tint * (1 + (u.hdrHeadroom-1)*strength);
       }
+      float green = flash.sample(nearest,uv).g;
+      if (green > 0 && u.hdrHeadroom > 1) {
+          color = float3(.18,1,.18) * (1 + (u.hdrHeadroom-1)*green);
+      }
       return float4(color, 1.0);
   }
   """

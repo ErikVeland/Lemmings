@@ -90,6 +90,19 @@ func require(_ value: Bool, _ message: String) throws {
     for c in 0..<4 { try require(crt[i*4+c] == crtSDR[i*4+c], "HDR changed the terrain or UI") }
   }
 
+  let greenMask = ExplosionHDR.textureMask(width: 8, height: 8, flashes: [
+    .init(rect: CGRect(x: 1, y: 1, width: 2, height: 2), strength: 1, expiresAt: 20, tint: .green)], now: 10)
+  let greenTexture = texture(.rg8Unorm, bytes: greenMask, row: 16)
+  let greenHDR = try render(code: ExplosionHDR.shader, vertex: "flash_vertex", fragment: "flash_fragment", textures: [greenTexture], uniforms: Float(8))
+  u.hdrHeadroom = 8
+  let greenCRT = try render(code: CRTShaders.source, vertex: "crt_vertex", fragment: "crt_composite", textures: [source, black, greenTexture], uniforms: u)
+  let greenIndex = (1 * 8 + 1) * 4
+  for image in [greenHDR, greenCRT] {
+    try require(image[greenIndex + 1] == 8 && image[greenIndex] < 2 && image[greenIndex + 2] < 2,
+      "Assignment pulse lost green HDR colour in flat or CRT output")
+  }
+  try require(greenHDR[3] == 0, "Assignment pulse changed pixels outside the reticle")
+
   // Regressions for the enabled effect doing nothing on an SDR display.
   func nuclear(age: Float, headroom: Float = 1, centre: SIMD2<Float> = .init(0.5,0.55),
                exposure: Float = 1, width: Int = 256, height: Int = 144) throws -> [Float] {

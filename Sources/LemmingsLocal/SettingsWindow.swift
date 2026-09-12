@@ -69,9 +69,9 @@ import NxlvKit
 
   func show() {
     if let page, GameScreen.shared.contains(page) { GameScreen.shared.present(page); return }
-    let page = GameMenuPage(title: "Settings", subtitle: "Make the game look and sound the way you like.")
+    let page = GameMenuPage(title: "Settings")
     page.onBack = { [weak page] in if let page { GameScreen.shared.dismiss(page) } }
-    let tabs = NSTabView()
+    let tabs = GameTabs()
     tabs.font = .systemFont(ofSize: 18, weight: .medium)
     tabs.addTabViewItem(tab("Gameplay", gameplayPane()))
     tabs.addTabViewItem(tab("Controller", controllerPane()))
@@ -106,7 +106,7 @@ import NxlvKit
     let container = NSView()
     var previous: NSView?
     for (label, control) in rows {
-      let caption = NSTextField(labelWithString: label)
+      let caption = GameLabel(labelWithString: label)
       if control.accessibilityLabel() == nil {
         control.setAccessibilityLabel((control as? NSButton).map { label + ": " + $0.title } ?? label)
       }
@@ -134,7 +134,7 @@ import NxlvKit
   }
 
   private func popUp(_ action: Selector) -> NSPopUpButton {
-    let button = NSPopUpButton()
+    let button = GamePopUpButton()
     button.font = .systemFont(ofSize: 17)
     button.controlSize = .large
     button.target = self
@@ -145,30 +145,28 @@ import NxlvKit
   private func slider(_ action: Selector, value: Double, min: Double = 0, max: Double = 1)
     -> NSSlider
   {
-    let control = NSSlider(value: value, minValue: min, maxValue: max, target: self, action: action)
+    let control = GameSlider(value: value, minValue: min, maxValue: max, target: self, action: action)
     control.isContinuous = true
     return control
   }
 
   private func gameplayPane() -> NSView {
-    let modern = NSButton(checkboxWithTitle: "Modern keyboard controls", target: self, action: #selector(modernControlsChanged))
+    let modern = GameCheckButton(title: "Modern keyboard controls", target: self, action: #selector(modernControlsChanged))
     modernControlsCheck = modern
-    let variable = NSButton(checkboxWithTitle: "Variable speed: 2×, 3×, 5×, 10×", target: self, action: #selector(variableSpeedChanged))
+    let variable = GameCheckButton(title: "Variable speed: 2×, 3×, 5×, 10×", target: self, action: #selector(variableSpeedChanged))
     variableSpeedCheck = variable
-    let interruption = NSButton(checkboxWithTitle: "Pause when switching apps or a controller disconnects", target: self, action: #selector(interruptionChanged))
+    let interruption = GameCheckButton(title: "Pause when switching apps or a controller disconnects", target: self, action: #selector(interruptionChanged))
     interruption.state = settings.pauseOnInterruption ? .on : .off
     interruptionCheck = interruption
-    let help = NSTextField(wrappingLabelWithString: "Tap F, Speed or RT to toggle fast-forward. Hold Shift, Speed or RT to boost; release to return.\nSpeed arrows, Shift+[ / Shift+] or LT + D-pad left/right choose the fast tier. F, Escape or B exits immediately.")
-    help.font = .systemFont(ofSize: 16)
-    let og = NSButton(title: "Use OG settings", target: self, action: #selector(useOGSettings))
-    let defaults = NSButton(title: "Use modern defaults", target: self, action: #selector(useModernDefaults))
+    variable.toolTip = SpeedPanelControls.help
+    let og = GameButton(title: "Use OG settings", target: self, action: #selector(useOGSettings))
+    let defaults = GameButton(title: "Use modern defaults", target: self, action: #selector(useModernDefaults))
     let buttons = NSStackView(views: [og, defaults]); buttons.orientation = .horizontal; buttons.spacing = 16
-    let note = NSTextField(wrappingLabelWithString: "OG restores fixed fast-forward and number keys. It turns off automatic pause, gamepad controls, HD effects, pointer capture, enhanced sequel artwork, shuffle and DJ extras. Your saves, machine and volume choices stay as set.")
-    note.font = .systemFont(ofSize: 15)
+    og.toolTip = "Restore fixed fast-forward, number keys and original presentation. Saves and volume choices stay as set."
     modern.state = settings.modernControlsEnabled ? .on : .off
     variable.state = settings.variableSpeedEnabled ? .on : .off
     variable.isEnabled = settings.modernControlsEnabled
-    return pane([("Controls", modern), ("Speed", variable), ("Pause", interruption), ("Shortcuts", help), ("Experience", buttons), ("", note)])
+    return pane([("Controls", modern), ("Speed", variable), ("Pause", interruption), ("Experience", buttons)])
   }
 
   @objc private func modernControlsChanged(_ sender: NSButton) {
@@ -183,9 +181,9 @@ import NxlvKit
   @objc private func useOGSettings() { applyExperiencePreset(modern: false) }
   @objc private func useModernDefaults() { applyExperiencePreset(modern: true) }
   private func controllerPane() -> NSView {
-    let enabled = NSButton(checkboxWithTitle: "Enable gamepad controls", target: self, action: #selector(controllerChanged))
-    let tap = NSButton(checkboxWithTitle: "Tap RT to toggle fast-forward; hold RT for a temporary boost", target: self, action: #selector(controllerTapChanged))
-    let swap = NSButton(checkboxWithTitle: "Swap sticks: right aims, left moves the camera", target: self, action: #selector(controllerSwapChanged))
+    let enabled = GameCheckButton(title: "Enable gamepad controls", target: self, action: #selector(controllerChanged))
+    let tap = GameCheckButton(title: "Tap RT to toggle fast-forward; hold RT for a temporary boost", target: self, action: #selector(controllerTapChanged))
+    let swap = GameCheckButton(title: "Swap sticks: right aims, left moves the camera", target: self, action: #selector(controllerSwapChanged))
     controllerCheck = enabled; controllerTapCheck = tap; controllerSwapCheck = swap
     enabled.state = settings.controllerEnabled ? .on : .off
     tap.state = settings.controllerTapSpeed ? .on : .off
@@ -194,7 +192,7 @@ import NxlvKit
     let scroll = NSScrollView()
     scroll.hasVerticalScroller = true; scroll.drawsBackground = false
     scroll.heightAnchor.constraint(equalToConstant: 184).isActive = true
-    let text = NSTextView(frame: CGRect(x: 0, y: 0, width: 730, height: 420))
+    let text = GameReadOnlyText(frame: CGRect(x: 0, y: 0, width: 730, height: 420))
     text.string = ControllerDevicePresentation.help(mapping: settings.controllerMappings)
     controllerHelpText = text
     text.font = .systemFont(ofSize: 15); text.textColor = .labelColor
@@ -202,27 +200,25 @@ import NxlvKit
     text.isVerticallyResizable = true; text.isHorizontallyResizable = false
     text.autoresizingMask = [.width]; text.textContainer?.widthTracksTextView = true
     scroll.documentView = text
-    let remap = NSButton(title: "Remap buttons…", target: self, action: #selector(showControllerRemapping))
+    let remap = GameButton(title: "Remap buttons…", target: self, action: #selector(showControllerRemapping))
     remap.isEnabled = settings.controllerEnabled; controllerRemapButton = remap
     return pane([("Gamepad", enabled), ("Speed", tap), ("Sticks", swap), ("Buttons", remap), ("Bindings", scroll)])
   }
   @objc private func showControllerRemapping() {
     let page = GameMenuPage(title: "Controller buttons", subtitle: "Choose a button, then choose what it does during play.")
-    let source = NSPopUpButton(), role = NSPopUpButton()
+    let source = GamePopUpButton(), role = GamePopUpButton()
     source.target = self; source.action = #selector(remapSourceChanged)
     role.target = self; role.action = #selector(remapRoleChanged)
     for button in ControllerBindings.Button.allCases {
       source.addItem(withTitle: ControllerDevicePresentation.name(button))
-      if let symbol = ControllerDevicePresentation.element(button)?.sfSymbolsName {
-        source.lastItem?.image = NSImage(systemSymbolName: symbol, accessibilityDescription: ControllerDevicePresentation.name(button))
-      }
+
       role.addItem(withTitle: ControllerBindings.roleName(button))
     }
     remapSource = source; remapRole = role
     source.setAccessibilityLabel("Controller button")
     role.setAccessibilityLabel("Gameplay action")
-    let reset = NSButton(title: "Reset button mappings", target: self, action: #selector(resetControllerMapping))
-    let note = NSTextField(wrappingLabelWithString: "If another button has that action, the two bindings swap. Modifier combinations follow the new buttons. Menu navigation always uses the standard controls. Sticks can be swapped in Controller settings.")
+    let reset = GameButton(title: "Reset button mappings", target: self, action: #selector(resetControllerMapping))
+    let note = GameLabel(wrappingLabelWithString: "If another button has that action, the two bindings swap. Modifier combinations follow the new buttons. Menu navigation always uses the standard controls. Sticks can be swapped in Controller settings.")
     note.font = .systemFont(ofSize: 17)
     let content = pane([("Button", source), ("Action", role), ("Defaults", reset), ("How it works", note)])
     content.frame = page.body.bounds; content.autoresizingMask = [.width, .height]
@@ -277,14 +273,14 @@ import NxlvKit
     let graphics = popUp(#selector(graphicsChanged))
     let depth = popUp(#selector(depthChanged))
     for option in ClassicColorDepth.allCases { depth.addItem(withTitle: option.displayName) }
-    let shuffle = NSButton(
-      checkboxWithTitle: "Change artwork every level", target: self,
+    let shuffle = GameCheckButton(
+      title: "Change artwork every level", target: self,
       action: #selector(graphicsShuffleChanged))
     shuffle.state = settings.shuffleGraphics ? .on : .off
     graphicsPopUp = graphics
     depthPopUp = depth
     graphicsShuffleCheck = shuffle
-    let sequel = NSButton(checkboxWithTitle: "Macintosh-style 2× artwork", target: self,
+    let sequel = GameCheckButton(title: "Macintosh-style 2× artwork", target: self,
                           action: #selector(sequelArtworkChanged))
     sequelArtworkCheck = sequel
     sequel.state = SequelArtworkPreference.enabled ? .on : .off
@@ -308,8 +304,8 @@ import NxlvKit
     let intensity = slider(#selector(intensityChanged), value: settings.displayIntensity)
     let aspect = slider(
       #selector(aspectChanged), value: settings.pixelAspect, min: 0.8, max: 1.5)
-    let integer = NSButton(
-      checkboxWithTitle: "Whole pixels only", target: self,
+    let integer = GameCheckButton(
+      title: "Whole pixels only", target: self,
       action: #selector(integerChanged))
     integer.state = settings.integerScaling ? .on : .off
 
@@ -321,22 +317,22 @@ import NxlvKit
     for control in [display, intensity, aspect, integer] as [NSControl] {
       control.isEnabled = videoIsConnected
     }
-    let note = NSTextField(
+    let note = GameLabel(
       labelWithString: videoIsConnected
         ? "" : "The tube simulation is not in the drawing path yet.")
     note.font = .systemFont(ofSize: 11)
     note.textColor = .secondaryLabelColor
 
-    let hdEffects = NSButton(checkboxWithTitle: "Enable HD effects", target: self, action: #selector(hdEffectsChanged))
+    let hdEffects = GameCheckButton(title: "Enable HD effects", target: self, action: #selector(hdEffectsChanged))
     hdEffects.toolTip = "Cinematic explosions, HDR flashes, speed streaks and ghost trails. Turn off for old-school effects."
     hdEffects.state = settings.hdEffectsEnabled ? .on : .off
     hdEffectsCheck = hdEffects
-    let flashes = NSButton(checkboxWithTitle: "Cinematic nuclear explosions", target: self, action: #selector(hdrFlashesChanged))
+    let flashes = GameCheckButton(title: "Cinematic nuclear explosions", target: self, action: #selector(hdrFlashesChanged))
     flashes.toolTip = "White flash, expanding fireball, shockwave and rising smoke. Works on all displays, with extra brightness in HDR."
     flashes.state = settings.fullScreenHDRFlashes ? .on : .off
     flashes.isEnabled = settings.hdEffectsEnabled
     hdrFlashCheck = flashes
-    let pointer = NSButton(checkboxWithTitle: "Keep pointer inside the game", target: self, action: #selector(pointerCaptureChanged))
+    let pointer = GameCheckButton(title: "Keep pointer inside the game", target: self, action: #selector(pointerCaptureChanged))
     pointer.toolTip = "Hold Option or pause to release the pointer. Menus also release it."
     pointer.state = settings.confinePointer ? .on : .off
     pointerCaptureCheck = pointer
@@ -353,11 +349,11 @@ import NxlvKit
   }
 
   private func accessibilityPane() -> NSView {
-    let motion = NSButton(checkboxWithTitle: "Reduce added motion", target: self, action: #selector(reduceMotionChanged))
+    let motion = GameCheckButton(title: "Reduce added motion", target: self, action: #selector(reduceMotionChanged))
     motion.toolTip = "Disable speed trails and cinematic explosions. Keep gameplay speed and controls."
     motion.state = settings.reduceMotion ? .on : .off
     reduceMotionCheck = motion
-    let reducedFlashes = NSButton(checkboxWithTitle: "Reduce added flashes", target: self, action: #selector(reduceFlashesChanged))
+    let reducedFlashes = GameCheckButton(title: "Reduce added flashes", target: self, action: #selector(reduceFlashesChanged))
     reducedFlashes.toolTip = "Disable added bright explosion cores, HDR flashes and cinematic explosions. Original game sprites remain."
     reducedFlashes.state = settings.reduceFlashes ? .on : .off
     reduceFlashesCheck = reducedFlashes
@@ -366,7 +362,7 @@ import NxlvKit
     size.selectItem(at: ClassicInterfaceSize.allCases.firstIndex(of: settings.interfaceSize) ?? 0)
     size.toolTip = "Enlarge menu pages and controls help. Scroll enlarged pages to reach every control."
     interfaceSizePopUp = size
-    return pane([("Text and menu size", size), ("Motion", motion), ("Flashes", reducedFlashes)])
+    return pane([("UI size", size), ("Motion", motion), ("Flashes", reducedFlashes)])
   }
 
   private func audioPane() -> NSView {
@@ -382,15 +378,15 @@ import NxlvKit
     musicSlider = musicLevel
     soundPopUp = sound
     soundSlider = soundLevel
-    let shuffle = NSButton(
-      checkboxWithTitle: "Change soundtrack every level", target: self,
+    let shuffle = GameCheckButton(
+      title: "Change soundtrack every level", target: self,
       action: #selector(musicShuffleChanged))
     shuffle.state = settings.shuffleMusic ? .on : .off
     musicShuffleCheck = shuffle
-    let mixes = NSButton(checkboxWithTitle: "Include L2, L3 and other ports", target: self, action: #selector(djSoundtracksChanged))
+    let mixes = GameCheckButton(title: "Include L2, L3 and other ports", target: self, action: #selector(djSoundtracksChanged))
     mixes.state = settings.djIncludesOtherSoundtracks ? .on : .off
     djSoundtracksCheck = mixes
-    let folders = NSButton(title: "Open Soundtrack Folder", target: self, action: #selector(openSoundtrackFolder))
+    let folders = GameButton(title: "Open Soundtrack Folder", target: self, action: #selector(openSoundtrackFolder))
     return pane([
       ("Music", music),
       ("Music Style", style),

@@ -101,8 +101,8 @@ import NxlvKit
         }
         let label = failure.map { "Movie could not continue: \($0) · Esc: back" }
             ?? (finished ? "Movie ended · Esc: back" : paused ? "Paused · Space: play · Esc: back" : "Space: pause · Esc: back")
-        label.draw(in: CGRect(x: 20, y: max(0, bounds.height - 30), width: max(0, bounds.width - 40), height: 24),
-            withAttributes: [.foregroundColor: NSColor.white, .font: NSFont.systemFont(ofSize: 14)])
+        GamePixelText.draw(MacInterfaceRenderer.menuText(label),
+            in: CGRect(x: 20, y: max(0, bounds.height - 30), width: max(0, bounds.width - 40), height: 24))
     }
     override func keyDown(with event: NSEvent) {
         if event.keyCode == 53 || event.keyCode == 36 { close() }

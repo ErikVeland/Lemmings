@@ -22,10 +22,10 @@ import NxlvKit
     let title = label("Your rescue story", size: 26, weight: .bold)
     let subtitle = label("\(earned) of \(ClassicAchievement.catalog.count) achievements earned", size: 14)
     subtitle.textColor = .secondaryLabelColor
-    let trophy = symbol("trophy.fill", color: .systemYellow, size: 44)
+    let trophy = symbol(earned: true, size: 44)
     let heading = NSStackView(views: [trophy, stack([title, subtitle], spacing: 5)])
     heading.spacing = 18
-    let meter = NSProgressIndicator()
+    let meter = GameProgressIndicator()
     meter.isIndeterminate = false
     meter.maxValue = Double(ClassicAchievement.catalog.count)
     meter.doubleValue = Double(earned)
@@ -74,20 +74,17 @@ import NxlvKit
     let card = NSBox()
     card.boxType = .custom
     card.titlePosition = .noTitle
-    card.cornerRadius = 12
+    card.cornerRadius = 0
     card.borderWidth = 1
     card.borderColor = earned ? .systemGreen.withAlphaComponent(0.4) : .separatorColor
     card.fillColor = earned ? .systemGreen.withAlphaComponent(0.08) : .controlBackgroundColor
     card.contentViewMargins = NSSize(width: 16, height: 14)
     let title = label(achievement.title, size: 15, weight: .semibold)
-    let detail = NSTextField(wrappingLabelWithString: achievement.detail)
+    let detail = GameLabel(wrappingLabelWithString: achievement.detail)
     detail.font = .systemFont(ofSize: 12)
     detail.textColor = .secondaryLabelColor
-    let status = label(earned ? "✓ Earned" : "Locked", size: 11, weight: .semibold)
-    status.textColor = earned ? .systemGreen : .secondaryLabelColor
-    let text = stack([title, detail, status], spacing: 4)
-    let badge = symbol(icon(for: achievement.id),
-      color: earned ? .systemGreen : .tertiaryLabelColor, size: 32)
+    let text = stack([title, detail], spacing: 4)
+    let badge = symbol(earned: earned, size: 32)
     let row = NSStackView(views: [badge, text])
     row.spacing = 16
     row.alignment = .centerY
@@ -105,32 +102,19 @@ import NxlvKit
     return card
   }
 
-  private func icon(for id: ClassicAchievementID) -> String {
-    switch id {
-    case .firstRescue: return "figure.walk"
-    case .xmas1991Complete, .xmas1992Complete, .holiday1993Complete,
-         .holiday1994Complete, .festiveComplete: return "snowflake"
-    case .lemmings2Complete: return "person.3.fill"
-    case .lemmings3Complete: return "globe.europe.africa.fill"
-    case .ohYesMoreLemmingsComplete: return "square.stack.3d.up.fill"
-    case .trilogyComplete: return "star.circle.fill"
-    case .fullCanonComplete: return "crown.fill"
-    default: return "flag.checkered"
-    }
-  }
-
   private func label(_ text: String, size: CGFloat,
     weight: NSFont.Weight = .regular) -> NSTextField {
-    let label = NSTextField(labelWithString: text)
+    let label = GameLabel(labelWithString: text)
     label.font = .systemFont(ofSize: size, weight: weight)
     return label
   }
 
-  private func symbol(_ name: String, color: NSColor, size: CGFloat) -> NSImageView {
-    let view = NSImageView()
-    view.image = NSImage(systemSymbolName: name, accessibilityDescription: nil)
-    view.contentTintColor = color
-    view.symbolConfiguration = .init(pointSize: size, weight: .medium)
+  private func symbol(earned: Bool, size: CGFloat) -> NSView {
+    let view = GameStarView()
+    view.earned = earned
+    view.setAccessibilityElement(true)
+    view.setAccessibilityRole(.image)
+    view.setAccessibilityLabel(earned ? "Earned" : "Not yet earned")
     view.widthAnchor.constraint(equalToConstant: size + 8).isActive = true
     view.heightAnchor.constraint(equalToConstant: size + 8).isActive = true
     return view

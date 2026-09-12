@@ -72,6 +72,26 @@ enum GamePhase: Equatable {
   case results
 }
 
+enum ReticleState { case unavailable, eligible, assigned, alreadyAssigned }
+
+struct ReticleFeedback {
+  private(set) var successUntil: TimeInterval = 0
+  private var orangeUntil: TimeInterval = 0
+  private var lastDuplicate: String?
+  private var orangeAllowedAt: TimeInterval = 0
+  mutating func assigned(now: TimeInterval) { successUntil = now + 0.10 }
+  mutating func state(eligible: Bool, duplicate: String?, now: TimeInterval) -> ReticleState {
+    if now < successUntil { return .assigned }
+    if eligible { lastDuplicate = nil; return .eligible }
+    if let duplicate, duplicate != lastDuplicate {
+      lastDuplicate = duplicate
+      if now >= orangeAllowedAt { orangeUntil = now + 0.08; orangeAllowedAt = now + 0.25 }
+    } else if duplicate == nil { lastDuplicate = nil }
+    return duplicate != nil && now < orangeUntil ? .alreadyAssigned : .unavailable
+  }
+  var nextChange: TimeInterval { max(successUntil, orangeUntil) }
+}
+
 @MainActor final class PlayfieldView: NSView {
   var hdEffectsEnabled = true {
     didSet {
@@ -167,7 +187,7 @@ enum GamePhase: Equatable {
   var overlayFrame = 0
   var phase: GamePhase = .playing {
     didSet {
-      if phase != oldValue { cursorViewPoint = nil; cursorLevelPoint = nil; overlayReplayLine = nil; overlayRetryLine = nil }
+      if phase != oldValue { reticleFeedback = ReticleFeedback(); assignedTarget = nil; displayedTarget = nil; cursorViewPoint = nil; overlayReplayLine = nil; overlayRetryLine = nil }
     }
   }
   var levelImage: CGImage?
@@ -182,10 +202,10 @@ enum GamePhase: Equatable {
     didSet {
       macInterface = interfaceArtwork
         .flatMap(ClassicMacUserInterface.init(artwork:))
-        .map(MacInterfaceRenderer.init(interface:))
+        .map(MacInterfaceRenderer.init(interface:)) ?? GameMenuArtwork.renderer()
     }
   }
-  private var macInterface: MacInterfaceRenderer?
+  private var macInterface: MacInterfaceRenderer? = GameMenuArtwork.renderer()
   var macScene: ClassicMacScene? { didSet { sceneTick = nil } }
   var classicScene: ClassicRenderedLevel? {
     didSet { sceneTick = nil }
@@ -216,7 +236,7 @@ enum GamePhase: Equatable {
     sceneTick = session.currentTick
   }
   var session: (any GameSession)? {
-    didSet { if oldValue !== session { hdrBirths.removeAll(); hdrLastTick = 0; speedTrails.reset() } }
+    didSet { if oldValue !== session { reticleFeedback = ReticleFeedback(); assignedTarget = nil; displayedTarget = nil; hdrBirths.removeAll(); hdrLastTick = 0; speedTrails.reset() } }
   }
   var assets: ClassicMainDATAssets?
   var palette: [ClassicRGBColor] = []
@@ -243,8 +263,40 @@ enum GamePhase: Equatable {
     handleMove(to: next); controllerPointer = next
   }
   let assignmentHighlight = LemmingFocusHighlight()
-  var pointerLemmingID: Int? { cursorViewPoint.flatMap { lemming(at: viewport.levelPoint(from: $0))?.id } }
-  private var cursorLevelPoint: CGPoint?
+  var selectedSkill: () -> Int = { 0 }
+  private var reticleFeedback = ReticleFeedback()
+  private var reticleRedraw: Task<Void, Never>?
+  private var assignedTarget: Int?
+
+  func didAssign(to id: Int) {
+    assignedTarget = id
+    if !reduceFlashes { reticleFeedback.assigned(now: ProcessInfo.processInfo.systemUptime) }
+    needsDisplay = true
+    scheduleReticleRedraw()
+  }
+
+  private func scheduleReticleRedraw() {
+    let remaining = reticleFeedback.nextChange - ProcessInfo.processInfo.systemUptime
+    guard remaining > 0 else { return }
+    reticleRedraw?.cancel()
+    reticleRedraw = Task { [weak self] in
+      try? await Task.sleep(for: .seconds(remaining + 0.005))
+      guard !Task.isCancelled else { return }
+      self?.needsDisplay = true
+    }
+  }
+
+  func reticleState(at point: CGPoint, now: TimeInterval) -> ReticleState {
+    let eligible = lemming(at: point) != nil
+    if eligible { return reticleFeedback.state(eligible: true, duplicate: nil, now: now) }
+    let skill = selectedSkill()
+    let duplicate = session?.lemmings.filter { contains($0, point) }.sorted {
+      distanceSquared($0, point) < distanceSquared($1, point)
+    }.first { session?.assignmentState(skillIndex: skill, to: $0.id) == .alreadyAssigned }
+    return reticleFeedback.state(eligible: eligible, duplicate: duplicate.map { "\($0.id):\(skill)" }, now: now)
+  }
+  private var displayedTarget: (id: Int, point: CGPoint, time: TimeInterval)?
+  var pointerLemmingID: Int? { cursorViewPoint.flatMap { clickTarget(at: viewport.levelPoint(from: $0))?.id } }
   private var cursorViewPoint: CGPoint?
   private var trackingArea: NSTrackingArea?
 
@@ -281,7 +333,6 @@ enum GamePhase: Equatable {
     controllerPointer = nil
     assignmentHighlight.clear()
     cursorViewPoint = point
-    cursorLevelPoint = viewport.levelPoint(from: point)
     needsDisplay = true
   }
 
@@ -306,8 +357,11 @@ enum GamePhase: Equatable {
     }
     assignmentHighlight.clear()
     cursorViewPoint = point
-    cursorLevelPoint = viewport.levelPoint(from: point)
-    if let target = lemming(at: viewport.levelPoint(from: point)) { onAssign?(target.id) }
+    let levelPoint = viewport.levelPoint(from: point)
+    let target = clickTarget(at: levelPoint)
+    displayedTarget = nil
+    if let target { onAssign?(target.id) }
+    needsDisplay = true
   }
 
   override func mouseMoved(with event: NSEvent) {
@@ -315,7 +369,6 @@ enum GamePhase: Equatable {
     let point = convert(event.locationInWindow, from: nil)
     assignmentHighlight.clear()
     cursorViewPoint = point
-    cursorLevelPoint = viewport.levelPoint(from: point)
     needsDisplay = true
   }
 
@@ -324,8 +377,8 @@ enum GamePhase: Equatable {
   }
 
   func clearPointer() {
-    cursorLevelPoint = nil
     cursorViewPoint = nil
+    displayedTarget = nil
     needsDisplay = true
   }
 
@@ -356,32 +409,40 @@ enum GamePhase: Equatable {
     needsDisplay = true
   }
 
-  /// The box around a lemming that the cursor must be inside to pick it.
-  ///
-  /// The anchor is the foot, so the box reaches upwards over the body. These
-  /// bounds follow the original: a little narrower than the drawn sprite,
-  /// because the sprite includes swinging arms and a pick area that wide makes
-  /// neighbouring lemmings impossible to tell apart.
-  private static let pickBox = (halfWidth: CGFloat(4), top: CGFloat(12), bottom: CGFloat(4))
+  /// A small allowance covers sprite edges without reaching across the crowd.
+  private static let pickBox = (halfWidth: CGFloat(6), top: CGFloat(14), bottom: CGFloat(5))
 
-  /// Returns the lemming under the point, or nothing when the cursor is clear.
-  ///
-  /// The cursor does not snap. Picking the nearest lemming within a radius
-  /// looks like the cursor sticking to a lemming it is not over, and it makes
-  /// two lemmings standing side by side impossible to choose between. Only a
-  /// lemming the cursor is actually inside can be picked.
-  ///
-  /// When several overlap, the last one wins. That is the one drawn on top, so
-  /// the choice matches what the player sees.
+  /// Both the green reticle and a fresh click use the nearest eligible lemming.
   func lemming(at point: CGPoint) -> SessionLemming? {
     guard let session else { return nil }
-    return session.lemmings.last { contains($0, point) }
+    let skill = selectedSkill()
+    let candidates = session.lemmings.filter { contains($0, point) }.sorted {
+      let a = distanceSquared($0, point), b = distanceSquared($1, point)
+      return a == b ? $0.id > $1.id : a < b
+    }
+    return candidates.first { session.canAssign(skillIndex: skill, to: $0.id) }
+  }
+
+  /// Honour the green target briefly while it walks between display and input.
+  func clickTarget(at point: CGPoint) -> SessionLemming? {
+    if let displayedTarget, ProcessInfo.processInfo.systemUptime - displayedTarget.time <= 0.12,
+       hypot(point.x - displayedTarget.point.x, point.y - displayedTarget.point.y) <= 2,
+       let session, let target = session.lemmings.first(where: { $0.id == displayedTarget.id }),
+       distanceSquared(target, point) <= 16 * 16,
+       session.canAssign(skillIndex: selectedSkill(), to: target.id) {
+      return target
+    }
+    return lemming(at: point)
+  }
+
+  private func distanceSquared(_ lemming: SessionLemming, _ point: CGPoint) -> CGFloat {
+    let dx = CGFloat(lemming.x) - point.x, dy = CGFloat(lemming.y - 5) - point.y
+    return dx * dx + dy * dy
   }
 
   private func contains(_ lemming: SessionLemming, _ point: CGPoint) -> Bool {
     let box = Self.pickBox
-    let x = CGFloat(lemming.x)
-    let y = CGFloat(lemming.y)
+    let x = CGFloat(lemming.x), y = CGFloat(lemming.y)
     return point.x >= x - box.halfWidth && point.x <= x + box.halfWidth
       && point.y >= y - box.top && point.y <= y + box.bottom
   }
@@ -798,16 +859,23 @@ enum GamePhase: Equatable {
   }
 
   private func drawCursor() {
-    guard let point = cursorLevelPoint else { return }
+    guard let cursorViewPoint else { return }
+    let point = viewport.levelPoint(from: cursorViewPoint)
     let target = lemming(at: point)
+    let now = ProcessInfo.processInfo.systemUptime
+    let state = reticleState(at: point, now: now)
+    let pulseTarget = state == .assigned ? session?.lemmings.first(where: { $0.id == assignedTarget }) : nil
+    scheduleReticleRedraw()
+    displayedTarget = target.map { ($0.id, point, ProcessInfo.processInfo.systemUptime) }
     let center = viewport.viewPoint(
-      fromLevel: target.map { CGPoint(x: CGFloat($0.x), y: CGFloat($0.y) - 5) } ?? point)
+      fromLevel: (pulseTarget ?? target).map { CGPoint(x: CGFloat($0.x), y: CGFloat($0.y) - 5) } ?? point)
     let side = 14 * viewport.zoom
     let box = CGRect(
       x: center.x - side / 2, y: center.y - side / 2, width: side, height: side)
 
     let path = NSBezierPath()
     let arm = side / 3
+    let thickness = max(1, viewport.zoom / 2)
     // Corner brackets read clearly over busy terrain.
     for (dx, dy) in [(0.0, 0.0), (1.0, 0.0), (0.0, 1.0), (1.0, 1.0)] {
       let cx = box.minX + box.width * dx
@@ -817,9 +885,22 @@ enum GamePhase: Equatable {
       path.move(to: CGPoint(x: cx + arm * sx, y: cy))
       path.line(to: CGPoint(x: cx, y: cy))
       path.line(to: CGPoint(x: cx, y: cy + arm * sy))
+      if state == .assigned, hdEffectsEnabled, !reduceFlashes {
+        hdrFlashes.append(.init(rect: CGRect(x: min(cx, cx + arm * sx), y: cy - thickness / 2,
+          width: arm, height: thickness), strength: 1, expiresAt: reticleFeedback.successUntil, tint: .green))
+        hdrFlashes.append(.init(rect: CGRect(x: cx - thickness / 2, y: min(cy, cy + arm * sy),
+          width: thickness, height: arm), strength: 1, expiresAt: reticleFeedback.successUntil, tint: .green))
+      }
     }
-    path.lineWidth = max(1, viewport.zoom / 2)
-    (target == nil ? NSColor.white.withAlphaComponent(0.5) : NSColor.systemGreen).setStroke()
+    path.lineWidth = thickness
+    let color: NSColor
+    switch state {
+    case .unavailable: color = NSColor(calibratedWhite: 0.6, alpha: 0.9)
+    case .eligible: color = NSColor(calibratedRed: 0.3, green: 0.85, blue: 0.2, alpha: 1)
+    case .assigned: color = NSColor(calibratedRed: 0.65, green: 1, blue: 0.45, alpha: 1)
+    case .alreadyAssigned: color = NSColor(calibratedRed: 1, green: 0.62, blue: 0.08, alpha: 1)
+    }
+    color.setStroke()
     path.stroke()
   }
 

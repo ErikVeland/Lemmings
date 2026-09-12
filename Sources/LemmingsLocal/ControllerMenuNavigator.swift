@@ -95,6 +95,7 @@ import NxlvKit
         func visit(_ item: NSView) {
             guard !item.isHidden, item.alphaValue > 0 else { return }
             if let tabs = item as? NSTabView { if let body = tabs.selectedTabViewItem?.view { visit(body) }; return }
+            if item is GameTabButton { return }
             if let control = item as? NSControl, control.isEnabled,
                control is NSButton || control is NSSlider { result.append(control); return }
             for child in item.subviews { visit(child) }
@@ -121,7 +122,7 @@ import NxlvKit
     override func hitTest(_ point: NSPoint) -> NSView? { nil }
     override func draw(_ dirtyRect: NSRect) {
         GameStyle.accent.setStroke()
-        let line = NSBezierPath(roundedRect: bounds.insetBy(dx: 1.5, dy: 1.5), xRadius: 6, yRadius: 6)
+        let line = NSBezierPath(rect: bounds.insetBy(dx: 1.5, dy: 1.5))
         line.lineWidth = 3; line.stroke()
     }
 }

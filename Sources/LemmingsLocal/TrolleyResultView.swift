@@ -4,24 +4,9 @@ import NxlvKit
 /// Shares the game's pixel headings, sprite portraits, input and page stack.
 @MainActor extension ArcadeView {
     func drawStar(at origin: CGPoint, earned: Bool, size: CGFloat = 2) {
-        NSGraphicsContext.saveGraphicsState()
-        NSGraphicsContext.current?.shouldAntialias = false
-        defer { NSGraphicsContext.restoreGraphicsState() }
-        let pixels = [".....#.....", "....###....", "....###....", "###########", ".#########.",
-                      "..#######..", "..#######..", ".####.####.", ".##.....##."]
-        let color = earned ? GameStyle.gold : NSColor(calibratedWhite: 0.62, alpha: 1)
-        let silhouette = NSBezierPath()
-        for (y, row) in pixels.enumerated() {
-            for (x, pixel) in row.enumerated() where pixel == "#" {
-                let interior = x > 0 && x + 1 < row.count && y > 0 && y + 1 < pixels.count
-                    && Array(row)[x - 1] == "#" && Array(row)[x + 1] == "#"
-                    && Array(pixels[y - 1])[x] == "#" && Array(pixels[y + 1])[x] == "#"
-                if !earned && interior { continue }
-                silhouette.appendRect(CGRect(x: origin.x + CGFloat(x) * size, y: origin.y + CGFloat(y) * size, width: size, height: size))
-            }
-        }
-        color.setFill(); silhouette.fill()
+        GameStar.draw(at: origin, earned: earned, size: size)
     }
+
     func rescueSummary(_ run: ArcadeRun, maximum: TrolleyMaximum) -> String {
         "Rescued: \(run.saved). Required: \(run.level.required). "
         + (maximum.isRescueTarget ? "\(maximum.status == .verified ? "Best possible" : "Best known"): \(maximum.value.map(String.init) ?? "unknown")." : "Maximum rescue unknown.")
@@ -245,5 +230,27 @@ import NxlvKit
         }
         pageFooter()
         setAccessibilityLabel((rows + levelRows).map { $0.0 + ": " + $0.1 }.joined(separator: ". ") + ". Select the play style for an explanation. Escape returns.")
+    }
+}
+
+@MainActor enum GameStar {
+    static func draw(at origin: CGPoint, earned: Bool, size: CGFloat) {
+        NSGraphicsContext.saveGraphicsState()
+        NSGraphicsContext.current?.shouldAntialias = false
+        defer { NSGraphicsContext.restoreGraphicsState() }
+        let pixels = [".....#.....", "....###....", "....###....", "###########", ".#########.",
+                      "..#######..", "..#######..", ".####.####.", ".##.....##."]
+        let color = earned ? GameStyle.gold : NSColor(calibratedWhite: 0.62, alpha: 1)
+        let silhouette = NSBezierPath()
+        for (y, row) in pixels.enumerated() {
+            for (x, pixel) in row.enumerated() where pixel == "#" {
+                let interior = x > 0 && x + 1 < row.count && y > 0 && y + 1 < pixels.count
+                    && Array(row)[x - 1] == "#" && Array(row)[x + 1] == "#"
+                    && Array(pixels[y - 1])[x] == "#" && Array(pixels[y + 1])[x] == "#"
+                if !earned && interior { continue }
+                silhouette.appendRect(CGRect(x: origin.x + CGFloat(x) * size, y: origin.y + CGFloat(y) * size, width: size, height: size))
+            }
+        }
+        color.setFill(); silhouette.fill()
     }
 }

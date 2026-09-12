@@ -407,13 +407,7 @@ enum PanelButton: Equatable {
         case .rateUp: symbol = "+"
         case .pause, .nuke, .fastForward, .skill: symbol = ""
         }
-        let attributes: [NSAttributedString.Key: Any] = [
-          .font: NSFont.systemFont(ofSize: 10 * panelScale, weight: .black),
-          .foregroundColor: NSColor.systemGreen]
-        let text = symbol as NSString
-        let size = text.size(withAttributes: attributes)
-        text.draw(at: CGPoint(x: frame.midX - size.width / 2, y: frame.midY - size.height / 2),
-          withAttributes: attributes)
+        GamePixelText.draw(symbol.replacingOccurrences(of: "−", with: "-"), in: frame.insetBy(dx: 4 * panelScale, dy: 4 * panelScale))
       }
     }
     NSColor(calibratedWhite: 0.42, alpha: 1).setStroke()
@@ -422,38 +416,7 @@ enum PanelButton: Equatable {
 
   /// Pixel bevels keep the controls in the same visual period as the sprites.
   private func drawStoneButton(_ frame: CGRect, selected: Bool) {
-    let pixel = max(1, panelScale / 2)
-    let rim = frame.insetBy(dx: pixel, dy: pixel)
-    func fill(_ rect: CGRect, _ color: NSColor) {
-      color.setFill()
-      rect.fill()
-    }
-    let light = NSColor(calibratedRed: 0.65, green: 0.66, blue: 0.59, alpha: 1)
-    let stone = NSColor(calibratedRed: 0.35, green: 0.37, blue: 0.32, alpha: 1)
-    let shadow = NSColor(calibratedRed: 0.11, green: 0.13, blue: 0.10, alpha: 1)
-    fill(rim, stone)
-    // Top and left catch the light; the selected button sinks into its socket.
-    let upper = selected ? shadow : light
-    let lower = selected ? light : shadow
-    for step in 0..<2 {
-      let edge = rim.insetBy(dx: CGFloat(step) * pixel, dy: CGFloat(step) * pixel)
-      fill(CGRect(x: edge.minX, y: edge.minY, width: edge.width, height: pixel), upper)
-      fill(CGRect(x: edge.minX, y: edge.minY, width: pixel, height: edge.height), upper)
-      fill(CGRect(x: edge.minX, y: edge.maxY - pixel, width: edge.width, height: pixel), lower)
-      fill(CGRect(x: edge.maxX - pixel, y: edge.minY, width: pixel, height: edge.height), lower)
-    }
-    let well = rim.insetBy(dx: 3 * pixel, dy: 3 * pixel)
-    fill(well.insetBy(dx: -pixel, dy: -pixel), shadow)
-    fill(CGRect(x: well.minX, y: well.maxY, width: well.width, height: pixel), light)
-    fill(CGRect(x: well.maxX, y: well.minY, width: pixel, height: well.height), light)
-    fill(well, selected
-      ? NSColor(calibratedRed: 0.17, green: 0.25, blue: 0.10, alpha: 1)
-      : NSColor(calibratedRed: 0.07, green: 0.09, blue: 0.06, alpha: 1))
-    if selected {
-      fill(CGRect(x: well.minX + pixel, y: well.maxY - 2 * pixel,
-        width: well.width - 2 * pixel, height: pixel),
-        NSColor(calibratedRed: 0.62, green: 0.85, blue: 0.22, alpha: 1))
-    }
+    GameStoneButton.draw(frame, selected: selected, pixel: max(1, panelScale / 2))
   }
 
   private func drawClassicCounts() {
@@ -510,13 +473,7 @@ enum PanelButton: Equatable {
       highlighted = session?.canUndoNuke == true
     }
 
-    let path = NSBezierPath(roundedRect: frame.insetBy(dx: 0.5, dy: 0.5), xRadius: 4, yRadius: 4)
-    (highlighted ? NSColor.systemGreen.withAlphaComponent(0.30) : NSColor(calibratedWhite: 0.20, alpha: 1))
-      .setFill()
-    path.fill()
-    (highlighted ? NSColor.systemGreen : NSColor(calibratedWhite: 0.34, alpha: 1)).setStroke()
-    path.lineWidth = highlighted ? 2 : 1
-    path.stroke()
+    GameStoneButton.draw(frame, selected: highlighted, pixel: 1)
 
     if let glyph = PanelGlyph.forButton(button, isPaused: isPaused, canUndoNuke: session?.canUndoNuke == true),
        let image = glyph.image(fitting: CGSize(width: frame.width - 10, height: subtitle.isEmpty ? frame.height - 10 : 14)) {
@@ -526,24 +483,11 @@ enum PanelButton: Equatable {
         fraction: 1, respectFlipped: true, hints: nil)
     }
 
-    let titleAttributes: [NSAttributedString.Key: Any] = [
-      .font: NSFont.systemFont(ofSize: 10, weight: .medium),
-      .foregroundColor: NSColor.white,
-    ]
-    let titleSize = (title as NSString).size(withAttributes: titleAttributes)
-    (title as NSString).draw(
-      at: CGPoint(x: frame.midX - titleSize.width / 2, y: frame.minY + 4),
-      withAttributes: titleAttributes)
-
-    guard !subtitle.isEmpty else { return }
-    let subtitleAttributes: [NSAttributedString.Key: Any] = [
-      .font: NSFont.monospacedDigitSystemFont(ofSize: 11, weight: .bold),
-      .foregroundColor: highlighted ? NSColor.systemGreen : NSColor(calibratedWhite: 0.72, alpha: 1),
-    ]
-    let subtitleSize = (subtitle as NSString).size(withAttributes: subtitleAttributes)
-    (subtitle as NSString).draw(
-      at: CGPoint(x: frame.midX - subtitleSize.width / 2, y: frame.minY + 18),
-      withAttributes: subtitleAttributes)
+    GamePixelText.draw(title.replacingOccurrences(of: "◀", with: "<").replacingOccurrences(of: "▶", with: ">"),
+      in: CGRect(x: frame.minX + 4, y: frame.minY + 4, width: frame.width - 8, height: 12))
+    if !subtitle.isEmpty {
+      GamePixelText.draw(subtitle, in: CGRect(x: frame.minX + 4, y: frame.minY + 18, width: frame.width - 8, height: 12))
+    }
   }
 
   private func drawMinimap() {
@@ -551,7 +495,7 @@ enum PanelButton: Equatable {
     // the view rectangle go on top of it.
     if !usesClassicSkin {
       NSColor(calibratedWhite: 0.05, alpha: 1).setFill()
-      NSBezierPath(roundedRect: minimapFrame, xRadius: 3, yRadius: 3).fill()
+      minimapFrame.fill()
     }
     guard levelSize.width > 0, levelSize.height > 0, let session else { return }
 
@@ -591,7 +535,7 @@ enum PanelButton: Equatable {
   /// Draws a label in the release's small face, centered in a box.
   ///
   /// Returns false when the release has no character set or the text does not
-  /// fit, so the caller can fall back to a system font.
+  /// fit, so the caller can use the compact pixel face.
   /// Punctuation the character set does not carry, mapped to what it does.
   private func gameText(_ text: String) -> String {
     text.uppercased()

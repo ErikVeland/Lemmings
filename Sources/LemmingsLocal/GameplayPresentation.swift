@@ -253,9 +253,9 @@ import NxlvKit
     ")":[0,65,34,28,0], "'" :[0,3,0,0,0], "!" :[0,0,95,0,0],
     ",":[0,64,48,0,0], "<":[8,20,34,65,0], ">":[0,65,34,20,8],
     "∞" :[28,34,28,34,28], "?" :[2,1,81,9,6], "=" :[20,20,20,20,20]]
-  static func draw(_ text: String, in rect: CGRect) {
+  static func draw(_ text: String, in rect: CGRect, maxScale: CGFloat = 3) {
     let normalized = text.uppercased().replacingOccurrences(of: "×", with: "X")
-    let scale = max(1, min(3, floor(min(rect.height / 7, rect.width / CGFloat(max(1, normalized.count * 6))))))
+    let scale = max(1, min(maxScale, floor(min(rect.height / 7, rect.width / CGFloat(max(1, normalized.count * 6))))))
     let start = floor(rect.midX - CGFloat(normalized.count * 6 - 1) * scale / 2)
     let top = floor(rect.midY - 3.5 * scale)
     let context = NSGraphicsContext.current?.cgContext
@@ -302,14 +302,14 @@ import NxlvKit
     override func draw(_ dirtyRect: NSRect) {
         guard let initials else { return }
         NSColor.black.withAlphaComponent(0.8).setFill()
-        NSBezierPath(roundedRect: bounds, xRadius: 4, yRadius: 4).fill()
+        bounds.fill()
         if let portrait {
             let width = min(28, portrait.size.width / portrait.size.height * 28)
             portrait.draw(in: CGRect(x: 4, y: 2, width: width, height: 28), from: .zero,
                 operation: .sourceOver, fraction: 1, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none])
         }
-        ("\(initials)'s turn" as NSString).draw(at: CGPoint(x: 36, y: 8),
-            withAttributes: [.font: NSFont.monospacedSystemFont(ofSize: 12, weight: .bold), .foregroundColor: NSColor.white])
+        GamePixelText.draw(initials, in: CGRect(x: portrait == nil ? 4 : 36, y: 4,
+            width: bounds.width - (portrait == nil ? 8 : 40), height: 24))
     }
 }
 

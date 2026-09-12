@@ -31,7 +31,7 @@ func fingerprint(_ sim: ClassicDOSSimulation) throws -> String {
 }
 
 let arguments = CommandLine.arguments
-guard arguments.count == 4 else { fatalError("Usage: hint-export GAME_DATA TROLLEY_DIRECTORY OUTPUT_JSON") }
+guard arguments.count == 5 else { fatalError("Usage: hint-export GAME_DATA TROLLEY_DIRECTORY OUTPUT_JSON ENGINE_FINGERPRINT") }
 let directory = URL(fileURLWithPath: arguments[1]), proofs = URL(fileURLWithPath: arguments[2])
 let decoder = JSONDecoder(); decoder.dateDecodingStrategy = .iso8601
 let catalogue = try decoder.decode(TrolleyProofCatalogue.self, from: Data(contentsOf: proofs.appendingPathComponent("verified-maxima.json")))
@@ -95,6 +95,6 @@ for (index, entry) in campaign.levels.enumerated() {
     print("PASS \(entry.rank) \(entry.number): \(replay.title)")
 }
 try require(levels.count == 120, "Incomplete original campaign")
-let output = HintExport(schemaVersion: 1, engineFingerprint: catalogue.engineSourceFingerprint, levels: levels)
+let output = HintExport(schemaVersion: 1, engineFingerprint: arguments[4], levels: levels)
 let encoder = JSONEncoder(); encoder.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
 try encoder.encode(output).write(to: URL(fileURLWithPath: arguments[3]), options: .atomic)

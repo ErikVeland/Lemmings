@@ -23,7 +23,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private var plainRoot: NSView?
   private var panelHeightConstraint: NSLayoutConstraint?
   private var tubeIsActive = false
-  private let picker = NSPopUpButton()
+  private let picker = GamePopUpButton()
 
   private var campaign: ClassicCampaign?
   private var grounds: [Int: ClassicGroundSet] = [:]
@@ -32,7 +32,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private var portArtworkFamily: String?
   /// Every imported game, in the order they were added.
   private var dataSets: [(set: ClassicDataSet, directory: URL)] = []
-  private let gamePicker = NSPopUpButton()
+  private let gamePicker = GamePopUpButton()
   private var assets: ClassicMainDATAssets?
   private var macArtworkCache: [String: ClassicMacArtwork] = [:]
   private var contentDirectory: URL?
@@ -968,6 +968,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     picker.action = #selector(levelChanged)
     gamePicker.target = self
     gamePicker.action = #selector(selectDataSet)
+    playfield.selectedSkill = { [weak self] in self?.panel.selectedSkillIndex ?? 0 }
     playfield.onAssign = { [weak self] id in self?.assign(id) }
     playfield.onViewportChanged = { [weak self] in self?.syncPanelViewport() }
     playfield.onAdvancePhase = { [weak self] in self?.advancePhase() }
@@ -2610,6 +2611,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     if let rejection {
       setStatus("Cannot assign: \(rejection)")
     } else {
+      playfield.didAssign(to: id)
       assignmentFocus.record(id: id, skill: panel.selectedSkillIndex, tick: session.currentTick)
       // The click is acknowledged straight away rather than on the next tick,
       // so the sound lands with the press.

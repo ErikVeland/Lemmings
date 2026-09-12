@@ -1049,6 +1049,7 @@ private final class FinalTickSession: GameSession {
   var didWin: Bool { isComplete && saved == 1 }
   func tick() { currentTick += 1 }
   func assign(skillIndex: Int, to lemmingID: Int) -> String? { nil }
+  func assignmentState(skillIndex: Int, to lemmingID: Int) -> AssignmentState { .unavailable }
   func adjustRate(by delta: Int) {}
   func nuke() {}
   let canUndoNuke = false
@@ -1631,6 +1632,108 @@ extension AppDelegate {
   }
 }
 
+@MainActor private func testPointerAssignment() throws {
+    var terrain = try NeoLemmixTerrain(width: 128, height: 96)
+    for x in 0..<128 { terrain.setSolid(true, x: x, y: 48) }
+    let config = try NeoLemmixConfiguration(totalLemmings: 2, requiredToSave: 1,
+        spawnInterval: 4, entrances: [], preplacedLemmings: [
+            .init(position: .init(x: 40, y: 48)), .init(position: .init(x: 44, y: 48))],
+        skills: [.climber: .finite(2), .builder: .finite(1)])
+    let simulation = try NeoLemmixSimulation(terrain: terrain, configuration: config)
+    let session = NeoLemmixSession(simulation: simulation, width: 128, height: 96)
+    let skill = session.skills.firstIndex { $0.name.lowercased() == "climber" }!
+    let ids = session.lemmings.map(\.id)
+    let view = PlayfieldView(frame: CGRect(x: 0, y: 0, width: 384, height: 288))
+    view.levelImage = CGContext(data: nil, width: 128, height: 96, bitsPerComponent: 8,
+        bytesPerRow: 128 * 4, space: CGColorSpaceCreateDeviceRGB(),
+        bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)!.makeImage()
+    view.session = session; view.phase = .playing; view.selectedSkill = { skill }
+    view.viewport.levelSize = CGSize(width: 128, height: 96)
+    view.viewport.viewSize = view.bounds.size
+    var feedback = ReticleFeedback()
+    try check(feedback.state(eligible: false, duplicate: nil, now: 1) == .unavailable, "Empty reticle was not grey")
+    try check(feedback.state(eligible: true, duplicate: nil, now: 1) == .eligible, "Eligible reticle was not green")
+    feedback.assigned(now: 2)
+    try check(feedback.state(eligible: false, duplicate: "1:climber", now: 2.05) == .assigned, "Successful assignment did not pulse")
+    try check(feedback.state(eligible: false, duplicate: "1:climber", now: 2.11) == .alreadyAssigned, "Already assigned target did not show orange")
+    try check(feedback.state(eligible: false, duplicate: "1:climber", now: 2.20) == .unavailable, "Orange cue lingered")
+    try check(feedback.state(eligible: true, duplicate: "1:climber", now: 2.21) == .eligible, "Orange cue obscured an eligible neighbour")
+    let point = CGPoint(x: 40, y: 43)
+    let before = session.simulation.snapshot()
+    try check(view.lemming(at: point)?.id == ids[0], "Pointer did not choose the nearest eligible lemming")
+    try check(session.simulation.snapshot() == before && session.recovery.inputs.isEmpty,
+        "Hover eligibility mutated simulation or replay history")
+    try check(session.assign(skillIndex: skill, to: ids[0]) == nil, "Target fixture could not assign the first climber")
+    try check(session.assignmentState(skillIndex: skill, to: ids[0]) == .alreadyAssigned,
+        "An existing permanent skill was not distinguished from an invalid assignment")
+    try check(view.lemming(at: point)?.id == ids[1], "An ineligible overlapping lemming blocked an eligible neighbour")
+    try check(view.lemming(at: CGPoint(x: 50, y: 43))?.id == ids[1], "Sprite-edge allowance was not applied")
+    try check(view.lemming(at: CGPoint(x: 65, y: 43)) == nil, "Pointer reached a distant lemming")
+    var assigned: Int?
+    view.onAssign = { id in
+        if session.assign(skillIndex: skill, to: id) == nil { assigned = id }
+    }
+    view.handleClick(at: view.viewport.viewPoint(fromLevel: point))
+    try check(assigned == ids[1] && view.lemming(at: point) == nil,
+        "Green target did not assign, or empty supply still offered a target")
+
+    let moving = NeoLemmixSession(simulation: simulation, width: 128, height: 96)
+    view.session = moving
+    view.onAssign = { id in
+        if moving.assign(skillIndex: skill, to: id) == nil { assigned = id }
+    }
+    view.handleMove(to: view.viewport.viewPoint(fromLevel: point))
+    let bitmap = view.bitmapImageRepForCachingDisplay(in: view.bounds)!
+    view.cacheDisplay(in: view.bounds, to: bitmap)
+    for _ in 0..<8 { moving.tick() }
+    try check(view.clickTarget(at: point)?.id == ids[0], "Click lost the recently displayed green target while it moved")
+    assigned = nil
+    view.handleClick(at: view.viewport.viewPoint(fromLevel: point))
+    try check(assigned == ids[0], "Moving green target was not assigned on click")
+    view.didAssign(to: ids[0])
+    view.cacheDisplay(in: view.bounds, to: bitmap)
+    try check(view.hdrFlashes.contains { $0.tint == .green }, "Assignment pulse did not reach the HDR compositor")
+    view.reduceFlashes = true
+    view.cacheDisplay(in: view.bounds, to: bitmap)
+    try check(view.hdrFlashes.allSatisfy { $0.tint != .green }, "Reduced flashes still emitted an HDR assignment pulse")
+
+    try check(GameMenuArtwork.renderer() != nil, "Bundled menu artwork font is missing")
+    let menu = PlayfieldView(frame: CGRect(x: 0, y: 0, width: 1000, height: 720))
+    menu.interfaceArtwork = nil
+    menu.phase = .briefing
+    menu.overlayTitle = "LEMMINGS"
+    menu.overlayLines = ["LEMMINGS 1/120", "FULL QUEST"]
+    menu.overlayHighlight = 0
+    let menuBitmap = menu.bitmapImageRepForCachingDisplay(in: menu.bounds)!
+    menu.cacheDisplay(in: menu.bounds, to: menuBitmap)
+    var bluePixels = 0
+    for y in stride(from: 0, to: menuBitmap.pixelsHigh, by: 4) {
+      for x in stride(from: 0, to: menuBitmap.pixelsWide, by: 4) {
+        if let color = menuBitmap.colorAt(x: x, y: y)?.usingColorSpace(.deviceRGB),
+           color.blueComponent > 0.25, color.blueComponent > color.greenComponent * 1.3,
+           color.blueComponent > color.redComponent * 1.3 { bluePixels += 1 }
+      }
+    }
+    try check(bluePixels > 30, "Game selection menu fell back to plain lettering without level artwork")
+
+
+    let floor = Data((0..<(128 * 96)).map { UInt8($0 / 128 >= 48 ? 1 : 0) })
+    let classicTerrain = try ClassicDOSTerrain(width: 128, height: 96, solidMask: floor, steelMask: Data(repeating: 0, count: 128 * 96))
+    let classicConfig = ClassicDOSConfiguration(totalLemmings: 1, requiredToSave: 1, timeLimitTicks: nil,
+        initialReleaseRate: 99, entrances: [.init(x: 40, y: 20)], initialSkills: [.climber: 1], maximumX: 127, maximumY: 95)
+    let classic = ClassicSession(simulation: try ClassicDOSSimulation(terrain: classicTerrain, configuration: classicConfig), width: 128, height: 96)
+    for _ in 0..<100 where classic.lemmings.isEmpty { classic.tick() }
+    let climber = ClassicSkill.allCases.firstIndex(of: .climber)!
+    let id = classic.lemmings.first!.id
+    let hash = ClassicDOSReplayRecorder.stateHash(of: classic.simulation)
+    try check(classic.canAssign(skillIndex: climber, to: id), "Classic eligibility rejected a valid climber")
+    try check(ClassicDOSReplayRecorder.stateHash(of: classic.simulation) == hash && classic.recoveryEvents.isEmpty,
+        "Classic hover eligibility changed the run")
+    try check(classic.assign(skillIndex: climber, to: id) == nil && !classic.canAssign(skillIndex: climber, to: id),
+        "Classic hover eligibility did not follow actual assignment rules")
+    print("PASS nearest eligible targeting, overlap, edge allowance, moving green target, exhausted skills and mutation-free Classic/fan probes")
+}
+
 let testApp = NSApplication.shared
 guard let testDomain = Bundle.main.bundleIdentifier,
   testDomain.hasPrefix("academy.glasscode.lemmings.integration-tests") else { exit(2) }
@@ -1643,6 +1746,7 @@ Task { @MainActor in
     try subject.testSteppedCompletion()
     try subject.testFirstLaunchEffects()
     try await subject.testAccessibleMenusAndHelp()
+    try testPointerAssignment()
     #if PERFORMANCE_TESTS
     try await subject.testReleasePerformance()
     #elseif HOT_SEAT_TESTS
