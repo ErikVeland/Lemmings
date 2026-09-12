@@ -158,17 +158,15 @@ import NxlvKit
     let interruption = GameCheckButton(title: "Pause when switching apps or a controller disconnects", target: self, action: #selector(interruptionChanged))
     interruption.state = settings.pauseOnInterruption ? .on : .off
     interruptionCheck = interruption
-    let help = GameLabel(wrappingLabelWithString: "Tap F, Speed or RT to toggle fast-forward. Hold Shift, Speed or RT to boost; release to return.\nSpeed arrows, Shift+[ / Shift+] or LT + D-pad left/right choose the fast tier. F, Escape or B exits immediately.")
-    help.font = .systemFont(ofSize: 16)
+    variable.toolTip = SpeedPanelControls.help
     let og = GameButton(title: "Use OG settings", target: self, action: #selector(useOGSettings))
     let defaults = GameButton(title: "Use modern defaults", target: self, action: #selector(useModernDefaults))
     let buttons = NSStackView(views: [og, defaults]); buttons.orientation = .horizontal; buttons.spacing = 16
-    let note = GameLabel(wrappingLabelWithString: "OG restores fixed fast-forward and number keys. It turns off automatic pause, gamepad controls, HD effects, pointer capture, enhanced sequel artwork, shuffle and DJ extras. Your saves, machine and volume choices stay as set.")
-    note.font = .systemFont(ofSize: 15)
+    og.toolTip = "Restore fixed fast-forward, number keys and original presentation. Saves and volume choices stay as set."
     modern.state = settings.modernControlsEnabled ? .on : .off
     variable.state = settings.variableSpeedEnabled ? .on : .off
     variable.isEnabled = settings.modernControlsEnabled
-    return pane([("Controls", modern), ("Speed", variable), ("Pause", interruption), ("Shortcuts", help), ("Experience", buttons), ("", note)])
+    return pane([("Controls", modern), ("Speed", variable), ("Pause", interruption), ("Experience", buttons)])
   }
 
   @objc private func modernControlsChanged(_ sender: NSButton) {

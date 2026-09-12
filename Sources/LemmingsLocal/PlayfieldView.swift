@@ -167,7 +167,7 @@ enum GamePhase: Equatable {
   var overlayFrame = 0
   var phase: GamePhase = .playing {
     didSet {
-      if phase != oldValue { displayedTarget = nil; cursorViewPoint = nil; cursorLevelPoint = nil; overlayReplayLine = nil; overlayRetryLine = nil }
+      if phase != oldValue { displayedTarget = nil; cursorViewPoint = nil; overlayReplayLine = nil; overlayRetryLine = nil }
     }
   }
   var levelImage: CGImage?
@@ -245,8 +245,7 @@ enum GamePhase: Equatable {
   let assignmentHighlight = LemmingFocusHighlight()
   var selectedSkill: () -> Int = { 0 }
   private var displayedTarget: (id: Int, point: CGPoint, time: TimeInterval)?
-  var pointerLemmingID: Int? { cursorViewPoint.flatMap { lemming(at: viewport.levelPoint(from: $0))?.id } }
-  private var cursorLevelPoint: CGPoint?
+  var pointerLemmingID: Int? { cursorViewPoint.flatMap { clickTarget(at: viewport.levelPoint(from: $0))?.id } }
   private var cursorViewPoint: CGPoint?
   private var trackingArea: NSTrackingArea?
 
@@ -283,7 +282,6 @@ enum GamePhase: Equatable {
     controllerPointer = nil
     assignmentHighlight.clear()
     cursorViewPoint = point
-    cursorLevelPoint = viewport.levelPoint(from: point)
     needsDisplay = true
   }
 
@@ -308,7 +306,6 @@ enum GamePhase: Equatable {
     }
     assignmentHighlight.clear()
     cursorViewPoint = point
-    cursorLevelPoint = viewport.levelPoint(from: point)
     let levelPoint = viewport.levelPoint(from: point)
     let target = clickTarget(at: levelPoint)
     displayedTarget = nil
@@ -321,7 +318,6 @@ enum GamePhase: Equatable {
     let point = convert(event.locationInWindow, from: nil)
     assignmentHighlight.clear()
     cursorViewPoint = point
-    cursorLevelPoint = viewport.levelPoint(from: point)
     needsDisplay = true
   }
 
@@ -330,7 +326,6 @@ enum GamePhase: Equatable {
   }
 
   func clearPointer() {
-    cursorLevelPoint = nil
     cursorViewPoint = nil
     displayedTarget = nil
     needsDisplay = true
