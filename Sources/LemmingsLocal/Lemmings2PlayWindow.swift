@@ -60,6 +60,7 @@ import NxlvKit
     private var paused = false
     private var assignmentFocus = AssignmentFocus()
     private var gameplayKeyboard: GameplayKeyboard?
+    func showKeyboardCommands() { gameplayKeyboard?.showHelp() }
     private let speedControl = GameSpeedControl(legacyMultiplier: 3)
     private var fastForward: Bool {
         get { speedControl.isFast }
@@ -231,9 +232,22 @@ import NxlvKit
             if self.fanSelected { self.fanSelected = false; self.releasePointerInput(); self.refreshGame() }
             else { self.releasePointerInput(); self.key("\u{1b}") }
         }
+        keyboard.cyclesSharedSkillLetters = false
+        keyboard.skillNames = { [weak self] in self?.game?.configuration.skills.map(\.name) ?? [] }
         keyboard.help = { [weak self] in
             let names = self?.game?.configuration.skills.map(\.name) ?? []
             return SkillShortcuts(names: names).hint(names: names, modern: self?.audioSettings.modernControlsEnabled ?? false) + "\n\nSpace / P: pause\nR: retry"
+        }
+        keyboard.contextCommands = {
+            [KeyboardCommand(keys: "← / → / ↑ / ↓", action: "Pan the level", group: "Camera"),
+             KeyboardCommand(keys: "V / S", action: "Review / save replay after a result", group: "Menus & results"),
+             KeyboardCommand(keys: "Return / Space", action: "Activate selected menu choice", group: "Menus & results"),
+             KeyboardCommand(keys: "P / M / I", action: "From L2 menu: practice / tribe map / introduction", group: "Menus & results"),
+             KeyboardCommand(keys: "1–4", action: "Choose practice level", group: "L2 practice"),
+             KeyboardCommand(keys: "Arrow keys", action: "Choose practice skill", group: "L2 practice"),
+             KeyboardCommand(keys: "Space / Return", action: "Toggle practice skill / start practice", group: "L2 practice"),
+             KeyboardCommand(keys: "← / →", action: "Choose tribe on map", group: "Menus & results"),
+             KeyboardCommand(keys: "R / B", action: "After a result: retry / records", group: "Menus & results")]
         }
         keyboard.hints = { [weak self] in self?.showLevelHints() }
         keyboard.settings = { [weak self] in self?.onShowSettings?() }

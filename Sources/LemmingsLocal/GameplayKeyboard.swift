@@ -80,6 +80,9 @@ import NxlvKit
     var escape: () -> Void = {}
     var mainMenu: (() -> Void)?
     var help: () -> String = { "" }
+    var skillNames: () -> [String] = { [] }
+    var cyclesSharedSkillLetters = true
+    var contextCommands: () -> [KeyboardCommand] = { [] }
     var hints: (() -> Void)?
     var settings: (() -> Void)?
     var retry: (() -> Void)?
@@ -274,23 +277,62 @@ import NxlvKit
         } else { sections.append("Controller support is off. Enable it in Settings > Controller.") }
         return sections.filter { !$0.isEmpty }.joined(separator: "\n\n")
     }
-    private func showHelp() {
+    var commandRows: [KeyboardCommand] {
+        var rows: [KeyboardCommand] = []
+        let names = skillNames()
+        let shortcuts = SkillShortcuts(names: names)
+        for index in names.indices {
+            var keys = index < 10 ? [String((index + 1) % 10)] : []
+            if modern() {
+                if let letter = shortcuts.letters[index] { keys.append(letter.uppercased()) }
+                if cyclesSharedSkillLetters, let initial = shortcuts.initials[index], shortcuts.initials.filter({ $0 == initial }).count > 1,
+                   !keys.contains(initial.uppercased()) { keys.append(initial.uppercased()) }
+            }
+            let shared = modern() && cyclesSharedSkillLetters && shortcuts.initials[index].map { initial in shortcuts.initials.filter { $0 == initial }.count > 1 } == true
+            let detail = shared ? " (\(shortcuts.initials[index]!.uppercased()) cycles matching skills)" : ""
+            rows.append(KeyboardCommand(keys: keys.joined(separator: " / "), action: "Select \(names[index])" + detail, group: "Skills"))
+        }
+        let controllerHeading = ControllerDevicePresentation.help(mapping: controllerMappings()).components(separatedBy: "\n").first
+        var controllerSection = false
+        for line in helpText.components(separatedBy: "\n") {
+            if controllerEnabled(), line == controllerHeading { controllerSection = true; continue }
+            guard let colon = line.firstIndex(of: ":") else { continue }
+            let keys = String(line[..<colon])
+            let action = String(line[line.index(after: colon)...]).trimmingCharacters(in: .whitespaces)
+            let lower = line.lowercased()
+            let group = controllerSection ? "Controller"
+                : ["speed", "fast-forward", "ramp", "1×"].contains(where: lower.contains) ? "Speed"
+                : ["skill", "assignment", "unassigned"].contains(where: lower.contains) ? "Skills"
+                : lower.contains("entrance") ? "Camera" : "Gameplay"
+            rows.append(KeyboardCommand(keys: keys, action: action, group: group))
+        }
+        if speedControl?.variableEnabled == true {
+            rows.append(KeyboardCommand(keys: "Shift + \\ (|)", action: "Immediately return to normal speed (1×)", group: "Speed"))
+        }
+        rows += contextCommands()
+        func menuRows(_ menu: NSMenu) {
+            for item in menu.items {
+                if let child = item.submenu { menuRows(child) }
+                guard !item.keyEquivalent.isEmpty else { continue }
+                let flags = item.keyEquivalentModifierMask
+                let modifiers = (flags.contains(.control) ? "⌃" : "") + (flags.contains(.option) ? "⌥" : "") + (flags.contains(.shift) ? "⇧" : "") + (flags.contains(.command) ? "⌘" : "")
+                rows.append(KeyboardCommand(keys: modifiers + item.keyEquivalent.uppercased(), action: item.title, group: "App menus"))
+            }
+        }
+        if let menu = NSApp.mainMenu { menuRows(menu) }
+        return rows
+    }
+
+    func showHelp() {
         guard let window, window.attachedSheet == nil else { return }
         let resume = pauseForHelp()
         let alert = NSAlert()
-        alert.messageText = "Keyboard and controller shortcuts"
-        let instructions = helpText
-        alert.informativeText = "Keyboard and controller mappings for the current game."
-        let scroll = NSScrollView(frame: NSRect(x: 0, y: 0, width: 530, height: 360))
-        scroll.hasVerticalScroller = true
-        let text = NSTextView(frame: scroll.bounds)
-        text.isEditable = false; text.isSelectable = true
-        text.font = .systemFont(ofSize: 13 * GameAccessibility.scale); text.string = instructions
-        text.isVerticallyResizable = true; text.isHorizontallyResizable = false
-        text.autoresizingMask = [.width]; text.textContainer?.widthTracksTextView = true
-        text.textContainerInset = NSSize(width: 8, height: 8)
-        scroll.documentView = text; alert.accessoryView = scroll
-        alert.addButton(withTitle: "Close")
+        alert.messageText = "Keyboard commands"
+        alert.informativeText = "Find a command by key, action or category. Your game pauses while this guide is open."
+        let guide = KeyboardCommandsView(commands: commandRows, modern: modern())
+        alert.accessoryView = guide
+        alert.addButton(withTitle: "Close").keyEquivalent = "\u{1b}"
+        alert.window.initialFirstResponder = guide.search
         if hints != nil { alert.addButton(withTitle: "Level hints") }
         alert.beginSheetModal(for: window) { [weak self] response in
             resume()

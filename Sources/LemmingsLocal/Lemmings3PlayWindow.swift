@@ -81,6 +81,7 @@ import NxlvKit
     private var paused = true
     private var assignmentFocus = AssignmentFocus()
     private var gameplayKeyboard: GameplayKeyboard?
+    func showKeyboardCommands() { gameplayKeyboard?.showHelp() }
     private let speedControl = GameSpeedControl(legacyMultiplier: 8)
     private var fast: Bool {
         get { speedControl.isFast }
@@ -259,9 +260,15 @@ import NxlvKit
                 self.pendingTool = nil; self.canvas.directionPoint = nil; self.refresh()
             } else { self.showGameMenu() }
         }
+        keyboard.skillNames = { Array(Lemmings3Panel.names.prefix(5)) }
         keyboard.help = { [weak self] in
             let names = Array(Lemmings3Panel.names.prefix(5))
             return SkillShortcuts(names: names).hint(names: names, modern: self?.audioSettings.modernControlsEnabled ?? false) + "\n\nSpace: pause\nR: retry\n.: single step"
+        }
+        keyboard.contextCommands = {
+            [KeyboardCommand(keys: "← / → / ↑ / ↓", action: "Pan the level", group: "Camera"),
+             KeyboardCommand(keys: "V / S", action: "Review / save replay after a result", group: "Menus & results"),
+             KeyboardCommand(keys: "Return / Space", action: "Activate selected menu choice", group: "Menus & results")]
         }
         keyboard.hints = { [weak self] in self?.showLevelHints() }
         keyboard.settings = { [weak self] in self?.onShowSettings?() }

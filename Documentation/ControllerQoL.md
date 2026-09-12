@@ -90,3 +90,10 @@ labelled Holiday, Xmas or Christmas, including the L2 DJ pool. Leaving a seasona
 campaign refreshes the module library, including when entering a fan level.
 Silence and mute remain available. A manually chosen soundtrack in a regular
 campaign remains an explicit override.
+
+Help > Keyboard commands (Command-?) opens a searchable command reference.
+During gameplay, ? opens the same guide. Categories cover skills, speed, camera,
+menus and results, app menu shortcuts, and the current controller mapping. Skill
+rows use the current level, including direct letter aliases and shared initials.
+The guide pauses play, supports text search and category filtering, and links to
+level hints. Escape closes it and restores the prior pause state.

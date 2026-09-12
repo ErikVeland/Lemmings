@@ -466,6 +466,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     presetItem = add(audioMenu, "Modern Sound", #selector(toggleMusicPreset))
 
     let helpMenu = addMenu("Help")
+    _ = add(helpMenu, "Keyboard commands…", #selector(showKeyboardCommands), "?", modifiers: [.command])
     _ = add(helpMenu, "Level hints…", #selector(showLevelHints), "/")
     NSApplication.shared.helpMenu = helpMenu
 
@@ -2895,6 +2896,12 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
   }
 
+  @objc private func showKeyboardCommands() {
+    if let nativeL2Window { nativeL2Window.showKeyboardCommands(); return }
+    if let nativeL3Window { nativeL3Window.showKeyboardCommands(); return }
+    gameplayKeyboard?.showHelp()
+  }
+
   private func installKeyboardShortcuts() {
     ArcadeWindow.shared.prepareSession = { [weak self] in
       guard let self else { return nil }
@@ -3013,6 +3020,15 @@ let achievementProgressKey = "ClassicAchievementProgress"
         self.playfield.viewport.scroll(dx: 0, dy: Double(y) - self.playfield.viewport.scrollY - self.playfield.viewport.visibleSize.height / 2)
       }
       self.scrollBy(Double(x) - self.playfield.viewport.scrollX - self.playfield.viewport.visibleSize.width / 2)
+    }
+    keyboard.skillNames = { [weak self] in self?.session?.skills.map(\.name) ?? [] }
+    keyboard.contextCommands = {
+      [KeyboardCommand(keys: "← / →", action: "Pan the level", group: "Camera"),
+       KeyboardCommand(keys: "N", action: "Next level", group: "Gameplay"),
+       KeyboardCommand(keys: "Q", action: "Abandon level", group: "Gameplay"),
+       KeyboardCommand(keys: "↑ / ↓", action: "Choose rank", group: "Menus & results"),
+       KeyboardCommand(keys: "Return / Space", action: "Continue or start level", group: "Menus & results"),
+       KeyboardCommand(keys: "V / S", action: "Review / save replay after a result", group: "Menus & results")]
     }
     keyboard.help = { [weak self] in
       let names = self?.session?.skills.map(\.name) ?? []

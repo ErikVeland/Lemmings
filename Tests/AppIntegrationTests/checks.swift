@@ -915,6 +915,23 @@ extension AppDelegate {
     installKeyboardShortcuts()
     gameplayKeyboard?.controllerAction(.help)
     guard let sheet = window.attachedSheet else { throw IntegrationFailure(message: "Controls help did not open") }
+    func findGuide(_ view: NSView) -> KeyboardCommandsView? {
+      if let guide = view as? KeyboardCommandsView { return guide }
+      return view.subviews.compactMap(findGuide).first
+    }
+    guard let guide = sheet.contentView.flatMap(findGuide) else { throw IntegrationFailure(message: "Missing command reference") }
+    try check(guide.commands.contains { $0.keys == "Escape" } && guide.commands.contains { $0.keys == "N" }, "Guide omitted navigation bindings")
+    guide.search.stringValue = "rewind"; guide.refresh()
+    try check(!guide.filtered.isEmpty && guide.filtered.allSatisfy { $0.action.localizedCaseInsensitiveContains("rewind") }, "Command search did not filter")
+    guide.search.stringValue = "no-command-matches-this"; guide.refresh()
+    try check(guide.filtered.isEmpty, "Command search did not show an empty result")
+    guide.search.stringValue = ""; guide.refresh()
+    sheet.contentView?.layoutSubtreeIfNeeded()
+    if let content = sheet.contentView, let bitmap = content.bitmapImageRepForCachingDisplay(in: content.bounds) {
+      content.cacheDisplay(in: content.bounds, to: bitmap)
+      let url = URL(fileURLWithPath: ".build/keyboard-guide.png")
+      try bitmap.representation(using: .png, properties: [:])?.write(to: url)
+    }
     func find(_ view: NSView) -> NSButton? {
       if let button = view as? NSButton, button.title == "Level hints" { return button }
       return view.subviews.compactMap(find).first
