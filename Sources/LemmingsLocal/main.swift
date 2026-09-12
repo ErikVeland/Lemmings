@@ -2958,7 +2958,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
     let interruption = gameplayKeyboard?.interruptionCount
     isPaused = true; panel.isPaused = true; accumulator = 0
     screenFlash.clear(); pointerCapture.reset(); panel.needsDisplay = true
-    LevelHintWindow.shared.show(deck, image: hintMap, owner: window) { [weak self, weak session] in
+    LevelHintWindow.shared.show(deck, image: hintMap, owner: window,
+      solutionSession: session as? ClassicSession, solutionSource: playfield) { [weak self, weak session] in
       guard let self, let session, self.session === session else { return }
       self.isPaused = wasPaused || self.gameplayKeyboard?.interruptionCount != interruption
       self.panel.isPaused = self.isPaused

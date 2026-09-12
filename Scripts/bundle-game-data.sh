@@ -19,6 +19,7 @@ done
 mkdir -p "$resources_dir/Ports" "$resources_dir/Music"
 mkdir -p "$resources_dir/Hints"
 cp "$project_dir/Resources/Hints/classic.json" "$resources_dir/Hints/classic.json"
+cp "$project_dir/Resources/Hints/solutions.json" "$resources_dir/Hints/solutions.json"
 # Assets stay in the ignored app bundle. Original executable engines, machine
 # settings and development overlays are not needed by the native interpreters.
 copy_options=(-a --exclude=.DS_Store --exclude='*.[Ee][Xx][Ee]' --exclude='*.[Cc][Oo][Mm]'

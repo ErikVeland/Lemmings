@@ -6,8 +6,11 @@ import NxlvKit
     static let shared = LevelHintWindow()
     private(set) var page: GameMenuPage?
     private(set) var revealedTier = 0
+    private(set) var solutionWindow: SolutionReplayWindow?
+    private var verification: Task<Void, Never>?
 
     func show(_ deck: LevelHintDeck, image: CGImage? = nil, owner: NSWindow,
+              solutionSession: ClassicSession? = nil, solutionSource: PlayfieldView? = nil,
               onDismiss: @escaping () -> Void = {}) {
         guard page == nil, !deck.stages.isEmpty else { return }
         let page = GameMenuPage(title: "Level hints", subtitle: deck.title)
@@ -20,20 +23,63 @@ import NxlvKit
         let next = page.addPrimaryAction(deck.checked ? "Reveal the approach" : "Make a small plan") {}
         // No Return shortcut: repeated help keys must not uncover another tier.
         next.keyEquivalent = ""
-        let action = HintRevealAction { [weak self, weak next, weak content] in
-            guard let self, self.revealedTier + 1 < deck.stages.count else { return }
-            self.revealedTier += 1
-            content?.tier = self.revealedTier
-            next?.title = self.revealedTier == 1
-                ? (deck.checked ? "Reveal opening moves" : "Show practice tips") : "All hints revealed"
-            next?.isEnabled = self.revealedTier + 1 < deck.stages.count
-            next?.needsDisplay = true
+        var solution: VerifiedSolution?
+        var checking = solutionSession != nil
+        let refreshAction = { [weak self, weak next] in
+            guard let self, let next else { return }
+            let final = self.revealedTier + 1 >= deck.stages.count
+            next.title = final ? (solution != nil ? "Show solution replay" : checking ? "Checking solution..." : "All hints revealed")
+                : self.revealedTier == 1 ? (deck.checked ? "Reveal opening moves" : "Show practice tips")
+                : (deck.checked ? "Reveal the approach" : "Make a small plan")
+            next.isEnabled = !final || solution != nil
+            next.needsDisplay = true
+        }
+        let action = HintRevealAction { [weak self, weak content, weak solutionSource] in
+            guard let self else { return }
+            if self.revealedTier + 1 < deck.stages.count {
+                self.revealedTier += 1
+                content?.tier = self.revealedTier
+                refreshAction()
+            } else if let solution, let solutionSource, let solutionSession {
+                let warning = GameMenuPage(title: "Reveal full solution?")
+                warning.setDetail("This shows the winning moves from start to finish. Your attempt stays paused.")
+                warning.backTitle = "Keep trying"
+                warning.onBack = { [weak warning] in if let warning { GameScreen.shared.dismiss(warning) } }
+                let confirm = warning.addPrimaryAction("Show full solution") { [weak self, weak warning] in
+                    // A double-click on the last hint must not accept the spoiler prompt.
+                    if let event = NSApp.currentEvent, [.leftMouseDown, .leftMouseUp].contains(event.type), event.clickCount > 1 { return }
+                    guard let self, let warning else { return }
+                    GameScreen.shared.dismiss(warning)
+                    let replay = SolutionReplayWindow(solution: solution, source: solutionSource,
+                        width: solutionSession.levelWidth, height: solutionSession.levelHeight)
+                    self.solutionWindow = replay
+                    replay.show(owner: owner)
+                }
+                confirm.keyEquivalent = ""
+                GameScreen.shared.present(warning, owner: owner, focus: warning.controllerBackButton)
+            }
+        }
+        if let solutionSession {
+            let initial = solutionSession.initialSimulation
+            let root = Bundle.main.resourceURL
+            verification = Task { [weak self, weak page] in
+                let result = await Task.detached(priority: .userInitiated) {
+                    VerifiedSolution.load(initial: initial, from: root)
+                }.value
+                guard !Task.isCancelled, let self, let page, self.page === page else { return }
+                solution = result; checking = false
+                refreshAction()
+            }
         }
         next.target = action; next.action = #selector(HintRevealAction.reveal)
         content.revealAction = action
         page.onBack = { [weak page] in if let page { GameScreen.shared.dismiss(page) } }
         self.page = page
-        let close = { [weak self] in self?.page = nil; onDismiss() }
+        let close = { [weak self] in
+            self?.verification?.cancel(); self?.verification = nil
+            self?.solutionWindow?.stop(); self?.solutionWindow = nil
+            self?.page = nil; onDismiss()
+        }
         if !GameScreen.shared.present(page, owner: owner, focus: content, onDismiss: close) { close() }
     }
 }
@@ -99,7 +145,7 @@ import NxlvKit
         prose.stringValue = stage.body
         note.stringValue = deck.checked
             ? (tier == 2 ? "Match the direction and adjust crowd spacing. Release rate, timing and your current terrain can change the opening." : "No moves are made for you. Reveal another hint only when you want more detail.")
-            : "General coaching — a checked solution for this level is not available yet."
+            : "General coaching for this level."
         setAccessibilityLabel("\(progress.stringValue). \(stage.title). \(stage.body). \(note.stringValue)")
         resetScroll = true
         needsLayout = true; needsDisplay = true

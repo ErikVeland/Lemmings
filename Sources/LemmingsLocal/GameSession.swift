@@ -99,6 +99,7 @@ extension GameSession {
 final class ClassicSession: GameSession {
   /// Wraps the engine so any earlier tick can be reached exactly.
   let initialStateHash: String
+  let initialSimulation: ClassicDOSSimulation
   private var history: ClassicDOSRewind
   private var beforeNuke: ClassicDOSRewind?
   private(set) var usedRewind = false
@@ -118,6 +119,7 @@ final class ClassicSession: GameSession {
   let levelHeight: Int
 
   init(simulation: ClassicDOSSimulation, width: Int, height: Int) {
+    initialSimulation = simulation
     initialStateHash = ClassicDOSReplayRecorder.stateHash(of: simulation)
     history = ClassicDOSRewind(simulation: simulation)
     levelWidth = width

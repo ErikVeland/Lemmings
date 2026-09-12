@@ -842,7 +842,7 @@ extension AppDelegate {
     print("PASS disk checkpoint, rewind/undo journal, exact paused restoration, continuation, backups, corruption, version and stale-writer rejection")
   }
 
-  fileprivate func testLevelHints() throws {
+  fileprivate func testLevelHints() async throws {
     GameScreen.shared.dismissAll()
     settings.music = .silent
     loadContent()
@@ -912,6 +912,9 @@ extension AppDelegate {
     }
     func capture(_ page: NSView, name: String) throws {
       page.layoutSubtreeIfNeeded()
+      // A fresh bitmap also needs the unchanged parts of a previously drawn page.
+      func redraw(_ view: NSView) { view.needsDisplay = true; view.subviews.forEach(redraw) }
+      redraw(page)
       let bitmap = page.bitmapImageRepForCachingDisplay(in: page.bounds)!
       page.cacheDisplay(in: page.bounds, to: bitmap)
       let directory = URL(fileURLWithPath: ".build/hints")
@@ -935,7 +938,56 @@ extension AppDelegate {
       try verifyText(page, stage: level.deck.stages[1])
       try capture(page, name: "approach-\(mode)")
       next.performClick(nil)
-      try check(LevelHintWindow.shared.revealedTier == 2 && !next.isEnabled, "Opening moves were not the final tier")
+      try check(LevelHintWindow.shared.revealedTier == 2, "Opening moves were skipped")
+      for _ in 0..<600 where !next.isEnabled { try await Task.sleep(for: .milliseconds(50)) }
+      try check(next.isEnabled && next.title == "Show solution replay", "Verified solution was not offered after the final hint")
+      let liveRun = arcadeRunID, liveOwner = arcadeProfileID, liveShared = arcadeHotSeatID
+      let recordsEncoder = JSONEncoder(); recordsEncoder.outputFormatting = [.sortedKeys]
+      let savedRecords = try recordsEncoder.encode(ArcadeStore.shared.records)
+      let liveHash = ClassicDOSReplayRecorder.stateHash(of: (current as! ClassicSession).simulation)
+      next.performClick(nil)
+      guard let warning = GameScreen.shared.controllerPage(in: window) as? GameMenuPage else {
+        throw IntegrationFailure(message: "Missing spoiler confirmation")
+      }
+      try check(warning !== page && LevelHintWindow.shared.solutionWindow == nil, "Solution played without confirmation")
+      try check(window.firstResponder === warning.controllerBackButton, "Spoiler confirmation did not focus Keep trying")
+      let confirm = button("Show full solution", in: warning)!
+      try check(confirm.keyEquivalent.isEmpty, "Return could reveal the solution")
+      try capture(warning, name: "solution-confirm-\(mode)")
+      let spoilerController = ControllerMenuNavigator()
+      _ = spoilerController.handle(.assign, in: warning)
+      try check(GameScreen.shared.controllerPage(in: window) === page, "Cancelling solution did not return to hints")
+      next.performClick(nil)
+      let accepted = GameScreen.shared.controllerPage(in: window)!
+      button("Show full solution", in: accepted)!.performClick(nil)
+      guard let ghost = LevelHintWindow.shared.solutionWindow else { throw IntegrationFailure(message: "Confirmed solution did not open") }
+      ghost.stop()
+      try check(ghost.playback.session !== current && isPaused, "Ghost used or resumed the live attempt")
+      let expected = ghost.playback.solution.replay.expected!
+      for _ in 0..<min(338, expected.ticks) { ghost.advance() }
+      try capture(ghost.page, name: "solution-playing-\(mode)")
+      button("Pause", in: ghost.page)!.performClick(nil)
+      button("1x", in: ghost.page)!.performClick(nil)
+      try check(button("3x", in: ghost.page) != nil, "Replay speed did not increase")
+      button("3x", in: ghost.page)!.performClick(nil)
+      try check(button("10x", in: ghost.page) != nil, "Replay speed did not reach 10x")
+      let stoppedTick = ghost.playback.session.currentTick
+      ghost.advance()
+      try check(ghost.playback.session.currentTick == stoppedTick, "Ghost pause did not stop playback")
+      button("Play", in: ghost.page)!.performClick(nil)
+      for _ in 0..<expected.ticks where !ghost.playback.session.isComplete { ghost.advance() }
+      try check(ghost.playback.session.isComplete && ghost.playback.session.simulation.didWin,
+        "Ghost did not complete its winning solution")
+      try check(ClassicDOSReplayRecorder.stateHash(of: ghost.playback.session.simulation) == expected.stateHash,
+        "Animated solution diverged from strict replay validation")
+      try capture(ghost.page, name: "solution-complete-\(mode)")
+      try check(ClassicDOSReplayRecorder.stateHash(of: (current as! ClassicSession).simulation) == liveHash,
+        "Ghost changed the live terrain, skills or lemmings")
+      try check(arcadeRunID == liveRun && arcadeProfileID == liveOwner && arcadeHotSeatID == liveShared
+        && (try recordsEncoder.encode(ArcadeStore.shared.records)) == savedRecords,
+        "Ghost changed run ownership, saved records or shared progress")
+      ghost.page.cancelOperation(nil)
+      try check(isPaused && GameScreen.shared.controllerPage(in: window) === page, "Closing ghost lost the paused hints")
       try verifyText(page, stage: level.deck.stages[2])
       try capture(page, name: "opening-\(mode)")
       page.cancelOperation(nil)
@@ -946,6 +998,37 @@ extension AppDelegate {
       GameScreen.shared.dismissAll()
       try check(isPaused, "Reading hints unpaused a game that was already paused")
     }
+    loadLevel(at: 0)
+    let fresh = (session as! ClassicSession).initialSimulation
+    guard let proof = VerifiedSolution.load(initial: fresh, from: Bundle.main.resourceURL) else {
+      throw IntegrationFailure(message: "Missing Fun 1 solution")
+    }
+    let shifted = ClassicDOSReplay(rank: proof.replay.rank, number: proof.replay.number,
+      title: proof.replay.title, initialStateHash: proof.replay.initialStateHash,
+      events: [.init(tick: 0, action: .releaseRate(50), afterTick: true)] + proof.replay.events.map {
+        .init(tick: $0.tick, action: $0.action, afterTick: true)
+      })
+    let liveOutcome = try ClassicDOSReplayPlayer.run(shifted, simulation: fresh, verify: false)
+    let liveReplay = ClassicDOSReplay(rank: shifted.rank, number: shifted.number, title: shifted.title,
+      initialStateHash: shifted.initialStateHash, events: shifted.events, expected: liveOutcome)
+    guard let liveProof = VerifiedSolution.validate(liveReplay, initial: fresh) else {
+      throw IntegrationFailure(message: "Valid after-tick solution was rejected")
+    }
+    let livePlayback = SolutionPlayback(liveProof, width: 1600, height: 160)
+    for _ in 0..<liveOutcome.ticks { livePlayback.tick() }
+    try check(ClassicDOSReplayRecorder.stateHash(of: livePlayback.session.simulation) == liveOutcome.stateHash,
+      "Animated after-tick input timing differs from the strict replay player")
+    var changed = fresh; _ = changed.tick()
+    try check(VerifiedSolution.validate(proof.replay, initial: changed) == nil,
+      "Changed initial state accepted a solution")
+    let incomplete = ClassicDOSReplay(rank: shifted.rank, number: shifted.number, title: shifted.title,
+      initialStateHash: shifted.initialStateHash, events: shifted.events)
+    try check(VerifiedSolution.validate(incomplete, initial: fresh) == nil,
+      "Solution without a verified outcome was accepted")
+    let broken = ClassicDOSReplay(rank: shifted.rank, number: shifted.number, title: shifted.title,
+      initialStateHash: shifted.initialStateHash, events: [], expected: liveOutcome)
+    try check(VerifiedSolution.validate(broken, initial: fresh) == nil,
+      "Broken solution was accepted")
     // Exercise every shipped page plus an oversized imported-level coaching page.
     let longDeck = LevelHintDeck(title: "Long coaching", checked: false, stages: [
       .init(title: "A gentle nudge", body: String(repeating: "Keep a worker safe.\n", count: 100)),
@@ -987,7 +1070,7 @@ extension AppDelegate {
     try check(opened == 1, "Holding F1 opened hints repeatedly")
     let fallback = LevelHintDeck.practice(title: "Fan level", skills: ["Builder"])
     try check(!fallback.checked && fallback.stages.allSatisfy { $0.moves.isEmpty }, "General coaching claimed a solved route")
-    print("PASS 120 checked hint decks, exact matching, tier isolation, F1, pause/resume, flat/CRT and fallback coaching")
+    print("PASS checked hints, confirmed winning ghosts, exact before/after-tick playback, unchanged live runs, flat/CRT and fallback coaching")
   }
 
   fileprivate func testVariableSpeedInput() throws {
@@ -1955,7 +2038,7 @@ Task { @MainActor in
     #elseif CONTROLLER_QOL_TESTS
     try await subject.testControllerQoL()
     try subject.testVariableSpeedInput()
-    try subject.testLevelHints()
+    try await subject.testLevelHints()
     try subject.testControllerRemapping()
     try subject.testNeoRunRecovery()
     try subject.testRunRecovery()
@@ -1971,7 +2054,7 @@ Task { @MainActor in
     try subject.testEscapeToMainMenu()
     print("Release blocker integration tests passed.")
     #elseif HINT_TESTS
-    try subject.testLevelHints()
+    try await subject.testLevelHints()
     try await subject.testHintsFromControlsHelp()
     print("Level hints integration tests passed.")
     #elseif VARIABLE_SPEED_TESTS
@@ -2000,7 +2083,7 @@ Task { @MainActor in
     try await subject.testControllerQoL()
     try subject.testVariableSpeedInput()
     try subject.testVariableSimulationClock()
-    try subject.testLevelHints()
+    try await subject.testLevelHints()
     try await subject.testHintsFromControlsHelp()
     try subject.testControllerRemapping()
     try subject.testNeoRunRecovery()
