@@ -4,6 +4,7 @@ The user's requirement: icons and states must make sense without explanatory
 sentences. Apply this to new UI and changes to existing UI.
 
 - Use the game's bitmap artwork and pixel controls throughout game pages and HUDs.
+  Menu lettering must not depend on the selected level graphics.
   Do not mix system fonts, SF Symbols, rounded Aqua controls or modern gradients
   into game artwork. AppKit can supply input and accessibility beneath game rendering.
 - Show each outcome once. A filled star already communicates an earned goal.
@@ -28,3 +29,9 @@ The shared result panel and Classic HUD now apply these rules. The changes cover
 star states, compact result layout, primary/selected actions, transport icon
 changes and removal of permanent HUD captions. This is not a claim that every
 sequel screen or every novice-player journey has been validated.
+
+Assignment feedback follows the engine's actual eligibility rules. Grey means no
+eligible target; green means the nearest target can accept the selected skill.
+Successful assignments get a 100 ms green pulse, with local HDR brightness when
+available. An existing assignment gets an 80 ms orange cue. An eligible neighbour
+always takes priority over orange. Honour the reduced-flash setting.

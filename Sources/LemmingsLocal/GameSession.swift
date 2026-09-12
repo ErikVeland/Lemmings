@@ -19,6 +19,8 @@ struct SessionSkill {
   let isInfinite: Bool
 }
 
+enum AssignmentState { case eligible, alreadyAssigned, unavailable }
+
 /// The behavior the app needs from either ruleset.
 ///
 /// The DOS and NeoLemmix engines share no types, so this is the seam that lets
@@ -57,7 +59,7 @@ protocol GameSession: AnyObject {
   var lastCues: [ClassicSoundEffect] { get }
   /// Returns nil when the assignment lands, or a reason when it does not.
   func assign(skillIndex: Int, to lemmingID: Int) -> String?
-  func canAssign(skillIndex: Int, to lemmingID: Int) -> Bool
+  func assignmentState(skillIndex: Int, to lemmingID: Int) -> AssignmentState
   func adjustRate(by delta: Int)
   func nuke()
   var canUndoNuke: Bool { get }
@@ -72,6 +74,16 @@ protocol GameSession: AnyObject {
 }
 
 extension GameSession {
+  func canAssign(skillIndex: Int, to lemmingID: Int) -> Bool {
+    assignmentState(skillIndex: skillIndex, to: lemmingID) == .eligible
+  }
+  func isPerforming(skill: String, lemmingID: Int) -> Bool {
+    guard let lemming = lemmings.first(where: { $0.id == lemmingID }) else { return false }
+    if skill == "bomber" { return lemming.countdown != nil }
+    let poses: [String: ClassicLemmingPose] = ["blocker": .blocking, "builder": .building,
+      "basher": .bashing, "miner": .mining, "digger": .digging]
+    return poses[skill] == lemming.pose
+  }
   var exitX: Int? { nil }
   var entranceY: Int? { nil }
   var exitY: Int? { nil }
@@ -220,10 +232,16 @@ final class ClassicSession: GameSession {
   func tick() { lastCues = ClassicSoundCue.cues(for: history.tick()) }
 
   /// Probe a value copy so targeting follows the engine without changing the run.
-  func canAssign(skillIndex: Int, to lemmingID: Int) -> Bool {
-    guard ClassicSkill.allCases.indices.contains(skillIndex) else { return false }
+  func assignmentState(skillIndex: Int, to lemmingID: Int) -> AssignmentState {
+    guard ClassicSkill.allCases.indices.contains(skillIndex) else { return .unavailable }
+    let skill = ClassicSkill.allCases[skillIndex]
     var probe = simulation
-    return probe.assign(ClassicSkill.allCases[skillIndex], to: lemmingID) == .assigned
+    let result = probe.assign(skill, to: lemmingID)
+    if result == .assigned { return .eligible }
+    if let lemming = simulation.lemmings.first(where: { $0.id == lemmingID && $0.isActive }),
+       (skill == .climber && lemming.hasClimber) || (skill == .floater && lemming.hasFloater) { return .alreadyAssigned }
+    if result == .alreadyHasSkill || (result == .invalidAction && isPerforming(skill: skill.rawValue, lemmingID: lemmingID)) { return .alreadyAssigned }
+    return .unavailable
   }
 
   func assign(skillIndex: Int, to lemmingID: Int) -> String? {
@@ -410,11 +428,17 @@ final class NeoLemmixSession: GameSession {
 
   func tick() { _ = simulation.tick() }
 
-  func canAssign(skillIndex: Int, to lemmingID: Int) -> Bool {
-    guard skillOrder.indices.contains(skillIndex) else { return false }
+  func assignmentState(skillIndex: Int, to lemmingID: Int) -> AssignmentState {
+    guard skillOrder.indices.contains(skillIndex) else { return .unavailable }
+    let skill = skillOrder[skillIndex]
     var probe = simulation
-    if case .rejected = probe.assign(skill: skillOrder[skillIndex], to: lemmingID) { return false }
-    return true
+    if case let .rejected(_, _, reason) = probe.assign(skill: skill, to: lemmingID) {
+      if let lemming = simulation.lemmings.first(where: { $0.id == lemmingID && $0.canReceiveSkills }),
+         lemming.traits.contains(where: { $0.rawValue == skill.rawValue }) { return .alreadyAssigned }
+      if reason == .duplicatePermanentSkill || (reason == .invalidCurrentAction && isPerforming(skill: skill.rawValue, lemmingID: lemmingID)) { return .alreadyAssigned }
+      return .unavailable
+    }
+    return .eligible
   }
 
   func assign(skillIndex: Int, to lemmingID: Int) -> String? {

@@ -5,9 +5,11 @@ import QuartzCore
 struct ExplosionFlash: Equatable {
   let rect: CGRect
   let strength: Float
+  enum Tint { case warm, green }
   let expiresAt: TimeInterval
-  init(rect: CGRect, strength: Float, expiresAt: TimeInterval = .infinity) {
-    self.rect = rect; self.strength = strength; self.expiresAt = expiresAt
+  let tint: Tint
+  init(rect: CGRect, strength: Float, expiresAt: TimeInterval = .infinity, tint: Tint = .warm) {
+    self.rect = rect; self.strength = strength; self.expiresAt = expiresAt; self.tint = tint
   }
 }
 
@@ -121,10 +123,10 @@ enum ExplosionHDR {
     available.isFinite ? Float(min(8, max(1, available))) : 1
   }
 
-  static func mask(width: Int, height: Int, flashes: [ExplosionFlash], now: TimeInterval = ProcessInfo.processInfo.systemUptime) -> [UInt8] {
+  static func mask(width: Int, height: Int, flashes: [ExplosionFlash], now: TimeInterval = ProcessInfo.processInfo.systemUptime, tint: ExplosionFlash.Tint = .warm) -> [UInt8] {
     guard width > 0, height > 0 else { return [] }
     var bytes = [UInt8](repeating: 0, count: width*height)
-    for flash in flashes where flash.expiresAt > now && flash.strength.isFinite && flash.strength > 0 && !flash.rect.isInfinite && !flash.rect.isNull {
+    for flash in flashes where flash.tint == tint && flash.expiresAt > now && flash.strength.isFinite && flash.strength > 0 && !flash.rect.isInfinite && !flash.rect.isNull {
       guard flash.rect.minX.isFinite, flash.rect.minY.isFinite, flash.rect.maxX.isFinite, flash.rect.maxY.isFinite else { continue }
       let rect = flash.rect.intersection(CGRect(x:0,y:0,width:width,height:height))
       guard !rect.isEmpty else { continue }
@@ -134,6 +136,12 @@ enum ExplosionHDR {
       for y in y0..<y1 { for x in x0..<x1 { bytes[y*width+x] = max(bytes[y*width+x],value) } }
     }
     return bytes
+  }
+
+  static func textureMask(width: Int, height: Int, flashes: [ExplosionFlash], now: TimeInterval = ProcessInfo.processInfo.systemUptime) -> [UInt8] {
+    let warm = mask(width: width, height: height, flashes: flashes, now: now)
+    let green = mask(width: width, height: height, flashes: flashes, now: now, tint: .green)
+    return zip(warm, green).flatMap { [$0, $1] }
   }
 
   static let shader = """
@@ -147,7 +155,9 @@ enum ExplosionHDR {
   fragment float4 flash_fragment(Vertex v [[stage_in]], texture2d<float> mask [[texture(0)]],
                                   constant float &headroom [[buffer(0)]]) {
     constexpr sampler s(filter::nearest,address::clamp_to_zero);
-    float strength = mask.sample(s,v.uv).r;
+    float2 pulse = mask.sample(s,v.uv).rg;
+    float strength = pulse.r;
+    if (pulse.g > 0 && headroom > 1) return float4(float3(.18,1,.18) * (1 + (headroom-1)*pulse.g),1);
     if (strength <= 0 || headroom <= 1) return float4(0);
     if (strength <= .25) {
       float alpha = strength;
@@ -457,13 +467,13 @@ enum ExplosionHDR {
     let width = Int(ceil(bounds.width)), height = Int(ceil(bounds.height))
     // Reuse an unchanged mask. Submitted masks remain immutable on the GPU.
     if maskIsDirty || texture == nil {
-      let descriptor = MTLTextureDescriptor.texture2DDescriptor(pixelFormat:.r8Unorm,width:width,height:height,mipmapped:false)
+      let descriptor = MTLTextureDescriptor.texture2DDescriptor(pixelFormat:.rg8Unorm,width:width,height:height,mipmapped:false)
       descriptor.usage = .shaderRead
       texture = gpu.makeTexture(descriptor:descriptor)
       if let texture {
-        let mask = ExplosionHDR.mask(width:width,height:height,flashes:flashes,now:now)
+        let mask = ExplosionHDR.textureMask(width:width,height:height,flashes:flashes,now:now)
         mask.withUnsafeBytes { bytes in
-          texture.replace(region:MTLRegionMake2D(0,0,width,height),mipmapLevel:0,withBytes:bytes.baseAddress!,bytesPerRow:width)
+          texture.replace(region:MTLRegionMake2D(0,0,width,height),mipmapLevel:0,withBytes:bytes.baseAddress!,bytesPerRow:width*2)
         }
         maskIsDirty = false
       }

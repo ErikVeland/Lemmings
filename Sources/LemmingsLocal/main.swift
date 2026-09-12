@@ -2611,6 +2611,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     if let rejection {
       setStatus("Cannot assign: \(rejection)")
     } else {
+      playfield.didAssign(to: id)
       assignmentFocus.record(id: id, skill: panel.selectedSkillIndex, tick: session.currentTick)
       // The click is acknowledged straight away rather than on the next tick,
       // so the sound lands with the press.

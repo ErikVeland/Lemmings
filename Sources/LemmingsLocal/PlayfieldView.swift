@@ -72,6 +72,26 @@ enum GamePhase: Equatable {
   case results
 }
 
+enum ReticleState { case unavailable, eligible, assigned, alreadyAssigned }
+
+struct ReticleFeedback {
+  private(set) var successUntil: TimeInterval = 0
+  private var orangeUntil: TimeInterval = 0
+  private var lastDuplicate: String?
+  private var orangeAllowedAt: TimeInterval = 0
+  mutating func assigned(now: TimeInterval) { successUntil = now + 0.10 }
+  mutating func state(eligible: Bool, duplicate: String?, now: TimeInterval) -> ReticleState {
+    if now < successUntil { return .assigned }
+    if eligible { lastDuplicate = nil; return .eligible }
+    if let duplicate, duplicate != lastDuplicate {
+      lastDuplicate = duplicate
+      if now >= orangeAllowedAt { orangeUntil = now + 0.08; orangeAllowedAt = now + 0.25 }
+    } else if duplicate == nil { lastDuplicate = nil }
+    return duplicate != nil && now < orangeUntil ? .alreadyAssigned : .unavailable
+  }
+  var nextChange: TimeInterval { max(successUntil, orangeUntil) }
+}
+
 @MainActor final class PlayfieldView: NSView {
   var hdEffectsEnabled = true {
     didSet {
@@ -167,7 +187,7 @@ enum GamePhase: Equatable {
   var overlayFrame = 0
   var phase: GamePhase = .playing {
     didSet {
-      if phase != oldValue { displayedTarget = nil; cursorViewPoint = nil; overlayReplayLine = nil; overlayRetryLine = nil }
+      if phase != oldValue { reticleFeedback = ReticleFeedback(); assignedTarget = nil; displayedTarget = nil; cursorViewPoint = nil; overlayReplayLine = nil; overlayRetryLine = nil }
     }
   }
   var levelImage: CGImage?
@@ -182,10 +202,10 @@ enum GamePhase: Equatable {
     didSet {
       macInterface = interfaceArtwork
         .flatMap(ClassicMacUserInterface.init(artwork:))
-        .map(MacInterfaceRenderer.init(interface:))
+        .map(MacInterfaceRenderer.init(interface:)) ?? GameMenuArtwork.renderer()
     }
   }
-  private var macInterface: MacInterfaceRenderer?
+  private var macInterface: MacInterfaceRenderer? = GameMenuArtwork.renderer()
   var macScene: ClassicMacScene? { didSet { sceneTick = nil } }
   var classicScene: ClassicRenderedLevel? {
     didSet { sceneTick = nil }
@@ -216,7 +236,7 @@ enum GamePhase: Equatable {
     sceneTick = session.currentTick
   }
   var session: (any GameSession)? {
-    didSet { if oldValue !== session { displayedTarget = nil; hdrBirths.removeAll(); hdrLastTick = 0; speedTrails.reset() } }
+    didSet { if oldValue !== session { reticleFeedback = ReticleFeedback(); assignedTarget = nil; displayedTarget = nil; hdrBirths.removeAll(); hdrLastTick = 0; speedTrails.reset() } }
   }
   var assets: ClassicMainDATAssets?
   var palette: [ClassicRGBColor] = []
@@ -244,6 +264,37 @@ enum GamePhase: Equatable {
   }
   let assignmentHighlight = LemmingFocusHighlight()
   var selectedSkill: () -> Int = { 0 }
+  private var reticleFeedback = ReticleFeedback()
+  private var reticleRedraw: Task<Void, Never>?
+  private var assignedTarget: Int?
+
+  func didAssign(to id: Int) {
+    assignedTarget = id
+    if !reduceFlashes { reticleFeedback.assigned(now: ProcessInfo.processInfo.systemUptime) }
+    needsDisplay = true
+    scheduleReticleRedraw()
+  }
+
+  private func scheduleReticleRedraw() {
+    let remaining = reticleFeedback.nextChange - ProcessInfo.processInfo.systemUptime
+    guard remaining > 0 else { return }
+    reticleRedraw?.cancel()
+    reticleRedraw = Task { [weak self] in
+      try? await Task.sleep(for: .seconds(remaining + 0.005))
+      guard !Task.isCancelled else { return }
+      self?.needsDisplay = true
+    }
+  }
+
+  func reticleState(at point: CGPoint, now: TimeInterval) -> ReticleState {
+    let eligible = lemming(at: point) != nil
+    if eligible { return reticleFeedback.state(eligible: true, duplicate: nil, now: now) }
+    let skill = selectedSkill()
+    let duplicate = session?.lemmings.filter { contains($0, point) }.sorted {
+      distanceSquared($0, point) < distanceSquared($1, point)
+    }.first { session?.assignmentState(skillIndex: skill, to: $0.id) == .alreadyAssigned }
+    return reticleFeedback.state(eligible: eligible, duplicate: duplicate.map { "\($0.id):\(skill)" }, now: now)
+  }
   private var displayedTarget: (id: Int, point: CGPoint, time: TimeInterval)?
   var pointerLemmingID: Int? { cursorViewPoint.flatMap { clickTarget(at: viewport.levelPoint(from: $0))?.id } }
   private var cursorViewPoint: CGPoint?
@@ -811,15 +862,20 @@ enum GamePhase: Equatable {
     guard let cursorViewPoint else { return }
     let point = viewport.levelPoint(from: cursorViewPoint)
     let target = lemming(at: point)
+    let now = ProcessInfo.processInfo.systemUptime
+    let state = reticleState(at: point, now: now)
+    let pulseTarget = state == .assigned ? session?.lemmings.first(where: { $0.id == assignedTarget }) : nil
+    scheduleReticleRedraw()
     displayedTarget = target.map { ($0.id, point, ProcessInfo.processInfo.systemUptime) }
     let center = viewport.viewPoint(
-      fromLevel: target.map { CGPoint(x: CGFloat($0.x), y: CGFloat($0.y) - 5) } ?? point)
+      fromLevel: (pulseTarget ?? target).map { CGPoint(x: CGFloat($0.x), y: CGFloat($0.y) - 5) } ?? point)
     let side = 14 * viewport.zoom
     let box = CGRect(
       x: center.x - side / 2, y: center.y - side / 2, width: side, height: side)
 
     let path = NSBezierPath()
     let arm = side / 3
+    let thickness = max(1, viewport.zoom / 2)
     // Corner brackets read clearly over busy terrain.
     for (dx, dy) in [(0.0, 0.0), (1.0, 0.0), (0.0, 1.0), (1.0, 1.0)] {
       let cx = box.minX + box.width * dx
@@ -829,9 +885,22 @@ enum GamePhase: Equatable {
       path.move(to: CGPoint(x: cx + arm * sx, y: cy))
       path.line(to: CGPoint(x: cx, y: cy))
       path.line(to: CGPoint(x: cx, y: cy + arm * sy))
+      if state == .assigned, hdEffectsEnabled, !reduceFlashes {
+        hdrFlashes.append(.init(rect: CGRect(x: min(cx, cx + arm * sx), y: cy - thickness / 2,
+          width: arm, height: thickness), strength: 1, expiresAt: reticleFeedback.successUntil, tint: .green))
+        hdrFlashes.append(.init(rect: CGRect(x: cx - thickness / 2, y: min(cy, cy + arm * sy),
+          width: thickness, height: arm), strength: 1, expiresAt: reticleFeedback.successUntil, tint: .green))
+      }
     }
-    path.lineWidth = max(1, viewport.zoom / 2)
-    (target == nil ? NSColor.white.withAlphaComponent(0.5) : NSColor.systemGreen).setStroke()
+    path.lineWidth = thickness
+    let color: NSColor
+    switch state {
+    case .unavailable: color = NSColor(calibratedWhite: 0.6, alpha: 0.9)
+    case .eligible: color = NSColor(calibratedRed: 0.3, green: 0.85, blue: 0.2, alpha: 1)
+    case .assigned: color = NSColor(calibratedRed: 0.65, green: 1, blue: 0.45, alpha: 1)
+    case .alreadyAssigned: color = NSColor(calibratedRed: 1, green: 0.62, blue: 0.08, alpha: 1)
+    }
+    color.setStroke()
     path.stroke()
   }
 
