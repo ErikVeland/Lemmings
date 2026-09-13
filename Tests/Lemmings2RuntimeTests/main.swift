@@ -41,6 +41,17 @@ func syntheticMasks() throws -> Lemmings2TerrainMasks {
         flame: Array(repeating: frame(0,0,32,12), count:2), blast: frame(0,0,22,22), plant:(0..<8).map { frame(8,0,4+$0,8) }, twister:frame(2,0,12,11), stone:Array(repeating:frame(0,0,4,4),count:4), spear:Array(repeating:frame(0,7,15,1),count:16), arrow:Array(repeating:frame(0,7,14,1),count:32))
 }
 
+func testWitnessRejectsOutOfOrderInputs() throws {
+    let json = """
+    {"version":1,"levelSHA256":"deadbeef","population":60,"expectedSaved":1,
+     "expectedTicks":100,"pointers":[],
+     "inputs":[{"tick":50,"lemming":0,"skill":7},{"tick":10,"lemming":0,"skill":7}]}
+    """
+    let witness = try JSONDecoder().decode(Lemmings2ReplayWitness.self, from: Data(json.utf8))
+    check(witness.inputsAreOrdered == false, "Witness accepted out-of-order inputs")
+    print("PASS replay witness rejects out-of-order inputs")
+}
+
 func testLinkedObjects() throws {
     var trap = Lemmings2TimedTrap()
     check(!trap.touch(),"Dormant trap killed before opening")
@@ -1378,6 +1389,7 @@ do {
     check(!Lemmings2SkillRules.permits(.roper,during:.throwing), "Thrower accepted an interrupting rope")
     testJetPackCollision()
     try testAuthoredBounds()
+    try testWitnessRejectsOutOfOrderInputs()
     testMagnoBooter()
     try testThrownTerrain(syntheticMasks())
     try testIceAndSlider()
@@ -1462,17 +1474,7 @@ do {
             }
             print("PASS Classic \(entry.number + 1): \(entry.level.title), \(objects.parts.count) object parts")
         }
-        struct Replay: Decodable {
-            struct Pointer: Decodable { let tick:Int; let x:Int; let y:Int; let fanX:Int; let fanY:Int; let fan:Bool }
-            let pointers:[Pointer]?
-            struct Input: Decodable { let tick: Int; let lemming: Int; let skill: Int }
-            let version: Int
-            let levelSHA256: String
-            let population: Int
-            let expectedSaved: Int
-            let expectedTicks: Int
-            let inputs: [Input]
-        }
+        typealias Replay = Lemmings2ReplayWitness
         let wholeCampaign = try Lemmings2Campaign(root:root)
         for tribe in 0..<12 {
             let style = try Lemmings2Style(data:Data(contentsOf:root.appendingPathComponent("STYLES/\(Lemmings2Campaign.styleNames[tribe]).DAT")))
@@ -1526,41 +1528,10 @@ do {
             check(completedLevels.insert(level.fingerprint).inserted,"Duplicate level completion fixture: \(name)")
             check(replay.version == 1 && replay.levelSHA256 == level.fingerprint,"Completion fixture uses a different level")
             let style = try Lemmings2Style(data:Data(contentsOf:root.appendingPathComponent("STYLES/\(Lemmings2Campaign.styleNames[level.style]).DAT")))
-            var game = try Lemmings2Runtime(level:level,style:style,masks:masks,total:replay.population)
-            let pointers = replay.pointers ?? []
-            check(pointers.allSatisfy {
-                (level.minimumScreenX...level.maximumScreenX+319).contains($0.x) &&
-                (level.minimumScreenY...level.maximumScreenY+159).contains($0.y) &&
-                (!$0.fan || ($0.x == $0.fanX && $0.y == $0.fanY))
-            },"Replay pointer cannot be placed in the game viewport: \(name)")
-            var command = 0, pointer = 0
-            while !game.isComplete && game.tick <= replay.expectedTicks {
-                while pointer < pointers.count && pointers[pointer].tick == game.tick {
-                    let p = pointers[pointer]
-                    game.setAim(x:p.fan ? p.fanX : p.x,y:p.fan ? p.fanY : p.y,held:!p.fan)
-                    game.setFan(x:p.fanX,y:p.fanY,active:p.fan)
-                    pointer += 1
-                }
-                while command < replay.inputs.count && replay.inputs[command].tick == game.tick {
-                    let event = replay.inputs[command]
-                    guard let slot = game.configuration.skills.firstIndex(where:{$0.rawValue == event.skill}) else {
-                        throw SequelDataError.invalid("Missing replay skill")
-                    }
-                    // Selecting a skill releases the fan. Selecting it again
-                    // after the assignment starts a new hold, as in the app.
-                    game.setFan(x:0,y:0,active:false)
-                    check(game.assign(slot:slot,to:event.lemming),"Rejected \(name) replay input at \(game.tick)")
-                    if pointer > 0, pointers[pointer-1].fan {
-                        let p = pointers[pointer-1]
-                        game.setFan(x:p.fanX,y:p.fanY,active:true)
-                    }
-                    command += 1
-                }
-                game.step()
-            }
-            check(command == replay.inputs.count && pointer == pointers.count && game.didWin &&
-                  game.saved == replay.expectedSaved && game.tick == replay.expectedTicks,"Completion changed: \(name)")
-            print("PASS \(name): \(game.saved) rescued, \(game.tick) ticks, recorded pointer and skill inputs")
+            let outcome: Lemmings2WitnessOutcome
+            do { outcome = try replay.run(level:level,style:style,masks:masks) }
+            catch { check(false,"Completion changed: \(name) (\(error))"); continue }
+            print("PASS \(name): \(outcome.saved) rescued, \(outcome.ticks) ticks, recorded pointer and skill inputs")
         }
         print("PASS \(completedLevels.count) distinct recorded campaign level completions")
         for (tribe,prefix,count) in [(2,"cavelem",3),(3,"circus",2)] {
