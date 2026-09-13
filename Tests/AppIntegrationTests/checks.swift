@@ -695,6 +695,55 @@ extension AppDelegate {
     retry()
     try check(fanPackGraphics && fanPlaying && session?.currentTick == 0,
       "A new fan attempt retained legacy graphics after retry")
+    returnToLibrary()
+    let steelText = """
+    releaseRate = 1
+    numLemmings = 10
+    numToRescue = 5
+    timeLimit = 3
+    name = Steel recovery
+    object_0 = 1, 100, 20
+    object_1 = 0, 300, 80
+    terrain_0 = 1, 100, 80
+    steel_0 = 101, 70, 13, 9
+    """
+    try steelText.write(to: folder.appendingPathComponent("steel.ini"), atomically: true, encoding: .utf8)
+    let steelZip = Process()
+    steelZip.executableURL = URL(fileURLWithPath: "/usr/bin/zip")
+    steelZip.currentDirectoryURL = folder
+    steelZip.arguments = ["-q", "steel.zip", "steel.ini"]
+    try steelZip.run(); steelZip.waitUntilExit()
+    try check(steelZip.terminationStatus == 0, "Could not create steel recovery fixture")
+    fanPack = folder.appendingPathComponent("steel.zip")
+    fanQueue = FanLevelLibrary.entries(in: fanPack!); fanQueueIndex = 0
+    fanTextSteel = false; restoringCheckpoint = true
+    loadCurrentFanLevel(); restoringCheckpoint = false
+    _ = advanceFanPlay()
+    guard let oldSteelSession = session as? ClassicSession, fanPlaying else {
+      throw IntegrationFailure(message: "Legacy text fixture failed to load")
+    }
+    for _ in 0..<30 { oldSteelSession.tick() }
+    saveRunCheckpoint(immediately: true)
+    var oldSteel = try recoveryStore.latest(profileID: arcadeProfileID, hotSeatID: arcadeHotSeatID)!
+    oldSteel.fanTextSteel = nil
+    let oldSteelHash = ClassicDOSReplayRecorder.stateHash(of: oldSteelSession.simulation)
+    returnToLibrary(); restoreRun(oldSteel)
+    try check(!fanTextSteel && isPaused && arcadeRunID == oldSteel.runID && (session as? ClassicSession).map {
+      ClassicDOSReplayRecorder.stateHash(of: $0.simulation) == oldSteelHash
+    } == true, "Text steel update changed an older saved attempt")
+    retry()
+    try check(fanTextSteel && fanPlaying && (session as? ClassicSession)?.simulation.terrain.isSteelProtected(x: 101, y: 70) == true,
+      "Retry did not enable exact text steel")
+    phase = .playing
+    session?.tick()
+    saveRunCheckpoint(immediately: true)
+    let newSteel = try recoveryStore.latest(profileID: arcadeProfileID, hotSeatID: arcadeHotSeatID)!
+    try check(newSteel.fanTextSteel == true, "New steel rules were not saved")
+    returnToLibrary(); restoreRun(newSteel)
+    try check(fanTextSteel && isPaused && arcadeRunID == newSteel.runID && (session as? ClassicSession).map {
+      ClassicDOSReplayRecorder.stateHash(of: $0.simulation) == newSteel.stateHash
+    } == true, "New text steel checkpoint did not restore exactly")
+    print("PASS legacy text steel checkpoint, retry upgrade and exact current checkpoint restoration")
     print("PASS Classic fan checkpoint, shuffled queue, exact paused restore, identity, continuation and missing-pack rejection")
   }
   fileprivate func testEscapeToMainMenu() throws {

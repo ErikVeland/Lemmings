@@ -3,6 +3,7 @@ import Foundation
 public enum FanLevelError: Error, Equatable, CustomStringConvertible {
     case wrongSize(bytes: Int)
     case missingField(String)
+    case invalidField(String)
     case tooMuchTerrain(count: Int)
     case tooManyObjects(count: Int)
 
@@ -12,6 +13,8 @@ public enum FanLevelError: Error, Equatable, CustomStringConvertible {
             return "A .lvl level is 2048 bytes. This one is \(bytes)."
         case let .missingField(name):
             return "The level description has no \(name) field."
+        case let .invalidField(name):
+            return "The level description has an invalid \(name) field."
         case let .tooMuchTerrain(count):
             return "A level holds at most 400 terrain pieces. This one lists \(count)."
         case let .tooManyObjects(count):
@@ -48,9 +51,13 @@ public enum FanLevelReader {
         public var objects: [[Int]] = []
         public var terrain: [[Int]] = []
         public var steel: [[Int]] = []
+        fileprivate var invalidFields: [String] = []
 
         public func integer(_ name: String, default fallback: Int? = nil) throws -> Int {
-            if let text = values[name], let value = Int(text) { return value }
+            if let text = values[name] {
+                guard let value = Int(text) else { throw FanLevelError.invalidField(name) }
+                return value
+            }
             if let fallback { return fallback }
             throw FanLevelError.missingField(name)
         }
@@ -66,8 +73,15 @@ public enum FanLevelReader {
             let value = line[line.index(after: split)...].trimmingCharacters(in: .whitespaces)
             guard !key.isEmpty else { continue }
 
-            let numbers = value.split(separator: ",").compactMap {
+            let components = value.split(separator: ",", omittingEmptySubsequences: false)
+            let numbers = components.compactMap {
                 Int($0.trimmingCharacters(in: .whitespaces))
+            }
+            if key.hasPrefix("object_") || key.hasPrefix("terrain_") || key.hasPrefix("steel_") {
+                let minimum = key.hasPrefix("steel_") ? 4 : 3
+                if numbers.count != components.count || numbers.count < minimum {
+                    fields.invalidFields.append(key)
+                }
             }
             if key.hasPrefix("object_") {
                 fields.objects.append(numbers)
@@ -90,10 +104,27 @@ public enum FanLevelReader {
 
     /// Turns a text level into the 2048 byte record the game uses.
     ///
-    /// The encoding is the exact inverse of the reader in `ClassicLevel`. Where
-    /// that reader subtracts sixteen from a stored x, this adds it back.
+    /// Steel must fit the DOS grid and size limits exactly. Use `level(fromINI:)`
+    /// to load text rectangles that cannot be represented by a DOS record.
     public static func record(fromINI text: String) throws -> Data {
+        try record(fromINI: text, encodeSteel: true)
+    }
+
+    private static func steelAreas(_ fields: Fields) throws -> [ClassicSteelArea] {
+        guard fields.steel.count <= 4096 else { throw FanLevelError.invalidField("steel") }
+        return try fields.steel.enumerated().map { index, values in
+            guard values.count == 4, values[2] > 0, values[3] > 0,
+                  !values[0].addingReportingOverflow(values[2]).overflow,
+                  !values[1].addingReportingOverflow(values[3]).overflow else {
+                throw FanLevelError.invalidField("steel_\(index)")
+            }
+            return ClassicSteelArea(x: values[0], y: values[1], width: values[2], height: values[3])
+        }
+    }
+
+    private static func record(fromINI text: String, encodeSteel: Bool) throws -> Data {
         let fields = parse(text)
+        if let invalid = fields.invalidFields.first { throw FanLevelError.invalidField(invalid) }
         guard fields.terrain.count <= 400 else {
             throw FanLevelError.tooMuchTerrain(count: fields.terrain.count)
         }
@@ -107,6 +138,11 @@ public enum FanLevelReader {
             bytes[offset] = UInt8(word >> 8)
             bytes[offset + 1] = UInt8(word & 0xFF)
         }
+        func checkedOffset(_ value: Int, by amount: Int, field: String) throws -> Int {
+            let result = value.addingReportingOverflow(amount)
+            guard !result.overflow else { throw FanLevelError.invalidField(field) }
+            return result.partialValue
+        }
 
         putWord(try fields.integer("releaseRate"), at: 0x0000)
         putWord(try fields.integer("numLemmings"), at: 0x0002)
@@ -116,11 +152,11 @@ public enum FanLevelReader {
         // record stores minutes, so seconds are converted, rounding up so a
         // level never loses time it was given.
         let minutes: Int
-        if let stated = try? fields.integer("timeLimit") {
-            minutes = stated
+        if fields.values["timeLimit"] != nil {
+            minutes = try fields.integer("timeLimit")
         } else {
             let seconds = try fields.integer("timeLimitSeconds")
-            minutes = (seconds + 59) / 60
+            minutes = try checkedOffset(seconds, by: 59, field: "timeLimitSeconds") / 60
         }
         putWord(minutes, at: 0x0006)
         for (index, name) in skillFields.enumerated() {
@@ -134,7 +170,7 @@ public enum FanLevelReader {
         // Paint mode 8 draws only over terrain, 4 never overwrites terrain.
         for (index, values) in fields.objects.enumerated() where values.count >= 3 {
             let offset = 0x0020 + index * 8
-            putWord(values[1] + 16, at: offset)
+            putWord(try checkedOffset(values[1], by: 16, field: "object_\(index)"), at: offset)
             putWord(values[2], at: offset + 2)
             bytes[offset + 5] = UInt8(values[0] & 0x0F)
             let mode = values.count > 3 ? values[3] : 0
@@ -151,8 +187,8 @@ public enum FanLevelReader {
             let offset = 0x0120 + index * 4
             let modifier = values.count > 3 ? values[3] : 0
             let flags = UInt32((modifier >> 1) & 0x07)
-            let x = UInt32(truncatingIfNeeded: values[1] + 16) & 0x0FFF
-            let y = UInt32(truncatingIfNeeded: values[2] + 4) & 0x01FF
+            let x = UInt32(truncatingIfNeeded: try checkedOffset(values[1], by: 16, field: "terrain_\(index)")) & 0x0FFF
+            let y = UInt32(truncatingIfNeeded: try checkedOffset(values[2], by: 4, field: "terrain_\(index)")) & 0x01FF
             let id = UInt32(truncatingIfNeeded: values[0]) & 0x003F
             let word = (flags << 29) | (x << 16) | (y << 7) | id
             bytes[offset] = UInt8((word >> 24) & 0xFF)
@@ -164,6 +200,25 @@ public enum FanLevelReader {
         for index in fields.terrain.count..<400 {
             let offset = 0x0120 + index * 4
             for byte in 0..<4 { bytes[offset + byte] = 0xFF }
+        }
+
+        if encodeSteel {
+            let areas = try steelAreas(fields)
+            guard areas.count <= 32 else { throw FanLevelError.invalidField("steel") }
+            for (index, area) in areas.enumerated() {
+                // DOS stores four-pixel units. Refuse an export that changes the protection area.
+                guard (-16...2028).contains(area.x), (0...508).contains(area.y),
+                      (4...64).contains(area.width), (4...64).contains(area.height),
+                      [area.x, area.y, area.width, area.height].allSatisfy({ $0 % 4 == 0 }) else {
+                    throw FanLevelError.invalidField("steel_\(index)")
+                }
+                let position = (((area.x + 16) / 4) << 7) | (area.y / 4)
+                let size = ((area.width / 4 - 1) << 4) | (area.height / 4 - 1)
+                guard position != 0 || size != 0 else { throw FanLevelError.invalidField("steel_\(index)") }
+                let offset = 0x0760 + index * 4
+                putWord(position, at: offset)
+                bytes[offset + 2] = UInt8(size)
+            }
         }
 
         // A level with no title still has to carry a name field.
@@ -186,8 +241,11 @@ public enum FanLevelReader {
         return (name?.isEmpty ?? true) ? nil : name
     }
 
-    /// Reads a text level straight into a `ClassicLevel`.
-    public static func level(fromINI text: String) throws -> ClassicLevel {
-        try ClassicLevel(data: try record(fromINI: text))
+    /// Retains exact text steel rectangles without the DOS record's grid and size limits.
+    /// Disable steel only to restore an attempt saved before text steel support.
+    public static func level(fromINI text: String, includeSteel: Bool = true) throws -> ClassicLevel {
+        let record = try record(fromINI: text, encodeSteel: false)
+        let steel = includeSteel ? try steelAreas(parse(text)) : []
+        return try ClassicLevel(data: record, steelOverride: steel)
     }
 }

@@ -18,7 +18,7 @@ SUITES = """ClassicGameFlowTests ClassicSettingsTests ClassicSoundCueTests Audio
 NeoLemmixSimulationTests NxlvRendererTests NxlvStyleResolverTests ClassicDOSSimulationRegressions
 ClassicDOSRewindTests ClassicDOSReplayTests ProTrackerTests PercussionTests AdaptiveDJDirectorTests
 FLICTests Lemmings2RuntimeTests Lemmings2IntroTests Lemmings3RuntimeTests Lemmings3SoundTests
-UnifiedGameTests ClassicSagaTests PlatformProfileTests AmigaSoundTests BundledGameResourcesTests
+UnifiedGameTests ClassicSagaTests PlatformProfileTests AmigaSoundTests AmigaVersusTests BundledGameResourcesTests
 PlatformExclusiveTests NeoLemmixEndToEnd PortableTests ModernEngineTests SequelDataTests""".split()
 
 
@@ -38,7 +38,7 @@ def manifest(paths):
 def input_paths():
     # Include evidence and actual asset inputs, including the installed test bundle.
     folders = ["Sources", "Tests", "Scripts", "Tools", "Resources", "Content",
-               "Documentation/CampaignCompletion", "Documentation/ClassicCompletion",
+               "Documentation/CampaignCompletion", "Documentation/ClassicCompletion", "Documentation/Lemmings2Completion",
                "Documentation/TrolleyVerification", "Documentation/ReleaseReadiness",
                ".build/local/Ultimate Lemmings.app/Contents/Resources"]
     paths = [ROOT / "Package.swift"]
@@ -129,6 +129,8 @@ def main():
                           dict(os.environ, SAVE_TEST_LIBRARY_DIR=str(library))))
         checks.append(run("run-recovery-files", [["zsh", "Scripts/run-run-recovery-file-tests.sh"]],
                           dict(os.environ, SAVE_TEST_LIBRARY_DIR=str(library))))
+        checks.append(run("fan-library", [["zsh", "Scripts/run-fan-library-tests.sh"]],
+                          dict(os.environ, FAN_TEST_LIBRARY_DIR=str(library))))
         verifier = library / "ClassicCompletion"
         data = ports / "lemmings_dos_1991-07-30"
         checks.append(run("original-120-solutions", [compile_command(ROOT / "Tools/ClassicCompletion/main.swift", verifier),
@@ -137,6 +139,14 @@ def main():
         checks.append(run("additional-campaign-solutions", [["zsh", "Scripts/verify-campaign-completion.sh"]], environment))
         checks.append(run("l3-solutions", [["zsh", "Scripts/verify-l3-completion.sh"]],
                           dict(os.environ, L3_TEST_LIBRARY_DIR=str(library))))
+        l2_verifier, l2_negative = library / "L2Completion", library / "L2CompletionNegative"
+        l2_data = ROOT / "Sources/Ports/Lemm2"
+        checks.append(run("l2-solutions", [
+            [sys.executable, "Tools/Lemmings2Completion/report.py", "--check"],
+            compile_command(ROOT / "Tools/Lemmings2Completion/main.swift", l2_verifier),
+            [l2_verifier, l2_data],
+            compile_command(ROOT / "Tests/Lemmings2CompletionTests/negative.swift", l2_negative),
+            [l2_negative, l2_data]]))
     for name, command in [
         ("audit-integrity", [sys.executable, "Tests/ReleaseReadinessTests/test_audit.py"]),
         ("hint-catalogue", ["zsh", "Scripts/test-level-hint-catalogue.sh"]),

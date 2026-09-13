@@ -200,7 +200,7 @@ enum FanLevelLibrary {
   }
 
   /// Reads one level, and the style name when the level carries one.
-  static func level(_ entry: Entry, in pack: URL) throws -> (ClassicLevel, String?) {
+  static func level(_ entry: Entry, in pack: URL, includeTextSteel: Bool = true) throws -> (ClassicLevel, String?) {
     guard let raw = contents(of: entry.file, in: pack) else {
       throw FanLevelError.wrongSize(bytes: 0)
     }
@@ -213,16 +213,16 @@ enum FanLevelLibrary {
         try ClassicLevel(data: sections[section].data.prefix(ClassicLevel.recordSize)),
         nil)
     }
-    return try singleLevel(raw, name: entry.file)
+    return try singleLevel(raw, name: entry.file, includeTextSteel: includeTextSteel)
   }
 
-  private static func singleLevel(_ raw: Data, name: String) throws -> (ClassicLevel, String?) {
+  private static func singleLevel(_ raw: Data, name: String, includeTextSteel: Bool = true) throws -> (ClassicLevel, String?) {
     // Some archived binary levels were given an .ini extension by their author.
     if name.lowercased().hasSuffix(".lvl") || (raw.count == ClassicLevel.recordSize && raw.prefix(32).contains(0)) {
       return (try FanLevelReader.level(fromLVL: raw), nil)
     }
     let text = String(data: raw, encoding: .utf8) ?? (String(data: raw, encoding: .isoLatin1) ?? String(decoding: raw, as: UTF8.self))
-    return (try FanLevelReader.level(fromINI: text), FanLevelReader.styleName(fromINI: text))
+    return (try FanLevelReader.level(fromINI: text, includeSteel: includeTextSteel), FanLevelReader.styleName(fromINI: text))
   }
 
   /// Custom-level slots span the original five styles, Oh No's four, then Xmas.

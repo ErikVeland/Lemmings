@@ -140,6 +140,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   #endif
   private var checkpointFan: FanRunRecovery?
   private var fanPackGraphics = true
+  private var fanTextSteel = true
   private var checkpointSourceURL: URL?
   private var checkpointLocation: (dataSetID: String, levelIndex: Int)?
 
@@ -165,7 +166,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
         undoCount: classic.undoCount, selectedSkill: panel.selectedSkillIndex,
         scrollX: playfield.viewport.scrollX, scrollY: playfield.viewport.scrollY)
       checkpoint.fan = checkpointFan
-      if checkpointFan != nil { checkpoint.fanPackGraphics = fanPackGraphics }
+      if checkpointFan != nil {
+        checkpoint.fanPackGraphics = fanPackGraphics
+        checkpoint.fanTextSteel = fanTextSteel
+      }
       if checkpointFan != nil { checkpoint.sourcePath = checkpointSourceURL?.path }
     } else if let neo = session as? NeoLemmixSession, let url = checkpointSourceURL {
       checkpoint = RunRecovery(engine: recoveryEngine, profileID: arcadeProfileID, runID: arcadeRunID,
@@ -229,7 +233,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
         }
         let entry = fan.queue[fan.index]
         _ = try FanLevelLibrary.level(.init(file: entry.file, section: entry.section, label: entry.label),
-            in: URL(fileURLWithPath: path))
+            in: URL(fileURLWithPath: path), includeTextSteel: checkpoint.fanTextSteel ?? false)
       } else if checkpoint.neo == nil {
         guard let index = classicIndex,
           dataSets[index].set.campaign.levels.indices.contains(checkpoint.levelIndex) else { throw RunRecoveryError.differentGame }
@@ -251,6 +255,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
         fanEntries = FanLevelLibrary.entries(in: fanPack!)
         fanScreen = .off
         fanPackGraphics = checkpoint.fanPackGraphics ?? false
+        fanTextSteel = checkpoint.fanTextSteel ?? false
         loadCurrentFanLevel()
         guard fanPlaying, phase == .briefing, let classic = session as? ClassicSession,
           arcadeLevel?.conditions?.levelFingerprint == checkpoint.levelFingerprint else { throw RunRecoveryError.differentGame }
@@ -1684,8 +1689,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
     let entry = fanQueue[fanQueueIndex]
     do {
-      let (level, styleName) = try FanLevelLibrary.level(entry, in: pack)
-      if !restoringCheckpoint { fanPackGraphics = true }
+      if !restoringCheckpoint { fanPackGraphics = true; fanTextSteel = true }
+      let (level, styleName) = try FanLevelLibrary.level(entry, in: pack, includeTextSteel: fanTextSteel)
       guard let ports = Bundle.main.resourceURL?.appendingPathComponent("Ports") else { return }
       let ground = try FanLevelLibrary.groundSet(for: level, styleName: styleName, portsRoot: ports, pack: fanPackGraphics ? pack : nil, entry: entry)
       let directory = ports.appendingPathComponent("lemmings_dos_1991-07-30")

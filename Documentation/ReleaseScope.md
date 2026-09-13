@@ -1,6 +1,6 @@
 # Release scope
 
-The beta 25 release boundary. Automated checks support the recorded routes;
+The beta 27 release boundary. Automated checks support the recorded routes;
 remaining compatibility and hardware claims still need validation. See the [gate register](ReleaseReadiness/gates.json)
 and the [1.0 gap evaluation](ReleaseReadiness/OneZeroGapEvaluation.md).
 
@@ -42,9 +42,10 @@ it converts, never twice.
 ## Fan levels and conversions
 
 Fan levels are part of the Classic validation boundary. The 6,043 bundled fan
-levels are not all certified playable: the earlier full-corpus audit recorded
-94 load/start failures and many levels without a winning route. Its results do
-not certify later builds. See the beta 23 readiness report for this build’s checks.
+levels are not all certified playable: the current full-corpus audit recorded
+85 load/start failures and 294 verified wins. Its results do not certify later
+changes. See [current Classic validation](ReleaseReadiness/ClassicValidation-current.md)
+for corpus evidence and [beta 27 readiness](Beta27Readiness.md) for package checks.
 Oh Yes! conversions also need their own replay and progression validation.
 
 ## Sequels
@@ -71,7 +72,8 @@ Mac release does not imply them.
   from the Classic 1.0 milestone.
 - Physical Intel, minimum macOS, HDR, multiple displays and high refresh rates
   are untested. Sustained 10x play is not established.
-- Scalable text and VoiceOver navigation are incomplete.
+- Scalable menus and VoiceOver navigation are implemented. Full VoiceOver
+  listening journeys and physical controller journeys remain unverified.
 - Game Center is newly testable and unproven against network loss and account
   changes.
 - Distribution rights for the original game data are not settled. No engineering

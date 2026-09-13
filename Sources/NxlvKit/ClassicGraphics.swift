@@ -536,8 +536,15 @@ public enum ClassicLevelRenderer {
 
         var steel = [UInt8](repeating: 0, count: width * height)
         for area in level.steel {
-            for y in area.y..<(area.y + area.height) where y >= 0 && y < height {
-                for x in area.x..<(area.x + area.width) where x >= 0 && x < width {
+            guard area.width > 0, area.height > 0 else { continue }
+            let right = area.x.addingReportingOverflow(area.width)
+            let bottom = area.y.addingReportingOverflow(area.height)
+            let left = max(0, area.x), top = max(0, area.y)
+            let endX = min(width, right.overflow ? Int.max : right.partialValue)
+            let endY = min(height, bottom.overflow ? Int.max : bottom.partialValue)
+            guard left < endX, top < endY else { continue }
+            for y in top..<endY {
+                for x in left..<endX {
                     let index = y * width + x
                     steel[index] = 1
                 }

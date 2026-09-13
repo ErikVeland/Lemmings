@@ -158,3 +158,32 @@ for (name, picture) in [("0002-geooPk1.zip", "vgaspecS.dat"), ("0399-Mon0lith.zi
   }
   check(checked, "letter-coded pack fixture renders and starts: \(name)")
 }
+
+// Text steel uses exact rectangles, including partial offscreen areas.
+let steelText = """
+releaseRate = 1
+numLemmings = 10
+numToRescue = 5
+timeLimit = 3
+object_0 = 1, 100, 20
+steel_0 = -3, -2, 10, 9
+steel_1 = 1598, 158, 960, 400
+steel_2 = -1000000000, -1000000000, 2, 2
+"""
+let steelLevel = try FanLevelReader.level(fromINI: steelText)
+let steelGround = try ClassicGroundSet.load(style: 0, from: originalStyles)
+let steelScene = try ClassicLevelRenderer.render(steelLevel, groundSet: steelGround)
+check(steelScene.steelMask.filter { $0 != 0 }.count == 53,
+      "exact text steel clips to the playfield without rounding or scanning offscreen pixels")
+var steelTerrain = try ClassicDOSTerrain(renderedLevel: steelScene)
+_ = steelTerrain.addSolid(x: 6, y: 6)
+_ = steelTerrain.addSolid(x: 7, y: 6)
+check(steelTerrain.isSteelProtected(x: 6, y: 6) && !steelTerrain.removeSolid(x: 6, y: 6)
+  && !steelTerrain.isSteelProtected(x: 7, y: 6) && steelTerrain.removeSolid(x: 7, y: 6),
+  "simulation terrain protects the exact text steel boundary")
+let extremeLevel = try ClassicLevel(data: Data(repeating: 0, count: ClassicLevel.recordSize),
+  steelOverride: [ClassicSteelArea(x: -1, y: -1, width: Int.max, height: Int.max),
+                  ClassicSteelArea(x: Int.max, y: 0, width: 5, height: 5),
+                  ClassicSteelArea(x: 0, y: 0, width: -1, height: 5)])
+let extremeScene = try ClassicLevelRenderer.render(extremeLevel, groundSet: steelGround)
+check(extremeScene.steelMask.allSatisfy { $0 == 1 }, "extreme steel rectangles render in bounded work without overflow")

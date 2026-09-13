@@ -28,6 +28,7 @@ class AuditTests(unittest.TestCase):
             try:
                 names = ["Sources/Ports/game.dat", "Resources/Info.plist",
                          "Documentation/CampaignCompletion/routes.json",
+                         "Documentation/Lemmings2Completion/evidence.json",
                          "Documentation/ReleaseReadiness/gates.json",
                          ".build/local/Ultimate Lemmings.app/Contents/Resources/level.dat"]
                 for name in names:

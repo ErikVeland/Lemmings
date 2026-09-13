@@ -129,7 +129,8 @@ public struct ClassicLevel: Codable, Equatable, Sendable {
     public let terrain: [ClassicTerrainPlacement]
     public let steel: [ClassicSteelArea]
 
-    public init(data: Data, propertiesOverride: ClassicLevelProperties? = nil) throws {
+    public init(data: Data, propertiesOverride: ClassicLevelProperties? = nil,
+                steelOverride: [ClassicSteelArea]? = nil) throws {
         let bytes = [UInt8](data)
         guard bytes.count >= Self.recordSize else {
             throw ClassicLevelError.invalidSize(actual: bytes.count, minimum: Self.recordSize)
@@ -224,7 +225,7 @@ public struct ClassicLevel: Codable, Equatable, Sendable {
                 height: (size & 0x0F) * 4 + 4
             ))
         }
-        steel = parsedSteel
+        steel = steelOverride ?? parsedSteel
 
     }
 

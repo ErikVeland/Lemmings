@@ -186,6 +186,74 @@ private func testFanLevelReaderTakesSecondsOrMinutes() throws {
     print("PASS a time limit is read whether it is written in seconds or minutes")
 }
 
+private func testMalformedTextLevelsAreRejected() throws {
+    let base = "releaseRate = 1\nnumLemmings = 10\nnumToRescue = 5\ntimeLimit = 3\n"
+    let cases: [(String, String)] = [
+        ("object_0 = 1, invalid, 20, 4", "object_0"),
+        ("terrain_0 = 1, , 20, 4", "terrain_0"),
+        ("terrain_0 = 1, 20", "terrain_0"),
+        ("steel_0 = 1, 2, invalid, 4", "steel_0"),
+        ("numBuilders = invalid", "numBuilders"),
+        ("timeLimit = invalid\ntimeLimitSeconds = 60", "timeLimit"),
+        ("object_0 = 1, \(Int.max), 20", "object_0"),
+        ("terrain_0 = 1, \(Int.max), 20", "terrain_0"),
+        ("terrain_0 = 1, 20, \(Int.max)", "terrain_0"),
+        ("terrain_0 = 1, 99999999999999999999999, 20", "terrain_0"),
+    ]
+    for (suffix, field) in cases {
+        do {
+            _ = try FanLevelReader.level(fromINI: base + suffix)
+            throw Failure(description: "accepted malformed \(field): \(suffix)")
+        } catch let error as FanLevelError {
+            try require(error == .invalidField(field), "wrong malformed-field error: \(error)")
+        }
+    }
+    do {
+        let text = base.replacingOccurrences(of: "timeLimit = 3", with: "timeLimitSeconds = \(Int.max)")
+        _ = try FanLevelReader.level(fromINI: text)
+        throw Failure(description: "accepted overflowing seconds")
+    } catch let error as FanLevelError {
+        try require(error == .invalidField("timeLimitSeconds"), "wrong seconds error: \(error)")
+    }
+    print("PASS malformed text levels reject shifted fields and overflowing coordinates or time without crashing")
+}
+
+private func testTextSteelIsLossless() throws {
+    let base = "releaseRate = 1\nnumLemmings = 10\nnumToRescue = 5\ntimeLimit = 3\n"
+    let exact = base + "steel_0 = 452, 72, 64, 24\nsteel_1 = 0, 0, 4, 4"
+    let expected = [ClassicSteelArea(x: 452, y: 72, width: 64, height: 24),
+                    ClassicSteelArea(x: 0, y: 0, width: 4, height: 4)]
+    let loaded = try FanLevelReader.level(fromINI: exact)
+    let exported = try ClassicLevel(data: FanLevelReader.record(fromINI: exact))
+    try require(loaded.steel == expected, "text steel changed")
+    try require(exported.steel == expected,
+                "DOS-compatible steel did not survive export")
+    let extended = base + "steel_0 = 3, -7, 960, 400"
+    let level = try FanLevelReader.level(fromINI: extended)
+    try require(level.steel == [ClassicSteelArea(x: 3, y: -7, width: 960, height: 400)],
+                "text steel was rounded or truncated")
+    let legacy = try FanLevelReader.level(fromINI: extended, includeSteel: false)
+    try require(legacy.steel.isEmpty,
+                "legacy import changed its steel")
+    let decoded = try JSONDecoder().decode(ClassicLevel.self, from: JSONEncoder().encode(level))
+    try require(decoded == level, "exact text steel did not survive Codable")
+    for line in ["steel_0 = 3, -7, 960, 400", "steel_0 = -16, 0, 4, 4"] {
+        do {
+            _ = try FanLevelReader.record(fromINI: base + line)
+            throw Failure(description: "lossy DOS steel export succeeded")
+        } catch is FanLevelError { }
+    }
+    for line in ["steel_0 = 0, 0, 0, 4", "steel_0 = 0, 0, 4, -1",
+                 "steel_0 = \(Int.max), 0, 4, 4", "steel_0 = 0, \(Int.max), 4, 4",
+                 "steel_0 = 0, 0, 4, 4, 1"] {
+        do {
+            _ = try FanLevelReader.level(fromINI: base + line)
+            throw Failure(description: "invalid steel accepted: \(line)")
+        } catch is FanLevelError { }
+    }
+    print("PASS exact text steel, DOS export, legacy loading and invalid geometry")
+}
+
 private func testAShortBinaryLevelIsRejected() throws {
     do {
         _ = try FanLevelReader.level(fromLVL: Data(repeating: 0, count: 1024))
@@ -266,6 +334,8 @@ do {
     try testTheSunsoftLevelsAreTheMegaDriveOnes()
     try testFanLevelReaderEncodesTheTrickyFields()
     try testFanLevelReaderTakesSecondsOrMinutes()
+    try testMalformedTextLevelsAreRejected()
+    try testTextSteelIsLossless()
     try testAShortBinaryLevelIsRejected()
     try testEveryStyleTheFanPacksUseResolves()
     try testStyleNamesIgnoreCaseAndSpace()
