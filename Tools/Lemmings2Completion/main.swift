@@ -41,6 +41,26 @@ for (index, level) in campaign.levels.enumerated() {
     verified += 1
 }
 print("Verified \(verified); missing \(missing.count).")
+
+// Population carries over: a level starts with the saved count of the level
+// before it. A route only proves the population it was recorded with, so the
+// chain uses equality, matching the runtime suite's carry-over check.
+var fullyChained = 0
+for tribe in 0..<12 {
+    let name = tribeName(tribe)
+    var expected = 60, chained = 0
+    for number in 1...10 {
+        let url = fixtures.appendingPathComponent(String(format: "\(name)-%02d.json", number))
+        guard let data = try? Data(contentsOf: url),
+              let route = try? JSONDecoder().decode(Lemmings2ReplayWitness.self, from: data),
+              route.population == expected else { break }
+        chained += 1
+        expected = route.expectedSaved
+    }
+    if chained == 10 { fullyChained += 1 }
+    print("CHAIN \(name): \(chained)/10 levels\(chained == 10 ? ", complete" : "")")
+}
+print("Tribes chained through all ten levels: \(fullyChained) of 12.")
 if requireAll && !missing.isEmpty {
     print("MISSING \(missing.joined(separator: ", "))")
     exit(1)

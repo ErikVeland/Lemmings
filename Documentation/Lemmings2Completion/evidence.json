@@ -15,8 +15,23 @@
     "sports": 5
   },
   "quality": {
-    "bareSurvivals": 46
+    "bareSurvivals": 43
   },
+  "chainedLevels": {
+    "beach": 1,
+    "cavelem": 3,
+    "circus": 2,
+    "classic": 2,
+    "egyptian": 1,
+    "highland": 1,
+    "medieval": 1,
+    "outdoor": 1,
+    "polar": 1,
+    "shadow": 1,
+    "space": 1,
+    "sports": 1
+  },
+  "fullyChainedTribes": 0,
   "fixtures": [
     {
       "fixture": "Tests/Lemmings2CompletionTests/Fixtures/beach-01.json",

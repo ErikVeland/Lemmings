@@ -20,10 +20,28 @@ for path in sorted(source.glob('*.json')):
                      'startingPopulation': value['population'],
                      'saved': value['expectedSaved'],
                      'ticks': value['expectedTicks']})
-bare = sum(1 for f in fixtures if f['saved'] == 1)
+# A bare survival saves one lemming while more were available. Saving one of one
+# is a complete rescue, which the game correctly rates gold.
+bare = sum(1 for f in fixtures if f['saved'] == 1 and f['startingPopulation'] > 1)
+# A level starts with the saved count of the level before it. A route proves only
+# the population it was recorded with, so the chain uses equality, as the
+# runtime suite and the completion gate do.
+chained_levels = {}
+for tribe in sorted({f['tribe'] for f in fixtures}):
+    routes = {f['level']: f for f in fixtures if f['tribe'] == tribe}
+    expected, chained = 60, 0
+    for number in range(1, 11):
+        route = routes.get(number)
+        if route is None or route['startingPopulation'] != expected:
+            break
+        chained += 1
+        expected = route['saved']
+    chained_levels[tribe] = chained
 manifest = {'schemaVersion': 1,
             'coverage': dict(Counter(f['tribe'] for f in fixtures)),
             'quality': {'bareSurvivals': bare},
+            'chainedLevels': chained_levels,
+            'fullyChainedTribes': sum(1 for n in chained_levels.values() if n == 10),
             'fixtures': fixtures}
 if '--check' in sys.argv:
     assert output.exists() and json.loads(output.read_text()) == manifest, \
