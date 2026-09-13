@@ -120,7 +120,7 @@ zsh Scripts/run-sequel-data-tests.sh
 zsh Scripts/build-native-l2.sh
 ```
 
-`Tests/Lemmings2RuntimeTests/Fixtures/classic-01.json` contains twenty timed
+`Tests/Lemmings2CompletionTests/Fixtures/classic-01.json` contains twenty timed
 skill assignments for the local `LEVEL000.DAT`. The test starts the unmodified
 level with 60 lemmings and its original skill supply. It only calls normal
 skill assignment and simulation ticks: no teleports, terrain patches,

@@ -1512,7 +1512,8 @@ do {
             check(practice.released > 0,"Practice map failed to start")
         }
         print("PASS all four original practice maps, selected skills and separate progress")
-        let fixtureDirectory = URL(fileURLWithPath:#filePath).deletingLastPathComponent().appendingPathComponent("Fixtures")
+        let fixtureDirectory = URL(fileURLWithPath:#filePath).deletingLastPathComponent().deletingLastPathComponent()
+            .appendingPathComponent("Lemmings2CompletionTests/Fixtures")
         let fixtureURLs = try FileManager.default.contentsOfDirectory(at:fixtureDirectory,includingPropertiesForKeys:nil)
             .filter { $0.pathExtension == "json" }.sorted { $0.lastPathComponent < $1.lastPathComponent }
         var completedLevels = Set<String>()
@@ -1540,7 +1541,7 @@ do {
         let chainStyle = try Lemmings2Style(data: Data(contentsOf: root.appendingPathComponent("STYLES/\(Lemmings2Campaign.styleNames[tribe]).DAT")))
         for number in 1...count {
             let url = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
-                .appendingPathComponent(String(format: "Fixtures/\(prefix)-%02d.json", number))
+                .deletingLastPathComponent().appendingPathComponent(String(format: "Lemmings2CompletionTests/Fixtures/\(prefix)-%02d.json", number))
             let replay = try JSONDecoder().decode(Replay.self, from: Data(contentsOf: url))
             check(replay.version == 1 && replay.levelSHA256 == chain.current.fingerprint,
                   "\(prefix) replay uses a different native level")
@@ -1564,7 +1565,7 @@ do {
         }
         }
         let replayURL = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
-            .appendingPathComponent("Fixtures/classic-01.json")
+            .deletingLastPathComponent().appendingPathComponent("Lemmings2CompletionTests/Fixtures/classic-01.json")
         let input = try JSONDecoder().decode(Replay.self, from: Data(contentsOf: replayURL))
         check(input.version == 1 && input.levelSHA256 == level.fingerprint, "Replay uses a different native level")
         var run = try Lemmings2Runtime(level: level, style: style, masks: masks, total: input.population)

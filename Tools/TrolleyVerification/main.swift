@@ -257,7 +257,7 @@ struct L2Replay: Codable {
         let style = try Lemmings2Style(data: Data(contentsOf: root.appendingPathComponent("STYLES/\(Lemmings2Campaign.styleNames[level.style]).DAT")))
         let prefix = level.style == 2 ? "cavelem" : tribe.lowercased()
         let fixtureURL = proof?.witness.map { proofRoot.appendingPathComponent($0.path) }
-            ?? project.appendingPathComponent(String(format: "Tests/Lemmings2RuntimeTests/Fixtures/\(prefix)-%02d.json", index % 10 + 1))
+            ?? project.appendingPathComponent(String(format: "Tests/Lemmings2CompletionTests/Fixtures/\(prefix)-%02d.json", index % 10 + 1))
         let fixture = FileManager.default.fileExists(atPath: fixtureURL.path) ? try JSONDecoder().decode(L2Replay.self, from: Data(contentsOf: fixtureURL)) : nil
         if let proof {
             guard let witness = proof.witness, let fixture,
