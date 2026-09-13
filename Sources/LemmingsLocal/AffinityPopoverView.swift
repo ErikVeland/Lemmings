@@ -22,7 +22,7 @@ import NxlvKit
         GameStyle.fill(CGRect(x: 24, y: 202, width: 432, height: 1), GameStyle.muted.withAlphaComponent(0.3))
         if let font {
             let face: ClassicMacUserInterface.Face = font.width(of: MacInterfaceRenderer.menuText(affinity.name), face: .large, scale: 1) <= heading.width ? .large : .small
-            font.menuLine(affinity.name, in: heading, face: face, alignment: .left)
+            font.menuLine(affinity.name, in: heading, face: face, alignment: .left, palette: .green)
             font.menuParagraph(affinity.philosophySummary, in: summary, alignment: .left)
             font.menuLine(forRun ? "This run" : "Play style", in: label, alignment: .left, alpha: 0.7)
             font.menuParagraph(affinity.affinityDescription, in: reason, alignment: .left)

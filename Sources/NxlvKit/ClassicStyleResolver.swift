@@ -50,8 +50,8 @@ public struct ClassicStyleResolver: Sendable {
         "rock": Location(release: .ohNoMore, index: 1),
         "snow": Location(release: .ohNoMore, index: 2),
         "bubble": Location(release: .ohNoMore, index: 3),
-        "xmas": Location(release: .holiday, index: 0),
-        "christmas": Location(release: .holiday, index: 0),
+        "xmas": Location(release: .holiday, index: 2),
+        "christmas": Location(release: .holiday, index: 2),
     ]
 
     /// What happened when a style was looked up.

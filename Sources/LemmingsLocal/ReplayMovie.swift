@@ -22,7 +22,8 @@ enum ReplayStorage {
 /// Records game ticks on a serial encoder queue. Playback never touches the game.
 final class ReplayMovieRecorder: @unchecked Sendable {
   let url: URL
-  private let queue = DispatchQueue(label: "academy.glasscode.lemmings.replay", qos: .utility)
+  private let queue: DispatchQueue
+  private let admissionTimeout: DispatchTimeInterval
   private let ticksPerSecond: Int32
   private var writer: AVAssetWriter?
   private var video: AVAssetWriterInput?
@@ -32,7 +33,11 @@ final class ReplayMovieRecorder: @unchecked Sendable {
   private var adaptor: AVAssetWriterInputPixelBufferAdaptor?
   private var frameCount: Int64 = 0
   private var audioFrames: Int64 = 0
-  private var failure: String?
+  private var storedFailure: String?
+  private var failure: String? {
+    get { cancellationLock.lock(); defer { cancellationLock.unlock() }; return storedFailure }
+    set { cancellationLock.lock(); if storedFailure == nil { storedFailure = newValue }; cancellationLock.unlock() }
+  }
   private var finished = false
   private var size = CGSize.zero
   private var sounds: [Voice] = []
@@ -43,9 +48,15 @@ final class ReplayMovieRecorder: @unchecked Sendable {
   private var fadeFrames = 0
   private let cancellationLock = NSLock()
   private var discarded = false
+  private var submissionClosed = false
   private var isDiscarded: Bool { cancellationLock.lock(); defer { cancellationLock.unlock() }; return discarded }
+  var isAcceptingFrames: Bool {
+    cancellationLock.lock(); defer { cancellationLock.unlock() }
+    return !discarded && !submissionClosed && storedFailure == nil
+  }
   private let admission = DispatchSemaphore(value: 12)
   #if PERFORMANCE_TESTS
+  var recordingFailure: String? { failure }
   private let metricLock = NSLock()
   private var admissionWait = 0.0
   var admissionWaitSeconds: Double { metricLock.lock(); defer { metricLock.unlock() }; return admissionWait }
@@ -58,21 +69,26 @@ final class ReplayMovieRecorder: @unchecked Sendable {
     var position = 0.0
   }
 
-  init(ticksPerSecond: Double) {
+  init(ticksPerSecond: Double, encodingQueue: DispatchQueue? = nil,
+       admissionTimeout: DispatchTimeInterval = .milliseconds(500)) {
+    queue = encodingQueue ?? DispatchQueue(label: "academy.glasscode.lemmings.replay", qos: .utility)
+    self.admissionTimeout = admissionTimeout
     self.ticksPerSecond = Int32((max(1, min(1000, ticksPerSecond.isFinite ? ticksPerSecond : 17)) * 1000).rounded())
     url = ReplayStorage.directory.appendingPathComponent("lemmings-replay-\(UUID().uuidString).mp4")
   }
 
   func sound(samples: [Float], rate: Double, gain: Float) {
+    guard isAcceptingFrames else { return }
     queue.async { [self] in
-      guard !finished, sounds.count < 32, !samples.isEmpty else { return }
+      guard !finished, failure == nil, sounds.count < 32, !samples.isEmpty else { return }
       sounds.append(Voice(samples: samples, step: rate / 44100, gain: gain))
     }
   }
 
   func setMusic(url: URL?, gain: Float) {
+    guard isAcceptingFrames else { return }
     queue.async { [self] in
-      guard !finished else { return }
+      guard !finished, failure == nil else { return }
       musicGain = gain
       guard url != musicURL else { return }
       oldMusic = music
@@ -82,15 +98,20 @@ final class ReplayMovieRecorder: @unchecked Sendable {
     }
   }
 
-  /// Bounded back pressure keeps long, fast runs from retaining unbounded images.
+  /// Stop a stalled recording instead of blocking game input or dropping movie frames.
   func append(_ image: CGImage) {
+    guard isAcceptingFrames else { return }
     #if PERFORMANCE_TESTS
     let waitingSince = ProcessInfo.processInfo.systemUptime
     #endif
-    admission.wait()
+    let admitted = admission.wait(timeout: .now() + admissionTimeout) == .success
     #if PERFORMANCE_TESTS
     metricLock.lock(); admissionWait += ProcessInfo.processInfo.systemUptime - waitingSince; metricLock.unlock()
     #endif
+    guard admitted else {
+      failure = "Replay recording stopped because the encoder stalled."
+      return
+    }
     queue.async { [self] in
       defer { admission.signal() }
       guard !finished, failure == nil else { return }
@@ -104,6 +125,17 @@ final class ReplayMovieRecorder: @unchecked Sendable {
   }
 
   func finish(_ completion: @escaping @MainActor @Sendable (Result<URL, ReplayMovieError>) -> Void) {
+    cancellationLock.lock(); submissionClosed = true; cancellationLock.unlock()
+    if let failure {
+      Task { @MainActor in completion(.failure(.message(failure))) }
+      queue.async { [self] in
+        finished = true
+        if writer?.status == .writing { writer?.cancelWriting() }
+        audioFile = nil
+        for file in [url, videoURL, audioURL] { try? FileManager.default.removeItem(at: file) }
+      }
+      return
+    }
     queue.async { [self] in
       guard !finished else {
         let result: Result<URL, ReplayMovieError> = failure.map { .failure(.message($0)) } ?? .success(url)
@@ -112,6 +144,7 @@ final class ReplayMovieRecorder: @unchecked Sendable {
       }
       finished = true
       guard let writer, frameCount > 0, failure == nil else {
+        if writer?.status == .writing { writer?.cancelWriting() }
         let error = ReplayMovieError.message(failure ?? "This run has no replay frames yet.")
         Task { @MainActor in completion(.failure(error)) }
         return
@@ -175,11 +208,12 @@ final class ReplayMovieRecorder: @unchecked Sendable {
   private func ready(_ input: AVAssetWriterInput) throws {
     let deadline = ProcessInfo.processInfo.systemUptime + 10
     while !input.isReadyForMoreMediaData {
-      guard writer?.status == .writing, ProcessInfo.processInfo.systemUptime < deadline else {
-        throw ReplayMovieError.message(writer?.error?.localizedDescription ?? "The movie encoder stopped responding.")
+      guard failure == nil, !isDiscarded, writer?.status == .writing, ProcessInfo.processInfo.systemUptime < deadline else {
+        throw ReplayMovieError.message(failure ?? writer?.error?.localizedDescription ?? "The movie encoder stopped responding.")
       }
       Thread.sleep(forTimeInterval: 0.002)
     }
+    if let failure { throw ReplayMovieError.message(failure) }
   }
 
   private func write(_ image: CGImage) throws {

@@ -8,10 +8,11 @@ public enum Lemmings2SoundCue: Int, Sendable, Hashable {
 }
 
 public struct Lemmings2SoundRequest: Sendable, Hashable {
+    public let isBottomFall: Bool
     public let sample: Int
     public let timeConstant: UInt8?
-    public init(_ cue: Lemmings2SoundCue) { sample = cue.rawValue; timeConstant = nil }
-    private init(sample: Int, timeConstant: UInt8) { self.sample = sample; self.timeConstant = timeConstant }
+    public init(_ cue: Lemmings2SoundCue, isBottomFall: Bool = false) { sample = cue.rawValue; timeConstant = nil; self.isBottomFall = isBottomFall }
+    private init(sample: Int, timeConstant: UInt8) { self.sample = sample; self.timeConstant = timeConstant; isBottomFall = false }
     public static func assignment(skill: Lemmings2Runtime.Skill, tribe: Int) -> Self {
         let sample: Int
         switch skill {
@@ -26,7 +27,7 @@ public struct Lemmings2SoundRequest: Sendable, Hashable {
     public static func introduction(sample: Int) -> Self? {
         (0..<79).contains(sample) ? Self(sample:sample) : nil
     }
-    private init(sample: Int) { self.sample = sample; timeConstant = nil }
+    private init(sample: Int) { self.sample = sample; timeConstant = nil; isBottomFall = false }
     public static func panel(slot: Int) -> Self? {
         // Native panel clicks transpose one sample for each of the twelve slots.
         let pitches: [UInt8] = [136,142,149,155,160,166,171,176,180,184,188,192]

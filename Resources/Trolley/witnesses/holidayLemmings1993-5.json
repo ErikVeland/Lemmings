@@ -1,0 +1,88 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 352
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 409
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 601
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 793
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 985
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1177
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1369
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 1581
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 80,
+    "required" : 40,
+    "saved" : 80,
+    "stateHash" : "739d0b296a1a18fa2fe38a54532f6c3d3b6f78909d607d6643b8fd1a4e7f43e9",
+    "ticks" : 4281
+  },
+  "initialStateHash" : "61f4e334f891774862091a1c1fc37c8bbff5ccf92a786c0d36c9dc1b0033784d",
+  "number" : 6,
+  "rank" : "Flurry",
+  "title" : "Lemming Snowfall"
+}

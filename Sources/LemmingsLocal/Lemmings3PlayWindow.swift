@@ -352,6 +352,7 @@ import NxlvKit
         speedControl.variableEnabled = settings.modernControlsEnabled && settings.variableSpeedEnabled
         warningSound.setMuted(muted || settings.sound == .silent)
         warningSound.setVolume(settings.soundVolume)
+        warningSound.setBottomFallSounds(settings.bottomFallSounds)
         try? warningSound.start()
         musicGain = Float(settings.musicVolume)
         music.setVolume(settings.musicVolume)
@@ -984,14 +985,12 @@ import NxlvKit
             }
             drawImage(sprite, x: CGFloat(lem.x) - sprite.size.width / 2, y: CGFloat(lem.y) - sprite.size.height)
             if lem.charmedBy != nil {
-                "Charmed".draw(at: NSPoint(x: origin.x + (CGFloat(lem.x - 8) - cameraX) * zoom,
-                    y: origin.y + (CGFloat(lem.y - 30) - cameraY) * zoom),
-                    withAttributes: [.foregroundColor: NSColor.systemPink, .font: NSFont.boldSystemFont(ofSize: 10)])
+                GameTypography.annotation("Charmed", at: NSPoint(x: origin.x + (CGFloat(lem.x - 8) - cameraX) * zoom,
+                    y: origin.y + (CGFloat(lem.y - 30) - cameraY) * zoom), palette: .green)
             }
             if let tool = lem.tool ?? lem.mobilityTool {
                 let label = lem.tool == nil ? "\(tool.label) \((lem.mobilityTicks + 22) / 23)s" : "\(tool.label)\(lem.quantity)"
-                label.draw(at: NSPoint(x: origin.x + (CGFloat(lem.x - 4) - cameraX) * zoom, y: origin.y + (CGFloat(lem.y - 23) - cameraY) * zoom),
-                    withAttributes: [.foregroundColor: NSColor.white, .font: NSFont.boldSystemFont(ofSize: 11)])
+                GameTypography.annotation(label, at: NSPoint(x: origin.x + (CGFloat(lem.x - 4) - cameraX) * zoom, y: origin.y + (CGFloat(lem.y - 23) - cameraY) * zoom), palette: .blue)
             }
         }
     }
@@ -1030,9 +1029,8 @@ import NxlvKit
         for item in game.explosives {
             if let frame = pickupImages[item.tool.rawValue] { drawImage(frame, x: CGFloat(item.x - 4), y: CGFloat(item.y - 7)) }
             let seconds = (item.fuseTicks - item.age + 22) / 23
-            "\(seconds)".draw(at: NSPoint(x: origin.x + (CGFloat(item.x - 2) - cameraX) * zoom,
-                y: origin.y + (CGFloat(item.y - 14) - cameraY) * zoom),
-                withAttributes: [.foregroundColor: NSColor.yellow, .font: NSFont.boldSystemFont(ofSize: 11)])
+            GameTypography.annotation("\(seconds)", at: NSPoint(x: origin.x + (CGFloat(item.x - 2) - cameraX) * zoom,
+                y: origin.y + (CGFloat(item.y - 14) - cameraY) * zoom), palette: .green)
         }
         for blast in game.blasts {
             if hdEffectsEnabled && !reduceFlashes {

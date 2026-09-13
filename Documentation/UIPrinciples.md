@@ -35,3 +35,13 @@ eligible target; green means the nearest target can accept the selected skill.
 Successful assignments get a 100 ms green pulse, with local HDR brightness when
 available. An existing assignment gets an 80 ms orange cue. An eligible neighbour
 always takes priority over orange. Honour the reduced-flash setting.
+
+## Typography
+
+Use the shipped green and blue bitmap fonts for all interface text, including
+in-game notices and countdowns. Use large green lettering for page titles,
+small green lettering for section headings and selected or primary actions,
+and small blue lettering for body text, quantities and secondary actions.
+Keep each row of peer controls at the same face and scale. Do not size individual
+labels to fill their boxes. Use spacing and grouping to separate supporting
+text from headings. Preserve accessible names and input targets.

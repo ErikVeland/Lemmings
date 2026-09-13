@@ -177,6 +177,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
     public var musicVolume: Double
     public var sound: ClassicSoundSource
     public var soundVolume: Double
+    public var bottomFallSounds: Bool
 
     /// Picks a different artwork source for each level.
     ///
@@ -213,6 +214,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         musicVolume: Double = 0.8,
         sound: ClassicSoundSource = .macintoshResources,
         soundVolume: Double = 0.9,
+        bottomFallSounds: Bool = true,
         shuffleGraphics: Bool = false,
         shuffleMusic: Bool = false
     ) {
@@ -241,6 +243,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         self.musicVolume = musicVolume
         self.sound = sound
         self.soundVolume = soundVolume
+        self.bottomFallSounds = bottomFallSounds
         self.shuffleGraphics = shuffleGraphics
         self.shuffleMusic = shuffleMusic
     }
@@ -303,6 +306,8 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         sound = source(.sound, fallback.sound)
         soundVolume = try values.decodeIfPresent(
             Double.self, forKey: .soundVolume) ?? fallback.soundVolume
+        bottomFallSounds = try values.decodeIfPresent(
+            Bool.self, forKey: .bottomFallSounds) ?? fallback.bottomFallSounds
         shuffleGraphics = try values.decodeIfPresent(
             Bool.self, forKey: .shuffleGraphics) ?? fallback.shuffleGraphics
         shuffleMusic = try values.decodeIfPresent(

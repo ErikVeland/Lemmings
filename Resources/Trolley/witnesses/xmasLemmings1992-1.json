@@ -1,0 +1,61 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 170
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 362
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 554
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 7,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 803
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 8,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 908
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 80,
+    "required" : 70,
+    "saved" : 80,
+    "stateHash" : "9ec7f8fffc063080f65199611422b1ee7e80cdeccdac7e6bd7856ed9f952c892",
+    "ticks" : 4656
+  },
+  "initialStateHash" : "34292a0d77bd9429cb502091f7a252e316074bfa9d6bc46d17b849899e715c25",
+  "number" : 2,
+  "rank" : "Xmas",
+  "title" : "Happy Holidays Mr Lemming!"
+}

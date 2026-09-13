@@ -141,6 +141,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private var checkpointFan: FanRunRecovery?
   private var fanPackGraphics = true
   private var fanTextSteel = true
+  private var fanLocalStyles = true
+  private var fanHolidayStyles = true
   private var checkpointSourceURL: URL?
   private var checkpointLocation: (dataSetID: String, levelIndex: Int)?
 
@@ -169,6 +171,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
       if checkpointFan != nil {
         checkpoint.fanPackGraphics = fanPackGraphics
         checkpoint.fanTextSteel = fanTextSteel
+        checkpoint.fanLocalStyles = fanLocalStyles
+        checkpoint.fanHolidayStyles = fanHolidayStyles
       }
       if checkpointFan != nil { checkpoint.sourcePath = checkpointSourceURL?.path }
     } else if let neo = session as? NeoLemmixSession, let url = checkpointSourceURL {
@@ -250,12 +254,17 @@ let achievementProgressKey = "ClassicAchievementProgress"
           gamePicker.selectItem(at: index); selectDataSet()
         }
         fanPack = URL(fileURLWithPath: path)
-        fanQueue = fan.queue.map { .init(file: $0.file, section: $0.section, label: $0.label) }
-        fanQueueIndex = fan.index
+        let retained = try FanLevelLibrary.restoredQueue(
+          fan.queue.map { .init(file: $0.file, section: $0.section, label: $0.label) },
+          index: fan.index, in: fanPack!)
+        fanQueue = retained.entries
+        fanQueueIndex = retained.index
         fanEntries = FanLevelLibrary.entries(in: fanPack!)
         fanScreen = .off
         fanPackGraphics = checkpoint.fanPackGraphics ?? false
         fanTextSteel = checkpoint.fanTextSteel ?? false
+        fanLocalStyles = checkpoint.fanLocalStyles ?? false
+        fanHolidayStyles = checkpoint.fanHolidayStyles ?? false
         loadCurrentFanLevel()
         guard fanPlaying, phase == .briefing, let classic = session as? ClassicSession,
           arcadeLevel?.conditions?.levelFingerprint == checkpoint.levelFingerprint else { throw RunRecoveryError.differentGame }
@@ -753,6 +762,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     soundtrack.setVolume(settings.musicVolume)
     dj.setVolume(settings.musicVolume)
     effects.setVolume(settings.soundVolume)
+    effects.setBottomFallSounds(settings.bottomFallSounds)
     music.setMuted(audioMuted || settings.music == .silent)
     soundtrack.setMuted(audioMuted || settings.music == .silent)
     dj.setMuted(audioMuted || settings.music == .silent)
@@ -1689,10 +1699,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
     let entry = fanQueue[fanQueueIndex]
     do {
-      if !restoringCheckpoint { fanPackGraphics = true; fanTextSteel = true }
+      if !restoringCheckpoint { fanPackGraphics = true; fanTextSteel = true; fanLocalStyles = true; fanHolidayStyles = true }
       let (level, styleName) = try FanLevelLibrary.level(entry, in: pack, includeTextSteel: fanTextSteel)
       guard let ports = Bundle.main.resourceURL?.appendingPathComponent("Ports") else { return }
-      let ground = try FanLevelLibrary.groundSet(for: level, styleName: styleName, portsRoot: ports, pack: fanPackGraphics ? pack : nil, entry: entry)
+      let ground = try FanLevelLibrary.groundSet(for: level, styleName: styleName, portsRoot: ports, pack: fanPackGraphics ? pack : nil, entry: entry, useLocalStyles: fanLocalStyles, useHolidayStyles: fanHolidayStyles)
       let directory = ports.appendingPathComponent("lemmings_dos_1991-07-30")
       let special: ClassicSpecialGraphic?
       if fanPackGraphics {
@@ -2750,7 +2760,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       guard let root = Bundle.main.resourceURL else { return }
       let directory = root.appendingPathComponent("Ports/amiga_extracted/lemmings")
       do {
-        let loaded = try effects.loadAmigaSounds(directory: directory)
+        let loaded = try effects.loadAmigaSounds(directory: directory, deathFallbackImage: BundledGameResources.macintoshSoundImage())
         setStatus("Loaded \(loaded.count) Amiga sound effects.")
       } catch {
         setStatus("Amiga sound effects: \(error)")

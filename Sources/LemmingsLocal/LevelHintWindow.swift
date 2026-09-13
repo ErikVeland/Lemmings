@@ -233,7 +233,7 @@ import NxlvKit
         for (index, line) in lines(width: bounds.width).enumerated() {
             let rect = CGRect(x: 0, y: CGFloat(index * lineHeight), width: bounds.width, height: CGFloat(lineHeight))
             if let renderer, renderer.font(face) != nil {
-                renderer.menuLine(line, in: rect, face: face, alignment: .left)
+                renderer.menuLine(line, in: rect, face: face, alignment: .left, palette: face == .large ? .green : .blue)
             } else {
                 let width = CGFloat(line.count * 12)
                 GamePixelText.draw(line, in: CGRect(x: 0, y: rect.minY, width: width, height: 14))

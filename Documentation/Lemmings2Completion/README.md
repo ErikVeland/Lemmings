@@ -10,18 +10,18 @@ It uses the same replay code as the runtime suite, so the two cannot drift apart
 
 | Tribe | Recorded routes | Levels that chain |
 | --- | ---: | ---: |
-| Classic | 7 | 2 |
+| Classic | 7 | 5 |
 | Beach | 5 | 1 |
 | Cavelems | 5 | 3 |
 | Circus | 7 | 2 |
-| Egyptian | 8 | 1 |
+| Egyptian | 8 | 8 |
 | Highland | 3 | 1 |
 | Medieval | 4 | 1 |
-| Outdoor | 7 | 1 |
-| Polar | 6 | 1 |
+| Outdoor | 7 | 3 |
+| Polar | 6 | 4 |
 | Shadow | 3 | 1 |
 | Space | 4 | 1 |
-| Sports | 5 | 1 |
+| Sports | 5 | 2 |
 
 A missing route does not prove a level is broken. It shows that nobody recorded
 a win. Loading and rendering are separate checks. They do not prove a solution.
@@ -50,9 +50,10 @@ A tribe chains through a level when that route starts with exactly the number th
 previous route saved. The table counts how many levels chain from the start of
 each tribe, without a break.
 
-No tribe chains through all ten levels. Cavelems chains furthest, through three.
-Egyptian has eight consecutive routes but chains through only one, because its
-first route saves 40 and its second route starts with 60.
+No tribe chains through all ten levels. Egyptian now chains through eight.
+Sixteen separate carry-over witnesses preserve the correct starting populations.
+The original 64 standalone routes remain unchanged. The gate verifies every
+variant twice before it uses that route in a chain.
 
 A continuous tribe run needs routes that chain. Independent routes for every
 level do not provide one.
@@ -70,7 +71,8 @@ every route and prints the chain result for each tribe.
 zsh Scripts/verify-lemmings2-completion.sh --require-all
 ```
 
-Strict mode fails while any level has no recorded route.
+Strict mode fails while any level has no recorded route or any tribe lacks a
+continuous ten-level chain. Independent level wins cannot close this gate.
 
 ```sh
 zsh Scripts/verify-lemmings2-completion.sh --negative
@@ -81,3 +83,16 @@ to reject it.
 
 After you add or change a fixture, run `python3 Tools/Lemmings2Completion/report.py`
 and then the gate. Do not regenerate the manifest to hide a changed outcome.
+
+## Carry-over discovery
+
+`Tools/Lemmings2Completion/adapt.swift` replays existing inputs with the actual
+number saved by the preceding level. It records only applied inputs and retains
+a candidate only after the shared witness validator reproduces it twice. An
+unsuccessful adaptation stops that tribe. `Chains` holds accepted variants,
+separately from `Fixtures`, so improving continuity does not discard earlier
+standalone evidence. Both sets are hash-checked in the manifest.
+
+The chain tests cover matching populations, missing levels and ambiguous routes.
+Real replay tests also reject altered hashes, outcomes, versions, invalid
+populations and orphan variants.

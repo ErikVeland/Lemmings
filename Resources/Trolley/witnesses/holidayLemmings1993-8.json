@@ -1,0 +1,88 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 70
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 103
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 630
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 9,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 672
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 9,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 864
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 9,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1056
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 9,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1248
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1250
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 80,
+    "required" : 75,
+    "saved" : 80,
+    "stateHash" : "669c2f13ea446cc391436a67f7f6aa9a8c8361204183ea7b074a38e7fd467042",
+    "ticks" : 3833
+  },
+  "initialStateHash" : "3292018f01d3a8fb5ce5c295c77b250fa8e43ea43933b17983d3cb8127aaccf6",
+  "number" : 9,
+  "rank" : "Flurry",
+  "title" : "A Block from Home"
+}

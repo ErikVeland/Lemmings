@@ -6,6 +6,52 @@ func require(_ value: Bool, _ message: String) throws {
   if !value { throw ReplayMovieError.message(message) }
 }
 
+@MainActor func verifyStalledRecording() async throws {
+  let encoder = DispatchQueue(label: "ReplayMovieTests.stalled")
+  let release = DispatchSemaphore(value: 0)
+  encoder.async { release.wait() }
+  defer { release.signal() }
+  let recorder = ReplayMovieRecorder(ticksPerSecond: 17, encodingQueue: encoder,
+    admissionTimeout: .milliseconds(10))
+  let frame = ReplayFrameCapture.image(size: CGSize(width: 16, height: 16)) {
+    NSColor.black.setFill(); NSRect(x: 0, y: 0, width: 16, height: 16).fill()
+  }!
+  for _ in 0..<12 { recorder.append(frame) }
+  let began = ProcessInfo.processInfo.systemUptime
+  recorder.append(frame)
+  let blocked = ProcessInfo.processInfo.systemUptime - began
+  let stopped = !recorder.isAcceptingFrames
+  for _ in 0..<100 { recorder.append(frame); recorder.setMusic(url: nil, gain: 0) }
+  let elapsed = ProcessInfo.processInfo.systemUptime - began
+  try require(stopped && blocked < 1 && elapsed < 1,
+    "A stalled encoder blocked game input or kept accepting frames")
+  let result = await withCheckedContinuation { continuation in
+    recorder.finish { continuation.resume(returning: $0) }
+  }
+  guard case let .failure(.message(message)) = result, message.contains("encoder stalled") else {
+    throw ReplayMovieError.message("A stalled recorder offered an incomplete movie")
+  }
+  recorder.discard()
+
+  let run = RunMovie()
+  var draws = 0
+  run.capture({ draws += 1; return frame }())
+  run.useTestRecorder(recorder)
+  run.capture({ draws += 1; return frame }())
+  run.begin(ticksPerSecond: 17, title: "Lazy capture")
+  run.capture({ draws += 1; return frame }())
+  run.finish()
+  run.capture({ draws += 1; return frame }())
+  run.discard()
+  run.capture({ draws += 1; return frame }())
+  try require(draws == 1, "Inactive, failed, finishing or discarded runs still drew replay frames")
+  print("PASS stalled encoding preserves input responsiveness, rejects partial movies and stops unused capture work")
+}
+
+extension RunMovie {
+  fileprivate func useTestRecorder(_ recorder: ReplayMovieRecorder) { self.recorder = recorder }
+}
+
 @MainActor func verifyMovie() async throws {
   let recorder = ReplayMovieRecorder(ticksPerSecond: 17)
   let tone = (0..<11025).map { Float(sin(Double($0) * 2 * .pi * 900 / 44100) * 0.4) }
@@ -171,6 +217,7 @@ let app = NSApplication.shared
 app.setActivationPolicy(.accessory)
 Task { @MainActor in
   do {
+    try await verifyStalledRecording()
     try await verifyMovie()
     try await verifyDirectionalGhostMovie()
     try await ReplayMovieWindow.shared.checkControls(URL(fileURLWithPath: ".build/replay-movie-tests/sample.mp4"))

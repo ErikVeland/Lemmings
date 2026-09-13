@@ -1,0 +1,51 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "digger"
+        }
+      },
+      "tick" : 105
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 362
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 525
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 700
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 80,
+    "required" : 78,
+    "saved" : 80,
+    "stateHash" : "36869971565be6e348ba8526ae55ccc964d147dd23228bc18c7522f05acb380e",
+    "ticks" : 1520
+  },
+  "initialStateHash" : "e65d40b4fb38e249f25488dbfdae2f0c29c932e33a1b4e76978353296dff1114",
+  "number" : 11,
+  "rank" : "Flurry",
+  "title" : "At Home in a Cave"
+}

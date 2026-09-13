@@ -1,16 +1,17 @@
 # Additional campaign completion evidence
 
-The manifest holds 119 fixed-input winning replays. These supplement the original
+The manifest holds 136 fixed-input winning replays. These supplement the original
 [120-level DOS gate](../ClassicCompletion/README.md) and the existing L2 tests.
 
 | Campaign | Winning replays | Levels without a fixture |
 | --- | ---: | ---: |
-| Oh No! More Lemmings | 66/100 | 34 |
+| Oh No! More Lemmings | 70/100 | 30 |
 | Xmas 1991 | 4/4 | 0 |
-| Xmas 1992 | 3/4 | 1 |
-| Holiday 1993 | 14/32 | 18 |
+| Xmas 1992 | 4/4 | 0 |
+| Holiday 1993 | 22/32 | 10 |
 | Holiday 1994 | 16/32 | 16 |
-| Lemmings 3 | 16/90 | 74 |
+| Oh Yes! conversions | 3/60 | 57 |
+| Lemmings 3 | 17/90 | 73 |
 
 These counts come from the committed [fixture manifest](evidence.json).
 To confirm them, run `python3 Tools/CampaignCompletion/report.py --check`.
@@ -44,3 +45,8 @@ After deliberately adding or improving a fixture, run
 `zsh Scripts/verify-trolley-maxima.sh`. The rescue audit imports and verifies
 these fixtures, then stamps its results with the current engine fingerprint.
 Do not refresh the manifest to hide an unexplained regression.
+
+For the selected Classic release, use `--classic-only --require-all`. This checks
+all five additional Classic campaigns and reports every missing route. The
+conversion fixtures are replayed by the full Classic corpus gate. Sequel regression
+checks remain separate.

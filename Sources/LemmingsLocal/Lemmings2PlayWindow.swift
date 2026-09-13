@@ -383,6 +383,7 @@ import NxlvKit
         globallyMuted = muted
         music.setVolume(settings.musicVolume)
         sounds.setVolume(settings.soundVolume)
+        sounds.setBottomFallSounds(settings.bottomFallSounds)
         music.setMuted(muted || settings.music == .silent || UserDefaults.standard.bool(forKey: progressKey + ".musicMuted"))
         sounds.setMuted(muted || settings.sound == .silent || UserDefaults.standard.bool(forKey: progressKey + ".soundsMuted"))
         if musicChanged { if screen == .playing { playTribeMusic() } else { playMusic("Maintune") } }
@@ -1899,8 +1900,8 @@ import NxlvKit
             }
             if let ticks = lem.bombTicks, sprites["COUNTDOWN"] == nil {
                 let text = String(max(1, (ticks + 14) / 15))
-                text.draw(at: NSPoint(x: origin.x + (CGFloat(lem.x) - cameraX) * zoom, y: origin.y + (CGFloat(lem.y - 16) - cameraY) * zoom * 1.2),
-                          withAttributes: [.foregroundColor: NSColor.white, .font: NSFont.boldSystemFont(ofSize: 12)])
+                GameTypography.annotation(text, at: NSPoint(x: origin.x + (CGFloat(lem.x) - cameraX) * zoom,
+                    y: origin.y + (CGFloat(lem.y - 16) - cameraY) * zoom * 1.2), palette: .blue)
             }
         }
     }
@@ -1911,7 +1912,7 @@ import NxlvKit
                 assignmentHighlight.draw(at: CGPoint(x: origin.x + (CGFloat(lem.x) - cameraX) * zoom,
                     y: origin.y + (CGFloat(lem.y - 6) - cameraY) * zoom * 1.2), scale: zoom)
             }
-            if let focusNotice { (focusNotice as NSString).draw(at: CGPoint(x: 12, y: 12), withAttributes: [.foregroundColor: NSColor.yellow, .font: NSFont.boldSystemFont(ofSize: 16)]) }
+            if let focusNotice { GameTypography.annotation(focusNotice, at: CGPoint(x: 12, y: 12)) }
         }
         if turnBadge.superview == nil { addSubview(turnBadge) }
         turnBadge.place(in: CGRect(x: origin.x, y: origin.y, width: visibleWidth * zoom, height: 192 * zoom))

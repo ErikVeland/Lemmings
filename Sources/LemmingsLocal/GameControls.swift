@@ -2,12 +2,12 @@ import AppKit
 
 /// Game artwork supplies the visible controls; AppKit retains input and accessibility.
 @MainActor enum GameControlText {
-    static func draw(_ text: String, in rect: CGRect, alignment: NSTextAlignment = .left, enabled: Bool = true) {
+    static func draw(_ text: String, in rect: CGRect, alignment: NSTextAlignment = .left, enabled: Bool = true, role: GameTypography.Role = .body) {
         if let renderer = GameMenuArtwork.renderer() {
-            let height = renderer.height(face: .small, scale: 1)
+            let height = renderer.height(face: role.face, scale: 1)
             renderer.menuLine(text, in: CGRect(x: rect.minX, y: rect.midY - height / 2, width: rect.width, height: height),
-                alignment: alignment, alpha: enabled ? 1 : 0.45)
-        } else { GamePixelText.draw(MacInterfaceRenderer.menuText(text), in: rect) }
+                face: role.face, alignment: alignment, alpha: enabled ? 1 : 0.45, palette: role.palette)
+        } else { GamePixelText.draw(MacInterfaceRenderer.menuText(text), in: rect, maxScale: role == .title ? 3 : 1, palette: role.palette) }
     }
     static func focus(_ control: NSControl) {
         guard control.window?.firstResponder === control else { return }
@@ -34,7 +34,7 @@ import AppKit
             GamePixelText.draw("X", in: socket.insetBy(dx: 5, dy: 5))
         }
         let caption = isCheck ? CGRect(x: 28, y: 0, width: bounds.width - 28, height: bounds.height) : bounds.insetBy(dx: 8, dy: 2)
-        GameControlText.draw(title, in: caption, alignment: isCheck ? .left : .center, enabled: isEnabled)
+        GameControlText.draw(title, in: caption, alignment: isCheck ? .left : .center, enabled: isEnabled, role: selected ? .heading : .body)
         GameControlText.focus(self)
     }
 }
@@ -50,11 +50,14 @@ import AppKit
 }
 
 @MainActor final class GameLabel: NSTextField {
+    var role: GameTypography.Role = .body {
+        didSet { invalidateIntrinsicContentSize(); needsDisplay = true }
+    }
     private var measuredWidth: CGFloat = 0
     override var isFlipped: Bool { true }
     override var intrinsicContentSize: NSSize {
-        guard let renderer = GameMenuArtwork.renderer(), let face = renderer.font(.small) else { return super.intrinsicContentSize }
-        let natural = renderer.width(of: MacInterfaceRenderer.menuText(stringValue), face: .small, scale: 1)
+        guard let renderer = GameMenuArtwork.renderer(), let face = renderer.font(role.face) else { return NSSize(width: CGFloat(stringValue.count * 6), height: 13) }
+        let natural = renderer.width(of: MacInterfaceRenderer.menuText(stringValue), face: role.face, scale: 1)
         let width = preferredMaxLayoutWidth > 0 ? preferredMaxLayoutWidth : bounds.width > 0 ? bounds.width : 600
         let lines = cell?.wraps == true ? MacInterfaceRenderer.menuLines(stringValue, columns: max(1, Int(width) / face.cellWidth)).count : 1
         return NSSize(width: natural, height: CGFloat(max(1, lines) * (face.cellHeight + 6)))
@@ -65,9 +68,9 @@ import AppKit
     }
     override func draw(_ dirtyRect: NSRect) {
         if cell?.wraps == true, let renderer = GameMenuArtwork.renderer(), bounds.height >= 32 {
-            renderer.menuParagraph(stringValue, in: bounds, alignment: alignment)
+            renderer.menuParagraph(stringValue, in: bounds, alignment: alignment, face: role.face, palette: role.palette, alpha: isEnabled ? 1 : 0.45)
         } else {
-            GameControlText.draw(stringValue, in: bounds, alignment: alignment, enabled: isEnabled)
+            GameControlText.draw(stringValue, in: bounds, alignment: alignment, enabled: isEnabled, role: role)
         }
     }
 }
@@ -197,7 +200,52 @@ import AppKit
     }
 }
 
+/// AppKit keeps text input, selection and undo; only game glyphs are painted.
+@MainActor final class GameFieldEditor: NSTextView {
+    private var cellWidth: CGFloat { CGFloat(GameMenuArtwork.renderer()?.font(.small)?.cellWidth ?? 8) }
+    private var cellHeight: CGFloat { CGFloat(GameMenuArtwork.renderer()?.font(.small)?.cellHeight ?? 14) }
+    private var textOrigin: CGPoint { CGPoint(x: textContainerOrigin.x, y: bounds.midY - cellHeight / 2) }
+    override func draw(_ dirtyRect: NSRect) {
+        NSColor.black.setFill(); bounds.fill()
+        let selection = selectedRange()
+        if selection.length > 0 {
+            NSColor(calibratedRed: 0.08, green: 0.22, blue: 0.12, alpha: 1).setFill()
+            CGRect(x: textOrigin.x + CGFloat(selection.location) * cellWidth, y: textOrigin.y,
+                width: CGFloat(selection.length) * cellWidth, height: cellHeight).fill()
+        }
+        GameTypography.annotation(string, at: textOrigin, palette: .blue)
+    }
+    override func drawInsertionPoint(in rect: NSRect, color: NSColor, turnedOn flag: Bool) {
+        guard flag else { needsDisplay = true; return }
+        NSColor.green.setFill()
+        CGRect(x: textOrigin.x + CGFloat(selectedRange().location) * cellWidth,
+            y: textOrigin.y, width: 1, height: cellHeight).fill()
+    }
+    func prepare() {
+        isFieldEditor = true; isRichText = false; drawsBackground = false
+        // Match invisible AppKit layout metrics to the bitmap cells for hit testing.
+        let metricFont = NSFont.monospacedSystemFont(ofSize: 12, weight: .regular)
+        let advance = ("M" as NSString).size(withAttributes: [.font: metricFont]).width
+        font = NSFont.monospacedSystemFont(ofSize: 12 * cellWidth / advance, weight: .regular)
+    }
+}
+
+@MainActor final class GameSearchFieldCell: NSSearchFieldCell {
+    private let editor = GameFieldEditor()
+    override func fieldEditor(for controlView: NSView) -> NSTextView? {
+        editor.prepare()
+        return editor
+    }
+}
+
 @MainActor final class GameSearchField: NSSearchField {
+    override init(frame frameRect: NSRect) {
+        super.init(frame: frameRect)
+        cell = GameSearchFieldCell(textCell: "")
+        isEditable = true; isSelectable = true
+        (cell as? NSTextFieldCell)?.isScrollable = true
+    }
+    required init?(coder: NSCoder) { fatalError("init(coder:) is unavailable") }
     override var isFlipped: Bool { true }
     override func draw(_ dirtyRect: NSRect) {
         GameStoneButton.draw(bounds, selected: window?.firstResponder === currentEditor(), pixel: 1)
@@ -209,6 +257,6 @@ import AppKit
 @MainActor final class GameTableHeaderCell: NSTableHeaderCell {
     override func draw(withFrame cellFrame: NSRect, in controlView: NSView) {
         GameStoneButton.draw(cellFrame, selected: false, pixel: 1)
-        GameControlText.draw(stringValue, in: cellFrame.insetBy(dx: 8, dy: 2))
+        GameControlText.draw(stringValue, in: cellFrame.insetBy(dx: 8, dy: 2), role: .heading)
     }
 }

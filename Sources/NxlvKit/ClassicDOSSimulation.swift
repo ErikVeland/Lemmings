@@ -454,6 +454,7 @@ public enum ClassicDOSEvent: Codable, Equatable, Sendable {
     case triggerActivated(lemmingID: Int, triggerID: Int, effect: ClassicDOSObjectEffect)
     case saved(lemmingID: Int)
     case lost(lemmingID: Int)
+    case fellOut(lemmingID: Int)
     case nukeStarted
     case releaseRateChanged(Int)
     case destructionMaskUnavailable(lemmingID: Int, skill: ClassicSkill)
@@ -1714,6 +1715,9 @@ public struct ClassicDOSSimulation: Codable, Equatable, Sendable {
         events: inout [ClassicDOSEvent]
     ) {
         guard lemming.isActive else { return }
+        if lemming.foot.y > configuration.maximumY {
+            events.append(.fellOut(lemmingID: lemming.id))
+        }
         clearBlockerField(&lemming)
         lemming.outcome = .lost
         lostCount += 1

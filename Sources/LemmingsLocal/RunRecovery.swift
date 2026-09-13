@@ -11,6 +11,8 @@ struct RunRecovery: Codable, Sendable {
     var fullQuest: Bool? = nil
     var fanPackGraphics: Bool? = nil
     var fanTextSteel: Bool? = nil
+    var fanLocalStyles: Bool? = nil
+    var fanHolidayStyles: Bool? = nil
     let runID: UUID
     let dataSetID: String
     let levelIndex: Int

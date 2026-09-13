@@ -1,5 +1,9 @@
 # 1.0 gap review
 
+Historical review. Classic 1.0 was selected on 13 September 2026.
+See [the current closure work](ClassicOneZero.md) and [release scope](ReleaseScope.md)
+for current counts and requirements.
+
 11 September 2026. Scope: the current macOS game. This review does not declare a 1.0 release.
 
 This document records the changes and the gate table. For the ranked open work and the 1.0 scope decision, see the [1.0 gap evaluation](ReleaseReadiness/OneZeroGapEvaluation.md).

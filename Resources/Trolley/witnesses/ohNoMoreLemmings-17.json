@@ -1,0 +1,52 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "miner"
+        }
+      },
+      "tick" : 225
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 548
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 6,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 743
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 949
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 50,
+    "required" : 25,
+    "saved" : 50,
+    "stateHash" : "02991ae5bf804bf717d7a4da1b3c3dff271ac989976402474a5f89872c97b4b9",
+    "ticks" : 3211
+  },
+  "initialStateHash" : "13085eddf3aad9d85369a70dea64ac23df7da6f8d9508049ddfb44b520708a92",
+  "number" : 18,
+  "rank" : "Tame",
+  "title" : "Lemmings For Presidents!"
+}

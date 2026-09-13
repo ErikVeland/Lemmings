@@ -313,6 +313,41 @@ private func testSpecialAndUnknownStylesAreDistinguished() throws {
     print("PASS a special graphic is told apart from a name nobody knows")
 }
 
+private func testHolidayAliasesSelectSnow() throws {
+    let ports = root.deletingLastPathComponent()
+    let xmas1991 = ports.appendingPathComponent("xmas_dos_XmasLemmingsV1.9")
+    let snow = try ClassicGroundSet.load(style: 2, from: xmas1991)
+    let brick = try ClassicGroundSet.load(style: 0, from: xmas1991)
+    let resolver = ClassicStyleResolver(portsRoot: ports)
+    for name in ["Xmas", "Christmas", "  CHRISTMAS  "] {
+        let actual = try resolver.groundSet(styleNamed: name)
+        try require(actual == snow && actual != brick, "\(name) selected promotional brick instead of Holiday snow")
+    }
+
+    let temporary = FileManager.default.temporaryDirectory.appendingPathComponent("HolidayAlias-\(UUID().uuidString)")
+    try FileManager.default.createDirectory(at: temporary, withIntermediateDirectories: true)
+    defer { try? FileManager.default.removeItem(at: temporary) }
+    let xmas1992 = ports.appendingPathComponent("xmas_dos_XmasLemmingsV1.9a1")
+    let isolatedRelease = temporary.appendingPathComponent(xmas1992.lastPathComponent)
+    try FileManager.default.createDirectory(at: isolatedRelease, withIntermediateDirectories: true)
+    for file in ["GROUND2O.DAT", "VGAGR2.DAT"] {
+        try FileManager.default.copyItem(at: xmas1992.appendingPathComponent(file),
+                                        to: isolatedRelease.appendingPathComponent(file))
+    }
+    let fallback = ClassicStyleResolver(portsRoot: temporary)
+    let expected = try ClassicGroundSet.load(style: 2, from: xmas1992)
+    let actual = try fallback.groundSet(styleNamed: "Christmas")
+    try require(actual == expected, "Holiday style did not resolve with only Xmas 1992 installed")
+
+    let override = ClassicStyleResolver(portsRoot: ports, packRoot: xmas1992)
+    try require(override.resolve(styleNamed: "Xmas") == .packSupplied(directory: xmas1992, index: 2),
+                "Holiday pack override did not use its source slot")
+    try require(ClassicStyleResolver(portsRoot: temporary.appendingPathComponent("missing"))
+        .resolve(styleNamed: "Christmas") == .notInstalled(ClassicStyleResolver.knownStyles["christmas"]!),
+        "Missing Holiday assets were not reported")
+    print("PASS Holiday aliases select snow, support Xmas 1992 alone, and retain pack overrides")
+}
+
 private func testEveryKnownStyleLoadsItsGroundSet() throws {
     let resolver = ClassicStyleResolver(portsRoot: root.deletingLastPathComponent())
     var loaded = 0
@@ -341,6 +376,7 @@ do {
     try testStyleNamesIgnoreCaseAndSpace()
     try testSpecialAndUnknownStylesAreDistinguished()
     try testEveryKnownStyleLoadsItsGroundSet()
+    try testHolidayAliasesSelectSnow()
     try testAPackWithNoDataIsEmptyRatherThanBroken()
     print("Amiga versus tests passed.")
 } catch {

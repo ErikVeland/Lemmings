@@ -187,3 +187,171 @@ let extremeLevel = try ClassicLevel(data: Data(repeating: 0, count: ClassicLevel
                   ClassicSteelArea(x: 0, y: 0, width: -1, height: 5)])
 let extremeScene = try ClassicLevelRenderer.render(extremeLevel, groundSet: steelGround)
 check(extremeScene.steelMask.allSatisfy { $0 == 1 }, "extreme steel rectangles render in bounded work without overflow")
+
+// Release-local slots must use the source release, even when a wrong tile happens to fit.
+let localFixtures: [(String, String)] = [
+  ("0477-DOS-Amiga-Tame.zip", "oh_no_more_lemmings_dos-1991-11-14_2232"),
+  ("0478-DOS-Amiga-Crazy.zip", "oh_no_more_lemmings_dos-1991-11-14_2232"),
+  ("0479-DOS-Amiga-Wild.zip", "oh_no_more_lemmings_dos-1991-11-14_2232"),
+  ("0480-DOS-Amiga-Wicked.zip", "oh_no_more_lemmings_dos-1991-11-14_2232"),
+  ("0481-DOS-Amiga-Havoc.zip", "oh_no_more_lemmings_dos-1991-11-14_2232"),
+  ("0486-DOS-Xmas-1991.zip", "xmas_dos_XmasLemmingsV1.9"),
+  ("0487-DOS-Xmas-1992.zip", "xmas_dos_XmasLemmingsV1.9a1"),
+  ("0530-Oh-No-More-cLemmings-Tame.zip", "oh_no_more_lemmings_dos-1991-11-14_2232"),
+  ("0531-Oh-No-More-cLemmings-Crazy.zip", "oh_no_more_lemmings_dos-1991-11-14_2232"),
+  ("0532-Oh-No-More-cLemmings-Wild.zip", "oh_no_more_lemmings_dos-1991-11-14_2232"),
+  ("0533-Oh-No-More-cLemmings-Wicked.zip", "oh_no_more_lemmings_dos-1991-11-14_2232"),
+  ("0534-Oh-No-More-cLemmings-Havoc.zip", "oh_no_more_lemmings_dos-1991-11-14_2232"),
+  ("0583-Amiga-Oh-No-More-Lemmings-Two-Player.zip", "oh_no_more_lemmings_dos-1991-11-14_2232"),
+]
+var localLevelCount = 0
+for (name, directory) in localFixtures {
+  let pack = root.appendingPathComponent("Content/LevelPacks/" + name)
+  check(FanLevelLibrary.localStyleDirectory(in: pack) == directory, "verified release identity: " + name)
+  for entry in FanLevelLibrary.entries(in: pack) {
+    let (level, style) = try FanLevelLibrary.level(entry, in: pack)
+    let ground = try FanLevelLibrary.groundSet(for: level, styleName: style, portsRoot: ports, pack: pack, entry: entry)
+    let expected = try ClassicGroundSet.load(style: level.groundStyle, from: ports.appendingPathComponent(directory))
+    check(ground == expected, "release-local graphics: " + level.title)
+    let scene = try ClassicLevelRenderer.render(level, groundSet: ground)
+    _ = try ClassicDOSSimulation(level: level, renderedLevel: scene, mainDATAssets: ClassicMainDATAssets.load(from: originalStyles))
+    localLevelCount += 1
+  }
+}
+let localPack = root.appendingPathComponent("Content/LevelPacks/0478-DOS-Amiga-Crazy.zip")
+let renamedLocal = temporary.appendingPathComponent("renamed.zip")
+var localBytes = try Data(contentsOf: localPack)
+try localBytes.write(to: renamedLocal)
+check(FanLevelLibrary.localStyleDirectory(in: renamedLocal) == localFixtures[0].1, "renamed verified archive retains its convention")
+localBytes[0] ^= 1
+try localBytes.write(to: renamedLocal)
+check(FanLevelLibrary.localStyleDirectory(in: renamedLocal) == nil, "same-sized changed archive cannot inherit verified metadata")
+check(FanLevelLibrary.localStyleDirectory(in: source) == nil, "unknown packs retain combined-editor numbering")
+let localEntry = FanLevelLibrary.entries(in: localPack)[1]
+let localLevel = try FanLevelLibrary.level(localEntry, in: localPack).0
+let legacyGround = try FanLevelLibrary.groundSet(for: localLevel, styleName: nil, portsRoot: ports, pack: localPack, useLocalStyles: false)
+check(legacyGround == (try FanLevelLibrary.groundSet(for: localLevel, styleName: nil, portsRoot: ports)), "legacy attempt preserves combined-editor graphics")
+check(try FanLevelLibrary.groundSet(for: localLevel, styleName: "dirt", portsRoot: ports, pack: localPack)
+  == ClassicGroundSet.load(style: 0, from: originalStyles), "explicit named style overrides release metadata")
+print("PASS \(localLevelCount) release-local levels render and start")
+
+// Compare the canonical reissues directly with the bundled official records.
+var canonicalMatches = 0
+for (name, directory) in localFixtures where name.hasPrefix("047") || name.hasPrefix("048") {
+  let official = try ClassicDataSet.detect(directory: ports.appendingPathComponent(directory))
+  let pack = root.appendingPathComponent("Content/LevelPacks/" + name)
+  for entry in FanLevelLibrary.entries(in: pack) {
+    let level = try FanLevelLibrary.level(entry, in: pack).0
+    if let original = official.campaign.levels.first(where: {
+      $0.level.terrain == level.terrain && $0.level.objects == level.objects
+    }) {
+      check(original.level.groundStyle == level.groundStyle, "official record confirms release slot: " + level.title)
+      canonicalMatches += 1
+    }
+  }
+}
+check(canonicalMatches >= 100, "at least 100 canonical records confirm release-local numbering")
+print("PASS \(canonicalMatches) canonical terrain/object records match the original release")
+
+let holidayFixtures: [String] = ["0482-DOS-Frost.zip", "0483-DOS-Hail.zip", "0535-Holiday-cLemmings-Frost.zip", "0536-Holiday-cLemmings-Hail.zip"]
+
+var holidayCount = 0
+var holidayMatches = 0
+let holidayOfficial = try ClassicDataSet.detect(directory: ports.appendingPathComponent("holiday_native_1994"))
+for name in holidayFixtures {
+  let pack = root.appendingPathComponent("Content/LevelPacks/" + name)
+  check(FanLevelLibrary.localStyleDirectory(in: pack) == nil, "previous graphics revision retains legacy Holiday assets")
+  check(FanLevelLibrary.localStyleDirectory(in: pack, includeHoliday: true) == "holiday_native_1994", "verified Holiday identity: " + name)
+  for entry in FanLevelLibrary.entries(in: pack) {
+    let level = try FanLevelLibrary.level(entry, in: pack).0
+    check(level.groundStyle == 2, "verified Holiday archive contains only slot 2")
+    let ground = try FanLevelLibrary.groundSet(for: level, styleName: nil, portsRoot: ports, pack: pack, entry: entry)
+    check(ground == (try ClassicGroundSet.load(style: 2, from: ports.appendingPathComponent("holiday_native_1994"))), "Holiday snow assets: " + level.title)
+    let scene = try ClassicLevelRenderer.render(level, groundSet: ground)
+    _ = try ClassicDOSSimulation(level: level, renderedLevel: scene, mainDATAssets: ClassicMainDATAssets.load(from: originalStyles))
+    check(try FanLevelLibrary.groundSet(for: level, styleName: nil, portsRoot: ports, pack: pack, useHolidayStyles: false)
+      == ClassicGroundSet.load(style: 2, from: originalStyles), "older Holiday attempt retains marble")
+    if name.hasPrefix("048"), let match = holidayOfficial.campaign.levels.first(where: {
+      $0.level.terrain == level.terrain && $0.level.objects == level.objects
+    }) {
+      check(match.level.groundStyle == 2, "official Holiday record confirms slot")
+      holidayMatches += 1
+    }
+    holidayCount += 1
+  }
+}
+check(holidayCount == 64 && holidayMatches >= 30, "Holiday inventory and original-record matches")
+print("PASS \(holidayCount) Holiday levels render/start; \(holidayMatches) original records match")
+
+let literalPack = root.appendingPathComponent("Tests/FanLevelLibraryTests/Fixtures/literal-members.zip")
+let literalNames = ["level[1].ini", "level1.ini", "star*.ini", "starX.ini", "q?.ini",
+                    "qa.ini", #"back\slash.ini"#, "nested[1]/level.ini", "nested1/level.ini", "-x.ini"]
+let literalEntries = FanLevelLibrary.entries(in: literalPack)
+check(literalEntries.count == literalNames.count, "all literal member names remain independently selectable")
+for (index, name) in literalNames.enumerated() {
+  let entry = literalEntries.first { $0.file == name }!
+  check(try FanLevelLibrary.level(entry, in: literalPack).0.title == "Literal \(index)",
+        "exact archive member: " + name)
+}
+let duplicatePack = root.appendingPathComponent("Tests/FanLevelLibraryTests/Fixtures/duplicate-members.zip")
+let duplicateEntries = FanLevelLibrary.entries(in: duplicatePack)
+check(duplicateEntries.map(\.file) == ["unique.ini"], "ambiguous duplicate members cannot merge into one level")
+do {
+  _ = try FanLevelLibrary.level(.init(file: "same.ini", section: nil, label: "Duplicate"), in: duplicatePack)
+  preconditionFailure("duplicate member selected directly")
+} catch {
+  check(true, "direct or saved selection of duplicate member is rejected")
+}
+
+// Remove an interior DAT record while keeping the saved identities on either side.
+let sourceEntry = readable.first { $0.section != nil }!
+let sourceDAT = try member(sourceEntry.file, in: source)
+let sourceSections = try ClassicDATArchive.decode(sourceDAT)
+check(sourceSections.count >= 3, "slot migration fixture has three records")
+let pruningFolder = temporary.appendingPathComponent("pruned")
+try FileManager.default.createDirectory(at: pruningFolder, withIntermediateDirectories: true)
+let mappedDAT = pruningFolder.appendingPathComponent("levels.dat")
+var retainedDAT = Data()
+for slot in [0, 2] {
+  let section = sourceSections[slot]
+  retainedDAT.append(sourceDAT[section.archiveOffset..<(section.archiveOffset + section.compressedSize)])
+}
+try retainedDAT.write(to: mappedDAT)
+let mappingFile = pruningFolder.appendingPathComponent("classic-section-slots.json")
+func mappedPack(_ slots: [Int], name: String) throws -> URL {
+  try JSONEncoder().encode(["levels.dat": slots]).write(to: mappingFile)
+  let destination = temporary.appendingPathComponent(name + ".zip")
+  let process = Process(); process.executableURL = URL(fileURLWithPath: "/usr/bin/zip")
+  process.currentDirectoryURL = pruningFolder
+  process.arguments = ["-q", destination.path, "levels.dat", "classic-section-slots.json"]
+  try process.run(); process.waitUntilExit()
+  check(process.terminationStatus == 0, "create mapped archive \(name)")
+  return destination
+}
+let prunedPack = try mappedPack([0, 2], name: "valid-slots")
+let prunedEntries = FanLevelLibrary.entries(in: prunedPack)
+check(prunedEntries.map(\.section) == [0, 2], "pruning keeps original DAT slot identities")
+for entry in prunedEntries {
+  check(try FanLevelLibrary.level(entry, in: prunedPack).0 == ClassicLevel(data: sourceSections[entry.section!].data),
+        "saved slot \(entry.section!) still resolves to its original level")
+}
+let oldQueue = (0..<3).map { FanLevelLibrary.Entry(file: "levels.dat", section: $0, label: "saved") }
+let restored = try FanLevelLibrary.restoredQueue(oldQueue, index: 2, in: prunedPack)
+check(restored.index == 1 && restored.entries.map(\.section) == [0, 2],
+      "saved queue removes deleted entries and preserves current ownership and position")
+do {
+  _ = try FanLevelLibrary.level(oldQueue[1], in: prunedPack)
+  preconditionFailure("removed slot resolves to its neighbour")
+} catch { check(true, "deleted slots never select another level") }
+do {
+  _ = try FanLevelLibrary.restoredQueue(oldQueue, index: 1, in: prunedPack)
+  preconditionFailure("removed current attempt restored as another level")
+} catch { check(true, "deleted current attempt fails without changing its identity") }
+for (index, slots) in [[0, 0], [-1, 2], [0], [0, 10000]].enumerated() {
+  let invalid = try mappedPack(slots, name: "invalid-slots-\(index)")
+  check(FanLevelLibrary.entries(in: invalid).isEmpty, "invalid slot mapping cannot enter catalogue")
+  do {
+    _ = try FanLevelLibrary.level(oldQueue[0], in: invalid)
+    preconditionFailure("invalid mapping selected directly")
+  } catch { check(true, "invalid saved slot mapping is rejected") }
+}

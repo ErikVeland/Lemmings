@@ -21,11 +21,8 @@ import AppKit
             box.layer?.borderColor = NSColor.systemGreen.withAlphaComponent(0.7).cgColor
             box.layer?.borderWidth = 1
             let heading = GameLabel(labelWithString: title)
-            heading.font = .systemFont(ofSize: 15 * GameAccessibility.scale, weight: .bold)
-            heading.textColor = .systemGreen
+            heading.role = .heading
             let label = GameLabel(wrappingLabelWithString: text)
-            label.font = .monospacedSystemFont(ofSize: 13 * GameAccessibility.scale, weight: .medium)
-            label.textColor = .white
             for view in [heading, label] { view.translatesAutoresizingMaskIntoConstraints = false; box.addSubview(view) }
             NSLayoutConstraint.activate([
                 heading.topAnchor.constraint(equalTo: box.topAnchor, constant: 12), heading.leadingAnchor.constraint(equalTo: box.leadingAnchor, constant: 14), heading.trailingAnchor.constraint(equalTo: box.trailingAnchor, constant: -14),

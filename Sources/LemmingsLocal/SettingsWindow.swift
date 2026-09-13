@@ -72,7 +72,6 @@ import NxlvKit
     let page = GameMenuPage(title: "Settings")
     page.onBack = { [weak page] in if let page { GameScreen.shared.dismiss(page) } }
     let tabs = GameTabs()
-    tabs.font = .systemFont(ofSize: 18, weight: .medium)
     tabs.addTabViewItem(tab("Gameplay", gameplayPane()))
     tabs.addTabViewItem(tab("Controller", controllerPane()))
     tabs.addTabViewItem(tab("Graphics", graphicsPane()))
@@ -111,7 +110,6 @@ import NxlvKit
         control.setAccessibilityLabel((control as? NSButton).map { label + ": " + $0.title } ?? label)
       }
       caption.alignment = .right
-      caption.font = .systemFont(ofSize: 17)
       caption.translatesAutoresizingMaskIntoConstraints = false
       control.translatesAutoresizingMaskIntoConstraints = false
       container.addSubview(caption)
@@ -135,7 +133,6 @@ import NxlvKit
 
   private func popUp(_ action: Selector) -> NSPopUpButton {
     let button = GamePopUpButton()
-    button.font = .systemFont(ofSize: 17)
     button.controlSize = .large
     button.target = self
     button.action = action
@@ -195,7 +192,6 @@ import NxlvKit
     let text = GameReadOnlyText(frame: CGRect(x: 0, y: 0, width: 730, height: 420))
     text.string = ControllerDevicePresentation.help(mapping: settings.controllerMappings)
     controllerHelpText = text
-    text.font = .systemFont(ofSize: 15); text.textColor = .labelColor
     text.isEditable = false; text.isSelectable = true; text.drawsBackground = false
     text.isVerticallyResizable = true; text.isHorizontallyResizable = false
     text.autoresizingMask = [.width]; text.textContainer?.widthTracksTextView = true
@@ -219,7 +215,6 @@ import NxlvKit
     role.setAccessibilityLabel("Gameplay action")
     let reset = GameButton(title: "Reset button mappings", target: self, action: #selector(resetControllerMapping))
     let note = GameLabel(wrappingLabelWithString: "If another button has that action, the two bindings swap. Modifier combinations follow the new buttons. Menu navigation always uses the standard controls. Sticks can be swapped in Controller settings.")
-    note.font = .systemFont(ofSize: 17)
     let content = pane([("Button", source), ("Action", role), ("Defaults", reset), ("How it works", note)])
     content.frame = page.body.bounds; content.autoresizingMask = [.width, .height]
     page.body.addSubview(content)
@@ -320,8 +315,6 @@ import NxlvKit
     let note = GameLabel(
       labelWithString: videoIsConnected
         ? "" : "The tube simulation is not in the drawing path yet.")
-    note.font = .systemFont(ofSize: 11)
-    note.textColor = .secondaryLabelColor
 
     let hdEffects = GameCheckButton(title: "Enable HD effects", target: self, action: #selector(hdEffectsChanged))
     hdEffects.toolTip = "Cinematic explosions, HDR flashes, speed streaks and ghost trails. Turn off for old-school effects."
@@ -372,6 +365,8 @@ import NxlvKit
     let musicLevel = slider(#selector(musicVolumeChanged), value: settings.musicVolume)
     let sound = popUp(#selector(soundChanged))
     let soundLevel = slider(#selector(soundVolumeChanged), value: settings.soundVolume)
+    let falls = GameCheckButton(title: "Play death sound", target: self, action: #selector(bottomFallSoundsChanged))
+    falls.state = settings.bottomFallSounds ? .on : .off
 
     musicPopUp = music
     stylePopUp = style
@@ -396,6 +391,7 @@ import NxlvKit
       ("", folders),
       ("Sound Effects", sound),
       ("Effects Volume", soundLevel),
+      ("Bottom Falls", falls),
     ])
   }
 
@@ -613,6 +609,11 @@ import NxlvKit
     guard options.sound.indices.contains(index) else { return }
     settings.sound = options.sound[index]
     markCustom()
+    changed()
+  }
+
+  @objc private func bottomFallSoundsChanged(_ sender: NSButton) {
+    settings.bottomFallSounds = sender.state == .on
     changed()
   }
 

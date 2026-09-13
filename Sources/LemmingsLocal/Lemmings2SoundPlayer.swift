@@ -64,11 +64,16 @@ final class Lemmings2SoundPlayer: @unchecked Sendable {
     func silence() { lock.lock(); defer { lock.unlock() }; mixer.silence() }
     func suspendOutput() { if source != nil { engine.pause() } }
     func resumeOutput() throws { if source != nil && !engine.isRunning { try engine.start() } }
+    private var bottomFallSounds = true
+    func setBottomFallSounds(_ enabled: Bool) {
+        lock.lock(); defer { lock.unlock() }; bottomFallSounds = enabled
+    }
     func play(_ requests: [Lemmings2SoundRequest]) {
         lock.lock(); defer { lock.unlock() }
         // Simultaneous lemmings share a cue, without stacking dozens of copies.
         var played: Set<Lemmings2SoundRequest> = []
         for request in requests where played.insert(request).inserted {
+            guard bottomFallSounds || !request.isBottomFall else { continue }
             mixer.play(request)
             if !mixer.muted, mixer.bank.clips.indices.contains(request.sample) {
                 let clip = mixer.bank.clips[request.sample]

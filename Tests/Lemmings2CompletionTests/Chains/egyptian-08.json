@@ -1,0 +1,42 @@
+{
+  "expectedSaved" : 1,
+  "expectedTicks" : 724,
+  "inputs" : [
+    {
+      "lemming" : 0,
+      "skill" : 29,
+      "tick" : 69
+    },
+    {
+      "lemming" : 0,
+      "skill" : 28,
+      "tick" : 174
+    },
+    {
+      "lemming" : 0,
+      "skill" : 34,
+      "tick" : 234
+    },
+    {
+      "lemming" : 0,
+      "skill" : 34,
+      "tick" : 442
+    },
+    {
+      "lemming" : 0,
+      "skill" : 28,
+      "tick" : 632
+    },
+    {
+      "lemming" : 0,
+      "skill" : 4,
+      "tick" : 696
+    }
+  ],
+  "levelSHA256" : "cb5eeee5d19f7e4377a8155f858d1f89797852872c98ba9a2b41ebe0dfdd289e",
+  "pointers" : [
+
+  ],
+  "population" : 1,
+  "version" : 1
+}

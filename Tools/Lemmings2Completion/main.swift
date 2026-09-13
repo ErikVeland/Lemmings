@@ -14,6 +14,17 @@ func tribeName(_ style: Int) -> String {
     style == 2 ? "cavelem" : Lemmings2Campaign.tribeNames[style].lowercased()
 }
 
+let chainFixtures = ProcessInfo.processInfo.environment["L2_COMPLETION_CHAINS"].map {
+    URL(fileURLWithPath: $0)
+} ?? fixtures.deletingLastPathComponent().appendingPathComponent("Chains")
+let variantFiles = (try? FileManager.default.contentsOfDirectory(at: chainFixtures,
+    includingPropertiesForKeys: nil))?.filter { $0.pathExtension == "json" } ?? []
+for url in variantFiles where !FileManager.default.fileExists(atPath: fixtures.appendingPathComponent(url.lastPathComponent).path) {
+    print("FAIL orphan carry-over witness: \(url.lastPathComponent)")
+    exit(1)
+}
+var verifiedRoutes: [String: [Lemmings2ReplayWitness]] = [:]
+var variantCount = 0
 let campaign = try Lemmings2Campaign(root: root)
 let masks = try Lemmings2TerrainMasks(root: root)
 var verified = 0
@@ -22,25 +33,39 @@ for (index, level) in campaign.levels.enumerated() {
     let name = String(format: "\(tribeName(level.style))-%02d", index % 10 + 1)
     let url = fixtures.appendingPathComponent(name + ".json")
     guard FileManager.default.fileExists(atPath: url.path) else { missing.append(name); continue }
-    let witness = try JSONDecoder().decode(Lemmings2ReplayWitness.self, from: Data(contentsOf: url))
     let style = try Lemmings2Style(data: Data(contentsOf: root.appendingPathComponent(
         "STYLES/\(Lemmings2Campaign.styleNames[level.style]).DAT")))
-    let first: Lemmings2WitnessOutcome, second: Lemmings2WitnessOutcome
-    do {
-        first = try witness.run(level: level, style: style, masks: masks)
-        second = try witness.run(level: level, style: style, masks: masks)
-    } catch {
-        print("FAIL \(name): \(error)")
-        exit(1)
+    let variant = chainFixtures.appendingPathComponent(name + ".json")
+    let inputs = [url] + (FileManager.default.fileExists(atPath: variant.path) ? [variant] : [])
+    for input in inputs {
+        let witness = try JSONDecoder().decode(Lemmings2ReplayWitness.self, from: Data(contentsOf: input))
+        guard witness.version == 1, (1...60).contains(witness.population),
+              (1...witness.population).contains(witness.expectedSaved), witness.expectedTicks > 0,
+              !(verifiedRoutes[name] ?? []).contains(where: { $0.population == witness.population }) else {
+            print("FAIL invalid or ambiguous witness: \(input.path)")
+            exit(1)
+        }
+        let first: Lemmings2WitnessOutcome, second: Lemmings2WitnessOutcome
+        do {
+            first = try witness.run(level: level, style: style, masks: masks)
+            second = try witness.run(level: level, style: style, masks: masks)
+        } catch {
+            print("FAIL \(input.path): \(error)")
+            exit(1)
+        }
+        guard first.stateHash == second.stateHash, first.saved == second.saved, first.ticks == second.ticks else {
+            print("FAIL \(name): two runs of the route disagree")
+            exit(1)
+        }
+        verifiedRoutes[name, default: []].append(witness)
+        let carryOver = input == variant
+        if carryOver { variantCount += 1 }
+        print("PASS \(name)\(carryOver ? " carry-over" : ""): \(first.saved)/\(witness.population) \(first.medal.name) in \(first.ticks) ticks")
     }
-    guard first.stateHash == second.stateHash, first.saved == second.saved, first.ticks == second.ticks else {
-        print("FAIL \(name): two runs of the route disagree")
-        exit(1)
-    }
-    print("PASS \(name): \(first.saved)/\(witness.population) \(first.medal.name) in \(first.ticks) ticks")
     verified += 1
 }
 print("Verified \(verified); missing \(missing.count).")
+print("Verified carry-over variants: \(variantCount).")
 
 // Population carries over: a level starts with the saved count of the level
 // before it. A route only proves the population it was recorded with, so the
@@ -50,10 +75,8 @@ for tribe in 0..<12 {
     let name = tribeName(tribe)
     var expected = 60, chained = 0
     for number in 1...10 {
-        let url = fixtures.appendingPathComponent(String(format: "\(name)-%02d.json", number))
-        guard let data = try? Data(contentsOf: url),
-              let route = try? JSONDecoder().decode(Lemmings2ReplayWitness.self, from: data),
-              route.population == expected else { break }
+        let key = String(format: "\(name)-%02d", number)
+        guard let route = verifiedRoutes[key]?.first(where: { $0.population == expected }) else { break }
         chained += 1
         expected = route.expectedSaved
     }
@@ -61,7 +84,8 @@ for tribe in 0..<12 {
     print("CHAIN \(name): \(chained)/10 levels\(chained == 10 ? ", complete" : "")")
 }
 print("Tribes chained through all ten levels: \(fullyChained) of 12.")
-if requireAll && !missing.isEmpty {
+if requireAll && (!missing.isEmpty || fullyChained != 12) {
     print("MISSING \(missing.joined(separator: ", "))")
+    print("Strict completion requires all twelve continuous tribe runs.")
     exit(1)
 }

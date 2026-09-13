@@ -1,6 +1,6 @@
 #!/bin/zsh
 # Replays every recorded Lemmings 2 route twice and checks the committed manifest.
-# Pass --require-all to fail while any campaign level has no recorded route.
+# Pass --require-all to require all levels and twelve continuous tribe runs.
 set -euo pipefail
 project_dir="${0:A:h:h}"
 build_dir="$project_dir/.build/l2-completion"
@@ -9,6 +9,7 @@ data="$project_dir/Sources/Ports/Lemm2"
 [[ -f "$data/LEVELS/LEVEL000.DAT" ]] || data="$project_dir/.build/local/Ultimate Lemmings.app/Contents/Resources/Ports/Lemm2"
 [[ -f "$data/LEVELS/LEVEL000.DAT" ]] || { echo "Lemmings 2 data not found." >&2; exit 1; }
 mkdir -p "$build_dir/modules"
+python3 Tests/Lemmings2CompletionTests/test_chains.py
 python3 Tools/Lemmings2Completion/report.py --check
 swiftc -O -swift-version 6 -warnings-as-errors -parse-as-library \
   -emit-module -emit-library -module-name NxlvKit \
@@ -26,4 +27,5 @@ if [[ "${1:-}" == --negative ]]; then
     Tests/Lemmings2CompletionTests/negative.swift -o "$build_dir/negative"
   exec "$build_dir/negative" "$data"
 fi
+python3 Tests/Lemmings2CompletionTests/test_chain_gate.py "$build_dir/verify" "$data"
 "$build_dir/verify" "$data" "$@"

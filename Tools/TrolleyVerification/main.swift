@@ -4,9 +4,11 @@ import NxlvKit
 
 // This tool observes the real engines. Search failure never establishes an upper bound.
 let project = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
-let resources = project.appendingPathComponent(".build/local/Ultimate Lemmings.app/Contents/Resources")
+let resources = ProcessInfo.processInfo.environment["TROLLEY_RESOURCES"].map { URL(fileURLWithPath: $0) }
+    ?? project.appendingPathComponent(".build/local/Ultimate Lemmings.app/Contents/Resources")
 let ports = resources.appendingPathComponent("Ports")
-let output = project.appendingPathComponent(".build/trolley-verification/results")
+let output = ProcessInfo.processInfo.environment["TROLLEY_OUTPUT"].map { URL(fileURLWithPath: $0) }
+    ?? project.appendingPathComponent(".build/trolley-verification/results")
 let family = CommandLine.arguments.dropFirst().first ?? "all"
 guard ["all", "classic", "ports", "l2", "l2-proofs", "l3", "fingerprint"].contains(family) else {
     throw SequelDataError.invalid("Choose all, classic, ports, l2, l2-proofs, l3, or fingerprint.")
@@ -29,6 +31,8 @@ func compact<T: Encodable>(_ value: T) throws -> Data {
 }
 func fileHash(_ url: URL) throws -> String { try hash(Data(contentsOf: url)) }
 func assetHash(_ root: URL) throws -> String {
+    // Match live sequel identity even when the build folder is a symlink.
+    let root = root.resolvingSymlinksInPath().standardizedFileURL
     let excluded = Set(["sav", "mp4", "m4a", "wav", "ogg", "mp3", "mod", "mid", "png", "jpg"])
     guard let files = FileManager.default.enumerator(at: root, includingPropertiesForKeys: [.isRegularFileKey], options: [.skipsHiddenFiles]) else {
         throw SequelDataError.invalid("Cannot enumerate \(root.path)")
@@ -128,6 +132,10 @@ func classicFingerprint(_ game: ClassicDOSSimulation) throws -> String {
 }
 @MainActor func auditClassic(_ set: ClassicDataSet, directory: URL) throws {
     let titleID = set.title?.rawValue ?? set.identifierKey
+    struct Catalogue: Decodable { let levels: [Row] }
+    let proofRoot = project.appendingPathComponent("Resources/Trolley")
+    let published = try JSONDecoder().decode(Catalogue.self,
+        from: Data(contentsOf: proofRoot.appendingPathComponent("verified-maxima.json"))).levels
     var assetsByDirectory: [URL: ClassicMainDATAssets] = [:]
     var grounds: [String: ClassicGroundSet] = [:], specials: [String: ClassicSpecialGraphic] = [:]
     for (index, entry) in set.campaign.levels.enumerated() {
@@ -197,6 +205,18 @@ func classicFingerprint(_ game: ClassicDOSSimulation) throws -> String {
             // Keep a previous witness before a baseline observation can replace its file.
             let cached = try? Data(contentsOf: existing)
             try attempt([])
+            if let proof = published.first(where: { $0.conditions == row.conditions }), let witness = proof.witness {
+                let url = proofRoot.appendingPathComponent(witness.path)
+                guard try fileHash(url) == witness.sha256 else {
+                    throw SequelDataError.invalid("Published Classic witness hash changed.")
+                }
+                let replay = try JSONDecoder().decode(ClassicDOSReplay.self, from: Data(contentsOf: url))
+                _ = try ClassicDOSReplayPlayer.run(replay, simulation: base)
+                try attempt(replay.events)
+                guard (row.bestSaved ?? 0) >= witness.saved else {
+                    throw SequelDataError.invalid("Published Classic rescue target regressed.")
+                }
+            }
             if row.status != "VERIFIED", let bytes = cached,
                let replay = try? JSONDecoder().decode(ClassicDOSReplay.self, from: bytes),
                (try? ClassicDOSReplayPlayer.run(replay, simulation: base)) != nil {

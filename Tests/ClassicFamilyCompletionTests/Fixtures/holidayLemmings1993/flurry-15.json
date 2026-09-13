@@ -1,0 +1,70 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 199
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 242
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 286
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 330
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 373
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 5,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 417
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 10,
+    "required" : 10,
+    "saved" : 10,
+    "stateHash" : "c973f6853912a25f31303d8d654cb766f49c4b72585c453f0d0b5cfe75895672",
+    "ticks" : 719
+  },
+  "initialStateHash" : "d39fe550177ebf6caae1b11d66523af06c1dc6c63f0851a6f49d24096e0ad37f",
+  "number" : 15,
+  "rank" : "Flurry",
+  "title" : "Head for the Hills!"
+}

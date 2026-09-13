@@ -193,15 +193,15 @@ See [method and limitations](README.md) and [exact conditions and evidence](audi
 | Tame 9: And now this... | 50 | 25 | 49 | — | — | [Observed](witnesses/ohNoMoreLemmings-8.json) |
 | Tame 10: New Lemmings On The Block | 50 | 25 | 50 | 50 | 0 | [Verified](witnesses/ohNoMoreLemmings-9.json) |
 | Tame 11: With Compliments | 50 | 25 | 50 | 50 | 0 | [Verified](witnesses/ohNoMoreLemmings-10.json) |
-| Tame 12: Citizen Lemming | 50 | 25 | — | — | — | No witness collected |
-| Tame 13: Thunder-Lemmings are go! | 50 | 25 | — | — | — | No witness collected |
+| Tame 12: Citizen Lemming | 50 | 25 | 50 | 50 | 0 | [Verified](witnesses/ohNoMoreLemmings-11.json) |
+| Tame 13: Thunder-Lemmings are go! | 50 | 25 | 50 | 50 | 0 | [Verified](witnesses/ohNoMoreLemmings-12.json) |
 | Tame 14: Get a little extra help | 50 | 25 | 50 | 50 | 0 | [Verified](witnesses/ohNoMoreLemmings-13.json) |
 | Tame 15: Not just a pretty Lemming | 50 | 25 | 49 | — | — | [Observed](witnesses/ohNoMoreLemmings-14.json) |
 | Tame 16: Gone With The Lemming | 50 | 25 | 50 | 50 | 0 | [Verified](witnesses/ohNoMoreLemmings-15.json) |
 | Tame 17: Honey, I Saved The Lemmings | 50 | 25 | 50 | 50 | 0 | [Verified](witnesses/ohNoMoreLemmings-16.json) |
-| Tame 18: Lemmings For Presidents! | 50 | 25 | — | — | — | No witness collected |
+| Tame 18: Lemmings For Presidents! | 50 | 25 | 50 | 50 | 0 | [Verified](witnesses/ohNoMoreLemmings-17.json) |
 | Tame 19: Lemming Productions Present... | 50 | 25 | 49 | — | — | [Observed](witnesses/ohNoMoreLemmings-18.json) |
-| Tame 20: Custom built for Lemmings | 50 | 25 | — | — | — | No witness collected |
+| Tame 20: Custom built for Lemmings | 50 | 25 | 50 | 50 | 0 | [Verified](witnesses/ohNoMoreLemmings-19.json) |
 | Wicked 1: LeMming ToMato KetchUp fAcilitY | 60 | 48 | — | — | — | No witness collected |
 | Wicked 2: Inroducing SUPERLEMMING | 1 | 1 | — | — | — | No witness collected |
 | Wicked 3: This Corrosion | 50 | 50 | 50 | 50 | 0 | [Verified](witnesses/ohNoMoreLemmings-62.json) |
@@ -248,7 +248,7 @@ See [method and limitations](README.md) and [exact conditions and evidence](audi
 | Level | Population | Pass goal | Best rescued | Verified maximum | Minimum sacrifices | Evidence |
 | --- | ---: | ---: | ---: | ---: | ---: | --- |
 | Xmas 1: Jingle Lemming | 50 | 25 | 50 | 50 | 0 | [Verified](witnesses/xmasLemmings1992-0.json) |
-| Xmas 2: Happy Holidays Mr Lemming! | 80 | 70 | — | — | — | No witness collected |
+| Xmas 2: Happy Holidays Mr Lemming! | 80 | 70 | 80 | 80 | 0 | [Verified](witnesses/xmasLemmings1992-1.json) |
 | Xmas 3: A Lemming Holiday | 80 | 80 | 80 | 80 | 0 | [Verified](witnesses/xmasLemmings1992-2.json) |
 | Xmas 4: The North Poles | 2 | 2 | 2 | 2 | 0 | [Verified](witnesses/xmasLemmings1992-3.json) |
 
@@ -401,20 +401,20 @@ See [method and limitations](README.md) and [exact conditions and evidence](audi
 | Blizzard 15: The Needs of the Many... | 15 | 8 | 8 | — | — | [Observed](witnesses/holidayLemmings1993-30.json) |
 | Blizzard 16: The Next Lemeration | 50 | 47 | 48 | — | — | [Observed](witnesses/holidayLemmings1993-31.json) |
 | Flurry 1: Climbing to the Top! | 10 | 10 | 10 | 10 | 0 | [Verified](witnesses/holidayLemmings1993-0.json) |
-| Flurry 2: Floating Lemming Flurry | 20 | 15 | — | — | — | No witness collected |
+| Flurry 2: Floating Lemming Flurry | 20 | 15 | 20 | 20 | 0 | [Verified](witnesses/holidayLemmings1993-1.json) |
 | Flurry 3: Holiday Mining | 80 | 50 | 80 | 80 | 0 | [Verified](witnesses/holidayLemmings1993-2.json) |
 | Flurry 4: Lemming Tracks in the Snow! | 50 | 45 | 50 | 50 | 0 | [Verified](witnesses/holidayLemmings1993-3.json) |
 | Flurry 5: Christmas South of the Equator | 75 | 25 | 75 | 75 | 0 | [Verified](witnesses/holidayLemmings1993-4.json) |
-| Flurry 6: Lemming Snowfall | 80 | 40 | — | — | — | No witness collected |
-| Flurry 7: Lemming Snowjourn | 50 | 25 | — | — | — | No witness collected |
+| Flurry 6: Lemming Snowfall | 80 | 40 | 80 | 80 | 0 | [Verified](witnesses/holidayLemmings1993-5.json) |
+| Flurry 7: Lemming Snowjourn | 50 | 25 | 50 | 50 | 0 | [Verified](witnesses/holidayLemmings1993-6.json) |
 | Flurry 8: Clouds of Lemmings | 80 | 70 | — | — | — | No witness collected |
-| Flurry 9: A Block from Home | 80 | 75 | — | — | — | No witness collected |
+| Flurry 9: A Block from Home | 80 | 75 | 80 | 80 | 0 | [Verified](witnesses/holidayLemmings1993-8.json) |
 | Flurry 10: 32 Lemmings Below Zero | 32 | 25 | 32 | 32 | 0 | [Verified](witnesses/holidayLemmings1993-9.json) |
-| Flurry 11: At Home in a Cave | 80 | 78 | — | — | — | No witness collected |
+| Flurry 11: At Home in a Cave | 80 | 78 | 80 | 80 | 0 | [Verified](witnesses/holidayLemmings1993-10.json) |
 | Flurry 12: Presents of Mind | 80 | 77 | — | — | — | No witness collected |
 | Flurry 13: Yo-yo Lem-lem | 80 | 80 | — | — | — | No witness collected |
 | Flurry 14: Marshmallow Land | 80 | 75 | 80 | 80 | 0 | [Verified](witnesses/holidayLemmings1993-13.json) |
-| Flurry 15: Head for the Hills! | 10 | 10 | — | — | — | No witness collected |
+| Flurry 15: Head for the Hills! | 10 | 10 | 10 | 10 | 0 | [Verified](witnesses/holidayLemmings1993-14.json) |
 | Flurry 16: The Long Way Around | 50 | 45 | 48 | — | — | [Observed](witnesses/holidayLemmings1993-15.json) |
 
 ## Oh Yes! More Lemmings
@@ -490,7 +490,7 @@ See [method and limitations](README.md) and [exact conditions and evidence](audi
 | Classic 2: Classic 2 | 22 | 1 | 12 | — | — | [Observed](witnesses/lemmings3-2.json) |
 | Classic 3: Classic 3 | 20 | 1 | 10 | — | — | [Observed](witnesses/lemmings3-3.json) |
 | Classic 4: Classic 4 | 22 | 1 | — | — | — | No witness collected |
-| Classic 5: Classic 5 | 20 | 1 | — | — | — | No witness collected |
+| Classic 5: Classic 5 | 20 | 1 | 1 | — | — | [Observed](witnesses/lemmings3-5.json) |
 | Classic 6: Classic 6 | 20 | 1 | — | — | — | No witness collected |
 | Classic 7: Classic 7 | 20 | 1 | — | — | — | No witness collected |
 | Classic 8: Classic 8 | 22 | 1 | — | — | — | No witness collected |

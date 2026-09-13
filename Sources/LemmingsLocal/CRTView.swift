@@ -3,6 +3,26 @@ import Metal
 import QuartzCore
 import simd
 
+#if PERFORMANCE_TESTS
+final class CRTPerformanceMetrics: @unchecked Sendable {
+  struct Frame: Sendable { let gpuMS: Double; let completionMS: Double }
+  private let lock = NSLock()
+  private var submitted = 0
+  private var completed: [Frame] = []
+  private var failures = 0
+  func submit() { lock.lock(); submitted += 1; lock.unlock() }
+  func complete(gpuMS: Double, completionMS: Double, failed: Bool) {
+    lock.lock(); defer { lock.unlock() }
+    completed.append(Frame(gpuMS: gpuMS, completionMS: completionMS))
+    if failed { failures += 1 }
+  }
+  var snapshot: (submitted: Int, frames: [Frame], failures: Int) {
+    lock.lock(); defer { lock.unlock() }
+    return (submitted, completed, failures)
+  }
+}
+#endif
+
 /// Display settings for the picture tube stage.
 struct CRTSettings {
   var curvature: Float
@@ -82,6 +102,9 @@ struct CRTUniforms {
 /// built at launch from source. If anything fails the view reports it and the
 /// app falls back to drawing without the tube.
 @MainActor final class CRTView: NSView {
+  #if PERFORMANCE_TESTS
+  var performanceMetrics = CRTPerformanceMetrics()
+  #endif
   private var device: MTLDevice?
   private var queue: MTLCommandQueue?
   private var metalLayer: CAMetalLayer?
@@ -387,10 +410,17 @@ struct CRTUniforms {
     pass(blurV, target: scratchA, textures: [scratchB])
     pass(composite, target: drawable.texture, textures: [sourceTexture, scratchA, flashTexture])
 
+    #if PERFORMANCE_TESTS
+    let metrics = performanceMetrics
+    let submittedAt = ProcessInfo.processInfo.systemUptime
+    metrics.submit()
+    buffer.addCompletedHandler { completed in
+      metrics.complete(gpuMS: max(0, completed.gpuEndTime - completed.gpuStartTime) * 1000,
+        completionMS: (ProcessInfo.processInfo.systemUptime - submittedAt) * 1000,
+        failed: completed.status != .completed)
+    }
+    #endif
     buffer.present(drawable)
     buffer.commit()
-    #if PERFORMANCE_TESTS
-    buffer.waitUntilCompleted()
-    #endif
   }
 }

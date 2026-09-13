@@ -305,8 +305,7 @@ import NxlvKit
         }
         let caption = CGRect(x: rect.minX + 12, y: rect.midY - 10, width: rect.width - 24, height: 20)
         if let font {
-            let face: ClassicMacUserInterface.Face = font.width(of: MacInterfaceRenderer.menuText(label), face: .large, scale: 1) <= caption.width ? .large : .small
-            font.menuLine(label, in: caption, face: face, alpha: enabled ? 1 : 0.45, palette: chosen ? .green : .blue)
+            font.menuLine(label, in: caption, face: .small, alpha: enabled ? 1 : 0.45, palette: chosen ? .green : .blue)
         } else { GamePixelText.draw(label, in: caption) }
         if enabled { buttons.append((label, rect, action)) }
     }

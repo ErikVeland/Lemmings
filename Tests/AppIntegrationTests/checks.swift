@@ -420,6 +420,8 @@ extension AppDelegate {
       if rate == 10 { for _ in 0..<4 { speedControl.step(1, at: ProcessInfo.processInfo.systemUptime) } }
       lastStepTime = nil; accumulator = 0
       replayCaptureSeconds = 0; playfield.sceneRenderSeconds = 0
+      crtView.performanceMetrics = CRTPerformanceMetrics()
+      let initialCapturedFrames = runMovie.capturedFrames
       var samples: [Double] = [], memories: [UInt64] = []
       var completedTicks = 0, previousTick = 0, nuked = false
       let began = ProcessInfo.processInfo.systemUptime
@@ -440,18 +442,51 @@ extension AppDelegate {
       }
       let elapsed = ProcessInfo.processInfo.systemUptime - began
       try check(completedTicks >= 100, "Benchmark did not run the simulation: ticks \(completedTicks), phase \(phase), paused \(isPaused)")
+      let capturedFrames = runMovie.capturedFrames - initialCapturedFrames
+      try check(capturedFrames == completedTicks, "Benchmark skipped replay frames: \(capturedFrames)/\(completedTicks)")
+      try check(runMovie.recorder != nil && runMovie.recorder?.recordingFailure == nil,
+        "Benchmark recorder failed: \(runMovie.recorder?.recordingFailure ?? "missing recorder")")
+      // Drain submitted GPU work after timing the normal asynchronous app loop.
+      let gpuDeadline = ProcessInfo.processInfo.systemUptime + 2
+      var gpu = crtView.performanceMetrics.snapshot
+      while gpu.frames.count < gpu.submitted && ProcessInfo.processInfo.systemUptime < gpuDeadline {
+        try await Task.sleep(for: .milliseconds(10))
+        gpu = crtView.performanceMetrics.snapshot
+      }
+      try check(gpu.frames.count == gpu.submitted && gpu.failures == 0, "GPU work did not complete successfully")
+      if mode != .flat { try check(gpu.submitted > 0, "CRT benchmark submitted no GPU work") }
+      let movieURL = try await runMovie.performanceFile()
+      let movieAsset = AVURLAsset(url: movieURL)
+      guard let movieTrack = try await movieAsset.loadTracks(withMediaType: .video).first else {
+        throw IntegrationFailure(message: "Benchmark movie has no video track")
+      }
+      let reader = try AVAssetReader(asset: movieAsset)
+      let videoOutput = AVAssetReaderTrackOutput(track: movieTrack, outputSettings: nil)
+      try check(reader.canAdd(videoOutput), "Benchmark movie cannot be read")
+      reader.add(videoOutput)
+      try check(reader.startReading(), "Benchmark movie did not start reading")
+      var encodedFrames = 0
+      while let sample = videoOutput.copyNextSampleBuffer() { encodedFrames += CMSampleBufferGetNumSamples(sample) }
+      try check(reader.status == .completed && encodedFrames == runMovie.capturedFrames,
+        "Benchmark movie lost frames: \(encodedFrames)/\(runMovie.capturedFrames)")
+      func distribution(_ values: [Double]) -> [String: Double] {
+        let sorted = values.sorted()
+        guard !sorted.isEmpty else { return [:] }
+        func q(_ fraction: Double) -> Double { sorted[min(sorted.count - 1, Int(Double(sorted.count - 1) * fraction))] }
+        return ["p50": q(0.5), "p95": q(0.95), "p99": q(0.99), "max": sorted.last!]
+      }
       let sorted = samples.sorted()
       func quantile(_ fraction: Double) -> Double { sorted[min(sorted.count - 1, Int(Double(sorted.count - 1) * fraction))] }
-      rows.append(["sceneRenderSeconds": playfield.sceneRenderSeconds, "replayCaptureSeconds": replayCaptureSeconds, "encoderWaitSeconds": runMovie.recorder?.admissionWaitSeconds ?? 0, "display": mode.rawValue, "requestedSpeed": rate, "seconds": elapsed, "frames": samples.count,
+      rows.append(["replayFrames": capturedFrames, "initialReplayFrames": initialCapturedFrames, "encodedReplayFrames": encodedFrames, "gpuFrames": gpu.frames.count, "gpuExecutionMS": distribution(gpu.frames.map(\.gpuMS)), "gpuCompletionMS": distribution(gpu.frames.map(\.completionMS)), "sceneRenderSeconds": playfield.sceneRenderSeconds, "replayCaptureSeconds": replayCaptureSeconds, "encoderWaitSeconds": runMovie.recorder?.admissionWaitSeconds ?? 0, "display": mode.rawValue, "requestedSpeed": rate, "seconds": elapsed, "frames": samples.count,
         "ticks": completedTicks, "observedSimulationSpeed": Double(completedTicks) / (17 * elapsed),
-        "frameMS": ["p50": quantile(0.5), "p95": quantile(0.95), "p99": quantile(0.99), "max": sorted.last!],
+        "cpuFrameMS": ["p50": quantile(0.5), "p95": quantile(0.95), "p99": quantile(0.99), "max": sorted.last!],
         "residentBytes": ["first": memories.first!, "last": memories.last!, "peak": memories.max()!],
         "nukeTriggered": nuked, "windowWidth": 1280, "windowHeight": 720])
       runMovie.discard()
     }
     let report: [String: Any] = ["scenarios": rows,
-      "scope": "Local 1280x720 app loop, drawing, enabled replay recording and synchronous Metal completion. Audio is silent. Short samples are not a sustained hardware certification."]
-    let output = URL(fileURLWithPath: ".build/blocker-closure/performance.json")
+      "scope": "Local 1280x720 production app loop with asynchronous Metal submission and enabled replay recording. CPU work, GPU execution and submission-to-completion latency are separate measurements. GPU draining occurs outside the timed loop. Audio is silent. Short samples are not sustained hardware certification."]
+    let output = URL(fileURLWithPath: ProcessInfo.processInfo.environment["LEMMINGS_PERFORMANCE_OUTPUT"] ?? ".build/blocker-closure/performance.json")
     try FileManager.default.createDirectory(at: output.deletingLastPathComponent(), withIntermediateDirectories: true)
     try JSONSerialization.data(withJSONObject: report, options: [.prettyPrinted, .sortedKeys]).write(to: output)
     window.orderOut(nil)
@@ -744,6 +779,92 @@ extension AppDelegate {
       ClassicDOSReplayRecorder.stateHash(of: $0.simulation) == newSteel.stateHash
     } == true, "New text steel checkpoint did not restore exactly")
     print("PASS legacy text steel checkpoint, retry upgrade and exact current checkpoint restoration")
+
+    returnToLibrary()
+    fanPack = Bundle.main.resourceURL!.appendingPathComponent("LevelPacks/0478-DOS-Amiga-Crazy.zip")
+    fanQueue = FanLevelLibrary.entries(in: fanPack!); fanQueueIndex = 1
+    fanLocalStyles = false; restoringCheckpoint = true
+    loadCurrentFanLevel(); restoringCheckpoint = false
+    _ = advanceFanPlay()
+    guard let legacyLocalSession = session as? ClassicSession, fanPlaying else {
+      throw IntegrationFailure(message: "Legacy local style fixture failed to load")
+    }
+    let legacyLocalInitialHash = ClassicDOSReplayRecorder.stateHash(of: legacyLocalSession.simulation)
+    for _ in 0..<30 { legacyLocalSession.tick() }
+    saveRunCheckpoint(immediately: true)
+    var legacyLocal = try recoveryStore.latest(profileID: arcadeProfileID, hotSeatID: arcadeHotSeatID)!
+    legacyLocal.fanLocalStyles = nil
+    let legacyLocalHash = ClassicDOSReplayRecorder.stateHash(of: legacyLocalSession.simulation)
+    returnToLibrary(); restoreRun(legacyLocal)
+    try check(!fanLocalStyles && isPaused && arcadeRunID == legacyLocal.runID && (session as? ClassicSession).map {
+      ClassicDOSReplayRecorder.stateHash(of: $0.simulation) == legacyLocalHash
+    } == true, "Local style update changed an older saved attempt")
+    retry()
+    try check(fanLocalStyles && fanPlaying && (session as? ClassicSession).map {
+      ClassicDOSReplayRecorder.stateHash(of: $0.simulation) != legacyLocalInitialHash
+    } == true, "Retry did not enable release-local graphics")
+    phase = .playing; session?.tick()
+    saveRunCheckpoint(immediately: true)
+    let currentLocal = try recoveryStore.latest(profileID: arcadeProfileID, hotSeatID: arcadeHotSeatID)!
+    try check(currentLocal.fanLocalStyles == true, "Local graphics convention was not saved")
+    returnToLibrary(); restoreRun(currentLocal)
+    try check(fanLocalStyles && isPaused && arcadeRunID == currentLocal.runID && (session as? ClassicSession).map {
+      ClassicDOSReplayRecorder.stateHash(of: $0.simulation) == currentLocal.stateHash
+    } == true, "Release-local graphics checkpoint did not restore exactly")
+    print("PASS legacy graphics checkpoint, retry upgrade and exact current checkpoint restoration")
+    returnToLibrary()
+    fanPack = Bundle.main.resourceURL!.appendingPathComponent("LevelPacks/0482-DOS-Frost.zip")
+    fanQueue = FanLevelLibrary.entries(in: fanPack!); fanQueueIndex = 0
+    fanLocalStyles = true; fanHolidayStyles = false; restoringCheckpoint = true
+    loadCurrentFanLevel(); restoringCheckpoint = false
+    _ = advanceFanPlay()
+    guard let legacyHolidaySession = session as? ClassicSession, fanPlaying else {
+      throw IntegrationFailure(message: "Legacy local style fixture failed to load")
+    }
+    let legacyHolidayInitialHash = ClassicDOSReplayRecorder.stateHash(of: legacyHolidaySession.simulation)
+    for _ in 0..<30 { legacyHolidaySession.tick() }
+    saveRunCheckpoint(immediately: true)
+    var legacyHoliday = try recoveryStore.latest(profileID: arcadeProfileID, hotSeatID: arcadeHotSeatID)!
+    legacyHoliday.fanHolidayStyles = nil
+    let legacyHolidayHash = ClassicDOSReplayRecorder.stateHash(of: legacyHolidaySession.simulation)
+    returnToLibrary(); restoreRun(legacyHoliday)
+    try check(!fanHolidayStyles && isPaused && arcadeRunID == legacyHoliday.runID && (session as? ClassicSession).map {
+      ClassicDOSReplayRecorder.stateHash(of: $0.simulation) == legacyHolidayHash
+    } == true, "Local style update changed an older saved attempt")
+    retry()
+    try check(fanHolidayStyles && fanPlaying && (session as? ClassicSession).map {
+      ClassicDOSReplayRecorder.stateHash(of: $0.simulation) != legacyHolidayInitialHash
+    } == true, "Retry did not enable release-local Holiday graphics")
+    phase = .playing; session?.tick()
+    saveRunCheckpoint(immediately: true)
+    let currentHoliday = try recoveryStore.latest(profileID: arcadeProfileID, hotSeatID: arcadeHotSeatID)!
+    try check(currentHoliday.fanHolidayStyles == true, "Local Holiday graphics convention was not saved")
+    returnToLibrary(); restoreRun(currentHoliday)
+    try check(fanHolidayStyles && isPaused && arcadeRunID == currentHoliday.runID && (session as? ClassicSession).map {
+      ClassicDOSReplayRecorder.stateHash(of: $0.simulation) == currentHoliday.stateHash
+    } == true, "Release-local Holiday graphics checkpoint did not restore exactly")
+    print("PASS legacy Holiday graphics checkpoint, retry upgrade and exact current checkpoint restoration")
+    var prunedCheckpoint = checkpoint
+    let oldFan = checkpoint.fan!
+    var oldQueueWithDeletion = oldFan.queue
+    oldQueueWithDeletion[0] = .init(file: "removed.lvl", section: nil, label: "Removed level")
+    prunedCheckpoint.fan = FanRunRecovery(
+      queue: oldQueueWithDeletion, index: oldFan.index, baseDataSetID: oldFan.baseDataSetID)
+    _ = try prunedCheckpoint.validated()
+    let startsBeforePrunedRestore = ArcadeStore.shared.records.trolley.starts.count
+    returnToLibrary(); restoreRun(prunedCheckpoint)
+    try check(fanPlaying && isPaused, "Pruned fan attempt did not resume paused")
+    try check(fanQueue.count == oldFan.queue.count - 1 && fanQueueIndex == oldFan.index - 1,
+      "Pruned fan queue did not remove the deleted entry and adjust its position")
+    try check(arcadeRunID == checkpoint.runID && ArcadeStore.shared.records.trolley.starts.count == startsBeforePrunedRestore,
+      "Pruned fan restore changed attempt ownership or counted another start")
+    try check((session as? ClassicSession).map { ClassicDOSReplayRecorder.stateHash(of: $0.simulation) == checkpoint.stateHash } == true,
+      "Pruned fan restore changed simulation state")
+    saveRunCheckpoint(immediately: true)
+    let prunedSaved = try recoveryStore.latest(profileID: arcadeProfileID, hotSeatID: arcadeHotSeatID)!
+    try check(prunedSaved.fan?.queue.count == oldFan.queue.count - 1 && prunedSaved.fan?.index == oldFan.index - 1,
+      "Removed fan entry returned in the next checkpoint")
+    print("PASS pruned fan queue retains paused state and ownership and saves only surviving entries")
     print("PASS Classic fan checkpoint, shuffled queue, exact paused restore, identity, continuation and missing-pack rejection")
   }
   fileprivate func testEscapeToMainMenu() throws {
@@ -2070,6 +2191,82 @@ extension AppDelegate {
     print("PASS nearest eligible targeting, overlap, edge allowance, moving green target, exhausted skills and mutation-free Classic/fan probes")
 }
 
+@MainActor private func testGameTypography() async throws {
+    GameScreen.shared.dismissAll()
+    let previousWindow = GameScreen.shared.gameWindow
+    let host = SpeedTestWindow(contentRect: CGRect(x: 0, y: 0, width: 1280, height: 800), styleMask: [], backing: .buffered, defer: false)
+    host.contentView = NSView(frame: CGRect(x: 0, y: 0, width: 1280, height: 800))
+    GameScreen.shared.gameWindow = host
+    defer { GameScreen.shared.dismissAll(); GameScreen.shared.gameWindow = previousWindow }
+    let folder = URL(fileURLWithPath: ".build/typography/screens")
+    try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+    func children(_ view: NSView) -> [NSView] { [view] + view.subviews.flatMap(children) }
+    func capture(_ name: String) async throws {
+        let root = host.contentView!
+        root.layoutSubtreeIfNeeded()
+        try await Task.sleep(for: .milliseconds(30))
+        CATransaction.flush()
+        children(root).forEach { $0.needsDisplay = true }
+        let bitmap = root.bitmapImageRepForCachingDisplay(in: root.bounds)!
+        root.displayIgnoringOpacity(root.bounds, in: NSGraphicsContext(bitmapImageRep: bitmap)!)
+        try bitmap.representation(using: .png, properties: [:])!.write(to: folder.appendingPathComponent(name + ".png"))
+    }
+    let settingsPage = SettingsWindow(settings: ClassicSettings(), options: ClassicSettingsOptions(graphics: [], music: [.silent], sound: []))
+    settingsPage.show()
+    host.contentView!.layoutSubtreeIfNeeded()
+    let tabs = children(host.contentView!).compactMap { $0 as? GameTabButton }
+    try check(tabs.count == 6, "Settings lost a tab")
+    for tab in tabs {
+        try check(tab.frame.width > 0 && tab.frame.height >= 28, "Settings tab lost its input target")
+        tab.performClick(nil)
+        try check(tab.state == .on, "Settings tab did not select")
+        try await capture("settings-" + tab.title.lowercased())
+        if tab.title.lowercased() == "audio" {
+            let falls = children(host.contentView!).compactMap { $0 as? GameCheckButton }.first { $0.title == "Play death sound" }
+            try check(falls?.state == .on, "Bottom-fall sounds must default on")
+            guard let falls else { fatalError("Missing bottom-fall setting") }
+            try check(falls.bounds.width >= falls.intrinsicContentSize.width && falls.bounds.height >= 28, "Bottom-fall input target is clipped")
+            falls.performClick(nil)
+            try check(falls.state == .off, "Bottom-fall switch did not turn off")
+            try await capture("settings-audio-falls-off")
+            falls.performClick(nil)
+            try check(falls.state == .on, "Bottom-fall switch did not turn on")
+        }
+    }
+    GameScreen.shared.dismissAll()
+    let achievements = AchievementsWindow()
+    achievements.show(progress: ClassicAchievementProgress())
+    try await capture("achievements")
+    GameScreen.shared.dismissAll()
+    let page = GameMenuPage(title: "Typography", subtitle: "Green headings / blue supporting text")
+    let heading = GameLabel(labelWithString: "Section heading"); heading.role = .heading
+    let body = GameLabel(labelWithString: "Supporting text"); body.role = .body
+    let title = GameLabel(labelWithString: "Page title"); title.role = .title
+    for (index, label) in [title, heading, body].enumerated() {
+        label.frame = CGRect(x: 24, y: 390 - index * 60, width: 700, height: 48)
+        label.alignment = .left; page.body.addSubview(label)
+    }
+    try check(title.intrinsicContentSize.height > body.intrinsicContentSize.height, "Page title lost its larger game face")
+    let search = GameSearchField(frame: CGRect(x: 24, y: 120, width: 480, height: 36))
+    search.stringValue = "Builder"; page.body.addSubview(search)
+    var pressed = 0
+    let action = GameActionButton(title: "Continue") { pressed += 1 }
+    action.frame = CGRect(x: 24, y: 36, width: 240, height: 48); page.body.addSubview(action)
+    GameScreen.shared.present(page, owner: host)
+    try await capture("roles")
+    action.performClick(nil)
+    try check(pressed == 1, "Bitmap action lost its input")
+    search.selectText(nil)
+    guard let editor = search.currentEditor() as? GameFieldEditor else {
+        throw IntegrationFailure(message: "Search editing exposed the native font: \(String(describing: search.currentEditor()))")
+    }
+    editor.insertText("Miner", replacementRange: NSRange(location: 0, length: (editor.string as NSString).length))
+    try check(editor.string == "Miner", "Bitmap editor broke text replacement")
+    editor.setSelectedRange(NSRange(location: 0, length: 2))
+    try await capture("search-editing")
+    print("PASS game typography, settings tab targets, title hierarchy, actions and bitmap search editing")
+}
+
 let testApp = NSApplication.shared
 guard let testDomain = Bundle.main.bundleIdentifier,
   testDomain.hasPrefix("academy.glasscode.lemmings.integration-tests") else { exit(2) }
@@ -2111,6 +2308,7 @@ Task { @MainActor in
     try subject.testEscapeToMainMenu()
     print("Release blocker integration tests passed.")
     #elseif HINT_TESTS
+    try await testGameTypography()
     try await subject.testLevelHints()
     try await subject.testHintsFromControlsHelp()
     print("Level hints integration tests passed.")
@@ -2132,6 +2330,7 @@ Task { @MainActor in
     try await subject.testCRTInput()
     try await subject.testInterruptedFade()
     try await subject.testElapsedTimeAndAudioRecovery()
+    try await testGameTypography()
     try subject.testGamePages()
     try subject.testRestartSelection()
     try subject.testBundledRescueTarget()

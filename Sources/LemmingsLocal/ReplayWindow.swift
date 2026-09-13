@@ -13,18 +13,36 @@ import UniformTypeIdentifiers
   private var recordCompletions: [Int: (Result<URL, ReplayMovieError>) -> Void] = [:]
   private var title = "Lemmings"
   var hasFrames = false
+  #if PERFORMANCE_TESTS
+  private(set) var capturedFrames = 0
+  func performanceFile() async throws -> URL {
+    try await withCheckedThrowingContinuation { continuation in
+      let callback: (Result<URL, ReplayMovieError>) -> Void = {
+        continuation.resume(with: $0.mapError { $0 as Error })
+      }
+      if let ready { callback(ready) }
+      else { waiting.append(callback); finish() }
+    }
+  }
+  #endif
   var onWillReview: (() -> Void)?
   var onDidReview: (() -> Void)?
 
   func begin(ticksPerSecond: Double, title: String) {
+    #if PERFORMANCE_TESTS
+    capturedFrames = 0
+    #endif
     if recordCompletions[generation] == nil { recorder?.discard() }
     generation += 1
     recorder = ReplayMovieRecorder(ticksPerSecond: ticksPerSecond)
     ready = nil; finishing = false; waiting.removeAll(); hasFrames = false
     self.title = title
   }
-  func capture(_ image: CGImage?) {
-    guard let image, let recorder, !finishing else { return }
+  func capture(_ image: @autoclosure () -> CGImage?) {
+    guard let recorder, !finishing, recorder.isAcceptingFrames, let image = image() else { return }
+    #if PERFORMANCE_TESTS
+    capturedFrames += 1
+    #endif
     hasFrames = true; recorder.append(image)
   }
   func finish() {
@@ -295,8 +313,7 @@ import UniformTypeIdentifiers
   override var acceptsFirstResponder: Bool { true }
   private func text(_ value: String, in rect: CGRect) {
     guard let font else { GamePixelText.draw(value, in: rect); return }
-    let face: ClassicMacUserInterface.Face = font.width(of: MacInterfaceRenderer.menuText(value), face: .large, scale: 1) <= rect.width - 16 ? .large : .small
-    font.menuLine(value, in: CGRect(x: rect.minX + 8, y: rect.midY - 10, width: rect.width - 16, height: 20), face: face)
+    font.menuLine(value, in: CGRect(x: rect.minX + 8, y: rect.midY - 10, width: rect.width - 16, height: 20), palette: .green)
   }
   override func draw(_ dirtyRect: NSRect) {
     GameStyle.fill(bounds, NSColor(calibratedWhite: 0.015, alpha: 1))

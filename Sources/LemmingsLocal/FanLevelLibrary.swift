@@ -1,4 +1,5 @@
 import Foundation
+import CryptoKit
 import NxlvKit
 
 /// Combines embedded packs, automatic downloads and optional local packs.
@@ -184,7 +185,8 @@ enum FanLevelLibrary {
         // Graphics archives sit beside the levels and hold no level records.
         guard !base.hasPrefix("vgaspec"), !base.hasPrefix("vgagr"),
           !base.hasPrefix("ground"), let raw = contents(of: name, in: pack),
-          let sections = try? ClassicDATArchive.decode(raw)
+          let sections = try? ClassicDATArchive.decode(raw),
+          let slots = try? sectionSlots(for: name, count: sections.count, in: pack)
         else { continue }
         for (index, section) in sections.enumerated() {
           guard section.data.count >= ClassicLevel.recordSize,
@@ -192,7 +194,7 @@ enum FanLevelLibrary {
               data: section.data.prefix(ClassicLevel.recordSize))
           else { continue }
           let title = level.title.isEmpty ? "\(base) \(index + 1)" : level.title
-          found.append(Entry(file: name, section: index, label: title))
+          found.append(Entry(file: name, section: slots[index], label: title))
         }
       }
     }
@@ -206,14 +208,38 @@ enum FanLevelLibrary {
     }
     if let section = entry.section {
       let sections = try ClassicDATArchive.decode(raw)
-      guard sections.indices.contains(section) else {
+      let slots = try sectionSlots(for: entry.file, count: sections.count, in: pack)
+      guard let index = slots.firstIndex(of: section) else {
         throw FanLevelError.wrongSize(bytes: 0)
       }
       return (
-        try ClassicLevel(data: sections[section].data.prefix(ClassicLevel.recordSize)),
+        try ClassicLevel(data: sections[index].data.prefix(ClassicLevel.recordSize)),
         nil)
     }
     return try singleLevel(raw, name: entry.file, includeTextSteel: includeTextSteel)
+  }
+
+  /// Pruned DAT archives retain original slot identities for saved queues.
+  private static func sectionSlots(for member: String, count: Int, in pack: URL) throws -> [Int] {
+    let name = "classic-section-slots.json"
+    guard graphicArchiveIndex.files(in: pack).contains(name) else { return Array(0..<count) }
+    guard let raw = contents(of: name, in: pack),
+          let mappings = try? JSONDecoder().decode([String: [Int]].self, from: raw),
+          let slots = mappings[member], slots.count == count,
+          Set(slots).count == slots.count, slots.allSatisfy({ (0..<10_000).contains($0) }) else {
+      throw NSError(domain: "FanLevelLibrary", code: 2,
+                    userInfo: [NSLocalizedDescriptionKey: "Invalid archived level slot mapping."])
+    }
+    return slots
+  }
+
+  static func restoredQueue(_ queue: [Entry], index: Int, in pack: URL) throws -> (entries: [Entry], index: Int) {
+    let available = Set(entries(in: pack).map { $0.file + "#\($0.section ?? -1)" })
+    let retained = queue.enumerated().filter { available.contains($0.element.file + "#\($0.element.section ?? -1)") }
+    guard let current = retained.firstIndex(where: { $0.offset == index }) else {
+      throw FanLevelError.wrongSize(bytes: 0)
+    }
+    return (retained.map(\.element), current)
   }
 
   private static func singleLevel(_ raw: Data, name: String, includeTextSteel: Bool = true) throws -> (ClassicLevel, String?) {
@@ -225,15 +251,51 @@ enum FanLevelLibrary {
     return (try FanLevelReader.level(fromINI: text, includeSteel: includeTextSteel), FanLevelReader.styleName(fromINI: text))
   }
 
+  /// Verified archives that retain release-local graphics slots. Names are not identities.
+  /// See Documentation/ReleaseReadiness/FanStyleConventions.md for evidence and scope.
+  private static let localStylePacks: [String: (bytes: Int, directory: String)] = [
+    "4657df879d7b2e81e52d0f5e5f2d2d15d8d31176be4628dcfa67366c9c1450bc": (8375, "oh_no_more_lemmings_dos-1991-11-14_2232"), // 0477-DOS-Amiga-Tame.zip
+    "8d65d85e93e941b486e9543d3b6d4435495d2e56eadb53d744bd1782eb051da6": (10596, "oh_no_more_lemmings_dos-1991-11-14_2232"), // 0478-DOS-Amiga-Crazy.zip
+    "9447da45833dc536df6fb4e25fd7dff06423ae5e67a769a9c9e94c9416ba439a": (10598, "oh_no_more_lemmings_dos-1991-11-14_2232"), // 0479-DOS-Amiga-Wild.zip
+    "63ab956e498283467aba9a3dd87680abe43f00fd07ae16279a6bfd950c54a0a2": (10497, "oh_no_more_lemmings_dos-1991-11-14_2232"), // 0480-DOS-Amiga-Wicked.zip
+    "575f71040f97db65494e2fd5ab5b3a4351fa43073677480e9af4a9881b02d997": (11089, "oh_no_more_lemmings_dos-1991-11-14_2232"), // 0481-DOS-Amiga-Havoc.zip
+    "fd76e9ca94eeb1d7a54ca3ae0861efecc9541422a9972c39376d40795b7258be": (2523, "xmas_dos_XmasLemmingsV1.9"), // 0486-DOS-Xmas-1991.zip
+    "4361935304ac1fd403c4a5ea63b0a4be415117ff601841b501bac0130e946a91": (2124, "xmas_dos_XmasLemmingsV1.9a1"), // 0487-DOS-Xmas-1992.zip
+    "b4cce71d3c06d23b8211c86de6f76ff300331d8adc0c121d3f0924ce4a23037a": (3830, "oh_no_more_lemmings_dos-1991-11-14_2232"), // 0530-Oh-No-More-cLemmings-Tame.zip
+    "e7eb1cb2ed4152fe7d0b78cfcfca504b5e526cb53dc1287672410afce8f08585": (5187, "oh_no_more_lemmings_dos-1991-11-14_2232"), // 0531-Oh-No-More-cLemmings-Crazy.zip
+    "06cc76ea462e87444c3294ca16d48b06d6df24af0d6e6825df4012b79e26ea5e": (6091, "oh_no_more_lemmings_dos-1991-11-14_2232"), // 0532-Oh-No-More-cLemmings-Wild.zip
+    "8473c39f4bf9a6cc9b19dd6d27633e8fa7ccb8e70c52210758f6211bde8f22ba": (5576, "oh_no_more_lemmings_dos-1991-11-14_2232"), // 0533-Oh-No-More-cLemmings-Wicked.zip
+    "64cd29e779476667eeb9b20370f45d6c39626711de511685c2ddf354ccd93456": (8316, "oh_no_more_lemmings_dos-1991-11-14_2232"), // 0534-Oh-No-More-cLemmings-Havoc.zip
+    "1331231b1a47cc1c92aaa411bbfd05bbabe9b122406c6ab79cc673b8ed23dfd8": (5434, "oh_no_more_lemmings_dos-1991-11-14_2232"), // 0583-Amiga-Oh-No-More-Lemmings-Two-Player.zip
+  ]
+
+  private static let holidayStylePacks: [String: (bytes: Int, directory: String)] = [
+    "9f0b55e9f63bc1d3b5f931af6cd9881f439aba28aa939e4dd79e74c8e4b847a0": (4533, "holiday_native_1994"), // 0482-DOS-Frost.zip
+    "0543b9c913b9999d82112c55561fc37b9e765a299c6dc4ee7dbea6c1db569d9e": (6221, "holiday_native_1994"), // 0483-DOS-Hail.zip
+    "e0b4def872bc847330ee71afc5a6e602c97aaefe65f5b0f86d28af0145245339": (2802, "holiday_native_1994"), // 0535-Holiday-cLemmings-Frost.zip
+    "982bcf92e698b395415cb59da56b5ad4ac3e4f6224163e64920f0a55218b74a2": (3815, "holiday_native_1994"), // 0536-Holiday-cLemmings-Hail.zip
+  ]
+
+  static func localStyleDirectory(in pack: URL, includeHoliday: Bool = false) -> String? {
+    let conventions = includeHoliday ? localStylePacks.merging(holidayStylePacks) { current, _ in current } : localStylePacks
+    guard let size = (try? pack.resourceValues(forKeys: [.fileSizeKey]))?.fileSize,
+          conventions.values.contains(where: { $0.bytes == size }),
+          let data = try? Data(contentsOf: pack, options: .mappedIfSafe), data.count == size else { return nil }
+    let hash = SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined()
+    return conventions[hash]?.directory
+  }
+
   /// Custom-level slots span the original five styles, Oh No's four, then Xmas.
   /// Resolve them independently of whichever campaign the player last opened.
   static func groundSet(for level: ClassicLevel, styleName: String?, portsRoot: URL,
-                        pack: URL? = nil, entry: Entry? = nil) throws -> ClassicGroundSet {
+                        pack: URL? = nil, entry: Entry? = nil, useLocalStyles: Bool = true, useHolidayStyles: Bool = true) throws -> ClassicGroundSet {
     let names = ["dirt", "fire", "marble", "pillar", "crystal", "brick", "rock", "snow", "bubble", "xmas"]
     let named = styleName?.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
     let name = named ?? (names.indices.contains(level.groundStyle) ? names[level.groundStyle] : "slot \(level.groundStyle)")
     let directory: URL, index: Int
-    if name == "xmas" || name == "christmas" {
+    if named == nil, useLocalStyles, let pack, let local = localStyleDirectory(in: pack, includeHoliday: useHolidayStyles) {
+      directory = portsRoot.appendingPathComponent(local); index = level.groundStyle
+    } else if name == "xmas" || name == "christmas" {
       directory = portsRoot.appendingPathComponent("holiday_native_1994"); index = 2
     } else {
       switch ClassicStyleResolver(portsRoot: portsRoot).resolve(styleNamed: name == "special" ? "dirt" : name) {
@@ -307,9 +369,16 @@ enum FanLevelLibrary {
   // MARK: - Reading zips
 
   private static func contents(of entry: String, in pack: URL) -> Data? {
+    // unzip treats member arguments as patterns, even without a shell.
+    // Duplicate names would concatenate records instead of selecting one file.
+    guard graphicArchiveIndex.files(in: pack).filter({ $0 == entry }).count == 1 else { return nil }
+    let literal = entry.reduce(into: "") { result, character in
+      if "*?[]\\".contains(character) { result.append("\\") }
+      result.append(character)
+    }
     let process = Process()
     process.executableURL = URL(fileURLWithPath: "/usr/bin/unzip")
-    process.arguments = ["-p", pack.path, entry]
+    process.arguments = ["-p", pack.path, literal]
     let pipe = Pipe()
     process.standardOutput = pipe
     process.standardError = FileHandle.nullDevice

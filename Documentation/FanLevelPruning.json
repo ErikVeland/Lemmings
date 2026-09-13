@@ -1,0 +1,214 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-09-13",
+  "packs": [
+    {
+      "pack": "0003-Anatol00.zip",
+      "originalSHA256": "90230cd05b382ec0c2ef0c63cb037b5806d6e50b1cda03f8eed9d6437f9e7e4e",
+      "remove": [
+        {
+          "member": "Anatol00.dat",
+          "slot": 2,
+          "title": "Earthworks",
+          "reason": "missing-terrain"
+        }
+      ],
+      "prunedSHA256": "69b7e2e0e7acd0be7f709333e5bdf05749719d47796966d6f461661ee429861f"
+    },
+    {
+      "pack": "0100-TimpackB.zip",
+      "originalSHA256": "8badb21037a84e1688cd719cf0454ce357ce23bbe065acdd7d3b12c951d82857",
+      "remove": [
+        {
+          "member": "TimpackB.dat",
+          "slot": 4,
+          "title": "Timberrr",
+          "reason": "missing-terrain"
+        }
+      ],
+      "prunedSHA256": "2d0993487cafd21b8baa96ea32ac0c17c7f82057885545491b2148a9fa9b8c67"
+    },
+    {
+      "pack": "0224-ANTHPCK4.zip",
+      "originalSHA256": "675a000eaca0d53ccf74268ce3cbaadc08d0717b193b6437427f52dac3ac1490",
+      "remove": [
+        {
+          "member": "ANTHPCK4.DAT",
+          "slot": 5,
+          "title": "Snow Lev 6",
+          "reason": "missing-terrain"
+        }
+      ],
+      "prunedSHA256": "b2818e41664bbcc98870c9a7c5e6f20258004495061503f5c373fa255188223d"
+    },
+    {
+      "pack": "0296-JUANJO7.zip",
+      "originalSHA256": "d9ec789be8518667fa1310a4dff11c256849ef391034db006e4662de9ebab355",
+      "remove": [
+        {
+          "member": "JUANJO7.DAT",
+          "slot": 5,
+          "title": "LemEdit generated Level",
+          "reason": "empty-record"
+        },
+        {
+          "member": "JUANJO7.DAT",
+          "slot": 6,
+          "title": "LemEdit generated Level",
+          "reason": "empty-record"
+        },
+        {
+          "member": "JUANJO7.DAT",
+          "slot": 7,
+          "title": "LemEdit generated Level",
+          "reason": "empty-record"
+        },
+        {
+          "member": "JUANJO7.DAT",
+          "slot": 8,
+          "title": "LemEdit generated Level",
+          "reason": "empty-record"
+        },
+        {
+          "member": "JUANJO7.DAT",
+          "slot": 9,
+          "title": "LemEdit generated Level",
+          "reason": "empty-record"
+        }
+      ],
+      "prunedSHA256": "f856ab8bc0d75484397930583052290f399fd22e2068751262d3cdac61100ead"
+    },
+    {
+      "pack": "0320-joem5.zip",
+      "originalSHA256": "6d0d8ee7900c9103085812573e7189f538449ca91d7a270b764bbbe57d9f33a8",
+      "remove": [
+        {
+          "member": "joem5.dat",
+          "slot": 8,
+          "title": "Session",
+          "reason": "missing-terrain"
+        }
+      ],
+      "prunedSHA256": "c761d0d62f0151d196e97c84e7c9be033b82def2f948f0abe0188aceccf92281"
+    },
+    {
+      "pack": "0324-joem9.zip",
+      "originalSHA256": "4fd4a66362e1348b3a7334ce0c5f25f0f106222cd87e6b7be86978d68ab5f864",
+      "remove": [
+        {
+          "member": "joem9.dat",
+          "slot": 3,
+          "title": "666",
+          "reason": "missing-terrain"
+        },
+        {
+          "member": "joem9.dat",
+          "slot": 6,
+          "title": "Unnamed Feeling",
+          "reason": "missing-terrain"
+        }
+      ],
+      "prunedSHA256": "f45430bc130acd8bcc3077fd597afb705e299385ebd4341604cfcbd719954d64"
+    },
+    {
+      "pack": "0333-JM07.zip",
+      "originalSHA256": "d6ce5361e4194a7697f988dc3832fae066ea6220699899d44263b3ec1103d4c3",
+      "remove": [
+        {
+          "member": "JM07.DAT",
+          "slot": 3,
+          "title": "Heavenly Stars",
+          "reason": "missing-terrain"
+        }
+      ],
+      "prunedSHA256": "edadf10af11c0cca7a77d558f95892cd6f981ef3eb23546068dbd9f31db4106c"
+    },
+    {
+      "pack": "0343-JM17.zip",
+      "originalSHA256": "bcf2d5af22c63cc691d463c52c6bfad3012eab93531c6989741f00751c2a17ed",
+      "remove": [
+        {
+          "member": "JM17.DAT",
+          "slot": 7,
+          "title": "Things change",
+          "reason": "missing-terrain"
+        }
+      ],
+      "prunedSHA256": "138d98f4c65d5342b3486358838d15160431b6044535ac0df4c12989dc7c9b91"
+    },
+    {
+      "pack": "0421-Luis-Pack.zip",
+      "originalSHA256": "a78e301acbb19068898d15e9f23772801e71ce37e6185513d4d100db6f50fff5",
+      "remove": [
+        {
+          "member": "Luis Pack.dat",
+          "slot": 1,
+          "title": "LemEdit generated Level",
+          "reason": "empty-record"
+        },
+        {
+          "member": "Luis Pack.dat",
+          "slot": 2,
+          "title": "LemEdit generated Level",
+          "reason": "empty-record"
+        },
+        {
+          "member": "Luis Pack.dat",
+          "slot": 3,
+          "title": "LemEdit generated Level",
+          "reason": "empty-record"
+        },
+        {
+          "member": "Luis Pack.dat",
+          "slot": 4,
+          "title": "LemEdit generated Level",
+          "reason": "empty-record"
+        },
+        {
+          "member": "Luis Pack.dat",
+          "slot": 5,
+          "title": "LemEdit generated Level",
+          "reason": "empty-record"
+        },
+        {
+          "member": "Luis Pack.dat",
+          "slot": 6,
+          "title": "LemEdit generated Level",
+          "reason": "empty-record"
+        },
+        {
+          "member": "Luis Pack.dat",
+          "slot": 7,
+          "title": "LemEdit generated Level",
+          "reason": "empty-record"
+        },
+        {
+          "member": "Luis Pack.dat",
+          "slot": 8,
+          "title": "LemEdit generated Level",
+          "reason": "empty-record"
+        },
+        {
+          "member": "Luis Pack.dat",
+          "slot": 9,
+          "title": "LemEdit generated Level",
+          "reason": "empty-record"
+        }
+      ],
+      "prunedSHA256": "5924a04636010f4a2ef1ffb9f23d19f1cee292fff526830fcd3528bc3b97e42c"
+    },
+    {
+      "pack": "0520-Van-Clan-Wicked.zip",
+      "originalSHA256": "6afd5ffd62fd224e9b0f87abfc2b2a2177b85e538b79b703f069c2f33a873bef",
+      "remove": [
+        {
+          "member": "Van Clan Wicked 2.dat",
+          "slot": 4,
+          "title": "Timberrrr",
+          "reason": "missing-terrain"
+        }
+      ],
+      "prunedSHA256": "047faf685b852ab53328e45b4a36b845d4511299c6b450397acba932b10c01de"
+    }
+  ]
+}

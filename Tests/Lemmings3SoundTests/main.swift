@@ -8,7 +8,7 @@ let root = URL(fileURLWithPath: "Sources/Ports/LEM3CD")
 let bank = try Lemmings3SoundBank(root: root)
 let expected: [ClassicSoundEffect: (Int, Double)] = [
     .doorOpen: (4066, 8363), .letsGo: (6346, 7046), .assignSkill: (5112, 14037),
-    .exitLevel: (9128, 10054), .splat: (3954, 18741), .ohNo: (5368, 10528)
+    .fallOut: (3954, 18741), .exitLevel: (9128, 10054), .splat: (3954, 18741), .ohNo: (5368, 10528)
 ]
 try require(bank.clips.count == expected.count, "Missing original L3 voices")
 for (effect, values) in expected {
@@ -56,3 +56,15 @@ try require(!cues.contains(.splat), "Safe run played a death voice")
 let before = Lemmings3SoundCue.Snapshot(game)
 try require(Lemmings3SoundCue.cues(before: before, after: before).isEmpty, "Paused/completed state repeated audio")
 print("PASS six original L3 voices, declared rates, signed/unsigned PCM, malformed files and event timing")
+
+var falling = try Lemmings3Runtime(configuration: .init(width: width, height: height,
+    attributes: [UInt16](repeating: 0x1000, count: width * height),
+    entrance: .init(x: 20, y: 40), exits: [.init(x: 110, y: 46)], total: 3, releaseInterval: 1, releaseDelay: 0))
+var falls: [ClassicSoundEffect] = []
+for _ in 0..<100 {
+    let before = Lemmings3SoundCue.Snapshot(falling)
+    falling.step()
+    falls += Lemmings3SoundCue.cues(before: before, after: .init(falling))
+}
+try require(falling.lost == 3 && falls.contains(.fallOut) && !falls.contains(.splat), "Bottom falls must have a separate death cue")
+print("PASS L3 bottom deaths are distinct from other losses")

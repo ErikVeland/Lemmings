@@ -724,7 +724,7 @@ struct ReticleFeedback {
       guard fit >= minimumScale else { continue }
       macInterface.drawCentered(
         normalized, face: face, centerX: rect.midX,
-        top: rect.midY - macInterface.height(face: face, scale: fit) / 2, scale: fit)
+        top: rect.midY - macInterface.height(face: face, scale: fit) / 2, scale: fit, palette: .green)
       return true
     }
     return false
@@ -887,15 +887,11 @@ struct ReticleFeedback {
 
   private func drawCountdown(_ countdown: Int, above rect: CGRect) {
     let seconds = max(1, (countdown + ClassicDOSRules.ticksPerSecond - 1) / ClassicDOSRules.ticksPerSecond)
-    let text = "\(seconds)" as NSString
-    let attributes: [NSAttributedString.Key: Any] = [
-      .font: NSFont.monospacedDigitSystemFont(ofSize: 10 * viewport.zoom / 3, weight: .bold),
-      .foregroundColor: NSColor.white,
-    ]
-    let size = text.size(withAttributes: attributes)
-    text.draw(
-      at: CGPoint(x: rect.midX - size.width / 2, y: rect.minY - size.height),
-      withAttributes: attributes)
+    let text = "\(seconds)"
+    let renderer = GameMenuArtwork.renderer()
+    let width = renderer?.width(of: text, face: .small, scale: 1) ?? CGFloat(text.count * 6)
+    let height = renderer?.height(face: .small, scale: 1) ?? 7
+    GameTypography.annotation(text, at: CGPoint(x: rect.midX - width / 2, y: rect.minY - height), palette: .blue)
   }
 
   private func drawCursor() {

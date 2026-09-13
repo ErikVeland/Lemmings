@@ -242,7 +242,7 @@ import NxlvKit
         let explanation = CGRect(x: 176, y: 280, width: 768, height: 144)
         if let font {
             let scale = font.width(of: MacInterfaceRenderer.menuText(title), face: .large, scale: 2) <= heading.width ? 2 : 1
-            font.menuLine(title, in: heading, face: .large, scale: scale)
+            font.menuLine(title, in: heading, face: .large, scale: scale, palette: .green)
             font.menuParagraph(subtitle, in: subheading)
             font.menuParagraph(detail, in: explanation)
         } else {
@@ -272,8 +272,7 @@ import NxlvKit
         GameControlText.focus(self)
         let caption = CGRect(x: 12, y: bounds.midY - 10, width: bounds.width - 24, height: 20)
         if let renderer {
-            let face: ClassicMacUserInterface.Face = renderer.width(of: MacInterfaceRenderer.menuText(title), face: .large, scale: 1) <= caption.width ? .large : .small
-            renderer.menuLine(title, in: caption, face: face, alpha: isEnabled ? 1 : 0.45)
+            renderer.menuLine(title, in: caption, face: .small, alpha: isEnabled ? 1 : 0.45, palette: chosen ? .green : .blue)
         } else { GamePixelText.draw(title, in: caption) }
     }
     @objc private func invoke() { onPress?() }

@@ -10,6 +10,22 @@ spec.loader.exec_module(audit)
 
 
 class AuditTests(unittest.TestCase):
+    def test_classic_scope_keeps_shared_and_unknown_gates(self):
+        gates = [
+            {"area": "Classic", "status": "open", "scopes": ["all", "classic-1.0"]},
+            {"area": "Sequel fidelity", "status": "open", "scopes": ["all"]},
+            {"area": "New unclassified blocker", "status": "open"},
+        ]
+        selected = audit.scoped_gates(gates, "classic-1.0")
+        self.assertEqual([gate["area"] for gate in selected], ["Classic", "New unclassified blocker"])
+        self.assertEqual(audit.scoped_gates(gates, "all"), gates)
+        self.assertEqual(audit.exit_status([{"status": "passed"}], [], selected, True), 2)
+
+    def test_classic_campaign_requires_missing_routes(self):
+        self.assertIn("--require-all", audit.campaign_command("classic-1.0"))
+        self.assertIn("--classic-only", audit.campaign_command("classic-1.0"))
+        self.assertNotIn("--require-all", audit.campaign_command("all"))
+
     def test_closure_requires_all_checks_and_gates(self):
         passed = [{"status": "passed"}]
         closed = [{"status": "closed"}]
@@ -30,6 +46,7 @@ class AuditTests(unittest.TestCase):
                          "Documentation/CampaignCompletion/routes.json",
                          "Documentation/Lemmings2Completion/evidence.json",
                          "Documentation/ReleaseReadiness/gates.json",
+                         "Documentation/ReleaseScope.md", "Documentation/FanLevelPruning.json",
                          ".build/local/Ultimate Lemmings.app/Contents/Resources/level.dat"]
                 for name in names:
                     path = audit.ROOT / name

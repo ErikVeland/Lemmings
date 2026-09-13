@@ -21,7 +21,6 @@ import NxlvKit
     let earned = ClassicAchievement.catalog.filter { progress.isUnlocked($0.id) }.count
     let title = label("Your rescue story", size: 26, weight: .bold)
     let subtitle = label("\(earned) of \(ClassicAchievement.catalog.count) achievements earned", size: 14)
-    subtitle.textColor = .secondaryLabelColor
     let trophy = symbol(earned: true, size: 44)
     let heading = NSStackView(views: [trophy, stack([title, subtitle], spacing: 5)])
     heading.spacing = 18
@@ -33,7 +32,6 @@ import NxlvKit
     let hint = label(earned == ClassicAchievement.catalog.count
       ? "Every achievement earned. What a rescue!"
       : "Play levels in order to work towards the next trophy.", size: 12)
-    hint.textColor = .secondaryLabelColor
     let header = stack([heading, meter, hint], spacing: 12)
     let scroll = NSScrollView()
     scroll.hasVerticalScroller = true
@@ -81,8 +79,6 @@ import NxlvKit
     card.contentViewMargins = NSSize(width: 16, height: 14)
     let title = label(achievement.title, size: 15, weight: .semibold)
     let detail = GameLabel(wrappingLabelWithString: achievement.detail)
-    detail.font = .systemFont(ofSize: 12)
-    detail.textColor = .secondaryLabelColor
     let text = stack([title, detail], spacing: 4)
     let badge = symbol(earned: earned, size: 32)
     let row = NSStackView(views: [badge, text])
@@ -103,9 +99,9 @@ import NxlvKit
   }
 
   private func label(_ text: String, size: CGFloat,
-    weight: NSFont.Weight = .regular) -> NSTextField {
+    weight: NSFont.Weight = .regular) -> GameLabel {
     let label = GameLabel(labelWithString: text)
-    label.font = .systemFont(ofSize: size, weight: weight)
+    label.role = size >= 24 ? .title : weight == .regular ? .body : .heading
     return label
   }
 

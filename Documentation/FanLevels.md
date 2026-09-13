@@ -42,3 +42,15 @@ responses. Pass `--live` to also check the current public catalogue.
 
 `Scripts/build-local-app.sh` runs `Scripts/index-fan-levels.sh` before packaging,
 so the first launch has an accurate total without scanning every pack.
+
+## Reviewed pruning
+
+The working source after beta 28 contains 6,020 fan levels in 535 packs. The user
+authorised removal of 23 empty or malformed records. No complete pack was removed.
+`Tools/FanLevelCatalog/prune.py` reproduces the reviewed deletions from the original
+archive hashes before indexing. Packaging checks the resulting archive hashes.
+
+Pruned DAT archives contain `classic-section-slots.json`, mapping physical records
+to their original slot numbers. Retained compressed records stay byte-for-byte
+unchanged. Saved attempts keep their level identity, and restored queues omit
+deleted entries. The [pruning manifest](FanLevelPruning.json) records every removal.

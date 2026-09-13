@@ -1,0 +1,70 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 100
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 292
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 6,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 745
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 6,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 937
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 6,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1129
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 15,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 1284
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 50,
+    "required" : 25,
+    "saved" : 50,
+    "stateHash" : "feaf26dd7fb3642230cd57f4f2e1e238995d2bdcd0c0630772198d59f551751e",
+    "ticks" : 3180
+  },
+  "initialStateHash" : "c56938883cf035df15f3ed695b221fed0bfd40202e3b11b9f408756c65addc01",
+  "number" : 13,
+  "rank" : "Tame",
+  "title" : "Thunder-Lemmings are go!"
+}

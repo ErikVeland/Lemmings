@@ -85,6 +85,16 @@ def validate_catalogue(root):
     return data
 
 
+def require_retained_targets(rows, published):
+    current = {json.dumps(row["conditions"], sort_keys=True): row
+               for row in rows if row.get("conditions")}
+    for previous in published:
+        row = current.get(json.dumps(previous["conditions"], sort_keys=True))
+        if not row or not row.get("witness") or row["witness"]["saved"] < previous["witness"]["saved"]:
+            raise ValueError("Published rescue target was not reproduced: "
+                             + previous.get("title", previous["conditions"]["levelID"]))
+
+
 def merge(results, shards):
     paths = [results / f"classic-{i}.json" for i in range(shards)]
     paths += [results / f"{name}.json" for name in ("ports", "l2", "l3")]
@@ -109,6 +119,8 @@ def merge(results, shards):
     rows.sort(key=lambda r: (order[r["gameID"]], r["rank"], r["number"], -r["population"]))
     report_dir = PROJECT / "Documentation/TrolleyVerification"
     proof_dir = PROJECT / "Resources/Trolley"
+    if (proof_dir / "verified-maxima.json").exists():
+        require_retained_targets(rows, validate_catalogue(proof_dir)["levels"])
     report_dir.mkdir(parents=True, exist_ok=True)
     proof_dir.mkdir(parents=True, exist_ok=True)
     for row in rows:

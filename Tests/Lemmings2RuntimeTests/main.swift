@@ -1222,6 +1222,15 @@ func testNativeTerrainPhases(_ masks: Lemmings2TerrainMasks) throws {
 }
 
 func testControlsAndSoundEvents() throws {
+    var falling = try Lemmings2Runtime(configuration: .init(width: 120, height: 80,
+        pixels: [UInt8](repeating: 0, count: 9600), solid: [Bool](repeating: false, count: 9600),
+        palette: [UInt8](repeating: 255, count: 1024), entrance: .init(x: 20, y: 45, width: 1, height: 1),
+        exits: [.init(x: 90, y: 50, width: 16, height: 16)], skills: [.climber], supplies: [0], total: 1,
+        timeLimit: 120, releaseInterval: 20, terrainMasks: try syntheticMasks()))
+    var falls: [Lemmings2SoundRequest] = []
+    for _ in 0..<200 { falling.step(); falls += falling.drainSoundEvents() }
+    check(falls.filter { $0.isBottomFall }.count == 1 && falling.lost == 1, "L2 must identify bottom deaths once")
+    check(!Lemmings2SoundRequest(.fallOut).isBottomFall, "Other boundary deaths must retain their sound")
     check(Lemmings2Control.slot(x: 304, y: 170) == Lemmings2Control.nuke.rawValue, "Mushroom cloud must be nuke, not fan")
     check(Lemmings2Control.slot(x: 272, y: 190) == Lemmings2Control.fan.rawValue, "Lower-left control must be fan")
     for slot in 0..<12 {

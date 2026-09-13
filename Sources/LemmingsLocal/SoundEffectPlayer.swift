@@ -160,7 +160,13 @@ final class SoundEffectPlayer: @unchecked Sendable {
   /// says which effect they belong to, and binding them to a guess would play
   /// the wrong sound rather than none.
   @discardableResult
-  func loadAmigaSounds(directory: URL) throws -> [ClassicSoundEffect] {
+  func loadAmigaSounds(directory: URL, deathFallbackImage: URL? = nil) throws -> [ClassicSoundEffect] {
+    // The Amiga death sample is unnamed. Use the identified Macintosh voice.
+    var death: ClassicMacSound?
+    if let image = deathFallbackImage {
+      let volume = try ClassicHFSVolume(image: Data(contentsOf: image, options: .mappedIfSafe))
+      death = ClassicMacSoundDecoder.sounds(in: try volume.resourceFork(named: "Lemmings")).first { $0.name == "Die" }
+    }
     var byName: [String: AmigaSound] = [:]
     for bank in ["basicfx", "fullfx"] {
       let url = directory.appendingPathComponent(bank)
@@ -174,6 +180,7 @@ final class SoundEffectPlayer: @unchecked Sendable {
     lock.lock()
     library = [:]
     rates = [:]
+    if let death { library[.fallOut] = death.floatSamples(); rates[.fallOut] = death.sampleRate }
     for (effect, name) in ClassicSoundMapping.amigaVoiceNames {
       guard let sound = byName[name.lowercased()] else { continue }
       library[effect] = sound.samples
@@ -217,9 +224,16 @@ final class SoundEffectPlayer: @unchecked Sendable {
   }
 
   /// Places an effect across the sound stage (-1.0 left to +1.0 right).
+  private var bottomFallSounds = true
+
+  func setBottomFallSounds(_ enabled: Bool) {
+    lock.lock(); defer { lock.unlock() }; bottomFallSounds = enabled
+  }
+
   func play(_ effect: ClassicSoundEffect, pan: Float = 0.0) {
     lock.lock()
     defer { lock.unlock() }
+    guard effect != .fallOut || bottomFallSounds else { return }
     guard !isMuted, let samples = library[effect], !samples.isEmpty else { return }
     let rate = rates[effect] ?? sampleRate
     onPlay?(samples, rate, Float(level) * 0.6)

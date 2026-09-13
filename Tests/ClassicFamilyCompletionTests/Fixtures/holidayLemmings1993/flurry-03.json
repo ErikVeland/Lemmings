@@ -1,0 +1,25 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 364
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 80,
+    "required" : 50,
+    "saved" : 80,
+    "stateHash" : "5f0c174dc82b81979e7fc812d360d661a43ec249bcdab74bae8cbee9967170e8",
+    "ticks" : 3362
+  },
+  "initialStateHash" : "a97346cb3a679da8558e2d6af03fc23321a8ba3981b087d4bb5236fa3be2361e",
+  "number" : 3,
+  "rank" : "Flurry",
+  "title" : "Holiday Mining"
+}

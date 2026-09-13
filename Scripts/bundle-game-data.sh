@@ -32,6 +32,7 @@ case "$2" in
       exit 1
     fi
     mkdir -p "$resources_dir/LevelPacks"
+    python3 "$project_dir/Tools/FanLevelCatalog/prune.py" "$project_dir/Content/LevelPacks"
     rsync -a --include='*.zip' --include='*.json' --exclude='*' \
       "$project_dir/Content/LevelPacks/" "$resources_dir/LevelPacks/"
     rsync "${copy_options[@]}" "$project_dir/Sources/Ports/" "$resources_dir/Ports/"

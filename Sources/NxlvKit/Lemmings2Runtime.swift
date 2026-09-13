@@ -1690,7 +1690,7 @@ public struct Lemmings2Runtime: Sendable {
                 }
             }
             if !configuration.playBounds.contains(lem.x,lem.y) {
-                if lem.active { sound(.fallOut) }; lem.state = .dead
+                if lem.active { sound(Lemmings2SoundRequest(.fallOut, isBottomFall: lem.y >= configuration.playBounds.y + configuration.playBounds.height)) }; lem.state = .dead
             }
             if lem.state == stateAtStart { lem.age += 1 }
             // PROCESS 03ef/0752 dispatches exit contact after the skill update.

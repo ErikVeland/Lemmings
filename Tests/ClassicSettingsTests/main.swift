@@ -16,6 +16,12 @@ private func require(
 }
 
 private func testOptionsFollowInstalledData() throws {
+    let upgraded = try JSONDecoder().decode(ClassicSettings.self, from: Data("{}".utf8))
+    try require(upgraded.bottomFallSounds && ClassicSettings().bottomFallSounds, "Bottom falls must default on for new and existing players")
+    var quiet = upgraded
+    quiet.bottomFallSounds = false
+    let restoredQuiet = try JSONDecoder().decode(ClassicSettings.self, from: JSONEncoder().encode(quiet))
+    try require(!restoredQuiet.bottomFallSounds, "The bottom-fall preference was not saved")
     let bare = ClassicSettingsOptions.available(
         hasDOSData: true, hasAmigaDisk: false, hasMacintoshDisk: false, moduleCount: 0)
     try require(bare.graphics == [.dosVGA], "only DOS artwork should be offered")

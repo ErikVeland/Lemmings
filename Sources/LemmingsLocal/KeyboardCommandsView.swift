@@ -19,7 +19,6 @@ struct KeyboardCommand {
         self.commands = commands
         super.init(frame: NSRect(x: 0, y: 0, width: 780, height: 450))
         let intro = GameLabel(wrappingLabelWithString: "Esc  •  Save and return to the main menu     Space  •  Pause     F  •  Fast-forward\n" + (modern ? "Number keys select skills by position. Letter bindings follow the current level." : "Modern shortcuts are off. Use number keys for skills; enable modern controls in Settings."))
-        intro.font = .systemFont(ofSize: 13 * GameAccessibility.scale)
         search.placeholderString = "Find a key or command, e.g. rewind, Shift, builder"
         search.setAccessibilityLabel("Search keyboard commands")
         search.delegate = self
@@ -41,8 +40,6 @@ struct KeyboardCommand {
         table.dataSource = self; table.delegate = self
         table.setAccessibilityLabel("Keyboard commands")
         scroll.documentView = table
-        count.font = .systemFont(ofSize: 12 * GameAccessibility.scale)
-        count.textColor = .secondaryLabelColor
         for view in [intro, search, category, scroll, count] {
             view.translatesAutoresizingMaskIntoConstraints = false; addSubview(view)
         }
@@ -72,9 +69,8 @@ struct KeyboardCommand {
         let command = filtered[row]
         let key = tableColumn?.identifier.rawValue ?? ""
         let label = GameLabel(wrappingLabelWithString: key == "keys" ? command.keys : key == "group" ? command.group : command.action)
-        label.font = key == "keys" ? .monospacedSystemFont(ofSize: 12 * GameAccessibility.scale, weight: .semibold) : .systemFont(ofSize: 12 * GameAccessibility.scale)
-        label.textColor = key == "group" ? .secondaryLabelColor : .labelColor
         label.setAccessibilityLabel(label.stringValue)
+        label.role = key == "group" ? .heading : .body
         return label
     }
 }

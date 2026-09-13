@@ -12,6 +12,7 @@ public enum ClassicSoundEffect: String, CaseIterable, Codable, Sendable {
     case ohNo
     case explode
     case splat
+    case fallOut
     case drown
     case vaporize
     case exitLevel
@@ -53,6 +54,8 @@ public enum ClassicSoundCue {
                 add(.builderWarning)
             case .hitSteel:
                 add(.hitSteel)
+            case .fellOut:
+                add(.fallOut)
             case .nukeStarted:
                 add(.nuke)
             case let .actionChanged(_, _, to):
@@ -139,6 +142,7 @@ extension ClassicSoundMapping {
         .exitLevel: "Ting",
         .builderWarning: "Oing",
         .nuke: "Die",
+        .fallOut: "Die",
         .yippee: "Yippee",
         .letsGo: "LetsGo",
         .pop: "Pop",

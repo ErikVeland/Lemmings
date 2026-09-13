@@ -31,7 +31,7 @@ public struct Lemmings3SoundBank: Sendable {
 
     public static let filenames: [ClassicSoundEffect: String] = [
         .doorOpen: "I_DOOR.PAT", .letsGo: "I_LETSGO.PAT", .assignSkill: "I_OK.PAT",
-        .exitLevel: "I_YIPEE.PAT", .splat: "I_LEMDIE.PAT", .ohNo: "I_OHNO.PAT"
+        .exitLevel: "I_YIPEE.PAT", .splat: "I_LEMDIE.PAT", .fallOut: "I_LEMDIE.PAT", .ohNo: "I_OHNO.PAT"
     ]
     public let clips: [ClassicSoundEffect: Clip]
     public init(root: URL) throws {
@@ -44,8 +44,10 @@ public struct Lemmings3SoundBank: Sendable {
 public enum Lemmings3SoundCue {
     public struct Snapshot: Sendable {
         let released: Int, saved: Int, lost: Int
+        let bottomDeaths: Set<Int>
         public init(_ game: Lemmings3Runtime) {
             released = game.released; saved = game.saved; lost = game.lost
+            bottomDeaths = Set(game.lemmings.filter { $0.state == .dead && $0.y >= game.configuration.height }.map(\.id))
         }
     }
     /// Collapse simultaneous arrivals and losses to one voice per event kind.
@@ -53,7 +55,9 @@ public enum Lemmings3SoundCue {
         var result: [ClassicSoundEffect] = []
         if before.released == 0 && after.released > 0 { result += [.doorOpen, .letsGo] }
         if after.saved > before.saved { result.append(.exitLevel) }
-        if after.lost > before.lost { result.append(.splat) }
+        let bottomLosses = after.bottomDeaths.subtracting(before.bottomDeaths).count
+        if bottomLosses > 0 { result.append(.fallOut) }
+        if after.lost - before.lost > bottomLosses { result.append(.splat) }
         return result
     }
 }

@@ -111,6 +111,14 @@ private func testPitchRatio() throws {
 }
 
 do {
+    try require(ClassicSoundCue.cues(for: [.fellOut(lemmingID: 1), .lost(lemmingID: 1), .fellOut(lemmingID: 2)]) == [.fallOut], "Bottom falls must play one death voice per tick")
+    try require(ClassicSoundCue.cues(for: [.lost(lemmingID: 1)]).isEmpty, "Completed death animations must not repeat their sound")
+    try require(ClassicSoundMapping.macintoshNames[.fallOut] == "Die", "Bottom falls must use the death sample")
+    let terrain = try ClassicDOSTerrain(width: 64, height: 64, solidMask: Data(repeating: 0, count: 4096), steelMask: Data(repeating: 0, count: 4096))
+    var falling = try ClassicDOSSimulation(terrain: terrain, configuration: .init(totalLemmings: 1, requiredToSave: 0, timeLimitTicks: nil, initialReleaseRate: 99, entrances: [.init(x: 20, y: 20)], maximumX: 63, maximumY: 63))
+    var bottomCues: [ClassicSoundEffect] = []
+    for _ in 0..<200 { bottomCues += ClassicSoundCue.cues(for: falling.tick()) }
+    try require(bottomCues.filter { $0 == .fallOut }.count == 1 && !bottomCues.contains(.splat), "A real bottom fall must emit exactly one death voice")
     try testCoreEventsMap()
     try testHazardsMap()
     try testDuplicatesCollapse()

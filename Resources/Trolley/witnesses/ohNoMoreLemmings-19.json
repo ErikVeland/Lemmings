@@ -1,0 +1,52 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 97
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 340
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 474
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 666
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 50,
+    "required" : 25,
+    "saved" : 50,
+    "stateHash" : "d2389e45f4baebf1a15e135ea1def49c1ab061badf8af487f68d9d3344afd54b",
+    "ticks" : 2934
+  },
+  "initialStateHash" : "5462bf79c3f25631a9ba654f204a096df091ea280a3e4f212f60a7c007fe4c72",
+  "number" : 20,
+  "rank" : "Tame",
+  "title" : "Custom built for Lemmings"
+}

@@ -1,6 +1,24 @@
 import AppKit
 import NxlvKit
 
+/// Text roles use the shipped glyphs. Size follows purpose, never word length.
+@MainActor enum GameTypography {
+  enum Role {
+    case title, heading, body
+    var face: ClassicMacUserInterface.Face { self == .title ? .large : .small }
+    var palette: MacInterfaceRenderer.Palette { self == .body ? .blue : .green }
+  }
+
+  static func annotation(_ text: String, at point: CGPoint, palette: MacInterfaceRenderer.Palette = .green) {
+    let text = MacInterfaceRenderer.menuText(text)
+    if let renderer = GameMenuArtwork.renderer() {
+      renderer.draw(text, face: .small, at: CGPoint(x: point.x.rounded(), y: point.y.rounded()), scale: 1, palette: palette)
+    } else {
+      GamePixelText.draw(text, in: CGRect(x: point.x, y: point.y, width: CGFloat(text.count * 6), height: 7), maxScale: 1, palette: palette)
+    }
+  }
+}
+
 /// Draws menus with the Macintosh release's own artwork.
 ///
 /// The Macintosh version drew its front end at twice the resolution of the
@@ -194,14 +212,15 @@ import NxlvKit
     }
   }
 
-  func menuParagraph(_ value: String, in rect: CGRect, alignment: NSTextAlignment = .center) {
-    guard let font = font(.small) else { return }
+  func menuParagraph(_ value: String, in rect: CGRect, alignment: NSTextAlignment = .center,
+    face: ClassicMacUserInterface.Face = .small, palette: Palette = .blue, alpha: CGFloat = 1) {
+    guard let font = font(face) else { return }
     let columns = max(1, Int(rect.width) / font.cellWidth), spacing = font.cellHeight + 6
     let rows = max(0, Int(rect.height) / spacing)
     let lines = Self.menuLines(value, columns: columns)
     for (index, value) in lines.prefix(rows).enumerated() {
       let text = index == rows - 1 && lines.count > rows ? String(value.prefix(max(0, columns - 3))) + "..." : value
-      menuLine(text, in: CGRect(x: rect.minX, y: rect.minY + CGFloat(index * spacing), width: rect.width, height: CGFloat(spacing)), alignment: alignment)
+      menuLine(text, in: CGRect(x: rect.minX, y: rect.minY + CGFloat(index * spacing), width: rect.width, height: CGFloat(spacing)), face: face, alignment: alignment, alpha: alpha, palette: palette)
     }
   }
 

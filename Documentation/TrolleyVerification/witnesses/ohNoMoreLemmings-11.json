@@ -1,0 +1,43 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 145
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 268
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "basher"
+        }
+      },
+      "tick" : 412
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 50,
+    "required" : 25,
+    "saved" : 50,
+    "stateHash" : "b21bd333aa7a1291acf1abea6030132159c3cb891b03fc791a66ec309face572",
+    "ticks" : 3067
+  },
+  "initialStateHash" : "17037d54f21e905115c5f214e039cf40dad9a8c19c1dc4d9a15aecb831399206",
+  "number" : 12,
+  "rank" : "Tame",
+  "title" : "Citizen Lemming"
+}

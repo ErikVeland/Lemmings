@@ -6,7 +6,7 @@ import AppKit
     func showNotice(_ text: String) { notice = text; noticeUntil = ProcessInfo.processInfo.systemUptime + 2 }
     func drawNotice() {
         guard let notice, ProcessInfo.processInfo.systemUptime < noticeUntil else { return }
-        (notice as NSString).draw(at: CGPoint(x: 12, y: 12), withAttributes: [.foregroundColor: NSColor.yellow, .font: NSFont.boldSystemFont(ofSize: 16)])
+        GameTypography.annotation(notice, at: CGPoint(x: 12, y: 12))
     }
     private var id: Int?
     private var until: TimeInterval = 0
