@@ -86,3 +86,28 @@ func testLocationKeys() {
     print("PASS location keys, re-fire window, fallback lemming, turns and the three lemming cap")
 }
 testLocationKeys()
+
+func testActions() throws {
+    var game = try fixture(wall: true)
+    while game.tick < 62 { game.step() }
+    let bounds = AimBounds(x: 0...(game.configuration.width - 1), y: 0...(game.configuration.height - 1))
+    let list = actions(in: game, candidates: [0, 0], bounds: bounds)
+    let basher = game.configuration.skills.firstIndex(of: .basher)!
+    check(list.first == .wait, "Wait is not the first action")
+    check(list.contains(.assign(slot: basher, lemming: 0)), "The basher assignment is missing at the wall")
+    check(Set(list).count == list.count, "Repeated candidates produced repeated actions")
+    let aimed = list.compactMap { action -> (Int, Int)? in
+        if case let .aimedAssign(_, _, x, y) = action { return (x, y) }
+        return nil
+    }
+    check(aimed.count <= 10, "The roper produced \(aimed.count) aim targets, expected at most 10")
+    check(aimed.allSatisfy { bounds.x.contains($0.0) && bounds.y.contains($0.1) }, "An aim target lies outside the witness bounds")
+    let roper = game.configuration.skills.firstIndex(of: .roper)!
+    let recorded = record(.aimedAssign(slot: roper, lemming: 0, x: 10, y: 20), tick: 62, skills: game.configuration.skills)
+    check(recorded.inputs.count == 1 && recorded.pointers.count == 1 && recorded.pointers[0].tick == 62
+          && recorded.pointers[0].x == 10 && !recorded.pointers[0].fan,
+          "An aimed assignment did not record one input and one held pointer")
+    check(record(.wait, tick: 62, skills: game.configuration.skills).inputs.isEmpty, "Wait recorded input")
+    print("PASS actions: wait first, basher at the wall, bounded roper aim, no repeats")
+}
+try testActions()
