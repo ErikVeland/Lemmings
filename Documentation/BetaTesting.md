@@ -1,6 +1,6 @@
 # Beta testing
 
-Beta 26 remains the latest notarised tester archive. Beta 27 is built and Developer ID signed, but its Apple notarisation is blocked by missing local credentials. Do not distribute the pending beta 27 ZIP. See [beta 27 readiness](Beta27Readiness.md), [cumulative notes since beta 18](ReleaseNotes-beta27.md), and [beta 26 archive verification](Beta26Readiness.md).
+Beta 27 is ready for testers: universal Intel/Apple silicon, macOS 13 or later, Developer ID signed, notarised and stapled. The extracted ZIP passed Gatekeeper with quarantine set. See [beta 27 readiness](Beta27Readiness.md) and [cumulative notes since beta 18](ReleaseNotes-beta27.md).
 
 ## Validate the build
 
@@ -37,11 +37,14 @@ BETA_NOTARY_PROFILE=lemmings-beta zsh Scripts/package-beta.sh
 The script builds both architectures, signs with the Developer ID in the
 keychain, submits to Apple, staples the ticket, and checks the extracted zip
 with Gatekeeper. Earlier zip files move into `.build/local/archive/`.
-The current distributable archive is `.build/beta26/UltimateLemmings-0.1-beta26.zip`.
+The current distributable archive is `.build/beta27/UltimateLemmings-0.1-beta27.zip`,
+also copied to `/Users/veland/Downloads/UltimateLemmings-beta27-macOS.zip`.
 Beta 27 inputs and validation logs are under `.build/beta27`. Its source and game
-data are frozen separately from this working checkout. The prepared
-`.build/beta27/finish-release.zsh` submits the tested archive, staples the ticket,
-and verifies the downloaded ZIP after the notarisation credentials are restored.
+data are frozen separately from this working checkout. The recorded
+`.build/beta27/finish-release.zsh` submitted the tested archive, stapled the ticket,
+and verified the downloaded ZIP using the working default keychain lookup.
+The earlier lookup failure did not require a credential reset. An explicit
+login-keychain search still misses this profile; that is not evidence of deletion.
 
 For a package without recorded soundtracks:
 

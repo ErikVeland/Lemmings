@@ -37,7 +37,7 @@
   "priority": "P0",
   "status": "partial",
   "exitCriteria": "Freeze the final source and assets. Build both Mac architectures, sign, notarise and verify the downloaded archive. Earlier beta notarisation is not evidence for later local builds.",
-  "progress": "Beta 26 remains notarised and was rechecked after extraction and quarantine. Beta 27 is frozen, universal and Developer ID signed. All 25 regression suites, 120 Original routes, known campaign routes, full app journeys on Apple silicon and Intel under Rosetta, full sequel UI and signed-app startup checks pass. Notarisation could not start because the local lemmings-beta credential profile is missing. Do not distribute the pending ZIP. Restore credentials and finish the prepared archive without rebuilding. See Documentation/Beta27Readiness.md."
+  "progress": "Beta 27 is frozen, universal, Developer ID signed, notarised and stapled. All 25 regression suites, 120 Original routes, known campaign routes, full app journeys on Apple silicon and Intel under Rosetta, full sequel UI and signed-app startup checks pass. Apple accepted submission 1b6d3ce3-fe97-46da-9f44-141da1e13bc4. The finished ZIP passed signature, ticket and Gatekeeper checks after extraction with quarantine set. The overnight keychain lookup failure recovered without resetting credentials. The original diagnosis of missing credentials was not established. See Documentation/Beta27Readiness.md."
  },
  {
   "area": "Publishing agreement and assets",

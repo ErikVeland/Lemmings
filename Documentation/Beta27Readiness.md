@@ -7,19 +7,30 @@ This remains a beta. It does not close the full Classic/fan or sequel 1.0 gates.
 
 The app is built and signed with Developer ID Application: Erik Veland
 (54WU29TRTY), with hardened runtime and a timestamp. Strict signature validation
-passed. Apple notarisation could not start because the current login keychain
-has no `lemmings-beta` credential profile. The pending ZIP must not be sent to
-testers. Restore the notarisation profile locally; do not paste credentials into
-chat or source control.
+passed. The overnight notarisation attempt reported that it could not find the
+`lemmings-beta` profile. That did not establish removal or revocation.
+
+On 13 September the same default lookup successfully retrieved Apple's submission
+history without changing credentials. An explicit `login.keychain-db` lookup still
+fails, so the earlier inspection of that file was not a valid absence check.
+The exact cause of the overnight default-lookup failure remains unconfirmed.
+The Mac was locked at the time. No credential reset was needed. Apple accepted the existing candidate as submission
+`1b6d3ce3-fe97-46da-9f44-141da1e13bc4`. The ticket was stapled and validated.
+The finished ZIP was extracted, marked as downloaded, and accepted by Gatekeeper
+as Notarized Developer ID. Strict signature checks passed on the extracted app.
 
 `.build/beta27/finish-release.zsh` checks the release test logs before submission,
 then staples Apple's ticket, extracts the finished ZIP, checks its signature and
 Gatekeeper acceptance with quarantine set, and copies it into Downloads. It does
 not rebuild the tested app.
 
-The previously delivered beta 26 ZIP was extracted again for this review.
-Gatekeeper accepted it as Notarized Developer ID, and its stapled ticket passed
-validation. It remains the available tester download.
+The tester download is
+`/Users/veland/Downloads/UltimateLemmings-beta27-macOS.zip`.
+SHA-256: `aab87a93033d1d682392bc923bc59d215f52c903f6d281478faa95ea6058f5cd`.
+The archive is about 407 MiB and includes the full soundtrack assets and
+`Release Notes.md`. The matching notes are also in Downloads.
+
+Beta 26 was rechecked successfully and remains archived as a fallback.
 
 ## Frozen inputs
 
@@ -32,7 +43,7 @@ from edits elsewhere. The input hash inventory is `.build/beta27/input-manifest.
 
 The two app logs are `app-arm64.log` and `app-x86_64.log`. Sequel results are
 `sequel-assets.log` and `sequel-ui.log`. `core.log`, `gates.log`, `launch-smoke.log`
-and `notary.log` record the remaining checks and the actual credential failure.
+and `notary.log` record the remaining checks and the initial credential lookup failure.
 All logs are under `.build/beta27`.
 
 The archive includes the latest Classic solution viewer, Hot Seat readiness

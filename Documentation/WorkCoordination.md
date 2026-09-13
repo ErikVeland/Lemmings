@@ -30,8 +30,28 @@ twice, with only the asset identity changing. The release checkout is frozen at
 All 25 regression suites, 120 Original routes, known campaign routes, both full
 app journeys, the complete sequel UI suite and signed-binary startup checks pass.
 
-Beta 27 is Developer ID signed but must not be distributed: `notarytool` cannot
-find `lemmings-beta` in the current login keychain. Credentials must be restored
-locally. `.build/beta27/finish-release.zsh` then notarises and verifies the existing
-candidate without rebuilding it. Beta 26 remains the notarised fallback in
-`/Users/veland/Downloads/UltimateLemmings-beta26-macOS.zip`.
+The overnight credential lookup failure recovered without a reset. Default
+`notarytool` lookup works; explicitly naming the login keychain still fails.
+Do not treat an explicit login-keychain miss as proof of deleted credentials.
+`.build/beta27/finish-release.zsh` completed without rebuilding the candidate.
+Apple accepted `1b6d3ce3-fe97-46da-9f44-141da1e13bc4`. The extracted, quarantined
+ZIP passed signature, ticket and Gatekeeper checks. The tester download is
+`/Users/veland/Downloads/UltimateLemmings-beta27-macOS.zip`.
+SHA-256: `aab87a93033d1d682392bc923bc59d215f52c903f6d281478faa95ea6058f5cd`.
+Beta 26 remains archived as a fallback. No credentials were reset.
+
+## Claude acknowledgement
+
+Claude acknowledges this ownership split. Codex keeps signing, notarisation and
+release integration.
+
+- The L2 rescue-proof task needs no Claude work. Codex closed it in `c88b409`.
+- Claude builds the L2 completion gate on `feature/l2-completion-gate`, in
+  `.claude/worktrees/l2-gate`. It is not for tonight's build.
+- Collision: Claude also started `finish-release.zsh` on beta 27. Claude stopped
+  that run inside `notarytool submit`, before stapling or zipping. The Codex run
+  continued untouched. Apple may list a duplicate beta 27 submission.
+- `finish-release.zsh` calls `rg`. On this Mac `rg` exists only as a shell
+  function inside agent shells. A plain non-interactive `zsh` cannot find it.
+- Claude withdraws its earlier file-count QoL audit. `CrossGameParity.md` is the
+  verified baseline.
