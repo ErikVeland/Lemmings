@@ -137,3 +137,24 @@ func testScoring() throws {
     print("PASS scoring order, fixed tie break and fingerprint merge")
 }
 try testScoring()
+
+func testPlantedRouteIsFound() throws {
+    let game = try fixture(wall: true)
+    let bounds = AimBounds(x: 0...(game.configuration.width - 1), y: 0...(game.configuration.height - 1))
+    let report = search(from: game, bounds: bounds, limits: SearchLimits(beamWidth: 16, maxDepth: 6, budgetSeconds: 120))
+    guard let best = report.best else {
+        check(false, "The search found no winning route on the planted level"); return
+    }
+    check(best.game.saved == 3, "The search saved \(best.game.saved) of 3 on the planted level, expected the crowd route")
+    // Replay the found input from a fresh runtime through the shared cursor.
+    var replay = try fixture(wall: true)
+    var cursor = Lemmings2InputCursor()
+    while !replay.isComplete {
+        try cursor.apply(inputsAt: &replay, inputs: best.inputs, pointers: best.pointers)
+        replay.step()
+    }
+    check(replay.saved == 3 && replay.tick == best.game.tick && replay.stateFingerprint == best.game.stateFingerprint,
+          "The found route did not replay to the same state")
+    print("PASS search finds the planted crowd route: 3 of 3 in \(best.game.tick) ticks, \(best.inputs.count) inputs, \(report.expanded) nodes")
+}
+try testPlantedRouteIsFound()
