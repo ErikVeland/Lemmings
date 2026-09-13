@@ -9,7 +9,7 @@ let masks = try Lemmings2TerrainMasks(root:root)
 let names = try Lemmings2FrontEnd(root: root).banks["INFO"]!.strings
 struct Fixture: Decodable { let levelSHA256: String }
 let fixtures = URL(fileURLWithPath: CommandLine.arguments.count > 2
-    ? CommandLine.arguments[2] : "Tests/Lemmings2RuntimeTests/Fixtures")
+    ? CommandLine.arguments[2] : "Tests/Lemmings2CompletionTests/Fixtures")
 let recorded = try Set(FileManager.default.contentsOfDirectory(at:fixtures,includingPropertiesForKeys:nil)
     .filter { $0.pathExtension == "json" }.map {
         try JSONDecoder().decode(Fixture.self,from:Data(contentsOf:$0)).levelSHA256
