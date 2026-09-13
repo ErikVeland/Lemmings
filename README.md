@@ -33,6 +33,11 @@ the check. See [the completion evidence](Documentation/ClassicCompletion/README.
 A winning rescue count is not an optimality proof; maximum-rescue targets remain
 separate from the original pass requirements.
 
+Lemmings 2 has a matching gate. `zsh Scripts/verify-lemmings2-completion.sh`
+replays each recorded route twice and checks a committed manifest. It verifies
+64 of 120 levels. No tribe chains all ten levels under population carry-over.
+See [the Lemmings 2 evidence](Documentation/Lemmings2Completion/README.md).
+
 The app also opens unofficial NeoLemmix `.nxlv` levels. The player chooses a
 NeoLemmix styles directory once. The app then resolves style assets, renders
 the level, and plays it under the NeoLemmix ruleset. Missing style data is

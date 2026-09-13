@@ -4,7 +4,7 @@
   "priority": "P0",
   "status": "open",
   "exitCriteria": "Replay a winning route for every advertised level. Close the remaining Oh No!, Xmas 1992, Holiday, L2, L3 and conversion gaps. Distinguish individual solutions from continuous campaign progression.",
-  "progress": "13 September: all 120 original Lemmings winning routes pass the strict gate. The fresh 6,395-level corpus audit reproduces all 223 official-family and 294 fan wins. Pack graphics and letter-coded special-picture fixes recover nine fan load/start failures, reducing 94 to 85, with no new failures or lost wins. The remaining 5,878 levels lack verified winning routes, so this gate stays open. Existing saved fan attempts retain their original graphics rules. See ReleaseReadiness/ClassicValidation-current.md."
+  "progress": "13 September: all 120 original Lemmings winning routes pass the strict gate. The fresh 6,395-level corpus audit reproduces all 223 official-family and 294 fan wins. Pack graphics and letter-coded special-picture fixes recover nine fan load/start failures, reducing 94 to 85, with no new failures or lost wins. The remaining 5,878 levels lack verified winning routes, so this gate stays open. Existing saved fan attempts retain their original graphics rules. See ReleaseReadiness/ClassicValidation-current.md. A standalone Lemmings 2 gate now replays each recorded route twice against a hashed manifest: 64 of 120 levels verified, 43 routes saving one lemming of sixty, and no tribe chaining all ten levels. See Lemmings2Completion/README.md."
  },
  {
   "area": "Sequel fidelity",
