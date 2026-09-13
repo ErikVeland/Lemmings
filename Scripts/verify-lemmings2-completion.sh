@@ -19,4 +19,11 @@ swiftc -O -swift-version 6 -warnings-as-errors \
   -I "$build_dir/modules" -L "$build_dir" -lNxlvKit \
   -Xlinker -rpath -Xlinker "$build_dir" \
   Tools/Lemmings2Completion/main.swift -o "$build_dir/verify"
+if [[ "${1:-}" == --negative ]]; then
+  swiftc -O -swift-version 6 -warnings-as-errors \
+    -I "$build_dir/modules" -L "$build_dir" -lNxlvKit \
+    -Xlinker -rpath -Xlinker "$build_dir" \
+    Tests/Lemmings2CompletionTests/negative.swift -o "$build_dir/negative"
+  exec "$build_dir/negative" "$data"
+fi
 "$build_dir/verify" "$data" "$@"
