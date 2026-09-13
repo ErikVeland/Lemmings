@@ -1533,6 +1533,11 @@ do {
             do { outcome = try replay.run(level:level,style:style,masks:masks) }
             catch { check(false,"Completion changed: \(name) (\(error))"); continue }
             print("PASS \(name): \(outcome.saved) rescued, \(outcome.ticks) ticks, recorded pointer and skill inputs")
+            let encoded = try JSONEncoder().encode(replay)
+            let decoded = try JSONDecoder().decode(Replay.self, from: encoded)
+            let again = try decoded.run(level:level,style:style,masks:masks)
+            check(again.saved == outcome.saved && again.ticks == outcome.ticks && again.stateHash == outcome.stateHash,
+                  "Encoded witness changed its outcome: \(name)")
         }
         print("PASS \(completedLevels.count) distinct recorded campaign level completions")
         for (tribe,prefix,count) in [(2,"cavelem",3),(3,"circus",2)] {
