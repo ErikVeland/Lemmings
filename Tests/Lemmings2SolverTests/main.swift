@@ -111,3 +111,29 @@ func testActions() throws {
     print("PASS actions: wait first, basher at the wall, bounded roper aim, no repeats")
 }
 try testActions()
+
+func testScoring() throws {
+    let base = Score(saved: 1, remaining: 50, distance: 100, inputs: 5, fingerprint: "b")
+    check(base < Score(saved: 2, remaining: 0, distance: 9999, inputs: 99, fingerprint: "a"), "More saved lemmings did not rank higher")
+    check(base < Score(saved: 1, remaining: 51, distance: 9999, inputs: 99, fingerprint: "a"), "Fewer losses did not rank higher")
+    check(base < Score(saved: 1, remaining: 50, distance: 99, inputs: 99, fingerprint: "a"), "A shorter crowd distance did not rank higher")
+    check(base < Score(saved: 1, remaining: 50, distance: 100, inputs: 4, fingerprint: "c"), "Fewer inputs did not rank higher")
+    check(Score(saved: 1, remaining: 50, distance: 100, inputs: 5, fingerprint: "c") < base, "The fingerprint tie break is not fixed")
+
+    let game = try fixture(wall: true)
+    func candidate(inputs: Int, pointerX: Int?) -> Candidate {
+        Candidate(game: game, cursor: Lemmings2InputCursor(),
+                  inputs: Array(repeating: Lemmings2ReplayWitness.Input(tick: 0, lemming: 0, skill: 1), count: inputs),
+                  pointers: pointerX.map { [Lemmings2ReplayWitness.Pointer(tick: 0, x: $0, y: 0, fanX: $0, fanY: 0, fan: false)] } ?? [],
+                  depth: 0, fingerprint: "same", detector: DecisionDetector(), decision: nil)
+    }
+    let merged = mergeByFingerprint([candidate(inputs: 3, pointerX: nil), candidate(inputs: 1, pointerX: nil)])
+    check(merged.count == 1 && merged[0].inputs.count == 1, "The merge did not keep the shorter route")
+    let aims = mergeByFingerprint([candidate(inputs: 1, pointerX: 10), candidate(inputs: 1, pointerX: 20)])
+    check(aims.count == 2, "States that differ only in the held pointer were merged")
+    let first = aims.map { $0.pointers[0].x }
+    let second = mergeByFingerprint([candidate(inputs: 1, pointerX: 20), candidate(inputs: 1, pointerX: 10)]).map { $0.pointers[0].x }
+    check(first == second, "The merge order depends on input order")
+    print("PASS scoring order, fixed tie break and fingerprint merge")
+}
+try testScoring()
