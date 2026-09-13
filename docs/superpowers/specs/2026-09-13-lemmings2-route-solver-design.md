@@ -75,6 +75,7 @@ Each unit has one purpose.
 | --- | --- |
 | `Tools/Lemmings2Solver/DecisionPoints.swift` | Watch a runtime and report when a decision can matter |
 | `Tools/Lemmings2Solver/Actions.swift` | List the legal actions at a decision point |
+| `Tools/Lemmings2Solver/Scoring.swift` | Rank candidates and merge candidates that reach the same state |
 | `Tools/Lemmings2Solver/Search.swift` | Run a beam search over snapshots taken at decision points |
 | `Tools/Lemmings2Solver/main.swift` | Run a level or a tribe chain and write a witness |
 | `Sources/NxlvKit/Lemmings2ReplayWitness.swift` | Reused. Replays a route and gives its outcome |
@@ -94,36 +95,40 @@ shared `apply(inputsAt:)`. The solver and the witness both call it.
 
 ### Decision points
 
-The detector checks these signals every tick. The checks need no runtime copy.
+A decision belongs to a place, not to one lemming. A wall is one decision however
+many lemmings reach it, and the lemming that meets it can be anywhere in the level.
+
+The detector watches every active lemming on every tick. The checks need no
+runtime copy.
 
 | Trigger | Signal |
 | --- | --- |
-| Edge ahead | The column 8 pixels ahead of the lead walking lemming has no solid pixel from `y + 1` to `y + 4` |
-| Wall turn | The lead lemming's `direction` changes |
-| Fall start | The lead lemming changes from `walking` to `falling` |
-| Death | `lost` increases |
+| Wall ahead | A walking lemming has a solid pixel in the column 8 pixels ahead, from `y - 8` to `y - 1` |
+| Edge ahead | A walking lemming has no solid pixel in the column 8 pixels ahead, from `y` to `y + 4` |
+| Fall start | A lemming changes from `walking` to `falling` |
+| Turn | A walking lemming's `direction` changes |
 | Fallback | No other trigger fires for 150 ticks, which is 10 seconds of game time |
 
-The lead lemming is the active walking lemming nearest to an exit. The fallback
-keeps the search moving when the trigger model misses a mechanic.
+Each trigger has a location key: the trigger kind, `x / cell`, `y / cell` and the
+direction. A key fires at most once within the re-fire window. A crowd that meets
+one wall therefore fires one decision, not one decision for each lemming.
 
-Triggers must not repeat. A crowd that follows one path would otherwise fire a
-trigger for every lemming, which is the waste this design removes.
+- Several lemmings can fire on one tick. The decision offers at most three of them,
+  ordered by trigger kind (wall ahead, edge ahead, fall start, turn), then by id.
+- The fallback offers the walking lemming nearest to an exit, so the search can act
+  on a level where nothing happens.
+- The fallback timer restarts whenever a decision fires.
 
-- Edge ahead fires once for each edge position. It fires again only after the
-  lead lemming changes or the edge is no longer ahead.
-- Fall start follows only the lead lemming. Deaths of other lemmings use the death
-  trigger.
-- Death fires at most once every 15 ticks, which is one second of game time.
-- The fallback timer restarts whenever any trigger fires.
+Death is not a trigger. A dead lemming cannot take a skill, so a death decision
+could only wait. The wall or edge that caused the death fires earlier.
 
 ### Actions
 
 At a decision point, the solver considers these actions.
 
 - **Wait.** Run to the next decision point.
-- **Assign.** Assign each stocked skill to the lead lemming or to the lemming that
-  fired the trigger. The solver never tries all released lemmings.
+- **Assign.** Assign each stocked skill to each lemming that the decision offers.
+  The solver never tries all released lemmings.
 - **Aim, roper only in the spike.** Ten targets: two directions, at 64 pixels
   horizontal distance, with vertical offsets of -48, -24, 0, 24 and 48.
 
@@ -135,7 +140,9 @@ The solver compares candidates in this order. It does not add weighted values.
 
 1. Saved lemmings, higher first.
 2. Lemmings not yet lost, higher first.
-3. Total distance of active lemmings to the nearest exit, lower first.
+3. Total distance to the nearest exit, lower first. Active lemmings count from
+   their position. Lemmings not yet released count from the entrance, so a
+   candidate does not gain rank by releasing fewer lemmings.
 4. Number of inputs, lower first.
 5. The state fingerprint, as a fixed tie break.
 
@@ -143,16 +150,27 @@ Beam entries with the same `stateFingerprint` merge into one entry. Different
 input orders often reach the same state. The merge keeps the entry that ranks
 highest under the order above, so the shorter route survives.
 
+The state fingerprint does not include the held pointer. A held pointer can move
+machines later. The merge key is therefore the fingerprint plus the last recorded
+pointer, so two states that differ only in the held pointer do not merge.
+
 ### Parameters
 
 | Parameter | Spike value |
 | --- | --- |
 | Beam width | 64 |
-| Maximum decision depth | 40 |
+| Maximum decision depth | Decision points on a run without input, plus 40 |
+| Location cell size | 8 pixels |
+| Re-fire window | 150 ticks |
 | Time budget per level | 15 minutes of one core |
 | Threads | One |
 
 The search is deterministic. The same level and parameters give the same route.
+
+The cell size and the re-fire window are spike parameters. Trigger density varies
+between levels, so the spike reports decision points per 100 ticks on a run
+without input. A high density points to detector tuning. It does not show that a
+level cannot be solved.
 
 ## Phases
 
@@ -187,7 +205,8 @@ route, 14 use no pointer skill and 4 use only the roper as their pointer skill.
 
 Write the result to `Documentation/Lemmings2Completion/SolverSpike.md`. For each
 level, record the saved count, ticks, decision points, expanded nodes, the share
-of decision points that came from the fallback, and wall time.
+of decision points that came from the fallback, the decision density per 100
+ticks on a run without input, and wall time.
 
 Improving `cavelem-01` breaks the existing Cavelems chain, because `cavelem-02`
 was recorded with a population of 1. The gate then reports Cavelems chaining
@@ -221,7 +240,8 @@ witness validation first.
 
 ## Acceptance
 
-The solver never writes to the fixture directory directly.
+The solver never writes to the fixture directory directly. Phase 1 writes and
+verifies candidates only. Promotion into the fixture directory starts in phase 2.
 
 1. The solver writes a candidate to `.build/l2-solver/candidates/`.
 2. The witness replays the candidate twice. The state hash and saved count must
@@ -251,20 +271,23 @@ The search must show it can succeed before a hard level can be called hard.
 | Test | What it proves |
 | --- | --- |
 | All 64 fixtures and the seven negative cases pass after the shared input change | The refactor did not change replay behaviour |
-| Detector unit tests on synthetic levels | Each trigger fires, including the fallback |
+| Detector unit tests on synthetic levels and on recorded observations | Each trigger fires once per location, the re-fire window works, and the fallback offers a lemming |
 | Planted solution on a synthetic level with one known winning assignment | The search can find a route at all |
-| Known answer: solve `classic-01` again | The search reaches a proven result on real data |
+| Known answer: solve `classic-01` again | Whether a no-go verdict comes from the levels or from the search |
 | Scoring order and fingerprint merging | Ranking is deterministic |
 
-The known answer test passes when the solver finds an accepted `classic-01` route
-that saves at least 30 of 60 within the budget. The recorded route saves 60 of 60
+The known answer runs the solver on `classic-01` and reports the result beside
+the spike. It does not change a go verdict. A no-go verdict while the known answer
+saves fewer than 30 of 60 is inconclusive, because the search then fails on a
+level with a proven route. The recorded route saves 60 of 60
 with 20 inputs across seven skills, so it is not a passive win.
 
 The synthetic runtime builder `fixture(wall:)` and `syntheticMasks()` live inside
-`Tests/Lemmings2RuntimeTests/main.swift`. Move them into a shared test helper that
-both the runtime suite and the solver tests compile. The builder uses only the
-public `Lemmings2Runtime.Configuration` initialiser. Its wall between the entrance
-and the exit gives the planted solution a clear obstacle.
+`Tests/Lemmings2RuntimeTests/main.swift`. Copy them verbatim into the solver test
+suite. Do not move them: `Tools/ReleaseReadiness/audit.py` compiles each suite from
+its `main.swift` alone, so a moved helper would break the release audit. The
+builder uses only the public `Lemmings2Runtime.Configuration` initialiser. Its wall
+between the entrance and the exit gives the planted solution a clear obstacle.
 
 ## Out of scope
 
@@ -274,3 +297,65 @@ and the exit gives the planted solution a clear obstacle.
 - Original engine fidelity comparison. That gate stays separate.
 - Lemmings 3 routes. The design may later extend to L3, but this document does not
   cover it.
+
+## Amendments during planning
+
+Planning measured the synthetic wall level before writing code. The results
+changed the design in three places.
+
+- **Wall ahead trigger.** Lemming 0 turns at the wall on tick 70. A basher saves
+  all three lemmings only when it is assigned on ticks 60 to 67. No basher
+  assignment after the turn saves all three. The wall turn trigger therefore fires
+  too late, and the fallback fires after the level has ended on tick 160. The
+  wall ahead trigger first fires on tick 62, inside the winning window.
+- **Edge ahead rule.** The rule now starts at `y`, the foot row. On the flat
+  synthetic level it fires on no walking tick.
+- **Synthetic helper.** The solver tests copy the helper instead of moving it,
+  because the release audit compiles each suite from one file.
+
+The same measurement shows why crowd scoring matters. A climber assigned to
+lemming 0 saves one lemming of three. A basher saves all three.
+
+### Location-keyed detector
+
+Compiling and running the planned code against real levels showed that a detector
+anchored to one lead lemming fails in two ways. The spike would have reported a
+false no-go.
+
+| Level | Lead lemming detector | Location-keyed detector |
+| --- | --- | --- |
+| `classic-01` | 2,894 decision points, about one per tick | 118, one per 38 ticks |
+| `space-03` | 2,758 | 121 |
+| `highland-03` | 24, of which 23 came from the fallback | 521, from walls, edges and turns |
+| `cavelem-01` | 269, including 60 deaths | 251 before death was removed |
+
+- **Too dense.** On `classic-01`, each lemming in turn met the same wall. When the
+  lead lemming turned away, the next lemming became the lead and reset the repeat
+  guard, so the wall fired for every lemming.
+- **Blind.** On `highland-03`, the exit is above the walkway. The lemming nearest to
+  the exit stays at one end, so the detector never observed the wall at the other
+  end, where the lemmings turned.
+- **No actor.** A death offers no lemming that can take a skill, so its decisions
+  could only wait.
+
+The location-keyed detector fixes the density and the blind spot. `highland-03`
+still fires about once every 6 ticks, because a long sloped wall gives many
+location keys. The spike reports this density, and the cell size and re-fire window
+are spike parameters.
+
+### Depth and the known answer
+
+Running the planned command on real levels with a depth of 40 decision points
+stopped every search long before its budget: `cavelem-01` after 6 seconds,
+`classic-01` after 8 and `highland-03` after 37. The depth limit, not the budget,
+ended each search.
+
+With the depth limit raised to 400, `cavelem-01` improved from 3 of 60 to 40 of
+60 with a Silver medal, and the route passed double replay. The depth limit is
+therefore derived from the level: the decision points on a run without input,
+plus 40.
+
+`classic-01` still saved 0 of 60 at depth 400. Its search ended after 20 seconds,
+because every branch ended without a win. A hard stop on this known answer would
+end the plan before the spike runs. The known answer is therefore reported beside
+the spike, and it qualifies a no-go verdict instead of blocking the spike.
