@@ -32,12 +32,25 @@ build_number="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleVersion' "$project_di
 # Game Center needs an Apple Development signature and a provisioning profile
 # that lists each tester's Mac. That build cannot be notarized, so it ships as a
 # separate archive under its own name. See BETA_GAME_CENTER below.
+# Version 1.0 and later require Classic closure, even through the beta packager.
+release_scope="$(python3 "$project_dir/Tools/ReleaseReadiness/package_scope.py" "$project_dir")"
 game_center="${BETA_GAME_CENTER:-0}"
 variant=""
 [[ "$game_center" == 1 ]] && variant="-gamecenter"
 zip_path="$build_dir/UltimateLemmings-$version-beta$build_number$variant.zip"
 notes_path="$project_dir/Documentation/ReleaseNotes-beta$build_number.md"
 [[ -f "$notes_path" ]] || { echo "Missing release notes: $notes_path" >&2; exit 1; }
+# A distributable beta must not silently hide stale proofs or hint decks.
+python3 "$project_dir/Tools/TrolleyVerification/catalogue.py" check
+python3 - "$project_dir" <<'CHECK_HINTS'
+import json, pathlib, sys
+root = pathlib.Path(sys.argv[1]) / 'Resources'
+proofs = json.loads((root / 'Trolley/verified-maxima.json').read_text())
+hints = json.loads((root / 'Hints/classic.json').read_text())
+if hints['engineFingerprint'] != proofs['engineSourceFingerprint']:
+    raise SystemExit('Hint data is stale. Regenerate it with Scripts/generate-level-hints.sh before packaging.')
+CHECK_HINTS
+
 write_release_archive() {
   ditto -c -k --sequesterRsrc --keepParent "$app_dir" "$zip_path"
   python3 - "$zip_path" "$notes_path" <<'PYNOTES'
@@ -111,6 +124,13 @@ fi
 
 echo "==> Checking the signature"
 codesign --verify --deep --strict --verbose=1 "$app_dir"
+
+if [[ "$release_scope" == classic-1.0 ]]; then
+  echo "==> Requiring fresh Classic 1.0 closure for this candidate"
+  python3 "$project_dir/Tools/ReleaseReadiness/audit.py" --scope classic-1.0 \
+    --require-closure --app --app-bundle "$app_dir" \
+    --out "$build_dir/classic-closure-$(date +%Y%m%d-%H%M%S)"
+fi
 
 echo "==> Compressing"
 # Keep earlier builds out of the handoff folder without deleting them.
