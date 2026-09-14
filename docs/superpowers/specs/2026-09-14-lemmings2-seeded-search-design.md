@@ -152,13 +152,15 @@ For each level, the seed is the first that exists:
 A seeded search that does not beat its seed still returns the seed replayed at the
 new population, when that replay wins.
 
-- **Pass.** A level passes when its route saves at least 1. Level 10 must save at
-  least 30 for the ark ending.
-- **Backtrack.** When a level cannot pass, the solver goes back one level. It
-  collects up to three winning routes for that level that save more than the
-  chosen route, from the finished candidates of its search, most saved first. It
-  retries the failed level with each population in turn. It backtracks one level
-  only.
+- **Pass.** A level passes when its route saves at least 1. The search already
+  ranks saved lemmings first. The report states whether level 10 saves the 30
+  that the ark ending needs.
+- **Backtrack.** The chosen route saves the most, but a smaller crowd can pass
+  where a large one blocks or dies. When a level cannot pass, the solver goes back
+  one level. It collects up to three other winning routes for that level with a
+  different saved count, from the finished candidates of its search, most saved
+  first. It retries the failed level with each population in turn. It backtracks
+  one level only.
 - **Break.** A chain that still fails is recorded at the level where it broke, with
   `UNSOLVED` and the best partial route.
 - **Report.** `solve-tribe` writes `.build/l2-solver/tribes/<tribe>.json` with the
