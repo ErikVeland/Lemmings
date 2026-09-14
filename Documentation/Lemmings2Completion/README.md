@@ -28,10 +28,10 @@ a win. Loading and rendering are separate checks. They do not prove a solution.
 
 ## Route quality
 
-The recorded routes earn 11 gold, 12 silver and 50 bronze medals.
+The recorded routes earn 11 gold, 13 silver and 49 bronze medals.
 
 Every winning route earns at least bronze, so a medal alone does not show how
-well a route plays. 44 routes save one lemming from a larger crowd. Most of them start with sixty. They count as bronze or silver.
+well a route plays. 43 routes save one lemming from a larger crowd. Most of them start with sixty. They count as bronze or silver.
 
 12 standalone routes start with fewer than 60 lemmings. A tribe run found them
 with the population that the level before passes on. The manifest records the
@@ -54,7 +54,7 @@ each tribe, without a break.
 Cavelems chains through all ten levels. Its level 10 route saves one lemming, so
 the run does not yet reach the ark ending, which needs 30. Egyptian chains through
 eight levels and Sports through seven.
-24 separate carry-over witnesses preserve the correct starting populations.
+27 separate carry-over witnesses preserve the correct starting populations.
 The 64 standalone routes include improved seeded-search results. The gate verifies every
 variant twice before it uses that route in a chain.
 

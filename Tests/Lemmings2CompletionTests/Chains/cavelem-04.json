@@ -9095,15 +9095,6 @@
     },
     {
       "event" : {
-        "assign" : {
-          "lemming" : 3,
-          "skill" : 8
-        }
-      },
-      "tick" : 497
-    },
-    {
-      "event" : {
         "aim" : {
           "held" : true,
           "x" : 0,
@@ -9344,15 +9335,6 @@
     },
     {
       "event" : {
-        "assign" : {
-          "lemming" : 2,
-          "skill" : 29
-        }
-      },
-      "tick" : 509
-    },
-    {
-      "event" : {
         "aim" : {
           "held" : true,
           "x" : 0,
@@ -9570,15 +9552,6 @@
         }
       },
       "tick" : 519
-    },
-    {
-      "event" : {
-        "assign" : {
-          "lemming" : 3,
-          "skill" : 29
-        }
-      },
-      "tick" : 520
     },
     {
       "event" : {
@@ -9819,6 +9792,116 @@
         }
       },
       "tick" : 531
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 0,
+          "y" : 174
+        }
+      },
+      "tick" : 532
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 0,
+          "y" : 174
+        }
+      },
+      "tick" : 532
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 0,
+          "y" : 175
+        }
+      },
+      "tick" : 533
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 0,
+          "y" : 175
+        }
+      },
+      "tick" : 533
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 0,
+          "y" : 175
+        }
+      },
+      "tick" : 534
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 0,
+          "y" : 175
+        }
+      },
+      "tick" : 534
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 0,
+          "y" : 176
+        }
+      },
+      "tick" : 535
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 0,
+          "y" : 176
+        }
+      },
+      "tick" : 535
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 90,
+          "y" : 176
+        }
+      },
+      "tick" : 536
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 90,
+          "y" : 176
+        }
+      },
+      "tick" : 536
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 0,
+          "y" : 0
+        }
+      },
+      "tick" : 536
     },
     {
       "event" : {
@@ -9827,116 +9910,6 @@
           "skill" : 29
         }
       },
-      "tick" : 532
-    },
-    {
-      "event" : {
-        "aim" : {
-          "held" : true,
-          "x" : 0,
-          "y" : 174
-        }
-      },
-      "tick" : 532
-    },
-    {
-      "event" : {
-        "fan" : {
-          "active" : false,
-          "x" : 0,
-          "y" : 174
-        }
-      },
-      "tick" : 532
-    },
-    {
-      "event" : {
-        "aim" : {
-          "held" : true,
-          "x" : 0,
-          "y" : 175
-        }
-      },
-      "tick" : 533
-    },
-    {
-      "event" : {
-        "fan" : {
-          "active" : false,
-          "x" : 0,
-          "y" : 175
-        }
-      },
-      "tick" : 533
-    },
-    {
-      "event" : {
-        "aim" : {
-          "held" : true,
-          "x" : 0,
-          "y" : 175
-        }
-      },
-      "tick" : 534
-    },
-    {
-      "event" : {
-        "fan" : {
-          "active" : false,
-          "x" : 0,
-          "y" : 175
-        }
-      },
-      "tick" : 534
-    },
-    {
-      "event" : {
-        "aim" : {
-          "held" : true,
-          "x" : 0,
-          "y" : 176
-        }
-      },
-      "tick" : 535
-    },
-    {
-      "event" : {
-        "fan" : {
-          "active" : false,
-          "x" : 0,
-          "y" : 176
-        }
-      },
-      "tick" : 535
-    },
-    {
-      "event" : {
-        "aim" : {
-          "held" : true,
-          "x" : 90,
-          "y" : 176
-        }
-      },
-      "tick" : 536
-    },
-    {
-      "event" : {
-        "fan" : {
-          "active" : false,
-          "x" : 90,
-          "y" : 176
-        }
-      },
-      "tick" : 536
-    },
-    {
-      "event" : {
-        "fan" : {
-          "active" : false,
-          "x" : 0,
-          "y" : 0
-        }
-      },
       "tick" : 536
     },
     {
@@ -11288,756 +11261,6 @@
         }
       },
       "tick" : 603
-    },
-    {
-      "event" : {
-        "fan" : {
-          "active" : true,
-          "x" : 90,
-          "y" : 248
-        }
-      },
-      "tick" : 603
-    },
-    {
-      "event" : {
-        "aim" : {
-          "held" : false,
-          "x" : 90,
-          "y" : 248
-        }
-      },
-      "tick" : 604
-    },
-    {
-      "event" : {
-        "fan" : {
-          "active" : true,
-          "x" : 90,
-          "y" : 248
-        }
-      },
-      "tick" : 604
-    },
-    {
-      "event" : {
-        "aim" : {
-          "held" : false,
-          "x" : 90,
-          "y" : 248
-        }
-      },
-      "tick" : 605
-    },
-    {
-      "event" : {
-        "fan" : {
-          "active" : true,
-          "x" : 90,
-          "y" : 248
-        }
-      },
-      "tick" : 605
-    },
-    {
-      "event" : {
-        "aim" : {
-          "held" : false,
-          "x" : 90,
-          "y" : 248
-        }
-      },
-      "tick" : 606
-    },
-    {
-      "event" : {
-        "fan" : {
-          "active" : true,
-          "x" : 90,
-          "y" : 248
-        }
-      },
-      "tick" : 606
-    },
-    {
-      "event" : {
-        "aim" : {
-          "held" : false,
-          "x" : 90,
-          "y" : 250
-        }
-      },
-      "tick" : 607
-    },
-    {
-      "event" : {
-        "fan" : {
-          "active" : true,
-          "x" : 90,
-          "y" : 250
-        }
-      },
-      "tick" : 607
-    },
-    {
-      "event" : {
-        "aim" : {
-          "held" : false,
-          "x" : 90,
-          "y" : 250
-        }
-      },
-      "tick" : 608
-    },
-    {
-      "event" : {
-        "fan" : {
-          "active" : true,
-          "x" : 90,
-          "y" : 250
-        }
-      },
-      "tick" : 608
-    },
-    {
-      "event" : {
-        "aim" : {
-          "held" : false,
-          "x" : 90,
-          "y" : 250
-        }
-      },
-      "tick" : 609
-    },
-    {
-      "event" : {
-        "fan" : {
-          "active" : true,
-          "x" : 90,
-          "y" : 250
-        }
-      },
-      "tick" : 609
-    },
-    {
-      "event" : {
-        "aim" : {
-          "held" : false,
-          "x" : 90,
-          "y" : 250
-        }
-      },
-      "tick" : 610
-    },
-    {
-      "event" : {
-        "fan" : {
-          "active" : true,
-          "x" : 90,
-          "y" : 250
-        }
-      },
-      "tick" : 610
-    },
-    {
-      "event" : {
-        "aim" : {
-          "held" : false,
-          "x" : 90,
-          "y" : 250
-        }
-      },
-      "tick" : 611
-    },
-    {
-      "event" : {
-        "fan" : {
-          "active" : true,
-          "x" : 90,
-          "y" : 250
-        }
-      },
-      "tick" : 611
-    },
-    {
-      "event" : {
-        "aim" : {
-          "held" : false,
-          "x" : 90,
-          "y" : 250
-        }
-      },
-      "tick" : 612
-    },
-    {
-      "event" : {
-        "fan" : {
-          "active" : true,
-          "x" : 90,
-          "y" : 250
-        }
-      },
-      "tick" : 612
-    },
-    {
-      "event" : {
-        "aim" : {
-          "held" : false,
-          "x" : 90,
-          "y" : 250
-        }
-      },
-      "tick" : 613
-    },
-    {
-      "event" : {
-        "fan" : {
-          "active" : true,
-          "x" : 90,
-          "y" : 250
-        }
-      },
-      "tick" : 613
-    },
-    {
-      "event" : {
-        "aim" : {
-          "held" : false,
-          "x" : 90,
-          "y" : 250
-        }
-      },
-      "tick" : 614
-    },
-    {
-      "event" : {
-        "fan" : {
-          "active" : true,
-          "x" : 90,
-          "y" : 250
-        }
-      },
-      "tick" : 614
-    },
-    {
-      "event" : {
-        "aim" : {
-          "held" : false,
-          "x" : 90,
-          "y" : 252
-        }
-      },
-      "tick" : 615
-    },
-    {
-      "event" : {
-        "fan" : {
-          "active" : true,
-          "x" : 90,
-          "y" : 252
-        }
-      },
-      "tick" : 615
-    },
-    {
-      "event" : {
-        "aim" : {
-          "held" : false,
-          "x" : 90,
-          "y" : 252
-        }
-      },
-      "tick" : 616
-    },
-    {
-      "event" : {
-        "fan" : {
-          "active" : true,
-          "x" : 90,
-          "y" : 252
-        }
-      },
-      "tick" : 616
-    },
-    {
-      "event" : {
-        "aim" : {
-          "held" : false,
-          "x" : 90,
-          "y" : 252
-        }
-      },
-      "tick" : 617
-    },
-    {
-      "event" : {
-        "fan" : {
-          "active" : true,
-          "x" : 90,
-          "y" : 252
-        }
-      },
-      "tick" : 617
-    },
-    {
-      "event" : {
-        "aim" : {
-          "held" : false,
-          "x" : 90,
-          "y" : 252
-        }
-      },
-      "tick" : 618
-    },
-    {
-      "event" : {
-        "fan" : {
-          "active" : true,
-          "x" : 90,
-          "y" : 252
-        }
-      },
-      "tick" : 618
-    },
-    {
-      "event" : {
-        "aim" : {
-          "held" : false,
-          "x" : 90,
-          "y" : 252
-        }
-      },
-      "tick" : 619
-    },
-    {
-      "event" : {
-        "fan" : {
-          "active" : true,
-          "x" : 90,
-          "y" : 252
-        }
-      },
-      "tick" : 619
-    },
-    {
-      "event" : {
-        "aim" : {
-          "held" : false,
-          "x" : 90,
-          "y" : 252
-        }
-      },
-      "tick" : 620
-    },
-    {
-      "event" : {
-        "fan" : {
-          "active" : true,
-          "x" : 90,
-          "y" : 252
-        }
-      },
-      "tick" : 620
-    },
-    {
-      "event" : {
-        "aim" : {
-          "held" : false,
-          "x" : 90,
-          "y" : 252
-        }
-      },
-      "tick" : 621
-    },
-    {
-      "event" : {
-        "fan" : {
-          "active" : true,
-          "x" : 90,
-          "y" : 252
-        }
-      },
-      "tick" : 621
-    },
-    {
-      "event" : {
-        "aim" : {
-          "held" : false,
-          "x" : 90,
-          "y" : 252
-        }
-      },
-      "tick" : 622
-    },
-    {
-      "event" : {
-        "fan" : {
-          "active" : true,
-          "x" : 90,
-          "y" : 252
-        }
-      },
-      "tick" : 622
-    },
-    {
-      "event" : {
-        "aim" : {
-          "held" : false,
-          "x" : 90,
-          "y" : 254
-        }
-      },
-      "tick" : 623
-    },
-    {
-      "event" : {
-        "fan" : {
-          "active" : true,
-          "x" : 90,
-          "y" : 254
-        }
-      },
-      "tick" : 623
-    },
-    {
-      "event" : {
-        "aim" : {
-          "held" : false,
-          "x" : 90,
-          "y" : 254
-        }
-      },
-      "tick" : 624
-    },
-    {
-      "event" : {
-        "fan" : {
-          "active" : true,
-          "x" : 90,
-          "y" : 254
-        }
-      },
-      "tick" : 624
-    },
-    {
-      "event" : {
-        "aim" : {
-          "held" : false,
-          "x" : 90,
-          "y" : 254
-        }
-      },
-      "tick" : 625
-    },
-    {
-      "event" : {
-        "fan" : {
-          "active" : true,
-          "x" : 90,
-          "y" : 254
-        }
-      },
-      "tick" : 625
-    },
-    {
-      "event" : {
-        "aim" : {
-          "held" : false,
-          "x" : 90,
-          "y" : 254
-        }
-      },
-      "tick" : 626
-    },
-    {
-      "event" : {
-        "fan" : {
-          "active" : true,
-          "x" : 90,
-          "y" : 254
-        }
-      },
-      "tick" : 626
-    },
-    {
-      "event" : {
-        "aim" : {
-          "held" : false,
-          "x" : 90,
-          "y" : 254
-        }
-      },
-      "tick" : 627
-    },
-    {
-      "event" : {
-        "fan" : {
-          "active" : true,
-          "x" : 90,
-          "y" : 254
-        }
-      },
-      "tick" : 627
-    },
-    {
-      "event" : {
-        "aim" : {
-          "held" : false,
-          "x" : 90,
-          "y" : 254
-        }
-      },
-      "tick" : 628
-    },
-    {
-      "event" : {
-        "fan" : {
-          "active" : true,
-          "x" : 90,
-          "y" : 254
-        }
-      },
-      "tick" : 628
-    },
-    {
-      "event" : {
-        "aim" : {
-          "held" : false,
-          "x" : 90,
-          "y" : 254
-        }
-      },
-      "tick" : 629
-    },
-    {
-      "event" : {
-        "fan" : {
-          "active" : true,
-          "x" : 90,
-          "y" : 254
-        }
-      },
-      "tick" : 629
-    },
-    {
-      "event" : {
-        "aim" : {
-          "held" : false,
-          "x" : 90,
-          "y" : 254
-        }
-      },
-      "tick" : 630
-    },
-    {
-      "event" : {
-        "fan" : {
-          "active" : true,
-          "x" : 90,
-          "y" : 254
-        }
-      },
-      "tick" : 630
-    },
-    {
-      "event" : {
-        "aim" : {
-          "held" : false,
-          "x" : 90,
-          "y" : 256
-        }
-      },
-      "tick" : 631
-    },
-    {
-      "event" : {
-        "fan" : {
-          "active" : true,
-          "x" : 90,
-          "y" : 256
-        }
-      },
-      "tick" : 631
-    },
-    {
-      "event" : {
-        "aim" : {
-          "held" : false,
-          "x" : 90,
-          "y" : 256
-        }
-      },
-      "tick" : 632
-    },
-    {
-      "event" : {
-        "fan" : {
-          "active" : true,
-          "x" : 90,
-          "y" : 256
-        }
-      },
-      "tick" : 632
-    },
-    {
-      "event" : {
-        "aim" : {
-          "held" : false,
-          "x" : 90,
-          "y" : 256
-        }
-      },
-      "tick" : 633
-    },
-    {
-      "event" : {
-        "fan" : {
-          "active" : true,
-          "x" : 90,
-          "y" : 256
-        }
-      },
-      "tick" : 633
-    },
-    {
-      "event" : {
-        "aim" : {
-          "held" : false,
-          "x" : 90,
-          "y" : 256
-        }
-      },
-      "tick" : 634
-    },
-    {
-      "event" : {
-        "fan" : {
-          "active" : true,
-          "x" : 90,
-          "y" : 256
-        }
-      },
-      "tick" : 634
-    },
-    {
-      "event" : {
-        "aim" : {
-          "held" : false,
-          "x" : 90,
-          "y" : 256
-        }
-      },
-      "tick" : 635
-    },
-    {
-      "event" : {
-        "fan" : {
-          "active" : true,
-          "x" : 90,
-          "y" : 256
-        }
-      },
-      "tick" : 635
-    },
-    {
-      "event" : {
-        "aim" : {
-          "held" : false,
-          "x" : 90,
-          "y" : 256
-        }
-      },
-      "tick" : 636
-    },
-    {
-      "event" : {
-        "fan" : {
-          "active" : true,
-          "x" : 90,
-          "y" : 256
-        }
-      },
-      "tick" : 636
-    },
-    {
-      "event" : {
-        "aim" : {
-          "held" : false,
-          "x" : 90,
-          "y" : 256
-        }
-      },
-      "tick" : 637
-    },
-    {
-      "event" : {
-        "fan" : {
-          "active" : true,
-          "x" : 90,
-          "y" : 256
-        }
-      },
-      "tick" : 637
-    },
-    {
-      "event" : {
-        "aim" : {
-          "held" : false,
-          "x" : 90,
-          "y" : 256
-        }
-      },
-      "tick" : 638
-    },
-    {
-      "event" : {
-        "fan" : {
-          "active" : true,
-          "x" : 90,
-          "y" : 256
-        }
-      },
-      "tick" : 638
-    },
-    {
-      "event" : {
-        "aim" : {
-          "held" : false,
-          "x" : 90,
-          "y" : 258
-        }
-      },
-      "tick" : 639
-    },
-    {
-      "event" : {
-        "fan" : {
-          "active" : true,
-          "x" : 90,
-          "y" : 258
-        }
-      },
-      "tick" : 639
-    },
-    {
-      "event" : {
-        "aim" : {
-          "held" : false,
-          "x" : 90,
-          "y" : 261
-        }
-      },
-      "tick" : 640
-    },
-    {
-      "event" : {
-        "fan" : {
-          "active" : true,
-          "x" : 90,
-          "y" : 261
-        }
-      },
-      "tick" : 640
     },
     {
       "event" : {
@@ -12046,7 +11269,757 @@
           "skill" : 29
         }
       },
-      "tick" : 641
+      "tick" : 603
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 90,
+          "y" : 248
+        }
+      },
+      "tick" : 603
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 90,
+          "y" : 248
+        }
+      },
+      "tick" : 604
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 90,
+          "y" : 248
+        }
+      },
+      "tick" : 604
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 90,
+          "y" : 248
+        }
+      },
+      "tick" : 605
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 90,
+          "y" : 248
+        }
+      },
+      "tick" : 605
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 90,
+          "y" : 248
+        }
+      },
+      "tick" : 606
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 90,
+          "y" : 248
+        }
+      },
+      "tick" : 606
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 90,
+          "y" : 250
+        }
+      },
+      "tick" : 607
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 90,
+          "y" : 250
+        }
+      },
+      "tick" : 607
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 90,
+          "y" : 250
+        }
+      },
+      "tick" : 608
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 90,
+          "y" : 250
+        }
+      },
+      "tick" : 608
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 90,
+          "y" : 250
+        }
+      },
+      "tick" : 609
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 90,
+          "y" : 250
+        }
+      },
+      "tick" : 609
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 90,
+          "y" : 250
+        }
+      },
+      "tick" : 610
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 90,
+          "y" : 250
+        }
+      },
+      "tick" : 610
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 90,
+          "y" : 250
+        }
+      },
+      "tick" : 611
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 90,
+          "y" : 250
+        }
+      },
+      "tick" : 611
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 90,
+          "y" : 250
+        }
+      },
+      "tick" : 612
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 90,
+          "y" : 250
+        }
+      },
+      "tick" : 612
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 90,
+          "y" : 250
+        }
+      },
+      "tick" : 613
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 90,
+          "y" : 250
+        }
+      },
+      "tick" : 613
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 90,
+          "y" : 250
+        }
+      },
+      "tick" : 614
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 90,
+          "y" : 250
+        }
+      },
+      "tick" : 614
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 90,
+          "y" : 252
+        }
+      },
+      "tick" : 615
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 90,
+          "y" : 252
+        }
+      },
+      "tick" : 615
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 90,
+          "y" : 252
+        }
+      },
+      "tick" : 616
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 90,
+          "y" : 252
+        }
+      },
+      "tick" : 616
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 90,
+          "y" : 252
+        }
+      },
+      "tick" : 617
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 90,
+          "y" : 252
+        }
+      },
+      "tick" : 617
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 90,
+          "y" : 252
+        }
+      },
+      "tick" : 618
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 90,
+          "y" : 252
+        }
+      },
+      "tick" : 618
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 90,
+          "y" : 252
+        }
+      },
+      "tick" : 619
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 90,
+          "y" : 252
+        }
+      },
+      "tick" : 619
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 90,
+          "y" : 252
+        }
+      },
+      "tick" : 620
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 90,
+          "y" : 252
+        }
+      },
+      "tick" : 620
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 90,
+          "y" : 252
+        }
+      },
+      "tick" : 621
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 90,
+          "y" : 252
+        }
+      },
+      "tick" : 621
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 90,
+          "y" : 252
+        }
+      },
+      "tick" : 622
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 90,
+          "y" : 252
+        }
+      },
+      "tick" : 622
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 90,
+          "y" : 254
+        }
+      },
+      "tick" : 623
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 90,
+          "y" : 254
+        }
+      },
+      "tick" : 623
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 90,
+          "y" : 254
+        }
+      },
+      "tick" : 624
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 90,
+          "y" : 254
+        }
+      },
+      "tick" : 624
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 90,
+          "y" : 254
+        }
+      },
+      "tick" : 625
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 90,
+          "y" : 254
+        }
+      },
+      "tick" : 625
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 90,
+          "y" : 254
+        }
+      },
+      "tick" : 626
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 90,
+          "y" : 254
+        }
+      },
+      "tick" : 626
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 90,
+          "y" : 254
+        }
+      },
+      "tick" : 627
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 90,
+          "y" : 254
+        }
+      },
+      "tick" : 627
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 90,
+          "y" : 254
+        }
+      },
+      "tick" : 628
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 90,
+          "y" : 254
+        }
+      },
+      "tick" : 628
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 90,
+          "y" : 254
+        }
+      },
+      "tick" : 629
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 90,
+          "y" : 254
+        }
+      },
+      "tick" : 629
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 90,
+          "y" : 254
+        }
+      },
+      "tick" : 630
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 90,
+          "y" : 254
+        }
+      },
+      "tick" : 630
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 90,
+          "y" : 256
+        }
+      },
+      "tick" : 631
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 90,
+          "y" : 256
+        }
+      },
+      "tick" : 631
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 90,
+          "y" : 256
+        }
+      },
+      "tick" : 632
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 90,
+          "y" : 256
+        }
+      },
+      "tick" : 632
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 90,
+          "y" : 256
+        }
+      },
+      "tick" : 633
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 90,
+          "y" : 256
+        }
+      },
+      "tick" : 633
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 90,
+          "y" : 256
+        }
+      },
+      "tick" : 634
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 90,
+          "y" : 256
+        }
+      },
+      "tick" : 634
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 90,
+          "y" : 256
+        }
+      },
+      "tick" : 635
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 90,
+          "y" : 256
+        }
+      },
+      "tick" : 635
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 90,
+          "y" : 256
+        }
+      },
+      "tick" : 636
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 90,
+          "y" : 256
+        }
+      },
+      "tick" : 636
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 90,
+          "y" : 256
+        }
+      },
+      "tick" : 637
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 90,
+          "y" : 256
+        }
+      },
+      "tick" : 637
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 90,
+          "y" : 256
+        }
+      },
+      "tick" : 638
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 90,
+          "y" : 256
+        }
+      },
+      "tick" : 638
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 90,
+          "y" : 258
+        }
+      },
+      "tick" : 639
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 90,
+          "y" : 258
+        }
+      },
+      "tick" : 639
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 90,
+          "y" : 261
+        }
+      },
+      "tick" : 640
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 90,
+          "y" : 261
+        }
+      },
+      "tick" : 640
     },
     {
       "event" : {
@@ -12167,6 +12140,15 @@
         }
       },
       "tick" : 646
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 8,
+          "skill" : 29
+        }
+      },
+      "tick" : 647
     },
     {
       "event" : {
@@ -12510,6 +12492,15 @@
     },
     {
       "event" : {
+        "assign" : {
+          "lemming" : 11,
+          "skill" : 8
+        }
+      },
+      "tick" : 664
+    },
+    {
+      "event" : {
         "aim" : {
           "held" : false,
           "x" : 104,
@@ -12627,6 +12618,15 @@
         }
       },
       "tick" : 669
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 3,
+          "skill" : 8
+        }
+      },
+      "tick" : 670
     },
     {
       "event" : {
@@ -12840,6 +12840,15 @@
     },
     {
       "event" : {
+        "assign" : {
+          "lemming" : 5,
+          "skill" : 29
+        }
+      },
+      "tick" : 680
+    },
+    {
+      "event" : {
         "aim" : {
           "held" : true,
           "x" : 110,
@@ -13037,6 +13046,15 @@
         }
       },
       "tick" : 689
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 2,
+          "skill" : 8
+        }
+      },
+      "tick" : 690
     },
     {
       "event" : {
@@ -13740,6 +13758,15 @@
     },
     {
       "event" : {
+        "assign" : {
+          "lemming" : 2,
+          "skill" : 34
+        }
+      },
+      "tick" : 724
+    },
+    {
+      "event" : {
         "aim" : {
           "held" : true,
           "x" : 112,
@@ -14067,6 +14094,15 @@
         }
       },
       "tick" : 740
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 5,
+          "skill" : 8
+        }
+      },
+      "tick" : 741
     },
     {
       "event" : {
@@ -14987,11 +15023,2281 @@
         }
       },
       "tick" : 786
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 305,
+          "y" : 191
+        }
+      },
+      "tick" : 787
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 305,
+          "y" : 191
+        }
+      },
+      "tick" : 787
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 305,
+          "y" : 191
+        }
+      },
+      "tick" : 788
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 305,
+          "y" : 191
+        }
+      },
+      "tick" : 788
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 305,
+          "y" : 191
+        }
+      },
+      "tick" : 789
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 305,
+          "y" : 191
+        }
+      },
+      "tick" : 789
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 305,
+          "y" : 191
+        }
+      },
+      "tick" : 790
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 305,
+          "y" : 191
+        }
+      },
+      "tick" : 790
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 305,
+          "y" : 191
+        }
+      },
+      "tick" : 791
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 305,
+          "y" : 191
+        }
+      },
+      "tick" : 791
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 305,
+          "y" : 193
+        }
+      },
+      "tick" : 792
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 305,
+          "y" : 193
+        }
+      },
+      "tick" : 792
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 305,
+          "y" : 193
+        }
+      },
+      "tick" : 793
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 305,
+          "y" : 193
+        }
+      },
+      "tick" : 793
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 305,
+          "y" : 193
+        }
+      },
+      "tick" : 794
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 305,
+          "y" : 193
+        }
+      },
+      "tick" : 794
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 305,
+          "y" : 193
+        }
+      },
+      "tick" : 795
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 305,
+          "y" : 193
+        }
+      },
+      "tick" : 795
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 305,
+          "y" : 193
+        }
+      },
+      "tick" : 796
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 305,
+          "y" : 193
+        }
+      },
+      "tick" : 796
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 305,
+          "y" : 193
+        }
+      },
+      "tick" : 797
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 305,
+          "y" : 193
+        }
+      },
+      "tick" : 797
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 305,
+          "y" : 193
+        }
+      },
+      "tick" : 798
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 305,
+          "y" : 193
+        }
+      },
+      "tick" : 798
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 305,
+          "y" : 193
+        }
+      },
+      "tick" : 799
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 305,
+          "y" : 193
+        }
+      },
+      "tick" : 799
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 305,
+          "y" : 195
+        }
+      },
+      "tick" : 800
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 305,
+          "y" : 195
+        }
+      },
+      "tick" : 800
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 305,
+          "y" : 195
+        }
+      },
+      "tick" : 801
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 305,
+          "y" : 195
+        }
+      },
+      "tick" : 801
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 305,
+          "y" : 195
+        }
+      },
+      "tick" : 802
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 305,
+          "y" : 195
+        }
+      },
+      "tick" : 802
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 305,
+          "y" : 195
+        }
+      },
+      "tick" : 803
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 305,
+          "y" : 195
+        }
+      },
+      "tick" : 803
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 305,
+          "y" : 251
+        }
+      },
+      "tick" : 804
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 305,
+          "y" : 251
+        }
+      },
+      "tick" : 804
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 0,
+          "y" : 0
+        }
+      },
+      "tick" : 804
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 305,
+          "y" : 251
+        }
+      },
+      "tick" : 804
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 305,
+          "y" : 251
+        }
+      },
+      "tick" : 805
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 305,
+          "y" : 251
+        }
+      },
+      "tick" : 805
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 305,
+          "y" : 251
+        }
+      },
+      "tick" : 806
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 305,
+          "y" : 251
+        }
+      },
+      "tick" : 806
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 305,
+          "y" : 251
+        }
+      },
+      "tick" : 807
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 305,
+          "y" : 251
+        }
+      },
+      "tick" : 807
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 305,
+          "y" : 251
+        }
+      },
+      "tick" : 808
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 305,
+          "y" : 251
+        }
+      },
+      "tick" : 808
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 305,
+          "y" : 251
+        }
+      },
+      "tick" : 809
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 305,
+          "y" : 251
+        }
+      },
+      "tick" : 809
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 305,
+          "y" : 251
+        }
+      },
+      "tick" : 810
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 305,
+          "y" : 251
+        }
+      },
+      "tick" : 810
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 305,
+          "y" : 251
+        }
+      },
+      "tick" : 811
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 305,
+          "y" : 251
+        }
+      },
+      "tick" : 811
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 305,
+          "y" : 251
+        }
+      },
+      "tick" : 812
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 305,
+          "y" : 251
+        }
+      },
+      "tick" : 812
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 305,
+          "y" : 251
+        }
+      },
+      "tick" : 813
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 305,
+          "y" : 251
+        }
+      },
+      "tick" : 813
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 305,
+          "y" : 251
+        }
+      },
+      "tick" : 814
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 305,
+          "y" : 251
+        }
+      },
+      "tick" : 814
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 304,
+          "y" : 249
+        }
+      },
+      "tick" : 815
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 304,
+          "y" : 249
+        }
+      },
+      "tick" : 815
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 303,
+          "y" : 249
+        }
+      },
+      "tick" : 816
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 303,
+          "y" : 249
+        }
+      },
+      "tick" : 816
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 302,
+          "y" : 249
+        }
+      },
+      "tick" : 817
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 302,
+          "y" : 249
+        }
+      },
+      "tick" : 817
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 301,
+          "y" : 249
+        }
+      },
+      "tick" : 818
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 301,
+          "y" : 249
+        }
+      },
+      "tick" : 818
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 300,
+          "y" : 249
+        }
+      },
+      "tick" : 819
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 300,
+          "y" : 249
+        }
+      },
+      "tick" : 819
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 300,
+          "y" : 249
+        }
+      },
+      "tick" : 820
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 300,
+          "y" : 249
+        }
+      },
+      "tick" : 820
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 301,
+          "y" : 249
+        }
+      },
+      "tick" : 821
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 301,
+          "y" : 249
+        }
+      },
+      "tick" : 821
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 302,
+          "y" : 249
+        }
+      },
+      "tick" : 822
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 302,
+          "y" : 249
+        }
+      },
+      "tick" : 822
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 303,
+          "y" : 249
+        }
+      },
+      "tick" : 823
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 303,
+          "y" : 249
+        }
+      },
+      "tick" : 823
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 304,
+          "y" : 249
+        }
+      },
+      "tick" : 824
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 304,
+          "y" : 249
+        }
+      },
+      "tick" : 824
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 305,
+          "y" : 251
+        }
+      },
+      "tick" : 825
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 305,
+          "y" : 251
+        }
+      },
+      "tick" : 825
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 306,
+          "y" : 251
+        }
+      },
+      "tick" : 826
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 306,
+          "y" : 251
+        }
+      },
+      "tick" : 826
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 307,
+          "y" : 251
+        }
+      },
+      "tick" : 827
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 307,
+          "y" : 251
+        }
+      },
+      "tick" : 827
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 308,
+          "y" : 251
+        }
+      },
+      "tick" : 828
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 308,
+          "y" : 251
+        }
+      },
+      "tick" : 828
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 309,
+          "y" : 251
+        }
+      },
+      "tick" : 829
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 309,
+          "y" : 251
+        }
+      },
+      "tick" : 829
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 309,
+          "y" : 251
+        }
+      },
+      "tick" : 830
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 309,
+          "y" : 251
+        }
+      },
+      "tick" : 830
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 308,
+          "y" : 251
+        }
+      },
+      "tick" : 831
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 308,
+          "y" : 251
+        }
+      },
+      "tick" : 831
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 307,
+          "y" : 251
+        }
+      },
+      "tick" : 832
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 307,
+          "y" : 251
+        }
+      },
+      "tick" : 832
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 306,
+          "y" : 251
+        }
+      },
+      "tick" : 833
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 306,
+          "y" : 251
+        }
+      },
+      "tick" : 833
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 305,
+          "y" : 251
+        }
+      },
+      "tick" : 834
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 305,
+          "y" : 251
+        }
+      },
+      "tick" : 834
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 304,
+          "y" : 249
+        }
+      },
+      "tick" : 835
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 304,
+          "y" : 249
+        }
+      },
+      "tick" : 835
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 303,
+          "y" : 249
+        }
+      },
+      "tick" : 836
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 303,
+          "y" : 249
+        }
+      },
+      "tick" : 836
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 302,
+          "y" : 249
+        }
+      },
+      "tick" : 837
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 302,
+          "y" : 249
+        }
+      },
+      "tick" : 837
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 301,
+          "y" : 249
+        }
+      },
+      "tick" : 838
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 301,
+          "y" : 249
+        }
+      },
+      "tick" : 838
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 300,
+          "y" : 249
+        }
+      },
+      "tick" : 839
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 300,
+          "y" : 249
+        }
+      },
+      "tick" : 839
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 300,
+          "y" : 249
+        }
+      },
+      "tick" : 840
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 300,
+          "y" : 249
+        }
+      },
+      "tick" : 840
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 301,
+          "y" : 249
+        }
+      },
+      "tick" : 841
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 301,
+          "y" : 249
+        }
+      },
+      "tick" : 841
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 302,
+          "y" : 249
+        }
+      },
+      "tick" : 842
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 302,
+          "y" : 249
+        }
+      },
+      "tick" : 842
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 303,
+          "y" : 249
+        }
+      },
+      "tick" : 843
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 303,
+          "y" : 249
+        }
+      },
+      "tick" : 843
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 304,
+          "y" : 249
+        }
+      },
+      "tick" : 844
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 304,
+          "y" : 249
+        }
+      },
+      "tick" : 844
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 305,
+          "y" : 251
+        }
+      },
+      "tick" : 845
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 305,
+          "y" : 251
+        }
+      },
+      "tick" : 845
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 306,
+          "y" : 251
+        }
+      },
+      "tick" : 846
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 306,
+          "y" : 251
+        }
+      },
+      "tick" : 846
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 307,
+          "y" : 251
+        }
+      },
+      "tick" : 847
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 307,
+          "y" : 251
+        }
+      },
+      "tick" : 847
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 308,
+          "y" : 251
+        }
+      },
+      "tick" : 848
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 308,
+          "y" : 251
+        }
+      },
+      "tick" : 848
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 309,
+          "y" : 251
+        }
+      },
+      "tick" : 849
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 309,
+          "y" : 251
+        }
+      },
+      "tick" : 849
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 309,
+          "y" : 251
+        }
+      },
+      "tick" : 850
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 309,
+          "y" : 251
+        }
+      },
+      "tick" : 850
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 308,
+          "y" : 251
+        }
+      },
+      "tick" : 851
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 308,
+          "y" : 251
+        }
+      },
+      "tick" : 851
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 307,
+          "y" : 251
+        }
+      },
+      "tick" : 852
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 307,
+          "y" : 251
+        }
+      },
+      "tick" : 852
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 306,
+          "y" : 251
+        }
+      },
+      "tick" : 853
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 306,
+          "y" : 251
+        }
+      },
+      "tick" : 853
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 305,
+          "y" : 251
+        }
+      },
+      "tick" : 854
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 305,
+          "y" : 251
+        }
+      },
+      "tick" : 854
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 304,
+          "y" : 249
+        }
+      },
+      "tick" : 855
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 304,
+          "y" : 249
+        }
+      },
+      "tick" : 855
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 303,
+          "y" : 249
+        }
+      },
+      "tick" : 856
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 303,
+          "y" : 249
+        }
+      },
+      "tick" : 856
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 302,
+          "y" : 249
+        }
+      },
+      "tick" : 857
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 302,
+          "y" : 249
+        }
+      },
+      "tick" : 857
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 301,
+          "y" : 249
+        }
+      },
+      "tick" : 858
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 301,
+          "y" : 249
+        }
+      },
+      "tick" : 858
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 300,
+          "y" : 249
+        }
+      },
+      "tick" : 859
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 300,
+          "y" : 249
+        }
+      },
+      "tick" : 859
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 300,
+          "y" : 249
+        }
+      },
+      "tick" : 860
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 300,
+          "y" : 249
+        }
+      },
+      "tick" : 860
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 301,
+          "y" : 249
+        }
+      },
+      "tick" : 861
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 301,
+          "y" : 249
+        }
+      },
+      "tick" : 861
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 302,
+          "y" : 249
+        }
+      },
+      "tick" : 862
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 302,
+          "y" : 249
+        }
+      },
+      "tick" : 862
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 303,
+          "y" : 249
+        }
+      },
+      "tick" : 863
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 303,
+          "y" : 249
+        }
+      },
+      "tick" : 863
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 304,
+          "y" : 249
+        }
+      },
+      "tick" : 864
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 304,
+          "y" : 249
+        }
+      },
+      "tick" : 864
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 305,
+          "y" : 251
+        }
+      },
+      "tick" : 865
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 305,
+          "y" : 251
+        }
+      },
+      "tick" : 865
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 306,
+          "y" : 251
+        }
+      },
+      "tick" : 866
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 306,
+          "y" : 251
+        }
+      },
+      "tick" : 866
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 307,
+          "y" : 251
+        }
+      },
+      "tick" : 867
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 307,
+          "y" : 251
+        }
+      },
+      "tick" : 867
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 308,
+          "y" : 251
+        }
+      },
+      "tick" : 868
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 308,
+          "y" : 251
+        }
+      },
+      "tick" : 868
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 309,
+          "y" : 251
+        }
+      },
+      "tick" : 869
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 309,
+          "y" : 251
+        }
+      },
+      "tick" : 869
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : false,
+          "x" : 309,
+          "y" : 251
+        }
+      },
+      "tick" : 870
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : true,
+          "x" : 309,
+          "y" : 251
+        }
+      },
+      "tick" : 870
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 308,
+          "y" : 195
+        }
+      },
+      "tick" : 871
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 308,
+          "y" : 195
+        }
+      },
+      "tick" : 871
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 0,
+          "y" : 0
+        }
+      },
+      "tick" : 871
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 308,
+          "y" : 195
+        }
+      },
+      "tick" : 872
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 308,
+          "y" : 195
+        }
+      },
+      "tick" : 872
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 308,
+          "y" : 195
+        }
+      },
+      "tick" : 873
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 308,
+          "y" : 195
+        }
+      },
+      "tick" : 873
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 308,
+          "y" : 195
+        }
+      },
+      "tick" : 874
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 308,
+          "y" : 195
+        }
+      },
+      "tick" : 874
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 308,
+          "y" : 195
+        }
+      },
+      "tick" : 875
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 308,
+          "y" : 195
+        }
+      },
+      "tick" : 875
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 308,
+          "y" : 195
+        }
+      },
+      "tick" : 876
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 308,
+          "y" : 195
+        }
+      },
+      "tick" : 876
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 308,
+          "y" : 195
+        }
+      },
+      "tick" : 877
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 308,
+          "y" : 195
+        }
+      },
+      "tick" : 877
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 308,
+          "y" : 195
+        }
+      },
+      "tick" : 878
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 308,
+          "y" : 195
+        }
+      },
+      "tick" : 878
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 308,
+          "y" : 195
+        }
+      },
+      "tick" : 879
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 308,
+          "y" : 195
+        }
+      },
+      "tick" : 879
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 308,
+          "y" : 195
+        }
+      },
+      "tick" : 880
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 308,
+          "y" : 195
+        }
+      },
+      "tick" : 880
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 308,
+          "y" : 195
+        }
+      },
+      "tick" : 881
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 308,
+          "y" : 195
+        }
+      },
+      "tick" : 881
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 308,
+          "y" : 195
+        }
+      },
+      "tick" : 882
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 308,
+          "y" : 195
+        }
+      },
+      "tick" : 882
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 308,
+          "y" : 195
+        }
+      },
+      "tick" : 883
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 308,
+          "y" : 195
+        }
+      },
+      "tick" : 883
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 308,
+          "y" : 195
+        }
+      },
+      "tick" : 884
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 308,
+          "y" : 195
+        }
+      },
+      "tick" : 884
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 308,
+          "y" : 195
+        }
+      },
+      "tick" : 885
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 308,
+          "y" : 195
+        }
+      },
+      "tick" : 885
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 308,
+          "y" : 195
+        }
+      },
+      "tick" : 886
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 308,
+          "y" : 195
+        }
+      },
+      "tick" : 886
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 308,
+          "y" : 195
+        }
+      },
+      "tick" : 887
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 308,
+          "y" : 195
+        }
+      },
+      "tick" : 887
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 306,
+          "y" : 195
+        }
+      },
+      "tick" : 888
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 306,
+          "y" : 195
+        }
+      },
+      "tick" : 888
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 304,
+          "y" : 197
+        }
+      },
+      "tick" : 889
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 304,
+          "y" : 197
+        }
+      },
+      "tick" : 889
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 303,
+          "y" : 199
+        }
+      },
+      "tick" : 890
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 303,
+          "y" : 199
+        }
+      },
+      "tick" : 890
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 303,
+          "y" : 199
+        }
+      },
+      "tick" : 891
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 303,
+          "y" : 199
+        }
+      },
+      "tick" : 891
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 303,
+          "y" : 199
+        }
+      },
+      "tick" : 892
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 303,
+          "y" : 199
+        }
+      },
+      "tick" : 892
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 303,
+          "y" : 199
+        }
+      },
+      "tick" : 893
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 303,
+          "y" : 199
+        }
+      },
+      "tick" : 893
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 303,
+          "y" : 199
+        }
+      },
+      "tick" : 894
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 303,
+          "y" : 199
+        }
+      },
+      "tick" : 894
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 303,
+          "y" : 199
+        }
+      },
+      "tick" : 895
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 303,
+          "y" : 199
+        }
+      },
+      "tick" : 895
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 303,
+          "y" : 199
+        }
+      },
+      "tick" : 896
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 303,
+          "y" : 199
+        }
+      },
+      "tick" : 896
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 303,
+          "y" : 199
+        }
+      },
+      "tick" : 897
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 303,
+          "y" : 199
+        }
+      },
+      "tick" : 897
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 303,
+          "y" : 199
+        }
+      },
+      "tick" : 898
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 303,
+          "y" : 199
+        }
+      },
+      "tick" : 898
     }
   ],
-  "expectedSaved" : 2,
-  "expectedTicks" : 822,
+  "expectedSaved" : 3,
+  "expectedTicks" : 899,
   "levelSHA256" : "a5965c026a401a840956bbb1e6369106f278bca5a99984c9a9c88f5574094f93",
-  "population" : 4,
+  "population" : 12,
   "version" : 2
 }
