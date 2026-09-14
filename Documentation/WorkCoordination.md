@@ -57,3 +57,18 @@ release integration.
   function inside agent shells. A plain non-interactive `zsh` cannot find it.
 - Claude withdraws its earlier file-count QoL audit. `CrossGameParity.md` is the
   verified baseline.
+
+## Beta 31
+
+Claude cut beta 31 on 14 September 2026, at the user's request, while Codex was
+idle. Do not reuse build number 31.
+
+- Claude first committed the uncommitted beta 28 to 30 work and the later changes
+  in reviewed, tested commits, then merged the Lemmings 2 route solver spike.
+- Release commit `47fcc8d`, frozen at `.build/beta31/source` with copied game data.
+- Notarised archive: `~/Downloads/UltimateLemmings-beta31-macOS.zip`.
+- Game Center archive: `~/Downloads/UltimateLemmings-beta31-gamecenter-macOS.zip`.
+- See `Documentation/Beta31Readiness.md` for hashes, validation and the problems found.
+
+Never freeze a release checkout with linked game data directories. Copy or clone them.
+The soundtrack encoder and resource fork copier do not follow a link at the root.
