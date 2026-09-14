@@ -242,3 +242,46 @@ in order of their one-lemming routes, most first.
 - Original engine fidelity comparison.
 - Lemmings 3 routes.
 - Converting the existing version 1 fixtures to version 2.
+
+## Amendments during implementation
+
+### Seed line protection and restarts
+
+The first `classic-01` recovery run failed. Removing the route's last builder left
+59 of 60. A builder for lemming 9 at the decision point on tick 2409 saves 60, but
+the search ended after 130 seconds with 59.
+
+The beam keeps the 64 best partial states. The candidate that only waits, which
+follows the seed unchanged, scored no better than variants with harmful early
+assignments. Over about 200 decision points it left the beam before tick 2409.
+
+- **Seed line.** The beam always keeps the candidate that has only waited.
+- **Restarts.** When a search finds a route that saves more, the solver searches
+  again from that route while budget remains.
+
+Scoring every branch by playing it to the end was rejected. It costs about
+1,600 plays of the rest of the level for each beam round.
+
+With both changes, the recovery test restores 60 of 60 in 2 rounds and about
+3 minutes.
+
+### Merge key cost
+
+The merge key first described every pending event as text. On `beach-01`, whose
+seed has 16,216 events, the search expanded 1,597 nodes in 120 seconds. The key
+now uses a stable FNV-1a hash of the pending events, and the same run expands
+156,483 nodes. Swift's `Hasher` was not used, because its values change between
+processes and the merge order must not.
+
+### Promotion and backtracking
+
+A backtracked route saves fewer lemmings than the level's best route. The
+promotion rule that never replaces a route that saves more would keep the better
+chain route, and the gate's chain would then break at the next level.
+
+- A chain route (population not 60) that a tribe run chose by backtracking replaces
+  the existing chain route at the same population.
+- A 60-lemming fixture never gets worse. A backtracked level 1 route is therefore
+  not promoted, and the tribe report shows it.
+- A chain route needs a fixture for its level, because the gate rejects a chain
+  route without one.

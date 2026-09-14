@@ -12,23 +12,23 @@ struct SearchLimits: Sendable {
 struct SearchReport: Sendable {
     var best: Candidate?
     var bestPartial: Candidate?
+    /// The best winning candidate for each saved count, most saved first.
+    var winners: [Candidate] = []
     var decisionPoints = 0
     var fallbackPoints = 0
     var expanded = 0
     var seconds = 0.0
 }
 
-/// Runs a candidate through its recorded input until the next decision point.
-/// Returns nil when the level ends. Throws when a recorded input is rejected.
-func advance(_ candidate: inout Candidate) throws -> Decision? {
-    let inputs = candidate.inputs, pointers = candidate.pointers
+/// Runs a candidate through its events until the next decision point. Refused events are
+/// removed. Returns nil when the level ends.
+func advance(_ candidate: inout Candidate) -> Decision? {
     while !candidate.game.isComplete {
         var cursor = candidate.cursor
-        try cursor.apply(inputsAt: &candidate.game, inputs: inputs, pointers: pointers)
+        _ = cursor.applyDroppingRefused(eventsAt: &candidate.game, events: &candidate.events)
         candidate.cursor = cursor
         candidate.game.step()
-        let observation = TickObservation(candidate.game)
-        if let decision = candidate.detector.update(observation) { return decision }
+        if let decision = candidate.detector.update(TickObservation(candidate.game)) { return decision }
     }
     return nil
 }
@@ -36,16 +36,24 @@ func advance(_ candidate: inout Candidate) throws -> Decision? {
 /// Runs a candidate to the end of the level without taking further decisions.
 func finish(_ candidate: Candidate) -> Candidate {
     var tail = candidate
-    while !tail.game.isComplete {
-        do { _ = try advance(&tail) } catch { break }
-    }
+    while advance(&tail) != nil {}
     return tail
 }
 
-/// Searches for the crowd route that saves the most lemmings.
-func search(from start: Lemmings2Runtime, bounds: AimBounds, limits: SearchLimits) -> SearchReport {
+/// Counts the decision points on a run that follows the seed without changes.
+func decisionCount(start: Lemmings2Runtime, seed: [Lemmings2TimedEvent], limits: SearchLimits) -> (points: Int, ticks: Int) {
+    var run = Candidate(game: start, events: seed, detector: DecisionDetector(cell: limits.cell, refire: limits.refire))
+    var points = 0
+    while advance(&run) != nil { points += 1 }
+    return (points, run.game.tick)
+}
+
+/// Searches for the crowd route that saves the most lemmings. A seed's events follow every change.
+func search(from start: Lemmings2Runtime, seed: [Lemmings2TimedEvent] = [], bounds: AimBounds,
+            limits: SearchLimits) -> SearchReport {
     let started = Date()
     var report = SearchReport()
+    var winners: [Int: Candidate] = [:]
     func elapsed() -> Double { Date().timeIntervalSince(started) }
     func settle(_ candidate: inout Candidate, _ decision: Decision?) {
         candidate.fingerprint = candidate.game.stateFingerprint
@@ -57,19 +65,23 @@ func search(from start: Lemmings2Runtime, bounds: AimBounds, limits: SearchLimit
     }
     func consider(_ candidate: Candidate) {
         let score = Score(candidate)
-        if candidate.game.isComplete && candidate.game.didWin,
-           report.best.map({ Score($0) < score }) ?? true {
-            report.best = candidate
+        if candidate.game.isComplete && candidate.game.didWin {
+            if report.best.map({ Score($0) < score }) ?? true { report.best = candidate }
+            if winners[candidate.game.saved].map({ Score($0) < score }) ?? true { winners[candidate.game.saved] = candidate }
         }
         if report.bestPartial.map({ Score($0) < score }) ?? true { report.bestPartial = candidate }
     }
 
-    var root = Candidate(game: start, cursor: Lemmings2InputCursor(), inputs: [], pointers: [],
-                         depth: 0, fingerprint: "", detector: DecisionDetector(cell: limits.cell, refire: limits.refire),
-                         decision: nil)
-    let firstDecision = try? advance(&root)
+    var root = Candidate(game: start, events: seed, detector: DecisionDetector(cell: limits.cell, refire: limits.refire))
+    let firstDecision = advance(&root)
     settle(&root, firstDecision)
     consider(root)
+    if !root.game.isComplete {
+        // The unchanged seed is a result in its own right.
+        var tail = finish(root)
+        settle(&tail, nil)
+        consider(tail)
+    }
     var beam = root.game.isComplete ? [] : [root]
 
     while !beam.isEmpty {
@@ -89,15 +101,15 @@ func search(from start: Lemmings2Runtime, bounds: AimBounds, limits: SearchLimit
                 consider(tail)
                 continue
             }
-            for action in actions(in: node.game, candidates: node.decision?.lemmings ?? [], bounds: bounds) {
+            let choices = actions(in: node.game, candidates: node.decision?.lemmings ?? [], bounds: bounds,
+                                  pending: node.events, from: node.cursor.next)
+            for action in choices {
                 var child = node
-                let recorded = record(action, tick: child.game.tick, skills: child.game.configuration.skills)
-                child.inputs += recorded.inputs
-                child.pointers += recorded.pointers
+                apply(action, to: &child)
+                if action != .wait { child.onSeedLine = false }
                 child.depth += 1
                 report.expanded += 1
-                let decision: Decision?
-                do { decision = try advance(&child) } catch { continue }
+                let decision = advance(&child)
                 settle(&child, decision)
                 consider(child)
                 if !child.game.isComplete { next.append(child) }
@@ -105,7 +117,14 @@ func search(from start: Lemmings2Runtime, bounds: AimBounds, limits: SearchLimit
             if elapsed() >= limits.budgetSeconds { break }
         }
         beam = Array(mergeByFingerprint(next).prefix(limits.beamWidth))
+        // A seed line that scores no better than harmful variants would otherwise leave the beam
+        // long before the decision point where one change improves it.
+        if !beam.contains(where: \.onSeedLine), let line = next.first(where: \.onSeedLine) {
+            if beam.count == limits.beamWidth { beam.removeLast() }
+            beam.append(line)
+        }
     }
+    report.winners = winners.keys.sorted(by: >).compactMap { winners[$0] }
     report.seconds = elapsed()
     return report
 }
