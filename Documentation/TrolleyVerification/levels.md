@@ -145,10 +145,10 @@ See [method and limitations](README.md) and [exact conditions and evidence](audi
 | Crazy 1: Quote: "That`s a good level" | 50 | 48 | 48 | — | — | [Observed](witnesses/ohNoMoreLemmings-20.json) |
 | Crazy 2: Dolly Dimple | 80 | 80 | — | — | — | No witness collected |
 | Crazy 3: Many Lemmings make level work | 50 | 48 | — | — | — | No witness collected |
-| Crazy 4: Lemming Express | 20 | 20 | — | — | — | No witness collected |
+| Crazy 4: Lemming Express | 20 | 20 | 20 | 20 | 0 | [Verified](witnesses/ohNoMoreLemmings-23.json) |
 | Crazy 5: 24 hour Lemathon | 80 | 80 | 80 | 80 | 0 | [Verified](witnesses/ohNoMoreLemmings-24.json) |
 | Crazy 6: The Stack | 20 | 20 | — | — | — | No witness collected |
-| Crazy 7: And now, the end is near... | 50 | 50 | — | — | — | No witness collected |
+| Crazy 7: And now, the end is near... | 50 | 50 | 50 | 50 | 0 | [Verified](witnesses/ohNoMoreLemmings-26.json) |
 | Crazy 8: KEEP ON TRUCKING | 80 | 75 | 75 | — | — | [Observed](witnesses/ohNoMoreLemmings-27.json) |
 | Crazy 9: On the Antarctic Coast | 20 | 20 | 20 | 20 | 0 | [Verified](witnesses/ohNoMoreLemmings-28.json) |
 | Crazy 10: ROCKY VI | 80 | 79 | 79 | — | — | [Observed](witnesses/ohNoMoreLemmings-29.json) |

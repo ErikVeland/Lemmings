@@ -1,10 +1,10 @@
 # Rescue maximum verification
 
-This audit covered 562 bundled level identities. It produced 174 proven maxima and 146 completed solutions without optimality proofs. It collected no winning witness for 242 levels. Classic Lemmings has a winning replay for every level. Coverage of the other campaigns remains incomplete.
+This audit covered 562 bundled level identities. It produced 176 proven maxima and 146 completed solutions without optimality proofs. It collected no winning witness for 240 levels. Classic Lemmings has a winning replay for every level. Coverage of the other campaigns remains incomplete.
 
 See the [level-by-level results](levels.md) for every campaign level and the [full evidence data](audit.json) for exact conditions and notes.
 
-The audit tried 955 candidate runs. Failed searches do not establish an optimum.
+The audit tried 43,064 candidate runs. Failed searches do not establish an optimum.
 
 Maximum saveable means the population minus unavoidable sacrifices. A successful solution proves that its saved count is achievable. It does not prove that its deaths are necessary. The bundled certificates currently require a completed, repeatable rescue of the entire finite population.
 
@@ -12,7 +12,7 @@ Maximum saveable means the population minus unavoidable sacrifices. A successful
 | --- | ---: | ---: | ---: | ---: |
 | Lemmings | 120 | 103 | 17 | 0 |
 | Xmas Lemmings 1991 | 4 | 3 | 1 | 0 |
-| Oh No! More Lemmings | 100 | 33 | 37 | 30 |
+| Oh No! More Lemmings | 100 | 35 | 37 | 28 |
 | Xmas Lemmings 1992 | 4 | 4 | 0 | 0 |
 | Lemmings 2: The Tribes | 120 | 2 | 62 | 56 |
 | Holiday Lemmings 1993 | 32 | 16 | 6 | 10 |
@@ -142,7 +142,9 @@ The [community maximum-saved records](https://www.lemmingsforums.net/index.php?t
 | Xmas Lemmings 1991 | Xmas 1: Merry Christmas Mr Lemming | 50/50 | 0 | [Witness](witnesses/xmasLemmings1991-0.json) |
 | Xmas Lemmings 1991 | Xmas 2: Christmas Bonus | 50/50 | 0 | [Witness](witnesses/xmasLemmings1991-1.json) |
 | Xmas Lemmings 1991 | Xmas 4: This Corrosion | 50/50 | 0 | [Witness](witnesses/xmasLemmings1991-3.json) |
+| Oh No! More Lemmings | Crazy 4: Lemming Express | 20/20 | 0 | [Witness](witnesses/ohNoMoreLemmings-23.json) |
 | Oh No! More Lemmings | Crazy 5: 24 hour Lemathon | 80/80 | 0 | [Witness](witnesses/ohNoMoreLemmings-24.json) |
+| Oh No! More Lemmings | Crazy 7: And now, the end is near... | 50/50 | 0 | [Witness](witnesses/ohNoMoreLemmings-26.json) |
 | Oh No! More Lemmings | Crazy 9: On the Antarctic Coast | 20/20 | 0 | [Witness](witnesses/ohNoMoreLemmings-28.json) |
 | Oh No! More Lemmings | Crazy 12: Lemming Friendly | 80/80 | 0 | [Witness](witnesses/ohNoMoreLemmings-31.json) |
 | Oh No! More Lemmings | Crazy 16: Across The Gap | 16/16 | 0 | [Witness](witnesses/ohNoMoreLemmings-35.json) |

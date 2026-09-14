@@ -1,0 +1,79 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 641
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 753
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 866
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1239
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1431
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1623
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "tick" : 1815
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 20,
+    "required" : 20,
+    "saved" : 20,
+    "stateHash" : "13759769292b64dfc3024d051e2665a29a3aa7bca993aeac6d8e9d3a1f964522",
+    "ticks" : 2495
+  },
+  "initialStateHash" : "a9198d9de98dbaa907b1240bb8aab3087083183487d06daa26224d6a6fc88ff8",
+  "number" : 4,
+  "rank" : "Crazy",
+  "title" : "Lemming Express"
+}
