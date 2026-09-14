@@ -4,7 +4,7 @@ This audit covered 562 bundled level identities. It produced 176 proven maxima a
 
 See the [level-by-level results](levels.md) for every campaign level and the [full evidence data](audit.json) for exact conditions and notes.
 
-The audit tried 43,064 candidate runs. Failed searches do not establish an optimum.
+The audit tried 43,131 candidate runs. Failed searches do not establish an optimum.
 
 Maximum saveable means the population minus unavoidable sacrifices. A successful solution proves that its saved count is achievable. It does not prove that its deaths are necessary. The bundled certificates currently require a completed, repeatable rescue of the entire finite population.
 
