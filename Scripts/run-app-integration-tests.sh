@@ -5,9 +5,11 @@ test_arch="${TEST_ARCH:-$(uname -m)}"
 [[ "$test_arch" == arm64 || "$test_arch" == x86_64 ]] || exit 1
 build_dir="$project_dir/.build/app-integration-tests-$test_arch"
 mkdir -p "$build_dir/modules"
+compatibility=()
+[[ "$test_arch" == x86_64 ]] && compatibility=(-runtime-compatibility-version none)
 optimization_flags=()
 if [[ "${TEST_SCOPE:-all}" == performance || "${TEST_OPTIMIZE:-0}" == 1 ]]; then optimization_flags=(-O); fi
-swiftc -swift-version 6 "${optimization_flags[@]}" -target "$test_arch-apple-macos12.3" -parse-as-library -emit-module -emit-library \
+swiftc -swift-version 6 "${compatibility[@]}" "${optimization_flags[@]}" -target "$test_arch-apple-macos12.3" -parse-as-library -emit-module -emit-library \
   -module-name NxlvKit -emit-module-path "$build_dir/modules/NxlvKit.swiftmodule" \
   -Xlinker -install_name -Xlinker @rpath/libNxlvKit.dylib \
   -o "$build_dir/libNxlvKit.dylib" "$project_dir"/Sources/NxlvKit/*.swift
@@ -34,7 +36,7 @@ if [[ "${TEST_SCOPE:-all}" == performance ]]; then test_flags+=(-D PERFORMANCE_T
 if [[ "${TEST_SCOPE:-all}" == release-blockers ]]; then test_flags+=(-D RELEASE_BLOCKER_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == hints ]]; then test_flags+=(-D HINT_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == controller ]]; then test_flags+=(-D CONTROLLER_QOL_TESTS); fi
-swiftc -swift-version 6 "${optimization_flags[@]}" -target "$test_arch-apple-macos12.3" -D APP_INTEGRATION_TESTS "${test_flags[@]}" \
+swiftc -swift-version 6 "${compatibility[@]}" "${optimization_flags[@]}" -target "$test_arch-apple-macos12.3" -D APP_INTEGRATION_TESTS "${test_flags[@]}" \
   -I "$build_dir/modules" -L "$build_dir" -lNxlvKit \
   -framework AppKit -framework AVFoundation -framework Metal -framework QuartzCore \
   -Xlinker -rpath -Xlinker "$build_dir" \
