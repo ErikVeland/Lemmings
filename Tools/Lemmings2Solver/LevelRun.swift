@@ -57,7 +57,9 @@ func solveLevel(level: Lemmings2Level, style: Lemmings2Style, masks: Lemmings2Te
         if let partial = report.bestPartial, bestPartial.map({ Score($0) < Score(partial) }) ?? true { bestPartial = partial }
         let improved = report.best.map { found in best.map { found.game.saved > $0.game.saved } ?? true } ?? false
         if let found = report.best, best.map({ Score($0) < Score(found) }) ?? true { best = found }
-        if improved, let found = report.best, found.applied != current {
+        if let best, best.game.saved == population {
+            break
+        } else if improved, let found = report.best, found.applied != current {
             // Search again from the better route at the same width.
             current = found.applied
             limits.beamWidth = base.beamWidth
