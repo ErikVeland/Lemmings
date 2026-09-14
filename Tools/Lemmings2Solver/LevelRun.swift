@@ -55,13 +55,20 @@ func solveLevel(level: Lemmings2Level, style: Lemmings2Style, masks: Lemmings2Te
             winners[winner.game.saved] = winner
         }
         if let partial = report.bestPartial, bestPartial.map({ Score($0) < Score(partial) }) ?? true { bestPartial = partial }
-        guard let found = report.best, best.map({ Score($0) < Score(found) }) ?? true else { break }
-        let improved = best.map { found.game.saved > $0.game.saved } ?? true
-        best = found
-        guard improved, found.applied != current else { break }
-        current = found.applied
+        let improved = report.best.map { found in best.map { found.game.saved > $0.game.saved } ?? true } ?? false
+        if let found = report.best, best.map({ Score($0) < Score(found) }) ?? true { best = found }
+        if improved, let found = report.best, found.applied != current {
+            // Search again from the better route at the same width.
+            current = found.applied
+            limits.beamWidth = base.beamWidth
+        } else if report.seconds < limits.budgetSeconds, limits.beamWidth < 4096 {
+            // The beam ran out before the budget. Search the same seed again with a wider beam.
+            limits.beamWidth *= 2
+        } else {
+            break
+        }
     }
-    let summary = "density \(density) per 100 ticks, decision points \(points) (fallback \(fallback)), expanded \(expanded), \(rounds) rounds, \(Int(Date().timeIntervalSince(started))) s"
+    let summary = "density \(density) per 100 ticks, decision points \(points) (fallback \(fallback)), expanded \(expanded), \(rounds) rounds to beam \(limits.beamWidth), \(Int(Date().timeIntervalSince(started))) s"
     guard let best else {
         return LevelResult(status: .unsolved, witness: nil,
             partial: bestPartial.map { witness(finish($0), level: level, population: population) },
