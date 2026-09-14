@@ -38,7 +38,9 @@ Apple accepted `1b6d3ce3-fe97-46da-9f44-141da1e13bc4`. The extracted, quarantine
 ZIP passed signature, ticket and Gatekeeper checks. The tester download is
 `/Users/veland/Downloads/UltimateLemmings-beta27-macOS.zip`.
 SHA-256: `aab87a93033d1d682392bc923bc59d215f52c903f6d281478faa95ea6058f5cd`.
-Beta 26 remains archived as a fallback. No credentials were reset.
+No credentials were reset. Do not use beta 26 as a fallback: its archive has no
+soundtracks and no Macintosh resource forks. See Beta26Readiness.md. Beta 29 is
+the latest complete notarised archive.
 
 ## Claude acknowledgement
 

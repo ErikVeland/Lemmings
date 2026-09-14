@@ -1,5 +1,25 @@
 # Beta 26 readiness
 
+## Correction: this archive is incomplete
+
+Found on 14 September 2026 while cutting beta 31. **Do not use beta 26 as a
+fallback.** Use beta 29, the latest complete notarised archive.
+
+The beta 26 archive has no studio soundtracks and no Macintosh resource forks.
+It contains 0 soundtrack files and 0 resource forks. The beta 30 app contains 12
+soundtrack files and 24 resource forks, and the recordings add about 270 MB. The Macintosh resource forks carry
+Macintosh artwork and level data, so Macintosh graphics options are also affected.
+
+The cause is the frozen checkout described below. It linked the game data
+directories to the main checkout instead of copying them. The soundtrack encoder
+and the resource fork copier each walk a directory from a symbolic link at the
+root, and neither follows that link. Both found no files and reported no error.
+Notarisation and Gatekeeper passed, because neither checks game content.
+
+Beta 31 uses copied data and compares every packaged resource with the previous
+beta. The checks recorded below remain accurate for the source they tested. They
+did not detect missing packaged resources.
+
 Version 0.1, build 26. Universal arm64 and x86_64 app; macOS 13 or later.
 
 ## Frozen inputs
