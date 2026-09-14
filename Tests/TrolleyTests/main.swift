@@ -385,9 +385,19 @@ func testEngineFamilies() throws {
         view.mouseDown(with: NSEvent.mouseEvent(with: .leftMouseDown, location: point, modifierFlags: [], timestamp: 0,
             windowNumber: window.windowNumber, context: nil, eventNumber: 0, clickCount: 1, pressure: 1)!)
     }
-    click(750)
+    func clickButton(_ label: String) throws {
+        let elements = (view.accessibilityChildren() ?? []).compactMap { $0 as? GameAccessibleElement }
+        guard let element = elements.first(where: { $0.accessibilityRole() == .button && $0.accessibilityLabel() == label }) else {
+            throw SequelDataError.invalid("Missing rendered button: \(label)")
+        }
+        let frame = element.accessibilityFrame()
+        let point = window.convertPoint(fromScreen: CGPoint(x: frame.midX, y: frame.midY))
+        view.mouseDown(with: NSEvent.mouseEvent(with: .leftMouseDown, location: point, modifierFlags: [], timestamp: 0,
+            windowNumber: window.windowNumber, context: nil, eventNumber: 0, clickCount: 1, pressure: 1)!)
+    }
+    try clickButton("Next level")
     try require(continues == 2 && retries == 1, "Successful primary mouse action must advance")
-    click(350)
+    try clickButton("Retry")
     try require(retries == 2, "Optional mouse retry is unavailable")
     for saved in [40, 41, 58] {
         view.report = store.record(run(saved, used: ["builder": saved == 58 ? 9 : 8])); try shot("stars-\(saved)")
@@ -398,7 +408,7 @@ func testEngineFamilies() throws {
     }
     view.report = store.record(run(34, win: false)); try shot("failed-default")
     let beforeFailure = continues
-    key("\r", code: 36); click(350)
+    key("\r", code: 36); try clickButton("Try again")
     try require(retries == 4 && continues == beforeFailure, "Failure primary mouse and Enter must retry")
     view.report = report; try shot("last-lemming")
     let newAwards = Set(report.trolley!.attempt.achievements)
@@ -411,7 +421,7 @@ func testEngineFamilies() throws {
             return color.redComponent > 0.9 && color.greenComponent > 0.6 && color.blueComponent < 0.45
         }.count > 16
     }
-    click(720, 459)
+    try clickButton("\(newAwards.count) new awards >")
     var visitedAwards = Set<TrolleyAchievement>()
     for index in 0..<newAwards.count {
         let name = "new-awards-\(index + 1)"
@@ -452,17 +462,18 @@ func testEngineFamilies() throws {
     try require(view.accessibilityLabel()?.contains("Personal best: 58") == true,
                 "The records filter changed the original run's personal history")
     view.assisted = false
-    view.mode = .result; try shot("affinity-result")
+    view.mode = .details; try shot("affinity-details")
     window.makeKeyAndOrderFront(nil)
-    click(800, 658)
-    try require(view.affinityPopover?.isShown == true && view.mode == .result, "Affinity did not open a popover")
+    let affinity = TrolleyAnalyser.archetype(report.trolley!.attempt.philosophy.primaryID)
+    try clickButton(affinity.name)
+    try require(view.affinityPopover?.isShown == true && view.mode == .details, "Affinity did not open a popover")
     let popup = view.affinityPopover!.contentViewController!.view
     let popupBitmap = popup.bitmapImageRepForCachingDisplay(in: popup.bounds)!
     popup.cacheDisplay(in: popup.bounds, to: popupBitmap)
     try popupBitmap.representation(using: .png, properties: [:])!.write(to: root.appendingPathComponent("affinity-popover.png"))
     let beforePopoverClose = continues
     key("", code: 53)
-    try require(view.affinityPopover?.isShown == false && view.mode == .result && continues == beforePopoverClose,
+    try require(view.affinityPopover?.isShown == false && view.mode == .details && continues == beforePopoverClose,
                 "Closing the affinity popover left the result or advanced play")
     key("a"); view.awardPage = 0; key("", code: 124)
     try require(view.awardPage == 1, "Award pages lacked keyboard navigation")
