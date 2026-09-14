@@ -1,24 +1,9 @@
 import AppKit
+import NxlvKit
 
-/// The two panel buttons the Macintosh release never drew.
-///
-/// That release put Pause in the Game menu and End Level in the File menu, so
-/// its artwork carries signs, a music toggle and the four rank names but no
-/// button face for either command. The eight skill buttons beside them draw
-/// real lemming sprites, which would leave a system font setting Helvetica
-/// against pixel art. These bitmaps keep the whole row in one period.
-///
-/// Each row is one scanline, and every glyph is written at the size it was
-/// drawn rather than described as curves, because the bar is scaled by whole
-/// numbers and a resampled edge would not match the sprites beside it. All of
-/// them are twelve wide, which is the width of the well the bar sinks into a
-/// button, so the art fills that well exactly at every scale.
+/// Original Amiga control tiles, with separate glyphs for Resume and Undo.
+/// Source pixels use the Amiga panel aspect ratio and a reference-matched colour palette.
 enum PanelGlyph: String {
-  /// A mushroom cloud, which is what the sequel puts on the same button.
-  ///
-  /// Redrawn here rather than lifted: the sequel's own icon is a shaded
-  /// 256-colour sprite in maroon and violet, and it neither survives the
-  /// reduction to a button of this size nor sits with a bar this flat.
   case nuke
   case pause
   case undo
@@ -33,25 +18,58 @@ enum PanelGlyph: String {
     switch self {
     case .nuke:
       return [
-        "....++++....",
-        "..o++++++o..",
-        ".o++++++++o.",
-        "oo++++++++oo",
-        ".oo++++++oo.",
-        "...oo++oo...",
-        ".....++.....",
-        ".....++.....",
-        "....o++o....",
-        "....++++....",
-        "..oo++++oo..",
-        "============",
+        "aa9aabbabaaa99aaabbbbbab9aba",
+        "aaababba99a999aa999aabbb99aa",
+        "aa9ccfff4f4f444264264246a99b",
+        "aafff4f4f464466426622262262a",
+        "bfff4ff466466662226626262262",
+        "f6ff64f466446622266222262426",
+        "c4f6466f46644264422222426262",
+        "bccddeeeffff466426244eedeecb",
+        "a9accccddefff646624dcbbbaabb",
+        "aa99baaaacdff44464ab9abab99b",
+        "aaa9acfffff4f44666624699abab",
+        "bcbcfff64f4f6446262266229aa9",
+        "aabacd6f6664f4626266622b99b9",
+        "a99aaccddedfff4624cddc99bbba",
+        "a999aaabacfff444626a99b9abbc",
+        "aa9999aacff4f44446269aabbccc",
+        "ccaa999cfff444666622699cb9ca",
+        "bbbaacffff4f444466662269a9b9",
+        "aaafffff4f4464666622626266aa",
+        "cffff4f4f4464664622622262266",
+        "cdeeeedddeeeeedddeedeeddeccb",
+        "eeddeeddeecdeeddeecddcdccbbb",
       ]
     case .undo:
       return [".....####...", "...########.", "..###....###", "..##......##", "#.##........", "####........", "###.........", "####........", "#####.......", "...........#", "...#########", ".....#####.."]
     case .fastForward:
       return ["#.....#.....", "##....##....", "###...###...", "####..####..", "#####.#####.", "############", "#####.#####.", "####..####..", "###...###...", "##....##....", "#.....#.....", "............"]
     case .pause:
-      return Array(repeating: "..###..###..", count: 12)
+      return [
+        "aaa99aa9aabbaa99999a90aaab90",
+        "acbb99aa999abbaaaa9a9e99ba9c",
+        "aaccaaaaa9990cbbbb000cb9b000",
+        "a99accbcaaa9e9aa900000e90000",
+        "ba99bcccaa99a000a9000ea99000",
+        "cbaaabccbba900000a99ccbbb99b",
+        "ccbaabbccbbb9000dbdee0000dcc",
+        "bcbaaaabcccbb99ce000000000dc",
+        "bcccaaaaaaccca900000000000eb",
+        "aaccc999accbc9900000000000db",
+        "aabbccc900aabc9e000000000dbc",
+        "b9bb9cc9ec999abebe00000edbbc",
+        "909999000caa9000b9c9a9999abb",
+        "9ea9900000c900000bbccaaa99aa",
+        "d000a9000cba9000ccccccaaa9ab",
+        "00000999cddddbb9bbccbbccaabb",
+        "9000dbdde0000ecbbccbbbbcccbb",
+        "b99be000000000ecbbbaaaabbcbb",
+        "bb9000000000000c9abbaa99aab9",
+        "aa9000000000000c999bbba9aaab",
+        "aa9b0000000000dbba99abbbbbb9",
+        "aab99bd00000dbbaaa999aaaab9a",
+      ]
     case .play:
       return [
         "..#.........",
@@ -70,24 +88,46 @@ enum PanelGlyph: String {
     }
   }
 
-  /// What each mark is drawn in.
-  ///
-  /// The cloud burns from a pale flash out to a cooler edge and lifts off a
-  /// lit ground. The transport marks take the pale green the bar already
-  /// labels its buttons in, so they belong to the row they sit in.
   private var palette: [Character: (UInt8, UInt8, UInt8)] {
     switch self {
-    case .nuke:
-      return ["+": (255, 236, 170), "o": (232, 116, 24), "=": (226, 178, 40)]
-    case .pause, .play, .fastForward, .undo:
+    case .pause, .nuke:
+      return Dictionary(uniqueKeysWithValues: Self.classicPalette.enumerated().map { index, colour in
+        (Character(String(index, radix: 16)), (colour.red, colour.green, colour.blue))
+      })
+    case .play, .fastForward, .undo:
       return ["#": (194, 224, 158)]
     }
   }
 
+  // Amiga panel1: 640×40, four planar bitplanes. Crop the two 32×24 cells
+  // at (320,16) and (352,16) by two horizontal and one vertical border pixels.
+  // The panel uses half-width horizontal pixels. Colours match the reference
+  // panel; this is not a claim that its original hardware palette was recovered.
+  private static let classicPalette: [ClassicRGBColor] = [
+    ClassicRGBColor(red: 0, green: 0, blue: 0),
+    ClassicRGBColor(red: 255, green: 255, blue: 255),
+    ClassicRGBColor(red: 255, green: 136, blue: 0),
+    ClassicRGBColor(red: 0, green: 187, blue: 0),
+    ClassicRGBColor(red: 255, green: 238, blue: 0),
+    ClassicRGBColor(red: 255, green: 221, blue: 221),
+    ClassicRGBColor(red: 221, green: 51, blue: 0),
+    ClassicRGBColor(red: 102, green: 68, blue: 238),
+    ClassicRGBColor(red: 238, green: 221, blue: 221),
+    ClassicRGBColor(red: 68, green: 17, blue: 17),
+    ClassicRGBColor(red: 102, green: 34, blue: 34),
+    ClassicRGBColor(red: 119, green: 51, blue: 51),
+    ClassicRGBColor(red: 136, green: 68, blue: 68),
+    ClassicRGBColor(red: 153, green: 85, blue: 85),
+    ClassicRGBColor(red: 187, green: 119, blue: 119),
+    ClassicRGBColor(red: 255, green: 255, blue: 136),
+  ]
+
+  var isOriginalTile: Bool { self == .pause || self == .nuke }
+
   /// The glyph's own size, before any scaling.
   var pixelSize: (width: Int, height: Int) {
     let rows = self.rows
-    return (rows.first?.count ?? 0, rows.count)
+    return ((rows.first?.count ?? 0) / (isOriginalTile ? 2 : 1), rows.count)
   }
 
   /// The largest whole-number scale that fits a box.
@@ -145,7 +185,7 @@ enum PanelGlyph: String {
         provider: provider, decode: nil, shouldInterpolate: false, intent: .defaultIntent)
     else { return nil }
 
-    let image = NSImage(cgImage: cgImage, size: CGSize(width: width, height: height))
+    let image = NSImage(cgImage: cgImage, size: CGSize(width: width / (isOriginalTile ? 2 : 1), height: height))
     Self.cache[key] = image
     return image
   }

@@ -197,15 +197,75 @@ private func require(
     bitsPerPixel: 32, bytesPerRow: graphics.width * 4, space: CGColorSpaceCreateDeviceRGB(),
     bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.last.rawValue), provider: provider,
     decode: nil, shouldInterpolate: false, intent: .defaultIntent)
-  for width in [640.0, 960.0, 1920.0] {
+  let testApp = ProcessInfo.processInfo.environment["LEMMINGS_TEST_APP"].map { URL(fileURLWithPath: $0) }
+    ?? root.appendingPathComponent(".build/local/Ultimate Lemmings.app")
+  let artworkRoot = testApp.appendingPathComponent("Contents/Resources/MacArtwork/lemmings")
+  panel.interfaceArtwork = try ClassicMacArtwork(directory: artworkRoot)
+  panel.macArtwork = panel.interfaceArtwork
+  let labelOutput = root.appendingPathComponent(".build/panel-label-regression")
+  try FileManager.default.createDirectory(at: labelOutput, withIntermediateDirectories: true)
+  for width in [640.0, 960.0, 1280.0, 1484.0, 1920.0] {
     panel.setFrameSize(NSSize(width: width, height: 240))
     for fast in [false, true] {
       panel.isFastForward = fast
       let bitmap = panel.bitmapImageRepForCachingDisplay(in: panel.bounds)!
       panel.cacheDisplay(in: panel.bounds, to: bitmap)
       try require(bitmap.pixelsWide > 0, "Classic panel did not render")
+      let scale = floor(min(width / Double(graphics.width), (240 - 22) / Double(graphics.height)))
+      let left = (width - Double(graphics.width) * scale) / 2
+      let ratio = Double(bitmap.pixelsWide) / width
+      var heights: [Int] = []
+      for index in 0..<8 {
+        let x0 = Int((left + Double(index + 2) * 16 * scale) * ratio)
+        let x1 = Int((left + Double(index + 3) * 16 * scale) * ratio)
+        let y0 = Int(10 * scale * ratio), y1 = Int(15 * scale * ratio)
+        var rows = Set<Int>()
+        for y in y0..<y1 { for x in x0..<x1 {
+          guard let color = bitmap.colorAt(x: x, y: y)?.usingColorSpace(.deviceRGB) else { continue }
+          if color.blueComponent > 0.4 || color.greenComponent > 0.5 { rows.insert(y) }
+        } }
+        for y in y0..<y1 {
+          for x in [x0, x1 - 1] {
+            let color = bitmap.colorAt(x: x, y: y)!.usingColorSpace(.deviceRGB)!
+            try require(color.blueComponent < 0.4 && color.greenComponent < 0.5,
+              "Skill label touched its neighbouring cell at \(width)")
+          }
+        }
+        heights.append(rows.count)
+      }
+      try require(heights.allSatisfy { $0 > 0 } && Set(heights).count == 1,
+        "Skill labels changed size across the row at \(width): \(heights)")
+      var chosen: PanelButton?
+      panel.onButton = { chosen = $0 }
+      for index in 0..<8 {
+        chosen = nil
+        panel.handlePointerDown(at: CGPoint(x: left + Double(index + 2) * 16 * scale + 8 * scale,
+                                            y: 28 * scale), time: Double(index + 1))
+        panel.handlePointerUp()
+        try require(chosen == .skill(index), "Skill label/button target changed at \(width)")
+      }
+      if !fast {
+        try bitmap.representation(using: .png, properties: [:])!.write(
+          to: labelOutput.appendingPathComponent("panel-\(Int(width)).png"))
+      }
+
     }
   }
+  func captureControlState(_ name: String) throws {
+    let bitmap = panel.bitmapImageRepForCachingDisplay(in: panel.bounds)!
+    panel.cacheDisplay(in: panel.bounds, to: bitmap)
+    try bitmap.representation(using: .png, properties: [:])!.write(
+      to: labelOutput.appendingPathComponent(name + ".png"))
+  }
+  panel.setFrameSize(NSSize(width: 960, height: 160))
+  panel.isPaused = true
+  try captureControlState("panel-paused")
+  try require(PanelGlyph.forButton(.pause, isPaused: true) == .play, "Paused panel lost its Resume symbol")
+  panel.isPaused = false
+  let mac = panel.macArtwork
+  panel.macArtwork = nil
+  try captureControlState("panel-dos")
+  panel.macArtwork = mac
   let session = panel.session as! ClassicSession
   for _ in 0..<120 { session.tick() }
   let original = ClassicDOSReplayRecorder.stateHash(of: session.simulation)
@@ -224,6 +284,8 @@ private func require(
   panel.handlePointerDown(at:nuke,time:1+gap)
   panel.handlePointerUp()
   try require(session.isNuking && session.canUndoNuke, "double-click did not start an undoable nuke")
+  try captureControlState("panel-undo-nuke")
+  try require(PanelGlyph.forButton(.nuke, isPaused: false, canUndoNuke: session.canUndoNuke) == .undo, "Nuke undo lost its reversible symbol")
   for _ in 0..<200 { session.tick() }
   panel.handlePointerDown(at:nuke,time:10)
   panel.handlePointerUp()

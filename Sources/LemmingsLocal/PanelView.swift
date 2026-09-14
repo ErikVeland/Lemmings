@@ -354,7 +354,7 @@ enum PanelButton: Equatable {
       let active = (button == .pause && isPaused) || (button == .fastForward && isFastForward)
         || (button == .nuke && session?.canUndoNuke == true)
       drawStoneButton(frame, selected: active)
-      if let image = glyph.image(fitting: frame.insetBy(dx: 2 * panelScale, dy: 2 * panelScale).size) {
+      if let image = glyph.image(fitting: glyph.isOriginalTile ? frame.size : frame.insetBy(dx: 2 * panelScale, dy: 2 * panelScale).size) {
         image.draw(in: CGRect(x: frame.midX - image.size.width / 2, y: frame.midY - image.size.height / 2,
           width: image.size.width, height: image.size.height), from: .zero, operation: .sourceOver,
           fraction: 1, respectFlipped: true, hints: nil)
@@ -393,7 +393,7 @@ enum PanelButton: Equatable {
       } else if let glyph = PanelGlyph.forButton(button, isPaused: isPaused, canUndoNuke: session?.canUndoNuke == true),
         // Rasterise the control glyph to fit the recessed well.
         let image = glyph.image(
-          fitting: frame.insetBy(
+          fitting: glyph.isOriginalTile ? frame.size : frame.insetBy(
             dx: 4 * max(1, panelScale / 2), dy: 4 * max(1, panelScale / 2)).size) {
         image.draw(
           in: CGRect(x: frame.midX - image.size.width / 2,
@@ -423,6 +423,18 @@ enum PanelButton: Equatable {
   private func drawSkillLabels() {
     guard panelScale >= 2 else { return }
     let names = ["CLIMB", "FLOAT", "BOMB", "BLOCK", "BUILD", "BASH", "MINE", "DIG"]
+    let labelWidth = buttonFrames.compactMap { button, frame -> CGFloat? in
+      if case .skill = button { return max(0, frame.width - 2 * panelScale) }
+      return nil
+    }.min() ?? 0
+    let labelHeight = 5 * panelScale
+    let longest = names.map(\.count).max() ?? 1
+    let macScale: Int
+    if let font = macInterface?.font(.small), names.allSatisfy({ font.covers($0) }) {
+      macScale = min(Int(labelWidth) / max(1, font.cellWidth * longest),
+                     Int(labelHeight) / max(1, font.cellHeight))
+    } else { macScale = 0 }
+    let pixelScale = max(1, min(3, floor(min(labelHeight / 7, labelWidth / CGFloat(longest * 6)))))
     let shortcuts = SkillShortcuts(names: session?.skills.map(\.name) ?? [])
     for (button, frame) in buttonFrames {
       guard case let .skill(index) = button, let name = names[safe: index] else { continue }
@@ -431,7 +443,12 @@ enum PanelButton: Equatable {
       NSColor.black.setFill()
       box.fill()
       let key = skillShortcut(index, shortcuts: shortcuts)
-      drawSkillName(name, in: box, key: key)
+      // Choose one face and scale for the whole row, including the fallback.
+      if macScale > 0 {
+        _ = drawMacLabel(name, centeredIn: box, scale: macScale, highlighted: key)
+      } else {
+        GamePixelText.draw(name, in: box, maxScale: pixelScale, highlighted: key)
+      }
       if let key, !name.contains(key) {
         let badge = CGRect(x: frame.maxX - 6 * panelScale, y: frame.minY + 2 * panelScale,
           width: 4 * panelScale, height: 5 * panelScale)
