@@ -176,11 +176,11 @@ extension AppDelegate {
 
     keyboard.controllerAction(.help)
     try check(keyboard.controllerMenuRoot != nil && keyboard.controllerIsAvailable(applicationActive: true), "Controller help sheet became unreachable")
-    try await Task.sleep(for: .milliseconds(500))
+    try await Task.sleep(nanoseconds: 500_000_000)
     keyboard.controllerMenuAction(.focusUnassigned(-1))
     let helpSelection = (keyboard.focusedControllerControl as? NSButton)?.title ?? "none"
     keyboard.controllerMenuAction(.assign)
-    try await Task.sleep(for: .milliseconds(500))
+    try await Task.sleep(nanoseconds: 500_000_000)
     try check(LevelHintWindow.shared.page != nil, "Controller could not select the hints button in controls help; selected \(helpSelection), sheet remains \(host.attachedSheet != nil)")
     keyboard.controllerMenuAction(.cancel)
 
@@ -438,7 +438,7 @@ extension AppDelegate {
         completedTicks += max(0, tick - previousTick); previousTick = tick
         if session?.isComplete == true { break }
         let remaining = max(0.001, 1.0 / 60 - (end - start))
-        try await Task.sleep(for: .seconds(remaining))
+        try await Task.sleep(nanoseconds: UInt64(remaining * 1_000_000_000))
       }
       let elapsed = ProcessInfo.processInfo.systemUptime - began
       try check(completedTicks >= 100, "Benchmark did not run the simulation: ticks \(completedTicks), phase \(phase), paused \(isPaused)")
@@ -450,7 +450,7 @@ extension AppDelegate {
       let gpuDeadline = ProcessInfo.processInfo.systemUptime + 2
       var gpu = crtView.performanceMetrics.snapshot
       while gpu.frames.count < gpu.submitted && ProcessInfo.processInfo.systemUptime < gpuDeadline {
-        try await Task.sleep(for: .milliseconds(10))
+        try await Task.sleep(nanoseconds: 10_000_000)
         gpu = crtView.performanceMetrics.snapshot
       }
       try check(gpu.frames.count == gpu.submitted && gpu.failures == 0, "GPU work did not complete successfully")
@@ -1117,7 +1117,7 @@ extension AppDelegate {
       try capture(page, name: "approach-\(mode)")
       next.performClick(nil)
       try check(LevelHintWindow.shared.revealedTier == 2, "Opening moves were skipped")
-      for _ in 0..<600 where !next.isEnabled { try await Task.sleep(for: .milliseconds(50)) }
+      for _ in 0..<600 where !next.isEnabled { try await Task.sleep(nanoseconds: 50_000_000) }
       try check(next.isEnabled && next.title == "Show solution replay", "Verified solution was not offered after the final hint")
       let liveRun = arcadeRunID, liveOwner = arcadeProfileID, liveShared = arcadeHotSeatID
       let recordsEncoder = JSONEncoder(); recordsEncoder.outputFormatting = [.sortedKeys]
@@ -1433,7 +1433,7 @@ extension AppDelegate {
     guard let hints = sheet.contentView.flatMap(find) else { throw IntegrationFailure(message: "Controls help omitted hints") }
     let helpInterruption = gameplayKeyboard?.interruptionCount
     hints.performClick(nil)
-    try await Task.sleep(for: .milliseconds(500))
+    try await Task.sleep(nanoseconds: 500_000_000)
     try check(LevelHintWindow.shared.page != nil && isPaused, "Controls help failed to hand off to hints; sheet: \(window.attachedSheet != nil)")
     GameScreen.shared.dismissAll()
     try check(isPaused == (gameplayKeyboard?.interruptionCount != helpInterruption), "Closing hints after controls help restored the wrong pause state")
@@ -1444,7 +1444,7 @@ extension AppDelegate {
     }
     let pauseInterruption = gameplayKeyboard?.interruptionCount
     hints.performClick(nil)
-    try await Task.sleep(for: .milliseconds(500))
+    try await Task.sleep(nanoseconds: 500_000_000)
     try check(LevelHintWindow.shared.page != nil && isPaused, "Pause menu failed to open hints")
     GameScreen.shared.dismissAll()
     try check(isPaused == (gameplayKeyboard?.interruptionCount != pauseInterruption), "Closing hints after pause menu restored the wrong pause state")
@@ -1756,7 +1756,7 @@ extension AppDelegate {
     suspendAudioOutput()
     try check(!music.isOutputRunning, "sleep did not suspend module output")
     wakeAudioOutput()
-    try await Task.sleep(for: .milliseconds(100))
+    try await Task.sleep(nanoseconds: 100_000_000)
     try check(music.isOutputRunning, "wake did not restore module output")
     for source in [ClassicMusicSource.adaptiveDJ, .remix(name: soundtrackLibrary.keys.sorted()[0])] {
       updated.music = source
@@ -1764,12 +1764,12 @@ extension AppDelegate {
       suspendAudioOutput()
       try check(!dj.isPlaying && !soundtrack.isPlaying, "sleep left a recording playing")
       wakeAudioOutput()
-      try await Task.sleep(for: .milliseconds(100))
+      try await Task.sleep(nanoseconds: 100_000_000)
       try check(dj.isPlaying || soundtrack.isPlaying, "wake did not restore recorded audio")
     }
     suspendCurrentEngine()
     resumeAudioOutput()
-    try await Task.sleep(for: .milliseconds(100))
+    try await Task.sleep(nanoseconds: 100_000_000)
     try check(!music.isRunning && !dj.isPlaying && !soundtrack.isPlaying, "wake resurrected a stopped source")
     print("PASS elapsed-time catch-up and audio interruption recovery")
   }
@@ -1973,11 +1973,11 @@ extension AppDelegate {
     var presses = 0
     panel.onButton = { if $0 == .rateDown { presses += 1 } }
     tubeClick(CGPoint(x: 40, y: 340))
-    try await Task.sleep(for: .milliseconds(450))
+    try await Task.sleep(nanoseconds: 450_000_000)
     try check(presses >= 3, "detached CRT panel did not repeat a held rate button")
     crtView.onMouseUp?()
     let released = presses
-    try await Task.sleep(for: .milliseconds(100))
+    try await Task.sleep(nanoseconds: 100_000_000)
     try check(presses == released, "CRT release did not stop repetition")
     var scrolled: Double?
     panel.levelSize = CGSize(width: 1600, height: 160)
@@ -1996,32 +1996,32 @@ extension AppDelegate {
     var telemetry = AdaptiveDJEngine.Telemetry(releasedCount: 10, totalCount: 10,
       savedCount: 5, requiredCount: 5, releaseRate: 50, dangerCount: 0, remainingSeconds: 300)
     dj.updateTelemetry(telemetry)
-    try await Task.sleep(for: .milliseconds(80))
+    try await Task.sleep(nanoseconds: 80_000_000)
     dj.resetLevel()
     telemetry.isNuking = true
     dj.updateTelemetry(telemetry)
-    try await Task.sleep(for: .milliseconds(80))
+    try await Task.sleep(nanoseconds: 80_000_000)
     try check(dj.isCrossfading && dj.playingDeckCount == 2, "cancelled fade finished the new transition")
-    try await Task.sleep(for: .milliseconds(2800))
+    try await Task.sleep(nanoseconds: 2_800_000_000)
     try check(!dj.isCrossfading && dj.playingDeckCount == 1, "fade did not retire its outgoing deck")
     dj.resetLevel()
     dj.updateTelemetry(telemetry)
-    try await Task.sleep(for: .milliseconds(80))
+    try await Task.sleep(nanoseconds: 80_000_000)
     dj.suspendOutput()
-    try await Task.sleep(for: .milliseconds(2800))
+    try await Task.sleep(nanoseconds: 2_800_000_000)
     try check(dj.isCrossfading && dj.playingDeckCount == 0, "Suspended fade consumed its remaining duration")
     dj.resumeOutput()
-    try await Task.sleep(for: .milliseconds(80))
+    try await Task.sleep(nanoseconds: 80_000_000)
     try check(dj.isCrossfading && dj.playingDeckCount == 2, "Resuming skipped the suspended fade")
     // Simulate a long frame. Fade duration must not depend on timer callback count.
     usleep(2_800_000)
-    try await Task.sleep(for: .milliseconds(100))
+    try await Task.sleep(nanoseconds: 100_000_000)
     try check(!dj.isCrossfading && dj.playingDeckCount == 1, "A delayed main actor stretched the fade")
     dj.resetLevel()
     dj.updateTelemetry(telemetry)
     dj.stop()
     dj.start()
-    try await Task.sleep(for: .milliseconds(100))
+    try await Task.sleep(nanoseconds: 100_000_000)
     try check(dj.isPlaying && dj.playingDeckCount == 1, "cancelled fade damaged restarted playback")
     dj.stop()
     print("PASS overlapping DJ cues, fade completion and stop/start cancellation")
@@ -2204,7 +2204,7 @@ extension AppDelegate {
     func capture(_ name: String) async throws {
         let root = host.contentView!
         root.layoutSubtreeIfNeeded()
-        try await Task.sleep(for: .milliseconds(30))
+        try await Task.sleep(nanoseconds: 30_000_000)
         CATransaction.flush()
         children(root).forEach { $0.needsDisplay = true }
         let bitmap = root.bitmapImageRepForCachingDisplay(in: root.bounds)!
