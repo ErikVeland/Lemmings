@@ -35,7 +35,7 @@ separate from the original pass requirements.
 
 Lemmings 2 has a matching gate. `zsh Scripts/verify-lemmings2-completion.sh`
 replays each recorded route twice and checks a committed manifest. It verifies
-64 of 120 levels. No tribe chains all ten levels under population carry-over.
+73 of 120 levels. Cavelems chains all ten levels under population carry-over.
 See [the Lemmings 2 evidence](Documentation/Lemmings2Completion/README.md).
 
 The app also opens unofficial NeoLemmix `.nxlv` levels. The player chooses a
@@ -50,7 +50,7 @@ reported rather than ignored.
 | DOS object graphics | Frames, palettes, upside-down objects, animation, `NoOverwrite`, and `OnlyOnTerrain` supported |
 | Classic gameplay | The DOS engine drives the app at a fixed 17 Hz tick with the eight DOS skills |
 | Campaign coverage | All 120 levels have repeatable winning native-engine replays |
-| Completion evidence | All 120 original levels have verified winning replays. Additional Classic campaigns have 118 winning routes. Full coverage remains open |
+| Completion evidence | All 120 original levels have verified winning replays. Additional Classic campaigns have 130 winning routes. Full coverage remains open |
 | Replays | End-of-run playback from 0.25× to 8× and MP4 movie export; separate deterministic DOS replay tools |
 | Arcade records | Local player profiles, sprite portraits, per-level rescue and skill boards, achievements and retry challenges |
 | Interface | Scrolling viewport, zoom, control panel, live skill counts, minimap, and cursor |
@@ -202,17 +202,17 @@ Sequel completion remains outside this milestone; shared regression checks still
 1. Broaden sequel fidelity and complete-level validation. L2 is a native beta
    with all twelve tribes, 120 campaign levels, 51 skills, interactive objects,
    four practice maps, original audio, introduction and ending scripts.
-   All campaign starts and exits pass checks; 64 levels have recorded solutions.
+   All campaign starts and exits pass checks; 73 levels have recorded solutions.
    Full walkthrough coverage and original-engine equivalence remain unverified.
    L3 remains a native preview with 90 campaign levels, separate tribe progress,
-   and 17 fixed-input winning replays. Its tribe module music, six named original
+   and 41 fixed-input winning replays. Its tribe module music, six named original
    voice samples and five original movies are connected. Environmental effects,
    movie soundtracks, story triggers and remaining mechanics need further work.
    See [Sequel interpreters](Documentation/SequelInterpreters.md).
 2. Complete solution coverage for Oh No!, Xmas and Holiday. The
-   [campaign gate](Documentation/CampaignCompletion/README.md) verifies 118 winning
-   replays: Oh No! 72/100, Xmas 1991 4/4, Xmas 1992 4/4, Holiday 1993 22/32 and
-   Holiday 1994 16/32. All 292 classic-family levels pass rendering and release checks.
+   [campaign gate](Documentation/CampaignCompletion/README.md) verifies 130 winning
+   replays: Oh No! 72/100, Xmas 1991 4/4, Xmas 1992 4/4, Holiday 1993 32/32 and
+   Holiday 1994 18/32. All 292 classic-family levels pass rendering and release checks.
 3. Keep the strict original DOS completion gate green. All 120 levels have
    winning replays, including 103 full rescues. Extend this gate to the other
    campaigns. See [completion evidence](Documentation/ClassicCompletion/README.md).
@@ -263,8 +263,8 @@ See [speed controls and effects](Documentation/SuperSpeed.md).
 Choose **Help → Level hints**, press **F1**, or choose hints from the controls help.
 Reveal a gentle nudge, then the approach, then opening moves with marked locations.
 The game pauses while you read. Each tier needs a separate click.
-All 120 original levels have hints drawn from checked winning routes.
-Other levels offer clearly labelled general coaching. See [level hints](Documentation/LevelHints.md).
+All 120 original levels and 130 additional official Classic levels have checked
+route hints. Levels without a matching route offer labelled general coaching. See [level hints](Documentation/LevelHints.md).
 
 ### Pointer capture
 

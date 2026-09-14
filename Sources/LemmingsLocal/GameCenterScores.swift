@@ -92,7 +92,12 @@ struct GameCenterAccount: Equatable, Sendable {
     private var generation = UUID()
     private var authenticationRequest: UUID?
     private var submitted: [String: Int] = [:]
-    private(set) var board: WorldwideBoard?
+    private var loadedBoard: WorldwideBoard?
+    private var boardAccountID: String?
+    var board: WorldwideBoard? {
+        guard let account, account.id == boardAccountID else { return nil }
+        return loadedBoard
+    }
     private(set) var boardID: String?
     private(set) var previousRank: Int?
     private(set) var status = "Connect Game Center to compare worldwide."
@@ -121,28 +126,30 @@ struct GameCenterAccount: Equatable, Sendable {
         busy = true; status = "Connecting to Game Center..."; onChange?()
         transport.authenticate(window: window) { [weak self] result in
             guard let self else { return }
-            guard self.authenticationRequest == request else {
-                self.operation?.cancel(); self.generation = UUID()
-                self.busy = false; self.board = nil; self.submitted = [:]
-                self.status = "Game Center account changed. Connect this player to refresh scores."
-                self.onChange?(); return
-            }
-            self.authenticationRequest = nil
+            guard self.authenticationRequest == request else { return }
             self.busy = false
             switch result {
             case .success(let account):
                 let key = "GameCenter.profile." + account.id
                 if self.defaults.string(forKey: key) == nil { self.defaults.set(profileID, forKey: key) }
                 self.refresh(profileID: profileID, boardID: boardID, history: history)
-            case .failure(let error): self.status = error.localizedDescription; self.board = nil; self.onChange?()
+            case .failure(let error):
+                self.operation?.cancel(); self.generation = UUID()
+                self.status = error.localizedDescription; self.loadedBoard = nil; self.previousRank = nil
+                self.onChange?()
             }
         }
     }
     func refresh(profileID: String, boardID: String, history: TrolleyHistory) {
         operation?.cancel(); generation = UUID()
         previousRank = self.boardID == boardID ? board?.personal?.rank : nil
-        self.boardID = boardID; board = nil
-        guard available, let account else { onChange?(); return }
+        self.boardID = boardID; loadedBoard = nil; busy = false
+        guard available, let account else {
+            authenticationRequest = nil
+            status = available ? "Connect Game Center to compare worldwide."
+                : "Worldwide rankings are not enabled in this build. Local records are saved."
+            onChange?(); return
+        }
         let ticket = generation
         let linked = linkedProfileID == profileID
         busy = true
@@ -155,7 +162,7 @@ struct GameCenterAccount: Equatable, Sendable {
                 if self.generation == ticket {
                     self.busy = false
                     if self.account?.id != account.id {
-                        self.board = nil
+                        self.loadedBoard = nil
                         self.status = "Game Center account changed. Your local records are saved."
                     }
                     self.onChange?()
@@ -170,14 +177,17 @@ struct GameCenterAccount: Equatable, Sendable {
                     guard self.submitted[key] != score else { continue }
                     do {
                         try await self.transport.submit(score, boardID: id)
+                        guard !Task.isCancelled, self.generation == ticket, self.account?.id == account.id else { return }
                         self.submitted[key] = score
                     } catch { syncFailed = true }
                 }
             }
+            guard !Task.isCancelled, self.generation == ticket, self.account?.id == account.id else { return }
             do {
                 let loaded = try await self.transport.load(boardID)
                 guard !Task.isCancelled, self.generation == ticket, self.account?.id == account.id else { return }
-                self.board = loaded
+                self.loadedBoard = loaded
+                self.boardAccountID = account.id
                 self.status = syncFailed ? "Scores are saved locally. Retry to finish syncing."
                     : linked ? "Connected as \(account.name). Records synced." : "Viewing as \(account.name). Scores belong to a different local player."
             } catch {
@@ -202,7 +212,7 @@ struct GameCenterAccount: Equatable, Sendable {
         boardScope = .worldwide; page(.records)
         let service = GameCenterScores.shared
         service.onChange = { [weak self] in self?.needsDisplay = true }
-        if service.account != nil, let config = service.configuration {
+        if let config = service.configuration {
             service.refresh(profileID: player.id, boardID: service.boardID ?? config.starsID, history: ArcadeStore.shared.records.trolley)
         }
     }

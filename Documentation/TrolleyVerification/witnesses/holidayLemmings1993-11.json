@@ -1,0 +1,64 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 200
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 322
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 337
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 457
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 600
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 80,
+    "required" : 77,
+    "saved" : 80,
+    "stateHash" : "9cf4ae9f4e472e20cce21a0e8d5364590ec040448985002edf7526da99bdd92d",
+    "ticks" : 1722
+  },
+  "initialStateHash" : "fcc7cca268ab28323fcdc8775d880e4889c4e97caede68dd5e8dfab7177ffe2e",
+  "number" : 12,
+  "rank" : "Flurry",
+  "title" : "Presents of Mind"
+}

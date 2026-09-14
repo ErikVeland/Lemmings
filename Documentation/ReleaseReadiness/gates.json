@@ -4,7 +4,7 @@
     "priority": "P0",
     "status": "open",
     "exitCriteria": "Replay a winning route for every advertised Classic level, including the bundled fan corpus and conversions. Close the remaining Oh No! and Holiday routes. Verify continuous Full Quest progression, save/resume and final results. L2/L3 completion belongs to the sequel gate.",
-    "progress": "After beta 29: official Classic coverage is 238/292 (54 missing), including the Oh No! Crazy 4 and 7 full rescues. Xmas 1992 is complete. Six new full-rescue routes are preserved. The retained 6,372-level corpus has 629 verified wins, no load/start failures and no lost wins; 5,743 identities still need winning evidence. There are 237 distinct hint replays and 177 full-rescue certificates. See Documentation/ClassicOneZero.md.",
+    "progress": "15 September: official Classic coverage is 250/292 (42 missing). All 32 Holiday 1993 levels now have preserved wins. The remaining official gaps are 28 Oh No! and 14 Holiday 1994 routes. The fresh 6,372-level audit after the slope-exit fix has 647 wins and zero load/start failures; 5,725 levels still lack wins. There are 248 distinct hint decks for 250 official levels and 251 distinct solution replays including conversions. The all-level requirement remains unchanged pending the owner\u2019s scope decision. See OneZeroClosure-2026-09-15.md.",
     "scopes": [
       "all",
       "classic-1.0"
@@ -18,14 +18,14 @@
     "scopes": [
       "all"
     ],
-    "progress": "64 L2 standalone routes remain preserved. Sixteen separately verified carry-over variants extend Egyptian to eight levels, Classic to five and Polar to four. Strict L2 completion now requires all twelve complete tribe chains. L3 has 17 recorded routes out of 90; its rules remain provisional. See Documentation/SequelClosure.md."
+    "progress": "15 September: Claude\u2019s committed work preserves 73/120 L2 standalone routes and 41/90 L3 routes. Cavelems has a complete ten-level carry-over chain. L2 and L3 remain previews outside Classic 1.0 completion. Current known-route and runtime regression suites passed in the baseline audit."
   },
   {
     "area": "Save and interruption recovery",
     "priority": "P0",
     "status": "partial",
     "exitCriteria": "Verify app and controller interruption on real hardware. Add versioned in-progress checkpoints and crash recovery before mobile suspend/termination support. Verify save migrations and rollback with real prior releases.",
-    "progress": "Beta 25 passed both complete app journeys (32 checks each), including Classic/fan checkpoints, Hot Seat identity, paused handovers, retrying the previous level as the incoming player, replay journals, corruption, stale writers and safe solo transitions. Main-window ownership was fixed after validation exposed a delayed-refresh crash; close and refresh coverage now passes. Physical power-loss and installed-release migration trials remain open. See Beta25Readiness.md.",
+    "progress": "15 September: all existing checkpoint, corruption, stale-writer and recovery tests pass. Ten new trials kill an isolated writer process during checkpoint updates, then validate the recovered checkpoint with a fresh reader. These pass. Classic wins now preserve validated input routes separately from recovery checkpoints. Physical interruption, installed prior-release migration and power-loss coverage remain distinct from these process tests. See OneZeroClosure-2026-09-15.md.",
     "scopes": [
       "all",
       "classic-1.0"
@@ -45,9 +45,9 @@
   {
     "area": "Performance and hardware",
     "priority": "P0",
-    "status": "open",
+    "status": "partial",
     "exitCriteria": "Measure complete frame times, memory growth and audio under sustained 10x play, nukes, replays and repeated engine switches. Test physical Intel, minimum supported macOS, SDR/HDR, multiple displays and high refresh rates.",
-    "progress": "13 September: the performance audit now measures production asynchronous Metal submission, separately reports CPU work and GPU timing, rejects GPU failures, and verifies every encoded replay frame after finalisation. The clean M4 Pro/macOS 27 sample records 9.08\u00d7 flat, 7.05\u00d7 monitor and 6.92\u00d7 television at requested 10\u00d7. All 5,932 captured frames are present in the movies. These short, silent Classic samples do not close sustained throughput, audio, native-sequel or hardware coverage. The earlier shared 500 ms encoder-stall bound remains tested. See ReleaseReadiness/PerformanceMeasurementClosure.md and ReplayStallClosure.md.",
+    "progress": "15 September: a repeated 20-scenario run exposed utility-priority replay encoder stalls under concurrent heavy work. User-initiated encoder priority completed all 20 scenarios with all 8,013 movie frames and no GPU errors. Queue size and the 500 ms input-blocking bound remain unchanged. Resident memory did not grow across five passes. Observed fast-forward was only 1.14\u20131.45\u00d7 under contention, so sustained 10\u00d7, audible audio and the physical hardware matrix remain open. See PerformanceMeasurementClosure.md.",
     "scopes": [
       "all",
       "classic-1.0"
@@ -58,7 +58,7 @@
     "priority": "P0",
     "status": "partial",
     "exitCriteria": "Freeze the final source and assets. Build both Mac architectures, sign, notarise and verify the downloaded archive. Earlier beta notarisation is not evidence for later local builds.",
-    "progress": "Beta 29 remains the notarised standard archive. Beta 30 Game Center packages the later closure work with an Apple Development signature and a profile for two registered Macs. Its extracted signature, resources and both architecture startups passed. It is not notarised. Live account checks and the final Classic 1.0 freeze remain open. See Documentation/Beta30GameCenterReadiness.md.",
+    "progress": "Beta 32 has notarised main and macOS 12 archives, plus a development-signed Game Center archive and standalone playable app for the registered Macs. The owner confirms live Game Center integration works. The current source contains later changes and needs its own source freeze, validation and package. See Documentation/Beta32Readiness.md.",
     "scopes": [
       "all",
       "classic-1.0"
@@ -67,12 +67,13 @@
   {
     "area": "Publishing agreement and assets",
     "priority": "P0",
-    "status": "external",
+    "status": "closed",
     "exitCriteria": "Agree the proposed official product scope, brand use and asset distribution with the rights holder. Record code and asset provenance, third-party dependencies and approved distribution inputs. Obtain the required platform publishing access.",
     "scopes": [
       "all",
       "classic-1.0"
-    ]
+    ],
+    "progress": "15 September: Erik Veland explicitly confirmed approval to distribute the original assets in this task. The existing THIRD_PARTY_NOTICES.md records code and asset provenance. This records the owner\u2019s approval, without extending it to unrequested platforms or claiming independent legal verification."
   },
   {
     "area": "Novice experience",
@@ -82,7 +83,8 @@
     "scopes": [
       "all",
       "classic-1.0"
-    ]
+    ],
+    "progress": "15 September: the owner reports regular personal and external tester play, no reported issues in Classic or early L2, and positive feedback. Verified tiered hints now extend beyond the original 120 to 250 official Classic levels, represented by 248 unique decks. The app hint journeys and catalogue checks pass. Tester feedback does not identify a separate first-time-player study."
   },
   {
     "area": "iPhone and iPad",
@@ -110,7 +112,8 @@
     "scopes": [
       "all",
       "classic-1.0"
-    ]
+    ],
+    "progress": "15 September: the owner confirms live Game Center integration works. Account-change regression tests now cover sign-out during a pending load, obsolete authentication callbacks, stale personal ranks and account-specific score submission. Local tests pass. Translation layout coverage and cloud-save conflict policy remain open."
   },
   {
     "area": "Partner evaluation build",

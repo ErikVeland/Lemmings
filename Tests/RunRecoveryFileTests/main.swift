@@ -8,7 +8,9 @@ func rejects(_ body: () throws -> Void) throws {
     do { try body() } catch { return }
     fatalError("Expected rejection")
 }
-let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+let writerMode = CommandLine.arguments.count == 3 && CommandLine.arguments[1] == "--write-loop"
+let root = writerMode ? URL(fileURLWithPath: CommandLine.arguments[2])
+    : FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
 try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
 defer { try? FileManager.default.removeItem(at: root) }
 let recovery = RunRecovery(engine: "test", profileID: "player", runID: UUID(), dataSetID: "lemmings",
@@ -25,6 +27,20 @@ func oversized(_ url: URL) throws {
     let file = try FileHandle(forWritingTo: url)
     defer { try? file.close() }
     try file.truncate(atOffset: 64 * 1024 * 1024 + 1)
+}
+
+if writerMode {
+    let file = RunRecoveryFile(url: root.appendingPathComponent("interrupted.json"))
+    _ = try file.load()
+    for tick in 0..<10_000 {
+        let checkpoint = RunRecovery(engine: "test", profileID: "player", runID: recovery.runID,
+            dataSetID: "lemmings", levelIndex: 0, levelFingerprint: "level", initialStateHash: "initial",
+            tick: tick, events: [], stateHash: "state-\(tick)", usedRewind: false,
+            nukeCount: 0, rewindCount: 0, undoCount: 0, selectedSkill: 0, scrollX: 0, scrollY: 0)
+        try file.save(checkpoint)
+        if tick == 0 { FileHandle.standardOutput.write(Data("READY".utf8)) }
+    }
+    exit(0)
 }
 
 let large = try seeded("large.json")
@@ -94,3 +110,23 @@ for invalid in [FanRunRecovery(queue: [], index: 0), .init(queue: [validEntry], 
     try rejects { _ = try fanCheckpoint.validated() }
 }
 print("PASS fan checkpoint queue bounds and archive-member validation")
+
+for trial in 0..<10 {
+    let directory = root.appendingPathComponent("process-\(trial)")
+    let process = Process()
+    process.executableURL = URL(fileURLWithPath: CommandLine.arguments[0]).standardizedFileURL
+    process.arguments = ["--write-loop", directory.path]
+    let ready = Pipe(); process.standardOutput = ready
+    try process.run()
+    let signal = try ready.fileHandleForReading.read(upToCount: 5)
+    try check(signal == Data("READY".utf8), "Checkpoint writer did not become ready")
+    usleep(useconds_t(1000 + trial * 1300))
+    try check(kill(process.processIdentifier, SIGKILL) == 0, "Could not interrupt test writer")
+    process.waitUntilExit()
+    try check(process.terminationReason == .uncaughtSignal && process.terminationStatus == SIGKILL,
+        "Writer did not terminate abruptly")
+    let checkpoint = try RunRecoveryFile(url: directory.appendingPathComponent("interrupted.json")).load()
+    try check(checkpoint != nil && checkpoint!.stateHash == "state-\(checkpoint!.tick)",
+        "Interrupted write left a torn or missing checkpoint")
+}
+print("PASS ten abrupt process terminations during checkpoint writes, with verified recovery")

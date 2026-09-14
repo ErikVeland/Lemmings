@@ -38,6 +38,14 @@ with tempfile.TemporaryDirectory(prefix='classic-completion-') as directory:
     replay['expected']['saved'] -= 1
     first.write_text(json.dumps(replay))
     rejects(['1'], 'outcome mismatch')
+    replay = json.loads(original)
+    replay['expected']['saved'] += 1
+    first.write_text(json.dumps(replay))
+    preserved = first.read_bytes()
+    result = subprocess.run([str(args.verifier.resolve()), 'refresh', str(args.data.resolve()), '1'],
+                            cwd=project, env=environment, capture_output=True, text=True)
+    assert result.returncode != 0 and 'lower the preserved rescue count' in result.stdout
+    assert first.read_bytes() == preserved, 'Refresh replaced a higher rescue target'
     second = fixtures / 'fun-02.json'
     before = second.read_bytes()
     plan = Path(directory) / 'lower-rescue-plan.json'
@@ -47,4 +55,26 @@ with tempfile.TemporaryDirectory(prefix='classic-completion-') as directory:
                             capture_output=True, text=True, check=False)
     assert result.returncode == 0 and 'saved 1 lost 9' in result.stdout, result.stdout + result.stderr
     assert second.read_bytes() == before, 'A lower rescue count replaced the best replay'
-print('PASS invalid evidence fails; a lower-rescue winning plan cannot replace the best replay.')
+    # A coordinate plan executes between ticks. Preserve that timing in its witness.
+    first.unlink()
+    plan.write_text(json.dumps([{'id': 0, 'skill': 'digger', 'tick': 60}]))
+    result = subprocess.run([str(args.verifier.resolve()), 'plan', str(args.data.resolve()),
+                             '1', str(plan)], cwd=project, env=environment,
+                            capture_output=True, text=True, check=False)
+    assert result.returncode == 0, result.stdout + result.stderr
+    played = json.loads(first.read_text())
+    assert played['events'][0]['afterTick'] is True
+    candidates = Path(directory) / 'recordings'
+    candidates.mkdir()
+    (candidates / 'played.json').write_text(json.dumps(played))
+    first.unlink()
+    result = subprocess.run([str(args.verifier.resolve()), 'recorded', str(args.data.resolve()),
+                             '1', str(candidates)], cwd=project, env=environment,
+                            capture_output=True, text=True, check=False)
+    assert result.returncode == 0 and 'RECORDED' in result.stdout, result.stdout + result.stderr
+    assert json.loads(first.read_text()) == played, 'Promotion changed the played route'
+    played['events'].append({'tick': played['expected']['ticks'] + 1,
+                             'action': {'releaseRate': {'_0': 99}}, 'afterTick': True})
+    first.write_text(json.dumps(played))
+    rejects(['1'], 'unconsumed inputs')
+print('PASS invalid evidence, best-route protection, live timing, recorded-route promotion and unused-input rejection.')

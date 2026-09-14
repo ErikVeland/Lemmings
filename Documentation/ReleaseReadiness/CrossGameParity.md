@@ -21,6 +21,7 @@ This requirement is also recorded in `AGENTS.md`.
 | Forward single step | Yes | Yes, added in this pass | Yes |
 | Rewind/backward step | Classic DOS history | Not implemented | Not implemented |
 | Tiered hints | Checked hints and general coaching | General coaching | General coaching |
+| Automatic completed input routes | Classic DOS, including fan levels | Existing recorder | Not implemented |
 | Verified solution playback | Matching bundled routes only | Not implemented | Not implemented |
 
 ## Gaps closed in this pass

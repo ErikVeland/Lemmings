@@ -170,8 +170,9 @@ def merge(results, shards):
     for game, expected in EXPECTED.items():
         count = Counter(r["status"] for r in primary if r["gameID"] == game)
         lines.append(f"| {NAMES[game]} | {expected} | {count['VERIFIED']} | {count['OBSERVED']} | {count['UNKNOWN']} |")
-    lines += ["", "Tribes uses 60 Lemmings for the campaign audit. Three existing fixtures also cover a "
-              "one-Lemming carry-over configuration. Their certificates apply only to that exact population.", "",
+    carry_over = [r for r in rows if r["gameID"] == "lemmings2" and r["population"] != 60]
+    lines += ["", f"Tribes uses 60 Lemmings for the campaign audit. Preserved fixtures also cover {len(carry_over)} "
+              "carry-over configurations. Each certificate applies only to its exact population.", "",
               "Chronicles keeps unreleased Lemmings in reserve. They are survivors, not sacrifices. "
               "Fixed-input L3 completion fixtures are checked twice with their level hashes, exact starting population, "
               "accepted inputs, terminal state and retained reserves. Uncovered levels receive a no-input check. See "

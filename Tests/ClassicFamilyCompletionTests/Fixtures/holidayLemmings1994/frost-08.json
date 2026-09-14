@@ -1,0 +1,34 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 1
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "digger"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 72
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 80,
+    "required" : 75,
+    "saved" : 80,
+    "stateHash" : "8cb0fa9edf722bd23dccf1b670d7a10adfd13ea85b2afd3c0d5dc0b57876defb",
+    "ticks" : 905
+  },
+  "initialStateHash" : "ffaa0278a5ee1a678ed86c20e52e5cec6b51fa83eb8eb43e817eeff04d0d8923",
+  "number" : 8,
+  "rank" : "Frost",
+  "title" : "Division Bell"
+}

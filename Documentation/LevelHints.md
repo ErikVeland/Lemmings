@@ -13,20 +13,19 @@ The game pauses while the page is open. Closing it restores the previous pause s
 
 ## Coverage
 
-Checked hints exist for the 120 original Lemmings levels. All three tiers come
-from a verified winning route for that level, so they cannot send a player down a
-route the engine does not accept.
+As of 15 September 2026, checked hints cover 250 official Classic levels through
+248 distinct level identities. This includes all 120 original levels, all 32
+Holiday 1993 levels, both complete Xmas campaigns, 72 Oh No! levels and 18
+Holiday 1994 levels. All three tiers come from a verified winning route.
 
-Every other campaign gets labelled general coaching instead: Oh No! More Lemmings,
-the Xmas and Holiday campaigns, Lemmings 2, Lemmings 3, converted levels and fan
-packs. That text is honest advice about the mechanics in play. It is not derived
-from a solution for the level in front of you, and it is labelled so no player
-mistakes it for one.
+Levels without matching checked routes receive labelled general coaching.
+This includes the remaining official levels, L2, L3, conversions and fan packs,
+unless a fan level exactly matches a checked original identity. General coaching
+is advice about the available mechanics, not a solution for that level.
 
-This is a beta limitation, not a design choice. Checked hints follow recorded
-winning routes, so a campaign gains them when its routes are recorded. 199 core
-campaign routes remain unverified, which is the same gap the release gates track.
-See the [1.0 gap evaluation](ReleaseReadiness/OneZeroGapEvaluation.md).
+Checked hints follow preserved winning routes. The official Classic gap is now
+42 levels. Sequel and community completion have separate evidence limits.
+See the [current closure work](ReleaseReadiness/OneZeroClosure-2026-09-15.md).
 
 Each click reveals one tier:
 
@@ -47,14 +46,15 @@ Paragraphs and numbered steps retain their line breaks. Long hints scroll with
 the mouse wheel, controller right stick, arrow keys, Page Up/Down or Home/End.
 Each new tier starts at the top. Assistive tools can read the complete hint text.
 
-The bundled catalogue covers all 120 original Lemmings levels: Fun, Tricky, Taxing and Mayhem.
-Other levels, including the sequels and fan levels, receive explicitly labelled general coaching.
-Missing or stale hint data also falls back to coaching.
+Missing or stale hint data falls back to labelled general coaching.
 
 ## Source and validation
 
 `Resources/Hints/classic.json` contains opening locations extracted from the existing winning replay witnesses.
-`Tools/LevelHints/main.swift` replays every original level, checks each assignment and compares the complete recorded outcome.
+`Tools/LevelHints/main.swift` replays each included route, checks every assignment
+and compares the complete recorded outcome. Original levels use the published
+rescue witnesses. Other official campaigns use the checked solution bundle.
+Both legacy before-tick and live after-tick inputs retain their recorded timing.
 It exports only the first three assignments, the order of skill types and the opening release-rate changes.
 The app matches the initial level fingerprint and engine fingerprint before offering a checked route.
 Levels with the same title or artwork cannot borrow another level's hints.
@@ -64,9 +64,9 @@ The output is deterministic. Normal app builds copy the saved catalogue without 
 
 Run `TEST_SCOPE=hints Scripts/run-app-integration-tests.sh` to check coverage, exact level matching,
 spoiler boundaries, native keys, pause restoration, flat/CRT presentation and missing-route coaching.
-The checks exercise all 360 original hint tiers, verify complete text and accessible values,
+The checks exercise all 744 hint tiers, verify complete text and accessible values,
 and test keyboard scrolling and scroll reset with an oversized coaching page.
 They also render the three tiers under `.build/hints` for visual inspection.
 
-Run `Scripts/test-level-hint-catalogue.sh` for headless checks of all 120 decks,
+Run `Scripts/test-level-hint-catalogue.sh` for headless checks of all 248 decks,
 release-rate ordering and the first two tiers’ spoiler boundaries.

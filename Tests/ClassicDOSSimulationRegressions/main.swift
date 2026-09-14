@@ -677,8 +677,8 @@ private func testReleaseRateZeroCanBeRestored() throws {
     try require(simulation.lastTickEvents == [.releaseRateChanged(0)], "restoring RR 0 emitted wrong events")
 }
 
-/// A lemming drops into an exit at the middle of the hole, whichever way it is
-/// walking.
+/// On level ground, a lemming enters at the middle from either direction.
+/// A slope must not lift it out of the trigger before entry.
 ///
 /// An earlier version measured a fixed depth from the near edge of the trigger.
 /// That cannot work: trigger zones are four pixels wide in most styles and
@@ -688,10 +688,20 @@ private func testReleaseRateZeroCanBeRestored() throws {
 /// walked.
 private func testExitTakesTheLemmingAtTheMiddle() throws {
     /// Walks a lemming in from one side and reports where it vanished.
-    func entryPoint(zone: ClassicDOSRect, from startX: Int, facing: ClassicDOSDirection) throws -> Int? {
+    func entryPoint(zone: ClassicDOSRect, from startX: Int, facing: ClassicDOSDirection, slope: Bool = false) throws -> Int? {
         let exitTrigger = ClassicDOSTrigger(id: 1, effect: .exit, bounds: zone)
+        var terrain = try floorTerrain(floorY: 40)
+        if slope {
+            var solid = Data(repeating: 0, count: 192 * 96)
+            for x in 0..<192 {
+                let raised = facing == .right ? x > zone.x1 : x < zone.x2 - 1
+                for y in (raised ? 39 : 40)..<96 { solid[y * 192 + x] = 1 }
+            }
+            terrain = try ClassicDOSTerrain(width: 192, height: 96,
+                solidMask: solid, steelMask: Data(repeating: 0, count: 192 * 96))
+        }
         var simulation = try ClassicDOSSimulation(
-            terrain: floorTerrain(floorY: 40),
+            terrain: terrain,
             configuration: configuration(
                 totalLemmings: 1, releaseRate: 99,
                 entrances: [ClassicDOSPoint(x: 32, y: 39)],
@@ -737,12 +747,20 @@ private func testExitTakesTheLemmingAtTheMiddle() throws {
                 + "rather than the middle at \(middle)")
     }
 
+    let slopeZone = ClassicDOSRect(x1: 20, y1: 40, x2: 24, y2: 44)
+    for direction in [ClassicDOSDirection.right, .left] {
+        let start = direction == .right ? 17 : 27
+        let entry = try entryPoint(zone: slopeZone, from: start, facing: direction, slope: true)
+        try require(entry == (direction == .right ? 20 : 23),
+            "a slope lifted a walker out of the exit before entry")
+    }
+
     // A zone one pixel wide still has to accept a lemming.
     let narrow = ClassicDOSRect(x1: 20, y1: 40, x2: 21, y2: 44)
     let narrowEntry = try entryPoint(zone: narrow, from: 17, facing: .right)
     try require(
         narrowEntry != nil, "a one pixel exit rejected a lemming walking into it")
-    print("PASS a lemming enters an exit at its middle from either direction")
+    print("PASS exits centre flat-ground arrivals and accept sloped approaches from either direction")
 }
 
 private func testCoolingTrapEmitsOneActivation() throws {

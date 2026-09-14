@@ -1463,33 +1463,21 @@ public struct ClassicDOSSimulation: Codable, Equatable, Sendable {
         return .none
     }
 
-    /// Whether the lemming has reached the middle of the exit.
-    ///
-    /// A lemming drops in at the middle of the hole, whichever way it is
-    /// walking. Anything else looks wrong, because the exit is drawn around
-    /// that point and the eye follows the picture rather than the trigger.
-    ///
-    /// Measuring a fixed depth from the near edge cannot do this. Trigger zones
-    /// are not all the same width: most exits use four pixels, but some use
-    /// eight, and the zone does not sit at the middle of the object either. A
-    /// depth that lands centrally in one style lands at the edge in another,
-    /// and it lands on opposite sides for a lemming walking left and one
-    /// walking right.
-    ///
-    /// Taking the middle of the zone fixes both. The two directions converge on
-    /// the same pixel, so a lemming vanishes in the same place whichever way it
-    /// arrived.
-    ///
-    /// The middle always lies inside the zone, so no exit becomes impossible to
-    /// enter. Walking moves one pixel per tick, so that pixel cannot be stepped
-    /// over. The one place that moves two pixels turns the lemming into a
-    /// faller, and a faller is already excluded from entering.
+    /// Use the exit centre when the next walking step stays inside its trigger.
+    /// Slopes can lift a walker out of the trigger before it reaches the centre.
+    /// Accept that walker now instead of letting it pass a usable exit.
     private func hasWalkedIntoExit(_ lemming: ClassicDOSLemming, zone: ClassicDOSRect) -> Bool {
         let middle = (zone.x1 + zone.x2) / 2
-        switch lemming.direction {
-        case .right: return lemming.foot.x >= middle
-        case .left: return lemming.foot.x <= middle
-        }
+        let reachedMiddle = lemming.direction == .right
+            ? lemming.foot.x >= middle : lemming.foot.x <= middle
+        if reachedMiddle { return true }
+        guard lemming.action == .walking else { return false }
+        var preview = self
+        var next = lemming
+        var ignoredEvents: [ClassicDOSEvent] = []
+        _ = preview.handleWalking(&next, events: &ignoredEvents)
+        return !zone.contains(next.foot) || next.action != .walking
+            || next.direction != lemming.direction
     }
 
     private func lastTriggerIndex(at point: ClassicDOSPoint) -> Int? {

@@ -1,0 +1,516 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 54
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 77
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 100
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 123
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 146
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 5,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 169
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 6,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 192
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 7,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 215
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 8,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 238
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 9,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 261
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 10,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 284
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 11,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 307
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 12,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 330
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 13,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 353
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 14,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 376
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 15,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 399
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 16,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 422
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 17,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 445
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 18,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 468
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 19,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 491
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 20,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 514
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 21,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 537
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 22,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 560
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 23,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 583
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 24,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 606
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 25,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 629
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 26,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 652
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 27,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 675
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 28,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 698
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 29,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 721
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 30,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 744
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 31,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 767
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 32,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 790
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 33,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 813
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 34,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 836
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 35,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 859
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 36,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 882
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 37,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 905
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 38,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 928
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 39,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 951
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 40,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 974
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 41,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 997
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 42,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1020
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 43,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1043
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 44,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1066
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 45,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1089
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 46,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1112
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 47,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1135
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 48,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1158
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 49,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1181
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 50,
+    "required" : 49,
+    "saved" : 50,
+    "stateHash" : "fd2b31c31c1adf62519e7e0905db804d1867b7cc28f521a2003883b8b2bd498b",
+    "ticks" : 1727
+  },
+  "initialStateHash" : "e65d916482082026d80e40d5f082e47c545b0d2398f98c5596fa622686504183",
+  "number" : 2,
+  "rank" : "Frost",
+  "title" : "Ski Jump!"
+}

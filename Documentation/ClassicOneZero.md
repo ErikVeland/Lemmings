@@ -1,12 +1,15 @@
 # Classic 1.0 closure work
 
-14 September 2026. The selected target is a complete macOS Classic release.
+15 September 2026. The selected target is a complete macOS Classic release.
 Lemmings 2 and Lemmings 3 retain preview status. Shared controls, paused Hot Seat
 handovers and saved-run recovery remain regression requirements across all three engines.
 
-Beta 29 is packaged and notarised. The current work after that release has
-238 verified official Classic levels, with 54 still missing. This does not
+Beta 32 is packaged. The main and macOS 12 archives are notarised. The current
+work after that release has 250 verified official Classic levels, with 42 still missing. This does not
 declare a completed or published 1.0.
+
+See [15 September closure work](ReleaseReadiness/OneZeroClosure-2026-09-15.md)
+for current changes, tester confirmation and remaining checks.
 
 ## Work included in beta 29
 

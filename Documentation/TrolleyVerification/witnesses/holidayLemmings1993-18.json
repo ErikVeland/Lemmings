@@ -1,0 +1,34 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 110
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "digger"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 878
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 80,
+    "required" : 80,
+    "saved" : 80,
+    "stateHash" : "fba96708b31ef54fd8af1c7e8b023401eaeacd7e45d86fbe9ecaaf33a3ced3f8",
+    "ticks" : 1449
+  },
+  "initialStateHash" : "47d167f8f44fb500a8d51877588309de3402447adbb7bc24fada07cc3f31d0e5",
+  "number" : 3,
+  "rank" : "Blizzard",
+  "title" : "Check Your Hints!"
+}

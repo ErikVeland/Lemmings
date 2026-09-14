@@ -302,7 +302,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
   }
 
-  func applicationWillTerminate(_ notification: Notification) { saveRunCheckpoint(immediately: true) }
+  func applicationWillTerminate(_ notification: Notification) { saveRunCheckpoint(immediately: true); ClassicRouteRecorder.flush() }
 
   func applicationDidFinishLaunching(_ notification: Notification) {
     migrateStandaloneSaves()
@@ -785,11 +785,11 @@ let achievementProgressKey = "ClassicAchievementProgress"
     achievementsWindow.show(progress: achievements)
   }
 
-  /// Opens the folder of Lemmings 2 levels saved as seed routes for the route solver.
+  /// Opens the preserved Classic and Lemmings 2 input routes.
   @objc private func showRecordedRoutes() {
-    let folder = Lemmings2RouteRecorder.folder
-    try? FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
-    NSWorkspace.shared.activateFileViewerSelecting([folder])
+    let folders = [ClassicRouteRecorder.folder, Lemmings2RouteRecorder.folder]
+    for folder in folders { try? FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true) }
+    NSWorkspace.shared.activateFileViewerSelecting(folders)
   }
 
   @objc private func chooseNativeL2() {
@@ -2543,6 +2543,15 @@ let achievementProgressKey = "ClassicAchievementProgress"
     runMovie.finish()
     do { try recoveryStore.clear(arcadeRunID) } catch { setStatus("Could not clear completed checkpoint: " + error.localizedDescription) }
     if let arcadeLevel {
+      if let classic = session as? ClassicSession, classic.didWin {
+        let index = picker.indexOfSelectedItem
+        let entry = !fanPlaying && currentNxlvURL == nil && campaign?.levels.indices.contains(index) == true
+          ? campaign?.levels[index] : nil
+        ClassicRouteRecorder.record(session: classic, level: arcadeLevel,
+          title: entry?.level.title.trimmingCharacters(in: .whitespaces) ?? arcadeLevel.title, rank: entry?.rank ?? "Fan", number: entry?.number ?? max(1, index + 1)) { [weak self] error in
+            self?.setStatus("Could not save the input route: " + error)
+          }
+      }
       arcadeReport = ArcadeStore.shared.record(ArcadeRun(id: arcadeRunID, profileID: arcadeProfileID,
         level: arcadeLevel, saved: session.saved, didWin: session.didWin, skills: session.skillAssignments,
         seconds: Double(session.currentTick) / Double(session.ticksPerSecond), assisted: session.usedRewind,

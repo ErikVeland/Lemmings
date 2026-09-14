@@ -14,6 +14,7 @@ guard ["all", "classic", "ports", "l2", "l2-proofs", "l3", "fingerprint"].contai
     throw SequelDataError.invalid("Choose all, classic, ports, l2, l2-proofs, l3, or fingerprint.")
 }
 let search = CommandLine.arguments.contains("--search")
+let refreshOutcomes = CommandLine.arguments.contains("--refresh-outcomes")
 let shard = CommandLine.arguments.first { $0.hasPrefix("--shard=") }?.dropFirst(8).split(separator: "/").compactMap { Int($0) }
 if let shard, shard.count != 2 || shard[1] < 1 || shard[0] < 0 || shard[0] >= shard[1] {
     throw SequelDataError.invalid("Use --shard=index/count with a zero-based index.")
@@ -167,13 +168,25 @@ func classicFingerprint(_ game: ClassicDOSSimulation) throws -> String {
             func attempt(_ events: [ClassicDOSReplayEvent], fullOnly: Bool = false) throws {
                 row.testedCandidates += 1
                 var trial = base
-                for event in events {
+                for event in events where event.afterTick != true {
                     if case let .assign(id, skill) = event.action {
                         guard trial.schedule(.init(tick: event.tick, lemmingID: id, skill: skill)) else { return }
                     }
                 }
+                func applyLive(_ tick: Int) -> Bool {
+                    for event in events where event.afterTick == true && event.tick == tick {
+                        switch event.action {
+                        case let .assign(id, skill):
+                            guard trial.assign(skill, to: id) == .assigned else { return false }
+                        case let .releaseRate(value): trial.setReleaseRate(value)
+                        case .nuke: trial.beginNuke()
+                        }
+                    }
+                    return true
+                }
+                guard applyLive(0) else { return }
                 while !trial.isComplete && trial.tickCount < ClassicDOSReplayPlayer.defaultTickLimit {
-                    for event in events where event.tick == trial.tickCount + 1 {
+                    for event in events where event.afterTick != true && event.tick == trial.tickCount + 1 {
                         switch event.action {
                         case let .releaseRate(value): trial.setReleaseRate(value)
                         case .nuke: trial.beginNuke()
@@ -181,15 +194,16 @@ func classicFingerprint(_ game: ClassicDOSSimulation) throws -> String {
                         }
                     }
                     var eventsApplied = trial.tick()
-                    for event in events where event.tick == trial.tickCount {
+                    for event in events where event.afterTick != true && event.tick == trial.tickCount {
                         if case let .assign(id, skill) = event.action {
                             guard let applied = eventsApplied.firstIndex(of: .skillAssigned(lemmingID: id, skill: skill)) else { return }
                             eventsApplied.remove(at: applied)
                         }
                     }
+                    guard applyLive(trial.tickCount) else { return }
                     if fullOnly && trial.lostCount > 0 { return }
                 }
-                guard events.allSatisfy({ $0.tick > 0 && $0.tick <= trial.tickCount }), trial.isComplete, trial.didWin,
+                guard events.allSatisfy({ $0.tick >= ($0.afterTick == true ? 0 : 1) && $0.tick <= trial.tickCount }), trial.isComplete, trial.didWin,
                       trial.savedCount > (row.bestSaved ?? -1) || trial.savedCount == row.population else { return }
                 let candidate = ClassicDOSReplay(rank: entry.rank, number: entry.number, title: level.title,
                     initialStateHash: initialHash, events: events)
@@ -205,17 +219,16 @@ func classicFingerprint(_ game: ClassicDOSSimulation) throws -> String {
             // Keep a previous witness before a baseline observation can replace its file.
             let cached = try? Data(contentsOf: existing)
             try attempt([])
+            var publishedRescueTarget: Int?
             if let proof = published.first(where: { $0.conditions == row.conditions }), let witness = proof.witness {
+                publishedRescueTarget = witness.saved
                 let url = proofRoot.appendingPathComponent(witness.path)
                 guard try fileHash(url) == witness.sha256 else {
                     throw SequelDataError.invalid("Published Classic witness hash changed.")
                 }
                 let replay = try JSONDecoder().decode(ClassicDOSReplay.self, from: Data(contentsOf: url))
-                _ = try ClassicDOSReplayPlayer.run(replay, simulation: base)
+                if !refreshOutcomes { _ = try ClassicDOSReplayPlayer.run(replay, simulation: base) }
                 try attempt(replay.events)
-                guard (row.bestSaved ?? 0) >= witness.saved else {
-                    throw SequelDataError.invalid("Published Classic rescue target regressed.")
-                }
             }
             if row.status != "VERIFIED", let bytes = cached,
                let replay = try? JSONDecoder().decode(ClassicDOSReplay.self, from: bytes),
@@ -238,6 +251,9 @@ func classicFingerprint(_ game: ClassicDOSSimulation) throws -> String {
                     try attempt(replay.events)
                 }
             }
+            if let target = publishedRescueTarget, (row.bestSaved ?? 0) < target {
+                throw SequelDataError.invalid("Published Classic rescue target regressed.")
+            }
             if search && row.status != "VERIFIED" {
                 // Complete zero-loss witnesses prove optimality. This bounded search does not prove failure.
                 for tick in stride(from: 36, through: 600, by: 8) where row.status != "VERIFIED" {
@@ -252,17 +268,7 @@ func classicFingerprint(_ game: ClassicDOSSimulation) throws -> String {
     }
 }
 
-struct L2Input: Codable { let tick: Int; let skill: Int; let lemming: Int }
-struct L2Pointer: Codable { let tick: Int; let x: Int; let y: Int; let fan: Bool; let fanX: Int; let fanY: Int }
-struct L2Replay: Codable {
-    let version: Int
-    let levelSHA256: String
-    let population: Int
-    let expectedSaved: Int
-    let expectedTicks: Int
-    let inputs: [L2Input]
-    let pointers: [L2Pointer]?
-}
+typealias L2Replay = Lemmings2ReplayWitness
 @MainActor func auditL2() throws {
     let root = ports.appendingPathComponent("Lemm2"), fingerprint = try assetHash(root)
     let campaign = try Lemmings2Campaign(root: root), masks = try Lemmings2TerrainMasks(root: root)
@@ -271,6 +277,7 @@ struct L2Replay: Codable {
     let bundled = family == "l2-proofs" ? try JSONDecoder().decode(Catalogue.self,
         from: Data(contentsOf: proofRoot.appendingPathComponent("verified-maxima.json"))).levels.filter { $0.gameID == "lemmings2" } : []
     for (index, level) in campaign.levels.enumerated() {
+        if let shard, index % shard[1] != shard[0] { continue }
         let proof = bundled.first { $0.conditions?.levelID == "\(index / 10):\(index % 10)" }
         if family == "l2-proofs" && proof == nil { continue }
         let tribe = Lemmings2Campaign.tribeNames[level.style]
@@ -301,30 +308,46 @@ struct L2Replay: Codable {
                     timeLimitSeconds: Double(c.timeLimit), modifiers: ["practice": String(c.isPractice), "releaseInterval": String(c.releaseInterval),
                         "firstReleaseTick": String(c.firstReleaseTick), "goldRequirement": String(max(1, population - level.allowedLossesForGold))])
                 func play(_ replay: L2Replay?) throws -> Lemmings2Runtime {
-                    var trial = base, command = 0, pointer = 0
-                    let inputs = replay?.inputs ?? [], pointers = replay?.pointers ?? []
-                    if let replay, replay.version != 1 || replay.levelSHA256 != level.fingerprint { throw SequelDataError.invalid("Replay level identity mismatch") }
-                    while !trial.isComplete && trial.tick < max(15000, c.timeLimit * 18) {
-                        while pointer < pointers.count && pointers[pointer].tick == trial.tick {
-                            let p = pointers[pointer]
-                            guard (level.minimumScreenX...level.maximumScreenX + 319).contains(p.x),
-                                  (level.minimumScreenY...level.maximumScreenY + 159).contains(p.y),
-                                  !p.fan || (p.x == p.fanX && p.y == p.fanY) else { throw SequelDataError.invalid("Replay pointer is outside the playable viewport") }
-                            trial.setAim(x: p.fan ? p.fanX : p.x, y: p.fan ? p.fanY : p.y, held: !p.fan)
-                            trial.setFan(x: p.fanX, y: p.fanY, active: p.fan); pointer += 1
+                    var trial = base
+                    if let replay {
+                        guard replay.levelSHA256 == level.fingerprint,
+                              (replay.version == 1 && replay.events == nil)
+                                || (replay.version == 2 && replay.events != nil && replay.inputs.isEmpty && replay.pointers == nil) else {
+                            throw SequelDataError.invalid("Replay level identity or input version mismatch")
                         }
-                        while command < inputs.count && inputs[command].tick == trial.tick {
-                            let event = inputs[command]
-                            trial.setFan(x: 0, y: 0, active: false)
-                            guard let slot = c.skills.firstIndex(where: { $0.rawValue == event.skill }), trial.assign(slot: slot, to: event.lemming) else {
-                                throw SequelDataError.invalid("Rejected replay skill at tick \(trial.tick)")
+                    }
+                    if let replay, replay.version == 1 {
+                        guard replay.inputsAreOrdered, (replay.pointers ?? []).allSatisfy({ pointer in
+                            (level.minimumScreenX...level.maximumScreenX + 319).contains(pointer.x)
+                                && (level.minimumScreenY...level.maximumScreenY + 159).contains(pointer.y)
+                                && (!pointer.fan || (pointer.x == pointer.fanX && pointer.y == pointer.fanY))
+                        }) else { throw SequelDataError.invalid("Legacy replay inputs or pointers are invalid") }
+                    }
+                    let events = replay?.timedEvents() ?? []
+                    guard zip(events, events.dropFirst()).allSatisfy({ $0.tick <= $1.tick }),
+                          events.allSatisfy({ $0.tick >= 0 }) else {
+                        throw SequelDataError.invalid("Replay events are not ordered")
+                    }
+                    for timed in events {
+                        let point: (Int, Int)?
+                        switch timed.event {
+                        case let .aim(x, y, _), let .machine(x, y), let .chain(x, y): point = (x, y)
+                        case let .fan(x, y, active): point = active ? (x, y) : nil
+                        case .assign, .releasePointer, .nuke: point = nil
+                        }
+                        if let point {
+                            guard (level.minimumScreenX...level.maximumScreenX + 319).contains(point.0),
+                                  (level.minimumScreenY...level.maximumScreenY + 159).contains(point.1) else {
+                                throw SequelDataError.invalid("Replay pointer is outside the playable viewport")
                             }
-                            if pointer > 0, pointers[pointer - 1].fan { let p = pointers[pointer - 1]; trial.setFan(x: p.fanX, y: p.fanY, active: true) }
-                            command += 1
                         }
+                    }
+                    var cursor = Lemmings2EventCursor()
+                    while !trial.isComplete && trial.tick < max(15000, c.timeLimit * 18) {
+                        try cursor.apply(eventsAt: &trial, events: events)
                         trial.step()
                     }
-                    guard command == inputs.count, pointer == pointers.count else { throw SequelDataError.invalid("Replay ended before all inputs were used") }
+                    guard cursor.next == events.count else { throw SequelDataError.invalid("Replay ended before all inputs were used") }
                     return trial
                 }
                 for candidate in (family == "l2-proofs" ? [fixture] : [nil, fixture]) as [L2Replay?] {
@@ -340,8 +363,14 @@ struct L2Replay: Codable {
                         guard trial.isComplete, trial.didWin, trial.saved > (row.bestSaved ?? -1) else { continue }
                         let verified = try play(candidate)
                         guard verified.saved == trial.saved, verified.lost == trial.lost, verified.tick == trial.tick else { throw SequelDataError.invalid("Replay is not deterministic") }
-                        let replay = L2Replay(version: 1, levelSHA256: level.fingerprint, population: population,
-                            expectedSaved: trial.saved, expectedTicks: trial.tick, inputs: candidate?.inputs ?? [], pointers: candidate?.pointers ?? [])
+                        let replay: L2Replay
+                        if let events = candidate?.events {
+                            replay = L2Replay(levelSHA256: level.fingerprint, population: population,
+                                expectedSaved: trial.saved, expectedTicks: trial.tick, events: events)
+                        } else {
+                            replay = L2Replay(levelSHA256: level.fingerprint, population: population,
+                                expectedSaved: trial.saved, expectedTicks: trial.tick, inputs: candidate?.inputs ?? [], pointers: candidate?.pointers ?? [])
+                        }
                         row.accept(try save(replay, name: "lemmings2-\(index)-\(population)", saved: trial.saved, released: trial.released,
                             lost: trial.lost, ticks: trial.tick, completed: true, won: trial.didWin))
                     } catch { row.notes.append(String(describing: error)) }

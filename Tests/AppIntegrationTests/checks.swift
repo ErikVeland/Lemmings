@@ -398,6 +398,8 @@ extension AppDelegate {
     selectDataSet()
     window.setContentSize(NSSize(width: 1280, height: 720))
     window.makeKeyAndOrderFront(nil)
+    let passes = Int(ProcessInfo.processInfo.environment["LEMMINGS_PERFORMANCE_PASSES"] ?? "1") ?? 1
+    try check((1...20).contains(passes), "Performance passes must be between 1 and 20")
     var rows: [[String: Any]] = []
     func residentBytes() -> UInt64 {
       var info = mach_task_basic_info()
@@ -409,6 +411,7 @@ extension AppDelegate {
       }
       return result == KERN_SUCCESS ? info.resident_size : 0
     }
+    for pass in 1...passes {
     for (mode, rate) in [(ClassicDisplayMode.flat, 1), (.flat, 10), (.monitor, 10), (.television, 10)] {
       settings.display = mode; settings.hdEffectsEnabled = true; settings.fullScreenHDRFlashes = true
       settings.reduceMotion = false; settings.reduceFlashes = false
@@ -421,8 +424,10 @@ extension AppDelegate {
       lastStepTime = nil; accumulator = 0
       replayCaptureSeconds = 0; playfield.sceneRenderSeconds = 0
       crtView.performanceMetrics = CRTPerformanceMetrics()
+      print("PERFORMANCE pass \(pass)/\(passes) \(mode.rawValue) \(rate)x")
       let initialCapturedFrames = runMovie.capturedFrames
       var samples: [Double] = [], memories: [UInt64] = []
+      try check(session?.currentTick == 0, "Benchmark did not start a fresh level")
       var completedTicks = 0, previousTick = 0, nuked = false
       let began = ProcessInfo.processInfo.systemUptime
       while ProcessInfo.processInfo.systemUptime - began < 20 {
@@ -431,6 +436,8 @@ extension AppDelegate {
         step(at: start)
         window.contentView?.displayIfNeeded()
         CATransaction.flush()
+        try check(runMovie.recorder?.recordingFailure == nil,
+          "Benchmark encoder failed in pass \(pass), \(mode.rawValue) \(rate)x: \(runMovie.recorder?.recordingFailure ?? "")")
         let end = ProcessInfo.processInfo.systemUptime
         samples.append((end - start) * 1000)
         memories.append(residentBytes())
@@ -443,7 +450,7 @@ extension AppDelegate {
       let elapsed = ProcessInfo.processInfo.systemUptime - began
       try check(completedTicks >= 100, "Benchmark did not run the simulation: ticks \(completedTicks), phase \(phase), paused \(isPaused)")
       let capturedFrames = runMovie.capturedFrames - initialCapturedFrames
-      try check(capturedFrames == completedTicks, "Benchmark skipped replay frames: \(capturedFrames)/\(completedTicks)")
+      try check(capturedFrames == completedTicks, "Benchmark skipped replay frames in pass \(pass), \(mode.rawValue) \(rate)x: \(capturedFrames)/\(completedTicks)")
       try check(runMovie.recorder != nil && runMovie.recorder?.recordingFailure == nil,
         "Benchmark recorder failed: \(runMovie.recorder?.recordingFailure ?? "missing recorder")")
       // Drain submitted GPU work after timing the normal asynchronous app loop.
@@ -477,15 +484,16 @@ extension AppDelegate {
       }
       let sorted = samples.sorted()
       func quantile(_ fraction: Double) -> Double { sorted[min(sorted.count - 1, Int(Double(sorted.count - 1) * fraction))] }
-      rows.append(["replayFrames": capturedFrames, "initialReplayFrames": initialCapturedFrames, "encodedReplayFrames": encodedFrames, "gpuFrames": gpu.frames.count, "gpuExecutionMS": distribution(gpu.frames.map(\.gpuMS)), "gpuCompletionMS": distribution(gpu.frames.map(\.completionMS)), "sceneRenderSeconds": playfield.sceneRenderSeconds, "replayCaptureSeconds": replayCaptureSeconds, "encoderWaitSeconds": runMovie.recorder?.admissionWaitSeconds ?? 0, "display": mode.rawValue, "requestedSpeed": rate, "seconds": elapsed, "frames": samples.count,
+      rows.append(["pass": pass, "replayFrames": capturedFrames, "initialReplayFrames": initialCapturedFrames, "encodedReplayFrames": encodedFrames, "gpuFrames": gpu.frames.count, "gpuExecutionMS": distribution(gpu.frames.map(\.gpuMS)), "gpuCompletionMS": distribution(gpu.frames.map(\.completionMS)), "sceneRenderSeconds": playfield.sceneRenderSeconds, "replayCaptureSeconds": replayCaptureSeconds, "encoderWaitSeconds": runMovie.recorder?.admissionWaitSeconds ?? 0, "display": mode.rawValue, "requestedSpeed": rate, "seconds": elapsed, "frames": samples.count,
         "ticks": completedTicks, "observedSimulationSpeed": Double(completedTicks) / (17 * elapsed),
         "cpuFrameMS": ["p50": quantile(0.5), "p95": quantile(0.95), "p99": quantile(0.99), "max": sorted.last!],
         "residentBytes": ["first": memories.first!, "last": memories.last!, "peak": memories.max()!],
         "nukeTriggered": nuked, "windowWidth": 1280, "windowHeight": 720])
       runMovie.discard()
     }
-    let report: [String: Any] = ["scenarios": rows,
-      "scope": "Local 1280x720 production app loop with asynchronous Metal submission and enabled replay recording. CPU work, GPU execution and submission-to-completion latency are separate measurements. GPU draining occurs outside the timed loop. Audio is silent. Short samples are not sustained hardware certification."]
+    }
+    let report: [String: Any] = ["passes": passes, "scenarios": rows,
+      "scope": "Local 1280x720 production app loop with asynchronous Metal submission and enabled replay recording. CPU work, GPU execution and submission-to-completion latency are separate measurements. GPU draining occurs outside the timed loop. Audio is silent. Repeated passes cover level restarts, display changes, nukes and replay finalisation. They do not certify uninterrupted long play or other hardware."]
     let output = URL(fileURLWithPath: ProcessInfo.processInfo.environment["LEMMINGS_PERFORMANCE_OUTPUT"] ?? ".build/blocker-closure/performance.json")
     try FileManager.default.createDirectory(at: output.deletingLastPathComponent(), withIntermediateDirectories: true)
     try JSONSerialization.data(withJSONObject: report, options: [.prettyPrinted, .sortedKeys]).write(to: output)
@@ -1029,7 +1037,7 @@ extension AppDelegate {
           let (catalogue, engine) = LevelHintCatalogue.load(), let level = catalogue.level(for: identity, engine: engine) else {
       throw IntegrationFailure(message: "Tricky 1 did not match its checked hint data")
     }
-    try check(catalogue.levels.count == 120 && level.rank == "Tricky" && level.number == 1,
+    try check(catalogue.levels.count == 248 && level.rank == "Tricky" && level.number == 1,
       "Hint coverage or live level identity is wrong")
     for row in catalogue.levels {
       try check(catalogue.level(for: row.fingerprint, engine: engine) != nil, "Invalid hints for \(row.title)")
@@ -1196,6 +1204,23 @@ extension AppDelegate {
     for _ in 0..<liveOutcome.ticks { livePlayback.tick() }
     try check(ClassicDOSReplayRecorder.stateHash(of: livePlayback.session.simulation) == liveOutcome.stateHash,
       "Animated after-tick input timing differs from the strict replay player")
+    let routeDirectory = URL(fileURLWithPath: ".build/hints/recorded-routes")
+    try? FileManager.default.removeItem(at: routeDirectory)
+    let recordedURL = try ClassicRouteRecorder.save(liveReplay, initial: fresh,
+      conditions: arcadeLevel?.conditions, folder: routeDirectory)
+    let recorded = try JSONDecoder().decode(ClassicDOSReplay.self, from: Data(contentsOf: recordedURL))
+    try check(recorded == liveReplay && recorded.events.allSatisfy { $0.afterTick == true },
+      "Player route changed its inputs or timing on disk")
+    try check(try ClassicRouteRecorder.save(liveReplay, initial: fresh,
+      conditions: arcadeLevel?.conditions, folder: routeDirectory) == recordedURL,
+      "Repeated player route created a duplicate")
+    let invalidRoute = ClassicDOSReplay(rank: liveReplay.rank, number: liveReplay.number,
+      title: liveReplay.title, initialStateHash: liveReplay.initialStateHash, events: [], expected: liveReplay.expected)
+    do {
+      _ = try ClassicRouteRecorder.save(invalidRoute, initial: fresh, conditions: nil, folder: routeDirectory)
+      throw IntegrationFailure(message: "Invalid played route was preserved as a win")
+    } catch is RunRecoveryError {}
+    print("PASS completed player route persistence, exact live timing, deduplication and rejection of invalid wins")
     var changed = fresh; _ = changed.tick()
     try check(VerifiedSolution.validate(proof.replay, initial: changed) == nil,
       "Changed initial state accepted a solution")
@@ -1207,6 +1232,30 @@ extension AppDelegate {
       initialStateHash: shifted.initialStateHash, events: [], expected: liveOutcome)
     try check(VerifiedSolution.validate(broken, initial: fresh) == nil,
       "Broken solution was accepted")
+    for title in [ClassicTitle.ohNoMoreLemmings, .xmasLemmings1991, .xmasLemmings1992,
+                  .holidayLemmings1993, .holidayLemmings1994] {
+      guard let index = dataSets.firstIndex(where: { $0.set.title == title }) else {
+        throw IntegrationFailure(message: "Missing hint campaign \(title)")
+      }
+      gamePicker.selectItem(at: index); selectDataSet(); loadLevel(at: 0)
+      guard let fingerprint = arcadeLevel?.conditions?.levelFingerprint,
+            let checked = catalogue.level(for: fingerprint, engine: engine) else {
+        throw IntegrationFailure(message: "Live campaign did not find checked hints: \(title)")
+      }
+      phase = .playing; isPaused = false
+      let tick = session!.currentTick
+      showLevelHints()
+      guard let page = LevelHintWindow.shared.page else { throw IntegrationFailure(message: "Campaign hints did not open") }
+      try check(isPaused && LevelHintWindow.shared.revealedTier == 0, "Campaign hints skipped the paused nudge")
+      try verifyText(page, stage: checked.deck.stages[0])
+      button("Reveal the approach", in: page)!.performClick(nil)
+      button("Reveal opening moves", in: page)!.performClick(nil)
+      try verifyText(page, stage: checked.deck.stages[2])
+      try capture(page, name: "family-\(title.rawValue)")
+      try check(session!.currentTick == tick, "Reading campaign hints advanced the run")
+      page.cancelOperation(nil)
+      try check(!isPaused, "Closing campaign hints failed to restore play")
+    }
     // Exercise every shipped page plus an oversized imported-level coaching page.
     let longDeck = LevelHintDeck(title: "Long coaching", checked: false, stages: [
       .init(title: "A gentle nudge", body: String(repeating: "Keep a worker safe.\n", count: 100)),
