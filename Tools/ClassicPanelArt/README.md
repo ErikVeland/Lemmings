@@ -11,6 +11,22 @@ horizontal edge and one on each vertical edge. This retains the original icon
 pixels while the shared stone controls supply the border. The panel artwork
 uses half-width horizontal pixels in the 320-wide game panel.
 
+Every Classic panel control shows panel rock behind its glyph. The speed box
+repeats the rock tile side by side. It uses the same crop
+from the ten skill cells at (0,16) to (288,16). The lemmings and counter boxes
+cover the middle of every cell, so the check script rebuilds those pixels:
+
+1. Below the counter box, use the rock colour that most cells agree on.
+2. Where the cells do not agree, copy the nearest settled rock pixel in the
+   same row, about half a cell away.
+3. Under the counter box, mirror the rows below it.
+
+Every rock pixel is an original panel colour. The arrangement in the middle of
+the tile is rebuilt, not recovered.
+
+The Pause and Nuke tiles draw at the scale that fills the button. The stone
+bevel covers their outer rock edge.
+
 The 16-colour display palette was matched to the user's reference. It is an
 approximation, not a recovered original hardware palette. The image shapes are
 direct source pixels, not new illustrations. The discarded DOS variant had

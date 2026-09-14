@@ -339,7 +339,10 @@ enum PanelButton: Equatable {
 
   private func drawSpeedControls() {
     guard variableSpeedEnabled, let frame = buttonFrames.first(where: { $0.0 == .fastForward })?.1 else { return }
-    SpeedPanelControls.draw(in: frame, label: speedLabel, active: isFastForward, next: speedChoiceLabel)
+    // Match the skill sockets' bevel so the speed box reads as the same stone.
+    SpeedPanelControls.draw(in: frame, label: speedLabel, active: isFastForward,
+      bevelPixel: max(1, panelScale / 2), backdrop: usesClassicSkin ? PanelGlyph.rock.image(fitting: frame.size) : nil,
+      text: { [self] text, box in drawGameLabel(text, in: box, maxPixelScale: .greatestFiniteMagnitude) })
   }
 
   private func drawClassicPanel() {
@@ -354,7 +357,9 @@ enum PanelButton: Equatable {
       let active = (button == .pause && isPaused) || (button == .fastForward && isFastForward)
         || (button == .nuke && session?.canUndoNuke == true)
       drawStoneButton(frame, selected: active)
-      if let image = glyph.image(fitting: glyph.isOriginalTile ? frame.size : frame.insetBy(dx: 2 * panelScale, dy: 2 * panelScale).size) {
+      if glyph.isOriginalTile, let image = glyph.image(fitting: frame.size) {
+        GameStoneButton.drawTile(image, in: frame, pixel: max(1, panelScale / 2))
+      } else if let image = glyph.image(fitting: frame.insetBy(dx: 2 * panelScale, dy: 2 * panelScale).size) {
         image.draw(in: CGRect(x: frame.midX - image.size.width / 2, y: frame.midY - image.size.height / 2,
           width: image.size.width, height: image.size.height), from: .zero, operation: .sourceOver,
           fraction: 1, respectFlipped: true, hints: nil)
@@ -391,9 +396,12 @@ enum PanelButton: Equatable {
           width: size.width, height: size.height), from: .zero, operation: .sourceOver,
           fraction: 1, respectFlipped: true, hints: nil)
       } else if let glyph = PanelGlyph.forButton(button, isPaused: isPaused, canUndoNuke: session?.canUndoNuke == true),
+        glyph.isOriginalTile, let image = glyph.image(fitting: frame.size) {
+        GameStoneButton.drawTile(image, in: frame, pixel: max(1, panelScale / 2))
+      } else if let glyph = PanelGlyph.forButton(button, isPaused: isPaused, canUndoNuke: session?.canUndoNuke == true),
         // Rasterise the control glyph to fit the recessed well.
         let image = glyph.image(
-          fitting: glyph.isOriginalTile ? frame.size : frame.insetBy(
+          fitting: frame.insetBy(
             dx: 4 * max(1, panelScale / 2), dy: 4 * max(1, panelScale / 2)).size) {
         image.draw(
           in: CGRect(x: frame.midX - image.size.width / 2,
@@ -408,7 +416,7 @@ enum PanelButton: Equatable {
         case .rateUp: symbol = "+"
         case .pause, .nuke, .fastForward, .skill: symbol = ""
         }
-        GamePixelText.draw(symbol.replacingOccurrences(of: "−", with: "-"), in: frame.insetBy(dx: 4 * panelScale, dy: 4 * panelScale))
+        drawGameLabel(symbol.replacingOccurrences(of: "−", with: "-"), in: frame.insetBy(dx: 4 * panelScale, dy: 4 * panelScale))
       }
     }
     NSColor(calibratedWhite: 0.42, alpha: 1).setStroke()
@@ -416,8 +424,10 @@ enum PanelButton: Equatable {
   }
 
   /// Pixel bevels keep the controls in the same visual period as the sprites.
+  /// Every panel socket shows Amiga panel rock behind its glyph.
   private func drawStoneButton(_ frame: CGRect, selected: Bool) {
-    GameStoneButton.draw(frame, selected: selected, pixel: max(1, panelScale / 2))
+    GameStoneButton.draw(frame, selected: selected, pixel: max(1, panelScale / 2),
+      backdrop: PanelGlyph.rock.image(fitting: frame.size))
   }
 
   private func drawSkillLabels() {
@@ -453,7 +463,7 @@ enum PanelButton: Equatable {
         let badge = CGRect(x: frame.maxX - 6 * panelScale, y: frame.minY + 2 * panelScale,
           width: 4 * panelScale, height: 5 * panelScale)
         NSColor.black.setFill(); badge.fill()
-        GamePixelText.draw(String(key), in: badge)
+        drawGameLabel(String(key), in: badge)
       }
     }
   }
@@ -603,6 +613,11 @@ enum PanelButton: Equatable {
       .replacingOccurrences(of: "∞", with: "*")
       .replacingOccurrences(of: "×", with: "X")
       .replacingOccurrences(of: "•", with: "*")
+  }
+
+  /// Draws panel text in the game font, and in the pixel font only when the game font is missing a character.
+  private func drawGameLabel(_ text: String, in box: CGRect, maxPixelScale: CGFloat = 3) {
+    if !drawMacLabel(text, centeredIn: box) { GamePixelText.draw(text, in: box, maxScale: maxPixelScale) }
   }
 
   private func drawMacLabel(_ text: String, centeredIn box: CGRect, scale wanted: Int = 0, highlighted: Character? = nil) -> Bool {

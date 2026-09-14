@@ -11,6 +11,8 @@ enum PanelGlyph: String {
   /// Shown on the pause button while the level is held, so the button says
   /// what it will do rather than what it did.
   case play
+  /// Plain Amiga panel rock, drawn behind the skill sprites.
+  case rock
 
   /// A dot leaves the button showing through. Every other mark is a colour
   /// the glyph names below.
@@ -70,6 +72,31 @@ enum PanelGlyph: String {
         "aa9b0000000000dbba99abbbbbb9",
         "aab99bd00000dbbaaa999aaaab9a",
       ]
+    case .rock:
+      return [
+        "aac999bbccaabbaaa999bbccaeaa",
+        "aab9aaaaaaa9abbaa9aaaaaaecba",
+        "aaa99ccaca99aabaa9cccaaadeba",
+        "a9b999cc9d9abbbb9999c9999daa",
+        "ba999ccbbbabbab9bb9ca99aecbb",
+        "cba99cc99ababbbabaa99aaaecbb",
+        "ccb99999abbbbcbbbaa9accbbdcb",
+        "bcb99aa99aa9aa9999aaa9bbadbb",
+        "bcca9aa99aa9aa9999aaa9bba99b",
+        "aaccc999abbbbcbbbaa9accbbbcb",
+        "aabbccc99ababbbabaa99aaabbbc",
+        "b9bb9ccbbbabbab9bb9ca99aabbc",
+        "bb9999cc9d9abbbb9999c9999abb",
+        "baa9cccaca99aabaa9cccaaa99aa",
+        "baa9aaaaaaa9abbaa9aaaaaaa9ab",
+        "aaa999bbccaabbaaa999bbccaabb",
+        "bbbbbbacbcccbbbbbbbbabbcccbb",
+        "baaaaabbbbbcbbbaaaaabaabbcbb",
+        "bbbcccca99aab9ebbcccca99aab9",
+        "aaabbbbca9aaabaaabbbbba9aaab",
+        "aaaabacccbbbb9aaaab9abbbbbb9",
+        "aabb9aaaacccbbbaaa999aaaab9a",
+      ]
     case .play:
       return [
         "..#.........",
@@ -90,7 +117,7 @@ enum PanelGlyph: String {
 
   private var palette: [Character: (UInt8, UInt8, UInt8)] {
     switch self {
-    case .pause, .nuke:
+    case .pause, .nuke, .rock:
       return Dictionary(uniqueKeysWithValues: Self.classicPalette.enumerated().map { index, colour in
         (Character(String(index, radix: 16)), (colour.red, colour.green, colour.blue))
       })
@@ -101,6 +128,8 @@ enum PanelGlyph: String {
 
   // Amiga panel1: 640×40, four planar bitplanes. Crop the two 32×24 cells
   // at (320,16) and (352,16) by two horizontal and one vertical border pixels.
+  // Rock takes the same crop from the ten skill cells. Tools/ClassicPanelArt/check.py
+  // shows how it is rebuilt where the lemmings and counter boxes cover it.
   // The panel uses half-width horizontal pixels. Colours match the reference
   // panel; this is not a claim that its original hardware palette was recovered.
   private static let classicPalette: [ClassicRGBColor] = [
@@ -122,7 +151,7 @@ enum PanelGlyph: String {
     ClassicRGBColor(red: 255, green: 255, blue: 136),
   ]
 
-  var isOriginalTile: Bool { self == .pause || self == .nuke }
+  var isOriginalTile: Bool { self == .pause || self == .nuke || self == .rock }
 
   /// The glyph's own size, before any scaling.
   var pixelSize: (width: Int, height: Int) {
@@ -210,26 +239,22 @@ enum PanelGlyph: String {
         if point.x >= rect.maxX - rect.width * 0.22 { return 1 }
         return 0
     }
-    static func draw(in rect: CGRect, label: String, active: Bool, next: String = "2×") {
+    /// `bevelPixel` sets only the stone bevel. The contents keep their layout pixel, so a
+    /// panel can match its neighbouring sockets without moving the label or arrows.
+    /// `text` draws the speed label. A panel with a game font passes its own; the default is the pixel font.
+    static func draw(in rect: CGRect, label: String, active: Bool, bevelPixel: CGFloat? = nil,
+        backdrop: NSImage? = nil, text: ((String, CGRect) -> Void)? = nil) {
+        let text = text ?? { GamePixelText.draw($0, in: $1, maxScale: .greatestFiniteMagnitude) }
         let side = rect.width * 0.22
         let pixel = max(1, floor(rect.height / 24))
         let boxes = [CGRect(x: rect.minX, y: rect.minY, width: side, height: rect.height),
             CGRect(x: rect.minX + side, y: rect.minY, width: rect.width - 2 * side, height: rect.height),
             CGRect(x: rect.maxX - side, y: rect.minY, width: side, height: rect.height)]
-        GameStoneButton.draw(rect, selected: active, pixel: pixel)
+        GameStoneButton.draw(rect, selected: active, pixel: bevelPixel ?? pixel, backdrop: backdrop)
         for (index, box) in boxes.enumerated() {
             if index == 1 {
-                let content = box.insetBy(dx: rect.height >= 60 ? 4 * pixel : pixel, dy: 6 * pixel)
-                let glyphBox = CGRect(x: content.minX, y: content.minY, width: content.width, height: content.height * 0.45)
-                if let image = PanelGlyph.fastForward.image(fitting: glyphBox.size), image.size.width <= glyphBox.width, image.size.height <= glyphBox.height {
-                    image.draw(in: CGRect(x: glyphBox.midX - image.size.width / 2, y: glyphBox.midY - image.size.height / 2,
-                        width: image.size.width, height: image.size.height), from: .zero, operation: .sourceOver,
-                        fraction: 1, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none])
-                    GamePixelText.draw(active ? label : next, in: CGRect(x: content.minX, y: content.midY,
-                        width: content.width, height: content.height / 2), maxScale: .greatestFiniteMagnitude)
-                } else {
-                    GamePixelText.draw(active ? label : next, in: content, maxScale: .greatestFiniteMagnitude)
-                }
+                // The label always names the speed the game is running at now.
+                text(label, box.insetBy(dx: rect.height >= 60 ? 4 * pixel : pixel, dy: 6 * pixel))
             } else {
                 let step = max(1, floor(min(box.width / 8, box.height / 12)))
                 let rows = index == 0 ? ["..#", ".#.", "#..", ".#.", "..#"] : ["#..", ".#.", "..#", ".#.", "#.."]
@@ -247,7 +272,31 @@ enum PanelGlyph: String {
 
 /// Shared stone sockets for controls added beside the original panel artwork.
 @MainActor enum GameStoneButton {
-  static func draw(_ frame: CGRect, selected: Bool, pixel: CGFloat) {
+  /// The recessed area inside the bevel, where a glyph belongs.
+  static func well(_ frame: CGRect, pixel: CGFloat) -> CGRect {
+    frame.insetBy(dx: 4 * pixel, dy: 4 * pixel)
+  }
+
+  /// Draws an original panel tile at the scale that fills the whole button, cropped to the
+  /// well. The tile keeps its size, and its textured edge gives way to the stone bevel.
+  /// A button wider than the tile repeats it side by side.
+  static func drawTile(_ image: NSImage, in frame: CGRect, pixel: CGFloat) {
+    let width = image.size.width
+    guard width > 0 else { return }
+    let copies = max(1, Int(ceil(well(frame, pixel: pixel).width / width)))
+    let left = floor(frame.midX - CGFloat(copies) * width / 2)
+    let top = floor(frame.midY - image.size.height / 2)
+    NSGraphicsContext.saveGraphicsState()
+    well(frame, pixel: pixel).clip()
+    for copy in 0..<copies {
+      image.draw(in: CGRect(x: left + CGFloat(copy) * width, y: top, width: width, height: image.size.height),
+        from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true, hints: nil)
+    }
+    NSGraphicsContext.restoreGraphicsState()
+  }
+
+  /// `backdrop` replaces the flat well colour, for example with panel rock.
+  static func draw(_ frame: CGRect, selected: Bool, pixel: CGFloat, backdrop: NSImage? = nil) {
     let rim = frame.insetBy(dx: pixel, dy: pixel)
     func fill(_ rect: CGRect, _ color: NSColor) {
       color.setFill()
@@ -267,13 +316,14 @@ enum PanelGlyph: String {
       fill(CGRect(x: edge.minX, y: edge.maxY - pixel, width: edge.width, height: pixel), lower)
       fill(CGRect(x: edge.maxX - pixel, y: edge.minY, width: pixel, height: edge.height), lower)
     }
-    let well = rim.insetBy(dx: 3 * pixel, dy: 3 * pixel)
+    let well = Self.well(frame, pixel: pixel)
     fill(well.insetBy(dx: -pixel, dy: -pixel), shadow)
     fill(CGRect(x: well.minX, y: well.maxY, width: well.width, height: pixel), light)
     fill(CGRect(x: well.maxX, y: well.minY, width: pixel, height: well.height), light)
     fill(well, selected
       ? NSColor(calibratedRed: 0.17, green: 0.25, blue: 0.10, alpha: 1)
       : NSColor(calibratedRed: 0.07, green: 0.09, blue: 0.06, alpha: 1))
+    if let backdrop { drawTile(backdrop, in: frame, pixel: pixel) }
     if selected {
       fill(CGRect(x: well.minX + pixel, y: well.maxY - 2 * pixel,
         width: well.width - 2 * pixel, height: pixel),
