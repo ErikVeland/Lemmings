@@ -14,10 +14,10 @@ if [[ ! -d "$project_dir/.build/local/Ultimate Lemmings.app/Contents/Resources/P
 fi
 mkdir -p "$build_dir/modules"
 engine_before=$(python3 Tools/TrolleyVerification/catalogue.py fingerprint)
-swiftc -swift-version 6 -O -target "$(uname -m)-apple-macos13.0" -parse-as-library -emit-module -emit-library \
+swiftc -swift-version 6 -O -target "$(uname -m)-apple-macos12.3" -parse-as-library -emit-module -emit-library \
   -module-name NxlvKit -emit-module-path "$build_dir/modules/NxlvKit.swiftmodule" \
   -Xlinker -install_name -Xlinker @rpath/libNxlvKit.dylib -o "$build_dir/libNxlvKit.dylib" Sources/NxlvKit/*.swift
-swiftc -swift-version 6 -O -warnings-as-errors -target "$(uname -m)-apple-macos13.0" \
+swiftc -swift-version 6 -O -warnings-as-errors -target "$(uname -m)-apple-macos12.3" \
   -I "$build_dir/modules" -L "$build_dir" -lNxlvKit -Xlinker -rpath -Xlinker "$build_dir" \
   -o "$build_dir/audit" Tools/Lemmings3Completion/Replay.swift Tools/TrolleyVerification/main.swift
 if [[ "$engine_before" != "$(python3 Tools/TrolleyVerification/catalogue.py fingerprint)" ]]; then

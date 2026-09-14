@@ -292,7 +292,7 @@ struct ReticleFeedback {
     guard remaining > 0 else { return }
     reticleRedraw?.cancel()
     reticleRedraw = Task { [weak self] in
-      try? await Task.sleep(for: .seconds(remaining + 0.005))
+      try? await Task.sleep(nanoseconds: UInt64((remaining + 0.005) * 1_000_000_000))
       guard !Task.isCancelled else { return }
       self?.needsDisplay = true
     }

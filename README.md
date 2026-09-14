@@ -91,7 +91,7 @@ verification is still in progress. L3 remains a native preview. See [integration
 
 ## Build and run
 
-Requires macOS 13 or later, the Apple Command Line Tools, and `unar` for the supplied Holiday installer.
+Requires macOS 12.3 or later, the Apple Command Line Tools, and `unar` for the supplied Holiday installer.
 
 ```sh
 zsh Scripts/build-local-app.sh
