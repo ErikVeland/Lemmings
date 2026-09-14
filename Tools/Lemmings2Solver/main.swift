@@ -119,7 +119,9 @@ if arguments[0] == "tribe" {
     var sources: [String: String] = [:]
     let chain: ChainReport
     do {
-        chain = try runChain(tribe: tribe, seedSource: { number, population in sources["\(number)-\(population)"] ?? "" },
+        // --from resumes a tribe at a level, with the population the verified chain passes to it.
+        let from = option("--from").flatMap(Int.init) ?? 1
+        chain = try runChain(tribe: tribe, from: from, population: option("--population").flatMap(Int.init) ?? 60, seedSource: { number, population in sources["\(number)-\(population)"] ?? "" },
             solve: { number, population in
                 let name = String(format: "\(tribe)-%02d", number)
                 let level = campaign.levels[indices[number - 1]]
@@ -143,7 +145,7 @@ if arguments[0] == "tribe" {
     let tribes = out.appendingPathComponent("tribes")
     try FileManager.default.createDirectory(at: tribes, withIntermediateDirectories: true)
     try encoder.encode(chain).write(to: tribes.appendingPathComponent(tribe + ".json"))
-    let reached = chain.levels.filter { $0.saved != nil }.count
+    let reached = (option("--from").flatMap(Int.init) ?? 1) - 1 + chain.levels.filter { $0.saved != nil }.count
     print("TRIBE \(tribe): \(reached) of 10 levels chained\(chain.brokeAt.map { ", broke at level \($0)" } ?? ", ark ending \(chain.arkReady ? "reached" : "needs 30 on level 10")")")
     if promoting { print("Run python3 Tools/Lemmings2Completion/report.py and the completion gate.") }
     exit(chain.brokeAt == nil ? 0 : 2)

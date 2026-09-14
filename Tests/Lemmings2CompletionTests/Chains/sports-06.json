@@ -1,0 +1,105 @@
+{
+  "events" : [
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 83,
+          "y" : 16
+        }
+      },
+      "tick" : 127
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 83,
+          "y" : 16
+        }
+      },
+      "tick" : 127
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 0,
+          "y" : 0
+        }
+      },
+      "tick" : 127
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 0,
+          "skill" : 45
+        }
+      },
+      "tick" : 127
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 0,
+          "y" : 0
+        }
+      },
+      "tick" : 188
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 0,
+          "skill" : 37
+        }
+      },
+      "tick" : 188
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 0,
+          "skill" : 42
+        }
+      },
+      "tick" : 252
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 0,
+          "y" : 0
+        }
+      },
+      "tick" : 256
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 0,
+          "skill" : 1
+        }
+      },
+      "tick" : 308
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 0,
+          "y" : 0
+        }
+      },
+      "tick" : 316
+    }
+  ],
+  "expectedSaved" : 1,
+  "expectedTicks" : 354,
+  "levelSHA256" : "a9c5720ac3f7b43780722e3ac8ead412b77e79edc8d6258306191711c9f2a38b",
+  "population" : 1,
+  "version" : 2
+}

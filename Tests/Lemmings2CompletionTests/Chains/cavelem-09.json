@@ -1,0 +1,76 @@
+{
+  "events" : [
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 0,
+          "y" : 0
+        }
+      },
+      "tick" : 275
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 0,
+          "skill" : 20
+        }
+      },
+      "tick" : 275
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 0,
+          "y" : 0
+        }
+      },
+      "tick" : 362
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 0,
+          "skill" : 40
+        }
+      },
+      "tick" : 362
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 0,
+          "y" : 0
+        }
+      },
+      "tick" : 854
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 0,
+          "skill" : 34
+        }
+      },
+      "tick" : 854
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 0,
+          "y" : 0
+        }
+      },
+      "tick" : 1054
+    }
+  ],
+  "expectedSaved" : 1,
+  "expectedTicks" : 1125,
+  "levelSHA256" : "a385fefecdbfc7237bf7ca02c9b51376f0b2a734c2d8819029fb05648f00dc78",
+  "population" : 1,
+  "version" : 2
+}

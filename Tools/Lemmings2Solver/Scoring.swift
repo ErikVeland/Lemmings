@@ -47,8 +47,10 @@ extension Score {
     init(_ candidate: Candidate) {
         let game = candidate.game
         let exits = game.configuration.exits
+        let field = DistanceFields.shared.field(for: game.configuration)
         func toExit(_ x: Int, _ y: Int) -> Int {
-            exits.map { abs(x - ($0.x + $0.width / 2)) + abs(y - ($0.y + $0.height / 2)) }.min() ?? 0
+            let straight = exits.map { abs(x - ($0.x + $0.width / 2)) + abs(y - ($0.y + $0.height / 2)) }.min() ?? 0
+            return field.distance(x: x, y: y, fallback: straight)
         }
         let entrance = game.configuration.entrance
         // Lemmings not yet released count from the entrance, so releasing fewer gains no rank.
