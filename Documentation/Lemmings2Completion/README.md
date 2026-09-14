@@ -6,21 +6,21 @@ It uses the same replay code as the runtime suite, so the two cannot drift apart
 
 ## Coverage
 
-64 of the 120 campaign levels have a recorded winning route. 56 do not.
+67 of the 120 campaign levels have a recorded winning route. 53 do not.
 
 | Tribe | Recorded routes | Levels that chain |
 | --- | ---: | ---: |
 | Classic | 7 | 5 |
 | Beach | 5 | 1 |
-| Cavelems | 5 | 4 |
-| Circus | 7 | 2 |
+| Cavelems | 6 | 5 |
+| Circus | 8 | 3 |
 | Egyptian | 8 | 8 |
 | Highland | 3 | 1 |
 | Medieval | 4 | 1 |
 | Outdoor | 7 | 3 |
 | Polar | 6 | 4 |
 | Shadow | 3 | 1 |
-| Space | 4 | 1 |
+| Space | 5 | 1 |
 | Sports | 5 | 2 |
 
 A missing route does not prove a level is broken. It shows that nobody recorded
@@ -28,14 +28,21 @@ a win. Loading and rendering are separate checks. They do not prove a solution.
 
 ## Route quality
 
-The recorded routes earn 5 gold, 9 silver and 50 bronze medals.
+The recorded routes earn 7 gold, 10 silver and 50 bronze medals.
 
 Every winning route earns at least bronze, so a medal alone does not show how
 well a route plays. 41 routes save one lemming of sixty. They count as bronze.
 
-Three standalone routes save one lemming of one: Cavelems 2, Cavelems 3 and
-Circus 2. Saving one of one is a complete rescue, so the game rates it gold.
-Newer carry-over witnesses can start these levels with different populations.
+Six standalone routes start with fewer than 60 lemmings, because a tribe run
+found them with the population that the level before passes on:
+
+- Cavelems 2, Cavelems 3, Circus 2 and Circus 3 save one lemming of one.
+- Cavelems 5 saves two of two.
+- Space 2 saves one of three.
+
+A complete rescue earns gold. Newer carry-over witnesses can start these levels
+with different populations. Space 2's route does not chain yet, because Space 1's
+route saves 51.
 
 Medal quality does not gate the evidence. The gate reports it so that progress
 stays visible.

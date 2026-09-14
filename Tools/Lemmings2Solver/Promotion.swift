@@ -13,7 +13,8 @@ enum PromotionOutcome: Equatable, Sendable {
 ///   or one that saves less. With `chosenByChain`, it also replaces one that saves more, because a
 ///   tribe run's backtracking needs that exact population forward. A fixture never gets worse.
 /// - The gate allows one route per population for each level, so a route at the fixture's own
-///   population goes to Fixtures, and a chain route needs a fixture beside it.
+///   population goes to Fixtures. A level without a fixture takes its first route there, at any
+///   population, because the gate needs a fixture before it accepts a chain route.
 func promote(_ route: Lemmings2ReplayWitness, name: String, fixtures: URL, chains: URL,
              chosenByChain: Bool = false) throws -> PromotionOutcome {
     let encoder = JSONEncoder()
@@ -23,7 +24,7 @@ func promote(_ route: Lemmings2ReplayWitness, name: String, fixtures: URL, chain
     }
     let fixtureURL = fixtures.appendingPathComponent(name + ".json")
     let fixture = existing(fixtureURL)
-    if route.population == 60 || fixture?.population == route.population {
+    if fixture == nil || route.population == 60 || fixture?.population == route.population {
         if let fixture, fixture.population == route.population, fixture.expectedSaved >= route.expectedSaved {
             return .kept("the fixture already saves \(fixture.expectedSaved) of \(fixture.population)")
         }
@@ -33,7 +34,6 @@ func promote(_ route: Lemmings2ReplayWitness, name: String, fixtures: URL, chain
         try encoder.encode(route).write(to: fixtureURL)
         return .fixture
     }
-    guard fixture != nil else { return .kept("a chain route needs a fixture for this level") }
     let chainURL = chains.appendingPathComponent(name + ".json")
     if let old = existing(chainURL), old.population == route.population,
        old.expectedSaved >= route.expectedSaved, !(chosenByChain && old.expectedSaved != route.expectedSaved) {

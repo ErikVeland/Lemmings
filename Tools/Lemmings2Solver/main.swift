@@ -7,6 +7,7 @@ import NxlvKit
 let usage = """
 usage: solver level <data-root> <tribe-NN> [--seed FILE] [--population N] [--promote] [search options]
        solver tribe <data-root> <tribe> [--seeds DIR] [--promote] [search options]
+       solver promote <data-root> <candidate.json>...
 search options: [--beam N] [--depth N] [--budget SECONDS] [--cell PIXELS] [--refire TICKS] [--out DIR]
 """
 let arguments = Array(CommandLine.arguments.dropFirst())
@@ -16,7 +17,7 @@ let arguments = Array(CommandLine.arguments.dropFirst())
     return arguments[index + 1]
 }
 
-guard arguments.count >= 3, ["level", "tribe"].contains(arguments[0]) else {
+guard arguments.count >= 3, ["level", "tribe", "promote"].contains(arguments[0]) else {
     print(usage)
     exit(1)
 }
@@ -75,6 +76,37 @@ func writePartial(_ name: String, _ result: LevelResult) throws {
 }
 
 let depth = option("--depth").flatMap(Int.init)
+
+// solver promote <data-root> <candidate.json>...: replay each candidate twice, then promote it.
+if arguments[0] == "promote" {
+    var failed = false
+    for path in arguments.dropFirst(2) where !path.hasPrefix("--") {
+        let url = URL(fileURLWithPath: path)
+        let name = String(url.deletingPathExtension().lastPathComponent.prefix(while: { $0 != "." }))
+        guard let route = try? JSONDecoder().decode(Lemmings2ReplayWitness.self, from: Data(contentsOf: url)),
+              let index = campaign.levels.indices.first(where: { levelName($0, campaign.levels[$0]) == name }),
+              campaign.levels[index].fingerprint == route.levelSHA256 else {
+            print("ERROR \(name): unreadable candidate or unknown level")
+            failed = true
+            continue
+        }
+        let level = campaign.levels[index]
+        do {
+            let first = try route.run(level: level, style: try style(for: level), masks: masks)
+            let second = try route.run(level: level, style: try style(for: level), masks: masks)
+            guard first.stateHash == second.stateHash else { throw SolverError.replayMismatch(name) }
+            switch try promote(route, name: name, fixtures: fixtures, chains: chains) {
+            case .fixture: print("PROMOTED \(name) fixture: saved \(route.expectedSaved) of \(route.population)")
+            case .chain: print("PROMOTED \(name) chain: saved \(route.expectedSaved) of \(route.population)")
+            case let .kept(reason): print("KEPT \(name): \(reason)")
+            }
+        } catch {
+            print("ERROR \(name): \(error)")
+            failed = true
+        }
+    }
+    exit(failed ? 1 : 0)
+}
 
 if arguments[0] == "tribe" {
     let tribe = arguments[2].lowercased()
