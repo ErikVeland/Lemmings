@@ -1,78 +1,124 @@
 [
- {
-  "area": "All advertised campaign solutions",
-  "priority": "P0",
-  "status": "open",
-  "exitCriteria": "Replay a winning route for every advertised level. Close the remaining Oh No!, Xmas 1992, Holiday, L2, L3 and conversion gaps. Distinguish individual solutions from continuous campaign progression.",
-  "progress": "13 September: all 120 original Lemmings winning routes pass the strict gate. The fresh 6,395-level corpus audit reproduces all 223 official-family and 294 fan wins. Pack graphics and letter-coded special-picture fixes recover nine fan load/start failures, reducing 94 to 85, with no new failures or lost wins. The remaining 5,878 levels lack verified winning routes, so this gate stays open. Existing saved fan attempts retain their original graphics rules. See ReleaseReadiness/ClassicValidation-current.md. A standalone Lemmings 2 gate now replays each recorded route twice against a hashed manifest: 64 of 120 levels verified, 43 routes saving one lemming of sixty, and no tribe chaining all ten levels. See Lemmings2Completion/README.md. The local text-steel follow-up restores 1,246 exact rectangles in 171 text files, preserves legacy attempt rules and adds the L2 completion and rejection checks to the release audit. See ReleaseReadiness/TextSteelClosure.md. This does not close missing-route coverage."
- },
- {
-  "area": "Sequel fidelity",
-  "priority": "P0",
-  "status": "open",
-  "exitCriteria": "Resolve provisional L3 tool, movement and trap semantics against original-engine evidence. Complete environmental effects, original movie audio and story transitions. Extend L2 original-engine comparisons."
- },
- {
-  "area": "Save and interruption recovery",
-  "priority": "P0",
-  "status": "partial",
-  "exitCriteria": "Verify app and controller interruption on real hardware. Add versioned in-progress checkpoints and crash recovery before mobile suspend/termination support. Verify save migrations and rollback with real prior releases.",
-  "progress": "Beta 25 passed both complete app journeys (32 checks each), including Classic/fan checkpoints, Hot Seat identity, paused handovers, retrying the previous level as the incoming player, replay journals, corruption, stale writers and safe solo transitions. Main-window ownership was fixed after validation exposed a delayed-refresh crash; close and refresh coverage now passes. Physical power-loss and installed-release migration trials remain open. See Beta25Readiness.md."
- },
- {
-  "area": "Input and accessibility",
-  "priority": "P0",
-  "status": "partial",
-  "exitCriteria": "Test the complete first-launch-to-results flow with physical Xbox, PlayStation and Switch-layout controllers. Add remapping and device glyphs, touch targeting, readable UI scaling, reduced motion/flash controls and VoiceOver navigation without forcing OG gameplay.",
-  "progress": "Beta 25 passed complete software-driven journeys on Apple silicon and Intel/Rosetta. F retains the reached speed after release; mouse and keyboard speed arrows apply immediately from 1x. Green handover initials and the previous-level retry button were rendered and tested with real mouse events. Existing keyboard/controller routing, targeting, fonts, scalable menus, hints and interruption tests passed. Physical controllers and full VoiceOver remain unverified. See Beta25Readiness.md."
- },
- {
-  "area": "Performance and hardware",
-  "priority": "P0",
-  "status": "open",
-  "exitCriteria": "Measure complete frame times, memory growth and audio under sustained 10x play, nukes, replays and repeated engine switches. Test physical Intel, minimum supported macOS, SDR/HDR, multiple displays and high refresh rates."
- },
- {
-  "area": "Release package",
-  "priority": "P0",
-  "status": "partial",
-  "exitCriteria": "Freeze the final source and assets. Build both Mac architectures, sign, notarise and verify the downloaded archive. Earlier beta notarisation is not evidence for later local builds.",
-  "progress": "Beta 27 is frozen, universal, Developer ID signed, notarised and stapled. All 25 regression suites, 120 Original routes, known campaign routes, full app journeys on Apple silicon and Intel under Rosetta, full sequel UI and signed-app startup checks pass. Apple accepted submission 1b6d3ce3-fe97-46da-9f44-141da1e13bc4. The finished ZIP passed signature, ticket and Gatekeeper checks after extraction with quarantine set. The overnight keychain lookup failure recovered without resetting credentials. The original diagnosis of missing credentials was not established. See Documentation/Beta27Readiness.md."
- },
- {
-  "area": "Publishing agreement and assets",
-  "priority": "P0",
-  "status": "external",
-  "exitCriteria": "Agree the proposed official product scope, brand use and asset distribution with the rights holder. Record code and asset provenance, third-party dependencies and approved distribution inputs. Obtain the required platform publishing access."
- },
- {
-  "area": "Novice experience",
-  "priority": "P1",
-  "status": "partial",
-  "exitCriteria": "Validate first-play onboarding with novice players. Extend verified tiered hints beyond the original 120 levels and show supported mechanics clearly in imported packs."
- },
- {
-  "area": "iPhone and iPad",
-  "priority": "P1",
-  "status": "not-implemented",
-  "exitCriteria": "Build and test the shared library with the iOS SDK. Implement a UIKit/Metal app shell, precise touch selection, safe-area layouts, audio/session interruptions, checkpoints, thermal budgets and device tests. A Package.swift deployment declaration is not an iOS app."
- },
- {
-  "area": "Switch and consoles",
-  "priority": "P1",
-  "status": "not-implemented",
-  "exitCriteria": "Use approved SDKs and hardware to establish the supported runtime and engine boundary. Implement native rendering, input, save/user services and suspend/resume adapters. Pass each platform's current requirements. Mac controller support is not a console port."
- },
- {
-  "area": "Online services and localisation",
-  "priority": "P1",
-  "status": "partial",
-  "exitCriteria": "Validate Game Center on provisioned builds, network loss and offline records. Externalise product strings and verify layouts with translated text. Define platform account and cloud-save conflict handling."
- },
- {
-  "area": "Partner evaluation build",
-  "priority": "P1",
-  "status": "open",
-  "exitCriteria": "Deliver an approved, reproducible demonstration build with a short feature tour, current evidence matrix, known limits, asset provenance and a platform delivery plan. Keep demonstration claims within verified scope."
- }
+  {
+    "area": "Classic campaign, fan and conversion completion",
+    "priority": "P0",
+    "status": "open",
+    "exitCriteria": "Replay a winning route for every advertised Classic level, including the bundled fan corpus and conversions. Close the remaining Oh No! and Holiday routes. Verify continuous Full Quest progression, save/resume and final results. L2/L3 completion belongs to the sequel gate.",
+    "progress": "After beta 29: official Classic coverage is 238/292 (54 missing), including the Oh No! Crazy 4 and 7 full rescues. Xmas 1992 is complete. Six new full-rescue routes are preserved. The retained 6,372-level corpus has 629 verified wins, no load/start failures and no lost wins; 5,743 identities still need winning evidence. There are 237 distinct hint replays and 177 full-rescue certificates. See Documentation/ClassicOneZero.md.",
+    "scopes": [
+      "all",
+      "classic-1.0"
+    ]
+  },
+  {
+    "area": "Sequel fidelity",
+    "priority": "P0",
+    "status": "open",
+    "exitCriteria": "Resolve provisional L3 tool, movement and trap semantics against original-engine evidence. Complete environmental effects, original movie audio and story transitions. Extend L2 original-engine comparisons. Record every L2/L3 winning route and verify continuous campaign progression, L2 survivor carry-over and endings.",
+    "scopes": [
+      "all"
+    ],
+    "progress": "64 L2 standalone routes remain preserved. Sixteen separately verified carry-over variants extend Egyptian to eight levels, Classic to five and Polar to four. Strict L2 completion now requires all twelve complete tribe chains. L3 has 17 recorded routes out of 90; its rules remain provisional. See Documentation/SequelClosure.md."
+  },
+  {
+    "area": "Save and interruption recovery",
+    "priority": "P0",
+    "status": "partial",
+    "exitCriteria": "Verify app and controller interruption on real hardware. Add versioned in-progress checkpoints and crash recovery before mobile suspend/termination support. Verify save migrations and rollback with real prior releases.",
+    "progress": "Beta 25 passed both complete app journeys (32 checks each), including Classic/fan checkpoints, Hot Seat identity, paused handovers, retrying the previous level as the incoming player, replay journals, corruption, stale writers and safe solo transitions. Main-window ownership was fixed after validation exposed a delayed-refresh crash; close and refresh coverage now passes. Physical power-loss and installed-release migration trials remain open. See Beta25Readiness.md.",
+    "scopes": [
+      "all",
+      "classic-1.0"
+    ]
+  },
+  {
+    "area": "Input and accessibility",
+    "priority": "P0",
+    "status": "partial",
+    "exitCriteria": "Test the complete first-launch-to-results flow with physical Xbox, PlayStation and Switch-layout controllers. Add remapping and device glyphs, touch targeting, readable UI scaling, reduced motion/flash controls and VoiceOver navigation without forcing OG gameplay.",
+    "progress": "Beta 25 passed complete software-driven journeys on Apple silicon and Intel/Rosetta. F retains the reached speed after release; mouse and keyboard speed arrows apply immediately from 1x. Green handover initials and the previous-level retry button were rendered and tested with real mouse events. Existing keyboard/controller routing, targeting, fonts, scalable menus, hints and interruption tests passed. Physical controllers and full VoiceOver remain unverified. See Beta25Readiness.md.",
+    "scopes": [
+      "all",
+      "classic-1.0"
+    ]
+  },
+  {
+    "area": "Performance and hardware",
+    "priority": "P0",
+    "status": "open",
+    "exitCriteria": "Measure complete frame times, memory growth and audio under sustained 10x play, nukes, replays and repeated engine switches. Test physical Intel, minimum supported macOS, SDR/HDR, multiple displays and high refresh rates.",
+    "progress": "13 September: the performance audit now measures production asynchronous Metal submission, separately reports CPU work and GPU timing, rejects GPU failures, and verifies every encoded replay frame after finalisation. The clean M4 Pro/macOS 27 sample records 9.08\u00d7 flat, 7.05\u00d7 monitor and 6.92\u00d7 television at requested 10\u00d7. All 5,932 captured frames are present in the movies. These short, silent Classic samples do not close sustained throughput, audio, native-sequel or hardware coverage. The earlier shared 500 ms encoder-stall bound remains tested. See ReleaseReadiness/PerformanceMeasurementClosure.md and ReplayStallClosure.md.",
+    "scopes": [
+      "all",
+      "classic-1.0"
+    ]
+  },
+  {
+    "area": "Release package",
+    "priority": "P0",
+    "status": "partial",
+    "exitCriteria": "Freeze the final source and assets. Build both Mac architectures, sign, notarise and verify the downloaded archive. Earlier beta notarisation is not evidence for later local builds.",
+    "progress": "Beta 29 remains the notarised standard archive. Beta 30 Game Center packages the later closure work with an Apple Development signature and a profile for two registered Macs. Its extracted signature, resources and both architecture startups passed. It is not notarised. Live account checks and the final Classic 1.0 freeze remain open. See Documentation/Beta30GameCenterReadiness.md.",
+    "scopes": [
+      "all",
+      "classic-1.0"
+    ]
+  },
+  {
+    "area": "Publishing agreement and assets",
+    "priority": "P0",
+    "status": "external",
+    "exitCriteria": "Agree the proposed official product scope, brand use and asset distribution with the rights holder. Record code and asset provenance, third-party dependencies and approved distribution inputs. Obtain the required platform publishing access.",
+    "scopes": [
+      "all",
+      "classic-1.0"
+    ]
+  },
+  {
+    "area": "Novice experience",
+    "priority": "P1",
+    "status": "partial",
+    "exitCriteria": "Validate first-play onboarding with novice players. Extend verified tiered hints beyond the original 120 levels and show supported mechanics clearly in imported packs.",
+    "scopes": [
+      "all",
+      "classic-1.0"
+    ]
+  },
+  {
+    "area": "iPhone and iPad",
+    "priority": "P1",
+    "status": "not-implemented",
+    "exitCriteria": "Build and test the shared library with the iOS SDK. Implement a UIKit/Metal app shell, precise touch selection, safe-area layouts, audio/session interruptions, checkpoints, thermal budgets and device tests. A Package.swift deployment declaration is not an iOS app.",
+    "scopes": [
+      "all"
+    ]
+  },
+  {
+    "area": "Switch and consoles",
+    "priority": "P1",
+    "status": "not-implemented",
+    "exitCriteria": "Use approved SDKs and hardware to establish the supported runtime and engine boundary. Implement native rendering, input, save/user services and suspend/resume adapters. Pass each platform's current requirements. Mac controller support is not a console port.",
+    "scopes": [
+      "all"
+    ]
+  },
+  {
+    "area": "Online services and localisation",
+    "priority": "P1",
+    "status": "partial",
+    "exitCriteria": "Validate Game Center on provisioned builds, network loss and offline records. Externalise product strings and verify layouts with translated text. Define platform account and cloud-save conflict handling.",
+    "scopes": [
+      "all",
+      "classic-1.0"
+    ]
+  },
+  {
+    "area": "Partner evaluation build",
+    "priority": "P1",
+    "status": "open",
+    "exitCriteria": "Deliver an approved, reproducible demonstration build with a short feature tour, current evidence matrix, known limits, asset provenance and a platform delivery plan. Keep demonstration claims within verified scope.",
+    "scopes": [
+      "all"
+    ]
+  }
 ]

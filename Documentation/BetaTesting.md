@@ -1,6 +1,11 @@
 # Beta testing
 
-Beta 27 is ready for testers: universal Intel/Apple silicon, macOS 13 or later, Developer ID signed, notarised and stapled. The extracted ZIP passed Gatekeeper with quarantine set. See [beta 27 readiness](Beta27Readiness.md) and [cumulative notes since beta 18](ReleaseNotes-beta27.md).
+Beta 30 Game Center is ready for the two registered test Macs. It includes the
+latest closure work and enables worldwide rankings. See [Game Center beta
+readiness](Beta30GameCenterReadiness.md) and [tester instructions](ReleaseNotes-beta30.md).
+This development-signed build requires the first-launch quarantine step.
+
+Beta 29 is ready for testers: universal Intel/Apple silicon, macOS 13 or later, Developer ID signed, notarised and stapled. The extracted ZIP passed Gatekeeper with quarantine set. See [beta 29 readiness](Beta29Readiness.md), [beta 29 release notes](ReleaseNotes-beta29.md) and [earlier cumulative notes since beta 18](ReleaseNotes-beta28.md).
 
 ## Validate the build
 
@@ -37,14 +42,13 @@ BETA_NOTARY_PROFILE=lemmings-beta zsh Scripts/package-beta.sh
 The script builds both architectures, signs with the Developer ID in the
 keychain, submits to Apple, staples the ticket, and checks the extracted zip
 with Gatekeeper. Earlier zip files move into `.build/local/archive/`.
-The current distributable archive is `.build/beta27/UltimateLemmings-0.1-beta27.zip`,
-also copied to `/Users/veland/Downloads/UltimateLemmings-beta27-macOS.zip`.
-Beta 27 inputs and validation logs are under `.build/beta27`. Its source and game
-data are frozen separately from this working checkout. The recorded
-`.build/beta27/finish-release.zsh` submitted the tested archive, stapled the ticket,
-and verified the downloaded ZIP using the working default keychain lookup.
-The earlier lookup failure did not require a credential reset. An explicit
-login-keychain search still misses this profile; that is not evidence of deletion.
+The current distributable archive is `.build/beta29/UltimateLemmings-0.1-beta29.zip`,
+also copied to `/Users/veland/Downloads/UltimateLemmings-beta29-macOS.zip`.
+Beta 29 inputs and validation logs are under `.build/beta29`. Its source and game
+data are frozen separately from this working checkout. The frozen packaging
+script signed and notarised the build using the `lemmings-beta` keychain profile,
+stapled the ticket, and verified the extracted ZIP with quarantine set.
+Beta 28 remains available as a fallback.
 
 For a package without recorded soundtracks:
 
