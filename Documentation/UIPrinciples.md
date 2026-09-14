@@ -39,7 +39,8 @@ always takes priority over orange. Honour the reduced-flash setting.
 ## Typography
 
 Use the shipped green and blue bitmap fonts for all interface text, including
-in-game notices and countdowns. Use large green lettering for page titles,
+in-game notices. Classic lemming explosion countdowns use white, bold system
+digits for crisp, readable numbers above each lemming. Use large green lettering for page titles,
 small green lettering for section headings and selected or primary actions,
 and small blue lettering for body text, quantities and secondary actions.
 Keep each row of peer controls at the same face and scale. Do not size individual
