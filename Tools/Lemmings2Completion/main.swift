@@ -39,7 +39,8 @@ for (index, level) in campaign.levels.enumerated() {
     let inputs = [url] + (FileManager.default.fileExists(atPath: variant.path) ? [variant] : [])
     for input in inputs {
         let witness = try JSONDecoder().decode(Lemmings2ReplayWitness.self, from: Data(contentsOf: input))
-        guard witness.version == 1, (1...60).contains(witness.population),
+        guard witness.version == 1 || (witness.version == 2 && witness.events != nil && witness.inputs.isEmpty),
+              (1...60).contains(witness.population),
               (1...witness.population).contains(witness.expectedSaved), witness.expectedTicks > 0,
               !(verifiedRoutes[name] ?? []).contains(where: { $0.population == witness.population }) else {
             print("FAIL invalid or ambiguous witness: \(input.path)")
