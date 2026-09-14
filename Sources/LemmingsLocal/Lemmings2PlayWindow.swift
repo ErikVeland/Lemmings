@@ -746,9 +746,22 @@ import NxlvKit
         if game.isComplete {
             do { try recoveryStore.clear(arcadeRunID) } catch { message = error.localizedDescription }
             runMovie.finish()
+            if practiceLevel == nil { recordRoute(game) }
             if practiceLevel == nil { _ = campaign.record(game); persist(); onProgressChanged?() }
             show(.results)
             recordArcadeResult(game)
+        }
+    }
+    /// Saves a campaign level that saved at least one lemming as a seed route for the solver.
+    /// It runs before the campaign records the result, which can move to the next level.
+    private func recordRoute(_ game: Lemmings2Runtime) {
+        guard game.saved > 0, let style else { return }
+        let level = self.level, masks = self.masks
+        let route = Lemmings2RouteRecorder.route(level: level, game: game, inputs: recoveryInputs)
+        let tribe = level.style == 2 ? "cavelem" : Lemmings2Campaign.tribeNames[level.style].lowercased()
+        let number = campaign.level + 1
+        DispatchQueue.global(qos: .utility).async {
+            _ = try? Lemmings2RouteRecorder.save(route, tribe: tribe, number: number, level: level, style: style, masks: masks)
         }
     }
     private func singleStep() {
