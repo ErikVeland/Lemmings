@@ -72,3 +72,14 @@ idle. Do not reuse build number 31.
 
 Never freeze a release checkout with linked game data directories. Copy or clone them.
 The soundtrack encoder and resource fork copier do not follow a link at the root.
+
+## Beta 32
+
+Codex cut three beta 32 archives on 15 September 2026 at the user's request.
+Claude's L2 route work is committed and included in all three variants. The
+Monterey branch includes the same gameplay changes and targets macOS 12.3.
+Standard and Game Center target macOS 13. Do not reuse build number 32.
+
+The frozen archives, source commits, 53 passing audit checks and hardware limits
+are recorded in [Beta32Readiness.md](Beta32Readiness.md). The downloads are under
+`~/Downloads`; the signed apps and evidence remain under `.build/beta32`.
