@@ -12,7 +12,7 @@ It uses the same replay code as the runtime suite, so the two cannot drift apart
 | --- | ---: | ---: |
 | Classic | 7 | 5 |
 | Beach | 5 | 1 |
-| Cavelems | 5 | 3 |
+| Cavelems | 5 | 4 |
 | Circus | 7 | 2 |
 | Egyptian | 8 | 8 |
 | Highland | 3 | 1 |
@@ -31,11 +31,11 @@ a win. Loading and rendering are separate checks. They do not prove a solution.
 The recorded routes earn 5 gold, 9 silver and 50 bronze medals.
 
 Every winning route earns at least bronze, so a medal alone does not show how
-well a route plays. 43 routes save one lemming of sixty. They count as bronze.
+well a route plays. 41 routes save one lemming of sixty. They count as bronze.
 
-Three routes save one lemming of one: Cavelems 2, Cavelems 3 and Circus 2. Each
-starts with the single lemming that the level before it saved. Saving one of one
-is a complete rescue, so the game rates it gold.
+Three standalone routes save one lemming of one: Cavelems 2, Cavelems 3 and
+Circus 2. Saving one of one is a complete rescue, so the game rates it gold.
+Newer carry-over witnesses can start these levels with different populations.
 
 Medal quality does not gate the evidence. The gate reports it so that progress
 stays visible.
@@ -51,8 +51,8 @@ previous route saved. The table counts how many levels chain from the start of
 each tribe, without a break.
 
 No tribe chains through all ten levels. Egyptian now chains through eight.
-Sixteen separate carry-over witnesses preserve the correct starting populations.
-The original 64 standalone routes remain unchanged. The gate verifies every
+Nineteen separate carry-over witnesses preserve the correct starting populations.
+The 64 standalone routes include improved seeded-search results. The gate verifies every
 variant twice before it uses that route in a chain.
 
 A continuous tribe run needs routes that chain. Independent routes for every

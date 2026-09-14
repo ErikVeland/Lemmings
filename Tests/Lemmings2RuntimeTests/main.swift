@@ -1536,7 +1536,7 @@ do {
             let prefix = level.style == 2 ? "cavelem" : Lemmings2Campaign.tribeNames[level.style].lowercased()
             check(name == String(format:"\(prefix)-%02d",number%10+1),"Completion fixture has the wrong tribe or level name: \(name)")
             check(completedLevels.insert(level.fingerprint).inserted,"Duplicate level completion fixture: \(name)")
-            check(replay.version == 1 && replay.levelSHA256 == level.fingerprint,"Completion fixture uses a different level")
+            check((1...2).contains(replay.version) && replay.levelSHA256 == level.fingerprint,"Completion fixture uses an unsupported version or different level")
             let style = try Lemmings2Style(data:Data(contentsOf:root.appendingPathComponent("STYLES/\(Lemmings2Campaign.styleNames[level.style]).DAT")))
             let outcome: Lemmings2WitnessOutcome
             do { outcome = try replay.run(level:level,style:style,masks:masks) }
@@ -1554,26 +1554,26 @@ do {
         try chain.select(tribe: tribe)
         let chainStyle = try Lemmings2Style(data: Data(contentsOf: root.appendingPathComponent("STYLES/\(Lemmings2Campaign.styleNames[tribe]).DAT")))
         for number in 1...count {
-            let url = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
-                .deletingLastPathComponent().appendingPathComponent(String(format: "Lemmings2CompletionTests/Fixtures/\(prefix)-%02d.json", number))
-            let replay = try JSONDecoder().decode(Replay.self, from: Data(contentsOf: url))
-            check(replay.version == 1 && replay.levelSHA256 == chain.current.fingerprint,
-                  "\(prefix) replay uses a different native level")
-            check(replay.population == chain.population, "\(prefix) replay skipped survivor carry-over")
+            let name = String(format: "\(prefix)-%02d.json", number)
+            let candidates = [fixtureDirectory.appendingPathComponent(name),
+                fixtureDirectory.deletingLastPathComponent().appendingPathComponent("Chains/\(name)")]
+            let routes = try candidates.filter { FileManager.default.fileExists(atPath: $0.path) }.map {
+                try JSONDecoder().decode(Replay.self, from: Data(contentsOf: $0))
+            }.filter { $0.population == chain.population }
+            check(routes.count == 1, "\(prefix) requires exactly one route for the carried population")
+            let replay = routes[0]
+            // Validate the witness before applying it to the campaign's live runtime.
+            let outcome = try replay.run(level: chain.current, style: chainStyle, masks: masks)
             var game = try Lemmings2Runtime(level: chain.current, style: chainStyle, masks: masks,
                 total: chain.population, allowExperimentalTribes: true)
-            var command = 0
+            let events = replay.timedEvents()
+            var cursor = Lemmings2EventCursor()
             while !game.isComplete && game.tick <= replay.expectedTicks {
-                while command < replay.inputs.count && replay.inputs[command].tick == game.tick {
-                    let event = replay.inputs[command]
-                    let slot = game.configuration.skills.firstIndex { $0.rawValue == event.skill }
-                    check(slot != nil && game.assign(slot: slot!, to: event.lemming), "\(prefix) replay input rejected")
-                    command += 1
-                }
+                try cursor.apply(eventsAt: &game, events: events)
                 game.step()
             }
-            check(command == replay.inputs.count && game.didWin && game.saved == replay.expectedSaved
-                && game.tick == replay.expectedTicks, "\(prefix) completion replay changed")
+            check(cursor.next == events.count && game.didWin && game.saved == outcome.saved
+                && game.tick == outcome.ticks, "\(prefix) completion replay changed")
             check(chain.advance(after: game), "\(prefix) campaign rejected completed level")
             print("PASS \(prefix) \(number): \(game.saved) rescued, \(game.tick) ticks, survivor carry-over verified")
         }
