@@ -76,7 +76,7 @@ creation. The release audit also checks the original Pause and Nuke pixel shapes
 
 | Area | Required outcome |
 | --- | --- |
-| Official campaigns | Preserve the remaining 56 winning routes: Oh No! 30, Holiday 1993 ten, Holiday 1994 sixteen. |
+| Official campaigns | Preserve the remaining 54 winning routes: Oh No! 28, Holiday 1993 ten, Holiday 1994 sixteen. |
 | Conversions | Preserve the remaining 57 winning routes and verify progression. |
 | Fan library | Preserve winning evidence for retained levels. Successful loading alone does not close completion. |
 | Full Quest | Verify the 292-level progression, release boundaries, save/resume and final results with winning outcomes. |

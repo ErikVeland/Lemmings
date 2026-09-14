@@ -1,11 +1,11 @@
 # Additional campaign completion evidence
 
-The manifest holds 136 fixed-input winning replays. These supplement the original
+The manifest holds 138 fixed-input winning replays. These supplement the original
 [120-level DOS gate](../ClassicCompletion/README.md) and the existing L2 tests.
 
 | Campaign | Winning replays | Levels without a fixture |
 | --- | ---: | ---: |
-| Oh No! More Lemmings | 70/100 | 30 |
+| Oh No! More Lemmings | 72/100 | 28 |
 | Xmas 1991 | 4/4 | 0 |
 | Xmas 1992 | 4/4 | 0 |
 | Holiday 1993 | 22/32 | 10 |
