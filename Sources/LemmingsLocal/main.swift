@@ -420,6 +420,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
     nativeL2.keyEquivalentModifierMask = [.command, .shift]
     nativeL2.target = self
     appMenu.addItem(nativeL2)
+    let recordedRoutes = NSMenuItem(title: "Show Recorded Routes", action: #selector(showRecordedRoutes), keyEquivalent: "")
+    recordedRoutes.target = self
+    appMenu.addItem(recordedRoutes)
     let nativeL3 = NSMenuItem(title: "Play Lemmings 3 Native Preview…", action: #selector(chooseNativeL3), keyEquivalent: "3")
     nativeL3.keyEquivalentModifierMask = [.command, .shift]
     nativeL3.target = self
@@ -780,6 +783,13 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   @objc private func showAchievements() {
     achievementsWindow.show(progress: achievements)
+  }
+
+  /// Opens the folder of Lemmings 2 levels saved as seed routes for the route solver.
+  @objc private func showRecordedRoutes() {
+    let folder = Lemmings2RouteRecorder.folder
+    try? FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+    NSWorkspace.shared.activateFileViewerSelecting([folder])
   }
 
   @objc private func chooseNativeL2() {

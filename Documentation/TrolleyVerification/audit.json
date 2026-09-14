@@ -1,7 +1,7 @@
 {
-  "engineSourceFingerprint": "f784fbe3c9f862f3ee7208f0d8e379060c03957fa3155a7c8ae3938eb37d4d59",
+  "engineSourceFingerprint": "361820290df106113af96e30840aefb2487c832093250fcd644fd2b4d8df4f3a",
   "exhaustive": false,
-  "generatedAt": "2026-09-14T04:58:59Z",
+  "generatedAt": "2026-09-14T11:26:49Z",
   "levels": [
     {
       "bestSaved": 10,
@@ -136,7 +136,7 @@
       "rank": "Fun",
       "required": 5,
       "status": "OBSERVED",
-      "testedCandidates": 74,
+      "testedCandidates": 75,
       "title": "Tailor-made for blockers",
       "witness": {
         "completed": true,
@@ -283,7 +283,7 @@
       "rank": "Fun",
       "required": 10,
       "status": "OBSERVED",
-      "testedCandidates": 145,
+      "testedCandidates": 146,
       "title": "A task for blockers and bombers",
       "witness": {
         "completed": true,
@@ -871,7 +871,7 @@
       "rank": "Fun",
       "required": 50,
       "status": "OBSERVED",
-      "testedCandidates": 145,
+      "testedCandidates": 146,
       "title": "Let's block and blow",
       "witness": {
         "completed": true,
@@ -1704,7 +1704,7 @@
       "rank": "Mayhem",
       "required": 60,
       "status": "OBSERVED",
-      "testedCandidates": 500,
+      "testedCandidates": 501,
       "title": "Down, along, up. In that order",
       "witness": {
         "completed": true,
@@ -1949,7 +1949,7 @@
       "rank": "Mayhem",
       "required": 50,
       "status": "OBSERVED",
-      "testedCandidates": 500,
+      "testedCandidates": 501,
       "title": "Pillars of Hercules",
       "witness": {
         "completed": true,
@@ -2390,7 +2390,7 @@
       "rank": "Mayhem",
       "required": 46,
       "status": "OBSERVED",
-      "testedCandidates": 216,
+      "testedCandidates": 217,
       "title": "Time to get up!",
       "witness": {
         "completed": true,
@@ -2733,7 +2733,7 @@
       "rank": "Mayhem",
       "required": 60,
       "status": "OBSERVED",
-      "testedCandidates": 216,
+      "testedCandidates": 217,
       "title": "The Steel Mines of Kessel",
       "witness": {
         "completed": true,
@@ -2880,7 +2880,7 @@
       "rank": "Mayhem",
       "required": 64,
       "status": "OBSERVED",
-      "testedCandidates": 287,
+      "testedCandidates": 288,
       "title": "Save Me",
       "witness": {
         "completed": true,
@@ -3272,7 +3272,7 @@
       "rank": "Taxing",
       "required": 78,
       "status": "OBSERVED",
-      "testedCandidates": 358,
+      "testedCandidates": 359,
       "title": "Every Lemming for himself!!!",
       "witness": {
         "completed": true,
@@ -3860,7 +3860,7 @@
       "rank": "Taxing",
       "required": 64,
       "status": "OBSERVED",
-      "testedCandidates": 74,
+      "testedCandidates": 75,
       "title": "Bomboozal",
       "witness": {
         "completed": true,
@@ -4252,7 +4252,7 @@
       "rank": "Taxing",
       "required": 48,
       "status": "OBSERVED",
-      "testedCandidates": 216,
+      "testedCandidates": 217,
       "title": "Call in the bomb squad",
       "witness": {
         "completed": true,
@@ -4301,7 +4301,7 @@
       "rank": "Taxing",
       "required": 56,
       "status": "OBSERVED",
-      "testedCandidates": 500,
+      "testedCandidates": 501,
       "title": "POOR WEE CREATURES!",
       "witness": {
         "completed": true,
@@ -5134,7 +5134,7 @@
       "rank": "Tricky",
       "required": 6,
       "status": "OBSERVED",
-      "testedCandidates": 74,
+      "testedCandidates": 75,
       "title": "Ozone friendly Lemmings",
       "witness": {
         "completed": true,
@@ -5183,7 +5183,7 @@
       "rank": "Tricky",
       "required": 40,
       "status": "OBSERVED",
-      "testedCandidates": 216,
+      "testedCandidates": 217,
       "title": "Luvly Jubly",
       "witness": {
         "completed": true,
@@ -5232,7 +5232,7 @@
       "rank": "Tricky",
       "required": 48,
       "status": "OBSERVED",
-      "testedCandidates": 74,
+      "testedCandidates": 75,
       "title": "Diet Lemmingaid",
       "witness": {
         "completed": true,
@@ -5281,7 +5281,7 @@
       "rank": "Tricky",
       "required": 9,
       "status": "OBSERVED",
-      "testedCandidates": 287,
+      "testedCandidates": 288,
       "title": "It's Lemmingentry Watson",
       "witness": {
         "completed": true,
@@ -5526,7 +5526,7 @@
       "rank": "Tricky",
       "required": 48,
       "status": "OBSERVED",
-      "testedCandidates": 429,
+      "testedCandidates": 430,
       "title": "From The Boundary Line",
       "witness": {
         "completed": true,
@@ -6016,7 +6016,7 @@
       "rank": "Xmas",
       "required": 45,
       "status": "OBSERVED",
-      "testedCandidates": 428,
+      "testedCandidates": 429,
       "title": "Time waits for no Lemming",
       "witness": {
         "completed": true,
@@ -6114,7 +6114,7 @@
       "rank": "Crazy",
       "required": 48,
       "status": "OBSERVED",
-      "testedCandidates": 357,
+      "testedCandidates": 358,
       "title": "Quote: \"That`s a good level\"",
       "witness": {
         "completed": true,
@@ -6418,7 +6418,7 @@
       "rank": "Crazy",
       "required": 75,
       "status": "OBSERVED",
-      "testedCandidates": 428,
+      "testedCandidates": 429,
       "title": "KEEP ON TRUCKING",
       "witness": {
         "completed": true,
@@ -6516,7 +6516,7 @@
       "rank": "Crazy",
       "required": 79,
       "status": "OBSERVED",
-      "testedCandidates": 428,
+      "testedCandidates": 429,
       "title": "ROCKY VI",
       "witness": {
         "completed": true,
@@ -6565,7 +6565,7 @@
       "rank": "Crazy",
       "required": 8,
       "status": "OBSERVED",
-      "testedCandidates": 144,
+      "testedCandidates": 145,
       "title": "No Problemming!",
       "witness": {
         "completed": true,
@@ -6663,7 +6663,7 @@
       "rank": "Crazy",
       "required": 10,
       "status": "OBSERVED",
-      "testedCandidates": 357,
+      "testedCandidates": 358,
       "title": "It`s a trade off",
       "witness": {
         "completed": true,
@@ -6712,7 +6712,7 @@
       "rank": "Crazy",
       "required": 45,
       "status": "OBSERVED",
-      "testedCandidates": 428,
+      "testedCandidates": 429,
       "title": "Time waits for no Lemming",
       "witness": {
         "completed": true,
@@ -6761,7 +6761,7 @@
       "rank": "Crazy",
       "required": 44,
       "status": "OBSERVED",
-      "testedCandidates": 286,
+      "testedCandidates": 287,
       "title": "Worra load of old blocks!",
       "witness": {
         "completed": true,
@@ -6895,7 +6895,7 @@
       "rank": "Crazy",
       "required": 45,
       "status": "OBSERVED",
-      "testedCandidates": 428,
+      "testedCandidates": 429,
       "title": "NO PROBLEM",
       "witness": {
         "completed": true,
@@ -6944,7 +6944,7 @@
       "rank": "Crazy",
       "required": 45,
       "status": "OBSERVED",
-      "testedCandidates": 499,
+      "testedCandidates": 500,
       "title": "DON`T PANIC",
       "witness": {
         "completed": true,
@@ -7029,7 +7029,7 @@
       "rank": "Havoc",
       "required": 76,
       "status": "OBSERVED",
-      "testedCandidates": 357,
+      "testedCandidates": 358,
       "title": "Tubular Lemmings",
       "witness": {
         "completed": true,
@@ -7078,7 +7078,7 @@
       "rank": "Havoc",
       "required": 29,
       "status": "OBSERVED",
-      "testedCandidates": 357,
+      "testedCandidates": 358,
       "title": "Be more than just a number",
       "witness": {
         "completed": true,
@@ -7565,7 +7565,7 @@
       "rank": "Havoc",
       "required": 75,
       "status": "OBSERVED",
-      "testedCandidates": 357,
+      "testedCandidates": 358,
       "title": "HIGHLAND FLING",
       "witness": {
         "completed": true,
@@ -7735,7 +7735,7 @@
       "rank": "Havoc",
       "required": 78,
       "status": "OBSERVED",
-      "testedCandidates": 499,
+      "testedCandidates": 500,
       "title": "Where Lemmings Dare",
       "witness": {
         "completed": true,
@@ -7784,7 +7784,7 @@
       "rank": "Havoc",
       "required": 68,
       "status": "OBSERVED",
-      "testedCandidates": 499,
+      "testedCandidates": 500,
       "title": "Lemmings in a situation",
       "witness": {
         "completed": true,
@@ -7967,7 +7967,7 @@
       "rank": "Tame",
       "required": 25,
       "status": "OBSERVED",
-      "testedCandidates": 570,
+      "testedCandidates": 571,
       "title": "Rent-a-Lemming",
       "witness": {
         "completed": true,
@@ -8114,7 +8114,7 @@
       "rank": "Tame",
       "required": 25,
       "status": "OBSERVED",
-      "testedCandidates": 570,
+      "testedCandidates": 571,
       "title": "Snuggle up to a Lemming",
       "witness": {
         "completed": true,
@@ -8212,7 +8212,7 @@
       "rank": "Tame",
       "required": 25,
       "status": "OBSERVED",
-      "testedCandidates": 570,
+      "testedCandidates": 571,
       "title": "Who`s That Lemming",
       "witness": {
         "completed": true,
@@ -8261,7 +8261,7 @@
       "rank": "Tame",
       "required": 25,
       "status": "OBSERVED",
-      "testedCandidates": 570,
+      "testedCandidates": 571,
       "title": "Dangerzone",
       "witness": {
         "completed": true,
@@ -8310,7 +8310,7 @@
       "rank": "Tame",
       "required": 25,
       "status": "OBSERVED",
-      "testedCandidates": 570,
+      "testedCandidates": 571,
       "title": "And now this...",
       "witness": {
         "completed": true,
@@ -8604,7 +8604,7 @@
       "rank": "Tame",
       "required": 25,
       "status": "OBSERVED",
-      "testedCandidates": 570,
+      "testedCandidates": 571,
       "title": "Not just a pretty Lemming",
       "witness": {
         "completed": true,
@@ -8800,7 +8800,7 @@
       "rank": "Tame",
       "required": 25,
       "status": "OBSERVED",
-      "testedCandidates": 570,
+      "testedCandidates": 571,
       "title": "Lemming Productions Present...",
       "witness": {
         "completed": true,
@@ -9019,7 +9019,7 @@
       "rank": "Wicked",
       "required": 30,
       "status": "OBSERVED",
-      "testedCandidates": 357,
+      "testedCandidates": 358,
       "title": "Oh No! It`s the 4TH DIMENSION!",
       "witness": {
         "completed": true,
@@ -9176,7 +9176,7 @@
       "rank": "Wicked",
       "required": 45,
       "status": "OBSERVED",
-      "testedCandidates": 357,
+      "testedCandidates": 358,
       "title": "A TOWERING PROBLEM",
       "witness": {
         "completed": true,
@@ -9225,7 +9225,7 @@
       "rank": "Wicked",
       "required": 45,
       "status": "OBSERVED",
-      "testedCandidates": 215,
+      "testedCandidates": 216,
       "title": "How on Earth?",
       "witness": {
         "completed": true,
@@ -9274,7 +9274,7 @@
       "rank": "Wicked",
       "required": 48,
       "status": "OBSERVED",
-      "testedCandidates": 428,
+      "testedCandidates": 429,
       "title": "Temple of Love",
       "witness": {
         "completed": true,
@@ -9323,7 +9323,7 @@
       "rank": "Wicked",
       "required": 40,
       "status": "OBSERVED",
-      "testedCandidates": 428,
+      "testedCandidates": 429,
       "title": "ROCKY ROAD",
       "witness": {
         "completed": true,
@@ -9408,7 +9408,7 @@
       "rank": "Wicked",
       "required": 70,
       "status": "OBSERVED",
-      "testedCandidates": 499,
+      "testedCandidates": 500,
       "title": "Almost Nearly Virtual Reality",
       "witness": {
         "completed": true,
@@ -9578,7 +9578,7 @@
       "rank": "Wicked",
       "required": 29,
       "status": "OBSERVED",
-      "testedCandidates": 286,
+      "testedCandidates": 287,
       "title": "Down the tube",
       "witness": {
         "completed": true,
@@ -9712,7 +9712,7 @@
       "rank": "Wicked",
       "required": 68,
       "status": "OBSERVED",
-      "testedCandidates": 286,
+      "testedCandidates": 287,
       "title": "The Lemming Funhouse",
       "witness": {
         "completed": true,
@@ -9810,7 +9810,7 @@
       "rank": "Wild",
       "required": 60,
       "status": "OBSERVED",
-      "testedCandidates": 570,
+      "testedCandidates": 571,
       "title": "Lemming Hotel",
       "witness": {
         "completed": true,
@@ -9859,7 +9859,7 @@
       "rank": "Wild",
       "required": 65,
       "status": "OBSERVED",
-      "testedCandidates": 428,
+      "testedCandidates": 429,
       "title": "Lemming Rhythms",
       "witness": {
         "completed": true,
@@ -10150,7 +10150,7 @@
       "rank": "Wild",
       "required": 60,
       "status": "OBSERVED",
-      "testedCandidates": 215,
+      "testedCandidates": 216,
       "title": "Higgledy Piggledy",
       "witness": {
         "completed": true,
@@ -10199,7 +10199,7 @@
       "rank": "Wild",
       "required": 49,
       "status": "OBSERVED",
-      "testedCandidates": 428,
+      "testedCandidates": 429,
       "title": "Mutiny On The Bounty",
       "witness": {
         "completed": true,
@@ -10248,7 +10248,7 @@
       "rank": "Wild",
       "required": 40,
       "status": "OBSERVED",
-      "testedCandidates": 357,
+      "testedCandidates": 358,
       "title": "SNOW JOKE",
       "witness": {
         "completed": true,
@@ -10297,7 +10297,7 @@
       "rank": "Wild",
       "required": 75,
       "status": "OBSERVED",
-      "testedCandidates": 428,
+      "testedCandidates": 429,
       "title": "ONWARD AND UPWARD",
       "witness": {
         "completed": true,
@@ -10552,7 +10552,7 @@
       "rank": "Wild",
       "required": 65,
       "status": "OBSERVED",
-      "testedCandidates": 357,
+      "testedCandidates": 358,
       "title": "Lemmingdelica",
       "witness": {
         "completed": true,
@@ -10601,7 +10601,7 @@
       "rank": "Wild",
       "required": 29,
       "status": "OBSERVED",
-      "testedCandidates": 286,
+      "testedCandidates": 287,
       "title": "Got anything....Lemmingy???",
       "witness": {
         "completed": true,
@@ -16706,7 +16706,7 @@
       "rank": "Blizzard",
       "required": 22,
       "status": "OBSERVED",
-      "testedCandidates": 428,
+      "testedCandidates": 429,
       "title": "Oogilemming!",
       "witness": {
         "completed": true,
@@ -16876,7 +16876,7 @@
       "rank": "Blizzard",
       "required": 75,
       "status": "OBSERVED",
-      "testedCandidates": 570,
+      "testedCandidates": 571,
       "title": "It Came Upon a Lemnight Clear",
       "witness": {
         "completed": true,
@@ -17216,7 +17216,7 @@
       "rank": "Blizzard",
       "required": 65,
       "status": "OBSERVED",
-      "testedCandidates": 570,
+      "testedCandidates": 571,
       "title": "The Final Frontier",
       "witness": {
         "completed": true,
@@ -17301,7 +17301,7 @@
       "rank": "Blizzard",
       "required": 8,
       "status": "OBSERVED",
-      "testedCandidates": 357,
+      "testedCandidates": 358,
       "title": "The Needs of the Many...",
       "witness": {
         "completed": true,
@@ -17350,7 +17350,7 @@
       "rank": "Blizzard",
       "required": 47,
       "status": "OBSERVED",
-      "testedCandidates": 357,
+      "testedCandidates": 358,
       "title": "The Next Lemeration",
       "witness": {
         "completed": true,
@@ -18095,7 +18095,7 @@
       "rank": "Flurry",
       "required": 45,
       "status": "OBSERVED",
-      "testedCandidates": 428,
+      "testedCandidates": 429,
       "title": "The Long Way Around",
       "witness": {
         "completed": true,
@@ -21754,7 +21754,7 @@
       "rank": "Frost",
       "required": 49,
       "status": "OBSERVED",
-      "testedCandidates": 286,
+      "testedCandidates": 287,
       "title": "Separate Ways",
       "witness": {
         "completed": true,
@@ -22153,7 +22153,7 @@
       "rank": "Frost",
       "required": 40,
       "status": "OBSERVED",
-      "testedCandidates": 144,
+      "testedCandidates": 145,
       "title": "Happy New Year II!",
       "witness": {
         "completed": true,
@@ -22310,7 +22310,7 @@
       "rank": "Hail",
       "required": 75,
       "status": "OBSERVED",
-      "testedCandidates": 357,
+      "testedCandidates": 358,
       "title": "Break On Through",
       "witness": {
         "completed": true,
@@ -22359,7 +22359,7 @@
       "rank": "Hail",
       "required": 25,
       "status": "OBSERVED",
-      "testedCandidates": 570,
+      "testedCandidates": 571,
       "title": "And a Happy New Year!",
       "witness": {
         "completed": true,
@@ -22408,7 +22408,7 @@
       "rank": "Hail",
       "required": 78,
       "status": "OBSERVED",
-      "testedCandidates": 499,
+      "testedCandidates": 500,
       "title": "Lemmintaschen?",
       "witness": {
         "completed": true,
@@ -22493,7 +22493,7 @@
       "rank": "Hail",
       "required": 27,
       "status": "OBSERVED",
-      "testedCandidates": 73,
+      "testedCandidates": 74,
       "title": "Surprise Package?",
       "witness": {
         "completed": true,

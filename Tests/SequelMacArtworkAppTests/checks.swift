@@ -1046,6 +1046,69 @@ extension Lemmings2PlayWindow {
 }
 try Lemmings2PlayWindow(root: l2root).checkPracticeRecovery()
 
+extension Lemmings2PlayWindow {
+    /// Plays the first Classic level's recorded route, a pointer, and a nuke that is undone,
+    /// then checks that the recorded route replays to the played result.
+    fileprivate func checkRouteRecording() throws {
+        defer { stop() }
+        campaign = try Lemmings2Campaign(root: root)
+        try campaign.select(tribe: 0)
+        prepareBriefing(); startLevel()
+        let skills = game!.configuration.skills
+        try assertArtwork(Lemmings2RouteRecorder.events([.init(tick: 7, action: .assign(slot: 0, lemming: 3))], skills: skills)
+            == [.init(tick: 7, event: .assign(skill: skills[0].rawValue, lemming: 3))], "A slot was not converted to its skill")
+        // Play the recorded classic-01 route through the window's own input path.
+        let fixture = try JSONDecoder().decode(Lemmings2ReplayWitness.self, from: Data(contentsOf: URL(fileURLWithPath:
+            "Tests/Lemmings2CompletionTests/Fixtures/classic-01.json")))
+        try assertArtwork(fixture.levelSHA256 == level.fingerprint && (fixture.pointers ?? []).isEmpty,
+            "The classic-01 fixture does not match the first Classic level")
+        paused = false
+        let nuke = Lemmings2Control.nuke.rawValue
+        var nuked = false
+        for input in fixture.inputs {
+            while let current = game, current.tick < input.tick { game?.step() }
+            if !nuked, input.tick > 400 {
+                // A nuke that is undone must leave no trace in the route.
+                panelAction(nuke, time: 5000); panelAction(nuke, time: 5000.01)
+                try assertArtwork(beforeNuke != nil && game?.isNuking == true, "The recording test did not start a nuke")
+                for _ in 0..<2 { game?.step() }
+                panelAction(nuke, time: 5001); panelAction(nuke, time: 5001.01)
+                try assertArtwork(beforeNuke == nil && game?.isNuking == false, "The recording test did not undo the nuke")
+                while let current = game, current.tick < input.tick { game?.step() }
+                nuked = true
+            }
+            guard let slot = skills.firstIndex(where: { $0.rawValue == input.skill }) else {
+                throw SequelDataError.invalid("classic-01 uses a skill the level does not stock")
+            }
+            try assertArtwork(performRecoveryInput(.assign(slot: slot, lemming: input.lemming)), "A classic-01 assignment was refused")
+        }
+        performRecoveryInput(.aim(x: 120, y: 40, held: true))
+        releasePointerInput()
+        while game?.isComplete == false { game?.step() }
+        guard let played = game, let style else { throw SequelDataError.invalid("L2 recording has no finished game") }
+        let route = Lemmings2RouteRecorder.route(level: level, game: played, inputs: recoveryInputs)
+        try assertArtwork(nuked && played.saved == 60, "The played classic-01 route saved \(played.saved) of 60")
+        try assertArtwork(route.events?.contains(where: { $0.event == .aim(x: 120, y: 40, held: true) }) == true,
+            "The recorded route lost the pointer")
+        try assertArtwork(route.events?.contains(where: { $0.event == .nuke }) == false, "The undone nuke stayed in the route")
+        let replay = try route.outcome(level: level, style: style, masks: masks)
+        try assertArtwork(replay.saved == played.saved && replay.ticks == played.tick && replay.stateHash == played.stateFingerprint,
+            "The recorded route replayed to \(replay.saved) in \(replay.ticks) ticks, played \(played.saved) in \(played.tick)")
+        let folder = FileManager.default.temporaryDirectory.appendingPathComponent("l2-routes-\(UUID())")
+        defer { try? FileManager.default.removeItem(at: folder) }
+        do {
+            let url = try Lemmings2RouteRecorder.save(route, tribe: "classic", number: 1, level: level, style: style, masks: masks,
+                                                     date: Date(timeIntervalSince1970: 0), folder: folder)
+            let saved = try JSONDecoder().decode(Lemmings2ReplayWitness.self, from: Data(contentsOf: url))
+            let object = try JSONSerialization.jsonObject(with: Data(contentsOf: url)) as? [String: Any]
+            try assertArtwork(saved.version == 2 && object?["verified"] == nil && url.lastPathComponent.hasPrefix("classic-01-saved"),
+                "The saved route file is wrong: \(url.lastPathComponent)")
+        }
+        print("PASS L2 route recording replays to the played result: \(played.saved) saved in \(played.tick) ticks, \(route.events?.count ?? 0) events")
+    }
+}
+try Lemmings2PlayWindow(root: l2root).checkRouteRecording()
+
 
 extension Lemmings2PlayWindow {
     fileprivate func checkEscapeMainMenu() throws {

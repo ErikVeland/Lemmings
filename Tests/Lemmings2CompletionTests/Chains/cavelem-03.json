@@ -1,0 +1,92 @@
+{
+  "events" : [
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 0,
+          "y" : 0
+        }
+      },
+      "tick" : 48
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 0,
+          "skill" : 1
+        }
+      },
+      "tick" : 48
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 0,
+          "y" : 0
+        }
+      },
+      "tick" : 473
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 0,
+          "skill" : 1
+        }
+      },
+      "tick" : 473
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 1,
+          "skill" : 29
+        }
+      },
+      "tick" : 722
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 2,
+          "skill" : 29
+        }
+      },
+      "tick" : 745
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 3,
+          "skill" : 29
+        }
+      },
+      "tick" : 780
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 4,
+          "skill" : 29
+        }
+      },
+      "tick" : 786
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 2,
+          "skill" : 34
+        }
+      },
+      "tick" : 868
+    }
+  ],
+  "expectedSaved" : 4,
+  "expectedTicks" : 1090,
+  "levelSHA256" : "4d3488287bfd167130d05bc41c3002b00ac71f0fafce2e51d09bfa20e2198bb0",
+  "population" : 5,
+  "version" : 2
+}

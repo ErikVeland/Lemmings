@@ -15,11 +15,11 @@
     "sports": 5
   },
   "quality": {
-    "bareSurvivals": 43
+    "bareSurvivals": 41
   },
   "chainedLevels": {
     "beach": 1,
-    "cavelem": 3,
+    "cavelem": 4,
     "circus": 2,
     "classic": 5,
     "egyptian": 8,
@@ -85,13 +85,13 @@
     },
     {
       "fixture": "Tests/Lemmings2CompletionTests/Fixtures/cavelem-01.json",
-      "sha256": "7fb7fbbdaf4b4c56e559f893054ed96de355abaec9d60e3676cf0ea03cb59899",
+      "sha256": "8deabd469f6e66f4ad07e5a7363c38979e31c3af7d3ec7dace0abce322d906bb",
       "tribe": "cavelem",
       "level": 1,
       "levelSHA256": "1094544c5d82d3fe95d445af818e5944ac5b63185951a49ce365444526a6d380",
       "startingPopulation": 60,
-      "saved": 1,
-      "ticks": 1632
+      "saved": 6,
+      "ticks": 3600
     },
     {
       "fixture": "Tests/Lemmings2CompletionTests/Fixtures/cavelem-02.json",
@@ -425,13 +425,13 @@
     },
     {
       "fixture": "Tests/Lemmings2CompletionTests/Fixtures/outdoor-01.json",
-      "sha256": "f1dc2d0105890c0709979290e7fc2f93934be80d46ef02518407da77fb133338",
+      "sha256": "f8f01c570bfb40e3b481fae6c56408b2fef8223b65c1f128bb19c88ee26734bb",
       "tribe": "outdoor",
       "level": 1,
       "levelSHA256": "72332f8e6f2a920a1648b541483901c04df60328614a560286758a37c7a79646",
       "startingPopulation": 60,
-      "saved": 58,
-      "ticks": 8100
+      "saved": 59,
+      "ticks": 4491
     },
     {
       "fixture": "Tests/Lemmings2CompletionTests/Fixtures/outdoor-02.json",
@@ -495,12 +495,12 @@
     },
     {
       "fixture": "Tests/Lemmings2CompletionTests/Fixtures/polar-01.json",
-      "sha256": "3d60d711714155a82d977622bdadc69f43615bba86c04349314ef84ebbad7d44",
+      "sha256": "a85ea3fa7c11c755c82e09e3081c733c71e01486e775c94414a31d97b06b1dfc",
       "tribe": "polar",
       "level": 1,
       "levelSHA256": "c4a6e555264ffd588e987d81e0346fe7054ecf0583b4d28dc563e24820beb73a",
       "startingPopulation": 60,
-      "saved": 1,
+      "saved": 26,
       "ticks": 4500
     },
     {
@@ -676,6 +676,36 @@
   ],
   "chainFixtures": [
     {
+      "fixture": "Tests/Lemmings2CompletionTests/Chains/cavelem-02.json",
+      "sha256": "f4fccfe5f11ba905a8982f5d3bb3ff7490fba8735771affcbd9b5ddddc620487",
+      "tribe": "cavelem",
+      "level": 2,
+      "levelSHA256": "1c6a1bfc6981e4e1d8cfcd2f4f5314a74cf34710a15ffce5fb32a71d7bc9bcfb",
+      "startingPopulation": 6,
+      "saved": 5,
+      "ticks": 2144
+    },
+    {
+      "fixture": "Tests/Lemmings2CompletionTests/Chains/cavelem-03.json",
+      "sha256": "692ec185f0f0a1362c2de1fb04d96f3061f723013213134deafddd8553f4b9eb",
+      "tribe": "cavelem",
+      "level": 3,
+      "levelSHA256": "4d3488287bfd167130d05bc41c3002b00ac71f0fafce2e51d09bfa20e2198bb0",
+      "startingPopulation": 5,
+      "saved": 4,
+      "ticks": 1090
+    },
+    {
+      "fixture": "Tests/Lemmings2CompletionTests/Chains/cavelem-04.json",
+      "sha256": "478c6ebadcb3c65cb8006c3145743d0413f2ef56a06f5a4fe05ac26f97b7640b",
+      "tribe": "cavelem",
+      "level": 4,
+      "levelSHA256": "a5965c026a401a840956bbb1e6369106f278bca5a99984c9a9c88f5574094f93",
+      "startingPopulation": 4,
+      "saved": 2,
+      "ticks": 822
+    },
+    {
       "fixture": "Tests/Lemmings2CompletionTests/Chains/classic-03.json",
       "sha256": "3c0dc3258449dc548fec2f5a310a092ebfcb56b4537649c97d33ec26b3b801fa",
       "tribe": "classic",
@@ -777,41 +807,41 @@
     },
     {
       "fixture": "Tests/Lemmings2CompletionTests/Chains/outdoor-02.json",
-      "sha256": "a368d3383805fb715175439f065587bab5349edc3afae14a16802d677cc79a5d",
+      "sha256": "ca573b9d4dfba993120c4c2d01e7f37687940232f2f17f6d3a8ca44ec39aa233",
       "tribe": "outdoor",
       "level": 2,
       "levelSHA256": "70bafc5c89cde29f8283d04adfec2534be4e8bd4b38318dc257ee05e2b749a75",
-      "startingPopulation": 58,
-      "saved": 2,
+      "startingPopulation": 59,
+      "saved": 14,
       "ticks": 5400
     },
     {
       "fixture": "Tests/Lemmings2CompletionTests/Chains/outdoor-03.json",
-      "sha256": "0885b5d885ccccf5a4079cb9c718e61a5564e4b5749b55cb9c82cbdaaec5d586",
+      "sha256": "f2ff59ba27b2a9118f24b56812937e7748fdf570ab971981b3d06d9d692814fa",
       "tribe": "outdoor",
       "level": 3,
       "levelSHA256": "718d18681f1b8edee3930a25029cadef7c1b88e978a925e17c571ac538b79b7e",
-      "startingPopulation": 2,
+      "startingPopulation": 14,
       "saved": 1,
-      "ticks": 1243
+      "ticks": 1227
     },
     {
       "fixture": "Tests/Lemmings2CompletionTests/Chains/polar-02.json",
-      "sha256": "48df613bd593b811a3e0a37ad78d68457cd841631f5eda116f7120804c16b325",
+      "sha256": "6deb06f115bd8eca0523bd9d9d61210904e2850bc73046b4e90ce7702c6d67fd",
       "tribe": "polar",
       "level": 2,
       "levelSHA256": "befc9ae6a15f8eccb17df77bd3fdb9085f56208f35a4167ee4a8a8ed3f637fec",
-      "startingPopulation": 1,
-      "saved": 1,
-      "ticks": 1625
+      "startingPopulation": 26,
+      "saved": 6,
+      "ticks": 4500
     },
     {
       "fixture": "Tests/Lemmings2CompletionTests/Chains/polar-03.json",
-      "sha256": "b0ae632dfb28a4fbd61d871aa823cb56dffb198e64b097bf5413e7c6dd4bb7b0",
+      "sha256": "c7587bda7dd67676f0107d34eff7efe4365f70a17297d6bfbf93e2504b2fabe9",
       "tribe": "polar",
       "level": 3,
       "levelSHA256": "318a7c56c7401edbf75da5e16da7913c7fac6b5494de09a93b7435f181ec496d",
-      "startingPopulation": 1,
+      "startingPopulation": 6,
       "saved": 1,
       "ticks": 1194
     },
@@ -827,13 +857,13 @@
     },
     {
       "fixture": "Tests/Lemmings2CompletionTests/Chains/sports-02.json",
-      "sha256": "20bc9f57a888bde891111c78b38f6fb8547d84265bb986f206b373316a74f08a",
+      "sha256": "c9ccfa0cd681a4beb251f4d573de2be20f6ded876358435b73d29e846213b1b8",
       "tribe": "sports",
       "level": 2,
       "levelSHA256": "af7eb2bfde9d3f2ac92a65b31f526cdef73d6c11c35caa3daa8b17340395d647",
       "startingPopulation": 2,
-      "saved": 1,
-      "ticks": 8100
+      "saved": 2,
+      "ticks": 548
     }
   ]
 }

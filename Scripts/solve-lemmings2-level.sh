@@ -1,6 +1,6 @@
 #!/bin/zsh
 # Builds the Lemmings 2 route solver and solves one campaign level.
-# Usage: zsh Scripts/solve-lemmings2-level.sh <tribe-NN> [--population N] [--beam N] [--depth N] [--budget SECONDS] [--cell PIXELS] [--refire TICKS] [--out DIR]
+# Usage: zsh Scripts/solve-lemmings2-level.sh <tribe-NN> [--seed FILE] [--population N] [--beam N] [--depth N] [--budget SECONDS] [--cell PIXELS] [--refire TICKS] [--out DIR]
 set -euo pipefail
 project_dir="${0:A:h:h}"
 build_dir="$project_dir/.build/l2-solver"
@@ -17,5 +17,5 @@ swiftc -O -swift-version 6 -warnings-as-errors -parse-as-library \
 swiftc -O -swift-version 6 -warnings-as-errors \
   -I "$build_dir/modules" -L "$build_dir" -lNxlvKit \
   -Xlinker -rpath -Xlinker "$build_dir" \
-  Tools/Lemmings2Solver/*.swift -o "$build_dir/solve-level"
-exec "$build_dir/solve-level" "$data" "$@"
+  Tools/Lemmings2Solver/*.swift -o "$build_dir/solver"
+exec "$build_dir/solver" level "$data" "$@"
