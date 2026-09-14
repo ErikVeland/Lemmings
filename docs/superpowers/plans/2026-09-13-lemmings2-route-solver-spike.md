@@ -1129,7 +1129,7 @@ Then run: `chmod +x Scripts/solve-lemmings2-level.sh`
 - [ ] **Step 2: Run the script and confirm it fails**
 
 Run: `zsh Scripts/solve-lemmings2-level.sh classic-01 2>&1 | grep -m1 -E "error:|undefined"`
-Expected: `clang: error: linker command failed with exit code 1`, because no file defines the `_main` entry point until `Tools/Lemmings2Solver/main.swift` exists.
+Expected: `error: link command failed with exit code 1`, because no file defines the `_main` entry point until `Tools/Lemmings2Solver/main.swift` exists.
 
 - [ ] **Step 3: Write the command**
 
