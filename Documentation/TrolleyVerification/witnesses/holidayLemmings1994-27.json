@@ -1,0 +1,76 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 251
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 364
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 509
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 748
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 954
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1084
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 25,
+    "required" : 25,
+    "saved" : 25,
+    "stateHash" : "77d61f19721f0377576174abb11c0ab464c09e01f2172d8a25927717e9eee09c",
+    "ticks" : 2395
+  },
+  "initialStateHash" : "1c290d8e1744d372141215a381984263d05a94435cbb3dfbe7f433437dc2b992",
+  "number" : 12,
+  "rank" : "Hail",
+  "title" : "Merry Christmaze"
+}

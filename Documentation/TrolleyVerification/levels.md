@@ -171,7 +171,7 @@ See [method and limitations](README.md) and [exact conditions and evidence](audi
 | Havoc 7: Creature Discomforts | 20 | 15 | — | — | — | No witness collected |
 | Havoc 8: Lemming about town | 50 | 45 | 50 | 50 | 0 | [Verified](witnesses/ohNoMoreLemmings-87.json) |
 | Havoc 9: AAAAAARRRRRRGGGGGGHHHHHH!!!!!! | 50 | 50 | — | — | — | No witness collected |
-| Havoc 10: Flow Control | 21 | 3 | — | — | — | No witness collected |
+| Havoc 10: Flow Control | 21 | 3 | 5 | — | — | [Observed](witnesses/ohNoMoreLemmings-89.json) |
 | Havoc 11: Welcome to the party, pal! | 80 | 80 | 80 | 80 | 0 | [Verified](witnesses/ohNoMoreLemmings-90.json) |
 | Havoc 12: It`s all a matter of timing | 80 | 80 | 80 | 80 | 0 | [Verified](witnesses/ohNoMoreLemmings-91.json) |
 | Havoc 13: HIGHLAND FLING | 80 | 75 | 76 | — | — | [Observed](witnesses/ohNoMoreLemmings-92.json) |
@@ -594,31 +594,31 @@ See [method and limitations](README.md) and [exact conditions and evidence](audi
 | Frost 2: Ski Jump! | 50 | 49 | 50 | 50 | 0 | [Verified](witnesses/holidayLemmings1994-1.json) |
 | Frost 3: CindyLand | 80 | 75 | 80 | 80 | 0 | [Verified](witnesses/holidayLemmings1994-2.json) |
 | Frost 4: Separate Ways | 50 | 49 | 49 | — | — | [Observed](witnesses/holidayLemmings1994-3.json) |
-| Frost 5: Lemming Reunification | 70 | 70 | — | — | — | No witness collected |
-| Frost 6: The Land of the Bizarre | 70 | 69 | — | — | — | No witness collected |
-| Frost 7: Happy New Year! | 50 | 25 | — | — | — | No witness collected |
+| Frost 5: Lemming Reunification | 70 | 70 | 70 | 70 | 0 | [Verified](witnesses/holidayLemmings1994-4.json) |
+| Frost 6: The Land of the Bizarre | 70 | 69 | 69 | — | — | [Observed](witnesses/holidayLemmings1994-5.json) |
+| Frost 7: Happy New Year! | 50 | 25 | 32 | — | — | [Observed](witnesses/holidayLemmings1994-6.json) |
 | Frost 8: Division Bell | 80 | 75 | 80 | 80 | 0 | [Verified](witnesses/holidayLemmings1994-7.json) |
-| Frost 9: Quest for Kieran | 40 | 40 | — | — | — | No witness collected |
+| Frost 9: Quest for Kieran | 40 | 40 | 40 | 40 | 0 | [Verified](witnesses/holidayLemmings1994-8.json) |
 | Frost 10: Four Play | 4 | 4 | 4 | 4 | 0 | [Verified](witnesses/holidayLemmings1994-9.json) |
 | Frost 11: Maybe not such a doddle | 80 | 80 | 80 | 80 | 0 | [Verified](witnesses/holidayLemmings1994-10.json) |
-| Frost 12: It's Boxing Day! | 80 | 78 | — | — | — | No witness collected |
-| Frost 13: 2 Minutes before midnight | 80 | 80 | — | — | — | No witness collected |
+| Frost 12: It's Boxing Day! | 80 | 78 | 80 | 80 | 0 | [Verified](witnesses/holidayLemmings1994-11.json) |
+| Frost 13: 2 Minutes before midnight | 80 | 80 | 80 | 80 | 0 | [Verified](witnesses/holidayLemmings1994-12.json) |
 | Frost 14: Happy New Year II! | 50 | 40 | 40 | — | — | [Observed](witnesses/holidayLemmings1994-13.json) |
-| Frost 15: Plethora of Presents | 50 | 49 | — | — | — | No witness collected |
-| Frost 16: Up on the Rooftops | 80 | 79 | — | — | — | No witness collected |
-| Hail 1: Go Thataway! | 75 | 75 | — | — | — | No witness collected |
+| Frost 15: Plethora of Presents | 50 | 49 | 49 | — | — | [Observed](witnesses/holidayLemmings1994-14.json) |
+| Frost 16: Up on the Rooftops | 80 | 79 | 79 | — | — | [Observed](witnesses/holidayLemmings1994-15.json) |
+| Hail 1: Go Thataway! | 75 | 75 | 75 | 75 | 0 | [Verified](witnesses/holidayLemmings1994-16.json) |
 | Hail 2: Break On Through | 80 | 75 | 75 | — | — | [Observed](witnesses/holidayLemmings1994-17.json) |
 | Hail 3: And a Happy New Year! | 50 | 25 | 35 | — | — | [Observed](witnesses/holidayLemmings1994-18.json) |
 | Hail 4: Lemmintaschen? | 80 | 78 | 79 | — | — | [Observed](witnesses/holidayLemmings1994-19.json) |
-| Hail 5: Get the Point? | 80 | 68 | — | — | — | No witness collected |
+| Hail 5: Get the Point? | 80 | 68 | 71 | — | — | [Observed](witnesses/holidayLemmings1994-20.json) |
 | Hail 6: Surprise Package? | 80 | 27 | 33 | — | — | [Observed](witnesses/holidayLemmings1994-21.json) |
 | Hail 7: Steel Ice Span | 80 | 80 | 80 | 80 | 0 | [Verified](witnesses/holidayLemmings1994-22.json) |
 | Hail 8: Sir Edmund Hilemming | 80 | 80 | 80 | 80 | 0 | [Verified](witnesses/holidayLemmings1994-23.json) |
 | Hail 9: Up, up, and away! | 50 | 50 | 50 | 50 | 0 | [Verified](witnesses/holidayLemmings1994-24.json) |
 | Hail 10: Lemmy in the cold, cold ground | 80 | 80 | 80 | 80 | 0 | [Verified](witnesses/holidayLemmings1994-25.json) |
-| Hail 11: Emmings!  (No L) | 70 | 70 | — | — | — | No witness collected |
-| Hail 12: Merry Christmaze | 25 | 25 | — | — | — | No witness collected |
-| Hail 13: Polar Expedition | 50 | 50 | — | — | — | No witness collected |
+| Hail 11: Emmings!  (No L) | 70 | 70 | 70 | 70 | 0 | [Verified](witnesses/holidayLemmings1994-26.json) |
+| Hail 12: Merry Christmaze | 25 | 25 | 25 | 25 | 0 | [Verified](witnesses/holidayLemmings1994-27.json) |
+| Hail 13: Polar Expedition | 50 | 50 | 50 | 50 | 0 | [Verified](witnesses/holidayLemmings1994-28.json) |
 | Hail 14: Rendezvous II | 65 | 65 | 65 | 65 | 0 | [Verified](witnesses/holidayLemmings1994-29.json) |
 | Hail 15: Steel Block Party | 60 | 60 | 60 | 60 | 0 | [Verified](witnesses/holidayLemmings1994-30.json) |
-| Hail 16: Peak of Performance | 10 | 10 | — | — | — | No witness collected |
+| Hail 16: Peak of Performance | 10 | 10 | 10 | 10 | 0 | [Verified](witnesses/holidayLemmings1994-31.json) |

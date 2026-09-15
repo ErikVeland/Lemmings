@@ -1,0 +1,29 @@
+[
+ {
+  "rate": 99,
+  "tick": 1
+ },
+ {
+  "skill": "builder",
+  "x": 742,
+  "direction": -1,
+  "action": "walking",
+  "yMin": 120,
+  "tick": 420
+ },
+ {
+  "skill": "builder",
+  "id": -1,
+  "x": 684,
+  "direction": 1,
+  "action": "walking"
+ },
+ {
+  "skill": "basher",
+  "x": 637,
+  "direction": 1,
+  "action": "walking",
+  "yMax": 60,
+  "tick": 900
+ }
+]

@@ -1,0 +1,56 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 110
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 304
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 10,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 553
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 579
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 70,
+    "required" : 70,
+    "saved" : 70,
+    "stateHash" : "55b083f1f4106ed5a15bb1631d302623e67205cb19bf4ae0342041bfeab9962c",
+    "ticks" : 1813
+  },
+  "initialStateHash" : "b5a2ef20dbc195b03d3cdb783d82edabf1128d2feec423de70ecad29bcacf198",
+  "number" : 5,
+  "rank" : "Frost",
+  "title" : "Lemming Reunification"
+}

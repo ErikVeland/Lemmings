@@ -1,0 +1,34 @@
+[
+ {
+  "skill": "climber",
+  "id": 0
+ },
+ {
+  "skill": "floater",
+  "id": 0
+ },
+ {
+  "rate": 99
+ },
+ {
+  "skill": "builder",
+  "id": 0,
+  "x": 1110,
+  "direction": 1,
+  "action": "walking",
+  "y": 64
+ },
+ {
+  "skill": "builder",
+  "id": 0,
+  "action": "shrugging"
+ },
+ {
+  "skill": "basher",
+  "id": 0,
+  "x": 1078,
+  "direction": -1,
+  "action": "walking",
+  "yMin": 130
+ }
+]

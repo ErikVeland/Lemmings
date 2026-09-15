@@ -1,0 +1,29 @@
+[
+ {
+  "skill": "miner",
+  "x": 790,
+  "direction": -1,
+  "action": "walking",
+  "notID": [
+   0
+  ]
+ },
+ {
+  "skill": "builder",
+  "id": 2,
+  "x": 720,
+  "direction": -1,
+  "action": "walking"
+ },
+ {
+  "skill": "builder",
+  "id": 0,
+  "x": 475,
+  "direction": -1,
+  "action": "walking"
+ },
+ {
+  "rate": 99,
+  "tick": 800
+ }
+]

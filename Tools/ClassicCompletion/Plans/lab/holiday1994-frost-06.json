@@ -1,0 +1,51 @@
+[
+ {
+  "skill": "builder",
+  "id": 0,
+  "x": 268,
+  "direction": 1,
+  "action": "walking"
+ },
+ {
+  "skill": "blocker",
+  "id": 1,
+  "xMin": 236,
+  "xMax": 252,
+  "direction": 1,
+  "action": "walking",
+  "yMax": 40
+ },
+ {
+  "rate": 99
+ },
+ {
+  "skill": "builder",
+  "id": 0,
+  "x": 250,
+  "direction": -1,
+  "action": "walking",
+  "yMin": 70,
+  "yMax": 82
+ },
+ {
+  "skill": "builder",
+  "id": 0,
+  "x": 270,
+  "direction": 1,
+  "action": "walking",
+  "yMin": 110
+ },
+ {
+  "skill": "builder",
+  "id": 0,
+  "x": 611,
+  "direction": 1,
+  "action": "walking",
+  "yMin": 140
+ },
+ {
+  "skill": "bomber",
+  "id": 1,
+  "tick": 1
+ }
+]

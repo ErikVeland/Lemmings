@@ -1,0 +1,84 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "climber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 54
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 55
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 218
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 235
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 427
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 451
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 500
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 80,
+    "required" : 79,
+    "saved" : 79,
+    "stateHash" : "58bb03b5c448c1a14f6344aa2957cf9771c13730f25cea8e15492a4245bf7a61",
+    "ticks" : 1011
+  },
+  "initialStateHash" : "eba8fe9c51311489eb65c1cc9f5c995c06dcbd7930349f8708da2876e98e03f8",
+  "number" : 16,
+  "rank" : "Frost",
+  "title" : "Up on the Rooftops"
+}

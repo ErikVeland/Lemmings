@@ -1,0 +1,209 @@
+[
+ {
+  "skill": "floater",
+  "id": 0
+ },
+ {
+  "skill": "digger",
+  "id": 0,
+  "action": "walking",
+  "y": 111
+ },
+ {
+  "skill": "builder",
+  "id": 0,
+  "action": "digging"
+ },
+ {
+  "skill": "floater",
+  "id": 1
+ },
+ {
+  "skill": "floater",
+  "id": 2
+ },
+ {
+  "skill": "floater",
+  "id": 3
+ },
+ {
+  "skill": "floater",
+  "id": 4
+ },
+ {
+  "skill": "floater",
+  "id": 5
+ },
+ {
+  "skill": "floater",
+  "id": 6
+ },
+ {
+  "skill": "floater",
+  "id": 7
+ },
+ {
+  "skill": "floater",
+  "id": 8
+ },
+ {
+  "skill": "floater",
+  "id": 9
+ },
+ {
+  "skill": "builder",
+  "id": 0,
+  "x": 778,
+  "direction": -1,
+  "action": "walking",
+  "yMin": 130
+ },
+ {
+  "skill": "floater",
+  "id": 10
+ },
+ {
+  "skill": "floater",
+  "id": 11
+ },
+ {
+  "skill": "floater",
+  "id": 12
+ },
+ {
+  "skill": "floater",
+  "id": 13
+ },
+ {
+  "skill": "builder",
+  "id": 0,
+  "action": "shrugging"
+ },
+ {
+  "skill": "floater",
+  "id": 14
+ },
+ {
+  "skill": "floater",
+  "id": 15
+ },
+ {
+  "skill": "floater",
+  "id": 16
+ },
+ {
+  "skill": "floater",
+  "id": 17
+ },
+ {
+  "skill": "floater",
+  "id": 18
+ },
+ {
+  "skill": "builder",
+  "id": 0,
+  "action": "shrugging"
+ },
+ {
+  "skill": "floater",
+  "id": 19
+ },
+ {
+  "skill": "floater",
+  "id": 20
+ },
+ {
+  "skill": "floater",
+  "id": 21
+ },
+ {
+  "skill": "floater",
+  "id": 22
+ },
+ {
+  "skill": "builder",
+  "id": 0,
+  "action": "shrugging"
+ },
+ {
+  "skill": "floater",
+  "id": 23
+ },
+ {
+  "skill": "floater",
+  "id": 24
+ },
+ {
+  "skill": "floater",
+  "id": 25
+ },
+ {
+  "skill": "floater",
+  "id": 26
+ },
+ {
+  "skill": "floater",
+  "id": 27
+ },
+ {
+  "skill": "builder",
+  "id": 0,
+  "action": "shrugging"
+ },
+ {
+  "skill": "floater",
+  "id": 28
+ },
+ {
+  "skill": "floater",
+  "id": 29
+ },
+ {
+  "skill": "blocker",
+  "xMin": 668,
+  "xMax": 669,
+  "direction": -1,
+  "action": "walking",
+  "yMax": 100,
+  "notID": [
+   0
+  ],
+  "tick": 1340
+ },
+ {
+  "skill": "floater",
+  "id": 30
+ },
+ {
+  "skill": "builder",
+  "id": 0,
+  "action": "shrugging"
+ },
+ {
+  "skill": "builder",
+  "xMin": 646,
+  "xMax": 647,
+  "direction": 1,
+  "action": "walking",
+  "yMax": 90,
+  "tick": 1610
+ },
+ {
+  "skill": "builder",
+  "xMin": 738,
+  "xMax": 740,
+  "direction": 1,
+  "action": "walking",
+  "yMax": 130,
+  "yMin": 100,
+  "tick": 1610
+ },
+ {
+  "skill": "builder",
+  "id": -1,
+  "action": "shrugging"
+ },
+ {
+  "rate": 99
+ }
+]

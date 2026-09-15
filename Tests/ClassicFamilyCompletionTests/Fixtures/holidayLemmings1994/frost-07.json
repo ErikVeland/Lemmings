@@ -1,0 +1,156 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 81
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 273
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "blocker"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 560
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 8,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 571
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 8,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 771
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 8,
+          "skill" : "bomber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 783
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 18,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1145
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 18,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1156
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 19,
+          "skill" : "blocker"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1176
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 18,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1348
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 18,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1733
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 18,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1812
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 18,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2004
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 31,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2005
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 50,
+    "required" : 25,
+    "saved" : 32,
+    "stateHash" : "9f9afd3f5dc3ea7790d391b04722195d4dafce7bc11587c3e99e32980455c602",
+    "ticks" : 6120
+  },
+  "initialStateHash" : "172769b69f60571501cfbea8f7a510690d20654f87a4f0a73e4dca1236ff388d",
+  "number" : 7,
+  "rank" : "Frost",
+  "title" : "Happy New Year!"
+}

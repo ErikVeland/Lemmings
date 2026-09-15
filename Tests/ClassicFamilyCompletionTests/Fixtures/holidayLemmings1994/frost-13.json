@@ -1,0 +1,55 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 63,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 430
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 63,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 678
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 41,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 900
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 80,
+    "required" : 80,
+    "saved" : 80,
+    "stateHash" : "2d39f0d45ee6aabd6b08c0d512a6f2f7e18bd43e92caeb6ccc674a77f7ad8c0e",
+    "ticks" : 1457
+  },
+  "initialStateHash" : "d3ac119213e9c58bf1abc492d16e6a97f0c4f37cd83de7d7be905dd5a39d189b",
+  "number" : 13,
+  "rank" : "Frost",
+  "title" : "2 Minutes before midnight"
+}

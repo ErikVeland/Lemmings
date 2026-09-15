@@ -1,7 +1,7 @@
 {
   "engineSourceFingerprint": "483661a10882d87cd0d07590d6d96b2247e537e8bae2acdd8c8152ca34c3a3ca",
   "exhaustive": false,
-  "generatedAt": "2026-09-14T23:38:30Z",
+  "generatedAt": "2026-09-15T14:23:17Z",
   "levels": [
     {
       "bestSaved": 10,
@@ -9162,6 +9162,55 @@
       }
     },
     {
+      "bestSaved": 70,
+      "conditions": {
+        "gameID": "holidayLemmings1994",
+        "levelFingerprint": "c24372727a26de8662d0f135128fb0db56303699a2474a9ea5b85c24c9242efd",
+        "levelID": "level-4",
+        "modifiers": {},
+        "packID": "holidayLemmings1994-MACLEVL-32",
+        "physicsMode": "classic-dos-v1",
+        "population": 70,
+        "rescueRequirement": 70,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "classic-dos-v1",
+        "startingSkills": {
+          "basher": 10,
+          "blocker": 10,
+          "bomber": 10,
+          "builder": 10,
+          "climber": 10,
+          "digger": 10,
+          "floater": 10,
+          "miner": 10
+        },
+        "timeLimitSeconds": 300
+      },
+      "gameID": "holidayLemmings1994",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 70,
+      "minimumSacrifices": 0,
+      "notes": [],
+      "number": 5,
+      "population": 70,
+      "rank": "Frost",
+      "required": 70,
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Lemming Reunification",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/holidayLemmings1994-4.json",
+        "released": 70,
+        "retainedReserves": 0,
+        "saved": 70,
+        "sha256": "f384f75db7cea9d557639dcfa6181d0f52c24fafb97146c16fa76b774f1cf9a2",
+        "ticks": 1813
+      }
+    },
+    {
       "bestSaved": 80,
       "conditions": {
         "gameID": "holidayLemmings1994",
@@ -9208,6 +9257,55 @@
         "saved": 80,
         "sha256": "3d074f088346d9c6377444bf61dc3dfbf289e096617ba34c256aff014d81e481",
         "ticks": 905
+      }
+    },
+    {
+      "bestSaved": 40,
+      "conditions": {
+        "gameID": "holidayLemmings1994",
+        "levelFingerprint": "a338780c44875f572cf3ced3379ed7d12491217a55265dc38faca4a73be82cef",
+        "levelID": "level-8",
+        "modifiers": {},
+        "packID": "holidayLemmings1994-MACLEVL-32",
+        "physicsMode": "classic-dos-v1",
+        "population": 40,
+        "rescueRequirement": 40,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "classic-dos-v1",
+        "startingSkills": {
+          "basher": 0,
+          "blocker": 0,
+          "bomber": 2,
+          "builder": 3,
+          "climber": 3,
+          "digger": 0,
+          "floater": 2,
+          "miner": 1
+        },
+        "timeLimitSeconds": 240
+      },
+      "gameID": "holidayLemmings1994",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 40,
+      "minimumSacrifices": 0,
+      "notes": [],
+      "number": 9,
+      "population": 40,
+      "rank": "Frost",
+      "required": 40,
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Quest for Kieran",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/holidayLemmings1994-8.json",
+        "released": 40,
+        "retainedReserves": 0,
+        "saved": 40,
+        "sha256": "425708c439e1da53cb8cdbf35eeebc8a37a8869fcc26e326cb3234bac84dc661",
+        "ticks": 1302
       }
     },
     {
@@ -9306,6 +9404,153 @@
         "saved": 80,
         "sha256": "682770421fcf05748b80f24ff05c050b86974803070bcb72c19a45c9f50d2b8c",
         "ticks": 2431
+      }
+    },
+    {
+      "bestSaved": 80,
+      "conditions": {
+        "gameID": "holidayLemmings1994",
+        "levelFingerprint": "b057113354512f61b366e07a0e9388d2670cc54c4127ae677350182f58240176",
+        "levelID": "level-11",
+        "modifiers": {},
+        "packID": "holidayLemmings1994-MACLEVL-32",
+        "physicsMode": "classic-dos-v1",
+        "population": 80,
+        "rescueRequirement": 78,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "classic-dos-v1",
+        "startingSkills": {
+          "basher": 2,
+          "blocker": 0,
+          "bomber": 0,
+          "builder": 3,
+          "climber": 0,
+          "digger": 1,
+          "floater": 0,
+          "miner": 0
+        },
+        "timeLimitSeconds": 240
+      },
+      "gameID": "holidayLemmings1994",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 80,
+      "minimumSacrifices": 0,
+      "notes": [],
+      "number": 12,
+      "population": 80,
+      "rank": "Frost",
+      "required": 78,
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "It's Boxing Day!",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/holidayLemmings1994-11.json",
+        "released": 80,
+        "retainedReserves": 0,
+        "saved": 80,
+        "sha256": "4b4bb88120667fafecd172a9acda2a38dfa686095a2bb7ce1a8f5383c3257206",
+        "ticks": 2115
+      }
+    },
+    {
+      "bestSaved": 80,
+      "conditions": {
+        "gameID": "holidayLemmings1994",
+        "levelFingerprint": "079760d84aa5d86fa35b50f5405ce33b5f31168dcecb7c323e69841a247e4675",
+        "levelID": "level-12",
+        "modifiers": {},
+        "packID": "holidayLemmings1994-MACLEVL-32",
+        "physicsMode": "classic-dos-v1",
+        "population": 80,
+        "rescueRequirement": 80,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "classic-dos-v1",
+        "startingSkills": {
+          "basher": 1,
+          "blocker": 0,
+          "bomber": 0,
+          "builder": 3,
+          "climber": 0,
+          "digger": 0,
+          "floater": 0,
+          "miner": 0
+        },
+        "timeLimitSeconds": 120
+      },
+      "gameID": "holidayLemmings1994",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 80,
+      "minimumSacrifices": 0,
+      "notes": [],
+      "number": 13,
+      "population": 80,
+      "rank": "Frost",
+      "required": 80,
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "2 Minutes before midnight",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/holidayLemmings1994-12.json",
+        "released": 80,
+        "retainedReserves": 0,
+        "saved": 80,
+        "sha256": "89f241c17a32d7a9cd91c47af2e67ee106dd089e8b7ebda90dd7fbd7aed04a7d",
+        "ticks": 1457
+      }
+    },
+    {
+      "bestSaved": 75,
+      "conditions": {
+        "gameID": "holidayLemmings1994",
+        "levelFingerprint": "5547a1c33eb8a16155aaeb3c7b964398f7ceb86bd907cb7e97bed54857edec0c",
+        "levelID": "level-16",
+        "modifiers": {},
+        "packID": "holidayLemmings1994-MACLEVL-32",
+        "physicsMode": "classic-dos-v1",
+        "population": 75,
+        "rescueRequirement": 75,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "classic-dos-v1",
+        "startingSkills": {
+          "basher": 2,
+          "blocker": 2,
+          "bomber": 2,
+          "builder": 2,
+          "climber": 1,
+          "digger": 0,
+          "floater": 1,
+          "miner": 0
+        },
+        "timeLimitSeconds": 360
+      },
+      "gameID": "holidayLemmings1994",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 75,
+      "minimumSacrifices": 0,
+      "notes": [],
+      "number": 1,
+      "population": 75,
+      "rank": "Hail",
+      "required": 75,
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Go Thataway!",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/holidayLemmings1994-16.json",
+        "released": 75,
+        "retainedReserves": 0,
+        "saved": 75,
+        "sha256": "dd765c7509bfa9eeb53589faa53fb95000032108261c30035d979bb241d0ed9c",
+        "ticks": 2148
       }
     },
     {
@@ -9505,6 +9750,153 @@
       }
     },
     {
+      "bestSaved": 70,
+      "conditions": {
+        "gameID": "holidayLemmings1994",
+        "levelFingerprint": "187ebc9ee16d58d67fc07f5c4cdeac09cfab0386def776e5db26d71da2c50a5b",
+        "levelID": "level-26",
+        "modifiers": {},
+        "packID": "holidayLemmings1994-MACLEVL-32",
+        "physicsMode": "classic-dos-v1",
+        "population": 70,
+        "rescueRequirement": 70,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "classic-dos-v1",
+        "startingSkills": {
+          "basher": 0,
+          "blocker": 2,
+          "bomber": 2,
+          "builder": 6,
+          "climber": 2,
+          "digger": 2,
+          "floater": 2,
+          "miner": 2
+        },
+        "timeLimitSeconds": 360
+      },
+      "gameID": "holidayLemmings1994",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 70,
+      "minimumSacrifices": 0,
+      "notes": [],
+      "number": 11,
+      "population": 70,
+      "rank": "Hail",
+      "required": 70,
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Emmings!  (No L)",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/holidayLemmings1994-26.json",
+        "released": 70,
+        "retainedReserves": 0,
+        "saved": 70,
+        "sha256": "8045424085a0c28bd3ab2d162a5e70883e14909843d353585714ce7355a8212f",
+        "ticks": 3315
+      }
+    },
+    {
+      "bestSaved": 25,
+      "conditions": {
+        "gameID": "holidayLemmings1994",
+        "levelFingerprint": "0af5924cef6d9840f198742e99e510c69bbebc005583f346e2438895fcf0ef18",
+        "levelID": "level-27",
+        "modifiers": {},
+        "packID": "holidayLemmings1994-MACLEVL-32",
+        "physicsMode": "classic-dos-v1",
+        "population": 25,
+        "rescueRequirement": 25,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "classic-dos-v1",
+        "startingSkills": {
+          "basher": 0,
+          "blocker": 0,
+          "bomber": 0,
+          "builder": 25,
+          "climber": 0,
+          "digger": 0,
+          "floater": 0,
+          "miner": 0
+        },
+        "timeLimitSeconds": 300
+      },
+      "gameID": "holidayLemmings1994",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 25,
+      "minimumSacrifices": 0,
+      "notes": [],
+      "number": 12,
+      "population": 25,
+      "rank": "Hail",
+      "required": 25,
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Merry Christmaze",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/holidayLemmings1994-27.json",
+        "released": 25,
+        "retainedReserves": 0,
+        "saved": 25,
+        "sha256": "6b3a7deb154ea0c1b2dc2614f335769afc8a6b925cff985d9a77487049bbe0b3",
+        "ticks": 2395
+      }
+    },
+    {
+      "bestSaved": 50,
+      "conditions": {
+        "gameID": "holidayLemmings1994",
+        "levelFingerprint": "574ddea4f36765adf21cbb3f4c97f870fc21c9cea62e64f703f8e82aab24ba61",
+        "levelID": "level-28",
+        "modifiers": {},
+        "packID": "holidayLemmings1994-MACLEVL-32",
+        "physicsMode": "classic-dos-v1",
+        "population": 50,
+        "rescueRequirement": 50,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "classic-dos-v1",
+        "startingSkills": {
+          "basher": 2,
+          "blocker": 2,
+          "bomber": 5,
+          "builder": 1,
+          "climber": 1,
+          "digger": 2,
+          "floater": 1,
+          "miner": 0
+        },
+        "timeLimitSeconds": 360
+      },
+      "gameID": "holidayLemmings1994",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 50,
+      "minimumSacrifices": 0,
+      "notes": [],
+      "number": 13,
+      "population": 50,
+      "rank": "Hail",
+      "required": 50,
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Polar Expedition",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/holidayLemmings1994-28.json",
+        "released": 50,
+        "retainedReserves": 0,
+        "saved": 50,
+        "sha256": "edff7f26f6f2255998b506534e142353f4dc5fa8ce9f3f03632c07e70d4fc1f8",
+        "ticks": 2761
+      }
+    },
+    {
       "bestSaved": 65,
       "conditions": {
         "gameID": "holidayLemmings1994",
@@ -9603,6 +9995,55 @@
       }
     },
     {
+      "bestSaved": 10,
+      "conditions": {
+        "gameID": "holidayLemmings1994",
+        "levelFingerprint": "33ea195c0def3791979ada23b30bba678e5111ce22745d96c7b649cef94ab7cd",
+        "levelID": "level-31",
+        "modifiers": {},
+        "packID": "holidayLemmings1994-MACLEVL-32",
+        "physicsMode": "classic-dos-v1",
+        "population": 10,
+        "rescueRequirement": 10,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "classic-dos-v1",
+        "startingSkills": {
+          "basher": 15,
+          "blocker": 15,
+          "bomber": 15,
+          "builder": 1,
+          "climber": 15,
+          "digger": 15,
+          "floater": 15,
+          "miner": 15
+        },
+        "timeLimitSeconds": 120
+      },
+      "gameID": "holidayLemmings1994",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 10,
+      "minimumSacrifices": 0,
+      "notes": [],
+      "number": 16,
+      "population": 10,
+      "rank": "Hail",
+      "required": 10,
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Peak of Performance",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/holidayLemmings1994-31.json",
+        "released": 10,
+        "retainedReserves": 0,
+        "saved": 10,
+        "sha256": "6b1c127f49c669efa21a6de92053a3f80a8fb775c859bb1c0e0782c6080f98b9",
+        "ticks": 1296
+      }
+    },
+    {
       "bestSaved": 47,
       "conditions": {
         "gameID": "lemmings",
@@ -9629,13 +10070,15 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 0,
-      "notes": [],
+      "notes": [
+        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
+      ],
       "number": 3,
       "population": 50,
       "rank": "Fun",
       "required": 5,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 4,
+      "testedCandidates": 75,
       "title": "Tailor-made for blockers",
       "witness": {
         "completed": true,
@@ -9676,13 +10119,15 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 2,
-      "notes": [],
+      "notes": [
+        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
+      ],
       "number": 6,
       "population": 50,
       "rank": "Fun",
       "required": 10,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 4,
+      "testedCandidates": 146,
       "title": "A task for blockers and bombers",
       "witness": {
         "completed": true,
@@ -9723,13 +10168,15 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 5,
-      "notes": [],
+      "notes": [
+        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
+      ],
       "number": 18,
       "population": 70,
       "rank": "Fun",
       "required": 50,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 4,
+      "testedCandidates": 146,
       "title": "Let's block and blow",
       "witness": {
         "completed": true,
@@ -9770,13 +10217,15 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 4,
-      "notes": [],
+      "notes": [
+        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
+      ],
       "number": 5,
       "population": 80,
       "rank": "Mayhem",
       "required": 60,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 4,
+      "testedCandidates": 501,
       "title": "Down, along, up. In that order",
       "witness": {
         "completed": true,
@@ -9817,13 +10266,15 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 2,
-      "notes": [],
+      "notes": [
+        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
+      ],
       "number": 10,
       "population": 75,
       "rank": "Mayhem",
       "required": 50,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 4,
+      "testedCandidates": 501,
       "title": "Pillars of Hercules",
       "witness": {
         "completed": true,
@@ -9864,13 +10315,15 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 2,
-      "notes": [],
+      "notes": [
+        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
+      ],
       "number": 19,
       "population": 50,
       "rank": "Mayhem",
       "required": 46,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 4,
+      "testedCandidates": 217,
       "title": "Time to get up!",
       "witness": {
         "completed": true,
@@ -9911,13 +10364,15 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 3,
-      "notes": [],
+      "notes": [
+        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
+      ],
       "number": 26,
       "population": 80,
       "rank": "Mayhem",
       "required": 60,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 4,
+      "testedCandidates": 217,
       "title": "The Steel Mines of Kessel",
       "witness": {
         "completed": true,
@@ -9958,13 +10413,15 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 0,
-      "notes": [],
+      "notes": [
+        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
+      ],
       "number": 29,
       "population": 80,
       "rank": "Mayhem",
       "required": 64,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 4,
+      "testedCandidates": 288,
       "title": "Save Me",
       "witness": {
         "completed": true,
@@ -10005,13 +10462,15 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 1,
-      "notes": [],
+      "notes": [
+        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
+      ],
       "number": 7,
       "population": 80,
       "rank": "Taxing",
       "required": 78,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 4,
+      "testedCandidates": 359,
       "title": "Every Lemming for himself!!!",
       "witness": {
         "completed": true,
@@ -10052,13 +10511,15 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 5,
-      "notes": [],
+      "notes": [
+        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
+      ],
       "number": 19,
       "population": 70,
       "rank": "Taxing",
       "required": 64,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 4,
+      "testedCandidates": 75,
       "title": "Bomboozal",
       "witness": {
         "completed": true,
@@ -10099,13 +10560,15 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 3,
-      "notes": [],
+      "notes": [
+        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
+      ],
       "number": 27,
       "population": 80,
       "rank": "Taxing",
       "required": 48,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 4,
+      "testedCandidates": 217,
       "title": "Call in the bomb squad",
       "witness": {
         "completed": true,
@@ -10146,13 +10609,15 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 10,
-      "notes": [],
+      "notes": [
+        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
+      ],
       "number": 28,
       "population": 80,
       "rank": "Taxing",
       "required": 56,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 4,
+      "testedCandidates": 501,
       "title": "POOR WEE CREATURES!",
       "witness": {
         "completed": true,
@@ -10193,13 +10658,15 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 3,
-      "notes": [],
+      "notes": [
+        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
+      ],
       "number": 15,
       "population": 10,
       "rank": "Tricky",
       "required": 6,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 4,
+      "testedCandidates": 75,
       "title": "Ozone friendly Lemmings",
       "witness": {
         "completed": true,
@@ -10240,13 +10707,15 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 4,
-      "notes": [],
+      "notes": [
+        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
+      ],
       "number": 16,
       "population": 50,
       "rank": "Tricky",
       "required": 40,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 4,
+      "testedCandidates": 217,
       "title": "Luvly Jubly",
       "witness": {
         "completed": true,
@@ -10287,13 +10756,15 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 2,
-      "notes": [],
+      "notes": [
+        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
+      ],
       "number": 17,
       "population": 50,
       "rank": "Tricky",
       "required": 48,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 4,
+      "testedCandidates": 75,
       "title": "Diet Lemmingaid",
       "witness": {
         "completed": true,
@@ -10334,13 +10805,15 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 1,
-      "notes": [],
+      "notes": [
+        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
+      ],
       "number": 18,
       "population": 10,
       "rank": "Tricky",
       "required": 9,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 4,
+      "testedCandidates": 288,
       "title": "It's Lemmingentry Watson",
       "witness": {
         "completed": true,
@@ -10381,13 +10854,15 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 1,
-      "notes": [],
+      "notes": [
+        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
+      ],
       "number": 23,
       "population": 80,
       "rank": "Tricky",
       "required": 48,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 4,
+      "testedCandidates": 430,
       "title": "From The Boundary Line",
       "witness": {
         "completed": true,

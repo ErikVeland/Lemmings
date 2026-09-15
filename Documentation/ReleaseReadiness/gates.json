@@ -4,7 +4,7 @@
     "priority": "P0",
     "status": "open",
     "exitCriteria": "Replay a winning route for every advertised Classic level, including the bundled fan corpus and conversions. Close the remaining Oh No! and Holiday routes. Verify continuous Full Quest progression, save/resume and final results. L2/L3 completion belongs to the sequel gate.",
-    "progress": "15 September: official Classic coverage is 250/292 (42 missing). All 32 Holiday 1993 levels now have preserved wins. The remaining official gaps are 28 Oh No! and 14 Holiday 1994 routes. The fresh 6,372-level audit after the slope-exit fix has 647 wins and zero load/start failures; 5,725 levels still lack wins. There are 248 distinct hint decks for 250 official levels and 251 distinct solution replays including conversions. The all-level requirement remains unchanged pending the owner\u2019s scope decision. See OneZeroClosure-2026-09-15.md.",
+    "progress": "16 September: official Classic coverage is 265/292 (27 missing). Holiday 1993 and Holiday 1994 now have preserved wins for all 32 levels each. The remaining official gaps are 27 Oh No! routes. The 6,372-level audit from 15 September has 647 wins and zero load/start failures. There are 263 distinct hint decks and 266 distinct solution replays including conversions. The all-level requirement remains unchanged pending the owner’s scope decision. See OneZeroClosure-2026-09-15.md.",
     "scopes": [
       "all",
       "classic-1.0"
@@ -18,7 +18,7 @@
     "scopes": [
       "all"
     ],
-    "progress": "15 September: Claude\u2019s committed work preserves 73/120 L2 standalone routes and 41/90 L3 routes. Cavelems has a complete ten-level carry-over chain. L2 and L3 remain previews outside Classic 1.0 completion. Current known-route and runtime regression suites passed in the baseline audit."
+    "progress": "15 September: Claude’s committed work preserves 73/120 L2 standalone routes and 41/90 L3 routes. Cavelems has a complete ten-level carry-over chain. L2 and L3 remain previews outside Classic 1.0 completion. Current known-route and runtime regression suites passed in the baseline audit."
   },
   {
     "area": "Save and interruption recovery",
@@ -47,7 +47,7 @@
     "priority": "P0",
     "status": "partial",
     "exitCriteria": "Measure complete frame times, memory growth and audio under sustained 10x play, nukes, replays and repeated engine switches. Test physical Intel, minimum supported macOS, SDR/HDR, multiple displays and high refresh rates.",
-    "progress": "15 September: a repeated 20-scenario run exposed utility-priority replay encoder stalls under concurrent heavy work. User-initiated encoder priority completed all 20 scenarios with all 8,013 movie frames and no GPU errors. Queue size and the 500 ms input-blocking bound remain unchanged. Resident memory did not grow across five passes. Observed fast-forward was only 1.14\u20131.45\u00d7 under contention, so sustained 10\u00d7, audible audio and the physical hardware matrix remain open. See PerformanceMeasurementClosure.md.",
+    "progress": "15 September: a repeated 20-scenario run exposed utility-priority replay encoder stalls under concurrent heavy work. User-initiated encoder priority completed all 20 scenarios with all 8,013 movie frames and no GPU errors. Queue size and the 500 ms input-blocking bound remain unchanged. Resident memory did not grow across five passes. Observed fast-forward was only 1.14–1.45× under contention, so sustained 10×, audible audio and the physical hardware matrix remain open. See PerformanceMeasurementClosure.md.",
     "scopes": [
       "all",
       "classic-1.0"
@@ -73,7 +73,7 @@
       "all",
       "classic-1.0"
     ],
-    "progress": "15 September: Erik Veland explicitly confirmed approval to distribute the original assets in this task. The existing THIRD_PARTY_NOTICES.md records code and asset provenance. This records the owner\u2019s approval, without extending it to unrequested platforms or claiming independent legal verification."
+    "progress": "15 September: Erik Veland explicitly confirmed approval to distribute the original assets in this task. The existing THIRD_PARTY_NOTICES.md records code and asset provenance. This records the owner’s approval, without extending it to unrequested platforms or claiming independent legal verification."
   },
   {
     "area": "Novice experience",
@@ -84,7 +84,7 @@
       "all",
       "classic-1.0"
     ],
-    "progress": "15 September: the owner reports regular personal and external tester play, no reported issues in Classic or early L2, and positive feedback. Verified tiered hints now extend beyond the original 120 to 250 official Classic levels, represented by 248 unique decks. The app hint journeys and catalogue checks pass. Tester feedback does not identify a separate first-time-player study."
+    "progress": "16 September: the owner reports regular personal and external tester play, no reported issues in Classic or early L2, and positive feedback. Verified tiered hints now extend beyond the original 120 to 265 official Classic levels, represented by 263 unique decks. The app hint journeys and catalogue checks pass. Tester feedback does not identify a separate first-time-player study."
   },
   {
     "area": "iPhone and iPad",

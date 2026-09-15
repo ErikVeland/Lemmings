@@ -1,0 +1,52 @@
+[
+ {
+  "skill": "climber",
+  "id": 0
+ },
+ {
+  "skill": "floater",
+  "id": 0
+ },
+ {
+  "skill": "basher",
+  "id": 0,
+  "x": 688,
+  "direction": 1,
+  "action": "walking"
+ },
+ {
+  "skill": "digger",
+  "id": 0,
+  "xMin": 836,
+  "xMax": 838,
+  "action": "walking",
+  "yMax": 80
+ },
+ {
+  "skill": "digger",
+  "id": 0,
+  "x": 843,
+  "action": "walking",
+  "yMax": 80
+ },
+ {
+  "skill": "builder",
+  "id": 0,
+  "x": 1043,
+  "direction": 1,
+  "action": "walking"
+ },
+ {
+  "skill": "basher",
+  "xMin": 584,
+  "xMax": 588,
+  "direction": 1,
+  "action": "walking",
+  "notID": [
+   0
+  ]
+ },
+ {
+  "rate": 99
+ }
+]

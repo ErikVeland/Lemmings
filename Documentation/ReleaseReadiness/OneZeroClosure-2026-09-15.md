@@ -118,6 +118,39 @@ not proof of a broken level. The bounded search tested all 54 initially missing
 states and found no additional winning route. Search timeouts do not establish
 that a level is impossible.
 
+## Holiday 1994 and Havoc 10 routes, 16 September
+
+Claude completed the Holiday 1994 routes that Codex had started. The four
+uncommitted Codex fixtures (Frost 5, Frost 15, Frost 16 and Hail 12) replay
+and are now in the manifest. Claude added routes for the other ten Holiday 1994
+levels and for Oh No! Havoc 10.
+
+| Level | Saved | Required | Ticks |
+| --- | ---: | ---: | ---: |
+| Holiday 1994 Frost 6 | 69 | 69 | 2980 |
+| Holiday 1994 Frost 7 | 32 | 25 | 6120 |
+| Holiday 1994 Frost 9 | 40 | 40 | 1302 |
+| Holiday 1994 Frost 12 | 80 | 78 | 2115 |
+| Holiday 1994 Frost 13 | 80 | 80 | 1457 |
+| Holiday 1994 Hail 1 | 75 | 75 | 2148 |
+| Holiday 1994 Hail 5 | 71 | 68 | 3060 |
+| Holiday 1994 Hail 11 | 70 | 70 | 3315 |
+| Holiday 1994 Hail 13 | 50 | 50 | 2761 |
+| Holiday 1994 Hail 16 | 10 | 10 | 1296 |
+| Oh No! Havoc 10 | 5 | 3 | 456 |
+
+Holiday 1994 now has preserved wins for all 32 levels. Official Classic coverage
+is 265/292. The 27 remaining gaps are all Oh No! levels.
+
+The routes came from the new level lab in `Tools/ClassicCompletion/Lab`. Strategy
+notes on the Lemmings Wiki suggested the approach for several levels. No wiki
+text is copied into the project. Coordinates and timing come from the native
+engine. Some routes differ from the wiki because this engine turns lemmings at
+different places. Each route was imported through the strict `recorded` mode.
+
+The campaign gate, the rescue audit and the hint export pass with these routes.
+There are now 263 distinct hint decks and 266 bundled solution replays.
+
 ## Remaining release boundaries
 
 The gate register still requires every bundled Classic, fan and conversion
