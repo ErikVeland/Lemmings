@@ -31,70 +31,120 @@ func fingerprint(_ sim: ClassicDOSSimulation) throws -> String {
 }
 
 let arguments = CommandLine.arguments
-guard arguments.count == 5 else { fatalError("Usage: hint-export GAME_DATA TROLLEY_DIRECTORY OUTPUT_JSON ENGINE_FINGERPRINT") }
+guard (5...7).contains(arguments.count) else { fatalError("Usage: hint-export GAME_DATA TROLLEY_DIRECTORY OUTPUT_JSON ENGINE_FINGERPRINT [PORTS_DIRECTORY [SOLUTIONS_JSON]]") }
 let directory = URL(fileURLWithPath: arguments[1]), proofs = URL(fileURLWithPath: arguments[2])
 let decoder = JSONDecoder(); decoder.dateDecodingStrategy = .iso8601
 let catalogue = try decoder.decode(TrolleyProofCatalogue.self, from: Data(contentsOf: proofs.appendingPathComponent("verified-maxima.json")))
-let campaign = try ClassicCampaignDefinition.originalDOSLemmings.load(from: directory)
-let assets = try ClassicMainDATAssets.load(from: directory)
-var grounds: [Int: ClassicGroundSet] = [:], specials: [Int: ClassicSpecialGraphic] = [:]
+let ports = arguments.count > 5 ? URL(fileURLWithPath: arguments[5]) : directory.deletingLastPathComponent()
+let solutionsURL = arguments.count > 6 ? URL(fileURLWithPath: arguments[6])
+    : URL(fileURLWithPath: arguments[3]).deletingLastPathComponent().appendingPathComponent("solutions.json")
+let solutions = try decoder.decode([String: ClassicDOSReplay].self, from: Data(contentsOf: solutionsURL))
+let campaigns: [(game: String, directory: URL)] = [
+    ("lemmings", directory),
+    ("ohNoMoreLemmings", ports.appendingPathComponent("oh_no_more_lemmings_dos-1991-11-14_2232")),
+    ("xmasLemmings1991", ports.appendingPathComponent("xmas_dos_XmasLemmingsV1.9")),
+    ("xmasLemmings1992", ports.appendingPathComponent("xmas_dos_XmasLemmingsV1.9a1")),
+    ("holidayLemmings1993", ports.appendingPathComponent("holiday_native_1993")),
+    ("holidayLemmings1994", ports.appendingPathComponent("holiday_native_1994"))
+]
 var levels: [HintExport.Level] = []
-for (index, entry) in campaign.levels.enumerated() {
-    let level = entry.level
-    if grounds[level.groundStyle] == nil { grounds[level.groundStyle] = try ClassicGroundSet.load(style: level.groundStyle, from: directory) }
-    if level.specialStyle != 0 && specials[level.specialStyle] == nil {
-        specials[level.specialStyle] = try ClassicSpecialGraphic.load(index: level.specialStyle - 1, from: directory)
-    }
-    let rendered = try ClassicLevelRenderer.render(level, groundSet: grounds[level.groundStyle]!, specialGraphic: specials[level.specialStyle])
-    var sim = try ClassicDOSSimulation(level: level, renderedLevel: rendered, mainDATAssets: assets)
-    let identity = try fingerprint(sim)
-    guard let proof = catalogue.levels.first(where: { $0.conditions?.gameID == "lemmings" && $0.conditions?.levelID == "level-\(index)" }),
-          proof.conditions?.levelFingerprint == identity, let witness = proof.witness else {
-        throw HintError(message: "No matching proof for \(entry.rank) \(entry.number)")
-    }
-    let bytes = try Data(contentsOf: proofs.appendingPathComponent(witness.path))
-    try require(digest(bytes) == witness.sha256, "Witness digest mismatch")
-    let replay = try decoder.decode(ClassicDOSReplay.self, from: bytes)
-    try require(replay.initialStateHash == ClassicDOSReplayRecorder.stateHash(of: sim), "Initial state mismatch")
-    for event in replay.events {
-        if case let .assign(id, skill) = event.action {
-            try require(sim.schedule(.init(tick: event.tick, lemmingID: id, skill: skill)), "Cannot schedule skill")
+var identities = Set<String>()
+var originalCount = 0
+for (game, dataDirectory) in campaigns {
+    let campaign = game == "lemmings"
+        ? try ClassicCampaignDefinition.originalDOSLemmings.load(from: dataDirectory)
+        : try ClassicDataSet.detect(directory: dataDirectory).campaign
+    let assets = try ClassicMainDATAssets.load(from: dataDirectory)
+    var grounds: [Int: ClassicGroundSet] = [:], specials: [Int: ClassicSpecialGraphic] = [:]
+    for (index, entry) in campaign.levels.enumerated() {
+        let level = entry.level
+        if grounds[level.groundStyle] == nil { grounds[level.groundStyle] = try ClassicGroundSet.load(style: level.groundStyle, from: dataDirectory) }
+        if level.specialStyle != 0 && specials[level.specialStyle] == nil {
+            specials[level.specialStyle] = try ClassicSpecialGraphic.load(index: level.specialStyle - 1, from: dataDirectory)
         }
-    }
-    let grouped = Dictionary(grouping: replay.events, by: \.tick)
-    var moves: [HintExport.Move] = [], skillOrder: [String] = [], rates: [HintExport.Rate] = []
-    while !sim.isComplete && sim.tickCount < ClassicDOSReplayPlayer.defaultTickLimit {
-        let tick = sim.tickCount + 1
-        for event in grouped[tick] ?? [] {
-            switch event.action {
-            case let .releaseRate(value): sim.setReleaseRate(value); rates.append(.init(tick: tick, value: value))
-            case .nuke: sim.beginNuke()
-            case .assign: break
+        let rendered = try ClassicLevelRenderer.render(level, groundSet: grounds[level.groundStyle]!, specialGraphic: specials[level.specialStyle])
+        var sim = try ClassicDOSSimulation(level: level, renderedLevel: rendered, mainDATAssets: assets)
+        let identity = try fingerprint(sim)
+        let replay: ClassicDOSReplay
+        if game == "lemmings" {
+            guard let proof = catalogue.levels.first(where: { $0.conditions?.gameID == game && $0.conditions?.levelID == "level-\(index)" }),
+                  proof.conditions?.levelFingerprint == identity, let witness = proof.witness else {
+                throw HintError(message: "No matching proof for \(entry.rank) \(entry.number)")
+            }
+            let bytes = try Data(contentsOf: proofs.appendingPathComponent(witness.path))
+            try require(digest(bytes) == witness.sha256, "Witness digest mismatch")
+            replay = try decoder.decode(ClassicDOSReplay.self, from: bytes)
+        } else {
+            guard let route = solutions[ClassicDOSReplayRecorder.stateHash(of: sim)] else {
+                print("UNCOVERED \(game) \(entry.rank) \(entry.number)")
+                continue
+            }
+            replay = route
+        }
+        try require(replay.initialStateHash == ClassicDOSReplayRecorder.stateHash(of: sim), "Initial state mismatch")
+        try require(replay.events.allSatisfy { $0.tick >= ($0.afterTick == true ? 0 : 1) }, "Unsupported hint event timing")
+        for event in replay.events where event.afterTick != true {
+            if case let .assign(id, skill) = event.action {
+                try require(sim.schedule(.init(tick: event.tick, lemmingID: id, skill: skill)), "Cannot schedule skill")
             }
         }
-        var applied = sim.tick()
-        for event in grouped[tick] ?? [] {
-            if case let .assign(id, skill) = event.action {
-                guard let appliedIndex = applied.firstIndex(of: .skillAssigned(lemmingID: id, skill: skill)),
-                      let actor = sim.lemmings.first(where: { $0.id == id }) else { throw HintError(message: "Rejected skill") }
-                applied.remove(at: appliedIndex)
-                if !skillOrder.contains(skill.rawValue) { skillOrder.append(skill.rawValue) }
-                if moves.count < 3 {
-                    moves.append(.init(skill: skill.rawValue, lemmingID: id, x: actor.foot.x, y: actor.foot.y,
-                                       tick: tick, facingLeft: actor.direction == .left))
+        let grouped = Dictionary(grouping: replay.events.filter { $0.afterTick != true }, by: \.tick)
+        let live = Dictionary(grouping: replay.events.filter { $0.afterTick == true }, by: \.tick)
+        var moves: [HintExport.Move] = [], skillOrder: [String] = [], rates: [HintExport.Rate] = []
+        func recordMove(id: Int, skill: ClassicSkill, actor: ClassicDOSLemming, tick: Int) {
+            if !skillOrder.contains(skill.rawValue) { skillOrder.append(skill.rawValue) }
+            if moves.count < 3 {
+                moves.append(.init(skill: skill.rawValue, lemmingID: id, x: actor.foot.x, y: actor.foot.y,
+                    tick: tick, facingLeft: actor.direction == .left))
+            }
+        }
+        func applyLive(_ tick: Int) throws {
+            for event in live[tick] ?? [] {
+                switch event.action {
+                case let .assign(id, skill):
+                    try require(sim.assign(skill, to: id) == .assigned, "Rejected live skill")
+                    guard let actor = sim.lemmings.first(where: { $0.id == id }) else { throw HintError(message: "Missing live worker") }
+                    recordMove(id: id, skill: skill, actor: actor, tick: tick)
+                case let .releaseRate(value): sim.setReleaseRate(value); rates.append(.init(tick: tick, value: value))
+                case .nuke: sim.beginNuke()
                 }
             }
         }
+        try applyLive(0)
+        while !sim.isComplete && sim.tickCount < ClassicDOSReplayPlayer.defaultTickLimit {
+            let tick = sim.tickCount + 1
+            for event in grouped[tick] ?? [] {
+                switch event.action {
+                case let .releaseRate(value): sim.setReleaseRate(value); rates.append(.init(tick: tick, value: value))
+                case .nuke: sim.beginNuke()
+                case .assign: break
+                }
+            }
+            var applied = sim.tick()
+            for event in grouped[tick] ?? [] {
+                if case let .assign(id, skill) = event.action {
+                    guard let appliedIndex = applied.firstIndex(of: .skillAssigned(lemmingID: id, skill: skill)),
+                          let actor = sim.lemmings.first(where: { $0.id == id }) else { throw HintError(message: "Rejected skill") }
+                    applied.remove(at: appliedIndex)
+                    recordMove(id: id, skill: skill, actor: actor, tick: tick)
+                }
+            }
+            try applyLive(tick)
+        }
+        let actual = ClassicDOSReplayOutcome(ticks: sim.tickCount, released: sim.releasedCount, saved: sim.savedCount,
+            required: sim.configuration.requiredToSave, didWin: sim.didWin, stateHash: ClassicDOSReplayRecorder.stateHash(of: sim))
+        try require(sim.isComplete && sim.didWin && replay.expected == actual, "Winning outcome changed for \(replay.title)")
+        try require(replay.events.allSatisfy { $0.tick <= sim.tickCount }, "Unconsumed replay inputs")
+        if game == "lemmings" { originalCount += 1 }
+        // Identical installed levels share one deck. Lookup rejects ambiguous identities.
+        guard identities.insert(identity).inserted else { continue }
+        levels.append(.init(fingerprint: identity, title: replay.title, rank: entry.rank, number: entry.number,
+            width: rendered.width, height: rendered.height, opening: moves, skillOrder: skillOrder,
+            rates: rates.filter { $0.tick <= (moves.last?.tick ?? 0) }))
+        print("PASS \(game) \(entry.rank) \(entry.number): \(replay.title)")
     }
-    let actual = ClassicDOSReplayOutcome(ticks: sim.tickCount, released: sim.releasedCount, saved: sim.savedCount,
-        required: sim.configuration.requiredToSave, didWin: sim.didWin, stateHash: ClassicDOSReplayRecorder.stateHash(of: sim))
-    try require(sim.isComplete && sim.didWin && replay.expected == actual, "Winning outcome changed for \(replay.title)")
-    levels.append(.init(fingerprint: identity, title: replay.title, rank: entry.rank, number: entry.number,
-        width: rendered.width, height: rendered.height, opening: moves, skillOrder: skillOrder,
-        rates: rates.filter { $0.tick <= (moves.last?.tick ?? 0) }))
-    print("PASS \(entry.rank) \(entry.number): \(replay.title)")
 }
-try require(levels.count == 120, "Incomplete original campaign")
+try require(originalCount == 120, "Incomplete original campaign")
 let output = HintExport(schemaVersion: 1, engineFingerprint: arguments[4], levels: levels)
 let encoder = JSONEncoder(); encoder.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
 try encoder.encode(output).write(to: URL(fileURLWithPath: arguments[3]), options: .atomic)

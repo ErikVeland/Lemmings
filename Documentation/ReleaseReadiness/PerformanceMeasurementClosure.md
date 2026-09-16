@@ -76,3 +76,29 @@ not run. Passing the measurement checks does not close the throughput gate.
 
 Final evidence: `final.json`, `final.log`, `movie-final.log`,
 `audit-tests.log` and `results.json` under the evidence directory above.
+
+## Repeated capture under contention, 15 September
+
+`LEMMINGS_PERFORMANCE_PASSES=5` repeats the four scenarios through 20 launches,
+nukes and movie finalisations. The benchmark now reports each pass and fails
+immediately with the encoder error when capture stops. It also requires a fresh
+simulation at the start of every scenario.
+
+The utility-priority encoder stopped at its 500 ms admission deadline in two
+runs. Four L3 solver jobs and other heavy work were active on the Mac. The
+encoder now uses user-initiated priority because capture serves the active game.
+Its queue size and 500 ms deadline are unchanged.
+
+The changed-priority run completed all 20 scenarios over 400.48 timed seconds.
+All 8,013 captured frames appeared in the final movies. All submitted GPU work
+completed without errors. Per-pass peak resident memory was 296.4, 165.6, 144.8,
+133.6 and 133.0 MiB. This sample shows no resident-memory growth across these
+restarts. It does not establish long-term memory or thermal behaviour.
+
+Observed fast-forward ranged from 1.14× to 1.45× under this workload. This was
+not a clean throughput comparison with the earlier sample, and it does not
+close sustained 10×, audio or hardware coverage. No other running job was stopped.
+
+Evidence: `.build/one-zero-current/performance-repeated.log`,
+`performance-repeated-final.log`, `performance-priority.log` and
+`performance-priority.json`. The first two logs preserve the failures.

@@ -1,0 +1,55 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 131
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 241
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 435
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "afterTick" : true,
+      "tick" : 800
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 40,
+    "required" : 40,
+    "saved" : 40,
+    "stateHash" : "ed7993242eac8db4a2c324e32bb5152a2c9fd49375fcb4afad5b3426296a39d3",
+    "ticks" : 1302
+  },
+  "initialStateHash" : "60d070e86c916b7cb1e69aa45a98484a655596b069ee036a08406512d50eca7c",
+  "number" : 9,
+  "rank" : "Frost",
+  "title" : "Quest for Kieran"
+}

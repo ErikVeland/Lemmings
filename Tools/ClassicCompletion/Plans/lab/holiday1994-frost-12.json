@@ -1,0 +1,43 @@
+[
+ {
+  "skill": "builder",
+  "x": 762,
+  "direction": -1,
+  "action": "walking"
+ },
+ {
+  "skill": "builder",
+  "id": -1,
+  "action": "shrugging"
+ },
+ {
+  "skill": "builder",
+  "id": -1,
+  "action": "shrugging"
+ },
+ {
+  "skill": "basher",
+  "id": 0,
+  "direction": -1,
+  "action": "walking",
+  "xMin": 695,
+  "xMax": 697,
+  "y": 64
+ },
+ {
+  "skill": "digger",
+  "x": 662,
+  "direction": 1,
+  "action": "walking",
+  "tick": 950
+ },
+ {
+  "rate": 99
+ },
+ {
+  "skill": "basher",
+  "id": -1,
+  "yMin": 140,
+  "action": "digging"
+ }
+]

@@ -1,17 +1,17 @@
 # Additional campaign completion evidence
 
-The manifest holds 138 fixed-input winning replays. These supplement the original
+The manifest holds 189 fixed-input winning replays. These supplement the original
 [120-level DOS gate](../ClassicCompletion/README.md) and the existing L2 tests.
 
 | Campaign | Winning replays | Levels without a fixture |
 | --- | ---: | ---: |
-| Oh No! More Lemmings | 72/100 | 28 |
+| Oh No! More Lemmings | 73/100 | 27 |
 | Xmas 1991 | 4/4 | 0 |
 | Xmas 1992 | 4/4 | 0 |
-| Holiday 1993 | 22/32 | 10 |
-| Holiday 1994 | 16/32 | 16 |
+| Holiday 1993 | 32/32 | 0 |
+| Holiday 1994 | 32/32 | 0 |
 | Oh Yes! conversions | 3/60 | 57 |
-| Lemmings 3 | 17/90 | 73 |
+| Lemmings 3 | 41/90 | 49 |
 
 These counts come from the committed [fixture manifest](evidence.json).
 To confirm them, run `python3 Tools/CampaignCompletion/report.py --check`.
@@ -50,3 +50,10 @@ For the selected Classic release, use `--classic-only --require-all`. This check
 all five additional Classic campaigns and reports every missing route. The
 conversion fixtures are replayed by the full Classic corpus gate. Sequel regression
 checks remain separate.
+
+24 Lemmings 3 routes come from the beam solver in
+[`Tools/Lemmings3Solver`](../../Tools/Lemmings3Solver). Run
+`zsh Scripts/solve-lemmings3-levels.sh missing --fewer-inputs-first --promote` to
+search the levels without a fixture. A second pass without `--fewer-inputs-first`
+ranks crowd distance first and finds different levels. The solver writes a route only after two
+replays agree, and the gate checks it again.

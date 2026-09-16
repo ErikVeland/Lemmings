@@ -515,6 +515,47 @@ private func require(
   print("PASS tick-based direction: stable slopes, immediate turns, falls, climbs and repeated capture")
 }
 
+/// Mac artwork doubles the source image (`imageScale == 2`). A crop edge
+/// that does not land on an even image pixel used to divide back into a
+/// fractional point width once scaled by zoom, and nearest-neighbor
+/// upscaling of a fractional destination samples source pixels unevenly.
+/// That showed up as scrambled pixels on small, detailed objects such as
+/// the entrance hatch, and worse at some zoom levels than others.
+private func testMacArtworkCropStaysPixelAligned() throws {
+  let imageScale: CGFloat = 2
+  let imageSize = CGSize(width: 400, height: 40)
+  // Sweep scroll positions (whole and fractional level pixels) and window
+  // widths, so both even and odd image-pixel crop edges are exercised.
+  for scrollX in stride(from: 0.0, through: 6.0, by: 0.5) {
+    for viewWidth in [4.0, 5.0, 7.0, 12.0, 37.0] {
+      for zoom in [1.0, 2.0, 3.0, 4.0] {
+        let visibleWidth = viewWidth / zoom
+        let visible = CGRect(
+          x: scrollX * imageScale, y: 0,
+          width: visibleWidth * imageScale, height: 8 * imageScale)
+        let crop = PlayfieldView.levelCropRect(visible: visible, imageScale: imageScale, imageSize: imageSize)
+        let context = "scrollX=\(scrollX) viewWidth=\(viewWidth) zoom=\(zoom)"
+        try require(crop.minX.truncatingRemainder(dividingBy: imageScale) == 0,
+          "\(context): crop origin \(crop.minX) is not a whole level pixel")
+        try require(crop.width.truncatingRemainder(dividingBy: imageScale) == 0,
+          "\(context): crop width \(crop.width) is not a whole level pixel")
+        let destinationWidth = crop.width * zoom / imageScale
+        try require(destinationWidth.truncatingRemainder(dividingBy: 1) == 0,
+          "\(context): destination width \(destinationWidth) is not a whole point, "
+            + "so nearest-neighbor scaling would sample source pixels unevenly")
+        try require(crop.minX >= 0 && crop.minX + crop.width <= imageSize.width,
+          "\(context): crop \(crop) escaped the image bounds \(imageSize)")
+      }
+    }
+  }
+  // imageScale == 1 (DOS, no Mac artwork) must draw exactly the old crop.
+  let visible = CGRect(x: 5.5, y: 0, width: 12.3, height: 8)
+  let crop = PlayfieldView.levelCropRect(visible: visible, imageScale: 1, imageSize: CGSize(width: 400, height: 40))
+  try require(crop == CGRect(x: 5, y: 0, width: 14, height: 9),
+    "imageScale 1 changed its crop from the original floor/ceil-plus-one behavior: \(crop)")
+  print("PASS Mac artwork level crop always lands on whole level pixels, at every zoom")
+}
+
 @MainActor private func testSpeedSpritesStayOnTop() throws {
   let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
   let view = PlayfieldView(frame: CGRect(x: 0, y: 0, width: 640, height: 320))
@@ -566,6 +607,7 @@ private func require(
   app.setActivationPolicy(.accessory)
   do {
     try testTickDirectionContinuity()
+    try testMacArtworkCropStaysPixelAligned()
     try testSpeedSpritesStayOnTop()
     try testSpeedAfterimages()
     try testBombFlashFrames()

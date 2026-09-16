@@ -46,3 +46,47 @@ route discovery. They use the replay format, not the coordinate-plan format.
 The verified copies, including expected outcomes, are in the completion fixtures.
 These routes cover Tricky 16, Taxing 7, Mayhem 15, and Mayhem 18; Taxing 24 retains its
 coordinate plan.
+
+## Recorded player inputs
+
+Completed Classic wins are saved in
+`~/Library/Application Support/Ultimate Lemmings/ClassicRoutes`.
+Use the app's **Show Recorded Routes** command to open this folder.
+Recordings contain native input timing and a verified outcome. They contain no
+player name or Game Center account identifier.
+
+Use `recorded DATA_DIRECTORY LEVEL RECORDING_DIRECTORY` to import a matching
+recording. Set `CLASSIC_COMPLETION_FAMILY=1` for a family campaign and
+`CLASSIC_COMPLETION_FIXTURES` to its fixture folder. Import checks the initial
+state, accepted assignments, consumed inputs and exact winning outcome twice.
+It cannot replace a better existing rescue count. Both legacy before-tick and
+live after-tick inputs remain supported.
+
+After adding a family fixture, regenerate the campaign manifest, solution bundle
+and hint catalogue. `Tools/SolutionReplays/generate.py --check` checks the bundle
+without rewriting it. `Tests/LevelHintCatalogueTests/test_export.py` checks fresh
+export, a changed outcome and optional live recorded input.
+
+The Holiday 1993 plans added on 15 September use rate 99 at tick 600 for
+Flurry 12 and Blizzard 8, tick 1000 for Flurry 13, tick 110 for Blizzard 3, and
+tick 1900 for Blizzard 11. Holiday 1994 Frost 8 uses rate 99 at tick 1.
+All other new plans retain their default rates.
+See `Documentation/ReleaseReadiness/OneZeroClosure-2026-09-15.md` for provenance.
+
+## Level lab
+
+`Lab/main.swift` renders a level and runs an ordered plan against the native
+engine. Build it against the local NxlvKit library, as the verify script does.
+
+- `info DATA LEVEL` prints the population, skills, entrances and triggers.
+- `run DATA LEVEL PLAN [--png FILE --crop x1,y1,x2,y2 --scale N]` draws the
+  terrain, triggers and lemmings at the end of the run.
+- `--trace IDS --every N` prints lemming positions. `--lost` prints losses.
+- `--out FILE` writes a winning run as a live after-tick replay.
+- `columns` and `steelmap` print terrain heights and steel.
+
+Lab plans are in `Plans/lab`. A step can match a lemming by id, position range,
+direction, action and earliest tick. A step can also set the release rate or
+start a nuke. The lab output is only a candidate. Import it with the `recorded`
+mode, which replays it twice and rejects refused or unused inputs.
+Each committed lab plan reproduces its fixture exactly.

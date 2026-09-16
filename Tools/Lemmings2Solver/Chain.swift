@@ -26,13 +26,14 @@ struct ChainReport: Codable, Sendable {
 /// before it. When a level cannot pass, the solver retries it with the previous level's other
 /// winning routes, most saved first, up to three, and backtracks one level only.
 /// `accept` receives each chosen route, and receives a replacement when backtracking changes one.
-func runChain(tribe: String, seedSource: (Int, Int) -> String = { _, _ in "" },
+func runChain(tribe: String, from start: Int = 1, population initial: Int = 60,
+              seedSource: (Int, Int) -> String = { _, _ in "" },
               solve: (Int, Int) throws -> LevelResult,
               accept: (Int, Lemmings2ReplayWitness, Bool) throws -> Void) rethrows -> ChainReport {
     var report = ChainReport(tribe: tribe)
-    var population = 60
+    var population = initial
     var previous: LevelResult?
-    for number in 1...10 {
+    for number in start...10 {
         let started = Date()
         var result = try solve(number, population)
         if result.witness == nil, let before = previous, let chosen = report.levels.last {

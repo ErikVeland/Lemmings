@@ -1,0 +1,20 @@
+[
+ {
+  "rate": 99,
+  "tick": 1
+ },
+ {
+  "rate": 50,
+  "tick": 70
+ },
+ {
+  "skill": "builder",
+  "xMin": 736,
+  "xMax": 737,
+  "direction": 1,
+  "action": "walking"
+ },
+ {
+  "rate": 99
+ }
+]

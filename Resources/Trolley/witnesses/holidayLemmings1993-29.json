@@ -1,0 +1,36 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 180
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "digger"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 712
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 80,
+    "required" : 80,
+    "saved" : 80,
+    "stateHash" : "89df5a4f7558969a96b5a9c115522a9e7fcee41f13f3d96863cdffee6ed1e457",
+    "ticks" : 4076
+  },
+  "initialStateHash" : "99a0f39860310756c918f898bb1ed4fdd9d5fe224c207f751403578df8407cf1",
+  "number" : 14,
+  "rank" : "Blizzard",
+  "title" : "The Undiscovered Country"
+}

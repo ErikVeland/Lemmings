@@ -1,0 +1,54 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "climber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 54
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 646
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 647
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "tick" : 1000
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 80,
+    "required" : 80,
+    "saved" : 80,
+    "stateHash" : "686df6172620cf300e16585ffd2c402fe2ec3cf85b6de7f3f6de6885d9f63d04",
+    "ticks" : 1977
+  },
+  "initialStateHash" : "b5ca9843da5759095044f247998d6c1976a2f30713b15df848e26c6629c0a169",
+  "number" : 13,
+  "rank" : "Flurry",
+  "title" : "Yo-yo Lem-lem"
+}

@@ -83,3 +83,25 @@ Standard and Game Center target macOS 13. Do not reuse build number 32.
 The frozen archives, source commits, 53 passing audit checks and hardware limits
 are recorded in [Beta32Readiness.md](Beta32Readiness.md). The downloads are under
 `~/Downloads`; the signed apps and evidence remain under `.build/beta32`.
+
+## Lemmings 2 and 3 route search after beta 32
+
+Claude continued the route work on `l2-seeded-search` on 15 September 2026.
+
+- Lemmings 2 has verified routes for 73 of 120 levels. Cavelems chains all ten
+  levels, the first tribe to do so. See
+  [SeededSearch.md](Lemmings2Completion/SeededSearch.md).
+- Lemmings 3 has verified routes for 41 of 90 levels from the new solver in
+  `Tools/Lemmings3Solver`. See [CampaignCompletion](CampaignCompletion/README.md).
+- No runtime physics changed, and `Sources/NxlvKit` did not change after beta 32.
+  The Trolley certificates and hints stay valid.
+- Played Lemmings 2 levels are saved as seed routes. Tester recordings of the
+  break levels in SeededSearch.md are the fastest way to extend the chains.
+
+## Local build 33
+
+The user bumped `Resources/Info.plist` to build 33 on 16 September 2026 for a
+quick local, unsigned build on `l2-seeded-search`, for the user's own testing.
+It was not cut with `package-beta.sh`, not signed for distribution, not
+notarised, and has no release notes. Do not reuse build number 33 for an
+actual tester archive; the next real archive starts at build 34.

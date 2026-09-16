@@ -62,13 +62,26 @@ private struct Content {
 private func run(_ replay: ClassicDOSReplay, base: ClassicDOSSimulation) throws -> ClassicDOSReplayOutcome {
     var simulation = base
     try require(replay.initialStateHash == ClassicDOSReplayRecorder.stateHash(of: base), "initial state mismatch")
-    let grouped = Dictionary(grouping: replay.events, by: \.tick)
+    let grouped = Dictionary(grouping: replay.events.filter { $0.afterTick != true }, by: \.tick)
+    let live = Dictionary(grouping: replay.events.filter { $0.afterTick == true }, by: \.tick)
     for event in replay.events {
-        try require(event.tick > 0, "invalid event tick")
+        try require(event.tick >= (event.afterTick == true ? 0 : 1), "invalid event tick")
+        if event.afterTick == true { continue }
         if case let .assign(id, skill) = event.action {
             try require(simulation.schedule(.init(tick: event.tick, lemmingID: id, skill: skill)), "assignment rejected")
         }
     }
+    func applyLive(_ tick: Int) throws {
+        for event in live[tick] ?? [] {
+            switch event.action {
+            case let .assign(id, skill):
+                try require(simulation.assign(skill, to: id) == .assigned, "assignment did not apply at tick \(tick)")
+            case let .releaseRate(value): simulation.setReleaseRate(value)
+            case .nuke: simulation.beginNuke()
+            }
+        }
+    }
+    try applyLive(0)
     while !simulation.isComplete && simulation.tickCount < ClassicDOSReplayPlayer.defaultTickLimit {
         let tick = simulation.tickCount + 1
         for event in grouped[tick] ?? [] {
@@ -87,6 +100,7 @@ private func run(_ replay: ClassicDOSReplay, base: ClassicDOSSimulation) throws 
                 applied.remove(at: index)
             }
         }
+        try applyLive(tick)
         if simulation.lostCount > simulation.configuration.totalLemmings - simulation.configuration.requiredToSave {
             throw ReplayFailure(description: "too many losses")
         }
@@ -115,7 +129,9 @@ private func appliedInputs(_ inputs: [ClassicDOSReplayEvent], base: ClassicDOSSi
         }
         _ = sim.tick()
         for event in grouped[tick] ?? [] {
-            if case let .assign(id, skill) = event.action, sim.assign(skill, to: id) == .assigned { result.append(event) }
+            if case let .assign(id, skill) = event.action, sim.assign(skill, to: id) == .assigned {
+                result.append(.init(tick: tick, action: event.action, afterTick: true))
+            }
         }
     }
     return result
@@ -206,7 +222,7 @@ private func tutorialInputs(base: ClassicDOSSimulation, index: Int, parameter: I
             if let skill, sim.assign(skill, to: lem.id) == .assigned {
                 if index == 73 && lem.id == 1 { nessyStep += 1 }
                 if index == 33 && skill == .digger { wallDigger += 1 }
-                events.append(.init(tick: sim.tickCount, action: .assign(lemmingID: lem.id, skill: skill)))
+                events.append(.init(tick: sim.tickCount, action: .assign(lemmingID: lem.id, skill: skill), afterTick: true))
                 if discoveryTrace { print("INPUT", parameter, sim.tickCount, lem.id, lem.foot, skill) }
                 break
             }
@@ -244,7 +260,7 @@ private func plannedInputs(_ steps: [PlanStep], base: ClassicDOSSimulation, rele
             if let action = step.action, lem.action.rawValue != action { continue }
             if let tick = step.tick, sim.tickCount < tick { continue }
             if sim.assign(step.skill, to: lem.id) == .assigned {
-                result.append(.init(tick: sim.tickCount, action: .assign(lemmingID: lem.id, skill: step.skill)))
+                result.append(.init(tick: sim.tickCount, action: .assign(lemmingID: lem.id, skill: step.skill), afterTick: true))
                 print("STEP", index, sim.tickCount, lem.id, step.skill, lem.foot, lem.action)
                 lastID = lem.id
                 index += 1
@@ -253,6 +269,12 @@ private func plannedInputs(_ steps: [PlanStep], base: ClassicDOSSimulation, rele
         }
     }
     try? JSONEncoder().encode(result).write(to: URL(fileURLWithPath: ".build/classic-completion/last-plan-events.json"))
+    if discoveryTrace {
+        let positions = Dictionary(grouping: sim.lemmings, by: {
+            "\($0.action.rawValue) \($0.foot.x) \($0.foot.y) \($0.direction.rawValue)"
+        }).mapValues(\.count)
+        print("FINAL", positions.sorted { $0.key < $1.key })
+    }
     print("PLAN", index, "of", steps.count, "saved", sim.savedCount, "lost", sim.lostCount)
     return result
 }
@@ -280,7 +302,7 @@ private func guidedInputs(_ input: InputCandidate, base: ClassicDOSSimulation, t
             guard let lem = sim.lemmings.first(where: { $0.id == cue.id }),
                 abs(lem.foot.x - cue.x) <= tolerance, abs(lem.foot.y - cue.y) <= tolerance else { continue }
             if sim.assign(cue.skill, to: cue.id) == .assigned {
-                result.append(.init(tick: tick, action: .assign(lemmingID: cue.id, skill: cue.skill)))
+                result.append(.init(tick: tick, action: .assign(lemmingID: cue.id, skill: cue.skill), afterTick: true))
                 done.insert(index)
                 break
             }
@@ -298,8 +320,9 @@ let familyMode = ProcessInfo.processInfo.environment["CLASSIC_COMPLETION_FAMILY"
 let encoder = JSONEncoder()
 encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
 do {
-    try require(["verify", "verify-known", "augment", "polish", "maximize", "maximize-adapt", "maximize-guided", "search", "solve", "import", "adapt", "guided", "tutorial", "plan", "refresh"].contains(mode), "unknown mode")
+    try require(["verify", "verify-known", "augment", "polish", "maximize", "maximize-adapt", "maximize-guided", "search", "solve", "recorded", "import", "adapt", "guided", "tutorial", "plan", "refresh"].contains(mode), "unknown mode")
     if mode == "plan" { try require(args.count > 4 && selected != nil, "plan requires a level and a plan file") }
+    if mode == "recorded" { try require(args.count > 4 && selected != nil, "recorded requires a level and a recording directory") }
     if familyMode {
         try require(ProcessInfo.processInfo.environment["CLASSIC_COMPLETION_FIXTURES"] != nil, "family mode requires a separate fixture directory")
         try require(mode != "tutorial", "tutorial policies apply only to the original campaign")
@@ -333,6 +356,8 @@ do {
         if mode == "refresh", let existing = replay {
             do {
                 let outcome = try run(candidate(existing.events), base: base)
+                try require(outcome.saved >= (existing.expected?.saved ?? base.configuration.requiredToSave),
+                    "refresh would lower the preserved rescue count")
                 let witness = candidate(existing.events, expected: outcome)
                 _ = try run(witness, base: content.simulation(at: index).0)
                 try encoder.encode(witness).write(to: file, options: .atomic)
@@ -344,7 +369,7 @@ do {
             for event in existing.events {
                 guard case let .assign(id, skill) = event.action, skill == .builder else { continue }
                 for delta in 1...400 where replay!.expected!.saved < base.configuration.totalLemmings {
-                    let events = (existing.events + [.init(tick: event.tick + delta, action: .assign(lemmingID: id, skill: .builder))]).sorted { $0.tick < $1.tick }
+                    let events = (existing.events + [.init(tick: event.tick + delta, action: .assign(lemmingID: id, skill: .builder), afterTick: event.afterTick)]).sorted { $0.tick < $1.tick }
                     if let outcome = try? run(candidate(events), base: base), outcome.saved > replay!.expected!.saved {
                         let improved = candidate(events, expected: outcome)
                         _ = try run(improved, base: content.simulation(at: index).0)
@@ -364,7 +389,7 @@ do {
                     for offset in [0, -1, 1, -2, 2, -4, 4, -8, 8, -16, 16, -32, 32, -64, 64, -128, 128, 256, 512, 1024] {
                         var events = seed
                         if offset == 0 { events.remove(at: eventIndex) }
-                        else { events[eventIndex] = .init(tick: max(1, seed[eventIndex].tick + offset), action: seed[eventIndex].action) }
+                        else { events[eventIndex] = .init(tick: max(seed[eventIndex].afterTick == true ? 0 : 1, seed[eventIndex].tick + offset), action: seed[eventIndex].action, afterTick: seed[eventIndex].afterTick) }
                         events.sort { $0.tick < $1.tick }
                         if let outcome = try? run(candidate(events), base: base), outcome.saved > best.expected!.saved {
                             best = candidate(events, expected: outcome)
@@ -387,6 +412,24 @@ do {
                 _ = try run(witness, base: content.simulation(at: index).0)
                 try encoder.encode(witness).write(to: file, options: .atomic)
                 replay = try JSONDecoder().decode(ClassicDOSReplay.self, from: Data(contentsOf: file))
+            }
+        }
+        if mode == "recorded" {
+            let sources = try FileManager.default.contentsOfDirectory(at: URL(fileURLWithPath: args[4]),
+                includingPropertiesForKeys: nil).filter { $0.pathExtension == "json" }.sorted { $0.path < $1.path }
+            for source in sources {
+                guard let recorded = try? JSONDecoder().decode(ClassicDOSReplay.self, from: Data(contentsOf: source)),
+                      recorded.initialStateHash == ClassicDOSReplayRecorder.stateHash(of: base) else { continue }
+                do {
+                    try require(recorded.expected != nil, "missing expected outcome")
+                    let outcome = try run(recorded, base: base)
+                    guard outcome.saved > (replay?.expected?.saved ?? -1) else { continue }
+                    let witness = candidate(recorded.events, expected: outcome)
+                    _ = try run(witness, base: content.simulation(at: index).0)
+                    try encoder.encode(witness).write(to: file, options: .atomic)
+                    replay = witness
+                    print("RECORDED \(source.lastPathComponent)")
+                } catch { print("REJECTED \(source.lastPathComponent): \(error)") }
             }
         }
         if mode == "tutorial" {
@@ -421,7 +464,7 @@ do {
                 let key = SHA256.hash(data: base.terrain.solidMask + base.terrain.steelMask).description
                 guard related[key, default: []].contains(input.title.lowercased()) else { continue }
                 for offset in ((mode == "guided" || mode == "maximize-guided") ? [0, 1, 2] : [0, 1, -1, 2, -2, 3, -3]) where replay == nil || (mode.hasPrefix("maximize") && replay!.expected!.saved < base.configuration.totalLemmings) {
-                    let shifted = input.events.map { ClassicDOSReplayEvent(tick: max(1, $0.tick + offset), action: $0.action) }
+                    let shifted = input.events.map { ClassicDOSReplayEvent(tick: max($0.afterTick == true ? 0 : 1, $0.tick + offset), action: $0.action, afterTick: $0.afterTick) }
                     let events = (mode == "guided" || mode == "maximize-guided") ? guidedInputs(input, base: base, tolerance: offset) : ((mode == "adapt" || mode == "maximize-adapt") ? appliedInputs(shifted, base: base) : shifted)
                     do {
                         let outcome = try run(candidate(events), base: base)

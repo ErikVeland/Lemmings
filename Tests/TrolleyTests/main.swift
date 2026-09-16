@@ -779,8 +779,13 @@ func testCelebrationProgress() throws {
     var submissions: [(String, Int)] = []
     var offline = true
     var loads = 0
+    var holdLoads = false
+    var pendingLoads: [CheckedContinuation<WorldwideBoard, Error>] = []
+    var authenticationCallbacks: [@MainActor (Result<GameCenterAccount, Error>) -> Void] = []
     func authenticate(window: NSWindow?, completion: @escaping @MainActor (Result<GameCenterAccount, Error>) -> Void) {
-        completion(.success(account!))
+        authenticationCallbacks.append(completion)
+        if let account { completion(.success(account)) }
+        else { completion(.failure(SequelDataError.invalid("signed out"))) }
     }
     func submit(_ score: Int, boardID: String) async throws {
         if offline { throw SequelDataError.invalid("offline") }
@@ -789,6 +794,7 @@ func testCelebrationProgress() throws {
     func load(_ boardID: String) async throws -> WorldwideBoard {
         loads += 1
         if offline { throw SequelDataError.invalid("offline") }
+        if holdLoads { return try await withCheckedThrowingContinuation { pendingLoads.append($0) } }
         return .init(entries: [.init(rank: 1, name: "Test Player", score: 3)],
                      personal: .init(rank: 1, name: "Test Player", score: 3), players: 1)
     }
@@ -819,6 +825,39 @@ func testCelebrationProgress() throws {
     service.refresh(profileID: "another-profile", boardID: "stars", history: records.trolley)
     try await settle()
     try require(transport.submissions.count == 4 && service.status.contains("different local player"), "Game Center merged local players")
+    // Signing out must hide the previous account and release cancelled controls immediately.
+    transport.account = nil
+    try require(service.board == nil && service.rankLabel == nil, "Signed-out player can see the previous personal rank")
+    service.refresh(profileID: ArcadeProfile.legacyID, boardID: "stars", history: records.trolley)
+    try require(!service.busy && service.board == nil && service.previousRank == nil,
+        "Signed-out refresh retained a busy state or previous rank")
+    transport.account = .init(id: "apple-player", name: "Test Player")
+    transport.holdLoads = true
+    service.refresh(profileID: ArcadeProfile.legacyID, boardID: "stars", history: records.trolley)
+    for _ in 0..<100 where transport.pendingLoads.isEmpty { try await Task.sleep(for: .milliseconds(10)) }
+    try require(transport.pendingLoads.count == 1 && service.busy, "Delayed account request did not start")
+    transport.account = nil
+    service.refresh(profileID: ArcadeProfile.legacyID, boardID: "stars", history: records.trolley)
+    try require(!service.busy, "Sign-out left a cancelled request busy")
+    transport.account = .init(id: "second-apple-player", name: "Second Player")
+    transport.holdLoads = false
+    let submittedBeforeSwitch = transport.submissions.count
+    service.connect(profileID: ArcadeProfile.legacyID, window: nil, boardID: "stars", history: records.trolley)
+    try await settle()
+    try require(transport.submissions.count == submittedBeforeSwitch + 4 && service.previousRank == nil,
+        "New account inherited submission suppression or rank history")
+    let currentBoard = service.board
+    transport.pendingLoads.removeFirst().resume(returning: .init(entries: [],
+        personal: .init(rank: 99, name: "Previous account", score: 0), players: 99))
+    for _ in 0..<3 { await Task.yield() }
+    try require(service.board == currentBoard && !service.busy, "Old account response replaced the new account board")
+    // GameKit retains authentication handlers. Superseded handlers must be harmless.
+    let staleCallback = transport.authenticationCallbacks.last!
+    service.connect(profileID: ArcadeProfile.legacyID, window: nil, boardID: "stars", history: records.trolley)
+    try await settle()
+    staleCallback(.failure(SequelDataError.invalid("old account callback")))
+    try require(service.board == currentBoard && !service.busy, "Old authentication callback cleared current scores")
+    print("PASS Game Center sign-out, account switching, delayed responses and superseded authentication")
     let disabled = TrolleyOnlineConfiguration(enabled: false, starsID: "stars", clearsID: "clears", perfectID: "perfect", levels: config.levels)
     let unavailable = GameCenterScores(configuration: disabled, transport: transport, defaults: defaults)
     let loads = transport.loads

@@ -1,7 +1,7 @@
 # Release scope
 
 Classic 1.0 is the selected macOS release target, confirmed on 13 September 2026.
-L2 and L3 remain previews. This document describes the working source after beta 29.
+L2 and L3 remain previews. This document describes the working source after beta 32.
 Automated checks support the recorded routes;
 remaining compatibility and hardware claims still need validation. See the [gate register](ReleaseReadiness/gates.json)
 and the [1.0 gap evaluation](ReleaseReadiness/OneZeroGapEvaluation.md).
@@ -26,11 +26,11 @@ against the original engine. Expect differences.
 | --- | ---: | ---: | --- |
 | Lemmings | 120 | 120 | **Complete** |
 | Xmas Lemmings 1991 | 4 | 4 | **Complete** |
-| Oh No! More Lemmings | 100 | 70 | Playable |
-| Holiday Lemmings 1994 | 32 | 16 | Playable |
-| Holiday Lemmings 1993 | 32 | 22 | Playable |
+| Oh No! More Lemmings | 100 | 72 | Playable |
+| Holiday Lemmings 1994 | 32 | 18 | Playable |
+| Holiday Lemmings 1993 | 32 | 32 | **Complete** |
 | Xmas Lemmings 1992 | 4 | 4 | **Complete** |
-| **Classic total** | **292** | **236** | |
+| **Classic total** | **292** | **250** | |
 
 The original campaign is the claim that matters most, and it is complete. All 120
 levels replay to a win, 103 of them rescuing every lemming. The engine also
@@ -59,8 +59,8 @@ See [the Classic 1.0 work record](ClassicOneZero.md) for current closure work.
 
 | Release | Levels | Proven routes | Claim |
 | --- | ---: | ---: | --- |
-| Lemmings 2: The Tribes | 120 | 64 | **Preview** |
-| Lemmings 3: The Chronicles | 90 | 17 | **Preview** |
+| Lemmings 2: The Tribes | 120 | 73 | **Preview** |
+| Lemmings 3: The Chronicles | 90 | 41 | **Preview** |
 
 Both play through their campaigns with original artwork, music and interfaces.
 Lemmings 3 keeps provisional rules in several areas, and its environmental

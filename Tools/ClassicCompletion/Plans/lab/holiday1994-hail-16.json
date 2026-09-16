@@ -1,0 +1,61 @@
+[
+ {
+  "skill": "floater",
+  "id": 0
+ },
+ {
+  "skill": "floater",
+  "id": 1
+ },
+ {
+  "skill": "floater",
+  "id": 2
+ },
+ {
+  "skill": "floater",
+  "id": 3
+ },
+ {
+  "skill": "floater",
+  "id": 4
+ },
+ {
+  "skill": "floater",
+  "id": 5
+ },
+ {
+  "skill": "floater",
+  "id": 6
+ },
+ {
+  "skill": "floater",
+  "id": 7
+ },
+ {
+  "skill": "floater",
+  "id": 8
+ },
+ {
+  "skill": "floater",
+  "id": 9
+ },
+ {
+  "skill": "blocker",
+  "id": 1,
+  "x": 540,
+  "action": "walking"
+ },
+ {
+  "skill": "basher",
+  "id": 2,
+  "x": 534,
+  "direction": 1,
+  "action": "walking"
+ },
+ {
+  "skill": "builder",
+  "id": 0,
+  "x": 930,
+  "direction": 1
+ }
+]

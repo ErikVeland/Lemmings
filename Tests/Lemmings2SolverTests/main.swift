@@ -247,7 +247,10 @@ func testPromotionRules() throws {
     func promoted(_ route: Lemmings2ReplayWitness, chosen: Bool = false) throws -> PromotionOutcome {
         try promote(route, name: "classic-02", fixtures: fixtures, chains: chains, chosenByChain: chosen)
     }
-    check(try promoted(route(30, population: 12)) != .chain, "A chain route was promoted without a fixture")
+    check(try promoted(route(3, population: 12)) == .fixture, "A level without a fixture did not take its first route")
+    check(try promoted(route(2, population: 60)) == .kept("the fixture is recorded for 12 lemmings"),
+          "A route at another population replaced the only fixture")
+    try FileManager.default.removeItem(at: fixtures.appendingPathComponent("classic-02.json"))
     check(try promoted(route(10, population: 60)) == .fixture, "A new 60 route was not promoted")
     check(try promoted(route(5, population: 60)) != .fixture, "A worse 60 route replaced a better one")
     check(try promoted(route(5, population: 60), chosen: true) != .fixture, "A tribe run made a fixture worse")

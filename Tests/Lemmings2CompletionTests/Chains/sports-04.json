@@ -1,0 +1,135 @@
+{
+  "events" : [
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 176,
+          "y" : 191
+        }
+      },
+      "tick" : 980
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 176,
+          "y" : 191
+        }
+      },
+      "tick" : 980
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 0,
+          "y" : 0
+        }
+      },
+      "tick" : 980
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 0,
+          "skill" : 45
+        }
+      },
+      "tick" : 980
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 0,
+          "y" : 0
+        }
+      },
+      "tick" : 1064
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 0,
+          "skill" : 28
+        }
+      },
+      "tick" : 1064
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 0,
+          "skill" : 35
+        }
+      },
+      "tick" : 1116
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 0,
+          "y" : 0
+        }
+      },
+      "tick" : 1124
+    },
+    {
+      "event" : {
+        "aim" : {
+          "held" : true,
+          "x" : 49,
+          "y" : 312
+        }
+      },
+      "tick" : 1184
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 49,
+          "y" : 312
+        }
+      },
+      "tick" : 1184
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 0,
+          "y" : 0
+        }
+      },
+      "tick" : 1184
+    },
+    {
+      "event" : {
+        "assign" : {
+          "lemming" : 0,
+          "skill" : 34
+        }
+      },
+      "tick" : 1190
+    },
+    {
+      "event" : {
+        "fan" : {
+          "active" : false,
+          "x" : 0,
+          "y" : 0
+        }
+      },
+      "tick" : 1244
+    }
+  ],
+  "expectedSaved" : 1,
+  "expectedTicks" : 1449,
+  "levelSHA256" : "aab747e53e005c7feffbed53424cfaa8480b751f956ceef00d3723daabbe2932",
+  "population" : 1,
+  "version" : 2
+}

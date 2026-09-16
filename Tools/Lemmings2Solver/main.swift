@@ -7,6 +7,7 @@ import NxlvKit
 let usage = """
 usage: solver level <data-root> <tribe-NN> [--seed FILE] [--population N] [--promote] [search options]
        solver tribe <data-root> <tribe> [--seeds DIR] [--promote] [search options]
+       solver promote <data-root> <candidate.json>...
 search options: [--beam N] [--depth N] [--budget SECONDS] [--cell PIXELS] [--refire TICKS] [--out DIR]
 """
 let arguments = Array(CommandLine.arguments.dropFirst())
@@ -16,7 +17,7 @@ let arguments = Array(CommandLine.arguments.dropFirst())
     return arguments[index + 1]
 }
 
-guard arguments.count >= 3, ["level", "tribe"].contains(arguments[0]) else {
+guard arguments.count >= 3, ["level", "tribe", "promote"].contains(arguments[0]) else {
     print(usage)
     exit(1)
 }
@@ -76,6 +77,37 @@ func writePartial(_ name: String, _ result: LevelResult) throws {
 
 let depth = option("--depth").flatMap(Int.init)
 
+// solver promote <data-root> <candidate.json>...: replay each candidate twice, then promote it.
+if arguments[0] == "promote" {
+    var failed = false
+    for path in arguments.dropFirst(2) where !path.hasPrefix("--") {
+        let url = URL(fileURLWithPath: path)
+        let name = String(url.deletingPathExtension().lastPathComponent.prefix(while: { $0 != "." }))
+        guard let route = try? JSONDecoder().decode(Lemmings2ReplayWitness.self, from: Data(contentsOf: url)),
+              let index = campaign.levels.indices.first(where: { levelName($0, campaign.levels[$0]) == name }),
+              campaign.levels[index].fingerprint == route.levelSHA256 else {
+            print("ERROR \(name): unreadable candidate or unknown level")
+            failed = true
+            continue
+        }
+        let level = campaign.levels[index]
+        do {
+            let first = try route.run(level: level, style: try style(for: level), masks: masks)
+            let second = try route.run(level: level, style: try style(for: level), masks: masks)
+            guard first.stateHash == second.stateHash else { throw SolverError.replayMismatch(name) }
+            switch try promote(route, name: name, fixtures: fixtures, chains: chains) {
+            case .fixture: print("PROMOTED \(name) fixture: saved \(route.expectedSaved) of \(route.population)")
+            case .chain: print("PROMOTED \(name) chain: saved \(route.expectedSaved) of \(route.population)")
+            case let .kept(reason): print("KEPT \(name): \(reason)")
+            }
+        } catch {
+            print("ERROR \(name): \(error)")
+            failed = true
+        }
+    }
+    exit(failed ? 1 : 0)
+}
+
 if arguments[0] == "tribe" {
     let tribe = arguments[2].lowercased()
     let indices = campaign.levels.indices.filter { levelName($0, campaign.levels[$0]).hasPrefix(tribe + "-") }
@@ -87,7 +119,9 @@ if arguments[0] == "tribe" {
     var sources: [String: String] = [:]
     let chain: ChainReport
     do {
-        chain = try runChain(tribe: tribe, seedSource: { number, population in sources["\(number)-\(population)"] ?? "" },
+        // --from resumes a tribe at a level, with the population the verified chain passes to it.
+        let from = option("--from").flatMap(Int.init) ?? 1
+        chain = try runChain(tribe: tribe, from: from, population: option("--population").flatMap(Int.init) ?? 60, seedSource: { number, population in sources["\(number)-\(population)"] ?? "" },
             solve: { number, population in
                 let name = String(format: "\(tribe)-%02d", number)
                 let level = campaign.levels[indices[number - 1]]
@@ -111,7 +145,7 @@ if arguments[0] == "tribe" {
     let tribes = out.appendingPathComponent("tribes")
     try FileManager.default.createDirectory(at: tribes, withIntermediateDirectories: true)
     try encoder.encode(chain).write(to: tribes.appendingPathComponent(tribe + ".json"))
-    let reached = chain.levels.filter { $0.saved != nil }.count
+    let reached = (option("--from").flatMap(Int.init) ?? 1) - 1 + chain.levels.filter { $0.saved != nil }.count
     print("TRIBE \(tribe): \(reached) of 10 levels chained\(chain.brokeAt.map { ", broke at level \($0)" } ?? ", ark ending \(chain.arkReady ? "reached" : "needs 30 on level 10")")")
     if promoting { print("Run python3 Tools/Lemmings2Completion/report.py and the completion gate.") }
     exit(chain.brokeAt == nil ? 0 : 2)

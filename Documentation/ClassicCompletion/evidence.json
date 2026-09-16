@@ -1,5 +1,5 @@
 {
-  "engineSourceFingerprint": "30654a68a6e9744b1ed5c7d8178b0aa8d3be2077f5b4f15d8b2541293b357efb",
+  "engineSourceFingerprint": "483661a10882d87cd0d07590d6d96b2247e537e8bae2acdd8c8152ca34c3a3ca",
   "dataFiles": {
     "ADLIB.DAT": "43eceee3e88fde48c679c635ee208d2af9ade1ed789dc291d647e7d314ffdcfe",
     "CGAGR0.DAT": "d0d1d08b117dbaa5a61bb7488b141d5d901ea084b8d4c859697139e4dc3be6d5",
@@ -1495,26 +1495,17 @@
     },
     {
       "fixture": "Tests/ClassicDOSCompletionTests/Fixtures/taxing-04.json",
-      "sha256": "7e5a7ae59f8977c009bac66b8cef7665350bd4625664f5f892ee5b2d671e6d15",
+      "sha256": "ccf1514c3fdb4bf46cdea3056ac33285cb973225954e9b8e926c4424c4fdd081",
       "population": 40,
       "expected": {
         "didWin": true,
         "released": 40,
         "required": 30,
         "saved": 40,
-        "stateHash": "0b73140fee30bde023cf6a9e8c27949399fcce0d07e15d9f22d998e0f4f28844",
-        "ticks": 3952
+        "stateHash": "08925067bb180b5858447ac5d2dc4e716c9539aafdb9e182d6e97bb88a82e075",
+        "ticks": 3850
       },
-      "matchingReferenceCandidates": [
-        {
-          "origin": {
-            "file": "Taxing4_13skills_saveall_DOS.lrb",
-            "sha256": "b6f8c335e40e0a2216cf01e95c8569f0a966593ce81457f236419dbee384231e"
-          },
-          "tickOffset": 0,
-          "title": "Lend a helping hand...."
-        }
-      ],
+      "matchingReferenceCandidates": [],
       "publishedDOSRecord": 40,
       "maximumStatus": "PROVED_FULL_RESCUE"
     },

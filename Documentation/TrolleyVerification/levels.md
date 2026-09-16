@@ -171,7 +171,7 @@ See [method and limitations](README.md) and [exact conditions and evidence](audi
 | Havoc 7: Creature Discomforts | 20 | 15 | — | — | — | No witness collected |
 | Havoc 8: Lemming about town | 50 | 45 | 50 | 50 | 0 | [Verified](witnesses/ohNoMoreLemmings-87.json) |
 | Havoc 9: AAAAAARRRRRRGGGGGGHHHHHH!!!!!! | 50 | 50 | — | — | — | No witness collected |
-| Havoc 10: Flow Control | 21 | 3 | — | — | — | No witness collected |
+| Havoc 10: Flow Control | 21 | 3 | 5 | — | — | [Observed](witnesses/ohNoMoreLemmings-89.json) |
 | Havoc 11: Welcome to the party, pal! | 80 | 80 | 80 | 80 | 0 | [Verified](witnesses/ohNoMoreLemmings-90.json) |
 | Havoc 12: It`s all a matter of timing | 80 | 80 | 80 | 80 | 0 | [Verified](witnesses/ohNoMoreLemmings-91.json) |
 | Havoc 13: HIGHLAND FLING | 80 | 75 | 76 | — | — | [Observed](witnesses/ohNoMoreLemmings-92.json) |
@@ -266,22 +266,28 @@ See [method and limitations](README.md) and [exact conditions and evidence](audi
 | Beach 8: Beach Mania | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-17-60.json) |
 | Beach 9: Sand Blaster | 60 | 1 | — | — | — | No witness collected |
 | Beach 10: Surf Lem ! | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-19-60.json) |
-| Cavelems 1: Audex Powder | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-20-60.json) |
+| Cavelems 1: Audex Powder | 60 | 1 | 47 | — | — | [Observed](witnesses/lemmings2-20-60.json) |
 | Cavelems 2: Successive division | 60 | 1 | 3 | — | — | [Observed](witnesses/lemmings2-21-60.json) |
 | Cavelems 2: Successive division (carry-over) | 1 | 1 | 1 | 1 | 0 | [Verified](witnesses/lemmings2-21-1.json) |
 | Cavelems 3: Mortal men doomed to die | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-22-60.json) |
 | Cavelems 3: Mortal men doomed to die (carry-over) | 1 | 1 | 1 | 1 | 0 | [Verified](witnesses/lemmings2-22-1.json) |
 | Cavelems 4: A stompin` good time! | 60 | 1 | 26 | — | — | [Observed](witnesses/lemmings2-23-60.json) |
-| Cavelems 5: This Is The Pits ! | 60 | 1 | — | — | — | No witness collected |
+| Cavelems 5: This Is The Pits ! | 60 | 1 | 2 | — | — | [Observed](witnesses/lemmings2-24-60.json) |
+| Cavelems 5: This Is The Pits ! (carry-over) | 2 | 1 | 2 | 2 | 0 | [Verified](witnesses/lemmings2-24-2.json) |
 | Cavelems 6: Ain`t No Time | 60 | 1 | — | — | — | No witness collected |
-| Cavelems 7: Deadly Exit | 60 | 1 | — | — | — | No witness collected |
-| Cavelems 8: Wilma! | 60 | 1 | — | — | — | No witness collected |
+| Cavelems 6: Ain`t No Time (carry-over) | 2 | 1 | 2 | 2 | 0 | [Verified](witnesses/lemmings2-25-2.json) |
+| Cavelems 7: Deadly Exit | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-26-60.json) |
+| Cavelems 7: Deadly Exit (carry-over) | 2 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-26-2.json) |
+| Cavelems 8: Wilma! | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-27-60.json) |
+| Cavelems 8: Wilma! (carry-over) | 1 | 1 | 1 | 1 | 0 | [Verified](witnesses/lemmings2-27-1.json) |
 | Cavelems 9: EVOLUTION OF LEMMINGS | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-28-60.json) |
-| Cavelems 10: Ah`m No Done Yet | 60 | 1 | — | — | — | No witness collected |
-| Circus 1: LIGHTLINES.... | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-30-60.json) |
+| Cavelems 10: Ah`m No Done Yet | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-29-60.json) |
+| Cavelems 10: Ah`m No Done Yet (carry-over) | 1 | 1 | 1 | 1 | 0 | [Verified](witnesses/lemmings2-29-1.json) |
+| Circus 1: LIGHTLINES.... | 60 | 1 | 2 | — | — | [Observed](witnesses/lemmings2-30-60.json) |
 | Circus 2: Lemmings In The Family | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-31-60.json) |
 | Circus 2: Lemmings In The Family (carry-over) | 1 | 1 | 1 | 1 | 0 | [Verified](witnesses/lemmings2-31-1.json) |
-| Circus 3: We`re Coming Home | 60 | 1 | — | — | — | No witness collected |
+| Circus 3: We`re Coming Home | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-32-60.json) |
+| Circus 3: We`re Coming Home (carry-over) | 1 | 1 | 1 | 1 | 0 | [Verified](witnesses/lemmings2-32-1.json) |
 | Circus 4: `Round the Blox! | 60 | 1 | — | — | — | No witness collected |
 | Circus 5: Big Top Time | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-34-60.json) |
 | Circus 6: HEADACHE | 60 | 1 | 3 | — | — | [Observed](witnesses/lemmings2-35-60.json) |
@@ -329,7 +335,7 @@ See [method and limitations](README.md) and [exact conditions and evidence](audi
 | Medieval 8: What shall we do now? | 60 | 1 | — | — | — | No witness collected |
 | Medieval 9: LEMMING IN DISTRESS !! | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-68-60.json) |
 | Medieval 10: JUST JOUSTING AROUND | 60 | 1 | — | — | — | No witness collected |
-| Outdoor 1: Pa-tent-ly Obvious | 60 | 1 | 58 | — | — | [Observed](witnesses/lemmings2-70-60.json) |
+| Outdoor 1: Pa-tent-ly Obvious | 60 | 1 | 59 | — | — | [Observed](witnesses/lemmings2-70-60.json) |
 | Outdoor 2: Swing/Roundabout Theory | 60 | 1 | 2 | — | — | [Observed](witnesses/lemmings2-71-60.json) |
 | Outdoor 3: Glide Like The Wind | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-72-60.json) |
 | Outdoor 4: Deliverance ? | 60 | 1 | — | — | — | No witness collected |
@@ -339,7 +345,7 @@ See [method and limitations](README.md) and [exact conditions and evidence](audi
 | Outdoor 8: The Laws of Tradition | 60 | 1 | — | — | — | No witness collected |
 | Outdoor 9: 22934 | 60 | 1 | — | — | — | No witness collected |
 | Outdoor 10: Garden of Stone | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-79-60.json) |
-| Polar 1: Lem Me Out ! | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-80-60.json) |
+| Polar 1: Lem Me Out ! | 60 | 1 | 26 | — | — | [Observed](witnesses/lemmings2-80-60.json) |
 | Polar 2: Ice Ice Lemy | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-81-60.json) |
 | Polar 3: Snow More Lems | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-82-60.json) |
 | Polar 4: DANGER THIN ICE ! | 60 | 1 | 42 | — | — | [Observed](witnesses/lemmings2-83-60.json) |
@@ -360,7 +366,8 @@ See [method and limitations](README.md) and [exact conditions and evidence](audi
 | Shadow 9: SPINNY THANG.... | 60 | 1 | — | — | — | No witness collected |
 | Shadow 10: Moonswings | 60 | 1 | — | — | — | No witness collected |
 | Space 1: HIT THE SPACE BAR | 60 | 1 | 51 | — | — | [Observed](witnesses/lemmings2-100-60.json) |
-| Space 2: Perpetual motion | 60 | 1 | — | — | — | No witness collected |
+| Space 2: Perpetual motion | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-101-60.json) |
+| Space 2: Perpetual motion (carry-over) | 3 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-101-3.json) |
 | Space 3: THE LEMMINGS HAVE LANDED | 60 | 1 | — | — | — | No witness collected |
 | Space 4: The Vortex | 60 | 1 | — | — | — | No witness collected |
 | Space 5: The Stainless Steel Lemm | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-104-60.json) |
@@ -371,11 +378,13 @@ See [method and limitations](README.md) and [exact conditions and evidence](audi
 | Space 10: Frontier of surreality | 60 | 1 | — | — | — | No witness collected |
 | Sports 1: Ceci n`est pas une pipe. | 60 | 1 | 2 | — | — | [Observed](witnesses/lemmings2-110-60.json) |
 | Sports 2: School Sports Day | 60 | 1 | 56 | — | — | [Observed](witnesses/lemmings2-111-60.json) |
-| Sports 3: The Octathalon! | 60 | 1 | — | — | — | No witness collected |
+| Sports 3: The Octathalon! | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-112-60.json) |
+| Sports 3: The Octathalon! (carry-over) | 2 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-112-2.json) |
 | Sports 4: RRRACKETEERZ! | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-113-60.json) |
 | Sports 5: Blow Back.... | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-114-60.json) |
 | Sports 6: Double Trouble | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-115-60.json) |
-| Sports 7: The Sun Sign Selection | 60 | 1 | — | — | — | No witness collected |
+| Sports 7: The Sun Sign Selection | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-116-60.json) |
+| Sports 7: The Sun Sign Selection (carry-over) | 1 | 1 | 1 | 1 | 0 | [Verified](witnesses/lemmings2-116-1.json) |
 | Sports 8: Run the Risk | 60 | 1 | — | — | — | No witness collected |
 | Sports 9: The Nervous Network! | 60 | 1 | — | — | — | No witness collected |
 | Sports 10: Take up Archery | 60 | 1 | — | — | — | No witness collected |
@@ -386,18 +395,18 @@ See [method and limitations](README.md) and [exact conditions and evidence](audi
 | --- | ---: | ---: | ---: | ---: | ---: | --- |
 | Blizzard 1: Oogilemming! | 25 | 22 | 22 | — | — | [Observed](witnesses/holidayLemmings1993-16.json) |
 | Blizzard 2: Lemmings Up High | 80 | 80 | 80 | 80 | 0 | [Verified](witnesses/holidayLemmings1993-17.json) |
-| Blizzard 3: Check Your Hints! | 80 | 80 | — | — | — | No witness collected |
-| Blizzard 4: Santus Lemmingus | 80 | 80 | — | — | — | No witness collected |
+| Blizzard 3: Check Your Hints! | 80 | 80 | 80 | 80 | 0 | [Verified](witnesses/holidayLemmings1993-18.json) |
+| Blizzard 4: Santus Lemmingus | 80 | 80 | 80 | 80 | 0 | [Verified](witnesses/holidayLemmings1993-19.json) |
 | Blizzard 5: It Came Upon a Lemnight Clear | 80 | 75 | 77 | — | — | [Observed](witnesses/holidayLemmings1993-20.json) |
 | Blizzard 6: A Single Lemming... | 80 | 80 | 80 | 80 | 0 | [Verified](witnesses/holidayLemmings1993-21.json) |
 | Blizzard 7: Break on through... | 60 | 55 | 60 | 60 | 0 | [Verified](witnesses/holidayLemmings1993-22.json) |
-| Blizzard 8: Presents of Mind II | 80 | 80 | — | — | — | No witness collected |
+| Blizzard 8: Presents of Mind II | 80 | 80 | 80 | 80 | 0 | [Verified](witnesses/holidayLemmings1993-23.json) |
 | Blizzard 9: Lemmings...The Motion Picture | 80 | 75 | 80 | 80 | 0 | [Verified](witnesses/holidayLemmings1993-24.json) |
-| Blizzard 10: The Wrath of Lem | 80 | 80 | — | — | — | No witness collected |
-| Blizzard 11: The Search for Lem | 80 | 80 | — | — | — | No witness collected |
-| Blizzard 12: The Voyage Home... | 80 | 70 | — | — | — | No witness collected |
+| Blizzard 10: The Wrath of Lem | 80 | 80 | 80 | 80 | 0 | [Verified](witnesses/holidayLemmings1993-25.json) |
+| Blizzard 11: The Search for Lem | 80 | 80 | 80 | 80 | 0 | [Verified](witnesses/holidayLemmings1993-26.json) |
+| Blizzard 12: The Voyage Home... | 80 | 70 | 78 | — | — | [Observed](witnesses/holidayLemmings1993-27.json) |
 | Blizzard 13: The Final Frontier | 70 | 65 | 65 | — | — | [Observed](witnesses/holidayLemmings1993-28.json) |
-| Blizzard 14: The Undiscovered Country | 80 | 80 | — | — | — | No witness collected |
+| Blizzard 14: The Undiscovered Country | 80 | 80 | 80 | 80 | 0 | [Verified](witnesses/holidayLemmings1993-29.json) |
 | Blizzard 15: The Needs of the Many... | 15 | 8 | 8 | — | — | [Observed](witnesses/holidayLemmings1993-30.json) |
 | Blizzard 16: The Next Lemeration | 50 | 47 | 48 | — | — | [Observed](witnesses/holidayLemmings1993-31.json) |
 | Flurry 1: Climbing to the Top! | 10 | 10 | 10 | 10 | 0 | [Verified](witnesses/holidayLemmings1993-0.json) |
@@ -407,12 +416,12 @@ See [method and limitations](README.md) and [exact conditions and evidence](audi
 | Flurry 5: Christmas South of the Equator | 75 | 25 | 75 | 75 | 0 | [Verified](witnesses/holidayLemmings1993-4.json) |
 | Flurry 6: Lemming Snowfall | 80 | 40 | 80 | 80 | 0 | [Verified](witnesses/holidayLemmings1993-5.json) |
 | Flurry 7: Lemming Snowjourn | 50 | 25 | 50 | 50 | 0 | [Verified](witnesses/holidayLemmings1993-6.json) |
-| Flurry 8: Clouds of Lemmings | 80 | 70 | — | — | — | No witness collected |
+| Flurry 8: Clouds of Lemmings | 80 | 70 | 77 | — | — | [Observed](witnesses/holidayLemmings1993-7.json) |
 | Flurry 9: A Block from Home | 80 | 75 | 80 | 80 | 0 | [Verified](witnesses/holidayLemmings1993-8.json) |
 | Flurry 10: 32 Lemmings Below Zero | 32 | 25 | 32 | 32 | 0 | [Verified](witnesses/holidayLemmings1993-9.json) |
 | Flurry 11: At Home in a Cave | 80 | 78 | 80 | 80 | 0 | [Verified](witnesses/holidayLemmings1993-10.json) |
-| Flurry 12: Presents of Mind | 80 | 77 | — | — | — | No witness collected |
-| Flurry 13: Yo-yo Lem-lem | 80 | 80 | — | — | — | No witness collected |
+| Flurry 12: Presents of Mind | 80 | 77 | 80 | 80 | 0 | [Verified](witnesses/holidayLemmings1993-11.json) |
+| Flurry 13: Yo-yo Lem-lem | 80 | 80 | 80 | 80 | 0 | [Verified](witnesses/holidayLemmings1993-12.json) |
 | Flurry 14: Marshmallow Land | 80 | 75 | 80 | 80 | 0 | [Verified](witnesses/holidayLemmings1993-13.json) |
 | Flurry 15: Head for the Hills! | 10 | 10 | 10 | 10 | 0 | [Verified](witnesses/holidayLemmings1993-14.json) |
 | Flurry 16: The Long Way Around | 50 | 45 | 48 | — | — | [Observed](witnesses/holidayLemmings1993-15.json) |
@@ -489,24 +498,24 @@ See [method and limitations](README.md) and [exact conditions and evidence](audi
 | Classic 1: Classic 1 | 20 | 1 | 10 | — | — | [Observed](witnesses/lemmings3-1.json) |
 | Classic 2: Classic 2 | 22 | 1 | 12 | — | — | [Observed](witnesses/lemmings3-2.json) |
 | Classic 3: Classic 3 | 20 | 1 | 10 | — | — | [Observed](witnesses/lemmings3-3.json) |
-| Classic 4: Classic 4 | 22 | 1 | — | — | — | No witness collected |
+| Classic 4: Classic 4 | 22 | 1 | 10 | — | — | [Observed](witnesses/lemmings3-4.json) |
 | Classic 5: Classic 5 | 20 | 1 | 1 | — | — | [Observed](witnesses/lemmings3-5.json) |
 | Classic 6: Classic 6 | 20 | 1 | — | — | — | No witness collected |
 | Classic 7: Classic 7 | 20 | 1 | — | — | — | No witness collected |
 | Classic 8: Classic 8 | 22 | 1 | — | — | — | No witness collected |
 | Classic 9: Classic 9 | 21 | 1 | — | — | — | No witness collected |
-| Classic 10: Classic 10 | 22 | 1 | — | — | — | No witness collected |
+| Classic 10: Classic 10 | 22 | 1 | 10 | — | — | [Observed](witnesses/lemmings3-10.json) |
 | Classic 11: Classic 11 | 21 | 1 | — | — | — | No witness collected |
 | Classic 12: Classic 12 | 20 | 1 | — | — | — | No witness collected |
-| Classic 13: Classic 13 | 23 | 1 | — | — | — | No witness collected |
+| Classic 13: Classic 13 | 23 | 1 | 1 | — | — | [Observed](witnesses/lemmings3-13.json) |
 | Classic 14: Classic 14 | 22 | 1 | — | — | — | No witness collected |
-| Classic 15: Classic 15 | 23 | 1 | — | — | — | No witness collected |
-| Classic 16: Classic 16 | 22 | 1 | — | — | — | No witness collected |
+| Classic 15: Classic 15 | 23 | 1 | 1 | — | — | [Observed](witnesses/lemmings3-15.json) |
+| Classic 16: Classic 16 | 22 | 1 | 1 | — | — | [Observed](witnesses/lemmings3-16.json) |
 | Classic 17: Classic 17 | 20 | 1 | — | — | — | No witness collected |
-| Classic 18: Classic 18 | 20 | 1 | — | — | — | No witness collected |
-| Classic 19: Classic 19 | 22 | 1 | — | — | — | No witness collected |
+| Classic 18: Classic 18 | 20 | 1 | 1 | — | — | [Observed](witnesses/lemmings3-18.json) |
+| Classic 19: Classic 19 | 22 | 1 | 1 | — | — | [Observed](witnesses/lemmings3-19.json) |
 | Classic 20: Classic 20 | 22 | 1 | — | — | — | No witness collected |
-| Classic 21: Classic 21 | 20 | 1 | — | — | — | No witness collected |
+| Classic 21: Classic 21 | 20 | 1 | 3 | — | — | [Observed](witnesses/lemmings3-21.json) |
 | Classic 22: Classic 22 | 20 | 1 | — | — | — | No witness collected |
 | Classic 23: Classic 23 | 23 | 1 | — | — | — | No witness collected |
 | Classic 24: Classic 24 | 20 | 1 | — | — | — | No witness collected |
@@ -514,52 +523,52 @@ See [method and limitations](README.md) and [exact conditions and evidence](audi
 | Classic 26: Classic 26 | 22 | 1 | — | — | — | No witness collected |
 | Classic 27: Classic 27 | 22 | 1 | — | — | — | No witness collected |
 | Classic 28: Classic 28 | 22 | 1 | — | — | — | No witness collected |
-| Classic 29: Classic 29 | 22 | 1 | — | — | — | No witness collected |
+| Classic 29: Classic 29 | 22 | 1 | 1 | — | — | [Observed](witnesses/lemmings3-29.json) |
 | Classic 30: Classic 30 | 22 | 1 | — | — | — | No witness collected |
 | Egyptian 1: Egyptian 1 | 20 | 1 | 10 | — | — | [Observed](witnesses/lemmings3-201.json) |
-| Egyptian 2: Egyptian 2 | 22 | 1 | — | — | — | No witness collected |
-| Egyptian 3: Egyptian 3 | 20 | 1 | — | — | — | No witness collected |
+| Egyptian 2: Egyptian 2 | 22 | 1 | 1 | — | — | [Observed](witnesses/lemmings3-202.json) |
+| Egyptian 3: Egyptian 3 | 20 | 1 | 1 | — | — | [Observed](witnesses/lemmings3-203.json) |
 | Egyptian 4: Egyptian 4 | 20 | 1 | 10 | — | — | [Observed](witnesses/lemmings3-204.json) |
 | Egyptian 5: Egyptian 5 | 21 | 1 | — | — | — | No witness collected |
 | Egyptian 6: Egyptian 6 | 21 | 1 | — | — | — | No witness collected |
 | Egyptian 7: Egyptian 7 | 20 | 1 | — | — | — | No witness collected |
 | Egyptian 8: Egyptian 8 | 20 | 1 | — | — | — | No witness collected |
-| Egyptian 9: Egyptian 9 | 24 | 1 | — | — | — | No witness collected |
+| Egyptian 9: Egyptian 9 | 24 | 1 | 1 | — | — | [Observed](witnesses/lemmings3-209.json) |
 | Egyptian 10: Egyptian 10 | 21 | 1 | 1 | — | — | [Observed](witnesses/lemmings3-210.json) |
 | Egyptian 11: Egyptian 11 | 20 | 1 | — | — | — | No witness collected |
 | Egyptian 12: Egyptian 12 | 21 | 1 | — | — | — | No witness collected |
 | Egyptian 13: Egyptian 13 | 21 | 1 | — | — | — | No witness collected |
 | Egyptian 14: Egyptian 14 | 23 | 1 | 6 | — | — | [Observed](witnesses/lemmings3-214.json) |
-| Egyptian 15: Egyptian 15 | 21 | 1 | — | — | — | No witness collected |
+| Egyptian 15: Egyptian 15 | 21 | 1 | 2 | — | — | [Observed](witnesses/lemmings3-215.json) |
 | Egyptian 16: Egyptian 16 | 20 | 1 | — | — | — | No witness collected |
 | Egyptian 17: Egyptian 17 | 24 | 1 | 10 | — | — | [Observed](witnesses/lemmings3-217.json) |
 | Egyptian 18: Egyptian 18 | 28 | 1 | 10 | — | — | [Observed](witnesses/lemmings3-218.json) |
 | Egyptian 19: Egyptian 19 | 20 | 1 | — | — | — | No witness collected |
 | Egyptian 20: Egyptian 20 | 22 | 1 | — | — | — | No witness collected |
 | Egyptian 21: Egyptian 21 | 21 | 1 | — | — | — | No witness collected |
-| Egyptian 22: Egyptian 22 | 21 | 1 | — | — | — | No witness collected |
-| Egyptian 23: Egyptian 23 | 22 | 1 | — | — | — | No witness collected |
+| Egyptian 22: Egyptian 22 | 21 | 1 | 1 | — | — | [Observed](witnesses/lemmings3-222.json) |
+| Egyptian 23: Egyptian 23 | 22 | 1 | 1 | — | — | [Observed](witnesses/lemmings3-223.json) |
 | Egyptian 24: Egyptian 24 | 20 | 1 | — | — | — | No witness collected |
 | Egyptian 25: Egyptian 25 | 23 | 1 | — | — | — | No witness collected |
-| Egyptian 26: Egyptian 26 | 20 | 1 | — | — | — | No witness collected |
+| Egyptian 26: Egyptian 26 | 20 | 1 | 10 | — | — | [Observed](witnesses/lemmings3-226.json) |
 | Egyptian 27: Egyptian 27 | 21 | 1 | — | — | — | No witness collected |
 | Egyptian 28: Egyptian 28 | 24 | 1 | 1 | — | — | [Observed](witnesses/lemmings3-228.json) |
 | Egyptian 29: Egyptian 29 | 22 | 1 | — | — | — | No witness collected |
-| Egyptian 30: Egyptian 30 | 26 | 1 | — | — | — | No witness collected |
+| Egyptian 30: Egyptian 30 | 26 | 1 | 1 | — | — | [Observed](witnesses/lemmings3-230.json) |
 | Shadow 1: Shadow 1 | 20 | 1 | 9 | — | — | [Observed](witnesses/lemmings3-101.json) |
-| Shadow 2: Shadow 2 | 20 | 1 | — | — | — | No witness collected |
-| Shadow 3: Shadow 3 | 20 | 1 | — | — | — | No witness collected |
-| Shadow 4: Shadow 4 | 22 | 1 | — | — | — | No witness collected |
+| Shadow 2: Shadow 2 | 20 | 1 | 5 | — | — | [Observed](witnesses/lemmings3-102.json) |
+| Shadow 3: Shadow 3 | 20 | 1 | 1 | — | — | [Observed](witnesses/lemmings3-103.json) |
+| Shadow 4: Shadow 4 | 22 | 1 | 3 | — | — | [Observed](witnesses/lemmings3-104.json) |
 | Shadow 5: Shadow 5 | 21 | 1 | 5 | — | — | [Observed](witnesses/lemmings3-105.json) |
 | Shadow 6: Shadow 6 | 20 | 1 | — | — | — | No witness collected |
-| Shadow 7: Shadow 7 | 21 | 1 | — | — | — | No witness collected |
-| Shadow 8: Shadow 8 | 20 | 1 | — | — | — | No witness collected |
+| Shadow 7: Shadow 7 | 21 | 1 | 6 | — | — | [Observed](witnesses/lemmings3-107.json) |
+| Shadow 8: Shadow 8 | 20 | 1 | 1 | — | — | [Observed](witnesses/lemmings3-108.json) |
 | Shadow 9: Shadow 9 | 22 | 1 | — | — | — | No witness collected |
 | Shadow 10: Shadow 10 | 21 | 1 | — | — | — | No witness collected |
-| Shadow 11: Shadow 11 | 20 | 1 | — | — | — | No witness collected |
+| Shadow 11: Shadow 11 | 20 | 1 | 1 | — | — | [Observed](witnesses/lemmings3-111.json) |
 | Shadow 12: Shadow 12 | 20 | 1 | — | — | — | No witness collected |
 | Shadow 13: Shadow 13 | 20 | 1 | 6 | — | — | [Observed](witnesses/lemmings3-113.json) |
-| Shadow 14: Shadow 14 | 21 | 1 | — | — | — | No witness collected |
+| Shadow 14: Shadow 14 | 21 | 1 | 1 | — | — | [Observed](witnesses/lemmings3-114.json) |
 | Shadow 15: Shadow 15 | 22 | 1 | — | — | — | No witness collected |
 | Shadow 16: Shadow 16 | 22 | 1 | 2 | — | — | [Observed](witnesses/lemmings3-116.json) |
 | Shadow 17: Shadow 17 | 20 | 1 | — | — | — | No witness collected |
@@ -582,34 +591,34 @@ See [method and limitations](README.md) and [exact conditions and evidence](audi
 | Level | Population | Pass goal | Best rescued | Verified maximum | Minimum sacrifices | Evidence |
 | --- | ---: | ---: | ---: | ---: | ---: | --- |
 | Frost 1: Chains of Command | 50 | 50 | 50 | 50 | 0 | [Verified](witnesses/holidayLemmings1994-0.json) |
-| Frost 2: Ski Jump! | 50 | 49 | — | — | — | No witness collected |
+| Frost 2: Ski Jump! | 50 | 49 | 50 | 50 | 0 | [Verified](witnesses/holidayLemmings1994-1.json) |
 | Frost 3: CindyLand | 80 | 75 | 80 | 80 | 0 | [Verified](witnesses/holidayLemmings1994-2.json) |
 | Frost 4: Separate Ways | 50 | 49 | 49 | — | — | [Observed](witnesses/holidayLemmings1994-3.json) |
-| Frost 5: Lemming Reunification | 70 | 70 | — | — | — | No witness collected |
-| Frost 6: The Land of the Bizarre | 70 | 69 | — | — | — | No witness collected |
-| Frost 7: Happy New Year! | 50 | 25 | — | — | — | No witness collected |
-| Frost 8: Division Bell | 80 | 75 | — | — | — | No witness collected |
-| Frost 9: Quest for Kieran | 40 | 40 | — | — | — | No witness collected |
+| Frost 5: Lemming Reunification | 70 | 70 | 70 | 70 | 0 | [Verified](witnesses/holidayLemmings1994-4.json) |
+| Frost 6: The Land of the Bizarre | 70 | 69 | 69 | — | — | [Observed](witnesses/holidayLemmings1994-5.json) |
+| Frost 7: Happy New Year! | 50 | 25 | 32 | — | — | [Observed](witnesses/holidayLemmings1994-6.json) |
+| Frost 8: Division Bell | 80 | 75 | 80 | 80 | 0 | [Verified](witnesses/holidayLemmings1994-7.json) |
+| Frost 9: Quest for Kieran | 40 | 40 | 40 | 40 | 0 | [Verified](witnesses/holidayLemmings1994-8.json) |
 | Frost 10: Four Play | 4 | 4 | 4 | 4 | 0 | [Verified](witnesses/holidayLemmings1994-9.json) |
 | Frost 11: Maybe not such a doddle | 80 | 80 | 80 | 80 | 0 | [Verified](witnesses/holidayLemmings1994-10.json) |
-| Frost 12: It's Boxing Day! | 80 | 78 | — | — | — | No witness collected |
-| Frost 13: 2 Minutes before midnight | 80 | 80 | — | — | — | No witness collected |
+| Frost 12: It's Boxing Day! | 80 | 78 | 80 | 80 | 0 | [Verified](witnesses/holidayLemmings1994-11.json) |
+| Frost 13: 2 Minutes before midnight | 80 | 80 | 80 | 80 | 0 | [Verified](witnesses/holidayLemmings1994-12.json) |
 | Frost 14: Happy New Year II! | 50 | 40 | 40 | — | — | [Observed](witnesses/holidayLemmings1994-13.json) |
-| Frost 15: Plethora of Presents | 50 | 49 | — | — | — | No witness collected |
-| Frost 16: Up on the Rooftops | 80 | 79 | — | — | — | No witness collected |
-| Hail 1: Go Thataway! | 75 | 75 | — | — | — | No witness collected |
+| Frost 15: Plethora of Presents | 50 | 49 | 49 | — | — | [Observed](witnesses/holidayLemmings1994-14.json) |
+| Frost 16: Up on the Rooftops | 80 | 79 | 79 | — | — | [Observed](witnesses/holidayLemmings1994-15.json) |
+| Hail 1: Go Thataway! | 75 | 75 | 75 | 75 | 0 | [Verified](witnesses/holidayLemmings1994-16.json) |
 | Hail 2: Break On Through | 80 | 75 | 75 | — | — | [Observed](witnesses/holidayLemmings1994-17.json) |
 | Hail 3: And a Happy New Year! | 50 | 25 | 35 | — | — | [Observed](witnesses/holidayLemmings1994-18.json) |
 | Hail 4: Lemmintaschen? | 80 | 78 | 79 | — | — | [Observed](witnesses/holidayLemmings1994-19.json) |
-| Hail 5: Get the Point? | 80 | 68 | — | — | — | No witness collected |
+| Hail 5: Get the Point? | 80 | 68 | 71 | — | — | [Observed](witnesses/holidayLemmings1994-20.json) |
 | Hail 6: Surprise Package? | 80 | 27 | 33 | — | — | [Observed](witnesses/holidayLemmings1994-21.json) |
 | Hail 7: Steel Ice Span | 80 | 80 | 80 | 80 | 0 | [Verified](witnesses/holidayLemmings1994-22.json) |
 | Hail 8: Sir Edmund Hilemming | 80 | 80 | 80 | 80 | 0 | [Verified](witnesses/holidayLemmings1994-23.json) |
 | Hail 9: Up, up, and away! | 50 | 50 | 50 | 50 | 0 | [Verified](witnesses/holidayLemmings1994-24.json) |
 | Hail 10: Lemmy in the cold, cold ground | 80 | 80 | 80 | 80 | 0 | [Verified](witnesses/holidayLemmings1994-25.json) |
-| Hail 11: Emmings!  (No L) | 70 | 70 | — | — | — | No witness collected |
-| Hail 12: Merry Christmaze | 25 | 25 | — | — | — | No witness collected |
-| Hail 13: Polar Expedition | 50 | 50 | — | — | — | No witness collected |
+| Hail 11: Emmings!  (No L) | 70 | 70 | 70 | 70 | 0 | [Verified](witnesses/holidayLemmings1994-26.json) |
+| Hail 12: Merry Christmaze | 25 | 25 | 25 | 25 | 0 | [Verified](witnesses/holidayLemmings1994-27.json) |
+| Hail 13: Polar Expedition | 50 | 50 | 50 | 50 | 0 | [Verified](witnesses/holidayLemmings1994-28.json) |
 | Hail 14: Rendezvous II | 65 | 65 | 65 | 65 | 0 | [Verified](witnesses/holidayLemmings1994-29.json) |
 | Hail 15: Steel Block Party | 60 | 60 | 60 | 60 | 0 | [Verified](witnesses/holidayLemmings1994-30.json) |
-| Hail 16: Peak of Performance | 10 | 10 | — | — | — | No witness collected |
+| Hail 16: Peak of Performance | 10 | 10 | 10 | 10 | 0 | [Verified](witnesses/holidayLemmings1994-31.json) |

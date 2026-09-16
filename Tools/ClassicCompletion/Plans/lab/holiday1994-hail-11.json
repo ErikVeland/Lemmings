@@ -1,0 +1,88 @@
+[
+ {
+  "skill": "miner",
+  "id": 1,
+  "x": 672,
+  "direction": -1,
+  "action": "walking"
+ },
+ {
+  "skill": "miner",
+  "xMin": 700,
+  "xMax": 701,
+  "direction": 1,
+  "action": "walking",
+  "yMax": 80,
+  "notID": [
+   1
+  ],
+  "tick": 300
+ },
+ {
+  "skill": "climber",
+  "id": 1,
+  "xMax": 440,
+  "direction": -1,
+  "action": "walking"
+ },
+ {
+  "skill": "digger",
+  "id": 1,
+  "x": 422,
+  "action": "walking",
+  "yMax": 56
+ },
+ {
+  "skill": "builder",
+  "id": 1,
+  "yMin": 108,
+  "action": "digging"
+ },
+ {
+  "skill": "climber",
+  "xMax": 440,
+  "direction": -1,
+  "action": "walking",
+  "notID": [
+   1
+  ]
+ },
+ {
+  "skill": "digger",
+  "id": -1,
+  "x": 429,
+  "action": "walking",
+  "yMax": 56
+ },
+ {
+  "skill": "builder",
+  "id": -1,
+  "yMin": 110,
+  "action": "digging"
+ },
+ {
+  "skill": "builder",
+  "x": 816,
+  "direction": -1,
+  "action": "walking",
+  "yMin": 120
+ },
+ {
+  "skill": "builder",
+  "id": -1,
+  "action": "shrugging"
+ },
+ {
+  "skill": "builder",
+  "id": -1,
+  "action": "shrugging"
+ },
+ {
+  "skill": "builder",
+  "id": -1,
+  "action": "shrugging"
+ },
+ {
+  "rate": 99
+ }
+]
