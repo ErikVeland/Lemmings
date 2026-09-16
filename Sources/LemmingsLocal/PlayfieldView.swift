@@ -730,16 +730,37 @@ struct ReticleFeedback {
     return false
   }
 
+  /// Rounds a crop to whole level pixels - multiples of `imageScale` - on
+  /// every edge, clamped to the image bounds. Mac artwork doubles the source
+  /// image (`imageScale == 2`); a crop edge that lands on an odd image pixel
+  /// divides back into a fractional point size below, and nearest-neighbor
+  /// upscaling of a fractional destination samples source pixels unevenly.
+  /// That showed up as scrambled pixels on small, detailed objects such as
+  /// the entrance hatch, and how it landed depended on the screen's own
+  /// pixel grid, so it looked worse on some displays than others.
+  ///
+  /// Exposed (not private) so a test can check the geometry directly rather
+  /// than inferring it from rendered pixels.
+  nonisolated static func levelCropRect(visible: CGRect, imageScale: CGFloat, imageSize: CGSize) -> CGRect {
+    let originX = floor(visible.minX / imageScale) * imageScale
+    let originY = floor(visible.minY / imageScale) * imageScale
+    let rawWidth = min(ceil(visible.width) + 1, imageSize.width - originX)
+    let rawHeight = min(ceil(visible.height) + 1, imageSize.height - originY)
+    return CGRect(
+      x: originX, y: originY,
+      width: min(ceil(rawWidth / imageScale) * imageScale, imageSize.width - originX),
+      height: min(ceil(rawHeight / imageScale) * imageScale, imageSize.height - originY))
+  }
+
   private func drawLevel(_ image: CGImage) {
     // Crop in image pixels. CGImage uses a top-left origin, which matches the
     // level coordinate system, so no vertical flip is needed here.
     let logical = viewport.visibleLevelRect
     let visible = CGRect(x: logical.minX * imageScale, y: logical.minY * imageScale,
       width: logical.width * imageScale, height: logical.height * imageScale)
-    let crop = CGRect(
-      x: floor(visible.minX), y: floor(visible.minY),
-      width: min(ceil(visible.width) + 1, CGFloat(image.width) - floor(visible.minX)),
-      height: min(ceil(visible.height) + 1, CGFloat(image.height) - floor(visible.minY)))
+    let crop = Self.levelCropRect(
+      visible: visible, imageScale: imageScale,
+      imageSize: CGSize(width: image.width, height: image.height))
     guard crop.width > 0, crop.height > 0, let cropped = image.cropping(to: crop) else { return }
 
     let origin = viewport.viewPoint(fromLevel: CGPoint(x: crop.minX / imageScale, y: crop.minY / imageScale))
