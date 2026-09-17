@@ -1,0 +1,50 @@
+[
+ {
+  "skill": "bomber",
+  "id": 0,
+  "x": 735,
+  "action": "walking",
+  "yMax": 40
+ },
+ {
+  "skill": "blocker",
+  "xMin": 840,
+  "xMax": 841,
+  "yMin": 60,
+  "yMax": 64,
+  "action": "walking",
+  "direction": 1
+ },
+ {
+  "skill": "bomber",
+  "xMin": 810,
+  "xMax": 811,
+  "yMin": 60,
+  "yMax": 64,
+  "action": "walking",
+  "direction": 1,
+  "tick": 237
+ },
+ {
+  "skill": "bomber",
+  "xMin": 810,
+  "xMax": 811,
+  "yMin": 58,
+  "yMax": 90,
+  "direction": 1,
+  "tick": 290
+ },
+ {
+  "skill": "bomber",
+  "xMin": 781,
+  "xMax": 782,
+  "yMin": 100,
+  "yMax": 106,
+  "action": "walking",
+  "direction": -1
+ },
+ {
+  "rate": 99,
+  "tick": 607
+ }
+]

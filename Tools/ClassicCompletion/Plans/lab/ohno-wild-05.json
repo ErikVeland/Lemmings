@@ -1,0 +1,86 @@
+[
+ {
+  "skill": "blocker",
+  "x": 686,
+  "yMin": 120,
+  "action": "walking"
+ },
+ {
+  "skill": "bomber",
+  "id": -1,
+  "action": "blocking"
+ },
+ {
+  "skill": "blocker",
+  "xMin": 694,
+  "xMax": 695,
+  "yMin": 120,
+  "action": "walking",
+  "tick": 300
+ },
+ {
+  "skill": "bomber",
+  "id": -1,
+  "action": "blocking"
+ },
+ {
+  "skill": "blocker",
+  "xMin": 716,
+  "xMax": 717,
+  "yMin": 120,
+  "action": "walking",
+  "tick": 420
+ },
+ {
+  "skill": "bomber",
+  "id": -1,
+  "action": "blocking"
+ },
+ {
+  "skill": "blocker",
+  "xMin": 724,
+  "xMax": 725,
+  "yMin": 120,
+  "action": "walking",
+  "tick": 520
+ },
+ {
+  "skill": "bomber",
+  "id": -1,
+  "action": "blocking"
+ },
+ {
+  "skill": "blocker",
+  "xMin": 756,
+  "xMax": 757,
+  "yMin": 145,
+  "direction": -1,
+  "action": "walking"
+ },
+ {
+  "skill": "builder",
+  "xMin": 956,
+  "xMax": 957,
+  "yMin": 145,
+  "direction": 1,
+  "action": "walking"
+ },
+ {
+  "skill": "builder",
+  "id": -1,
+  "action": "shrugging"
+ },
+ {
+  "skill": "builder",
+  "id": -1,
+  "action": "shrugging"
+ },
+ {
+  "skill": "builder",
+  "id": -1,
+  "action": "shrugging"
+ },
+ {
+  "rate": 99
+ }
+]

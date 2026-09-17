@@ -1,0 +1,39 @@
+[
+ {
+  "skill": "miner",
+  "id": 1,
+  "x": 705,
+  "direction": 1,
+  "action": "walking"
+ },
+ {
+  "skill": "miner",
+  "id": 2,
+  "x": 780,
+  "direction": -1,
+  "action": "walking",
+  "yMax": 30
+ },
+ {
+  "skill": "miner",
+  "xMin": 747,
+  "yMin": 34,
+  "yMax": 52,
+  "direction": 1,
+  "action": "walking",
+  "tick": 1592
+ },
+ {
+  "skill": "miner",
+  "xMin": 747,
+  "yMin": 52,
+  "yMax": 105,
+  "direction": -1,
+  "action": "walking",
+  "tick": 2360
+ },
+ {
+  "rate": 99,
+  "tick": 1392
+ }
+]

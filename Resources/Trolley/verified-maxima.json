@@ -1,7 +1,7 @@
 {
   "engineSourceFingerprint": "483661a10882d87cd0d07590d6d96b2247e537e8bae2acdd8c8152ca34c3a3ca",
   "exhaustive": false,
-  "generatedAt": "2026-09-15T14:23:17Z",
+  "generatedAt": "2026-09-17T07:11:46Z",
   "levels": [
     {
       "bestSaved": 10,
@@ -5296,6 +5296,55 @@
       }
     },
     {
+      "bestSaved": 20,
+      "conditions": {
+        "gameID": "ohNoMoreLemmings",
+        "levelFingerprint": "2916ee2968af24070814f72a4350beca2339fe671895d7d02ec4074c8ffbb025",
+        "levelID": "level-25",
+        "modifiers": {},
+        "packID": "ohNoMoreLemmings-DLVEL-100",
+        "physicsMode": "classic-dos-v1",
+        "population": 20,
+        "rescueRequirement": 20,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "classic-dos-v1",
+        "startingSkills": {
+          "basher": 0,
+          "blocker": 0,
+          "bomber": 0,
+          "builder": 5,
+          "climber": 2,
+          "digger": 2,
+          "floater": 0,
+          "miner": 0
+        },
+        "timeLimitSeconds": 180
+      },
+      "gameID": "ohNoMoreLemmings",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 20,
+      "minimumSacrifices": 0,
+      "notes": [],
+      "number": 6,
+      "population": 20,
+      "rank": "Crazy",
+      "required": 20,
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "The Stack",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/ohNoMoreLemmings-25.json",
+        "released": 20,
+        "retainedReserves": 0,
+        "saved": 20,
+        "sha256": "716f166713506c69ff2dfc8fa3ed5ea4d4f152fbc7d342637b79d0254c90fdb4",
+        "ticks": 2784
+      }
+    },
+    {
       "bestSaved": 50,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
@@ -5685,6 +5734,55 @@
         "saved": 50,
         "sha256": "7c82b6983771c49a4ae08ecc479d82dae77475e11b82d0f654f1804650d10487",
         "ticks": 3551
+      }
+    },
+    {
+      "bestSaved": 50,
+      "conditions": {
+        "gameID": "ohNoMoreLemmings",
+        "levelFingerprint": "63facbfdf81c74a7cb59c0b7cc240e049f5a092858e7ad6fc63972bebac33efb",
+        "levelID": "level-88",
+        "modifiers": {},
+        "packID": "ohNoMoreLemmings-DLVEL-100",
+        "physicsMode": "classic-dos-v1",
+        "population": 50,
+        "rescueRequirement": 50,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "classic-dos-v1",
+        "startingSkills": {
+          "basher": 0,
+          "blocker": 0,
+          "bomber": 0,
+          "builder": 5,
+          "climber": 20,
+          "digger": 0,
+          "floater": 0,
+          "miner": 3
+        },
+        "timeLimitSeconds": 240
+      },
+      "gameID": "ohNoMoreLemmings",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 50,
+      "minimumSacrifices": 0,
+      "notes": [],
+      "number": 9,
+      "population": 50,
+      "rank": "Havoc",
+      "required": 50,
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "AAAAAARRRRRRGGGGGGHHHHHH!!!!!!",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/ohNoMoreLemmings-88.json",
+        "released": 50,
+        "retainedReserves": 0,
+        "saved": 50,
+        "sha256": "9f7118f2635736db8f5c37cd048489680fa8ea72d147cb4fcacebf099bd1efa6",
+        "ticks": 2369
       }
     },
     {
@@ -6521,6 +6619,55 @@
       }
     },
     {
+      "bestSaved": 1,
+      "conditions": {
+        "gameID": "ohNoMoreLemmings",
+        "levelFingerprint": "5a744cb614d0f1309dd47c61b17db1660b43e22940f66227b4c03f1647fb2dfb",
+        "levelID": "level-61",
+        "modifiers": {},
+        "packID": "ohNoMoreLemmings-DLVEL-100",
+        "physicsMode": "classic-dos-v1",
+        "population": 1,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "classic-dos-v1",
+        "startingSkills": {
+          "basher": 6,
+          "blocker": 0,
+          "bomber": 0,
+          "builder": 5,
+          "climber": 1,
+          "digger": 6,
+          "floater": 0,
+          "miner": 2
+        },
+        "timeLimitSeconds": 240
+      },
+      "gameID": "ohNoMoreLemmings",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 1,
+      "minimumSacrifices": 0,
+      "notes": [],
+      "number": 2,
+      "population": 1,
+      "rank": "Wicked",
+      "required": 1,
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Inroducing SUPERLEMMING",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/ohNoMoreLemmings-61.json",
+        "released": 1,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "baaf5bcd4db0fe66333723142f819b931611e863604989a6e7874208b7d217a5",
+        "ticks": 3560
+      }
+    },
+    {
       "bestSaved": 50,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
@@ -6567,6 +6714,55 @@
         "saved": 50,
         "sha256": "556efd3f37a2a9843f4136361e7cbba8ef463c66ac3673eaa61c105f4a8d2bbf",
         "ticks": 1378
+      }
+    },
+    {
+      "bestSaved": 20,
+      "conditions": {
+        "gameID": "ohNoMoreLemmings",
+        "levelFingerprint": "1f5da2ecc3e03f3c16d3e9d6afc3287f2f6fa3a80f5343adefa8908b462b131c",
+        "levelID": "level-64",
+        "modifiers": {},
+        "packID": "ohNoMoreLemmings-DLVEL-100",
+        "physicsMode": "classic-dos-v1",
+        "population": 20,
+        "rescueRequirement": 20,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "classic-dos-v1",
+        "startingSkills": {
+          "basher": 10,
+          "blocker": 0,
+          "bomber": 0,
+          "builder": 1,
+          "climber": 1,
+          "digger": 10,
+          "floater": 1,
+          "miner": 0
+        },
+        "timeLimitSeconds": 180
+      },
+      "gameID": "ohNoMoreLemmings",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 20,
+      "minimumSacrifices": 0,
+      "notes": [],
+      "number": 5,
+      "population": 20,
+      "rank": "Wicked",
+      "required": 20,
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Chill out!",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/ohNoMoreLemmings-64.json",
+        "released": 20,
+        "retainedReserves": 0,
+        "saved": 20,
+        "sha256": "6f77520857239310fdef7fe89ebbe068cc90a65369126177d298ef6911d82c9d",
+        "ticks": 1926
       }
     },
     {
@@ -6815,6 +7011,55 @@
       }
     },
     {
+      "bestSaved": 10,
+      "conditions": {
+        "gameID": "ohNoMoreLemmings",
+        "levelFingerprint": "9ad9a2ec74e9502ce3e51b72dfb6e3ba74ceda143cb641fa29dcaa2442c66d4a",
+        "levelID": "level-47",
+        "modifiers": {},
+        "packID": "ohNoMoreLemmings-DLVEL-100",
+        "physicsMode": "classic-dos-v1",
+        "population": 10,
+        "rescueRequirement": 10,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "classic-dos-v1",
+        "startingSkills": {
+          "basher": 0,
+          "blocker": 1,
+          "bomber": 1,
+          "builder": 1,
+          "climber": 10,
+          "digger": 0,
+          "floater": 10,
+          "miner": 0
+        },
+        "timeLimitSeconds": 60
+      },
+      "gameID": "ohNoMoreLemmings",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 10,
+      "minimumSacrifices": 0,
+      "notes": [],
+      "number": 8,
+      "population": 10,
+      "rank": "Wild",
+      "required": 10,
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "It`s a tight fit!",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/ohNoMoreLemmings-47.json",
+        "released": 10,
+        "retainedReserves": 0,
+        "saved": 10,
+        "sha256": "4a1cfb8209e4e6461213b57183c3ae9b345f57f14201318f1721162379604a57",
+        "ticks": 782
+      }
+    },
+    {
       "bestSaved": 80,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
@@ -6861,6 +7106,55 @@
         "saved": 80,
         "sha256": "23ed49d30af6fb4ba16c2c21e1b72427914af0a88464cce72ea4374f52d956a4",
         "ticks": 3543
+      }
+    },
+    {
+      "bestSaved": 1,
+      "conditions": {
+        "gameID": "ohNoMoreLemmings",
+        "levelFingerprint": "c8631f4dc2c989b303dc3026dad5400552b16dcf9c7582ef67e4927bb230469f",
+        "levelID": "level-55",
+        "modifiers": {},
+        "packID": "ohNoMoreLemmings-DLVEL-100",
+        "physicsMode": "classic-dos-v1",
+        "population": 1,
+        "rescueRequirement": 1,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "classic-dos-v1",
+        "startingSkills": {
+          "basher": 0,
+          "blocker": 0,
+          "bomber": 0,
+          "builder": 4,
+          "climber": 1,
+          "digger": 0,
+          "floater": 0,
+          "miner": 0
+        },
+        "timeLimitSeconds": 180
+      },
+      "gameID": "ohNoMoreLemmings",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 1,
+      "minimumSacrifices": 0,
+      "notes": [],
+      "number": 16,
+      "population": 1,
+      "rank": "Wild",
+      "required": 1,
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Take care, Sweetie",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/ohNoMoreLemmings-55.json",
+        "released": 1,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "b3b10600d915fa17ced9428bfcfc3d8d3038149cb1f71313faa58b1df88581cd",
+        "ticks": 1561
       }
     },
     {

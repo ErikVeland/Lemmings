@@ -1,0 +1,67 @@
+[
+ {
+  "skill": "bomber",
+  "id": 0,
+  "async": true
+ },
+ {
+  "skill": "bomber",
+  "id": 1,
+  "async": true
+ },
+ {
+  "skill": "bomber",
+  "id": 2,
+  "action": "walking",
+  "async": true
+ },
+ {
+  "skill": "bomber",
+  "id": 3,
+  "x": 747,
+  "action": "walking",
+  "async": true
+ },
+ {
+  "skill": "builder",
+  "id": 5,
+  "x": 802,
+  "direction": 1,
+  "action": "walking",
+  "async": true
+ },
+ {
+  "skill": "builder",
+  "id": 4,
+  "x": 864,
+  "direction": 1,
+  "action": "walking"
+ },
+ {
+  "skill": "builder",
+  "id": 4,
+  "action": "shrugging"
+ },
+ {
+  "skill": "builder",
+  "id": 4,
+  "action": "shrugging"
+ },
+ {
+  "skill": "builder",
+  "id": 4,
+  "action": "shrugging"
+ },
+ {
+  "skill": "bomber",
+  "action": "falling",
+  "tick": 1050,
+  "async": true,
+  "yMax": 30
+ },
+ {
+  "rate": 99,
+  "tick": 1170,
+  "async": true
+ }
+]

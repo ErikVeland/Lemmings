@@ -53,6 +53,7 @@ struct Step: Codable {
     var rate: Int?
     var nuke: Bool?
     var notID: [Int]?
+    var async: Bool?
 }
 
 struct Result {
@@ -78,11 +79,29 @@ func matches(_ step: Step, _ lem: ClassicDOSLemming, lastID: Int) -> Bool {
 func runPlan(_ steps: [Step], base: ClassicDOSSimulation, until: Int? = nil, verbose: Bool, traceIDs: Set<Int> = [], every: Int = 50, stopLoss: Bool = true) -> Result {
     var sim = base
     var events: [ClassicDOSReplayEvent] = []
+    let asyncSteps = steps.filter { $0.async == true }
+    let steps = steps.filter { $0.async != true }
+    var asyncDone = Array(repeating: false, count: asyncSteps.count)
     var index = 0
     var lastID = 0
     let limit = until ?? ClassicDOSReplayPlayer.defaultTickLimit
     while !sim.isComplete && sim.tickCount < limit {
         _ = sim.tick()
+        for (ai, step) in asyncSteps.enumerated() where !asyncDone[ai] {
+            if let t = step.tick, sim.tickCount < t { continue }
+            if let rate = step.rate {
+                sim.setReleaseRate(rate); events.append(.init(tick: sim.tickCount, action: .releaseRate(rate), afterTick: true)); asyncDone[ai] = true; continue
+            }
+            guard let skill = step.skill else { asyncDone[ai] = true; continue }
+            for lem in sim.lemmings where lem.isActive && matches(step, lem, lastID: lastID) {
+                if sim.assign(skill, to: lem.id) == .assigned {
+                    events.append(.init(tick: sim.tickCount, action: .assign(lemmingID: lem.id, skill: skill), afterTick: true))
+                    if verbose { print("ASYNC", ai, sim.tickCount, lem.id, skill.rawValue, lem.foot.x, lem.foot.y, lem.action.rawValue, lem.direction.rawValue) }
+                    asyncDone[ai] = true
+                    break
+                }
+            }
+        }
         if !traceIDs.isEmpty && sim.tickCount % every == 0 {
             for lem in sim.lemmings where traceIDs.contains(lem.id) {
                 print("T", sim.tickCount, lem.id, lem.foot.x, lem.foot.y, lem.action.rawValue, lem.direction.rawValue, lem.outcome.rawValue)
@@ -231,7 +250,7 @@ case "info":
     print("size \(base.terrain.width)x\(base.terrain.height) lemmings \(c.totalLemmings) required \(c.requiredToSave) timeTicks \(c.timeLimitTicks.map(String.init) ?? "none") (\((c.timeLimitTicks ?? 0) / 17)s) rate \(c.initialReleaseRate) maxX \(c.maximumX) maxY \(c.maximumY)")
     print("skills", ClassicSkill.allCases.map { "\($0.rawValue)=\(c.initialSkills[$0] ?? 0)" }.joined(separator: " "))
     print("entrances", c.entrances.map { "(\($0.x),\($0.y))" }.joined(separator: " "))
-    for t in c.triggers { print("trigger", t.id, t.effect, t.bounds.x1, t.bounds.y1, t.bounds.x2, t.bounds.y2) }
+    for t in c.triggers { print("trigger", t.id, t.effect, t.bounds.x1, t.bounds.y1, t.bounds.x2, t.bounds.y2, "reset", t.trapResetTicks) }
 case "run", "replay":
     let steps = try JSONDecoder().decode([Step].self, from: Data(contentsOf: URL(fileURLWithPath: args[4])))
     let until = option("--until").flatMap(Int.init)
@@ -241,6 +260,14 @@ case "run", "replay":
     if let png = option("--png") {
         let crop = option("--crop").map { s -> (Int, Int, Int, Int) in let v = s.split(separator: ",").map { Int($0)! }; return (v[0], v[1], v[2], v[3]) }
         render(result.sim, original: original, crop: crop, scale: option("--scale").flatMap(Int.init) ?? 1, url: URL(fileURLWithPath: png), labels: args.contains("--labels"))
+    }
+    if let m = option("--map") {
+        let v = m.split(separator: ",").map { Int($0)! }
+        for y in v[2]...v[3] {
+            var row = String(format: "%3d ", y)
+            for x in v[0]...v[1] { row += result.sim.terrain.isSolid(x: x, y: y) ? "#" : "." }
+            print(row)
+        }
     }
     if args.contains("--lost") {
         let groups = Dictionary(grouping: result.sim.lemmings.filter { $0.outcome == .lost }, by: { "\($0.action.rawValue) \($0.foot.x) \($0.foot.y)" }).mapValues { $0.map(\.id) }

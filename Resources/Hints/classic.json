@@ -6481,6 +6481,47 @@
       "width" : 1600
     },
     {
+      "fingerprint" : "cb6636e9fcef46fae6ac2fe3aa35a760509e646ef8ce8e922df6c63e698d3d14",
+      "height" : 160,
+      "number" : 3,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "bomber",
+          "tick" : 80,
+          "x" : 506,
+          "y" : 44
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 1,
+          "skill" : "builder",
+          "tick" : 107,
+          "x" : 520,
+          "y" : 44
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 3,
+          "skill" : "builder",
+          "tick" : 133,
+          "x" : 520,
+          "y" : 43
+        }
+      ],
+      "rank" : "Crazy",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "bomber",
+        "builder"
+      ],
+      "title" : "Many Lemmings make level work",
+      "width" : 1600
+    },
+    {
       "fingerprint" : "c3c8e0607e31982a862eca652e413884135a2904bd7f3582b3e22a73566eae49",
       "height" : 160,
       "number" : 4,
@@ -6562,6 +6603,48 @@
         "digger"
       ],
       "title" : "24 hour Lemathon",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "2916ee2968af24070814f72a4350beca2339fe671895d7d02ec4074c8ffbb025",
+      "height" : 160,
+      "number" : 6,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "climber",
+          "tick" : 54,
+          "x" : 712,
+          "y" : 109
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "builder",
+          "tick" : 144,
+          "x" : 770,
+          "y" : 136
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "digger",
+          "tick" : 1149,
+          "x" : 799,
+          "y" : 49
+        }
+      ],
+      "rank" : "Crazy",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "climber",
+        "builder",
+        "digger"
+      ],
+      "title" : "The Stack",
       "width" : 1600
     },
     {
@@ -7455,6 +7538,48 @@
       "width" : 1600
     },
     {
+      "fingerprint" : "af1027f1d0ed6f97c6af001a1e10226680abb45a9f1c7852296c4bbcaf4f0c81",
+      "height" : 160,
+      "number" : 5,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "blocker",
+          "tick" : 224,
+          "x" : 686,
+          "y" : 126
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "bomber",
+          "tick" : 225,
+          "x" : 686,
+          "y" : 126
+        },
+        {
+          "facingLeft" : true,
+          "lemmingID" : 2,
+          "skill" : "blocker",
+          "tick" : 339,
+          "x" : 694,
+          "y" : 128
+        }
+      ],
+      "rank" : "Wild",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "blocker",
+        "bomber",
+        "builder"
+      ],
+      "title" : "Lemming Head",
+      "width" : 1600
+    },
+    {
       "fingerprint" : "e698717664369dff49c95a9161b059133f13e1de0a9bccc2f2ccc09575b11629",
       "height" : 160,
       "number" : 6,
@@ -7498,6 +7623,51 @@
         "basher"
       ],
       "title" : "Just A Quicky",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "9ad9a2ec74e9502ce3e51b72dfb6e3ba74ceda143cb641fa29dcaa2442c66d4a",
+      "height" : 160,
+      "number" : 8,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "climber",
+          "tick" : 54,
+          "x" : 728,
+          "y" : 45
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 1,
+          "skill" : "climber",
+          "tick" : 107,
+          "x" : 728,
+          "y" : 45
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 1,
+          "skill" : "floater",
+          "tick" : 108,
+          "x" : 728,
+          "y" : 48
+        }
+      ],
+      "rank" : "Wild",
+      "rates" : [
+        {
+          "tick" : 55,
+          "value" : 99
+        }
+      ],
+      "skillOrder" : [
+        "climber",
+        "floater",
+        "builder"
+      ],
+      "title" : "It`s a tight fit!",
       "width" : 1600
     },
     {
@@ -7744,6 +7914,47 @@
       "width" : 1600
     },
     {
+      "fingerprint" : "c8631f4dc2c989b303dc3026dad5400552b16dcf9c7582ef67e4927bb230469f",
+      "height" : 160,
+      "number" : 16,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "builder",
+          "tick" : 62,
+          "x" : 616,
+          "y" : 47
+        },
+        {
+          "facingLeft" : true,
+          "lemmingID" : 0,
+          "skill" : "builder",
+          "tick" : 320,
+          "x" : 556,
+          "y" : 47
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "builder",
+          "tick" : 1017,
+          "x" : 918,
+          "y" : 155
+        }
+      ],
+      "rank" : "Wild",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "builder",
+        "climber"
+      ],
+      "title" : "Take care, Sweetie",
+      "width" : 1600
+    },
+    {
       "fingerprint" : "2b77334a499a5400ed92479dad81a789633169e125212f2454c83a030a9ba378",
       "height" : 160,
       "number" : 17,
@@ -7794,6 +8005,47 @@
         "miner"
       ],
       "title" : "The Chain with no name",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "c4197c9cdbd017c4b4d93a5262f40788828da00ac28132c8ca56577d1d9f2051",
+      "height" : 160,
+      "number" : 18,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "bomber",
+          "tick" : 54,
+          "x" : 744,
+          "y" : 17
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 1,
+          "skill" : "bomber",
+          "tick" : 107,
+          "x" : 744,
+          "y" : 17
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 2,
+          "skill" : "bomber",
+          "tick" : 168,
+          "x" : 744,
+          "y" : 40
+        }
+      ],
+      "rank" : "Wild",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "bomber",
+        "builder"
+      ],
+      "title" : "Dr Lemminggood",
       "width" : 1600
     },
     {
@@ -7885,6 +8137,94 @@
       "width" : 1600
     },
     {
+      "fingerprint" : "c2880610cc76ee5176bfe86ce7ffaffb3ddc684ca768494f2a54d90bca78ab3f",
+      "height" : 160,
+      "number" : 1,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "bomber",
+          "tick" : 65,
+          "x" : 715,
+          "y" : 135
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 1,
+          "skill" : "climber",
+          "tick" : 107,
+          "x" : 632,
+          "y" : 17
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 3,
+          "skill" : "bomber",
+          "tick" : 228,
+          "x" : 719,
+          "y" : 135
+        }
+      ],
+      "rank" : "Wicked",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "bomber",
+        "climber",
+        "miner",
+        "basher",
+        "digger"
+      ],
+      "title" : "LeMming ToMato KetchUp fAcilitY",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "5a744cb614d0f1309dd47c61b17db1660b43e22940f66227b4c03f1647fb2dfb",
+      "height" : 160,
+      "number" : 2,
+      "opening" : [
+        {
+          "facingLeft" : true,
+          "lemmingID" : 0,
+          "skill" : "miner",
+          "tick" : 275,
+          "x" : 150,
+          "y" : 55
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "basher",
+          "tick" : 635,
+          "x" : 90,
+          "y" : 152
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "climber",
+          "tick" : 700,
+          "x" : 110,
+          "y" : 152
+        }
+      ],
+      "rank" : "Wicked",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "miner",
+        "basher",
+        "climber",
+        "digger",
+        "builder"
+      ],
+      "title" : "Inroducing SUPERLEMMING",
+      "width" : 1600
+    },
+    {
       "fingerprint" : "612d217daf7cfd3ffe75cd462ca0d64b9b661409012b3830c71bbbea40df38a5",
       "height" : 160,
       "number" : 3,
@@ -7971,6 +8311,130 @@
         "basher"
       ],
       "title" : "Oh No! It`s the 4TH DIMENSION!",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "1f5da2ecc3e03f3c16d3e9d6afc3287f2f6fa3a80f5343adefa8908b462b131c",
+      "height" : 160,
+      "number" : 5,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "digger",
+          "tick" : 70,
+          "x" : 588,
+          "y" : 53
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "basher",
+          "tick" : 103,
+          "x" : 588,
+          "y" : 58
+        },
+        {
+          "facingLeft" : true,
+          "lemmingID" : 1,
+          "skill" : "builder",
+          "tick" : 172,
+          "x" : 579,
+          "y" : 56
+        }
+      ],
+      "rank" : "Wicked",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "digger",
+        "basher",
+        "builder",
+        "climber"
+      ],
+      "title" : "Chill out!",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "a3f7076cc75d6f9419e7f75233e595d8c567d31daac19069fd3771fc8c9117b5",
+      "height" : 160,
+      "number" : 6,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 1,
+          "skill" : "miner",
+          "tick" : 135,
+          "x" : 705,
+          "y" : 25
+        },
+        {
+          "facingLeft" : true,
+          "lemmingID" : 2,
+          "skill" : "miner",
+          "tick" : 260,
+          "x" : 780,
+          "y" : 23
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 1,
+          "skill" : "miner",
+          "tick" : 1592,
+          "x" : 747,
+          "y" : 51
+        }
+      ],
+      "rank" : "Wicked",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "miner"
+      ],
+      "title" : "PoP TiL YoU DrOp!",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "3817ed20cc81e0467be0f1ec0c2f70e815da85c9b8ebded93b1becc538154ff4",
+      "height" : 160,
+      "number" : 7,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "bomber",
+          "tick" : 131,
+          "x" : 735,
+          "y" : 38
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 5,
+          "skill" : "blocker",
+          "tick" : 365,
+          "x" : 840,
+          "y" : 62
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 3,
+          "skill" : "bomber",
+          "tick" : 372,
+          "x" : 810,
+          "y" : 62
+        }
+      ],
+      "rank" : "Wicked",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "bomber",
+        "blocker"
+      ],
+      "title" : "Last Lemming To Lemmingcentral",
       "width" : 1600
     },
     {
@@ -8188,6 +8652,49 @@
       "width" : 1600
     },
     {
+      "fingerprint" : "ebd51531e805731acc3b310fa169395d458a239abfb23941355d7c1a95858fa8",
+      "height" : 160,
+      "number" : 12,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 1,
+          "skill" : "blocker",
+          "tick" : 120,
+          "x" : 626,
+          "y" : 122
+        },
+        {
+          "facingLeft" : true,
+          "lemmingID" : 2,
+          "skill" : "blocker",
+          "tick" : 169,
+          "x" : 588,
+          "y" : 122
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "builder",
+          "tick" : 220,
+          "x" : 749,
+          "y" : 50
+        }
+      ],
+      "rank" : "Wicked",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "blocker",
+        "builder",
+        "miner",
+        "bomber"
+      ],
+      "title" : "Suicidal Tendencies",
+      "width" : 1600
+    },
+    {
       "fingerprint" : "4441ef5f588a312a827ac47a10c31eff7294c3fba7c64fe08d23f7b6569fa6ae",
       "height" : 160,
       "number" : 13,
@@ -8279,6 +8786,50 @@
       "width" : 1600
     },
     {
+      "fingerprint" : "ab5daa77f945dadb73257c0b0ae8195d48100c2c9c1d0d075e6b18aff7f5273e",
+      "height" : 160,
+      "number" : 16,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "bomber",
+          "tick" : 54,
+          "x" : 680,
+          "y" : 37
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 1,
+          "skill" : "climber",
+          "tick" : 70,
+          "x" : 680,
+          "y" : 37
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 1,
+          "skill" : "miner",
+          "tick" : 153,
+          "x" : 750,
+          "y" : 77
+        }
+      ],
+      "rank" : "Wicked",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "bomber",
+        "climber",
+        "miner",
+        "builder",
+        "floater"
+      ],
+      "title" : "Five Alive",
+      "width" : 1600
+    },
+    {
       "fingerprint" : "bca449fa95f05c6040c328620bf7befbfce160e99a5ae6107a58baf09d66a111",
       "height" : 160,
       "number" : 17,
@@ -8365,6 +8916,50 @@
         "miner"
       ],
       "title" : "LoTs moRe wHeRe TheY caMe fRom",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "6f81a8208f6ea691de7076e0b1b4b898525c983b9a471ea2d3d8c0efcbf5cceb",
+      "height" : 160,
+      "number" : 19,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "basher",
+          "tick" : 303,
+          "x" : 674,
+          "y" : 154
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "basher",
+          "tick" : 446,
+          "x" : 812,
+          "y" : 156
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "builder",
+          "tick" : 679,
+          "x" : 862,
+          "y" : 120
+        }
+      ],
+      "rank" : "Wicked",
+      "rates" : [
+        {
+          "tick" : 1,
+          "value" : 99
+        }
+      ],
+      "skillOrder" : [
+        "basher",
+        "builder"
+      ],
+      "title" : "Up, Down or Round and Round",
       "width" : 1600
     },
     {
@@ -8770,6 +9365,48 @@
         "digger"
       ],
       "title" : "Lemming about town",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "63facbfdf81c74a7cb59c0b7cc240e049f5a092858e7ad6fc63972bebac33efb",
+      "height" : 160,
+      "number" : 9,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 1,
+          "skill" : "climber",
+          "tick" : 107,
+          "x" : 744,
+          "y" : 97
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 2,
+          "skill" : "climber",
+          "tick" : 160,
+          "x" : 744,
+          "y" : 97
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 3,
+          "skill" : "climber",
+          "tick" : 213,
+          "x" : 744,
+          "y" : 97
+        }
+      ],
+      "rank" : "Havoc",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "climber",
+        "builder",
+        "miner"
+      ],
+      "title" : "AAAAAARRRRRRGGGGGGHHHHHH!!!!!!",
       "width" : 1600
     },
     {

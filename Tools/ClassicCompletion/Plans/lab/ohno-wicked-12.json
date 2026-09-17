@@ -1,0 +1,80 @@
+[
+ {
+  "skill": "blocker",
+  "id": 1,
+  "x": 626,
+  "direction": 1,
+  "action": "walking"
+ },
+ {
+  "skill": "blocker",
+  "id": 2,
+  "x": 588,
+  "direction": -1,
+  "action": "walking"
+ },
+ {
+  "skill": "builder",
+  "id": 0,
+  "x": 749,
+  "y": 50,
+  "direction": 1,
+  "action": "walking"
+ },
+ {
+  "skill": "builder",
+  "id": 0,
+  "x": 799,
+  "y": 40,
+  "direction": 1,
+  "action": "walking"
+ },
+ {
+  "skill": "builder",
+  "id": 0,
+  "x": 833,
+  "y": 72,
+  "direction": 1,
+  "action": "walking"
+ },
+ {
+  "skill": "builder",
+  "id": 0,
+  "x": 879,
+  "y": 64,
+  "direction": 1,
+  "action": "walking"
+ },
+ {
+  "skill": "builder",
+  "id": 0,
+  "x": 914,
+  "y": 102,
+  "direction": 1,
+  "action": "walking"
+ },
+ {
+  "skill": "builder",
+  "id": 0,
+  "x": 961,
+  "y": 95,
+  "direction": 1,
+  "action": "walking"
+ },
+ {
+  "skill": "miner",
+  "id": 0,
+  "x": 1115,
+  "y": 46,
+  "direction": 1,
+  "action": "walking"
+ },
+ {
+  "skill": "bomber",
+  "id": 1,
+  "tick": 1760
+ },
+ {
+  "rate": 99
+ }
+]

@@ -13,10 +13,10 @@ The game pauses while the page is open. Closing it restores the previous pause s
 
 ## Coverage
 
-As of 16 September 2026, checked hints cover 265 official Classic levels through
-263 distinct level identities. This includes all 120 original levels, all 32
+As of 17 September 2026, checked hints cover 280 official Classic levels through
+278 distinct level identities. This includes all 120 original levels, all 32
 Holiday 1993 levels, all 32 Holiday 1994 levels, both complete Xmas campaigns and
-73 Oh No! levels. All three tiers come from a verified winning route.
+88 Oh No! levels. All three tiers come from a verified winning route.
 
 Levels without matching checked routes receive labelled general coaching.
 This includes the remaining official levels, L2, L3, conversions and fan packs,
@@ -24,7 +24,7 @@ unless a fan level exactly matches a checked original identity. General coaching
 is advice about the available mechanics, not a solution for that level.
 
 Checked hints follow preserved winning routes. The official Classic gap is now
-27 Oh No! levels. Sequel and community completion have separate evidence limits.
+12 Oh No! levels. Sequel and community completion have separate evidence limits.
 See the [current closure work](ReleaseReadiness/OneZeroClosure-2026-09-15.md).
 
 Each click reveals one tier:
@@ -68,5 +68,5 @@ The checks exercise all 744 hint tiers, verify complete text and accessible valu
 and test keyboard scrolling and scroll reset with an oversized coaching page.
 They also render the three tiers under `.build/hints` for visual inspection.
 
-Run `Scripts/test-level-hint-catalogue.sh` for headless checks of all 263 decks,
+Run `Scripts/test-level-hint-catalogue.sh` for headless checks of all 278 decks,
 release-rate ordering and the first two tiers’ spoiler boundaries.

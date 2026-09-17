@@ -144,10 +144,10 @@ See [method and limitations](README.md) and [exact conditions and evidence](audi
 | --- | ---: | ---: | ---: | ---: | ---: | --- |
 | Crazy 1: Quote: "That`s a good level" | 50 | 48 | 48 | — | — | [Observed](witnesses/ohNoMoreLemmings-20.json) |
 | Crazy 2: Dolly Dimple | 80 | 80 | — | — | — | No witness collected |
-| Crazy 3: Many Lemmings make level work | 50 | 48 | — | — | — | No witness collected |
+| Crazy 3: Many Lemmings make level work | 50 | 48 | 48 | — | — | [Observed](witnesses/ohNoMoreLemmings-22.json) |
 | Crazy 4: Lemming Express | 20 | 20 | 20 | 20 | 0 | [Verified](witnesses/ohNoMoreLemmings-23.json) |
 | Crazy 5: 24 hour Lemathon | 80 | 80 | 80 | 80 | 0 | [Verified](witnesses/ohNoMoreLemmings-24.json) |
-| Crazy 6: The Stack | 20 | 20 | — | — | — | No witness collected |
+| Crazy 6: The Stack | 20 | 20 | 20 | 20 | 0 | [Verified](witnesses/ohNoMoreLemmings-25.json) |
 | Crazy 7: And now, the end is near... | 50 | 50 | 50 | 50 | 0 | [Verified](witnesses/ohNoMoreLemmings-26.json) |
 | Crazy 8: KEEP ON TRUCKING | 80 | 75 | 75 | — | — | [Observed](witnesses/ohNoMoreLemmings-27.json) |
 | Crazy 9: On the Antarctic Coast | 20 | 20 | 20 | 20 | 0 | [Verified](witnesses/ohNoMoreLemmings-28.json) |
@@ -170,7 +170,7 @@ See [method and limitations](README.md) and [exact conditions and evidence](audi
 | Havoc 6: Now get out of that! | 50 | 50 | 50 | 50 | 0 | [Verified](witnesses/ohNoMoreLemmings-85.json) |
 | Havoc 7: Creature Discomforts | 20 | 15 | — | — | — | No witness collected |
 | Havoc 8: Lemming about town | 50 | 45 | 50 | 50 | 0 | [Verified](witnesses/ohNoMoreLemmings-87.json) |
-| Havoc 9: AAAAAARRRRRRGGGGGGHHHHHH!!!!!! | 50 | 50 | — | — | — | No witness collected |
+| Havoc 9: AAAAAARRRRRRGGGGGGHHHHHH!!!!!! | 50 | 50 | 50 | 50 | 0 | [Verified](witnesses/ohNoMoreLemmings-88.json) |
 | Havoc 10: Flow Control | 21 | 3 | 5 | — | — | [Observed](witnesses/ohNoMoreLemmings-89.json) |
 | Havoc 11: Welcome to the party, pal! | 80 | 80 | 80 | 80 | 0 | [Verified](witnesses/ohNoMoreLemmings-90.json) |
 | Havoc 12: It`s all a matter of timing | 80 | 80 | 80 | 80 | 0 | [Verified](witnesses/ohNoMoreLemmings-91.json) |
@@ -202,34 +202,34 @@ See [method and limitations](README.md) and [exact conditions and evidence](audi
 | Tame 18: Lemmings For Presidents! | 50 | 25 | 50 | 50 | 0 | [Verified](witnesses/ohNoMoreLemmings-17.json) |
 | Tame 19: Lemming Productions Present... | 50 | 25 | 49 | — | — | [Observed](witnesses/ohNoMoreLemmings-18.json) |
 | Tame 20: Custom built for Lemmings | 50 | 25 | 50 | 50 | 0 | [Verified](witnesses/ohNoMoreLemmings-19.json) |
-| Wicked 1: LeMming ToMato KetchUp fAcilitY | 60 | 48 | — | — | — | No witness collected |
-| Wicked 2: Inroducing SUPERLEMMING | 1 | 1 | — | — | — | No witness collected |
+| Wicked 1: LeMming ToMato KetchUp fAcilitY | 60 | 48 | 55 | — | — | [Observed](witnesses/ohNoMoreLemmings-60.json) |
+| Wicked 2: Inroducing SUPERLEMMING | 1 | 1 | 1 | 1 | 0 | [Verified](witnesses/ohNoMoreLemmings-61.json) |
 | Wicked 3: This Corrosion | 50 | 50 | 50 | 50 | 0 | [Verified](witnesses/ohNoMoreLemmings-62.json) |
 | Wicked 4: Oh No! It`s the 4TH DIMENSION! | 50 | 30 | 41 | — | — | [Observed](witnesses/ohNoMoreLemmings-63.json) |
-| Wicked 5: Chill out! | 20 | 20 | — | — | — | No witness collected |
-| Wicked 6: PoP TiL YoU DrOp! | 80 | 30 | — | — | — | No witness collected |
-| Wicked 7: Last Lemming To Lemmingcentral | 80 | 72 | — | — | — | No witness collected |
+| Wicked 5: Chill out! | 20 | 20 | 20 | 20 | 0 | [Verified](witnesses/ohNoMoreLemmings-64.json) |
+| Wicked 6: PoP TiL YoU DrOp! | 80 | 30 | 40 | — | — | [Observed](witnesses/ohNoMoreLemmings-65.json) |
+| Wicked 7: Last Lemming To Lemmingcentral | 80 | 72 | 73 | — | — | [Observed](witnesses/ohNoMoreLemmings-66.json) |
 | Wicked 8: A TOWERING PROBLEM | 50 | 45 | 46 | — | — | [Observed](witnesses/ohNoMoreLemmings-67.json) |
 | Wicked 9: How on Earth? | 50 | 45 | 45 | — | — | [Observed](witnesses/ohNoMoreLemmings-68.json) |
 | Wicked 10: Temple of Love | 50 | 48 | 49 | — | — | [Observed](witnesses/ohNoMoreLemmings-69.json) |
 | Wicked 11: ROCKY ROAD | 50 | 40 | 44 | — | — | [Observed](witnesses/ohNoMoreLemmings-70.json) |
-| Wicked 12: Suicidal Tendencies | 80 | 78 | — | — | — | No witness collected |
+| Wicked 12: Suicidal Tendencies | 80 | 78 | 78 | — | — | [Observed](witnesses/ohNoMoreLemmings-71.json) |
 | Wicked 13: Almost Nearly Virtual Reality | 80 | 70 | 73 | — | — | [Observed](witnesses/ohNoMoreLemmings-72.json) |
 | Wicked 14: The Lemming Learning Curve | 80 | 79 | 80 | 80 | 0 | [Verified](witnesses/ohNoMoreLemmings-73.json) |
 | Wicked 15: SPAM,SPAM,SPAM,EGG AND LEMMING | 50 | 40 | — | — | — | No witness collected |
-| Wicked 16: Five Alive | 6 | 5 | — | — | — | No witness collected |
+| Wicked 16: Five Alive | 6 | 5 | 5 | — | — | [Observed](witnesses/ohNoMoreLemmings-75.json) |
 | Wicked 17: Down the tube | 30 | 29 | 29 | — | — | [Observed](witnesses/ohNoMoreLemmings-76.json) |
 | Wicked 18: LoTs moRe wHeRe TheY caMe fRom | 60 | 50 | 60 | 60 | 0 | [Verified](witnesses/ohNoMoreLemmings-77.json) |
-| Wicked 19: Up, Down or Round and Round | 50 | 41 | — | — | — | No witness collected |
+| Wicked 19: Up, Down or Round and Round | 50 | 41 | 46 | — | — | [Observed](witnesses/ohNoMoreLemmings-78.json) |
 | Wicked 20: The Lemming Funhouse | 70 | 68 | 68 | — | — | [Observed](witnesses/ohNoMoreLemmings-79.json) |
 | Wild 1: PoP YoR ToP!!! | 60 | 53 | 60 | 60 | 0 | [Verified](witnesses/ohNoMoreLemmings-40.json) |
 | Wild 2: Lemming Hotel | 80 | 60 | 60 | — | — | [Observed](witnesses/ohNoMoreLemmings-41.json) |
 | Wild 3: Lemming Rhythms | 80 | 65 | 69 | — | — | [Observed](witnesses/ohNoMoreLemmings-42.json) |
 | Wild 4: Meeting Adjourned | 80 | 80 | 80 | 80 | 0 | [Verified](witnesses/ohNoMoreLemmings-43.json) |
-| Wild 5: Lemming Head | 80 | 68 | — | — | — | No witness collected |
+| Wild 5: Lemming Head | 80 | 68 | 75 | — | — | [Observed](witnesses/ohNoMoreLemmings-44.json) |
 | Wild 6: Just A Quicky | 80 | 80 | 80 | 80 | 0 | [Verified](witnesses/ohNoMoreLemmings-45.json) |
 | Wild 7: You Take the High Road | 80 | 80 | — | — | — | No witness collected |
-| Wild 8: It`s a tight fit! | 10 | 10 | — | — | — | No witness collected |
+| Wild 8: It`s a tight fit! | 10 | 10 | 10 | 10 | 0 | [Verified](witnesses/ohNoMoreLemmings-47.json) |
 | Wild 9: Ice Station Lemming | 40 | 40 | — | — | — | No witness collected |
 | Wild 10: Higgledy Piggledy | 80 | 60 | 72 | — | — | [Observed](witnesses/ohNoMoreLemmings-49.json) |
 | Wild 11: Mutiny On The Bounty | 50 | 49 | 49 | — | — | [Observed](witnesses/ohNoMoreLemmings-50.json) |
@@ -237,9 +237,9 @@ See [method and limitations](README.md) and [exact conditions and evidence](audi
 | Wild 13: ONWARD AND UPWARD | 80 | 75 | 76 | — | — | [Observed](witnesses/ohNoMoreLemmings-52.json) |
 | Wild 14: ICE SPY | 80 | 70 | 80 | 80 | 0 | [Verified](witnesses/ohNoMoreLemmings-53.json) |
 | Wild 15: THE SILENCE OF THE LEMMINGS | 50 | 40 | — | — | — | No witness collected |
-| Wild 16: Take care, Sweetie | 1 | 1 | — | — | — | No witness collected |
+| Wild 16: Take care, Sweetie | 1 | 1 | 1 | 1 | 0 | [Verified](witnesses/ohNoMoreLemmings-55.json) |
 | Wild 17: The Chain with no name | 80 | 80 | 80 | 80 | 0 | [Verified](witnesses/ohNoMoreLemmings-56.json) |
-| Wild 18: Dr Lemminggood | 80 | 60 | — | — | — | No witness collected |
+| Wild 18: Dr Lemminggood | 80 | 60 | 71 | — | — | [Observed](witnesses/ohNoMoreLemmings-57.json) |
 | Wild 19: Lemmingdelica | 80 | 65 | 65 | — | — | [Observed](witnesses/ohNoMoreLemmings-58.json) |
 | Wild 20: Got anything....Lemmingy??? | 30 | 29 | 29 | — | — | [Observed](witnesses/ohNoMoreLemmings-59.json) |
 

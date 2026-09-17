@@ -1,10 +1,10 @@
 # Rescue maximum verification
 
-This audit covered 562 bundled level identities. It produced 195 proven maxima and 186 completed solutions without optimality proofs. It collected no winning witness for 181 levels. Classic Lemmings has a winning replay for every level. Coverage of the other campaigns remains incomplete.
+This audit covered 562 bundled level identities. It produced 201 proven maxima and 195 completed solutions without optimality proofs. It collected no winning witness for 166 levels. Classic Lemmings has a winning replay for every level. Coverage of the other campaigns remains incomplete.
 
 See the [level-by-level results](levels.md) for every campaign level and the [full evidence data](audit.json) for exact conditions and notes.
 
-The audit tried 36,306 candidate runs. Failed searches do not establish an optimum.
+The audit tried 34,688 candidate runs. Failed searches do not establish an optimum.
 
 Maximum saveable means the population minus unavoidable sacrifices. A successful solution proves that its saved count is achievable. It does not prove that its deaths are necessary. The bundled certificates currently require a completed, repeatable rescue of the entire finite population.
 
@@ -12,7 +12,7 @@ Maximum saveable means the population minus unavoidable sacrifices. A successful
 | --- | ---: | ---: | ---: | ---: |
 | Lemmings | 120 | 103 | 17 | 0 |
 | Xmas Lemmings 1991 | 4 | 3 | 1 | 0 |
-| Oh No! More Lemmings | 100 | 35 | 38 | 27 |
+| Oh No! More Lemmings | 100 | 41 | 47 | 12 |
 | Xmas Lemmings 1992 | 4 | 4 | 0 | 0 |
 | Lemmings 2: The Tribes | 120 | 2 | 70 | 48 |
 | Holiday Lemmings 1993 | 32 | 24 | 8 | 0 |
@@ -144,6 +144,7 @@ The [community maximum-saved records](https://www.lemmingsforums.net/index.php?t
 | Xmas Lemmings 1991 | Xmas 4: This Corrosion | 50/50 | 0 | [Witness](witnesses/xmasLemmings1991-3.json) |
 | Oh No! More Lemmings | Crazy 4: Lemming Express | 20/20 | 0 | [Witness](witnesses/ohNoMoreLemmings-23.json) |
 | Oh No! More Lemmings | Crazy 5: 24 hour Lemathon | 80/80 | 0 | [Witness](witnesses/ohNoMoreLemmings-24.json) |
+| Oh No! More Lemmings | Crazy 6: The Stack | 20/20 | 0 | [Witness](witnesses/ohNoMoreLemmings-25.json) |
 | Oh No! More Lemmings | Crazy 7: And now, the end is near... | 50/50 | 0 | [Witness](witnesses/ohNoMoreLemmings-26.json) |
 | Oh No! More Lemmings | Crazy 9: On the Antarctic Coast | 20/20 | 0 | [Witness](witnesses/ohNoMoreLemmings-28.json) |
 | Oh No! More Lemmings | Crazy 12: Lemming Friendly | 80/80 | 0 | [Witness](witnesses/ohNoMoreLemmings-31.json) |
@@ -152,6 +153,7 @@ The [community maximum-saved records](https://www.lemmingsforums.net/index.php?t
 | Oh No! More Lemmings | Havoc 4: The race against cliches | 20/20 | 0 | [Witness](witnesses/ohNoMoreLemmings-83.json) |
 | Oh No! More Lemmings | Havoc 6: Now get out of that! | 50/50 | 0 | [Witness](witnesses/ohNoMoreLemmings-85.json) |
 | Oh No! More Lemmings | Havoc 8: Lemming about town | 50/50 | 0 | [Witness](witnesses/ohNoMoreLemmings-87.json) |
+| Oh No! More Lemmings | Havoc 9: AAAAAARRRRRRGGGGGGHHHHHH!!!!!! | 50/50 | 0 | [Witness](witnesses/ohNoMoreLemmings-88.json) |
 | Oh No! More Lemmings | Havoc 11: Welcome to the party, pal! | 80/80 | 0 | [Witness](witnesses/ohNoMoreLemmings-90.json) |
 | Oh No! More Lemmings | Havoc 12: It`s all a matter of timing | 80/80 | 0 | [Witness](witnesses/ohNoMoreLemmings-91.json) |
 | Oh No! More Lemmings | Havoc 15: Have an ice day | 10/10 | 0 | [Witness](witnesses/ohNoMoreLemmings-94.json) |
@@ -169,13 +171,17 @@ The [community maximum-saved records](https://www.lemmingsforums.net/index.php?t
 | Oh No! More Lemmings | Tame 17: Honey, I Saved The Lemmings | 50/50 | 0 | [Witness](witnesses/ohNoMoreLemmings-16.json) |
 | Oh No! More Lemmings | Tame 18: Lemmings For Presidents! | 50/50 | 0 | [Witness](witnesses/ohNoMoreLemmings-17.json) |
 | Oh No! More Lemmings | Tame 20: Custom built for Lemmings | 50/50 | 0 | [Witness](witnesses/ohNoMoreLemmings-19.json) |
+| Oh No! More Lemmings | Wicked 2: Inroducing SUPERLEMMING | 1/1 | 0 | [Witness](witnesses/ohNoMoreLemmings-61.json) |
 | Oh No! More Lemmings | Wicked 3: This Corrosion | 50/50 | 0 | [Witness](witnesses/ohNoMoreLemmings-62.json) |
+| Oh No! More Lemmings | Wicked 5: Chill out! | 20/20 | 0 | [Witness](witnesses/ohNoMoreLemmings-64.json) |
 | Oh No! More Lemmings | Wicked 14: The Lemming Learning Curve | 80/80 | 0 | [Witness](witnesses/ohNoMoreLemmings-73.json) |
 | Oh No! More Lemmings | Wicked 18: LoTs moRe wHeRe TheY caMe fRom | 60/60 | 0 | [Witness](witnesses/ohNoMoreLemmings-77.json) |
 | Oh No! More Lemmings | Wild 1: PoP YoR ToP!!! | 60/60 | 0 | [Witness](witnesses/ohNoMoreLemmings-40.json) |
 | Oh No! More Lemmings | Wild 4: Meeting Adjourned | 80/80 | 0 | [Witness](witnesses/ohNoMoreLemmings-43.json) |
 | Oh No! More Lemmings | Wild 6: Just A Quicky | 80/80 | 0 | [Witness](witnesses/ohNoMoreLemmings-45.json) |
+| Oh No! More Lemmings | Wild 8: It`s a tight fit! | 10/10 | 0 | [Witness](witnesses/ohNoMoreLemmings-47.json) |
 | Oh No! More Lemmings | Wild 14: ICE SPY | 80/80 | 0 | [Witness](witnesses/ohNoMoreLemmings-53.json) |
+| Oh No! More Lemmings | Wild 16: Take care, Sweetie | 1/1 | 0 | [Witness](witnesses/ohNoMoreLemmings-55.json) |
 | Oh No! More Lemmings | Wild 17: The Chain with no name | 80/80 | 0 | [Witness](witnesses/ohNoMoreLemmings-56.json) |
 | Xmas Lemmings 1992 | Xmas 1: Jingle Lemming | 50/50 | 0 | [Witness](witnesses/xmasLemmings1992-0.json) |
 | Xmas Lemmings 1992 | Xmas 2: Happy Holidays Mr Lemming! | 80/80 | 0 | [Witness](witnesses/xmasLemmings1992-1.json) |

@@ -1,0 +1,66 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 62
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 320
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1017
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1161
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "climber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1235
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 1,
+    "required" : 1,
+    "saved" : 1,
+    "stateHash" : "f52d0975920055e0db6e99a9d6fb41b08bf0f418f68f31c1d346b3eb8071786f",
+    "ticks" : 1561
+  },
+  "initialStateHash" : "4b45349cdb71c4689bcb860df86099eca871cd8dc7eecad45fd7a28f1f95ec1e",
+  "number" : 16,
+  "rank" : "Wild",
+  "title" : "Take care, Sweetie"
+}
