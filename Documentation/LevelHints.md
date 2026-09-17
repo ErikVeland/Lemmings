@@ -14,7 +14,7 @@ The game pauses while the page is open. Closing it restores the previous pause s
 ## Coverage
 
 As of 17 September 2026, checked hints cover 281 official Classic levels through
-279 distinct level identities. This includes all 120 original levels, all 32
+284 distinct level identities. This includes all 120 original levels, all 32
 Holiday 1993 levels, all 32 Holiday 1994 levels, both complete Xmas campaigns and
 89 Oh No! levels. All three tiers come from a verified winning route.
 
@@ -68,5 +68,5 @@ The checks exercise all 744 hint tiers, verify complete text and accessible valu
 and test keyboard scrolling and scroll reset with an oversized coaching page.
 They also render the three tiers under `.build/hints` for visual inspection.
 
-Run `Scripts/test-level-hint-catalogue.sh` for headless checks of all 279 decks,
+Run `Scripts/test-level-hint-catalogue.sh` for headless checks of all 284 decks,
 release-rate ordering and the first two tiers’ spoiler boundaries.

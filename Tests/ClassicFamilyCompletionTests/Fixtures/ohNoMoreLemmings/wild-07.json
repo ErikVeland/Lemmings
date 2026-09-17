@@ -1,0 +1,145 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 203
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "climber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 242
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "digger"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 280
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "climber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 404
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 467
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "digger"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 523
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 671
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 74,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 933
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 52,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1121
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 52,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1141
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 52,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1159
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 52,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1240
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 80,
+    "required" : 80,
+    "saved" : 80,
+    "stateHash" : "96658231cc80307bdde1671720130720b9bf6a5bab0d3b76411b315f1624216b",
+    "ticks" : 1854
+  },
+  "initialStateHash" : "37f8eba29057b5b30218f59fbbc48d6ac061646d5cd7d61e4d8f186c43882ff8",
+  "number" : 7,
+  "rank" : "Wild",
+  "title" : "You Take the High Road"
+}

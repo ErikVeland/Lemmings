@@ -1037,7 +1037,7 @@ extension AppDelegate {
           let (catalogue, engine) = LevelHintCatalogue.load(), let level = catalogue.level(for: identity, engine: engine) else {
       throw IntegrationFailure(message: "Tricky 1 did not match its checked hint data")
     }
-    try check(catalogue.levels.count == 279 && level.rank == "Tricky" && level.number == 1,
+    try check(catalogue.levels.count == 284 && level.rank == "Tricky" && level.number == 1,
       "Hint coverage or live level identity is wrong")
     for row in catalogue.levels {
       try check(catalogue.level(for: row.fingerprint, engine: engine) != nil, "Invalid hints for \(row.title)")

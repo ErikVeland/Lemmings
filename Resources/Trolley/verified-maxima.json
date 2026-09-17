@@ -1,7 +1,7 @@
 {
   "engineSourceFingerprint": "483661a10882d87cd0d07590d6d96b2247e537e8bae2acdd8c8152ca34c3a3ca",
   "exhaustive": false,
-  "generatedAt": "2026-09-17T11:35:47Z",
+  "generatedAt": "2026-09-17T13:19:27Z",
   "levels": [
     {
       "bestSaved": 10,
@@ -5198,6 +5198,55 @@
       }
     },
     {
+      "bestSaved": 80,
+      "conditions": {
+        "gameID": "ohNoMoreLemmings",
+        "levelFingerprint": "fe811ce395d07d887ef819d89b7de601b4e2d0329e2be709bdf89e9b04bd7add",
+        "levelID": "level-21",
+        "modifiers": {},
+        "packID": "ohNoMoreLemmings-DLVEL-100",
+        "physicsMode": "classic-dos-v1",
+        "population": 80,
+        "rescueRequirement": 80,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "classic-dos-v1",
+        "startingSkills": {
+          "basher": 0,
+          "blocker": 0,
+          "bomber": 0,
+          "builder": 10,
+          "climber": 1,
+          "digger": 2,
+          "floater": 0,
+          "miner": 0
+        },
+        "timeLimitSeconds": 240
+      },
+      "gameID": "ohNoMoreLemmings",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 80,
+      "minimumSacrifices": 0,
+      "notes": [],
+      "number": 2,
+      "population": 80,
+      "rank": "Crazy",
+      "required": 80,
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Dolly Dimple",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/ohNoMoreLemmings-21.json",
+        "released": 80,
+        "retainedReserves": 0,
+        "saved": 80,
+        "sha256": "afb6a3d46aa70d0cbe77239b2ce824f37bb8f1a8e1eda172bbbb551372b662b5",
+        "ticks": 2844
+      }
+    },
+    {
       "bestSaved": 20,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
@@ -5881,6 +5930,55 @@
         "saved": 80,
         "sha256": "00446005c8fb2c118c3776274150bd516188b9d6a3d437e08b858597508f790c",
         "ticks": 1007
+      }
+    },
+    {
+      "bestSaved": 80,
+      "conditions": {
+        "gameID": "ohNoMoreLemmings",
+        "levelFingerprint": "f1feeea182c673842081a6c3d24c3ab3d171976c77069c395af3f3663527eb95",
+        "levelID": "level-93",
+        "modifiers": {},
+        "packID": "ohNoMoreLemmings-DLVEL-100",
+        "physicsMode": "classic-dos-v1",
+        "population": 80,
+        "rescueRequirement": 80,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "classic-dos-v1",
+        "startingSkills": {
+          "basher": 4,
+          "blocker": 0,
+          "bomber": 0,
+          "builder": 4,
+          "climber": 2,
+          "digger": 2,
+          "floater": 0,
+          "miner": 0
+        },
+        "timeLimitSeconds": 60
+      },
+      "gameID": "ohNoMoreLemmings",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 80,
+      "minimumSacrifices": 0,
+      "notes": [],
+      "number": 14,
+      "population": 80,
+      "rank": "Havoc",
+      "required": 80,
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Synchronised Lemming",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/ohNoMoreLemmings-93.json",
+        "released": 80,
+        "retainedReserves": 0,
+        "saved": 80,
+        "sha256": "b7f36a07622836713c7ff19d71a37f04025ea0a63aea69bf287048e9e2079b50",
+        "ticks": 991
       }
     },
     {
@@ -7008,6 +7106,55 @@
         "saved": 80,
         "sha256": "0a1e6e9f8176a2083cde35bf74cf93174b0b9bedf6689c4430c170969b6e2d1c",
         "ticks": 1432
+      }
+    },
+    {
+      "bestSaved": 80,
+      "conditions": {
+        "gameID": "ohNoMoreLemmings",
+        "levelFingerprint": "21b404f46dcea9f8c2e88aa4b159db8f7420b686f2f7c00cd96d9daa7b760138",
+        "levelID": "level-46",
+        "modifiers": {},
+        "packID": "ohNoMoreLemmings-DLVEL-100",
+        "physicsMode": "classic-dos-v1",
+        "population": 80,
+        "rescueRequirement": 80,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "classic-dos-v1",
+        "startingSkills": {
+          "basher": 7,
+          "blocker": 0,
+          "bomber": 0,
+          "builder": 3,
+          "climber": 3,
+          "digger": 2,
+          "floater": 0,
+          "miner": 0
+        },
+        "timeLimitSeconds": 120
+      },
+      "gameID": "ohNoMoreLemmings",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 80,
+      "minimumSacrifices": 0,
+      "notes": [],
+      "number": 7,
+      "population": 80,
+      "rank": "Wild",
+      "required": 80,
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "You Take the High Road",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/ohNoMoreLemmings-46.json",
+        "released": 80,
+        "retainedReserves": 0,
+        "saved": 80,
+        "sha256": "a67555ae3d8382889b6c113d3851b65a3749c6769372034ef50cb91a882fe776",
+        "ticks": 1854
       }
     },
     {

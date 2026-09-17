@@ -1,7 +1,7 @@
 {
   "engineSourceFingerprint": "483661a10882d87cd0d07590d6d96b2247e537e8bae2acdd8c8152ca34c3a3ca",
   "exhaustive": false,
-  "generatedAt": "2026-09-17T11:35:47Z",
+  "generatedAt": "2026-09-17T13:19:27Z",
   "levels": [
     {
       "bestSaved": 10,
@@ -6129,6 +6129,7 @@
       }
     },
     {
+      "bestSaved": 80,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
         "levelFingerprint": "fe811ce395d07d887ef819d89b7de601b4e2d0329e2be709bdf89e9b04bd7add",
@@ -6153,16 +6154,28 @@
         "timeLimitSeconds": 240
       },
       "gameID": "ohNoMoreLemmings",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 80,
+      "minimumSacrifices": 0,
+      "notes": [],
       "number": 2,
       "population": 80,
       "rank": "Crazy",
       "required": 80,
-      "status": "UNKNOWN",
-      "testedCandidates": 214,
-      "title": "Dolly Dimple"
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Dolly Dimple",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/ohNoMoreLemmings-21.json",
+        "released": 80,
+        "retainedReserves": 0,
+        "saved": 80,
+        "sha256": "afb6a3d46aa70d0cbe77239b2ce824f37bb8f1a8e1eda172bbbb551372b662b5",
+        "ticks": 2844
+      }
     },
     {
       "bestSaved": 48,
@@ -6885,7 +6898,7 @@
       "rank": "Crazy",
       "required": 49,
       "status": "OBSERVED",
-      "testedCandidates": 357,
+      "testedCandidates": 358,
       "title": "DIGGING FOR VICTORY",
       "witness": {
         "completed": true,
@@ -7645,6 +7658,7 @@
       }
     },
     {
+      "bestSaved": 80,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
         "levelFingerprint": "f1feeea182c673842081a6c3d24c3ab3d171976c77069c395af3f3663527eb95",
@@ -7669,16 +7683,28 @@
         "timeLimitSeconds": 60
       },
       "gameID": "ohNoMoreLemmings",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 80,
+      "minimumSacrifices": 0,
+      "notes": [],
       "number": 14,
       "population": 80,
       "rank": "Havoc",
       "required": 80,
-      "status": "UNKNOWN",
-      "testedCandidates": 285,
-      "title": "Synchronised Lemming"
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Synchronised Lemming",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/ohNoMoreLemmings-93.json",
+        "released": 80,
+        "retainedReserves": 0,
+        "saved": 80,
+        "sha256": "b7f36a07622836713c7ff19d71a37f04025ea0a63aea69bf287048e9e2079b50",
+        "ticks": 991
+      }
     },
     {
       "bestSaved": 10,
@@ -9615,6 +9641,7 @@
       }
     },
     {
+      "bestSaved": 42,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
         "levelFingerprint": "cb4d936d1d956c2e45f6268aafbdd8cff6aad1297f7a23277b6ea5f1561559a4",
@@ -9639,6 +9666,7 @@
         "timeLimitSeconds": 240
       },
       "gameID": "ohNoMoreLemmings",
+      "lossesInBestSolution": 7,
       "notes": [
         "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
       ],
@@ -9646,9 +9674,20 @@
       "population": 50,
       "rank": "Wicked",
       "required": 40,
-      "status": "UNKNOWN",
-      "testedCandidates": 498,
-      "title": "SPAM,SPAM,SPAM,EGG AND LEMMING"
+      "status": "OBSERVED",
+      "testedCandidates": 499,
+      "title": "SPAM,SPAM,SPAM,EGG AND LEMMING",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 7,
+        "path": "witnesses/ohNoMoreLemmings-74.json",
+        "released": 50,
+        "retainedReserves": 0,
+        "saved": 42,
+        "sha256": "18d2fe7935db29d9a48b987669abf79ef6267510db5a05015876a49f0e7a7030",
+        "ticks": 4080
+      }
     },
     {
       "bestSaved": 5,
@@ -10190,6 +10229,7 @@
       }
     },
     {
+      "bestSaved": 80,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
         "levelFingerprint": "21b404f46dcea9f8c2e88aa4b159db8f7420b686f2f7c00cd96d9daa7b760138",
@@ -10214,16 +10254,28 @@
         "timeLimitSeconds": 120
       },
       "gameID": "ohNoMoreLemmings",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 80,
+      "minimumSacrifices": 0,
+      "notes": [],
       "number": 7,
       "population": 80,
       "rank": "Wild",
       "required": 80,
-      "status": "UNKNOWN",
-      "testedCandidates": 285,
-      "title": "You Take the High Road"
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "You Take the High Road",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/ohNoMoreLemmings-46.json",
+        "released": 80,
+        "retainedReserves": 0,
+        "saved": 80,
+        "sha256": "a67555ae3d8382889b6c113d3851b65a3749c6769372034ef50cb91a882fe776",
+        "ticks": 1854
+      }
     },
     {
       "bestSaved": 10,
@@ -10556,6 +10608,7 @@
       }
     },
     {
+      "bestSaved": 40,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
         "levelFingerprint": "9aac91cb8f6e12a4373dfdf168997d0db51ff11cdb88b92d2516fbf0ffd89449",
@@ -10580,6 +10633,7 @@
         "timeLimitSeconds": 180
       },
       "gameID": "ohNoMoreLemmings",
+      "lossesInBestSolution": 9,
       "notes": [
         "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
       ],
@@ -10587,9 +10641,20 @@
       "population": 50,
       "rank": "Wild",
       "required": 40,
-      "status": "UNKNOWN",
-      "testedCandidates": 356,
-      "title": "THE SILENCE OF THE LEMMINGS"
+      "status": "OBSERVED",
+      "testedCandidates": 357,
+      "title": "THE SILENCE OF THE LEMMINGS",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 9,
+        "path": "witnesses/ohNoMoreLemmings-54.json",
+        "released": 50,
+        "retainedReserves": 0,
+        "saved": 40,
+        "sha256": "959e8c47d92c8877b25a2dd80ede200cedfa8237b0cfc9acb226f9d9a092b9cb",
+        "ticks": 3060
+      }
     },
     {
       "bestSaved": 1,

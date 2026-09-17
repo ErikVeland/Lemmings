@@ -7,7 +7,7 @@ func require(_ condition: @autoclosure () -> Bool, _ message: String) {
 let root = URL(fileURLWithPath: CommandLine.arguments[1])
 let catalogue = try JSONDecoder().decode(LevelHintCatalogue.self,
     from: Data(contentsOf: root.appendingPathComponent("Resources/Hints/classic.json")))
-require(catalogue.levels.count == 279, "Expected the verified Classic-family catalogue")
+require(catalogue.levels.count == 284, "Expected the verified Classic-family catalogue")
 for rank in ["Fun", "Tricky", "Taxing", "Mayhem"] {
     require(Set(catalogue.levels.filter { $0.rank == rank }.map(\.number)) == Set(1...30),
         "Missing original hints for \(rank)")

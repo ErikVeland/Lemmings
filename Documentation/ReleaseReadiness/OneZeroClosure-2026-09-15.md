@@ -184,6 +184,33 @@ remain the evidence, and the strict gate replays each fixture.
 The campaign gate, the rescue audit and the hint export pass. There are 279
 distinct hint decks and 282 bundled solution replays.
 
+## Oh No! routes, 18 September
+
+Claude added routes for 5 more Oh No! levels with the level lab.
+
+| Level | Saved | Required | Ticks |
+| --- | ---: | ---: | ---: |
+| Crazy 2 | 80 | 80 | 2844 |
+| Wild 7 | 80 | 80 | 1854 |
+| Wild 15 | 40 | 40 | 3060 |
+| Wicked 15 | 42 | 40 | 4080 |
+| Havoc 14 | 80 | 80 | 991 |
+
+Official Classic coverage is now 286/292. The 6 remaining gaps are Crazy 20,
+Wild 9, Havoc 5, Havoc 7, Havoc 16 and Havoc 20. Lab plans for all five routes
+are in `Tools/ClassicCompletion/Plans/lab`.
+
+Two gaps may not be solvable in this engine:
+
+- Havoc 20: every lemming from the left entrance falls 78 pixels through a
+  narrow shaft and splats. At most 30 of the required 50 can be saved.
+  The terrain or the entrance position can differ from the original game.
+- Havoc 5: the published opening makes the miner exit 2 pixels too high.
+  The fall is 61 pixels and the lemming splats. The skill set cannot delay
+  the second lemming, and all 20 lemmings are required.
+
+There are now 284 distinct hint decks and 287 bundled solution replays.
+
 ## Remaining release boundaries
 
 The gate register still requires every bundled Classic, fan and conversion

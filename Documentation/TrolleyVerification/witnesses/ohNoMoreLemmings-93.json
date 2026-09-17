@@ -1,0 +1,145 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 74
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 84
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "climber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 96
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "digger"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 134
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 150
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 156
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 7,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 191
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "climber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 216
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 292
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 353
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "digger"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 385
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 412
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 80,
+    "required" : 80,
+    "saved" : 80,
+    "stateHash" : "5d92f20f887fb0b4cfcdd7a074299de116352216aec08e69060884f4671bee03",
+    "ticks" : 991
+  },
+  "initialStateHash" : "3e1bbbb2ef6ec84300c2d2374d99a14073f7591608576c7a3b39a0fbc4b1c1e8",
+  "number" : 14,
+  "rank" : "Havoc",
+  "title" : "Synchronised Lemming"
+}

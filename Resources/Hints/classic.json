@@ -6481,6 +6481,48 @@
       "width" : 1600
     },
     {
+      "fingerprint" : "fe811ce395d07d887ef819d89b7de601b4e2d0329e2be709bdf89e9b04bd7add",
+      "height" : 160,
+      "number" : 2,
+      "opening" : [
+        {
+          "facingLeft" : true,
+          "lemmingID" : 0,
+          "skill" : "climber",
+          "tick" : 198,
+          "x" : 880,
+          "y" : 50
+        },
+        {
+          "facingLeft" : true,
+          "lemmingID" : 0,
+          "skill" : "digger",
+          "tick" : 446,
+          "x" : 680,
+          "y" : 24
+        },
+        {
+          "facingLeft" : true,
+          "lemmingID" : 0,
+          "skill" : "builder",
+          "tick" : 992,
+          "x" : 666,
+          "y" : 146
+        }
+      ],
+      "rank" : "Crazy",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "climber",
+        "digger",
+        "builder"
+      ],
+      "title" : "Dolly Dimple",
+      "width" : 1600
+    },
+    {
       "fingerprint" : "cb6636e9fcef46fae6ac2fe3aa35a760509e646ef8ce8e922df6c63e698d3d14",
       "height" : 160,
       "number" : 3,
@@ -7670,6 +7712,52 @@
       "width" : 1600
     },
     {
+      "fingerprint" : "21b404f46dcea9f8c2e88aa4b159db8f7420b686f2f7c00cd96d9daa7b760138",
+      "height" : 160,
+      "number" : 7,
+      "opening" : [
+        {
+          "facingLeft" : true,
+          "lemmingID" : 0,
+          "skill" : "builder",
+          "tick" : 203,
+          "x" : 960,
+          "y" : 47
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 1,
+          "skill" : "climber",
+          "tick" : 242,
+          "x" : 652,
+          "y" : 147
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 1,
+          "skill" : "digger",
+          "tick" : 280,
+          "x" : 656,
+          "y" : 125
+        }
+      ],
+      "rank" : "Wild",
+      "rates" : [
+        {
+          "tick" : 1,
+          "value" : 99
+        }
+      ],
+      "skillOrder" : [
+        "builder",
+        "climber",
+        "digger",
+        "basher"
+      ],
+      "title" : "You Take the High Road",
+      "width" : 1600
+    },
+    {
       "fingerprint" : "9ad9a2ec74e9502ce3e51b72dfb6e3ba74ceda143cb641fa29dcaa2442c66d4a",
       "height" : 160,
       "number" : 8,
@@ -7955,6 +8043,50 @@
         "miner"
       ],
       "title" : "ICE SPY",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "9aac91cb8f6e12a4373dfdf168997d0db51ff11cdb88b92d2516fbf0ffd89449",
+      "height" : 160,
+      "number" : 15,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "digger",
+          "tick" : 102,
+          "x" : 493,
+          "y" : 77
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "basher",
+          "tick" : 151,
+          "x" : 493,
+          "y" : 84
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 1,
+          "skill" : "blocker",
+          "tick" : 223,
+          "x" : 755,
+          "y" : 75
+        }
+      ],
+      "rank" : "Wild",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "digger",
+        "basher",
+        "blocker",
+        "builder",
+        "bomber"
+      ],
+      "title" : "THE SILENCE OF THE LEMMINGS",
       "width" : 1600
     },
     {
@@ -8830,6 +8962,51 @@
       "width" : 1600
     },
     {
+      "fingerprint" : "cb4d936d1d956c2e45f6268aafbdd8cff6aad1297f7a23277b6ea5f1561559a4",
+      "height" : 160,
+      "number" : 15,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "floater",
+          "tick" : 54,
+          "x" : 712,
+          "y" : 17
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "builder",
+          "tick" : 131,
+          "x" : 757,
+          "y" : 82
+        },
+        {
+          "facingLeft" : true,
+          "lemmingID" : 0,
+          "skill" : "builder",
+          "tick" : 344,
+          "x" : 724,
+          "y" : 79
+        }
+      ],
+      "rank" : "Wicked",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "floater",
+        "builder",
+        "blocker",
+        "basher",
+        "miner",
+        "bomber"
+      ],
+      "title" : "SPAM,SPAM,SPAM,EGG AND LEMMING",
+      "width" : 1600
+    },
+    {
       "fingerprint" : "ab5daa77f945dadb73257c0b0ae8195d48100c2c9c1d0d075e6b18aff7f5273e",
       "height" : 160,
       "number" : 16,
@@ -9641,6 +9818,52 @@
         "bomber"
       ],
       "title" : "HIGHLAND FLING",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "f1feeea182c673842081a6c3d24c3ab3d171976c77069c395af3f3663527eb95",
+      "height" : 160,
+      "number" : 14,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 1,
+          "skill" : "builder",
+          "tick" : 74,
+          "x" : 857,
+          "y" : 71
+        },
+        {
+          "facingLeft" : true,
+          "lemmingID" : 3,
+          "skill" : "basher",
+          "tick" : 84,
+          "x" : 776,
+          "y" : 47
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "climber",
+          "tick" : 96,
+          "x" : 885,
+          "y" : 145
+        }
+      ],
+      "rank" : "Havoc",
+      "rates" : [
+        {
+          "tick" : 1,
+          "value" : 99
+        }
+      ],
+      "skillOrder" : [
+        "builder",
+        "basher",
+        "climber",
+        "digger"
+      ],
+      "title" : "Synchronised Lemming",
       "width" : 1600
     },
     {

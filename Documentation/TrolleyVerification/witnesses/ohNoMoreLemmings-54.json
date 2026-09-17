@@ -1,0 +1,125 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "digger"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 102
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 151
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "blocker"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 223
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 419
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 600
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1023
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1100
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1238
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "bomber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1391
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 6,
+          "skill" : "blocker"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1741
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 6,
+          "skill" : "bomber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2200
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 50,
+    "required" : 40,
+    "saved" : 40,
+    "stateHash" : "d4b1f5d8ac4780e5559e71a6352657c342898b20dac22344d4c4ce1c32bfee74",
+    "ticks" : 3060
+  },
+  "initialStateHash" : "da77b11a35cd5114e42d43060b3fe9a59b2e47875a99a9643e970be84700baf0",
+  "number" : 15,
+  "rank" : "Wild",
+  "title" : "THE SILENCE OF THE LEMMINGS"
+}

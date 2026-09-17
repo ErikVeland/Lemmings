@@ -1,0 +1,116 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "climber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 198
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "digger"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 446
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 992
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1011
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 67,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1128
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1203
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1395
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1587
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1779
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 22,
+          "skill" : "digger"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2227
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 80,
+    "required" : 80,
+    "saved" : 80,
+    "stateHash" : "94676bbb6f50ec7397bd520e429b07bc49e2613fe654b835f58a651904f8b8d7",
+    "ticks" : 2844
+  },
+  "initialStateHash" : "a2a7648f7d3dd97ad3b6649643a0d4d5dcf8dc1d2e379591591b9e8647896482",
+  "number" : 2,
+  "rank" : "Crazy",
+  "title" : "Dolly Dimple"
+}
