@@ -1,0 +1,85 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "bomber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 65
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "climber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 107
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "bomber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 228
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 341
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 370
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 5,
+          "skill" : "digger"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 465
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "afterTick" : true,
+      "tick" : 500
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 60,
+    "required" : 48,
+    "saved" : 55,
+    "stateHash" : "6dfcc74736afd1de81fd9d5a1274f1c8dc8296a07be00de648aa8edca06a8f86",
+    "ticks" : 1164
+  },
+  "initialStateHash" : "d952314196df7e435d49ab8b4722d2cc9da3168246efa566c5707a5589b9cc1c",
+  "number" : 1,
+  "rank" : "Wicked",
+  "title" : "LeMming ToMato KetchUp fAcilitY"
+}

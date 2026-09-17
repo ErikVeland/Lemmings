@@ -180,11 +180,22 @@ public struct ArcadeRecords: Codable, Equatable, Sendable {
         profiles.first { $0.id == activeProfileID } ?? profiles[0]
     }
     public func profile(_ id: String) -> ArcadeProfile? { profiles.first { $0.id == id } }
-    public mutating func addProfile(initials: String, portrait: Int) -> ArcadeProfile? {
+    public mutating func addProfile(initials: String, portrait: Int, select: Bool = true) -> ArcadeProfile? {
         guard profiles.count < 8 else { return nil }
         let profile = ArcadeProfile(initials: initials, portrait: portrait)
-        profiles.append(profile); activeProfileID = profile.id
+        profiles.append(profile)
+        if select { activeProfileID = profile.id }
         return profile
+    }
+    /// Removes a player and everything recorded for them. The last player cannot be removed.
+    /// Returns the removed replay references, or nil when nothing was removed.
+    public mutating func removeProfile(_ id: String) -> [TrolleyReplayReference]? {
+        guard profiles.count > 1, profile(id) != nil else { return nil }
+        profiles.removeAll { $0.id == id }
+        if activeProfileID == id { activeProfileID = profiles[0].id }
+        runs.removeAll { $0.profileID == id }
+        statistics = statistics.filter { !$0.key.hasSuffix("|\(id)|true") && !$0.key.hasSuffix("|\(id)|false") }
+        return trolley.removeProfile(id)
     }
     public mutating func updateProfile(_ id: String, initials: String, portrait: Int) {
         guard let index = profiles.firstIndex(where: { $0.id == id }) else { return }

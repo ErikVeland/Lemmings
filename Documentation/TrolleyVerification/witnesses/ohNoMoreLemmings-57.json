@@ -1,0 +1,125 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "bomber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 54
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "bomber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 107
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "bomber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 168
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "bomber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 224
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 5,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 385
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 417
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 609
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 801
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 993
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 19,
+          "skill" : "bomber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1061
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1170
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 80,
+    "required" : 60,
+    "saved" : 71,
+    "stateHash" : "d588706910a06d487360080affbec8ed113e0f9feba2901ec86504d34e0e6f92",
+    "ticks" : 1913
+  },
+  "initialStateHash" : "4c10c0f2e16a334014f90d40dcd74c5fd0ed7efaf02cc09f11f265a0f83a9340",
+  "number" : 18,
+  "rank" : "Wild",
+  "title" : "Dr Lemminggood"
+}

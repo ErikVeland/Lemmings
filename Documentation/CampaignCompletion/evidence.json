@@ -3,7 +3,7 @@
   "coverage": {
     "holidayLemmings1993": 32,
     "holidayLemmings1994": 32,
-    "ohNoMoreLemmings": 73,
+    "ohNoMoreLemmings": 94,
     "ohYesMoreLemmings": 3,
     "xmasLemmings1991": 4,
     "xmasLemmings1992": 4,
@@ -661,6 +661,26 @@
       "ticks": 2508
     },
     {
+      "fixture": "Tests/ClassicFamilyCompletionTests/Fixtures/ohNoMoreLemmings/crazy-02.json",
+      "sha256": "afb6a3d46aa70d0cbe77239b2ce824f37bb8f1a8e1eda172bbbb551372b662b5",
+      "game": "ohNoMoreLemmings",
+      "level": "Crazy 2",
+      "saved": 80,
+      "lost": 0,
+      "reserves": 0,
+      "ticks": 2844
+    },
+    {
+      "fixture": "Tests/ClassicFamilyCompletionTests/Fixtures/ohNoMoreLemmings/crazy-03.json",
+      "sha256": "e281e1689942efe23739b78431d59a9ac8e70f8ef7fed5266dc9ef74c0190612",
+      "game": "ohNoMoreLemmings",
+      "level": "Crazy 3",
+      "saved": 48,
+      "lost": 2,
+      "reserves": 0,
+      "ticks": 1106
+    },
+    {
       "fixture": "Tests/ClassicFamilyCompletionTests/Fixtures/ohNoMoreLemmings/crazy-04.json",
       "sha256": "95a36f8a7201ea3ff5dd75479d1cfe4dbdff7895886fe4a60c3fb079c659b6bd",
       "game": "ohNoMoreLemmings",
@@ -679,6 +699,16 @@
       "lost": 0,
       "reserves": 0,
       "ticks": 2588
+    },
+    {
+      "fixture": "Tests/ClassicFamilyCompletionTests/Fixtures/ohNoMoreLemmings/crazy-06.json",
+      "sha256": "716f166713506c69ff2dfc8fa3ed5ea4d4f152fbc7d342637b79d0254c90fdb4",
+      "game": "ohNoMoreLemmings",
+      "level": "Crazy 6",
+      "saved": 20,
+      "lost": 0,
+      "reserves": 0,
+      "ticks": 2784
     },
     {
       "fixture": "Tests/ClassicFamilyCompletionTests/Fixtures/ohNoMoreLemmings/crazy-07.json",
@@ -781,6 +811,16 @@
       "ticks": 1375
     },
     {
+      "fixture": "Tests/ClassicFamilyCompletionTests/Fixtures/ohNoMoreLemmings/crazy-17.json",
+      "sha256": "3035952a06c56e02a818acf02626255510542978fbd460e644448827db0455a9",
+      "game": "ohNoMoreLemmings",
+      "level": "Crazy 17",
+      "saved": 49,
+      "lost": 1,
+      "reserves": 0,
+      "ticks": 2896
+    },
+    {
       "fixture": "Tests/ClassicFamilyCompletionTests/Fixtures/ohNoMoreLemmings/crazy-18.json",
       "sha256": "32ce7f978825ae037afdc5c50c66a2a6f0f368af2e88b97412796148edb3edc9",
       "game": "ohNoMoreLemmings",
@@ -861,6 +901,16 @@
       "ticks": 3551
     },
     {
+      "fixture": "Tests/ClassicFamilyCompletionTests/Fixtures/ohNoMoreLemmings/havoc-09.json",
+      "sha256": "9f7118f2635736db8f5c37cd048489680fa8ea72d147cb4fcacebf099bd1efa6",
+      "game": "ohNoMoreLemmings",
+      "level": "Havoc 9",
+      "saved": 50,
+      "lost": 0,
+      "reserves": 0,
+      "ticks": 2369
+    },
+    {
       "fixture": "Tests/ClassicFamilyCompletionTests/Fixtures/ohNoMoreLemmings/havoc-10.json",
       "sha256": "586f8b9bb6440705de20e1c9ca87f78bc02fcfdde0aee846e7e059ec1f20ff4e",
       "game": "ohNoMoreLemmings",
@@ -899,6 +949,16 @@
       "lost": 4,
       "reserves": 0,
       "ticks": 3426
+    },
+    {
+      "fixture": "Tests/ClassicFamilyCompletionTests/Fixtures/ohNoMoreLemmings/havoc-14.json",
+      "sha256": "b7f36a07622836713c7ff19d71a37f04025ea0a63aea69bf287048e9e2079b50",
+      "game": "ohNoMoreLemmings",
+      "level": "Havoc 14",
+      "saved": 80,
+      "lost": 0,
+      "reserves": 0,
+      "ticks": 991
     },
     {
       "fixture": "Tests/ClassicFamilyCompletionTests/Fixtures/ohNoMoreLemmings/havoc-15.json",
@@ -1141,6 +1201,26 @@
       "ticks": 2934
     },
     {
+      "fixture": "Tests/ClassicFamilyCompletionTests/Fixtures/ohNoMoreLemmings/wicked-01.json",
+      "sha256": "5eed6954a1f3121b5a76fd473ae38fa2db9bfb10ff9ebcca8a883c0597e47add",
+      "game": "ohNoMoreLemmings",
+      "level": "Wicked 1",
+      "saved": 55,
+      "lost": 5,
+      "reserves": 0,
+      "ticks": 1164
+    },
+    {
+      "fixture": "Tests/ClassicFamilyCompletionTests/Fixtures/ohNoMoreLemmings/wicked-02.json",
+      "sha256": "baaf5bcd4db0fe66333723142f819b931611e863604989a6e7874208b7d217a5",
+      "game": "ohNoMoreLemmings",
+      "level": "Wicked 2",
+      "saved": 1,
+      "lost": 0,
+      "reserves": 0,
+      "ticks": 3560
+    },
+    {
       "fixture": "Tests/ClassicFamilyCompletionTests/Fixtures/ohNoMoreLemmings/wicked-03.json",
       "sha256": "556efd3f37a2a9843f4136361e7cbba8ef463c66ac3673eaa61c105f4a8d2bbf",
       "game": "ohNoMoreLemmings",
@@ -1159,6 +1239,36 @@
       "lost": 9,
       "reserves": 0,
       "ticks": 2637
+    },
+    {
+      "fixture": "Tests/ClassicFamilyCompletionTests/Fixtures/ohNoMoreLemmings/wicked-05.json",
+      "sha256": "6f77520857239310fdef7fe89ebbe068cc90a65369126177d298ef6911d82c9d",
+      "game": "ohNoMoreLemmings",
+      "level": "Wicked 5",
+      "saved": 20,
+      "lost": 0,
+      "reserves": 0,
+      "ticks": 1926
+    },
+    {
+      "fixture": "Tests/ClassicFamilyCompletionTests/Fixtures/ohNoMoreLemmings/wicked-06.json",
+      "sha256": "742e4cfae1ceca49b5a8154e69c76fa06bea96bf6ccfc8162f82cb2c91988d2d",
+      "game": "ohNoMoreLemmings",
+      "level": "Wicked 6",
+      "saved": 40,
+      "lost": 40,
+      "reserves": 0,
+      "ticks": 8160
+    },
+    {
+      "fixture": "Tests/ClassicFamilyCompletionTests/Fixtures/ohNoMoreLemmings/wicked-07.json",
+      "sha256": "e802235a0ef68c076a3d585a69078078091575782df7ad52584e45e635d1d50d",
+      "game": "ohNoMoreLemmings",
+      "level": "Wicked 7",
+      "saved": 73,
+      "lost": 7,
+      "reserves": 0,
+      "ticks": 2040
     },
     {
       "fixture": "Tests/ClassicFamilyCompletionTests/Fixtures/ohNoMoreLemmings/wicked-08.json",
@@ -1201,6 +1311,16 @@
       "ticks": 3746
     },
     {
+      "fixture": "Tests/ClassicFamilyCompletionTests/Fixtures/ohNoMoreLemmings/wicked-12.json",
+      "sha256": "821c1ac557b69e86aae2b44b0c3054346e6ee522381e5ea79d65d3a26ea81ba5",
+      "game": "ohNoMoreLemmings",
+      "level": "Wicked 12",
+      "saved": 78,
+      "lost": 2,
+      "reserves": 0,
+      "ticks": 4080
+    },
+    {
       "fixture": "Tests/ClassicFamilyCompletionTests/Fixtures/ohNoMoreLemmings/wicked-13.json",
       "sha256": "bb39528356db2b47f39fa60b03096ace436da8acc4adf683e80064de9358df89",
       "game": "ohNoMoreLemmings",
@@ -1221,6 +1341,26 @@
       "ticks": 1230
     },
     {
+      "fixture": "Tests/ClassicFamilyCompletionTests/Fixtures/ohNoMoreLemmings/wicked-15.json",
+      "sha256": "18d2fe7935db29d9a48b987669abf79ef6267510db5a05015876a49f0e7a7030",
+      "game": "ohNoMoreLemmings",
+      "level": "Wicked 15",
+      "saved": 42,
+      "lost": 8,
+      "reserves": 0,
+      "ticks": 4080
+    },
+    {
+      "fixture": "Tests/ClassicFamilyCompletionTests/Fixtures/ohNoMoreLemmings/wicked-16.json",
+      "sha256": "10e2fac43dfe1cea009a7ccc2c22f462178be5295731e9124d34a8325a7f25ed",
+      "game": "ohNoMoreLemmings",
+      "level": "Wicked 16",
+      "saved": 5,
+      "lost": 1,
+      "reserves": 0,
+      "ticks": 614
+    },
+    {
       "fixture": "Tests/ClassicFamilyCompletionTests/Fixtures/ohNoMoreLemmings/wicked-17.json",
       "sha256": "a699492e7f31d4991de3625bd876f40795236a409d00910d5fc71e7afde7610e",
       "game": "ohNoMoreLemmings",
@@ -1239,6 +1379,16 @@
       "lost": 0,
       "reserves": 0,
       "ticks": 1755
+    },
+    {
+      "fixture": "Tests/ClassicFamilyCompletionTests/Fixtures/ohNoMoreLemmings/wicked-19.json",
+      "sha256": "ab312e2f955b4004081444ff637f0b8447c69baec69f74475811c5b6dbeff376",
+      "game": "ohNoMoreLemmings",
+      "level": "Wicked 19",
+      "saved": 46,
+      "lost": 4,
+      "reserves": 0,
+      "ticks": 1539
     },
     {
       "fixture": "Tests/ClassicFamilyCompletionTests/Fixtures/ohNoMoreLemmings/wicked-20.json",
@@ -1291,6 +1441,16 @@
       "ticks": 2457
     },
     {
+      "fixture": "Tests/ClassicFamilyCompletionTests/Fixtures/ohNoMoreLemmings/wild-05.json",
+      "sha256": "0be5fb2ceed9c36b2ad20271210d909e472d647623d3e98c810efa86c4a26c6b",
+      "game": "ohNoMoreLemmings",
+      "level": "Wild 5",
+      "saved": 75,
+      "lost": 5,
+      "reserves": 0,
+      "ticks": 4080
+    },
+    {
       "fixture": "Tests/ClassicFamilyCompletionTests/Fixtures/ohNoMoreLemmings/wild-06.json",
       "sha256": "0a1e6e9f8176a2083cde35bf74cf93174b0b9bedf6689c4430c170969b6e2d1c",
       "game": "ohNoMoreLemmings",
@@ -1299,6 +1459,26 @@
       "lost": 0,
       "reserves": 0,
       "ticks": 1432
+    },
+    {
+      "fixture": "Tests/ClassicFamilyCompletionTests/Fixtures/ohNoMoreLemmings/wild-07.json",
+      "sha256": "a67555ae3d8382889b6c113d3851b65a3749c6769372034ef50cb91a882fe776",
+      "game": "ohNoMoreLemmings",
+      "level": "Wild 7",
+      "saved": 80,
+      "lost": 0,
+      "reserves": 0,
+      "ticks": 1854
+    },
+    {
+      "fixture": "Tests/ClassicFamilyCompletionTests/Fixtures/ohNoMoreLemmings/wild-08.json",
+      "sha256": "4a1cfb8209e4e6461213b57183c3ae9b345f57f14201318f1721162379604a57",
+      "game": "ohNoMoreLemmings",
+      "level": "Wild 8",
+      "saved": 10,
+      "lost": 0,
+      "reserves": 0,
+      "ticks": 782
     },
     {
       "fixture": "Tests/ClassicFamilyCompletionTests/Fixtures/ohNoMoreLemmings/wild-10.json",
@@ -1351,6 +1531,26 @@
       "ticks": 3543
     },
     {
+      "fixture": "Tests/ClassicFamilyCompletionTests/Fixtures/ohNoMoreLemmings/wild-15.json",
+      "sha256": "959e8c47d92c8877b25a2dd80ede200cedfa8237b0cfc9acb226f9d9a092b9cb",
+      "game": "ohNoMoreLemmings",
+      "level": "Wild 15",
+      "saved": 40,
+      "lost": 10,
+      "reserves": 0,
+      "ticks": 3060
+    },
+    {
+      "fixture": "Tests/ClassicFamilyCompletionTests/Fixtures/ohNoMoreLemmings/wild-16.json",
+      "sha256": "b3b10600d915fa17ced9428bfcfc3d8d3038149cb1f71313faa58b1df88581cd",
+      "game": "ohNoMoreLemmings",
+      "level": "Wild 16",
+      "saved": 1,
+      "lost": 0,
+      "reserves": 0,
+      "ticks": 1561
+    },
+    {
       "fixture": "Tests/ClassicFamilyCompletionTests/Fixtures/ohNoMoreLemmings/wild-17.json",
       "sha256": "b871c83d1475f4f83d666475f411f973b01901f6f9755f2b115fd00fce8a1af8",
       "game": "ohNoMoreLemmings",
@@ -1359,6 +1559,16 @@
       "lost": 0,
       "reserves": 0,
       "ticks": 1359
+    },
+    {
+      "fixture": "Tests/ClassicFamilyCompletionTests/Fixtures/ohNoMoreLemmings/wild-18.json",
+      "sha256": "7cecd5a94400e849b0fb41358dd300c66b57343f13d4b5813fc2c9680fabc82b",
+      "game": "ohNoMoreLemmings",
+      "level": "Wild 18",
+      "saved": 71,
+      "lost": 9,
+      "reserves": 0,
+      "ticks": 1913
     },
     {
       "fixture": "Tests/ClassicFamilyCompletionTests/Fixtures/ohNoMoreLemmings/wild-19.json",

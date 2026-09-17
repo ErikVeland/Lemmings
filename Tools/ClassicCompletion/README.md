@@ -90,3 +90,9 @@ direction, action and earliest tick. A step can also set the release rate or
 start a nuke. The lab output is only a candidate. Import it with the `recorded`
 mode, which replays it twice and rejects refused or unused inputs.
 Each committed lab plan reproduces its fixture exactly.
+
+A plan step with `"async": true` runs when it matches, without waiting for earlier
+steps. Add `"exactTick": true` to apply it only at its `tick`.
+`beam DATA LEVEL PLAN --id N --target x,y[;x,y...]` searches skill assignments for
+one lemming toward the given waypoints. It prints the assignments as exact-tick
+steps. Run them with `run` and import the result like any other candidate.

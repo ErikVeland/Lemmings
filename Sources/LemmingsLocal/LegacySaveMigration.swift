@@ -10,7 +10,7 @@ enum LegacySaveMigration {
         "MusicDirectory", "MusicUsesModernPreset", "MacintoshDiskImage", "ClassicSettings",
         "AudioMuted", "PreferMacArtworkV1", "SequelMacArtworkEnabledV2", "HDEffectsChoiceV1", "FanLevelFolder"
     ]
-    private static func isProgress(_ key: String) -> Bool {
+    static func isProgress(_ key: String) -> Bool {
         ["ModernCampaignProgress", "ClassicAchievementProgress", "ClassicGameProgress", "FanLevelsPassed"].contains(key)
             || key.hasPrefix("ClassicGameProgress.") || key.hasPrefix("nativeL2Campaign.v1.")
             || key.hasPrefix("nativeL3ClassicPreview.v1.") || key.hasPrefix("nativeL3EgyptianPreview.v1.")

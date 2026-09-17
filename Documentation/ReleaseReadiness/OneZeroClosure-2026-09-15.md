@@ -151,6 +151,66 @@ different places. Each route was imported through the strict `recorded` mode.
 The campaign gate, the rescue audit and the hint export pass with these routes.
 There are now 263 distinct hint decks and 266 bundled solution replays.
 
+## Oh No! routes, 17 September
+
+Claude added routes for 16 more Oh No! levels with the level lab.
+
+| Level | Saved | Required | Ticks |
+| --- | ---: | ---: | ---: |
+| Crazy 3 | 48 | 48 | 1106 |
+| Crazy 6 | 20 | 20 | 2784 |
+| Wild 5 | 75 | 68 | 4080 |
+| Wild 8 | 10 | 10 | 782 |
+| Wild 16 | 1 | 1 | 1561 |
+| Wild 18 | 71 | 60 | 1913 |
+| Wicked 1 | 55 | 48 | 1164 |
+| Wicked 2 | 1 | 1 | 3560 |
+| Wicked 5 | 20 | 20 | 1926 |
+| Wicked 6 | 40 | 30 | 8160 |
+| Wicked 7 | 73 | 72 | 2040 |
+| Wicked 12 | 78 | 78 | 4080 |
+| Wicked 16 | 5 | 5 | 614 |
+| Wicked 19 | 46 | 41 | 1539 |
+| Havoc 9 | 50 | 50 | 2369 |
+| Crazy 17 | 49 | 49 | 2896 |
+
+Official Classic coverage is now 281/292. The 11 remaining gaps are Oh No! levels.
+The lab now supports steps that do not wait for earlier steps, and a random
+search over step templates found the Wicked 6 and Wicked 7 routes. Lab plans
+for eight of these routes are in `Tools/ClassicCompletion/Plans/lab`. The plans
+for the other eight were lost with a cleared scratch folder. Their fixtures
+remain the evidence, and the strict gate replays each fixture.
+
+The campaign gate, the rescue audit and the hint export pass. There are 279
+distinct hint decks and 282 bundled solution replays.
+
+## Oh No! routes, 18 September
+
+Claude added routes for 5 more Oh No! levels with the level lab.
+
+| Level | Saved | Required | Ticks |
+| --- | ---: | ---: | ---: |
+| Crazy 2 | 80 | 80 | 2844 |
+| Wild 7 | 80 | 80 | 1854 |
+| Wild 15 | 40 | 40 | 3060 |
+| Wicked 15 | 42 | 40 | 4080 |
+| Havoc 14 | 80 | 80 | 991 |
+
+Official Classic coverage is now 286/292. The 6 remaining gaps are Crazy 20,
+Wild 9, Havoc 5, Havoc 7, Havoc 16 and Havoc 20. Lab plans for all five routes
+are in `Tools/ClassicCompletion/Plans/lab`.
+
+Two gaps may not be solvable in this engine:
+
+- Havoc 20: every lemming from the left entrance falls 78 pixels through a
+  narrow shaft and splats. At most 30 of the required 50 can be saved.
+  The terrain or the entrance position can differ from the original game.
+- Havoc 5: the published opening makes the miner exit 2 pixels too high.
+  The fall is 61 pixels and the lemming splats. The skill set cannot delay
+  the second lemming, and all 20 lemmings are required.
+
+There are now 284 distinct hint decks and 287 bundled solution replays.
+
 ## Remaining release boundaries
 
 The gate register still requires every bundled Classic, fan and conversion

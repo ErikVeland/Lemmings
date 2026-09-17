@@ -1,0 +1,55 @@
+[
+ {
+  "skill": "bomber",
+  "id": 0,
+  "xMin": 715,
+  "action": "walking"
+ },
+ {
+  "skill": "climber",
+  "id": 1
+ },
+ {
+  "skill": "bomber",
+  "xMin": 719,
+  "yMin": 128,
+  "action": "walking",
+  "direction": 1,
+  "notID": [
+   0
+  ]
+ },
+ {
+  "skill": "miner",
+  "id": 1,
+  "xMin": 780,
+  "xMax": 782,
+  "yMax": 66,
+  "direction": 1,
+  "action": "walking"
+ },
+ {
+  "skill": "basher",
+  "id": 1,
+  "xMin": 756,
+  "xMax": 757,
+  "yMax": 66,
+  "direction": -1,
+  "action": "walking"
+ },
+ {
+  "skill": "digger",
+  "xMin": 762,
+  "xMax": 763,
+  "yMin": 55,
+  "yMax": 70,
+  "action": "walking",
+  "notID": [
+   1
+  ]
+ },
+ {
+  "rate": 99,
+  "tick": 500
+ }
+]

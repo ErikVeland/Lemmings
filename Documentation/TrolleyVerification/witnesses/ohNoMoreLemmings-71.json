@@ -1,0 +1,125 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "blocker"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 120
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "blocker"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 169
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 220
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 447
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 671
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 894
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1121
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1346
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1693
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "bomber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1760
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1761
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 80,
+    "required" : 78,
+    "saved" : 78,
+    "stateHash" : "34839e1d893cf962efb00e76eec3c02cc53124f7c24c0f4317d7d49a39d74447",
+    "ticks" : 4080
+  },
+  "initialStateHash" : "d3c4d51e68ddea65315901bda2aef66e61ee1a4238fdd2708df4c473adba5e38",
+  "number" : 12,
+  "rank" : "Wicked",
+  "title" : "Suicidal Tendencies"
+}

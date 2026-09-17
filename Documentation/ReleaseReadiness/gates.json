@@ -4,7 +4,7 @@
     "priority": "P0",
     "status": "open",
     "exitCriteria": "Replay a winning route for every advertised Classic level, including the bundled fan corpus and conversions. Close the remaining Oh No! and Holiday routes. Verify continuous Full Quest progression, save/resume and final results. L2/L3 completion belongs to the sequel gate.",
-    "progress": "16 September: official Classic coverage is 265/292 (27 missing). Holiday 1993 and Holiday 1994 now have preserved wins for all 32 levels each. The remaining official gaps are 27 Oh No! routes. The 6,372-level audit from 15 September has 647 wins and zero load/start failures. There are 263 distinct hint decks and 266 distinct solution replays including conversions. The all-level requirement remains unchanged pending the owner’s scope decision. See OneZeroClosure-2026-09-15.md.",
+    "progress": "18 September: official Classic coverage is 286/292 (6 missing). Holiday 1993 and Holiday 1994 now have preserved wins for all 32 levels each. The remaining official gaps are 6 Oh No! routes: Crazy 20, Wild 9, Havoc 5, Havoc 7, Havoc 16 and Havoc 20. The 6,372-level audit from 15 September has 647 wins and zero load/start failures. There are 284 distinct hint decks and 287 distinct solution replays including conversions. The all-level requirement remains unchanged pending the owner’s scope decision. See OneZeroClosure-2026-09-15.md.",
     "scopes": [
       "all",
       "classic-1.0"
@@ -84,7 +84,7 @@
       "all",
       "classic-1.0"
     ],
-    "progress": "16 September: the owner reports regular personal and external tester play, no reported issues in Classic or early L2, and positive feedback. Verified tiered hints now extend beyond the original 120 to 265 official Classic levels, represented by 263 unique decks. The app hint journeys and catalogue checks pass. Tester feedback does not identify a separate first-time-player study."
+    "progress": "17 September: the owner reports regular personal and external tester play, no reported issues in Classic or early L2, and positive feedback. Verified tiered hints now extend beyond the original 120 to 286 official Classic levels, represented by 284 unique decks. The app hint journeys and catalogue checks pass. Tester feedback does not identify a separate first-time-player study."
   },
   {
     "area": "iPhone and iPad",

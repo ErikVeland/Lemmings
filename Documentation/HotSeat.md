@@ -6,10 +6,19 @@ all solo profiles.
 
 ## Start or resume shared play
 
-Add players in Player Profiles, then open **Hot Seat**. The previous shared
-campaign, roster and next turn return when available. Otherwise, the host and
-one other profile form the first roster. Number keys 1–8 add or remove guests.
-The host stays in the roster.
+Open **Hot Seat** from the Ultimate Lemmings menu or Player Profiles.
+
+1. Select the player tiles to add or remove players. Number keys 1–8 do the same.
+2. To add a player who has no profile, select **+ New player** (or press N).
+   After **Add player**, the new player joins the roster and the page returns.
+3. Select **Choose a game**.
+
+With only one profile, **+ New player** is the primary action. **Choose a game**
+is available when the roster has at least two players. The host stays in the roster.
+
+The previous shared campaign, roster and next turn return when available.
+Otherwise, the host and one other profile form the first roster. **New Hot Seat**
+starts the shared campaign again from the beginning with the same players.
 
 Changing players during a level first offers **Save and return to library**.
 The current attempt keeps its owner. Player changes take effect from the library,

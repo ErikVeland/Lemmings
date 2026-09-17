@@ -1,0 +1,164 @@
+[
+ {
+  "skill": "builder",
+  "id": 0,
+  "x": 712,
+  "direction": -1,
+  "action": "walking"
+ },
+ {
+  "skill": "builder",
+  "id": 0,
+  "action": "shrugging"
+ },
+ {
+  "skill": "builder",
+  "id": 0,
+  "action": "shrugging"
+ },
+ {
+  "skill": "builder",
+  "id": 0,
+  "action": "shrugging"
+ },
+ {
+  "skill": "builder",
+  "id": 0,
+  "action": "shrugging"
+ },
+ {
+  "skill": "climber",
+  "id": 1,
+  "async": true
+ },
+ {
+  "skill": "climber",
+  "id": 2,
+  "async": true
+ },
+ {
+  "skill": "climber",
+  "id": 3,
+  "async": true
+ },
+ {
+  "skill": "climber",
+  "id": 4,
+  "async": true
+ },
+ {
+  "skill": "climber",
+  "id": 5,
+  "async": true
+ },
+ {
+  "skill": "climber",
+  "id": 6,
+  "async": true
+ },
+ {
+  "skill": "climber",
+  "id": 7,
+  "async": true
+ },
+ {
+  "skill": "climber",
+  "id": 8,
+  "async": true
+ },
+ {
+  "skill": "climber",
+  "id": 9,
+  "async": true
+ },
+ {
+  "skill": "climber",
+  "id": 10,
+  "async": true
+ },
+ {
+  "skill": "climber",
+  "id": 11,
+  "async": true
+ },
+ {
+  "skill": "climber",
+  "id": 12,
+  "async": true
+ },
+ {
+  "skill": "climber",
+  "id": 13,
+  "async": true
+ },
+ {
+  "skill": "climber",
+  "id": 14,
+  "async": true
+ },
+ {
+  "skill": "climber",
+  "id": 15,
+  "async": true
+ },
+ {
+  "skill": "climber",
+  "id": 16,
+  "async": true
+ },
+ {
+  "skill": "climber",
+  "id": 17,
+  "async": true
+ },
+ {
+  "skill": "climber",
+  "id": 18,
+  "async": true
+ },
+ {
+  "skill": "climber",
+  "id": 19,
+  "async": true
+ },
+ {
+  "skill": "climber",
+  "id": 20,
+  "async": true
+ },
+ {
+  "skill": "miner",
+  "xMin": 903,
+  "yMax": 32,
+  "direction": 1,
+  "action": "walking",
+  "async": true
+ },
+ {
+  "skill": "miner",
+  "xMin": 926,
+  "yMin": 108,
+  "yMax": 120,
+  "direction": 1,
+  "action": "walking",
+  "tick": 785,
+  "async": true
+ },
+ {
+  "skill": "miner",
+  "xMin": 846,
+  "yMin": 108,
+  "yMax": 150,
+  "direction": -1,
+  "action": "walking",
+  "tick": 1000,
+  "async": true,
+  "xMax": 846,
+  "id": 1
+ },
+ {
+  "rate": 99,
+  "tick": 1958,
+  "async": true
+ }
+]

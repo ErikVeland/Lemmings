@@ -5,16 +5,37 @@ evidence-aware rescue potential, philosophical affinities, seven compatible loca
 boards, and adaptive Retry challenges. This page also describes the compact legacy
 records retained during migration. Existing profiles and campaign saves remain intact.
 
-Use **Player Profiles** (Command-Shift-P) to choose up to eight local players.
+Use **Player Profiles** (Command-Shift-P) to manage up to eight local players.
 Each player has three initials and a portrait from the original lemming sprites.
-Type initials, choose a portrait, then select **Play As**. Arrow keys also choose
-portraits. The first profile, initially called LEM, retains existing campaign
-progress. New profiles start their own campaigns and achievements. Graphics and
-audio settings remain shared.
 
-Finish the current run before changing players. Opening profile selection pauses
-play. A run belongs to the profile that started it. Renaming initials or changing
-the portrait does not change that identity or erase records.
+| Task | Steps |
+| --- | --- |
+| Add a player | Select **+ New player**, type initials, choose a portrait, then select **Add player**. |
+| Change initials or portrait | Select the player, then type or choose a portrait. Changes save immediately. |
+| Change the active player | Select the player, then select **Play as**. |
+| Delete a player | Select the player, select **Delete**, then confirm. |
+
+The primary action changes with the selection: **Add player**, **Play as** or **Done**.
+Enter does the primary action. Arrow keys choose portraits.
+
+Deleting a player removes their campaign progress, saved runs, replay movies,
+scores, records and achievements. It also removes a shared campaign that they
+host. You cannot undo a deletion. You cannot delete the last player. During a run,
+you cannot delete the host, the current player or a Hot Seat player.
+
+The first profile, initially called LEM, retains existing campaign progress.
+New profiles start their own campaigns and achievements. Graphics and audio
+settings remain shared.
+
+Finish the current run before changing players. You can add and edit players
+during a run. Opening profile selection pauses play. A run belongs to the profile
+that started it. Renaming initials or changing the portrait does not change that
+identity or erase records.
+
+If the records file cannot be read, the app cannot save results. Select
+**Fix records**. The app reads the file again. If it still fails, select
+**Start new records**. The unreadable files stay in the records folder with a
+`.set-aside-` suffix.
 
 Each completed classic, fan, L2 or L3 run opens THE TROLLEY result page **inside the game
 window**. The rescue count is the main result. The page then shows the rescue goal,

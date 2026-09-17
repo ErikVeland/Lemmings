@@ -56,7 +56,7 @@ import NxlvKit
     func showProfiles(canSwitch: Bool, owner: NSWindow? = nil, beforeSwitch: @escaping () -> Void, afterSwitch: @escaping () -> Void, background: CGImage? = nil) {
         arcadeView.background = background
         arcadeView.highlightedAwards = []; arcadeView.focusedNewAward = nil
-        arcadeView.mode = .profiles; arcadeView.canSwitch = canSwitch
+        arcadeView.mode = .profiles; arcadeView.canSwitch = canSwitch; arcadeView.profilesReturnToHotSeat = false
         arcadeView.beforeSwitch = beforeSwitch; arcadeView.afterSwitch = afterSwitch
         arcadeView.selectProfile(ArcadeStore.shared.records.activeProfile)
         present(owner: owner)
@@ -175,7 +175,7 @@ import NxlvKit
         }
         result += buttons.enumerated().map { index, item in
             var name = item.0
-            if name.hasPrefix("player-"), let profile = ArcadeStore.shared.records.profile(String(name.dropFirst(7))) { name = "Select player " + profile.initials }
+            if name.hasPrefix("player-"), !name.hasPrefix("player-new"), let profile = ArcadeStore.shared.records.profile(String(name.dropFirst(7))) { name = "Select player " + profile.initials }
             if name.hasPrefix("portrait-"), let index = Int(name.dropFirst(9)), ArcadeProfile.portraitNames.indices.contains(index) { name = "Portrait: " + ArcadeProfile.portraitNames[index] }
             return accessibleElements.element(id: "button-\(index)", owner: self, label: name, frame: mapped(item.1), press: item.2)
         }
@@ -185,7 +185,7 @@ import NxlvKit
             field.readValue = { [weak self] in self?.initials ?? "" }
             field.writeValue = { [weak self] value in
                 self?.initials = String(value.uppercased().filter { $0.isASCII && ($0.isLetter || $0.isNumber) }.prefix(3))
-                self?.replaceInitials = false; self?.needsDisplay = true
+                self?.replaceInitials = false; self?.saveEdits(); self?.needsDisplay = true
             }
             result.insert(field, at: 0)
         }
@@ -240,13 +240,16 @@ import NxlvKit
         }
         if let error = ArcadeStore.shared.storageError {
             text(error, 64, mode == .result ? 583 : 695, 814, height: 20)
+            let rect = CGRect(x: 886, y: mode == .result ? 578 : 688, width: 170, height: mode == .result ? 26 : 30)
             if ArcadeStore.shared.profilesAreWritable {
-                button("Retry save", CGRect(x: 886, y: mode == .result ? 578 : 688, width: 170, height: mode == .result ? 26 : 30)) { [weak self] in
+                button("Retry save", rect) { [weak self] in
                     guard let self else { return }
-                    if self.mode == .profiles { self.saveProfile() }
+                    if self.mode == .profiles { self.saveEdits() }
                     else { ArcadeStore.shared.save() }
                     self.needsDisplay = true
                 }
+            } else {
+                button("Fix records", rect) { [weak self] in self?.fixRecords() }
             }
         } else if let notice = ArcadeStore.shared.storageNotice {
             text(notice, 64, mode == .result ? 583 : 695, 980, height: 20)
@@ -387,6 +390,7 @@ import NxlvKit
     func page(_ next: Mode) { finishCelebration(); affinityPopover?.close(); mode = next; hover = nil; needsDisplay = true }
     private func back() {
         if mode == .hotSeat { closeSession(); return }
+        if mode == .profiles { closeProfiles(); return }
         if mode != .result && mode != .profiles && report != nil { page(.result) }
         else { onClose?() }
     }
@@ -431,17 +435,91 @@ import NxlvKit
                    from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true,
                    hints: [.interpolation: NSImageInterpolation.none])
     }
-    private func saveProfile() {
+    var profilesReturnToHotSeat = false
+    var isNewProfile: Bool { selectedProfileID == nil }
+    /// A run in progress keeps its player. Other players can still be added, edited or removed.
+    private var runInProgress: Bool { !canSwitch }
+    /// Edits to an existing player save at once. A new player is saved by Add player.
+    func saveEdits() {
+        guard let id = selectedProfileID, !initials.isEmpty else { return }
+        ArcadeStore.shared.updateProfile(id, initials: initials, portrait: portrait)
+        needsDisplay = true
+    }
+    func addNewProfile() {
         let store = ArcadeStore.shared
-        guard store.profilesAreWritable else { return }
-        guard canSwitch || selectedProfileID == store.records.activeProfileID else { return }
-        if canSwitch { beforeSwitch?() }
-        guard store.saveProfile(id: selectedProfileID, initials: initials, portrait: portrait, select: canSwitch) != nil else {
-            needsDisplay = true
-            return
+        guard isNewProfile, let added = store.addProfile(initials: initials, portrait: portrait, select: false) else { needsDisplay = true; return }
+        if profilesReturnToHotSeat {
+            if !store.hotSeatIsActive { store.prepareHotSeat() }
+            if !store.sessionProfileIDs.contains(added.id) { store.toggleSessionProfile(added.id) }
+            profilesReturnToHotSeat = false
+            page(.hotSeat); return
         }
-        if canSwitch { afterSwitch?() }
+        selectProfile(added)
+    }
+    func playAsSelected() {
+        let store = ArcadeStore.shared
+        guard canSwitch, let id = selectedProfileID, id != store.records.activeProfileID else { return }
+        beforeSwitch?()
+        guard store.saveProfile(id: id, initials: initials.isEmpty ? store.records.profile(id)?.initials ?? "LEM" : initials,
+                                portrait: portrait, select: true) != nil else { needsDisplay = true; return }
+        afterSwitch?()
         onClose?()
+    }
+    var profilePrimaryTitle: String {
+        if isNewProfile { return "Add player" }
+        if canSwitch, selectedProfileID != ArcadeStore.shared.records.activeProfileID { return "Play as \(initials.isEmpty ? "LEM" : initials)" }
+        return "Done"
+    }
+    func performProfilePrimaryAction() {
+        if isNewProfile { addNewProfile() }
+        else if profilePrimaryTitle == "Done" {
+            guard ArcadeStore.shared.storageError == nil else { needsDisplay = true; return }
+            closeProfiles()
+        } else { playAsSelected() }
+    }
+    func closeProfiles() {
+        if profilesReturnToHotSeat { profilesReturnToHotSeat = false; page(.hotSeat) } else { onClose?() }
+    }
+    func startNewProfile(returnToHotSeat: Bool = false) {
+        guard ArcadeStore.shared.records.profiles.count < 8 else { return }
+        profilesReturnToHotSeat = returnToHotSeat
+        selectedProfileID = nil; initials = ""; portrait = ArcadeStore.shared.records.profiles.count % 8; replaceInitials = true
+        page(.profiles)
+    }
+    func confirmDeleteSelectedProfile() {
+        let store = ArcadeStore.shared
+        guard let id = selectedProfileID, let profile = store.records.profile(id),
+              store.canDeleteProfile(id, runInProgress: runInProgress) else { return }
+        GameScreen.shared.confirm("Delete \(profile.initials)?",
+            detail: "This removes \(profile.initials)'s progress, saved runs, scores and achievements. You cannot undo this.",
+            actionTitle: "Delete \(profile.initials)", owner: window) { [weak self] in self?.deleteProfile(id) }
+    }
+    func deleteProfile(_ id: String) {
+        let store = ArcadeStore.shared
+        guard store.canDeleteProfile(id, runInProgress: runInProgress) else { return }
+        let switching = id == store.records.activeProfileID
+        if switching { beforeSwitch?() }
+        let deleted = store.deleteProfile(id)
+        if switching { afterSwitch?() }
+        if deleted { selectProfile(store.records.activeProfile) }
+        needsDisplay = true
+    }
+    func fixRecords() {
+        let store = ArcadeStore.shared
+        if store.reloadRecords() {
+            if mode == .profiles { selectProfile(store.records.activeProfile) }
+            afterSwitch?(); needsDisplay = true; return
+        }
+        GameScreen.shared.confirm("Records cannot be read",
+            detail: (store.storageError ?? "") + " Start new records to save again. The unreadable files stay in the records folder.",
+            actionTitle: "Start new records", owner: window) { [weak self] in
+                guard let self else { return }
+                if store.startNewRecords() {
+                    self.selectProfile(store.records.activeProfile)
+                    self.afterSwitch?()
+                } else { GameScreen.shared.message("Cannot start new records", detail: store.storageError ?? "") }
+                self.needsDisplay = true
+            }
     }
     func openSession() {
         guard mode != .profiles || canSwitch || ArcadeStore.shared.hotSeatIsActive else { return }
@@ -451,21 +529,25 @@ import NxlvKit
     func closeSession() { if let previous = sessionReturnMode { page(previous) } else { onClose?() } }
     private func drawSession() {
         let store = ArcadeStore.shared
-        header("Take turns", subtitle: "HOT SEAT")
-        text("A hot seat needs at least two players. Press 1-8 to join or leave.", 64, 142, 992)
-        for (index, profile) in store.records.profiles.enumerated() {
-            let chosen = store.sessionProfiles.contains { $0.id == profile.id }
-            let position = store.sessionProfiles.firstIndex { $0.id == profile.id }.map { String($0 + 1) } ?? "-"
-            let rect = CGRect(x: 64 + (index % 2) * 506, y: 195 + (index / 2) * 75, width: 486, height: 60)
-            button("\(index + 1). \(profile.initials)\(chosen ? " - Turn " + position : "")\(profile.id == store.records.activeProfileID ? " (host)" : "")", rect, selected: chosen) { [weak self] in
-                self?.changeSessionPlayer(profile.id)
-            }
+        header("Hot Seat", subtitle: "TAKE TURNS ON THIS MAC")
+        let players = store.records.profiles
+        let slots = players.count + (players.count < 8 ? 1 : 0)
+        for (index, profile) in players.enumerated() {
+            let turn = store.hotSeatIsActive ? store.sessionProfiles.firstIndex { $0.id == profile.id } : nil
+            let chosen = turn != nil
+            let rect = CGRect(x: 64 + (index % 2) * 506, y: 150 + (index / 2) * 70, width: 486, height: 58)
+            let host = profile.id == store.records.activeProfileID
+            let label = "\(index + 1). \(profile.initials)" + (turn.map { "  Turn \($0 + 1)" } ?? "") + (host ? "  Host" : "")
+            button(label, rect, selected: chosen) { [weak self] in self?.changeSessionPlayer(profile.id) }
         }
-        // The roster grid is as tall as the profiles need, so two players do not
-        // leave a hole in the middle and eight do not push the buttons off screen.
-        let rows = min(4, (store.records.profiles.count + 1) / 2)
-        var y = 195 + CGFloat(rows) * 75 + 14
-        text("Pass the turn", 64, y + 6, 300, palette: .green)
+        let needsPlayer = players.count < 2
+        if players.count < 8 {
+            let index = players.count
+            let rect = CGRect(x: 64 + (index % 2) * 506, y: 150 + (index / 2) * 70, width: 486, height: 58)
+            button("+ New player", rect, primary: needsPlayer) { [weak self] in self?.startNewProfile(returnToHotSeat: true) }
+        }
+        var y = 150 + CGFloat((slots + 1) / 2) * 70 + 16
+        text("Pass the turn", 64, y + 10, 300, palette: .green)
         for (index, policy) in ArcadeStore.TurnPolicy.allCases.enumerated() {
             button(policy.title, CGRect(x: 370 + CGFloat(index) * 348, y: y, width: 336, height: 44),
                    selected: store.turnPolicy == policy) { [weak self] in
@@ -473,34 +555,23 @@ import NxlvKit
             }
         }
         y += 54
-        text(store.turnPolicy.detail, 64, y, 992, alpha: 0.8); y += 30
-        text("Current turn: \(store.records.profile(store.playingProfileID)?.initials ?? "LEM")", 64, y, 992); y += 30
-        // The last lines are dropped rather than drawn over the buttons.
-        // A hot seat needs a second player. Saying so beats a silent no-op when
-        // only the host is selected, which looks identical to a started session.
-        let chosen = store.hotSeatIsActive ? store.sessionProfiles.count : 0
-        let guidance: (String, MacInterfaceRenderer.Palette)? = store.records.profiles.count < 2
-            ? ("Add another player in Player Profiles to take turns.", .blue)
-            : chosen < 2
-            ? ("Press a number to add a second player. A hot seat needs at least two.", .green)
-            : ("\(chosen) players ready. Your shared campaign is saved.", .green)
-        let footerTop: CGFloat = 620
-        let reserved: CGFloat = guidance == nil ? 0 : 30
-        if y + 30 + reserved <= footerTop {
-            text("Shared campaign saved separately from solo play", 64, y, 992); y += 30
+        if y + 30 <= 620 { text(store.turnPolicy.detail, 370, y, 686, alpha: 0.8); y += 36 }
+        if y + 30 <= 620 {
+            if store.hotSeatIsActive {
+                text("Next turn: \(store.records.profile(store.playingProfileID)?.initials ?? "LEM")", 64, y, 992, palette: .green)
+            } else if !needsPlayer {
+                text("Choose a second player", 64, y, 992, palette: .green)
+            }
         }
-        if y + 30 + reserved <= footerTop {
-            text("Each turn keeps its own scores, records and achievements.", 64, y, 992); y += 30
-        }
-        if let guidance { text(guidance.0, 64, min(y, footerTop - 30), 992, palette: guidance.1) }
         button("Return to solo", CGRect(x: 64, y: 634, width: 270, height: 48)) { [weak self] in self?.confirmReturnToSolo() }
         if store.hotSeatIsActive {
             button("New Hot Seat", CGRect(x: 350, y: 634, width: 360, height: 48)) { [weak self] in self?.confirmNewHotSeat() }
         }
-        button("Choose a game", CGRect(x: 736, y: 634, width: 320, height: 48), primary: true) { [weak self] in self?.closeSession() }
+        button("Choose a game", CGRect(x: 736, y: 634, width: 320, height: 48), primary: !needsPlayer,
+               enabled: store.hotSeatIsActive) { [weak self] in self?.closeSession() }
         setAccessibilityLabel("Hot seat. " + store.sessionProfiles.map(\.initials).joined(separator: ", ")
             + ". Pass the turn \(store.turnPolicy.title). \(store.turnPolicy.detail)"
-            + " Number keys choose players. Choose a game keeps this shared campaign. New Hot Seat starts from the beginning.")
+            + " Number keys add or remove players. N adds a new player. Choose a game continues this shared campaign. New Hot Seat starts from the beginning.")
     }
     func changeSessionPlayer(_ id: String) {
         let store = ArcadeStore.shared
@@ -532,43 +603,56 @@ import NxlvKit
             }
     }
     private func drawProfiles() {
-        header("Choose your lemming", subtitle: "PLAYER SELECT")
-        let records = ArcadeStore.shared.records
-        text("Players", 64, 150, 250)
+        let store = ArcadeStore.shared
+        let records = store.records
+        header("Players", subtitle: isNewProfile ? "NEW PLAYER" : "PLAYER SELECT")
         for (index, profile) in records.profiles.enumerated() {
-            let rect = CGRect(x: 64, y: 185 + index * 43, width: 264, height: 38)
+            let rect = CGRect(x: 64, y: 160 + index * 46, width: 264, height: 40)
             let selected = profile.id == selectedProfileID
             GameStyle.fill(rect, selected ? NSColor(calibratedWhite: 0.22, alpha: 1) : .clear)
-            drawPortrait(profile.portrait, in: CGRect(x: 73, y: rect.minY + 2, width: 30, height: 34))
+            if selected { GameStyle.fill(CGRect(x: rect.minX, y: rect.maxY - 3, width: rect.width, height: 3), GameStyle.accent) }
+            drawPortrait(profile.portrait, in: CGRect(x: 73, y: rect.minY + 3, width: 30, height: 34))
             rowText(profile.initials, x: 119, width: 94, row: rect)
-            if profile.id == ArcadeStore.shared.playingProfileID { rowText("Playing", x: 216, width: 100, row: rect) }
-            else if profile.id == records.activeProfileID { rowText("Host", x: 216, width: 100, row: rect) }
+            if profile.id == store.playingProfileID { rowText("Playing", x: 216, width: 104, row: rect) }
+            else if profile.id == records.activeProfileID { rowText("Host", x: 216, width: 104, row: rect) }
             buttons.append(("player-" + profile.id, rect, { [weak self] in self?.selectProfile(profile) }))
         }
-        if records.profiles.count < 8 && canSwitch {
-            link("+ New player", CGRect(x: 78, y: 190 + records.profiles.count * 43, width: 235, height: 38)) { [weak self] in
-                self?.selectedProfileID = nil; self?.initials = ""; self?.portrait = 0; self?.replaceInitials = true; self?.needsDisplay = true
+        if records.profiles.count < 8 {
+            let rect = CGRect(x: 64, y: 160 + records.profiles.count * 46, width: 264, height: 40)
+            if isNewProfile {
+                GameStyle.fill(rect, NSColor(calibratedWhite: 0.22, alpha: 1))
+                GameStyle.fill(CGRect(x: rect.minX, y: rect.maxY - 3, width: rect.width, height: 3), GameStyle.accent)
+            }
+            link("+ New player", rect, palette: isNewProfile ? .green : .blue) { [weak self] in
+                self?.startNewProfile(returnToHotSeat: self?.profilesReturnToHotSeat ?? false)
             }
         }
-        GameStyle.fill(CGRect(x: 364, y: 158, width: 1, height: 404), GameStyle.muted.withAlphaComponent(0.2))
+        GameStyle.fill(CGRect(x: 364, y: 158, width: 1, height: 440), GameStyle.muted.withAlphaComponent(0.2))
         drawPortrait(portrait, in: CGRect(x: 417, y: 153, width: 108, height: 136))
-        text("YOUR INITIALS", 564, 167, 440)
+        text("INITIALS", 564, 167, 440)
         title(initials.padding(toLength: 3, withPad: "_", startingAt: 0), x: 564, y: 204, width: 430, height: 60)
-        text("Type up to three letters or numbers", 564, 268, 450)
-        text("Choose a portrait", 418, 318, 600)
         for index in 0..<8 {
-            let rect = CGRect(x: 418 + index % 4 * 160, y: 356 + index / 4 * 102, width: 144, height: 90)
+            let rect = CGRect(x: 418 + index % 4 * 160, y: 318 + index / 4 * 124, width: 144, height: 110)
             GameStyle.fill(rect, index == portrait ? NSColor(calibratedWhite: 0.22, alpha: 1) : NSColor.clear)
-            if index == portrait { GameStyle.fill(CGRect(x: rect.minX, y: rect.maxY - 3, width: rect.width, height: 3), NSColor.lightGray) }
-            drawPortrait(index, in: CGRect(x: rect.midX - 26, y: rect.minY + 6, width: 52, height: 55))
-            text(ArcadeProfile.portraitNames[index], rect.minX, rect.minY + 66, rect.width, alignment: .center)
-            buttons.append(("portrait-\(index)", rect, { [weak self] in self?.portrait = index; self?.needsDisplay = true }))
+            if index == portrait { GameStyle.fill(CGRect(x: rect.minX, y: rect.maxY - 3, width: rect.width, height: 3), GameStyle.accent) }
+            drawPortrait(index, in: CGRect(x: rect.midX - 30, y: rect.minY + 8, width: 60, height: 64))
+            text(ArcadeProfile.portraitNames[index], rect.minX, rect.minY + 80, rect.width, alignment: .center)
+            buttons.append(("portrait-\(index)", rect, { [weak self] in
+                self?.portrait = index; self?.saveEdits(); self?.needsDisplay = true
+            }))
         }
-        text(canSwitch ? "Each player keeps their own progress and records." : ArcadeStore.shared.hotSeatIsActive ? "Use Hot Seat to change players." : "Finish this run before changing players.", 64, 575, 992)
-        button(canSwitch ? "Play as \(initials.isEmpty ? "LEM" : initials)" : "Save portrait", CGRect(x: 418, y: 627, width: 336, height: 55), primary: true, enabled: canSwitch || selectedProfileID == records.activeProfileID) { [weak self] in self?.saveProfile() }
-        button("Hot seat", CGRect(x: 774, y: 627, width: 282, height: 55), enabled: canSwitch || ArcadeStore.shared.hotSeatIsActive) { [weak self] in self?.openSession() }
-        button("Back", CGRect(x: 64, y: 627, width: 220, height: 55)) { [weak self] in self?.onClose?() }
-        setAccessibilityLabel("Choose your lemming. \(records.profiles.map(\.initials).joined(separator: ", ")). Type initials. Arrow keys choose portraits. Enter saves. Escape goes back.")
+        button("Back", CGRect(x: 64, y: 627, width: 200, height: 55)) { [weak self] in self?.closeProfiles() }
+        if let id = selectedProfileID {
+            button("Delete", CGRect(x: 280, y: 627, width: 200, height: 55),
+                   enabled: store.canDeleteProfile(id, runInProgress: runInProgress)) { [weak self] in self?.confirmDeleteSelectedProfile() }
+        }
+        button(profilePrimaryTitle, CGRect(x: 496, y: 627, width: 320, height: 55), primary: true,
+               enabled: store.profilesAreWritable) { [weak self] in self?.performProfilePrimaryAction() }
+        if !profilesReturnToHotSeat {
+            button("Hot Seat", CGRect(x: 832, y: 627, width: 224, height: 55),
+                   enabled: canSwitch || store.hotSeatIsActive) { [weak self] in self?.openSession() }
+        }
+        setAccessibilityLabel("Players. \(records.profiles.map(\.initials).joined(separator: ", ")). Type initials. Arrow keys choose a portrait. Changes save automatically. Enter: \(profilePrimaryTitle). Escape goes back.")
     }
     private func drawRecords() {
         if boardScope == .career { drawCareerBoard(); return }
@@ -696,7 +780,12 @@ import NxlvKit
         if event.keyCode == 53 { back(); return }
         let key = event.charactersIgnoringModifiers?.uppercased() ?? ""
         if mode == .hotSeat {
-            if [36, 76].contains(event.keyCode) { closeSession(); return }
+            if [36, 76].contains(event.keyCode) {
+                if ArcadeStore.shared.hotSeatIsActive { closeSession() }
+                else if ArcadeStore.shared.records.profiles.count < 2 { startNewProfile(returnToHotSeat: true) }
+                return
+            }
+            if key == "N" { startNewProfile(returnToHotSeat: true); return }
             if let number = Int(key), (1...ArcadeStore.shared.records.profiles.count).contains(number) {
                 changeSessionPlayer(ArcadeStore.shared.records.profiles[number - 1].id)
                 needsDisplay = true
@@ -704,14 +793,14 @@ import NxlvKit
             return
         }
         if mode == .profiles {
-            if event.keyCode == 36 { saveProfile(); return }
+            if [36, 76].contains(event.keyCode) { performProfilePrimaryAction(); return }
             if event.keyCode == 123 || event.keyCode == 124 { portrait = (portrait + (event.keyCode == 123 ? 7 : 1)) % 8 }
             else if event.keyCode == 51 { if !initials.isEmpty { initials.removeLast() }; replaceInitials = false }
             else if !key.isEmpty, key.allSatisfy({ $0.isASCII && ($0.isLetter || $0.isNumber) }) {
                 if replaceInitials { initials = ""; replaceInitials = false }
                 initials = String((initials + key).prefix(3))
-            }
-            needsDisplay = true; return
+            } else { return }
+            saveEdits(); needsDisplay = true; return
         }
         if mode == .awards, level?.conditions != nil {
             if let number = Int(key), (1...TrolleyAchievementGroup.allCases.count).contains(number) {

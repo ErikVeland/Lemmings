@@ -53,6 +53,8 @@ struct Step: Codable {
     var rate: Int?
     var nuke: Bool?
     var notID: [Int]?
+    var async: Bool?
+    var exactTick: Bool?
 }
 
 struct Result {
@@ -78,11 +80,30 @@ func matches(_ step: Step, _ lem: ClassicDOSLemming, lastID: Int) -> Bool {
 func runPlan(_ steps: [Step], base: ClassicDOSSimulation, until: Int? = nil, verbose: Bool, traceIDs: Set<Int> = [], every: Int = 50, stopLoss: Bool = true) -> Result {
     var sim = base
     var events: [ClassicDOSReplayEvent] = []
+    let asyncSteps = steps.filter { $0.async == true }
+    let steps = steps.filter { $0.async != true }
+    var asyncDone = Array(repeating: false, count: asyncSteps.count)
     var index = 0
     var lastID = 0
     let limit = until ?? ClassicDOSReplayPlayer.defaultTickLimit
     while !sim.isComplete && sim.tickCount < limit {
         _ = sim.tick()
+        for (ai, step) in asyncSteps.enumerated() where !asyncDone[ai] {
+            if let t = step.tick, sim.tickCount < t { continue }
+            if step.exactTick == true, let t = step.tick, sim.tickCount != t { continue }
+            if let rate = step.rate {
+                sim.setReleaseRate(rate); events.append(.init(tick: sim.tickCount, action: .releaseRate(rate), afterTick: true)); asyncDone[ai] = true; continue
+            }
+            guard let skill = step.skill else { asyncDone[ai] = true; continue }
+            for lem in sim.lemmings where lem.isActive && matches(step, lem, lastID: lastID) {
+                if sim.assign(skill, to: lem.id) == .assigned {
+                    events.append(.init(tick: sim.tickCount, action: .assign(lemmingID: lem.id, skill: skill), afterTick: true))
+                    if verbose { print("ASYNC", ai, sim.tickCount, lem.id, skill.rawValue, lem.foot.x, lem.foot.y, lem.action.rawValue, lem.direction.rawValue) }
+                    asyncDone[ai] = true
+                    break
+                }
+            }
+        }
         if !traceIDs.isEmpty && sim.tickCount % every == 0 {
             for lem in sim.lemmings where traceIDs.contains(lem.id) {
                 print("T", sim.tickCount, lem.id, lem.foot.x, lem.foot.y, lem.action.rawValue, lem.direction.rawValue, lem.outcome.rawValue)
@@ -122,6 +143,125 @@ func runPlan(_ steps: [Step], base: ClassicDOSSimulation, until: Int? = nil, ver
         if stopLoss && sim.lostCount > sim.configuration.totalLemmings - sim.configuration.requiredToSave && until == nil { break }
     }
     return Result(sim: sim, events: events, applied: index)
+}
+
+
+struct BeamNode {
+    var sim: ClassicDOSSimulation
+    var events: [ClassicDOSReplayEvent]
+    var index: Int
+    var asyncDone: [Bool]
+    var lastID: Int
+    var trailAssigns: Int
+    var best: Int
+    var wp: Int = 0
+}
+
+// Advance one tick with the scripted plan, like runPlan.
+func stepPlan(_ n: inout BeamNode, seq: [Step], asyncSteps: [Step]) {
+    _ = n.sim.tick()
+    for (ai, step) in asyncSteps.enumerated() where !n.asyncDone[ai] {
+        if let t = step.tick, n.sim.tickCount < t { continue }
+        if let rate = step.rate { n.sim.setReleaseRate(rate); n.events.append(.init(tick: n.sim.tickCount, action: .releaseRate(rate), afterTick: true)); n.asyncDone[ai] = true; continue }
+        if step.nuke == true { n.sim.beginNuke(); n.events.append(.init(tick: n.sim.tickCount, action: .nuke, afterTick: true)); n.asyncDone[ai] = true; continue }
+        guard let skill = step.skill else { n.asyncDone[ai] = true; continue }
+        for lem in n.sim.lemmings where lem.isActive && matches(step, lem, lastID: n.lastID) {
+            if n.sim.assign(skill, to: lem.id) == .assigned {
+                n.events.append(.init(tick: n.sim.tickCount, action: .assign(lemmingID: lem.id, skill: skill), afterTick: true))
+                n.asyncDone[ai] = true; break
+            }
+        }
+    }
+    while n.index < seq.count {
+        let step = seq[n.index]
+        if let t = step.tick, n.sim.tickCount < t { break }
+        if let rate = step.rate { n.sim.setReleaseRate(rate); n.events.append(.init(tick: n.sim.tickCount, action: .releaseRate(rate), afterTick: true)); n.index += 1; continue }
+        if step.nuke == true { n.sim.beginNuke(); n.events.append(.init(tick: n.sim.tickCount, action: .nuke, afterTick: true)); n.index += 1; continue }
+        guard let skill = step.skill else { n.index += 1; continue }
+        var done = false
+        for lem in n.sim.lemmings where lem.isActive && matches(step, lem, lastID: n.lastID) {
+            if n.sim.assign(skill, to: lem.id) == .assigned {
+                n.events.append(.init(tick: n.sim.tickCount, action: .assign(lemmingID: lem.id, skill: skill), afterTick: true))
+                n.lastID = lem.id; n.index += 1; done = true; break
+            }
+        }
+        if !done { break }
+        break
+    }
+}
+
+func runBeam(base: ClassicDOSSimulation, steps: [Step], trail: Int, targets: [(Int, Int)], skills: [ClassicSkill], width: Int, stride: Int, maxAssigns: Int, until: Int, requireAll: Bool) -> BeamNode? {
+    let asyncSteps = steps.filter { $0.async == true }
+    let seq = steps.filter { $0.async != true }
+    var beam = [BeamNode(sim: base, events: [], index: 0, asyncDone: Array(repeating: false, count: asyncSteps.count), lastID: 0, trailAssigns: 0, best: 1 << 20)]
+    var bestSaved: BeamNode?
+    func dist(_ n: BeamNode) -> Int {
+        guard trail < n.sim.lemmings.count else { return 1 << 20 }
+        let l = n.sim.lemmings[trail]
+        let t = targets[min(n.wp, targets.count - 1)]
+        return abs(l.foot.x - t.0) + abs(l.foot.y - t.1) + (targets.count - 1 - n.wp) * 2000
+    }
+    while let head = beam.first, head.sim.tickCount < until {
+        var next: [BeamNode] = []
+        var seen = Set<String>()
+        for var node in beam {
+            // Branch before advancing, so the assignment applies after this tick like a live input.
+            stepPlan(&node, seq: seq, asyncSteps: asyncSteps)
+            if node.sim.isComplete { if node.sim.didWin { return node }; continue }
+            let tick = node.sim.tickCount
+            var candidates = [node]
+            if trail < node.sim.lemmings.count, node.trailAssigns < maxAssigns, tick % stride == 0 || node.sim.lemmings[trail].action == .shrugging {
+                let l = node.sim.lemmings[trail]
+                if l.isActive {
+                    for sk in skills where node.sim.remainingSkillCount(sk) > 0 {
+                        var fork = node
+                        if fork.sim.assign(sk, to: trail) == .assigned {
+                            fork.events.append(.init(tick: tick, action: .assign(lemmingID: trail, skill: sk), afterTick: true))
+                            fork.trailAssigns += 1
+                            candidates.append(fork)
+                        }
+                    }
+                }
+            }
+            for var c in candidates {
+                if trail < c.sim.lemmings.count {
+                    let l = c.sim.lemmings[trail]
+                    if l.outcome == .lost { continue }
+                    if l.outcome == .saved {
+                        if !requireAll { return c }
+                        if bestSaved == nil || c.sim.savedCount > bestSaved!.sim.savedCount { bestSaved = c }
+                    }
+                }
+                if requireAll && c.sim.lostCount > c.sim.configuration.totalLemmings - c.sim.configuration.requiredToSave { continue }
+                if c.wp < targets.count - 1, trail < c.sim.lemmings.count {
+                    let l = c.sim.lemmings[trail]; let t = targets[c.wp]
+                    if abs(l.foot.x - t.0) + abs(l.foot.y - t.1) <= 10 { c.wp += 1; c.best = 1 << 20 }
+                }
+                c.best = min(c.best, dist(c))
+                let key = ClassicDOSReplayRecorder.stateHash(of: c.sim) + ":\(c.index)"
+                if !seen.insert(key).inserted { continue }
+                next.append(c)
+            }
+        }
+        if next.isEmpty { break }
+        next.sort { (a, b) in
+            let da = dist(a) * 4 + a.best + a.trailAssigns * 6
+            let db = dist(b) * 4 + b.best + b.trailAssigns * 6
+            return da < db
+        }
+        // Keep some of every assignment count so frugal routes survive.
+        var buckets: [Int: [BeamNode]] = [:]
+        for n in next { buckets[n.trailAssigns, default: []].append(n) }
+        let share = max(2, width / max(1, buckets.count))
+        var kept: [BeamNode] = []
+        for (_, b) in buckets { kept.append(contentsOf: b.prefix(share)) }
+        kept.sort { dist($0) * 4 + $0.best + $0.trailAssigns * 6 < dist($1) * 4 + $1.best + $1.trailAssigns * 6 }
+        beam = Array(kept.prefix(width))
+        if head.sim.tickCount % 200 == 0 {
+            FileHandle.standardError.write(Data("tick \(head.sim.tickCount) beam \(beam.count) bestdist \(dist(beam[0])) wp \(beam[0].wp) assigns \(beam[0].trailAssigns)\n".utf8))
+        }
+    }
+    return bestSaved ?? beam.first
 }
 
 func summary(_ r: Result, _ steps: [Step]) -> String {
@@ -231,7 +371,7 @@ case "info":
     print("size \(base.terrain.width)x\(base.terrain.height) lemmings \(c.totalLemmings) required \(c.requiredToSave) timeTicks \(c.timeLimitTicks.map(String.init) ?? "none") (\((c.timeLimitTicks ?? 0) / 17)s) rate \(c.initialReleaseRate) maxX \(c.maximumX) maxY \(c.maximumY)")
     print("skills", ClassicSkill.allCases.map { "\($0.rawValue)=\(c.initialSkills[$0] ?? 0)" }.joined(separator: " "))
     print("entrances", c.entrances.map { "(\($0.x),\($0.y))" }.joined(separator: " "))
-    for t in c.triggers { print("trigger", t.id, t.effect, t.bounds.x1, t.bounds.y1, t.bounds.x2, t.bounds.y2) }
+    for t in c.triggers { print("trigger", t.id, t.effect, t.bounds.x1, t.bounds.y1, t.bounds.x2, t.bounds.y2, "reset", t.trapResetTicks) }
 case "run", "replay":
     let steps = try JSONDecoder().decode([Step].self, from: Data(contentsOf: URL(fileURLWithPath: args[4])))
     let until = option("--until").flatMap(Int.init)
@@ -241,6 +381,14 @@ case "run", "replay":
     if let png = option("--png") {
         let crop = option("--crop").map { s -> (Int, Int, Int, Int) in let v = s.split(separator: ",").map { Int($0)! }; return (v[0], v[1], v[2], v[3]) }
         render(result.sim, original: original, crop: crop, scale: option("--scale").flatMap(Int.init) ?? 1, url: URL(fileURLWithPath: png), labels: args.contains("--labels"))
+    }
+    if let m = option("--map") {
+        let v = m.split(separator: ",").map { Int($0)! }
+        for y in v[2]...v[3] {
+            var row = String(format: "%3d ", y)
+            for x in v[0]...v[1] { row += result.sim.terrain.isSolid(x: x, y: y) ? "#" : "." }
+            print(row)
+        }
     }
     if args.contains("--lost") {
         let groups = Dictionary(grouping: result.sim.lemmings.filter { $0.outcome == .lost }, by: { "\($0.action.rawValue) \($0.foot.x) \($0.foot.y)" }).mapValues { $0.map(\.id) }
@@ -257,6 +405,23 @@ case "run", "replay":
         let enc = JSONEncoder(); enc.outputFormatting = [.prettyPrinted, .sortedKeys]
         try enc.encode(replay).write(to: URL(fileURLWithPath: out))
         print("WROTE", out)
+    }
+case "beam":
+    let steps = try JSONDecoder().decode([Step].self, from: Data(contentsOf: URL(fileURLWithPath: args[4])))
+    let trail = Int(option("--id") ?? "0")!
+    let targets = option("--target")!.split(separator: ";").map { pair -> (Int, Int) in let v = pair.split(separator: ",").map { Int($0)! }; return (v[0], v[1]) }
+    let skills = (option("--skills") ?? "builder").split(separator: ",").map { ClassicSkill(rawValue: String($0))! }
+    let node = runBeam(base: base, steps: steps, trail: trail, targets: targets, skills: skills,
+        width: Int(option("--width") ?? "60")!, stride: Int(option("--stride") ?? "4")!, maxAssigns: Int(option("--maxassign") ?? "8")!,
+        until: Int(option("--until") ?? "4000")!, requireAll: args.contains("--requireall"))
+    if let node {
+        // Emit the trail assignments as an exact plan to be finished with run.
+        let trailEvents = node.events.filter { if case let .assign(id, _) = $0.action { return id == trail } else { return false } }
+        var planOut: [[String: Any]] = []
+        for e in trailEvents { if case let .assign(id, sk) = e.action { planOut.append(["skill": sk.rawValue, "id": id, "tick": e.tick, "exactTick": true, "async": true]) } }
+        print("BEAM tick \(node.sim.tickCount) trail \(node.sim.lemmings.count > trail ? node.sim.lemmings[trail].outcome.rawValue : "none") saved \(node.sim.savedCount) lost \(node.sim.lostCount)")
+        let data = try JSONSerialization.data(withJSONObject: planOut)
+        print("TRAIL " + String(data: data, encoding: .utf8)!)
     }
 case "sweep":
     // Each line of the file is one plan. Prints one result line per plan.

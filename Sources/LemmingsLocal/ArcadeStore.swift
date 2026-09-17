@@ -7,7 +7,8 @@ import NxlvKit
     private(set) var records = ArcadeRecords()
     private(set) var storageError: String?
     private let file: URL
-    private let recordFile: ArcadeRecordFile
+    private var recordFile: ArcadeRecordFile
+    private let recoveryStore: RunRecoveryStore
     private(set) var storageNotice: String?
     private var canWrite = true
     private let bundledProofs: TrolleyBundledProofs?
@@ -121,9 +122,11 @@ import NxlvKit
     }
 
 
-    init(file: URL? = nil, bundledProofs: TrolleyBundledProofs? = .load(), defaults: UserDefaults = .standard) {
+    init(file: URL? = nil, bundledProofs: TrolleyBundledProofs? = .load(), defaults: UserDefaults = .standard,
+         checkpoints: RunRecoveryStore? = nil) {
         self.bundledProofs = bundledProofs
         self.defaults = defaults
+        recoveryStore = checkpoints ?? RunRecoveryStore()
         let support = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
         let preview = Bundle.main.bundleIdentifier?.contains("preview") == true ? "Arcade Preview" : "Arcade"
         self.file = file ?? support.appendingPathComponent("Ultimate Lemmings/\(preview)/records-v1.json")
@@ -139,10 +142,93 @@ import NxlvKit
             canWrite = false
         }
         _ = restoreSession(activeOnly: true)
+        adoptBundledProofs()
+    }
+    private func adoptBundledProofs() {
         records.retainBundledTrolleyMaxima(bundledProofs?.maxima ?? [:])
         for entry in bundledProofs?.catalogue.levels ?? [] {
             if let conditions = entry.conditions { acceptBundledProof(for: conditions) }
         }
+    }
+    /// Reads the records file again, for example after another copy of the app changed it.
+    @discardableResult func reloadRecords() -> Bool {
+        let reopened = ArcadeRecordFile(url: file)
+        do {
+            records = try reopened.load() ?? ArcadeRecords()
+            recordFile = reopened; canWrite = true; storageError = nil
+            storageNotice = reopened.recovered ? "Records recovered from backup. Recent results may be missing." : nil
+            adoptBundledProofs()
+            return true
+        } catch {
+            storageError = (error as? ArcadeRecordFile.Failure)?.errorDescription
+                ?? "Records could not be read. Existing files have been preserved."
+            return false
+        }
+    }
+    /// The way out when records cannot be read. The unreadable files stay beside the new records.
+    @discardableResult func startNewRecords() -> Bool {
+        let manager = FileManager.default
+        let stamp = UUID().uuidString
+        do {
+            for url in [file, recordFile.backupURL] where manager.fileExists(atPath: url.path) {
+                try manager.moveItem(at: url, to: url.deletingLastPathComponent()
+                    .appendingPathComponent("\(url.lastPathComponent).set-aside-\(stamp)"))
+            }
+        } catch {
+            storageError = "Records could not be moved aside. Check folder access."
+            return false
+        }
+        endHotSeat()
+        recordFile = ArcadeRecordFile(url: file)
+        records = ArcadeRecords(); canWrite = true; storageError = nil; storageNotice = nil
+        adoptBundledProofs()
+        save()
+        return storageError == nil
+    }
+    /// Players who can be removed now. A player in the current turn or run stays until it ends.
+    func canDeleteProfile(_ id: String, runInProgress: Bool) -> Bool {
+        guard canWrite, storageError == nil, records.profiles.count > 1, records.profile(id) != nil else { return false }
+        guard runInProgress else { return true }
+        return id != records.activeProfileID && id != playingProfileID && !sessionProfileIDs.contains(id)
+    }
+    /// Removes a player, their records, campaign progress, saved runs and replay movies.
+    @discardableResult func deleteProfile(_ id: String) -> Bool {
+        guard canWrite, storageError == nil else { return false }
+        let previous = records
+        guard let replays = records.removeProfile(id) else { return false }
+        save()
+        guard storageError == nil else { records = previous; return false }
+        if sessionProfileIDs.contains(id) {
+            if hotSeatHostID == id || sessionProfileIDs.count <= 2 { endHotSeat() }
+            else {
+                sessionProfileIDs.removeAll { $0 == id }
+                if sessionTurnID == id { sessionTurnID = nil }
+                persistSession()
+            }
+        }
+        if previous.activeProfileID == id { endHotSeat() }
+        let folder = file.deletingLastPathComponent()
+        for replay in replays { try? FileManager.default.removeItem(at: folder.appendingPathComponent(replay.relativePath)) }
+        try? recoveryStore.discard(profileID: id)
+        removeSavedProgress(of: id)
+        return true
+    }
+    private func removeSavedProgress(of id: String) {
+        let prefix = "ArcadeProfile.\(id)."
+        for (key, value) in defaults.dictionaryRepresentation() {
+            if key.hasPrefix(prefix) || (id == ArcadeProfile.legacyID && LegacySaveMigration.isProgress(key)) {
+                defaults.removeObject(forKey: key)
+            } else if key.hasPrefix("GameCenter.profile."), value as? String == id {
+                defaults.removeObject(forKey: key)
+            }
+        }
+        // A shared campaign hosted by this player can no longer be resumed.
+        let hosted = sessionKey(host: id)
+        if let data = defaults.data(forKey: hosted), let saved = try? JSONDecoder().decode(SavedHotSeat.self, from: data) {
+            let shared = "HotSeat.\(saved.id)."
+            for key in defaults.dictionaryRepresentation().keys where key.hasPrefix(shared) { defaults.removeObject(forKey: key) }
+        }
+        defaults.removeObject(forKey: hosted)
     }
     func progressKey(_ key: String) -> String {
         // A hot seat campaign is nobody's solo campaign, so it never reads or
@@ -221,7 +307,7 @@ import NxlvKit
             if select { records.selectProfile(id) }
             profileID = id
         } else {
-            guard select, let added = records.addProfile(initials: initials, portrait: portrait) else { return nil }
+            guard let added = records.addProfile(initials: initials, portrait: portrait, select: select) else { return nil }
             profileID = added.id
         }
         save()
@@ -229,11 +315,11 @@ import NxlvKit
         if select && previous.activeProfileID != records.activeProfileID { endHotSeat() }
         return records.profile(profileID)
     }
-    func updateProfile(_ id: String, initials: String, portrait: Int) {
+    @discardableResult func updateProfile(_ id: String, initials: String, portrait: Int) -> ArcadeProfile? {
         saveProfile(id: id, initials: initials, portrait: portrait, select: false)
     }
-    @discardableResult func addProfile(initials: String, portrait: Int) -> ArcadeProfile? {
-        saveProfile(id: nil, initials: initials, portrait: portrait, select: true)
+    @discardableResult func addProfile(initials: String, portrait: Int, select: Bool = true) -> ArcadeProfile? {
+        saveProfile(id: nil, initials: initials, portrait: portrait, select: select)
     }
     func selectProfile(_ id: String) {
         guard canWrite, let profile = records.profile(id) else { return }

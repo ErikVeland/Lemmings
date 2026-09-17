@@ -155,10 +155,14 @@ func testSkillAccounting() throws {
     let retryPoint = view.convert(NSPoint(x: 971, y: 703), to: nil)
     view.mouseDown(with: NSEvent.mouseEvent(with: .leftMouseDown, location: retryPoint, modifierFlags: [], timestamp: 0,
         windowNumber: window.windowNumber, context: nil, eventNumber: 0, clickCount: 1, pressure: 1)!)
-    try require(store.records.activeProfile.initials == "XYZ" && before == 2 && after == 1 && closed == 1
-        && store.storageError == nil, "Retry did not commit the profile and close after success")
-    view.canSwitch = false; view.selectProfile(store.records.profile(legacy)!); key("\r", code: 36)
-    try require(store.records.activeProfile.id == profile.id && before == 2, "Mid-run profile switch changed the run owner")
+    try require(store.records.activeProfile.initials == "XYZ" && before == 0 && after == 0 && closed == 0
+        && store.storageError == nil, "Retry did not save the edited initials in place")
+    key("\r", code: 36)
+    try require(closed == 1 && before == 0, "Done did not close the players page without switching")
+    view.canSwitch = false; view.selectProfile(store.records.profile(legacy)!)
+    try require(view.profilePrimaryTitle == "Done", "A run in progress offered to switch players")
+    key("\r", code: 36)
+    try require(store.records.activeProfile.id == profile.id && before == 0, "Mid-run profile switch changed the run owner")
     view.mode = .result; view.level = sample.1.run.level
     let result = store.record(ArcadeRun(profileID: profile.id, level: sample.1.run.level, saved: 10,
         didWin: true, skills: ["builder": 3], seconds: 48.2))!
@@ -332,11 +336,153 @@ func testSkillAccounting() throws {
     print("PASS hot-seat roster, three-player rotation, removal, shared progress owner, separate result owner and retry action")
 }
 
+@MainActor func testProfileJourneys() throws {
+    let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+    defer { try? FileManager.default.removeItem(at: directory) }
+    let checkpoints = RunRecoveryStore(directory: directory.appendingPathComponent("Checkpoints"))
+    let records = directory.appendingPathComponent("records.json")
+    let store = ArcadeStore(file: records, bundledProofs: nil, checkpoints: checkpoints)
+    let previous = ArcadeStore.shared
+    ArcadeStore.shared = store
+    defer { ArcadeStore.shared = previous }
+    let host = store.records.activeProfileID
+    let view = ArcadeView(frame: CGRect(x: 0, y: 0, width: 1120, height: 720))
+    let artwork = try ClassicMacArtwork(directory: URL(fileURLWithPath: ProcessInfo.processInfo.environment["LEMMINGS_TEST_APP"] ?? ".build/local/Ultimate Lemmings.app").appendingPathComponent("Contents/Resources/MacArtwork/lemmings"))
+    view.useArtwork(artwork)
+    let window = NSWindow(contentRect: view.frame, styleMask: [.titled], backing: .buffered, defer: false)
+    window.contentView = view
+    let output = URL(fileURLWithPath: FileManager.default.currentDirectoryPath).appendingPathComponent(".build/profile-shots")
+    try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
+    func shot(_ name: String) throws {
+        let bitmap = view.bitmapImageRepForCachingDisplay(in: view.bounds)!
+        view.cacheDisplay(in: view.bounds, to: bitmap)
+        try bitmap.representation(using: .png, properties: [:])!.write(to: output.appendingPathComponent(name + ".png"))
+    }
+    func key(_ text: String, code: UInt16 = 0) {
+        view.keyDown(with: NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 0,
+            windowNumber: window.windowNumber, context: nil, characters: text, charactersIgnoringModifiers: text,
+            isARepeat: false, keyCode: code)!)
+    }
+    func buttons(_ view: NSView) -> [NSButton] { (view as? NSButton).map { [$0] } ?? view.subviews.flatMap(buttons) }
+    var switches = 0, closes = 0
+    view.beforeSwitch = {}; view.afterSwitch = { switches += 1 }; view.onClose = { closes += 1 }
+
+    // Hot Seat with one player: the primary action adds a player and returns to the roster.
+    view.canSwitch = true
+    view.mode = .hotSeat; try shot("hot-seat-one-player")
+    key("\r", code: 36)
+    try require(view.mode == .profiles && view.isNewProfile && view.profilePrimaryTitle == "Add player", "Hot Seat did not start a new player")
+    try shot("new-player")
+    key("b"); key("o"); key("b"); key("\r", code: 36)
+    let bob = store.records.profiles.first { $0.initials == "BOB" }
+    try require(bob != nil && view.mode == .hotSeat && store.hotSeatIsActive && store.sessionProfileIDs.contains(bob!.id)
+        && store.records.activeProfileID == host, "Adding a player from Hot Seat did not join the roster without switching host")
+    try shot("hot-seat-ready")
+
+    // Editing an existing player saves at once, without a confirm button.
+    view.mode = .profiles; view.selectProfile(bob!)
+    key("r"); key("o"); key("b")
+    try require(store.records.profile(bob!.id)?.initials == "ROB" && ArcadeStore(file: records, bundledProofs: nil, checkpoints: checkpoints)
+        .records.profile(bob!.id)?.initials == "ROB", "Edited initials were not saved automatically")
+    key("", code: 124)
+    try require(store.records.profile(bob!.id)?.portrait == (bob!.portrait + 1) % 8, "Portrait change was not saved automatically")
+    try require(view.profilePrimaryTitle == "Play as ROB", "Other player did not offer Play as")
+    try shot("edit-player")
+
+    // A run in progress cannot delete the host or a roster player.
+    try require(!store.canDeleteProfile(host, runInProgress: true) && !store.canDeleteProfile(bob!.id, runInProgress: true),
+        "A player in the current run or turn could be deleted")
+    store.endHotSeat()
+
+    // Deleting a player removes records, progress, saved runs and shared campaigns they host.
+    let level = ArcadeLevel(id: "delete", title: "Delete level", game: "Classic", rules: "test", total: 10, required: 5)
+    _ = store.record(ArcadeRun(profileID: bob!.id, level: level, saved: 7, didWin: true, skills: [:], seconds: 3))
+    _ = store.record(ArcadeRun(profileID: host, level: level, saved: 5, didWin: true, skills: [:], seconds: 4))
+    let progressKey = ArcadeStore.progressKey("ClassicGameProgress.test", profileID: bob!.id)
+    UserDefaults.standard.set(Data([1]), forKey: progressKey)
+    defer { UserDefaults.standard.removeObject(forKey: progressKey) }
+    let run = RunRecovery(engine: "test", profileID: bob!.id, runID: UUID(), dataSetID: "lemmings", levelIndex: 0,
+        levelFingerprint: "f", initialStateHash: "i", tick: 1, events: [], stateHash: "s", usedRewind: false,
+        nukeCount: 0, rewindCount: 0, undoCount: 0, selectedSkill: 0, scrollX: 0, scrollY: 0)
+    checkpoints.save(run, immediately: true) { _ in }
+    let savedRun = try checkpoints.latest(profileID: bob!.id)
+    try require(savedRun?.runID == run.runID, "Checkpoint fixture was not saved")
+    view.selectProfile(store.records.profile(bob!.id)!)
+    view.confirmDeleteSelectedProfile()
+    guard let confirmation = GameScreen.shared.controllerPage(in: window) as? GameMenuPage,
+          let delete = buttons(confirmation).first(where: { $0.title == "Delete ROB" }) else {
+        throw SequelDataError.invalid("Delete did not ask for confirmation")
+    }
+    try shot("delete-confirmation")
+    delete.performClick(nil)
+    let remainingRun = try checkpoints.latest(profileID: bob!.id)
+    try require(store.records.profile(bob!.id) == nil && store.records.runs.allSatisfy { $0.profileID != bob!.id }
+        && store.records.trolley.attempts.allSatisfy { $0.run.profileID != bob!.id }
+        && UserDefaults.standard.object(forKey: progressKey) == nil
+        && remainingRun == nil
+        && store.records.leaderboard(level: level, board: .rescue, assisted: false).first?.saved == 5,
+        "Deleting a player left their data or removed another player's records")
+    let reloaded = try ArcadeStore(file: records, bundledProofs: nil, checkpoints: checkpoints).records.validated()
+    try require(reloaded.profile(bob!.id) == nil, "Deletion was not saved")
+    try require(view.selectedProfileID == host && store.records.profiles.count == 1, "Deletion did not select a remaining player")
+    try require(!store.canDeleteProfile(host, runInProgress: false), "The last player could be deleted")
+    try shot("after-delete")
+
+    // Deleting the active player switches to another player.
+    let cat = store.addProfile(initials: "CAT", portrait: 2, select: true)!
+    let beforeDelete = switches
+    view.canSwitch = true
+    view.deleteProfile(cat.id)
+    try require(store.records.activeProfileID == host && switches == beforeDelete + 1, "Deleting the active player did not switch players")
+
+    // A saved run that cannot restore can be discarded; its bytes are kept aside.
+    let broken = RunRecovery(engine: "test", profileID: host, runID: UUID(), dataSetID: "lemmings", levelIndex: 0,
+        levelFingerprint: "f", initialStateHash: "i", tick: 1, events: [], stateHash: "s", usedRewind: false,
+        nukeCount: 0, rewindCount: 0, undoCount: 0, selectedSkill: 0, scrollX: 0, scrollY: 0)
+    checkpoints.save(broken, immediately: true) { _ in }
+    try checkpoints.setAside(broken.runID)
+    let afterDiscard = try checkpoints.latest(profileID: host)
+    let aside = try FileManager.default.contentsOfDirectory(atPath: checkpoints.setAsideDirectory.path)
+    try require(afterDiscard == nil && aside.contains { $0.hasPrefix(broken.runID.uuidString) },
+        "Discarded run stayed in Resume or lost its bytes")
+    let damaged = checkpoints.directory.appendingPathComponent(UUID().uuidString + ".json")
+    try Data("damaged".utf8).write(to: damaged)
+    var threw = false
+    do { _ = try checkpoints.latest(profileID: host) } catch { threw = true }
+    try require(threw, "Damaged checkpoint fixture did not fail")
+    let moved = try checkpoints.setAsideUnreadable()
+    let afterUnreadable = try checkpoints.latest(profileID: host)
+    try require(moved == 1 && afterUnreadable == nil,
+        "Unreadable run still blocked Resume")
+
+    // Unreadable records offer a way out that keeps the old files.
+    try Data("broken records".utf8).write(to: records)
+    try? FileManager.default.removeItem(at: records.appendingPathExtension("backup"))
+    let stuck = ArcadeStore(file: records, bundledProofs: nil, checkpoints: checkpoints)
+    ArcadeStore.shared = stuck
+    try require(!stuck.profilesAreWritable && stuck.storageError != nil, "Broken records fixture was readable")
+    view.mode = .profiles; view.selectProfile(stuck.records.activeProfile)
+    try shot("records-unreadable")
+    view.fixRecords()
+    guard let fix = GameScreen.shared.controllerPage(in: window) as? GameMenuPage,
+          let start = buttons(fix).first(where: { $0.title == "Start new records" }) else {
+        throw SequelDataError.invalid("Unreadable records offered no way out")
+    }
+    start.performClick(nil)
+    let kept = try FileManager.default.contentsOfDirectory(atPath: directory.path).filter { $0.hasPrefix("records.json.set-aside-") }
+    try require(stuck.profilesAreWritable && stuck.storageError == nil && kept.count == 1
+        && ArcadeStore(file: records, bundledProofs: nil, checkpoints: checkpoints).storageError == nil,
+        "Start new records did not restore saving or lost the unreadable file")
+    _ = closes
+    print("PASS player add-to-Hot-Seat, automatic edits, deletion cleanup, active-player deletion, discarded runs and unreadable records way out")
+}
+
 let app = NSApplication.shared
 app.setActivationPolicy(.accessory)
 Task { @MainActor in
     do {
         try testSharedSession()
+        try testProfileJourneys()
         let sample = try testRecords()
         try testSkillAccounting()
         try await testStoreAndView(sample)

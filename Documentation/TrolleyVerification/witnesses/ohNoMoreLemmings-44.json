@@ -1,0 +1,155 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "blocker"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 224
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "bomber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 225
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "blocker"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 339
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "bomber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 340
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "blocker"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 469
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "bomber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 470
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 6,
+          "skill" : "blocker"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 584
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 6,
+          "skill" : "bomber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 585
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 8,
+          "skill" : "blocker"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1341
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 16,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1354
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 16,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1546
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 16,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1738
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 16,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1930
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1931
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 80,
+    "required" : 68,
+    "saved" : 75,
+    "stateHash" : "625f36e02c45c635c50d8e85e4374d703c9f63887aa3e1c7f33969110c035ada",
+    "ticks" : 4080
+  },
+  "initialStateHash" : "70dd14b6259bb80682f5bc69f292bdec8f9bd5264432b167ed1c6b8f2cc5c8bd",
+  "number" : 5,
+  "rank" : "Wild",
+  "title" : "Lemming Head"
+}

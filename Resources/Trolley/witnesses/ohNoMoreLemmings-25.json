@@ -1,0 +1,106 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "climber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 54
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 144
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "digger"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1149
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "climber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1150
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "digger"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1448
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1726
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1947
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1985
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 5,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1996
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 20,
+    "required" : 20,
+    "saved" : 20,
+    "stateHash" : "8baf0f33cc40e150c4628d4e35e1926c581a7cd1a6bb8d61bdfa446391e18824",
+    "ticks" : 2784
+  },
+  "initialStateHash" : "763d7da42b4e548f634df4a59aa9202eee9f1d3af7e0c02085ddfcca3df65511",
+  "number" : 6,
+  "rank" : "Crazy",
+  "title" : "The Stack"
+}

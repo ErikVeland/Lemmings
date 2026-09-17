@@ -60,6 +60,10 @@ public struct TrolleyMaximumRecord: Codable, Equatable, Sendable {
         }
         // Even a population-wide observed rescue remains OBSERVED until evidence is explicitly accepted.
     }
+    /// Used when the observing attempt is deleted. The caller re-observes the attempts that remain.
+    public mutating func forgetObservation() {
+        highestObserved = nil; observedAttemptID = nil; observedDate = nil; observedBuild = nil
+    }
     public mutating func acceptVerified(_ evidence: TrolleyMaximum, population: Int) throws {
         guard evidence.isRescueTarget, evidence.isValid(population: population),
               evidence.value! >= (highestObserved ?? 0) else {
