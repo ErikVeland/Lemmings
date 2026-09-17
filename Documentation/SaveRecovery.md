@@ -130,3 +130,20 @@ the campaign. It restores the selected slot, pauses and retains the original att
 Invalid map indices, duplicate skills and incomplete panels are rejected.
 
 See [the 1.0 follow-up](ReleaseReadiness/OneZeroLocalClosure.md) for validation.
+
+## Saved runs that cannot be restored
+
+A saved run can become unusable. For example, its game data moved or a newer app
+version wrote it. Resume then shows the error and **Discard saved run**.
+
+- **Cannot restore run** discards that run.
+- **Cannot read saved run** discards every run file that cannot be read.
+
+Discarding moves the files to `Checkpoints/Set aside/`. The app does not delete them.
+Resume then offers the next valid run, if one exists. If another app is saving
+a run, the app reports it and offers no discard.
+
+Deleting a player deletes that player's saved runs.
+
+Validation: `Scripts/run-arcade-records-tests.sh` covers discard, unreadable
+runs, deletion cleanup and the records way out.

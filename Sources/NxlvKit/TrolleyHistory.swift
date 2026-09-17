@@ -97,6 +97,20 @@ public struct TrolleyHistory: Codable, Equatable, Sendable {
     public mutating func retainBundledMaxima(_ current: [String: TrolleyMaximum]) {
         for key in Array(maxima.keys) { maxima[key]?.retainBundledEvidence(current[key]) }
     }
+    /// Removes one player's attempts. Returns their replay references so the caller can delete the files.
+    @discardableResult public mutating func removeProfile(_ profileID: String) -> [TrolleyReplayReference] {
+        let removed = Set(attempts.filter { $0.run.profileID == profileID }.map(\.id))
+        attempts.removeAll { removed.contains($0.id) }
+        starts.removeAll { $0.profileID == profileID }
+        let orphaned = replays.filter { removed.contains($0.attemptID) }
+        replays.removeAll { removed.contains($0.attemptID) }
+        for key in Array(maxima.keys) {
+            guard let observed = maxima[key]?.observedAttemptID, removed.contains(observed) else { continue }
+            maxima[key]?.forgetObservation()
+            for attempt in attempts where attempt.comparisonID == key { maxima[key]?.observe(attempt.run) }
+        }
+        return orphaned
+    }
     public func personal(profileID: String, comparisonID: String? = nil) -> TrolleyPersonalRecords {
         .init(attempts: attempts.map { $0.assessed(using: maxima[$0.comparisonID]?.current ?? TrolleyMaximum()) }, starts: starts, profileID: profileID, comparisonID: comparisonID)
     }

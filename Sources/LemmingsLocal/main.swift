@@ -205,7 +205,18 @@ let achievementProgressKey = "ClassicAchievementProgress"
         GameScreen.shared.confirm("Resume saved run?", detail: "Your current attempt stays saved. The restored run starts paused.",
           actionTitle: "Resume run", owner: window) { [weak self] in self?.restoreRun(checkpoint) }
       } else { restoreRun(checkpoint) }
-    } catch { GameScreen.shared.message("Cannot read saved run", detail: error.localizedDescription) }
+    } catch RunRecoveryError.busy {
+      GameScreen.shared.message("Cannot read saved run", detail: RunRecoveryError.busy.localizedDescription)
+    } catch {
+      // A run that can never load must not block Resume forever. Its bytes are moved aside, not deleted.
+      GameScreen.shared.confirm("Cannot read saved run", detail: error.localizedDescription,
+        actionTitle: "Discard saved run", owner: window) { [weak self] in
+          guard let self else { return }
+          do { try self.recoveryStore.setAsideUnreadable() }
+          catch { GameScreen.shared.message("Cannot discard saved run", detail: error.localizedDescription) }
+          self.renderScreen()
+        }
+    }
   }
 
   private func restoreRun(_ checkpoint: RunRecovery) {
@@ -298,7 +309,17 @@ let achievementProgressKey = "ClassicAchievementProgress"
       window.makeFirstResponder(playfield)
     } catch {
       isPaused = true; panel.isPaused = true
-      GameScreen.shared.message("Cannot restore run", detail: error.localizedDescription)
+      if case RunRecoveryError.busy = error {
+        GameScreen.shared.message("Cannot restore run", detail: error.localizedDescription)
+        return
+      }
+      GameScreen.shared.confirm("Cannot restore run", detail: error.localizedDescription,
+        actionTitle: "Discard saved run", owner: window) { [weak self] in
+          guard let self else { return }
+          do { try self.recoveryStore.setAside(checkpoint.runID) }
+          catch { GameScreen.shared.message("Cannot discard saved run", detail: error.localizedDescription) }
+          self.renderScreen()
+        }
     }
   }
 

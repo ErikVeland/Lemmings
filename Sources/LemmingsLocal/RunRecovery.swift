@@ -219,15 +219,57 @@ final class RunRecoveryStore: @unchecked Sendable {
         if immediately { queue.sync(execute: operation) } else { queue.async(execute: operation) }
     }
     func clear(_ id: UUID) throws { try queue.sync { try file(id).save(nil) } }
+    /// Unrestorable runs leave Resume. Their bytes move to "Set aside" instead of being deleted.
+    var setAsideDirectory: URL { directory.appendingPathComponent("Set aside") }
+    func setAside(_ id: UUID) throws { try queue.sync { try moveAside(id) } }
+    /// Sets aside every run that cannot be read. Returns how many were moved.
+    @discardableResult func setAsideUnreadable() throws -> Int {
+        try queue.sync {
+            var moved = 0
+            for id in try runIDs() {
+                do { _ = try file(id).load() }
+                catch RunRecoveryError.busy { continue }
+                catch { try moveAside(id); moved += 1 }
+            }
+            return moved
+        }
+    }
+    /// Deletes the readable runs of a removed player. Runs that cannot be read stay untouched.
+    func discard(profileID: String) throws {
+        try queue.sync {
+            for id in try runIDs() {
+                guard let value = try? file(id).load(), value.profileID == profileID else { continue }
+                files[id] = nil
+                for suffix in [".json", ".json.backup", ".json.lock"] {
+                    try? FileManager.default.removeItem(at: directory.appendingPathComponent(id.uuidString + suffix))
+                }
+            }
+        }
+    }
+    private func runIDs() throws -> Set<UUID> {
+        guard FileManager.default.fileExists(atPath: directory.path) else { return [] }
+        let urls = try FileManager.default.contentsOfDirectory(at: directory, includingPropertiesForKeys: nil)
+        // Include missing-primary backups after an interrupted file operation.
+        return Set(urls.compactMap { URL -> UUID? in
+            let stem = URL.deletingPathExtension()
+            return UUID(uuidString: URL.pathExtension == "backup" ? stem.deletingPathExtension().lastPathComponent : stem.lastPathComponent)
+        })
+    }
+    private func moveAside(_ id: UUID) throws {
+        files[id] = nil
+        let manager = FileManager.default
+        try manager.createDirectory(at: setAsideDirectory, withIntermediateDirectories: true)
+        let stamp = UUID().uuidString
+        for suffix in [".json", ".json.backup"] {
+            let source = directory.appendingPathComponent(id.uuidString + suffix)
+            guard manager.fileExists(atPath: source.path) else { continue }
+            try manager.moveItem(at: source, to: setAsideDirectory.appendingPathComponent("\(id.uuidString)-\(stamp)\(suffix)"))
+        }
+        try? manager.removeItem(at: directory.appendingPathComponent(id.uuidString + ".json.lock"))
+    }
     func latest(profileID: String, hotSeatID: String? = nil) throws -> RunRecovery? {
         try queue.sync {
-            guard FileManager.default.fileExists(atPath: directory.path) else { return nil }
-            let urls = try FileManager.default.contentsOfDirectory(at: directory, includingPropertiesForKeys: nil)
-            // Include missing-primary backups after an interrupted file operation.
-            let ids = Set(urls.compactMap { URL -> UUID? in
-                let stem = URL.deletingPathExtension()
-                return UUID(uuidString: URL.pathExtension == "backup" ? stem.deletingPathExtension().lastPathComponent : stem.lastPathComponent)
-            })
+            let ids = try runIDs()
             var latest: RunRecovery?
             var firstError: Error?
             for id in ids {
