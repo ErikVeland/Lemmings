@@ -153,7 +153,7 @@ There are now 263 distinct hint decks and 266 bundled solution replays.
 
 ## Oh No! routes, 17 September
 
-Claude added routes for 15 more Oh No! levels with the level lab.
+Claude added routes for 16 more Oh No! levels with the level lab.
 
 | Level | Saved | Required | Ticks |
 | --- | ---: | ---: | ---: |
@@ -172,16 +172,17 @@ Claude added routes for 15 more Oh No! levels with the level lab.
 | Wicked 16 | 5 | 5 | 614 |
 | Wicked 19 | 46 | 41 | 1539 |
 | Havoc 9 | 50 | 50 | 2369 |
+| Crazy 17 | 49 | 49 | 2896 |
 
-Official Classic coverage is now 280/292. The 12 remaining gaps are Oh No! levels.
+Official Classic coverage is now 281/292. The 11 remaining gaps are Oh No! levels.
 The lab now supports steps that do not wait for earlier steps, and a random
 search over step templates found the Wicked 6 and Wicked 7 routes. Lab plans
-for seven of these routes are in `Tools/ClassicCompletion/Plans/lab`. The plans
+for eight of these routes are in `Tools/ClassicCompletion/Plans/lab`. The plans
 for the other eight were lost with a cleared scratch folder. Their fixtures
 remain the evidence, and the strict gate replays each fixture.
 
-The campaign gate, the rescue audit and the hint export pass. There are 278
-distinct hint decks and 281 bundled solution replays.
+The campaign gate, the rescue audit and the hint export pass. There are 279
+distinct hint decks and 282 bundled solution replays.
 
 ## Remaining release boundaries
 

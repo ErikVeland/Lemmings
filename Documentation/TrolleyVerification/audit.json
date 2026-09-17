@@ -1,7 +1,7 @@
 {
   "engineSourceFingerprint": "483661a10882d87cd0d07590d6d96b2247e537e8bae2acdd8c8152ca34c3a3ca",
   "exhaustive": false,
-  "generatedAt": "2026-09-17T07:11:46Z",
+  "generatedAt": "2026-09-17T11:35:47Z",
   "levels": [
     {
       "bestSaved": 10,
@@ -6199,7 +6199,7 @@
       "rank": "Crazy",
       "required": 48,
       "status": "OBSERVED",
-      "testedCandidates": 144,
+      "testedCandidates": 145,
       "title": "Many Lemmings make level work",
       "witness": {
         "completed": true,
@@ -6851,6 +6851,7 @@
       }
     },
     {
+      "bestSaved": 49,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
         "levelFingerprint": "c28be20ac4ed010f898ee6f8d62771dabf5fc682c37182303726e659df58cb42",
@@ -6875,6 +6876,7 @@
         "timeLimitSeconds": 180
       },
       "gameID": "ohNoMoreLemmings",
+      "lossesInBestSolution": 1,
       "notes": [
         "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
       ],
@@ -6882,9 +6884,20 @@
       "population": 50,
       "rank": "Crazy",
       "required": 49,
-      "status": "UNKNOWN",
-      "testedCandidates": 356,
-      "title": "DIGGING FOR VICTORY"
+      "status": "OBSERVED",
+      "testedCandidates": 357,
+      "title": "DIGGING FOR VICTORY",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 1,
+        "path": "witnesses/ohNoMoreLemmings-36.json",
+        "released": 50,
+        "retainedReserves": 0,
+        "saved": 49,
+        "sha256": "3035952a06c56e02a818acf02626255510542978fbd460e644448827db0455a9",
+        "ticks": 2896
+      }
     },
     {
       "bestSaved": 46,
@@ -8950,7 +8963,7 @@
       "rank": "Wicked",
       "required": 48,
       "status": "OBSERVED",
-      "testedCandidates": 428,
+      "testedCandidates": 429,
       "title": "LeMming ToMato KetchUp fAcilitY",
       "witness": {
         "completed": true,
@@ -9195,7 +9208,7 @@
       "rank": "Wicked",
       "required": 30,
       "status": "OBSERVED",
-      "testedCandidates": 286,
+      "testedCandidates": 287,
       "title": "PoP TiL YoU DrOp!",
       "witness": {
         "completed": true,
@@ -9244,7 +9257,7 @@
       "rank": "Wicked",
       "required": 72,
       "status": "OBSERVED",
-      "testedCandidates": 144,
+      "testedCandidates": 145,
       "title": "Last Lemming To Lemmingcentral",
       "witness": {
         "completed": true,
@@ -9489,7 +9502,7 @@
       "rank": "Wicked",
       "required": 78,
       "status": "OBSERVED",
-      "testedCandidates": 286,
+      "testedCandidates": 287,
       "title": "Suicidal Tendencies",
       "witness": {
         "completed": true,
@@ -9672,7 +9685,7 @@
       "rank": "Wicked",
       "required": 5,
       "status": "OBSERVED",
-      "testedCandidates": 357,
+      "testedCandidates": 358,
       "title": "Five Alive",
       "witness": {
         "completed": true,
@@ -9819,7 +9832,7 @@
       "rank": "Wicked",
       "required": 41,
       "status": "OBSERVED",
-      "testedCandidates": 144,
+      "testedCandidates": 145,
       "title": "Up, Down or Round and Round",
       "witness": {
         "completed": true,
@@ -10113,7 +10126,7 @@
       "rank": "Wild",
       "required": 68,
       "status": "OBSERVED",
-      "testedCandidates": 215,
+      "testedCandidates": 216,
       "title": "Lemming Head",
       "witness": {
         "completed": true,
@@ -10711,7 +10724,7 @@
       "rank": "Wild",
       "required": 60,
       "status": "OBSERVED",
-      "testedCandidates": 144,
+      "testedCandidates": 145,
       "title": "Dr Lemminggood",
       "witness": {
         "completed": true,

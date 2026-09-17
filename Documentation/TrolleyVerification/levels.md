@@ -158,7 +158,7 @@ See [method and limitations](README.md) and [exact conditions and evidence](audi
 | Crazy 14: Time waits for no Lemming | 50 | 45 | 48 | — | — | [Observed](witnesses/ohNoMoreLemmings-33.json) |
 | Crazy 15: Worra load of old blocks! | 50 | 44 | 49 | — | — | [Observed](witnesses/ohNoMoreLemmings-34.json) |
 | Crazy 16: Across The Gap | 16 | 16 | 16 | 16 | 0 | [Verified](witnesses/ohNoMoreLemmings-35.json) |
-| Crazy 17: DIGGING FOR VICTORY | 50 | 49 | — | — | — | No witness collected |
+| Crazy 17: DIGGING FOR VICTORY | 50 | 49 | 49 | — | — | [Observed](witnesses/ohNoMoreLemmings-36.json) |
 | Crazy 18: NO PROBLEM | 50 | 45 | 46 | — | — | [Observed](witnesses/ohNoMoreLemmings-37.json) |
 | Crazy 19: DON`T PANIC | 50 | 45 | 46 | — | — | [Observed](witnesses/ohNoMoreLemmings-38.json) |
 | Crazy 20: Ice Ice Lemming | 20 | 10 | — | — | — | No witness collected |

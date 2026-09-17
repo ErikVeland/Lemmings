@@ -1,0 +1,80 @@
+[
+ {
+  "skill": "digger",
+  "id": 0,
+  "x": 288,
+  "action": "walking"
+ },
+ {
+  "skill": "blocker",
+  "id": 1,
+  "xMax": 274,
+  "xMin": 270,
+  "action": "walking",
+  "async": true
+ },
+ {
+  "skill": "digger",
+  "id": 0,
+  "yMin": 50,
+  "yMax": 58,
+  "action": "walking"
+ },
+ {
+  "skill": "basher",
+  "id": 0,
+  "x": 296,
+  "direction": 1,
+  "action": "walking",
+  "yMin": 70,
+  "tick": 246
+ },
+ {
+  "rate": 99,
+  "tick": 400,
+  "async": true
+ },
+ {
+  "skill": "builder",
+  "id": 0,
+  "x": 449,
+  "direction": 1,
+  "action": "walking"
+ },
+ {
+  "skill": "builder",
+  "id": 0,
+  "x": 666,
+  "direction": 1,
+  "action": "walking"
+ },
+ {
+  "skill": "builder",
+  "id": 0,
+  "action": "shrugging"
+ },
+ {
+  "skill": "builder",
+  "id": 0,
+  "action": "shrugging"
+ },
+ {
+  "skill": "basher",
+  "id": 0,
+  "xMin": 726,
+  "direction": 1,
+  "action": "building"
+ },
+ {
+  "skill": "digger",
+  "id": 0,
+  "xMin": 882,
+  "action": "bashing"
+ },
+ {
+  "skill": "bomber",
+  "id": 1,
+  "tick": 1700,
+  "async": true
+ }
+]

@@ -3,7 +3,7 @@
   "coverage": {
     "holidayLemmings1993": 32,
     "holidayLemmings1994": 32,
-    "ohNoMoreLemmings": 88,
+    "ohNoMoreLemmings": 89,
     "ohYesMoreLemmings": 3,
     "xmasLemmings1991": 4,
     "xmasLemmings1992": 4,
@@ -799,6 +799,16 @@
       "lost": 0,
       "reserves": 0,
       "ticks": 1375
+    },
+    {
+      "fixture": "Tests/ClassicFamilyCompletionTests/Fixtures/ohNoMoreLemmings/crazy-17.json",
+      "sha256": "3035952a06c56e02a818acf02626255510542978fbd460e644448827db0455a9",
+      "game": "ohNoMoreLemmings",
+      "level": "Crazy 17",
+      "saved": 49,
+      "lost": 1,
+      "reserves": 0,
+      "ticks": 2896
     },
     {
       "fixture": "Tests/ClassicFamilyCompletionTests/Fixtures/ohNoMoreLemmings/crazy-18.json",
