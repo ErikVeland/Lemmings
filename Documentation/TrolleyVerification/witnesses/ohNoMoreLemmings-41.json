@@ -6,6 +6,7 @@
           "_0" : 1
         }
       },
+      "afterTick" : true,
       "tick" : 7
     },
     {
@@ -15,7 +16,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 121
+      "afterTick" : true,
+      "tick" : 120
     },
     {
       "action" : {
@@ -24,7 +26,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 324
+      "afterTick" : true,
+      "tick" : 323
     },
     {
       "action" : {
@@ -33,7 +36,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 408
+      "afterTick" : true,
+      "tick" : 407
     },
     {
       "action" : {
@@ -42,7 +46,8 @@
           "skill" : "bomber"
         }
       },
-      "tick" : 585
+      "afterTick" : true,
+      "tick" : 584
     },
     {
       "action" : {
@@ -51,7 +56,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 779
+      "afterTick" : true,
+      "tick" : 778
     },
     {
       "action" : {
@@ -60,7 +66,8 @@
           "skill" : "bomber"
         }
       },
-      "tick" : 973
+      "afterTick" : true,
+      "tick" : 972
     },
     {
       "action" : {
@@ -69,7 +76,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 975
+      "afterTick" : true,
+      "tick" : 973
     },
     {
       "action" : {
@@ -78,7 +86,8 @@
           "skill" : "bomber"
         }
       },
-      "tick" : 1007
+      "afterTick" : true,
+      "tick" : 1006
     },
     {
       "action" : {
@@ -87,7 +96,8 @@
           "skill" : "bomber"
         }
       },
-      "tick" : 1038
+      "afterTick" : true,
+      "tick" : 1037
     },
     {
       "action" : {
@@ -96,7 +106,8 @@
           "skill" : "bomber"
         }
       },
-      "tick" : 1105
+      "afterTick" : true,
+      "tick" : 1103
     },
     {
       "action" : {
@@ -105,7 +116,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1181
+      "afterTick" : true,
+      "tick" : 1180
     },
     {
       "action" : {
@@ -114,7 +126,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1421
+      "afterTick" : true,
+      "tick" : 1420
     },
     {
       "action" : {
@@ -123,7 +136,8 @@
           "skill" : "bomber"
         }
       },
-      "tick" : 1533
+      "afterTick" : true,
+      "tick" : 1532
     },
     {
       "action" : {
@@ -132,7 +146,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1656
+      "afterTick" : true,
+      "tick" : 1655
     },
     {
       "action" : {
@@ -141,7 +156,8 @@
           "skill" : "bomber"
         }
       },
-      "tick" : 1806
+      "afterTick" : true,
+      "tick" : 1805
     },
     {
       "action" : {
@@ -150,7 +166,8 @@
           "skill" : "bomber"
         }
       },
-      "tick" : 1932
+      "afterTick" : true,
+      "tick" : 1931
     },
     {
       "action" : {
@@ -159,7 +176,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1936
+      "afterTick" : true,
+      "tick" : 1935
     },
     {
       "action" : {
@@ -167,6 +185,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 1989
     },
     {
@@ -175,6 +194,7 @@
 
         }
       },
+      "afterTick" : true,
       "tick" : 2897
     },
     {
@@ -183,6 +203,7 @@
 
         }
       },
+      "afterTick" : true,
       "tick" : 2901
     }
   ],
@@ -191,10 +212,10 @@
     "released" : 80,
     "required" : 60,
     "saved" : 60,
-    "stateHash" : "ad308e616605c474af0db3f2f9755388e7e6ead7a9286d5dfa8ab5870cc0a183",
-    "ticks" : 3045
+    "stateHash" : "91c3da84d3dfcd5184ace7908f74b7e35ba73857f7a99c91f766c5eae1a55e13",
+    "ticks" : 3046
   },
-  "initialStateHash" : "f070a3f4a5dbb2917e40134c8e85565a2230ccaca04363e807bc313fedff2d8f",
+  "initialStateHash" : "257a8deed54e72b750c5b1dd695a48ca5a36034e42dd1bd63123142a47f2ce27",
   "number" : 2,
   "rank" : "Wild",
   "title" : "Lemming Hotel"

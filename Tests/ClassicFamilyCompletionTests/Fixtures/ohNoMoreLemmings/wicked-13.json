@@ -6,6 +6,7 @@
           "_0" : 1
         }
       },
+      "afterTick" : true,
       "tick" : 6
     },
     {
@@ -15,7 +16,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 71
+      "afterTick" : true,
+      "tick" : 70
     },
     {
       "action" : {
@@ -24,7 +26,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 142
+      "afterTick" : true,
+      "tick" : 141
     },
     {
       "action" : {
@@ -33,7 +36,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 229
+      "afterTick" : true,
+      "tick" : 228
     },
     {
       "action" : {
@@ -42,7 +46,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 313
+      "afterTick" : true,
+      "tick" : 312
     },
     {
       "action" : {
@@ -51,7 +56,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 347
+      "afterTick" : true,
+      "tick" : 346
     },
     {
       "action" : {
@@ -60,7 +66,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 412
+      "afterTick" : true,
+      "tick" : 411
     },
     {
       "action" : {
@@ -69,7 +76,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 460
+      "afterTick" : true,
+      "tick" : 459
     },
     {
       "action" : {
@@ -77,6 +85,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 492
     },
     {
@@ -86,7 +95,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 958
+      "afterTick" : true,
+      "tick" : 957
     },
     {
       "action" : {
@@ -95,7 +105,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1110
+      "afterTick" : true,
+      "tick" : 1109
     },
     {
       "action" : {
@@ -104,7 +115,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1303
+      "afterTick" : true,
+      "tick" : 1301
     },
     {
       "action" : {
@@ -113,7 +125,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1496
+      "afterTick" : true,
+      "tick" : 1493
     },
     {
       "action" : {
@@ -122,7 +135,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1689
+      "afterTick" : true,
+      "tick" : 1685
     },
     {
       "action" : {
@@ -131,7 +145,8 @@
           "skill" : "digger"
         }
       },
-      "tick" : 1759
+      "afterTick" : true,
+      "tick" : 1720
     }
   ],
   "expected" : {
@@ -139,10 +154,10 @@
     "released" : 80,
     "required" : 70,
     "saved" : 73,
-    "stateHash" : "373725160fd978e98202261c44b0b68903bf62911abaf768ba02384bc04cec58",
-    "ticks" : 2925
+    "stateHash" : "5ea535082b5e54fd06c3598d6d3cb0e6ac2104d2da0dc48867cae22c186ef03c",
+    "ticks" : 2886
   },
-  "initialStateHash" : "ad72b259e57da368f77ee312cd0d163f2645fcbcc374d920d39ef08694854072",
+  "initialStateHash" : "4ca8fab554ed6ff6c02f8b86ce6be8b460fb3ac39c62bb8f58db984c8085b83e",
   "number" : 13,
   "rank" : "Wicked",
   "title" : "Almost Nearly Virtual Reality"

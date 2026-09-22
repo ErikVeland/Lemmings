@@ -7,7 +7,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 199
+      "afterTick" : true,
+      "tick" : 198
     },
     {
       "action" : {
@@ -16,7 +17,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 242
+      "afterTick" : true,
+      "tick" : 241
     },
     {
       "action" : {
@@ -25,7 +27,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 286
+      "afterTick" : true,
+      "tick" : 285
     },
     {
       "action" : {
@@ -34,7 +37,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 330
+      "afterTick" : true,
+      "tick" : 329
     },
     {
       "action" : {
@@ -43,7 +47,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 373
+      "afterTick" : true,
+      "tick" : 372
     },
     {
       "action" : {
@@ -52,7 +57,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 417
+      "afterTick" : true,
+      "tick" : 416
     }
   ],
   "expected" : {
@@ -60,10 +66,10 @@
     "released" : 10,
     "required" : 10,
     "saved" : 10,
-    "stateHash" : "c973f6853912a25f31303d8d654cb766f49c4b72585c453f0d0b5cfe75895672",
-    "ticks" : 719
+    "stateHash" : "50b559897f71c277df6a167240613497248cd5ffe48cdef67964b6e53496a778",
+    "ticks" : 718
   },
-  "initialStateHash" : "d39fe550177ebf6caae1b11d66523af06c1dc6c63f0851a6f49d24096e0ad37f",
+  "initialStateHash" : "9c32bb77ae9f4407d575eedc18959282e06bc93212b93f61333a85f151f4754c",
   "number" : 15,
   "rank" : "Flurry",
   "title" : "Head for the Hills!"

@@ -1,0 +1,56 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 117
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 323
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 11,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 524
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 733
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 75,
+    "required" : 65,
+    "saved" : 75,
+    "stateHash" : "53ed708c79e7e08bb6a6425bc9ae7e5a61a4804fe6d57226170b63ae2ba08bff",
+    "ticks" : 2444
+  },
+  "initialStateHash" : "c5d3e333d48ce443bc5fef8b5de555d607493693dffaceefbaf7379048a7699e",
+  "number" : 6,
+  "rank" : "Lemmings Versus",
+  "title" : "In the thick of the fray"
+}

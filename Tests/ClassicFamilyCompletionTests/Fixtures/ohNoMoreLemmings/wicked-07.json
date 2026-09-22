@@ -8,37 +8,37 @@
         }
       },
       "afterTick" : true,
-      "tick" : 131
-    },
-    {
-      "action" : {
-        "assign" : {
-          "lemmingID" : 5,
-          "skill" : "blocker"
-        }
-      },
-      "afterTick" : true,
-      "tick" : 365
+      "tick" : 130
     },
     {
       "action" : {
         "assign" : {
           "lemmingID" : 3,
-          "skill" : "bomber"
+          "skill" : "blocker"
         }
       },
       "afterTick" : true,
-      "tick" : 372
+      "tick" : 257
     },
     {
       "action" : {
         "assign" : {
-          "lemmingID" : 6,
+          "lemmingID" : 2,
           "skill" : "bomber"
         }
       },
       "afterTick" : true,
-      "tick" : 388
+      "tick" : 318
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 5,
+          "skill" : "bomber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 334
     },
     {
       "action" : {
@@ -48,7 +48,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 517
+      "tick" : 516
     },
     {
       "action" : {
@@ -64,11 +64,11 @@
     "didWin" : true,
     "released" : 80,
     "required" : 72,
-    "saved" : 73,
-    "stateHash" : "5b9ba285063e3bfd51e0fbd8269388596d43543bf0aa3a5887f4a3fb78a9074e",
+    "saved" : 74,
+    "stateHash" : "fb8acdeee533533b0433922f57413fe42dbcbeb4fa3d1c8e2d6154a7927ab23e",
     "ticks" : 2040
   },
-  "initialStateHash" : "7a8ba06d74281ef3be6e7905df3dfaebcb2210e1ee52f42d5926839e7053f5f3",
+  "initialStateHash" : "87bd38d79e71b2b2588157ade99213b642a6bc8bbe0a75005362b288f47f6ced",
   "number" : 7,
   "rank" : "Wicked",
   "title" : "Last Lemming To Lemmingcentral"

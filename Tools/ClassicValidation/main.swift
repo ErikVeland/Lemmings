@@ -44,7 +44,7 @@ var counts: [String: [String: Int]] = [:]
 var groundCache: [String: ClassicGroundSet] = [:]
 var assetCache: [String: ClassicMainDATAssets] = [:]
 var specialCache: [String: ClassicSpecialGraphic] = [:]
-@MainActor func audit(_ level: ClassicLevel, collection: String, source: String, directory: URL, fallback: URL? = nil, style: String? = nil, pack: URL? = nil, entry: FanLevelLibrary.Entry? = nil) {
+@MainActor func audit(_ level: ClassicLevel, collection: String, source: String, directory: URL, fallback: URL? = nil, style: String? = nil, pack: URL? = nil, entry: FanLevelLibrary.Entry? = nil, mechanics: ClassicDOSMechanics = .original) {
     var row = Row(collection: collection, source: source, title: level.title)
     do {
         var groundDirectory = directory
@@ -70,7 +70,7 @@ var specialCache: [String: ClassicSpecialGraphic] = [:]
             } else { specialCache[specialKey] = try ClassicSpecialGraphic.load(index: level.specialStyle - 1, from: directory) }
         }
         let rendered = try ClassicLevelRenderer.render(level, groundSet: groundCache[groundKey]!, specialGraphic: level.specialStyle == 0 ? nil : specialCache[specialKey])
-        let base = try ClassicDOSSimulation(level: level, renderedLevel: rendered, mainDATAssets: assetCache[assetDirectory.path]!)
+        let base = try ClassicDOSSimulation(level: level, renderedLevel: rendered, mainDATAssets: assetCache[assetDirectory.path]!, mechanics: mechanics)
         let hash = ClassicDOSReplayRecorder.stateHash(of: base); row.initialHash = hash
         if let candidates = witnesses[hash] {
             var failures: [String] = []
@@ -97,12 +97,12 @@ let official = ["lemmings_dos_1991-07-30", "oh_no_more_lemmings_dos-1991-11-14_2
 for folder in official {
     let directory = ports.appendingPathComponent(folder)
     let set = try ClassicDataSet.detect(directory: directory)
-    for (index, entry) in set.campaign.levels.enumerated() { audit(entry.level, collection: set.title!.rawValue, source: "\(folder)/\(index)", directory: directory) }
+    for (index, entry) in set.campaign.levels.enumerated() { audit(entry.level, collection: set.title!.rawValue, source: "\(folder)/\(index)", directory: directory, mechanics: ClassicDOSMechanics(title: set.title, rank: entry.rank)) }
     print("Audited \(folder): \(set.campaign.levels.count)"); fflush(stdout)
 }
 let converted = try PortExclusivePack.dataSet(amigaRoot: ports.appendingPathComponent("amiga_extracted"), portsRoot: ports)
 for (index, entry) in (converted?.campaign.levels ?? []).enumerated() {
-    audit(entry.level, collection: "ohYesMoreLemmings", source: "conversion/\(index)", directory: PortExclusivePack.artworkDirectory(for: entry, portsRoot: ports), fallback: PortExclusivePack.fallbackArtworkDirectory(for: entry, portsRoot: ports))
+    audit(entry.level, collection: "ohYesMoreLemmings", source: "conversion/\(index)", directory: PortExclusivePack.artworkDirectory(for: entry, portsRoot: ports), fallback: PortExclusivePack.fallbackArtworkDirectory(for: entry, portsRoot: ports), mechanics: ClassicDOSMechanics(title: .ohYesMoreLemmings, rank: entry.rank))
 }
 var packs: [[String: String]] = []
 let partCount = Int(ProcessInfo.processInfo.environment["CLASSIC_AUDIT_PARTS"] ?? "1") ?? 0

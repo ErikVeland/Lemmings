@@ -8,7 +8,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 198
+      "tick" : 197
     },
     {
       "action" : {
@@ -18,7 +18,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 446
+      "tick" : 445
     },
     {
       "action" : {
@@ -28,7 +28,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 992
+      "tick" : 991
     },
     {
       "action" : {
@@ -38,17 +38,17 @@
         }
       },
       "afterTick" : true,
-      "tick" : 1011
+      "tick" : 1010
     },
     {
       "action" : {
         "assign" : {
-          "lemmingID" : 67,
+          "lemmingID" : 66,
           "skill" : "builder"
         }
       },
       "afterTick" : true,
-      "tick" : 1128
+      "tick" : 1123
     },
     {
       "action" : {
@@ -58,7 +58,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 1203
+      "tick" : 1202
     },
     {
       "action" : {
@@ -68,7 +68,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 1395
+      "tick" : 1394
     },
     {
       "action" : {
@@ -78,7 +78,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 1587
+      "tick" : 1586
     },
     {
       "action" : {
@@ -88,17 +88,17 @@
         }
       },
       "afterTick" : true,
-      "tick" : 1779
+      "tick" : 1778
     },
     {
       "action" : {
         "assign" : {
-          "lemmingID" : 22,
+          "lemmingID" : 23,
           "skill" : "digger"
         }
       },
       "afterTick" : true,
-      "tick" : 2227
+      "tick" : 2230
     }
   ],
   "expected" : {
@@ -106,10 +106,10 @@
     "released" : 80,
     "required" : 80,
     "saved" : 80,
-    "stateHash" : "94676bbb6f50ec7397bd520e429b07bc49e2613fe654b835f58a651904f8b8d7",
-    "ticks" : 2844
+    "stateHash" : "116473d70b352c583824caa84f3005a3945c448879f676fa4d09f947dabdb5dc",
+    "ticks" : 2847
   },
-  "initialStateHash" : "a2a7648f7d3dd97ad3b6649643a0d4d5dcf8dc1d2e379591591b9e8647896482",
+  "initialStateHash" : "866d5f6198d0374810f8317c0a964a36152354872ffb64baba1e86413c0f05f5",
   "number" : 2,
   "rank" : "Crazy",
   "title" : "Dolly Dimple"

@@ -1,0 +1,6 @@
+[{"skill":"basher","direction":-1,"xMax":734,"y":68,"action":"walking","async":true},
+ {"skill":"basher","direction":-1,"xMin":721,"xMax":724,"y":68,"action":"walking","async":true,"tick":1},
+ {"skill":"basher","direction":-1,"xMin":711,"xMax":714,"y":68,"action":"walking","async":true,"tick":1},
+ {"skill":"basher","direction":1,"xMin":786,"y":68,"action":"walking","async":true},
+ {"skill":"basher","direction":1,"xMin":796,"xMax":799,"y":68,"action":"walking","async":true,"tick":1},
+ {"skill":"basher","direction":1,"xMin":806,"xMax":809,"y":68,"action":"walking","async":true,"tick":1}]

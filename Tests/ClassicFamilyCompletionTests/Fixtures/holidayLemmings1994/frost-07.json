@@ -8,7 +8,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 81
+      "tick" : 80
     },
     {
       "action" : {
@@ -18,7 +18,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 273
+      "tick" : 272
     },
     {
       "action" : {
@@ -28,7 +28,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 560
+      "tick" : 559
     },
     {
       "action" : {
@@ -38,7 +38,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 571
+      "tick" : 570
     },
     {
       "action" : {
@@ -48,7 +48,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 771
+      "tick" : 770
     },
     {
       "action" : {
@@ -58,7 +58,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 783
+      "tick" : 782
     },
     {
       "action" : {
@@ -68,7 +68,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 1145
+      "tick" : 1144
     },
     {
       "action" : {
@@ -78,7 +78,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 1156
+      "tick" : 1155
     },
     {
       "action" : {
@@ -88,7 +88,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 1176
+      "tick" : 1175
     },
     {
       "action" : {
@@ -98,7 +98,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 1348
+      "tick" : 1347
     },
     {
       "action" : {
@@ -108,7 +108,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 1733
+      "tick" : 1732
     },
     {
       "action" : {
@@ -118,7 +118,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 1812
+      "tick" : 1811
     },
     {
       "action" : {
@@ -128,7 +128,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 2004
+      "tick" : 2003
     },
     {
       "action" : {
@@ -138,7 +138,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 2005
+      "tick" : 2004
     }
   ],
   "expected" : {
@@ -146,10 +146,10 @@
     "released" : 50,
     "required" : 25,
     "saved" : 32,
-    "stateHash" : "9f9afd3f5dc3ea7790d391b04722195d4dafce7bc11587c3e99e32980455c602",
+    "stateHash" : "393f3f1f3f592d943abf5d6b5d4efd12b85aa15f1265b56f08ce421162e313ec",
     "ticks" : 6120
   },
-  "initialStateHash" : "172769b69f60571501cfbea8f7a510690d20654f87a4f0a73e4dca1236ff388d",
+  "initialStateHash" : "b229a15b66afc13b3c35ba0854c3d9db14719f66c9bb3740129909b4c4066cbd",
   "number" : 7,
   "rank" : "Frost",
   "title" : "Happy New Year!"

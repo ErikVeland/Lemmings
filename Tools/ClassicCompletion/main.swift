@@ -20,6 +20,7 @@ private func require(
 
 private struct Content {
     let campaign: ClassicCampaign
+    let title: ClassicTitle?
     let assets: ClassicMainDATAssets
     let grounds: [Int: ClassicGroundSet]
     let specials: [Int: ClassicSpecialGraphic]
@@ -28,8 +29,10 @@ private struct Content {
         if ProcessInfo.processInfo.environment["CLASSIC_COMPLETION_FAMILY"] == "1" {
             let dataSet = try ClassicDataSet.detect(directory: directory)
             campaign = dataSet.campaign
+            title = dataSet.title
         } else {
             campaign = try ClassicCampaignDefinition.originalDOSLemmings.load(from: directory)
+            title = .lemmings
         }
         assets = try ClassicMainDATAssets.load(from: directory)
         var grounds: [Int: ClassicGroundSet] = [:]
@@ -53,7 +56,8 @@ private struct Content {
         let rendered = try ClassicLevelRenderer.render(
             level, groundSet: ground, specialGraphic: specials[level.specialStyle])
         let simulation = try ClassicDOSSimulation(
-            level: level, renderedLevel: rendered, mainDATAssets: assets)
+            level: level, renderedLevel: rendered, mainDATAssets: assets,
+            mechanics: ClassicDOSMechanics(title: title, rank: entry.rank))
         return (simulation, entry)
     }
 }

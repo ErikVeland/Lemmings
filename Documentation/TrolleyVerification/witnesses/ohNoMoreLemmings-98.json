@@ -6,6 +6,7 @@
           "_0" : 30
         }
       },
+      "afterTick" : true,
       "tick" : 31
     },
     {
@@ -15,6 +16,7 @@
           "skill" : "builder"
         }
       },
+      "afterTick" : true,
       "tick" : 65
     },
     {
@@ -24,7 +26,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 111
+      "afterTick" : true,
+      "tick" : 110
     },
     {
       "action" : {
@@ -33,6 +36,7 @@
           "skill" : "builder"
         }
       },
+      "afterTick" : true,
       "tick" : 142
     },
     {
@@ -42,7 +46,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 150
+      "afterTick" : true,
+      "tick" : 149
     },
     {
       "action" : {
@@ -51,7 +56,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 163
+      "afterTick" : true,
+      "tick" : 162
     },
     {
       "action" : {
@@ -60,7 +66,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 211
+      "afterTick" : true,
+      "tick" : 210
     },
     {
       "action" : {
@@ -69,7 +76,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 231
+      "afterTick" : true,
+      "tick" : 230
     },
     {
       "action" : {
@@ -78,7 +86,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 348
+      "afterTick" : true,
+      "tick" : 347
     },
     {
       "action" : {
@@ -87,7 +96,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 654
+      "afterTick" : true,
+      "tick" : 653
     },
     {
       "action" : {
@@ -96,7 +106,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 678
+      "afterTick" : true,
+      "tick" : 677
     },
     {
       "action" : {
@@ -105,7 +116,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 732
+      "afterTick" : true,
+      "tick" : 731
     },
     {
       "action" : {
@@ -114,7 +126,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 813
+      "afterTick" : true,
+      "tick" : 812
     },
     {
       "action" : {
@@ -123,7 +136,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 875
+      "afterTick" : true,
+      "tick" : 874
     },
     {
       "action" : {
@@ -131,6 +145,7 @@
           "_0" : 31
         }
       },
+      "afterTick" : true,
       "tick" : 907
     },
     {
@@ -139,6 +154,7 @@
           "_0" : 32
         }
       },
+      "afterTick" : true,
       "tick" : 908
     },
     {
@@ -147,6 +163,7 @@
           "_0" : 33
         }
       },
+      "afterTick" : true,
       "tick" : 909
     },
     {
@@ -155,6 +172,7 @@
           "_0" : 34
         }
       },
+      "afterTick" : true,
       "tick" : 910
     },
     {
@@ -163,6 +181,7 @@
           "_0" : 35
         }
       },
+      "afterTick" : true,
       "tick" : 911
     },
     {
@@ -171,6 +190,7 @@
           "_0" : 36
         }
       },
+      "afterTick" : true,
       "tick" : 912
     },
     {
@@ -179,6 +199,7 @@
           "_0" : 37
         }
       },
+      "afterTick" : true,
       "tick" : 913
     },
     {
@@ -187,6 +208,7 @@
           "_0" : 38
         }
       },
+      "afterTick" : true,
       "tick" : 914
     },
     {
@@ -195,6 +217,7 @@
           "_0" : 39
         }
       },
+      "afterTick" : true,
       "tick" : 915
     },
     {
@@ -203,6 +226,7 @@
           "_0" : 40
         }
       },
+      "afterTick" : true,
       "tick" : 916
     },
     {
@@ -211,6 +235,7 @@
           "_0" : 41
         }
       },
+      "afterTick" : true,
       "tick" : 917
     },
     {
@@ -219,6 +244,7 @@
           "_0" : 42
         }
       },
+      "afterTick" : true,
       "tick" : 918
     },
     {
@@ -227,6 +253,7 @@
           "_0" : 43
         }
       },
+      "afterTick" : true,
       "tick" : 919
     },
     {
@@ -235,6 +262,7 @@
           "_0" : 44
         }
       },
+      "afterTick" : true,
       "tick" : 920
     },
     {
@@ -243,6 +271,7 @@
           "_0" : 45
         }
       },
+      "afterTick" : true,
       "tick" : 921
     },
     {
@@ -251,6 +280,7 @@
           "_0" : 46
         }
       },
+      "afterTick" : true,
       "tick" : 922
     },
     {
@@ -259,6 +289,7 @@
           "_0" : 47
         }
       },
+      "afterTick" : true,
       "tick" : 923
     },
     {
@@ -267,6 +298,7 @@
           "_0" : 48
         }
       },
+      "afterTick" : true,
       "tick" : 924
     },
     {
@@ -275,6 +307,7 @@
           "_0" : 49
         }
       },
+      "afterTick" : true,
       "tick" : 925
     },
     {
@@ -283,6 +316,7 @@
           "_0" : 50
         }
       },
+      "afterTick" : true,
       "tick" : 926
     },
     {
@@ -291,6 +325,7 @@
           "_0" : 51
         }
       },
+      "afterTick" : true,
       "tick" : 927
     },
     {
@@ -299,6 +334,7 @@
           "_0" : 52
         }
       },
+      "afterTick" : true,
       "tick" : 928
     },
     {
@@ -307,6 +343,7 @@
           "_0" : 53
         }
       },
+      "afterTick" : true,
       "tick" : 929
     },
     {
@@ -315,6 +352,7 @@
           "_0" : 54
         }
       },
+      "afterTick" : true,
       "tick" : 930
     },
     {
@@ -323,6 +361,7 @@
           "_0" : 55
         }
       },
+      "afterTick" : true,
       "tick" : 931
     },
     {
@@ -331,6 +370,7 @@
           "_0" : 56
         }
       },
+      "afterTick" : true,
       "tick" : 932
     },
     {
@@ -339,6 +379,7 @@
           "_0" : 57
         }
       },
+      "afterTick" : true,
       "tick" : 933
     },
     {
@@ -347,6 +388,7 @@
           "_0" : 58
         }
       },
+      "afterTick" : true,
       "tick" : 934
     },
     {
@@ -355,6 +397,7 @@
           "_0" : 59
         }
       },
+      "afterTick" : true,
       "tick" : 935
     },
     {
@@ -363,6 +406,7 @@
           "_0" : 60
         }
       },
+      "afterTick" : true,
       "tick" : 936
     },
     {
@@ -371,6 +415,7 @@
           "_0" : 61
         }
       },
+      "afterTick" : true,
       "tick" : 937
     },
     {
@@ -379,6 +424,7 @@
           "_0" : 62
         }
       },
+      "afterTick" : true,
       "tick" : 938
     },
     {
@@ -387,6 +433,7 @@
           "_0" : 63
         }
       },
+      "afterTick" : true,
       "tick" : 939
     },
     {
@@ -395,6 +442,7 @@
           "_0" : 64
         }
       },
+      "afterTick" : true,
       "tick" : 940
     },
     {
@@ -403,6 +451,7 @@
           "_0" : 65
         }
       },
+      "afterTick" : true,
       "tick" : 941
     },
     {
@@ -411,6 +460,7 @@
           "_0" : 66
         }
       },
+      "afterTick" : true,
       "tick" : 942
     },
     {
@@ -419,6 +469,7 @@
           "_0" : 67
         }
       },
+      "afterTick" : true,
       "tick" : 943
     },
     {
@@ -427,6 +478,7 @@
           "_0" : 68
         }
       },
+      "afterTick" : true,
       "tick" : 944
     },
     {
@@ -435,6 +487,7 @@
           "_0" : 69
         }
       },
+      "afterTick" : true,
       "tick" : 945
     },
     {
@@ -443,6 +496,7 @@
           "_0" : 70
         }
       },
+      "afterTick" : true,
       "tick" : 946
     },
     {
@@ -451,6 +505,7 @@
           "_0" : 71
         }
       },
+      "afterTick" : true,
       "tick" : 947
     },
     {
@@ -459,6 +514,7 @@
           "_0" : 72
         }
       },
+      "afterTick" : true,
       "tick" : 948
     },
     {
@@ -467,6 +523,7 @@
           "_0" : 73
         }
       },
+      "afterTick" : true,
       "tick" : 949
     },
     {
@@ -475,6 +532,7 @@
           "_0" : 74
         }
       },
+      "afterTick" : true,
       "tick" : 950
     },
     {
@@ -483,6 +541,7 @@
           "_0" : 75
         }
       },
+      "afterTick" : true,
       "tick" : 951
     },
     {
@@ -491,6 +550,7 @@
           "_0" : 76
         }
       },
+      "afterTick" : true,
       "tick" : 952
     },
     {
@@ -499,6 +559,7 @@
           "_0" : 77
         }
       },
+      "afterTick" : true,
       "tick" : 953
     },
     {
@@ -507,6 +568,7 @@
           "_0" : 78
         }
       },
+      "afterTick" : true,
       "tick" : 954
     },
     {
@@ -515,6 +577,7 @@
           "_0" : 79
         }
       },
+      "afterTick" : true,
       "tick" : 955
     },
     {
@@ -523,6 +586,7 @@
           "_0" : 80
         }
       },
+      "afterTick" : true,
       "tick" : 956
     },
     {
@@ -531,6 +595,7 @@
           "_0" : 81
         }
       },
+      "afterTick" : true,
       "tick" : 957
     },
     {
@@ -539,6 +604,7 @@
           "_0" : 82
         }
       },
+      "afterTick" : true,
       "tick" : 958
     },
     {
@@ -547,6 +613,7 @@
           "_0" : 83
         }
       },
+      "afterTick" : true,
       "tick" : 959
     },
     {
@@ -555,6 +622,7 @@
           "_0" : 84
         }
       },
+      "afterTick" : true,
       "tick" : 960
     },
     {
@@ -563,6 +631,7 @@
           "_0" : 85
         }
       },
+      "afterTick" : true,
       "tick" : 961
     },
     {
@@ -571,6 +640,7 @@
           "_0" : 86
         }
       },
+      "afterTick" : true,
       "tick" : 962
     },
     {
@@ -579,6 +649,7 @@
           "_0" : 87
         }
       },
+      "afterTick" : true,
       "tick" : 963
     },
     {
@@ -587,6 +658,7 @@
           "_0" : 88
         }
       },
+      "afterTick" : true,
       "tick" : 964
     },
     {
@@ -595,6 +667,7 @@
           "_0" : 89
         }
       },
+      "afterTick" : true,
       "tick" : 965
     },
     {
@@ -603,6 +676,7 @@
           "_0" : 90
         }
       },
+      "afterTick" : true,
       "tick" : 966
     },
     {
@@ -611,6 +685,7 @@
           "_0" : 91
         }
       },
+      "afterTick" : true,
       "tick" : 967
     },
     {
@@ -619,6 +694,7 @@
           "_0" : 92
         }
       },
+      "afterTick" : true,
       "tick" : 968
     },
     {
@@ -627,6 +703,7 @@
           "_0" : 93
         }
       },
+      "afterTick" : true,
       "tick" : 969
     },
     {
@@ -635,6 +712,7 @@
           "_0" : 94
         }
       },
+      "afterTick" : true,
       "tick" : 970
     },
     {
@@ -643,6 +721,7 @@
           "_0" : 95
         }
       },
+      "afterTick" : true,
       "tick" : 971
     },
     {
@@ -651,6 +730,7 @@
           "_0" : 96
         }
       },
+      "afterTick" : true,
       "tick" : 972
     },
     {
@@ -659,6 +739,7 @@
           "_0" : 97
         }
       },
+      "afterTick" : true,
       "tick" : 973
     },
     {
@@ -667,6 +748,7 @@
           "_0" : 98
         }
       },
+      "afterTick" : true,
       "tick" : 974
     },
     {
@@ -675,6 +757,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 975
     },
     {
@@ -683,6 +766,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 976
     },
     {
@@ -691,6 +775,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 977
     },
     {
@@ -699,6 +784,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 978
     },
     {
@@ -707,6 +793,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 979
     },
     {
@@ -715,6 +802,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 980
     },
     {
@@ -723,6 +811,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 981
     },
     {
@@ -731,6 +820,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 982
     },
     {
@@ -739,6 +829,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 983
     },
     {
@@ -747,6 +838,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 984
     },
     {
@@ -755,6 +847,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 985
     },
     {
@@ -763,6 +856,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 986
     },
     {
@@ -771,6 +865,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 987
     },
     {
@@ -779,6 +874,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 988
     }
   ],
@@ -787,10 +883,10 @@
     "released" : 80,
     "required" : 80,
     "saved" : 80,
-    "stateHash" : "1275c0ca0c98abc63771ddd2766275d62f82b3d3628edf6d3fcacea2ff8706e7",
+    "stateHash" : "85f1af14913b761ccba88dde21126514f17d7cba38295d6e2879eb634ba80c0b",
     "ticks" : 1432
   },
-  "initialStateHash" : "bc086c652cf73a3ae74a9ce50d43471df35399df3a370c4ed24ce373d6664261",
+  "initialStateHash" : "bf879227ad5ffe28afa8bcb78a8ef2f66881ddb0780cc854bca0f8f35d12874d",
   "number" : 19,
   "rank" : "Havoc",
   "title" : "Looks a Bit Nippy Out There"

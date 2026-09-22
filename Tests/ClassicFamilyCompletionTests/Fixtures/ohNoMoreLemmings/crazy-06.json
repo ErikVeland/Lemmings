@@ -18,7 +18,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 144
+      "tick" : 143
     },
     {
       "action" : {
@@ -28,7 +28,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 1149
+      "tick" : 1148
     },
     {
       "action" : {
@@ -38,7 +38,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 1150
+      "tick" : 1149
     },
     {
       "action" : {
@@ -48,7 +48,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 1448
+      "tick" : 1447
     },
     {
       "action" : {
@@ -58,7 +58,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 1726
+      "tick" : 1725
     },
     {
       "action" : {
@@ -68,7 +68,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 1947
+      "tick" : 1946
     },
     {
       "action" : {
@@ -78,7 +78,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 1985
+      "tick" : 1984
     },
     {
       "action" : {
@@ -88,7 +88,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 1996
+      "tick" : 1995
     }
   ],
   "expected" : {
@@ -96,10 +96,10 @@
     "released" : 20,
     "required" : 20,
     "saved" : 20,
-    "stateHash" : "8baf0f33cc40e150c4628d4e35e1926c581a7cd1a6bb8d61bdfa446391e18824",
-    "ticks" : 2784
+    "stateHash" : "afa7173e0c27dc6c6fd959ea4b92e52f157f182e82b4f73f5472ae85159a223f",
+    "ticks" : 2783
   },
-  "initialStateHash" : "763d7da42b4e548f634df4a59aa9202eee9f1d3af7e0c02085ddfcca3df65511",
+  "initialStateHash" : "69a9000d71abd2ad58e8249f2c938c1fe11d84f17e9be9b3e9cc4722852e4e51",
   "number" : 6,
   "rank" : "Crazy",
   "title" : "The Stack"

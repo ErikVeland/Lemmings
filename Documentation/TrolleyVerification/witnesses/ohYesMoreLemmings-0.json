@@ -1,0 +1,26 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 81
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 80,
+    "required" : 65,
+    "saved" : 78,
+    "stateHash" : "7de48e9a4a50efc16632285f15b64bc7daf37ef0f4f2373737a52216f71e71f3",
+    "ticks" : 2947
+  },
+  "initialStateHash" : "20516712b310c9ede2ba2a3228c7cf910b30891e9ec88220cfddd474b442ac58",
+  "number" : 1,
+  "rank" : "Lemmings Versus",
+  "title" : "There can be only one"
+}

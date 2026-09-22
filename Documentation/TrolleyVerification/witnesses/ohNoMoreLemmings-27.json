@@ -6,6 +6,7 @@
           "_0" : 1
         }
       },
+      "afterTick" : true,
       "tick" : 4
     },
     {
@@ -15,7 +16,8 @@
           "skill" : "blocker"
         }
       },
-      "tick" : 75
+      "afterTick" : true,
+      "tick" : 74
     },
     {
       "action" : {
@@ -24,7 +26,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 187
+      "afterTick" : true,
+      "tick" : 186
     },
     {
       "action" : {
@@ -32,6 +35,7 @@
           "_0" : 20
         }
       },
+      "afterTick" : true,
       "tick" : 540
     },
     {
@@ -41,7 +45,8 @@
           "skill" : "blocker"
         }
       },
-      "tick" : 578
+      "afterTick" : true,
+      "tick" : 577
     },
     {
       "action" : {
@@ -50,7 +55,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 727
+      "afterTick" : true,
+      "tick" : 726
     },
     {
       "action" : {
@@ -59,7 +65,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 965
+      "afterTick" : true,
+      "tick" : 964
     },
     {
       "action" : {
@@ -68,7 +75,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 975
+      "afterTick" : true,
+      "tick" : 974
     },
     {
       "action" : {
@@ -77,7 +85,8 @@
           "skill" : "blocker"
         }
       },
-      "tick" : 998
+      "afterTick" : true,
+      "tick" : 997
     },
     {
       "action" : {
@@ -86,7 +95,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1014
+      "afterTick" : true,
+      "tick" : 1013
     },
     {
       "action" : {
@@ -95,7 +105,8 @@
           "skill" : "miner"
         }
       },
-      "tick" : 1187
+      "afterTick" : true,
+      "tick" : 1186
     },
     {
       "action" : {
@@ -104,7 +115,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1227
+      "afterTick" : true,
+      "tick" : 1226
     },
     {
       "action" : {
@@ -113,7 +125,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1273
+      "afterTick" : true,
+      "tick" : 1272
     },
     {
       "action" : {
@@ -122,7 +135,8 @@
           "skill" : "blocker"
         }
       },
-      "tick" : 1427
+      "afterTick" : true,
+      "tick" : 1426
     },
     {
       "action" : {
@@ -131,7 +145,8 @@
           "skill" : "digger"
         }
       },
-      "tick" : 1640
+      "afterTick" : true,
+      "tick" : 1639
     },
     {
       "action" : {
@@ -140,7 +155,8 @@
           "skill" : "miner"
         }
       },
-      "tick" : 1683
+      "afterTick" : true,
+      "tick" : 1682
     },
     {
       "action" : {
@@ -149,7 +165,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1743
+      "afterTick" : true,
+      "tick" : 1742
     },
     {
       "action" : {
@@ -158,7 +175,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1977
+      "afterTick" : true,
+      "tick" : 1976
     },
     {
       "action" : {
@@ -167,7 +185,8 @@
           "skill" : "miner"
         }
       },
-      "tick" : 2142
+      "afterTick" : true,
+      "tick" : 2141
     },
     {
       "action" : {
@@ -175,6 +194,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 2321
     },
     {
@@ -184,7 +204,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 2360
+      "afterTick" : true,
+      "tick" : 2359
     }
   ],
   "expected" : {
@@ -192,10 +213,10 @@
     "released" : 80,
     "required" : 75,
     "saved" : 75,
-    "stateHash" : "da1c2116b6f1719cb440ce3d71ad2c95c289cb9e9075f8c2d155e7cf315787f9",
+    "stateHash" : "89883e1b36d41ddd4b7b57785bf39842a1793ed794145705cf5f4ec8e757bd1c",
     "ticks" : 4080
   },
-  "initialStateHash" : "b2c972b44b3cad0707959004eac76b5a6a04fef7db202e7a5a1c4f592bca35ae",
+  "initialStateHash" : "8648707ca423fc13e018f788d3480f656c95c01599f159954c36130fb31e5eb0",
   "number" : 8,
   "rank" : "Crazy",
   "title" : "KEEP ON TRUCKING"

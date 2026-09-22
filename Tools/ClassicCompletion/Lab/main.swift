@@ -11,30 +11,41 @@ import UniformTypeIdentifiers
 
 struct Failure: Error, CustomStringConvertible { let description: String }
 
+// DATA is a DOS data directory, or `conversion:PORTS` for the Oh Yes! pack.
+// Conversion ranks take their artwork from different releases, so assets are
+// resolved per level in the same way as Tools/ClassicValidation.
 struct Content {
     let campaign: ClassicCampaign
-    let assets: ClassicMainDATAssets
-    let grounds: [Int: ClassicGroundSet]
-    let specials: [Int: ClassicSpecialGraphic]
-    init(directory: URL) throws {
-        campaign = try ClassicDataSet.detect(directory: directory).campaign
-        assets = try ClassicMainDATAssets.load(from: directory)
-        var grounds: [Int: ClassicGroundSet] = [:]
-        for style in Set(campaign.levels.map { $0.level.groundStyle }) {
-            grounds[style] = try ClassicGroundSet.load(style: style, from: directory)
+    let title: ClassicTitle?
+    let directory: URL
+    let portsRoot: URL?
+    init(argument: String) throws {
+        if argument.hasPrefix("conversion:") {
+            let ports = URL(fileURLWithPath: String(argument.dropFirst("conversion:".count)))
+            guard let set = try PortExclusivePack.dataSet(amigaRoot: ports.appendingPathComponent("amiga_extracted"), portsRoot: ports) else {
+                throw Failure(description: "no conversion levels under \(ports.path)")
+            }
+            campaign = set.campaign; title = set.title; directory = ports; portsRoot = ports
+        } else {
+            directory = URL(fileURLWithPath: argument)
+            let set = try ClassicDataSet.detect(directory: directory)
+            campaign = set.campaign; title = set.title; portsRoot = nil
         }
-        self.grounds = grounds
-        var specials: [Int: ClassicSpecialGraphic] = [:]
-        for index in Set(campaign.levels.map { $0.level.specialStyle }).filter({ $0 != 0 }) {
-            specials[index] = try ClassicSpecialGraphic.load(index: index - 1, from: directory)
-        }
-        self.specials = specials
     }
-    func load(_ index: Int) throws -> (ClassicDOSSimulation, ClassicCampaignLevel, ClassicRenderedLevel) {
+    func load(_ index: Int, mechanics override: ClassicDOSMechanics? = nil) throws -> (ClassicDOSSimulation, ClassicCampaignLevel, ClassicRenderedLevel) {
         let entry = campaign.levels[index]
         let level = entry.level
-        let rendered = try ClassicLevelRenderer.render(level, groundSet: grounds[level.groundStyle]!, specialGraphic: specials[level.specialStyle])
-        return (try ClassicDOSSimulation(level: level, renderedLevel: rendered, mainDATAssets: assets), entry, rendered)
+        var root = directory, fallback: URL? = nil
+        if let portsRoot {
+            root = PortExclusivePack.artworkDirectory(for: entry, portsRoot: portsRoot)
+            fallback = PortExclusivePack.fallbackArtworkDirectory(for: entry, portsRoot: portsRoot)
+        }
+        let ground = try ClassicGroundSet.load(style: level.groundStyle, from: root, fallbackDirectory: fallback)
+        let special = level.specialStyle == 0 ? nil : try ClassicSpecialGraphic.load(index: level.specialStyle - 1, from: root)
+        let assets = try ClassicMainDATAssets.load(from: fallback ?? root)
+        let rendered = try ClassicLevelRenderer.render(level, groundSet: ground, specialGraphic: special)
+        let mechanics = override ?? ClassicDOSMechanics(title: title, rank: entry.rank)
+        return (try ClassicDOSSimulation(level: level, renderedLevel: rendered, mainDATAssets: assets, mechanics: mechanics), entry, rendered)
     }
 }
 
@@ -360,9 +371,10 @@ func option(_ name: String) -> String? {
 
 let args = CommandLine.arguments
 let command = args[1]
-let content = try Content(directory: URL(fileURLWithPath: args[2]))
+let content = try Content(argument: args[2])
 let index = Int(args[3])! - 1
-let (base, entry, original) = try content.load(index)
+// --mechanics original|ohNoMore overrides the level's own rule set.
+let (base, entry, original) = try content.load(index, mechanics: option("--mechanics").flatMap(ClassicDOSMechanics.init(rawValue:)))
 let c = base.configuration
 
 switch command {
@@ -435,6 +447,227 @@ case "sweep":
             print(n, summary(r, steps))
         }
         if r.sim.didWin && args.contains("--first") { print("PLAN", line); break }
+    }
+case "transplant":
+    // transplant DATA LEVEL OLD_REPLAY [--out FILE]
+    // Moves a route found under the original rules to the level's own rules.
+    // The old route runs under the original rules with every command applied
+    // after its tick. Each assignment records where its lemming stood. The new
+    // run gives the same skill to the lemming with the same hatch and release
+    // position once it stands in the same place, trying small offsets.
+    let replay = try JSONDecoder().decode(ClassicDOSReplay.self, from: Data(contentsOf: URL(fileURLWithPath: args[4])))
+    let (oldBase, _, _) = try content.load(index, mechanics: .original)
+    struct Target { var tick: Int; var action: ClassicDOSReplayAction; var lemming: ClassicDOSLemming? }
+    let byTick = Dictionary(grouping: replay.events.sorted { $0.tick < $1.tick }, by: \.tick)
+    var old = oldBase, targets: [Target] = []
+    while !old.isComplete && old.tickCount < ClassicDOSReplayPlayer.defaultTickLimit {
+        _ = old.tick()
+        for event in byTick[old.tickCount] ?? [] {
+            switch event.action {
+            case let .assign(id, skill):
+                let before = old.lemmings.first { $0.id == id }
+                guard old.assign(skill, to: id) == .assigned else { print("OLD refused", old.tickCount, id, skill.rawValue); continue }
+                targets.append(Target(tick: old.tickCount, action: event.action, lemming: before))
+            case let .releaseRate(value): old.setReleaseRate(value); targets.append(Target(tick: old.tickCount, action: event.action))
+            case .nuke: old.beginNuke(); targets.append(Target(tick: old.tickCount, action: event.action))
+            }
+        }
+    }
+    print("OLD live conversion saved \(old.savedCount)/\(c.requiredToSave) win \(old.didWin) (fixture saved \(replay.expected?.saved ?? -1))")
+
+    // A lemming's hatch and its release order within that hatch identify it
+    // across the two release tables.
+    let oldTable = ClassicDOSRules.hatchOrder(entranceCount: c.entrances.count, mechanics: .original)
+    let newTable = ClassicDOSRules.hatchOrder(entranceCount: c.entrances.count, mechanics: c.mechanics)
+    func key(_ id: Int, _ table: [Int]) -> (Int, Int) { (table[id % 4], (0..<id).filter { table[$0 % 4] == table[id % 4] }.count) }
+    let idMap: [Int] = (0..<max(c.totalLemmings, 1)).map { id in
+        let k = key(id, oldTable)
+        return (0..<c.totalLemmings).first { key($0, newTable) == k } ?? id
+    }
+    func newID(_ id: Int) -> Int { idMap.indices.contains(id) ? idMap[id] : id }
+
+    // Offsets tried for each assignment, nearest first. Three further modes
+    // follow: any lemming at the spot, the matching lemming at the old tick,
+    // and the old lemming number at the spot.
+    let offsets: [(Int, Int)] = [(0, 0), (1, 0), (-1, 0), (0, -1), (0, 1), (2, 0), (-2, 0), (1, -1), (1, 1), (-1, 1), (-1, -1)]
+    let modes = offsets.count + 3
+    let early = Int(option("--early") ?? "120")!, late = Int(option("--late") ?? "200")!
+    func attempt(_ choice: [Int], limit: Int? = nil) -> (sim: ClassicDOSSimulation, events: [ClassicDOSReplayEvent], applied: Int) {
+        var sim = base, events: [ClassicDOSReplayEvent] = [], next = 0
+        let end = limit ?? ClassicDOSReplayPlayer.defaultTickLimit
+        while !sim.isComplete && sim.tickCount < end {
+            _ = sim.tick()
+            while next < targets.count {
+                let t = targets[next]
+                // Give up on a step that has not matched long after its old tick.
+                if sim.tickCount > t.tick + late { return (sim, events, next) }
+                switch t.action {
+                case let .releaseRate(value):
+                    guard sim.tickCount >= t.tick else { break }
+                    sim.setReleaseRate(value); events.append(.init(tick: sim.tickCount, action: t.action, afterTick: true)); next += 1; continue
+                case .nuke:
+                    guard sim.tickCount >= t.tick else { break }
+                    sim.beginNuke(); events.append(.init(tick: sim.tickCount, action: t.action, afterTick: true)); next += 1; continue
+                case let .assign(id, skill):
+                    guard let at = t.lemming, sim.tickCount >= t.tick - early else { break }
+                    let mode = next < choice.count ? choice[next] : 0
+                    func here(_ lem: ClassicDOSLemming, _ dx: Int = 0, _ dy: Int = 0) -> Bool {
+                        lem.isActive && lem.foot.x == at.foot.x + dx && lem.foot.y == at.foot.y + dy
+                            && lem.direction == at.direction && lem.action == at.action
+                    }
+                    var pick: Int?
+                    switch mode {
+                    case ..<offsets.count:
+                        let (dx, dy) = offsets[mode]
+                        pick = sim.lemmings.first { $0.id == newID(id) && here($0, dx, dy) }?.id
+                    case offsets.count:
+                        pick = sim.lemmings.first { here($0) || here($0, 1) }?.id
+                    case offsets.count + 1:
+                        pick = sim.tickCount == t.tick ? newID(id) : nil
+                    default:
+                        pick = sim.lemmings.first { $0.id == id && (here($0) || here($0, 1)) }?.id
+                    }
+                    if let pick, sim.assign(skill, to: pick) == .assigned {
+                        events.append(.init(tick: sim.tickCount, action: .assign(lemmingID: pick, skill: skill), afterTick: true))
+                        next += 1
+                    }
+                }
+                break
+            }
+        }
+        return (sim, events, next)
+    }
+    // Greedy: settle each step on the first offset that lets the run apply it
+    // and keeps the later steps applicable for longest.
+    var choice: [Int] = []
+    for step in 0..<targets.count {
+        var best = (score: -1, offset: 0)
+        for o in 0..<modes {
+            let trial = attempt(choice + [o])
+            let score = trial.applied * 1000 + trial.sim.savedCount
+            if trial.applied > step && score > best.score { best = (score, o) }
+            if trial.sim.didWin { best = (Int.max, o); break }
+        }
+        choice.append(best.offset)
+        if best.score == Int.max { break }
+    }
+    let final = attempt(choice)
+    print("NEW applied \(final.applied)/\(targets.count) saved \(final.sim.savedCount)/\(c.requiredToSave) lost \(final.sim.lostCount) tick \(final.sim.tickCount) win \(final.sim.didWin)")
+    if let planFile = option("--plan") {
+        // Exact-tick steps for further work with `run`.
+        var steps: [[String: Any]] = []
+        for e in final.events {
+            switch e.action {
+            case let .assign(id, skill): steps.append(["skill": skill.rawValue, "id": id, "tick": e.tick, "exactTick": true, "async": true])
+            case let .releaseRate(v): steps.append(["rate": v, "tick": e.tick, "async": true])
+            case .nuke: steps.append(["nuke": true, "tick": e.tick])
+            }
+        }
+        try JSONSerialization.data(withJSONObject: steps).write(to: URL(fileURLWithPath: planFile))
+    }
+    if let out = option("--out"), final.sim.didWin {
+        let outcome = ClassicDOSReplayOutcome(ticks: final.sim.tickCount, released: final.sim.releasedCount, saved: final.sim.savedCount, required: c.requiredToSave, didWin: true, stateHash: ClassicDOSReplayRecorder.stateHash(of: final.sim))
+        let moved = ClassicDOSReplay(rank: entry.rank, number: entry.number, title: entry.level.title.trimmingCharacters(in: .whitespaces), initialStateHash: ClassicDOSReplayRecorder.stateHash(of: base), events: final.events, expected: outcome)
+        let enc = JSONEncoder(); enc.outputFormatting = [.prettyPrinted, .sortedKeys]
+        try enc.encode(moved).write(to: URL(fileURLWithPath: out))
+        print("WROTE", out)
+    }
+case "climb":
+    // climb DATA LEVEL PLAN [--iters N] [--seed S] [--out FILE] [--plan FILE]
+    // Local search from a partial plan. Each assignment becomes "at tick T,
+    // the nearest lemming to (x, y) facing d". Random nudges to ticks and
+    // points are kept when the rescue count does not fall.
+    struct Move { var tick: Int; var skill: ClassicSkill?; var x = 0; var y = 0; var dir = 0; var rate: Int?; var nuke = false }
+    let steps = try JSONDecoder().decode([Step].self, from: Data(contentsOf: URL(fileURLWithPath: args[4])))
+    // Resolve the starting plan into moves by running it once.
+    let first = runPlan(steps, base: base, verbose: false, stopLoss: false)
+    var moves: [Move] = []
+    do {
+        var sim = base, cursor = 0
+        let events = first.events
+        while cursor < events.count && !sim.isComplete {
+            _ = sim.tick()
+            while cursor < events.count && events[cursor].tick == sim.tickCount {
+                let e = events[cursor]; cursor += 1
+                switch e.action {
+                case let .assign(id, skill):
+                    if let l = sim.lemmings.first(where: { $0.id == id }) {
+                        moves.append(Move(tick: e.tick, skill: skill, x: l.foot.x, y: l.foot.y, dir: l.direction.rawValue))
+                    }
+                    _ = sim.assign(skill, to: id)
+                case let .releaseRate(v): moves.append(Move(tick: e.tick, rate: v)); sim.setReleaseRate(v)
+                case .nuke: moves.append(Move(tick: e.tick, nuke: true)); sim.beginNuke()
+                }
+            }
+        }
+    }
+    func play(_ moves: [Move]) -> (sim: ClassicDOSSimulation, events: [ClassicDOSReplayEvent], hits: Int) {
+        var sim = base, events: [ClassicDOSReplayEvent] = [], hits = 0
+        let byTick = Dictionary(grouping: moves, by: \.tick)
+        while !sim.isComplete && sim.tickCount < ClassicDOSReplayPlayer.defaultTickLimit {
+            _ = sim.tick()
+            for m in byTick[sim.tickCount] ?? [] {
+                if let r = m.rate { sim.setReleaseRate(r); events.append(.init(tick: sim.tickCount, action: .releaseRate(r), afterTick: true)); continue }
+                if m.nuke { sim.beginNuke(); events.append(.init(tick: sim.tickCount, action: .nuke, afterTick: true)); continue }
+                guard let skill = m.skill else { continue }
+                let near = sim.lemmings.filter { $0.isActive && abs($0.foot.x - m.x) <= 12 && abs($0.foot.y - m.y) <= 12 }
+                    .sorted { (abs($0.foot.x - m.x) + abs($0.foot.y - m.y) + ($0.direction.rawValue == m.dir ? 0 : 20))
+                            < (abs($1.foot.x - m.x) + abs($1.foot.y - m.y) + ($1.direction.rawValue == m.dir ? 0 : 20)) }
+                for l in near where sim.assign(skill, to: l.id) == .assigned {
+                    events.append(.init(tick: sim.tickCount, action: .assign(lemmingID: l.id, skill: skill), afterTick: true)); hits += 1; break
+                }
+            }
+        }
+        return (sim, events, hits)
+    }
+    func score(_ r: (sim: ClassicDOSSimulation, events: [ClassicDOSReplayEvent], hits: Int)) -> Int {
+        (r.sim.didWin ? 1_000_000 : 0) + r.sim.savedCount * 1000 + r.hits * 10 - r.sim.tickCount / 1000
+    }
+    var rng = SystemRandomNumberGenerator()
+    var seed = UInt64(option("--seed") ?? "") ?? rng.next()
+    func rand(_ n: Int) -> Int { seed = seed &* 6364136223846793005 &+ 1442695040888963407; return Int((seed >> 33) % UInt64(max(1, n))) }
+    var current = moves, best = play(current), bestScore = score(best)
+    print("START moves \(moves.count) saved \(best.sim.savedCount)/\(c.requiredToSave) win \(best.sim.didWin)")
+    let iterations = Int(option("--iters") ?? "3000")!
+    var iteration = 0
+    while iteration < iterations && !best.sim.didWin {
+        iteration += 1
+        var trial = current
+        let changes = 1 + rand(3)
+        for _ in 0..<changes where !trial.isEmpty {
+            let i = rand(trial.count)
+            switch rand(10) {
+            case 0...4: trial[i].tick = max(1, trial[i].tick + rand(41) - 20)
+            case 5...6: trial[i].x += rand(9) - 4
+            case 7: trial[i].y += rand(7) - 3
+            case 8: trial[i].tick = max(1, trial[i].tick + rand(5) - 2)
+            default: if trial[i].skill != nil { trial[i].dir = -trial[i].dir }
+            }
+        }
+        let r = play(trial), s = score(r)
+        if s >= bestScore {
+            if s > bestScore { print("ITER \(iteration) saved \(r.sim.savedCount)/\(c.requiredToSave) lost \(r.sim.lostCount) win \(r.sim.didWin)") }
+            current = trial; best = r; bestScore = s
+        }
+    }
+    print("CLIMB saved \(best.sim.savedCount)/\(c.requiredToSave) lost \(best.sim.lostCount) tick \(best.sim.tickCount) win \(best.sim.didWin) after \(iteration)")
+    if let planFile = option("--plan") {
+        var out: [[String: Any]] = []
+        for e in best.events {
+            switch e.action {
+            case let .assign(id, skill): out.append(["skill": skill.rawValue, "id": id, "tick": e.tick, "exactTick": true, "async": true])
+            case let .releaseRate(v): out.append(["rate": v, "tick": e.tick, "async": true])
+            case .nuke: out.append(["nuke": true, "tick": e.tick])
+            }
+        }
+        try JSONSerialization.data(withJSONObject: out).write(to: URL(fileURLWithPath: planFile))
+    }
+    if let out = option("--out"), best.sim.didWin {
+        let outcome = ClassicDOSReplayOutcome(ticks: best.sim.tickCount, released: best.sim.releasedCount, saved: best.sim.savedCount, required: c.requiredToSave, didWin: true, stateHash: ClassicDOSReplayRecorder.stateHash(of: best.sim))
+        let replay = ClassicDOSReplay(rank: entry.rank, number: entry.number, title: entry.level.title.trimmingCharacters(in: .whitespaces), initialStateHash: ClassicDOSReplayRecorder.stateHash(of: base), events: best.events, expected: outcome)
+        let enc = JSONEncoder(); enc.outputFormatting = [.prettyPrinted, .sortedKeys]
+        try enc.encode(replay).write(to: URL(fileURLWithPath: out))
+        print("WROTE", out)
     }
 case "steelmap":
     // steelmap DATA LEVEL x1 x2 y1 y2: '#' steel, 'o' solid, '.' empty

@@ -7,6 +7,7 @@
           "skill" : "floater"
         }
       },
+      "afterTick" : true,
       "tick" : 56
     },
     {
@@ -16,7 +17,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 128
+      "afterTick" : true,
+      "tick" : 127
     },
     {
       "action" : {
@@ -25,7 +27,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 136
+      "afterTick" : true,
+      "tick" : 135
     },
     {
       "action" : {
@@ -34,43 +37,18 @@
           "skill" : "builder"
         }
       },
-      "tick" : 168
+      "afterTick" : true,
+      "tick" : 167
     },
     {
       "action" : {
         "assign" : {
-          "lemmingID" : 3,
+          "lemmingID" : 2,
           "skill" : "floater"
         }
       },
-      "tick" : 232
-    },
-    {
-      "action" : {
-        "assign" : {
-          "lemmingID" : 3,
-          "skill" : "builder"
-        }
-      },
-      "tick" : 304
-    },
-    {
-      "action" : {
-        "assign" : {
-          "lemmingID" : 0,
-          "skill" : "builder"
-        }
-      },
-      "tick" : 336
-    },
-    {
-      "action" : {
-        "assign" : {
-          "lemmingID" : 16,
-          "skill" : "floater"
-        }
-      },
-      "tick" : 904
+      "afterTick" : true,
+      "tick" : 179
     }
   ],
   "expected" : {
@@ -78,10 +56,10 @@
     "released" : 19,
     "required" : 8,
     "saved" : 8,
-    "stateHash" : "dad1c7e0a55fecfb6a01aeeec1690844f3641980a09642464d7b08458f1e53c7",
+    "stateHash" : "3ad9e8d91794d9694a49463cb43de01ac766f5748cf7438d3cbdd10577cbcc67",
     "ticks" : 1020
   },
-  "initialStateHash" : "c124e181499a3721a385a7297f031a19afb2f2dbc52f3c83327e9692be4f426c",
+  "initialStateHash" : "94528fc44a01525bc247b3a94d9012e70452e5c4a90bb8183b9a8c8120060198",
   "number" : 11,
   "rank" : "Crazy",
   "title" : "No Problemming!"

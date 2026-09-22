@@ -1,7 +1,7 @@
 {
-  "engineSourceFingerprint": "483661a10882d87cd0d07590d6d96b2247e537e8bae2acdd8c8152ca34c3a3ca",
+  "engineSourceFingerprint": "6de62a611f02b621a0af08a5d6e4012b7571ddc0dad8009fa6ab48743b559507",
   "exhaustive": false,
-  "generatedAt": "2026-09-17T13:19:27Z",
+  "generatedAt": "2026-09-22T00:57:06Z",
   "levels": [
     {
       "bestSaved": 10,
@@ -5054,7 +5054,7 @@
       "bestSaved": 50,
       "conditions": {
         "gameID": "xmasLemmings1991",
-        "levelFingerprint": "ea748368551dc562ce5f2dff8e82e8e73c1b9948a1f6f3f28cfb94da68f0cb11",
+        "levelFingerprint": "2636b33d6ba53bc8cc1422b93ad8c33ff52ad5e8da153ae9f1db0638c7822179",
         "levelID": "level-0",
         "modifiers": {},
         "packID": "xmasLemmings1991-LEVEL-4",
@@ -5095,15 +5095,15 @@
         "released": 50,
         "retainedReserves": 0,
         "saved": 50,
-        "sha256": "c7b9c71c3d4269e399c510113d3ecc3474b529a0fdee7e7130f6a1df92aaf3d1",
-        "ticks": 4876
+        "sha256": "de5a35c9e3936293677c6c3c596c3b47a6f68a397d51b1c320a26b4fed36b0c7",
+        "ticks": 4866
       }
     },
     {
       "bestSaved": 50,
       "conditions": {
         "gameID": "xmasLemmings1991",
-        "levelFingerprint": "d4f9ac95723d9ef06d735b8227fa9f33854538f7336b18954731788f0f1677c0",
+        "levelFingerprint": "da3e3851b3f3e9401a2a5d9942ed9ed064e201ca2be151dc101f6a7a8c81653f",
         "levelID": "level-1",
         "modifiers": {},
         "packID": "xmasLemmings1991-LEVEL-4",
@@ -5144,15 +5144,15 @@
         "released": 50,
         "retainedReserves": 0,
         "saved": 50,
-        "sha256": "9a4c73bcce9245bd4e9f9cddac9c170017a10484580d2b1cfdd164ac3c819612",
-        "ticks": 4574
+        "sha256": "4957b329a941adc06283c893c21c805a0b1bf800878e9c7b4e350068e9741e11",
+        "ticks": 4565
       }
     },
     {
       "bestSaved": 50,
       "conditions": {
         "gameID": "xmasLemmings1991",
-        "levelFingerprint": "612d217daf7cfd3ffe75cd462ca0d64b9b661409012b3830c71bbbea40df38a5",
+        "levelFingerprint": "3b35a64372258ebc33057529af455bfd0f3113c7b54c9d2774bb004b088313b9",
         "levelID": "level-3",
         "modifiers": {},
         "packID": "xmasLemmings1991-LEVEL-4",
@@ -5193,15 +5193,15 @@
         "released": 50,
         "retainedReserves": 0,
         "saved": 50,
-        "sha256": "2611213e8c50bc1eb44d3612a32d3287ed8a4ab4dfa1ff7f26dda1157014adf8",
-        "ticks": 1378
+        "sha256": "53b3227e3319a2951269d33a397fb7a342032e820d44181785cce0800e69fbf0",
+        "ticks": 1377
       }
     },
     {
       "bestSaved": 80,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
-        "levelFingerprint": "fe811ce395d07d887ef819d89b7de601b4e2d0329e2be709bdf89e9b04bd7add",
+        "levelFingerprint": "cd46d85cae2d1e06445fd2d9956d9a7a545e23139da15d0c482f0eb2b8df9f55",
         "levelID": "level-21",
         "modifiers": {},
         "packID": "ohNoMoreLemmings-DLVEL-100",
@@ -5242,15 +5242,15 @@
         "released": 80,
         "retainedReserves": 0,
         "saved": 80,
-        "sha256": "afb6a3d46aa70d0cbe77239b2ce824f37bb8f1a8e1eda172bbbb551372b662b5",
-        "ticks": 2844
+        "sha256": "bba1f8ff11e7dead44e51200ef326850d3ed93dccfb6efff38ee79fa90d206f1",
+        "ticks": 2847
       }
     },
     {
       "bestSaved": 20,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
-        "levelFingerprint": "c3c8e0607e31982a862eca652e413884135a2904bd7f3582b3e22a73566eae49",
+        "levelFingerprint": "58f1c9803649f36286da988e40b7b9aad0ef26f9a4ca1e138b31161425817651",
         "levelID": "level-23",
         "modifiers": {},
         "packID": "ohNoMoreLemmings-DLVEL-100",
@@ -5291,15 +5291,15 @@
         "released": 20,
         "retainedReserves": 0,
         "saved": 20,
-        "sha256": "95a36f8a7201ea3ff5dd75479d1cfe4dbdff7895886fe4a60c3fb079c659b6bd",
-        "ticks": 2495
+        "sha256": "20394bb59431c70e19cf0b705d9d664ab51796c792f26283eb75fd6c9067a67d",
+        "ticks": 2494
       }
     },
     {
       "bestSaved": 80,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
-        "levelFingerprint": "efc264dc9dc36b7c3e91b70a61ac5e797491272295bb1c0d438293cb0adf1b55",
+        "levelFingerprint": "1f201ab9e0cf1c363e0e9ac83441b5d072186fbee3d8cf6e081521f0ec563cc0",
         "levelID": "level-24",
         "modifiers": {},
         "packID": "ohNoMoreLemmings-DLVEL-100",
@@ -5340,15 +5340,15 @@
         "released": 80,
         "retainedReserves": 0,
         "saved": 80,
-        "sha256": "713206f448c6972f1bc47dae675afc68e3fe2e53209fac7cda461a8d975b6314",
-        "ticks": 2588
+        "sha256": "4cfad8d3785193a45badfa8f41a91af011534e71bacee2b50c3b8eb5f0c370cc",
+        "ticks": 2587
       }
     },
     {
       "bestSaved": 20,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
-        "levelFingerprint": "2916ee2968af24070814f72a4350beca2339fe671895d7d02ec4074c8ffbb025",
+        "levelFingerprint": "5f68cde0e92095d17ddbe1603aba74e8afe0fcea88edab05a95edd0eddca94e4",
         "levelID": "level-25",
         "modifiers": {},
         "packID": "ohNoMoreLemmings-DLVEL-100",
@@ -5389,15 +5389,15 @@
         "released": 20,
         "retainedReserves": 0,
         "saved": 20,
-        "sha256": "716f166713506c69ff2dfc8fa3ed5ea4d4f152fbc7d342637b79d0254c90fdb4",
-        "ticks": 2784
+        "sha256": "2704b13b7426c88a9e68907c1496310341602d4d89760a3c2dfcaebdf0006b50",
+        "ticks": 2783
       }
     },
     {
       "bestSaved": 50,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
-        "levelFingerprint": "3ee30f075598e6a63d3e0a41ab45b326c2c23a632bac611e3c7ac48f333ef6c5",
+        "levelFingerprint": "c856321ab6cb5d0c9d5af8e85d1676cd52854982333a79fe9378a90c9374e035",
         "levelID": "level-26",
         "modifiers": {},
         "packID": "ohNoMoreLemmings-DLVEL-100",
@@ -5438,15 +5438,15 @@
         "released": 50,
         "retainedReserves": 0,
         "saved": 50,
-        "sha256": "7df4e380d413ea9d3513237be6e34710eecaa87b4e9ae400e251f02c42f65da7",
-        "ticks": 2770
+        "sha256": "16c2893935d0875fbb2f1f566ca2ae52133e5a4cf0543285977a7c4446514a2f",
+        "ticks": 2769
       }
     },
     {
       "bestSaved": 20,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
-        "levelFingerprint": "2adfc07652972f8c14febfde03bf49cbce25154fd5c85434f2ac1ce6dc5a4e7b",
+        "levelFingerprint": "b86e94f897dcabca2cc8f7b94135da40a4e3498fb27544e40bbf831b5219264a",
         "levelID": "level-28",
         "modifiers": {},
         "packID": "ohNoMoreLemmings-DLVEL-100",
@@ -5487,15 +5487,15 @@
         "released": 20,
         "retainedReserves": 0,
         "saved": 20,
-        "sha256": "2682da2ab09e1e54cf87505d37862382daed8360699c94877c246b19f975a099",
-        "ticks": 2773
+        "sha256": "f18b910e42e3d2a558c7b1fa3a7e5794f276119000b895b740cce445ee69017a",
+        "ticks": 2772
       }
     },
     {
       "bestSaved": 80,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
-        "levelFingerprint": "fe27a4a2e31ff49bba1e0b0fc6aceb2107772c66861b1b12da2e74ccc8088ccb",
+        "levelFingerprint": "b93efdffbdba707facfa827322e221ef1e9abd97dbc9b4f304126152d8a809e2",
         "levelID": "level-31",
         "modifiers": {},
         "packID": "ohNoMoreLemmings-DLVEL-100",
@@ -5536,15 +5536,15 @@
         "released": 80,
         "retainedReserves": 0,
         "saved": 80,
-        "sha256": "a5824f7212c04aa6e28f059964e32dd8c1628a817aeea27d0e49b49b3fd65899",
-        "ticks": 1995
+        "sha256": "a153a1907bc6ae15bf40a4a3db366c63ce5607a92dca532fa6c59934c0e54e07",
+        "ticks": 1994
       }
     },
     {
       "bestSaved": 16,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
-        "levelFingerprint": "b6e7fdba68fe61ada82e2574073abf485f814935e5d09ff8695036b321537e85",
+        "levelFingerprint": "e1dd3e98b2750040e51443a66a1867bf86b7931c2a390a9c353c496deaed60ed",
         "levelID": "level-35",
         "modifiers": {},
         "packID": "ohNoMoreLemmings-DLVEL-100",
@@ -5585,15 +5585,15 @@
         "released": 16,
         "retainedReserves": 0,
         "saved": 16,
-        "sha256": "d7a61f713364ddf24fdbff091a2ddacf7ffeaac9794476eb4596383156b68f74",
-        "ticks": 1375
+        "sha256": "5c1a609fb6e281d3a125e3db8223eafbaf266714986e01a5a126d09e92b5dfcd",
+        "ticks": 1370
       }
     },
     {
       "bestSaved": 50,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
-        "levelFingerprint": "20efa01abc092958424a7df9918e911febb03412a218caf9a6dc10752568d793",
+        "levelFingerprint": "c2d003d44f17f22c37aadcf578667bb811256a997deb6bae3ee1a30f5ea089ae",
         "levelID": "level-82",
         "modifiers": {},
         "packID": "ohNoMoreLemmings-DLVEL-100",
@@ -5634,15 +5634,15 @@
         "released": 50,
         "retainedReserves": 0,
         "saved": 50,
-        "sha256": "f4f748aef1831276af4d3152b9e207f149238b5886be141bb91d7c9915d47a9e",
-        "ticks": 1947
+        "sha256": "92c249345aff8353c843c8115695e9c49f774af19a66fdc4f18fc4ec08514716",
+        "ticks": 1946
       }
     },
     {
       "bestSaved": 20,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
-        "levelFingerprint": "5529dcf1d3d0a9d9be1b609817f7c46b4f25e54223e53045cbcddb0f13f1149d",
+        "levelFingerprint": "095b145e88d4f9a2a1e9a56d6f74cac1c906efe70388e630f498c3971b4e339d",
         "levelID": "level-83",
         "modifiers": {},
         "packID": "ohNoMoreLemmings-DLVEL-100",
@@ -5683,15 +5683,15 @@
         "released": 20,
         "retainedReserves": 0,
         "saved": 20,
-        "sha256": "17828f655e1691d1ff16f033ead704dd9f85d07982a2913329fe9a3611ec1266",
-        "ticks": 3026
+        "sha256": "0dd676019ce10159b1db6e10be4e954db23b330f908e6a04d04f104d984eeed2",
+        "ticks": 3025
       }
     },
     {
       "bestSaved": 50,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
-        "levelFingerprint": "7e8ab33a12519d4d19d2a29ab6e304f360dd629e12031a79aca3ab456c82043d",
+        "levelFingerprint": "89da07b3fc80f41aeba5ffcdf030d8d631f66c5f3284c28416031281fd3fc065",
         "levelID": "level-85",
         "modifiers": {},
         "packID": "ohNoMoreLemmings-DLVEL-100",
@@ -5732,15 +5732,15 @@
         "released": 50,
         "retainedReserves": 0,
         "saved": 50,
-        "sha256": "747d25abf9b1146ca327cc528cc6094673ed64e853781adae4e5f45a4550be00",
-        "ticks": 970
+        "sha256": "ff14ac392190fe941b286dab77d7edb27644c8a1d14e2e5f989626b59c20dd94",
+        "ticks": 969
       }
     },
     {
       "bestSaved": 50,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
-        "levelFingerprint": "e5fc76900c30073b1e282656be152741aaa2648a50ef69a7a7121f25abb3b5fd",
+        "levelFingerprint": "1dcb48eba2a2a2ef9323e7eade6f47f9205876190db2433a28fdbca7cb5ab80f",
         "levelID": "level-87",
         "modifiers": {},
         "packID": "ohNoMoreLemmings-DLVEL-100",
@@ -5781,15 +5781,15 @@
         "released": 50,
         "retainedReserves": 0,
         "saved": 50,
-        "sha256": "7c82b6983771c49a4ae08ecc479d82dae77475e11b82d0f654f1804650d10487",
-        "ticks": 3551
+        "sha256": "2ba6044cd013f97093479924a865183765f0991eff35bdfcc65da5d3c9bcf114",
+        "ticks": 3552
       }
     },
     {
       "bestSaved": 50,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
-        "levelFingerprint": "63facbfdf81c74a7cb59c0b7cc240e049f5a092858e7ad6fc63972bebac33efb",
+        "levelFingerprint": "18cb4427132f80e1ba482668239be4c04d28b9883f16b6c67d223f6ac4743f6e",
         "levelID": "level-88",
         "modifiers": {},
         "packID": "ohNoMoreLemmings-DLVEL-100",
@@ -5830,15 +5830,15 @@
         "released": 50,
         "retainedReserves": 0,
         "saved": 50,
-        "sha256": "9f7118f2635736db8f5c37cd048489680fa8ea72d147cb4fcacebf099bd1efa6",
-        "ticks": 2369
+        "sha256": "816d12c6c6d58d89b400f7759dc78bc46843dcc51b9e2ffb97552a397ddcc28e",
+        "ticks": 2368
       }
     },
     {
       "bestSaved": 80,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
-        "levelFingerprint": "64f6d6b9020c0c4c48017e00d43adee071d14c984ca33dc5b095ce6c91013f07",
+        "levelFingerprint": "4483d4b3d8d7e8ea608bb847471753e3111b0759d79105a78aad45dfb34d84f6",
         "levelID": "level-90",
         "modifiers": {},
         "packID": "ohNoMoreLemmings-DLVEL-100",
@@ -5879,15 +5879,15 @@
         "released": 80,
         "retainedReserves": 0,
         "saved": 80,
-        "sha256": "ad1f4bb48d2a1a21b0473954fe9f9068a6228fab6a3a0767bf793935f787fb4e",
-        "ticks": 2804
+        "sha256": "4ba535aea31e9bd0088edadfc2de7a95d86f4b5d957f418c39a97cacb3c0d26e",
+        "ticks": 2803
       }
     },
     {
       "bestSaved": 80,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
-        "levelFingerprint": "35e667e6459eb0c356fc690d81fa5b1a8475528d9515c345484796d6c913ccd3",
+        "levelFingerprint": "c0000be4086bf263f55aab28807710d0b2063efc46b4b6872c96b045234036a0",
         "levelID": "level-91",
         "modifiers": {},
         "packID": "ohNoMoreLemmings-DLVEL-100",
@@ -5928,15 +5928,15 @@
         "released": 80,
         "retainedReserves": 0,
         "saved": 80,
-        "sha256": "00446005c8fb2c118c3776274150bd516188b9d6a3d437e08b858597508f790c",
-        "ticks": 1007
+        "sha256": "055ea64598a43688e9ff97f2499cb2e9c7acf7afc9afc6b686a9950327bbd180",
+        "ticks": 1006
       }
     },
     {
       "bestSaved": 80,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
-        "levelFingerprint": "f1feeea182c673842081a6c3d24c3ab3d171976c77069c395af3f3663527eb95",
+        "levelFingerprint": "9896d3ad53fc648aab75e05a554e7550d7bfd5d49a1b0d6e261cc1d29a077dbe",
         "levelID": "level-93",
         "modifiers": {},
         "packID": "ohNoMoreLemmings-DLVEL-100",
@@ -5977,15 +5977,15 @@
         "released": 80,
         "retainedReserves": 0,
         "saved": 80,
-        "sha256": "b7f36a07622836713c7ff19d71a37f04025ea0a63aea69bf287048e9e2079b50",
-        "ticks": 991
+        "sha256": "8a1c5d7f2d19c80a7da7b1e20192228cacf3ce5942c6c77e9234f36a2a7fe3ef",
+        "ticks": 989
       }
     },
     {
       "bestSaved": 10,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
-        "levelFingerprint": "2b1de4a8525c0208780cc41437078d4209c792516ce4a972fd8f7bc06acd6054",
+        "levelFingerprint": "463fd1e2f688a1bb83fbe7639933ecea97c30789ce962ac0a913cdcfdea9b01a",
         "levelID": "level-94",
         "modifiers": {},
         "packID": "ohNoMoreLemmings-DLVEL-100",
@@ -6026,15 +6026,15 @@
         "released": 10,
         "retainedReserves": 0,
         "saved": 10,
-        "sha256": "8c56eedd7b4a7c64ff1570a44e64a96835463b7a45aabcb287ccac40a1be419c",
-        "ticks": 3542
+        "sha256": "38a4003b46db721c83ab01031475029d9c2b7d858ceb6fc508f1055b2821c839",
+        "ticks": 3541
       }
     },
     {
       "bestSaved": 80,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
-        "levelFingerprint": "1543ac63be49778a96fcbe362ee0130b761e13cc3a9710c5e134dae671ddc16c",
+        "levelFingerprint": "75e34c0c5656ea6f292cc1fac45552020940f0fed1848c4b1a959dcd4502a569",
         "levelID": "level-98",
         "modifiers": {},
         "packID": "ohNoMoreLemmings-DLVEL-100",
@@ -6075,7 +6075,7 @@
         "released": 80,
         "retainedReserves": 0,
         "saved": 80,
-        "sha256": "b4e21bbb0f62ade97881dd24dcebf95de9969f408d58a262a8f21e6e2fd32224",
+        "sha256": "bb8091d789193e34acd307025071ca2e901a8c0603f5cab36491dff69d766a7e",
         "ticks": 1432
       }
     },
@@ -6083,7 +6083,7 @@
       "bestSaved": 50,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
-        "levelFingerprint": "4382872e3228b6b8003cade552b64f96817779e484d9ce6c8d85a67f3a47f294",
+        "levelFingerprint": "547c4bdf922958e942d8f53f7e0bde84c470fa636a33ea893780c0f153d66054",
         "levelID": "level-0",
         "modifiers": {},
         "packID": "ohNoMoreLemmings-DLVEL-100",
@@ -6124,15 +6124,15 @@
         "released": 50,
         "retainedReserves": 0,
         "saved": 50,
-        "sha256": "59d72e8a3d5f9358c0774901443d4ce822c5d6f24d902c1e5d2db3d25e1df330",
-        "ticks": 2842
+        "sha256": "ee43d6930ea52ed800512413cfec0b697c5a01a8a1cebdef2523f3963445548a",
+        "ticks": 2841
       }
     },
     {
       "bestSaved": 50,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
-        "levelFingerprint": "f5dda60c3c4041d53de62aa8ab96177e4f65262a222aa5be22272387343b2019",
+        "levelFingerprint": "04690ada6eaf3aac7e20e4c59ef65f3ae8539505458a3801966d66aeda3ca030",
         "levelID": "level-2",
         "modifiers": {},
         "packID": "ohNoMoreLemmings-DLVEL-100",
@@ -6173,15 +6173,15 @@
         "released": 50,
         "retainedReserves": 0,
         "saved": 50,
-        "sha256": "43c7a055aa5c3832f028ee0b88944c6258f3b544d5c89481edc05e02adf3e64c",
-        "ticks": 3360
+        "sha256": "2179fc80377be6e6d2058df40462539a95da68dfb9cfebe4fbaabe60dce704f5",
+        "ticks": 3359
       }
     },
     {
       "bestSaved": 50,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
-        "levelFingerprint": "1199f8612bdbbe4679903a2a5d7e6e30e74cc295cf0d985396c9fa1147ec24e8",
+        "levelFingerprint": "b72e0b10352e62f2106d6ed63ccc5aa9a83ba18541472fa3b0ad21088e4911a7",
         "levelID": "level-3",
         "modifiers": {},
         "packID": "ohNoMoreLemmings-DLVEL-100",
@@ -6222,15 +6222,15 @@
         "released": 50,
         "retainedReserves": 0,
         "saved": 50,
-        "sha256": "cc7c6ce6ff4bba5f50d1299544012d6d7cabd687ebf5edffec6b7d132c6766fb",
-        "ticks": 3099
+        "sha256": "2d17bdaf65e3838d7648b0ef9c324902eddd3c519b05af5b2f558c1e03b295d6",
+        "ticks": 3098
       }
     },
     {
       "bestSaved": 50,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
-        "levelFingerprint": "e4c42540f1ce9382b981783ea3c9c09a177a2154b2469d024ae67307cb5cc7c7",
+        "levelFingerprint": "ee4a7a23ceabd8af6ac449d4564757c77fdcdafa48c5dc8d3b20b9c645c5066c",
         "levelID": "level-5",
         "modifiers": {},
         "packID": "ohNoMoreLemmings-DLVEL-100",
@@ -6271,15 +6271,15 @@
         "released": 50,
         "retainedReserves": 0,
         "saved": 50,
-        "sha256": "54724fe9a6bff8479363cdff0262faff4a5cd32c30c530d36ccbb0a1daabd22c",
-        "ticks": 3061
+        "sha256": "6b01471b14322682468279524360f3efc9c66fe153a41ec78219ab328d1dda81",
+        "ticks": 3060
       }
     },
     {
       "bestSaved": 50,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
-        "levelFingerprint": "872bf896bbec0ad29600679b9642b86cd88db3d0147c0f5be0d7cd6486eb7600",
+        "levelFingerprint": "d752cd6a828a2ca662f864287c5cb05b4ad57920f262337b4b1f824873960a02",
         "levelID": "level-9",
         "modifiers": {},
         "packID": "ohNoMoreLemmings-DLVEL-100",
@@ -6320,15 +6320,15 @@
         "released": 50,
         "retainedReserves": 0,
         "saved": 50,
-        "sha256": "7da9fc4b83644da2668e46316fccaef2c1c887511a440fae2dff90d4a52e952a",
-        "ticks": 3192
+        "sha256": "bfa23db0918a652a752bab4e73a8c09eba6f82e5749530a3e2eca4f62dd9af96",
+        "ticks": 3191
       }
     },
     {
       "bestSaved": 50,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
-        "levelFingerprint": "5554f24636ceebea958d99870434e61e22f611d9873bb45a0957a69378aebe94",
+        "levelFingerprint": "89dfc490b8e66a2dd88cf60c3d9a12391743b2ea2266d8d84d943db640b5a2a5",
         "levelID": "level-10",
         "modifiers": {},
         "packID": "ohNoMoreLemmings-DLVEL-100",
@@ -6369,7 +6369,7 @@
         "released": 50,
         "retainedReserves": 0,
         "saved": 50,
-        "sha256": "d3a4ce759f38e16ec154a2964dfe0320f1c25e427f0eb4ceefdad70897e2d048",
+        "sha256": "2f3fe6fa39333a4f612fccb9b7691accec3670cc7b93dc77d67c560e2fff30dd",
         "ticks": 2897
       }
     },
@@ -6377,7 +6377,7 @@
       "bestSaved": 50,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
-        "levelFingerprint": "62b8cd3a09fbf6464849a0f2720f14efeecc7efb04c63c7766e5689b324f9151",
+        "levelFingerprint": "95aa181698c005bb9c89d801f798d351ee4a3f9d4d52c3fc25da3f9afcfebf97",
         "levelID": "level-11",
         "modifiers": {},
         "packID": "ohNoMoreLemmings-DLVEL-100",
@@ -6418,15 +6418,15 @@
         "released": 50,
         "retainedReserves": 0,
         "saved": 50,
-        "sha256": "04bf9bc87814bb9101fe9d6206f3b096c158612b5d102ee3065541be561b97d0",
-        "ticks": 3067
+        "sha256": "3bb889bb9ef184debd1dff9bb1f6cdfd77e6558c11917caee7249cf6941d6c46",
+        "ticks": 3066
       }
     },
     {
       "bestSaved": 50,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
-        "levelFingerprint": "219ebb98f52fd77d7b817ce1593f96cf82d779476d158688a1e648afc930300b",
+        "levelFingerprint": "3a71ff92d899770191baec4bab4d8bc011a7c33e9f8dacc9ad96619cb6d80c28",
         "levelID": "level-12",
         "modifiers": {},
         "packID": "ohNoMoreLemmings-DLVEL-100",
@@ -6467,64 +6467,15 @@
         "released": 50,
         "retainedReserves": 0,
         "saved": 50,
-        "sha256": "62d15a909ea1ec43f7d2d42e0bd0d7f927efd0b10b434c004abd8027d60e12b6",
-        "ticks": 3180
+        "sha256": "e03b810e829e9c4a13d1f084ab47d0425a24657f74f5dcd6bcf5fafe3a25b584",
+        "ticks": 3179
       }
     },
     {
       "bestSaved": 50,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
-        "levelFingerprint": "15e7b1a071331d87d5aa8ee1831a7466e6961c96677aadcc208cc10269155873",
-        "levelID": "level-13",
-        "modifiers": {},
-        "packID": "ohNoMoreLemmings-DLVEL-100",
-        "physicsMode": "classic-dos-v1",
-        "population": 50,
-        "rescueRequirement": 25,
-        "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "classic-dos-v1",
-        "startingSkills": {
-          "basher": 20,
-          "blocker": 20,
-          "bomber": 20,
-          "builder": 20,
-          "climber": 20,
-          "digger": 20,
-          "floater": 20,
-          "miner": 20
-        },
-        "timeLimitSeconds": 240
-      },
-      "gameID": "ohNoMoreLemmings",
-      "lossesInBestSolution": 0,
-      "maximumSaveable": 50,
-      "minimumSacrifices": 0,
-      "notes": [],
-      "number": 14,
-      "population": 50,
-      "rank": "Tame",
-      "required": 25,
-      "status": "VERIFIED",
-      "testedCandidates": 2,
-      "title": "Get a little extra help",
-      "witness": {
-        "completed": true,
-        "didWin": true,
-        "lost": 0,
-        "path": "witnesses/ohNoMoreLemmings-13.json",
-        "released": 50,
-        "retainedReserves": 0,
-        "saved": 50,
-        "sha256": "abc9e88abafde34880a0409013dd058e7173cf6244c28e57096702565e142cc0",
-        "ticks": 2580
-      }
-    },
-    {
-      "bestSaved": 50,
-      "conditions": {
-        "gameID": "ohNoMoreLemmings",
-        "levelFingerprint": "d0b03c3dab5dae6494f88635724ef23a4f3f1b6f239c4f9f018ecebbf828cea9",
+        "levelFingerprint": "11413b41fd1598800dd8a79261ccf4b9a107e74a6c292b67d81f538b75cc8b5c",
         "levelID": "level-15",
         "modifiers": {},
         "packID": "ohNoMoreLemmings-DLVEL-100",
@@ -6565,15 +6516,15 @@
         "released": 50,
         "retainedReserves": 0,
         "saved": 50,
-        "sha256": "ee22c1186aa2bc0c7c988ed15811af9b6a235951a24d2ccac9ac1eed2e497714",
-        "ticks": 3027
+        "sha256": "99f22c55461e722c46cf2168bd130afd360611a67f88789173371abbf82505c9",
+        "ticks": 3026
       }
     },
     {
       "bestSaved": 50,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
-        "levelFingerprint": "cec1be5b2b2c2dc1aedb15513737f9eea235e5a1e4344f3b52538dced4a252a5",
+        "levelFingerprint": "3598c53d846140124c7a01c19b9f2d722bad8ba411981ccbab9127e4a801664e",
         "levelID": "level-16",
         "modifiers": {},
         "packID": "ohNoMoreLemmings-DLVEL-100",
@@ -6614,15 +6565,15 @@
         "released": 50,
         "retainedReserves": 0,
         "saved": 50,
-        "sha256": "793f39da1d1b16aac919d6accda1680a35270db6112e48b547b42e3d33646847",
-        "ticks": 2964
+        "sha256": "f5f4b7b193ff189141e7aa7728128aa8bb7f8ad31ecb38b38fa943e36b6e8d20",
+        "ticks": 2963
       }
     },
     {
       "bestSaved": 50,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
-        "levelFingerprint": "6bfd12aca43d5efe387dc8a185dc84e69e4b5c671b100735b3c1584934cb71b1",
+        "levelFingerprint": "4d45ed6c91cdb97a5ae99bb9314e3ce67f5701a814c2f342d1fc622ab8cafb3d",
         "levelID": "level-17",
         "modifiers": {},
         "packID": "ohNoMoreLemmings-DLVEL-100",
@@ -6663,15 +6614,15 @@
         "released": 50,
         "retainedReserves": 0,
         "saved": 50,
-        "sha256": "d790c080d0bfae5dcb58e8354f4e09338eb018fdf26dd3218cbc185276819b60",
-        "ticks": 3211
+        "sha256": "f3c28669dde9af8ea5f71e6c617c586e85e9659d75d21a534ac50fde5f4c9835",
+        "ticks": 3208
       }
     },
     {
       "bestSaved": 50,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
-        "levelFingerprint": "c86c4bf25ac1316b2a7aa89803656ae92537ef3bdbca5d2516d897a77cbac045",
+        "levelFingerprint": "0d01ab1659d8968f6a2dededdd0c14fb7e9c3f18ce5a198f7d0b18b3c1fadf86",
         "levelID": "level-19",
         "modifiers": {},
         "packID": "ohNoMoreLemmings-DLVEL-100",
@@ -6712,15 +6663,15 @@
         "released": 50,
         "retainedReserves": 0,
         "saved": 50,
-        "sha256": "d43e13080415b287ef6a0e7424efff2a107d3ef106146bb5e69760541e563f31",
-        "ticks": 2934
+        "sha256": "7a050c141e2d048120a359bfec84c6b8f8a25d69f4b546bf93448dc0caeaab75",
+        "ticks": 2933
       }
     },
     {
       "bestSaved": 1,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
-        "levelFingerprint": "5a744cb614d0f1309dd47c61b17db1660b43e22940f66227b4c03f1647fb2dfb",
+        "levelFingerprint": "9c90112a0cbd5a48a439e0a61540a3d8cf7f0358d2de82bfc9a43d1869bcd452",
         "levelID": "level-61",
         "modifiers": {},
         "packID": "ohNoMoreLemmings-DLVEL-100",
@@ -6761,15 +6712,15 @@
         "released": 1,
         "retainedReserves": 0,
         "saved": 1,
-        "sha256": "baaf5bcd4db0fe66333723142f819b931611e863604989a6e7874208b7d217a5",
-        "ticks": 3560
+        "sha256": "989ff81752fe5d07baba089b534a2eba512b1f577724722133e6aaaf34d55e64",
+        "ticks": 3559
       }
     },
     {
       "bestSaved": 50,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
-        "levelFingerprint": "612d217daf7cfd3ffe75cd462ca0d64b9b661409012b3830c71bbbea40df38a5",
+        "levelFingerprint": "3b35a64372258ebc33057529af455bfd0f3113c7b54c9d2774bb004b088313b9",
         "levelID": "level-62",
         "modifiers": {},
         "packID": "ohNoMoreLemmings-DLVEL-100",
@@ -6810,15 +6761,15 @@
         "released": 50,
         "retainedReserves": 0,
         "saved": 50,
-        "sha256": "556efd3f37a2a9843f4136361e7cbba8ef463c66ac3673eaa61c105f4a8d2bbf",
-        "ticks": 1378
+        "sha256": "d3606325c07b09bb1ea31ce3bf0235ffa0bbc05749c26f3a956860bd7e966efe",
+        "ticks": 1377
       }
     },
     {
       "bestSaved": 20,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
-        "levelFingerprint": "1f5da2ecc3e03f3c16d3e9d6afc3287f2f6fa3a80f5343adefa8908b462b131c",
+        "levelFingerprint": "ee59951ec69c8078e730303740731d03585546d88bd150c285f6d99259cf8813",
         "levelID": "level-64",
         "modifiers": {},
         "packID": "ohNoMoreLemmings-DLVEL-100",
@@ -6859,15 +6810,15 @@
         "released": 20,
         "retainedReserves": 0,
         "saved": 20,
-        "sha256": "6f77520857239310fdef7fe89ebbe068cc90a65369126177d298ef6911d82c9d",
-        "ticks": 1926
+        "sha256": "6a9da9ffa3fc219e7af0c6e8b8d876163fa8484a6d90948e4129946983e4e472",
+        "ticks": 1923
       }
     },
     {
       "bestSaved": 80,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
-        "levelFingerprint": "ba0718e23417a8cfccbef963d73a43e7e710e1f568b05e9b974d8d32d1811350",
+        "levelFingerprint": "1da3559be3424e03339335cd83e15c5be7f09b473fd2f27a776ee194a1014ccd",
         "levelID": "level-73",
         "modifiers": {},
         "packID": "ohNoMoreLemmings-DLVEL-100",
@@ -6908,15 +6859,15 @@
         "released": 80,
         "retainedReserves": 0,
         "saved": 80,
-        "sha256": "0b99fc5fc215e5c8daa89a3045e8246959407d7a39379e3c815131e5da11972a",
-        "ticks": 1230
+        "sha256": "37e65b7d68bdb9190debc6d059d1520e6837f5c513ebed40704b14dae784ea9a",
+        "ticks": 1229
       }
     },
     {
       "bestSaved": 60,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
-        "levelFingerprint": "5341776ba5df963d698610baad5449c3ce06f6e5b148df5eaa442210626f0739",
+        "levelFingerprint": "299f92982b9ec01ec4dab005096865bffeb29dbe1572f81f5ce46f3b01074054",
         "levelID": "level-77",
         "modifiers": {},
         "packID": "ohNoMoreLemmings-DLVEL-100",
@@ -6957,15 +6908,15 @@
         "released": 60,
         "retainedReserves": 0,
         "saved": 60,
-        "sha256": "d9acdd0f81c120785296b009326df86269eba7fbdbb3758209ca32d96a4b0569",
-        "ticks": 1755
+        "sha256": "8372ea3de23d95a72c6604db11e4e6f9afa7678c737304973c5ebea8a933b0ea",
+        "ticks": 1754
       }
     },
     {
       "bestSaved": 60,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
-        "levelFingerprint": "7fe253476a5272895c4cd8dc1132c83ae9c43517595ce04a15e31a2f2c95df57",
+        "levelFingerprint": "8e3ca7cbb3543f4d6a971f7624d40df2b2e1a7b9cec08f0f72f1e20359a02f02",
         "levelID": "level-40",
         "modifiers": {},
         "packID": "ohNoMoreLemmings-DLVEL-100",
@@ -7006,7 +6957,7 @@
         "released": 60,
         "retainedReserves": 0,
         "saved": 60,
-        "sha256": "93371f9231babc6ea2cf0793f1344671e0275f2a7c531ea76e1c3fb341916d80",
+        "sha256": "a8674c5ac05993c5cbcffad3532716b66a97d22bdbd646135f27421a124f8bb0",
         "ticks": 1563
       }
     },
@@ -7014,7 +6965,7 @@
       "bestSaved": 80,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
-        "levelFingerprint": "7492387873500bc686a3208176a15cafd784ad781daaa75be945b1f6ad050470",
+        "levelFingerprint": "681e387e0f41782cae87c2c952fbe479cde2441a70139590a3eeb13cc80b932d",
         "levelID": "level-43",
         "modifiers": {},
         "packID": "ohNoMoreLemmings-DLVEL-100",
@@ -7055,15 +7006,15 @@
         "released": 80,
         "retainedReserves": 0,
         "saved": 80,
-        "sha256": "34e957e85326433240047957a4e145634ce7ef45edb8a904d94a3aad0de11369",
-        "ticks": 2457
+        "sha256": "6037b6162facbe8529ab6dd436b9eabb66b55127b0fccf6fd6197da34716b8b7",
+        "ticks": 2454
       }
     },
     {
       "bestSaved": 80,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
-        "levelFingerprint": "e698717664369dff49c95a9161b059133f13e1de0a9bccc2f2ccc09575b11629",
+        "levelFingerprint": "ca0fac14e993c4e32fb5e533c141a0b2d05392ec7a6e298c0c01bf4747de7c32",
         "levelID": "level-45",
         "modifiers": {},
         "packID": "ohNoMoreLemmings-DLVEL-100",
@@ -7104,15 +7055,15 @@
         "released": 80,
         "retainedReserves": 0,
         "saved": 80,
-        "sha256": "0a1e6e9f8176a2083cde35bf74cf93174b0b9bedf6689c4430c170969b6e2d1c",
-        "ticks": 1432
+        "sha256": "aa3ed780db841adea36c2339a609578676564b91df57ed6f9b7a1db75fd60951",
+        "ticks": 1431
       }
     },
     {
       "bestSaved": 80,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
-        "levelFingerprint": "21b404f46dcea9f8c2e88aa4b159db8f7420b686f2f7c00cd96d9daa7b760138",
+        "levelFingerprint": "3d693ff4eed51e875670bf3f287b4c14411e95fa67b18a56023dc78a61f2dcec",
         "levelID": "level-46",
         "modifiers": {},
         "packID": "ohNoMoreLemmings-DLVEL-100",
@@ -7153,15 +7104,15 @@
         "released": 80,
         "retainedReserves": 0,
         "saved": 80,
-        "sha256": "a67555ae3d8382889b6c113d3851b65a3749c6769372034ef50cb91a882fe776",
-        "ticks": 1854
+        "sha256": "3b3cedf6ed8c7b3a0fc69dc3fd9cd6be0fcaa13309a5c43bfe6458630f4fa2b2",
+        "ticks": 1853
       }
     },
     {
       "bestSaved": 10,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
-        "levelFingerprint": "9ad9a2ec74e9502ce3e51b72dfb6e3ba74ceda143cb641fa29dcaa2442c66d4a",
+        "levelFingerprint": "4f5c6ed9b0536f1d8d9b188ed3dcebcfdc4ccc722b1e40ae4f26032b1686064f",
         "levelID": "level-47",
         "modifiers": {},
         "packID": "ohNoMoreLemmings-DLVEL-100",
@@ -7202,15 +7153,15 @@
         "released": 10,
         "retainedReserves": 0,
         "saved": 10,
-        "sha256": "4a1cfb8209e4e6461213b57183c3ae9b345f57f14201318f1721162379604a57",
-        "ticks": 782
+        "sha256": "eb9ad6d9b2b4751091ffeb195eee966973d910fdd28819b19baaf0c67a7792b0",
+        "ticks": 781
       }
     },
     {
       "bestSaved": 80,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
-        "levelFingerprint": "f759d710a6783f023e77241615964b3aa18041097180e5b3683d7fb8c44ca99b",
+        "levelFingerprint": "eafed5720e2f23bca7458783efe1819c7559af85940432e65d75779b1b3ec9cb",
         "levelID": "level-53",
         "modifiers": {},
         "packID": "ohNoMoreLemmings-DLVEL-100",
@@ -7251,15 +7202,15 @@
         "released": 80,
         "retainedReserves": 0,
         "saved": 80,
-        "sha256": "23ed49d30af6fb4ba16c2c21e1b72427914af0a88464cce72ea4374f52d956a4",
-        "ticks": 3543
+        "sha256": "f5adcca76bb96ecf4a7fa9fecd3375f46ec2abe2ee11f4d10899401b4c0dd4d9",
+        "ticks": 3534
       }
     },
     {
       "bestSaved": 1,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
-        "levelFingerprint": "c8631f4dc2c989b303dc3026dad5400552b16dcf9c7582ef67e4927bb230469f",
+        "levelFingerprint": "e193c7fd16ea4c3515ee50ce8dceb485fe89de274855c33cb17c1097dccd035a",
         "levelID": "level-55",
         "modifiers": {},
         "packID": "ohNoMoreLemmings-DLVEL-100",
@@ -7300,15 +7251,15 @@
         "released": 1,
         "retainedReserves": 0,
         "saved": 1,
-        "sha256": "b3b10600d915fa17ced9428bfcfc3d8d3038149cb1f71313faa58b1df88581cd",
-        "ticks": 1561
+        "sha256": "73b7d03e2cbad7ef8f91bc5978b052c645fc2f09b0a196f3b96e20daff44a828",
+        "ticks": 1544
       }
     },
     {
       "bestSaved": 80,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
-        "levelFingerprint": "2b77334a499a5400ed92479dad81a789633169e125212f2454c83a030a9ba378",
+        "levelFingerprint": "ee1d026774e4c46bece0ece7e1f4ff191bc99131d30f056ff2fdbb96e1aea81e",
         "levelID": "level-56",
         "modifiers": {},
         "packID": "ohNoMoreLemmings-DLVEL-100",
@@ -7349,15 +7300,15 @@
         "released": 80,
         "retainedReserves": 0,
         "saved": 80,
-        "sha256": "b871c83d1475f4f83d666475f411f973b01901f6f9755f2b115fd00fce8a1af8",
-        "ticks": 1359
+        "sha256": "eecc3d84ccf14859d967d5dc819dcc81e94e2bf50e6b8c0a3bc33f20bf1d9964",
+        "ticks": 1358
       }
     },
     {
       "bestSaved": 50,
       "conditions": {
         "gameID": "xmasLemmings1992",
-        "levelFingerprint": "fe25ceca7be883c367a123d843a7dd7803ff799402640122356a9b0e7b1b8128",
+        "levelFingerprint": "b19be931b592870331c5798f39717230be366bb5fb8f7f1991f31d8dcbe3c75c",
         "levelID": "level-0",
         "modifiers": {},
         "packID": "xmasLemmings1992-LEVEL-4",
@@ -7398,15 +7349,15 @@
         "released": 50,
         "retainedReserves": 0,
         "saved": 50,
-        "sha256": "fb415529501be7ab4f234f4a10b15fcfe53d57e51dfe65f1bc6d5b7889393ee6",
-        "ticks": 1605
+        "sha256": "16cc8f7938fd7132a6c976f36adaaecd29f0fe4a0af6774233d3272b80546788",
+        "ticks": 1604
       }
     },
     {
       "bestSaved": 80,
       "conditions": {
         "gameID": "xmasLemmings1992",
-        "levelFingerprint": "8ff23b216c0ebebffa85c736213961244c6d400f345e76e23dfd58ded5371e9d",
+        "levelFingerprint": "a61ad56a796a9ec05aa1eabd71dde2a3a1bedb91c48a89619c51b3707643e14f",
         "levelID": "level-1",
         "modifiers": {},
         "packID": "xmasLemmings1992-LEVEL-4",
@@ -7447,15 +7398,15 @@
         "released": 80,
         "retainedReserves": 0,
         "saved": 80,
-        "sha256": "f04c3227ccdbbd6738a487b0a2a6354e72de27d5087ab88759cb43028932e4f4",
-        "ticks": 4656
+        "sha256": "fd5ab6269403050e4db4eac472f4498971f2eb0382f04bf8763db61600f0d3ae",
+        "ticks": 4655
       }
     },
     {
       "bestSaved": 80,
       "conditions": {
         "gameID": "xmasLemmings1992",
-        "levelFingerprint": "cc1b99390278ff9597893a3ed50390ec3fa7679349243b2f3ee44ceacf5f3928",
+        "levelFingerprint": "c839bb971b70913bf6a92676a765cc9ef66f75c18a0f7a158aa2973bc860b28c",
         "levelID": "level-2",
         "modifiers": {},
         "packID": "xmasLemmings1992-LEVEL-4",
@@ -7496,15 +7447,15 @@
         "released": 80,
         "retainedReserves": 0,
         "saved": 80,
-        "sha256": "1bd023affc1626349e947c2eac670c236b5d310ef16d1e9e9418cc2444475508",
-        "ticks": 7572
+        "sha256": "0de033df0da2969bf6ec09aaa82846ae02ef0d1bbcc7989022a20b8f0f049b03",
+        "ticks": 7532
       }
     },
     {
       "bestSaved": 2,
       "conditions": {
         "gameID": "xmasLemmings1992",
-        "levelFingerprint": "fd8ba00d369d699416827a94d4dd485dea031f5c1245a707ec49db53c535fb3b",
+        "levelFingerprint": "0a4a4dfdbff5a82d45baa9dda301fc16b948300c1fadc4a0cf6a3a1d7a2d16d6",
         "levelID": "level-3",
         "modifiers": {},
         "packID": "xmasLemmings1992-LEVEL-4",
@@ -7545,8 +7496,8 @@
         "released": 2,
         "retainedReserves": 0,
         "saved": 2,
-        "sha256": "ee2b40b31ed7bb7f705b5645d6d82342a78b74c8d3cabeaa551da7278664dcb5",
-        "ticks": 2401
+        "sha256": "7f46dd250319a2a83364739db13389339a8c2af31965e22d7321bdebd5205428",
+        "ticks": 2380
       }
     },
     {
@@ -8136,7 +8087,7 @@
       "bestSaved": 80,
       "conditions": {
         "gameID": "holidayLemmings1993",
-        "levelFingerprint": "90aefddce26e38049e14dfac1413383e7fb120eab8c6662e9dd8d5ae507be2b1",
+        "levelFingerprint": "4372278baf45a5e626edd1deb7f7cf0a8e0079327dabcf38cf47c76f725afa0e",
         "levelID": "level-17",
         "modifiers": {},
         "packID": "holidayLemmings1993-MACLEVL-32",
@@ -8177,15 +8128,15 @@
         "released": 80,
         "retainedReserves": 0,
         "saved": 80,
-        "sha256": "0fa62e81322eb7cd1e3de336f3ea89311a71efc4d7cb668d09b1b92c7f27ce7d",
-        "ticks": 2177
+        "sha256": "32701d5a20c89e76f80391e189f2250548a9dffeac04e5cdbfd95186b4bc7496",
+        "ticks": 2176
       }
     },
     {
       "bestSaved": 80,
       "conditions": {
         "gameID": "holidayLemmings1993",
-        "levelFingerprint": "f03a0ec1021a19bc71aac53ea235fa7a99deeb225f3e40b53327cf03bd376b51",
+        "levelFingerprint": "950850c1ea25f4faa14154fc9ccc7d36b9c94accda8eff4c6e048d5023bf4803",
         "levelID": "level-18",
         "modifiers": {},
         "packID": "holidayLemmings1993-MACLEVL-32",
@@ -8226,15 +8177,15 @@
         "released": 80,
         "retainedReserves": 0,
         "saved": 80,
-        "sha256": "41a878adf0541e9a21aed7dd694763cdf28fce242b98fb19ba8ba93be75fa54a",
-        "ticks": 1449
+        "sha256": "0971e4a79607a7e4490bb330095db146a0a288a7133ce11067551fa970204abc",
+        "ticks": 1448
       }
     },
     {
       "bestSaved": 80,
       "conditions": {
         "gameID": "holidayLemmings1993",
-        "levelFingerprint": "c38abb6944e35b84da22775688b3edf777c7317421946191f0b6fd17444f1c6f",
+        "levelFingerprint": "44d09942a5447acd8260802093b897b9f13a7b07d8e0f1d8e4c2241b2d1931a8",
         "levelID": "level-19",
         "modifiers": {},
         "packID": "holidayLemmings1993-MACLEVL-32",
@@ -8275,15 +8226,15 @@
         "released": 80,
         "retainedReserves": 0,
         "saved": 80,
-        "sha256": "ccb05966f41e3ec9fd846704184c69b5dc86b80c07ea7f8b1d93a20423576e8b",
-        "ticks": 5734
+        "sha256": "ee16c583e975bd56c02863a7596834c46beebfd3c7277eb6ece8294fe4e4b5f9",
+        "ticks": 5732
       }
     },
     {
       "bestSaved": 80,
       "conditions": {
         "gameID": "holidayLemmings1993",
-        "levelFingerprint": "6b0a12c6564b33d3b29ff3e2cc3b6c491bb3631d11608d5a9089dcef5cba843f",
+        "levelFingerprint": "17fdf62ec78cc86db3e1a99d073a7b0fd413dc2a76fa240edfd94877c6d50ffe",
         "levelID": "level-21",
         "modifiers": {},
         "packID": "holidayLemmings1993-MACLEVL-32",
@@ -8324,15 +8275,15 @@
         "released": 80,
         "retainedReserves": 0,
         "saved": 80,
-        "sha256": "f4309eff6fa76325289242c605d6bbb76abd7f391678af2a1e225fcc2c5b101c",
-        "ticks": 1605
+        "sha256": "5212ecdbaea85f2381788a130443cdd92c672befbdde7ac11eae75ece98262aa",
+        "ticks": 1604
       }
     },
     {
       "bestSaved": 60,
       "conditions": {
         "gameID": "holidayLemmings1993",
-        "levelFingerprint": "e487e3155b63b6c110c5cd8684d2d4385691165720e78ca5f3d4611add78cfcf",
+        "levelFingerprint": "e053781e5f0e762526023c3a26b52668eaf33a8b1785fe650d9336f22936cac8",
         "levelID": "level-22",
         "modifiers": {},
         "packID": "holidayLemmings1993-MACLEVL-32",
@@ -8373,15 +8324,15 @@
         "released": 60,
         "retainedReserves": 0,
         "saved": 60,
-        "sha256": "61186c610fd4c890af2283361306924db5a005f41d75e4774f4d040748ebb77a",
-        "ticks": 3040
+        "sha256": "3e25eefae16facab13e261bb9b4eaa5beab5ac213af3dc9a51d1a38913eafcaa",
+        "ticks": 3050
       }
     },
     {
       "bestSaved": 80,
       "conditions": {
         "gameID": "holidayLemmings1993",
-        "levelFingerprint": "52601e0f26664ffad255fb050b2b674bf33d0ff965706402365ea607c3cd7a71",
+        "levelFingerprint": "55de44be85f02e11739af2e4456c9096eadaefd34fbcdffbbfa95e619d9c19fc",
         "levelID": "level-23",
         "modifiers": {},
         "packID": "holidayLemmings1993-MACLEVL-32",
@@ -8422,15 +8373,15 @@
         "released": 80,
         "retainedReserves": 0,
         "saved": 80,
-        "sha256": "1dd561ac35754110b741ede5297a9f4df4db0c5f56ab0e7a2482e8afe99a87c3",
-        "ticks": 1704
+        "sha256": "71486214a47c0816c13b4c008b2ec7a0faf0f5dfbb756629589ffa7eed3e74c7",
+        "ticks": 1699
       }
     },
     {
       "bestSaved": 80,
       "conditions": {
         "gameID": "holidayLemmings1993",
-        "levelFingerprint": "ae21fec4bd0163f2b53f88389c2634e777ccee1bb676583313daeb018fe3a3c8",
+        "levelFingerprint": "df89e4883d961a863ab1c690f279838333fe75fd7b562ce6378d524f2cca5379",
         "levelID": "level-24",
         "modifiers": {},
         "packID": "holidayLemmings1993-MACLEVL-32",
@@ -8471,15 +8422,15 @@
         "released": 80,
         "retainedReserves": 0,
         "saved": 80,
-        "sha256": "81a40aa215bba95ab2bca4519b23e82a2d4cd5e4064138aa589cc871a5d4e364",
-        "ticks": 5395
+        "sha256": "02bdc656b1d1d65538ddaab504669b0d0139e3436d915f00c40d8b9f3af037b8",
+        "ticks": 5393
       }
     },
     {
       "bestSaved": 80,
       "conditions": {
         "gameID": "holidayLemmings1993",
-        "levelFingerprint": "3dbac9ebd0f5e84fd0f489458deff780491c462e1c47736fbab5deca11f0cf9f",
+        "levelFingerprint": "04d80901db88ec74c8fcdc6e6a3bd20e275555daf88c338af1b6b0c53fe50926",
         "levelID": "level-25",
         "modifiers": {},
         "packID": "holidayLemmings1993-MACLEVL-32",
@@ -8520,15 +8471,15 @@
         "released": 80,
         "retainedReserves": 0,
         "saved": 80,
-        "sha256": "315f0f0bf934ebfc2707bc6e2ee28f1f969b0779a60e416e4e08f5ee96623393",
-        "ticks": 3806
+        "sha256": "52a97743a3389396799973ff12e0a1efe1fef61ffaa435feb710f153e17691fa",
+        "ticks": 3848
       }
     },
     {
       "bestSaved": 80,
       "conditions": {
         "gameID": "holidayLemmings1993",
-        "levelFingerprint": "ef124d86cc840f4dcd6550184e37ed835184bae93b15fcdfc4b7eea91ce1122b",
+        "levelFingerprint": "1d70f4f099efd56de496fb83e4df099f477c5c3b0cc587c510ce5b4703b58868",
         "levelID": "level-26",
         "modifiers": {},
         "packID": "holidayLemmings1993-MACLEVL-32",
@@ -8569,15 +8520,15 @@
         "released": 80,
         "retainedReserves": 0,
         "saved": 80,
-        "sha256": "48fb0e523e09460953c1374760341b2453ee82f52555830c56755a37f158c15c",
-        "ticks": 2651
+        "sha256": "0451dbd642284ab8705398f7cc86fec6e796ab6167648abe2bd2a89a96990e49",
+        "ticks": 2649
       }
     },
     {
       "bestSaved": 80,
       "conditions": {
         "gameID": "holidayLemmings1993",
-        "levelFingerprint": "708ed01e15eeb436619a861285feaaa5989bb7a60dc82bf6707609a046485810",
+        "levelFingerprint": "12f42ec420073f090474dcdb1bc68db59f6de8792d065f33061fbce37e585cb0",
         "levelID": "level-29",
         "modifiers": {},
         "packID": "holidayLemmings1993-MACLEVL-32",
@@ -8618,64 +8569,15 @@
         "released": 80,
         "retainedReserves": 0,
         "saved": 80,
-        "sha256": "53ffd58dbbccfda5ea37bef9078efcffe5423fa63167a1691d4a58cfbcef3592",
+        "sha256": "7cfdfbbd7d6a11d5e6bb0375a352917ec0b0053ecf570ee35344bdf7f4f2c334",
         "ticks": 4076
-      }
-    },
-    {
-      "bestSaved": 10,
-      "conditions": {
-        "gameID": "holidayLemmings1993",
-        "levelFingerprint": "39604264f108596cdcf1995370709feb6fe0f24076544c6988308c6ae6c6af9e",
-        "levelID": "level-0",
-        "modifiers": {},
-        "packID": "holidayLemmings1993-MACLEVL-32",
-        "physicsMode": "classic-dos-v1",
-        "population": 10,
-        "rescueRequirement": 10,
-        "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "classic-dos-v1",
-        "startingSkills": {
-          "basher": 20,
-          "blocker": 20,
-          "bomber": 20,
-          "builder": 20,
-          "climber": 20,
-          "digger": 20,
-          "floater": 20,
-          "miner": 20
-        },
-        "timeLimitSeconds": 360
-      },
-      "gameID": "holidayLemmings1993",
-      "lossesInBestSolution": 0,
-      "maximumSaveable": 10,
-      "minimumSacrifices": 0,
-      "notes": [],
-      "number": 1,
-      "population": 10,
-      "rank": "Flurry",
-      "required": 10,
-      "status": "VERIFIED",
-      "testedCandidates": 2,
-      "title": "Climbing to the Top!",
-      "witness": {
-        "completed": true,
-        "didWin": true,
-        "lost": 0,
-        "path": "witnesses/holidayLemmings1993-0.json",
-        "released": 10,
-        "retainedReserves": 0,
-        "saved": 10,
-        "sha256": "06c741278c83b6152c89856464e0e7fc71637acba0c280d6d8d4b6c12509423a",
-        "ticks": 1159
       }
     },
     {
       "bestSaved": 20,
       "conditions": {
         "gameID": "holidayLemmings1993",
-        "levelFingerprint": "8ca8dad53e1e707720a2262707dd6bd438749ae06a93670f4bbc4bf621735ca9",
+        "levelFingerprint": "0f437d0c78e97a4de3e4828fca6cf8a78e449f2c6f4e2f3522871874c28cfe95",
         "levelID": "level-1",
         "modifiers": {},
         "packID": "holidayLemmings1993-MACLEVL-32",
@@ -8716,15 +8618,15 @@
         "released": 20,
         "retainedReserves": 0,
         "saved": 20,
-        "sha256": "db02360f890e780770a35b62e55a977de0963aaf04e3022d47f574870b3bfdd9",
-        "ticks": 1117
+        "sha256": "2332d9634f20b0172d852d3064eaeb6ab2721903035bad2908dfa65805c1a8be",
+        "ticks": 1116
       }
     },
     {
       "bestSaved": 80,
       "conditions": {
         "gameID": "holidayLemmings1993",
-        "levelFingerprint": "ef6ae2cede14b03af889f36a4c94d75e57e102966c3532ae6559aa6670de83b1",
+        "levelFingerprint": "c6794c0464081bbdfe6a3156e621aaa3f18babbb437055559769dc43ea6fbcc1",
         "levelID": "level-2",
         "modifiers": {},
         "packID": "holidayLemmings1993-MACLEVL-32",
@@ -8765,15 +8667,15 @@
         "released": 80,
         "retainedReserves": 0,
         "saved": 80,
-        "sha256": "64111bd4deec6da35987a6d3d238a84c261ba96f4cb4909813f0955a2b71037c",
-        "ticks": 3362
+        "sha256": "420e9efd7f71178cf5aba4467c4a720c3057180f6985ebec7bd4658022cdfd52",
+        "ticks": 3360
       }
     },
     {
       "bestSaved": 50,
       "conditions": {
         "gameID": "holidayLemmings1993",
-        "levelFingerprint": "260e74dab2b56e676ca9b8556382237fd5b13a8fb3ba8e4e80964830a9148732",
+        "levelFingerprint": "8980a87548846593004a4730bbde8869e84a03b3581e23f9622c14ab2da5d346",
         "levelID": "level-3",
         "modifiers": {},
         "packID": "holidayLemmings1993-MACLEVL-32",
@@ -8814,15 +8716,15 @@
         "released": 50,
         "retainedReserves": 0,
         "saved": 50,
-        "sha256": "ccafac54af777bb02308439200a8139d6815d7074d8bc11a913da6bd51ee40a5",
-        "ticks": 2707
+        "sha256": "8a3097857ca3765cc5203c39df911819ab714990aa4ee6970562bee3c898f8fe",
+        "ticks": 2706
       }
     },
     {
       "bestSaved": 75,
       "conditions": {
         "gameID": "holidayLemmings1993",
-        "levelFingerprint": "0881a4263fa834b0873a1d5892f0227be46ecb212cca31e90207a76895542927",
+        "levelFingerprint": "b519aa8326c6bd90423016d04a16fd343d54c8a9717de8b378fc2267680cb2d9",
         "levelID": "level-4",
         "modifiers": {},
         "packID": "holidayLemmings1993-MACLEVL-32",
@@ -8863,7 +8765,7 @@
         "released": 75,
         "retainedReserves": 0,
         "saved": 75,
-        "sha256": "d84104fdf38dea2d7c89f7dd805abea6634f9b16653829fc88674c393db6a0b6",
+        "sha256": "c8d047c29c81bcb8f682845c5d5d10d2a71bd136c692c9e2498ec51693c9d96b",
         "ticks": 2977
       }
     },
@@ -8871,7 +8773,7 @@
       "bestSaved": 80,
       "conditions": {
         "gameID": "holidayLemmings1993",
-        "levelFingerprint": "e90a12a7b2fdac34040f042ad03161d52e4a7cd2e6c625d85c017f4cb0a34857",
+        "levelFingerprint": "978b51a4d7dba994d66da3d946fb6845cf70a13be95b230214def71f3911d876",
         "levelID": "level-5",
         "modifiers": {},
         "packID": "holidayLemmings1993-MACLEVL-32",
@@ -8912,7 +8814,7 @@
         "released": 80,
         "retainedReserves": 0,
         "saved": 80,
-        "sha256": "b3ce11b2669ac74bdbb6ba043fbbbb3d4aba3f232b3c18e83e89d0dacde345ab",
+        "sha256": "dd366ee5cb096a1bd4c533077504acabe9c74ff1e9583557ca74a9b3aefa7ff7",
         "ticks": 4281
       }
     },
@@ -8920,7 +8822,7 @@
       "bestSaved": 50,
       "conditions": {
         "gameID": "holidayLemmings1993",
-        "levelFingerprint": "121f710acf16741ae2aa566c46b622e1eac54577cce83afcb3de2937e441d60f",
+        "levelFingerprint": "0af99c0f9abb00f3d0a5f0ee27dbc6d9b7a71a75bc318d348701858c5c08e831",
         "levelID": "level-6",
         "modifiers": {},
         "packID": "holidayLemmings1993-MACLEVL-32",
@@ -8961,64 +8863,15 @@
         "released": 50,
         "retainedReserves": 0,
         "saved": 50,
-        "sha256": "951d40ed8113f133428b8d82682218add9f9c7f529733fc4fd6f3dc03d5f0f6f",
+        "sha256": "83bd71c7665e2c543b2af8465d9cd6e85a35068d588bfc1832b79a4400e49e01",
         "ticks": 3205
-      }
-    },
-    {
-      "bestSaved": 80,
-      "conditions": {
-        "gameID": "holidayLemmings1993",
-        "levelFingerprint": "97a4546f68ce5542a0f98d93ada5396e398e2f6a4a016cdfb1c117985819b0f0",
-        "levelID": "level-8",
-        "modifiers": {},
-        "packID": "holidayLemmings1993-MACLEVL-32",
-        "physicsMode": "classic-dos-v1",
-        "population": 80,
-        "rescueRequirement": 75,
-        "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "classic-dos-v1",
-        "startingSkills": {
-          "basher": 10,
-          "blocker": 10,
-          "bomber": 10,
-          "builder": 10,
-          "climber": 10,
-          "digger": 10,
-          "floater": 10,
-          "miner": 10
-        },
-        "timeLimitSeconds": 240
-      },
-      "gameID": "holidayLemmings1993",
-      "lossesInBestSolution": 0,
-      "maximumSaveable": 80,
-      "minimumSacrifices": 0,
-      "notes": [],
-      "number": 9,
-      "population": 80,
-      "rank": "Flurry",
-      "required": 75,
-      "status": "VERIFIED",
-      "testedCandidates": 2,
-      "title": "A Block from Home",
-      "witness": {
-        "completed": true,
-        "didWin": true,
-        "lost": 0,
-        "path": "witnesses/holidayLemmings1993-8.json",
-        "released": 80,
-        "retainedReserves": 0,
-        "saved": 80,
-        "sha256": "d28f884a438b70318eb0aaa6b4565625f21d3f5c64b38f496ffe9ebd02e63dd7",
-        "ticks": 3833
       }
     },
     {
       "bestSaved": 32,
       "conditions": {
         "gameID": "holidayLemmings1993",
-        "levelFingerprint": "c4cc0c9fb8aa05e169c53b2186f9508ff96aab2bae857d67e9d473e8a44e93ec",
+        "levelFingerprint": "dbf8dc2e9715839f9abe199f620a67bcf7fb5c04027838cef80f075f3dd82315",
         "levelID": "level-9",
         "modifiers": {},
         "packID": "holidayLemmings1993-MACLEVL-32",
@@ -9059,7 +8912,7 @@
         "released": 32,
         "retainedReserves": 0,
         "saved": 32,
-        "sha256": "0b9a3136d5870e73d9c0595f17a083074fe03c3e43e031a9af2c1184ed3ceb4c",
+        "sha256": "ac74a0b22d62ce746b33a644fe3486e671dede5d5a6702b00e750945fd32cd07",
         "ticks": 3833
       }
     },
@@ -9067,7 +8920,7 @@
       "bestSaved": 80,
       "conditions": {
         "gameID": "holidayLemmings1993",
-        "levelFingerprint": "bfdf886dc06c1fc19435f50da901047f46559c1b8ed582b6f13d70371ed9626c",
+        "levelFingerprint": "b97102b5e043a2885fa86501c64c38678cc7573308cd3bd785dcec522a354f65",
         "levelID": "level-10",
         "modifiers": {},
         "packID": "holidayLemmings1993-MACLEVL-32",
@@ -9108,15 +8961,15 @@
         "released": 80,
         "retainedReserves": 0,
         "saved": 80,
-        "sha256": "e5d667c0e7ce90f6613fb32edca7cb6eaa77ed88eb743babaa83e50f93275f51",
-        "ticks": 1520
+        "sha256": "ccbb62a89532d5e6953cff0798abd194bddeba13ef95df5a9d78eeb8e1ab131a",
+        "ticks": 1519
       }
     },
     {
       "bestSaved": 80,
       "conditions": {
         "gameID": "holidayLemmings1993",
-        "levelFingerprint": "7ef337259da9cb4bd2d79762f4bf003e2d00a3b95d0651fb72bab0fdc33ebe99",
+        "levelFingerprint": "28873833db6cdc6db8dff3cb898e1551b44a8535e5dbc01a600046dbf18eb777",
         "levelID": "level-11",
         "modifiers": {},
         "packID": "holidayLemmings1993-MACLEVL-32",
@@ -9157,15 +9010,15 @@
         "released": 80,
         "retainedReserves": 0,
         "saved": 80,
-        "sha256": "a64352de82d282519f4595618d5d15f3db191f8747f3839fe88cfa53c38c0b0b",
-        "ticks": 1722
+        "sha256": "401b2500d64e7f75b85cf6869d3ea89b0a4bb323f0f580d9cb6948013c72f844",
+        "ticks": 1717
       }
     },
     {
       "bestSaved": 80,
       "conditions": {
         "gameID": "holidayLemmings1993",
-        "levelFingerprint": "0bace4dea32d3a9b54b700990b75d4e5b2f71f8470c39a401ac81b5acc8d3a8f",
+        "levelFingerprint": "9dd5991a0ce1b46f67c04de62256ec036eb44794b0c0235a895ae4d9986862ab",
         "levelID": "level-12",
         "modifiers": {},
         "packID": "holidayLemmings1993-MACLEVL-32",
@@ -9206,7 +9059,7 @@
         "released": 80,
         "retainedReserves": 0,
         "saved": 80,
-        "sha256": "387f1af4cfbf3cce750eec076d4e06c7ffc035ae567ffcc15acb37c1ef6f07c8",
+        "sha256": "3cb2a72cc5573f27e94d94fe9454d91ce04ee050f1d9002a82c40347008c219c",
         "ticks": 1977
       }
     },
@@ -9214,7 +9067,7 @@
       "bestSaved": 80,
       "conditions": {
         "gameID": "holidayLemmings1993",
-        "levelFingerprint": "b7ed8783fb67f3bfe27539c51302de6217f966946502efed6ef1da13dba67562",
+        "levelFingerprint": "f302f2d2ec6878aa481ec2ebcdcecd0727f6c312a4a75556956957849e66e332",
         "levelID": "level-13",
         "modifiers": {},
         "packID": "holidayLemmings1993-MACLEVL-32",
@@ -9255,15 +9108,15 @@
         "released": 80,
         "retainedReserves": 0,
         "saved": 80,
-        "sha256": "44a13cd17c56ce4031ea586da166ae0027a16e078061c9d678bb008e8cc5ae68",
-        "ticks": 2173
+        "sha256": "679011238212c9ce0ed27853ee3375a08b0828ba00ce23a962fe49ef2c212050",
+        "ticks": 2171
       }
     },
     {
       "bestSaved": 10,
       "conditions": {
         "gameID": "holidayLemmings1993",
-        "levelFingerprint": "f48e8a3dbcd2f39d046d98555966adeac5959f381f80ca029f410a4016b1a23f",
+        "levelFingerprint": "f1018c329a3dcc78fd69c578403f67faba192f9d24a79e3c06bd7fe7a31a5710",
         "levelID": "level-14",
         "modifiers": {},
         "packID": "holidayLemmings1993-MACLEVL-32",
@@ -9304,8 +9157,155 @@
         "released": 10,
         "retainedReserves": 0,
         "saved": 10,
-        "sha256": "7a37e843d1b57d925f4010d9c2a1bb82d7621660b565eb5fc71800dbd1a3dac2",
-        "ticks": 719
+        "sha256": "851916199eb2a8c6dd6902b091d96a58b1c974d98754dcd1d89ac06b0eb644d7",
+        "ticks": 718
+      }
+    },
+    {
+      "bestSaved": 100,
+      "conditions": {
+        "gameID": "ohYesMoreLemmings",
+        "levelFingerprint": "e699a265ad71297811912e760e9955e90dbafc63c575676dff27996fc0a7ad27",
+        "levelID": "level-2",
+        "modifiers": {},
+        "packID": "ohYesMoreLemmings-OHYES-60",
+        "physicsMode": "classic-dos-v1",
+        "population": 100,
+        "rescueRequirement": 80,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "classic-dos-v1",
+        "startingSkills": {
+          "basher": 50,
+          "blocker": 10,
+          "bomber": 5,
+          "builder": 50,
+          "climber": 20,
+          "digger": 40,
+          "floater": 20,
+          "miner": 40
+        },
+        "timeLimitSeconds": 480
+      },
+      "gameID": "ohYesMoreLemmings",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 100,
+      "minimumSacrifices": 0,
+      "notes": [],
+      "number": 3,
+      "population": 100,
+      "rank": "Lemmings Versus",
+      "required": 80,
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Still everything to play for",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/ohYesMoreLemmings-2.json",
+        "released": 100,
+        "retainedReserves": 0,
+        "saved": 100,
+        "sha256": "05e50acb3fbe6005ebf224da3bb5dd802ac91f991d96745b1ace715cad58e3ae",
+        "ticks": 1688
+      }
+    },
+    {
+      "bestSaved": 80,
+      "conditions": {
+        "gameID": "ohYesMoreLemmings",
+        "levelFingerprint": "afa8e7dcb678b62d875e0cb81772217af8c65b5e34c69ec34d5d01fc9b80b515",
+        "levelID": "level-4",
+        "modifiers": {},
+        "packID": "ohYesMoreLemmings-OHYES-60",
+        "physicsMode": "classic-dos-v1",
+        "population": 80,
+        "rescueRequirement": 80,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "classic-dos-v1",
+        "startingSkills": {
+          "basher": 20,
+          "blocker": 10,
+          "bomber": 10,
+          "builder": 50,
+          "climber": 20,
+          "digger": 20,
+          "floater": 10,
+          "miner": 20
+        },
+        "timeLimitSeconds": 300
+      },
+      "gameID": "ohYesMoreLemmings",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 80,
+      "minimumSacrifices": 0,
+      "notes": [],
+      "number": 5,
+      "population": 80,
+      "rank": "Lemmings Versus",
+      "required": 80,
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "and the winner is.....",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/ohYesMoreLemmings-4.json",
+        "released": 80,
+        "retainedReserves": 0,
+        "saved": 80,
+        "sha256": "7b727b28e175220bfbf46fe9bad4c24889a472f04e19e866a9d0d15a7d0352a2",
+        "ticks": 1640
+      }
+    },
+    {
+      "bestSaved": 75,
+      "conditions": {
+        "gameID": "ohYesMoreLemmings",
+        "levelFingerprint": "0a4bf39d68889f30c91b09f03eee7ab2cc9d133a1c436a6db95e0c71c0af5f53",
+        "levelID": "level-5",
+        "modifiers": {},
+        "packID": "ohYesMoreLemmings-OHYES-60",
+        "physicsMode": "classic-dos-v1",
+        "population": 75,
+        "rescueRequirement": 65,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "classic-dos-v1",
+        "startingSkills": {
+          "basher": 20,
+          "blocker": 20,
+          "bomber": 20,
+          "builder": 80,
+          "climber": 10,
+          "digger": 20,
+          "floater": 10,
+          "miner": 20
+        },
+        "timeLimitSeconds": 300
+      },
+      "gameID": "ohYesMoreLemmings",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 75,
+      "minimumSacrifices": 0,
+      "notes": [],
+      "number": 6,
+      "population": 75,
+      "rank": "Lemmings Versus",
+      "required": 65,
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "In the thick of the fray",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/ohYesMoreLemmings-5.json",
+        "released": 75,
+        "retainedReserves": 0,
+        "saved": 75,
+        "sha256": "9f21c4f5577ac01a4f9bc68a79ca3f5a975e89fd020fa4803090be5502789769",
+        "ticks": 2444
       }
     },
     {
@@ -9361,7 +9361,7 @@
       "bestSaved": 40,
       "conditions": {
         "gameID": "ohYesMoreLemmings",
-        "levelFingerprint": "9badd51a7853fef2dbfd3989aab34d3a17b9ca68bd76b61623cc3a0d49ba1140",
+        "levelFingerprint": "37a2be2086e068c1c1e6a885c0bd9eb1a91453cec8e3f50e1a9fcc021cda8e53",
         "levelID": "level-25",
         "modifiers": {},
         "packID": "ohYesMoreLemmings-OHYES-60",
@@ -9392,7 +9392,7 @@
       "rank": "Oh No! More Lemmings Versus",
       "required": 40,
       "status": "VERIFIED",
-      "testedCandidates": 2,
+      "testedCandidates": 1,
       "title": "Test Of Skill",
       "witness": {
         "completed": true,
@@ -9402,15 +9402,15 @@
         "released": 40,
         "retainedReserves": 0,
         "saved": 40,
-        "sha256": "4b657387104e8789c9e90f39d122f04c51b8028de850df308973a27dd119d153",
-        "ticks": 2358
+        "sha256": "38a1d378135c3d9086221593f2163ca175cb1b9e373c912129dc3c6e60236655",
+        "ticks": 2357
       }
     },
     {
       "bestSaved": 40,
       "conditions": {
         "gameID": "ohYesMoreLemmings",
-        "levelFingerprint": "eee9ddad9c4a9101fb2f0b18e232e1debe2f511b584ab87e0d3d4f3fc18d7f62",
+        "levelFingerprint": "579d1bfb7bee8ef2fb598df333499577883af1b183769b22c54ddfb16ee75097",
         "levelID": "level-26",
         "modifiers": {},
         "packID": "ohYesMoreLemmings-OHYES-60",
@@ -9441,7 +9441,7 @@
       "rank": "Oh No! More Lemmings Versus",
       "required": 40,
       "status": "VERIFIED",
-      "testedCandidates": 2,
+      "testedCandidates": 1,
       "title": "Give And Take",
       "witness": {
         "completed": true,
@@ -9451,64 +9451,15 @@
         "released": 40,
         "retainedReserves": 0,
         "saved": 40,
-        "sha256": "0d2d5aaba744bf8f7d1293e120e26b9bfc7bfb66dde54eaded82f5b05cabe9e8",
-        "ticks": 2302
+        "sha256": "ff9563a88cf5b39bba5a151e27a2396665a05931a607561c2143d9632e250a7a",
+        "ticks": 2248
       }
     },
     {
       "bestSaved": 50,
       "conditions": {
         "gameID": "holidayLemmings1994",
-        "levelFingerprint": "b3ce13e3ba15faa3e9efc15ecb4beff7b4dff5824f7d857644073858e8e53d9f",
-        "levelID": "level-0",
-        "modifiers": {},
-        "packID": "holidayLemmings1994-MACLEVL-32",
-        "physicsMode": "classic-dos-v1",
-        "population": 50,
-        "rescueRequirement": 50,
-        "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "classic-dos-v1",
-        "startingSkills": {
-          "basher": 6,
-          "blocker": 6,
-          "bomber": 6,
-          "builder": 6,
-          "climber": 6,
-          "digger": 6,
-          "floater": 6,
-          "miner": 6
-        },
-        "timeLimitSeconds": 360
-      },
-      "gameID": "holidayLemmings1994",
-      "lossesInBestSolution": 0,
-      "maximumSaveable": 50,
-      "minimumSacrifices": 0,
-      "notes": [],
-      "number": 1,
-      "population": 50,
-      "rank": "Frost",
-      "required": 50,
-      "status": "VERIFIED",
-      "testedCandidates": 2,
-      "title": "Chains of Command",
-      "witness": {
-        "completed": true,
-        "didWin": true,
-        "lost": 0,
-        "path": "witnesses/holidayLemmings1994-0.json",
-        "released": 50,
-        "retainedReserves": 0,
-        "saved": 50,
-        "sha256": "680ae21989fce696bc3d44f17ce30da3489fb67620f65432ea64961aa30f80d6",
-        "ticks": 2504
-      }
-    },
-    {
-      "bestSaved": 50,
-      "conditions": {
-        "gameID": "holidayLemmings1994",
-        "levelFingerprint": "6996139ab69bdb088e46611294ce63da8e3dfc5e9efbe4d564edfbbbbbac7cb3",
+        "levelFingerprint": "9fe3243d73230c0a5939ecc91578e8b14638726fcba42251e2dd254f0494fddc",
         "levelID": "level-1",
         "modifiers": {},
         "packID": "holidayLemmings1994-MACLEVL-32",
@@ -9549,15 +9500,15 @@
         "released": 50,
         "retainedReserves": 0,
         "saved": 50,
-        "sha256": "8a0ffa5ae77803ec2d9abf8fc83ae127bf7f78e5e89f3606d5321756a0134e8b",
-        "ticks": 1727
+        "sha256": "4e250eb87ece72766a56bc1f2c11ac1a3975cd7996990a22758b3031a268c647",
+        "ticks": 1726
       }
     },
     {
       "bestSaved": 80,
       "conditions": {
         "gameID": "holidayLemmings1994",
-        "levelFingerprint": "95bebcf0be0b7784584fa808460c61125f2fb42fe342fcb651ef9d600037626c",
+        "levelFingerprint": "200ed85a524a438127e9cdc54702befe1dec884d4113d5786d9be28ba825f129",
         "levelID": "level-2",
         "modifiers": {},
         "packID": "holidayLemmings1994-MACLEVL-32",
@@ -9598,15 +9549,64 @@
         "released": 80,
         "retainedReserves": 0,
         "saved": 80,
-        "sha256": "a090d23fc5b107bbe18ffd4267345213051469a9b6d214945c9e2a596844265e",
-        "ticks": 2135
+        "sha256": "61d8736d4ac77e0a1e55e59aae6ac041f018b857bdf79311bae322e4b27def16",
+        "ticks": 2134
+      }
+    },
+    {
+      "bestSaved": 50,
+      "conditions": {
+        "gameID": "holidayLemmings1994",
+        "levelFingerprint": "d1e63613a85f4dec3805e3407bbe4775539735619085ec1b7e515b599676c9bc",
+        "levelID": "level-3",
+        "modifiers": {},
+        "packID": "holidayLemmings1994-MACLEVL-32",
+        "physicsMode": "classic-dos-v1",
+        "population": 50,
+        "rescueRequirement": 49,
+        "rewindPolicy": "separate-assisted-v1",
+        "rulesetVersion": "classic-dos-v1",
+        "startingSkills": {
+          "basher": 1,
+          "blocker": 0,
+          "bomber": 1,
+          "builder": 1,
+          "climber": 0,
+          "digger": 0,
+          "floater": 0,
+          "miner": 1
+        },
+        "timeLimitSeconds": 300
+      },
+      "gameID": "holidayLemmings1994",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 50,
+      "minimumSacrifices": 0,
+      "notes": [],
+      "number": 4,
+      "population": 50,
+      "rank": "Frost",
+      "required": 49,
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Separate Ways",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/holidayLemmings1994-3.json",
+        "released": 50,
+        "retainedReserves": 0,
+        "saved": 50,
+        "sha256": "e12deae374c682d0a74109700ea9b2e8373cdf1054906b4ed10fc3cafa465b51",
+        "ticks": 2166
       }
     },
     {
       "bestSaved": 70,
       "conditions": {
         "gameID": "holidayLemmings1994",
-        "levelFingerprint": "c24372727a26de8662d0f135128fb0db56303699a2474a9ea5b85c24c9242efd",
+        "levelFingerprint": "57d74a319f145ea2714b9ff7341da0d35ec877a1abca688de29bb05ae8094050",
         "levelID": "level-4",
         "modifiers": {},
         "packID": "holidayLemmings1994-MACLEVL-32",
@@ -9647,15 +9647,15 @@
         "released": 70,
         "retainedReserves": 0,
         "saved": 70,
-        "sha256": "f384f75db7cea9d557639dcfa6181d0f52c24fafb97146c16fa76b774f1cf9a2",
-        "ticks": 1813
+        "sha256": "1bdf6d7cbfc20b8f14016465f00c9f7f6381ada1d995af8a038df283bbc070ac",
+        "ticks": 1812
       }
     },
     {
       "bestSaved": 80,
       "conditions": {
         "gameID": "holidayLemmings1994",
-        "levelFingerprint": "50a9d0c48804a1a77374fe72e004f765553b9ba11b2d36fe916f64f3f828bad2",
+        "levelFingerprint": "2ac52984a83ff31297f49fe71f4f6b63f683ef5bad2f5668d68897e35a671a42",
         "levelID": "level-7",
         "modifiers": {},
         "packID": "holidayLemmings1994-MACLEVL-32",
@@ -9696,15 +9696,15 @@
         "released": 80,
         "retainedReserves": 0,
         "saved": 80,
-        "sha256": "3d074f088346d9c6377444bf61dc3dfbf289e096617ba34c256aff014d81e481",
-        "ticks": 905
+        "sha256": "ebd1167352f52d89eeae6b5383fee083aad08d0bfd7ecdd1385d7352d85c9937",
+        "ticks": 913
       }
     },
     {
       "bestSaved": 40,
       "conditions": {
         "gameID": "holidayLemmings1994",
-        "levelFingerprint": "a338780c44875f572cf3ced3379ed7d12491217a55265dc38faca4a73be82cef",
+        "levelFingerprint": "2fade08e1faea8e1a6097aa3cd6acd8f1515491f434726076caccf853788db96",
         "levelID": "level-8",
         "modifiers": {},
         "packID": "holidayLemmings1994-MACLEVL-32",
@@ -9745,15 +9745,15 @@
         "released": 40,
         "retainedReserves": 0,
         "saved": 40,
-        "sha256": "425708c439e1da53cb8cdbf35eeebc8a37a8869fcc26e326cb3234bac84dc661",
-        "ticks": 1302
+        "sha256": "730cd6735186e6625e706247191e1ec3be7234841b4706e66450905d5d9b027e",
+        "ticks": 1301
       }
     },
     {
       "bestSaved": 4,
       "conditions": {
         "gameID": "holidayLemmings1994",
-        "levelFingerprint": "1d69ee89abe2603d4a9d082e4e755ec8eb073d65e2dc0359a3a22a02fe56061a",
+        "levelFingerprint": "8b647455742d14d023c7b7f0afa1d4305eb94ba0fb8421566c62b1e71d872481",
         "levelID": "level-9",
         "modifiers": {},
         "packID": "holidayLemmings1994-MACLEVL-32",
@@ -9794,15 +9794,15 @@
         "released": 4,
         "retainedReserves": 0,
         "saved": 4,
-        "sha256": "d05b69897f7ca6289de472eef635d8141f86ec89cc34a0950dc0e459ec39cdf1",
-        "ticks": 2017
+        "sha256": "43d8a69f45b15e7964fdcc42ebf6de87235e8129d85a60fe1aa6a4f9e1d25992",
+        "ticks": 2016
       }
     },
     {
       "bestSaved": 80,
       "conditions": {
         "gameID": "holidayLemmings1994",
-        "levelFingerprint": "ad69ff22f615ce9aa927ee59fbd10161983139ee52f7ce21f853c807a9d391b1",
+        "levelFingerprint": "250a6f1a4f44d0940181ba242f5c367d44cacd4ae8728936de6b00137158f6b6",
         "levelID": "level-10",
         "modifiers": {},
         "packID": "holidayLemmings1994-MACLEVL-32",
@@ -9843,15 +9843,15 @@
         "released": 80,
         "retainedReserves": 0,
         "saved": 80,
-        "sha256": "682770421fcf05748b80f24ff05c050b86974803070bcb72c19a45c9f50d2b8c",
-        "ticks": 2431
+        "sha256": "8cdf76dc9b8c0bb43a151a7f3e4c7315335816a1a9920d569939281f77536e3c",
+        "ticks": 2428
       }
     },
     {
       "bestSaved": 80,
       "conditions": {
         "gameID": "holidayLemmings1994",
-        "levelFingerprint": "b057113354512f61b366e07a0e9388d2670cc54c4127ae677350182f58240176",
+        "levelFingerprint": "0275a114bbf86868a6833bdf0d506871c25d56fc264e4e2ab787aaa15469c6d2",
         "levelID": "level-11",
         "modifiers": {},
         "packID": "holidayLemmings1994-MACLEVL-32",
@@ -9892,15 +9892,15 @@
         "released": 80,
         "retainedReserves": 0,
         "saved": 80,
-        "sha256": "4b4bb88120667fafecd172a9acda2a38dfa686095a2bb7ce1a8f5383c3257206",
-        "ticks": 2115
+        "sha256": "33a75aed7cc0ea47c20347688d89ca5a76c7196c92b692ef2f2b1eeac48912f1",
+        "ticks": 2114
       }
     },
     {
       "bestSaved": 80,
       "conditions": {
         "gameID": "holidayLemmings1994",
-        "levelFingerprint": "079760d84aa5d86fa35b50f5405ce33b5f31168dcecb7c323e69841a247e4675",
+        "levelFingerprint": "2297dd0880a7b34ad235c95f8f18def7c8611c3771e34d573af24072edf27109",
         "levelID": "level-12",
         "modifiers": {},
         "packID": "holidayLemmings1994-MACLEVL-32",
@@ -9941,15 +9941,15 @@
         "released": 80,
         "retainedReserves": 0,
         "saved": 80,
-        "sha256": "89f241c17a32d7a9cd91c47af2e67ee106dd089e8b7ebda90dd7fbd7aed04a7d",
-        "ticks": 1457
+        "sha256": "60bb498fa31f2ff7ca6edabb2c8ba1dd32d460e83407f390b6bb262e24223e1e",
+        "ticks": 1460
       }
     },
     {
       "bestSaved": 75,
       "conditions": {
         "gameID": "holidayLemmings1994",
-        "levelFingerprint": "5547a1c33eb8a16155aaeb3c7b964398f7ceb86bd907cb7e97bed54857edec0c",
+        "levelFingerprint": "e5fc53f6e390aae7face461a64406b9e54cbd6c562bc551e0dbf82f81ad8d7a5",
         "levelID": "level-16",
         "modifiers": {},
         "packID": "holidayLemmings1994-MACLEVL-32",
@@ -9990,15 +9990,15 @@
         "released": 75,
         "retainedReserves": 0,
         "saved": 75,
-        "sha256": "dd765c7509bfa9eeb53589faa53fb95000032108261c30035d979bb241d0ed9c",
-        "ticks": 2148
+        "sha256": "1a52ac06fbd069a7639284bc27dd04d6156eef9b372be5857b776c80032aa52d",
+        "ticks": 2147
       }
     },
     {
       "bestSaved": 80,
       "conditions": {
         "gameID": "holidayLemmings1994",
-        "levelFingerprint": "588359268807ca8764ebb3ac4c956b84887383ad68e55c8231ea5a74afbba291",
+        "levelFingerprint": "c9c0dbe236a911929f966fb2e56ce583573c87075fabf76247e2d3a11112ba20",
         "levelID": "level-22",
         "modifiers": {},
         "packID": "holidayLemmings1994-MACLEVL-32",
@@ -10039,15 +10039,15 @@
         "released": 80,
         "retainedReserves": 0,
         "saved": 80,
-        "sha256": "a64fd59deb0c087983bc920a8ed2f5ecd82987a4496965e49be9ebfa551f37f0",
-        "ticks": 5067
+        "sha256": "6590fce9a1d8853e81be948c3c59fa51d6e34ba5e019fc4b0fb458a9622e62e7",
+        "ticks": 5066
       }
     },
     {
       "bestSaved": 80,
       "conditions": {
         "gameID": "holidayLemmings1994",
-        "levelFingerprint": "30fe32dc4262ed4225a3088c345f7563dd06b7dc03d3d704333e13eed4040458",
+        "levelFingerprint": "48af1ca173b294a029b3c10cd6eabfe0d78fad887a604e55fb3f58b11773ed2c",
         "levelID": "level-23",
         "modifiers": {},
         "packID": "holidayLemmings1994-MACLEVL-32",
@@ -10088,15 +10088,15 @@
         "released": 80,
         "retainedReserves": 0,
         "saved": 80,
-        "sha256": "1041b99559f3d681b1593c2d73d1781cf73303624252584ef54209c220a06f33",
-        "ticks": 5640
+        "sha256": "ed777af0d0bd8b3099f80ebe7e48f07f059a85694c3e1077e4420e62bd025828",
+        "ticks": 5639
       }
     },
     {
       "bestSaved": 50,
       "conditions": {
         "gameID": "holidayLemmings1994",
-        "levelFingerprint": "15838e16a690d3b9a551c74f44a52412a0dfaca7a92fae7ee079fe78661f6240",
+        "levelFingerprint": "4b67bc2d9f35be962c8c5ced93296735c5ba06fc4dd37dee2a139d8b1fabc70e",
         "levelID": "level-24",
         "modifiers": {},
         "packID": "holidayLemmings1994-MACLEVL-32",
@@ -10137,64 +10137,15 @@
         "released": 50,
         "retainedReserves": 0,
         "saved": 50,
-        "sha256": "f4af36c06fac3fb0362ac055cb4969db18c6f35e3920cc2140b4486dfb414040",
-        "ticks": 4682
-      }
-    },
-    {
-      "bestSaved": 80,
-      "conditions": {
-        "gameID": "holidayLemmings1994",
-        "levelFingerprint": "89024e094e82a2f2d65bd4728cf947ad8d33bb7e2924259444d1e37284259efa",
-        "levelID": "level-25",
-        "modifiers": {},
-        "packID": "holidayLemmings1994-MACLEVL-32",
-        "physicsMode": "classic-dos-v1",
-        "population": 80,
-        "rescueRequirement": 80,
-        "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "classic-dos-v1",
-        "startingSkills": {
-          "basher": 5,
-          "blocker": 1,
-          "bomber": 1,
-          "builder": 5,
-          "climber": 0,
-          "digger": 0,
-          "floater": 0,
-          "miner": 5
-        },
-        "timeLimitSeconds": 240
-      },
-      "gameID": "holidayLemmings1994",
-      "lossesInBestSolution": 0,
-      "maximumSaveable": 80,
-      "minimumSacrifices": 0,
-      "notes": [],
-      "number": 10,
-      "population": 80,
-      "rank": "Hail",
-      "required": 80,
-      "status": "VERIFIED",
-      "testedCandidates": 2,
-      "title": "Lemmy in the cold, cold ground",
-      "witness": {
-        "completed": true,
-        "didWin": true,
-        "lost": 0,
-        "path": "witnesses/holidayLemmings1994-25.json",
-        "released": 80,
-        "retainedReserves": 0,
-        "saved": 80,
-        "sha256": "f410c02fc527c7e7f0d983a259114651c30070386d6f145e28404edd68de4f47",
-        "ticks": 3702
+        "sha256": "335456bd2d69d1d080566ebf972840c1cbbd4d6185cdf380b2359e8726d54fbd",
+        "ticks": 4681
       }
     },
     {
       "bestSaved": 70,
       "conditions": {
         "gameID": "holidayLemmings1994",
-        "levelFingerprint": "187ebc9ee16d58d67fc07f5c4cdeac09cfab0386def776e5db26d71da2c50a5b",
+        "levelFingerprint": "7e180d0021fac6da339082e9677b2f2d58cc5f480973a41709ed3a133d68cb9c",
         "levelID": "level-26",
         "modifiers": {},
         "packID": "holidayLemmings1994-MACLEVL-32",
@@ -10235,15 +10186,15 @@
         "released": 70,
         "retainedReserves": 0,
         "saved": 70,
-        "sha256": "8045424085a0c28bd3ab2d162a5e70883e14909843d353585714ce7355a8212f",
-        "ticks": 3315
+        "sha256": "bdddad811473eb7f682165721704a1726073d0dbab64c92512fbdf25c26b75ec",
+        "ticks": 3316
       }
     },
     {
       "bestSaved": 25,
       "conditions": {
         "gameID": "holidayLemmings1994",
-        "levelFingerprint": "0af5924cef6d9840f198742e99e510c69bbebc005583f346e2438895fcf0ef18",
+        "levelFingerprint": "a89b798470632592c895d9bce560bf1eb3cbcec72d610788794825b57152342b",
         "levelID": "level-27",
         "modifiers": {},
         "packID": "holidayLemmings1994-MACLEVL-32",
@@ -10284,15 +10235,15 @@
         "released": 25,
         "retainedReserves": 0,
         "saved": 25,
-        "sha256": "6b3a7deb154ea0c1b2dc2614f335769afc8a6b925cff985d9a77487049bbe0b3",
-        "ticks": 2395
+        "sha256": "69f902327635faf6c128813a47cec9035d446dbd7c7b9af206dd4c4490356e67",
+        "ticks": 2393
       }
     },
     {
       "bestSaved": 50,
       "conditions": {
         "gameID": "holidayLemmings1994",
-        "levelFingerprint": "574ddea4f36765adf21cbb3f4c97f870fc21c9cea62e64f703f8e82aab24ba61",
+        "levelFingerprint": "b304507b3e02d856fc2f8ffe4cbe391488b72c73312e628ac9c90425a0225eab",
         "levelID": "level-28",
         "modifiers": {},
         "packID": "holidayLemmings1994-MACLEVL-32",
@@ -10333,64 +10284,15 @@
         "released": 50,
         "retainedReserves": 0,
         "saved": 50,
-        "sha256": "edff7f26f6f2255998b506534e142353f4dc5fa8ce9f3f03632c07e70d4fc1f8",
-        "ticks": 2761
-      }
-    },
-    {
-      "bestSaved": 65,
-      "conditions": {
-        "gameID": "holidayLemmings1994",
-        "levelFingerprint": "db70cd11efda6ee83fb1e127e443dd66d7572885bda77c760a113e3fd3d1b882",
-        "levelID": "level-29",
-        "modifiers": {},
-        "packID": "holidayLemmings1994-MACLEVL-32",
-        "physicsMode": "classic-dos-v1",
-        "population": 65,
-        "rescueRequirement": 65,
-        "rewindPolicy": "separate-assisted-v1",
-        "rulesetVersion": "classic-dos-v1",
-        "startingSkills": {
-          "basher": 5,
-          "blocker": 2,
-          "bomber": 0,
-          "builder": 20,
-          "climber": 5,
-          "digger": 3,
-          "floater": 5,
-          "miner": 3
-        },
-        "timeLimitSeconds": 540
-      },
-      "gameID": "holidayLemmings1994",
-      "lossesInBestSolution": 0,
-      "maximumSaveable": 65,
-      "minimumSacrifices": 0,
-      "notes": [],
-      "number": 14,
-      "population": 65,
-      "rank": "Hail",
-      "required": 65,
-      "status": "VERIFIED",
-      "testedCandidates": 2,
-      "title": "Rendezvous II",
-      "witness": {
-        "completed": true,
-        "didWin": true,
-        "lost": 0,
-        "path": "witnesses/holidayLemmings1994-29.json",
-        "released": 65,
-        "retainedReserves": 0,
-        "saved": 65,
-        "sha256": "352bfefe2b8a4d005fc2e81d11d4f16466021e0c1aa2cb1ae4d41f499e2d9ebb",
-        "ticks": 3399
+        "sha256": "a739de780c7af22c74fc94eed5cb332529394bd9f8bd415dd0701980ad1d61bb",
+        "ticks": 2760
       }
     },
     {
       "bestSaved": 60,
       "conditions": {
         "gameID": "holidayLemmings1994",
-        "levelFingerprint": "3f583b4a0313c452fa23546cac606ab9215d887865e854e66359ae0e5fa11818",
+        "levelFingerprint": "5c0c01458bb60d341fc6a3585a5d01dc241d61d310a1b7a84680cf9005397be6",
         "levelID": "level-30",
         "modifiers": {},
         "packID": "holidayLemmings1994-MACLEVL-32",
@@ -10431,15 +10333,15 @@
         "released": 60,
         "retainedReserves": 0,
         "saved": 60,
-        "sha256": "7dbc79bf0082ac3958e7cb5a9e7a2096afdcbec515daddf691d10db0f520a0d2",
-        "ticks": 804
+        "sha256": "bba30e67c0ff6c446758bc0eeaf7aba947159cced37b74a807b5c50f964a7790",
+        "ticks": 803
       }
     },
     {
       "bestSaved": 10,
       "conditions": {
         "gameID": "holidayLemmings1994",
-        "levelFingerprint": "33ea195c0def3791979ada23b30bba678e5111ce22745d96c7b649cef94ab7cd",
+        "levelFingerprint": "2f39118f450d82b993a549d2ed4291a3ae95038184b2f0a894fc4a6f0012b2bc",
         "levelID": "level-31",
         "modifiers": {},
         "packID": "holidayLemmings1994-MACLEVL-32",
@@ -10480,8 +10382,8 @@
         "released": 10,
         "retainedReserves": 0,
         "saved": 10,
-        "sha256": "6b1c127f49c669efa21a6de92053a3f80a8fb775c859bb1c0e0782c6080f98b9",
-        "ticks": 1296
+        "sha256": "312bcf9244c72ae696404fdcce04345c35e2b3aaa19b213cd8c963b9d3de1784",
+        "ticks": 1299
       }
     },
     {

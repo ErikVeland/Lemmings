@@ -8,7 +8,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 146
+      "tick" : 145
     },
     {
       "action" : {
@@ -18,7 +18,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 175
+      "tick" : 174
     },
     {
       "action" : {
@@ -28,7 +28,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 296
+      "tick" : 295
     },
     {
       "action" : {
@@ -43,12 +43,12 @@
     {
       "action" : {
         "assign" : {
-          "lemmingID" : 2,
+          "lemmingID" : 3,
           "skill" : "builder"
         }
       },
       "afterTick" : true,
-      "tick" : 482
+      "tick" : 524
     }
   ],
   "expected" : {
@@ -56,10 +56,10 @@
     "released" : 80,
     "required" : 80,
     "saved" : 80,
-    "stateHash" : "1a5da7764bb12e10d3cce3744804e43b339191cab0340f9f78879adf938125d8",
-    "ticks" : 3806
+    "stateHash" : "3c917492fcad06941b2e24ffd2365dd6072f859245ee4ab47772f4b58d7179a9",
+    "ticks" : 3848
   },
-  "initialStateHash" : "5cb580b1d9580fa3912fadac86f0c1cb97625da3a3178961366655c64964d8cb",
+  "initialStateHash" : "403e583135c197a1908e38b2ec57b374dbd098bd035a0b36ab652043f2e90538",
   "number" : 10,
   "rank" : "Blizzard",
   "title" : "The Wrath of Lem"

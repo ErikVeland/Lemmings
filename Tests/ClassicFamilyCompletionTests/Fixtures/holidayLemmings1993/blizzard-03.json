@@ -6,6 +6,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 110
     },
     {
@@ -16,7 +17,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 878
+      "tick" : 877
     }
   ],
   "expected" : {
@@ -24,10 +25,10 @@
     "released" : 80,
     "required" : 80,
     "saved" : 80,
-    "stateHash" : "fba96708b31ef54fd8af1c7e8b023401eaeacd7e45d86fbe9ecaaf33a3ced3f8",
-    "ticks" : 1449
+    "stateHash" : "c914ed76a07d490cc5da5b27fa7e35715c9e179168ab537a8ecd1852e2c3abd0",
+    "ticks" : 1448
   },
-  "initialStateHash" : "47d167f8f44fb500a8d51877588309de3402447adbb7bc24fada07cc3f31d0e5",
+  "initialStateHash" : "a4fd2a507e88ab7466f7a7e36dd2d86c6cc171bf6848c5a5e8aad5d84b445777",
   "number" : 3,
   "rank" : "Blizzard",
   "title" : "Check Your Hints!"

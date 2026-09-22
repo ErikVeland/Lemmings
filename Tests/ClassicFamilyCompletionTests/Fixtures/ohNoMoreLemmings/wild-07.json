@@ -17,7 +17,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 203
+      "tick" : 202
     },
     {
       "action" : {
@@ -27,7 +27,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 242
+      "tick" : 241
     },
     {
       "action" : {
@@ -37,7 +37,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 280
+      "tick" : 279
     },
     {
       "action" : {
@@ -47,7 +47,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 404
+      "tick" : 403
     },
     {
       "action" : {
@@ -57,7 +57,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 467
+      "tick" : 466
     },
     {
       "action" : {
@@ -67,7 +67,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 523
+      "tick" : 522
     },
     {
       "action" : {
@@ -77,17 +77,17 @@
         }
       },
       "afterTick" : true,
-      "tick" : 671
+      "tick" : 670
     },
     {
       "action" : {
         "assign" : {
-          "lemmingID" : 74,
+          "lemmingID" : 75,
           "skill" : "builder"
         }
       },
       "afterTick" : true,
-      "tick" : 933
+      "tick" : 936
     },
     {
       "action" : {
@@ -97,7 +97,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 1121
+      "tick" : 1120
     },
     {
       "action" : {
@@ -107,7 +107,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 1141
+      "tick" : 1140
     },
     {
       "action" : {
@@ -117,7 +117,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 1159
+      "tick" : 1158
     },
     {
       "action" : {
@@ -127,7 +127,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 1240
+      "tick" : 1239
     }
   ],
   "expected" : {
@@ -135,10 +135,10 @@
     "released" : 80,
     "required" : 80,
     "saved" : 80,
-    "stateHash" : "96658231cc80307bdde1671720130720b9bf6a5bab0d3b76411b315f1624216b",
-    "ticks" : 1854
+    "stateHash" : "30b2f36dfcd5578e931a8d4e320a969e736d3732707ffc51e8ce397092ae4b3c",
+    "ticks" : 1853
   },
-  "initialStateHash" : "37f8eba29057b5b30218f59fbbc48d6ac061646d5cd7d61e4d8f186c43882ff8",
+  "initialStateHash" : "5a186dc6cdbd0598492489ef00ebbf1a4ad1429198d5ed4c118585dbc5ccfb82",
   "number" : 7,
   "rank" : "Wild",
   "title" : "You Take the High Road"

@@ -6,6 +6,7 @@
           "_0" : 10
         }
       },
+      "afterTick" : true,
       "tick" : 6
     },
     {
@@ -14,6 +15,7 @@
           "_0" : 80
         }
       },
+      "afterTick" : true,
       "tick" : 6
     },
     {
@@ -22,6 +24,7 @@
           "_0" : 60
         }
       },
+      "afterTick" : true,
       "tick" : 86
     },
     {
@@ -30,6 +33,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 98
     },
     {
@@ -39,7 +43,8 @@
           "skill" : "climber"
         }
       },
-      "tick" : 101
+      "afterTick" : true,
+      "tick" : 100
     },
     {
       "action" : {
@@ -48,7 +53,8 @@
           "skill" : "climber"
         }
       },
-      "tick" : 107
+      "afterTick" : true,
+      "tick" : 106
     },
     {
       "action" : {
@@ -57,7 +63,8 @@
           "skill" : "blocker"
         }
       },
-      "tick" : 531
+      "afterTick" : true,
+      "tick" : 530
     },
     {
       "action" : {
@@ -66,7 +73,8 @@
           "skill" : "miner"
         }
       },
-      "tick" : 536
+      "afterTick" : true,
+      "tick" : 535
     },
     {
       "action" : {
@@ -75,7 +83,8 @@
           "skill" : "blocker"
         }
       },
-      "tick" : 695
+      "afterTick" : true,
+      "tick" : 694
     },
     {
       "action" : {
@@ -84,7 +93,8 @@
           "skill" : "bomber"
         }
       },
-      "tick" : 719
+      "afterTick" : true,
+      "tick" : 695
     },
     {
       "action" : {
@@ -93,7 +103,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 1121
+      "afterTick" : true,
+      "tick" : 1120
     },
     {
       "action" : {
@@ -102,7 +113,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1162
+      "afterTick" : true,
+      "tick" : 1161
     },
     {
       "action" : {
@@ -111,6 +123,7 @@
           "skill" : "bomber"
         }
       },
+      "afterTick" : true,
       "tick" : 1354
     },
     {
@@ -120,7 +133,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1365
+      "afterTick" : true,
+      "tick" : 1364
     },
     {
       "action" : {
@@ -129,7 +143,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 1732
+      "afterTick" : true,
+      "tick" : 1731
     },
     {
       "action" : {
@@ -138,7 +153,8 @@
           "skill" : "bomber"
         }
       },
-      "tick" : 1910
+      "afterTick" : true,
+      "tick" : 1909
     },
     {
       "action" : {
@@ -147,7 +163,8 @@
           "skill" : "bomber"
         }
       },
-      "tick" : 2149
+      "afterTick" : true,
+      "tick" : 2148
     }
   ],
   "expected" : {
@@ -155,10 +172,10 @@
     "released" : 80,
     "required" : 75,
     "saved" : 76,
-    "stateHash" : "d73068b970e4ae52906ba2268f7cca4c5c129132ecf97ddbfafed71fad545a5f",
-    "ticks" : 2890
+    "stateHash" : "5be2acec7a911061ef97e3a852a821dda0ca1369750c9422e2b915d92c628d21",
+    "ticks" : 2887
   },
-  "initialStateHash" : "411815f2a67ff0fbcb024643bade336edac5271846da5150bde91f2bfc413701",
+  "initialStateHash" : "a99f0c53ffb8f13d2d86a5e4eb779e5880fb907914aace7f1ad395fe87e1a68c",
   "number" : 13,
   "rank" : "Wild",
   "title" : "ONWARD AND UPWARD"

@@ -46,10 +46,10 @@
     "released" : 50,
     "required" : 48,
     "saved" : 48,
-    "stateHash" : "3a4e603788ed96e8ee870c4735e81fa101b6f892a2ef578dd81b2cdc0f680b9a",
-    "ticks" : 1106
+    "stateHash" : "1a036eb24da36a38e05add68fb056e53dffd316bf6f36a4195155e1985da42c2",
+    "ticks" : 1105
   },
-  "initialStateHash" : "2a10701ef3efb5fdf2926f0f1cb7f987a540d537f53a50167ada206051399365",
+  "initialStateHash" : "8cabbe4ebf142e3d87829c03d9e89a5b183444d281f61b859e34fefa24afdeb6",
   "number" : 3,
   "rank" : "Crazy",
   "title" : "Many Lemmings make level work"

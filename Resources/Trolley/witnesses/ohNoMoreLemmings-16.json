@@ -7,7 +7,7 @@
           "skill" : "miner"
         }
       },
-      "tick" : 68
+      "tick" : 64
     }
   ],
   "expected" : {
@@ -15,10 +15,10 @@
     "released" : 50,
     "required" : 25,
     "saved" : 50,
-    "stateHash" : "b39e6ae233991564619460fb5b5af685333b76fb4cb0e2b43b92fe4ccaf06e61",
-    "ticks" : 2964
+    "stateHash" : "3320f3851feed1d4c69144f2b0f73ad8d673bd5f149b5b1a2b77476530c686d0",
+    "ticks" : 2963
   },
-  "initialStateHash" : "f042085ab2b252b4bebc471646c2432fa496d73f6b3000ac662e3502ed6b3cbe",
+  "initialStateHash" : "83f049d8098c9441bae1d919ec9358f8d3ecfad05bec2d7d2e34245bc476efb0",
   "number" : 17,
   "rank" : "Tame",
   "title" : "Honey, I Saved The Lemmings"

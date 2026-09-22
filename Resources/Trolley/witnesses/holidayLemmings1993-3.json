@@ -7,7 +7,8 @@
           "skill" : "blocker"
         }
       },
-      "tick" : 160
+      "afterTick" : true,
+      "tick" : 159
     },
     {
       "action" : {
@@ -16,6 +17,7 @@
           "skill" : "blocker"
         }
       },
+      "afterTick" : true,
       "tick" : 184
     },
     {
@@ -25,7 +27,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 200
+      "afterTick" : true,
+      "tick" : 199
     },
     {
       "action" : {
@@ -34,7 +37,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 424
+      "afterTick" : true,
+      "tick" : 423
     },
     {
       "action" : {
@@ -43,7 +47,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 432
+      "afterTick" : true,
+      "tick" : 431
     },
     {
       "action" : {
@@ -52,7 +57,8 @@
           "skill" : "miner"
         }
       },
-      "tick" : 440
+      "afterTick" : true,
+      "tick" : 439
     },
     {
       "action" : {
@@ -61,7 +67,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 2144
+      "afterTick" : true,
+      "tick" : 2143
     }
   ],
   "expected" : {
@@ -69,10 +76,10 @@
     "released" : 50,
     "required" : 45,
     "saved" : 50,
-    "stateHash" : "42ea5288600c58bbc32569a479ccc8558863636009289cf2b780bf57567c3764",
-    "ticks" : 2707
+    "stateHash" : "5e7dc3d65d7cf92e4a7f4d1193690e0d8cfb97c55bf464d2b7e5c064ad30a505",
+    "ticks" : 2706
   },
-  "initialStateHash" : "13cfce68b3f495f7e803d36cf8073ba2dd30426767cc0f1f8f624996de063c2e",
+  "initialStateHash" : "d95918d4cdfdfa83e3f2ff2dbb37048ba7569435fe76804357573ecd1c0e3c7c",
   "number" : 4,
   "rank" : "Flurry",
   "title" : "Lemming Tracks in the Snow!"

@@ -6,6 +6,7 @@
           "_0" : 1
         }
       },
+      "afterTick" : true,
       "tick" : 21
     },
     {
@@ -15,7 +16,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 74
+      "afterTick" : true,
+      "tick" : 73
     },
     {
       "action" : {
@@ -24,7 +26,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 140
+      "afterTick" : true,
+      "tick" : 139
     },
     {
       "action" : {
@@ -33,7 +36,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 338
+      "afterTick" : true,
+      "tick" : 337
     },
     {
       "action" : {
@@ -42,7 +46,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 369
+      "afterTick" : true,
+      "tick" : 368
     },
     {
       "action" : {
@@ -51,7 +56,8 @@
           "skill" : "bomber"
         }
       },
-      "tick" : 387
+      "afterTick" : true,
+      "tick" : 386
     },
     {
       "action" : {
@@ -60,7 +66,8 @@
           "skill" : "bomber"
         }
       },
-      "tick" : 467
+      "afterTick" : true,
+      "tick" : 466
     },
     {
       "action" : {
@@ -69,7 +76,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 581
+      "afterTick" : true,
+      "tick" : 580
     },
     {
       "action" : {
@@ -78,7 +86,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 814
+      "afterTick" : true,
+      "tick" : 813
     },
     {
       "action" : {
@@ -87,7 +96,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 839
+      "afterTick" : true,
+      "tick" : 838
     },
     {
       "action" : {
@@ -96,7 +106,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1090
+      "afterTick" : true,
+      "tick" : 1089
     },
     {
       "action" : {
@@ -105,7 +116,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1335
+      "afterTick" : true,
+      "tick" : 1334
     },
     {
       "action" : {
@@ -114,7 +126,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1571
+      "afterTick" : true,
+      "tick" : 1570
     },
     {
       "action" : {
@@ -123,7 +136,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 1844
+      "afterTick" : true,
+      "tick" : 1843
     },
     {
       "action" : {
@@ -131,6 +145,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 1849
     },
     {
@@ -140,7 +155,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 2005
+      "afterTick" : true,
+      "tick" : 2004
     },
     {
       "action" : {
@@ -149,7 +165,8 @@
           "skill" : "bomber"
         }
       },
-      "tick" : 2012
+      "afterTick" : true,
+      "tick" : 2011
     },
     {
       "action" : {
@@ -158,7 +175,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 2132
+      "afterTick" : true,
+      "tick" : 2131
     },
     {
       "action" : {
@@ -167,7 +185,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 2300
+      "afterTick" : true,
+      "tick" : 2299
     }
   ],
   "expected" : {
@@ -175,10 +194,10 @@
     "released" : 50,
     "required" : 30,
     "saved" : 41,
-    "stateHash" : "0543a07d47d34f5b041ba3f0d0afd88ec5c6d7462539efd00e313e7194ad3951",
-    "ticks" : 2637
+    "stateHash" : "d25983d78a5c5a467733d8e06934fe2ee05bdc1850b455b5ba8bbd1c64cc928f",
+    "ticks" : 2636
   },
-  "initialStateHash" : "23f9d04da23da3e7f9d5f85f803dbf5e21e6f89f97bcef06570d24283181a7df",
+  "initialStateHash" : "394a15d38a24c6bd417cb81ed2351e9f1fa79170b9210d6d1a5e8f71940234d0",
   "number" : 4,
   "rank" : "Wicked",
   "title" : "Oh No! It`s the 4TH DIMENSION!"

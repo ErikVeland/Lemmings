@@ -6,6 +6,7 @@
           "_0" : 1
         }
       },
+      "afterTick" : true,
       "tick" : 11
     },
     {
@@ -15,7 +16,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 105
+      "afterTick" : true,
+      "tick" : 104
     },
     {
       "action" : {
@@ -24,7 +26,8 @@
           "skill" : "miner"
         }
       },
-      "tick" : 142
+      "afterTick" : true,
+      "tick" : 141
     },
     {
       "action" : {
@@ -33,7 +36,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 205
+      "afterTick" : true,
+      "tick" : 204
     },
     {
       "action" : {
@@ -42,7 +46,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 220
+      "afterTick" : true,
+      "tick" : 219
     },
     {
       "action" : {
@@ -51,7 +56,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 315
+      "afterTick" : true,
+      "tick" : 314
     },
     {
       "action" : {
@@ -60,7 +66,8 @@
           "skill" : "digger"
         }
       },
-      "tick" : 574
+      "afterTick" : true,
+      "tick" : 573
     },
     {
       "action" : {
@@ -69,7 +76,8 @@
           "skill" : "miner"
         }
       },
-      "tick" : 866
+      "afterTick" : true,
+      "tick" : 862
     },
     {
       "action" : {
@@ -78,7 +86,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 1050
+      "afterTick" : true,
+      "tick" : 1046
     },
     {
       "action" : {
@@ -87,7 +96,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 1168
+      "afterTick" : true,
+      "tick" : 1167
     },
     {
       "action" : {
@@ -95,6 +105,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 1185
     }
   ],
@@ -103,10 +114,10 @@
     "released" : 50,
     "required" : 50,
     "saved" : 50,
-    "stateHash" : "1a64941f692e155ec75aabdf2fea31be0c7902115d059d831a40156ad8600458",
-    "ticks" : 1947
+    "stateHash" : "3a6453346cfe2b6f84f98251f84915db9d35483ff2ab75fac32808ea7e4090f6",
+    "ticks" : 1946
   },
-  "initialStateHash" : "288c826b861edf6c5c451e762a30537f76fb0b5d011c2631bd0bd5f49ac8c7c2",
+  "initialStateHash" : "90fcc65337377e9521b959e4368dee6dcf243f7d3ab4b4c96d73e70c75f12e1f",
   "number" : 3,
   "rank" : "Havoc",
   "title" : "It`s the price you have to pay"

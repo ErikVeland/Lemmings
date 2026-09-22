@@ -6,6 +6,7 @@
           "_0" : 5
         }
       },
+      "afterTick" : true,
       "tick" : 34
     },
     {
@@ -15,7 +16,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 135
+      "afterTick" : true,
+      "tick" : 134
     },
     {
       "action" : {
@@ -24,7 +26,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 268
+      "afterTick" : true,
+      "tick" : 267
     },
     {
       "action" : {
@@ -32,6 +35,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 270
     },
     {
@@ -40,6 +44,7 @@
           "_0" : 43
         }
       },
+      "afterTick" : true,
       "tick" : 363
     },
     {
@@ -48,6 +53,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 371
     },
     {
@@ -57,6 +63,7 @@
           "skill" : "builder"
         }
       },
+      "afterTick" : true,
       "tick" : 465
     },
     {
@@ -66,6 +73,7 @@
           "skill" : "builder"
         }
       },
+      "afterTick" : true,
       "tick" : 661
     },
     {
@@ -75,6 +83,7 @@
           "skill" : "basher"
         }
       },
+      "afterTick" : true,
       "tick" : 764
     },
     {
@@ -84,7 +93,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1694
+      "afterTick" : true,
+      "tick" : 1691
     },
     {
       "action" : {
@@ -93,7 +103,8 @@
           "skill" : "digger"
         }
       },
-      "tick" : 1941
+      "afterTick" : true,
+      "tick" : 1938
     }
   ],
   "expected" : {
@@ -101,10 +112,10 @@
     "released" : 50,
     "required" : 45,
     "saved" : 46,
-    "stateHash" : "c831c8a1b62696f67a68d65a3789f0382f7ffb93f25741146cf33cc75fa321bc",
-    "ticks" : 2501
+    "stateHash" : "aa3144d27b0a70b45aa2aa8534c5bd87f78c19845aa44c5ecde8f771b466f037",
+    "ticks" : 2523
   },
-  "initialStateHash" : "b92f3143a34dfcfa7356af3bdeac7c63a5700cdab8550d7db86e6350abb03b66",
+  "initialStateHash" : "57c2016566d12f5ff684fdb1e5d7ce64dcee36d3847bb3256b678b95f3a9546a",
   "number" : 19,
   "rank" : "Crazy",
   "title" : "DON`T PANIC"

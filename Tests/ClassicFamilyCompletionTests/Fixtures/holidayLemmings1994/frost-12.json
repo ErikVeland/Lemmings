@@ -8,7 +8,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 162
+      "tick" : 161
     },
     {
       "action" : {
@@ -18,7 +18,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 354
+      "tick" : 353
     },
     {
       "action" : {
@@ -28,7 +28,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 546
+      "tick" : 545
     },
     {
       "action" : {
@@ -38,7 +38,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 843
+      "tick" : 842
     },
     {
       "action" : {
@@ -48,7 +48,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 956
+      "tick" : 955
     },
     {
       "action" : {
@@ -67,7 +67,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 1557
+      "tick" : 1556
     }
   ],
   "expected" : {
@@ -75,10 +75,10 @@
     "released" : 80,
     "required" : 78,
     "saved" : 80,
-    "stateHash" : "4274cbc819109424094679b6bfac6ac2ec12f56efc367697a240b7fff062cab3",
-    "ticks" : 2115
+    "stateHash" : "46870f2692d003fb70d2aecc815563c2715696c07295db2626a4a95187abd114",
+    "ticks" : 2114
   },
-  "initialStateHash" : "91a683e34d3738720ac11af5873b3dec1dfff222b4943bb7ff158a0d63e940fb",
+  "initialStateHash" : "5147de2dd7b97330a0eb42810aa6b04064b44b37d8bac6d649789994e63d0ad2",
   "number" : 12,
   "rank" : "Frost",
   "title" : "It's Boxing Day!"

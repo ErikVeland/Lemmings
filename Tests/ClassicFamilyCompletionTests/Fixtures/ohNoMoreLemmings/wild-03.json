@@ -6,6 +6,7 @@
           "_0" : 1
         }
       },
+      "afterTick" : true,
       "tick" : 22
     },
     {
@@ -15,7 +16,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 70
+      "afterTick" : true,
+      "tick" : 69
     },
     {
       "action" : {
@@ -24,7 +26,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 214
+      "afterTick" : true,
+      "tick" : 213
     },
     {
       "action" : {
@@ -33,7 +36,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 220
+      "afterTick" : true,
+      "tick" : 219
     },
     {
       "action" : {
@@ -42,7 +46,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 349
+      "afterTick" : true,
+      "tick" : 348
     },
     {
       "action" : {
@@ -51,7 +56,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 391
+      "afterTick" : true,
+      "tick" : 390
     },
     {
       "action" : {
@@ -60,7 +66,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 399
+      "afterTick" : true,
+      "tick" : 398
     },
     {
       "action" : {
@@ -69,7 +76,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 458
+      "afterTick" : true,
+      "tick" : 457
     },
     {
       "action" : {
@@ -78,7 +86,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 474
+      "afterTick" : true,
+      "tick" : 473
     },
     {
       "action" : {
@@ -87,7 +96,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 497
+      "afterTick" : true,
+      "tick" : 496
     },
     {
       "action" : {
@@ -96,7 +106,8 @@
           "skill" : "miner"
         }
       },
-      "tick" : 561
+      "afterTick" : true,
+      "tick" : 560
     },
     {
       "action" : {
@@ -105,7 +116,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 616
+      "afterTick" : true,
+      "tick" : 615
     },
     {
       "action" : {
@@ -114,7 +126,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 792
+      "afterTick" : true,
+      "tick" : 791
     },
     {
       "action" : {
@@ -123,7 +136,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 830
+      "afterTick" : true,
+      "tick" : 829
     },
     {
       "action" : {
@@ -131,6 +145,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 956
     },
     {
@@ -139,6 +154,7 @@
 
         }
       },
+      "afterTick" : true,
       "tick" : 1579
     }
   ],
@@ -147,10 +163,10 @@
     "released" : 80,
     "required" : 65,
     "saved" : 69,
-    "stateHash" : "74e1206e0097c9ee684bb81e14855985913cf708cdea30caebb392b20b41de13",
-    "ticks" : 1727
+    "stateHash" : "9c254a33d30358cad733b2972ccb9c6450f954665654309436f3502c341f8ae8",
+    "ticks" : 1728
   },
-  "initialStateHash" : "b5d123cc9429745ff2c0c6b46ec5e4034156709c3f169b0ae1bbb533d1a9cf54",
+  "initialStateHash" : "0fe3f6d953bdb5909b4e0ff6b10d82b1255436924663763797e3b3811e462f4a",
   "number" : 3,
   "rank" : "Wild",
   "title" : "Lemming Rhythms"

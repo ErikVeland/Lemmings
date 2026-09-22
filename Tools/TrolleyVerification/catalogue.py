@@ -85,11 +85,29 @@ def validate_catalogue(root):
     return data
 
 
-def require_retained_targets(rows, published):
+RULE_CHANGES = json.loads(Path(__file__).with_name("rule-changes.json").read_text())
+
+
+def superseded_by_rule_change(previous, rows, changes):
+    """A reviewed rule change retires a target only where it changed the level."""
+    conditions = previous["conditions"]
+    game, rank = conditions.get("gameID"), previous.get("rank")
+    if not any(game in change["gameIDs"] or rank in change.get("ranks", {}).get(game, []) for change in changes):
+        return False
+    return any(row.get("conditions")
+               and row["conditions"].get("gameID") == game
+               and row["conditions"].get("levelID") == conditions.get("levelID")
+               and row["conditions"].get("levelFingerprint") != conditions.get("levelFingerprint")
+               for row in rows)
+
+
+def require_retained_targets(rows, published, changes=()):
     current = {json.dumps(row["conditions"], sort_keys=True): row
                for row in rows if row.get("conditions")}
     for previous in published:
         row = current.get(json.dumps(previous["conditions"], sort_keys=True))
+        if row is None and superseded_by_rule_change(previous, rows, changes):
+            continue
         if not row or not row.get("witness") or row["witness"]["saved"] < previous["witness"]["saved"]:
             raise ValueError("Published rescue target was not reproduced: "
                              + previous.get("title", previous["conditions"]["levelID"]))
@@ -120,7 +138,7 @@ def merge(results, shards):
     report_dir = PROJECT / "Documentation/TrolleyVerification"
     proof_dir = PROJECT / "Resources/Trolley"
     if (proof_dir / "verified-maxima.json").exists():
-        require_retained_targets(rows, validate_catalogue(proof_dir)["levels"])
+        require_retained_targets(rows, validate_catalogue(proof_dir)["levels"], RULE_CHANGES)
     report_dir.mkdir(parents=True, exist_ok=True)
     proof_dir.mkdir(parents=True, exist_ok=True)
     for row in rows:

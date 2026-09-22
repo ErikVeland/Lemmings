@@ -3,8 +3,8 @@
     "area": "Classic campaign, fan and conversion completion",
     "priority": "P0",
     "status": "open",
-    "exitCriteria": "Replay a winning route for every advertised Classic level, including the bundled fan corpus and conversions. Close the remaining Oh No! and Holiday routes. Verify continuous Full Quest progression, save/resume and final results. L2/L3 completion belongs to the sequel gate.",
-    "progress": "18 September: official Classic coverage is 286/292 (6 missing). Holiday 1993 and Holiday 1994 now have preserved wins for all 32 levels each. The remaining official gaps are 6 Oh No! routes: Crazy 20, Wild 9, Havoc 5, Havoc 7, Havoc 16 and Havoc 20. The 6,372-level audit from 15 September has 647 wins and zero load/start failures. There are 284 distinct hint decks and 287 distinct solution replays including conversions. The all-level requirement remains unchanged pending the owner’s scope decision. See OneZeroClosure-2026-09-15.md.",
+    "exitCriteria": "Replay a winning route for every official Classic level and every Oh Yes! conversion. Fan levels must load and start; they need no winning route (owner decision, 22 September 2026). Verify continuous Full Quest progression, save/resume and final results. L2/L3 completion belongs to the sequel gate.",
+    "progress": "22 September: Oh No!, Xmas and Holiday now run under the later DOS rules (spawn x+25, A-B-A-B hatches, no climber-shrugger bug), with Havoc 20 as the evidence. See OhNoMechanics.md. Official Classic coverage is 275/292 under these rules. Missing: Oh No! Crazy 1, Crazy 10, Crazy 20, Wild 9, Wild 10, Havoc 5, Havoc 7, Havoc 13, Havoc 16, Havoc 20; Holiday 1993 Flurry 1, Flurry 9, Flurry 16, Blizzard 1; Holiday 1994 Frost 1, Hail 10, Hail 14. Conversions: 8/60. Trolley repackaged 211 certificates and 17 rescue records. There are 273 hint decks and 281 bundled solution replays.",
     "scopes": [
       "all",
       "classic-1.0"

@@ -1,10 +1,10 @@
 # Rescue maximum verification
 
-This audit covered 562 bundled level identities. It produced 204 proven maxima and 198 completed solutions without optimality proofs. It collected no winning witness for 160 levels. Classic Lemmings has a winning replay for every level. Coverage of the other campaigns remains incomplete.
+This audit covered 562 bundled level identities. It produced 202 proven maxima and 194 completed solutions without optimality proofs. It collected no winning witness for 166 levels. Classic Lemmings has a winning replay for every level. Coverage of the other campaigns remains incomplete.
 
 See the [level-by-level results](levels.md) for every campaign level and the [full evidence data](audit.json) for exact conditions and notes.
 
-The audit tried 33,923 candidate runs. Failed searches do not establish an optimum.
+The audit tried 36,687 candidate runs. Failed searches do not establish an optimum.
 
 Maximum saveable means the population minus unavoidable sacrifices. A successful solution proves that its saved count is achievable. It does not prove that its deaths are necessary. The bundled certificates currently require a completed, repeatable rescue of the entire finite population.
 
@@ -12,13 +12,13 @@ Maximum saveable means the population minus unavoidable sacrifices. A successful
 | --- | ---: | ---: | ---: | ---: |
 | Lemmings | 120 | 103 | 17 | 0 |
 | Xmas Lemmings 1991 | 4 | 3 | 1 | 0 |
-| Oh No! More Lemmings | 100 | 44 | 50 | 6 |
+| Oh No! More Lemmings | 100 | 43 | 47 | 10 |
 | Xmas Lemmings 1992 | 4 | 4 | 0 | 0 |
 | Lemmings 2: The Tribes | 120 | 2 | 70 | 48 |
-| Holiday Lemmings 1993 | 32 | 24 | 8 | 0 |
-| Oh Yes! More Lemmings | 60 | 3 | 0 | 57 |
+| Holiday Lemmings 1993 | 32 | 22 | 6 | 4 |
+| Oh Yes! More Lemmings | 60 | 6 | 2 | 52 |
 | All New World of Lemmings | 90 | 0 | 41 | 49 |
-| Holiday Lemmings 1994 | 32 | 21 | 11 | 0 |
+| Holiday Lemmings 1994 | 32 | 19 | 10 | 3 |
 
 Tribes uses 60 Lemmings for the campaign audit. Preserved fixtures also cover 12 carry-over configurations. Each certificate applies only to its exact population.
 
@@ -168,7 +168,6 @@ The [community maximum-saved records](https://www.lemmingsforums.net/index.php?t
 | Oh No! More Lemmings | Tame 11: With Compliments | 50/50 | 0 | [Witness](witnesses/ohNoMoreLemmings-10.json) |
 | Oh No! More Lemmings | Tame 12: Citizen Lemming | 50/50 | 0 | [Witness](witnesses/ohNoMoreLemmings-11.json) |
 | Oh No! More Lemmings | Tame 13: Thunder-Lemmings are go! | 50/50 | 0 | [Witness](witnesses/ohNoMoreLemmings-12.json) |
-| Oh No! More Lemmings | Tame 14: Get a little extra help | 50/50 | 0 | [Witness](witnesses/ohNoMoreLemmings-13.json) |
 | Oh No! More Lemmings | Tame 16: Gone With The Lemming | 50/50 | 0 | [Witness](witnesses/ohNoMoreLemmings-15.json) |
 | Oh No! More Lemmings | Tame 17: Honey, I Saved The Lemmings | 50/50 | 0 | [Witness](witnesses/ohNoMoreLemmings-16.json) |
 | Oh No! More Lemmings | Tame 18: Lemmings For Presidents! | 50/50 | 0 | [Witness](witnesses/ohNoMoreLemmings-17.json) |
@@ -202,26 +201,27 @@ The [community maximum-saved records](https://www.lemmingsforums.net/index.php?t
 | Holiday Lemmings 1993 | Blizzard 10: The Wrath of Lem | 80/80 | 0 | [Witness](witnesses/holidayLemmings1993-25.json) |
 | Holiday Lemmings 1993 | Blizzard 11: The Search for Lem | 80/80 | 0 | [Witness](witnesses/holidayLemmings1993-26.json) |
 | Holiday Lemmings 1993 | Blizzard 14: The Undiscovered Country | 80/80 | 0 | [Witness](witnesses/holidayLemmings1993-29.json) |
-| Holiday Lemmings 1993 | Flurry 1: Climbing to the Top! | 10/10 | 0 | [Witness](witnesses/holidayLemmings1993-0.json) |
 | Holiday Lemmings 1993 | Flurry 2: Floating Lemming Flurry | 20/20 | 0 | [Witness](witnesses/holidayLemmings1993-1.json) |
 | Holiday Lemmings 1993 | Flurry 3: Holiday Mining | 80/80 | 0 | [Witness](witnesses/holidayLemmings1993-2.json) |
 | Holiday Lemmings 1993 | Flurry 4: Lemming Tracks in the Snow! | 50/50 | 0 | [Witness](witnesses/holidayLemmings1993-3.json) |
 | Holiday Lemmings 1993 | Flurry 5: Christmas South of the Equator | 75/75 | 0 | [Witness](witnesses/holidayLemmings1993-4.json) |
 | Holiday Lemmings 1993 | Flurry 6: Lemming Snowfall | 80/80 | 0 | [Witness](witnesses/holidayLemmings1993-5.json) |
 | Holiday Lemmings 1993 | Flurry 7: Lemming Snowjourn | 50/50 | 0 | [Witness](witnesses/holidayLemmings1993-6.json) |
-| Holiday Lemmings 1993 | Flurry 9: A Block from Home | 80/80 | 0 | [Witness](witnesses/holidayLemmings1993-8.json) |
 | Holiday Lemmings 1993 | Flurry 10: 32 Lemmings Below Zero | 32/32 | 0 | [Witness](witnesses/holidayLemmings1993-9.json) |
 | Holiday Lemmings 1993 | Flurry 11: At Home in a Cave | 80/80 | 0 | [Witness](witnesses/holidayLemmings1993-10.json) |
 | Holiday Lemmings 1993 | Flurry 12: Presents of Mind | 80/80 | 0 | [Witness](witnesses/holidayLemmings1993-11.json) |
 | Holiday Lemmings 1993 | Flurry 13: Yo-yo Lem-lem | 80/80 | 0 | [Witness](witnesses/holidayLemmings1993-12.json) |
 | Holiday Lemmings 1993 | Flurry 14: Marshmallow Land | 80/80 | 0 | [Witness](witnesses/holidayLemmings1993-13.json) |
 | Holiday Lemmings 1993 | Flurry 15: Head for the Hills! | 10/10 | 0 | [Witness](witnesses/holidayLemmings1993-14.json) |
+| Oh Yes! More Lemmings | Lemmings Versus 3: Still everything to play for | 100/100 | 0 | [Witness](witnesses/ohYesMoreLemmings-2.json) |
+| Oh Yes! More Lemmings | Lemmings Versus 5: and the winner is..... | 80/80 | 0 | [Witness](witnesses/ohYesMoreLemmings-4.json) |
+| Oh Yes! More Lemmings | Lemmings Versus 6: In the thick of the fray | 75/75 | 0 | [Witness](witnesses/ohYesMoreLemmings-5.json) |
 | Oh Yes! More Lemmings | Lemmings Versus 14: The Pipe Room... | 100/100 | 0 | [Witness](witnesses/ohYesMoreLemmings-13.json) |
 | Oh Yes! More Lemmings | Oh No! More Lemmings Versus 6: Test Of Skill | 40/40 | 0 | [Witness](witnesses/ohYesMoreLemmings-25.json) |
 | Oh Yes! More Lemmings | Oh No! More Lemmings Versus 7: Give And Take | 40/40 | 0 | [Witness](witnesses/ohYesMoreLemmings-26.json) |
-| Holiday Lemmings 1994 | Frost 1: Chains of Command | 50/50 | 0 | [Witness](witnesses/holidayLemmings1994-0.json) |
 | Holiday Lemmings 1994 | Frost 2: Ski Jump! | 50/50 | 0 | [Witness](witnesses/holidayLemmings1994-1.json) |
 | Holiday Lemmings 1994 | Frost 3: CindyLand | 80/80 | 0 | [Witness](witnesses/holidayLemmings1994-2.json) |
+| Holiday Lemmings 1994 | Frost 4: Separate Ways | 50/50 | 0 | [Witness](witnesses/holidayLemmings1994-3.json) |
 | Holiday Lemmings 1994 | Frost 5: Lemming Reunification | 70/70 | 0 | [Witness](witnesses/holidayLemmings1994-4.json) |
 | Holiday Lemmings 1994 | Frost 8: Division Bell | 80/80 | 0 | [Witness](witnesses/holidayLemmings1994-7.json) |
 | Holiday Lemmings 1994 | Frost 9: Quest for Kieran | 40/40 | 0 | [Witness](witnesses/holidayLemmings1994-8.json) |
@@ -233,11 +233,9 @@ The [community maximum-saved records](https://www.lemmingsforums.net/index.php?t
 | Holiday Lemmings 1994 | Hail 7: Steel Ice Span | 80/80 | 0 | [Witness](witnesses/holidayLemmings1994-22.json) |
 | Holiday Lemmings 1994 | Hail 8: Sir Edmund Hilemming | 80/80 | 0 | [Witness](witnesses/holidayLemmings1994-23.json) |
 | Holiday Lemmings 1994 | Hail 9: Up, up, and away! | 50/50 | 0 | [Witness](witnesses/holidayLemmings1994-24.json) |
-| Holiday Lemmings 1994 | Hail 10: Lemmy in the cold, cold ground | 80/80 | 0 | [Witness](witnesses/holidayLemmings1994-25.json) |
 | Holiday Lemmings 1994 | Hail 11: Emmings!  (No L) | 70/70 | 0 | [Witness](witnesses/holidayLemmings1994-26.json) |
 | Holiday Lemmings 1994 | Hail 12: Merry Christmaze | 25/25 | 0 | [Witness](witnesses/holidayLemmings1994-27.json) |
 | Holiday Lemmings 1994 | Hail 13: Polar Expedition | 50/50 | 0 | [Witness](witnesses/holidayLemmings1994-28.json) |
-| Holiday Lemmings 1994 | Hail 14: Rendezvous II | 65/65 | 0 | [Witness](witnesses/holidayLemmings1994-29.json) |
 | Holiday Lemmings 1994 | Hail 15: Steel Block Party | 60/60 | 0 | [Witness](witnesses/holidayLemmings1994-30.json) |
 | Holiday Lemmings 1994 | Hail 16: Peak of Performance | 10/10 | 0 | [Witness](witnesses/holidayLemmings1994-31.json) |
 

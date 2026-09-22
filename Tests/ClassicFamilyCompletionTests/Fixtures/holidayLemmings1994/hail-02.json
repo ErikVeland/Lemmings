@@ -6,6 +6,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 11
     },
     {
@@ -15,7 +16,8 @@
           "skill" : "blocker"
         }
       },
-      "tick" : 188
+      "afterTick" : true,
+      "tick" : 187
     },
     {
       "action" : {
@@ -24,6 +26,7 @@
           "skill" : "bomber"
         }
       },
+      "afterTick" : true,
       "tick" : 439
     },
     {
@@ -33,7 +36,8 @@
           "skill" : "blocker"
         }
       },
-      "tick" : 547
+      "afterTick" : true,
+      "tick" : 566
     },
     {
       "action" : {
@@ -42,7 +46,8 @@
           "skill" : "bomber"
         }
       },
-      "tick" : 564
+      "afterTick" : true,
+      "tick" : 567
     },
     {
       "action" : {
@@ -51,7 +56,8 @@
           "skill" : "blocker"
         }
       },
-      "tick" : 678
+      "afterTick" : true,
+      "tick" : 697
     },
     {
       "action" : {
@@ -60,7 +66,8 @@
           "skill" : "bomber"
         }
       },
-      "tick" : 704
+      "afterTick" : true,
+      "tick" : 705
     },
     {
       "action" : {
@@ -69,7 +76,8 @@
           "skill" : "blocker"
         }
       },
-      "tick" : 819
+      "afterTick" : true,
+      "tick" : 820
     }
   ],
   "expected" : {
@@ -77,10 +85,10 @@
     "released" : 80,
     "required" : 75,
     "saved" : 75,
-    "stateHash" : "e9ddea2b6b57f38a1436f719d8a2b3150ec5ad3e97ef078c29bec8b735c5d841",
+    "stateHash" : "665b96908d58960277edfc06c09a04e27a4c8f08c1dfd94073d39ef91dae19d0",
     "ticks" : 2040
   },
-  "initialStateHash" : "3c6bd6bbbfb161ca8b52d16c5f4f947a4168f35f27b0dc0c736fea2a7160411e",
+  "initialStateHash" : "8eff953e88d2bf4adad425897d2d5eab6121fe4180a31783c13c94d421633cc7",
   "number" : 2,
   "rank" : "Hail",
   "title" : "Break On Through"

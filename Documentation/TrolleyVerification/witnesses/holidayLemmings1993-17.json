@@ -6,6 +6,7 @@
           "_0" : 20
         }
       },
+      "afterTick" : true,
       "tick" : 6
     },
     {
@@ -14,6 +15,7 @@
           "_0" : 89
         }
       },
+      "afterTick" : true,
       "tick" : 6
     },
     {
@@ -22,6 +24,7 @@
           "_0" : 20
         }
       },
+      "afterTick" : true,
       "tick" : 75
     },
     {
@@ -31,7 +34,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 98
+      "afterTick" : true,
+      "tick" : 97
     },
     {
       "action" : {
@@ -40,7 +44,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 107
+      "afterTick" : true,
+      "tick" : 106
     },
     {
       "action" : {
@@ -49,7 +54,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 117
+      "afterTick" : true,
+      "tick" : 116
     },
     {
       "action" : {
@@ -58,7 +64,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 127
+      "afterTick" : true,
+      "tick" : 126
     },
     {
       "action" : {
@@ -67,7 +74,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 140
+      "afterTick" : true,
+      "tick" : 139
     },
     {
       "action" : {
@@ -76,7 +84,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 326
+      "afterTick" : true,
+      "tick" : 318
     },
     {
       "action" : {
@@ -85,7 +94,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 525
+      "afterTick" : true,
+      "tick" : 510
     },
     {
       "action" : {
@@ -94,7 +104,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 724
+      "afterTick" : true,
+      "tick" : 702
     },
     {
       "action" : {
@@ -103,7 +114,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 922
+      "afterTick" : true,
+      "tick" : 894
     },
     {
       "action" : {
@@ -112,7 +124,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1120
+      "afterTick" : true,
+      "tick" : 1086
     },
     {
       "action" : {
@@ -121,7 +134,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1322
+      "afterTick" : true,
+      "tick" : 1288
     },
     {
       "action" : {
@@ -130,7 +144,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 1680
+      "afterTick" : true,
+      "tick" : 1646
     },
     {
       "action" : {
@@ -138,6 +153,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 1725
     }
   ],
@@ -146,10 +162,10 @@
     "released" : 80,
     "required" : 80,
     "saved" : 80,
-    "stateHash" : "9d16e1a609349ce4ea66cd94a96db94839d2fd4bada9e55f29ba661c4ee79ed7",
-    "ticks" : 2177
+    "stateHash" : "8e184d2cab09049d2eda7ef95e075a781d68f8436c691bd57edc29f79641a3d9",
+    "ticks" : 2176
   },
-  "initialStateHash" : "9672b4e2618741a407a9247a6de4826d1e511c3119fe2be1904ea553e32a0eec",
+  "initialStateHash" : "e83abe35429e6d14137d47ee58cfedf1ea660473417d9b7ed9bad38e4d33bb53",
   "number" : 2,
   "rank" : "Blizzard",
   "title" : "Lemmings Up High"

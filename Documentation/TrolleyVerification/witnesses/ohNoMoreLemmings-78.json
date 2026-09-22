@@ -17,7 +17,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 303
+      "tick" : 302
     },
     {
       "action" : {
@@ -27,7 +27,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 446
+      "tick" : 445
     },
     {
       "action" : {
@@ -37,7 +37,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 679
+      "tick" : 678
     },
     {
       "action" : {
@@ -47,7 +47,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 939
+      "tick" : 938
     },
     {
       "action" : {
@@ -57,7 +57,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 1040
+      "tick" : 1039
     },
     {
       "action" : {
@@ -67,7 +67,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 1117
+      "tick" : 1116
     },
     {
       "action" : {
@@ -77,7 +77,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 1258
+      "tick" : 1257
     },
     {
       "action" : {
@@ -87,7 +87,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 1344
+      "tick" : 1343
     }
   ],
   "expected" : {
@@ -95,10 +95,10 @@
     "released" : 50,
     "required" : 41,
     "saved" : 46,
-    "stateHash" : "48c42c4adc63ab1ac0d517191b71effa5ddeaeac4bbd96368ea7563fac806cdf",
-    "ticks" : 1539
+    "stateHash" : "2104891249afd4cc7e313cc36389ba43faffcf527963e9acf6862f9df09815f3",
+    "ticks" : 1538
   },
-  "initialStateHash" : "37cc484c2e994f0d7ceda1fc320ef6d02b9b38db6ef1cc3d8a00cdfe316c8759",
+  "initialStateHash" : "d15ed999bb5f3a41073db5c55b57fd0f565a059df4bdd03ae4f102d7ac23cc44",
   "number" : 19,
   "rank" : "Wicked",
   "title" : "Up, Down or Round and Round"

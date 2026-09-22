@@ -6,6 +6,7 @@
           "_0" : 1
         }
       },
+      "afterTick" : true,
       "tick" : 51
     },
     {
@@ -15,7 +16,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 81
+      "afterTick" : true,
+      "tick" : 80
     },
     {
       "action" : {
@@ -23,6 +25,7 @@
           "_0" : 89
         }
       },
+      "afterTick" : true,
       "tick" : 83
     },
     {
@@ -31,6 +34,7 @@
           "_0" : 1
         }
       },
+      "afterTick" : true,
       "tick" : 112
     },
     {
@@ -40,7 +44,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 203
+      "afterTick" : true,
+      "tick" : 202
     },
     {
       "action" : {
@@ -49,7 +54,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 217
+      "afterTick" : true,
+      "tick" : 216
     },
     {
       "action" : {
@@ -58,7 +64,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 271
+      "afterTick" : true,
+      "tick" : 270
     },
     {
       "action" : {
@@ -67,7 +74,8 @@
           "skill" : "digger"
         }
       },
-      "tick" : 291
+      "afterTick" : true,
+      "tick" : 290
     },
     {
       "action" : {
@@ -76,7 +84,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 369
+      "afterTick" : true,
+      "tick" : 368
     },
     {
       "action" : {
@@ -85,7 +94,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 409
+      "afterTick" : true,
+      "tick" : 408
     },
     {
       "action" : {
@@ -93,6 +103,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 414
     }
   ],
@@ -101,10 +112,10 @@
     "released" : 70,
     "required" : 68,
     "saved" : 68,
-    "stateHash" : "fccc5649103c2c4f1f0be78f2ba08a08855a3d53376bbd13d2087465aa8f53a1",
-    "ticks" : 950
+    "stateHash" : "209cf6033ba90bc90c697f3f5ec3fd4dcbf819ef123d54f90a1fdf9fa0712914",
+    "ticks" : 949
   },
-  "initialStateHash" : "4051850caec695c32f31c9178721b017a0b3b94bbd37f1e40a05dee63a148bbc",
+  "initialStateHash" : "eb4480d273a183b29b71eebf967821b03a5a285e25293f9cdd1548f8d6b7a2fe",
   "number" : 20,
   "rank" : "Wicked",
   "title" : "The Lemming Funhouse"

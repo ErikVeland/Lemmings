@@ -6,6 +6,7 @@
           "_0" : 1
         }
       },
+      "afterTick" : true,
       "tick" : 71
     },
     {
@@ -14,6 +15,7 @@
           "_0" : 70
         }
       },
+      "afterTick" : true,
       "tick" : 86
     },
     {
@@ -22,6 +24,7 @@
           "_0" : 1
         }
       },
+      "afterTick" : true,
       "tick" : 116
     },
     {
@@ -31,7 +34,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 154
+      "afterTick" : true,
+      "tick" : 153
     },
     {
       "action" : {
@@ -40,7 +44,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 166
+      "afterTick" : true,
+      "tick" : 165
     },
     {
       "action" : {
@@ -49,7 +54,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 191
+      "afterTick" : true,
+      "tick" : 190
     },
     {
       "action" : {
@@ -57,6 +63,7 @@
           "_0" : 83
         }
       },
+      "afterTick" : true,
       "tick" : 342
     },
     {
@@ -65,6 +72,7 @@
           "_0" : 67
         }
       },
+      "afterTick" : true,
       "tick" : 405
     },
     {
@@ -74,7 +82,8 @@
           "skill" : "miner"
         }
       },
-      "tick" : 557
+      "afterTick" : true,
+      "tick" : 556
     },
     {
       "action" : {
@@ -83,7 +92,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 617
+      "afterTick" : true,
+      "tick" : 616
     },
     {
       "action" : {
@@ -92,7 +102,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 634
+      "afterTick" : true,
+      "tick" : 633
     },
     {
       "action" : {
@@ -101,7 +112,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 651
+      "afterTick" : true,
+      "tick" : 650
     },
     {
       "action" : {
@@ -110,7 +122,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 678
+      "afterTick" : true,
+      "tick" : 677
     },
     {
       "action" : {
@@ -119,7 +132,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 705
+      "afterTick" : true,
+      "tick" : 704
     },
     {
       "action" : {
@@ -128,7 +142,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 732
+      "afterTick" : true,
+      "tick" : 731
     },
     {
       "action" : {
@@ -137,7 +152,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 759
+      "afterTick" : true,
+      "tick" : 758
     },
     {
       "action" : {
@@ -146,7 +162,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 786
+      "afterTick" : true,
+      "tick" : 785
     },
     {
       "action" : {
@@ -154,6 +171,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 831
     }
   ],
@@ -162,10 +180,10 @@
     "released" : 80,
     "required" : 80,
     "saved" : 80,
-    "stateHash" : "4e038a55997bd93b4ccd2710dc09cbbb37be6154f3384b12ec722d4d7ea2cba7",
-    "ticks" : 1359
+    "stateHash" : "625b8b195733368f7b69e4b74278e2520b1b7167ad5fd06fbf4af1f091f5e620",
+    "ticks" : 1358
   },
-  "initialStateHash" : "e2b110e9745d90fb43f5dd037e0508a720765de0b29afb43e45ba04ea5d709ea",
+  "initialStateHash" : "458260141bb5d1c6b950dcb251058bb1e7146456f447ec85e6185cc8903c87ab",
   "number" : 17,
   "rank" : "Wild",
   "title" : "The Chain with no name"

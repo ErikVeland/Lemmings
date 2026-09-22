@@ -66,10 +66,10 @@
     "released" : 80,
     "required" : 80,
     "saved" : 80,
-    "stateHash" : "855c1c54dfe2c0e331416b0273237b5f7046296f386ccf63d1b5355e04b6591e",
-    "ticks" : 5734
+    "stateHash" : "620cc6de4bc4d1388ee75d598c9099754f85155e79041ce7b924ea7145f395e8",
+    "ticks" : 5732
   },
-  "initialStateHash" : "3a0c1d46cf33511bfaa4e899d3b98e58bcfe81bc82d2311dee73bd0b37ed038f",
+  "initialStateHash" : "4074867deeffdfef9bc75ba219deb5644a8663bcb2398c3acc6a7146c19531c4",
   "number" : 4,
   "rank" : "Blizzard",
   "title" : "Santus Lemmingus"

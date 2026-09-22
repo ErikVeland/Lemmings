@@ -189,11 +189,11 @@
     "didWin" : true,
     "released" : 80,
     "required" : 27,
-    "saved" : 33,
-    "stateHash" : "a82d10dc50f2a1a148883110d4a6c92dd4c2e7141e9bc5a7624fd7b995bebe65",
-    "ticks" : 790
+    "saved" : 42,
+    "stateHash" : "fc52d6d0733ae5ce9412a217bb7ab878f7f5ffc2c688463079e978e9ca3fdbc4",
+    "ticks" : 768
   },
-  "initialStateHash" : "40249d54877df06aaf075b59f195551980aecc0e2e71175b991599fdccbf03f9",
+  "initialStateHash" : "5285b79e05df916dd09bd4e64f76446899c04360a56206c81438ef426c3d7d3a",
   "number" : 6,
   "rank" : "Hail",
   "title" : "Surprise Package?"

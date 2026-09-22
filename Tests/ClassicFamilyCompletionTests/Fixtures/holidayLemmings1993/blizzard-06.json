@@ -6,6 +6,7 @@
           "_0" : 70
         }
       },
+      "afterTick" : true,
       "tick" : 4
     },
     {
@@ -14,6 +15,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 4
     },
     {
@@ -23,7 +25,8 @@
           "skill" : "digger"
         }
       },
-      "tick" : 552
+      "afterTick" : true,
+      "tick" : 551
     },
     {
       "action" : {
@@ -32,7 +35,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 970
+      "afterTick" : true,
+      "tick" : 968
     }
   ],
   "expected" : {
@@ -40,10 +44,10 @@
     "released" : 80,
     "required" : 80,
     "saved" : 80,
-    "stateHash" : "7ffc43fc62c811e3ab69c81444bfa58f38ad2b47c36cea944df17e39861bc62e",
-    "ticks" : 1605
+    "stateHash" : "ee9f8cdeb2be39a4f9e961e8e47e8af869b60a5941c38c71ff3d8a6e561ed098",
+    "ticks" : 1604
   },
-  "initialStateHash" : "76269ef951e2b1a6241f4088a0ed84631cb207a9b8e615efceaf5aaae6af2b78",
+  "initialStateHash" : "8141bde8e27e41f03716717198fd4d3c06a4aa1f8d19bec874fcb9318901a19f",
   "number" : 6,
   "rank" : "Blizzard",
   "title" : "A Single Lemming..."

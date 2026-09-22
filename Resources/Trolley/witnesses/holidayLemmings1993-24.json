@@ -6,6 +6,7 @@
           "_0" : 25
         }
       },
+      "afterTick" : true,
       "tick" : 7
     },
     {
@@ -14,6 +15,7 @@
           "_0" : 31
         }
       },
+      "afterTick" : true,
       "tick" : 7
     },
     {
@@ -23,7 +25,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 267
+      "afterTick" : true,
+      "tick" : 265
     },
     {
       "action" : {
@@ -32,7 +35,8 @@
           "skill" : "blocker"
         }
       },
-      "tick" : 284
+      "afterTick" : true,
+      "tick" : 282
     },
     {
       "action" : {
@@ -40,6 +44,7 @@
           "_0" : 37
         }
       },
+      "afterTick" : true,
       "tick" : 364
     },
     {
@@ -48,6 +53,7 @@
           "_0" : 31
         }
       },
+      "afterTick" : true,
       "tick" : 401
     },
     {
@@ -57,7 +63,8 @@
           "skill" : "digger"
         }
       },
-      "tick" : 541
+      "afterTick" : true,
+      "tick" : 539
     },
     {
       "action" : {
@@ -65,6 +72,7 @@
           "_0" : 37
         }
       },
+      "afterTick" : true,
       "tick" : 665
     },
     {
@@ -73,6 +81,7 @@
           "_0" : 31
         }
       },
+      "afterTick" : true,
       "tick" : 704
     },
     {
@@ -82,7 +91,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 746
+      "afterTick" : true,
+      "tick" : 740
     },
     {
       "action" : {
@@ -90,6 +100,7 @@
           "_0" : 37
         }
       },
+      "afterTick" : true,
       "tick" : 973
     },
     {
@@ -99,7 +110,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 992
+      "afterTick" : true,
+      "tick" : 986
     },
     {
       "action" : {
@@ -107,6 +119,7 @@
           "_0" : 31
         }
       },
+      "afterTick" : true,
       "tick" : 1014
     },
     {
@@ -115,6 +128,7 @@
           "_0" : 37
         }
       },
+      "afterTick" : true,
       "tick" : 1271
     },
     {
@@ -124,7 +138,8 @@
           "skill" : "digger"
         }
       },
-      "tick" : 1310
+      "afterTick" : true,
+      "tick" : 1304
     },
     {
       "action" : {
@@ -132,6 +147,7 @@
           "_0" : 31
         }
       },
+      "afterTick" : true,
       "tick" : 1312
     },
     {
@@ -141,7 +157,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1514
+      "afterTick" : true,
+      "tick" : 1505
     },
     {
       "action" : {
@@ -149,6 +166,7 @@
           "_0" : 37
         }
       },
+      "afterTick" : true,
       "tick" : 1568
     },
     {
@@ -157,6 +175,7 @@
           "_0" : 31
         }
       },
+      "afterTick" : true,
       "tick" : 1619
     },
     {
@@ -166,7 +185,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1744
+      "afterTick" : true,
+      "tick" : 1735
     },
     {
       "action" : {
@@ -174,6 +194,7 @@
           "_0" : 37
         }
       },
+      "afterTick" : true,
       "tick" : 1872
     },
     {
@@ -182,6 +203,7 @@
           "_0" : 31
         }
       },
+      "afterTick" : true,
       "tick" : 1910
     },
     {
@@ -191,7 +213,8 @@
           "skill" : "digger"
         }
       },
-      "tick" : 2059
+      "afterTick" : true,
+      "tick" : 2050
     },
     {
       "action" : {
@@ -199,6 +222,7 @@
           "_0" : 37
         }
       },
+      "afterTick" : true,
       "tick" : 2175
     },
     {
@@ -207,6 +231,7 @@
           "_0" : 31
         }
       },
+      "afterTick" : true,
       "tick" : 2208
     },
     {
@@ -216,7 +241,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 2263
+      "afterTick" : true,
+      "tick" : 2251
     },
     {
       "action" : {
@@ -224,6 +250,7 @@
           "_0" : 37
         }
       },
+      "afterTick" : true,
       "tick" : 2479
     },
     {
@@ -233,7 +260,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 2506
+      "afterTick" : true,
+      "tick" : 2494
     },
     {
       "action" : {
@@ -241,6 +269,7 @@
           "_0" : 31
         }
       },
+      "afterTick" : true,
       "tick" : 2515
     },
     {
@@ -249,6 +278,7 @@
           "_0" : 37
         }
       },
+      "afterTick" : true,
       "tick" : 2780
     },
     {
@@ -257,6 +287,7 @@
           "_0" : 31
         }
       },
+      "afterTick" : true,
       "tick" : 2810
     },
     {
@@ -266,7 +297,8 @@
           "skill" : "digger"
         }
       },
-      "tick" : 2839
+      "afterTick" : true,
+      "tick" : 2827
     },
     {
       "action" : {
@@ -274,6 +306,7 @@
           "_0" : 81
         }
       },
+      "afterTick" : true,
       "tick" : 2884
     },
     {
@@ -282,6 +315,7 @@
           "_0" : 91
         }
       },
+      "afterTick" : true,
       "tick" : 2931
     },
     {
@@ -291,7 +325,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 3050
+      "afterTick" : true,
+      "tick" : 3036
     },
     {
       "action" : {
@@ -300,7 +335,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 3253
+      "afterTick" : true,
+      "tick" : 3239
     },
     {
       "action" : {
@@ -309,7 +345,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 3530
+      "afterTick" : true,
+      "tick" : 3516
     },
     {
       "action" : {
@@ -318,7 +355,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 3743
+      "afterTick" : true,
+      "tick" : 3729
     },
     {
       "action" : {
@@ -327,7 +365,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 4016
+      "afterTick" : true,
+      "tick" : 4014
     },
     {
       "action" : {
@@ -336,7 +375,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 4135
+      "afterTick" : true,
+      "tick" : 4133
     },
     {
       "action" : {
@@ -345,7 +385,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 4563
+      "afterTick" : true,
+      "tick" : 4561
     },
     {
       "action" : {
@@ -354,7 +395,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 4802
+      "afterTick" : true,
+      "tick" : 4800
     }
   ],
   "expected" : {
@@ -362,10 +404,10 @@
     "released" : 80,
     "required" : 75,
     "saved" : 80,
-    "stateHash" : "9f82fb26ef392025be8c27674404a4943b4d1a118e3be2e05a0160cce11e8a9b",
-    "ticks" : 5395
+    "stateHash" : "475fb78e43d81dae7407f9ea63cb913329ffb9258de740a15bdaecb112490eb4",
+    "ticks" : 5393
   },
-  "initialStateHash" : "902d6da1f8368ff2e2449c7f3472d6a975200a47603751710c46e8b8fa4d7e82",
+  "initialStateHash" : "9641e6289b532badf20e54dda983401a52cbbd9a24407d009a578d68b66d7a4d",
   "number" : 9,
   "rank" : "Blizzard",
   "title" : "Lemmings...The Motion Picture"

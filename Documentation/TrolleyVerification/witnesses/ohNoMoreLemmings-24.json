@@ -6,6 +6,7 @@
           "_0" : 1
         }
       },
+      "afterTick" : true,
       "tick" : 11
     },
     {
@@ -15,7 +16,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 78
+      "afterTick" : true,
+      "tick" : 77
     },
     {
       "action" : {
@@ -24,7 +26,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 142
+      "afterTick" : true,
+      "tick" : 141
     },
     {
       "action" : {
@@ -33,7 +36,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 205
+      "afterTick" : true,
+      "tick" : 204
     },
     {
       "action" : {
@@ -42,7 +46,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 267
+      "afterTick" : true,
+      "tick" : 266
     },
     {
       "action" : {
@@ -51,7 +56,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 424
+      "afterTick" : true,
+      "tick" : 423
     },
     {
       "action" : {
@@ -60,7 +66,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 716
+      "afterTick" : true,
+      "tick" : 715
     },
     {
       "action" : {
@@ -69,7 +76,8 @@
           "skill" : "digger"
         }
       },
-      "tick" : 761
+      "afterTick" : true,
+      "tick" : 760
     },
     {
       "action" : {
@@ -78,7 +86,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 877
+      "afterTick" : true,
+      "tick" : 876
     },
     {
       "action" : {
@@ -87,7 +96,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1179
+      "afterTick" : true,
+      "tick" : 1178
     },
     {
       "action" : {
@@ -96,7 +106,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1231
+      "afterTick" : true,
+      "tick" : 1230
     },
     {
       "action" : {
@@ -105,7 +116,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1281
+      "afterTick" : true,
+      "tick" : 1280
     },
     {
       "action" : {
@@ -114,7 +126,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1493
+      "afterTick" : true,
+      "tick" : 1492
     },
     {
       "action" : {
@@ -123,7 +136,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1547
+      "afterTick" : true,
+      "tick" : 1546
     },
     {
       "action" : {
@@ -131,6 +145,7 @@
           "_0" : 65
         }
       },
+      "afterTick" : true,
       "tick" : 1832
     },
     {
@@ -140,7 +155,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1966
+      "afterTick" : true,
+      "tick" : 1965
     },
     {
       "action" : {
@@ -149,7 +165,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 2071
+      "afterTick" : true,
+      "tick" : 2070
     },
     {
       "action" : {
@@ -158,7 +175,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 2098
+      "afterTick" : true,
+      "tick" : 2097
     },
     {
       "action" : {
@@ -167,7 +185,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 2126
+      "afterTick" : true,
+      "tick" : 2125
     },
     {
       "action" : {
@@ -176,7 +195,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 2152
+      "afterTick" : true,
+      "tick" : 2151
     },
     {
       "action" : {
@@ -185,7 +205,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 2178
+      "afterTick" : true,
+      "tick" : 2177
     },
     {
       "action" : {
@@ -194,7 +215,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 2203
+      "afterTick" : true,
+      "tick" : 2202
     },
     {
       "action" : {
@@ -203,7 +225,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 2226
+      "afterTick" : true,
+      "tick" : 2225
     },
     {
       "action" : {
@@ -211,6 +234,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 2233
     }
   ],
@@ -219,10 +243,10 @@
     "released" : 80,
     "required" : 80,
     "saved" : 80,
-    "stateHash" : "dcc28746942c00319d059f7f1e95d4cee92bffba150eb07d9442255b954f3bbe",
-    "ticks" : 2588
+    "stateHash" : "d1ce142af9c180c88e3c7cdd85031d3e0f6416f790f265ae21fc0307def894b8",
+    "ticks" : 2587
   },
-  "initialStateHash" : "59a6e46e721a28ee72f93149f1b71ebf844c2aa96f6592022ded35ce34bccea8",
+  "initialStateHash" : "22c870829674f5ffd3aef1836acb5a374e04908a3382b3f66047499dbe3afbbe",
   "number" : 5,
   "rank" : "Crazy",
   "title" : "24 hour Lemathon"

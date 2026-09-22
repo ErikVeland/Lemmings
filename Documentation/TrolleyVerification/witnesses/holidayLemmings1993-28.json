@@ -6,6 +6,7 @@
           "_0" : 40
         }
       },
+      "afterTick" : true,
       "tick" : 26
     },
     {
@@ -15,7 +16,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 104
+      "afterTick" : true,
+      "tick" : 103
     },
     {
       "action" : {
@@ -24,7 +26,8 @@
           "skill" : "blocker"
         }
       },
-      "tick" : 268
+      "afterTick" : true,
+      "tick" : 267
     },
     {
       "action" : {
@@ -33,7 +36,8 @@
           "skill" : "blocker"
         }
       },
-      "tick" : 331
+      "afterTick" : true,
+      "tick" : 330
     },
     {
       "action" : {
@@ -42,7 +46,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 354
+      "afterTick" : true,
+      "tick" : 353
     },
     {
       "action" : {
@@ -51,7 +56,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 557
+      "afterTick" : true,
+      "tick" : 556
     },
     {
       "action" : {
@@ -60,7 +66,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 759
+      "afterTick" : true,
+      "tick" : 758
     },
     {
       "action" : {
@@ -69,7 +76,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1124
+      "afterTick" : true,
+      "tick" : 1123
     },
     {
       "action" : {
@@ -78,7 +86,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1327
+      "afterTick" : true,
+      "tick" : 1326
     },
     {
       "action" : {
@@ -87,7 +96,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1525
+      "afterTick" : true,
+      "tick" : 1518
     },
     {
       "action" : {
@@ -95,6 +105,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 1737
     },
     {
@@ -104,7 +115,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1874
+      "afterTick" : true,
+      "tick" : 1867
     },
     {
       "action" : {
@@ -113,7 +125,8 @@
           "skill" : "bomber"
         }
       },
-      "tick" : 1942
+      "afterTick" : true,
+      "tick" : 1902
     },
     {
       "action" : {
@@ -121,6 +134,7 @@
 
         }
       },
+      "afterTick" : true,
       "tick" : 2508
     }
   ],
@@ -129,10 +143,10 @@
     "released" : 70,
     "required" : 65,
     "saved" : 65,
-    "stateHash" : "576b6ee4afd1bd1c77aced243c06399ea27573ab4478fdf4f678aea1dc54fcb0",
-    "ticks" : 2655
+    "stateHash" : "4ceb361061afc680096e512ee9175dae5a81141b6fcd3fdeda961f45037b8623",
+    "ticks" : 2656
   },
-  "initialStateHash" : "0fdd93caf5b6fc4f12d75430870bc9a62b3e044106664f1dd4be4fa0b6e424f6",
+  "initialStateHash" : "6e1e38b3b8fe4892c69b1b45e3070280997332923d674209ca5e1a723e1ca214",
   "number" : 13,
   "rank" : "Blizzard",
   "title" : "The Final Frontier"

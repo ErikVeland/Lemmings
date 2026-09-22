@@ -142,7 +142,7 @@ See [method and limitations](README.md) and [exact conditions and evidence](audi
 
 | Level | Population | Pass goal | Best rescued | Verified maximum | Minimum sacrifices | Evidence |
 | --- | ---: | ---: | ---: | ---: | ---: | --- |
-| Crazy 1: Quote: "That`s a good level" | 50 | 48 | 48 | — | — | [Observed](witnesses/ohNoMoreLemmings-20.json) |
+| Crazy 1: Quote: "That`s a good level" | 50 | 48 | — | — | — | No witness collected |
 | Crazy 2: Dolly Dimple | 80 | 80 | 80 | 80 | 0 | [Verified](witnesses/ohNoMoreLemmings-21.json) |
 | Crazy 3: Many Lemmings make level work | 50 | 48 | 48 | — | — | [Observed](witnesses/ohNoMoreLemmings-22.json) |
 | Crazy 4: Lemming Express | 20 | 20 | 20 | 20 | 0 | [Verified](witnesses/ohNoMoreLemmings-23.json) |
@@ -151,7 +151,7 @@ See [method and limitations](README.md) and [exact conditions and evidence](audi
 | Crazy 7: And now, the end is near... | 50 | 50 | 50 | 50 | 0 | [Verified](witnesses/ohNoMoreLemmings-26.json) |
 | Crazy 8: KEEP ON TRUCKING | 80 | 75 | 75 | — | — | [Observed](witnesses/ohNoMoreLemmings-27.json) |
 | Crazy 9: On the Antarctic Coast | 20 | 20 | 20 | 20 | 0 | [Verified](witnesses/ohNoMoreLemmings-28.json) |
-| Crazy 10: ROCKY VI | 80 | 79 | 79 | — | — | [Observed](witnesses/ohNoMoreLemmings-29.json) |
+| Crazy 10: ROCKY VI | 80 | 79 | — | — | — | No witness collected |
 | Crazy 11: No Problemming! | 80 | 8 | 8 | — | — | [Observed](witnesses/ohNoMoreLemmings-30.json) |
 | Crazy 12: Lemming Friendly | 80 | 75 | 80 | 80 | 0 | [Verified](witnesses/ohNoMoreLemmings-31.json) |
 | Crazy 13: It`s a trade off | 20 | 10 | 11 | — | — | [Observed](witnesses/ohNoMoreLemmings-32.json) |
@@ -174,7 +174,7 @@ See [method and limitations](README.md) and [exact conditions and evidence](audi
 | Havoc 10: Flow Control | 21 | 3 | 5 | — | — | [Observed](witnesses/ohNoMoreLemmings-89.json) |
 | Havoc 11: Welcome to the party, pal! | 80 | 80 | 80 | 80 | 0 | [Verified](witnesses/ohNoMoreLemmings-90.json) |
 | Havoc 12: It`s all a matter of timing | 80 | 80 | 80 | 80 | 0 | [Verified](witnesses/ohNoMoreLemmings-91.json) |
-| Havoc 13: HIGHLAND FLING | 80 | 75 | 76 | — | — | [Observed](witnesses/ohNoMoreLemmings-92.json) |
+| Havoc 13: HIGHLAND FLING | 80 | 75 | — | — | — | No witness collected |
 | Havoc 14: Synchronised Lemming | 80 | 80 | 80 | 80 | 0 | [Verified](witnesses/ohNoMoreLemmings-93.json) |
 | Havoc 15: Have an ice day | 10 | 8 | 10 | 10 | 0 | [Verified](witnesses/ohNoMoreLemmings-94.json) |
 | Havoc 16: Scaling the Heights | 50 | 45 | — | — | — | No witness collected |
@@ -195,20 +195,20 @@ See [method and limitations](README.md) and [exact conditions and evidence](audi
 | Tame 11: With Compliments | 50 | 25 | 50 | 50 | 0 | [Verified](witnesses/ohNoMoreLemmings-10.json) |
 | Tame 12: Citizen Lemming | 50 | 25 | 50 | 50 | 0 | [Verified](witnesses/ohNoMoreLemmings-11.json) |
 | Tame 13: Thunder-Lemmings are go! | 50 | 25 | 50 | 50 | 0 | [Verified](witnesses/ohNoMoreLemmings-12.json) |
-| Tame 14: Get a little extra help | 50 | 25 | 50 | 50 | 0 | [Verified](witnesses/ohNoMoreLemmings-13.json) |
+| Tame 14: Get a little extra help | 50 | 25 | 49 | — | — | [Observed](witnesses/ohNoMoreLemmings-13.json) |
 | Tame 15: Not just a pretty Lemming | 50 | 25 | 49 | — | — | [Observed](witnesses/ohNoMoreLemmings-14.json) |
 | Tame 16: Gone With The Lemming | 50 | 25 | 50 | 50 | 0 | [Verified](witnesses/ohNoMoreLemmings-15.json) |
 | Tame 17: Honey, I Saved The Lemmings | 50 | 25 | 50 | 50 | 0 | [Verified](witnesses/ohNoMoreLemmings-16.json) |
 | Tame 18: Lemmings For Presidents! | 50 | 25 | 50 | 50 | 0 | [Verified](witnesses/ohNoMoreLemmings-17.json) |
 | Tame 19: Lemming Productions Present... | 50 | 25 | 49 | — | — | [Observed](witnesses/ohNoMoreLemmings-18.json) |
 | Tame 20: Custom built for Lemmings | 50 | 25 | 50 | 50 | 0 | [Verified](witnesses/ohNoMoreLemmings-19.json) |
-| Wicked 1: LeMming ToMato KetchUp fAcilitY | 60 | 48 | 55 | — | — | [Observed](witnesses/ohNoMoreLemmings-60.json) |
+| Wicked 1: LeMming ToMato KetchUp fAcilitY | 60 | 48 | 56 | — | — | [Observed](witnesses/ohNoMoreLemmings-60.json) |
 | Wicked 2: Inroducing SUPERLEMMING | 1 | 1 | 1 | 1 | 0 | [Verified](witnesses/ohNoMoreLemmings-61.json) |
 | Wicked 3: This Corrosion | 50 | 50 | 50 | 50 | 0 | [Verified](witnesses/ohNoMoreLemmings-62.json) |
 | Wicked 4: Oh No! It`s the 4TH DIMENSION! | 50 | 30 | 41 | — | — | [Observed](witnesses/ohNoMoreLemmings-63.json) |
 | Wicked 5: Chill out! | 20 | 20 | 20 | 20 | 0 | [Verified](witnesses/ohNoMoreLemmings-64.json) |
 | Wicked 6: PoP TiL YoU DrOp! | 80 | 30 | 40 | — | — | [Observed](witnesses/ohNoMoreLemmings-65.json) |
-| Wicked 7: Last Lemming To Lemmingcentral | 80 | 72 | 73 | — | — | [Observed](witnesses/ohNoMoreLemmings-66.json) |
+| Wicked 7: Last Lemming To Lemmingcentral | 80 | 72 | 74 | — | — | [Observed](witnesses/ohNoMoreLemmings-66.json) |
 | Wicked 8: A TOWERING PROBLEM | 50 | 45 | 46 | — | — | [Observed](witnesses/ohNoMoreLemmings-67.json) |
 | Wicked 9: How on Earth? | 50 | 45 | 45 | — | — | [Observed](witnesses/ohNoMoreLemmings-68.json) |
 | Wicked 10: Temple of Love | 50 | 48 | 49 | — | — | [Observed](witnesses/ohNoMoreLemmings-69.json) |
@@ -231,7 +231,7 @@ See [method and limitations](README.md) and [exact conditions and evidence](audi
 | Wild 7: You Take the High Road | 80 | 80 | 80 | 80 | 0 | [Verified](witnesses/ohNoMoreLemmings-46.json) |
 | Wild 8: It`s a tight fit! | 10 | 10 | 10 | 10 | 0 | [Verified](witnesses/ohNoMoreLemmings-47.json) |
 | Wild 9: Ice Station Lemming | 40 | 40 | — | — | — | No witness collected |
-| Wild 10: Higgledy Piggledy | 80 | 60 | 72 | — | — | [Observed](witnesses/ohNoMoreLemmings-49.json) |
+| Wild 10: Higgledy Piggledy | 80 | 60 | — | — | — | No witness collected |
 | Wild 11: Mutiny On The Bounty | 50 | 49 | 49 | — | — | [Observed](witnesses/ohNoMoreLemmings-50.json) |
 | Wild 12: SNOW JOKE | 50 | 40 | 42 | — | — | [Observed](witnesses/ohNoMoreLemmings-51.json) |
 | Wild 13: ONWARD AND UPWARD | 80 | 75 | 76 | — | — | [Observed](witnesses/ohNoMoreLemmings-52.json) |
@@ -393,7 +393,7 @@ See [method and limitations](README.md) and [exact conditions and evidence](audi
 
 | Level | Population | Pass goal | Best rescued | Verified maximum | Minimum sacrifices | Evidence |
 | --- | ---: | ---: | ---: | ---: | ---: | --- |
-| Blizzard 1: Oogilemming! | 25 | 22 | 22 | — | — | [Observed](witnesses/holidayLemmings1993-16.json) |
+| Blizzard 1: Oogilemming! | 25 | 22 | — | — | — | No witness collected |
 | Blizzard 2: Lemmings Up High | 80 | 80 | 80 | 80 | 0 | [Verified](witnesses/holidayLemmings1993-17.json) |
 | Blizzard 3: Check Your Hints! | 80 | 80 | 80 | 80 | 0 | [Verified](witnesses/holidayLemmings1993-18.json) |
 | Blizzard 4: Santus Lemmingus | 80 | 80 | 80 | 80 | 0 | [Verified](witnesses/holidayLemmings1993-19.json) |
@@ -409,7 +409,7 @@ See [method and limitations](README.md) and [exact conditions and evidence](audi
 | Blizzard 14: The Undiscovered Country | 80 | 80 | 80 | 80 | 0 | [Verified](witnesses/holidayLemmings1993-29.json) |
 | Blizzard 15: The Needs of the Many... | 15 | 8 | 8 | — | — | [Observed](witnesses/holidayLemmings1993-30.json) |
 | Blizzard 16: The Next Lemeration | 50 | 47 | 48 | — | — | [Observed](witnesses/holidayLemmings1993-31.json) |
-| Flurry 1: Climbing to the Top! | 10 | 10 | 10 | 10 | 0 | [Verified](witnesses/holidayLemmings1993-0.json) |
+| Flurry 1: Climbing to the Top! | 10 | 10 | — | — | — | No witness collected |
 | Flurry 2: Floating Lemming Flurry | 20 | 15 | 20 | 20 | 0 | [Verified](witnesses/holidayLemmings1993-1.json) |
 | Flurry 3: Holiday Mining | 80 | 50 | 80 | 80 | 0 | [Verified](witnesses/holidayLemmings1993-2.json) |
 | Flurry 4: Lemming Tracks in the Snow! | 50 | 45 | 50 | 50 | 0 | [Verified](witnesses/holidayLemmings1993-3.json) |
@@ -417,25 +417,25 @@ See [method and limitations](README.md) and [exact conditions and evidence](audi
 | Flurry 6: Lemming Snowfall | 80 | 40 | 80 | 80 | 0 | [Verified](witnesses/holidayLemmings1993-5.json) |
 | Flurry 7: Lemming Snowjourn | 50 | 25 | 50 | 50 | 0 | [Verified](witnesses/holidayLemmings1993-6.json) |
 | Flurry 8: Clouds of Lemmings | 80 | 70 | 77 | — | — | [Observed](witnesses/holidayLemmings1993-7.json) |
-| Flurry 9: A Block from Home | 80 | 75 | 80 | 80 | 0 | [Verified](witnesses/holidayLemmings1993-8.json) |
+| Flurry 9: A Block from Home | 80 | 75 | — | — | — | No witness collected |
 | Flurry 10: 32 Lemmings Below Zero | 32 | 25 | 32 | 32 | 0 | [Verified](witnesses/holidayLemmings1993-9.json) |
 | Flurry 11: At Home in a Cave | 80 | 78 | 80 | 80 | 0 | [Verified](witnesses/holidayLemmings1993-10.json) |
 | Flurry 12: Presents of Mind | 80 | 77 | 80 | 80 | 0 | [Verified](witnesses/holidayLemmings1993-11.json) |
 | Flurry 13: Yo-yo Lem-lem | 80 | 80 | 80 | 80 | 0 | [Verified](witnesses/holidayLemmings1993-12.json) |
 | Flurry 14: Marshmallow Land | 80 | 75 | 80 | 80 | 0 | [Verified](witnesses/holidayLemmings1993-13.json) |
 | Flurry 15: Head for the Hills! | 10 | 10 | 10 | 10 | 0 | [Verified](witnesses/holidayLemmings1993-14.json) |
-| Flurry 16: The Long Way Around | 50 | 45 | 48 | — | — | [Observed](witnesses/holidayLemmings1993-15.json) |
+| Flurry 16: The Long Way Around | 50 | 45 | — | — | — | No witness collected |
 
 ## Oh Yes! More Lemmings
 
 | Level | Population | Pass goal | Best rescued | Verified maximum | Minimum sacrifices | Evidence |
 | --- | ---: | ---: | ---: | ---: | ---: | --- |
-| Lemmings Versus 1: There can be only one | 80 | 65 | — | — | — | No witness collected |
+| Lemmings Versus 1: There can be only one | 80 | 65 | 78 | — | — | [Observed](witnesses/ohYesMoreLemmings-0.json) |
 | Lemmings Versus 2: We`re in this one together | 80 | 65 | — | — | — | No witness collected |
-| Lemmings Versus 3: Still everything to play for | 100 | 80 | — | — | — | No witness collected |
+| Lemmings Versus 3: Still everything to play for | 100 | 80 | 100 | 100 | 0 | [Verified](witnesses/ohYesMoreLemmings-2.json) |
 | Lemmings Versus 4: May the craftiest player win | 80 | 80 | — | — | — | No witness collected |
-| Lemmings Versus 5: and the winner is..... | 80 | 80 | — | — | — | No witness collected |
-| Lemmings Versus 6: In the thick of the fray | 75 | 65 | — | — | — | No witness collected |
+| Lemmings Versus 5: and the winner is..... | 80 | 80 | 80 | 80 | 0 | [Verified](witnesses/ohYesMoreLemmings-4.json) |
+| Lemmings Versus 6: In the thick of the fray | 75 | 65 | 75 | 75 | 0 | [Verified](witnesses/ohYesMoreLemmings-5.json) |
 | Lemmings Versus 7: Just for fun or to the death? | 100 | 50 | — | — | — | No witness collected |
 | Lemmings Versus 8: Game on!  Choose your tactics. | 80 | 80 | — | — | — | No witness collected |
 | Lemmings Versus 9: The Passing Place | 75 | 75 | — | — | — | No witness collected |
@@ -447,7 +447,7 @@ See [method and limitations](README.md) and [exact conditions and evidence](audi
 | Lemmings Versus 15: Graffiti | 100 | 90 | — | — | — | No witness collected |
 | Lemmings Versus 16: The Rubbish Dump | 100 | 90 | — | — | — | No witness collected |
 | Lemmings Versus 17: The Crystal Cavern Mark II | 40 | 30 | — | — | — | No witness collected |
-| Lemmings Versus 18: The Rope Bridge | 50 | 26 | — | — | — | No witness collected |
+| Lemmings Versus 18: The Rope Bridge | 50 | 26 | 26 | — | — | [Observed](witnesses/ohYesMoreLemmings-17.json) |
 | Lemmings Versus 19: Islands in the Sky | 40 | 26 | — | — | — | No witness collected |
 | Lemmings Versus 20: Cross-over Point | 40 | 20 | — | — | — | No witness collected |
 | Mega Drive Sunsoft 1: Rules to fall | 20 | 10 | — | — | — | No witness collected |
@@ -590,10 +590,10 @@ See [method and limitations](README.md) and [exact conditions and evidence](audi
 
 | Level | Population | Pass goal | Best rescued | Verified maximum | Minimum sacrifices | Evidence |
 | --- | ---: | ---: | ---: | ---: | ---: | --- |
-| Frost 1: Chains of Command | 50 | 50 | 50 | 50 | 0 | [Verified](witnesses/holidayLemmings1994-0.json) |
+| Frost 1: Chains of Command | 50 | 50 | — | — | — | No witness collected |
 | Frost 2: Ski Jump! | 50 | 49 | 50 | 50 | 0 | [Verified](witnesses/holidayLemmings1994-1.json) |
 | Frost 3: CindyLand | 80 | 75 | 80 | 80 | 0 | [Verified](witnesses/holidayLemmings1994-2.json) |
-| Frost 4: Separate Ways | 50 | 49 | 49 | — | — | [Observed](witnesses/holidayLemmings1994-3.json) |
+| Frost 4: Separate Ways | 50 | 49 | 50 | 50 | 0 | [Verified](witnesses/holidayLemmings1994-3.json) |
 | Frost 5: Lemming Reunification | 70 | 70 | 70 | 70 | 0 | [Verified](witnesses/holidayLemmings1994-4.json) |
 | Frost 6: The Land of the Bizarre | 70 | 69 | 69 | — | — | [Observed](witnesses/holidayLemmings1994-5.json) |
 | Frost 7: Happy New Year! | 50 | 25 | 32 | — | — | [Observed](witnesses/holidayLemmings1994-6.json) |
@@ -610,15 +610,15 @@ See [method and limitations](README.md) and [exact conditions and evidence](audi
 | Hail 2: Break On Through | 80 | 75 | 75 | — | — | [Observed](witnesses/holidayLemmings1994-17.json) |
 | Hail 3: And a Happy New Year! | 50 | 25 | 35 | — | — | [Observed](witnesses/holidayLemmings1994-18.json) |
 | Hail 4: Lemmintaschen? | 80 | 78 | 79 | — | — | [Observed](witnesses/holidayLemmings1994-19.json) |
-| Hail 5: Get the Point? | 80 | 68 | 71 | — | — | [Observed](witnesses/holidayLemmings1994-20.json) |
-| Hail 6: Surprise Package? | 80 | 27 | 33 | — | — | [Observed](witnesses/holidayLemmings1994-21.json) |
+| Hail 5: Get the Point? | 80 | 68 | 70 | — | — | [Observed](witnesses/holidayLemmings1994-20.json) |
+| Hail 6: Surprise Package? | 80 | 27 | 42 | — | — | [Observed](witnesses/holidayLemmings1994-21.json) |
 | Hail 7: Steel Ice Span | 80 | 80 | 80 | 80 | 0 | [Verified](witnesses/holidayLemmings1994-22.json) |
 | Hail 8: Sir Edmund Hilemming | 80 | 80 | 80 | 80 | 0 | [Verified](witnesses/holidayLemmings1994-23.json) |
 | Hail 9: Up, up, and away! | 50 | 50 | 50 | 50 | 0 | [Verified](witnesses/holidayLemmings1994-24.json) |
-| Hail 10: Lemmy in the cold, cold ground | 80 | 80 | 80 | 80 | 0 | [Verified](witnesses/holidayLemmings1994-25.json) |
+| Hail 10: Lemmy in the cold, cold ground | 80 | 80 | — | — | — | No witness collected |
 | Hail 11: Emmings!  (No L) | 70 | 70 | 70 | 70 | 0 | [Verified](witnesses/holidayLemmings1994-26.json) |
 | Hail 12: Merry Christmaze | 25 | 25 | 25 | 25 | 0 | [Verified](witnesses/holidayLemmings1994-27.json) |
 | Hail 13: Polar Expedition | 50 | 50 | 50 | 50 | 0 | [Verified](witnesses/holidayLemmings1994-28.json) |
-| Hail 14: Rendezvous II | 65 | 65 | 65 | 65 | 0 | [Verified](witnesses/holidayLemmings1994-29.json) |
+| Hail 14: Rendezvous II | 65 | 65 | — | — | — | No witness collected |
 | Hail 15: Steel Block Party | 60 | 60 | 60 | 60 | 0 | [Verified](witnesses/holidayLemmings1994-30.json) |
 | Hail 16: Peak of Performance | 10 | 10 | 10 | 10 | 0 | [Verified](witnesses/holidayLemmings1994-31.json) |

@@ -6,6 +6,7 @@
           "_0" : 10
         }
       },
+      "afterTick" : true,
       "tick" : 16
     },
     {
@@ -15,7 +16,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 88
+      "afterTick" : true,
+      "tick" : 86
     },
     {
       "action" : {
@@ -23,6 +25,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 494
     },
     {
@@ -32,7 +35,8 @@
           "skill" : "miner"
         }
       },
-      "tick" : 507
+      "afterTick" : true,
+      "tick" : 505
     },
     {
       "action" : {
@@ -41,7 +45,8 @@
           "skill" : "miner"
         }
       },
-      "tick" : 613
+      "afterTick" : true,
+      "tick" : 611
     },
     {
       "action" : {
@@ -50,7 +55,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 820
+      "afterTick" : true,
+      "tick" : 818
     },
     {
       "action" : {
@@ -59,7 +65,8 @@
           "skill" : "miner"
         }
       },
-      "tick" : 1044
+      "afterTick" : true,
+      "tick" : 1042
     },
     {
       "action" : {
@@ -68,7 +75,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1291
+      "afterTick" : true,
+      "tick" : 1285
     },
     {
       "action" : {
@@ -77,7 +85,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1365
+      "afterTick" : true,
+      "tick" : 1359
     },
     {
       "action" : {
@@ -86,7 +95,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1645
+      "afterTick" : true,
+      "tick" : 1639
     },
     {
       "action" : {
@@ -95,7 +105,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 2005
+      "afterTick" : true,
+      "tick" : 1999
     },
     {
       "action" : {
@@ -104,7 +115,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 2290
+      "afterTick" : true,
+      "tick" : 2284
     },
     {
       "action" : {
@@ -113,7 +125,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 2837
+      "afterTick" : true,
+      "tick" : 2831
     },
     {
       "action" : {
@@ -122,7 +135,8 @@
           "skill" : "digger"
         }
       },
-      "tick" : 3118
+      "afterTick" : true,
+      "tick" : 3112
     },
     {
       "action" : {
@@ -131,7 +145,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 3362
+      "afterTick" : true,
+      "tick" : 3353
     }
   ],
   "expected" : {
@@ -139,10 +154,10 @@
     "released" : 50,
     "required" : 40,
     "saved" : 44,
-    "stateHash" : "f8813251dc0edcad1fb70eaefb6574b25488a4a051b07328c8b5d50897bef6d7",
-    "ticks" : 3746
+    "stateHash" : "62f60daf499020c5cc6642fe7b47045ce60bd2445bd1d9ee052e2a2083d6e629",
+    "ticks" : 3754
   },
-  "initialStateHash" : "7ed901df72dde21cb5096008ad24e0dd71975cc5b966c53635c1f8c91c062edb",
+  "initialStateHash" : "40b9c375169dd795f0643118951796088dcf65985b442e4f17eb3af64c2df6ca",
   "number" : 11,
   "rank" : "Wicked",
   "title" : "ROCKY ROAD"

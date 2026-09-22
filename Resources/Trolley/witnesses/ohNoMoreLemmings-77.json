@@ -6,6 +6,7 @@
           "_0" : 1
         }
       },
+      "afterTick" : true,
       "tick" : 22
     },
     {
@@ -15,7 +16,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 142
+      "afterTick" : true,
+      "tick" : 141
     },
     {
       "action" : {
@@ -24,7 +26,8 @@
           "skill" : "climber"
         }
       },
-      "tick" : 153
+      "afterTick" : true,
+      "tick" : 152
     },
     {
       "action" : {
@@ -33,6 +36,7 @@
           "skill" : "climber"
         }
       },
+      "afterTick" : true,
       "tick" : 178
     },
     {
@@ -42,7 +46,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 472
+      "afterTick" : true,
+      "tick" : 471
     },
     {
       "action" : {
@@ -51,7 +56,8 @@
           "skill" : "miner"
         }
       },
-      "tick" : 572
+      "afterTick" : true,
+      "tick" : 571
     },
     {
       "action" : {
@@ -60,7 +66,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 634
+      "afterTick" : true,
+      "tick" : 633
     },
     {
       "action" : {
@@ -69,7 +76,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 711
+      "afterTick" : true,
+      "tick" : 706
     },
     {
       "action" : {
@@ -78,7 +86,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 797
+      "afterTick" : true,
+      "tick" : 792
     },
     {
       "action" : {
@@ -87,7 +96,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 856
+      "afterTick" : true,
+      "tick" : 855
     },
     {
       "action" : {
@@ -96,7 +106,8 @@
           "skill" : "miner"
         }
       },
-      "tick" : 1037
+      "afterTick" : true,
+      "tick" : 1032
     },
     {
       "action" : {
@@ -105,7 +116,8 @@
           "skill" : "miner"
         }
       },
-      "tick" : 1053
+      "afterTick" : true,
+      "tick" : 1052
     },
     {
       "action" : {
@@ -113,6 +125,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 1076
     }
   ],
@@ -121,10 +134,10 @@
     "released" : 60,
     "required" : 50,
     "saved" : 60,
-    "stateHash" : "e06135a27339fafdeca591c7c011e90db214bc0aa78fad1c07141afae107b40b",
-    "ticks" : 1755
+    "stateHash" : "f6b1f9d977b593f66734d785ff2c329813276fc476579b71e4da53e89e0a24f5",
+    "ticks" : 1754
   },
-  "initialStateHash" : "36de04b7afc7a54e63184a6d8ddf9fc7e86a82fd1248a6210835c2085f850538",
+  "initialStateHash" : "7de38249c01b97715a557eb69a117d3f15d86f6bff5e3ab79d6aec892424a349",
   "number" : 18,
   "rank" : "Wicked",
   "title" : "LoTs moRe wHeRe TheY caMe fRom"

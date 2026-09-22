@@ -158,7 +158,8 @@ func classicFingerprint(_ game: ClassicDOSSimulation) throws -> String {
                 specials[specialKey] = try ClassicSpecialGraphic.load(index: level.specialStyle - 1, from: artDirectory, fallbackDirectory: fallback)
             }
             let rendered = try ClassicLevelRenderer.render(level, groundSet: grounds[groundKey]!, specialGraphic: specials[specialKey])
-            let base = try ClassicDOSSimulation(level: level, renderedLevel: rendered, mainDATAssets: assets)
+            let base = try ClassicDOSSimulation(level: level, renderedLevel: rendered, mainDATAssets: assets,
+                                                mechanics: ClassicDOSMechanics(title: set.title, rank: entry.rank))
             row.conditions = TrolleyConditions(gameID: titleID, packID: set.identifierKey, levelID: "level-\(index)",
                 levelFingerprint: try classicFingerprint(base), rulesetVersion: "classic-dos-v1", physicsMode: "classic-dos-v1",
                 population: base.configuration.totalLemmings, rescueRequirement: base.configuration.requiredToSave,

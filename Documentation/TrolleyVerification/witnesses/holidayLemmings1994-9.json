@@ -6,6 +6,7 @@
           "_0" : 4
         }
       },
+      "afterTick" : true,
       "tick" : 8
     },
     {
@@ -14,6 +15,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 8
     },
     {
@@ -23,7 +25,8 @@
           "skill" : "digger"
         }
       },
-      "tick" : 106
+      "afterTick" : true,
+      "tick" : 105
     },
     {
       "action" : {
@@ -32,7 +35,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 833
+      "afterTick" : true,
+      "tick" : 826
     },
     {
       "action" : {
@@ -41,7 +45,8 @@
           "skill" : "digger"
         }
       },
-      "tick" : 1012
+      "afterTick" : true,
+      "tick" : 1011
     },
     {
       "action" : {
@@ -50,7 +55,8 @@
           "skill" : "digger"
         }
       },
-      "tick" : 1058
+      "afterTick" : true,
+      "tick" : 1057
     },
     {
       "action" : {
@@ -59,7 +65,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1709
+      "afterTick" : true,
+      "tick" : 1702
     }
   ],
   "expected" : {
@@ -67,10 +74,10 @@
     "released" : 4,
     "required" : 4,
     "saved" : 4,
-    "stateHash" : "90baefa2eb0b54607ebb6b899c43207f7dac569922ebc2e72e7c1aecb88502ed",
-    "ticks" : 2017
+    "stateHash" : "61f53770de91ce51a46a29537d34b3566884569a45d4808da1069b6550084182",
+    "ticks" : 2016
   },
-  "initialStateHash" : "916d946397c3e6c4761a040890c324518fe87a9b3f0ea3d870c7025ef05af897",
+  "initialStateHash" : "8a76dadd26f0248a3485940595de3aa65113cbfaae2258ef8860417866e39675",
   "number" : 10,
   "rank" : "Frost",
   "title" : "Four Play"

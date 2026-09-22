@@ -6,6 +6,7 @@
           "_0" : 40
         }
       },
+      "afterTick" : true,
       "tick" : 4
     },
     {
@@ -15,7 +16,8 @@
           "skill" : "climber"
         }
       },
-      "tick" : 177
+      "afterTick" : true,
+      "tick" : 176
     },
     {
       "action" : {
@@ -24,7 +26,8 @@
           "skill" : "digger"
         }
       },
-      "tick" : 339
+      "afterTick" : true,
+      "tick" : 338
     },
     {
       "action" : {
@@ -33,7 +36,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 646
+      "afterTick" : true,
+      "tick" : 645
     },
     {
       "action" : {
@@ -42,7 +46,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 848
+      "afterTick" : true,
+      "tick" : 847
     },
     {
       "action" : {
@@ -51,7 +56,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 1360
+      "afterTick" : true,
+      "tick" : 1358
     },
     {
       "action" : {
@@ -60,7 +66,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1478
+      "afterTick" : true,
+      "tick" : 1481
     },
     {
       "action" : {
@@ -69,7 +76,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1809
+      "afterTick" : true,
+      "tick" : 1812
     },
     {
       "action" : {
@@ -78,7 +86,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 1931
+      "afterTick" : true,
+      "tick" : 1924
     },
     {
       "action" : {
@@ -87,7 +96,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 1996
+      "afterTick" : true,
+      "tick" : 1989
     },
     {
       "action" : {
@@ -96,7 +106,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 2087
+      "afterTick" : true,
+      "tick" : 2080
     },
     {
       "action" : {
@@ -105,7 +116,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 2144
+      "afterTick" : true,
+      "tick" : 2137
     },
     {
       "action" : {
@@ -114,7 +126,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 2648
+      "afterTick" : true,
+      "tick" : 2641
     },
     {
       "action" : {
@@ -123,7 +136,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 2838
+      "afterTick" : true,
+      "tick" : 2831
     },
     {
       "action" : {
@@ -132,7 +146,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 3090
+      "afterTick" : true,
+      "tick" : 3083
     },
     {
       "action" : {
@@ -141,7 +156,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 3242
+      "afterTick" : true,
+      "tick" : 3227
     },
     {
       "action" : {
@@ -150,7 +166,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 3258
+      "afterTick" : true,
+      "tick" : 3243
     },
     {
       "action" : {
@@ -159,7 +176,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 3613
+      "afterTick" : true,
+      "tick" : 3598
     },
     {
       "action" : {
@@ -168,7 +186,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 3765
+      "afterTick" : true,
+      "tick" : 3750
     },
     {
       "action" : {
@@ -177,7 +196,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 3888
+      "afterTick" : true,
+      "tick" : 3862
     },
     {
       "action" : {
@@ -186,7 +206,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 3921
+      "afterTick" : true,
+      "tick" : 3895
     },
     {
       "action" : {
@@ -195,7 +216,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 4186
+      "afterTick" : true,
+      "tick" : 4160
     },
     {
       "action" : {
@@ -204,7 +226,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 4203
+      "afterTick" : true,
+      "tick" : 4177
     }
   ],
   "expected" : {
@@ -212,10 +235,10 @@
     "released" : 50,
     "required" : 25,
     "saved" : 50,
-    "stateHash" : "4240923844a75ed15a6958e55c650a8e6852b249e0b9ef01ef2f08dcb6518715",
-    "ticks" : 4574
+    "stateHash" : "11f708db26274974e7fdf069dc40e6fb94fb3c49e4a4a679f8bb9cfd607c4fb9",
+    "ticks" : 4565
   },
-  "initialStateHash" : "5c30c3cd987190c7080a720f199f016aaf003dc25d2fcb6b976c1dd1596b714a",
+  "initialStateHash" : "857d4725e9fdbddff921ccbf4d6d0ee5bb5c11ff68f301ef6fa000c5601bc548",
   "number" : 2,
   "rank" : "Xmas",
   "title" : "Christmas Bonus"

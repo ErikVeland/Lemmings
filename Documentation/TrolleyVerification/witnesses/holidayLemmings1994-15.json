@@ -28,7 +28,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 218
+      "tick" : 217
     },
     {
       "action" : {
@@ -38,7 +38,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 235
+      "tick" : 234
     },
     {
       "action" : {
@@ -48,7 +48,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 427
+      "tick" : 426
     },
     {
       "action" : {
@@ -58,7 +58,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 451
+      "tick" : 450
     },
     {
       "action" : {
@@ -66,6 +66,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 500
     }
   ],
@@ -74,10 +75,10 @@
     "released" : 80,
     "required" : 79,
     "saved" : 79,
-    "stateHash" : "58bb03b5c448c1a14f6344aa2957cf9771c13730f25cea8e15492a4245bf7a61",
-    "ticks" : 1011
+    "stateHash" : "1389a9f0f0e035e42fd96389ca9aacf762beb0d21e3d8fc3ce126484db3bc94c",
+    "ticks" : 1010
   },
-  "initialStateHash" : "eba8fe9c51311489eb65c1cc9f5c995c06dcbd7930349f8708da2876e98e03f8",
+  "initialStateHash" : "5f0a68e37163e3dfc5484dcbcbfeacae6a725233aa3ba7bbeb63301e9c9562ca",
   "number" : 16,
   "rank" : "Frost",
   "title" : "Up on the Rooftops"

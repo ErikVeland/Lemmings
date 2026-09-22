@@ -7,7 +7,8 @@
           "skill" : "miner"
         }
       },
-      "tick" : 160
+      "afterTick" : true,
+      "tick" : 159
     },
     {
       "action" : {
@@ -16,7 +17,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 168
+      "afterTick" : true,
+      "tick" : 162
     },
     {
       "action" : {
@@ -25,7 +27,8 @@
           "skill" : "miner"
         }
       },
-      "tick" : 216
+      "afterTick" : true,
+      "tick" : 210
     },
     {
       "action" : {
@@ -34,7 +37,8 @@
           "skill" : "digger"
         }
       },
-      "tick" : 224
+      "afterTick" : true,
+      "tick" : 213
     },
     {
       "action" : {
@@ -43,7 +47,8 @@
           "skill" : "miner"
         }
       },
-      "tick" : 248
+      "afterTick" : true,
+      "tick" : 230
     },
     {
       "action" : {
@@ -52,7 +57,8 @@
           "skill" : "bomber"
         }
       },
-      "tick" : 2904
+      "afterTick" : true,
+      "tick" : 2886
     }
   ],
   "expected" : {
@@ -60,10 +66,10 @@
     "released" : 50,
     "required" : 25,
     "saved" : 49,
-    "stateHash" : "ce5e643d18f73df3b41971be8f3ee0f0c4e1e2e0a1f48907f95b9d99caef81cf",
-    "ticks" : 3051
+    "stateHash" : "28c5990b4069d89c246d73a8fa850bc976fee3cd3b3ef661c438064ed53fec6d",
+    "ticks" : 3033
   },
-  "initialStateHash" : "255405b7cad971d43186bc365a8eb2435092e59e982625b2b0f7b087c830520f",
+  "initialStateHash" : "5336b1af6ab326b088cd965a72ebb1b230c57c3626f0785968513a34d924d543",
   "number" : 8,
   "rank" : "Tame",
   "title" : "Dangerzone"

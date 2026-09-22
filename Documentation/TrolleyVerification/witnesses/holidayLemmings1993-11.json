@@ -8,7 +8,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 200
+      "tick" : 199
     },
     {
       "action" : {
@@ -18,27 +18,27 @@
         }
       },
       "afterTick" : true,
-      "tick" : 322
+      "tick" : 321
     },
     {
       "action" : {
         "assign" : {
-          "lemmingID" : 2,
+          "lemmingID" : 3,
           "skill" : "basher"
         }
       },
       "afterTick" : true,
-      "tick" : 337
+      "tick" : 367
     },
     {
       "action" : {
         "assign" : {
-          "lemmingID" : 2,
+          "lemmingID" : 3,
           "skill" : "builder"
         }
       },
       "afterTick" : true,
-      "tick" : 457
+      "tick" : 487
     },
     {
       "action" : {
@@ -46,6 +46,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 600
     }
   ],
@@ -54,10 +55,10 @@
     "released" : 80,
     "required" : 77,
     "saved" : 80,
-    "stateHash" : "9cf4ae9f4e472e20cce21a0e8d5364590ec040448985002edf7526da99bdd92d",
-    "ticks" : 1722
+    "stateHash" : "b345a43f3d04143c5c1586adf0aa1befaea79505f5e1bdb0d176fcdfec8087f4",
+    "ticks" : 1717
   },
-  "initialStateHash" : "fcc7cca268ab28323fcdc8775d880e4889c4e97caede68dd5e8dfab7177ffe2e",
+  "initialStateHash" : "2b9f52d1ce47386441d8d9bcb2ab3a6b7d9de1491584655a75d738f720917b12",
   "number" : 12,
   "rank" : "Flurry",
   "title" : "Presents of Mind"

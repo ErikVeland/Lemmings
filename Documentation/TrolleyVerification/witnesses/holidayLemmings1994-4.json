@@ -8,7 +8,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 110
+      "tick" : 109
     },
     {
       "action" : {
@@ -18,27 +18,27 @@
         }
       },
       "afterTick" : true,
-      "tick" : 304
+      "tick" : 303
     },
     {
       "action" : {
         "assign" : {
-          "lemmingID" : 10,
+          "lemmingID" : 11,
           "skill" : "basher"
         }
       },
       "afterTick" : true,
-      "tick" : 553
+      "tick" : 568
     },
     {
       "action" : {
         "assign" : {
-          "lemmingID" : 1,
+          "lemmingID" : 3,
           "skill" : "basher"
         }
       },
       "afterTick" : true,
-      "tick" : 579
+      "tick" : 594
     }
   ],
   "expected" : {
@@ -46,10 +46,10 @@
     "released" : 70,
     "required" : 70,
     "saved" : 70,
-    "stateHash" : "55b083f1f4106ed5a15bb1631d302623e67205cb19bf4ae0342041bfeab9962c",
-    "ticks" : 1813
+    "stateHash" : "5e1690c2bcaf9f79c4a5cc3f10f7217cbb469abba320a851be82f50288d31772",
+    "ticks" : 1812
   },
-  "initialStateHash" : "b5a2ef20dbc195b03d3cdb783d82edabf1128d2feec423de70ecad29bcacf198",
+  "initialStateHash" : "56b50345a36ae823b2e0c23b37ff96b81a355dc8c02b7ef23af5cbeb6fe345ae",
   "number" : 5,
   "rank" : "Frost",
   "title" : "Lemming Reunification"

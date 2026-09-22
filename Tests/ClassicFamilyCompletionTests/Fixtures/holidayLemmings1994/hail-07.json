@@ -6,6 +6,7 @@
           "_0" : 1
         }
       },
+      "afterTick" : true,
       "tick" : 13
     },
     {
@@ -14,6 +15,7 @@
           "_0" : 2
         }
       },
+      "afterTick" : true,
       "tick" : 21
     },
     {
@@ -22,6 +24,7 @@
           "_0" : 3
         }
       },
+      "afterTick" : true,
       "tick" : 22
     },
     {
@@ -30,6 +33,7 @@
           "_0" : 4
         }
       },
+      "afterTick" : true,
       "tick" : 23
     },
     {
@@ -38,6 +42,7 @@
           "_0" : 5
         }
       },
+      "afterTick" : true,
       "tick" : 24
     },
     {
@@ -46,6 +51,7 @@
           "_0" : 6
         }
       },
+      "afterTick" : true,
       "tick" : 25
     },
     {
@@ -54,6 +60,7 @@
           "_0" : 7
         }
       },
+      "afterTick" : true,
       "tick" : 26
     },
     {
@@ -62,6 +69,7 @@
           "_0" : 8
         }
       },
+      "afterTick" : true,
       "tick" : 27
     },
     {
@@ -70,6 +78,7 @@
           "_0" : 9
         }
       },
+      "afterTick" : true,
       "tick" : 28
     },
     {
@@ -78,6 +87,7 @@
           "_0" : 10
         }
       },
+      "afterTick" : true,
       "tick" : 29
     },
     {
@@ -86,6 +96,7 @@
           "_0" : 9
         }
       },
+      "afterTick" : true,
       "tick" : 35
     },
     {
@@ -95,7 +106,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 100
+      "afterTick" : true,
+      "tick" : 99
     },
     {
       "action" : {
@@ -104,7 +116,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 160
+      "afterTick" : true,
+      "tick" : 159
     },
     {
       "action" : {
@@ -113,7 +126,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 220
+      "afterTick" : true,
+      "tick" : 219
     },
     {
       "action" : {
@@ -122,7 +136,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 280
+      "afterTick" : true,
+      "tick" : 279
     },
     {
       "action" : {
@@ -131,7 +146,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 316
+      "afterTick" : true,
+      "tick" : 315
     },
     {
       "action" : {
@@ -140,7 +156,8 @@
           "skill" : "climber"
         }
       },
-      "tick" : 360
+      "afterTick" : true,
+      "tick" : 359
     },
     {
       "action" : {
@@ -149,7 +166,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1248
+      "afterTick" : true,
+      "tick" : 1247
     },
     {
       "action" : {
@@ -158,7 +176,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1530
+      "afterTick" : true,
+      "tick" : 1529
     },
     {
       "action" : {
@@ -167,7 +186,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1995
+      "afterTick" : true,
+      "tick" : 1994
     },
     {
       "action" : {
@@ -176,7 +196,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 3082
+      "afterTick" : true,
+      "tick" : 3081
     },
     {
       "action" : {
@@ -185,7 +206,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 4138
+      "afterTick" : true,
+      "tick" : 4137
     },
     {
       "action" : {
@@ -194,7 +216,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 4173
+      "afterTick" : true,
+      "tick" : 4172
     },
     {
       "action" : {
@@ -203,7 +226,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 4317
+      "afterTick" : true,
+      "tick" : 4316
     },
     {
       "action" : {
@@ -212,7 +236,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 4509
+      "afterTick" : true,
+      "tick" : 4508
     }
   ],
   "expected" : {
@@ -220,10 +245,10 @@
     "released" : 80,
     "required" : 80,
     "saved" : 80,
-    "stateHash" : "3f19f3f09b6fe472ffb784f80c8750818e210bdb5df3549364b1ffcc34297834",
-    "ticks" : 5067
+    "stateHash" : "cb395efcb66cbb415b42afc536726e73b6d79a9b4c8ed756569126f06b11cc9b",
+    "ticks" : 5066
   },
-  "initialStateHash" : "ec446c4d97c7a2a4846e078a4946e771349fdbed4fb7d977103b89e39a7cbd46",
+  "initialStateHash" : "8e28976adc7dfe2e7994314507c0b07864e2c66d211ea320a94f497a8a597ce7",
   "number" : 7,
   "rank" : "Hail",
   "title" : "Steel Ice Span"

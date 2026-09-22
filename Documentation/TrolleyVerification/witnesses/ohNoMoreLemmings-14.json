@@ -7,7 +7,8 @@
           "skill" : "miner"
         }
       },
-      "tick" : 96
+      "afterTick" : true,
+      "tick" : 95
     },
     {
       "action" : {
@@ -16,7 +17,8 @@
           "skill" : "blocker"
         }
       },
-      "tick" : 120
+      "afterTick" : true,
+      "tick" : 119
     },
     {
       "action" : {
@@ -25,7 +27,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 208
+      "afterTick" : true,
+      "tick" : 206
     },
     {
       "action" : {
@@ -34,7 +37,8 @@
           "skill" : "climber"
         }
       },
-      "tick" : 1288
+      "afterTick" : true,
+      "tick" : 1287
     },
     {
       "action" : {
@@ -43,7 +47,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1296
+      "afterTick" : true,
+      "tick" : 1295
     },
     {
       "action" : {
@@ -52,7 +57,8 @@
           "skill" : "floater"
         }
       },
-      "tick" : 1320
+      "afterTick" : true,
+      "tick" : 1319
     },
     {
       "action" : {
@@ -61,7 +67,8 @@
           "skill" : "miner"
         }
       },
-      "tick" : 1328
+      "afterTick" : true,
+      "tick" : 1327
     },
     {
       "action" : {
@@ -70,7 +77,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1656
+      "afterTick" : true,
+      "tick" : 1655
     },
     {
       "action" : {
@@ -79,7 +87,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 1664
+      "afterTick" : true,
+      "tick" : 1663
     },
     {
       "action" : {
@@ -88,7 +97,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 1672
+      "afterTick" : true,
+      "tick" : 1671
     },
     {
       "action" : {
@@ -97,7 +107,8 @@
           "skill" : "bomber"
         }
       },
-      "tick" : 3664
+      "afterTick" : true,
+      "tick" : 3663
     },
     {
       "action" : {
@@ -106,7 +117,8 @@
           "skill" : "floater"
         }
       },
-      "tick" : 3672
+      "afterTick" : true,
+      "tick" : 3665
     },
     {
       "action" : {
@@ -115,7 +127,8 @@
           "skill" : "bomber"
         }
       },
-      "tick" : 3680
+      "afterTick" : true,
+      "tick" : 3666
     },
     {
       "action" : {
@@ -124,7 +137,8 @@
           "skill" : "climber"
         }
       },
-      "tick" : 3768
+      "afterTick" : true,
+      "tick" : 3745
     }
   ],
   "expected" : {
@@ -132,10 +146,10 @@
     "released" : 50,
     "required" : 25,
     "saved" : 49,
-    "stateHash" : "395ae1d1d49250431d9e2e42882874cb406dbee2352789df5c1ec3c2bad9aba7",
-    "ticks" : 3827
+    "stateHash" : "3f3556669bc70f7739678f7975912ee12f927bf11bc12159cb2d49cb1d332f51",
+    "ticks" : 3813
   },
-  "initialStateHash" : "189c075126db0c2522228984f9fefc4559a56296a5ea43af6e03cf85c2870495",
+  "initialStateHash" : "498c10152526fa37d6f6641f1a370cdf3e14073eb407b57729a859f72875b956",
   "number" : 15,
   "rank" : "Tame",
   "title" : "Not just a pretty Lemming"

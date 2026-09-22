@@ -6,6 +6,7 @@
           "_0" : 1
         }
       },
+      "afterTick" : true,
       "tick" : 60
     },
     {
@@ -15,6 +16,7 @@
           "skill" : "climber"
         }
       },
+      "afterTick" : true,
       "tick" : 60
     },
     {
@@ -24,7 +26,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 133
+      "afterTick" : true,
+      "tick" : 132
     },
     {
       "action" : {
@@ -33,7 +36,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 327
+      "afterTick" : true,
+      "tick" : 324
     },
     {
       "action" : {
@@ -42,7 +46,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 520
+      "afterTick" : true,
+      "tick" : 516
     },
     {
       "action" : {
@@ -51,7 +56,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 585
+      "afterTick" : true,
+      "tick" : 580
     },
     {
       "action" : {
@@ -60,7 +66,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 766
+      "afterTick" : true,
+      "tick" : 761
     },
     {
       "action" : {
@@ -69,7 +76,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 928
+      "afterTick" : true,
+      "tick" : 927
     },
     {
       "action" : {
@@ -78,7 +86,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 964
+      "afterTick" : true,
+      "tick" : 953
     },
     {
       "action" : {
@@ -87,7 +96,8 @@
           "skill" : "bomber"
         }
       },
-      "tick" : 1212
+      "afterTick" : true,
+      "tick" : 1201
     },
     {
       "action" : {
@@ -96,7 +106,8 @@
           "skill" : "blocker"
         }
       },
-      "tick" : 1288
+      "afterTick" : true,
+      "tick" : 1287
     },
     {
       "action" : {
@@ -105,7 +116,8 @@
           "skill" : "digger"
         }
       },
-      "tick" : 1316
+      "afterTick" : true,
+      "tick" : 1315
     },
     {
       "action" : {
@@ -114,7 +126,8 @@
           "skill" : "miner"
         }
       },
-      "tick" : 1353
+      "afterTick" : true,
+      "tick" : 1348
     },
     {
       "action" : {
@@ -122,6 +135,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 1367
     }
   ],
@@ -130,10 +144,10 @@
     "released" : 80,
     "required" : 75,
     "saved" : 77,
-    "stateHash" : "594b3374373002b9433c91d37a5d6aa4184975a5b383b57f4a0e9cbe0b8c0e2b",
+    "stateHash" : "c50e73a01246e657b570f7af69c96c1680428c4c2ce1a49d4bf001b70fb271cb",
     "ticks" : 5100
   },
-  "initialStateHash" : "02f57438ee4955c7d975b7c0b79f49481687c987cd897114eb80eba69299a907",
+  "initialStateHash" : "354fff763a3eba272a160e91a7d72cebac2c70ad37eb559d7573498b1a775176",
   "number" : 5,
   "rank" : "Blizzard",
   "title" : "It Came Upon a Lemnight Clear"

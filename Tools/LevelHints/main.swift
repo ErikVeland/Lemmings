@@ -63,7 +63,8 @@ for (game, dataDirectory) in campaigns {
             specials[level.specialStyle] = try ClassicSpecialGraphic.load(index: level.specialStyle - 1, from: dataDirectory)
         }
         let rendered = try ClassicLevelRenderer.render(level, groundSet: grounds[level.groundStyle]!, specialGraphic: specials[level.specialStyle])
-        var sim = try ClassicDOSSimulation(level: level, renderedLevel: rendered, mainDATAssets: assets)
+        var sim = try ClassicDOSSimulation(level: level, renderedLevel: rendered, mainDATAssets: assets,
+                                           mechanics: ClassicDOSMechanics(title: ClassicTitle(rawValue: game), rank: entry.rank))
         let identity = try fingerprint(sim)
         let replay: ClassicDOSReplay
         if game == "lemmings" {

@@ -6,6 +6,7 @@
           "_0" : 1
         }
       },
+      "afterTick" : true,
       "tick" : 20
     },
     {
@@ -15,7 +16,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 99
+      "afterTick" : true,
+      "tick" : 98
     },
     {
       "action" : {
@@ -24,7 +26,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 199
+      "afterTick" : true,
+      "tick" : 198
     },
     {
       "action" : {
@@ -33,7 +36,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 277
+      "afterTick" : true,
+      "tick" : 276
     },
     {
       "action" : {
@@ -42,7 +46,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 342
+      "afterTick" : true,
+      "tick" : 341
     },
     {
       "action" : {
@@ -51,7 +56,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 404
+      "afterTick" : true,
+      "tick" : 403
     },
     {
       "action" : {
@@ -60,7 +66,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 498
+      "afterTick" : true,
+      "tick" : 497
     },
     {
       "action" : {
@@ -69,7 +76,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 592
+      "afterTick" : true,
+      "tick" : 591
     },
     {
       "action" : {
@@ -78,7 +86,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 698
+      "afterTick" : true,
+      "tick" : 697
     },
     {
       "action" : {
@@ -87,7 +96,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 763
+      "afterTick" : true,
+      "tick" : 762
     },
     {
       "action" : {
@@ -96,7 +106,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 902
+      "afterTick" : true,
+      "tick" : 901
     },
     {
       "action" : {
@@ -105,7 +116,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 961
+      "afterTick" : true,
+      "tick" : 960
     },
     {
       "action" : {
@@ -114,7 +126,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1022
+      "afterTick" : true,
+      "tick" : 1021
     },
     {
       "action" : {
@@ -123,7 +136,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1082
+      "afterTick" : true,
+      "tick" : 1081
     },
     {
       "action" : {
@@ -132,7 +146,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1232
+      "afterTick" : true,
+      "tick" : 1231
     },
     {
       "action" : {
@@ -141,7 +156,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1324
+      "afterTick" : true,
+      "tick" : 1323
     },
     {
       "action" : {
@@ -150,7 +166,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1422
+      "afterTick" : true,
+      "tick" : 1421
     },
     {
       "action" : {
@@ -159,7 +176,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1467
+      "afterTick" : true,
+      "tick" : 1466
     },
     {
       "action" : {
@@ -168,7 +186,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1485
+      "afterTick" : true,
+      "tick" : 1484
     },
     {
       "action" : {
@@ -177,7 +196,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1569
+      "afterTick" : true,
+      "tick" : 1568
     },
     {
       "action" : {
@@ -186,7 +206,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1647
+      "afterTick" : true,
+      "tick" : 1646
     },
     {
       "action" : {
@@ -195,7 +216,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1832
+      "afterTick" : true,
+      "tick" : 1831
     },
     {
       "action" : {
@@ -203,6 +225,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 1868
     },
     {
@@ -212,7 +235,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 2015
+      "afterTick" : true,
+      "tick" : 2014
     }
   ],
   "expected" : {
@@ -220,10 +244,10 @@
     "released" : 80,
     "required" : 65,
     "saved" : 65,
-    "stateHash" : "4f4ded664f601d4c8f55d948f787f7dd417be64157b1d89a1c9c878a9eaf21fc",
-    "ticks" : 2687
+    "stateHash" : "e5e563b9d6e609147230e509c7f1a02f7b38d79a7738863b12b53e67d52d8248",
+    "ticks" : 2686
   },
-  "initialStateHash" : "df5fccb6afb2b11e3dcce700e43cb19e2a7e0d1f6aaf8da76c14049d79c24670",
+  "initialStateHash" : "414be711043b891a3bcf7f06e2e661219202cdd81e5fe167237ed65bd0649724",
   "number" : 19,
   "rank" : "Wild",
   "title" : "Lemmingdelica"

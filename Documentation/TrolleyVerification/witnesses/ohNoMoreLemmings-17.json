@@ -42,10 +42,10 @@
     "released" : 50,
     "required" : 25,
     "saved" : 50,
-    "stateHash" : "02991ae5bf804bf717d7a4da1b3c3dff271ac989976402474a5f89872c97b4b9",
-    "ticks" : 3211
+    "stateHash" : "67c66df8fbbcaa40d3c20f4457f7ae3ab25f65e5fb86c1f3b0e5bfe8a91277e5",
+    "ticks" : 3208
   },
-  "initialStateHash" : "13085eddf3aad9d85369a70dea64ac23df7da6f8d9508049ddfb44b520708a92",
+  "initialStateHash" : "24e3a9a6ca55a24d32438e4a0287a6e264ac92dd6429c5ad11113a435f5ee456",
   "number" : 18,
   "rank" : "Tame",
   "title" : "Lemmings For Presidents!"

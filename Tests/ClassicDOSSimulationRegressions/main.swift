@@ -995,6 +995,65 @@ private func soakOfficialCampaign(dataDirectory: URL) throws -> CampaignSoakResu
     return totals
 }
 
+private func testOhNoMoreMechanics(dataDirectory: URL) throws {
+    try require(ClassicDOSMechanics(title: .lemmings, rank: "Fun") == .original, "original release rules")
+    for title in [ClassicTitle.ohNoMoreLemmings, .xmasLemmings1991, .xmasLemmings1992, .holidayLemmings1993, .holidayLemmings1994] {
+        try require(ClassicDOSMechanics(title: title, rank: "") == .ohNoMore, "\(title) should use the later rules")
+    }
+    try require(ClassicDOSMechanics(title: .ohYesMoreLemmings, rank: "Oh No! More Lemmings Versus") == .ohNoMore
+        && ClassicDOSMechanics(title: .ohYesMoreLemmings, rank: "Lemmings Versus") == .original
+        && ClassicDOSMechanics(title: nil, rank: "fan pack") == .original, "conversion and fan rules")
+
+    try require(ClassicDOSRules.hatchOrder(entranceCount: 2, mechanics: .ohNoMore) == [0, 1, 0, 1]
+        && ClassicDOSRules.hatchOrder(entranceCount: 3, mechanics: .ohNoMore) == [0, 1, 2, 1], "later hatch tables")
+    var config = configuration(totalLemmings: 8, releaseRate: 99, entrances: [ClassicDOSPoint(x: 10, y: 0), ClassicDOSPoint(x: 20, y: 0)])
+    config = ClassicDOSConfiguration(totalLemmings: config.totalLemmings, requiredToSave: 0, timeLimitTicks: nil,
+        initialReleaseRate: 99, entrances: config.entrances, maximumX: 63, maximumY: 511, mechanics: .ohNoMore)
+    var alternating = try ClassicDOSSimulation(terrain: emptyTerrain(), configuration: config)
+    var observed: [Int] = []
+    while observed.count < 8 { observed.append(contentsOf: hatchEvents(in: alternating.tick()).map(\.entrance)) }
+    try require(observed == [0, 1, 0, 1, 0, 1, 0, 1], "later two-hatch release sequence was \(observed)")
+
+    // Oh No! spawns one pixel further right than the original game.
+    let campaign = try ClassicCampaignDefinition.originalDOSLemmings.load(from: dataDirectory)
+    let level = campaign.levels[0].level
+    let rendered = try ClassicLevelRenderer.render(level, groundSet: ClassicGroundSet.load(style: level.groundStyle, from: dataDirectory))
+    let original = try ClassicDOSSimulation(level: level, renderedLevel: rendered)
+    let later = try ClassicDOSSimulation(level: level, renderedLevel: rendered, mechanics: .ohNoMore)
+    try require(zip(original.configuration.entrances, later.configuration.entrances).allSatisfy { $0.x + 1 == $1.x && $0.y == $1.y },
+        "later hatch offset should be x+25")
+    try require(ClassicDOSReplayRecorder.stateHash(of: original) != ClassicDOSReplayRecorder.stateHash(of: later),
+        "rule sets must not share a replay identity")
+
+    // Only the original game ends a builder's shrug when it gets a climber.
+    func shrugAfterClimber(_ mechanics: ClassicDOSMechanics) throws -> ClassicDOSAction {
+        var simulation = try ClassicDOSSimulation(terrain: floorTerrain(), configuration: ClassicDOSConfiguration(
+            totalLemmings: 1, requiredToSave: 0, timeLimitTicks: nil, initialReleaseRate: 50,
+            entrances: [ClassicDOSPoint(x: 40, y: 30)], initialSkills: [.builder: 1, .climber: 1],
+            maximumX: 191, maximumY: 95, mechanics: mechanics))
+        var built = false
+        while simulation.tickCount < 1500 {
+            _ = simulation.tick()
+            guard let lemming = simulation.lemmings.first else { continue }
+            if !built, lemming.action == .walking { built = simulation.assign(.builder, to: lemming.id) == .assigned }
+            if lemming.action == .shrugging {
+                try require(simulation.assign(.climber, to: lemming.id) == .assigned, "climber was refused")
+                return simulation.lemmings[0].action
+            }
+        }
+        throw RegressionFailure(description: "builder never shrugged")
+    }
+    let originalShrug = try shrugAfterClimber(.original), laterShrug = try shrugAfterClimber(.ohNoMore)
+    try require(originalShrug == .walking, "original climber should end the shrug")
+    try require(laterShrug == .shrugging, "later climber should keep the shrug")
+
+    // Checkpoints written before rule sets existed restore the original rules.
+    var object = try JSONSerialization.jsonObject(with: JSONEncoder().encode(later.configuration)) as! [String: Any]
+    try require(object.removeValue(forKey: "mechanics") != nil, "configuration should encode its rule set")
+    let restored = try JSONDecoder().decode(ClassicDOSConfiguration.self, from: JSONSerialization.data(withJSONObject: object))
+    try require(restored.mechanics == .original, "a missing rule set should decode as original")
+}
+
 private func run() throws {
     guard CommandLine.arguments.count == 2 else {
         throw RegressionFailure(description: "usage: ClassicDOSSimulationRegressions CLASSIC_DATA_DIRECTORY")
@@ -1020,6 +1079,7 @@ private func run() throws {
     try testSplatterWaterUsesZeroHorizontalVelocity()
     try testDeterministicCodableContinuation()
     try testReplayInsertionOrdering()
+    try testOhNoMoreMechanics(dataDirectory: dataDirectory)
     let soak = try soakOfficialCampaign(dataDirectory: dataDirectory)
 
     print("Classic DOS rules: RR1=53, RR2=52, RR98=4, RR99=4; entrance tick=35; first hatch tick=54.")

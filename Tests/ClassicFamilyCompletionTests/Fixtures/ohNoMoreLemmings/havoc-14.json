@@ -17,7 +17,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 74
+      "tick" : 73
     },
     {
       "action" : {
@@ -37,7 +37,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 96
+      "tick" : 95
     },
     {
       "action" : {
@@ -47,7 +47,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 134
+      "tick" : 133
     },
     {
       "action" : {
@@ -67,7 +67,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 156
+      "tick" : 155
     },
     {
       "action" : {
@@ -87,7 +87,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 216
+      "tick" : 215
     },
     {
       "action" : {
@@ -97,7 +97,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 292
+      "tick" : 291
     },
     {
       "action" : {
@@ -107,7 +107,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 353
+      "tick" : 352
     },
     {
       "action" : {
@@ -117,7 +117,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 385
+      "tick" : 384
     },
     {
       "action" : {
@@ -127,7 +127,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 412
+      "tick" : 411
     }
   ],
   "expected" : {
@@ -135,10 +135,10 @@
     "released" : 80,
     "required" : 80,
     "saved" : 80,
-    "stateHash" : "5d92f20f887fb0b4cfcdd7a074299de116352216aec08e69060884f4671bee03",
-    "ticks" : 991
+    "stateHash" : "c13c89cba889b627ae845d05e1ffc53ef675bddf8823578cfec575fd8aad3b20",
+    "ticks" : 989
   },
-  "initialStateHash" : "3e1bbbb2ef6ec84300c2d2374d99a14073f7591608576c7a3b39a0fbc4b1c1e8",
+  "initialStateHash" : "54e38f98cb44f661c45ae82240eca186765827ce2791688b6db5b9c1487d455e",
   "number" : 14,
   "rank" : "Havoc",
   "title" : "Synchronised Lemming"

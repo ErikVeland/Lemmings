@@ -42,7 +42,19 @@ class CoverageTests(unittest.TestCase):
         self.assertTrue(self.run_report())
 
     def test_smoke_is_not_completion(self):
-        self.rows[-1]["status"] = "rendered-and-smoke-tested-only"
+        self.rows[0]["status"] = "rendered-and-smoke-tested-only"
+        self.assertFalse(self.run_report())
+
+    def test_conversion_needs_a_win(self):
+        next(row for row in self.rows if row["collection"] == "ohYesMoreLemmings")["status"] = "rendered-and-smoke-tested-only"
+        self.assertFalse(self.run_report())
+
+    def test_fan_level_needs_no_route(self):
+        self.rows[-1] = {"collection": "fan", "source": "test.zip/test.lvl#0", "status": "rendered-and-smoke-tested-only"}
+        self.assertTrue(self.run_report())
+
+    def test_fan_level_must_load(self):
+        self.rows[-1] = {"collection": "fan", "source": "test.zip/test.lvl#0", "status": "load-or-render-failed"}
         self.assertFalse(self.run_report())
 
     def test_missing_collection(self):

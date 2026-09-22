@@ -6,6 +6,7 @@
           "_0" : 1
         }
       },
+      "afterTick" : true,
       "tick" : 8
     },
     {
@@ -14,6 +15,7 @@
           "_0" : 87
         }
       },
+      "afterTick" : true,
       "tick" : 8
     },
     {
@@ -22,6 +24,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 826
     },
     {
@@ -31,7 +34,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 1074
+      "afterTick" : true,
+      "tick" : 1073
     },
     {
       "action" : {
@@ -40,7 +44,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 1599
+      "afterTick" : true,
+      "tick" : 1598
     },
     {
       "action" : {
@@ -49,7 +54,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1614
+      "afterTick" : true,
+      "tick" : 1613
     },
     {
       "action" : {
@@ -58,7 +64,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 1680
+      "afterTick" : true,
+      "tick" : 1677
     },
     {
       "action" : {
@@ -67,7 +74,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 1748
+      "afterTick" : true,
+      "tick" : 1745
     },
     {
       "action" : {
@@ -76,7 +84,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1758
+      "afterTick" : true,
+      "tick" : 1755
     },
     {
       "action" : {
@@ -85,7 +94,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1847
+      "afterTick" : true,
+      "tick" : 1844
     }
   ],
   "expected" : {
@@ -93,10 +103,10 @@
     "released" : 80,
     "required" : 75,
     "saved" : 80,
-    "stateHash" : "f257ceea7c331de857684f9be8d3af5ce797c2a0733fc34192dcb44d26bbb41e",
-    "ticks" : 1995
+    "stateHash" : "1f9dd75402a798941d1fa8f1cc185218f5a75c0c625729c995ae5c12fef8c840",
+    "ticks" : 1994
   },
-  "initialStateHash" : "029e65c64e7975d8676f07cc00631b48c94fe0a829f5a3f90eb94711137d060c",
+  "initialStateHash" : "cad810fb4dbedbd84208e5faa024b739c1e29d7077c4c52b34fa469c98d5bcdc",
   "number" : 12,
   "rank" : "Crazy",
   "title" : "Lemming Friendly"

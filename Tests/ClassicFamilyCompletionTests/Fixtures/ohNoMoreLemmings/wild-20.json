@@ -6,6 +6,7 @@
           "_0" : 1
         }
       },
+      "afterTick" : true,
       "tick" : 24
     },
     {
@@ -15,7 +16,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 102
+      "afterTick" : true,
+      "tick" : 101
     },
     {
       "action" : {
@@ -24,7 +26,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 151
+      "afterTick" : true,
+      "tick" : 150
     },
     {
       "action" : {
@@ -33,7 +36,8 @@
           "skill" : "digger"
         }
       },
-      "tick" : 239
+      "afterTick" : true,
+      "tick" : 238
     },
     {
       "action" : {
@@ -41,6 +45,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 245
     },
     {
@@ -50,7 +55,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 557
+      "afterTick" : true,
+      "tick" : 556
     }
   ],
   "expected" : {
@@ -58,10 +64,10 @@
     "released" : 30,
     "required" : 29,
     "saved" : 29,
-    "stateHash" : "c4b9f40100d44b61387c5b150c0fedf742199e06d7d8d6aded793be1c530dcd9",
-    "ticks" : 1151
+    "stateHash" : "3874994d6541e893f111471151b87ebd1bcebf7275e70145ee1c15ed4b143288",
+    "ticks" : 1150
   },
-  "initialStateHash" : "8340bea3ee860461ceae9f096bc1124f980fc8f8816dedd97ff833143958c928",
+  "initialStateHash" : "b1c53657a18e34109b3914518bb92350957d1604eaaf7ed8b70d2effe847fff2",
   "number" : 20,
   "rank" : "Wild",
   "title" : "Got anything....Lemmingy???"

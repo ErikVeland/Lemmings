@@ -6,6 +6,7 @@
           "_0" : 1
         }
       },
+      "afterTick" : true,
       "tick" : 33
     },
     {
@@ -15,7 +16,8 @@
           "skill" : "miner"
         }
       },
-      "tick" : 71
+      "afterTick" : true,
+      "tick" : 70
     },
     {
       "action" : {
@@ -24,7 +26,8 @@
           "skill" : "digger"
         }
       },
-      "tick" : 74
+      "afterTick" : true,
+      "tick" : 73
     },
     {
       "action" : {
@@ -33,7 +36,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 85
+      "afterTick" : true,
+      "tick" : 82
     },
     {
       "action" : {
@@ -41,6 +45,7 @@
           "_0" : 41
         }
       },
+      "afterTick" : true,
       "tick" : 117
     },
     {
@@ -49,6 +54,7 @@
           "_0" : 51
         }
       },
+      "afterTick" : true,
       "tick" : 121
     },
     {
@@ -57,6 +63,7 @@
           "_0" : 57
         }
       },
+      "afterTick" : true,
       "tick" : 121
     },
     {
@@ -66,7 +73,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 148
+      "afterTick" : true,
+      "tick" : 145
     },
     {
       "action" : {
@@ -74,6 +82,7 @@
           "_0" : 1
         }
       },
+      "afterTick" : true,
       "tick" : 165
     },
     {
@@ -83,7 +92,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 270
+      "afterTick" : true,
+      "tick" : 267
     },
     {
       "action" : {
@@ -92,7 +102,8 @@
           "skill" : "miner"
         }
       },
-      "tick" : 339
+      "afterTick" : true,
+      "tick" : 336
     },
     {
       "action" : {
@@ -101,7 +112,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 356
+      "afterTick" : true,
+      "tick" : 351
     },
     {
       "action" : {
@@ -110,7 +122,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 418
+      "afterTick" : true,
+      "tick" : 413
     },
     {
       "action" : {
@@ -119,7 +132,8 @@
           "skill" : "digger"
         }
       },
-      "tick" : 603
+      "afterTick" : true,
+      "tick" : 598
     },
     {
       "action" : {
@@ -128,7 +142,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 621
+      "afterTick" : true,
+      "tick" : 615
     },
     {
       "action" : {
@@ -137,7 +152,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 651
+      "afterTick" : true,
+      "tick" : 645
     },
     {
       "action" : {
@@ -145,6 +161,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 712
     }
   ],
@@ -153,10 +170,10 @@
     "released" : 80,
     "required" : 80,
     "saved" : 80,
-    "stateHash" : "92993731c4758a9d5065e229724a071288f415d06d43fbab263bffce2f0ba9af",
-    "ticks" : 1432
+    "stateHash" : "fd44d850733f0fd60d28e2575c14ffa567d4c77576df571257d8815254555824",
+    "ticks" : 1431
   },
-  "initialStateHash" : "2dc529a89fbbc60547fdb53a8956ceacf590a4ba4b06ffb42f35edb91eb9d303",
+  "initialStateHash" : "72b2f435bea52b2e8f9c71271ad2df9f3c451884df4fe1a706f18c22c5634f4d",
   "number" : 6,
   "rank" : "Wild",
   "title" : "Just A Quicky"

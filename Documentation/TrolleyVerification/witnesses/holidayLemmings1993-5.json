@@ -78,10 +78,10 @@
     "released" : 80,
     "required" : 40,
     "saved" : 80,
-    "stateHash" : "739d0b296a1a18fa2fe38a54532f6c3d3b6f78909d607d6643b8fd1a4e7f43e9",
+    "stateHash" : "67d7c0b5dd837f2df938a29fe24130e33f10a76f08958736601f74ae6f94288d",
     "ticks" : 4281
   },
-  "initialStateHash" : "61f4e334f891774862091a1c1fc37c8bbff5ccf92a786c0d36c9dc1b0033784d",
+  "initialStateHash" : "63e6f4cfe8780c092be5d470332f1719b03eb885fb1695088d1cefd5f8db5952",
   "number" : 6,
   "rank" : "Flurry",
   "title" : "Lemming Snowfall"

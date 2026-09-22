@@ -6,6 +6,7 @@
           "_0" : 1
         }
       },
+      "afterTick" : true,
       "tick" : 9
     },
     {
@@ -14,6 +15,7 @@
           "_0" : 88
         }
       },
+      "afterTick" : true,
       "tick" : 9
     },
     {
@@ -22,6 +24,7 @@
           "_0" : 1
         }
       },
+      "afterTick" : true,
       "tick" : 87
     },
     {
@@ -31,7 +34,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 93
+      "afterTick" : true,
+      "tick" : 92
     },
     {
       "action" : {
@@ -40,7 +44,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 107
+      "afterTick" : true,
+      "tick" : 106
     },
     {
       "action" : {
@@ -49,7 +54,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 121
+      "afterTick" : true,
+      "tick" : 120
     },
     {
       "action" : {
@@ -58,7 +64,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 135
+      "afterTick" : true,
+      "tick" : 134
     },
     {
       "action" : {
@@ -67,7 +74,8 @@
           "skill" : "blocker"
         }
       },
-      "tick" : 144
+      "afterTick" : true,
+      "tick" : 140
     },
     {
       "action" : {
@@ -76,7 +84,8 @@
           "skill" : "blocker"
         }
       },
-      "tick" : 152
+      "afterTick" : true,
+      "tick" : 151
     },
     {
       "action" : {
@@ -85,7 +94,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 170
+      "afterTick" : true,
+      "tick" : 169
     },
     {
       "action" : {
@@ -94,7 +104,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 369
+      "afterTick" : true,
+      "tick" : 361
     },
     {
       "action" : {
@@ -103,7 +114,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 605
+      "afterTick" : true,
+      "tick" : 597
     },
     {
       "action" : {
@@ -112,7 +124,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 799
+      "afterTick" : true,
+      "tick" : 789
     },
     {
       "action" : {
@@ -121,7 +134,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1042
+      "afterTick" : true,
+      "tick" : 1032
     },
     {
       "action" : {
@@ -130,7 +144,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1237
+      "afterTick" : true,
+      "tick" : 1224
     },
     {
       "action" : {
@@ -139,7 +154,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1278
+      "afterTick" : true,
+      "tick" : 1277
     },
     {
       "action" : {
@@ -147,6 +163,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 1290
     }
   ],
@@ -155,10 +172,10 @@
     "released" : 50,
     "required" : 45,
     "saved" : 45,
-    "stateHash" : "616dfd8033f10d1399631c0711dc74d857e66d9d8572eaf4bcd90b0f3bc5848f",
+    "stateHash" : "fc4cdbc076ad43dee35c3531d2f6d07c649a939eb3b2eccdba1eafa6e8356956",
     "ticks" : 4080
   },
-  "initialStateHash" : "9611cea0fb9a9938e301d48be013c3606df578e7de8f2145e3499b4e868ed88d",
+  "initialStateHash" : "0ff0b4ac92c36ed40654bd6ce612bd7dd28ffa66ed770837d2c990c9c6f7f85a",
   "number" : 9,
   "rank" : "Wicked",
   "title" : "How on Earth?"

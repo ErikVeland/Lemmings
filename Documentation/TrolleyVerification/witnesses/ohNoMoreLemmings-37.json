@@ -6,6 +6,7 @@
           "_0" : 10
         }
       },
+      "afterTick" : true,
       "tick" : 20
     },
     {
@@ -15,7 +16,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 199
+      "afterTick" : true,
+      "tick" : 198
     },
     {
       "action" : {
@@ -23,6 +25,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 441
     },
     {
@@ -32,7 +35,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 460
+      "afterTick" : true,
+      "tick" : 459
     },
     {
       "action" : {
@@ -41,7 +45,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 865
+      "afterTick" : true,
+      "tick" : 864
     },
     {
       "action" : {
@@ -50,7 +55,8 @@
           "skill" : "miner"
         }
       },
-      "tick" : 1126
+      "afterTick" : true,
+      "tick" : 1125
     },
     {
       "action" : {
@@ -59,7 +65,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1179
+      "afterTick" : true,
+      "tick" : 1176
     },
     {
       "action" : {
@@ -68,7 +75,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1381
+      "afterTick" : true,
+      "tick" : 1378
     },
     {
       "action" : {
@@ -77,7 +85,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 1603
+      "afterTick" : true,
+      "tick" : 1600
     },
     {
       "action" : {
@@ -86,7 +95,8 @@
           "skill" : "miner"
         }
       },
-      "tick" : 1627
+      "afterTick" : true,
+      "tick" : 1624
     }
   ],
   "expected" : {
@@ -94,10 +104,10 @@
     "released" : 50,
     "required" : 45,
     "saved" : 46,
-    "stateHash" : "28593be808708626f7c4f101c577fc666cf913494557390033d078e6a0d29f6b",
-    "ticks" : 3034
+    "stateHash" : "703a6ccc415b2e194403692743c10ec4eee1b7568c191f12c4f985fe8ac5bd8b",
+    "ticks" : 3033
   },
-  "initialStateHash" : "3552f562ccd4dece49e92146aa97a0a66a45bd15f734aae5d20fd512b719e586",
+  "initialStateHash" : "1565aca8c053465820146126e4ad512a6f267fe52e298d937d4dd84aa9ffc06f",
   "number" : 18,
   "rank" : "Crazy",
   "title" : "NO PROBLEM"

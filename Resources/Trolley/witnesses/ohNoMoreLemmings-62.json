@@ -6,6 +6,7 @@
           "_0" : 1
         }
       },
+      "afterTick" : true,
       "tick" : 35
     },
     {
@@ -15,7 +16,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 148
+      "afterTick" : true,
+      "tick" : 147
     },
     {
       "action" : {
@@ -24,7 +26,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 194
+      "afterTick" : true,
+      "tick" : 193
     },
     {
       "action" : {
@@ -33,7 +36,8 @@
           "skill" : "digger"
         }
       },
-      "tick" : 324
+      "afterTick" : true,
+      "tick" : 323
     },
     {
       "action" : {
@@ -42,7 +46,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 881
+      "afterTick" : true,
+      "tick" : 876
     },
     {
       "action" : {
@@ -51,7 +56,8 @@
           "skill" : "digger"
         }
       },
-      "tick" : 973
+      "afterTick" : true,
+      "tick" : 972
     },
     {
       "action" : {
@@ -59,6 +65,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 1023
     }
   ],
@@ -67,10 +74,10 @@
     "released" : 50,
     "required" : 50,
     "saved" : 50,
-    "stateHash" : "319c267179eeb4620a18e38eb1ba6e7129bfb4a63fb103ae2147c694ae44c7b1",
-    "ticks" : 1378
+    "stateHash" : "e1bd09bf0fd22b8cafa95b5e3a527349264a9fe7ef10a9781e2e70ecf6f3a93c",
+    "ticks" : 1377
   },
-  "initialStateHash" : "6ff1db7d2fbd867711590dcc475a66e92453a5e19c66aab4ec67ab8b77c58ef6",
+  "initialStateHash" : "d491c56aa389208cc43f8f810e45349be04f9210c3c6a4d140384813bb8ee41e",
   "number" : 3,
   "rank" : "Wicked",
   "title" : "This Corrosion"

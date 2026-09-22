@@ -6,6 +6,7 @@
           "_0" : 1
         }
       },
+      "afterTick" : true,
       "tick" : 32
     },
     {
@@ -15,7 +16,8 @@
           "skill" : "digger"
         }
       },
-      "tick" : 59
+      "afterTick" : true,
+      "tick" : 58
     },
     {
       "action" : {
@@ -24,6 +26,7 @@
           "skill" : "climber"
         }
       },
+      "afterTick" : true,
       "tick" : 109
     },
     {
@@ -33,7 +36,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 130
+      "afterTick" : true,
+      "tick" : 129
     },
     {
       "action" : {
@@ -42,7 +46,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 140
+      "afterTick" : true,
+      "tick" : 139
     },
     {
       "action" : {
@@ -51,7 +56,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 353
+      "afterTick" : true,
+      "tick" : 352
     },
     {
       "action" : {
@@ -60,7 +66,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 621
+      "afterTick" : true,
+      "tick" : 620
     },
     {
       "action" : {
@@ -69,7 +76,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 822
+      "afterTick" : true,
+      "tick" : 821
     },
     {
       "action" : {
@@ -78,7 +86,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1036
+      "afterTick" : true,
+      "tick" : 1035
     },
     {
       "action" : {
@@ -87,7 +96,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1239
+      "afterTick" : true,
+      "tick" : 1238
     },
     {
       "action" : {
@@ -96,7 +106,8 @@
           "skill" : "digger"
         }
       },
-      "tick" : 1353
+      "afterTick" : true,
+      "tick" : 1350
     },
     {
       "action" : {
@@ -105,7 +116,8 @@
           "skill" : "digger"
         }
       },
-      "tick" : 1399
+      "afterTick" : true,
+      "tick" : 1396
     },
     {
       "action" : {
@@ -114,7 +126,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1668
+      "afterTick" : true,
+      "tick" : 1661
     },
     {
       "action" : {
@@ -123,7 +136,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1890
+      "afterTick" : true,
+      "tick" : 1883
     },
     {
       "action" : {
@@ -132,7 +146,8 @@
           "skill" : "climber"
         }
       },
-      "tick" : 2001
+      "afterTick" : true,
+      "tick" : 1980
     }
   ],
   "expected" : {
@@ -140,10 +155,10 @@
     "released" : 2,
     "required" : 2,
     "saved" : 2,
-    "stateHash" : "55a4977a430ecfbe17714cad28174537a3362f5a7ba52560870b8dcb86b461d6",
-    "ticks" : 2401
+    "stateHash" : "83825513a71629e9fd3e9b8b188d43d568cebe38706829a64ba47e3532fb2977",
+    "ticks" : 2380
   },
-  "initialStateHash" : "744e32098c3e782138031dbbf218d88e4bfd6cf18489f8ce0b31905cf81213c5",
+  "initialStateHash" : "f581e65915506564f468599f3d249e56d848f5a45ac810e4afeb12f08f3fd4c4",
   "number" : 4,
   "rank" : "Xmas",
   "title" : "The North Poles"
