@@ -1,13 +1,11 @@
 # Ultimate Lemmings — beta 35
 
-Version 0.1, build 35. All three archives include Intel and Apple silicon builds,
-full soundtracks and the same gameplay changes. These notes list all changes
-since beta 34.
+Version 0.1, build 35. This is a local Game Center build for the registered test
+Macs. It includes Intel and Apple silicon builds and full soundtracks. These notes
+list all changes since beta 34.
 
 | Archive | Minimum macOS | Records |
 | --- | --- | --- |
-| UltimateLemmings-beta35-macOS.zip | 13.0 | Local records; notarised |
-| UltimateLemmings-beta35-macOS12.zip | 12.3 Monterey | Local records; notarised |
 | UltimateLemmings-beta35-gamecenter-macOS.zip | 13.0 | Game Center; registered test Macs only |
 
 ## Changes since beta 34
@@ -24,8 +22,18 @@ DOS rules of those releases. Original Lemmings does not change.
 Oh No! Havoc 20 now plays as in the original game. Lemmings from the left hatch
 land on the ledges in the narrow shaft and do not fall to the bottom.
 
-Some routes that worked in beta 34 no longer work in these levels. A saved run
-from beta 34 continues with the rules that it started with.
+Some routes that worked in beta 34 no longer work in these levels.
+
+### Saved runs
+
+An update no longer stops a saved run from resuming. This includes Hot Seat games.
+
+- A run saved in an earlier build resumes with the rules that it started with.
+- New saved runs also keep the full game state. A later build can continue the
+  run even when it cannot replay the saved moves exactly.
+- Before this change, a build with any engine change showed **Cannot restore
+  run** for every saved run. If you saw that message and did not select
+  **Discard saved run**, select **Resume Saved Run** again.
 
 ### Hints and verified routes
 
@@ -55,10 +63,8 @@ xattr -dr com.apple.quarantine "/Applications/Ultimate Lemmings.app"
   hatches in turn.
 - Open hints and solution replays in Oh No!, Xmas and Holiday levels. Check that
   each replay wins.
-- Continue a saved Oh No! or Holiday run from beta 34.
+- Continue saved runs and Hot Seat games from beta 34 in all three games.
 - Play Oh Yes! More Lemmings levels, and check that their hints and solution replays win.
-- Monterey testers: launch on macOS 12.3 or later, play all three engines, and check sound,
-  fullscreen, speed changes, save/resume and replay export. Report the Mac model and OS version.
 
 Report build 35, the archive used, your macOS version, the level and the steps when a test fails.
 Do not include account passwords or authentication codes.

@@ -690,6 +690,23 @@ public struct ClassicDOSSimulation: Codable, Equatable, Sendable {
         )
     }
 
+    /// The same level before its first tick under another rule set, or nil
+    /// after the first tick. Saved runs use this to continue under the rules
+    /// they started with.
+    public func startingWithMechanics(_ mechanics: ClassicDOSMechanics) -> ClassicDOSSimulation? {
+        guard tickCount == 0, lemmings.isEmpty else { return nil }
+        if mechanics == configuration.mechanics { return self }
+        let shift = mechanics.hatchOffsetX - configuration.mechanics.hatchOffsetX
+        let c = configuration
+        let moved = ClassicDOSConfiguration(
+            totalLemmings: c.totalLemmings, requiredToSave: c.requiredToSave, timeLimitTicks: c.timeLimitTicks,
+            initialReleaseRate: c.initialReleaseRate,
+            entrances: c.entrances.map { ClassicDOSPoint(x: $0.x + shift, y: $0.y) },
+            triggers: c.triggers, initialSkills: c.initialSkills,
+            maximumX: c.maximumX, maximumY: c.maximumY, mechanics: mechanics)
+        return try? ClassicDOSSimulation(terrain: terrain, configuration: moved, destructionMasks: destructionMasks)
+    }
+
     public func remainingSkillCount(_ skill: ClassicSkill) -> Int {
         skills[skill] ?? 0
     }

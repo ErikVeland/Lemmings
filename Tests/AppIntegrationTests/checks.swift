@@ -590,8 +590,15 @@ extension AppDelegate {
     let saved = checkpoint.neo!
     checkpoint.neo = NeoRunRecovery(initialState: initial, state: saved.state, inputs: [])
     let rejected = fresh()
-    do { try rejected.restore(checkpoint); throw IntegrationFailure(message: "Neo recovery accepted a missing journal") }
-    catch RunRecoveryError.invalid {}
+    // A newer build may not replay the journal. The saved state then continues
+    // the run, which counts as assisted because its inputs no longer prove it.
+    let continued = fresh()
+    try continued.restore(checkpoint)
+    try check(continued.simulation == saved.state && continued.usedRewind,
+      "Neo recovery did not continue an unprovable run from its saved state as assisted")
+    checkpoint.neo = NeoRunRecovery(initialState: initial, state: initial, inputs: [])
+    do { try rejected.restore(checkpoint); throw IntegrationFailure(message: "Neo recovery accepted a state from another tick") }
+    catch RunRecoveryError.differentGame {} catch RunRecoveryError.invalid {}
     try check(rejected.simulation == initial, "Rejected Neo recovery modified live state")
     GameScreen.shared.dismissAll()
     let directory = FileManager.default.temporaryDirectory.appendingPathComponent("NeoRecovery-\(UUID())")
@@ -945,7 +952,15 @@ extension AppDelegate {
       throw IntegrationFailure(message: "No disk checkpoint was saved")
     }
     let encoded = try JSONEncoder().encode(checkpoint)
-    for (key, replacement) in [("tick", -1 as Any), ("tick", 120_001), ("initialStateHash", "wrong"),
+    // A checkpoint whose starting state this build cannot rebuild still
+    // continues from its saved engine state, and counts as assisted.
+    var unmatched = try JSONSerialization.jsonObject(with: encoded) as! [String: Any]
+    unmatched["initialStateHash"] = "a start this build never makes"
+    let fromState = ClassicSession(simulation: initialSimulation, width: original.levelWidth, height: original.levelHeight)
+    try fromState.restore(JSONDecoder().decode(RunRecovery.self, from: JSONSerialization.data(withJSONObject: unmatched)))
+    try check(ClassicDOSReplayRecorder.stateHash(of: fromState.simulation) == ClassicDOSReplayRecorder.stateHash(of: original.simulation)
+      && fromState.usedRewind, "Saved engine state did not continue the run as assisted")
+    for (key, replacement) in [("tick", -1 as Any), ("tick", 120_001),
       ("stateHash", "wrong"), ("version", 2), ("selectedSkill", 8), ("nukeCount", -1)] {
       var object = try JSONSerialization.jsonObject(with: encoded) as! [String: Any]
       object[key] = replacement

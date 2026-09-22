@@ -153,6 +153,8 @@ def main():
                           dict(os.environ, SAVE_TEST_LIBRARY_DIR=str(library))))
         checks.append(run("run-recovery-files", [["zsh", "Scripts/run-run-recovery-file-tests.sh"]],
                           dict(os.environ, SAVE_TEST_LIBRARY_DIR=str(library))))
+        checks.append(run("cross-build-recovery", [["zsh", "Scripts/run-cross-build-recovery-tests.sh"]],
+                          dict(os.environ, SAVE_TEST_LIBRARY_DIR=str(library), CROSS_BUILD_PORTS=str(ports))))
         checks.append(run("fan-library", [["zsh", "Scripts/run-fan-library-tests.sh"]],
                           dict(os.environ, FAN_TEST_LIBRARY_DIR=str(library))))
         verifier = library / "ClassicCompletion"

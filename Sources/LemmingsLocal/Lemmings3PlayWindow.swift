@@ -126,8 +126,9 @@ import NxlvKit
     init(root: URL, recovery: RunRecovery? = nil, expectedRecoveryEngine: String = RunRecovery.bundledEngine) throws {
         if let recovery {
             _ = try recovery.validated()
-            guard recovery.l3 != nil, recovery.profileID == ArcadeStore.shared.playingProfileID, recovery.hotSeatID == ArcadeStore.shared.hotSeatID,
-              recovery.engine == expectedRecoveryEngine else { throw RunRecoveryError.differentGame }
+            // A newer engine must not strand a saved run; the replay below checks the state.
+            guard recovery.l3 != nil, recovery.profileID == ArcadeStore.shared.playingProfileID,
+              recovery.hotSeatID == ArcadeStore.shared.hotSeatID else { throw RunRecoveryError.differentGame }
         }
         dataRoot = root
         let selectedTribe = recovery?.l3?.progress.tribe ?? Lemmings3ClassicCampaign.Tribe(rawValue: UserDefaults.standard.integer(forKey: ArcadeStore.shared.progressKey("nativeL3SelectedTribe.v1." + Self.storageIdentity(root)))) ?? .classic
@@ -144,7 +145,10 @@ import NxlvKit
         if let recovery, let saved = recovery.l3 {
             let levelPath = root.appendingPathComponent(String(format: "LEVELS/LEVEL%03d.DAT", sequence.tribe.firstLevel + sequence.index))
             let fingerprint = ArcadeStore.fingerprint(try Data(contentsOf: levelPath)) + ":" + TrolleyCapture.contentFingerprint(root: root)
-            guard fingerprint == recovery.levelFingerprint else { throw RunRecoveryError.differentGame }
+            // Compare the level only. Other data files may change between builds;
+            // the replay still requires the exact saved state.
+            guard fingerprint.split(separator: ":").first == recovery.levelFingerprint.split(separator: ":").first
+            else { throw RunRecoveryError.differentGame }
             game = try saved.restore(initial: initial, checkpoint: recovery)
         }
         let scene = try Lemmings3Scene(level: level, style: style, permanent: permanent, temporary: temporary)
