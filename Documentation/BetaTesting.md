@@ -1,11 +1,9 @@
 # Beta testing
 
-Beta 30 Game Center is ready for the two registered test Macs. It includes the
-latest closure work and enables worldwide rankings. See [Game Center beta
-readiness](Beta30GameCenterReadiness.md) and [tester instructions](ReleaseNotes-beta30.md).
-This development-signed build requires the first-launch quarantine step.
-
-Beta 29 is ready for testers: universal Intel/Apple silicon, macOS 13 or later, Developer ID signed, notarised and stapled. The extracted ZIP passed Gatekeeper with quarantine set. See [beta 29 readiness](Beta29Readiness.md), [beta 29 release notes](ReleaseNotes-beta29.md) and [earlier cumulative notes since beta 18](ReleaseNotes-beta28.md).
+RC1 (build 36) is the current candidate: the first real-device test release since
+beta 32, and the first build after the official Classic campaign closed at
+352/352. See [RC1 readiness](Beta36Readiness.md) and
+[release notes since beta 32](ReleaseNotes-beta36.md).
 
 ## Validate the build
 
@@ -19,19 +17,24 @@ zsh Scripts/run-beta-regressions.sh
 zsh Scripts/run-swift-tests.sh
 zsh Scripts/run-sequel-mac-artwork-tests.sh
 zsh Scripts/run-explosion-hdr-tests.sh
-zsh Scripts/verify-classic-completion.sh
-zsh Scripts/verify-campaign-completion.sh
+zsh Scripts/verify-official-classic.sh --include-conversions
+zsh Scripts/run-cross-build-recovery-tests.sh
 zsh Scripts/verify-trolley-maxima.sh
 ```
 
 Integration tests use their own app identifier and preferences, plus assets from
 the local app bundle. The Swift Testing runner works around stale Command Line
 Tools manifest interfaces in a local copy; it does not modify the installed tools.
-The campaign gate checks the committed witness manifest before replaying the
-known solutions. Use `Scripts/verify-campaign-completion.sh --require-all` to
-require a solution for every level. That stricter gate is expected to fail while
-campaign coverage remains incomplete; a passing known-solution gate is not a
-full-campaign sign-off.
+
+`Scripts/verify-official-classic.sh` replays the committed witness manifest and
+requires all 292 official routes; `--include-conversions` adds the 60 Oh Yes!
+routes and the combined 352-level quest, restore and progression checks. This
+gate is closed as of beta 35 — see [ClassicOneZero.md](ClassicOneZero.md).
+
+`Scripts/run-cross-build-recovery-tests.sh` checks that saved runs and Hot Seat
+games survive an engine change across builds. Run it before any release that
+touches engine or recovery code; restore copies of real checkpoints first, never
+the owner's live Checkpoints folder.
 
 ## Package for testers
 
@@ -39,16 +42,17 @@ full-campaign sign-off.
 BETA_NOTARY_PROFILE=lemmings-beta zsh Scripts/package-beta.sh
 ```
 
-The script builds both architectures, signs with the Developer ID in the
-keychain, submits to Apple, staples the ticket, and checks the extracted zip
-with Gatekeeper. Earlier zip files move into `.build/local/archive/`.
-The current distributable archive is `.build/beta29/UltimateLemmings-0.1-beta29.zip`,
-also copied to `/Users/veland/Downloads/UltimateLemmings-beta29-macOS.zip`.
-Beta 29 inputs and validation logs are under `.build/beta29`. Its source and game
-data are frozen separately from this working checkout. The frozen packaging
-script signed and notarised the build using the `lemmings-beta` keychain profile,
-stapled the ticket, and verified the extracted ZIP with quarantine set.
-Beta 28 remains available as a fallback.
+The script checks the release-scope gate (`Tools/ReleaseReadiness/package_scope.py`),
+builds both architectures, signs with the Developer ID in the keychain, submits
+to Apple, staples the ticket, and checks the extracted zip with Gatekeeper.
+Version 1.0 and later refuses to package while a required Classic gate is open.
+Earlier zip files move into `.build/local/archive/`.
+
+"Cut a build" means a local Game Center build only, unless the owner asks for
+all three archives (Developer ID standard, macOS 12 Monterey, Game Center). A
+tri-archive cut is what "for real device testing" or "for testers" means: the
+Developer ID and Monterey archives run on any tester's Mac, not just the two
+registered Game Center devices.
 
 For a package without recorded soundtracks:
 
@@ -59,6 +63,24 @@ BETA_SLIM=1 BETA_NOTARY_PROFILE=lemmings-beta zsh Scripts/package-beta.sh
 The slim package retains module music. Both variants use the same filename;
 keep only the intended variant in the handoff folder. Always notarize the
 variant you distribute.
+
+## Package the macOS 12 (Monterey) archive
+
+The Monterey build lives on the `macos12-support` branch, kept as a worktree at
+`.claude/worktrees/macos12`. It merges each release's gameplay and doc changes
+from the working branch, then builds with the 12.3 deployment target from
+inside that worktree:
+
+```sh
+cd .claude/worktrees/macos12
+git merge <working-branch>
+BETA_NOTARY_PROFILE=lemmings-beta zsh Scripts/package-beta.sh
+```
+
+Merge every commit from the working branch first, including saved-run and
+recovery fixes — an out-of-date Monterey merge can reintroduce a bug the
+working branch already fixed. Check with
+`git log <monterey-branch>..<working-branch> --oneline` before packaging.
 
 ## Package with worldwide rankings
 
@@ -113,13 +135,20 @@ production scores.
 No extra game files are needed for the bundled campaigns. Fan packs are included and new compatible packs are checked at launch.
 Optional external NeoLemmix styles still use a separately selected folder.
 
-Check a fresh profile and an upgrade from beta 13. Exercise all display modes,
-fullscreen and resizing, music-source changes, mute, sound-bank changes,
-single-step completion, and transitions into and out of the sequels.
-Check the sequel artwork setting during play and after relaunch. Try nuke undo
-in the classic player and Lemmings 2. Check explosion flashes in flat and CRT
-modes, including pausing during a flash and moving between displays.
-Report the game and level, settings, and whether restarting changes the result.
+Check a fresh profile and an upgrade from beta 32, the last archive most testers
+have. Exercise all display modes, fullscreen and resizing, music-source changes,
+mute, sound-bank changes, single-step completion, and transitions into and out
+of the sequels. Check the sequel artwork setting during play and after relaunch.
+Try nuke undo in the classic player and Lemmings 2. Check explosion flashes in
+flat and CRT modes, including pausing during a flash and moving between
+displays. Report the game and level, settings, and whether restarting changes
+the result.
+
+RC1 is this project's first release aimed at real, physical hardware coverage
+rather than the developer's own Macs: report your exact Mac model, macOS
+version, and whether it is Intel or Apple silicon on every report. Physical
+Intel, macOS 13, HDR, multiple displays and high refresh rates are still
+unverified — that is what this candidate exists to test.
 
 The app contains commercial game data. Keep the beta test group private and
 follow `THIRD_PARTY_NOTICES.md`.

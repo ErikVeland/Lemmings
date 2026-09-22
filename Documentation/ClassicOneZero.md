@@ -4,7 +4,7 @@
 Lemmings 2 and Lemmings 3 retain preview status. Shared controls, paused Hot Seat
 handovers and saved-run recovery remain regression requirements across all three engines.
 
-Beta 34 is packaged. The current source has winning evidence for all 292 official Classic levels.
+Beta 35 is packaged. The current source has winning evidence for all 292 official Classic levels.
 All 60 Oh Yes! conversions also pass. The combined 352-level quest and saved-run gate passes.
 Fan content must load and start, but no longer needs a winning route for 1.0.
 This follows the owner's decision on 22 September.
