@@ -6,6 +6,7 @@
           "_0" : 40
         }
       },
+      "afterTick" : true,
       "tick" : 48
     },
     {
@@ -15,7 +16,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 155
+      "afterTick" : true,
+      "tick" : 154
     },
     {
       "action" : {
@@ -24,7 +26,8 @@
           "skill" : "climber"
         }
       },
-      "tick" : 230
+      "afterTick" : true,
+      "tick" : 229
     },
     {
       "action" : {
@@ -33,7 +36,8 @@
           "skill" : "digger"
         }
       },
-      "tick" : 415
+      "afterTick" : true,
+      "tick" : 414
     },
     {
       "action" : {
@@ -42,7 +46,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 551
+      "afterTick" : true,
+      "tick" : 543
     },
     {
       "action" : {
@@ -51,7 +56,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 663
+      "afterTick" : true,
+      "tick" : 655
     },
     {
       "action" : {
@@ -60,7 +66,8 @@
           "skill" : "miner"
         }
       },
-      "tick" : 789
+      "afterTick" : true,
+      "tick" : 781
     },
     {
       "action" : {
@@ -69,7 +76,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 1221
+      "afterTick" : true,
+      "tick" : 1213
     },
     {
       "action" : {
@@ -78,7 +86,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1342
+      "afterTick" : true,
+      "tick" : 1334
     },
     {
       "action" : {
@@ -87,7 +96,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1544
+      "afterTick" : true,
+      "tick" : 1536
     },
     {
       "action" : {
@@ -96,7 +106,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1747
+      "afterTick" : true,
+      "tick" : 1739
     },
     {
       "action" : {
@@ -105,7 +116,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1950
+      "afterTick" : true,
+      "tick" : 1942
     },
     {
       "action" : {
@@ -114,7 +126,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 1987
+      "afterTick" : true,
+      "tick" : 1974
     },
     {
       "action" : {
@@ -123,7 +136,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1993
+      "afterTick" : true,
+      "tick" : 1980
     },
     {
       "action" : {
@@ -132,7 +146,8 @@
           "skill" : "miner"
         }
       },
-      "tick" : 2318
+      "afterTick" : true,
+      "tick" : 2305
     },
     {
       "action" : {
@@ -141,7 +156,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 2523
+      "afterTick" : true,
+      "tick" : 2512
     },
     {
       "action" : {
@@ -150,7 +166,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 2576
+      "afterTick" : true,
+      "tick" : 2557
     },
     {
       "action" : {
@@ -159,7 +176,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 2935
+      "afterTick" : true,
+      "tick" : 2897
     },
     {
       "action" : {
@@ -168,7 +186,8 @@
           "skill" : "miner"
         }
       },
-      "tick" : 3271
+      "afterTick" : true,
+      "tick" : 3233
     },
     {
       "action" : {
@@ -177,7 +196,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 3579
+      "afterTick" : true,
+      "tick" : 3541
     },
     {
       "action" : {
@@ -186,7 +206,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 3781
+      "afterTick" : true,
+      "tick" : 3743
     },
     {
       "action" : {
@@ -195,7 +216,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 3984
+      "afterTick" : true,
+      "tick" : 3946
     }
   ],
   "expected" : {
@@ -203,10 +225,10 @@
     "released" : 50,
     "required" : 25,
     "saved" : 50,
-    "stateHash" : "955184e052c334e3f472908fd4e47b65286bfd037cf4f2f0ba3e73105d89b737",
-    "ticks" : 4876
+    "stateHash" : "81389207effcaf67768b9031bbe75c6b1f33e62e9668f48146bec2fffe2f066b",
+    "ticks" : 4866
   },
-  "initialStateHash" : "fa00fb02ccca9edf841a9f18003664ee5a6f9a7cafb8aeaa1b6da54a936e50b9",
+  "initialStateHash" : "e662a941989715ac6c082bd950b597760d385a3392776a79084646c026742105",
   "number" : 1,
   "rank" : "Xmas",
   "title" : "Merry Christmas Mr Lemming"

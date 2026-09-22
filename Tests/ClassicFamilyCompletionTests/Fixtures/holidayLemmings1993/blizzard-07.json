@@ -6,7 +6,8 @@
           "_0" : 30
         }
       },
-      "tick" : 28
+      "afterTick" : true,
+      "tick" : 50
     },
     {
       "action" : {
@@ -15,7 +16,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 848
+      "afterTick" : true,
+      "tick" : 845
     },
     {
       "action" : {
@@ -24,7 +26,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1059
+      "afterTick" : true,
+      "tick" : 1056
     },
     {
       "action" : {
@@ -33,7 +36,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1270
+      "afterTick" : true,
+      "tick" : 1267
     },
     {
       "action" : {
@@ -42,7 +46,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1519
+      "afterTick" : true,
+      "tick" : 1516
     },
     {
       "action" : {
@@ -51,7 +56,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 1576
+      "afterTick" : true,
+      "tick" : 1574
     },
     {
       "action" : {
@@ -60,7 +66,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1578
+      "afterTick" : true,
+      "tick" : 1576
     },
     {
       "action" : {
@@ -69,71 +76,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 1643
-    },
-    {
-      "action" : {
-        "releaseRate" : {
-          "_0" : 31
-        }
-      },
-      "tick" : 1823
-    },
-    {
-      "action" : {
-        "releaseRate" : {
-          "_0" : 32
-        }
-      },
-      "tick" : 1824
-    },
-    {
-      "action" : {
-        "releaseRate" : {
-          "_0" : 33
-        }
-      },
-      "tick" : 1825
-    },
-    {
-      "action" : {
-        "releaseRate" : {
-          "_0" : 34
-        }
-      },
-      "tick" : 1826
-    },
-    {
-      "action" : {
-        "releaseRate" : {
-          "_0" : 35
-        }
-      },
-      "tick" : 1827
-    },
-    {
-      "action" : {
-        "releaseRate" : {
-          "_0" : 36
-        }
-      },
-      "tick" : 1828
-    },
-    {
-      "action" : {
-        "releaseRate" : {
-          "_0" : 37
-        }
-      },
-      "tick" : 1829
-    },
-    {
-      "action" : {
-        "releaseRate" : {
-          "_0" : 38
-        }
-      },
-      "tick" : 1830
+      "afterTick" : true,
+      "tick" : 1657
     },
     {
       "action" : {
@@ -141,6 +85,133 @@
           "_0" : 39
         }
       },
+      "afterTick" : true,
+      "tick" : 1749
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 33
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1791
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 59
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1797
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 52
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1808
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 49
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1811
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 41
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1812
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 32
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1813
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 43
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1816
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 38
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1821
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 45
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1821
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 92
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1822
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 66
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1823
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 46
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1830
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 68
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1831
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 79
+        }
+      },
+      "afterTick" : true,
       "tick" : 1831
     },
     {
@@ -149,175 +220,8 @@
           "_0" : 40
         }
       },
+      "afterTick" : true,
       "tick" : 1832
-    },
-    {
-      "action" : {
-        "releaseRate" : {
-          "_0" : 41
-        }
-      },
-      "tick" : 1833
-    },
-    {
-      "action" : {
-        "releaseRate" : {
-          "_0" : 42
-        }
-      },
-      "tick" : 1834
-    },
-    {
-      "action" : {
-        "releaseRate" : {
-          "_0" : 43
-        }
-      },
-      "tick" : 1835
-    },
-    {
-      "action" : {
-        "releaseRate" : {
-          "_0" : 44
-        }
-      },
-      "tick" : 1836
-    },
-    {
-      "action" : {
-        "releaseRate" : {
-          "_0" : 45
-        }
-      },
-      "tick" : 1837
-    },
-    {
-      "action" : {
-        "releaseRate" : {
-          "_0" : 46
-        }
-      },
-      "tick" : 1838
-    },
-    {
-      "action" : {
-        "releaseRate" : {
-          "_0" : 47
-        }
-      },
-      "tick" : 1839
-    },
-    {
-      "action" : {
-        "releaseRate" : {
-          "_0" : 48
-        }
-      },
-      "tick" : 1840
-    },
-    {
-      "action" : {
-        "releaseRate" : {
-          "_0" : 49
-        }
-      },
-      "tick" : 1841
-    },
-    {
-      "action" : {
-        "releaseRate" : {
-          "_0" : 50
-        }
-      },
-      "tick" : 1842
-    },
-    {
-      "action" : {
-        "releaseRate" : {
-          "_0" : 51
-        }
-      },
-      "tick" : 1843
-    },
-    {
-      "action" : {
-        "releaseRate" : {
-          "_0" : 52
-        }
-      },
-      "tick" : 1844
-    },
-    {
-      "action" : {
-        "releaseRate" : {
-          "_0" : 53
-        }
-      },
-      "tick" : 1845
-    },
-    {
-      "action" : {
-        "releaseRate" : {
-          "_0" : 54
-        }
-      },
-      "tick" : 1846
-    },
-    {
-      "action" : {
-        "releaseRate" : {
-          "_0" : 55
-        }
-      },
-      "tick" : 1847
-    },
-    {
-      "action" : {
-        "releaseRate" : {
-          "_0" : 56
-        }
-      },
-      "tick" : 1848
-    },
-    {
-      "action" : {
-        "releaseRate" : {
-          "_0" : 57
-        }
-      },
-      "tick" : 1849
-    },
-    {
-      "action" : {
-        "releaseRate" : {
-          "_0" : 58
-        }
-      },
-      "tick" : 1850
-    },
-    {
-      "action" : {
-        "releaseRate" : {
-          "_0" : 59
-        }
-      },
-      "tick" : 1851
-    },
-    {
-      "action" : {
-        "releaseRate" : {
-          "_0" : 60
-        }
-      },
-      "tick" : 1852
-    },
-    {
-      "action" : {
-        "releaseRate" : {
-          "_0" : 61
-        }
-      },
-      "tick" : 1853
     },
     {
       "action" : {
@@ -325,87 +229,35 @@
           "_0" : 62
         }
       },
-      "tick" : 1854
+      "afterTick" : true,
+      "tick" : 1832
     },
     {
       "action" : {
         "releaseRate" : {
-          "_0" : 63
+          "_0" : 56
         }
       },
-      "tick" : 1855
+      "afterTick" : true,
+      "tick" : 1834
     },
     {
       "action" : {
         "releaseRate" : {
-          "_0" : 64
+          "_0" : 98
         }
       },
-      "tick" : 1856
+      "afterTick" : true,
+      "tick" : 1835
     },
     {
       "action" : {
         "releaseRate" : {
-          "_0" : 65
+          "_0" : 31
         }
       },
-      "tick" : 1857
-    },
-    {
-      "action" : {
-        "releaseRate" : {
-          "_0" : 66
-        }
-      },
-      "tick" : 1858
-    },
-    {
-      "action" : {
-        "releaseRate" : {
-          "_0" : 67
-        }
-      },
-      "tick" : 1859
-    },
-    {
-      "action" : {
-        "releaseRate" : {
-          "_0" : 68
-        }
-      },
-      "tick" : 1860
-    },
-    {
-      "action" : {
-        "releaseRate" : {
-          "_0" : 69
-        }
-      },
-      "tick" : 1861
-    },
-    {
-      "action" : {
-        "releaseRate" : {
-          "_0" : 70
-        }
-      },
-      "tick" : 1862
-    },
-    {
-      "action" : {
-        "releaseRate" : {
-          "_0" : 71
-        }
-      },
-      "tick" : 1863
-    },
-    {
-      "action" : {
-        "releaseRate" : {
-          "_0" : 72
-        }
-      },
-      "tick" : 1864
+      "afterTick" : true,
+      "tick" : 1836
     },
     {
       "action" : {
@@ -413,39 +265,107 @@
           "_0" : 73
         }
       },
-      "tick" : 1865
+      "afterTick" : true,
+      "tick" : 1838
     },
     {
       "action" : {
         "releaseRate" : {
-          "_0" : 74
+          "_0" : 50
         }
       },
-      "tick" : 1866
+      "afterTick" : true,
+      "tick" : 1839
     },
     {
       "action" : {
         "releaseRate" : {
-          "_0" : 75
+          "_0" : 53
         }
       },
-      "tick" : 1867
+      "afterTick" : true,
+      "tick" : 1840
     },
     {
       "action" : {
         "releaseRate" : {
-          "_0" : 76
+          "_0" : 57
         }
       },
-      "tick" : 1868
+      "afterTick" : true,
+      "tick" : 1841
     },
     {
       "action" : {
         "releaseRate" : {
-          "_0" : 77
+          "_0" : 36
         }
       },
-      "tick" : 1869
+      "afterTick" : true,
+      "tick" : 1842
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 61
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1843
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 37
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1844
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 42
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1844
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 83
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1850
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 58
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1851
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 51
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1852
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 69
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1852
     },
     {
       "action" : {
@@ -453,30 +373,142 @@
           "_0" : 78
         }
       },
-      "tick" : 1870
+      "afterTick" : true,
+      "tick" : 1853
     },
     {
       "action" : {
         "releaseRate" : {
-          "_0" : 79
+          "_0" : 94
         }
       },
+      "afterTick" : true,
+      "tick" : 1854
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 35
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1857
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 70
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1857
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 75
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1859
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 76
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1860
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 71
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1862
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 60
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1865
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 96
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1865
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 85
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1868
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 67
+        }
+      },
+      "afterTick" : true,
       "tick" : 1871
     },
     {
       "action" : {
         "releaseRate" : {
-          "_0" : 80
+          "_0" : 44
         }
       },
+      "afterTick" : true,
       "tick" : 1872
     },
     {
       "action" : {
         "releaseRate" : {
-          "_0" : 81
+          "_0" : 63
         }
       },
+      "afterTick" : true,
+      "tick" : 1872
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1872
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 47
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1873
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 77
+        }
+      },
+      "afterTick" : true,
       "tick" : 1873
     },
     {
@@ -485,39 +517,8 @@
           "_0" : 82
         }
       },
-      "tick" : 1874
-    },
-    {
-      "action" : {
-        "releaseRate" : {
-          "_0" : 83
-        }
-      },
-      "tick" : 1875
-    },
-    {
-      "action" : {
-        "releaseRate" : {
-          "_0" : 84
-        }
-      },
-      "tick" : 1876
-    },
-    {
-      "action" : {
-        "releaseRate" : {
-          "_0" : 85
-        }
-      },
+      "afterTick" : true,
       "tick" : 1877
-    },
-    {
-      "action" : {
-        "releaseRate" : {
-          "_0" : 86
-        }
-      },
-      "tick" : 1878
     },
     {
       "action" : {
@@ -525,31 +526,62 @@
           "_0" : 87
         }
       },
-      "tick" : 1879
+      "afterTick" : true,
+      "tick" : 1877
     },
     {
       "action" : {
         "releaseRate" : {
-          "_0" : 88
+          "_0" : 64
         }
       },
-      "tick" : 1880
-    },
-    {
-      "action" : {
-        "releaseRate" : {
-          "_0" : 89
-        }
-      },
+      "afterTick" : true,
       "tick" : 1881
     },
     {
       "action" : {
         "releaseRate" : {
-          "_0" : 90
+          "_0" : 86
         }
       },
+      "afterTick" : true,
+      "tick" : 1881
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "afterTick" : true,
       "tick" : 1882
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 54
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1884
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1885
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 84
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1888
     },
     {
       "action" : {
@@ -557,62 +589,61 @@
           "_0" : 91
         }
       },
-      "tick" : 1883
-    },
-    {
-      "action" : {
-        "releaseRate" : {
-          "_0" : 92
-        }
-      },
-      "tick" : 1884
-    },
-    {
-      "action" : {
-        "releaseRate" : {
-          "_0" : 93
-        }
-      },
-      "tick" : 1885
-    },
-    {
-      "action" : {
-        "releaseRate" : {
-          "_0" : 94
-        }
-      },
-      "tick" : 1886
-    },
-    {
-      "action" : {
-        "releaseRate" : {
-          "_0" : 95
-        }
-      },
-      "tick" : 1887
-    },
-    {
-      "action" : {
-        "releaseRate" : {
-          "_0" : 96
-        }
-      },
+      "afterTick" : true,
       "tick" : 1888
     },
     {
       "action" : {
         "releaseRate" : {
-          "_0" : 97
+          "_0" : 99
         }
       },
+      "afterTick" : true,
+      "tick" : 1888
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 55
+        }
+      },
+      "afterTick" : true,
       "tick" : 1889
     },
     {
       "action" : {
         "releaseRate" : {
-          "_0" : 98
+          "_0" : 72
         }
       },
+      "afterTick" : true,
+      "tick" : 1889
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 65
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1890
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 81
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1890
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 90
+        }
+      },
+      "afterTick" : true,
       "tick" : 1890
     },
     {
@@ -621,78 +652,34 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
+      "tick" : 1890
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 88
+        }
+      },
+      "afterTick" : true,
       "tick" : 1891
     },
     {
       "action" : {
         "releaseRate" : {
-          "_0" : 99
+          "_0" : 95
         }
       },
-      "tick" : 1892
+      "afterTick" : true,
+      "tick" : 1891
     },
     {
       "action" : {
         "releaseRate" : {
-          "_0" : 99
+          "_0" : 74
         }
       },
-      "tick" : 1893
-    },
-    {
-      "action" : {
-        "releaseRate" : {
-          "_0" : 99
-        }
-      },
-      "tick" : 1894
-    },
-    {
-      "action" : {
-        "releaseRate" : {
-          "_0" : 99
-        }
-      },
-      "tick" : 1895
-    },
-    {
-      "action" : {
-        "releaseRate" : {
-          "_0" : 99
-        }
-      },
-      "tick" : 1896
-    },
-    {
-      "action" : {
-        "releaseRate" : {
-          "_0" : 99
-        }
-      },
-      "tick" : 1897
-    },
-    {
-      "action" : {
-        "releaseRate" : {
-          "_0" : 99
-        }
-      },
-      "tick" : 1898
-    },
-    {
-      "action" : {
-        "releaseRate" : {
-          "_0" : 99
-        }
-      },
-      "tick" : 1899
-    },
-    {
-      "action" : {
-        "releaseRate" : {
-          "_0" : 99
-        }
-      },
+      "afterTick" : true,
       "tick" : 1900
     },
     {
@@ -701,7 +688,8 @@
           "_0" : 99
         }
       },
-      "tick" : 1901
+      "afterTick" : true,
+      "tick" : 1900
     },
     {
       "action" : {
@@ -709,6 +697,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 1902
     },
     {
@@ -717,7 +706,107 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 1903
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 80
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1906
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 89
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1907
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 48
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1909
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 93
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1913
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 34
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1917
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1920
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1922
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 97
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1930
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1941
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1950
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1972
     }
   ],
   "expected" : {
@@ -725,10 +814,10 @@
     "released" : 60,
     "required" : 55,
     "saved" : 60,
-    "stateHash" : "d265adc7b81d1963eb955e9a18b9949bd722ad0daa2cfa3e6c60b800d6eb82f9",
-    "ticks" : 3040
+    "stateHash" : "2c95e59a2404629f90d3798a9ce609219c8c6b92b1659191cf26a250532bfc11",
+    "ticks" : 3050
   },
-  "initialStateHash" : "e70da6651236b010dfe84cc295ffb696b3fba1f6a289dbecf238ff3e0d0f85a1",
+  "initialStateHash" : "3962025c48216a813cde7d4f10331e31747cac2a6786fbc853147eff0150b6f1",
   "number" : 7,
   "rank" : "Blizzard",
   "title" : "Break on through..."

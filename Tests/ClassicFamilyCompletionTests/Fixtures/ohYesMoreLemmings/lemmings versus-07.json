@@ -1,0 +1,66 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 276
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "digger"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 337
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 802
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 834
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 11,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 843
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 100,
+    "required" : 50,
+    "saved" : 100,
+    "stateHash" : "37a728864820e106909337ea69ed4e61dbdce5bd627f9b88662e31204f6e76a7",
+    "ticks" : 4721
+  },
+  "initialStateHash" : "06593333d2c98779833d5e4ceb35b1d3221e5d577765fa2aac65399c10bbce7b",
+  "number" : 7,
+  "rank" : "Lemmings Versus",
+  "title" : "Just for fun or to the death?"
+}

@@ -37,7 +37,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 411
+      "tick" : 410
     },
     {
       "action" : {
@@ -47,7 +47,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 603
+      "tick" : 602
     },
     {
       "action" : {
@@ -57,7 +57,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 718
+      "tick" : 717
     }
   ],
   "expected" : {
@@ -65,10 +65,10 @@
     "released" : 75,
     "required" : 75,
     "saved" : 75,
-    "stateHash" : "1c78bead41b0ce38f7c3681c2c37746ad33f0c1a00247344e5cfd0873a0dc282",
-    "ticks" : 2148
+    "stateHash" : "f8313e4251ef515d35d582889a1483da74cba8f5cd08bd31b864502a0f55fc51",
+    "ticks" : 2147
   },
-  "initialStateHash" : "faf482ad93f385886bf85e10158d03ce363ee153ad9745256ad93e132a87c6e4",
+  "initialStateHash" : "5f72b9e384877682d4f08aba33b4a22539af36cfeca683083e4eacbe36176776",
   "number" : 1,
   "rank" : "Hail",
   "title" : "Go Thataway!"

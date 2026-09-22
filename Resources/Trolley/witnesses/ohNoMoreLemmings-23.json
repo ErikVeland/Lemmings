@@ -7,7 +7,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 641
+      "afterTick" : true,
+      "tick" : 640
     },
     {
       "action" : {
@@ -16,7 +17,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 753
+      "afterTick" : true,
+      "tick" : 752
     },
     {
       "action" : {
@@ -25,7 +27,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 866
+      "afterTick" : true,
+      "tick" : 865
     },
     {
       "action" : {
@@ -34,7 +37,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1239
+      "afterTick" : true,
+      "tick" : 1238
     },
     {
       "action" : {
@@ -43,7 +47,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1431
+      "afterTick" : true,
+      "tick" : 1430
     },
     {
       "action" : {
@@ -52,7 +57,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1623
+      "afterTick" : true,
+      "tick" : 1622
     },
     {
       "action" : {
@@ -61,7 +67,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1815
+      "afterTick" : true,
+      "tick" : 1814
     }
   ],
   "expected" : {
@@ -69,10 +76,10 @@
     "released" : 20,
     "required" : 20,
     "saved" : 20,
-    "stateHash" : "13759769292b64dfc3024d051e2665a29a3aa7bca993aeac6d8e9d3a1f964522",
-    "ticks" : 2495
+    "stateHash" : "1e149e2c1c993f04dcc3a04f333ee4da034ea89994a63994e751b5c79bdba988",
+    "ticks" : 2494
   },
-  "initialStateHash" : "a9198d9de98dbaa907b1240bb8aab3087083183487d06daa26224d6a6fc88ff8",
+  "initialStateHash" : "e4f239fd079359723097ec972013e8f720f7ba78ec2e4bef19b1678e26587e1f",
   "number" : 4,
   "rank" : "Crazy",
   "title" : "Lemming Express"

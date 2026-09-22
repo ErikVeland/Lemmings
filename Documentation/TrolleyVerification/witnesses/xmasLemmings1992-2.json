@@ -6,6 +6,7 @@
           "_0" : 40
         }
       },
+      "afterTick" : true,
       "tick" : 22
     },
     {
@@ -15,7 +16,8 @@
           "skill" : "digger"
         }
       },
-      "tick" : 74
+      "afterTick" : true,
+      "tick" : 73
     },
     {
       "action" : {
@@ -24,7 +26,8 @@
           "skill" : "miner"
         }
       },
-      "tick" : 105
+      "afterTick" : true,
+      "tick" : 98
     },
     {
       "action" : {
@@ -33,7 +36,8 @@
           "skill" : "digger"
         }
       },
-      "tick" : 106
+      "afterTick" : true,
+      "tick" : 99
     },
     {
       "action" : {
@@ -42,7 +46,8 @@
           "skill" : "miner"
         }
       },
-      "tick" : 108
+      "afterTick" : true,
+      "tick" : 100
     },
     {
       "action" : {
@@ -51,7 +56,8 @@
           "skill" : "digger"
         }
       },
-      "tick" : 110
+      "afterTick" : true,
+      "tick" : 101
     },
     {
       "action" : {
@@ -60,7 +66,8 @@
           "skill" : "miner"
         }
       },
-      "tick" : 113
+      "afterTick" : true,
+      "tick" : 102
     },
     {
       "action" : {
@@ -69,7 +76,8 @@
           "skill" : "digger"
         }
       },
-      "tick" : 133
+      "afterTick" : true,
+      "tick" : 117
     },
     {
       "action" : {
@@ -78,7 +86,8 @@
           "skill" : "climber"
         }
       },
-      "tick" : 347
+      "afterTick" : true,
+      "tick" : 326
     },
     {
       "action" : {
@@ -87,7 +96,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 365
+      "afterTick" : true,
+      "tick" : 342
     },
     {
       "action" : {
@@ -96,7 +106,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 465
+      "afterTick" : true,
+      "tick" : 442
     },
     {
       "action" : {
@@ -105,7 +116,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 576
+      "afterTick" : true,
+      "tick" : 553
     },
     {
       "action" : {
@@ -114,7 +126,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 604
+      "afterTick" : true,
+      "tick" : 569
     },
     {
       "action" : {
@@ -123,7 +136,8 @@
           "skill" : "floater"
         }
       },
-      "tick" : 626
+      "afterTick" : true,
+      "tick" : 591
     },
     {
       "action" : {
@@ -132,7 +146,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 709
+      "afterTick" : true,
+      "tick" : 674
     },
     {
       "action" : {
@@ -141,7 +156,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 784
+      "afterTick" : true,
+      "tick" : 749
     },
     {
       "action" : {
@@ -150,7 +166,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 1002
+      "afterTick" : true,
+      "tick" : 967
     },
     {
       "action" : {
@@ -159,7 +176,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 1505
+      "afterTick" : true,
+      "tick" : 1470
     },
     {
       "action" : {
@@ -168,7 +186,8 @@
           "skill" : "digger"
         }
       },
-      "tick" : 1686
+      "afterTick" : true,
+      "tick" : 1651
     },
     {
       "action" : {
@@ -177,7 +196,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 2285
+      "afterTick" : true,
+      "tick" : 2245
     },
     {
       "action" : {
@@ -186,7 +206,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 2488
+      "afterTick" : true,
+      "tick" : 2448
     },
     {
       "action" : {
@@ -195,7 +216,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 2691
+      "afterTick" : true,
+      "tick" : 2651
     },
     {
       "action" : {
@@ -204,7 +226,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 2893
+      "afterTick" : true,
+      "tick" : 2853
     },
     {
       "action" : {
@@ -213,7 +236,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 3095
+      "afterTick" : true,
+      "tick" : 3055
     },
     {
       "action" : {
@@ -222,7 +246,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 3423
+      "afterTick" : true,
+      "tick" : 3383
     },
     {
       "action" : {
@@ -231,7 +256,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 3455
+      "afterTick" : true,
+      "tick" : 3415
     },
     {
       "action" : {
@@ -240,7 +266,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 3657
+      "afterTick" : true,
+      "tick" : 3617
     },
     {
       "action" : {
@@ -249,7 +276,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 3859
+      "afterTick" : true,
+      "tick" : 3819
     },
     {
       "action" : {
@@ -258,7 +286,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 4106
+      "afterTick" : true,
+      "tick" : 4066
     },
     {
       "action" : {
@@ -267,7 +296,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 4308
+      "afterTick" : true,
+      "tick" : 4268
     },
     {
       "action" : {
@@ -276,7 +306,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 4510
+      "afterTick" : true,
+      "tick" : 4470
     },
     {
       "action" : {
@@ -285,7 +316,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 4702
+      "afterTick" : true,
+      "tick" : 4662
     },
     {
       "action" : {
@@ -294,7 +326,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 4796
+      "afterTick" : true,
+      "tick" : 4756
     },
     {
       "action" : {
@@ -303,7 +336,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 5346
+      "afterTick" : true,
+      "tick" : 5306
     },
     {
       "action" : {
@@ -312,7 +346,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 5409
+      "afterTick" : true,
+      "tick" : 5369
     },
     {
       "action" : {
@@ -321,7 +356,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 6475
+      "afterTick" : true,
+      "tick" : 6435
     },
     {
       "action" : {
@@ -330,7 +366,8 @@
           "skill" : "miner"
         }
       },
-      "tick" : 6519
+      "afterTick" : true,
+      "tick" : 6479
     },
     {
       "action" : {
@@ -339,7 +376,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 6595
+      "afterTick" : true,
+      "tick" : 6555
     },
     {
       "action" : {
@@ -348,7 +386,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 6733
+      "afterTick" : true,
+      "tick" : 6693
     },
     {
       "action" : {
@@ -357,7 +396,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 6811
+      "afterTick" : true,
+      "tick" : 6771
     },
     {
       "action" : {
@@ -366,7 +406,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 7013
+      "afterTick" : true,
+      "tick" : 6973
     },
     {
       "action" : {
@@ -375,7 +416,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 7141
+      "afterTick" : true,
+      "tick" : 7101
     }
   ],
   "expected" : {
@@ -383,10 +425,10 @@
     "released" : 80,
     "required" : 80,
     "saved" : 80,
-    "stateHash" : "61bcb3cfb8588042e5bdbdc7c36789512771ef86ef7c0ae0c574b2cc2ab55ae5",
-    "ticks" : 7572
+    "stateHash" : "2d88b08edfab661b7e85c5584f95cfed32b9f120c226cb3b591e006d57ba6115",
+    "ticks" : 7532
   },
-  "initialStateHash" : "5aa086bc37326a9e9fa243b29f62fbd1b30cc6dd7cc00d29b6ee8618e9bbf358",
+  "initialStateHash" : "4a85bbb80f45a70564c84167ce75f752a98705fa608f29284699e2f68565bee5",
   "number" : 3,
   "rank" : "Xmas",
   "title" : "A Lemming Holiday"

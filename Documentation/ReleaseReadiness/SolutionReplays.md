@@ -15,10 +15,10 @@ run ownership, campaign records, achievements or Hot Seat progress.
 
 ## Coverage
 
-The bundle contains 221 distinct winning input records covering all 120 Original
-levels and 103 additional Classic-family routes. Two routes share identical
-initial states and titles. This is not complete coverage of the wider Classic and
-fan catalogue. Levels without a matching verified record retain their existing hints.
+The bundle contains 350 distinct winning input records covering all 352 official
+Classic and conversion levels. Two level pairs share identical initial states
+and titles. Fan levels can use a matching verified record. The bundle does not
+claim complete fan playthrough coverage.
 
 `Tools/SolutionReplays/generate.py` rebuilds the bundle from the completion fixtures.
 The shipping asset script includes it. The app checks the initial state and the

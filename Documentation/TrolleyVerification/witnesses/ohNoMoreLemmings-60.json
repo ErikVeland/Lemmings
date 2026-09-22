@@ -8,7 +8,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 65
+      "tick" : 64
     },
     {
       "action" : {
@@ -23,12 +23,12 @@
     {
       "action" : {
         "assign" : {
-          "lemmingID" : 3,
+          "lemmingID" : 2,
           "skill" : "bomber"
         }
       },
       "afterTick" : true,
-      "tick" : 228
+      "tick" : 174
     },
     {
       "action" : {
@@ -38,7 +38,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 341
+      "tick" : 340
     },
     {
       "action" : {
@@ -48,7 +48,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 370
+      "tick" : 369
     },
     {
       "action" : {
@@ -58,7 +58,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 465
+      "tick" : 464
     },
     {
       "action" : {
@@ -74,11 +74,11 @@
     "didWin" : true,
     "released" : 60,
     "required" : 48,
-    "saved" : 55,
-    "stateHash" : "6dfcc74736afd1de81fd9d5a1274f1c8dc8296a07be00de648aa8edca06a8f86",
-    "ticks" : 1164
+    "saved" : 56,
+    "stateHash" : "866e3d36b47156949d9437064a799c90a39c77402ee9ccc6bea63038272d9434",
+    "ticks" : 1163
   },
-  "initialStateHash" : "d952314196df7e435d49ab8b4722d2cc9da3168246efa566c5707a5589b9cc1c",
+  "initialStateHash" : "1da88f7987c8e9116e8ea157f33036c951d433bfcb49ac1d9881d44d1e48065e",
   "number" : 1,
   "rank" : "Wicked",
   "title" : "LeMming ToMato KetchUp fAcilitY"

@@ -25,15 +25,45 @@ public enum ClassicDOSRules {
     }
 
     /// Expands one to four DOS hatches into the four-entry release table.
-    /// Original Lemmings uses A-B-B-A for two hatches and A-B-C-B for three.
-    public static func hatchOrder(entranceCount: Int) -> [Int] {
+    /// Original Lemmings uses A-B-B-A for two hatches; the later releases use
+    /// A-B-A-B. Both use A-B-C-B for three.
+    public static func hatchOrder(entranceCount: Int, mechanics: ClassicDOSMechanics = .original) -> [Int] {
         switch entranceCount {
         case 1: return [0, 0, 0, 0]
-        case 2: return [0, 1, 1, 0]
+        case 2: return mechanics == .original ? [0, 1, 1, 0] : [0, 1, 0, 1]
         case 3: return [0, 1, 2, 1]
         default: return [0, 1, 2, 3]
         }
     }
+}
+
+/// The DOS rule set a level runs under.
+///
+/// Oh No! More Lemmings changed three behaviours, and the Xmas and Holiday
+/// releases kept them: lemmings leave a hatch one pixel further right, two
+/// hatches release A-B-A-B, and giving a climber to a shrugging builder no
+/// longer makes it walk. Lemmix models the same split (DOSORIG_MECHANICS and
+/// DOSOHNO_MECHANICS). Oh No! Havoc 20 depends on the spawn position.
+public enum ClassicDOSMechanics: String, Codable, Sendable {
+    case original
+    case ohNoMore
+
+    /// The rule set for a level from a release, and a rank for the Oh Yes!
+    /// pack, which gathers levels from several releases.
+    public init(title: ClassicTitle?, rank: String) {
+        switch title {
+        case .ohNoMoreLemmings, .xmasLemmings1991, .xmasLemmings1992,
+             .holidayLemmings1993, .holidayLemmings1994:
+            self = .ohNoMore
+        case .ohYesMoreLemmings:
+            self = rank == "Oh No! More Lemmings Versus" ? .ohNoMore : .original
+        default:
+            self = .original
+        }
+    }
+
+    /// Horizontal distance from a hatch object to its new lemmings' feet.
+    var hatchOffsetX: Int { self == .original ? 24 : 25 }
 }
 
 public struct ClassicDOSPoint: Codable, Equatable, Hashable, Sendable {
@@ -384,6 +414,7 @@ public struct ClassicDOSConfiguration: Codable, Equatable, Sendable {
     public let initialSkills: [ClassicSkill: Int]
     public let maximumX: Int
     public let maximumY: Int
+    public let mechanics: ClassicDOSMechanics
 
     public init(
         totalLemmings: Int,
@@ -394,7 +425,8 @@ public struct ClassicDOSConfiguration: Codable, Equatable, Sendable {
         triggers: [ClassicDOSTrigger] = [],
         initialSkills: [ClassicSkill: Int] = [:],
         maximumX: Int = ClassicDOSRules.classicMaximumX,
-        maximumY: Int = ClassicDOSRules.classicMaximumY
+        maximumY: Int = ClassicDOSRules.classicMaximumY,
+        mechanics: ClassicDOSMechanics = .original
     ) {
         self.totalLemmings = max(0, totalLemmings)
         self.requiredToSave = max(0, requiredToSave)
@@ -407,6 +439,27 @@ public struct ClassicDOSConfiguration: Codable, Equatable, Sendable {
         )
         self.maximumX = maximumX
         self.maximumY = maximumY
+        self.mechanics = mechanics
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case totalLemmings, requiredToSave, timeLimitTicks, initialReleaseRate, entrances
+        case triggers, initialSkills, maximumX, maximumY, mechanics
+    }
+
+    // Checkpoints saved before the rule sets existed decode as original rules.
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        totalLemmings = try c.decode(Int.self, forKey: .totalLemmings)
+        requiredToSave = try c.decode(Int.self, forKey: .requiredToSave)
+        timeLimitTicks = try c.decodeIfPresent(Int.self, forKey: .timeLimitTicks)
+        initialReleaseRate = try c.decode(Int.self, forKey: .initialReleaseRate)
+        entrances = try c.decode([ClassicDOSPoint].self, forKey: .entrances)
+        triggers = try c.decode([ClassicDOSTrigger].self, forKey: .triggers)
+        initialSkills = try c.decode([ClassicSkill: Int].self, forKey: .initialSkills)
+        maximumX = try c.decode(Int.self, forKey: .maximumX)
+        maximumY = try c.decode(Int.self, forKey: .maximumY)
+        mechanics = try c.decodeIfPresent(ClassicDOSMechanics.self, forKey: .mechanics) ?? .original
     }
 }
 
@@ -559,7 +612,8 @@ public struct ClassicDOSSimulation: Codable, Equatable, Sendable {
         nextReleaseCountdown = ClassicDOSRules.firstReleaseCountdown
         triggerStates = configuration.triggers.map { ClassicDOSTriggerState(trigger: $0, cooldown: 0) }
         nukeCursor = 0
-        hatchTable = ClassicDOSRules.hatchOrder(entranceCount: configuration.entrances.count)
+        hatchTable = ClassicDOSRules.hatchOrder(
+            entranceCount: configuration.entrances.count, mechanics: configuration.mechanics)
         commandSequence = 0
         queuedCommands = []
     }
@@ -567,7 +621,8 @@ public struct ClassicDOSSimulation: Codable, Equatable, Sendable {
     public init(
         level: ClassicLevel,
         renderedLevel: ClassicRenderedLevel,
-        destructionMasks: ClassicDOSDestructionMaskSet? = nil
+        destructionMasks: ClassicDOSDestructionMaskSet? = nil,
+        mechanics: ClassicDOSMechanics = .original
     ) throws {
         let interactiveObjects = renderedLevel.objects.filter {
             $0.placement.slot < 16 && $0.graphic.triggerEffect != 0
@@ -589,7 +644,7 @@ public struct ClassicDOSSimulation: Codable, Equatable, Sendable {
             .prefix(4)
             .map {
                 ClassicDOSPoint(
-                    x: $0.placement.x + 24,
+                    x: $0.placement.x + mechanics.hatchOffsetX,
                     y: $0.placement.y + 14
                 )
         }
@@ -609,7 +664,8 @@ public struct ClassicDOSSimulation: Codable, Equatable, Sendable {
                 : renderedLevel.width - 1,
             maximumY: renderedLevel.height == ClassicLevel.height
                 ? ClassicDOSRules.classicMaximumY
-                : renderedLevel.height + 3
+                : renderedLevel.height + 3,
+            mechanics: mechanics
         )
         try self.init(
             terrain: ClassicDOSTerrain(renderedLevel: renderedLevel),
@@ -621,14 +677,16 @@ public struct ClassicDOSSimulation: Codable, Equatable, Sendable {
     public init(
         level: ClassicLevel,
         renderedLevel: ClassicRenderedLevel,
-        mainDATAssets: ClassicMainDATAssets
+        mainDATAssets: ClassicMainDATAssets,
+        mechanics: ClassicDOSMechanics = .original
     ) throws {
         try self.init(
             level: level,
             renderedLevel: renderedLevel,
             destructionMasks: ClassicDOSDestructionMaskSet(
                 mainDATMasks: mainDATAssets.destructionMasks
-            )
+            ),
+            mechanics: mechanics
         )
     }
 
@@ -817,7 +875,8 @@ public struct ClassicDOSSimulation: Codable, Equatable, Sendable {
                 return .invalidAction
             }
             lemming.hasClimber = true
-            if lemming.action == .shrugging {
+            // Original Lemmings only: the climber ends a builder's shrug.
+            if lemming.action == .shrugging, configuration.mechanics == .original {
                 transition(&lemming, to: .walking, events: &events)
             }
 

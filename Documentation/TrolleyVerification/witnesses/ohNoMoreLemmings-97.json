@@ -6,6 +6,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 69
     },
     {
@@ -15,6 +16,7 @@
           "skill" : "climber"
         }
       },
+      "afterTick" : true,
       "tick" : 69
     },
     {
@@ -24,7 +26,8 @@
           "skill" : "floater"
         }
       },
-      "tick" : 152
+      "afterTick" : true,
+      "tick" : 151
     },
     {
       "action" : {
@@ -33,7 +36,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 198
+      "afterTick" : true,
+      "tick" : 197
     },
     {
       "action" : {
@@ -42,7 +46,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 457
+      "afterTick" : true,
+      "tick" : 456
     },
     {
       "action" : {
@@ -51,7 +56,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 650
+      "afterTick" : true,
+      "tick" : 648
     },
     {
       "action" : {
@@ -60,7 +66,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 858
+      "afterTick" : true,
+      "tick" : 856
     },
     {
       "action" : {
@@ -69,7 +76,8 @@
           "skill" : "digger"
         }
       },
-      "tick" : 1048
+      "afterTick" : true,
+      "tick" : 1046
     },
     {
       "action" : {
@@ -78,7 +86,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1130
+      "afterTick" : true,
+      "tick" : 1128
     },
     {
       "action" : {
@@ -87,7 +96,8 @@
           "skill" : "digger"
         }
       },
-      "tick" : 1507
+      "afterTick" : true,
+      "tick" : 1505
     },
     {
       "action" : {
@@ -96,7 +106,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1548
+      "afterTick" : true,
+      "tick" : 1546
     },
     {
       "action" : {
@@ -105,7 +116,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1677
+      "afterTick" : true,
+      "tick" : 1675
     },
     {
       "action" : {
@@ -114,7 +126,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1885
+      "afterTick" : true,
+      "tick" : 1883
     },
     {
       "action" : {
@@ -123,7 +136,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 2632
+      "afterTick" : true,
+      "tick" : 2630
     },
     {
       "action" : {
@@ -132,7 +146,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 2645
+      "afterTick" : true,
+      "tick" : 2643
     },
     {
       "action" : {
@@ -141,7 +156,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 2776
+      "afterTick" : true,
+      "tick" : 2774
     },
     {
       "action" : {
@@ -150,7 +166,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 2792
+      "afterTick" : true,
+      "tick" : 2790
     },
     {
       "action" : {
@@ -159,7 +176,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 3278
+      "afterTick" : true,
+      "tick" : 3276
     },
     {
       "action" : {
@@ -168,7 +186,8 @@
           "skill" : "digger"
         }
       },
-      "tick" : 3385
+      "afterTick" : true,
+      "tick" : 3383
     },
     {
       "action" : {
@@ -177,7 +196,8 @@
           "skill" : "bomber"
         }
       },
-      "tick" : 3594
+      "afterTick" : true,
+      "tick" : 3592
     }
   ],
   "expected" : {
@@ -185,10 +205,10 @@
     "released" : 70,
     "required" : 68,
     "saved" : 69,
-    "stateHash" : "bbd235925f23433d8ea3ac2d8a36c03708037c24adbe81abbdf5947b68532331",
-    "ticks" : 4019
+    "stateHash" : "5b1893d0321ea5589726afa2f6abdc4892831a9913faa4365f88060120552630",
+    "ticks" : 4016
   },
-  "initialStateHash" : "100a552f9539143c3539cfb84b7350719a9539e15e8b684eadbdf1b12b97417e",
+  "initialStateHash" : "5d4c5ca7e096babf01bba0ef49af7c362350005d084a4d78c73ec41c0719ec73",
   "number" : 18,
   "rank" : "Havoc",
   "title" : "Lemmings in a situation"

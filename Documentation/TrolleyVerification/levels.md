@@ -161,14 +161,14 @@ See [method and limitations](README.md) and [exact conditions and evidence](audi
 | Crazy 17: DIGGING FOR VICTORY | 50 | 49 | 49 | — | — | [Observed](witnesses/ohNoMoreLemmings-36.json) |
 | Crazy 18: NO PROBLEM | 50 | 45 | 46 | — | — | [Observed](witnesses/ohNoMoreLemmings-37.json) |
 | Crazy 19: DON`T PANIC | 50 | 45 | 46 | — | — | [Observed](witnesses/ohNoMoreLemmings-38.json) |
-| Crazy 20: Ice Ice Lemming | 20 | 10 | — | — | — | No witness collected |
+| Crazy 20: Ice Ice Lemming | 20 | 10 | 10 | — | — | [Observed](witnesses/ohNoMoreLemmings-39.json) |
 | Havoc 1: Tubular Lemmings | 80 | 76 | 76 | — | — | [Observed](witnesses/ohNoMoreLemmings-80.json) |
 | Havoc 2: Be more than just a number | 30 | 29 | 29 | — | — | [Observed](witnesses/ohNoMoreLemmings-81.json) |
 | Havoc 3: It`s the price you have to pay | 50 | 50 | 50 | 50 | 0 | [Verified](witnesses/ohNoMoreLemmings-82.json) |
 | Havoc 4: The race against cliches | 20 | 20 | 20 | 20 | 0 | [Verified](witnesses/ohNoMoreLemmings-83.json) |
-| Havoc 5: There`s madness in the method | 20 | 20 | — | — | — | No witness collected |
+| Havoc 5: There`s madness in the method | 20 | 20 | 20 | 20 | 0 | [Verified](witnesses/ohNoMoreLemmings-84.json) |
 | Havoc 6: Now get out of that! | 50 | 50 | 50 | 50 | 0 | [Verified](witnesses/ohNoMoreLemmings-85.json) |
-| Havoc 7: Creature Discomforts | 20 | 15 | — | — | — | No witness collected |
+| Havoc 7: Creature Discomforts | 20 | 15 | 18 | — | — | [Observed](witnesses/ohNoMoreLemmings-86.json) |
 | Havoc 8: Lemming about town | 50 | 45 | 50 | 50 | 0 | [Verified](witnesses/ohNoMoreLemmings-87.json) |
 | Havoc 9: AAAAAARRRRRRGGGGGGHHHHHH!!!!!! | 50 | 50 | 50 | 50 | 0 | [Verified](witnesses/ohNoMoreLemmings-88.json) |
 | Havoc 10: Flow Control | 21 | 3 | 5 | — | — | [Observed](witnesses/ohNoMoreLemmings-89.json) |
@@ -177,11 +177,11 @@ See [method and limitations](README.md) and [exact conditions and evidence](audi
 | Havoc 13: HIGHLAND FLING | 80 | 75 | 76 | — | — | [Observed](witnesses/ohNoMoreLemmings-92.json) |
 | Havoc 14: Synchronised Lemming | 80 | 80 | 80 | 80 | 0 | [Verified](witnesses/ohNoMoreLemmings-93.json) |
 | Havoc 15: Have an ice day | 10 | 8 | 10 | 10 | 0 | [Verified](witnesses/ohNoMoreLemmings-94.json) |
-| Havoc 16: Scaling the Heights | 50 | 45 | — | — | — | No witness collected |
+| Havoc 16: Scaling the Heights | 50 | 45 | 48 | — | — | [Observed](witnesses/ohNoMoreLemmings-95.json) |
 | Havoc 17: Where Lemmings Dare | 80 | 78 | 78 | — | — | [Observed](witnesses/ohNoMoreLemmings-96.json) |
 | Havoc 18: Lemmings in a situation | 70 | 68 | 69 | — | — | [Observed](witnesses/ohNoMoreLemmings-97.json) |
 | Havoc 19: Looks a Bit Nippy Out There | 80 | 80 | 80 | 80 | 0 | [Verified](witnesses/ohNoMoreLemmings-98.json) |
-| Havoc 20: LOoK BeFoRe YoU LeAp! | 60 | 50 | — | — | — | No witness collected |
+| Havoc 20: LOoK BeFoRe YoU LeAp! | 60 | 50 | 50 | — | — | [Observed](witnesses/ohNoMoreLemmings-99.json) |
 | Tame 1: Down And Out Lemmings | 50 | 25 | 50 | 50 | 0 | [Verified](witnesses/ohNoMoreLemmings-0.json) |
 | Tame 2: Rent-a-Lemming | 50 | 25 | 49 | — | — | [Observed](witnesses/ohNoMoreLemmings-1.json) |
 | Tame 3: Undercover Lemming | 50 | 25 | 50 | 50 | 0 | [Verified](witnesses/ohNoMoreLemmings-2.json) |
@@ -195,20 +195,20 @@ See [method and limitations](README.md) and [exact conditions and evidence](audi
 | Tame 11: With Compliments | 50 | 25 | 50 | 50 | 0 | [Verified](witnesses/ohNoMoreLemmings-10.json) |
 | Tame 12: Citizen Lemming | 50 | 25 | 50 | 50 | 0 | [Verified](witnesses/ohNoMoreLemmings-11.json) |
 | Tame 13: Thunder-Lemmings are go! | 50 | 25 | 50 | 50 | 0 | [Verified](witnesses/ohNoMoreLemmings-12.json) |
-| Tame 14: Get a little extra help | 50 | 25 | 50 | 50 | 0 | [Verified](witnesses/ohNoMoreLemmings-13.json) |
+| Tame 14: Get a little extra help | 50 | 25 | 49 | — | — | [Observed](witnesses/ohNoMoreLemmings-13.json) |
 | Tame 15: Not just a pretty Lemming | 50 | 25 | 49 | — | — | [Observed](witnesses/ohNoMoreLemmings-14.json) |
 | Tame 16: Gone With The Lemming | 50 | 25 | 50 | 50 | 0 | [Verified](witnesses/ohNoMoreLemmings-15.json) |
 | Tame 17: Honey, I Saved The Lemmings | 50 | 25 | 50 | 50 | 0 | [Verified](witnesses/ohNoMoreLemmings-16.json) |
 | Tame 18: Lemmings For Presidents! | 50 | 25 | 50 | 50 | 0 | [Verified](witnesses/ohNoMoreLemmings-17.json) |
 | Tame 19: Lemming Productions Present... | 50 | 25 | 49 | — | — | [Observed](witnesses/ohNoMoreLemmings-18.json) |
 | Tame 20: Custom built for Lemmings | 50 | 25 | 50 | 50 | 0 | [Verified](witnesses/ohNoMoreLemmings-19.json) |
-| Wicked 1: LeMming ToMato KetchUp fAcilitY | 60 | 48 | 55 | — | — | [Observed](witnesses/ohNoMoreLemmings-60.json) |
+| Wicked 1: LeMming ToMato KetchUp fAcilitY | 60 | 48 | 56 | — | — | [Observed](witnesses/ohNoMoreLemmings-60.json) |
 | Wicked 2: Inroducing SUPERLEMMING | 1 | 1 | 1 | 1 | 0 | [Verified](witnesses/ohNoMoreLemmings-61.json) |
 | Wicked 3: This Corrosion | 50 | 50 | 50 | 50 | 0 | [Verified](witnesses/ohNoMoreLemmings-62.json) |
 | Wicked 4: Oh No! It`s the 4TH DIMENSION! | 50 | 30 | 41 | — | — | [Observed](witnesses/ohNoMoreLemmings-63.json) |
 | Wicked 5: Chill out! | 20 | 20 | 20 | 20 | 0 | [Verified](witnesses/ohNoMoreLemmings-64.json) |
 | Wicked 6: PoP TiL YoU DrOp! | 80 | 30 | 40 | — | — | [Observed](witnesses/ohNoMoreLemmings-65.json) |
-| Wicked 7: Last Lemming To Lemmingcentral | 80 | 72 | 73 | — | — | [Observed](witnesses/ohNoMoreLemmings-66.json) |
+| Wicked 7: Last Lemming To Lemmingcentral | 80 | 72 | 74 | — | — | [Observed](witnesses/ohNoMoreLemmings-66.json) |
 | Wicked 8: A TOWERING PROBLEM | 50 | 45 | 46 | — | — | [Observed](witnesses/ohNoMoreLemmings-67.json) |
 | Wicked 9: How on Earth? | 50 | 45 | 45 | — | — | [Observed](witnesses/ohNoMoreLemmings-68.json) |
 | Wicked 10: Temple of Love | 50 | 48 | 49 | — | — | [Observed](witnesses/ohNoMoreLemmings-69.json) |
@@ -230,7 +230,7 @@ See [method and limitations](README.md) and [exact conditions and evidence](audi
 | Wild 6: Just A Quicky | 80 | 80 | 80 | 80 | 0 | [Verified](witnesses/ohNoMoreLemmings-45.json) |
 | Wild 7: You Take the High Road | 80 | 80 | 80 | 80 | 0 | [Verified](witnesses/ohNoMoreLemmings-46.json) |
 | Wild 8: It`s a tight fit! | 10 | 10 | 10 | 10 | 0 | [Verified](witnesses/ohNoMoreLemmings-47.json) |
-| Wild 9: Ice Station Lemming | 40 | 40 | — | — | — | No witness collected |
+| Wild 9: Ice Station Lemming | 40 | 40 | 40 | 40 | 0 | [Verified](witnesses/ohNoMoreLemmings-48.json) |
 | Wild 10: Higgledy Piggledy | 80 | 60 | 72 | — | — | [Observed](witnesses/ohNoMoreLemmings-49.json) |
 | Wild 11: Mutiny On The Bounty | 50 | 49 | 49 | — | — | [Observed](witnesses/ohNoMoreLemmings-50.json) |
 | Wild 12: SNOW JOKE | 50 | 40 | 42 | — | — | [Observed](witnesses/ohNoMoreLemmings-51.json) |
@@ -430,66 +430,66 @@ See [method and limitations](README.md) and [exact conditions and evidence](audi
 
 | Level | Population | Pass goal | Best rescued | Verified maximum | Minimum sacrifices | Evidence |
 | --- | ---: | ---: | ---: | ---: | ---: | --- |
-| Lemmings Versus 1: There can be only one | 80 | 65 | — | — | — | No witness collected |
-| Lemmings Versus 2: We`re in this one together | 80 | 65 | — | — | — | No witness collected |
-| Lemmings Versus 3: Still everything to play for | 100 | 80 | — | — | — | No witness collected |
-| Lemmings Versus 4: May the craftiest player win | 80 | 80 | — | — | — | No witness collected |
-| Lemmings Versus 5: and the winner is..... | 80 | 80 | — | — | — | No witness collected |
-| Lemmings Versus 6: In the thick of the fray | 75 | 65 | — | — | — | No witness collected |
-| Lemmings Versus 7: Just for fun or to the death? | 100 | 50 | — | — | — | No witness collected |
-| Lemmings Versus 8: Game on!  Choose your tactics. | 80 | 80 | — | — | — | No witness collected |
-| Lemmings Versus 9: The Passing Place | 75 | 75 | — | — | — | No witness collected |
-| Lemmings Versus 10: Take what you can, when you can | 80 | 80 | — | — | — | No witness collected |
-| Lemmings Versus 11: Any chance of a truce? | 80 | 80 | — | — | — | No witness collected |
-| Lemmings Versus 12: Good game! Good game! | 80 | 65 | — | — | — | No witness collected |
-| Lemmings Versus 13: The Hammock... | 100 | 90 | — | — | — | No witness collected |
+| Lemmings Versus 1: There can be only one | 80 | 65 | 78 | — | — | [Observed](witnesses/ohYesMoreLemmings-0.json) |
+| Lemmings Versus 2: We`re in this one together | 80 | 65 | 68 | — | — | [Observed](witnesses/ohYesMoreLemmings-1.json) |
+| Lemmings Versus 3: Still everything to play for | 100 | 80 | 100 | 100 | 0 | [Verified](witnesses/ohYesMoreLemmings-2.json) |
+| Lemmings Versus 4: May the craftiest player win | 80 | 80 | 80 | 80 | 0 | [Verified](witnesses/ohYesMoreLemmings-3.json) |
+| Lemmings Versus 5: and the winner is..... | 80 | 80 | 80 | 80 | 0 | [Verified](witnesses/ohYesMoreLemmings-4.json) |
+| Lemmings Versus 6: In the thick of the fray | 75 | 65 | 75 | 75 | 0 | [Verified](witnesses/ohYesMoreLemmings-5.json) |
+| Lemmings Versus 7: Just for fun or to the death? | 100 | 50 | 100 | 100 | 0 | [Verified](witnesses/ohYesMoreLemmings-6.json) |
+| Lemmings Versus 8: Game on!  Choose your tactics. | 80 | 80 | 80 | 80 | 0 | [Verified](witnesses/ohYesMoreLemmings-7.json) |
+| Lemmings Versus 9: The Passing Place | 75 | 75 | 75 | 75 | 0 | [Verified](witnesses/ohYesMoreLemmings-8.json) |
+| Lemmings Versus 10: Take what you can, when you can | 80 | 80 | 80 | 80 | 0 | [Verified](witnesses/ohYesMoreLemmings-9.json) |
+| Lemmings Versus 11: Any chance of a truce? | 80 | 80 | 80 | 80 | 0 | [Verified](witnesses/ohYesMoreLemmings-10.json) |
+| Lemmings Versus 12: Good game! Good game! | 80 | 65 | 78 | — | — | [Observed](witnesses/ohYesMoreLemmings-11.json) |
+| Lemmings Versus 13: The Hammock... | 100 | 90 | 98 | — | — | [Observed](witnesses/ohYesMoreLemmings-12.json) |
 | Lemmings Versus 14: The Pipe Room... | 100 | 90 | 100 | 100 | 0 | [Verified](witnesses/ohYesMoreLemmings-13.json) |
-| Lemmings Versus 15: Graffiti | 100 | 90 | — | — | — | No witness collected |
-| Lemmings Versus 16: The Rubbish Dump | 100 | 90 | — | — | — | No witness collected |
-| Lemmings Versus 17: The Crystal Cavern Mark II | 40 | 30 | — | — | — | No witness collected |
-| Lemmings Versus 18: The Rope Bridge | 50 | 26 | — | — | — | No witness collected |
-| Lemmings Versus 19: Islands in the Sky | 40 | 26 | — | — | — | No witness collected |
-| Lemmings Versus 20: Cross-over Point | 40 | 20 | — | — | — | No witness collected |
-| Mega Drive Sunsoft 1: Rules to fall | 20 | 10 | — | — | — | No witness collected |
-| Mega Drive Sunsoft 2: Inside the bone | 50 | 50 | — | — | — | No witness collected |
-| Mega Drive Sunsoft 3: Anxiety | 60 | 60 | — | — | — | No witness collected |
-| Mega Drive Sunsoft 4: Train your body | 10 | 10 | — | — | — | No witness collected |
-| Mega Drive Sunsoft 5: Watch your step | 50 | 49 | — | — | — | No witness collected |
-| Mega Drive Sunsoft 6: Libra | 60 | 48 | — | — | — | No witness collected |
-| Mega Drive Sunsoft 7: Everyone turn left (Part two) | 10 | 10 | — | — | — | No witness collected |
-| Mega Drive Sunsoft 8: Is this a circus? | 10 | 10 | — | — | — | No witness collected |
-| Mega Drive Sunsoft 9: Evacuating a coal mine | 100 | 100 | — | — | — | No witness collected |
-| Mega Drive Sunsoft 10: Spiral staircase | 100 | 98 | — | — | — | No witness collected |
-| Mega Drive Sunsoft 11: Turn around and look. | 50 | 45 | — | — | — | No witness collected |
-| Mega Drive Sunsoft 12: Water processing plant | 50 | 49 | — | — | — | No witness collected |
-| Mega Drive Sunsoft 13: Doomsday | 50 | 45 | — | — | — | No witness collected |
-| Mega Drive Sunsoft 14: No world without you | 2 | 2 | — | — | — | No witness collected |
-| Mega Drive Sunsoft 15: Exodus! | 50 | 50 | — | — | — | No witness collected |
-| Mega Drive Sunsoft 16: Here is Mr.Lemming's house | 50 | 40 | — | — | — | No witness collected |
-| Mega Drive Sunsoft 17: Cave quest | 10 | 10 | — | — | — | No witness collected |
-| Mega Drive Sunsoft 18: SUNSOFT Special | 60 | 48 | — | — | — | No witness collected |
-| Mega Drive Sunsoft 19: Let's go camping. | 3 | 3 | — | — | — | No witness collected |
-| Mega Drive Sunsoft 20: Haunted botanical garden | 60 | 59 | — | — | — | No witness collected |
-| Mega Drive Sunsoft 21: Be sure to be a builder. | 25 | 25 | — | — | — | No witness collected |
-| Mega Drive Sunsoft 22: Watch right or left (Part two) | 50 | 46 | — | — | — | No witness collected |
-| Mega Drive Sunsoft 23: Move on in two separate groups. | 50 | 50 | — | — | — | No witness collected |
-| Mega Drive Sunsoft 24: Out, away from the tune | 50 | 49 | — | — | — | No witness collected |
-| Mega Drive Sunsoft 25: Stray sheep | 100 | 80 | — | — | — | No witness collected |
-| Mega Drive Sunsoft 26: Just a minute (Part Three) | 100 | 100 | — | — | — | No witness collected |
-| Mega Drive Sunsoft 27: Two heads are better... | 4 | 1 | — | — | — | No witness collected |
-| Mega Drive Sunsoft 28: The gate trap Lemmings. | 100 | 100 | — | — | — | No witness collected |
-| Mega Drive Sunsoft 29: I am A.T. | 100 | 80 | — | — | — | No witness collected |
-| Mega Drive Sunsoft 30: Fall and no life (Part Two) | 50 | 50 | — | — | — | No witness collected |
-| Oh No! More Lemmings Versus 1: The Duel | 40 | 40 | — | — | — | No witness collected |
-| Oh No! More Lemmings Versus 2: Match Of The Day | 40 | 40 | — | — | — | No witness collected |
-| Oh No! More Lemmings Versus 3: Confrontation | 40 | 40 | — | — | — | No witness collected |
-| Oh No! More Lemmings Versus 4: The Only Way Out | 40 | 40 | — | — | — | No witness collected |
-| Oh No! More Lemmings Versus 5: Showdown! | 40 | 40 | — | — | — | No witness collected |
+| Lemmings Versus 15: Graffiti | 100 | 90 | 98 | — | — | [Observed](witnesses/ohYesMoreLemmings-14.json) |
+| Lemmings Versus 16: The Rubbish Dump | 100 | 90 | 100 | 100 | 0 | [Verified](witnesses/ohYesMoreLemmings-15.json) |
+| Lemmings Versus 17: The Crystal Cavern Mark II | 40 | 30 | 40 | 40 | 0 | [Verified](witnesses/ohYesMoreLemmings-16.json) |
+| Lemmings Versus 18: The Rope Bridge | 50 | 26 | 26 | — | — | [Observed](witnesses/ohYesMoreLemmings-17.json) |
+| Lemmings Versus 19: Islands in the Sky | 40 | 26 | 39 | — | — | [Observed](witnesses/ohYesMoreLemmings-18.json) |
+| Lemmings Versus 20: Cross-over Point | 40 | 20 | 21 | — | — | [Observed](witnesses/ohYesMoreLemmings-19.json) |
+| Mega Drive Sunsoft 1: Rules to fall | 20 | 10 | 20 | 20 | 0 | [Verified](witnesses/ohYesMoreLemmings-30.json) |
+| Mega Drive Sunsoft 2: Inside the bone | 50 | 50 | 50 | 50 | 0 | [Verified](witnesses/ohYesMoreLemmings-31.json) |
+| Mega Drive Sunsoft 3: Anxiety | 60 | 60 | 60 | 60 | 0 | [Verified](witnesses/ohYesMoreLemmings-32.json) |
+| Mega Drive Sunsoft 4: Train your body | 10 | 10 | 10 | 10 | 0 | [Verified](witnesses/ohYesMoreLemmings-33.json) |
+| Mega Drive Sunsoft 5: Watch your step | 50 | 49 | 49 | — | — | [Observed](witnesses/ohYesMoreLemmings-34.json) |
+| Mega Drive Sunsoft 6: Libra | 60 | 48 | 51 | — | — | [Observed](witnesses/ohYesMoreLemmings-35.json) |
+| Mega Drive Sunsoft 7: Everyone turn left (Part two) | 10 | 10 | 10 | 10 | 0 | [Verified](witnesses/ohYesMoreLemmings-36.json) |
+| Mega Drive Sunsoft 8: Is this a circus? | 10 | 10 | 10 | 10 | 0 | [Verified](witnesses/ohYesMoreLemmings-37.json) |
+| Mega Drive Sunsoft 9: Evacuating a coal mine | 100 | 100 | 100 | 100 | 0 | [Verified](witnesses/ohYesMoreLemmings-38.json) |
+| Mega Drive Sunsoft 10: Spiral staircase | 100 | 98 | 98 | — | — | [Observed](witnesses/ohYesMoreLemmings-39.json) |
+| Mega Drive Sunsoft 11: Turn around and look. | 50 | 45 | 50 | 50 | 0 | [Verified](witnesses/ohYesMoreLemmings-40.json) |
+| Mega Drive Sunsoft 12: Water processing plant | 50 | 49 | 49 | — | — | [Observed](witnesses/ohYesMoreLemmings-41.json) |
+| Mega Drive Sunsoft 13: Doomsday | 50 | 45 | 45 | — | — | [Observed](witnesses/ohYesMoreLemmings-42.json) |
+| Mega Drive Sunsoft 14: No world without you | 2 | 2 | 2 | 2 | 0 | [Verified](witnesses/ohYesMoreLemmings-43.json) |
+| Mega Drive Sunsoft 15: Exodus! | 50 | 50 | 50 | 50 | 0 | [Verified](witnesses/ohYesMoreLemmings-44.json) |
+| Mega Drive Sunsoft 16: Here is Mr.Lemming's house | 50 | 40 | 49 | — | — | [Observed](witnesses/ohYesMoreLemmings-45.json) |
+| Mega Drive Sunsoft 17: Cave quest | 10 | 10 | 10 | 10 | 0 | [Verified](witnesses/ohYesMoreLemmings-46.json) |
+| Mega Drive Sunsoft 18: SUNSOFT Special | 60 | 48 | 58 | — | — | [Observed](witnesses/ohYesMoreLemmings-47.json) |
+| Mega Drive Sunsoft 19: Let's go camping. | 3 | 3 | 3 | 3 | 0 | [Verified](witnesses/ohYesMoreLemmings-48.json) |
+| Mega Drive Sunsoft 20: Haunted botanical garden | 60 | 59 | 59 | — | — | [Observed](witnesses/ohYesMoreLemmings-49.json) |
+| Mega Drive Sunsoft 21: Be sure to be a builder. | 25 | 25 | 25 | 25 | 0 | [Verified](witnesses/ohYesMoreLemmings-50.json) |
+| Mega Drive Sunsoft 22: Watch right or left (Part two) | 50 | 46 | 47 | — | — | [Observed](witnesses/ohYesMoreLemmings-51.json) |
+| Mega Drive Sunsoft 23: Move on in two separate groups. | 50 | 50 | 50 | 50 | 0 | [Verified](witnesses/ohYesMoreLemmings-52.json) |
+| Mega Drive Sunsoft 24: Out, away from the tune | 50 | 49 | 49 | — | — | [Observed](witnesses/ohYesMoreLemmings-53.json) |
+| Mega Drive Sunsoft 25: Stray sheep | 100 | 80 | 96 | — | — | [Observed](witnesses/ohYesMoreLemmings-54.json) |
+| Mega Drive Sunsoft 26: Just a minute (Part Three) | 100 | 100 | 100 | 100 | 0 | [Verified](witnesses/ohYesMoreLemmings-55.json) |
+| Mega Drive Sunsoft 27: Two heads are better... | 4 | 1 | 1 | — | — | [Observed](witnesses/ohYesMoreLemmings-56.json) |
+| Mega Drive Sunsoft 28: The gate trap Lemmings. | 100 | 100 | 100 | 100 | 0 | [Verified](witnesses/ohYesMoreLemmings-57.json) |
+| Mega Drive Sunsoft 29: I am A.T. | 100 | 80 | 80 | — | — | [Observed](witnesses/ohYesMoreLemmings-58.json) |
+| Mega Drive Sunsoft 30: Fall and no life (Part Two) | 50 | 50 | 50 | 50 | 0 | [Verified](witnesses/ohYesMoreLemmings-59.json) |
+| Oh No! More Lemmings Versus 1: The Duel | 40 | 40 | 40 | 40 | 0 | [Verified](witnesses/ohYesMoreLemmings-20.json) |
+| Oh No! More Lemmings Versus 2: Match Of The Day | 40 | 40 | 40 | 40 | 0 | [Verified](witnesses/ohYesMoreLemmings-21.json) |
+| Oh No! More Lemmings Versus 3: Confrontation | 40 | 40 | 40 | 40 | 0 | [Verified](witnesses/ohYesMoreLemmings-22.json) |
+| Oh No! More Lemmings Versus 4: The Only Way Out | 40 | 40 | 40 | 40 | 0 | [Verified](witnesses/ohYesMoreLemmings-23.json) |
+| Oh No! More Lemmings Versus 5: Showdown! | 40 | 40 | 40 | 40 | 0 | [Verified](witnesses/ohYesMoreLemmings-24.json) |
 | Oh No! More Lemmings Versus 6: Test Of Skill | 40 | 40 | 40 | 40 | 0 | [Verified](witnesses/ohYesMoreLemmings-25.json) |
 | Oh No! More Lemmings Versus 7: Give And Take | 40 | 40 | 40 | 40 | 0 | [Verified](witnesses/ohYesMoreLemmings-26.json) |
-| Oh No! More Lemmings Versus 8: Co-operation | 40 | 40 | — | — | — | No witness collected |
-| Oh No! More Lemmings Versus 9: One On One | 40 | 40 | — | — | — | No witness collected |
-| Oh No! More Lemmings Versus 10: I Want It All | 40 | 40 | — | — | — | No witness collected |
+| Oh No! More Lemmings Versus 8: Co-operation | 40 | 40 | 40 | 40 | 0 | [Verified](witnesses/ohYesMoreLemmings-27.json) |
+| Oh No! More Lemmings Versus 9: One On One | 40 | 40 | 40 | 40 | 0 | [Verified](witnesses/ohYesMoreLemmings-28.json) |
+| Oh No! More Lemmings Versus 10: I Want It All | 40 | 40 | 40 | 40 | 0 | [Verified](witnesses/ohYesMoreLemmings-29.json) |
 
 ## All New World of Lemmings
 
@@ -593,7 +593,7 @@ See [method and limitations](README.md) and [exact conditions and evidence](audi
 | Frost 1: Chains of Command | 50 | 50 | 50 | 50 | 0 | [Verified](witnesses/holidayLemmings1994-0.json) |
 | Frost 2: Ski Jump! | 50 | 49 | 50 | 50 | 0 | [Verified](witnesses/holidayLemmings1994-1.json) |
 | Frost 3: CindyLand | 80 | 75 | 80 | 80 | 0 | [Verified](witnesses/holidayLemmings1994-2.json) |
-| Frost 4: Separate Ways | 50 | 49 | 49 | — | — | [Observed](witnesses/holidayLemmings1994-3.json) |
+| Frost 4: Separate Ways | 50 | 49 | 50 | 50 | 0 | [Verified](witnesses/holidayLemmings1994-3.json) |
 | Frost 5: Lemming Reunification | 70 | 70 | 70 | 70 | 0 | [Verified](witnesses/holidayLemmings1994-4.json) |
 | Frost 6: The Land of the Bizarre | 70 | 69 | 69 | — | — | [Observed](witnesses/holidayLemmings1994-5.json) |
 | Frost 7: Happy New Year! | 50 | 25 | 32 | — | — | [Observed](witnesses/holidayLemmings1994-6.json) |
@@ -610,8 +610,8 @@ See [method and limitations](README.md) and [exact conditions and evidence](audi
 | Hail 2: Break On Through | 80 | 75 | 75 | — | — | [Observed](witnesses/holidayLemmings1994-17.json) |
 | Hail 3: And a Happy New Year! | 50 | 25 | 35 | — | — | [Observed](witnesses/holidayLemmings1994-18.json) |
 | Hail 4: Lemmintaschen? | 80 | 78 | 79 | — | — | [Observed](witnesses/holidayLemmings1994-19.json) |
-| Hail 5: Get the Point? | 80 | 68 | 71 | — | — | [Observed](witnesses/holidayLemmings1994-20.json) |
-| Hail 6: Surprise Package? | 80 | 27 | 33 | — | — | [Observed](witnesses/holidayLemmings1994-21.json) |
+| Hail 5: Get the Point? | 80 | 68 | 70 | — | — | [Observed](witnesses/holidayLemmings1994-20.json) |
+| Hail 6: Surprise Package? | 80 | 27 | 42 | — | — | [Observed](witnesses/holidayLemmings1994-21.json) |
 | Hail 7: Steel Ice Span | 80 | 80 | 80 | 80 | 0 | [Verified](witnesses/holidayLemmings1994-22.json) |
 | Hail 8: Sir Edmund Hilemming | 80 | 80 | 80 | 80 | 0 | [Verified](witnesses/holidayLemmings1994-23.json) |
 | Hail 9: Up, up, and away! | 50 | 50 | 50 | 50 | 0 | [Verified](witnesses/holidayLemmings1994-24.json) |

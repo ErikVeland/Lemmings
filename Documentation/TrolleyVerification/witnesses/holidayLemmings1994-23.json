@@ -6,6 +6,7 @@
           "_0" : 30
         }
       },
+      "afterTick" : true,
       "tick" : 9
     },
     {
@@ -14,6 +15,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 17
     },
     {
@@ -22,6 +24,7 @@
           "_0" : 98
         }
       },
+      "afterTick" : true,
       "tick" : 22
     },
     {
@@ -30,6 +33,7 @@
           "_0" : 97
         }
       },
+      "afterTick" : true,
       "tick" : 23
     },
     {
@@ -38,6 +42,7 @@
           "_0" : 96
         }
       },
+      "afterTick" : true,
       "tick" : 24
     },
     {
@@ -46,6 +51,7 @@
           "_0" : 95
         }
       },
+      "afterTick" : true,
       "tick" : 25
     },
     {
@@ -54,6 +60,7 @@
           "_0" : 94
         }
       },
+      "afterTick" : true,
       "tick" : 26
     },
     {
@@ -62,6 +69,7 @@
           "_0" : 93
         }
       },
+      "afterTick" : true,
       "tick" : 27
     },
     {
@@ -70,6 +78,7 @@
           "_0" : 92
         }
       },
+      "afterTick" : true,
       "tick" : 28
     },
     {
@@ -78,6 +87,7 @@
           "_0" : 91
         }
       },
+      "afterTick" : true,
       "tick" : 29
     },
     {
@@ -86,6 +96,7 @@
           "_0" : 90
         }
       },
+      "afterTick" : true,
       "tick" : 30
     },
     {
@@ -94,6 +105,7 @@
           "_0" : 89
         }
       },
+      "afterTick" : true,
       "tick" : 31
     },
     {
@@ -102,6 +114,7 @@
           "_0" : 88
         }
       },
+      "afterTick" : true,
       "tick" : 32
     },
     {
@@ -110,6 +123,7 @@
           "_0" : 87
         }
       },
+      "afterTick" : true,
       "tick" : 33
     },
     {
@@ -118,6 +132,7 @@
           "_0" : 86
         }
       },
+      "afterTick" : true,
       "tick" : 34
     },
     {
@@ -126,6 +141,7 @@
           "_0" : 85
         }
       },
+      "afterTick" : true,
       "tick" : 35
     },
     {
@@ -134,6 +150,7 @@
           "_0" : 79
         }
       },
+      "afterTick" : true,
       "tick" : 35
     },
     {
@@ -142,6 +159,7 @@
           "_0" : 46
         }
       },
+      "afterTick" : true,
       "tick" : 75
     },
     {
@@ -150,6 +168,7 @@
           "_0" : 87
         }
       },
+      "afterTick" : true,
       "tick" : 135
     },
     {
@@ -159,7 +178,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 188
+      "afterTick" : true,
+      "tick" : 187
     },
     {
       "action" : {
@@ -168,7 +188,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 204
+      "afterTick" : true,
+      "tick" : 203
     },
     {
       "action" : {
@@ -177,7 +198,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 247
+      "afterTick" : true,
+      "tick" : 246
     },
     {
       "action" : {
@@ -186,7 +208,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 258
+      "afterTick" : true,
+      "tick" : 257
     },
     {
       "action" : {
@@ -195,7 +218,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 277
+      "afterTick" : true,
+      "tick" : 276
     },
     {
       "action" : {
@@ -204,7 +228,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 365
+      "afterTick" : true,
+      "tick" : 364
     },
     {
       "action" : {
@@ -213,7 +238,8 @@
           "skill" : "digger"
         }
       },
-      "tick" : 563
+      "afterTick" : true,
+      "tick" : 562
     },
     {
       "action" : {
@@ -222,7 +248,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 729
+      "afterTick" : true,
+      "tick" : 723
     },
     {
       "action" : {
@@ -231,7 +258,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 830
+      "afterTick" : true,
+      "tick" : 829
     },
     {
       "action" : {
@@ -240,7 +268,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 863
+      "afterTick" : true,
+      "tick" : 862
     },
     {
       "action" : {
@@ -249,7 +278,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 950
+      "afterTick" : true,
+      "tick" : 949
     },
     {
       "action" : {
@@ -258,7 +288,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 981
+      "afterTick" : true,
+      "tick" : 980
     },
     {
       "action" : {
@@ -267,7 +298,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1020
+      "afterTick" : true,
+      "tick" : 1019
     },
     {
       "action" : {
@@ -276,7 +308,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1109
+      "afterTick" : true,
+      "tick" : 1108
     },
     {
       "action" : {
@@ -285,7 +318,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1253
+      "afterTick" : true,
+      "tick" : 1252
     },
     {
       "action" : {
@@ -294,7 +328,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1352
+      "afterTick" : true,
+      "tick" : 1351
     },
     {
       "action" : {
@@ -303,7 +338,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1544
+      "afterTick" : true,
+      "tick" : 1543
     },
     {
       "action" : {
@@ -312,7 +348,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1736
+      "afterTick" : true,
+      "tick" : 1735
     },
     {
       "action" : {
@@ -321,7 +358,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 2620
+      "afterTick" : true,
+      "tick" : 2619
     },
     {
       "action" : {
@@ -330,7 +368,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 2785
+      "afterTick" : true,
+      "tick" : 2784
     },
     {
       "action" : {
@@ -339,7 +378,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 2993
+      "afterTick" : true,
+      "tick" : 2992
     },
     {
       "action" : {
@@ -348,7 +388,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 3394
+      "afterTick" : true,
+      "tick" : 3393
     },
     {
       "action" : {
@@ -357,7 +398,8 @@
           "skill" : "miner"
         }
       },
-      "tick" : 3604
+      "afterTick" : true,
+      "tick" : 3603
     },
     {
       "action" : {
@@ -366,7 +408,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 4125
+      "afterTick" : true,
+      "tick" : 4122
     },
     {
       "action" : {
@@ -375,7 +418,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 4328
+      "afterTick" : true,
+      "tick" : 4325
     },
     {
       "action" : {
@@ -384,7 +428,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 4531
+      "afterTick" : true,
+      "tick" : 4528
     },
     {
       "action" : {
@@ -393,7 +438,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 4532
+      "afterTick" : true,
+      "tick" : 4531
     },
     {
       "action" : {
@@ -402,7 +448,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 4734
+      "afterTick" : true,
+      "tick" : 4731
     },
     {
       "action" : {
@@ -411,7 +458,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 4928
+      "afterTick" : true,
+      "tick" : 4923
     }
   ],
   "expected" : {
@@ -419,10 +467,10 @@
     "released" : 80,
     "required" : 80,
     "saved" : 80,
-    "stateHash" : "941387e60ffa09db99410cd45b97a3f419312851e07faa3fd67ccd1372a62042",
-    "ticks" : 5640
+    "stateHash" : "a0d690ac0b6e345ab42c96dc93cde32319bea1ea7e860ec152111abc996d9c43",
+    "ticks" : 5639
   },
-  "initialStateHash" : "bc90200e351266094cd97cc1483d7b1b1a271fd7f91872a9c49505a4beaad51f",
+  "initialStateHash" : "90e32cc0ec3d4958e9832a76b985d52bd6b952ec8f42562cb35c5ebb3483f2aa",
   "number" : 8,
   "rank" : "Hail",
   "title" : "Sir Edmund Hilemming"

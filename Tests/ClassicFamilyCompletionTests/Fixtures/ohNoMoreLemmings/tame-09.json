@@ -7,7 +7,8 @@
           "skill" : "digger"
         }
       },
-      "tick" : 72
+      "afterTick" : true,
+      "tick" : 71
     },
     {
       "action" : {
@@ -16,7 +17,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 104
+      "afterTick" : true,
+      "tick" : 96
     },
     {
       "action" : {
@@ -25,7 +27,8 @@
           "skill" : "blocker"
         }
       },
-      "tick" : 112
+      "afterTick" : true,
+      "tick" : 97
     },
     {
       "action" : {
@@ -34,7 +37,8 @@
           "skill" : "climber"
         }
       },
-      "tick" : 792
+      "afterTick" : true,
+      "tick" : 793
     },
     {
       "action" : {
@@ -43,7 +47,8 @@
           "skill" : "climber"
         }
       },
-      "tick" : 1168
+      "afterTick" : true,
+      "tick" : 1169
     },
     {
       "action" : {
@@ -52,7 +57,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1176
+      "afterTick" : true,
+      "tick" : 1177
     },
     {
       "action" : {
@@ -61,7 +67,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 2792
+      "afterTick" : true,
+      "tick" : 2793
     },
     {
       "action" : {
@@ -70,7 +77,8 @@
           "skill" : "climber"
         }
       },
-      "tick" : 2800
+      "afterTick" : true,
+      "tick" : 2801
     },
     {
       "action" : {
@@ -79,7 +87,8 @@
           "skill" : "floater"
         }
       },
-      "tick" : 2816
+      "afterTick" : true,
+      "tick" : 2817
     },
     {
       "action" : {
@@ -88,7 +97,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 2832
+      "afterTick" : true,
+      "tick" : 2833
     },
     {
       "action" : {
@@ -97,7 +107,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 3888
+      "afterTick" : true,
+      "tick" : 3889
     },
     {
       "action" : {
@@ -106,7 +117,8 @@
           "skill" : "climber"
         }
       },
-      "tick" : 3896
+      "afterTick" : true,
+      "tick" : 3897
     },
     {
       "action" : {
@@ -115,7 +127,8 @@
           "skill" : "bomber"
         }
       },
-      "tick" : 3936
+      "afterTick" : true,
+      "tick" : 3898
     },
     {
       "action" : {
@@ -124,7 +137,8 @@
           "skill" : "floater"
         }
       },
-      "tick" : 4016
+      "afterTick" : true,
+      "tick" : 3977
     }
   ],
   "expected" : {
@@ -132,10 +146,10 @@
     "released" : 50,
     "required" : 25,
     "saved" : 49,
-    "stateHash" : "c727fd847e74d163f3ac811942267ef305e92dddcb06a15cdc9bdc6358fb6a84",
-    "ticks" : 4080
+    "stateHash" : "f9b2fe23232175e1fb02f5e01e6732231022ad10cb8f67eb9cf3c685d819e37d",
+    "ticks" : 4045
   },
-  "initialStateHash" : "72f5ebc8d9f07a2852550da8afb9004c002c6dea41393dd9b14ca43868095e6b",
+  "initialStateHash" : "764aa657b5470744b414fee2425e013e069e44bb9ba5ab11a58020c3274afe55",
   "number" : 9,
   "rank" : "Tame",
   "title" : "And now this..."

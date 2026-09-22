@@ -33,10 +33,10 @@
     "released" : 50,
     "required" : 25,
     "saved" : 50,
-    "stateHash" : "b21bd333aa7a1291acf1abea6030132159c3cb891b03fc791a66ec309face572",
-    "ticks" : 3067
+    "stateHash" : "9db9a34141b08d48bc74e787815a0cc3fc2cd333219e902e458ce27720a3d243",
+    "ticks" : 3066
   },
-  "initialStateHash" : "17037d54f21e905115c5f214e039cf40dad9a8c19c1dc4d9a15aecb831399206",
+  "initialStateHash" : "1ee1df6f799b9a112c91b659a8f1d779c442c35dfb6353833b97e537440ce991",
   "number" : 12,
   "rank" : "Tame",
   "title" : "Citizen Lemming"

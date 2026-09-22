@@ -1,15 +1,17 @@
 # Classic 1.0 closure work
 
-15 September 2026. The selected target is a complete macOS Classic release.
+22 September 2026. The selected target is a complete macOS Classic release.
 Lemmings 2 and Lemmings 3 retain preview status. Shared controls, paused Hot Seat
 handovers and saved-run recovery remain regression requirements across all three engines.
 
-Beta 32 is packaged. The main and macOS 12 archives are notarised. The current
-work after that release has 250 verified official Classic levels, with 42 still missing. This does not
-declare a completed or published 1.0.
+Beta 34 is packaged. The current source has winning evidence for all 292 official Classic levels.
+All 60 Oh Yes! conversions also pass. The combined 352-level quest and saved-run gate passes.
+Fan content must load and start, but no longer needs a winning route for 1.0.
+This follows the owner's decision on 22 September.
 
-See [15 September closure work](ReleaseReadiness/OneZeroClosure-2026-09-15.md)
-for current changes, tester confirmation and remaining checks.
+See [22 September campaign closure](ReleaseReadiness/CampaignClosure-2026-09-22.md)
+for current evidence. The earlier work below remains release history.
+This does not declare a completed or published 1.0.
 
 ## Work included in beta 29
 
@@ -35,8 +37,7 @@ for current changes, tester confirmation and remaining checks.
 - Corrected the proof refresh to replay published Classic witnesses even when
   its output directory starts empty. Packaging now rejects missing or lower
   published rescue targets before replacing the catalogue.
-- Added an explicit `classic-1.0` release audit scope. It requires all Classic,
-  fan and conversion routes. Sequel regression checks remain enabled, while
+- Added an explicit `classic-1.0` release audit scope. It requires all official Classic and conversion routes, plus fan load/start checks. Sequel regression checks remain enabled, while
   sequel completion and future platform delivery are tracked outside this milestone.
 
 ## Work after beta 29
@@ -79,16 +80,16 @@ creation. The release audit also checks the original Pause and Nuke pixel shapes
 
 | Area | Required outcome |
 | --- | --- |
-| Official campaigns | Preserve the remaining 54 winning routes: Oh No! 28, Holiday 1993 ten, Holiday 1994 sixteen. |
-| Conversions | Preserve the remaining 57 winning routes and verify progression. |
-| Fan library | Preserve winning evidence for retained levels. Successful loading alone does not close completion. |
-| Full Quest | Verify the 292-level progression, release boundaries, save/resume and final results with winning outcomes. |
+| Official campaigns | Closed: all 292 routes pass the strict verifier. |
+| Conversions | Closed: all 60 routes and progression pass. |
+| Fan library | Closed: all 6,020 retained levels load, render and start. Winning routes remain optional. |
+| Full Quest | Closed for all 352 Classic levels. Sequel preview progression remains separate. |
 | Recovery | Test physical interruption, power loss, installed-release migration and rollback. |
 | Input and accessibility | Complete physical controller, VoiceOver and novice-player journeys. |
 | Performance | Establish sustained throughput, memory and audio stability on supported hardware. |
 | Hardware | Test physical Intel, macOS 13 and the supported display configurations. |
 | Services | Validate the advertised account and offline behaviour. |
-| Distribution | Resolve the recorded publishing/asset approval, then freeze and verify the actual 1.0 package. |
+| Distribution | Asset approval is recorded. Freeze and verify the actual 1.0 package after the remaining gates close. |
 
 ## Evidence
 

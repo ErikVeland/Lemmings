@@ -6,6 +6,7 @@
           "_0" : 1
         }
       },
+      "afterTick" : true,
       "tick" : 48
     },
     {
@@ -15,7 +16,8 @@
           "skill" : "blocker"
         }
       },
-      "tick" : 74
+      "afterTick" : true,
+      "tick" : 73
     },
     {
       "action" : {
@@ -24,7 +26,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 168
+      "afterTick" : true,
+      "tick" : 167
     },
     {
       "action" : {
@@ -33,7 +36,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 310
+      "afterTick" : true,
+      "tick" : 309
     },
     {
       "action" : {
@@ -42,7 +46,8 @@
           "skill" : "blocker"
         }
       },
-      "tick" : 393
+      "afterTick" : true,
+      "tick" : 392
     },
     {
       "action" : {
@@ -51,7 +56,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 430
+      "afterTick" : true,
+      "tick" : 429
     },
     {
       "action" : {
@@ -59,6 +65,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 483
     },
     {
@@ -68,7 +75,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 625
+      "afterTick" : true,
+      "tick" : 621
     },
     {
       "action" : {
@@ -77,7 +85,8 @@
           "skill" : "digger"
         }
       },
-      "tick" : 956
+      "afterTick" : true,
+      "tick" : 955
     },
     {
       "action" : {
@@ -86,7 +95,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1023
+      "afterTick" : true,
+      "tick" : 1022
     },
     {
       "action" : {
@@ -95,7 +105,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1218
+      "afterTick" : true,
+      "tick" : 1214
     },
     {
       "action" : {
@@ -103,6 +114,7 @@
 
         }
       },
+      "afterTick" : true,
       "tick" : 1901
     }
   ],
@@ -111,10 +123,10 @@
     "released" : 50,
     "required" : 45,
     "saved" : 48,
-    "stateHash" : "c3b4b2afe85ea51b523f344fde7a0c13f164b081c1610e2f92c38c40c4558d97",
-    "ticks" : 2049
+    "stateHash" : "a3f5c5b6b2d8cacc80858128f5019b9a92256ac26cfe344e3848234bf5e50b5f",
+    "ticks" : 2050
   },
-  "initialStateHash" : "9e72cd566607af5ab7ab7734b12da9726d338a734981e081ead5df73482ee95d",
+  "initialStateHash" : "2ca3f8af1521fdee1d47bcb46c92632b9aa60a3004a39f140cfd6dfe58d21c9d",
   "number" : 3,
   "rank" : "Xmas",
   "title" : "Time waits for no Lemming"

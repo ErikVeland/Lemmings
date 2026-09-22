@@ -1,34 +1,42 @@
 # Current Classic validation
 
-13 September 2026. **All 120 original Lemmings routes pass. Official Classic
-coverage is 236/292. The wider completion gate remains open.**
+22 September 2026. **All 6,372 retained levels load and render. Official Classic
+coverage is 292/292 and conversion coverage is 60/60. The corpus gate passes.**
 
-The retained corpus contains 6,372 levels: 292 official Classic-family levels,
-60 conversions and 6,020 fan levels in 535 archives. The user authorised deletion
-of empty and malformed fan levels. Twenty-three records were removed from ten
-archives. No complete pack was removed.
+The corpus contains 292 official Classic levels, 60 conversions and 6,020 fan
+levels in 535 archives. Each matching replay runs twice. Levels without a
+matching replay run a 180-tick smoke check. Loading and a smoke check do not
+establish a completed playthrough.
 
-## Coverage
-
-| Collection | Levels | Verified winning routes | Load/start failures |
+| Collection | Levels | Verified winning routes | Load/render failures |
 | --- | ---: | ---: | ---: |
 | Original Lemmings | 120 | 120 | 0 |
-| Oh No! More Lemmings | 100 | 70 | 0 |
+| Oh No! More Lemmings | 100 | 100 | 0 |
 | Xmas 1991 | 4 | 4 | 0 |
 | Xmas 1992 | 4 | 4 | 0 |
-| Holiday 1993 | 32 | 22 | 0 |
-| Holiday 1994 | 32 | 16 | 0 |
-| Oh Yes! conversions | 60 | 3 | 0 |
-| Fan levels | 6,020 | 390 | 0 |
+| Holiday 1993 | 32 | 32 | 0 |
+| Holiday 1994 | 32 | 32 | 0 |
+| Oh Yes! conversions | 60 | 60 | 0 |
+| Fan levels | 6,020 | 344 | 0 |
 
-There are 629 verified wins. The remaining 5,743 identities need winning evidence:
-56 official levels, 57 conversions and 5,630 fan levels. Ten fan entries reject
-available candidate replays. Those candidates are not counted as wins and their
-failure does not establish that the levels are impossible.
+The corpus has 696 winning identities. All official and conversion levels have
+winning routes. The owner removed the fan winning-route requirement on
+22 September. Nine fan entries reject available replay candidates. Those entries
+are not counted as wins. No fan archive or level was removed in this pass.
 
-The retained corpus passed loading, rendering and a 180-tick smoke simulation.
-A smoke simulation is not a completed playthrough. Matching witnesses must replay
-twice from fresh simulations and reproduce the stored winning outcome.
+## Fan evidence after the DOS rules correction
+
+The earlier 15 September exit-fix corpus recorded 394 fan wins. The current
+corpus has the same 6,020 fan identities and initial state hashes. Ninety-nine
+old fan witnesses no longer match because their shared campaign fixtures now
+use the later DOS rules. Seven other fan identities gained matching witnesses,
+leaving 302 wins in the earlier official-only run. The conversion closure adds
+42 matching fan witnesses, bringing current fan coverage to 344. All 99 unmatched
+witnesses point to replaced fixture identities, rather than a replay that ran and stopped winning in this pass.
+
+This is reduced current replay coverage. It does not establish broken fan
+levels or prove the older routes against the current engine. The comparison is
+recorded in `.build/closure-sep22/fan-evidence-comparison.json`.
 
 ## Pruning and saved runs
 
@@ -47,39 +55,23 @@ Packaging rejects an unpruned or unreviewed version of an affected archive.
 The former failures were deleted from the source assets, not reclassified as
 successful playthroughs. Their removal is explicit in the corpus comparison.
 
-## Route additions
-
-After beta 29, full-rescue routes were added for Xmas 1992 level 2 and Flurry 6,
-7, 9, 11 and 15. All six were replayed twice. Xmas 1992 now has all four wins.
-
-New full-rescue routes cover Tame 12, 13, 18 and 20, plus Flurry 2. Existing rescue
-proofs supplied strict campaign fixtures for Flurry 3 and 5 and three conversions.
-The Xmas 1992 level 1 fixture now preserves its existing full-rescue proof.
-
-All previous corpus wins remain valid. The native engines were not changed by
-this closure pass. The shared controls and recovery remain subject to regression
-checks across Classic, L2 and L3.
-
 ## Evidence
 
-Current work is recorded in [Classic 1.0 closure](../ClassicOneZero.md).
-The current full-corpus run is `.build/classic-closure/corpus`. Its input-drift
-check is empty. The comparison against beta 29 retains all 622 earlier wins and
-all initial states, and adds seven winning identities.
+The full run is `.build/closure-sep22/corpus-conversions-parallel`. Its `coverage.json` checks
+all archive hashes, decoded counts, level identities and inventory. All required
+checks pass. `levels.jsonl` contains every result. `blockers.json` is empty.
+The [preserved summary](ClassicConversionCorpus.json) includes the result hashes.
 
-Earlier pruning and beta 29 evidence remains under `.build/classic-one-zero`:
+The nine failed optional fan candidates remain visible in `levels.jsonl`.
+The separate load/render failure register is
+[ClassicValidation-current-failures.json](ClassicValidation-current-failures.json).
 
-- `pruning-comparison.json`: exactly 23 removed records, no changed retained
-  initial states, no lost wins and no load/start failures.
-- `pruned-fan-tests.log`: native parsing, original slot identities, saved queues,
-  direct selection of removed slots and rejected malformed mappings.
-- `campaign-current.log`: all preserved additional Classic routes, including the
-  final Flurry 2 addition, replayed against the freshly compiled current engine.
-- `final-corpus`: the complete cleaned corpus before the final Flurry 2 addition,
-  with 621 wins, unchanged inputs and explicit remaining coverage gaps.
-- `final-audit/classic-corpus`: the candidate audit output when the final strict
-  release command is run. Its own inputs and results govern its claims.
+See [22 September campaign closure](CampaignClosure-2026-09-22.md) for strict
+route checks, new plans, refreshed hints and rescue certificates. This run used
+a fresh native engine with the existing local bundled game data. It is not a
+signed candidate audit and does not certify the final 1.0 archive.
 
-Earlier loader corrections remain documented in [fan style conventions](FanStyleConventions.md),
+Earlier pruning evidence remains under `.build/classic-one-zero` and
+`.build/classic-closure`. See [fan style conventions](FanStyleConventions.md),
 [Holiday graphics](HolidayStyleClosure.md), [exact archive selection](LiteralArchiveClosure.md)
-and [Holiday aliases](HolidayAliasClosure.md). The frozen beta 28 and beta 29 ZIPs are unchanged.
+and [Holiday aliases](HolidayAliasClosure.md). Published beta archives remain unchanged.

@@ -8,7 +8,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 140
+      "tick" : 138
     },
     {
       "action" : {
@@ -18,7 +18,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 166
+      "tick" : 165
     },
     {
       "action" : {
@@ -28,7 +28,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 258
+      "tick" : 257
     },
     {
       "action" : {
@@ -38,7 +38,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 572
+      "tick" : 571
     },
     {
       "action" : {
@@ -48,7 +48,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 754
+      "tick" : 753
     },
     {
       "action" : {
@@ -58,7 +58,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 816
+      "tick" : 815
     }
   ],
   "expected" : {
@@ -66,10 +66,10 @@
     "released" : 50,
     "required" : 49,
     "saved" : 49,
-    "stateHash" : "432b05bd6330f8e5f9ad7a19146d758adc1fbe569378d4d5e595c3cb4ca433e9",
-    "ticks" : 2338
+    "stateHash" : "46f24e635f3aa8fc51485de82788ee14301028ea87246a72c183d496c4736a26",
+    "ticks" : 2337
   },
-  "initialStateHash" : "7e1c733768b9eea18321c8625e18edf75f4032f409de18c029a5256a63005a43",
+  "initialStateHash" : "f536e971eabaa3417059fcac80cd92dd3870fcec8f51fee2ddb37d4adb494444",
   "number" : 15,
   "rank" : "Frost",
   "title" : "Plethora of Presents"

@@ -6,7 +6,8 @@
           "_0" : 10
         }
       },
-      "tick" : 17
+      "afterTick" : true,
+      "tick" : 15
     },
     {
       "action" : {
@@ -15,7 +16,8 @@
           "skill" : "bomber"
         }
       },
-      "tick" : 59
+      "afterTick" : true,
+      "tick" : 57
     },
     {
       "action" : {
@@ -24,7 +26,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 199
+      "afterTick" : true,
+      "tick" : 198
     },
     {
       "action" : {
@@ -33,7 +36,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 204
+      "afterTick" : true,
+      "tick" : 202
     },
     {
       "action" : {
@@ -42,7 +46,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 211
+      "afterTick" : true,
+      "tick" : 210
     },
     {
       "action" : {
@@ -51,7 +56,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 386
+      "afterTick" : true,
+      "tick" : 384
     },
     {
       "action" : {
@@ -60,7 +66,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 409
+      "afterTick" : true,
+      "tick" : 407
     },
     {
       "action" : {
@@ -68,7 +75,8 @@
           "_0" : 99
         }
       },
-      "tick" : 459
+      "afterTick" : true,
+      "tick" : 483
     }
   ],
   "expected" : {
@@ -76,10 +84,10 @@
     "released" : 30,
     "required" : 29,
     "saved" : 29,
-    "stateHash" : "b27ebe45c4b177efee99ea33aa524639c083811fdaff68ffa7c88d201eb2db20",
-    "ticks" : 824
+    "stateHash" : "0fea109a68f4f0f07a400ace2b33a8555734331915212e06a2dbf080e82aca63",
+    "ticks" : 823
   },
-  "initialStateHash" : "059636c3bfe68e3236c4573d27fc42cfede41f68f0fccce43bdbea07070ea728",
+  "initialStateHash" : "238846f6a0470c7400764c16556788cb52673d267a98dfe6554642e4b53cb077",
   "number" : 17,
   "rank" : "Wicked",
   "title" : "Down the tube"

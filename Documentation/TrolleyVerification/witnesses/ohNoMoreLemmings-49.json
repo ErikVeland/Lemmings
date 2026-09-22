@@ -6,7 +6,8 @@
           "_0" : 1
         }
       },
-      "tick" : 5
+      "afterTick" : true,
+      "tick" : 4
     },
     {
       "action" : {
@@ -15,7 +16,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 218
+      "afterTick" : true,
+      "tick" : 217
     },
     {
       "action" : {
@@ -24,7 +26,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 365
+      "afterTick" : true,
+      "tick" : 364
     },
     {
       "action" : {
@@ -33,7 +36,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 557
+      "afterTick" : true,
+      "tick" : 556
     },
     {
       "action" : {
@@ -42,7 +46,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 759
+      "afterTick" : true,
+      "tick" : 758
     },
     {
       "action" : {
@@ -51,7 +56,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 814
+      "afterTick" : true,
+      "tick" : 813
     },
     {
       "action" : {
@@ -60,7 +66,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 816
+      "afterTick" : true,
+      "tick" : 815
     },
     {
       "action" : {
@@ -69,6 +76,7 @@
           "skill" : "basher"
         }
       },
+      "afterTick" : true,
       "tick" : 874
     },
     {
@@ -77,7 +85,8 @@
           "_0" : 2
         }
       },
-      "tick" : 891
+      "afterTick" : true,
+      "tick" : 890
     },
     {
       "action" : {
@@ -85,7 +94,8 @@
           "_0" : 3
         }
       },
-      "tick" : 892
+      "afterTick" : true,
+      "tick" : 891
     },
     {
       "action" : {
@@ -93,7 +103,8 @@
           "_0" : 4
         }
       },
-      "tick" : 893
+      "afterTick" : true,
+      "tick" : 892
     },
     {
       "action" : {
@@ -101,7 +112,8 @@
           "_0" : 5
         }
       },
-      "tick" : 894
+      "afterTick" : true,
+      "tick" : 893
     },
     {
       "action" : {
@@ -109,7 +121,8 @@
           "_0" : 6
         }
       },
-      "tick" : 895
+      "afterTick" : true,
+      "tick" : 894
     },
     {
       "action" : {
@@ -117,7 +130,8 @@
           "_0" : 7
         }
       },
-      "tick" : 896
+      "afterTick" : true,
+      "tick" : 895
     },
     {
       "action" : {
@@ -125,7 +139,8 @@
           "_0" : 8
         }
       },
-      "tick" : 897
+      "afterTick" : true,
+      "tick" : 896
     },
     {
       "action" : {
@@ -133,7 +148,8 @@
           "_0" : 9
         }
       },
-      "tick" : 898
+      "afterTick" : true,
+      "tick" : 897
     },
     {
       "action" : {
@@ -141,7 +157,8 @@
           "_0" : 10
         }
       },
-      "tick" : 899
+      "afterTick" : true,
+      "tick" : 898
     },
     {
       "action" : {
@@ -149,7 +166,8 @@
           "_0" : 11
         }
       },
-      "tick" : 900
+      "afterTick" : true,
+      "tick" : 899
     },
     {
       "action" : {
@@ -157,7 +175,8 @@
           "_0" : 12
         }
       },
-      "tick" : 901
+      "afterTick" : true,
+      "tick" : 900
     },
     {
       "action" : {
@@ -165,7 +184,8 @@
           "_0" : 13
         }
       },
-      "tick" : 902
+      "afterTick" : true,
+      "tick" : 901
     },
     {
       "action" : {
@@ -173,7 +193,8 @@
           "_0" : 14
         }
       },
-      "tick" : 903
+      "afterTick" : true,
+      "tick" : 902
     },
     {
       "action" : {
@@ -181,7 +202,8 @@
           "_0" : 15
         }
       },
-      "tick" : 904
+      "afterTick" : true,
+      "tick" : 903
     },
     {
       "action" : {
@@ -189,7 +211,8 @@
           "_0" : 16
         }
       },
-      "tick" : 905
+      "afterTick" : true,
+      "tick" : 904
     },
     {
       "action" : {
@@ -197,7 +220,8 @@
           "_0" : 17
         }
       },
-      "tick" : 906
+      "afterTick" : true,
+      "tick" : 905
     },
     {
       "action" : {
@@ -205,7 +229,8 @@
           "_0" : 18
         }
       },
-      "tick" : 907
+      "afterTick" : true,
+      "tick" : 906
     },
     {
       "action" : {
@@ -213,7 +238,8 @@
           "_0" : 19
         }
       },
-      "tick" : 908
+      "afterTick" : true,
+      "tick" : 907
     },
     {
       "action" : {
@@ -221,7 +247,8 @@
           "_0" : 20
         }
       },
-      "tick" : 909
+      "afterTick" : true,
+      "tick" : 908
     },
     {
       "action" : {
@@ -229,7 +256,8 @@
           "_0" : 21
         }
       },
-      "tick" : 910
+      "afterTick" : true,
+      "tick" : 909
     },
     {
       "action" : {
@@ -237,7 +265,8 @@
           "_0" : 22
         }
       },
-      "tick" : 911
+      "afterTick" : true,
+      "tick" : 910
     },
     {
       "action" : {
@@ -245,7 +274,8 @@
           "_0" : 23
         }
       },
-      "tick" : 912
+      "afterTick" : true,
+      "tick" : 911
     },
     {
       "action" : {
@@ -253,7 +283,8 @@
           "_0" : 24
         }
       },
-      "tick" : 913
+      "afterTick" : true,
+      "tick" : 912
     },
     {
       "action" : {
@@ -261,7 +292,8 @@
           "_0" : 25
         }
       },
-      "tick" : 914
+      "afterTick" : true,
+      "tick" : 913
     },
     {
       "action" : {
@@ -269,7 +301,8 @@
           "_0" : 26
         }
       },
-      "tick" : 915
+      "afterTick" : true,
+      "tick" : 914
     },
     {
       "action" : {
@@ -277,7 +310,8 @@
           "_0" : 27
         }
       },
-      "tick" : 916
+      "afterTick" : true,
+      "tick" : 915
     },
     {
       "action" : {
@@ -285,7 +319,8 @@
           "_0" : 28
         }
       },
-      "tick" : 917
+      "afterTick" : true,
+      "tick" : 916
     },
     {
       "action" : {
@@ -293,7 +328,8 @@
           "_0" : 29
         }
       },
-      "tick" : 918
+      "afterTick" : true,
+      "tick" : 917
     },
     {
       "action" : {
@@ -301,7 +337,8 @@
           "_0" : 30
         }
       },
-      "tick" : 919
+      "afterTick" : true,
+      "tick" : 918
     },
     {
       "action" : {
@@ -309,7 +346,8 @@
           "_0" : 31
         }
       },
-      "tick" : 920
+      "afterTick" : true,
+      "tick" : 919
     },
     {
       "action" : {
@@ -317,7 +355,8 @@
           "_0" : 32
         }
       },
-      "tick" : 921
+      "afterTick" : true,
+      "tick" : 920
     },
     {
       "action" : {
@@ -325,7 +364,8 @@
           "_0" : 33
         }
       },
-      "tick" : 922
+      "afterTick" : true,
+      "tick" : 921
     },
     {
       "action" : {
@@ -333,7 +373,8 @@
           "_0" : 34
         }
       },
-      "tick" : 923
+      "afterTick" : true,
+      "tick" : 922
     },
     {
       "action" : {
@@ -341,7 +382,8 @@
           "_0" : 35
         }
       },
-      "tick" : 924
+      "afterTick" : true,
+      "tick" : 923
     },
     {
       "action" : {
@@ -349,7 +391,8 @@
           "_0" : 36
         }
       },
-      "tick" : 925
+      "afterTick" : true,
+      "tick" : 924
     },
     {
       "action" : {
@@ -357,7 +400,8 @@
           "_0" : 37
         }
       },
-      "tick" : 926
+      "afterTick" : true,
+      "tick" : 925
     },
     {
       "action" : {
@@ -365,7 +409,8 @@
           "_0" : 38
         }
       },
-      "tick" : 927
+      "afterTick" : true,
+      "tick" : 926
     },
     {
       "action" : {
@@ -373,7 +418,8 @@
           "_0" : 39
         }
       },
-      "tick" : 928
+      "afterTick" : true,
+      "tick" : 927
     },
     {
       "action" : {
@@ -381,7 +427,8 @@
           "_0" : 40
         }
       },
-      "tick" : 929
+      "afterTick" : true,
+      "tick" : 928
     },
     {
       "action" : {
@@ -389,7 +436,8 @@
           "_0" : 41
         }
       },
-      "tick" : 930
+      "afterTick" : true,
+      "tick" : 929
     },
     {
       "action" : {
@@ -397,7 +445,8 @@
           "_0" : 42
         }
       },
-      "tick" : 931
+      "afterTick" : true,
+      "tick" : 930
     },
     {
       "action" : {
@@ -405,7 +454,8 @@
           "_0" : 43
         }
       },
-      "tick" : 932
+      "afterTick" : true,
+      "tick" : 931
     },
     {
       "action" : {
@@ -413,7 +463,8 @@
           "_0" : 44
         }
       },
-      "tick" : 933
+      "afterTick" : true,
+      "tick" : 932
     },
     {
       "action" : {
@@ -421,7 +472,8 @@
           "_0" : 45
         }
       },
-      "tick" : 934
+      "afterTick" : true,
+      "tick" : 933
     },
     {
       "action" : {
@@ -429,7 +481,8 @@
           "_0" : 46
         }
       },
-      "tick" : 935
+      "afterTick" : true,
+      "tick" : 934
     },
     {
       "action" : {
@@ -437,7 +490,8 @@
           "_0" : 47
         }
       },
-      "tick" : 936
+      "afterTick" : true,
+      "tick" : 935
     },
     {
       "action" : {
@@ -445,7 +499,8 @@
           "_0" : 48
         }
       },
-      "tick" : 937
+      "afterTick" : true,
+      "tick" : 936
     },
     {
       "action" : {
@@ -453,7 +508,8 @@
           "_0" : 49
         }
       },
-      "tick" : 938
+      "afterTick" : true,
+      "tick" : 937
     },
     {
       "action" : {
@@ -461,7 +517,8 @@
           "_0" : 50
         }
       },
-      "tick" : 939
+      "afterTick" : true,
+      "tick" : 938
     },
     {
       "action" : {
@@ -469,7 +526,8 @@
           "_0" : 51
         }
       },
-      "tick" : 940
+      "afterTick" : true,
+      "tick" : 939
     },
     {
       "action" : {
@@ -477,7 +535,8 @@
           "_0" : 52
         }
       },
-      "tick" : 941
+      "afterTick" : true,
+      "tick" : 940
     },
     {
       "action" : {
@@ -485,7 +544,8 @@
           "_0" : 53
         }
       },
-      "tick" : 942
+      "afterTick" : true,
+      "tick" : 941
     },
     {
       "action" : {
@@ -493,7 +553,8 @@
           "_0" : 54
         }
       },
-      "tick" : 943
+      "afterTick" : true,
+      "tick" : 942
     },
     {
       "action" : {
@@ -501,7 +562,8 @@
           "_0" : 55
         }
       },
-      "tick" : 944
+      "afterTick" : true,
+      "tick" : 943
     },
     {
       "action" : {
@@ -509,7 +571,8 @@
           "_0" : 56
         }
       },
-      "tick" : 945
+      "afterTick" : true,
+      "tick" : 944
     },
     {
       "action" : {
@@ -517,7 +580,8 @@
           "_0" : 57
         }
       },
-      "tick" : 946
+      "afterTick" : true,
+      "tick" : 945
     },
     {
       "action" : {
@@ -525,7 +589,8 @@
           "_0" : 58
         }
       },
-      "tick" : 947
+      "afterTick" : true,
+      "tick" : 946
     },
     {
       "action" : {
@@ -533,7 +598,8 @@
           "_0" : 59
         }
       },
-      "tick" : 948
+      "afterTick" : true,
+      "tick" : 947
     },
     {
       "action" : {
@@ -541,7 +607,8 @@
           "_0" : 60
         }
       },
-      "tick" : 949
+      "afterTick" : true,
+      "tick" : 948
     },
     {
       "action" : {
@@ -549,7 +616,8 @@
           "_0" : 61
         }
       },
-      "tick" : 950
+      "afterTick" : true,
+      "tick" : 949
     },
     {
       "action" : {
@@ -557,7 +625,8 @@
           "_0" : 62
         }
       },
-      "tick" : 951
+      "afterTick" : true,
+      "tick" : 950
     },
     {
       "action" : {
@@ -565,7 +634,8 @@
           "_0" : 63
         }
       },
-      "tick" : 952
+      "afterTick" : true,
+      "tick" : 951
     },
     {
       "action" : {
@@ -573,7 +643,8 @@
           "_0" : 64
         }
       },
-      "tick" : 953
+      "afterTick" : true,
+      "tick" : 952
     },
     {
       "action" : {
@@ -581,7 +652,8 @@
           "_0" : 65
         }
       },
-      "tick" : 954
+      "afterTick" : true,
+      "tick" : 953
     },
     {
       "action" : {
@@ -589,7 +661,8 @@
           "_0" : 66
         }
       },
-      "tick" : 955
+      "afterTick" : true,
+      "tick" : 954
     },
     {
       "action" : {
@@ -597,7 +670,8 @@
           "_0" : 67
         }
       },
-      "tick" : 956
+      "afterTick" : true,
+      "tick" : 955
     },
     {
       "action" : {
@@ -605,7 +679,8 @@
           "_0" : 68
         }
       },
-      "tick" : 957
+      "afterTick" : true,
+      "tick" : 956
     },
     {
       "action" : {
@@ -613,7 +688,8 @@
           "_0" : 69
         }
       },
-      "tick" : 958
+      "afterTick" : true,
+      "tick" : 957
     },
     {
       "action" : {
@@ -621,7 +697,8 @@
           "_0" : 70
         }
       },
-      "tick" : 959
+      "afterTick" : true,
+      "tick" : 958
     },
     {
       "action" : {
@@ -629,7 +706,8 @@
           "_0" : 71
         }
       },
-      "tick" : 960
+      "afterTick" : true,
+      "tick" : 959
     },
     {
       "action" : {
@@ -637,7 +715,8 @@
           "_0" : 72
         }
       },
-      "tick" : 961
+      "afterTick" : true,
+      "tick" : 960
     },
     {
       "action" : {
@@ -645,7 +724,8 @@
           "_0" : 73
         }
       },
-      "tick" : 962
+      "afterTick" : true,
+      "tick" : 961
     },
     {
       "action" : {
@@ -653,7 +733,8 @@
           "_0" : 74
         }
       },
-      "tick" : 963
+      "afterTick" : true,
+      "tick" : 962
     },
     {
       "action" : {
@@ -661,7 +742,8 @@
           "_0" : 75
         }
       },
-      "tick" : 964
+      "afterTick" : true,
+      "tick" : 963
     },
     {
       "action" : {
@@ -669,7 +751,8 @@
           "_0" : 76
         }
       },
-      "tick" : 965
+      "afterTick" : true,
+      "tick" : 964
     },
     {
       "action" : {
@@ -677,7 +760,8 @@
           "_0" : 77
         }
       },
-      "tick" : 966
+      "afterTick" : true,
+      "tick" : 965
     },
     {
       "action" : {
@@ -685,7 +769,8 @@
           "_0" : 78
         }
       },
-      "tick" : 967
+      "afterTick" : true,
+      "tick" : 966
     },
     {
       "action" : {
@@ -693,7 +778,8 @@
           "_0" : 79
         }
       },
-      "tick" : 968
+      "afterTick" : true,
+      "tick" : 967
     },
     {
       "action" : {
@@ -701,7 +787,8 @@
           "_0" : 80
         }
       },
-      "tick" : 969
+      "afterTick" : true,
+      "tick" : 968
     },
     {
       "action" : {
@@ -709,7 +796,8 @@
           "_0" : 81
         }
       },
-      "tick" : 970
+      "afterTick" : true,
+      "tick" : 969
     },
     {
       "action" : {
@@ -717,7 +805,8 @@
           "_0" : 82
         }
       },
-      "tick" : 971
+      "afterTick" : true,
+      "tick" : 970
     },
     {
       "action" : {
@@ -725,7 +814,8 @@
           "_0" : 83
         }
       },
-      "tick" : 972
+      "afterTick" : true,
+      "tick" : 971
     },
     {
       "action" : {
@@ -733,7 +823,8 @@
           "_0" : 84
         }
       },
-      "tick" : 973
+      "afterTick" : true,
+      "tick" : 972
     },
     {
       "action" : {
@@ -741,7 +832,8 @@
           "_0" : 85
         }
       },
-      "tick" : 974
+      "afterTick" : true,
+      "tick" : 973
     },
     {
       "action" : {
@@ -749,7 +841,8 @@
           "_0" : 86
         }
       },
-      "tick" : 975
+      "afterTick" : true,
+      "tick" : 974
     },
     {
       "action" : {
@@ -757,7 +850,8 @@
           "_0" : 87
         }
       },
-      "tick" : 976
+      "afterTick" : true,
+      "tick" : 975
     },
     {
       "action" : {
@@ -765,7 +859,8 @@
           "_0" : 88
         }
       },
-      "tick" : 977
+      "afterTick" : true,
+      "tick" : 976
     },
     {
       "action" : {
@@ -773,7 +868,8 @@
           "_0" : 89
         }
       },
-      "tick" : 978
+      "afterTick" : true,
+      "tick" : 977
     },
     {
       "action" : {
@@ -781,7 +877,8 @@
           "_0" : 90
         }
       },
-      "tick" : 979
+      "afterTick" : true,
+      "tick" : 978
     },
     {
       "action" : {
@@ -789,7 +886,8 @@
           "_0" : 91
         }
       },
-      "tick" : 980
+      "afterTick" : true,
+      "tick" : 979
     },
     {
       "action" : {
@@ -797,7 +895,8 @@
           "_0" : 92
         }
       },
-      "tick" : 981
+      "afterTick" : true,
+      "tick" : 980
     },
     {
       "action" : {
@@ -805,7 +904,8 @@
           "_0" : 93
         }
       },
-      "tick" : 982
+      "afterTick" : true,
+      "tick" : 981
     },
     {
       "action" : {
@@ -813,7 +913,8 @@
           "_0" : 94
         }
       },
-      "tick" : 983
+      "afterTick" : true,
+      "tick" : 982
     },
     {
       "action" : {
@@ -821,7 +922,8 @@
           "_0" : 95
         }
       },
-      "tick" : 984
+      "afterTick" : true,
+      "tick" : 983
     },
     {
       "action" : {
@@ -829,7 +931,8 @@
           "_0" : 96
         }
       },
-      "tick" : 985
+      "afterTick" : true,
+      "tick" : 984
     },
     {
       "action" : {
@@ -837,7 +940,8 @@
           "_0" : 97
         }
       },
-      "tick" : 986
+      "afterTick" : true,
+      "tick" : 985
     },
     {
       "action" : {
@@ -845,6 +949,16 @@
           "_0" : 98
         }
       },
+      "afterTick" : true,
+      "tick" : 986
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "afterTick" : true,
       "tick" : 987
     },
     {
@@ -853,6 +967,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 988
     },
     {
@@ -861,6 +976,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 989
     },
     {
@@ -869,6 +985,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 990
     },
     {
@@ -877,6 +994,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 991
     },
     {
@@ -885,6 +1003,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 992
     },
     {
@@ -893,15 +1012,8 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 993
-    },
-    {
-      "action" : {
-        "releaseRate" : {
-          "_0" : 99
-        }
-      },
-      "tick" : 994
     },
     {
       "action" : {
@@ -910,6 +1022,7 @@
           "skill" : "builder"
         }
       },
+      "afterTick" : true,
       "tick" : 1340
     }
   ],
@@ -918,10 +1031,10 @@
     "released" : 80,
     "required" : 60,
     "saved" : 72,
-    "stateHash" : "4831d021a53d754bd354622d74abb8e56b5d24e27b0f8239050cafa380945ba0",
+    "stateHash" : "43923d17033696160f1875028929ee45ea1f65b37b6629099d13edecb72ed838",
     "ticks" : 1800
   },
-  "initialStateHash" : "c80421abe517d37c874d3681598c9503ffc0b1151c6baf7290983be841a71054",
+  "initialStateHash" : "2515bfd85867d16bc9a7af8cd545ec63ee739e2e720fd7cd8b8ce24cf718cf51",
   "number" : 10,
   "rank" : "Wild",
   "title" : "Higgledy Piggledy"

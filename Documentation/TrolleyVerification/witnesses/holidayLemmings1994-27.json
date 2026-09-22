@@ -8,7 +8,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 251
+      "tick" : 249
     },
     {
       "action" : {
@@ -18,7 +18,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 364
+      "tick" : 362
     },
     {
       "action" : {
@@ -28,7 +28,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 509
+      "tick" : 507
     },
     {
       "action" : {
@@ -38,7 +38,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 748
+      "tick" : 746
     },
     {
       "action" : {
@@ -48,7 +48,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 954
+      "tick" : 952
     },
     {
       "action" : {
@@ -58,7 +58,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 1084
+      "tick" : 1082
     }
   ],
   "expected" : {
@@ -66,10 +66,10 @@
     "released" : 25,
     "required" : 25,
     "saved" : 25,
-    "stateHash" : "77d61f19721f0377576174abb11c0ab464c09e01f2172d8a25927717e9eee09c",
-    "ticks" : 2395
+    "stateHash" : "7cf45a15cdee510df387f27b5b541a8048ce116fc3bd3eba2faa91433741233b",
+    "ticks" : 2393
   },
-  "initialStateHash" : "1c290d8e1744d372141215a381984263d05a94435cbb3dfbe7f433437dc2b992",
+  "initialStateHash" : "e3cad505ed63831680bff62e1d8c6c7ff8dbb999bfc5e493021c4dbf31960acb",
   "number" : 12,
   "rank" : "Hail",
   "title" : "Merry Christmaze"

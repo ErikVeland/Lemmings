@@ -6,6 +6,7 @@
           "_0" : 1
         }
       },
+      "afterTick" : true,
       "tick" : 19
     },
     {
@@ -15,7 +16,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 139
+      "afterTick" : true,
+      "tick" : 138
     },
     {
       "action" : {
@@ -24,7 +26,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 338
+      "afterTick" : true,
+      "tick" : 330
     },
     {
       "action" : {
@@ -33,7 +36,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 576
+      "afterTick" : true,
+      "tick" : 575
     },
     {
       "action" : {
@@ -42,7 +46,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 692
+      "afterTick" : true,
+      "tick" : 691
     },
     {
       "action" : {
@@ -50,6 +55,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 871
     },
     {
@@ -58,6 +64,7 @@
           "_0" : 1
         }
       },
+      "afterTick" : true,
       "tick" : 1148
     },
     {
@@ -67,7 +74,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 1226
+      "afterTick" : true,
+      "tick" : 1225
     },
     {
       "action" : {
@@ -76,7 +84,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1337
+      "afterTick" : true,
+      "tick" : 1336
     },
     {
       "action" : {
@@ -85,7 +94,8 @@
           "skill" : "miner"
         }
       },
-      "tick" : 1353
+      "afterTick" : true,
+      "tick" : 1352
     },
     {
       "action" : {
@@ -94,7 +104,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1356
+      "afterTick" : true,
+      "tick" : 1355
     },
     {
       "action" : {
@@ -103,7 +114,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 1373
+      "afterTick" : true,
+      "tick" : 1372
     },
     {
       "action" : {
@@ -112,7 +124,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1499
+      "afterTick" : true,
+      "tick" : 1498
     },
     {
       "action" : {
@@ -121,7 +134,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1727
+      "afterTick" : true,
+      "tick" : 1726
     },
     {
       "action" : {
@@ -130,7 +144,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1958
+      "afterTick" : true,
+      "tick" : 1957
     },
     {
       "action" : {
@@ -139,7 +154,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 2183
+      "afterTick" : true,
+      "tick" : 2182
     },
     {
       "action" : {
@@ -148,7 +164,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 2240
+      "afterTick" : true,
+      "tick" : 2239
     }
   ],
   "expected" : {
@@ -156,10 +173,10 @@
     "released" : 80,
     "required" : 80,
     "saved" : 80,
-    "stateHash" : "b8abddf9edea6b2b00678e6fde59e580fa47801fa1dd63547534d3870236ca05",
-    "ticks" : 2804
+    "stateHash" : "1c41d5312f6de50782b70c1c51d995905f1210b0a35c13dac50da9462bd2c5c3",
+    "ticks" : 2803
   },
-  "initialStateHash" : "778a78062c7514d6a7b7ef3672412d8f0941efc594c9f21e10863ba572ed4219",
+  "initialStateHash" : "28588412406acbe715ca775a60f6bbf15fc05aad4279ec22eb0b1d26f43165ad",
   "number" : 11,
   "rank" : "Havoc",
   "title" : "Welcome to the party, pal!"

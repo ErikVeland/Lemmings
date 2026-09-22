@@ -18,7 +18,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 320
+      "tick" : 303
     },
     {
       "action" : {
@@ -28,7 +28,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 1017
+      "tick" : 1000
     },
     {
       "action" : {
@@ -38,7 +38,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 1161
+      "tick" : 1144
     },
     {
       "action" : {
@@ -48,7 +48,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 1235
+      "tick" : 1218
     }
   ],
   "expected" : {
@@ -56,10 +56,10 @@
     "released" : 1,
     "required" : 1,
     "saved" : 1,
-    "stateHash" : "f52d0975920055e0db6e99a9d6fb41b08bf0f418f68f31c1d346b3eb8071786f",
-    "ticks" : 1561
+    "stateHash" : "58c8b57dacda2fd1b01db47b5cf1a362004bfdd4dde67c038f5a8eb8ac85d6d1",
+    "ticks" : 1544
   },
-  "initialStateHash" : "4b45349cdb71c4689bcb860df86099eca871cd8dc7eecad45fd7a28f1f95ec1e",
+  "initialStateHash" : "5251e69ecb94471059de93fca066e4828c206b4ee67895c2bb3e12528808ece5",
   "number" : 16,
   "rank" : "Wild",
   "title" : "Take care, Sweetie"

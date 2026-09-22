@@ -7,7 +7,8 @@
           "skill" : "digger"
         }
       },
-      "tick" : 70
+      "afterTick" : true,
+      "tick" : 71
     },
     {
       "action" : {
@@ -16,6 +17,7 @@
           "skill" : "basher"
         }
       },
+      "afterTick" : true,
       "tick" : 103
     },
     {
@@ -25,7 +27,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 630
+      "afterTick" : true,
+      "tick" : 628
     },
     {
       "action" : {
@@ -34,7 +37,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 672
+      "afterTick" : true,
+      "tick" : 670
     },
     {
       "action" : {
@@ -43,6 +47,7 @@
           "skill" : "builder"
         }
       },
+      "afterTick" : true,
       "tick" : 864
     },
     {
@@ -52,16 +57,8 @@
           "skill" : "builder"
         }
       },
+      "afterTick" : true,
       "tick" : 1056
-    },
-    {
-      "action" : {
-        "assign" : {
-          "lemmingID" : 9,
-          "skill" : "builder"
-        }
-      },
-      "tick" : 1248
     },
     {
       "action" : {
@@ -70,7 +67,18 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1250
+      "afterTick" : true,
+      "tick" : 1248
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 9,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1249
     }
   ],
   "expected" : {
@@ -78,10 +86,10 @@
     "released" : 80,
     "required" : 75,
     "saved" : 80,
-    "stateHash" : "669c2f13ea446cc391436a67f7f6aa9a8c8361204183ea7b074a38e7fd467042",
-    "ticks" : 3833
+    "stateHash" : "34ac25f4897f2e7f09f85722840acd8670ddbe30e5176e0e460fd47832551086",
+    "ticks" : 3832
   },
-  "initialStateHash" : "3292018f01d3a8fb5ce5c295c77b250fa8e43ea43933b17983d3cb8127aaccf6",
+  "initialStateHash" : "1b0155f320da38039ab72beb86369a290e9afabc7e8d081ad7b14b60c4a18eb3",
   "number" : 9,
   "rank" : "Flurry",
   "title" : "A Block from Home"

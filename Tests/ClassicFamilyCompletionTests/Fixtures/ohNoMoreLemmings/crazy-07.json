@@ -7,7 +7,8 @@
           "skill" : "climber"
         }
       },
-      "tick" : 100
+      "afterTick" : true,
+      "tick" : 99
     },
     {
       "action" : {
@@ -16,7 +17,8 @@
           "skill" : "floater"
         }
       },
-      "tick" : 101
+      "afterTick" : true,
+      "tick" : 100
     },
     {
       "action" : {
@@ -25,7 +27,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 507
+      "afterTick" : true,
+      "tick" : 506
     },
     {
       "action" : {
@@ -34,7 +37,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 585
+      "afterTick" : true,
+      "tick" : 584
     },
     {
       "action" : {
@@ -43,7 +47,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 777
+      "afterTick" : true,
+      "tick" : 776
     },
     {
       "action" : {
@@ -52,7 +57,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 897
+      "afterTick" : true,
+      "tick" : 896
     },
     {
       "action" : {
@@ -61,7 +67,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 1003
+      "afterTick" : true,
+      "tick" : 1002
     }
   ],
   "expected" : {
@@ -69,10 +76,10 @@
     "released" : 50,
     "required" : 50,
     "saved" : 50,
-    "stateHash" : "65712e08deb4a465f247185a44f2b91e65e392b0741bef38ccd36fe124437e1b",
-    "ticks" : 2770
+    "stateHash" : "55feb4c66f3636db4f0aad83261832b3f0f8d79e5a028d6fc83900e8d8146c8f",
+    "ticks" : 2769
   },
-  "initialStateHash" : "dc5b1ad9257351b41273e2ab11d141bf9a74053dff9db7dbaa71505818b8376c",
+  "initialStateHash" : "3abde0b577a8c28f490fff44d01aa81e1408a93ba1556f7c807d09188810d9ec",
   "number" : 7,
   "rank" : "Crazy",
   "title" : "And now, the end is near..."

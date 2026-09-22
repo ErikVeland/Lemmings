@@ -8,7 +8,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 296
+      "tick" : 295
     },
     {
       "action" : {
@@ -18,7 +18,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 317
+      "tick" : 316
     },
     {
       "action" : {
@@ -37,7 +37,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 658
+      "tick" : 657
     },
     {
       "action" : {
@@ -47,7 +47,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 1015
+      "tick" : 1014
     },
     {
       "action" : {
@@ -57,7 +57,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 1554
+      "tick" : 1553
     },
     {
       "action" : {
@@ -67,7 +67,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 1555
+      "tick" : 1554
     }
   ],
   "expected" : {
@@ -75,10 +75,10 @@
     "released" : 70,
     "required" : 69,
     "saved" : 69,
-    "stateHash" : "f91b035ea9ba84e64a8427fec85bf29ceae7e5c4ece0559b5a8c13f78a8ddb7f",
-    "ticks" : 2980
+    "stateHash" : "20c25821918d93b74af2f2d27982522f4e6adc3d5abe58fda941573bbe0b8a04",
+    "ticks" : 2979
   },
-  "initialStateHash" : "d4255ade917439b2ad44d85cc6df3bf4b5460ec311bfc989064f4097f6cab418",
+  "initialStateHash" : "397d585b8acaa042b787f343fed1f107e5815558d20e13c6895199fe8805a4ef",
   "number" : 6,
   "rank" : "Frost",
   "title" : "The Land of the Bizarre"

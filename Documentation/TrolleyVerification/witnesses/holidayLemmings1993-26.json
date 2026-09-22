@@ -8,7 +8,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 114
+      "tick" : 112
     },
     {
       "action" : {
@@ -28,7 +28,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 251
+      "tick" : 249
     },
     {
       "action" : {
@@ -38,7 +38,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 296
+      "tick" : 294
     },
     {
       "action" : {
@@ -48,7 +48,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 521
+      "tick" : 519
     },
     {
       "action" : {
@@ -58,7 +58,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 748
+      "tick" : 746
     },
     {
       "action" : {
@@ -68,7 +68,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 975
+      "tick" : 973
     },
     {
       "action" : {
@@ -78,7 +78,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 1205
+      "tick" : 1203
     },
     {
       "action" : {
@@ -88,7 +88,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 1408
+      "tick" : 1406
     },
     {
       "action" : {
@@ -98,7 +98,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 1611
+      "tick" : 1609
     },
     {
       "action" : {
@@ -108,7 +108,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 1814
+      "tick" : 1812
     },
     {
       "action" : {
@@ -118,7 +118,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 1818
+      "tick" : 1816
     },
     {
       "action" : {
@@ -126,6 +126,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 1900
     }
   ],
@@ -134,10 +135,10 @@
     "released" : 80,
     "required" : 80,
     "saved" : 80,
-    "stateHash" : "5a8d00345dd89242bd2d275f0e50cce4b4cc147bacf50bdbd44e36e1febe84ff",
-    "ticks" : 2651
+    "stateHash" : "113041bf323b049cd81633f2bbf0808829d98056c06c164dc8eb88d4ba4888c1",
+    "ticks" : 2649
   },
-  "initialStateHash" : "3f494562a927b191fb6c471c6296d542328bd08f2ded26186386a02d0da863b8",
+  "initialStateHash" : "c53686b616e5af9bcb7bbdfbcb98a22b9350831bebf962f90ebbcf117c1fc928",
   "number" : 11,
   "rank" : "Blizzard",
   "title" : "The Search for Lem"

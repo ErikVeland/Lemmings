@@ -1,0 +1,153 @@
+[
+  {
+    "skill": "blocker",
+    "x": 714,
+    "yMin": 126,
+    "yMax": 130,
+    "direction": -1,
+    "action": "walking",
+    "async": true
+  },
+  {
+    "skill": "bomber",
+    "x": 714,
+    "action": "blocking",
+    "async": true
+  },
+  {
+    "skill": "blocker",
+    "x": 640,
+    "yMin": 82,
+    "yMax": 86,
+    "direction": 1,
+    "action": "walking",
+    "async": true
+  },
+  {
+    "skill": "bomber",
+    "x": 640,
+    "yMin": 82,
+    "yMax": 86,
+    "action": "blocking",
+    "async": true
+  },
+  {
+    "skill": "blocker",
+    "x": 640,
+    "yMin": 90,
+    "yMax": 94,
+    "direction": 1,
+    "action": "walking",
+    "async": true
+  },
+  {
+    "skill": "bomber",
+    "x": 640,
+    "yMin": 90,
+    "yMax": 94,
+    "action": "blocking",
+    "async": true
+  },
+  {
+    "skill": "blocker",
+    "x": 808,
+    "yMin": 82,
+    "yMax": 86,
+    "direction": 1,
+    "action": "walking",
+    "async": true
+  },
+  {
+    "skill": "bomber",
+    "x": 808,
+    "yMin": 82,
+    "yMax": 86,
+    "action": "blocking",
+    "async": true
+  },
+  {
+    "skill": "blocker",
+    "x": 808,
+    "yMin": 90,
+    "yMax": 94,
+    "direction": 1,
+    "action": "walking",
+    "async": true
+  },
+  {
+    "skill": "bomber",
+    "x": 808,
+    "yMin": 90,
+    "yMax": 94,
+    "action": "blocking",
+    "async": true
+  },
+  {
+    "skill": "blocker",
+    "x": 694,
+    "yMin": 124,
+    "yMax": 128,
+    "direction": 1,
+    "action": "walking",
+    "async": true
+  },
+  {
+    "skill": "bomber",
+    "x": 694,
+    "yMin": 124,
+    "yMax": 128,
+    "action": "blocking",
+    "async": true
+  },
+  {
+    "skill": "blocker",
+    "x": 697,
+    "yMin": 132,
+    "yMax": 136,
+    "direction": 1,
+    "action": "walking",
+    "async": true
+  },
+  {
+    "skill": "bomber",
+    "x": 697,
+    "yMin": 132,
+    "yMax": 136,
+    "action": "blocking",
+    "async": true
+  },
+  {
+    "skill": "blocker",
+    "x": 703,
+    "yMin": 136,
+    "yMax": 146,
+    "direction": 1,
+    "action": "walking",
+    "async": true
+  },
+  {
+    "skill": "bomber",
+    "x": 703,
+    "yMin": 136,
+    "yMax": 146,
+    "action": "blocking",
+    "async": true
+  },
+  {
+    "skill": "blocker",
+    "x": 808,
+    "yMin": 112,
+    "yMax": 116,
+    "direction": 1,
+    "action": "walking",
+    "async": true
+  },
+  {
+    "skill": "bomber",
+    "x": 808,
+    "yMin": 112,
+    "yMax": 116,
+    "action": "blocking",
+    "async": true
+  }
+]

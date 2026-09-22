@@ -195,10 +195,10 @@
     "released" : 20,
     "required" : 15,
     "saved" : 20,
-    "stateHash" : "13264a7fd7a1b7c86351453f222d183558cc8f07d3303dd4d82a8ad527385622",
-    "ticks" : 1117
+    "stateHash" : "9653cae62ee448eb7135d87fc689a898f8ec5b9ae811dba6e696aaf660c1ecd0",
+    "ticks" : 1116
   },
-  "initialStateHash" : "ad96778cfd5bb57b027e8f1962a0a8f7ff2c9cad14d5cc0be91f6255973f17e1",
+  "initialStateHash" : "da05315b7f24593511ebecae92737f09cd8e0c4a2c1f0e01b81448d7eb67bbb6",
   "number" : 2,
   "rank" : "Flurry",
   "title" : "Floating Lemming Flurry"

@@ -6,6 +6,7 @@
           "_0" : 1
         }
       },
+      "afterTick" : true,
       "tick" : 17
     },
     {
@@ -15,7 +16,8 @@
           "skill" : "miner"
         }
       },
-      "tick" : 302
+      "afterTick" : true,
+      "tick" : 301
     },
     {
       "action" : {
@@ -24,7 +26,8 @@
           "skill" : "miner"
         }
       },
-      "tick" : 367
+      "afterTick" : true,
+      "tick" : 366
     },
     {
       "action" : {
@@ -33,7 +36,8 @@
           "skill" : "miner"
         }
       },
-      "tick" : 432
+      "afterTick" : true,
+      "tick" : 431
     },
     {
       "action" : {
@@ -41,6 +45,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 441
     }
   ],
@@ -49,10 +54,10 @@
     "released" : 50,
     "required" : 50,
     "saved" : 50,
-    "stateHash" : "f5745966f98b0a4f3776c3f367143b7156a730fc90c477811e5946f8d68bf1bb",
-    "ticks" : 970
+    "stateHash" : "435c81db8ba85391031d6976ada027f7e8916ff1a1def5923828170bedb941e2",
+    "ticks" : 969
   },
-  "initialStateHash" : "85bdeb3bf2fd6a7675159a58b1e66ba600bfaccd39c073d495ffae417515fe4c",
+  "initialStateHash" : "9c93278f169625fe86fdd418934e065dc039f746ec8a70ab492b32de72399c4c",
   "number" : 6,
   "rank" : "Havoc",
   "title" : "Now get out of that!"

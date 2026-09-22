@@ -1,0 +1,119 @@
+[
+  {
+    "skill": "builder",
+    "id": 0,
+    "x": 394,
+    "action": "walking"
+  },
+  {
+    "skill": "blocker",
+    "id": 1,
+    "x": 398,
+    "action": "walking"
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "x": 455,
+    "action": "walking"
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "x": 520,
+    "action": "walking"
+  },
+  {
+    "skill": "basher",
+    "id": 0,
+    "x": 558,
+    "action": "walking"
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "x": 596,
+    "action": "walking"
+  },
+  {
+    "skill": "basher",
+    "id": 0,
+    "x": 737,
+    "direction": 1,
+    "action": "walking"
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "x": 799,
+    "direction": 1,
+    "action": "walking"
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "action": "shrugging"
+  },
+  {
+    "skill": "basher",
+    "id": 0,
+    "tick": 1580,
+    "exactTick": true
+  },
+  {
+    "skill": "basher",
+    "id": 0,
+    "x": 913,
+    "direction": 1,
+    "action": "walking"
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "x": 1020,
+    "direction": 1,
+    "action": "walking"
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "direction": -1,
+    "action": "walking"
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "direction": 1,
+    "action": "walking"
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "direction": -1,
+    "action": "walking"
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "direction": 1,
+    "action": "walking"
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "direction": -1,
+    "action": "walking"
+  },
+  {
+    "skill": "basher",
+    "x": 391,
+    "direction": 1,
+    "action": "walking",
+    "tick": 3100
+  },
+  {
+    "skill": "builder",
+    "id": 1,
+    "action": "walking"
+  }
+]

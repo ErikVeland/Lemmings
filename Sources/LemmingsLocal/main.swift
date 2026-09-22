@@ -1476,13 +1476,19 @@ let achievementProgressKey = "ClassicAchievementProgress"
         level, groundSet: ground, specialGraphic: groundOverride == nil ? specials[level.specialStyle] : specialOverride)
 
       // The DOS engine derives entrances, exits and hazards from the level's
-      // own trigger zones, so nothing is positioned by hand here.
+      // own trigger zones, so nothing is positioned by hand here. Fan levels
+      // (with a ground override) keep the original rules.
+      var title: ClassicTitle?
+      if groundOverride == nil, dataSets.indices.contains(gamePicker.indexOfSelectedItem) {
+        title = dataSets[gamePicker.indexOfSelectedItem].set.title
+      }
+      let mechanics = ClassicDOSMechanics(title: title, rank: entry.rank)
       let simulation: ClassicDOSSimulation
       if let assets = assetsOverride ?? assets {
         simulation = try ClassicDOSSimulation(
-          level: level, renderedLevel: rendered, mainDATAssets: assets)
+          level: level, renderedLevel: rendered, mainDATAssets: assets, mechanics: mechanics)
       } else {
-        simulation = try ClassicDOSSimulation(level: level, renderedLevel: rendered)
+        simulation = try ClassicDOSSimulation(level: level, renderedLevel: rendered, mechanics: mechanics)
       }
       guard let image = makeImage(
         width: rendered.width, height: rendered.height, rgba: [UInt8](rendered.rgba))

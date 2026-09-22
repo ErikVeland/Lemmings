@@ -6,6 +6,7 @@
           "_0" : 1
         }
       },
+      "afterTick" : true,
       "tick" : 77
     },
     {
@@ -14,6 +15,7 @@
           "_0" : 67
         }
       },
+      "afterTick" : true,
       "tick" : 112
     },
     {
@@ -23,7 +25,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 170
+      "afterTick" : true,
+      "tick" : 169
     },
     {
       "action" : {
@@ -32,7 +35,8 @@
           "skill" : "digger"
         }
       },
-      "tick" : 224
+      "afterTick" : true,
+      "tick" : 223
     },
     {
       "action" : {
@@ -41,7 +45,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 268
+      "afterTick" : true,
+      "tick" : 264
     },
     {
       "action" : {
@@ -50,7 +55,8 @@
           "skill" : "climber"
         }
       },
-      "tick" : 327
+      "afterTick" : true,
+      "tick" : 323
     },
     {
       "action" : {
@@ -59,7 +65,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 372
+      "afterTick" : true,
+      "tick" : 368
     },
     {
       "action" : {
@@ -68,7 +75,8 @@
           "skill" : "digger"
         }
       },
-      "tick" : 742
+      "afterTick" : true,
+      "tick" : 738
     },
     {
       "action" : {
@@ -77,7 +85,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1122
+      "afterTick" : true,
+      "tick" : 1115
     },
     {
       "action" : {
@@ -86,7 +95,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1464
+      "afterTick" : true,
+      "tick" : 1457
     },
     {
       "action" : {
@@ -95,7 +105,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1559
+      "afterTick" : true,
+      "tick" : 1552
     }
   ],
   "expected" : {
@@ -103,10 +114,10 @@
     "released" : 50,
     "required" : 44,
     "saved" : 49,
-    "stateHash" : "ac5668d020464d26d0b4832af3b9bd242caf3dbd5bf0c73f3d274f5d33f45ff8",
-    "ticks" : 2188
+    "stateHash" : "08a7ae5bbcc6ef7fbbf22f9c2078d46740616c0669ac2ecf4a6e25d47812b7bb",
+    "ticks" : 2185
   },
-  "initialStateHash" : "5f0ebf9f455d78d8715dd19565c47535380ad271791f5ed7abea2f74ddbabd97",
+  "initialStateHash" : "ea394aec0e88febd4b4a91b89a8ef0550a5196ad5ed125a12b32c17af8a1a14a",
   "number" : 15,
   "rank" : "Crazy",
   "title" : "Worra load of old blocks!"

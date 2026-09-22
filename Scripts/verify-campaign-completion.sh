@@ -27,6 +27,9 @@ for (( index=1; index<=${#games}; index++ )); do
   CLASSIC_COMPLETION_FIXTURES="$project_dir/Tests/ClassicFamilyCompletionTests/Fixtures/${games[index]}" \
     "$build_dir/Verify" "$mode" "$ports/${folders[index]}" || failed=1
 done
+CLASSIC_COMPLETION_FIXTURES="$project_dir/Tests/ClassicFamilyCompletionTests/Fixtures/ohYesMoreLemmings" \
+  "$build_dir/Verify" "$mode" "conversion:$ports" || failed=1
+python3 Tests/ClassicFamilyCompletionTests/test_conversions.py "$build_dir/Verify" "$ports" || failed=1
 if (( ! classic_only )); then
   l3_arguments=()
   if [[ "$mode" == verify ]]; then l3_arguments=(--require-all); fi

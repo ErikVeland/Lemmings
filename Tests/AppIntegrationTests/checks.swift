@@ -1037,7 +1037,7 @@ extension AppDelegate {
           let (catalogue, engine) = LevelHintCatalogue.load(), let level = catalogue.level(for: identity, engine: engine) else {
       throw IntegrationFailure(message: "Tricky 1 did not match its checked hint data")
     }
-    try check(catalogue.levels.count == 284 && level.rank == "Tricky" && level.number == 1,
+    try check(catalogue.levels.count == 350 && level.rank == "Tricky" && level.number == 1,
       "Hint coverage or live level identity is wrong")
     for row in catalogue.levels {
       try check(catalogue.level(for: row.fingerprint, engine: engine) != nil, "Invalid hints for \(row.title)")
@@ -1232,12 +1232,14 @@ extension AppDelegate {
       initialStateHash: shifted.initialStateHash, events: [], expected: liveOutcome)
     try check(VerifiedSolution.validate(broken, initial: fresh) == nil,
       "Broken solution was accepted")
-    for title in [ClassicTitle.ohNoMoreLemmings, .xmasLemmings1991, .xmasLemmings1992,
-                  .holidayLemmings1993, .holidayLemmings1994] {
+    let hintCampaigns: [(ClassicTitle, Int)] = [(.ohNoMoreLemmings, 0), (.xmasLemmings1991, 0),
+      (.xmasLemmings1992, 0), (.holidayLemmings1993, 0), (.holidayLemmings1994, 0),
+      (.ohYesMoreLemmings, 0), (.ohYesMoreLemmings, 17), (.ohYesMoreLemmings, 20), (.ohYesMoreLemmings, 30)]
+    for (title, levelIndex) in hintCampaigns {
       guard let index = dataSets.firstIndex(where: { $0.set.title == title }) else {
         throw IntegrationFailure(message: "Missing hint campaign \(title)")
       }
-      gamePicker.selectItem(at: index); selectDataSet(); loadLevel(at: 0)
+      gamePicker.selectItem(at: index); selectDataSet(); loadLevel(at: levelIndex)
       guard let fingerprint = arcadeLevel?.conditions?.levelFingerprint,
             let checked = catalogue.level(for: fingerprint, engine: engine) else {
         throw IntegrationFailure(message: "Live campaign did not find checked hints: \(title)")
@@ -1251,7 +1253,8 @@ extension AppDelegate {
       button("Reveal the approach", in: page)!.performClick(nil)
       button("Reveal opening moves", in: page)!.performClick(nil)
       try verifyText(page, stage: checked.deck.stages[2])
-      try capture(page, name: "family-\(title.rawValue)")
+      try await Task.sleep(for: .milliseconds(200))
+      try capture(page, name: "family-\(title.rawValue)-\(levelIndex)")
       try check(session!.currentTick == tick, "Reading campaign hints advanced the run")
       page.cancelOperation(nil)
       try check(!isPaused, "Closing campaign hints failed to restore play")

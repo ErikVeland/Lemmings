@@ -105,3 +105,20 @@ quick local, unsigned build on `l2-seeded-search`, for the user's own testing.
 It was not cut with `package-beta.sh`, not signed for distribution, not
 notarised, and has no release notes. Do not reuse build number 33 for an
 actual tester archive; the next real archive starts at build 34.
+
+## Beta 34
+
+Claude cut three beta 34 archives on 18 September 2026 at the user's request.
+They carry the player, saved-run and Hot Seat changes, the routes for five more
+Oh No! levels, and every change since beta 32. Build 33 never reached testers.
+
+Standard and Game Center use `be828c5`; Monterey uses `20424d7`. The frozen
+checkouts, 53 passing audit checks, notarisation identifiers and archive hashes
+are recorded in [Beta34Readiness.md](Beta34Readiness.md). The downloads are under
+`~/Downloads`; signed apps and evidence remain under `.build/beta34`.
+
+Do not reuse build number 34. The next archive starts at build 35.
+
+A locked Mac fails the `arcade-records` keyboard focus check and hides the
+notarytool credentials. Unlock the session before an audit or a release run.
+

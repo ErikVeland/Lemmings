@@ -6,6 +6,7 @@
           "_0" : 20
         }
       },
+      "afterTick" : true,
       "tick" : 15
     },
     {
@@ -14,6 +15,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 134
     },
     {
@@ -23,7 +25,8 @@
           "skill" : "floater"
         }
       },
-      "tick" : 145
+      "afterTick" : true,
+      "tick" : 144
     },
     {
       "action" : {
@@ -32,7 +35,8 @@
           "skill" : "blocker"
         }
       },
-      "tick" : 154
+      "afterTick" : true,
+      "tick" : 153
     },
     {
       "action" : {
@@ -41,7 +45,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 196
+      "afterTick" : true,
+      "tick" : 195
     },
     {
       "action" : {
@@ -49,6 +54,7 @@
           "_0" : 75
         }
       },
+      "afterTick" : true,
       "tick" : 322
     },
     {
@@ -58,7 +64,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 362
+      "afterTick" : true,
+      "tick" : 361
     },
     {
       "action" : {
@@ -67,7 +74,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 564
+      "afterTick" : true,
+      "tick" : 563
     },
     {
       "action" : {
@@ -76,7 +84,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 763
+      "afterTick" : true,
+      "tick" : 755
     },
     {
       "action" : {
@@ -85,7 +94,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1061
+      "afterTick" : true,
+      "tick" : 1053
     },
     {
       "action" : {
@@ -94,7 +104,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1259
+      "afterTick" : true,
+      "tick" : 1245
     },
     {
       "action" : {
@@ -103,7 +114,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1453
+      "afterTick" : true,
+      "tick" : 1437
     },
     {
       "action" : {
@@ -112,7 +124,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1647
+      "afterTick" : true,
+      "tick" : 1629
     },
     {
       "action" : {
@@ -121,7 +134,8 @@
           "skill" : "blocker"
         }
       },
-      "tick" : 1848
+      "afterTick" : true,
+      "tick" : 1830
     },
     {
       "action" : {
@@ -130,7 +144,8 @@
           "skill" : "digger"
         }
       },
-      "tick" : 1961
+      "afterTick" : true,
+      "tick" : 1960
     },
     {
       "action" : {
@@ -139,7 +154,8 @@
           "skill" : "floater"
         }
       },
-      "tick" : 1969
+      "afterTick" : true,
+      "tick" : 1968
     },
     {
       "action" : {
@@ -148,7 +164,8 @@
           "skill" : "climber"
         }
       },
-      "tick" : 1974
+      "afterTick" : true,
+      "tick" : 1973
     },
     {
       "action" : {
@@ -157,7 +174,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 2290
+      "afterTick" : true,
+      "tick" : 2289
     }
   ],
   "expected" : {
@@ -165,10 +183,10 @@
     "released" : 50,
     "required" : 48,
     "saved" : 49,
-    "stateHash" : "bbb58c5869a4b0283c657addb0892b9b5b374feda40ff4a42aae533ac8e392fe",
+    "stateHash" : "ba9748a225b158c77ab029165da67460ab96293a03d57a2db9a702ea2a93117a",
     "ticks" : 4080
   },
-  "initialStateHash" : "b74ee8928fbd220db6bc8cdeff0cd5e2dccc249eaf52e92cc0f583ffc0c958d6",
+  "initialStateHash" : "ff1a1887da8c96654e93259ec47bde517b69de86f5acc6788d04e6a2b2391825",
   "number" : 10,
   "rank" : "Wicked",
   "title" : "Temple of Love"

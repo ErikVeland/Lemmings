@@ -6,6 +6,7 @@
           "_0" : 1
         }
       },
+      "afterTick" : true,
       "tick" : 21
     },
     {
@@ -15,7 +16,8 @@
           "skill" : "digger"
         }
       },
-      "tick" : 68
+      "afterTick" : true,
+      "tick" : 67
     },
     {
       "action" : {
@@ -23,6 +25,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 75
     },
     {
@@ -32,7 +35,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 677
+      "afterTick" : true,
+      "tick" : 676
     },
     {
       "action" : {
@@ -41,7 +45,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 974
+      "afterTick" : true,
+      "tick" : 973
     },
     {
       "action" : {
@@ -50,7 +55,8 @@
           "skill" : "miner"
         }
       },
-      "tick" : 1225
+      "afterTick" : true,
+      "tick" : 1224
     }
   ],
   "expected" : {
@@ -58,10 +64,10 @@
     "released" : 20,
     "required" : 10,
     "saved" : 11,
-    "stateHash" : "bf544f0189837844f016bbf5681e3fd99a3177ce829e5cb39171d2e15aa8cc5f",
-    "ticks" : 1904
+    "stateHash" : "d715c7d2051bfed659f895f503548c6957d70657fc7c5ddfaafcbf7dd0661514",
+    "ticks" : 1903
   },
-  "initialStateHash" : "9e91f769ddfb48e137dd36ec2de263110f617f68d294d1eb10d4f295bbf218ae",
+  "initialStateHash" : "12d145b58172aac4ceaf1678a7decbf6533b77eb8b734db789bc1ff86e61a0a9",
   "number" : 13,
   "rank" : "Crazy",
   "title" : "It`s a trade off"

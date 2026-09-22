@@ -1,0 +1,156 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "bomber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 92
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "bomber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 200
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "climber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 300
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 300
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "bomber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 306
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 5,
+          "skill" : "bomber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 412
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 597
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 7,
+          "skill" : "bomber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 658
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 9,
+          "skill" : "bomber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 738
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 28,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2027
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 18,
+          "skill" : "bomber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 3000
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 28,
+          "skill" : "bomber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 3900
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 44,
+          "skill" : "bomber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 4800
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 30,
+          "skill" : "bomber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 5618
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 60,
+    "required" : 50,
+    "saved" : 50,
+    "stateHash" : "897d570fae3a68c67365b14c2a5b9a5a8033c603c465a306778794b9d46f7cce",
+    "ticks" : 6038
+  },
+  "initialStateHash" : "97037eaf526a164b42f5b1c2916824a432dd32903d20381c6af9bc2f510399dc",
+  "number" : 20,
+  "rank" : "Havoc",
+  "title" : "LOoK BeFoRe YoU LeAp!"
+}

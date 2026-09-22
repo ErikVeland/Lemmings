@@ -162,6 +162,10 @@ public enum ClassicDOSReplayRecorder {
         append(simulation.configuration.initialReleaseRate)
         append(simulation.configuration.maximumX)
         append(simulation.configuration.maximumY)
+        // Original-rule hashes predate the rule sets and stay unchanged.
+        if simulation.configuration.mechanics != .original {
+            append(simulation.configuration.mechanics.rawValue)
+        }
 
         bytes.append(simulation.terrain.canonicalMaskBytes)
 

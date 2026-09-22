@@ -96,3 +96,25 @@ steps. Add `"exactTick": true` to apply it only at its `tick`.
 `beam DATA LEVEL PLAN --id N --target x,y[;x,y...]` searches skill assignments for
 one lemming toward the given waypoints. It prints the assignments as exact-tick
 steps. Run them with `run` and import the result like any other candidate.
+
+## Oh Yes! conversions
+
+Use `conversion:PORTS_DIRECTORY` as the data argument for the strict verifier.
+Set `CLASSIC_COMPLETION_FIXTURES` to the separate Oh Yes! fixture folder.
+`recorded`, `verify-known` and `verify` use the same input and outcome checks as
+other Classic campaigns. Artwork follows each rank, including the Sunsoft
+fallback assets. All 60 levels must be present even when checking one route.
+
+`Scripts/verify-campaign-completion.sh` includes conversions and their negative
+checks. `--require-all --classic-only` requires all 172 additional official
+Classic levels and all 60 conversions. The Original 120 retain their own gate.
+
+## Complete official Classic gate
+
+Run `zsh Scripts/verify-official-classic.sh` for all 292 official levels. It
+requires every fixture, replays it twice, then runs the real app session through
+three saved-run restores per level and checks progress through all six releases.
+The default report is `.build/official-classic/quest.json`. Set
+`CAMPAIGN_TEST_RESOURCES` to a candidate app’s `Contents/Resources`; set
+`CAMPAIGN_TEST_LIBRARY_DIR` to reuse an already verified current engine build.
+The broader campaign gate still requires all conversions.

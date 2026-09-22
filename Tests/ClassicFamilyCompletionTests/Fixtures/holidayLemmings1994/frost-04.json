@@ -7,27 +7,29 @@
           "skill" : "builder"
         }
       },
-      "tick" : 480
+      "afterTick" : true,
+      "tick" : 479
     },
     {
       "action" : {
         "assign" : {
-          "lemmingID" : 7,
+          "lemmingID" : 6,
           "skill" : "basher"
         }
       },
-      "tick" : 1368
+      "afterTick" : true,
+      "tick" : 1334
     }
   ],
   "expected" : {
     "didWin" : true,
     "released" : 50,
     "required" : 49,
-    "saved" : 49,
-    "stateHash" : "2b238a80350aa55991052a4ad86ef001e1368127c5c1a46395a4fac3c6abdf72",
-    "ticks" : 2167
+    "saved" : 50,
+    "stateHash" : "2f6d02c00574472d635de7c20abc6f4a00f63c70d80aa3a90ceae8f2e6d0d367",
+    "ticks" : 2166
   },
-  "initialStateHash" : "d52c4db16f88f6384ba57b60768c952cb7b3d38c58056580d51053bb61bb6807",
+  "initialStateHash" : "885cc70d09917ae8988f50b79047db6632a375628049d73c5c5f4cde2e2754a6",
   "number" : 4,
   "rank" : "Frost",
   "title" : "Separate Ways"

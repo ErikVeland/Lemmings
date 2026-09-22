@@ -8,7 +8,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 275
+      "tick" : 274
     },
     {
       "action" : {
@@ -18,7 +18,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 635
+      "tick" : 634
     },
     {
       "action" : {
@@ -28,7 +28,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 700
+      "tick" : 697
     },
     {
       "action" : {
@@ -38,7 +38,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 1712
+      "tick" : 1711
     },
     {
       "action" : {
@@ -48,7 +48,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 1765
+      "tick" : 1764
     },
     {
       "action" : {
@@ -58,7 +58,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 1819
+      "tick" : 1818
     },
     {
       "action" : {
@@ -68,7 +68,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 1872
+      "tick" : 1871
     },
     {
       "action" : {
@@ -78,7 +78,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 1925
+      "tick" : 1924
     },
     {
       "action" : {
@@ -88,7 +88,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 2193
+      "tick" : 2192
     },
     {
       "action" : {
@@ -98,7 +98,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 2446
+      "tick" : 2445
     },
     {
       "action" : {
@@ -108,7 +108,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 2699
+      "tick" : 2698
     },
     {
       "action" : {
@@ -118,7 +118,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 2952
+      "tick" : 2951
     },
     {
       "action" : {
@@ -128,7 +128,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 3201
+      "tick" : 3200
     },
     {
       "action" : {
@@ -138,7 +138,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 3258
+      "tick" : 3257
     },
     {
       "action" : {
@@ -148,7 +148,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 3458
+      "tick" : 3457
     }
   ],
   "expected" : {
@@ -156,10 +156,10 @@
     "released" : 1,
     "required" : 1,
     "saved" : 1,
-    "stateHash" : "56844c89983f377ffcb6367fd8233ddf41667d02bb77a0d611930ca6fcbae10f",
-    "ticks" : 3560
+    "stateHash" : "4b226babd42367f97e93e0c199d35351b210887883074ea569697785d573052c",
+    "ticks" : 3559
   },
-  "initialStateHash" : "eb86499f6a71d3d80b38ac3ff38c2788c7df4180446af02e0d49dd033d1f2a3c",
+  "initialStateHash" : "ad0b89022384fbced95bd60527ba74262c63a2db4128970269321cedd39c1a94",
   "number" : 2,
   "rank" : "Wicked",
   "title" : "Inroducing SUPERLEMMING"

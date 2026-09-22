@@ -7,7 +7,8 @@
           "skill" : "blocker"
         }
       },
-      "tick" : 120
+      "afterTick" : true,
+      "tick" : 119
     },
     {
       "action" : {
@@ -16,7 +17,8 @@
           "skill" : "miner"
         }
       },
-      "tick" : 128
+      "afterTick" : true,
+      "tick" : 127
     },
     {
       "action" : {
@@ -25,7 +27,8 @@
           "skill" : "blocker"
         }
       },
-      "tick" : 176
+      "afterTick" : true,
+      "tick" : 177
     },
     {
       "action" : {
@@ -34,7 +37,8 @@
           "skill" : "miner"
         }
       },
-      "tick" : 280
+      "afterTick" : true,
+      "tick" : 279
     },
     {
       "action" : {
@@ -43,7 +47,8 @@
           "skill" : "miner"
         }
       },
-      "tick" : 424
+      "afterTick" : true,
+      "tick" : 423
     },
     {
       "action" : {
@@ -52,7 +57,8 @@
           "skill" : "miner"
         }
       },
-      "tick" : 432
+      "afterTick" : true,
+      "tick" : 425
     },
     {
       "action" : {
@@ -61,7 +67,8 @@
           "skill" : "miner"
         }
       },
-      "tick" : 928
+      "afterTick" : true,
+      "tick" : 927
     },
     {
       "action" : {
@@ -70,7 +77,8 @@
           "skill" : "climber"
         }
       },
-      "tick" : 2952
+      "afterTick" : true,
+      "tick" : 2951
     },
     {
       "action" : {
@@ -79,7 +87,8 @@
           "skill" : "bomber"
         }
       },
-      "tick" : 2960
+      "afterTick" : true,
+      "tick" : 2959
     },
     {
       "action" : {
@@ -88,7 +97,8 @@
           "skill" : "bomber"
         }
       },
-      "tick" : 2968
+      "afterTick" : true,
+      "tick" : 2960
     },
     {
       "action" : {
@@ -97,7 +107,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 2976
+      "afterTick" : true,
+      "tick" : 2975
     },
     {
       "action" : {
@@ -106,7 +117,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 2984
+      "afterTick" : true,
+      "tick" : 2976
     },
     {
       "action" : {
@@ -115,7 +127,8 @@
           "skill" : "climber"
         }
       },
-      "tick" : 3056
+      "afterTick" : true,
+      "tick" : 3039
     }
   ],
   "expected" : {
@@ -123,10 +136,10 @@
     "released" : 50,
     "required" : 25,
     "saved" : 49,
-    "stateHash" : "1a4434d574133b681ce7b2428d3eac4ddaf37a25bbf76bbfd2891efe7bddd35c",
-    "ticks" : 3115
+    "stateHash" : "9cb3e0aafbe4ca9fc3dc4191ade4d46d58fd136173f50f4122a583f4db631445",
+    "ticks" : 3107
   },
-  "initialStateHash" : "3caa28176a86bcee4eb5df3508c5b9213b5d38de711a344ffb747298fe182afd",
+  "initialStateHash" : "5f1ca5dbe380e282e4dbbc0e6b1fc68d086b344390b57d49a94690c4dec1a4f3",
   "number" : 19,
   "rank" : "Tame",
   "title" : "Lemming Productions Present..."

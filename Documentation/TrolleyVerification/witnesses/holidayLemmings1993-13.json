@@ -6,6 +6,7 @@
           "_0" : 10
         }
       },
+      "afterTick" : true,
       "tick" : 122
     },
     {
@@ -14,6 +15,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 122
     },
     {
@@ -23,7 +25,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 200
+      "afterTick" : true,
+      "tick" : 198
     },
     {
       "action" : {
@@ -32,7 +35,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 318
+      "afterTick" : true,
+      "tick" : 316
     },
     {
       "action" : {
@@ -41,7 +45,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 680
+      "afterTick" : true,
+      "tick" : 678
     },
     {
       "action" : {
@@ -50,7 +55,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 1312
+      "afterTick" : true,
+      "tick" : 1310
     }
   ],
   "expected" : {
@@ -58,10 +64,10 @@
     "released" : 80,
     "required" : 75,
     "saved" : 80,
-    "stateHash" : "126b76ea99fe27850050c730c369d19bcea71d9017b299b63a90b479148e3f54",
-    "ticks" : 2173
+    "stateHash" : "32ec2a97f514a033f3c5be9174cd58b6cf3b6d6b6015f9da3446fe7aa080eb90",
+    "ticks" : 2171
   },
-  "initialStateHash" : "0afe288a95c579d37bcb25d6808324218b85df06e5137c9e590d095ba15a20a1",
+  "initialStateHash" : "68cdb7cc9134d9cd54777032aca48ed4435899e3c6dc6e7ca5d7c5b255831d90",
   "number" : 14,
   "rank" : "Flurry",
   "title" : "Marshmallow Land"

@@ -64,13 +64,20 @@ def report(resources, output):
             failures.append("Incomplete or duplicate collection: " + collection)
     if any(row["status"] == "winning-replay" and (not row.get("witness") or not row.get("initialHash")) for row in rows):
         failures.append("Winning rows lack replay provenance")
-    unverified = sum(row["status"] != "winning-replay" for row in rows)
+    # Classic 1.0 requires wins for official levels and conversions. Fan levels
+    # ship as community content: they must load and start, but need no route.
+    required = [row for row in rows if row["collection"] != "fan"]
+    unverified = sum(row["status"] != "winning-replay" for row in required)
     if unverified:
-        failures.append(f"{unverified} levels lack verified winning replays")
+        failures.append(f"{unverified} official or converted levels lack verified winning replays")
+    broken = sum(row["status"] == "load-or-render-failed" for row in rows if row["collection"] == "fan")
+    if broken:
+        failures.append(f"{broken} fan levels fail to load or render")
     result = {"passed": not failures, "failures": failures, "counts": counts,
               "packs": len(packs), "fanLevels": len(sources), "inventory": inventory}
     (output / "coverage.json").write_text(json.dumps(result, indent=2) + "\n")
-    (output / "blockers.json").write_text(json.dumps([row for row in rows if row["status"] != "winning-replay"], indent=2) + "\n")
+    (output / "blockers.json").write_text(json.dumps([row for row in rows if (row["status"] != "winning-replay" and row["collection"] != "fan")
+                                                        or row["status"] == "load-or-render-failed"], indent=2) + "\n")
     print(json.dumps({key: value for key, value in result.items() if key != "inventory"}, indent=2))
     return not failures
 

@@ -6,6 +6,7 @@
           "_0" : 5
         }
       },
+      "afterTick" : true,
       "tick" : 23
     },
     {
@@ -15,7 +16,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 170
+      "afterTick" : true,
+      "tick" : 169
     },
     {
       "action" : {
@@ -24,7 +26,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 329
+      "afterTick" : true,
+      "tick" : 328
     },
     {
       "action" : {
@@ -33,7 +36,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 494
+      "afterTick" : true,
+      "tick" : 493
     },
     {
       "action" : {
@@ -42,7 +46,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 574
+      "afterTick" : true,
+      "tick" : 573
     },
     {
       "action" : {
@@ -50,6 +55,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 990
     },
     {
@@ -59,7 +65,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1002
+      "afterTick" : true,
+      "tick" : 1001
     },
     {
       "action" : {
@@ -68,7 +75,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 1455
+      "afterTick" : true,
+      "tick" : 1454
     },
     {
       "action" : {
@@ -77,7 +85,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1809
+      "afterTick" : true,
+      "tick" : 1808
     },
     {
       "action" : {
@@ -86,7 +95,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 2060
+      "afterTick" : true,
+      "tick" : 2059
     },
     {
       "action" : {
@@ -95,7 +105,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 2411
+      "afterTick" : true,
+      "tick" : 2410
     },
     {
       "action" : {
@@ -104,7 +115,8 @@
           "skill" : "miner"
         }
       },
-      "tick" : 2573
+      "afterTick" : true,
+      "tick" : 2570
     },
     {
       "action" : {
@@ -113,7 +125,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 2899
+      "afterTick" : true,
+      "tick" : 2896
     },
     {
       "action" : {
@@ -122,7 +135,8 @@
           "skill" : "miner"
         }
       },
-      "tick" : 3178
+      "afterTick" : true,
+      "tick" : 3177
     },
     {
       "action" : {
@@ -131,7 +145,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 3340
+      "afterTick" : true,
+      "tick" : 3336
     },
     {
       "action" : {
@@ -140,7 +155,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 3543
+      "afterTick" : true,
+      "tick" : 3539
     },
     {
       "action" : {
@@ -149,7 +165,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 3746
+      "afterTick" : true,
+      "tick" : 3742
     },
     {
       "action" : {
@@ -158,7 +175,8 @@
           "skill" : "miner"
         }
       },
-      "tick" : 4415
+      "afterTick" : true,
+      "tick" : 4439
     },
     {
       "action" : {
@@ -167,7 +185,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 4987
+      "afterTick" : true,
+      "tick" : 5011
     },
     {
       "action" : {
@@ -176,7 +195,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 5190
+      "afterTick" : true,
+      "tick" : 5214
     },
     {
       "action" : {
@@ -185,7 +205,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 6097
+      "afterTick" : true,
+      "tick" : 6094
     },
     {
       "action" : {
@@ -194,7 +215,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 6531
+      "afterTick" : true,
+      "tick" : 6528
     },
     {
       "action" : {
@@ -203,7 +225,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 6608
+      "afterTick" : true,
+      "tick" : 6605
     },
     {
       "action" : {
@@ -212,7 +235,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 7074
+      "afterTick" : true,
+      "tick" : 7071
     },
     {
       "action" : {
@@ -221,7 +245,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 7365
+      "afterTick" : true,
+      "tick" : 7362
     }
   ],
   "expected" : {
@@ -229,10 +254,10 @@
     "released" : 50,
     "required" : 25,
     "saved" : 35,
-    "stateHash" : "59322ec121cb3b61716ccc5d5f0dc4e244b87d9b5c473896783dc88ec060d0d8",
-    "ticks" : 8678
+    "stateHash" : "0ce5321b88e681f93ad2d3f06f24a31406e81dc7836c8ddf9b47039629eb0d39",
+    "ticks" : 8610
   },
-  "initialStateHash" : "5feb98a14d3120f864d90b60be84a0ade3fce6049152ab26bc59ac2308d342ed",
+  "initialStateHash" : "e6d3bc5915aba1f5e2523323c61c127e2e7645ac54b28b18e0dbd636e5fa05d5",
   "number" : 3,
   "rank" : "Hail",
   "title" : "And a Happy New Year!"

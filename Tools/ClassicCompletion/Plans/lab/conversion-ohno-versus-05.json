@@ -1,0 +1,63 @@
+[
+  {
+    "skill": "climber",
+    "id": 0
+  },
+  {
+    "skill": "blocker",
+    "id": 0,
+    "x": 1000,
+    "y": 59
+  },
+  {
+    "skill": "climber",
+    "id": 1,
+    "x": 890,
+    "direction": 1
+  },
+  {
+    "skill": "miner",
+    "id": 1,
+    "x": 988,
+    "direction": -1,
+    "y": 59
+  },
+  {
+    "skill": "builder",
+    "x": 844,
+    "y": 136,
+    "direction": 1,
+    "action": "walking"
+  },
+  {
+    "skill": "builder",
+    "id": -1,
+    "action": "shrugging"
+  },
+  {
+    "skill": "builder",
+    "id": -1,
+    "action": "shrugging"
+  },
+  {
+    "skill": "builder",
+    "x": 892,
+    "direction": 1,
+    "action": "walking",
+    "tick": 1750
+  },
+  {
+    "skill": "miner",
+    "x": 991,
+    "y": 59,
+    "direction": 1,
+    "action": "walking",
+    "tick": 2000
+  },
+  {
+    "skill": "builder",
+    "id": -1,
+    "xMin": 997,
+    "action": "mining"
+  }
+]

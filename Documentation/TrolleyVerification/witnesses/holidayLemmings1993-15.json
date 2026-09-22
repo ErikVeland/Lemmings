@@ -6,6 +6,7 @@
           "_0" : 20
         }
       },
+      "afterTick" : true,
       "tick" : 44
     },
     {
@@ -14,6 +15,7 @@
           "_0" : 92
         }
       },
+      "afterTick" : true,
       "tick" : 67
     },
     {
@@ -23,7 +25,8 @@
           "skill" : "blocker"
         }
       },
-      "tick" : 505
+      "afterTick" : true,
+      "tick" : 504
     },
     {
       "action" : {
@@ -32,7 +35,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 883
+      "afterTick" : true,
+      "tick" : 882
     },
     {
       "action" : {
@@ -41,6 +45,7 @@
           "skill" : "builder"
         }
       },
+      "afterTick" : true,
       "tick" : 1222
     },
     {
@@ -50,7 +55,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 1460
+      "afterTick" : true,
+      "tick" : 1459
     },
     {
       "action" : {
@@ -59,7 +65,8 @@
           "skill" : "blocker"
         }
       },
-      "tick" : 1950
+      "afterTick" : true,
+      "tick" : 1947
     },
     {
       "action" : {
@@ -68,7 +75,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 2031
+      "afterTick" : true,
+      "tick" : 2301
     },
     {
       "action" : {
@@ -77,7 +85,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 2355
+      "afterTick" : true,
+      "tick" : 2625
     },
     {
       "action" : {
@@ -86,7 +95,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 2599
+      "afterTick" : true,
+      "tick" : 2869
     }
   ],
   "expected" : {
@@ -94,10 +104,10 @@
     "released" : 50,
     "required" : 45,
     "saved" : 48,
-    "stateHash" : "3d4ece7c452268ef45b578d259ff6f349cbceffb4b0d3d12ad78243e14098d17",
+    "stateHash" : "25ad10e8c0bf2253f1fccdeaedc5ff9ebed834199cf06d55bee1e70eced46f83",
     "ticks" : 4080
   },
-  "initialStateHash" : "55f64276fa7c2b11603a0790a8b56706a78255c66a3504acf373c0db66d851ca",
+  "initialStateHash" : "18bf2b4c32a66eca1aa923aa9cefdad184eedcd607fa1a77b022b85466823587",
   "number" : 16,
   "rank" : "Flurry",
   "title" : "The Long Way Around"

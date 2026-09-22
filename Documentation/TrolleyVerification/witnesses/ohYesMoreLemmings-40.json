@@ -1,0 +1,36 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 65
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 161
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 50,
+    "required" : 45,
+    "saved" : 50,
+    "stateHash" : "9c46529803ca50f8dc05686495a03abc0bb5fd3d768b50e95e19ca002bc207ec",
+    "ticks" : 2761
+  },
+  "initialStateHash" : "fa5036a7f826d3bd96ed83f2fb784b3e177db6bb5df8949673ddf1a9eb5901be",
+  "number" : 11,
+  "rank" : "Mega Drive Sunsoft",
+  "title" : "Turn around and look."
+}

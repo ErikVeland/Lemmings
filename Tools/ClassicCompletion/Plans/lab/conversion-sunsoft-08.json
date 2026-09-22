@@ -1,0 +1,68 @@
+[
+  {
+    "skill": "basher",
+    "notID": [
+      0
+    ],
+    "x": 666,
+    "direction": 1,
+    "yMax": 93,
+    "tick": 530,
+    "async": true
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "x": 608,
+    "direction": 1
+  },
+  {
+    "skill": "basher",
+    "id": 0,
+    "x": 630,
+    "direction": 1
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "xMin": 664,
+    "xMax": 668,
+    "direction": 1
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "x": 688,
+    "direction": 1
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "x": 716,
+    "direction": 1
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "x": 744,
+    "direction": 1
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "action": "shrugging"
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "x": 812,
+    "direction": 1
+  },
+  {
+    "skill": "builder",
+    "x": 666,
+    "direction": 1,
+    "tick": 1800,
+    "async": true
+  }
+]

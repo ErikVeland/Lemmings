@@ -6,6 +6,7 @@
           "_0" : 1
         }
       },
+      "afterTick" : true,
       "tick" : 8
     },
     {
@@ -14,6 +15,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 8
     },
     {
@@ -22,6 +24,7 @@
           "_0" : 97
         }
       },
+      "afterTick" : true,
       "tick" : 61
     },
     {
@@ -30,6 +33,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 64
     },
     {
@@ -38,6 +42,7 @@
           "_0" : 1
         }
       },
+      "afterTick" : true,
       "tick" : 68
     },
     {
@@ -47,7 +52,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 82
+      "afterTick" : true,
+      "tick" : 81
     },
     {
       "action" : {
@@ -56,7 +62,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 114
+      "afterTick" : true,
+      "tick" : 113
     },
     {
       "action" : {
@@ -65,7 +72,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 117
+      "afterTick" : true,
+      "tick" : 116
     },
     {
       "action" : {
@@ -74,7 +82,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 150
+      "afterTick" : true,
+      "tick" : 149
     },
     {
       "action" : {
@@ -83,7 +92,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 154
+      "afterTick" : true,
+      "tick" : 153
     },
     {
       "action" : {
@@ -92,7 +102,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 184
+      "afterTick" : true,
+      "tick" : 183
     },
     {
       "action" : {
@@ -101,7 +112,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 218
+      "afterTick" : true,
+      "tick" : 217
     },
     {
       "action" : {
@@ -110,7 +122,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 371
+      "afterTick" : true,
+      "tick" : 370
     },
     {
       "action" : {
@@ -119,7 +132,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 391
+      "afterTick" : true,
+      "tick" : 390
     },
     {
       "action" : {
@@ -127,6 +141,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 460
     }
   ],
@@ -135,10 +150,10 @@
     "released" : 80,
     "required" : 80,
     "saved" : 80,
-    "stateHash" : "e4ff3c911e31375468bc1ab0032c75a3fa27b123a949636d44bb582d0fa0b566",
-    "ticks" : 1007
+    "stateHash" : "afba35b8492706b0e48ce5b5481fb74a1c3dd4baa754ea903f30c0e921ec0325",
+    "ticks" : 1006
   },
-  "initialStateHash" : "1cb4fc79f46a169ca3f89af6d9a35459ba92901acf1338104ce226bb304cfece",
+  "initialStateHash" : "bd480815460ecc15df79b0ca9aee995dd969c260f9f20565d2521b0acd6fe2d3",
   "number" : 12,
   "rank" : "Havoc",
   "title" : "It`s all a matter of timing"

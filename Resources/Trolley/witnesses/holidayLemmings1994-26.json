@@ -8,17 +8,17 @@
         }
       },
       "afterTick" : true,
-      "tick" : 237
+      "tick" : 236
     },
     {
       "action" : {
         "assign" : {
-          "lemmingID" : 2,
+          "lemmingID" : 3,
           "skill" : "miner"
         }
       },
       "afterTick" : true,
-      "tick" : 320
+      "tick" : 365
     },
     {
       "action" : {
@@ -28,7 +28,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 664
+      "tick" : 663
     },
     {
       "action" : {
@@ -38,7 +38,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 788
+      "tick" : 787
     },
     {
       "action" : {
@@ -48,7 +48,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 1221
+      "tick" : 1220
     },
     {
       "action" : {
@@ -58,7 +58,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 1225
+      "tick" : 1224
     },
     {
       "action" : {
@@ -68,7 +68,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 1342
+      "tick" : 1341
     },
     {
       "action" : {
@@ -78,47 +78,47 @@
         }
       },
       "afterTick" : true,
-      "tick" : 1791
+      "tick" : 1790
     },
     {
       "action" : {
         "assign" : {
-          "lemmingID" : 15,
+          "lemmingID" : 28,
           "skill" : "builder"
         }
       },
       "afterTick" : true,
-      "tick" : 1795
+      "tick" : 1797
     },
     {
       "action" : {
         "assign" : {
-          "lemmingID" : 15,
+          "lemmingID" : 28,
           "skill" : "builder"
         }
       },
       "afterTick" : true,
-      "tick" : 1987
+      "tick" : 1989
     },
     {
       "action" : {
         "assign" : {
-          "lemmingID" : 15,
+          "lemmingID" : 28,
           "skill" : "builder"
         }
       },
       "afterTick" : true,
-      "tick" : 2179
+      "tick" : 2181
     },
     {
       "action" : {
         "assign" : {
-          "lemmingID" : 15,
+          "lemmingID" : 28,
           "skill" : "builder"
         }
       },
       "afterTick" : true,
-      "tick" : 2371
+      "tick" : 2373
     },
     {
       "action" : {
@@ -127,7 +127,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 2372
+      "tick" : 2374
     }
   ],
   "expected" : {
@@ -135,10 +135,10 @@
     "released" : 70,
     "required" : 70,
     "saved" : 70,
-    "stateHash" : "ce0724d37cac842c41bfc27fc3f47ac71e813d396c1f07fb665e2923a6ef969d",
-    "ticks" : 3315
+    "stateHash" : "e2511618675ff0ac30b9fb902c424c6bb663f14c544045fc15500fd01c52d01c",
+    "ticks" : 3316
   },
-  "initialStateHash" : "27ac4ea4b991d209068474dd50bb75241ce9e928afacf65a10f18ce7c11a1e97",
+  "initialStateHash" : "90b27ddef569160016a0032b0a713e582fe5e46d760b49ab8c98d1f9c02693ec",
   "number" : 11,
   "rank" : "Hail",
   "title" : "Emmings!  (No L)"

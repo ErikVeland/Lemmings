@@ -1,0 +1,116 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "climber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 54
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "blocker"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 464
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "climber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 870
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1131
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 7,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1142
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 7,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1334
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 7,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1526
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 18,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1774
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 32,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2006
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 32,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2033
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 40,
+    "required" : 40,
+    "saved" : 40,
+    "stateHash" : "f97cfe7d07ec1fbfff4acbeafb2971cc1805a6a37ac58966b5197a11902dd9da",
+    "ticks" : 2870
+  },
+  "initialStateHash" : "ee063f8274d793fe722f3b3cc4612dbbfe694d5beb573e3f2d92726d08ffbaa0",
+  "number" : 5,
+  "rank" : "Oh No! More Lemmings Versus",
+  "title" : "Showdown!"
+}

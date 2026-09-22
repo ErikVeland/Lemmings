@@ -6,6 +6,7 @@
           "_0" : 30
         }
       },
+      "afterTick" : true,
       "tick" : 211
     },
     {
@@ -15,7 +16,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 225
+      "afterTick" : true,
+      "tick" : 224
     },
     {
       "action" : {
@@ -24,7 +26,8 @@
           "skill" : "miner"
         }
       },
-      "tick" : 351
+      "afterTick" : true,
+      "tick" : 350
     },
     {
       "action" : {
@@ -33,7 +36,8 @@
           "skill" : "blocker"
         }
       },
-      "tick" : 409
+      "afterTick" : true,
+      "tick" : 408
     },
     {
       "action" : {
@@ -42,7 +46,8 @@
           "skill" : "bomber"
         }
       },
-      "tick" : 862
+      "afterTick" : true,
+      "tick" : 861
     },
     {
       "action" : {
@@ -51,7 +56,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 1016
+      "afterTick" : true,
+      "tick" : 1015
     },
     {
       "action" : {
@@ -59,6 +65,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 1030
     }
   ],
@@ -67,10 +74,10 @@
     "released" : 50,
     "required" : 47,
     "saved" : 48,
-    "stateHash" : "768925ea1742b9e542c061be9979deecacfe0eeef1b184ff524adda88636f7c1",
-    "ticks" : 1760
+    "stateHash" : "9a8fb51295772becb8e74d402b73794cfe9a9f8e8ba0225ba31e548a0c694249",
+    "ticks" : 1759
   },
-  "initialStateHash" : "66d23243f39de13556720b734f7ed5705ba96a62e4b818d7c0e76061ba99654f",
+  "initialStateHash" : "307348004e9b63be6e335df2a404a55603a7373266f430dd9ae2e3070b85c0e7",
   "number" : 16,
   "rank" : "Blizzard",
   "title" : "The Next Lemeration"

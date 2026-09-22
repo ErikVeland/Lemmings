@@ -1,0 +1,56 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "digger"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 65
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 90
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 94
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 125
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 3,
+    "required" : 3,
+    "saved" : 3,
+    "stateHash" : "b8ec850e1abb34de2669c3daa6ee499153aadbc6dc1b2f590aad59562d2590d5",
+    "ticks" : 220
+  },
+  "initialStateHash" : "83f3b865c77b65c68531ab2e2fe3721887482632a20977d13d33f01c4261e2c1",
+  "number" : 19,
+  "rank" : "Mega Drive Sunsoft",
+  "title" : "Let's go camping."
+}

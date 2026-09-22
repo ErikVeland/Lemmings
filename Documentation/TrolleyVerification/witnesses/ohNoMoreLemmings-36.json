@@ -125,10 +125,10 @@
     "released" : 50,
     "required" : 49,
     "saved" : 49,
-    "stateHash" : "97e035e69a2110417134d9b8c32c6bc06014c195a14f852a61b096b193124e58",
-    "ticks" : 2896
+    "stateHash" : "f5d6483ea1b4737e1385c24275e1499f6266b371dde654a32a1afea32cff87d8",
+    "ticks" : 2893
   },
-  "initialStateHash" : "fd4d719ad3a5b67f4fd6f847091807775d57c523882f39a88c49d07358a4f430",
+  "initialStateHash" : "3b33bb825a6f3ad1e6eb95afd69ad225c418e3c757cb21fa6aa1e950d703a6fe",
   "number" : 17,
   "rank" : "Crazy",
   "title" : "DIGGING FOR VICTORY"

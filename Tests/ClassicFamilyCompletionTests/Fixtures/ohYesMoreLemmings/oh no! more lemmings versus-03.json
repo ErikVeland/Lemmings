@@ -1,0 +1,26 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 248
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 40,
+    "required" : 40,
+    "saved" : 40,
+    "stateHash" : "e86f6cd98a52e2afbfe20fd57f537a77a36631bebdfee1afd59ffe77f4a21ac1",
+    "ticks" : 2445
+  },
+  "initialStateHash" : "5a33134e06cbe28e304c366aa76c104ef9f4cdb6249c91dcafb9e07c904ae435",
+  "number" : 3,
+  "rank" : "Oh No! More Lemmings Versus",
+  "title" : "Confrontation"
+}

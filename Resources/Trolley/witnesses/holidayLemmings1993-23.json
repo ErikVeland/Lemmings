@@ -8,7 +8,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 198
+      "tick" : 197
     },
     {
       "action" : {
@@ -18,27 +18,27 @@
         }
       },
       "afterTick" : true,
-      "tick" : 322
+      "tick" : 321
     },
     {
       "action" : {
         "assign" : {
-          "lemmingID" : 2,
+          "lemmingID" : 3,
           "skill" : "basher"
         }
       },
       "afterTick" : true,
-      "tick" : 333
+      "tick" : 361
     },
     {
       "action" : {
         "assign" : {
-          "lemmingID" : 2,
+          "lemmingID" : 5,
           "skill" : "builder"
         }
       },
       "afterTick" : true,
-      "tick" : 475
+      "tick" : 486
     },
     {
       "action" : {
@@ -54,10 +54,10 @@
     "released" : 80,
     "required" : 80,
     "saved" : 80,
-    "stateHash" : "ab2c52d187a6c7a5a936959a868820fe16a4b9a8dee175a72ed97dbe0dc3bc92",
-    "ticks" : 1704
+    "stateHash" : "04c0aecc9a75dbf6b0625d905985f6fe93f01e18843ea22bb3518fa57c0b1bbb",
+    "ticks" : 1699
   },
-  "initialStateHash" : "c0c508700993fb5dc1733c023a76902d138016aaa64056c93a1747d74bf50994",
+  "initialStateHash" : "b9784054fdb75c2ff0364706d22248de6fe29980a8353ab268e4ba7910263d29",
   "number" : 8,
   "rank" : "Blizzard",
   "title" : "Presents of Mind II"

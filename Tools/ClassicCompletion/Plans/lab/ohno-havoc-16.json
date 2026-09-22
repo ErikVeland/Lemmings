@@ -1,0 +1,72 @@
+[
+  {
+    "skill": "blocker",
+    "id": 0,
+    "x": 807,
+    "y": 117
+  },
+  {
+    "skill": "climber",
+    "id": 1
+  },
+  {
+    "skill": "miner",
+    "id": 1,
+    "x": 751,
+    "yMax": 35
+  },
+  {
+    "skill": "builder",
+    "id": 1,
+    "xMax": 737,
+    "action": "mining"
+  },
+  {
+    "skill": "miner",
+    "id": 1,
+    "direction": 1,
+    "action": "walking"
+  },
+  {
+    "tick": 117,
+    "skill": "builder",
+    "exactTick": true,
+    "id": 2,
+    "async": true
+  },
+  {
+    "tick": 153,
+    "async": true,
+    "skill": "builder",
+    "id": 2,
+    "exactTick": true
+  },
+  {
+    "async": true,
+    "id": 2,
+    "tick": 231,
+    "exactTick": true,
+    "skill": "builder"
+  },
+  {
+    "tick": 336,
+    "skill": "builder",
+    "async": true,
+    "exactTick": true,
+    "id": 2
+  },
+  {
+    "async": true,
+    "id": 2,
+    "tick": 416,
+    "skill": "builder",
+    "exactTick": true
+  },
+  {
+    "tick": 432,
+    "skill": "builder",
+    "exactTick": true,
+    "async": true,
+    "id": 2
+  }
+]

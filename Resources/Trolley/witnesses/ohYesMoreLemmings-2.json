@@ -1,0 +1,46 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 95
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 110
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 125
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 100,
+    "required" : 80,
+    "saved" : 100,
+    "stateHash" : "025a6e1dead83db5b3e21d8990e7349f48766635b7265bf5c794d4662bb85498",
+    "ticks" : 1688
+  },
+  "initialStateHash" : "41a748b5595c3aafe10f1f580f149287597b09732ef5e698e755454adf0a3960",
+  "number" : 3,
+  "rank" : "Lemmings Versus",
+  "title" : "Still everything to play for"
+}

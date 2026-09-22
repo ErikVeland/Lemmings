@@ -40,6 +40,23 @@ with tempfile.TemporaryDirectory(prefix='lemmings-hint-export-') as temporary:
     assert output.read_bytes() == before, 'Failed export replaced the existing catalogue'
     shutil.copy2(root / 'Resources/Hints/solutions.json', solutions)
 
+    routes = json.loads(solutions.read_text())
+    conversion = json.loads((root / 'Tests/ClassicFamilyCompletionTests/Fixtures/ohYesMoreLemmings/mega drive sunsoft-30.json').read_text())
+    routes[conversion['initialStateHash']]['expected']['saved'] -= 1
+    solutions.write_text(json.dumps(routes))
+    result = run()
+    assert result.returncode != 0, 'Changed conversion outcome was accepted'
+    assert output.read_bytes() == before, 'Failed conversion export replaced the catalogue'
+    shutil.copy2(root / 'Resources/Hints/solutions.json', solutions)
+
+    routes = json.loads(solutions.read_text())
+    del routes[conversion['initialStateHash']]
+    solutions.write_text(json.dumps(routes))
+    result = run()
+    assert result.returncode != 0, 'Missing conversion route was accepted'
+    assert output.read_bytes() == before, 'Incomplete export replaced the catalogue'
+    shutil.copy2(root / 'Resources/Hints/solutions.json', solutions)
+
     if args.played_route:
         route = json.loads(args.played_route.read_text())
         catalogue_path = proofs / 'verified-maxima.json'

@@ -15,10 +15,10 @@
     "released" : 80,
     "required" : 50,
     "saved" : 80,
-    "stateHash" : "5f0c174dc82b81979e7fc812d360d661a43ec249bcdab74bae8cbee9967170e8",
-    "ticks" : 3362
+    "stateHash" : "efc5472305dc9ef7d8d3f302df31eeea54236cdb887b9888bd783ba45daeeb51",
+    "ticks" : 3360
   },
-  "initialStateHash" : "a97346cb3a679da8558e2d6af03fc23321a8ba3981b087d4bb5236fa3be2361e",
+  "initialStateHash" : "69a4f26e4fe1f45430debc901c821631e9ec52795c0ee38f9dd16f5b0bf268a4",
   "number" : 3,
   "rank" : "Flurry",
   "title" : "Holiday Mining"

@@ -6,6 +6,7 @@
           "_0" : 50
         }
       },
+      "afterTick" : true,
       "tick" : 46
     },
     {
@@ -15,7 +16,8 @@
           "skill" : "blocker"
         }
       },
-      "tick" : 140
+      "afterTick" : true,
+      "tick" : 139
     },
     {
       "action" : {
@@ -23,6 +25,7 @@
           "_0" : 67
         }
       },
+      "afterTick" : true,
       "tick" : 199
     },
     {
@@ -31,6 +34,7 @@
           "_0" : 50
         }
       },
+      "afterTick" : true,
       "tick" : 227
     },
     {
@@ -39,6 +43,7 @@
           "_0" : 67
         }
       },
+      "afterTick" : true,
       "tick" : 359
     },
     {
@@ -47,6 +52,7 @@
           "_0" : 50
         }
       },
+      "afterTick" : true,
       "tick" : 390
     },
     {
@@ -55,6 +61,7 @@
           "_0" : 67
         }
       },
+      "afterTick" : true,
       "tick" : 519
     },
     {
@@ -63,6 +70,7 @@
           "_0" : 50
         }
       },
+      "afterTick" : true,
       "tick" : 547
     },
     {
@@ -71,6 +79,7 @@
           "_0" : 67
         }
       },
+      "afterTick" : true,
       "tick" : 678
     },
     {
@@ -79,6 +88,7 @@
           "_0" : 71
         }
       },
+      "afterTick" : true,
       "tick" : 708
     },
     {
@@ -87,6 +97,7 @@
           "_0" : 50
         }
       },
+      "afterTick" : true,
       "tick" : 747
     },
     {
@@ -96,7 +107,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 902
+      "afterTick" : true,
+      "tick" : 901
     },
     {
       "action" : {
@@ -105,7 +117,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 932
+      "afterTick" : true,
+      "tick" : 931
     },
     {
       "action" : {
@@ -114,7 +127,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 969
+      "afterTick" : true,
+      "tick" : 968
     },
     {
       "action" : {
@@ -123,7 +137,8 @@
           "skill" : "blocker"
         }
       },
-      "tick" : 1256
+      "afterTick" : true,
+      "tick" : 1255
     },
     {
       "action" : {
@@ -132,7 +147,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 1313
+      "afterTick" : true,
+      "tick" : 1312
     },
     {
       "action" : {
@@ -141,7 +157,8 @@
           "skill" : "blocker"
         }
       },
-      "tick" : 1351
+      "afterTick" : true,
+      "tick" : 1348
     },
     {
       "action" : {
@@ -150,7 +167,8 @@
           "skill" : "blocker"
         }
       },
-      "tick" : 1369
+      "afterTick" : true,
+      "tick" : 1364
     },
     {
       "action" : {
@@ -159,7 +177,8 @@
           "skill" : "blocker"
         }
       },
-      "tick" : 1381
+      "afterTick" : true,
+      "tick" : 1380
     },
     {
       "action" : {
@@ -168,7 +187,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 1416
+      "afterTick" : true,
+      "tick" : 1415
     },
     {
       "action" : {
@@ -177,7 +197,8 @@
           "skill" : "blocker"
         }
       },
-      "tick" : 1438
+      "afterTick" : true,
+      "tick" : 1435
     },
     {
       "action" : {
@@ -186,7 +207,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 1476
+      "afterTick" : true,
+      "tick" : 1475
     },
     {
       "action" : {
@@ -194,6 +216,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 1504
     },
     {
@@ -203,7 +226,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 1515
+      "afterTick" : true,
+      "tick" : 1514
     }
   ],
   "expected" : {
@@ -211,10 +235,10 @@
     "released" : 80,
     "required" : 75,
     "saved" : 80,
-    "stateHash" : "7b9b88546f18222f82fd5518a0a62ccd2bbff04cba5f4a971cfdeeac3fed1e4e",
-    "ticks" : 2135
+    "stateHash" : "52b56afa74513744e3ce8719390e0107242718e866b5b434f9f7a4451e0a92e2",
+    "ticks" : 2134
   },
-  "initialStateHash" : "cb56f6218deea55e9beafe97c63f1d3f4458650a0623d1c962dabfce17d376f3",
+  "initialStateHash" : "eebe11997a9cbbcc00e906e0d0e7d70fe1a84b575c823d7e8a3c62c7bed1f13a",
   "number" : 3,
   "rank" : "Frost",
   "title" : "CindyLand"

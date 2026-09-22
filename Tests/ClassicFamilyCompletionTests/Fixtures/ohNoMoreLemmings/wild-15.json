@@ -8,7 +8,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 102
+      "tick" : 101
     },
     {
       "action" : {
@@ -18,7 +18,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 151
+      "tick" : 150
     },
     {
       "action" : {
@@ -28,17 +28,17 @@
         }
       },
       "afterTick" : true,
-      "tick" : 223
+      "tick" : 222
     },
     {
       "action" : {
         "assign" : {
-          "lemmingID" : 2,
+          "lemmingID" : 3,
           "skill" : "builder"
         }
       },
       "afterTick" : true,
-      "tick" : 419
+      "tick" : 469
     },
     {
       "action" : {
@@ -48,7 +48,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 600
+      "tick" : 599
     },
     {
       "action" : {
@@ -58,7 +58,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 1023
+      "tick" : 1022
     },
     {
       "action" : {
@@ -77,7 +77,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 1238
+      "tick" : 1237
     },
     {
       "action" : {
@@ -87,27 +87,27 @@
         }
       },
       "afterTick" : true,
-      "tick" : 1391
+      "tick" : 1390
     },
     {
       "action" : {
         "assign" : {
-          "lemmingID" : 6,
+          "lemmingID" : 7,
           "skill" : "blocker"
         }
       },
       "afterTick" : true,
-      "tick" : 1741
+      "tick" : 1791
     },
     {
       "action" : {
         "assign" : {
-          "lemmingID" : 6,
+          "lemmingID" : 7,
           "skill" : "bomber"
         }
       },
       "afterTick" : true,
-      "tick" : 2200
+      "tick" : 2160
     }
   ],
   "expected" : {
@@ -115,10 +115,10 @@
     "released" : 50,
     "required" : 40,
     "saved" : 40,
-    "stateHash" : "d4b1f5d8ac4780e5559e71a6352657c342898b20dac22344d4c4ce1c32bfee74",
+    "stateHash" : "ac796e609fdb9cd206a01b1bdcb6247d4668433c354a7dc32b32b8c59206d735",
     "ticks" : 3060
   },
-  "initialStateHash" : "da77b11a35cd5114e42d43060b3fe9a59b2e47875a99a9643e970be84700baf0",
+  "initialStateHash" : "ca56c98e057dda0ada10f9997fd27c90716b23fdc28473ad3a87c28b6b6a90a5",
   "number" : 15,
   "rank" : "Wild",
   "title" : "THE SILENCE OF THE LEMMINGS"

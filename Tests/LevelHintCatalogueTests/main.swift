@@ -7,12 +7,18 @@ func require(_ condition: @autoclosure () -> Bool, _ message: String) {
 let root = URL(fileURLWithPath: CommandLine.arguments[1])
 let catalogue = try JSONDecoder().decode(LevelHintCatalogue.self,
     from: Data(contentsOf: root.appendingPathComponent("Resources/Hints/classic.json")))
-require(catalogue.levels.count == 284, "Expected the verified Classic-family catalogue")
+require(catalogue.levels.count == 350, "Expected all official and conversion hint decks")
+for (rank, count) in [("Lemmings Versus", 20), ("Oh No! More Lemmings Versus", 10), ("Mega Drive Sunsoft", 30)] {
+    require(Set(catalogue.levels.filter { $0.rank == rank }.map(\.number)) == Set(1...count),
+            "Incomplete conversion hints: \(rank)")
+}
 for rank in ["Fun", "Tricky", "Taxing", "Mayhem"] {
     require(Set(catalogue.levels.filter { $0.rank == rank }.map(\.number)) == Set(1...30),
         "Missing original hints for \(rank)")
 }
 require(Set(catalogue.levels.map(\.fingerprint)).count == catalogue.levels.count, "Ambiguous hint identities")
+let ropeBridge = catalogue.levels.first { $0.rank == "Lemmings Versus" && $0.number == 18 }
+require(ropeBridge?.opening.count == 1, "Off-canvas assignments must not create invalid map markers")
 for rank in ["Tame", "Crazy", "Wild", "Wicked", "Havoc", "Xmas", "Flurry", "Blizzard", "Frost", "Hail"] {
     require(catalogue.levels.contains { $0.rank == rank }, "Missing supported campaign rank \(rank)")
 }

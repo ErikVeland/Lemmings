@@ -1,0 +1,56 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "digger"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 115
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 404
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "digger"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 608
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1049
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 100,
+    "required" : 90,
+    "saved" : 100,
+    "stateHash" : "0ab99048f53d7e77e1d418a294dfc3f5d147635b151c448860209b53b9eda809",
+    "ticks" : 2915
+  },
+  "initialStateHash" : "ea222bbe7098244cd9b4bb5735bc1068c18cea17959afc1961cd160ea6738852",
+  "number" : 16,
+  "rank" : "Lemmings Versus",
+  "title" : "The Rubbish Dump"
+}

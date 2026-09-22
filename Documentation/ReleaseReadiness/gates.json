@@ -1,10 +1,21 @@
 [
   {
-    "area": "Classic campaign, fan and conversion completion",
+    "area": "Official Classic campaign completion",
     "priority": "P0",
-    "status": "open",
-    "exitCriteria": "Replay a winning route for every advertised Classic level, including the bundled fan corpus and conversions. Close the remaining Oh No! and Holiday routes. Verify continuous Full Quest progression, save/resume and final results. L2/L3 completion belongs to the sequel gate.",
-    "progress": "18 September: official Classic coverage is 286/292 (6 missing). Holiday 1993 and Holiday 1994 now have preserved wins for all 32 levels each. The remaining official gaps are 6 Oh No! routes: Crazy 20, Wild 9, Havoc 5, Havoc 7, Havoc 16 and Havoc 20. The 6,372-level audit from 15 September has 647 wins and zero load/start failures. There are 284 distinct hint decks and 287 distinct solution replays including conversions. The all-level requirement remains unchanged pending the owner’s scope decision. See OneZeroClosure-2026-09-15.md.",
+    "status": "closed",
+    "exitCriteria": "Require winning replays for all 292 official Classic levels. Verify their session recovery, continuous official-only progression, saved progress, release transitions and final results.",
+    "progress": "22 September: all 292 official routes pass strict replay verification under the corrected DOS rules. The real app session and recovery code passes 876 saved-run restores and 292 progress resumes, with all five official release transitions and the final quest result. Missing fixtures, altered outcomes and late inputs fail. The gate uses the six-release official-only library; full installed-library progression and physical UI/hardware journeys retain their separate gates. Reproduce with Scripts/verify-official-classic.sh. See OfficialClassicQuest.json and CampaignClosure-2026-09-22.md.",
+    "scopes": [
+      "all",
+      "classic-1.0"
+    ]
+  },
+  {
+    "area": "Fan and conversion completion",
+    "priority": "P0",
+    "status": "closed",
+    "exitCriteria": "Fan levels must load and start; they need no winning route (owner decision, 22 September 2026). Require winning routes and progression for all 60 Oh Yes! conversions. Sequel progression is tracked in the sequel gate.",
+    "progress": "22 September: all 6,020 retained fan levels load, render and start. All 60 conversions pass strict replay verification twice, with complete 20/10/30 rank inventories. The combined 352-level Classic quest passes 1,056 run restores, 352 progress resumes, six release transitions and the final result. Missing fixtures, altered outcomes and late inputs fail without replacing successful evidence. All 352 identities have bundled solution replays and verified hints. See ClassicConversionQuest.json, ClassicValidation-current.md and CampaignClosure-2026-09-22.md. L2/L3 remain previews under their separate gate.",
     "scopes": [
       "all",
       "classic-1.0"
@@ -84,7 +95,7 @@
       "all",
       "classic-1.0"
     ],
-    "progress": "17 September: the owner reports regular personal and external tester play, no reported issues in Classic or early L2, and positive feedback. Verified tiered hints now extend beyond the original 120 to 286 official Classic levels, represented by 284 unique decks. The app hint journeys and catalogue checks pass. Tester feedback does not identify a separate first-time-player study."
+    "progress": "22 September: verified hints cover all 352 official Classic and conversion levels in 350 unique decks. Fresh exports reproduce and reject changed official or conversion outcomes without replacing the catalogue. Hint tests check all conversion ranks and reject off-canvas markers. The owner previously reported regular personal and external tester play, no issues in Classic or early L2, and positive feedback. A separate first-time-player study remains unverified. See CampaignClosure-2026-09-22.md."
   },
   {
     "area": "iPhone and iPad",

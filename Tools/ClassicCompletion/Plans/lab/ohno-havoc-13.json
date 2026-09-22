@@ -1,0 +1,74 @@
+[
+  {
+    "rate": 5,
+    "tick": 18,
+    "async": true
+  },
+  {
+    "rate": 67,
+    "async": true,
+    "tick": 18
+  },
+  {
+    "async": true,
+    "skill": "blocker",
+    "id": 0,
+    "tick": 177,
+    "exactTick": true
+  },
+  {
+    "async": true,
+    "rate": 93,
+    "tick": 1595
+  },
+  {
+    "id": 79,
+    "async": true,
+    "tick": 1757,
+    "exactTick": true,
+    "skill": "miner"
+  },
+  {
+    "skill": "basher",
+    "async": true,
+    "tick": 2477,
+    "id": 79,
+    "exactTick": true
+  },
+  {
+    "id": 79,
+    "tick": 2976,
+    "exactTick": true,
+    "skill": "blocker",
+    "async": true
+  },
+  {
+    "exactTick": true,
+    "id": 78,
+    "skill": "builder",
+    "async": true,
+    "tick": 2982
+  },
+  {
+    "tick": 2999,
+    "exactTick": true,
+    "skill": "builder",
+    "id": 78,
+    "async": true
+  },
+  {
+    "id": 77,
+    "skill": "bomber",
+    "exactTick": true,
+    "async": true,
+    "tick": 3040
+  },
+  {
+    "tick": 3276,
+    "nuke": true
+  },
+  {
+    "nuke": true,
+    "tick": 3279
+  }
+]

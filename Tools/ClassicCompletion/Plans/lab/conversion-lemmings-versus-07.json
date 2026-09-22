@@ -1,0 +1,1 @@
+[{"skill": "basher", "id": 1, "x": 678, "direction": 1}, {"skill": "digger", "id": 1, "x": 696}, {"skill": "builder", "id": 1, "yMin": 90, "action": "digging"}, {"skill": "basher", "id": 1, "direction": -1, "action": "walking"}, {"skill": "basher", "x": 719, "y": 31, "direction": -1, "action": "walking"}]

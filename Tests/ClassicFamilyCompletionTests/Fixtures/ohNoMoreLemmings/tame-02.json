@@ -7,7 +7,8 @@
           "skill" : "miner"
         }
       },
-      "tick" : 192
+      "afterTick" : true,
+      "tick" : 191
     },
     {
       "action" : {
@@ -16,7 +17,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 232
+      "afterTick" : true,
+      "tick" : 230
     },
     {
       "action" : {
@@ -25,7 +27,8 @@
           "skill" : "miner"
         }
       },
-      "tick" : 280
+      "afterTick" : true,
+      "tick" : 279
     },
     {
       "action" : {
@@ -34,7 +37,8 @@
           "skill" : "digger"
         }
       },
-      "tick" : 288
+      "afterTick" : true,
+      "tick" : 286
     },
     {
       "action" : {
@@ -43,7 +47,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 320
+      "afterTick" : true,
+      "tick" : 311
     },
     {
       "action" : {
@@ -52,7 +57,8 @@
           "skill" : "miner"
         }
       },
-      "tick" : 336
+      "afterTick" : true,
+      "tick" : 335
     },
     {
       "action" : {
@@ -61,7 +67,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 352
+      "afterTick" : true,
+      "tick" : 350
     },
     {
       "action" : {
@@ -70,7 +77,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 792
+      "afterTick" : true,
+      "tick" : 791
     }
   ],
   "expected" : {
@@ -78,10 +86,10 @@
     "released" : 50,
     "required" : 25,
     "saved" : 49,
-    "stateHash" : "f58ea5c2297bc7ec79b5dc5a1ddbb9a934446b460829720f36941af000960014",
-    "ticks" : 2929
+    "stateHash" : "4d4b8ddc7d7cbb33c565cd3e03548307589696fd78a5393c2b6183ea74b802dc",
+    "ticks" : 2928
   },
-  "initialStateHash" : "389f366691c0e7cde4dd39c3f68343e8251548876319a4f0911af975126900f0",
+  "initialStateHash" : "cb64bff0610fc6b45d0c37ccc788962a515ef8f02b388f2fd0f7a3a6a7d4a55a",
   "number" : 2,
   "rank" : "Tame",
   "title" : "Rent-a-Lemming"

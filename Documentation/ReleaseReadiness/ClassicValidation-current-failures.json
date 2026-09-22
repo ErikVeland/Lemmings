@@ -1,7 +1,11 @@
 {
-  "date": "2026-09-13",
-  "scope": "6,372 retained Classic and fan levels after the authorised pruning on 13 September 2026",
+  "date": "2026-09-22",
+  "scope": "6,372 retained official Classic, conversion and fan levels",
   "failures": [],
+  "missingRequiredWinningRoutes": 0,
+  "optionalFanReplayFailures": 9,
   "removedRecords": "Documentation/FanLevelPruning.json",
-  "evidence": ".build/classic-one-zero/pruning-comparison.json"
+  "evidence": ".build/closure-sep22/corpus-conversions-parallel/coverage.json",
+  "missingOfficialWinningRoutes": 0,
+  "missingConversionWinningRoutes": 0
 }

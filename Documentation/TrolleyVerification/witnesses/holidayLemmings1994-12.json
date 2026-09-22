@@ -12,22 +12,22 @@
     {
       "action" : {
         "assign" : {
-          "lemmingID" : 63,
+          "lemmingID" : 62,
           "skill" : "builder"
         }
       },
       "afterTick" : true,
-      "tick" : 430
+      "tick" : 425
     },
     {
       "action" : {
         "assign" : {
-          "lemmingID" : 63,
+          "lemmingID" : 62,
           "skill" : "builder"
         }
       },
       "afterTick" : true,
-      "tick" : 678
+      "tick" : 673
     },
     {
       "action" : {
@@ -37,7 +37,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 900
+      "tick" : 899
     }
   ],
   "expected" : {
@@ -45,10 +45,10 @@
     "released" : 80,
     "required" : 80,
     "saved" : 80,
-    "stateHash" : "2d39f0d45ee6aabd6b08c0d512a6f2f7e18bd43e92caeb6ccc674a77f7ad8c0e",
-    "ticks" : 1457
+    "stateHash" : "09b341b44f753a32683e92857b6f88c81be1b2c5c5c9d2c491e0aa54c1adb85e",
+    "ticks" : 1460
   },
-  "initialStateHash" : "d3ac119213e9c58bf1abc492d16e6a97f0c4f37cd83de7d7be905dd5a39d189b",
+  "initialStateHash" : "3af89334833e894fdd8793fc8986e2539d97653c53889524e12a4bcfc50657d5",
   "number" : 13,
   "rank" : "Frost",
   "title" : "2 Minutes before midnight"

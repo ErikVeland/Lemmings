@@ -1,0 +1,45 @@
+[
+  {
+    "skill": "basher",
+    "id": 0,
+    "x": 778,
+    "y": 51,
+    "direction": 1
+  },
+  {
+    "skill": "miner",
+    "id": 1,
+    "direction": -1,
+    "action": "walking"
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "tick": 260
+  },
+  {
+    "skill": "climber",
+    "id": 1
+  },
+  {
+    "skill": "basher",
+    "id": 1,
+    "x": 577,
+    "y": 111,
+    "direction": -1
+  },
+  {
+    "skill": "climber",
+    "id": 5,
+    "tick": 400,
+    "async": true
+  },
+  {
+    "skill": "miner",
+    "id": 5,
+    "x": 535,
+    "y": 111,
+    "direction": 1,
+    "action": "walking"
+  }
+]

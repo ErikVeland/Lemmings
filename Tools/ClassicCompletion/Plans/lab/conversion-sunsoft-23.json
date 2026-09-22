@@ -1,0 +1,84 @@
+[
+  {
+    "skill": "basher",
+    "id": 1,
+    "x": 822,
+    "y": 72,
+    "direction": 1,
+    "async": true
+  },
+  {
+    "skill": "builder",
+    "id": 1,
+    "x": 854,
+    "direction": 1,
+    "async": true
+  },
+  {
+    "skill": "blocker",
+    "id": 4,
+    "x": 660,
+    "y": 124,
+    "direction": 1,
+    "action": "walking",
+    "async": true
+  },
+  {
+    "skill": "basher",
+    "id": 0,
+    "x": 665,
+    "y": 128,
+    "direction": -1,
+    "tick": 700,
+    "async": true
+  },
+  {
+    "skill": "basher",
+    "id": 0,
+    "x": 612,
+    "direction": 1,
+    "action": "walking"
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "x": 674,
+    "direction": 1
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "action": "shrugging"
+  },
+  {
+    "skill": "basher",
+    "id": 0,
+    "x": 722,
+    "direction": 1
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "x": 740,
+    "direction": 1
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "x": 758,
+    "direction": -1,
+    "action": "walking"
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "x": 720,
+    "direction": 1,
+    "action": "walking"
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "action": "shrugging"
+  }
+]

@@ -1,0 +1,187 @@
+[
+  {
+    "skill": "digger",
+    "notID": [
+      0
+    ],
+    "x": 758,
+    "yMax": 130,
+    "direction": -1,
+    "action": "walking",
+    "tick": 480,
+    "async": true
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "x": 760,
+    "direction": 1
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "direction": -1,
+    "action": "walking"
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "action": "shrugging"
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "x": 700,
+    "direction": -1
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "action": "shrugging"
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "action": "shrugging"
+  },
+  {
+    "skill": "basher",
+    "id": 0,
+    "x": 648,
+    "direction": -1
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "x": 642,
+    "direction": 1,
+    "yMin": 100
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "x": 650,
+    "direction": 1
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "action": "shrugging"
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "x": 678,
+    "direction": -1,
+    "action": "walking"
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "action": "shrugging"
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "direction": 1,
+    "action": "walking"
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "action": "shrugging"
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "action": "shrugging"
+  },
+  {
+    "skill": "builder",
+    "x": 764,
+    "direction": -1,
+    "tick": 3000,
+    "async": true
+  },
+  {
+    "skill": "builder",
+    "x": 686,
+    "y": 80,
+    "direction": 1,
+    "action": "walking",
+    "tick": 3100,
+    "async": true
+  },
+  {
+    "skill": "builder",
+    "x": 686,
+    "y": 79,
+    "direction": 1,
+    "action": "walking",
+    "tick": 3100,
+    "async": true
+  },
+  {
+    "skill": "builder",
+    "x": 686,
+    "y": 78,
+    "direction": 1,
+    "action": "walking",
+    "tick": 3100,
+    "async": true
+  },
+  {
+    "skill": "builder",
+    "x": 686,
+    "y": 77,
+    "direction": 1,
+    "action": "walking",
+    "tick": 3100,
+    "async": true
+  },
+  {
+    "skill": "builder",
+    "x": 686,
+    "y": 76,
+    "direction": 1,
+    "action": "walking",
+    "tick": 3100,
+    "async": true
+  },
+  {
+    "skill": "builder",
+    "x": 686,
+    "y": 75,
+    "direction": 1,
+    "action": "walking",
+    "tick": 3100,
+    "async": true
+  },
+  {
+    "skill": "builder",
+    "x": 686,
+    "y": 74,
+    "direction": 1,
+    "action": "walking",
+    "tick": 3100,
+    "async": true
+  },
+  {
+    "skill": "builder",
+    "x": 686,
+    "y": 73,
+    "direction": 1,
+    "action": "walking",
+    "tick": 3100,
+    "async": true
+  },
+  {
+    "skill": "basher",
+    "id": 55,
+    "direction": -1,
+    "action": "walking",
+    "x": 691,
+    "tick": 3600,
+    "async": true
+  }
+]

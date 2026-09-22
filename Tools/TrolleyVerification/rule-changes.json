@@ -1,0 +1,10 @@
+[
+  {
+    "id": "classic-dos-oh-no-mechanics",
+    "date": "2026-09-22",
+    "reason": "Oh No! More Lemmings and the later DOS releases spawn at hatch x+25, release two hatches A-B-A-B and keep a shrugging builder's shrug when it gets a climber. Targets measured under the original game's rules do not apply to these levels.",
+    "review": "Documentation/ReleaseReadiness/OhNoMechanics.md",
+    "gameIDs": ["ohNoMoreLemmings", "xmasLemmings1991", "xmasLemmings1992", "holidayLemmings1993", "holidayLemmings1994"],
+    "ranks": {"ohYesMoreLemmings": ["Oh No! More Lemmings Versus"]}
+  }
+]

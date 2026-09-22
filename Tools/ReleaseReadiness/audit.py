@@ -80,7 +80,7 @@ def main():
     parser.add_argument("--app-bundle", type=Path, default=ROOT / ".build/local/Ultimate Lemmings.app",
                         help="Resource bundle for fresh tests. Use a candidate inside this checkout.")
     parser.add_argument("--scope", choices=["all", "classic-1.0"], default="all",
-                        help="Classic 1.0 requires complete Classic/fan evidence and retains sequel regression checks.")
+                        help="Classic 1.0 requires official and conversion wins, fan load/start checks, and sequel regressions.")
     parser.add_argument("--require-closure", action="store_true", help="Fail while any tracked release gate is still open")
     args = parser.parse_args()
     app = args.app_bundle.resolve()
@@ -158,10 +158,20 @@ def main():
         verifier = library / "ClassicCompletion"
         data = ports / "lemmings_dos_1991-07-30"
         checks.append(run("original-120-solutions", [compile_command(ROOT / "Tools/ClassicCompletion/main.swift", verifier),
-            [verifier, "verify", data], [sys.executable, "Tests/ClassicDOSCompletionTests/test_gate.py", verifier, data]]))
-        environment = dict(os.environ, CAMPAIGN_TEST_LIBRARY_DIR=str(library))
+            [verifier, "verify", data], [sys.executable, "Tools/ClassicCompletion/report.py", "--check"],
+            [sys.executable, "Tests/ClassicDOSCompletionTests/test_gate.py", verifier, data]]))
+        environment = dict(os.environ, CAMPAIGN_TEST_LIBRARY_DIR=str(library),
+                           CAMPAIGN_TEST_RESOURCES=str(app / "Contents/Resources"))
         checks.append(run("additional-campaign-solutions", [campaign_command(args.scope)], environment))
         if args.scope == "classic-1.0":
+            quest_verifier = library / "OfficialClassicQuest"
+            checks.append(run("official-classic-quest", [
+                compile_command(ROOT / "Tools/OfficialClassicQuest/main.swift", quest_verifier,
+                                [ROOT / "Sources/LemmingsLocal/GameSession.swift",
+                                 ROOT / "Sources/LemmingsLocal/RunRecovery.swift"]),
+                [quest_verifier, ports, base / "official-classic-quest.json"],
+                [quest_verifier, ports, base / "classic-conversion-quest.json", "--include-conversions"],
+                [sys.executable, "Tests/ClassicFamilyCompletionTests/test_official_quest.py", quest_verifier, ports, "--include-conversions"]]))
             corpus = base / "classic-corpus"
             corpus.mkdir()
             corpus_verifier = library / "ClassicCorpus"

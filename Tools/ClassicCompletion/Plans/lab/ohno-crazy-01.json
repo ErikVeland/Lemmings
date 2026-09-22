@@ -1,0 +1,1 @@
+[{"rate": 1, "tick": 16}, {"skill": "blocker", "id": 0, "xMin": 729, "xMax": 729, "yMin": 117, "yMax": 121, "direction": 1, "action": "walking", "tick": 56}, {"rate": 19, "tick": 66}, {"rate": 53, "tick": 2142}, {"skill": "bomber", "id": 49, "action": "falling", "tick": 2205}, {"nuke": true, "tick": 2360}, {"nuke": true, "tick": 2362}]

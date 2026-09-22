@@ -1,0 +1,85 @@
+[
+  {
+    "skill": "builder",
+    "id": 0,
+    "x": 741,
+    "direction": 1,
+    "yMin": 135,
+    "async": true
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "x": 628,
+    "direction": 1,
+    "tick": 600
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "action": "shrugging"
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "x": 720,
+    "direction": -1
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "action": "shrugging"
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "x": 632,
+    "direction": 1,
+    "yMax": 70
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "action": "shrugging"
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "action": "shrugging"
+  },
+  {
+    "skill": "digger",
+    "id": 0,
+    "x": 796,
+    "yMax": 30
+  },
+  {
+    "skill": "blocker",
+    "x": 862,
+    "yMax": 75,
+    "direction": 1,
+    "async": true
+  },
+  {
+    "skill": "bomber",
+    "action": "blocking",
+    "tick": 3100,
+    "async": true
+  },
+  {
+    "skill": "builder",
+    "id": 1,
+    "x": 741,
+    "yMin": 135,
+    "direction": 1,
+    "async": true
+  },
+  {
+    "skill": "builder",
+    "id": 2,
+    "x": 741,
+    "yMin": 135,
+    "direction": 1,
+    "async": true
+  }
+]

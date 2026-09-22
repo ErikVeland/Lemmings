@@ -1,0 +1,111 @@
+[
+  {
+    "skill": "bomber",
+    "id": 0,
+    "tick": 92,
+    "exactTick": true,
+    "async": true
+  },
+  {
+    "skill": "bomber",
+    "id": 1,
+    "tick": 200,
+    "exactTick": true,
+    "async": true
+  },
+  {
+    "skill": "bomber",
+    "id": 3,
+    "tick": 306,
+    "exactTick": true,
+    "async": true
+  },
+  {
+    "skill": "bomber",
+    "id": 5,
+    "tick": 412,
+    "exactTick": true,
+    "async": true
+  },
+  {
+    "skill": "bomber",
+    "id": 7,
+    "tick": 658,
+    "exactTick": true,
+    "async": true
+  },
+  {
+    "skill": "bomber",
+    "id": 9,
+    "tick": 738,
+    "exactTick": true,
+    "async": true
+  },
+  {
+    "skill": "climber",
+    "id": 2,
+    "tick": 300,
+    "async": true
+  },
+  {
+    "skill": "floater",
+    "id": 2,
+    "tick": 300,
+    "async": true
+  },
+  {
+    "skill": "miner",
+    "id": 2,
+    "x": 709,
+    "direction": -1,
+    "action": "walking",
+    "tick": 550,
+    "async": true
+  },
+  {
+    "skill": "miner",
+    "x": 751,
+    "yMin": 105,
+    "yMax": 122,
+    "direction": 1,
+    "action": "walking",
+    "tick": 2000,
+    "async": true
+  },
+  {
+    "skill": "bomber",
+    "x": 948,
+    "yMax": 60,
+    "direction": 1,
+    "action": "walking",
+    "tick": 3000,
+    "async": true
+  },
+  {
+    "skill": "bomber",
+    "x": 960,
+    "yMax": 60,
+    "direction": 1,
+    "action": "walking",
+    "tick": 3900,
+    "async": true
+  },
+  {
+    "skill": "bomber",
+    "x": 956,
+    "yMax": 60,
+    "direction": 1,
+    "action": "walking",
+    "tick": 4800,
+    "async": true
+  },
+  {
+    "skill": "bomber",
+    "x": 972,
+    "yMax": 60,
+    "direction": 1,
+    "action": "walking",
+    "tick": 5600,
+    "async": true
+  }
+]

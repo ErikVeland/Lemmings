@@ -6,7 +6,8 @@
           "_0" : 5
         }
       },
-      "tick" : 19
+      "afterTick" : true,
+      "tick" : 18
     },
     {
       "action" : {
@@ -14,7 +15,8 @@
           "_0" : 67
         }
       },
-      "tick" : 19
+      "afterTick" : true,
+      "tick" : 18
     },
     {
       "action" : {
@@ -23,7 +25,8 @@
           "skill" : "blocker"
         }
       },
-      "tick" : 178
+      "afterTick" : true,
+      "tick" : 177
     },
     {
       "action" : {
@@ -31,7 +34,8 @@
           "_0" : 93
         }
       },
-      "tick" : 1596
+      "afterTick" : true,
+      "tick" : 1595
     },
     {
       "action" : {
@@ -40,7 +44,8 @@
           "skill" : "miner"
         }
       },
-      "tick" : 1758
+      "afterTick" : true,
+      "tick" : 1757
     },
     {
       "action" : {
@@ -49,7 +54,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 2479
+      "afterTick" : true,
+      "tick" : 2477
     },
     {
       "action" : {
@@ -58,7 +64,8 @@
           "skill" : "blocker"
         }
       },
-      "tick" : 2978
+      "afterTick" : true,
+      "tick" : 2976
     },
     {
       "action" : {
@@ -67,7 +74,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 2983
+      "afterTick" : true,
+      "tick" : 2982
     },
     {
       "action" : {
@@ -76,7 +84,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 3000
+      "afterTick" : true,
+      "tick" : 2999
     },
     {
       "action" : {
@@ -85,7 +94,8 @@
           "skill" : "bomber"
         }
       },
-      "tick" : 3041
+      "afterTick" : true,
+      "tick" : 3040
     },
     {
       "action" : {
@@ -93,7 +103,8 @@
 
         }
       },
-      "tick" : 3277
+      "afterTick" : true,
+      "tick" : 3276
     },
     {
       "action" : {
@@ -101,7 +112,8 @@
 
         }
       },
-      "tick" : 3280
+      "afterTick" : true,
+      "tick" : 3279
     }
   ],
   "expected" : {
@@ -109,10 +121,10 @@
     "released" : 80,
     "required" : 75,
     "saved" : 76,
-    "stateHash" : "ba21b29634451894b3e36d34f28e4440f31514229181cb0767ddb30e1496d751",
+    "stateHash" : "83047d42f415a89e373171df58a7f70c6b97e384d3931def92646f5caa5dc2f3",
     "ticks" : 3426
   },
-  "initialStateHash" : "13ec2874aa35554b8b0d06b7b6a38ab133104c5edb0a5252dd1bb6f61e59aa09",
+  "initialStateHash" : "1519422b02efdb45d17d729814e71beb8425edc908fd94a704d3f2aa10eb09d6",
   "number" : 13,
   "rank" : "Havoc",
   "title" : "HIGHLAND FLING"

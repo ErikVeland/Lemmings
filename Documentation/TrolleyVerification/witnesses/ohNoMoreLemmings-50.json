@@ -6,6 +6,7 @@
           "_0" : 1
         }
       },
+      "afterTick" : true,
       "tick" : 56
     },
     {
@@ -15,7 +16,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 129
+      "afterTick" : true,
+      "tick" : 128
     },
     {
       "action" : {
@@ -24,7 +26,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 212
+      "afterTick" : true,
+      "tick" : 211
     },
     {
       "action" : {
@@ -32,6 +35,7 @@
           "_0" : 51
         }
       },
+      "afterTick" : true,
       "tick" : 323
     },
     {
@@ -41,7 +45,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 386
+      "afterTick" : true,
+      "tick" : 385
     },
     {
       "action" : {
@@ -49,6 +54,7 @@
           "_0" : 1
         }
       },
+      "afterTick" : true,
       "tick" : 388
     },
     {
@@ -58,7 +64,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 451
+      "afterTick" : true,
+      "tick" : 450
     },
     {
       "action" : {
@@ -67,7 +74,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 514
+      "afterTick" : true,
+      "tick" : 513
     },
     {
       "action" : {
@@ -76,7 +84,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 577
+      "afterTick" : true,
+      "tick" : 576
     },
     {
       "action" : {
@@ -84,6 +93,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 644
     },
     {
@@ -93,7 +103,8 @@
           "skill" : "miner"
         }
       },
-      "tick" : 651
+      "afterTick" : true,
+      "tick" : 650
     },
     {
       "action" : {
@@ -102,7 +113,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 899
+      "afterTick" : true,
+      "tick" : 898
     }
   ],
   "expected" : {
@@ -110,10 +122,10 @@
     "released" : 50,
     "required" : 49,
     "saved" : 49,
-    "stateHash" : "95ee9cd089cda821bb68b04bc089dd81a2d967a3b6093ca4311610dd3229f392",
-    "ticks" : 1281
+    "stateHash" : "5a77f286ca8ca93b48055d2b95698df72ae19c98e7a41a7158e796d7d5bb9242",
+    "ticks" : 1280
   },
-  "initialStateHash" : "fe362c6d7ccf8cd5ac33ac750b80d7f9ecce67f955c09bcce5f7b33d83680260",
+  "initialStateHash" : "2e6d35820d6137c1708a5099e25ff7463735777724a68465bcde9a74258f269d",
   "number" : 11,
   "rank" : "Wild",
   "title" : "Mutiny On The Bounty"

@@ -1,0 +1,73 @@
+[
+  {
+    "skill": "builder",
+    "id": 0,
+    "x": 598,
+    "direction": 1
+  },
+  {
+    "skill": "basher",
+    "id": 0,
+    "x": 634,
+    "direction": 1
+  },
+  {
+    "skill": "basher",
+    "id": 0,
+    "x": 648,
+    "direction": 1
+  },
+  {
+    "skill": "basher",
+    "id": 0,
+    "x": 700,
+    "direction": 1
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "x": 750,
+    "direction": 1
+  },
+  {
+    "skill": "basher",
+    "id": 0,
+    "x": 790,
+    "direction": 1
+  },
+  {
+    "skill": "basher",
+    "id": 0,
+    "x": 816,
+    "direction": 1
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "x": 836,
+    "direction": 1
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "x": 957,
+    "direction": 1
+  },
+  {
+    "skill": "blocker",
+    "id": 0,
+    "x": 973,
+    "yMax": 72
+  },
+  {
+    "skill": "bomber",
+    "id": 0
+  },
+  {
+    "skill": "builder",
+    "x": 963,
+    "yMax": 79,
+    "direction": 1,
+    "tick": 1850
+  }
+]

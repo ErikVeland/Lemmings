@@ -7,7 +7,8 @@
           "skill" : "miner"
         }
       },
-      "tick" : 104
+      "afterTick" : true,
+      "tick" : 103
     },
     {
       "action" : {
@@ -16,7 +17,8 @@
           "skill" : "digger"
         }
       },
-      "tick" : 120
+      "afterTick" : true,
+      "tick" : 118
     },
     {
       "action" : {
@@ -25,7 +27,8 @@
           "skill" : "miner"
         }
       },
-      "tick" : 128
+      "afterTick" : true,
+      "tick" : 119
     },
     {
       "action" : {
@@ -34,7 +37,8 @@
           "skill" : "miner"
         }
       },
-      "tick" : 168
+      "afterTick" : true,
+      "tick" : 159
     },
     {
       "action" : {
@@ -43,7 +47,8 @@
           "skill" : "digger"
         }
       },
-      "tick" : 184
+      "afterTick" : true,
+      "tick" : 174
     },
     {
       "action" : {
@@ -52,7 +57,8 @@
           "skill" : "miner"
         }
       },
-      "tick" : 192
+      "afterTick" : true,
+      "tick" : 175
     },
     {
       "action" : {
@@ -61,7 +67,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 296
+      "afterTick" : true,
+      "tick" : 274
     }
   ],
   "expected" : {
@@ -69,10 +76,10 @@
     "released" : 50,
     "required" : 25,
     "saved" : 50,
-    "stateHash" : "c72aa9f6938c593b651916dc9d9e2c33d65ee302ca1f1517164f65848d3e4c6f",
-    "ticks" : 3027
+    "stateHash" : "2142d9894fc3021409e856528ded7dde0074d16bfec8c1bec9f6dba3a6dfe7b2",
+    "ticks" : 3026
   },
-  "initialStateHash" : "d29d4276ff4dfb3e412c186c4ac0d25944f2717a07cd8af9c01b2336d7e923c2",
+  "initialStateHash" : "7828d4881a44734debd7108481a27e96a28464c53e5d1dc54f5ed7bb08f03333",
   "number" : 16,
   "rank" : "Tame",
   "title" : "Gone With The Lemming"

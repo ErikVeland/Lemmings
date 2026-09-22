@@ -6,7 +6,8 @@
           "_0" : 1
         }
       },
-      "tick" : 28
+      "afterTick" : true,
+      "tick" : 27
     },
     {
       "action" : {
@@ -14,7 +15,8 @@
           "_0" : 99
         }
       },
-      "tick" : 56
+      "afterTick" : true,
+      "tick" : 55
     },
     {
       "action" : {
@@ -23,7 +25,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 78
+      "afterTick" : true,
+      "tick" : 77
     },
     {
       "action" : {
@@ -31,7 +34,8 @@
           "_0" : 51
         }
       },
-      "tick" : 121
+      "afterTick" : true,
+      "tick" : 120
     },
     {
       "action" : {
@@ -39,7 +43,8 @@
           "_0" : 99
         }
       },
-      "tick" : 125
+      "afterTick" : true,
+      "tick" : 124
     },
     {
       "action" : {
@@ -48,7 +53,8 @@
           "skill" : "bomber"
         }
       },
-      "tick" : 136
+      "afterTick" : true,
+      "tick" : 127
     },
     {
       "action" : {
@@ -56,7 +62,8 @@
           "_0" : 51
         }
       },
-      "tick" : 164
+      "afterTick" : true,
+      "tick" : 163
     },
     {
       "action" : {
@@ -64,7 +71,8 @@
           "_0" : 99
         }
       },
-      "tick" : 169
+      "afterTick" : true,
+      "tick" : 168
     },
     {
       "action" : {
@@ -72,7 +80,8 @@
           "_0" : 51
         }
       },
-      "tick" : 208
+      "afterTick" : true,
+      "tick" : 207
     },
     {
       "action" : {
@@ -80,7 +89,8 @@
           "_0" : 99
         }
       },
-      "tick" : 212
+      "afterTick" : true,
+      "tick" : 211
     },
     {
       "action" : {
@@ -88,7 +98,8 @@
           "_0" : 51
         }
       },
-      "tick" : 253
+      "afterTick" : true,
+      "tick" : 252
     },
     {
       "action" : {
@@ -96,7 +107,8 @@
           "_0" : 99
         }
       },
-      "tick" : 257
+      "afterTick" : true,
+      "tick" : 256
     },
     {
       "action" : {
@@ -104,7 +116,8 @@
           "_0" : 51
         }
       },
-      "tick" : 297
+      "afterTick" : true,
+      "tick" : 296
     },
     {
       "action" : {
@@ -112,7 +125,8 @@
           "_0" : 99
         }
       },
-      "tick" : 300
+      "afterTick" : true,
+      "tick" : 299
     },
     {
       "action" : {
@@ -120,7 +134,8 @@
           "_0" : 51
         }
       },
-      "tick" : 341
+      "afterTick" : true,
+      "tick" : 340
     },
     {
       "action" : {
@@ -128,7 +143,8 @@
           "_0" : 99
         }
       },
-      "tick" : 344
+      "afterTick" : true,
+      "tick" : 343
     },
     {
       "action" : {
@@ -136,7 +152,8 @@
           "_0" : 51
         }
       },
-      "tick" : 384
+      "afterTick" : true,
+      "tick" : 383
     },
     {
       "action" : {
@@ -144,7 +161,8 @@
           "_0" : 99
         }
       },
-      "tick" : 388
+      "afterTick" : true,
+      "tick" : 387
     },
     {
       "action" : {
@@ -152,7 +170,8 @@
           "_0" : 51
         }
       },
-      "tick" : 430
+      "afterTick" : true,
+      "tick" : 429
     },
     {
       "action" : {
@@ -160,7 +179,8 @@
           "_0" : 99
         }
       },
-      "tick" : 433
+      "afterTick" : true,
+      "tick" : 432
     },
     {
       "action" : {
@@ -168,7 +188,8 @@
           "_0" : 51
         }
       },
-      "tick" : 474
+      "afterTick" : true,
+      "tick" : 473
     },
     {
       "action" : {
@@ -176,7 +197,8 @@
           "_0" : 99
         }
       },
-      "tick" : 478
+      "afterTick" : true,
+      "tick" : 477
     },
     {
       "action" : {
@@ -184,7 +206,8 @@
           "_0" : 51
         }
       },
-      "tick" : 518
+      "afterTick" : true,
+      "tick" : 517
     },
     {
       "action" : {
@@ -192,7 +215,8 @@
           "_0" : 99
         }
       },
-      "tick" : 522
+      "afterTick" : true,
+      "tick" : 521
     },
     {
       "action" : {
@@ -200,7 +224,8 @@
           "_0" : 51
         }
       },
-      "tick" : 562
+      "afterTick" : true,
+      "tick" : 561
     },
     {
       "action" : {
@@ -208,7 +233,8 @@
           "_0" : 99
         }
       },
-      "tick" : 565
+      "afterTick" : true,
+      "tick" : 564
     },
     {
       "action" : {
@@ -216,7 +242,8 @@
           "_0" : 51
         }
       },
-      "tick" : 605
+      "afterTick" : true,
+      "tick" : 604
     },
     {
       "action" : {
@@ -224,7 +251,8 @@
           "_0" : 99
         }
       },
-      "tick" : 608
+      "afterTick" : true,
+      "tick" : 607
     },
     {
       "action" : {
@@ -232,7 +260,8 @@
           "_0" : 51
         }
       },
-      "tick" : 650
+      "afterTick" : true,
+      "tick" : 649
     },
     {
       "action" : {
@@ -240,7 +269,8 @@
           "_0" : 99
         }
       },
-      "tick" : 654
+      "afterTick" : true,
+      "tick" : 653
     },
     {
       "action" : {
@@ -248,7 +278,8 @@
           "_0" : 51
         }
       },
-      "tick" : 693
+      "afterTick" : true,
+      "tick" : 692
     },
     {
       "action" : {
@@ -256,7 +287,8 @@
           "_0" : 99
         }
       },
-      "tick" : 696
+      "afterTick" : true,
+      "tick" : 695
     },
     {
       "action" : {
@@ -264,7 +296,8 @@
           "_0" : 51
         }
       },
-      "tick" : 738
+      "afterTick" : true,
+      "tick" : 737
     },
     {
       "action" : {
@@ -272,7 +305,8 @@
           "_0" : 99
         }
       },
-      "tick" : 742
+      "afterTick" : true,
+      "tick" : 741
     },
     {
       "action" : {
@@ -281,7 +315,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 978
+      "afterTick" : true,
+      "tick" : 975
     },
     {
       "action" : {
@@ -290,7 +325,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1073
+      "afterTick" : true,
+      "tick" : 1070
     },
     {
       "action" : {
@@ -299,7 +335,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 1143
+      "afterTick" : true,
+      "tick" : 1140
     },
     {
       "action" : {
@@ -308,7 +345,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1726
+      "afterTick" : true,
+      "tick" : 1723
     },
     {
       "action" : {
@@ -317,7 +355,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 2111
+      "afterTick" : true,
+      "tick" : 2108
     },
     {
       "action" : {
@@ -326,7 +365,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 2314
+      "afterTick" : true,
+      "tick" : 2311
     },
     {
       "action" : {
@@ -335,7 +375,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 2488
+      "afterTick" : true,
+      "tick" : 2485
     },
     {
       "action" : {
@@ -344,7 +385,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 2709
+      "afterTick" : true,
+      "tick" : 2706
     }
   ],
   "expected" : {
@@ -352,10 +394,10 @@
     "released" : 80,
     "required" : 79,
     "saved" : 79,
-    "stateHash" : "9ef8f3c390d90010f02b78e8221328fbaaa258c8b02dc333871d30fa7ac03069",
-    "ticks" : 3009
+    "stateHash" : "4da66062c2ac5c6db94eae42a83b88c778097eaf59eb899edea7fdd7ebfe38fa",
+    "ticks" : 3006
   },
-  "initialStateHash" : "509f170b8392e9ed7a8c92a1f1823388129485a2c0b1b4bbe4875f5b4fa14c10",
+  "initialStateHash" : "796368c3769964fcf78bd07942ed8bce01afc6c4f1f8ae40dc88fff8297317cf",
   "number" : 10,
   "rank" : "Crazy",
   "title" : "ROCKY VI"

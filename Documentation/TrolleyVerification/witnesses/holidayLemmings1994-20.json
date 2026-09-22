@@ -18,7 +18,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 96
+      "tick" : 94
     },
     {
       "action" : {
@@ -28,7 +28,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 97
+      "tick" : 95
     },
     {
       "action" : {
@@ -128,7 +128,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 454
+      "tick" : 449
     },
     {
       "action" : {
@@ -178,7 +178,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 646
+      "tick" : 641
     },
     {
       "action" : {
@@ -238,7 +238,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 838
+      "tick" : 833
     },
     {
       "action" : {
@@ -288,7 +288,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 1030
+      "tick" : 1025
     },
     {
       "action" : {
@@ -348,7 +348,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 1222
+      "tick" : 1217
     },
     {
       "action" : {
@@ -378,7 +378,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 1354
+      "tick" : 1349
     },
     {
       "action" : {
@@ -398,7 +398,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 1414
+      "tick" : 1409
     },
     {
       "action" : {
@@ -408,7 +408,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 1629
+      "tick" : 1627
     },
     {
       "action" : {
@@ -418,7 +418,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 1633
+      "tick" : 1628
     },
     {
       "action" : {
@@ -428,7 +428,7 @@
         }
       },
       "afterTick" : true,
-      "tick" : 1825
+      "tick" : 1820
     },
     {
       "action" : {
@@ -444,11 +444,11 @@
     "didWin" : true,
     "released" : 80,
     "required" : 68,
-    "saved" : 71,
-    "stateHash" : "34dc44fde5000490970fc4a1ce656d99740c0d4c4ba477bb98c68a07f4671f6c",
+    "saved" : 70,
+    "stateHash" : "1a71d3b27e2a6755d235f8d1479208776fcd1cfe40331ee53d79f96b7a25fa33",
     "ticks" : 3060
   },
-  "initialStateHash" : "8d66dc2a463c3f4a93cce0e01a6da4f03e1042e4d8e5338c6313696448d52d58",
+  "initialStateHash" : "7ca4669f221415be2bca159f797d2de5118db2a2dd82d8d4d617f34f450b18ef",
   "number" : 5,
   "rank" : "Hail",
   "title" : "Get the Point?"

@@ -6,16 +6,18 @@
           "_0" : 50
         }
       },
-      "tick" : 128
+      "afterTick" : true,
+      "tick" : 1
     },
     {
       "action" : {
         "assign" : {
-          "lemmingID" : 2,
+          "lemmingID" : 3,
           "skill" : "basher"
         }
       },
-      "tick" : 168
+      "afterTick" : true,
+      "tick" : 195
     },
     {
       "action" : {
@@ -24,34 +26,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 199
-    },
-    {
-      "action" : {
-        "assign" : {
-          "lemmingID" : 2,
-          "skill" : "builder"
-        }
-      },
-      "tick" : 214
-    },
-    {
-      "action" : {
-        "assign" : {
-          "lemmingID" : 0,
-          "skill" : "builder"
-        }
-      },
-      "tick" : 302
-    },
-    {
-      "action" : {
-        "assign" : {
-          "lemmingID" : 1,
-          "skill" : "builder"
-        }
-      },
-      "tick" : 391
+      "afterTick" : true,
+      "tick" : 198
     },
     {
       "action" : {
@@ -60,16 +36,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 401
-    },
-    {
-      "action" : {
-        "assign" : {
-          "lemmingID" : 4,
-          "skill" : "builder"
-        }
-      },
-      "tick" : 435
+      "afterTick" : true,
+      "tick" : 241
     },
     {
       "action" : {
@@ -78,7 +46,48 @@
           "skill" : "builder"
         }
       },
-      "tick" : 528
+      "afterTick" : true,
+      "tick" : 301
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 368
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 390
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 434
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 527
     },
     {
       "action" : {
@@ -87,16 +96,18 @@
           "skill" : "basher"
         }
       },
-      "tick" : 638
+      "afterTick" : true,
+      "tick" : 637
     },
     {
       "action" : {
         "assign" : {
-          "lemmingID" : 3,
+          "lemmingID" : 2,
           "skill" : "builder"
         }
       },
-      "tick" : 664
+      "afterTick" : true,
+      "tick" : 663
     },
     {
       "action" : {
@@ -105,7 +116,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 695
+      "afterTick" : true,
+      "tick" : 694
     },
     {
       "action" : {
@@ -114,7 +126,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 863
+      "afterTick" : true,
+      "tick" : 860
     },
     {
       "action" : {
@@ -123,7 +136,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 891
+      "afterTick" : true,
+      "tick" : 886
     },
     {
       "action" : {
@@ -132,7 +146,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 932
+      "afterTick" : true,
+      "tick" : 927
     },
     {
       "action" : {
@@ -141,7 +156,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1066
+      "afterTick" : true,
+      "tick" : 1063
     },
     {
       "action" : {
@@ -150,7 +166,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1258
+      "afterTick" : true,
+      "tick" : 1255
     },
     {
       "action" : {
@@ -159,7 +176,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1269
+      "afterTick" : true,
+      "tick" : 1264
     },
     {
       "action" : {
@@ -168,7 +186,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1450
+      "afterTick" : true,
+      "tick" : 1447
     },
     {
       "action" : {
@@ -177,7 +196,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1653
+      "afterTick" : true,
+      "tick" : 1648
     },
     {
       "action" : {
@@ -186,7 +206,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1859
+      "afterTick" : true,
+      "tick" : 1856
     },
     {
       "action" : {
@@ -195,7 +216,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 2051
+      "afterTick" : true,
+      "tick" : 2048
     },
     {
       "action" : {
@@ -204,7 +226,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 2245
+      "afterTick" : true,
+      "tick" : 2240
     },
     {
       "action" : {
@@ -213,7 +236,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 2477
+      "afterTick" : true,
+      "tick" : 2472
     },
     {
       "action" : {
@@ -222,16 +246,18 @@
           "skill" : "basher"
         }
       },
-      "tick" : 2624
+      "afterTick" : true,
+      "tick" : 2552
     },
     {
       "action" : {
         "assign" : {
-          "lemmingID" : 39,
+          "lemmingID" : 38,
           "skill" : "basher"
         }
       },
-      "tick" : 2686
+      "afterTick" : true,
+      "tick" : 2657
     }
   ],
   "expected" : {
@@ -239,10 +265,10 @@
     "released" : 65,
     "required" : 65,
     "saved" : 65,
-    "stateHash" : "290e5e8adc81fc10dbe95583b5e7e08bb8debb262eb46a778f4efcfd642f60e4",
-    "ticks" : 3399
+    "stateHash" : "7c5b1aaa9194a63c2fbddd092bc649d58b549f82e37c2a522b50c2d4536407b9",
+    "ticks" : 3334
   },
-  "initialStateHash" : "447bc99e257779a7e2ca9a008307e50f251183644cf7c69dcacce97db9a57d9d",
+  "initialStateHash" : "fb933bb73dfb4a2c111ffc2cd4d8996e9951d8a3b078418b3b8e3813e7fddab9",
   "number" : 14,
   "rank" : "Hail",
   "title" : "Rendezvous II"

@@ -6,6 +6,7 @@
           "_0" : 5
         }
       },
+      "afterTick" : true,
       "tick" : 15
     },
     {
@@ -15,7 +16,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 130
+      "afterTick" : true,
+      "tick" : 129
     },
     {
       "action" : {
@@ -24,7 +26,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 195
+      "afterTick" : true,
+      "tick" : 193
     },
     {
       "action" : {
@@ -33,7 +36,8 @@
           "skill" : "digger"
         }
       },
-      "tick" : 298
+      "afterTick" : true,
+      "tick" : 296
     },
     {
       "action" : {
@@ -42,7 +46,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 334
+      "afterTick" : true,
+      "tick" : 329
     },
     {
       "action" : {
@@ -50,6 +55,7 @@
           "_0" : 21
         }
       },
+      "afterTick" : true,
       "tick" : 365
     },
     {
@@ -58,6 +64,7 @@
           "_0" : 5
         }
       },
+      "afterTick" : true,
       "tick" : 416
     },
     {
@@ -66,6 +73,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 461
     },
     {
@@ -75,7 +83,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 951
+      "afterTick" : true,
+      "tick" : 946
     },
     {
       "action" : {
@@ -84,7 +93,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1146
+      "afterTick" : true,
+      "tick" : 1138
     },
     {
       "action" : {
@@ -93,7 +103,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1339
+      "afterTick" : true,
+      "tick" : 1330
     },
     {
       "action" : {
@@ -102,7 +113,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 1531
+      "afterTick" : true,
+      "tick" : 1522
     },
     {
       "action" : {
@@ -111,7 +123,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1625
+      "afterTick" : true,
+      "tick" : 1616
     },
     {
       "action" : {
@@ -120,7 +133,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1872
+      "afterTick" : true,
+      "tick" : 1863
     },
     {
       "action" : {
@@ -129,7 +143,8 @@
           "skill" : "miner"
         }
       },
-      "tick" : 2185
+      "afterTick" : true,
+      "tick" : 2176
     }
   ],
   "expected" : {
@@ -137,10 +152,10 @@
     "released" : 80,
     "required" : 70,
     "saved" : 80,
-    "stateHash" : "575ebd49209ab5dd877723fb76f3dd7409295e797529d89d165f0580403718e5",
-    "ticks" : 3543
+    "stateHash" : "2f6b74b26b14faa4349cca85e58bcdbf5e99004edaea61ece5c2679362f6c6fa",
+    "ticks" : 3534
   },
-  "initialStateHash" : "f53079ccb1a7e7197e0f36f2f576526c2adf9d546a131c88fc054c8f68a67ccb",
+  "initialStateHash" : "8d36d74e84fd582f0a6da3d3d28c5b938663c96d644c662dd366cfac13fb2a67",
   "number" : 14,
   "rank" : "Wild",
   "title" : "ICE SPY"

@@ -1,0 +1,3 @@
+[{"skill":"builder","direction":1,"xMin":853,"xMax":855,"yMax":118,"action":"walking"},
+ {"skill":"basher","direction":1,"xMin":972,"xMax":974,"action":"walking"},
+ {"skill":"basher","direction":1,"xMin":1024,"xMax":1026,"action":"walking"}]

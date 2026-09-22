@@ -6,6 +6,7 @@
           "_0" : 1
         }
       },
+      "afterTick" : true,
       "tick" : 51
     },
     {
@@ -15,7 +16,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 120
+      "afterTick" : true,
+      "tick" : 119
     },
     {
       "action" : {
@@ -24,7 +26,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 226
+      "afterTick" : true,
+      "tick" : 225
     },
     {
       "action" : {
@@ -33,7 +36,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 455
+      "afterTick" : true,
+      "tick" : 454
     },
     {
       "action" : {
@@ -41,6 +45,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 489
     },
     {
@@ -49,6 +54,7 @@
           "_0" : 1
         }
       },
+      "afterTick" : true,
       "tick" : 605
     },
     {
@@ -58,7 +64,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 696
+      "afterTick" : true,
+      "tick" : 695
     },
     {
       "action" : {
@@ -67,7 +74,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 774
+      "afterTick" : true,
+      "tick" : 773
     },
     {
       "action" : {
@@ -76,7 +84,8 @@
           "skill" : "digger"
         }
       },
-      "tick" : 808
+      "afterTick" : true,
+      "tick" : 805
     },
     {
       "action" : {
@@ -85,6 +94,7 @@
           "skill" : "digger"
         }
       },
+      "afterTick" : true,
       "tick" : 942
     },
     {
@@ -94,6 +104,7 @@
           "skill" : "builder"
         }
       },
+      "afterTick" : true,
       "tick" : 986
     },
     {
@@ -103,6 +114,7 @@
           "skill" : "blocker"
         }
       },
+      "afterTick" : true,
       "tick" : 1152
     },
     {
@@ -112,7 +124,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1365
+      "afterTick" : true,
+      "tick" : 1362
     },
     {
       "action" : {
@@ -121,7 +134,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1558
+      "afterTick" : true,
+      "tick" : 1554
     },
     {
       "action" : {
@@ -130,7 +144,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1752
+      "afterTick" : true,
+      "tick" : 1746
     },
     {
       "action" : {
@@ -139,7 +154,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1946
+      "afterTick" : true,
+      "tick" : 1938
     },
     {
       "action" : {
@@ -148,7 +164,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 2154
+      "afterTick" : true,
+      "tick" : 2146
     },
     {
       "action" : {
@@ -157,7 +174,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 2242
+      "afterTick" : true,
+      "tick" : 2241
     }
   ],
   "expected" : {
@@ -165,10 +183,10 @@
     "released" : 30,
     "required" : 29,
     "saved" : 29,
-    "stateHash" : "bad11e5179e4a699fc59775e7910234bce877a3af60a5b6991b4ff520f242460",
+    "stateHash" : "9688610f36d914d280410f1d5556103997c2596ed68b48e09460b5b53d83dfbd",
     "ticks" : 4080
   },
-  "initialStateHash" : "ac075b75bd2b06a00149ad051801d8f0f9a36bcde533d10b6a3a5c45fc186230",
+  "initialStateHash" : "549391c20c096ad10651c26f454f91f568c00a85cfdbb042349ee3972857cacd",
   "number" : 2,
   "rank" : "Havoc",
   "title" : "Be more than just a number"

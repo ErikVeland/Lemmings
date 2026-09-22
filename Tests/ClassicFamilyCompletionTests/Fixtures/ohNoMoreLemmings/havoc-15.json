@@ -6,6 +6,7 @@
           "_0" : 20
         }
       },
+      "afterTick" : true,
       "tick" : 6
     },
     {
@@ -14,6 +15,7 @@
           "_0" : 40
         }
       },
+      "afterTick" : true,
       "tick" : 6
     },
     {
@@ -22,6 +24,7 @@
           "_0" : 20
         }
       },
+      "afterTick" : true,
       "tick" : 60
     },
     {
@@ -31,7 +34,8 @@
           "skill" : "digger"
         }
       },
-      "tick" : 162
+      "afterTick" : true,
+      "tick" : 161
     },
     {
       "action" : {
@@ -40,7 +44,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 415
+      "afterTick" : true,
+      "tick" : 414
     },
     {
       "action" : {
@@ -49,7 +54,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 439
+      "afterTick" : true,
+      "tick" : 438
     },
     {
       "action" : {
@@ -58,7 +64,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 455
+      "afterTick" : true,
+      "tick" : 454
     },
     {
       "action" : {
@@ -67,7 +74,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 654
+      "afterTick" : true,
+      "tick" : 646
     },
     {
       "action" : {
@@ -76,7 +84,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 714
+      "afterTick" : true,
+      "tick" : 706
     },
     {
       "action" : {
@@ -85,7 +94,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 912
+      "afterTick" : true,
+      "tick" : 898
     },
     {
       "action" : {
@@ -94,7 +104,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1113
+      "afterTick" : true,
+      "tick" : 1099
     },
     {
       "action" : {
@@ -103,7 +114,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1313
+      "afterTick" : true,
+      "tick" : 1299
     },
     {
       "action" : {
@@ -112,7 +124,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1515
+      "afterTick" : true,
+      "tick" : 1501
     },
     {
       "action" : {
@@ -121,7 +134,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1715
+      "afterTick" : true,
+      "tick" : 1701
     },
     {
       "action" : {
@@ -130,7 +144,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1918
+      "afterTick" : true,
+      "tick" : 1904
     },
     {
       "action" : {
@@ -139,7 +154,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1962
+      "afterTick" : true,
+      "tick" : 1948
     },
     {
       "action" : {
@@ -148,7 +164,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 2010
+      "afterTick" : true,
+      "tick" : 1996
     },
     {
       "action" : {
@@ -157,7 +174,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 2431
+      "afterTick" : true,
+      "tick" : 2417
     },
     {
       "action" : {
@@ -166,7 +184,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 2887
+      "afterTick" : true,
+      "tick" : 2873
     },
     {
       "action" : {
@@ -175,7 +194,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 3023
+      "afterTick" : true,
+      "tick" : 3009
     },
     {
       "action" : {
@@ -184,7 +204,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 3152
+      "afterTick" : true,
+      "tick" : 3137
     },
     {
       "action" : {
@@ -193,7 +214,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 3338
+      "afterTick" : true,
+      "tick" : 3324
     }
   ],
   "expected" : {
@@ -201,10 +223,10 @@
     "released" : 10,
     "required" : 8,
     "saved" : 10,
-    "stateHash" : "207ad855cf7ff13556a241d7a99938fda1aa599ece77151a151d9f7041979d47",
-    "ticks" : 3542
+    "stateHash" : "a433d432f1250788b4bef5ccf542b6f41a5d8dabe1b9ae79843bccd8d5c536d2",
+    "ticks" : 3541
   },
-  "initialStateHash" : "d2d883d3041d41f2a301908a7e21f0d1370f2d654da77654c1fc558bdaba19bd",
+  "initialStateHash" : "539114ae3a3058c5f947aa63c4ef57ad5eac73dd0134e0e41da9b966b240fb72",
   "number" : 15,
   "rank" : "Havoc",
   "title" : "Have an ice day"

@@ -78,10 +78,10 @@
     "released" : 50,
     "required" : 25,
     "saved" : 50,
-    "stateHash" : "f1a805386fc01c0e79ccf4d82a4729631d3d4982c6083fe00c7fde83dcb4ab1a",
-    "ticks" : 3360
+    "stateHash" : "a7bbc5fdcc333133a241d03cf787d42591ba238dc1c96a8cc1691d1ae02f9535",
+    "ticks" : 3359
   },
-  "initialStateHash" : "2afe26eb2129955f4c07685fc8003b6103e0854b4e5ea7eb34f1a339bc701208",
+  "initialStateHash" : "2c5df53e22e415deb76f796d86c3c978fa5fcf7ab0e017fe2d839c3e6adfaf73",
   "number" : 3,
   "rank" : "Tame",
   "title" : "Undercover Lemming"

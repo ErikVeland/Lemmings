@@ -6,6 +6,7 @@
           "_0" : 1
         }
       },
+      "afterTick" : true,
       "tick" : 24
     },
     {
@@ -14,6 +15,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 24
     },
     {
@@ -23,7 +25,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 115
+      "afterTick" : true,
+      "tick" : 114
     },
     {
       "action" : {
@@ -32,6 +35,7 @@
           "skill" : "bomber"
         }
       },
+      "afterTick" : true,
       "tick" : 176
     },
     {
@@ -40,6 +44,7 @@
           "_0" : 1
         }
       },
+      "afterTick" : true,
       "tick" : 185
     },
     {
@@ -48,6 +53,7 @@
           "_0" : 99
         }
       },
+      "afterTick" : true,
       "tick" : 194
     },
     {
@@ -56,6 +62,7 @@
           "_0" : 1
         }
       },
+      "afterTick" : true,
       "tick" : 289
     },
     {
@@ -65,7 +72,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 327
+      "afterTick" : true,
+      "tick" : 326
     },
     {
       "action" : {
@@ -74,6 +82,7 @@
           "skill" : "bomber"
         }
       },
+      "afterTick" : true,
       "tick" : 450
     },
     {
@@ -83,7 +92,8 @@
           "skill" : "climber"
         }
       },
-      "tick" : 647
+      "afterTick" : true,
+      "tick" : 646
     },
     {
       "action" : {
@@ -92,6 +102,7 @@
           "skill" : "bomber"
         }
       },
+      "afterTick" : true,
       "tick" : 812
     },
     {
@@ -101,6 +112,7 @@
           "skill" : "bomber"
         }
       },
+      "afterTick" : true,
       "tick" : 1060
     },
     {
@@ -110,6 +122,7 @@
           "skill" : "builder"
         }
       },
+      "afterTick" : true,
       "tick" : 1158
     }
   ],
@@ -118,10 +131,10 @@
     "released" : 50,
     "required" : 45,
     "saved" : 46,
-    "stateHash" : "cd8778042f85df1c4173e6aabba4d581728d4e4bc76d7ccdaab00ac60e2a4e63",
-    "ticks" : 1615
+    "stateHash" : "157e0eae03cf2702ea395cf6f303362e684bce455d92b767ff5c732307fff83f",
+    "ticks" : 1614
   },
-  "initialStateHash" : "853814d2b02d65ad6fb8e5c793cd7e9be1ff70c20c8c1ac504a8d2fe6451c098",
+  "initialStateHash" : "b709c83c309a71b59b04fa598de018a6898ae6e55e4ff3b54676eb08325e5054",
   "number" : 8,
   "rank" : "Wicked",
   "title" : "A TOWERING PROBLEM"

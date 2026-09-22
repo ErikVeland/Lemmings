@@ -6,6 +6,7 @@
           "_0" : 1
         }
       },
+      "afterTick" : true,
       "tick" : 25
     },
     {
@@ -15,7 +16,8 @@
           "skill" : "blocker"
         }
       },
-      "tick" : 162
+      "afterTick" : true,
+      "tick" : 161
     },
     {
       "action" : {
@@ -24,7 +26,8 @@
           "skill" : "climber"
         }
       },
-      "tick" : 177
+      "afterTick" : true,
+      "tick" : 176
     },
     {
       "action" : {
@@ -33,7 +36,8 @@
           "skill" : "climber"
         }
       },
-      "tick" : 280
+      "afterTick" : true,
+      "tick" : 279
     },
     {
       "action" : {
@@ -42,7 +46,8 @@
           "skill" : "climber"
         }
       },
-      "tick" : 312
+      "afterTick" : true,
+      "tick" : 311
     },
     {
       "action" : {
@@ -51,7 +56,8 @@
           "skill" : "digger"
         }
       },
-      "tick" : 382
+      "afterTick" : true,
+      "tick" : 379
     },
     {
       "action" : {
@@ -60,25 +66,28 @@
           "skill" : "digger"
         }
       },
+      "afterTick" : true,
+      "tick" : 537
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
       "tick" : 538
     },
     {
       "action" : {
         "assign" : {
-          "lemmingID" : 2,
-          "skill" : "basher"
-        }
-      },
-      "tick" : 540
-    },
-    {
-      "action" : {
-        "assign" : {
           "lemmingID" : 3,
           "skill" : "digger"
         }
       },
-      "tick" : 574
+      "afterTick" : true,
+      "tick" : 575
     },
     {
       "action" : {
@@ -87,7 +96,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 579
+      "afterTick" : true,
+      "tick" : 576
     },
     {
       "action" : {
@@ -96,7 +106,8 @@
           "skill" : "digger"
         }
       },
-      "tick" : 610
+      "afterTick" : true,
+      "tick" : 608
     },
     {
       "action" : {
@@ -105,7 +116,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 611
+      "afterTick" : true,
+      "tick" : 609
     },
     {
       "action" : {
@@ -114,25 +126,28 @@
           "skill" : "digger"
         }
       },
+      "afterTick" : true,
+      "tick" : 643
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
       "tick" : 644
     },
     {
       "action" : {
         "assign" : {
-          "lemmingID" : 1,
-          "skill" : "basher"
-        }
-      },
-      "tick" : 646
-    },
-    {
-      "action" : {
-        "assign" : {
           "lemmingID" : 3,
           "skill" : "digger"
         }
       },
-      "tick" : 658
+      "afterTick" : true,
+      "tick" : 655
     },
     {
       "action" : {
@@ -141,7 +156,8 @@
           "skill" : "blocker"
         }
       },
-      "tick" : 671
+      "afterTick" : true,
+      "tick" : 669
     },
     {
       "action" : {
@@ -150,7 +166,8 @@
           "skill" : "digger"
         }
       },
-      "tick" : 696
+      "afterTick" : true,
+      "tick" : 694
     },
     {
       "action" : {
@@ -159,7 +176,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 698
+      "afterTick" : true,
+      "tick" : 695
     },
     {
       "action" : {
@@ -168,6 +186,7 @@
           "skill" : "builder"
         }
       },
+      "afterTick" : true,
       "tick" : 700
     },
     {
@@ -177,7 +196,8 @@
           "skill" : "blocker"
         }
       },
-      "tick" : 702
+      "afterTick" : true,
+      "tick" : 701
     },
     {
       "action" : {
@@ -186,7 +206,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 720
+      "afterTick" : true,
+      "tick" : 721
     },
     {
       "action" : {
@@ -195,7 +216,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 728
+      "afterTick" : true,
+      "tick" : 729
     },
     {
       "action" : {
@@ -204,7 +226,8 @@
           "skill" : "miner"
         }
       },
-      "tick" : 772
+      "afterTick" : true,
+      "tick" : 768
     },
     {
       "action" : {
@@ -213,6 +236,7 @@
           "skill" : "miner"
         }
       },
+      "afterTick" : true,
       "tick" : 867
     },
     {
@@ -222,7 +246,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 885
+      "afterTick" : true,
+      "tick" : 882
     },
     {
       "action" : {
@@ -231,6 +256,7 @@
           "skill" : "digger"
         }
       },
+      "afterTick" : true,
       "tick" : 905
     },
     {
@@ -240,7 +266,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 907
+      "afterTick" : true,
+      "tick" : 906
     },
     {
       "action" : {
@@ -249,6 +276,7 @@
           "skill" : "digger"
         }
       },
+      "afterTick" : true,
       "tick" : 915
     },
     {
@@ -258,7 +286,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 918
+      "afterTick" : true,
+      "tick" : 916
     },
     {
       "action" : {
@@ -267,6 +296,7 @@
           "skill" : "digger"
         }
       },
+      "afterTick" : true,
       "tick" : 931
     },
     {
@@ -276,6 +306,7 @@
           "skill" : "basher"
         }
       },
+      "afterTick" : true,
       "tick" : 932
     },
     {
@@ -285,6 +316,7 @@
           "skill" : "digger"
         }
       },
+      "afterTick" : true,
       "tick" : 958
     },
     {
@@ -294,6 +326,7 @@
           "skill" : "digger"
         }
       },
+      "afterTick" : true,
       "tick" : 970
     },
     {
@@ -303,7 +336,8 @@
           "skill" : "blocker"
         }
       },
-      "tick" : 972
+      "afterTick" : true,
+      "tick" : 971
     },
     {
       "action" : {
@@ -312,7 +346,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 973
+      "afterTick" : true,
+      "tick" : 972
     },
     {
       "action" : {
@@ -321,6 +356,7 @@
           "skill" : "digger"
         }
       },
+      "afterTick" : true,
       "tick" : 982
     },
     {
@@ -330,7 +366,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 984
+      "afterTick" : true,
+      "tick" : 983
     },
     {
       "action" : {
@@ -339,6 +376,7 @@
           "skill" : "digger"
         }
       },
+      "afterTick" : true,
       "tick" : 994
     },
     {
@@ -348,7 +386,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 1007
+      "afterTick" : true,
+      "tick" : 1003
     },
     {
       "action" : {
@@ -357,7 +396,8 @@
           "skill" : "miner"
         }
       },
-      "tick" : 1057
+      "afterTick" : true,
+      "tick" : 1059
     },
     {
       "action" : {
@@ -366,7 +406,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 1063
+      "afterTick" : true,
+      "tick" : 1062
     },
     {
       "action" : {
@@ -375,6 +416,7 @@
           "skill" : "digger"
         }
       },
+      "afterTick" : true,
       "tick" : 1072
     },
     {
@@ -384,7 +426,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1074
+      "afterTick" : true,
+      "tick" : 1073
     },
     {
       "action" : {
@@ -393,7 +436,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 1085
+      "afterTick" : true,
+      "tick" : 1081
     },
     {
       "action" : {
@@ -402,7 +446,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 1096
+      "afterTick" : true,
+      "tick" : 1092
     }
   ],
   "expected" : {
@@ -410,10 +455,10 @@
     "released" : 16,
     "required" : 16,
     "saved" : 16,
-    "stateHash" : "8a23921e3df03ea1f827f27311eeedf2f848ccf81e85a15846e3266e75ec2f4a",
-    "ticks" : 1375
+    "stateHash" : "cefdc49f6e5878cfa4fb996606d25918fa95c18c03354a7ca4d4068c54a12910",
+    "ticks" : 1370
   },
-  "initialStateHash" : "7ab187062cd58216a528fe4e80dd32a376efb39d8fe1ec2926f28d21ce87700b",
+  "initialStateHash" : "c5cecebe66eaca18b9e5facd421ac39843d040896736be527cd3301b63ac804e",
   "number" : 16,
   "rank" : "Crazy",
   "title" : "Across The Gap"
