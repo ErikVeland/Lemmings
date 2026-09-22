@@ -1,13 +1,11 @@
 # Ultimate Lemmings — beta 35
 
-Version 0.1, build 35. All three archives include Intel and Apple silicon builds,
-full soundtracks and the same gameplay changes. These notes list all changes
-since beta 34.
+Version 0.1, build 35. This is a local Game Center build for the registered test
+Macs. It includes Intel and Apple silicon builds and full soundtracks. These notes
+list all changes since beta 34.
 
 | Archive | Minimum macOS | Records |
 | --- | --- | --- |
-| UltimateLemmings-beta35-macOS.zip | 13.0 | Local records; notarised |
-| UltimateLemmings-beta35-macOS12.zip | 12.3 Monterey | Local records; notarised |
 | UltimateLemmings-beta35-gamecenter-macOS.zip | 13.0 | Game Center; registered test Macs only |
 
 ## Changes since beta 34
@@ -67,8 +65,6 @@ xattr -dr com.apple.quarantine "/Applications/Ultimate Lemmings.app"
   each replay wins.
 - Continue saved runs and Hot Seat games from beta 34 in all three games.
 - Play Oh Yes! More Lemmings levels, and check that their hints and solution replays win.
-- Monterey testers: launch on macOS 12.3 or later, play all three engines, and check sound,
-  fullscreen, speed changes, save/resume and replay export. Report the Mac model and OS version.
 
 Report build 35, the archive used, your macOS version, the level and the steps when a test fails.
 Do not include account passwords or authentication codes.
