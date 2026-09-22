@@ -24,8 +24,18 @@ DOS rules of those releases. Original Lemmings does not change.
 Oh No! Havoc 20 now plays as in the original game. Lemmings from the left hatch
 land on the ledges in the narrow shaft and do not fall to the bottom.
 
-Some routes that worked in beta 34 no longer work in these levels. A saved run
-from beta 34 continues with the rules that it started with.
+Some routes that worked in beta 34 no longer work in these levels.
+
+### Saved runs
+
+An update no longer stops a saved run from resuming. This includes Hot Seat games.
+
+- A run saved in an earlier build resumes with the rules that it started with.
+- New saved runs also keep the full game state. A later build can continue the
+  run even when it cannot replay the saved moves exactly.
+- Before this change, a build with any engine change showed **Cannot restore
+  run** for every saved run. If you saw that message and did not select
+  **Discard saved run**, select **Resume Saved Run** again.
 
 ### Hints and verified routes
 
@@ -55,7 +65,7 @@ xattr -dr com.apple.quarantine "/Applications/Ultimate Lemmings.app"
   hatches in turn.
 - Open hints and solution replays in Oh No!, Xmas and Holiday levels. Check that
   each replay wins.
-- Continue a saved Oh No! or Holiday run from beta 34.
+- Continue saved runs and Hot Seat games from beta 34 in all three games.
 - Play Oh Yes! More Lemmings levels, and check that their hints and solution replays win.
 - Monterey testers: launch on macOS 12.3 or later, play all three engines, and check sound,
   fullscreen, speed changes, save/resume and replay export. Report the Mac model and OS version.

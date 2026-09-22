@@ -1,7 +1,7 @@
 {
-  "engineSourceFingerprint": "6de62a611f02b621a0af08a5d6e4012b7571ddc0dad8009fa6ab48743b559507",
+  "engineSourceFingerprint": "76b5aba51026b04f1732e532efab17a44975d1ddd7d6fb17456945b2d3ea37ff",
   "exhaustive": false,
-  "generatedAt": "2026-09-22T08:41:27Z",
+  "generatedAt": "2026-09-22T13:51:06Z",
   "levels": [
     {
       "bestSaved": 10,
@@ -12373,13 +12373,15 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 0,
-      "notes": [],
+      "notes": [
+        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
+      ],
       "number": 3,
       "population": 50,
       "rank": "Fun",
       "required": 5,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 4,
+      "testedCandidates": 75,
       "title": "Tailor-made for blockers",
       "witness": {
         "completed": true,
@@ -12420,13 +12422,15 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 2,
-      "notes": [],
+      "notes": [
+        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
+      ],
       "number": 6,
       "population": 50,
       "rank": "Fun",
       "required": 10,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 4,
+      "testedCandidates": 146,
       "title": "A task for blockers and bombers",
       "witness": {
         "completed": true,
@@ -12467,13 +12471,15 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 5,
-      "notes": [],
+      "notes": [
+        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
+      ],
       "number": 18,
       "population": 70,
       "rank": "Fun",
       "required": 50,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 4,
+      "testedCandidates": 146,
       "title": "Let's block and blow",
       "witness": {
         "completed": true,
@@ -12514,13 +12520,15 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 4,
-      "notes": [],
+      "notes": [
+        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
+      ],
       "number": 5,
       "population": 80,
       "rank": "Mayhem",
       "required": 60,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 4,
+      "testedCandidates": 501,
       "title": "Down, along, up. In that order",
       "witness": {
         "completed": true,
@@ -12561,13 +12569,15 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 2,
-      "notes": [],
+      "notes": [
+        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
+      ],
       "number": 10,
       "population": 75,
       "rank": "Mayhem",
       "required": 50,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 4,
+      "testedCandidates": 501,
       "title": "Pillars of Hercules",
       "witness": {
         "completed": true,
@@ -12608,13 +12618,15 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 2,
-      "notes": [],
+      "notes": [
+        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
+      ],
       "number": 19,
       "population": 50,
       "rank": "Mayhem",
       "required": 46,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 4,
+      "testedCandidates": 217,
       "title": "Time to get up!",
       "witness": {
         "completed": true,
@@ -12655,13 +12667,15 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 3,
-      "notes": [],
+      "notes": [
+        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
+      ],
       "number": 26,
       "population": 80,
       "rank": "Mayhem",
       "required": 60,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 4,
+      "testedCandidates": 217,
       "title": "The Steel Mines of Kessel",
       "witness": {
         "completed": true,
@@ -12702,13 +12716,15 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 0,
-      "notes": [],
+      "notes": [
+        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
+      ],
       "number": 29,
       "population": 80,
       "rank": "Mayhem",
       "required": 64,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 4,
+      "testedCandidates": 288,
       "title": "Save Me",
       "witness": {
         "completed": true,
@@ -12749,13 +12765,15 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 1,
-      "notes": [],
+      "notes": [
+        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
+      ],
       "number": 7,
       "population": 80,
       "rank": "Taxing",
       "required": 78,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 4,
+      "testedCandidates": 359,
       "title": "Every Lemming for himself!!!",
       "witness": {
         "completed": true,
@@ -12796,13 +12814,15 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 5,
-      "notes": [],
+      "notes": [
+        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
+      ],
       "number": 19,
       "population": 70,
       "rank": "Taxing",
       "required": 64,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 4,
+      "testedCandidates": 75,
       "title": "Bomboozal",
       "witness": {
         "completed": true,
@@ -12843,13 +12863,15 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 3,
-      "notes": [],
+      "notes": [
+        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
+      ],
       "number": 27,
       "population": 80,
       "rank": "Taxing",
       "required": 48,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 4,
+      "testedCandidates": 217,
       "title": "Call in the bomb squad",
       "witness": {
         "completed": true,
@@ -12890,13 +12912,15 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 10,
-      "notes": [],
+      "notes": [
+        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
+      ],
       "number": 28,
       "population": 80,
       "rank": "Taxing",
       "required": 56,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 4,
+      "testedCandidates": 501,
       "title": "POOR WEE CREATURES!",
       "witness": {
         "completed": true,
@@ -12937,13 +12961,15 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 3,
-      "notes": [],
+      "notes": [
+        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
+      ],
       "number": 15,
       "population": 10,
       "rank": "Tricky",
       "required": 6,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 4,
+      "testedCandidates": 75,
       "title": "Ozone friendly Lemmings",
       "witness": {
         "completed": true,
@@ -12984,13 +13010,15 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 4,
-      "notes": [],
+      "notes": [
+        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
+      ],
       "number": 16,
       "population": 50,
       "rank": "Tricky",
       "required": 40,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 4,
+      "testedCandidates": 217,
       "title": "Luvly Jubly",
       "witness": {
         "completed": true,
@@ -13031,13 +13059,15 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 2,
-      "notes": [],
+      "notes": [
+        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
+      ],
       "number": 17,
       "population": 50,
       "rank": "Tricky",
       "required": 48,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 4,
+      "testedCandidates": 75,
       "title": "Diet Lemmingaid",
       "witness": {
         "completed": true,
@@ -13078,13 +13108,15 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 1,
-      "notes": [],
+      "notes": [
+        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
+      ],
       "number": 18,
       "population": 10,
       "rank": "Tricky",
       "required": 9,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 4,
+      "testedCandidates": 288,
       "title": "It's Lemmingentry Watson",
       "witness": {
         "completed": true,
@@ -13125,13 +13157,15 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 1,
-      "notes": [],
+      "notes": [
+        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
+      ],
       "number": 23,
       "population": 80,
       "rank": "Tricky",
       "required": 48,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 4,
+      "testedCandidates": 430,
       "title": "From The Boundary Line",
       "witness": {
         "completed": true,

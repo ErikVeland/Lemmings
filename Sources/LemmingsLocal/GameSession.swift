@@ -98,8 +98,8 @@ extension GameSession {
 
 final class ClassicSession: GameSession {
   /// Wraps the engine so any earlier tick can be reached exactly.
-  let initialStateHash: String
-  let initialSimulation: ClassicDOSSimulation
+  private(set) var initialStateHash: String
+  private(set) var initialSimulation: ClassicDOSSimulation
   private var history: ClassicDOSRewind
   private var beforeNuke: ClassicDOSRewind?
   private(set) var usedRewind = false
@@ -130,11 +130,35 @@ final class ClassicSession: GameSession {
     history.commands.map { ClassicDOSReplayEvent(tick: $0.tick, action: $0.action, afterTick: true) }
   }
 
-  /// Rebuild from valid level data and reject any input or final-state mismatch.
+  /// Continue a saved run. A build must never strand a saved run, so this
+  /// tries, in order: the saved inputs under this build's rules, the saved
+  /// inputs under the rule set the run started with, and the saved engine
+  /// state. Each path must reproduce the saved state exactly.
   func restore(_ recovery: RunRecovery) throws {
     _ = try recovery.validated()
-    guard currentTick == 0, recovery.initialStateHash == initialStateHash else { throw RunRecoveryError.differentGame }
-    let restored = ClassicSession(simulation: simulation, width: levelWidth, height: levelHeight)
+    guard currentTick == 0 else { throw RunRecoveryError.differentGame }
+    var starts = [initialSimulation]
+    for mechanics in [ClassicDOSMechanics.original, .ohNoMore] where mechanics != initialSimulation.configuration.mechanics {
+      if let start = initialSimulation.startingWithMechanics(mechanics) { starts.append(start) }
+    }
+    for start in starts where ClassicDOSReplayRecorder.stateHash(of: start) == recovery.initialStateHash {
+      if (try? replay(recovery, from: start)) != nil { return }
+    }
+    if let saved = recovery.classicState, saved.terrain.width == initialSimulation.terrain.width,
+       saved.terrain.height == initialSimulation.terrain.height,
+       ClassicDOSReplayRecorder.stateHash(of: saved) == recovery.stateHash, !saved.isComplete {
+      history = ClassicDOSRewind(simulation: saved); beforeNuke = nil
+      // The inputs no longer prove this state, so the run counts as assisted.
+      usedRewind = true; nukeCount = recovery.nukeCount
+      rewindCount = recovery.rewindCount; undoCount = recovery.undoCount
+      lastCues = []
+      return
+    }
+    throw RunRecoveryError.differentGame
+  }
+
+  private func replay(_ recovery: RunRecovery, from start: ClassicDOSSimulation) throws {
+    let restored = ClassicSession(simulation: start, width: levelWidth, height: levelHeight)
     func advance(to tick: Int) throws {
       while restored.currentTick < tick && !restored.isComplete { restored.tick() }
       guard restored.currentTick == tick else { throw RunRecoveryError.invalid }
@@ -162,6 +186,7 @@ final class ClassicSession: GameSession {
       throw RunRecoveryError.invalid
     }
     history = restored.history; beforeNuke = restored.beforeNuke
+    initialSimulation = start; initialStateHash = ClassicDOSReplayRecorder.stateHash(of: start)
     usedRewind = recovery.usedRewind; nukeCount = recovery.nukeCount
     rewindCount = recovery.rewindCount; undoCount = recovery.undoCount
     lastCues = []
@@ -357,10 +382,21 @@ final class NeoLemmixSession: GameSession {
     NeoRunRecovery(initialState: initialSimulation, state: simulation, inputs: recoveryInputs)
   }
 
+  /// Continue a saved run: replay its inputs, or continue from its saved
+  /// state when this build no longer replays them to the same result.
   func restore(_ checkpoint: RunRecovery) throws {
     _ = try checkpoint.validated()
-    guard let saved = checkpoint.neo, currentTick == 0,
-      saved.initialState == initialSimulation else { throw RunRecoveryError.differentGame }
+    guard let saved = checkpoint.neo, currentTick == 0 else { throw RunRecoveryError.differentGame }
+    if saved.initialState == initialSimulation, (try? replay(checkpoint, saved)) != nil { return }
+    guard saved.state.tickCount == checkpoint.tick else { throw RunRecoveryError.differentGame }
+    simulation = saved.state; recoveryInputs = saved.inputs
+    beforeNuke = nil; beforeNukeSkills = [:]; beforeNukeInputCount = 0
+    // The inputs no longer prove this state, so the run counts as assisted.
+    usedRewind = true; nukeCount = checkpoint.nukeCount
+    rewindCount = checkpoint.rewindCount; undoCount = checkpoint.undoCount
+  }
+
+  private func replay(_ checkpoint: RunRecovery, _ saved: NeoRunRecovery) throws {
     let restored = NeoLemmixSession(simulation: initialSimulation, width: levelWidth, height: levelHeight)
     func advance(to tick: Int) throws {
       while restored.currentTick < tick && !restored.isComplete { restored.tick() }

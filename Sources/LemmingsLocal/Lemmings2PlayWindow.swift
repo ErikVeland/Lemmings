@@ -119,8 +119,9 @@ import NxlvKit
     init(root: URL, recovery: RunRecovery? = nil, expectedRecoveryEngine: String = RunRecovery.bundledEngine) throws {
         if let recovery {
             _ = try recovery.validated()
-            guard recovery.l2 != nil, recovery.profileID == ArcadeStore.shared.playingProfileID, recovery.hotSeatID == ArcadeStore.shared.hotSeatID,
-                recovery.engine == expectedRecoveryEngine else { throw RunRecoveryError.differentGame }
+            // A newer engine must not strand a saved run; the replay below checks the state.
+            guard recovery.l2 != nil, recovery.profileID == ArcadeStore.shared.playingProfileID,
+                recovery.hotSeatID == ArcadeStore.shared.hotSeatID else { throw RunRecoveryError.differentGame }
         }
         self.root = root
         practice = try Lemmings2Practice(root:root)
@@ -304,8 +305,11 @@ import NxlvKit
             }
             restoringRun = true
             prepareBriefing(); startLevel()
+            // Compare the level only. Other data files may change between builds;
+            // the replay below still requires the exact saved state.
             guard let initial, let fingerprint = arcadeLevel?.conditions?.levelFingerprint,
-                fingerprint == recovery.levelFingerprint else { throw RunRecoveryError.differentGame }
+                fingerprint.split(separator: ":").first == recovery.levelFingerprint.split(separator: ":").first
+            else { throw RunRecoveryError.differentGame }
             let restored = try saved.restore(initial: initial, checkpoint: recovery)
             game = restored.0; beforeNuke = restored.1; beforeNukeInputCount = restored.2
             recoveryInputs = saved.inputs; recoveryProgress = saved.progress; recoveryPractice = saved.practice

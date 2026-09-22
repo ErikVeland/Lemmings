@@ -32,6 +32,10 @@ struct RunRecovery: Codable, Sendable {
     var l3: L3RunRecovery? = nil
     var neo: NeoRunRecovery? = nil
     var fan: FanRunRecovery? = nil
+    /// The Classic engine state at `tick`. A later build restores from it
+    /// when its engine no longer replays `events` to the same state, so an
+    /// update never strands a saved run.
+    var classicState: ClassicDOSSimulation? = nil
     var sourcePath: String? = nil
     var savedAt = Date()
 

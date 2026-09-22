@@ -167,6 +167,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
         usedRewind: classic.usedRewind, nukeCount: classic.nukeCount, rewindCount: classic.rewindCount,
         undoCount: classic.undoCount, selectedSkill: panel.selectedSkillIndex,
         scrollX: playfield.viewport.scrollX, scrollY: playfield.viewport.scrollY)
+      checkpoint.classicState = classic.simulation
       checkpoint.fan = checkpointFan
       if checkpointFan != nil {
         checkpoint.fanPackGraphics = fanPackGraphics
@@ -222,8 +223,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private func restoreRun(_ checkpoint: RunRecovery) {
     do {
       _ = try checkpoint.validated()
-      guard checkpoint.profileID == ArcadeStore.shared.playingProfileID, checkpoint.hotSeatID == ArcadeStore.shared.hotSeatID,
-        checkpoint.engine == recoveryEngine else { throw RunRecoveryError.differentGame }
+      // A newer engine must not strand a saved run. The session restores from
+      // the saved inputs or state, and rejects only a state it cannot reproduce.
+      guard checkpoint.profileID == ArcadeStore.shared.playingProfileID,
+        checkpoint.hotSeatID == ArcadeStore.shared.hotSeatID else { throw RunRecoveryError.differentGame }
       if checkpoint.l2 != nil {
         guard let path = checkpoint.sourcePath else { throw RunRecoveryError.invalid }
         let next = try Lemmings2PlayWindow(root: URL(fileURLWithPath: path), recovery: checkpoint)
@@ -277,22 +280,19 @@ let achievementProgressKey = "ClassicAchievementProgress"
         fanLocalStyles = checkpoint.fanLocalStyles ?? false
         fanHolidayStyles = checkpoint.fanHolidayStyles ?? false
         loadCurrentFanLevel()
-        guard fanPlaying, phase == .briefing, let classic = session as? ClassicSession,
-          arcadeLevel?.conditions?.levelFingerprint == checkpoint.levelFingerprint else { throw RunRecoveryError.differentGame }
+        guard fanPlaying, phase == .briefing, let classic = session as? ClassicSession else { throw RunRecoveryError.differentGame }
         _ = advanceFanPlay()
         try classic.restore(checkpoint)
       } else if checkpoint.neo != nil, let path = checkpoint.sourcePath {
         loadNxlv(URL(fileURLWithPath: path))
-        guard let neo = session as? NeoLemmixSession,
-          arcadeLevel?.conditions?.levelFingerprint == checkpoint.levelFingerprint else { throw RunRecoveryError.differentGame }
+        guard let neo = session as? NeoLemmixSession else { throw RunRecoveryError.differentGame }
         try neo.restore(checkpoint)
       } else if let index = classicIndex {
         launchMode = .singleTitle; activeTitle = dataSets[index].set.title
         gamePicker.selectItem(at: index); selectDataSet()
         picker.selectItem(at: checkpoint.levelIndex); levelChanged()
         if phase == .briefing { advancePhase() }
-        guard let classic = session as? ClassicSession,
-          arcadeLevel?.conditions?.levelFingerprint == checkpoint.levelFingerprint else { throw RunRecoveryError.differentGame }
+        guard let classic = session as? ClassicSession else { throw RunRecoveryError.differentGame }
         try classic.restore(checkpoint)
       }
       guard let restored = session else { throw RunRecoveryError.invalid }
