@@ -122,3 +122,17 @@ Do not reuse build number 34. The next archive starts at build 35.
 A locked Mac fails the `arcade-records` keyboard focus check and hides the
 notarytool credentials. Unlock the session before an audit or a release run.
 
+
+## Beta 35
+
+Claude cut beta 35 on 23 September 2026 as one local Game Center archive,
+at the owner's request. Source `cbb1ee5`; see [Beta35Readiness.md](Beta35Readiness.md).
+Do not reuse build number 35. The next archive starts at build 36.
+
+- A new build must never invalidate saved runs. Restore must not depend on the
+  engine fingerprint. Before a release that touches engines or recovery, restore
+  copies of the owner's real checkpoints and run `Scripts/run-cross-build-recovery-tests.sh`.
+- "Cut a build" means a local Game Center build unless the owner asks for all
+  three archives.
+- The notarised pre-fix beta 35 archives under `.build/beta35/prefix-*` refuse
+  saved runs. Do not send them.
