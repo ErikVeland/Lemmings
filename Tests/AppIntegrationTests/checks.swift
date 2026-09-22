@@ -1253,7 +1253,7 @@ extension AppDelegate {
       button("Reveal the approach", in: page)!.performClick(nil)
       button("Reveal opening moves", in: page)!.performClick(nil)
       try verifyText(page, stage: checked.deck.stages[2])
-      try await Task.sleep(for: .milliseconds(200))
+      try await Task.sleep(nanoseconds: 200_000_000)
       try capture(page, name: "family-\(title.rawValue)-\(levelIndex)")
       try check(session!.currentTick == tick, "Reading campaign hints advanced the run")
       page.cancelOperation(nil)
