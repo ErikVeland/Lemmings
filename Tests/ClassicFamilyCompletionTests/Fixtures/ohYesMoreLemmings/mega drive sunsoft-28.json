@@ -1,0 +1,136 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "digger"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 106
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 134
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "blocker"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 210
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 715
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 807
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 983
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1106
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1154
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1159
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1351
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 55,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1900
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 8,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1901
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 100,
+    "required" : 100,
+    "saved" : 100,
+    "stateHash" : "e88e4322aac51dd751b3c1e04a36ca417c8ab3b02305e05366f2c8d80fa03ed5",
+    "ticks" : 2372
+  },
+  "initialStateHash" : "ab972dbd87629fa253e14ba963b8a0d9e99810d9c48c93790b02c3f9926af8d2",
+  "number" : 28,
+  "rank" : "Mega Drive Sunsoft",
+  "title" : "The gate trap Lemmings."
+}

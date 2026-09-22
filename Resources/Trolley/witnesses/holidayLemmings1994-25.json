@@ -6,6 +6,7 @@
           "_0" : 60
         }
       },
+      "afterTick" : true,
       "tick" : 16
     },
     {
@@ -15,7 +16,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 113
+      "afterTick" : true,
+      "tick" : 112
     },
     {
       "action" : {
@@ -24,6 +26,7 @@
           "skill" : "basher"
         }
       },
+      "afterTick" : true,
       "tick" : 213
     },
     {
@@ -33,6 +36,7 @@
           "skill" : "basher"
         }
       },
+      "afterTick" : true,
       "tick" : 1150
     },
     {
@@ -42,7 +46,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 1171
+      "afterTick" : true,
+      "tick" : 1170
     },
     {
       "action" : {
@@ -51,6 +56,7 @@
           "skill" : "builder"
         }
       },
+      "afterTick" : true,
       "tick" : 1611
     },
     {
@@ -60,7 +66,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 1695
+      "afterTick" : true,
+      "tick" : 1694
     },
     {
       "action" : {
@@ -69,7 +76,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 2129
+      "afterTick" : true,
+      "tick" : 2128
     },
     {
       "action" : {
@@ -78,7 +86,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 2233
+      "afterTick" : true,
+      "tick" : 2229
     },
     {
       "action" : {
@@ -87,7 +96,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 2353
+      "afterTick" : true,
+      "tick" : 2352
     }
   ],
   "expected" : {
@@ -95,10 +105,10 @@
     "released" : 80,
     "required" : 80,
     "saved" : 80,
-    "stateHash" : "d14d596ca0f3c5c90a937feedcb277cafc2a463bcfe4f90c48e467cbb39c9fd4",
-    "ticks" : 3702
+    "stateHash" : "25c0fb949f41e2fd849230ac4808cd9b61ca68d42b5f1e125f5879f7e2c6ca40",
+    "ticks" : 3700
   },
-  "initialStateHash" : "b209412e5258a785fbc635429b1b16e1fd1a5c0cc45bb60fd468a9e9cc131a6e",
+  "initialStateHash" : "b93123321a524317af70e6f38a8c4edef33d21e20f0a87c1b101cc102f7fa725",
   "number" : 10,
   "rank" : "Hail",
   "title" : "Lemmy in the cold, cold ground"

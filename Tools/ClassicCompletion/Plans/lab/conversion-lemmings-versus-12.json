@@ -1,0 +1,92 @@
+[
+  {
+    "skill": "blocker",
+    "id": 1,
+    "x": 782,
+    "direction": 1,
+    "async": true
+  },
+  {
+    "skill": "blocker",
+    "id": 2,
+    "x": 742,
+    "direction": -1,
+    "async": true
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "x": 900,
+    "direction": 1
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "action": "shrugging"
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "action": "shrugging"
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "action": "shrugging"
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "x": 1004,
+    "direction": 1
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "action": "shrugging"
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "x": 1090,
+    "direction": 1
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "action": "shrugging"
+  },
+  {
+    "skill": "basher",
+    "id": 0,
+    "x": 1216,
+    "direction": 1
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "x": 1322,
+    "direction": 1
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "action": "shrugging"
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "action": "shrugging"
+  },
+  {
+    "skill": "bomber",
+    "id": 1,
+    "tick": 2700,
+    "async": true
+  },
+  {
+    "rate": 99,
+    "tick": 2000,
+    "async": true
+  }
+]

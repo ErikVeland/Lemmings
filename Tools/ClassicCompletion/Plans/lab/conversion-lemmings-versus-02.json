@@ -1,0 +1,243 @@
+[
+  {
+    "skill": "blocker",
+    "x": 340,
+    "yMin": 135,
+    "direction": -1,
+    "async": true
+  },
+  {
+    "skill": "blocker",
+    "notID": [
+      0
+    ],
+    "x": 470,
+    "yMin": 140,
+    "direction": 1,
+    "async": true
+  },
+  {
+    "skill": "digger",
+    "id": 0,
+    "x": 414,
+    "direction": -1
+  },
+  {
+    "skill": "miner",
+    "id": 0,
+    "y": 96
+  },
+  {
+    "skill": "builder",
+    "id": 7,
+    "x": 500,
+    "y": 150,
+    "direction": 1
+  },
+  {
+    "skill": "builder",
+    "id": 7,
+    "x": 524,
+    "y": 138,
+    "direction": 1
+  },
+  {
+    "skill": "basher",
+    "id": 7,
+    "x": 548,
+    "y": 126,
+    "direction": 1
+  },
+  {
+    "skill": "basher",
+    "id": 7,
+    "x": 558,
+    "y": 126,
+    "direction": 1
+  },
+  {
+    "skill": "builder",
+    "id": 7,
+    "x": 614,
+    "y": 126,
+    "direction": 1
+  },
+  {
+    "skill": "builder",
+    "id": 7,
+    "x": 628,
+    "direction": -1
+  },
+  {
+    "skill": "builder",
+    "id": 7,
+    "x": 650,
+    "y": 128,
+    "direction": 1
+  },
+  {
+    "skill": "builder",
+    "id": 7,
+    "x": 674,
+    "y": 116,
+    "direction": 1
+  },
+  {
+    "skill": "basher",
+    "id": 7,
+    "x": 714,
+    "y": 87,
+    "direction": 1
+  },
+  {
+    "skill": "builder",
+    "id": 7,
+    "x": 845,
+    "y": 104,
+    "direction": 1
+  },
+  {
+    "skill": "basher",
+    "id": 7,
+    "x": 863,
+    "y": 96,
+    "direction": 1
+  },
+  {
+    "skill": "miner",
+    "id": 7,
+    "x": 875,
+    "y": 96,
+    "direction": 1
+  },
+  {
+    "skill": "builder",
+    "id": 7,
+    "x": 879,
+    "y": 98,
+    "direction": 1
+  },
+  {
+    "skill": "miner",
+    "id": 7,
+    "x": 891,
+    "y": 92,
+    "direction": 1
+  },
+  {
+    "skill": "builder",
+    "id": 7,
+    "x": 1032,
+    "y": 108,
+    "direction": 1
+  },
+  {
+    "skill": "builder",
+    "id": 7,
+    "x": 1120,
+    "y": 127,
+    "direction": 1
+  },
+  {
+    "skill": "builder",
+    "id": 7,
+    "x": 1144,
+    "y": 115,
+    "direction": 1
+  },
+  {
+    "skill": "builder",
+    "id": 7,
+    "x": 1134,
+    "y": 119,
+    "direction": -1
+  },
+  {
+    "skill": "builder",
+    "id": 7,
+    "x": 1128,
+    "direction": 1
+  },
+  {
+    "skill": "builder",
+    "id": 7,
+    "x": 1138,
+    "direction": -1
+  },
+  {
+    "skill": "builder",
+    "id": 7,
+    "x": 1126,
+    "direction": 1
+  },
+  {
+    "skill": "builder",
+    "id": 7,
+    "x": 1138,
+    "direction": -1
+  },
+  {
+    "skill": "builder",
+    "id": 7,
+    "x": 1128,
+    "direction": 1
+  },
+  {
+    "skill": "builder",
+    "id": 7,
+    "action": "walking",
+    "direction": -1
+  },
+  {
+    "skill": "builder",
+    "id": 7,
+    "action": "walking",
+    "direction": 1
+  },
+  {
+    "skill": "builder",
+    "id": 7,
+    "action": "walking",
+    "direction": -1
+  },
+  {
+    "skill": "builder",
+    "x": 440,
+    "direction": 1,
+    "tick": 2800,
+    "async": true
+  },
+  {
+    "skill": "blocker",
+    "notID": [
+      7
+    ],
+    "x": 1054,
+    "yMin": 120,
+    "direction": -1,
+    "async": true
+  },
+  {
+    "skill": "blocker",
+    "notID": [
+      7
+    ],
+    "x": 1118,
+    "yMin": 110,
+    "yMax": 118,
+    "direction": -1,
+    "tick": 3780,
+    "async": true
+  },
+  {
+    "skill": "blocker",
+    "notID": [
+      7
+    ],
+    "x": 1150,
+    "yMax": 115,
+    "direction": 1,
+    "tick": 3650,
+    "async": true
+  }
+]

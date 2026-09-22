@@ -21,11 +21,29 @@ private func require(
 private struct Content {
     let campaign: ClassicCampaign
     let title: ClassicTitle?
-    let assets: ClassicMainDATAssets
+    let assets: ClassicMainDATAssets?
     let grounds: [Int: ClassicGroundSet]
     let specials: [Int: ClassicSpecialGraphic]
+    let portsRoot: URL?
 
-    init(directory: URL) throws {
+    init(directory: URL, conversions: Bool = false) throws {
+        if conversions {
+            guard let set = try PortExclusivePack.dataSet(
+                amigaRoot: directory.appendingPathComponent("amiga_extracted"), portsRoot: directory) else {
+                throw ReplayFailure(description: "missing conversion campaign")
+            }
+            let counts = Dictionary(grouping: set.campaign.levels, by: \.rank).mapValues(\.count)
+            try require(counts == ["Lemmings Versus": 20, "Oh No! More Lemmings Versus": 10,
+                                   "Mega Drive Sunsoft": 30], "incomplete conversion campaign")
+            campaign = set.campaign
+            title = set.title
+            portsRoot = directory
+            assets = nil
+            grounds = [:]
+            specials = [:]
+            return
+        }
+        portsRoot = nil
         if ProcessInfo.processInfo.environment["CLASSIC_COMPLETION_FAMILY"] == "1" {
             let dataSet = try ClassicDataSet.detect(directory: directory)
             campaign = dataSet.campaign
@@ -50,6 +68,18 @@ private struct Content {
     func simulation(at index: Int) throws -> (ClassicDOSSimulation, ClassicCampaignLevel) {
         let entry = campaign.levels[index]
         let level = entry.level
+        if let portsRoot {
+            let directory = PortExclusivePack.artworkDirectory(for: entry, portsRoot: portsRoot)
+            let fallback = PortExclusivePack.fallbackArtworkDirectory(for: entry, portsRoot: portsRoot)
+            let ground = try ClassicGroundSet.load(style: level.groundStyle, from: directory, fallbackDirectory: fallback)
+            let special = level.specialStyle == 0 ? nil
+                : try ClassicSpecialGraphic.load(index: level.specialStyle - 1, from: directory)
+            let rendered = try ClassicLevelRenderer.render(level, groundSet: ground, specialGraphic: special)
+            return (try ClassicDOSSimulation(level: level, renderedLevel: rendered,
+                mainDATAssets: ClassicMainDATAssets.load(from: fallback ?? directory),
+                mechanics: ClassicDOSMechanics(title: title, rank: entry.rank)), entry)
+        }
+        guard let assets else { throw ReplayFailure(description: "missing campaign assets") }
         guard let ground = grounds[level.groundStyle] else {
             throw ReplayFailure(description: "missing ground style \(level.groundStyle)")
         }
@@ -317,10 +347,12 @@ private func guidedInputs(_ input: InputCandidate, base: ClassicDOSSimulation, t
 
 let args = CommandLine.arguments
 let mode = args.count > 1 ? args[1] : "verify"
-let directory = URL(fileURLWithPath: args.count > 2 ? args[2] : ".build/local/Ultimate Lemmings.app/Contents/Resources/Ports/lemmings_dos_1991-07-30")
+let dataArgument = args.count > 2 ? args[2] : ".build/local/Ultimate Lemmings.app/Contents/Resources/Ports/lemmings_dos_1991-07-30"
+let conversions = dataArgument.hasPrefix("conversion:")
+let directory = URL(fileURLWithPath: conversions ? String(dataArgument.dropFirst("conversion:".count)) : dataArgument)
 let fixtures = URL(fileURLWithPath: ProcessInfo.processInfo.environment["CLASSIC_COMPLETION_FIXTURES"] ?? "Tests/ClassicDOSCompletionTests/Fixtures")
 let selected = args.count > 3 ? Int(args[3]) : nil
-let familyMode = ProcessInfo.processInfo.environment["CLASSIC_COMPLETION_FAMILY"] == "1"
+let familyMode = conversions || ProcessInfo.processInfo.environment["CLASSIC_COMPLETION_FAMILY"] == "1"
 let encoder = JSONEncoder()
 encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
 do {
@@ -331,7 +363,7 @@ do {
         try require(ProcessInfo.processInfo.environment["CLASSIC_COMPLETION_FIXTURES"] != nil, "family mode requires a separate fixture directory")
         try require(mode != "tutorial", "tutorial policies apply only to the original campaign")
     }
-    let content = try Content(directory: directory)
+    let content = try Content(directory: directory, conversions: conversions)
     if !familyMode { try require(content.campaign.levels.count == 120, "expected 120 retail levels") }
     if args.count > 3 { try require(selected != nil && (1...content.campaign.levels.count).contains(selected!), "level is outside the campaign") }
     try FileManager.default.createDirectory(at: fixtures, withIntermediateDirectories: true)

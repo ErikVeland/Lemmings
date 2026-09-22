@@ -1,0 +1,110 @@
+[
+  {
+    "skill": "digger",
+    "id": 0,
+    "x": 810,
+    "y": 50,
+    "action": "walking"
+  },
+  {
+    "skill": "floater",
+    "id": 0,
+    "async": true,
+    "tick": 90
+  },
+  {
+    "skill": "floater",
+    "id": 1,
+    "async": true
+  },
+  {
+    "skill": "floater",
+    "id": 2,
+    "async": true
+  },
+  {
+    "skill": "floater",
+    "id": 3,
+    "async": true
+  },
+  {
+    "skill": "floater",
+    "id": 4,
+    "async": true
+  },
+  {
+    "skill": "floater",
+    "id": 5,
+    "async": true
+  },
+  {
+    "skill": "floater",
+    "id": 6,
+    "async": true
+  },
+  {
+    "skill": "floater",
+    "id": 7,
+    "async": true
+  },
+  {
+    "skill": "floater",
+    "id": 8,
+    "async": true
+  },
+  {
+    "skill": "floater",
+    "id": 9,
+    "async": true
+  },
+  {
+    "skill": "floater",
+    "id": 10,
+    "async": true
+  },
+  {
+    "skill": "floater",
+    "id": 11,
+    "async": true
+  },
+  {
+    "skill": "floater",
+    "id": 12,
+    "async": true
+  },
+  {
+    "skill": "floater",
+    "id": 13,
+    "async": true
+  },
+  {
+    "skill": "floater",
+    "id": 14,
+    "async": true
+  },
+  {
+    "skill": "floater",
+    "id": 15,
+    "async": true
+  },
+  {
+    "skill": "floater",
+    "id": 16,
+    "async": true
+  },
+  {
+    "skill": "floater",
+    "id": 17,
+    "async": true
+  },
+  {
+    "skill": "floater",
+    "id": 18,
+    "async": true
+  },
+  {
+    "skill": "floater",
+    "id": 19,
+    "async": true
+  }
+]

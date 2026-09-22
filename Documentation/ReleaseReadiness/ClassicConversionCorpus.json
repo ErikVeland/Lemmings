@@ -1,0 +1,42 @@
+{
+  "passed": true,
+  "failures": [],
+  "counts": {
+    "fan": {
+      "rendered-and-smoke-tested-only": 5667,
+      "replay-failed": 9,
+      "winning-replay": 344
+    },
+    "holidayLemmings1993": {
+      "winning-replay": 32
+    },
+    "holidayLemmings1994": {
+      "winning-replay": 32
+    },
+    "lemmings": {
+      "winning-replay": 120
+    },
+    "ohNoMoreLemmings": {
+      "winning-replay": 100
+    },
+    "ohYesMoreLemmings": {
+      "winning-replay": 60
+    },
+    "xmasLemmings1991": {
+      "winning-replay": 4
+    },
+    "xmasLemmings1992": {
+      "winning-replay": 4
+    }
+  },
+  "packs": 535,
+  "fanLevels": 6020,
+  "levels": 6372,
+  "evidenceDirectory": ".build/closure-sep22/corpus-conversions-parallel",
+  "evidenceHashes": {
+    "coverage.json": "254db4653ff8b4df0f9ae92ecb1e40e9d5efde6ac5682b334993c8f114cac3af",
+    "levels.jsonl": "2bf9410eee266b003b11146f47014b5b379d9233e9ad7df492b3f9f72a0b104c",
+    "packs.json": "174356e45d784c5ef93dc33310cf3129b9c94f024b12e2ac45ffe7127c9d6184",
+    "blockers.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+  }
+}

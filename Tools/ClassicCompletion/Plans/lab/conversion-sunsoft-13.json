@@ -1,0 +1,157 @@
+[
+  {
+    "skill": "blocker",
+    "notID": [
+      18
+    ],
+    "x": 882,
+    "direction": 1,
+    "async": true
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "x": 752,
+    "direction": 1
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "action": "shrugging"
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "x": 788,
+    "direction": 1,
+    "action": "walking"
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "direction": -1,
+    "action": "walking"
+  },
+  {
+    "skill": "blocker",
+    "id": 0,
+    "x": 784,
+    "direction": -1,
+    "yMax": 50
+  },
+  {
+    "skill": "builder",
+    "id": 1,
+    "x": 792,
+    "yMax": 55,
+    "direction": 1,
+    "action": "walking"
+  },
+  {
+    "skill": "builder",
+    "id": 1,
+    "direction": -1,
+    "action": "walking"
+  },
+  {
+    "skill": "builder",
+    "id": 1,
+    "x": 798,
+    "direction": 1,
+    "action": "walking"
+  },
+  {
+    "skill": "builder",
+    "id": 1,
+    "x": 798,
+    "direction": 1,
+    "action": "walking"
+  },
+  {
+    "skill": "builder",
+    "id": 1,
+    "x": 798,
+    "direction": 1,
+    "action": "walking"
+  },
+  {
+    "skill": "builder",
+    "id": 1,
+    "x": 798,
+    "direction": 1,
+    "action": "walking"
+  },
+  {
+    "skill": "builder",
+    "id": 1,
+    "x": 798,
+    "direction": 1,
+    "action": "walking"
+  },
+  {
+    "skill": "blocker",
+    "id": 1,
+    "x": 804,
+    "direction": 1,
+    "action": "walking"
+  },
+  {
+    "skill": "bomber",
+    "id": 1
+  },
+  {
+    "skill": "blocker",
+    "id": 2,
+    "x": 811,
+    "direction": 1
+  },
+  {
+    "skill": "bomber",
+    "id": 2
+  },
+  {
+    "skill": "blocker",
+    "id": 3,
+    "x": 818,
+    "direction": 1
+  },
+  {
+    "skill": "bomber",
+    "id": 3
+  },
+  {
+    "skill": "builder",
+    "x": 896,
+    "direction": 1
+  },
+  {
+    "skill": "builder",
+    "id": -1,
+    "action": "shrugging"
+  },
+  {
+    "skill": "builder",
+    "id": -1,
+    "action": "shrugging"
+  },
+  {
+    "skill": "builder",
+    "id": -1,
+    "action": "shrugging"
+  },
+  {
+    "skill": "bomber",
+    "x": 882,
+    "action": "blocking",
+    "tick": 3070
+  },
+  {
+    "skill": "climber",
+    "id": 10,
+    "tick": 3100
+  },
+  {
+    "nuke": true,
+    "tick": 4200
+  }
+]

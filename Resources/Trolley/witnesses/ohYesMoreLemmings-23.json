@@ -1,0 +1,46 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 173
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 405
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 934
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 40,
+    "required" : 40,
+    "saved" : 40,
+    "stateHash" : "136efc4350335e3cba3f8c8efa61792e4a7a41548ed29b2b8e39b55e23f40d9f",
+    "ticks" : 2794
+  },
+  "initialStateHash" : "1064092a14d2d7c421220b606a413f4286f6e721632edfd5b0a5e17d37f5fc7d",
+  "number" : 4,
+  "rank" : "Oh No! More Lemmings Versus",
+  "title" : "The Only Way Out"
+}

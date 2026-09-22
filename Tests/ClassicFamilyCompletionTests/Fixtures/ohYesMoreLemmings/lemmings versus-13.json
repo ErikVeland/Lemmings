@@ -1,0 +1,106 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "digger"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 204
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "blocker"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 264
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "blocker"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 516
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 629
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 661
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 755
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 947
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1160
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "bomber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1300
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 100,
+    "required" : 90,
+    "saved" : 98,
+    "stateHash" : "e84a21ec6512cf5e878fe4de9a2e1ec512baa29edb86d37a71eb5147b58a849f",
+    "ticks" : 5100
+  },
+  "initialStateHash" : "d9d82b0c810cf3c8ee2d75d787e4dad3a6211e2f80eaa70a2f02295a5041bcf6",
+  "number" : 13,
+  "rank" : "Lemmings Versus",
+  "title" : "The Hammock..."
+}

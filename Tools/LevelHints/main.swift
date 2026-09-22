@@ -45,25 +45,48 @@ let campaigns: [(game: String, directory: URL)] = [
     ("xmasLemmings1991", ports.appendingPathComponent("xmas_dos_XmasLemmingsV1.9")),
     ("xmasLemmings1992", ports.appendingPathComponent("xmas_dos_XmasLemmingsV1.9a1")),
     ("holidayLemmings1993", ports.appendingPathComponent("holiday_native_1993")),
-    ("holidayLemmings1994", ports.appendingPathComponent("holiday_native_1994"))
+    ("holidayLemmings1994", ports.appendingPathComponent("holiday_native_1994")),
+    ("ohYesMoreLemmings", ports)
 ]
 var levels: [HintExport.Level] = []
 var identities = Set<String>()
 var originalCount = 0
+var verifiedCount = 0
 for (game, dataDirectory) in campaigns {
-    let campaign = game == "lemmings"
-        ? try ClassicCampaignDefinition.originalDOSLemmings.load(from: dataDirectory)
-        : try ClassicDataSet.detect(directory: dataDirectory).campaign
-    let assets = try ClassicMainDATAssets.load(from: dataDirectory)
-    var grounds: [Int: ClassicGroundSet] = [:], specials: [Int: ClassicSpecialGraphic] = [:]
+    let campaign: ClassicCampaign
+    if game == "ohYesMoreLemmings" {
+        guard let converted = try PortExclusivePack.dataSet(
+            amigaRoot: ports.appendingPathComponent("amiga_extracted"), portsRoot: ports) else {
+            throw HintError(message: "Missing conversion campaign")
+        }
+        campaign = converted.campaign
+    } else {
+        campaign = game == "lemmings"
+            ? try ClassicCampaignDefinition.originalDOSLemmings.load(from: dataDirectory)
+            : try ClassicDataSet.detect(directory: dataDirectory).campaign
+    }
+    try require(campaign.levels.count == ClassicTitle(rawValue: game)?.expectedLevelCount,
+                "Incomplete hint campaign: \(game)")
+    var assets: [URL: ClassicMainDATAssets] = [:]
+    var grounds: [String: ClassicGroundSet] = [:], specials: [String: ClassicSpecialGraphic] = [:]
     for (index, entry) in campaign.levels.enumerated() {
         let level = entry.level
-        if grounds[level.groundStyle] == nil { grounds[level.groundStyle] = try ClassicGroundSet.load(style: level.groundStyle, from: dataDirectory) }
-        if level.specialStyle != 0 && specials[level.specialStyle] == nil {
-            specials[level.specialStyle] = try ClassicSpecialGraphic.load(index: level.specialStyle - 1, from: dataDirectory)
+        let artwork = game == "ohYesMoreLemmings"
+            ? PortExclusivePack.artworkDirectory(for: entry, portsRoot: ports) : dataDirectory
+        let fallback = game == "ohYesMoreLemmings"
+            ? PortExclusivePack.fallbackArtworkDirectory(for: entry, portsRoot: ports) : nil
+        let assetRoot = fallback ?? artwork
+        if assets[assetRoot] == nil { assets[assetRoot] = try ClassicMainDATAssets.load(from: assetRoot) }
+        let groundKey = "\(artwork.path)|\(fallback?.path ?? "")|\(level.groundStyle)"
+        let specialKey = "\(artwork.path)|\(level.specialStyle)"
+        if grounds[groundKey] == nil {
+            grounds[groundKey] = try ClassicGroundSet.load(style: level.groundStyle, from: artwork, fallbackDirectory: fallback)
         }
-        let rendered = try ClassicLevelRenderer.render(level, groundSet: grounds[level.groundStyle]!, specialGraphic: specials[level.specialStyle])
-        var sim = try ClassicDOSSimulation(level: level, renderedLevel: rendered, mainDATAssets: assets,
+        if level.specialStyle != 0 && specials[specialKey] == nil {
+            specials[specialKey] = try ClassicSpecialGraphic.load(index: level.specialStyle - 1, from: artwork)
+        }
+        let rendered = try ClassicLevelRenderer.render(level, groundSet: grounds[groundKey]!, specialGraphic: specials[specialKey])
+        var sim = try ClassicDOSSimulation(level: level, renderedLevel: rendered, mainDATAssets: assets[assetRoot]!,
                                            mechanics: ClassicDOSMechanics(title: ClassicTitle(rawValue: game), rank: entry.rank))
         let identity = try fingerprint(sim)
         let replay: ClassicDOSReplay
@@ -77,8 +100,7 @@ for (game, dataDirectory) in campaigns {
             replay = try decoder.decode(ClassicDOSReplay.self, from: bytes)
         } else {
             guard let route = solutions[ClassicDOSReplayRecorder.stateHash(of: sim)] else {
-                print("UNCOVERED \(game) \(entry.rank) \(entry.number)")
-                continue
+                throw HintError(message: "Missing winning route for \(game) \(entry.rank) \(entry.number)")
             }
             replay = route
         }
@@ -137,15 +159,22 @@ for (game, dataDirectory) in campaigns {
         try require(sim.isComplete && sim.didWin && replay.expected == actual, "Winning outcome changed for \(replay.title)")
         try require(replay.events.allSatisfy { $0.tick <= sim.tickCount }, "Unconsumed replay inputs")
         if game == "lemmings" { originalCount += 1 }
+        verifiedCount += 1
         // Identical installed levels share one deck. Lookup rejects ambiguous identities.
         guard identities.insert(identity).inserted else { continue }
+        // DOS permits assignments beyond the terrain canvas. Keep the full replay,
+        // but omit markers that the hint map cannot place inside that canvas.
+        let visibleMoves = moves.filter {
+            $0.x >= 0 && $0.x < rendered.width && $0.y >= 0 && $0.y < rendered.height
+        }
         levels.append(.init(fingerprint: identity, title: replay.title, rank: entry.rank, number: entry.number,
-            width: rendered.width, height: rendered.height, opening: moves, skillOrder: skillOrder,
-            rates: rates.filter { $0.tick <= (moves.last?.tick ?? 0) }))
+            width: rendered.width, height: rendered.height, opening: visibleMoves, skillOrder: skillOrder,
+            rates: rates.filter { $0.tick <= (visibleMoves.last?.tick ?? 0) }))
         print("PASS \(game) \(entry.rank) \(entry.number): \(replay.title)")
     }
 }
 try require(originalCount == 120, "Incomplete original campaign")
+try require(verifiedCount == 352, "Incomplete Classic and conversion hints")
 let output = HintExport(schemaVersion: 1, engineFingerprint: arguments[4], levels: levels)
 let encoder = JSONEncoder(); encoder.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
 try encoder.encode(output).write(to: URL(fileURLWithPath: arguments[3]), options: .atomic)

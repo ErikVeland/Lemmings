@@ -1,0 +1,1 @@
+[{"skill": "miner", "id": 1, "x": 838, "direction": -1, "async": true}, {"skill": "builder", "id": 0, "x": 673, "direction": 1}, {"skill": "builder", "id": 0, "action": "shrugging"}, {"skill": "digger", "x": 796, "direction": 1, "async": true}, {"skill": "builder", "id": 2, "x": 673, "direction": 1, "async": true}]

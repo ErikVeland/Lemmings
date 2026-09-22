@@ -1,0 +1,14 @@
+[
+  {
+    "skill": "miner",
+    "id": 0,
+    "x": 1048,
+    "direction": 1,
+    "action": "walking"
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "tick": 190
+  }
+]

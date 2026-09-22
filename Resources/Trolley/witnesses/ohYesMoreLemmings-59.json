@@ -1,0 +1,146 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 54
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 136
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 233
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 246
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 313
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 388
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 580
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 961
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1258
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1333
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1727
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1985
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 13,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2279
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 50,
+    "required" : 50,
+    "saved" : 50,
+    "stateHash" : "39dc3dc0b49ced0f7c589ad028efbdf3f430d824588e80bc3775eb48d0bde8f8",
+    "ticks" : 2949
+  },
+  "initialStateHash" : "9665edf3ae8c62cf03ced94a4ec38a9beeb15ec47373a578081720be4ab8f27d",
+  "number" : 30,
+  "rank" : "Mega Drive Sunsoft",
+  "title" : "Fall and no life (Part Two)"
+}

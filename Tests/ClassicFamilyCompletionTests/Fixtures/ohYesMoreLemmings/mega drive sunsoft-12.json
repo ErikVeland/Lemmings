@@ -1,0 +1,135 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 129
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 146
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 376
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 568
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "afterTick" : true,
+      "tick" : 900
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 900
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 6,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1120
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 6,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1173
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1320
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 6,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1365
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 6,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1557
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1626
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 50,
+    "required" : 49,
+    "saved" : 49,
+    "stateHash" : "d9cd705993b6ddd19832c72991ec17eeec3f554c05e3044a37ef8aa441940f00",
+    "ticks" : 2047
+  },
+  "initialStateHash" : "fdaeca71b0ea59bb4783fca00ac39385b206b1c6eccb79b9bd885dda509d62e7",
+  "number" : 12,
+  "rank" : "Mega Drive Sunsoft",
+  "title" : "Water processing plant"
+}

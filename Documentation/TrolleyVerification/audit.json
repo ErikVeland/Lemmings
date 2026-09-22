@@ -1,7 +1,7 @@
 {
   "engineSourceFingerprint": "6de62a611f02b621a0af08a5d6e4012b7571ddc0dad8009fa6ab48743b559507",
   "exhaustive": false,
-  "generatedAt": "2026-09-22T00:57:06Z",
+  "generatedAt": "2026-09-22T08:41:27Z",
   "levels": [
     {
       "bestSaved": 10,
@@ -128,15 +128,13 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 0,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 3,
       "population": 50,
       "rank": "Fun",
       "required": 5,
       "status": "OBSERVED",
-      "testedCandidates": 75,
+      "testedCandidates": 4,
       "title": "Tailor-made for blockers",
       "witness": {
         "completed": true,
@@ -275,15 +273,13 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 2,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 6,
       "population": 50,
       "rank": "Fun",
       "required": 10,
       "status": "OBSERVED",
-      "testedCandidates": 146,
+      "testedCandidates": 4,
       "title": "A task for blockers and bombers",
       "witness": {
         "completed": true,
@@ -863,15 +859,13 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 5,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 18,
       "population": 70,
       "rank": "Fun",
       "required": 50,
       "status": "OBSERVED",
-      "testedCandidates": 146,
+      "testedCandidates": 4,
       "title": "Let's block and blow",
       "witness": {
         "completed": true,
@@ -1696,15 +1690,13 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 4,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 5,
       "population": 80,
       "rank": "Mayhem",
       "required": 60,
       "status": "OBSERVED",
-      "testedCandidates": 501,
+      "testedCandidates": 4,
       "title": "Down, along, up. In that order",
       "witness": {
         "completed": true,
@@ -1941,15 +1933,13 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 2,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 10,
       "population": 75,
       "rank": "Mayhem",
       "required": 50,
       "status": "OBSERVED",
-      "testedCandidates": 501,
+      "testedCandidates": 4,
       "title": "Pillars of Hercules",
       "witness": {
         "completed": true,
@@ -2382,15 +2372,13 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 2,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 19,
       "population": 50,
       "rank": "Mayhem",
       "required": 46,
       "status": "OBSERVED",
-      "testedCandidates": 217,
+      "testedCandidates": 4,
       "title": "Time to get up!",
       "witness": {
         "completed": true,
@@ -2725,15 +2713,13 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 3,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 26,
       "population": 80,
       "rank": "Mayhem",
       "required": 60,
       "status": "OBSERVED",
-      "testedCandidates": 217,
+      "testedCandidates": 4,
       "title": "The Steel Mines of Kessel",
       "witness": {
         "completed": true,
@@ -2872,15 +2858,13 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 0,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 29,
       "population": 80,
       "rank": "Mayhem",
       "required": 64,
       "status": "OBSERVED",
-      "testedCandidates": 288,
+      "testedCandidates": 4,
       "title": "Save Me",
       "witness": {
         "completed": true,
@@ -3264,15 +3248,13 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 1,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 7,
       "population": 80,
       "rank": "Taxing",
       "required": 78,
       "status": "OBSERVED",
-      "testedCandidates": 359,
+      "testedCandidates": 4,
       "title": "Every Lemming for himself!!!",
       "witness": {
         "completed": true,
@@ -3852,15 +3834,13 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 5,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 19,
       "population": 70,
       "rank": "Taxing",
       "required": 64,
       "status": "OBSERVED",
-      "testedCandidates": 75,
+      "testedCandidates": 4,
       "title": "Bomboozal",
       "witness": {
         "completed": true,
@@ -4244,15 +4224,13 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 3,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 27,
       "population": 80,
       "rank": "Taxing",
       "required": 48,
       "status": "OBSERVED",
-      "testedCandidates": 217,
+      "testedCandidates": 4,
       "title": "Call in the bomb squad",
       "witness": {
         "completed": true,
@@ -4293,15 +4271,13 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 10,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 28,
       "population": 80,
       "rank": "Taxing",
       "required": 56,
       "status": "OBSERVED",
-      "testedCandidates": 501,
+      "testedCandidates": 4,
       "title": "POOR WEE CREATURES!",
       "witness": {
         "completed": true,
@@ -5126,15 +5102,13 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 3,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 15,
       "population": 10,
       "rank": "Tricky",
       "required": 6,
       "status": "OBSERVED",
-      "testedCandidates": 75,
+      "testedCandidates": 4,
       "title": "Ozone friendly Lemmings",
       "witness": {
         "completed": true,
@@ -5175,15 +5149,13 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 4,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 16,
       "population": 50,
       "rank": "Tricky",
       "required": 40,
       "status": "OBSERVED",
-      "testedCandidates": 217,
+      "testedCandidates": 4,
       "title": "Luvly Jubly",
       "witness": {
         "completed": true,
@@ -5224,15 +5196,13 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 2,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 17,
       "population": 50,
       "rank": "Tricky",
       "required": 48,
       "status": "OBSERVED",
-      "testedCandidates": 75,
+      "testedCandidates": 4,
       "title": "Diet Lemmingaid",
       "witness": {
         "completed": true,
@@ -5273,15 +5243,13 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 1,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 18,
       "population": 10,
       "rank": "Tricky",
       "required": 9,
       "status": "OBSERVED",
-      "testedCandidates": 288,
+      "testedCandidates": 4,
       "title": "It's Lemmingentry Watson",
       "witness": {
         "completed": true,
@@ -5518,15 +5486,13 @@
       },
       "gameID": "lemmings",
       "lossesInBestSolution": 1,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 23,
       "population": 80,
       "rank": "Tricky",
       "required": 48,
       "status": "OBSERVED",
-      "testedCandidates": 430,
+      "testedCandidates": 4,
       "title": "From The Boundary Line",
       "witness": {
         "completed": true,
@@ -6008,15 +5974,13 @@
       },
       "gameID": "xmasLemmings1991",
       "lossesInBestSolution": 2,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 3,
       "population": 50,
       "rank": "Xmas",
       "required": 45,
       "status": "OBSERVED",
-      "testedCandidates": 428,
+      "testedCandidates": 3,
       "title": "Time waits for no Lemming",
       "witness": {
         "completed": true,
@@ -6080,6 +6044,7 @@
       }
     },
     {
+      "bestSaved": 48,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
         "levelFingerprint": "3b53bef03666fc66a8c827af79fe3cbc5b11c808ee958a970069a6ef1de5dab5",
@@ -6104,16 +6069,26 @@
         "timeLimitSeconds": 180
       },
       "gameID": "ohNoMoreLemmings",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "lossesInBestSolution": 2,
+      "notes": [],
       "number": 1,
       "population": 50,
       "rank": "Crazy",
       "required": 48,
-      "status": "UNKNOWN",
-      "testedCandidates": 356,
-      "title": "Quote: \"That`s a good level\""
+      "status": "OBSERVED",
+      "testedCandidates": 3,
+      "title": "Quote: \"That`s a good level\"",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 2,
+        "path": "witnesses/ohNoMoreLemmings-20.json",
+        "released": 50,
+        "retainedReserves": 0,
+        "saved": 48,
+        "sha256": "b027b13d324af72e91045558dbb6e60ee55b35149b19dc7c7e8f1db140dd5deb",
+        "ticks": 2508
+      }
     },
     {
       "bestSaved": 80,
@@ -6191,15 +6166,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 2,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 3,
       "population": 50,
       "rank": "Crazy",
       "required": 48,
       "status": "OBSERVED",
-      "testedCandidates": 144,
+      "testedCandidates": 3,
       "title": "Many Lemmings make level work",
       "witness": {
         "completed": true,
@@ -6436,15 +6409,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 2,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 8,
       "population": 80,
       "rank": "Crazy",
       "required": 75,
       "status": "OBSERVED",
-      "testedCandidates": 428,
+      "testedCandidates": 3,
       "title": "KEEP ON TRUCKING",
       "witness": {
         "completed": true,
@@ -6508,6 +6479,7 @@
       }
     },
     {
+      "bestSaved": 79,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
         "levelFingerprint": "961582f8a7b01e4040b1ce826c03bba69d8f3b459a3623cb1c06ed138184f2e8",
@@ -6532,16 +6504,26 @@
         "timeLimitSeconds": 180
       },
       "gameID": "ohNoMoreLemmings",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "lossesInBestSolution": 1,
+      "notes": [],
       "number": 10,
       "population": 80,
       "rank": "Crazy",
       "required": 79,
-      "status": "UNKNOWN",
-      "testedCandidates": 427,
-      "title": "ROCKY VI"
+      "status": "OBSERVED",
+      "testedCandidates": 3,
+      "title": "ROCKY VI",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 1,
+        "path": "witnesses/ohNoMoreLemmings-29.json",
+        "released": 80,
+        "retainedReserves": 0,
+        "saved": 79,
+        "sha256": "0134cd3437e6cef163b9ad293d6b0589ce3bb09b8b03ef1ae5321fd31691fb15",
+        "ticks": 3006
+      }
     },
     {
       "bestSaved": 8,
@@ -6570,15 +6552,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 9,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 11,
       "population": 80,
       "rank": "Crazy",
       "required": 8,
       "status": "OBSERVED",
-      "testedCandidates": 144,
+      "testedCandidates": 3,
       "title": "No Problemming!",
       "witness": {
         "completed": true,
@@ -6668,15 +6648,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 9,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 13,
       "population": 20,
       "rank": "Crazy",
       "required": 10,
       "status": "OBSERVED",
-      "testedCandidates": 357,
+      "testedCandidates": 3,
       "title": "It`s a trade off",
       "witness": {
         "completed": true,
@@ -6717,15 +6695,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 2,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 14,
       "population": 50,
       "rank": "Crazy",
       "required": 45,
       "status": "OBSERVED",
-      "testedCandidates": 428,
+      "testedCandidates": 3,
       "title": "Time waits for no Lemming",
       "witness": {
         "completed": true,
@@ -6766,15 +6742,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 1,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 15,
       "population": 50,
       "rank": "Crazy",
       "required": 44,
       "status": "OBSERVED",
-      "testedCandidates": 286,
+      "testedCandidates": 3,
       "title": "Worra load of old blocks!",
       "witness": {
         "completed": true,
@@ -6864,15 +6838,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 1,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 17,
       "population": 50,
       "rank": "Crazy",
       "required": 49,
       "status": "OBSERVED",
-      "testedCandidates": 357,
+      "testedCandidates": 3,
       "title": "DIGGING FOR VICTORY",
       "witness": {
         "completed": true,
@@ -6913,15 +6885,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 4,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 18,
       "population": 50,
       "rank": "Crazy",
       "required": 45,
       "status": "OBSERVED",
-      "testedCandidates": 428,
+      "testedCandidates": 3,
       "title": "NO PROBLEM",
       "witness": {
         "completed": true,
@@ -6962,15 +6932,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 4,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 19,
       "population": 50,
       "rank": "Crazy",
       "required": 45,
       "status": "OBSERVED",
-      "testedCandidates": 499,
+      "testedCandidates": 3,
       "title": "DON`T PANIC",
       "witness": {
         "completed": true,
@@ -6985,6 +6953,7 @@
       }
     },
     {
+      "bestSaved": 10,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
         "levelFingerprint": "98263270a46700940ae0a97c53c3c2b184d0a7b951de64468a3a5573b721befe",
@@ -7009,16 +6978,26 @@
         "timeLimitSeconds": 240
       },
       "gameID": "ohNoMoreLemmings",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "lossesInBestSolution": 0,
+      "notes": [],
       "number": 20,
       "population": 20,
       "rank": "Crazy",
       "required": 10,
-      "status": "UNKNOWN",
-      "testedCandidates": 285,
-      "title": "Ice Ice Lemming"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "Ice Ice Lemming",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/ohNoMoreLemmings-39.json",
+        "released": 20,
+        "retainedReserves": 0,
+        "saved": 10,
+        "sha256": "aee15892a35ddd858fd6808cd476feea5c611d7146587ded0c6737dbe021ac83",
+        "ticks": 4080
+      }
     },
     {
       "bestSaved": 76,
@@ -7047,15 +7026,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 4,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 1,
       "population": 80,
       "rank": "Havoc",
       "required": 76,
       "status": "OBSERVED",
-      "testedCandidates": 357,
+      "testedCandidates": 3,
       "title": "Tubular Lemmings",
       "witness": {
         "completed": true,
@@ -7096,15 +7073,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 0,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 2,
       "population": 30,
       "rank": "Havoc",
       "required": 29,
       "status": "OBSERVED",
-      "testedCandidates": 357,
+      "testedCandidates": 3,
       "title": "Be more than just a number",
       "witness": {
         "completed": true,
@@ -7217,6 +7192,7 @@
       }
     },
     {
+      "bestSaved": 20,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
         "levelFingerprint": "1c5a7af807ec853cb96f2f211c124c45b026fe0e18e4bd4423896ae9c9579e78",
@@ -7241,16 +7217,28 @@
         "timeLimitSeconds": 240
       },
       "gameID": "ohNoMoreLemmings",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 20,
+      "minimumSacrifices": 0,
+      "notes": [],
       "number": 5,
       "population": 20,
       "rank": "Havoc",
       "required": 20,
-      "status": "UNKNOWN",
-      "testedCandidates": 427,
-      "title": "There`s madness in the method"
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "There`s madness in the method",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/ohNoMoreLemmings-84.json",
+        "released": 20,
+        "retainedReserves": 0,
+        "saved": 20,
+        "sha256": "c5a1537cca7b28c3578533564ee617e96e1477d0824916e752fde0849b1b49a7",
+        "ticks": 2160
+      }
     },
     {
       "bestSaved": 50,
@@ -7302,6 +7290,7 @@
       }
     },
     {
+      "bestSaved": 18,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
         "levelFingerprint": "e2f69cb0620155a1de57c89e38bea46473c4cff7d785a40f73463650aa7d4df5",
@@ -7326,16 +7315,26 @@
         "timeLimitSeconds": 180
       },
       "gameID": "ohNoMoreLemmings",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "lossesInBestSolution": 1,
+      "notes": [],
       "number": 7,
       "population": 20,
       "rank": "Havoc",
       "required": 15,
-      "status": "UNKNOWN",
-      "testedCandidates": 569,
-      "title": "Creature Discomforts"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "Creature Discomforts",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 1,
+        "path": "witnesses/ohNoMoreLemmings-86.json",
+        "released": 20,
+        "retainedReserves": 0,
+        "saved": 18,
+        "sha256": "2c460dd96a85ae7e8e03e5ce2828f1519b6ce73303cc4b33894e6a3d3daaffd0",
+        "ticks": 3060
+      }
     },
     {
       "bestSaved": 50,
@@ -7462,15 +7461,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 16,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 10,
       "population": 21,
       "rank": "Havoc",
       "required": 3,
       "status": "OBSERVED",
-      "testedCandidates": 428,
+      "testedCandidates": 3,
       "title": "Flow Control",
       "witness": {
         "completed": true,
@@ -7583,6 +7580,7 @@
       }
     },
     {
+      "bestSaved": 76,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
         "levelFingerprint": "3a4f1205673d17001cd507195ef664e081f35e87fa7d08a85ee47114d72b641e",
@@ -7607,16 +7605,26 @@
         "timeLimitSeconds": 240
       },
       "gameID": "ohNoMoreLemmings",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "lossesInBestSolution": 4,
+      "notes": [],
       "number": 13,
       "population": 80,
       "rank": "Havoc",
       "required": 75,
-      "status": "UNKNOWN",
-      "testedCandidates": 356,
-      "title": "HIGHLAND FLING"
+      "status": "OBSERVED",
+      "testedCandidates": 3,
+      "title": "HIGHLAND FLING",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 4,
+        "path": "witnesses/ohNoMoreLemmings-92.json",
+        "released": 80,
+        "retainedReserves": 0,
+        "saved": 76,
+        "sha256": "6bed077b32f63b1e5cf1687bba07b569e5d1c94954ae6cbf2c0b428531a7b681",
+        "ticks": 3426
+      }
     },
     {
       "bestSaved": 80,
@@ -7717,6 +7725,7 @@
       }
     },
     {
+      "bestSaved": 48,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
         "levelFingerprint": "75fd9f413d7562edee91e603fd67d7a1edf9eeab0993d3fc84fee2ebd0fcf575",
@@ -7741,16 +7750,26 @@
         "timeLimitSeconds": 120
       },
       "gameID": "ohNoMoreLemmings",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "lossesInBestSolution": 0,
+      "notes": [],
       "number": 16,
       "population": 50,
       "rank": "Havoc",
       "required": 45,
-      "status": "UNKNOWN",
-      "testedCandidates": 285,
-      "title": "Scaling the Heights"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "Scaling the Heights",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/ohNoMoreLemmings-95.json",
+        "released": 50,
+        "retainedReserves": 0,
+        "saved": 48,
+        "sha256": "cd2cae4c071a3e86294be538c8de1d4c2ca5d0cf369405990214fee60907716d",
+        "ticks": 2040
+      }
     },
     {
       "bestSaved": 78,
@@ -7779,15 +7798,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 1,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 17,
       "population": 80,
       "rank": "Havoc",
       "required": 78,
       "status": "OBSERVED",
-      "testedCandidates": 499,
+      "testedCandidates": 3,
       "title": "Where Lemmings Dare",
       "witness": {
         "completed": true,
@@ -7828,15 +7845,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 1,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 18,
       "population": 70,
       "rank": "Havoc",
       "required": 68,
       "status": "OBSERVED",
-      "testedCandidates": 499,
+      "testedCandidates": 3,
       "title": "Lemmings in a situation",
       "witness": {
         "completed": true,
@@ -7900,6 +7915,7 @@
       }
     },
     {
+      "bestSaved": 50,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
         "levelFingerprint": "ba0d5e42ea47bbc45f83382bd7f2fb0ea3cce5d303b12fbd090644a899e06bcd",
@@ -7924,16 +7940,26 @@
         "timeLimitSeconds": 420
       },
       "gameID": "ohNoMoreLemmings",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "lossesInBestSolution": 10,
+      "notes": [],
       "number": 20,
       "population": 60,
       "rank": "Havoc",
       "required": 50,
-      "status": "UNKNOWN",
-      "testedCandidates": 285,
-      "title": "LOoK BeFoRe YoU LeAp!"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "LOoK BeFoRe YoU LeAp!",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 10,
+        "path": "witnesses/ohNoMoreLemmings-99.json",
+        "released": 60,
+        "retainedReserves": 0,
+        "saved": 50,
+        "sha256": "06e4c1b21e15c59cf6e83c66b99e2857aa7f7b02b052bb2601da27c6fe858715",
+        "ticks": 6038
+      }
     },
     {
       "bestSaved": 50,
@@ -8011,15 +8037,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 1,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 2,
       "population": 50,
       "rank": "Tame",
       "required": 25,
       "status": "OBSERVED",
-      "testedCandidates": 570,
+      "testedCandidates": 3,
       "title": "Rent-a-Lemming",
       "witness": {
         "completed": true,
@@ -8158,15 +8182,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 4,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 5,
       "population": 50,
       "rank": "Tame",
       "required": 25,
       "status": "OBSERVED",
-      "testedCandidates": 570,
+      "testedCandidates": 3,
       "title": "Snuggle up to a Lemming",
       "witness": {
         "completed": true,
@@ -8256,15 +8278,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 1,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 7,
       "population": 50,
       "rank": "Tame",
       "required": 25,
       "status": "OBSERVED",
-      "testedCandidates": 570,
+      "testedCandidates": 3,
       "title": "Who`s That Lemming",
       "witness": {
         "completed": true,
@@ -8305,15 +8325,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 1,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 8,
       "population": 50,
       "rank": "Tame",
       "required": 25,
       "status": "OBSERVED",
-      "testedCandidates": 570,
+      "testedCandidates": 3,
       "title": "Dangerzone",
       "witness": {
         "completed": true,
@@ -8354,15 +8372,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 1,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 9,
       "population": 50,
       "rank": "Tame",
       "required": 25,
       "status": "OBSERVED",
-      "testedCandidates": 570,
+      "testedCandidates": 3,
       "title": "And now this...",
       "witness": {
         "completed": true,
@@ -8599,15 +8615,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 0,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 14,
       "population": 50,
       "rank": "Tame",
       "required": 25,
       "status": "OBSERVED",
-      "testedCandidates": 570,
+      "testedCandidates": 3,
       "title": "Get a little extra help",
       "witness": {
         "completed": true,
@@ -8648,15 +8662,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 1,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 15,
       "population": 50,
       "rank": "Tame",
       "required": 25,
       "status": "OBSERVED",
-      "testedCandidates": 570,
+      "testedCandidates": 3,
       "title": "Not just a pretty Lemming",
       "witness": {
         "completed": true,
@@ -8844,15 +8856,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 1,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 19,
       "population": 50,
       "rank": "Tame",
       "required": 25,
       "status": "OBSERVED",
-      "testedCandidates": 570,
+      "testedCandidates": 3,
       "title": "Lemming Productions Present...",
       "witness": {
         "completed": true,
@@ -8942,15 +8952,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 4,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 1,
       "population": 60,
       "rank": "Wicked",
       "required": 48,
       "status": "OBSERVED",
-      "testedCandidates": 428,
+      "testedCandidates": 3,
       "title": "LeMming ToMato KetchUp fAcilitY",
       "witness": {
         "completed": true,
@@ -9089,15 +9097,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 9,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 4,
       "population": 50,
       "rank": "Wicked",
       "required": 30,
       "status": "OBSERVED",
-      "testedCandidates": 357,
+      "testedCandidates": 3,
       "title": "Oh No! It`s the 4TH DIMENSION!",
       "witness": {
         "completed": true,
@@ -9187,15 +9193,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 0,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 6,
       "population": 80,
       "rank": "Wicked",
       "required": 30,
       "status": "OBSERVED",
-      "testedCandidates": 286,
+      "testedCandidates": 3,
       "title": "PoP TiL YoU DrOp!",
       "witness": {
         "completed": true,
@@ -9236,15 +9240,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 5,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 7,
       "population": 80,
       "rank": "Wicked",
       "required": 72,
       "status": "OBSERVED",
-      "testedCandidates": 144,
+      "testedCandidates": 3,
       "title": "Last Lemming To Lemmingcentral",
       "witness": {
         "completed": true,
@@ -9285,15 +9287,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 4,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 8,
       "population": 50,
       "rank": "Wicked",
       "required": 45,
       "status": "OBSERVED",
-      "testedCandidates": 357,
+      "testedCandidates": 3,
       "title": "A TOWERING PROBLEM",
       "witness": {
         "completed": true,
@@ -9334,15 +9334,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 3,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 9,
       "population": 50,
       "rank": "Wicked",
       "required": 45,
       "status": "OBSERVED",
-      "testedCandidates": 215,
+      "testedCandidates": 3,
       "title": "How on Earth?",
       "witness": {
         "completed": true,
@@ -9383,15 +9381,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 0,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 10,
       "population": 50,
       "rank": "Wicked",
       "required": 48,
       "status": "OBSERVED",
-      "testedCandidates": 428,
+      "testedCandidates": 3,
       "title": "Temple of Love",
       "witness": {
         "completed": true,
@@ -9432,15 +9428,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 6,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 11,
       "population": 50,
       "rank": "Wicked",
       "required": 40,
       "status": "OBSERVED",
-      "testedCandidates": 428,
+      "testedCandidates": 3,
       "title": "ROCKY ROAD",
       "witness": {
         "completed": true,
@@ -9481,15 +9475,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 1,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 12,
       "population": 80,
       "rank": "Wicked",
       "required": 78,
       "status": "OBSERVED",
-      "testedCandidates": 286,
+      "testedCandidates": 3,
       "title": "Suicidal Tendencies",
       "witness": {
         "completed": true,
@@ -9530,15 +9522,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 7,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 13,
       "population": 80,
       "rank": "Wicked",
       "required": 70,
       "status": "OBSERVED",
-      "testedCandidates": 499,
+      "testedCandidates": 3,
       "title": "Almost Nearly Virtual Reality",
       "witness": {
         "completed": true,
@@ -9628,15 +9618,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 7,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 15,
       "population": 50,
       "rank": "Wicked",
       "required": 40,
       "status": "OBSERVED",
-      "testedCandidates": 499,
+      "testedCandidates": 3,
       "title": "SPAM,SPAM,SPAM,EGG AND LEMMING",
       "witness": {
         "completed": true,
@@ -9677,15 +9665,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 1,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 16,
       "population": 6,
       "rank": "Wicked",
       "required": 5,
       "status": "OBSERVED",
-      "testedCandidates": 357,
+      "testedCandidates": 3,
       "title": "Five Alive",
       "witness": {
         "completed": true,
@@ -9726,15 +9712,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 1,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 17,
       "population": 30,
       "rank": "Wicked",
       "required": 29,
       "status": "OBSERVED",
-      "testedCandidates": 286,
+      "testedCandidates": 3,
       "title": "Down the tube",
       "witness": {
         "completed": true,
@@ -9824,15 +9808,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 4,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 19,
       "population": 50,
       "rank": "Wicked",
       "required": 41,
       "status": "OBSERVED",
-      "testedCandidates": 144,
+      "testedCandidates": 3,
       "title": "Up, Down or Round and Round",
       "witness": {
         "completed": true,
@@ -9873,15 +9855,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 2,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 20,
       "population": 70,
       "rank": "Wicked",
       "required": 68,
       "status": "OBSERVED",
-      "testedCandidates": 286,
+      "testedCandidates": 3,
       "title": "The Lemming Funhouse",
       "witness": {
         "completed": true,
@@ -9971,15 +9951,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 20,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 2,
       "population": 80,
       "rank": "Wild",
       "required": 60,
       "status": "OBSERVED",
-      "testedCandidates": 570,
+      "testedCandidates": 3,
       "title": "Lemming Hotel",
       "witness": {
         "completed": true,
@@ -10020,15 +9998,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 11,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 3,
       "population": 80,
       "rank": "Wild",
       "required": 65,
       "status": "OBSERVED",
-      "testedCandidates": 428,
+      "testedCandidates": 3,
       "title": "Lemming Rhythms",
       "witness": {
         "completed": true,
@@ -10118,15 +10094,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 4,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 5,
       "population": 80,
       "rank": "Wild",
       "required": 68,
       "status": "OBSERVED",
-      "testedCandidates": 215,
+      "testedCandidates": 3,
       "title": "Lemming Head",
       "witness": {
         "completed": true,
@@ -10288,6 +10262,7 @@
       }
     },
     {
+      "bestSaved": 40,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
         "levelFingerprint": "6ad182864707a7718059ab8b15de054d0326ccd1c5d62d0ae2aeda410479733a",
@@ -10312,18 +10287,31 @@
         "timeLimitSeconds": 240
       },
       "gameID": "ohNoMoreLemmings",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 40,
+      "minimumSacrifices": 0,
+      "notes": [],
       "number": 9,
       "population": 40,
       "rank": "Wild",
       "required": 40,
-      "status": "UNKNOWN",
-      "testedCandidates": 285,
-      "title": "Ice Station Lemming"
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Ice Station Lemming",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/ohNoMoreLemmings-48.json",
+        "released": 40,
+        "retainedReserves": 0,
+        "saved": 40,
+        "sha256": "722aba36bea6b2d4aa3ca73fa480c1ed8a14dacab29f0e466b51050c0763a812",
+        "ticks": 2904
+      }
     },
     {
+      "bestSaved": 72,
       "conditions": {
         "gameID": "ohNoMoreLemmings",
         "levelFingerprint": "6a6f775e9dcea6220747d01a8140c97d888aa571ec1de57970bafc552bf37975",
@@ -10348,16 +10336,26 @@
         "timeLimitSeconds": 240
       },
       "gameID": "ohNoMoreLemmings",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "lossesInBestSolution": 8,
+      "notes": [],
       "number": 10,
       "population": 80,
       "rank": "Wild",
       "required": 60,
-      "status": "UNKNOWN",
-      "testedCandidates": 214,
-      "title": "Higgledy Piggledy"
+      "status": "OBSERVED",
+      "testedCandidates": 3,
+      "title": "Higgledy Piggledy",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 8,
+        "path": "witnesses/ohNoMoreLemmings-49.json",
+        "released": 80,
+        "retainedReserves": 0,
+        "saved": 72,
+        "sha256": "cca6b08c219cb37aa1c87a29fa3cefc049f90c824dc3ef410e154ef4edf9c8c7",
+        "ticks": 1800
+      }
     },
     {
       "bestSaved": 49,
@@ -10386,15 +10384,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 1,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 11,
       "population": 50,
       "rank": "Wild",
       "required": 49,
       "status": "OBSERVED",
-      "testedCandidates": 428,
+      "testedCandidates": 3,
       "title": "Mutiny On The Bounty",
       "witness": {
         "completed": true,
@@ -10435,15 +10431,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 8,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 12,
       "population": 50,
       "rank": "Wild",
       "required": 40,
       "status": "OBSERVED",
-      "testedCandidates": 357,
+      "testedCandidates": 3,
       "title": "SNOW JOKE",
       "witness": {
         "completed": true,
@@ -10484,15 +10478,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 4,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 13,
       "population": 80,
       "rank": "Wild",
       "required": 75,
       "status": "OBSERVED",
-      "testedCandidates": 428,
+      "testedCandidates": 3,
       "title": "ONWARD AND UPWARD",
       "witness": {
         "completed": true,
@@ -10582,15 +10574,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 9,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 15,
       "population": 50,
       "rank": "Wild",
       "required": 40,
       "status": "OBSERVED",
-      "testedCandidates": 357,
+      "testedCandidates": 3,
       "title": "THE SILENCE OF THE LEMMINGS",
       "witness": {
         "completed": true,
@@ -10729,15 +10719,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 9,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 18,
       "population": 80,
       "rank": "Wild",
       "required": 60,
       "status": "OBSERVED",
-      "testedCandidates": 144,
+      "testedCandidates": 3,
       "title": "Dr Lemminggood",
       "witness": {
         "completed": true,
@@ -10778,15 +10766,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 15,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 19,
       "population": 80,
       "rank": "Wild",
       "required": 65,
       "status": "OBSERVED",
-      "testedCandidates": 357,
+      "testedCandidates": 3,
       "title": "Lemmingdelica",
       "witness": {
         "completed": true,
@@ -10827,15 +10813,13 @@
       },
       "gameID": "ohNoMoreLemmings",
       "lossesInBestSolution": 1,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 20,
       "population": 30,
       "rank": "Wild",
       "required": 29,
       "status": "OBSERVED",
-      "testedCandidates": 286,
+      "testedCandidates": 3,
       "title": "Got anything....Lemmingy???",
       "witness": {
         "completed": true,
@@ -17483,6 +17467,7 @@
       "title": "Take up Archery"
     },
     {
+      "bestSaved": 22,
       "conditions": {
         "gameID": "holidayLemmings1993",
         "levelFingerprint": "b1f14a1f29991b0ba1e867c5940ef5be3d5c4af12dc11100a3bb6d18c13b6634",
@@ -17507,16 +17492,26 @@
         "timeLimitSeconds": 540
       },
       "gameID": "holidayLemmings1993",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "lossesInBestSolution": 3,
+      "notes": [],
       "number": 1,
       "population": 25,
       "rank": "Blizzard",
       "required": 22,
-      "status": "UNKNOWN",
-      "testedCandidates": 427,
-      "title": "Oogilemming!"
+      "status": "OBSERVED",
+      "testedCandidates": 3,
+      "title": "Oogilemming!",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 3,
+        "path": "witnesses/holidayLemmings1993-16.json",
+        "released": 25,
+        "retainedReserves": 0,
+        "saved": 22,
+        "sha256": "fea87a49c95189cda988b3cc364f9fcdac77606d5ad7167a17598eef098e6360",
+        "ticks": 6182
+      }
     },
     {
       "bestSaved": 80,
@@ -17692,15 +17687,13 @@
       },
       "gameID": "holidayLemmings1993",
       "lossesInBestSolution": 2,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 5,
       "population": 80,
       "rank": "Blizzard",
       "required": 75,
       "status": "OBSERVED",
-      "testedCandidates": 570,
+      "testedCandidates": 3,
       "title": "It Came Upon a Lemnight Clear",
       "witness": {
         "completed": true,
@@ -18035,15 +18028,13 @@
       },
       "gameID": "holidayLemmings1993",
       "lossesInBestSolution": 2,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 12,
       "population": 80,
       "rank": "Blizzard",
       "required": 70,
       "status": "OBSERVED",
-      "testedCandidates": 144,
+      "testedCandidates": 3,
       "title": "The Voyage Home...",
       "witness": {
         "completed": true,
@@ -18084,15 +18075,13 @@
       },
       "gameID": "holidayLemmings1993",
       "lossesInBestSolution": 5,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 13,
       "population": 70,
       "rank": "Blizzard",
       "required": 65,
       "status": "OBSERVED",
-      "testedCandidates": 570,
+      "testedCandidates": 3,
       "title": "The Final Frontier",
       "witness": {
         "completed": true,
@@ -18182,15 +18171,13 @@
       },
       "gameID": "holidayLemmings1993",
       "lossesInBestSolution": 5,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 15,
       "population": 15,
       "rank": "Blizzard",
       "required": 8,
       "status": "OBSERVED",
-      "testedCandidates": 357,
+      "testedCandidates": 3,
       "title": "The Needs of the Many...",
       "witness": {
         "completed": true,
@@ -18231,15 +18218,13 @@
       },
       "gameID": "holidayLemmings1993",
       "lossesInBestSolution": 2,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 16,
       "population": 50,
       "rank": "Blizzard",
       "required": 47,
       "status": "OBSERVED",
-      "testedCandidates": 357,
+      "testedCandidates": 3,
       "title": "The Next Lemeration",
       "witness": {
         "completed": true,
@@ -18254,6 +18239,7 @@
       }
     },
     {
+      "bestSaved": 10,
       "conditions": {
         "gameID": "holidayLemmings1993",
         "levelFingerprint": "a9d2f4923e50c26f8623e69783836dbf5f28aecf9c0449ac274d683818c08f00",
@@ -18278,16 +18264,28 @@
         "timeLimitSeconds": 360
       },
       "gameID": "holidayLemmings1993",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 10,
+      "minimumSacrifices": 0,
+      "notes": [],
       "number": 1,
       "population": 10,
       "rank": "Flurry",
       "required": 10,
-      "status": "UNKNOWN",
-      "testedCandidates": 569,
-      "title": "Climbing to the Top!"
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Climbing to the Top!",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/holidayLemmings1993-0.json",
+        "released": 10,
+        "retainedReserves": 0,
+        "saved": 10,
+        "sha256": "f58b2e86d5a81d6d9815eabec6a4410d99eacd4e381f1b5dd6cc2d8308e152ad",
+        "ticks": 1156
+      }
     },
     {
       "bestSaved": 20,
@@ -18610,15 +18608,13 @@
       },
       "gameID": "holidayLemmings1993",
       "lossesInBestSolution": 0,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 8,
       "population": 80,
       "rank": "Flurry",
       "required": 70,
       "status": "OBSERVED",
-      "testedCandidates": 570,
+      "testedCandidates": 3,
       "title": "Clouds of Lemmings",
       "witness": {
         "completed": true,
@@ -18633,6 +18629,7 @@
       }
     },
     {
+      "bestSaved": 80,
       "conditions": {
         "gameID": "holidayLemmings1993",
         "levelFingerprint": "8fff89f6f98c4e97b4370a21e6c3262e4b684151c5863f2718b57be4007c8042",
@@ -18657,16 +18654,28 @@
         "timeLimitSeconds": 240
       },
       "gameID": "holidayLemmings1993",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 80,
+      "minimumSacrifices": 0,
+      "notes": [],
       "number": 9,
       "population": 80,
       "rank": "Flurry",
       "required": 75,
-      "status": "UNKNOWN",
-      "testedCandidates": 569,
-      "title": "A Block from Home"
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "A Block from Home",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/holidayLemmings1993-8.json",
+        "released": 80,
+        "retainedReserves": 0,
+        "saved": 80,
+        "sha256": "acdae875187562033896d1b8318db8ea0aa4208462fb275cd17b23393be3d391",
+        "ticks": 3832
+      }
     },
     {
       "bestSaved": 32,
@@ -18963,6 +18972,7 @@
       }
     },
     {
+      "bestSaved": 48,
       "conditions": {
         "gameID": "holidayLemmings1993",
         "levelFingerprint": "2e4d449de7fdfc0b803bdc6b0ec7da27f894a67fa8eeefe87688927b1fe0bb87",
@@ -18987,16 +18997,26 @@
         "timeLimitSeconds": 240
       },
       "gameID": "holidayLemmings1993",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "lossesInBestSolution": 0,
+      "notes": [],
       "number": 16,
       "population": 50,
       "rank": "Flurry",
       "required": 45,
-      "status": "UNKNOWN",
-      "testedCandidates": 427,
-      "title": "The Long Way Around"
+      "status": "OBSERVED",
+      "testedCandidates": 3,
+      "title": "The Long Way Around",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/holidayLemmings1993-15.json",
+        "released": 50,
+        "retainedReserves": 0,
+        "saved": 48,
+        "sha256": "b2285013202adc66ec593abeeecb7f79b4bd518067af2a4db43c913b16a8867c",
+        "ticks": 4080
+      }
     },
     {
       "bestSaved": 78,
@@ -19031,7 +19051,7 @@
       "rank": "Lemmings Versus",
       "required": 65,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "There can be only one",
       "witness": {
         "completed": true,
@@ -19046,6 +19066,7 @@
       }
     },
     {
+      "bestSaved": 68,
       "conditions": {
         "gameID": "ohYesMoreLemmings",
         "levelFingerprint": "b9fc7951ec313497e197f8283dd1a69bc3d499b6441ea33e34feef0269b27650",
@@ -19070,14 +19091,26 @@
         "timeLimitSeconds": 300
       },
       "gameID": "ohYesMoreLemmings",
+      "lossesInBestSolution": 7,
       "notes": [],
       "number": 2,
       "population": 80,
       "rank": "Lemmings Versus",
       "required": 65,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "We`re in this one together"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "We`re in this one together",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 7,
+        "path": "witnesses/ohYesMoreLemmings-1.json",
+        "released": 80,
+        "retainedReserves": 0,
+        "saved": 68,
+        "sha256": "4449faf6686639175f97c0bf0b271f60a71074cd8972dbe23a7ad3fee2567a06",
+        "ticks": 5100
+      }
     },
     {
       "bestSaved": 100,
@@ -19129,6 +19162,7 @@
       }
     },
     {
+      "bestSaved": 80,
       "conditions": {
         "gameID": "ohYesMoreLemmings",
         "levelFingerprint": "e7ff2fcce6fb2f24756f1079b35581bbc739b56d838a5a90f5faed21f8434fde",
@@ -19153,14 +19187,28 @@
         "timeLimitSeconds": 300
       },
       "gameID": "ohYesMoreLemmings",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 80,
+      "minimumSacrifices": 0,
       "notes": [],
       "number": 4,
       "population": 80,
       "rank": "Lemmings Versus",
       "required": 80,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "May the craftiest player win"
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "May the craftiest player win",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/ohYesMoreLemmings-3.json",
+        "released": 80,
+        "retainedReserves": 0,
+        "saved": 80,
+        "sha256": "71100d0797e2cfe5875df98448f32ce400e494fa7d896b34a0deae7cb520ab06",
+        "ticks": 4769
+      }
     },
     {
       "bestSaved": 80,
@@ -19261,6 +19309,7 @@
       }
     },
     {
+      "bestSaved": 100,
       "conditions": {
         "gameID": "ohYesMoreLemmings",
         "levelFingerprint": "26384c52795d326d684c67f9ef59921513e02591d5a17aa9cfd4ec53e960b821",
@@ -19285,16 +19334,31 @@
         "timeLimitSeconds": 300
       },
       "gameID": "ohYesMoreLemmings",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 100,
+      "minimumSacrifices": 0,
       "notes": [],
       "number": 7,
       "population": 100,
       "rank": "Lemmings Versus",
       "required": 50,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "Just for fun or to the death?"
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Just for fun or to the death?",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/ohYesMoreLemmings-6.json",
+        "released": 100,
+        "retainedReserves": 0,
+        "saved": 100,
+        "sha256": "fd1a6a00c16ff7ba508935470443f4de128caec23bbd056098d49629fdbc6ccc",
+        "ticks": 4721
+      }
     },
     {
+      "bestSaved": 80,
       "conditions": {
         "gameID": "ohYesMoreLemmings",
         "levelFingerprint": "b2734247122baea44bae35aa5ec70ecd794654fec622ec6a0839b45fe636af8f",
@@ -19319,16 +19383,31 @@
         "timeLimitSeconds": 300
       },
       "gameID": "ohYesMoreLemmings",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 80,
+      "minimumSacrifices": 0,
       "notes": [],
       "number": 8,
       "population": 80,
       "rank": "Lemmings Versus",
       "required": 80,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "Game on!  Choose your tactics."
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Game on!  Choose your tactics.",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/ohYesMoreLemmings-7.json",
+        "released": 80,
+        "retainedReserves": 0,
+        "saved": 80,
+        "sha256": "0ac918b6378a639602daedd526ef91ebc608204cb08e1750b417ae07a990bb54",
+        "ticks": 1962
+      }
     },
     {
+      "bestSaved": 75,
       "conditions": {
         "gameID": "ohYesMoreLemmings",
         "levelFingerprint": "332cd7b5caa4fcb8cb34d730a32c7fd3294196e443ca2a996ef5583a96ae68fb",
@@ -19353,16 +19432,31 @@
         "timeLimitSeconds": 240
       },
       "gameID": "ohYesMoreLemmings",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 75,
+      "minimumSacrifices": 0,
       "notes": [],
       "number": 9,
       "population": 75,
       "rank": "Lemmings Versus",
       "required": 75,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "The Passing Place"
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "The Passing Place",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/ohYesMoreLemmings-8.json",
+        "released": 75,
+        "retainedReserves": 0,
+        "saved": 75,
+        "sha256": "eb215bc32873a62d08cd7b4ddd058e1b6b94d22cbecbda9208a4796c22adf425",
+        "ticks": 3381
+      }
     },
     {
+      "bestSaved": 80,
       "conditions": {
         "gameID": "ohYesMoreLemmings",
         "levelFingerprint": "18e6f5d22cdd7afe89ae3f1d072a0647205d6b602bdb57108ed90d791c7bfbf9",
@@ -19387,16 +19481,31 @@
         "timeLimitSeconds": 300
       },
       "gameID": "ohYesMoreLemmings",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 80,
+      "minimumSacrifices": 0,
       "notes": [],
       "number": 10,
       "population": 80,
       "rank": "Lemmings Versus",
       "required": 80,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "Take what you can, when you can"
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Take what you can, when you can",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/ohYesMoreLemmings-9.json",
+        "released": 80,
+        "retainedReserves": 0,
+        "saved": 80,
+        "sha256": "5433c68afbe4e9dc3c9e08ae0457398d0f0302fe118e54484a06b279670f9661",
+        "ticks": 3767
+      }
     },
     {
+      "bestSaved": 80,
       "conditions": {
         "gameID": "ohYesMoreLemmings",
         "levelFingerprint": "8c2a1882b9a9a9b796d94c00a096af6761b66c1bd6c6081544608156cb265d41",
@@ -19421,16 +19530,31 @@
         "timeLimitSeconds": 300
       },
       "gameID": "ohYesMoreLemmings",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 80,
+      "minimumSacrifices": 0,
       "notes": [],
       "number": 11,
       "population": 80,
       "rank": "Lemmings Versus",
       "required": 80,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "Any chance of a truce?"
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Any chance of a truce?",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/ohYesMoreLemmings-10.json",
+        "released": 80,
+        "retainedReserves": 0,
+        "saved": 80,
+        "sha256": "fb01cbe97f57d39cabf30772e12a29d2cbe370d857ce326b2e9a2f1be1a0f89d",
+        "ticks": 1995
+      }
     },
     {
+      "bestSaved": 78,
       "conditions": {
         "gameID": "ohYesMoreLemmings",
         "levelFingerprint": "64b872f922c0eb2f9e05746cd5fa23c1e67a556abc1b104db937d90545277992",
@@ -19455,16 +19579,29 @@
         "timeLimitSeconds": 300
       },
       "gameID": "ohYesMoreLemmings",
+      "lossesInBestSolution": 1,
       "notes": [],
       "number": 12,
       "population": 80,
       "rank": "Lemmings Versus",
       "required": 65,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "Good game! Good game!"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "Good game! Good game!",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 1,
+        "path": "witnesses/ohYesMoreLemmings-11.json",
+        "released": 80,
+        "retainedReserves": 0,
+        "saved": 78,
+        "sha256": "167737caf4eaa6dd5cbf2f718f07bb23ff22ebdb43ab6bd1a149bb110235465d",
+        "ticks": 5100
+      }
     },
     {
+      "bestSaved": 98,
       "conditions": {
         "gameID": "ohYesMoreLemmings",
         "levelFingerprint": "5d03c4cd02f6e5387a83b98d1f2be9c83cef8ed41823e4b72d1fa4555f64a90c",
@@ -19489,14 +19626,26 @@
         "timeLimitSeconds": 300
       },
       "gameID": "ohYesMoreLemmings",
+      "lossesInBestSolution": 1,
       "notes": [],
       "number": 13,
       "population": 100,
       "rank": "Lemmings Versus",
       "required": 90,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "The Hammock..."
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "The Hammock...",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 1,
+        "path": "witnesses/ohYesMoreLemmings-12.json",
+        "released": 100,
+        "retainedReserves": 0,
+        "saved": 98,
+        "sha256": "22106e379dd0abe61fe9e839aae7323cca049bc96a6bfb455cde846d290d8353",
+        "ticks": 5100
+      }
     },
     {
       "bestSaved": 100,
@@ -19548,6 +19697,7 @@
       }
     },
     {
+      "bestSaved": 98,
       "conditions": {
         "gameID": "ohYesMoreLemmings",
         "levelFingerprint": "898d97dec4a9cd76e63c58daba4d638cb911fb7129ec5f4cee1ed3e22a496b2e",
@@ -19572,16 +19722,29 @@
         "timeLimitSeconds": 480
       },
       "gameID": "ohYesMoreLemmings",
+      "lossesInBestSolution": 1,
       "notes": [],
       "number": 15,
       "population": 100,
       "rank": "Lemmings Versus",
       "required": 90,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "Graffiti"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "Graffiti",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 1,
+        "path": "witnesses/ohYesMoreLemmings-14.json",
+        "released": 100,
+        "retainedReserves": 0,
+        "saved": 98,
+        "sha256": "b3d51c352ee50d198aeaf9b5b605b997a009dd0438ff8ffb76ee655a75e425cd",
+        "ticks": 8160
+      }
     },
     {
+      "bestSaved": 100,
       "conditions": {
         "gameID": "ohYesMoreLemmings",
         "levelFingerprint": "f06fb54f0fa3bca60c91667702367ab3dfdbfcceaa759b6130b2ead90c01d4c8",
@@ -19606,16 +19769,31 @@
         "timeLimitSeconds": 300
       },
       "gameID": "ohYesMoreLemmings",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 100,
+      "minimumSacrifices": 0,
       "notes": [],
       "number": 16,
       "population": 100,
       "rank": "Lemmings Versus",
       "required": 90,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "The Rubbish Dump"
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "The Rubbish Dump",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/ohYesMoreLemmings-15.json",
+        "released": 100,
+        "retainedReserves": 0,
+        "saved": 100,
+        "sha256": "22a0c9a19a67ab8ec01e3681a28e8caa5c0dde8f0da56c39a5a4c86cae980ee0",
+        "ticks": 2915
+      }
     },
     {
+      "bestSaved": 40,
       "conditions": {
         "gameID": "ohYesMoreLemmings",
         "levelFingerprint": "80b6eaec05dbf361027418ca93774ae899ca1735ac9f94eb4132f0b8c09ebb21",
@@ -19640,14 +19818,28 @@
         "timeLimitSeconds": 300
       },
       "gameID": "ohYesMoreLemmings",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 40,
+      "minimumSacrifices": 0,
       "notes": [],
       "number": 17,
       "population": 40,
       "rank": "Lemmings Versus",
       "required": 30,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "The Crystal Cavern Mark II"
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "The Crystal Cavern Mark II",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/ohYesMoreLemmings-16.json",
+        "released": 40,
+        "retainedReserves": 0,
+        "saved": 40,
+        "sha256": "97a8e65cbace733b7bf42bc1bd7d3640e63fd403e697794fc21525cfdd84b55f",
+        "ticks": 2003
+      }
     },
     {
       "bestSaved": 26,
@@ -19682,7 +19874,7 @@
       "rank": "Lemmings Versus",
       "required": 26,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "The Rope Bridge",
       "witness": {
         "completed": true,
@@ -19697,6 +19889,7 @@
       }
     },
     {
+      "bestSaved": 39,
       "conditions": {
         "gameID": "ohYesMoreLemmings",
         "levelFingerprint": "e593679a4585ba9ef99bf39b58bd61c50deed7569a8e3b6342e4904fd9e9eb3b",
@@ -19721,16 +19914,29 @@
         "timeLimitSeconds": 540
       },
       "gameID": "ohYesMoreLemmings",
+      "lossesInBestSolution": 0,
       "notes": [],
       "number": 19,
       "population": 40,
       "rank": "Lemmings Versus",
       "required": 26,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "Islands in the Sky"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "Islands in the Sky",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/ohYesMoreLemmings-18.json",
+        "released": 40,
+        "retainedReserves": 0,
+        "saved": 39,
+        "sha256": "5240720634c82ee3a6e7f6e21d327e9673c2c05e9fae7274db7af15b64c007da",
+        "ticks": 9180
+      }
     },
     {
+      "bestSaved": 21,
       "conditions": {
         "gameID": "ohYesMoreLemmings",
         "levelFingerprint": "61bffbfb11424aa771b2f9d8ece820ffb212763d1acc612a190e3d016ef13d38",
@@ -19755,16 +19961,29 @@
         "timeLimitSeconds": 360
       },
       "gameID": "ohYesMoreLemmings",
+      "lossesInBestSolution": 19,
       "notes": [],
       "number": 20,
       "population": 40,
       "rank": "Lemmings Versus",
       "required": 20,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "Cross-over Point"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "Cross-over Point",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 19,
+        "path": "witnesses/ohYesMoreLemmings-19.json",
+        "released": 40,
+        "retainedReserves": 0,
+        "saved": 21,
+        "sha256": "f54457d90831a00b4c30092ea65bfded7cc559c01df9aa3edf565e68c3b66980",
+        "ticks": 1629
+      }
     },
     {
+      "bestSaved": 20,
       "conditions": {
         "gameID": "ohYesMoreLemmings",
         "levelFingerprint": "93e74e7ffe1a3bd5aa597e58f72d28fc70854f51a45e0d6ad09bb845b85b0b0b",
@@ -19789,16 +20008,31 @@
         "timeLimitSeconds": 60
       },
       "gameID": "ohYesMoreLemmings",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 20,
+      "minimumSacrifices": 0,
       "notes": [],
       "number": 1,
       "population": 20,
       "rank": "Mega Drive Sunsoft",
       "required": 10,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "Rules to fall"
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Rules to fall",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/ohYesMoreLemmings-30.json",
+        "released": 20,
+        "retainedReserves": 0,
+        "saved": 20,
+        "sha256": "53e2a1a4f28b9b5910a73eea51880c965899897dc6214fef298e65481a9a26c1",
+        "ticks": 839
+      }
     },
     {
+      "bestSaved": 50,
       "conditions": {
         "gameID": "ohYesMoreLemmings",
         "levelFingerprint": "77b0a48e80cfb225b3ceb2dcb085023a6f48482b12ea29ce0fa0c56007154502",
@@ -19823,16 +20057,31 @@
         "timeLimitSeconds": 300
       },
       "gameID": "ohYesMoreLemmings",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 50,
+      "minimumSacrifices": 0,
       "notes": [],
       "number": 2,
       "population": 50,
       "rank": "Mega Drive Sunsoft",
       "required": 50,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "Inside the bone"
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Inside the bone",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/ohYesMoreLemmings-31.json",
+        "released": 50,
+        "retainedReserves": 0,
+        "saved": 50,
+        "sha256": "c150b6fa0fdad1a36a2393d0caa64a314ac4ef4f57e133d532157ef0b3a0ced2",
+        "ticks": 3090
+      }
     },
     {
+      "bestSaved": 60,
       "conditions": {
         "gameID": "ohYesMoreLemmings",
         "levelFingerprint": "26f056595a3480d008f18957d2179cabdd8d8fa2a1b492dc3a9229532d0ca77b",
@@ -19857,16 +20106,31 @@
         "timeLimitSeconds": 300
       },
       "gameID": "ohYesMoreLemmings",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 60,
+      "minimumSacrifices": 0,
       "notes": [],
       "number": 3,
       "population": 60,
       "rank": "Mega Drive Sunsoft",
       "required": 60,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "Anxiety"
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Anxiety",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/ohYesMoreLemmings-32.json",
+        "released": 60,
+        "retainedReserves": 0,
+        "saved": 60,
+        "sha256": "eaa3ff5c255b937352f1a1b4e29a0178bc01e4f37acb088e19fa301221c56d17",
+        "ticks": 2624
+      }
     },
     {
+      "bestSaved": 10,
       "conditions": {
         "gameID": "ohYesMoreLemmings",
         "levelFingerprint": "7e35635b16912e09aa824dd216a4d56b21a18d8c97ab2d2341b09fc58e1d5767",
@@ -19891,16 +20155,31 @@
         "timeLimitSeconds": 300
       },
       "gameID": "ohYesMoreLemmings",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 10,
+      "minimumSacrifices": 0,
       "notes": [],
       "number": 4,
       "population": 10,
       "rank": "Mega Drive Sunsoft",
       "required": 10,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "Train your body"
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Train your body",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/ohYesMoreLemmings-33.json",
+        "released": 10,
+        "retainedReserves": 0,
+        "saved": 10,
+        "sha256": "c060a894679298ea0c2a2f8295c6cffc89203a19a99d675facc3728924472447",
+        "ticks": 3661
+      }
     },
     {
+      "bestSaved": 49,
       "conditions": {
         "gameID": "ohYesMoreLemmings",
         "levelFingerprint": "d3cae162547a41275785277a490174c4ea7764060a0785e2bbcc9f45df4687c8",
@@ -19925,16 +20204,29 @@
         "timeLimitSeconds": 360
       },
       "gameID": "ohYesMoreLemmings",
+      "lossesInBestSolution": 1,
       "notes": [],
       "number": 5,
       "population": 50,
       "rank": "Mega Drive Sunsoft",
       "required": 49,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "Watch your step"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "Watch your step",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 1,
+        "path": "witnesses/ohYesMoreLemmings-34.json",
+        "released": 50,
+        "retainedReserves": 0,
+        "saved": 49,
+        "sha256": "cc89ec1e06f7c5bcbf8029fa3d35ad515e726fe2fc08c989f161b1eb0c75cc38",
+        "ticks": 3655
+      }
     },
     {
+      "bestSaved": 51,
       "conditions": {
         "gameID": "ohYesMoreLemmings",
         "levelFingerprint": "2577b5d803a9c6d96afb7e3377d765cd56536063c523311f9aa8b3bb83ec20d7",
@@ -19959,16 +20251,29 @@
         "timeLimitSeconds": 300
       },
       "gameID": "ohYesMoreLemmings",
+      "lossesInBestSolution": 9,
       "notes": [],
       "number": 6,
       "population": 60,
       "rank": "Mega Drive Sunsoft",
       "required": 48,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "Libra"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "Libra",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 9,
+        "path": "witnesses/ohYesMoreLemmings-35.json",
+        "released": 60,
+        "retainedReserves": 0,
+        "saved": 51,
+        "sha256": "b073ef2e1143dd27ce817398587846c5c7cd17b10afba55fea35b2009bf4b571",
+        "ticks": 2107
+      }
     },
     {
+      "bestSaved": 10,
       "conditions": {
         "gameID": "ohYesMoreLemmings",
         "levelFingerprint": "c09bf61f952b7fbd9857ac7afea392b28c84f5e873060f3b6612dfa25854a7bd",
@@ -19993,16 +20298,31 @@
         "timeLimitSeconds": 180
       },
       "gameID": "ohYesMoreLemmings",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 10,
+      "minimumSacrifices": 0,
       "notes": [],
       "number": 7,
       "population": 10,
       "rank": "Mega Drive Sunsoft",
       "required": 10,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "Everyone turn left (Part two)"
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Everyone turn left (Part two)",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/ohYesMoreLemmings-36.json",
+        "released": 10,
+        "retainedReserves": 0,
+        "saved": 10,
+        "sha256": "3c84eaf094d703223e7a1cd7693af824d7529784ea3d85c789ee5dac289e5106",
+        "ticks": 1670
+      }
     },
     {
+      "bestSaved": 10,
       "conditions": {
         "gameID": "ohYesMoreLemmings",
         "levelFingerprint": "5cc0a1fefa61958e4840a62552c8aae64b61e1fdc85417c0b0c2e2ebbe743e54",
@@ -20027,16 +20347,31 @@
         "timeLimitSeconds": 180
       },
       "gameID": "ohYesMoreLemmings",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 10,
+      "minimumSacrifices": 0,
       "notes": [],
       "number": 8,
       "population": 10,
       "rank": "Mega Drive Sunsoft",
       "required": 10,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "Is this a circus?"
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Is this a circus?",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/ohYesMoreLemmings-37.json",
+        "released": 10,
+        "retainedReserves": 0,
+        "saved": 10,
+        "sha256": "dbdfcdb819c80e732360502b0eaf3fc8d32b56ed18816e946e660ba4fa8093ad",
+        "ticks": 2525
+      }
     },
     {
+      "bestSaved": 100,
       "conditions": {
         "gameID": "ohYesMoreLemmings",
         "levelFingerprint": "ea373196e97e5ae00062f1407c455d1bc43d31d16fb3c17ed40dd2ff1598b219",
@@ -20061,16 +20396,31 @@
         "timeLimitSeconds": 300
       },
       "gameID": "ohYesMoreLemmings",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 100,
+      "minimumSacrifices": 0,
       "notes": [],
       "number": 9,
       "population": 100,
       "rank": "Mega Drive Sunsoft",
       "required": 100,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "Evacuating a coal mine"
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Evacuating a coal mine",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/ohYesMoreLemmings-38.json",
+        "released": 100,
+        "retainedReserves": 0,
+        "saved": 100,
+        "sha256": "eb088e3b870b8d5bff0f17bf4ac893b9a354b5424de5e7dfbca3cb44660cdee6",
+        "ticks": 2362
+      }
     },
     {
+      "bestSaved": 98,
       "conditions": {
         "gameID": "ohYesMoreLemmings",
         "levelFingerprint": "756f15874d9df6036474ebed33470d19fbeb3ef7e40f44f957a485c2d48fc53f",
@@ -20095,16 +20445,29 @@
         "timeLimitSeconds": 360
       },
       "gameID": "ohYesMoreLemmings",
+      "lossesInBestSolution": 2,
       "notes": [],
       "number": 10,
       "population": 100,
       "rank": "Mega Drive Sunsoft",
       "required": 98,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "Spiral staircase"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "Spiral staircase",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 2,
+        "path": "witnesses/ohYesMoreLemmings-39.json",
+        "released": 100,
+        "retainedReserves": 0,
+        "saved": 98,
+        "sha256": "9997a88a57797ecc191ec00b50c33c3ba24f1fd29c975cf06c63f0291872a8ac",
+        "ticks": 5296
+      }
     },
     {
+      "bestSaved": 50,
       "conditions": {
         "gameID": "ohYesMoreLemmings",
         "levelFingerprint": "d791e3bd1c4b71dd9e876912dd9462c606bc497e957de22ac9d664affd17cb8c",
@@ -20129,16 +20492,31 @@
         "timeLimitSeconds": 180
       },
       "gameID": "ohYesMoreLemmings",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 50,
+      "minimumSacrifices": 0,
       "notes": [],
       "number": 11,
       "population": 50,
       "rank": "Mega Drive Sunsoft",
       "required": 45,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "Turn around and look."
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Turn around and look.",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/ohYesMoreLemmings-40.json",
+        "released": 50,
+        "retainedReserves": 0,
+        "saved": 50,
+        "sha256": "471eda3bef8a35135245c715d7c2dfbfedfcf03b5c146ea9f7ee608fd456a8d7",
+        "ticks": 2761
+      }
     },
     {
+      "bestSaved": 49,
       "conditions": {
         "gameID": "ohYesMoreLemmings",
         "levelFingerprint": "14b145bef79147ecf1c233d9238662143eba45146c1f63fc7a65a33e9309a4c6",
@@ -20163,16 +20541,29 @@
         "timeLimitSeconds": 180
       },
       "gameID": "ohYesMoreLemmings",
+      "lossesInBestSolution": 1,
       "notes": [],
       "number": 12,
       "population": 50,
       "rank": "Mega Drive Sunsoft",
       "required": 49,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "Water processing plant"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "Water processing plant",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 1,
+        "path": "witnesses/ohYesMoreLemmings-41.json",
+        "released": 50,
+        "retainedReserves": 0,
+        "saved": 49,
+        "sha256": "300ed761496e1f47d80a6a30fff60e68e99d28313ee4070251d57e3a666d2cdb",
+        "ticks": 2047
+      }
     },
     {
+      "bestSaved": 45,
       "conditions": {
         "gameID": "ohYesMoreLemmings",
         "levelFingerprint": "632fe2357148ff4d346d0cb28e2f2610d5e08f801b7afcc91015c2c9a44cfac6",
@@ -20197,16 +20588,29 @@
         "timeLimitSeconds": 300
       },
       "gameID": "ohYesMoreLemmings",
+      "lossesInBestSolution": 5,
       "notes": [],
       "number": 13,
       "population": 50,
       "rank": "Mega Drive Sunsoft",
       "required": 45,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "Doomsday"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "Doomsday",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 5,
+        "path": "witnesses/ohYesMoreLemmings-42.json",
+        "released": 50,
+        "retainedReserves": 0,
+        "saved": 45,
+        "sha256": "680fd79717d9ad1d19fadc2f215612672165c6b3e0cfb51a76a77b1dc9aef4b8",
+        "ticks": 4348
+      }
     },
     {
+      "bestSaved": 2,
       "conditions": {
         "gameID": "ohYesMoreLemmings",
         "levelFingerprint": "4137ac2e823e2a94214ddb066d8097f66a612d9d52cf76845096acdb4cd001f7",
@@ -20231,16 +20635,31 @@
         "timeLimitSeconds": 300
       },
       "gameID": "ohYesMoreLemmings",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 2,
+      "minimumSacrifices": 0,
       "notes": [],
       "number": 14,
       "population": 2,
       "rank": "Mega Drive Sunsoft",
       "required": 2,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "No world without you"
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "No world without you",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/ohYesMoreLemmings-43.json",
+        "released": 2,
+        "retainedReserves": 0,
+        "saved": 2,
+        "sha256": "1ae44083489050a252f1e2d0c3966972f9e5a0b4af14f65718e76ec338440974",
+        "ticks": 798
+      }
     },
     {
+      "bestSaved": 50,
       "conditions": {
         "gameID": "ohYesMoreLemmings",
         "levelFingerprint": "5a5332d1020b3c102743cb0bf73b55e21df87f5d5b70c9d22134e2966f87465b",
@@ -20265,16 +20684,31 @@
         "timeLimitSeconds": 180
       },
       "gameID": "ohYesMoreLemmings",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 50,
+      "minimumSacrifices": 0,
       "notes": [],
       "number": 15,
       "population": 50,
       "rank": "Mega Drive Sunsoft",
       "required": 50,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "Exodus!"
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Exodus!",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/ohYesMoreLemmings-44.json",
+        "released": 50,
+        "retainedReserves": 0,
+        "saved": 50,
+        "sha256": "e5438b324c9d380b4773100a755dd6ceacffb82c5aa64e1caf459623fde086e1",
+        "ticks": 1557
+      }
     },
     {
+      "bestSaved": 49,
       "conditions": {
         "gameID": "ohYesMoreLemmings",
         "levelFingerprint": "a3073ad68f0dac48fd9089a9940ed247a3b793d8066c22e5938e73cf947a1255",
@@ -20299,16 +20733,29 @@
         "timeLimitSeconds": 300
       },
       "gameID": "ohYesMoreLemmings",
+      "lossesInBestSolution": 1,
       "notes": [],
       "number": 16,
       "population": 50,
       "rank": "Mega Drive Sunsoft",
       "required": 40,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "Here is Mr.Lemming's house"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "Here is Mr.Lemming's house",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 1,
+        "path": "witnesses/ohYesMoreLemmings-45.json",
+        "released": 50,
+        "retainedReserves": 0,
+        "saved": 49,
+        "sha256": "c1ea78f1ea5ec078263a630be47d071d5ad6713ede85329473d25a2074a82b8e",
+        "ticks": 3255
+      }
     },
     {
+      "bestSaved": 10,
       "conditions": {
         "gameID": "ohYesMoreLemmings",
         "levelFingerprint": "17cd7fe317ad60a88c52af225355a5a68d14542a1cb8edbedc7c4a7486de0261",
@@ -20333,16 +20780,31 @@
         "timeLimitSeconds": 300
       },
       "gameID": "ohYesMoreLemmings",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 10,
+      "minimumSacrifices": 0,
       "notes": [],
       "number": 17,
       "population": 10,
       "rank": "Mega Drive Sunsoft",
       "required": 10,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "Cave quest"
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Cave quest",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/ohYesMoreLemmings-46.json",
+        "released": 10,
+        "retainedReserves": 0,
+        "saved": 10,
+        "sha256": "ef179ccc74d8182d0db69a98666631f17d84b1413f2f19fb06ae2f71fda9be91",
+        "ticks": 2451
+      }
     },
     {
+      "bestSaved": 58,
       "conditions": {
         "gameID": "ohYesMoreLemmings",
         "levelFingerprint": "93cb03471a1cc27bd0bafddbdecefe83aedfafc787989752abec22119ef3685c",
@@ -20367,16 +20829,29 @@
         "timeLimitSeconds": 180
       },
       "gameID": "ohYesMoreLemmings",
+      "lossesInBestSolution": 1,
       "notes": [],
       "number": 18,
       "population": 60,
       "rank": "Mega Drive Sunsoft",
       "required": 48,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "SUNSOFT Special"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "SUNSOFT Special",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 1,
+        "path": "witnesses/ohYesMoreLemmings-47.json",
+        "released": 60,
+        "retainedReserves": 0,
+        "saved": 58,
+        "sha256": "92e29f65708f1475b7e53575d581ab90a1ee6bb5a1ba4854c1e3838b5937287b",
+        "ticks": 3060
+      }
     },
     {
+      "bestSaved": 3,
       "conditions": {
         "gameID": "ohYesMoreLemmings",
         "levelFingerprint": "79eef669d280a0f82784397077b81b3e352c6899cc59ce7925d743f483248ee8",
@@ -20401,16 +20876,31 @@
         "timeLimitSeconds": 240
       },
       "gameID": "ohYesMoreLemmings",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 3,
+      "minimumSacrifices": 0,
       "notes": [],
       "number": 19,
       "population": 3,
       "rank": "Mega Drive Sunsoft",
       "required": 3,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "Let's go camping."
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Let's go camping.",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/ohYesMoreLemmings-48.json",
+        "released": 3,
+        "retainedReserves": 0,
+        "saved": 3,
+        "sha256": "829ee7fdf2f4c6b48732b5c70831cd5ddff26216fd82c313e1f883be0804e8a7",
+        "ticks": 220
+      }
     },
     {
+      "bestSaved": 59,
       "conditions": {
         "gameID": "ohYesMoreLemmings",
         "levelFingerprint": "efb75d5c26b624886cf9f5279a465cc0a06d65785d546fbce909d1f20cc64f80",
@@ -20435,16 +20925,29 @@
         "timeLimitSeconds": 180
       },
       "gameID": "ohYesMoreLemmings",
+      "lossesInBestSolution": 1,
       "notes": [],
       "number": 20,
       "population": 60,
       "rank": "Mega Drive Sunsoft",
       "required": 59,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "Haunted botanical garden"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "Haunted botanical garden",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 1,
+        "path": "witnesses/ohYesMoreLemmings-49.json",
+        "released": 60,
+        "retainedReserves": 0,
+        "saved": 59,
+        "sha256": "eaee981d3de198702b37ad42930a95efd1247111d264f5891be3c91c39d97056",
+        "ticks": 2897
+      }
     },
     {
+      "bestSaved": 25,
       "conditions": {
         "gameID": "ohYesMoreLemmings",
         "levelFingerprint": "9972951d04cf9870fbe62a57c324482c6ab192d125d7c568955474e28ccb7446",
@@ -20469,16 +20972,31 @@
         "timeLimitSeconds": 300
       },
       "gameID": "ohYesMoreLemmings",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 25,
+      "minimumSacrifices": 0,
       "notes": [],
       "number": 21,
       "population": 25,
       "rank": "Mega Drive Sunsoft",
       "required": 25,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "Be sure to be a builder."
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Be sure to be a builder.",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/ohYesMoreLemmings-50.json",
+        "released": 25,
+        "retainedReserves": 0,
+        "saved": 25,
+        "sha256": "77c5cd25ecfefad9cc59e8d764e2ff1e8a5f2c1ec79f4b7109268089a6a17f8a",
+        "ticks": 3350
+      }
     },
     {
+      "bestSaved": 47,
       "conditions": {
         "gameID": "ohYesMoreLemmings",
         "levelFingerprint": "06c7c41ab6697ecfe23fa2996a0d9a576d3e437c53c7790a0435e84dd0e8da01",
@@ -20503,16 +21021,29 @@
         "timeLimitSeconds": 120
       },
       "gameID": "ohYesMoreLemmings",
+      "lossesInBestSolution": 3,
       "notes": [],
       "number": 22,
       "population": 50,
       "rank": "Mega Drive Sunsoft",
       "required": 46,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "Watch right or left (Part two)"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "Watch right or left (Part two)",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 3,
+        "path": "witnesses/ohYesMoreLemmings-51.json",
+        "released": 50,
+        "retainedReserves": 0,
+        "saved": 47,
+        "sha256": "a0d2d4083a5566c73f416abd215a3c4567b2bdfa0a3c6c1afb34ae204f0e8eda",
+        "ticks": 1022
+      }
     },
     {
+      "bestSaved": 50,
       "conditions": {
         "gameID": "ohYesMoreLemmings",
         "levelFingerprint": "fb417b2978f17d868fbccd8c7cbdfcdca97e14831246aaf674cbd5535299b854",
@@ -20537,16 +21068,31 @@
         "timeLimitSeconds": 180
       },
       "gameID": "ohYesMoreLemmings",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 50,
+      "minimumSacrifices": 0,
       "notes": [],
       "number": 23,
       "population": 50,
       "rank": "Mega Drive Sunsoft",
       "required": 50,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "Move on in two separate groups."
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Move on in two separate groups.",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/ohYesMoreLemmings-52.json",
+        "released": 50,
+        "retainedReserves": 0,
+        "saved": 50,
+        "sha256": "e37570c9dac1cad029f9a34a5b8ab5f83f46e9f6b79b65d12e8853dfb672f3e5",
+        "ticks": 2030
+      }
     },
     {
+      "bestSaved": 49,
       "conditions": {
         "gameID": "ohYesMoreLemmings",
         "levelFingerprint": "3795d6cf17ef85d24f0ecf8222fa63270563233335934583e1c9f31575bb0a02",
@@ -20571,16 +21117,29 @@
         "timeLimitSeconds": 360
       },
       "gameID": "ohYesMoreLemmings",
+      "lossesInBestSolution": 1,
       "notes": [],
       "number": 24,
       "population": 50,
       "rank": "Mega Drive Sunsoft",
       "required": 49,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "Out, away from the tune"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "Out, away from the tune",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 1,
+        "path": "witnesses/ohYesMoreLemmings-53.json",
+        "released": 50,
+        "retainedReserves": 0,
+        "saved": 49,
+        "sha256": "138c9bd22d4853546fd53fbe34030e89bd314ca9581ee879a17d14d86911d167",
+        "ticks": 3108
+      }
     },
     {
+      "bestSaved": 96,
       "conditions": {
         "gameID": "ohYesMoreLemmings",
         "levelFingerprint": "f646e096067aec282ed22539d4e061d2f8b07f205ec43257658ea1011b764d4f",
@@ -20605,16 +21164,29 @@
         "timeLimitSeconds": 420
       },
       "gameID": "ohYesMoreLemmings",
+      "lossesInBestSolution": 1,
       "notes": [],
       "number": 25,
       "population": 100,
       "rank": "Mega Drive Sunsoft",
       "required": 80,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "Stray sheep"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "Stray sheep",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 1,
+        "path": "witnesses/ohYesMoreLemmings-54.json",
+        "released": 100,
+        "retainedReserves": 0,
+        "saved": 96,
+        "sha256": "db501e68cc553648151903299597f414be7cfeb8ab43641160817d786353e0e7",
+        "ticks": 7140
+      }
     },
     {
+      "bestSaved": 100,
       "conditions": {
         "gameID": "ohYesMoreLemmings",
         "levelFingerprint": "7189a3dcb976486f884a93a7ae7ffda5004a14339801a12263aaf4845b10319a",
@@ -20639,16 +21211,31 @@
         "timeLimitSeconds": 60
       },
       "gameID": "ohYesMoreLemmings",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 100,
+      "minimumSacrifices": 0,
       "notes": [],
       "number": 26,
       "population": 100,
       "rank": "Mega Drive Sunsoft",
       "required": 100,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "Just a minute (Part Three)"
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Just a minute (Part Three)",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/ohYesMoreLemmings-55.json",
+        "released": 100,
+        "retainedReserves": 0,
+        "saved": 100,
+        "sha256": "8b719c8c27116299c9e7b155386829941ae8db0d4cf70260873e93f761dcb428",
+        "ticks": 932
+      }
     },
     {
+      "bestSaved": 1,
       "conditions": {
         "gameID": "ohYesMoreLemmings",
         "levelFingerprint": "c3c8fe3fe134dc6e7234167790ed7ce4314c1ddcae77aecaf5f7e0e8168330a2",
@@ -20673,16 +21260,29 @@
         "timeLimitSeconds": 60
       },
       "gameID": "ohYesMoreLemmings",
+      "lossesInBestSolution": 3,
       "notes": [],
       "number": 27,
       "population": 4,
       "rank": "Mega Drive Sunsoft",
       "required": 1,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "Two heads are better..."
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "Two heads are better...",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 3,
+        "path": "witnesses/ohYesMoreLemmings-56.json",
+        "released": 4,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "2d9dd7cea821e0451a84edaf411adc53b9194932aa7a719413105b008eb91d5e",
+        "ticks": 486
+      }
     },
     {
+      "bestSaved": 100,
       "conditions": {
         "gameID": "ohYesMoreLemmings",
         "levelFingerprint": "bc2163ebbfbbf27abc960d02d47c11ed65918acce0b4514b9107b504391fd758",
@@ -20707,16 +21307,31 @@
         "timeLimitSeconds": 300
       },
       "gameID": "ohYesMoreLemmings",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 100,
+      "minimumSacrifices": 0,
       "notes": [],
       "number": 28,
       "population": 100,
       "rank": "Mega Drive Sunsoft",
       "required": 100,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "The gate trap Lemmings."
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "The gate trap Lemmings.",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/ohYesMoreLemmings-57.json",
+        "released": 100,
+        "retainedReserves": 0,
+        "saved": 100,
+        "sha256": "1aa7a4bb2d7ac2be35983a3b829adc4f55d0fa6c22368fa5bd0ab2ce7e5dfa70",
+        "ticks": 2372
+      }
     },
     {
+      "bestSaved": 80,
       "conditions": {
         "gameID": "ohYesMoreLemmings",
         "levelFingerprint": "dd9fc4b96b65f6c62817f357f4900b6f56a5ba71638101e8f8a6ab0123a230cf",
@@ -20741,16 +21356,29 @@
         "timeLimitSeconds": 120
       },
       "gameID": "ohYesMoreLemmings",
+      "lossesInBestSolution": 20,
       "notes": [],
       "number": 29,
       "population": 100,
       "rank": "Mega Drive Sunsoft",
       "required": 80,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "I am A.T."
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "I am A.T.",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 20,
+        "path": "witnesses/ohYesMoreLemmings-58.json",
+        "released": 100,
+        "retainedReserves": 0,
+        "saved": 80,
+        "sha256": "6d38849c56ea3db544ecb89425667c8bbb1f6fccfcc9bb25fb145a7d46f06732",
+        "ticks": 1757
+      }
     },
     {
+      "bestSaved": 50,
       "conditions": {
         "gameID": "ohYesMoreLemmings",
         "levelFingerprint": "4366483c07d8bcd2e55cc25a47f3f2565036e11c6b1bf2bc48c7ee5a94df8461",
@@ -20775,16 +21403,31 @@
         "timeLimitSeconds": 180
       },
       "gameID": "ohYesMoreLemmings",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 50,
+      "minimumSacrifices": 0,
       "notes": [],
       "number": 30,
       "population": 50,
       "rank": "Mega Drive Sunsoft",
       "required": 50,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "Fall and no life (Part Two)"
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Fall and no life (Part Two)",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/ohYesMoreLemmings-59.json",
+        "released": 50,
+        "retainedReserves": 0,
+        "saved": 50,
+        "sha256": "68dc801dc705db0fb40103e7dd99dcb815b97a2e98d00a491021c032ba6683ed",
+        "ticks": 2949
+      }
     },
     {
+      "bestSaved": 40,
       "conditions": {
         "gameID": "ohYesMoreLemmings",
         "levelFingerprint": "69bb08c63ff74992b60f770de5286ddf6fa9dd17da4b8fde0ee6260bc9f5a81f",
@@ -20809,16 +21452,31 @@
         "timeLimitSeconds": 300
       },
       "gameID": "ohYesMoreLemmings",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 40,
+      "minimumSacrifices": 0,
       "notes": [],
       "number": 1,
       "population": 40,
       "rank": "Oh No! More Lemmings Versus",
       "required": 40,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "The Duel"
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "The Duel",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/ohYesMoreLemmings-20.json",
+        "released": 40,
+        "retainedReserves": 0,
+        "saved": 40,
+        "sha256": "93edfd78127be9ccbba8902a2a809c191aee5a9f8050f1c57c61f5be2813303b",
+        "ticks": 2886
+      }
     },
     {
+      "bestSaved": 40,
       "conditions": {
         "gameID": "ohYesMoreLemmings",
         "levelFingerprint": "9b4e7dc9a7a21dbe728347caa505d5c3cb026981b5264b6316f0c1e83b10b2c1",
@@ -20843,16 +21501,31 @@
         "timeLimitSeconds": 300
       },
       "gameID": "ohYesMoreLemmings",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 40,
+      "minimumSacrifices": 0,
       "notes": [],
       "number": 2,
       "population": 40,
       "rank": "Oh No! More Lemmings Versus",
       "required": 40,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "Match Of The Day"
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Match Of The Day",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/ohYesMoreLemmings-21.json",
+        "released": 40,
+        "retainedReserves": 0,
+        "saved": 40,
+        "sha256": "1705f9bff6faaeaee6a47306067ce886c1b5d8c20f456a2e333fe1e67927b7ce",
+        "ticks": 2466
+      }
     },
     {
+      "bestSaved": 40,
       "conditions": {
         "gameID": "ohYesMoreLemmings",
         "levelFingerprint": "db8bff4710328dcb0c8a05d9097f1ae52c27e47dbea770c406441e11bf986612",
@@ -20877,16 +21550,31 @@
         "timeLimitSeconds": 300
       },
       "gameID": "ohYesMoreLemmings",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 40,
+      "minimumSacrifices": 0,
       "notes": [],
       "number": 3,
       "population": 40,
       "rank": "Oh No! More Lemmings Versus",
       "required": 40,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "Confrontation"
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Confrontation",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/ohYesMoreLemmings-22.json",
+        "released": 40,
+        "retainedReserves": 0,
+        "saved": 40,
+        "sha256": "c7b5e3b15a1e02f3cd0b4ffdf56fe1293f9b9b3342b865e861a73488316ddf14",
+        "ticks": 2445
+      }
     },
     {
+      "bestSaved": 40,
       "conditions": {
         "gameID": "ohYesMoreLemmings",
         "levelFingerprint": "b4ff8265bf04a8dfa6cec6071eccbc8717338bdb42e33804dcdfebfe4a646038",
@@ -20911,16 +21599,31 @@
         "timeLimitSeconds": 300
       },
       "gameID": "ohYesMoreLemmings",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 40,
+      "minimumSacrifices": 0,
       "notes": [],
       "number": 4,
       "population": 40,
       "rank": "Oh No! More Lemmings Versus",
       "required": 40,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "The Only Way Out"
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "The Only Way Out",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/ohYesMoreLemmings-23.json",
+        "released": 40,
+        "retainedReserves": 0,
+        "saved": 40,
+        "sha256": "f7ad5982a1300496f4acce4c96e0e015325d29b640f41aa3fbed6904db17018f",
+        "ticks": 2794
+      }
     },
     {
+      "bestSaved": 40,
       "conditions": {
         "gameID": "ohYesMoreLemmings",
         "levelFingerprint": "a3e4a0ad9278165728d5406cd8f79d31a51ae0094f62654795f9e92275f31cbe",
@@ -20945,14 +21648,28 @@
         "timeLimitSeconds": 300
       },
       "gameID": "ohYesMoreLemmings",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 40,
+      "minimumSacrifices": 0,
       "notes": [],
       "number": 5,
       "population": 40,
       "rank": "Oh No! More Lemmings Versus",
       "required": 40,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "Showdown!"
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Showdown!",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/ohYesMoreLemmings-24.json",
+        "released": 40,
+        "retainedReserves": 0,
+        "saved": 40,
+        "sha256": "fdd911f3bca1ecffee5e0ae8fdfa642f70a88d9c93677029bfc093f6d2ea0fb8",
+        "ticks": 2870
+      }
     },
     {
       "bestSaved": 40,
@@ -20989,7 +21706,7 @@
       "rank": "Oh No! More Lemmings Versus",
       "required": 40,
       "status": "VERIFIED",
-      "testedCandidates": 1,
+      "testedCandidates": 2,
       "title": "Test Of Skill",
       "witness": {
         "completed": true,
@@ -21038,7 +21755,7 @@
       "rank": "Oh No! More Lemmings Versus",
       "required": 40,
       "status": "VERIFIED",
-      "testedCandidates": 1,
+      "testedCandidates": 2,
       "title": "Give And Take",
       "witness": {
         "completed": true,
@@ -21053,6 +21770,7 @@
       }
     },
     {
+      "bestSaved": 40,
       "conditions": {
         "gameID": "ohYesMoreLemmings",
         "levelFingerprint": "0612ff9d85ad32b8fe04a9ab115d800b0c390832e2a4d930ba847b75a87e44a6",
@@ -21077,16 +21795,31 @@
         "timeLimitSeconds": 300
       },
       "gameID": "ohYesMoreLemmings",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 40,
+      "minimumSacrifices": 0,
       "notes": [],
       "number": 8,
       "population": 40,
       "rank": "Oh No! More Lemmings Versus",
       "required": 40,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "Co-operation"
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Co-operation",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/ohYesMoreLemmings-27.json",
+        "released": 40,
+        "retainedReserves": 0,
+        "saved": 40,
+        "sha256": "aedc1171fe0bb742fef935ff475112990fe8bc3f3eee7f76d0e1fd6aed7643a8",
+        "ticks": 4144
+      }
     },
     {
+      "bestSaved": 40,
       "conditions": {
         "gameID": "ohYesMoreLemmings",
         "levelFingerprint": "39c8c8de4d38caef0576d12f7eb67c221b86f5922186b7ac72de7d8301e3ca88",
@@ -21111,16 +21844,31 @@
         "timeLimitSeconds": 300
       },
       "gameID": "ohYesMoreLemmings",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 40,
+      "minimumSacrifices": 0,
       "notes": [],
       "number": 9,
       "population": 40,
       "rank": "Oh No! More Lemmings Versus",
       "required": 40,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "One On One"
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "One On One",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/ohYesMoreLemmings-28.json",
+        "released": 40,
+        "retainedReserves": 0,
+        "saved": 40,
+        "sha256": "66e0ff1c6d0b5853db642c641b0924c26e8a5623af3d7ff0ddbfba89b0709a4c",
+        "ticks": 2740
+      }
     },
     {
+      "bestSaved": 40,
       "conditions": {
         "gameID": "ohYesMoreLemmings",
         "levelFingerprint": "22ea99aae8c814093ad6889863d2c2aebbc2ccbeeaafacab3786a12b8dc10368",
@@ -21145,14 +21893,28 @@
         "timeLimitSeconds": 300
       },
       "gameID": "ohYesMoreLemmings",
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 40,
+      "minimumSacrifices": 0,
       "notes": [],
       "number": 10,
       "population": 40,
       "rank": "Oh No! More Lemmings Versus",
       "required": 40,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "I Want It All"
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "I Want It All",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/ohYesMoreLemmings-29.json",
+        "released": 40,
+        "retainedReserves": 0,
+        "saved": 40,
+        "sha256": "1b76ff77d65ed829b2d5f3c88e5e037e6314397f2ab2fbd4e2a2e5b11ac164fe",
+        "ticks": 2237
+      }
     },
     {
       "bestSaved": 10,
@@ -22858,6 +23620,7 @@
       "title": "Shadow 30"
     },
     {
+      "bestSaved": 50,
       "conditions": {
         "gameID": "holidayLemmings1994",
         "levelFingerprint": "d86ba20b06742e9658919a1b7c5b503598f5f09b5b6b7e8aebc96e1f97e01c76",
@@ -22882,16 +23645,28 @@
         "timeLimitSeconds": 360
       },
       "gameID": "holidayLemmings1994",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 50,
+      "minimumSacrifices": 0,
+      "notes": [],
       "number": 1,
       "population": 50,
       "rank": "Frost",
       "required": 50,
-      "status": "UNKNOWN",
-      "testedCandidates": 569,
-      "title": "Chains of Command"
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Chains of Command",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/holidayLemmings1994-0.json",
+        "released": 50,
+        "retainedReserves": 0,
+        "saved": 50,
+        "sha256": "f4bb220d301d15be18799ab36cf56f7d547a823d635dc5840becfceec5fdc5d4",
+        "ticks": 3147
+      }
     },
     {
       "bestSaved": 50,
@@ -23116,15 +23891,13 @@
       },
       "gameID": "holidayLemmings1994",
       "lossesInBestSolution": 1,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 6,
       "population": 70,
       "rank": "Frost",
       "required": 69,
       "status": "OBSERVED",
-      "testedCandidates": 357,
+      "testedCandidates": 3,
       "title": "The Land of the Bizarre",
       "witness": {
         "completed": true,
@@ -23165,15 +23938,13 @@
       },
       "gameID": "holidayLemmings1994",
       "lossesInBestSolution": 17,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 7,
       "population": 50,
       "rank": "Frost",
       "required": 25,
       "status": "OBSERVED",
-      "testedCandidates": 357,
+      "testedCandidates": 3,
       "title": "Happy New Year!",
       "witness": {
         "completed": true,
@@ -23508,15 +24279,13 @@
       },
       "gameID": "holidayLemmings1994",
       "lossesInBestSolution": 10,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 14,
       "population": 50,
       "rank": "Frost",
       "required": 40,
       "status": "OBSERVED",
-      "testedCandidates": 144,
+      "testedCandidates": 3,
       "title": "Happy New Year II!",
       "witness": {
         "completed": true,
@@ -23557,15 +24326,13 @@
       },
       "gameID": "holidayLemmings1994",
       "lossesInBestSolution": 1,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 15,
       "population": 50,
       "rank": "Frost",
       "required": 49,
       "status": "OBSERVED",
-      "testedCandidates": 357,
+      "testedCandidates": 3,
       "title": "Plethora of Presents",
       "witness": {
         "completed": true,
@@ -23606,15 +24373,13 @@
       },
       "gameID": "holidayLemmings1994",
       "lossesInBestSolution": 1,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 16,
       "population": 80,
       "rank": "Frost",
       "required": 79,
       "status": "OBSERVED",
-      "testedCandidates": 357,
+      "testedCandidates": 3,
       "title": "Up on the Rooftops",
       "witness": {
         "completed": true,
@@ -23704,15 +24469,13 @@
       },
       "gameID": "holidayLemmings1994",
       "lossesInBestSolution": 3,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 2,
       "population": 80,
       "rank": "Hail",
       "required": 75,
       "status": "OBSERVED",
-      "testedCandidates": 357,
+      "testedCandidates": 3,
       "title": "Break On Through",
       "witness": {
         "completed": true,
@@ -23753,15 +24516,13 @@
       },
       "gameID": "holidayLemmings1994",
       "lossesInBestSolution": 15,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 3,
       "population": 50,
       "rank": "Hail",
       "required": 25,
       "status": "OBSERVED",
-      "testedCandidates": 570,
+      "testedCandidates": 3,
       "title": "And a Happy New Year!",
       "witness": {
         "completed": true,
@@ -23802,15 +24563,13 @@
       },
       "gameID": "holidayLemmings1994",
       "lossesInBestSolution": 1,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 4,
       "population": 80,
       "rank": "Hail",
       "required": 78,
       "status": "OBSERVED",
-      "testedCandidates": 499,
+      "testedCandidates": 3,
       "title": "Lemmintaschen?",
       "witness": {
         "completed": true,
@@ -23851,15 +24610,13 @@
       },
       "gameID": "holidayLemmings1994",
       "lossesInBestSolution": 9,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 5,
       "population": 80,
       "rank": "Hail",
       "required": 68,
       "status": "OBSERVED",
-      "testedCandidates": 286,
+      "testedCandidates": 3,
       "title": "Get the Point?",
       "witness": {
         "completed": true,
@@ -23900,15 +24657,13 @@
       },
       "gameID": "holidayLemmings1994",
       "lossesInBestSolution": 38,
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "notes": [],
       "number": 6,
       "population": 80,
       "rank": "Hail",
       "required": 27,
       "status": "OBSERVED",
-      "testedCandidates": 73,
+      "testedCandidates": 3,
       "title": "Surprise Package?",
       "witness": {
         "completed": true,
@@ -24070,6 +24825,7 @@
       }
     },
     {
+      "bestSaved": 80,
       "conditions": {
         "gameID": "holidayLemmings1994",
         "levelFingerprint": "635a7f37362d4aecf2205dae3909b7ed241730b090db4b8d73474bb2ca26a6f9",
@@ -24094,16 +24850,28 @@
         "timeLimitSeconds": 240
       },
       "gameID": "holidayLemmings1994",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 80,
+      "minimumSacrifices": 0,
+      "notes": [],
       "number": 10,
       "population": 80,
       "rank": "Hail",
       "required": 80,
-      "status": "UNKNOWN",
-      "testedCandidates": 356,
-      "title": "Lemmy in the cold, cold ground"
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Lemmy in the cold, cold ground",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/holidayLemmings1994-25.json",
+        "released": 80,
+        "retainedReserves": 0,
+        "saved": 80,
+        "sha256": "9f0fa0b323b46e8f89970d7f1a868ba0ba41c15785ef84b98ace3b594deda6ad",
+        "ticks": 3700
+      }
     },
     {
       "bestSaved": 70,
@@ -24253,6 +25021,7 @@
       }
     },
     {
+      "bestSaved": 65,
       "conditions": {
         "gameID": "holidayLemmings1994",
         "levelFingerprint": "b367cefa58fa34a33d1e1617e02c7788ce810b9c0a34e91767abfcc041d0bdc6",
@@ -24277,16 +25046,28 @@
         "timeLimitSeconds": 540
       },
       "gameID": "holidayLemmings1994",
-      "notes": [
-        "No full rescue found with one skill on the first Lemming in the sampled ticks. This is not an impossibility proof."
-      ],
+      "lossesInBestSolution": 0,
+      "maximumSaveable": 65,
+      "minimumSacrifices": 0,
+      "notes": [],
       "number": 14,
       "population": 65,
       "rank": "Hail",
       "required": 65,
-      "status": "UNKNOWN",
-      "testedCandidates": 498,
-      "title": "Rendezvous II"
+      "status": "VERIFIED",
+      "testedCandidates": 2,
+      "title": "Rendezvous II",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 0,
+        "path": "witnesses/holidayLemmings1994-29.json",
+        "released": 65,
+        "retainedReserves": 0,
+        "saved": 65,
+        "sha256": "ea9ce4cafd31f4d264d2989d1f884c53ba566ac1cc719b02fe0824608766f163",
+        "ticks": 3334
+      }
     },
     {
       "bestSaved": 60,

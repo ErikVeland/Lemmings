@@ -1,0 +1,203 @@
+[
+  {
+    "rate": 99,
+    "tick": 500,
+    "async": true
+  },
+  {
+    "skill": "builder",
+    "id": 1,
+    "y": 102,
+    "action": "digging",
+    "async": true
+  },
+  {
+    "rate": 88
+  },
+  {
+    "skill": "digger",
+    "x": 700,
+    "direction": 1,
+    "action": "walking"
+  },
+  {
+    "skill": "digger",
+    "x": 707,
+    "direction": 1,
+    "action": "walking"
+  },
+  {
+    "skill": "digger",
+    "x": 714,
+    "direction": 1,
+    "action": "walking"
+  },
+  {
+    "skill": "digger",
+    "x": 721,
+    "direction": 1,
+    "action": "walking"
+  },
+  {
+    "skill": "digger",
+    "x": 728,
+    "direction": 1,
+    "action": "walking"
+  },
+  {
+    "skill": "digger",
+    "x": 735,
+    "direction": 1,
+    "action": "walking"
+  },
+  {
+    "skill": "digger",
+    "x": 742,
+    "direction": 1,
+    "action": "walking"
+  },
+  {
+    "skill": "digger",
+    "x": 749,
+    "direction": 1,
+    "action": "walking"
+  },
+  {
+    "skill": "digger",
+    "x": 756,
+    "direction": 1,
+    "action": "walking"
+  },
+  {
+    "skill": "digger",
+    "x": 763,
+    "direction": 1,
+    "action": "walking"
+  },
+  {
+    "skill": "digger",
+    "x": 770,
+    "direction": 1,
+    "action": "walking"
+  },
+  {
+    "skill": "digger",
+    "x": 777,
+    "direction": 1,
+    "action": "walking"
+  },
+  {
+    "skill": "digger",
+    "x": 784,
+    "direction": 1,
+    "action": "walking"
+  },
+  {
+    "skill": "digger",
+    "x": 791,
+    "direction": 1,
+    "action": "walking"
+  },
+  {
+    "skill": "digger",
+    "x": 798,
+    "direction": 1,
+    "action": "walking"
+  },
+  {
+    "skill": "digger",
+    "x": 805,
+    "direction": 1,
+    "action": "walking"
+  },
+  {
+    "skill": "digger",
+    "x": 812,
+    "direction": 1,
+    "action": "walking"
+  },
+  {
+    "skill": "digger",
+    "x": 819,
+    "direction": 1,
+    "action": "walking"
+  },
+  {
+    "skill": "digger",
+    "x": 826,
+    "direction": 1,
+    "action": "walking"
+  },
+  {
+    "skill": "digger",
+    "x": 833,
+    "direction": 1,
+    "action": "walking"
+  },
+  {
+    "skill": "digger",
+    "x": 840,
+    "direction": 1,
+    "action": "walking"
+  },
+  {
+    "skill": "digger",
+    "x": 847,
+    "direction": 1,
+    "action": "walking"
+  },
+  {
+    "skill": "digger",
+    "x": 854,
+    "direction": 1,
+    "action": "walking"
+  },
+  {
+    "skill": "digger",
+    "x": 861,
+    "direction": 1,
+    "action": "walking"
+  },
+  {
+    "skill": "digger",
+    "x": 868,
+    "direction": 1,
+    "action": "walking"
+  },
+  {
+    "skill": "digger",
+    "x": 875,
+    "direction": 1,
+    "action": "walking"
+  },
+  {
+    "skill": "digger",
+    "x": 882,
+    "direction": 1,
+    "action": "walking"
+  },
+  {
+    "skill": "digger",
+    "x": 889,
+    "direction": 1,
+    "action": "walking"
+  },
+  {
+    "skill": "digger",
+    "x": 896,
+    "direction": 1,
+    "action": "walking"
+  },
+  {
+    "skill": "digger",
+    "x": 903,
+    "direction": 1,
+    "action": "walking"
+  },
+  {
+    "skill": "digger",
+    "x": 910,
+    "direction": 1,
+    "action": "walking"
+  }
+]

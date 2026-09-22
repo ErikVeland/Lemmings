@@ -1,0 +1,116 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 89
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 423
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 528
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 8,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 571
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 720
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 932
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1137
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1329
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1564
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 7,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1834
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 10,
+    "required" : 10,
+    "saved" : 10,
+    "stateHash" : "d2122cad610bc5d0a792f7c66340149db2c0ed027c5200432a9185387636c2f1",
+    "ticks" : 2525
+  },
+  "initialStateHash" : "db29f5a674ffb54643dcc29f3765aea5aa4d034c8b832f558bbd4384763b2295",
+  "number" : 8,
+  "rank" : "Mega Drive Sunsoft",
+  "title" : "Is this a circus?"
+}

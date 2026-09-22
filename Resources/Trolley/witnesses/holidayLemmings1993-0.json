@@ -6,7 +6,8 @@
           "_0" : 50
         }
       },
-      "tick" : 10
+      "afterTick" : true,
+      "tick" : 9
     },
     {
       "action" : {
@@ -14,7 +15,8 @@
           "_0" : 99
         }
       },
-      "tick" : 10
+      "afterTick" : true,
+      "tick" : 9
     },
     {
       "action" : {
@@ -22,7 +24,8 @@
           "_0" : 50
         }
       },
-      "tick" : 86
+      "afterTick" : true,
+      "tick" : 85
     },
     {
       "action" : {
@@ -31,7 +34,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 189
+      "afterTick" : true,
+      "tick" : 186
     },
     {
       "action" : {
@@ -40,7 +44,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 392
+      "afterTick" : true,
+      "tick" : 389
     },
     {
       "action" : {
@@ -49,7 +54,8 @@
           "skill" : "builder"
         }
       },
-      "tick" : 595
+      "afterTick" : true,
+      "tick" : 592
     },
     {
       "action" : {
@@ -58,7 +64,8 @@
           "skill" : "basher"
         }
       },
-      "tick" : 770
+      "afterTick" : true,
+      "tick" : 767
     }
   ],
   "expected" : {
@@ -66,10 +73,10 @@
     "released" : 10,
     "required" : 10,
     "saved" : 10,
-    "stateHash" : "e1b88e061e60702072ab34dbb9899b799155d7d566e6467decd393ed07b9f499",
-    "ticks" : 1159
+    "stateHash" : "5f165807d453cb569d60e4207fb067ea6ba3c7b7b82b726bebdea1de7f565cf8",
+    "ticks" : 1156
   },
-  "initialStateHash" : "0deed05049d2bb6b4b3beae3dfc110495a1f37bd75c2ccd2f677656069b3dea9",
+  "initialStateHash" : "a509acc99dff3a298d108970fe1b5cd674e912bccb542a9e6cb2c3d2ebf3f859",
   "number" : 1,
   "rank" : "Flurry",
   "title" : "Climbing to the Top!"

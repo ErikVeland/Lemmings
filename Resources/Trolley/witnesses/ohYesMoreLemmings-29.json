@@ -1,0 +1,36 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 79
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 190
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 40,
+    "required" : 40,
+    "saved" : 40,
+    "stateHash" : "67bd435d5f51bf5c167483ef22f8a0a5cdf4720716f5edd3e965fd8ee66f5f30",
+    "ticks" : 2237
+  },
+  "initialStateHash" : "d71a93be439a0397676379891cf9c121691894c981bf6d84de4d34c36e62357a",
+  "number" : 10,
+  "rank" : "Oh No! More Lemmings Versus",
+  "title" : "I Want It All"
+}

@@ -1,0 +1,59 @@
+[
+  {
+    "skill": "miner",
+    "id": 0,
+    "x": 704,
+    "direction": -1,
+    "async": true
+  },
+  {
+    "skill": "builder",
+    "id": 1,
+    "x": 690,
+    "direction": 1,
+    "async": true
+  },
+  {
+    "rate": 99,
+    "tick": 150,
+    "async": true
+  },
+  {
+    "skill": "miner",
+    "id": 59,
+    "x": 698,
+    "direction": 1
+  },
+  {
+    "skill": "builder",
+    "id": 59,
+    "x": 830,
+    "direction": 1
+  },
+  {
+    "skill": "builder",
+    "id": 59,
+    "x": 856,
+    "direction": 1
+  },
+  {
+    "skill": "miner",
+    "id": 59,
+    "x": 886,
+    "direction": 1
+  },
+  {
+    "skill": "builder",
+    "id": 59,
+    "x": 964,
+    "direction": 1
+  },
+  {
+    "skill": "miner",
+    "id": 0,
+    "x": 682,
+    "direction": 1,
+    "tick": 2100,
+    "async": true
+  }
+]

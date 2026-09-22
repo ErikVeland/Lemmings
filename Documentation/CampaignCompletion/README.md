@@ -1,16 +1,16 @@
 # Additional campaign completion evidence
 
-The manifest holds 210 fixed-input winning replays. These supplement the original
+The manifest holds 273 fixed-input winning replays. These supplement the original
 [120-level DOS gate](../ClassicCompletion/README.md) and the existing L2 tests.
 
 | Campaign | Winning replays | Levels without a fixture |
 | --- | ---: | ---: |
-| Oh No! More Lemmings | 94/100 | 6 |
+| Oh No! More Lemmings | 100/100 | 0 |
 | Xmas 1991 | 4/4 | 0 |
 | Xmas 1992 | 4/4 | 0 |
 | Holiday 1993 | 32/32 | 0 |
 | Holiday 1994 | 32/32 | 0 |
-| Oh Yes! conversions | 3/60 | 57 |
+| Oh Yes! conversions | 60/60 | 0 |
 | Lemmings 3 | 41/90 | 49 |
 
 These counts come from the committed [fixture manifest](evidence.json).
@@ -48,7 +48,9 @@ Do not refresh the manifest to hide an unexplained regression.
 
 For the selected Classic release, use `--classic-only --require-all`. This checks
 all five additional Classic campaigns and reports every missing route. The
-conversion fixtures are replayed by the full Classic corpus gate. Sequel regression
+conversion fixtures also run through this strict gate, with artwork selected by
+source rank. Missing conversion data fails rather than reducing the level count.
+The full Classic corpus gate independently replays them. Sequel regression
 checks remain separate.
 
 24 Lemmings 3 routes come from the beam solver in
@@ -57,3 +59,11 @@ checks remain separate.
 search the levels without a fixture. A second pass without `--fewer-inputs-first`
 ranks crowd distance first and finds different levels. The solver writes a route only after two
 replays agree, and the gate checks it again.
+
+The official Classic gate is complete: `zsh Scripts/verify-official-classic.sh`
+requires all 292 wins and runs the real session/recovery and progression checks.
+See [official quest evidence](../ReleaseReadiness/OfficialClassicQuest.json).
+
+Add `--include-conversions` to the official gate to require all 352 Classic wins,
+1,056 saved-run restores, 352 progress resumes and six release transitions.
+See [combined quest evidence](../ReleaseReadiness/ClassicConversionQuest.json).

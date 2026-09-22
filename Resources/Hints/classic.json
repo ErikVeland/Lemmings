@@ -6432,6 +6432,50 @@
       "width" : 1600
     },
     {
+      "fingerprint" : "3b53bef03666fc66a8c827af79fe3cbc5b11c808ee958a970069a6ef1de5dab5",
+      "height" : 160,
+      "number" : 1,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "blocker",
+          "tick" : 65,
+          "x" : 729,
+          "y" : 119
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 49,
+          "skill" : "bomber",
+          "tick" : 2205,
+          "x" : 729,
+          "y" : 98
+        }
+      ],
+      "rank" : "Crazy",
+      "rates" : [
+        {
+          "tick" : 16,
+          "value" : 1
+        },
+        {
+          "tick" : 66,
+          "value" : 19
+        },
+        {
+          "tick" : 2142,
+          "value" : 53
+        }
+      ],
+      "skillOrder" : [
+        "blocker",
+        "bomber"
+      ],
+      "title" : "Quote: \"That`s a good level\"",
+      "width" : 1600
+    },
+    {
       "fingerprint" : "cd46d85cae2d1e06445fd2d9956d9a7a545e23139da15d0c482f0eb2b8df9f55",
       "height" : 160,
       "number" : 2,
@@ -6781,6 +6825,175 @@
         "miner"
       ],
       "title" : "On the Antarctic Coast",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "961582f8a7b01e4040b1ce826c03bba69d8f3b459a3623cb1c06ed138184f2e8",
+      "height" : 160,
+      "number" : 10,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "builder",
+          "tick" : 77,
+          "x" : 751,
+          "y" : 71
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "bomber",
+          "tick" : 127,
+          "x" : 757,
+          "y" : 68
+        },
+        {
+          "facingLeft" : true,
+          "lemmingID" : 78,
+          "skill" : "builder",
+          "tick" : 975,
+          "x" : 689,
+          "y" : 89
+        }
+      ],
+      "rank" : "Crazy",
+      "rates" : [
+        {
+          "tick" : 27,
+          "value" : 1
+        },
+        {
+          "tick" : 55,
+          "value" : 99
+        },
+        {
+          "tick" : 120,
+          "value" : 51
+        },
+        {
+          "tick" : 124,
+          "value" : 99
+        },
+        {
+          "tick" : 163,
+          "value" : 51
+        },
+        {
+          "tick" : 168,
+          "value" : 99
+        },
+        {
+          "tick" : 207,
+          "value" : 51
+        },
+        {
+          "tick" : 211,
+          "value" : 99
+        },
+        {
+          "tick" : 252,
+          "value" : 51
+        },
+        {
+          "tick" : 256,
+          "value" : 99
+        },
+        {
+          "tick" : 296,
+          "value" : 51
+        },
+        {
+          "tick" : 299,
+          "value" : 99
+        },
+        {
+          "tick" : 340,
+          "value" : 51
+        },
+        {
+          "tick" : 343,
+          "value" : 99
+        },
+        {
+          "tick" : 383,
+          "value" : 51
+        },
+        {
+          "tick" : 387,
+          "value" : 99
+        },
+        {
+          "tick" : 429,
+          "value" : 51
+        },
+        {
+          "tick" : 432,
+          "value" : 99
+        },
+        {
+          "tick" : 473,
+          "value" : 51
+        },
+        {
+          "tick" : 477,
+          "value" : 99
+        },
+        {
+          "tick" : 517,
+          "value" : 51
+        },
+        {
+          "tick" : 521,
+          "value" : 99
+        },
+        {
+          "tick" : 561,
+          "value" : 51
+        },
+        {
+          "tick" : 564,
+          "value" : 99
+        },
+        {
+          "tick" : 604,
+          "value" : 51
+        },
+        {
+          "tick" : 607,
+          "value" : 99
+        },
+        {
+          "tick" : 649,
+          "value" : 51
+        },
+        {
+          "tick" : 653,
+          "value" : 99
+        },
+        {
+          "tick" : 692,
+          "value" : 51
+        },
+        {
+          "tick" : 695,
+          "value" : 99
+        },
+        {
+          "tick" : 737,
+          "value" : 51
+        },
+        {
+          "tick" : 741,
+          "value" : 99
+        }
+      ],
+      "skillOrder" : [
+        "builder",
+        "bomber",
+        "basher"
+      ],
+      "title" : "ROCKY VI",
       "width" : 1600
     },
     {
@@ -7219,6 +7432,47 @@
       "width" : 1600
     },
     {
+      "fingerprint" : "98263270a46700940ae0a97c53c3c2b184d0a7b951de64468a3a5573b721befe",
+      "height" : 160,
+      "number" : 20,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 1,
+          "skill" : "builder",
+          "tick" : 161,
+          "x" : 720,
+          "y" : 63
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 1,
+          "skill" : "basher",
+          "tick" : 224,
+          "x" : 726,
+          "y" : 60
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 1,
+          "skill" : "builder",
+          "tick" : 232,
+          "x" : 729,
+          "y" : 60
+        }
+      ],
+      "rank" : "Crazy",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "builder",
+        "basher"
+      ],
+      "title" : "Ice Ice Lemming",
+      "width" : 1600
+    },
+    {
       "fingerprint" : "8e3ca7cbb3543f4d6a971f7624d40df2b2e1a7b9cec08f0f72f1e20359a02f02",
       "height" : 160,
       "number" : 1,
@@ -7582,6 +7836,92 @@
         "builder"
       ],
       "title" : "It`s a tight fit!",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "6ad182864707a7718059ab8b15de054d0326ccd1c5d62d0ae2aeda410479733a",
+      "height" : 160,
+      "number" : 9,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 1,
+          "skill" : "builder",
+          "tick" : 138,
+          "x" : 647,
+          "y" : 142
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 1,
+          "skill" : "builder",
+          "tick" : 330,
+          "x" : 671,
+          "y" : 130
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 1,
+          "skill" : "builder",
+          "tick" : 522,
+          "x" : 695,
+          "y" : 118
+        }
+      ],
+      "rank" : "Wild",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "builder",
+        "basher",
+        "digger"
+      ],
+      "title" : "Ice Station Lemming",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "6a6f775e9dcea6220747d01a8140c97d888aa571ec1de57970bafc552bf37975",
+      "height" : 160,
+      "number" : 10,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "builder",
+          "tick" : 217,
+          "x" : 610,
+          "y" : 91
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 2,
+          "skill" : "builder",
+          "tick" : 364,
+          "x" : 650,
+          "y" : 89
+        },
+        {
+          "facingLeft" : true,
+          "lemmingID" : 2,
+          "skill" : "builder",
+          "tick" : 556,
+          "x" : 656,
+          "y" : 85
+        }
+      ],
+      "rank" : "Wild",
+      "rates" : [
+        {
+          "tick" : 4,
+          "value" : 1
+        }
+      ],
+      "skillOrder" : [
+        "builder",
+        "basher"
+      ],
+      "title" : "Higgledy Piggledy",
       "width" : 1600
     },
     {
@@ -9226,6 +9566,49 @@
       "width" : 1600
     },
     {
+      "fingerprint" : "1c5a7af807ec853cb96f2f211c124c45b026fe0e18e4bd4423896ae9c9579e78",
+      "height" : 160,
+      "number" : 5,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "basher",
+          "tick" : 95,
+          "x" : 778,
+          "y" : 51
+        },
+        {
+          "facingLeft" : true,
+          "lemmingID" : 1,
+          "skill" : "miner",
+          "tick" : 176,
+          "x" : 806,
+          "y" : 51
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "builder",
+          "tick" : 260,
+          "x" : 828,
+          "y" : 51
+        }
+      ],
+      "rank" : "Havoc",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "basher",
+        "miner",
+        "builder",
+        "climber"
+      ],
+      "title" : "There`s madness in the method",
+      "width" : 1600
+    },
+    {
       "fingerprint" : "89da07b3fc80f41aeba5ffcdf030d8d631f66c5f3284c28416031281fd3fc065",
       "height" : 160,
       "number" : 6,
@@ -9266,6 +9649,52 @@
         "miner"
       ],
       "title" : "Now get out of that!",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "e2f69cb0620155a1de57c89e38bea46473c4cff7d785a40f73463650aa7d4df5",
+      "height" : 160,
+      "number" : 7,
+      "opening" : [
+        {
+          "facingLeft" : true,
+          "lemmingID" : 0,
+          "skill" : "blocker",
+          "tick" : 138,
+          "x" : 370,
+          "y" : 43
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 2,
+          "skill" : "digger",
+          "tick" : 149,
+          "x" : 409,
+          "y" : 43
+        },
+        {
+          "facingLeft" : true,
+          "lemmingID" : 1,
+          "skill" : "builder",
+          "tick" : 187,
+          "x" : 858,
+          "y" : 148
+        }
+      ],
+      "rank" : "Havoc",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "blocker",
+        "digger",
+        "builder",
+        "basher",
+        "miner",
+        "climber",
+        "bomber"
+      ],
+      "title" : "Creature Discomforts",
       "width" : 1600
     },
     {
@@ -9504,6 +9933,61 @@
       "width" : 1600
     },
     {
+      "fingerprint" : "3a4f1205673d17001cd507195ef664e081f35e87fa7d08a85ee47114d72b641e",
+      "height" : 160,
+      "number" : 13,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "blocker",
+          "tick" : 177,
+          "x" : 611,
+          "y" : 100
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 79,
+          "skill" : "miner",
+          "tick" : 1757,
+          "x" : 624,
+          "y" : 98
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 79,
+          "skill" : "basher",
+          "tick" : 2477,
+          "x" : 744,
+          "y" : 158
+        }
+      ],
+      "rank" : "Havoc",
+      "rates" : [
+        {
+          "tick" : 18,
+          "value" : 5
+        },
+        {
+          "tick" : 18,
+          "value" : 67
+        },
+        {
+          "tick" : 1595,
+          "value" : 93
+        }
+      ],
+      "skillOrder" : [
+        "blocker",
+        "miner",
+        "basher",
+        "builder",
+        "bomber"
+      ],
+      "title" : "HIGHLAND FLING",
+      "width" : 1600
+    },
+    {
       "fingerprint" : "9896d3ad53fc648aab75e05a554e7550d7bfd5d49a1b0d6e261cc1d29a077dbe",
       "height" : 160,
       "number" : 14,
@@ -9600,6 +10084,49 @@
         "basher"
       ],
       "title" : "Have an ice day",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "75fd9f413d7562edee91e603fd67d7a1edf9eeab0993d3fc84fee2ebd0fcf575",
+      "height" : 160,
+      "number" : 16,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "blocker",
+          "tick" : 98,
+          "x" : 807,
+          "y" : 117
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 1,
+          "skill" : "climber",
+          "tick" : 99,
+          "x" : 795,
+          "y" : 110
+        },
+        {
+          "facingLeft" : true,
+          "lemmingID" : 2,
+          "skill" : "builder",
+          "tick" : 117,
+          "x" : 800,
+          "y" : 110
+        }
+      ],
+      "rank" : "Havoc",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "blocker",
+        "climber",
+        "builder",
+        "miner"
+      ],
+      "title" : "Scaling the Heights",
       "width" : 1600
     },
     {
@@ -9743,6 +10270,49 @@
         "basher"
       ],
       "title" : "Looks a Bit Nippy Out There",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "ba0d5e42ea47bbc45f83382bd7f2fb0ea3cce5d303b12fbd090644a899e06bcd",
+      "height" : 160,
+      "number" : 20,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "bomber",
+          "tick" : 92,
+          "x" : 601,
+          "y" : 99
+        },
+        {
+          "facingLeft" : true,
+          "lemmingID" : 1,
+          "skill" : "bomber",
+          "tick" : 200,
+          "x" : 1007,
+          "y" : 33
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 2,
+          "skill" : "climber",
+          "tick" : 300,
+          "x" : 623,
+          "y" : 159
+        }
+      ],
+      "rank" : "Havoc",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "bomber",
+        "climber",
+        "floater",
+        "miner"
+      ],
+      "title" : "LOoK BeFoRe YoU LeAp!",
       "width" : 1600
     },
     {
@@ -9997,6 +10567,58 @@
       "width" : 1600
     },
     {
+      "fingerprint" : "a9d2f4923e50c26f8623e69783836dbf5f28aecf9c0449ac274d683818c08f00",
+      "height" : 160,
+      "number" : 1,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 9,
+          "skill" : "builder",
+          "tick" : 186,
+          "x" : 734,
+          "y" : 105
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 9,
+          "skill" : "builder",
+          "tick" : 389,
+          "x" : 761,
+          "y" : 93
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 9,
+          "skill" : "builder",
+          "tick" : 592,
+          "x" : 788,
+          "y" : 81
+        }
+      ],
+      "rank" : "Flurry",
+      "rates" : [
+        {
+          "tick" : 9,
+          "value" : 50
+        },
+        {
+          "tick" : 9,
+          "value" : 99
+        },
+        {
+          "tick" : 85,
+          "value" : 50
+        }
+      ],
+      "skillOrder" : [
+        "builder",
+        "basher"
+      ],
+      "title" : "Climbing to the Top!",
+      "width" : 1600
+    },
+    {
       "fingerprint" : "0f437d0c78e97a4de3e4828fca6cf8a78e449f2c6f4e2f3522871874c28cfe95",
       "height" : 160,
       "number" : 2,
@@ -10241,6 +10863,48 @@
         "basher"
       ],
       "title" : "Clouds of Lemmings",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "8fff89f6f98c4e97b4370a21e6c3262e4b684151c5863f2718b57be4007c8042",
+      "height" : 160,
+      "number" : 9,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "digger",
+          "tick" : 71,
+          "x" : 617,
+          "y" : 145
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "basher",
+          "tick" : 103,
+          "x" : 617,
+          "y" : 149
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "builder",
+          "tick" : 628,
+          "x" : 805,
+          "y" : 117
+        }
+      ],
+      "rank" : "Flurry",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "digger",
+        "basher",
+        "builder"
+      ],
+      "title" : "A Block from Home",
       "width" : 1600
     },
     {
@@ -10501,6 +11165,195 @@
         "builder"
       ],
       "title" : "Head for the Hills!",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "2e4d449de7fdfc0b803bdc6b0ec7da27f894a67fa8eeefe87688927b1fe0bb87",
+      "height" : 160,
+      "number" : 16,
+      "opening" : [
+        {
+          "facingLeft" : true,
+          "lemmingID" : 0,
+          "skill" : "blocker",
+          "tick" : 504,
+          "x" : 367,
+          "y" : 103
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 49,
+          "skill" : "basher",
+          "tick" : 882,
+          "x" : 371,
+          "y" : 93
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 49,
+          "skill" : "builder",
+          "tick" : 1222,
+          "x" : 476,
+          "y" : 93
+        }
+      ],
+      "rank" : "Flurry",
+      "rates" : [
+        {
+          "tick" : 44,
+          "value" : 20
+        },
+        {
+          "tick" : 67,
+          "value" : 92
+        }
+      ],
+      "skillOrder" : [
+        "blocker",
+        "basher",
+        "builder"
+      ],
+      "title" : "The Long Way Around",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "b1f14a1f29991b0ba1e867c5940ef5be3d5c4af12dc11100a3bb6d18c13b6634",
+      "height" : 160,
+      "number" : 1,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 24,
+          "skill" : "digger",
+          "tick" : 683,
+          "x" : 18,
+          "y" : 151
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 24,
+          "skill" : "builder",
+          "tick" : 742,
+          "x" : 18,
+          "y" : 159
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 24,
+          "skill" : "basher",
+          "tick" : 1189,
+          "x" : 19,
+          "y" : 158
+        }
+      ],
+      "rank" : "Blizzard",
+      "rates" : [
+        {
+          "tick" : 6,
+          "value" : 80
+        },
+        {
+          "tick" : 6,
+          "value" : 93
+        },
+        {
+          "tick" : 54,
+          "value" : 80
+        },
+        {
+          "tick" : 65,
+          "value" : 93
+        },
+        {
+          "tick" : 76,
+          "value" : 80
+        },
+        {
+          "tick" : 86,
+          "value" : 93
+        },
+        {
+          "tick" : 95,
+          "value" : 80
+        },
+        {
+          "tick" : 105,
+          "value" : 93
+        },
+        {
+          "tick" : 117,
+          "value" : 80
+        },
+        {
+          "tick" : 122,
+          "value" : 93
+        },
+        {
+          "tick" : 134,
+          "value" : 80
+        },
+        {
+          "tick" : 143,
+          "value" : 93
+        },
+        {
+          "tick" : 156,
+          "value" : 80
+        },
+        {
+          "tick" : 163,
+          "value" : 93
+        },
+        {
+          "tick" : 174,
+          "value" : 80
+        },
+        {
+          "tick" : 181,
+          "value" : 93
+        },
+        {
+          "tick" : 196,
+          "value" : 80
+        },
+        {
+          "tick" : 202,
+          "value" : 93
+        },
+        {
+          "tick" : 216,
+          "value" : 80
+        },
+        {
+          "tick" : 222,
+          "value" : 93
+        },
+        {
+          "tick" : 234,
+          "value" : 80
+        },
+        {
+          "tick" : 242,
+          "value" : 93
+        },
+        {
+          "tick" : 256,
+          "value" : 80
+        },
+        {
+          "tick" : 261,
+          "value" : 93
+        }
+      ],
+      "skillOrder" : [
+        "digger",
+        "builder",
+        "basher",
+        "climber",
+        "floater",
+        "blocker"
+      ],
+      "title" : "Oogilemming!",
       "width" : 1600
     },
     {
@@ -11158,6 +12011,46 @@
         "basher"
       ],
       "title" : "The Next Lemeration",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "d86ba20b06742e9658919a1b7c5b503598f5f09b5b6b7e8aebc96e1f97e01c76",
+      "height" : 160,
+      "number" : 1,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "basher",
+          "tick" : 328,
+          "x" : 475,
+          "y" : 27
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 1,
+          "skill" : "basher",
+          "tick" : 544,
+          "x" : 644,
+          "y" : 20
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "basher",
+          "tick" : 706,
+          "x" : 775,
+          "y" : 23
+        }
+      ],
+      "rank" : "Frost",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "basher"
+      ],
+      "title" : "Chains of Command",
       "width" : 1600
     },
     {
@@ -12310,6 +13203,50 @@
       "width" : 1600
     },
     {
+      "fingerprint" : "635a7f37362d4aecf2205dae3909b7ed241730b090db4b8d73474bb2ca26a6f9",
+      "height" : 160,
+      "number" : 10,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "builder",
+          "tick" : 112,
+          "x" : 362,
+          "y" : 147
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "basher",
+          "tick" : 213,
+          "x" : 374,
+          "y" : 141
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "basher",
+          "tick" : 1150,
+          "x" : 690,
+          "y" : 127
+        }
+      ],
+      "rank" : "Hail",
+      "rates" : [
+        {
+          "tick" : 16,
+          "value" : 60
+        }
+      ],
+      "skillOrder" : [
+        "builder",
+        "basher"
+      ],
+      "title" : "Lemmy in the cold, cold ground",
+      "width" : 1600
+    },
+    {
       "fingerprint" : "7e180d0021fac6da339082e9677b2f2d58cc5f480973a41709ed3a133d68cb9c",
       "height" : 160,
       "number" : 11,
@@ -12437,6 +13374,50 @@
       "width" : 1600
     },
     {
+      "fingerprint" : "b367cefa58fa34a33d1e1617e02c7788ce810b9c0a34e91767abfcc041d0bdc6",
+      "height" : 160,
+      "number" : 14,
+      "opening" : [
+        {
+          "facingLeft" : true,
+          "lemmingID" : 3,
+          "skill" : "basher",
+          "tick" : 195,
+          "x" : 1509,
+          "y" : 114
+        },
+        {
+          "facingLeft" : true,
+          "lemmingID" : 1,
+          "skill" : "builder",
+          "tick" : 198,
+          "x" : 1450,
+          "y" : 136
+        },
+        {
+          "facingLeft" : true,
+          "lemmingID" : 3,
+          "skill" : "builder",
+          "tick" : 241,
+          "x" : 1495,
+          "y" : 114
+        }
+      ],
+      "rank" : "Hail",
+      "rates" : [
+        {
+          "tick" : 1,
+          "value" : 50
+        }
+      ],
+      "skillOrder" : [
+        "basher",
+        "builder"
+      ],
+      "title" : "Rendezvous II",
+      "width" : 1600
+    },
+    {
       "fingerprint" : "5c0c01458bb60d341fc6a3585a5d01dc241d61d310a1b7a84680cf9005397be6",
       "height" : 160,
       "number" : 15,
@@ -12522,6 +13503,2379 @@
         "builder"
       ],
       "title" : "Peak of Performance",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "f67889ba147c0ebb9ec89fe76e002f69b9f838257084993cac72548e05b6de7a",
+      "height" : 160,
+      "number" : 1,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "builder",
+          "tick" : 81,
+          "x" : 778,
+          "y" : 93
+        }
+      ],
+      "rank" : "Lemmings Versus",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "builder"
+      ],
+      "title" : "There can be only one",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "b9fc7951ec313497e197f8283dd1a69bc3d499b6441ea33e34feef0269b27650",
+      "height" : 160,
+      "number" : 2,
+      "opening" : [
+        {
+          "facingLeft" : true,
+          "lemmingID" : 0,
+          "skill" : "digger",
+          "tick" : 121,
+          "x" : 414,
+          "y" : 54
+        },
+        {
+          "facingLeft" : true,
+          "lemmingID" : 0,
+          "skill" : "miner",
+          "tick" : 450,
+          "x" : 414,
+          "y" : 97
+        },
+        {
+          "facingLeft" : true,
+          "lemmingID" : 2,
+          "skill" : "blocker",
+          "tick" : 578,
+          "x" : 340,
+          "y" : 144
+        }
+      ],
+      "rank" : "Lemmings Versus",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "digger",
+        "miner",
+        "blocker",
+        "builder",
+        "basher"
+      ],
+      "title" : "We`re in this one together",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "e699a265ad71297811912e760e9955e90dbafc63c575676dff27996fc0a7ad27",
+      "height" : 160,
+      "number" : 3,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "basher",
+          "tick" : 95,
+          "x" : 786,
+          "y" : 68
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "basher",
+          "tick" : 110,
+          "x" : 796,
+          "y" : 68
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "basher",
+          "tick" : 125,
+          "x" : 806,
+          "y" : 68
+        }
+      ],
+      "rank" : "Lemmings Versus",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "basher"
+      ],
+      "title" : "Still everything to play for",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "e7ff2fcce6fb2f24756f1079b35581bbc739b56d838a5a90f5faed21f8434fde",
+      "height" : 160,
+      "number" : 4,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 1,
+          "skill" : "builder",
+          "tick" : 89,
+          "x" : 650,
+          "y" : 153
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 1,
+          "skill" : "builder",
+          "tick" : 281,
+          "x" : 674,
+          "y" : 141
+        },
+        {
+          "facingLeft" : true,
+          "lemmingID" : 1,
+          "skill" : "builder",
+          "tick" : 313,
+          "x" : 678,
+          "y" : 139
+        }
+      ],
+      "rank" : "Lemmings Versus",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "builder",
+        "climber",
+        "floater",
+        "blocker",
+        "digger",
+        "basher",
+        "miner"
+      ],
+      "title" : "May the craftiest player win",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "afa8e7dcb678b62d875e0cb81772217af8c65b5e34c69ec34d5d01fc9b80b515",
+      "height" : 160,
+      "number" : 5,
+      "opening" : [
+        {
+          "facingLeft" : true,
+          "lemmingID" : 0,
+          "skill" : "basher",
+          "tick" : 82,
+          "x" : 709,
+          "y" : 49
+        },
+        {
+          "facingLeft" : true,
+          "lemmingID" : 0,
+          "skill" : "builder",
+          "tick" : 122,
+          "x" : 696,
+          "y" : 49
+        },
+        {
+          "facingLeft" : true,
+          "lemmingID" : 2,
+          "skill" : "builder",
+          "tick" : 134,
+          "x" : 693,
+          "y" : 48
+        }
+      ],
+      "rank" : "Lemmings Versus",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "basher",
+        "builder"
+      ],
+      "title" : "and the winner is.....",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "0a4bf39d68889f30c91b09f03eee7ab2cc9d133a1c436a6db95e0c71c0af5f53",
+      "height" : 160,
+      "number" : 6,
+      "opening" : [
+        {
+          "facingLeft" : true,
+          "lemmingID" : 0,
+          "skill" : "builder",
+          "tick" : 117,
+          "x" : 778,
+          "y" : 132
+        },
+        {
+          "facingLeft" : true,
+          "lemmingID" : 2,
+          "skill" : "builder",
+          "tick" : 323,
+          "x" : 730,
+          "y" : 116
+        },
+        {
+          "facingLeft" : true,
+          "lemmingID" : 11,
+          "skill" : "builder",
+          "tick" : 524,
+          "x" : 682,
+          "y" : 100
+        }
+      ],
+      "rank" : "Lemmings Versus",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "builder"
+      ],
+      "title" : "In the thick of the fray",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "26384c52795d326d684c67f9ef59921513e02591d5a17aa9cfd4ec53e960b821",
+      "height" : 160,
+      "number" : 7,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 1,
+          "skill" : "basher",
+          "tick" : 276,
+          "x" : 678,
+          "y" : 31
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 1,
+          "skill" : "digger",
+          "tick" : 337,
+          "x" : 696,
+          "y" : 31
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 1,
+          "skill" : "builder",
+          "tick" : 802,
+          "x" : 696,
+          "y" : 90
+        }
+      ],
+      "rank" : "Lemmings Versus",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "basher",
+        "digger",
+        "builder"
+      ],
+      "title" : "Just for fun or to the death?",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "b2734247122baea44bae35aa5ec70ecd794654fec622ec6a0839b45fe636af8f",
+      "height" : 160,
+      "number" : 8,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 1,
+          "skill" : "miner",
+          "tick" : 106,
+          "x" : 866,
+          "y" : 46
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 1,
+          "skill" : "builder",
+          "tick" : 253,
+          "x" : 892,
+          "y" : 59
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "digger",
+          "tick" : 277,
+          "x" : 780,
+          "y" : 39
+        }
+      ],
+      "rank" : "Lemmings Versus",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "miner",
+        "builder",
+        "digger",
+        "basher"
+      ],
+      "title" : "Game on!  Choose your tactics.",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "332cd7b5caa4fcb8cb34d730a32c7fd3294196e443ca2a996ef5583a96ae68fb",
+      "height" : 160,
+      "number" : 9,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 1,
+          "skill" : "builder",
+          "tick" : 131,
+          "x" : 488,
+          "y" : 117
+        },
+        {
+          "facingLeft" : true,
+          "lemmingID" : 0,
+          "skill" : "builder",
+          "tick" : 144,
+          "x" : 840,
+          "y" : 117
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 5,
+          "skill" : "builder",
+          "tick" : 303,
+          "x" : 488,
+          "y" : 116
+        }
+      ],
+      "rank" : "Lemmings Versus",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "builder"
+      ],
+      "title" : "The Passing Place",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "18e6f5d22cdd7afe89ae3f1d072a0647205d6b602bdb57108ed90d791c7bfbf9",
+      "height" : 160,
+      "number" : 10,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "builder",
+          "tick" : 68,
+          "x" : 760,
+          "y" : 148
+        },
+        {
+          "facingLeft" : true,
+          "lemmingID" : 0,
+          "skill" : "builder",
+          "tick" : 244,
+          "x" : 782,
+          "y" : 137
+        },
+        {
+          "facingLeft" : true,
+          "lemmingID" : 0,
+          "skill" : "builder",
+          "tick" : 436,
+          "x" : 758,
+          "y" : 125
+        }
+      ],
+      "rank" : "Lemmings Versus",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "builder",
+        "digger",
+        "basher"
+      ],
+      "title" : "Take what you can, when you can",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "8c2a1882b9a9a9b796d94c00a096af6761b66c1bd6c6081544608156cb265d41",
+      "height" : 160,
+      "number" : 11,
+      "opening" : [
+        {
+          "facingLeft" : true,
+          "lemmingID" : 0,
+          "skill" : "miner",
+          "tick" : 260,
+          "x" : 1027,
+          "y" : 85
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 1,
+          "skill" : "miner",
+          "tick" : 264,
+          "x" : 443,
+          "y" : 80
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 1,
+          "skill" : "miner",
+          "tick" : 272,
+          "x" : 449,
+          "y" : 84
+        }
+      ],
+      "rank" : "Lemmings Versus",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "miner"
+      ],
+      "title" : "Any chance of a truce?",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "64b872f922c0eb2f9e05746cd5fa23c1e67a556abc1b104db937d90545277992",
+      "height" : 160,
+      "number" : 12,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 1,
+          "skill" : "blocker",
+          "tick" : 114,
+          "x" : 782,
+          "y" : 99
+        },
+        {
+          "facingLeft" : true,
+          "lemmingID" : 2,
+          "skill" : "blocker",
+          "tick" : 170,
+          "x" : 742,
+          "y" : 99
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "builder",
+          "tick" : 214,
+          "x" : 900,
+          "y" : 101
+        }
+      ],
+      "rank" : "Lemmings Versus",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "blocker",
+        "builder",
+        "basher",
+        "bomber"
+      ],
+      "title" : "Good game! Good game!",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "5d03c4cd02f6e5387a83b98d1f2be9c83cef8ed41823e4b72d1fa4555f64a90c",
+      "height" : 160,
+      "number" : 13,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "digger",
+          "tick" : 204,
+          "x" : 980,
+          "y" : 36
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 1,
+          "skill" : "blocker",
+          "tick" : 264,
+          "x" : 968,
+          "y" : 42
+        },
+        {
+          "facingLeft" : true,
+          "lemmingID" : 3,
+          "skill" : "blocker",
+          "tick" : 516,
+          "x" : 714,
+          "y" : 40
+        }
+      ],
+      "rank" : "Lemmings Versus",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "digger",
+        "blocker",
+        "builder",
+        "basher",
+        "bomber"
+      ],
+      "title" : "The Hammock...",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "2d66525f2e483c19d6410109b3c443d2651e7b6d0d3a1b00811ecadf9f1e0075",
+      "height" : 160,
+      "number" : 14,
+      "opening" : [
+
+      ],
+      "rank" : "Lemmings Versus",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+
+      ],
+      "title" : "The Pipe Room...",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "898d97dec4a9cd76e63c58daba4d638cb911fb7129ec5f4cee1ed3e22a496b2e",
+      "height" : 160,
+      "number" : 15,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 1,
+          "skill" : "blocker",
+          "tick" : 119,
+          "x" : 310,
+          "y" : 120
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "basher",
+          "tick" : 151,
+          "x" : 386,
+          "y" : 120
+        },
+        {
+          "facingLeft" : true,
+          "lemmingID" : 2,
+          "skill" : "blocker",
+          "tick" : 189,
+          "x" : 272,
+          "y" : 120
+        }
+      ],
+      "rank" : "Lemmings Versus",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "blocker",
+        "basher",
+        "builder",
+        "miner",
+        "bomber"
+      ],
+      "title" : "Graffiti",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "f06fb54f0fa3bca60c91667702367ab3dfdbfcceaa759b6130b2ead90c01d4c8",
+      "height" : 160,
+      "number" : 16,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "digger",
+          "tick" : 115,
+          "x" : 798,
+          "y" : 33
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "basher",
+          "tick" : 404,
+          "x" : 798,
+          "y" : 70
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "digger",
+          "tick" : 608,
+          "x" : 860,
+          "y" : 70
+        }
+      ],
+      "rank" : "Lemmings Versus",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "digger",
+        "basher"
+      ],
+      "title" : "The Rubbish Dump",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "80b6eaec05dbf361027418ca93774ae899ca1735ac9f94eb4132f0b8c09ebb21",
+      "height" : 160,
+      "number" : 17,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 1,
+          "skill" : "basher",
+          "tick" : 199,
+          "x" : 548,
+          "y" : 90
+        },
+        {
+          "facingLeft" : true,
+          "lemmingID" : 0,
+          "skill" : "basher",
+          "tick" : 262,
+          "x" : 1080,
+          "y" : 90
+        },
+        {
+          "facingLeft" : true,
+          "lemmingID" : 0,
+          "skill" : "basher",
+          "tick" : 358,
+          "x" : 1035,
+          "y" : 96
+        }
+      ],
+      "rank" : "Lemmings Versus",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "basher",
+        "builder"
+      ],
+      "title" : "The Crystal Cavern Mark II",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "c54565df1a9a4f4ab17d59385adbd96ba478ca15b685734f5cd11bc098d104ad",
+      "height" : 160,
+      "number" : 18,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 48,
+          "skill" : "builder",
+          "tick" : 1445,
+          "x" : 1594,
+          "y" : 142
+        }
+      ],
+      "rank" : "Lemmings Versus",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "builder"
+      ],
+      "title" : "The Rope Bridge",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "e593679a4585ba9ef99bf39b58bd61c50deed7569a8e3b6342e4904fd9e9eb3b",
+      "height" : 160,
+      "number" : 19,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "blocker",
+          "tick" : 81,
+          "x" : 1045,
+          "y" : 128
+        }
+      ],
+      "rank" : "Lemmings Versus",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "blocker"
+      ],
+      "title" : "Islands in the Sky",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "61bffbfb11424aa771b2f9d8ece820ffb212763d1acc612a190e3d016ef13d38",
+      "height" : 160,
+      "number" : 20,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "digger",
+          "tick" : 84,
+          "x" : 890,
+          "y" : 66
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 1,
+          "skill" : "floater",
+          "tick" : 92,
+          "x" : 632,
+          "y" : 33
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 1,
+          "skill" : "digger",
+          "tick" : 112,
+          "x" : 634,
+          "y" : 66
+        }
+      ],
+      "rank" : "Lemmings Versus",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "digger",
+        "floater",
+        "builder",
+        "basher"
+      ],
+      "title" : "Cross-over Point",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "69bb08c63ff74992b60f770de5286ddf6fa9dd17da4b8fde0ee6260bc9f5a81f",
+      "height" : 160,
+      "number" : 1,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "basher",
+          "tick" : 126,
+          "x" : 870,
+          "y" : 64
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "basher",
+          "tick" : 261,
+          "x" : 934,
+          "y" : 64
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "basher",
+          "tick" : 396,
+          "x" : 998,
+          "y" : 64
+        }
+      ],
+      "rank" : "Oh No! More Lemmings Versus",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "basher",
+        "builder"
+      ],
+      "title" : "The Duel",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "9b4e7dc9a7a21dbe728347caa505d5c3cb026981b5264b6316f0c1e83b10b2c1",
+      "height" : 160,
+      "number" : 2,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "basher",
+          "tick" : 179,
+          "x" : 879,
+          "y" : 99
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "basher",
+          "tick" : 335,
+          "x" : 1008,
+          "y" : 132
+        }
+      ],
+      "rank" : "Oh No! More Lemmings Versus",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "basher"
+      ],
+      "title" : "Match Of The Day",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "db8bff4710328dcb0c8a05d9097f1ae52c27e47dbea770c406441e11bf986612",
+      "height" : 160,
+      "number" : 3,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "basher",
+          "tick" : 248,
+          "x" : 860,
+          "y" : 63
+        }
+      ],
+      "rank" : "Oh No! More Lemmings Versus",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "basher"
+      ],
+      "title" : "Confrontation",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "b4ff8265bf04a8dfa6cec6071eccbc8717338bdb42e33804dcdfebfe4a646038",
+      "height" : 160,
+      "number" : 4,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "basher",
+          "tick" : 173,
+          "x" : 756,
+          "y" : 137
+        },
+        {
+          "facingLeft" : true,
+          "lemmingID" : 0,
+          "skill" : "builder",
+          "tick" : 405,
+          "x" : 781,
+          "y" : 137
+        },
+        {
+          "facingLeft" : true,
+          "lemmingID" : 0,
+          "skill" : "builder",
+          "tick" : 934,
+          "x" : 648,
+          "y" : 66
+        }
+      ],
+      "rank" : "Oh No! More Lemmings Versus",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "basher",
+        "builder"
+      ],
+      "title" : "The Only Way Out",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "a3e4a0ad9278165728d5406cd8f79d31a51ae0094f62654795f9e92275f31cbe",
+      "height" : 160,
+      "number" : 5,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "climber",
+          "tick" : 54,
+          "x" : 745,
+          "y" : 113
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "blocker",
+          "tick" : 464,
+          "x" : 1000,
+          "y" : 59
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 1,
+          "skill" : "climber",
+          "tick" : 870,
+          "x" : 890,
+          "y" : 136
+        }
+      ],
+      "rank" : "Oh No! More Lemmings Versus",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "climber",
+        "blocker",
+        "miner",
+        "builder"
+      ],
+      "title" : "Showdown!",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "37a2be2086e068c1c1e6a885c0bd9eb1a91453cec8e3f50e1a9fcc021cda8e53",
+      "height" : 160,
+      "number" : 6,
+      "opening" : [
+
+      ],
+      "rank" : "Oh No! More Lemmings Versus",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+
+      ],
+      "title" : "Test Of Skill",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "579d1bfb7bee8ef2fb598df333499577883af1b183769b22c54ddfb16ee75097",
+      "height" : 160,
+      "number" : 7,
+      "opening" : [
+
+      ],
+      "rank" : "Oh No! More Lemmings Versus",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+
+      ],
+      "title" : "Give And Take",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "0612ff9d85ad32b8fe04a9ab115d800b0c390832e2a4d930ba847b75a87e44a6",
+      "height" : 160,
+      "number" : 8,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "builder",
+          "tick" : 87,
+          "x" : 394,
+          "y" : 88
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 1,
+          "skill" : "blocker",
+          "tick" : 144,
+          "x" : 398,
+          "y" : 85
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "builder",
+          "tick" : 329,
+          "x" : 455,
+          "y" : 95
+        }
+      ],
+      "rank" : "Oh No! More Lemmings Versus",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "builder",
+        "blocker",
+        "basher"
+      ],
+      "title" : "Co-operation",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "39c8c8de4d38caef0576d12f7eb67c221b86f5922186b7ac72de7d8301e3ca88",
+      "height" : 160,
+      "number" : 9,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 1,
+          "skill" : "builder",
+          "tick" : 204,
+          "x" : 1122,
+          "y" : 64
+        },
+        {
+          "facingLeft" : true,
+          "lemmingID" : 0,
+          "skill" : "builder",
+          "tick" : 297,
+          "x" : 486,
+          "y" : 64
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 3,
+          "skill" : "builder",
+          "tick" : 318,
+          "x" : 1130,
+          "y" : 59
+        }
+      ],
+      "rank" : "Oh No! More Lemmings Versus",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "builder",
+        "digger"
+      ],
+      "title" : "One On One",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "22ea99aae8c814093ad6889863d2c2aebbc2ccbeeaafacab3786a12b8dc10368",
+      "height" : 160,
+      "number" : 10,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "miner",
+          "tick" : 79,
+          "x" : 1048,
+          "y" : 89
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "builder",
+          "tick" : 190,
+          "x" : 1068,
+          "y" : 98
+        }
+      ],
+      "rank" : "Oh No! More Lemmings Versus",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "miner",
+        "builder"
+      ],
+      "title" : "I Want It All",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "93e74e7ffe1a3bd5aa597e58f72d28fc70854f51a45e0d6ad09bb845b85b0b0b",
+      "height" : 160,
+      "number" : 1,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "digger",
+          "tick" : 65,
+          "x" : 810,
+          "y" : 50
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "floater",
+          "tick" : 90,
+          "x" : 810,
+          "y" : 54
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 1,
+          "skill" : "floater",
+          "tick" : 92,
+          "x" : 808,
+          "y" : 25
+        }
+      ],
+      "rank" : "Mega Drive Sunsoft",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "digger",
+        "floater"
+      ],
+      "title" : "Rules to fall",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "77b0a48e80cfb225b3ceb2dcb085023a6f48482b12ea29ce0fa0c56007154502",
+      "height" : 160,
+      "number" : 2,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "builder",
+          "tick" : 76,
+          "x" : 636,
+          "y" : 116
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "builder",
+          "tick" : 268,
+          "x" : 660,
+          "y" : 104
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "basher",
+          "tick" : 504,
+          "x" : 708,
+          "y" : 114
+        }
+      ],
+      "rank" : "Mega Drive Sunsoft",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "builder",
+        "basher"
+      ],
+      "title" : "Inside the bone",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "26f056595a3480d008f18957d2179cabdd8d8fa2a1b492dc3a9229532d0ca77b",
+      "height" : 160,
+      "number" : 3,
+      "opening" : [
+        {
+          "facingLeft" : true,
+          "lemmingID" : 0,
+          "skill" : "miner",
+          "tick" : 116,
+          "x" : 704,
+          "y" : 64
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 1,
+          "skill" : "builder",
+          "tick" : 130,
+          "x" : 690,
+          "y" : 63
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 59,
+          "skill" : "miner",
+          "tick" : 442,
+          "x" : 698,
+          "y" : 67
+        }
+      ],
+      "rank" : "Mega Drive Sunsoft",
+      "rates" : [
+        {
+          "tick" : 150,
+          "value" : 99
+        }
+      ],
+      "skillOrder" : [
+        "miner",
+        "builder"
+      ],
+      "title" : "Anxiety",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "7e35635b16912e09aa824dd216a4d56b21a18d8c97ab2d2341b09fc58e1d5767",
+      "height" : 160,
+      "number" : 4,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "digger",
+          "tick" : 117,
+          "x" : 648,
+          "y" : 116
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 1,
+          "skill" : "digger",
+          "tick" : 138,
+          "x" : 616,
+          "y" : 116
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "basher",
+          "tick" : 736,
+          "x" : 687,
+          "y" : 144
+        }
+      ],
+      "rank" : "Mega Drive Sunsoft",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "digger",
+        "basher",
+        "builder"
+      ],
+      "title" : "Train your body",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "d3cae162547a41275785277a490174c4ea7764060a0785e2bbcc9f45df4687c8",
+      "height" : 160,
+      "number" : 5,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 1,
+          "skill" : "blocker",
+          "tick" : 157,
+          "x" : 695,
+          "y" : 86
+        },
+        {
+          "facingLeft" : true,
+          "lemmingID" : 0,
+          "skill" : "builder",
+          "tick" : 251,
+          "x" : 580,
+          "y" : 113
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 1,
+          "skill" : "bomber",
+          "tick" : 600,
+          "x" : 695,
+          "y" : 86
+        }
+      ],
+      "rank" : "Mega Drive Sunsoft",
+      "rates" : [
+        {
+          "tick" : 1,
+          "value" : 1
+        },
+        {
+          "tick" : 500,
+          "value" : 99
+        }
+      ],
+      "skillOrder" : [
+        "blocker",
+        "builder",
+        "bomber",
+        "basher"
+      ],
+      "title" : "Watch your step",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "2577b5d803a9c6d96afb7e3377d765cd56536063c523311f9aa8b3bb83ec20d7",
+      "height" : 160,
+      "number" : 6,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "blocker",
+          "tick" : 90,
+          "x" : 640,
+          "y" : 84
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "bomber",
+          "tick" : 90,
+          "x" : 640,
+          "y" : 84
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 1,
+          "skill" : "blocker",
+          "tick" : 110,
+          "x" : 808,
+          "y" : 84
+        }
+      ],
+      "rank" : "Mega Drive Sunsoft",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "blocker",
+        "bomber"
+      ],
+      "title" : "Libra",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "c09bf61f952b7fbd9857ac7afea392b28c84f5e873060f3b6612dfa25854a7bd",
+      "height" : 160,
+      "number" : 7,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "miner",
+          "tick" : 172,
+          "x" : 772,
+          "y" : 45
+        },
+        {
+          "facingLeft" : true,
+          "lemmingID" : 0,
+          "skill" : "miner",
+          "tick" : 175,
+          "x" : 774,
+          "y" : 47
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 1,
+          "skill" : "miner",
+          "tick" : 209,
+          "x" : 781,
+          "y" : 45
+        }
+      ],
+      "rank" : "Mega Drive Sunsoft",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "miner"
+      ],
+      "title" : "Everyone turn left (Part two)",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "5cc0a1fefa61958e4840a62552c8aae64b61e1fdc85417c0b0c2e2ebbe743e54",
+      "height" : 160,
+      "number" : 8,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "builder",
+          "tick" : 89,
+          "x" : 608,
+          "y" : 104
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "basher",
+          "tick" : 423,
+          "x" : 630,
+          "y" : 93
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "builder",
+          "tick" : 528,
+          "x" : 664,
+          "y" : 93
+        }
+      ],
+      "rank" : "Mega Drive Sunsoft",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "builder",
+        "basher"
+      ],
+      "title" : "Is this a circus?",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "ea373196e97e5ae00062f1407c455d1bc43d31d16fb3c17ed40dd2ff1598b219",
+      "height" : 160,
+      "number" : 9,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "climber",
+          "tick" : 54,
+          "x" : 632,
+          "y" : 57
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 1,
+          "skill" : "builder",
+          "tick" : 108,
+          "x" : 670,
+          "y" : 90
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "basher",
+          "tick" : 469,
+          "x" : 914,
+          "y" : 74
+        }
+      ],
+      "rank" : "Mega Drive Sunsoft",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "climber",
+        "builder",
+        "basher",
+        "miner"
+      ],
+      "title" : "Evacuating a coal mine",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "756f15874d9df6036474ebed33470d19fbeb3ef7e40f44f957a485c2d48fc53f",
+      "height" : 160,
+      "number" : 10,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "builder",
+          "tick" : 453,
+          "x" : 741,
+          "y" : 156
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 1,
+          "skill" : "builder",
+          "tick" : 496,
+          "x" : 741,
+          "y" : 155
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 2,
+          "skill" : "builder",
+          "tick" : 539,
+          "x" : 741,
+          "y" : 154
+        }
+      ],
+      "rank" : "Mega Drive Sunsoft",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "builder",
+        "digger",
+        "blocker",
+        "bomber"
+      ],
+      "title" : "Spiral staircase",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "d791e3bd1c4b71dd9e876912dd9462c606bc497e957de22ac9d664affd17cb8c",
+      "height" : 160,
+      "number" : 11,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "miner",
+          "tick" : 65,
+          "x" : 827,
+          "y" : 82
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "builder",
+          "tick" : 161,
+          "x" : 843,
+          "y" : 90
+        }
+      ],
+      "rank" : "Mega Drive Sunsoft",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "miner",
+        "builder"
+      ],
+      "title" : "Turn around and look.",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "14b145bef79147ecf1c233d9238662143eba45146c1f63fc7a65a33e9309a4c6",
+      "height" : 160,
+      "number" : 12,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 1,
+          "skill" : "builder",
+          "tick" : 129,
+          "x" : 1024,
+          "y" : 120
+        },
+        {
+          "facingLeft" : true,
+          "lemmingID" : 0,
+          "skill" : "builder",
+          "tick" : 146,
+          "x" : 1008,
+          "y" : 120
+        },
+        {
+          "facingLeft" : true,
+          "lemmingID" : 0,
+          "skill" : "builder",
+          "tick" : 376,
+          "x" : 1044,
+          "y" : 109
+        }
+      ],
+      "rank" : "Mega Drive Sunsoft",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "builder",
+        "miner",
+        "floater",
+        "basher"
+      ],
+      "title" : "Water processing plant",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "632fe2357148ff4d346d0cb28e2f2610d5e08f801b7afcc91015c2c9a44cfac6",
+      "height" : 160,
+      "number" : 13,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "builder",
+          "tick" : 245,
+          "x" : 752,
+          "y" : 81
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "builder",
+          "tick" : 437,
+          "x" : 776,
+          "y" : 69
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "builder",
+          "tick" : 832,
+          "x" : 788,
+          "y" : 60
+        }
+      ],
+      "rank" : "Mega Drive Sunsoft",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "builder",
+        "blocker",
+        "bomber",
+        "climber"
+      ],
+      "title" : "Doomsday",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "4137ac2e823e2a94214ddb066d8097f66a612d9d52cf76845096acdb4cd001f7",
+      "height" : 160,
+      "number" : 14,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 1,
+          "skill" : "climber",
+          "tick" : 62,
+          "x" : 856,
+          "y" : 93
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "basher",
+          "tick" : 173,
+          "x" : 742,
+          "y" : 12
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "digger",
+          "tick" : 267,
+          "x" : 786,
+          "y" : 16
+        }
+      ],
+      "rank" : "Mega Drive Sunsoft",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "climber",
+        "basher",
+        "digger",
+        "builder"
+      ],
+      "title" : "No world without you",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "5a5332d1020b3c102743cb0bf73b55e21df87f5d5b70c9d22134e2966f87465b",
+      "height" : 160,
+      "number" : 15,
+      "opening" : [
+        {
+          "facingLeft" : true,
+          "lemmingID" : 0,
+          "skill" : "climber",
+          "tick" : 110,
+          "x" : 832,
+          "y" : 120
+        },
+        {
+          "facingLeft" : true,
+          "lemmingID" : 0,
+          "skill" : "floater",
+          "tick" : 111,
+          "x" : 831,
+          "y" : 120
+        },
+        {
+          "facingLeft" : true,
+          "lemmingID" : 0,
+          "skill" : "builder",
+          "tick" : 537,
+          "x" : 650,
+          "y" : 144
+        }
+      ],
+      "rank" : "Mega Drive Sunsoft",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "climber",
+        "floater",
+        "builder",
+        "basher"
+      ],
+      "title" : "Exodus!",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "a3073ad68f0dac48fd9089a9940ed247a3b793d8066c22e5938e73cf947a1255",
+      "height" : 160,
+      "number" : 16,
+      "opening" : [
+        {
+          "facingLeft" : true,
+          "lemmingID" : 1,
+          "skill" : "blocker",
+          "tick" : 271,
+          "x" : 944,
+          "y" : 60
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "digger",
+          "tick" : 345,
+          "x" : 850,
+          "y" : 32
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "builder",
+          "tick" : 578,
+          "x" : 850,
+          "y" : 62
+        }
+      ],
+      "rank" : "Mega Drive Sunsoft",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "blocker",
+        "digger",
+        "builder",
+        "basher",
+        "miner",
+        "bomber"
+      ],
+      "title" : "Here is Mr.Lemming's house",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "17cd7fe317ad60a88c52af225355a5a68d14542a1cb8edbedc7c4a7486de0261",
+      "height" : 160,
+      "number" : 17,
+      "opening" : [
+        {
+          "facingLeft" : true,
+          "lemmingID" : 0,
+          "skill" : "digger",
+          "tick" : 244,
+          "x" : 902,
+          "y" : 69
+        },
+        {
+          "facingLeft" : true,
+          "lemmingID" : 1,
+          "skill" : "blocker",
+          "tick" : 278,
+          "x" : 916,
+          "y" : 66
+        },
+        {
+          "facingLeft" : true,
+          "lemmingID" : 0,
+          "skill" : "builder",
+          "tick" : 514,
+          "x" : 880,
+          "y" : 116
+        }
+      ],
+      "rank" : "Mega Drive Sunsoft",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "digger",
+        "blocker",
+        "builder",
+        "basher"
+      ],
+      "title" : "Cave quest",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "93cb03471a1cc27bd0bafddbdecefe83aedfafc787989752abec22119ef3685c",
+      "height" : 160,
+      "number" : 18,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "digger",
+          "tick" : 179,
+          "x" : 660,
+          "y" : 79
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 1,
+          "skill" : "blocker",
+          "tick" : 212,
+          "x" : 650,
+          "y" : 81
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "basher",
+          "tick" : 340,
+          "x" : 660,
+          "y" : 100
+        }
+      ],
+      "rank" : "Mega Drive Sunsoft",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "digger",
+        "blocker",
+        "basher",
+        "builder",
+        "bomber"
+      ],
+      "title" : "SUNSOFT Special",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "79eef669d280a0f82784397077b81b3e352c6899cc59ce7925d743f483248ee8",
+      "height" : 160,
+      "number" : 19,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "digger",
+          "tick" : 65,
+          "x" : 889,
+          "y" : 48
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "builder",
+          "tick" : 90,
+          "x" : 889,
+          "y" : 52
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 1,
+          "skill" : "builder",
+          "tick" : 94,
+          "x" : 889,
+          "y" : 52
+        }
+      ],
+      "rank" : "Mega Drive Sunsoft",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "digger",
+        "builder"
+      ],
+      "title" : "Let's go camping.",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "efb75d5c26b624886cf9f5279a465cc0a06d65785d546fbce909d1f20cc64f80",
+      "height" : 160,
+      "number" : 20,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "builder",
+          "tick" : 165,
+          "x" : 673,
+          "y" : 116
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 2,
+          "skill" : "builder",
+          "tick" : 251,
+          "x" : 673,
+          "y" : 115
+        },
+        {
+          "facingLeft" : true,
+          "lemmingID" : 1,
+          "skill" : "miner",
+          "tick" : 356,
+          "x" : 838,
+          "y" : 65
+        }
+      ],
+      "rank" : "Mega Drive Sunsoft",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "builder",
+        "miner",
+        "digger"
+      ],
+      "title" : "Haunted botanical garden",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "9972951d04cf9870fbe62a57c324482c6ab192d125d7c568955474e28ccb7446",
+      "height" : 160,
+      "number" : 21,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "basher",
+          "tick" : 139,
+          "x" : 668,
+          "y" : 105
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 4,
+          "skill" : "blocker",
+          "tick" : 281,
+          "x" : 698,
+          "y" : 105
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "builder",
+          "tick" : 360,
+          "x" : 736,
+          "y" : 105
+        }
+      ],
+      "rank" : "Mega Drive Sunsoft",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "basher",
+        "blocker",
+        "builder",
+        "miner"
+      ],
+      "title" : "Be sure to be a builder.",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "06c7c41ab6697ecfe23fa2996a0d9a576d3e437c53c7790a0435e84dd0e8da01",
+      "height" : 160,
+      "number" : 22,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "digger",
+          "tick" : 61,
+          "x" : 808,
+          "y" : 35
+        },
+        {
+          "facingLeft" : true,
+          "lemmingID" : 0,
+          "skill" : "basher",
+          "tick" : 158,
+          "x" : 760,
+          "y" : 61
+        },
+        {
+          "facingLeft" : true,
+          "lemmingID" : 0,
+          "skill" : "builder",
+          "tick" : 171,
+          "x" : 757,
+          "y" : 61
+        }
+      ],
+      "rank" : "Mega Drive Sunsoft",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "digger",
+        "basher",
+        "builder",
+        "bomber"
+      ],
+      "title" : "Watch right or left (Part two)",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "fb417b2978f17d868fbccd8c7cbdfcdca97e14831246aaf674cbd5535299b854",
+      "height" : 160,
+      "number" : 23,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "basher",
+          "tick" : 105,
+          "x" : 612,
+          "y" : 124
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 1,
+          "skill" : "basher",
+          "tick" : 140,
+          "x" : 822,
+          "y" : 72
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "builder",
+          "tick" : 242,
+          "x" : 674,
+          "y" : 140
+        }
+      ],
+      "rank" : "Mega Drive Sunsoft",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "basher",
+        "builder",
+        "blocker"
+      ],
+      "title" : "Move on in two separate groups.",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "3795d6cf17ef85d24f0ecf8222fa63270563233335934583e1c9f31575bb0a02",
+      "height" : 160,
+      "number" : 24,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "builder",
+          "tick" : 71,
+          "x" : 598,
+          "y" : 151
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "basher",
+          "tick" : 365,
+          "x" : 634,
+          "y" : 127
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "basher",
+          "tick" : 384,
+          "x" : 648,
+          "y" : 127
+        }
+      ],
+      "rank" : "Mega Drive Sunsoft",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "builder",
+        "basher",
+        "blocker",
+        "bomber"
+      ],
+      "title" : "Out, away from the tune",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "f646e096067aec282ed22539d4e061d2f8b07f205ec43257658ea1011b764d4f",
+      "height" : 160,
+      "number" : 25,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "builder",
+          "tick" : 125,
+          "x" : 638,
+          "y" : 97
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 1,
+          "skill" : "blocker",
+          "tick" : 143,
+          "x" : 606,
+          "y" : 110
+        },
+        {
+          "facingLeft" : true,
+          "lemmingID" : 2,
+          "skill" : "blocker",
+          "tick" : 214,
+          "x" : 576,
+          "y" : 109
+        }
+      ],
+      "rank" : "Mega Drive Sunsoft",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "builder",
+        "blocker",
+        "basher",
+        "miner",
+        "digger"
+      ],
+      "title" : "Stray sheep",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "7189a3dcb976486f884a93a7ae7ffda5004a14339801a12263aaf4845b10319a",
+      "height" : 160,
+      "number" : 26,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 1,
+          "skill" : "climber",
+          "tick" : 62,
+          "x" : 680,
+          "y" : 73
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "digger",
+          "tick" : 92,
+          "x" : 710,
+          "y" : 96
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "basher",
+          "tick" : 181,
+          "x" : 710,
+          "y" : 108
+        }
+      ],
+      "rank" : "Mega Drive Sunsoft",
+      "rates" : [
+        {
+          "tick" : 93,
+          "value" : 99
+        }
+      ],
+      "skillOrder" : [
+        "climber",
+        "digger",
+        "basher",
+        "miner"
+      ],
+      "title" : "Just a minute (Part Three)",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "c3c8fe3fe134dc6e7234167790ed7ce4314c1ddcae77aecaf5f7e0e8168330a2",
+      "height" : 160,
+      "number" : 27,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "climber",
+          "tick" : 54,
+          "x" : 712,
+          "y" : 17
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "bomber",
+          "tick" : 68,
+          "x" : 720,
+          "y" : 32
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 1,
+          "skill" : "climber",
+          "tick" : 107,
+          "x" : 712,
+          "y" : 17
+        }
+      ],
+      "rank" : "Mega Drive Sunsoft",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "climber",
+        "bomber",
+        "floater"
+      ],
+      "title" : "Two heads are better...",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "bc2163ebbfbbf27abc960d02d47c11ed65918acce0b4514b9107b504391fd758",
+      "height" : 160,
+      "number" : 28,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "digger",
+          "tick" : 106,
+          "x" : 738,
+          "y" : 45
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 2,
+          "skill" : "builder",
+          "tick" : 134,
+          "x" : 730,
+          "y" : 45
+        },
+        {
+          "facingLeft" : true,
+          "lemmingID" : 1,
+          "skill" : "blocker",
+          "tick" : 210,
+          "x" : 880,
+          "y" : 72
+        }
+      ],
+      "rank" : "Mega Drive Sunsoft",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "digger",
+        "builder",
+        "blocker",
+        "basher"
+      ],
+      "title" : "The gate trap Lemmings.",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "dd9fc4b96b65f6c62817f357f4900b6f56a5ba71638101e8f8a6ab0123a230cf",
+      "height" : 160,
+      "number" : 29,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 1,
+          "skill" : "digger",
+          "tick" : 90,
+          "x" : 700,
+          "y" : 44
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 3,
+          "skill" : "digger",
+          "tick" : 116,
+          "x" : 707,
+          "y" : 44
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 5,
+          "skill" : "digger",
+          "tick" : 143,
+          "x" : 714,
+          "y" : 44
+        }
+      ],
+      "rank" : "Mega Drive Sunsoft",
+      "rates" : [
+        {
+          "tick" : 1,
+          "value" : 88
+        }
+      ],
+      "skillOrder" : [
+        "digger",
+        "builder"
+      ],
+      "title" : "I am A.T.",
+      "width" : 1600
+    },
+    {
+      "fingerprint" : "4366483c07d8bcd2e55cc25a47f3f2565036e11c6b1bf2bc48c7ee5a94df8461",
+      "height" : 160,
+      "number" : 30,
+      "opening" : [
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "floater",
+          "tick" : 54,
+          "x" : 712,
+          "y" : 17
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 1,
+          "skill" : "miner",
+          "tick" : 136,
+          "x" : 749,
+          "y" : 37
+        },
+        {
+          "facingLeft" : false,
+          "lemmingID" : 0,
+          "skill" : "builder",
+          "tick" : 233,
+          "x" : 862,
+          "y" : 24
+        }
+      ],
+      "rank" : "Mega Drive Sunsoft",
+      "rates" : [
+
+      ],
+      "skillOrder" : [
+        "floater",
+        "miner",
+        "builder",
+        "basher"
+      ],
+      "title" : "Fall and no life (Part Two)",
       "width" : 1600
     }
   ],

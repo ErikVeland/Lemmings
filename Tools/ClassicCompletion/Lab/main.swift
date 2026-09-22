@@ -458,7 +458,12 @@ case "transplant":
     let replay = try JSONDecoder().decode(ClassicDOSReplay.self, from: Data(contentsOf: URL(fileURLWithPath: args[4])))
     let (oldBase, _, _) = try content.load(index, mechanics: .original)
     struct Target { var tick: Int; var action: ClassicDOSReplayAction; var lemming: ClassicDOSLemming? }
-    let byTick = Dictionary(grouping: replay.events.sorted { $0.tick < $1.tick }, by: \.tick)
+    // Legacy rate and nuke commands apply before their tick, so they move to
+    // the end of the previous tick. Legacy assignments apply within their tick.
+    let byTick = Dictionary(grouping: replay.events.sorted { $0.tick < $1.tick }, by: { event -> Int in
+        if event.afterTick != true, case .assign = event.action { return event.tick }
+        return event.afterTick == true ? event.tick : event.tick - 1
+    })
     var old = oldBase, targets: [Target] = []
     while !old.isComplete && old.tickCount < ClassicDOSReplayPlayer.defaultTickLimit {
         _ = old.tick()

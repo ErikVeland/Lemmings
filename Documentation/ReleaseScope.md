@@ -1,7 +1,7 @@
 # Release scope
 
 Classic 1.0 is the selected macOS release target, confirmed on 13 September 2026.
-L2 and L3 remain previews. This document describes the working source after beta 32.
+L2 and L3 remain previews. Updated 22 September 2026 after the later DOS rules correction.
 Automated checks support the recorded routes;
 remaining compatibility and hardware claims still need validation. See the [gate register](ReleaseReadiness/gates.json)
 and the [1.0 gap evaluation](ReleaseReadiness/OneZeroGapEvaluation.md).
@@ -26,30 +26,41 @@ against the original engine. Expect differences.
 | --- | ---: | ---: | --- |
 | Lemmings | 120 | 120 | **Complete** |
 | Xmas Lemmings 1991 | 4 | 4 | **Complete** |
-| Oh No! More Lemmings | 100 | 72 | Playable |
-| Holiday Lemmings 1994 | 32 | 18 | Playable |
+| Oh No! More Lemmings | 100 | 100 | **Complete** |
+| Holiday Lemmings 1994 | 32 | 32 | **Complete** |
 | Holiday Lemmings 1993 | 32 | 32 | **Complete** |
 | Xmas Lemmings 1992 | 4 | 4 | **Complete** |
-| **Classic total** | **292** | **250** | |
+| **Official Classic total** | **292** | **292** | **Complete** |
+| Oh Yes! conversions | 60 | 60 | **Complete** |
+| **Classic release total** | **352** | **352** | **Complete** |
 
 The original campaign is the claim that matters most, and it is complete. All 120
 levels replay to a win, 103 of them rescuing every lemming. The engine also
 applies the original steel-probe rules, so destructive skills behave as the
 original does rather than as an approximation.
 
+The official-only quest passes all 292 wins through the app session, with 876
+saved-run restores, 292 progress resumes and the final quest result. Run
+`zsh Scripts/verify-official-classic.sh` to reproduce it. This isolates the six
+official Classic releases; it does not certify the full installed library.
+
 Oh Yes! More Lemmings contains 60 port-exclusive conversions: Amiga versus
 levels and Mega Drive Sunsoft levels. These are separate from the 292 official
-DOS campaign levels and need their own winning evidence.
+DOS campaign levels. All 60 now have strictly verified winning evidence.
 
 ## Fan levels and conversions
 
-Fan levels are part of the Classic validation boundary. The 6,020 retained bundled fan
-levels are not all certified playable: the current full-corpus audit recorded
-zero load/start failures after the authorised removal of 23 broken records. Its results do not certify later
-changes. See [current Classic validation](ReleaseReadiness/ClassicValidation-current.md)
-for corpus evidence and [beta 29 readiness](Beta29Readiness.md) for package checks.
-Three Oh Yes! conversions now have recorded winning routes. The other 57 and
-continuous progression remain unverified.
+Fan levels must load and start for Classic 1.0. The owner removed the winning-route
+requirement for community content on 22 September 2026. The 6,020 retained bundled fan
+levels all load and render in the 22 September full-corpus check. There are 344
+current fan winning witnesses. A smoke check does not establish a playthrough.
+See [current Classic validation](ReleaseReadiness/ClassicValidation-current.md)
+for corpus evidence and the change in shared replay coverage.
+The expanded Classic quest passes all 352 levels, including conversions, through
+the app session and recovery code. It checks 1,056 run restores, 352 progress
+resumes, six release transitions and the final quest result. Reproduce it with
+`zsh Scripts/verify-official-classic.sh --include-conversions`.
+See [combined quest evidence](ReleaseReadiness/ClassicConversionQuest.json).
 
 The removed records are listed in [the pruning manifest](FanLevelPruning.json).
 Surviving DAT slots retain their original identities for saved attempts.
@@ -73,9 +84,9 @@ Mac release does not imply them.
 
 ## Open before 1.0
 
-- 56 official Classic levels have no recorded winning route. Fan levels and
-  conversions also have unresolved coverage and compatibility gaps.
-- L2 and L3 retain preview status; their 129 missing routes are tracked separately
+- Full Quest across the sequel previews remains outside the completed 352-level
+  Classic campaign gate.
+- L2 and L3 retain preview status; their 96 missing routes are tracked separately
   from the Classic 1.0 milestone.
 - Physical Intel, minimum macOS, HDR, multiple displays and high refresh rates
   are untested. Sustained 10x play is not established.
@@ -83,5 +94,8 @@ Mac release does not imply them.
   listening journeys and physical controller journeys remain unverified.
 - Game Center is newly testable and unproven against network loss and account
   changes.
-- Distribution rights for the original game data are not settled. No engineering
-  work closes that, and it governs any public release.
+- The owner confirmed asset-distribution approval on 15 September. The final
+  1.0 candidate still needs its own source freeze, validation, signing and notarisation.
+
+See [22 September campaign closure](ReleaseReadiness/CampaignClosure-2026-09-22.md)
+for the recovered routes and current validation limits.

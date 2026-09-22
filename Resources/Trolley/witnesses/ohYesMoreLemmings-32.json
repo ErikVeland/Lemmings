@@ -1,0 +1,105 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 116
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 130
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "afterTick" : true,
+      "tick" : 150
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 59,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 442
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 59,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 725
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 59,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 927
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 59,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1138
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 59,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1597
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2158
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 60,
+    "required" : 60,
+    "saved" : 60,
+    "stateHash" : "fdf15a71230d6ec15009d22a516abebc80aead1dbdbb3ec6ee5f0516f34ff1de",
+    "ticks" : 2624
+  },
+  "initialStateHash" : "602496234506a1455b5601cbfa3bb623d5c9cd42521ec59de8a7375c026e0bd9",
+  "number" : 3,
+  "rank" : "Mega Drive Sunsoft",
+  "title" : "Anxiety"
+}

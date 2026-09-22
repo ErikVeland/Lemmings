@@ -1,0 +1,128 @@
+[
+  {
+    "id": 1,
+    "exactTick": true,
+    "async": true,
+    "tick": 161,
+    "skill": "builder"
+  },
+  {
+    "exactTick": true,
+    "async": true,
+    "id": 1,
+    "skill": "basher",
+    "tick": 224
+  },
+  {
+    "id": 1,
+    "skill": "builder",
+    "tick": 232,
+    "exactTick": true,
+    "async": true
+  },
+  {
+    "skill": "builder",
+    "x": 757,
+    "y": 62,
+    "direction": 1,
+    "async": true
+  },
+  {
+    "skill": "builder",
+    "x": 792,
+    "y": 62,
+    "direction": 1,
+    "async": true
+  },
+  {
+    "skill": "builder",
+    "x": 816,
+    "y": 50,
+    "direction": 1,
+    "action": "shrugging",
+    "async": true
+  },
+  {
+    "skill": "builder",
+    "x": 812,
+    "y": 85,
+    "direction": 1,
+    "async": true
+  },
+  {
+    "skill": "builder",
+    "x": 843,
+    "y": 85,
+    "direction": 1,
+    "async": true
+  },
+  {
+    "skill": "basher",
+    "x": 845,
+    "yMax": 85,
+    "direction": 1,
+    "async": true
+  },
+  {
+    "skill": "builder",
+    "x": 895,
+    "y": 112,
+    "direction": 1,
+    "async": true
+  },
+  {
+    "skill": "builder",
+    "id": 3,
+    "xMin": 818,
+    "xMax": 821,
+    "yMin": 78,
+    "yMax": 85,
+    "direction": 1,
+    "action": "walking",
+    "async": true
+  },
+  {
+    "skill": "builder",
+    "x": 904,
+    "yMin": 95,
+    "yMax": 112,
+    "direction": 1,
+    "action": "walking",
+    "async": true
+  },
+  {
+    "skill": "builder",
+    "x": 904,
+    "yMin": 95,
+    "yMax": 112,
+    "direction": 1,
+    "action": "walking",
+    "async": true
+  },
+  {
+    "skill": "builder",
+    "x": 904,
+    "yMin": 95,
+    "yMax": 112,
+    "direction": 1,
+    "action": "walking",
+    "async": true
+  },
+  {
+    "skill": "builder",
+    "x": 919,
+    "y": 100,
+    "direction": 1,
+    "action": "shrugging",
+    "async": true
+  },
+  {
+    "skill": "builder",
+    "x": 904,
+    "yMin": 95,
+    "yMax": 112,
+    "direction": 1,
+    "action": "walking",
+    "async": true
+  }
+]

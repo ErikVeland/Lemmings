@@ -1,0 +1,383 @@
+[
+  {
+    "skill": "builder",
+    "id": 0,
+    "tick": 457,
+    "exactTick": true,
+    "async": true
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "tick": 649,
+    "exactTick": true,
+    "async": true
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "tick": 697,
+    "exactTick": true,
+    "async": true
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "tick": 889,
+    "exactTick": true,
+    "async": true
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "tick": 1081,
+    "exactTick": true,
+    "async": true
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "tick": 1273,
+    "exactTick": true,
+    "async": true
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "tick": 1289,
+    "exactTick": true,
+    "async": true
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "tick": 1481,
+    "exactTick": true,
+    "async": true
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "tick": 1497,
+    "exactTick": true,
+    "async": true
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "tick": 1689,
+    "exactTick": true,
+    "async": true
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "tick": 1705,
+    "exactTick": true,
+    "async": true
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "tick": 1897,
+    "exactTick": true,
+    "async": true
+  },
+  {
+    "skill": "blocker",
+    "x": 930,
+    "yMax": 50,
+    "direction": -1,
+    "async": true
+  },
+  {
+    "skill": "builder",
+    "id": 2,
+    "x": 628,
+    "direction": 1,
+    "yMax": 90,
+    "tick": 2300,
+    "async": true
+  },
+  {
+    "skill": "climber",
+    "id": 2,
+    "x": 626,
+    "direction": 1,
+    "yMax": 70,
+    "tick": 2301,
+    "async": true
+  },
+  {
+    "skill": "floater",
+    "id": 2,
+    "tick": 2301,
+    "async": true
+  },
+  {
+    "skill": "builder",
+    "id": 2,
+    "x": 790,
+    "direction": 1,
+    "yMin": 115,
+    "tick": 2500,
+    "async": true
+  },
+  {
+    "skill": "blocker",
+    "id": 2,
+    "x": 810,
+    "direction": 1,
+    "yMin": 110,
+    "tick": 2600,
+    "async": true
+  },
+  {
+    "skill": "builder",
+    "id": 5,
+    "x": 630,
+    "direction": 1,
+    "yMax": 90,
+    "tick": 2500,
+    "async": true
+  },
+  {
+    "skill": "climber",
+    "id": 5,
+    "x": 626,
+    "direction": 1,
+    "yMax": 70,
+    "tick": 2900,
+    "async": true
+  },
+  {
+    "skill": "floater",
+    "id": 5,
+    "tick": 2900,
+    "async": true
+  },
+  {
+    "skill": "builder",
+    "id": 1,
+    "x": 650,
+    "direction": 1
+  },
+  {
+    "skill": "builder",
+    "id": 1,
+    "action": "shrugging"
+  },
+  {
+    "skill": "builder",
+    "id": 1,
+    "direction": -1,
+    "action": "walking"
+  },
+  {
+    "skill": "builder",
+    "id": 1,
+    "action": "shrugging"
+  },
+  {
+    "skill": "builder",
+    "id": 1,
+    "action": "shrugging"
+  },
+  {
+    "skill": "builder",
+    "id": 1,
+    "action": "shrugging"
+  },
+  {
+    "skill": "builder",
+    "id": 1,
+    "direction": 1,
+    "action": "walking"
+  },
+  {
+    "skill": "builder",
+    "id": 1,
+    "action": "shrugging"
+  },
+  {
+    "skill": "builder",
+    "id": 1,
+    "direction": -1,
+    "action": "walking"
+  },
+  {
+    "skill": "builder",
+    "id": 1,
+    "action": "shrugging"
+  },
+  {
+    "skill": "builder",
+    "id": 1,
+    "direction": 1,
+    "action": "walking"
+  },
+  {
+    "skill": "climber",
+    "id": 1
+  },
+  {
+    "skill": "floater",
+    "id": 1
+  },
+  {
+    "skill": "builder",
+    "id": 1,
+    "x": 772,
+    "direction": 1,
+    "yMax": 50
+  },
+  {
+    "skill": "builder",
+    "id": 1,
+    "action": "shrugging"
+  },
+  {
+    "skill": "builder",
+    "id": 1,
+    "action": "shrugging"
+  },
+  {
+    "skill": "digger",
+    "id": 1,
+    "x": 790,
+    "direction": -1,
+    "yMax": 40
+  },
+  {
+    "skill": "builder",
+    "id": 1,
+    "direction": -1,
+    "yMin": 115
+  },
+  {
+    "skill": "builder",
+    "id": 1,
+    "action": "shrugging"
+  },
+  {
+    "skill": "blocker",
+    "id": 1,
+    "x": 750,
+    "direction": -1
+  },
+  {
+    "skill": "builder",
+    "id": 5,
+    "x": 756,
+    "direction": 1,
+    "yMax": 110,
+    "yMin": 95
+  },
+  {
+    "skill": "builder",
+    "id": 5,
+    "action": "shrugging"
+  },
+  {
+    "skill": "builder",
+    "x": 632,
+    "direction": 1,
+    "yMax": 90,
+    "tick": 3300,
+    "async": true
+  },
+  {
+    "skill": "builder",
+    "x": 626,
+    "direction": -1,
+    "yMax": 70,
+    "tick": 3650
+  },
+  {
+    "skill": "builder",
+    "id": -1,
+    "direction": 1,
+    "action": "walking"
+  },
+  {
+    "skill": "basher",
+    "x": 756,
+    "direction": -1,
+    "yMin": 104,
+    "yMax": 110,
+    "tick": 3700,
+    "async": true
+  },
+  {
+    "skill": "digger",
+    "x": 808,
+    "yMin": 110,
+    "tick": 3650,
+    "async": true
+  },
+  {
+    "skill": "builder",
+    "id": 2,
+    "x": 812,
+    "direction": 1,
+    "yMin": 120,
+    "action": "walking",
+    "tick": 3650,
+    "async": true
+  },
+  {
+    "skill": "miner",
+    "x": 940,
+    "direction": -1,
+    "yMax": 50,
+    "tick": 4050,
+    "async": true
+  },
+  {
+    "skill": "builder",
+    "action": "mining",
+    "yMin": 52,
+    "xMin": 920,
+    "tick": 4050,
+    "async": true
+  },
+  {
+    "skill": "builder",
+    "id": 46,
+    "tick": 4250,
+    "async": true
+  },
+  {
+    "skill": "basher",
+    "id": 46,
+    "tick": 4400,
+    "async": true
+  },
+  {
+    "skill": "builder",
+    "id": 5,
+    "x": 812,
+    "direction": 1,
+    "yMin": 115,
+    "tick": 3660,
+    "async": true
+  },
+  {
+    "skill": "basher",
+    "id": 2,
+    "x": 830,
+    "direction": 1,
+    "action": "building",
+    "tick": 3700,
+    "async": true
+  },
+  {
+    "skill": "basher",
+    "id": 5,
+    "x": 830,
+    "direction": 1,
+    "action": "building",
+    "tick": 3700,
+    "async": true
+  }
+]

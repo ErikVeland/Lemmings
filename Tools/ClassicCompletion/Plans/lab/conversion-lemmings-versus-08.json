@@ -1,0 +1,50 @@
+[
+  {
+    "skill": "miner",
+    "id": 1,
+    "x": 866,
+    "direction": 1,
+    "action": "walking",
+    "async": true
+  },
+  {
+    "skill": "builder",
+    "id": 1,
+    "yMin": 59,
+    "action": "mining",
+    "async": true
+  },
+  {
+    "skill": "miner",
+    "id": 2,
+    "x": 522,
+    "direction": -1,
+    "action": "walking",
+    "async": true
+  },
+  {
+    "skill": "builder",
+    "id": 2,
+    "yMin": 50,
+    "action": "mining",
+    "async": true
+  },
+  {
+    "skill": "digger",
+    "id": 0,
+    "x": 780,
+    "action": "walking"
+  },
+  {
+    "skill": "builder",
+    "id": 0,
+    "yMin": 92,
+    "action": "digging"
+  },
+  {
+    "skill": "basher",
+    "id": 0,
+    "direction": -1,
+    "action": "walking"
+  }
+]

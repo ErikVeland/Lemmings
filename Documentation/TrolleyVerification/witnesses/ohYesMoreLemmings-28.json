@@ -1,0 +1,116 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 204
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 297
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 318
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 411
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "digger"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 471
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 5,
+          "skill" : "digger"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 542
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "digger"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 564
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "digger"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 633
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "digger"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 709
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "digger"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 804
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 40,
+    "required" : 40,
+    "saved" : 40,
+    "stateHash" : "42ada5aeb439675fb81627b44072b361f9b7b59e1179ec0cef257d8e4a2c3724",
+    "ticks" : 2740
+  },
+  "initialStateHash" : "27ffe784fcc7043ab7be114070730ca2ac2e8a9a3fef53be8f6e062325492061",
+  "number" : 9,
+  "rank" : "Oh No! More Lemmings Versus",
+  "title" : "One On One"
+}

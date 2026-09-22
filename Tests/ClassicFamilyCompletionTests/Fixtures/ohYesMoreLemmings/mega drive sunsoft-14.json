@@ -1,0 +1,76 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "climber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 62
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 173
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "digger"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 267
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 357
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 516
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 624
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 2,
+    "required" : 2,
+    "saved" : 2,
+    "stateHash" : "782f5be2330d93063da50c606b3d2b8ba1b98c506a4ebeba0512de7e587c06af",
+    "ticks" : 798
+  },
+  "initialStateHash" : "fb44f7a853532fac02aff333e02cca8a148d03b75fdb1b63f0ea4ac8546af847",
+  "number" : 14,
+  "rank" : "Mega Drive Sunsoft",
+  "title" : "No world without you"
+}

@@ -4,7 +4,7 @@ Run `python3 Tools/SolutionReplays/generate.py` after the completion replay gate
 The generator bundles winning records from the Original and Classic Family fixture suites.
 It keeps the shortest record when two levels have the same initial state.
 
-The current bundle contains 237 distinct records for 239 verified level routes, including all 120 Original levels.
+The current bundle contains 300 distinct records for 302 verified level routes, including all 120 Original levels.
 It contains inputs and expected outcomes, not level artwork or terrain.
 
 Before offering playback, the app matches the loaded level's initial state and runs

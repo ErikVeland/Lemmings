@@ -1,0 +1,85 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "climber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 110
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 111
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 537
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 635
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 827
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 891
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "afterTick" : true,
+      "tick" : 892
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 50,
+    "required" : 50,
+    "saved" : 50,
+    "stateHash" : "0833f67ebb334098a9fa4c88f861bb6ce48ebdaf8b49d96b4323a82a1f7f073b",
+    "ticks" : 1557
+  },
+  "initialStateHash" : "437a54504fcee2e9e536b70a2094394e0640d4f3a3aa5395cb1f26903f9dfbf5",
+  "number" : 15,
+  "rank" : "Mega Drive Sunsoft",
+  "title" : "Exodus!"
+}

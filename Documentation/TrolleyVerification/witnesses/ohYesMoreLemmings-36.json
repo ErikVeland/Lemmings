@@ -1,0 +1,216 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 172
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 175
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 209
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 222
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 237
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 240
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 273
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 276
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 313
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 318
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 5,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 347
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 5,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 361
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 6,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 384
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 6,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 388
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 7,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 421
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 7,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 431
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 8,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 460
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 8,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 473
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 9,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 493
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 9,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 507
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 10,
+    "required" : 10,
+    "saved" : 10,
+    "stateHash" : "fd401b999bd47523880c80bfd72473d81aae157d4036464b0093cf4510c24edb",
+    "ticks" : 1670
+  },
+  "initialStateHash" : "91ccded33931b089533867ceff6986b2ee88a9e27d4b0aebcf779e4e3aafbd9b",
+  "number" : 7,
+  "rank" : "Mega Drive Sunsoft",
+  "title" : "Everyone turn left (Part two)"
+}

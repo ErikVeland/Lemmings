@@ -1,0 +1,76 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "digger"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 84
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 92
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "digger"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 112
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 301
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 333
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "digger"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 395
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 40,
+    "required" : 20,
+    "saved" : 21,
+    "stateHash" : "62d4033214c2df8e7f875d355a074f9ead4fc94d1af10eaf6bc18b5be081c747",
+    "ticks" : 1629
+  },
+  "initialStateHash" : "73dad214a81ccc8c24cfa37dd5fcd11513a0d7d9f793a3380003b2371d7c9d5d",
+  "number" : 20,
+  "rank" : "Lemmings Versus",
+  "title" : "Cross-over Point"
+}

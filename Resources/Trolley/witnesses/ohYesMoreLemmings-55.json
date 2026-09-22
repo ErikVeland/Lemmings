@@ -1,0 +1,95 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "climber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 62
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "digger"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 92
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "afterTick" : true,
+      "tick" : 93
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 181
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 361
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 374
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 497
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 714
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 100,
+    "required" : 100,
+    "saved" : 100,
+    "stateHash" : "f0a7b05a73f88e5fa0c927454c6c9c5044fafbe614d495108a8f48110158d5ca",
+    "ticks" : 932
+  },
+  "initialStateHash" : "07eb70c95a446838984e705511848b93bc35e332923cf26b7d6b99c347e904f2",
+  "number" : 26,
+  "rank" : "Mega Drive Sunsoft",
+  "title" : "Just a minute (Part Three)"
+}

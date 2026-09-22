@@ -1085,29 +1085,6 @@ struct ReticleFeedback {
   }
 }
 
-func spritePose(for action: ClassicDOSAction) -> ClassicLemmingPose {
-  switch action {
-  case .walking: return .walking
-  case .falling: return .falling
-  case .jumping: return .jumping
-  case .climbing: return .climbing
-  case .hoisting: return .postClimb
-  case .floating: return .floating
-  case .splatting: return .splatting
-  case .exiting: return .exiting
-  case .drowning: return .drowning
-  case .vaporizing: return .frying
-  case .blocking: return .blocking
-  case .building: return .building
-  case .shrugging: return .shrugging
-  case .bashing: return .bashing
-  case .mining: return .mining
-  case .digging: return .digging
-  case .ohNo: return .ohNo
-  case .exploding: return .explosion
-  }
-}
-
 @MainActor extension ClassicMacArtwork.Frame {
   func makeNSImage() -> NSImage? {
     guard let provider = CGDataProvider(data: rgba as CFData),
