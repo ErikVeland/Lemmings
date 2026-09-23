@@ -1,5 +1,10 @@
 # Lemmings Local
 
+For a plain-language summary of what this project has built and where it is
+headed, see [the project overview](Documentation/Overview.md). The rest of
+this file is the technical entry point: build instructions, source layout
+and detailed feature status.
+
 Lemmings Local is an unofficial native macOS port of Lemmings. Commercial game
 data is not committed to the source repository. Local builds embed the game
 assets already provided under `Sources/Ports` and `Sources/Music`.

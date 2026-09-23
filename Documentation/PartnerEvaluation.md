@@ -23,10 +23,10 @@ The current Mac prototype demonstrates a unified library for the original games 
 - Verified replay routes for all original 120 levels, plus separately counted additional campaign routes.
 - Source and asset provenance, third-party notices and a clear separation of original material from port code.
 - The [release plan](ModernReleasePlan.md), hardware test matrix and explicit open gates.
-- A proposal for an iPhone/iPad shell and a console feasibility milestone built around the same simulation evidence.
+- A proposal for an iPhone/iPad shell, then Windows and Linux, built around the same simulation evidence. Consoles are not a current target.
 
 ## Decisions for an official collaboration
 
 Agree which games and features belong in the first release, the intended audience, preservation/fidelity requirements, supported devices and accessibility targets. Confirm the supplied assets and permitted distribution, then establish development access, engineering ownership, review milestones and platform delivery responsibilities.
 
-The Mac prototype provides evidence of the experience and engineering approach. iOS and consoles remain development work. The current sequel coverage, physical hardware matrix, mobile lifecycle support and platform compliance are not represented as complete.
+The Mac prototype provides evidence of the experience and engineering approach. iOS, Windows and Linux remain development work; consoles are not a current target. The current sequel coverage, physical hardware matrix, mobile lifecycle support and platform compliance are not represented as complete.
