@@ -36,7 +36,7 @@
     "priority": "P0",
     "status": "partial",
     "exitCriteria": "Verify app and controller interruption on real hardware. Add versioned in-progress checkpoints and crash recovery before mobile suspend/termination support. Verify save migrations and rollback with real prior releases.",
-    "progress": "15 September: all existing checkpoint, corruption, stale-writer and recovery tests pass. Ten new trials kill an isolated writer process during checkpoint updates, then validate the recovered checkpoint with a fresh reader. These pass. Classic wins now preserve validated input routes separately from recovery checkpoints. Physical interruption, installed prior-release migration and power-loss coverage remain distinct from these process tests. See OneZeroClosure-2026-09-15.md.",
+    "progress": "15 September: all existing checkpoint, corruption, stale-writer and recovery tests pass. Ten new trials kill an isolated writer process during checkpoint updates, then validate the recovered checkpoint with a fresh reader. These pass. Classic wins now preserve validated input routes separately from recovery checkpoints. Physical interruption, installed prior-release migration and power-loss coverage remain distinct from these process tests. See CampaignClosure-2026-09-22.md.",
     "scopes": [
       "all",
       "classic-1.0"
@@ -47,7 +47,7 @@
     "priority": "P0",
     "status": "partial",
     "exitCriteria": "Test the complete first-launch-to-results flow with physical Xbox, PlayStation and Switch-layout controllers. Add remapping and device glyphs, touch targeting, readable UI scaling, reduced motion/flash controls and VoiceOver navigation without forcing OG gameplay.",
-    "progress": "Beta 25 passed complete software-driven journeys on Apple silicon and Intel/Rosetta. F retains the reached speed after release; mouse and keyboard speed arrows apply immediately from 1x. Green handover initials and the previous-level retry button were rendered and tested with real mouse events. Existing keyboard/controller routing, targeting, fonts, scalable menus, hints and interruption tests passed. Physical controllers and full VoiceOver remain unverified. See Beta25Readiness.md.",
+    "progress": "Earlier beta testing passed complete software-driven journeys on Apple silicon and Intel/Rosetta. F retains the reached speed after release; mouse and keyboard speed arrows apply immediately from 1x. Green handover initials and the previous-level retry button were rendered and tested with real mouse events. Existing keyboard/controller routing, targeting, fonts, scalable menus, hints and interruption tests passed. Physical controllers and full VoiceOver remain unverified.",
     "scopes": [
       "all",
       "classic-1.0"
@@ -69,7 +69,7 @@
     "priority": "P0",
     "status": "partial",
     "exitCriteria": "Freeze the final source and assets. Build both Mac architectures, sign, notarise and verify the downloaded archive. Earlier beta notarisation is not evidence for later local builds.",
-    "progress": "Beta 32 has notarised main and macOS 12 archives, plus a development-signed Game Center archive and standalone playable app for the registered Macs. The owner confirms live Game Center integration works. The current source contains later changes and needs its own source freeze, validation and package. See Documentation/Beta32Readiness.md.",
+    "progress": "The 1.0 RC1 package was notarised for the main and macOS 12 archives, with a development-signed Game Center archive for registered Macs. The current 1.1 source contains later changes and requires its own source freeze, validation and package.",
     "scopes": [
       "all",
       "classic-1.0"

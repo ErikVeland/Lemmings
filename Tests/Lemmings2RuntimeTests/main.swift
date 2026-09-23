@@ -22,6 +22,113 @@ func fixture(wall: Bool = false) throws -> Lemmings2Runtime {
     return try Lemmings2Runtime(configuration: config)
 }
 
+func testFavorApproachingLemming() throws {
+    let width = 120, height = 80
+    var pixels = [UInt8](repeating: 0, count: width * height)
+    var solid = [Bool](repeating: false, count: width * height)
+    for y in 60..<height { for x in 0..<width { solid[y * width + x] = true; pixels[y * width + x] = 6 } }
+    for y in 20..<60 { for x in 50..<56 { solid[y * width + x] = true; pixels[y * width + x] = 6 } }
+    let c = try fixture().configuration
+    var game = try Lemmings2Runtime(configuration: .init(width: width, height: height, pixels: pixels, solid: solid,
+        palette: c.palette, entrance: .init(x: 20, y: 45, width: 1, height: 1),
+        exits: [.init(x: 90, y: 50, width: 16, height: 16)], skills: c.skills, supplies: c.supplies, total: 2,
+        timeLimit: 120, releaseInterval: 6, terrainMasks: c.terrainMasks, firstReleaseTick: 1))
+    for _ in 0..<600 where !(game.lemmings.count == 2 && game.lemmings.contains(where: { $0.direction < 0 })) { game.step() }
+    guard let turned = game.lemmings.first(where: { $0.direction < 0 }),
+        let approaching = game.lemmings.first(where: { $0.direction > 0 }) else {
+        check(false, "Expected one turned lemming and one still approaching the wall"); return
+    }
+    check(approaching.x < turned.x, "The trailing lemming should not yet have reached the wall")
+    let slot = c.skills.firstIndex(of: .climber)!
+    // Click just past the turned lemming (inside the wall it bounced off), not on top of it: at that exact
+    // x, "(click - x) * direction" is zero for the turned lemming and reads as ambiguously "approaching" too,
+    // masking the preference this test exists to prove.
+    let clickX = turned.x + 2
+    check(game.target(slot: slot, x: clickX, y: turned.y - 5, preferApproaching: true)?.id == approaching.id,
+        "favorApproachingLemmings should target the lemming still walking toward the wall")
+    check(game.target(slot: slot, x: clickX, y: turned.y - 5)?.id == turned.id,
+        "Plain nearest-distance targeting should keep choosing the closer, already-turned lemming")
+    print("PASS favorApproachingLemmings prefers the lemming still walking toward the wall")
+}
+
+/// Two lemmings walking the SAME direction on flat, wall-free ground must
+/// not get reordered by the approaching preference: the nearer one (by
+/// pixel distance) wins regardless of which side of it the click lands on,
+/// because neither of them has turned around.
+func testSameDirectionPackKeepsNearestPick() throws {
+    var game = try fixture()
+    for _ in 0..<400 where game.lemmings.count < 2 { game.step() }
+    check(game.lemmings.count == 2, "Expected both lemmings released within the tick budget")
+    // Both walk right on flat ground with no wall, so both should still have direction > 0.
+    check(game.lemmings.allSatisfy { $0.direction > 0 }, "Expected both lemmings still walking right")
+    let leader = game.lemmings.max(by: { $0.x < $1.x })!, follower = game.lemmings.min(by: { $0.x < $1.x })!
+    check(leader.x > follower.x, "Expected the earlier-released lemming to be ahead")
+    // Click one pixel behind the leader: the leader itself does not
+    // "approach" this click (it already walked past it), and the follower
+    // does, but both face the same way, so the override must not apply.
+    let clickX = leader.x - 1
+    let slot = try fixture().configuration.skills.firstIndex(of: .climber)!
+    check(game.target(slot: slot, x: clickX, y: leader.y - 5, preferApproaching: true)?.id == leader.id,
+        "Same-direction lemmings must not be reordered by the approaching preference")
+    check(game.target(slot: slot, x: clickX, y: leader.y - 5)?.id == leader.id,
+        "Plain targeting should also pick the nearer, same-direction leader")
+    print("PASS same-direction lemming pack keeps the plain nearest-distance pick")
+}
+
+/// With only a single, already-turned lemming in range, targeting must
+/// still fall back to it — there is no approaching alternative to prefer.
+func testFavorApproachingLemmingFallsBackWithNoAlternative() throws {
+    let width = 120, height = 80
+    var pixels = [UInt8](repeating: 0, count: width * height)
+    var solid = [Bool](repeating: false, count: width * height)
+    for y in 60..<height { for x in 0..<width { solid[y * width + x] = true; pixels[y * width + x] = 6 } }
+    for y in 20..<60 { for x in 50..<56 { solid[y * width + x] = true; pixels[y * width + x] = 6 } }
+    let c = try fixture().configuration
+    var game = try Lemmings2Runtime(configuration: .init(width: width, height: height, pixels: pixels, solid: solid,
+        palette: c.palette, entrance: .init(x: 20, y: 45, width: 1, height: 1),
+        exits: [.init(x: 90, y: 50, width: 16, height: 16)], skills: c.skills, supplies: c.supplies, total: 1,
+        timeLimit: 120, releaseInterval: 1, terrainMasks: c.terrainMasks, firstReleaseTick: 1))
+    for _ in 0..<600 where !(game.lemmings.first?.direction ?? 1 < 0) { game.step() }
+    guard let turned = game.lemmings.first, turned.direction < 0 else {
+        check(false, "Expected the lone lemming to turn around at the wall"); return
+    }
+    let slot = c.skills.firstIndex(of: .climber)!
+    check(game.target(slot: slot, x: turned.x + 1, y: turned.y - 5, preferApproaching: true)?.id == turned.id,
+        "With no approaching alternative, targeting should fall back to the only candidate")
+    print("PASS favorApproachingLemmings falls back to the only candidate when nothing approaches")
+}
+
+func testFollowerBehindBuilderIsTargeted() throws {
+    let base = try fixture().configuration
+    var game = try Lemmings2Runtime(configuration: .init(width: base.width, height: base.height,
+        pixels: base.pixels, solid: base.solid, palette: base.palette, entrance: base.entrance,
+        exits: base.exits, skills: base.skills, supplies: base.supplies, total: 2,
+        timeLimit: base.timeLimit, releaseInterval: 1, terrainMasks: base.terrainMasks, firstReleaseTick: 1))
+    for _ in 0..<200 {
+        game.step()
+        if game.lemmings.filter({ $0.active && $0.state == .walking }).count >= 2 { break }
+    }
+    let walkers = game.lemmings.filter { $0.active && $0.state == .walking }
+    guard let builder = walkers.max(by: { $0.x < $1.x }),
+        let follower = walkers.filter({ $0.id != builder.id }).min(by: { $0.x < $1.x }) else {
+        check(false, "Expected a builder and a follower in the targeting fixture"); return
+    }
+    let builderSlot = game.configuration.skills.firstIndex(of: .builder)!
+    check(game.assign(slot: builderSlot, to: builder.id), "Fixture builder assignment was rejected")
+    guard let activeBuilder = game.lemmings.first(where: { $0.id == builder.id && $0.state == .building }) else {
+        check(false, "Fixture builder did not enter the building state"); return
+    }
+    check(abs(activeBuilder.x - follower.x) <= 9 && activeBuilder.y == follower.y,
+        "Fixture follower was not close enough behind the builder")
+    let skillSlot = game.configuration.skills.firstIndex(of: .climber)!
+    let clickX = activeBuilder.x + 2
+    check(game.target(slot: skillSlot, x: clickX, y: activeBuilder.y - 5, preferApproaching: true)?.id == follower.id,
+        "A follower approaching a bridge builder should receive the selected skill")
+    check(game.target(slot: skillSlot, x: clickX, y: activeBuilder.y - 5)?.id == activeBuilder.id,
+        "Turning the setting off should keep the nearest bridge builder")
+    print("PASS Lemmings 2 targeting favours a follower behind a builder")
+}
+
 // Deliberately synthetic rectangles exercise runtime phases without bundling
 // original assets. Local-data tests below verify the actual native masks.
 func syntheticMasks() throws -> Lemmings2TerrainMasks {
@@ -1428,6 +1535,10 @@ do {
     try testRunner()
     try testJumper()
     try testStomper(syntheticMasks())
+    try testFavorApproachingLemming()
+    try testSameDirectionPackKeepsNearestPick()
+    try testFavorApproachingLemmingFallsBackWithNoAlternative()
+    try testFollowerBehindBuilderIsTargeted()
     print("PASS native L2 walking, rescue, inventory, terrain, replay and nuke tests")
 
     if CommandLine.arguments.count > 1 {

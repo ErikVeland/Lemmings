@@ -1,9 +1,54 @@
 # Beta testing
 
-RC1 (build 36) is the current candidate: the first real-device test release since
-beta 32, and the first build after the official Classic campaign closed at
-352/352. See [RC1 readiness](Beta36Readiness.md) and
-[release notes since beta 32](ReleaseNotes-beta36.md).
+No 1.1 beta candidate has been declared yet. Use this checklist when the first
+1.1 package is cut. The 1.0 RC1 build 36 records are in the local archive and
+do not certify a 1.1 package.
+
+## Local build and notarisation
+
+When the normal beta packaging workflow is not available, run the focused
+tri-archive release script:
+
+```sh
+NOTARY_PROFILE=lemmings-beta zsh Scripts/build-and-notarise.sh
+```
+
+If the profile is stored outside the default keychain, set
+`NOTARY_KEYCHAIN=/path/to/keychain-db`. The script validates the named profile
+before it starts a build. `--notary-profile` and `--notary-keychain` provide
+the same values without environment variables.
+
+The profile name is optional. On a Mac with no shared profile name, use
+`APPLE_ID` and `APPLE_TEAM_ID`; `notarytool` prompts securely for the
+app-specific password. App Store Connect API-key authentication is also
+available through `ASC_KEY_PATH`, `ASC_KEY_ID` and `ASC_ISSUER_ID`.
+
+Before it builds, the script checks for source changes after the previous
+release, checks the current release notes, creates notes from recent source
+changes when they are missing, and checks that the Monterey worktree contains
+the current commit. It then writes three timestamped ZIP files to
+`~/Downloads`: Developer ID standard, macOS 12 Monterey and Game Center.
+
+The first two archives are notarised. The Game Center archive is development
+signed for registered devices because Apple does not notarise App Store Game
+Center entitlements. The script finds the first installed Developer ID
+Application identity unless `SIGNING_IDENTITY` is set. It uses a keychain
+profile created by `xcrun notarytool store-credentials`, so Apple credentials
+are not stored in the repository or passed on the command line.
+
+For the fastest local progress check, use the snapshot path instead:
+
+```sh
+zsh Scripts/build-game-center-snapshot.sh
+```
+
+It builds the current Mac architecture, signs the Game Center entitlement and
+writes a ZIP to Downloads. It does not notarise or run release gates. The
+provisioning profile must include every Mac that will run the snapshot.
+
+Use `--dry-run` to run the gates and check the selected paths without building,
+signing or uploading anything. Set `RELEASE_BASE` when the automatic previous
+release boundary is not the one you intend to package.
 
 ## Validate the build
 
@@ -29,7 +74,7 @@ Tools manifest interfaces in a local copy; it does not modify the installed tool
 `Scripts/verify-official-classic.sh` replays the committed witness manifest and
 requires all 292 official routes; `--include-conversions` adds the 60 Oh Yes!
 routes and the combined 352-level quest, restore and progression checks. This
-gate is closed as of beta 35 — see [ClassicOneZero.md](ClassicOneZero.md).
+gate was closed for the 1.0 baseline. Re-run it for the first 1.1 package.
 
 `Scripts/run-cross-build-recovery-tests.sh` checks that saved runs and Hot Seat
 games survive an engine change across builds. Run it before any release that
@@ -135,8 +180,8 @@ production scores.
 No extra game files are needed for the bundled campaigns. Fan packs are included and new compatible packs are checked at launch.
 Optional external NeoLemmix styles still use a separately selected folder.
 
-Check a fresh profile and an upgrade from beta 32, the last archive most testers
-have. Exercise all display modes, fullscreen and resizing, music-source changes,
+Check a fresh profile and an upgrade from the previous 1.1 package, when one
+exists. Exercise all display modes, fullscreen and resizing, music-source changes,
 mute, sound-bank changes, single-step completion, and transitions into and out
 of the sequels. Check the sequel artwork setting during play and after relaunch.
 Try nuke undo in the classic player and Lemmings 2. Check explosion flashes in
@@ -144,11 +189,9 @@ flat and CRT modes, including pausing during a flash and moving between
 displays. Report the game and level, settings, and whether restarting changes
 the result.
 
-RC1 is this project's first release aimed at real, physical hardware coverage
-rather than the developer's own Macs: report your exact Mac model, macOS
-version, and whether it is Intel or Apple silicon on every report. Physical
-Intel, macOS 13, HDR, multiple displays and high refresh rates are still
-unverified — that is what this candidate exists to test.
+For each 1.1 report, include the exact Mac model, macOS version, and whether it
+is Intel or Apple silicon. Include display, controller and input details for
+any targeting issue.
 
 The app contains commercial game data. Keep the beta test group private and
 follow `THIRD_PARTY_NOTICES.md`.

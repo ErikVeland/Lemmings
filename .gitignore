@@ -17,6 +17,9 @@ Sources/lemmings_*/
 main
 *.app
 
+# Local archive of superseded documentation. Current release and design docs stay tracked.
+.archive/
+
 # macOS
 .DS_Store
 

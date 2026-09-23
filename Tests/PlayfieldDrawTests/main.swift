@@ -39,6 +39,92 @@ private final class BombPreviewSession: GameSession {
   func stepForward() -> Bool { false }
 }
 
+private final class TargetingSession: GameSession {
+  var actors: [SessionLemming] = []
+  let levelWidth = 320, levelHeight = 160, ticksPerSecond = 17
+  var lemmings: [SessionLemming] { actors }
+  let entranceX: Int? = nil
+  let released = 0, total = 0, saved = 0, required = 0, rate = 50
+  let rateLabel = "Rate"
+  let remainingSeconds: Int? = nil
+  let isComplete = false, didWin = false, isNuking = false, canUndoNuke = false, supportsRewind = false
+  let skills: [SessionSkill] = [], lastCues: [ClassicSoundEffect] = []
+  var currentTick = 0
+  func tick() {}
+  func assign(skillIndex: Int, to lemmingID: Int) -> String? { nil }
+  func assignmentState(skillIndex: Int, to lemmingID: Int) -> AssignmentState { .eligible }
+  func adjustRate(by delta: Int) {}
+  func nuke() {}
+  func undoNuke() {}
+  func rewind(seconds: Double) -> Bool { false }
+  func stepBackward() -> Bool { false }
+  func stepForward() -> Bool { false }
+}
+
+/// Lemming 1 is one pixel farther from the click than lemming 0, but it is
+/// still walking toward the click while lemming 0 already turned away. The
+/// setting should pick the farther, still-approaching lemming; turning the
+/// setting off should restore plain nearest-distance picking.
+@MainActor private func testApproachingLemmingPreferred() throws {
+  let view = PlayfieldView(frame: NSRect(x: 0, y: 0, width: 640, height: 320))
+  let session = TargetingSession()
+  view.session = session
+  session.actors = [
+    .init(id: 0, x: 99, y: 80, pose: .walking, facingLeft: true, animationFrame: 0, countdown: nil),
+    .init(id: 1, x: 98, y: 80, pose: .walking, facingLeft: false, animationFrame: 0, countdown: nil),
+  ]
+  view.favorApproachingLemmings = true
+  try require(view.lemming(at: CGPoint(x: 100, y: 80))?.id == 1,
+    "The approaching lemming should win over a closer one that already turned away")
+  view.favorApproachingLemmings = false
+  try require(view.lemming(at: CGPoint(x: 100, y: 80))?.id == 0,
+    "Turning the setting off should restore plain nearest-distance picking")
+  session.actors = [
+    .init(id: 0, x: 99, y: 80, pose: .walking, facingLeft: true, animationFrame: 0, countdown: nil),
+  ]
+  view.favorApproachingLemmings = true
+  try require(view.lemming(at: CGPoint(x: 100, y: 80))?.id == 0,
+    "With no approaching candidate, targeting must fall back to the nearest eligible one")
+  print("PASS approaching-lemming targeting prefers the one still walking toward the click")
+}
+
+/// Two lemmings walking the SAME direction must not get reordered: the
+/// nearer one (by pixel distance) is picked regardless of which side of it
+/// the click lands on, because neither of them has turned around.
+@MainActor private func testSameDirectionPackKeepsNearestPick() throws {
+  let view = PlayfieldView(frame: NSRect(x: 0, y: 0, width: 640, height: 320))
+  let session = TargetingSession()
+  view.session = session
+  session.actors = [
+    .init(id: 0, x: 101, y: 80, pose: .walking, facingLeft: false, animationFrame: 0, countdown: nil),
+    .init(id: 1, x: 97, y: 80, pose: .walking, facingLeft: false, animationFrame: 0, countdown: nil),
+  ]
+  view.favorApproachingLemmings = true
+  try require(view.lemming(at: CGPoint(x: 100, y: 80))?.id == 0,
+    "Two lemmings walking the same direction should not be reordered by the approaching preference")
+  print("PASS same-direction lemming pack keeps the plain nearest-pixel pick")
+}
+
+/// A builder is the one deliberate exception to same-direction nearest-pixel
+/// selection. A follower still walking towards the bridge should receive the
+/// selected skill instead of the lemming placing the bridge.
+@MainActor private func testFollowerBehindBuilderIsTargeted() throws {
+  let view = PlayfieldView(frame: NSRect(x: 0, y: 0, width: 640, height: 320))
+  let session = TargetingSession()
+  view.session = session
+  session.actors = [
+    .init(id: 0, x: 101, y: 80, pose: .building, facingLeft: false, animationFrame: 0, countdown: nil),
+    .init(id: 1, x: 97, y: 80, pose: .walking, facingLeft: false, animationFrame: 0, countdown: nil),
+  ]
+  view.favorApproachingLemmings = true
+  try require(view.lemming(at: CGPoint(x: 104, y: 80))?.id == 1,
+    "A follower approaching a bridge builder should receive the selected skill")
+  view.favorApproachingLemmings = false
+  try require(view.lemming(at: CGPoint(x: 104, y: 80))?.id == 0,
+    "Turning the setting off should keep the nearest bridge builder")
+  print("PASS Classic targeting favours a follower behind a builder")
+}
+
 @MainActor private func testBombFlashFrames() throws {
   let root = URL(fileURLWithPath:#filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
   let out = root.appendingPathComponent(".build/bomb-pop")
@@ -611,6 +697,9 @@ private func testMacArtworkCropStaysPixelAligned() throws {
     try testSpeedSpritesStayOnTop()
     try testSpeedAfterimages()
     try testBombFlashFrames()
+    try testApproachingLemmingPreferred()
+    try testSameDirectionPackKeepsNearestPick()
+    try testFollowerBehindBuilderIsTargeted()
     try testNukeGesturesAndQueuedUndo()
     try testClassicPanelLabels()
     print("PASS Xmas panel labels at multiple sizes with speed control")

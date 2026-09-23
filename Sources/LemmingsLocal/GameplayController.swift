@@ -39,6 +39,7 @@ import NxlvKit
         stopBoost(); keyboard?.speedControl?.cancelInput()
         if receivedInput { keyboard?.handleInterruption() }
         receivedInput = false
+        keyboard?.controllerRewindHeld(false)
         bindings.reset(); device = nil; context = nil; wasActive = false
     }
     private func poll() {
@@ -88,6 +89,7 @@ import NxlvKit
         }
         previousMapping = mapping
         let pressed = ControllerBindings.remap(pressed, using: mapping)
+        keyboard.controllerRewindHeld(playing && pressed.contains(.leftTrigger) && pressed.contains(.b))
         wasActive = playing; context = keyboard.controllerContext
         let wasFast = keyboard.speedControl?.isFast == true
         for action in bindings.update(pressed: pressed, inMenu: !playing) {

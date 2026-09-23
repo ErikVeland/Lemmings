@@ -9,6 +9,18 @@ private func check(_ value: @autoclosure () throws -> Bool, _ message: String) t
 }
 
 extension AppDelegate {
+  fileprivate func testFailureMoodDecision() throws {
+    try check(!FailureMoodDecision.isUnrecoverable(saved: 0, active: 1, unreleased: 0, required: 1),
+      "Failure mood triggered while an active lemming could still meet the target")
+    try check(!FailureMoodDecision.isUnrecoverable(saved: 0, active: 0, unreleased: 1, required: 1),
+      "Failure mood triggered while an unreleased lemming could still meet the target")
+    try check(FailureMoodDecision.isUnrecoverable(saved: 0, active: 0, unreleased: 0, required: 1),
+      "Failure mood did not trigger when no rescue remained")
+    try check(!FailureMoodDecision.isUnrecoverable(saved: 1, active: 0, unreleased: 0, required: 1),
+      "Failure mood ignored an already met rescue requirement")
+    print("PASS unrecoverable-run failure mood decision")
+  }
+
   fileprivate func testAccessibleMenusAndHelp() async throws {
     let host = SpeedTestWindow(contentRect: CGRect(x: 0, y: 0, width: 640, height: 400), styleMask: [], backing: .buffered, defer: false)
     host.contentView = NSView(frame: CGRect(x: 0, y: 0, width: 640, height: 400))
@@ -1172,6 +1184,9 @@ extension AppDelegate {
       try check(button("3x", in: ghost.page) != nil, "Replay speed did not increase")
       button("3x", in: ghost.page)!.performClick(nil)
       try check(button("10x", in: ghost.page) != nil, "Replay speed did not reach 10x")
+      button("Back 1s", in: ghost.page)!.performClick(nil)
+      try check(ghost.field.session === ghost.playback.session,
+        "Seeking solution replay left the canvas on a stale session")
       let stoppedTick = ghost.playback.session.currentTick
       ghost.advance()
       try check(ghost.playback.session.currentTick == stoppedTick, "Ghost pause did not stop playback")
@@ -1219,6 +1234,22 @@ extension AppDelegate {
     for _ in 0..<liveOutcome.ticks { livePlayback.tick() }
     try check(ClassicDOSReplayRecorder.stateHash(of: livePlayback.session.simulation) == liveOutcome.stateHash,
       "Animated after-tick input timing differs from the strict replay player")
+    let seekStart = min(120, liveOutcome.ticks)
+    let seekDistance = min(ClassicDOSRules.ticksPerSecond, seekStart)
+    let seekPlayback = SolutionPlayback(liveProof, width: 1600, height: 160)
+    for _ in 0..<seekStart { seekPlayback.tick() }
+    seekPlayback.seek(by: -seekDistance)
+    let rewoundPlayback = SolutionPlayback(liveProof, width: 1600, height: 160)
+    for _ in 0..<(seekStart - seekDistance) { rewoundPlayback.tick() }
+    try check(ClassicDOSReplayRecorder.stateHash(of: seekPlayback.session.simulation)
+      == ClassicDOSReplayRecorder.stateHash(of: rewoundPlayback.session.simulation),
+      "Solution replay backward seek diverged from deterministic playback")
+    seekPlayback.seek(by: seekDistance)
+    let restoredPlayback = SolutionPlayback(liveProof, width: 1600, height: 160)
+    for _ in 0..<seekStart { restoredPlayback.tick() }
+    try check(ClassicDOSReplayRecorder.stateHash(of: seekPlayback.session.simulation)
+      == ClassicDOSReplayRecorder.stateHash(of: restoredPlayback.session.simulation),
+      "Solution replay forward seek did not restore deterministic playback")
     let routeDirectory = URL(fileURLWithPath: ".build/hints/recorded-routes")
     try? FileManager.default.removeItem(at: routeDirectory)
     let recordedURL = try ClassicRouteRecorder.save(liveReplay, initial: fresh,
@@ -2343,6 +2374,7 @@ Task { @MainActor in
   do {
     let subject = AppDelegate()
     subject.prepareArcadeTests()
+    try subject.testFailureMoodDecision()
     try subject.testSteppedCompletion()
     try subject.testFirstLaunchEffects()
     try await subject.testAccessibleMenusAndHelp()

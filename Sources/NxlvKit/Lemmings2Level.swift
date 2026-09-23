@@ -85,8 +85,9 @@ public struct Lemmings2Level: Sendable {
             throw SequelDataError.invalid("L2MP contains a partial terrain record.")
         }
         tiles = stride(from: 0, to: terrain.count, by: 4).map { offset in
-            Tile(modifier: Int(terrain.bytes[offset]) << 8 | Int(terrain.bytes[offset + 1]),
-                 rawIdentifier: Int(terrain.bytes[offset + 2]) << 8 | Int(terrain.bytes[offset + 3]))
+            let modifier = (Int(terrain.bytes[offset]) << 8) | Int(terrain.bytes[offset + 1])
+            let rawIdentifier = (Int(terrain.bytes[offset + 2]) << 8) | Int(terrain.bytes[offset + 3])
+            return Tile(modifier: modifier, rawIdentifier: rawIdentifier)
         }
         let objectData = SequelBinary(try form.requiredSection("L2BO"))
         guard objectData.count.isMultiple(of: 10) else {

@@ -101,16 +101,29 @@ struct ReticleFeedback {
       needsDisplay = true
     }
   }
-  var reduceMotion = false { didSet { if reduceMotion { speedTrails.reset() }; needsDisplay = true } }
+  var reduceMotion = false {
+    didSet {
+      assignmentHighlight.reduceMotion = reduceMotion
+      if reduceMotion { speedTrails.reset() }
+      needsDisplay = true
+    }
+  }
   var reduceFlashes = false {
     didSet {
       if reduceFlashes { hdrBirths.removeAll(); hdrFlashes.removeAll(); hdrOverlay?.clear() }
       needsDisplay = true
     }
   }
+  var favorApproachingLemmings = true
   var speedMultiplier: Double = 3 { didSet { speedTrails.multiplier = speedMultiplier } }
   var isFastForward = false
   private let speedTrails = SpeedTrails()
+  private var rewindGhost: CGImage?
+  private var rewindCueStartedAt: TimeInterval?
+  private var rewindCueUntil: TimeInterval = 0
+  private var rewindOriginTick = 0
+  private var rewindCurrentTick = 0
+  private var rewindCueTask: Task<Void, Never>?
   private var hdrOverlay: ExplosionHDRView?
   private(set) var hdrFlashes: [ExplosionFlash] = []
   private var hdrBirths: [Int:(tick:Int,expires:TimeInterval)] = [:]
@@ -200,6 +213,7 @@ struct ReticleFeedback {
   var phase: GamePhase = .playing {
     didSet {
       if phase != oldValue { reticleFeedback = ReticleFeedback(); assignedTarget = nil; displayedTarget = nil; cursorViewPoint = nil; overlayReplayLine = nil; overlayRetryLine = nil }
+      if phase != oldValue { window?.invalidateCursorRects(for: self) }
     }
   }
   var levelImage: CGImage?
@@ -250,6 +264,7 @@ struct ReticleFeedback {
   var session: (any GameSession)? {
     didSet { if oldValue !== session { reticleFeedback = ReticleFeedback(); assignedTarget = nil; displayedTarget = nil; hdrBirths.removeAll(); hdrLastTick = 0; speedTrails.reset() } }
   }
+  var failureMoodAmount: CGFloat = 0
   var assets: ClassicMainDATAssets?
   var palette: [ClassicRGBColor] = []
   var viewport = Viewport()
@@ -266,6 +281,7 @@ struct ReticleFeedback {
 
   private var spriteCache: [String: NSImage] = [:]
   private var spritePixels: [String: CGImage] = [:]
+  private var skillBadgeCache: [Int: NSImage] = [:]
   var usesControllerPointer: Bool { controllerPointer != nil }
   private var controllerPointer: CGPoint?
   func moveControllerPointer(_ dx: Double, _ dy: Double) {
@@ -275,6 +291,7 @@ struct ReticleFeedback {
     handleMove(to: next); controllerPointer = next
   }
   let assignmentHighlight = LemmingFocusHighlight()
+  private let assignmentPulse = LemmingAssignmentPulse()
   var selectedSkill: () -> Int = { 0 }
   private var reticleFeedback = ReticleFeedback()
   private var reticleRedraw: Task<Void, Never>?
@@ -282,6 +299,7 @@ struct ReticleFeedback {
 
   func didAssign(to id: Int) {
     assignedTarget = id
+    assignmentPulse.show(id)
     if !reduceFlashes { reticleFeedback.assigned(now: ProcessInfo.processInfo.systemUptime) }
     needsDisplay = true
     scheduleReticleRedraw()
@@ -289,12 +307,16 @@ struct ReticleFeedback {
 
   private func scheduleReticleRedraw() {
     let remaining = reticleFeedback.nextChange - ProcessInfo.processInfo.systemUptime
-    guard remaining > 0 else { return }
+    let assignmentRemaining = assignmentPulse.remaining
+    let shimmer = cursorViewPoint != nil && !reduceMotion && session != nil
+    let delay = max(remaining, assignmentRemaining, shimmer ? 1.0 / 30.0 : 0)
+    guard delay > 0 else { return }
     reticleRedraw?.cancel()
     reticleRedraw = Task { [weak self] in
-      try? await Task.sleep(nanoseconds: UInt64((remaining + 0.005) * 1_000_000_000))
+      try? await Task.sleep(nanoseconds: UInt64((delay + 0.005) * 1_000_000_000))
       guard !Task.isCancelled else { return }
       self?.needsDisplay = true
+      self?.scheduleReticleRedraw()
     }
   }
 
@@ -311,6 +333,47 @@ struct ReticleFeedback {
   var pointerLemmingID: Int? { cursorViewPoint.flatMap { clickTarget(at: viewport.levelPoint(from: $0))?.id } }
   private var cursorViewPoint: CGPoint?
   private var trackingArea: NSTrackingArea?
+
+  /// Captures the visible state before a rewind starts.
+  func beginRewindCue(at tick: Int) {
+    rewindGhost = nil
+    if let bitmap = bitmapImageRepForCachingDisplay(in: bounds) {
+      cacheDisplay(in: bounds, to: bitmap)
+      rewindGhost = bitmap.cgImage
+    }
+    rewindOriginTick = tick
+    rewindCurrentTick = tick
+    rewindCueStartedAt = ProcessInfo.processInfo.systemUptime
+    rewindCueUntil = .infinity
+    needsDisplay = true
+    scheduleRewindCueRedraw()
+  }
+
+  /// Updates the transport cue after a deterministic history seek.
+  func updateRewindCue(at tick: Int) {
+    rewindCurrentTick = tick
+    needsDisplay = true
+  }
+
+  /// Leaves the origin ghost on screen briefly, then fades it away.
+  func endRewindCue() {
+    guard rewindCueStartedAt != nil else { return }
+    rewindCueStartedAt = nil
+    rewindCueUntil = ProcessInfo.processInfo.systemUptime + 0.35
+    needsDisplay = true
+    scheduleRewindCueRedraw()
+  }
+
+  private func scheduleRewindCueRedraw() {
+    rewindCueTask?.cancel()
+    guard rewindCueStartedAt != nil || ProcessInfo.processInfo.systemUptime < rewindCueUntil else { return }
+    rewindCueTask = Task { [weak self] in
+      try? await Task.sleep(for: .milliseconds(33))
+      guard !Task.isCancelled else { return }
+      self?.needsDisplay = true
+      self?.scheduleRewindCueRedraw()
+    }
+  }
 
   override var isFlipped: Bool { true }
   override var acceptsFirstResponder: Bool { true }
@@ -331,10 +394,19 @@ struct ReticleFeedback {
     if let trackingArea { removeTrackingArea(trackingArea) }
     let area = NSTrackingArea(
       rect: bounds,
-      options: [.activeInKeyWindow, .mouseMoved, .mouseEnteredAndExited, .inVisibleRect],
+      options: [.activeInKeyWindow, .mouseMoved, .mouseEnteredAndExited, .cursorUpdate, .inVisibleRect],
       owner: self)
     addTrackingArea(area)
     trackingArea = area
+  }
+
+  override func resetCursorRects() {
+    guard phase == .playing else { return }
+    addCursorRect(bounds, cursor: GameCursor.invisible)
+  }
+
+  override func cursorUpdate(with event: NSEvent) {
+    if phase == .playing { GameCursor.invisible.set() } else { NSCursor.arrow.set() }
   }
 
   /// Takes a cursor position directly.
@@ -428,7 +500,8 @@ struct ReticleFeedback {
   /// A small allowance covers sprite edges without reaching across the crowd.
   private static let pickBox = (halfWidth: CGFloat(6), top: CGFloat(14), bottom: CGFloat(5))
 
-  /// Both the green reticle and a fresh click use the nearest eligible lemming.
+  /// Both the green reticle and a fresh click use the nearest eligible
+  /// lemming, with an approaching follower preferred over a bridge builder.
   func lemming(at point: CGPoint) -> SessionLemming? {
     guard let session else { return nil }
     let skill = selectedSkill()
@@ -436,7 +509,29 @@ struct ReticleFeedback {
       let a = distanceSquared($0, point), b = distanceSquared($1, point)
       return a == b ? $0.id > $1.id : a < b
     }
-    return candidates.first { session.canAssign(skillIndex: skill, to: $0.id) }
+    let eligible = candidates.filter { session.canAssign(skillIndex: skill, to: $0.id) }
+    guard let nearest = eligible.first else { return nil }
+    if favorApproachingLemmings, nearest.pose == .building,
+       let follower = eligible.first(where: { isApproaching($0, point: point) && isBehind($0, builder: nearest) }) {
+      return follower
+    }
+    if favorApproachingLemmings, !isApproaching(nearest, point: point),
+       let approaching = eligible.first(where: { isApproaching($0, point: point) && $0.facingLeft != nearest.facingLeft }) {
+      return approaching
+    }
+    return nearest
+  }
+
+  /// Whether `point` sits on the side of `lemming` that matches its facing.
+  private func isApproaching(_ lemming: SessionLemming, point: CGPoint) -> Bool {
+    let direction: CGFloat = lemming.facingLeft ? -1 : 1
+    return (point.x - CGFloat(lemming.x)) * direction >= 0
+  }
+
+  /// Whether `lemming` follows the builder in the builder's travel direction.
+  private func isBehind(_ lemming: SessionLemming, builder: SessionLemming) -> Bool {
+    guard lemming.facingLeft == builder.facingLeft else { return false }
+    return builder.facingLeft ? lemming.x > builder.x : lemming.x < builder.x
   }
 
   /// Honour the green target briefly while it walks between display and input.
@@ -471,7 +566,8 @@ struct ReticleFeedback {
     defer {
       ControllerPointer.draw(controllerPointer)
       if let id = assignmentHighlight.target, let lem = session?.lemmings.first(where: { $0.id == id }) {
-        assignmentHighlight.draw(at: viewport.viewPoint(fromLevel: CGPoint(x: lem.x, y: lem.y - 6)), scale: viewport.zoom)
+        assignmentHighlight.draw(at: viewport.viewPoint(fromLevel: CGPoint(x: lem.x, y: lem.y - 6)),
+          scale: viewport.zoom, tint: .systemYellow, radius: 10)
       }
     }
     updateSpeedTrails()
@@ -513,6 +609,8 @@ struct ReticleFeedback {
         drawLevel(levelImage)
         speedTrails.draw(enabled: hdEffectsEnabled && !reduceMotion && isFastForward && phase == .playing, in: bounds) { drawLemmings() }
       }
+      FailureMoodOverlay.draw(in: bounds, amount: failureMoodAmount)
+      drawRewindCue()
       if phase == .playing { drawTurnBadge(); drawCursor() }
     }
     if phase != .playing { drawOverlay() }
@@ -866,6 +964,7 @@ struct ReticleFeedback {
           return
         }
         drawSprite(sprite, key: key, in: rect, alpha: fraction)
+        drawAssignmentPulse(for: lemming.id, key: key, sprite: sprite, in: rect)
         if pose == .explosion { drawBombCore(in: rect, tick: lemming.animationFrame, actor:lemming.id) }
         if let countdown = lemming.countdown { drawCountdown(countdown, above: rect) }
         return
@@ -899,11 +998,20 @@ struct ReticleFeedback {
       return
     }
     drawSprite(sprite, key: key, in: rect, alpha: fraction)
+    drawAssignmentPulse(for: lemming.id, key: key, sprite: sprite, in: rect)
     if pose == .explosion { drawBombCore(in: rect, tick: lemming.animationFrame, actor:lemming.id) }
 
     if let countdown = lemming.countdown {
       drawCountdown(countdown, above: rect)
     }
+  }
+
+  private func drawAssignmentPulse(for id: Int, key: String, sprite: NSImage, in rect: CGRect) {
+    guard assignmentPulse.target == id,
+          let pixels = spritePixels[key] ?? sprite.cgImage(forProposedRect: nil, context: nil, hints: nil)
+    else { return }
+    assignmentPulse.draw(sprite: pixels, in: rect, scale: viewport.zoom,
+      reduceMotion: reduceMotion, reduceFlashes: reduceFlashes)
   }
 
   private func drawCountdown(_ countdown: Int, above rect: CGRect) {
@@ -928,32 +1036,8 @@ struct ReticleFeedback {
     let pulseTarget = state == .assigned ? session?.lemmings.first(where: { $0.id == assignedTarget }) : nil
     scheduleReticleRedraw()
     displayedTarget = target.map { ($0.id, point, ProcessInfo.processInfo.systemUptime) }
-    let center = viewport.viewPoint(
+    let targetPoint = viewport.viewPoint(
       fromLevel: (pulseTarget ?? target).map { CGPoint(x: CGFloat($0.x), y: CGFloat($0.y) - 5) } ?? point)
-    let side = 14 * viewport.zoom
-    let box = CGRect(
-      x: center.x - side / 2, y: center.y - side / 2, width: side, height: side)
-
-    let path = NSBezierPath()
-    let arm = side / 3
-    let thickness = max(1, viewport.zoom / 2)
-    // Corner brackets read clearly over busy terrain.
-    for (dx, dy) in [(0.0, 0.0), (1.0, 0.0), (0.0, 1.0), (1.0, 1.0)] {
-      let cx = box.minX + box.width * dx
-      let cy = box.minY + box.height * dy
-      let sx: CGFloat = dx == 0 ? 1 : -1
-      let sy: CGFloat = dy == 0 ? 1 : -1
-      path.move(to: CGPoint(x: cx + arm * sx, y: cy))
-      path.line(to: CGPoint(x: cx, y: cy))
-      path.line(to: CGPoint(x: cx, y: cy + arm * sy))
-      if state == .assigned, hdEffectsEnabled, !reduceFlashes {
-        hdrFlashes.append(.init(rect: CGRect(x: min(cx, cx + arm * sx), y: cy - thickness / 2,
-          width: arm, height: thickness), strength: 1, expiresAt: reticleFeedback.successUntil, tint: .green))
-        hdrFlashes.append(.init(rect: CGRect(x: cx - thickness / 2, y: min(cy, cy + arm * sy),
-          width: thickness, height: arm), strength: 1, expiresAt: reticleFeedback.successUntil, tint: .green))
-      }
-    }
-    path.lineWidth = thickness
     let color: NSColor
     switch state {
     case .unavailable: color = NSColor(calibratedWhite: 0.6, alpha: 0.9)
@@ -961,8 +1045,85 @@ struct ReticleFeedback {
     case .assigned: color = NSColor(calibratedRed: 0.65, green: 1, blue: 0.45, alpha: 1)
     case .alreadyAssigned: color = NSColor(calibratedRed: 1, green: 0.62, blue: 0.08, alpha: 1)
     }
-    color.setStroke()
-    path.stroke()
+
+    if state == .assigned, hdEffectsEnabled, !reduceFlashes,
+       (target != nil || pulseTarget != nil) {
+      let pixel = max(1, floor(viewport.zoom))
+      let expires = reticleFeedback.successUntil
+      hdrFlashes.append(.init(
+        rect: CGRect(x: targetPoint.x - pixel, y: targetPoint.y - pixel,
+          width: 2 * pixel, height: 2 * pixel).intersection(bounds),
+        strength: 0.45, expiresAt: expires, tint: .green))
+    }
+
+    // The lemming, rather than the pointer, is the point of attention. Keep
+    // this cue soft so it confirms the target without changing play timing or
+    // obscuring the native sprite artwork.
+    if target != nil, assignmentHighlight.target == nil, state != .unavailable {
+      LemmingSelectionGlow.draw(at: targetPoint, scale: viewport.zoom, radius: 10,
+        tint: color, animated: !reduceMotion)
+    }
+
+    // Leave a small pointer mark at the actual cursor position. This keeps
+    // the input location readable when the target is offset from the pointer.
+    let pixel = max(1, floor(viewport.zoom))
+    let arm = 3 * pixel
+    let crosshair = NSBezierPath()
+    crosshair.move(to: CGPoint(x: cursorViewPoint.x - arm, y: cursorViewPoint.y))
+    crosshair.line(to: CGPoint(x: cursorViewPoint.x + arm, y: cursorViewPoint.y))
+    crosshair.move(to: CGPoint(x: cursorViewPoint.x, y: cursorViewPoint.y - arm))
+    crosshair.line(to: CGPoint(x: cursorViewPoint.x, y: cursorViewPoint.y + arm))
+    crosshair.lineWidth = pixel
+    color.withAlphaComponent(0.85).setStroke()
+    crosshair.stroke()
+
+    SkillCursorBadge.draw(icon: skillBadge(for: selectedSkill()), index: selectedSkill(),
+      at: cursorViewPoint, scale: viewport.zoom, tint: color,
+      reduceMotion: reduceMotion, in: bounds)
+  }
+
+  private func skillBadge(for index: Int) -> NSImage? {
+    guard (0..<8).contains(index), let assets else { return nil }
+    if let cached = skillBadgeCache[index] { return cached }
+    let poses: [ClassicLemmingPose] = [.climbing, .floating, .ohNo, .blocking,
+      .building, .bashing, .mining, .digging]
+    guard let frame = assets.animation(for: poses[index], direction: .none)?.frames.first,
+          let image = image(from: frame) else { return nil }
+    skillBadgeCache[index] = image
+    return image
+  }
+
+  private func drawRewindCue() {
+    let now = ProcessInfo.processInfo.systemUptime
+    guard let ghost = rewindGhost,
+          rewindCueStartedAt != nil || now < rewindCueUntil else {
+      if rewindCueStartedAt == nil { rewindGhost = nil }
+      return
+    }
+    let fading = rewindCueStartedAt == nil
+    let fade = fading ? CGFloat(max(0, rewindCueUntil - now) / 0.35) : 1
+    let elapsed = CGFloat(now - (rewindCueStartedAt ?? now))
+    let sweep = reduceMotion ? 0 : floor((elapsed * 18).truncatingRemainder(dividingBy: 8))
+    let context = NSGraphicsContext.current?.cgContext
+    context?.saveGState()
+    if let context {
+      context.clip(to: CGRect(origin: viewport.contentOffset, size: viewport.visibleSize))
+      context.setAlpha(0.10 * fade)
+      context.interpolationQuality = .none
+      context.draw(ghost, in: bounds.offsetBy(dx: -sweep, dy: 0))
+      if !reduceMotion {
+        context.setAlpha(0.07 * fade)
+        context.setFillColor(NSColor.systemBlue.cgColor)
+        context.fill(CGRect(x: viewport.contentOffset.x + sweep,
+          y: viewport.contentOffset.y, width: max(1, viewport.zoom), height: viewport.visibleSize.height))
+      }
+    }
+    context?.restoreGState()
+    RewindTransportCue.draw(
+      origin: CGPoint(x: 12, y: 12),
+      currentTick: rewindCurrentTick,
+      originTick: rewindOriginTick
+    )
   }
 
   /// Walks a row of real lemmings across the foot of a menu.

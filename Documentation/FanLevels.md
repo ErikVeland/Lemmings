@@ -45,7 +45,8 @@ so the first launch has an accurate total without scanning every pack.
 
 ## Reviewed pruning
 
-The working source after beta 28 contains 6,020 fan levels in 535 packs. The user
+The working source after beta 28 contains 6,020 Classic-format fan levels in
+535 packs. The user
 authorised removal of 23 empty or malformed records. No complete pack was removed.
 `Tools/FanLevelCatalog/prune.py` reproduces the reviewed deletions from the original
 archive hashes before indexing. Packaging checks the resulting archive hashes.

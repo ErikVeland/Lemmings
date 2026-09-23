@@ -2,7 +2,7 @@
 
 Updated 11 September 2026. This is the current engineering plan, not an announcement of an official release.
 
-The objective is an official-quality edition that preserves the original puzzles and makes them comfortable to play on modern devices. The strongest route is to finish and prove the Mac reference build, bring the same rules and replay fixtures to iPhone and iPad, then validate a console implementation with approved tools and hardware.
+The objective is an official-quality edition that preserves the original puzzles and makes them comfortable to play on modern devices. The strongest route is to finish and prove the Mac reference build, bring the same rules and replay fixtures to iPhone and iPad, then reach Windows and Linux. Consoles are not a current target; see the platform plan below.
 
 ## What exists
 
@@ -18,7 +18,7 @@ The objective is an official-quality edition that preserves the original puzzles
 | Preferences | Modern defaults, first-launch choice, OG reset and individual settings | Saves and explicit opt-outs persist. Independent added-motion and added-flash reductions preserve modern gameplay. Broader accessibility validation remains open. |
 | Progress and replay | Local profiles, records, achievements, replay review and movie export | In-progress crash recovery and cross-device save conflicts remain open. Game Center needs provisioned service testing. |
 
-Campaign counts come from the committed [campaign evidence](CampaignCompletion/evidence.json), [original completion gate](ClassicCompletion/README.md) and sequel tests. The older [beta 12 report](Beta12Readiness.md) describes its frozen build. Its notarisation and performance numbers do not certify the current effects or input build.
+Campaign counts come from the committed [campaign evidence](CampaignCompletion/evidence.json), [original completion gate](ClassicCompletion/README.md) and sequel tests. Archived beta reports do not certify the current effects, input or 1.1 build.
 
 ## Gaps closed in this audit
 
@@ -52,14 +52,13 @@ Additional product work includes input remapping, left-handed touch layouts, loc
 | --- | --- | --- |
 | macOS | Running AppKit/Metal app, universal arm64/x86_64 binaries targeting macOS 13 | Signed reference candidate with hardware and novice-play evidence. |
 | iPhone/iPad | `NxlvKit` declares iOS 16 support and has no AppKit imports. It still uses Apple graphics, image and hashing frameworks. There is no iOS app target. | Compile the library with the iOS SDK, then a playable UIKit/Metal shell that runs the same replay fixtures. Validate direct touch, precise crowd selection, zoom/pan, safe areas and app suspension on devices. |
-| Switch | No console target or approved SDK integration in this repository | Obtain platform access, establish the supported runtime/interop approach and prove one deterministic level on approved hardware. Then add native services, handheld/docked layouts and platform testing. |
-| PlayStation/Xbox | No console target or native service adapters in this repository | Establish the approved toolchain and engine boundary, then prove equivalent simulation, gamepad navigation, users/saves and suspend/resume on development hardware. |
+| Windows/Linux | `Package.swift` declares only macOS and iOS. `NxlvKit` imports CoreGraphics, ImageIO and CryptoKit, all Apple-only. There is no Windows or Linux target. | Replace the Apple-only graphics, image and hashing dependencies with portable equivalents, then build a non-AppKit interface that runs the same replay fixtures. |
 
-Do not rewrite the simulation before proving a need. Keep simulation ticks, replay commands, deterministic outcomes and data formats as the reference contract. Extract rendering, input, audio, files, clocks and account services behind platform adapters when implementing each shell. A portable data model does not imply that this Swift executable runs on a console.
+Consoles (Switch, PlayStation, Xbox) are not a current target. This repository has no console target, no approved SDK integration and no relationship with a console platform owner. Revisit this only after a decision to pursue it.
+
+Do not rewrite the simulation before proving a need. Keep simulation ticks, replay commands, deterministic outcomes and data formats as the reference contract. Extract rendering, input, audio, files, clocks and account services behind platform adapters when implementing each shell. A portable data model does not imply that this Swift executable runs on every platform.
 
 The current workstation has Command Line Tools but no usable iOS SDK. No iOS compilation or device result is claimed. Install and select a full Xcode toolchain before the first iOS build. Apple documents [virtual controls for controller-based iOS games](https://developer.apple.com/documentation/gamecontroller/adding-virtual-controls-to-games-that-support-game-controllers-in-ios); touch precision for this game still needs its own design and tests.
-
-Console access and delivery requirements must come from the platform owners. Nintendo provides a separate [Switch access request](https://developer.nintendo.com/register) after registration. PlayStation provides its [partner programme](https://partners.playstation.net/). Microsoft provides [Xbox development and publishing resources](https://developer.microsoft.com/en-US/games/partner). These sources were checked on 11 September 2026. Their public pages do not establish toolchain compatibility or certification for this project.
 
 ## Repeatable verification
 
@@ -73,7 +72,10 @@ The audit creates a new directory under `.build/release-audit`, compiles the sha
 
 Without `--app`, the app suites are explicitly **not run**. This is useful during engine work but is not a complete application check. `--require-closure` also fails because hardware, publishing and other platform gates remain open. The tool deliberately does not issue a release-ready certificate.
 
-The September 11 hardening results are recorded in [the handoff](ReleaseReadiness/2026-09-11.md). Keep those results distinct from future builds.
+The September 11 hardening results are retained in the current release-readiness
+records. Keep those results distinct from future builds and use the current
+[validation record](ReleaseReadiness/ClassicValidation-current.md) for present
+claims.
 
 ## Partner evaluation
 

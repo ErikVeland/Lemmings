@@ -52,30 +52,6 @@ Invalid rewind durations return failure without changing the simulation. Large f
 Arcade backups protect profiles and records. The run checkpoints described below protect supported in-progress games. Campaign progress still uses its existing preferences storage. Installed-release migration trials, power-loss testing and cross-device save conflicts remain open.
 
 
-## Earlier checked build
-
-The [updated universal app](../.build/release-audit/save-hardening/Ultimate%20Lemmings.app) contains these fixes. Both executable slices target macOS 13 and pass strict local signature verification. It is an ad-hoc signed development build.
-
-The save-recovery, arcade-profile UI, full app-integration, package-resource and audit-integrity checks passed. The [result manifest](../.build/release-audit/save-hardening/results.json) records the logs and zero input drift. The [save-failure capture](../.build/arcade/save-failure.png) was checked for legible text and an unclipped retry button.
-
-The app executables were rebuilt for both architectures. The unchanged core library and assets were reused only after their source and bundle hashes matched the previous verified build. See [build evidence](../.build/release-audit/save-hardening/build.json) and [the build script](../.build/release-audit/save-hardening/rebuild.py). A full rebuild remains available through `Scripts/build-local-app.sh`.
-
-The initial arcade test compile rejected an attempt to access private UI state. The corrected test clicks the actual retry button. The initial log remains beside the passing logs.
-
-## Release verification repair
-
-The rescue verifier and packager previously used different lists of presentation-only source files. A fresh audit could complete its searches and then fail to package matching certificates. Both tools now read `Tools/TrolleyVerification/presentation-files.json`. The verification script compares their fingerprints before starting the searches.
-
-The first failed audit log is retained under `.build/release-audit/rewind-hardening/trolley-initial.log`. The repaired verification reruns the searches. It does not relabel old results as fresh evidence.
-
-## Checked rewind build
-
-The [rewind build](../.build/release-audit/rewind-hardening/Ultimate%20Lemmings.app) contains this follow-up. The app and core library were rebuilt for arm64 and x86_64, both targeting macOS 13. The local ad-hoc signature passed strict verification.
-
-The [result manifest](../.build/release-audit/rewind-hardening/results.json) records passing rewind, legacy replay, simulation, app integration, rescue verification, hint generation, audit integrity and package checks. The simulation suite included a 120-level soak. The rescue audit covered 562 level identities and packaged 161 exact-condition certificates plus 17 best-known rescue targets. All 120 classic hint decks were regenerated from passing replays.
-
-The final package has matching engine, certificate and hint fingerprints. Code inputs did not change during the final verification. Package inputs also had zero drift. The initial fingerprint-policy failure remains in the evidence alongside the successful rerun. That earlier build predates disk checkpoints. The full 1.0 release gates remain open.
-
 ## Classic run checkpoints
 
 Classic campaign play now saves a checkpoint every five seconds of wall time.
@@ -129,7 +105,7 @@ Restore recreates practice play without applying its saved campaign progress to
 the campaign. It restores the selected slot, pauses and retains the original attempt.
 Invalid map indices, duplicate skills and incomplete panels are rejected.
 
-See [the 1.0 follow-up](ReleaseReadiness/OneZeroLocalClosure.md) for validation.
+See the [current recovery and campaign evidence](ReleaseReadiness/CampaignClosure-2026-09-22.md) for the retained baseline.
 
 ## Saved runs that cannot be restored
 

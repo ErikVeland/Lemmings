@@ -197,10 +197,18 @@ struct CRTUniforms {
     if let trackingArea { removeTrackingArea(trackingArea) }
     let area = NSTrackingArea(
       rect: bounds,
-      options: [.activeInKeyWindow, .mouseMoved, .mouseEnteredAndExited, .inVisibleRect],
+      options: [.activeInKeyWindow, .mouseMoved, .mouseEnteredAndExited, .cursorUpdate, .inVisibleRect],
       owner: self)
     addTrackingArea(area)
     trackingArea = area
+  }
+
+  override func resetCursorRects() {
+    addCursorRect(bounds, cursor: GameCursor.invisible)
+  }
+
+  override func cursorUpdate(with event: NSEvent) {
+    GameCursor.invisible.set()
   }
 
   override var acceptsFirstResponder: Bool { true }

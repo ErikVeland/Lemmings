@@ -1,7 +1,20 @@
 # Controller QoL
 
 Controller actions share the keyboard command handlers in Classic, Lemmings 2 and Lemmings 3.
-See the [binding table](../README.md#controller-controls) for the complete layout.
+Button names below follow the Xbox layout; PlayStation uses the corresponding
+button positions.
+
+| Controller | Action |
+| --- | --- |
+| Left stick / right stick | Aim / pan camera |
+| A / B | Assign selected skill / return to 1×, then cancel or open pause |
+| X / Y | Repeat last successful skill / focus last assignment |
+| LB / RB | Previous / next available skill |
+| D-pad left / right | Previous / next unassigned lemming |
+| D-pad up / down | Increase / decrease release rate where supported |
+| Tap RT / hold RT | Toggle fast-forward / temporary speed boost |
+| Menu | Pause or resume |
+| View / Options | Show keyboard and controller help |
 
 The defaults include fast-forward toggles, temporary held boosts, quick exits, skill cycling,
 unassigned and last-assigned focus, repeat assignment, entrance/exit focus, hints, settings and retry.

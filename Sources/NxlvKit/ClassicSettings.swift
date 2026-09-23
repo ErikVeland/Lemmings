@@ -156,6 +156,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
     public var modernControlsEnabled: Bool
     public var variableSpeedEnabled: Bool
     public var pauseOnInterruption: Bool
+    public var favorApproachingLemmings: Bool
     public var controllerEnabled: Bool
     public var controllerTapSpeed: Bool
     public var controllerMappings: [String: String]
@@ -198,6 +199,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         modernControlsEnabled: Bool = true,
         variableSpeedEnabled: Bool = true,
         pauseOnInterruption: Bool = true,
+        favorApproachingLemmings: Bool = true,
         controllerEnabled: Bool = true,
         controllerTapSpeed: Bool = true,
         controllerSwapSticks: Bool = false,
@@ -210,7 +212,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         fullScreenHDRFlashes: Bool = true,
         djIncludesOtherSoundtracks: Bool = true,
         music: ClassicMusicSource = .amigaModules,
-        musicStyle: ClassicMusicStyle = .faithful,
+        musicStyle: ClassicMusicStyle = .modern,
         musicVolume: Double = 0.8,
         sound: ClassicSoundSource = .macintoshResources,
         soundVolume: Double = 0.9,
@@ -227,6 +229,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         self.modernControlsEnabled = modernControlsEnabled
         self.variableSpeedEnabled = variableSpeedEnabled
         self.pauseOnInterruption = pauseOnInterruption
+        self.favorApproachingLemmings = favorApproachingLemmings
         self.controllerEnabled = controllerEnabled
         self.controllerTapSpeed = controllerTapSpeed
         self.controllerSwapSticks = controllerSwapSticks
@@ -287,6 +290,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         modernControlsEnabled = try values.decodeIfPresent(Bool.self, forKey: .modernControlsEnabled) ?? fallback.modernControlsEnabled
         variableSpeedEnabled = try values.decodeIfPresent(Bool.self, forKey: .variableSpeedEnabled) ?? fallback.variableSpeedEnabled
         pauseOnInterruption = try values.decodeIfPresent(Bool.self, forKey: .pauseOnInterruption) ?? modernControlsEnabled
+        favorApproachingLemmings = try values.decodeIfPresent(Bool.self, forKey: .favorApproachingLemmings) ?? modernControlsEnabled
         controllerEnabled = try values.decodeIfPresent(Bool.self, forKey: .controllerEnabled) ?? modernControlsEnabled
         controllerTapSpeed = try values.decodeIfPresent(Bool.self, forKey: .controllerTapSpeed) ?? fallback.controllerTapSpeed
         controllerSwapSticks = try values.decodeIfPresent(Bool.self, forKey: .controllerSwapSticks) ?? fallback.controllerSwapSticks
@@ -319,6 +323,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         modernControlsEnabled = modern
         variableSpeedEnabled = modern
         pauseOnInterruption = modern
+        favorApproachingLemmings = modern
         controllerEnabled = modern
         controllerTapSpeed = modern
         controllerSwapSticks = false
@@ -329,7 +334,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         djIncludesOtherSoundtracks = modern
         shuffleGraphics = false
         shuffleMusic = false
-        musicStyle = .faithful
+        musicStyle = modern ? .modern : .faithful
         if !modern, music == .adaptiveDJ { music = .amigaModules }
     }
 
