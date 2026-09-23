@@ -39,7 +39,7 @@ import AppKit
     self.endForward = endForward
     monitor = NSEvent.addLocalMonitorForEvents(matching: [.keyDown, .keyUp]) { [weak self] event in
       guard let self, event.window === window,
-            event.modifierFlags.intersection([.command, .control, .option, .shift]).isEmpty else { return event }
+            event.modifierFlags.intersection([.command, .control, .option]).isEmpty else { return event }
       let direction: Direction
       switch event.charactersIgnoringModifiers {
       case ",": direction = .backward
