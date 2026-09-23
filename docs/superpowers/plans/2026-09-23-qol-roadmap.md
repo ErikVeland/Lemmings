@@ -201,8 +201,9 @@ Left/Right steps one tick backward or forward, and Space remains play/pause.
 The controller rewind modifier uses the same held transport path, ghost and
 reversed-effects cue. Lemmings 2 and Lemmings 3 use the same LT+B held action
 and provide a two-second `Z` seek. Their deterministic state adapters,
-cancel-to-origin path and visual transport cue are now available; forward
-keyboard scrubbing and the complete shared action set remain open.
+cancel-to-origin path, visual transport cue and held `.` forward scrub are now
+available. Shifted frame navigation, cross-source music capture and resume
+cross-fades remain open.
 
 ### Audio treatment
 

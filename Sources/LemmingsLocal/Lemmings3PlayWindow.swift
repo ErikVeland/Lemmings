@@ -15,6 +15,10 @@ import NxlvKit
         window?.contentView = nil
         window = host
         gameplayKeyboard?.bind(to: host)
+        forwardTransport = RewindForwardKeyTransport(window: host,
+            canStart: { [weak self] in self?.canStepForward ?? false },
+            begin: { [weak self] in self?.beginContinuousStepForward() ?? false },
+            end: { [weak self] in self?.endContinuousStepForward() })
         usesSharedWindow = true
         campaignFinished = Self.savedCompletion(root: dataRoot) == 90
         host.contentView = content
@@ -93,6 +97,9 @@ import NxlvKit
     private var message = "Choose an action, then click a lemming. Walker turns or releases a blocker."
     private var rewindTimer: Timer?
     private var rewindHeld = false
+    private var forwardTimer: Timer?
+    private var forwardHeld = false
+    private var forwardTransport: RewindForwardKeyTransport?
     private var rewindAudioDucked = false
     private var rewindOriginState: Lemmings3Runtime?
     private var rewindOriginInputs: [L3RunRecovery.Input] = []
@@ -300,7 +307,11 @@ import NxlvKit
             if held { self.beginContinuousRewind() }
             else if self.rewindHeld { self.endContinuousRewind() }
         }
-        keyboard.step = { [weak self] direction in if direction > 0 { self?.singleStep() } }
+        keyboard.step = { [weak self] direction in
+            guard let self else { return }
+            if direction < 0 { _ = self.rewind(seconds: 1.0 / Lemmings3Runtime.ticksPerSecond) }
+            else if !self.stepForward(seconds: 1.0 / Lemmings3Runtime.ticksPerSecond) { self.singleStep() }
+        }
         keyboard.endRun = { [weak self] in self?.confirmEndRun() }
         keyboard.pauseForHelp = { [weak self] in
             guard let self else { return {} }
@@ -312,6 +323,10 @@ import NxlvKit
                 self.accumulator = 0; self.refresh()
             }
         }
+        forwardTransport = RewindForwardKeyTransport(window: window,
+            canStart: { [weak self] in self?.canStepForward ?? false },
+            begin: { [weak self] in self?.beginContinuousStepForward() ?? false },
+            end: { [weak self] in self?.endContinuousStepForward() })
         music.loadLibrary(at: dataRoot.deletingLastPathComponent().deletingLastPathComponent()
             .appendingPathComponent("Music/lemmings_3_music_mod_tsyu"))
         try? music.start()
@@ -357,7 +372,8 @@ import NxlvKit
         saveCheckpoint(immediately: true)
         canvas.capturePointer(active: false)
         NotificationCenter.default.removeObserver(self, name: SequelArtworkPreference.changed, object: nil)
-        timer?.invalidate(); timer = nil; runMovie.discard(); warningSound.stop(); music.stop(); save()
+        timer?.invalidate(); timer = nil; forwardTimer?.invalidate(); forwardTimer = nil
+        runMovie.discard(); warningSound.stop(); music.stop(); save()
         originalMovie?.close(); originalMovie = nil
     }
     func suspendAudioOutput() {
@@ -420,7 +436,7 @@ import NxlvKit
     @objc private func togglePause() {
         saveCheckpoint(immediately: true)
         let wasPaused = paused; paused.toggle(); accumulator = 0
-        if wasPaused { rewindOriginState = nil }
+        if wasPaused { discardRewindOrigin() }
         refresh()
     }
     @objc private func singleStep() { paused = true; advanceTick(); refresh() }
@@ -442,6 +458,36 @@ import NxlvKit
         rewindTimer?.invalidate()
         rewindTimer = nil
         setRewindAudioDucked(false)
+    }
+    private var canStepForward: Bool {
+        game.tick < (rewindOriginState?.tick ?? game.tick) && !rewindHeld
+    }
+    private func beginContinuousStepForward() -> Bool {
+        guard canStepForward, !forwardHeld else { return false }
+        forwardHeld = true
+        forwardTimer?.invalidate()
+        setRewindAudioDucked(true)
+        forwardTimer = Timer.scheduledTimer(withTimeInterval: 1.0 / 15.0, repeats: true) { [weak self] _ in
+            MainActor.assumeIsolated {
+                guard let self, self.stepForward(seconds: 0.20) else { self?.endContinuousStepForward(); return }
+            }
+        }
+        guard stepForward(seconds: 0.20) else {
+            endContinuousStepForward()
+            return false
+        }
+        return true
+    }
+    private func endContinuousStepForward() {
+        forwardHeld = false
+        forwardTimer?.invalidate()
+        forwardTimer = nil
+        setRewindAudioDucked(false)
+    }
+    private func discardRewindOrigin() {
+        endContinuousStepForward()
+        rewindOriginState = nil
+        rewindOriginInputs = []
     }
     private func setRewindAudioDucked(_ active: Bool) {
         guard rewindAudioDucked != active else { return }
@@ -485,6 +531,28 @@ import NxlvKit
         assignmentFocus.rewind(to: target); canvas.assignmentHighlight.clear(); warningSound.silence(); warningSound.playRewindScrub()
         refresh(); saveCheckpoint(immediately: true)
         if !rewindHeld { setRewindAudioDucked(false) }
+        return true
+    }
+    @discardableResult
+    private func stepForward(seconds: Double) -> Bool {
+        guard let origin = rewindOriginState, game.tick < origin.tick else { return false }
+        let target = min(origin.tick, game.tick + Int((seconds * Lemmings3Runtime.ticksPerSecond).rounded()))
+        guard target > game.tick else { return false }
+        let prefix = rewindOriginInputs.prefix { $0.tick <= target }
+        setRewindAudioDucked(true)
+        do {
+            game = try L3RunRecovery.replay(initial: initial, inputs: Array(prefix), through: target)
+            try rebuildReplayStatistics(Array(prefix))
+        } catch {
+            message = "Could not move forward through this run: \(error)"
+            if !forwardHeld { setRewindAudioDucked(false) }
+            return false
+        }
+        recoveryInputs = Array(prefix)
+        paused = true; accumulator = 0; pendingTool = nil; canvas.directionPoint = nil
+        assignmentFocus.rewind(to: target); canvas.assignmentHighlight.clear(); warningSound.silence(); warningSound.playRewindScrub()
+        refresh(); saveCheckpoint(immediately: true)
+        if !forwardHeld { setRewindAudioDucked(false) }
         return true
     }
     private func rebuildReplayStatistics(_ inputs: [L3RunRecovery.Input]) throws {
@@ -582,6 +650,7 @@ import NxlvKit
         let action = Lemmings3Runtime.Action.allCases[selected]
         let accepted = action == .use ? game.useTool(to: id, direction: direction) : game.assign(action, to: id)
         if accepted {
+            if rewindOriginState != nil { discardRewindOrigin() }
             recoveryInputs.append(.init(tick: game.tick, action: action.rawValue, lemming: id,
                 direction: action == .use ? direction.rawValue : nil))
             assignmentFocus.record(id: id, skill: selected, tick: game.tick)

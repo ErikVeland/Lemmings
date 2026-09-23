@@ -15,6 +15,10 @@ import NxlvKit
         window?.contentView = nil
         window = host
         gameplayKeyboard?.bind(to: host)
+        forwardTransport = RewindForwardKeyTransport(window: host,
+            canStart: { [weak self] in self?.canStepForward ?? false },
+            begin: { [weak self] in self?.beginContinuousStepForward() ?? false },
+            end: { [weak self] in self?.endContinuousStepForward() })
         usesSharedWindow = true
         host.contentView = content
         host.makeFirstResponder(content)
@@ -111,6 +115,9 @@ import NxlvKit
     private var beforeNuke: Lemmings2Runtime?
     private var rewindTimer: Timer?
     private var rewindHeld = false
+    private var forwardTimer: Timer?
+    private var forwardHeld = false
+    private var forwardTransport: RewindForwardKeyTransport?
     private var rewindAudioDucked = false
     private var rewindOriginState: Lemmings2Runtime?
     private var rewindOriginInputs: [L2RunRecovery.Input] = []
@@ -278,7 +285,11 @@ import NxlvKit
             if held { self.beginContinuousRewind() }
             else if self.rewindHeld { self.endContinuousRewind() }
         }
-        keyboard.step = { [weak self] direction in if direction > 0 { self?.singleStep() } }
+        keyboard.step = { [weak self] direction in
+            guard let self else { return }
+            if direction < 0 { _ = self.rewind(seconds: 1.0 / Lemmings2Runtime.ticksPerSecond) }
+            else if !self.stepForward(seconds: 1.0 / Lemmings2Runtime.ticksPerSecond) { self.singleStep() }
+        }
         keyboard.endRun = { [weak self] in
             guard let self else { return }
             let nuke = Lemmings2Control.nuke.rawValue
@@ -301,6 +312,10 @@ import NxlvKit
                 self.accumulator = 0; self.refreshGame()
             }
         }
+        forwardTransport = RewindForwardKeyTransport(window: window,
+            canStart: { [weak self] in self?.canStepForward ?? false },
+            begin: { [weak self] in self?.beginContinuousStepForward() ?? false },
+            end: { [weak self] in self?.endContinuousStepForward() })
 
         let musicRoot = root.deletingLastPathComponent().deletingLastPathComponent()
             .appendingPathComponent("Music/lemmings_2_music_mod_tsyu")
@@ -384,7 +399,8 @@ import NxlvKit
         canvas.capturePointer(active: false)
         NotificationCenter.default.removeObserver(self, name: SequelArtworkPreference.changed, object: nil)
         NotificationCenter.default.removeObserver(self,name:NSWindow.didResignKeyNotification,object:nil)
-        timer?.invalidate(); timer = nil; runMovie.discard(); music.stop(); dj.stop(); sounds.stop(); persist()
+        timer?.invalidate(); timer = nil; forwardTimer?.invalidate(); forwardTimer = nil
+        runMovie.discard(); music.stop(); dj.stop(); sounds.stop(); persist()
     }
     func setMuted(_ muted: Bool) { setAudioSettings(audioSettings, muted: muted) }
     func suspendAudioOutput() { saveCheckpoint(immediately: true); music.suspendOutput(); dj.suspendOutput(); sounds.suspendOutput() }
@@ -578,7 +594,7 @@ import NxlvKit
             switch Lemmings2Control(rawValue: slot) {
             case .pause:
                 let wasPaused = paused; paused.toggle(); accumulator = 0
-                if wasPaused { rewindOriginState = nil }
+                if wasPaused { discardRewindOrigin() }
             case .fan: fanSelected.toggle()
             case .nuke:
                 if nukeAction == .undo, let beforeNuke {
@@ -601,6 +617,7 @@ import NxlvKit
     }
     @discardableResult private func performRecoveryInput(_ action: L2RunRecovery.Input.Action) -> Bool {
         guard var current = game else { return false }
+        if rewindOriginState != nil { discardRewindOrigin() }
         switch action {
         case .fan: if action == lastFanInput { return true }
         case .aim: if action == lastAimInput { return true }
@@ -832,6 +849,37 @@ import NxlvKit
         rewindTimer = nil
         setRewindAudioDucked(false)
     }
+    private var canStepForward: Bool {
+        guard screen == .playing, let game, let origin = rewindOriginState else { return false }
+        return game.tick < origin.tick && !rewindHeld
+    }
+    private func beginContinuousStepForward() -> Bool {
+        guard canStepForward, !forwardHeld else { return false }
+        forwardHeld = true
+        forwardTimer?.invalidate()
+        setRewindAudioDucked(true)
+        forwardTimer = Timer.scheduledTimer(withTimeInterval: 1.0 / 15.0, repeats: true) { [weak self] _ in
+            MainActor.assumeIsolated {
+                guard let self, self.stepForward(seconds: 0.20) else { self?.endContinuousStepForward(); return }
+            }
+        }
+        guard stepForward(seconds: 0.20) else {
+            endContinuousStepForward()
+            return false
+        }
+        return true
+    }
+    private func endContinuousStepForward() {
+        forwardHeld = false
+        forwardTimer?.invalidate()
+        forwardTimer = nil
+        setRewindAudioDucked(false)
+    }
+    private func discardRewindOrigin() {
+        endContinuousStepForward()
+        rewindOriginState = nil
+        rewindOriginInputs = []
+    }
     private func setRewindAudioDucked(_ active: Bool) {
         guard rewindAudioDucked != active else { return }
         rewindAudioDucked = active
@@ -881,6 +929,31 @@ import NxlvKit
         if !rewindHeld { setRewindAudioDucked(false) }
         return true
     }
+    @discardableResult
+    private func stepForward(seconds: Double) -> Bool {
+        guard let initial, let current = game, let origin = rewindOriginState,
+              current.tick < origin.tick else { return false }
+        let target = min(origin.tick, current.tick + Int((seconds * Lemmings2Runtime.ticksPerSecond).rounded()))
+        guard target > current.tick else { return false }
+        let prefix = rewindOriginInputs.prefix { $0.tick <= target }
+        setRewindAudioDucked(true)
+        do { game = try L2RunRecovery.replay(initial: initial, inputs: Array(prefix), through: target) }
+        catch {
+            message = "Could not move forward through this run: \(error)"
+            if !forwardHeld { setRewindAudioDucked(false) }
+            return false
+        }
+        recoveryInputs = Array(prefix)
+        lastFanInput = nil; lastAimInput = nil; beforeNuke = nil
+        nukeCount = recoveryInputs.reduce(into: 0) { count, input in
+            if case .nuke = input.action { count += 1 }
+        }
+        usedRewind = true; paused = true; accumulator = 0
+        assignmentFocus.rewind(to: target); canvas.assignmentHighlight.clear(); sounds.silence(); sounds.playRewindScrub()
+        refreshGame(); saveCheckpoint(immediately: true)
+        if !forwardHeld { setRewindAudioDucked(false) }
+        return true
+    }
     private func startIntroduction() {
         do {
             introduction = try Lemmings2Introduction(root:root,font:assets.font)
@@ -927,6 +1000,7 @@ import NxlvKit
         }
         if screen == .playing {
             if key.lowercased() == "z" { _ = rewind(seconds: 2) }
+            else if key == "." { singleStep() }
             else if let game, let index = SkillShortcuts(names: game.configuration.skills.map(\.name)).index(for: key, modern: audioSettings.modernControlsEnabled) { panelAction(index) }
             else if key == " " || key.lowercased() == "p" { panelAction(8) }
             else if key.lowercased() == "r" { restart() }
