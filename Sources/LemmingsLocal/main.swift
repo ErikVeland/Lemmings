@@ -40,6 +40,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   private var session: (any GameSession)?
   private var timer: Timer?
+  private var rewindTimer: Timer?
+  private var rewindHeld = false
   private var accumulator = 0.0
   private var lastStepTime: TimeInterval?
   private var isPaused = false
@@ -3184,7 +3186,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
     keyboard.help = { [weak self] in
       let names = self?.session?.skills.map(\.name) ?? []
-      return SkillShortcuts(names: names).hint(names: names, modern: self?.settings.modernControlsEnabled ?? true) + "\n\nSpace / P: pause\nR: retry\nZ: rewind\n, / .: step backward / forward\nX: nuke"
+      return SkillShortcuts(names: names).hint(names: names, modern: self?.settings.modernControlsEnabled ?? true) + "\n\nSpace / P: play or pause\nHold Z: rewind\nShift + Left / Right: step backward / forward\nX: nuke"
     }
     keyboard.pauseForHelp = { [weak self] in
       guard let self else { return {} }
@@ -3222,11 +3224,17 @@ let achievementProgressKey = "ClassicAchievementProgress"
       }
     }
 
-    NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
+    NSEvent.addLocalMonitorForEvents(matching: [.keyDown, .keyUp]) { [weak self] event in
       guard let self else { return event }
       guard !GameScreen.shared.isPresented, !self.sequelIsActive, event.window === self.window, self.window?.attachedSheet == nil,
         event.modifierFlags.intersection([.command, .control, .option]).isEmpty else { return event }
       if self.window?.firstResponder is NSTextView { return event }
+
+      if event.type == .keyUp, event.keyCode == 6 {
+        guard self.rewindHeld else { return event }
+        self.endContinuousRewind()
+        return nil
+      }
 
       if event.keyCode == 122 || event.charactersIgnoringModifiers?.lowercased() == "i" {
         if !event.isARepeat { self.showLevelHints() }
@@ -3235,8 +3243,14 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
       let scrollStep = 24.0
       switch event.keyCode {
-      case 123: self.scrollBy(-scrollStep); return nil
-      case 124: self.scrollBy(scrollStep); return nil
+      case 123:
+        if event.modifierFlags.contains(.shift) { self.stepBackward() }
+        else { self.scrollBy(-scrollStep) }
+        return nil
+      case 124:
+        if event.modifierFlags.contains(.shift) { self.stepForward() }
+        else { self.scrollBy(scrollStep) }
+        return nil
       default: break
       }
 
@@ -3268,7 +3282,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
       }
 
       switch characters {
-      case "z": self.rewind(seconds: 2)
+      case "z":
+        if !event.isARepeat { self.beginContinuousRewind() }
       case ",": self.stepBackward()
       case ".": self.stepForward()
       case "\r":
@@ -3295,25 +3310,65 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   // MARK: - Rewind
 
+  private func beginContinuousRewind() {
+    guard let session, session.supportsRewind else {
+      setStatus("This ruleset cannot rewind yet.")
+      return
+    }
+    guard !rewindHeld else { return }
+    rewindHeld = true
+    rewindTimer?.invalidate()
+    playfield.beginRewindCue(at: session.currentTick)
+    rewindTimer = Timer.scheduledTimer(withTimeInterval: 1.0 / 15.0, repeats: true) { [weak self] _ in
+      MainActor.assumeIsolated { _ = self?.performRewind(seconds: 0.20) }
+    }
+    performRewind(seconds: 0.20)
+  }
+
+  private func endContinuousRewind() {
+    rewindHeld = false
+    rewindTimer?.invalidate()
+    rewindTimer = nil
+    effects.silence()
+    playfield.endRewindCue()
+  }
+
+  @discardableResult
+  private func performRewind(seconds: Double) -> Bool {
+    guard let session, session.supportsRewind, session.rewind(seconds: seconds) else {
+      if rewindHeld { endContinuousRewind() }
+      return false
+    }
+    effects.playRewindScrub()
+    isPaused = true
+    panel.isPaused = true
+    refreshAfterSeek()
+    return true
+  }
+
   private func rewind(seconds: Double) {
     guard let session, session.supportsRewind else {
       setStatus("This ruleset cannot rewind yet.")
       return
     }
-    guard session.rewind(seconds: seconds) else {
+    playfield.beginRewindCue(at: session.currentTick)
+    guard performRewind(seconds: seconds) else {
+      playfield.endRewindCue()
       setStatus("Already at the start of the history.")
       return
     }
-    isPaused = true
-    panel.isPaused = true
-    refreshAfterSeek()
+    playfield.endRewindCue()
   }
 
   private func stepBackward() {
-    guard let session, session.supportsRewind, session.stepBackward() else { return }
+    guard let session, session.supportsRewind else { return }
+    playfield.beginRewindCue(at: session.currentTick)
+    guard session.stepBackward() else { playfield.endRewindCue(); return }
     isPaused = true
     panel.isPaused = true
     refreshAfterSeek()
+    effects.playRewindScrub()
+    playfield.endRewindCue()
   }
 
   private func stepForward() {
@@ -3335,6 +3390,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   /// Redraws after moving through history, without playing sounds again.
   private func refreshAfterSeek() {
     if let session { assignmentFocus.rewind(to: session.currentTick) }
+    if let session { playfield.updateRewindCue(at: session.currentTick) }
     playfield.assignmentHighlight.clear()
     screenFlash.clear()
     accumulator = 0

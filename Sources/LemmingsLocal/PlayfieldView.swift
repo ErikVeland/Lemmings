@@ -118,6 +118,12 @@ struct ReticleFeedback {
   var speedMultiplier: Double = 3 { didSet { speedTrails.multiplier = speedMultiplier } }
   var isFastForward = false
   private let speedTrails = SpeedTrails()
+  private var rewindGhost: CGImage?
+  private var rewindCueStartedAt: TimeInterval?
+  private var rewindCueUntil: TimeInterval = 0
+  private var rewindOriginTick = 0
+  private var rewindCurrentTick = 0
+  private var rewindCueTask: Task<Void, Never>?
   private var hdrOverlay: ExplosionHDRView?
   private(set) var hdrFlashes: [ExplosionFlash] = []
   private var hdrBirths: [Int:(tick:Int,expires:TimeInterval)] = [:]
@@ -321,6 +327,47 @@ struct ReticleFeedback {
   var pointerLemmingID: Int? { cursorViewPoint.flatMap { clickTarget(at: viewport.levelPoint(from: $0))?.id } }
   private var cursorViewPoint: CGPoint?
   private var trackingArea: NSTrackingArea?
+
+  /// Captures the visible state before a rewind starts.
+  func beginRewindCue(at tick: Int) {
+    rewindGhost = nil
+    if let bitmap = bitmapImageRepForCachingDisplay(in: bounds) {
+      cacheDisplay(in: bounds, to: bitmap)
+      rewindGhost = bitmap.cgImage
+    }
+    rewindOriginTick = tick
+    rewindCurrentTick = tick
+    rewindCueStartedAt = ProcessInfo.processInfo.systemUptime
+    rewindCueUntil = .infinity
+    needsDisplay = true
+    scheduleRewindCueRedraw()
+  }
+
+  /// Updates the transport cue after a deterministic history seek.
+  func updateRewindCue(at tick: Int) {
+    rewindCurrentTick = tick
+    needsDisplay = true
+  }
+
+  /// Leaves the origin ghost on screen briefly, then fades it away.
+  func endRewindCue() {
+    guard rewindCueStartedAt != nil else { return }
+    rewindCueStartedAt = nil
+    rewindCueUntil = ProcessInfo.processInfo.systemUptime + 0.35
+    needsDisplay = true
+    scheduleRewindCueRedraw()
+  }
+
+  private func scheduleRewindCueRedraw() {
+    rewindCueTask?.cancel()
+    guard rewindCueStartedAt != nil || ProcessInfo.processInfo.systemUptime < rewindCueUntil else { return }
+    rewindCueTask = Task { [weak self] in
+      try? await Task.sleep(for: .milliseconds(33))
+      guard !Task.isCancelled else { return }
+      self?.needsDisplay = true
+      self?.scheduleRewindCueRedraw()
+    }
+  }
 
   override var isFlipped: Bool { true }
   override var acceptsFirstResponder: Bool { true }
@@ -547,6 +594,7 @@ struct ReticleFeedback {
         drawLevel(levelImage)
         speedTrails.draw(enabled: hdEffectsEnabled && !reduceMotion && isFastForward && phase == .playing, in: bounds) { drawLemmings() }
       }
+      drawRewindCue()
       if phase == .playing { drawTurnBadge(); drawCursor() }
     }
     if phase != .playing { drawOverlay() }
@@ -1002,6 +1050,36 @@ struct ReticleFeedback {
     crosshair.lineWidth = pixel
     color.withAlphaComponent(0.85).setStroke()
     crosshair.stroke()
+  }
+
+  private func drawRewindCue() {
+    let now = ProcessInfo.processInfo.systemUptime
+    guard let ghost = rewindGhost,
+          rewindCueStartedAt != nil || now < rewindCueUntil else {
+      if rewindCueStartedAt == nil { rewindGhost = nil }
+      return
+    }
+    let fading = rewindCueStartedAt == nil
+    let fade = fading ? CGFloat(max(0, rewindCueUntil - now) / 0.35) : 1
+    let elapsed = CGFloat(now - (rewindCueStartedAt ?? now))
+    let sweep = reduceMotion ? 0 : floor((elapsed * 18).truncatingRemainder(dividingBy: 8))
+    let context = NSGraphicsContext.current?.cgContext
+    context?.saveGState()
+    if let context {
+      context.clip(to: CGRect(origin: viewport.contentOffset, size: viewport.visibleSize))
+      context.setAlpha(0.10 * fade)
+      context.interpolationQuality = .none
+      context.draw(ghost, in: bounds.offsetBy(dx: -sweep, dy: 0))
+      if !reduceMotion {
+        context.setAlpha(0.07 * fade)
+        context.setFillColor(NSColor.systemBlue.cgColor)
+        context.fill(CGRect(x: viewport.contentOffset.x + sweep,
+          y: viewport.contentOffset.y, width: max(1, viewport.zoom), height: viewport.visibleSize.height))
+      }
+    }
+    context?.restoreGState()
+    let delta = max(0, rewindOriginTick - rewindCurrentTick)
+    GameTypography.annotation("REWIND  -\(delta) TICKS", at: CGPoint(x: 12, y: 12), palette: .blue)
   }
 
   /// Walks a row of real lemmings across the foot of a menu.

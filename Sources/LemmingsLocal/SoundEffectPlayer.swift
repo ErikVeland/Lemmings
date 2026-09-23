@@ -25,6 +25,8 @@ final class SoundEffectPlayer: @unchecked Sendable {
   private var voices: [Voice]
   private var isMuted = false
   private var level: Double = 1.0
+  private var recentSamples: [Float] = []
+  private let recentSampleLimit = 44_100
 
   private let sampleRate = 44100.0
   private(set) var isRunning = false
@@ -213,6 +215,19 @@ final class SoundEffectPlayer: @unchecked Sendable {
     for index in voices.indices { voices[index].isActive = false }
   }
 
+  /// Plays a short reversed slice of recent effects while the run is scrubbed.
+  /// This gives rewind the character of a tape transport without changing the
+  /// original effect samples or adding a new game sound.
+  func playRewindScrub() {
+    lock.lock()
+    defer { lock.unlock() }
+    guard !isMuted, !recentSamples.isEmpty else { return }
+    let samples = Array(recentSamples.suffix(11_025).reversed())
+    guard !samples.isEmpty else { return }
+    let index = voices.firstIndex { !$0.isActive } ?? voices.startIndex
+    voices[index] = Voice(samples: samples, position: 0, increment: 1, isActive: true)
+  }
+
   /// Turns a stereo position into a pair of channel gains.
   ///
   /// A pan of -1 is hard left, 0 is centre, and +1 is hard right. Values
@@ -237,6 +252,10 @@ final class SoundEffectPlayer: @unchecked Sendable {
     guard !isMuted, let samples = library[effect], !samples.isEmpty else { return }
     let rate = rates[effect] ?? sampleRate
     onPlay?(samples, rate, Float(level) * 0.6)
+    recentSamples.append(contentsOf: samples.suffix(recentSampleLimit))
+    if recentSamples.count > recentSampleLimit {
+      recentSamples.removeFirst(recentSamples.count - recentSampleLimit)
+    }
 
     var slot = voices.firstIndex { !$0.isActive }
     if slot == nil {
