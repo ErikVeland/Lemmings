@@ -10,6 +10,8 @@ import NxlvKit
 /// swap buffers without locking, which is worth doing if this ever glitches.
 final class ModuleMusicPlayer: @unchecked Sendable {
   private let engine = AVAudioEngine()
+  private let reverb = AVAudioUnitReverb()
+  private let spatialMixer = AVAudioMixerNode()
   private var sourceNode: AVAudioSourceNode?
   private let lock = NSLock()
 
@@ -22,10 +24,26 @@ final class ModuleMusicPlayer: @unchecked Sendable {
   private var interpolationPhase = 1.0
   private var currentFrame: (left: Float, right: Float) = (0, 0)
   private var nextFrame: (left: Float, right: Float) = (0, 0)
+  private var outputSuspended = false
+  private var pauseFadeFrames = 0
+  private var startFadeFrames = 0
+  private var pauseWorkItem: DispatchWorkItem?
+
+  private let loopCrossfadeFrames = 2048
+  private var loopTail = [(left: Float, right: Float)](
+    repeating: (left: 0, right: 0), count: 2048)
+  private var loopTailWriteIndex = 0
+  private var loopTailCount = 0
+  private var previousLoopTail: [(left: Float, right: Float)] = []
+  private var loopBlendIndex: Int?
 
   private let sampleRate = 44100.0
   private(set) var isRunning = false
-  var isOutputRunning: Bool { engine.isRunning }
+  var isOutputRunning: Bool {
+    lock.lock()
+    defer { lock.unlock() }
+    return isRunning && !outputSuspended
+  }
   private(set) var currentTitle: String?
   private(set) var currentURL: URL?
 
@@ -52,30 +70,81 @@ final class ModuleMusicPlayer: @unchecked Sendable {
     }
 
     engine.attach(node)
-    engine.connect(node, to: engine.mainMixerNode, format: format)
+    engine.attach(reverb)
+    engine.attach(spatialMixer)
+    reverb.loadFactoryPreset(.mediumRoom)
+    reverb.wetDryMix = 0
+    spatialMixer.renderingAlgorithm = .auto
+    spatialMixer.sourceMode = .pointSource
+    spatialMixer.position = AVAudio3DPoint(x: 0, y: 0, z: -1)
+    engine.connect(node, to: reverb, format: format)
+    engine.connect(reverb, to: spatialMixer, format: format)
+    engine.connect(spatialMixer, to: engine.mainMixerNode, format: format)
     sourceNode = node
     do {
       try engine.start()
     } catch {
       engine.detach(node)
+      engine.detach(spatialMixer)
+      engine.detach(reverb)
       sourceNode = nil
       throw error
     }
+    lock.lock()
+    outputSuspended = false
+    lock.unlock()
     isRunning = true
   }
 
   func stop() {
     guard isRunning else { return }
+    pauseWorkItem?.cancel()
+    pauseWorkItem = nil
     engine.stop()
     if let sourceNode { engine.detach(sourceNode) }
+    engine.detach(spatialMixer)
+    engine.detach(reverb)
     sourceNode = nil
+    lock.lock()
+    outputSuspended = false
+    pauseFadeFrames = 0
+    startFadeFrames = 0
+    lock.unlock()
     isRunning = false
   }
 
-  func suspendOutput() { if isRunning { engine.pause() } }
+  /// Fades the module into a short room tail before pausing the engine.
+  func suspendOutput() {
+    guard isRunning else { return }
+    lock.lock()
+    guard !outputSuspended else { lock.unlock(); return }
+    outputSuspended = true
+    pauseFadeFrames = Int(sampleRate * 0.16)
+    lock.unlock()
+    reverb.wetDryMix = 14
+    pauseWorkItem?.cancel()
+    let work = DispatchWorkItem { [weak self] in
+      guard let self else { return }
+      self.lock.lock()
+      let shouldPause = self.outputSuspended
+      self.lock.unlock()
+      if shouldPause { self.engine.pause() }
+    }
+    pauseWorkItem = work
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.42, execute: work)
+  }
 
   func resumeOutput() throws {
-    if isRunning && !engine.isRunning { try engine.start() }
+    guard isRunning else { return }
+    pauseWorkItem?.cancel()
+    pauseWorkItem = nil
+    lock.lock()
+    outputSuspended = false
+    pauseFadeFrames = 0
+    startFadeFrames = 0
+    lock.unlock()
+    reverb.wetDryMix = 0
+    if !engine.isRunning { try engine.start() }
   }
 
   private func fill(_ buffers: UnsafeMutableAudioBufferListPointer, frames: Int) {
@@ -96,26 +165,74 @@ final class ModuleMusicPlayer: @unchecked Sendable {
       interpolationPhase = 0
     }
     for index in 0..<frames {
-      let blend = Float(interpolationPhase)
-      let frame = (
-        left: currentFrame.left + (nextFrame.left - currentFrame.left) * blend,
-        right: currentFrame.right + (nextFrame.right - currentFrame.right) * blend)
-      left?[index] = frame.left * Float(level)
-      right?[index] = frame.right * Float(level)
-      interpolationPhase += tempoScale
-      while interpolationPhase >= 1 {
-        currentFrame = nextFrame
-        nextFrame = nextSourceFrameLocked()
-        interpolationPhase -= 1
+      let canAdvance = pauseFadeFrames > 0 || !outputSuspended
+      if outputSuspended && pauseFadeFrames > 0 { pauseFadeFrames -= 1 }
+      let gain = outputSuspended
+        ? Float(pauseFadeFrames) / Float(max(1, Int(sampleRate * 0.16)))
+        : startFadeGainLocked()
+
+      let frame: (left: Float, right: Float)
+      if canAdvance {
+        let blend = Float(interpolationPhase)
+        frame = (
+          left: currentFrame.left + (nextFrame.left - currentFrame.left) * blend,
+          right: currentFrame.right + (nextFrame.right - currentFrame.right) * blend)
+        interpolationPhase += tempoScale
+        while interpolationPhase >= 1 {
+          currentFrame = nextFrame
+          nextFrame = nextSourceFrameLocked()
+          interpolationPhase -= 1
+        }
+      } else {
+        frame = (left: 0, right: 0)
       }
+      left?[index] = frame.left * Float(level) * gain
+      right?[index] = frame.right * Float(level) * gain
     }
   }
 
+  private func startFadeGainLocked() -> Float {
+    guard startFadeFrames > 0 else { return 1 }
+    startFadeFrames -= 1
+    return 1 - Float(startFadeFrames) / Float(max(1, Int(sampleRate * 0.14)))
+  }
+
   private func nextSourceFrameLocked() -> (left: Float, right: Float) {
-    let frame = player!.nextFrame()
-    // A module ends by running off its order list. Loop it, as the game does.
-    if player!.hasFinished { restartLocked() }
+    let raw = player!.nextFrame()
+    let frame: (left: Float, right: Float)
+    if let blendIndex = loopBlendIndex, blendIndex < previousLoopTail.count {
+      let amount = Float(blendIndex + 1) / Float(previousLoopTail.count)
+      let tail = previousLoopTail[blendIndex]
+      let outgoingGain = cos(amount * .pi / 2)
+      let incomingGain = sin(amount * .pi / 2)
+      frame = (
+        left: tail.left * outgoingGain + raw.left * incomingGain,
+        right: tail.right * outgoingGain + raw.right * incomingGain)
+      loopBlendIndex = blendIndex + 1 < previousLoopTail.count ? blendIndex + 1 : nil
+    } else {
+      frame = raw
+    }
+
+    loopTail[loopTailWriteIndex] = raw
+    loopTailWriteIndex = (loopTailWriteIndex + 1) % loopTail.count
+    loopTailCount = min(loopTail.count, loopTailCount + 1)
+
+    // A short equal-power overlap hides the order-list boundary without
+    // changing the module clock or its pattern data.
+    if player!.hasFinished {
+      previousLoopTail = loopTailSnapshotLocked()
+      loopTailWriteIndex = 0
+      loopTailCount = 0
+      loopBlendIndex = previousLoopTail.isEmpty ? nil : 0
+      restartLocked()
+    }
     return frame
+  }
+
+  private func loopTailSnapshotLocked() -> [(left: Float, right: Float)] {
+    guard loopTailCount > 0 else { return [] }
+    let start = loopTailCount == loopTail.count ? loopTailWriteIndex : 0
+    return (0..<loopTailCount).map { loopTail[(start + $0) % loopTail.count] }
   }
 
   private var loadedModule: ProTrackerModule?
@@ -160,6 +277,12 @@ final class ModuleMusicPlayer: @unchecked Sendable {
     player = ProTrackerEnhancedPlayer(
       module: module, sampleRate: sampleRate, enhancements: enhancements)
     interpolationPhase = 1
+    loopTail = [(left: 0, right: 0)](repeating: (left: 0, right: 0), count: loopCrossfadeFrames)
+    loopTailWriteIndex = 0
+    loopTailCount = 0
+    previousLoopTail = []
+    loopBlendIndex = nil
+    startFadeFrames = Int(sampleRate * 0.14)
     lock.unlock()
 
     currentURL = url

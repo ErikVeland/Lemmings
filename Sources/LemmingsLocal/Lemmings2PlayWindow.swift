@@ -428,6 +428,9 @@ import NxlvKit
         sounds.setVolume(settings.soundVolume)
         sounds.setBottomFallSounds(settings.bottomFallSounds)
         music.setMuted(muted || settings.music == .silent || UserDefaults.standard.bool(forKey: progressKey + ".musicMuted"))
+        if music.usesModernPreset != (settings.musicStyle == .modern) {
+            music.setEnhancements(settings.musicStyle == .modern ? .modern : .faithful)
+        }
         sounds.setMuted(muted || settings.sound == .silent || UserDefaults.standard.bool(forKey: progressKey + ".soundsMuted"))
         if musicChanged { if screen == .playing { playTribeMusic() } else { playMusic("Maintune") } }
     }
