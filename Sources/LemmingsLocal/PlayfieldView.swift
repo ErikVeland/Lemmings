@@ -429,7 +429,9 @@ struct ReticleFeedback {
   /// A small allowance covers sprite edges without reaching across the crowd.
   private static let pickBox = (halfWidth: CGFloat(6), top: CGFloat(14), bottom: CGFloat(5))
 
-  /// Both the green reticle and a fresh click use the nearest eligible lemming.
+  /// Both the green reticle and a fresh click use the nearest eligible
+  /// lemming, unless it already turned away and an eligible lemming still
+  /// facing the click is just as close.
   func lemming(at point: CGPoint) -> SessionLemming? {
     guard let session else { return nil }
     let skill = selectedSkill()
@@ -438,10 +440,12 @@ struct ReticleFeedback {
       return a == b ? $0.id > $1.id : a < b
     }
     let eligible = candidates.filter { session.canAssign(skillIndex: skill, to: $0.id) }
-    if favorApproachingLemmings, let approaching = eligible.first(where: { isApproaching($0, point: point) }) {
+    guard let nearest = eligible.first else { return nil }
+    if favorApproachingLemmings, !isApproaching(nearest, point: point),
+       let approaching = eligible.first(where: { isApproaching($0, point: point) && $0.facingLeft != nearest.facingLeft }) {
       return approaching
     }
-    return eligible.first
+    return nearest
   }
 
   /// Whether `point` sits on the side of `lemming` that matches its facing.

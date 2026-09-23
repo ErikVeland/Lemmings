@@ -290,7 +290,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         modernControlsEnabled = try values.decodeIfPresent(Bool.self, forKey: .modernControlsEnabled) ?? fallback.modernControlsEnabled
         variableSpeedEnabled = try values.decodeIfPresent(Bool.self, forKey: .variableSpeedEnabled) ?? fallback.variableSpeedEnabled
         pauseOnInterruption = try values.decodeIfPresent(Bool.self, forKey: .pauseOnInterruption) ?? modernControlsEnabled
-        favorApproachingLemmings = try values.decodeIfPresent(Bool.self, forKey: .favorApproachingLemmings) ?? fallback.favorApproachingLemmings
+        favorApproachingLemmings = try values.decodeIfPresent(Bool.self, forKey: .favorApproachingLemmings) ?? modernControlsEnabled
         controllerEnabled = try values.decodeIfPresent(Bool.self, forKey: .controllerEnabled) ?? modernControlsEnabled
         controllerTapSpeed = try values.decodeIfPresent(Bool.self, forKey: .controllerTapSpeed) ?? fallback.controllerTapSpeed
         controllerSwapSticks = try values.decodeIfPresent(Bool.self, forKey: .controllerSwapSticks) ?? fallback.controllerSwapSticks

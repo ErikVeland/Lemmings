@@ -224,6 +224,7 @@ private func testHDEffectsPreference() throws {
     let oldControllerSettings = try JSONDecoder().decode(ClassicSettings.self, from: Data("{\"modernControlsEnabled\":false}".utf8))
     try require(!oldControllerSettings.pauseOnInterruption, "Migration re-enabled automatic pause for OG settings")
     try require(!oldControllerSettings.controllerEnabled, "Migration re-enabled a saved OG controller choice")
+    try require(!oldControllerSettings.favorApproachingLemmings, "Migration re-enabled approaching-lemming targeting for OG settings")
     let controllerChoice = ClassicSettings(controllerEnabled: true, controllerTapSpeed: false, controllerSwapSticks: true, controllerMappings: ["a": "b", "b": "a"])
     let restoredControllerChoice = try JSONDecoder().decode(ClassicSettings.self, from: JSONEncoder().encode(controllerChoice))
     try require(restoredControllerChoice == controllerChoice,
