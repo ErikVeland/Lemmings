@@ -2608,7 +2608,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   private func updatePointerCapture() {
     guard let root = window.contentView else { pointerCapture.reset(); return }
-    let active = settings.confinePointer && !playfield.usesControllerPointer && phase == .playing && !isPaused && session?.isComplete == false
+    let active = settings.confinePointer && !playfield.usesControllerPointer && phase == .playing && !isPaused
+      && session?.isComplete == false && !GameScreen.shared.isPresented
     guard let point = pointerCapture.update(in: root, active: active) else { return }
     if tubeIsActive {
       if let source = crtView.sourcePoint(from: crtView.convert(point, from: root), clampingToImage: true) {
