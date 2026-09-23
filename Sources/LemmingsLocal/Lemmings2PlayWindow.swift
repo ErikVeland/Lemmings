@@ -15,10 +15,7 @@ import NxlvKit
         window?.contentView = nil
         window = host
         gameplayKeyboard?.bind(to: host)
-        forwardTransport = RewindForwardKeyTransport(window: host,
-            canStart: { [weak self] in self?.canStepForward ?? false },
-            begin: { [weak self] in self?.beginContinuousStepForward() ?? false },
-            end: { [weak self] in self?.endContinuousStepForward() })
+        timelineTransport = makeTimelineTransport(for: host)
         usesSharedWindow = true
         host.contentView = content
         host.makeFirstResponder(content)
@@ -118,7 +115,7 @@ import NxlvKit
     private var rewindHeld = false
     private var forwardTimer: Timer?
     private var forwardHeld = false
-    private var forwardTransport: RewindForwardKeyTransport?
+    private var timelineTransport: TimelineKeyTransport?
     private var rewindAudioDucked = false
     private var rewindOriginState: Lemmings2Runtime?
     private var rewindOriginInputs: [L2RunRecovery.Input] = []
@@ -265,14 +262,14 @@ import NxlvKit
         keyboard.skillNames = { [weak self] in self?.game?.configuration.skills.map(\.name) ?? [] }
         keyboard.help = { [weak self] in
             let names = self?.game?.configuration.skills.map(\.name) ?? []
-            return SkillShortcuts(names: names).hint(names: names, modern: self?.audioSettings.modernControlsEnabled ?? false) + "\n\nSpace / P: pause\nR: retry\nZ: rewind 2 seconds\nHold .: scrub forward after rewind\n.: single step at live edge"
+            return SkillShortcuts(names: names).hint(names: names, modern: self?.audioSettings.modernControlsEnabled ?? false) + "\n\nSpace / P: pause\nR: retry\nHold ,: scrub backward\nHold .: scrub forward after rewind\nTap , / .: step one tick\nZ: rewind 2 seconds"
         }
         keyboard.contextCommands = {
             [KeyboardCommand(keys: "← / → / ↑ / ↓", action: "Pan the level", group: "Camera"),
              KeyboardCommand(keys: "V / S", action: "Review / save replay after a result", group: "Menus & results"),
              KeyboardCommand(keys: "Return / Space", action: "Activate selected menu choice", group: "Menus & results"),
-             KeyboardCommand(keys: "Z / LT + B", action: "Rewind the current run", group: "Gameplay"),
-             KeyboardCommand(keys: "Hold .", action: "Scrub forward after a rewind; release to pause", group: "Gameplay"),
+             KeyboardCommand(keys: "Z / , / LT + B", action: "Rewind the current run", group: "Gameplay"),
+             KeyboardCommand(keys: ", / .", action: "Step one tick; hold to scrub; release to pause", group: "Gameplay"),
              KeyboardCommand(keys: "P / M / I", action: "From L2 menu: practice / tribe map / introduction", group: "Menus & results"),
              KeyboardCommand(keys: "1–4", action: "Choose practice level", group: "L2 practice"),
              KeyboardCommand(keys: "Arrow keys", action: "Choose practice skill", group: "L2 practice"),
@@ -292,7 +289,7 @@ import NxlvKit
         keyboard.rewind = { [weak self] in _ = self?.rewind(seconds: 2) }
         keyboard.controllerRewindHeld = { [weak self] held in
             guard let self else { return }
-            if held { self.beginContinuousRewind() }
+            if held { _ = self.beginContinuousRewind() }
             else if self.rewindHeld { self.endContinuousRewind() }
         }
         keyboard.step = { [weak self] direction in
@@ -322,10 +319,7 @@ import NxlvKit
                 self.accumulator = 0; self.refreshGame()
             }
         }
-        forwardTransport = RewindForwardKeyTransport(window: window,
-            canStart: { [weak self] in self?.canStepForward ?? false },
-            begin: { [weak self] in self?.beginContinuousStepForward() ?? false },
-            end: { [weak self] in self?.endContinuousStepForward() })
+        timelineTransport = makeTimelineTransport(for: window)
 
         let musicRoot = root.deletingLastPathComponent().deletingLastPathComponent()
             .appendingPathComponent("Music/lemmings_2_music_mod_tsyu")
@@ -844,8 +838,8 @@ import NxlvKit
         self.game = game; refreshGame(); captureReplayFrame(); saveCheckpoint(immediately: true)
         finishIfComplete(game)
     }
-    private func beginContinuousRewind() {
-        guard screen == .playing, game?.tick ?? 0 > 0, !rewindHeld else { return }
+    private func beginContinuousRewind(advanceImmediately: Bool = true) -> Bool {
+        guard screen == .playing, game?.tick ?? 0 > 0, !rewindHeld else { return false }
         captureRewindOrigin()
         rewindHeld = true
         rewindTimer?.invalidate()
@@ -855,7 +849,8 @@ import NxlvKit
                 guard let self, self.rewind(seconds: 0.20) else { self?.endContinuousRewind(); return }
             }
         }
-        guard rewind(seconds: 0.20) else { endContinuousRewind(); return }
+        guard !advanceImmediately || rewind(seconds: 0.20) else { endContinuousRewind(); return false }
+        return true
     }
     private func endContinuousRewind() {
         rewindHeld = false
@@ -867,7 +862,7 @@ import NxlvKit
         guard screen == .playing, let game, let origin = rewindOriginState else { return false }
         return game.tick < origin.tick && !rewindHeld
     }
-    private func beginContinuousStepForward() -> Bool {
+    private func beginContinuousStepForward(advanceImmediately: Bool = true) -> Bool {
         guard canStepForward, !forwardHeld else { return false }
         forwardHeld = true
         forwardTimer?.invalidate()
@@ -877,7 +872,7 @@ import NxlvKit
                 guard let self, self.stepForward(seconds: 0.20) else { self?.endContinuousStepForward(); return }
             }
         }
-        guard stepForward(seconds: 0.20) else {
+        guard !advanceImmediately || stepForward(seconds: 0.20) else {
             endContinuousStepForward()
             return false
         }
@@ -888,6 +883,21 @@ import NxlvKit
         forwardTimer?.invalidate()
         forwardTimer = nil
         setRewindAudioDucked(false)
+    }
+
+    private func makeTimelineTransport(for window: NSWindow) -> TimelineKeyTransport {
+        TimelineKeyTransport(window: window,
+            canStartBackward: { [weak self] in
+                guard let self else { return false }
+                return self.screen == .playing && (self.game?.tick ?? 0) > 0
+            },
+            stepBackward: { [weak self] in self?.rewind(seconds: 1.0 / Lemmings2Runtime.ticksPerSecond) ?? false },
+            beginBackward: { [weak self] in self?.beginContinuousRewind(advanceImmediately: false) ?? false },
+            endBackward: { [weak self] in self?.endContinuousRewind() },
+            canStartForward: { [weak self] in self?.canStepForward ?? false },
+            stepForward: { [weak self] in self?.stepForward(seconds: 1.0 / Lemmings2Runtime.ticksPerSecond) ?? false },
+            beginForward: { [weak self] in self?.beginContinuousStepForward(advanceImmediately: false) ?? false },
+            endForward: { [weak self] in self?.endContinuousStepForward() })
     }
     private func discardRewindOrigin() {
         endContinuousStepForward()

@@ -211,15 +211,17 @@ Respect the accessibility settings:
 
 ### Rewind controls
 
-For the Classic engine, hold `Z` to scrub backwards and hold `.` to scrub
-forward. Release the key to leave the run paused at the chosen tick. `Shift` +
-Left/Right steps one tick backward or forward, and Space remains play/pause.
+For all engines, tap `,` or `.` to step one tick backward or forward, then hold
+the same adjacent key to scrub continuously. Release the key to leave the run
+paused at the chosen tick. `Space` remains play/pause and `Escape` cancels to
+the rewind origin. The existing `Z` shortcut remains a two-second backward
+seek, and the controller rewind modifier uses the same held transport path.
 The controller rewind modifier uses the same held transport path, ghost and
 reversed-effects cue. Lemmings 2 and Lemmings 3 use the same LT+B held action
 and provide a two-second `Z` seek. Their deterministic state adapters,
-cancel-to-origin path, visual transport cue and held `.` forward scrub are now
-available. Shifted frame navigation, cross-source music capture and resume
-cross-fades remain open.
+cancel-to-origin path, visual transport cue and adjacent punctuation transport
+are now available. Cross-source music capture and resume cross-fades remain
+open.
 
 ### Audio treatment
 

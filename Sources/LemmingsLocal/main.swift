@@ -42,10 +42,14 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private var timer: Timer?
   private var rewindTimer: Timer?
   private var rewindHeld = false
+  private var backwardKeyTimer: Timer?
+  private var backwardKeyHeld = false
   private var rewindOriginTick: Int?
   private var rewindAudioDucked = false
   private var forwardTimer: Timer?
   private var forwardHeld = false
+  private var forwardKeyTimer: Timer?
+  private var forwardKeyHeld = false
   private var accumulator = 0.0
   private var lastStepTime: TimeInterval?
   private var isPaused = false
@@ -3209,7 +3213,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
     keyboard.help = { [weak self] in
       let names = self?.session?.skills.map(\.name) ?? []
-      return SkillShortcuts(names: names).hint(names: names, modern: self?.settings.modernControlsEnabled ?? true) + "\n\nSpace / P: play or pause\nHold Z: rewind\nHold .: step forward\nShift + Left / Right: step backward / forward\nX: nuke"
+      return SkillShortcuts(names: names).hint(names: names, modern: self?.settings.modernControlsEnabled ?? true) + "\n\nSpace / P: play or pause\nHold ,: scrub backward\nHold .: scrub forward\nTap , / .: step one tick\nZ: rewind 2 seconds\nX: nuke"
     }
     keyboard.pauseForHelp = { [weak self] in
       guard let self else { return {} }
@@ -3259,9 +3263,18 @@ let achievementProgressKey = "ClassicAchievementProgress"
         self.endContinuousRewind()
         return nil
       }
+      if event.type == .keyUp, event.charactersIgnoringModifiers == "," {
+        self.backwardKeyHeld = false
+        self.backwardKeyTimer?.invalidate()
+        self.backwardKeyTimer = nil
+        if self.rewindHeld { self.endContinuousRewind() }
+        return nil
+      }
       if event.type == .keyUp, event.charactersIgnoringModifiers == "." {
-        guard self.forwardHeld else { return event }
-        self.endContinuousStepForward()
+        self.forwardKeyHeld = false
+        self.forwardKeyTimer?.invalidate()
+        self.forwardKeyTimer = nil
+        if self.forwardHeld { self.endContinuousStepForward() }
         return nil
       }
 
@@ -3313,8 +3326,36 @@ let achievementProgressKey = "ClassicAchievementProgress"
       switch characters {
       case "z":
         if !event.isARepeat { self.beginContinuousRewind() }
-      case ",": self.stepBackward()
-      case ".": if !event.isARepeat { self.beginContinuousStepForward() }
+      case ",":
+        if !event.isARepeat {
+          self.backwardKeyHeld = true
+          guard self.stepBackward() else {
+            self.backwardKeyHeld = false
+            return nil
+          }
+          self.backwardKeyTimer?.invalidate()
+          self.backwardKeyTimer = Timer.scheduledTimer(withTimeInterval: 0.18, repeats: false) { [weak self] _ in
+            MainActor.assumeIsolated {
+              guard let self, self.backwardKeyHeld else { return }
+              _ = self.beginContinuousRewind(preservingOrigin: true, advanceImmediately: false)
+            }
+          }
+        }
+      case ".":
+        if !event.isARepeat {
+          self.forwardKeyHeld = true
+          guard self.stepForward() else {
+            self.forwardKeyHeld = false
+            return nil
+          }
+          self.forwardKeyTimer?.invalidate()
+          self.forwardKeyTimer = Timer.scheduledTimer(withTimeInterval: 0.18, repeats: false) { [weak self] _ in
+            MainActor.assumeIsolated {
+              guard let self, self.forwardKeyHeld else { return }
+              self.beginContinuousStepForward(advanceImmediately: false)
+            }
+          }
+        }
       case "\r":
         if self.phase == .playing { return event }
         self.advancePhase()
@@ -3339,13 +3380,13 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   // MARK: - Rewind
 
-  private func beginContinuousRewind() {
+  private func beginContinuousRewind(preservingOrigin: Bool = false, advanceImmediately: Bool = true) -> Bool {
     guard let session, session.supportsRewind else {
       setStatus("This ruleset cannot rewind yet.")
-      return
+      return false
     }
-    guard !rewindHeld else { return }
-    rewindOriginTick = session.currentTick
+    guard !rewindHeld else { return false }
+    if !preservingOrigin { rewindOriginTick = session.currentTick }
     rewindHeld = true
     rewindTimer?.invalidate()
     setRewindAudioDucked(true)
@@ -3353,7 +3394,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
     rewindTimer = Timer.scheduledTimer(withTimeInterval: 1.0 / 15.0, repeats: true) { [weak self] _ in
       MainActor.assumeIsolated { _ = self?.performRewind(seconds: 0.20) }
     }
-    performRewind(seconds: 0.20)
+    guard advanceImmediately else { return true }
+    return performRewind(seconds: 0.20)
   }
 
   private func endContinuousRewind() {
@@ -3391,7 +3433,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
   }
 
-  private func beginContinuousStepForward() {
+  private func beginContinuousStepForward(advanceImmediately: Bool = true) {
     guard phase == .playing, session?.supportsRewind == true else { return }
     guard !forwardHeld else { return }
     forwardHeld = true
@@ -3401,7 +3443,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
         guard let self, self.stepForward() else { self?.endContinuousStepForward(); return }
       }
     }
-    guard stepForward() else {
+    guard !advanceImmediately || stepForward() else {
       endContinuousStepForward()
       return
     }
@@ -3444,15 +3486,16 @@ let achievementProgressKey = "ClassicAchievementProgress"
     playfield.endRewindCue()
   }
 
-  private func stepBackward() {
-    guard let session, session.supportsRewind else { return }
+  @discardableResult
+  private func stepBackward() -> Bool {
+    guard let session, session.supportsRewind else { return false }
     rewindOriginTick = rewindOriginTick ?? session.currentTick
     setRewindAudioDucked(true)
     playfield.beginRewindCue(at: session.currentTick)
     guard session.stepBackward() else {
       setRewindAudioDucked(false)
       playfield.endRewindCue()
-      return
+      return false
     }
     isPaused = true
     panel.isPaused = true
@@ -3460,6 +3503,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     effects.playRewindScrub()
     setRewindAudioDucked(false)
     playfield.endRewindCue()
+    return true
   }
 
   @discardableResult
