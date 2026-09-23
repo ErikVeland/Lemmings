@@ -187,9 +187,9 @@ generate_release_notes() {
 if [[ ! -f "$release_notes" ]]; then
   generate_release_notes
 fi
-rg -q "^Build: $build_number$" "$release_notes" ||
+grep -q "^Build: $build_number$" "$release_notes" ||
   fail "Release notes do not identify build $build_number: $release_notes"
-rg -q "^Release commit: $current_head$" "$release_notes" ||
+grep -q "^Release commit: $current_head$" "$release_notes" ||
   fail "Release notes are not current for $current_short. Update or remove: $release_notes"
 
 [[ -x "$project_dir/Scripts/build-local-app.sh" ]] || fail "Missing build-local-app.sh."
@@ -318,7 +318,7 @@ print "==> Building and signing Game Center target"
 build_app "$project_dir" "$game_center_dir" 1
 codesign --verify --deep --strict --verbose=1 "$game_center_app"
 codesign -d --entitlements :- "$game_center_app" 2>/dev/null |
-  rg -q 'com.apple.developer.game-center' ||
+  grep -q 'com.apple.developer.game-center' ||
   fail "Game Center entitlement is missing from the Game Center target."
 package_app "$game_center_app" "$game_center_zip"
 

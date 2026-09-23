@@ -25,7 +25,7 @@ LEMMINGS_ARCHITECTURES="$(uname -m)" \
 
 codesign --verify --deep --strict --verbose=1 "$app_dir"
 codesign -d --entitlements :- "$app_dir" 2>/dev/null |
-  rg -q 'com.apple.developer.game-center' ||
+  grep -q 'com.apple.developer.game-center' ||
   { print -u2 "FAILED: Game Center entitlement is missing from $app_dir"; exit 1; }
 
 ditto -c -k --sequesterRsrc --keepParent "$app_dir" "$zip_path"

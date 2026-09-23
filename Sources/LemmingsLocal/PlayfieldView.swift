@@ -368,7 +368,7 @@ struct ReticleFeedback {
     rewindCueTask?.cancel()
     guard rewindCueStartedAt != nil || ProcessInfo.processInfo.systemUptime < rewindCueUntil else { return }
     rewindCueTask = Task { [weak self] in
-      try? await Task.sleep(for: .milliseconds(33))
+      try? await Task.sleep(nanoseconds: 33_000_000)
       guard !Task.isCancelled else { return }
       self?.needsDisplay = true
       self?.scheduleRewindCueRedraw()

@@ -277,7 +277,7 @@ final class ModuleMusicPlayer: @unchecked Sendable {
     player = ProTrackerEnhancedPlayer(
       module: module, sampleRate: sampleRate, enhancements: enhancements)
     interpolationPhase = 1
-    loopTail = [(left: 0, right: 0)](repeating: (left: 0, right: 0), count: loopCrossfadeFrames)
+    loopTail = Array(repeating: (left: 0, right: 0), count: loopCrossfadeFrames)
     loopTailWriteIndex = 0
     loopTailCount = 0
     previousLoopTail = []

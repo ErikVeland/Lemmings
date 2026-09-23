@@ -1051,7 +1051,7 @@ import NxlvKit
         assignmentPulseTask?.cancel()
         guard assignmentPulse.isActive else { return }
         assignmentPulseTask = Task { [weak self] in
-            try? await Task.sleep(for: .milliseconds(16))
+            try? await Task.sleep(nanoseconds: 16_000_000)
             guard !Task.isCancelled else { return }
             self?.needsDisplay = true
             self?.scheduleAssignmentPulseRedraw()
