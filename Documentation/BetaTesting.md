@@ -4,6 +4,24 @@ No 1.1 beta candidate has been declared yet. Use this checklist when the first
 1.1 package is cut. The 1.0 RC1 build 36 records are in the local archive and
 do not certify a 1.1 package.
 
+## Local build and notarisation
+
+When the normal beta packaging workflow is not available, run the focused
+Developer ID distribution script:
+
+```sh
+NOTARY_PROFILE=lemmings-beta zsh Scripts/build-and-notarise.sh
+```
+
+The script finds the first installed Developer ID Application identity unless
+`SIGNING_IDENTITY` is set. It uses a keychain profile created by
+`xcrun notarytool store-credentials`, so Apple credentials are not stored in
+the repository or passed on the command line. The output is a timestamped
+directory under `.build/notarised/`.
+
+Use `--dry-run` to check the selected identity, notary profile and output path
+without building or uploading anything.
+
 ## Validate the build
 
 Run from the project directory:
