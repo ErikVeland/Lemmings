@@ -56,6 +56,7 @@ import NxlvKit
   private var currentEnergy: AdaptiveDJEngine.DJEnergyLevel = .chill
   private var lastEnergyChangeAt = -Double.infinity
   private var fadeTask: Task<Void, Never>?
+  private var rotationTask: Task<Void, Never>?
   private var fadeGeneration = 0
   private var fadePosition = 0.0
   private var fadeSuspendedAt: TimeInterval?
@@ -66,6 +67,9 @@ import NxlvKit
   private var fadingIn: DJDeck?
   private var fadingOut: DJDeck?
   private var playbackRate: Float = 1
+
+  /// Keep the megamix moving even when the level has no state cue.
+  private let rotationInterval: TimeInterval = 64
 
   /// Soundtracks the player supplied, keyed by folder name.
   private var pools: [String: [URL]] = [:]
@@ -125,6 +129,7 @@ import NxlvKit
     deckA?.volume = isMuted ? 0 : masterVolume
     deckA?.play()
     announce(first.url)
+    armRotation()
   }
 
   /// A new level, so every cue may happen again.
@@ -212,6 +217,8 @@ import NxlvKit
     guard let next = pickTrack(avoiding: currentPool, victory: victory), let incoming = makeDeck(next.url) else {
       return
     }
+    rotationTask?.cancel()
+    rotationTask = nil
     fadeTask?.cancel()
     fadeGeneration += 1
     let generation = fadeGeneration
@@ -245,6 +252,17 @@ import NxlvKit
       }
       guard !Task.isCancelled, self?.fadeGeneration == generation else { return }
       self?.finishFade()
+      self?.armRotation()
+    }
+  }
+
+  private func armRotation() {
+    rotationTask?.cancel()
+    rotationTask = Task { @MainActor [weak self] in
+      do { try await Task.sleep(nanoseconds: UInt64(self?.rotationInterval ?? 64) * 1_000_000_000) }
+      catch { return }
+      guard let self, !self.outputSuspended, self.isPlaying, self.fadeTask == nil else { return }
+      self.crossfade(seconds: Fade.phrase)
     }
   }
 
@@ -293,6 +311,8 @@ import NxlvKit
     resumeDeckA = false
     resumeDeckB = false
     fadeTask?.cancel()
+    rotationTask?.cancel()
+    rotationTask = nil
     fadeGeneration += 1
     fadeTask = nil
     fadeSuspendedAt = nil
@@ -327,6 +347,7 @@ import NxlvKit
     }
     if resumeDeckA { deckA?.play() }
     if resumeDeckB { deckB?.play() }
+    armRotation()
     resumeDeckA = false
     resumeDeckB = false
   }

@@ -115,7 +115,7 @@ final class MusicFileDeck {
     }
   }
 
-  /// Fades the source before the engine pauses, so the room tail remains.
+  /// Cuts the source quickly, then leaves a short room tail before pausing.
   func suspendOutput() {
     guard started, !outputSuspended else { return }
     outputSuspended = true
@@ -124,14 +124,14 @@ final class MusicFileDeck {
     fadeTask = Task { @MainActor [weak self] in
       guard let self else { return }
       let start = self.sourceMixer.outputVolume
-      for step in 1...8 {
+      for step in 1...3 {
         guard !Task.isCancelled else { return }
-        try? await Task.sleep(nanoseconds: 20_000_000)
-        self.sourceMixer.outputVolume = start * Float(8 - step) / 8
+        try? await Task.sleep(nanoseconds: 8_000_000)
+        self.sourceMixer.outputVolume = start * Float(3 - step) / 3
       }
       guard !Task.isCancelled, self.outputSuspended else { return }
       if self.resumeAfterSuspend { self.player.pause() }
-      try? await Task.sleep(nanoseconds: 260_000_000)
+      try? await Task.sleep(nanoseconds: 140_000_000)
       guard !Task.isCancelled, self.outputSuspended else { return }
       self.engine.pause()
     }

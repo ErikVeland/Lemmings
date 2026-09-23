@@ -113,13 +113,13 @@ final class ModuleMusicPlayer: @unchecked Sendable {
     isRunning = false
   }
 
-  /// Fades the module into a short room tail before pausing the engine.
+  /// Cuts the module quickly, then leaves a short room tail before pausing.
   func suspendOutput() {
     guard isRunning else { return }
     lock.lock()
     guard !outputSuspended else { lock.unlock(); return }
     outputSuspended = true
-    pauseFadeFrames = Int(sampleRate * 0.16)
+    pauseFadeFrames = Int(sampleRate * 0.035)
     lock.unlock()
     reverb.wetDryMix = 14
     pauseWorkItem?.cancel()
@@ -131,7 +131,7 @@ final class ModuleMusicPlayer: @unchecked Sendable {
       if shouldPause { self.engine.pause() }
     }
     pauseWorkItem = work
-    DispatchQueue.main.asyncAfter(deadline: .now() + 0.42, execute: work)
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.18, execute: work)
   }
 
   func resumeOutput() throws {
@@ -168,7 +168,7 @@ final class ModuleMusicPlayer: @unchecked Sendable {
       let canAdvance = pauseFadeFrames > 0 || !outputSuspended
       if outputSuspended && pauseFadeFrames > 0 { pauseFadeFrames -= 1 }
       let gain = outputSuspended
-        ? Float(pauseFadeFrames) / Float(max(1, Int(sampleRate * 0.16)))
+        ? Float(pauseFadeFrames) / Float(max(1, Int(sampleRate * 0.035)))
         : startFadeGainLocked()
 
       let frame: (left: Float, right: Float)

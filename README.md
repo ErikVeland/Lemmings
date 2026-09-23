@@ -159,6 +159,9 @@ See [controller QoL](Documentation/ControllerQoL.md),
 [level hints](Documentation/LevelHints.md) and
 [save recovery](Documentation/SaveRecovery.md) for focused behaviour notes.
 
+Audio source coverage and the soundtrack import layout are maintained in
+[Audio coverage](Documentation/AudioCoverage.md).
+
 ### Controller controls
 
 The complete binding table and validation boundary are maintained in

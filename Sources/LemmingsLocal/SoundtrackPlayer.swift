@@ -11,7 +11,7 @@ import NxlvKit
 /// The player supplies the files. Nothing here ships with the app.
 @MainActor final class SoundtrackPlayer {
   /// Extensions the system decoder reads without extra work.
-  static let audioExtensions: Set<String> = ["wav", "aif", "aiff", "mp3", "m4a", "caf", "flac"]
+  static let audioExtensions: Set<String> = ["wav", "aif", "aiff", "aifc", "mp3", "m4a", "caf", "flac"]
 
   private var player: MusicFileDeck?
   private(set) var currentURL: URL?
