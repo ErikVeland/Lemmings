@@ -45,5 +45,6 @@ zsh Scripts/run-slim-packaging-tests.sh
 zsh Scripts/run-crt-probe.sh
 zsh Scripts/run-lemmings2-viewport-tests.sh
 zsh Scripts/run-playfield-draw-tests.sh
+zsh Scripts/run-lemmings3-targeting-tests.sh
 CAMPAIGN_TEST_LIBRARY_DIR="$build_dir" zsh Scripts/verify-campaign-completion.sh
 echo "All ${#suites} beta regression suites passed."

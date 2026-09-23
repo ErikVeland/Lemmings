@@ -33,8 +33,45 @@ private func testApproachingLemmingPreferred() throws {
     print("PASS Lemmings 3 targeting prefers the lemming still walking toward the click")
 }
 
+/// Two candidates facing the SAME direction must not be reordered by the
+/// approaching preference, even when the nearer one technically fails the
+/// "approaching" check because the click landed one pixel behind it.
+private func testSameDirectionCandidatesKeepNearestPick() throws {
+    let leader = Lemmings3TargetCandidate(id: 0, x: 51, y: 40, direction: 1, tool: nil, active: true)
+    let follower = Lemmings3TargetCandidate(id: 1, x: 46, y: 40, direction: 1, tool: nil, active: true)
+
+    let favored = Lemmings3Targeting.nearest(
+        among: [leader, follower], x: 50, y: 40, selected: 0, favorApproaching: true)
+    try require(favored?.id == leader.id,
+        "Same-direction candidates must not be reordered by the approaching preference")
+
+    let plain = Lemmings3Targeting.nearest(
+        among: [leader, follower], x: 50, y: 40, selected: 0, favorApproaching: false)
+    try require(plain?.id == leader.id,
+        "Plain targeting should also pick the nearer, same-direction leader")
+
+    print("PASS same-direction Lemmings 3 candidates keep the plain nearest pick")
+}
+
+/// When `selected >= 3` (the "Use" action), a lemming that already holds a
+/// tool must be picked over a nearer-approaching lemming with no tool —
+/// the tool-holding tier must not be overridden by the approaching tier.
+private func testToolHolderBeatsApproachingCandidate() throws {
+    let holder = Lemmings3TargetCandidate(id: 0, x: 55, y: 40, direction: -1, tool: .bricks, active: true)
+    let toolless = Lemmings3TargetCandidate(id: 1, x: 51, y: 40, direction: 1, tool: nil, active: true)
+
+    let result = Lemmings3Targeting.nearest(
+        among: [holder, toolless], x: 52, y: 40, selected: 3, favorApproaching: true)
+    try require(result?.id == holder.id,
+        "A tool-holding candidate must win even when a toolless candidate is nearer and approaching")
+
+    print("PASS tool-holding tier still beats an approaching toolless candidate")
+}
+
 do {
     try testApproachingLemmingPreferred()
+    try testSameDirectionCandidatesKeepNearestPick()
+    try testToolHolderBeatsApproachingCandidate()
     print("Lemmings 3 targeting tests passed.")
 } catch {
     FileHandle.standardError.write(Data("Lemmings 3 targeting tests failed: \(error)\n".utf8))

@@ -369,6 +369,7 @@ import NxlvKit
         canvas.reduceFlashes = settings.reduceFlashes
         canvas.hdEffectsEnabled = settings.hdEffectsEnabled
         canvas.fullScreenHDRFlashes = settings.cinematicExplosionsEnabled
+        canvas.favorApproachingLemmings = settings.favorApproachingLemmings
     }
 
     private func playLevelMusic() {
@@ -798,6 +799,7 @@ import NxlvKit
     var onDirection: ((Lemmings3Runtime.Direction) -> Void)?
     var onCancelDirection: (() -> Void)?
     var selectedAction = 0
+    var favorApproachingLemmings = true
     var paused = true
     var fast = false
     var menuRows: [String]? { didSet { syncSpeedEffects() } }
@@ -832,8 +834,11 @@ import NxlvKit
     var pointerTarget: Int? {
         guard let p = pointerPosition, playfieldRect.contains(p), let game else { return nil }
         let x = (p.x - origin.x) / zoom + cameraX, y = (p.y - origin.y) / zoom + cameraY
-        return game.lemmings.filter { $0.active && abs(CGFloat($0.x) - x) <= 9 && abs(CGFloat($0.y - 8) - y) <= 12 }
-            .min { abs(CGFloat($0.x) - x) < abs(CGFloat($1.x) - x) }?.id
+        let candidates = game.lemmings.map {
+            Lemmings3TargetCandidate(id: $0.id, x: $0.x, y: $0.y, direction: $0.direction, tool: $0.tool, active: $0.active)
+        }
+        return Lemmings3Targeting.nearest(among: candidates, x: Int(x), y: Int(y), selected: selectedAction,
+            favorApproaching: favorApproachingLemmings)?.id
     }
     private var hoveredLemming: Int?
     private var tracking: NSTrackingArea?
@@ -1121,8 +1126,7 @@ import NxlvKit
         controllerPointer = nil
         assignmentHighlight.clear()
         pointerPosition = p
-        let x = (p.x - origin.x) / zoom + cameraX, y = (p.y - origin.y) / zoom + cameraY
-        hoveredLemming = playfieldRect.contains(p) ? game?.lemmings.filter { $0.active && abs(CGFloat($0.x) - x) <= 9 && abs(CGFloat($0.y - 8) - y) <= 12 }.min(by: { abs(CGFloat($0.x) - x) < abs(CGFloat($1.x) - x) })?.id : nil
+        hoveredLemming = pointerTarget
         let sx = (p.x - screenOrigin.x) / zoom, sy = (p.y - screenOrigin.y) / zoom
         toolTip = sy >= 172 && sx >= 214 && sx < 249 ? SpeedPanelControls.help : sy >= 172 ? Lemmings3Panel.slot(at: sx).map { ($0 < 5 ? SkillShortcuts(names: Array(Lemmings3Panel.names.prefix(5))).hint(names: Array(Lemmings3Panel.names.prefix(5))) : Lemmings3Panel.names[$0]) + ($0 == 8 ? " — double-click to end run" : "") } : nil
         needsDisplay = true
