@@ -23,7 +23,7 @@
 	<key>CFBundleVersion</key>
 	<string>37</string>
 	<key>LSMinimumSystemVersion</key>
-	<string>12.3</string>
+	<string>13.0</string>
 	<key>NSHighResolutionCapable</key>
 	<true/>
 </dict>
