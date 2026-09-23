@@ -129,7 +129,7 @@ Restore recreates practice play without applying its saved campaign progress to
 the campaign. It restores the selected slot, pauses and retains the original attempt.
 Invalid map indices, duplicate skills and incomplete panels are rejected.
 
-See [the 1.0 follow-up](ReleaseReadiness/OneZeroLocalClosure.md) for validation.
+See the [current recovery and campaign evidence](ReleaseReadiness/CampaignClosure-2026-09-22.md) for the retained baseline.
 
 ## Saved runs that cannot be restored
 

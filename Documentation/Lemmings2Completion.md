@@ -9,7 +9,8 @@ and original-engine equivalence are not claimed.
 
 The local universal app and signed beta 8 archive include the twelve-tribe
 expansion. Apple notarization, ticket validation and the extracted ZIP
-Gatekeeper check passed. See [release verification](Beta8Readiness.md).
+Gatekeeper check passed for the historical beta archive. Current release claims
+must use the active 1.1 beta record when it is created.
 
 - Added the tribe digging tools, Jumper, Runner, Hopper and blast Bomber.
 - Added native trap, launcher and trampoline state and multiple entrances.

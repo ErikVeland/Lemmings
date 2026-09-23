@@ -105,6 +105,26 @@ private final class TargetingSession: GameSession {
   print("PASS same-direction lemming pack keeps the plain nearest-pixel pick")
 }
 
+/// A builder is the one deliberate exception to same-direction nearest-pixel
+/// selection. A follower still walking towards the bridge should receive the
+/// selected skill instead of the lemming placing the bridge.
+@MainActor private func testFollowerBehindBuilderIsTargeted() throws {
+  let view = PlayfieldView(frame: NSRect(x: 0, y: 0, width: 640, height: 320))
+  let session = TargetingSession()
+  view.session = session
+  session.actors = [
+    .init(id: 0, x: 101, y: 80, pose: .building, facingLeft: false, animationFrame: 0, countdown: nil),
+    .init(id: 1, x: 97, y: 80, pose: .walking, facingLeft: false, animationFrame: 0, countdown: nil),
+  ]
+  view.favorApproachingLemmings = true
+  try require(view.lemming(at: CGPoint(x: 104, y: 80))?.id == 1,
+    "A follower approaching a bridge builder should receive the selected skill")
+  view.favorApproachingLemmings = false
+  try require(view.lemming(at: CGPoint(x: 104, y: 80))?.id == 0,
+    "Turning the setting off should keep the nearest bridge builder")
+  print("PASS Classic targeting favours a follower behind a builder")
+}
+
 @MainActor private func testBombFlashFrames() throws {
   let root = URL(fileURLWithPath:#filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
   let out = root.appendingPathComponent(".build/bomb-pop")
@@ -679,6 +699,7 @@ private func testMacArtworkCropStaysPixelAligned() throws {
     try testBombFlashFrames()
     try testApproachingLemmingPreferred()
     try testSameDirectionPackKeepsNearestPick()
+    try testFollowerBehindBuilderIsTargeted()
     try testNukeGesturesAndQueuedUndo()
     try testClassicPanelLabels()
     print("PASS Xmas panel labels at multiple sizes with speed control")

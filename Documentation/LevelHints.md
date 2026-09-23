@@ -25,7 +25,7 @@ is advice about the available mechanics, not a solution for that level.
 
 Checked hints follow preserved winning routes. The official Classic gap is now
 11 Oh No! levels. Sequel and community completion have separate evidence limits.
-See the [current closure work](ReleaseReadiness/OneZeroClosure-2026-09-15.md).
+See the [current campaign closure evidence](ReleaseReadiness/CampaignClosure-2026-09-22.md).
 
 Each click reveals one tier:
 

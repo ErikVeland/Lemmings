@@ -12,8 +12,8 @@ private func require(
 /// The turned lemming sits closer to the click but already faces away from
 /// it. The approaching lemming is one step behind, still walking toward it.
 private func testApproachingLemmingPreferred() throws {
-    let turned = Lemmings3TargetCandidate(id: 0, x: 50, y: 40, direction: -1, tool: nil, active: true)
-    let approaching = Lemmings3TargetCandidate(id: 1, x: 48, y: 40, direction: 1, tool: nil, active: true)
+    let turned = Lemmings3TargetCandidate(id: 0, x: 50, y: 40, direction: -1, tool: nil, isBuilding: false, active: true)
+    let approaching = Lemmings3TargetCandidate(id: 1, x: 48, y: 40, direction: 1, tool: nil, isBuilding: false, active: true)
 
     let favored = Lemmings3Targeting.nearest(
         among: [turned, approaching], x: 52, y: 40, selected: 0, favorApproaching: true)
@@ -37,8 +37,8 @@ private func testApproachingLemmingPreferred() throws {
 /// approaching preference, even when the nearer one technically fails the
 /// "approaching" check because the click landed one pixel behind it.
 private func testSameDirectionCandidatesKeepNearestPick() throws {
-    let leader = Lemmings3TargetCandidate(id: 0, x: 51, y: 40, direction: 1, tool: nil, active: true)
-    let follower = Lemmings3TargetCandidate(id: 1, x: 46, y: 40, direction: 1, tool: nil, active: true)
+    let leader = Lemmings3TargetCandidate(id: 0, x: 51, y: 40, direction: 1, tool: nil, isBuilding: false, active: true)
+    let follower = Lemmings3TargetCandidate(id: 1, x: 46, y: 40, direction: 1, tool: nil, isBuilding: false, active: true)
 
     let favored = Lemmings3Targeting.nearest(
         among: [leader, follower], x: 50, y: 40, selected: 0, favorApproaching: true)
@@ -57,8 +57,8 @@ private func testSameDirectionCandidatesKeepNearestPick() throws {
 /// tool must be picked over a nearer-approaching lemming with no tool —
 /// the tool-holding tier must not be overridden by the approaching tier.
 private func testToolHolderBeatsApproachingCandidate() throws {
-    let holder = Lemmings3TargetCandidate(id: 0, x: 55, y: 40, direction: -1, tool: .bricks, active: true)
-    let toolless = Lemmings3TargetCandidate(id: 1, x: 51, y: 40, direction: 1, tool: nil, active: true)
+    let holder = Lemmings3TargetCandidate(id: 0, x: 55, y: 40, direction: -1, tool: .bricks, isBuilding: false, active: true)
+    let toolless = Lemmings3TargetCandidate(id: 1, x: 51, y: 40, direction: 1, tool: nil, isBuilding: false, active: true)
 
     let result = Lemmings3Targeting.nearest(
         among: [holder, toolless], x: 52, y: 40, selected: 3, favorApproaching: true)
@@ -68,10 +68,25 @@ private func testToolHolderBeatsApproachingCandidate() throws {
     print("PASS tool-holding tier still beats an approaching toolless candidate")
 }
 
+private func testFollowerBeatsBuilder() throws {
+    let builder = Lemmings3TargetCandidate(id: 0, x: 50, y: 40, direction: 1, tool: .bricks, isBuilding: true, active: true)
+    let follower = Lemmings3TargetCandidate(id: 1, x: 46, y: 40, direction: 1, tool: nil, isBuilding: false, active: true)
+    let result = Lemmings3Targeting.nearest(
+        among: [builder, follower], x: 52, y: 40, selected: 0, favorApproaching: true)
+    try require(result?.id == follower.id,
+        "A follower approaching a bridge builder should receive the selected skill")
+    let plain = Lemmings3Targeting.nearest(
+        among: [builder, follower], x: 52, y: 40, selected: 0, favorApproaching: false)
+    try require(plain?.id == builder.id,
+        "Turning the setting off should keep the nearest bridge builder")
+    print("PASS Lemmings 3 targeting favours a follower behind a builder")
+}
+
 do {
     try testApproachingLemmingPreferred()
     try testSameDirectionCandidatesKeepNearestPick()
     try testToolHolderBeatsApproachingCandidate()
+    try testFollowerBeatsBuilder()
     print("Lemmings 3 targeting tests passed.")
 } catch {
     FileHandle.standardError.write(Data("Lemmings 3 targeting tests failed: \(error)\n".utf8))

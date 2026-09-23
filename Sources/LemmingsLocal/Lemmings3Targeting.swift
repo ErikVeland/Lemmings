@@ -10,6 +10,7 @@ struct Lemmings3TargetCandidate {
   let y: Int
   let direction: Int
   let tool: Lemmings3Runtime.Tool?
+  let isBuilding: Bool
   let active: Bool
 }
 
@@ -30,6 +31,13 @@ enum Lemmings3Targeting {
       let da = distance(a), db = distance(b)
       return da == db ? a.id < b.id : da < db
     }) else { return nil }
+    if favorApproaching, selected < 3, nearest.isBuilding,
+       let follower = nearby.filter({ isApproaching($0, clickX: x) && isBehind($0, builder: nearest) }).min(by: {
+         let da = distance($0), db = distance($1)
+         return da == db ? $0.id < $1.id : da < db
+       }) {
+      return follower
+    }
     guard favorApproaching, (x - nearest.x) * nearest.direction < 0 else { return nearest }
     let approaching = nearby.filter {
       (x - $0.x) * $0.direction >= 0 && $0.direction != nearest.direction
@@ -39,5 +47,14 @@ enum Lemmings3Targeting {
       return da == db ? a.id < b.id : da < db
     }
     return approaching ?? nearest
+  }
+
+  private static func isApproaching(_ lemming: Lemmings3TargetCandidate, clickX: Int) -> Bool {
+    (clickX - lemming.x) * lemming.direction >= 0
+  }
+
+  private static func isBehind(_ lemming: Lemmings3TargetCandidate, builder: Lemmings3TargetCandidate) -> Bool {
+    lemming.direction == builder.direction &&
+      (builder.direction > 0 ? lemming.x < builder.x : lemming.x > builder.x)
   }
 }

@@ -450,8 +450,11 @@ import NxlvKit
             let width = min(terrain.image.width - left, level.maximumScreenX + 320 - left)
             let height = min(terrain.image.height - top, level.maximumScreenY + 160 - top)
             guard width > 0, height > 0 else { throw SequelDataError.invalid("Invalid level camera bounds.") }
-            let pixels = (0..<height).flatMap { y in
-                Array(terrain.image.pixels[((top + y) * terrain.image.width + left)..<((top + y) * terrain.image.width + left + width)])
+            var pixels: [UInt8] = []
+            pixels.reserveCapacity(width * height)
+            for y in 0..<height {
+                let start = (top + y) * terrain.image.width + left
+                pixels.append(contentsOf: terrain.image.pixels[start..<(start + width)])
             }
             preview = front.makeImage(pixels, width: width, height: height, palette: decoded.palette, category: .lemmings2Terrain(tribe: level.style), frontEnd: false)
             show(.briefing)

@@ -3,7 +3,8 @@
 This is a plain-language summary of the project for someone who has not read
 the engineering documents. For gate-by-gate detail, see
 [release scope](ReleaseScope.md), [the modern release plan](ModernReleasePlan.md)
-and the [partner evaluation brief](PartnerEvaluation.md).
+and the [partner evaluation brief](PartnerEvaluation.md). See the [content
+universe roadmap](ContentUniverseRoadmap.md) for the long-term 2D content scope.
 
 Ultimate Lemmings is an unofficial native macOS port of the original Lemmings
 games. It is not affiliated with, endorsed by, or licensed by Sony Interactive
@@ -104,21 +105,17 @@ what lets the release notes above be trusted rather than taken on faith.
 
 ## Where the project stands right now
 
-The official Classic campaign closed at 352/352 on 22 September 2026. RC1
-(build 36) is in progress: it is the first archive built for real, physical
-hardware testing since beta 32, rather than for the developer's own Macs. It
-packages a Developer ID notarized build, a macOS 12.3 compatibility build,
-and the Game Center build, from the same verified source. See
-[RC1 release notes](ReleaseNotes-beta36.md) once published.
+The official Classic campaign closed at 352/352 on 22 September 2026. The 1.0
+RC1 baseline was build 36. Its release records are archived locally because
+the active branch is now 1.1. The first 1.1 beta will have its own readiness
+record and release notes. Current targeting work covers Classic, Lemmings 2 and
+Lemmings 3; see the [targeting plan](../docs/superpowers/plans/2026-09-23-approaching-lemming-targeting.md).
 
 ## Roadmap
 
-**Now: finish Classic 1.0 on macOS.** The campaign content gate is closed.
-What remains is largely validation rather than new gameplay work: real
-Intel Macs, the minimum supported macOS version, multiple displays and
-refresh rates, sustained play, physical controllers, full VoiceOver
-journeys, and Game Center under real network conditions. See
-[remaining gates](ReleaseReadiness/gates.json).
+**Now: develop 1.1 on macOS.** The first 1.1 QoL focus is reliable misclick
+targeting across all three engines. Release validation will restart with the
+first 1.1 beta package rather than reuse the 1.0 RC1 record.
 
 **Next: bring Lemmings 2 and 3 to the same standard.** Both already run their
 full campaigns with original assets. Closing the gap means recording the

@@ -463,7 +463,8 @@ import NxlvKit
     }
     private func assign(x: Int, y: Int) {
         let candidates = game.lemmings.map {
-            Lemmings3TargetCandidate(id: $0.id, x: $0.x, y: $0.y, direction: $0.direction, tool: $0.tool, active: $0.active)
+            Lemmings3TargetCandidate(id: $0.id, x: $0.x, y: $0.y, direction: $0.direction, tool: $0.tool,
+                isBuilding: $0.state == .building, active: $0.active)
         }
         guard let picked = Lemmings3Targeting.nearest(among: candidates, x: x, y: y, selected: selected,
             favorApproaching: audioSettings.favorApproachingLemmings) else { return }
@@ -835,7 +836,8 @@ import NxlvKit
         guard let p = pointerPosition, playfieldRect.contains(p), let game else { return nil }
         let x = (p.x - origin.x) / zoom + cameraX, y = (p.y - origin.y) / zoom + cameraY
         let candidates = game.lemmings.map {
-            Lemmings3TargetCandidate(id: $0.id, x: $0.x, y: $0.y, direction: $0.direction, tool: $0.tool, active: $0.active)
+            Lemmings3TargetCandidate(id: $0.id, x: $0.x, y: $0.y, direction: $0.direction, tool: $0.tool,
+                isBuilding: $0.state == .building, active: $0.active)
         }
         return Lemmings3Targeting.nearest(among: candidates, x: Int(x), y: Int(y), selected: selectedAction,
             favorApproaching: favorApproachingLemmings)?.id

@@ -76,7 +76,7 @@ reported rather than ignored.
 | Lemmings 3 movies | All five original `.FLI` movies are available from the in-game movie gallery. Streaming playback supports pause and return; story triggers and movie soundtracks remain unconnected |
 | Graphics sources | DOS VGA, Amiga OCS, and Macintosh artwork all decode and can be chosen |
 | DOS CGA | Not available. The DOS data holds CGA sets, and no decoder reads them. There are no EGA sets |
-| Distribution | Beta 32 (0.1, build 32): standard and Game Center for macOS 13+, plus a Monterey compatibility build for macOS 12.3+. See [release notes](Documentation/ReleaseNotes-beta32.md) and [archive verification](Documentation/Beta32Readiness.md). Full Classic and fan-pack coverage, hardware checks and accessibility remain open before 1.0. See [release scope](Documentation/ReleaseScope.md). |
+| Distribution | 1.1 development branch: no 1.1 beta package has been declared yet. The 1.0 RC1 build 36 records are in the local ignored archive. Current misclick targeting work is tracked in the [1.1 plan](docs/superpowers/plans/2026-09-23-approaching-lemming-targeting.md) and [design](docs/superpowers/specs/2026-09-23-approaching-lemming-targeting-design.md). |
 
 ## Unified game library
 
@@ -138,7 +138,7 @@ On a healthy SwiftPM installation, `swift test` remains available.
 
 ## Release readiness
 
-The [1.0 gap review](Documentation/ReleaseReadiness-1.0.md) records this hardening pass, test evidence and the remaining release blockers.
+The 1.0 RC1 release records are archived locally. The 1.1 line is now the active development target; create a new numbered beta readiness record when the first 1.1 package is cut.
 
 The [modern release plan](Documentation/ModernReleasePlan.md) records verified features, open gaps and the path from the Mac reference build to iOS and consoles. The [partner evaluation brief](Documentation/PartnerEvaluation.md) describes the proposed demonstration and collaboration scope.
 
@@ -201,7 +201,7 @@ The suites verify:
 
 ## Remaining work
 
-Classic 1.0 is the active release target. See [the closure work](Documentation/ClassicOneZero.md).
+The active release line is 1.1. The current QoL target is consistent misclick selection across Classic, Lemmings 2 and Lemmings 3, including selecting an approaching lemming behind a builder. See the [1.1 targeting plan](docs/superpowers/plans/2026-09-23-approaching-lemming-targeting.md).
 Sequel completion remains outside this milestone; shared regression checks still apply.
 
 1. Broaden sequel fidelity and complete-level validation. L2 is a native beta

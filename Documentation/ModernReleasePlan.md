@@ -18,7 +18,7 @@ The objective is an official-quality edition that preserves the original puzzles
 | Preferences | Modern defaults, first-launch choice, OG reset and individual settings | Saves and explicit opt-outs persist. Independent added-motion and added-flash reductions preserve modern gameplay. Broader accessibility validation remains open. |
 | Progress and replay | Local profiles, records, achievements, replay review and movie export | In-progress crash recovery and cross-device save conflicts remain open. Game Center needs provisioned service testing. |
 
-Campaign counts come from the committed [campaign evidence](CampaignCompletion/evidence.json), [original completion gate](ClassicCompletion/README.md) and sequel tests. The older [beta 12 report](Beta12Readiness.md) describes its frozen build. Its notarisation and performance numbers do not certify the current effects or input build.
+Campaign counts come from the committed [campaign evidence](CampaignCompletion/evidence.json), [original completion gate](ClassicCompletion/README.md) and sequel tests. Archived beta reports do not certify the current effects, input or 1.1 build.
 
 ## Gaps closed in this audit
 

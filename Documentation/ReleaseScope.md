@@ -1,10 +1,10 @@
 # Release scope
 
-Classic 1.0 is the selected macOS release target, confirmed on 13 September 2026.
+Classic 1.0 is the historical macOS release baseline, confirmed on 13 September 2026.
 L2 and L3 remain previews. Updated 22 September 2026 after the later DOS rules correction.
 Automated checks support the recorded routes;
 remaining compatibility and hardware claims still need validation. See the [gate register](ReleaseReadiness/gates.json)
-and the [1.0 gap evaluation](ReleaseReadiness/OneZeroGapEvaluation.md).
+and the current [Classic validation](ReleaseReadiness/ClassicValidation-current.md).
 
 ## Wording
 
@@ -64,7 +64,7 @@ See [combined quest evidence](ReleaseReadiness/ClassicConversionQuest.json).
 
 The removed records are listed in [the pruning manifest](FanLevelPruning.json).
 Surviving DAT slots retain their original identities for saved attempts.
-See [the Classic 1.0 work record](ClassicOneZero.md) for current closure work.
+See [the current campaign closure evidence](ReleaseReadiness/CampaignClosure-2026-09-22.md) for the retained baseline.
 
 ## Sequels
 

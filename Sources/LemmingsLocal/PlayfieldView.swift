@@ -430,8 +430,7 @@ struct ReticleFeedback {
   private static let pickBox = (halfWidth: CGFloat(6), top: CGFloat(14), bottom: CGFloat(5))
 
   /// Both the green reticle and a fresh click use the nearest eligible
-  /// lemming, unless it already turned away and an eligible lemming still
-  /// facing the click is just as close.
+  /// lemming, with an approaching follower preferred over a bridge builder.
   func lemming(at point: CGPoint) -> SessionLemming? {
     guard let session else { return nil }
     let skill = selectedSkill()
@@ -441,6 +440,10 @@ struct ReticleFeedback {
     }
     let eligible = candidates.filter { session.canAssign(skillIndex: skill, to: $0.id) }
     guard let nearest = eligible.first else { return nil }
+    if favorApproachingLemmings, nearest.pose == .building,
+       let follower = eligible.first(where: { isApproaching($0, point: point) && isBehind($0, builder: nearest) }) {
+      return follower
+    }
     if favorApproachingLemmings, !isApproaching(nearest, point: point),
        let approaching = eligible.first(where: { isApproaching($0, point: point) && $0.facingLeft != nearest.facingLeft }) {
       return approaching
@@ -452,6 +455,12 @@ struct ReticleFeedback {
   private func isApproaching(_ lemming: SessionLemming, point: CGPoint) -> Bool {
     let direction: CGFloat = lemming.facingLeft ? -1 : 1
     return (point.x - CGFloat(lemming.x)) * direction >= 0
+  }
+
+  /// Whether `lemming` follows the builder in the builder's travel direction.
+  private func isBehind(_ lemming: SessionLemming, builder: SessionLemming) -> Bool {
+    guard lemming.facingLeft == builder.facingLeft else { return false }
+    return builder.facingLeft ? lemming.x > builder.x : lemming.x < builder.x
   }
 
   /// Honour the green target briefly while it walks between display and input.

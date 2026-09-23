@@ -71,7 +71,7 @@ The Holiday 1993 plans added on 15 September use rate 99 at tick 600 for
 Flurry 12 and Blizzard 8, tick 1000 for Flurry 13, tick 110 for Blizzard 3, and
 tick 1900 for Blizzard 11. Holiday 1994 Frost 8 uses rate 99 at tick 1.
 All other new plans retain their default rates.
-See `Documentation/ReleaseReadiness/OneZeroClosure-2026-09-15.md` for provenance.
+See `Documentation/ReleaseReadiness/CampaignClosure-2026-09-22.md` for the retained baseline provenance.
 
 ## Level lab
 

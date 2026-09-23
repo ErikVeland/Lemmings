@@ -4,10 +4,11 @@
 turned lemming instead of the one still facing the obstacle.
 
 **Revised 23 September 2026**, after the first implementation's whole-branch
-review. Two changes from the original text below: the approaching check now
-requires a facing mismatch (see "The fix"), and every input path — not only
-the mouse click — must share one targeting function per engine (see "Scope
-guardrails" and "Where this lands, per engine").
+review. Three changes from the original text below: the approaching check now
+requires a facing mismatch (see "The fix"), a follower approaching a bridge
+builder is a deliberate exception for same-direction groups, and every input
+path — not only the mouse click — must share one targeting function per engine
+(see "Scope guardrails" and "Where this lands, per engine").
 
 ## Goal
 
@@ -50,6 +51,18 @@ behavior, whatever side of either one the click lands on.
 
 When no candidate both approaches and faces opposite the plain pick,
 targeting falls back to today's nearest-eligible rule, unchanged.
+
+### Builder exception
+
+Same-direction nearest-pixel selection remains unchanged unless the plain
+nearest eligible candidate is actively building a bridge. In that case, prefer
+the nearest eligible lemming that is behind the builder, shares its direction,
+and is still approaching the click. This lets a following lemming receive a
+skill without assigning it to the lemming placing the bridge.
+
+The builder exception applies only when the setting is on. Lemmings 3 keeps its
+existing tool-holder priority for Use and Drop actions. A builder is not
+displaced when no eligible follower meets all three conditions.
 
 ## Scope guardrails
 
@@ -114,6 +127,8 @@ function (for example `Lemmings2RuntimeTests` already exercises
 
 - Two eligible candidates, opposite facing, the nearer one facing away: the
   farther, approaching one wins.
+- An eligible follower behind an eligible builder, both facing the obstacle:
+  the follower wins when the builder is the plain nearest pick.
 - Two eligible candidates, same facing, the nearer one still the plain
   nearest-eligible pick: targeting keeps the nearer one, whichever side of
   it the click lands on. This is the facing-mismatch gate's own test.

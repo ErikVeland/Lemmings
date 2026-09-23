@@ -62,8 +62,8 @@ The initial broader sequel suite stopped on a stale bundled L2 proof asset
 identity. Beta 27 closes that mismatch: all five bundled witnesses replayed twice
 against the freshly packaged assets, with identical witness bytes, input timing,
 rescue counts and other conditions. Only their asset suffix changed. The complete
-beta 27 sequel suite now passes with the live proof check enabled; there is no
-excluded check. See `Documentation/Beta27Readiness.md` and
+the earlier sequel suite passed with the live proof check enabled; there is no
+excluded check. The retained witness details are in
 `Documentation/TrolleyVerification/beta27-l2-proof-refresh.json`.
 
 An older settings assertion also assumed native tabs were direct page children.

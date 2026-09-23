@@ -98,6 +98,37 @@ func testFavorApproachingLemmingFallsBackWithNoAlternative() throws {
     print("PASS favorApproachingLemmings falls back to the only candidate when nothing approaches")
 }
 
+func testFollowerBehindBuilderIsTargeted() throws {
+    let base = try fixture().configuration
+    var game = try Lemmings2Runtime(configuration: .init(width: base.width, height: base.height,
+        pixels: base.pixels, solid: base.solid, palette: base.palette, entrance: base.entrance,
+        exits: base.exits, skills: base.skills, supplies: base.supplies, total: 2,
+        timeLimit: base.timeLimit, releaseInterval: 1, terrainMasks: base.terrainMasks, firstReleaseTick: 1))
+    for _ in 0..<200 {
+        game.step()
+        if game.lemmings.filter({ $0.active && $0.state == .walking }).count >= 2 { break }
+    }
+    let walkers = game.lemmings.filter { $0.active && $0.state == .walking }
+    guard let builder = walkers.max(by: { $0.x < $1.x }),
+        let follower = walkers.filter({ $0.id != builder.id }).min(by: { $0.x < $1.x }) else {
+        check(false, "Expected a builder and a follower in the targeting fixture"); return
+    }
+    let builderSlot = game.configuration.skills.firstIndex(of: .builder)!
+    check(game.assign(slot: builderSlot, to: builder.id), "Fixture builder assignment was rejected")
+    guard let activeBuilder = game.lemmings.first(where: { $0.id == builder.id && $0.state == .building }) else {
+        check(false, "Fixture builder did not enter the building state"); return
+    }
+    check(abs(activeBuilder.x - follower.x) <= 9 && activeBuilder.y == follower.y,
+        "Fixture follower was not close enough behind the builder")
+    let skillSlot = game.configuration.skills.firstIndex(of: .climber)!
+    let clickX = activeBuilder.x + 2
+    check(game.target(slot: skillSlot, x: clickX, y: activeBuilder.y - 5, preferApproaching: true)?.id == follower.id,
+        "A follower approaching a bridge builder should receive the selected skill")
+    check(game.target(slot: skillSlot, x: clickX, y: activeBuilder.y - 5)?.id == activeBuilder.id,
+        "Turning the setting off should keep the nearest bridge builder")
+    print("PASS Lemmings 2 targeting favours a follower behind a builder")
+}
+
 // Deliberately synthetic rectangles exercise runtime phases without bundling
 // original assets. Local-data tests below verify the actual native masks.
 func syntheticMasks() throws -> Lemmings2TerrainMasks {
@@ -1507,6 +1538,7 @@ do {
     try testFavorApproachingLemming()
     try testSameDirectionPackKeepsNearestPick()
     try testFavorApproachingLemmingFallsBackWithNoAlternative()
+    try testFollowerBehindBuilderIsTargeted()
     print("PASS native L2 walking, rescue, inventory, terrain, replay and nuke tests")
 
     if CommandLine.arguments.count > 1 {

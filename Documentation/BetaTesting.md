@@ -1,9 +1,8 @@
 # Beta testing
 
-RC1 (build 36) is the current candidate: the first real-device test release since
-beta 32, and the first build after the official Classic campaign closed at
-352/352. See [RC1 readiness](Beta36Readiness.md) and
-[release notes since beta 32](ReleaseNotes-beta36.md).
+No 1.1 beta candidate has been declared yet. Use this checklist when the first
+1.1 package is cut. The 1.0 RC1 build 36 records are in the local archive and
+do not certify a 1.1 package.
 
 ## Validate the build
 
@@ -29,7 +28,7 @@ Tools manifest interfaces in a local copy; it does not modify the installed tool
 `Scripts/verify-official-classic.sh` replays the committed witness manifest and
 requires all 292 official routes; `--include-conversions` adds the 60 Oh Yes!
 routes and the combined 352-level quest, restore and progression checks. This
-gate is closed as of beta 35 — see [ClassicOneZero.md](ClassicOneZero.md).
+gate was closed for the 1.0 baseline. Re-run it for the first 1.1 package.
 
 `Scripts/run-cross-build-recovery-tests.sh` checks that saved runs and Hot Seat
 games survive an engine change across builds. Run it before any release that
@@ -135,8 +134,8 @@ production scores.
 No extra game files are needed for the bundled campaigns. Fan packs are included and new compatible packs are checked at launch.
 Optional external NeoLemmix styles still use a separately selected folder.
 
-Check a fresh profile and an upgrade from beta 32, the last archive most testers
-have. Exercise all display modes, fullscreen and resizing, music-source changes,
+Check a fresh profile and an upgrade from the previous 1.1 package, when one
+exists. Exercise all display modes, fullscreen and resizing, music-source changes,
 mute, sound-bank changes, single-step completion, and transitions into and out
 of the sequels. Check the sequel artwork setting during play and after relaunch.
 Try nuke undo in the classic player and Lemmings 2. Check explosion flashes in
@@ -144,11 +143,9 @@ flat and CRT modes, including pausing during a flash and moving between
 displays. Report the game and level, settings, and whether restarting changes
 the result.
 
-RC1 is this project's first release aimed at real, physical hardware coverage
-rather than the developer's own Macs: report your exact Mac model, macOS
-version, and whether it is Intel or Apple silicon on every report. Physical
-Intel, macOS 13, HDR, multiple displays and high refresh rates are still
-unverified — that is what this candidate exists to test.
+For each 1.1 report, include the exact Mac model, macOS version, and whether it
+is Intel or Apple silicon. Include display, controller and input details for
+any targeting issue.
 
 The app contains commercial game data. Keep the beta test group private and
 follow `THIRD_PARTY_NOTICES.md`.
