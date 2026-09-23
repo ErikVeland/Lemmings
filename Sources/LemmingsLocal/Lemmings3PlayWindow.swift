@@ -461,18 +461,18 @@ import NxlvKit
         restart()
     }
     private func assign(x: Int, y: Int) {
-        let nearby = game.lemmings.filter { $0.active && abs($0.x - x) <= 9 && abs($0.y - 8 - y) <= 12 }
-        guard let lem = nearby.min(by: {
-            if selected >= 3 && ($0.tool == nil) != ($1.tool == nil) { return $0.tool != nil }
-            return abs($0.x - x) + abs($0.y - 8 - y) < abs($1.x - x) + abs($1.y - 8 - y)
-        }) else { return }
-        if selected == 3 && (lem.tool == .bricks || lem.tool == .spade) {
-            pendingTool = lem.id
-            canvas.directionPoint = CGPoint(x: lem.x, y: lem.y)
+        let candidates = game.lemmings.map {
+            Lemmings3TargetCandidate(id: $0.id, x: $0.x, y: $0.y, direction: $0.direction, tool: $0.tool, active: $0.active)
+        }
+        guard let picked = Lemmings3Targeting.nearest(among: candidates, x: x, y: y, selected: selected,
+            favorApproaching: audioSettings.favorApproachingLemmings) else { return }
+        if selected == 3 && (picked.tool == .bricks || picked.tool == .spade) {
+            pendingTool = picked.id
+            canvas.directionPoint = CGPoint(x: picked.x, y: picked.y)
             canvas.needsDisplay = true
             return
         }
-        applyAction(to: lem.id, direction: .right)
+        applyAction(to: picked.id, direction: .right)
     }
     private func applyAction(to id: Int, direction: Lemmings3Runtime.Direction) {
         guard let lem = game.lemmings.first(where: { $0.id == id && $0.active }) else { return }
