@@ -652,7 +652,12 @@ import NxlvKit
         canvas.isFastForward = fastForward && !paused && screen == .playing && !game.isComplete
         canvas.update(game)
         let palette = Lemmings2Panel.palette(over: game.configuration.palette, phase: frontTicks / 4)
-        let hover = canvas.updateSelection(slot: selected, fan: fanSelected, palette: palette)
+        let skillFrame: Lemmings2SpriteFrame? = {
+            let identifier = game.configuration.skills[selected].rawValue
+            guard identifier > 0, assets.panel.skills.indices.contains(identifier - 1) else { return nil }
+            return assets.panel.skills[identifier - 1]
+        }()
+        let hover = canvas.updateSelection(slot: selected, fan: fanSelected, palette: palette, skillFrame: skillFrame)
         var controls: Set<Lemmings2Control> = []
         if paused { controls.insert(.pause) }
         if fastForward { controls.insert(.fastForward) }
@@ -1390,9 +1395,11 @@ import NxlvKit
     override func resetCursorRects() {
         if cursorFrames.indices.contains(pointerFrame) { addCursorRect(bounds, cursor: cursorFrames[pointerFrame]) }
     }
-    func updateSelection(slot: Int, fan: Bool, palette: [UInt8]) -> String? {
+    func updateSelection(slot: Int, fan: Bool, palette: [UInt8], skillFrame: Lemmings2SpriteFrame? = nil) -> String? {
         selectedSkillSlot = slot
         pointerSelectionEnabled = !fan
+        skillBadge = skillFrame.map { image(width: $0.width, height: $0.height, pixels: $0.pixels,
+                                             palette: palette, opaque: $0.opaque, category: .sprite) }
         if let pointers, cursorFrames.isEmpty || zoom != cursorZoom {
             cursorZoom = zoom
             cursorFrames = pointers.frames.map { pixels in
@@ -1959,6 +1966,11 @@ import NxlvKit
                         tint: .systemGreen, animated: !reduceMotion)
                 }
             }
+            if pointerSelectionEnabled, let point = cursorPoint(),
+               point.y >= origin.y, point.y < origin.y + 160 * zoom * 1.2 {
+                SkillCursorBadge.draw(icon: skillBadge, index: selectedSkillSlot, at: point,
+                    scale: zoom, tint: .systemGreen, reduceMotion: reduceMotion, in: bounds)
+            }
             if let focusNotice { GameTypography.annotation(focusNotice, at: CGPoint(x: 12, y: 12)) }
         }
         if turnBadge.superview == nil { addSubview(turnBadge) }
@@ -2103,6 +2115,7 @@ import NxlvKit
     private let assignmentPulse = LemmingAssignmentPulse()
     private var assignmentPulseTask: Task<Void, Never>?
     private var selectedSkillSlot = 0
+    private var skillBadge: NSImage?
     private var pointerSelectionEnabled = true
     private var focusNotice: String?
     func didAssign(to id: Int) {
@@ -2125,11 +2138,14 @@ import NxlvKit
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in self?.focusNotice = nil; self?.needsDisplay = true }
     }
     func pointerTarget(slot: Int) -> Int? {
-        guard let window, let game else { return nil }
-        let p = controllerPointer ?? capturedPointer ?? convert(window.mouseLocationOutsideOfEventStream, from: nil)
+        guard let game, let p = cursorPoint() else { return nil }
         let x = (p.x - origin.x) / zoom, y = (p.y - origin.y) / (zoom * 1.2)
         guard (0..<visibleWidth).contains(x), (0..<160).contains(y) else { return nil }
         return game.target(slot: slot, x: Int(x + cameraX), y: Int(y + cameraY), preferApproaching: favorApproachingLemmings)?.id
+    }
+    private func cursorPoint() -> CGPoint? {
+        guard let window else { return nil }
+        return controllerPointer ?? capturedPointer ?? convert(window.mouseLocationOutsideOfEventStream, from: nil)
     }
     func focusLemming(_ id: Int) {
         guard let lem = game?.lemmings.first(where: { $0.id == id && $0.active }) else { return }

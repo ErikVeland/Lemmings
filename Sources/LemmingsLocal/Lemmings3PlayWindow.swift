@@ -681,6 +681,7 @@ import NxlvKit
         canAdvance = game.isComplete && game.saved > 0 && ((campaignFinished && usesSharedWindow)
             || (availability.indices.contains(campaign.index + 1) && availability[campaign.index + 1] == nil))
         canvas.selectedAction = selected; canvas.paused = paused; canvas.fast = fast
+        canvas.updateSkillBadge()
         canvas.setAccessibilityLabel("Lemmings 3. \(campaign.tribe.title) level \(campaign.index + 1). \(game.saved) saved, \(game.reserve) in reserve, \(game.remainingSeconds) seconds. Selected \(Lemmings3Panel.names[selected]). \(message) Space pauses. F changes speed. Escape returns to the main menu. Double-click End Run to finish.")
         let turn = ArcadeStore.shared.hotSeatIsActive ? ArcadeStore.shared.records.profile(arcadeProfileID) : nil
         canvas.turnBadge.show(initials: turn?.initials, portrait: turn.flatMap { ArcadeWindow.shared.arcadeView.portraitImage($0.portrait) })
@@ -867,6 +868,7 @@ import NxlvKit
     private var hoveredLemming: Int?
     private var tracking: NSTrackingArea?
     private var panelArt: Lemmings3Panel?
+    private var skillBadge: NSImage?
     private var menuSelection = 0
     private var terrain: NSImage?
     private var sprites: [[NSImage]] = []
@@ -898,6 +900,21 @@ import NxlvKit
             palette: palette, opaque: opaque, category: category)
     }
     func refreshArtwork() throws { try reloadArtwork?(); needsDisplay = true }
+
+    func updateSkillBadge() {
+        guard let art = panelArt, (0..<5).contains(selectedAction) else {
+            skillBadge = nil
+            return
+        }
+        let left = CGFloat(Lemmings3Panel.edges[selectedAction])
+        let width = CGFloat(Lemmings3Panel.edges[selectedAction + 1]) - left
+        let source = CGRect(x: left, y: 0, width: width, height: 40)
+        skillBadge = NSImage(size: source.size, flipped: true) { rect in
+            art.normal.draw(in: rect, from: source, operation: .sourceOver, fraction: 1,
+                            respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
+            return true
+        }
+    }
 
     func load(scene: Lemmings3Scene, style: Lemmings3Style, permanent: Lemmings3Objects, temporary: Lemmings3Objects, sprites bank: Lemmings3Sprites, root: URL, terrainStyle: Int) throws {
         hdrOverlay?.clear()
@@ -1100,6 +1117,11 @@ import NxlvKit
         drawLemmings(game, ghostsOnly: false)
         NSGraphicsContext.restoreGraphicsState()
         drawInterface()
+        if let point = pointerPosition ?? controllerPointer, playfieldRect.contains(point),
+           (0..<5).contains(selectedAction) {
+            SkillCursorBadge.draw(icon: skillBadge, index: selectedAction, at: point,
+                scale: zoom, tint: .systemGreen, reduceMotion: reduceMotion, in: bounds)
+        }
         if turnBadge.superview == nil { addSubview(turnBadge) }
         turnBadge.place(in: playfieldRect)
     }

@@ -279,6 +279,7 @@ struct ReticleFeedback {
 
   private var spriteCache: [String: NSImage] = [:]
   private var spritePixels: [String: CGImage] = [:]
+  private var skillBadgeCache: [Int: NSImage] = [:]
   var usesControllerPointer: Bool { controllerPointer != nil }
   private var controllerPointer: CGPoint?
   func moveControllerPointer(_ dx: Double, _ dy: Double) {
@@ -1063,6 +1064,21 @@ struct ReticleFeedback {
     crosshair.lineWidth = pixel
     color.withAlphaComponent(0.85).setStroke()
     crosshair.stroke()
+
+    SkillCursorBadge.draw(icon: skillBadge(for: selectedSkill()), index: selectedSkill(),
+      at: cursorViewPoint, scale: viewport.zoom, tint: color,
+      reduceMotion: reduceMotion, in: bounds)
+  }
+
+  private func skillBadge(for index: Int) -> NSImage? {
+    guard (0..<8).contains(index), let assets else { return nil }
+    if let cached = skillBadgeCache[index] { return cached }
+    let poses: [ClassicLemmingPose] = [.climbing, .floating, .ohNo, .blocking,
+      .building, .bashing, .mining, .digging]
+    guard let frame = assets.animation(for: poses[index], direction: .none)?.frames.first,
+          let image = image(from: frame) else { return nil }
+    skillBadgeCache[index] = image
+    return image
   }
 
   private func drawRewindCue() {

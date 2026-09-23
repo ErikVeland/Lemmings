@@ -116,7 +116,7 @@ The 1.1 target feature is complete only when:
 - the selected skill remains visible without covering the target;
 - mouse, keyboard and controller input use the same target ID;
 - the setting-off path matches the previous nearest-target behaviour;
-- no pick radius or eligibility rule changes;
+- no pick radius or eligibility rule changes.
 
 The target cue implementation uses the same glow renderer for Classic,
 Lemmings 2 and Lemmings 3. Classic also keeps the established short green HDR
@@ -142,7 +142,7 @@ keyboard and controller maps before implementation.
 | --- | --- | --- |
 | Scrub backward | Hold `Z`, or use the controller rewind action | Move back through recorded states. The transport remains paused at release. |
 | Stop at the current state | Release `Z` or use the controller pause action | Keep the selected historical state paused. |
-| Scrub forward | Shift + Right, with the key repeat held | Move through recorded states towards the live edge one tick at a time. |
+| Scrub forward | Hold `.`, or use Shift + Right | Move through recorded states towards the live edge one tick at a time. |
 | Step one logic tick | Shift + Left or Shift + Right | Move one deterministic tick. |
 | Step one second | Controller rewind action or repeated `Z` | Move through a short time slice without replaying historical sounds. |
 | Resume | Space or the normal Play action | Play from the selected state. |
@@ -152,9 +152,10 @@ When the player reaches the old live edge, normal play resumes only after an
 explicit Play action. A new skill assignment or rate command from an earlier
 state starts a new replay branch, as Classic history does now.
 
-The current 1.1 slice implements the backward scrub, frame stepping, origin
-ghost and reverse recent-effect cue for Classic. Forward transport, controller
-hold semantics and a complete mixed-audio buffer remain the next P1 increment.
+The current 1.1 slice implements the backward scrub, forward scrub, frame
+stepping, origin ghost and reverse recent-effect cue for Classic. The controller
+rewind modifier uses the same held transport path. A complete mixed-audio
+buffer remains the next P1 increment.
 
 The controls help must show the current time, available history and branch
 behaviour. The transport must work from a keyboard, controller and visible
@@ -188,12 +189,12 @@ Respect the accessibility settings:
 
 ### Rewind controls
 
-For the Classic engine, hold `Z` to scrub backwards. Release it to leave the
-run paused at the chosen tick. `Shift` + Left/Right steps one tick backward or
-forward, and Space remains play/pause. The controller rewind action uses the
-same ghost, transport and reversed-effects cue for its fixed seek. Lemmings 2
-and Lemmings 3 continue to report that rewind is unsupported until their
-engines expose deterministic history.
+For the Classic engine, hold `Z` to scrub backwards and hold `.` to scrub
+forward. Release the key to leave the run paused at the chosen tick. `Shift` +
+Left/Right steps one tick backward or forward, and Space remains play/pause.
+The controller rewind modifier uses the same held transport path, ghost and
+reversed-effects cue. Lemmings 2 and Lemmings 3 continue to report that rewind
+is unsupported until their engines expose deterministic history.
 
 ### Audio treatment
 
