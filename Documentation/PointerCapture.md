@@ -21,6 +21,12 @@ do not generate mouse events. Classic CRT scrolling also accepts the curved blac
 border, while clicks retain their original image bounds. Lemmings 2 retains
 held pointer input across the boundary.
 
+Holding an edge re-warps every frame. Each warp re-associates the mouse with the
+cursor afterward; without that, macOS accumulates a stale motion delta and the
+system cursor stops drawing while an edge is held, even though input keeps
+landing correctly. This showed up along the bottom panel, the window edge
+closest to where players rest the pointer to pick a skill.
+
 Capture starts only after the pointer is inside the game. Focus loss, display
 changes, window closure, live resizing and system menus reset it. The game does
 not disconnect the mouse from the system cursor.
