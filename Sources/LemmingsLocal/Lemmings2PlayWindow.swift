@@ -179,6 +179,7 @@ import NxlvKit
             guard let self, let id = self.canvas.assignmentHighlight.target ?? self.canvas.pointerTarget(slot: self.selected) else { return }
             if self.performRecoveryInput(.assign(slot: self.selected, lemming: id)) {
                 self.assignmentFocus.record(id: id, skill: self.selected, tick: self.game?.tick ?? 0)
+                self.canvas.didAssign(to: id)
             }
             self.sounds.play(self.game?.drainSoundEvents() ?? []); self.refreshGame()
         }
@@ -207,6 +208,7 @@ import NxlvKit
                   let id = self.canvas.assignmentHighlight.target ?? self.canvas.pointerTarget(slot: skill) else { return }
             if self.performRecoveryInput(.assign(slot: skill, lemming: id)) {
                 self.assignmentFocus.record(id: id, skill: skill, tick: self.game?.tick ?? 0)
+                self.canvas.didAssign(to: id)
             }
             self.sounds.play(self.game?.drainSoundEvents() ?? []); self.refreshGame()
         }
@@ -633,6 +635,7 @@ import NxlvKit
         if !fanSelected, let lem = game?.target(slot: selected, x: x, y: y, preferApproaching: audioSettings.favorApproachingLemmings) {
             if performRecoveryInput(.assign(slot: selected, lemming: lem.id)) {
                 assignmentFocus.record(id: lem.id, skill: selected, tick: game?.tick ?? 0)
+                canvas.didAssign(to: lem.id)
             }
         }
         sounds.play(game?.drainSoundEvents() ?? [])
@@ -1893,6 +1896,14 @@ import NxlvKit
             }
             drawImage(sprite.image, x: CGFloat(lem.x + offsetX + sprite.x),
                 y: CGFloat(lem.y + offsetY + sprite.y), mirrored: mirrored)
+            let spriteRect = CGRect(x: origin.x + (CGFloat(lem.x + offsetX + sprite.x) - cameraX) * zoom,
+                y: origin.y + (CGFloat(lem.y + offsetY + sprite.y) - cameraY) * zoom * 1.2,
+                width: sprite.image.size.width * zoom, height: sprite.image.size.height * zoom * 1.2)
+            if assignmentPulse.target == lem.id,
+               let pixels = sprite.image.cgImage(forProposedRect: nil, context: nil, hints: nil) {
+                assignmentPulse.draw(sprite: pixels, in: spriteRect, scale: zoom,
+                    reduceMotion: reduceMotion, reduceFlashes: reduceFlashes)
+            }
             if let ticks = lem.bombTicks, let numbers = sprites["COUNTDOWN"], numbers.indices.contains(ticks >> 4) {
                 let number = numbers[ticks >> 4]
                 let x = [.walking,.running,.falling].contains(lem.state) ? -8 : offsetX
@@ -2089,9 +2100,26 @@ import NxlvKit
     }
     func controllerPan(_ dx: Double, _ dy: Double) { assignmentHighlight.clear(); pan(x: dx, y: dy) }
     let assignmentHighlight = LemmingFocusHighlight()
+    private let assignmentPulse = LemmingAssignmentPulse()
+    private var assignmentPulseTask: Task<Void, Never>?
     private var selectedSkillSlot = 0
     private var pointerSelectionEnabled = true
     private var focusNotice: String?
+    func didAssign(to id: Int) {
+        assignmentPulse.show(id)
+        needsDisplay = true
+        scheduleAssignmentPulseRedraw()
+    }
+    private func scheduleAssignmentPulseRedraw() {
+        assignmentPulseTask?.cancel()
+        guard assignmentPulse.isActive else { return }
+        assignmentPulseTask = Task { [weak self] in
+            try? await Task.sleep(for: .milliseconds(16))
+            guard !Task.isCancelled else { return }
+            self?.needsDisplay = true
+            self?.scheduleAssignmentPulseRedraw()
+        }
+    }
     func showFocusNotice(_ text: String) {
         focusNotice = text; needsDisplay = true
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in self?.focusNotice = nil; self?.needsDisplay = true }

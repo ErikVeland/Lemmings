@@ -288,6 +288,7 @@ struct ReticleFeedback {
     handleMove(to: next); controllerPointer = next
   }
   let assignmentHighlight = LemmingFocusHighlight()
+  private let assignmentPulse = LemmingAssignmentPulse()
   var selectedSkill: () -> Int = { 0 }
   private var reticleFeedback = ReticleFeedback()
   private var reticleRedraw: Task<Void, Never>?
@@ -295,6 +296,7 @@ struct ReticleFeedback {
 
   func didAssign(to id: Int) {
     assignedTarget = id
+    assignmentPulse.show(id)
     if !reduceFlashes { reticleFeedback.assigned(now: ProcessInfo.processInfo.systemUptime) }
     needsDisplay = true
     scheduleReticleRedraw()
@@ -302,8 +304,9 @@ struct ReticleFeedback {
 
   private func scheduleReticleRedraw() {
     let remaining = reticleFeedback.nextChange - ProcessInfo.processInfo.systemUptime
+    let assignmentRemaining = assignmentPulse.remaining
     let shimmer = cursorViewPoint != nil && !reduceMotion && session != nil
-    let delay = max(remaining, shimmer ? 1.0 / 30.0 : 0)
+    let delay = max(remaining, assignmentRemaining, shimmer ? 1.0 / 30.0 : 0)
     guard delay > 0 else { return }
     reticleRedraw?.cancel()
     reticleRedraw = Task { [weak self] in
@@ -948,6 +951,7 @@ struct ReticleFeedback {
           return
         }
         drawSprite(sprite, key: key, in: rect, alpha: fraction)
+        drawAssignmentPulse(for: lemming.id, key: key, sprite: sprite, in: rect)
         if pose == .explosion { drawBombCore(in: rect, tick: lemming.animationFrame, actor:lemming.id) }
         if let countdown = lemming.countdown { drawCountdown(countdown, above: rect) }
         return
@@ -981,11 +985,20 @@ struct ReticleFeedback {
       return
     }
     drawSprite(sprite, key: key, in: rect, alpha: fraction)
+    drawAssignmentPulse(for: lemming.id, key: key, sprite: sprite, in: rect)
     if pose == .explosion { drawBombCore(in: rect, tick: lemming.animationFrame, actor:lemming.id) }
 
     if let countdown = lemming.countdown {
       drawCountdown(countdown, above: rect)
     }
+  }
+
+  private func drawAssignmentPulse(for id: Int, key: String, sprite: NSImage, in rect: CGRect) {
+    guard assignmentPulse.target == id,
+          let pixels = spritePixels[key] ?? sprite.cgImage(forProposedRect: nil, context: nil, hints: nil)
+    else { return }
+    assignmentPulse.draw(sprite: pixels, in: rect, scale: viewport.zoom,
+      reduceMotion: reduceMotion, reduceFlashes: reduceFlashes)
   }
 
   private func drawCountdown(_ countdown: Int, above rect: CGRect) {

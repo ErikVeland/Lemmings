@@ -484,6 +484,7 @@ import NxlvKit
             recoveryInputs.append(.init(tick: game.tick, action: action.rawValue, lemming: id,
                 direction: action == .use ? direction.rawValue : nil))
             assignmentFocus.record(id: id, skill: selected, tick: game.tick)
+            canvas.didAssign(to: id)
             warningSound.play(action == .use && lem.tool == .bomb ? .ohNo : .assignSkill)
             skillAssignments[action.rawValue, default: 0] += 1
             if action == .use, let tool = lem.tool { toolUses[String(describing: tool), default: 0] += 1 }
@@ -836,6 +837,23 @@ import NxlvKit
             windowNumber: window?.windowNumber ?? 0, context: nil, characters: key, charactersIgnoringModifiers: key, isARepeat: false, keyCode: code) { keyDown(with: event) }
     }
     let assignmentHighlight = LemmingFocusHighlight()
+    private let assignmentPulse = LemmingAssignmentPulse()
+    private var assignmentPulseTask: Task<Void, Never>?
+    func didAssign(to id: Int) {
+        assignmentPulse.show(id)
+        needsDisplay = true
+        scheduleAssignmentPulseRedraw()
+    }
+    private func scheduleAssignmentPulseRedraw() {
+        assignmentPulseTask?.cancel()
+        guard assignmentPulse.isActive else { return }
+        assignmentPulseTask = Task { [weak self] in
+            try? await Task.sleep(for: .milliseconds(16))
+            guard !Task.isCancelled else { return }
+            self?.needsDisplay = true
+            self?.scheduleAssignmentPulseRedraw()
+        }
+    }
     var pointerTarget: Int? {
         guard let p = pointerPosition, playfieldRect.contains(p), let game else { return nil }
         let x = (p.x - origin.x) / zoom + cameraX, y = (p.y - origin.y) / zoom + cameraY
@@ -1007,6 +1025,14 @@ import NxlvKit
                 continue
             }
             drawImage(sprite, x: CGFloat(lem.x) - sprite.size.width / 2, y: CGFloat(lem.y) - sprite.size.height)
+            let spriteRect = CGRect(x: origin.x + (CGFloat(lem.x) - sprite.size.width / 2 - cameraX) * zoom,
+                y: origin.y + (CGFloat(lem.y) - sprite.size.height - cameraY) * zoom,
+                width: sprite.size.width * zoom, height: sprite.size.height * zoom)
+            if assignmentPulse.target == lem.id,
+               let pixels = sprite.cgImage(forProposedRect: nil, context: nil, hints: nil) {
+                assignmentPulse.draw(sprite: pixels, in: spriteRect, scale: zoom,
+                    reduceMotion: reduceMotion, reduceFlashes: reduceFlashes)
+            }
             if lem.charmedBy != nil {
                 GameTypography.annotation("Charmed", at: NSPoint(x: origin.x + (CGFloat(lem.x - 8) - cameraX) * zoom,
                     y: origin.y + (CGFloat(lem.y - 30) - cameraY) * zoom), palette: .green)
