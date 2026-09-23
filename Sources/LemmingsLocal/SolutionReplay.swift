@@ -192,6 +192,9 @@ struct VerifiedSolution: Sendable {
     }
 
     private func refresh() {
+        // Seeking rebuilds the read-only session value; keep the canvas on that
+        // replacement rather than the session that was first displayed.
+        field.session = playback.session
         if playback.session.isComplete {
             status.stringValue = "\(playback.session.simulation.savedCount) rescued"
             marker.point = nil
