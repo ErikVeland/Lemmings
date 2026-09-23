@@ -20,24 +20,14 @@ The integration checks cover the 360 original hint tiers, the actual packaged fo
 paragraph and arrow handling, accessible values, oversized text, keyboard scrolling
 and tier reset. Existing pause, spoiler, controller, flat/CRT and help handoff checks remain.
 
-The full [Mac integration suite](../../.build/release-polish-app-tests.log) passed.
-Visual inspection covered nudge, approach and opening moves in the rendered flat/CRT pages.
-The two release-audit integrity tests and shell syntax check passed.
+The focused checks are run with
+`TEST_SCOPE=hints Scripts/run-app-integration-tests.sh`. Sequel data and
+artwork checks use `Scripts/run-sequel-data-tests.sh` and
+`Scripts/run-sequel-mac-artwork-tests.sh`. The release audit records the source
+and fixture hashes for a candidate build; local `.build` outputs are disposable
+and are not linked from maintained documentation.
 
-The [sequel suite](../../.build/release-polish-sequel-tests.log) passed, including 59,542 artwork frames,
-214 levels, live L2/L3 hint pause restoration, controllers, settings and original media.
-
-The optimised [Universal development app](../../.build/release-polish/Ultimate%20Lemmings.app) built successfully
-through the production script. The executable and shared library each contain arm64 and x86_64 slices,
-both targeting macOS 13. Strict, deep ad-hoc signature verification passed.
-The bundled hint fingerprint matches the engine. The recorded source inputs did not change.
-See [build output](../../.build/release-polish-build.log), [package integrity](../../.build/release-polish/integrity.json)
-and [source inputs](../../.build/release-polish-inputs.json).
-
-The full [integration rerun](../../.build/release-polish-package-app-tests.log) also passed with
-the new package's resource bundle and optimised shared library.
-
-This is a local development build. It is not a newly notarised release archive.
+This review records development validation. It is not a release certificate.
 
 ## Remaining release gates
 

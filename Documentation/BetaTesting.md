@@ -7,20 +7,28 @@ do not certify a 1.1 package.
 ## Local build and notarisation
 
 When the normal beta packaging workflow is not available, run the focused
-Developer ID distribution script:
+tri-archive release script:
 
 ```sh
 NOTARY_PROFILE=lemmings-beta zsh Scripts/build-and-notarise.sh
 ```
 
-The script finds the first installed Developer ID Application identity unless
-`SIGNING_IDENTITY` is set. It uses a keychain profile created by
-`xcrun notarytool store-credentials`, so Apple credentials are not stored in
-the repository or passed on the command line. The output is a timestamped
-directory under `.build/notarised/`.
+Before it builds, the script checks for source changes after the previous
+release, checks the current release notes, creates notes from recent source
+changes when they are missing, and checks that the Monterey worktree contains
+the current commit. It then writes three timestamped ZIP files to
+`~/Downloads`: Developer ID standard, macOS 12 Monterey and Game Center.
 
-Use `--dry-run` to check the selected identity, notary profile and output path
-without building or uploading anything.
+The first two archives are notarised. The Game Center archive is development
+signed for registered devices because Apple does not notarise App Store Game
+Center entitlements. The script finds the first installed Developer ID
+Application identity unless `SIGNING_IDENTITY` is set. It uses a keychain
+profile created by `xcrun notarytool store-credentials`, so Apple credentials
+are not stored in the repository or passed on the command line.
+
+Use `--dry-run` to run the gates and check the selected paths without building,
+signing or uploading anything. Set `RELEASE_BASE` when the automatic previous
+release boundary is not the one you intend to package.
 
 ## Validate the build
 

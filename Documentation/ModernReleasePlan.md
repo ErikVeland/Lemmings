@@ -72,7 +72,10 @@ The audit creates a new directory under `.build/release-audit`, compiles the sha
 
 Without `--app`, the app suites are explicitly **not run**. This is useful during engine work but is not a complete application check. `--require-closure` also fails because hardware, publishing and other platform gates remain open. The tool deliberately does not issue a release-ready certificate.
 
-The September 11 hardening results are recorded in [the handoff](ReleaseReadiness/2026-09-11.md). Keep those results distinct from future builds.
+The September 11 hardening results are retained in the current release-readiness
+records. Keep those results distinct from future builds and use the current
+[validation record](ReleaseReadiness/ClassicValidation-current.md) for present
+claims.
 
 ## Partner evaluation
 

@@ -48,10 +48,11 @@ engine. Both sequels play through their full campaigns with original
 artwork, music and interfaces. See [wording definitions](ReleaseScope.md#wording)
 for the full distinction, including "Playable."
 
-Beyond these eight official releases, the app also loads 6,020 fan-made
-levels in the unofficial NeoLemmix format. Every one of them loads, renders
-and starts. A winning route is not required for these, and most do not have
-one recorded yet.
+Beyond these eight official releases, the app also loads 6,020 Classic-format
+fan levels in 535 retained packs. The full corpus has load and render evidence;
+344 levels also have current winning witnesses. This corpus is separate from
+NeoLemmix `.nxlv` compatibility. Real NeoLemmix fan-pack coverage remains a
+1.5 gate and is not presented as completed content.
 
 ## What "modern" means here
 
@@ -114,8 +115,10 @@ Lemmings 3; see the [targeting plan](../docs/superpowers/plans/2026-09-23-approa
 ## Roadmap
 
 **Now: develop 1.1 on macOS.** The first 1.1 QoL focus is reliable misclick
-targeting across all three engines. Release validation will restart with the
-first 1.1 beta package rather than reuse the 1.0 RC1 record.
+targeting across all three engines. The prioritised QoL roadmap defines the
+target-select visual contract and the following rewind milestone. Release
+validation will restart with the first 1.1 beta package rather than reuse the
+1.0 RC1 record. See the [QoL roadmap](../docs/superpowers/plans/2026-09-23-qol-roadmap.md).
 
 **Next: bring Lemmings 2 and 3 to the same standard.** Both already run their
 full campaigns with original assets. Closing the gap means recording the
