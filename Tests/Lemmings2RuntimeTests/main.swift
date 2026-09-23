@@ -33,7 +33,7 @@ func testFavorApproachingLemming() throws {
         palette: c.palette, entrance: .init(x: 20, y: 45, width: 1, height: 1),
         exits: [.init(x: 90, y: 50, width: 16, height: 16)], skills: c.skills, supplies: c.supplies, total: 2,
         timeLimit: 120, releaseInterval: 6, terrainMasks: c.terrainMasks, firstReleaseTick: 1))
-    while !(game.lemmings.count == 2 && game.lemmings.contains(where: { $0.direction < 0 })) { game.step() }
+    for _ in 0..<600 where !(game.lemmings.count == 2 && game.lemmings.contains(where: { $0.direction < 0 })) { game.step() }
     guard let turned = game.lemmings.first(where: { $0.direction < 0 }),
         let approaching = game.lemmings.first(where: { $0.direction > 0 }) else {
         check(false, "Expected one turned lemming and one still approaching the wall"); return
@@ -49,6 +49,53 @@ func testFavorApproachingLemming() throws {
     check(game.target(slot: slot, x: clickX, y: turned.y - 5)?.id == turned.id,
         "Plain nearest-distance targeting should keep choosing the closer, already-turned lemming")
     print("PASS favorApproachingLemmings prefers the lemming still walking toward the wall")
+}
+
+/// Two lemmings walking the SAME direction on flat, wall-free ground must
+/// not get reordered by the approaching preference: the nearer one (by
+/// pixel distance) wins regardless of which side of it the click lands on,
+/// because neither of them has turned around.
+func testSameDirectionPackKeepsNearestPick() throws {
+    var game = try fixture()
+    for _ in 0..<400 where game.lemmings.count < 2 { game.step() }
+    check(game.lemmings.count == 2, "Expected both lemmings released within the tick budget")
+    // Both walk right on flat ground with no wall, so both should still have direction > 0.
+    check(game.lemmings.allSatisfy { $0.direction > 0 }, "Expected both lemmings still walking right")
+    let leader = game.lemmings.max(by: { $0.x < $1.x })!, follower = game.lemmings.min(by: { $0.x < $1.x })!
+    check(leader.x > follower.x, "Expected the earlier-released lemming to be ahead")
+    // Click one pixel behind the leader: the leader itself does not
+    // "approach" this click (it already walked past it), and the follower
+    // does, but both face the same way, so the override must not apply.
+    let clickX = leader.x - 1
+    let slot = try fixture().configuration.skills.firstIndex(of: .climber)!
+    check(game.target(slot: slot, x: clickX, y: leader.y - 5, preferApproaching: true)?.id == leader.id,
+        "Same-direction lemmings must not be reordered by the approaching preference")
+    check(game.target(slot: slot, x: clickX, y: leader.y - 5)?.id == leader.id,
+        "Plain targeting should also pick the nearer, same-direction leader")
+    print("PASS same-direction lemming pack keeps the plain nearest-distance pick")
+}
+
+/// With only a single, already-turned lemming in range, targeting must
+/// still fall back to it — there is no approaching alternative to prefer.
+func testFavorApproachingLemmingFallsBackWithNoAlternative() throws {
+    let width = 120, height = 80
+    var pixels = [UInt8](repeating: 0, count: width * height)
+    var solid = [Bool](repeating: false, count: width * height)
+    for y in 60..<height { for x in 0..<width { solid[y * width + x] = true; pixels[y * width + x] = 6 } }
+    for y in 20..<60 { for x in 50..<56 { solid[y * width + x] = true; pixels[y * width + x] = 6 } }
+    let c = try fixture().configuration
+    var game = try Lemmings2Runtime(configuration: .init(width: width, height: height, pixels: pixels, solid: solid,
+        palette: c.palette, entrance: .init(x: 20, y: 45, width: 1, height: 1),
+        exits: [.init(x: 90, y: 50, width: 16, height: 16)], skills: c.skills, supplies: c.supplies, total: 1,
+        timeLimit: 120, releaseInterval: 1, terrainMasks: c.terrainMasks, firstReleaseTick: 1))
+    for _ in 0..<600 where !(game.lemmings.first?.direction ?? 1 < 0) { game.step() }
+    guard let turned = game.lemmings.first, turned.direction < 0 else {
+        check(false, "Expected the lone lemming to turn around at the wall"); return
+    }
+    let slot = c.skills.firstIndex(of: .climber)!
+    check(game.target(slot: slot, x: turned.x, y: turned.y - 5, preferApproaching: true)?.id == turned.id,
+        "With no approaching alternative, targeting should fall back to the only candidate")
+    print("PASS favorApproachingLemmings falls back to the only candidate when nothing approaches")
 }
 
 // Deliberately synthetic rectangles exercise runtime phases without bundling
@@ -1458,6 +1505,8 @@ do {
     try testJumper()
     try testStomper(syntheticMasks())
     try testFavorApproachingLemming()
+    try testSameDirectionPackKeepsNearestPick()
+    try testFavorApproachingLemmingFallsBackWithNoAlternative()
     print("PASS native L2 walking, rescue, inventory, terrain, replay and nuke tests")
 
     if CommandLine.arguments.count > 1 {

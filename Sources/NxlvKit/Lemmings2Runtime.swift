@@ -482,19 +482,27 @@ public struct Lemmings2Runtime: Sendable {
         default: return true
         }
     }
-    /// Hover and click use the same stable, eligible-first target selection.
+    /// Hover, click and keyboard/gamepad assignment all use this same,
+    /// stable, eligible-first target selection.
     public func target(slot: Int, x: Int, y: Int, preferApproaching: Bool = false) -> Lemming? {
-        lemmings.filter { $0.active && $0.state != .exiting && $0.state != .exploding &&
-            abs($0.x - x) <= 9 && abs($0.y - 5 - y) <= 12 }.min { a, b in
-                let eligibleA = canAssign(slot: slot, to: a.id), eligibleB = canAssign(slot: slot, to: b.id)
-                if eligibleA != eligibleB { return eligibleA }
-                if preferApproaching, eligibleA, eligibleB {
-                    let approachingA = (x - a.x) * a.direction >= 0, approachingB = (x - b.x) * b.direction >= 0
-                    if approachingA != approachingB { return approachingA }
-                }
-                let da = abs(a.x - x) + abs(a.y - 5 - y), db = abs(b.x - x) + abs(b.y - 5 - y)
-                return da == db ? a.id < b.id : da < db
-            }
+        let candidates = lemmings.filter { $0.active && $0.state != .exiting && $0.state != .exploding &&
+            abs($0.x - x) <= 9 && abs($0.y - 5 - y) <= 12 }
+        func distance(_ lem: Lemming) -> Int { abs(lem.x - x) + abs(lem.y - 5 - y) }
+        guard let nearest = candidates.min(by: { a, b in
+            let eligibleA = canAssign(slot: slot, to: a.id), eligibleB = canAssign(slot: slot, to: b.id)
+            if eligibleA != eligibleB { return eligibleA }
+            let da = distance(a), db = distance(b)
+            return da == db ? a.id < b.id : da < db
+        }) else { return nil }
+        guard preferApproaching, canAssign(slot: slot, to: nearest.id),
+            (x - nearest.x) * nearest.direction < 0 else { return nearest }
+        let approaching = candidates.filter {
+            canAssign(slot: slot, to: $0.id) && (x - $0.x) * $0.direction >= 0 && $0.direction != nearest.direction
+        }.min { a, b in
+            let da = distance(a), db = distance(b)
+            return da == db ? a.id < b.id : da < db
+        }
+        return approaching ?? nearest
     }
     @discardableResult public mutating func assign(slot: Int, to id: Int) -> Bool {
         guard canAssign(slot: slot, to: id), let index = lemmings.firstIndex(where: { $0.id == id }) else { return false }

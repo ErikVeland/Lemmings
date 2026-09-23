@@ -378,6 +378,7 @@ import NxlvKit
         canvas.reduceMotion = settings.reduceMotion
         canvas.reduceFlashes = settings.reduceFlashes
         canvas.hdEffectsEnabled = settings.hdEffectsEnabled
+        canvas.favorApproachingLemmings = settings.favorApproachingLemmings
         canvas.fullScreenHDRFlashes = settings.cinematicExplosionsEnabled
         if let root = Bundle.main.resourceURL?.appendingPathComponent("Music") {
             dj.load(soundtracks: SoundtrackPlayer.djSoundtracks(at: root, includeOtherSoundtracks: settings.djIncludesOtherSoundtracks))
@@ -1404,7 +1405,7 @@ import NxlvKit
             let x = (point.x - origin.x) / zoom, y = (point.y - origin.y) / (zoom * 1.2)
             if (0..<visibleWidth).contains(x), (0..<160).contains(y) {
                 if fan { frame = 2 }
-                else if let target = game.target(slot: slot, x: Int(x + cameraX), y: Int(y + cameraY)) {
+                else if let target = game.target(slot: slot, x: Int(x + cameraX), y: Int(y + cameraY), preferApproaching: favorApproachingLemmings) {
                     frame = game.canAssign(slot: slot, to: target.id) ? 1 : 0
                     switch target.state {
                     case .walking: label = "WALKER"
@@ -1526,6 +1527,7 @@ import NxlvKit
     var speedLabel = "2×"
     var speedChoiceLabel = "2×"
     var variableSpeedEnabled = true
+    var favorApproachingLemmings = true
     var onSpeedPress: ((TimeInterval, Int) -> Void)?
     var onSpeedRelease: ((TimeInterval) -> Void)?
     var onSpeedStep: ((Int, TimeInterval) -> Void)?
@@ -2080,7 +2082,7 @@ import NxlvKit
         let p = controllerPointer ?? capturedPointer ?? convert(window.mouseLocationOutsideOfEventStream, from: nil)
         let x = (p.x - origin.x) / zoom, y = (p.y - origin.y) / (zoom * 1.2)
         guard (0..<visibleWidth).contains(x), (0..<160).contains(y) else { return nil }
-        return game.target(slot: slot, x: Int(x + cameraX), y: Int(y + cameraY))?.id
+        return game.target(slot: slot, x: Int(x + cameraX), y: Int(y + cameraY), preferApproaching: favorApproachingLemmings)?.id
     }
     func focusLemming(_ id: Int) {
         guard let lem = game?.lemmings.first(where: { $0.id == id && $0.active }) else { return }
