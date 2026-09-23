@@ -159,7 +159,10 @@ public enum SequelMacArtwork {
             characterDetails(source, indexedWalker: category == .lemmings2Walker, output: &output)
         }
         if category == .mechanical { metalDetails(source, colours: colours, light: light, output: &output) }
-        if category == .liquid { liquidDetails(source, output: &output) }
+        if category == .liquid {
+            liquidBody(source, output: &output)
+            liquidDetails(source, output: &output)
+        }
         for edit in edits {
             guard edit.x >= 0, edit.y >= 0, edit.x < w*2, edit.y < h*2 else {
                 throw SequelDataError.invalid("Artwork correction is outside its frame.")
@@ -250,6 +253,34 @@ public enum SequelMacArtwork {
                 output[p+2] = UInt8(truncatingIfNeeded:pixel >> 8)
             }
         } }
+    }
+
+    /// Fill the transparent tail below an existing liquid column.
+    /// Liquid animation frames often store only the moving surface. The
+    /// frame bounds still define the body area, so fill only below source
+    /// pixels that already belong to the liquid. Empty columns stay clear.
+    private static func liquidBody(_ source: SequelMacFrame, output: inout [UInt8]) {
+        let w = source.width, h = source.height
+        guard w > 0, h > 1 else { return }
+        for x in 0..<w {
+            var lastOpaque: Int?
+            for y in 0..<h where source.rgba[(y * w + x) * 4 + 3] == 255 {
+                lastOpaque = y
+            }
+            guard let lastOpaque, lastOpaque < h - 1 else { continue }
+            let bodyPixel = ((lastOpaque * 2) * w * 2 + x * 2) * 4
+            for y in (lastOpaque + 1)..<h {
+                for dy in 0..<2 {
+                    for dx in 0..<2 {
+                        let pixel = ((y * 2 + dy) * w * 2 + x * 2 + dx) * 4
+                        output[pixel] = output[bodyPixel]
+                        output[pixel + 1] = output[bodyPixel + 1]
+                        output[pixel + 2] = output[bodyPixel + 2]
+                        output[pixel + 3] = 255
+                    }
+                }
+            }
+        }
     }
 
     /// Mac wave glints use one-pixel horizontal marks above a flat body.
