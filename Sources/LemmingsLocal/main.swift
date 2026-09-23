@@ -42,6 +42,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private var timer: Timer?
   private var rewindTimer: Timer?
   private var rewindHeld = false
+  private var rewindAudioDucked = false
   private var forwardTimer: Timer?
   private var forwardHeld = false
   private var accumulator = 0.0
@@ -3330,6 +3331,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     guard !rewindHeld else { return }
     rewindHeld = true
     rewindTimer?.invalidate()
+    setRewindAudioDucked(true)
     playfield.beginRewindCue(at: session.currentTick)
     rewindTimer = Timer.scheduledTimer(withTimeInterval: 1.0 / 15.0, repeats: true) { [weak self] _ in
       MainActor.assumeIsolated { _ = self?.performRewind(seconds: 0.20) }
@@ -3342,7 +3344,21 @@ let achievementProgressKey = "ClassicAchievementProgress"
     rewindTimer?.invalidate()
     rewindTimer = nil
     effects.silence()
+    setRewindAudioDucked(false)
     playfield.endRewindCue()
+  }
+
+  private func setRewindAudioDucked(_ active: Bool) {
+    guard rewindAudioDucked != active else { return }
+    rewindAudioDucked = active
+    if active {
+      let level = settings.musicVolume * 0.18
+      music.setVolume(level); soundtrack.setVolume(level); dj.setVolume(level)
+    } else {
+      music.setVolume(settings.musicVolume)
+      soundtrack.setVolume(settings.musicVolume)
+      dj.setVolume(settings.musicVolume)
+    }
   }
 
   private func beginContinuousStepForward() {
@@ -3385,23 +3401,32 @@ let achievementProgressKey = "ClassicAchievementProgress"
       setStatus("This ruleset cannot rewind yet.")
       return
     }
+    setRewindAudioDucked(true)
     playfield.beginRewindCue(at: session.currentTick)
     guard performRewind(seconds: seconds) else {
+      setRewindAudioDucked(false)
       playfield.endRewindCue()
       setStatus("Already at the start of the history.")
       return
     }
+    setRewindAudioDucked(false)
     playfield.endRewindCue()
   }
 
   private func stepBackward() {
     guard let session, session.supportsRewind else { return }
+    setRewindAudioDucked(true)
     playfield.beginRewindCue(at: session.currentTick)
-    guard session.stepBackward() else { playfield.endRewindCue(); return }
+    guard session.stepBackward() else {
+      setRewindAudioDucked(false)
+      playfield.endRewindCue()
+      return
+    }
     isPaused = true
     panel.isPaused = true
     refreshAfterSeek()
     effects.playRewindScrub()
+    setRewindAudioDucked(false)
     playfield.endRewindCue()
   }
 

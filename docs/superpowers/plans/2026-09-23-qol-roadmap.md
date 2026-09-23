@@ -154,8 +154,9 @@ state starts a new replay branch, as Classic history does now.
 
 The current 1.1 slice implements the backward scrub, forward scrub, frame
 stepping, origin ghost and reverse recent-effect cue for Classic. The controller
-rewind modifier uses the same held transport path. A complete mixed-audio
-buffer remains the next P1 increment.
+rewind modifier uses the same held transport path. The effect renderer now keeps
+a short mixed ring and ducks music during transport. Cross-source music capture
+and resume cross-fades remain the next audio increment.
 
 The controls help must show the current time, available history and branch
 behaviour. The transport must work from a keyboard, controller and visible

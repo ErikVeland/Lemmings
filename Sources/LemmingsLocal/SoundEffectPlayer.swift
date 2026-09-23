@@ -25,8 +25,10 @@ final class SoundEffectPlayer: @unchecked Sendable {
   private var voices: [Voice]
   private var isMuted = false
   private var level: Double = 1.0
-  private var recentSamples: [Float] = []
   private let recentSampleLimit = 44_100
+  private var recentSamples: [Float]
+  private var recentSamplePositions: [Int64]
+  private var latestRecentSample: Int64?
 
   private let sampleRate = 44100.0
   private(set) var isRunning = false
@@ -34,6 +36,8 @@ final class SoundEffectPlayer: @unchecked Sendable {
 
   init(voiceCount: Int = 16) {
     voices = [Voice](repeating: Voice(), count: max(1, voiceCount))
+    recentSamples = [Float](repeating: 0, count: recentSampleLimit)
+    recentSamplePositions = [Int64](repeating: .min, count: recentSampleLimit)
     // A short builder-like chink is available even in previews without a bank.
     library[.builderWarning] = (0..<3528).map { i in
       let t = Double(i) / 44100
@@ -55,13 +59,13 @@ final class SoundEffectPlayer: @unchecked Sendable {
     engine.connect(environment, to: engine.mainMixerNode, format: stereo)
     for index in voices.indices {
       let mixer = AVAudioMixerNode()
-      let node = AVAudioSourceNode(format: mono) { [weak self] _, _, frameCount, buffers in
+      let node = AVAudioSourceNode(format: mono) { [weak self] _, timestamp, frameCount, buffers in
         let list = UnsafeMutableAudioBufferListPointer(buffers)
         guard let self else {
           for buffer in list { memset(buffer.mData, 0, Int(buffer.mDataByteSize)) }
           return noErr
         }
-        self.fillVoice(index, buffers: list, frames: Int(frameCount))
+        self.fillVoice(index, buffers: list, frames: Int(frameCount), sampleTime: timestamp.pointee.mSampleTime)
         return noErr
       }
       engine.attach(node)
@@ -101,22 +105,36 @@ final class SoundEffectPlayer: @unchecked Sendable {
     if isRunning && !engine.isRunning { try engine.start() }
   }
 
-  private func fillVoice(_ index: Int, buffers: UnsafeMutableAudioBufferListPointer, frames: Int) {
+  private func fillVoice(_ index: Int, buffers: UnsafeMutableAudioBufferListPointer, frames: Int, sampleTime: Double) {
     lock.lock()
     defer { lock.unlock() }
     var voice = voices[index]
+    let start = sampleTime.isFinite && sampleTime >= 0
+      ? Int64(sampleTime.rounded())
+      : (latestRecentSample.map { $0 + 1 } ?? 0)
     for frame in 0..<frames {
       var sample: Float = 0
+      var sourceSample: Float = 0
       if !isMuted && voice.isActive {
         let position = Int(voice.position)
         if position < voice.samples.count {
-          sample = voice.samples[position] * Float(level) * 0.6
+          sourceSample = voice.samples[position]
+          sample = sourceSample * Float(level) * 0.6
           voice.position += voice.increment
         } else {
           voice.isActive = false
         }
       }
       for buffer in buffers { buffer.mData?.assumingMemoryBound(to: Float.self)[frame] = sample }
+
+      let position = start + Int64(frame)
+      let slot = Int((position % Int64(recentSampleLimit) + Int64(recentSampleLimit)) % Int64(recentSampleLimit))
+      if recentSamplePositions[slot] != position {
+        recentSamplePositions[slot] = position
+        recentSamples[slot] = 0
+      }
+      recentSamples[slot] += sourceSample
+      latestRecentSample = max(latestRecentSample ?? position, position)
     }
     voices[index] = voice
   }
@@ -221,8 +239,15 @@ final class SoundEffectPlayer: @unchecked Sendable {
   func playRewindScrub() {
     lock.lock()
     defer { lock.unlock() }
-    guard !isMuted, !recentSamples.isEmpty else { return }
-    let samples = Array(recentSamples.suffix(11_025).reversed())
+    guard !isMuted, let latest = latestRecentSample else { return }
+    var samples: [Float] = []
+    samples.reserveCapacity(11_025)
+    for offset in 0..<11_025 {
+      let position = latest - Int64(offset)
+      let slot = Int((position % Int64(recentSampleLimit) + Int64(recentSampleLimit)) % Int64(recentSampleLimit))
+      guard recentSamplePositions[slot] == position else { break }
+      samples.append(recentSamples[slot])
+    }
     guard !samples.isEmpty else { return }
     let index = voices.firstIndex { !$0.isActive } ?? voices.startIndex
     voices[index] = Voice(samples: samples, position: 0, increment: 1, isActive: true)
@@ -252,11 +277,6 @@ final class SoundEffectPlayer: @unchecked Sendable {
     guard !isMuted, let samples = library[effect], !samples.isEmpty else { return }
     let rate = rates[effect] ?? sampleRate
     onPlay?(samples, rate, Float(level) * 0.6)
-    recentSamples.append(contentsOf: samples.suffix(recentSampleLimit))
-    if recentSamples.count > recentSampleLimit {
-      recentSamples.removeFirst(recentSamples.count - recentSampleLimit)
-    }
-
     var slot = voices.firstIndex { !$0.isActive }
     if slot == nil {
       // Steal the voice closest to finishing, which is least noticeable.
