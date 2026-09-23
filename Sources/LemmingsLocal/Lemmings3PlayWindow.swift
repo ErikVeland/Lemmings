@@ -783,7 +783,10 @@ import NxlvKit
             || (availability.indices.contains(campaign.index + 1) && availability[campaign.index + 1] == nil))
         canvas.selectedAction = selected; canvas.paused = paused; canvas.fast = fast
         canvas.updateSkillBadge()
-        canvas.setAccessibilityLabel("Lemmings 3. \(campaign.tribe.title) level \(campaign.index + 1). \(game.saved) saved, \(game.reserve) in reserve, \(game.remainingSeconds) seconds. Selected \(Lemmings3Panel.names[selected]). \(message) Space pauses. F changes speed. Escape returns to the main menu. Double-click End Run to finish.")
+        let transport = rewindOriginState.map { "Rewind active, \($0.tick - game.tick) ticks back. Escape cancels." } ?? ""
+        canvas.rewindOriginTick = rewindOriginState?.tick
+        canvas.rewindCurrentTick = game.tick
+        canvas.setAccessibilityLabel("Lemmings 3. \(campaign.tribe.title) level \(campaign.index + 1). \(game.saved) saved, \(game.reserve) in reserve, \(game.remainingSeconds) seconds. Selected \(Lemmings3Panel.names[selected]). \(message) Space pauses. F changes speed. Z rewinds. \(transport) Escape returns to the main menu. Double-click End Run to finish.")
         let turn = ArcadeStore.shared.hotSeatIsActive ? ArcadeStore.shared.records.profile(arcadeProfileID) : nil
         canvas.turnBadge.show(initials: turn?.initials, portrait: turn.flatMap { ArcadeWindow.shared.arcadeView.portraitImage($0.portrait) })
         canvas.speedMultiplier = speedControl.multiplier
@@ -865,6 +868,8 @@ import NxlvKit
         hdrOverlay?.pulse(cores: cores, fullScreen: fullScreenHDRFlashes)
     }
     var game: Lemmings3Runtime? { didSet { updateSpeedTrails() } }
+    var rewindOriginTick: Int?
+    var rewindCurrentTick = 0
     var onClick: ((Int, Int) -> Void)?
     var onKey: ((String) -> Void)?
     private let accessibleElements = GameAccessibleElements()
@@ -1117,6 +1122,9 @@ import NxlvKit
                     LemmingSelectionGlow.draw(at: centre, scale: zoom, radius: 10,
                         tint: .systemGreen, animated: !reduceMotion)
                 }
+            }
+            if let origin = rewindOriginTick, origin > rewindCurrentTick {
+                GameTypography.annotation("REWIND  -\(origin - rewindCurrentTick) TICKS", at: CGPoint(x: screenOrigin.x + 8, y: screenOrigin.y + 14), palette: .blue)
             }
         }
         updateSpeedTrails()

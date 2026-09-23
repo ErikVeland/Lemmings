@@ -683,13 +683,16 @@ import NxlvKit
         let armed = nukeGesture.armedAt.map { ProcessInfo.processInfo.systemUptime - $0 <= NSEvent.doubleClickInterval } ?? false
         if armed || game.isNuking { controls.insert(.nuke) }
         let label = game.isNuking || armed ? "NUKE" : fanSelected ? "FAN" : hover ?? (fastForward ? "SPEED " + speedControl.label.replacingOccurrences(of: "×", with: "X") : game.configuration.skills[selected].name)
+        canvas.rewindOriginTick = rewindOriginState?.tick
+        canvas.rewindCurrentTick = game.tick
         if let rendered = try? assets.panel.render(skills: game.configuration.skills.map(\.rawValue), supplies: game.supplies,
             selected: selected, saved: game.saved, remaining: game.lemmings.filter(\.active).count,
             seconds: game.remainingSeconds, label: label, palette: palette, highlightedControls: controls) {
             canvas.setPanel(rendered)
         }
         canvas.toolTip = SkillShortcuts(names: game.configuration.skills.map(\.name)).hint(names: game.configuration.skills.map(\.name), modern: audioSettings.modernControlsEnabled) + "\n" + SpeedPanelControls.help
-        canvas.setAccessibilityLabel("Lemmings 2. \(game.configuration.skills[selected].name) selected. \(label). \(paused ? "Paused." : "Running.") \(game.isNuking ? "Nuke active." : "") \(game.released) released, \(game.saved) saved.")
+        let transport = rewindOriginState.map { "Rewind active, \($0.tick - game.tick) ticks back. Escape cancels." } ?? ""
+        canvas.setAccessibilityLabel("Lemmings 2. \(game.configuration.skills[selected].name) selected. \(label). \(paused ? "Paused." : "Running.") \(game.isNuking ? "Nuke active." : "") \(game.released) released, \(game.saved) saved. \(transport)")
     }
     private func update() {
         let now = ProcessInfo.processInfo.systemUptime
@@ -1431,6 +1434,8 @@ import NxlvKit
     private var terrainRevision: Int?
     private var panel: NSImage?
     private var panelBackground = NSColor.black
+    var rewindOriginTick: Int?
+    var rewindCurrentTick = 0
     private var sprites: [String: [(image: NSImage, x: Int, y: Int)]] = [:]
     private var objects: [(id: Int, type: Int, x: Int, y: Int, entrance: Bool, animated: Bool, special: Bool,
                            frames: [(image: NSImage, x: Int, y: Int)])] = []
@@ -2058,6 +2063,9 @@ import NxlvKit
                     scale: zoom, tint: .systemGreen, reduceMotion: reduceMotion, in: bounds)
             }
             if let focusNotice { GameTypography.annotation(focusNotice, at: CGPoint(x: 12, y: 12)) }
+            if let origin = rewindOriginTick, origin > rewindCurrentTick {
+                GameTypography.annotation("REWIND  -\(origin - rewindCurrentTick) TICKS", at: CGPoint(x: 12, y: 12), palette: .blue)
+            }
         }
         if turnBadge.superview == nil { addSubview(turnBadge) }
         turnBadge.place(in: CGRect(x: origin.x, y: origin.y, width: visibleWidth * zoom, height: 192 * zoom))
