@@ -483,11 +483,15 @@ public struct Lemmings2Runtime: Sendable {
         }
     }
     /// Hover and click use the same stable, eligible-first target selection.
-    public func target(slot: Int, x: Int, y: Int) -> Lemming? {
+    public func target(slot: Int, x: Int, y: Int, preferApproaching: Bool = false) -> Lemming? {
         lemmings.filter { $0.active && $0.state != .exiting && $0.state != .exploding &&
             abs($0.x - x) <= 9 && abs($0.y - 5 - y) <= 12 }.min { a, b in
                 let eligibleA = canAssign(slot: slot, to: a.id), eligibleB = canAssign(slot: slot, to: b.id)
                 if eligibleA != eligibleB { return eligibleA }
+                if preferApproaching, eligibleA, eligibleB {
+                    let approachingA = (x - a.x) * a.direction >= 0, approachingB = (x - b.x) * b.direction >= 0
+                    if approachingA != approachingB { return approachingA }
+                }
                 let da = abs(a.x - x) + abs(a.y - 5 - y), db = abs(b.x - x) + abs(b.y - 5 - y)
                 return da == db ? a.id < b.id : da < db
             }

@@ -626,7 +626,7 @@ import NxlvKit
         nukeGesture.reset()
         if !fanSelected, performRecoveryInput(.machine(x:x,y:y)) { refreshGame(); return }
         if !fanSelected, performRecoveryInput(.chain(x:x,y:y)) { refreshGame(); return }
-        if !fanSelected, let lem = game?.target(slot: selected, x: x, y: y) {
+        if !fanSelected, let lem = game?.target(slot: selected, x: x, y: y, preferApproaching: audioSettings.favorApproachingLemmings) {
             if performRecoveryInput(.assign(slot: selected, lemming: lem.id)) {
                 assignmentFocus.record(id: lem.id, skill: selected, tick: game?.tick ?? 0)
             }

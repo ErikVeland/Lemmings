@@ -22,6 +22,35 @@ func fixture(wall: Bool = false) throws -> Lemmings2Runtime {
     return try Lemmings2Runtime(configuration: config)
 }
 
+func testFavorApproachingLemming() throws {
+    let width = 120, height = 80
+    var pixels = [UInt8](repeating: 0, count: width * height)
+    var solid = [Bool](repeating: false, count: width * height)
+    for y in 60..<height { for x in 0..<width { solid[y * width + x] = true; pixels[y * width + x] = 6 } }
+    for y in 20..<60 { for x in 50..<56 { solid[y * width + x] = true; pixels[y * width + x] = 6 } }
+    let c = try fixture().configuration
+    var game = try Lemmings2Runtime(configuration: .init(width: width, height: height, pixels: pixels, solid: solid,
+        palette: c.palette, entrance: .init(x: 20, y: 45, width: 1, height: 1),
+        exits: [.init(x: 90, y: 50, width: 16, height: 16)], skills: c.skills, supplies: c.supplies, total: 2,
+        timeLimit: 120, releaseInterval: 6, terrainMasks: c.terrainMasks, firstReleaseTick: 1))
+    while !(game.lemmings.count == 2 && game.lemmings.contains(where: { $0.direction < 0 })) { game.step() }
+    guard let turned = game.lemmings.first(where: { $0.direction < 0 }),
+        let approaching = game.lemmings.first(where: { $0.direction > 0 }) else {
+        check(false, "Expected one turned lemming and one still approaching the wall"); return
+    }
+    check(approaching.x < turned.x, "The trailing lemming should not yet have reached the wall")
+    let slot = c.skills.firstIndex(of: .climber)!
+    // Click just past the turned lemming (inside the wall it bounced off), not on top of it: at that exact
+    // x, "(click - x) * direction" is zero for the turned lemming and reads as ambiguously "approaching" too,
+    // masking the preference this test exists to prove.
+    let clickX = turned.x + 2
+    check(game.target(slot: slot, x: clickX, y: turned.y - 5, preferApproaching: true)?.id == approaching.id,
+        "favorApproachingLemmings should target the lemming still walking toward the wall")
+    check(game.target(slot: slot, x: clickX, y: turned.y - 5)?.id == turned.id,
+        "Plain nearest-distance targeting should keep choosing the closer, already-turned lemming")
+    print("PASS favorApproachingLemmings prefers the lemming still walking toward the wall")
+}
+
 // Deliberately synthetic rectangles exercise runtime phases without bundling
 // original assets. Local-data tests below verify the actual native masks.
 func syntheticMasks() throws -> Lemmings2TerrainMasks {
@@ -1428,6 +1457,7 @@ do {
     try testRunner()
     try testJumper()
     try testStomper(syntheticMasks())
+    try testFavorApproachingLemming()
     print("PASS native L2 walking, rescue, inventory, terrain, replay and nuke tests")
 
     if CommandLine.arguments.count > 1 {
