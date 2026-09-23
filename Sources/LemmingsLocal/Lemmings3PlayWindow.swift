@@ -284,13 +284,14 @@ import NxlvKit
         keyboard.skillNames = { Array(Lemmings3Panel.names.prefix(5)) }
         keyboard.help = { [weak self] in
             let names = Array(Lemmings3Panel.names.prefix(5))
-            return SkillShortcuts(names: names).hint(names: names, modern: self?.audioSettings.modernControlsEnabled ?? false) + "\n\nSpace: pause\nR: retry\nZ: rewind 2 seconds\n.: single step"
+            return SkillShortcuts(names: names).hint(names: names, modern: self?.audioSettings.modernControlsEnabled ?? false) + "\n\nSpace: pause\nR: retry\nZ: rewind 2 seconds\nHold .: scrub forward after rewind\n.: single step at live edge"
         }
         keyboard.contextCommands = {
             [KeyboardCommand(keys: "← / → / ↑ / ↓", action: "Pan the level", group: "Camera"),
              KeyboardCommand(keys: "V / S", action: "Review / save replay after a result", group: "Menus & results"),
              KeyboardCommand(keys: "Return / Space", action: "Activate selected menu choice", group: "Menus & results"),
-             KeyboardCommand(keys: "Z / LT + B", action: "Rewind the current run", group: "Gameplay")]
+             KeyboardCommand(keys: "Z / LT + B", action: "Rewind the current run", group: "Gameplay"),
+             KeyboardCommand(keys: "Hold .", action: "Scrub forward after a rewind; release to pause", group: "Gameplay")]
         }
         keyboard.hints = { [weak self] in self?.showLevelHints() }
         keyboard.settings = { [weak self] in self?.onShowSettings?() }
@@ -852,7 +853,7 @@ import NxlvKit
             || (availability.indices.contains(campaign.index + 1) && availability[campaign.index + 1] == nil))
         canvas.selectedAction = selected; canvas.paused = paused; canvas.fast = fast
         canvas.updateSkillBadge()
-        let transport = rewindOriginState.map { "Rewind active, \($0.tick - game.tick) ticks back. Escape cancels." } ?? ""
+        let transport = rewindOriginState.map { "Rewind active, \($0.tick - game.tick) ticks back. Hold full stop scrubs forward. Escape cancels." } ?? ""
         canvas.rewindOriginTick = rewindOriginState?.tick
         canvas.rewindCurrentTick = game.tick
         canvas.setAccessibilityLabel("Lemmings 3. \(campaign.tribe.title) level \(campaign.index + 1). \(game.saved) saved, \(game.reserve) in reserve, \(game.remainingSeconds) seconds. Selected \(Lemmings3Panel.names[selected]). \(message) Space pauses. F changes speed. Z rewinds. \(transport) Escape returns to the main menu. Double-click End Run to finish.")

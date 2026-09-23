@@ -256,13 +256,14 @@ import NxlvKit
         keyboard.skillNames = { [weak self] in self?.game?.configuration.skills.map(\.name) ?? [] }
         keyboard.help = { [weak self] in
             let names = self?.game?.configuration.skills.map(\.name) ?? []
-            return SkillShortcuts(names: names).hint(names: names, modern: self?.audioSettings.modernControlsEnabled ?? false) + "\n\nSpace / P: pause\nR: retry\nZ: rewind 2 seconds\n.: single step"
+            return SkillShortcuts(names: names).hint(names: names, modern: self?.audioSettings.modernControlsEnabled ?? false) + "\n\nSpace / P: pause\nR: retry\nZ: rewind 2 seconds\nHold .: scrub forward after rewind\n.: single step at live edge"
         }
         keyboard.contextCommands = {
             [KeyboardCommand(keys: "← / → / ↑ / ↓", action: "Pan the level", group: "Camera"),
              KeyboardCommand(keys: "V / S", action: "Review / save replay after a result", group: "Menus & results"),
              KeyboardCommand(keys: "Return / Space", action: "Activate selected menu choice", group: "Menus & results"),
              KeyboardCommand(keys: "Z / LT + B", action: "Rewind the current run", group: "Gameplay"),
+             KeyboardCommand(keys: "Hold .", action: "Scrub forward after a rewind; release to pause", group: "Gameplay"),
              KeyboardCommand(keys: "P / M / I", action: "From L2 menu: practice / tribe map / introduction", group: "Menus & results"),
              KeyboardCommand(keys: "1–4", action: "Choose practice level", group: "L2 practice"),
              KeyboardCommand(keys: "Arrow keys", action: "Choose practice skill", group: "L2 practice"),
@@ -708,7 +709,7 @@ import NxlvKit
             canvas.setPanel(rendered)
         }
         canvas.toolTip = SkillShortcuts(names: game.configuration.skills.map(\.name)).hint(names: game.configuration.skills.map(\.name), modern: audioSettings.modernControlsEnabled) + "\n" + SpeedPanelControls.help
-        let transport = rewindOriginState.map { "Rewind active, \($0.tick - game.tick) ticks back. Escape cancels." } ?? ""
+        let transport = rewindOriginState.map { "Rewind active, \($0.tick - game.tick) ticks back. Hold full stop scrubs forward. Escape cancels." } ?? ""
         canvas.setAccessibilityLabel("Lemmings 2. \(game.configuration.skills[selected].name) selected. \(label). \(paused ? "Paused." : "Running.") \(game.isNuking ? "Nuke active." : "") \(game.released) released, \(game.saved) saved. \(transport)")
     }
     private func update() {
