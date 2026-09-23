@@ -101,7 +101,13 @@ struct ReticleFeedback {
       needsDisplay = true
     }
   }
-  var reduceMotion = false { didSet { if reduceMotion { speedTrails.reset() }; needsDisplay = true } }
+  var reduceMotion = false {
+    didSet {
+      assignmentHighlight.reduceMotion = reduceMotion
+      if reduceMotion { speedTrails.reset() }
+      needsDisplay = true
+    }
+  }
   var reduceFlashes = false {
     didSet {
       if reduceFlashes { hdrBirths.removeAll(); hdrFlashes.removeAll(); hdrOverlay?.clear() }
@@ -290,12 +296,15 @@ struct ReticleFeedback {
 
   private func scheduleReticleRedraw() {
     let remaining = reticleFeedback.nextChange - ProcessInfo.processInfo.systemUptime
-    guard remaining > 0 else { return }
+    let shimmer = cursorViewPoint != nil && !reduceMotion && session != nil
+    let delay = max(remaining, shimmer ? 1.0 / 30.0 : 0)
+    guard delay > 0 else { return }
     reticleRedraw?.cancel()
     reticleRedraw = Task { [weak self] in
-      try? await Task.sleep(for: .seconds(remaining + 0.005))
+      try? await Task.sleep(for: .seconds(delay + 0.005))
       guard !Task.isCancelled else { return }
       self?.needsDisplay = true
+      self?.scheduleReticleRedraw()
     }
   }
 
@@ -495,7 +504,8 @@ struct ReticleFeedback {
     defer {
       ControllerPointer.draw(controllerPointer)
       if let id = assignmentHighlight.target, let lem = session?.lemmings.first(where: { $0.id == id }) {
-        assignmentHighlight.draw(at: viewport.viewPoint(fromLevel: CGPoint(x: lem.x, y: lem.y - 6)), scale: viewport.zoom)
+        assignmentHighlight.draw(at: viewport.viewPoint(fromLevel: CGPoint(x: lem.x, y: lem.y - 6)),
+          scale: viewport.zoom, tint: .systemYellow, radius: 10)
       }
     }
     updateSpeedTrails()
@@ -952,32 +962,8 @@ struct ReticleFeedback {
     let pulseTarget = state == .assigned ? session?.lemmings.first(where: { $0.id == assignedTarget }) : nil
     scheduleReticleRedraw()
     displayedTarget = target.map { ($0.id, point, ProcessInfo.processInfo.systemUptime) }
-    let center = viewport.viewPoint(
+    let targetPoint = viewport.viewPoint(
       fromLevel: (pulseTarget ?? target).map { CGPoint(x: CGFloat($0.x), y: CGFloat($0.y) - 5) } ?? point)
-    let side = 14 * viewport.zoom
-    let box = CGRect(
-      x: center.x - side / 2, y: center.y - side / 2, width: side, height: side)
-
-    let path = NSBezierPath()
-    let arm = side / 3
-    let thickness = max(1, viewport.zoom / 2)
-    // Corner brackets read clearly over busy terrain.
-    for (dx, dy) in [(0.0, 0.0), (1.0, 0.0), (0.0, 1.0), (1.0, 1.0)] {
-      let cx = box.minX + box.width * dx
-      let cy = box.minY + box.height * dy
-      let sx: CGFloat = dx == 0 ? 1 : -1
-      let sy: CGFloat = dy == 0 ? 1 : -1
-      path.move(to: CGPoint(x: cx + arm * sx, y: cy))
-      path.line(to: CGPoint(x: cx, y: cy))
-      path.line(to: CGPoint(x: cx, y: cy + arm * sy))
-      if state == .assigned, hdEffectsEnabled, !reduceFlashes {
-        hdrFlashes.append(.init(rect: CGRect(x: min(cx, cx + arm * sx), y: cy - thickness / 2,
-          width: arm, height: thickness), strength: 1, expiresAt: reticleFeedback.successUntil, tint: .green))
-        hdrFlashes.append(.init(rect: CGRect(x: cx - thickness / 2, y: min(cy, cy + arm * sy),
-          width: thickness, height: arm), strength: 1, expiresAt: reticleFeedback.successUntil, tint: .green))
-      }
-    }
-    path.lineWidth = thickness
     let color: NSColor
     switch state {
     case .unavailable: color = NSColor(calibratedWhite: 0.6, alpha: 0.9)
@@ -985,8 +971,37 @@ struct ReticleFeedback {
     case .assigned: color = NSColor(calibratedRed: 0.65, green: 1, blue: 0.45, alpha: 1)
     case .alreadyAssigned: color = NSColor(calibratedRed: 1, green: 0.62, blue: 0.08, alpha: 1)
     }
-    color.setStroke()
-    path.stroke()
+
+    if state == .assigned, hdEffectsEnabled, !reduceFlashes,
+       (target != nil || pulseTarget != nil) {
+      let pixel = max(1, floor(viewport.zoom))
+      let expires = reticleFeedback.successUntil
+      hdrFlashes.append(.init(
+        rect: CGRect(x: targetPoint.x - pixel, y: targetPoint.y - pixel,
+          width: 2 * pixel, height: 2 * pixel).intersection(bounds),
+        strength: 0.45, expiresAt: expires, tint: .green))
+    }
+
+    // The lemming, rather than the pointer, is the point of attention. Keep
+    // this cue soft so it confirms the target without changing play timing or
+    // obscuring the native sprite artwork.
+    if target != nil, assignmentHighlight.target == nil, state != .unavailable {
+      LemmingSelectionGlow.draw(at: targetPoint, scale: viewport.zoom, radius: 10,
+        tint: color, animated: !reduceMotion)
+    }
+
+    // Leave a small pointer mark at the actual cursor position. This keeps
+    // the input location readable when the target is offset from the pointer.
+    let pixel = max(1, floor(viewport.zoom))
+    let arm = 3 * pixel
+    let crosshair = NSBezierPath()
+    crosshair.move(to: CGPoint(x: cursorViewPoint.x - arm, y: cursorViewPoint.y))
+    crosshair.line(to: CGPoint(x: cursorViewPoint.x + arm, y: cursorViewPoint.y))
+    crosshair.move(to: CGPoint(x: cursorViewPoint.x, y: cursorViewPoint.y - arm))
+    crosshair.line(to: CGPoint(x: cursorViewPoint.x, y: cursorViewPoint.y + arm))
+    crosshair.lineWidth = pixel
+    color.withAlphaComponent(0.85).setStroke()
+    crosshair.stroke()
   }
 
   /// Walks a row of real lemmings across the foot of a menu.

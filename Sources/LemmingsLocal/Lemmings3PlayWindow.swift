@@ -709,7 +709,11 @@ import NxlvKit
         }
     }
     var reduceMotion = false {
-        didSet { if reduceMotion { speedTrails.reset() }; syncSpeedEffects(); needsDisplay = true }
+        didSet {
+            assignmentHighlight.reduceMotion = reduceMotion
+            if reduceMotion { speedTrails.reset() }
+            syncSpeedEffects(); needsDisplay = true
+        }
     }
     var reduceFlashes = false {
         didSet { if reduceFlashes { hdrOverlay?.clearExplosions() }; needsDisplay = true }
@@ -966,9 +970,17 @@ import NxlvKit
         defer {
             ControllerPointer.draw(controllerPointer)
             assignmentHighlight.drawNotice()
-            if let id = assignmentHighlight.target, let lem = game?.lemmings.first(where: { $0.id == id && $0.active }) {
-                assignmentHighlight.draw(at: CGPoint(x: origin.x + (CGFloat(lem.x) - cameraX) * zoom,
-                    y: origin.y + (CGFloat(lem.y - 6) - cameraY) * zoom), scale: zoom)
+            if let id = assignmentHighlight.target ?? pointerTarget,
+               let lem = game?.lemmings.first(where: { $0.id == id && $0.active }) {
+                let focused = assignmentHighlight.target != nil
+                let centre = CGPoint(x: origin.x + (CGFloat(lem.x) - cameraX) * zoom,
+                    y: origin.y + (CGFloat(lem.y - 6) - cameraY) * zoom)
+                if focused {
+                    assignmentHighlight.draw(at: centre, scale: zoom, tint: .systemYellow, radius: 10)
+                } else {
+                    LemmingSelectionGlow.draw(at: centre, scale: zoom, radius: 10,
+                        tint: .systemGreen, animated: !reduceMotion)
+                }
             }
         }
         updateSpeedTrails()

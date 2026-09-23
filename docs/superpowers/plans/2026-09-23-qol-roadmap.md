@@ -50,24 +50,31 @@ It must not run a second nearest-lemming calculation.
 | B. Cursor-top badge | Draw the skill icon above the cursor with a one-pixel gap. | It reads as a label for the cursor. | It can overlap terrain, lemming sprites or the top edge of the window. | Use only as an accessibility or high-scale option if testing supports it. |
 | C. HUD mirror | Add a larger selected-skill icon beside the existing skill count. | It is easy to read at every scale. | It does not identify the skill at the point of selection. | Keep as supporting feedback, not the main indicator. |
 
-Use Option A with a small target bracket. Reuse the native skill artwork from
-the existing game controls and bitmap renderers. Render the badge at source
+Use Option A with a small target glow. Reuse the native skill artwork from the
+existing game controls and bitmap renderers. Render the badge at source
 resolution, then scale it with nearest-neighbour filtering.
+
+The target cue must be a soft halo around the selected lemming, not a
+four-corner frame. Use two thin pixel-aligned rings and three short shimmer
+arcs. Keep the outer ring low contrast and let one arc provide the readable
+motion cue. The glow must sit outside the opaque sprite where possible and
+must not hide the lemming's action or change the pick area.
 
 ### Visual target states
 
-Use four small corner brackets around the selected lemming. Keep the brackets
-outside the opaque sprite pixels where possible.
+Use a small halo around the selected lemming. Keep the halo outside the opaque
+sprite pixels where possible.
 
 | State | Shape | Colour | Motion |
 | --- | --- | --- | --- |
 | No candidate | Cursor keeps its normal outline. The badge uses an empty tile. | Grey | None |
-| Eligible target | Four open corner brackets. | Green | None |
-| Existing assignment | Same brackets with a small orange inner mark. | Orange | One short cue only |
-| Successful assignment | Keep the target brackets for the existing feedback interval. | Green | Use the existing 100 ms pulse |
+| Eligible target | Two thin rings and one moving shimmer arc. | Green | Low-amplitude shimmer |
+| Existing assignment | Same halo with an orange tint. | Orange | One short cue only |
+| Successful assignment | Keep the halo for the existing feedback interval. | Green | Use the existing 100 ms pulse |
 
-Shape must carry the state. Colour must not be the only signal. Do not add a
-continuous glow, a pulsing halo or a large label over the playfield.
+The ring and shimmer must carry the state. Colour must not be the only signal.
+Do not add a bright pulse, a large label or a halo that competes with the
+lemming sprite.
 
 The cursor badge must show the selected skill even when no lemming is eligible.
 This tells the player what the next click will try to assign. The skill count
@@ -83,7 +90,7 @@ not already provide them.
 Candidate cycling must:
 
 1. keep the cursor position fixed;
-2. update the bracket and target ID immediately;
+2. update the halo and target ID immediately;
 3. use a stable order based on the resolver result and lemming ID;
 4. assign only after the player clicks or activates the assign action;
 5. return to normal hover resolution when the pointer moves away.
@@ -96,7 +103,7 @@ the player asks to cycle. This keeps the original screen clear.
 1. Extract a small target-selection result for each engine.
 2. Route hover, click, keyboard and controller paths through that result.
 3. Add the cursor-corner skill badge.
-4. Add the restrained target brackets.
+4. Add the restrained target halo and shimmer.
 5. Add candidate cycling through existing focus and remapping paths.
 6. Add settings and controls-help text only where a new action exists.
 7. Test all states at 1×, 2×, CRT mode and enlarged menu settings.
@@ -105,7 +112,7 @@ the player asks to cycle. This keeps the original screen clear.
 
 The 1.1 target feature is complete only when:
 
-- the hover bracket and the click target always match;
+- the hover halo and the click target always match;
 - the selected skill remains visible without covering the target;
 - mouse, keyboard and controller input use the same target ID;
 - the setting-off path matches the previous nearest-target behaviour;
@@ -160,7 +167,7 @@ small layers:
 The origin ghost should fade when the player stops or resumes. The trails should
 follow the same source-pixel discipline as the existing speed effects. The
 effect must remain readable in flat and CRT modes without covering terrain,
-skill counts or the target bracket.
+skill counts or the target halo.
 
 Respect the accessibility settings:
 

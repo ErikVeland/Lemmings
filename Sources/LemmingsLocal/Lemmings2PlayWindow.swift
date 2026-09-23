@@ -1388,6 +1388,8 @@ import NxlvKit
         if cursorFrames.indices.contains(pointerFrame) { addCursorRect(bounds, cursor: cursorFrames[pointerFrame]) }
     }
     func updateSelection(slot: Int, fan: Bool, palette: [UInt8]) -> String? {
+        selectedSkillSlot = slot
+        pointerSelectionEnabled = !fan
         if let pointers, cursorFrames.isEmpty || zoom != cursorZoom {
             cursorZoom = zoom
             cursorFrames = pointers.frames.map { pixels in
@@ -1514,7 +1516,11 @@ import NxlvKit
         }
     }
     var reduceMotion = false {
-        didSet { if reduceMotion { speedTrails.reset() }; syncSpeedEffects(); needsDisplay = true }
+        didSet {
+            assignmentHighlight.reduceMotion = reduceMotion
+            if reduceMotion { speedTrails.reset() }
+            syncSpeedEffects(); needsDisplay = true
+        }
     }
     var reduceFlashes = false {
         didSet { if reduceFlashes { hdrOverlay?.clearExplosions() }; needsDisplay = true }
@@ -1930,9 +1936,17 @@ import NxlvKit
     override func draw(_ dirtyRect: NSRect) {
         defer {
             ControllerPointer.draw(controllerPointer)
-            if let id = assignmentHighlight.target, let lem = game?.lemmings.first(where: { $0.id == id && $0.active }) {
-                assignmentHighlight.draw(at: CGPoint(x: origin.x + (CGFloat(lem.x) - cameraX) * zoom,
-                    y: origin.y + (CGFloat(lem.y - 6) - cameraY) * zoom * 1.2), scale: zoom)
+            if let id = assignmentHighlight.target ?? (pointerSelectionEnabled ? pointerTarget(slot: selectedSkillSlot) : nil),
+               let lem = game?.lemmings.first(where: { $0.id == id && $0.active }) {
+                let focused = assignmentHighlight.target != nil
+                let centre = CGPoint(x: origin.x + (CGFloat(lem.x) - cameraX) * zoom,
+                    y: origin.y + (CGFloat(lem.y - 6) - cameraY) * zoom * 1.2)
+                if focused {
+                    assignmentHighlight.draw(at: centre, scale: zoom, tint: .systemYellow, radius: 10)
+                } else {
+                    LemmingSelectionGlow.draw(at: centre, scale: zoom, radius: 10,
+                        tint: .systemGreen, animated: !reduceMotion)
+                }
             }
             if let focusNotice { GameTypography.annotation(focusNotice, at: CGPoint(x: 12, y: 12)) }
         }
@@ -2075,6 +2089,8 @@ import NxlvKit
     }
     func controllerPan(_ dx: Double, _ dy: Double) { assignmentHighlight.clear(); pan(x: dx, y: dy) }
     let assignmentHighlight = LemmingFocusHighlight()
+    private var selectedSkillSlot = 0
+    private var pointerSelectionEnabled = true
     private var focusNotice: String?
     func showFocusNotice(_ text: String) {
         focusNotice = text; needsDisplay = true
