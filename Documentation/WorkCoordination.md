@@ -136,3 +136,28 @@ Do not reuse build number 35. The next archive starts at build 36.
   three archives.
 - The notarised pre-fix beta 35 archives under `.build/beta35/prefix-*` refuse
   saved runs. Do not send them.
+
+## Beta 36 (RC1)
+
+Claude cut all three beta 36 archives on 23 September 2026 at the owner's
+request, as RC1: the first candidate built for real, physical hardware
+testing since beta 32. Standard and Game Center use `6b5f945` on
+`l2-seeded-search`; Monterey uses `d8b77ca` on `macos12-support`, merged
+forward through the beta 35 saved-run fix, which that branch had been
+missing. See [Beta36Readiness.md](Beta36Readiness.md).
+Do not reuse build number 36. The next archive starts at build 37.
+
+- Before freezing a checkout, clone every gitignored data directory, not only
+  `Sources/Ports` and `Sources/Music`. The first beta 36 packaging attempt
+  failed because the frozen checkouts were missing `Content` (fan level
+  packs, also gitignored), and `Tools/FanLevelCatalog/prune.py` fails hard
+  on a missing pack rather than skipping it. Both checkouts were fixed by
+  cloning `Content` in after the fact and rebuilding.
+- The `macos12-support` worktree can silently fall behind the working branch
+  on exactly the commits that matter most (it had missed the saved-run
+  fix). Check `git log <monterey-branch>..<working-branch> --oneline` before
+  packaging, every time, not only when a merge is expected.
+- 16GB of stale per-feature `.build/*` caches and two stale git worktrees
+  (`.build/beta33/source`, `.build/beta33/source-macos12`) were removed
+  before this pass. Deregister a worktree with `git worktree remove` before
+  deleting its directory, never a plain `rm -rf`.
