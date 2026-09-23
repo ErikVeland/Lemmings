@@ -247,7 +247,8 @@ Rewind is ready for a player release only when:
 
 After rewind has a shared contract, extend checked hints to L2 and L3. Use the
 same three tiers as Classic. Keep general coaching visibly separate from a
-route-backed hint.
+route-backed hint. Classic checked solution replay now has pause, speed, back
+one second and one-tick forward controls.
 
 Add a short solution playback action that starts from the current level and
 allows pause, step, speed and rewind. Do not expose a route as verified until

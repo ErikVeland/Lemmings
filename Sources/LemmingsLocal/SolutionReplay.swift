@@ -27,7 +27,7 @@ struct VerifiedSolution: Sendable {
 /// Playback owns its simulation and never calls the campaign, saves or result handlers.
 @MainActor final class SolutionPlayback {
     let solution: VerifiedSolution
-    let session: ClassicSession
+    private(set) var session: ClassicSession
     private let events: [Int: [ClassicDOSReplayEvent]]
     private(set) var lastAssignment: (id: Int, skill: ClassicSkill)?
 
@@ -39,9 +39,24 @@ struct VerifiedSolution: Sendable {
                 precondition(simulation.schedule(.init(tick: event.tick, lemmingID: id, skill: skill)))
             }
         }
-        session = ClassicSession(simulation: simulation, width: width, height: height)
         events = Dictionary(grouping: solution.replay.events, by: \.tick)
+        session = ClassicSession(simulation: simulation, width: width, height: height)
         for event in events[0] ?? [] { apply(event.action) }
+    }
+
+    /// Moves the read-only replay to a nearby recorded tick.
+    func seek(by delta: Int) {
+        let target = max(0, min(solution.replay.expected?.ticks ?? 0, session.currentTick + delta))
+        guard target != session.currentTick else { return }
+        var simulation = solution.initial
+        for event in solution.replay.events where event.afterTick != true {
+            if case let .assign(id, skill) = event.action {
+                precondition(simulation.schedule(.init(tick: event.tick, lemmingID: id, skill: skill)))
+            }
+        }
+        session = ClassicSession(simulation: simulation, width: session.levelWidth, height: session.levelHeight)
+        for event in events[0] ?? [] { apply(event.action) }
+        for _ in 0..<target { tick() }
     }
 
     func tick() {
@@ -115,6 +130,24 @@ struct VerifiedSolution: Sendable {
         }
         transport?.keyEquivalent = " "
         transport?.setAccessibilityLabel("Play or pause solution replay. Space.")
+        let back = GameActionButton(title: "Back 1s", primary: false) { [weak self] in
+            guard let self else { return }
+            self.paused = true
+            self.playback.seek(by: -ClassicDOSRules.ticksPerSecond)
+            self.refresh()
+        }
+        back.frame = CGRect(x: 24, y: 8, width: 136, height: 44)
+        back.setAccessibilityLabel("Move the solution replay back one second.")
+        page.body.addSubview(back)
+        let step = GameActionButton(title: "Step +1", primary: false) { [weak self] in
+            guard let self else { return }
+            self.paused = true
+            self.playback.seek(by: 1)
+            self.refresh()
+        }
+        step.frame = CGRect(x: 168, y: 8, width: 136, height: 44)
+        step.setAccessibilityLabel("Step the solution replay forward one tick.")
+        page.body.addSubview(step)
         let rate = GameActionButton(title: "1x", primary: false) { [weak self] in
             guard let self else { return }
             self.speed = self.speed == 1 ? 3 : self.speed == 3 ? 10 : 1
@@ -146,7 +179,7 @@ struct VerifiedSolution: Sendable {
                 followedID = lemming.id
                 field.viewport.center(on: Double(lemming.x))
                 marker.point = CGPoint(x: lemming.x, y: lemming.y)
-                status.stringValue = assignment.skill.rawValue
+                status.stringValue = "Tick \(playback.session.currentTick): \(assignment.skill.rawValue)"
                 assignmentUntil = ProcessInfo.processInfo.systemUptime + 1.5
                 // Keep each skill assignment visible even at high playback speeds.
                 break
@@ -163,7 +196,9 @@ struct VerifiedSolution: Sendable {
             status.stringValue = "\(playback.session.simulation.savedCount) rescued"
             marker.point = nil
         } else if ProcessInfo.processInfo.systemUptime > assignmentUntil {
-            status.stringValue = ""; marker.point = nil
+            let total = playback.solution.replay.expected?.ticks ?? 0
+            status.stringValue = "Tick \(playback.session.currentTick) / \(total)"
+            marker.point = nil
         }
         transport?.title = playback.session.isComplete ? "Replay" : paused ? "Play" : "Pause"
         transport?.needsDisplay = true
