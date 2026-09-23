@@ -13,6 +13,16 @@ tri-archive release script:
 NOTARY_PROFILE=lemmings-beta zsh Scripts/build-and-notarise.sh
 ```
 
+If the profile is stored outside the default keychain, set
+`NOTARY_KEYCHAIN=/path/to/keychain-db`. The script validates the named profile
+before it starts a build. `--notary-profile` and `--notary-keychain` provide
+the same values without environment variables.
+
+The profile name is optional. On a Mac with no shared profile name, use
+`APPLE_ID` and `APPLE_TEAM_ID`; `notarytool` prompts securely for the
+app-specific password. App Store Connect API-key authentication is also
+available through `ASC_KEY_PATH`, `ASC_KEY_ID` and `ASC_ISSUER_ID`.
+
 Before it builds, the script checks for source changes after the previous
 release, checks the current release notes, creates notes from recent source
 changes when they are missing, and checks that the Monterey worktree contains
@@ -25,6 +35,16 @@ Center entitlements. The script finds the first installed Developer ID
 Application identity unless `SIGNING_IDENTITY` is set. It uses a keychain
 profile created by `xcrun notarytool store-credentials`, so Apple credentials
 are not stored in the repository or passed on the command line.
+
+For the fastest local progress check, use the snapshot path instead:
+
+```sh
+zsh Scripts/build-game-center-snapshot.sh
+```
+
+It builds the current Mac architecture, signs the Game Center entitlement and
+writes a ZIP to Downloads. It does not notarise or run release gates. The
+provisioning profile must include every Mac that will run the snapshot.
 
 Use `--dry-run` to run the gates and check the selected paths without building,
 signing or uploading anything. Set `RELEASE_BASE` when the automatic previous

@@ -53,6 +53,16 @@ The finished bundle contains the resources required by the app. It must not
 depend on the source checkout, current working directory, Homebrew or a
 developer-only data path after it is copied.
 
+For a fast local Game Center snapshot, run:
+
+```sh
+zsh Scripts/build-game-center-snapshot.sh
+```
+
+This builds only the current Mac architecture, signs with the matching Apple
+Development provisioning profile, and writes an app plus ZIP to the build and
+Downloads directories. It does not notarise or run release gates.
+
 ## Verification
 
 Run the release audit for the current source and fixture set:
@@ -91,6 +101,24 @@ SIGNING_IDENTITY="Developer ID Application: Example (TEAMID)" \
 NOTARY_PROFILE="lemmings-notary" \
 zsh Scripts/build-and-notarise.sh
 ```
+
+The profile name is the name supplied to `xcrun notarytool
+store-credentials`; storing a profile does not make its name discoverable to
+the script. If the profile is in a non-default keychain, also set
+`NOTARY_KEYCHAIN=/path/to/keychain-db`, or pass `--notary-keychain`.
+
+For a machine with no shared profile name, use Apple ID authentication. The
+Apple ID and team ID are passed to `notarytool`; its secure prompt requests the
+app-specific password:
+
+```sh
+APPLE_ID="developer@example.com" APPLE_TEAM_ID="TEAMID" \
+zsh Scripts/build-and-notarise.sh
+```
+
+An App Store Connect API key is also supported with `ASC_KEY_PATH`,
+`ASC_KEY_ID` and `ASC_ISSUER_ID`. Passwords and private key contents are never
+accepted as command-line or environment arguments.
 
 The Monterey worktree must contain the release commit. Set
 `MONTEREY_WORKTREE` when it is not at `.claude/worktrees/macos12`. Set

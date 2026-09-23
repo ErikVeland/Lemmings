@@ -1,9 +1,18 @@
 #!/bin/zsh
 # Build, gate, sign, notarise and verify the three local macOS release targets.
 #
-# Required environment variables:
-#   SIGNING_IDENTITY  Developer ID Application certificate name
+# Authentication options:
 #   NOTARY_PROFILE    xcrun notarytool keychain profile name
+#   NOTARY_KEYCHAIN   optional keychain file containing that profile
+#   APPLE_ID          Apple ID for secure notarytool password prompt
+#   APPLE_TEAM_ID     Apple Developer team ID for Apple ID authentication
+#   ASC_KEY_PATH      App Store Connect API private key path
+#   ASC_KEY_ID        App Store Connect API key ID
+#   ASC_ISSUER_ID     App Store Connect API issuer ID
+#
+# SIGNING_IDENTITY is optional and defaults to the first installed Developer ID
+# Application identity. A password is never accepted as a script argument or
+# environment variable.
 #
 # Optional environment variables:
 #   RELEASE_BASE      commit or tag at the previous release boundary
@@ -28,14 +37,20 @@ monterey_worktree="${monterey_worktree:A}"
 dry_run=0
 
 usage() {
-  print "Usage: zsh Scripts/build-and-notarise.sh [--dry-run]"
+  print "Usage: zsh Scripts/build-and-notarise.sh [--dry-run] [--notary-profile NAME] [--notary-keychain PATH]"
   print
   print "Runs the local release gates, then emits three ZIP files in Downloads:"
   print "  Developer ID standard, macOS 12 Monterey, and Game Center."
   print
   print "Environment:"
   print "  SIGNING_IDENTITY            optional Developer ID certificate name"
-  print "  NOTARY_PROFILE              required notarytool keychain profile"
+  print "  NOTARY_PROFILE              optional notarytool keychain profile"
+  print "  NOTARY_KEYCHAIN             optional keychain file for the profile"
+  print "  APPLE_ID                    optional Apple ID; notarytool prompts for password"
+  print "  APPLE_TEAM_ID               team ID used with APPLE_ID"
+  print "  ASC_KEY_PATH                App Store Connect API private key path"
+  print "  ASC_KEY_ID                  App Store Connect API key ID"
+  print "  ASC_ISSUER_ID               App Store Connect API issuer ID"
   print "  RELEASE_BASE                previous release commit or tag"
   print "  RELEASE_NOTES_PATH          current release notes file"
   print "  MONTEREY_WORKTREE           macOS 12 worktree path"
@@ -52,6 +67,16 @@ fail() {
 while (( $# )); do
   case "$1" in
     --dry-run) dry_run=1 ;;
+    --notary-profile)
+      (( $# >= 2 )) || { print -u2 "--notary-profile requires a name."; exit 2; }
+      notary_profile_argument="$2"
+      shift
+      ;;
+    --notary-keychain)
+      (( $# >= 2 )) || { print -u2 "--notary-keychain requires a path."; exit 2; }
+      notary_keychain_argument="$2"
+      shift
+      ;;
     --help|-h) usage; exit 0 ;;
     *) print -u2 "Unknown option: $1"; usage >&2; exit 2 ;;
   esac
@@ -64,13 +89,46 @@ stamp="$(date +%Y%m%d-%H%M%S)"
 run_dir="$build_root/$version-$build_number-$stamp"
 
 signing_identity="${SIGNING_IDENTITY:-${BETA_SIGNING_IDENTITY:-}}"
-notary_profile="${NOTARY_PROFILE:-${BETA_NOTARY_PROFILE:-}}"
+notary_profile="${notary_profile_argument:-${NOTARY_PROFILE:-${BETA_NOTARY_PROFILE:-}}}"
+notary_keychain="${notary_keychain_argument:-${NOTARY_KEYCHAIN:-}}"
+apple_id="${APPLE_ID:-}"
+apple_team_id="${APPLE_TEAM_ID:-}"
+asc_key_path="${ASC_KEY_PATH:-}"
+asc_key_id="${ASC_KEY_ID:-}"
+asc_issuer_id="${ASC_ISSUER_ID:-}"
 if [[ -z "$signing_identity" ]]; then
   signing_identity="$(security find-identity -v -p codesigning 2>/dev/null |
     awk -F'"' '/Developer ID Application:/ { print $2; exit }')"
 fi
 [[ -n "$signing_identity" ]] || fail "No Developer ID Application identity was found. Set SIGNING_IDENTITY."
-[[ -n "$notary_profile" ]] || fail "No notarytool keychain profile was supplied. Set NOTARY_PROFILE."
+if [[ -n "$notary_keychain" ]]; then
+  notary_keychain="${notary_keychain:A}"
+  [[ -r "$notary_keychain" ]] || fail "The notary keychain is not readable: $notary_keychain"
+fi
+if [[ -n "$notary_profile" ]]; then
+  notary_auth_mode="keychain profile"
+  notary_auth_description="keychain profile '$notary_profile'"
+  notary_auth_args=(--keychain-profile "$notary_profile")
+  if [[ -n "$notary_keychain" ]]; then
+    notary_auth_args+=(--keychain "$notary_keychain")
+  fi
+elif [[ -n "$asc_key_path" || -n "$asc_key_id" || -n "$asc_issuer_id" ]]; then
+  [[ -n "$asc_key_path" && -n "$asc_key_id" && -n "$asc_issuer_id" ]] ||
+    fail "ASC_KEY_PATH, ASC_KEY_ID and ASC_ISSUER_ID must be supplied together."
+  asc_key_path="${asc_key_path:A}"
+  [[ -r "$asc_key_path" ]] || fail "The App Store Connect private key is not readable: $asc_key_path"
+  notary_auth_mode="App Store Connect API key"
+  notary_auth_description="App Store Connect API key '$asc_key_id'"
+  notary_auth_args=(--key "$asc_key_path" --key-id "$asc_key_id" --issuer "$asc_issuer_id")
+elif [[ -n "$apple_id" || -n "$apple_team_id" ]]; then
+  [[ -n "$apple_id" && -n "$apple_team_id" ]] ||
+    fail "APPLE_ID and APPLE_TEAM_ID must be supplied together."
+  notary_auth_mode="Apple ID"
+  notary_auth_description="Apple ID $apple_id"
+  notary_auth_args=(--apple-id "$apple_id" --team-id "$apple_team_id")
+else
+  fail "No notarisation credentials configured. Set NOTARY_PROFILE, APPLE_ID plus APPLE_TEAM_ID, or ASC_KEY_PATH plus ASC_KEY_ID plus ASC_ISSUER_ID."
+fi
 
 git_root="$(git -C "$project_dir" rev-parse --show-toplevel 2>/dev/null)" ||
   fail "The project directory is not a Git worktree."
@@ -146,7 +204,7 @@ print "Project:       $project_dir"
 print "Version:       $version ($build_number)"
 print "Release base:  $release_base"
 print "Identity:      $signing_identity"
-print "Notary profile: $notary_profile"
+print "Notary auth:   $notary_auth_description"
 print "Monterey:      $monterey_worktree"
 print "Downloads:     $downloads_dir"
 print
@@ -159,6 +217,18 @@ print "Gate 4: three target archives configured"
 if (( dry_run )); then
   print "Dry run: no build, signing, notarisation or upload performed."
   exit 0
+fi
+
+if [[ "$notary_auth_mode" != "Apple ID" ]]; then
+  print "==> Checking $notary_auth_mode credentials"
+  notary_auth_output=""
+  if ! notary_auth_output="$(xcrun notarytool history \
+    "${notary_auth_args[@]}" --output-format json --no-progress 2>&1)"; then
+    print -u2 -r -- "$notary_auth_output"
+    fail "notarytool could not use $notary_auth_description. Check the credential, keychain and account access."
+  fi
+else
+  print "==> Apple ID credentials will be requested securely by notarytool"
 fi
 
 mkdir -p "$run_dir" "$downloads_dir"
@@ -201,7 +271,7 @@ PYNOTES
 notarise_app() {
   local app="$1" submission="$2" final="$3"
   package_app "$app" "$submission"
-  xcrun notarytool submit "$submission" --keychain-profile "$notary_profile" --wait
+  xcrun notarytool submit "$submission" "${notary_auth_args[@]}" --wait
   xcrun stapler staple "$app"
   xcrun stapler validate "$app"
   package_app "$app" "$final"
