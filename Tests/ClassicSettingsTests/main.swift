@@ -165,14 +165,17 @@ private func testOlderSettingsStillLoad() throws {
     try require(!restored.integerScaling, "the chosen scaling was lost")
     try require(!restored.shuffleGraphics, "a missing setting should default to off")
     try require(!restored.shuffleMusic, "a missing setting should default to off")
+    try require(restored.favorApproachingLemmings, "a missing setting should default to on")
 
     // And the new settings survive a round trip.
     var shuffled = restored
     shuffled.shuffleGraphics = true
     shuffled.shuffleMusic = true
+    shuffled.favorApproachingLemmings = false
     let again = try JSONDecoder().decode(
         ClassicSettings.self, from: try JSONEncoder().encode(shuffled))
     try require(again.shuffleGraphics && again.shuffleMusic, "shuffle did not survive saving")
+    try require(!again.favorApproachingLemmings, "favor-approaching did not survive saving")
     print("PASS settings written by an older build still load")
 }
 
@@ -241,7 +244,7 @@ private func testHDEffectsPreference() throws {
     var experience = ClassicSettings(graphics: .amiga, musicVolume: 0.25, soundVolume: 0.4)
     experience.applyExperiencePreset(modern: false)
     try require(!experience.pauseOnInterruption && !experience.modernControlsEnabled && !experience.variableSpeedEnabled && !experience.controllerEnabled && !experience.hdEffectsEnabled
-      && !experience.confinePointer && !experience.fullScreenHDRFlashes && !experience.djIncludesOtherSoundtracks,
+      && !experience.confinePointer && !experience.fullScreenHDRFlashes && !experience.djIncludesOtherSoundtracks && !experience.favorApproachingLemmings,
       "OG did not disable the added conveniences together")
     try require(experience.graphics == .amiga && experience.musicVolume == 0.25 && experience.soundVolume == 0.4,
       "OG discarded the chosen machine or volumes")
@@ -249,7 +252,7 @@ private func testHDEffectsPreference() throws {
     try require(savedExperience == experience, "The OG preset did not survive relaunch")
     experience.applyExperiencePreset(modern: true)
     try require(experience.pauseOnInterruption && experience.modernControlsEnabled && experience.variableSpeedEnabled && experience.controllerEnabled && experience.hdEffectsEnabled
-      && experience.confinePointer, "Modern defaults failed to restore the conveniences")
+      && experience.confinePointer && experience.favorApproachingLemmings, "Modern defaults failed to restore the conveniences")
     print("PASS modern defaults, OG bundle, saved preference and preserved machine/volumes")
 }
 
