@@ -313,7 +313,7 @@ struct ReticleFeedback {
     guard delay > 0 else { return }
     reticleRedraw?.cancel()
     reticleRedraw = Task { [weak self] in
-      try? await Task.sleep(for: .seconds(delay + 0.005))
+      try? await Task.sleep(nanoseconds: UInt64((delay + 0.005) * 1_000_000_000))
       guard !Task.isCancelled else { return }
       self?.needsDisplay = true
       self?.scheduleReticleRedraw()

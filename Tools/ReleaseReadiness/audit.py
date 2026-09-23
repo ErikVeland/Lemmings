@@ -97,7 +97,7 @@ def main():
     for source in ROOT.glob("Sources/NxlvKit/*.swift"):
         shutil.copy2(source, frozen / source.name)
     checks = []
-    compiler_target = f"{platform.machine()}-apple-macos13.0"
+    compiler_target = f"{platform.machine()}-apple-macos12.3"
 
     def run(name, commands, env=None):
         env = dict(env or os.environ, LEMMINGS_TEST_APP=str(app),

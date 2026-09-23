@@ -3,7 +3,7 @@ set -euo pipefail
 project_dir="${0:A:h:h}"
 build_dir="$project_dir/.build/native-l2"
 app_dir="$build_dir/Lemmings 2 Native.app"
-export MACOSX_DEPLOYMENT_TARGET=13.0
+export MACOSX_DEPLOYMENT_TARGET=12.3
 mkdir -p "$build_dir/modules" "$app_dir/Contents/MacOS" "$app_dir/Contents/Frameworks"
 swiftc -O -swift-version 6 -warnings-as-errors -parse-as-library \
   -emit-module -emit-library -module-name NxlvKit \
@@ -14,7 +14,7 @@ swiftc -O -swift-version 6 -warnings-as-errors -parse-as-library \
 # The shared music player retains a macOS 13-compatible AVAudioEngine call.
 app_sources=("$project_dir"/Sources/LemmingsLocal/*.swift)
 app_sources=("${(@)app_sources:#*/main.swift}")
-swiftc -O -swift-version 6 -warnings-as-errors -target "$(uname -m)-apple-macos13.0" \
+swiftc -O -swift-version 6 -warnings-as-errors -target "$(uname -m)-apple-macos12.3" \
   -I "$build_dir/modules" -L "$app_dir/Contents/Frameworks" -lNxlvKit \
   -framework AppKit -framework AVFoundation -framework Metal -framework QuartzCore \
   -Xlinker -rpath -Xlinker @executable_path/../Frameworks \

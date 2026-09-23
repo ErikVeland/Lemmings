@@ -6,7 +6,7 @@ build_dir="${LEMMINGS_BUILD_DIR:-$project_dir/.build/local}"
 build_dir="${build_dir:A}"
 app_dir="$build_dir/Ultimate Lemmings.app"
 contents_dir="$app_dir/Contents"
-deployment_target="13.0"
+deployment_target="12.3"
 architectures=(arm64 x86_64)
 if [[ -n "${LEMMINGS_ARCHITECTURES:-}" ]]; then
   architectures=("${(@s: :)LEMMINGS_ARCHITECTURES}")
@@ -23,8 +23,14 @@ for architecture in "${architectures[@]}"; do
   module_dir="$architecture_dir/modules"
   mkdir -p "$module_dir"
   target="$architecture-apple-macosx$deployment_target"
+  # Below macOS 13 the Swift driver links libswiftCompatibility56. The Command Line
+  # Tools ship that library for arm64 only, so the Intel slice is linked without it.
+  # Its fixes apply to the Swift 5.6 concurrency runtime. The compiler still rejects
+  # any API newer than the deployment target.
+  compatibility=()
+  [[ "$architecture" == x86_64 ]] && compatibility=(-runtime-compatibility-version none)
 
-  swiftc -swift-version 6 "$swift_optimization" -target "$target" -parse-as-library \
+  swiftc -swift-version 6 "$swift_optimization" -target "$target" "${compatibility[@]}" -parse-as-library \
     -module-cache-path "$build_dir/ModuleCache" \
     -emit-module -emit-library \
     -module-name NxlvKit \
@@ -33,7 +39,7 @@ for architecture in "${architectures[@]}"; do
     -o "$architecture_dir/libNxlvKit.dylib" \
     "$project_dir"/Sources/NxlvKit/*.swift
 
-  swiftc -swift-version 6 "$swift_optimization" -target "$target" \
+  swiftc -swift-version 6 "$swift_optimization" -target "$target" "${compatibility[@]}" \
     -module-cache-path "$build_dir/ModuleCache" \
     -I "$module_dir" -L "$architecture_dir" -lNxlvKit \
     -framework AppKit -framework AVFoundation -framework Metal -framework QuartzCore \

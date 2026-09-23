@@ -4,7 +4,7 @@ import PackageDescription
 let package = Package(
     name: "LemmingsNativePort",
     platforms: [
-        .macOS(.v13),
+        .macOS("12.3"),
         .iOS(.v16)
     ],
     products: [
