@@ -93,7 +93,7 @@ func testFavorApproachingLemmingFallsBackWithNoAlternative() throws {
         check(false, "Expected the lone lemming to turn around at the wall"); return
     }
     let slot = c.skills.firstIndex(of: .climber)!
-    check(game.target(slot: slot, x: turned.x, y: turned.y - 5, preferApproaching: true)?.id == turned.id,
+    check(game.target(slot: slot, x: turned.x + 1, y: turned.y - 5, preferApproaching: true)?.id == turned.id,
         "With no approaching alternative, targeting should fall back to the only candidate")
     print("PASS favorApproachingLemmings falls back to the only candidate when nothing approaches")
 }
