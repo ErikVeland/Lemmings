@@ -58,7 +58,7 @@ public struct SequelMacFrame: Equatable, Sendable {
 /// pairs. Uncertain neighbourhoods retain their source block. There is no
 /// interpolation or animation seed. Static texture uses an authored pixel phase.
 public enum SequelMacArtwork {
-    public static let revision = 5
+    public static let revision = 6
     private static let offsets = [(0,0),(-1,-1),(0,-1),(1,-1),(-1,0),(1,0),(-1,1),(0,1),(1,1)]
 
     public struct PixelEdit: Sendable {
