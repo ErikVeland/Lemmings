@@ -17,8 +17,7 @@ enum PanelButton: Equatable {
   var session: (any GameSession)? {
     didSet {
       if oldValue !== session { nukeGesture.reset() }
-      let names = session?.skills.map(\.name) ?? []
-      toolTip = SkillShortcuts(names: names).hint(names: names, modern: modernControlsEnabled) + "\n" + SpeedPanelControls.help
+      toolTip = nil
     }
   }
   private var nukeGesture = NukeClickGesture()

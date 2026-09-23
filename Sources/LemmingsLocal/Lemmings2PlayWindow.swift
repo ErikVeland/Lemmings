@@ -718,7 +718,7 @@ import NxlvKit
             seconds: game.remainingSeconds, label: label, palette: palette, highlightedControls: controls) {
             canvas.setPanel(rendered)
         }
-        canvas.toolTip = SkillShortcuts(names: game.configuration.skills.map(\.name)).hint(names: game.configuration.skills.map(\.name), modern: audioSettings.modernControlsEnabled) + "\n" + SpeedPanelControls.help
+        canvas.toolTip = nil
         let transport = rewindOriginState.map { "Rewind active, \($0.tick - game.tick) ticks back. Hold full stop scrubs forward. Escape cancels." } ?? ""
         canvas.setAccessibilityLabel("Lemmings 2. \(game.configuration.skills[selected].name) selected. \(label). \(paused ? "Paused." : "Running.") \(game.isNuking ? "Nuke active." : "") \(game.released) released, \(game.saved) saved. \(transport)")
     }

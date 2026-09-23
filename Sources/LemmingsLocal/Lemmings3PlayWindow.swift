@@ -1405,7 +1405,7 @@ import NxlvKit
         pointerPosition = p
         hoveredLemming = pointerTarget
         let sx = (p.x - screenOrigin.x) / zoom, sy = (p.y - screenOrigin.y) / zoom
-        toolTip = sy >= 172 && sx >= 214 && sx < 249 ? SpeedPanelControls.help : sy >= 172 ? Lemmings3Panel.slot(at: sx).map { ($0 < 5 ? SkillShortcuts(names: Array(Lemmings3Panel.names.prefix(5))).hint(names: Array(Lemmings3Panel.names.prefix(5))) : Lemmings3Panel.names[$0]) + ($0 == 8 ? " — double-click to end run" : "") } : nil
+        toolTip = nil
         needsDisplay = true
     }
     override func mouseExited(with event: NSEvent) { pointerPosition = nil; hoveredLemming = nil; needsDisplay = true }
