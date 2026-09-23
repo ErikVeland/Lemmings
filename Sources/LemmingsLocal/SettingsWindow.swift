@@ -29,6 +29,7 @@ import NxlvKit
   private var modernControlsCheck: NSButton?
   private var variableSpeedCheck: NSButton?
   private var interruptionCheck: NSButton?
+  private var favorApproachingCheck: NSButton?
   private var controllerCheck: NSButton?
   private var controllerTapCheck: NSButton?
   private var controllerSwapCheck: NSButton?
@@ -155,6 +156,10 @@ import NxlvKit
     let interruption = GameCheckButton(title: "Pause when switching apps or a controller disconnects", target: self, action: #selector(interruptionChanged))
     interruption.state = settings.pauseOnInterruption ? .on : .off
     interruptionCheck = interruption
+    let favorApproaching = GameCheckButton(title: "Favor lemmings still approaching", target: self, action: #selector(favorApproachingChanged))
+    favorApproaching.toolTip = "When a click could match more than one lemming, pick the one still approaching. Skip the one that already turned away."
+    favorApproaching.state = settings.favorApproachingLemmings ? .on : .off
+    favorApproachingCheck = favorApproaching
     variable.toolTip = SpeedPanelControls.help
     let og = GameButton(title: "Use OG settings", target: self, action: #selector(useOGSettings))
     let defaults = GameButton(title: "Use modern defaults", target: self, action: #selector(useModernDefaults))
@@ -163,7 +168,7 @@ import NxlvKit
     modern.state = settings.modernControlsEnabled ? .on : .off
     variable.state = settings.variableSpeedEnabled ? .on : .off
     variable.isEnabled = settings.modernControlsEnabled
-    return pane([("Controls", modern), ("Speed", variable), ("Pause", interruption), ("Experience", buttons)])
+    return pane([("Controls", modern), ("Speed", variable), ("Pause", interruption), ("Targeting", favorApproaching), ("Experience", buttons)])
   }
 
   @objc private func modernControlsChanged(_ sender: NSButton) {
@@ -174,6 +179,10 @@ import NxlvKit
   @objc private func interruptionChanged(_ sender: NSButton) { settings.pauseOnInterruption = sender.state == .on; changed() }
   @objc private func variableSpeedChanged(_ sender: NSButton) {
     settings.variableSpeedEnabled = sender.state == .on; changed()
+  }
+  @objc private func favorApproachingChanged(_ sender: NSButton) {
+    settings.favorApproachingLemmings = sender.state == .on
+    changed()
   }
   @objc private func useOGSettings() { applyExperiencePreset(modern: false) }
   @objc private func useModernDefaults() { applyExperiencePreset(modern: true) }
@@ -428,6 +437,7 @@ import NxlvKit
     variableSpeedCheck?.state = settings.variableSpeedEnabled ? .on : .off
     variableSpeedCheck?.isEnabled = settings.modernControlsEnabled
     interruptionCheck?.state = settings.pauseOnInterruption ? .on : .off
+    favorApproachingCheck?.state = settings.favorApproachingLemmings ? .on : .off
     controllerCheck?.state = settings.controllerEnabled ? .on : .off
     controllerTapCheck?.state = settings.controllerTapSpeed ? .on : .off
     controllerSwapCheck?.state = settings.controllerSwapSticks ? .on : .off

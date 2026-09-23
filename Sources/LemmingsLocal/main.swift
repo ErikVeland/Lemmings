@@ -734,6 +734,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     playfield.reduceMotion = settings.reduceMotion
     playfield.reduceFlashes = settings.reduceFlashes
     playfield.hdEffectsEnabled = settings.hdEffectsEnabled
+    playfield.favorApproachingLemmings = settings.favorApproachingLemmings
     if !settings.hdEffectsEnabled { screenFlash.clear() }
     else if !settings.cinematicExplosionsEnabled { screenFlash.clearExplosions() }
     applyAudioSettings()
@@ -776,6 +777,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     playfield.reduceMotion = settings.reduceMotion
     playfield.reduceFlashes = settings.reduceFlashes
     playfield.hdEffectsEnabled = settings.hdEffectsEnabled
+    playfield.favorApproachingLemmings = settings.favorApproachingLemmings
   }
 
   private func applyAudioSettings() {
