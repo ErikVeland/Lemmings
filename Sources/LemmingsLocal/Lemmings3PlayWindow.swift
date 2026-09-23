@@ -94,6 +94,10 @@ import NxlvKit
     private var rewindTimer: Timer?
     private var rewindHeld = false
     private var rewindAudioDucked = false
+    private var rewindOriginState: Lemmings3Runtime?
+    private var rewindOriginInputs: [L3RunRecovery.Input] = []
+    private var rewindOriginAssignments: [String: Int] = [:]
+    private var rewindOriginToolUses: [String: Int] = [:]
 
     private struct Session {
         var campaign: Lemmings3ClassicCampaign
@@ -264,6 +268,7 @@ import NxlvKit
         }
         keyboard.escape = { [weak self] in
             guard let self else { return }
+            if self.cancelRewindToOrigin() { return }
             if self.pendingTool != nil || self.canvas.directionPoint != nil {
                 self.pendingTool = nil; self.canvas.directionPoint = nil; self.refresh()
             } else { self.showGameMenu() }
@@ -412,10 +417,16 @@ import NxlvKit
         }
     }
 
-    @objc private func togglePause() { saveCheckpoint(immediately: true); paused.toggle(); accumulator = 0; refresh() }
+    @objc private func togglePause() {
+        saveCheckpoint(immediately: true)
+        let wasPaused = paused; paused.toggle(); accumulator = 0
+        if wasPaused { rewindOriginState = nil }
+        refresh()
+    }
     @objc private func singleStep() { paused = true; advanceTick(); refresh() }
     private func beginContinuousRewind() {
         guard game.tick > 0, !rewindHeld else { return }
+        captureRewindOrigin()
         rewindHeld = true
         rewindTimer?.invalidate()
         setRewindAudioDucked(true)
@@ -437,9 +448,26 @@ import NxlvKit
         rewindAudioDucked = active
         music.setVolume(Double(active ? musicGain * 0.18 : musicGain))
     }
+    private func captureRewindOrigin() {
+        guard rewindOriginState == nil else { return }
+        rewindOriginState = game; rewindOriginInputs = recoveryInputs
+        rewindOriginAssignments = skillAssignments; rewindOriginToolUses = toolUses
+    }
+    private func cancelRewindToOrigin() -> Bool {
+        guard let origin = rewindOriginState, game.tick != origin.tick else { return false }
+        endContinuousRewind()
+        game = origin; recoveryInputs = rewindOriginInputs
+        skillAssignments = rewindOriginAssignments; toolUses = rewindOriginToolUses
+        rewindOriginState = nil; rewindOriginInputs = []
+        pendingTool = nil; canvas.directionPoint = nil; assignmentFocus.rewind(to: origin.tick)
+        canvas.assignmentHighlight.clear(); warningSound.silence()
+        paused = true; accumulator = 0; refresh(); saveCheckpoint(immediately: true)
+        return true
+    }
     @discardableResult
     private func rewind(seconds: Double) -> Bool {
         guard game.tick > 0 else { return false }
+        captureRewindOrigin()
         let target = max(0, game.tick - Int((seconds * Lemmings3Runtime.ticksPerSecond).rounded()))
         guard target < game.tick else { return false }
         let prefix = recoveryInputs.prefix { $0.tick <= target }

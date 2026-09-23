@@ -199,8 +199,8 @@ forward. Release the key to leave the run paused at the chosen tick. `Shift` +
 Left/Right steps one tick backward or forward, and Space remains play/pause.
 The controller rewind modifier uses the same held transport path, ghost and
 reversed-effects cue. Lemmings 2 and Lemmings 3 use the same LT+B held action
-and provide a two-second `Z` seek. Their deterministic state adapters are now
-available; visual transport parity and cancel-to-origin are still open.
+and provide a two-second `Z` seek. Their deterministic state adapters and
+cancel-to-origin path are now available; visual transport parity is still open.
 
 ### Audio treatment
 
@@ -230,7 +230,7 @@ fallback must still respect mute, volume and interruption pause.
 7. Add Lemmings 3 history using its recorded input and checkpoint model. **Done
    for deterministic backward seek and branch truncation.**
 8. Run cross-engine branch, pause, retry, save and result-page checks, then
-   align the visual transport strip and cancel-to-origin behaviour.
+   align the visual transport strip. **Cancel-to-origin is implemented.**
 
 Do not place rewind controls in `NxlvKit` views. Keep engine state and seek
 contracts in `NxlvKit`. Keep cursor, transport, audio and visual effects in

@@ -112,6 +112,11 @@ import NxlvKit
     private var rewindTimer: Timer?
     private var rewindHeld = false
     private var rewindAudioDucked = false
+    private var rewindOriginState: Lemmings2Runtime?
+    private var rewindOriginInputs: [L2RunRecovery.Input] = []
+    private var rewindOriginNukeCount = 0
+    private var rewindOriginBeforeNuke: Lemmings2Runtime?
+    private var rewindOriginBeforeNukeInputCount = 0
     private var selectedSlot = 0
     private var ending: Lemmings2Ending?
     private var award: Lemmings2Award?
@@ -235,6 +240,7 @@ import NxlvKit
         }
         keyboard.escape = { [weak self] in
             guard let self else { return }
+            if self.cancelRewindToOrigin() { return }
             if self.fanSelected { self.fanSelected = false; self.releasePointerInput(); self.refreshGame() }
             else { self.releasePointerInput(); self.key("\u{1b}") }
         }
@@ -570,7 +576,9 @@ import NxlvKit
             selected = slot; fanSelected = false
         } else {
             switch Lemmings2Control(rawValue: slot) {
-            case .pause: paused.toggle(); accumulator = 0
+            case .pause:
+                let wasPaused = paused; paused.toggle(); accumulator = 0
+                if wasPaused { rewindOriginState = nil }
             case .fan: fanSelected.toggle()
             case .nuke:
                 if nukeAction == .undo, let beforeNuke {
@@ -804,6 +812,7 @@ import NxlvKit
     }
     private func beginContinuousRewind() {
         guard screen == .playing, game?.tick ?? 0 > 0, !rewindHeld else { return }
+        captureRewindOrigin()
         rewindHeld = true
         rewindTimer?.invalidate()
         setRewindAudioDucked(true)
@@ -825,9 +834,29 @@ import NxlvKit
         rewindAudioDucked = active
         music.setVolume(active ? audioSettings.musicVolume * 0.18 : audioSettings.musicVolume)
     }
+    private func captureRewindOrigin() {
+        guard rewindOriginState == nil, let game else { return }
+        rewindOriginState = game
+        rewindOriginInputs = recoveryInputs
+        rewindOriginNukeCount = nukeCount
+        rewindOriginBeforeNuke = beforeNuke
+        rewindOriginBeforeNukeInputCount = beforeNukeInputCount
+    }
+    private func cancelRewindToOrigin() -> Bool {
+        guard let origin = rewindOriginState, game?.tick != origin.tick else { return false }
+        endContinuousRewind()
+        game = origin; recoveryInputs = rewindOriginInputs
+        nukeCount = rewindOriginNukeCount; beforeNuke = rewindOriginBeforeNuke
+        beforeNukeInputCount = rewindOriginBeforeNukeInputCount
+        rewindOriginState = nil; rewindOriginInputs = []
+        assignmentFocus.rewind(to: origin.tick); canvas.assignmentHighlight.clear(); sounds.silence()
+        paused = true; accumulator = 0; refreshGame(); saveCheckpoint(immediately: true)
+        return true
+    }
     @discardableResult
     private func rewind(seconds: Double) -> Bool {
         guard screen == .playing, let initial, let current = game, current.tick > 0 else { return false }
+        captureRewindOrigin()
         let target = max(0, current.tick - Int((seconds * Lemmings2Runtime.ticksPerSecond).rounded()))
         guard target < current.tick else { return false }
         let prefix = recoveryInputs.prefix { $0.tick <= target }

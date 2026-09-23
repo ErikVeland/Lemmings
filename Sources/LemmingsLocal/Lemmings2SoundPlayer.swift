@@ -79,7 +79,10 @@ final class Lemmings2SoundPlayer: @unchecked Sendable {
         engine.detach(environment)
         self.source = nil
     }
-    func silence() { lock.lock(); defer { lock.unlock() }; mixer.silence() }
+    func silence() {
+        lock.lock(); defer { lock.unlock() }
+        mixer.silence(); rewindSamples = []; rewindIndex = 0
+    }
     func playRewindScrub() {
         lock.lock(); defer { lock.unlock() }
         let count = min(15_435, recentSamples.count)

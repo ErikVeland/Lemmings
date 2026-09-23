@@ -42,6 +42,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private var timer: Timer?
   private var rewindTimer: Timer?
   private var rewindHeld = false
+  private var rewindOriginTick: Int?
   private var rewindAudioDucked = false
   private var forwardTimer: Timer?
   private var forwardHeld = false
@@ -2731,6 +2732,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
       dj.suspendOutput()
       effects.suspendOutput()
     } else {
+      rewindOriginTick = nil
+      playfield.endRewindCue()
       do {
         try music.resumeOutput()
         soundtrack.resumeOutput()
@@ -3209,6 +3212,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     keyboard.mainMenu = { [weak self] in self?.returnToLibrary() }
     keyboard.escape = { [weak self, weak keyboard] in
       guard let self else { return }
+      if self.cancelRewindToOrigin() { return }
       let resume = keyboard?.pauseForHelp() ?? {}
       let alert = NSAlert(); alert.messageText = "Paused"
       alert.addButton(withTitle: "Resume"); alert.addButton(withTitle: "Retry level")
@@ -3329,6 +3333,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       return
     }
     guard !rewindHeld else { return }
+    rewindOriginTick = session.currentTick
     rewindHeld = true
     rewindTimer?.invalidate()
     setRewindAudioDucked(true)
@@ -3346,6 +3351,19 @@ let achievementProgressKey = "ClassicAchievementProgress"
     effects.silence()
     setRewindAudioDucked(false)
     playfield.endRewindCue()
+  }
+
+  /// Restores the point where the current transport gesture started.
+  private func cancelRewindToOrigin() -> Bool {
+    guard let origin = rewindOriginTick, let session, session.currentTick != origin else { return false }
+    if rewindHeld { endContinuousRewind() }
+    while session.currentTick < origin, session.stepForward() {}
+    while session.currentTick > origin, session.stepBackward() {}
+    guard session.currentTick == origin else { return false }
+    rewindOriginTick = nil
+    isPaused = true; panel.isPaused = true; accumulator = 0
+    effects.silence(); setRewindAudioDucked(false); refreshAfterSeek()
+    return true
   }
 
   private func setRewindAudioDucked(_ active: Bool) {
@@ -3401,6 +3419,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       setStatus("This ruleset cannot rewind yet.")
       return
     }
+    rewindOriginTick = rewindOriginTick ?? session.currentTick
     setRewindAudioDucked(true)
     playfield.beginRewindCue(at: session.currentTick)
     guard performRewind(seconds: seconds) else {
@@ -3415,6 +3434,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   private func stepBackward() {
     guard let session, session.supportsRewind else { return }
+    rewindOriginTick = rewindOriginTick ?? session.currentTick
     setRewindAudioDucked(true)
     playfield.beginRewindCue(at: session.currentTick)
     guard session.stepBackward() else {
