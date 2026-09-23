@@ -15,6 +15,7 @@ clear transport controls.
 | Priority | Milestone | Release position | Reason |
 | --- | --- | --- | --- |
 | P0 | Target-select polish | 1.1 exit gate | The current targeting logic needs a clear visual and a deterministic input path. |
+| P1 | Unrecoverable-run mood | 1.1 polish | Tell the player when the rescue target is no longer reachable without changing the simulation or result rules. |
 | P1 | Rewind transport design and Classic prototype | After the 1.1 target baseline | Classic already has exact history. It can prove the interaction, visuals and audio before cross-engine work. |
 | P1 | Lemmings 2 and Lemmings 3 rewind adapters | Next QoL milestone | Rewind must reach all three engines before it becomes a shared player promise. |
 | P2 | Verified hints and solution playback | After rewind foundation | Hints depend on checked routes and should follow the same evidence boundary. |
@@ -126,6 +127,21 @@ radius.
 - reduced-flash mode removes added pulses but keeps the state shape;
 - all three engines pass targeted tests and manual crowded-level checks;
 - screenshots cover eligible, unavailable, duplicate, focused and controller states.
+
+## P1: unrecoverable-run mood
+
+When the saved lemmings, active lemmings and unreleased lemmings cannot reach
+the level requirement, enter a reversible failed-run mood over 0.9 seconds:
+
+- slow module and recorded music to 72% playback speed;
+- apply a restrained colour and black overlay to the playfield;
+- keep controls and the lemming sprites readable;
+- clear the mood when rewind, retry or a new level returns the run to a
+  recoverable state.
+
+This is presentation only. It does not change the simulation clock, physics,
+rescue requirement or result calculation. Classic uses its level requirement;
+the native sequel previews use their current one-lemming completion rule.
 
 ## P1: rewind transport
 

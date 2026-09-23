@@ -21,6 +21,7 @@ import NxlvKit
   private(set) var tracks: [URL] = []
   private(set) var volume: Float = 0.8
   private(set) var muted = false
+  private(set) var playbackRate: Float = 1
 
   /// The soundtracks found under a root, one per folder.
   ///
@@ -98,6 +99,8 @@ import NxlvKit
       // A level outlasts a track, so the track repeats, as the module did.
       made.numberOfLoops = -1
       made.volume = muted ? 0 : volume
+      made.enableRate = true
+      made.rate = playbackRate
       made.prepareToPlay()
       // Stop the old player explicitly before releasing it. AVAudioPlayer does
       // not drain its output buffer synchronously on deallocation, so simply
@@ -136,6 +139,12 @@ import NxlvKit
   func setVolume(_ value: Double) {
     volume = Float(min(1, max(0, value)))
     player?.volume = muted ? 0 : volume
+  }
+
+  func setPlaybackRate(_ value: Double) {
+    playbackRate = Float(min(1, max(0.5, value)))
+    player?.enableRate = true
+    player?.rate = playbackRate
   }
 
   func setMuted(_ value: Bool) {

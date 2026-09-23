@@ -9,6 +9,18 @@ private func check(_ value: @autoclosure () throws -> Bool, _ message: String) t
 }
 
 extension AppDelegate {
+  fileprivate func testFailureMoodDecision() throws {
+    try check(!FailureMoodDecision.isUnrecoverable(saved: 0, active: 1, unreleased: 0, required: 1),
+      "Failure mood triggered while an active lemming could still meet the target")
+    try check(!FailureMoodDecision.isUnrecoverable(saved: 0, active: 0, unreleased: 1, required: 1),
+      "Failure mood triggered while an unreleased lemming could still meet the target")
+    try check(FailureMoodDecision.isUnrecoverable(saved: 0, active: 0, unreleased: 0, required: 1),
+      "Failure mood did not trigger when no rescue remained")
+    try check(!FailureMoodDecision.isUnrecoverable(saved: 1, active: 0, unreleased: 0, required: 1),
+      "Failure mood ignored an already met rescue requirement")
+    print("PASS unrecoverable-run failure mood decision")
+  }
+
   fileprivate func testAccessibleMenusAndHelp() async throws {
     let host = SpeedTestWindow(contentRect: CGRect(x: 0, y: 0, width: 640, height: 400), styleMask: [], backing: .buffered, defer: false)
     host.contentView = NSView(frame: CGRect(x: 0, y: 0, width: 640, height: 400))
@@ -2362,6 +2374,7 @@ Task { @MainActor in
   do {
     let subject = AppDelegate()
     subject.prepareArcadeTests()
+    try subject.testFailureMoodDecision()
     try subject.testSteppedCompletion()
     try subject.testFirstLaunchEffects()
     try await subject.testAccessibleMenusAndHelp()

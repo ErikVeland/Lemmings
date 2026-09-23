@@ -70,6 +70,7 @@ import NxlvKit
     }
     private let warningSound = SoundEffectPlayer()
     private let music = ModuleMusicPlayer()
+    private let failureMood = FailureMoodTransition()
     private var musicGain: Float = 0.8
     private var audioSettings = ClassicSettings()
     private let runMovie = RunMovie()
@@ -169,6 +170,12 @@ import NxlvKit
         super.init(window: NSWindow(contentRect: NSRect(x: 0, y: 0, width: 1050, height: 680),
             styleMask: [.titled, .closable, .miniaturizable, .resizable], backing: .buffered, defer: false))
         guard let window else { return }
+        failureMood.onChange = { [weak self] amount in
+            guard let self else { return }
+            self.canvas.failureMoodAmount = amount
+            self.music.setTempoScale(1 - 0.28 * Double(amount))
+            self.canvas.needsDisplay = true
+        }
         try warningSound.loadLemmings3Sounds(root: root)
         window.title = "Lemmings 3 — \(campaign.tribe.title) \(campaign.index + 1) — Experimental native preview"
         window.delegate = self; window.isReleasedWhenClosed = false
@@ -841,6 +848,10 @@ import NxlvKit
         })
     }
     private func refresh() {
+        let impossible = canvas.menuRows == nil && !game.isComplete && FailureMoodDecision.isUnrecoverable(
+            saved: game.saved, active: game.lemmings.filter(\.active).count,
+            unreleased: game.reserve, required: 1)
+        failureMood.set(active: impossible)
         let justCompleted = game.isComplete && !recorded
         if justCompleted {
             do { try recoveryStore.clear(arcadeRunID) } catch { message = error.localizedDescription }
@@ -1046,6 +1057,7 @@ import NxlvKit
     private var panelArt: Lemmings3Panel?
     private var skillBadge: NSImage?
     private var menuSelection = 0
+    var failureMoodAmount: CGFloat = 0
     private var terrain: NSImage?
     private var sprites: [[NSImage]] = []
     private var objects: [(Int, Int, Int, Bool, [NSImage])] = []
@@ -1204,6 +1216,7 @@ import NxlvKit
         speedTrails.draw(enabled: usesSpeedEffects && menuRows == nil, in: playfieldRect) {
             drawWorld(game, terrain: terrain)
         }
+        FailureMoodOverlay.draw(in: playfieldRect, amount: failureMoodAmount)
     }
     private func drawLemmings(_ game: Lemmings3Runtime, ghostsOnly: Bool) {
         for lem in game.lemmings where lem.active {

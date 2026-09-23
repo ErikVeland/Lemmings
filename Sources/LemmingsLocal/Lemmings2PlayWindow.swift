@@ -45,6 +45,7 @@ import NxlvKit
     private var hoverPracticeSkill: Int?
     private let masks: Lemmings2TerrainMasks
     private let music = ModuleMusicPlayer()
+    private let failureMood = FailureMoodTransition()
     private var audioSettings = ClassicSettings()
     private var globallyMuted = false
     private let sounds: Lemmings2SoundPlayer
@@ -157,6 +158,14 @@ import NxlvKit
         super.init(window: NSWindow(contentRect: NSRect(x: 0, y: 0, width: 960, height: 720),
             styleMask: [.titled, .closable, .miniaturizable, .resizable], backing: .buffered, defer: false))
         guard let window else { return }
+        failureMood.onChange = { [weak self] amount in
+            guard let self else { return }
+            self.canvas.failureMoodAmount = amount
+            let tempo = 1 - 0.28 * Double(amount)
+            self.music.setTempoScale(tempo)
+            self.dj.setPlaybackRate(tempo)
+            self.canvas.needsDisplay = true
+        }
         NotificationCenter.default.addObserver(self, selector: #selector(artworkChanged),
             name: SequelArtworkPreference.changed, object: nil)
         window.title = "Lemmings 2 — The Tribes"
@@ -679,6 +688,10 @@ import NxlvKit
     }
     private func refreshGame() {
         guard let game else { return }
+        let impossible = screen == .playing && !game.isComplete && FailureMoodDecision.isUnrecoverable(
+            saved: game.saved, active: game.lemmings.filter(\.active).count,
+            unreleased: game.configuration.total - game.released, required: 1)
+        failureMood.set(active: impossible)
         let turn = ArcadeStore.shared.hotSeatIsActive ? ArcadeStore.shared.records.profile(arcadeProfileID) : nil
         canvas.turnBadge.show(initials: turn?.initials, portrait: turn.flatMap { ArcadeWindow.shared.arcadeView.portraitImage($0.portrait) })
         canvas.speedMultiplier = speedControl.multiplier
@@ -1511,6 +1524,7 @@ import NxlvKit
     private var panelBackground = NSColor.black
     var rewindOriginTick: Int?
     var rewindCurrentTick = 0
+    var failureMoodAmount: CGFloat = 0
     private var sprites: [String: [(image: NSImage, x: Int, y: Int)]] = [:]
     private var objects: [(id: Int, type: Int, x: Int, y: Int, entrance: Bool, animated: Bool, special: Bool,
                            frames: [(image: NSImage, x: Int, y: Int)])] = []
@@ -2152,6 +2166,9 @@ import NxlvKit
             in: NSRect(x: origin.x, y: origin.y, width: visibleWidth * zoom, height: 192 * zoom)) {
             drawWorld(game, terrain: terrain)
         }
+        FailureMoodOverlay.draw(
+            in: CGRect(x: origin.x, y: origin.y, width: visibleWidth * zoom, height: 192 * zoom),
+            amount: failureMoodAmount)
         if let panel {
             panelBackground.setFill()
             NSRect(x: bounds.minX, y: origin.y + 192 * zoom, width: bounds.width, height: 48 * zoom).fill()

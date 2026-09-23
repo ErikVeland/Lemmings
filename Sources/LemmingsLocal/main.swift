@@ -91,6 +91,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private var arcadeReport: ArcadeReport?
   private var arcadeAutoPresent = true
   private let music = ModuleMusicPlayer()
+  private let failureMood = FailureMoodTransition()
   /// Plays recordings the player supplied, as an alternative to the modules.
   private let soundtrack = SoundtrackPlayer()
   /// Mixes across the supplied soundtracks, moving on what the game does.
@@ -1066,6 +1067,15 @@ let achievementProgressKey = "ClassicAchievementProgress"
       contentRect: NSRect(x: 0, y: 0, width: 1000, height: 620),
       styleMask: [.titled, .closable, .resizable, .miniaturizable],
       backing: .buffered, defer: false)
+    failureMood.onChange = { [weak self] amount in
+      guard let self else { return }
+      self.playfield.failureMoodAmount = amount
+      let tempo = 1 - 0.28 * Double(amount)
+      self.music.setTempoScale(tempo)
+      self.soundtrack.setPlaybackRate(tempo)
+      self.dj.setPlaybackRate(tempo)
+      self.playfield.needsDisplay = true
+    }
     window.isReleasedWhenClosed = false
     window.delegate = self
     GameScreen.shared.gameWindow = window
@@ -2429,6 +2439,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   private func step(at now: TimeInterval = ProcessInfo.processInfo.systemUptime) {
+    updateFailureMood()
     refreshTurnDisplay()
     refreshProgressText()
     // Limit catch-up after sleep or a long modal interaction.
@@ -2491,6 +2502,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       let previousExplosions = settings.cinematicExplosionsEnabled
         ? Set(session.lemmings.filter { $0.pose == .explosion }.map(\.id)) : []
       session.tick()
+      updateFailureMood()
       playfield.updateSpeedTrails()
       countdownWarning.reset(seconds: before)
       if countdownWarning.update(seconds: session.remainingSeconds) { effects.play(.builderWarning) }
@@ -3470,6 +3482,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   /// Redraws after moving through history, without playing sounds again.
   private func refreshAfterSeek() {
+    updateFailureMood()
     if let session { assignmentFocus.rewind(to: session.currentTick) }
     if let session { playfield.updateRewindCue(at: session.currentTick) }
     playfield.assignmentHighlight.clear()
@@ -3478,6 +3491,14 @@ let achievementProgressKey = "ClassicAchievementProgress"
     playfield.needsDisplay = true
     panel.needsDisplay = true
     updateStatus()
+  }
+
+  private func updateFailureMood() {
+    guard phase == .playing, let session else {
+      failureMood.set(active: false)
+      return
+    }
+    failureMood.set(active: !session.isComplete && !session.canStillReachRequirement)
   }
 
   private func focusLemming(_ id: Int) {

@@ -7,6 +7,13 @@ import NxlvKit
   private var recording: AVAudioPlayer?
   private var module: ModuleMusicPlayer?
   var volume: Float = 0 { didSet { recording?.volume = volume; module?.setVolume(Double(volume)) } }
+  var playbackRate: Float = 1 {
+    didSet {
+      recording?.enableRate = true
+      recording?.rate = playbackRate
+      module?.setTempoScale(Double(playbackRate))
+    }
+  }
   var isPlaying: Bool { recording?.isPlaying == true || module?.isOutputRunning == true }
 
   init?(_ url: URL) {
@@ -58,6 +65,7 @@ import NxlvKit
   private var resumeDeckB = false
   private var fadingIn: DJDeck?
   private var fadingOut: DJDeck?
+  private var playbackRate: Float = 1
 
   /// Soundtracks the player supplied, keyed by folder name.
   private var pools: [String: [URL]] = [:]
@@ -126,7 +134,19 @@ import NxlvKit
 
   // MARK: - Decks
 
-  private func makeDeck(_ url: URL) -> DJDeck? { DJDeck(url) }
+  private func makeDeck(_ url: URL) -> DJDeck? {
+    let deck = DJDeck(url)
+    deck?.playbackRate = playbackRate
+    return deck
+  }
+
+  func setPlaybackRate(_ value: Double) {
+    playbackRate = Float(min(1, max(0.5, value)))
+    deckA?.playbackRate = playbackRate
+    deckB?.playbackRate = playbackRate
+    fadingIn?.playbackRate = playbackRate
+    fadingOut?.playbackRate = playbackRate
+  }
 
   /// Favour victory themes, then a different source and an unplayed track.
   static func victoryPreference(_ url: URL) -> Int {

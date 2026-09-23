@@ -18,6 +18,10 @@ final class ModuleMusicPlayer: @unchecked Sendable {
   private var enhancements: ProTrackerEnhancements = .faithful
   private var isMuted = false
   private var level: Double = 1.0
+  private var tempoScale = 1.0
+  private var interpolationPhase = 1.0
+  private var currentFrame: (left: Float, right: Float) = (0, 0)
+  private var nextFrame: (left: Float, right: Float) = (0, 0)
 
   private let sampleRate = 44100.0
   private(set) var isRunning = false
@@ -86,13 +90,32 @@ final class ModuleMusicPlayer: @unchecked Sendable {
       return
     }
 
+    if interpolationPhase >= 1 {
+      currentFrame = nextSourceFrameLocked()
+      nextFrame = nextSourceFrameLocked()
+      interpolationPhase = 0
+    }
     for index in 0..<frames {
-      let frame = player!.nextFrame()
+      let blend = Float(interpolationPhase)
+      let frame = (
+        left: currentFrame.left + (nextFrame.left - currentFrame.left) * blend,
+        right: currentFrame.right + (nextFrame.right - currentFrame.right) * blend)
       left?[index] = frame.left * Float(level)
       right?[index] = frame.right * Float(level)
-      // A module ends by running off its order list. Loop it, as the game does.
-      if player!.hasFinished { restartLocked() }
+      interpolationPhase += tempoScale
+      while interpolationPhase >= 1 {
+        currentFrame = nextFrame
+        nextFrame = nextSourceFrameLocked()
+        interpolationPhase -= 1
+      }
     }
+  }
+
+  private func nextSourceFrameLocked() -> (left: Float, right: Float) {
+    let frame = player!.nextFrame()
+    // A module ends by running off its order list. Loop it, as the game does.
+    if player!.hasFinished { restartLocked() }
+    return frame
   }
 
   private var loadedModule: ProTrackerModule?
@@ -101,6 +124,7 @@ final class ModuleMusicPlayer: @unchecked Sendable {
     guard let module = loadedModule else { return }
     player = ProTrackerEnhancedPlayer(
       module: module, sampleRate: sampleRate, enhancements: enhancements)
+    interpolationPhase = 1
   }
 
   // MARK: - Library
@@ -135,6 +159,7 @@ final class ModuleMusicPlayer: @unchecked Sendable {
     loadedModule = module
     player = ProTrackerEnhancedPlayer(
       module: module, sampleRate: sampleRate, enhancements: enhancements)
+    interpolationPhase = 1
     lock.unlock()
 
     currentURL = url
@@ -150,6 +175,13 @@ final class ModuleMusicPlayer: @unchecked Sendable {
   func setVolume(_ value: Double) {
     lock.lock()
     level = min(1, max(0, value))
+    lock.unlock()
+  }
+
+  /// Slows module playback without changing the game clock or pitch abruptly.
+  func setTempoScale(_ value: Double) {
+    lock.lock()
+    tempoScale = min(1, max(0.5, value))
     lock.unlock()
   }
 
@@ -178,6 +210,7 @@ final class ModuleMusicPlayer: @unchecked Sendable {
     if let module = loadedModule {
       player = ProTrackerEnhancedPlayer(
         module: module, sampleRate: sampleRate, enhancements: value)
+      interpolationPhase = 1
     }
     lock.unlock()
   }

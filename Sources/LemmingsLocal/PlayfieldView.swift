@@ -263,6 +263,7 @@ struct ReticleFeedback {
   var session: (any GameSession)? {
     didSet { if oldValue !== session { reticleFeedback = ReticleFeedback(); assignedTarget = nil; displayedTarget = nil; hdrBirths.removeAll(); hdrLastTick = 0; speedTrails.reset() } }
   }
+  var failureMoodAmount: CGFloat = 0
   var assets: ClassicMainDATAssets?
   var palette: [ClassicRGBColor] = []
   var viewport = Viewport()
@@ -598,6 +599,7 @@ struct ReticleFeedback {
         drawLevel(levelImage)
         speedTrails.draw(enabled: hdEffectsEnabled && !reduceMotion && isFastForward && phase == .playing, in: bounds) { drawLemmings() }
       }
+      FailureMoodOverlay.draw(in: bounds, amount: failureMoodAmount)
       drawRewindCue()
       if phase == .playing { drawTurnBadge(); drawCursor() }
     }
