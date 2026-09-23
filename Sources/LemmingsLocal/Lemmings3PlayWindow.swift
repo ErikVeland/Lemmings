@@ -1006,7 +1006,12 @@ import NxlvKit
     var favorApproachingLemmings = true
     var paused = true
     var fast = false
-    var menuRows: [String]? { didSet { syncSpeedEffects() } }
+    var menuRows: [String]? {
+        didSet {
+            syncSpeedEffects()
+            if oldValue != menuRows { window?.invalidateCursorRects(for: self) }
+        }
+    }
     var menuNotice = "EXPERIMENTAL GAMEPLAY"
     var directionPoint: CGPoint?
     private var pointerPosition: CGPoint?
@@ -1381,8 +1386,15 @@ import NxlvKit
     override func updateTrackingAreas() {
         super.updateTrackingAreas()
         if let tracking { removeTrackingArea(tracking) }
-        let area = NSTrackingArea(rect: bounds, options: [.activeInKeyWindow, .mouseMoved, .mouseEnteredAndExited, .inVisibleRect], owner: self)
+        let area = NSTrackingArea(rect: bounds, options: [.activeInKeyWindow, .mouseMoved, .mouseEnteredAndExited, .cursorUpdate, .inVisibleRect], owner: self)
         tracking = area; addTrackingArea(area)
+    }
+    override func resetCursorRects() {
+        guard menuRows == nil else { return }
+        addCursorRect(bounds, cursor: GameCursor.invisible)
+    }
+    override func cursorUpdate(with event: NSEvent) {
+        if menuRows == nil { GameCursor.invisible.set() } else { NSCursor.arrow.set() }
     }
     override func mouseMoved(with event: NSEvent) {
         trackPointer(at: convert(event.locationInWindow, from: nil))

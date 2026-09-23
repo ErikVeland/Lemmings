@@ -213,6 +213,7 @@ struct ReticleFeedback {
   var phase: GamePhase = .playing {
     didSet {
       if phase != oldValue { reticleFeedback = ReticleFeedback(); assignedTarget = nil; displayedTarget = nil; cursorViewPoint = nil; overlayReplayLine = nil; overlayRetryLine = nil }
+      if phase != oldValue { window?.invalidateCursorRects(for: self) }
     }
   }
   var levelImage: CGImage?
@@ -393,10 +394,19 @@ struct ReticleFeedback {
     if let trackingArea { removeTrackingArea(trackingArea) }
     let area = NSTrackingArea(
       rect: bounds,
-      options: [.activeInKeyWindow, .mouseMoved, .mouseEnteredAndExited, .inVisibleRect],
+      options: [.activeInKeyWindow, .mouseMoved, .mouseEnteredAndExited, .cursorUpdate, .inVisibleRect],
       owner: self)
     addTrackingArea(area)
     trackingArea = area
+  }
+
+  override func resetCursorRects() {
+    guard phase == .playing else { return }
+    addCursorRect(bounds, cursor: GameCursor.invisible)
+  }
+
+  override func cursorUpdate(with event: NSEvent) {
+    if phase == .playing { GameCursor.invisible.set() } else { NSCursor.arrow.set() }
   }
 
   /// Takes a cursor position directly.
