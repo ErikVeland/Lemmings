@@ -108,6 +108,7 @@ struct ReticleFeedback {
       needsDisplay = true
     }
   }
+  var favorApproachingLemmings = true
   var speedMultiplier: Double = 3 { didSet { speedTrails.multiplier = speedMultiplier } }
   var isFastForward = false
   private let speedTrails = SpeedTrails()
@@ -436,7 +437,17 @@ struct ReticleFeedback {
       let a = distanceSquared($0, point), b = distanceSquared($1, point)
       return a == b ? $0.id > $1.id : a < b
     }
-    return candidates.first { session.canAssign(skillIndex: skill, to: $0.id) }
+    let eligible = candidates.filter { session.canAssign(skillIndex: skill, to: $0.id) }
+    if favorApproachingLemmings, let approaching = eligible.first(where: { isApproaching($0, point: point) }) {
+      return approaching
+    }
+    return eligible.first
+  }
+
+  /// Whether `point` sits on the side of `lemming` that matches its facing.
+  private func isApproaching(_ lemming: SessionLemming, point: CGPoint) -> Bool {
+    let direction: CGFloat = lemming.facingLeft ? -1 : 1
+    return (point.x - CGFloat(lemming.x)) * direction >= 0
   }
 
   /// Honour the green target briefly while it walks between display and input.
