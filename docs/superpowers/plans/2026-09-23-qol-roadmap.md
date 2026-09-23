@@ -155,8 +155,11 @@ state starts a new replay branch, as Classic history does now.
 The current 1.1 slice implements the backward scrub, forward scrub, frame
 stepping, origin ghost and reverse recent-effect cue for Classic. The controller
 rewind modifier uses the same held transport path. The effect renderer now keeps
-a short mixed ring and ducks music during transport. Cross-source music capture
-and resume cross-fades remain the next audio increment.
+a short mixed ring and ducks music during transport. Lemmings 2 and Lemmings 3
+now expose deterministic backward seeking through their existing input logs,
+including controller hold, keyboard seek and branch truncation. Cross-source
+music capture, resume cross-fades and the shared visual transport strip remain
+the next parity increment.
 
 The controls help must show the current time, available history and branch
 behaviour. The transport must work from a keyboard, controller and visible
@@ -194,8 +197,9 @@ For the Classic engine, hold `Z` to scrub backwards and hold `.` to scrub
 forward. Release the key to leave the run paused at the chosen tick. `Shift` +
 Left/Right steps one tick backward or forward, and Space remains play/pause.
 The controller rewind modifier uses the same held transport path, ghost and
-reversed-effects cue. Lemmings 2 and Lemmings 3 continue to report that rewind
-is unsupported until their engines expose deterministic history.
+reversed-effects cue. Lemmings 2 and Lemmings 3 use the same LT+B held action
+and provide a two-second `Z` seek. Their deterministic state adapters are now
+available; visual transport parity and cancel-to-origin are still open.
 
 ### Audio treatment
 
@@ -220,9 +224,12 @@ fallback must still respect mute, volume and interruption pause.
 4. Add the origin ghost and reverse trails using the existing presentation
    surfaces.
 5. Add the rolling audio buffer and reverse scrub playback.
-6. Add Lemmings 2 history using its recorded input and checkpoint model.
-7. Add Lemmings 3 history using its recorded input and checkpoint model.
-8. Run cross-engine branch, pause, retry, save and result-page checks.
+6. Add Lemmings 2 history using its recorded input and checkpoint model. **Done
+   for deterministic backward seek and branch truncation.**
+7. Add Lemmings 3 history using its recorded input and checkpoint model. **Done
+   for deterministic backward seek and branch truncation.**
+8. Run cross-engine branch, pause, retry, save and result-page checks, then
+   align the visual transport strip and cancel-to-origin behaviour.
 
 Do not place rewind controls in `NxlvKit` views. Keep engine state and seek
 contracts in `NxlvKit`. Keep cursor, transport, audio and visual effects in

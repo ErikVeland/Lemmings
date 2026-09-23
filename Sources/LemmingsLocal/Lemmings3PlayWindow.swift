@@ -91,6 +91,8 @@ import NxlvKit
     private var lastTime = ProcessInfo.processInfo.systemUptime
     private var accumulator = 0.0
     private var message = "Choose an action, then click a lemming. Walker turns or releases a blocker."
+    private var rewindTimer: Timer?
+    private var rewindHeld = false
 
     private struct Session {
         var campaign: Lemmings3ClassicCampaign
@@ -190,7 +192,8 @@ import NxlvKit
             guard let self else { return }
             if self.game.isComplete, key.lowercased() == "v" { self.runMovie.review(); return }
             if self.game.isComplete, key.lowercased() == "s" { self.runMovie.review(save: true); return }
-            if let index = SkillShortcuts(names: Array(Lemmings3Panel.names.prefix(5))).index(for: key, current: self.selected, modern: self.audioSettings.modernControlsEnabled) { self.pendingTool = nil; self.canvas.directionPoint = nil; self.selected = index; self.refresh() }
+            if key.lowercased() == "z" { _ = self.rewind(seconds: 2) }
+            else if let index = SkillShortcuts(names: Array(Lemmings3Panel.names.prefix(5))).index(for: key, current: self.selected, modern: self.audioSettings.modernControlsEnabled) { self.pendingTool = nil; self.canvas.directionPoint = nil; self.selected = index; self.refresh() }
             else if key == " " { self.togglePause() }
             else if key == "." { self.singleStep() }
             else if key.lowercased() == "r" { self.restart() }
@@ -268,12 +271,13 @@ import NxlvKit
         keyboard.skillNames = { Array(Lemmings3Panel.names.prefix(5)) }
         keyboard.help = { [weak self] in
             let names = Array(Lemmings3Panel.names.prefix(5))
-            return SkillShortcuts(names: names).hint(names: names, modern: self?.audioSettings.modernControlsEnabled ?? false) + "\n\nSpace: pause\nR: retry\n.: single step"
+            return SkillShortcuts(names: names).hint(names: names, modern: self?.audioSettings.modernControlsEnabled ?? false) + "\n\nSpace: pause\nR: retry\nZ: rewind 2 seconds\n.: single step"
         }
         keyboard.contextCommands = {
             [KeyboardCommand(keys: "← / → / ↑ / ↓", action: "Pan the level", group: "Camera"),
              KeyboardCommand(keys: "V / S", action: "Review / save replay after a result", group: "Menus & results"),
-             KeyboardCommand(keys: "Return / Space", action: "Activate selected menu choice", group: "Menus & results")]
+             KeyboardCommand(keys: "Return / Space", action: "Activate selected menu choice", group: "Menus & results"),
+             KeyboardCommand(keys: "Z / LT + B", action: "Rewind the current run", group: "Gameplay")]
         }
         keyboard.hints = { [weak self] in self?.showLevelHints() }
         keyboard.settings = { [weak self] in self?.onShowSettings?() }
@@ -284,6 +288,12 @@ import NxlvKit
         keyboard.controllerMappings = { [weak self] in self?.audioSettings.controllerMappings ?? [:] }
         keyboard.controllerSwapSticks = { [weak self] in self?.audioSettings.controllerSwapSticks ?? false }
         keyboard.retry = { [weak self] in self?.restart() }
+        keyboard.rewind = { [weak self] in _ = self?.rewind(seconds: 2) }
+        keyboard.controllerRewindHeld = { [weak self] held in
+            guard let self else { return }
+            if held { self.beginContinuousRewind() }
+            else if self.rewindHeld { self.endContinuousRewind() }
+        }
         keyboard.step = { [weak self] direction in if direction > 0 { self?.singleStep() } }
         keyboard.endRun = { [weak self] in self?.confirmEndRun() }
         keyboard.pauseForHelp = { [weak self] in
@@ -403,6 +413,58 @@ import NxlvKit
 
     @objc private func togglePause() { saveCheckpoint(immediately: true); paused.toggle(); accumulator = 0; refresh() }
     @objc private func singleStep() { paused = true; advanceTick(); refresh() }
+    private func beginContinuousRewind() {
+        guard game.tick > 0, !rewindHeld else { return }
+        rewindHeld = true
+        rewindTimer?.invalidate()
+        rewindTimer = Timer.scheduledTimer(withTimeInterval: 1.0 / 15.0, repeats: true) { [weak self] _ in
+            MainActor.assumeIsolated {
+                guard let self, self.rewind(seconds: 0.20) else { self?.endContinuousRewind(); return }
+            }
+        }
+        guard rewind(seconds: 0.20) else { endContinuousRewind(); return }
+    }
+    private func endContinuousRewind() {
+        rewindHeld = false
+        rewindTimer?.invalidate()
+        rewindTimer = nil
+    }
+    @discardableResult
+    private func rewind(seconds: Double) -> Bool {
+        guard game.tick > 0 else { return false }
+        let target = max(0, game.tick - Int((seconds * Lemmings3Runtime.ticksPerSecond).rounded()))
+        guard target < game.tick else { return false }
+        let prefix = recoveryInputs.prefix { $0.tick <= target }
+        do {
+            game = try L3RunRecovery.replay(initial: initial, inputs: Array(prefix), through: target)
+            try rebuildReplayStatistics(Array(prefix))
+        } catch {
+            message = "Could not rewind this run: \(error)"
+            return false
+        }
+        recoveryInputs = Array(prefix)
+        paused = true; accumulator = 0; pendingTool = nil; canvas.directionPoint = nil
+        assignmentFocus.rewind(to: target); canvas.assignmentHighlight.clear(); warningSound.silence()
+        refresh(); saveCheckpoint(immediately: true)
+        return true
+    }
+    private func rebuildReplayStatistics(_ inputs: [L3RunRecovery.Input]) throws {
+        var probe = initial
+        var assignments: [String: Int] = [:]
+        var tools: [String: Int] = [:]
+        for input in inputs {
+            while probe.tick < input.tick && !probe.isComplete { probe.step() }
+            guard probe.tick == input.tick, !probe.isComplete else { throw RunRecoveryError.invalid }
+            assignments[input.action, default: 0] += 1
+            if input.action == "use", let id = input.lemming,
+               let tool = probe.lemmings.first(where: { $0.id == id })?.tool {
+                tools[String(describing: tool), default: 0] += 1
+            }
+            L3RunRecovery.apply(input, to: &probe)
+        }
+        skillAssignments = assignments
+        toolUses = tools
+    }
     @objc private func toggleFast() { speedControl.tap(); refresh() }
     @objc private func confirmEndRun() {
         guard !game.isComplete, !GameScreen.shared.isPresented else { return }

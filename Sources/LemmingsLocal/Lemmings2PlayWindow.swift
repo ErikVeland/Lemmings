@@ -109,6 +109,8 @@ import NxlvKit
     private var lastCheckpointTime = 0.0
     private var restoringRun = false
     private var beforeNuke: Lemmings2Runtime?
+    private var rewindTimer: Timer?
+    private var rewindHeld = false
     private var selectedSlot = 0
     private var ending: Lemmings2Ending?
     private var award: Lemmings2Award?
@@ -240,12 +242,13 @@ import NxlvKit
         keyboard.skillNames = { [weak self] in self?.game?.configuration.skills.map(\.name) ?? [] }
         keyboard.help = { [weak self] in
             let names = self?.game?.configuration.skills.map(\.name) ?? []
-            return SkillShortcuts(names: names).hint(names: names, modern: self?.audioSettings.modernControlsEnabled ?? false) + "\n\nSpace / P: pause\nR: retry\n.: single step"
+            return SkillShortcuts(names: names).hint(names: names, modern: self?.audioSettings.modernControlsEnabled ?? false) + "\n\nSpace / P: pause\nR: retry\nZ: rewind 2 seconds\n.: single step"
         }
         keyboard.contextCommands = {
             [KeyboardCommand(keys: "← / → / ↑ / ↓", action: "Pan the level", group: "Camera"),
              KeyboardCommand(keys: "V / S", action: "Review / save replay after a result", group: "Menus & results"),
              KeyboardCommand(keys: "Return / Space", action: "Activate selected menu choice", group: "Menus & results"),
+             KeyboardCommand(keys: "Z / LT + B", action: "Rewind the current run", group: "Gameplay"),
              KeyboardCommand(keys: "P / M / I", action: "From L2 menu: practice / tribe map / introduction", group: "Menus & results"),
              KeyboardCommand(keys: "1–4", action: "Choose practice level", group: "L2 practice"),
              KeyboardCommand(keys: "Arrow keys", action: "Choose practice skill", group: "L2 practice"),
@@ -262,6 +265,12 @@ import NxlvKit
         keyboard.controllerMappings = { [weak self] in self?.audioSettings.controllerMappings ?? [:] }
         keyboard.controllerSwapSticks = { [weak self] in self?.audioSettings.controllerSwapSticks ?? false }
         keyboard.retry = { [weak self] in self?.restart() }
+        keyboard.rewind = { [weak self] in _ = self?.rewind(seconds: 2) }
+        keyboard.controllerRewindHeld = { [weak self] held in
+            guard let self else { return }
+            if held { self.beginContinuousRewind() }
+            else if self.rewindHeld { self.endContinuousRewind() }
+        }
         keyboard.step = { [weak self] direction in if direction > 0 { self?.singleStep() } }
         keyboard.endRun = { [weak self] in
             guard let self else { return }
@@ -792,6 +801,43 @@ import NxlvKit
         self.game = game; refreshGame(); captureReplayFrame(); saveCheckpoint(immediately: true)
         finishIfComplete(game)
     }
+    private func beginContinuousRewind() {
+        guard screen == .playing, game?.tick ?? 0 > 0, !rewindHeld else { return }
+        rewindHeld = true
+        rewindTimer?.invalidate()
+        rewindTimer = Timer.scheduledTimer(withTimeInterval: 1.0 / 15.0, repeats: true) { [weak self] _ in
+            MainActor.assumeIsolated {
+                guard let self, self.rewind(seconds: 0.20) else { self?.endContinuousRewind(); return }
+            }
+        }
+        guard rewind(seconds: 0.20) else { endContinuousRewind(); return }
+    }
+    private func endContinuousRewind() {
+        rewindHeld = false
+        rewindTimer?.invalidate()
+        rewindTimer = nil
+    }
+    @discardableResult
+    private func rewind(seconds: Double) -> Bool {
+        guard screen == .playing, let initial, let current = game, current.tick > 0 else { return false }
+        let target = max(0, current.tick - Int((seconds * Lemmings2Runtime.ticksPerSecond).rounded()))
+        guard target < current.tick else { return false }
+        let prefix = recoveryInputs.prefix { $0.tick <= target }
+        do { game = try L2RunRecovery.replay(initial: initial, inputs: Array(prefix), through: target) }
+        catch {
+            message = "Could not rewind this run: \(error)"
+            return false
+        }
+        recoveryInputs = Array(prefix)
+        lastFanInput = nil; lastAimInput = nil; beforeNuke = nil
+        nukeCount = recoveryInputs.reduce(into: 0) { count, input in
+            if case .nuke = input.action { count += 1 }
+        }
+        usedRewind = true; paused = true; accumulator = 0
+        assignmentFocus.rewind(to: target); canvas.assignmentHighlight.clear(); sounds.silence()
+        refreshGame(); saveCheckpoint(immediately: true)
+        return true
+    }
     private func startIntroduction() {
         do {
             introduction = try Lemmings2Introduction(root:root,font:assets.font)
@@ -837,9 +883,9 @@ import NxlvKit
             }
         }
         if screen == .playing {
-            if let game, let index = SkillShortcuts(names: game.configuration.skills.map(\.name)).index(for: key, modern: audioSettings.modernControlsEnabled) { panelAction(index) }
+            if key.lowercased() == "z" { _ = rewind(seconds: 2) }
+            else if let game, let index = SkillShortcuts(names: game.configuration.skills.map(\.name)).index(for: key, modern: audioSettings.modernControlsEnabled) { panelAction(index) }
             else if key == " " || key.lowercased() == "p" { panelAction(8) }
-
             else if key.lowercased() == "r" { restart() }
         } else if key == "\r" || key == " " {
             if screen == .menu { playFromMenu() }
