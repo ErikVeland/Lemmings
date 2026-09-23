@@ -111,6 +111,7 @@ import NxlvKit
     private var beforeNuke: Lemmings2Runtime?
     private var rewindTimer: Timer?
     private var rewindHeld = false
+    private var rewindAudioDucked = false
     private var selectedSlot = 0
     private var ending: Lemmings2Ending?
     private var award: Lemmings2Award?
@@ -805,6 +806,7 @@ import NxlvKit
         guard screen == .playing, game?.tick ?? 0 > 0, !rewindHeld else { return }
         rewindHeld = true
         rewindTimer?.invalidate()
+        setRewindAudioDucked(true)
         rewindTimer = Timer.scheduledTimer(withTimeInterval: 1.0 / 15.0, repeats: true) { [weak self] _ in
             MainActor.assumeIsolated {
                 guard let self, self.rewind(seconds: 0.20) else { self?.endContinuousRewind(); return }
@@ -816,6 +818,12 @@ import NxlvKit
         rewindHeld = false
         rewindTimer?.invalidate()
         rewindTimer = nil
+        setRewindAudioDucked(false)
+    }
+    private func setRewindAudioDucked(_ active: Bool) {
+        guard rewindAudioDucked != active else { return }
+        rewindAudioDucked = active
+        music.setVolume(active ? audioSettings.musicVolume * 0.18 : audioSettings.musicVolume)
     }
     @discardableResult
     private func rewind(seconds: Double) -> Bool {
@@ -823,9 +831,11 @@ import NxlvKit
         let target = max(0, current.tick - Int((seconds * Lemmings2Runtime.ticksPerSecond).rounded()))
         guard target < current.tick else { return false }
         let prefix = recoveryInputs.prefix { $0.tick <= target }
+        setRewindAudioDucked(true)
         do { game = try L2RunRecovery.replay(initial: initial, inputs: Array(prefix), through: target) }
         catch {
             message = "Could not rewind this run: \(error)"
+            if !rewindHeld { setRewindAudioDucked(false) }
             return false
         }
         recoveryInputs = Array(prefix)
@@ -834,8 +844,9 @@ import NxlvKit
             if case .nuke = input.action { count += 1 }
         }
         usedRewind = true; paused = true; accumulator = 0
-        assignmentFocus.rewind(to: target); canvas.assignmentHighlight.clear(); sounds.silence()
+        assignmentFocus.rewind(to: target); canvas.assignmentHighlight.clear(); sounds.silence(); sounds.playRewindScrub()
         refreshGame(); saveCheckpoint(immediately: true)
+        if !rewindHeld { setRewindAudioDucked(false) }
         return true
     }
     private func startIntroduction() {

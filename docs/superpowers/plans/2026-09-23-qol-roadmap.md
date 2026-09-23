@@ -157,9 +157,10 @@ stepping, origin ghost and reverse recent-effect cue for Classic. The controller
 rewind modifier uses the same held transport path. The effect renderer now keeps
 a short mixed ring and ducks music during transport. Lemmings 2 and Lemmings 3
 now expose deterministic backward seeking through their existing input logs,
-including controller hold, keyboard seek and branch truncation. Cross-source
-music capture, resume cross-fades and the shared visual transport strip remain
-the next parity increment.
+including controller hold, keyboard seek and branch truncation. Their effect
+mixers now play the same short reverse tape cue and duck module music while a
+held scrub is active. Cross-source music capture, resume cross-fades and the
+shared visual transport strip remain the next parity increment.
 
 The controls help must show the current time, available history and branch
 behaviour. The transport must work from a keyboard, controller and visible

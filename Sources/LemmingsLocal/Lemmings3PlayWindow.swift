@@ -93,6 +93,7 @@ import NxlvKit
     private var message = "Choose an action, then click a lemming. Walker turns or releases a blocker."
     private var rewindTimer: Timer?
     private var rewindHeld = false
+    private var rewindAudioDucked = false
 
     private struct Session {
         var campaign: Lemmings3ClassicCampaign
@@ -417,6 +418,7 @@ import NxlvKit
         guard game.tick > 0, !rewindHeld else { return }
         rewindHeld = true
         rewindTimer?.invalidate()
+        setRewindAudioDucked(true)
         rewindTimer = Timer.scheduledTimer(withTimeInterval: 1.0 / 15.0, repeats: true) { [weak self] _ in
             MainActor.assumeIsolated {
                 guard let self, self.rewind(seconds: 0.20) else { self?.endContinuousRewind(); return }
@@ -428,6 +430,12 @@ import NxlvKit
         rewindHeld = false
         rewindTimer?.invalidate()
         rewindTimer = nil
+        setRewindAudioDucked(false)
+    }
+    private func setRewindAudioDucked(_ active: Bool) {
+        guard rewindAudioDucked != active else { return }
+        rewindAudioDucked = active
+        music.setVolume(Double(active ? musicGain * 0.18 : musicGain))
     }
     @discardableResult
     private func rewind(seconds: Double) -> Bool {
@@ -435,17 +443,20 @@ import NxlvKit
         let target = max(0, game.tick - Int((seconds * Lemmings3Runtime.ticksPerSecond).rounded()))
         guard target < game.tick else { return false }
         let prefix = recoveryInputs.prefix { $0.tick <= target }
+        setRewindAudioDucked(true)
         do {
             game = try L3RunRecovery.replay(initial: initial, inputs: Array(prefix), through: target)
             try rebuildReplayStatistics(Array(prefix))
         } catch {
             message = "Could not rewind this run: \(error)"
+            if !rewindHeld { setRewindAudioDucked(false) }
             return false
         }
         recoveryInputs = Array(prefix)
         paused = true; accumulator = 0; pendingTool = nil; canvas.directionPoint = nil
-        assignmentFocus.rewind(to: target); canvas.assignmentHighlight.clear(); warningSound.silence()
+        assignmentFocus.rewind(to: target); canvas.assignmentHighlight.clear(); warningSound.silence(); warningSound.playRewindScrub()
         refresh(); saveCheckpoint(immediately: true)
+        if !rewindHeld { setRewindAudioDucked(false) }
         return true
     }
     private func rebuildReplayStatistics(_ inputs: [L3RunRecovery.Input]) throws {
