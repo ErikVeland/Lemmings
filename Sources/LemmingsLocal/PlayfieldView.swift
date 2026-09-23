@@ -1107,8 +1107,11 @@ struct ReticleFeedback {
       }
     }
     context?.restoreGState()
-    let delta = max(0, rewindOriginTick - rewindCurrentTick)
-    GameTypography.annotation("REWIND  -\(delta) TICKS", at: CGPoint(x: 12, y: 12), palette: .blue)
+    RewindTransportCue.draw(
+      origin: CGPoint(x: 12, y: 12),
+      currentTick: rewindCurrentTick,
+      originTick: rewindOriginTick
+    )
   }
 
   /// Walks a row of real lemmings across the foot of a menu.

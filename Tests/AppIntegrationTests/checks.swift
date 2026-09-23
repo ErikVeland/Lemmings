@@ -1172,6 +1172,9 @@ extension AppDelegate {
       try check(button("3x", in: ghost.page) != nil, "Replay speed did not increase")
       button("3x", in: ghost.page)!.performClick(nil)
       try check(button("10x", in: ghost.page) != nil, "Replay speed did not reach 10x")
+      button("Back 1s", in: ghost.page)!.performClick(nil)
+      try check(ghost.field.session === ghost.playback.session,
+        "Seeking solution replay left the canvas on a stale session")
       let stoppedTick = ghost.playback.session.currentTick
       ghost.advance()
       try check(ghost.playback.session.currentTick == stoppedTick, "Ghost pause did not stop playback")
@@ -1219,6 +1222,22 @@ extension AppDelegate {
     for _ in 0..<liveOutcome.ticks { livePlayback.tick() }
     try check(ClassicDOSReplayRecorder.stateHash(of: livePlayback.session.simulation) == liveOutcome.stateHash,
       "Animated after-tick input timing differs from the strict replay player")
+    let seekStart = min(120, liveOutcome.ticks)
+    let seekDistance = min(ClassicDOSRules.ticksPerSecond, seekStart)
+    let seekPlayback = SolutionPlayback(liveProof, width: 1600, height: 160)
+    for _ in 0..<seekStart { seekPlayback.tick() }
+    seekPlayback.seek(by: -seekDistance)
+    let rewoundPlayback = SolutionPlayback(liveProof, width: 1600, height: 160)
+    for _ in 0..<(seekStart - seekDistance) { rewoundPlayback.tick() }
+    try check(ClassicDOSReplayRecorder.stateHash(of: seekPlayback.session.simulation)
+      == ClassicDOSReplayRecorder.stateHash(of: rewoundPlayback.session.simulation),
+      "Solution replay backward seek diverged from deterministic playback")
+    seekPlayback.seek(by: seekDistance)
+    let restoredPlayback = SolutionPlayback(liveProof, width: 1600, height: 160)
+    for _ in 0..<seekStart { restoredPlayback.tick() }
+    try check(ClassicDOSReplayRecorder.stateHash(of: seekPlayback.session.simulation)
+      == ClassicDOSReplayRecorder.stateHash(of: restoredPlayback.session.simulation),
+      "Solution replay forward seek did not restore deterministic playback")
     let routeDirectory = URL(fileURLWithPath: ".build/hints/recorded-routes")
     try? FileManager.default.removeItem(at: routeDirectory)
     let recordedURL = try ClassicRouteRecorder.save(liveReplay, initial: fresh,

@@ -2064,7 +2064,8 @@ import NxlvKit
             }
             if let focusNotice { GameTypography.annotation(focusNotice, at: CGPoint(x: 12, y: 12)) }
             if let origin = rewindOriginTick, origin > rewindCurrentTick {
-                GameTypography.annotation("REWIND  -\(origin - rewindCurrentTick) TICKS", at: CGPoint(x: 12, y: 12), palette: .blue)
+                RewindTransportCue.draw(origin: CGPoint(x: 12, y: 12),
+                    currentTick: rewindCurrentTick, originTick: origin, scale: zoom)
             }
         }
         if turnBadge.superview == nil { addSubview(turnBadge) }

@@ -1124,7 +1124,8 @@ import NxlvKit
                 }
             }
             if let origin = rewindOriginTick, origin > rewindCurrentTick {
-                GameTypography.annotation("REWIND  -\(origin - rewindCurrentTick) TICKS", at: CGPoint(x: screenOrigin.x + 8, y: screenOrigin.y + 14), palette: .blue)
+                RewindTransportCue.draw(origin: CGPoint(x: screenOrigin.x + 8, y: screenOrigin.y + 14),
+                    currentTick: rewindCurrentTick, originTick: origin, scale: zoom)
             }
         }
         updateSpeedTrails()

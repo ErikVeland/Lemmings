@@ -159,8 +159,9 @@ a short mixed ring and ducks music during transport. Lemmings 2 and Lemmings 3
 now expose deterministic backward seeking through their existing input logs,
 including controller hold, keyboard seek and branch truncation. Their effect
 mixers now play the same short reverse tape cue and duck module music while a
-held scrub is active. Cross-source music capture, resume cross-fades and the
-shared visual transport strip remain the next parity increment.
+held scrub is active. All three engines now show the shared compact transport
+label and history-position rail. Cross-source music capture and resume
+cross-fades remain open for the release gate.
 
 The controls help must show the current time, available history and branch
 behaviour. The transport must work from a keyboard, controller and visible
@@ -199,8 +200,9 @@ forward. Release the key to leave the run paused at the chosen tick. `Shift` +
 Left/Right steps one tick backward or forward, and Space remains play/pause.
 The controller rewind modifier uses the same held transport path, ghost and
 reversed-effects cue. Lemmings 2 and Lemmings 3 use the same LT+B held action
-and provide a two-second `Z` seek. Their deterministic state adapters and
-cancel-to-origin path are now available; visual transport parity is still open.
+and provide a two-second `Z` seek. Their deterministic state adapters,
+cancel-to-origin path and visual transport cue are now available; forward
+keyboard scrubbing and the complete shared action set remain open.
 
 ### Audio treatment
 
@@ -230,7 +232,8 @@ fallback must still respect mute, volume and interruption pause.
 7. Add Lemmings 3 history using its recorded input and checkpoint model. **Done
    for deterministic backward seek and branch truncation.**
 8. Run cross-engine branch, pause, retry, save and result-page checks, then
-   align the visual transport strip. **Cancel-to-origin is implemented.**
+   align the remaining transport actions. **Cancel-to-origin and the shared
+   visual transport cue are implemented.**
 
 Do not place rewind controls in `NxlvKit` views. Keep engine state and seek
 contracts in `NxlvKit`. Keep cursor, transport, audio and visual effects in
@@ -256,7 +259,9 @@ Rewind is ready for a player release only when:
 After rewind has a shared contract, extend checked hints to L2 and L3. Use the
 same three tiers as Classic. Keep general coaching visibly separate from a
 route-backed hint. Classic checked solution replay now has pause, speed, back
-one second and one-tick forward controls.
+one second and one-tick forward controls. Its backward and forward seek paths
+now have deterministic state checks and keep the replay canvas on the replaced
+session.
 
 Add a short solution playback action that starts from the current level and
 allows pause, step, speed and rewind. Do not expose a route as verified until
