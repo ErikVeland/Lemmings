@@ -242,11 +242,13 @@ private func testHDEffectsPreference() throws {
     print("PASS HD defaults, legacy preference migration and saved old-school mode")
     try require(defaults.modernControlsEnabled && defaults.variableSpeedEnabled,
       "Modern controls and variable speed must default on")
+    try require(defaults.musicStyle == .modern, "Modern music mixing must default on")
     var experience = ClassicSettings(graphics: .amiga, musicVolume: 0.25, soundVolume: 0.4)
     experience.applyExperiencePreset(modern: false)
     try require(!experience.pauseOnInterruption && !experience.modernControlsEnabled && !experience.variableSpeedEnabled && !experience.controllerEnabled && !experience.hdEffectsEnabled
       && !experience.confinePointer && !experience.fullScreenHDRFlashes && !experience.djIncludesOtherSoundtracks && !experience.favorApproachingLemmings,
       "OG did not disable the added conveniences together")
+    try require(experience.musicStyle == .faithful, "OG did not restore faithful music")
     try require(experience.graphics == .amiga && experience.musicVolume == 0.25 && experience.soundVolume == 0.4,
       "OG discarded the chosen machine or volumes")
     let savedExperience = try JSONDecoder().decode(ClassicSettings.self, from: JSONEncoder().encode(experience))
@@ -254,6 +256,7 @@ private func testHDEffectsPreference() throws {
     experience.applyExperiencePreset(modern: true)
     try require(experience.pauseOnInterruption && experience.modernControlsEnabled && experience.variableSpeedEnabled && experience.controllerEnabled && experience.hdEffectsEnabled
       && experience.confinePointer && experience.favorApproachingLemmings, "Modern defaults failed to restore the conveniences")
+    try require(experience.musicStyle == .modern, "Modern defaults did not enable the modern music mix")
     print("PASS modern defaults, OG bundle, saved preference and preserved machine/volumes")
 }
 

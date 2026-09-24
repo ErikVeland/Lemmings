@@ -54,10 +54,11 @@ but ambiguous shapes must retain the source block. They must not receive random
 texture. Repeated animations must use the same rule without a time or frame seed.
 
 For the sequels, source transparency takes precedence over reference silhouette
-changes. Every transparent source pixel remains four transparent pixels. Every
-opaque source pixel remains four opaque pixels. Reconstruction changes colour
-within those masks. The pipeline must not copy the Mac water height, cropped
-origins, altered proportions or frame timing into a sequel.
+changes. Every transparent source pixel remains four transparent pixels, except
+for a liquid frame tail below an existing liquid column. Every opaque source
+pixel remains four opaque pixels. Reconstruction changes colour within those
+masks. The pipeline must not copy the Mac water height, cropped origins, altered
+proportions or frame timing into a sequel.
 
 All generated images and comparison sheets remain under `.build/`, alongside
 the supplied commercial data. The repository holds the generation code and
@@ -98,11 +99,11 @@ Four curated treatments supplement the tables:
    Only textured, saturated regions use this fallback. Flat fills, architectural
    surfaces and transparent pixels do not receive it. Marks use neighbouring
    palette tones. They do not copy the source terrain shape or invent colours.
-3. Liquids narrow an existing bright surface glint to one visual pixel,
-   using the liquid colour directly below it. This preserves PC surface height
-   and opacity. L3 generic liquid/fire hazards share this conservative treatment.
-   Isolated glints become one pixel; connected crests retain a horizontal pair.
-   Their collision tags are not changed by rendering.
+3. Liquids fill the transparent tail below existing liquid columns, then narrow
+   an existing bright surface glint to one visual pixel. Empty columns remain
+   transparent. This removes black gaps without changing the liquid footprint
+   at the sides or its collision tags. Isolated glints become one pixel;
+   connected crests retain a horizontal pair.
 4. Small neutral metal highlights receive faceted corners, as seen in the Mac
    exit's studs and dark joints. Only connected highlight patches no larger
    than 3×3 source pixels qualify. Corner marks use an existing darker neutral

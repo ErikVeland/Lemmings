@@ -436,7 +436,8 @@ enum ExplosionHDR {
     else if let expiry = flashes.map(\.expiresAt).filter({$0.isFinite && $0 > now}).min() { end = expiry }
     else { return }
     expiration = Task { @MainActor [weak self] in
-      do { try await Task.sleep(for:.seconds(end-now)) } catch { return }
+      // Nanoseconds keep this available on macOS 12.3. Duration-based sleep needs macOS 13.
+      do { try await Task.sleep(nanoseconds: UInt64(max(0, end - now) * 1_000_000_000)) } catch { return }
       self?.render()
       self?.scheduleExpiration()
     }

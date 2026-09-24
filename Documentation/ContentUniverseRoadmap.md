@@ -50,6 +50,42 @@ Each record should include:
 The catalogue must distinguish Classic fan levels from NeoLemmix levels. A
 level format alone must not decide which physics engine runs the level.
 
+Add the player-facing content browser in the same milestone:
+
+- Use a CoverFlow-style carousel with the selected pack or level in the centre,
+  shipped pixel artwork, a clear focus state and one primary start action.
+- Keep the browser usable with mouse, keyboard, controller and VoiceOver. Add a
+  list or grid path when reduced motion is enabled.
+- Add `Shuffle all` for eligible fan levels. Do not mix unverified content into
+  the normal library, and do not repeat a level until the selected pool is
+  exhausted unless the player starts a new shuffle.
+- Let the player create a playlist from ten random eligible levels or from a
+  manually selected and ordered set of levels.
+- Store the source engine, pack identity, level identity and catalogue revision
+  in each playlist entry. Reject or repair entries that no longer resolve.
+- Keep playlist progress separate from campaign progress, Hot Seat ownership,
+  saved attempts, replays and verified completion records.
+
+### L2 and L3 completion verification
+
+Make sequel completion verification a 1.2 exit gate. Keep the current Preview
+labels until every condition passes:
+
+- preserve and replay a winning route for all 120 Lemmings 2 levels and all 90
+  Lemmings 3 levels;
+- compare Lemmings 2 rules with the original engine and resolve the provisional
+  Lemmings 3 tool, movement and trap semantics;
+- verify continuous campaign progression, Lemmings 2 survivor carry-over and
+  both games' endings;
+- complete Lemmings 3 environmental effects, original movie audio and story
+  transitions, and close the remaining Lemmings 2 media and fidelity gaps;
+- verify app-session completion, saved-run recovery, replay identity and result
+  records against the current engine and content revisions.
+
+The current baseline is 73/120 Lemmings 2 routes and 41/90 Lemmings 3 routes.
+The missing 96 routes are an open verification gap, not evidence that those
+levels are broken. A passing load or smoke check does not close this gate.
+
 ### 1.5 — NeoLemmix compatibility
 
 Target NeoLemmix 12.14 data and replay compatibility, plus the current
