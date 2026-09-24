@@ -1499,11 +1499,12 @@ import NxlvKit
         drawLemmings(game, ghostsOnly: false)
         NSGraphicsContext.restoreGraphicsState()
         drawInterface()
-        if let point = pointerPosition ?? controllerPointer, playfieldRect.contains(point),
-           (0..<5).contains(selectedAction) {
+        if let point = pointerPosition ?? controllerPointer, playfieldRect.contains(point) {
             GameCursor.drawPlayfieldPointer(at: point, scale: zoom, tint: .systemGreen)
-            SkillCursorBadge.draw(icon: skillBadge, index: selectedAction, at: point,
-                scale: zoom, tint: .systemGreen, reduceMotion: reduceMotion, in: bounds)
+            if (0..<5).contains(selectedAction) {
+                SkillCursorBadge.draw(icon: skillBadge, index: selectedAction, at: point,
+                    scale: zoom, tint: .systemGreen, reduceMotion: reduceMotion, in: bounds)
+            }
         }
         if turnBadge.superview == nil { addSubview(turnBadge) }
         turnBadge.place(in: playfieldRect)
