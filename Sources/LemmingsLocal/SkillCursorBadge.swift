@@ -17,7 +17,7 @@ import AppKit
     }
 
     static func draw(icon: NSImage?, index _: Int, at point: CGPoint, scale: CGFloat,
-                     tint: NSColor, reduceMotion _: Bool, in _: CGRect) {
+                     tint: NSColor, reduceMotion _: Bool, in bounds: CGRect) {
         let pixel = max(1, floor(scale))
         let reticle = reticleFrame(at: point, scale: scale)
         if let icon {
@@ -29,9 +29,14 @@ import AppKit
             let fit = min(1, available.width / max(1, icon.size.width),
                           available.height / max(1, icon.size.height))
             let size = CGSize(width: icon.size.width * fit, height: icon.size.height * fit)
-            let rect = CGRect(x: reticle.maxX - size.width - badgeInset * pixel,
-                              y: reticle.maxY - size.height - badgeInset * pixel,
-                              width: size.width, height: size.height)
+            let inset = badgeInset * pixel
+            var x = reticle.maxX - size.width - inset
+            var y = reticle.maxY - size.height - inset
+            if x < bounds.minX || x + size.width > bounds.maxX { x = reticle.minX + inset }
+            if y < bounds.minY || y + size.height > bounds.maxY { y = reticle.minY + inset }
+            x = min(max(bounds.minX, x), max(bounds.minX, bounds.maxX - size.width))
+            y = min(max(bounds.minY, y), max(bounds.minY, bounds.maxY - size.height))
+            let rect = CGRect(x: x, y: y, width: size.width, height: size.height)
             icon.draw(in: rect, from: .zero,
                 operation: .sourceOver,
                 fraction: 1,
@@ -42,8 +47,13 @@ import AppKit
             // drawing a tile or label over the reticle.
             tint.withAlphaComponent(0.9).setFill()
             let marker = pixel
-            CGRect(x: reticle.maxX - marker - badgeInset * pixel,
-                y: reticle.maxY - marker - badgeInset * pixel,
+            let inset = badgeInset * pixel
+            var x = reticle.maxX - marker - inset
+            var y = reticle.maxY - marker - inset
+            if x < bounds.minX || x + marker > bounds.maxX { x = reticle.minX + inset }
+            if y < bounds.minY || y + marker > bounds.maxY { y = reticle.minY + inset }
+            CGRect(x: min(max(bounds.minX, x), bounds.maxX - marker),
+                y: min(max(bounds.minY, y), bounds.maxY - marker),
                 width: marker,
                 height: marker).fill()
         }
