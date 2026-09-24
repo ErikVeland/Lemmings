@@ -16,15 +16,15 @@ clear transport controls.
 | --- | --- | --- | --- |
 | P0 | Target-select polish | 1.1 exit gate | The current targeting logic needs a clear visual and a deterministic input path. |
 | P1 | Unrecoverable-run mood | 1.1 polish | Tell the player when the rescue target is no longer reachable without changing the simulation or result rules. |
-| P1 | Rewind transport design and Classic prototype | After the 1.1 target baseline | Classic already has exact history. It can prove the interaction, visuals and audio before cross-engine work. |
-| P1 | Lemmings 2 and Lemmings 3 rewind adapters | Next QoL milestone | Rewind must reach all three engines before it becomes a shared player promise. |
+| P1 | Rewind transport and cross-engine closure | 1.1 CR2 validation | The transport is in the CR2 source candidate. Audio resume and release evidence remain open. |
+| P2 | Content browser and fan playlists | 1.2 content discovery | Players need a clear way to browse the growing fan-level library and create a deliberate or random sequence. |
 | P2 | Verified hints and solution playback | After rewind foundation | Hints depend on checked routes and should follow the same evidence boundary. |
 | P3 | Accessibility and device validation | Alongside every milestone, release gate | The features exist, but physical controllers and complete VoiceOver journeys still need evidence. |
 | P4 | Smart waiting and Hot Seat expansion | Later milestone | These improve comfort, but they do not fix the main input and recovery gaps. |
 
-Target-select is the 1.1 product commitment. Rewind design work can start during
-1.1, but the full rewind feature should not enter the 1.1 exit gate until all
-three engines have the same player-facing contract.
+Target-select and deterministic rewind transport are in the 1.1 CR2 source
+candidate. The 1.1 exit gate still needs one player-facing contract across all
+three engines, audio resume checks and release evidence.
 
 ## P0: target-select polish for 1.1
 
@@ -300,6 +300,62 @@ that 10× speed still leaves long waits. Consider mid-level Hot Seat takeovers
 only after shared attempt ownership and record attribution are defined.
 
 Keep both features outside the 1.1 exit gate.
+
+## P2: content browser and fan playlists for 1.2
+
+The 1.2 content-discovery milestone should make the growing fan-level library
+easy to browse without changing engine rules or content claims.
+
+### Level browser
+
+- Use a CoverFlow-style carousel with one focused pack or level in the centre.
+- Reuse the shipped pixel artwork and existing bitmap controls.
+- Show the source engine, pack name, level name or number and content status.
+- Give the focused item one primary Start action. Keep secondary actions concise.
+- Support mouse, keyboard, controller and VoiceOver navigation.
+- Provide a list or grid fallback when reduced motion is enabled.
+- Keep unverified content outside the normal library unless the player imports
+  it through an explicit path.
+
+The carousel is presentation only. Selection must resolve to a typed catalogue
+entry before the app starts a level. The selected entry must retain its source
+engine and pack identity.
+
+### Fan-level shuffle
+
+Add `Shuffle all` for eligible fan levels. The shuffle pool must use the same
+content-status and engine filters as the browser. It must not repeat a level
+until the pool is exhausted. A new shuffle starts a new order.
+
+Do not combine official campaigns and fan levels silently. Show the active pool
+before the first level starts, and retain the pool identity for recovery and
+results.
+
+### Playlists
+
+Let the player create a playlist in either of these ways:
+
+- select ten eligible levels at random;
+- select and order levels manually.
+
+Store the source engine, pack identity, level identity and catalogue revision
+for every entry. Keep playlist progress separate from campaign progress, Hot
+Seat ownership, saved attempts, replays and verified completion records.
+If an entry no longer resolves, show the issue and let the player remove or
+replace it. Do not silently substitute a different level.
+
+### Exit gate
+
+The feature is ready when all three engines can enter a level from the shared
+browser where their content contracts allow it, and when the following checks
+pass:
+
+- shuffle produces a stable, non-repeating order for a recorded seed;
+- random and manual playlists save, resume and report the correct level;
+- missing or changed catalogue entries fail visibly without corrupting progress;
+- mouse, keyboard, controller, VoiceOver, reduced-motion and focus states work;
+- official, fan, Preview and unverified content keep their existing labels and
+  release boundaries.
 
 ## Design references
 

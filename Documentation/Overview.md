@@ -107,21 +107,29 @@ what lets the release notes above be trusted rather than taken on faith.
 ## Where the project stands right now
 
 The official Classic campaign closed at 352/352 on 22 September 2026. The 1.0
-RC1 baseline was build 36. Its release records are archived locally because
-the active branch is now 1.1. The first 1.1 beta will have its own readiness
-record and release notes. Current targeting work covers Classic, Lemmings 2 and
-Lemmings 3; see the [targeting plan](../docs/superpowers/plans/2026-09-23-approaching-lemming-targeting.md).
+RC1 baseline was build 36. The current 1.1 CR2 source candidate is commit
+`e1a2cbb`. It includes shared target selection, rewind transport and the related
+presentation work across Classic, Lemmings 2 and Lemmings 3. CR2 is not a release
+claim yet. A fresh package, release audit, physical-device checks, VoiceOver
+journeys and hardware/performance evidence remain open.
 
 ## Roadmap
 
-**Now: develop 1.1 on macOS.** The first 1.1 QoL focus is reliable misclick
-targeting across all three engines. The prioritised QoL roadmap defines the
-target-select visual contract and the following rewind milestone. Release
-validation will restart with the first 1.1 beta package rather than reuse the
-1.0 RC1 record. See the [QoL roadmap](../docs/superpowers/plans/2026-09-23-qol-roadmap.md).
+**Now: close 1.1 CR2 on macOS.** Target selection and the shared rewind
+transport are implemented across the three engines. The next work is candidate
+validation and release evidence, not another large feature. See the
+[QoL roadmap](../docs/superpowers/plans/2026-09-23-qol-roadmap.md).
 
-**Next: bring Lemmings 2 and 3 to the same standard.** Both already run their
-full campaigns with original assets. Closing the gap means recording the
+**Next: 1.2 content discovery.** Build a CoverFlow-style level browser that
+keeps the shipped pixel artwork and gives one clear primary action. Add
+`Shuffle all` for eligible fan levels and saved playlists. A playlist can use
+ten randomly selected levels or an order chosen by the player. Preserve the
+source engine, pack identity and level identity in every playlist entry so
+saves, replays and results remain safe. This work belongs beside the 1.2
+[content atlas and import boundary](ContentUniverseRoadmap.md#12--content-atlas-and-import-boundary).
+
+**In parallel: bring Lemmings 2 and 3 to the same standard.** Both already run
+their full campaigns with original assets. Closing the gap means recording the
 remaining 96 routes and comparing their rules against the original engines
 level by level, the same evidence standard already applied to Classic.
 

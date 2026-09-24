@@ -50,6 +50,22 @@ Each record should include:
 The catalogue must distinguish Classic fan levels from NeoLemmix levels. A
 level format alone must not decide which physics engine runs the level.
 
+Add the player-facing content browser in the same milestone:
+
+- Use a CoverFlow-style carousel with the selected pack or level in the centre,
+  shipped pixel artwork, a clear focus state and one primary start action.
+- Keep the browser usable with mouse, keyboard, controller and VoiceOver. Add a
+  list or grid path when reduced motion is enabled.
+- Add `Shuffle all` for eligible fan levels. Do not mix unverified content into
+  the normal library, and do not repeat a level until the selected pool is
+  exhausted unless the player starts a new shuffle.
+- Let the player create a playlist from ten random eligible levels or from a
+  manually selected and ordered set of levels.
+- Store the source engine, pack identity, level identity and catalogue revision
+  in each playlist entry. Reject or repair entries that no longer resolve.
+- Keep playlist progress separate from campaign progress, Hot Seat ownership,
+  saved attempts, replays and verified completion records.
+
 ### 1.5 — NeoLemmix compatibility
 
 Target NeoLemmix 12.14 data and replay compatibility, plus the current

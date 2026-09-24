@@ -1,8 +1,8 @@
 # Beta testing
 
-No 1.1 beta candidate has been declared yet. Use this checklist when the first
-1.1 package is cut. The 1.0 RC1 build 36 records are in the local archive and
-do not certify a 1.1 package.
+The 1.1 CR2 source candidate is commit `e1a2cbb`. This checklist still needs a
+fresh package and validation record for that candidate. The 1.0 RC1 build 36
+records are in the local archive and do not certify 1.1 CR2.
 
 ## Local build and notarisation
 
