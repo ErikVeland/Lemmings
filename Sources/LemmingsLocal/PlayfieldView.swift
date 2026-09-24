@@ -522,9 +522,16 @@ struct ReticleFeedback {
     }
     let eligible = candidates.filter { session.canAssign(skillIndex: skill, to: $0.id) }
     guard let nearest = eligible.first else { return nil }
-    if favorApproachingLemmings, nearest.pose == .building,
-       let follower = eligible.first(where: { isApproaching($0, point: point) && isBehind($0, builder: nearest) }) {
-      return follower
+    if favorApproachingLemmings, nearest.pose == .building {
+      // A follower behind the builder can sit outside the click's own pick
+      // box, so look for one near the builder instead of near the click.
+      let builderPoint = CGPoint(x: CGFloat(nearest.x), y: CGFloat(nearest.y))
+      let nearbyFollowers = session.lemmings
+        .filter { $0.id != nearest.id && contains($0, builderPoint) && session.canAssign(skillIndex: skill, to: $0.id) }
+        .sorted { distanceSquared($0, point) < distanceSquared($1, point) }
+      if let follower = nearbyFollowers.first(where: { isApproaching($0, point: point) && isBehind($0, builder: nearest) }) {
+        return follower
+      }
     }
     if favorApproachingLemmings, !isApproaching(nearest, point: point),
        let approaching = eligible.first(where: { isApproaching($0, point: point) && $0.facingLeft != nearest.facingLeft }) {
