@@ -6,8 +6,6 @@ final class LaunchTests: XCTestCase {
     }
 
     @MainActor func testFirstLaunchAndRotationKeepImportAvailable() throws {
-        XCUIDevice.shared.orientation = .portrait
-        defer { XCUIDevice.shared.orientation = .portrait }
         let app = XCUIApplication()
         app.launch()
 
@@ -15,7 +13,11 @@ final class LaunchTests: XCTestCase {
         XCTAssertTrue(importButton.waitForExistence(timeout: 5))
         XCTAssertTrue(importButton.isHittable)
 
-        XCUIDevice.shared.orientation = .landscapeLeft
+        if XCUIDevice.shared.orientation.isLandscape {
+            XCUIDevice.shared.orientation = .portrait
+        } else {
+            XCUIDevice.shared.orientation = .landscapeLeft
+        }
         XCTAssertTrue(importButton.waitForExistence(timeout: 3))
         XCTAssertTrue(importButton.isHittable)
     }
