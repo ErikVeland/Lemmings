@@ -1,7 +1,7 @@
 # Ultimate Lemmings 1.1 RC3 (build 39)
 
 Build: 39
-Release commit: a0cb013420965a28bb0d98dfd9f9c21b9d59ab43
+Release commit: 2149c2309771182da14624f31c2ac63e693fe1d3
 Release base: c69663be994a642eff12450db055a3aa5000f498
 
 This candidate fixes the emergency cursor bug from RC2. In Lemmings 3, the
