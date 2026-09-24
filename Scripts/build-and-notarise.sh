@@ -1,5 +1,5 @@
 #!/bin/zsh
-# Build, gate, sign, notarise and verify the two local macOS release targets.
+# Build, gate, sign, notarise and verify the three local macOS release targets.
 #
 # Authentication options:
 #   NOTARY_PROFILE    xcrun notarytool keychain profile name
@@ -17,6 +17,7 @@
 # Optional environment variables:
 #   RELEASE_BASE      commit or tag at the previous release boundary
 #   RELEASE_NOTES_PATH path for the current release notes
+#   MONTEREY_WORKTREE macOS 12 worktree, default .claude/worktrees/macos12
 #   DOWNLOADS_DIR     destination for the three final ZIP files
 #   BUILD_ROOT        internal build output directory
 #   APPLE_PROVISIONING_PROFILE  Game Center provisioning profile
@@ -31,13 +32,15 @@ build_root="${BUILD_ROOT:-$project_dir/.build/notarised}"
 build_root="${build_root:A}"
 downloads_dir="${DOWNLOADS_DIR:-$HOME/Downloads}"
 downloads_dir="${downloads_dir:A}"
+monterey_worktree="${MONTEREY_WORKTREE:-$project_dir/.claude/worktrees/macos12}"
+monterey_worktree="${monterey_worktree:A}"
 dry_run=0
 
 usage() {
   print "Usage: zsh Scripts/build-and-notarise.sh [--dry-run] [--notary-profile NAME] [--notary-keychain PATH]"
   print
   print "Runs the local release gates, then emits three ZIP files in Downloads:"
-  print "  Developer ID standard and Game Center."
+  print "  Developer ID standard, macOS 12 Monterey, and Game Center."
   print
   print "Environment:"
   print "  SIGNING_IDENTITY            optional Developer ID certificate name"
@@ -50,6 +53,7 @@ usage() {
   print "  ASC_ISSUER_ID               App Store Connect API issuer ID"
   print "  RELEASE_BASE                previous release commit or tag"
   print "  RELEASE_NOTES_PATH          current release notes file"
+  print "  MONTEREY_WORKTREE           macOS 12 worktree path"
   print "  APPLE_PROVISIONING_PROFILE  Game Center profile path"
   print "  DOWNLOADS_DIR               ZIP destination, default ~/Downloads"
   print "  BUILD_ROOT                  internal build output directory"
@@ -137,6 +141,10 @@ if [[ -z "$release_base" ]]; then
   release_base="$(git -C "$project_dir" log --all --diff-filter=A --format='%H' \
     -- 'Documentation/ReleaseNotes-beta*.md' | sed -n '1p')"
 fi
+if [[ -z "$release_base" ]]; then
+  release_base="$(git -C "$project_dir" log --all --format='%H' \
+    -- 'Documentation/ReleaseNotes-1.1-build*.md' | sed -n '1p')"
+fi
 [[ -n "$release_base" ]] || fail "Set RELEASE_BASE to the previous release commit or tag."
 git -C "$project_dir" rev-parse --verify "$release_base^{commit}" >/dev/null 2>&1 ||
   fail "RELEASE_BASE does not resolve to a commit: $release_base"
@@ -171,6 +179,7 @@ generate_release_notes() {
     print
     print "## Package targets"
     print -r -- "- Developer ID standard: notarised."
+    print -r -- "- macOS 12 Monterey: notarised."
     print -r -- "- Game Center: development-signed for registered devices; not notarised."
   } > "$release_notes"
   print "Created release notes: $release_notes"
@@ -188,18 +197,26 @@ grep -q "^Release commit: $current_head$" "$release_notes" ||
   fail "Release notes are not current for $current_short. Update or remove: $release_notes"
 
 [[ -x "$project_dir/Scripts/build-local-app.sh" ]] || fail "Missing build-local-app.sh."
+[[ -x "$monterey_worktree/Scripts/build-local-app.sh" ]] ||
+  fail "Missing Monterey worktree at $monterey_worktree. Set MONTEREY_WORKTREE."
+monterey_head="$(git -C "$monterey_worktree" rev-parse HEAD 2>/dev/null)" ||
+  fail "Monterey path is not a Git worktree: $monterey_worktree"
+git -C "$monterey_worktree" merge-base --is-ancestor "$current_head" "$monterey_head" ||
+  fail "The Monterey worktree does not contain current commit $current_short. Merge the release changes first."
+
 print "Project:       $project_dir"
 print "Version:       $version ($build_number)"
 print "Release base:  $release_base"
 print "Identity:      $signing_identity"
 print "Notary auth:   $notary_auth_description"
+print "Monterey:      $monterey_worktree"
 print "Downloads:     $downloads_dir"
 print
 print "Gate 1: source changes present"
 print -r -- "$source_changes"
 print "Gate 2-3: release notes current"
 print "             $release_notes"
-print "Gate 4: two target archives configured"
+print "Gate 4: three target archives configured"
 
 if (( dry_run )); then
   print "Dry run: no build, signing, notarisation or upload performed."
@@ -289,6 +306,15 @@ sign_developer_id "$standard_app"
 notarise_app "$standard_app" "$run_dir/standard-submission.zip" "$standard_zip"
 verify_gatekeeper "$standard_zip"
 
+monterey_dir="$run_dir/monterey"
+monterey_app="$monterey_dir/Ultimate Lemmings.app"
+monterey_zip="$downloads_dir/UltimateLemmings-$version-build$build_number-$stamp-monterey.zip"
+print "==> Building and notarising macOS 12 Monterey target"
+build_app "$monterey_worktree" "$monterey_dir" 0
+sign_developer_id "$monterey_app"
+notarise_app "$monterey_app" "$run_dir/monterey-submission.zip" "$monterey_zip"
+verify_gatekeeper "$monterey_zip"
+
 game_center_dir="$run_dir/gamecenter"
 game_center_app="$game_center_dir/Ultimate Lemmings.app"
 game_center_zip="$downloads_dir/UltimateLemmings-$version-build$build_number-$stamp-gamecenter.zip"
@@ -301,7 +327,8 @@ codesign -d --entitlements :- "$game_center_app" 2>/dev/null |
 package_app "$game_center_app" "$game_center_zip"
 
 print
-print "Two target archives created in $downloads_dir:"
+print "Three target archives created in $downloads_dir:"
 print "  $standard_zip"
+print "  $monterey_zip"
 print "  $game_center_zip"
 print "The Game Center archive is signed for registered devices and is not notarised."

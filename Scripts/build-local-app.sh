@@ -6,7 +6,7 @@ build_dir="${LEMMINGS_BUILD_DIR:-$project_dir/.build/local}"
 build_dir="${build_dir:A}"
 app_dir="$build_dir/Ultimate Lemmings.app"
 contents_dir="$app_dir/Contents"
-deployment_target="13.0"
+deployment_target="12.3"
 architectures=(arm64 x86_64)
 if [[ -n "${LEMMINGS_ARCHITECTURES:-}" ]]; then
   architectures=("${(@s: :)LEMMINGS_ARCHITECTURES}")
