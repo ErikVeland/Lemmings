@@ -26,10 +26,5 @@ swiftc -swift-version 6 -warnings-as-errors \
   "$project_dir/Sources/LemmingsLocal/PanelGlyphs.swift" \
   "$project_dir/Sources/LemmingsLocal/RunRecovery.swift" \
   "$project_dir/Sources/LemmingsLocal/GameSession.swift" \
-  "$project_dir/Sources/LemmingsLocal/LemmingAssignmentPulse.swift" \
-  "$project_dir/Sources/LemmingsLocal/GameCursor.swift" \
-  "$project_dir/Sources/LemmingsLocal/FailureMood.swift" \
-  "$project_dir/Sources/LemmingsLocal/SkillCursorBadge.swift" \
-  "$project_dir/Sources/LemmingsLocal/RewindTransportCue.swift" \
   "$project_dir/Tests/PlayfieldDrawTests/main.swift"
 "$build_dir/PlayfieldDrawTests"

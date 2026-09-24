@@ -36,8 +36,7 @@ import AppKit
             if y < bounds.minY || y + size.height > bounds.maxY { y = reticle.minY + inset }
             x = min(max(bounds.minX, x), max(bounds.minX, bounds.maxX - size.width))
             y = min(max(bounds.minY, y), max(bounds.minY, bounds.maxY - size.height))
-            let rect = CGRect(x: x, y: y, width: size.width, height: size.height)
-            icon.draw(in: rect, from: .zero,
+            icon.draw(in: CGRect(x: x, y: y, width: size.width, height: size.height), from: .zero,
                 operation: .sourceOver,
                 fraction: 1,
                 respectFlipped: true,
@@ -54,8 +53,7 @@ import AppKit
             if y < bounds.minY || y + marker > bounds.maxY { y = reticle.minY + inset }
             CGRect(x: min(max(bounds.minX, x), bounds.maxX - marker),
                 y: min(max(bounds.minY, y), bounds.maxY - marker),
-                width: marker,
-                height: marker).fill()
+                width: marker, height: marker).fill()
         }
     }
 }

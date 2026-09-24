@@ -743,19 +743,28 @@ private func testMacArtworkCropStaysPixelAligned() throws {
 
 @MainActor private func testSkillCursorBadgeGeometry() throws {
   let point = CGPoint(x: 60, y: 40)
+  let bounds = CGRect(x: 0, y: 0, width: 120, height: 80)
   for scale in [1.0, 2.0, 3.0] {
     let pixel = floor(scale)
-    let frame = SkillCursorBadge.reticleFrame(at: point, scale: scale)
-    try require(frame.width == 14 * pixel && frame.height == frame.width,
-      "the gameplay reticle changed size at \(scale)x")
-    try require(frame.minX < point.x && frame.maxX > point.x
-      && frame.minY < point.y && frame.maxY > point.y,
-      "the gameplay reticle moved its hotspot at \(scale)x")
+    let frame = SkillCursorBadge.frame(at: point, scale: scale, in: bounds)
+    try require(frame.width == 8 * pixel && frame.height == frame.width,
+      "the selected-skill reminder is not tiny at \(scale)x")
+    try require(frame.minX > point.x && frame.minY > point.y,
+      "the selected-skill reminder is not below and to the right at \(scale)x")
     try require(frame.minX.truncatingRemainder(dividingBy: pixel) == 0
       && frame.minY.truncatingRemainder(dividingBy: pixel) == 0,
-      "the gameplay reticle is not pixel-aligned at \(scale)x")
+      "the selected-skill reminder is not pixel-aligned at \(scale)x")
+    for edge in [
+      CGPoint(x: bounds.minX, y: bounds.minY),
+      CGPoint(x: bounds.maxX, y: bounds.minY),
+      CGPoint(x: bounds.minX, y: bounds.maxY),
+      CGPoint(x: bounds.maxX, y: bounds.maxY),
+    ] {
+      try require(bounds.contains(SkillCursorBadge.frame(at: edge, scale: scale, in: bounds)),
+        "the selected-skill reminder leaves the playfield at \(scale)x")
+    }
   }
-  print("PASS gameplay reticle keeps its precise, pixel-aligned corner geometry")
+  print("PASS selected-skill reminder stays tiny, offset and visible at every edge")
 }
 
 @MainActor private func testGameCursorRegions() throws {
