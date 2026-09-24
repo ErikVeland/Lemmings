@@ -68,7 +68,9 @@ if (( !runtime_available )); then
   asset_settings=(EXCLUDED_SOURCE_FILE_NAMES=Assets.xcassets)
 fi
 
-zsh Scripts/run-swift-tests.sh --disable-sandbox --filter LemmingsMobileCoreTests
+zsh Scripts/run-swift-tests.sh --disable-sandbox \
+  --test-product LemmingsNativePortPackageTests \
+  --filter LemmingsMobileCoreTests
 xcodebuild -quiet \
   -project Apps/UltimateLemmingsIOS/UltimateLemmingsIOS.xcodeproj \
   -target UltimateLemmingsIOSUITests \

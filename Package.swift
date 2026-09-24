@@ -39,10 +39,7 @@ let package = Package(
                 "NxlvKit",
                 .product(name: "Sparkle", package: "Sparkle")
             ],
-            path: "Sources/LemmingsLocal",
-            swiftSettings: [
-                .enableExperimentalFeature("IsolatedDeinit")
-            ]
+            path: "Sources/LemmingsLocal"
         ),
         .executableTarget(
             name: "LemmingsDataTool",
