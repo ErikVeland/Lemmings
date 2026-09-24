@@ -71,9 +71,12 @@ def validate_appcast(path, allow_empty=False):
         if enclosure is None:
             raise ValueError("Every appcast item must contain an enclosure.")
         _https_url(enclosure.get("url"), "appcast enclosure URL")
-        for attribute in ("version", "shortVersionString", "edSignature"):
-            if not enclosure.get(f"{{{SPARKLE_NAMESPACE}}}{attribute}"):
-                raise ValueError(f"Every appcast enclosure needs sparkle:{attribute}.")
+        if not enclosure.get(f"{{{SPARKLE_NAMESPACE}}}edSignature"):
+            raise ValueError("Every appcast enclosure needs sparkle:edSignature.")
+        for attribute in ("version", "shortVersionString"):
+            tag = f"{{{SPARKLE_NAMESPACE}}}{attribute}"
+            if item.find(tag) is None and not enclosure.get(tag):
+                raise ValueError(f"Every appcast item needs sparkle:{attribute}.")
     return len(items)
 
 

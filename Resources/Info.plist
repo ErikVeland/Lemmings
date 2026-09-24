@@ -29,7 +29,7 @@
 	<key>SUFeedURL</key>
 	<string>https://raw.githubusercontent.com/ErikVeland/Lemmings/main/appcast.xml</string>
 	<key>SUPublicEDKey</key>
-	<string>gzS4EDQ/ROAmAtgR4VNfNN5Wa7KX2ujMetrLQfwPyt8=</string>
+	<string>AGH6HkcWMbg42X7O6QXwwHXa0jreXxFuvgwMFZMEv6c=</string>
 	<key>SUEnableAutomaticChecks</key>
 	<true/>
 	<key>SUAutomaticallyUpdate</key>
