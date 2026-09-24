@@ -53,7 +53,24 @@ public struct Lemmings2TerrainMasks: Sendable {
               (flame.isEmpty || flame.count == 2) else {
             throw SequelDataError.invalid("Invalid L2 tribe digging mask count.")
         }
-        for frame in [digger, exploder, brick, platformer] + basher + miner + stacker + (stomper.map { [$0] } ?? []) + scooper + fencer + clubBasher + laser + flame + (blast.map { [$0] } ?? []) + plant + stone + spear + arrow + ropeHook + (twister.map { [$0] } ?? []) {
+        var frames = [digger, exploder, brick, platformer]
+        frames.append(contentsOf: basher)
+        frames.append(contentsOf: miner)
+        frames.append(contentsOf: stacker)
+        if let stomper { frames.append(stomper) }
+        frames.append(contentsOf: scooper)
+        frames.append(contentsOf: fencer)
+        frames.append(contentsOf: clubBasher)
+        frames.append(contentsOf: laser)
+        frames.append(contentsOf: flame)
+        if let blast { frames.append(blast) }
+        frames.append(contentsOf: plant)
+        frames.append(contentsOf: stone)
+        frames.append(contentsOf: spear)
+        frames.append(contentsOf: arrow)
+        frames.append(contentsOf: ropeHook)
+        if let twister { frames.append(twister) }
+        for frame in frames {
             guard frame.width > 0, frame.height > 0, frame.width <= 256, frame.height <= 256,
                   frame.pixels.count == frame.width * frame.height, frame.opaque.count == frame.pixels.count,
                   (-256...256).contains(frame.x), (-256...256).contains(frame.y) else {
