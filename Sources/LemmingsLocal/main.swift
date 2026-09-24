@@ -532,6 +532,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
   func applicationWillTerminate(_ notification: Notification) { saveRunCheckpoint(immediately: true); ClassicRouteRecorder.flush() }
 
   func applicationDidFinishLaunching(_ notification: Notification) {
+    // Start scheduled update checks without waiting for the menu action.
+    _ = updaterController
     migrateStandaloneSaves()
     buildMenu()
     buildInterface()
