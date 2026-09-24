@@ -9,5 +9,6 @@ swiftc -swift-version 6 -warnings-as-errors -target "$(uname -m)-apple-macos12.3
   "$project_dir/Sources/LemmingsLocal/ExplosionHDR.swift" \
   "$project_dir/Sources/LemmingsLocal/CRTView.swift" \
   "$project_dir/Sources/LemmingsLocal/CRTShaders.swift" \
+  "$project_dir/Sources/LemmingsLocal/GameCursor.swift" \
   "$project_dir/Tests/ExplosionHDRTests/main.swift"
 "$build_dir/tests" "$@"

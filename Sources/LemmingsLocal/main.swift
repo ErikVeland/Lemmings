@@ -651,6 +651,15 @@ let achievementProgressKey = "ClassicAchievementProgress"
     tube.maskStrength *= strength
     tube.bloomAmount *= strength
     tube.curvature = tube.curvature / max(0.15, strength)
+    tube.curvatureY = tube.curvatureY / max(0.15, strength)
+    tube.cornerRadius *= strength
+    tube.cornerSoftness *= strength
+    tube.convergence *= strength
+    tube.convergenceY *= strength
+    tube.vignette *= strength
+    tube.saturation = 1 + (tube.saturation - 1) * strength
+    tube.brightBoostDark = 1 + (tube.brightBoostDark - 1) * strength
+    tube.brightBoostBright = 1 + (tube.brightBoostBright - 1) * strength
     tube.pixelAspect = Float(settings.pixelAspect)
     tube.colorLevels = Float(settings.colorDepth.levels)
     return tube
