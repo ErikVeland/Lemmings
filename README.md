@@ -17,6 +17,7 @@ before distributing a build.
 - [Project overview](Documentation/Overview.md) — player-facing status and roadmap.
 - [1.3 mobile roadmap](Documentation/1.3Roadmap.md) — iPhone/iPad scope, source state and device gates.
 - [1.5 NeoLemmix roadmap](Documentation/1.5Roadmap.md) — pinned oracle, executable gates and compatibility limits.
+- [1.5 NeoLemmix source handoff](Documentation/ReleaseReadiness/1.5NeoLemmixHandoff.md) — verified source and corpus evidence, open release gates and non-claims.
 - [QoL roadmap](docs/superpowers/plans/2026-09-23-qol-roadmap.md) — target selection and rewind priorities.
 - [Release scope](Documentation/ReleaseScope.md) — the meaning of Complete, Playable and Preview.
 - [Content roadmap](Documentation/ContentUniverseRoadmap.md) — the path towards broader 2D content.
