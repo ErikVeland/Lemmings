@@ -59,6 +59,11 @@ class AutomaticUpdateTests(unittest.TestCase):
             })
             ElementTree.ElementTree(root).write(path, encoding="utf-8", xml_declaration=True)
             self.assertEqual(validate_appcast(path), 1)
+            self.assertEqual(validate_appcast(path, expected_release=("1.2", "40")), 1)
+            with self.assertRaisesRegex(ValueError, "does not match"):
+                validate_appcast(path, expected_release=("1.2", "41"))
+            with self.assertRaisesRegex(ValueError, "does not match"):
+                validate_appcast(path, expected_release=("1.2.1", "40"))
 
     def test_empty_feed_is_not_valid_for_a_release(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -68,6 +73,25 @@ class AutomaticUpdateTests(unittest.TestCase):
             ElementTree.ElementTree(root).write(path, encoding="utf-8", xml_declaration=True)
             with self.assertRaisesRegex(ValueError, "update item"):
                 validate_appcast(path)
+
+    def test_release_match_uses_highest_build_with_enclosure_attributes(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "appcast.xml"
+            namespace = "http://www.andymatuschak.org/xml-namespaces/sparkle"
+            root = ElementTree.Element("rss")
+            channel = ElementTree.SubElement(root, "channel")
+            for build in ("38", "40", "39"):
+                item = ElementTree.SubElement(channel, "item")
+                ElementTree.SubElement(item, "enclosure", {
+                    "url": f"https://example.invalid/build{build}.zip",
+                    f"{{{namespace}}}edSignature": "signed",
+                    f"{{{namespace}}}version": build,
+                    f"{{{namespace}}}shortVersionString": "1.2",
+                })
+            ElementTree.ElementTree(root).write(path)
+            self.assertEqual(validate_appcast(path, expected_release=("1.2", "40")), 3)
+            with self.assertRaisesRegex(ValueError, "does not match"):
+                validate_appcast(path, expected_release=("1.2", "39"))
 
 
 if __name__ == "__main__":

@@ -1,51 +1,37 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml version="1.0" standalone="yes"?>
 <rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
     <channel>
-        <title>Ultimate Lemmings Updates</title>
-        <link>https://github.com/ErikVeland/Lemmings/releases</link>
-        <description>Updates for Ultimate Lemmings.</description>
-        <language>en</language>
+        <title>Ultimate Lemmings</title>
         <item>
             <title>1.2</title>
-            <pubDate>Fri, 25 Sep 2026 00:14:40 +1000</pubDate>
+            <pubDate>Fri, 25 Sep 2026 02:11:04 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
-            <sparkle:version>39</sparkle:version>
+            <sparkle:version>40</sparkle:version>
             <sparkle:shortVersionString>1.2</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>12.3</sparkle:minimumSystemVersion>
-            <description sparkle:format="plain-text"><![CDATA[# Ultimate Lemmings 1.2
+            <description sparkle:format="plain-text"><![CDATA[# Ultimate Lemmings 1.2 (build 40)
 
-Build: 39
-Release commit: 2149c2309771182da14624f31c2ac63e693fe1d3
+[Download the Mac app](https://github.com/ErikVeland/Lemmings/releases/download/v1.2-build40/UltimateLemmings-1.2-build40.zip)
 
-A universal download for Intel and Apple silicon Macs running macOS 12.3 or later.
-The app is Developer ID signed and notarised by Apple, including the bundled
-Sparkle framework, updater and XPC helpers. No device registration is required.
+Build: 40
+Release commit: b58df9c401173e94891145b19f1e8ab4025bd4e8
 
-## Changes
+Fix automatic updates not starting until the first manual update check. Sparkle
+now starts when the app launches. Existing build 39 installations can select
+**Ultimate Lemmings → Check for Updates…** to download and install this build.
 
-- Browse content with the new level browser.
-- Use improved lemming targeting, skill cursor indicators and rewind controls.
-- Fix disappearing gameplay cursors in Lemmings 2 and Lemmings 3.
-- Fix Classic clicks that missed a follower behind a bridge builder.
-- Receive signed automatic updates through Sparkle.
+Universal app for Intel and Apple silicon, macOS 12.3 or later. The public app
+and all bundled Sparkle components are Developer ID signed and Apple notarised.
+No device registration is required.
 
-## Install
+For a new installation, expand the ZIP, move Ultimate Lemmings.app to
+Applications, then open it.
 
-Download `UltimateLemmings-1.2-build39.zip`, expand it, then move
-`Ultimate Lemmings.app` to Applications and open it.
-
-This is the same signed build 39 previously distributed as RC3. If you already
-have 1.2 build 39, no replacement download or automatic update is needed.
-
-## Known limits
-
-- Lemmings 2 and Lemmings 3 remain previews, with incomplete fidelity and campaign verification.
-- The Lemmings 2 artwork toggle does not restore pixel-identical rendering after a round trip.
-- A controller retry, rewind and step button sequence has a known routing issue.
-- Physical Intel and minimum-macOS testing remains unverified.
-- This public build does not include the device-restricted Game Center variant.
+Lemmings 2 and Lemmings 3 remain previews. Known artwork-toggle and controller
+sequence issues remain. Physical Intel and minimum-macOS testing is unverified.
+The device-restricted Game Center variant is not included.
 ]]></description>
-            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.2.0/UltimateLemmings-1.2-build39.zip" length="428869830" type="application/octet-stream" sparkle:edSignature="i8XF80StUdfEKW7sMGqLHIScaOigbzWTdz/jDp/mkha7q/Z9fqkA560scInA0UEXCFDSZmxv3PBpCyXyLH1AAg=="/>
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.2-build40/UltimateLemmings-1.2-build40.zip" length="428869969" type="application/octet-stream" sparkle:edSignature="uoQcPClcjiAdoXqYT3sCdT+WSLT9sK8pdTRY+hsKd235DwIk6M8AbaS7+jGig4dGz+4OhUsh9OVs5uJisIjGDA=="/>
         </item>
     </channel>
 </rss>

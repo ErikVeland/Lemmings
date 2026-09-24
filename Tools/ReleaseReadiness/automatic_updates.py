@@ -54,7 +54,7 @@ def validate_info_plist(path):
     return version, build
 
 
-def validate_appcast(path, allow_empty=False):
+def validate_appcast(path, allow_empty=False, expected_release=None):
     root = ElementTree.parse(path).getroot()
     if root.tag != "rss":
         raise ValueError("The appcast root must be rss.")
@@ -77,6 +77,22 @@ def validate_appcast(path, allow_empty=False):
             tag = f"{{{SPARKLE_NAMESPACE}}}{attribute}"
             if item.find(tag) is None and not enclosure.get(tag):
                 raise ValueError(f"Every appcast item needs sparkle:{attribute}.")
+    if expected_release is not None:
+        releases = []
+        for item in items:
+            enclosure = item.find("enclosure")
+            values = []
+            for attribute in ("shortVersionString", "version"):
+                tag = f"{{{SPARKLE_NAMESPACE}}}{attribute}"
+                value = item.findtext(tag) or enclosure.get(tag)
+                values.append(value)
+            if not re.fullmatch(r"\d+", values[1] or ""):
+                raise ValueError("Release appcast build numbers must be numeric.")
+            releases.append(tuple(values))
+        latest = max(releases, key=lambda release: int(release[1]))
+        if latest != expected_release:
+            raise ValueError(
+                f"Newest appcast release {latest} does not match application {expected_release}.")
     return len(items)
 
 
@@ -93,7 +109,8 @@ def validate_repository(root, allow_empty=False):
         path = root / relative
         if not path.is_file() or not path.stat().st_mode & 0o111:
             raise ValueError(f"Required release script is not executable: {relative}")
-    items = validate_appcast(root / "appcast.xml", allow_empty=allow_empty)
+    items = validate_appcast(root / "appcast.xml", allow_empty=allow_empty,
+                             expected_release=(version, build))
     return version, build, items
 
 
