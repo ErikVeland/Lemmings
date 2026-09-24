@@ -34,7 +34,17 @@ struct PointerConfinement {
     var isCaptured: Bool { confinement.isCaptured && !NSEvent.modifierFlags.contains(.option) }
 
     init(readPosition: @escaping () -> CGPoint = { NSEvent.mouseLocation },
-         warpPosition: @escaping (CGPoint) -> CGError = { CGWarpMouseCursorPosition($0) }) {
+         warpPosition: @escaping (CGPoint) -> CGError = { point in
+             // A held edge re-warps every frame. Without re-associating the
+             // mouse to the cursor after each warp, macOS accumulates a
+             // stale motion delta and the system cursor stops drawing
+             // (input still lands correctly; only the visible arrow goes
+             // missing) for as long as the edge is held, e.g. along the
+             // bottom panel or during edge scrolling.
+             let result = CGWarpMouseCursorPosition(point)
+             CGAssociateMouseAndMouseCursorPosition(true)
+             return result
+         }) {
         self.readPosition = readPosition
         self.warpPosition = warpPosition
         super.init()
