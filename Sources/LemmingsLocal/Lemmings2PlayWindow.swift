@@ -237,7 +237,6 @@ import NxlvKit
         }
         canvas.onPanel = { [weak self] slot, count, time in self?.panelAction(slot, clickCount: count, time: time) }
         canvas.onHover = { [weak self] in self?.refreshGame() }
-        canvas.pointers = assets.pointers
         canvas.onKey = { [weak self] key in self?.key(key) }
         let keyboard = GameplayKeyboard(window: window)
         gameplayKeyboard = keyboard
