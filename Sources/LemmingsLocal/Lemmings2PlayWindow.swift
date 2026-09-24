@@ -2,10 +2,32 @@ import AppKit
 import NxlvKit
 
 @MainActor final class Lemmings2PlayWindow: NSWindowController, NSWindowDelegate {
+    struct LevelSelection: Equatable, Sendable {
+        let tribe: Int
+        let level: Int
+    }
+
+    struct BrowserLevel: Sendable {
+        let selection: LevelSelection
+        let levelID: String
+        let sourceRevision: String
+        let title: String
+        let isAvailable: Bool
+    }
+
     var onReturnToLibrary: (() -> Void)?
     var onProgressChanged: (() -> Void)?
     var onCampaignCompleted: (() -> Void)?
     var onShowSettings: (() -> Void)?
+    /**
+     * Handles Continue for a level sequence. The argument reports whether the level was won.
+     */
+    var onSequenceContinue: ((Bool) -> Bool)?
+    var sequenceContinueTitle = "Next level"
+    /**
+     * Controls whether this run can update campaign, recovery, replay and verified records.
+     */
+    var recordsCampaignProgress = true
     private var usesSharedWindow = false
 
     /// Attach the engine after loading succeeds, so a failed load leaves the current game intact.
@@ -129,12 +151,27 @@ import NxlvKit
     private let progressKey: String
     private var level: Lemmings2Level { practiceLevel ?? campaign.current }
 
-    init(root: URL, recovery: RunRecovery? = nil, expectedRecoveryEngine: String = RunRecovery.bundledEngine) throws {
+    init(root: URL, recovery: RunRecovery? = nil, selection: LevelSelection? = nil,
+         expectedLevelID: String? = nil,
+         expectedSourceRevision: String? = nil,
+         recordsCampaignProgress: Bool = true,
+         expectedRecoveryEngine: String = RunRecovery.bundledEngine) throws {
         if let recovery {
             _ = try recovery.validated()
             // A newer engine must not strand a saved run; the replay below checks the state.
             guard recovery.l2 != nil, recovery.profileID == ArcadeStore.shared.playingProfileID,
                 recovery.hotSeatID == ArcadeStore.shared.hotSeatID else { throw RunRecoveryError.differentGame }
+        }
+        if let expectedSourceRevision {
+            guard let selection else {
+                throw SequelDataError.invalid("The selected Lemmings 2 level is no longer available.")
+            }
+            let source = LevelPreviewSource.lemmings2(
+                root: root, selection: selection, expectedLevelID: expectedLevelID ?? "")
+            guard try source.sourceRevision() == expectedSourceRevision else {
+                throw SequelDataError.invalid(
+                    "The selected Lemmings 2 level data changed. Open Level Select and choose it again.")
+            }
         }
         self.root = root
         practice = try Lemmings2Practice(root:root)
@@ -146,11 +183,20 @@ import NxlvKit
         intern = try Lemmings2SpecialGraphics(data:Data(contentsOf:root.appendingPathComponent("INTERN.DAT")))
         explosion = try Lemmings2Explosion(root:root)
         walker = (try? Data(contentsOf:root.appendingPathComponent("WALKER.DAT"))).flatMap { try? Lemmings2Walker(data:$0) }
-        let bundled = (try? BundledGameResources.lemmings2())?.standardizedFileURL == root.standardizedFileURL
-        progressKey = ArcadeStore.shared.progressKey("nativeL2Campaign.v1." + (bundled ? "bundled" : root.standardizedFileURL.path))
+        self.recordsCampaignProgress = recordsCampaignProgress
+        progressKey = Self.campaignProgressKey(root: root)
         if let data = UserDefaults.standard.data(forKey: progressKey),
            let saved = try? JSONDecoder().decode(Lemmings2Campaign.Progress.self, from: data) {
             try? campaign.restore(saved)
+        }
+        if recovery == nil, let selection {
+            let index = selection.tribe * 10 + selection.level
+            guard campaign.levels.indices.contains(index),
+                  expectedLevelID == nil || campaign.levels[index].fingerprint == expectedLevelID else {
+                throw SequelDataError.invalid(
+                    "The selected Lemmings 2 level changed. Open Level Select and choose it again.")
+            }
+            try campaign.select(tribe: selection.tribe, level: selection.level)
         }
         super.init(window: NSWindow(contentRect: NSRect(x: 0, y: 0, width: 960, height: 720),
             styleMask: [.titled, .closable, .miniaturizable, .resizable], backing: .buffered, defer: false))
@@ -289,7 +335,7 @@ import NxlvKit
         keyboard.rewind = { [weak self] in _ = self?.rewind(seconds: 2) }
         keyboard.controllerRewindHeld = { [weak self] held in
             guard let self else { return }
-            if held { _ = self.beginContinuousRewind() }
+            if held { _ = self.beginContinuousRewind(advanceImmediately: false) }
             else if self.rewindHeld { self.endContinuousRewind() }
         }
         keyboard.step = { [weak self] direction in
@@ -358,7 +404,7 @@ import NxlvKit
             arcadeLevelSnapshot = arcadeLevel
             restoringRun = false
             releasePointerInput(); refreshGame()
-        }
+        } else if selection != nil { prepareBriefing() }
         timer = Timer.scheduledTimer(withTimeInterval: 1.0 / 60, repeats: true) { [weak self] _ in
             MainActor.assumeIsolated { self?.update() }
         }
@@ -436,13 +482,54 @@ import NxlvKit
     }
     static func savedCompletion(root: URL) -> Int {
         guard var campaign = try? Lemmings2Campaign(root: root) else { return 0 }
-        let bundled = (try? BundledGameResources.lemmings2())?.standardizedFileURL == root.standardizedFileURL
-        let key = ArcadeStore.shared.progressKey("nativeL2Campaign.v1." + (bundled ? "bundled" : root.standardizedFileURL.path))
+        let key = campaignProgressKey(root: root)
         if let data = UserDefaults.standard.data(forKey: key),
            let saved = try? JSONDecoder().decode(Lemmings2Campaign.Progress.self, from: data) {
             try? campaign.restore(saved)
         }
         return campaign.results.count
+    }
+
+    static func browserLevels(root: URL) throws -> [BrowserLevel] {
+        try browserLevels(root: root, progressData: browserProgressData(root: root))
+    }
+
+    static func browserProgressData(root: URL) -> Data? {
+        UserDefaults.standard.data(forKey: campaignProgressKey(root: root))
+    }
+
+    nonisolated static func browserLevels(root: URL, progressData: Data?) throws -> [BrowserLevel] {
+        try Task.checkCancellation()
+        var campaign = try Lemmings2Campaign(root: root)
+        if let progressData,
+           let saved = try? JSONDecoder().decode(
+            Lemmings2Campaign.Progress.self, from: progressData) {
+            try? campaign.restore(saved)
+        }
+        guard let rootRevision = FanLevelLibrary.directoryFingerprint(root) else {
+            throw SequelDataError.invalid("The Lemmings 2 game data could not be verified.")
+        }
+        return try campaign.levels.enumerated().map { index, level in
+            try Task.checkCancellation()
+            let tribe = index / 10
+            let position = index % 10
+            let selection = LevelSelection(tribe: tribe, level: position)
+            let sourceRevision = try LevelPreviewSource.lemmings2(
+                root: root, selection: selection, expectedLevelID: level.fingerprint)
+                .sourceRevision(rootRevision: rootRevision)
+            return BrowserLevel(
+                selection: selection,
+                levelID: level.fingerprint,
+                sourceRevision: sourceRevision,
+                title: level.title,
+                isAvailable: position <= campaign.unlockedLevel(in: tribe))
+        }
+    }
+
+    private static func campaignProgressKey(root: URL) -> String {
+        let bundled = (try? BundledGameResources.lemmings2())?.standardizedFileURL == root.standardizedFileURL
+        return ArcadeStore.shared.progressKey(
+            "nativeL2Campaign.v1." + (bundled ? "bundled" : root.standardizedFileURL.path))
     }
     private func playMusic(_ name: String) {
         if audioSettings.music == .adaptiveDJ, dj.hasTracks { music.stop(); dj.start(); return }
@@ -453,9 +540,20 @@ import NxlvKit
         }
     }
     private func persist() {
+        guard recordsCampaignProgress else { return }
         if let data = try? JSONEncoder().encode(campaign.progress) { UserDefaults.standard.set(data, forKey: progressKey) }
     }
     private func show(_ screen: Screen) {
+        if onSequenceContinue != nil {
+            switch screen {
+            case .map, .practice, .load, .save:
+                explain(
+                    "Return to the library before choosing another level or saved game.",
+                    returnTo: self.screen)
+                return
+            default: break
+            }
+        }
         saveCheckpoint(immediately: true)
         if self.screen == .intro && screen != .intro { introduction = nil; try? music.resumeOutput() }
         if screen == .talisman {
@@ -546,7 +644,7 @@ import NxlvKit
         arcadeRunID = UUID(); arcadeProfileID = ArcadeStore.shared.playingProfileID; arcadeHotSeatID = ArcadeStore.shared.hotSeatID
         arcadeReport = nil; usedRewind = false; nukeCount = 0; undoCount = 0
         arcadeLevelSnapshot = arcadeLevel
-        if let arcadeLevel { ArcadeStore.shared.beginAttempt(id: arcadeRunID, profileID: arcadeProfileID,
+        if recordsCampaignProgress, let arcadeLevel { ArcadeStore.shared.beginAttempt(id: arcadeRunID, profileID: arcadeProfileID,
             level: arcadeLevel, previousID: previousAttemptID) }
         runMovie.begin(ticksPerSecond: Lemmings2Runtime.ticksPerSecond, title: "Lemmings 2 - " + level.title)
         runMovie.onWillReview = { [weak self] in self?.suspendAudioOutput() }
@@ -661,6 +759,7 @@ import NxlvKit
         return checkpoint
     }
     func saveCheckpoint(immediately: Bool = false) {
+        guard recordsCampaignProgress else { return }
         let now = ProcessInfo.processInfo.systemUptime
         guard immediately || now - lastCheckpointTime >= 5 else { return }
         do {
@@ -809,10 +908,14 @@ import NxlvKit
     }
     private func finishIfComplete(_ game: Lemmings2Runtime) {
         if game.isComplete {
-            do { try recoveryStore.clear(arcadeRunID) } catch { message = error.localizedDescription }
+            if recordsCampaignProgress {
+                do { try recoveryStore.clear(arcadeRunID) } catch { message = error.localizedDescription }
+            }
             runMovie.finish()
-            if practiceLevel == nil { recordRoute(game) }
-            if practiceLevel == nil { _ = campaign.record(game); persist(); onProgressChanged?() }
+            if practiceLevel == nil && recordsCampaignProgress { recordRoute(game) }
+            if practiceLevel == nil && recordsCampaignProgress {
+                _ = campaign.record(game); persist(); onProgressChanged?()
+            }
             show(.results)
             recordArcadeResult(game)
         }
@@ -1046,11 +1149,23 @@ import NxlvKit
     }
     private func changeLevel(_ direction: Int) {
         guard practiceLevel == nil else { return }
+        guard onSequenceContinue == nil else {
+            explain(
+                "Return to the library before choosing another level.",
+                returnTo: .briefing)
+            return
+        }
         if (try? campaign.select(tribe: campaign.tribe, level: campaign.level + direction)) != nil { prepareBriefing() }
     }
     private func continueResult() {
         if practiceLevel != nil { show(.practice); return }
         guard let game else { return }
+        if onSequenceContinue != nil, !game.didWin {
+            restart()
+            return
+        }
+        if onSequenceContinue?(game.didWin) == true { return }
+        guard recordsCampaignProgress else { prepareBriefing(); return }
         if game.didWin && campaign.level == 9 { show(.talisman) }
         else if campaign.advance(after: game) { persist(); prepareBriefing() }
         else { prepareBriefing() }
@@ -1069,17 +1184,26 @@ import NxlvKit
             let count = game.configuration.supplies[slot] - game.supplies[slot]
             if count > 0 { used[TrolleyCapture.skillKey(game.configuration.skills[slot].name), default: 0] += count }
         }
-        arcadeReport = ArcadeStore.shared.record(ArcadeRun(id: arcadeRunID, profileID: arcadeProfileID,
+        let run = ArcadeRun(id: arcadeRunID, profileID: arcadeProfileID,
             level: arcadeLevel, saved: game.saved, didWin: game.didWin, skills: used,
             seconds: Double(game.tick) / Lemmings2Runtime.ticksPerSecond, assisted: usedRewind,
             telemetry: TrolleyTelemetry(released: game.released, nukeCount: nukeCount, undoCount: undoCount,
                 destructiveSkillCount: TrolleyCapture.destructiveCount(used), buildVersion: TrolleyCapture.buildVersion,
-                additionalStatistics: ["goldRequirement": Double(max(1, game.configuration.total - level.allowedLossesForGold))])))
+                additionalStatistics: ["goldRequirement": Double(max(1, game.configuration.total - level.allowedLossesForGold))]))
+        arcadeReport = recordsCampaignProgress
+            ? ArcadeStore.shared.record(run)
+            : ArcadeStore.shared.previewReport(for: run)
         guard let arcadeReport else { return }
-        runMovie.preserveRecord(arcadeReport)
+        if recordsCampaignProgress { runMovie.preserveRecord(arcadeReport) }
         ArcadeWindow.shared.showResult(arcadeReport, owner: window, retry: { [weak self] in self?.restart() },
             next: { [weak self] in self?.continueResult() }, replay: { [weak self] save in self?.runMovie.review(save: save) },
-            continueTitle: practiceLevel != nil ? "Practice levels" : campaign.level == 9 ? "Continue" : "Next level", background: arcadeBackdrop, rewardVolume: sounds.muted ? 0 : audioSettings.soundVolume)
+            continueTitle: resultContinueTitle, background: arcadeBackdrop,
+            rewardVolume: sounds.muted ? 0 : audioSettings.soundVolume)
+    }
+    private var resultContinueTitle: String {
+        if practiceLevel != nil { return "Practice levels" }
+        if onSequenceContinue != nil { return game?.didWin == false ? "Retry level" : sequenceContinueTitle }
+        return campaign.level == 9 ? "Continue" : "Next level"
     }
     // Region centres follow the original map artwork; the nearest tribe owns
     // the intervening land. The ark has its own hit region at the top.
@@ -1705,8 +1829,10 @@ import NxlvKit
     }
     func refreshArtwork() throws {
         let previous = game, oldX = cameraX, oldY = cameraY
+        let wasFastForward = isFastForward
         try reloadArtwork?()
         cameraX = oldX; cameraY = oldY
+        isFastForward = wasFastForward
         cursorFrames = []; pointerFrame = -1
         if let previous { update(previous) }
         needsDisplay = true
@@ -1772,13 +1898,15 @@ import NxlvKit
         hdrOverlay?.pulse(cores: cores, fullScreen: fullScreenHDRFlashes)
     }
     private var explosion: Lemmings2Explosion?
-    func load(level: Lemmings2Level, style: Lemmings2Style, sprites bank: Lemmings2Sprites, intern: Lemmings2SpecialGraphics, explosion: Lemmings2Explosion, walker: Lemmings2Walker?) throws {
-        hdrOverlay?.clear()
-        isFastForward = false
-        speedTrails.reset()
+    func load(level: Lemmings2Level, style: Lemmings2Style, sprites bank: Lemmings2Sprites, intern: Lemmings2SpecialGraphics, explosion: Lemmings2Explosion, walker: Lemmings2Walker?, resetPresentation: Bool = true) throws {
+        if resetPresentation {
+            hdrOverlay?.clear()
+            isFastForward = false
+            speedTrails.reset()
+        }
         reloadArtwork = { [weak self] in
             try self?.load(level: level, style: style, sprites: bank, intern: intern,
-                           explosion: explosion, walker: walker)
+                           explosion: explosion, walker: walker, resetPresentation: false)
         }
         terrainCategory = .lemmings2Terrain(tribe: level.style)
         self.explosion = explosion

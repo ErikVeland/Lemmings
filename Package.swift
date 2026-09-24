@@ -13,6 +13,9 @@ let package = Package(
         .executable(name: "LemmingsLocal", targets: ["LemmingsLocal"]),
         .executable(name: "LemmingsDataTool", targets: ["LemmingsDataTool"])
     ],
+    dependencies: [
+        .package(url: "https://github.com/sparkle-project/Sparkle.git", exact: "2.7.3")
+    ],
     targets: [
         .target(
             name: "NxlvKit",
@@ -20,7 +23,10 @@ let package = Package(
         ),
         .executableTarget(
             name: "LemmingsLocal",
-            dependencies: ["NxlvKit"],
+            dependencies: [
+                "NxlvKit",
+                .product(name: "Sparkle", package: "Sparkle")
+            ],
             path: "Sources/LemmingsLocal"
         ),
         .executableTarget(

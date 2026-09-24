@@ -173,6 +173,12 @@ struct CRTUniforms {
   var onMouseExited: (() -> Void)?
   var onMouseMoved: ((CGPoint) -> Void)?
   var onScroll: ((CGFloat, CGFloat) -> Void)?
+  /// Source-space area that draws its own pointer. Controls outside it keep the system arrow.
+  var gameplayCursorRect: CGRect? {
+    didSet {
+      if oldValue != gameplayCursorRect { window?.invalidateCursorRects(for: self) }
+    }
+  }
   private var trackingArea: NSTrackingArea?
   private(set) var failureReason: String?
   var isAvailable: Bool { compositePipeline != nil }
@@ -244,11 +250,20 @@ struct CRTUniforms {
   }
 
   override func resetCursorRects() {
-    addCursorRect(bounds, cursor: GameCursor.invisible)
+    addCursorRect(bounds, cursor: NSCursor.arrow)
   }
 
   override func cursorUpdate(with event: NSEvent) {
-    GameCursor.invisible.set()
+    updateSystemCursor(at: convert(event.locationInWindow, from: nil))
+  }
+
+  /**
+   * Applies the cursor policy after mouse events and pointer-capture warps.
+   */
+  func updateSystemCursor(at viewPoint: CGPoint) {
+    GameCursor.update(
+      at: sourcePoint(from: viewPoint),
+      hidingInside: gameplayCursorRect)
   }
 
   override var acceptsFirstResponder: Bool { true }
@@ -329,7 +344,9 @@ struct CRTUniforms {
   }
 
   override func mouseMoved(with event: NSEvent) {
-    guard let point = sourcePoint(from: convert(event.locationInWindow, from: nil))
+    let viewPoint = convert(event.locationInWindow, from: nil)
+    updateSystemCursor(at: viewPoint)
+    guard let point = sourcePoint(from: viewPoint)
     else { onMouseExited?(); return }
     onMouseMoved?(point)
   }
@@ -345,7 +362,10 @@ struct CRTUniforms {
     onMouseDragged?(point)
   }
 
-  override func mouseExited(with event: NSEvent) { onMouseExited?() }
+  override func mouseExited(with event: NSEvent) {
+    NSCursor.arrow.set()
+    onMouseExited?()
+  }
 
   override func scrollWheel(with event: NSEvent) {
     onScroll?(event.scrollingDeltaX, event.scrollingDeltaY)

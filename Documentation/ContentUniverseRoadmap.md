@@ -65,6 +65,41 @@ Add the player-facing content browser in the same milestone:
   in each playlist entry. Reject or repair entries that no longer resolve.
 - Keep playlist progress separate from campaign progress, Hot Seat ownership,
   saved attempts, replays and verified completion records.
+- Check for new compatible fan packs in the background at launch. Rate-limit
+  sequential requests, validate each archive and readable level before install,
+  and never replace an installed pack or change a running game.
+- Show the update result in the fan-pack browser. Keep installed packs and
+  progress available offline, and retry an unavailable check on a later launch.
+- Limit automatic updates to supported releases in the Lemmings Level Database.
+  Do not fetch forum attachments or install engine and graphics dependencies.
+- Add automated application updates for supported macOS builds. Check a signed
+  release feed in the background, verify the package and platform before install,
+  and show release notes before the player accepts an update.
+- Let the player defer an update and never interrupt a running game. Keep a
+  manual download path for offline use or when an update check is unavailable.
+
+Current source status:
+
+- Classic level cards follow the active player's progress within each rating.
+  Each rating starts with its first level available. A saved Settings option can
+  unlock all Classic cards without changing campaign progress.
+- The active player profile owns its saved playlists and active sequence.
+  Manual playlists preserve their chosen order. `Random 10` asks for one pack
+  and saves up to ten distinct eligible levels from that pack.
+- A playlist can run in manual order or use a stable seeded shuffle.
+  `Shuffle all` shows its fan-level pool before play and stores one
+  non-repeating order.
+- The active sequence stores its fixed entries and current position for resume.
+  Playlist play does not advance campaign or fan-pack progress and does not
+  write Hot Seat, recovery, route, replay or verified record state.
+- Missing and changed entries keep their saved names and appear as invalid.
+  The player can remove or replace them instead of receiving a substitute.
+
+The current source includes the browser, playlist storage, background fan-pack
+checks and application update path. Targeted tests cover these features.
+The content atlas still needs the complete supported-pack catalogue. A signed
+package, physical controller use and a complete VoiceOver journey still need
+validation on the release Mac.
 
 ### L2 and L3 completion verification
 

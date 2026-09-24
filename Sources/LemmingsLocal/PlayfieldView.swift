@@ -157,6 +157,11 @@ struct ReticleFeedback {
     }
     var items: [Any] = []
     if let overlayTitle { items.append(accessibleElements.element(id: "title", owner: owner, label: overlayTitle, frame: transform(bounds))) }
+    if let rect = overlaySettingsButtonFrame() {
+      items.append(accessibleElements.element(
+        id: "settings", owner: owner, label: "Settings", frame: transform(rect)
+      ) { [weak self] in self?.onSettings?() })
+    }
     for (index, line) in overlayLines.enumerated() {
       let rect = overlayLineRects.indices.contains(index) ? overlayLineRects[index] : bounds
       let actionable = overlayHighlight != nil || overlayRetryLine == index || overlayReplayLine == index
@@ -194,6 +199,8 @@ struct ReticleFeedback {
   var overlayProfileInitials: String?
   var onProfiles: (() -> Void)?
   var onRecords: (() -> Void)?
+  var overlayShowsSettingsButton = false
+  var onSettings: (() -> Void)?
   private var overlayFooterButtons: [CGRect] = []
   /// Which overlay line is currently chosen, when the screen offers a choice.
   var overlayHighlight: Int?
@@ -423,6 +430,10 @@ struct ReticleFeedback {
   /// Takes a click position directly.
   func handleClick(at point: CGPoint) {
     guard phase == .playing else {
+      if let rect = overlaySettingsButtonFrame(), rect.contains(point) {
+        onSettings?()
+        return
+      }
       if overlayHandoverRetryTitle != nil, let index = handoverButtons.firstIndex(where: { $0.contains(point) }) {
         if index == 0 { onHandoverRetry?() } else { onAdvancePhase?() }
         return
@@ -636,6 +647,46 @@ struct ReticleFeedback {
       alpha: 1)
   }
 
+  private struct OverlayLayout {
+    let scale: CGFloat
+    let rowHeight: CGFloat
+    let headerHeight: CGFloat
+    let board: CGRect
+  }
+
+  private func overlayLayout() -> OverlayLayout {
+    let showsLogo = overlayTitle == "LEMMINGS" && macInterface?.interface.logo != nil
+    let headerUnits: CGFloat = showsLogo ? 116 : 62
+    let marchHeight: CGFloat = overlayShowsLemmings ? 64 : 0
+    let scale = min(2.5, bounds.width / 1100,
+      max(1, bounds.height - marchHeight - 24)
+        / (headerUnits + 106 + CGFloat(overlayLines.count) * 42))
+    let width = min(bounds.width - 28 * scale, 900 * scale)
+    let headerHeight = headerUnits * scale
+    let height = (106 + CGFloat(overlayLines.count) * 42) * scale + headerHeight
+    let board = CGRect(
+      x: (bounds.width - width) / 2,
+      y: max(12, (bounds.height - marchHeight - height) / 2),
+      width: width,
+      height: height)
+    return OverlayLayout(
+      scale: scale,
+      rowHeight: 42 * scale,
+      headerHeight: headerHeight,
+      board: board)
+  }
+
+  private func overlaySettingsButtonFrame(_ layout: OverlayLayout? = nil) -> CGRect? {
+    guard overlayShowsSettingsButton else { return nil }
+    let layout = layout ?? overlayLayout()
+    let side = max(44, 48 * layout.scale)
+    return CGRect(
+      x: layout.board.maxX - 18 * layout.scale - side,
+      y: layout.board.minY + 18 * layout.scale,
+      width: side,
+      height: side)
+  }
+
   private func drawOverlay() {
     overlayLineRects = []
     overlayFooterButtons = []
@@ -643,17 +694,12 @@ struct ReticleFeedback {
     NSColor.black.withAlphaComponent(0.42).setFill()
     bounds.fill()
     let showsLogo = overlayTitle == "LEMMINGS" && macInterface?.interface.logo != nil
-    let headerUnits: CGFloat = showsLogo ? 116 : 62
-    // Reserve separate space for the footer and the marching sprites.
-    let marchHeight: CGFloat = overlayShowsLemmings ? 64 : 0
-    let scale = min(2.5, bounds.width / 1100,
-      max(1, bounds.height - marchHeight - 24) / (headerUnits + 106 + CGFloat(overlayLines.count) * 42))
-    let rowHeight = 42 * scale
-    let width = min(bounds.width - 28 * scale, 900 * scale)
-    let headerHeight = headerUnits * scale
-    let height = (106 + CGFloat(overlayLines.count) * 42) * scale + headerHeight
-    let board = CGRect(x: (bounds.width - width) / 2,
-      y: max(12, (bounds.height - marchHeight - height) / 2), width: width, height: height)
+    let layout = overlayLayout()
+    let scale = layout.scale
+    let rowHeight = layout.rowHeight
+    let headerHeight = layout.headerHeight
+    let board = layout.board
+    let settingsButton = overlaySettingsButtonFrame(layout)
 
     // Chunky stone edging and a moss cap echo the level terrain.
     (macInterface == nil ? NSColor(calibratedRed: 0.09, green: 0.12, blue: 0.16, alpha: 0.97)
@@ -663,7 +709,7 @@ struct ReticleFeedback {
 
     // Use one face and scale for every row, fitted to the longest label.
     let longest = overlayLines.map { MacInterfaceRenderer.menuText($0).count }.max() ?? 1
-    let rowTextWidth = width - 64 * scale
+    let rowTextWidth = board.width - 64 * scale
     let rowTextHeight = rowHeight - 12 * scale
     var menuFace = ClassicMacUserInterface.Face.small
     var menuScale = 1
@@ -681,14 +727,45 @@ struct ReticleFeedback {
 
     var y = board.minY + 19 * scale
     if showsLogo, let macInterface {
+      let maximumWidth: CGFloat
+      if let settings = settingsButton {
+        maximumWidth = max(1, min(
+          board.width - 40 * scale,
+          2 * (settings.minX - board.midX - 10 * scale)))
+      } else {
+        maximumWidth = board.width - 40 * scale
+      }
       _ = macInterface.drawLogo(
         centerX: bounds.midX, top: y - 4 * scale,
-        maximumWidth: board.width - 40 * scale, maximumHeight: headerHeight - 26 * scale)
+        maximumWidth: maximumWidth, maximumHeight: headerHeight - 26 * scale)
     } else if let overlayTitle {
       let heading = CGRect(x: board.minX + 18 * scale, y: y,
         width: board.width - 36 * scale, height: headerHeight - 18 * scale)
       if !drawMacText(overlayTitle, in: heading, minimumScale: 1) {
         GamePixelText.draw(overlayTitle, in: heading)
+      }
+    }
+    if let settings = settingsButton {
+      let hovered = cursorViewPoint.map(settings.contains) ?? false
+      let pixel = max(1, floor(scale))
+      GameStoneButton.draw(
+        settings,
+        selected: hovered,
+        pixel: pixel,
+        backdrop: PanelGlyph.rock.image(fitting: settings.size))
+      let well = GameStoneButton.well(settings, pixel: pixel).insetBy(dx: 2 * pixel, dy: 2 * pixel)
+      if let image = PanelGlyph.settings.image(fitting: well.size) {
+        image.draw(
+          in: CGRect(
+            x: floor(well.midX - image.size.width / 2),
+            y: floor(well.midY - image.size.height / 2),
+            width: image.size.width,
+            height: image.size.height),
+          from: .zero,
+          operation: .sourceOver,
+          fraction: 1,
+          respectFlipped: true,
+          hints: [.interpolation: NSImageInterpolation.none])
       }
     }
     y += headerHeight
@@ -1064,18 +1141,9 @@ struct ReticleFeedback {
         tint: color, animated: !reduceMotion)
     }
 
-    // Leave a small pointer mark at the actual cursor position. This keeps
-    // the input location readable when the target is offset from the pointer.
-    let pixel = max(1, floor(viewport.zoom))
-    let arm = 3 * pixel
-    let crosshair = NSBezierPath()
-    crosshair.move(to: CGPoint(x: cursorViewPoint.x - arm, y: cursorViewPoint.y))
-    crosshair.line(to: CGPoint(x: cursorViewPoint.x + arm, y: cursorViewPoint.y))
-    crosshair.move(to: CGPoint(x: cursorViewPoint.x, y: cursorViewPoint.y - arm))
-    crosshair.line(to: CGPoint(x: cursorViewPoint.x, y: cursorViewPoint.y + arm))
-    crosshair.lineWidth = pixel
-    color.withAlphaComponent(0.85).setStroke()
-    crosshair.stroke()
+    // Keep the reticle at the actual cursor position. The target glow remains
+    // separate, so a target offset does not change click precision.
+    GameCursor.drawPlayfieldPointer(at: cursorViewPoint, scale: viewport.zoom, tint: color)
 
     SkillCursorBadge.draw(icon: skillBadge(for: selectedSkill()), index: selectedSkill(),
       at: cursorViewPoint, scale: viewport.zoom, tint: color,

@@ -1800,6 +1800,558 @@ extension AppDelegate {
     arcadeAutoPresent = false
     ArcadeStore.shared = ArcadeStore(file: FileManager.default.temporaryDirectory.appendingPathComponent("arcade-integration-\(UUID().uuidString).json"))
   }
+  fileprivate func testHomeSettingsButton() throws {
+    if window == nil { buildInterface() }
+    GameScreen.shared.dismissAll()
+    let previousFlow = flow
+    let previousFanScreen = fanScreen
+    let previousFanPlaying = fanPlaying
+    let previousWindowFrame = window.frame
+    defer {
+      GameScreen.shared.dismissAll()
+      flow = previousFlow
+      fanScreen = previousFanScreen
+      fanPlaying = previousFanPlaying
+      window.setFrame(previousWindowFrame, display: false)
+    }
+
+    flow = ClassicGameFlow(ranks: [ClassicRank(name: "Fun", levelIndices: [0])])
+    fanScreen = .off
+    fanPlaying = false
+    window.setContentSize(CGSize(width: 900, height: 620))
+    window.contentView?.layoutSubtreeIfNeeded()
+    renderScreen()
+    let expectedFamilies = HomeContentFamily.allCases.map {
+      $0.displayName.uppercased()
+    }
+    let familyLines = Array(playfield.overlayLines.suffix(expectedFamilies.count))
+    try check(zip(familyLines, expectedFamilies).allSatisfy { line, family in
+      line.hasPrefix(family)
+    }, "The home screen did not show the seven content families in order")
+    let routedFamilies = homeMenuItems().compactMap { item -> HomeContentFamily? in
+      if case let .browse(family) = item.action { return family }
+      return nil
+    }
+    try check(routedFamilies == HomeContentFamily.allCases,
+      "The home content rows did not keep their CoverFlow routes")
+    guard let allLemmings = homeMenuItems().first(where: {
+      if case .fullQuest = $0.action { return true }
+      return false
+    }) else {
+      throw IntegrationFailure(message: "The home screen omitted the all-level run")
+    }
+    try check(allLemmings.title
+      == "\(Self.allLemmingsMenuTitle)  \(library.passed)/\(library.total)",
+      "The all-level run did not use its player-facing name and non-fan total")
+    let nonFanTitles = Set(HomeContentFamily.allCases
+      .filter { $0 != .fan }.flatMap(\.titles))
+    try check(nonFanTitles == Set(ClassicTitle.allCases),
+      "The all-level run did not cover every non-fan content family")
+    let bitmap = playfield.bitmapImageRepForCachingDisplay(in: playfield.bounds)!
+    playfield.cacheDisplay(in: playfield.bounds, to: bitmap)
+    let capture = URL(fileURLWithPath: ".build/home-screen-settings-minimum.png")
+    try FileManager.default.createDirectory(at: capture.deletingLastPathComponent(), withIntermediateDirectories: true)
+    try bitmap.representation(using: .png, properties: [:])!.write(to: capture)
+    let controls = playfield.accessibilityChildren()?.compactMap { $0 as? GameAccessibleElement } ?? []
+    guard let settings = controls.first(where: { $0.accessibilityLabel() == "Settings" }) else {
+      throw IntegrationFailure(message: "The real home screen omitted the Settings gear")
+    }
+    let settingsFrame = settings.localFrame
+    try check(abs(settingsFrame.width - settingsFrame.height) < 0.01
+      && settingsFrame.width >= 44 && playfield.bounds.contains(settingsFrame),
+      "The home Settings gear is not a square, full-size input target")
+    try check(controls.filter { $0 !== settings && $0.accessibilityRole() == .button }
+      .allSatisfy { !$0.localFrame.intersects(settingsFrame) },
+      "The home Settings gear overlaps another input target")
+    let familyControls = expectedFamilies.compactMap { family in
+      controls.first { ($0.accessibilityLabel() ?? "").hasPrefix(family) }
+    }
+    try check(familyControls.count == expectedFamilies.count
+      && familyControls.allSatisfy {
+        $0.accessibilityRole() == .button
+          && $0.localFrame.width >= 44
+          && $0.localFrame.height >= 28
+          && playfield.bounds.contains($0.localFrame)
+      }, "A home content family lost its visible input target")
+    for left in familyControls.indices {
+      for right in familyControls.indices where right > left {
+        try check(!familyControls[left].localFrame.intersects(
+          familyControls[right].localFrame),
+          "Home content family input targets overlap")
+      }
+    }
+    try check(settings.accessibilityPerformPress(), "The home Settings gear did not perform its action")
+    try check(GameScreen.shared.controllerPage(in: window)?.accessibilityLabel() == "Settings",
+      "The home Settings gear did not open the existing Settings page")
+    GameScreen.shared.dismissAll()
+    playfield.handleClick(at: CGPoint(x: settingsFrame.midX, y: settingsFrame.midY))
+    try check(GameScreen.shared.controllerPage(in: window)?.accessibilityLabel() == "Settings",
+      "The home Settings gear mouse target did not open Settings")
+    GameScreen.shared.dismissAll()
+
+    var next = flow!
+    next.startGame()
+    flow = next
+    renderScreen()
+    playfield.cacheDisplay(in: playfield.bounds, to: bitmap)
+    try check(playfield.accessibilityChildren()?.compactMap { $0 as? GameAccessibleElement }
+      .contains(where: { $0.accessibilityLabel() == "Settings" }) != true,
+      "The home Settings gear remained on the rating screen")
+    print("PASS seven home content families and the Settings gear use distinct targets")
+  }
+  fileprivate func testHomeContentFamilyFiltering() throws {
+    GameScreen.shared.dismissAll()
+    let originalCatalogue = levelCatalogue
+    let originalFamilies = levelBrowserPackFamilies
+    let originalPackSelection = levelBrowserPackSelection
+    let originalDataSets = dataSets
+    let originalFanPacks = fanPacks
+    let originalBrowserFanPacks = levelBrowserFanPacks
+    let originalInvalidFanPacks = levelBrowserInvalidFanPacks
+    let originalInvalidFanPackRevisions = levelBrowserInvalidFanPackRevisions
+    let originalLibrary = library
+    let originalFlow = flow
+    let originalActiveTitle = activeTitle
+    let originalLaunchMode = launchMode
+    let fanProgressKey = ArcadeStore.shared.progressKey("FanLevelsPassed")
+    let originalFanProgress = UserDefaults.standard.object(forKey: fanProgressKey)
+    let fanCountsKey = "FanLevelCountsV2"
+    let originalFanCounts = UserDefaults.standard.object(forKey: fanCountsKey)
+    defer {
+      GameScreen.shared.dismissAll()
+      levelCatalogue = originalCatalogue
+      levelBrowserPackFamilies = originalFamilies
+      levelBrowserPackSelection = originalPackSelection
+      dataSets = originalDataSets
+      fanPacks = originalFanPacks
+      levelBrowserFanPacks = originalBrowserFanPacks
+      levelBrowserInvalidFanPacks = originalInvalidFanPacks
+      levelBrowserInvalidFanPackRevisions = originalInvalidFanPackRevisions
+      library = originalLibrary
+      flow = originalFlow
+      activeTitle = originalActiveTitle
+      launchMode = originalLaunchMode
+      if let originalFanProgress {
+        UserDefaults.standard.set(originalFanProgress, forKey: fanProgressKey)
+      } else {
+        UserDefaults.standard.removeObject(forKey: fanProgressKey)
+      }
+      if let originalFanCounts {
+        UserDefaults.standard.set(originalFanCounts, forKey: fanCountsKey)
+      } else {
+        UserDefaults.standard.removeObject(forKey: fanCountsKey)
+      }
+    }
+
+    let installedFanPack = URL(fileURLWithPath: "0384-Gronklems-1.zip")
+    let removedFanPack = URL(fileURLWithPath: "0386-Gronklems-1.zip")
+    UserDefaults.standard.set([
+      FanLevelLibrary.Progress.identifier(
+        pack: installedFanPack, label: "Installed level"),
+      FanLevelLibrary.Progress.identifier(
+        pack: removedFanPack, label: "Removed level"),
+    ], forKey: fanProgressKey)
+    try check(FanLevelLibrary.Progress.passedCount(for: [installedFanPack]) == 1,
+      "Fan progress included a pass from a removed pack")
+    FanLevelLibrary.Progress.setCount(1, for: installedFanPack)
+    fanPacks = [installedFanPack]
+    dataSets = []
+    try check(fanHomeRow() == "FAN LEMMINGS  1/1",
+      "The Fan Lemmings home row included progress from a removed pack")
+    library = UnifiedGameLibrary(entries: [
+      .init(title: .lemmings, total: 1),
+    ])
+    flow = ClassicGameFlow(ranks: [
+      ClassicRank(name: "Fun", levelIndices: [0]),
+    ])
+    activeTitle = nil
+    launchMode = .quest
+    launchTitle(.lemmings)
+    try check(flow?.screen == .title && activeTitle == nil,
+      "The all-level run started the previous flow when its release could not load")
+    try check(!Self.shouldSkipDetectedDataSet(
+      kind: .scanned,
+      title: .lemmings,
+      identifierKey: "lemmings-LEVEL-120",
+      loadedOfficialKeys: ["lemmings-LEVEL-120"])
+      && Self.shouldSkipDetectedDataSet(
+        kind: .originalLemmings,
+        title: .lemmings,
+        identifierKey: "lemmings-LEVEL-120",
+        loadedOfficialKeys: ["lemmings-LEVEL-120"]),
+      "A title-like scanned campaign used the official duplicate rule")
+    let questCandidates: [(title: ClassicTitle?, kind: ClassicDataSet.Kind)] = [
+      (title: .lemmings, kind: .scanned),
+      (title: .lemmings, kind: .originalLemmings),
+      (title: .ohYesMoreLemmings, kind: .scanned),
+    ]
+    try check(Self.nonFanQuestDataSetIndex(
+      for: .lemmings, in: questCandidates) == 1
+      && Self.nonFanQuestDataSetIndex(
+        for: .ohYesMoreLemmings, in: questCandidates) == 2,
+      "The all-level run did not select the non-fan data set")
+
+    let packs = HomeContentFamily.allCases.enumerated().map { index, family in
+      LevelCataloguePack(
+        engine: family == .lemmings2 ? .lemmings2
+          : family == .lemmings3 ? .lemmings3 : .classic,
+        id: "home-family-\(index)",
+        name: family.displayName,
+        status: .complete,
+        levels: [])
+    }
+    levelCatalogue = LevelCatalogue(revision: "home-family-test", packs: packs)
+    levelBrowserPackFamilies = Dictionary(uniqueKeysWithValues:
+      zip(packs, HomeContentFamily.allCases).map {
+        (browserPackKey($0.0), $0.1)
+      })
+    try check(levelBrowserPacks(for: nil).map(\.id) == packs.map(\.id),
+      "The File menu Level Select route lost part of the full catalogue")
+    for (pack, family) in zip(packs, HomeContentFamily.allCases) {
+      try check(levelBrowserPacks(for: family).map(\.id) == [pack.id],
+        "The \(family.displayName) home route included another content family")
+    }
+
+    let releaseFamilies: [(ClassicTitle?, HomeContentFamily)] = [
+      (.lemmings, .classic),
+      (.ohNoMoreLemmings, .ohNo),
+      (.xmasLemmings1991, .holiday),
+      (.xmasLemmings1992, .holiday),
+      (.holidayLemmings1993, .holiday),
+      (.holidayLemmings1994, .holiday),
+      (.ohYesMoreLemmings, .ohYes),
+      (.lemmings2TheTribes, .lemmings2),
+      (.lemmings3TheChronicles, .lemmings3),
+      (nil, .fan),
+    ]
+    try check(releaseFamilies.allSatisfy {
+      HomeContentFamily.family(for: $0.0) == $0.1
+    } && HomeContentFamily.family(for: .lemmings, kind: .scanned) == .fan
+      && HomeContentFamily.family(
+        for: .lemmings2TheTribes, kind: .scanned) == .fan
+      && HomeContentFamily.family(
+        for: .ohYesMoreLemmings, kind: .scanned) == .ohYes,
+      "A release or imported Classic pack was assigned to the wrong home family")
+
+    let identity = LevelCatalogueIdentity(
+      engine: .classic, packID: "live-pack", levelID: "level-1")
+    func livePack(_ availability: LevelAvailability) -> LevelCataloguePack {
+      LevelCataloguePack(
+        engine: .classic,
+        id: identity.packID,
+        name: "Live pack",
+        status: .complete,
+        levels: [LevelCatalogueEntry(
+          identity: identity,
+          packName: "Live pack",
+          levelName: "Live level",
+          number: 1,
+          status: .complete,
+          availability: availability)])
+    }
+    let lockedPack = livePack(.locked)
+    levelBrowserFanPacks[lockedPack.id] = installedFanPack
+    levelCatalogue = LevelCatalogue(
+      revision: "home-family-live-pack", packs: [lockedPack])
+    presentLevelPackBrowser(packs: [lockedPack], title: "Live family")
+    levelCatalogue = LevelCatalogue(
+      revision: "home-family-live-pack", packs: [livePack(.available)])
+    func descendants(of view: NSView) -> [NSView] {
+      [view] + view.subviews.flatMap { descendants(of: $0) }
+    }
+    guard let packPage = GameScreen.shared.controllerPage(in: window),
+          let packCarousel = descendants(of: packPage)
+            .compactMap({ $0 as? LevelCoverFlowView }).first,
+          let browse = descendants(of: packPage).compactMap({ $0 as? NSButton })
+            .first(where: { $0.title == "Browse levels" }) else {
+      throw IntegrationFailure(message: "The family pack browser did not open")
+    }
+    invalidateResolvedFanPack(id: lockedPack.id)
+    try check(packCarousel.selectedItem?.isAvailable == false
+      && packCarousel.selectedItem?.detail.hasPrefix("Unavailable") == true
+      && FanLevelLibrary.knownLevelCount(in: installedFanPack) == nil
+      && levelBrowserInvalidFanPacks.contains(lockedPack.id)
+      && levelBrowserInvalidFanPackRevisions[lockedPack.id]
+        == Self.fanPackFileRevision(installedFanPack),
+      "Invalidating a pack did not refresh its open CoverFlow card")
+    levelCatalogue = LevelCatalogue(
+      revision: "home-family-live-pack", packs: [livePack(.available)])
+    levelBrowserInvalidFanPacks.remove(lockedPack.id)
+    levelBrowserInvalidFanPackRevisions[lockedPack.id] = nil
+    refreshOpenLevelPackBrowser()
+    browse.performClick(nil)
+    guard let levelPage = GameScreen.shared.controllerPage(in: window),
+          levelPage !== packPage,
+          let levels = descendants(of: levelPage)
+            .compactMap({ $0 as? LevelCoverFlowView }).first else {
+      throw IntegrationFailure(message: "The family route did not open its level carousel")
+    }
+    try check(levels.selectedItem?.isAvailable == true,
+      "The family route opened a stale pack after catalogue availability changed")
+    print("PASS home families filter the typed catalogue without changing release identities")
+  }
+  fileprivate func testLevelBrowserRouteIntegrity() async throws {
+    GameScreen.shared.dismissAll()
+    let folder = URL(fileURLWithPath: ".build/content-browser")
+    try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+    let archive = folder.appendingPathComponent("route-change-fixture")
+    defer {
+      try? FileManager.default.removeItem(at: archive)
+      GameScreen.shared.dismissAll()
+    }
+    try Data("before".utf8).write(to: archive, options: .atomic)
+    guard let fingerprint = FanLevelLibrary.archiveFingerprint(archive) else {
+      throw IntegrationFailure(message: "The route fixture could not be fingerprinted")
+    }
+    let identity = LevelCatalogueIdentity(
+      engine: .classic, packID: "fan:fixture", levelID: "fixture.lvl#-1")
+    let entry = LevelCatalogueEntry(
+      identity: identity,
+      packName: "Fixture pack",
+      levelName: "Fixture level",
+      number: 1,
+      status: .unverified)
+    levelCatalogue = LevelCatalogue(revision: "route-fixture", packs: [
+      .init(engine: .classic, id: identity.packID, name: "Fixture pack",
+        status: .unverified, levels: [entry]),
+    ])
+    levelBrowserRoutes = [identity: .fan(
+      pack: archive,
+      entry: .init(file: "fixture.lvl", section: nil, label: "Fixture level"),
+      archiveFingerprint: fingerprint)]
+    launchMode = .quest
+    try Data("after".utf8).write(to: archive, options: .atomic)
+    startBrowserLevel(identity)
+    for _ in 0..<200 where levelBrowserLaunchTask != nil {
+      try await Task.sleep(nanoseconds: 10_000_000)
+    }
+    try check(levelBrowserLaunchTask == nil,
+      "The changed fan route did not finish its background validation")
+    try check(GameScreen.shared.controllerPage(in: window)?.accessibilityLabel() == "Fixture level",
+      "The real browser route did not reject changed fan bytes")
+    try check(launchMode == .quest,
+      "A rejected browser route changed the current run mode")
+    GameScreen.shared.dismissAll()
+
+    levelCatalogue = LevelCatalogue(revision: "route-fixture-2", packs: [])
+    startBrowserLevel(identity)
+    try check(GameScreen.shared.controllerPage(in: window)?.accessibilityLabel() == "Level unavailable",
+      "The real browser route did not report a removed catalogue entry")
+    print("PASS changed and removed level routes fail visibly")
+  }
+
+  fileprivate func testPlaylistStartRevalidatesFanSources() async throws {
+    GameScreen.shared.dismissAll()
+    let folder = URL(fileURLWithPath: ".build/content-browser")
+    try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+    let source = URL(fileURLWithPath:
+      "Tests/FanLevelLibraryTests/Fixtures/literal-members.zip")
+    let archive = folder.appendingPathComponent(
+      "playlist-source-\(UUID().uuidString).zip")
+    let storeFile = folder.appendingPathComponent(
+      "playlist-store-\(UUID().uuidString).json")
+    let originalCatalogue = levelCatalogue
+    let originalFanPacks = levelBrowserFanPacks
+    let originalFanEntries = levelBrowserFanEntries
+    let originalRoutes = levelBrowserRoutes
+    let originalPreviews = levelPreviewRequests
+    let originalStoreCache = playlistStoreCache
+    let originalSequenceStore = sequencePlaylistStore
+    defer {
+      cancelPlaylistFanLoading()
+      GameScreen.shared.dismissAll()
+      levelCatalogue = originalCatalogue
+      levelBrowserFanPacks = originalFanPacks
+      levelBrowserFanEntries = originalFanEntries
+      levelBrowserRoutes = originalRoutes
+      levelPreviewRequests = originalPreviews
+      playlistStoreCache = originalStoreCache
+      sequencePlaylistStore = originalSequenceStore
+      try? FileManager.default.removeItem(at: archive)
+      LevelPlaylistStore.removeData(at: storeFile)
+      try? FileManager.default.removeItem(
+        at: storeFile.appendingPathExtension("lock"))
+    }
+
+    let sourceData = try Data(contentsOf: source)
+    let packID = "fan:playlist-source-revalidation"
+    let placeholder = LevelCataloguePack(
+      engine: .classic,
+      id: packID,
+      name: "Source revalidation fixture",
+      status: .unverified,
+      levels: [])
+    func resolveFixture() throws -> LevelCataloguePack {
+      try sourceData.write(to: archive, options: .atomic)
+      let entries = try FanLevelLibrary.validatedEntries(in: archive)
+      let fingerprint = try checkFingerprint(archive)
+      levelCatalogue = LevelCatalogue(
+        revision: "playlist-source-revalidation",
+        packs: [placeholder])
+      levelBrowserFanPacks = [packID: archive]
+      return resolveBrowserPack(
+        placeholder,
+        discovery: LevelBrowserFanDiscovery(
+          fingerprint: fingerprint,
+          entries: entries))
+    }
+    func waitForRevalidation() async throws {
+      for _ in 0..<300 where playlistFanLoadTask != nil {
+        try await Task.sleep(nanoseconds: 10_000_000)
+      }
+      try check(playlistFanLoadTask == nil,
+        "Fan-source revalidation did not finish")
+    }
+
+    let resolved = try resolveFixture()
+    guard let level = resolved.levels.first else {
+      throw IntegrationFailure(message: "The fan-source fixture had no levels")
+    }
+    let store = try LevelPlaylistStore(file: storeFile)
+    let playlist = try LevelPlaylist(
+      name: "Changed source",
+      entries: [try playlistEntry(for: level.identity)])
+    try store.add(playlist)
+    playlistStoreCache = (
+      ArcadeStore.shared.records.activeProfileID,
+      store)
+    presentPlaylistEditor(id: playlist.id)
+    let originalEditor = playlistEditorPage
+    try Data("changed after the playlist editor opened".utf8)
+      .write(to: archive, options: .atomic)
+    startPlaylist(id: playlist.id, shuffled: false)
+    try await waitForRevalidation()
+    try check(store.activeRun == nil,
+      "Playlist Play persisted a run after its fan source changed")
+    func descendants(of view: NSView) -> [NSView] {
+      [view] + view.subviews.flatMap { descendants(of: $0) }
+    }
+    guard let refreshedEditor = playlistEditorPage else {
+      throw IntegrationFailure(message: "The changed-source playlist editor disappeared")
+    }
+    let editorViews = descendants(of: refreshedEditor)
+    let editorCarousel = editorViews.compactMap { $0 as? LevelCoverFlowView }.first
+    let editorButtons = editorViews.compactMap { $0 as? NSButton }
+    try check(refreshedEditor !== originalEditor
+      && editorCarousel?.selectedItem?.isAvailable == false
+      && editorButtons.first(where: { $0.title == "Play" })?.isEnabled == false
+      && editorButtons.first(where: { $0.title == "Shuffle" })?.isEnabled == false,
+      "A failed source check left the open playlist editor playable")
+    GameScreen.shared.dismissAll()
+
+    _ = try resolveFixture()
+    let shuffleInput = try shuffleAllRunInput()
+    try Data("changed while the Shuffle all confirmation was open".utf8)
+      .write(to: archive, options: .atomic)
+    startConfirmedShuffleAllFanLevels(expectedPoolID: shuffleInput.pool.id)
+    try await waitForRevalidation()
+    try check(store.activeRun == nil,
+      "Shuffle all persisted a run after a fan source changed")
+    print("PASS Playlist Play and Shuffle all revalidate fan archives at confirmation time")
+  }
+
+  private func checkFingerprint(_ archive: URL) throws -> String {
+    guard let fingerprint = FanLevelLibrary.archiveFingerprint(archive) else {
+      throw IntegrationFailure(message: "The fan-source fixture could not be fingerprinted")
+    }
+    return fingerprint
+  }
+
+  fileprivate func testSequenceNavigationGuards() throws {
+    GameScreen.shared.dismissAll()
+    if resumeSavedRunItem == nil { buildMenu() }
+    defer {
+      sequenceLaunchRunID = nil
+      setSequencePlayingIdentity(nil)
+      GameScreen.shared.dismissAll()
+    }
+
+    for engine in LevelSourceEngine.allCases {
+      let identity = LevelCatalogueIdentity(
+        engine: engine,
+        packID: "sequence-guard-pack",
+        levelID: "sequence-guard-level")
+      setSequencePlayingIdentity(identity)
+      try check(resumeSavedRunItem?.isEnabled == false
+        && !gamePicker.isEnabled && !picker.isEnabled,
+        "A running \(engine.displayName) sequence left alternate navigation enabled")
+      resumeSavedRun()
+      try check(sequencePlayingIdentity == identity,
+        "Resume Saved Run replaced a running \(engine.displayName) sequence")
+      GameScreen.shared.dismissAll()
+      setSequencePlayingIdentity(nil)
+    }
+
+    let pendingRunID = UUID()
+    sequenceLaunchRunID = pendingRunID
+    refreshSequenceNavigationAvailability()
+    try check(resumeSavedRunItem?.isEnabled == false,
+      "A pending sequence left Resume Saved Run enabled")
+    resumeSavedRun()
+    showHotSeat()
+    try check(sequenceLaunchRunID == pendingRunID && !GameScreen.shared.isPresented,
+      "Alternate navigation cancelled or covered a pending sequence launch")
+    sequenceLaunchRunID = nil
+    refreshSequenceNavigationAvailability()
+    try check(resumeSavedRunItem?.isEnabled == true
+      && gamePicker.isEnabled && picker.isEnabled,
+      "Leaving a sequence did not restore normal navigation")
+    print("PASS active and pending sequences guard saved-run, game, level and Hot Seat navigation")
+  }
+
+  fileprivate func testClassicLevelPickerUnlockGate() throws {
+    GameScreen.shared.dismissAll()
+    struct EncodedCampaign: Encodable {
+      let name: String
+      let levels: [ClassicCampaignLevel]
+    }
+    let level = try ClassicLevel(data: Data(repeating: 0, count: ClassicLevel.recordSize))
+    let fixture = try JSONDecoder().decode(
+      ClassicCampaign.self,
+      from: JSONEncoder().encode(EncodedCampaign(
+        name: "Classic unlock fixture",
+        levels: [
+          .standalone(level, rank: "Fun", number: 1),
+          .standalone(level, rank: "Fun", number: 2),
+        ])))
+    campaign = fixture
+    flow = ClassicGameFlow(campaign: fixture)
+    classicSelectionRecordsCampaignProgress = true
+    picker.removeAllItems()
+    picker.addItems(withTitles: ["1. Fun - First", "2. Fun - Second"])
+    refreshClassicLevelPickerAvailability()
+    let initialProgress = flow!.progress
+    defer {
+      var restored = settings
+      restored.unlockAllClassicLevels = false
+      apply(restored)
+      GameScreen.shared.dismissAll()
+    }
+
+    try check(picker.item(at: 0)?.isEnabled == true
+      && picker.item(at: 1)?.isEnabled == false,
+      "The legacy level pop-up did not disable locked Fun 2")
+    picker.selectItem(at: 1)
+    levelChanged()
+    try check(picker.indexOfSelectedItem == 0
+      && flow?.screen == .title
+      && flow?.progress == initialProgress,
+      "The legacy level pop-up opened locked Fun 2")
+
+    var updated = settings
+    updated.unlockAllClassicLevels = true
+    apply(updated)
+    try check(picker.item(at: 1)?.isEnabled == true,
+      "The Classic unlock setting did not update the open level pop-up")
+    updated.unlockAllClassicLevels = false
+    apply(updated)
+    try check(picker.item(at: 1)?.isEnabled == false,
+      "Turning off the Classic override left locked levels visually enabled")
+    try check(flow?.progress == initialProgress,
+      "Changing the Classic unlock setting advanced campaign progress")
+    print("PASS legacy Classic level pop-up enforces progress and reflects the unlock override")
+  }
+
   fileprivate func testGamePages() throws {
     let running = FinalTickSession(win: false, finalTick: 1000)
     session = running; phase = .playing; isPaused = false; lastStepTime = 1; accumulator = 0
@@ -2019,7 +2571,7 @@ extension AppDelegate {
     playfield.phase = .briefing
     panel.isMenuMode = true
     playfield.overlayTitle = "LEMMINGS"
-    playfield.overlayLines = ["FULL QUEST", "LEMMINGS", "XMAS LEMMINGS 1991"]
+    playfield.overlayLines = ["OH MY! ALL LEMMINGS!", "LEMMINGS", "XMAS LEMMINGS 1991"]
     applyDisplayMode()
     window.contentView?.layoutSubtreeIfNeeded()
     try check(!tubeIsActive && window.contentView === plainRoot,
@@ -2252,7 +2804,7 @@ extension AppDelegate {
     menu.interfaceArtwork = nil
     menu.phase = .briefing
     menu.overlayTitle = "LEMMINGS"
-    menu.overlayLines = ["LEMMINGS 1/120", "FULL QUEST"]
+    menu.overlayLines = ["LEMMINGS 1/120", "OH MY! ALL LEMMINGS!"]
     menu.overlayHighlight = 0
     let menuBitmap = menu.bitmapImageRepForCachingDisplay(in: menu.bounds)!
     menu.cacheDisplay(in: menu.bounds, to: menuBitmap)
@@ -2365,6 +2917,517 @@ extension AppDelegate {
     print("PASS game typography, settings tab targets, title hierarchy, actions and bitmap search editing")
 }
 
+/** Supplies precise trackpad-sized deltas without depending on attached hardware. */
+private final class ContentBrowserScrollEvent: NSEvent {
+    private let horizontal: CGFloat
+    private let vertical: CGFloat
+    private let precise: Bool
+    private let scrollPhase: NSEvent.Phase
+    private let scrollMomentumPhase: NSEvent.Phase
+
+    init(
+        horizontal: CGFloat = 0,
+        vertical: CGFloat,
+        precise: Bool = true,
+        phase: NSEvent.Phase = [],
+        momentumPhase: NSEvent.Phase = []
+    ) {
+        self.horizontal = horizontal
+        self.vertical = vertical
+        self.precise = precise
+        scrollPhase = phase
+        scrollMomentumPhase = momentumPhase
+        super.init()
+    }
+
+    required init?(coder: NSCoder) { fatalError("init(coder:) is unavailable") }
+    override var scrollingDeltaX: CGFloat { horizontal }
+    override var scrollingDeltaY: CGFloat { vertical }
+    override var hasPreciseScrollingDeltas: Bool { precise }
+    override var phase: NSEvent.Phase { scrollPhase }
+    override var momentumPhase: NSEvent.Phase { scrollMomentumPhase }
+}
+
+private actor ContentBrowserArtworkFixture {
+    private var requests: [String: Int] = [:]
+
+    func load(_ key: String) -> LevelPreviewBitmap? {
+        requests[key, default: 0] += 1
+        let width = 320, height = 160
+        let seed = key.utf8.reduce(UInt32(2_166_136_261)) {
+            ($0 ^ UInt32($1)) &* 16_777_619
+        }
+        var pixels = [UInt8](repeating: 255, count: width * height * 4)
+        for y in 0..<height {
+            for x in 0..<width {
+                let offset = (y * width + x) * 4
+                let stripe = UInt8((x / 32 + y / 20) % 2)
+                pixels[offset] = UInt8(truncatingIfNeeded: seed >> 16) &+ stripe &* 48
+                pixels[offset + 1] = UInt8(truncatingIfNeeded: seed >> 8)
+                  &+ UInt8(truncatingIfNeeded: y)
+                pixels[offset + 2] = UInt8(truncatingIfNeeded: seed)
+                  &+ UInt8(truncatingIfNeeded: x)
+            }
+        }
+        return LevelPreviewBitmap(width: width, height: height, rgba: Data(pixels))
+    }
+
+    func requestCounts() -> [String: Int] { requests }
+}
+
+@MainActor private func testContentBrowser() async throws {
+    GameScreen.shared.dismissAll()
+    let host = SpeedTestWindow(
+        contentRect: CGRect(x: 0, y: 0, width: 1120, height: 720),
+        styleMask: [], backing: .buffered, defer: false)
+    host.contentView = NSView(frame: CGRect(x: 0, y: 0, width: 1120, height: 720))
+    host.makeKeyAndOrderFront(nil)
+    defer { GameScreen.shared.dismissAll(); host.orderOut(nil) }
+    let output = URL(fileURLWithPath: ".build/content-browser")
+    try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
+    func capture(_ name: String) async throws {
+        let root = host.contentView!
+        func invalidate(_ view: NSView) {
+            view.needsDisplay = true
+            view.subviews.forEach(invalidate)
+        }
+        invalidate(root)
+        root.layoutSubtreeIfNeeded()
+        try await Task.sleep(nanoseconds: 30_000_000)
+        CATransaction.flush()
+        invalidate(root)
+        if let composited = CGWindowListCreateImage(
+          .null,
+          .optionIncludingWindow,
+          CGWindowID(host.windowNumber),
+          [.boundsIgnoreFraming, .bestResolution]) {
+            let bitmap = NSBitmapImageRep(cgImage: composited)
+            try bitmap.representation(using: .png, properties: [:])!.write(
+              to: output.appendingPathComponent(name + ".png"))
+            return
+        }
+        let bitmap = root.bitmapImageRepForCachingDisplay(in: root.bounds)!
+        root.displayIgnoringOpacity(
+          root.bounds,
+          in: NSGraphicsContext(bitmapImageRep: bitmap)!)
+        try bitmap.representation(using: .png, properties: [:])!.write(
+            to: output.appendingPathComponent(name + ".png"))
+    }
+
+    let classicIdentity = LevelCatalogueIdentity(
+        engine: .classic, packID: "fixture-pack", levelID: "fixture-level")
+    let typedEntry = LevelCatalogueEntry(
+        identity: classicIdentity, packName: "Fixture pack", levelName: "Fixture level",
+        number: 1, status: .complete)
+    let typedCatalogue = LevelCatalogue(revision: "fixture", packs: [
+        .init(engine: .classic, id: "fixture-pack", name: "Fixture pack",
+              status: .complete, levels: [typedEntry]),
+    ])
+    try check(typedCatalogue.resolve(classicIdentity) == typedEntry
+      && typedCatalogue.resolve(.init(
+        engine: .lemmings2, packID: classicIdentity.packID, levelID: classicIdentity.levelID)) == nil,
+      "The catalogue resolved a level without its explicit engine identity")
+    let removedCatalogue = LevelCatalogue(revision: "fixture-2", packs: [])
+    try check(removedCatalogue.resolve(classicIdentity) == nil,
+      "The catalogue silently substituted a removed level")
+
+    let archive = output.appendingPathComponent("changed-archive-fixture")
+    defer { try? FileManager.default.removeItem(at: archive) }
+    try Data("before".utf8).write(to: archive, options: .atomic)
+    guard let archiveFingerprint = FanLevelLibrary.archiveFingerprint(archive) else {
+        throw IntegrationFailure(message: "The browser could not fingerprint a fan archive")
+    }
+    try check(FanLevelLibrary.archiveMatches(archive, fingerprint: archiveFingerprint),
+      "An unchanged fan archive failed its identity check")
+    try Data("after".utf8).write(to: archive, options: .atomic)
+    try check(!FanLevelLibrary.archiveMatches(archive, fingerprint: archiveFingerprint),
+      "A changed fan archive kept its previous identity")
+    try check(FanLevelLibrary.catalogueStatus(archive) == .unverified,
+      "An imported archive was labelled Playable without corpus evidence")
+
+    let artworkKeys = (0..<7).map { "level-\($0):revision-1" }
+    let items = (0..<7).map { index in
+        LevelCoverFlowItem(
+            id: "level-\(index)",
+            title: "Level \(index + 1)",
+            subtitle: index < 3 ? "Classic / Complete" : "Lemmings 2 / Preview",
+            detail: "Pack \(index / 3 + 1)",
+            isAvailable: index != 6,
+            artworkKey: artworkKeys[index])
+    }
+    let page = GameMenuPage(title: "Level Select", subtitle: "Fixture pack")
+    let carousel = LevelCoverFlowView(frame: page.body.bounds)
+    let artworkFixture = ContentBrowserArtworkFixture()
+    carousel.artworkLoader = { key in await artworkFixture.load(key) }
+    carousel.autoresizingMask = [.width, .height]
+    page.body.addSubview(carousel)
+    var starts = 0
+    carousel.onStart = { _ in starts += 1 }
+    let primary = page.addPrimaryAction("Start") { carousel.startSelectedItem() }
+    primary.keyEquivalent = "\r"; primary.keyEquivalentModifierMask = []
+    page.preferControllerControl(primary)
+    carousel.onSelectionChanged = { [weak primary] item in
+        primary?.isEnabled = item.isAvailable
+        primary?.needsDisplay = true
+    }
+    carousel.configure(items: items, selectedID: "level-3", reduceMotion: false)
+    GameScreen.shared.present(page, owner: host, focus: carousel)
+    host.contentView?.layoutSubtreeIfNeeded()
+    for _ in 0..<200 {
+        if (0..<7).allSatisfy({ carousel.visualState(at: $0)?.hasArtwork == true }) { break }
+        try await Task.sleep(nanoseconds: 5_000_000)
+    }
+    try check((0..<7).allSatisfy({ carousel.visualState(at: $0)?.hasArtwork == true }),
+      "CoverFlow did not load artwork for every visible level")
+    try await capture("coverflow")
+
+    try check(carousel.selectedItem?.id == "level-3" && !carousel.usesReducedMotionLayout,
+      "CoverFlow did not centre the requested typed entry")
+    var cards = carousel.subviews.compactMap { $0 as? NSButton }
+    try check(cards.count == 7 && cards.allSatisfy { $0.frame.width >= 100 && $0.frame.height >= 150 },
+      "CoverFlow cards lost their input targets")
+    try check(cards.allSatisfy { !($0.accessibilityLabel() ?? "").isEmpty },
+      "CoverFlow cards lost their VoiceOver names")
+
+    guard let centreState = carousel.visualState(at: 3),
+          let leftState = carousel.visualState(at: 2),
+          let rightState = carousel.visualState(at: 4) else {
+        throw IntegrationFailure(message: "CoverFlow omitted a visible 3D state")
+    }
+    let tolerance: CGFloat = 0.001
+    try check(abs(centreState.rotationY) < tolerance
+      && centreState.depth > 0
+      && abs(centreState.scale - 1.5) < tolerance,
+      "The centred CoverFlow card did not face forward and move towards the viewer")
+    try check(leftState.rotationY * rightState.rotationY < 0
+      && leftState.rotationY > 0 && rightState.rotationY < 0
+      && abs(abs(leftState.rotationY) - .pi / 4) < tolerance
+      && abs(abs(leftState.rotationY) - abs(rightState.rotationY)) < tolerance,
+      "CoverFlow side cards did not use balanced opposing rotations")
+    try check(leftState.depth < 0 && rightState.depth < 0
+      && centreState.backDepth > leftState.frontDepth
+      && centreState.backDepth > rightState.frontDepth
+      && leftState.backDepth < leftState.frontDepth
+      && rightState.backDepth < rightState.frontDepth
+      && leftState.scale < centreState.scale && rightState.scale < centreState.scale,
+      "CoverFlow side planes did not settle fully behind the centred card")
+    try check(centreState.perspective < 0
+      && centreState.inputTransformIsIdentity
+      && leftState.inputTransformIsIdentity
+      && rightState.inputTransformIsIdentity,
+      "CoverFlow did not keep stable input slots under one perspective stage")
+    func edgeLength(_ first: CGPoint, _ second: CGPoint) -> CGFloat {
+        hypot(first.x - second.x, first.y - second.y)
+    }
+    let leftCorners = leftState.projectedCoverCorners
+    let rightCorners = rightState.projectedCoverCorners
+    let centreCorners = centreState.projectedCoverCorners
+    func xExtent(_ corners: [CGPoint]) -> ClosedRange<CGFloat> {
+        corners.map(\.x).min()!...corners.map(\.x).max()!
+    }
+    try check(leftCorners.count == 4 && rightCorners.count == 4
+      && abs(edgeLength(leftCorners[0], leftCorners[3])
+        - edgeLength(leftCorners[1], leftCorners[2])) > 2
+      && abs(edgeLength(rightCorners[0], rightCorners[3])
+        - edgeLength(rightCorners[1], rightCorners[2])) > 2,
+      "CoverFlow side cards did not project to visible perspective trapezoids")
+    try check(xExtent(leftCorners).upperBound + 4 <= xExtent(centreCorners).lowerBound
+      && xExtent(centreCorners).upperBound + 4 <= xExtent(rightCorners).lowerBound,
+      "A settled side cover cut across the centred cover border")
+    try check((0..<7).allSatisfy {
+        guard let state = carousel.visualState(at: $0) else { return false }
+        return state.reflectionVisible && state.hasArtwork
+          && state.artworkKey == artworkKeys[$0]
+      }, "CoverFlow lost a level image or its reflection")
+
+    carousel.setReducedMotion(true)
+    host.contentView?.layoutSubtreeIfNeeded()
+    guard let reducedCentre = carousel.visualState(at: 3),
+          let reducedSide = carousel.visualState(at: 2) else {
+        throw IntegrationFailure(message: "Live reduced motion omitted a visible card")
+    }
+    try check(carousel.selectedItem?.id == "level-3"
+      && carousel.usesReducedMotionLayout
+      && abs(reducedCentre.perspective) < tolerance
+      && abs(reducedCentre.rotationY) < tolerance
+      && abs(reducedSide.rotationY) < tolerance
+      && !reducedCentre.reflectionVisible
+      && !reducedSide.reflectionVisible,
+      "Turning on reduced motion did not update the open CoverFlow in place")
+    carousel.setReducedMotion(false)
+    host.contentView?.layoutSubtreeIfNeeded()
+    guard let restoredCentre = carousel.visualState(at: 3),
+          let restoredSide = carousel.visualState(at: 2) else {
+        throw IntegrationFailure(message: "Restored CoverFlow omitted a visible card")
+    }
+    try check(carousel.selectedItem?.id == "level-3"
+      && !carousel.usesReducedMotionLayout
+      && restoredCentre.perspective < 0
+      && abs(restoredSide.rotationY) > tolerance
+      && restoredCentre.reflectionVisible
+      && restoredSide.reflectionVisible,
+      "Turning off reduced motion did not restore the open CoverFlow in place")
+    let initialArtworkRequests = await artworkFixture.requestCounts()
+    try check(initialArtworkRequests.count == artworkKeys.count
+      && artworkKeys.allSatisfy { initialArtworkRequests[$0] == 1 },
+      "CoverFlow requested a visible level image more than once")
+
+    carousel.scrollWheel(with: ContentBrowserScrollEvent(vertical: -30, phase: .began))
+    try check(abs(carousel.coverFlowPosition - 3.5) < tolerance,
+      "The CoverFlow fixture did not reach an exact half-card position")
+    guard let halfwayLeft = carousel.visualState(at: 3),
+          let halfwayRight = carousel.visualState(at: 4) else {
+        throw IntegrationFailure(message: "CoverFlow omitted a half-card plane")
+    }
+    let halfwayLeftExtent = xExtent(halfwayLeft.projectedCoverCorners)
+    let halfwayRightExtent = xExtent(halfwayRight.projectedCoverCorners)
+    try check(halfwayLeftExtent.upperBound + 4 <= halfwayRightExtent.lowerBound,
+      "The two half-card planes intersected at the centre hand-off")
+    try check(halfwayRight.stackOrder > halfwayLeft.stackOrder,
+      "The selected half-card did not have an explicit front order")
+    try await capture("coverflow-halfway")
+    for (index, state) in [(3, halfwayLeft), (4, halfwayRight)] {
+        let centroid = state.projectedCoverCorners.reduce(CGPoint.zero) {
+            CGPoint(x: $0.x + $1.x / 4, y: $0.y + $1.y / 4)
+        }
+        let hostPoint = carousel.convert(centroid, to: host.contentView)
+        let hit = host.contentView?.hitTest(hostPoint)
+        try check(hit === cards.first(where: { $0.tag == index }),
+          "Half-card \(index) lost its projected mouse target; hit \((hit as? NSButton)?.tag ?? -1)")
+    }
+    carousel.configure(items: items, selectedID: "level-3", reduceMotion: false)
+    try await Task.sleep(nanoseconds: 30_000_000)
+    CATransaction.flush()
+
+    guard let selectedInputCard = cards.first(where: { $0.tag == 3 }) else {
+        throw IntegrationFailure(message: "CoverFlow omitted its selected input slot")
+    }
+    let projectedCentre = centreState.projectedCoverCorners
+    let projectedLeft = projectedCentre.map(\.x).min()!
+    let projectedMidY = (projectedCentre.map(\.y).min()!
+      + projectedCentre.map(\.y).max()!) / 2
+    let projectedOnlyPoint = CGPoint(
+      x: (projectedLeft + selectedInputCard.frame.minX) / 2,
+      y: projectedMidY)
+    try check(!selectedInputCard.frame.contains(projectedOnlyPoint),
+      "The CoverFlow fixture did not extend beyond its stable input slot")
+    let projectedHostPoint = carousel.convert(projectedOnlyPoint, to: host.contentView)
+    try check(host.contentView?.hitTest(projectedHostPoint) === selectedInputCard,
+      "CoverFlow did not hit the visible projected cover outside its raw input slot")
+
+    guard let mouseCard = cards.first(where: { $0.tag == 4 }) else {
+        throw IntegrationFailure(message: "CoverFlow omitted a visible mouse target")
+    }
+    let rightCentroid = rightCorners.reduce(CGPoint.zero) {
+        CGPoint(x: $0.x + $1.x / 4, y: $0.y + $1.y / 4)
+    }
+    let rightOutsideEdge = CGPoint(
+      x: (rightCorners[1].x + rightCorners[2].x) / 2,
+      y: (rightCorners[1].y + rightCorners[2].y) / 2)
+    let visibleRightPoint = CGPoint(
+      x: rightCentroid.x * 0.25 + rightOutsideEdge.x * 0.75,
+      y: rightCentroid.y * 0.25 + rightOutsideEdge.y * 0.75)
+    let mousePoint = carousel.convert(visibleRightPoint, to: host.contentView)
+    try check(host.contentView?.hitTest(mousePoint) === mouseCard,
+      "CoverFlow's visible mouse target did not hit its card")
+    let windowPoint = host.contentView!.convert(mousePoint, to: nil)
+    let mouseDown = NSEvent.mouseEvent(with: .leftMouseDown, location: windowPoint,
+      modifierFlags: [], timestamp: 1, windowNumber: host.windowNumber, context: nil,
+      eventNumber: 0, clickCount: 1, pressure: 1)!
+    let mouseUp = NSEvent.mouseEvent(with: .leftMouseUp, location: windowPoint,
+      modifierFlags: [], timestamp: 1.01, windowNumber: host.windowNumber, context: nil,
+      eventNumber: 0, clickCount: 1, pressure: 0)!
+    NSApp.postEvent(mouseUp, atStart: true)
+    host.sendEvent(mouseDown)
+    try check(carousel.selectedItem?.id == "level-4", "A mouse action did not select its card")
+    let transitionKeys = Set(
+      (carousel.visualState(at: 3)?.activeAnimationKeys ?? [])
+      + (carousel.visualState(at: 4)?.activeAnimationKeys ?? []))
+    try check(transitionKeys.contains("coverFlow.position")
+      && transitionKeys.contains("coverFlow.transform"),
+      "CoverFlow did not animate position and depth between selections")
+
+    carousel.scrollWheel(with: ContentBrowserScrollEvent(vertical: -18, phase: .began))
+    guard let partialState = carousel.visualState(at: 4) else {
+      throw IntegrationFailure(message: "Precise scrolling hid the centred card")
+    }
+    try check(carousel.selectedItem?.id == "level-4"
+      && carousel.isTrackingPreciseScroll
+      && carousel.coverFlowPosition > 4 && carousel.coverFlowPosition < 4.5
+      && partialState.rotationY > 0 && partialState.rotationY < abs(rightState.rotationY)
+      && partialState.frontDepth > rightState.frontDepth
+      && partialState.frontDepth < centreState.frontDepth
+      && partialState.backDepth < partialState.frontDepth
+      && partialState.scale < centreState.scale && partialState.scale > rightState.scale,
+      "A precise scroll did not continuously interpolate the CoverFlow cards")
+    carousel.scrollWheel(with: ContentBrowserScrollEvent(vertical: -9, phase: .ended))
+    try check(carousel.isTrackingPreciseScroll && carousel.coverFlowPosition > 4.4,
+      "CoverFlow snapped before a pending momentum event could begin")
+    carousel.scrollWheel(with: ContentBrowserScrollEvent(
+      vertical: 0, momentumPhase: .began))
+    try check(carousel.isTrackingPreciseScroll && carousel.coverFlowPosition > 4.4,
+      "CoverFlow did not carry the finger position into trackpad momentum")
+    carousel.scrollWheel(with: ContentBrowserScrollEvent(
+      vertical: -12, momentumPhase: .changed))
+    try check(carousel.selectedItem?.id == "level-5"
+      && carousel.coverFlowPosition > 4.5 && carousel.coverFlowPosition < 5,
+      "CoverFlow did not preserve its fractional position through momentum")
+    carousel.scrollWheel(with: ContentBrowserScrollEvent(
+      vertical: 0, momentumPhase: .ended))
+    try check(carousel.selectedItem?.id == "level-5"
+      && !carousel.isTrackingPreciseScroll
+      && abs(carousel.coverFlowPosition - 5) < tolerance,
+      "CoverFlow did not snap to the nearest card when momentum ended")
+    carousel.scrollWheel(with: ContentBrowserScrollEvent(vertical: 0.1, precise: false))
+    try check(carousel.selectedItem?.id == "level-4",
+      "A non-precise wheel event did not make one discrete move")
+    carousel.scrollWheel(with: ContentBrowserScrollEvent(vertical: 0.1, precise: false))
+    try check(carousel.selectedItem?.id == "level-3",
+      "A second non-precise wheel event did not make one discrete move")
+    let left = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 0,
+      windowNumber: host.windowNumber, context: nil, characters: "", charactersIgnoringModifiers: "",
+      isARepeat: false, keyCode: 123)!
+    host.makeFirstResponder(carousel)
+    host.sendEvent(left)
+    try check(carousel.selectedItem?.id == "level-2", "Left did not move the CoverFlow selection")
+    let enter = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 0,
+      windowNumber: host.windowNumber, context: nil, characters: "\r", charactersIgnoringModifiers: "\r",
+      isARepeat: false, keyCode: 36)!
+    host.sendEvent(enter)
+    try check(starts == 1, "Enter did not start the focused level")
+
+    carousel.selectItem(at: 6); carousel.startSelectedItem()
+    try check(starts == 1 && !primary.isEnabled,
+      "An unavailable level started or left the primary action enabled")
+    carousel.configure(items: Array(items.reversed()), reduceMotion: true)
+    host.contentView?.layoutSubtreeIfNeeded()
+    carousel.scrollWheel(with: ContentBrowserScrollEvent(vertical: -0.6))
+    try check(carousel.selectedIndex == 0 && !carousel.isTrackingPreciseScroll,
+      "One reduced-motion scroll fragment moved or animated the list")
+    carousel.scrollWheel(with: ContentBrowserScrollEvent(vertical: -0.6))
+    try check(carousel.selectedIndex == 1
+      && !carousel.isTrackingPreciseScroll
+      && abs(carousel.coverFlowPosition - 1) < tolerance,
+      "Reduced motion did not keep precise scrolling discrete")
+    carousel.selectItem(at: 0)
+    try await capture("reduced-motion-list")
+    try check(carousel.selectedItem?.id == "level-6" && carousel.usesReducedMotionLayout,
+      "A catalogue refresh lost the typed selection or reduced-motion fallback")
+    cards = carousel.subviews.compactMap { $0 as? NSButton }
+    let widths = Set(cards.map { Int($0.frame.width.rounded()) })
+    try check(cards.count == 5 && widths.count == 1 && cards.allSatisfy { $0.frame.height >= 54 },
+      "The reduced-motion list has uneven or clipped targets")
+    try check((0..<5).allSatisfy {
+        guard let state = carousel.visualState(at: $0) else { return false }
+        return abs(state.rotationY) < tolerance
+          && abs(state.depth) < tolerance
+          && abs(state.scale - 1) < tolerance
+          && abs(state.perspective) < tolerance
+          && state.inputTransformIsIdentity
+          && !state.reflectionVisible
+          && state.activeAnimationKeys.isEmpty
+          && state.hasArtwork
+      }, "Reduced motion retained a 3D transform, reflection or transition animation")
+    let reusedArtworkRequests = await artworkFixture.requestCounts()
+    try check(reusedArtworkRequests == initialArtworkRequests,
+      "CoverFlow reloaded cached level images after selection and layout changes")
+    try check(cards.filter { $0.isAccessibilitySelected() }.map(\.tag) == [0]
+      && cards.first(where: { $0.tag == 0 })?.accessibilityValueDescription() == "Selected",
+      "VoiceOver could not identify the current CoverFlow selection")
+
+    guard let voiceOverCard = cards.first(where: { $0.tag == 2 }) else {
+        throw IntegrationFailure(message: "The reduced-motion list omitted a VoiceOver target")
+    }
+    try check(voiceOverCard.accessibilityPerformPress()
+      && carousel.selectedIndex == voiceOverCard.tag,
+      "The VoiceOver action did not select its level")
+
+    let navigator = ControllerMenuNavigator()
+    try check(navigator.handle(.assign, in: page) && starts == 2,
+      "The controller did not activate the primary Start action")
+    var selectedCard: NSButton?
+    for _ in 0..<10 where selectedCard == nil {
+        _ = navigator.handle(.focusUnassigned(-1), in: page)
+        if let button = navigator.selected as? NSButton,
+           button !== primary, button !== page.controllerBackButton,
+           button.tag != carousel.selectedIndex { selectedCard = button }
+    }
+    guard let selectedCard else {
+        throw IntegrationFailure(message: "The controller could not focus a CoverFlow card")
+    }
+    _ = navigator.handle(.assign, in: page)
+    try check(carousel.selectedIndex == selectedCard.tag,
+      "The controller did not select its focused CoverFlow card")
+
+    let cacheItems = (0..<30).map { index in
+      LevelCoverFlowItem(
+        id: "cache-level-\(index)",
+        title: "Cache level \(index + 1)",
+        subtitle: "Classic / Complete",
+        detail: "Cache fixture",
+        isAvailable: true,
+        artworkKey: "cache-level-\(index):revision-1")
+    }
+    carousel.configure(items: cacheItems, selectedID: cacheItems[0].id, reduceMotion: false)
+    for index in cacheItems.indices {
+      carousel.selectItem(at: index)
+      for _ in 0..<100 {
+        if carousel.visualState(at: index)?.hasArtwork == true { break }
+        try await Task.sleep(nanoseconds: 1_000_000)
+      }
+      try check(carousel.visualState(at: index)?.hasArtwork == true,
+        "CoverFlow did not load cache stress fixture \(index)")
+    }
+    let cacheLimits = carousel.artworkCacheLimits
+    try check(carousel.artworkCacheEntryCount <= cacheLimits.entries
+      && carousel.artworkCacheCost <= cacheLimits.cost,
+      "CoverFlow's view-local image cache exceeded its fixed limits")
+    let recentKey = cacheItems[28].artworkKey!
+    let recentRequests = await artworkFixture.requestCounts()[recentKey]
+    carousel.selectItem(at: 28)
+    let reusedRecentRequests = await artworkFixture.requestCounts()[recentKey]
+    try check(reusedRecentRequests == recentRequests,
+      "CoverFlow reloaded a recently visited image instead of using its bounded cache")
+
+    func selectedReducedMotionRowIsVisible(_ expectedIndex: Int) -> Bool {
+      guard carousel.selectedIndex == expectedIndex,
+            let row = carousel.subviews.compactMap({ $0 as? NSButton })
+              .first(where: { $0.tag == expectedIndex }) else { return false }
+      let rowFrame = row.convert(row.bounds, to: carousel)
+      return !row.isHidden && carousel.bounds.insetBy(dx: -1, dy: -1).contains(rowFrame)
+    }
+    carousel.configure(items: cacheItems, selectedID: cacheItems[0].id, reduceMotion: true)
+    host.contentView?.layoutSubtreeIfNeeded()
+    host.makeFirstResponder(carousel)
+    let pageDown = NSEvent.keyEvent(
+      with: .keyDown, location: .zero, modifierFlags: [], timestamp: 0,
+      windowNumber: host.windowNumber, context: nil,
+      characters: "", charactersIgnoringModifiers: "", isARepeat: false, keyCode: 121)!
+    host.sendEvent(pageDown)
+    try check(selectedReducedMotionRowIsVisible(5),
+      "Reduced motion hid the selected row after keyboard navigation")
+    host.sendEvent(pageDown)
+    try check(selectedReducedMotionRowIsVisible(10),
+      "Reduced motion did not keep a later keyboard selection visible")
+
+    let longListNavigator = ControllerMenuNavigator()
+    var laterControllerCard: NSButton?
+    for _ in 0..<20 where laterControllerCard == nil {
+      _ = longListNavigator.handle(.focusUnassigned(1), in: page)
+      if let button = longListNavigator.selected as? NSButton,
+         button.superview === carousel, button.tag > carousel.selectedIndex {
+        laterControllerCard = button
+      }
+    }
+    guard let laterControllerCard else {
+      throw IntegrationFailure(message: "The controller could not focus a later reduced-motion row")
+    }
+    _ = longListNavigator.handle(.assign, in: page)
+    try check(selectedReducedMotionRowIsVisible(laterControllerCard.tag),
+      "Reduced motion hid the selected row after controller navigation")
+    print("PASS typed CoverFlow selection, mouse, keyboard, controller, VoiceOver and reduced motion")
+}
+
 let testApp = NSApplication.shared
 guard let testDomain = Bundle.main.bundleIdentifier,
   testDomain.hasPrefix("academy.glasscode.lemmings.integration-tests") else { exit(2) }
@@ -2377,8 +3440,12 @@ Task { @MainActor in
     try subject.testFailureMoodDecision()
     try subject.testSteppedCompletion()
     try subject.testFirstLaunchEffects()
+    try subject.testHomeSettingsButton()
+    try subject.testHomeContentFamilyFiltering()
+    #if !CONTENT_BROWSER_TESTS
     try await subject.testAccessibleMenusAndHelp()
     try testPointerAssignment()
+    #endif
     #if PERFORMANCE_TESTS
     try await subject.testReleasePerformance()
     #elseif HOT_SEAT_TESTS
@@ -2411,6 +3478,13 @@ Task { @MainActor in
     try await subject.testLevelHints()
     try await subject.testHintsFromControlsHelp()
     print("Level hints integration tests passed.")
+    #elseif CONTENT_BROWSER_TESTS
+    try await subject.testLevelBrowserRouteIntegrity()
+    try await subject.testPlaylistStartRevalidatesFanSources()
+    try subject.testSequenceNavigationGuards()
+    try subject.testClassicLevelPickerUnlockGate()
+    try await testContentBrowser()
+    print("Content browser integration tests passed.")
     #elseif VARIABLE_SPEED_TESTS
     try subject.testVariableSpeedInput()
     try subject.testVariableSimulationClock()
@@ -2449,6 +3523,11 @@ Task { @MainActor in
     try subject.testHotSeatBoundaries()
     try subject.testHandoverPreviousLevel()
     try subject.testSeasonalMusic()
+    try await subject.testLevelBrowserRouteIntegrity()
+    try await subject.testPlaylistStartRevalidatesFanSources()
+    try subject.testSequenceNavigationGuards()
+    try subject.testClassicLevelPickerUnlockGate()
+    try await testContentBrowser()
     print("App integration tests passed.")
     #endif
     exit(0)

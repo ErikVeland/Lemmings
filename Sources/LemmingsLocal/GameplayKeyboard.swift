@@ -254,7 +254,7 @@ import NxlvKit
         case .hints: hints?()
         case .settings: settings?()
         case .retry: retry?()
-        case .rewind: controllerRewindHeld(true)
+        case .rewind: rewind?()
         case let .step(direction): step?(direction)
         case .endRun: endRun?()
         case .focusLast: focusLast()

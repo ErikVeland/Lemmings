@@ -18,6 +18,8 @@ private func require(
 private func testOptionsFollowInstalledData() throws {
     let upgraded = try JSONDecoder().decode(ClassicSettings.self, from: Data("{}".utf8))
     try require(upgraded.bottomFallSounds && ClassicSettings().bottomFallSounds, "Bottom falls must default on for new and existing players")
+    try require(!upgraded.unlockAllClassicLevels && !ClassicSettings().unlockAllClassicLevels,
+        "Classic levels must follow campaign progress by default")
     var quiet = upgraded
     quiet.bottomFallSounds = false
     let restoredQuiet = try JSONDecoder().decode(ClassicSettings.self, from: JSONEncoder().encode(quiet))
@@ -165,6 +167,7 @@ private func testOlderSettingsStillLoad() throws {
     try require(!restored.integerScaling, "the chosen scaling was lost")
     try require(!restored.shuffleGraphics, "a missing setting should default to off")
     try require(!restored.shuffleMusic, "a missing setting should default to off")
+    try require(!restored.unlockAllClassicLevels, "a missing level-unlock setting should default to off")
     try require(restored.favorApproachingLemmings, "a missing setting should default to on")
 
     // And the new settings survive a round trip.
@@ -172,10 +175,12 @@ private func testOlderSettingsStillLoad() throws {
     shuffled.shuffleGraphics = true
     shuffled.shuffleMusic = true
     shuffled.favorApproachingLemmings = false
+    shuffled.unlockAllClassicLevels = true
     let again = try JSONDecoder().decode(
         ClassicSettings.self, from: try JSONEncoder().encode(shuffled))
     try require(again.shuffleGraphics && again.shuffleMusic, "shuffle did not survive saving")
     try require(!again.favorApproachingLemmings, "favor-approaching did not survive saving")
+    try require(again.unlockAllClassicLevels, "the Classic level unlock did not survive saving")
     print("PASS settings written by an older build still load")
 }
 
@@ -244,6 +249,7 @@ private func testHDEffectsPreference() throws {
       "Modern controls and variable speed must default on")
     try require(defaults.musicStyle == .modern, "Modern music mixing must default on")
     var experience = ClassicSettings(graphics: .amiga, musicVolume: 0.25, soundVolume: 0.4)
+    experience.unlockAllClassicLevels = true
     experience.applyExperiencePreset(modern: false)
     try require(!experience.pauseOnInterruption && !experience.modernControlsEnabled && !experience.variableSpeedEnabled && !experience.controllerEnabled && !experience.hdEffectsEnabled
       && !experience.confinePointer && !experience.fullScreenHDRFlashes && !experience.djIncludesOtherSoundtracks && !experience.favorApproachingLemmings,
@@ -251,12 +257,14 @@ private func testHDEffectsPreference() throws {
     try require(experience.musicStyle == .faithful, "OG did not restore faithful music")
     try require(experience.graphics == .amiga && experience.musicVolume == 0.25 && experience.soundVolume == 0.4,
       "OG discarded the chosen machine or volumes")
+    try require(experience.unlockAllClassicLevels, "OG changed the Classic level unlock choice")
     let savedExperience = try JSONDecoder().decode(ClassicSettings.self, from: JSONEncoder().encode(experience))
     try require(savedExperience == experience, "The OG preset did not survive relaunch")
     experience.applyExperiencePreset(modern: true)
     try require(experience.pauseOnInterruption && experience.modernControlsEnabled && experience.variableSpeedEnabled && experience.controllerEnabled && experience.hdEffectsEnabled
       && experience.confinePointer && experience.favorApproachingLemmings, "Modern defaults failed to restore the conveniences")
     try require(experience.musicStyle == .modern, "Modern defaults did not enable the modern music mix")
+    try require(experience.unlockAllClassicLevels, "Modern defaults changed the Classic level unlock choice")
     print("PASS modern defaults, OG bundle, saved preference and preserved machine/volumes")
 }
 

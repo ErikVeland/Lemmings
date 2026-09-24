@@ -118,12 +118,11 @@ enum PanelButton: Equatable {
   override var isFlipped: Bool { true }
 
   override func resetCursorRects() {
-    guard !isMenuMode else { return }
-    addCursorRect(bounds, cursor: GameCursor.invisible)
+    addCursorRect(bounds, cursor: NSCursor.arrow)
   }
 
   override func cursorUpdate(with event: NSEvent) {
-    if isMenuMode { NSCursor.arrow.set() } else { GameCursor.invisible.set() }
+    NSCursor.arrow.set()
   }
 
   private let buttonHeight = 34.0

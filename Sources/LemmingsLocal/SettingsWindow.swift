@@ -30,6 +30,7 @@ import NxlvKit
   private var variableSpeedCheck: NSButton?
   private var interruptionCheck: NSButton?
   private var favorApproachingCheck: NSButton?
+  private var unlockAllClassicLevelsCheck: NSButton?
   private var controllerCheck: NSButton?
   private var controllerTapCheck: NSButton?
   private var controllerSwapCheck: NSButton?
@@ -160,6 +161,12 @@ import NxlvKit
     favorApproaching.toolTip = "When a click could match more than one lemming, pick the one still approaching. Skip the one that already turned away."
     favorApproaching.state = settings.favorApproachingLemmings ? .on : .off
     favorApproachingCheck = favorApproaching
+    let unlockAllClassicLevels = GameCheckButton(
+      title: "Unlock all Classic levels", target: self,
+      action: #selector(unlockAllClassicLevelsChanged))
+    unlockAllClassicLevels.toolTip = "Allow direct selection of Classic levels beyond this player's campaign progress."
+    unlockAllClassicLevels.state = settings.unlockAllClassicLevels ? .on : .off
+    unlockAllClassicLevelsCheck = unlockAllClassicLevels
     variable.toolTip = SpeedPanelControls.help
     let og = GameButton(title: "Use OG settings", target: self, action: #selector(useOGSettings))
     let defaults = GameButton(title: "Use modern defaults", target: self, action: #selector(useModernDefaults))
@@ -168,7 +175,11 @@ import NxlvKit
     modern.state = settings.modernControlsEnabled ? .on : .off
     variable.state = settings.variableSpeedEnabled ? .on : .off
     variable.isEnabled = settings.modernControlsEnabled
-    return pane([("Controls", modern), ("Speed", variable), ("Pause", interruption), ("Targeting", favorApproaching), ("Experience", buttons)])
+    return pane([
+      ("Controls", modern), ("Speed", variable), ("Pause", interruption),
+      ("Targeting", favorApproaching), ("Level Select", unlockAllClassicLevels),
+      ("Experience", buttons),
+    ])
   }
 
   @objc private func modernControlsChanged(_ sender: NSButton) {
@@ -182,6 +193,10 @@ import NxlvKit
   }
   @objc private func favorApproachingChanged(_ sender: NSButton) {
     settings.favorApproachingLemmings = sender.state == .on
+    changed()
+  }
+  @objc private func unlockAllClassicLevelsChanged(_ sender: NSButton) {
+    settings.unlockAllClassicLevels = sender.state == .on
     changed()
   }
   @objc private func useOGSettings() { applyExperiencePreset(modern: false) }
@@ -438,6 +453,7 @@ import NxlvKit
     variableSpeedCheck?.isEnabled = settings.modernControlsEnabled
     interruptionCheck?.state = settings.pauseOnInterruption ? .on : .off
     favorApproachingCheck?.state = settings.favorApproachingLemmings ? .on : .off
+    unlockAllClassicLevelsCheck?.state = settings.unlockAllClassicLevels ? .on : .off
     controllerCheck?.state = settings.controllerEnabled ? .on : .off
     controllerTapCheck?.state = settings.controllerTapSpeed ? .on : .off
     controllerSwapCheck?.state = settings.controllerSwapSticks ? .on : .off
@@ -487,6 +503,7 @@ import NxlvKit
     applied.modernControlsEnabled = settings.modernControlsEnabled
     applied.variableSpeedEnabled = settings.variableSpeedEnabled
     applied.pauseOnInterruption = settings.pauseOnInterruption
+    applied.unlockAllClassicLevels = settings.unlockAllClassicLevels
     applied.controllerEnabled = settings.controllerEnabled
     applied.controllerTapSpeed = settings.controllerTapSpeed
     applied.controllerSwapSticks = settings.controllerSwapSticks

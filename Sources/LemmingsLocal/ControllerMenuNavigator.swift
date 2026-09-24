@@ -31,7 +31,7 @@ import NxlvKit
         let choices = controls(in: view)
         guard !choices.isEmpty else { return false }
         if !choices.contains(where: { $0 === selected }) {
-            selected = ((view as? GameMenuPage)?.controllerBackButton).flatMap { back in choices.first(where: { $0 === back }) }
+            selected = ((view as? GameMenuPage)?.controllerInitialControl).flatMap { initial in choices.first(where: { $0 === initial }) }
                 ?? (sheet?.defaultButtonCell?.controlView as? NSControl).flatMap { candidate in
                     choices.first(where: { $0 === candidate })
                 }

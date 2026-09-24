@@ -15,6 +15,10 @@ swift_optimization="${LEMMINGS_SWIFT_OPTIMIZATION:--O}"
 
 zsh "$project_dir/Scripts/check-local-build.sh"
 mkdir -p "$contents_dir/MacOS" "$contents_dir/Resources" "$contents_dir/Frameworks"
+sparkle_framework="$(SPARKLE_FRAMEWORK_PATH="${SPARKLE_FRAMEWORK_PATH:-}" \
+  LEMMINGS_BUILD_ROOT="$build_dir/dependencies" \
+  zsh "$project_dir/Scripts/ensure-sparkle.sh")"
+sparkle_framework_dir="${sparkle_framework:h}"
 
 library_inputs=()
 executable_inputs=()
@@ -42,6 +46,7 @@ for architecture in "${architectures[@]}"; do
   swiftc -swift-version 6 "$swift_optimization" -target "$target" "${compatibility[@]}" \
     -module-cache-path "$build_dir/ModuleCache" \
     -I "$module_dir" -L "$architecture_dir" -lNxlvKit \
+    -F "$sparkle_framework_dir" -framework Sparkle \
     -framework AppKit -framework AVFoundation -framework Metal -framework QuartzCore \
     -Xlinker -rpath -Xlinker @executable_path/../Frameworks -Xlinker -w \
     -o "$architecture_dir/LemmingsLocal" \
@@ -59,6 +64,7 @@ else
   lipo -create "${executable_inputs[@]}" -output "$contents_dir/MacOS/LemmingsLocal"
 fi
 cp "$project_dir/Resources/Info.plist" "$contents_dir/Info.plist"
+rsync -a --delete "$sparkle_framework" "$contents_dir/Frameworks/"
 zsh "$project_dir/Scripts/build-app-icon.sh" "$contents_dir/Resources/AppIcon.icns"
 zsh "$project_dir/Scripts/index-fan-levels.sh" "$build_dir/$(uname -m)"
 zsh "$project_dir/Scripts/bundle-game-data.sh" "$contents_dir/Resources" all

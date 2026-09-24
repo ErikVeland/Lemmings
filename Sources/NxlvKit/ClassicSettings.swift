@@ -188,6 +188,8 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
     public var shuffleGraphics: Bool
     /// Picks a different soundtrack for each level, on the same reasoning.
     public var shuffleMusic: Bool
+    /// Allows direct selection of Classic levels beyond campaign progress.
+    public var unlockAllClassicLevels: Bool
 
     public init(
         graphics: ClassicGraphicsSource = .macintosh,
@@ -218,7 +220,8 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         soundVolume: Double = 0.9,
         bottomFallSounds: Bool = true,
         shuffleGraphics: Bool = false,
-        shuffleMusic: Bool = false
+        shuffleMusic: Bool = false,
+        unlockAllClassicLevels: Bool = false
     ) {
         self.graphics = graphics
         self.colorDepth = colorDepth
@@ -249,6 +252,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         self.bottomFallSounds = bottomFallSounds
         self.shuffleGraphics = shuffleGraphics
         self.shuffleMusic = shuffleMusic
+        self.unlockAllClassicLevels = unlockAllClassicLevels
     }
 
     /// Reads settings written by an older build.
@@ -316,6 +320,8 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
             Bool.self, forKey: .shuffleGraphics) ?? fallback.shuffleGraphics
         shuffleMusic = try values.decodeIfPresent(
             Bool.self, forKey: .shuffleMusic) ?? fallback.shuffleMusic
+        unlockAllClassicLevels = try values.decodeIfPresent(
+            Bool.self, forKey: .unlockAllClassicLevels) ?? fallback.unlockAllClassicLevels
     }
 
     /// Changes the added conveniences while preserving the chosen machine and volumes.

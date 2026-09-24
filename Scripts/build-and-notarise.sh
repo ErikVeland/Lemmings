@@ -20,6 +20,10 @@
 #   MONTEREY_WORKTREE macOS 12 worktree, default .claude/worktrees/macos12
 #   DOWNLOADS_DIR     destination for the three final ZIP files
 #   BUILD_ROOT        internal build output directory
+#   UPDATES_DIR       Sparkle update archives and appcast working directory
+#   RELEASE_TAG       public GitHub release tag, default vMAJOR.MINOR.0
+#   DOWNLOAD_URL_PREFIX public HTTPS URL prefix for Sparkle update archives
+#   PUBLISH_GITHUB_RELEASE set to 1 to upload the update and publish appcast.xml
 #   APPLE_PROVISIONING_PROFILE  Game Center provisioning profile
 #
 # Credentials are never accepted on the command line or written to disk by
@@ -32,6 +36,9 @@ build_root="${BUILD_ROOT:-$project_dir/.build/notarised}"
 build_root="${build_root:A}"
 downloads_dir="${DOWNLOADS_DIR:-$HOME/Downloads}"
 downloads_dir="${downloads_dir:A}"
+updates_dir="${UPDATES_DIR:-$project_dir/.build/updates}"
+updates_dir="${updates_dir:A}"
+publish_github_release="${PUBLISH_GITHUB_RELEASE:-0}"
 monterey_worktree="${MONTEREY_WORKTREE:-$project_dir/.claude/worktrees/macos12}"
 monterey_worktree="${monterey_worktree:A}"
 dry_run=0
@@ -57,6 +64,10 @@ usage() {
   print "  APPLE_PROVISIONING_PROFILE  Game Center profile path"
   print "  DOWNLOADS_DIR               ZIP destination, default ~/Downloads"
   print "  BUILD_ROOT                  internal build output directory"
+  print "  UPDATES_DIR                 Sparkle update archive directory"
+  print "  RELEASE_TAG                 public release tag, default vMAJOR.MINOR.0"
+  print "  DOWNLOAD_URL_PREFIX         public HTTPS URL prefix for update archives"
+  print "  PUBLISH_GITHUB_RELEASE      1 to publish the update and appcast to GitHub"
 }
 
 fail() {
@@ -101,6 +112,12 @@ if [[ -z "$signing_identity" ]]; then
     awk -F'"' '/Developer ID Application:/ { print $2; exit }')"
 fi
 [[ -n "$signing_identity" ]] || fail "No Developer ID Application identity was found. Set SIGNING_IDENTITY."
+[[ "$publish_github_release" == 0 || "$publish_github_release" == 1 ]] ||
+  fail "PUBLISH_GITHUB_RELEASE must be 0 or 1."
+if [[ "$publish_github_release" == 1 ]]; then
+  command -v gh >/dev/null 2>&1 || fail "The GitHub CLI is required when publishing."
+  gh auth status >/dev/null 2>&1 || fail "Authenticate the GitHub CLI before publishing."
+fi
 if [[ -n "$notary_keychain" ]]; then
   notary_keychain="${notary_keychain:A}"
   [[ -r "$notary_keychain" ]] || fail "The notary keychain is not readable: $notary_keychain"
@@ -135,6 +152,10 @@ git_root="$(git -C "$project_dir" rev-parse --show-toplevel 2>/dev/null)" ||
 [[ "$git_root" == "$project_dir" ]] || fail "The script must run from the project worktree."
 current_head="$(git -C "$project_dir" rev-parse HEAD)"
 current_short="${current_head[1,7]}"
+if [[ "$publish_github_release" == 1 ]]; then
+  [[ -z "$(git -C "$project_dir" status --short)" ]] ||
+    fail "Publishing requires a clean worktree. Commit the release source first."
+fi
 
 release_base="${RELEASE_BASE:-}"
 if [[ -z "$release_base" ]]; then
@@ -153,7 +174,7 @@ git -C "$project_dir" rev-parse --verify "$release_base^{commit}" >/dev/null 2>&
 source_changes="$(git -C "$project_dir" diff --name-only "$release_base" -- Sources)"
 [[ -n "$source_changes" ]] || fail "No new source code exists after $release_base."
 
-release_notes="${RELEASE_NOTES_PATH:-$project_dir/Documentation/ReleaseNotes-1.1-build$build_number.md}"
+release_notes="${RELEASE_NOTES_PATH:-$project_dir/Documentation/ReleaseNotes-$version-build$build_number.md}"
 release_notes="${release_notes:A}"
 
 generate_release_notes() {
@@ -161,7 +182,7 @@ generate_release_notes() {
   source_commits="$(git -C "$project_dir" log --format='- %h %s' "$release_base"..HEAD -- Sources)"
   source_files="$(git -C "$project_dir" diff --name-status "$release_base" -- Sources)"
   {
-    print "# Ultimate Lemmings 1.1 build $build_number"
+    print "# Ultimate Lemmings $version build $build_number"
     print
     print "Build: $build_number"
     print "Release commit: $current_head"
@@ -211,6 +232,7 @@ print "Identity:      $signing_identity"
 print "Notary auth:   $notary_auth_description"
 print "Monterey:      $monterey_worktree"
 print "Downloads:     $downloads_dir"
+print "Updates:       $updates_dir"
 print
 print "Gate 1: source changes present"
 print -r -- "$source_changes"
@@ -305,6 +327,28 @@ build_app "$project_dir" "$standard_dir" 0
 sign_developer_id "$standard_app"
 notarise_app "$standard_app" "$run_dir/standard-submission.zip" "$standard_zip"
 verify_gatekeeper "$standard_zip"
+
+# Sparkle updates contain only the notarised app. The public release process
+# uploads this archive and the generated appcast to the configured release.
+mkdir -p "$updates_dir"
+update_zip="$updates_dir/UltimateLemmings-$version-build$build_number.zip"
+ditto -c -k --sequesterRsrc --keepParent "$standard_app" "$update_zip"
+cp "$release_notes" "$updates_dir/UltimateLemmings-$version-build$build_number.txt"
+release_tag="${RELEASE_TAG:-v${version}.0}"
+download_url_prefix="${DOWNLOAD_URL_PREFIX:-https://github.com/ErikVeland/Lemmings/releases/download/$release_tag/}"
+[[ "$download_url_prefix" == https://* ]] || fail "DOWNLOAD_URL_PREFIX must use HTTPS."
+DOWNLOAD_URL_PREFIX="$download_url_prefix" APPCAST_PATH="$project_dir/appcast.xml" \
+  UPDATES_DIR="$updates_dir" zsh "$project_dir/Scripts/generate-appcast.sh" "$updates_dir"
+zsh "$project_dir/Scripts/check-1.2-release-inputs.sh"
+if [[ "$publish_github_release" == 1 ]]; then
+  RELEASE_TAG="$release_tag" \
+  RELEASE_VERSION="$version" \
+  RELEASE_COMMIT="$current_head" \
+  RELEASE_NOTES_PATH="$release_notes" \
+  APPCAST_PATH="$project_dir/appcast.xml" \
+  GITHUB_REPOSITORY="${GITHUB_REPOSITORY:-ErikVeland/Lemmings}" \
+    zsh "$project_dir/Scripts/publish-github-release.sh" "$update_zip"
+fi
 
 monterey_dir="$run_dir/monterey"
 monterey_app="$monterey_dir/Ultimate Lemmings.app"

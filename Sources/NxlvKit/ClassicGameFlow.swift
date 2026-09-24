@@ -96,6 +96,18 @@ public struct ClassicGameFlow: Sendable {
         passed.contains(key(rank: rank, position: position))
     }
 
+    /**
+     * Returns true when campaign progress permits direct selection of a level.
+     */
+    public func isLevelUnlocked(_ levelIndex: Int) -> Bool {
+        for rank in ranks {
+            guard let position = rank.levelIndices.firstIndex(of: levelIndex) else { continue }
+            return position <= (furthestReached[rank.name] ?? 0)
+                || position > 0 && hasPassed(rank: rank.name, position: position - 1)
+        }
+        return false
+    }
+
     /// How many levels of a rank have been passed.
     public func passedCount(inRank rank: String) -> Int {
         passed.filter { $0.hasPrefix("\(rank)#") }.count
@@ -129,18 +141,24 @@ public struct ClassicGameFlow: Sendable {
     }
 
     /// Jumps straight to one level, for practice or a level code.
-    public mutating func selectLevel(rank index: Int, position: Int) {
+    public mutating func selectLevel(
+        rank index: Int,
+        position: Int,
+        recordsCampaignProgress: Bool = true
+    ) {
         guard ranks.indices.contains(index),
             ranks[index].levelIndices.indices.contains(position) else { return }
         currentRankIndex = index
         positionInRank = position
-        openBriefing()
+        openBriefing(recordsCampaignProgress: recordsCampaignProgress)
     }
 
-    private mutating func openBriefing() {
+    private mutating func openBriefing(recordsCampaignProgress: Bool = true) {
         guard let level = currentLevelIndex, let rank = currentRank else { return }
-        let reached = furthestReached[rank.name] ?? 0
-        furthestReached[rank.name] = max(reached, positionInRank)
+        if recordsCampaignProgress {
+            let reached = furthestReached[rank.name] ?? 0
+            furthestReached[rank.name] = max(reached, positionInRank)
+        }
         screen = .briefing(level: level)
     }
 
@@ -150,19 +168,26 @@ public struct ClassicGameFlow: Sendable {
     }
 
     /// Records how a level ended and shows the result.
-    public mutating func finishLevel(saved: Int, required: Int, total: Int) {
+    public mutating func finishLevel(
+        saved: Int,
+        required: Int,
+        total: Int,
+        recordsCampaignProgress: Bool = true
+    ) {
         guard case let .playing(level) = screen else { return }
-        if saved >= required, let rank = currentRank {
+        if recordsCampaignProgress, saved >= required, let rank = currentRank {
             passed.insert(key(rank: rank.name, position: positionInRank))
         }
         screen = .results(level: level, saved: saved, required: required, total: total)
     }
 
     /// Moves on from a result. Passing advances, failing repeats the level.
-    public mutating func acknowledgeResults() {
+    public mutating func acknowledgeResults(
+        recordsCampaignProgress: Bool = true
+    ) {
         guard case let .results(_, saved, required, _) = screen else { return }
         guard saved >= required else {
-            openBriefing()
+            openBriefing(recordsCampaignProgress: recordsCampaignProgress)
             return
         }
         guard let rank = currentRank else { return }
@@ -170,7 +195,7 @@ public struct ClassicGameFlow: Sendable {
         let next = positionInRank + 1
         if next < rank.levelIndices.count {
             positionInRank = next
-            openBriefing()
+            openBriefing(recordsCampaignProgress: recordsCampaignProgress)
             return
         }
 
@@ -179,7 +204,9 @@ public struct ClassicGameFlow: Sendable {
     }
 
     /// Moves on from a rank completion.
-    public mutating func acknowledgeRankComplete() {
+    public mutating func acknowledgeRankComplete(
+        recordsCampaignProgress: Bool = true
+    ) {
         guard case .rankComplete = screen else { return }
         let next = currentRankIndex + 1
         guard next < ranks.count else {
@@ -189,7 +216,7 @@ public struct ClassicGameFlow: Sendable {
         }
         currentRankIndex = next
         positionInRank = 0
-        openBriefing()
+        openBriefing(recordsCampaignProgress: recordsCampaignProgress)
     }
 
     public mutating func acknowledgeGameComplete() {

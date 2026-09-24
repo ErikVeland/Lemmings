@@ -1,11 +1,33 @@
 import AppKit
+import CryptoKit
 import NxlvKit
 
 @MainActor final class Lemmings3PlayWindow: NSWindowController, NSWindowDelegate {
+    struct LevelSelection: Equatable, Sendable {
+        let tribe: Lemmings3ClassicCampaign.Tribe
+        let level: Int
+    }
+
+    struct BrowserLevel: Sendable {
+        let selection: LevelSelection
+        let levelID: String
+        let sourceRevision: String
+        let isAvailable: Bool
+    }
+
     var onReturnToLibrary: (() -> Void)?
     var onProgressChanged: (() -> Void)?
     var onCampaignCompleted: (() -> Void)?
     var onShowSettings: (() -> Void)?
+    /**
+     * Handles Continue for a level sequence. The argument reports whether the level was won.
+     */
+    var onSequenceContinue: ((Bool) -> Bool)?
+    var sequenceContinueTitle = "Next level"
+    /**
+     * Controls whether this run can update campaign, recovery, replay and verified records.
+     */
+    var recordsCampaignProgress = true
     private var usesSharedWindow = false
 
     /// Attach the engine after loading succeeds, so a failed load leaves the current game intact.
@@ -135,18 +157,50 @@ import NxlvKit
             commands: Data(contentsOf: root.appendingPathComponent(prefix + ".CMP")))
         return Session(campaign: sequence, style: decodedStyle, sprites: sprites, availability: availability, progressKey: key)
     }
-    init(root: URL, recovery: RunRecovery? = nil, expectedRecoveryEngine: String = RunRecovery.bundledEngine) throws {
+    init(root: URL, recovery: RunRecovery? = nil, selection: LevelSelection? = nil,
+         expectedLevelID: String? = nil,
+         expectedSourceRevision: String? = nil,
+         recordsCampaignProgress: Bool = true,
+         expectedRecoveryEngine: String = RunRecovery.bundledEngine) throws {
         if let recovery {
             _ = try recovery.validated()
             // A newer engine must not strand a saved run; the replay below checks the state.
             guard recovery.l3 != nil, recovery.profileID == ArcadeStore.shared.playingProfileID,
               recovery.hotSeatID == ArcadeStore.shared.hotSeatID else { throw RunRecoveryError.differentGame }
         }
+        if let expectedSourceRevision {
+            guard let selection else {
+                throw SequelDataError.invalid("The selected Lemmings 3 level is no longer available.")
+            }
+            let source = LevelPreviewSource.lemmings3(
+                root: root, selection: selection, expectedLevelID: expectedLevelID ?? "")
+            guard try source.sourceRevision() == expectedSourceRevision else {
+                throw SequelDataError.invalid(
+                    "The selected Lemmings 3 level data changed. Open Level Select and choose it again.")
+            }
+        }
         dataRoot = root
-        let selectedTribe = recovery?.l3?.progress.tribe ?? Lemmings3ClassicCampaign.Tribe(rawValue: UserDefaults.standard.integer(forKey: ArcadeStore.shared.progressKey("nativeL3SelectedTribe.v1." + Self.storageIdentity(root)))) ?? .classic
+        self.recordsCampaignProgress = recordsCampaignProgress
+        let selectedTribe = recovery?.l3?.progress.tribe ?? selection?.tribe
+            ?? Lemmings3ClassicCampaign.Tribe(rawValue: UserDefaults.standard.integer(
+                forKey: ArcadeStore.shared.progressKey("nativeL3SelectedTribe.v1." + Self.storageIdentity(root))))
+            ?? .classic
         let session = try Self.session(root: root, tribe: selectedTribe)
         var sequence = session.campaign
         if let saved = recovery?.l3 { try sequence.restore(saved.progress) }
+        if recovery == nil, let selection {
+            guard session.availability.indices.contains(selection.level),
+                  session.availability[selection.level] == nil else {
+                throw SequelDataError.invalid("This Lemmings 3 level is not available.")
+            }
+            let currentLevelID = SHA256.hash(data: sequence.levels[selection.level].rawData)
+                .map { String(format: "%02x", $0) }.joined()
+            guard expectedLevelID == nil || currentLevelID == expectedLevelID else {
+                throw SequelDataError.invalid(
+                    "The selected Lemmings 3 level changed. Open Level Select and choose it again.")
+            }
+            try sequence.select(selection.level)
+        }
         style = session.style; sprites = session.sprites; availability = session.availability; progressKey = session.progressKey
         campaign = sequence
         let level = sequence.levels[sequence.index]
@@ -309,7 +363,7 @@ import NxlvKit
         keyboard.rewind = { [weak self] in _ = self?.rewind(seconds: 2) }
         keyboard.controllerRewindHeld = { [weak self] held in
             guard let self else { return }
-            if held { _ = self.beginContinuousRewind() }
+            if held { _ = self.beginContinuousRewind(advanceImmediately: false) }
             else if self.rewindHeld { self.endContinuousRewind() }
         }
         keyboard.step = { [weak self] direction in
@@ -347,9 +401,72 @@ import NxlvKit
         timer = Timer.scheduledTimer(withTimeInterval: 1.0 / 60, repeats: true) { [weak self] _ in
             MainActor.assumeIsolated { self?.update() }
         }
+        if recordsCampaignProgress, recovery == nil, let selection {
+            UserDefaults.standard.set(selection.tribe.rawValue,
+                forKey: ArcadeStore.shared.progressKey(
+                    "nativeL3SelectedTribe.v1." + Self.storageIdentity(root)))
+        }
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
     func present() { showWindow(nil); window?.makeKeyAndOrderFront(nil); window?.makeFirstResponder(canvas) }
+    static func browserLevels(root: URL) throws -> [BrowserLevel] {
+        try browserLevels(root: root, progressData: browserProgressData(root: root))
+    }
+
+    static func browserProgressData(root: URL) -> [Int: Data] {
+        Dictionary(uniqueKeysWithValues: Lemmings3ClassicCampaign.Tribe.allCases.compactMap { tribe in
+            let key = ArcadeStore.shared.progressKey(
+                "nativeL3\(tribe.title)Preview.v1." + storageIdentity(root))
+            return UserDefaults.standard.data(forKey: key).map { (tribe.rawValue, $0) }
+        })
+    }
+
+    nonisolated static func browserLevels(root: URL, progressData: [Int: Data]) throws -> [BrowserLevel] {
+        var result: [BrowserLevel] = []
+        guard let rootRevision = FanLevelLibrary.directoryFingerprint(root) else {
+            throw SequelDataError.invalid("The Lemmings 3 game data could not be verified.")
+        }
+        for tribe in Lemmings3ClassicCampaign.Tribe.allCases {
+            try Task.checkCancellation()
+            var campaign = try Lemmings3ClassicCampaign(root: root, tribe: tribe)
+            if let data = progressData[tribe.rawValue],
+               let progress = try? JSONDecoder().decode(
+                Lemmings3ClassicCampaign.Progress.self, from: data) {
+                try? campaign.restore(progress)
+            }
+            let style = try Lemmings3Style(
+                directory: root.appendingPathComponent("STYLES"), number: tribe.rawValue)
+            var availability: [Bool] = []
+            for entry in campaign.levels {
+                try Task.checkCancellation()
+                guard let permanent = try? Lemmings3Objects(data: Data(contentsOf:
+                        root.appendingPathComponent(String(format: "LEVELS/PERM%03d.OBS",
+                            entry.permanentObjectsReference)))),
+                      let temporary = try? Lemmings3Objects(data: Data(contentsOf:
+                        root.appendingPathComponent(String(format: "LEVELS/TEMP%03d.OBS",
+                            entry.temporaryObjectsReference)))),
+                      (try? Lemmings3Runtime(
+                        level: entry, style: style, permanent: permanent, temporary: temporary)) != nil
+                else { availability.append(false); continue }
+                availability.append(true)
+            }
+            for level in campaign.levels.indices {
+                try Task.checkCancellation()
+                let selection = LevelSelection(tribe: tribe, level: level)
+                let levelID = SHA256.hash(data: campaign.levels[level].rawData)
+                    .map { String(format: "%02x", $0) }.joined()
+                let sourceRevision = try LevelPreviewSource.lemmings3(
+                    root: root, selection: selection, expectedLevelID: levelID)
+                    .sourceRevision(rootRevision: rootRevision)
+                result.append(BrowserLevel(
+                    selection: selection,
+                    levelID: levelID,
+                    sourceRevision: sourceRevision,
+                    isAvailable: availability[level]))
+            }
+        }
+        return result
+    }
     func showLevelHints() {
         guard let window, !GameScreen.shared.isPresented, !game.isComplete else { return }
         let deck = LevelHintDeck.practice(title: "\(campaign.tribe.title) \(campaign.index + 1)", skills: [], chronicles: true)
@@ -604,8 +721,14 @@ import NxlvKit
         saveCheckpoint(immediately: true)
         speedControl.newLevel()
         canvas.menuRows = nil; pendingTool = nil; canvas.directionPoint = nil; game = initial; beginReplay(); recorded = false; paused = ArcadeStore.shared.hotSeatIsActive; accumulator = 0; canvas.resetCamera(campaign.levels[campaign.index]); message = "Choose an action. Bricks and spades ask for a direction. Arrow keys move the camera."; refresh() }
-    private func save() { if let data = try? JSONEncoder().encode(campaign.progress) { UserDefaults.standard.set(data, forKey: progressKey) } }
+    private func save() {
+        guard recordsCampaignProgress else { return }
+        if let data = try? JSONEncoder().encode(campaign.progress) {
+            UserDefaults.standard.set(data, forKey: progressKey)
+        }
+    }
     @objc private func chooseTribe() {
+        guard onSequenceContinue == nil else { return }
         guard let tribe = Lemmings3ClassicCampaign.Tribe(rawValue: menuTribe + 1), tribe != campaign.tribe else { return }
         do {
             var session = try Self.session(root: dataRoot, tribe: tribe)
@@ -619,7 +742,10 @@ import NxlvKit
             save()
             style = session.style; sprites = session.sprites; availability = session.availability; progressKey = session.progressKey
             campaign = session.campaign; initial = replacement
-            UserDefaults.standard.set(tribe.rawValue, forKey: ArcadeStore.shared.progressKey("nativeL3SelectedTribe.v1." + Self.storageIdentity(dataRoot)))
+            if recordsCampaignProgress {
+                UserDefaults.standard.set(tribe.rawValue, forKey: ArcadeStore.shared.progressKey(
+                    "nativeL3SelectedTribe.v1." + Self.storageIdentity(dataRoot)))
+            }
             window?.title = "Lemmings 3 — \(tribe.title) \(campaign.index + 1) — Experimental native preview"
             restart()
         } catch {
@@ -627,11 +753,13 @@ import NxlvKit
         }
     }
     @objc private func chooseLevel() {
+        guard onSequenceContinue == nil else { return }
         var proposed = campaign
         do { try proposed.select(menuLevel); try load(proposed) }
         catch { message = String(describing: error); refresh() }
     }
     @objc private func advance() {
+        guard recordsCampaignProgress else { return }
         if campaignFinished, let onCampaignCompleted { onCampaignCompleted(); return }
         var proposed = campaign
         guard proposed.advance(after: game), availability[proposed.index] == nil else { return }
@@ -688,6 +816,13 @@ import NxlvKit
         rebuildMenu()
     }
     private func rebuildMenu() {
+        if onSequenceContinue != nil {
+            canvas.menuRows = ["RESUME", "RETRY LEVEL",
+                SequelArtworkPreference.enabled ? "ARTWORK  MAC STYLE" : "ARTWORK  ORIGINAL PC",
+                "ORIGINAL MOVIES", "BACK TO LIBRARY"]
+            canvas.needsDisplay = true
+            return
+        }
         let tribe = Lemmings3ClassicCampaign.Tribe.allCases[menuTribe]
         canvas.menuRows = ["RESUME", "RETRY LEVEL", "TRIBE  " + tribe.title.uppercased(),
             "PREVIOUS LEVEL", "NEXT LEVEL", "PLAY LEVEL \(menuLevel + 1)",
@@ -695,6 +830,18 @@ import NxlvKit
         canvas.needsDisplay = true
     }
     private func menuAction(_ row: Int) {
+        if onSequenceContinue != nil {
+            switch row {
+            case 0: canvas.menuRows = nil; paused = false; accumulator = 0; lastTime = ProcessInfo.processInfo.systemUptime; refresh()
+            case 1: restart()
+            case 2: toggleArtwork(); rebuildMenu()
+            case 3: showOriginalMovies()
+            case 4: canvas.menuRows = nil; close()
+            default: break
+            }
+            canvas.needsDisplay = true
+            return
+        }
         switch row {
         case 0: canvas.menuRows = nil; paused = false; accumulator = 0; lastTime = ProcessInfo.processInfo.systemUptime; refresh()
         case 1: restart()
@@ -772,8 +919,10 @@ import NxlvKit
         arcadeRunID = UUID(); arcadeProfileID = ArcadeStore.shared.playingProfileID; arcadeHotSeatID = ArcadeStore.shared.hotSeatID
         arcadeReport = nil; skillAssignments = [:]; toolUses = [:]
         arcadeLevelSnapshot = arcadeLevel
-        ArcadeStore.shared.beginAttempt(id: arcadeRunID, profileID: arcadeProfileID,
-            level: arcadeLevel, previousID: previousAttemptID)
+        if recordsCampaignProgress {
+            ArcadeStore.shared.beginAttempt(id: arcadeRunID, profileID: arcadeProfileID,
+                level: arcadeLevel, previousID: previousAttemptID)
+        }
         runMovie.begin(ticksPerSecond: Lemmings3Runtime.ticksPerSecond, title: "Lemmings 3 - \(campaign.tribe.title) \(campaign.index + 1)")
         playLevelMusic()
         runMovie.onWillReview = { [weak self] in self?.suspendAudioOutput() }
@@ -798,29 +947,39 @@ import NxlvKit
     }
     var arcadeBackdrop: CGImage? { ArcadeWindow.captureScene(canvas) }
     private func recordArcadeResult() {
-        arcadeReport = ArcadeStore.shared.record(ArcadeRun(id: arcadeRunID, profileID: arcadeProfileID,
+        let run = ArcadeRun(id: arcadeRunID, profileID: arcadeProfileID,
             level: arcadeLevel, saved: game.saved, didWin: game.saved > 0, skills: skillAssignments,
             seconds: Double(game.tick) / Lemmings3Runtime.ticksPerSecond,
             telemetry: TrolleyTelemetry(released: game.released + game.configuration.extras.count,
                 destructiveSkillCount: TrolleyCapture.destructiveCount(toolUses), buildVersion: TrolleyCapture.buildVersion,
                 additionalStatistics: ["reserve": Double(game.reserve), "engineLost": Double(game.lost),
-                                       "timeRemaining": Double(game.remainingSeconds)].merging(Dictionary(uniqueKeysWithValues: toolUses.map { ("tool." + $0.key, Double($0.value)) }), uniquingKeysWith: { _, b in b }))))
+                                       "timeRemaining": Double(game.remainingSeconds)].merging(Dictionary(uniqueKeysWithValues: toolUses.map { ("tool." + $0.key, Double($0.value)) }), uniquingKeysWith: { _, b in b })))
+        arcadeReport = recordsCampaignProgress
+            ? ArcadeStore.shared.record(run)
+            : ArcadeStore.shared.previewReport(for: run)
         guard let arcadeReport else { return }
-        runMovie.preserveRecord(arcadeReport)
+        if recordsCampaignProgress { runMovie.preserveRecord(arcadeReport) }
         ArcadeWindow.shared.showResult(arcadeReport, owner: window, retry: { [weak self] in self?.restart() },
             next: { [weak self] in self?.continueArcadeResult() },
             replay: { [weak self] save in self?.runMovie.review(save: save) }, continueTitle: resultContinueTitle, background: arcadeBackdrop, rewardVolume: warningSound.muted ? 0 : warningSound.volume)
     }
     private var resultContinueTitle: String {
+        if onSequenceContinue != nil { return game.saved == 0 ? "Retry level" : sequenceContinueTitle }
         if canAdvance { return campaignFinished ? "Continue" : "Next level" }
         return usesSharedWindow ? "Back to library" : "Choose level"
     }
     private func continueArcadeResult() {
+        if onSequenceContinue != nil, game.saved == 0 {
+            restart()
+            return
+        }
+        if onSequenceContinue?(game.saved > 0) == true { return }
         if canAdvance { advance() }
         else if usesSharedWindow { onReturnToLibrary?() }
         else { showGameMenu() }
     }
     func saveCheckpoint(immediately: Bool = false) {
+        guard recordsCampaignProgress else { return }
         let engine = RunRecovery.bundledEngine
         let now = ProcessInfo.processInfo.systemUptime
         guard !engine.isEmpty, game.tick >= 0, !game.isComplete,
@@ -864,13 +1023,18 @@ import NxlvKit
         failureMood.set(active: impossible)
         let justCompleted = game.isComplete && !recorded
         if justCompleted {
-            do { try recoveryStore.clear(arcadeRunID) } catch { message = error.localizedDescription }
-            runMovie.finish(); recorded = true; if campaign.record(game) {
-            save()
-            campaignFinished = Self.savedCompletion(root: dataRoot) == 90
-            onProgressChanged?()
-        } }
-        canAdvance = game.isComplete && game.saved > 0 && ((campaignFinished && usesSharedWindow)
+            if recordsCampaignProgress {
+                do { try recoveryStore.clear(arcadeRunID) } catch { message = error.localizedDescription }
+            }
+            runMovie.finish(); recorded = true
+            if recordsCampaignProgress, campaign.record(game) {
+                save()
+                campaignFinished = Self.savedCompletion(root: dataRoot) == 90
+                onProgressChanged?()
+            }
+        }
+        canAdvance = recordsCampaignProgress && game.isComplete && game.saved > 0
+            && ((campaignFinished && usesSharedWindow)
             || (availability.indices.contains(campaign.index + 1) && availability[campaign.index + 1] == nil))
         canvas.selectedAction = selected; canvas.paused = paused; canvas.fast = fast
         canvas.updateSkillBadge()
@@ -896,6 +1060,7 @@ import NxlvKit
     func capturePointer(active: Bool) {
         let frame = CGRect(origin: screenOrigin, size: CGSize(width: 320 * zoom, height: 212 * zoom))
         if let point = pointerCapture.update(in: self, rect: frame, active: active && confinePointer && controllerPointer == nil) {
+            updateSystemCursor(at: point)
             trackPointer(at: point)
         }
     }
@@ -1010,6 +1175,7 @@ import NxlvKit
         didSet {
             syncSpeedEffects()
             if oldValue != menuRows { window?.invalidateCursorRects(for: self) }
+            if menuRows != nil { NSCursor.arrow.set() }
         }
     }
     var menuNotice = "EXPERIMENTAL GAMEPLAY"
@@ -1102,7 +1268,12 @@ import NxlvKit
         try artworkRenderer.image(width: width, height: height, pixels: pixels,
             palette: palette, opaque: opaque, category: category)
     }
-    func refreshArtwork() throws { try reloadArtwork?(); needsDisplay = true }
+    func refreshArtwork() throws {
+        let wasFastForward = isFastForward
+        try reloadArtwork?()
+        isFastForward = wasFastForward
+        needsDisplay = true
+    }
 
     func updateSkillBadge() {
         guard let art = panelArt, (0..<5).contains(selectedAction) else {
@@ -1119,15 +1290,18 @@ import NxlvKit
         }
     }
 
-    func load(scene: Lemmings3Scene, style: Lemmings3Style, permanent: Lemmings3Objects, temporary: Lemmings3Objects, sprites bank: Lemmings3Sprites, root: URL, terrainStyle: Int) throws {
-        hdrOverlay?.clear()
-        isFastForward = false
-        lastBlastTick = -1
-        speedTrails.reset()
+    func load(scene: Lemmings3Scene, style: Lemmings3Style, permanent: Lemmings3Objects, temporary: Lemmings3Objects, sprites bank: Lemmings3Sprites, root: URL, terrainStyle: Int, resetPresentation: Bool = true) throws {
+        if resetPresentation {
+            hdrOverlay?.clear()
+            isFastForward = false
+            lastBlastTick = -1
+            speedTrails.reset()
+        }
         panelArt = try Lemmings3Panel(root: root, tribe: [1: 4, 2: 10, 3: 5][terrainStyle] ?? 4, renderer: artworkRenderer)
         terrainCategory = .lemmings3Terrain(style: terrainStyle)
         reloadArtwork = { [weak self] in
-            try self?.load(scene: scene, style: style, permanent: permanent, temporary: temporary, sprites: bank, root: root, terrainStyle: terrainStyle)
+            try self?.load(scene: scene, style: style, permanent: permanent, temporary: temporary,
+                           sprites: bank, root: root, terrainStyle: terrainStyle, resetPresentation: false)
         }
         let staged = Lemmings3Canvas()
         staged.terrainCategory = terrainCategory
@@ -1327,6 +1501,9 @@ import NxlvKit
         drawInterface()
         if let point = pointerPosition ?? controllerPointer, playfieldRect.contains(point),
            (0..<5).contains(selectedAction) {
+            if controllerPointer == nil {
+                GameCursor.drawPlayfieldPointer(at: point, scale: zoom, tint: .systemGreen)
+            }
             SkillCursorBadge.draw(icon: skillBadge, index: selectedAction, at: point,
                 scale: zoom, tint: .systemGreen, reduceMotion: reduceMotion, in: bounds)
         }
@@ -1390,25 +1567,57 @@ import NxlvKit
         tracking = area; addTrackingArea(area)
     }
     override func resetCursorRects() {
-        guard menuRows == nil else { return }
-        addCursorRect(bounds, cursor: GameCursor.invisible)
+        guard menuRows == nil else {
+            addCursorRect(bounds, cursor: NSCursor.arrow)
+            return
+        }
+        let gameplay = playfieldRect.intersection(bounds)
+        guard !gameplay.isNull, !gameplay.isEmpty else {
+            addCursorRect(bounds, cursor: NSCursor.arrow)
+            return
+        }
+        addCursorRect(gameplay, cursor: GameCursor.invisible)
+        let controls = [
+            CGRect(x: bounds.minX, y: bounds.minY,
+                width: bounds.width, height: max(0, gameplay.minY - bounds.minY)),
+            CGRect(x: bounds.minX, y: gameplay.maxY,
+                width: bounds.width, height: max(0, bounds.maxY - gameplay.maxY)),
+            CGRect(x: bounds.minX, y: gameplay.minY,
+                width: max(0, gameplay.minX - bounds.minX), height: gameplay.height),
+            CGRect(x: gameplay.maxX, y: gameplay.minY,
+                width: max(0, bounds.maxX - gameplay.maxX), height: gameplay.height),
+        ]
+        for rect in controls where rect.width > 0 && rect.height > 0 {
+            addCursorRect(rect, cursor: NSCursor.arrow)
+        }
     }
     override func cursorUpdate(with event: NSEvent) {
-        if menuRows == nil { GameCursor.invisible.set() } else { NSCursor.arrow.set() }
+        updateSystemCursor(at: convert(event.locationInWindow, from: nil))
     }
     override func mouseMoved(with event: NSEvent) {
-        trackPointer(at: convert(event.locationInWindow, from: nil))
+        let point = convert(event.locationInWindow, from: nil)
+        updateSystemCursor(at: point)
+        trackPointer(at: point)
+    }
+    private func updateSystemCursor(at point: CGPoint) {
+        GameCursor.update(
+            at: point,
+            hidingInside: menuRows == nil ? playfieldRect : nil)
     }
     private func trackPointer(at p: CGPoint) {
         controllerPointer = nil
         assignmentHighlight.clear()
         pointerPosition = p
         hoveredLemming = pointerTarget
-        let sx = (p.x - screenOrigin.x) / zoom, sy = (p.y - screenOrigin.y) / zoom
         toolTip = nil
         needsDisplay = true
     }
-    override func mouseExited(with event: NSEvent) { pointerPosition = nil; hoveredLemming = nil; needsDisplay = true }
+    override func mouseExited(with event: NSEvent) {
+        pointerPosition = nil
+        hoveredLemming = nil
+        NSCursor.arrow.set()
+        needsDisplay = true
+    }
     private var directionPickerRect: CGRect {
         let point = directionPoint ?? .zero
         return CGRect(x: max(1, min(277, point.x - cameraX - 21)), y: max(13, min(129, point.y - cameraY - 32)), width: 42, height: 42)

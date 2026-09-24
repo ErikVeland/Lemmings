@@ -2,45 +2,50 @@ import AppKit
 
 /// Draws the selected skill as a small, pixel-aligned cursor companion.
 @MainActor enum SkillCursorBadge {
-    static func draw(icon: NSImage?, index: Int, at point: CGPoint, scale: CGFloat,
-                     tint: NSColor, reduceMotion: Bool, in bounds: CGRect) {
+    private static let reticleSide: CGFloat = 14
+    private static let badgeInset: CGFloat = 1
+
+    /**
+     * Returns the cursor reticle in view coordinates without moving its hotspot.
+     */
+    static func reticleFrame(at point: CGPoint, scale: CGFloat) -> CGRect {
         let pixel = max(1, floor(scale))
-        let side = 18 * pixel
-        let gap = 6 * pixel
-        let x = min(max(bounds.minX + pixel, point.x + gap), bounds.maxX - side - pixel)
-        let y = min(max(bounds.minY + pixel, point.y + gap), bounds.maxY - side - pixel)
-        let rect = CGRect(x: floor(x / pixel) * pixel, y: floor(y / pixel) * pixel,
-                          width: side, height: side)
+        let side = reticleSide * pixel
+        return CGRect(x: floor((point.x - side / 2) / pixel) * pixel,
+                      y: floor((point.y - side / 2) / pixel) * pixel,
+                      width: side, height: side)
+    }
 
-        NSColor.black.withAlphaComponent(0.86).setFill()
-        rect.fill()
-        tint.withAlphaComponent(0.88).setStroke()
-        let border = NSBezierPath(rect: rect.insetBy(dx: pixel, dy: pixel))
-        border.lineWidth = pixel
-        border.stroke()
-
-        let iconRect = rect.insetBy(dx: 3 * pixel, dy: 3 * pixel)
+    static func draw(icon: NSImage?, index _: Int, at point: CGPoint, scale: CGFloat,
+                     tint: NSColor, reduceMotion _: Bool, in _: CGRect) {
+        let pixel = max(1, floor(scale))
+        let reticle = reticleFrame(at: point, scale: scale)
         if let icon {
-            let fit = min(iconRect.width / max(1, icon.size.width), iconRect.height / max(1, icon.size.height))
+            let available = CGSize(
+                width: max(1, reticle.width - 2 * badgeInset * pixel),
+                height: max(1, reticle.height - 2 * badgeInset * pixel))
+            // Keep one source pixel as one screen pixel. This prevents a selected
+            // skill from becoming a second cursor while retaining nearest-neighbour art.
+            let fit = min(1, available.width / max(1, icon.size.width),
+                          available.height / max(1, icon.size.height))
             let size = CGSize(width: icon.size.width * fit, height: icon.size.height * fit)
-            icon.draw(in: CGRect(x: iconRect.midX - size.width / 2, y: iconRect.midY - size.height / 2,
-                                 width: size.width, height: size.height), from: .zero,
-                      operation: .sourceOver, fraction: 1, respectFlipped: true,
-                      hints: [.interpolation: NSImageInterpolation.none.rawValue])
+            let rect = CGRect(x: reticle.maxX - size.width - badgeInset * pixel,
+                              y: reticle.maxY - size.height - badgeInset * pixel,
+                              width: size.width, height: size.height)
+            icon.draw(in: rect, from: .zero,
+                operation: .sourceOver,
+                fraction: 1,
+                respectFlipped: true,
+                hints: [.interpolation: NSImageInterpolation.none.rawValue])
         } else {
-            let label = "\(max(0, index) + 1)" as NSString
-            let attributes: [NSAttributedString.Key: Any] = [
-                .font: NSFont.monospacedDigitSystemFont(ofSize: 8 * pixel, weight: .bold),
-                .foregroundColor: tint,
-            ]
-            let size = label.size(withAttributes: attributes)
-            label.draw(at: CGPoint(x: rect.midX - size.width / 2, y: rect.midY - size.height / 2),
-                       withAttributes: attributes)
+            // Keep the indicator present when source artwork is unavailable, without
+            // drawing a tile or label over the reticle.
+            tint.withAlphaComponent(0.9).setFill()
+            let marker = pixel
+            CGRect(x: reticle.maxX - marker - badgeInset * pixel,
+                y: reticle.maxY - marker - badgeInset * pixel,
+                width: marker,
+                height: marker).fill()
         }
-
-        guard !reduceMotion else { return }
-        let shimmer = rect.minX + pixel * CGFloat(2 + (Int(ProcessInfo.processInfo.systemUptime * 12) % 12))
-        tint.withAlphaComponent(0.24).setFill()
-        CGRect(x: shimmer, y: rect.minY + pixel, width: pixel, height: pixel).fill()
     }
 }
