@@ -15,7 +15,7 @@
             <description sparkle:format="plain-text"><![CDATA[# Ultimate Lemmings 1.1 RC3 (build 39)
 
 Build: 39
-Release commit: a0cb013420965a28bb0d98dfd9f9c21b9d59ab43
+Release commit: 2149c2309771182da14624f31c2ac63e693fe1d3
 Release base: c69663be994a642eff12450db055a3aa5000f498
 
 This candidate fixes the emergency cursor bug from RC2. In Lemmings 3, the
@@ -153,7 +153,7 @@ A	Sources/NxlvKit/LevelPlaylist.swift
 - macOS 12 Monterey: notarised.
 - Game Center: development-signed for registered devices; not notarised.
 ]]></description>
-            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v0.1-rc3-build39/UltimateLemmings-1.2-build39.zip" length="428869847" type="application/octet-stream" sparkle:edSignature="SodKf6p99IkNVSLqjkj4O6SSxQ1gFgvebDL5M3P4W/GXByHEVyqfdIRJfnlCAnORT8qb9T6MuJAe/abj8gQJAA=="/>
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v0.1-rc3-build39/UltimateLemmings-1.2-build39.zip" length="428869830" type="application/octet-stream" sparkle:edSignature="i8XF80StUdfEKW7sMGqLHIScaOigbzWTdz/jDp/mkha7q/Z9fqkA560scInA0UEXCFDSZmxv3PBpCyXyLH1AAg=="/>
         </item>
     </channel>
 </rss>
