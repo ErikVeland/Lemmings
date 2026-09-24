@@ -239,8 +239,21 @@ print -r -- "$source_changes"
 print "Gate 2-3: release notes current"
 print "             $release_notes"
 print "Gate 4: three target archives configured"
-print "Gate 5: app integration tests run on the standard build"
-print "Gate 6: each signed target launches as a new user"
+# Stale proofs or hints do not stop a build. The app then hides rescue
+# targets and level hints without a message.
+python3 "$project_dir/Tools/TrolleyVerification/catalogue.py" check ||
+  fail "Rescue proofs do not match the engine. Run Scripts/verify-trolley-maxima.sh."
+python3 - "$project_dir" <<'CHECK_HINTS' ||
+import json, pathlib, sys
+root = pathlib.Path(sys.argv[1]) / 'Resources'
+proofs = json.loads((root / 'Trolley/verified-maxima.json').read_text())
+hints = json.loads((root / 'Hints/classic.json').read_text())
+sys.exit(hints['engineFingerprint'] != proofs['engineSourceFingerprint'])
+CHECK_HINTS
+  fail "Level hints do not match the engine. Run Scripts/generate-level-hints.sh."
+print "Gate 5: rescue proofs and level hints match the engine"
+print "Gate 6: app integration tests run on the standard build"
+print "Gate 7: each signed target launches as a new user"
 
 if (( dry_run )); then
   print "Dry run: no build, signing, notarisation or upload performed."
@@ -326,7 +339,7 @@ standard_app="$standard_dir/Ultimate Lemmings.app"
 standard_zip="$downloads_dir/UltimateLemmings-$version-build$build_number-$stamp-standard.zip"
 print "==> Building and notarising Developer ID standard target"
 build_app "$project_dir" "$standard_dir" 0
-print "==> Gate 5: running app integration tests"
+print "==> Gate 6: running app integration tests"
 LEMMINGS_TEST_APP="$standard_app" zsh "$project_dir/Scripts/run-app-integration-tests.sh" ||
   fail "The app integration tests failed. Do not release this build."
 sign_developer_id "$standard_app"
