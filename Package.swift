@@ -10,6 +10,8 @@ let package = Package(
     products: [
         // Shared format, rendering, and simulation code.
         .library(name: "NxlvKit", targets: ["NxlvKit"]),
+        .library(name: "LemmingsMobileCore", targets: ["LemmingsMobileCore"]),
+        .library(name: "LemmingsMobileUI", targets: ["LemmingsMobileUI"]),
         .executable(name: "LemmingsLocal", targets: ["LemmingsLocal"]),
         .executable(name: "LemmingsDataTool", targets: ["LemmingsDataTool"])
     ],
@@ -20,6 +22,16 @@ let package = Package(
         .target(
             name: "NxlvKit",
             path: "Sources/NxlvKit"
+        ),
+        .target(
+            name: "LemmingsMobileCore",
+            dependencies: ["NxlvKit"],
+            path: "Sources/LemmingsMobileCore"
+        ),
+        .target(
+            name: "LemmingsMobileUI",
+            dependencies: ["LemmingsMobileCore", "NxlvKit"],
+            path: "Sources/LemmingsMobileUI"
         ),
         .executableTarget(
             name: "LemmingsLocal",
@@ -38,6 +50,11 @@ let package = Package(
             name: "NxlvKitTests",
             dependencies: ["NxlvKit"],
             path: "Tests/NxlvKitTests"
+        ),
+        .testTarget(
+            name: "LemmingsMobileCoreTests",
+            dependencies: ["LemmingsMobileCore", "NxlvKit"],
+            path: "Tests/LemmingsMobileCoreTests"
         )
     ]
 )

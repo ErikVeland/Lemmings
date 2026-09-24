@@ -1,9 +1,10 @@
 # Ultimate Lemmings
 
-Ultimate Lemmings is an unofficial native macOS port of the 2D Lemmings
-games. It uses native Swift interpreters and does not run DOS code through an
-emulator. Commercial game data is not committed to this repository; local
-builds use the assets supplied in `Sources/Ports`, `Sources/Music` and
+Ultimate Lemmings is an unofficial native Swift port of the 2D Lemmings games.
+The current release shell is for macOS, and version 1.3 adds an iPhone/iPad
+development target. It uses native interpreters and does not run DOS code
+through an emulator. Commercial game data is not committed to this repository;
+local builds use the assets supplied in `Sources/Ports`, `Sources/Music` and
 `Content/` when present.
 
 The project is not affiliated with, endorsed by or licensed by Sony
@@ -14,6 +15,7 @@ before distributing a build.
 
 - [Architecture](ARCHITECTURE.md) — module boundaries, runtime flow and release packaging.
 - [Project overview](Documentation/Overview.md) — player-facing status and roadmap.
+- [1.3 mobile roadmap](Documentation/1.3Roadmap.md) — iPhone/iPad scope, source state and device gates.
 - [QoL roadmap](docs/superpowers/plans/2026-09-23-qol-roadmap.md) — target selection and rewind priorities.
 - [Release scope](Documentation/ReleaseScope.md) — the meaning of Complete, Playable and Preview.
 - [Content roadmap](Documentation/ContentUniverseRoadmap.md) — the path towards broader 2D content.
@@ -21,11 +23,13 @@ before distributing a build.
 - [Beta testing](Documentation/BetaTesting.md) — local package and validation procedure.
 - [Release evidence](Documentation/ReleaseReadiness/) — current gate records and manifests.
 - [1.2 handoff](Documentation/ReleaseReadiness/1.2DataIndependentHandoff.md) — data-independent release work and Mac checks.
+- [1.3 mobile handoff](Documentation/ReleaseReadiness/1.3MobileHandoff.md) — iOS source evidence and remaining device checks.
 - [Automatic updates](#automatic-updates) — Sparkle feed and release requirements.
 - [Automatic update evidence](Documentation/AutomaticUpdates.md) — release checks and records.
 
-The current milestone is 1.2 on macOS. Classic content is the completed
-reference engine. Lemmings 2 and Lemmings 3 are labelled Preview. The bundled
+The current development milestone is 1.3 for iPhone and iPad. The macOS
+product remains version 1.2. Classic content is the completed reference
+engine. Lemmings 2 and Lemmings 3 are labelled Preview. The bundled
 corpus contains 6,020 Classic-format fan levels in 535 packs; this is not a
 claim of NeoLemmix fan-pack compatibility. NeoLemmix `.nxlv` support has
 parser, renderer and synthetic simulation coverage. Real NeoLemmix pack
@@ -36,6 +40,7 @@ its gate passes.
 
 - macOS 13 or later;
 - Apple Command Line Tools with Swift 6 support;
+- full Xcode with an iOS Simulator runtime for the 1.3 mobile build and tests;
 - Python 3;
 - ImageMagick (`magick`) for asset preparation;
 - `unar` for the supplied Holiday installer;
@@ -43,6 +48,10 @@ its gate passes.
 
 The repository's source and tests remain useful without the commercial data,
 but data-dependent build and evidence gates report their missing inputs.
+
+The iOS source target supports iOS 16 or later. Its first player-facing slice
+imports a player-owned Classic DOS folder through the system document picker.
+It does not package commercial game data.
 
 ## Build and run
 
@@ -66,6 +75,16 @@ zsh Scripts/build-game-center-snapshot.sh
 This builds only the current Mac architecture, signs with the matching Apple
 Development provisioning profile, and writes an app plus ZIP to the build and
 Downloads directories. It does not notarise or run release gates.
+
+Build and test the iPhone and iPad source target:
+
+```sh
+zsh Scripts/check-1.3-mobile.sh --require-sdk
+```
+
+The required gate needs an installed iOS Simulator runtime. Physical touch,
+audio interruption, thermal, accessibility, signing and device journeys remain
+separate acceptance evidence.
 
 ## Verification
 
@@ -164,6 +183,9 @@ Apple does not accept that entitlement in a Developer ID notarisation.
 | --- | --- |
 | `Sources/NxlvKit` | Shared format, rendering and simulation library |
 | `Sources/LemmingsLocal` | Native macOS application shell |
+| `Sources/LemmingsMobileCore` | Platform-neutral mobile sessions, input, recovery and performance policy |
+| `Sources/LemmingsMobileUI` | UIKit, Metal, audio, import and mobile flow adapters |
+| `Apps/UltimateLemmingsIOS` | iPhone/iPad application and UI-test target |
 | `Sources/LemmingsDataTool` | Development data inspection utility |
 | `Tests` | Focused engine, data, app and evidence suites |
 | `Scripts` | Repeatable build and validation gates |

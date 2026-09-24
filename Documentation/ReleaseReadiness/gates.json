@@ -100,11 +100,12 @@
   {
     "area": "iPhone and iPad",
     "priority": "P1",
-    "status": "not-implemented",
+    "status": "partial",
     "exitCriteria": "Build and test the shared library with the iOS SDK. Implement a UIKit/Metal app shell, precise touch selection, safe-area layouts, audio/session interruptions, checkpoints, thermal budgets and device tests. A Package.swift deployment declaration is not an iOS app.",
     "scopes": [
       "all"
-    ]
+    ],
+    "progress": "25 September: the repository now has a version 1.3 UIKit application target for iPhone and iPad, shared mobile-core and UI modules, nearest-neighbour Metal output, direct targeting, pan and anchored zoom, safe-area controls, explicit-resume audio and application lifecycle handling, atomic versioned checkpoints, thermal budgets, privacy metadata, an app icon and an iPhone/iPad CI matrix. All 42 package tests pass, including 13 focused mobile tests for staged import safety, stale-writer rejection, a Classic jumping regression and exact Classic, L2 and L3 checkpoint restoration. Xcode 26.6 compiled Debug and optimised Release Swift builds for both Simulator architectures and an unsigned optimised arm64 device build with the iOS 26.5 SDK. This Mac has no iOS Simulator runtime or connected device, so asset-catalogue compilation, launch, rotation, touch, audio, thermal, VoiceOver, signing and physical-device evidence remain open. The player-facing mobile slice imports Classic DOS data only; L2 and L3 mobile import and renderers are not claimed. See 1.3Roadmap.md and 1.3MobileHandoff.md."
   },
   {
     "area": "Switch and consoles",

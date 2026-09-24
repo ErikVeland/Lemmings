@@ -1,7 +1,7 @@
 # Release scope
 
 Classic 1.0 is the historical macOS release baseline, confirmed on 13 September 2026.
-L2 and L3 remain previews. Updated 22 September 2026 after the later DOS rules correction.
+L2 and L3 remain previews. Updated 25 September 2026 for the 1.3 mobile source scope.
 Automated checks support the recorded routes;
 remaining compatibility and hardware claims still need validation. See the [gate register](ReleaseReadiness/gates.json)
 and the current [Classic validation](ReleaseReadiness/ClassicValidation-current.md).
@@ -82,10 +82,25 @@ They remain Preview until all advertised levels have winning-route evidence,
 engine-fidelity comparisons, continuous progression, recovery checks, media
 closure and verified endings.
 
+## iPhone and iPad 1.3
+
+The repository contains an iOS 16 UIKit/Metal application target. Its first
+player-facing slice imports a player-owned Classic DOS folder. It uses the same
+deterministic Classic simulation as the Mac application and adds direct touch,
+pan, zoom, safe-area controls, interruption recovery and thermal presentation
+budgets.
+
+This is a development source claim. It is not a tested iPhone/iPad release.
+Lemmings 2 and Lemmings 3 have shared mobile session and checkpoint adapters,
+but no player-facing mobile import or renderer. Simulator, physical-device,
+accessibility, signing and distribution gates remain open. See the
+[1.3 roadmap](1.3Roadmap.md).
+
 ## Not in this release
 
-iPhone, iPad and consoles. The repository has no working app target for them. A
-Mac release does not imply them.
+The macOS 1.2 release does not include iPhone, iPad or consoles. Mobile 1.3 is a
+separate target and release gate. Consoles have no application target. A Mac
+release does not imply support for either platform group.
 
 ## Open before 1.0
 

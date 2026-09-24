@@ -6,8 +6,9 @@ the engineering documents. For gate-by-gate detail, see
 and the [partner evaluation brief](PartnerEvaluation.md). See the [content
 universe roadmap](ContentUniverseRoadmap.md) for the long-term 2D content scope.
 
-Ultimate Lemmings is an unofficial native macOS port of the original Lemmings
-games. It is not affiliated with, endorsed by, or licensed by Sony Interactive
+Ultimate Lemmings is an unofficial native port of the original Lemmings games.
+The release baseline is macOS, and version 1.3 adds an iPhone/iPad development
+target. It is not affiliated with, endorsed by, or licensed by Sony Interactive
 Entertainment, which holds the Lemmings rights today. See
 [README.md](../README.md) and `THIRD_PARTY_NOTICES.md` for the full notice.
 This document is a status summary, not a product announcement.
@@ -107,18 +108,30 @@ what lets the release notes above be trusted rather than taken on faith.
 ## Where the project stands right now
 
 The official Classic campaign closed at 352/352 on 22 September 2026. The 1.0
-RC1 baseline was build 36. The current source candidate carries version 1.2
-build 39. It includes the shared browser, playlists, background fan-pack checks
-and automatic application updates. It is not a release claim yet. A fresh
-package, release audit, physical-device checks, VoiceOver journeys and hardware
+RC1 baseline was build 36. The macOS baseline now carries version 1.2 build 39
+with the shared browser, playlists, background fan-pack checks and automatic
+application updates. The 1.3 development branch adds a separate iPhone and iPad
+target at version 1.3 build 1. It is source work, not a mobile release claim.
+Simulator, physical-device, VoiceOver, thermal, signing and distribution
 evidence remain open.
 
 ## Roadmap
 
-**Now: close 1.2 on macOS.** The source-level content discovery and update work
-is implemented. The next work is candidate validation and release evidence.
-The missing sequel routes remain a separate data-dependent gate. See the
-[QoL roadmap](../docs/superpowers/plans/2026-09-23-qol-roadmap.md).
+**Now: validate 1.3 on iPhone and iPad.** The repository has a UIKit/Metal app
+target, player-owned Classic data import, direct crowd selection, pan and zoom,
+safe-area controls, interruption checkpoints and presentation-only thermal
+budgets. The shared session and checkpoint boundary covers Classic, Lemmings 2
+and Lemmings 3, but only Classic is player-facing mobile content. See the
+[1.3 mobile roadmap](1.3Roadmap.md).
+
+The next gate is execution evidence. Run the iPhone and iPad Simulator matrix,
+then complete physical touch, audio, background, thermal, accessibility,
+signing and distribution checks. This Mac has the iOS SDK but no Simulator
+runtime or connected device, so it cannot supply that evidence.
+
+**macOS 1.2 baseline.** The source-level content discovery and update work is
+implemented. The missing sequel routes remain a separate data-dependent gate.
+See the [QoL roadmap](../docs/superpowers/plans/2026-09-23-qol-roadmap.md).
 
 **1.2 content discovery and sequel completion.** The shared CoverFlow-style
 level browser is implemented in source with shipped pixel artwork and one clear
@@ -145,11 +158,6 @@ Make Lemmings 2 and Lemmings 3 completion verification a 1.2 exit gate. The
 remaining 96 winning routes must close, and both games need engine-fidelity,
 campaign-progression, media and recovery evidence. Until that gate passes, both
 games remain Preview.
-
-**After that: iPhone and iPad.** The simulation library already builds for
-iOS and has no dependency on the Mac's window system. It still needs a touch
-interface: direct crowd selection, safe-area layout, and app suspension
-handling. No one has produced or tested an iOS build yet.
 
 **Longer term: Windows and Linux.** The simulation core is Swift, but it
 currently depends on Apple-only frameworks for graphics, image decoding and
