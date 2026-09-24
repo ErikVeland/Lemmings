@@ -300,7 +300,7 @@ struct CRTUniforms {
     }
     guard straightened.x >= 0, straightened.x <= 1,
       straightened.y >= 0, straightened.y <= 1,
-      isInsideGlass(straightened)
+      clampingToImage || isInsideGlass(straightened)
     else { return nil }
     return CGPoint(
       x: straightened.x * sourceSize.width,

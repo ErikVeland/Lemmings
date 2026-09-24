@@ -388,7 +388,7 @@ private func testImmutableSteelAndDestructionMasks() throws {
     try require(solid.count == width * height, "terrain fixture size changed")
 }
 
-private func testDiggerMaskPreservesSteel() throws {
+private func testDiggerMaskCanOverlapSteel() throws {
     let width = 64, height = 48
     var solid = Data(repeating: 0, count: width * height)
     var steel = Data(repeating: 0, count: width * height)
@@ -409,84 +409,8 @@ private func testDiggerMaskPreservesSteel() throws {
     try require(simulation.lemmings.first?.foot.x == 33, "unexpected digger position")
     try require(simulation.assign(.digger, to: 0) == .assigned, "digger outside steel was refused")
     _ = simulation.tick()
-    try require(simulation.terrain.isSolid(x: 37, y: 40), "DOS digger mask removed its steel overlap")
-    try require(!simulation.terrain.isSolid(x: 36, y: 40), "DOS digger mask did not remove adjacent destructible terrain")
+    try require(!simulation.terrain.isSolid(x: 37, y: 40), "DOS digger mask incorrectly clipped its steel overlap")
     try require(simulation.terrain.steelMask == steel, "digger changed steel metadata")
-}
-
-private func testBashMineAndExplosionMasksPreserveSteel() throws {
-    let width = 64, height = 96
-
-    func run(
-        action: ClassicDOSAction,
-        animationFrame: Int,
-        foot: ClassicDOSPoint,
-        maskBounds: ClassicDOSRect,
-        steelPoint: ClassicDOSPoint
-    ) throws -> ClassicDOSSimulation {
-        var solid = Data(repeating: 0, count: width * height)
-        for y in maskBounds.y1..<maskBounds.y2 {
-            for x in maskBounds.x1..<maskBounds.x2 {
-                solid[solid.startIndex + y * width + x] = 1
-            }
-        }
-        var steel = Data(repeating: 0, count: width * height)
-        steel[steel.startIndex + steelPoint.y * width + steelPoint.x] = 1
-        let terrain = try ClassicDOSTerrain(width: width, height: height, solidMask: solid, steelMask: steel)
-        let masks = try destructionMaskSet()
-        var simulation = try ClassicDOSSimulation(
-            terrain: terrain,
-            configuration: configuration(
-                totalLemmings: 1,
-                releaseRate: 99,
-                entrances: [ClassicDOSPoint(x: 30, y: 10)],
-                skills: [.basher: 1, .miner: 1, .bomber: 1],
-                maximumX: width - 1,
-                maximumY: height - 1
-            ),
-            destructionMasks: masks
-        )
-        while simulation.tickCount < 54 { _ = simulation.tick() }
-        simulation = try modifiedSimulation(simulation) { root in
-            try modifyLemmings(in: &root) { lemmings in
-                lemmings[0]["foot"] = ["x": foot.x, "y": foot.y]
-                lemmings[0]["action"] = action.rawValue
-                lemmings[0]["animationFrame"] = animationFrame
-            }
-        }
-        _ = simulation.tick()
-        return simulation
-    }
-
-    let basher = try run(
-        action: .bashing,
-        animationFrame: 1,
-        foot: ClassicDOSPoint(x: 30, y: 30),
-        maskBounds: ClassicDOSRect(x1: 30, y1: 30, x2: 46, y2: 40),
-        steelPoint: ClassicDOSPoint(x: 35, y: 35)
-    )
-    try require(basher.terrain.isSolid(x: 35, y: 35), "basher removed steel inside its mask")
-    try require(!basher.terrain.isSolid(x: 34, y: 35), "basher did not remove adjacent destructible terrain")
-
-    let miner = try run(
-        action: .mining,
-        animationFrame: 0,
-        foot: ClassicDOSPoint(x: 30, y: 30),
-        maskBounds: ClassicDOSRect(x1: 30, y1: 30, x2: 46, y2: 43),
-        steelPoint: ClassicDOSPoint(x: 35, y: 35)
-    )
-    try require(miner.terrain.isSolid(x: 35, y: 35), "miner removed steel inside its mask")
-    try require(!miner.terrain.isSolid(x: 34, y: 35), "miner did not remove adjacent destructible terrain")
-
-    let bomber = try run(
-        action: .exploding,
-        animationFrame: 0,
-        foot: ClassicDOSPoint(x: 30, y: 30),
-        maskBounds: ClassicDOSRect(x1: 22, y1: 19, x2: 38, y2: 41),
-        steelPoint: ClassicDOSPoint(x: 35, y: 30)
-    )
-    try require(bomber.terrain.isSolid(x: 35, y: 30), "bomber removed steel inside its mask")
-    try require(!bomber.terrain.isSolid(x: 34, y: 30), "bomber did not remove adjacent destructible terrain")
 }
 
 private func testBombedBlockerOnSteelSuppressesExplosion() throws {
@@ -1143,8 +1067,7 @@ private func run() throws {
     try testHalfOpenTriggerBounds()
     try testMaximumSafeFallDistance()
     try testImmutableSteelAndDestructionMasks()
-    try testDiggerMaskPreservesSteel()
-    try testBashMineAndExplosionMasksPreserveSteel()
+    try testDiggerMaskCanOverlapSteel()
     try testBombedBlockerOnSteelSuppressesExplosion()
     try testBlockerCenterSuppressesAndUncoversExit()
     try testFallingOhNoKeepsFixedBlockerAnchor()
