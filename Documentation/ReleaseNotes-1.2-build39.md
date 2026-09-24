@@ -1,18 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
-    <channel>
-        <title>Ultimate Lemmings Updates</title>
-        <link>https://github.com/ErikVeland/Lemmings/releases</link>
-        <description>Updates for Ultimate Lemmings.</description>
-        <language>en</language>
-        <item>
-            <title>1.2</title>
-            <pubDate>Fri, 25 Sep 2026 00:14:40 +1000</pubDate>
-            <link>https://github.com/ErikVeland/Lemmings/releases</link>
-            <sparkle:version>39</sparkle:version>
-            <sparkle:shortVersionString>1.2</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>12.3</sparkle:minimumSystemVersion>
-            <description sparkle:format="plain-text"><![CDATA[# Ultimate Lemmings 1.2
+# Ultimate Lemmings 1.2
 
 Build: 39
 Release commit: 2149c2309771182da14624f31c2ac63e693fe1d3
@@ -44,8 +30,3 @@ have 1.2 build 39, no replacement download or automatic update is needed.
 - A controller retry, rewind and step button sequence has a known routing issue.
 - Physical Intel and minimum-macOS testing remains unverified.
 - This public build does not include the device-restricted Game Center variant.
-]]></description>
-            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.2.0/UltimateLemmings-1.2-build39.zip" length="428869830" type="application/octet-stream" sparkle:edSignature="i8XF80StUdfEKW7sMGqLHIScaOigbzWTdz/jDp/mkha7q/Z9fqkA560scInA0UEXCFDSZmxv3PBpCyXyLH1AAg=="/>
-        </item>
-    </channel>
-</rss>
