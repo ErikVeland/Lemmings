@@ -66,6 +66,26 @@ Add the player-facing content browser in the same milestone:
 - Keep playlist progress separate from campaign progress, Hot Seat ownership,
   saved attempts, replays and verified completion records.
 
+### L2 and L3 completion verification
+
+Make sequel completion verification a 1.2 exit gate. Keep the current Preview
+labels until every condition passes:
+
+- preserve and replay a winning route for all 120 Lemmings 2 levels and all 90
+  Lemmings 3 levels;
+- compare Lemmings 2 rules with the original engine and resolve the provisional
+  Lemmings 3 tool, movement and trap semantics;
+- verify continuous campaign progression, Lemmings 2 survivor carry-over and
+  both games' endings;
+- complete Lemmings 3 environmental effects, original movie audio and story
+  transitions, and close the remaining Lemmings 2 media and fidelity gaps;
+- verify app-session completion, saved-run recovery, replay identity and result
+  records against the current engine and content revisions.
+
+The current baseline is 73/120 Lemmings 2 routes and 41/90 Lemmings 3 routes.
+The missing 96 routes are an open verification gap, not evidence that those
+levels are broken. A passing load or smoke check does not close this gate.
+
 ### 1.5 — NeoLemmix compatibility
 
 Target NeoLemmix 12.14 data and replay compatibility, plus the current

@@ -120,18 +120,18 @@ transport are implemented across the three engines. The next work is candidate
 validation and release evidence, not another large feature. See the
 [QoL roadmap](../docs/superpowers/plans/2026-09-23-qol-roadmap.md).
 
-**Next: 1.2 content discovery.** Build a CoverFlow-style level browser that
-keeps the shipped pixel artwork and gives one clear primary action. Add
-`Shuffle all` for eligible fan levels and saved playlists. A playlist can use
-ten randomly selected levels or an order chosen by the player. Preserve the
-source engine, pack identity and level identity in every playlist entry so
-saves, replays and results remain safe. This work belongs beside the 1.2
-[content atlas and import boundary](ContentUniverseRoadmap.md#12--content-atlas-and-import-boundary).
+**Next: 1.2 content discovery and sequel completion.** Build a CoverFlow-style
+level browser that keeps the shipped pixel artwork and gives one clear primary
+action. Add `Shuffle all` for eligible fan levels and saved playlists. A
+playlist can use ten randomly selected levels or an order chosen by the player.
+Preserve the source engine, pack identity and level identity in every playlist
+entry so saves, replays and results remain safe. This work belongs beside the
+1.2 [content atlas and import boundary](ContentUniverseRoadmap.md#12--content-atlas-and-import-boundary).
 
-**In parallel: bring Lemmings 2 and 3 to the same standard.** Both already run
-their full campaigns with original assets. Closing the gap means recording the
-remaining 96 routes and comparing their rules against the original engines
-level by level, the same evidence standard already applied to Classic.
+Make Lemmings 2 and Lemmings 3 completion verification a 1.2 exit gate. The
+remaining 96 winning routes must close, and both games need engine-fidelity,
+campaign-progression, media and recovery evidence. Until that gate passes, both
+games remain Preview.
 
 **After that: iPhone and iPad.** The simulation library already builds for
 iOS and has no dependency on the Mac's window system. It still needs a touch
