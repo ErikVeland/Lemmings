@@ -578,7 +578,7 @@ struct ReticleFeedback {
       ControllerPointer.draw(controllerPointer)
       if let id = assignmentHighlight.target, let lem = session?.lemmings.first(where: { $0.id == id }) {
         assignmentHighlight.draw(at: viewport.viewPoint(fromLevel: CGPoint(x: lem.x, y: lem.y - 6)),
-          scale: viewport.zoom, tint: .systemYellow, radius: 10)
+          scale: viewport.zoom, tint: .systemYellow, radius: 7)
       }
     }
     updateSpeedTrails()
@@ -1137,7 +1137,7 @@ struct ReticleFeedback {
     // this cue soft so it confirms the target without changing play timing or
     // obscuring the native sprite artwork.
     if target != nil, assignmentHighlight.target == nil, state != .unavailable {
-      LemmingSelectionGlow.draw(at: targetPoint, scale: viewport.zoom, radius: 10,
+      LemmingSelectionGlow.draw(at: targetPoint, scale: viewport.zoom, radius: 7,
         tint: color, animated: !reduceMotion)
     }
 

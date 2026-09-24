@@ -2,11 +2,10 @@ import AppKit
 
 /// A pixel-aligned selection cue for a focused or hovered lemming.
 @MainActor enum LemmingSelectionGlow {
-    static func draw(at point: CGPoint, scale: CGFloat, radius: CGFloat = 10,
+    static func draw(at point: CGPoint, scale: CGFloat, radius: CGFloat = 7,
                      tint: NSColor, animated: Bool = true) {
         let pixel = max(1, floor(scale))
-        let outerRadius = max(6 * pixel, floor(radius * scale / pixel) * pixel)
-        let innerRadius = max(4 * pixel, outerRadius - 2 * pixel)
+        let ringRadius = max(4 * pixel, floor(radius * scale / pixel) * pixel)
         let now = ProcessInfo.processInfo.systemUptime
         let phase = animated
             ? CGFloat(now.truncatingRemainder(dividingBy: 1.2) / 1.2)
@@ -15,28 +14,18 @@ import AppKit
         NSGraphicsContext.saveGraphicsState()
         NSGraphicsContext.current?.shouldAntialias = false
 
-        let outer = pixelRect(around: point, radius: outerRadius)
-        let inner = pixelRect(around: point, radius: innerRadius)
-        tint.withAlphaComponent(0.12).setStroke()
-        let outerRing = NSBezierPath(ovalIn: outer)
-        outerRing.lineWidth = 2 * pixel
-        outerRing.stroke()
-
+        let ring = NSBezierPath(ovalIn: pixelRect(around: point, radius: ringRadius))
         tint.withAlphaComponent(0.28).setStroke()
-        let innerRing = NSBezierPath(ovalIn: inner)
-        innerRing.lineWidth = pixel
-        innerRing.stroke()
+        ring.lineWidth = pixel
+        ring.stroke()
 
         let shimmerStart = phase * 360
-        for index in 0..<3 {
-            let start = shimmerStart + CGFloat(index) * 120
-            let shimmer = NSBezierPath()
-            shimmer.appendArc(withCenter: point, radius: outerRadius,
-                              startAngle: start, endAngle: start + 22)
-            tint.withAlphaComponent(index == 0 ? 0.72 : 0.28).setStroke()
-            shimmer.lineWidth = pixel
-            shimmer.stroke()
-        }
+        let shimmer = NSBezierPath()
+        shimmer.appendArc(withCenter: point, radius: ringRadius,
+                          startAngle: shimmerStart, endAngle: shimmerStart + 28)
+        tint.withAlphaComponent(animated ? 0.42 : 0.18).setStroke()
+        shimmer.lineWidth = pixel
+        shimmer.stroke()
 
         NSGraphicsContext.restoreGraphicsState()
     }
@@ -63,7 +52,7 @@ import AppKit
     var reduceMotion = false
     func show(_ id: Int) { self.id = id; until = ProcessInfo.processInfo.systemUptime + 2 }
     func clear() { id = nil }
-    func draw(at point: CGPoint, scale: CGFloat, tint: NSColor = .systemYellow, radius: CGFloat = 10) {
+    func draw(at point: CGPoint, scale: CGFloat, tint: NSColor = .systemYellow, radius: CGFloat = 7) {
         guard target != nil else { return }
         LemmingSelectionGlow.draw(at: point, scale: scale, radius: radius,
                                   tint: tint, animated: !reduceMotion)

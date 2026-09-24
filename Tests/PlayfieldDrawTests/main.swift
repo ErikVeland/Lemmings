@@ -749,8 +749,11 @@ private func testMacArtworkCropStaysPixelAligned() throws {
     let frame = SkillCursorBadge.frame(at: point, scale: scale, in: bounds)
     try require(frame.width == 8 * pixel && frame.height == frame.width,
       "the selected-skill reminder is not tiny at \(scale)x")
-    try require(frame.minX > point.x && frame.minY > point.y,
-      "the selected-skill reminder is not below and to the right at \(scale)x")
+    let reticle = GameCursor.playfieldPointerFrame(at: point, scale: scale)
+    try require(reticle.contains(frame),
+      "the selected-skill reminder is not inside the reticle at \(scale)x")
+    try require(frame.maxX < reticle.maxX && frame.maxY < reticle.maxY,
+      "the selected-skill reminder is not inset from the reticle corner at \(scale)x")
     try require(frame.minX.truncatingRemainder(dividingBy: pixel) == 0
       && frame.minY.truncatingRemainder(dividingBy: pixel) == 0,
       "the selected-skill reminder is not pixel-aligned at \(scale)x")

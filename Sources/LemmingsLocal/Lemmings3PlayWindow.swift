@@ -1388,9 +1388,9 @@ import NxlvKit
                 let centre = CGPoint(x: origin.x + (CGFloat(lem.x) - cameraX) * zoom,
                     y: origin.y + (CGFloat(lem.y - 6) - cameraY) * zoom)
                 if focused {
-                    assignmentHighlight.draw(at: centre, scale: zoom, tint: .systemYellow, radius: 10)
+                    assignmentHighlight.draw(at: centre, scale: zoom, tint: .systemYellow, radius: 7)
                 } else {
-                    LemmingSelectionGlow.draw(at: centre, scale: zoom, radius: 10,
+                    LemmingSelectionGlow.draw(at: centre, scale: zoom, radius: 7,
                         tint: .systemGreen, animated: !reduceMotion)
                 }
             }
@@ -1501,9 +1501,7 @@ import NxlvKit
         drawInterface()
         if let point = pointerPosition ?? controllerPointer, playfieldRect.contains(point),
            (0..<5).contains(selectedAction) {
-            if controllerPointer == nil {
-                GameCursor.drawPlayfieldPointer(at: point, scale: zoom, tint: .systemGreen)
-            }
+            GameCursor.drawPlayfieldPointer(at: point, scale: zoom, tint: .systemGreen)
             SkillCursorBadge.draw(icon: skillBadge, index: selectedAction, at: point,
                 scale: zoom, tint: .systemGreen, reduceMotion: reduceMotion, in: bounds)
         }

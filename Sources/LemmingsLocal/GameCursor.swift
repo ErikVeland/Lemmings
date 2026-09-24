@@ -29,17 +29,26 @@ import AppKit
   }
 
   /**
-   * Draws the small cornered reticle used as the gameplay pointer.
+   * Returns the pixel-aligned frame used by the four-corner playfield pointer.
    */
-  static func drawPlayfieldPointer(at point: CGPoint, scale: CGFloat, tint: NSColor) {
+  static func playfieldPointerFrame(at point: CGPoint, scale: CGFloat) -> CGRect {
     let pixel = max(1, floor(scale))
     let side = 14 * pixel
-    let arm = side / 3
-    let box = CGRect(
+    return CGRect(
       x: floor((point.x - side / 2) / pixel) * pixel,
       y: floor((point.y - side / 2) / pixel) * pixel,
       width: side,
       height: side)
+  }
+
+  /**
+   * Draws the small cornered reticle used as the gameplay pointer.
+   */
+  static func drawPlayfieldPointer(at point: CGPoint, scale: CGFloat, tint: NSColor) {
+    let pixel = max(1, floor(scale))
+    let box = playfieldPointerFrame(at: point, scale: scale)
+    let side = box.width
+    let arm = side / 3
     let reticle = NSBezierPath()
     for (dx, dy) in [(0.0, 0.0), (1.0, 0.0), (0.0, 1.0), (1.0, 1.0)] {
       let corner = CGPoint(x: box.minX + box.width * dx, y: box.minY + box.height * dy)

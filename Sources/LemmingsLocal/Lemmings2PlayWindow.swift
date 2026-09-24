@@ -1647,10 +1647,6 @@ import NxlvKit
     var onPanel: ((Int, Int, TimeInterval) -> Void)?
     var onHover: (() -> Void)?
     var onKey: ((String) -> Void)?
-    var pointers: Lemmings2Pointers?
-    private var cursorFrames: [NSCursor] = []
-    private var cursorZoom: CGFloat = 0
-    private var pointerFrame = 0
     var cameraX: CGFloat = 0
     var cameraY: CGFloat = 0
     private var cameraBounds: (left: CGFloat, top: CGFloat, right: CGFloat, bottom: CGFloat) = (0, 0, 0, 0)
@@ -1707,38 +1703,26 @@ import NxlvKit
         onRelease?(); onHover?(); NSCursor.arrow.set()
     }
     override func cursorUpdate(with event: NSEvent) {
-        if cursorFrames.indices.contains(pointerFrame) { cursorFrames[pointerFrame].set() }
+        GameCursor.update(at: convert(event.locationInWindow, from: nil), hidingInside: gameplayRect)
     }
     override func resetCursorRects() {
-        if cursorFrames.indices.contains(pointerFrame) { addCursorRect(bounds, cursor: cursorFrames[pointerFrame]) }
+        addCursorRect(bounds, cursor: NSCursor.arrow)
+        if !gameplayRect.isEmpty { addCursorRect(gameplayRect, cursor: GameCursor.invisible) }
+    }
+    private var gameplayRect: CGRect {
+        CGRect(x: origin.x, y: origin.y, width: visibleWidth * zoom, height: 160 * zoom * 1.2)
     }
     func updateSelection(slot: Int, fan: Bool, palette: [UInt8], skillFrame: Lemmings2SpriteFrame? = nil) -> String? {
         selectedSkillSlot = slot
         pointerSelectionEnabled = !fan
         skillBadge = skillFrame.map { image(width: $0.width, height: $0.height, pixels: $0.pixels,
                                              palette: palette, opaque: $0.opaque, category: .sprite) }
-        if let pointers, cursorFrames.isEmpty || zoom != cursorZoom {
-            cursorZoom = zoom
-            cursorFrames = pointers.frames.map { pixels in
-                let original = image(width: 16, height: 16, pixels: pixels, palette: palette, opaque: pixels.map { $0 != 0 }, category: .architectural)
-                let size = NSSize(width: 16 * zoom, height: 16 * zoom * 1.2)
-                let scaled = NSImage(size: size, flipped: true) { rect in
-                    original.draw(in: rect, from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true,
-                                  hints: [.interpolation: NSImageInterpolation.none.rawValue])
-                    return true
-                }
-                return NSCursor(image: scaled, hotSpot: NSPoint(x: 8 * zoom, y: 8 * zoom * 1.2))
-            }
-            window?.invalidateCursorRects(for: self)
-        }
-        var frame = 0, label: String?
+        var label: String?
         if let window, let game {
             let point = controllerPointer ?? convert(window.mouseLocationOutsideOfEventStream, from: nil)
             let x = (point.x - origin.x) / zoom, y = (point.y - origin.y) / (zoom * 1.2)
             if (0..<visibleWidth).contains(x), (0..<160).contains(y) {
-                if fan { frame = 2 }
-                else if let target = game.target(slot: slot, x: Int(x + cameraX), y: Int(y + cameraY), preferApproaching: favorApproachingLemmings) {
-                    frame = game.canAssign(slot: slot, to: target.id) ? 1 : 0
+                if !fan, let target = game.target(slot: slot, x: Int(x + cameraX), y: Int(y + cameraY), preferApproaching: favorApproachingLemmings) {
                     switch target.state {
                     case .walking: label = "WALKER"
                     case .running: label = "RUNNER"
@@ -1811,10 +1795,9 @@ import NxlvKit
                     }
                 }
             }
-            if frame != pointerFrame {
-                pointerFrame = frame; window.invalidateCursorRects(for: self)
+            if window.isKeyWindow, bounds.contains(point) {
+                GameCursor.update(at: point, hidingInside: gameplayRect)
             }
-            if window.isKeyWindow, bounds.contains(point), cursorFrames.indices.contains(frame) { cursorFrames[frame].set() }
         }
         return label
     }
@@ -1833,7 +1816,6 @@ import NxlvKit
         try reloadArtwork?()
         cameraX = oldX; cameraY = oldY
         isFastForward = wasFastForward
-        cursorFrames = []; pointerFrame = -1
         if let previous { update(previous) }
         needsDisplay = true
     }
@@ -2281,16 +2263,18 @@ import NxlvKit
                 let centre = CGPoint(x: origin.x + (CGFloat(lem.x) - cameraX) * zoom,
                     y: origin.y + (CGFloat(lem.y - 6) - cameraY) * zoom * 1.2)
                 if focused {
-                    assignmentHighlight.draw(at: centre, scale: zoom, tint: .systemYellow, radius: 10)
+                    assignmentHighlight.draw(at: centre, scale: zoom, tint: .systemYellow, radius: 7)
                 } else {
-                    LemmingSelectionGlow.draw(at: centre, scale: zoom, radius: 10,
+                    LemmingSelectionGlow.draw(at: centre, scale: zoom, radius: 7,
                         tint: .systemGreen, animated: !reduceMotion)
                 }
             }
-            if pointerSelectionEnabled, let point = cursorPoint(),
-               point.y >= origin.y, point.y < origin.y + 160 * zoom * 1.2 {
-                SkillCursorBadge.draw(icon: skillBadge, index: selectedSkillSlot, at: point,
-                    scale: zoom, tint: .systemGreen, reduceMotion: reduceMotion, in: bounds)
+            if let point = cursorPoint(), gameplayRect.contains(point) {
+                GameCursor.drawPlayfieldPointer(at: point, scale: zoom, tint: .systemGreen)
+                if pointerSelectionEnabled {
+                    SkillCursorBadge.draw(icon: skillBadge, index: selectedSkillSlot, at: point,
+                        scale: zoom, tint: .systemGreen, reduceMotion: reduceMotion, in: bounds)
+                }
             }
             if let focusNotice { GameTypography.annotation(focusNotice, at: CGPoint(x: 12, y: 12)) }
             if let origin = rewindOriginTick, origin > rewindCurrentTick {
