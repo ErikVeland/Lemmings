@@ -19,6 +19,9 @@ swiftc -swift-version 6 -warnings-as-errors \
   "$project_dir/Sources/LemmingsLocal/SkillCursorBadge.swift" \
   "$project_dir/Sources/LemmingsLocal/ControllerPointer.swift" \
   "$project_dir/Sources/LemmingsLocal/LemmingFocusHighlight.swift" \
+  "$project_dir/Sources/LemmingsLocal/LemmingAssignmentPulse.swift" \
+  "$project_dir/Sources/LemmingsLocal/FailureMood.swift" \
+  "$project_dir/Sources/LemmingsLocal/RewindTransportCue.swift" \
   "$project_dir/Sources/LemmingsLocal/GameplayPresentation.swift" \
   "$project_dir/Sources/LemmingsLocal/PlayfieldView.swift" \
   "$project_dir/Sources/LemmingsLocal/ExplosionHDR.swift" \
