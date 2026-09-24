@@ -6,6 +6,7 @@ on:
     branches:
       - main
       - codex/1.3b
+      - codex/1.5
 
 jobs:
   source-gate:

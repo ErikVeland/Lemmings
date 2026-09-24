@@ -2,14 +2,10 @@
 set -euo pipefail
 
 project_dir="${0:A:h:h}"
-build_dir="$project_dir/.build/nxlv-corpus-diagnostics"
+build_dir="$project_dir/.build/nxrp-corpus-diagnostics"
 
-if (( $# < 2 || $# > 3 )); then
-  print -u2 "Usage: $0 <levels-directory> <styles-directory> [--require-runnable]"
-  exit 2
-fi
-if (( $# == 3 )) && [[ "$3" != "--require-runnable" ]]; then
-  print -u2 "Usage: $0 <levels-directory> <styles-directory> [--require-runnable]"
+if (( $# != 1 )); then
+  print -u2 "Usage: $0 <replays-directory>"
   exit 2
 fi
 
@@ -26,7 +22,7 @@ swiftc -swift-version 6 -warnings-as-errors -parse-as-library \
 swiftc -swift-version 6 -warnings-as-errors \
   -I "$build_dir/modules" -L "$build_dir" -lNxlvKit \
   -Xlinker -rpath -Xlinker "$build_dir" \
-  -o "$build_dir/NxlvCorpusDiagnostics" \
-  "$project_dir/Tests/NxlvCorpusDiagnostics/main.swift"
+  -o "$build_dir/NxrpCorpusDiagnostics" \
+  "$project_dir/Tests/NxrpCorpusDiagnostics/main.swift"
 
-"$build_dir/NxlvCorpusDiagnostics" "$@"
+"$build_dir/NxrpCorpusDiagnostics" "$1"

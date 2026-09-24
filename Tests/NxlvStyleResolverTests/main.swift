@@ -183,6 +183,73 @@ func testMetadataDiagnosticsAndLimit(_ fixture: URL) throws {
     try expect(contains(.metadataTooLarge, in: limited.diagnostics), "The metadata size limit was not enforced.")
 }
 
+func testGeneratedAnimationsAndCurrentEffects(_ fixture: URL) throws {
+    let styles = fixture.appendingPathComponent("generated-animation-styles", isDirectory: true)
+    let objects = styles.appendingPathComponent("current/objects", isDirectory: true)
+    try write(
+        """
+        EFFECT PICKUPSKILL
+        TRIGGER_X 4
+        TRIGGER_Y 9
+        TRIGGER_WIDTH 4
+        TRIGGER_HEIGHT 7
+        $PRIMARY_ANIMATION
+          NAME *PICKUP
+        $END
+        """,
+        to: objects.appendingPathComponent("pickup.nxmo")
+    )
+    try write(
+        """
+        EFFECT ANIMATIONONCE
+        $PRIMARY_ANIMATION
+          FRAMES 1
+        $END
+        """,
+        to: objects.appendingPathComponent("once.nxmo")
+    )
+    try touch(objects.appendingPathComponent("once.png"))
+    try write(
+        """
+        EFFECT ENTRANCE
+        TRIGGER_X 4
+        TRIGGER_Y 9
+        $PRIMARY_ANIMATION
+          FRAMES 1
+        $END
+        """,
+        to: objects.appendingPathComponent("window.nxmo")
+    )
+    try touch(objects.appendingPathComponent("window.png"))
+
+    let result = NxlvStyleResolver(stylesRootURL: styles).resolve(references: [
+        NxlvStyleAssetReference(kind: .object, style: "current", piece: "pickup"),
+        NxlvStyleAssetReference(kind: .object, style: "current", piece: "once"),
+        NxlvStyleAssetReference(kind: .object, style: "current", piece: "window"),
+    ])
+    try expect(result.isComplete, "Generated animation metadata did not resolve: \(result.diagnostics)")
+    let pickup = try result.assets.first { $0.reference.piece == "pickup" }
+        .unwrap("The generated pickup object did not resolve.")
+    try expect(pickup.graphicURLs.isEmpty, "A generated pickup requested a non-existent PNG.")
+    try expect(
+        pickup.objectMetadata?.animations.first?.frames == nil,
+        "A generated pickup was assigned a source frame count."
+    )
+    let once = try result.assets.first { $0.reference.piece == "once" }
+        .unwrap("The one-shot animation object did not resolve.")
+    try expect(
+        once.objectMetadata?.effect == .animationOnce,
+        "ANIMATIONONCE was not retained as a current CE object effect."
+    )
+    let window = try result.assets.first { $0.reference.piece == "window" }
+        .unwrap("The entrance object did not resolve.")
+    try expect(
+        window.objectMetadata?.triggerWidth == 1
+            && window.objectMetadata?.triggerHeight == 1,
+        "An entrance without explicit trigger dimensions did not use CE's 1 by 1 point."
+    )
+}
+
 func testRecursiveAliasesAndDefaults(_ fixture: URL) throws {
     let styles = fixture.appendingPathComponent("alias-styles", isDirectory: true)
     try write(
@@ -476,6 +543,7 @@ struct NxlvStyleResolverTests {
         try testTraversalAndSymlinkSafety(fixture)
         try testMissingAndAmbiguousAssets(fixture)
         try testMetadataDiagnosticsAndLimit(fixture)
+        try testGeneratedAnimationsAndCurrentEffects(fixture)
         try testRecursiveAliasesAndDefaults(fixture)
         try testAliasCycleAndDepthDiagnostics(fixture)
         try testAliasSafetyAndAmbiguity(fixture)

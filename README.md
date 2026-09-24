@@ -16,6 +16,7 @@ before distributing a build.
 - [Architecture](ARCHITECTURE.md) — module boundaries, runtime flow and release packaging.
 - [Project overview](Documentation/Overview.md) — player-facing status and roadmap.
 - [1.3 mobile roadmap](Documentation/1.3Roadmap.md) — iPhone/iPad scope, source state and device gates.
+- [1.5 NeoLemmix roadmap](Documentation/1.5Roadmap.md) — pinned oracle, executable gates and compatibility limits.
 - [QoL roadmap](docs/superpowers/plans/2026-09-23-qol-roadmap.md) — target selection and rewind priorities.
 - [Release scope](Documentation/ReleaseScope.md) — the meaning of Complete, Playable and Preview.
 - [Content roadmap](Documentation/ContentUniverseRoadmap.md) — the path towards broader 2D content.
@@ -27,14 +28,14 @@ before distributing a build.
 - [Automatic updates](#automatic-updates) — Sparkle feed and release requirements.
 - [Automatic update evidence](Documentation/AutomaticUpdates.md) — release checks and records.
 
-The current development milestone is 1.3 for iPhone and iPad. The macOS
-product remains version 1.2. Classic content is the completed reference
-engine. Lemmings 2 and Lemmings 3 are labelled Preview. The bundled
-corpus contains 6,020 Classic-format fan levels in 535 packs; this is not a
-claim of NeoLemmix fan-pack compatibility. NeoLemmix `.nxlv` support has
-parser, renderer and synthetic simulation coverage. Real NeoLemmix pack
-compatibility is a 1.5 goal and remains outside the completed library until
-its gate passes.
+The iPhone and iPad 1.3 source and Simulator gates pass. Physical-device,
+VoiceOver, thermal, signing and distribution evidence remain open. The macOS
+product remains version 1.2. Active source work is now the 1.5 NeoLemmix
+compatibility lane. Classic content is the completed reference engine.
+Lemmings 2 and Lemmings 3 are labelled Preview. The bundled corpus contains
+6,020 Classic-format fan levels in 535 packs; this is not a claim of NeoLemmix
+fan-pack compatibility. NeoLemmix support remains Beta or Preview until its
+real-pack and reference-replay gates pass.
 
 ## Requirements
 
@@ -85,6 +86,17 @@ zsh Scripts/check-1.3-mobile.sh --require-sdk
 The required gate needs an installed iOS Simulator runtime. Physical touch,
 audio interruption, thermal, accessibility, signing and device journeys remain
 separate acceptance evidence.
+
+Run the data-independent NeoLemmix 1.5 source gate:
+
+```sh
+zsh Scripts/check-1.5-neolemmix.sh
+```
+
+Pass a checkout of the pinned NeoLemmix Community Edition oracle to add the
+real level-corpus gate. See the [1.5 roadmap](Documentation/1.5Roadmap.md) for
+the strict runnable and replay commands. A source-gate pass is not a full
+NeoLemmix compatibility claim.
 
 ## Verification
 

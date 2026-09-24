@@ -111,23 +111,32 @@ The official Classic campaign closed at 352/352 on 22 September 2026. The 1.0
 RC1 baseline was build 36. The macOS baseline now carries version 1.2 build 39
 with the shared browser, playlists, background fan-pack checks and automatic
 application updates. The 1.3 development branch adds a separate iPhone and iPad
-target at version 1.3 build 1. It is source work, not a mobile release claim.
-Simulator, physical-device, VoiceOver, thermal, signing and distribution
-evidence remain open.
+target at version 1.3 build 1. Its source, iPhone Simulator and iPad Simulator
+gates pass. It is not a mobile release claim. Physical-device, VoiceOver,
+thermal, signing and distribution evidence remain open. The active 1.5 source
+lane now prepares NeoLemmix compatibility without adding unverified packs to
+the completed library.
 
 ## Roadmap
 
-**Now: validate 1.3 on iPhone and iPad.** The repository has a UIKit/Metal app
+**1.3: finish physical iPhone and iPad acceptance.** The repository has a UIKit/Metal app
 target, player-owned Classic data import, direct crowd selection, pan and zoom,
 safe-area controls, interruption checkpoints and presentation-only thermal
 budgets. The shared session and checkpoint boundary covers Classic, Lemmings 2
 and Lemmings 3, but only Classic is player-facing mobile content. See the
 [1.3 mobile roadmap](1.3Roadmap.md).
 
-The next gate is execution evidence. Run the iPhone and iPad Simulator matrix,
-then complete physical touch, audio, background, thermal, accessibility,
-signing and distribution checks. This Mac has the iOS SDK but no Simulator
-runtime or connected device, so it cannot supply that evidence.
+The GitHub iPhone and iPad Simulator matrix passes. The remaining gates are
+physical touch, audio, background, thermal, accessibility, signing and
+distribution checks. This Mac has the iOS SDK but no Simulator runtime or
+connected device, so it cannot supply that evidence.
+
+**Now: execute the 1.5 NeoLemmix compatibility plan.** The source recognises
+NeoLemmix levels, styles and the current section-based replay format. The
+development gate uses a pinned Community Edition checkout and separates
+import/render failures from known unsupported mechanics. Fencer, Laserer,
+interactive gadgets, zombie infection, Superlemming and native reference-replay
+comparison remain open. See the [1.5 roadmap](1.5Roadmap.md).
 
 **macOS 1.2 baseline.** The source-level content discovery and update work is
 implemented. The missing sequel routes remain a separate data-dependent gate.

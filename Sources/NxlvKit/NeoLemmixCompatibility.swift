@@ -10,7 +10,8 @@ extension NeoLemmixRules {
         for gadget in renderedLevel.gadgets {
             switch gadget.effect {
             case .none, .background, .entrance, .exit, .trap, .trapOnce, .fire, .water,
-                 .oneWayLeft, .oneWayRight, .oneWayUp, .oneWayDown:
+                 .oneWayLeft, .oneWayRight, .oneWayUp, .oneWayDown, .animation,
+                 .animationOnce:
                 break
             case .lockedExit: features.insert("locked exits")
             case .unlockButton: features.insert("exit buttons")
@@ -20,6 +21,10 @@ extension NeoLemmixRules {
             case .splatPad, .antiSplatPad: features.insert("splat pads")
             case .splitter: features.insert("splitters")
             case .forceLeft, .forceRight: features.insert("force fields")
+            case .paint: features.insert("paint effects")
+            case .neutralizer, .deneutralizer: features.insert("neutral state changers")
+            case .addSkill, .removeSkills: features.insert("skill state changers")
+            case .portal: features.insert("portals")
             case let .unknown(name): features.insert("object effect \(name)")
             }
         }

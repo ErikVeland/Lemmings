@@ -34,9 +34,9 @@ private func levelURLs(beneath root: URL) throws -> [URL] {
 
 private func run() throws {
     let arguments = Array(CommandLine.arguments.dropFirst())
-    guard arguments.count == 2 else {
+    guard arguments.count == 2 || (arguments.count == 3 && arguments[2] == "--require-runnable") else {
         throw CorpusFailure(
-            description: "Usage: NxlvCorpusDiagnostics <levels-directory> <styles-directory>"
+            description: "Usage: NxlvCorpusDiagnostics <levels-directory> <styles-directory> [--require-runnable]"
         )
     }
     let levelsRoot = URL(fileURLWithPath: arguments[0], isDirectory: true)
@@ -51,8 +51,13 @@ private func run() throws {
     var failures: [String] = []
     var warnings = 0
     var simulatedTicks = 0
+    var unsupportedLevels: [(path: String, features: [String])] = []
 
-    for url in urls {
+    for (index, url) in urls.enumerated() {
+        let relative = url.path.replacingOccurrences(
+            of: levelsRoot.path + "/",
+            with: ""
+        )
         do {
             let data = try Data(contentsOf: url, options: .mappedIfSafe)
             guard data.count <= 16_777_216,
@@ -101,6 +106,15 @@ private func run() throws {
                 }.joined(separator: "; "))
             }
 
+            let unsupported = NeoLemmixRules.unsupportedFeatures(
+                level: level,
+                renderedLevel: rendered
+            )
+            if !unsupported.isEmpty {
+                unsupportedLevels.append((path: relative, features: unsupported))
+                continue
+            }
+
             var original = try NeoLemmixSimulation(level: level, renderedLevel: rendered)
             original.run(ticks: 256)
             simulatedTicks += original.tickCount
@@ -119,22 +133,38 @@ private func run() throws {
                 simulatedTicks += 1
             }
         } catch {
-            let relative = url.path.replacingOccurrences(
-                of: levelsRoot.path + "/",
-                with: ""
-            )
             failures.append("\(relative): \(error)")
+        }
+        if (index + 1).isMultiple(of: 50) || index + 1 == urls.count {
+            print("NXLV corpus progress: \(index + 1)/\(urls.count)")
+            fflush(stdout)
         }
     }
 
     print(
         "NXLV corpus: \(urls.count) levels, \(simulatedTicks) deterministic ticks, "
-            + "\(warnings) warnings, \(failures.count) failures."
+            + "\(warnings) warnings, \(unsupportedLevels.count) unsupported, "
+            + "\(failures.count) import/render failures."
     )
+    let featureCounts = unsupportedLevels
+        .flatMap(\.features)
+        .reduce(into: [String: Int]()) { counts, feature in counts[feature, default: 0] += 1 }
+    for feature in featureCounts.keys.sorted() {
+        print("OPEN \(feature): \(featureCounts[feature, default: 0]) level(s)")
+    }
     if !failures.isEmpty {
         for failure in failures.prefix(40) { print("FAIL \(failure)") }
         if failures.count > 40 { print("...and \(failures.count - 40) more failures") }
         throw CorpusFailure(description: "NXLV corpus verification failed.")
+    }
+    if arguments.last == "--require-runnable", !unsupportedLevels.isEmpty {
+        for item in unsupportedLevels.prefix(40) {
+            print("OPEN \(item.path): \(item.features.joined(separator: ", "))")
+        }
+        if unsupportedLevels.count > 40 {
+            print("...and \(unsupportedLevels.count - 40) more unsupported levels")
+        }
+        throw CorpusFailure(description: "NXLV runnable corpus verification failed.")
     }
 }
 

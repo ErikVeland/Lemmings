@@ -133,6 +133,13 @@ gadgets, special effects, zombies, Superlemming, pack progress and recovery.
 Until this gate passes, NeoLemmix support remains Beta or Preview and stays out
 of the completed main library.
 
+The executable development plan is in the [1.5 NeoLemmix roadmap](1.5Roadmap.md).
+The source gate uses NeoLemmix Community Edition 1.2.0 at a pinned commit. It
+separates level import and rendering from runnable mechanics, and it has a
+strict mode that fails while any required mechanic remains unsupported. The
+current-format replay decoder is covered by synthetic tests. Real reference
+replays and native result comparison remain mandatory external evidence.
+
 ### Later — wider 2D content
 
 Add separate compatibility lanes for:
