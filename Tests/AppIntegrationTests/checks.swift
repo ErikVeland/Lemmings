@@ -2317,6 +2317,13 @@ extension AppDelegate {
     campaign = fixture
     flow = ClassicGameFlow(campaign: fixture)
     classicSelectionRecordsCampaignProgress = true
+    // A data-set switch saves progress, and so refreshes, before it fills
+    // the picker. Build 39 stopped launch here with an NSMenu assertion.
+    picker.removeAllItems()
+    picker.addItem(withTitle: "1. Fun - First")
+    refreshClassicLevelPickerAvailability()
+    try check(picker.numberOfItems == 1 && picker.item(at: 0)?.isEnabled == true,
+      "A level picker with fewer rows than the campaign did not refresh")
     picker.removeAllItems()
     picker.addItems(withTitles: ["1. Fun - First", "2. Fun - Second"])
     refreshClassicLevelPickerAvailability()
@@ -3432,6 +3439,9 @@ let testApp = NSApplication.shared
 guard let testDomain = Bundle.main.bundleIdentifier,
   testDomain.hasPrefix("academy.glasscode.lemmings.integration-tests") else { exit(2) }
 UserDefaults.standard.removePersistentDomain(forName: testDomain)
+// AppKit logs an Objective-C exception from an event and keeps running, so a
+// check that raises one never finishes. Stop the run instead.
+UserDefaults.standard.set(true, forKey: "NSApplicationCrashOnExceptions")
 testApp.setActivationPolicy(.accessory)
 Task { @MainActor in
   do {
