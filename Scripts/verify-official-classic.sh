@@ -42,6 +42,6 @@ fi
 swiftc -O -swift-version 6 -warnings-as-errors \
   -I "$library_dir/modules" -L "$library_dir" -lNxlvKit -Xlinker -rpath -Xlinker "$library_dir" \
   Sources/LemmingsLocal/GameSession.swift Sources/LemmingsLocal/RunRecovery.swift \
-  Tools/OfficialClassicQuest/main.swift -o "$build_dir/Quest"
+  Sources/LemmingsLocal/FailureMood.swift Tools/OfficialClassicQuest/main.swift -o "$build_dir/Quest"
 "$build_dir/Quest" "$ports" "$report" "${quest_arguments[@]}"
 python3 Tests/ClassicFamilyCompletionTests/test_official_quest.py "$build_dir/Quest" "$ports" "${quest_arguments[@]}"

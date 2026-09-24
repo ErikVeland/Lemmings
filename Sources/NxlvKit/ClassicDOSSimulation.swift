@@ -369,15 +369,12 @@ public struct ClassicDOSTerrain: Codable, Equatable, Sendable {
         return true
     }
 
-    /// Destructive masks may only remove destructible terrain pixels.
-    ///
-    /// Skill-specific probe checks decide whether an action can start, but the
-    /// full mask can cover more than one probe point. Steel must therefore be
-    /// enforced again for every pixel in the mask.
+    /// DOS checks steel at skill-specific probe points before applying a mask.
+    /// A mask can overlap protected pixels when its probe is outside steel.
     fileprivate mutating func removeDOSPixel(x: Int, y: Int) -> Bool {
         guard contains(x: x, y: y) else { return false }
         let index = y * width + x
-        guard solidPixels[index] != 0, steelPixels[index] == 0 else { return false }
+        guard solidPixels[index] != 0 else { return false }
         solidPixels[index] = 0
         return true
     }

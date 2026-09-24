@@ -16,6 +16,7 @@ fi
 swiftc -O -swift-version 6 -warnings-as-errors -target "$(uname -m)-apple-macos12.3" \
   -I "$library_dir/modules" -L "$library_dir" -lNxlvKit \
   -Xlinker -rpath -Xlinker "$library_dir" -o "$build_dir/tests" \
-  Sources/LemmingsLocal/GameSession.swift Sources/LemmingsLocal/RunRecovery.swift Tests/CrossBuildRecoveryTests/main.swift
+  Sources/LemmingsLocal/GameSession.swift Sources/LemmingsLocal/RunRecovery.swift \
+  Sources/LemmingsLocal/FailureMood.swift Tests/CrossBuildRecoveryTests/main.swift
 ports="${CROSS_BUILD_PORTS:-$project_dir/.build/local/Ultimate Lemmings.app/Contents/Resources/Ports}"
 "$build_dir/tests" "$ports/oh_no_more_lemmings_dos-1991-11-14_2232"

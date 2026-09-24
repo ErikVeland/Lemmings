@@ -42,7 +42,7 @@ struct PointerConfinement {
              // missing) for as long as the edge is held, e.g. along the
              // bottom panel or during edge scrolling.
              let result = CGWarpMouseCursorPosition(point)
-             CGAssociateMouseAndMouseCursorPosition(1)
+             CGAssociateMouseAndMouseCursorPosition(boolean_t(1))
              return result
          }) {
         self.readPosition = readPosition
