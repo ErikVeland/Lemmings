@@ -894,6 +894,21 @@ struct LevelCoverFlowItem: Equatable, Sendable {
         return windingSign != nil
     }
 
+    // NSButton tracks the release against the raw frame, but the carousel
+    // hit-tests the projected cover. A click on the visible edge of a side
+    // card fell outside the raw frame and did nothing.
+    override func mouseDown(with event: NSEvent) {
+        guard let window, let stage = superview else { return super.mouseDown(with: event) }
+        while let next = window.nextEvent(matching: [.leftMouseUp, .leftMouseDragged]) {
+            guard next.type == .leftMouseUp else { continue }
+            let point = stage.convert(next.locationInWindow, from: nil)
+            if frame.contains(point) || containsInteractivePoint(point, in: stage.layer ?? CALayer()) {
+                onPress?()
+            }
+            return
+        }
+    }
+
     override func keyDown(with event: NSEvent) {
         switch event.keyCode {
         case 123, 126: onMove?(-1)
