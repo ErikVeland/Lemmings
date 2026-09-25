@@ -35,7 +35,7 @@ import NxlvKit
   private var favorApproachingCheck: NSButton?
   private var favorBombBlockersCheck: NSButton?
   private var favorBuildersCheck: NSButton?
-  private var unlockAllClassicLevelsCheck: NSButton?
+  private var levelSelectionPopUp: NSPopUpButton?
   private var controllerCheck: NSButton?
   private var controllerTapCheck: NSButton?
   private var controllerSwapCheck: NSButton?
@@ -186,19 +186,19 @@ import NxlvKit
     favorBuildersCheck = builders
     let targeting = NSStackView(views: [favorApproaching, bombBlockers, builders])
     targeting.orientation = .vertical; targeting.alignment = .leading; targeting.spacing = 8
-    let unlockAllClassicLevels = GameCheckButton(
-      title: "Unlock all Classic levels", target: self,
-      action: #selector(unlockAllClassicLevelsChanged))
-    unlockAllClassicLevels.toolTip = "Allow direct selection of Classic levels beyond this player's campaign progress."
-    unlockAllClassicLevels.state = settings.unlockAllClassicLevels ? .on : .off
-    unlockAllClassicLevelsCheck = unlockAllClassicLevels
+    let levelSelection = popUp(#selector(levelSelectionChanged))
+    levelSelection.addItems(withTitles: ["Player Unlocked", "All"])
+    levelSelection.setAccessibilityLabel("Level selection")
+    levelSelection.toolTip = "Choose which Classic levels are available for direct selection."
+    levelSelection.selectItem(at: settings.unlockAllClassicLevels ? 1 : 0)
+    levelSelectionPopUp = levelSelection
     variable.toolTip = SpeedPanelControls.help
     modern.state = settings.modernControlsEnabled ? .on : .off
     variable.state = settings.variableSpeedEnabled ? .on : .off
     variable.isEnabled = settings.modernControlsEnabled
     return pane([
       ("Preset", experience), ("Controls", modern), ("Speed", variable), ("Pause", interruption),
-      ("Targeting", targeting), ("Skill icon", iconSize), ("Reticule", count), ("Level Select", unlockAllClassicLevels),
+      ("Targeting", targeting), ("Skill icon", iconSize), ("Reticule", count), ("Level Select", levelSelection),
     ], spacing: 14)
   }
 
@@ -223,8 +223,9 @@ import NxlvKit
     settings.favorApproachingLemmings = sender.state == .on
     changed()
   }
-  @objc private func unlockAllClassicLevelsChanged(_ sender: NSButton) {
-    settings.unlockAllClassicLevels = sender.state == .on
+  @objc private func levelSelectionChanged(_ sender: NSPopUpButton) {
+    guard (0...1).contains(sender.indexOfSelectedItem) else { return }
+    settings.unlockAllClassicLevels = sender.indexOfSelectedItem == 1
     changed()
   }
   @objc private func favorBombBlockersChanged(_ sender: NSButton) {
@@ -499,7 +500,7 @@ import NxlvKit
     favorApproachingCheck?.state = settings.favorApproachingLemmings ? .on : .off
     favorBombBlockersCheck?.state = settings.favorBombBlockers ? .on : .off
     favorBuildersCheck?.state = settings.favorBuilders ? .on : .off
-    unlockAllClassicLevelsCheck?.state = settings.unlockAllClassicLevels ? .on : .off
+    levelSelectionPopUp?.selectItem(at: settings.unlockAllClassicLevels ? 1 : 0)
     controllerCheck?.state = settings.controllerEnabled ? .on : .off
     controllerTapCheck?.state = settings.controllerTapSpeed ? .on : .off
     controllerSwapCheck?.state = settings.controllerSwapSticks ? .on : .off
@@ -557,6 +558,7 @@ import NxlvKit
     applied.favorBombBlockers = settings.favorBombBlockers
     applied.favorBuilders = settings.favorBuilders
     applied.experiencePreset = settings.experiencePreset
+    applied.musicStyle = settings.musicStyle
     applied.pauseOnInterruption = settings.pauseOnInterruption
     applied.unlockAllClassicLevels = settings.unlockAllClassicLevels
     applied.controllerEnabled = settings.controllerEnabled

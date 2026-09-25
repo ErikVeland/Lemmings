@@ -117,3 +117,20 @@ Previously recorded movies retain their original frames.
 A GPU timing sample on the development Mac measured about 1.7 ms for the
 screen effect at 2560×1440. This excludes the base game render and is not a
 guarantee for other displays or GPUs.
+
+### Speed feedback checks, 25 September 2026
+
+The speed-state and Classic drawing suites passed. Offline audio measurements
+passed at all five speeds, including the pitch cap and unchanged tempo. The
+DJ module and incoming recording checks also passed. Focused L2/L3 canvas
+checks passed for sprite layering, controls, menus and effect lifetimes.
+The 2×, 3×, 5× and 10× renders were generated for all three games.
+
+The complete suites still have validation gaps outside this change:
+
+- The installed music library fails the sequel alternate-version assertion.
+  The pre-change playback code at `e894667` fails the same assertion.
+- Classic's variable-speed integration checks pass, but the later CRT minimap
+  drag assertion fails.
+- The full sequel app suite calls removed Settings preset methods and cannot
+  compile. The canvas checks above ran separately from those Settings tests.

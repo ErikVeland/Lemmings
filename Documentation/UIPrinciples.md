@@ -76,6 +76,12 @@ its choices. Machine artwork presets preserve targeting preferences.
 L2 retains a builder until native assignment rules allow another build. In L3,
 Use favours bomb-equipped blockers, then active brick builders. These preferences
 do not grant tools, change skill rules or queue builds.
+L2's Exploder can be assigned to blockers; its blast Bomber cannot. The preference
+only applies when the native skill rules permit the assignment.
+
+Level Select uses a dropdown with Player Unlocked (default) and All. It keeps the
+existing Classic progress override and saved choice. L2 and L3 retain their native
+campaign selection rules.
 
 ## Fresh level start
 

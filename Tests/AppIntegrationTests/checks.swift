@@ -431,6 +431,10 @@ extension AppDelegate {
         windowNumber: window.windowNumber, context: nil, eventNumber: 1, clickCount: 1, pressure: 0)!
       NSApp.postEvent(up, atStart: true)
       window.sendEvent(down)
+      // Native buttons can finish tracking on the next event-loop turn.
+      if let release = NSApp.nextEvent(matching: .leftMouseUp, until: .distantPast, inMode: .default, dequeue: true) {
+        NSApp.sendEvent(release)
+      }
     }
     func capturePreset(_ name: String) throws {
       root.layoutSubtreeIfNeeded()
@@ -445,14 +449,22 @@ extension AppDelegate {
         try check(false, "Preset choice \(name) is missing"); return
       }
       root.layoutSubtreeIfNeeded()
+      try capturePreset("choices")
       if keyboard {
         window.makeFirstResponder(button)
         let event = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 1,
           windowNumber: window.windowNumber, context: nil, characters: "\r", charactersIgnoringModifiers: "\r",
           isARepeat: false, keyCode: 36)!
         try check(GameScreen.shared.handleDialogKey(event), "Preset ignored Return")
-      } else { click(CGPoint(x: button.bounds.midX, y: button.bounds.midY), in: button) }
-      try check(experience.titleOfSelectedItem == name, "Preset selection did not update its label")
+      } else {
+        let point = CGPoint(x: button.bounds.midX, y: button.bounds.midY)
+        let hit = root.hitTest(button.convert(point, to: root))
+        try check(hit === button, "Preset click target was \(String(describing: hit)) instead of \(button.title)")
+        click(point, in: button)
+      }
+      if experience.titleOfSelectedItem != name { try capturePreset("failed-\(name.lowercased())") }
+      try check(experience.titleOfSelectedItem == name,
+        "Preset \(name) stayed \(experience.titleOfSelectedItem ?? "nil"); choice frame=\(button.frame), visible=\(button.visibleRect), page=\(GameScreen.shared.controllerPage(in: window)?.accessibilityLabel() ?? "nil")")
     }
     try capturePreset("modern")
     try selectPreset("Original")
