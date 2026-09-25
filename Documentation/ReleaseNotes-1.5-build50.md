@@ -1,12 +1,12 @@
-# Ultimate Lemmings 1.5 (build 47)
+# Ultimate Lemmings 1.5 (build 50)
 
-[Download the Mac app](https://github.com/ErikVeland/Lemmings/releases/download/v1.5.0/UltimateLemmings-1.5-build47.zip)
+[Download the Mac app](https://github.com/ErikVeland/Lemmings/releases/download/v1.5.0/UltimateLemmings-1.5-build50.zip)
 
-Build: 47
+Build: 50
 Release base: v1.2-build41
 
 These notes list all changes since 1.1 RC1 (build 37). Builds 38 to 41 were
-public test and 1.2 releases. Builds 42 to 46 were local test builds.
+public test and 1.2 releases. Builds 42 to 49 were local test builds.
 
 ## New in 1.5
 
@@ -36,12 +36,15 @@ public test and 1.2 releases. Builds 42 to 46 were local test builds.
 - Settings has skill-icon sizes None, 1× and 2×. The default 1× is the size
   that builds 44 to 46 called 2×. The new 2× is twice as large. The old,
   smallest size is gone. Saved settings keep their current icon size.
+- Gameplay settings have Original, Modern and Custom presets. Modern turns on
+  the targeting aids below. Original turns them off and hides the skill icon.
+  A change to one setting selects Custom.
 - An optional lemming count shows beside the cursor. The default is off.
 - Cursor settings apply in Classic, Lemmings 2 and Lemmings 3.
-- With Bomber selected, a click near a blocker picks the blocker. With
+- With a bomb skill selected, a click near a blocker picks the blocker. With
   Builder selected, a click near a builder picks it, so its bridge continues.
   Both options are on by default in all three games. In Lemmings 3, they
-  apply to Use tool with a bomb or bricks.
+  apply to Use tool. The native skill rules still decide each assignment.
 - Press R to retry, and the music stops like a record under a DJ's hand.
   The new attempt releases the record, and it spins back up to speed.
 - The selected lemming shows a faint halo and a gentle shimmer. With reduced
@@ -62,6 +65,19 @@ public test and 1.2 releases. Builds 42 to 46 were local test builds.
 - You can click a checkbox label to change the checkbox.
 - The speed toolbar buttons toggle correctly.
 
+### Controls and dialogs
+
+- Press H for level hints. I and F1 still work.
+- Use the toolbar to rewind two seconds or step one tick backward or forward
+  in all three games. Play stays paused after a step or a rewind.
+- Open hints from the toolbar in all three games. Left and Right move between
+  hint stages. The full solution still asks for confirmation.
+- Return and keypad Enter activate the focused dialog button. Tab, Shift-Tab
+  and the arrow keys move between dialog controls.
+- Dialogs and help screens use the normal mouse pointer in all three games.
+- Replay and original-movie controls work from the keyboard and with
+  VoiceOver actions.
+
 ### Speed
 
 - The title screen opens without a pause. The game reads only the header of
@@ -71,6 +87,9 @@ public test and 1.2 releases. Builds 42 to 46 were local test builds.
 - The game does not set up a campaign again when you go back to it.
   Transition saves no longer block play.
 - HDR effects start only when an effect needs them.
+- Music pitch rises a little at each fast-forward speed, without a change in
+  tempo. Normal speed restores normal pitch.
+- Speed echoes behind moving lemmings grow longer and softer at each speed.
 
 ### Gameplay fixes
 

@@ -296,11 +296,11 @@ extension SettingsWindow {
         try image.representation(using: .png, properties: [:])!.write(to: folder.appendingPathComponent("gameplay-settings.png"))
         try assertArtwork(modernControlsCheck?.state == .on && variableSpeedCheck?.state == .on,
             "Modern controls and variable speed are not the defaults")
-        useOGSettings()
+        applyExperiencePreset(modern: false)
         try assertArtwork(!current.modernControlsEnabled && !current.variableSpeedEnabled && !current.hdEffectsEnabled
             && !current.confinePointer && !SequelArtworkPreference.enabled && variableSpeedCheck?.isEnabled == false,
             "The OG action did not switch off the new conveniences")
-        useModernDefaults()
+        applyExperiencePreset(modern: true)
         try assertArtwork(current.modernControlsEnabled && current.variableSpeedEnabled && current.hdEffectsEnabled
             && current.confinePointer && SequelArtworkPreference.enabled && variableSpeedCheck?.isEnabled == true,
             "Modern defaults failed to restore the conveniences")
