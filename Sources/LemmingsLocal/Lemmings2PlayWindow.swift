@@ -2353,7 +2353,8 @@ import NxlvKit
                     assignmentHighlight.draw(at: centre, scale: zoom, tint: .systemYellow, radius: 7)
                 } else {
                     LemmingSelectionGlow.draw(at: centre, scale: zoom, radius: 7,
-                        tint: .systemGreen, animated: !reduceMotion)
+                        tint: GameCursor.targetTint(eligible: game?.canAssign(slot: selectedSkillSlot, to: id) == true, occupied: true),
+                        animated: !reduceMotion)
                 }
             }
             if !GameCursor.gameplaySuppressed, let point = cursorPoint(), gameplayRect.contains(point) {

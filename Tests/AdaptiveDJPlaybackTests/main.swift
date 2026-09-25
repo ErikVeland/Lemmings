@@ -20,7 +20,88 @@ private func require(
 
 private typealias Telemetry = AdaptiveDJEngine.Telemetry
 
+extension MusicFileDeck {
+@MainActor fileprivate static func checkSpeedPitchSignal() throws {
+  let url = FileManager.default.temporaryDirectory.appendingPathComponent("pitch-tone-\(UUID().uuidString).wav")
+  defer { try? FileManager.default.removeItem(at: url) }
+  let format = AVAudioFormat(standardFormatWithSampleRate: 44100, channels: 2)!
+  do {
+    let file = try AVAudioFile(forWriting: url, settings: format.settings)
+    let tone = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: 44100)!
+    tone.frameLength = 44100
+    for channel in 0..<2 { for frame in 0..<44100 {
+      tone.floatChannelData![channel][frame] = Float(sin(Double(frame) * 2 * .pi * 440 / 44100)) * 0.25
+    } }
+    try file.write(from: tone)
+  }
+  for tier in GameplaySpeed.steps {
+    let deck = MusicFileDeck(url: url)!
+    let ratio = GameplayMusicPitch.ratio(for: tier)
+    deck.setSpeedPitch(1200 * log2(ratio))
+    deck.reverb.wetDryMix = 0
+    deck.equaliser.bypass = true
+    try require(deck.playbackRate == 1 && deck.speedPitch.rate == 1, "Speed pitch altered the music tempo")
+    try deck.engine.enableManualRenderingMode(.offline, format: format, maximumFrameCount: 1024)
+    try deck.engine.start()
+    deck.player.scheduleFile(deck.file, at: nil)
+    deck.player.play()
+    let buffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: 1024)!
+    var samples: [Float] = []
+    while samples.count < 32768 {
+      let status = try deck.engine.renderOffline(1024, to: buffer)
+      try require(status == .success, "Pitch graph failed to render audio")
+      samples.append(contentsOf: UnsafeBufferPointer(start: buffer.floatChannelData![0], count: Int(buffer.frameLength)))
+    }
+    // Ignore the processor's initial latency. Measure the actual shifted tone.
+    var crossings = 0
+    for index in 8193..<samples.count where samples[index - 1] <= 0 && samples[index] > 0 { crossings += 1 }
+    let frequency = Double(crossings) * 44100 / Double(samples.count - 8192)
+    try require(abs(frequency / 440 - ratio) < 0.012,
+      "\(tier)× music rendered at \(frequency) Hz instead of \(440 * ratio) Hz")
+    deck.setSpeedPitch(10000)
+    try require(deck.speedPitch.pitch <= Float(1200 * log2(1.5)) + 0.001, "Audio graph exceeded the pitch cap")
+    deck.setSpeedPitch(0)
+    try require(deck.speedPitch.pitch == 0, "Normal speed retained pitch processing")
+    deck.stop()
+  }
+  print("PASS rendered music pitch at every tier, unchanged tempo and hard pitch cap")
+}
+
+}
+
+extension ModuleMusicPlayer {
+  fileprivate func checkSpeedPitch(_ cents: Double) throws {
+    try require(speedPitch.pitch == Float(cents), "Module missed the speed pitch")
+  }
+}
+extension MusicFileDeck {
+  fileprivate func checkSpeedPitch(_ cents: Double) throws {
+    try require(speedPitch.pitch == Float(cents), "Recording missed the speed pitch")
+  }
+}
+extension DJDeck {
+  fileprivate func checkSpeedPitch(_ cents: Double) throws {
+    try recording?.checkSpeedPitch(cents)
+    try module?.checkSpeedPitch(cents)
+  }
+}
+extension AdaptiveDJPlayer {
+  fileprivate func checkSpeedPitchRouting(recordingURL: URL) throws {
+    let cents = 1200 * log2(GameplayMusicPitch.ratio(for: 10))
+    let bpm = deckA?.beatInfo?.bpm
+    setSpeedPitch(cents)
+    try deckA?.checkSpeedPitch(cents)
+    try require(deckA?.beatInfo?.bpm == bpm, "Module pitch altered the tracker clock")
+    let incoming = makeDeck(recordingURL)
+    try require(incoming != nil, "Incoming recording did not load")
+    try incoming?.checkSpeedPitch(cents)
+    setSpeedPitch(0)
+    try deckA?.checkSpeedPitch(0)
+  }
+}
+
 @MainActor private func run(_ root: URL) throws {
+  try MusicFileDeck.checkSpeedPitchSignal()
   let loopURL = FileManager.default.temporaryDirectory.appendingPathComponent("music-loop-\(UUID().uuidString).wav")
   defer { try? FileManager.default.removeItem(at: loopURL) }
   let format = AVAudioFormat(standardFormatWithSampleRate: 44100, channels: 2)!
@@ -86,6 +167,7 @@ private typealias Telemetry = AdaptiveDJEngine.Telemetry
   player.startLevel(url: assigned, identity: "level-one")
   try require(player.currentURL == assigned, "Assigned opening track ignored")
   try require(player.isPlaying, "the mix did not start")
+  try player.checkSpeedPitchRouting(recordingURL: loopURL)
   let opening = player.currentTrackName
   try require(!opening.isEmpty, "the mix started without naming a track")
   print("  opened on: \(opening)")

@@ -36,7 +36,9 @@ Assignment feedback follows the engine's actual eligibility rules. Grey means no
 accept the selected skill; green means the nearest target can accept the selected skill.
 Successful assignments get a 100 ms green pulse, with local HDR brightness when
 available. An existing assignment gets an 80 ms orange cue. An eligible neighbour
-always takes priority over orange. Honour the reduced-flash setting.
+normally takes priority over orange. When Build targeting favours a current builder,
+keep that builder selected until it finishes. Show its actual eligibility and do
+not queue an early click. Honour the reduced-flash setting.
 
 ## Typography
 
@@ -54,7 +56,8 @@ text from headings. Preserve accessible names and input targets.
 Use four corner brackets at the input position, with strokes one pixel
 wide at every zoom and no central crosshair. Place the selected skill sprite diagonally below
 and right of the bottom-right corner, about 10 screen pixels from each edge. Offer None, 1× and 2×
-skill icon sizes in Gameplay settings, defaulting to 2×.
+skill icon sizes in Gameplay settings. The visible 1× and 2× choices use actual
+2× and 4× artwork. Modern defaults to 1×; Original hides the icon.
 Offer a separate default-off lemming count below-left, aligned with the skill icon and the same distance from the opposite corner.
 Count live sprite centres inside the reticule, regardless of skill eligibility.
 Keep the count available when the icon is hidden.
@@ -64,6 +67,15 @@ artwork rather than falling back to a plain dot.
 A selected lemming has a faint, soft halo with a small brightness shimmer.
 Do not draw an outlined ring or an orbiting arc. Reduced motion keeps the halo
 static. Classic, Lemmings 2 and Lemmings 3 use the same cursor and halo renderers.
+
+Gameplay settings offer Original, Modern and Custom presets. Modern enables
+approaching-lemming targeting, blockers for bombs and current builders for Build.
+Original disables these aids. Individual changes select Custom, which persists
+even if the player restores the previous values. Only selecting a preset resets
+its choices. Machine artwork presets preserve targeting preferences.
+L2 retains a builder until native assignment rules allow another build. In L3,
+Use favours bomb-equipped blockers, then active brick builders. These preferences
+do not grant tools, change skill rules or queue builds.
 
 ## Fresh level start
 

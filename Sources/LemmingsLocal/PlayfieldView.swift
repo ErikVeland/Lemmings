@@ -1148,7 +1148,7 @@ struct ReticleFeedback {
       fromLevel: (pulseTarget ?? target).map { CGPoint(x: CGFloat($0.x), y: CGFloat($0.y) - 5) } ?? point)
     let color: NSColor
     switch state {
-    case .unavailable: color = NSColor(calibratedWhite: 0.6, alpha: 0.9)
+    case .unavailable: color = target == nil ? NSColor(calibratedWhite: 0.6, alpha: 0.9) : .systemYellow
     case .eligible: color = NSColor(calibratedRed: 0.3, green: 0.85, blue: 0.2, alpha: 1)
     case .assigned: color = NSColor(calibratedRed: 0.65, green: 1, blue: 0.45, alpha: 1)
     case .alreadyAssigned: color = NSColor(calibratedRed: 1, green: 0.62, blue: 0.08, alpha: 1)
@@ -1167,7 +1167,7 @@ struct ReticleFeedback {
     // The lemming, rather than the pointer, is the point of attention. Keep
     // this cue soft so it confirms the target without changing play timing or
     // obscuring the native sprite artwork.
-    if target != nil, assignmentHighlight.target == nil, state != .unavailable {
+    if target != nil, assignmentHighlight.target == nil {
       LemmingSelectionGlow.draw(at: targetPoint, scale: viewport.zoom, radius: 7,
         tint: color, animated: !reduceMotion)
     }
@@ -1175,7 +1175,7 @@ struct ReticleFeedback {
     // Keep the reticle at the actual cursor position. The target glow remains
     // separate, so a target offset does not change click precision.
     GameCursor.drawPlayfieldPointer(at: cursorViewPoint, scale: viewport.zoom,
-      tint: GameCursor.targetTint(eligible: target != nil,
+      tint: GameCursor.targetTint(eligible: target.map { session?.canAssign(skillIndex: selectedSkill(), to: $0.id) == true } == true,
         occupied: session?.lemmings.contains { contains($0, point) } == true))
 
     if showReticleCount {
