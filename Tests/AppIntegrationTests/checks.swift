@@ -2604,7 +2604,9 @@ extension AppDelegate {
     try check(running.currentTick == 0, "The level clock ran behind a game page")
     settings.display = tubeIsActive ? .flat : .monitor
     applyDisplayMode()
-    try check(page.window === window && window.firstResponder === page, "Changing display mode lost the menu")
+    // Dialog navigation may focus the page's default control rather than the page.
+    let menuFocused = (window.firstResponder as? NSView).map { $0 === page || $0.isDescendant(of: page) } == true
+    try check(page.window === window && menuFocused, "Changing display mode lost the menu")
     try check(NSApp.windows.count == count, "A game page opened another window")
     GameScreen.shared.dismiss(page)
     step(at: 3.1)
@@ -2900,7 +2902,8 @@ extension AppDelegate {
     var scrolled: Double?
     panel.levelSize = CGSize(width: 1600, height: 160)
     panel.onMinimapScroll = { scrolled = $0 }
-    crtView.onMouseDragged?(CGPoint(x: 550, y: 340))
+    // The timeline controls sit above the minimap. Drag inside the minimap itself.
+    crtView.onMouseDragged?(CGPoint(x: panel.minimapBounds.midX, y: panel.minimapBounds.midY + 320))
     try check(scrolled != nil, "CRT minimap drag did not scroll")
     settings.display = .flat
     applyDisplayMode()
