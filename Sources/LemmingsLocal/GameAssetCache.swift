@@ -19,13 +19,17 @@ final class GameAssetCache<Value: Sendable>: @unchecked Sendable {
         while order.count > capacity { values.removeValue(forKey: order.removeFirst()) }
     }
 
-    private static var resourceRoot: String? {
-        Bundle.main.resourceURL?.resolvingSymlinksInPath().standardizedFileURL.path
-    }
     /// Only the installed application resources are immutable for this process.
     static func bundledKey(_ url: URL) -> String? {
-        guard let root = resourceRoot else { return nil }
+        guard let root = InstalledGameResourceRoot.path else { return nil }
         let path = url.resolvingSymlinksInPath().standardizedFileURL.path
         return path.hasPrefix(root + "/") ? path : nil
     }
+}
+
+private enum InstalledGameResourceRoot {
+    static let path: String? = {
+        guard Bundle.main.bundleURL.pathExtension.lowercased() == "app" else { return nil }
+        return Bundle.main.resourceURL?.resolvingSymlinksInPath().standardizedFileURL.path
+    }()
 }
