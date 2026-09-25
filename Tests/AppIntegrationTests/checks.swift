@@ -370,6 +370,32 @@ extension AppDelegate {
     print("PASS green handover identity, mouse retry of the previous level as UVA, rightmost begin action, shared progress and solo boundaries")
   }
 
+  fileprivate func testPauseKeyRelease() throws {
+    if window == nil { buildInterface() }
+    if gameplayKeyboard == nil { installKeyboardShortcuts() }
+    GameScreen.shared.dismissAll()
+    loadContent()
+    gamePicker.selectItem(at: dataSets.firstIndex(where: { $0.set.title == .lemmings })!)
+    selectDataSet(); loadLevel(at: 30); phase = .playing; isPaused = false
+    for (key, code) in [(" ", UInt16(49)), ("p", UInt16(35))] {
+      func send(_ type: NSEvent.EventType, repeatKey: Bool = false) {
+        let event = NSEvent.keyEvent(with: type, location: .zero, modifierFlags: [], timestamp: 1,
+          windowNumber: window.windowNumber, context: nil, characters: key,
+          charactersIgnoringModifiers: key, isARepeat: repeatKey, keyCode: code)!
+        NSApp.sendEvent(event)
+      }
+      send(.keyDown)
+      try check(isPaused, "Pause key did not pause on press")
+      send(.keyDown, repeatKey: true)
+      try check(isPaused, "Held pause key toggled repeatedly")
+      send(.keyUp)
+      try check(isPaused, "Releasing pause immediately resumed play")
+      send(.keyDown); send(.keyUp)
+      try check(!isPaused, "Second pause press did not resume play")
+    }
+    print("PASS Space and P pause once per press, ignore repeat and remain paused on release")
+  }
+
   fileprivate func testInterruptionPolicy() throws {
     if gameplayKeyboard == nil { installKeyboardShortcuts() }
     GameScreen.shared.dismissAll()
@@ -3437,6 +3463,7 @@ Task { @MainActor in
   do {
     let subject = AppDelegate()
     subject.prepareArcadeTests()
+    #if !CURSOR_INPUT_TESTS
     try subject.testFailureMoodDecision()
     try subject.testSteppedCompletion()
     try subject.testFirstLaunchEffects()
@@ -3445,6 +3472,7 @@ Task { @MainActor in
     #if !CONTENT_BROWSER_TESTS
     try await subject.testAccessibleMenusAndHelp()
     try testPointerAssignment()
+    #endif
     #endif
     #if PERFORMANCE_TESTS
     try await subject.testReleasePerformance()
@@ -3464,6 +3492,7 @@ Task { @MainActor in
     try subject.testRunRecovery()
     try subject.testFanRunRecovery()
     try subject.testEscapeToMainMenu()
+    try subject.testPauseKeyRelease()
     try subject.testInterruptionPolicy()
     print("Controller QoL integration tests passed.")
     #elseif RELEASE_BLOCKER_TESTS
@@ -3492,6 +3521,9 @@ Task { @MainActor in
     try subject.testMenuDisplayTransition()
     try await subject.testCRTInput()
     print("Variable speed integration tests passed.")
+    #elseif CURSOR_INPUT_TESTS
+    try subject.testPauseKeyRelease()
+    print("Cursor input integration tests passed.")
     #elseif HD_EFFECTS_TESTS
     try subject.testSuperSpeedPresentation()
     print("HD effects integration tests passed.")
@@ -3519,6 +3551,7 @@ Task { @MainActor in
     try subject.testRunRecovery()
     try subject.testFanRunRecovery()
     try subject.testEscapeToMainMenu()
+    try subject.testPauseKeyRelease()
     try subject.testInterruptionPolicy()
     try subject.testHotSeatBoundaries()
     try subject.testHandoverPreviousLevel()

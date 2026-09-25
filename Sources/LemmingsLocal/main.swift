@@ -6393,6 +6393,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
         return nil
       }
 
+      guard event.type == .keyDown else { return event }
+      if event.isARepeat, [" ", "p"].contains(event.charactersIgnoringModifiers ?? "") { return nil }
+
       if event.keyCode == 122 || event.charactersIgnoringModifiers?.lowercased() == "i" {
         if !event.isARepeat { self.showLevelHints() }
         return nil

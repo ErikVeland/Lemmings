@@ -750,10 +750,10 @@ private func testMacArtworkCropStaysPixelAligned() throws {
     try require(frame.width == 8 * pixel && frame.height == frame.width,
       "the selected-skill reminder is not tiny at \(scale)x")
     let reticle = GameCursor.playfieldPointerFrame(at: point, scale: scale)
-    try require(reticle.contains(frame),
-      "the selected-skill reminder is not inside the reticle at \(scale)x")
-    try require(frame.maxX < reticle.maxX && frame.maxY < reticle.maxY,
-      "the selected-skill reminder is not inset from the reticle corner at \(scale)x")
+    try require(!reticle.intersects(frame),
+      "the selected-skill reminder overlaps the reticle at \(scale)x")
+    try require(frame.minX > reticle.maxX && frame.minY > reticle.maxY,
+      "the selected-skill reminder is not diagonally below the reticle corner at \(scale)x")
     try require(frame.minX.truncatingRemainder(dividingBy: pixel) == 0
       && frame.minY.truncatingRemainder(dividingBy: pixel) == 0,
       "the selected-skill reminder is not pixel-aligned at \(scale)x")
@@ -768,6 +768,27 @@ private func testMacArtworkCropStaysPixelAligned() throws {
     }
   }
   print("PASS selected-skill reminder stays tiny, offset and visible at every edge")
+}
+
+@MainActor private func renderSelectionPreview() throws {
+  let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
+  let view = PlayfieldView(frame: CGRect(x: 0, y: 0, width: 640, height: 320))
+  let session = TargetingSession()
+  session.actors = [.init(id: 0, x: 160, y: 80, pose: .walking, facingLeft: false, animationFrame: 0, countdown: nil)]
+  view.session = session; view.phase = .playing; view.viewport.zoom = 2
+  view.assets = try ClassicMainDATAssets.load(from: root.appendingPathComponent("Content/lemming1.pc"))
+  view.palette = ClassicLemmingPalette.panelVGA
+  view.levelImage = CGContext(data: nil, width: 320, height: 160, bitsPerComponent: 8,
+    bytesPerRow: 1280, space: CGColorSpaceCreateDeviceRGB(),
+    bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)!.makeImage()
+  view.handleMove(to: CGPoint(x: 320, y: 160))
+  for (name, reduced) in [("animated", false), ("reduced-motion", true)] {
+    view.reduceMotion = reduced
+    let bitmap = view.bitmapImageRepForCachingDisplay(in: view.bounds)!
+    view.cacheDisplay(in: view.bounds, to: bitmap)
+    try bitmap.representation(using: .png, properties: [:])!.write(
+      to: root.appendingPathComponent(".build/selection-" + name + ".png"))
+  }
 }
 
 @MainActor private func testGameCursorRegions() throws {
@@ -788,6 +809,7 @@ private func testMacArtworkCropStaysPixelAligned() throws {
     try testTickDirectionContinuity()
     try testSkillCursorBadgeGeometry()
     try testGameCursorRegions()
+    try renderSelectionPreview()
     try testMacArtworkCropStaysPixelAligned()
     try testSpeedSpritesStayOnTop()
     try testSpeedAfterimages()

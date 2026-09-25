@@ -46,3 +46,14 @@ and small blue lettering for body text, quantities and secondary actions.
 Keep each row of peer controls at the same face and scale. Do not size individual
 labels to fill their boxes. Use spacing and grouping to separate supporting
 text from headings. Preserve accessible names and input targets.
+
+## Gameplay pointer
+
+Keep the small pre-build-38 crosshair at the input position. Place the selected
+skill sprite diagonally below and right of the crosshair, outside its bounds.
+Clamp the sprite to the playfield edge. Directional skills must use directional
+artwork rather than falling back to a plain dot.
+
+A selected lemming has a faint, soft halo with a small brightness shimmer.
+Do not draw an outlined ring or an orbiting arc. Reduced motion keeps the halo
+static. Classic, Lemmings 2 and Lemmings 3 use the same cursor and halo renderers.

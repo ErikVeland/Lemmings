@@ -1598,6 +1598,7 @@ import NxlvKit
     override func mouseMoved(with event: NSEvent) { if let p = point(event) { onMove?(p.0, p.1) } }
     override func keyDown(with event: NSEvent) {
         guard event.modifierFlags.intersection([.command, .control, .option]).isEmpty else { super.keyDown(with: event); return }
+        if event.isARepeat, [" ", "p"].contains(event.charactersIgnoringModifiers ?? "") { return }
         if event.keyCode == 123 { onKey?("left") }
         else if event.keyCode == 124 { onKey?("right") }
         else if event.keyCode == 125 { onKey?("down") }
@@ -2406,6 +2407,7 @@ import NxlvKit
     override func mouseUp(with event: NSEvent) { onSpeedRelease?(event.timestamp); trackPointer(event,held:false); onRelease?() }
     override func keyDown(with event: NSEvent) {
         guard event.modifierFlags.intersection([.command, .control, .option]).isEmpty else { super.keyDown(with: event); return }
+        if event.isARepeat, [" ", "p"].contains(event.charactersIgnoringModifiers ?? "") { return }
         switch event.keyCode {
         case 123: pan(x: -24, y: 0)
         case 124: pan(x: 24, y: 0)

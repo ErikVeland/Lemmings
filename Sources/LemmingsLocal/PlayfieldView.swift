@@ -1162,7 +1162,9 @@ struct ReticleFeedback {
     if let cached = skillBadgeCache[index] { return cached }
     let poses: [ClassicLemmingPose] = [.climbing, .floating, .ohNo, .blocking,
       .building, .bashing, .mining, .digging]
-    guard let frame = assets.animation(for: poses[index], direction: .none)?.frames.first,
+    let animation = assets.animation(for: poses[index], direction: .right)
+      ?? assets.animation(for: poses[index], direction: .none)
+    guard let frame = animation?.frames.first,
           let image = image(from: frame) else { return nil }
     skillBadgeCache[index] = image
     return image

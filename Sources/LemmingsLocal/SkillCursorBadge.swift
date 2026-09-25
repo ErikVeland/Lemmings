@@ -6,7 +6,7 @@ import AppKit
     private static let nativeGap: CGFloat = 3
 
     /**
-     * Returns a tiny badge frame inside the reticle's lower-right corner.
+     * Returns a tiny badge frame diagonally below the reticle’s lower-right corner.
      */
     static func frame(at point: CGPoint, scale: CGFloat, in bounds: CGRect) -> CGRect {
         let pixel = max(1, floor(scale))
@@ -14,10 +14,10 @@ import AppKit
         let reticle = GameCursor.playfieldPointerFrame(at: point, scale: scale)
         let gap = nativeGap * pixel
         let safeBounds = bounds.insetBy(dx: pixel, dy: pixel)
-        var x = floor((reticle.maxX - side - gap) / pixel) * pixel
-        var y = floor((reticle.maxY - side - gap) / pixel) * pixel
-        x = min(max(safeBounds.minX, x), max(safeBounds.minX, safeBounds.maxX - side))
-        y = min(max(safeBounds.minY, y), max(safeBounds.minY, safeBounds.maxY - side))
+        var x = floor((reticle.maxX + gap) / pixel) * pixel
+        var y = floor((reticle.maxY + gap) / pixel) * pixel
+        x = min(max(safeBounds.minX, x), max(safeBounds.minX, floor((safeBounds.maxX - side) / pixel) * pixel))
+        y = min(max(safeBounds.minY, y), max(safeBounds.minY, floor((safeBounds.maxY - side) / pixel) * pixel))
         return CGRect(x: x, y: y, width: side, height: side)
     }
 

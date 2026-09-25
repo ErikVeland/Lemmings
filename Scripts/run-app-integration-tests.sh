@@ -34,6 +34,7 @@ rsync -a --delete "$sparkle_framework" "$test_app/Contents/Frameworks/"
 resource_app="${LEMMINGS_TEST_APP:-$project_dir/.build/local/Ultimate Lemmings.app}"
 ln -sfn "$resource_app/Contents/Resources" "$test_app/Contents/Resources"
 test_flags=()
+if [[ "${TEST_SCOPE:-all}" == cursor-input ]]; then test_flags+=(-D CURSOR_INPUT_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == hot-seat ]]; then test_flags+=(-D HOT_SEAT_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == hd-effects ]]; then test_flags+=(-D HD_EFFECTS_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == variable-speed ]]; then test_flags+=(-D VARIABLE_SPEED_TESTS); fi

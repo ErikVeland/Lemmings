@@ -1539,6 +1539,7 @@ import NxlvKit
     override func mouseUp(with event: NSEvent) { onSpeedRelease?(event.timestamp) }
     override func keyDown(with event: NSEvent) {
         guard event.modifierFlags.intersection([.command, .control, .option]).isEmpty else { super.keyDown(with: event); return }
+        if event.isARepeat, [" ", "p"].contains(event.charactersIgnoringModifiers ?? "") { return }
         if let rows = menuRows {
             if event.keyCode == 125 { menuSelection = (menuSelection + 1) % rows.count }
             else if event.keyCode == 126 { menuSelection = (menuSelection + rows.count - 1) % rows.count }
