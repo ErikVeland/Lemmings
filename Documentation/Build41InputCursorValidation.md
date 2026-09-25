@@ -27,3 +27,12 @@ Validation:
 - Lemmings 2 and 3 use the same cursor, badge and selection renderer. Their
   pause handlers were inspected and compiled. Live sequel and Hot Seat
   validation were not run for this change.
+
+## Follow-up in consolidated 1.5 build 42
+
+The merged 1.2 first-launch fixes and corrected test setup allow the targeted
+input test to complete. The test enters both the gameplay view and campaign
+playing state, then calls the exact handler registered by the event monitor.
+Space and P press, repeat, release and second-press checks all pass. The signed
+build also passes a 15-second launch with an empty user profile. The earlier
+failed attempts above remain historical evidence, not current blockers.

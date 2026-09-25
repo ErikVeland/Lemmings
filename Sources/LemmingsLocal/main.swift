@@ -6374,131 +6374,136 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
     NSEvent.addLocalMonitorForEvents(matching: [.keyDown, .keyUp]) { [weak self] event in
       guard let self else { return event }
-      guard !GameScreen.shared.isPresented, !self.sequelIsActive, event.window === self.window, self.window?.attachedSheet == nil,
-        event.modifierFlags.intersection([.command, .control, .option]).isEmpty else { return event }
-      if self.window?.firstResponder is NSTextView { return event }
+      return self.handleClassicKeyboardEvent(event)
+    }
+  }
 
-      if event.type == .keyUp, event.keyCode == 6 {
-        guard self.rewindHeld else { return event }
-        self.endContinuousRewind()
-        return nil
-      }
-      if event.type == .keyUp, event.charactersIgnoringModifiers == "," {
-        self.backwardKeyHeld = false
-        self.backwardKeyTimer?.invalidate()
-        self.backwardKeyTimer = nil
-        if self.rewindHeld { self.endContinuousRewind() }
-        return nil
-      }
-      if event.type == .keyUp, event.charactersIgnoringModifiers == "." {
-        self.forwardKeyHeld = false
-        self.forwardKeyTimer?.invalidate()
-        self.forwardKeyTimer = nil
-        if self.forwardHeld { self.endContinuousStepForward() }
-        return nil
-      }
+  /// Routes real keyboard events independently of the AppKit event queue.
+  private func handleClassicKeyboardEvent(_ event: NSEvent) -> NSEvent? {
+    guard !GameScreen.shared.isPresented, !self.sequelIsActive, event.window === self.window, self.window?.attachedSheet == nil,
+      event.modifierFlags.intersection([.command, .control, .option]).isEmpty else { return event }
+    if self.window?.firstResponder is NSTextView { return event }
 
-      guard event.type == .keyDown else { return event }
-      if event.isARepeat, [" ", "p"].contains(event.charactersIgnoringModifiers ?? "") { return nil }
+    if event.type == .keyUp, event.keyCode == 6 {
+      guard self.rewindHeld else { return event }
+      self.endContinuousRewind()
+      return nil
+    }
+    if event.type == .keyUp, event.charactersIgnoringModifiers == "," {
+      self.backwardKeyHeld = false
+      self.backwardKeyTimer?.invalidate()
+      self.backwardKeyTimer = nil
+      if self.rewindHeld { self.endContinuousRewind() }
+      return nil
+    }
+    if event.type == .keyUp, event.charactersIgnoringModifiers == "." {
+      self.forwardKeyHeld = false
+      self.forwardKeyTimer?.invalidate()
+      self.forwardKeyTimer = nil
+      if self.forwardHeld { self.endContinuousStepForward() }
+      return nil
+    }
 
-      if event.keyCode == 122 || event.charactersIgnoringModifiers?.lowercased() == "i" {
-        if !event.isARepeat { self.showLevelHints() }
-        return nil
-      }
+    guard event.type == .keyDown else { return event }
+    if event.isARepeat, [" ", "p"].contains(event.charactersIgnoringModifiers ?? "") { return nil }
 
-      let scrollStep = 24.0
+    if event.keyCode == 122 || event.charactersIgnoringModifiers?.lowercased() == "i" {
+      if !event.isARepeat { self.showLevelHints() }
+      return nil
+    }
+
+    let scrollStep = 24.0
+    switch event.keyCode {
+    case 123:
+      if event.modifierFlags.contains(.shift) { self.stepBackward() }
+      else { self.scrollBy(-scrollStep) }
+      return nil
+    case 124:
+      if event.modifierFlags.contains(.shift) { self.stepForward() }
+      else { self.scrollBy(scrollStep) }
+      return nil
+    default: break
+    }
+
+    guard let characters = event.charactersIgnoringModifiers?.lowercased() else { return event }
+    if self.phase == .results, self.session?.isComplete == true {
+      if characters == "v" { self.runMovie.review(); return nil }
+      if characters == "s" { self.runMovie.review(save: true); return nil }
+    }
+    if self.phase == .playing, let session = self.session,
+      let index = SkillShortcuts(names: session.skills.map(\.name)).index(for: characters, current: self.panel.selectedSkillIndex, modern: self.settings.modernControlsEnabled) {
+      self.handle(.skill(index))
+      return nil
+    }
+    // Screen keys come first, so they are not eaten by gameplay bindings.
+    if let screen = self.flow?.screen, !screen.isPlaying {
       switch event.keyCode {
-      case 123:
-        if event.modifierFlags.contains(.shift) { self.stepBackward() }
-        else { self.scrollBy(-scrollStep) }
-        return nil
-      case 124:
-        if event.modifierFlags.contains(.shift) { self.stepForward() }
-        else { self.scrollBy(scrollStep) }
+      case 125: self.moveRankChoice(1); return nil     // down
+      case 126: self.moveRankChoice(-1); return nil    // up
+      case 36, 76: self.advancePhase(); return nil     // return, enter
+      case 53:                                          // escape
+        if self.retreatFanScreen() { return nil }
+        if screen == .quitConfirm { self.cancelQuit() }
+        else { self.returnToLibrary() }
         return nil
       default: break
       }
-
-      guard let characters = event.charactersIgnoringModifiers?.lowercased() else { return event }
-      if self.phase == .results, self.session?.isComplete == true {
-        if characters == "v" { self.runMovie.review(); return nil }
-        if characters == "s" { self.runMovie.review(save: true); return nil }
-      }
-      if self.phase == .playing, let session = self.session,
-        let index = SkillShortcuts(names: session.skills.map(\.name)).index(for: characters, current: self.panel.selectedSkillIndex, modern: self.settings.modernControlsEnabled) {
-        self.handle(.skill(index))
-        return nil
-      }
-      // Screen keys come first, so they are not eaten by gameplay bindings.
-      if let screen = self.flow?.screen, !screen.isPlaying {
-        switch event.keyCode {
-        case 125: self.moveRankChoice(1); return nil     // down
-        case 126: self.moveRankChoice(-1); return nil    // up
-        case 36, 76: self.advancePhase(); return nil     // return, enter
-        case 53:                                          // escape
-          if self.retreatFanScreen() { return nil }
-          if screen == .quitConfirm { self.cancelQuit() }
-          else { self.returnToLibrary() }
-          return nil
-        default: break
-        }
-        if characters == " " { self.advancePhase(); return nil }
-        if characters == "q" { self.requestQuit(); return nil }
-      }
-
-      switch characters {
-      case "z":
-        if !event.isARepeat { self.beginContinuousRewind() }
-      case ",":
-        if !event.isARepeat {
-          self.backwardKeyHeld = true
-          guard self.stepBackward() else {
-            self.backwardKeyHeld = false
-            return nil
-          }
-          self.backwardKeyTimer?.invalidate()
-          self.backwardKeyTimer = Timer.scheduledTimer(withTimeInterval: 0.18, repeats: false) { [weak self] _ in
-            MainActor.assumeIsolated {
-              guard let self, self.backwardKeyHeld else { return }
-              _ = self.beginContinuousRewind(preservingOrigin: true, advanceImmediately: false)
-            }
-          }
-        }
-      case ".":
-        if !event.isARepeat {
-          self.forwardKeyHeld = true
-          guard self.stepForward() else {
-            self.forwardKeyHeld = false
-            return nil
-          }
-          self.forwardKeyTimer?.invalidate()
-          self.forwardKeyTimer = Timer.scheduledTimer(withTimeInterval: 0.18, repeats: false) { [weak self] _ in
-            MainActor.assumeIsolated {
-              guard let self, self.forwardKeyHeld else { return }
-              self.beginContinuousStepForward(advanceImmediately: false)
-            }
-          }
-        }
-      case "\r":
-        if self.phase == .playing { return event }
-        self.advancePhase()
-      case "q":
-        if var current = self.flow {
-          current.abandonLevel()
-          self.flow = current
-          self.renderScreen()
-        }
-      case "n": self.nextLevel()
-      case "r": self.retry()
-      case " ":
-        if self.phase == .playing { self.togglePause() } else { self.advancePhase() }
-      case "p": self.togglePause()
-      case "f": return event
-      case "x": self.handle(.nuke)
-      default: return event
-      }
-      return nil
+      if characters == " " { self.advancePhase(); return nil }
+      if characters == "q" { self.requestQuit(); return nil }
     }
+
+    switch characters {
+    case "z":
+      if !event.isARepeat { self.beginContinuousRewind() }
+    case ",":
+      if !event.isARepeat {
+        self.backwardKeyHeld = true
+        guard self.stepBackward() else {
+          self.backwardKeyHeld = false
+          return nil
+        }
+        self.backwardKeyTimer?.invalidate()
+        self.backwardKeyTimer = Timer.scheduledTimer(withTimeInterval: 0.18, repeats: false) { [weak self] _ in
+          MainActor.assumeIsolated {
+            guard let self, self.backwardKeyHeld else { return }
+            _ = self.beginContinuousRewind(preservingOrigin: true, advanceImmediately: false)
+          }
+        }
+      }
+    case ".":
+      if !event.isARepeat {
+        self.forwardKeyHeld = true
+        guard self.stepForward() else {
+          self.forwardKeyHeld = false
+          return nil
+        }
+        self.forwardKeyTimer?.invalidate()
+        self.forwardKeyTimer = Timer.scheduledTimer(withTimeInterval: 0.18, repeats: false) { [weak self] _ in
+          MainActor.assumeIsolated {
+            guard let self, self.forwardKeyHeld else { return }
+            self.beginContinuousStepForward(advanceImmediately: false)
+          }
+        }
+      }
+    case "\r":
+      if self.phase == .playing { return event }
+      self.advancePhase()
+    case "q":
+      if var current = self.flow {
+        current.abandonLevel()
+        self.flow = current
+        self.renderScreen()
+      }
+    case "n": self.nextLevel()
+    case "r": self.retry()
+    case " ":
+      if self.phase == .playing { self.togglePause() } else { self.advancePhase() }
+    case "p": self.togglePause()
+    case "f": return event
+    case "x": self.handle(.nuke)
+    default: return event
+    }
+    return nil
   }
 
   // MARK: - Rewind

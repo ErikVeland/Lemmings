@@ -388,13 +388,18 @@ extension AppDelegate {
     GameScreen.shared.dismissAll()
     loadContent()
     gamePicker.selectItem(at: dataSets.firstIndex(where: { $0.set.title == .lemmings })!)
-    selectDataSet(); loadLevel(at: 30); phase = .playing; isPaused = false
+    selectDataSet(); loadLevel(at: 0); phase = .playing; isPaused = false
+    flow?.selectLevel(rank: 0, position: 0)
+    flow?.beginPlaying()
+    GameScreen.shared.dismissAll()
+    window.makeFirstResponder(playfield)
+    try check(session != nil && flow?.screen.isPlaying == true && !sequelIsActive && window.attachedSheet == nil, "Pause fixture did not enter Classic gameplay")
     for (key, code) in [(" ", UInt16(49)), ("p", UInt16(35))] {
       func send(_ type: NSEvent.EventType, repeatKey: Bool = false) {
         let event = NSEvent.keyEvent(with: type, location: .zero, modifierFlags: [], timestamp: 1,
           windowNumber: window.windowNumber, context: nil, characters: key,
           charactersIgnoringModifiers: key, isARepeat: repeatKey, keyCode: code)!
-        NSApp.sendEvent(event)
+        _ = handleClassicKeyboardEvent(event)
       }
       send(.keyDown)
       try check(isPaused, "Pause key did not pause on press")
