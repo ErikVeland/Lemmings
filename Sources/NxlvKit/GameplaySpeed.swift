@@ -37,8 +37,8 @@ public struct GameplaySpeed: Sendable {
     }
 
     /// A tap toggles immediately. Extra clicks cannot restart a stopped burst.
-    public mutating func tap(at now: TimeInterval, clickCount: Int = 1, immediate: Bool = true) {
-        if variableEnabled, !isFast,
+    public mutating func tap(at now: TimeInterval, clickCount: Int = 1, immediate: Bool = true, absorbRapidClicks: Bool = true) {
+        if absorbRapidClicks, variableEnabled, !isFast,
            clickCount > 1 || stoppedAt.map({ now >= $0 && now - $0 <= Self.rapidInterval }) == true {
             stoppedAt = now
             return
@@ -53,9 +53,9 @@ public struct GameplaySpeed: Sendable {
     public mutating func step(_ direction: Int, at now: TimeInterval) {
         guard variableEnabled else { return }
         cancelHolds()
-        let index = Self.steps.firstIndex(of: cruise) ?? 1
-        cruise = Self.steps[min(Self.steps.count - 1, max(1, index + (direction < 0 ? -1 : 1)))]
-        selected = cruise
+        let index = Self.steps.firstIndex(of: target) ?? 0
+        selected = Self.steps[min(Self.steps.count - 1, max(0, index + (direction < 0 ? -1 : 1)))]
+        if selected > 1 { cruise = selected }
         changeTarget(selected, at: now)
     }
 
@@ -79,7 +79,7 @@ public struct GameplaySpeed: Sendable {
         guard held.remove(input) != nil, held.isEmpty else { return }
         let wasTap = allowTap && canTap && now - (holdStartedAt ?? now) < Self.holdDelay
         holdStartedAt = nil
-        if wasTap && variableEnabled { tap(at: now) }
+        if wasTap && variableEnabled { tap(at: now, absorbRapidClicks: input != .mouse) }
         else { changeTarget(selected, at: now, immediate: true) }
     }
 

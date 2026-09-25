@@ -20,10 +20,7 @@ import NxlvKit
     var panelLabel: String { state.label }
     var choiceLabel: String { "\(Int(state.cruise))×" }
     func pointerDown(at now: TimeInterval, clickCount: Int) {
-        if clickCount > 1 {
-            state.reset(at: now)
-            state.press(.mouse, at: now, tapEnabled: false)
-        } else { state.press(.mouse, at: now) }
+        state.press(.mouse, at: now)
         onChange()
     }
     func update(at now: TimeInterval, active: Bool) {
@@ -41,7 +38,7 @@ import NxlvKit
     func setFast(_ enabled: Bool) { state.setFast(enabled, at: ProcessInfo.processInfo.systemUptime); onChange() }
     var help: String {
         variableEnabled
-            ? "F / Speed: toggle fast-forward\nHold F: ramp up to 10×; release: keep speed\nHold Shift, Speed or RT: temporary boost; release: previous speed\nSpeed arrows or Shift+[ / Shift+]: apply 2×, 3×, 5× or 10×\nF or controller B: immediately return to 1×"
+            ? "F / Speed: toggle fast-forward\nHold F: ramp up to 10×; release: keep speed\nHold Shift, Speed or RT: temporary boost; release: previous speed\nSpeed arrows or Shift+[ / Shift+]: apply 1×, 2×, 3×, 5× or 10×\nF or controller B: immediately return to 1×"
             : "F / Speed: toggle fast-forward"
     }
 }

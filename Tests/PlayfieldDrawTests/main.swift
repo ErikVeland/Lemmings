@@ -747,7 +747,7 @@ private func testMacArtworkCropStaysPixelAligned() throws {
   for scale in [1.0, 2.0, 3.0] {
     let pixel = floor(scale)
     let frame = SkillCursorBadge.frame(at: point, scale: scale, size: .one, in: bounds)
-    try require(frame.width == 8 * pixel && frame.height == frame.width,
+    try require(frame.width == 6 * pixel && frame.height == frame.width,
       "the selected-skill reminder is not tiny at \(scale)x")
     let doubled = SkillCursorBadge.frame(at: point, scale: scale, size: .two, in: bounds)
     try require(doubled.width == frame.width * 2, "2× icon frame must double 1×")
@@ -756,9 +756,8 @@ private func testMacArtworkCropStaysPixelAligned() throws {
       "the selected-skill reminder overlaps the reticle at \(scale)x")
     try require(frame.minX > reticle.maxX && frame.minY > reticle.maxY,
       "the selected-skill reminder is not diagonally below the reticle corner at \(scale)x")
-    try require(frame.minX.truncatingRemainder(dividingBy: pixel) == 0
-      && frame.minY.truncatingRemainder(dividingBy: pixel) == 0,
-      "the selected-skill reminder is not pixel-aligned at \(scale)x")
+    try require(frame.minX - reticle.maxX == 10 && frame.minY - reticle.maxY == 10,
+      "Cursor companions must remain ten pixels from the corners at every zoom")
     for edge in [
       CGPoint(x: bounds.minX, y: bounds.minY),
       CGPoint(x: bounds.maxX, y: bounds.minY),
@@ -778,7 +777,7 @@ private func testMacArtworkCropStaysPixelAligned() throws {
     let count = SkillCursorBadge.countFrame(count: 12, at: point, scale: 2, size: size, in: bounds)
     let effective: SkillCursorIconSize = size == .none ? .two : size
     let icon = SkillCursorBadge.frame(at: point, scale: 2, size: effective, in: bounds)
-    try require(count.maxX < point.x && count.minY == icon.minY + 2 * CGFloat(effective.multiplier),
+    try require(count.maxX < point.x && count.minY == icon.minY,
       "Count must sit opposite the icon at the same height")
   }
   print("PASS selected-skill reminder stays tiny, offset and visible at every edge")

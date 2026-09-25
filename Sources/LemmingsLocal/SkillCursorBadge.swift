@@ -3,8 +3,11 @@ import NxlvKit
 
 /// Draws the selected skill as a small, pixel-aligned cursor companion.
 @MainActor enum SkillCursorBadge {
-    private static let nativeSide: CGFloat = 8
-    private static let nativeGap: CGFloat = 3
+    private static let nativeSide: CGFloat = 6
+    private static var cornerGap: CGFloat {
+        let deviceScale = abs(NSGraphicsContext.current?.cgContext.convertToDeviceSpace(CGSize(width: 1, height: 0)).width ?? 1)
+        return 10 / max(1, deviceScale)
+    }
 
     /**
      * Returns a tiny badge frame diagonally below the reticle’s lower-right corner.
@@ -13,10 +16,10 @@ import NxlvKit
         let pixel = max(1, floor(scale))
         let side = nativeSide * pixel * CGFloat(size.multiplier)
         let reticle = GameCursor.playfieldPointerFrame(at: point, scale: scale)
-        let gap = nativeGap * pixel
+        let gap = cornerGap
         let safeBounds = bounds.insetBy(dx: pixel, dy: pixel)
-        var x = floor((reticle.maxX + gap) / pixel) * pixel
-        var y = floor((reticle.maxY + gap) / pixel) * pixel
+        var x = reticle.maxX + gap
+        var y = reticle.maxY + gap
         x = min(max(safeBounds.minX, x), max(safeBounds.minX, floor((safeBounds.maxX - side) / pixel) * pixel))
         y = min(max(safeBounds.minY, y), max(safeBounds.minY, floor((safeBounds.maxY - side) / pixel) * pixel))
         return CGRect(x: x, y: y, width: side, height: side)
@@ -37,14 +40,14 @@ import NxlvKit
         let reticle = GameCursor.playfieldPointerFrame(at: point, scale: scale)
         let width = CGFloat(String(count).count * 6) * multiplier
         let height = 7 * multiplier
-        let available = badge.insetBy(dx: pixel * multiplier, dy: pixel * multiplier)
+        let available = badge
         let iconHeight: CGFloat
         if let icon {
             let fit = min(multiplier, available.width / max(1, icon.size.width), available.height / max(1, icon.size.height))
             iconHeight = icon.size.height * fit
         } else { iconHeight = height }
         let y = floor(available.minY + (iconHeight - height) / 2)
-        let x = reticle.minX - nativeGap * pixel - pixel * multiplier - width
+        let x = reticle.minX - cornerGap - width
         return CGRect(x: max(bounds.minX + pixel, min(x, bounds.maxX - pixel - width)),
                       y: max(bounds.minY, min(y, bounds.maxY - height)), width: width, height: height)
     }
@@ -63,13 +66,13 @@ import NxlvKit
         let pixel = max(1, floor(scale))
         let rect = frame(at: point, scale: scale, size: size, in: bounds)
         if let icon {
-            let available = rect.insetBy(dx: pixel * multiplier, dy: pixel * multiplier)
+            let available = rect
             let fit = min(multiplier, available.width / max(1, icon.size.width),
                           available.height / max(1, icon.size.height))
             let size = CGSize(width: icon.size.width * fit, height: icon.size.height * fit)
             let iconRect = CGRect(
-                x: floor(available.minX / pixel) * pixel,
-                y: floor(available.minY / pixel) * pixel,
+                x: available.minX,
+                y: available.minY,
                 width: size.width,
                 height: size.height)
             icon.draw(in: iconRect, from: .zero,

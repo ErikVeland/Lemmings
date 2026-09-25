@@ -53,9 +53,9 @@ text from headings. Preserve accessible names and input targets.
 
 Use four corner brackets at the input position, with strokes one pixel
 wide at every zoom and no central crosshair. Place the selected skill sprite diagonally below
-and right of the bottom-right corner, outside the reticle. Offer None, 1× and 2×
+and right of the bottom-right corner, about 10 screen pixels from each edge. Offer None, 1× and 2×
 skill icon sizes in Gameplay settings, defaulting to 2×.
-Offer a separate default-off lemming count below-left, aligned with the skill icon.
+Offer a separate default-off lemming count below-left, aligned with the skill icon and the same distance from the opposite corner.
 Count live sprite centres inside the reticule, regardless of skill eligibility.
 Keep the count available when the icon is hidden.
 Clamp the sprite to the playfield edge. Directional skills must use directional
