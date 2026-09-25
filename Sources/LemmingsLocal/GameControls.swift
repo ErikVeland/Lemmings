@@ -40,6 +40,27 @@ import AppKit
 }
 
 @MainActor final class GameCheckButton: GameButton {
+    override func accessibilityPerformPress() -> Bool {
+        guard isEnabled else { return false }
+        performClick(nil)
+        return true
+    }
+
+    override func mouseDown(with event: NSEvent) {
+        guard isEnabled else { return }
+        window?.makeFirstResponder(self)
+        var inside = bounds.contains(convert(event.locationInWindow, from: nil))
+        highlight(inside)
+        defer { highlight(false) }
+        while let next = window?.nextEvent(matching: [.leftMouseDragged, .leftMouseUp]) {
+            inside = bounds.contains(convert(next.locationInWindow, from: nil))
+            highlight(inside)
+            if next.type == .leftMouseUp {
+                if inside { performClick(nil) }
+                return
+            }
+        }
+    }
     override var isCheck: Bool { true }
     init(title: String, target: AnyObject?, action: Selector?) {
         super.init(frame: .zero)

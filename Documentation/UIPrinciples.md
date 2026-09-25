@@ -19,6 +19,8 @@ sentences. Apply this to new UI and changes to existing UI.
   action name with an invented icon or an initial.
 - Put criteria, records, award descriptions and instructions on their relevant
   detail/help pages. Do not repeat them below the main outcome.
+- Checkbox text and box form one input target. Clicking either toggles the control.
+  Menu gaps and disabled controls must never pass clicks to the underlying screen.
 - Preserve accessible names and keyboard help. Visible captions should not be
   needed to explain a familiar icon, and images must not exclude screen-reader users.
 - Inspect actual renders for success, partial success, failure, active, inactive,

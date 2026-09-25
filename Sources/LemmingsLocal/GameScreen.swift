@@ -185,6 +185,17 @@ import NxlvKit
                 hints: [.interpolation: NSImageInterpolation.none])
         }
     }
+    // A menu owns pointer input until it closes, including gaps and disabled controls.
+    override func mouseDown(with event: NSEvent) {}
+    override func mouseUp(with event: NSEvent) {}
+    override func rightMouseDown(with event: NSEvent) {}
+    override func rightMouseUp(with event: NSEvent) {}
+    override func otherMouseDown(with event: NSEvent) {}
+    override func otherMouseUp(with event: NSEvent) {}
+    override func mouseDragged(with event: NSEvent) {}
+    override func rightMouseDragged(with event: NSEvent) {}
+    override func otherMouseDragged(with event: NSEvent) {}
+
     func captureBackdrop(_ view: NSView) {
         if canvas.isMessage && background == nil { background = ArcadeWindow.captureScene(view) }
     }

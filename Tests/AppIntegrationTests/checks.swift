@@ -406,6 +406,41 @@ extension AppDelegate {
       try check(false, "Reticule count control is missing"); return
     }
     try check(countControl.state == .off && !preferences.current.showReticleCount, "Reticule count must default off")
+    root.layoutSubtreeIfNeeded()
+    func click(_ point: CGPoint, in view: NSView, releaseAt: CGPoint? = nil) {
+      let location = view.convert(point, to: nil)
+      let down = NSEvent.mouseEvent(with: .leftMouseDown, location: location, modifierFlags: [], timestamp: 1,
+        windowNumber: window.windowNumber, context: nil, eventNumber: 0, clickCount: 1, pressure: 1)!
+      let up = NSEvent.mouseEvent(with: .leftMouseUp, location: releaseAt.map { view.convert($0, to: nil) } ?? location, modifierFlags: [], timestamp: 1.1,
+        windowNumber: window.windowNumber, context: nil, eventNumber: 1, clickCount: 1, pressure: 0)!
+      NSApp.postEvent(up, atStart: true)
+      window.sendEvent(down)
+    }
+    for x in [10.0, 40.0, countControl.bounds.width - 4] {
+      click(CGPoint(x: x, y: countControl.bounds.midY), in: countControl)
+      try check(preferences.current.showReticleCount, "Clicking the checkbox or its text did not enable it at x=\(x), frame=\(countControl.frame)")
+      click(CGPoint(x: x, y: countControl.bounds.midY), in: countControl)
+      try check(!preferences.current.showReticleCount, "Clicking the checkbox or its text did not disable it")
+      try check(GameScreen.shared.controllerPage(in: window)?.accessibilityLabel() == "Settings",
+        "A settings click navigated to another page")
+    }
+    click(CGPoint(x: 40, y: countControl.bounds.midY), in: countControl,
+      releaseAt: CGPoint(x: 40, y: countControl.bounds.maxY + 20))
+    try check(!preferences.current.showReticleCount, "Releasing outside the checkbox must cancel the click")
+    try check(countControl.accessibilityPerformPress(), "Checkbox accessibility action is unavailable")
+    try check(preferences.current.showReticleCount, "Accessibility press did not enable the checkbox")
+    _ = countControl.accessibilityPerformPress()
+    try check(!preferences.current.showReticleCount, "Accessibility press did not disable the checkbox")
+    countControl.isEnabled = false
+    click(CGPoint(x: 40, y: countControl.bounds.midY), in: countControl)
+    try check(!preferences.current.showReticleCount, "Disabled checkbox accepted a click")
+    countControl.isEnabled = true
+    if let page = GameScreen.shared.controllerPage(in: window) {
+      click(CGPoint(x: 10, y: 10), in: page)
+      try check(GameScreen.shared.controllerPage(in: window) === page, "Clicking menu background navigated away")
+    }
+
+    print("PASS checkbox box, label, release cancellation, disabled state, accessibility and menu input isolation")
     countControl.performClick(nil)
     try check(preferences.current.showReticleCount, "Reticule count control did not enable the count")
     countControl.performClick(nil)
