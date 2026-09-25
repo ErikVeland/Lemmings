@@ -2907,6 +2907,30 @@ extension AppDelegate {
     print("PASS CRT dimensions, shader coordinates, held rate, release and minimap drag")
   }
 
+  fileprivate func testVinylRetry() async throws {
+    GameScreen.shared.dismissAll()
+    var updated = settings
+    updated.music = .amigaModules
+    updated.musicVolume = 0
+    apply(updated)
+    levelMusic = nil
+    if session == nil { levelChanged() }
+    phase = .playing
+    startedMusicIdentity = nil
+    playMusicForCurrentLevel()
+    try check(music.isOutputRunning && music.currentURL != nil, "No module played before the vinyl retry")
+    let tune = music.currentURL
+    retry()
+    try check(music.isVinylBraking, "R did not brake the music like a record")
+    try await Task.sleep(nanoseconds: 250_000_000)
+    try check(music.vinylRate < 0.7, "The brake did not lower the pitch")
+    try await Task.sleep(nanoseconds: 700_000_000)
+    try check(!music.isVinylBraking && music.vinylRate == 1 && music.isOutputRunning,
+      "The next attempt did not release the record to full speed")
+    try check(music.currentURL == tune, "A retry changed the tune")
+    print("PASS R brakes the music like a record and the retry releases it")
+  }
+
   fileprivate func testInterruptedFade() async throws {
     // Gameplay telemetry no longer changes the tune. Level entry is the
     // transition that crossfades between two recordings.
@@ -3869,6 +3893,7 @@ Task { @MainActor in
     try subject.testMenuDisplayTransition()
     try await subject.testCRTInput()
     try await subject.testInterruptedFade()
+    try await subject.testVinylRetry()
     try await subject.testElapsedTimeAndAudioRecovery()
     try await testGameTypography()
     try subject.testGamePages()

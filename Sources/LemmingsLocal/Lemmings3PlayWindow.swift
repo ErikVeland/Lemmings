@@ -268,7 +268,7 @@ import NxlvKit
             else if let index = SkillShortcuts(names: Array(Lemmings3Panel.names.prefix(5))).index(for: key, current: self.selected, modern: self.audioSettings.modernControlsEnabled) { self.pendingTool = nil; self.canvas.directionPoint = nil; self.selected = index; self.refresh() }
             else if key == " " { self.togglePause() }
             else if key == "." { self.singleStep() }
-            else if key.lowercased() == "r" { self.restart() }
+            else if key.lowercased() == "r" { self.retryLevel() }
 
             else if key == "\u{1b}" { self.showGameMenu() }
         }
@@ -382,7 +382,7 @@ import NxlvKit
         keyboard.controllerTapSpeed = { [weak self] in self?.audioSettings.controllerTapSpeed ?? true }
         keyboard.controllerMappings = { [weak self] in self?.audioSettings.controllerMappings ?? [:] }
         keyboard.controllerSwapSticks = { [weak self] in self?.audioSettings.controllerSwapSticks ?? false }
-        keyboard.retry = { [weak self] in self?.restart() }
+        keyboard.retry = { [weak self] in self?.retryLevel() }
         keyboard.rewind = { [weak self] in _ = self?.rewind(seconds: 2) }
         keyboard.controllerRewindHeld = { [weak self] held in
             guard let self else { return }
@@ -781,6 +781,14 @@ import NxlvKit
                 self.game.abort(); self.paused = true; self.accumulator = 0; self.refresh()
             }
     }
+    /// A retry brakes the music like a record stopped by hand, then restarts.
+    private func retryLevel() {
+        music.vinylStop()
+        dj.vinylStop()
+        restart()
+        music.vinylRelease()
+        dj.vinylRelease()
+    }
     @objc private func restart() {
         saveCheckpoint(immediately: true, waitForDisk: false)
         speedControl.newLevel()
@@ -894,7 +902,7 @@ import NxlvKit
         if onSequenceContinue != nil {
             switch row {
             case 0: canvas.menuRows = nil; paused = false; accumulator = 0; lastTime = ProcessInfo.processInfo.systemUptime; refresh()
-            case 1: restart()
+            case 1: retryLevel()
             case 2: toggleArtwork(); rebuildMenu()
             case 3: showOriginalMovies()
             case 4: canvas.menuRows = nil; close()
@@ -905,7 +913,7 @@ import NxlvKit
         }
         switch row {
         case 0: canvas.menuRows = nil; paused = false; accumulator = 0; lastTime = ProcessInfo.processInfo.systemUptime; refresh()
-        case 1: restart()
+        case 1: retryLevel()
         case 2: menuTribe = (menuTribe + 1) % 3; menuLevel = 0; rebuildMenu()
         case 3: menuLevel = (menuLevel + 29) % 30; rebuildMenu()
         case 4: menuLevel = (menuLevel + 1) % 30; rebuildMenu()
@@ -1025,7 +1033,7 @@ import NxlvKit
             : ArcadeStore.shared.previewReport(for: run)
         guard let arcadeReport else { return }
         if recordsCampaignProgress { runMovie.preserveRecord(arcadeReport) }
-        ArcadeWindow.shared.showResult(arcadeReport, owner: window, retry: { [weak self] in self?.restart() },
+        ArcadeWindow.shared.showResult(arcadeReport, owner: window, retry: { [weak self] in self?.retryLevel() },
             next: { [weak self] in self?.continueArcadeResult() },
             replay: { [weak self] save in self?.runMovie.review(save: save) }, continueTitle: resultContinueTitle, background: arcadeBackdrop, rewardVolume: warningSound.muted ? 0 : warningSound.volume)
     }
@@ -1036,7 +1044,7 @@ import NxlvKit
     }
     private func continueArcadeResult() {
         if onSequenceContinue != nil, game.saved == 0 {
-            restart()
+            retryLevel()
             return
         }
         if onSequenceContinue?(game.saved > 0) == true { return }

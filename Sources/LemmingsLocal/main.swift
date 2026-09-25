@@ -6054,7 +6054,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
   /// The Macintosh release names its sounds, so they bind without guessing.
   private func loadSoundEffects(from url: URL) {
     do {
-      let loaded = try effects.loadMacintoshSounds(imageURL: url)
+      let amiga = Bundle.main.resourceURL?.appendingPathComponent("Ports/amiga_extracted/lemmings")
+      let loaded = try effects.loadMacintoshSounds(imageURL: url, amigaFallbackDirectory: amiga)
       setStatus("Loaded \(loaded.count) sound effects.")
     } catch {
       setStatus("Sound effects: \(error)")
@@ -6225,7 +6226,24 @@ let achievementProgressKey = "ClassicAchievementProgress"
     syncPanelViewport()
   }
 
+  /// A retry brakes the music like a record stopped by hand. The new
+  /// attempt releases it from the finger hold.
+  private func brakeMusicForRetry() {
+    music.vinylStop()
+    soundtrack.vinylStop()
+    dj.vinylStop()
+  }
+
+  /// The attempt's own tune, when it starts one, replaces the release.
+  private func releaseMusicAfterRetry() {
+    music.vinylRelease()
+    soundtrack.vinylRelease()
+    dj.vinylRelease()
+  }
+
   private func retry() {
+    brakeMusicForRetry()
+    defer { releaseMusicAfterRetry() }
     if phase == .briefing, availableHandoverRetry != nil { retryPreviousHandoverLevel(); return }
     let skills = session?.skills ?? []
     let selectedSkill = skills.indices.contains(panel.selectedSkillIndex)

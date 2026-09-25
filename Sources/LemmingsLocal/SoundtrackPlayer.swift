@@ -115,7 +115,8 @@ import NxlvKit
   }
 
   func load(_ urls: [URL]) {
-    stop()
+    // A braking or resting record keeps its place for the next attempt.
+    if !vinylStopping && !vinylHeld { stop() }
     tracks = urls
   }
 
@@ -124,18 +125,69 @@ import NxlvKit
   func play(index: Int) -> String? {
     guard !tracks.isEmpty else { return nil }
     let url = tracks[((index % tracks.count) + tracks.count) % tracks.count]
+    if vinylStopping {
+      // The braking record finishes first. Its release starts this track.
+      vinylPendingIndex = index
+      return url.deletingPathExtension().lastPathComponent
+    }
     guard let made = MusicFileDeck(url: url) else { return nil }
     made.volume = muted ? 0 : volume
     made.playbackRate = playbackRate
     made.setSpeedPitch(speedPitch)
     player?.stop()
     player = made
+    if vinylHeld {
+      vinylHeld = false
+      vinylRamp.run(.start, apply: { made.setVinyl(rate: $0, gain: $1) }) { made.setVinyl(rate: 1, gain: 1) }
+    }
     made.play()
     currentURL = url
     return url.deletingPathExtension().lastPathComponent
   }
 
+  private let vinylRamp = VinylRamp()
+  private var vinylStopping = false
+  private var vinylHeld = false
+  private var vinylPendingIndex: Int?
+  private var vinylReleaseRequested = false
+
+  /// Brakes the playing track like a record stopped by hand.
+  ///
+  /// `vinylRelease()` lets it run on from the finger hold. A `play(index:)`
+  /// releases its new track instead. Either waits for an unfinished brake.
+  func vinylStop() {
+    guard let deck = player, deck.isPlaying, !vinylStopping, !vinylHeld else { return }
+    vinylStopping = true
+    vinylRamp.run(.stop, apply: { deck.setVinyl(rate: $0, gain: $1) }) { [weak self] in
+      guard let self else { return }
+      self.vinylStopping = false
+      let release = self.vinylReleaseRequested
+      self.vinylReleaseRequested = false
+      // A resting record keeps turning silently at the slowest speed.
+      self.vinylHeld = true
+      if let index = self.vinylPendingIndex {
+        self.vinylPendingIndex = nil
+        self.play(index: index)
+      } else if release {
+        self.vinylRelease()
+      }
+    }
+  }
+
+  /// Lets a braked track run on from the finger hold.
+  func vinylRelease() {
+    if vinylStopping { vinylReleaseRequested = true; return }
+    guard vinylHeld, let deck = player else { return }
+    vinylHeld = false
+    vinylRamp.run(.start, apply: { deck.setVinyl(rate: $0, gain: $1) }) { deck.setVinyl(rate: 1, gain: 1) }
+  }
+
   func stop() {
+    vinylRamp.cancel()
+    vinylStopping = false
+    vinylHeld = false
+    vinylPendingIndex = nil
+    vinylReleaseRequested = false
     resumeAfterSleep = false
     outputSuspended = false
     player?.stop()

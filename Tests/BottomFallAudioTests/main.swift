@@ -15,6 +15,16 @@ func check(_ value: Bool, _ message: String) {
 }
 let resources = URL(fileURLWithPath: CommandLine.arguments[1])
 let mac = resources.appendingPathComponent("Ports/lemmings_1_5_2/Lemmings_1_5_2.dsk")
+do {
+    // The Mac disk has no Pop. The Mac set borrows the named Amiga sample.
+    let player = SoundEffectPlayer()
+    let alone = try player.loadMacintoshSounds(imageURL: mac)
+    check(!alone.contains(.pop), "The Mac disk unexpectedly gained a Pop sound")
+    let filled = try player.loadMacintoshSounds(imageURL: mac,
+        amigaFallbackDirectory: resources.appendingPathComponent("Ports/amiga_extracted/lemmings"))
+    check(filled.contains(.pop) && Set(alone).isSubset(of: Set(filled)), "The Mac set did not fill Pop from the Amiga bank")
+    print("PASS Mac sound set fills Pop from the Amiga bank")
+}
 for source in 0..<3 {
     let player = SoundEffectPlayer()
     if source == 0 { try player.loadMacintoshSounds(imageURL: mac) }

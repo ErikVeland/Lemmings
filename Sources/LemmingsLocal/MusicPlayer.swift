@@ -23,6 +23,9 @@ final class ModuleMusicPlayer: @unchecked Sendable {
   private var isMuted = false
   private var level: Double = 1.0
   private var tempoScale = 1.0
+  /// Turntable speed and level during a vinyl stop or start.
+  private var vinylRateLocked = 1.0
+  private var vinylGain: Float = 1
   private var interpolationPhase = 1.0
   private var currentFrame: (left: Float, right: Float) = (0, 0)
   private var nextFrame: (left: Float, right: Float) = (0, 0)
@@ -108,6 +111,7 @@ final class ModuleMusicPlayer: @unchecked Sendable {
   }
 
   func stop() {
+    resetVinyl()
     guard isRunning else { return }
     pauseWorkItem?.cancel()
     pauseWorkItem = nil
@@ -190,7 +194,7 @@ final class ModuleMusicPlayer: @unchecked Sendable {
         frame = (
           left: currentFrame.left + (nextFrame.left - currentFrame.left) * blend,
           right: currentFrame.right + (nextFrame.right - currentFrame.right) * blend)
-        interpolationPhase += tempoScale
+        interpolationPhase += tempoScale * vinylRateLocked
         while interpolationPhase >= 1 {
           currentFrame = nextFrame
           nextFrame = nextSourceFrameLocked()
@@ -199,8 +203,8 @@ final class ModuleMusicPlayer: @unchecked Sendable {
       } else {
         frame = (left: 0, right: 0)
       }
-      left?[index] = frame.left * Float(level) * gain
-      right?[index] = frame.right * Float(level) * gain
+      left?[index] = frame.left * Float(level) * gain * vinylGain
+      right?[index] = frame.right * Float(level) * gain * vinylGain
     }
   }
 
@@ -284,7 +288,23 @@ final class ModuleMusicPlayer: @unchecked Sendable {
     guard let data = try? Data(contentsOf: url),
       let module = try? ProTrackerModule(data: data)
     else { return nil }
+    let title = module.title.isEmpty ? url.deletingPathExtension().lastPathComponent : module.title
+    if vinylStopping {
+      // The braking record finishes first. Its release starts this module.
+      vinylPending = (module, url)
+      currentURL = url
+      currentTitle = title
+      return title
+    }
+    load(module, url: url)
+    if vinylHeld {
+      vinylHeld = false
+      MainActor.assumeIsolated { vinylStart() }
+    }
+    return title
+  }
 
+  private func load(_ module: ProTrackerModule, url: URL) {
     lock.lock()
     loadedModule = module
     player = ProTrackerEnhancedPlayer(
@@ -302,7 +322,87 @@ final class ModuleMusicPlayer: @unchecked Sendable {
     currentTitle = module.title.isEmpty
       ? url.deletingPathExtension().lastPathComponent
       : module.title
-    return currentTitle
+  }
+
+  // MARK: - Vinyl
+
+  // Main actor only.
+  private var vinylRamp: VinylRamp?
+  private var vinylStopping = false
+  private var vinylHeld = false
+  private var vinylPending: (module: ProTrackerModule, url: URL)?
+  private var vinylReleaseRequested = false
+
+  /// Whether a retry is braking the record now.
+  var isVinylBraking: Bool { vinylStopping }
+  /// The turntable speed factor, where 1 is normal speed.
+  var vinylRate: Double {
+    lock.lock()
+    defer { lock.unlock() }
+    return vinylRateLocked
+  }
+
+  /// Applies a turntable speed and level directly, for a DJ deck's own ramp.
+  func applyVinyl(rate: Double, gain: Double) {
+    lock.lock()
+    vinylRateLocked = rate
+    vinylGain = Float(gain)
+    lock.unlock()
+  }
+
+  /// Brakes the playing module like a record stopped by hand.
+  ///
+  /// The record then rests silent. `vinylRelease()` lets it run on from where
+  /// the hand stopped it. A `play(url:)` releases its new module instead.
+  /// Either waits for the brake when it comes early.
+  @MainActor func vinylStop() {
+    guard isRunning, currentURL != nil, !vinylStopping, !vinylHeld else { return }
+    vinylStopping = true
+    let ramp = vinylRamp ?? VinylRamp()
+    vinylRamp = ramp
+    ramp.run(.stop, apply: { [weak self] rate, gain in self?.applyVinyl(rate: rate, gain: gain) }) { [weak self] in
+      guard let self else { return }
+      self.vinylStopping = false
+      let release = self.vinylReleaseRequested
+      self.vinylReleaseRequested = false
+      if let pending = self.vinylPending {
+        self.vinylPending = nil
+        self.load(pending.module, url: pending.url)
+        self.vinylStart()
+      } else if release {
+        self.vinylStart()
+      } else {
+        self.vinylHeld = true
+      }
+    }
+  }
+
+  /// Lets a braked record run on from the finger hold.
+  @MainActor func vinylRelease() {
+    if vinylStopping { vinylReleaseRequested = true; return }
+    guard vinylHeld else { return }
+    vinylHeld = false
+    vinylStart()
+  }
+
+  @MainActor private func vinylStart() {
+    lock.lock()
+    startFadeFrames = 0
+    lock.unlock()
+    let ramp = vinylRamp ?? VinylRamp()
+    vinylRamp = ramp
+    ramp.run(.start, apply: { [weak self] rate, gain in self?.applyVinyl(rate: rate, gain: gain) }) { [weak self] in
+      self?.applyVinyl(rate: 1, gain: 1)
+    }
+  }
+
+  private func resetVinyl() {
+    if Thread.isMainThread { MainActor.assumeIsolated { vinylRamp?.cancel() } }
+    vinylStopping = false
+    vinylHeld = false
+    vinylPending = nil
+    vinylReleaseRequested = false
+    applyVinyl(rate: 1, gain: 1)
   }
 
   // MARK: - Controls

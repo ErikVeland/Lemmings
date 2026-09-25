@@ -30,14 +30,28 @@ final class MusicFileDeck {
     get { masterVolume }
     set {
       masterVolume = min(1, max(0, newValue))
-      outputMixer.outputVolume = muted ? 0 : masterVolume
+      applyOutputVolume()
     }
   }
 
+  private var baseRate: Float = 1
+  private var vinyl: (rate: Float, gain: Float) = (1, 1)
+
   var playbackRate: Float {
-    get { varispeed.rate }
-    set { varispeed.rate = min(1, max(0.5, newValue)) }
+    get { baseRate }
+    set { baseRate = min(1, max(0.5, newValue)); applyRate() }
   }
+
+  /// Turntable speed and level for a vinyl stop or start. Varispeed cannot
+  /// go below a quarter speed, so the gain carries the last of the brake.
+  func setVinyl(rate: Double, gain: Double) {
+    vinyl = (Float(rate), Float(min(1, max(0, gain))))
+    applyRate()
+    applyOutputVolume()
+  }
+
+  private func applyRate() { varispeed.rate = max(0.25, baseRate * vinyl.rate) }
+  private func applyOutputVolume() { outputMixer.outputVolume = muted ? 0 : masterVolume * vinyl.gain }
 
   var isPlaying: Bool { started && !outputSuspended && player.isPlaying }
 
@@ -87,7 +101,7 @@ final class MusicFileDeck {
     spatialMixer.sourceMode = .pointSource
     spatialMixer.position = AVAudio3DPoint(x: 0, y: 0, z: -1)
     sourceMixer.outputVolume = 1
-    outputMixer.outputVolume = masterVolume
+    applyOutputVolume()
   }
 
   func setMixBass(_ gain: Float) { equaliser.bands[0].gain = 1.5 + gain; equaliser.bands[0].bypass = false }
@@ -175,7 +189,7 @@ final class MusicFileDeck {
 
   func setMuted(_ muted: Bool) {
     self.muted = muted
-    outputMixer.outputVolume = muted ? 0 : masterVolume
+    applyOutputVolume()
   }
 
   func stop() {

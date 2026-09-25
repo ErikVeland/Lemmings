@@ -144,9 +144,10 @@ final class SoundEffectPlayer: @unchecked Sendable {
   /// Loads effects from a Macintosh disk image.
   ///
   /// The Mac release names its sounds, so the binding is by name rather than
-  /// by position, and each sound keeps the rate its resource records.
+  /// by position, and each sound keeps the rate its resource records. The Mac
+  /// disk has no sound for some events. A named Amiga sample fills each gap.
   @discardableResult
-  func loadMacintoshSounds(imageURL: URL) throws -> [ClassicSoundEffect] {
+  func loadMacintoshSounds(imageURL: URL, amigaFallbackDirectory: URL? = nil) throws -> [ClassicSoundEffect] {
     let image = try Data(contentsOf: imageURL, options: .mappedIfSafe)
     let volume = try ClassicHFSVolume(image: image)
     let fork = try volume.resourceFork(named: "Lemmings")
@@ -164,6 +165,15 @@ final class SoundEffectPlayer: @unchecked Sendable {
       guard let sound = byName[name] else { continue }
       library[effect] = sound.floatSamples()
       rates[effect] = sound.sampleRate
+    }
+    if let amigaFallbackDirectory {
+      // A missing or damaged Amiga bank leaves these gaps silent, as before.
+      let amiga = (try? Self.amigaSounds(in: amigaFallbackDirectory)) ?? [:]
+      for (effect, name) in ClassicSoundMapping.amigaVoiceNames where library[effect] == nil {
+        guard let sound = amiga[name.lowercased()] else { continue }
+        library[effect] = sound.samples
+        rates[effect] = sound.sampleRate
+      }
     }
     let loaded = library.keys.sorted { $0.rawValue < $1.rawValue }
     lock.unlock()
@@ -187,15 +197,7 @@ final class SoundEffectPlayer: @unchecked Sendable {
       let volume = try ClassicHFSVolume(image: Data(contentsOf: image, options: .mappedIfSafe))
       death = ClassicMacSoundDecoder.sounds(in: try volume.resourceFork(named: "Lemmings")).first { $0.name == "Die" }
     }
-    var byName: [String: AmigaSound] = [:]
-    for bank in ["basicfx", "fullfx"] {
-      let url = directory.appendingPathComponent(bank)
-      guard let data = try? Data(contentsOf: url, options: .mappedIfSafe) else { continue }
-      for sound in try AmigaSoundBank.decode(data) {
-        guard let name = sound.name else { continue }
-        byName[name.lowercased()] = sound
-      }
-    }
+    let byName = try Self.amigaSounds(in: directory)
 
     lock.lock()
     library = [:]
@@ -211,6 +213,20 @@ final class SoundEffectPlayer: @unchecked Sendable {
 
     loadedEffects = loaded
     return loaded
+  }
+
+  /// The named samples in the two Amiga banks, keyed by lower-case name.
+  private static func amigaSounds(in directory: URL) throws -> [String: AmigaSound] {
+    var byName: [String: AmigaSound] = [:]
+    for bank in ["basicfx", "fullfx"] {
+      let url = directory.appendingPathComponent(bank)
+      guard let data = try? Data(contentsOf: url, options: .mappedIfSafe) else { continue }
+      for sound in try AmigaSoundBank.decode(data) {
+        guard let name = sound.name else { continue }
+        byName[name.lowercased()] = sound
+      }
+    }
+    return byName
   }
 
   // MARK: - Playing

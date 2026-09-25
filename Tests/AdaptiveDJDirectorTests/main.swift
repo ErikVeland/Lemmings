@@ -62,3 +62,25 @@ require(LevelMusicSelection.cycle(index: 17, titles: scoreTitles, holiday: false
 
 require(LevelMusicSelection.track(index: 13, title: "Professor Mariarti", holiday: false, ohNo: false) == "mariarti", "Missing Archimedes special assignment")
 require(LevelMusicSelection.track(index: 13, title: "Professor Mariarti", holiday: true, ohNo: false) != "mariarti", "Special leaked into seasonal campaign")
+
+// A retry brakes the record to near rest and fades it out. The release
+// climbs from near rest to full speed, and both curves stay monotonic.
+for phase in [VinylMotion.Phase.stop, .start] {
+    let first = VinylMotion.sample(phase, progress: 0), last = VinylMotion.sample(phase, progress: 1)
+    var previous = first
+    for step in 1...20 {
+        let now = VinylMotion.sample(phase, progress: Double(step) / 20)
+        require(phase == .stop ? now.rate <= previous.rate : now.rate >= previous.rate, "Vinyl rate must change in one direction")
+        require(now.rate >= VinylMotion.minimumRate && now.rate <= 1 && now.gain >= 0 && now.gain <= 1, "Vinyl sample out of range")
+        previous = now
+    }
+    if phase == .stop {
+        require(first.rate == 1 && first.gain == 1 && last.rate == VinylMotion.minimumRate && last.gain == 0, "Vinyl stop must start at speed and end silent near rest")
+        require(VinylMotion.sample(.stop, progress: 0.5).gain == 1, "The brake must keep the level until the pitch is low")
+    } else {
+        require(first.rate == VinylMotion.minimumRate && first.gain == 0 && last.rate == 1 && last.gain == 1, "Vinyl start must rise from rest to full speed")
+        require(VinylMotion.sample(.start, progress: 0.5).rate > 0.8, "The release must reach most of its speed quickly")
+    }
+}
+require(VinylMotion.stopSeconds <= 0.5 && VinylMotion.startSeconds <= 0.35, "Vinyl stop and start must stay quick")
+print("PASS quick vinyl brake and release curves")

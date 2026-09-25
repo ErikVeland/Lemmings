@@ -36,6 +36,10 @@ import NxlvKit
       if module.isRunning { try? module.resumeOutput() } else { try? module.start() }
     }
   }
+  func setVinyl(rate: Double, gain: Double) {
+    recording?.setVinyl(rate: rate, gain: gain)
+    module?.applyVinyl(rate: rate, gain: gain)
+  }
   func pause() { recording?.suspendOutput(); module?.suspendOutput() }
   func stop() { recording?.stop(); module?.stop() }
 }
@@ -119,6 +123,8 @@ import NxlvKit
   func start() {
     // A suspended or crossfading deck may not report isPlaying yet (the engine
     // starts asynchronously), so treat those states as already running too.
+    guard !vinylStopping else { return }
+    if vinylHeld { vinylRelease(); return }
     guard !pools.isEmpty, !outputSuspended, fadeTask == nil,
           activeDeck == nil || activeDeck?.isPlaying != true else { return }
     guard let first = pickTrack(avoiding: nil) else { return }
@@ -148,6 +154,21 @@ import NxlvKit
     guard FileManager.default.isReadableFile(atPath: url.path) else { return }
     levelIdentity = identity
     resetLevel()
+    if vinylStopping {
+      // The braking record finishes first. Its release starts this track.
+      vinylPending = (url, identity)
+      return
+    }
+    if vinylHeld, let deck = makeDeck(url) {
+      vinylHeld = false
+      deckA?.stop(); deckB?.stop()
+      deckA = deck; deckB = nil; activeIsA = true; currentURL = url
+      currentPool = url.deletingLastPathComponent().lastPathComponent
+      deck.volume = isMuted ? 0 : masterVolume
+      vinylRamp.run(.start, apply: { deck.setVinyl(rate: $0, gain: $1) }) { deck.setVinyl(rate: 1, gain: 1) }
+      deck.play(); announce(url)
+      return
+    }
     if activeDeck != nil {
       crossfade(seconds: Fade.phrase, destination: url)
     } else {
@@ -160,6 +181,65 @@ import NxlvKit
   }
   private var levelIdentity: String?
   private var pendingLevel: (url: URL, identity: String)?
+
+  // MARK: - Vinyl
+
+  private let vinylRamp = VinylRamp()
+  private var vinylStopping = false
+  private var vinylHeld = false
+  private var vinylPending: (url: URL, identity: String)?
+  private var vinylReleaseRequested = false
+  private var vinylIdentity: String?
+
+  /// Brakes the level track like a record stopped by hand.
+  ///
+  /// A retry calls this. `vinylRelease()` lets the track run on from the
+  /// finger hold. A `startLevel` releases its own track instead, even when
+  /// the attempt keeps the same identity.
+  func vinylStop() {
+    guard !outputSuspended, !vinylStopping, !vinylHeld else { return }
+    fadeTask?.cancel()
+    fadeGeneration += 1
+    finishFade()
+    guard let deck = activeDeck, deck.isPlaying else { return }
+    idleDeck?.stop()
+    if activeIsA { deckB = nil } else { deckA = nil }
+    vinylIdentity = levelIdentity
+    levelIdentity = nil
+    vinylStopping = true
+    vinylRamp.run(.stop, apply: { deck.setVinyl(rate: $0, gain: $1) }) { [weak self] in
+      guard let self else { return }
+      self.vinylStopping = false
+      let release = self.vinylReleaseRequested
+      self.vinylReleaseRequested = false
+      // A resting record keeps turning silently at the slowest speed.
+      self.vinylHeld = true
+      if let pending = self.vinylPending {
+        self.vinylPending = nil
+        self.levelIdentity = nil
+        self.startLevel(url: pending.url, identity: pending.identity)
+      } else if release {
+        self.vinylRelease()
+      }
+    }
+  }
+
+  /// Lets a braked track run on from the finger hold.
+  func vinylRelease() {
+    if vinylStopping { vinylReleaseRequested = true; return }
+    guard vinylHeld, let deck = activeDeck else { return }
+    vinylHeld = false
+    if levelIdentity == nil { levelIdentity = vinylIdentity }
+    vinylRamp.run(.start, apply: { deck.setVinyl(rate: $0, gain: $1) }) { deck.setVinyl(rate: 1, gain: 1) }
+  }
+
+  private func resetVinyl() {
+    vinylRamp.cancel()
+    vinylStopping = false
+    vinylHeld = false
+    vinylPending = nil
+    vinylReleaseRequested = false
+  }
 
   /// A new level, so every cue may happen again.
   func resetLevel() {
@@ -323,6 +403,7 @@ import NxlvKit
   }
 
   func stop() {
+    resetVinyl()
     outputSuspended = false
     resumeDeckA = false
     resumeDeckB = false

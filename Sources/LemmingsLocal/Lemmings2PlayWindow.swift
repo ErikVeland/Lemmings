@@ -350,7 +350,7 @@ import NxlvKit
         keyboard.controllerTapSpeed = { [weak self] in self?.audioSettings.controllerTapSpeed ?? true }
         keyboard.controllerMappings = { [weak self] in self?.audioSettings.controllerMappings ?? [:] }
         keyboard.controllerSwapSticks = { [weak self] in self?.audioSettings.controllerSwapSticks ?? false }
-        keyboard.retry = { [weak self] in self?.restart() }
+        keyboard.retry = { [weak self] in self?.retryLevel() }
         keyboard.rewind = { [weak self] in _ = self?.rewind(seconds: 2) }
         keyboard.controllerRewindHeld = { [weak self] held in
             guard let self else { return }
@@ -678,6 +678,14 @@ import NxlvKit
             playTribeMusic()
             refreshGame()
         } catch { explain(String(describing: error), returnTo: .briefing) }
+    }
+    /// A retry brakes the music like a record stopped by hand, then restarts.
+    private func retryLevel() {
+        music.vinylStop()
+        dj.vinylStop()
+        restart()
+        music.vinylRelease()
+        dj.vinylRelease()
     }
     private func restart() {
         saveCheckpoint(immediately: true, waitForDisk: false)
@@ -1203,7 +1211,7 @@ import NxlvKit
             else if key == "." { singleStep() }
             else if let game, let index = SkillShortcuts(names: game.configuration.skills.map(\.name)).index(for: key, modern: audioSettings.modernControlsEnabled) { panelAction(index) }
             else if key == " " || key.lowercased() == "p" { panelAction(8) }
-            else if key.lowercased() == "r" { restart() }
+            else if key.lowercased() == "r" { retryLevel() }
         } else if key == "\r" || key == " " {
             if screen == .menu { playFromMenu() }
             else if screen == .briefing { startLevel() }
@@ -1231,7 +1239,7 @@ import NxlvKit
         if practiceLevel != nil { show(.practice); return }
         guard let game else { return }
         if onSequenceContinue != nil, !game.didWin {
-            restart()
+            retryLevel()
             return
         }
         if onSequenceContinue?(game.didWin) == true { return }
@@ -1265,7 +1273,7 @@ import NxlvKit
             : ArcadeStore.shared.previewReport(for: run)
         guard let arcadeReport else { return }
         if recordsCampaignProgress { runMovie.preserveRecord(arcadeReport) }
-        ArcadeWindow.shared.showResult(arcadeReport, owner: window, retry: { [weak self] in self?.restart() },
+        ArcadeWindow.shared.showResult(arcadeReport, owner: window, retry: { [weak self] in self?.retryLevel() },
             next: { [weak self] in self?.continueResult() }, replay: { [weak self] save in self?.runMovie.review(save: save) },
             continueTitle: resultContinueTitle, background: arcadeBackdrop,
             rewardVolume: sounds.muted ? 0 : audioSettings.soundVolume)
@@ -1355,7 +1363,7 @@ import NxlvKit
             else { startLevel() }
         case .results:
             if (145..<172).contains(y) { runMovie.review(save: x >= 160); return }
-            if inside(0, 178, 100, 22) { restart() }
+            if inside(0, 178, 100, 22) { retryLevel() }
             else if inside(220, 178, 100, 22) { show(.menu) }
             else { continueResult() }
         case .preferences:

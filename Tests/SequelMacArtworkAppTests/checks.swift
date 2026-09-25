@@ -554,6 +554,11 @@ extension Lemmings3PlayWindow {
         }
         canvas.onPanel?(2, 1)
         try assertArtwork(selected == 2, "L3 native panel did not select Jumper")
+        // During the fresh-level countdown, Pause cancels the automatic start.
+        if canvas.startCountdown.isActive {
+            canvas.onPanel?(7, 1)
+            try assertArtwork(!canvas.startCountdown.isActive && paused, "L3 pause icon did not cancel the start countdown")
+        }
         let wasPaused = paused
         canvas.onPanel?(7, 1)
         try assertArtwork(paused != wasPaused, "L3 native pause icon is disconnected")
@@ -606,7 +611,8 @@ extension Lemmings3PlayWindow {
         gameplayKeyboard?.controllerAction(.step(-1))
         try assertArtwork(paused && game.tick == stepTick, "L3 controller backward step did not return one tick")
         gameplayKeyboard?.controllerAction(.retry)
-        try assertArtwork(game.tick == 0 && !paused, "L3 controller retry did not reset the level")
+        // A retry starts over with the fresh-level countdown.
+        try assertArtwork(game.tick == 0 && canvas.startCountdown.isActive, "L3 controller retry did not reset the level")
         gameplayKeyboard?.controllerAction(.endRun)
         try assertArtwork(GameScreen.shared.isPresented && !game.isComplete,
                           "L3 controller end-run skipped confirmation")
@@ -923,7 +929,8 @@ extension Lemmings2PlayWindow {
             "L2 briefing did not identify the incoming player")
         _ = try shot(front, "hot-seat-l2-briefing")
         startLevel()
-        try assertArtwork(!paused && self.game?.tick == 0, "L2 briefing required another action after Begin")
+        // The fresh-level countdown starts play without another action.
+        try assertArtwork((!paused || canvas.startCountdown.isActive) && self.game?.tick == 0, "L2 briefing required another action after Begin")
         restart()
         try assertArtwork(paused && speedControl.multiplier == 1, "Hot Seat retry did not wait at normal speed")
         let handoverTick = self.game?.tick ?? 0
@@ -968,11 +975,12 @@ try Lemmings2PlayWindow(root: l2root).checkRunRecovery()
     try bitmap.representation(using: .png, properties: [:])!.write(to: output.appendingPathComponent("\(type(of: view)).png"))
     event(.leftMouseDown, 102); event(.leftMouseUp, 102.05)
     event(.leftMouseDown, 102.1, clicks: 2); event(.leftMouseUp, 102.15, clicks: 2)
-    try assertArtwork(speed.multiplier == 1, "Sequel double-click restarted speed")
+    // Each middle click toggles, including both clicks of a double-click.
+    try assertArtwork(speed.target == 3, "Sequel middle clicks did not each toggle")
     event(.leftMouseDown, 103); speed.update(at: 105, active: true)
     try assertArtwork(speed.target == 10, "Sequel mouse hold failed")
     event(.leftMouseUp, 105.1)
-    try assertArtwork(speed.multiplier == 1, "Sequel hold release did not return to normal")
+    try assertArtwork(speed.multiplier == 3, "Sequel hold release did not restore cruise")
 }
 extension Lemmings2PlayWindow {
     fileprivate func checkSpeedMouseControls() throws {

@@ -22,6 +22,7 @@ public test and 1.2 releases. Builds 42 to 46 were local test builds.
   tunes.
 - Level music stays the same during play. The DJ mixes to a new track only
   when the game state changes, for example at the result screen.
+- With the Mac sound set, the "pop" event now plays the Amiga sample.
 - The SNES recording of "As Long As You Try Your Best" now plays to its end.
   Before, the macOS decoder stopped with an error at the end of the file.
 - The first frame shows before level music starts.
@@ -32,9 +33,17 @@ public test and 1.2 releases. Builds 42 to 46 were local test builds.
 
 - The four-corner reticle is back, with one-pixel strokes. Green corners show
   an eligible lemming, yellow an ineligible lemming, and grey empty terrain.
-- Settings has skill-icon sizes None, 1× and 2×. The default is 2×.
+- Settings has skill-icon sizes None, 1× and 2×. The default 1× is the size
+  that builds 44 to 46 called 2×. The new 2× is twice as large. The old,
+  smallest size is gone. Saved settings keep their current icon size.
 - An optional lemming count shows beside the cursor. The default is off.
 - Cursor settings apply in Classic, Lemmings 2 and Lemmings 3.
+- With Bomber selected, a click near a blocker picks the blocker. With
+  Builder selected, a click near a builder picks it, so its bridge continues.
+  Both options are on by default in all three games. In Lemmings 3, they
+  apply to Use tool with a bomb or bricks.
+- Press R to retry, and the music stops like a record under a DJ's hand.
+  The new attempt releases the record, and it spins back up to speed.
 - The selected lemming shows a faint halo and a gentle shimmer. With reduced
   motion, the halo does not move.
 - Space and P toggle pause once for each key press. Key release and key
@@ -135,12 +144,9 @@ Saved runs from earlier builds resume as before.
 ## Known limits
 
 - Lemmings 2, Lemmings 3 and NeoLemmix remain previews.
-- The Lemmings 2 artwork toggle does not restore pixel-identical rendering
-  after a round trip.
-- A controller retry, rewind and step button sequence has a known routing
-  issue.
 - Chip recordings repeat the full file, with its intro and fade. They do not
   loop seamlessly.
-- With the Mac sound set, the "yippee" and "pop" events have no sound.
+- With the Mac sound set, the "yippee" event has no sound. The Mac disk has
+  no yippee sample, and no named Amiga sample is a yippee.
 - Physical Intel and minimum-macOS testing is not verified.
 - The iPhone and iPad app is not part of this release.
