@@ -11,6 +11,7 @@ import NxlvKit
   var onChange: ((ClassicSettings) -> Void)?
 
   private var presetPopUp: NSPopUpButton?
+  private var experiencePopUp: NSPopUpButton?
   private var graphicsPopUp: NSPopUpButton?
   private var depthPopUp: NSPopUpButton?
   private var displayPopUp: NSPopUpButton?
@@ -32,6 +33,8 @@ import NxlvKit
   private var reticleCountCheck: NSButton?
   private var skillCursorSizePopUp: NSPopUpButton?
   private var favorApproachingCheck: NSButton?
+  private var favorBombBlockersCheck: NSButton?
+  private var favorBuildersCheck: NSButton?
   private var unlockAllClassicLevelsCheck: NSButton?
   private var controllerCheck: NSButton?
   private var controllerTapCheck: NSButton?
@@ -105,7 +108,7 @@ import NxlvKit
   // MARK: - Building panes
 
   /// Lays out labelled rows down a pane.
-  private func pane(_ rows: [(String, NSView)]) -> NSView {
+  private func pane(_ rows: [(String, NSView)], spacing: CGFloat = 22) -> NSView {
     let container = NSView()
     var previous: NSView?
     for (label, control) in rows {
@@ -128,7 +131,7 @@ import NxlvKit
           equalTo: container.trailingAnchor, constant: -18),
         control.topAnchor.constraint(
           equalTo: previous?.bottomAnchor ?? container.topAnchor,
-          constant: previous == nil ? 32 : 22),
+          constant: previous == nil ? 32 : spacing),
       ])
       previous = control
     }
@@ -152,12 +155,16 @@ import NxlvKit
   }
 
   private func gameplayPane() -> NSView {
+    let experience = popUp(#selector(experienceChanged))
+    experience.addItems(withTitles: ClassicExperiencePreset.allCases.map(\.title))
+    experience.setAccessibilityLabel("Gameplay preset")
+    experiencePopUp = experience
     let count = GameCheckButton(title: "Show lemming count", target: self, action: #selector(reticleCountChanged))
     count.state = settings.showReticleCount ? .on : .off
     reticleCountCheck = count
     let iconSize = popUp(#selector(skillCursorSizeChanged))
     iconSize.addItems(withTitles: SkillCursorIconSize.allCases.map(\.title))
-    iconSize.selectItem(at: SkillCursorIconSize.allCases.firstIndex(of: settings.skillCursorIconSize) ?? 2)
+    iconSize.selectItem(at: SkillCursorIconSize.allCases.firstIndex(of: settings.skillCursorIconSize) ?? 1)
     iconSize.setAccessibilityLabel("Skill icon size")
     skillCursorSizePopUp = iconSize
     let modern = GameCheckButton(title: "Modern keyboard controls", target: self, action: #selector(modernControlsChanged))
@@ -171,6 +178,14 @@ import NxlvKit
     favorApproaching.toolTip = "When a click could match more than one lemming, pick the one still approaching. Skip the one that already turned away."
     favorApproaching.state = settings.favorApproachingLemmings ? .on : .off
     favorApproachingCheck = favorApproaching
+    let bombBlockers = GameCheckButton(title: "Favor blockers for bombs", target: self, action: #selector(favorBombBlockersChanged))
+    bombBlockers.state = settings.favorBombBlockers ? .on : .off
+    favorBombBlockersCheck = bombBlockers
+    let builders = GameCheckButton(title: "Favor current builders for Build", target: self, action: #selector(favorBuildersChanged))
+    builders.state = settings.favorBuilders ? .on : .off
+    favorBuildersCheck = builders
+    let targeting = NSStackView(views: [favorApproaching, bombBlockers, builders])
+    targeting.orientation = .vertical; targeting.alignment = .leading; targeting.spacing = 8
     let unlockAllClassicLevels = GameCheckButton(
       title: "Unlock all Classic levels", target: self,
       action: #selector(unlockAllClassicLevelsChanged))
@@ -178,18 +193,13 @@ import NxlvKit
     unlockAllClassicLevels.state = settings.unlockAllClassicLevels ? .on : .off
     unlockAllClassicLevelsCheck = unlockAllClassicLevels
     variable.toolTip = SpeedPanelControls.help
-    let og = GameButton(title: "Use OG settings", target: self, action: #selector(useOGSettings))
-    let defaults = GameButton(title: "Use modern defaults", target: self, action: #selector(useModernDefaults))
-    let buttons = NSStackView(views: [og, defaults]); buttons.orientation = .horizontal; buttons.spacing = 16
-    og.toolTip = "Restore fixed fast-forward, number keys and original presentation. Saves and volume choices stay as set."
     modern.state = settings.modernControlsEnabled ? .on : .off
     variable.state = settings.variableSpeedEnabled ? .on : .off
     variable.isEnabled = settings.modernControlsEnabled
     return pane([
-      ("Controls", modern), ("Speed", variable), ("Pause", interruption),
-      ("Targeting", favorApproaching), ("Skill icon", iconSize), ("Reticule", count), ("Level Select", unlockAllClassicLevels),
-      ("Experience", buttons),
-    ])
+      ("Preset", experience), ("Controls", modern), ("Speed", variable), ("Pause", interruption),
+      ("Targeting", targeting), ("Skill icon", iconSize), ("Reticule", count), ("Level Select", unlockAllClassicLevels),
+    ], spacing: 14)
   }
 
   @objc private func reticleCountChanged(_ sender: NSButton) {
@@ -217,8 +227,20 @@ import NxlvKit
     settings.unlockAllClassicLevels = sender.state == .on
     changed()
   }
-  @objc private func useOGSettings() { applyExperiencePreset(modern: false) }
-  @objc private func useModernDefaults() { applyExperiencePreset(modern: true) }
+  @objc private func favorBombBlockersChanged(_ sender: NSButton) {
+    settings.favorBombBlockers = sender.state == .on; changed()
+  }
+  @objc private func favorBuildersChanged(_ sender: NSButton) {
+    settings.favorBuilders = sender.state == .on; changed()
+  }
+  @objc private func experienceChanged(_ sender: NSPopUpButton) {
+    guard ClassicExperiencePreset.allCases.indices.contains(sender.indexOfSelectedItem) else { return }
+    switch ClassicExperiencePreset.allCases[sender.indexOfSelectedItem] {
+    case .original: applyExperiencePreset(modern: false)
+    case .modern: applyExperiencePreset(modern: true)
+    case .custom: settings.experiencePreset = .custom; changed()
+    }
+  }
   private func controllerPane() -> NSView {
     let enabled = GameCheckButton(title: "Enable gamepad controls", target: self, action: #selector(controllerChanged))
     let tap = GameCheckButton(title: "Tap RT to toggle fast-forward; hold RT for a temporary boost", target: self, action: #selector(controllerTapChanged))
@@ -296,7 +318,7 @@ import NxlvKit
   private func applyExperiencePreset(modern: Bool) {
     settings.applyExperiencePreset(modern: modern)
     SequelArtworkPreference.setEnabled(modern)
-    rebuildSources(); markCustom(); changed()
+    rebuildSources(); markCustom(); changed(customizeExperience: false)
   }
 
   private func graphicsPane() -> NSView {
@@ -329,6 +351,7 @@ import NxlvKit
 
   @objc private func sequelArtworkChanged(_ sender: NSButton) {
     SequelArtworkPreference.setEnabled(sender.state == .on)
+    changed()
   }
 
   @objc private func refreshSequelArtwork() {
@@ -439,6 +462,7 @@ import NxlvKit
 
   /// Refills the source lists and reselects what is chosen.
   private func rebuildSources() {
+    experiencePopUp?.selectItem(at: ClassicExperiencePreset.allCases.firstIndex(of: settings.experiencePreset) ?? 2)
     graphicsPopUp?.removeAllItems()
     for option in options.graphics { graphicsPopUp?.addItem(withTitle: option.displayName) }
     if let index = options.graphics.firstIndex(of: settings.graphics) {
@@ -471,8 +495,10 @@ import NxlvKit
     variableSpeedCheck?.isEnabled = settings.modernControlsEnabled
     interruptionCheck?.state = settings.pauseOnInterruption ? .on : .off
     reticleCountCheck?.state = settings.showReticleCount ? .on : .off
-    skillCursorSizePopUp?.selectItem(at: SkillCursorIconSize.allCases.firstIndex(of: settings.skillCursorIconSize) ?? 2)
+    skillCursorSizePopUp?.selectItem(at: SkillCursorIconSize.allCases.firstIndex(of: settings.skillCursorIconSize) ?? 1)
     favorApproachingCheck?.state = settings.favorApproachingLemmings ? .on : .off
+    favorBombBlockersCheck?.state = settings.favorBombBlockers ? .on : .off
+    favorBuildersCheck?.state = settings.favorBuilders ? .on : .off
     unlockAllClassicLevelsCheck?.state = settings.unlockAllClassicLevels ? .on : .off
     controllerCheck?.state = settings.controllerEnabled ? .on : .off
     controllerTapCheck?.state = settings.controllerTapSpeed ? .on : .off
@@ -494,7 +520,10 @@ import NxlvKit
 
   // MARK: - Changes
 
-  private func changed() {
+  private func changed(customizeExperience: Bool = true) {
+    if customizeExperience { settings.experiencePreset = .custom }
+    experiencePopUp?.selectItem(at: ClassicExperiencePreset.allCases.firstIndex(of: settings.experiencePreset) ?? 2)
+    experiencePopUp?.needsDisplay = true
     GameAccessibility.interfaceSize = settings.interfaceSize
     GameScreen.shared.reattach()
     onChange?(settings)
@@ -524,6 +553,10 @@ import NxlvKit
     applied.variableSpeedEnabled = settings.variableSpeedEnabled
     applied.showReticleCount = settings.showReticleCount
     applied.skillCursorIconSize = settings.skillCursorIconSize
+    applied.favorApproachingLemmings = settings.favorApproachingLemmings
+    applied.favorBombBlockers = settings.favorBombBlockers
+    applied.favorBuilders = settings.favorBuilders
+    applied.experiencePreset = settings.experiencePreset
     applied.pauseOnInterruption = settings.pauseOnInterruption
     applied.unlockAllClassicLevels = settings.unlockAllClassicLevels
     applied.controllerEnabled = settings.controllerEnabled
@@ -540,7 +573,7 @@ import NxlvKit
     settings = applied
     rebuildSources()
     presetPopUp?.selectItem(at: index + 1)
-    changed()
+    changed(customizeExperience: false)
   }
 
   @objc private func graphicsChanged(_ sender: NSPopUpButton) {

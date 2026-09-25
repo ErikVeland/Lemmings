@@ -116,8 +116,10 @@ struct ReticleFeedback {
   }
   let startCountdown = FreshLevelCountdown()
   var showReticleCount = false
-    var skillCursorIconSize: SkillCursorIconSize = .two
+    var skillCursorIconSize: SkillCursorIconSize = .one
     var favorApproachingLemmings = true
+    var favorBombBlockers = true
+    var favorBuilders = true
   var speedMultiplier: Double = 3 { didSet { speedTrails.multiplier = speedMultiplier } }
   var isFastForward = false
   private let speedTrails = SpeedTrails()
@@ -331,7 +333,8 @@ struct ReticleFeedback {
   }
 
   func reticleState(at point: CGPoint, now: TimeInterval) -> ReticleState {
-    let eligible = lemming(at: point) != nil
+    let target = lemming(at: point)
+    let eligible = target.map { session?.canAssign(skillIndex: selectedSkill(), to: $0.id) == true } ?? false
     if eligible { return reticleFeedback.state(eligible: true, duplicate: nil, now: now) }
     let skill = selectedSkill()
     let duplicate = session?.lemmings.filter { contains($0, point) }.sorted {
@@ -412,11 +415,11 @@ struct ReticleFeedback {
 
   override func resetCursorRects() {
     guard phase == .playing else { return }
-    addCursorRect(bounds, cursor: GameCursor.invisible)
+    addCursorRect(bounds, cursor: GameCursor.gameplayCursor)
   }
 
   override func cursorUpdate(with event: NSEvent) {
-    if phase == .playing { GameCursor.invisible.set() } else { NSCursor.arrow.set() }
+    if phase == .playing { GameCursor.gameplayCursor.set() } else { NSCursor.arrow.set() }
   }
 
   /// Takes a cursor position directly.
@@ -514,8 +517,8 @@ struct ReticleFeedback {
   /// A small allowance covers sprite edges without reaching across the crowd.
   private static let pickBox = (halfWidth: CGFloat(6), top: CGFloat(14), bottom: CGFloat(5))
 
-  /// Both the green reticle and a fresh click use the nearest eligible
-  /// lemming, with an approaching follower preferred over a bridge builder.
+  /// Hover and input share skill priorities. A current builder stays targeted
+  /// until it can accept another build; an early click does not queue one.
   func lemming(at point: CGPoint) -> SessionLemming? {
     guard let session else { return nil }
     let skill = selectedSkill()
@@ -523,7 +526,18 @@ struct ReticleFeedback {
       let a = distanceSquared($0, point), b = distanceSquared($1, point)
       return a == b ? $0.id > $1.id : a < b
     }
+    let name = session.skills.indices.contains(skill) ? session.skills[skill].name.lowercased() : ""
+    if favorBuilders, name == "builder", !session.isComplete, !session.isNuking,
+       session.skills[skill].isInfinite || session.skills[skill].count > 0,
+       let builder = candidates.first(where: {
+         [.building, .shrugging].contains($0.pose) && session.assignmentState(skillIndex: skill, to: $0.id) != .unavailable
+       }) {
+      return builder
+    }
     let eligible = candidates.filter { session.canAssign(skillIndex: skill, to: $0.id) }
+    if favorBombBlockers, name == "bomber", let blocker = eligible.first(where: { $0.pose == .blocking }) {
+      return blocker
+    }
     guard let nearest = eligible.first else { return nil }
     if favorApproachingLemmings, nearest.pose == .building {
       // A follower behind the builder can sit outside the click's own pick
@@ -557,6 +571,12 @@ struct ReticleFeedback {
 
   /// Honour the green target briefly while it walks between display and input.
   func clickTarget(at point: CGPoint) -> SessionLemming? {
+    if let session, session.skills.indices.contains(selectedSkill()) {
+      let name = session.skills[selectedSkill()].name.lowercased()
+      if (favorBuilders && name == "builder") || (favorBombBlockers && name == "bomber") {
+        return lemming(at: point)
+      }
+    }
     if let displayedTarget, ProcessInfo.processInfo.systemUptime - displayedTarget.time <= 0.12,
        hypot(point.x - displayedTarget.point.x, point.y - displayedTarget.point.y) <= 2,
        let session, let target = session.lemmings.first(where: { $0.id == displayedTarget.id }),
@@ -1116,7 +1136,7 @@ struct ReticleFeedback {
   }
 
   private func drawCursor() {
-    guard let cursorViewPoint else { return }
+    guard !GameCursor.gameplaySuppressed, let cursorViewPoint else { return }
     let point = viewport.levelPoint(from: cursorViewPoint)
     let target = lemming(at: point)
     let now = ProcessInfo.processInfo.systemUptime

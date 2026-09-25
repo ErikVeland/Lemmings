@@ -64,7 +64,7 @@ import NxlvKit
 }
 
 /// Results lead with the rescue. Records and details are separate game pages.
-@MainActor final class ArcadeView: NSView {
+@MainActor final class ArcadeView: NSView, GameDialogCustomNavigation {
     enum Mode { case result, profiles, records, awards, details, goals, career, hotSeat }
     enum BoardScope { case level, career, worldwide }
     var mode = Mode.records { didSet { if mode != oldValue { keyboardButton = nil } } }
@@ -165,6 +165,7 @@ import NxlvKit
     private var buttons: [(String, CGRect, () -> Void)] = []
     private let accessibleElements = GameAccessibleElements()
     private var accessibleText: [(String, CGRect)] = []
+    private var primaryButtonIndex: Int?
     private var keyboardButton: Int?
     override func isAccessibilityElement() -> Bool { true }
     override func accessibilityRole() -> NSAccessibility.Role? { .group }
@@ -177,7 +178,9 @@ import NxlvKit
             var name = item.0
             if name.hasPrefix("player-"), !name.hasPrefix("player-new"), let profile = ArcadeStore.shared.records.profile(String(name.dropFirst(7))) { name = "Select player " + profile.initials }
             if name.hasPrefix("portrait-"), let index = Int(name.dropFirst(9)), ArcadeProfile.portraitNames.indices.contains(index) { name = "Portrait: " + ArcadeProfile.portraitNames[index] }
-            return accessibleElements.element(id: "button-\(index)", owner: self, label: name, frame: mapped(item.1), press: item.2)
+            let element = accessibleElements.element(id: "button-\(index)", owner: self, label: name, frame: mapped(item.1), press: item.2)
+            element.onFocus = { [weak self] in self?.keyboardButton = index; self?.needsDisplay = true }
+            return element
         }
         if mode == .profiles {
             let field = accessibleElements.element(id: "initials", owner: self, label: "Player initials", frame: mapped(CGRect(x: 564, y: 204, width: 430, height: 60)))
@@ -214,7 +217,7 @@ import NxlvKit
     private var scale: CGFloat { GamePageLayout.scale(in: bounds.size) }
     private var offset: CGPoint { CGPoint(x: (bounds.width - 1120 * scale) / 2, y: (bounds.height - (mode == .result ? 604 : 720) * scale) / 2) }
     override func draw(_ dirtyRect: NSRect) {
-        NSColor.black.setFill(); bounds.fill(); buttons = []; accessibleText = []
+        NSColor.black.setFill(); bounds.fill(); buttons = []; primaryButtonIndex = nil; accessibleText = []
         if let background {
             let image = NSImage(cgImage: background, size: CGSize(width: background.width, height: background.height))
             let fit = max(bounds.width / image.size.width, bounds.height / image.size.height)
@@ -255,6 +258,9 @@ import NxlvKit
             text(notice, 64, mode == .result ? 583 : 695, 980, height: 20)
         }
         setAccessibilityHelp(ArcadeStore.shared.storageError ?? ArcadeStore.shared.storageNotice)
+        if keyboardButton == nil || !buttons.indices.contains(keyboardButton!) {
+            keyboardButton = primaryButtonIndex ?? buttons.firstIndex(where: { $0.0.hasPrefix("Back") || $0.0 == "Close" }) ?? (buttons.isEmpty ? nil : 0)
+        }
         if let keyboardButton, buttons.indices.contains(keyboardButton) {
             NSColor.systemYellow.setStroke()
             let outline = NSBezierPath(rect: buttons[keyboardButton].1.insetBy(dx: -2, dy: -2))
@@ -310,7 +316,10 @@ import NxlvKit
         if let font {
             font.menuLine(label, in: caption, face: .small, alpha: enabled ? 1 : 0.45, palette: chosen ? .green : .blue)
         } else { GamePixelText.draw(label, in: caption) }
-        if enabled { buttons.append((label, rect, action)) }
+        if enabled {
+            if primary { primaryButtonIndex = buttons.count }
+            buttons.append((label, rect, action))
+        }
     }
     func link(_ label: String, _ rect: CGRect, alpha: CGFloat = 1, alignment: NSTextAlignment = .center, palette: MacInterfaceRenderer.Palette = .blue, action: @escaping () -> Void) {
         text(label, rect.minX, rect.midY - 9, rect.width, alignment: alignment, alpha: hover == label ? 1 : alpha, palette: hover == label ? .green : palette)
@@ -763,11 +772,15 @@ import NxlvKit
     }
     override func mouseExited(with event: NSEvent) { hover = nil; needsDisplay = true; NSCursor.arrow.set() }
     override func keyDown(with event: NSEvent) {
-        if event.keyCode == 48, !buttons.isEmpty {
-            let direction = event.modifierFlags.contains(.shift) ? -1 : 1
+        guard event.modifierFlags.intersection([.command, .control, .option]).isEmpty else { super.keyDown(with: event); return }
+        if [48, 123, 124, 125, 126].contains(event.keyCode), !buttons.isEmpty {
+            let direction = event.keyCode == 48 ? (event.modifierFlags.contains(.shift) ? -1 : 1) : ([123, 126].contains(event.keyCode) ? -1 : 1)
             keyboardButton = ((keyboardButton ?? (direction > 0 ? -1 : 0)) + direction + buttons.count) % buttons.count
             let item = buttons[keyboardButton!]
             scrollToVisible(CGRect(x: offset.x + item.1.minX * scale, y: offset.y + item.1.minY * scale, width: item.1.width * scale, height: item.1.height * scale))
+            if let element = accessibilityChildren()?.compactMap({ $0 as? GameAccessibleElement }).first(where: { $0.localFrame == CGRect(x: offset.x + item.1.minX * scale, y: offset.y + item.1.minY * scale, width: item.1.width * scale, height: item.1.height * scale) }) {
+                NSAccessibility.post(element: element, notification: .focusedUIElementChanged)
+            }
             needsDisplay = true; return
         }
         if [36, 76, 49].contains(event.keyCode), !event.isARepeat, let keyboardButton, buttons.indices.contains(keyboardButton) {

@@ -126,6 +126,28 @@ func testFollowerBehindBuilderIsTargeted() throws {
         "A follower approaching a bridge builder should receive the selected skill")
     check(game.target(slot: skillSlot, x: clickX, y: activeBuilder.y - 5)?.id == activeBuilder.id,
         "Turning the setting off should keep the nearest bridge builder")
+    check(game.target(slot: builderSlot, x: clickX, y: activeBuilder.y - 5,
+        preferApproaching: true, preferBuilders: true)?.id == activeBuilder.id,
+        "Build must retain the active builder over an eligible follower")
+    check(game.target(slot: builderSlot, x: clickX, y: activeBuilder.y - 5,
+        preferApproaching: true, preferBuilders: false)?.id == follower.id,
+        "Builder preference opt-out must select the eligible follower")
+    let supply = game.supplies[builderSlot]
+    check(!game.assign(slot: builderSlot, to: activeBuilder.id) && game.supplies[builderSlot] == supply,
+        "An early Build must not consume supply or restart the builder")
+    let blockerSlot = game.configuration.skills.firstIndex(of: .blocker)!
+    check(game.assign(slot: blockerSlot, to: activeBuilder.id), "Could not prepare the bomb blocker")
+    let bomberSlot = game.configuration.skills.firstIndex(of: .bomber)!
+    check(game.target(slot: bomberSlot, x: follower.x, y: follower.y - 5,
+        preferApproaching: true, preferBombBlockers: true)?.id == activeBuilder.id,
+        "Bomb must prefer the blocker over the nearer follower")
+    check(game.target(slot: bomberSlot, x: follower.x, y: follower.y - 5,
+        preferApproaching: false, preferBombBlockers: false)?.id == follower.id,
+        "Bomb preference opt-out must preserve ordinary targeting")
+    check(game.assign(slot: bomberSlot, to: activeBuilder.id), "Could not bomb the blocker")
+    check(game.target(slot: bomberSlot, x: follower.x, y: follower.y - 5,
+        preferApproaching: true, preferBombBlockers: true)?.id == follower.id,
+        "An already bombed blocker must not receive a second bomb")
     print("PASS Lemmings 2 targeting favours a follower behind a builder")
 }
 

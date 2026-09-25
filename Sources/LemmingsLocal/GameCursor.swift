@@ -2,6 +2,9 @@ import AppKit
 
 /// Cursor presentation shared by gameplay views and their controls.
 @MainActor enum GameCursor {
+  static var gameplaySuppressed = false
+  static var gameplayCursor: NSCursor { gameplaySuppressed ? .arrow : invisible }
+
   static let invisible: NSCursor = {
     let image = NSImage(size: NSSize(width: 1, height: 1), flipped: true) { _ in true }
     return NSCursor(image: image, hotSpot: .zero)
@@ -11,7 +14,7 @@ import AppKit
    * Returns true only where the game draws its own pointer.
    */
   static func hidesSystemCursor(at point: CGPoint?, inside gameplayRect: CGRect?) -> Bool {
-    guard let point, let gameplayRect, !gameplayRect.isNull, !gameplayRect.isEmpty else {
+    guard !gameplaySuppressed, let point, let gameplayRect, !gameplayRect.isNull, !gameplayRect.isEmpty else {
       return false
     }
     return gameplayRect.contains(point)
@@ -45,6 +48,7 @@ import AppKit
    * Draws the four-corner reticle used as the gameplay pointer.
    */
   static func drawPlayfieldPointer(at point: CGPoint, scale: CGFloat, tint: NSColor) {
+    guard !gameplaySuppressed else { return }
     let frame = playfieldPointerFrame(at: point, scale: scale)
     let pixel = max(1, floor(scale))
     let arm = 5 * pixel

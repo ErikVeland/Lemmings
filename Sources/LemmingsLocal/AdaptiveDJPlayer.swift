@@ -13,6 +13,7 @@ import NxlvKit
     }
   }
   var isPlaying: Bool { recording?.isPlaying == true || module?.isOutputRunning == true }
+  func setSpeedPitch(_ cents: Double) { recording?.setSpeedPitch(cents); module?.setSpeedPitch(cents) }
 
   init?(_ url: URL, repeats: Bool = true) {
     if url.pathExtension.lowercased() == "mod" {
@@ -61,6 +62,7 @@ import NxlvKit
   private var fadingIn: DJDeck?
   private var fadingOut: DJDeck?
   private var playbackRate: Float = 1
+  private var speedPitch: Double = 0
 
 
   /// Soundtracks the player supplied, keyed by folder name.
@@ -177,6 +179,7 @@ import NxlvKit
     let repeats = !["victory", "failure", "cue", "medal", "milestone"].contains(role ?? "")
     let deck = DJDeck(url, repeats: repeats)
     deck?.playbackRate = playbackRate
+    deck?.setSpeedPitch(speedPitch)
     return deck
   }
 
@@ -186,6 +189,14 @@ import NxlvKit
     deckB?.playbackRate = playbackRate
     fadingIn?.playbackRate = playbackRate
     fadingOut?.playbackRate = playbackRate
+  }
+
+  func setSpeedPitch(_ cents: Double) {
+    speedPitch = cents
+    deckA?.setSpeedPitch(cents)
+    deckB?.setSpeedPitch(cents)
+    fadingIn?.setSpeedPitch(cents)
+    fadingOut?.setSpeedPitch(cents)
   }
 
   private func pickTrack(avoiding pool: String?, victory: Bool = false, failure: Bool = false) -> (pool: String, url: URL)? {

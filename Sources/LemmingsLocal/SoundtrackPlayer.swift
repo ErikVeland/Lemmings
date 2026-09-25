@@ -21,6 +21,7 @@ import NxlvKit
   private(set) var volume: Float = 0.8
   private(set) var muted = false
   private(set) var playbackRate: Float = 1
+  private var speedPitch: Double = 0
 
   /// The soundtracks found under a root, one per folder.
   ///
@@ -126,6 +127,7 @@ import NxlvKit
     guard let made = MusicFileDeck(url: url) else { return nil }
     made.volume = muted ? 0 : volume
     made.playbackRate = playbackRate
+    made.setSpeedPitch(speedPitch)
     player?.stop()
     player = made
     made.play()
@@ -162,6 +164,11 @@ import NxlvKit
   func setPlaybackRate(_ value: Double) {
     playbackRate = Float(min(1, max(0.5, value)))
     player?.playbackRate = playbackRate
+  }
+
+  func setSpeedPitch(_ cents: Double) {
+    speedPitch = cents
+    player?.setSpeedPitch(cents)
   }
 
   func setMuted(_ value: Bool) {

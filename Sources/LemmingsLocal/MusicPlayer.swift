@@ -10,6 +10,7 @@ import NxlvKit
 /// swap buffers without locking, which is worth doing if this ever glitches.
 final class ModuleMusicPlayer: @unchecked Sendable {
   private let engine = AVAudioEngine()
+  private let speedPitch = AVAudioUnitTimePitch()
   private let reverb = AVAudioUnitReverb()
   private let mixEQ = AVAudioUnitEQ(numberOfBands: 1)
   private let spatialMixer = AVAudioMixerNode()
@@ -71,6 +72,7 @@ final class ModuleMusicPlayer: @unchecked Sendable {
     }
 
     engine.attach(node)
+    engine.attach(speedPitch)
     engine.attach(mixEQ)
     mixEQ.bands[0].filterType = .lowShelf
     mixEQ.bands[0].frequency = 180
@@ -82,7 +84,8 @@ final class ModuleMusicPlayer: @unchecked Sendable {
     spatialMixer.renderingAlgorithm = .auto
     spatialMixer.sourceMode = .pointSource
     spatialMixer.position = AVAudio3DPoint(x: 0, y: 0, z: -1)
-    engine.connect(node, to: mixEQ, format: format)
+    engine.connect(node, to: speedPitch, format: format)
+    engine.connect(speedPitch, to: mixEQ, format: format)
     engine.connect(mixEQ, to: reverb, format: format)
     engine.connect(reverb, to: spatialMixer, format: format)
     engine.connect(spatialMixer, to: engine.mainMixerNode, format: format)
@@ -91,6 +94,7 @@ final class ModuleMusicPlayer: @unchecked Sendable {
       try engine.start()
     } catch {
       engine.detach(node)
+      engine.detach(speedPitch)
       engine.detach(spatialMixer)
       engine.detach(reverb)
       engine.detach(mixEQ)
@@ -109,6 +113,7 @@ final class ModuleMusicPlayer: @unchecked Sendable {
     pauseWorkItem = nil
     engine.stop()
     if let sourceNode { engine.detach(sourceNode) }
+    engine.detach(speedPitch)
     engine.detach(spatialMixer)
     engine.detach(reverb)
     engine.detach(mixEQ)
@@ -321,6 +326,11 @@ final class ModuleMusicPlayer: @unchecked Sendable {
     return (clock.musicalBPM * tempoScale, clock.secondsUntilNextBeat / tempoScale)
   }
   func setMixBass(_ gain: Float) { mixEQ.bands[0].gain = gain }
+
+  /// Gameplay supplies a smoothed pitch in cents. Keep the tracker clock unchanged.
+  func setSpeedPitch(_ cents: Double) {
+    speedPitch.pitch = Float(min(1200 * log2(1.5), max(0, cents)))
+  }
 
   /// Sets module playback rate independently of the game clock.
   func setTempoScale(_ value: Double) {

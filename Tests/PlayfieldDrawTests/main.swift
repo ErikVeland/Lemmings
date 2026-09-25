@@ -48,11 +48,18 @@ private final class TargetingSession: GameSession {
   let rateLabel = "Rate"
   let remainingSeconds: Int? = nil
   let isComplete = false, didWin = false, isNuking = false, canUndoNuke = false, supportsRewind = false
-  let skills: [SessionSkill] = [], lastCues: [ClassicSoundEffect] = []
+  var skills: [SessionSkill] = ["Climber", "Bomber", "Builder"].map { .init(name: $0, count: 10, isInfinite: false) }
+  let lastCues: [ClassicSoundEffect] = []
   var currentTick = 0
   func tick() {}
   func assign(skillIndex: Int, to lemmingID: Int) -> String? { nil }
-  func assignmentState(skillIndex: Int, to lemmingID: Int) -> AssignmentState { .eligible }
+  func assignmentState(skillIndex: Int, to lemmingID: Int) -> AssignmentState {
+    guard skills.indices.contains(skillIndex), skills[skillIndex].count > 0,
+      let lem = actors.first(where: { $0.id == lemmingID }) else { return .unavailable }
+    if skillIndex == 2 && lem.pose == .building { return .alreadyAssigned }
+    if skillIndex == 1 && lem.countdown != nil { return .alreadyAssigned }
+    return .eligible
+  }
   func adjustRate(by delta: Int) {}
   func nuke() {}
   func undoNuke() {}
@@ -177,6 +184,38 @@ private final class TargetingSession: GameSession {
   let composedMask = ExplosionHDR.mask(width:640,height:400,flashes:view.hdrFlashes)
   try require(composedMask[(320*640)...].allSatisfy {$0 == 0}, "an edge explosion put HDR pixels into the CRT panel")
   print("PASS real PC/Mac explosion frames: opaque pop followed by an empty frame")
+}
+
+@MainActor private func testSkillTargetPriorities() throws {
+  let view = PlayfieldView(frame: CGRect(x: 0, y: 0, width: 640, height: 320))
+  let session = TargetingSession()
+  view.session = session
+  let walker = SessionLemming(id: 0, x: 99, y: 80, pose: .walking, facingLeft: false, animationFrame: 0, countdown: nil)
+  let point = CGPoint(x: 100, y: 75)
+  session.actors = [walker, .init(id: 1, x: 97, y: 80, pose: .blocking, facingLeft: true, animationFrame: 0, countdown: nil)]
+  view.selectedSkill = { 1 }
+  try require(view.lemming(at: point)?.id == 1 && view.clickTarget(at: point)?.id == 1,
+    "Bomb targeting must prefer the blocker over a closer approaching walker")
+  view.favorBombBlockers = false
+  try require(view.lemming(at: point)?.id == 0, "Bomb preference opt-out must restore the walker")
+  view.favorBombBlockers = true
+  session.actors[1] = .init(id: 1, x: 97, y: 80, pose: .blocking, facingLeft: true, animationFrame: 0, countdown: 10)
+  try require(view.lemming(at: point)?.id == 0, "An already bombed blocker must not take another bomb")
+  session.actors[1] = .init(id: 1, x: 97, y: 80, pose: .building, facingLeft: false, animationFrame: 0, countdown: nil)
+  view.selectedSkill = { 2 }
+  try require(view.lemming(at: point)?.id == 1 && view.clickTarget(at: point)?.id == 1,
+    "Build must keep the active builder selected")
+  try require(view.reticleState(at: point, now: 1) == .alreadyAssigned,
+    "The retained builder must not claim to accept an early assignment")
+  view.favorBuilders = false
+  try require(view.lemming(at: point)?.id == 0, "Builder preference opt-out must allow the eligible walker")
+  view.favorBuilders = true
+  session.actors[1] = .init(id: 1, x: 97, y: 80, pose: .shrugging, facingLeft: false, animationFrame: 0, countdown: nil)
+  try require(view.lemming(at: point)?.id == 1 && view.reticleState(at: point, now: 2) == .eligible,
+    "The finished builder must stay selected when it can accept Build")
+  session.skills[2] = .init(name: "Builder", count: 0, isInfinite: false)
+  try require(view.lemming(at: point) == nil, "An empty Build supply must not retain a target")
+  print("PASS bomb blockers, retained builders, eligibility and independent opt-outs")
 }
 
 private func require(
@@ -536,6 +575,28 @@ private func require(
     "super speed lost its trailing afterimages")
   let repeated = try render(tick: 4, enabled: true)
   try require(repeated == fast, "redrawing one tick changed the afterimages")
+  var previousLength = 0
+  var previousTailPeak = 256
+  for tier in [2.0, 3, 5, 10] {
+    trails.multiplier = tier
+    let pixels = try render(tick: 4, enabled: true)
+    var leftmost = Int(sprite.minX)
+    for y in 0..<360 { for x in 0..<Int(sprite.minX) where pixels[(y * 640 + x) * 4 + 3] > 2 {
+      leftmost = min(leftmost, x)
+    } }
+    let length = Int(sprite.minX) - leftmost
+    var tailPeak = 0
+    for y in 0..<360 { for x in leftmost..<(leftmost + 8) {
+      tailPeak = max(tailPeak, Int(pixels[(y * 640 + x) * 4 + 3]))
+    } }
+    try require(length > previousLength, "The \(tier)× trail did not get longer")
+    try require(tailPeak < previousTailPeak, "The \(tier)× far tail did not get fainter")
+    previousLength = length; previousTailPeak = tailPeak
+    for index in stride(from: 0, to: normal.count, by: 4) where normal[index + 3] != 0 {
+      try require(normal[index..<index + 4] == pixels[index..<index + 4], "A speed tier blurred the solid sprite")
+    }
+  }
+  trails.multiplier = 3
   let left = try render(tick: 4, enabled: true, left: true)
   try require(left != fast, "afterimages did not follow direction")
   bitmap.clear(bounds)
@@ -734,6 +795,12 @@ private func testMacArtworkCropStaysPixelAligned() throws {
     } else if updated.brightnessComponent > 0 { ghostPixels += 1 }
   } }
   try require(spritePixels > 0 && ghostPixels > 0, "the overlap test did not draw both sprites and ghosts")
+  for tier in [2.0, 3, 5, 10] {
+    view.speedMultiplier = tier
+    let preview = render(fast: true)
+    try preview.representation(using: .png, properties: [:])!.write(to:
+      root.appendingPathComponent(".build/playfield-draw-tests/speed-\(Int(tier))x.png"))
+  }
   view.hdEffectsEnabled = false
   let oldSchool = render(fast: true)
   try require(oldSchool.representation(using: .png, properties: [:]) == normal.representation(using: .png, properties: [:]),
@@ -747,8 +814,8 @@ private func testMacArtworkCropStaysPixelAligned() throws {
   for scale in [1.0, 2.0, 3.0] {
     let pixel = floor(scale)
     let frame = SkillCursorBadge.frame(at: point, scale: scale, size: .one, in: bounds)
-    try require(frame.width == 6 * pixel && frame.height == frame.width,
-      "the selected-skill reminder is not tiny at \(scale)x")
+    try require(frame.width == 12 * pixel && frame.height == frame.width,
+      "The baseline icon must use actual 2× artwork at \(scale)x")
     let doubled = SkillCursorBadge.frame(at: point, scale: scale, size: .two, in: bounds)
     try require(doubled.width == frame.width * 2, "2× icon frame must double 1×")
     let reticle = GameCursor.playfieldPointerFrame(at: point, scale: scale)
@@ -775,12 +842,12 @@ private func testMacArtworkCropStaysPixelAligned() throws {
     "Empty reticule must show zero")
   for size in SkillCursorIconSize.allCases {
     let count = SkillCursorBadge.countFrame(count: 12, at: point, scale: 2, size: size, in: bounds)
-    let effective: SkillCursorIconSize = size == .none ? .two : size
+    let effective: SkillCursorIconSize = size == .none ? .one : size
     let icon = SkillCursorBadge.frame(at: point, scale: 2, size: effective, in: bounds)
     try require(count.maxX < point.x && count.minY == icon.minY,
       "Count must sit opposite the icon at the same height")
   }
-  print("PASS selected-skill reminder stays tiny, offset and visible at every edge")
+  print("PASS readable 2×/4× skill icons, offset and clamping at every edge")
 }
 
 @MainActor private func renderSelectionPreview() throws {
@@ -798,7 +865,7 @@ private func testMacArtworkCropStaysPixelAligned() throws {
   for size in SkillCursorIconSize.allCases {
     view.showReticleCount = true
     let name = size.rawValue
-    if size == .two { view.startCountdown.arm() }
+    view.startCountdown.cancel()
     view.skillCursorIconSize = size
     view.reduceMotion = true
     view.needsDisplay = true
@@ -851,6 +918,7 @@ private func testMacArtworkCropStaysPixelAligned() throws {
     try testApproachingLemmingPreferred()
     try testSameDirectionPackKeepsNearestPick()
     try testFollowerBehindBuilderIsTargeted()
+    try testSkillTargetPriorities()
     try testNukeGesturesAndQueuedUndo()
     try testClassicPanelLabels()
     print("PASS Xmas panel labels at multiple sizes with speed control")

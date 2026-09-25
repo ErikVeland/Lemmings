@@ -298,6 +298,10 @@ import NxlvKit
         canvas.onSpeedRelease = { [weak self] time in self?.speedControl.release(.mouse, at: time) }
         canvas.onSpeedStep = { [weak self] direction, time in self?.speedControl.step(direction, at: time) }
         keyboard.speedControl = speedControl
+        speedControl.onMusicPitchChange = { [weak self] cents in
+            self?.music.setSpeedPitch(cents)
+            self?.dj.setSpeedPitch(cents)
+        }
         keyboard.modern = { [weak self] in self?.audioSettings.modernControlsEnabled ?? true }
         speedControl.onChange = { [weak self] in self?.accumulator = 0; self?.refreshGame() }
         keyboard.cycle = { [weak self] direction in
@@ -489,6 +493,8 @@ import NxlvKit
         canvas.showReticleCount = settings.showReticleCount
         canvas.skillCursorIconSize = settings.skillCursorIconSize
         canvas.favorApproachingLemmings = settings.favorApproachingLemmings
+        canvas.favorBombBlockers = settings.favorBombBlockers
+        canvas.favorBuilders = settings.favorBuilders
         canvas.fullScreenHDRFlashes = settings.cinematicExplosionsEnabled
         if let root = Bundle.main.resourceURL?.appendingPathComponent("Music") {
             dj.load(soundtracks: SoundtrackPlayer.djSoundtracks(at: root), catalogueRoot: root)
@@ -829,7 +835,8 @@ import NxlvKit
         nukeGesture.reset()
         if !fanSelected, performRecoveryInput(.machine(x:x,y:y)) { refreshGame(); return }
         if !fanSelected, performRecoveryInput(.chain(x:x,y:y)) { refreshGame(); return }
-        if !fanSelected, let lem = game?.target(slot: selected, x: x, y: y, preferApproaching: audioSettings.favorApproachingLemmings) {
+        if !fanSelected, let lem = game?.target(slot: selected, x: x, y: y, preferApproaching: audioSettings.favorApproachingLemmings,
+            preferBombBlockers: audioSettings.favorBombBlockers, preferBuilders: audioSettings.favorBuilders) {
             if performRecoveryInput(.assign(slot: selected, lemming: lem.id)) {
                 assignmentFocus.record(id: lem.id, skill: selected, tick: game?.tick ?? 0)
                 canvas.didAssign(to: lem.id)
@@ -1778,7 +1785,7 @@ import NxlvKit
     }
     override func resetCursorRects() {
         addCursorRect(bounds, cursor: NSCursor.arrow)
-        if !gameplayRect.isEmpty { addCursorRect(gameplayRect, cursor: GameCursor.invisible) }
+        if !gameplayRect.isEmpty { addCursorRect(gameplayRect, cursor: GameCursor.gameplayCursor) }
     }
     private var gameplayRect: CGRect {
         CGRect(x: origin.x, y: origin.y, width: visibleWidth * zoom, height: 160 * zoom * 1.2)
@@ -1793,7 +1800,8 @@ import NxlvKit
             let point = controllerPointer ?? convert(window.mouseLocationOutsideOfEventStream, from: nil)
             let x = (point.x - origin.x) / zoom, y = (point.y - origin.y) / (zoom * 1.2)
             if (0..<visibleWidth).contains(x), (0..<160).contains(y) {
-                if !fan, let target = game.target(slot: slot, x: Int(x + cameraX), y: Int(y + cameraY), preferApproaching: favorApproachingLemmings) {
+                if !fan, let target = game.target(slot: slot, x: Int(x + cameraX), y: Int(y + cameraY), preferApproaching: favorApproachingLemmings,
+            preferBombBlockers: favorBombBlockers, preferBuilders: favorBuilders) {
                     switch target.state {
                     case .walking: label = "WALKER"
                     case .running: label = "RUNNER"
@@ -1920,8 +1928,10 @@ import NxlvKit
     var variableSpeedEnabled = true
     let startCountdown = FreshLevelCountdown()
     var showReticleCount = false
-    var skillCursorIconSize: SkillCursorIconSize = .two
+    var skillCursorIconSize: SkillCursorIconSize = .one
     var favorApproachingLemmings = true
+    var favorBombBlockers = true
+    var favorBuilders = true
     var onSpeedPress: ((TimeInterval, Int) -> Void)?
     var onSpeedRelease: ((TimeInterval) -> Void)?
     var onSpeedStep: ((Int, TimeInterval) -> Void)?
@@ -2346,7 +2356,7 @@ import NxlvKit
                         tint: .systemGreen, animated: !reduceMotion)
                 }
             }
-            if let point = cursorPoint(), gameplayRect.contains(point) {
+            if !GameCursor.gameplaySuppressed, let point = cursorPoint(), gameplayRect.contains(point) {
                 if showReticleCount {
                     let centres = (game?.lemmings ?? []).filter { $0.active }.map {
                         CGPoint(x: origin.x + (CGFloat($0.x) - cameraX) * zoom,
@@ -2544,7 +2554,8 @@ import NxlvKit
         guard let game, let p = cursorPoint() else { return nil }
         let x = (p.x - origin.x) / zoom, y = (p.y - origin.y) / (zoom * 1.2)
         guard (0..<visibleWidth).contains(x), (0..<160).contains(y) else { return nil }
-        return game.target(slot: slot, x: Int(x + cameraX), y: Int(y + cameraY), preferApproaching: favorApproachingLemmings)?.id
+        return game.target(slot: slot, x: Int(x + cameraX), y: Int(y + cameraY), preferApproaching: favorApproachingLemmings,
+            preferBombBlockers: favorBombBlockers, preferBuilders: favorBuilders)?.id
     }
     private func cursorPoint() -> CGPoint? {
         guard let window else { return nil }

@@ -20,7 +20,8 @@ private func testOptionsFollowInstalledData() throws {
     try require(upgraded.bottomFallSounds && ClassicSettings().bottomFallSounds, "Bottom falls must default on for new and existing players")
     try require(!upgraded.unlockAllClassicLevels && !ClassicSettings().unlockAllClassicLevels,
         "Classic levels must follow campaign progress by default")
-    try require(upgraded.skillCursorIconSize == .two, "Existing players must default to a 2× skill icon")
+    try require(upgraded.skillCursorIconSize == .one && upgraded.skillCursorIconSize.multiplier == 2,
+        "Existing players must default to real 2× artwork labelled 1×")
     for size in SkillCursorIconSize.allCases {
         var settings = upgraded
         settings.skillCursorIconSize = size
@@ -64,6 +65,39 @@ private func testOptionsFollowInstalledData() throws {
     try require(!full.music.contains(.macintoshMIDI), "Macintosh music has no player yet")
     try require(full.sound.contains(.macintoshResources), "Macintosh sound should be offered")
     print("PASS the options offered follow the data installed")
+}
+
+private func testTargetingPresetsAndIconMigration() throws {
+    var settings = ClassicSettings()
+    try require(settings.experiencePreset == .modern && settings.favorApproachingLemmings
+        && settings.favorBombBlockers && settings.favorBuilders, "Modern targeting must default on")
+    try require(SkillCursorIconSize.one.title == "1×" && SkillCursorIconSize.one.multiplier == 2
+        && SkillCursorIconSize.two.title == "2×" && SkillCursorIconSize.two.multiplier == 4,
+        "Visible sizes must map to actual 2× and 4×")
+    for old in ["one", "two"] {
+        let restored = try JSONDecoder().decode(ClassicSettings.self,
+            from: Data("{\"skillCursorIconSize\":\"\(old)\"}".utf8))
+        try require(restored.skillCursorIconSize == .one, "Old icon sizes must migrate to the readable baseline")
+    }
+    let originalSave = try JSONDecoder().decode(ClassicSettings.self,
+        from: Data("{\"modernControlsEnabled\":false,\"skillCursorIconSize\":\"none\"}".utf8))
+    try require(!originalSave.favorBombBlockers && !originalSave.favorBuilders
+        && originalSave.skillCursorIconSize == .none, "Migration must respect Original choices")
+    settings.applyExperiencePreset(modern: false)
+    try require(settings.experiencePreset == .original && !settings.favorApproachingLemmings
+        && !settings.favorBombBlockers && !settings.favorBuilders && settings.skillCursorIconSize == .none,
+        "Original must disable targeting aids and the icon")
+    settings.applyExperiencePreset(modern: true)
+    try require(settings.experiencePreset == .modern && settings.favorApproachingLemmings
+        && settings.favorBombBlockers && settings.favorBuilders && settings.skillCursorIconSize == .one,
+        "Modern must restore all targeting aids and the baseline icon")
+    settings.experiencePreset = .custom
+    settings.favorBombBlockers = false
+    settings.favorBuilders = false
+    settings.skillCursorIconSize = .two
+    let restored = try JSONDecoder().decode(ClassicSettings.self, from: JSONEncoder().encode(settings))
+    try require(restored == settings, "Custom preset, opt-outs and actual 4× must persist")
+    print("PASS targeting presets, saved Custom state and readable icon migration")
 }
 
 private func testUndecodedSourcesAreNotOffered() throws {
@@ -301,6 +335,7 @@ private func testReducedEffects() throws {
 }
 
 do {
+    try testTargetingPresetsAndIconMigration()
     for size in ClassicInterfaceSize.allCases {
         var settings = ClassicSettings()
         settings.interfaceSize = size

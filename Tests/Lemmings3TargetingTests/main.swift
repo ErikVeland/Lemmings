@@ -83,6 +83,22 @@ private func testFollowerBeatsBuilder() throws {
 }
 
 do {
+    let builder = Lemmings3TargetCandidate(id: 0, x: 46, y: 40, direction: 1, tool: .bricks, isBuilding: true, active: true)
+    let walker = Lemmings3TargetCandidate(id: 1, x: 51, y: 40, direction: 1, tool: .bricks, isBuilding: false, active: true)
+    try require(Lemmings3Targeting.nearest(among: [builder, walker], x: 52, y: 32, selected: 3,
+        favorApproaching: true, favorBuilders: true)?.id == builder.id, "Use must prefer an active brick builder")
+    try require(Lemmings3Targeting.nearest(among: [builder, walker], x: 52, y: 32, selected: 3,
+        favorApproaching: true, favorBuilders: false)?.id == walker.id, "Builder opt-out must restore the nearest tool holder")
+    var blocker = Lemmings3TargetCandidate(id: 2, x: 48, y: 40, direction: -1, tool: .bomb,
+        isBuilding: false, active: true, isBlocking: true)
+    try require(Lemmings3Targeting.nearest(among: [blocker, walker], x: 52, y: 32, selected: 3,
+        favorApproaching: true, favorBombBlockers: true)?.id == blocker.id, "Use must prefer a bomb-equipped blocker")
+    try require(Lemmings3Targeting.nearest(among: [blocker, walker], x: 52, y: 32, selected: 3,
+        favorApproaching: true, favorBombBlockers: false)?.id == walker.id, "Bomb opt-out must restore the nearer tool holder")
+    blocker.canAssignSelected = false
+    try require(Lemmings3Targeting.nearest(among: [blocker, walker], x: 52, y: 32, selected: 3,
+        favorApproaching: true, favorBombBlockers: true)?.id == walker.id, "Bomb preference must respect tool eligibility")
+    print("PASS Lemmings 3 bomb and builder priorities, eligibility and independent opt-outs")
     try testApproachingLemmingPreferred()
     try testSameDirectionCandidatesKeepNearestPick()
     try testToolHolderBeatsApproachingCandidate()

@@ -1019,6 +1019,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
     playfield.showReticleCount = settings.showReticleCount
     playfield.skillCursorIconSize = settings.skillCursorIconSize
     playfield.favorApproachingLemmings = settings.favorApproachingLemmings
+    playfield.favorBombBlockers = settings.favorBombBlockers
+    playfield.favorBuilders = settings.favorBuilders
     if !settings.hdEffectsEnabled { screenFlash.clear() }
     else if !settings.cinematicExplosionsEnabled { screenFlash.clearExplosions() }
     applyAudioSettings()
@@ -1064,6 +1066,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
     playfield.showReticleCount = settings.showReticleCount
     playfield.skillCursorIconSize = settings.skillCursorIconSize
     playfield.favorApproachingLemmings = settings.favorApproachingLemmings
+    playfield.favorBombBlockers = settings.favorBombBlockers
+    playfield.favorBuilders = settings.favorBuilders
   }
 
   private func applyAudioSettings() {
@@ -6444,6 +6448,11 @@ let achievementProgressKey = "ClassicAchievementProgress"
       self.panel.selectedSkillIndex = skill; self.assign(id); self.panel.selectedSkillIndex = previous
     }
     keyboard.speedControl = speedControl
+    speedControl.onMusicPitchChange = { [weak self] cents in
+      self?.music.setSpeedPitch(cents)
+      self?.soundtrack.setSpeedPitch(cents)
+      self?.dj.setSpeedPitch(cents)
+    }
     keyboard.modern = { [weak self] in self?.settings.modernControlsEnabled ?? true }
     speedControl.onChange = { [weak self] in
       guard let self else { return }

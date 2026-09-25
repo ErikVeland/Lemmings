@@ -411,7 +411,13 @@ extension AppDelegate {
     guard let iconSize = descendants(root).compactMap({ $0 as? NSPopUpButton }).first(where: { $0.accessibilityLabel() == "Skill icon size" }) else {
       try check(false, "Skill icon size control is missing"); return
     }
-    try check(iconSize.titleOfSelectedItem == "2×", "Skill icon must default to 2×")
+    try check(iconSize.titleOfSelectedItem == "1×" && preferences.current.skillCursorIconSize.multiplier == 2,
+      "Skill icon must default to actual 2× labelled 1×")
+    guard let experience = descendants(root).compactMap({ $0 as? NSPopUpButton }).first(where: { $0.accessibilityLabel() == "Gameplay preset" }) else {
+      try check(false, "Gameplay preset control is missing"); return
+    }
+    try check(experience.itemTitles == ["Original", "Modern", "Custom"] && experience.titleOfSelectedItem == "Modern",
+      "Gameplay must offer Original, Modern and Custom, with Modern selected")
     guard let countControl = descendants(root).compactMap({ $0 as? NSButton }).first(where: { $0.title == "Show lemming count" }) else {
       try check(false, "Reticule count control is missing"); return
     }
@@ -426,6 +432,59 @@ extension AppDelegate {
       NSApp.postEvent(up, atStart: true)
       window.sendEvent(down)
     }
+    func capturePreset(_ name: String) throws {
+      root.layoutSubtreeIfNeeded()
+      let bitmap = root.bitmapImageRepForCachingDisplay(in: root.bounds)!
+      root.cacheDisplay(in: root.bounds, to: bitmap)
+      try bitmap.representation(using: .png, properties: [:])!.write(to: URL(fileURLWithPath: ".build/gameplay-preset-\(name).png"))
+    }
+    func selectPreset(_ name: String, keyboard: Bool = false) throws {
+      try check(experience.accessibilityPerformPress(), "Preset choices could not open")
+      guard let page = GameScreen.shared.controllerPage(in: window),
+        let button = descendants(page).compactMap({ $0 as? NSButton }).first(where: { $0.title == name }) else {
+        try check(false, "Preset choice \(name) is missing"); return
+      }
+      root.layoutSubtreeIfNeeded()
+      if keyboard {
+        window.makeFirstResponder(button)
+        let event = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 1,
+          windowNumber: window.windowNumber, context: nil, characters: "\r", charactersIgnoringModifiers: "\r",
+          isARepeat: false, keyCode: 36)!
+        try check(GameScreen.shared.handleDialogKey(event), "Preset ignored Return")
+      } else { click(CGPoint(x: button.bounds.midX, y: button.bounds.midY), in: button) }
+      try check(experience.titleOfSelectedItem == name, "Preset selection did not update its label")
+    }
+    try capturePreset("modern")
+    try selectPreset("Original")
+    try check(preferences.current.experiencePreset == .original && !preferences.current.favorApproachingLemmings
+      && !preferences.current.favorBombBlockers && !preferences.current.favorBuilders
+      && preferences.current.skillCursorIconSize == .none && iconSize.titleOfSelectedItem == "None",
+      "Original did not disable all targeting aids and the icon")
+    try capturePreset("original")
+    try selectPreset("Modern", keyboard: true)
+    try check(preferences.current.favorApproachingLemmings && preferences.current.favorBombBlockers
+      && preferences.current.favorBuilders && preferences.current.skillCursorIconSize == .one,
+      "Modern did not restore targeting aids and the baseline icon")
+    for title in ["Favor lemmings still approaching", "Favor blockers for bombs", "Favor current builders for Build"] {
+      guard let control = descendants(root).compactMap({ $0 as? NSButton }).first(where: { $0.title == title }) else {
+        try check(false, "Targeting control is missing: \(title)"); return
+      }
+      try check(control.state == .on, "Modern left a targeting checkbox off")
+      for x in [10.0, 40.0, control.bounds.width - 4] {
+        click(CGPoint(x: x, y: control.bounds.midY), in: control)
+        try check(control.state == .off && experience.titleOfSelectedItem == "Custom"
+          && preferences.current.experiencePreset == .custom, "A targeting change must select Custom")
+        click(CGPoint(x: x, y: control.bounds.midY), in: control)
+        try check(control.state == .on && experience.titleOfSelectedItem == "Custom",
+          "Reversing an individual change must remain Custom")
+      }
+    }
+    try capturePreset("custom")
+    let custom = preferences.current
+    try selectPreset("Custom")
+    try check(preferences.current == custom, "Selecting Custom changed individual settings")
+    try selectPreset("Modern", keyboard: true)
+    try check(preferences.current.experiencePreset == .modern, "Explicit Modern selection did not leave Custom")
     for x in [10.0, 40.0, countControl.bounds.width - 4] {
       click(CGPoint(x: x, y: countControl.bounds.midY), in: countControl)
       try check(preferences.current.showReticleCount, "Clicking the checkbox or its text did not enable it at x=\(x), frame=\(countControl.frame)")
@@ -465,6 +524,13 @@ extension AppDelegate {
     root.cacheDisplay(in: root.bounds, to: bitmap)
     try bitmap.representation(using: .png, properties: [:])!.write(to: URL(fileURLWithPath: ".build/skill-icon-settings.png"))
     GameScreen.shared.dismissAll()
+    let savedPreferences = try JSONDecoder().decode(ClassicSettings.self, from: JSONEncoder().encode(preferences.current))
+    let reopened = SettingsWindow(settings: savedPreferences, options: settingsOptions())
+    reopened.show()
+    let reopenedPreset = descendants(root).compactMap { $0 as? NSPopUpButton }.first { $0.accessibilityLabel() == "Gameplay preset" }
+    try check(reopenedPreset?.titleOfSelectedItem == "Custom", "Custom preset did not survive save and reopen")
+    GameScreen.shared.dismissAll()
+    print("PASS Original/Modern/Custom presets, checkbox targets, keyboard selection, persistence and rendered states")
     window.makeFirstResponder(playfield)
     for (key, code) in [(" ", UInt16(49)), ("p", UInt16(35))] {
       func send(_ type: NSEvent.EventType, repeatKey: Bool = false) {
@@ -1486,6 +1552,8 @@ extension AppDelegate {
     let host = SpeedTestWindow(contentRect: NSRect(x: 0, y: 0, width: 600, height: 400), styleMask: [], backing: .buffered, defer: false)
     host.contentView = NSView(frame: host.contentView!.bounds)
     let controller = GameSpeedControl(), keyboard = GameplayKeyboard(window: host)
+    var musicCents = 0.0
+    controller.onMusicPitchChange = { musicCents = $0 }
     keyboard.speedControl = controller; keyboard.active = { true }
     func key(_ type: NSEvent.EventType, _ time: Double, text: String = "f", code: UInt16 = 3, repeatKey: Bool = false, flags: NSEvent.ModifierFlags = [], in window: NSWindow? = nil) -> NSEvent {
       NSEvent.keyEvent(with: type, location: .zero, modifierFlags: flags, timestamp: time,
@@ -1499,6 +1567,8 @@ extension AppDelegate {
     for time in [11.3, 11.8, 12.3, 12.8, 13.1] { controller.update(at: time, active: true) }
     _ = keyboard.handle(key(.keyDown, 13.2, repeatKey: true))
     try check(controller.target == 10, "Shift did not boost or an F repeat changed speed")
+    try check(abs(musicCents - 1200 * log2(GameplayMusicPitch.ratio(for: 10))) < 0.001,
+      "Held speed did not reach the music pitch target")
     _ = keyboard.handle(key(.flagsChanged, 13.3, text: "", code: 56))
     try check(controller.multiplier == 2, "Shift release did not immediately restore cruise")
     _ = keyboard.handle(key(.keyDown, 14)); _ = keyboard.handle(key(.keyUp, 14.1))
@@ -1508,6 +1578,8 @@ extension AppDelegate {
     try check(controller.target == 2 && controller.state.cruise == 2, "Shift+] did not apply the selected tier")
     _ = keyboard.handle(key(.keyDown, 16, text: "|", code: 42, flags: .shift))
     try check(!controller.isFast, "Shift+backslash did not reset")
+    controller.update(at: 16, active: true); controller.update(at: 16.13, active: true)
+    try check(musicCents == 0, "Reset left the music pitch raised")
     controller.tap(at: 17)
     var escaped = false; keyboard.mainMenu = { escaped = true }
     _ = keyboard.handle(key(.keyDown, 18, text: "\u{1b}", code: 53))
@@ -1624,6 +1696,7 @@ extension AppDelegate {
     gameplayKeyboard?.controllerAction(.help)
     guard let overlay = gameplayKeyboard?.overlay else { throw IntegrationFailure(message: "Visual controls overlay did not open") }
     try check(isPaused && GameScreen.shared.contains(overlay), "Visual help did not freeze the level")
+    try check(GameCursor.gameplaySuppressed && (window.firstResponder as? NSButton)?.title == "Close (Esc)", "Help did not restore the arrow and focus Close: suppressed=\(GameCursor.gameplaySuppressed), focus=\(String(describing: window.firstResponder))")
     try check(overlay.anchors().count >= 8, "Overlay did not attach key badges to the skill bar")
     let frozenSpeed = speedControl.target
     let speedEvent = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 1, windowNumber: window.windowNumber, context: nil, characters: "f", charactersIgnoringModifiers: "f", isARepeat: false, keyCode: 3)!
@@ -1671,7 +1744,10 @@ extension AppDelegate {
     }
     guard let hints = sheet.contentView.flatMap(find) else { throw IntegrationFailure(message: "Controls help omitted hints") }
     let helpInterruption = gameplayKeyboard?.interruptionCount
-    hints.performClick(nil)
+    GameScreen.shared.keyboardNavigation.focus(hints, in: sheet)
+    let selectedEnter = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 1,
+      windowNumber: sheet.windowNumber, context: nil, characters: "\r", charactersIgnoringModifiers: "\r", isARepeat: false, keyCode: 76)!
+    try check(GameScreen.shared.handleDialogKey(selectedEnter), "Native help sheet did not activate the focused hints button with Enter")
     try await Task.sleep(nanoseconds: 500_000_000)
     try check(LevelHintWindow.shared.page != nil && isPaused, "Controls help failed to hand off to hints; sheet: \(window.attachedSheet != nil)")
     GameScreen.shared.dismissAll()
@@ -1682,7 +1758,10 @@ extension AppDelegate {
       throw IntegrationFailure(message: "Pause menu omitted hints")
     }
     let pauseInterruption = gameplayKeyboard?.interruptionCount
-    hints.performClick(nil)
+    GameScreen.shared.keyboardNavigation.focus(hints, in: pause)
+    let pauseEnter = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 1,
+      windowNumber: pause.windowNumber, context: nil, characters: "\r", charactersIgnoringModifiers: "\r", isARepeat: false, keyCode: 36)!
+    try check(GameScreen.shared.handleDialogKey(pauseEnter), "Native pause sheet did not activate the focused hints button with Return")
     try await Task.sleep(nanoseconds: 500_000_000)
     try check(LevelHintWindow.shared.page != nil && isPaused, "Pause menu failed to open hints")
     GameScreen.shared.dismissAll()
@@ -3695,7 +3774,7 @@ Task { @MainActor in
   do {
     let subject = AppDelegate()
     subject.prepareArcadeTests()
-    #if !CURSOR_INPUT_TESTS && !LOADING_LATENCY_TESTS && !TRANSPORT_TESTS
+    #if !CURSOR_INPUT_TESTS && !LOADING_LATENCY_TESTS && !TRANSPORT_TESTS && !DIALOG_TESTS
     try subject.testFailureMoodDecision()
     try subject.testSteppedCompletion()
     try subject.testFirstLaunchEffects()
@@ -3706,7 +3785,14 @@ Task { @MainActor in
     try testPointerAssignment()
     #endif
     #endif
-    #if TRANSPORT_TESTS
+    #if DIALOG_TESTS
+    try subject.testDialogNavigation()
+    try subject.testHomeSettingsButton()
+    try await subject.testAccessibleMenusAndHelp()
+    try await subject.testLevelHints()
+    try await subject.testHintsFromControlsHelp()
+    try subject.testTimelineToolbar()
+    #elseif TRANSPORT_TESTS
     try subject.testTimelineToolbar()
     #elseif LOADING_LATENCY_TESTS
     try await subject.testLoadingLatency()
@@ -3821,12 +3907,12 @@ extension AppDelegate {
       let event = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [],
         timestamp: 0, windowNumber: window.windowNumber, context: nil,
         characters: code == 49 ? " " : "\r", charactersIgnoringModifiers: "", isARepeat: false, keyCode: code)!
-      try check(page.performKeyEquivalent(with: event) && activations == 1,
+      try check(GameScreen.shared.handleDialogKey(event) && activations == 1,
         "Handover key did not activate Ready exactly once")
       let repeated = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [],
         timestamp: 0, windowNumber: window.windowNumber, context: nil,
         characters: " ", charactersIgnoringModifiers: " ", isARepeat: true, keyCode: code)!
-      _ = page.performKeyEquivalent(with: repeated)
+      _ = GameScreen.shared.handleDialogKey(repeated)
       try check(activations == 1, "Held handover key repeated Ready")
       page.layoutSubtreeIfNeeded()
       if code == 49, let bitmap = page.bitmapImageRepForCachingDisplay(in: page.bounds) {
@@ -3896,6 +3982,8 @@ extension AppDelegate {
   try check(tick() == 0 && paused(), "Rewind toolbar button failed " + name)
   click(.hints)
   try check(LevelHintWindow.shared.page != nil && paused(), "Hint toolbar button failed " + name)
+  try check(GameCursor.gameplaySuppressed, "Hints retained the game cursor in " + name)
+  try capture("-hint-background")
   GameScreen.shared.dismissAll()
   print("PASS " + name + " toolbar input, history and paused hints")
 }
@@ -3950,5 +4038,124 @@ extension AppDelegate {
     let l3 = try Lemmings3PlayWindow(root: BundledGameResources.lemmings3(), recordsCampaignProgress: false)
     try l3.testTimelinePanel(); l3.window?.orderOut(nil)
     print("PASS H hints and Classic flat/CRT timeline toolbar")
+  }
+}
+
+extension AppDelegate {
+  fileprivate func testDialogNavigation() throws {
+    if window == nil { buildInterface() }
+    GameScreen.shared.dismissAll()
+    let host = SpeedTestWindow(contentRect: CGRect(x: 0, y: 0, width: 1120, height: 720), styleMask: [], backing: .buffered, defer: false)
+    host.contentView = NSView(frame: CGRect(x: 0, y: 0, width: 1120, height: 720))
+    let oldWindow = GameScreen.shared.gameWindow
+    defer { GameScreen.shared.dismissAll(); GameScreen.shared.gameWindow = oldWindow }
+    func event(_ code: UInt16, shift: Bool = false, repeatKey: Bool = false) -> NSEvent {
+      NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: shift ? [.shift] : [],
+        timestamp: 0, windowNumber: host.windowNumber, context: nil,
+        characters: code == 49 ? " " : code == 53 ? "\u{1b}" : "\r", charactersIgnoringModifiers: "",
+        isARepeat: repeatKey, keyCode: code)!
+    }
+    func key(_ code: UInt16, shift: Bool = false, repeatKey: Bool = false) {
+      let input = event(code, shift: shift, repeatKey: repeatKey)
+      if !GameScreen.shared.handleDialogKey(input) { host.firstResponder?.keyDown(with: input) }
+    }
+    func capture(_ view: NSView, _ name: String) throws {
+      view.layoutSubtreeIfNeeded()
+      let folder = URL(fileURLWithPath: ".build/dialog-shots")
+      try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+      func redraw(_ item: NSView) { item.needsDisplay = true; item.subviews.forEach(redraw) }
+      redraw(view)
+      let bitmap = view.bitmapImageRepForCachingDisplay(in: view.bounds)!
+      view.cacheDisplay(in: view.bounds, to: bitmap)
+      guard let png = bitmap.representation(using: .png, properties: [:]) else {
+        throw IntegrationFailure(message: "Could not capture dialog")
+      }
+      try png.write(to: folder.appendingPathComponent(name + ".png"))
+    }
+    var primaryCount = 0, secondaryCount = 0
+    let page = GameMenuPage(title: "Keyboard controls")
+    let primary = page.addPrimaryAction("Continue") { primaryCount += 1 }
+    let secondary = page.addSecondaryAction("Previous") { secondaryCount += 1 }
+    page.onBack = { GameScreen.shared.dismiss(page) }
+    GameScreen.shared.present(page, owner: host)
+    try check(host.firstResponder === primary, "Dialog did not focus its default action")
+    try check(GameCursor.gameplaySuppressed && !GameCursor.hidesSystemCursor(at: .zero, inside: CGRect(x: 0, y: 0, width: 20, height: 20)), "Dialog retained the game cursor")
+    key(36); key(76); key(36, repeatKey: true)
+    try check(primaryCount == 2, "Return/keypad Enter/repeat handling failed")
+    GameScreen.shared.keyboardNavigation.focus(secondary, in: host)
+    key(36); key(76)
+    try check(secondaryCount == 2 && primaryCount == 2, "Return ignored the selected button")
+    let controls = GameScreen.shared.keyboardNavigation.controls(in: page)
+    for _ in controls.indices { key(48) }
+    try check(host.firstResponder === secondary, "Tab escaped the dialog")
+    key(48, shift: true); key(48)
+    try check(host.firstResponder === secondary, "Shift-Tab did not reverse focus")
+    try capture(page, "focused-secondary")
+    var accepted = 0
+    GameScreen.shared.confirm("Restart level?", detail: "Start this level again.", actionTitle: "Restart", owner: host) { accepted += 1 }
+    key(76)
+    try check(accepted == 0 && GameScreen.shared.controllerPage(in: host) === page, "Confirmation did not default to Back")
+    try check(host.firstResponder === secondary && GameCursor.gameplaySuppressed, "Nested dialog lost focus or restored the game cursor too soon")
+    GameScreen.shared.confirm("Restart level?", detail: "Start this level again.", actionTitle: "Restart", owner: host) { accepted += 1 }
+    key(48); key(36)
+    try check(accepted == 1, "Deliberately selected confirmation failed")
+    let children = host.accessibilityChildren() ?? []
+    try check(children.count == 1 && host.isAccessibilityModal(), "Covered gameplay remained in the dialog accessibility tree")
+    key(53)
+    try check(!GameCursor.gameplaySuppressed, "Closing the final dialog did not restore gameplay cursor policy")
+
+    LevelHintWindow.shared.show(.practice(title: "Practice level", skills: ["Builder"]), owner: host)
+    guard let hints = LevelHintWindow.shared.page else { throw IntegrationFailure(message: "Hints did not open") }
+    key(123)
+    try check(LevelHintWindow.shared.revealedTier == 0, "Hints moved before the first hint")
+    key(124); key(124, repeatKey: true)
+    try check(LevelHintWindow.shared.revealedTier == 1, "Held arrow revealed multiple hints")
+    key(124); key(124)
+    try check(LevelHintWindow.shared.revealedTier == 2, "Hints moved past the last hint")
+    key(123)
+    try check(LevelHintWindow.shared.revealedTier == 1, "Left arrow failed to revisit a hint")
+    let hintButtons = GameScreen.shared.keyboardNavigation.controls(in: hints).compactMap { $0 as? NSButton }
+    guard let previous = hintButtons.first(where: { $0.accessibilityLabel() == "Previous hint" }) else { throw IntegrationFailure(message: "Previous hint button missing") }
+    GameScreen.shared.keyboardNavigation.focus(previous, in: host)
+    key(76)
+    try check(LevelHintWindow.shared.revealedTier == 0 && !previous.isEnabled, "Previous hint button failed")
+    key(124)
+    try check(LevelHintWindow.shared.revealedTier == 1, "Hint arrows failed when a button had focus")
+    try capture(hints, "hint-middle")
+    key(53)
+
+    let bar = ReplayBar(frame: CGRect(x: 0, y: 0, width: 1120, height: 180))
+    var actions = 0, position = 0.0
+    bar.onAction = { _ in actions += 1 }; bar.onSeek = { position = $0 }
+    GameScreen.shared.present(bar, owner: host, focus: bar)
+    key(36); key(76); key(76, repeatKey: true)
+    try check(actions == 2, "Replay default Return and keypad Enter failed")
+    let elements = bar.accessibilityChildren()?.compactMap { $0 as? GameAccessibleElement } ?? []
+    try check(elements.count == 7, "Replay controls missing from accessibility tree")
+    elements[0].setAccessibilityValue(NSNumber(value: 40))
+    try check(position == 0.4, "Accessible replay position failed")
+    try check(elements[1].accessibilityPerformPress() && actions == 3, "Accessible replay button failed")
+    key(48); key(76)
+    try check(actions == 4, "Replay selected button failed")
+    try capture(bar, "replay-focus")
+    GameScreen.shared.dismissAll()
+    let movie = try OriginalMoviePlayer(url: BundledGameResources.lemmings3().appendingPathComponent("MOVIE/INTRO.FLI"))
+    try check(movie.present(owner: host), "Original movie did not open")
+    key(36)
+    try check(movie.paused, "Original movie Return did not activate Pause")
+    key(76)
+    try check(!movie.paused, "Original movie keypad Enter did not activate Play")
+    key(48)
+    try check((host.firstResponder as? NSButton)?.title == "Back", "Movie controls were not keyboard navigable")
+    try capture(movie, "original-movie")
+    key(76)
+    try check(!GameScreen.shared.isPresented, "Original movie selected Back failed")
+    let overlay = KeyboardOverlayView(commands: [], modern: true, hints: true)
+    overlay.onClose = { GameScreen.shared.dismiss(overlay) }
+    GameScreen.shared.present(overlay, owner: host)
+    key(76)
+    try check(!GameScreen.shared.isPresented, "Keyboard overlay default Enter failed")
+    try testPageKeyboardContinuation()
+    print("PASS dialog defaults, Return/keypad Enter, focus loops, confirmations, hint arrows, replay accessibility and cursor lifecycle")
   }
 }

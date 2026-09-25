@@ -76,3 +76,29 @@ check(speed.target == 1 && speed.cruise == 3, "Stopping must preserve the chosen
 speed.tap(at: 104.1, absorbRapidClicks: false)
 check(speed.target == 3, "Middle toggle must restore the most recent fast tier")
 print("PASS toolbar 1× floor and rapid remembered-speed toggles")
+
+var pitch = GameplayMusicPitch()
+var previousPitch = 1.0
+for (index, tier) in GameplaySpeed.steps.dropFirst().enumerated() {
+    let time = 200 + Double(index)
+    let ratio = GameplayMusicPitch.ratio(for: tier)
+    check(ratio > previousPitch && ratio <= 1.5, "Each tier must raise pitch within the 1.5× cap")
+    pitch.update(speed: tier, at: time)
+    let start = pitch.cents
+    pitch.update(speed: tier, at: time + 0.06)
+    check(pitch.cents > start && pitch.cents < 1200 * log2(ratio), "Pitch must glide without jumping")
+    pitch.update(speed: tier, at: time + 0.13)
+    check(abs(pow(2, pitch.cents / 1200) - ratio) < 0.000001, "Pitch did not settle in 120 ms")
+    previousPitch = ratio
+}
+pitch.update(speed: 1, at: 205)
+pitch.update(speed: 1, at: 205.04)
+let fallingPitch = pitch.cents
+pitch.update(speed: 5, at: 205.04)
+check(pitch.cents == fallingPitch, "A reversed glide jumped in pitch")
+pitch.update(speed: 1, at: 206)
+pitch.update(speed: 1, at: 206.13)
+check(pitch.cents == 0, "Returning to normal retained raised pitch")
+check(GameplayMusicPitch.ratio(for: 100) <= 1.5 && GameplayMusicPitch.ratio(for: 0) == 1,
+      "Out-of-range speed escaped the pitch limits")
+print("PASS per-tier music pitch, 120 ms glides, reversals and pitch cap")

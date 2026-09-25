@@ -9,6 +9,7 @@ final class MusicFileDeck {
   private let engine = AVAudioEngine()
   private let player = AVAudioPlayerNode()
   private let varispeed = AVAudioUnitVarispeed()
+  private let speedPitch = AVAudioUnitTimePitch()
   private let equaliser = AVAudioUnitEQ(numberOfBands: 3)
   private let sourceMixer = AVAudioMixerNode()
   private let reverb = AVAudioUnitReverb()
@@ -63,6 +64,7 @@ final class MusicFileDeck {
 
     engine.attach(player)
     engine.attach(varispeed)
+    engine.attach(speedPitch)
     engine.attach(equaliser)
     engine.attach(sourceMixer)
     engine.attach(reverb)
@@ -71,7 +73,8 @@ final class MusicFileDeck {
 
     let format = file.processingFormat
     engine.connect(player, to: varispeed, format: format)
-    engine.connect(varispeed, to: equaliser, format: format)
+    engine.connect(varispeed, to: speedPitch, format: format)
+    engine.connect(speedPitch, to: equaliser, format: format)
     engine.connect(equaliser, to: sourceMixer, format: format)
     engine.connect(sourceMixer, to: reverb, format: format)
     engine.connect(reverb, to: spatialMixer, format: format)
@@ -88,6 +91,10 @@ final class MusicFileDeck {
   }
 
   func setMixBass(_ gain: Float) { equaliser.bands[0].gain = 1.5 + gain; equaliser.bands[0].bypass = false }
+
+  func setSpeedPitch(_ cents: Double) {
+    speedPitch.pitch = Float(min(1200 * log2(1.5), max(0, cents)))
+  }
 
   func play() {
     fadeTask?.cancel()

@@ -3,6 +3,8 @@ import NxlvKit
 
 @MainActor final class GameSpeedControl {
     private(set) var state: GameplaySpeed
+    private var musicPitch = GameplayMusicPitch()
+    var onMusicPitchChange: (Double) -> Void = { _ in }
     var onChange: () -> Void = {}
     init(legacyMultiplier: Double = 3) { state = GameplaySpeed(legacyMultiplier: legacyMultiplier) }
     var variableEnabled: Bool {
@@ -25,6 +27,9 @@ import NxlvKit
     }
     func update(at now: TimeInterval, active: Bool) {
         if active { state.update(at: now) } else { state.suspend(at: now) }
+        let previous = musicPitch.cents
+        musicPitch.update(speed: active && variableEnabled ? target : 1, at: now)
+        if musicPitch.cents != previous { onMusicPitchChange(musicPitch.cents) }
     }
     func tap(at now: TimeInterval = ProcessInfo.processInfo.systemUptime, clickCount: Int = 1) {
         state.tap(at: now, clickCount: clickCount); onChange()

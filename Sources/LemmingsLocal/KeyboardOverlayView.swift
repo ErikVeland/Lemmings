@@ -12,6 +12,8 @@ import AppKit
 
     init(commands: [KeyboardCommand], modern: Bool, hints: Bool) {
         super.init(frame: .zero)
+        setAccessibilityElement(true)
+        setAccessibilityRole(.group)
         setAccessibilityLabel("Keyboard overlay. The level is paused. Escape closes the overlay.")
         func card(_ title: String, _ text: String, _ position: String) {
             let box = NSView()

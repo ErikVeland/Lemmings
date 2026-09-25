@@ -76,3 +76,18 @@ Handover pages accept Space, Return and keypad Enter for their primary Ready act
 Held keys must not repeat that action. Pointer confinement also applies to paused
 screens and menus in all three games. Respect the capture preference, Option release,
 window focus, system sheets and app switching.
+
+## Dialog input and accessibility
+
+Return and keypad Enter activate the focused button. A new dialog focuses its
+intended default action. Confirmations focus Back or Cancel. Tab and Shift-Tab
+stay inside the current dialog, and closing a nested dialog restores its previous
+focus. Held activation keys do not repeat. Text fields keep their normal editing
+keys, and VoiceOver modifier combinations pass through to AppKit.
+
+Level hints use Left and Right to revisit hint stages. Arrow keys never accept
+the full-solution confirmation. Up and Down scroll the hint text.
+
+Dialogs and help overlays use the normal system cursor. The gameplay reticle,
+skill icon and count stay hidden until the final dialog or sheet closes. Covered
+game controls are excluded from the active dialog's accessibility tree.

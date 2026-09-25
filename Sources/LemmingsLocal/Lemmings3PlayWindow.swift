@@ -335,6 +335,10 @@ import NxlvKit
         canvas.onSpeedRelease = { [weak self] time in self?.speedControl.release(.mouse, at: time) }
         canvas.onSpeedStep = { [weak self] direction, time in self?.speedControl.step(direction, at: time) }
         keyboard.speedControl = speedControl
+        speedControl.onMusicPitchChange = { [weak self] cents in
+            self?.music.setSpeedPitch(cents)
+            self?.dj.setSpeedPitch(cents)
+        }
         keyboard.modern = { [weak self] in self?.audioSettings.modernControlsEnabled ?? true }
         speedControl.onChange = { [weak self] in self?.accumulator = 0; self?.refresh() }
         keyboard.cycle = { [weak self] direction in
@@ -563,6 +567,8 @@ import NxlvKit
         canvas.showReticleCount = settings.showReticleCount
         canvas.skillCursorIconSize = settings.skillCursorIconSize
         canvas.favorApproachingLemmings = settings.favorApproachingLemmings
+        canvas.favorBombBlockers = settings.favorBombBlockers
+        canvas.favorBuilders = settings.favorBuilders
     }
 
     private func playLevelMusic() {
@@ -835,12 +841,9 @@ import NxlvKit
         restart()
     }
     private func assign(x: Int, y: Int) {
-        let candidates = game.lemmings.map {
-            Lemmings3TargetCandidate(id: $0.id, x: $0.x, y: $0.y, direction: $0.direction, tool: $0.tool,
-                isBuilding: $0.state == .building, active: $0.active)
-        }
-        guard let picked = Lemmings3Targeting.nearest(among: candidates, x: x, y: y, selected: selected,
-            favorApproaching: audioSettings.favorApproachingLemmings) else { return }
+        guard let picked = game.target(x: x, y: y, selected: selected,
+            favorApproaching: audioSettings.favorApproachingLemmings,
+            favorBombBlockers: audioSettings.favorBombBlockers, favorBuilders: audioSettings.favorBuilders) else { return }
         if selected == 3 && (picked.tool == .bricks || picked.tool == .spade) {
             pendingTool = picked.id
             canvas.directionPoint = CGPoint(x: picked.x, y: picked.y)
@@ -1242,8 +1245,10 @@ import NxlvKit
     var selectedAction = 0
     let startCountdown = FreshLevelCountdown()
     var showReticleCount = false
-    var skillCursorIconSize: SkillCursorIconSize = .two
+    var skillCursorIconSize: SkillCursorIconSize = .one
     var favorApproachingLemmings = true
+    var favorBombBlockers = true
+    var favorBuilders = true
     var paused = true
     var fast = false
     var menuRows: [String]? {
@@ -1301,12 +1306,9 @@ import NxlvKit
     var pointerTarget: Int? {
         guard let p = pointerPosition ?? controllerPointer, playfieldRect.contains(p), let game else { return nil }
         let x = (p.x - origin.x) / zoom + cameraX, y = (p.y - origin.y) / zoom + cameraY
-        let candidates = game.lemmings.map {
-            Lemmings3TargetCandidate(id: $0.id, x: $0.x, y: $0.y, direction: $0.direction, tool: $0.tool,
-                isBuilding: $0.state == .building, active: $0.active)
-        }
-        return Lemmings3Targeting.nearest(among: candidates, x: Int(x), y: Int(y), selected: selectedAction,
-            favorApproaching: favorApproachingLemmings)?.id
+        return game.target(x: Int(x), y: Int(y), selected: selectedAction,
+            favorApproaching: favorApproachingLemmings,
+            favorBombBlockers: favorBombBlockers, favorBuilders: favorBuilders)?.id
     }
     private var hoveredLemming: Int?
     private var tracking: NSTrackingArea?
@@ -1582,7 +1584,7 @@ import NxlvKit
         drawLemmings(game, ghostsOnly: false)
         NSGraphicsContext.restoreGraphicsState()
         drawInterface()
-        if let point = pointerPosition ?? controllerPointer, playfieldRect.contains(point) {
+        if !GameCursor.gameplaySuppressed, let point = pointerPosition ?? controllerPointer, playfieldRect.contains(point) {
             if showReticleCount {
                 let centres = game.lemmings.filter { $0.active }.map {
                     CGPoint(x: origin.x + (CGFloat($0.x) - cameraX) * zoom,
@@ -1673,7 +1675,7 @@ import NxlvKit
             addCursorRect(bounds, cursor: NSCursor.arrow)
             return
         }
-        addCursorRect(gameplay, cursor: GameCursor.invisible)
+        addCursorRect(gameplay, cursor: GameCursor.gameplayCursor)
         let controls = [
             CGRect(x: bounds.minX, y: bounds.minY,
                 width: bounds.width, height: max(0, gameplay.minY - bounds.minY)),

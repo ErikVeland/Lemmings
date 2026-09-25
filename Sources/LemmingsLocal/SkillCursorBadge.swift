@@ -10,9 +10,9 @@ import NxlvKit
     }
 
     /**
-     * Returns a tiny badge frame diagonally below the reticle’s lower-right corner.
+     * Returns a badge frame diagonally below the reticle’s lower-right corner.
      */
-    static func frame(at point: CGPoint, scale: CGFloat, size: SkillCursorIconSize = .two, in bounds: CGRect) -> CGRect {
+    static func frame(at point: CGPoint, scale: CGFloat, size: SkillCursorIconSize = .one, in bounds: CGRect) -> CGRect {
         let pixel = max(1, floor(scale))
         let side = nativeSide * pixel * CGFloat(size.multiplier)
         let reticle = GameCursor.playfieldPointerFrame(at: point, scale: scale)
@@ -33,7 +33,7 @@ import NxlvKit
 
     static func countFrame(count: Int, at point: CGPoint, scale: CGFloat,
                            size: SkillCursorIconSize, icon: NSImage? = nil, in bounds: CGRect) -> CGRect {
-        let effectiveSize: SkillCursorIconSize = size == .none ? .two : size
+        let effectiveSize: SkillCursorIconSize = size == .none ? .one : size
         let multiplier = CGFloat(effectiveSize.multiplier)
         let pixel = max(1, floor(scale))
         let badge = frame(at: point, scale: scale, size: effectiveSize, in: bounds)
@@ -60,7 +60,7 @@ import NxlvKit
     }
 
     static func draw(icon: NSImage?, index _: Int, at point: CGPoint, scale: CGFloat,
-                     tint: NSColor, size: SkillCursorIconSize = .two, reduceMotion _: Bool, in bounds: CGRect) {
+                     tint: NSColor, size: SkillCursorIconSize = .one, reduceMotion _: Bool, in bounds: CGRect) {
         guard size != .none else { return }
         let multiplier = CGFloat(size.multiplier)
         let pixel = max(1, floor(scale))

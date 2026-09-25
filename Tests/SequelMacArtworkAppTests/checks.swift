@@ -183,6 +183,10 @@ for number in stride(from: 0, to: 120, by: 10) {
         for _ in 0..<3 { game.step(); view.update(game); _ = try shot(view,"l2-speed-trails") }
         let tick = game.tick, pixels = game.pixels, saved = game.saved
         let trails = try shot(view,"l2-speed-trails")
+        for tier in [2.0, 3, 5, 10] {
+            view.speedMultiplier = tier
+            _ = try shot(view, "l2-speed-\(Int(tier))x")
+        }
         view.isFastForward = false
         let plain = try shot(view,"l2-speed-plain")
         try assertArtwork(trails != plain, "Speed mode did not add afterimages")
@@ -238,6 +242,10 @@ for number in [1,101,201] {
     _ = try shot(view, "l3-\(number)-speed-start")
     view.game = game
     let afterimages = try shot(view, "l3-\(number)-speed")
+    for tier in [2.0, 3, 5, 10] {
+        view.speedMultiplier = tier
+        _ = try shot(view, "l3-\(number)-speed-\(Int(tier))x")
+    }
     view.isFastForward = false
     try assertArtwork(try shot(view, "l3-\(number)-speed-off") == restored,
         "L3 normal speed retained a afterimages frame")

@@ -1,5 +1,34 @@
 import Foundation
 
+/// A short glide in musical pitch, separate from simulation and music tempo.
+public struct GameplayMusicPitch: Sendable {
+    public static let transitionDuration = 0.12
+    public private(set) var cents: Double = 0
+    private var target: Double = 0
+    private var from: Double = 0
+    private var changedAt: TimeInterval = 0
+
+    public init() {}
+
+    public static func ratio(for speed: Double) -> Double {
+        let ratios = [1.0, 1.04, 1.09, 1.18, 1.35]
+        let speed = min(10, max(1, speed))
+        for index in 1..<GameplaySpeed.steps.count where speed <= GameplaySpeed.steps[index] {
+            let lower = GameplaySpeed.steps[index - 1], upper = GameplaySpeed.steps[index]
+            let blend = (speed - lower) / (upper - lower)
+            return ratios[index - 1] * pow(ratios[index] / ratios[index - 1], blend)
+        }
+        return ratios.last!
+    }
+
+    public mutating func update(speed: Double, at now: TimeInterval) {
+        let t = min(1, max(0, (now - changedAt) / Self.transitionDuration))
+        cents = from + (target - from) * t * t * (3 - 2 * t)
+        let next = 1200 * log2(Self.ratio(for: speed))
+        if next != target { from = cents; target = next; changedAt = now }
+    }
+}
+
 /// Speed changes the clock, never the size of a physics tick.
 public struct GameplaySpeed: Sendable {
     public enum Hold: Hashable, Sendable { case key, shift, controller, mouse }

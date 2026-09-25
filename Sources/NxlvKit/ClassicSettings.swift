@@ -142,9 +142,25 @@ public enum ClassicInterfaceSize: String, Codable, CaseIterable, Sendable {
 }
 
 public enum SkillCursorIconSize: String, CaseIterable, Codable, Sendable {
-    case none, one, two
+    case none, one = "double", two = "quadruple"
     public var title: String { switch self { case .none: "None"; case .one: "1×"; case .two: "2×" } }
-    public var multiplier: Int { switch self { case .none: 0; case .one: 1; case .two: 2 } }
+    public var multiplier: Int { switch self { case .none: 0; case .one: 2; case .two: 4 } }
+
+    public init(from decoder: Decoder) throws {
+        let value = try decoder.singleValueContainer().decode(String.self)
+        // Preserve the old 2× size and raise the old 1× choice to the new minimum.
+        switch value {
+        case "none": self = .none
+        case "one", "two", "double": self = .one
+        case "quadruple": self = .two
+        default: self = .one
+        }
+    }
+}
+
+public enum ClassicExperiencePreset: String, CaseIterable, Codable, Sendable {
+    case original, modern, custom
+    public var title: String { rawValue.capitalized }
 }
 
 public struct ClassicSettings: Equatable, Codable, Sendable {
@@ -165,6 +181,9 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
     public var showReticleCount: Bool
     public var skillCursorIconSize: SkillCursorIconSize
     public var favorApproachingLemmings: Bool
+    public var favorBombBlockers: Bool
+    public var favorBuilders: Bool
+    public var experiencePreset: ClassicExperiencePreset
     public var controllerEnabled: Bool
     public var controllerTapSpeed: Bool
     public var controllerMappings: [String: String]
@@ -210,8 +229,11 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         variableSpeedEnabled: Bool = true,
         pauseOnInterruption: Bool = true,
         showReticleCount: Bool = false,
-        skillCursorIconSize: SkillCursorIconSize = .two,
+        skillCursorIconSize: SkillCursorIconSize = .one,
         favorApproachingLemmings: Bool = true,
+        favorBombBlockers: Bool = true,
+        favorBuilders: Bool = true,
+        experiencePreset: ClassicExperiencePreset = .modern,
         controllerEnabled: Bool = true,
         controllerTapSpeed: Bool = true,
         controllerSwapSticks: Bool = false,
@@ -245,6 +267,9 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         self.showReticleCount = showReticleCount
         self.skillCursorIconSize = skillCursorIconSize
         self.favorApproachingLemmings = favorApproachingLemmings
+        self.favorBombBlockers = favorBombBlockers
+        self.favorBuilders = favorBuilders
+        self.experiencePreset = experiencePreset
         self.controllerEnabled = controllerEnabled
         self.controllerTapSpeed = controllerTapSpeed
         self.controllerSwapSticks = controllerSwapSticks
@@ -307,8 +332,11 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         variableSpeedEnabled = try values.decodeIfPresent(Bool.self, forKey: .variableSpeedEnabled) ?? fallback.variableSpeedEnabled
         pauseOnInterruption = try values.decodeIfPresent(Bool.self, forKey: .pauseOnInterruption) ?? modernControlsEnabled
         showReticleCount = (try? values.decodeIfPresent(Bool.self, forKey: .showReticleCount)) ?? false
-        skillCursorIconSize = (try? values.decodeIfPresent(SkillCursorIconSize.self, forKey: .skillCursorIconSize)) ?? .two
+        skillCursorIconSize = (try? values.decodeIfPresent(SkillCursorIconSize.self, forKey: .skillCursorIconSize)) ?? .one
         favorApproachingLemmings = try values.decodeIfPresent(Bool.self, forKey: .favorApproachingLemmings) ?? modernControlsEnabled
+        favorBombBlockers = try values.decodeIfPresent(Bool.self, forKey: .favorBombBlockers) ?? modernControlsEnabled
+        favorBuilders = try values.decodeIfPresent(Bool.self, forKey: .favorBuilders) ?? modernControlsEnabled
+        experiencePreset = .custom
         controllerEnabled = try values.decodeIfPresent(Bool.self, forKey: .controllerEnabled) ?? modernControlsEnabled
         controllerTapSpeed = try values.decodeIfPresent(Bool.self, forKey: .controllerTapSpeed) ?? fallback.controllerTapSpeed
         controllerSwapSticks = try values.decodeIfPresent(Bool.self, forKey: .controllerSwapSticks) ?? fallback.controllerSwapSticks
@@ -336,14 +364,30 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
             Bool.self, forKey: .shuffleMusic) ?? fallback.shuffleMusic
         unlockAllClassicLevels = try values.decodeIfPresent(
             Bool.self, forKey: .unlockAllClassicLevels) ?? fallback.unlockAllClassicLevels
+        if let saved = try? values.decodeIfPresent(ClassicExperiencePreset.self, forKey: .experiencePreset) {
+            experiencePreset = saved
+        } else {
+            // Older saves have no preset label. Identify a matching bundle without changing any choices.
+            for modern in [false, true] {
+                var preset = self
+                preset.applyExperiencePreset(modern: modern)
+                preset.experiencePreset = .custom
+                if self == preset { experiencePreset = modern ? .modern : .original; break }
+            }
+        }
     }
 
     /// Changes the added conveniences while preserving the chosen machine and volumes.
     public mutating func applyExperiencePreset(modern: Bool) {
+        experiencePreset = modern ? .modern : .original
         modernControlsEnabled = modern
         variableSpeedEnabled = modern
         pauseOnInterruption = modern
         favorApproachingLemmings = modern
+        favorBombBlockers = modern
+        favorBuilders = modern
+        skillCursorIconSize = modern ? .one : .none
+        showReticleCount = false
         controllerEnabled = modern
         controllerTapSpeed = modern
         controllerSwapSticks = false
