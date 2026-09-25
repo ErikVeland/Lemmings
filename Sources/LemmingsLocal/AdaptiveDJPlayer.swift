@@ -55,6 +55,8 @@ import NxlvKit
   private var energyEngine = AdaptiveDJEngine()
   private var currentEnergy: AdaptiveDJEngine.DJEnergyLevel = .chill
   private var lastEnergyChangeAt = -Double.infinity
+  /// False until the first telemetry after a new opening track.
+  private var energySeeded = false
   private var fadeTask: Task<Void, Never>?
   private var rotationTask: Task<Void, Never>?
   private var fadeGeneration = 0
@@ -112,6 +114,7 @@ import NxlvKit
     guard !pools.isEmpty, !outputSuspended, fadeTask == nil,
           activeDeck == nil || activeDeck?.isPlaying != true else { return }
     guard let first = pickTrack(avoiding: nil) else { return }
+    energySeeded = false
     // A deck can be left behind in the other slot when a crossfade was
     // interrupted before it finished (a level ending mid-fade, for example).
     // Clear both decks before starting fresh, or the old one can resurface
@@ -138,6 +141,7 @@ import NxlvKit
     energyEngine = AdaptiveDJEngine()
     currentEnergy = .chill
     lastEnergyChangeAt = -Double.infinity
+    energySeeded = false
   }
 
   /// Offers the game state to the director and moves the mix when its energy changes.
@@ -147,6 +151,13 @@ import NxlvKit
     let cue = director.cue(for: telemetry)
     let now = ProcessInfo.processInfo.systemUptime
     let urgent = cue != nil || energy == .nukeDrop || energy == .victory
+    // The opening track stands for the level's first state. Adopt that
+    // energy without a crossfade. Before, a level with a release rate above
+    // 40 replaced its opening track at the first update.
+    if !energySeeded {
+      energySeeded = true
+      if !urgent { currentEnergy = energy; lastEnergyChangeAt = now }
+    }
     let energyChanged = energy != currentEnergy
         && (urgent || now - lastEnergyChangeAt >= 3.0)
     guard energyChanged || cue != nil else { return }
