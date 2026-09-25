@@ -16,6 +16,7 @@ swiftc -swift-version 6 -warnings-as-errors -target "$(uname -m)-apple-macos12.3
   -Xlinker -rpath -Xlinker "$build_dir" \
   -o "$build_dir/AdaptiveDJPlaybackTests" \
   "$project_dir/Sources/LemmingsLocal/AdaptiveDJPlayer.swift" \
+  "$project_dir/Sources/LemmingsLocal/MusicFileDeck.swift" \
   "$project_dir/Sources/LemmingsLocal/MusicPlayer.swift" \
   "$project_dir/Sources/LemmingsLocal/SoundtrackPlayer.swift" \
   "$project_dir/Tests/AdaptiveDJPlaybackTests/main.swift"
