@@ -19,26 +19,26 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.2</string>
+	<string>1.5</string>
 	<key>CFBundleVersion</key>
-	<string>41</string>
+	<string>42</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>12.3</string>
 	<key>NSHighResolutionCapable</key>
+	<true/>
+	<key>SUAllowsAutomaticUpdates</key>
+	<true/>
+	<key>SUAutomaticallyUpdate</key>
+	<true/>
+	<key>SUEnableAutomaticChecks</key>
 	<true/>
 	<key>SUFeedURL</key>
 	<string>https://raw.githubusercontent.com/ErikVeland/Lemmings/main/appcast.xml</string>
 	<key>SUPublicEDKey</key>
 	<string>AGH6HkcWMbg42X7O6QXwwHXa0jreXxFuvgwMFZMEv6c=</string>
-	<key>SUEnableAutomaticChecks</key>
-	<true/>
-	<key>SUAutomaticallyUpdate</key>
-	<true/>
-	<key>SUAllowsAutomaticUpdates</key>
-	<true/>
-	<key>SUVerifyUpdateBeforeExtraction</key>
-	<true/>
 	<key>SUScheduledCheckInterval</key>
 	<integer>86400</integer>
+	<key>SUVerifyUpdateBeforeExtraction</key>
+	<true/>
 </dict>
 </plist>
