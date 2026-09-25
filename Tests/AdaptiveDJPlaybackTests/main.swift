@@ -45,6 +45,15 @@ private typealias Telemetry = AdaptiveDJEngine.Telemetry
   RunLoop.current.run(until: Date().addingTimeInterval(0.25))
   try require(!recording.isPlaying && recording.completedLoops == 0, "Old streaming callback restarted stopped audio")
 
+  guard let cue = MusicFileDeck(url: loopURL, repeats: false) else { throw Failure(description: "One-shot fixture did not open") }
+  cue.volume = 0; cue.play()
+  RunLoop.current.run(until: Date().addingTimeInterval(0.5))
+  try require(cue.completedLoops == 1 && !cue.isPlaying, "One-shot cue repeated")
+  cue.suspendOutput(); cue.resumeOutput()
+  RunLoop.current.run(until: Date().addingTimeInterval(0.2))
+  try require(cue.completedLoops == 1 && !cue.isPlaying, "Completed cue resumed after handover")
+  cue.stop()
+
   let soundtracks = SoundtrackPlayer.djSoundtracks(at: root)
   guard !soundtracks.isEmpty else {
     print("No soundtrack folders installed. Nothing to mix.")
@@ -169,6 +178,22 @@ private typealias Telemetry = AdaptiveDJEngine.Telemetry
     try require(player.currentURL == alternate, "Retry changed sequel arrangement")
     player.stop()
   }
+  let mariarti = root.appendingPathComponent("Archimedes/14. Professor Mariarti (Archimedes).mp3")
+  try require(SoundtrackPlayer.recording(trackID: "classic.mariarti", root: root) == mariarti,
+    "Recording-only special fallback missing")
+  player.load(soundtracks: restricted, catalogueRoot: root)
+  try require(player.startJourney(trackID: "classic.mariarti", cycle: 0, identity: "mariarti", includeAlternates: false),
+    "Special requires a nonexistent Amiga module")
+  try require(player.currentURL == mariarti && player.isPlaying, "Special recording did not start")
+  player.stop()
+  player.load(soundtracks: soundtracks, catalogueRoot: root)
+  let sms = root.appendingPathComponent("Lemmings-SMS/Lemmings - 02 - Can-Can (Galop Infernal).m4a")
+  player.startLevel(url: sms, identity: "sms-result")
+  player.updateTelemetry(.init(didWin: false, isComplete: true))
+  try require(player.currentURL?.lastPathComponent == "Lemmings - 20 - Failure.m4a", "SMS failure routing wrong")
+  RunLoop.current.run(until: Date().addingTimeInterval(6))
+  try require(!player.isPlaying, "SMS failure cue looped indefinitely")
+  player.stop()
   print("PASS assigned tracks, score journeys in all engines, protected cues, retry stability and suspended crossfade")
 }
 

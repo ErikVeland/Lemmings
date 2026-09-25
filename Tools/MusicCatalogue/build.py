@@ -47,6 +47,7 @@ def normal(value):
 def gd3(path):
     data = path.read_bytes()
     if data[:2] == b'\x1f\x8b': data = gzip.decompress(data)
+    if len(data)<0x24 or data[:4]!=b'Vgm ': raise ValueError(f'Invalid VGM: {path}')
     offset = 20 + struct.unpack_from('<I', data, 20)[0]
     if data[offset:offset+4] != b'Gd3 ': return []
     return data[offset+12:offset+12+struct.unpack_from('<I', data, offset+8)[0]].decode('utf-16-le').split('\0')
@@ -92,10 +93,6 @@ def classify(path, music):
     elif folder == 'lemmings_demo_music_mod' or (tags and 'Demo' in tags[2]): game = 'demo'; role = 'demo'
 
     if folder in {'Archimedes', 'Lemmings (MP3)'}:
-        quality = 'lossy-source'
-        title = re.sub(r'\s*\(Archimedes\)$', '', title)
-        evidence = 'Downloaded recording titles; SNES ID3 credits Tomomi Hatakeyama and Dragon Fogel. Native sequencing unverified.'
-    if folder in {'Archimedes', 'Lemmings (MP3)'}:
         metadata = json.loads(subprocess.check_output(['ffprobe','-v','error','-show_entries','format_tags','-of','json',str(path)]))['format'].get('tags',{})
         credits = metadata.get('artist','')
         source_notes = json.dumps(metadata,ensure_ascii=False,sort_keys=True)
@@ -125,7 +122,17 @@ def classify(path, music):
     elif folder == 'Remixes':
         quality = 'lossy-source'; remix = 'mandelsoft'; port = 'dos-opl2'
         evidence = 'https://www.lemmingsforums.net/index.php?topic=3921.0 (author numbering and DOS order).'
-        if path.stem.startswith('orig_'):
+        if path.parent.name == 'orig_special_music_mandelsoft':
+            if path.stem.lower() not in {'beasti', 'beastii', 'menace', 'awesome'}:
+                raise ValueError(f'Unknown special remix: {path}')
+            key = path.stem.lower()
+            evidence = 'Named special-level OGG in orig_special_music_mandelsoft; preserve special composition identity.'
+        elif path.parent.name == 'paintball_music_mandelsoft':
+            game = 'paintball'; port = 'windows'; key = 'mandelsoft-'+path.stem
+            role = 'bonus'
+            title = 'Paintball '+path.stem.removeprefix('lpb_')+' (MandelSoft)'
+            evidence = 'Numbered OGG in paintball_music_mandelsoft. Original cue title and role unverified; separate bonus material.'
+        elif path.stem.startswith('orig_'):
             # The author explicitly identifies 12 as Doggie (unlike the VGM package order).
             keys = ['lemming1','lemming2','lemming3','mountain','tenlemmings','cancan','tim1','tim2','tim3','tim4','tim5','doggie','tim6','tim7','tim8','tim9','tim10']
             key = keys[int(path.stem[-2:])-1]
@@ -165,13 +172,13 @@ def classify(path, music):
     if key is None: key = port+'-'+slug(title)
     if game=='classic' and key in {'beasti','beastii','menace','awesome','mariarti'}: role='special'
     elif key in {'intro','maintune','frontend'} or any(n in title.lower() for n in ['opening','title theme','title screen','menu','frontend']): role='menu'
-    elif key=='endtune' or 'ending' in title.lower() or 'staff roll' in title.lower(): role='ending'
+    elif key=='endtune' or 'ending' in title.lower(): role='ending'
     elif any(n in title.lower() for n in ['unknown']): role='unverified'; confidence='unverified'
     elif 'medal' in title.lower(): role='medal'
     elif 'tribe complete' in title.lower(): role='milestone'
     elif 'stage clear' in title.lower() or title.lower().startswith('clear ') or title.lower()=='success': role='victory'
     elif title.lower() in {'failed','failure','game over'}: role='failure'
-    elif "let's go" in title.lower() or any(n in title.lower() for n in ['rating jingle','level pane','stage intro','trapdoor','oh no!','intermission']): role='cue'
+    elif "let's go" in title.lower() or any(n in title.lower() for n in ['rating jingle','level pane']): role='cue'
     elif title.lower() in {'stage intro','trapdoor','oh no!'}: role='cue'
     elif title.lower()=='intermission': role='intermission'
     elif title.lower()=='staff roll': role='credits'

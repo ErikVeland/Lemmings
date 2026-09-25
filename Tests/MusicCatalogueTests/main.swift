@@ -6,7 +6,7 @@ func require(_ condition: @autoclosure () -> Bool, _ message: String) {
 let root = URL(fileURLWithPath: CommandLine.arguments[1])
 let catalogue = try SoundtrackCatalogue(data: Data(contentsOf: root.appendingPathComponent("Resources/Music/catalogue.json")))
 let paths = Set(catalogue.tracks.flatMap(\.variants).map(\.path))
-require(paths.count == 486, "A source version was omitted or duplicated")
+require(paths.count == 495, "A source version was omitted or duplicated")
 func pick(_ id: String, _ cycle: Int = 0, _ port: String = "amiga") -> SoundtrackCatalogue.Variant? {
     catalogue.select(trackID: id, cycle: cycle, preferredPort: port, availablePaths: paths)
 }
@@ -52,4 +52,29 @@ for track in catalogue.tracks {
         require(FileManager.default.fileExists(atPath: root.appendingPathComponent("Sources/Music/" + variant.path).path), "Missing source: \(variant.path)")
     }
 }
-print("PASS 486 versions, authentic first cycles, deterministic alternates, same-tune fallback, special roles, port-safe cues and source coverage")
+print("PASS 495 versions, authentic first cycles, deterministic alternates, same-tune fallback, special roles, port-safe cues and source coverage")
+
+for (path, identity) in [
+    ("Lemmings (MP3)/14 Smile if You Love Lemmings.mp3", "classic.lemming3"),
+    ("Archimedes/03 - Smile if You Love Lemmings (Archimedes).mp3", "classic.tim2"),
+    ("Lemmings (MP3)/15 Keep Your Hair on Mr. Lemming.mp3", "classic.tim7"),
+    ("Archimedes/10 - Keep Your Hair On Mr. Lemming (Archimedes).mp3", "classic.lemming3"),
+    ("Lemmings-SMS/Lemmings - 11 - Keep Your Hair On Mr Lemming.m4a", "classic.lemming3")
+] {
+    require(catalogue.entry(path: path)?.track.id == identity, "Collection-specific title confused: \(path)")
+}
+require(catalogue.track(id: "classic.mariarti")?.role == "special", "Mariarti lost its special role")
+require(pick("classic.mariarti")?.port == "archimedes", "Recording-only special unavailable")
+for port in ["snes", "master-system"] {
+    let theme = pick("classic.cancan", 0, port)!
+    require(theme.port == port, "New native port not selectable")
+    for won in [true, false] {
+        let cue = catalogue.result(won: won, currentPath: theme.path, availablePaths: paths)
+        require(cue?.port == port, "New port's result cue was not routed")
+        require(catalogue.entry(path: cue!.path)?.track.role == (won ? "victory" : "failure"), "Wrong cue role")
+    }
+}
+require(catalogue.track(id: "classic.master-system-oh-no")?.role == "cue", "Oh No voice was mistaken for a failure song")
+require(catalogue.track(id: "classic.snes-intermission")?.role == "intermission", "Intermission entered the level rotation")
+require(catalogue.track(id: "classic.snes-staff-roll")?.role == "credits", "Credits entered the level rotation")
+print("PASS SNES title collisions, Archimedes special and Master System cues")

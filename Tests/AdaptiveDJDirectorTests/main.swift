@@ -59,3 +59,6 @@ require(LevelMusicSelection.cycle(index: 50, titles: scoreTitles, holiday: false
     "Repeated special theme did not advance its own cycle")
 require(LevelMusicSelection.cycle(index: 17, titles: scoreTitles, holiday: false, ohNo: false) == 1,
     "Ordinary score cycle did not advance")
+
+require(LevelMusicSelection.track(index: 13, title: "Professor Mariarti", holiday: false, ohNo: false) == "mariarti", "Missing Archimedes special assignment")
+require(LevelMusicSelection.track(index: 13, title: "Professor Mariarti", holiday: true, ohNo: false) != "mariarti", "Special leaked into seasonal campaign")

@@ -1,6 +1,6 @@
 # Track catalogue
 
-486 playable versions across 205 track identities.
+495 playable versions across 210 track identities.
 
 Browse `Sources/Music/By Track`: game → role → track → port → source quality → original/remix.
 
@@ -52,6 +52,7 @@ Role: special
 | x68000 | chip-render | original | Lemmings_(Sharp_X68000)/21 Awesome.m4a |
 | dos-opl2 | chip-render | original | Lemmings_Series_(IBM_PC_AT)/21 Awesome.m4a |
 | tandy | chip-render | original | Lemmings_Series_(Tandy_1000)/20 Awesome Main Theme (Wright&Wright).m4a |
+| dos-opl2 | lossy-source | mandelsoft | Remixes/orig_special_music_mandelsoft/awesome.m4a |
 | amiga | native-module | original | lemmings_music_mod/awesome.mod |
 
 ## classic.beasti — Shadow of the Beast
@@ -67,6 +68,7 @@ Role: special
 | x68000 | chip-render | original | Lemmings_(Sharp_X68000)/19 Beast.m4a |
 | dos-opl2 | chip-render | original | Lemmings_Series_(IBM_PC_AT)/19 Beast.m4a |
 | tandy | chip-render | original | Lemmings_Series_(Tandy_1000)/18 Shadow of the Beast Opening (Whittaker).m4a |
+| dos-opl2 | lossy-source | mandelsoft | Remixes/orig_special_music_mandelsoft/beasti.m4a |
 | amiga | native-module | original | lemmings_music_mod/beastI.mod |
 
 ## classic.beastii — Shadow of the Beast II
@@ -83,6 +85,7 @@ Role: special
 | x68000 | chip-render | original | Lemmings_(Sharp_X68000)/22 BeastII.m4a |
 | dos-opl2 | chip-render | original | Lemmings_Series_(IBM_PC_AT)/22 BeastII.m4a |
 | tandy | chip-render | original | Lemmings_Series_(Tandy_1000)/21 Shadow of the Beast II Level 2-3 (Wright&Wright).m4a |
+| dos-opl2 | lossy-source | mandelsoft | Remixes/orig_special_music_mandelsoft/beastii.m4a |
 | amiga | native-module | original | lemmings_music_mod/beastII.mod |
 
 ## classic.cancan — Can-Can
@@ -503,6 +506,7 @@ Role: special
 | x68000 | chip-render | original | Lemmings_(Sharp_X68000)/20 Menace.m4a |
 | dos-opl2 | chip-render | original | Lemmings_Series_(IBM_PC_AT)/20 Menace.m4a |
 | tandy | chip-render | original | Lemmings_Series_(Tandy_1000)/19 Menace Main BGM (Whittaker).m4a |
+| dos-opl2 | lossy-source | mandelsoft | Remixes/orig_special_music_mandelsoft/menace.m4a |
 | amiga | native-module | original | lemmings_music_mod/menace.mod |
 
 ## classic.mountain — Coming Round the Mountain
@@ -549,7 +553,7 @@ Role: failure
 
 ## classic.snes-intermission — Intermission
 
-Role: cue
+Role: intermission
 
 | Port | Source quality | Remix | File |
 | --- | --- | --- | --- |
@@ -557,7 +561,7 @@ Role: cue
 
 ## classic.snes-staff-roll — Staff Roll
 
-Role: ending
+Role: credits
 
 | Port | Source quality | Remix | File |
 | --- | --- | --- | --- |
@@ -1926,3 +1930,43 @@ Role: level
 | dos-opl2 | chip-render | original | Lemmings_Series_(IBM_PC_AT)/26 The Smiling Blues.m4a |
 | tandy | chip-render | original | Lemmings_Series_(Tandy_1000)/25 The Smiling Blues.m4a |
 | amiga | native-module | original | oh_no_more_lemmings_music_mod/tune6.mod |
+
+## paintball.mandelsoft-lpb_01 — Paintball 01 (MandelSoft)
+
+Role: bonus
+
+| Port | Source quality | Remix | File |
+| --- | --- | --- | --- |
+| windows | lossy-source | mandelsoft | Remixes/paintball_music_mandelsoft/lpb_01.m4a |
+
+## paintball.mandelsoft-lpb_02 — Paintball 02 (MandelSoft)
+
+Role: bonus
+
+| Port | Source quality | Remix | File |
+| --- | --- | --- | --- |
+| windows | lossy-source | mandelsoft | Remixes/paintball_music_mandelsoft/lpb_02.m4a |
+
+## paintball.mandelsoft-lpb_03 — Paintball 03 (MandelSoft)
+
+Role: bonus
+
+| Port | Source quality | Remix | File |
+| --- | --- | --- | --- |
+| windows | lossy-source | mandelsoft | Remixes/paintball_music_mandelsoft/lpb_03.m4a |
+
+## paintball.mandelsoft-lpb_04 — Paintball 04 (MandelSoft)
+
+Role: bonus
+
+| Port | Source quality | Remix | File |
+| --- | --- | --- | --- |
+| windows | lossy-source | mandelsoft | Remixes/paintball_music_mandelsoft/lpb_04.m4a |
+
+## paintball.mandelsoft-lpb_05 — Paintball 05 (MandelSoft)
+
+Role: bonus
+
+| Port | Source quality | Remix | File |
+| --- | --- | --- | --- |
+| windows | lossy-source | mandelsoft | Remixes/paintball_music_mandelsoft/lpb_05.m4a |

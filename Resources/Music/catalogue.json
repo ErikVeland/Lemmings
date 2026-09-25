@@ -184,6 +184,18 @@
           "sourcePath": "Lemmings_Series_(Tandy_1000)/20 Awesome Main Theme (Wright&Wright).vgz"
         },
         {
+          "id": "remixes-orig-special-music-mandelsoft-awesome-m4a",
+          "path": "Remixes/orig_special_music_mandelsoft/awesome.m4a",
+          "port": "dos-opl2",
+          "quality": "lossy-source",
+          "remix": "mandelsoft",
+          "confidence": "documented",
+          "evidence": "Named special-level OGG in orig_special_music_mandelsoft; preserve special composition identity.",
+          "sourceNotes": "",
+          "credits": "MandelSoft",
+          "sourcePath": "Remixes/orig_special_music_mandelsoft/awesome.ogg"
+        },
+        {
           "id": "lemmings-music-mod-awesome-mod",
           "path": "lemmings_music_mod/awesome.mod",
           "port": "amiga",
@@ -286,6 +298,18 @@
           "sourceNotes": "Sound ID: 2",
           "credits": "Brian Johnston, Tim Wright, arr. Tony Williams",
           "sourcePath": "Lemmings_Series_(Tandy_1000)/18 Shadow of the Beast Opening (Whittaker).vgz"
+        },
+        {
+          "id": "remixes-orig-special-music-mandelsoft-beasti-m4a",
+          "path": "Remixes/orig_special_music_mandelsoft/beasti.m4a",
+          "port": "dos-opl2",
+          "quality": "lossy-source",
+          "remix": "mandelsoft",
+          "confidence": "documented",
+          "evidence": "Named special-level OGG in orig_special_music_mandelsoft; preserve special composition identity.",
+          "sourceNotes": "",
+          "credits": "MandelSoft",
+          "sourcePath": "Remixes/orig_special_music_mandelsoft/beasti.ogg"
         },
         {
           "id": "lemmings-music-mod-beasti-mod",
@@ -402,6 +426,18 @@
           "sourceNotes": "Sound ID: 3",
           "credits": "Brian Johnston, Tim Wright, arr. Tony Williams",
           "sourcePath": "Lemmings_Series_(Tandy_1000)/21 Shadow of the Beast II Level 2-3 (Wright&Wright).vgz"
+        },
+        {
+          "id": "remixes-orig-special-music-mandelsoft-beastii-m4a",
+          "path": "Remixes/orig_special_music_mandelsoft/beastii.m4a",
+          "port": "dos-opl2",
+          "quality": "lossy-source",
+          "remix": "mandelsoft",
+          "confidence": "documented",
+          "evidence": "Named special-level OGG in orig_special_music_mandelsoft; preserve special composition identity.",
+          "sourceNotes": "",
+          "credits": "MandelSoft",
+          "sourcePath": "Remixes/orig_special_music_mandelsoft/beastii.ogg"
         },
         {
           "id": "lemmings-music-mod-beastii-mod",
@@ -2100,6 +2136,18 @@
           "sourcePath": "Lemmings_Series_(Tandy_1000)/19 Menace Main BGM (Whittaker).vgz"
         },
         {
+          "id": "remixes-orig-special-music-mandelsoft-menace-m4a",
+          "path": "Remixes/orig_special_music_mandelsoft/menace.m4a",
+          "port": "dos-opl2",
+          "quality": "lossy-source",
+          "remix": "mandelsoft",
+          "confidence": "documented",
+          "evidence": "Named special-level OGG in orig_special_music_mandelsoft; preserve special composition identity.",
+          "sourceNotes": "",
+          "credits": "MandelSoft",
+          "sourcePath": "Remixes/orig_special_music_mandelsoft/menace.ogg"
+        },
+        {
           "id": "lemmings-music-mod-menace-mod",
           "path": "lemmings_music_mod/menace.mod",
           "port": "amiga",
@@ -2317,7 +2365,7 @@
       "id": "classic.snes-intermission",
       "game": "classic",
       "title": "Intermission",
-      "role": "cue",
+      "role": "intermission",
       "variants": [
         {
           "id": "lemmings-mp3-26-intermission-mp3",
@@ -2337,7 +2385,7 @@
       "id": "classic.snes-staff-roll",
       "game": "classic",
       "title": "Staff Roll",
-      "role": "ending",
+      "role": "credits",
       "variants": [
         {
           "id": "lemmings-mp3-28-staff-roll-mp3",
@@ -7470,6 +7518,106 @@
           "sourceNotes": "",
           "credits": "",
           "sourcePath": "oh_no_more_lemmings_music_mod/tune6.mod"
+        }
+      ]
+    },
+    {
+      "id": "paintball.mandelsoft-lpb_01",
+      "game": "paintball",
+      "title": "Paintball 01 (MandelSoft)",
+      "role": "bonus",
+      "variants": [
+        {
+          "id": "remixes-paintball-music-mandelsoft-lpb-01-m4a",
+          "path": "Remixes/paintball_music_mandelsoft/lpb_01.m4a",
+          "port": "windows",
+          "quality": "lossy-source",
+          "remix": "mandelsoft",
+          "confidence": "documented",
+          "evidence": "Numbered OGG in paintball_music_mandelsoft. Original cue title and role unverified; separate bonus material.",
+          "sourceNotes": "",
+          "credits": "MandelSoft",
+          "sourcePath": "Remixes/paintball_music_mandelsoft/lpb_01.ogg"
+        }
+      ]
+    },
+    {
+      "id": "paintball.mandelsoft-lpb_02",
+      "game": "paintball",
+      "title": "Paintball 02 (MandelSoft)",
+      "role": "bonus",
+      "variants": [
+        {
+          "id": "remixes-paintball-music-mandelsoft-lpb-02-m4a",
+          "path": "Remixes/paintball_music_mandelsoft/lpb_02.m4a",
+          "port": "windows",
+          "quality": "lossy-source",
+          "remix": "mandelsoft",
+          "confidence": "documented",
+          "evidence": "Numbered OGG in paintball_music_mandelsoft. Original cue title and role unverified; separate bonus material.",
+          "sourceNotes": "",
+          "credits": "MandelSoft",
+          "sourcePath": "Remixes/paintball_music_mandelsoft/lpb_02.ogg"
+        }
+      ]
+    },
+    {
+      "id": "paintball.mandelsoft-lpb_03",
+      "game": "paintball",
+      "title": "Paintball 03 (MandelSoft)",
+      "role": "bonus",
+      "variants": [
+        {
+          "id": "remixes-paintball-music-mandelsoft-lpb-03-m4a",
+          "path": "Remixes/paintball_music_mandelsoft/lpb_03.m4a",
+          "port": "windows",
+          "quality": "lossy-source",
+          "remix": "mandelsoft",
+          "confidence": "documented",
+          "evidence": "Numbered OGG in paintball_music_mandelsoft. Original cue title and role unverified; separate bonus material.",
+          "sourceNotes": "",
+          "credits": "MandelSoft",
+          "sourcePath": "Remixes/paintball_music_mandelsoft/lpb_03.ogg"
+        }
+      ]
+    },
+    {
+      "id": "paintball.mandelsoft-lpb_04",
+      "game": "paintball",
+      "title": "Paintball 04 (MandelSoft)",
+      "role": "bonus",
+      "variants": [
+        {
+          "id": "remixes-paintball-music-mandelsoft-lpb-04-m4a",
+          "path": "Remixes/paintball_music_mandelsoft/lpb_04.m4a",
+          "port": "windows",
+          "quality": "lossy-source",
+          "remix": "mandelsoft",
+          "confidence": "documented",
+          "evidence": "Numbered OGG in paintball_music_mandelsoft. Original cue title and role unverified; separate bonus material.",
+          "sourceNotes": "",
+          "credits": "MandelSoft",
+          "sourcePath": "Remixes/paintball_music_mandelsoft/lpb_04.ogg"
+        }
+      ]
+    },
+    {
+      "id": "paintball.mandelsoft-lpb_05",
+      "game": "paintball",
+      "title": "Paintball 05 (MandelSoft)",
+      "role": "bonus",
+      "variants": [
+        {
+          "id": "remixes-paintball-music-mandelsoft-lpb-05-m4a",
+          "path": "Remixes/paintball_music_mandelsoft/lpb_05.m4a",
+          "port": "windows",
+          "quality": "lossy-source",
+          "remix": "mandelsoft",
+          "confidence": "documented",
+          "evidence": "Numbered OGG in paintball_music_mandelsoft. Original cue title and role unverified; separate bonus material.",
+          "sourceNotes": "",
+          "credits": "MandelSoft",
+          "sourcePath": "Remixes/paintball_music_mandelsoft/lpb_05.ogg"
         }
       ]
     }

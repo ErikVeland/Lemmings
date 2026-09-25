@@ -43,3 +43,12 @@ for folder, port, count, quality in [('Archimedes/', 'archimedes', 21, 'lossy-so
 for port in ['snes', 'master-system']:
     assert any(t['role'] == 'failure' and any(v['port'] == port for v in t['variants']) for t in catalogue['tracks'])
 print('PASS new port coverage, provenance and failure cue classification')
+
+for key in ['beasti', 'beastii', 'awesome', 'menace']:
+    track = next(t for t in catalogue['tracks'] if t['id'] == 'classic.'+key)
+    assert track['role'] == 'special'
+    assert any(v['remix'] == 'mandelsoft' and '/orig_special_music_mandelsoft/' in v['path'] for v in track['variants'])
+paintball = [t for t in catalogue['tracks'] if t['game'] == 'paintball']
+assert len(paintball) == 5 and all(t['role'] == 'bonus' for t in paintball)
+assert all(v['remix'] == 'mandelsoft' for t in paintball for v in t['variants'])
+print('PASS special remixes retain their themes; Paintball tracks remain separate bonus entries')
