@@ -13,8 +13,8 @@ from automatic_updates import validate_appcast, validate_info_plist, validate_re
 
 class AutomaticUpdateTests(unittest.TestCase):
     def test_current_repository_inputs_are_valid(self):
-        version, build, items = validate_repository(ROOT, allow_empty=True)
-        self.assertEqual(version, "1.2")
+        version, build, items = validate_repository(ROOT, allow_empty=True, allow_stale_release=True)
+        self.assertEqual(version, "1.5")
         self.assertTrue(build.isdigit())
         self.assertGreaterEqual(items, 0)
 
@@ -35,7 +35,7 @@ class AutomaticUpdateTests(unittest.TestCase):
             channel = ElementTree.SubElement(root, "channel")
             item = ElementTree.SubElement(channel, "item")
             ElementTree.SubElement(item, f"{{{namespace}}}version").text = "40"
-            ElementTree.SubElement(item, f"{{{namespace}}}shortVersionString").text = "1.2"
+            ElementTree.SubElement(item, f"{{{namespace}}}shortVersionString").text = "1.5"
             ElementTree.SubElement(item, "enclosure", {
                 "url": "http://example.invalid/update.zip",
                 f"{{{namespace}}}edSignature": "signed",
@@ -52,18 +52,18 @@ class AutomaticUpdateTests(unittest.TestCase):
             channel = ElementTree.SubElement(root, "channel")
             item = ElementTree.SubElement(channel, "item")
             ElementTree.SubElement(item, f"{{{namespace}}}version").text = "40"
-            ElementTree.SubElement(item, f"{{{namespace}}}shortVersionString").text = "1.2"
+            ElementTree.SubElement(item, f"{{{namespace}}}shortVersionString").text = "1.5"
             ElementTree.SubElement(item, "enclosure", {
                 "url": "https://example.invalid/update.zip",
                 f"{{{namespace}}}edSignature": "signed",
             })
             ElementTree.ElementTree(root).write(path, encoding="utf-8", xml_declaration=True)
             self.assertEqual(validate_appcast(path), 1)
-            self.assertEqual(validate_appcast(path, expected_release=("1.2", "40")), 1)
+            self.assertEqual(validate_appcast(path, expected_release=("1.5", "40")), 1)
             with self.assertRaisesRegex(ValueError, "does not match"):
-                validate_appcast(path, expected_release=("1.2", "41"))
+                validate_appcast(path, expected_release=("1.5", "41"))
             with self.assertRaisesRegex(ValueError, "does not match"):
-                validate_appcast(path, expected_release=("1.2.1", "40"))
+                validate_appcast(path, expected_release=("1.5.1", "40"))
 
     def test_empty_feed_is_not_valid_for_a_release(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -86,12 +86,12 @@ class AutomaticUpdateTests(unittest.TestCase):
                     "url": f"https://example.invalid/build{build}.zip",
                     f"{{{namespace}}}edSignature": "signed",
                     f"{{{namespace}}}version": build,
-                    f"{{{namespace}}}shortVersionString": "1.2",
+                    f"{{{namespace}}}shortVersionString": "1.5",
                 })
             ElementTree.ElementTree(root).write(path)
-            self.assertEqual(validate_appcast(path, expected_release=("1.2", "40")), 3)
+            self.assertEqual(validate_appcast(path, expected_release=("1.5", "40")), 3)
             with self.assertRaisesRegex(ValueError, "does not match"):
-                validate_appcast(path, expected_release=("1.2", "39"))
+                validate_appcast(path, expected_release=("1.5", "39"))
 
 
 if __name__ == "__main__":

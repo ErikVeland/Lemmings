@@ -13,10 +13,13 @@ before distributing a build.
 
 ## Download
 
-[Download Ultimate Lemmings 1.2](https://github.com/ErikVeland/Lemmings/releases/latest)
-for Intel and Apple silicon Macs running macOS 12.3 or later. The public app and
-its bundled Sparkle components are Developer ID signed and notarised.
-See the [release notes](Documentation/ReleaseNotes-1.2-build40.md) for known limits.
+The [1.2 build 41 Mac app](https://github.com/ErikVeland/Lemmings/releases/download/v1.2-build41/UltimateLemmings-1.2-build41.zip)
+is the last public download verified in this repository.
+
+The 1.5 public release candidate targets Intel and Apple silicon Macs running
+macOS 12.3 or later. Publish the signed archive only after the release gates in
+the [1.5 readiness record](Documentation/ReleaseReadiness/1.5PublicRelease.md)
+pass. The [release notes](Documentation/ReleaseNotes-1.5-build45.md) are a draft.
 
 ## Start here
 
@@ -31,6 +34,7 @@ See the [release notes](Documentation/ReleaseNotes-1.2-build40.md) for known lim
 - [Level browser](Documentation/LevelBrowser.md) — CoverFlow controls, content boundaries and current evidence.
 - [Beta testing](Documentation/BetaTesting.md) — local package and validation procedure.
 - [Release evidence](Documentation/ReleaseReadiness/) — current gate records and manifests.
+- [1.5 public release readiness](Documentation/ReleaseReadiness/1.5PublicRelease.md) — current candidate gates and handoff conditions.
 - [1.2 handoff](Documentation/ReleaseReadiness/1.2DataIndependentHandoff.md) — data-independent release work and Mac checks.
 - [1.3 mobile handoff](Documentation/ReleaseReadiness/1.3MobileHandoff.md) — iOS source evidence and remaining device checks.
 - [Automatic updates](#automatic-updates) — Sparkle feed and release requirements.
@@ -38,7 +42,7 @@ See the [release notes](Documentation/ReleaseNotes-1.2-build40.md) for known lim
 
 The iPhone and iPad 1.3 source and Simulator gates pass. Physical-device,
 VoiceOver, thermal, signing and distribution evidence remain open. The macOS
-product remains version 1.2. Active source work is now the 1.5 NeoLemmix
+product candidate is version 1.5. Active NeoLemmix work remains a separate
 compatibility lane. Classic content is the completed reference engine.
 Lemmings 2 and Lemmings 3 are labelled Preview. The bundled corpus contains
 6,020 Classic-format fan levels in 535 packs; this is not a claim of NeoLemmix
@@ -47,7 +51,7 @@ real-pack and reference-replay gates pass.
 
 ## Requirements
 
-- macOS 13 or later;
+- macOS 12.3 or later to run the distributed macOS app;
 - Apple Command Line Tools with Swift 6 support;
 - full Xcode with an iOS Simulator runtime for the 1.3 mobile build and tests;
 - Python 3;
@@ -163,32 +167,38 @@ An App Store Connect API key is also supported with `ASC_KEY_PATH`,
 `ASC_KEY_ID` and `ASC_ISSUER_ID`. Passwords and private key contents are never
 accepted as command-line or environment arguments.
 
-The Monterey worktree must contain the release commit. Set
+The Monterey worktree must be clean and use the exact release commit. Set
 `MONTEREY_WORKTREE` when it is not at `.claude/worktrees/macos12`. Set
 `DOWNLOADS_DIR` to use another output directory. Use `--dry-run` to exercise
 the gates without building or contacting Apple services.
 
-Run the data-independent 1.2 release checks before using the notarisation
+The release source must be clean. The script uses `v1.2-build41` as the 1.5
+release base. It checks a reviewed notes draft, then adds the frozen commit to
+the packaged copy. Update the notes draft when the build number changes.
+
+Run the data-independent 1.5 release checks before using the notarisation
 script:
 
 ```sh
-zsh Scripts/check-1.2-release-inputs.sh --allow-empty-appcast
+zsh Scripts/check-release-inputs.sh --allow-empty-appcast
 ```
 
 The release script runs the same check after it generates a signed appcast.
 
 ### Automatic updates
 
-The 1.2 app uses Sparkle 2.7.3. It checks the signed appcast once per day and
+The 1.5 app uses Sparkle 2.7.3. It checks the signed appcast once per day and
 downloads and installs signed updates in the background. The appcast is
 [`appcast.xml`](appcast.xml), and the app embeds its public Ed25519 key.
 
 The release script creates a clean update ZIP from the notarised standard app,
 signs its entry with the Sparkle private key in the login Keychain, and writes
-the appcast. Set `PUBLISH_GITHUB_RELEASE=1` to upload the update ZIP, create or
-update the tagged GitHub Release, and publish `appcast.xml` to `main` through
-the GitHub API. Set `DOWNLOAD_URL_PREFIX` when the release asset URL differs
-from the default GitHub URL.
+the appcast. It does not publish. After the package and hardware checks pass,
+the release owner can use `Scripts/publish-github-release.sh` to upload the ZIP
+and publish `appcast.xml` to `main` through the GitHub API. Set
+`DOWNLOAD_URL_PREFIX` when the release asset URL differs from the default
+GitHub URL. Follow the [update procedure](Documentation/AutomaticUpdates.md)
+for the required publication inputs.
 
 Keep the Sparkle private key out of Git and out of command arguments. A release
 must not proceed when the appcast entry is unsigned or its download URL is not

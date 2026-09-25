@@ -1,6 +1,6 @@
 # Automatic updates
 
-Ultimate Lemmings 1.2 uses Sparkle 2.7.3 for macOS updates.
+Ultimate Lemmings 1.5 uses Sparkle 2.7.3 for macOS updates.
 
 ## Runtime contract
 
@@ -15,31 +15,38 @@ commit the key or pass the key value as a command argument.
 
 ## Release procedure
 
-1. Build and notarise the standard Developer ID app with
-   `Scripts/build-and-notarise.sh`.
-2. Keep the generated update ZIP in the persistent `UPDATES_DIR`.
-3. Set `PUBLISH_GITHUB_RELEASE=1` to upload the update ZIP, create or update
-   the tagged GitHub Release, and publish `appcast.xml` to `main`.
-4. Install the previous release and run the update check.
-5. Record the source revision, archive checksum, appcast checksum and result.
+1. Freeze the source and assets.
+2. Run `Scripts/build-and-notarise.sh` without publication.
+3. Check the printed ZIPs, stamped notes, signed appcast and release gates.
+4. Set `RELEASE_TAG`, `RELEASE_VERSION`, `RELEASE_COMMIT` and
+   `RELEASE_NOTES_PATH` from the package run.
+5. Run `Scripts/publish-github-release.sh --check` with the printed update ZIP path.
+6. After approval, set `RELEASE_APPROVED=1`.
+7. Run `Scripts/publish-github-release.sh` with the printed update ZIP path.
+8. Install public 1.2 build 41.
+9. Run the update and check its relaunch.
+10. Record the source revision, archive checksum, appcast checksum and result.
 
 The update ZIP must contain only the notarised app. The Game Center archive is
 not an update candidate.
 
-Publishing requires an authenticated GitHub CLI and a clean worktree. The
-default tag for version 1.2 is `v1.2.0`. Set `RELEASE_TAG` when another tag is
-required.
+Release packaging requires a clean worktree. Publication is a separate step
+and needs an authenticated GitHub CLI. The package script uses `v1.5.0` for
+the feed URL by default. Use that value for `RELEASE_TAG` unless it was changed.
+The publication script requires the tag and stamped notes. Its read-only
+`--check` mode checks that the notes, archive name and signed appcast describe
+the same build. Only the publication run needs `RELEASE_APPROVED=1`.
 
 ## Validation evidence
 
-[Build 40 verification](ReleaseReadiness/1.2Build40Distribution.md) records the public
-Sparkle download, installation and relaunch from build 39.
+[Build 41 verification](ReleaseReadiness/1.2Build41Distribution.md) records the last
+public Sparkle download, installation and relaunch. Repeat this check for 1.5.
 
 Run the data-independent checks before a release. The empty-feed option is
 only for development before the first public update exists.
 
 ```sh
-zsh Scripts/check-1.2-release-inputs.sh --allow-empty-appcast
+zsh Scripts/check-release-inputs.sh --allow-empty-appcast
 ```
 
 The release script runs the strict form after it generates the signed feed.

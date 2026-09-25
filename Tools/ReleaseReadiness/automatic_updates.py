@@ -12,10 +12,12 @@ from xml.etree import ElementTree
 
 SPARKLE_NAMESPACE = "http://www.andymatuschak.org/xml-namespaces/sparkle"
 SPARKLE_VERSION = "2.7.3"
+RELEASE_VERSION_PATTERN = re.compile(r"1\.5(?:\.\d+)?")
 REQUIRED_SCRIPTS = (
     "Scripts/ensure-sparkle.sh",
     "Scripts/generate-appcast.sh",
     "Scripts/publish-github-release.sh",
+    "Scripts/check-release-inputs.sh",
 )
 
 
@@ -32,8 +34,8 @@ def validate_info_plist(path):
         info = plistlib.load(source)
     version = info.get("CFBundleShortVersionString")
     build = info.get("CFBundleVersion")
-    if not isinstance(version, str) or not re.fullmatch(r"1\.2(?:\.\d+)?", version):
-        raise ValueError("Info.plist must identify a 1.2 application.")
+    if not isinstance(version, str) or not RELEASE_VERSION_PATTERN.fullmatch(version):
+        raise ValueError("Info.plist must identify a 1.5 application.")
     if not isinstance(build, str) or not re.fullmatch(r"\d+", build):
         raise ValueError("Info.plist must contain a numeric build number.")
     _https_url(info.get("SUFeedURL"), "SUFeedURL")
@@ -54,7 +56,7 @@ def validate_info_plist(path):
     return version, build
 
 
-def validate_appcast(path, allow_empty=False, expected_release=None):
+def validate_appcast(path, allow_empty=False, expected_release=None, allow_stale_release=False):
     root = ElementTree.parse(path).getroot()
     if root.tag != "rss":
         raise ValueError("The appcast root must be rss.")
@@ -90,13 +92,18 @@ def validate_appcast(path, allow_empty=False, expected_release=None):
                 raise ValueError("Release appcast build numbers must be numeric.")
             releases.append(tuple(values))
         latest = max(releases, key=lambda release: int(release[1]))
-        if latest != expected_release:
+        def release_key(release):
+            version_parts = tuple(int(part) for part in release[0].split("."))
+            return version_parts + (0,) * (3 - len(version_parts)) + (int(release[1]),)
+
+        if latest != expected_release and (
+                not allow_stale_release or release_key(latest) > release_key(expected_release)):
             raise ValueError(
                 f"Newest appcast release {latest} does not match application {expected_release}.")
     return len(items)
 
 
-def validate_repository(root, allow_empty=False):
+def validate_repository(root, allow_empty=False, allow_stale_release=False):
     root = Path(root)
     version, build = validate_info_plist(root / "Resources/Info.plist")
     package = (root / "Package.swift").read_text()
@@ -110,7 +117,8 @@ def validate_repository(root, allow_empty=False):
         if not path.is_file() or not path.stat().st_mode & 0o111:
             raise ValueError(f"Required release script is not executable: {relative}")
     items = validate_appcast(root / "appcast.xml", allow_empty=allow_empty,
-                             expected_release=(version, build))
+                             expected_release=(version, build),
+                             allow_stale_release=allow_stale_release)
     return version, build, items
 
 
@@ -118,9 +126,11 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=Path(__file__).resolve().parents[2])
     parser.add_argument("--allow-empty-appcast", action="store_true")
+    parser.add_argument("--allow-stale-appcast", action="store_true")
     args = parser.parse_args()
-    version, build, items = validate_repository(args.root, args.allow_empty_appcast)
-    print(f"PASS 1.2 update inputs: version {version}, build {build}, appcast items {items}")
+    version, build, items = validate_repository(
+        args.root, args.allow_empty_appcast, args.allow_stale_appcast)
+    print(f"PASS {version} update inputs: version {version}, build {build}, appcast items {items}")
 
 
 if __name__ == "__main__":

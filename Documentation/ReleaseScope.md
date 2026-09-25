@@ -1,7 +1,8 @@
 # Release scope
 
 Classic 1.0 is the historical macOS release baseline, confirmed on 13 September 2026.
-L2 and L3 remain previews. Updated 25 September 2026 for the 1.3 mobile source scope.
+The current public release candidate is macOS 1.5 build 45. L2 and L3 remain
+previews. Updated 25 September 2026 for the 1.5 release scope.
 Automated checks support the recorded routes;
 remaining compatibility and hardware claims still need validation. See the [gate register](ReleaseReadiness/gates.json)
 and the current [Classic validation](ReleaseReadiness/ClassicValidation-current.md).
@@ -19,6 +20,19 @@ a level nobody has recorded a win for yet.
 
 **Preview.** The game runs and is enjoyable, and its rules are not yet proven
 against the original engine. Expect differences.
+
+## macOS 1.5 public scope
+
+The 1.5 release targets Intel and Apple silicon Macs running macOS 12.3 or
+later. The completed 352-level Classic campaign is the primary release claim.
+Lemmings 2 and Lemmings 3 remain Preview. NeoLemmix import remains Beta or
+Preview until the real-pack, runnable, replay and behaviour gates pass.
+
+The 1.5 crash, startup, input and gameplay-cursor fixes are release changes.
+Fresh source, app, signing, notarisation, Gatekeeper and live-update evidence
+must still describe the same final commit.
+See [1.5 public release readiness](ReleaseReadiness/1.5PublicRelease.md) for the
+current gate state.
 
 ## Classic
 
@@ -98,7 +112,7 @@ accessibility, signing and distribution gates remain open. See the
 
 ## Not in this release
 
-The macOS 1.2 release does not include iPhone, iPad or consoles. Mobile 1.3 is a
+The macOS 1.5 release does not include iPhone, iPad or consoles. Mobile 1.3 is a
 separate target and release gate. Consoles have no application target. A Mac
 release does not imply support for either platform group.
 
