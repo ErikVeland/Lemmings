@@ -9,6 +9,14 @@ private func check(_ value: @autoclosure () throws -> Bool, _ message: String) t
 }
 
 extension AppDelegate {
+  /// Fixtures jump to later levels. The level picker refuses a locked
+  /// level and stays on the current one.
+  fileprivate func setAllClassicLevelsUnlocked(_ unlocked: Bool) {
+    var updated = settings
+    updated.unlockAllClassicLevels = unlocked
+    apply(updated)
+  }
+
   fileprivate func testFailureMoodDecision() throws {
     try check(!FailureMoodDecision.isUnrecoverable(saved: 0, active: 1, unreleased: 0, required: 1),
       "Failure mood triggered while an active lemming could still meet the target")
@@ -311,7 +319,11 @@ extension AppDelegate {
     let directory = FileManager.default.temporaryDirectory.appendingPathComponent("handover-retry-\(UUID().uuidString)")
     let store = ArcadeStore(file: directory.appendingPathComponent("records.json"), bundledProofs: nil)
     ArcadeStore.shared = store
-    defer { handoverRetry = nil; store.endHotSeat(); ArcadeStore.shared = previousStore }
+    setAllClassicLevelsUnlocked(true)
+    defer {
+      handoverRetry = nil; store.endHotSeat(); ArcadeStore.shared = previousStore
+      setAllClassicLevelsUnlocked(false)
+    }
     let host = store.records.activeProfileID
     let guest = store.addProfile(initials: "UVA", portrait: 2)!
     store.selectProfile(host); store.toggleSessionProfile(guest.id)
@@ -408,6 +420,8 @@ extension AppDelegate {
     launchMode = .singleTitle; activeTitle = .lemmings
     gamePicker.selectItem(at: dataSets.firstIndex { $0.set.title == .lemmings }!)
     selectDataSet()
+    setAllClassicLevelsUnlocked(true)
+    defer { setAllClassicLevelsUnlocked(false) }
     window.setContentSize(NSSize(width: 1280, height: 720))
     window.makeKeyAndOrderFront(nil)
     let passes = Int(ProcessInfo.processInfo.environment["LEMMINGS_PERFORMANCE_PASSES"] ?? "1") ?? 1
@@ -1475,6 +1489,8 @@ extension AppDelegate {
     selectDataSet()
     settings.display = .flat
     window.setContentSize(NSSize(width: 1280, height: 800))
+    setAllClassicLevelsUnlocked(true)
+    defer { setAllClassicLevelsUnlocked(false) }
     picker.selectItem(at: 30); levelChanged()
     if phase == .briefing { advancePhase() }
     phase = .playing; isPaused = false
