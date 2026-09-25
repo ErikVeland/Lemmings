@@ -16,14 +16,13 @@
 #
 # Optional environment variables:
 #   RELEASE_BASE      commit or tag at the previous release boundary
-#   RELEASE_NOTES_PATH path for the current release notes
+#   RELEASE_NOTES_PATH path for the reviewed release notes draft
 #   MONTEREY_WORKTREE macOS 12 worktree, default .claude/worktrees/macos12
 #   DOWNLOADS_DIR     destination for the three final ZIP files
 #   BUILD_ROOT        internal build output directory
 #   UPDATES_DIR       Sparkle update archives and appcast working directory
 #   RELEASE_TAG       public GitHub release tag, default vMAJOR.MINOR.0
 #   DOWNLOAD_URL_PREFIX public HTTPS URL prefix for Sparkle update archives
-#   PUBLISH_GITHUB_RELEASE set to 1 to upload the update and publish appcast.xml
 #   APPLE_PROVISIONING_PROFILE  Game Center provisioning profile
 #
 # Credentials are never accepted on the command line or written to disk by
@@ -38,7 +37,6 @@ downloads_dir="${DOWNLOADS_DIR:-$HOME/Downloads}"
 downloads_dir="${downloads_dir:A}"
 updates_dir="${UPDATES_DIR:-$project_dir/.build/updates}"
 updates_dir="${updates_dir:A}"
-publish_github_release="${PUBLISH_GITHUB_RELEASE:-0}"
 monterey_worktree="${MONTEREY_WORKTREE:-$project_dir/.claude/worktrees/macos12}"
 monterey_worktree="${monterey_worktree:A}"
 dry_run=0
@@ -67,7 +65,7 @@ usage() {
   print "  UPDATES_DIR                 Sparkle update archive directory"
   print "  RELEASE_TAG                 public release tag, default vMAJOR.MINOR.0"
   print "  DOWNLOAD_URL_PREFIX         public HTTPS URL prefix for update archives"
-  print "  PUBLISH_GITHUB_RELEASE      1 to publish the update and appcast to GitHub"
+  print "  Publication is a separate step after package and hardware checks."
 }
 
 fail() {
@@ -112,12 +110,8 @@ if [[ -z "$signing_identity" ]]; then
     awk -F'"' '/Developer ID Application:/ { print $2; exit }')"
 fi
 [[ -n "$signing_identity" ]] || fail "No Developer ID Application identity was found. Set SIGNING_IDENTITY."
-[[ "$publish_github_release" == 0 || "$publish_github_release" == 1 ]] ||
-  fail "PUBLISH_GITHUB_RELEASE must be 0 or 1."
-if [[ "$publish_github_release" == 1 ]]; then
-  command -v gh >/dev/null 2>&1 || fail "The GitHub CLI is required when publishing."
-  gh auth status >/dev/null 2>&1 || fail "Authenticate the GitHub CLI before publishing."
-fi
+[[ "${PUBLISH_GITHUB_RELEASE:-0}" == 0 ]] ||
+  fail "Package first. Publish only after review with Scripts/publish-github-release.sh."
 if [[ -n "$notary_keychain" ]]; then
   notary_keychain="${notary_keychain:A}"
   [[ -r "$notary_keychain" ]] || fail "The notary keychain is not readable: $notary_keychain"
@@ -152,78 +146,52 @@ git_root="$(git -C "$project_dir" rev-parse --show-toplevel 2>/dev/null)" ||
 [[ "$git_root" == "$project_dir" ]] || fail "The script must run from the project worktree."
 current_head="$(git -C "$project_dir" rev-parse HEAD)"
 current_short="${current_head[1,7]}"
-if [[ "$publish_github_release" == 1 ]]; then
-  [[ -z "$(git -C "$project_dir" status --short)" ]] ||
-    fail "Publishing requires a clean worktree. Commit the release source first."
-fi
+[[ -z "$(git -C "$project_dir" status --porcelain --untracked-files=all)" ]] ||
+  fail "Release packaging requires a clean worktree. Commit the release source first."
 
 release_base="${RELEASE_BASE:-}"
-if [[ -z "$release_base" ]]; then
-  release_base="$(git -C "$project_dir" log --all --diff-filter=A --format='%H' \
-    -- 'Documentation/ReleaseNotes-beta*.md' | sed -n '1p')"
-fi
-if [[ -z "$release_base" ]]; then
-  release_base="$(git -C "$project_dir" log --all --format='%H' \
-    -- 'Documentation/ReleaseNotes-1.1-build*.md' | sed -n '1p')"
-fi
+[[ -n "$release_base" || "$version" != 1.5 ]] || release_base="v1.2-build41"
 [[ -n "$release_base" ]] || fail "Set RELEASE_BASE to the previous release commit or tag."
 git -C "$project_dir" rev-parse --verify "$release_base^{commit}" >/dev/null 2>&1 ||
   fail "RELEASE_BASE does not resolve to a commit: $release_base"
+git -C "$project_dir" merge-base --is-ancestor "$release_base" "$current_head" ||
+  fail "RELEASE_BASE is not an ancestor of the release commit: $release_base"
 
 # Gate 1: the candidate must contain source changes after the previous release.
 source_changes="$(git -C "$project_dir" diff --name-only "$release_base" -- Sources)"
 [[ -n "$source_changes" ]] || fail "No new source code exists after $release_base."
 
-release_notes="${RELEASE_NOTES_PATH:-$project_dir/Documentation/ReleaseNotes-$version-build$build_number.md}"
-release_notes="${release_notes:A}"
-
-generate_release_notes() {
-  local source_commits source_files
-  source_commits="$(git -C "$project_dir" log --format='- %h %s' "$release_base"..HEAD -- Sources)"
-  source_files="$(git -C "$project_dir" diff --name-status "$release_base" -- Sources)"
-  {
-    print "# Ultimate Lemmings $version build $build_number"
-    print
-    print "Build: $build_number"
-    print "Release commit: $current_head"
-    print "Release base: $release_base"
-    print
-    print "## Changes since the previous release"
-    if [[ -n "$source_commits" ]]; then
-      print -r -- "$source_commits"
-    else
-      print -r -- "- Source changes are present in the working tree."
-    fi
-    print
-    print "## Source files"
-    print -r -- "$source_files"
-    print
-    print "## Package targets"
-    print -r -- "- Developer ID standard: notarised."
-    print -r -- "- macOS 12 Monterey: notarised."
-    print -r -- "- Game Center: development-signed for registered devices; not notarised."
-  } > "$release_notes"
-  print "Created release notes: $release_notes"
-}
-
-# Gate 2-3: release notes must describe this candidate. Create them when the
-# current build has no notes; reject an older notes file rather than silently
-# packaging undocumented code.
-if [[ ! -f "$release_notes" ]]; then
-  generate_release_notes
-fi
-grep -q "^Build: $build_number$" "$release_notes" ||
-  fail "Release notes do not identify build $build_number: $release_notes"
-grep -q "^Release commit: $current_head$" "$release_notes" ||
-  fail "Release notes are not current for $current_short. Update or remove: $release_notes"
+release_notes_draft="${RELEASE_NOTES_PATH:-$project_dir/Documentation/ReleaseNotes-$version-build$build_number.md}"
+release_notes_draft="${release_notes_draft:A}"
+[[ -f "$release_notes_draft" ]] ||
+  fail "Review and commit release notes for build $build_number: $release_notes_draft"
+git -C "$project_dir" ls-files --error-unmatch -- "$release_notes_draft" >/dev/null 2>&1 ||
+  fail "The release notes draft must be tracked in this worktree: $release_notes_draft"
+python3 "$project_dir/Tools/ReleaseReadiness/release_notes.py" \
+  --draft "$release_notes_draft" --build "$build_number" --base "$release_base" \
+  --commit "$current_head" --check || fail "The release notes draft is not current."
 
 [[ -x "$project_dir/Scripts/build-local-app.sh" ]] || fail "Missing build-local-app.sh."
 [[ -x "$monterey_worktree/Scripts/build-local-app.sh" ]] ||
   fail "Missing Monterey worktree at $monterey_worktree. Set MONTEREY_WORKTREE."
 monterey_head="$(git -C "$monterey_worktree" rev-parse HEAD 2>/dev/null)" ||
   fail "Monterey path is not a Git worktree: $monterey_worktree"
-git -C "$monterey_worktree" merge-base --is-ancestor "$current_head" "$monterey_head" ||
-  fail "The Monterey worktree does not contain current commit $current_short. Merge the release changes first."
+[[ "$monterey_head" == "$current_head" ]] ||
+  fail "The Monterey worktree must use the exact release commit $current_short."
+[[ -z "$(git -C "$monterey_worktree" status --porcelain --untracked-files=all)" ]] ||
+  fail "The Monterey worktree has uncommitted changes."
+
+check_release_snapshot() {
+  [[ "$(git -C "$project_dir" rev-parse HEAD)" == "$current_head" ]] ||
+    fail "The release commit changed during packaging. Discard these archives."
+  # The generator changes only the tracked appcast after the clean-source check.
+  [[ -z "$(git -C "$project_dir" status --porcelain --untracked-files=all -- . ':(exclude)appcast.xml')" ]] ||
+    fail "The release source changed during packaging. Discard these archives."
+  [[ "$(git -C "$monterey_worktree" rev-parse HEAD)" == "$current_head" ]] ||
+    fail "The Monterey commit changed during packaging. Discard these archives."
+  [[ -z "$(git -C "$monterey_worktree" status --porcelain --untracked-files=all)" ]] ||
+    fail "The Monterey source changed during packaging. Discard these archives."
+}
 
 print "Project:       $project_dir"
 print "Version:       $version ($build_number)"
@@ -237,7 +205,7 @@ print
 print "Gate 1: source changes present"
 print -r -- "$source_changes"
 print "Gate 2-3: release notes current"
-print "             $release_notes"
+print "             $release_notes_draft"
 print "Gate 4: three target archives configured"
 # Stale proofs or hints do not stop a build. The app then hides rescue
 # targets and level hints without a message.
@@ -273,6 +241,10 @@ else
 fi
 
 mkdir -p "$run_dir" "$downloads_dir"
+release_notes="$run_dir/ReleaseNotes-$version-build$build_number.md"
+python3 "$project_dir/Tools/ReleaseReadiness/release_notes.py" \
+  --draft "$release_notes_draft" --build "$build_number" --base "$release_base" \
+  --commit "$current_head" --output "$release_notes"
 
 build_app() {
   local source_dir="$1" output_dir="$2" capabilities="$3"
@@ -384,21 +356,19 @@ codesign -d --entitlements :- "$game_center_app" 2>/dev/null |
 zsh "$project_dir/Scripts/run-launch-smoke-test.sh" "$game_center_app" ||
   fail "The Game Center target did not launch cleanly."
 package_app "$game_center_app" "$game_center_zip"
-
-# Publish only after all three targets pass their gates.
-if [[ "$publish_github_release" == 1 ]]; then
-  RELEASE_TAG="$release_tag" \
-  RELEASE_VERSION="$version" \
-  RELEASE_COMMIT="$current_head" \
-  RELEASE_NOTES_PATH="$release_notes" \
-  APPCAST_PATH="$project_dir/appcast.xml" \
-  GITHUB_REPOSITORY="${GITHUB_REPOSITORY:-ErikVeland/Lemmings}" \
-    zsh "$project_dir/Scripts/publish-github-release.sh" "$update_zip"
-fi
+check_release_snapshot
+zsh "$project_dir/Scripts/check-release-inputs.sh" ||
+  fail "The signed update feed changed during packaging. Discard these archives."
 
 print
 print "Three target archives created in $downloads_dir:"
 print "  $standard_zip"
 print "  $monterey_zip"
 print "  $game_center_zip"
+print "Signed update ZIP: $update_zip"
+print "Signed appcast: $project_dir/appcast.xml"
+print "Stamped release notes: $release_notes"
+print "Frozen source commit: $current_head"
+shasum -a 256 "$update_zip" "$project_dir/appcast.xml"
+print "No public release was published. Review the packages before publication."
 print "The Game Center archive is signed for registered devices and is not notarised."
