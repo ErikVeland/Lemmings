@@ -4416,6 +4416,17 @@ let achievementProgressKey = "ClassicAchievementProgress"
         return
       }
       guard beginSequenceLaunch(runID: sequenceRunID, identity: identity) else { return }
+      if GameAssetCache<String>.bundledKey(dataSetDirectory) != nil,
+         loadedArtworkDirectory?.standardizedFileURL == dataSetDirectory.standardizedFileURL,
+         FanLevelLibrary.directoryFingerprint(dataSetDirectory) == sourceRevision,
+         let assets {
+        let prepared = PreparedClassicArtwork(grounds: grounds, specials: specials, assets: assets,
+          directory: dataSetDirectory, portArtworkFamily: portArtworkFamily)
+        commitClassicBrowserLevel(identity: identity, entry: entry, dataSetDirectory: dataSetDirectory,
+          browserDataSet: browserDataSet, dataSetIndex: dataSetIndex, levelIndex: levelIndex,
+          preparedArtwork: prepared, sequenceRunID: sequenceRunID)
+        return
+      }
       let (_, launchID) = levelBrowserLaunchLoadingPage(
         title: entry.levelName,
         sequenceRunID: sequenceRunID)

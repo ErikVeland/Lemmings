@@ -3600,6 +3600,10 @@ extension AppDelegate {
       view.cacheDisplay(in: view.bounds, to: bitmap)
       try bitmap.representation(using: .png, properties: [:])?.write(to: URL(fileURLWithPath: ".build/loading-browser.png"))
     }
+    let selected = levelBrowserPacks(for: .classic).first!.levels.first!
+    measure("Prepared Classic Start") { startBrowserLevel(selected.identity) }
+    try check(levelBrowserLaunchPage == nil && artworkLevel?.title == selected.levelName,
+      "Prepared Start showed a loading page or opened the wrong level")
     GameScreen.shared.dismissAll()
     let replayFolder = FileManager.default.temporaryDirectory.appendingPathComponent("replay-latency-\(UUID().uuidString)")
     try FileManager.default.createDirectory(at: replayFolder, withIntermediateDirectories: true)
@@ -3607,18 +3611,22 @@ extension AppDelegate {
     let store = ArcadeStore(file: replayFolder.appendingPathComponent("records.json"), bundledProofs: nil)
     let level = arcadeLevel!
     let run = ArcadeRun(profileID: store.records.activeProfileID, level: level,
-      saved: level.total, didWin: true, skills: [:], seconds: 1)
-    let report = store.record(run)!
+      saved: level.total, didWin: true, skills: [:], seconds: 1, telemetry: .init(released: level.total))
+    guard let report = store.record(run), let attempt = report.trolley?.attempt else {
+      throw IntegrationFailure(message: "Replay retention fixture did not create an attempt")
+    }
     let bytes = Data(repeating: 42, count: 32 * 1024 * 1024)
     let source = replayFolder.appendingPathComponent("temporary.mp4")
     try bytes.write(to: source)
     var retention: Task<Void, Never>?
     measure("Replay retention dispatch (32 MB)") {
-      retention = store.preserveReplay(source, attemptID: report.trolley!.attempt.id)
+      retention = store.preserveReplay(source, attemptID: attempt.id)
     }
     try FileManager.default.removeItem(at: source)
     await retention?.value
-    let replay = store.records.trolley.replays.first!
+    guard let replay = store.records.trolley.replays.first else {
+      throw IntegrationFailure(message: "Background replay retention did not finish")
+    }
     try check(try Data(contentsOf: replayFolder.appendingPathComponent(replay.relativePath)) == bytes,
       "Background retention lost a discarded temporary movie")
     try check(replay.sha256 == ArcadeStore.fingerprint(bytes),
