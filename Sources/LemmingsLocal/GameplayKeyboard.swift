@@ -90,6 +90,7 @@ import NxlvKit
     var settings: (() -> Void)?
     var retry: (() -> Void)?
     var rewind: (() -> Void)?
+    var controllerRewindHeld: (Bool) -> Void = { _ in }
     var step: ((Int) -> Void)?
     var endRun: (() -> Void)?
     var pauseForHelp: () -> (() -> Void) = { {} }

@@ -596,7 +596,7 @@ extension Lemmings3PlayWindow {
         gameplayKeyboard?.controllerAction(.step(1))
         try assertArtwork(paused && game.tick == stepTick + 1, "L3 controller forward step did not advance one tick")
         gameplayKeyboard?.controllerAction(.step(-1))
-        try assertArtwork(game.tick == stepTick + 1, "Unsupported L3 backward step changed the game")
+        try assertArtwork(paused && game.tick == stepTick, "L3 controller backward step did not return one tick")
         gameplayKeyboard?.controllerAction(.retry)
         try assertArtwork(game.tick == 0 && !paused, "L3 controller retry did not reset the level")
         gameplayKeyboard?.controllerAction(.endRun)

@@ -228,7 +228,7 @@ private func require(
   panel.isMenuMode = true
   playfield.phase = .briefing
   playfield.overlayTitle = "LEMMINGS"
-  playfield.overlayLines = ["FULL QUEST  0/228", "LEMMINGS  0/120"]
+  playfield.overlayLines = ["OH MY! ALL LEMMINGS!  0/228", "LEMMINGS  0/120"]
   playfield.overlayFooter = "UP AND DOWN TO CHOOSE"
   playfield.overlayHighlight = 0
 
@@ -236,6 +236,59 @@ private func require(
   try require(
     menu > 200,
     "the menu drew \(menu) lit pixels, so the panel painted over the playing view")
+}
+
+/// The home screen keeps Settings visible without adding another text row.
+@MainActor private func testHomeSettingsButton() throws {
+  let (window, playfield, panel) = makeWindow()
+  window.setContentSize(CGSize(width: 900, height: 620))
+  playfield.frame = CGRect(x: 0, y: 142, width: 900, height: 478)
+  panel.frame = CGRect(x: 0, y: 0, width: 900, height: 142)
+  panel.isMenuMode = true
+  playfield.phase = .briefing
+  playfield.overlayTitle = "LEMMINGS"
+  playfield.overlayLines = ["OH MY! ALL LEMMINGS!  0/228", "LEMMINGS  0/120"]
+  playfield.overlayHighlight = 0
+  playfield.overlayProfileInitials = "LEM"
+  playfield.overlayShowsSettingsButton = true
+
+  let bitmap = playfield.bitmapImageRepForCachingDisplay(in: playfield.bounds)!
+  playfield.cacheDisplay(in: playfield.bounds, to: bitmap)
+  let controls = playfield.accessibilityChildren()?.compactMap { $0 as? GameAccessibleElement } ?? []
+  guard let settings = controls.first(where: { $0.accessibilityLabel() == "Settings" }) else {
+    throw Failure(description: "the home screen has no accessible Settings button")
+  }
+  let frame = settings.localFrame
+  try require(
+    abs(frame.width - frame.height) < 0.01 && frame.width >= 44 && playfield.bounds.contains(frame),
+    "the Settings button is not a square, full-size input target")
+  try require(controls.filter { $0 !== settings && $0.accessibilityRole() == .button }
+    .allSatisfy { !$0.localFrame.intersects(frame) },
+    "the Settings button overlaps another home-screen input target")
+  try require(PanelGlyph.settings.image(fitting: frame.insetBy(dx: 6, dy: 6).size) != nil,
+    "the Settings button has no gear glyph")
+
+  var presses = 0
+  playfield.onSettings = { presses += 1 }
+  playfield.handleClick(at: CGPoint(x: frame.midX, y: frame.midY))
+  try require(presses == 1, "the Settings button did not handle its mouse target")
+  try require(settings.accessibilityPerformPress() && presses == 2,
+    "the Settings button did not handle its accessibility action")
+
+  let output = URL(fileURLWithPath: ".build/home-screen-settings.png")
+  try FileManager.default.createDirectory(at: output.deletingLastPathComponent(), withIntermediateDirectories: true)
+  try bitmap.representation(using: .png, properties: [:])!.write(to: output)
+
+  playfield.overlayShowsSettingsButton = false
+  playfield.cacheDisplay(in: playfield.bounds, to: bitmap)
+  try require(
+    playfield.accessibilityChildren()?.compactMap { $0 as? GameAccessibleElement }
+      .contains(where: { $0.accessibilityLabel() == "Settings" }) != true,
+    "the Settings button remained outside the home screen")
+  playfield.handleClick(at: CGPoint(x: frame.midX, y: frame.midY))
+  try require(presses == 2, "the hidden Settings button kept a stale mouse target")
+  _ = window
+  print("PASS the home screen has a square, accessible gear button for Settings")
 }
 
 /// And the panel still draws its own area.
@@ -688,11 +741,53 @@ private func testMacArtworkCropStaysPixelAligned() throws {
   print("PASS every solid sprite stays above neighbouring additive ghosts")
 }
 
+@MainActor private func testSkillCursorBadgeGeometry() throws {
+  let point = CGPoint(x: 60, y: 40)
+  let bounds = CGRect(x: 0, y: 0, width: 120, height: 80)
+  for scale in [1.0, 2.0, 3.0] {
+    let pixel = floor(scale)
+    let frame = SkillCursorBadge.frame(at: point, scale: scale, in: bounds)
+    try require(frame.width == 8 * pixel && frame.height == frame.width,
+      "the selected-skill reminder is not tiny at \(scale)x")
+    let reticle = GameCursor.playfieldPointerFrame(at: point, scale: scale)
+    try require(reticle.contains(frame),
+      "the selected-skill reminder is not inside the reticle at \(scale)x")
+    try require(frame.maxX < reticle.maxX && frame.maxY < reticle.maxY,
+      "the selected-skill reminder is not inset from the reticle corner at \(scale)x")
+    try require(frame.minX.truncatingRemainder(dividingBy: pixel) == 0
+      && frame.minY.truncatingRemainder(dividingBy: pixel) == 0,
+      "the selected-skill reminder is not pixel-aligned at \(scale)x")
+    for edge in [
+      CGPoint(x: bounds.minX, y: bounds.minY),
+      CGPoint(x: bounds.maxX, y: bounds.minY),
+      CGPoint(x: bounds.minX, y: bounds.maxY),
+      CGPoint(x: bounds.maxX, y: bounds.maxY),
+    ] {
+      try require(bounds.contains(SkillCursorBadge.frame(at: edge, scale: scale, in: bounds)),
+        "the selected-skill reminder leaves the playfield at \(scale)x")
+    }
+  }
+  print("PASS selected-skill reminder stays tiny, offset and visible at every edge")
+}
+
+@MainActor private func testGameCursorRegions() throws {
+  let playfield = CGRect(x: 0, y: 0, width: 320, height: 160)
+  try require(GameCursor.hidesSystemCursor(at: CGPoint(x: 160, y: 80), inside: playfield),
+    "the gameplay cursor is not hidden behind the drawn pointer")
+  try require(!GameCursor.hidesSystemCursor(at: CGPoint(x: 160, y: 180), inside: playfield),
+    "the system cursor is hidden over the control bar")
+  try require(!GameCursor.hidesSystemCursor(at: CGPoint(x: 160, y: 80), inside: nil),
+    "a menu without a drawn gameplay pointer hides the system cursor")
+  print("PASS cursor policy keeps the system arrow over controls and menus")
+}
+
 @MainActor private func run() {
   let app = NSApplication.shared
   app.setActivationPolicy(.accessory)
   do {
     try testTickDirectionContinuity()
+    try testSkillCursorBadgeGeometry()
+    try testGameCursorRegions()
     try testMacArtworkCropStaysPixelAligned()
     try testSpeedSpritesStayOnTop()
     try testSpeedAfterimages()
@@ -707,6 +802,7 @@ private func testMacArtworkCropStaysPixelAligned() throws {
     print("PASS camera survives resizing and clears menu edge scrolling")
     try testMenuSurvivesThePanel()
     print("PASS a menu survives the panel drawn over it")
+    try testHomeSettingsButton()
     try testPanelDrawsItself()
     print("PASS the panel still draws its own area")
     print("Playfield drawing tests passed.")

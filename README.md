@@ -10,6 +10,13 @@ The project is not affiliated with, endorsed by or licensed by Sony
 Interactive Entertainment. Read [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md)
 before distributing a build.
 
+## Download
+
+[Download Ultimate Lemmings 1.2](https://github.com/ErikVeland/Lemmings/releases/latest)
+for Intel and Apple silicon Macs running macOS 12.3 or later. The public app and
+its bundled Sparkle components are Developer ID signed and notarised.
+See the [release notes](Documentation/ReleaseNotes-1.2-build40.md) for known limits.
+
 ## Start here
 
 - [Architecture](ARCHITECTURE.md) — module boundaries, runtime flow and release packaging.
@@ -17,10 +24,14 @@ before distributing a build.
 - [QoL roadmap](docs/superpowers/plans/2026-09-23-qol-roadmap.md) — target selection and rewind priorities.
 - [Release scope](Documentation/ReleaseScope.md) — the meaning of Complete, Playable and Preview.
 - [Content roadmap](Documentation/ContentUniverseRoadmap.md) — the path towards broader 2D content.
+- [Level browser](Documentation/LevelBrowser.md) — CoverFlow controls, content boundaries and current evidence.
 - [Beta testing](Documentation/BetaTesting.md) — local package and validation procedure.
 - [Release evidence](Documentation/ReleaseReadiness/) — current gate records and manifests.
+- [1.2 handoff](Documentation/ReleaseReadiness/1.2DataIndependentHandoff.md) — data-independent release work and Mac checks.
+- [Automatic updates](#automatic-updates) — Sparkle feed and release requirements.
+- [Automatic update evidence](Documentation/AutomaticUpdates.md) — release checks and records.
 
-The current milestone is 1.1 on macOS. Classic content is the completed
+The current milestone is 1.2 on macOS. Classic content is the completed
 reference engine. Lemmings 2 and Lemmings 3 are labelled Preview. The bundled
 corpus contains 6,020 Classic-format fan levels in 535 packs; this is not a
 claim of NeoLemmix fan-pack compatibility. NeoLemmix `.nxlv` support has
@@ -52,6 +63,16 @@ open ".build/local/Ultimate Lemmings.app"
 The finished bundle contains the resources required by the app. It must not
 depend on the source checkout, current working directory, Homebrew or a
 developer-only data path after it is copied.
+
+For a fast local Game Center snapshot, run:
+
+```sh
+zsh Scripts/build-game-center-snapshot.sh
+```
+
+This builds only the current Mac architecture, signs with the matching Apple
+Development provisioning profile, and writes an app plus ZIP to the build and
+Downloads directories. It does not notarise or run release gates.
 
 ## Verification
 
@@ -92,10 +113,54 @@ NOTARY_PROFILE="lemmings-notary" \
 zsh Scripts/build-and-notarise.sh
 ```
 
+The profile name is the name supplied to `xcrun notarytool
+store-credentials`; storing a profile does not make its name discoverable to
+the script. If the profile is in a non-default keychain, also set
+`NOTARY_KEYCHAIN=/path/to/keychain-db`, or pass `--notary-keychain`.
+
+For a machine with no shared profile name, use Apple ID authentication. The
+Apple ID and team ID are passed to `notarytool`; its secure prompt requests the
+app-specific password:
+
+```sh
+APPLE_ID="developer@example.com" APPLE_TEAM_ID="TEAMID" \
+zsh Scripts/build-and-notarise.sh
+```
+
+An App Store Connect API key is also supported with `ASC_KEY_PATH`,
+`ASC_KEY_ID` and `ASC_ISSUER_ID`. Passwords and private key contents are never
+accepted as command-line or environment arguments.
+
 The Monterey worktree must contain the release commit. Set
 `MONTEREY_WORKTREE` when it is not at `.claude/worktrees/macos12`. Set
 `DOWNLOADS_DIR` to use another output directory. Use `--dry-run` to exercise
 the gates without building or contacting Apple services.
+
+Run the data-independent 1.2 release checks before using the notarisation
+script:
+
+```sh
+zsh Scripts/check-1.2-release-inputs.sh --allow-empty-appcast
+```
+
+The release script runs the same check after it generates a signed appcast.
+
+### Automatic updates
+
+The 1.2 app uses Sparkle 2.7.3. It checks the signed appcast once per day and
+downloads and installs signed updates in the background. The appcast is
+[`appcast.xml`](appcast.xml), and the app embeds its public Ed25519 key.
+
+The release script creates a clean update ZIP from the notarised standard app,
+signs its entry with the Sparkle private key in the login Keychain, and writes
+the appcast. Set `PUBLISH_GITHUB_RELEASE=1` to upload the update ZIP, create or
+update the tagged GitHub Release, and publish `appcast.xml` to `main` through
+the GitHub API. Set `DOWNLOAD_URL_PREFIX` when the release asset URL differs
+from the default GitHub URL.
+
+Keep the Sparkle private key out of Git and out of command arguments. A release
+must not proceed when the appcast entry is unsigned or its download URL is not
+HTTPS.
 
 Game Center is a separate development-signed archive for registered devices;
 Apple does not accept that entitlement in a Developer ID notarisation.
@@ -130,6 +195,9 @@ See [controller QoL](Documentation/ControllerQoL.md),
 [speed controls](Documentation/SuperSpeed.md),
 [level hints](Documentation/LevelHints.md) and
 [save recovery](Documentation/SaveRecovery.md) for focused behaviour notes.
+
+Audio source coverage and the soundtrack import layout are maintained in
+[Audio coverage](Documentation/AudioCoverage.md).
 
 ### Controller controls
 

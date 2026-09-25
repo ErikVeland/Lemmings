@@ -45,6 +45,8 @@ protocol GameSession: AnyObject {
   var remainingSeconds: Int? { get }
   var isComplete: Bool { get }
   var didWin: Bool { get }
+  /// True while the remaining active and unreleased lemmings can still meet the target.
+  var canStillReachRequirement: Bool { get }
   var isNuking: Bool { get }
 
   var skills: [SessionSkill] { get }
@@ -74,6 +76,10 @@ protocol GameSession: AnyObject {
 }
 
 extension GameSession {
+  var canStillReachRequirement: Bool {
+    !FailureMoodDecision.isUnrecoverable(saved: saved, active: lemmings.count,
+      unreleased: total - released, required: required)
+  }
   func canAssign(skillIndex: Int, to lemmingID: Int) -> Bool {
     assignmentState(skillIndex: skillIndex, to: lemmingID) == .eligible
   }

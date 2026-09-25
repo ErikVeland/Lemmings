@@ -109,7 +109,7 @@ app.setActivationPolicy(.accessory)
 let arguments = CommandLine.arguments
 let root = URL(
   fileURLWithPath: arguments.count > 1
-    ? arguments[1] : ".build/local/Lemmings Local.app/Contents/Resources/Music")
+    ? arguments[1] : ".build/local/Ultimate Lemmings.app/Contents/Resources/Music")
 
 do {
   guard FileManager.default.fileExists(atPath: root.path) else {
