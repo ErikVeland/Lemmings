@@ -87,7 +87,10 @@ import NxlvKit
             if let page { self.dismiss(page) }
             action()
         }
-        present(page, owner: owner)
+        // A confirmation starts on Back. Return, Space and controller A must
+        // not accept the action without a deliberate move to it.
+        page.preferControllerControl(page.controllerBackButton)
+        present(page, owner: owner, focus: page.controllerBackButton)
     }
     func message(_ title: String, detail: String) {
         let page = GameMenuPage(title: title)

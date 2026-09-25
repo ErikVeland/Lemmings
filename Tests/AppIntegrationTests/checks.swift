@@ -185,8 +185,7 @@ extension AppDelegate {
     driver.processButtons([.a, .leftTrigger], at: 24.1, playing: false)
     try check(LevelHintWindow.shared.revealedTier == 0, "A held button exposed a hint during the page transition")
     driver.processButtons([], at: 24.2, playing: false)
-    driver.processButtons([.right], at: 24.3, playing: false)
-    driver.processButtons([], at: 24.4, playing: false)
+    // Controller focus starts on the page's primary action: the next hint.
     driver.processButtons([.a], at: 24.5, playing: false)
     driver.processButtons([.a], at: 24.6, playing: false)
     try check(LevelHintWindow.shared.revealedTier == 1 && assigned == 1, "One controller press skipped hints or assigned behind them")
@@ -1682,6 +1681,9 @@ extension AppDelegate {
     // A synthetic clock check must not record the preceding level's scene.
     runMovie.discard()
     let game = FinalTickSession(win: false, finalTick: 10000)
+    // The synthetic session is not a fresh start, so clear any countdown
+    // armed by the previous level.
+    playfield.startCountdown.cancel()
     session = game; phase = .playing; isPaused = false
     settings.modernControlsEnabled = true; settings.variableSpeedEnabled = true
     speedControl.variableEnabled = true; speedControl.reset(at: 100)
@@ -2542,7 +2544,7 @@ extension AppDelegate {
     wakeAudioOutput()
     try await Task.sleep(nanoseconds: 100_000_000)
     try check(music.isOutputRunning, "wake did not restore module output")
-    for source in [ClassicMusicSource.adaptiveDJ, .remix(name: soundtrackLibrary.keys.sorted()[0])] {
+    for source in [ClassicMusicSource.adaptiveDJ, try recordingForCurrentLevel()] {
       updated.music = source
       apply(updated)
       suspendAudioOutput()
@@ -2557,13 +2559,27 @@ extension AppDelegate {
     try check(!music.isRunning && !dj.isPlaying && !soundtrack.isPlaying, "wake resurrected a stopped source")
     print("PASS elapsed-time catch-up and audio interruption recovery")
   }
+  /// Recording albums play only a documented version of the level's tune.
+  /// Pick the first album that has one, as a player would need to.
+  fileprivate func recordingForCurrentLevel() throws -> ClassicMusicSource {
+    guard let root = Bundle.main.resourceURL?.appendingPathComponent("Music") else {
+      throw IntegrationFailure(message: "missing bundled music")
+    }
+    let assignedName = LevelMusicSelection.track(index: currentNxlvURL == nil ? max(0, picker.indexOfSelectedItem) : 0,
+      title: currentNxlvURL == nil ? artworkLevel?.title ?? "" : "", holiday: seasonalMusic, ohNo: musicTitle == .ohNoMoreLemmings)
+    let game = seasonalMusic ? "holiday" : musicTitle == .ohNoMoreLemmings ? "ohno" : "classic"
+    let trackID = game + "." + assignedName.lowercased()
+    guard let name = soundtrackLibrary.keys.sorted().first(where: { album in
+      soundtrackLibrary[album]?.contains { SoundtrackPlayer.matches($0, trackID: trackID, root: root) } == true
+    }) else { throw IntegrationFailure(message: "no recording album has \(trackID)") }
+    return .remix(name: name)
+  }
   fileprivate func testMusicTransitions() throws {
     settings.music = .silent
     music.loadLibrary(at: URL(fileURLWithPath: "Sources/Music/lemmings_music_mod"))
-    soundtrackLibrary = SoundtrackPlayer.soundtracks(at: URL(fileURLWithPath: "Sources/Music"))
-    dj.load(soundtracks: soundtrackLibrary)
+    loadSoundtracks()
     try check(!music.library.isEmpty && !soundtrackLibrary.isEmpty, "missing audio fixtures")
-    let recording = ClassicMusicSource.remix(name: soundtrackLibrary.keys.sorted()[0])
+    let recording = try recordingForCurrentLevel()
     let sources: [ClassicMusicSource] = [.amigaModules, recording, .adaptiveDJ, .silent]
     for from in sources {
       for to in sources {
@@ -2596,12 +2612,24 @@ extension AppDelegate {
     let recording = ClassicMusicSource.remix(name: soundtrackLibrary.keys.sorted()[0])
     levelMusic = nil
     let root = URL(fileURLWithPath: "Sources/Music")
+    // Catalogue identity decides seasonal music, as in the app. Path words
+    // cover only uncatalogued files, such as the bundled modules.
+    let roots = [root] + [Bundle.main.resourceURL?.appendingPathComponent("Music")].compactMap { $0 }
+    let catalogues = roots.map { ($0, SoundtrackCatalogue.load(at: $0)) }
+    func isChristmas(_ url: URL) -> Bool {
+      for (base, catalogue) in catalogues {
+        if let path = SoundtrackPlayer.relativePath(url, under: base), let entry = catalogue?.entry(path: path) {
+          return entry.track.game == "holiday"
+        }
+      }
+      return SoundtrackPlayer.isSeasonal(url.path)
+    }
     for includeOthers in [false, true] {
       let regular = SoundtrackPlayer.djSoundtracks(at: root, includeOtherSoundtracks: includeOthers)
       let seasonal = SoundtrackPlayer.djSoundtracks(at: root, includeOtherSoundtracks: includeOthers, seasonal: true)
       try check(!regular.isEmpty && !seasonal.isEmpty, "missing regular or seasonal DJ pool")
-      try check(regular.values.flatMap { $0 }.allSatisfy { !SoundtrackPlayer.isSeasonal($0.path) }, "regular DJ includes Christmas tracks")
-      try check(seasonal.values.flatMap { $0 }.allSatisfy { SoundtrackPlayer.isSeasonal($0.path) }, "Christmas DJ includes regular tracks")
+      try check(regular.values.flatMap { $0 }.allSatisfy { !isChristmas($0) }, "regular DJ includes Christmas tracks")
+      try check(seasonal.values.flatMap { $0 }.allSatisfy { isChristmas($0) }, "Christmas DJ includes regular tracks")
     }
     loadContent()
     let selected = gamePicker.indexOfSelectedItem
@@ -2626,13 +2654,13 @@ extension AppDelegate {
         settings.music = source
         playMusicForCurrentLevel()
         let url = dj.isPlaying ? dj.currentURL : soundtrack.isPlaying ? soundtrack.currentURL : music.currentURL
-        try check(url != nil && SoundtrackPlayer.isSeasonal(url!.path) == SoundtrackPlayer.isSeasonal(title), "wrong seasonal music for \(title), \(source)")
+        try check(url != nil && isChristmas(url!) == SoundtrackPlayer.isSeasonal(title), "wrong seasonal music for \(title), \(source)")
       }
     }
     fanPlaying = true
     settings.music = .amigaModules
     playMusicForCurrentLevel()
-    try check(music.currentURL.map { !SoundtrackPlayer.isSeasonal($0.path) } == true, "fan level retained Christmas modules")
+    try check(music.currentURL.map { !isChristmas($0) } == true, "fan level retained Christmas modules")
     print("PASS all 16 music source transitions, seasonal DJ pools and campaign music boundaries")
   }
 
@@ -2672,7 +2700,7 @@ extension AppDelegate {
   }
 
   fileprivate func testGlobalMuteAndStop() throws {
-    for source in [ClassicMusicSource.adaptiveDJ, .remix(name: soundtrackLibrary.keys.sorted()[0])] {
+    for source in [ClassicMusicSource.adaptiveDJ, try recordingForCurrentLevel()] {
       var updated = settings
       updated.music = source
       apply(updated)
@@ -2774,22 +2802,27 @@ extension AppDelegate {
   }
 
   fileprivate func testInterruptedFade() async throws {
+    // Gameplay telemetry no longer changes the tune. Level entry is the
+    // transition that crossfades between two recordings.
+    let recordings = soundtrackLibrary.values.flatMap { $0 }.sorted { $0.path < $1.path }
+    try check(recordings.count >= 2, "missing DJ fade fixtures")
+    var entries = 0
+    func enterLevel() {
+      entries += 1
+      dj.startLevel(url: recordings[entries % recordings.count], identity: "interrupted-fade-\(entries)")
+    }
     dj.setVolume(0)
     dj.start()
-    dj.resetLevel()
-    var telemetry = AdaptiveDJEngine.Telemetry(releasedCount: 10, totalCount: 10,
-      savedCount: 5, requiredCount: 5, releaseRate: 50, dangerCount: 0, remainingSeconds: 300)
-    dj.updateTelemetry(telemetry)
-    try await Task.sleep(nanoseconds: 80_000_000)
-    dj.resetLevel()
-    telemetry.isNuking = true
-    dj.updateTelemetry(telemetry)
+    enterLevel()
+    // A module deck can hold the incoming track for up to one second to meet
+    // its next beat. Interrupt after that, while both decks play.
+    try await Task.sleep(nanoseconds: 1_200_000_000)
+    enterLevel()
     try await Task.sleep(nanoseconds: 80_000_000)
     try check(dj.isCrossfading && dj.playingDeckCount == 2, "cancelled fade finished the new transition")
     try await Task.sleep(nanoseconds: 2_800_000_000)
     try check(!dj.isCrossfading && dj.playingDeckCount == 1, "fade did not retire its outgoing deck")
-    dj.resetLevel()
-    dj.updateTelemetry(telemetry)
+    enterLevel()
     try await Task.sleep(nanoseconds: 80_000_000)
     dj.suspendOutput()
     try await Task.sleep(nanoseconds: 2_800_000_000)
@@ -2801,8 +2834,7 @@ extension AppDelegate {
     usleep(2_800_000)
     try await Task.sleep(nanoseconds: 100_000_000)
     try check(!dj.isCrossfading && dj.playingDeckCount == 1, "A delayed main actor stretched the fade")
-    dj.resetLevel()
-    dj.updateTelemetry(telemetry)
+    enterLevel()
     dj.stop()
     dj.start()
     try await Task.sleep(nanoseconds: 100_000_000)

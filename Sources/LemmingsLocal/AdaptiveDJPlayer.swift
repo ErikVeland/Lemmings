@@ -97,10 +97,7 @@ import NxlvKit
   }
 
   private func relativePath(_ url: URL) -> String? {
-    guard let root = catalogueRoot?.standardizedFileURL.path else { return nil }
-    let path = url.standardizedFileURL.path
-    guard path.hasPrefix(root + "/") else { return nil }
-    return String(path.dropFirst(root.count + 1))
+    catalogueRoot.flatMap { SoundtrackPlayer.relativePath(url, under: $0) }
   }
 
   /// Resolve a composition once per level. The caller's score position, never
@@ -253,13 +250,18 @@ import NxlvKit
         do { try await Task.sleep(nanoseconds: UInt64(Fade.step * 1_000_000_000)) } catch { return }
       }
       incoming.play()
+      // Measure the clock, not the callbacks. A delayed main actor must not
+      // stretch the fade, and suspended time must not advance it.
       var elapsed = 0.0
+      var last = ProcessInfo.processInfo.systemUptime
       while elapsed < duration, !Task.isCancelled {
         do { try await Task.sleep(nanoseconds: UInt64(Fade.step * 1_000_000_000)) }
         catch { return }
         guard !Task.isCancelled, self?.fadeGeneration == generation else { return }
+        let now = ProcessInfo.processInfo.systemUptime
+        defer { last = now }
         if self?.outputSuspended == true { continue }
-        elapsed += Fade.step
+        elapsed += now - last
         self?.applyFade(position: min(1, elapsed / duration))
       }
       guard !Task.isCancelled, self?.fadeGeneration == generation else { return }

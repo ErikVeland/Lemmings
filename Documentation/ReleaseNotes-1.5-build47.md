@@ -25,6 +25,8 @@ public test and 1.2 releases. Builds 42 to 46 were local test builds.
 - The SNES recording of "As Long As You Try Your Best" now plays to its end.
   Before, the macOS decoder stopped with an error at the end of the file.
 - The first frame shows before level music starts.
+- A crossfade keeps its length when the game stalls for a moment. Before, a
+  long frame made the fade last longer.
 
 ### Play and controls
 
@@ -41,6 +43,11 @@ public test and 1.2 releases. Builds 42 to 46 were local test builds.
   or single-step to cancel the automatic start. Saved runs stay paused.
 - Hot Seat handovers accept keyboard actions. Handovers stay paused until the
   next player is ready.
+- On a game page, controller focus starts on the main action. For example,
+  on the hints page, A shows the next hint.
+- A confirmation page, such as "End this run?" or "Reveal full solution?",
+  starts on the safe choice. Return, Space and controller A do not accept
+  the action until you move to it.
 - The macOS pointer shows over menus and controls. The game hides it only
   over the playfield.
 - You can click a checkbox label to change the checkbox.

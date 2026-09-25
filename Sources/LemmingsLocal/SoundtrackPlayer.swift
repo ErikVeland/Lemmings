@@ -36,18 +36,25 @@ import NxlvKit
       if url.lastPathComponent == "By Track" { walker.skipDescendants(); continue }
       guard audioExtensions.contains(url.pathExtension.lowercased()),
             (try? url.resourceValues(forKeys: [.isRegularFileKey]))?.isRegularFile == true else { continue }
-      let relative = String(url.path.dropFirst(root.path.count + 1))
-      guard !sourceOnly.contains(relative) else { continue }
-      let folder = url.deletingLastPathComponent().path.replacingOccurrences(of: root.path + "/", with: "")
+      guard let relative = relativePath(url, under: root), !sourceOnly.contains(relative) else { continue }
+      let folder = (relative as NSString).deletingLastPathComponent
       found[folder, default: []].append(url)
     }
     return found.mapValues { $0.sorted { $0.path < $1.path } }
   }
 
+  /// The path of a file below a root. The directory enumerator can return
+  /// resolved paths for a root reached through a symbolic link, so compare
+  /// both sides after resolution.
+  static func relativePath(_ url: URL, under root: URL) -> String? {
+    let base = root.resolvingSymlinksInPath().path + "/"
+    let path = url.resolvingSymlinksInPath().path
+    return path.hasPrefix(base) ? String(path.dropFirst(base.count)) : nil
+  }
+
   /// Resolve recordings through composition identity before using legacy aliases.
   static func matches(_ url: URL, trackID: String, root: URL) -> Bool {
-    guard url.standardizedFileURL.path.hasPrefix(root.standardizedFileURL.path + "/") else { return false }
-    let relative = String(url.standardizedFileURL.path.dropFirst(root.standardizedFileURL.path.count + 1))
+    guard let relative = relativePath(url, under: root) else { return false }
     if let entry = SoundtrackCatalogue.load(at: root)?.entry(path: relative) {
       return entry.track.id == trackID && entry.variant.confidence == "documented"
     }
@@ -92,10 +99,9 @@ import NxlvKit
         if url.lastPathComponent == "By Track" { walker.skipDescendants(); continue }
         guard audioExtensions.union(["mod"]).contains(url.pathExtension.lowercased()),
               (try? url.resourceValues(forKeys: [.isRegularFileKey]))?.isRegularFile == true else { continue }
-        let relative = url.deletingLastPathComponent().path.replacingOccurrences(of: directory.path + "/", with: "")
+        guard let trackPath = relativePath(url, under: directory), !sourceOnly.contains(trackPath) else { continue }
+        let relative = (trackPath as NSString).deletingLastPathComponent
         let classic = relative == "lemmings_music_mod" || relative.hasPrefix("CoLD SToRAGE - Lemmings - the original AMIGA")
-        let trackPath = relative + "/" + url.lastPathComponent
-        guard !sourceOnly.contains(trackPath) else { continue }
         let entry = catalogue?.entry(path: trackPath)
         let isHoliday = entry.map { $0.track.game == "holiday" } ?? isSeasonal(trackPath)
         guard isHoliday == seasonal else { continue }

@@ -56,6 +56,7 @@ import NxlvKit
                     replay.show(owner: owner)
                 }
                 confirm.keyEquivalent = ""
+                warning.preferControllerControl(warning.controllerBackButton)
                 GameScreen.shared.present(warning, owner: owner, focus: warning.controllerBackButton)
             }
         }
