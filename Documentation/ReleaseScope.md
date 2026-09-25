@@ -1,7 +1,7 @@
 # Release scope
 
 Classic 1.0 is the historical macOS release baseline, confirmed on 13 September 2026.
-The current public release candidate is macOS 1.5 build 45. L2 and L3 remain
+The current public tester release is macOS 1.5 build 50. L2 and L3 remain
 previews. Updated 25 September 2026 for the 1.5 release scope.
 Automated checks support the recorded routes;
 remaining compatibility and hardware claims still need validation. See the [gate register](ReleaseReadiness/gates.json)

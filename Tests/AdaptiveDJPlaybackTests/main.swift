@@ -56,6 +56,7 @@ extension MusicFileDeck {
     var crossings = 0
     for index in 8193..<samples.count where samples[index - 1] <= 0 && samples[index] > 0 { crossings += 1 }
     let frequency = Double(crossings) * 44100 / Double(samples.count - 8192)
+    try require(deck.sourceSeconds > 0, "The recording did not expose its source sample position")
     try require(abs(frequency / 440 - ratio) < 0.012,
       "\(tier)× music rendered at \(frequency) Hz instead of \(440 * ratio) Hz")
     deck.setSpeedPitch(10000)
@@ -64,7 +65,26 @@ extension MusicFileDeck {
     try require(deck.speedPitch.pitch == 0, "Normal speed retained pitch processing")
     deck.stop()
   }
+  for rate: Float in [0.5, 1, 1.04] {
+    let deck = MusicFileDeck(url: url)!
+    deck.playbackRate = rate
+    try deck.engine.enableManualRenderingMode(.offline, format: format, maximumFrameCount: 1024)
+    try deck.engine.start()
+    deck.player.scheduleFile(deck.file, at: nil)
+    deck.player.play()
+    let buffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: 1024)!
+    for _ in 0..<8 { _ = try deck.engine.renderOffline(1024, to: buffer) }
+    let start = deck.sourceSeconds
+    for _ in 0..<16 {
+      let status = try deck.engine.renderOffline(1024, to: buffer)
+      try require(status == .success, "Tempo graph failed to render")
+    }
+    let observedRate = (deck.sourceSeconds - start) * 44100 / (16 * 1024)
+    try require(abs(observedRate - Double(rate)) < 0.02, "Source position did not follow the rendered tempo: \(observedRate) vs \(rate)")
+    deck.stop()
+  }
   print("PASS rendered music pitch at every tier, unchanged tempo and hard pitch cap")
+  print("PASS recording source position at slow, normal and matched playback rates")
 }
 
 }
@@ -86,6 +106,29 @@ extension DJDeck {
   }
 }
 extension AdaptiveDJPlayer {
+  fileprivate func checkTimingRouting(root: URL) throws {
+    guard let grid = timingCatalogue?.variants.first(where: { $0.supportsBarMixing && !$0.path.hasSuffix(".mod") }) else {
+      throw Failure(description: "No analysed recording grid loaded")
+    }
+    guard let deck = makeDeck(root.appendingPathComponent(grid.path)) else {
+      throw Failure(description: "Analysed recording did not load")
+    }
+    try require(deck.timing?.variantID == grid.variantID && deck.beatInfo != nil, "Recording beat grid did not reach the DJ deck")
+    deck.playbackRate = 1.04
+    try require(abs((deck.beatInfo?.bpm ?? 0) - grid.baseBPM! * 1.04) < 0.001, "Tempo match lost the analysed base BPM")
+    // Check the actual recording unit, not just the DJ wrapper's requested rate.
+    try deck.checkMatchedRate()
+    let saved = timingCatalogue
+    defer { timingCatalogue = saved }
+    var record = try JSONSerialization.jsonObject(with: Data(contentsOf: root.appendingPathComponent("timing.json"))) as! [String: Any]
+    var entries = record["variants"] as! [[String: Any]]
+    for index in entries.indices { entries[index]["sourceSHA256"] = String(repeating: "0", count: 64); entries[index].removeValue(forKey: "playbackSHA256") }
+    record["variants"] = entries
+    timingCatalogue = try MusicTimingCatalogue(data: JSONSerialization.data(withJSONObject: record))
+    let stale = makeDeck(root.appendingPathComponent(grid.path))
+    try require(stale != nil && stale?.timing == nil, "A changed audio file kept its stale beat grid")
+    print("PASS recording grid routing, actual tempo matching and stale-grid rejection")
+  }
   fileprivate func checkSpeedPitchRouting(recordingURL: URL) throws {
     let cents = 1200 * log2(GameplayMusicPitch.ratio(for: 10))
     let bpm = deckA?.beatInfo?.bpm
@@ -97,6 +140,11 @@ extension AdaptiveDJPlayer {
     try incoming?.checkSpeedPitch(cents)
     setSpeedPitch(0)
     try deckA?.checkSpeedPitch(0)
+  }
+}
+extension DJDeck {
+  fileprivate func checkMatchedRate() throws {
+    try require(abs((recording?.playbackRate ?? 0) - 1.04) < 0.001, "The recording unit clamped an upward tempo match")
   }
 }
 
@@ -153,6 +201,7 @@ extension AdaptiveDJPlayer {
   let player = AdaptiveDJPlayer()
   player.load(soundtracks: soundtracks, catalogueRoot: root)
   try require(player.hasTracks, "the player found no tracks to mix")
+  try player.checkTimingRouting(root: root)
 
   player.setVolume(0)  // The test makes no noise.
   let assigned = root.appendingPathComponent("lemmings_music_mod/cancan.mod")

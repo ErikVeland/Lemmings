@@ -47,6 +47,8 @@ The generator checks conflicting roles and rebuilds only links to known assets. 
 
 Full-game packaging copies the catalogue after WAV-to-M4A encoding and rewrites those catalogue paths. Standalone Lemmings 2 and Lemmings 3 builds now copy their own catalogue entries and all available versions for that game. Browsing links and archive originals are not needed inside the app bundle.
 
+The shared DJ uses the [per-version timing audit](MusicTiming.md) for stable beat estimates and compatible whole-bar fades. Packaging includes the matching timing entries and playback-file hashes for each game. Uncertain estimates keep timed fades. Regenerate timing after changing audio assets.
+
 Validation on 25 September 2026: catalogue and packaging checks passed for all 495 versions. Director checks and real audio playback checks passed, including both sequel journeys, retries and paused crossfades. The full desktop app passed Swift type-checking; existing unrelated deprecation/unused-result warnings remain. No release app was rebuilt or installed.
 
 Converted VGZ recordings still contain two loops and a fade. The recording deck repeats the whole file, including the intro and fade. Seamless native loop points, loudness matching and listening checks against original hardware remain unverified. No new visual controls were added.

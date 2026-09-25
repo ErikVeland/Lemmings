@@ -1,0 +1,196 @@
+[size=18pt][b]Ultimate Lemmings 1.5 public test (build 50)[/b][/size]
+
+[url=https://github.com/ErikVeland/Lemmings/releases/download/v1.5-build50/UltimateLemmings-1.5-build50.zip]Download the Mac app[/url]
+
+Build: 50
+Release base: v1.2-build41
+
+These notes list all changes since 1.1 RC1 (build 37). Builds 38 to 41 were
+public test and 1.2 releases. Builds 42 to 49 were local test builds. This is a public tester prerelease.
+
+[size=14pt][b]New in 1.5[/b][/size]
+
+[b]Added in builds 48 to 50[/b]
+
+[list]
+[*]Press H, I or F1 for hints in Classic, Lemmings 2 and Lemmings 3.
+[*]Rewind two seconds or step one tick backward or forward from the toolbar.
+Stepping and rewinding leave play paused. Unsupported controls are disabled.
+[*]Navigate dialogs with Tab, Shift-Tab and arrow keys. Return or keypad Enter
+activates the focused button. Nested dialogs restore focus when closed.
+[*]Use Left and Right to browse hints. Full solutions still require confirmation.
+[*]Use keyboard and accessibility actions for replay and original-movie controls.
+[*]Tap fast-forward to keep it on, or hold for a temporary boost. Choose 2×,
+3×, 5× or 10×. Releasing a hold restores the previous speed immediately.
+[*]Speed effects and sprite trails work across all three games. Variable speed
+raises music pitch without changing its tempo. HD effects can be switched off.
+[*]The DJ uses measured beat grids and compatible bar boundaries for supported
+transitions. Uncertain timing keeps a timed fade. All 495 versions were
+analysed, with 276 stable BPM estimates and 209 stable bar estimates.
+These are automated estimates, without a listening review of every transition.
+[/list]
+
+[b]Soundtrack[/b]
+
+[list]
+[*]The adaptive DJ now plays from a catalogue of 495 versions of 210 tunes.
+These include Amiga modules, chip recordings from other ports, composer
+recordings and fan remixes.
+[*]The first time a tune plays, you hear the original Amiga version. Later
+levels with the same tune play other ports and remixes.
+[*]Retry, level select, saved runs and Hot Seat handovers keep the same
+version of a tune. Special-level, seasonal and result music keep their own
+tunes.
+[*]Level music stays the same during play. The DJ mixes to a new track only
+when the game state changes, for example at the result screen.
+[*]The SNES recording of "As Long As You Try Your Best" now plays to its end.
+Before, the macOS decoder stopped with an error at the end of the file.
+[*]The first frame shows before level music starts.
+[*]A crossfade keeps its length when the game stalls for a moment. Before, a
+long frame made the fade last longer.
+[/list]
+
+[b]Play and controls[/b]
+
+[list]
+[*]The four-corner reticle is back, with one-pixel strokes. Green corners show
+an eligible lemming, yellow an ineligible lemming, and grey empty terrain.
+[*]Settings has skill-icon sizes None, 1× and 2×. The default is 2×.
+[*]An optional lemming count shows beside the cursor. The default is off.
+[*]Cursor settings apply in Classic, Lemmings 2 and Lemmings 3.
+[*]The selected lemming shows a faint halo and a gentle shimmer. With reduced
+motion, the halo does not move.
+[*]Space and P toggle pause once for each key press. Key release and key
+repeat do not toggle pause again.
+[*]A new level or a retry starts automatically after a 3–2–1 countdown. Pause
+or single-step to cancel the automatic start. Saved runs stay paused.
+[*]Hot Seat handovers accept keyboard actions. Handovers stay paused until the
+next player is ready.
+[*]On a game page, controller focus starts on the main action. For example,
+on the hints page, A shows the next hint.
+[*]A confirmation page, such as "End this run?" or "Reveal full solution?",
+starts on the safe choice. Return, Space and controller A do not accept
+the action until you move to it.
+[*]The macOS pointer shows over menus and controls. The game hides it only
+over the playfield.
+[*]You can click a checkbox label to change the checkbox.
+[*]The speed toolbar buttons toggle correctly.
+[/list]
+
+[b]Speed[/b]
+
+[list]
+[*]The title screen opens without a pause. The game reads only the header of
+each saved run to find the newest run. With 516 saved runs, this step fell
+from 6.1 s to 0.26 s.
+[*]The title menu no longer stalls on each key press.
+[*]The game does not set up a campaign again when you go back to it.
+Transition saves no longer block play.
+[*]HDR effects start only when an effect needs them.
+[/list]
+
+[b]Gameplay fixes[/b]
+
+[list]
+[*]Liquid fills correctly below bridges and does not cover terrain.
+[/list]
+
+[b]NeoLemmix (Preview)[/b]
+
+[list]
+[*]The game can import, show and run NeoLemmix [font=monospace].nxlv[/font] levels, and read
+current [font=monospace].nxrp[/font] replays.
+[*]The Fencer and Laserer skills, skill pickups and some other mechanics are
+not supported. Full NeoLemmix replay and behavior compatibility is not
+claimed.
+[/list]
+
+[size=14pt][b]Delivered in 1.2 builds 39 to 41[/b][/size]
+
+[list]
+[*]Build 41: A new installation starts correctly. Before, the game showed a
+black window, and a menu action closed the app (issue #3).
+[*]Build 41: Rescue targets and Classic level hints show again.
+[*]Build 41: A click on the visible edge of a side card in the level browser
+selects that card.
+[*]Build 41: The opening music track continues when a level starts.
+[*]Build 40: Automatic updates start when the app starts.
+[*]Build 39: A new level browser shows each campaign as cards with previews
+and playlists.
+[*]Build 39: The gameplay cursor no longer disappears in Lemmings 2 and
+Lemmings 3.
+[*]Build 39: A click behind a bridge builder gives the skill to the follower
+lemming, also outside the click's pick box.
+[*]Build 39: The skill icon beside the cursor stays inside the window.
+[*]Build 39: Sparkle signed automatic updates.
+[/list]
+
+[size=14pt][b]Delivered in 1.1 RC2 (build 38)[/b][/size]
+
+[list]
+[*]New CRT display models.
+[*]The system cursor no longer disappears during pointer capture.
+[*]Classic releases pointer capture while a page, such as Settings, is open.
+[*]The CRT view scrolls correctly at its curved corners.
+[*]A fix that protected steel from destruction was removed. It broke 57 of
+the 352 Classic completion routes. All 352 routes verify again.
+[/list]
+
+[size=14pt][b]In 1.1 RC1 (build 37)[/b][/size]
+
+[list]
+[*]When a click could select two lemmings, the game prefers the lemming that
+comes toward the click. Settings has a switch for this in all three games.
+[*]Lemmings 2 and Lemmings 3 have rewind, forward and step controls. Rewind
+plays audio cues in all three games.
+[*]Solution replays have transport controls.
+[*]The cursor shows the selected skill. The target lemming has a glow, and a
+skill assignment shows a short pulse.
+[*]The adaptive DJ covers the soundtracks of all ports, with modern mixing
+and seasonal music.
+[*]A run that cannot succeed plays a sad mood.
+[*]Gameplay has no hover help pop-ups.
+[*]The minimum macOS version is 12.3.
+[/list]
+
+[size=14pt][b]Install and update[/b][/size]
+
+For a new installation, expand the ZIP, move Ultimate Lemmings.app to
+Applications, then open it. The signed update feed also serves this public
+test build through [b]Ultimate Lemmings → Check for Updates…[/b].
+
+Universal app for Intel and Apple silicon, macOS 12.3 or later. The public
+app and all bundled Sparkle components are Developer ID signed and Apple
+notarised.
+
+Saved runs from earlier builds resume as before.
+
+[size=14pt][b]Known limits[/b][/size]
+
+[list]
+[*]Lemmings 2, Lemmings 3 and NeoLemmix remain previews.
+[*]The Lemmings 2 artwork toggle does not restore pixel-identical rendering
+after a round trip.
+[*]A controller retry, rewind and step button sequence has a known routing
+issue.
+[*]Chip recordings repeat the full file, with its intro and fade. They do not
+loop seamlessly.
+[*]With the Mac sound set, the "yippee" and "pop" events have no sound.
+[*]Physical Intel, minimum-macOS, physical-controller and complete VoiceOver
+journeys remain unverified. Rosetta checks do not replace Intel hardware tests.
+[*]Sustained 10× performance, thermal behaviour and a complete audio listening
+review remain open tester checks.
+[*]The public build uses local records. Game Center requires the separate
+development-signed build for registered Macs.
+[*]The iPhone and iPad app is not part of this release.
+[/list]
+
+[size=14pt][b]Report a problem[/b][/size]
+
+[url=https://github.com/ErikVeland/Lemmings/issues/new]Open a GitHub issue[/url] with
+build 50, your Mac model, macOS version, game and level, input device, settings,
+and steps to reproduce. Include a screenshot or replay when useful. Do not
+attach private saved runs or device identifiers unless they are needed.
+
+See the [url=https://github.com/ErikVeland/Lemmings/blob/codex/1.5/Documentation/BetaTesting.md]tester guide[/url] and
+[url=https://github.com/ErikVeland/Lemmings/blob/codex/1.5/Documentation/ReleaseReadiness/1.5PublicRelease.md]release evidence[/url] for the validation scope.
