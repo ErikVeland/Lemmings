@@ -13,10 +13,9 @@ before distributing a build.
 
 ## Download
 
-[Download Ultimate Lemmings 1.2](https://github.com/ErikVeland/Lemmings/releases/latest)
-for Intel and Apple silicon Macs running macOS 12.3 or later. The public app and
-its bundled Sparkle components are Developer ID signed and notarised.
-See the [release notes](Documentation/ReleaseNotes-1.2-build40.md) for known limits.
+The 1.5 public release candidate targets Intel and Apple silicon Macs running
+macOS 12.3 or later. Publish the signed archive only after the release gates in
+the [1.5 release notes](Documentation/ReleaseNotes-1.5-build45.md) pass.
 
 ## Start here
 
@@ -31,6 +30,7 @@ See the [release notes](Documentation/ReleaseNotes-1.2-build40.md) for known lim
 - [Level browser](Documentation/LevelBrowser.md) — CoverFlow controls, content boundaries and current evidence.
 - [Beta testing](Documentation/BetaTesting.md) — local package and validation procedure.
 - [Release evidence](Documentation/ReleaseReadiness/) — current gate records and manifests.
+- [1.5 public release readiness](Documentation/ReleaseReadiness/1.5PublicRelease.md) — current candidate gates and handoff conditions.
 - [1.2 handoff](Documentation/ReleaseReadiness/1.2DataIndependentHandoff.md) — data-independent release work and Mac checks.
 - [1.3 mobile handoff](Documentation/ReleaseReadiness/1.3MobileHandoff.md) — iOS source evidence and remaining device checks.
 - [Automatic updates](#automatic-updates) — Sparkle feed and release requirements.
@@ -38,7 +38,7 @@ See the [release notes](Documentation/ReleaseNotes-1.2-build40.md) for known lim
 
 The iPhone and iPad 1.3 source and Simulator gates pass. Physical-device,
 VoiceOver, thermal, signing and distribution evidence remain open. The macOS
-product remains version 1.2. Active source work is now the 1.5 NeoLemmix
+product candidate is version 1.5. Active NeoLemmix work remains a separate
 compatibility lane. Classic content is the completed reference engine.
 Lemmings 2 and Lemmings 3 are labelled Preview. The bundled corpus contains
 6,020 Classic-format fan levels in 535 packs; this is not a claim of NeoLemmix
@@ -168,18 +168,18 @@ The Monterey worktree must contain the release commit. Set
 `DOWNLOADS_DIR` to use another output directory. Use `--dry-run` to exercise
 the gates without building or contacting Apple services.
 
-Run the data-independent 1.2 release checks before using the notarisation
+Run the data-independent 1.5 release checks before using the notarisation
 script:
 
 ```sh
-zsh Scripts/check-1.2-release-inputs.sh --allow-empty-appcast
+zsh Scripts/check-release-inputs.sh --allow-empty-appcast
 ```
 
 The release script runs the same check after it generates a signed appcast.
 
 ### Automatic updates
 
-The 1.2 app uses Sparkle 2.7.3. It checks the signed appcast once per day and
+The 1.5 app uses Sparkle 2.7.3. It checks the signed appcast once per day and
 downloads and installs signed updates in the background. The appcast is
 [`appcast.xml`](appcast.xml), and the app embeds its public Ed25519 key.
 

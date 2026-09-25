@@ -359,7 +359,7 @@ download_url_prefix="${DOWNLOAD_URL_PREFIX:-https://github.com/ErikVeland/Lemmin
 [[ "$download_url_prefix" == https://* ]] || fail "DOWNLOAD_URL_PREFIX must use HTTPS."
 DOWNLOAD_URL_PREFIX="$download_url_prefix" APPCAST_PATH="$project_dir/appcast.xml" \
   UPDATES_DIR="$updates_dir" zsh "$project_dir/Scripts/generate-appcast.sh" "$updates_dir"
-zsh "$project_dir/Scripts/check-1.2-release-inputs.sh"
+zsh "$project_dir/Scripts/check-release-inputs.sh"
 
 monterey_dir="$run_dir/monterey"
 monterey_app="$monterey_dir/Ultimate Lemmings.app"

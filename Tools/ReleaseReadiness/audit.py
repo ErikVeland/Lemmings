@@ -90,7 +90,8 @@ def main():
     base = args.out.resolve()
     base.mkdir(parents=True, exist_ok=False)
     logs, library, frozen = base / "logs", base / "library", base / "source"
-    for path in [logs, library / "modules", frozen]:
+    module_cache = base / "module-cache"
+    for path in [logs, library / "modules", frozen, module_cache]:
         path.mkdir(parents=True, exist_ok=True)
     before = manifest(input_paths(app))
     (base / "inputs.json").write_text(json.dumps(before, indent=2) + "\n")
@@ -100,8 +101,13 @@ def main():
     compiler_target = f"{platform.machine()}-apple-macos12.3"
 
     def run(name, commands, env=None):
-        env = dict(env or os.environ, LEMMINGS_TEST_APP=str(app),
-                   CAMPAIGN_TEST_RESOURCES=str(app / "Contents/Resources"))
+        env = dict(env or os.environ)
+        env.update(
+            LEMMINGS_TEST_APP=str(app),
+            CAMPAIGN_TEST_RESOURCES=str(app / "Contents/Resources"),
+            CLANG_MODULE_CACHE_PATH=str(module_cache),
+            SWIFT_MODULE_CACHE_PATH=str(module_cache),
+        )
         started = time.monotonic()
         code = 0
         with (logs / (name + ".log")).open("w") as output:
@@ -121,10 +127,12 @@ def main():
         return result
 
     def compile_command(source, output, extra=()):
-        return ["swiftc", "-O", "-swift-version", "6", "-target", compiler_target, *extra, "-I", library / "modules", "-L", library,
+        return ["swiftc", "-O", "-swift-version", "6", "-target", compiler_target,
+                "-module-cache-path", module_cache, *extra, "-I", library / "modules", "-L", library,
                 "-lNxlvKit", "-Xlinker", "-rpath", "-Xlinker", library, "-o", output, source]
 
-    checks.append(run("shared-library", [["swiftc", "-O", "-swift-version", "6", "-target", compiler_target, "-parse-as-library",
+    checks.append(run("shared-library", [["swiftc", "-O", "-swift-version", "6", "-target", compiler_target,
+        "-module-cache-path", module_cache, "-parse-as-library",
         "-emit-module", "-emit-library", "-module-name", "NxlvKit", "-emit-module-path",
         library / "modules/NxlvKit.swiftmodule", "-Xlinker", "-install_name", "-Xlinker",
         "@rpath/libNxlvKit.dylib", "-o", library / "libNxlvKit.dylib", *sorted(frozen.glob("*.swift"))]]))

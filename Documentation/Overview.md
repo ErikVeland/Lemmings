@@ -108,9 +108,10 @@ what lets the release notes above be trusted rather than taken on faith.
 ## Where the project stands right now
 
 The official Classic campaign closed at 352/352 on 22 September 2026. The 1.0
-RC1 baseline was build 36. The macOS baseline now carries version 1.2 build 39
-with the shared browser, playlists, background fan-pack checks and automatic
-application updates. The 1.3 development branch adds a separate iPhone and iPad
+RC1 baseline was build 36. The current macOS 1.5 candidate carries the shared
+browser, playlists, background fan-pack checks, automatic application updates,
+startup fixes and the shared gameplay cursor policy. The 1.3 development branch
+adds a separate iPhone and iPad
 target at version 1.3 build 1. Its source, iPhone Simulator and iPad Simulator
 gates pass. It is not a mobile release claim. Physical-device, VoiceOver,
 thermal, signing and distribution evidence remain open. The active 1.5 source
@@ -138,8 +139,10 @@ import/render failures from known unsupported mechanics. Fencer, Laserer,
 interactive gadgets, zombie infection, Superlemming and native reference-replay
 comparison remain open. See the [1.5 roadmap](1.5Roadmap.md).
 
-**macOS 1.2 baseline.** The source-level content discovery and update work is
-implemented. The missing sequel routes remain a separate data-dependent gate.
+**macOS 1.5 public scope.** The completed Classic campaign is the release
+baseline. Lemmings 2 and Lemmings 3 remain Preview. NeoLemmix remains Beta or
+Preview until its real-pack and reference-replay gates pass. Crash, startup,
+input and cursor fixes are recorded in the current 1.5 release notes.
 See the [QoL roadmap](../docs/superpowers/plans/2026-09-23-qol-roadmap.md).
 
 **1.2 content discovery and sequel completion.** The shared CoverFlow-style

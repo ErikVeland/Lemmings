@@ -2,7 +2,8 @@
 set -euo pipefail
 project_dir="${0:A:h:h}"
 build_dir="$project_dir/.build/controller-qol-unit"
-mkdir -p "$build_dir"
+module_cache="$build_dir/ModuleCache"
+mkdir -p "$module_cache"
 cd "$project_dir"
 # Run these pure input checks even when the installed SwiftPM manifest runtime is unavailable.
 python3 - "$build_dir/main.swift" <<'PY'
@@ -17,6 +18,6 @@ source += '\n'.join(f'suite.{method}()' for method in methods)
 source += '\nprint("PASS controller bindings, menu chords, RT tap/hold/rapid exit and interrupted input")\n'
 Path(sys.argv[1]).write_text(source)
 PY
-swiftc -swift-version 6 Sources/NxlvKit/GameplaySpeed.swift Sources/NxlvKit/ControllerBindings.swift \
+swiftc -swift-version 6 -module-cache-path "$module_cache" Sources/NxlvKit/GameplaySpeed.swift Sources/NxlvKit/ControllerBindings.swift \
   "$build_dir/main.swift" -o "$build_dir/ControllerTests"
 "$build_dir/ControllerTests"

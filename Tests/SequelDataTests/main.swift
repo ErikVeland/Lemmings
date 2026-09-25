@@ -379,7 +379,11 @@ do {
                 selected: 4, saved: 0, remaining: 0, seconds: 300, label: "BUILDER", palette: pal,
                 highlightedControls: [.pause, .nuke, .fastForward])
             for (x, y) in [(128,9),(256,0),(288,0),(288,20)] {
-                let region = (y..<min(40,y+20)).flatMap { row in Array(pausedPanel.pixels[(row*320+x)..<(row*320+x+32)]) }
+                var region: [UInt8] = []
+                for row in y..<min(40, y + 20) {
+                    let start = row * 320 + x
+                    region.append(contentsOf: pausedPanel.pixels[start..<(start + 32)])
+                }
                 try require(region.contains(145), "Paused/armed control hid skill selection")
             }
             do {

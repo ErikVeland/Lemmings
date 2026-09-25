@@ -1,6 +1,6 @@
 # Automatic updates
 
-Ultimate Lemmings 1.2 uses Sparkle 2.7.3 for macOS updates.
+Ultimate Lemmings 1.5 uses Sparkle 2.7.3 for macOS updates.
 
 ## Runtime contract
 
@@ -27,19 +27,19 @@ The update ZIP must contain only the notarised app. The Game Center archive is
 not an update candidate.
 
 Publishing requires an authenticated GitHub CLI and a clean worktree. The
-default tag for version 1.2 is `v1.2.0`. Set `RELEASE_TAG` when another tag is
+default tag for version 1.5 is `v1.5.0`. Set `RELEASE_TAG` when another tag is
 required.
 
 ## Validation evidence
 
-[Build 40 verification](ReleaseReadiness/1.2Build40Distribution.md) records the public
-Sparkle download, installation and relaunch from build 39.
+[Build 41 verification](ReleaseReadiness/1.2Build41Distribution.md) records the last
+public Sparkle download, installation and relaunch. Repeat this check for 1.5.
 
 Run the data-independent checks before a release. The empty-feed option is
 only for development before the first public update exists.
 
 ```sh
-zsh Scripts/check-1.2-release-inputs.sh --allow-empty-appcast
+zsh Scripts/check-release-inputs.sh --allow-empty-appcast
 ```
 
 The release script runs the strict form after it generates the signed feed.
