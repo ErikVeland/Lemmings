@@ -87,3 +87,8 @@ for special in ["beasti", "beastii", "awesome", "menace"] {
 let paintball = catalogue.tracks.filter { $0.game == "paintball" }
 require(paintball.count == 5 && paintball.allSatisfy { $0.role == "bonus" }, "Paintball remixes were assigned to Classic")
 require(catalogue.track(id: "classic.march-of-the-greentops")?.variants.count == 1, "Unrecognised remixes merged into March of the Greentops")
+
+require(catalogue.sourceOnlyPaths.contains("Lemmings (MP3)/13 As Long As You Try Your Best.mp3"),
+    "Broken MP3 remained a playable variant")
+require(catalogue.entry(path: "Lemmings (MP3)/13 As Long As You Try Your Best.m4a")?.track.id == "classic.tim6",
+    "Decoder-safe copy lost its composition identity")

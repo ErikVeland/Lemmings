@@ -74,12 +74,20 @@ def main():
     parser.add_argument('--renderer', type=Path, required=True)
     parser.add_argument('--jobs', type=int, default=4)
     parser.add_argument('--verify-existing', action='store_true', help='Adopt existing files only when their decoded samples match a fresh render.')
+    parser.add_argument('--repair-mp3', action='append', default=[], metavar='RELATIVE_PATH', help='Create an ALAC copy of a specified MP3 while preserving the source.')
     args = parser.parse_args()
     root = args.root.resolve()
     sources = sorted(p for p in root.rglob('*') if not p.is_symlink() and 'By Track' not in p.parts and p.suffix.lower() in {'.vgz', '.vgm', '.ogg'})
     report_path = root / 'conversion-report.json'
     previous = json.loads(report_path.read_text()) if report_path.exists() else {'tracks': []}
     known = {row['source']: row for row in previous['tracks']}
+    repairs = set(args.repair_mp3) | {row['source'] for row in previous['tracks'] if Path(row['source']).suffix.lower()=='.mp3'}
+    for relative in sorted(repairs):
+        source = (root/relative).resolve()
+        if not source.is_relative_to(root) or source.suffix.lower() != '.mp3' or not source.is_file():
+            raise ValueError(f'Invalid MP3 repair source: {relative}')
+        sources.append(source)
+    sources = sorted(set(sources))
     pending = []
     rows = []
     for source in sources:

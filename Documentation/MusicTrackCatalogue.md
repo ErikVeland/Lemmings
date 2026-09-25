@@ -750,7 +750,7 @@ Role: level
 | --- | --- | --- | --- |
 | archimedes | lossy-source | original | Archimedes/09 - Dance of the Reed Flutes (Archimedes).mp3 |
 | amiga | composer-recording | original | CoLD SToRAGE - Lemmings - the original AMIGA game audio/CoLD SToRAGE - Lemmings - the original AMIGA game audio - 08 Lemmings - Dance of the Reed Flutes.wav |
-| snes | lossy-source | original | Lemmings (MP3)/13 As Long As You Try Your Best.mp3 |
+| snes | lossy-source | original | Lemmings (MP3)/13 As Long As You Try Your Best.m4a |
 | master-system | chip-render | original | Lemmings-SMS/Lemmings - 10 - Dance Of The Reed Flutes.m4a |
 | arcade | chip-render | original | Lemmings_(Arcade)/08 Dance of the Toy Flutes (The Nutcracker Act II No. 12 V).m4a |
 | lynx | chip-render | original | Lemmings_(Atari_Lynx)/14 Dance of the Reed-Flutes.m4a |

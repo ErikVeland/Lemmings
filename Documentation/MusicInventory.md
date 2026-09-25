@@ -2,7 +2,7 @@
 
 ## Current source library — 25 September 2026
 
-The downloaded library now contains **495 directly playable files**, including 304 chip renders, 32 converted MandelSoft remixes, the existing modules and recordings, two other remix recordings, and 50 newly added Archimedes/SNES MP3 files. The 22 Master System chip logs now have Apple Lossless M4A counterparts. Converted files are versions, not new compositions.
+The catalogue now offers **495 playable versions**, including 304 chip renders, 32 converted MandelSoft remixes, the existing modules and recordings, two other remix recordings, and 50 newly added Archimedes/SNES MP3 files. The 22 Master System chip logs now have Apple Lossless M4A counterparts. Converted files are versions, not new compositions. One SNES MP3 has a verified ALAC replacement after a Core Audio end-of-file error; the original remains archived and excluded from playback.
 
 - [Downloaded-source audit](MusicSourceAudit.md): per-folder counts, package versions, credits, source quirks, result cues and remaining gaps.
 - [Track catalogue](MusicTrackCatalogue.md): composition/role groupings and available renditions.

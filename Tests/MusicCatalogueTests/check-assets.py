@@ -9,6 +9,8 @@ catalogue=json.loads((ROOT/'Resources/Music/catalogue.json').read_text())
 variants=[v for t in catalogue['tracks'] for v in t['variants']]
 known={v['path'] for v in variants}
 actual={p.relative_to(MUSIC).as_posix() for p in MUSIC.rglob('*') if p.is_file() and not p.is_symlink() and p.suffix.lower() in {'.mod','.m4a','.wav','.mp3'}}
+source_only={v['sourcePath'] for v in variants}-known
+actual-=source_only
 assert known==actual, (known-actual,actual-known)
 links=list((MUSIC/'By Track').rglob('*'))
 assert all(p.exists() for p in links), 'Broken browsing link'
@@ -52,3 +54,7 @@ paintball = [t for t in catalogue['tracks'] if t['game'] == 'paintball']
 assert len(paintball) == 5 and all(t['role'] == 'bonus' for t in paintball)
 assert all(v['remix'] == 'mandelsoft' for t in paintball for v in t['variants'])
 print('PASS special remixes retain their themes; Paintball tracks remain separate bonus entries')
+
+repair=next(v for v in variants if v['path']=='Lemmings (MP3)/13 As Long As You Try Your Best.m4a')
+assert repair['sourcePath'].endswith('.mp3') and repair['quality']=='lossy-source'
+print('PASS decoder-safe replacement retains its lossy source provenance')

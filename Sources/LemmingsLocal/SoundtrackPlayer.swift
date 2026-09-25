@@ -31,10 +31,13 @@ import NxlvKit
     guard let walker = manager.enumerator(at: root,
       includingPropertiesForKeys: [.isRegularFileKey], options: [.skipsHiddenFiles]) else { return [:] }
     var found: [String: [URL]] = [:]
+    let sourceOnly = SoundtrackCatalogue.load(at: root)?.sourceOnlyPaths ?? []
     for case let url as URL in walker {
       if url.lastPathComponent == "By Track" { walker.skipDescendants(); continue }
       guard audioExtensions.contains(url.pathExtension.lowercased()),
             (try? url.resourceValues(forKeys: [.isRegularFileKey]))?.isRegularFile == true else { continue }
+      let relative = String(url.path.dropFirst(root.path.count + 1))
+      guard !sourceOnly.contains(relative) else { continue }
       let folder = url.deletingLastPathComponent().path.replacingOccurrences(of: root.path + "/", with: "")
       found[folder, default: []].append(url)
     }
@@ -84,6 +87,7 @@ import NxlvKit
       guard let walker = FileManager.default.enumerator(at: directory,
         includingPropertiesForKeys: [.isRegularFileKey], options: [.skipsHiddenFiles]) else { continue }
       let catalogue = SoundtrackCatalogue.load(at: directory)
+      let sourceOnly = catalogue?.sourceOnlyPaths ?? []
       for case let url as URL in walker {
         if url.lastPathComponent == "By Track" { walker.skipDescendants(); continue }
         guard audioExtensions.union(["mod"]).contains(url.pathExtension.lowercased()),
@@ -91,6 +95,7 @@ import NxlvKit
         let relative = url.deletingLastPathComponent().path.replacingOccurrences(of: directory.path + "/", with: "")
         let classic = relative == "lemmings_music_mod" || relative.hasPrefix("CoLD SToRAGE - Lemmings - the original AMIGA")
         let trackPath = relative + "/" + url.lastPathComponent
+        guard !sourceOnly.contains(trackPath) else { continue }
         let entry = catalogue?.entry(path: trackPath)
         let isHoliday = entry.map { $0.track.game == "holiday" } ?? isSeasonal(trackPath)
         guard isHoliday == seasonal else { continue }

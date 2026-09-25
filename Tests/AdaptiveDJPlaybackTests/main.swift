@@ -61,6 +61,9 @@ private typealias Telemetry = AdaptiveDJEngine.Telemetry
   }
   try require(soundtracks.keys.contains { $0.contains("lemmings_2") }, "L2 modules missing from DJ")
   try require(soundtracks.keys.contains { $0.contains("lemmings_3") }, "L3 modules missing from DJ")
+  let unsafeMP3 = root.appendingPathComponent("Lemmings (MP3)/13 As Long As You Try Your Best.mp3")
+  try require(!soundtracks.values.flatMap { $0 }.contains(unsafeMP3), "DJ offered a replaced source MP3")
+  try require(!SoundtrackPlayer.soundtracks(at: root).values.flatMap { $0 }.contains(unsafeMP3), "Album offered a replaced source MP3")
   let restricted = SoundtrackPlayer.djSoundtracks(at: root, includeOtherSoundtracks: false)
   try require(!restricted.keys.contains { $0.contains("lemmings_2") || $0.contains("lemmings_3") }, "DJ opt-out did not remove sequels")
   let tracks = soundtracks.values.reduce(0) { $0 + $1.count }

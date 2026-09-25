@@ -38,6 +38,12 @@ public struct SoundtrackCatalogue: Codable, Sendable {
         return try? Self(data: data)
     }
 
+    /// Preserved originals with a verified replacement must not enter playback.
+    public var sourceOnlyPaths: Set<String> {
+        let variants = tracks.flatMap(\.variants)
+        return Set(variants.map(\.sourcePath)).subtracting(variants.map(\.path))
+    }
+
     public func track(id: String) -> Track? { tracks.first { $0.id == id } }
 
     public func entry(path: String) -> (track: Track, variant: Variant)? {

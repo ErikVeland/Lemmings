@@ -4,9 +4,9 @@ Snapshot: 25 September 2026. Counts exclude the `By Track` symlink view. Package
 
 ## Files and provenance
 
-The folder contains **304 VGZ, 22 files named VGM, 32 OGG, 73 MOD, 12 WAV, 51 MP3 and 359 M4A files**. Converted counterparts are not additional compositions. There are **495 directly playable files**. The current [track catalogue](MusicTrackCatalogue.md) now groups all 495 files into 210 identities. Identity counts depend on classification and are not a verified count of unique compositions.
+The folder contains **304 VGZ, 22 files named VGM, 32 OGG, 73 MOD, 12 WAV, 51 MP3 and 360 M4A files**. Converted counterparts are not additional compositions. There are **495 directly playable files**. The current [track catalogue](MusicTrackCatalogue.md) now groups all 495 files into 210 identities. Identity counts depend on classification and are not a verified count of unique compositions.
 
-The conversion report records 358 conversions and 0 failures. See [conversion details](MusicConversion.md) for decoder validation and the finite-loop limitation.
+The conversion report records 359 conversions and 0 failures. See [conversion details](MusicConversion.md) for decoder validation and the finite-loop limitation.
 
 | Source folder | Original formats | M4A counterparts/source | Package provenance |
 | --- | --- | ---: | --- |
@@ -90,3 +90,11 @@ Nine more OGG sources are installed: `orig_special_music_mandelsoft` contains Be
 The four named remixes join their matching Classic special identities and remain outside ordinary level music. The five Paintball remixes have separate Paintball bonus identities; their original cue names and roles are unverified. They are packaged and indexed, not substituted for Classic or sequel level themes.
 
 All nine passed conversion, complete Apple audio decoding and catalogue/packaging checks. The current catalogue has 495 versions and 210 identities; identity totals also reflect the recent SNES/Archimedes title reconciliation, so they cannot be derived by adding new files to the earlier identity count.
+
+## Runtime reconciliation and decoder validation
+
+The catalogue now offers 495 playable versions across 210 identities. There are 496 files with supported audio extensions because one SNES MP3 is retained only as a source archive. Its M4A replacement is the playable version. The conversion report contains 359 verified outputs, including that repair, with zero failures.
+
+All 81 additions have passed full Core Audio decoding through their selected playback files. The original SNES `13 As Long As You Try Your Best.mp3` raised Core Audio error -39 at the end of decoding. Its ALAC copy passed. The original file remains untouched and excluded from library selection. MP3 provenance remains lossy.
+
+The SNES mappings use explicit collection-specific level titles. Mariarti and the four named special remixes retain special roles; Paintball retains five separate bonus identities. Generic SNES/SMS win/loss cues play once and cannot select endings, credits, intermissions or voice clips. See [the journey rules](SoundtrackJourney.md).

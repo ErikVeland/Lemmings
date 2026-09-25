@@ -70,7 +70,7 @@ def classic_key(title):
     return 'tim'+m[1] if m else None
 
 
-def classify(path, music):
+def classify(path, music, source_override=None):
     relative = path.relative_to(music).as_posix()
     folder = relative.split('/')[0]
     title = re.sub(r'^\d+\s*[-. ]\s*', '', path.stem)
@@ -93,7 +93,8 @@ def classify(path, music):
     elif folder == 'lemmings_demo_music_mod' or (tags and 'Demo' in tags[2]): game = 'demo'; role = 'demo'
 
     if folder in {'Archimedes', 'Lemmings (MP3)'}:
-        metadata = json.loads(subprocess.check_output(['ffprobe','-v','error','-show_entries','format_tags','-of','json',str(path)]))['format'].get('tags',{})
+        quality = 'lossy-source'
+        metadata = json.loads(subprocess.check_output(['ffprobe','-v','error','-show_entries','format_tags','-of','json',str(music/source_override if source_override else path)]))['format'].get('tags',{})
         credits = metadata.get('artist','')
         source_notes = json.dumps(metadata,ensure_ascii=False,sort_keys=True)
         if folder == 'Archimedes':
@@ -199,7 +200,7 @@ def classify(path, music):
     if port == 'unknown':
         confidence = 'unverified'
         evidence += ' Platform is unverified; excluded from automatic selection.'
-    archive = source if source.exists() else path.with_suffix('.ogg')
+    archive = music/source_override if source_override else source if source.exists() else path.with_suffix('.ogg')
     variant = dict(id=slug(relative), path=relative, port=port, quality=quality, remix=remix,
         confidence=confidence, evidence=evidence, sourceNotes=source_notes, credits=credits or {'mandelsoft':'MandelSoft','cold-storage':'CoLD SToRAGE','amigamer':'AmiGamer'}.get(remix, 'CoLD SToRAGE' if folder.startswith('CoLD') else ''), sourcePath=archive.relative_to(music).as_posix() if archive.exists() else relative)
     return dict(id=game+'.'+key, game=game, title=canonical_title, role=role), variant
@@ -207,9 +208,12 @@ def classify(path, music):
 
 def build(music, destination, links):
     tracks={}
-    files=sorted(p for p in music.rglob('*') if p.is_file() and not p.is_symlink() and 'By Track' not in p.parts and p.suffix.lower() in PLAYABLE)
+    report_path=music/'conversion-report.json'
+    converted=json.loads(report_path.read_text())['tracks'] if report_path.exists() else []
+    repairs={row['output']:row['source'] for row in converted if Path(row['source']).suffix.lower()=='.mp3' and (music/row['output']).is_file()}
+    files=sorted(p for p in music.rglob('*') if p.is_file() and not p.is_symlink() and 'By Track' not in p.parts and p.suffix.lower() in PLAYABLE and p.relative_to(music).as_posix() not in repairs.values())
     for path in files:
-        track, variant=classify(path,music)
+        track, variant=classify(path,music,repairs.get(path.relative_to(music).as_posix()))
         entry=tracks.setdefault(track['id'],dict(**track,variants=[]))
         if entry['role']!=track['role']: raise ValueError(f'Conflicting roles: {track}')
         entry['variants'].append(variant)
@@ -221,6 +225,7 @@ def build(music, destination, links):
         view=music/'By Track'
         # Rebuild only generated links to known music assets. Never delete audio.
         known = {str(p.resolve()) for p in files}
+        known.update(str((music/p).resolve()) for p in repairs.values())
         known.update(str(p.with_suffix(ext).resolve()) for p in files for ext in ['.vgz','.vgm','.ogg'])
         if view.exists():
             for link in view.rglob('*'):

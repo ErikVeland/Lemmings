@@ -1,7 +1,7 @@
 # Audio coverage
 
 The level owns its assigned track. The Adaptive DJ keeps it for active play and
-only uses the shared library for completed result cues. It does not rotate on
+uses the catalogue for deterministic versions of that tune and completed result cues. It does not rotate on
 a timer or react to rescue quota, danger, release rate or nuke.
 
 See [Music inventory](MusicInventory.md) for every included track, platform
@@ -43,8 +43,8 @@ module folders are also included when their corresponding game data is built.
 
 ## Formats still missing a native playback path
 
-The repository does not currently contain these soundtrack files or a native
-decoder for their raw source formats:
+The app has no native playback path for the raw formats below. Several ports
+now have converted recordings in the local library:
 
 | Port | Raw format | Current position | Practical input now |
 | --- | --- | --- | --- |
@@ -55,9 +55,11 @@ decoder for their raw source formats:
 | DOS | `ADLIB.DAT` / OPL2 sequence | OPL2 synthesis exists, but the Lemmings sequence driver is not decoded | Supply a rendered WAV, AIFF, M4A or FLAC |
 | Macintosh | MIDI and Sound Manager resources | Resources can be audited, but there is no MIDI or Sound Manager music player | Supply a rendered WAV, AIFF, M4A or FLAC |
 
-This checkout currently has no supplied NES, SNES, Master System,
-Genesis/Mega Drive, DOS or Macintosh soundtrack renders. It has the inventory
-and audit scaffolding, but that is not the same as playable audio.
+This checkout now includes NES, SNES, Master System, Genesis/Mega Drive, DOS
+and Archimedes recordings, among other ports. Macintosh recordings remain
+unavailable. See the current source audit for coverage and provenance. The
+catalogue offers 495 playable versions and preserves special, seasonal and
+port-specific identities. Conversion does not provide native raw-format playback.
 
 Do not add downloaded game rips or user-sequenced arrangements to the
 repository unless their redistribution rights are clear. If you provide

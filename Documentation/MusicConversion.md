@@ -38,7 +38,7 @@ Generated audio and the report remain in the ignored Music asset folder. The ful
 
 The 22 Master System files use gzip payloads despite their `.vgm` extension. Conversion now detects gzip by its signature and preserves the originals. All 22 were rendered to Apple Lossless M4A; the report now contains 349 conversions with zero failures. The 50 Archimedes/SNES MP3 files retain their existing supported format and passed full FFmpeg decoding.
 
-The catalogue now contains 486 playable versions across 226 identities. All 72 additions have explicit ports and source-quality labels. Unmatched melodies remain separate identities instead of being assigned by track number. Matching named compositions participate in the existing soundtrack journey. Result cues and endings remain separate from ordinary level music. Full-game packaging includes the playable files and excludes original VGM/VGZ logs.
+At this checkpoint, the catalogue contained 486 playable versions. Later composition reconciliation and remix additions are recorded below. All 72 additions have explicit ports and source-quality labels. Unmatched melodies remain separate identities instead of being assigned by track number. Matching named compositions participate in the existing soundtrack journey. Result cues and endings remain separate from ordinary level music. Full-game packaging includes the playable files and excludes original VGM/VGZ logs.
 
 Apple AVAudioFile also read all 72 new recordings to their audio end. One SNES MP3 reported EOF 86 samples (about 2 ms) before its advertised length; full FFmpeg decoding passed, and the Apple check treats this small MP3 duration discrepancy as end-of-stream. The remaining files decoded without that discrepancy. This does not establish original-hardware fidelity.
 
@@ -47,3 +47,18 @@ Catalogue coverage and packaging checks passed for all 486 versions, including t
 ## Additional remix conversion
 
 Converted four MandelSoft Classic special remixes and five Paintball remixes from OGG to Apple Lossless M4A. All nine passed full signal/duration checks and Apple AVAudioFile decoding. The report now records 358 verified conversions with zero failures. The catalogue and packaging tests pass for 495 playable versions. No new release build was cut.
+
+## Decoder-safe SNES recording
+
+Full Core Audio decoding found error -39 at the end of `Lemmings (MP3)/13 As Long As You Try Your Best.mp3`. The original is preserved. Its Apple Lossless copy passed complete decoding and replaces the MP3 in both library scanners. The source remains lossy; this is a decoder compatibility repair.
+
+```sh
+python3 Scripts/convert-music.py Sources/Music \
+  --renderer .build/music-tools/libvgm/build/bin/vgm2wav \
+  --repair-mp3 'Lemmings (MP3)/13 As Long As You Try Your Best.mp3'
+python3 Tools/MusicCatalogue/build.py --links
+```
+
+The report now has 359 verified conversions with zero failures. Previously verified MP3 repairs are included on repeat runs. The catalogue uses the report to preserve their original paths without offering both the source and its replacement as separate arrangements.
+
+When a conversion already exists without a report entry, `--verify-existing` compares its complete decoded samples with a fresh render. Only an identical result is adopted. It never replaces existing audio.
