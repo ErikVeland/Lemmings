@@ -22,6 +22,8 @@ public test and 1.2 releases. Builds 42 to 46 were local test builds.
   tunes.
 - Level music stays the same during play. The DJ mixes to a new track only
   when the game state changes, for example at the result screen.
+- The SNES recording of "As Long As You Try Your Best" now plays to its end.
+  Before, the macOS decoder stopped with an error at the end of the file.
 - The first frame shows before level music starts.
 
 ### Play and controls
