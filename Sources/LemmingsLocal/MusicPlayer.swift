@@ -11,6 +11,7 @@ import NxlvKit
 final class ModuleMusicPlayer: @unchecked Sendable {
   private let engine = AVAudioEngine()
   private let reverb = AVAudioUnitReverb()
+  private let mixEQ = AVAudioUnitEQ(numberOfBands: 1)
   private let spatialMixer = AVAudioMixerNode()
   private var sourceNode: AVAudioSourceNode?
   private let lock = NSLock()
@@ -70,6 +71,10 @@ final class ModuleMusicPlayer: @unchecked Sendable {
     }
 
     engine.attach(node)
+    engine.attach(mixEQ)
+    mixEQ.bands[0].filterType = .lowShelf
+    mixEQ.bands[0].frequency = 180
+    mixEQ.bands[0].bypass = false
     engine.attach(reverb)
     engine.attach(spatialMixer)
     reverb.loadFactoryPreset(.mediumRoom)
@@ -77,7 +82,8 @@ final class ModuleMusicPlayer: @unchecked Sendable {
     spatialMixer.renderingAlgorithm = .auto
     spatialMixer.sourceMode = .pointSource
     spatialMixer.position = AVAudio3DPoint(x: 0, y: 0, z: -1)
-    engine.connect(node, to: reverb, format: format)
+    engine.connect(node, to: mixEQ, format: format)
+    engine.connect(mixEQ, to: reverb, format: format)
     engine.connect(reverb, to: spatialMixer, format: format)
     engine.connect(spatialMixer, to: engine.mainMixerNode, format: format)
     sourceNode = node
@@ -87,6 +93,7 @@ final class ModuleMusicPlayer: @unchecked Sendable {
       engine.detach(node)
       engine.detach(spatialMixer)
       engine.detach(reverb)
+      engine.detach(mixEQ)
       sourceNode = nil
       throw error
     }
@@ -104,6 +111,7 @@ final class ModuleMusicPlayer: @unchecked Sendable {
     if let sourceNode { engine.detach(sourceNode) }
     engine.detach(spatialMixer)
     engine.detach(reverb)
+    engine.detach(mixEQ)
     sourceNode = nil
     lock.lock()
     outputSuspended = false
@@ -301,10 +309,23 @@ final class ModuleMusicPlayer: @unchecked Sendable {
     lock.unlock()
   }
 
-  /// Slows module playback without changing the game clock or pitch abruptly.
+  /// Tracker beat timing, including tempo commands on the opening row.
+  var beatInfo: (bpm: Double, delay: Double)? {
+    lock.lock(); defer { lock.unlock() }
+    guard let player else { return nil }
+    var clock = player.player
+    if !isRunning {
+      _ = clock.nextSample()
+      return (clock.musicalBPM * tempoScale, 0)
+    }
+    return (clock.musicalBPM * tempoScale, clock.secondsUntilNextBeat / tempoScale)
+  }
+  func setMixBass(_ gain: Float) { mixEQ.bands[0].gain = gain }
+
+  /// Sets module playback rate independently of the game clock.
   func setTempoScale(_ value: Double) {
     lock.lock()
-    tempoScale = min(1, max(0.5, value))
+    tempoScale = min(1.08, max(0.5, value))
     lock.unlock()
   }
 

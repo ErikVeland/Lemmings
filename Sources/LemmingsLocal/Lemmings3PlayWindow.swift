@@ -89,6 +89,7 @@ import NxlvKit
     }
     private let warningSound = SoundEffectPlayer()
     private let music = ModuleMusicPlayer()
+    private let dj = AdaptiveDJPlayer()
     private let failureMood = FailureMoodTransition()
     private var musicGain: Float = 0.8
     private var audioSettings = ClassicSettings()
@@ -225,6 +226,7 @@ import NxlvKit
             guard let self else { return }
             self.canvas.failureMoodAmount = amount
             self.music.setTempoScale(1 - 0.28 * Double(amount))
+            self.dj.setPlaybackRate(1 - 0.28 * Double(amount))
             self.canvas.needsDisplay = true
         }
         try warningSound.loadLemmings3Sounds(root: root)
@@ -495,17 +497,19 @@ import NxlvKit
         canvas.capturePointer(active: false)
         NotificationCenter.default.removeObserver(self, name: SequelArtworkPreference.changed, object: nil)
         timer?.invalidate(); timer = nil; forwardTimer?.invalidate(); forwardTimer = nil
-        runMovie.discard(); warningSound.stop(); music.stop(); save()
+        runMovie.discard(); warningSound.stop(); music.stop(); dj.stop(); save()
         originalMovie?.close(); originalMovie = nil
     }
     func suspendAudioOutput() {
         saveCheckpoint(immediately: true)
         music.suspendOutput()
+        dj.suspendOutput()
         warningSound.suspendOutput()
         warningSound.silence()
     }
-    func resumeAudioOutput() throws { try music.resumeOutput(); try warningSound.resumeOutput() }
+    func resumeAudioOutput() throws { try music.resumeOutput(); dj.resumeOutput(); try warningSound.resumeOutput() }
     func setAudioSettings(_ settings: ClassicSettings, muted: Bool) {
+        let sourceChanged = audioSettings.music != settings.music
         audioSettings = settings
         speedControl.variableEnabled = settings.modernControlsEnabled && settings.variableSpeedEnabled
         warningSound.setMuted(muted || settings.sound == .silent)
@@ -514,10 +518,13 @@ import NxlvKit
         try? warningSound.start()
         musicGain = Float(settings.musicVolume)
         music.setVolume(settings.musicVolume)
+        dj.setVolume(settings.musicVolume)
+        dj.setMuted(muted || settings.music == .silent)
         music.setMuted(muted || settings.music == .silent)
         if music.usesModernPreset != (settings.musicStyle == .modern) {
             music.setEnhancements(settings.musicStyle == .modern ? .modern : .faithful)
         }
+        if sourceChanged { playLevelMusic() }
         canvas.confinePointer = settings.confinePointer
         canvas.reduceMotion = settings.reduceMotion
         canvas.reduceFlashes = settings.reduceFlashes
@@ -537,7 +544,16 @@ import NxlvKit
         }
         let tracks = music.library.filter { $0.lastPathComponent.uppercased().hasPrefix(prefix) }
         guard !tracks.isEmpty else { return }
-        _ = music.play(url: tracks[campaign.index % tracks.count])
+        let url = tracks[campaign.index % tracks.count]
+        if audioSettings.music == .adaptiveDJ {
+            dj.load(soundtracks: ["Lemmings 3": music.library])
+            music.stop()
+            dj.startLevel(url: url, identity: arcadeRunID.uuidString)
+        } else {
+            dj.stop()
+            try? music.start()
+            _ = music.play(url: url)
+        }
     }
     @objc private func toggleArtwork() { SequelArtworkPreference.setEnabled(!SequelArtworkPreference.enabled) }
     @objc private func artworkChanged() {
@@ -636,6 +652,7 @@ import NxlvKit
         guard rewindAudioDucked != active else { return }
         rewindAudioDucked = active
         music.setVolume(Double(active ? musicGain * 0.18 : musicGain))
+        dj.setVolume(Double(active ? musicGain * 0.18 : musicGain))
     }
     private func captureRewindOrigin() {
         guard rewindOriginState == nil else { return }
@@ -1023,7 +1040,7 @@ import NxlvKit
         if countdownWarning.update(seconds: game.remainingSeconds) { warningSound.play(.builderWarning) }
         canvas.flashExplosions(game)
         canvas.game = game
-        runMovie.recorder?.setMusic(url: music.currentURL, gain: music.muted ? 0 : musicGain)
+        runMovie.recorder?.setMusic(url: dj.isPlaying ? dj.currentURL : music.currentURL, gain: music.muted ? 0 : musicGain)
         runMovie.capture(ReplayFrameCapture.image(size: CGSize(width: 1280, height: 640)) {
             ReplayFrameCapture.draw(canvas, in: CGRect(x: 0, y: 0, width: 1280, height: 640))
         })
@@ -1034,6 +1051,7 @@ import NxlvKit
             unreleased: game.reserve, required: 1)
         failureMood.set(active: impossible)
         let justCompleted = game.isComplete && !recorded
+        if justCompleted { dj.updateTelemetry(.init(didWin: game.saved > 0, isComplete: true)) }
         if justCompleted {
             if recordsCampaignProgress {
                 do { try recoveryStore.clear(arcadeRunID) } catch { message = error.localizedDescription }

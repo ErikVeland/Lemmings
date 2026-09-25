@@ -89,6 +89,8 @@ final class MusicFileDeck {
     outputMixer.outputVolume = masterVolume
   }
 
+  func setMixBass(_ gain: Float) { equaliser.bands[0].gain = 1.5 + gain; equaliser.bands[0].bypass = false }
+
   func play() {
     fadeTask?.cancel()
     fadeTask = nil

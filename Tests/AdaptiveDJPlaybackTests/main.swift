@@ -38,11 +38,24 @@ private typealias Telemetry = AdaptiveDJEngine.Telemetry
   try require(player.hasTracks, "the player found no tracks to mix")
 
   player.setVolume(0)  // The test makes no noise.
-  player.start()
+  let assigned = root.appendingPathComponent("lemmings_music_mod/cancan.mod")
+  let module = try ProTrackerModule(data: Data(contentsOf: assigned))
+  var clock = ProTrackerPlayer(module: module)
+  try require(clock.secondsUntilNextBeat == 0, "Fresh module did not start on the beat")
+  _ = clock.nextSample()
+  let before = clock.secondsUntilNextBeat
+  for _ in 0..<2205 { _ = clock.nextSample() }
+  try require(abs((before - clock.secondsUntilNextBeat) - 0.05) < 0.001,
+    "Beat clock did not follow rendered audio time")
+  player.startLevel(url: assigned, identity: "level-one")
+  try require(player.currentURL == assigned, "Assigned opening track ignored")
   try require(player.isPlaying, "the mix did not start")
   let opening = player.currentTrackName
   try require(!opening.isEmpty, "the mix started without naming a track")
   print("  opened on: \(opening)")
+
+  player.startLevel(url: root.appendingPathComponent("lemmings_music_mod/doggie.mod"), identity: "level-one")
+  try require(player.currentURL == assigned, "Repeated level entry replaced the track")
 
   // A quiet level must not move the music.
   let quiet = Telemetry(
@@ -53,14 +66,24 @@ private typealias Telemetry = AdaptiveDJEngine.Telemetry
     player.currentTrackName == opening,
     "a quiet level moved the mix to \(player.currentTrackName)")
 
-  // The rescue target is the cue this design exists for.
+  var danger = quiet
+  danger.isNuking = true; danger.dangerCount = 100; danger.releaseRate = 99
+  for _ in 0..<100 { player.updateTelemetry(danger) }
+  player.load(soundtracks: soundtracks)
+  try require(player.currentTrackName == opening, "Danger or library refresh changed level music")
+
+  // Meeting the quota must not interrupt a level that is still active.
   var rescued = quiet
   rescued.savedCount = 5
   player.updateTelemetry(rescued)
+  try require(player.currentTrackName == opening, "Quota changed active level music")
+  rescued.didWin = true; rescued.isComplete = true
+  player.updateTelemetry(rescued)
+  RunLoop.current.run(until: Date().addingTimeInterval(1.2))
   try require(
     player.currentTrackName != opening,
     "the rescue target did not move the mix off \(opening)")
-  print("  rescue target moved to: \(player.currentTrackName)")
+  print("  completed win moved to: \(player.currentTrackName)")
 
   // And it moves once, not on every frame that follows.
   let afterCue = player.currentTrackName
@@ -98,9 +121,17 @@ private typealias Telemetry = AdaptiveDJEngine.Telemetry
     "resuming did not continue the original crossfade cleanly - a stray start() call left "
       + "\(player.playingDeckCount) deck(s) playing on \"\(player.currentTrackName)\" instead")
 
+  player.suspendOutput()
+  player.startLevel(url: assigned, identity: "retry")
+  try require(player.playingDeckCount == 0, "New level bypassed suspension")
+  player.resumeOutput()
+  RunLoop.current.run(until: Date().addingTimeInterval(4.5))
+  try require(player.currentURL == assigned && player.playingDeckCount == 1, "Retry did not finish on the assigned single deck")
+  player.updateTelemetry(.init(didWin: false, isComplete: true))
+  try require(player.currentURL == assigned, "No failure theme should substitute an arbitrary tune")
   player.stop()
   try require(!player.isPlaying, "the mix kept playing after stop")
-  print("PASS the mix starts, moves on the rescue target, moves only once, and start() cannot disturb a suspended crossfade")
+  print("PASS assigned track, quota stability, completed win, one cue, and suspended crossfade")
 }
 
 let app = NSApplication.shared

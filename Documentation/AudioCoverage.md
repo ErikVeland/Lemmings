@@ -1,10 +1,16 @@
 # Audio coverage
 
-The Adaptive DJ Mix treats every playable file it discovers as one pool. It
-searches the bundled `Music` directory and the optional
+The level owns its assigned track. The Adaptive DJ keeps it for active play and
+only uses the shared library for completed result cues. It does not rotate on
+a timer or react to rescue quota, danger, release rate or nuke.
+
+See [Music inventory](MusicInventory.md) for every included track, platform
+gaps and remix candidates. Module transitions use tracker beat timing and EQ.
+Recordings without a beat grid use an EQ crossfade.
+
+The library searches the bundled `Music` directory and the optional
 `~/Library/Application Support/Ultimate Lemmings/Soundtracks` directory,
-including nested folders. It avoids repeating a track until the current pool
-has been used, and changes tracks with a short crossfade.
+including nested folders.
 
 The DJ supports these decoded file formats:
 
@@ -55,8 +61,8 @@ and audit scaffolding, but that is not the same as playable audio.
 
 Do not add downloaded game rips or user-sequenced arrangements to the
 repository unless their redistribution rights are clear. If you provide
-licensed renders locally, the DJ will include them without further code
-changes. Raw NSF, SPC, RSN, VGM, VGZ, GYM, MIDI and `ADLIB.DAT` files are not
+licensed renders locally, the library can discover them. Assigned level playback also needs a
+matching tune name. Raw NSF, SPC, RSN, VGM, VGZ, GYM, MIDI and `ADLIB.DAT` files are not
 silently added to the pool because the current audio deck cannot decode them.
 
 ## Source and rights notes

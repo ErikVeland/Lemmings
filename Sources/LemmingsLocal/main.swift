@@ -190,6 +190,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private var levelGraphics: ClassicGraphicsSource?
   /// The soundtrack this level plays, on the same basis.
   private var levelMusic: ClassicMusicSource?
+  private var startedMusicIdentity: String?
   private let effects = SoundEffectPlayer()
 
   /// Which fan level screen is showing, if any.
@@ -1115,6 +1116,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     music.stop()
     soundtrack.stop()
     dj.stop()
+    startedMusicIdentity = nil
     effects.stop()
     accumulator = 0
   }
@@ -5711,6 +5713,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   private func finishSessionIfNeeded() {
     guard phase == .playing, let session, session.isComplete else { return }
+    dj.updateTelemetry(djTelemetry(session))
     let recordsPlayerArtifacts = sequencePlayingIdentity == nil
     runMovie.finish()
     do { try recoveryStore.clear(arcadeRunID) } catch { setStatus("Could not clear completed checkpoint: " + error.localizedDescription) }
@@ -5937,6 +5940,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       if music.library.isEmpty {
         setStatus("No .mod files were found in that folder.")
       } else {
+        startedMusicIdentity = nil
         playMusicForCurrentLevel()
       }
     }
@@ -6037,7 +6041,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       dangerCount: session.lemmings.filter { $0.countdown != nil }.count,
       remainingSeconds: session.remainingSeconds,
       isNuking: session.isNuking,
-      didWin: session.saved >= session.required)
+      didWin: session.didWin, isComplete: session.isComplete)
   }
 
   /// The original cycles through its tunes as the campaign advances.
@@ -6047,27 +6051,36 @@ let achievementProgressKey = "ClassicAchievementProgress"
       music.stop()
       soundtrack.stop()
       dj.stop()
+      startedMusicIdentity = nil
       return
     }
-    // The mix runs across every supplied soundtrack and moves on its own.
-    if activeMusic == .adaptiveDJ { reloadDJLibrary() }
-    if activeMusic == .adaptiveDJ, dj.hasTracks {
-      music.stop()
-      soundtrack.stop()
-      dj.resetLevel()
-      dj.start()
-      return
+    let identity = arcadeRunID.uuidString + String(describing: activeMusic)
+    guard startedMusicIdentity != identity else { return }
+    startedMusicIdentity = identity
+    let assignedName = LevelMusicSelection.track(index: currentNxlvURL == nil ? max(0, picker.indexOfSelectedItem) : 0,
+      title: currentNxlvURL == nil ? artworkLevel?.title ?? "" : "", holiday: seasonalMusic, ohNo: musicTitle == .ohNoMoreLemmings)
+    if activeMusic == .adaptiveDJ {
+      reloadDJLibrary()
+      let folder = seasonalMusic ? "holiday_lemmings_music_mod" : musicTitle == .ohNoMoreLemmings ? "oh_no_more_lemmings_music_mod" : "lemmings_music_mod"
+      let name = assignedName
+      if let root = BundledGameResources.music(folder) {
+        let urls = (try? FileManager.default.contentsOfDirectory(at: root, includingPropertiesForKeys: nil)) ?? []
+        if let url = urls.first(where: { $0.deletingPathExtension().lastPathComponent.lowercased() == name.lowercased() }) {
+          music.stop(); soundtrack.stop()
+          dj.startLevel(url: url, identity: arcadeRunID.uuidString)
+          return
+        }
+      }
     }
     dj.stop()
 
-    // A chosen soundtrack replaces the modules for the whole session.
-    if case let .remix(name) = activeMusic, let tracks = soundtrackLibrary[name] {
+    // A recording must match the assigned tune. An incomplete album falls
+    // back to the module instead of substituting an unrelated song.
+    if case let .remix(name) = activeMusic, let tracks = soundtrackLibrary[name],
+       let index = tracks.firstIndex(where: { LevelMusicSelection.matchesRecording($0.deletingPathExtension().lastPathComponent, track: assignedName) }) {
       music.stop()
       soundtrack.load(tracks)
-      let index = settings.shuffleMusic
-        ? Int.random(in: 0..<max(1, tracks.count))
-        : (currentNxlvURL == nil ? max(0, picker.indexOfSelectedItem) : 0)
-      if let title = soundtrack.play(index: index) { setStatus("* \(title)") }
+      if let title = soundtrack.play(index: index) { setStatus("♪ \(title)") }
       return
     }
     soundtrack.stop()
@@ -6085,9 +6098,14 @@ let achievementProgressKey = "ClassicAchievementProgress"
       setStatus("Audio unavailable: \(error.localizedDescription)")
       return
     }
-    let index = currentNxlvURL == nil ? max(0, picker.indexOfSelectedItem) : 0
-    if let title = music.play(index: index) {
+    let bundled = BundledGameResources.music(folder)?.appendingPathComponent(assignedName + ".mod")
+    let url = music.library.first(where: { $0.deletingPathExtension().lastPathComponent.lowercased() == assignedName.lowercased() }) ?? bundled
+    if let url, let title = music.play(url: url) {
       setStatus("♪ \(title)")
+    } else {
+      music.stop()
+      startedMusicIdentity = nil
+      setStatus("Assigned music unavailable: \(assignedName)")
     }
   }
 

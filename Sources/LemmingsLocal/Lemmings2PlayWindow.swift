@@ -534,7 +534,10 @@ import NxlvKit
             "nativeL2Campaign.v1." + (bundled ? "bundled" : root.standardizedFileURL.path))
     }
     private func playMusic(_ name: String) {
-        if audioSettings.music == .adaptiveDJ, dj.hasTracks { music.stop(); dj.start(); return }
+        if audioSettings.music == .adaptiveDJ,
+           let url = music.library.first(where: { $0.deletingPathExtension().lastPathComponent.lowercased() == name.lowercased() }) {
+            music.stop(); dj.startLevel(url: url, identity: arcadeRunID.uuidString + ":" + name.lowercased()); return
+        }
         dj.stop()
         try? music.start()
         if let index = music.library.firstIndex(where: { $0.deletingPathExtension().lastPathComponent.lowercased() == name.lowercased() }) {
@@ -624,13 +627,12 @@ import NxlvKit
     private func restart() {
         saveCheckpoint(immediately: true)
         guard let initial else { return }
-        let wasPlaying = screen == .playing
         game = initial; beginReplay(); dj.resetLevel(); canvas.resetCamera(level: level)
         countdownWarning.reset(seconds: initial.remainingSeconds)
         beforeNuke = nil
         canvas.startCountdown.arm(); paused = true; speedControl.newLevel(); accumulator = 0; nukeGesture.reset(); sounds.silence()
         show(.playing)
-        if !wasPlaying { playTribeMusic() }
+        playTribeMusic()
         refreshGame()
     }
     private func beginReplay() {
@@ -917,6 +919,7 @@ import NxlvKit
     }
     private func finishIfComplete(_ game: Lemmings2Runtime) {
         if game.isComplete {
+            dj.updateTelemetry(.init(didWin: game.didWin, isComplete: true))
             if recordsCampaignProgress {
                 do { try recoveryStore.clear(arcadeRunID) } catch { message = error.localizedDescription }
             }

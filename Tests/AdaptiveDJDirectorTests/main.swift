@@ -10,7 +10,8 @@ for saved in 0..<50 {
         remainingSeconds: 5, isNuking: true, didWin: true)
     require(director.cue(for: telemetry) == nil, "Transition before the actual rescue target")
 }
-let target = AdaptiveDJEngine.Telemetry(savedCount: 50, requiredCount: 50)
+require(director.cue(for: .init(savedCount: 50, requiredCount: 50)) == nil, "Quota interrupted active play")
+let target = AdaptiveDJEngine.Telemetry(savedCount: 50, requiredCount: 50, didWin: true, isComplete: true)
 require(director.cue(for: target) == .init(reason: .won, timing: .atNextPhrase), "Missing target transition")
 for _ in 0..<100 { require(director.cue(for: target) == nil, "Repeated victory transition") }
 director.reset()
@@ -32,4 +33,19 @@ require(old.djIncludesOtherSoundtracks && old.hdEffectsEnabled && old.fullScreen
 var changed = old; changed.djIncludesOtherSoundtracks = false; changed.fullScreenHDRFlashes = false
 let restored = try JSONDecoder().decode(ClassicSettings.self, from: JSONEncoder().encode(changed))
 require(restored == changed, "New options did not persist")
-print("PASS rescue quota only, one transition per level, ten countdown beeps, rewind, untimed levels and settings migration")
+print("PASS completed results only, one transition per level, countdown beeps and settings migration")
+
+director.reset()
+require(director.cue(for: .init(didWin: false, isComplete: true))?.reason == .lost, "Missing failure cue")
+require(LevelMusicSelection.track(index: 0, title: "", holiday: false, ohNo: false) == "cancan", "Opening tune wrong")
+require(LevelMusicSelection.track(index: 1, title: "A BeastII of a level", holiday: false, ohNo: false) == "beastII", "Special tune wrong")
+
+require(!LevelMusicSelection.matchesRecording("01 Awesome", track: "cancan"), "Incomplete album picked unrelated tune")
+require(LevelMusicSelection.matchesRecording("04 Lemmings - Smile if you Love Lemmings", track: "tim2"), "Named recording did not match")
+
+require(LevelMusicSelection.matchesRecording("12 Lemmings - Dance of the Little Swans", track: "tim8"), "Tim8 album mapping wrong")
+require(LevelMusicSelection.matchesRecording("10 Lemmings - Forest Green", track: "tim10"), "Tim10 album mapping wrong")
+let expectedCycle = ["cancan", "lemming1", "tim2", "lemming2", "tim8", "tim3", "tim5", "doggie", "tim6", "lemming3", "tim7", "tim9", "tim1", "tim10", "tim4", "tenlemmings", "mountain"]
+for index in 0..<34 {
+    require(LevelMusicSelection.track(index: index, title: "ordinary", holiday: false, ohNo: false) == expectedCycle[index % 17], "Reference rotation mismatch")
+}
