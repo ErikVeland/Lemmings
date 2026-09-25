@@ -798,6 +798,7 @@ private func testMacArtworkCropStaysPixelAligned() throws {
   for size in SkillCursorIconSize.allCases {
     view.showReticleCount = true
     let name = size.rawValue
+    if size == .two { view.startCountdown.arm() }
     view.skillCursorIconSize = size
     view.reduceMotion = true
     view.needsDisplay = true
@@ -806,6 +807,21 @@ private func testMacArtworkCropStaysPixelAligned() throws {
     try bitmap.representation(using: .png, properties: [:])!.write(
       to: root.appendingPathComponent(".build/selection-" + name + ".png"))
   }
+}
+
+@MainActor private func testFreshLevelCountdown() throws {
+  let countdown = FreshLevelCountdown()
+  countdown.arm()
+  try require(countdown.number == 3, "Fresh countdown must begin at three")
+  try require(!countdown.advance(seconds: 20, visible: false) && countdown.number == 3,
+    "Menus or inactive windows must not consume the countdown")
+  try require(!countdown.advance(seconds: 1, visible: true) && countdown.number == 2, "Countdown missed two")
+  try require(!countdown.advance(seconds: 1, visible: true) && countdown.number == 1, "Countdown missed one")
+  try require(countdown.advance(seconds: 1, visible: true) && !countdown.isActive, "Countdown must start the level")
+  try require(!countdown.advance(seconds: 1, visible: true), "Countdown must start only once")
+  countdown.arm(); countdown.cancel()
+  try require(!countdown.advance(seconds: 10, visible: true), "Explicit pause must cancel automatic start")
+  print("PASS fresh-level countdown, hidden time, one-shot start and explicit cancellation")
 }
 
 @MainActor private func testGameCursorRegions() throws {
@@ -825,6 +841,7 @@ private func testMacArtworkCropStaysPixelAligned() throws {
   do {
     try testTickDirectionContinuity()
     try testSkillCursorBadgeGeometry()
+    try testFreshLevelCountdown()
     try testGameCursorRegions()
     try renderSelectionPreview()
     try testMacArtworkCropStaysPixelAligned()

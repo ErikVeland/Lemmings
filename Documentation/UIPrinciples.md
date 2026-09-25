@@ -64,3 +64,10 @@ artwork rather than falling back to a plain dot.
 A selected lemming has a faint, soft halo with a small brightness shimmer.
 Do not draw an outlined ring or an orbiting arc. Reduced motion keeps the halo
 static. Classic, Lemmings 2 and Lemmings 3 use the same cursor and halo renderers.
+
+## Fresh level start
+
+Fresh starts and retries show a shared 3–2–1 countdown before play. Only visible,
+active gameplay time advances the countdown. Menus and inactive windows hold it.
+Pause or single-step cancels automatic start. Saved runs remain paused, and
+Hot Seat handovers still wait for the player to indicate readiness.

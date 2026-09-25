@@ -114,6 +114,7 @@ struct ReticleFeedback {
       needsDisplay = true
     }
   }
+  let startCountdown = FreshLevelCountdown()
   var showReticleCount = false
     var skillCursorIconSize: SkillCursorIconSize = .two
     var favorApproachingLemmings = true
@@ -584,6 +585,7 @@ struct ReticleFeedback {
 
   override func draw(_ dirtyRect: NSRect) {
     defer {
+      if phase == .playing { startCountdown.draw(in: bounds) }
       // The shared corner reticle also represents the controller pointer.
       if let id = assignmentHighlight.target, let lem = session?.lemmings.first(where: { $0.id == id }) {
         assignmentHighlight.draw(at: viewport.viewPoint(fromLevel: CGPoint(x: lem.x, y: lem.y - 6)),

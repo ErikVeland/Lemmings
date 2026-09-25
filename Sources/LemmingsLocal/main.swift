@@ -5141,8 +5141,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
     let rootSize = window.contentView?.bounds.size ?? CGSize(width: 1280, height: 720)
     replaySize = CGSize(width: 1280, height: max(240, min(960, floor(1280 * rootSize.height / max(1, rootSize.width) / 2) * 2)))
     accumulator = 0
-    isPaused = false
-    panel.isPaused = false
+    playfield.startCountdown.cancel()
+    if !restoringCheckpoint { playfield.startCountdown.arm() }
+    isPaused = playfield.startCountdown.isActive
+    panel.isPaused = isPaused
     isFastForward = false
     panel.isFastForward = false
     lastStepTime = nil
@@ -5549,6 +5551,16 @@ let achievementProgressKey = "ClassicAchievementProgress"
     panel.progressText = parts.joined(separator: "   ")
   }
 
+  @discardableResult private func advanceFreshLevelStart(seconds: Double, visible: Bool) -> Bool {
+    guard phase == .playing, playfield.startCountdown.isActive else { return false }
+    if playfield.startCountdown.advance(seconds: seconds, visible: visible) {
+      isPaused = false; panel.isPaused = false; panel.needsDisplay = true
+    }
+    playfield.needsDisplay = true
+    accumulator = 0
+    return true
+  }
+
   private func step(at now: TimeInterval = ProcessInfo.processInfo.systemUptime) {
     updateFailureMood()
     refreshTurnDisplay()
@@ -5599,6 +5611,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       if let frame = composeNativeFrame() { crtView.setSource(frame, flashes: playfield.hdrFlashes) }
     }
     if let session, phase == .playing { dj.updateTelemetry(djTelemetry(session)) }
+    if advanceFreshLevelStart(seconds: elapsed, visible: window.isKeyWindow) { return }
     guard phase == .playing, !isPaused, let session, !session.isComplete else { return }
 
     // Each ruleset states its own logic rate. Whole ticks only, so timing does
@@ -5867,6 +5880,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   private func togglePause() {
+    if playfield.startCountdown.isActive {
+      playfield.startCountdown.cancel()
+      isPaused = false; playfield.needsDisplay = true
+    }
     saveRunCheckpoint(immediately: true)
     isPaused.toggle()
     panel.isPaused = isPaused
@@ -6672,6 +6689,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     let previousExplosions = Set(session.lemmings.filter { $0.pose == .explosion }.map(\.id))
     countdownWarning.reset(seconds: session.remainingSeconds)
     guard session.stepForward() else { return false }
+    playfield.startCountdown.cancel()
     if countdownWarning.update(seconds: session.remainingSeconds) { effects.play(.builderWarning) }
     effects.play(session.lastCues)
     dj.updateTelemetry(djTelemetry(session))

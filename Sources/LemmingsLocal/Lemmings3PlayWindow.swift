@@ -396,7 +396,10 @@ import NxlvKit
             canvas.restoreCamera(x: CGFloat(recovery.scrollX), y: CGFloat(recovery.scrollY))
             arcadeLevelSnapshot = arcadeLevel
             message = "Saved run restored. Press Space when you are ready."
-        } else { beginReplay() }
+        } else {
+            beginReplay()
+            if !ArcadeStore.shared.hotSeatIsActive { canvas.startCountdown.arm() }
+        }
         refresh()
         timer = Timer.scheduledTimer(withTimeInterval: 1.0 / 60, repeats: true) { [weak self] _ in
             MainActor.assumeIsolated { self?.update() }
@@ -555,12 +558,15 @@ import NxlvKit
     }
 
     @objc private func togglePause() {
+        if canvas.startCountdown.isActive {
+            canvas.startCountdown.cancel(); paused = true; accumulator = 0; refresh(); return
+        }
         saveCheckpoint(immediately: true)
         let wasPaused = paused; paused.toggle(); accumulator = 0
         if wasPaused { discardRewindOrigin() }
         refresh()
     }
-    @objc private func singleStep() { paused = true; advanceTick(); refresh() }
+    @objc private func singleStep() { canvas.startCountdown.cancel(); paused = true; advanceTick(); refresh() }
     private func beginContinuousRewind(advanceImmediately: Bool = true) -> Bool {
         guard game.tick > 0, !rewindHeld else { return false }
         captureRewindOrigin()
@@ -722,7 +728,7 @@ import NxlvKit
     @objc private func restart() {
         saveCheckpoint(immediately: true)
         speedControl.newLevel()
-        canvas.menuRows = nil; pendingTool = nil; canvas.directionPoint = nil; game = initial; beginReplay(); recorded = false; paused = ArcadeStore.shared.hotSeatIsActive; accumulator = 0; canvas.resetCamera(campaign.levels[campaign.index]); message = "Choose an action. Bricks and spades ask for a direction. Arrow keys move the camera."; refresh() }
+        canvas.menuRows = nil; pendingTool = nil; canvas.directionPoint = nil; game = initial; beginReplay(); recorded = false; canvas.startCountdown.arm(); paused = true; accumulator = 0; canvas.resetCamera(campaign.levels[campaign.index]); message = "Choose an action. Bricks and spades ask for a direction. Arrow keys move the camera."; refresh() }
     private func save() {
         guard recordsCampaignProgress else { return }
         if let data = try? JSONEncoder().encode(campaign.progress) {
@@ -903,6 +909,10 @@ import NxlvKit
         canvas.capturePointer(active: playing)
         guard !GameScreen.shared.isPresented, canvas.menuRows == nil, pendingTool == nil else { accumulator = 0; return }
         canvas.panAtPointer(seconds: elapsed)
+        if canvas.startCountdown.isActive {
+            if canvas.startCountdown.advance(seconds: elapsed, visible: window?.isKeyWindow == true) { paused = false }
+            accumulator = 0; refresh(); return
+        }
         guard !paused, !game.isComplete else { return }
         accumulator += elapsed * speedControl.multiplier
         let inputDeadline = ProcessInfo.processInfo.systemUptime + 0.012
@@ -1170,6 +1180,7 @@ import NxlvKit
     var onDirection: ((Lemmings3Runtime.Direction) -> Void)?
     var onCancelDirection: (() -> Void)?
     var selectedAction = 0
+    let startCountdown = FreshLevelCountdown()
     var showReticleCount = false
     var skillCursorIconSize: SkillCursorIconSize = .two
     var favorApproachingLemmings = true
@@ -1383,6 +1394,7 @@ import NxlvKit
         speedTrails.update(tick: game?.tick ?? 0, enabled: enabled, actors: actors)
     }
     override func draw(_ dirtyRect: NSRect) {
+        defer { if menuRows == nil { startCountdown.draw(in: playfieldRect) } }
         defer {
             // The shared corner reticle also represents the controller pointer.
             assignmentHighlight.drawNotice()

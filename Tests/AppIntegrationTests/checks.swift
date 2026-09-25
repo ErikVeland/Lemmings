@@ -394,6 +394,17 @@ extension AppDelegate {
     GameScreen.shared.dismissAll()
     window.makeFirstResponder(playfield)
     try check(session != nil && flow?.screen.isPlaying == true && !sequelIsActive && window.attachedSheet == nil, "Pause fixture did not enter Classic gameplay")
+    try check(playfield.startCountdown.isActive, "Fresh Classic level did not arm its countdown")
+    let freshTick = session?.currentTick
+    advanceFreshLevelStart(seconds: 20, visible: false)
+    try check(playfield.startCountdown.number == 3, "Inactive window consumed the countdown")
+    for _ in 1...32 { advanceFreshLevelStart(seconds: 0.1, visible: true) }
+    try check(!playfield.startCountdown.isActive && !isPaused, "Fresh Classic level did not start automatically")
+    try check(session?.currentTick == freshTick, "Countdown advanced the level clock")
+    playfield.startCountdown.arm()
+    togglePause()
+    try check(isPaused && !playfield.startCountdown.isActive, "Pause during countdown must remain paused")
+    togglePause()
     let preferences = SettingsWindow(settings: ClassicSettings(), options: settingsOptions())
     preferences.show()
     func descendants(_ view: NSView) -> [NSView] { [view] + view.subviews.flatMap { descendants($0) } }

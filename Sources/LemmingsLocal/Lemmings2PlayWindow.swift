@@ -398,6 +398,7 @@ import NxlvKit
             recoveryInitialHash = recovery.initialStateHash
             arcadeRunID = recovery.runID; arcadeProfileID = recovery.profileID; arcadeHotSeatID = recovery.hotSeatID
             usedRewind = recovery.usedRewind; nukeCount = recovery.nukeCount; undoCount = recovery.undoCount
+            canvas.startCountdown.cancel()
             selected = recovery.selectedSkill; paused = true; fanSelected = false
             canvas.cameraX = CGFloat(recovery.scrollX); canvas.cameraY = CGFloat(recovery.scrollY)
             arcadeLevelSnapshot = arcadeLevel
@@ -612,7 +613,7 @@ import NxlvKit
             dj.resetLevel()
             countdownWarning.reset(seconds: replacement.remainingSeconds)
             beforeNuke = nil
-            selected = 0; paused = false; speedControl.newLevel(); fanSelected = false; nukeGesture.reset()
+            selected = 0; canvas.startCountdown.arm(); paused = true; speedControl.newLevel(); fanSelected = false; nukeGesture.reset()
             sounds.silence()
             show(.playing)
             beginReplay()
@@ -627,7 +628,7 @@ import NxlvKit
         game = initial; beginReplay(); dj.resetLevel(); canvas.resetCamera(level: level)
         countdownWarning.reset(seconds: initial.remainingSeconds)
         beforeNuke = nil
-        paused = ArcadeStore.shared.hotSeatIsActive; speedControl.newLevel(); accumulator = 0; nukeGesture.reset(); sounds.silence()
+        canvas.startCountdown.arm(); paused = true; speedControl.newLevel(); accumulator = 0; nukeGesture.reset(); sounds.silence()
         show(.playing)
         if !wasPlaying { playTribeMusic() }
         refreshGame()
@@ -699,6 +700,9 @@ import NxlvKit
         } else {
             switch Lemmings2Control(rawValue: slot) {
             case .pause:
+                if canvas.startCountdown.isActive {
+                    canvas.startCountdown.cancel(); paused = true; accumulator = 0; refreshGame(); return
+                }
                 let wasPaused = paused; paused.toggle(); accumulator = 0
                 if wasPaused { discardRewindOrigin() }
             case .fan: fanSelected.toggle()
@@ -880,6 +884,10 @@ import NxlvKit
             if (screen == .map || screen == .results) && frontTicks.isMultiple(of: 4) { front.needsDisplay = true }
             return
         }
+        if canvas.startCountdown.isActive {
+            if canvas.startCountdown.advance(seconds: elapsed, visible: window?.isKeyWindow == true) { paused = false }
+            accumulator = 0; refreshGame(); return
+        }
         guard !paused, var game, !game.isComplete else {
             if frontTicks.isMultiple(of: 4) { refreshGame() }
             return
@@ -934,6 +942,7 @@ import NxlvKit
         }
     }
     private func singleStep() {
+        canvas.startCountdown.cancel()
         guard screen == .playing, var game, !game.isComplete, !GameScreen.shared.isPresented else { return }
         paused = true; accumulator = 0; releasePointerInput()
         // Release held fan/aim input before taking the single physics step.
@@ -1849,6 +1858,7 @@ import NxlvKit
     var speedLabel = "2×"
     var speedChoiceLabel = "2×"
     var variableSpeedEnabled = true
+    let startCountdown = FreshLevelCountdown()
     var showReticleCount = false
     var skillCursorIconSize: SkillCursorIconSize = .two
     var favorApproachingLemmings = true
@@ -2259,6 +2269,7 @@ import NxlvKit
         }
     }
     override func draw(_ dirtyRect: NSRect) {
+        defer { startCountdown.draw(in: gameplayRect) }
         defer {
             // The shared corner reticle also represents the controller pointer.
             if let id = assignmentHighlight.target ?? (pointerSelectionEnabled ? pointerTarget(slot: selectedSkillSlot) : nil),

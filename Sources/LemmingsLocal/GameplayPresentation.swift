@@ -402,3 +402,26 @@ import NxlvKit
         return element
     }
 }
+
+/// A fresh level starts after three visible seconds. Explicit pause cancels it.
+@MainActor final class FreshLevelCountdown {
+    private(set) var remaining: Double? = nil
+    var isActive: Bool { remaining != nil }
+    var number: Int? { remaining.map { max(1, Int(ceil($0))) } }
+    func arm() { remaining = 3 }
+    func cancel() { remaining = nil }
+    @discardableResult func advance(seconds: Double, visible: Bool) -> Bool {
+        guard visible, let remaining else { return false }
+        let next = remaining - max(0, seconds)
+        if next <= 0 { cancel(); return true }
+        self.remaining = next
+        return false
+    }
+    func draw(in bounds: CGRect) {
+        guard let number else { return }
+        let rect = CGRect(x: floor(bounds.midX - 24), y: floor(bounds.midY - 28), width: 48, height: 56)
+        NSColor.black.withAlphaComponent(0.75).setFill()
+        rect.insetBy(dx: -8, dy: -8).fill()
+        GamePixelText.draw(String(number), in: rect, maxScale: 6, palette: .green)
+    }
+}
