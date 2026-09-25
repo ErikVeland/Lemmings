@@ -520,6 +520,8 @@ import NxlvKit
         canvas.reduceFlashes = settings.reduceFlashes
         canvas.hdEffectsEnabled = settings.hdEffectsEnabled
         canvas.fullScreenHDRFlashes = settings.cinematicExplosionsEnabled
+        canvas.showReticleCount = settings.showReticleCount
+        canvas.skillCursorIconSize = settings.skillCursorIconSize
         canvas.favorApproachingLemmings = settings.favorApproachingLemmings
     }
 
@@ -1168,6 +1170,8 @@ import NxlvKit
     var onDirection: ((Lemmings3Runtime.Direction) -> Void)?
     var onCancelDirection: (() -> Void)?
     var selectedAction = 0
+    var showReticleCount = false
+    var skillCursorIconSize: SkillCursorIconSize = .two
     var favorApproachingLemmings = true
     var paused = true
     var fast = false
@@ -1224,7 +1228,7 @@ import NxlvKit
         }
     }
     var pointerTarget: Int? {
-        guard let p = pointerPosition, playfieldRect.contains(p), let game else { return nil }
+        guard let p = pointerPosition ?? controllerPointer, playfieldRect.contains(p), let game else { return nil }
         let x = (p.x - origin.x) / zoom + cameraX, y = (p.y - origin.y) / zoom + cameraY
         let candidates = game.lemmings.map {
             Lemmings3TargetCandidate(id: $0.id, x: $0.x, y: $0.y, direction: $0.direction, tool: $0.tool,
@@ -1380,7 +1384,7 @@ import NxlvKit
     }
     override func draw(_ dirtyRect: NSRect) {
         defer {
-            ControllerPointer.draw(controllerPointer)
+            // The shared corner reticle also represents the controller pointer.
             assignmentHighlight.drawNotice()
             if let id = assignmentHighlight.target ?? pointerTarget,
                let lem = game?.lemmings.first(where: { $0.id == id && $0.active }) {
@@ -1500,10 +1504,22 @@ import NxlvKit
         NSGraphicsContext.restoreGraphicsState()
         drawInterface()
         if let point = pointerPosition ?? controllerPointer, playfieldRect.contains(point) {
-            GameCursor.drawPlayfieldPointer(at: point, scale: zoom, tint: .systemGreen)
+            if showReticleCount {
+                let centres = game.lemmings.filter { $0.active }.map {
+                    CGPoint(x: origin.x + (CGFloat($0.x) - cameraX) * zoom,
+                            y: origin.y + (CGFloat($0.y - 8) - cameraY) * zoom)
+                }
+                let count = SkillCursorBadge.count(centres: centres, at: point, scale: zoom)
+                SkillCursorBadge.drawCount(count, at: point, scale: zoom, size: skillCursorIconSize, icon: skillCursorIconSize == .none ? nil : skillBadge, in: playfieldRect)
+            }
+            let target = pointerTarget
+            let eligible = Lemmings3Runtime.Action.allCases.indices.contains(selectedAction)
+                && target.map { game.canAssign(Lemmings3Runtime.Action.allCases[selectedAction], to: $0) } == true
+            GameCursor.drawPlayfieldPointer(at: point, scale: zoom,
+                tint: GameCursor.targetTint(eligible: eligible, occupied: target != nil))
             if (0..<5).contains(selectedAction) {
                 SkillCursorBadge.draw(icon: skillBadge, index: selectedAction, at: point,
-                    scale: zoom, tint: .systemGreen, reduceMotion: reduceMotion, in: bounds)
+                    scale: zoom, tint: .systemGreen, size: skillCursorIconSize, reduceMotion: reduceMotion, in: playfieldRect)
             }
         }
         if turnBadge.superview == nil { addSubview(turnBadge) }

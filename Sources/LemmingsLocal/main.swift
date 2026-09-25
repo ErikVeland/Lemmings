@@ -1012,6 +1012,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
     playfield.reduceMotion = settings.reduceMotion
     playfield.reduceFlashes = settings.reduceFlashes
     playfield.hdEffectsEnabled = settings.hdEffectsEnabled
+    playfield.showReticleCount = settings.showReticleCount
+    playfield.skillCursorIconSize = settings.skillCursorIconSize
     playfield.favorApproachingLemmings = settings.favorApproachingLemmings
     if !settings.hdEffectsEnabled { screenFlash.clear() }
     else if !settings.cinematicExplosionsEnabled { screenFlash.clearExplosions() }
@@ -1055,6 +1057,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
     playfield.reduceMotion = settings.reduceMotion
     playfield.reduceFlashes = settings.reduceFlashes
     playfield.hdEffectsEnabled = settings.hdEffectsEnabled
+    playfield.showReticleCount = settings.showReticleCount
+    playfield.skillCursorIconSize = settings.skillCursorIconSize
     playfield.favorApproachingLemmings = settings.favorApproachingLemmings
   }
 

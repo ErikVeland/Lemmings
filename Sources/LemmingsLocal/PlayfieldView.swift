@@ -114,7 +114,9 @@ struct ReticleFeedback {
       needsDisplay = true
     }
   }
-  var favorApproachingLemmings = true
+  var showReticleCount = false
+    var skillCursorIconSize: SkillCursorIconSize = .two
+    var favorApproachingLemmings = true
   var speedMultiplier: Double = 3 { didSet { speedTrails.multiplier = speedMultiplier } }
   var isFastForward = false
   private let speedTrails = SpeedTrails()
@@ -582,7 +584,7 @@ struct ReticleFeedback {
 
   override func draw(_ dirtyRect: NSRect) {
     defer {
-      ControllerPointer.draw(controllerPointer)
+      // The shared corner reticle also represents the controller pointer.
       if let id = assignmentHighlight.target, let lem = session?.lemmings.first(where: { $0.id == id }) {
         assignmentHighlight.draw(at: viewport.viewPoint(fromLevel: CGPoint(x: lem.x, y: lem.y - 6)),
           scale: viewport.zoom, tint: .systemYellow, radius: 7)
@@ -1150,11 +1152,21 @@ struct ReticleFeedback {
 
     // Keep the reticle at the actual cursor position. The target glow remains
     // separate, so a target offset does not change click precision.
-    GameCursor.drawPlayfieldPointer(at: cursorViewPoint, scale: viewport.zoom, tint: color)
+    GameCursor.drawPlayfieldPointer(at: cursorViewPoint, scale: viewport.zoom,
+      tint: GameCursor.targetTint(eligible: target != nil,
+        occupied: session?.lemmings.contains { contains($0, point) } == true))
 
+    if showReticleCount {
+      let centres = (session?.lemmings ?? []).map {
+        viewport.viewPoint(fromLevel: CGPoint(x: CGFloat($0.x), y: CGFloat($0.y) - 5))
+      }
+      let count = SkillCursorBadge.count(centres: centres, at: cursorViewPoint, scale: viewport.zoom)
+      SkillCursorBadge.drawCount(count, at: cursorViewPoint, scale: viewport.zoom,
+        size: skillCursorIconSize, icon: skillCursorIconSize == .none ? nil : skillBadge(for: selectedSkill()), in: bounds)
+    }
     SkillCursorBadge.draw(icon: skillBadge(for: selectedSkill()), index: selectedSkill(),
       at: cursorViewPoint, scale: viewport.zoom, tint: color,
-      reduceMotion: reduceMotion, in: bounds)
+      size: skillCursorIconSize, reduceMotion: reduceMotion, in: bounds)
   }
 
   private func skillBadge(for index: Int) -> NSImage? {

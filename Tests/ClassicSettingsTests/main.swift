@@ -20,6 +20,18 @@ private func testOptionsFollowInstalledData() throws {
     try require(upgraded.bottomFallSounds && ClassicSettings().bottomFallSounds, "Bottom falls must default on for new and existing players")
     try require(!upgraded.unlockAllClassicLevels && !ClassicSettings().unlockAllClassicLevels,
         "Classic levels must follow campaign progress by default")
+    try require(upgraded.skillCursorIconSize == .two, "Existing players must default to a 2× skill icon")
+    for size in SkillCursorIconSize.allCases {
+        var settings = upgraded
+        settings.skillCursorIconSize = size
+        let restored = try JSONDecoder().decode(ClassicSettings.self, from: JSONEncoder().encode(settings))
+        try require(restored.skillCursorIconSize == size, "Skill icon size must persist")
+    }
+    try require(!upgraded.showReticleCount && !ClassicSettings().showReticleCount, "Reticule count must default off")
+    var countSettings = upgraded
+    countSettings.showReticleCount = true
+    let restoredCount = try JSONDecoder().decode(ClassicSettings.self, from: JSONEncoder().encode(countSettings))
+    try require(restoredCount.showReticleCount, "Reticule count must persist")
     var quiet = upgraded
     quiet.bottomFallSounds = false
     let restoredQuiet = try JSONDecoder().decode(ClassicSettings.self, from: JSONEncoder().encode(quiet))

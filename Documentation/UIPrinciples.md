@@ -30,8 +30,8 @@ star states, compact result layout, primary/selected actions, transport icon
 changes and concise skill names beneath HUD counts. This is not a claim that every
 sequel screen or every novice-player journey has been validated.
 
-Assignment feedback follows the engine's actual eligibility rules. Grey means no
-eligible target; green means the nearest target can accept the selected skill.
+Assignment feedback follows the engine's actual eligibility rules. Grey means no lemming is under the pointer; yellow means the lemming cannot
+accept the selected skill; green means the nearest target can accept the selected skill.
 Successful assignments get a 100 ms green pulse, with local HDR brightness when
 available. An existing assignment gets an 80 ms orange cue. An eligible neighbour
 always takes priority over orange. Honour the reduced-flash setting.
@@ -49,8 +49,13 @@ text from headings. Preserve accessible names and input targets.
 
 ## Gameplay pointer
 
-Keep the small pre-build-38 crosshair at the input position. Place the selected
-skill sprite diagonally below and right of the crosshair, outside its bounds.
+Use four corner brackets at the input position, with strokes one pixel
+wide at every zoom and no central crosshair. Place the selected skill sprite diagonally below
+and right of the bottom-right corner, outside the reticle. Offer None, 1× and 2×
+skill icon sizes in Gameplay settings, defaulting to 2×.
+Offer a separate default-off lemming count below-left, aligned with the skill icon.
+Count live sprite centres inside the reticule, regardless of skill eligibility.
+Keep the count available when the icon is hidden.
 Clamp the sprite to the playfield edge. Directional skills must use directional
 artwork rather than falling back to a plain dot.
 

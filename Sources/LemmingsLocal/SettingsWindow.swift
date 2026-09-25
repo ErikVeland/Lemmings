@@ -29,6 +29,8 @@ import NxlvKit
   private var modernControlsCheck: NSButton?
   private var variableSpeedCheck: NSButton?
   private var interruptionCheck: NSButton?
+  private var reticleCountCheck: NSButton?
+  private var skillCursorSizePopUp: NSPopUpButton?
   private var favorApproachingCheck: NSButton?
   private var unlockAllClassicLevelsCheck: NSButton?
   private var controllerCheck: NSButton?
@@ -150,6 +152,14 @@ import NxlvKit
   }
 
   private func gameplayPane() -> NSView {
+    let count = GameCheckButton(title: "Show lemming count", target: self, action: #selector(reticleCountChanged))
+    count.state = settings.showReticleCount ? .on : .off
+    reticleCountCheck = count
+    let iconSize = popUp(#selector(skillCursorSizeChanged))
+    iconSize.addItems(withTitles: SkillCursorIconSize.allCases.map(\.title))
+    iconSize.selectItem(at: SkillCursorIconSize.allCases.firstIndex(of: settings.skillCursorIconSize) ?? 2)
+    iconSize.setAccessibilityLabel("Skill icon size")
+    skillCursorSizePopUp = iconSize
     let modern = GameCheckButton(title: "Modern keyboard controls", target: self, action: #selector(modernControlsChanged))
     modernControlsCheck = modern
     let variable = GameCheckButton(title: "Variable speed: 2×, 3×, 5×, 10×", target: self, action: #selector(variableSpeedChanged))
@@ -177,11 +187,19 @@ import NxlvKit
     variable.isEnabled = settings.modernControlsEnabled
     return pane([
       ("Controls", modern), ("Speed", variable), ("Pause", interruption),
-      ("Targeting", favorApproaching), ("Level Select", unlockAllClassicLevels),
+      ("Targeting", favorApproaching), ("Skill icon", iconSize), ("Reticule", count), ("Level Select", unlockAllClassicLevels),
       ("Experience", buttons),
     ])
   }
 
+  @objc private func reticleCountChanged(_ sender: NSButton) {
+    settings.showReticleCount = sender.state == .on
+    changed()
+  }
+  @objc private func skillCursorSizeChanged(_ sender: NSPopUpButton) {
+    settings.skillCursorIconSize = SkillCursorIconSize.allCases[sender.indexOfSelectedItem]
+    changed()
+  }
   @objc private func modernControlsChanged(_ sender: NSButton) {
     settings.modernControlsEnabled = sender.state == .on
     variableSpeedCheck?.isEnabled = settings.modernControlsEnabled
@@ -452,6 +470,8 @@ import NxlvKit
     variableSpeedCheck?.state = settings.variableSpeedEnabled ? .on : .off
     variableSpeedCheck?.isEnabled = settings.modernControlsEnabled
     interruptionCheck?.state = settings.pauseOnInterruption ? .on : .off
+    reticleCountCheck?.state = settings.showReticleCount ? .on : .off
+    skillCursorSizePopUp?.selectItem(at: SkillCursorIconSize.allCases.firstIndex(of: settings.skillCursorIconSize) ?? 2)
     favorApproachingCheck?.state = settings.favorApproachingLemmings ? .on : .off
     unlockAllClassicLevelsCheck?.state = settings.unlockAllClassicLevels ? .on : .off
     controllerCheck?.state = settings.controllerEnabled ? .on : .off
@@ -502,6 +522,8 @@ import NxlvKit
     applied.shuffleMusic = settings.shuffleMusic
     applied.modernControlsEnabled = settings.modernControlsEnabled
     applied.variableSpeedEnabled = settings.variableSpeedEnabled
+    applied.showReticleCount = settings.showReticleCount
+    applied.skillCursorIconSize = settings.skillCursorIconSize
     applied.pauseOnInterruption = settings.pauseOnInterruption
     applied.unlockAllClassicLevels = settings.unlockAllClassicLevels
     applied.controllerEnabled = settings.controllerEnabled

@@ -461,6 +461,8 @@ import NxlvKit
         canvas.reduceMotion = settings.reduceMotion
         canvas.reduceFlashes = settings.reduceFlashes
         canvas.hdEffectsEnabled = settings.hdEffectsEnabled
+        canvas.showReticleCount = settings.showReticleCount
+        canvas.skillCursorIconSize = settings.skillCursorIconSize
         canvas.favorApproachingLemmings = settings.favorApproachingLemmings
         canvas.fullScreenHDRFlashes = settings.cinematicExplosionsEnabled
         if let root = Bundle.main.resourceURL?.appendingPathComponent("Music") {
@@ -1847,6 +1849,8 @@ import NxlvKit
     var speedLabel = "2×"
     var speedChoiceLabel = "2×"
     var variableSpeedEnabled = true
+    var showReticleCount = false
+    var skillCursorIconSize: SkillCursorIconSize = .two
     var favorApproachingLemmings = true
     var onSpeedPress: ((TimeInterval, Int) -> Void)?
     var onSpeedRelease: ((TimeInterval) -> Void)?
@@ -2256,7 +2260,7 @@ import NxlvKit
     }
     override func draw(_ dirtyRect: NSRect) {
         defer {
-            ControllerPointer.draw(controllerPointer)
+            // The shared corner reticle also represents the controller pointer.
             if let id = assignmentHighlight.target ?? (pointerSelectionEnabled ? pointerTarget(slot: selectedSkillSlot) : nil),
                let lem = game?.lemmings.first(where: { $0.id == id && $0.active }) {
                 let focused = assignmentHighlight.target != nil
@@ -2270,10 +2274,21 @@ import NxlvKit
                 }
             }
             if let point = cursorPoint(), gameplayRect.contains(point) {
-                GameCursor.drawPlayfieldPointer(at: point, scale: zoom, tint: .systemGreen)
+                if showReticleCount {
+                    let centres = (game?.lemmings ?? []).filter { $0.active }.map {
+                        CGPoint(x: origin.x + (CGFloat($0.x) - cameraX) * zoom,
+                                y: origin.y + (CGFloat($0.y - 5) - cameraY) * zoom * 1.2)
+                    }
+                    let count = SkillCursorBadge.count(centres: centres, at: point, scale: zoom)
+                    SkillCursorBadge.drawCount(count, at: point, scale: zoom, size: skillCursorIconSize, icon: skillCursorIconSize == .none ? nil : skillBadge, in: gameplayRect)
+                }
+                let target = pointerTarget(slot: selectedSkillSlot)
+                GameCursor.drawPlayfieldPointer(at: point, scale: zoom,
+                    tint: GameCursor.targetTint(eligible: pointerSelectionEnabled && target.map { game?.canAssign(slot: selectedSkillSlot, to: $0) == true } == true,
+                        occupied: target != nil))
                 if pointerSelectionEnabled {
                     SkillCursorBadge.draw(icon: skillBadge, index: selectedSkillSlot, at: point,
-                        scale: zoom, tint: .systemGreen, reduceMotion: reduceMotion, in: bounds)
+                        scale: zoom, tint: .systemGreen, size: skillCursorIconSize, reduceMotion: reduceMotion, in: gameplayRect)
                 }
             }
             if let focusNotice { GameTypography.annotation(focusNotice, at: CGPoint(x: 12, y: 12)) }

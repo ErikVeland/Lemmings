@@ -141,6 +141,12 @@ public enum ClassicInterfaceSize: String, Codable, CaseIterable, Sendable {
     public var title: String { switch self { case .standard: "Standard (100%)"; case .large: "Large (125%)"; case .extraLarge: "Extra large (150%)" } }
 }
 
+public enum SkillCursorIconSize: String, CaseIterable, Codable, Sendable {
+    case none, one, two
+    public var title: String { switch self { case .none: "None"; case .one: "1×"; case .two: "2×" } }
+    public var multiplier: Int { switch self { case .none: 0; case .one: 1; case .two: 2 } }
+}
+
 public struct ClassicSettings: Equatable, Codable, Sendable {
     // Graphics
     public var graphics: ClassicGraphicsSource
@@ -156,6 +162,8 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
     public var modernControlsEnabled: Bool
     public var variableSpeedEnabled: Bool
     public var pauseOnInterruption: Bool
+    public var showReticleCount: Bool
+    public var skillCursorIconSize: SkillCursorIconSize
     public var favorApproachingLemmings: Bool
     public var controllerEnabled: Bool
     public var controllerTapSpeed: Bool
@@ -201,6 +209,8 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         modernControlsEnabled: Bool = true,
         variableSpeedEnabled: Bool = true,
         pauseOnInterruption: Bool = true,
+        showReticleCount: Bool = false,
+        skillCursorIconSize: SkillCursorIconSize = .two,
         favorApproachingLemmings: Bool = true,
         controllerEnabled: Bool = true,
         controllerTapSpeed: Bool = true,
@@ -232,6 +242,8 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         self.modernControlsEnabled = modernControlsEnabled
         self.variableSpeedEnabled = variableSpeedEnabled
         self.pauseOnInterruption = pauseOnInterruption
+        self.showReticleCount = showReticleCount
+        self.skillCursorIconSize = skillCursorIconSize
         self.favorApproachingLemmings = favorApproachingLemmings
         self.controllerEnabled = controllerEnabled
         self.controllerTapSpeed = controllerTapSpeed
@@ -294,6 +306,8 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         modernControlsEnabled = try values.decodeIfPresent(Bool.self, forKey: .modernControlsEnabled) ?? fallback.modernControlsEnabled
         variableSpeedEnabled = try values.decodeIfPresent(Bool.self, forKey: .variableSpeedEnabled) ?? fallback.variableSpeedEnabled
         pauseOnInterruption = try values.decodeIfPresent(Bool.self, forKey: .pauseOnInterruption) ?? modernControlsEnabled
+        showReticleCount = (try? values.decodeIfPresent(Bool.self, forKey: .showReticleCount)) ?? false
+        skillCursorIconSize = (try? values.decodeIfPresent(SkillCursorIconSize.self, forKey: .skillCursorIconSize)) ?? .two
         favorApproachingLemmings = try values.decodeIfPresent(Bool.self, forKey: .favorApproachingLemmings) ?? modernControlsEnabled
         controllerEnabled = try values.decodeIfPresent(Bool.self, forKey: .controllerEnabled) ?? modernControlsEnabled
         controllerTapSpeed = try values.decodeIfPresent(Bool.self, forKey: .controllerTapSpeed) ?? fallback.controllerTapSpeed

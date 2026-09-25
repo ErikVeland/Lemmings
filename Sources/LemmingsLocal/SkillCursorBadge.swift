@@ -1,4 +1,5 @@
 import AppKit
+import NxlvKit
 
 /// Draws the selected skill as a small, pixel-aligned cursor companion.
 @MainActor enum SkillCursorBadge {
@@ -8,9 +9,9 @@ import AppKit
     /**
      * Returns a tiny badge frame diagonally below the reticle’s lower-right corner.
      */
-    static func frame(at point: CGPoint, scale: CGFloat, in bounds: CGRect) -> CGRect {
+    static func frame(at point: CGPoint, scale: CGFloat, size: SkillCursorIconSize = .two, in bounds: CGRect) -> CGRect {
         let pixel = max(1, floor(scale))
-        let side = nativeSide * pixel
+        let side = nativeSide * pixel * CGFloat(size.multiplier)
         let reticle = GameCursor.playfieldPointerFrame(at: point, scale: scale)
         let gap = nativeGap * pixel
         let safeBounds = bounds.insetBy(dx: pixel, dy: pixel)
@@ -21,18 +22,54 @@ import AppKit
         return CGRect(x: x, y: y, width: side, height: side)
     }
 
-    static func draw(icon: NSImage?, index _: Int, at point: CGPoint, scale: CGFloat,
-                     tint: NSColor, reduceMotion _: Bool, in bounds: CGRect) {
+    /// Count every live lemming whose sprite centre lies inside the corners.
+    static func count(centres: [CGPoint], at point: CGPoint, scale: CGFloat) -> Int {
+        let reticle = GameCursor.playfieldPointerFrame(at: point, scale: scale)
+        return centres.reduce(0) { $0 + (reticle.contains($1) ? 1 : 0) }
+    }
+
+    static func countFrame(count: Int, at point: CGPoint, scale: CGFloat,
+                           size: SkillCursorIconSize, icon: NSImage? = nil, in bounds: CGRect) -> CGRect {
+        let effectiveSize: SkillCursorIconSize = size == .none ? .two : size
+        let multiplier = CGFloat(effectiveSize.multiplier)
         let pixel = max(1, floor(scale))
-        let rect = frame(at: point, scale: scale, in: bounds)
+        let badge = frame(at: point, scale: scale, size: effectiveSize, in: bounds)
+        let reticle = GameCursor.playfieldPointerFrame(at: point, scale: scale)
+        let width = CGFloat(String(count).count * 6) * multiplier
+        let height = 7 * multiplier
+        let available = badge.insetBy(dx: pixel * multiplier, dy: pixel * multiplier)
+        let iconHeight: CGFloat
         if let icon {
-            let available = rect.insetBy(dx: pixel, dy: pixel)
-            let fit = min(1, available.width / max(1, icon.size.width),
+            let fit = min(multiplier, available.width / max(1, icon.size.width), available.height / max(1, icon.size.height))
+            iconHeight = icon.size.height * fit
+        } else { iconHeight = height }
+        let y = floor(available.minY + (iconHeight - height) / 2)
+        let x = reticle.minX - nativeGap * pixel - pixel * multiplier - width
+        return CGRect(x: max(bounds.minX + pixel, min(x, bounds.maxX - pixel - width)),
+                      y: max(bounds.minY, min(y, bounds.maxY - height)), width: width, height: height)
+    }
+
+    static func drawCount(_ count: Int, at point: CGPoint, scale: CGFloat,
+                          size: SkillCursorIconSize, icon: NSImage? = nil, in bounds: CGRect) {
+        let rect = countFrame(count: count, at: point, scale: scale, size: size, icon: icon, in: bounds)
+        GamePixelText.draw(String(count), in: rect,
+            maxScale: CGFloat(size == .none ? 2 : size.multiplier), palette: .blue)
+    }
+
+    static func draw(icon: NSImage?, index _: Int, at point: CGPoint, scale: CGFloat,
+                     tint: NSColor, size: SkillCursorIconSize = .two, reduceMotion _: Bool, in bounds: CGRect) {
+        guard size != .none else { return }
+        let multiplier = CGFloat(size.multiplier)
+        let pixel = max(1, floor(scale))
+        let rect = frame(at: point, scale: scale, size: size, in: bounds)
+        if let icon {
+            let available = rect.insetBy(dx: pixel * multiplier, dy: pixel * multiplier)
+            let fit = min(multiplier, available.width / max(1, icon.size.width),
                           available.height / max(1, icon.size.height))
             let size = CGSize(width: icon.size.width * fit, height: icon.size.height * fit)
             let iconRect = CGRect(
-                x: floor((available.maxX - size.width) / pixel) * pixel,
-                y: floor((available.maxY - size.height) / pixel) * pixel,
+                x: floor(available.minX / pixel) * pixel,
+                y: floor(available.minY / pixel) * pixel,
                 width: size.width,
                 height: size.height)
             icon.draw(in: iconRect, from: .zero,

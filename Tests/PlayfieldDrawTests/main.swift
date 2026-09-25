@@ -743,12 +743,14 @@ private func testMacArtworkCropStaysPixelAligned() throws {
 
 @MainActor private func testSkillCursorBadgeGeometry() throws {
   let point = CGPoint(x: 60, y: 40)
-  let bounds = CGRect(x: 0, y: 0, width: 120, height: 80)
+  let bounds = CGRect(x: 0, y: 0, width: 300, height: 240)
   for scale in [1.0, 2.0, 3.0] {
     let pixel = floor(scale)
-    let frame = SkillCursorBadge.frame(at: point, scale: scale, in: bounds)
+    let frame = SkillCursorBadge.frame(at: point, scale: scale, size: .one, in: bounds)
     try require(frame.width == 8 * pixel && frame.height == frame.width,
       "the selected-skill reminder is not tiny at \(scale)x")
+    let doubled = SkillCursorBadge.frame(at: point, scale: scale, size: .two, in: bounds)
+    try require(doubled.width == frame.width * 2, "2× icon frame must double 1×")
     let reticle = GameCursor.playfieldPointerFrame(at: point, scale: scale)
     try require(!reticle.intersects(frame),
       "the selected-skill reminder overlaps the reticle at \(scale)x")
@@ -767,6 +769,18 @@ private func testMacArtworkCropStaysPixelAligned() throws {
         "the selected-skill reminder leaves the playfield at \(scale)x")
     }
   }
+  let centres = [point, CGPoint(x: point.x + 2, y: point.y), CGPoint(x: 290, y: 230)]
+  try require(SkillCursorBadge.count(centres: centres, at: point, scale: 2) == 2,
+    "Reticule count must count every centre inside its bounds")
+  try require(SkillCursorBadge.count(centres: [], at: point, scale: 2) == 0,
+    "Empty reticule must show zero")
+  for size in SkillCursorIconSize.allCases {
+    let count = SkillCursorBadge.countFrame(count: 12, at: point, scale: 2, size: size, in: bounds)
+    let effective: SkillCursorIconSize = size == .none ? .two : size
+    let icon = SkillCursorBadge.frame(at: point, scale: 2, size: effective, in: bounds)
+    try require(count.maxX < point.x && count.minY == icon.minY + 2 * CGFloat(effective.multiplier),
+      "Count must sit opposite the icon at the same height")
+  }
   print("PASS selected-skill reminder stays tiny, offset and visible at every edge")
 }
 
@@ -782,8 +796,12 @@ private func testMacArtworkCropStaysPixelAligned() throws {
     bytesPerRow: 1280, space: CGColorSpaceCreateDeviceRGB(),
     bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)!.makeImage()
   view.handleMove(to: CGPoint(x: 320, y: 160))
-  for (name, reduced) in [("animated", false), ("reduced-motion", true)] {
-    view.reduceMotion = reduced
+  for size in SkillCursorIconSize.allCases {
+    view.showReticleCount = true
+    let name = size.rawValue
+    view.skillCursorIconSize = size
+    view.reduceMotion = true
+    view.needsDisplay = true
     let bitmap = view.bitmapImageRepForCachingDisplay(in: view.bounds)!
     view.cacheDisplay(in: view.bounds, to: bitmap)
     try bitmap.representation(using: .png, properties: [:])!.write(

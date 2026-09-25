@@ -58,3 +58,21 @@ enum Lemmings3Targeting {
       (builder.direction > 0 ? lemming.x < builder.x : lemming.x > builder.x)
   }
 }
+
+extension Lemmings3Runtime {
+    func canAssign(_ action: Action, to id: Int) -> Bool {
+        guard !isComplete, let lem = lemmings.first(where: { $0.id == id && $0.active }) else { return false }
+        if action == .walker && [.climbing, .shimmying].contains(lem.state) { return true }
+        if action == .walker && lem.state == .swimming { return lem.tool == .swimmer && lem.quantity >= 2 }
+        guard [.walking, .blocking, .building, .digging].contains(lem.state), isSolid(lem.x, lem.y) else { return false }
+        switch action {
+        case .walker, .jumper: return true
+        case .blocker: return lem.state != .blocking
+        case .drop: return lem.tool != nil
+        case .use:
+            guard let tool = lem.tool, lem.quantity > 0 else { return false }
+            return [.bricks, .spade, .sucker, .shimmy, .bomb, .grenade, .hadoken].contains(tool)
+        }
+    }
+
+}

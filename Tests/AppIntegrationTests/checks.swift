@@ -394,6 +394,33 @@ extension AppDelegate {
     GameScreen.shared.dismissAll()
     window.makeFirstResponder(playfield)
     try check(session != nil && flow?.screen.isPlaying == true && !sequelIsActive && window.attachedSheet == nil, "Pause fixture did not enter Classic gameplay")
+    let preferences = SettingsWindow(settings: ClassicSettings(), options: settingsOptions())
+    preferences.show()
+    func descendants(_ view: NSView) -> [NSView] { [view] + view.subviews.flatMap { descendants($0) } }
+    let root = window.contentView!
+    guard let iconSize = descendants(root).compactMap({ $0 as? NSPopUpButton }).first(where: { $0.accessibilityLabel() == "Skill icon size" }) else {
+      try check(false, "Skill icon size control is missing"); return
+    }
+    try check(iconSize.titleOfSelectedItem == "2×", "Skill icon must default to 2×")
+    guard let countControl = descendants(root).compactMap({ $0 as? NSButton }).first(where: { $0.title == "Show lemming count" }) else {
+      try check(false, "Reticule count control is missing"); return
+    }
+    try check(countControl.state == .off && !preferences.current.showReticleCount, "Reticule count must default off")
+    countControl.performClick(nil)
+    try check(preferences.current.showReticleCount, "Reticule count control did not enable the count")
+    countControl.performClick(nil)
+    try check(!preferences.current.showReticleCount, "Reticule count control did not disable the count")
+    for (index, size) in SkillCursorIconSize.allCases.enumerated() {
+      iconSize.selectItem(at: index)
+      _ = iconSize.sendAction(iconSize.action, to: iconSize.target)
+      try check(preferences.current.skillCursorIconSize == size, "Skill icon control did not apply its selection")
+    }
+    root.layoutSubtreeIfNeeded()
+    let bitmap = root.bitmapImageRepForCachingDisplay(in: root.bounds)!
+    root.cacheDisplay(in: root.bounds, to: bitmap)
+    try bitmap.representation(using: .png, properties: [:])!.write(to: URL(fileURLWithPath: ".build/skill-icon-settings.png"))
+    GameScreen.shared.dismissAll()
+    window.makeFirstResponder(playfield)
     for (key, code) in [(" ", UInt16(49)), ("p", UInt16(35))] {
       func send(_ type: NSEvent.EventType, repeatKey: Bool = false) {
         let event = NSEvent.keyEvent(with: type, location: .zero, modifierFlags: [], timestamp: 1,
