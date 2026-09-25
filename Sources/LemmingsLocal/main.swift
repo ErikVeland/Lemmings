@@ -16,6 +16,15 @@ let settingsKey = "ClassicSettings"
 let achievementProgressKey = "ClassicAchievementProgress"
 
 @MainActor final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
+  private let launchStartedAt = ProcessInfo.processInfo.systemUptime
+  private var preparingLaunch = false
+
+  private func traceLaunch(_ stage: String) {
+    guard ProcessInfo.processInfo.environment["LEMMINGS_LAUNCH_TRACE"] == "1" else { return }
+    let elapsed = ProcessInfo.processInfo.systemUptime - launchStartedAt
+    FileHandle.standardError.write(Data(String(format: "LAUNCH %.3f %@\n", elapsed, stage).utf8))
+  }
+
   private static let allLemmingsMenuTitle = "Oh My! ALL Lemmings!"
   private lazy var updaterController = SPUStandardUpdaterController(
     startingUpdater: true,
@@ -532,11 +541,14 @@ let achievementProgressKey = "ClassicAchievementProgress"
   func applicationWillTerminate(_ notification: Notification) { saveRunCheckpoint(immediately: true); ClassicRouteRecorder.flush() }
 
   func applicationDidFinishLaunching(_ notification: Notification) {
+    preparingLaunch = true
+    traceLaunch("begin")
     // Start scheduled update checks without waiting for the menu action.
     _ = updaterController
     migrateStandaloneSaves()
     buildMenu()
     buildInterface()
+    traceLaunch("interface")
     installKeyboardShortcuts()
     NotificationCenter.default.addObserver(self, selector: #selector(resumeAudioOutput),
       name: .AVAudioEngineConfigurationChange, object: nil)
@@ -580,8 +592,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
     updateMusicButtons()
 
+    traceLaunch("audio-prepared")
     FanLevelLibrary.Progress.seedBundledCounts()
     loadContent()
+    traceLaunch("content")
     startFanUpdates()
     startTimer()
     // Enter full screen while the window is still unordered, so the player never
@@ -602,6 +616,18 @@ let achievementProgressKey = "ClassicAchievementProgress"
     effectsWelcome.showIfNeeded(in: window) { [weak self] enabled in
       self?.setExperiencePreset(enabled)
     }
+    // Return to AppKit before starting playback. Submit the visible menu first.
+    DispatchQueue.main.async { [weak self] in self?.finishLaunchPresentation() }
+  }
+
+  private func finishLaunchPresentation() {
+    guard preparingLaunch, !launchingFullScreen, window.isVisible else { return }
+    window.contentView?.displayIfNeeded()
+    CATransaction.flush()
+    traceLaunch("first-frame")
+    preparingLaunch = false
+    traceLaunch("music-start")
+    playMusicForCurrentLevel()
   }
 
   private func setExperiencePreset(_ enabled: Bool) {
@@ -1492,12 +1518,14 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   func windowDidEnterFullScreen(_ notification: Notification) {
     launchingFullScreen = false
+    finishLaunchPresentation()
   }
 
   func windowDidFailToEnterFullScreen(_ window: NSWindow) {
     // Leave the window usable rather than hidden if the transition is refused.
     launchingFullScreen = false
     window.makeKeyAndOrderFront(nil)
+    finishLaunchPresentation()
   }
 
   func windowDidResize(_ notification: Notification) {
@@ -5993,7 +6021,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   /// The original cycles through its tunes as the campaign advances.
   private func playMusicForCurrentLevel() {
-    guard !sequelIsActive else { return }
+    guard !preparingLaunch, !sequelIsActive else { return }
     if settings.music == .silent {
       music.stop()
       soundtrack.stop()

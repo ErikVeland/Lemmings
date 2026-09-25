@@ -1,5 +1,5 @@
 #!/bin/zsh
-# Build a fast, current-architecture Game Center snapshot for local testing.
+# Build an optimised, current-architecture Game Center snapshot for local testing.
 # This path does not notarise, run release gates or require a Monterey worktree.
 set -euo pipefail
 
@@ -18,7 +18,7 @@ print "    Output:       $app_dir"
 
 mkdir -p "$downloads_dir"
 LEMMINGS_ARCHITECTURES="$(uname -m)" \
-  LEMMINGS_SWIFT_OPTIMIZATION="${LEMMINGS_SWIFT_OPTIMIZATION:--Onone}" \
+  LEMMINGS_SWIFT_OPTIMIZATION="${LEMMINGS_SWIFT_OPTIMIZATION:--O}" \
   ENABLE_APPLE_CAPABILITIES=1 \
   LEMMINGS_BUILD_DIR="$build_dir" \
   zsh "$project_dir/Scripts/build-local-app.sh"

@@ -44,7 +44,7 @@ trap cleanup EXIT
 # runtime hides the log. OS_ACTIVITY_DT_MODE sends the log to stderr where
 # the signature permits it.
 mkdir -p "$scratch/home"
-CFFIXED_USER_HOME="$scratch/home" OS_ACTIVITY_DT_MODE=YES \
+CFFIXED_USER_HOME="$scratch/home" OS_ACTIVITY_DT_MODE=YES LEMMINGS_LAUNCH_TRACE=1 \
   "$executable" -NSApplicationCrashOnExceptions YES > "$log" 2>&1 &
 pid=$!
 
@@ -64,4 +64,17 @@ if grep -qE "$faults" "$log"; then
   grep -E -A 12 "$faults" "$log" | head -30 >&2
   fail "The app reported a fault during launch: $app"
 fi
+python3 - "$log" "${LAUNCH_READY_SECONDS:-5}" <<'PYTIMING'
+import pathlib, sys
+rows = [line.split() for line in pathlib.Path(sys.argv[1]).read_text().splitlines()
+        if line.startswith('LAUNCH ')]
+times = {row[2]: float(row[1]) for row in rows}
+if 'first-frame' not in times or 'music-start' not in times:
+    raise SystemExit('FAILED: launch did not present its first frame and start music')
+if times['first-frame'] > float(sys.argv[2]):
+    raise SystemExit(f"FAILED: first frame took {times['first-frame']:.3f}s")
+if times['music-start'] < times['first-frame']:
+    raise SystemExit('FAILED: music started before the first frame')
+print(f"PASS first frame {times['first-frame']:.3f}s; music starts after the frame")
+PYTIMING
 print "PASS launch smoke test ($seconds s, empty home): $app"
