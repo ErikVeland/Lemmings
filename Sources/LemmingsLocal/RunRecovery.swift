@@ -124,11 +124,24 @@ final class RunRecoveryFile {
     private(set) var recoveredBackup = false
     init(url: URL) { self.url = url }
     private func hash(_ data: Data) -> String { SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined() }
-    private func decode(_ data: Data) throws -> RunRecovery? {
+    /// The fields that choose the latest run. Decoding only these skips the engine snapshot.
+    struct Header: Decodable, Sendable {
+        let profileID: String
+        var hotSeatID: String? = nil
+        var savedAt = Date()
+    }
+    private func verifiedPayload(_ data: Data) throws -> Data? {
         let document = try JSONDecoder().decode(Document.self, from: data)
         guard document.version == 1 else { throw RunRecoveryError.version }
         guard document.checksum == hash(document.payload ?? Data()) else { throw RunRecoveryError.invalid }
-        return try document.payload.map { try JSONDecoder().decode(RunRecovery.self, from: $0).validated() }
+        return document.payload
+    }
+    private func decode(_ data: Data) throws -> RunRecovery? {
+        try verifiedPayload(data).map { try JSONDecoder().decode(RunRecovery.self, from: $0).validated() }
+    }
+    /// Reads the primary file's header without the lock or backup recovery. Callers fall back to `load()`.
+    func header() throws -> Header? {
+        try verifiedPayload(read(url)).map { try JSONDecoder().decode(Header.self, from: $0) }
     }
     private func read(_ path: URL) throws -> Data {
         var freshPath = path
@@ -210,9 +223,15 @@ final class RunRecoveryStore: @unchecked Sendable {
     }
     private func file(_ id: UUID) throws -> RunRecoveryFile {
         if let file = files[id] { return file }
+        try loadRun(id)
+        return files[id]!
+    }
+    /// Loads a run once, including the first open that registers its file.
+    @discardableResult private func loadRun(_ id: UUID) throws -> RunRecovery? {
+        if let file = files[id] { return try file.load() }
         let file = RunRecoveryFile(url: directory.appendingPathComponent(id.uuidString + ".json"))
-        _ = try file.load(); files[id] = file
-        return file
+        let value = try file.load(); files[id] = file
+        return value
     }
     func save(_ recovery: RunRecovery, immediately: Bool = false,
               onError: @escaping @MainActor @Sendable (String) -> Void) {
@@ -250,14 +269,25 @@ final class RunRecoveryStore: @unchecked Sendable {
             }
         }
     }
-    private func runIDs() throws -> Set<UUID> {
-        guard FileManager.default.fileExists(atPath: directory.path) else { return [] }
-        let urls = try FileManager.default.contentsOfDirectory(at: directory, includingPropertiesForKeys: nil)
-        // Include missing-primary backups after an interrupted file operation.
-        return Set(urls.compactMap { URL -> UUID? in
-            let stem = URL.deletingPathExtension()
-            return UUID(uuidString: URL.pathExtension == "backup" ? stem.deletingPathExtension().lastPathComponent : stem.lastPathComponent)
-        })
+    private func runIDs() throws -> Set<UUID> { try listing().ids }
+    /// Run IDs, and a stamp for each primary file, from one directory listing.
+    private func listing() throws -> (ids: Set<UUID>, stamps: [UUID: Stamp]) {
+        guard FileManager.default.fileExists(atPath: directory.path) else { return ([], [:]) }
+        let keys: Set<URLResourceKey> = [.contentModificationDateKey, .fileSizeKey]
+        let urls = try FileManager.default.contentsOfDirectory(at: directory, includingPropertiesForKeys: Array(keys))
+        var ids = Set<UUID>(), stamps: [UUID: Stamp] = [:]
+        for url in urls {
+            // Include missing-primary backups after an interrupted file operation.
+            let stem = url.deletingPathExtension()
+            let isBackup = url.pathExtension == "backup"
+            guard let id = UUID(uuidString: isBackup ? stem.deletingPathExtension().lastPathComponent : stem.lastPathComponent) else { continue }
+            ids.insert(id)
+            if url.pathExtension == "json", let values = try? url.resourceValues(forKeys: keys),
+               let modified = values.contentModificationDate, let size = values.fileSize {
+                stamps[id] = Stamp(modified: modified, size: size)
+            }
+        }
+        return (ids, stamps)
     }
     private func moveAside(_ id: UUID) throws {
         files[id] = nil
@@ -271,20 +301,85 @@ final class RunRecoveryStore: @unchecked Sendable {
         }
         try? manager.removeItem(at: directory.appendingPathComponent(id.uuidString + ".json.lock"))
     }
+    /// A file's identity on disk. Any write, from this process or another, changes it.
+    private struct Stamp: Equatable {
+        let modified: Date
+        let size: Int
+    }
+    private struct Summary {
+        let stamp: Stamp
+        let header: RunRecoveryFile.Header?
+    }
+    private var summaries: [UUID: Summary] = [:]
+    private var loadedRun: (id: UUID, stamp: Stamp, value: RunRecovery)?
+    private func stamp(_ id: UUID) -> Stamp? {
+        var url = directory.appendingPathComponent(id.uuidString + ".json")
+        url.removeAllCachedResourceValues()
+        guard let values = try? url.resourceValues(forKeys: [.contentModificationDateKey, .fileSizeKey]),
+              let modified = values.contentModificationDate, let size = values.fileSize else { return nil }
+        return Stamp(modified: modified, size: size)
+    }
+    private final class HeaderReads: @unchecked Sendable {
+        private let lock = NSLock()
+        private var values: [UUID: RunRecoveryFile.Header?] = [:]
+        func record(_ header: RunRecoveryFile.Header?, for id: UUID) { lock.lock(); values[id] = .some(header); lock.unlock() }
+        /// `nil` when the quick read failed; `.some(nil)` for a cleared run.
+        func header(for id: UUID) -> RunRecoveryFile.Header?? { lock.lock(); defer { lock.unlock() }; return values[id] }
+    }
+    /// Headers of all runs. Only files that changed since the last scan are read, in parallel.
+    /// A file that fails the quick read goes through the full load, which also recovers backups.
+    private func headers(_ ids: Set<UUID>, stamps listed: [UUID: Stamp]) -> [UUID: Result<RunRecoveryFile.Header?, Error>] {
+        let changed = ids.filter { id in listed[id].map { summaries[id]?.stamp != $0 } ?? true }
+        let readable = Array(changed.filter { listed[$0] != nil })
+        let reads = HeaderReads()
+        let directory = directory
+        DispatchQueue.concurrentPerform(iterations: readable.count) { index in
+            let id = readable[index]
+            if let header = try? RunRecoveryFile(url: directory.appendingPathComponent(id.uuidString + ".json")).header() {
+                reads.record(header, for: id)
+            }
+        }
+        var result: [UUID: Result<RunRecoveryFile.Header?, Error>] = [:]
+        for id in ids {
+            if !changed.contains(id), let cached = summaries[id] { result[id] = .success(cached.header); continue }
+            let header: RunRecoveryFile.Header?
+            if let quick = reads.header(for: id) { header = quick }
+            else {
+                do { header = try loadRun(id).map { RunRecoveryFile.Header(profileID: $0.profileID, hotSeatID: $0.hotSeatID, savedAt: $0.savedAt) } }
+                catch { result[id] = .failure(error); continue }
+            }
+            result[id] = .success(header)
+            // A write during the read leaves the entry out, so the next scan reads it again.
+            if let settled = stamp(id), listed[id] == nil || settled == listed[id] { summaries[id] = Summary(stamp: settled, header: header) }
+        }
+        return result
+    }
+    /// Chooses the newest run from cached headers, then fully loads only that run.
     func latest(profileID: String, hotSeatID: String? = nil) throws -> RunRecovery? {
         try queue.sync {
-            let ids = try runIDs()
-            var latest: RunRecovery?
+            var candidates: [(id: UUID, savedAt: Date)] = []
             var firstError: Error?
-            for id in ids {
+            let (ids, listed) = try listing()
+            for (id, read) in headers(ids, stamps: listed) {
+                switch read {
+                case .success(let header):
+                    guard let header, header.profileID == profileID, header.hotSeatID == hotSeatID else { continue }
+                    candidates.append((id, header.savedAt))
+                case .failure(let error): if firstError == nil { firstError = error }
+                }
+            }
+            for candidate in candidates.sorted(by: { $0.savedAt > $1.savedAt }) {
+                let current = stamp(candidate.id)
+                if let loadedRun, loadedRun.id == candidate.id, let current, loadedRun.stamp == current,
+                   files[candidate.id] != nil { return loadedRun.value }
                 do {
-                    let item = try file(id)
-                    guard let value = try item.load(), value.profileID == profileID, value.hotSeatID == hotSeatID else { continue }
-                    if latest == nil || value.savedAt > latest!.savedAt { latest = value }
+                    guard let value = try loadRun(candidate.id), value.profileID == profileID, value.hotSeatID == hotSeatID else { continue }
+                    if let settled = stamp(candidate.id), settled == current { loadedRun = (candidate.id, settled, value) }
+                    return value
                 } catch { if firstError == nil { firstError = error } }
             }
-            if latest == nil, let firstError { throw firstError }
-            return latest
+            if let firstError { throw firstError }
+            return nil
         }
     }
 }
