@@ -47,10 +47,13 @@ def validate_info_plist(path):
             raise ValueError
     except (ValueError, TypeError):
         raise ValueError("SUPublicEDKey must contain a base64 Ed25519 public key.")
-    for key in ("SUEnableAutomaticChecks", "SUAutomaticallyUpdate",
-                "SUAllowsAutomaticUpdates", "SUVerifyUpdateBeforeExtraction"):
+    for key in ("SUEnableAutomaticChecks", "SUVerifyUpdateBeforeExtraction"):
         if info.get(key) is not True:
             raise ValueError(f"{key} must be true.")
+    # Players approve each update after they read its notes. No silent installs.
+    for key in ("SUAutomaticallyUpdate", "SUAllowsAutomaticUpdates"):
+        if info.get(key) is not False:
+            raise ValueError(f"{key} must be false.")
     if not isinstance(info.get("SUScheduledCheckInterval"), int) or info["SUScheduledCheckInterval"] < 3600:
         raise ValueError("SUScheduledCheckInterval must be at least one hour.")
     return version, build

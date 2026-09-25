@@ -5,7 +5,11 @@ Ultimate Lemmings 1.5 uses Sparkle 2.7.3 for macOS updates.
 ## Runtime contract
 
 - The app checks the HTTPS appcast once per day.
-- Sparkle downloads and installs signed updates in the background.
+- When an update is available, Sparkle shows its release notes. The player
+  selects **Install Update** or dismisses the alert. Nothing installs
+  without approval, and the app offers no automatic-install option.
+- Builds 39 to 41 install silently. Their own settings control the update
+  to 1.5. From 1.5, every update asks first.
 - The app verifies the Ed25519 archive signature before extraction.
 - The app shows `Check for Updates…` in the application menu.
 - The feed URL and public key are in the app bundle `Info.plist`.

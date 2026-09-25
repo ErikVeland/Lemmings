@@ -325,7 +325,9 @@ zsh "$project_dir/Scripts/run-launch-smoke-test.sh" "$standard_app" ||
 mkdir -p "$updates_dir"
 update_zip="$updates_dir/UltimateLemmings-$version-build$build_number.zip"
 ditto -c -k --sequesterRsrc --keepParent "$standard_app" "$update_zip"
-cp "$release_notes" "$updates_dir/UltimateLemmings-$version-build$build_number.txt"
+# The update alert shows these notes. Sparkle reads HTML beside the archive.
+python3 "$project_dir/Tools/ReleaseReadiness/update_notes.py" "$release_notes" \
+  "$updates_dir/UltimateLemmings-$version-build$build_number.html"
 release_tag="${RELEASE_TAG:-v${version}.0}"
 download_url_prefix="${DOWNLOAD_URL_PREFIX:-https://github.com/ErikVeland/Lemmings/releases/download/$release_tag/}"
 [[ "$download_url_prefix" == https://* ]] || fail "DOWNLOAD_URL_PREFIX must use HTTPS."

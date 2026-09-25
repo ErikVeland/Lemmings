@@ -119,9 +119,12 @@ public test and 1.2 releases. Builds 42 to 46 were local test builds.
 
 ## Install and update
 
-Installations of 1.2 builds 39 to 41 can select **Ultimate Lemmings → Check
-for Updates…** to install this build. For a new installation, expand the
-ZIP, move Ultimate Lemmings.app to Applications, then open it.
+Installations of 1.2 builds 39 to 41 download and install this build
+automatically. For a new installation, expand the ZIP, move Ultimate
+Lemmings.app to Applications, then open it.
+
+From 1.5, the game checks for updates each day. When an update is ready, the
+game shows its release notes. You choose to install it now or later.
 
 Universal app for Intel and Apple silicon, macOS 12.3 or later. The public
 app and all bundled Sparkle components are Developer ID signed and Apple
