@@ -532,6 +532,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
   func applicationWillTerminate(_ notification: Notification) { saveRunCheckpoint(immediately: true); ClassicRouteRecorder.flush() }
 
   func applicationDidFinishLaunching(_ notification: Notification) {
+    // Start scheduled update checks without waiting for the menu action.
+    _ = updaterController
     migrateStandaloneSaves()
     buildMenu()
     buildInterface()
@@ -1335,7 +1337,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   private func refreshClassicLevelPickerAvailability() {
     guard let campaign, let flow else { return }
-    for index in campaign.levels.indices {
+    // A data-set switch saves progress before it fills the picker, so the
+    // picker can hold fewer rows than the campaign. NSMenu asserts on an
+    // index past its end.
+    for index in 0..<min(campaign.levels.count, picker.numberOfItems) {
       picker.item(at: index)?.isEnabled = settings.unlockAllClassicLevels
         || sequenceIsActive
         || flow.isLevelUnlocked(index)

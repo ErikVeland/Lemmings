@@ -7,9 +7,7 @@ swiftc -swift-version 6 -warnings-as-errors -parse-as-library \
   -emit-module -emit-library -module-name NxlvKit \
   -emit-module-path "$build_dir/modules/NxlvKit.swiftmodule" \
   -Xlinker -install_name -Xlinker @rpath/libNxlvKit.dylib \
-  -o "$build_dir/libNxlvKit.dylib" \
-  "$project_dir/Sources/NxlvKit/SequelBinary.swift" \
-  "$project_dir"/Sources/NxlvKit/Lemmings2*.swift "$project_dir"/Sources/NxlvKit/Lemmings3*.swift
+  -o "$build_dir/libNxlvKit.dylib" "$project_dir"/Sources/NxlvKit/*.swift
 swiftc -swift-version 6 -warnings-as-errors \
   -I "$build_dir/modules" -L "$build_dir" -lNxlvKit \
   -Xlinker -rpath -Xlinker "$build_dir" \

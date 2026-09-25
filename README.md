@@ -11,6 +11,13 @@ The project is not affiliated with, endorsed by or licensed by Sony
 Interactive Entertainment. Read [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md)
 before distributing a build.
 
+## Download
+
+[Download Ultimate Lemmings 1.2](https://github.com/ErikVeland/Lemmings/releases/latest)
+for Intel and Apple silicon Macs running macOS 12.3 or later. The public app and
+its bundled Sparkle components are Developer ID signed and notarised.
+See the [release notes](Documentation/ReleaseNotes-1.2-build40.md) for known limits.
+
 ## Start here
 
 - [Architecture](ARCHITECTURE.md) — module boundaries, runtime flow and release packaging.

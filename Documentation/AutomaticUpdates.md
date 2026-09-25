@@ -32,6 +32,9 @@ required.
 
 ## Validation evidence
 
+[Build 40 verification](ReleaseReadiness/1.2Build40Distribution.md) records the public
+Sparkle download, installation and relaunch from build 39.
+
 Run the data-independent checks before a release. The empty-feed option is
 only for development before the first public update exists.
 

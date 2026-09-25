@@ -239,6 +239,21 @@ print -r -- "$source_changes"
 print "Gate 2-3: release notes current"
 print "             $release_notes"
 print "Gate 4: three target archives configured"
+# Stale proofs or hints do not stop a build. The app then hides rescue
+# targets and level hints without a message.
+python3 "$project_dir/Tools/TrolleyVerification/catalogue.py" check ||
+  fail "Rescue proofs do not match the engine. Run Scripts/verify-trolley-maxima.sh."
+python3 - "$project_dir" <<'CHECK_HINTS' ||
+import json, pathlib, sys
+root = pathlib.Path(sys.argv[1]) / 'Resources'
+proofs = json.loads((root / 'Trolley/verified-maxima.json').read_text())
+hints = json.loads((root / 'Hints/classic.json').read_text())
+sys.exit(hints['engineFingerprint'] != proofs['engineSourceFingerprint'])
+CHECK_HINTS
+  fail "Level hints do not match the engine. Run Scripts/generate-level-hints.sh."
+print "Gate 5: rescue proofs and level hints match the engine"
+print "Gate 6: app integration tests run on the standard build"
+print "Gate 7: each signed target launches as a new user"
 
 if (( dry_run )); then
   print "Dry run: no build, signing, notarisation or upload performed."
@@ -324,9 +339,14 @@ standard_app="$standard_dir/Ultimate Lemmings.app"
 standard_zip="$downloads_dir/UltimateLemmings-$version-build$build_number-$stamp-standard.zip"
 print "==> Building and notarising Developer ID standard target"
 build_app "$project_dir" "$standard_dir" 0
+print "==> Gate 6: running app integration tests"
+LEMMINGS_TEST_APP="$standard_app" zsh "$project_dir/Scripts/run-app-integration-tests.sh" ||
+  fail "The app integration tests failed. Do not release this build."
 sign_developer_id "$standard_app"
 notarise_app "$standard_app" "$run_dir/standard-submission.zip" "$standard_zip"
 verify_gatekeeper "$standard_zip"
+zsh "$project_dir/Scripts/run-launch-smoke-test.sh" "$standard_app" ||
+  fail "The standard target did not launch cleanly."
 
 # Sparkle updates contain only the notarised app. The public release process
 # uploads this archive and the generated appcast to the configured release.
@@ -340,15 +360,6 @@ download_url_prefix="${DOWNLOAD_URL_PREFIX:-https://github.com/ErikVeland/Lemmin
 DOWNLOAD_URL_PREFIX="$download_url_prefix" APPCAST_PATH="$project_dir/appcast.xml" \
   UPDATES_DIR="$updates_dir" zsh "$project_dir/Scripts/generate-appcast.sh" "$updates_dir"
 zsh "$project_dir/Scripts/check-1.2-release-inputs.sh"
-if [[ "$publish_github_release" == 1 ]]; then
-  RELEASE_TAG="$release_tag" \
-  RELEASE_VERSION="$version" \
-  RELEASE_COMMIT="$current_head" \
-  RELEASE_NOTES_PATH="$release_notes" \
-  APPCAST_PATH="$project_dir/appcast.xml" \
-  GITHUB_REPOSITORY="${GITHUB_REPOSITORY:-ErikVeland/Lemmings}" \
-    zsh "$project_dir/Scripts/publish-github-release.sh" "$update_zip"
-fi
 
 monterey_dir="$run_dir/monterey"
 monterey_app="$monterey_dir/Ultimate Lemmings.app"
@@ -358,6 +369,8 @@ build_app "$monterey_worktree" "$monterey_dir" 0
 sign_developer_id "$monterey_app"
 notarise_app "$monterey_app" "$run_dir/monterey-submission.zip" "$monterey_zip"
 verify_gatekeeper "$monterey_zip"
+zsh "$project_dir/Scripts/run-launch-smoke-test.sh" "$monterey_app" ||
+  fail "The Monterey target did not launch cleanly."
 
 game_center_dir="$run_dir/gamecenter"
 game_center_app="$game_center_dir/Ultimate Lemmings.app"
@@ -368,7 +381,20 @@ codesign --verify --deep --strict --verbose=1 "$game_center_app"
 codesign -d --entitlements :- "$game_center_app" 2>/dev/null |
   grep -q 'com.apple.developer.game-center' ||
   fail "Game Center entitlement is missing from the Game Center target."
+zsh "$project_dir/Scripts/run-launch-smoke-test.sh" "$game_center_app" ||
+  fail "The Game Center target did not launch cleanly."
 package_app "$game_center_app" "$game_center_zip"
+
+# Publish only after all three targets pass their gates.
+if [[ "$publish_github_release" == 1 ]]; then
+  RELEASE_TAG="$release_tag" \
+  RELEASE_VERSION="$version" \
+  RELEASE_COMMIT="$current_head" \
+  RELEASE_NOTES_PATH="$release_notes" \
+  APPCAST_PATH="$project_dir/appcast.xml" \
+  GITHUB_REPOSITORY="${GITHUB_REPOSITORY:-ErikVeland/Lemmings}" \
+    zsh "$project_dir/Scripts/publish-github-release.sh" "$update_zip"
+fi
 
 print
 print "Three target archives created in $downloads_dir:"
