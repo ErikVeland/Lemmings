@@ -932,7 +932,7 @@ extension AppDelegate {
     loadCurrentFanLevel(); restoringCheckpoint = false
     _ = advanceFanPlay()
     guard let legacyLocalSession = session as? ClassicSession, fanPlaying else {
-      throw IntegrationFailure(message: "Legacy local style fixture failed to load")
+      throw IntegrationFailure(message: "Legacy style fixture failed: \(fanPack?.lastPathComponent ?? "missing pack"), entries=\(fanQueue.count), status=\(panel.statusText)")
     }
     let legacyLocalInitialHash = ClassicDOSReplayRecorder.stateHash(of: legacyLocalSession.simulation)
     for _ in 0..<30 { legacyLocalSession.tick() }
@@ -964,7 +964,7 @@ extension AppDelegate {
     loadCurrentFanLevel(); restoringCheckpoint = false
     _ = advanceFanPlay()
     guard let legacyHolidaySession = session as? ClassicSession, fanPlaying else {
-      throw IntegrationFailure(message: "Legacy local style fixture failed to load")
+      throw IntegrationFailure(message: "Legacy style fixture failed: \(fanPack?.lastPathComponent ?? "missing pack"), entries=\(fanQueue.count), status=\(panel.statusText)")
     }
     let legacyHolidayInitialHash = ClassicDOSReplayRecorder.stateHash(of: legacyHolidaySession.simulation)
     for _ in 0..<30 { legacyHolidaySession.tick() }

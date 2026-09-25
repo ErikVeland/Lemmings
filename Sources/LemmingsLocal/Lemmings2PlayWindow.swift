@@ -644,7 +644,7 @@ import NxlvKit
         } catch { explain(String(describing: error), returnTo: .briefing) }
     }
     private func restart() {
-        saveCheckpoint(immediately: true)
+        saveCheckpoint(immediately: true, waitForDisk: false)
         guard let initial else { return }
         game = initial; beginReplay(); dj.resetLevel(); canvas.resetCamera(level: level)
         countdownWarning.reset(seconds: initial.remainingSeconds)
@@ -784,14 +784,14 @@ import NxlvKit
         checkpoint.hotSeatID = arcadeHotSeatID
         return checkpoint
     }
-    func saveCheckpoint(immediately: Bool = false) {
+    func saveCheckpoint(immediately: Bool = false, waitForDisk: Bool = true) {
         guard recordsCampaignProgress else { return }
         let now = ProcessInfo.processInfo.systemUptime
         guard immediately || now - lastCheckpointTime >= 5 else { return }
         do {
             guard let checkpoint = try makeCheckpoint(engine: RunRecovery.bundledEngine) else { return }
             lastCheckpointTime = now
-            recoveryStore.save(checkpoint, immediately: immediately) { [weak self] error in self?.message = error }
+            recoveryStore.save(checkpoint, immediately: immediately && waitForDisk) { [weak self] error in self?.message = error }
         } catch { message = error.localizedDescription }
     }
 

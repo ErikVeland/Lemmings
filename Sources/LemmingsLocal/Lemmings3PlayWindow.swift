@@ -748,7 +748,7 @@ import NxlvKit
             }
     }
     @objc private func restart() {
-        saveCheckpoint(immediately: true)
+        saveCheckpoint(immediately: true, waitForDisk: false)
         speedControl.newLevel()
         canvas.menuRows = nil; pendingTool = nil; canvas.directionPoint = nil; game = initial; beginReplay(); recorded = false; canvas.startCountdown.arm(); paused = true; accumulator = 0; canvas.resetCamera(campaign.levels[campaign.index]); message = "Choose an action. Bricks and spades ask for a direction. Arrow keys move the camera."; refresh() }
     private func save() {
@@ -1012,7 +1012,7 @@ import NxlvKit
         else if usesSharedWindow { onReturnToLibrary?() }
         else { showGameMenu() }
     }
-    func saveCheckpoint(immediately: Bool = false) {
+    func saveCheckpoint(immediately: Bool = false, waitForDisk: Bool = true) {
         guard recordsCampaignProgress else { return }
         let engine = RunRecovery.bundledEngine
         let now = ProcessInfo.processInfo.systemUptime
@@ -1031,7 +1031,7 @@ import NxlvKit
         checkpoint.l3 = L3RunRecovery(progress: progress, inputs: recoveryInputs,
           skillAssignments: skillAssignments, toolUses: toolUses)
         checkpoint.hotSeatID = arcadeHotSeatID
-        recoveryStore.save(checkpoint, immediately: immediately) { [weak self] error in
+        recoveryStore.save(checkpoint, immediately: immediately && waitForDisk) { [weak self] error in
             self?.message = "Run recovery save failed: " + error
         }
     }

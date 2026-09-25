@@ -357,10 +357,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   private var recoveryEngine: String { RunRecovery.bundledEngine }
 
-  private func saveRunCheckpoint(immediately: Bool = false) {
+  private func saveRunCheckpoint(immediately: Bool = false, waitForDisk: Bool = true) {
     guard !sequenceIsActive else { return }
-    if let nativeL2Window { nativeL2Window.saveCheckpoint(immediately: immediately); return }
-    if let nativeL3Window { nativeL3Window.saveCheckpoint(immediately: immediately); return }
+    if let nativeL2Window { nativeL2Window.saveCheckpoint(immediately: immediately, waitForDisk: waitForDisk); return }
+    if let nativeL3Window { nativeL3Window.saveCheckpoint(immediately: immediately, waitForDisk: waitForDisk); return }
     let atBriefing: Bool
     if case .briefing? = flow?.screen { atBriefing = true } else { atBriefing = false }
     guard !restoringCheckpoint, !sequelIsActive, (phase == .playing || atBriefing),
@@ -398,7 +398,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     lastCheckpointTime = now
     checkpoint.hotSeatID = arcadeHotSeatID
     checkpoint.fullQuest = launchMode == .quest
-    recoveryStore.save(checkpoint, immediately: immediately) { [weak self] message in
+    recoveryStore.save(checkpoint, immediately: immediately && waitForDisk) { [weak self] message in
       self?.setStatus("Run recovery save failed: " + message)
     }
   }
@@ -4575,7 +4575,11 @@ let achievementProgressKey = "ClassicAchievementProgress"
       return
     }
     guard sequenceLaunchCanCommit(runID: sequenceRunID, identity: identity) else { return }
-    saveRunCheckpoint(immediately: true)
+    let reusesCampaign = !sequelIsActive && !fanPlaying && currentNxlvURL == nil
+      && gamePicker.indexOfSelectedItem == dataSetIndex && flow != nil
+      && GameAssetCache<String>.bundledKey(dataSetDirectory) != nil
+      && loadedArtworkDirectory?.standardizedFileURL == dataSetDirectory.standardizedFileURL
+    saveRunCheckpoint(immediately: true, waitForDisk: false)
     if sequelIsActive || fanPlaying || fanScreen != .off { returnToLibrary() }
     else { GameScreen.shared.dismissAll() }
     if sequenceRunID == nil {
@@ -4583,16 +4587,18 @@ let achievementProgressKey = "ClassicAchievementProgress"
       sequencePlaylistStore = nil
     }
     gamePicker.selectItem(at: dataSetIndex)
-    do {
-      try applyDataSetSelection(
-        at: dataSetIndex,
-        using: (set: browserDataSet, directory: dataSetDirectory),
-        preparedArtwork: preparedArtwork)
-    } catch {
-      clearSequenceLaunch(sequenceRunID)
-      GameScreen.shared.message(entry.levelName,
-        detail: "The selected game data could not load: \(error)")
-      return
+    if !reusesCampaign {
+      do {
+        try applyDataSetSelection(
+          at: dataSetIndex,
+          using: (set: browserDataSet, directory: dataSetDirectory),
+          preparedArtwork: preparedArtwork)
+      } catch {
+        clearSequenceLaunch(sequenceRunID)
+        GameScreen.shared.message(entry.levelName,
+          detail: "The selected game data could not load: \(error)")
+        return
+      }
     }
     activeTitle = browserDataSet.title
     launchMode = .singleTitle
@@ -5145,7 +5151,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   // MARK: - Session handling
 
   private func adopt(_ new: any GameSession) {
-    saveRunCheckpoint(immediately: true)
+    saveRunCheckpoint(immediately: true, waitForDisk: false)
     lastCheckpointTime = 0
     screenFlash.clear()
     assignmentFocus = AssignmentFocus()
