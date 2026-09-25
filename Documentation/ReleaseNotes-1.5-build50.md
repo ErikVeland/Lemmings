@@ -1,5 +1,7 @@
 # Ultimate Lemmings 1.5 public test (build 50)
 
+Draft only. Publication is pending a source decision and a distinct build number.
+
 [Download the Mac app](https://github.com/ErikVeland/Lemmings/releases/download/v1.5-build50/UltimateLemmings-1.5-build50.zip)
 
 Build: 50
@@ -50,7 +52,13 @@ public test and 1.2 releases. Builds 42 to 49 were local test builds. This is a 
 
 - The four-corner reticle is back, with one-pixel strokes. Green corners show
   an eligible lemming, yellow an ineligible lemming, and grey empty terrain.
-- Settings has skill-icon sizes None, 1× and 2×. The default is 2×.
+- Settings has skill-icon sizes None, 1× and 2×. The default is 1×,
+  matching the size called 2× in builds 44 to 46. Saved icon sizes are preserved.
+- Gameplay settings have Original, Modern and Custom presets. Changing an
+  individual option selects Custom.
+- Modern controls can favour a blocker for a bomb skill or a builder for
+  another bridge. These options apply across Classic, Lemmings 2 and Lemmings 3.
+  In Lemmings 3 they apply to Use tool. Native skill rules still decide assignment.
 - An optional lemming count shows beside the cursor. The default is off.
 - Cursor settings apply in Classic, Lemmings 2 and Lemmings 3.
 - The selected lemming shows a faint halo and a gentle shimmer. With reduced
@@ -152,8 +160,6 @@ Saved runs from earlier builds resume as before.
 - Lemmings 2, Lemmings 3 and NeoLemmix remain previews.
 - The Lemmings 2 artwork toggle does not restore pixel-identical rendering
   after a round trip.
-- A controller retry, rewind and step button sequence has a known routing
-  issue.
 - Chip recordings repeat the full file, with its intro and fade. They do not
   loop seamlessly.
 - With the Mac sound set, the "yippee" and "pop" events have no sound.

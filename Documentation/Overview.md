@@ -108,7 +108,7 @@ what lets the release notes above be trusted rather than taken on faith.
 ## Where the project stands right now
 
 The official Classic campaign closed at 352/352 on 22 September 2026. The 1.0
-RC1 baseline was build 36. The macOS 1.5 build 50 public test carries the shared
+RC1 baseline was build 36. The unpublished macOS 1.5 build 50 candidate carries the shared
 browser, playlists, background fan-pack checks, automatic application updates,
 startup fixes, shared gameplay controls, keyboard dialog navigation and measured
 DJ beat timing. See the [release notes](ReleaseNotes-1.5-build50.md) and

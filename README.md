@@ -13,16 +13,17 @@ before distributing a build.
 
 ## Download
 
-The [1.5 build 50 public test](https://github.com/ErikVeland/Lemmings/releases/tag/v1.5-build50)
-provides a universal Mac app for Intel and Apple silicon, macOS 12.3 or later.
-Read the [release notes](Documentation/ReleaseNotes-1.5-build50.md),
+The [1.2 build 41 release](https://github.com/ErikVeland/Lemmings/releases/tag/v1.2-build41)
+is the latest verified public download.
+
+A universal macOS 1.5 candidate has been built locally for Intel and Apple
+silicon, macOS 12.3 or later. Publication is pending a source decision because
+another release process is using build number 50. Read the
+[draft release notes](Documentation/ReleaseNotes-1.5-build50.md),
 [tester guide](Documentation/BetaTesting.md), and
 [validation record](Documentation/ReleaseReadiness/1.5PublicRelease.md).
-The [BBCode release notes](Documentation/ReleaseNotes-1.5-build50.bbcode.txt)
-are ready to paste into a forum post.
-
-The [1.2 build 41 release](https://github.com/ErikVeland/Lemmings/releases/tag/v1.2-build41)
-remains available as the previous public version.
+The matching [BBCode draft](Documentation/ReleaseNotes-1.5-build50.bbcode.txt)
+will be ready to post when the final build number and download are confirmed.
 
 ## Start here
 
@@ -46,7 +47,7 @@ remains available as the previous public version.
 
 The iPhone and iPad 1.3 source and Simulator gates pass. Physical-device,
 VoiceOver, thermal, signing and distribution evidence remain open. The macOS
-public test is version 1.5 build 50. Active NeoLemmix work remains a separate
+local candidate is version 1.5 build 50. Publication is pending. Active NeoLemmix work remains a separate
 compatibility lane. Classic content is the completed reference engine.
 Lemmings 2 and Lemmings 3 are labelled Preview. The bundled corpus contains
 6,020 Classic-format fan levels in 535 packs; this is not a claim of NeoLemmix

@@ -15,9 +15,9 @@ commit the key or pass the key value as a command argument.
 
 ## Current public test
 
-Build 50 uses tag `v1.5-build50` and archive `UltimateLemmings-1.5-build50.zip`.
-It is a GitHub prerelease for public testers. The live Sparkle feed serves this
-build after package verification. GitHub's prerelease flag alone does not keep
+This candidate proposes tag `v1.5-build50` and archive `UltimateLemmings-1.5-build50.zip`.
+Publication is pending a source decision and a distinct build number. The live
+feed still serves public 1.2 build 41. The intended release is a GitHub prerelease. GitHub's prerelease flag alone does not keep
 an entry out of the Sparkle feed.
 
 See the [build 50 validation record](ReleaseReadiness/1.5PublicRelease.md) for

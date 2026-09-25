@@ -107,6 +107,8 @@ enum PanelButton: Equatable {
   }
   private var buttonFrames: [(PanelButton, CGRect)] = []
   private var minimapFrame = CGRect.zero
+  /// The minimap's drag area, below the timeline controls.
+  var minimapBounds: CGRect { minimapFrame }
   private var panelFrame = CGRect.zero
   private var panelScale = 1.0
 

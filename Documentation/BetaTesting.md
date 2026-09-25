@@ -1,7 +1,9 @@
 # Public testing
 
 The current public tester candidate is **Ultimate Lemmings 1.5 build 50**.
-Download it from the [GitHub release](https://github.com/ErikVeland/Lemmings/releases/tag/v1.5-build50).
+It has not been published from this checkout. Another process is preparing a
+different build 50. The source and final build number must be selected first.
+The installation steps below describe the prepared release workflow.
 Read the [release notes](ReleaseNotes-1.5-build50.md) and
 [validation record](ReleaseReadiness/1.5PublicRelease.md) before testing.
 
