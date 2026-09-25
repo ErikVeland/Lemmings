@@ -71,3 +71,8 @@ Fresh starts and retries show a shared 3–2–1 countdown before play. Only vis
 active gameplay time advances the countdown. Menus and inactive windows hold it.
 Pause or single-step cancels automatic start. Saved runs remain paused, and
 Hot Seat handovers still wait for the player to indicate readiness.
+
+Handover pages accept Space, Return and keypad Enter for their primary Ready action.
+Held keys must not repeat that action. Pointer confinement also applies to paused
+screens and menus in all three games. Respect the capture preference, Option release,
+window focus, system sheets and app switching.

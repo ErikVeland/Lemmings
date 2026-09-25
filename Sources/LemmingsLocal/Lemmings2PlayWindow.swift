@@ -858,6 +858,7 @@ import NxlvKit
         canvas.speedChoiceLabel = speedControl.choiceLabel
         canvas.speedLabel = speedControl.panelLabel
         canvas.variableSpeedEnabled = speedControl.variableEnabled
+        GameScreen.shared.capturePointer(in: window, enabled: audioSettings.confinePointer && !playing)
         canvas.capturePointer(active: playing && audioSettings.confinePointer)
         guard !GameScreen.shared.isPresented else { accumulator = 0; return }
         frontTicks += 1

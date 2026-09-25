@@ -3664,6 +3664,7 @@ Task { @MainActor in
     #elseif PERFORMANCE_TESTS
     try await subject.testReleasePerformance()
     #elseif HOT_SEAT_TESTS
+    try subject.testPageKeyboardContinuation()
     try subject.testHotSeatBoundaries()
     try subject.testHandoverPreviousLevel()
     try subject.testRunRecovery()
@@ -3757,3 +3758,34 @@ Task { @MainActor in
   }
 }
 testApp.run()
+
+
+extension AppDelegate {
+  fileprivate func testPageKeyboardContinuation() throws {
+    for code: UInt16 in [36, 76, 49] {
+      var activations = 0
+      let page = GameMenuPage(title: "UVA's turn", subtitle: "PASS THE CONTROLS")
+      page.controllerBackButton.isHidden = true
+      page.setDetail("The game will wait. Give the controls to UVA, then choose Ready.")
+      page.addPrimaryAction("Ready, UVA") { activations += 1 }
+      GameScreen.shared.present(page, owner: window)
+      let event = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [],
+        timestamp: 0, windowNumber: window.windowNumber, context: nil,
+        characters: code == 49 ? " " : "\r", charactersIgnoringModifiers: "", isARepeat: false, keyCode: code)!
+      try check(page.performKeyEquivalent(with: event) && activations == 1,
+        "Handover key did not activate Ready exactly once")
+      let repeated = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [],
+        timestamp: 0, windowNumber: window.windowNumber, context: nil,
+        characters: " ", charactersIgnoringModifiers: " ", isARepeat: true, keyCode: code)!
+      _ = page.performKeyEquivalent(with: repeated)
+      try check(activations == 1, "Held handover key repeated Ready")
+      page.layoutSubtreeIfNeeded()
+      if code == 49, let bitmap = page.bitmapImageRepForCachingDisplay(in: page.bounds) {
+        page.cacheDisplay(in: page.bounds, to: bitmap)
+        try bitmap.representation(using: .png, properties: [:])?.write(to: URL(fileURLWithPath: ".build/keyboard-handover.png"))
+      }
+      GameScreen.shared.dismiss(page)
+    }
+    print("PASS Enter, keypad Enter and Space activate Ready once; held keys do not repeat")
+  }
+}

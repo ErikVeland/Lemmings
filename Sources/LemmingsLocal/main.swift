@@ -5642,6 +5642,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
     panel.speedLabel = speedControl.panelLabel
     panel.variableSpeedEnabled = speedControl.variableEnabled
     playfield.speedMultiplier = speedControl.multiplier
+    if !sequelIsActive {
+      GameScreen.shared.capturePointer(in: window, enabled: settings.confinePointer && !playfield.usesControllerPointer
+        && (phase != .playing || isPaused || GameScreen.shared.isPresented || session?.isComplete == true))
+    }
     // Settle the display before an open page can suspend the simulation.
     applyDisplayMode()
     guard !sequelIsActive, !GameScreen.shared.isPresented else {

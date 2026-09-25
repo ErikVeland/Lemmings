@@ -13,6 +13,11 @@ import NxlvKit
         let container: GamePageContainer
     }
     private var pages: [Page] = []
+    private let pointerCapture = GamePointerCapture()
+    func capturePointer(in window: NSWindow?, enabled: Bool) {
+        guard let root = window?.contentView else { pointerCapture.reset(); return }
+        _ = pointerCapture.update(in: root, active: enabled)
+    }
     private weak var gameFocus: NSResponder?
     var isPresented: Bool { !pages.isEmpty || gameWindow?.attachedSheet != nil }
     func contains(_ view: NSView) -> Bool { pages.contains { $0.view === view } }
@@ -151,7 +156,8 @@ import NxlvKit
     private let back = GameActionButton(title: "Back", primary: false)
     var controllerBackButton: NSButton { back }
     private weak var preferredControllerControl: NSControl?
-    var controllerInitialControl: NSControl { preferredControllerControl ?? back }
+    private weak var primaryAction: NSButton?
+    var controllerInitialControl: NSControl { preferredControllerControl ?? primaryAction ?? back }
     private var background: CGImage?
     override var isFlipped: Bool { true }
     override var acceptsFirstResponder: Bool { true }
@@ -215,6 +221,7 @@ import NxlvKit
             button.frame = CGRect(x: 574, y: 466, width: 370, height: 48)
         } else { button.frame = CGRect(x: 688, y: 634, width: 368, height: 48) }
         canvas.addSubview(button)
+        primaryAction = button
         return button
     }
     @discardableResult func addSecondaryAction(
@@ -238,10 +245,19 @@ import NxlvKit
     }
     override func performKeyEquivalent(with event: NSEvent) -> Bool {
         if event.isARepeat, [36, 76, 49].contains(event.keyCode) { return true }
+        if window?.firstResponder === self, activatePrimary(with: event) { return true }
         return super.performKeyEquivalent(with: event)
+    }
+    private func activatePrimary(with event: NSEvent) -> Bool {
+        guard [36, 76, 49].contains(event.keyCode),
+              event.modifierFlags.intersection([.command, .control, .option]).isEmpty,
+              let primaryAction, primaryAction.isEnabled, !primaryAction.isHidden else { return false }
+        if !event.isARepeat { primaryAction.performClick(nil) }
+        return true
     }
     override func cancelOperation(_ sender: Any?) { onBack?() }
     override func keyDown(with event: NSEvent) {
+        if activatePrimary(with: event) { return }
         if event.keyCode == 53 { onBack?() } else { super.keyDown(with: event) }
     }
 }

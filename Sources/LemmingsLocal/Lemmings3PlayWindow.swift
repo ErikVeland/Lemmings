@@ -928,6 +928,7 @@ import NxlvKit
         canvas.speedChoiceLabel = speedControl.choiceLabel
         canvas.speedLabel = speedControl.panelLabel
         canvas.variableSpeedEnabled = speedControl.variableEnabled
+        GameScreen.shared.capturePointer(in: window, enabled: canvas.confinePointer && !playing)
         canvas.capturePointer(active: playing)
         guard !GameScreen.shared.isPresented, canvas.menuRows == nil, pendingTool == nil else { accumulator = 0; return }
         canvas.panAtPointer(seconds: elapsed)
