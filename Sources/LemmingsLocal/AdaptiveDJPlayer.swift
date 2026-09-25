@@ -14,15 +14,15 @@ import NxlvKit
   }
   var isPlaying: Bool { recording?.isPlaying == true || module?.isOutputRunning == true }
 
-  init?(_ url: URL) {
+  init?(_ url: URL, repeats: Bool = true) {
     if url.pathExtension.lowercased() == "mod" {
       let player = ModuleMusicPlayer()
-      player.setEnhancements(.modern)
+      player.setEnhancements(.faithful)
       player.setVolume(0)
       guard player.play(url: url) != nil else { return nil }
       module = player
     } else {
-      guard let player = MusicFileDeck(url: url) else { return nil }
+      guard let player = MusicFileDeck(url: url, repeats: repeats) else { return nil }
       player.volume = 0
       recording = player
     }
@@ -67,7 +67,9 @@ import NxlvKit
   private var pools: [String: [URL]] = [:]
   private var currentPool: String?
   private(set) var currentURL: URL?
-  private var playedTracks: Set<String> = []
+  private var catalogue: SoundtrackCatalogue?
+  private var catalogueRoot: URL?
+  private var availablePaths: Set<String> = []
 
   private(set) var masterVolume: Float = 0.8
   private(set) var isMuted = false
@@ -87,8 +89,31 @@ import NxlvKit
   private var activeDeck: DJDeck? { activeIsA ? deckA : deckB }
   private var idleDeck: DJDeck? { activeIsA ? deckB : deckA }
 
-  func load(soundtracks: [String: [URL]]) {
+  func load(soundtracks: [String: [URL]], catalogueRoot: URL? = nil) {
     pools = soundtracks.filter { !$0.value.isEmpty }
+    self.catalogueRoot = catalogueRoot
+    catalogue = catalogueRoot.flatMap { SoundtrackCatalogue.load(at: $0) }
+    availablePaths = Set(pools.values.flatMap { $0 }.compactMap { relativePath($0) })
+  }
+
+  private func relativePath(_ url: URL) -> String? {
+    guard let root = catalogueRoot?.standardizedFileURL.path else { return nil }
+    let path = url.standardizedFileURL.path
+    guard path.hasPrefix(root + "/") else { return nil }
+    return String(path.dropFirst(root.count + 1))
+  }
+
+  /// Resolve a composition once per level. The caller's score position, never
+  /// elapsed time or a random seed, owns progression through its versions.
+  @discardableResult
+  func startJourney(trackID: String, cycle: Int, identity: String, fallback: URL? = nil,
+                    includeAlternates: Bool = true) -> Bool {
+    let selected = catalogue?.select(trackID: trackID, cycle: cycle,
+      availablePaths: availablePaths, includeAlternates: includeAlternates)
+    guard let url = selected.flatMap({ variant in catalogueRoot?.appendingPathComponent(variant.path) }) ?? fallback,
+          FileManager.default.isReadableFile(atPath: url.path) else { return false }
+    startLevel(url: url, identity: identity)
+    return true
   }
 
   /// Starts the mix, or leaves it alone when it is already running.
@@ -151,7 +176,9 @@ import NxlvKit
   // MARK: - Decks
 
   private func makeDeck(_ url: URL) -> DJDeck? {
-    let deck = DJDeck(url)
+    let role = relativePath(url).flatMap { catalogue?.entry(path: $0)?.track.role }
+    let repeats = !["victory", "failure", "cue", "medal", "milestone"].contains(role ?? "")
+    let deck = DJDeck(url, repeats: repeats)
     deck?.playbackRate = playbackRate
     return deck
   }
@@ -164,44 +191,19 @@ import NxlvKit
     fadingOut?.playbackRate = playbackRate
   }
 
-  /// Favour victory themes, then a different source and an unplayed track.
-  static func victoryPreference(_ url: URL) -> Int {
-    let name = url.deletingPathExtension().lastPathComponent.lowercased()
-    if ["endtune", "victory", "triumph", "fanfare", "ending", "success", "win"].contains(where: name.contains) { return 3 }
-    if ["cancan", "awesome", "turkish march", "rainbow", "sports", "highland", "classic3", "smile"].contains(where: name.contains) { return 2 }
-    if ["shadow", "cave", "intro", "frontend", "maintune", "game over"].contains(where: name.contains) { return 0 }
-    return 1
-  }
-
   private func pickTrack(avoiding pool: String?, victory: Bool = false, failure: Bool = false) -> (pool: String, url: URL)? {
-    var candidates = pools.flatMap { name, urls in urls.map { (pool: name, url: $0) } }
-    let different = candidates.filter { $0.url != currentURL }
-    if !different.isEmpty { candidates = different }
-    guard !candidates.isEmpty else { return nil }
-    if victory {
-      candidates = candidates.filter { Self.victoryPreference($0.url) == 3 }
-      guard !candidates.isEmpty else { return nil }
+    guard let catalogue, let root = catalogueRoot else { return nil }
+    let variant: SoundtrackCatalogue.Variant?
+    if victory || failure {
+      guard let currentURL, let path = relativePath(currentURL) else { return nil }
+      variant = catalogue.result(won: victory, currentPath: path, availablePaths: availablePaths)
+    } else {
+      variant = catalogue.select(trackID: "classic.cancan", cycle: 0, availablePaths: availablePaths)
     }
-    if failure {
-      let explicit = candidates.filter { ["fail", "lose", "lost", "game over"].contains(where: $0.url.lastPathComponent.lowercased().contains) }
-      // Without an identified failure cue, retain the level music.
-      guard !explicit.isEmpty else { return nil }
-      candidates = explicit
-    }
-    let fresh = candidates.filter { !playedTracks.contains($0.url.path) }
-    if !fresh.isEmpty { candidates = fresh }
-    else { playedTracks.removeAll() }
-    let otherPools = candidates.filter { $0.pool != pool }
-    if !otherPools.isEmpty { candidates = otherPools }
-    // Skip unreadable tracks without taking down the running deck.
-    while let choice = candidates.randomElement() {
-      if makeDeck(choice.url) != nil {
-        playedTracks.insert(choice.url.path)
-        return choice
-      }
-      candidates.removeAll { $0.url == choice.url }
-    }
-    return nil
+    guard let variant else { return nil }
+    let url = root.appendingPathComponent(variant.path)
+    guard FileManager.default.isReadableFile(atPath: url.path) else { return nil }
+    return (url.deletingLastPathComponent().lastPathComponent, url)
   }
 
   /// Brings the next track up as the current one goes down.

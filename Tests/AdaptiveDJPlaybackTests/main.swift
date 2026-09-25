@@ -58,7 +58,7 @@ private typealias Telemetry = AdaptiveDJEngine.Telemetry
   print("  soundtracks: \(soundtracks.count), tracks: \(tracks)")
 
   let player = AdaptiveDJPlayer()
-  player.load(soundtracks: soundtracks)
+  player.load(soundtracks: soundtracks, catalogueRoot: root)
   try require(player.hasTracks, "the player found no tracks to mix")
 
   player.setVolume(0)  // The test makes no noise.
@@ -93,7 +93,7 @@ private typealias Telemetry = AdaptiveDJEngine.Telemetry
   var danger = quiet
   danger.isNuking = true; danger.dangerCount = 100; danger.releaseRate = 99
   for _ in 0..<100 { player.updateTelemetry(danger) }
-  player.load(soundtracks: soundtracks)
+  player.load(soundtracks: soundtracks, catalogueRoot: root)
   try require(player.currentTrackName == opening, "Danger or library refresh changed level music")
 
   // Meeting the quota must not interrupt a level that is still active.
@@ -103,11 +103,11 @@ private typealias Telemetry = AdaptiveDJEngine.Telemetry
   try require(player.currentTrackName == opening, "Quota changed active level music")
   rescued.didWin = true; rescued.isComplete = true
   player.updateTelemetry(rescued)
+  try require(player.currentTrackName == opening, "Classic win stole a finale from another game")
+  let nextLevel = root.appendingPathComponent("lemmings_music_mod/doggie.mod")
+  player.startLevel(url: nextLevel, identity: "level-two")
   RunLoop.current.run(until: Date().addingTimeInterval(1.2))
-  try require(
-    player.currentTrackName != opening,
-    "the rescue target did not move the mix off \(opening)")
-  print("  completed win moved to: \(player.currentTrackName)")
+  try require(player.currentURL == nextLevel, "Next level did not crossfade to its assigned tune")
 
   // And it moves once, not on every frame that follows.
   let afterCue = player.currentTrackName
@@ -155,7 +155,21 @@ private typealias Telemetry = AdaptiveDJEngine.Telemetry
   try require(player.currentURL == assigned, "No failure theme should substitute an arbitrary tune")
   player.stop()
   try require(!player.isPlaying, "the mix kept playing after stop")
-  print("PASS assigned track, quota stability, completed win, one cue, and suspended crossfade")
+  for (trackID, modulePath) in [
+    ("lemmings2.medieval", "lemmings_2_music_mod_tsyu/medieval.mod"),
+    ("lemmings3.classic1", "lemmings_3_music_mod_tsyu/CLASSIC1.mod")
+  ] {
+    let fallback = root.appendingPathComponent(modulePath)
+    player.startJourney(trackID: trackID, cycle: 0, identity: trackID + ":first", fallback: fallback)
+    try require(player.currentURL == fallback, "Sequel did not start authentically")
+    player.startJourney(trackID: trackID, cycle: 1, identity: trackID + ":later", fallback: fallback)
+    try require(player.currentURL != fallback, "Sequel did not select its alternate version")
+    let alternate = player.currentURL
+    player.startJourney(trackID: trackID, cycle: 1, identity: trackID + ":retry", fallback: fallback)
+    try require(player.currentURL == alternate, "Retry changed sequel arrangement")
+    player.stop()
+  }
+  print("PASS assigned tracks, score journeys in all engines, protected cues, retry stability and suspended crossfade")
 }
 
 let app = NSApplication.shared

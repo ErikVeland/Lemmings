@@ -467,7 +467,7 @@ import NxlvKit
         canvas.favorApproachingLemmings = settings.favorApproachingLemmings
         canvas.fullScreenHDRFlashes = settings.cinematicExplosionsEnabled
         if let root = Bundle.main.resourceURL?.appendingPathComponent("Music") {
-            dj.load(soundtracks: SoundtrackPlayer.djSoundtracks(at: root, includeOtherSoundtracks: settings.djIncludesOtherSoundtracks))
+            dj.load(soundtracks: SoundtrackPlayer.djSoundtracks(at: root), catalogueRoot: root)
         }
         dj.setVolume(settings.musicVolume)
         dj.setMuted(muted || settings.music == .silent || UserDefaults.standard.bool(forKey: progressKey + ".musicMuted"))
@@ -555,7 +555,13 @@ import NxlvKit
     private func playMusic(_ name: String) {
         if audioSettings.music == .adaptiveDJ,
            let url = music.library.first(where: { $0.deletingPathExtension().lastPathComponent.lowercased() == name.lowercased() }) {
-            music.stop(); dj.startLevel(url: url, identity: arcadeRunID.uuidString + ":" + name.lowercased()); return
+            let musicRoot = root.deletingLastPathComponent().deletingLastPathComponent().appendingPathComponent("Music")
+            dj.load(soundtracks: SoundtrackPlayer.djSoundtracks(at: musicRoot), catalogueRoot: musicRoot)
+            music.stop()
+            dj.startJourney(trackID: "lemmings2." + name.lowercased(), cycle: campaign.level,
+                identity: arcadeRunID.uuidString + ":" + name.lowercased(), fallback: url,
+                includeAlternates: audioSettings.djIncludesOtherSoundtracks)
+            return
         }
         dj.stop()
         try? music.start()

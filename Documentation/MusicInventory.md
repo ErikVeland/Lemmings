@@ -1,8 +1,19 @@
 # Music inventory
 
-Audited 25 September 2026 from `Sources/Music`. These are playable files, not a count of unique compositions.
+## Current source library — 25 September 2026
 
-85 source files: 73 modules and 12 recordings. Build 44 contains 85 playable files. WAV sources are packaged as Apple Lossless M4A.
+The downloaded library now contains **486 directly playable files**, including 304 chip renders, 23 converted MandelSoft remixes, the existing modules and recordings, two other remix recordings, and 50 newly added Archimedes/SNES MP3 files. The 22 Master System chip logs now have Apple Lossless M4A counterparts. Converted files are versions, not new compositions.
+
+- [Downloaded-source audit](MusicSourceAudit.md): per-folder counts, package versions, credits, source quirks, result cues and remaining gaps.
+- [Track catalogue](MusicTrackCatalogue.md): composition/role groupings and available renditions.
+- [Conversion and validation](MusicConversion.md): formats, checks, hashes and loop limitations.
+- [Archive recovery](VengefulChipRecovery.md): recovered links whose audio availability is unverified.
+
+The audit below is historical. Its missing-platform and uninstalled-remix statements describe Build 44, not the expanded source folder. The current audit supersedes those claims. Source presence does not establish release inclusion or correct runtime assignment.
+
+## Build 44 audit
+
+85 source files: 73 modules and 12 recordings. These are playable files, not unique compositions. WAV sources are packaged as Apple Lossless M4A.
 
 ## Reference
 
@@ -160,3 +171,15 @@ These links are candidates, not newly bundled tracks. No fan recordings were dow
 - There is no identified failure track bundled. The DJ retains the level tune when it cannot find an explicit failure cue.
 - The reference page describes a completion-driven cycle rather than universal per-level assignments. This app uses a stable campaign-index mapping into that cycle so opening a level directly and retrying are predictable. The Amiga named rotation is the default playback policy, even when another platform supplies artwork. Native platform-specific sequencing is not yet verified.
 - Fan level custom song references are not yet a complete import pipeline. Missing external tracks cannot be guaranteed.
+
+## DOS reference supplement — 25 September 2026
+
+Use [VGMPF: Lemmings (DOS)](https://www.vgmpf.com/Wiki/index.php/Lemmings_%28DOS%29) alongside the cross-platform reference.
+
+- Audit AdLib/OPL2, Tandy 3 Voice and Double Pack CD as separate arrangements. Tony Williams arranged the floppy soundtrack; Colin Anderson arranged the CD music.
+- VGMPF lists 22 entries for each floppy device: a start cue, 17 ordinary tunes and four special themes. It lists 23 CD recordings, including two intro variants. These are reference counts, not verified counts in our expanded source folder.
+- Its DOS cycle advances after completing levels, with special music at Fun 22, Tricky 14, Taxing 15 and Mayhem 22. Keep the app's stable direct-level/retry policy explicit; do not claim it reproduces DOS sequencing exactly.
+- Recording IDs and physical CD track numbers differ. Match compositions by title, not numeric filename order.
+- VGMPF flags its floppy recordings as incomplete and AdLib track 108 as missing notes. Compare that rendition before adopting it as a fidelity reference.
+
+Next audit: map the new source files to these arrangement sets and verify composition coverage. Conversion alone does not establish completeness or correct level assignment.

@@ -15,6 +15,7 @@ final class MusicFileDeck {
   private let spatialMixer = AVAudioMixerNode()
   private let outputMixer = AVAudioMixerNode()
   private let file: AVAudioFile
+  private let repeats: Bool
   private var playbackGeneration = 0
   private(set) var completedLoops = 0
   private var fadeTask: Task<Void, Never>?
@@ -39,9 +40,10 @@ final class MusicFileDeck {
 
   var isPlaying: Bool { started && !outputSuspended && player.isPlaying }
 
-  init?(url: URL) {
+  init?(url: URL, repeats: Bool = true) {
     guard let file = try? AVAudioFile(forReading: url), file.length > 0 else { return nil }
     self.file = file
+    self.repeats = repeats
 
     let bands = equaliser.bands
     bands[0].filterType = .lowShelf
@@ -101,7 +103,7 @@ final class MusicFileDeck {
       started = true
       playbackGeneration += 1
       scheduleLoop(generation: playbackGeneration)
-      scheduleLoop(generation: playbackGeneration)
+      if repeats { scheduleLoop(generation: playbackGeneration) }
     }
     if !player.isPlaying { player.play() }
     fadeTask = Task { @MainActor [weak self] in
@@ -120,7 +122,12 @@ final class MusicFileDeck {
       Task { @MainActor [weak self] in
         guard let self, self.started, self.playbackGeneration == generation else { return }
         self.completedLoops += 1
-        self.scheduleLoop(generation: generation)
+        if self.repeats {
+          self.scheduleLoop(generation: generation)
+        } else {
+          self.started = false
+          self.player.stop()
+        }
       }
     }
   }

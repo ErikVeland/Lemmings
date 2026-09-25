@@ -6096,7 +6096,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private func reloadDJLibrary() {
     guard let root = Bundle.main.resourceURL?.appendingPathComponent("Music") else { return }
     dj.load(soundtracks: SoundtrackPlayer.djSoundtracks(at: root,
-      includeOtherSoundtracks: settings.djIncludesOtherSoundtracks, seasonal: seasonalMusic))
+      includeOtherSoundtracks: settings.djIncludesOtherSoundtracks, seasonal: seasonalMusic), catalogueRoot: root)
   }
 
   /// Describes the level to the mix, so it can decide when to move.
@@ -6132,22 +6132,28 @@ let achievementProgressKey = "ClassicAchievementProgress"
     if activeMusic == .adaptiveDJ {
       reloadDJLibrary()
       let folder = seasonalMusic ? "holiday_lemmings_music_mod" : musicTitle == .ohNoMoreLemmings ? "oh_no_more_lemmings_music_mod" : "lemmings_music_mod"
-      let name = assignedName
-      if let root = BundledGameResources.music(folder) {
-        let urls = (try? FileManager.default.contentsOfDirectory(at: root, includingPropertiesForKeys: nil)) ?? []
-        if let url = urls.first(where: { $0.deletingPathExtension().lastPathComponent.lowercased() == name.lowercased() }) {
-          music.stop(); soundtrack.stop()
-          dj.startLevel(url: url, identity: arcadeRunID.uuidString)
-          return
-        }
+      let module = BundledGameResources.music(folder)?.appendingPathComponent(assignedName + ".mod")
+      let fallback = module.flatMap { FileManager.default.isReadableFile(atPath: $0.path) ? $0 : nil }
+      let game = seasonalMusic ? "holiday" : musicTitle == .ohNoMoreLemmings ? "ohno" : "classic"
+      let position = currentNxlvURL == nil ? max(0, picker.indexOfSelectedItem) : 0
+      let cycle = currentNxlvURL == nil ? LevelMusicSelection.cycle(index: position,
+        titles: picker.itemTitles, holiday: seasonalMusic, ohNo: musicTitle == .ohNoMoreLemmings) : 0
+      if dj.startJourney(trackID: game + "." + assignedName.lowercased(), cycle: cycle,
+        identity: arcadeRunID.uuidString, fallback: fallback,
+        includeAlternates: settings.djIncludesOtherSoundtracks) {
+        music.stop(); soundtrack.stop()
+        return
       }
     }
     dj.stop()
 
     // A recording must match the assigned tune. An incomplete album falls
     // back to the module instead of substituting an unrelated song.
+    let trackGame = seasonalMusic ? "holiday" : musicTitle == .ohNoMoreLemmings ? "ohno" : "classic"
     if case let .remix(name) = activeMusic, let tracks = soundtrackLibrary[name],
-       let index = tracks.firstIndex(where: { LevelMusicSelection.matchesRecording($0.deletingPathExtension().lastPathComponent, track: assignedName) }) {
+       let musicRoot = Bundle.main.resourceURL?.appendingPathComponent("Music"),
+       let index = tracks.firstIndex(where: { SoundtrackPlayer.matches($0,
+          trackID: trackGame + "." + assignedName.lowercased(), root: musicRoot) }) {
       music.stop()
       soundtrack.load(tracks)
       if let title = soundtrack.play(index: index) { setStatus("♪ \(title)") }
@@ -6174,6 +6180,11 @@ let achievementProgressKey = "ClassicAchievementProgress"
       setStatus("♪ \(title)")
     } else {
       music.stop()
+      if let root = Bundle.main.resourceURL?.appendingPathComponent("Music"),
+         let recording = SoundtrackPlayer.recording(trackID: trackGame + "." + assignedName.lowercased(), root: root) {
+        soundtrack.load([recording])
+        if let title = soundtrack.play(index: 0) { setStatus("♪ \(title)"); return }
+      }
       startedMusicIdentity = nil
       setStatus("Assigned music unavailable: \(assignedName)")
     }

@@ -35,9 +35,20 @@ public struct AdaptiveDJDirector: Sendable {
 /// Reference: https://lemmings.fandom.com/wiki/Music_in_Lemmings
 public enum LevelMusicSelection {
     public static let classic = ["cancan", "lemming1", "tim2", "lemming2", "tim8", "tim3", "tim5", "doggie", "tim6", "lemming3", "tim7", "tim9", "tim1", "tim10", "tim4", "tenlemmings", "mountain"]
+    /// Count prior score occurrences, including special-level overrides. Direct
+    /// level selection and retries produce the same arrangement as linear play.
+    public static func cycle(index: Int, titles: [String], holiday: Bool, ohNo: Bool) -> Int {
+        guard index >= 0, index < titles.count else { return 0 }
+        let selected = track(index: index, title: titles[index], holiday: holiday, ohNo: ohNo)
+        return (0..<index).filter {
+            track(index: $0, title: titles[$0], holiday: holiday, ohNo: ohNo) == selected
+        }.count
+    }
+
     public static func track(index: Int, title: String, holiday: Bool, ohNo: Bool) -> String {
         let title = title.lowercased()
         if !holiday && !ohNo {
+            if title.contains("mariarti") { return "mariarti" }
             if title.contains("beastii") || title.contains("beast ii") { return "beastII" }
             if title.contains("beast") { return "beastI" }
             if title.contains("menacing") { return "menace" }

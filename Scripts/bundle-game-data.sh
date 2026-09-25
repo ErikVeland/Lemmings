@@ -36,7 +36,7 @@ case "$2" in
     rsync -a --include='*.zip' --include='*.json' --exclude='*' \
       "$project_dir/Content/LevelPacks/" "$resources_dir/LevelPacks/"
     rsync "${copy_options[@]}" "$project_dir/Sources/Ports/" "$resources_dir/Ports/"
-    rsync -a --exclude=.DS_Store --exclude='*.wav' \
+    rsync -a --exclude=.DS_Store --exclude='By Track/' --exclude='*.vgz' --exclude='*.vgm' --exclude='*.vgm' --exclude='*.ogg' --exclude='*.wav' \
       "$project_dir/Sources/Music/" "$resources_dir/Music/"
     zsh "$project_dir/Scripts/encode-soundtracks.sh" \
       "$project_dir/Sources/Music" "$resources_dir/Music"
@@ -59,6 +59,13 @@ case "$2" in
     rsync -a --exclude=.DS_Store "$project_dir/Sources/Music/lemmings_3_music_mod_tsyu/" "$resources_dir/Music/lemmings_3_music_mod_tsyu/"
     ;;
 esac
+
+music_game=all
+[[ "$2" == l2 ]] && music_game=lemmings2
+[[ "$2" == l3 ]] && music_game=lemmings3
+python3 "$project_dir/Tools/MusicCatalogue/package.py" \
+  "$project_dir/Resources/Music/catalogue.json" "$project_dir/Sources/Music" \
+  "$resources_dir/Music" "$music_game"
 
 # Standalone sequel players share the in-game profile and Trolley artwork.
 if [[ "$2" == l2 || "$2" == l3 ]]; then

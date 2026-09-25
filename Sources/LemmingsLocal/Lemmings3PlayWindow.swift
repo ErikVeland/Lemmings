@@ -551,9 +551,12 @@ import NxlvKit
         guard !tracks.isEmpty else { return }
         let url = tracks[campaign.index % tracks.count]
         if audioSettings.music == .adaptiveDJ {
-            dj.load(soundtracks: ["Lemmings 3": music.library])
+            let musicRoot = url.deletingLastPathComponent().deletingLastPathComponent()
+            dj.load(soundtracks: SoundtrackPlayer.djSoundtracks(at: musicRoot), catalogueRoot: musicRoot)
             music.stop()
-            dj.startLevel(url: url, identity: arcadeRunID.uuidString)
+            dj.startJourney(trackID: "lemmings3." + url.deletingPathExtension().lastPathComponent.lowercased(),
+                cycle: campaign.index / tracks.count, identity: arcadeRunID.uuidString, fallback: url,
+                includeAlternates: audioSettings.djIncludesOtherSoundtracks)
         } else {
             dj.stop()
             try? music.start()

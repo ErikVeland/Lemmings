@@ -28,27 +28,41 @@ import NxlvKit
   /// belong to the module player and are left out.
   static func soundtracks(at root: URL) -> [String: [URL]] {
     let manager = FileManager.default
-    guard let entries = try? manager.contentsOfDirectory(
-      at: root, includingPropertiesForKeys: [.isDirectoryKey], options: [.skipsHiddenFiles])
-    else { return [:] }
-
+    guard let walker = manager.enumerator(at: root,
+      includingPropertiesForKeys: [.isRegularFileKey], options: [.skipsHiddenFiles]) else { return [:] }
     var found: [String: [URL]] = [:]
-    for entry in entries {
-      let isDirectory = (try? entry.resourceValues(forKeys: [.isDirectoryKey]))?.isDirectory
-      guard isDirectory == true else { continue }
-      guard let files = try? manager.contentsOfDirectory(
-        at: entry, includingPropertiesForKeys: nil, options: [.skipsHiddenFiles])
-      else { continue }
-      let audio = files
-        .filter { audioExtensions.contains($0.pathExtension.lowercased()) }
-        .sorted { $0.lastPathComponent < $1.lastPathComponent }
-      if !audio.isEmpty { found[entry.lastPathComponent] = audio }
+    for case let url as URL in walker {
+      if url.lastPathComponent == "By Track" { walker.skipDescendants(); continue }
+      guard audioExtensions.contains(url.pathExtension.lowercased()),
+            (try? url.resourceValues(forKeys: [.isRegularFileKey]))?.isRegularFile == true else { continue }
+      let folder = url.deletingLastPathComponent().path.replacingOccurrences(of: root.path + "/", with: "")
+      found[folder, default: []].append(url)
     }
-    return found
+    return found.mapValues { $0.sorted { $0.path < $1.path } }
   }
 
-  /// Include installed sequel modules and recordings from other ports.
-  /// Additional soundtrack folders can live in Application Support.
+  /// Resolve recordings through composition identity before using legacy aliases.
+  static func matches(_ url: URL, trackID: String, root: URL) -> Bool {
+    guard url.standardizedFileURL.path.hasPrefix(root.standardizedFileURL.path + "/") else { return false }
+    let relative = String(url.standardizedFileURL.path.dropFirst(root.standardizedFileURL.path.count + 1))
+    if let entry = SoundtrackCatalogue.load(at: root)?.entry(path: relative) {
+      return entry.track.id == trackID && entry.variant.confidence == "documented"
+    }
+    return LevelMusicSelection.matchesRecording(url.deletingPathExtension().lastPathComponent,
+      track: String(trackID.split(separator: ".").last ?? ""))
+  }
+
+  /// Some port-exclusive themes have no Amiga module counterpart.
+  static func recording(trackID: String, root: URL) -> URL? {
+    guard let catalogue = SoundtrackCatalogue.load(at: root) else { return nil }
+    let paths = Set((catalogue.track(id: trackID)?.variants ?? []).filter {
+      audioExtensions.contains(URL(fileURLWithPath: $0.path).pathExtension.lowercased()) &&
+        FileManager.default.isReadableFile(atPath: root.appendingPathComponent($0.path).path)
+    }.map(\.path))
+    return catalogue.select(trackID: trackID, cycle: 0, availablePaths: paths)
+      .map { root.appendingPathComponent($0.path) }
+  }
+
   static func isSeasonal(_ name: String) -> Bool {
     let name = name.lowercased()
     return ["holiday", "xmas", "christmas"].contains { name.contains($0) }
@@ -69,14 +83,19 @@ import NxlvKit
     for directory in roots {
       guard let walker = FileManager.default.enumerator(at: directory,
         includingPropertiesForKeys: [.isRegularFileKey], options: [.skipsHiddenFiles]) else { continue }
+      let catalogue = SoundtrackCatalogue.load(at: directory)
       for case let url as URL in walker {
+        if url.lastPathComponent == "By Track" { walker.skipDescendants(); continue }
         guard audioExtensions.union(["mod"]).contains(url.pathExtension.lowercased()),
               (try? url.resourceValues(forKeys: [.isRegularFileKey]))?.isRegularFile == true else { continue }
         let relative = url.deletingLastPathComponent().path.replacingOccurrences(of: directory.path + "/", with: "")
         let classic = relative == "lemmings_music_mod" || relative.hasPrefix("CoLD SToRAGE - Lemmings - the original AMIGA")
         let trackPath = relative + "/" + url.lastPathComponent
-        guard isSeasonal(trackPath) == seasonal else { continue }
-        guard seasonal || includeOtherSoundtracks || classic else { continue }
+        let entry = catalogue?.entry(path: trackPath)
+        let isHoliday = entry.map { $0.track.game == "holiday" } ?? isSeasonal(trackPath)
+        guard isHoliday == seasonal else { continue }
+        let exclusiveSpecial = entry.map { $0.track.role == "special" && !$0.track.variants.contains { $0.quality == "native-module" } } ?? false
+        guard seasonal || includeOtherSoundtracks || classic || exclusiveSpecial else { continue }
         found[relative, default: []].append(url)
       }
     }

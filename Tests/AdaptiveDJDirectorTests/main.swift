@@ -49,3 +49,13 @@ let expectedCycle = ["cancan", "lemming1", "tim2", "lemming2", "tim8", "tim3", "
 for index in 0..<34 {
     require(LevelMusicSelection.track(index: index, title: "ordinary", holiday: false, ohNo: false) == expectedCycle[index % 17], "Reference rotation mismatch")
 }
+
+var scoreTitles = Array(repeating: "Ordinary", count: 120)
+scoreTitles[21] = "A Beast of a level"
+scoreTitles[50] = "A Beast of a level"
+require(LevelMusicSelection.cycle(index: 21, titles: scoreTitles, holiday: false, ohNo: false) == 0,
+    "First special theme must be authentic even late in the campaign")
+require(LevelMusicSelection.cycle(index: 50, titles: scoreTitles, holiday: false, ohNo: false) == 1,
+    "Repeated special theme did not advance its own cycle")
+require(LevelMusicSelection.cycle(index: 17, titles: scoreTitles, holiday: false, ohNo: false) == 1,
+    "Ordinary score cycle did not advance")
