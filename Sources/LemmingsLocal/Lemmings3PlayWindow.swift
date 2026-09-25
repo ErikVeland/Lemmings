@@ -274,6 +274,23 @@ import NxlvKit
         }
         let keyboard = GameplayKeyboard(window: window)
         gameplayKeyboard = keyboard
+        canvas.timeline.enabled = { [weak self] action in
+            guard let self, self.canvas.menuRows == nil else { return false }
+            let game = self.game
+            switch action {
+            case .rewind, .backward: return game.tick > 0
+            case .forward: return !game.isComplete || self.canStepForward
+            case .hints: return true
+            }
+        }
+        canvas.timeline.perform = { [weak keyboard] action in
+            switch action {
+            case .rewind: keyboard?.rewind?()
+            case .backward: keyboard?.step?(-1)
+            case .forward: keyboard?.step?(1)
+            case .hints: keyboard?.hints?()
+            }
+        }
         keyboard.active = { [weak self] in
             guard let self else { return false }
             return self.canvas.menuRows == nil && !self.game.isComplete
@@ -413,6 +430,14 @@ import NxlvKit
         }
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+    #if APP_INTEGRATION_TESTS
+    func testTimelinePanel() throws {
+        canvas.menuRows = nil
+        try validateTimelineCanvas(canvas, timeline: canvas.timeline, name: "lemmings3",
+            tick: { self.game.tick }, paused: { self.paused })
+    }
+    #endif
+
     func present() { showWindow(nil); window?.makeKeyAndOrderFront(nil); window?.makeFirstResponder(canvas) }
     static func browserLevels(root: URL) throws -> [BrowserLevel] {
         try browserLevels(root: root, progressData: browserProgressData(root: root))
@@ -1094,10 +1119,17 @@ import NxlvKit
 }
 
 @MainActor private final class Lemmings3Canvas: NSView {
+    let timeline = TimelinePanelControls()
+    private func layoutTimeline() {
+        let width = min(260, bounds.width - 16)
+        timeline.frame = CGRect(x: (bounds.width - width) / 2, y: bounds.height - 34, width: width, height: 30)
+    }
+
     var confinePointer = true
     private let pointerCapture = GamePointerCapture()
     func capturePointer(active: Bool) {
-        let frame = CGRect(origin: screenOrigin, size: CGSize(width: 320 * zoom, height: 212 * zoom))
+        layoutTimeline()
+        let frame = CGRect(origin: screenOrigin, size: CGSize(width: 320 * zoom, height: 212 * zoom)).union(timeline.frame)
         if let point = pointerCapture.update(in: self, rect: frame, active: active && confinePointer && controllerPointer == nil) {
             updateSystemCursor(at: point)
             trackPointer(at: point)
@@ -1147,7 +1179,7 @@ import NxlvKit
         }
         syncSpeedEffects()
     }
-    override func layout() { super.layout(); syncSpeedEffects() }
+    override func layout() { super.layout(); layoutTimeline(); syncSpeedEffects() }
     private func syncSpeedEffects() {
         let active = usesSpeedEffects && menuRows == nil && window != nil
         hdrOverlay?.setSuperSpeed(active,in:playfieldRect,immediate:!active, multiplier: speedMultiplier)
@@ -1199,7 +1231,8 @@ import NxlvKit
             }
         }
         children.append(accessibleElements.element(id: "menu", owner: self, label: "Game menu", frame: rect(CGRect(x: 280, y: 0, width: 40, height: 12))) { [weak self] in self?.onMenu?() })
-        return children
+        layoutTimeline()
+        return children + timeline.accessibleControls(owner: self)
     }
     var onPanel: ((Int, Int) -> Void)?
     var onMenu: (() -> Void)?
@@ -1297,8 +1330,8 @@ import NxlvKit
     private(set) var cameraY: CGFloat = 0
     override var isFlipped: Bool { true }
     override var acceptsFirstResponder: Bool { true }
-    private var zoom: CGFloat { max(0.1, min(bounds.width / 320, bounds.height / 212)) }
-    private var screenOrigin: NSPoint { NSPoint(x: (bounds.width - 320 * zoom) / 2, y: (bounds.height - 212 * zoom) / 2) }
+    private var zoom: CGFloat { max(0.1, min(bounds.width / 320, (bounds.height - 38) / 212)) }
+    private var screenOrigin: NSPoint { NSPoint(x: (bounds.width - 320 * zoom) / 2, y: (bounds.height - 38 - 212 * zoom) / 2) }
     private var origin: NSPoint { NSPoint(x: screenOrigin.x, y: screenOrigin.y + 12 * zoom) }
     var playfieldRect: CGRect { CGRect(x: origin.x, y: origin.y, width: 320 * zoom, height: 160 * zoom) }
     var panelRect: CGRect { CGRect(x: origin.x, y: origin.y + 160 * zoom, width: 320 * zoom, height: 40 * zoom) }
@@ -1421,6 +1454,13 @@ import NxlvKit
         speedTrails.update(tick: game?.tick ?? 0, enabled: enabled, actors: actors)
     }
     override func draw(_ dirtyRect: NSRect) {
+        layoutTimeline()
+        NSGraphicsContext.saveGraphicsState()
+        defer {
+            NSGraphicsContext.restoreGraphicsState()
+            layoutTimeline()
+            if menuRows == nil { timeline.draw() }
+        }
         defer { if menuRows == nil { startCountdown.draw(in: playfieldRect) } }
         defer {
             // The shared corner reticle also represents the controller pointer.
@@ -1567,6 +1607,8 @@ import NxlvKit
     override func mouseDown(with event: NSEvent) {
         window?.makeFirstResponder(self)
         let point = convert(event.locationInWindow, from: nil)
+        layoutTimeline()
+        if menuRows == nil, timeline.click(at: point) { return }
         let sx = (point.x - screenOrigin.x) / zoom, sy = (point.y - screenOrigin.y) / zoom
         if let rows = menuRows {
             let row = Int((sy - 39) / 16)

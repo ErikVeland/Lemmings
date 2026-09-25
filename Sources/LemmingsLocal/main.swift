@@ -1470,6 +1470,23 @@ let achievementProgressKey = "ClassicAchievementProgress"
       self.advancePhase()
     }
     panel.onButton = { [weak self] button in self?.handle(button) }
+    panel.timeline.enabled = { [weak self] action in
+      guard let self, self.phase == .playing, let session = self.session else { return false }
+      switch action {
+      case .rewind, .backward: return session.supportsRewind && session.currentTick > 0
+      case .forward: return !session.isComplete
+      case .hints: return true
+      }
+    }
+    panel.timeline.perform = { [weak self] action in
+      guard let self else { return }
+      switch action {
+      case .rewind: self.rewind(seconds: 2)
+      case .backward: _ = self.stepBackward()
+      case .forward: _ = self.stepForward()
+      case .hints: self.showLevelHints()
+      }
+    }
     panel.onMinimapScroll = { [weak self] centerX in
       guard let self else { return }
       self.playfield.viewport.center(on: centerX)
@@ -6555,7 +6572,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     guard event.type == .keyDown else { return event }
     if event.isARepeat, [" ", "p"].contains(event.charactersIgnoringModifiers ?? "") { return nil }
 
-    if event.keyCode == 122 || event.charactersIgnoringModifiers?.lowercased() == "i" {
+    if event.keyCode == 122 || ["h", "i"].contains(event.charactersIgnoringModifiers?.lowercased() ?? "") {
       if !event.isARepeat { self.showLevelHints() }
       return nil
     }

@@ -65,6 +65,7 @@ enum PanelButton: Equatable {
   var onMinimapScroll: ((Double) -> Void)?
 
   var speedControlBounds: CGRect { buttonFrames.first(where: { $0.0 == .fastForward })?.1 ?? .zero }
+  let timeline = TimelinePanelControls()
   private let accessibleElements = GameAccessibleElements()
   override func isAccessibilityElement() -> Bool { true }
     override func accessibilityRole() -> NSAccessibility.Role? { .group }
@@ -102,7 +103,7 @@ enum PanelButton: Equatable {
         }
       }
     }
-    return result
+    return result + timeline.accessibleControls(owner: owner, transform: transform)
   }
   private var buttonFrames: [(PanelButton, CGRect)] = []
   private var minimapFrame = CGRect.zero
@@ -162,6 +163,13 @@ enum PanelButton: Equatable {
       y: panelFrame.minY + 18 * scale,
       width: max(0, panelFrame.maxX - mapLeft - 4 * scale),
       height: 20 * scale)
+    layoutTimeline()
+  }
+
+  private func layoutTimeline() {
+    let height = min(24 * max(1, panelScale / 2), minimapFrame.height * 0.6)
+    timeline.frame = CGRect(x: minimapFrame.minX, y: minimapFrame.maxY - height, width: minimapFrame.width, height: height)
+    minimapFrame.size.height -= height + 2
   }
 
   private func layoutButtons() {
@@ -184,12 +192,15 @@ enum PanelButton: Equatable {
         width: width, height: buttonHeight)
       return (button, frame)
     }
+    panelScale = 1
+    layoutTimeline()
   }
 
   // MARK: - Input
 
   /// Takes a click position directly, for input arriving from the tube view.
   func handleClick(at point: CGPoint, time: TimeInterval = ProcessInfo.processInfo.systemUptime) {
+    if timeline.click(at: point) { return }
     if let match = buttonFrames.first(where: { $0.1.contains(point) }) {
       press(match.0, time: time)
       return
@@ -205,6 +216,7 @@ enum PanelButton: Equatable {
   func handlePointerDown(at point: CGPoint, time: TimeInterval = ProcessInfo.processInfo.systemUptime, clickCount: Int = 1) {
     stopRepeating()
     pointerIsDown = true
+    if timeline.click(at: point) { return }
     if let match = buttonFrames.first(where: { $0.1.contains(point) }) {
       if match.0 == .fastForward, variableSpeedEnabled, let part = SpeedPanelControls.part(at: point, in: match.1) {
         nukeGesture.reset()
@@ -334,6 +346,7 @@ enum PanelButton: Equatable {
       drawMinimap()
       drawStatus()
       drawSpeedControls()
+      timeline.draw()
       return
     }
 
@@ -344,6 +357,7 @@ enum PanelButton: Equatable {
     drawMinimap()
     drawStatus()
     drawSpeedControls()
+    timeline.draw()
   }
 
   private func drawSpeedControls() {

@@ -1461,6 +1461,21 @@ extension AppDelegate {
       try check(keyboard.handle(event) == nil, "F1 leaked into gameplay")
     }
     try check(opened == 1, "Holding F1 opened hints repeatedly")
+    for modern in [false, true] {
+      keyboard.modern = { modern }
+      for repeated in [false, true] {
+        let event = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 2,
+          windowNumber: host.windowNumber, context: nil, characters: "h", charactersIgnoringModifiers: "h",
+          isARepeat: repeated, keyCode: 4)!
+        try check(keyboard.handle(event) == nil, "H leaked into gameplay")
+      }
+    }
+    try check(opened == 3, "H did not open hints once in each control mode")
+    let hintSkills = SkillShortcuts(names: ["Hopper", "Hiker", "Shimmier"])
+    try check(hintSkills.index(for: "h", current: 0) == nil && !hintSkills.letters.contains("h"),
+      "A skill claimed H from hints")
+    try testTimelinePanelControls()
+
     let fallback = LevelHintDeck.practice(title: "Fan level", skills: ["Builder"])
     try check(!fallback.checked && fallback.stages.allSatisfy { $0.moves.isEmpty }, "General coaching claimed a solved route")
     print("PASS checked hints, confirmed winning ghosts, exact before/after-tick playback, unchanged live runs, flat/CRT and fallback coaching")
@@ -3680,7 +3695,7 @@ Task { @MainActor in
   do {
     let subject = AppDelegate()
     subject.prepareArcadeTests()
-    #if !CURSOR_INPUT_TESTS && !LOADING_LATENCY_TESTS
+    #if !CURSOR_INPUT_TESTS && !LOADING_LATENCY_TESTS && !TRANSPORT_TESTS
     try subject.testFailureMoodDecision()
     try subject.testSteppedCompletion()
     try subject.testFirstLaunchEffects()
@@ -3691,7 +3706,9 @@ Task { @MainActor in
     try testPointerAssignment()
     #endif
     #endif
-    #if LOADING_LATENCY_TESTS
+    #if TRANSPORT_TESTS
+    try subject.testTimelineToolbar()
+    #elseif LOADING_LATENCY_TESTS
     try await subject.testLoadingLatency()
     #elseif PERFORMANCE_TESTS
     try await subject.testReleasePerformance()
@@ -3819,5 +3836,119 @@ extension AppDelegate {
       GameScreen.shared.dismiss(page)
     }
     print("PASS Enter, keypad Enter and Space activate Ready once; held keys do not repeat")
+  }
+}
+
+@MainActor private func testTimelinePanelControls() throws {
+  let controls = TimelinePanelControls()
+  controls.frame = CGRect(x: 4, y: 4, width: 252, height: 30)
+  var performed: [TimelinePanelControls.Action] = []
+  controls.perform = { performed.append($0) }
+  controls.enabled = { $0 == .forward || $0 == .hints }
+  for action in TimelinePanelControls.Action.allCases {
+    let box = controls.rect(for: action)
+    try check(controls.click(at: CGPoint(x: box.midX, y: box.midY)), "Timeline target leaked its click")
+  }
+  try check(performed == [.forward, .hints], "Disabled timeline controls activated")
+  let first = controls.rect(for: .rewind)
+  try check(controls.click(at: CGPoint(x: first.maxX + 1, y: first.midY)), "Timeline gap leaked input")
+  try check(performed.count == 2, "Timeline gap activated a neighbour")
+  let directory = URL(fileURLWithPath: ".build/transport")
+  try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+  for enabled in [false, true] {
+    controls.enabled = { enabled || $0 == .hints }
+    let image = NSImage(size: CGSize(width: 260, height: 38))
+    image.lockFocusFlipped(true); controls.draw(); image.unlockFocus()
+    let bitmap = NSBitmapImageRep(data: image.tiffRepresentation!)!
+    try bitmap.representation(using: .png, properties: [:])!.write(to: directory.appendingPathComponent(enabled ? "enabled.png" : "disabled.png"))
+  }
+  print("PASS timeline controls: active, unavailable, hit regions and gap capture")
+}
+
+@MainActor func validateTimelineCanvas(_ canvas: NSView, timeline: TimelinePanelControls, name: String,
+                                      tick: () -> Int, paused: () -> Bool) throws {
+  canvas.setFrameSize(CGSize(width: 1050, height: 680))
+  canvas.layoutSubtreeIfNeeded()
+  func capture(_ suffix: String) throws {
+    let image = NSImage(size: canvas.bounds.size)
+    image.lockFocusFlipped(true); canvas.draw(canvas.bounds); image.unlockFocus()
+    let bitmap = NSBitmapImageRep(data: image.tiffRepresentation!)!
+    print("CAPTURE \(name)\(suffix): \(canvas.bounds), timeline \(timeline.frame)")
+    try bitmap.representation(using: .png, properties: [:])!.write(to: URL(fileURLWithPath: ".build/transport/" + name + suffix + ".png"))
+  }
+  try capture("-start")
+  try check(!timeline.enabled(.backward), "Fresh level enabled rewind")
+  func click(_ action: TimelinePanelControls.Action) {
+    let box = timeline.rect(for: action)
+    let point = canvas.convert(CGPoint(x: box.midX, y: box.midY), to: nil)
+    let event = NSEvent.mouseEvent(with: .leftMouseDown, location: point, modifierFlags: [], timestamp: 1,
+      windowNumber: canvas.window?.windowNumber ?? 0, context: nil, eventNumber: 0, clickCount: 1, pressure: 1)!
+    canvas.mouseDown(with: event)
+  }
+  click(.forward)
+  try check(tick() == 1 && paused(), "Forward toolbar button failed to step and pause " + name)
+  click(.backward)
+  try check(tick() == 0 && paused(), "Backward toolbar button failed to restore " + name)
+  click(.forward)
+  try check(tick() == 1 && paused(), "Forward toolbar button failed to restore history " + name)
+  try capture("-paused")
+  click(.rewind)
+  try check(tick() == 0 && paused(), "Rewind toolbar button failed " + name)
+  click(.hints)
+  try check(LevelHintWindow.shared.page != nil && paused(), "Hint toolbar button failed " + name)
+  GameScreen.shared.dismissAll()
+  print("PASS " + name + " toolbar input, history and paused hints")
+}
+
+extension AppDelegate {
+  fileprivate func testTimelineToolbar() throws {
+    try testTimelinePanelControls()
+    buildInterface()
+    settings.music = .silent
+    loadContent()
+    guard let gameIndex = dataSets.firstIndex(where: { $0.set.title == .lemmings }) else {
+      throw IntegrationFailure(message: "Missing Classic resources")
+    }
+    gamePicker.selectItem(at: gameIndex); selectDataSet(); loadLevel(at: 0)
+    phase = .playing; panel.isMenuMode = false
+    for tube in [false, true] {
+      panel.isCRTSource = tube
+      panel.frame = CGRect(x: 0, y: 0, width: tube ? 640 : 1050, height: tube ? 80 : panel.intrinsicHeight)
+      panel.isMenuMode = false
+      let image = NSImage(size: panel.bounds.size)
+      image.lockFocusFlipped(true); panel.draw(panel.bounds); image.unlockFocus()
+      let bitmap = NSBitmapImageRep(data: image.tiffRepresentation!)!
+      try bitmap.representation(using: .png, properties: [:])!.write(to: URL(fileURLWithPath: ".build/transport/classic-" + (tube ? "crt" : "flat") + ".png"))
+      for action in TimelinePanelControls.Action.allCases {
+        try check(panel.bounds.contains(panel.timeline.rect(for: action)), "Classic timeline was clipped: \(panel.timeline.frame) in \(panel.bounds)")
+      }
+      let before = session!.currentTick
+      let forward = panel.timeline.rect(for: .forward)
+      panel.handlePointerDown(at: CGPoint(x: forward.midX, y: forward.midY)); panel.handlePointerUp()
+      try check(session!.currentTick == before + 1 && isPaused, "Classic forward button failed")
+      let backward = panel.timeline.rect(for: .backward)
+      panel.handlePointerDown(at: CGPoint(x: backward.midX, y: backward.midY)); panel.handlePointerUp()
+      try check(session!.currentTick == before && isPaused, "Classic backward button failed")
+    }
+    let host = SpeedTestWindow(contentRect: window.frame, styleMask: [], backing: .buffered, defer: false)
+    let keyboard = GameplayKeyboard(window: host)
+    keyboard.active = { true }
+    var hints = 0; keyboard.hints = { hints += 1 }
+    for modern in [false, true] {
+      keyboard.modern = { modern }
+      for repeated in [false, true] {
+        let event = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 1,
+          windowNumber: host.windowNumber, context: nil, characters: "h", charactersIgnoringModifiers: "h",
+          isARepeat: repeated, keyCode: 4)!
+        try check(keyboard.handle(event) == nil, "H leaked into skill selection")
+      }
+    }
+    try check(hints == 2, "H repeated or failed in a control mode")
+    try check(SkillShortcuts(names: ["Hopper", "Hiker"]).index(for: "h", current: 0) == nil, "Skills claimed H")
+    let l2 = try Lemmings2PlayWindow(root: BundledGameResources.lemmings2(), recordsCampaignProgress: false)
+    try l2.testTimelinePanel(); l2.window?.orderOut(nil)
+    let l3 = try Lemmings3PlayWindow(root: BundledGameResources.lemmings3(), recordsCampaignProgress: false)
+    try l3.testTimelinePanel(); l3.window?.orderOut(nil)
+    print("PASS H hints and Classic flat/CRT timeline toolbar")
   }
 }

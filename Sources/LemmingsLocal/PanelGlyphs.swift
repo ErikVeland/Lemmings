@@ -8,6 +8,7 @@ enum PanelGlyph: String {
   case pause
   case undo
   case fastForward
+  case rewind, stepBackward, stepForward
   case settings
   /// Shown on the pause button while the level is held, so the button says
   /// what it will do rather than what it did.
@@ -48,6 +49,12 @@ enum PanelGlyph: String {
       return [".....####...", "...########.", "..###....###", "..##......##", "#.##........", "####........", "###.........", "####........", "#####.......", "...........#", "...#########", ".....#####.."]
     case .fastForward:
       return ["#.....#.....", "##....##....", "###...###...", "####..####..", "#####.#####.", "############", "#####.#####.", "####..####..", "###...###...", "##....##....", "#.....#.....", "............"]
+    case .rewind:
+      return PanelGlyph.fastForward.rows.map { String($0.reversed()) }
+    case .stepForward:
+      return ["#.......##", "##......##", "###.....##", "####....##", "#####...##", "######..##", "#####...##", "####....##", "###.....##", "##......##", "#.......##"]
+    case .stepBackward:
+      return PanelGlyph.stepForward.rows.map { String($0.reversed()) }
     case .settings:
       return [
         "......###......",
@@ -140,7 +147,7 @@ enum PanelGlyph: String {
       return Dictionary(uniqueKeysWithValues: Self.classicPalette.enumerated().map { index, colour in
         (Character(String(index, radix: 16)), (colour.red, colour.green, colour.blue))
       })
-    case .play, .fastForward, .undo, .settings:
+    case .play, .fastForward, .undo, .settings, .rewind, .stepBackward, .stepForward:
       return ["#": (194, 224, 158)]
     }
   }

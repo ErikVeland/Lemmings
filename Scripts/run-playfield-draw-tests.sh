@@ -31,6 +31,7 @@ swiftc -swift-version 6 -warnings-as-errors \
   "$project_dir/Sources/LemmingsLocal/MacInterfaceRenderer.swift" \
   "$project_dir/Sources/LemmingsLocal/GameMenuArtwork.swift" \
   "$project_dir/Sources/LemmingsLocal/PanelView.swift" \
+  "$project_dir/Sources/LemmingsLocal/TimelinePanelControls.swift" \
   "$project_dir/Sources/LemmingsLocal/PanelGlyphs.swift" \
   "$project_dir/Sources/LemmingsLocal/RunRecovery.swift" \
   "$project_dir/Sources/LemmingsLocal/GameSession.swift" \

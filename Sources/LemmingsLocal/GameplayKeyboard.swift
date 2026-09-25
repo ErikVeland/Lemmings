@@ -142,9 +142,8 @@ import NxlvKit
             return event
         }
         guard event.type == .keyDown else { return event }
-        // F1 or i. The function key is easy to miss, and i is where a player
-        // reaches for information.
-        if event.keyCode == 122 || event.charactersIgnoringModifiers?.lowercased() == "i",
+        // H opens hints. Keep I and F1 as aliases.
+        if event.keyCode == 122 || ["h", "i"].contains(event.charactersIgnoringModifiers?.lowercased() ?? ""),
            let hints {
             if !event.isARepeat { hints() }
             return nil
@@ -271,7 +270,7 @@ import NxlvKit
             sections.append("Tab / Shift-Tab: next / previous available skill\nHome / End: entrance / exit\n[ / ]: previous / next unassigned lemming\n\\: focus last assignment\nReturn: repeat last skill")
         } else { sections.append("Modern keyboard shortcuts are off. Number keys select skills.") }
         sections.append("Escape: save run and return to main menu\n?: controls help")
-        if hints != nil { sections.append("F1 or i: level goals and tiered hints") }
+        if hints != nil { sections.append("H / F1: level goals and tiered hints") }
         if rate != nil { sections.append("− / +: release rate") }
         if controllerEnabled() {
             sections.append(ControllerDevicePresentation.help(mapping: controllerMappings(),

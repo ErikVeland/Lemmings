@@ -240,6 +240,22 @@ import NxlvKit
         canvas.onKey = { [weak self] key in self?.key(key) }
         let keyboard = GameplayKeyboard(window: window)
         gameplayKeyboard = keyboard
+        canvas.timeline.enabled = { [weak self] action in
+            guard let self, self.screen == .playing, let game = self.game else { return false }
+            switch action {
+            case .rewind, .backward: return game.tick > 0
+            case .forward: return !game.isComplete || self.canStepForward
+            case .hints: return true
+            }
+        }
+        canvas.timeline.perform = { [weak keyboard] action in
+            switch action {
+            case .rewind: keyboard?.rewind?()
+            case .backward: keyboard?.step?(-1)
+            case .forward: keyboard?.step?(1)
+            case .hints: keyboard?.hints?()
+            }
+        }
         keyboard.active = { [weak self] in self?.screen == .playing && self?.game?.isComplete == false }
         keyboard.assignSelected = { [weak self] in
             guard let self, let id = self.canvas.assignmentHighlight.target ?? self.canvas.pointerTarget(slot: self.selected) else { return }
@@ -410,6 +426,14 @@ import NxlvKit
         }
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+    #if APP_INTEGRATION_TESTS
+    func testTimelinePanel() throws {
+        prepareBriefing(); startLevel()
+        try validateTimelineCanvas(canvas, timeline: canvas.timeline, name: "lemmings2",
+            tick: { self.game?.tick ?? -1 }, paused: { self.paused })
+    }
+    #endif
+
     func present() { showWindow(nil); window?.makeKeyAndOrderFront(nil); window?.makeFirstResponder(front) }
     func showLevelHints() {
         guard let window, !GameScreen.shared.isPresented, screen == .playing || screen == .briefing else { return }
@@ -1648,6 +1672,12 @@ import NxlvKit
 }
 
 @MainActor private final class Lemmings2Canvas: NSView {
+    let timeline = TimelinePanelControls()
+    private func layoutTimeline() {
+        let width = min(260, bounds.width - 16)
+        timeline.frame = CGRect(x: (bounds.width - width) / 2, y: bounds.height - 34, width: width, height: 30)
+    }
+
     private let pointerCapture = GamePointerCapture()
     private var capturedPointer: CGPoint?
     func capturePointer(active: Bool) {
@@ -1682,7 +1712,8 @@ import NxlvKit
                 children.append(accessibleElements.element(id: "speed-\(direction)", owner: self, label: direction < 0 ? "Decrease fast speed" : "Increase fast speed", frame: speedRect) { [weak self] in self?.onSpeedStep?(direction, ProcessInfo.processInfo.systemUptime) })
             }
         }
-        return children
+        layoutTimeline()
+        return children + timeline.accessibleControls(owner: self)
     }
     var onPanel: ((Int, Int, TimeInterval) -> Void)?
     var onHover: (() -> Void)?
@@ -1705,7 +1736,7 @@ import NxlvKit
     override var acceptsFirstResponder: Bool { true }
     override func acceptsFirstMouse(for event: NSEvent?) -> Bool { true }
     private var viewport: Lemmings2Viewport {
-        Lemmings2Viewport(viewWidth: Double(bounds.width), viewHeight: Double(bounds.height))
+        Lemmings2Viewport(viewWidth: Double(bounds.width), viewHeight: Double(max(1, bounds.height - 38)))
     }
     private var zoom: CGFloat { CGFloat(viewport.scale) }
     private var visibleWidth: CGFloat { CGFloat(viewport.width) }
@@ -1907,7 +1938,7 @@ import NxlvKit
         }
         syncSpeedEffects()
     }
-    override func layout() { super.layout(); syncSpeedEffects() }
+    override func layout() { super.layout(); layoutTimeline(); syncSpeedEffects() }
     private func syncSpeedEffects() {
         let active = usesSpeedEffects && window != nil
         hdrOverlay?.setSuperSpeed(active,
@@ -2298,6 +2329,8 @@ import NxlvKit
         }
     }
     override func draw(_ dirtyRect: NSRect) {
+        layoutTimeline()
+        defer { timeline.draw() }
         defer { startCountdown.draw(in: gameplayRect) }
         defer {
             // The shared corner reticle also represents the controller pointer.
@@ -2438,6 +2471,8 @@ import NxlvKit
     override func mouseDown(with event: NSEvent) {
         window?.makeFirstResponder(self)
         let p = convert(event.locationInWindow, from: nil)
+        layoutTimeline()
+        if timeline.click(at: p) { return }
         let x = (p.x - origin.x) / zoom
         let y = (p.y - origin.y) / (zoom * 1.2)
         guard x >= 0, x < visibleWidth, y >= 0, y < 200 else { return }
