@@ -21,6 +21,30 @@ private func require(
 private typealias Telemetry = AdaptiveDJEngine.Telemetry
 
 @MainActor private func run(_ root: URL) throws {
+  let loopURL = FileManager.default.temporaryDirectory.appendingPathComponent("music-loop-\(UUID().uuidString).wav")
+  defer { try? FileManager.default.removeItem(at: loopURL) }
+  let format = AVAudioFormat(standardFormatWithSampleRate: 44100, channels: 2)!
+  do {
+    let file = try AVAudioFile(forWriting: loopURL, settings: format.settings)
+    let silence = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: 4410)!
+    silence.frameLength = 4410
+    for channel in 0..<2 { silence.floatChannelData![channel].initialize(repeating: 0, count: 4410) }
+    try file.write(from: silence)
+  }
+  guard let recording = MusicFileDeck(url: loopURL) else { throw Failure(description: "Streaming fixture did not open") }
+  recording.volume = 0; recording.play()
+  RunLoop.current.run(until: Date().addingTimeInterval(0.8))
+  try require(recording.completedLoops >= 3, "Stream did not queue consecutive loops")
+  recording.suspendOutput()
+  RunLoop.current.run(until: Date().addingTimeInterval(0.25))
+  try require(!recording.isPlaying, "Stream ignored suspension")
+  recording.resumeOutput()
+  RunLoop.current.run(until: Date().addingTimeInterval(0.25))
+  try require(recording.isPlaying, "Stream did not resume")
+  recording.stop()
+  RunLoop.current.run(until: Date().addingTimeInterval(0.25))
+  try require(!recording.isPlaying && recording.completedLoops == 0, "Old streaming callback restarted stopped audio")
+
   let soundtracks = SoundtrackPlayer.djSoundtracks(at: root)
   guard !soundtracks.isEmpty else {
     print("No soundtrack folders installed. Nothing to mix.")

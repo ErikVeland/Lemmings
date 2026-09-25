@@ -3562,6 +3562,72 @@ private actor ContentBrowserArtworkFixture {
     print("PASS typed CoverFlow selection, mouse, keyboard, controller, VoiceOver and reduced motion")
 }
 
+extension AppDelegate {
+  fileprivate func testLoadingLatency() async throws {
+    if window == nil { buildInterface() }
+    func measure(_ name: String, _ work: () throws -> Void) rethrows {
+      let start = ProcessInfo.processInfo.systemUptime
+      try work()
+      print("LOAD \(name): \(String(format: "%.1f", (ProcessInfo.processInfo.systemUptime - start) * 1000)) ms")
+    }
+    for pass in 1...2 {
+      if let root = try? BundledGameResources.lemmings2() {
+        try measure("L2 catalogue \(pass)") { _ = try Lemmings2PlayWindow.browserLevels(root: root, progressData: nil) }
+      }
+      if let root = try? BundledGameResources.lemmings3() {
+        try measure("L3 catalogue \(pass)") { _ = try Lemmings3PlayWindow.browserLevels(root: root, progressData: [:]) }
+      }
+    }
+    settings.music = .silent
+    measure("Classic content") { loadContent() }
+    launchMode = .singleTitle; activeTitle = .lemmings
+    gamePicker.selectItem(at: dataSets.firstIndex { $0.set.title == .lemmings }!)
+    measure("Classic select") { selectDataSet() }
+    for pass in 1...3 {
+      measure("Classic retry \(pass)") { retry() }
+    }
+    let discovery = await makeLevelBrowserDiscoveryTask().value
+    preparedLevelBrowserDiscovery = discovery
+    window.makeKeyAndOrderFront(nil)
+    for pass in 1...2 {
+      GameScreen.shared.dismissAll()
+      measure("Classic browser \(pass)") { openLevelBrowser(family: .classic) }
+      try check(levelBrowserLoadingPage == nil, "Prepared browser showed a loading page")
+      try check(GameScreen.shared.controllerPage(in: window) != nil, "Prepared browser was not presented")
+    }
+    try await Task.sleep(nanoseconds: 250_000_000)
+    if let view = window.contentView, let bitmap = view.bitmapImageRepForCachingDisplay(in: view.bounds) {
+      view.cacheDisplay(in: view.bounds, to: bitmap)
+      try bitmap.representation(using: .png, properties: [:])?.write(to: URL(fileURLWithPath: ".build/loading-browser.png"))
+    }
+    GameScreen.shared.dismissAll()
+    let replayFolder = FileManager.default.temporaryDirectory.appendingPathComponent("replay-latency-\(UUID().uuidString)")
+    try FileManager.default.createDirectory(at: replayFolder, withIntermediateDirectories: true)
+    defer { try? FileManager.default.removeItem(at: replayFolder) }
+    let store = ArcadeStore(file: replayFolder.appendingPathComponent("records.json"), bundledProofs: nil)
+    let level = arcadeLevel!
+    let run = ArcadeRun(profileID: store.records.activeProfileID, level: level,
+      saved: level.total, didWin: true, skills: [:], seconds: 1)
+    let report = store.record(run)!
+    let bytes = Data(repeating: 42, count: 32 * 1024 * 1024)
+    let source = replayFolder.appendingPathComponent("temporary.mp4")
+    try bytes.write(to: source)
+    var retention: Task<Void, Never>?
+    measure("Replay retention dispatch (32 MB)") {
+      retention = store.preserveReplay(source, attemptID: report.trolley!.attempt.id)
+    }
+    try FileManager.default.removeItem(at: source)
+    await retention?.value
+    let replay = store.records.trolley.replays.first!
+    try check(try Data(contentsOf: replayFolder.appendingPathComponent(replay.relativePath)) == bytes,
+      "Background retention lost a discarded temporary movie")
+    try check(replay.sha256 == ArcadeStore.fingerprint(bytes),
+      "Background retention checksum changed")
+    print("PASS background replay retention survives source deletion")
+    print("Loading latency checks completed")
+  }
+}
+
 let testApp = NSApplication.shared
 guard let testDomain = Bundle.main.bundleIdentifier,
   testDomain.hasPrefix("academy.glasscode.lemmings.integration-tests") else { exit(2) }
@@ -3574,7 +3640,7 @@ Task { @MainActor in
   do {
     let subject = AppDelegate()
     subject.prepareArcadeTests()
-    #if !CURSOR_INPUT_TESTS
+    #if !CURSOR_INPUT_TESTS && !LOADING_LATENCY_TESTS
     try subject.testFailureMoodDecision()
     try subject.testSteppedCompletion()
     try subject.testFirstLaunchEffects()
@@ -3585,7 +3651,9 @@ Task { @MainActor in
     try testPointerAssignment()
     #endif
     #endif
-    #if PERFORMANCE_TESTS
+    #if LOADING_LATENCY_TESTS
+    try await subject.testLoadingLatency()
+    #elseif PERFORMANCE_TESTS
     try await subject.testReleasePerformance()
     #elseif HOT_SEAT_TESTS
     try subject.testHotSeatBoundaries()

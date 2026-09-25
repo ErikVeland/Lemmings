@@ -306,6 +306,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private var levelBrowserLevelSelections: [String: String] = [:]
   private var levelBrowserLoadTask: Task<Void, Never>?
   private var levelBrowserDiscoveryTask: Task<LevelBrowserDiscovery?, Never>?
+  private var levelBrowserWarmTask: Task<LevelBrowserDiscovery?, Never>?
+  private var preparedLevelBrowserDiscovery: LevelBrowserDiscovery?
   private var levelBrowserFanLoadTask: Task<Void, Never>?
   private var levelBrowserFanDiscoveryTask: Task<LevelBrowserFanDiscovery?, Never>?
   private var levelBrowserLaunchTask: Task<Void, Never>?
@@ -629,6 +631,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     preparingLaunch = false
     traceLaunch("music-start")
     playMusicForCurrentLevel()
+    warmLevelBrowserCatalogue()
   }
 
   private func setExperiencePreset(_ enabled: Bool) {
@@ -2043,6 +2046,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   private var artworkLevel: ClassicLevel?
 
+  nonisolated private static let decodedClassicArtwork = GameAssetCache<PreparedClassicArtwork>(capacity: 8)
+
   nonisolated private static func readClassicArtwork(
     directory: URL,
     styles: [Int],
@@ -2050,17 +2055,25 @@ let achievementProgressKey = "ClassicAchievementProgress"
     fallbackDirectory: URL? = nil,
     portArtworkFamily: String? = nil
   ) throws -> PreparedClassicArtwork {
+    let cacheKey = GameAssetCache<PreparedClassicArtwork>.bundledKey(directory).flatMap { root -> String? in
+      if let fallbackDirectory, GameAssetCache<PreparedClassicArtwork>.bundledKey(fallbackDirectory) == nil { return nil }
+      return root + ":" + String(describing: styles) + ":" + String(describing: specialIndices)
+        + ":" + (fallbackDirectory?.path ?? "") + ":" + (portArtworkFamily ?? "")
+    }
+    if let cacheKey, let cached = decodedClassicArtwork.value(for: cacheKey) { return cached }
     var newGrounds: [Int: ClassicGroundSet] = [:]
     var newSpecials: [Int: ClassicSpecialGraphic] = [:]
     for style in styles { newGrounds[style] = try ClassicGroundSet.load(style: style, from: directory, fallbackDirectory: fallbackDirectory) }
     for index in specialIndices { newSpecials[index + 1] = try ClassicSpecialGraphic.load(index: index, from: directory, fallbackDirectory: fallbackDirectory) }
     let newAssets = try ClassicMainDATAssets.load(from: fallbackDirectory ?? directory)
-    return PreparedClassicArtwork(
+    let result = PreparedClassicArtwork(
       grounds: newGrounds,
       specials: newSpecials,
       assets: newAssets,
       directory: directory,
       portArtworkFamily: portArtworkFamily)
+    if let cacheKey { decodedClassicArtwork.insert(result, for: cacheKey) }
+    return result
   }
 
   private func installClassicArtwork(_ prepared: PreparedClassicArtwork) {
@@ -2270,6 +2283,11 @@ let achievementProgressKey = "ClassicAchievementProgress"
     if let page = levelBrowserPackPage, GameScreen.shared.contains(page) {
       GameScreen.shared.dismiss(page)
     }
+    if let prepared = preparedLevelBrowserDiscovery,
+       prepared.classic.map({ $0.directory }) == dataSets.map({ $0.directory }) {
+      presentPreparedLevelBrowser(prepared, family: family)
+      return
+    }
     let browserTitle = family?.displayName ?? "Level Select"
     let loadingPage = GameMenuPage(title: browserTitle)
     levelBrowserLoadingPage = loadingPage
@@ -2295,6 +2313,37 @@ let achievementProgressKey = "ClassicAchievementProgress"
       self.levelBrowserLoadingPage = nil
     })
 
+    let discoveryTask: Task<LevelBrowserDiscovery?, Never>
+    if let warm = levelBrowserWarmTask, !warm.isCancelled { discoveryTask = warm }
+    else { discoveryTask = makeLevelBrowserDiscoveryTask() }
+    levelBrowserDiscoveryTask = discoveryTask
+    levelBrowserLoadTask = Task { [weak self, weak loadingPage] in
+      guard let discovery = await discoveryTask.value,
+            !Task.isCancelled, let self, let loadingPage,
+            self.levelBrowserLoadingPage === loadingPage,
+            GameScreen.shared.controllerPage(in: self.window) === loadingPage,
+            self.window.attachedSheet == nil else { return }
+      levelBrowserLoadTask = nil
+      levelBrowserDiscoveryTask = nil
+      if discovery.classic.allSatisfy(\.isVerified) { preparedLevelBrowserDiscovery = discovery }
+      rebuildLevelCatalogue(discovery)
+      levelBrowserLoadingPage = nil
+      GameScreen.shared.dismiss(loadingPage)
+      let packs = levelBrowserPacks(for: family)
+      guard !packs.isEmpty else {
+        GameScreen.shared.message(browserTitle,
+          detail: "No \(browserTitle) level packs are available in this build.")
+        return
+      }
+      if packs.count == 1, let pack = packs.first {
+        presentLevelBrowser(for: pack)
+      } else {
+        presentLevelPackBrowser(packs: packs, title: browserTitle)
+      }
+    }
+  }
+
+  private func makeLevelBrowserDiscoveryTask() -> Task<LevelBrowserDiscovery?, Never> {
     let bundledClassic = Set(BundledGameResources.classicDirectories().map {
       $0.resolvingSymlinksInPath().standardizedFileURL
     })
@@ -2317,7 +2366,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       Lemmings3PlayWindow.browserProgressData(root: $0)
     } ?? [:]
 
-    let discoveryTask = Task.detached(priority: .userInitiated) {
+    return Task.detached(priority: .utility) {
       () -> LevelBrowserDiscovery? in
         guard !Task.isCancelled else { return nil }
         let refreshedClassic = classic.compactMap { source -> LevelBrowserClassicSource? in
@@ -2363,30 +2412,29 @@ let achievementProgressKey = "ClassicAchievementProgress"
           lemmings3Root: lemmings3Root,
           lemmings3: lemmings3)
     }
-    levelBrowserDiscoveryTask = discoveryTask
-    levelBrowserLoadTask = Task { [weak self, weak loadingPage] in
-      guard let discovery = await discoveryTask.value,
-            !Task.isCancelled, let self, let loadingPage,
-            self.levelBrowserLoadingPage === loadingPage,
-            GameScreen.shared.controllerPage(in: self.window) === loadingPage,
-            self.window.attachedSheet == nil else { return }
-      levelBrowserLoadTask = nil
-      levelBrowserDiscoveryTask = nil
-      rebuildLevelCatalogue(discovery)
-      levelBrowserLoadingPage = nil
-      GameScreen.shared.dismiss(loadingPage)
-      let packs = levelBrowserPacks(for: family)
-      guard !packs.isEmpty else {
-        GameScreen.shared.message(browserTitle,
-          detail: "No \(browserTitle) level packs are available in this build.")
-        return
-      }
-      if packs.count == 1, let pack = packs.first {
-        presentLevelBrowser(for: pack)
-      } else {
-        presentLevelPackBrowser(packs: packs, title: browserTitle)
+  }
+
+  private func warmLevelBrowserCatalogue() {
+    guard levelBrowserWarmTask == nil else { return }
+    let task = makeLevelBrowserDiscoveryTask()
+    levelBrowserWarmTask = task
+    Task { [weak self] in
+      let discovery = await task.value
+      guard let self else { return }
+      self.levelBrowserWarmTask = nil
+      if let discovery, discovery.classic.allSatisfy(\.isVerified) {
+        self.preparedLevelBrowserDiscovery = discovery
       }
     }
+  }
+
+  private func presentPreparedLevelBrowser(_ discovery: LevelBrowserDiscovery, family: HomeContentFamily?) {
+    rebuildLevelCatalogue(discovery)
+    let title = family?.displayName ?? "Level Select"
+    let packs = levelBrowserPacks(for: family)
+    if packs.count == 1, let pack = packs.first { presentLevelBrowser(for: pack) }
+    else if !packs.isEmpty { presentLevelPackBrowser(packs: packs, title: title) }
+    else { GameScreen.shared.message(title, detail: "No level packs are available.") }
   }
 
   private func rebuildLevelCatalogue(_ discovery: LevelBrowserDiscovery) {
@@ -2447,9 +2495,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
 
     if let root = discovery.lemmings2Root, !discovery.lemmings2.isEmpty {
+      let currentLevels = (try? Lemmings2PlayWindow.browserLevels(root: root)) ?? discovery.lemmings2
       for tribe in Lemmings2Campaign.tribeNames.indices {
         let packID = "tribes-\(tribe)"
-        let tribeLevels = discovery.lemmings2.filter { $0.selection.tribe == tribe }.map { level in
+        let tribeLevels = currentLevels.filter { $0.selection.tribe == tribe }.map { level in
           let identity = LevelCatalogueIdentity(
             engine: .lemmings2, packID: packID,
             levelID: "\(level.selection.level):\(level.levelID)")

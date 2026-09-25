@@ -500,18 +500,35 @@ import NxlvKit
         UserDefaults.standard.data(forKey: campaignProgressKey(root: root))
     }
 
+    nonisolated private static let browserCampaignCache = GameAssetCache<Lemmings2Campaign>(capacity: 4)
+    nonisolated private static let browserMetadataCache = GameAssetCache<[BrowserLevel]>(capacity: 4)
+
     nonisolated static func browserLevels(root: URL, progressData: Data?) throws -> [BrowserLevel] {
         try Task.checkCancellation()
-        var campaign = try Lemmings2Campaign(root: root)
+        guard let rootRevision = FanLevelLibrary.directoryFingerprint(root) else {
+            throw SequelDataError.invalid("The Lemmings 2 game data could not be verified.")
+        }
+        let cacheKey = root.standardizedFileURL.path + ":" + rootRevision
+        var campaign: Lemmings2Campaign
+        if let cached = browserCampaignCache.value(for: cacheKey) { campaign = cached }
+        else {
+            campaign = try Lemmings2Campaign(root: root)
+            browserCampaignCache.insert(campaign, for: cacheKey)
+        }
         if let progressData,
            let saved = try? JSONDecoder().decode(
             Lemmings2Campaign.Progress.self, from: progressData) {
             try? campaign.restore(saved)
         }
-        guard let rootRevision = FanLevelLibrary.directoryFingerprint(root) else {
-            throw SequelDataError.invalid("The Lemmings 2 game data could not be verified.")
+
+        if let cached = browserMetadataCache.value(for: cacheKey) {
+            return cached.map { level in
+                BrowserLevel(selection: level.selection, levelID: level.levelID,
+                    sourceRevision: level.sourceRevision, title: level.title,
+                    isAvailable: level.selection.level <= campaign.unlockedLevel(in: level.selection.tribe))
+            }
         }
-        return try campaign.levels.enumerated().map { index, level in
+        let result = try campaign.levels.enumerated().map { index, level in
             try Task.checkCancellation()
             let tribe = index / 10
             let position = index % 10
@@ -526,6 +543,8 @@ import NxlvKit
                 title: level.title,
                 isAvailable: position <= campaign.unlockedLevel(in: tribe))
         }
+        browserMetadataCache.insert(result, for: cacheKey)
+        return result
     }
 
     private static func campaignProgressKey(root: URL) -> String {

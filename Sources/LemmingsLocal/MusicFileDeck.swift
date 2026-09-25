@@ -2,8 +2,8 @@ import AVFoundation
 
 /// Plays one decoded music file through a small modern mix chain.
 ///
-/// The source buffer loops in the audio engine. This avoids the gap that can
-/// occur when a file player stops and starts again at the end of a track.
+/// File segments stream through the audio engine. Two queued passes keep
+/// the loop continuous without decoding the whole song on the UI thread.
 @MainActor
 final class MusicFileDeck {
   private let engine = AVAudioEngine()
@@ -14,7 +14,9 @@ final class MusicFileDeck {
   private let reverb = AVAudioUnitReverb()
   private let spatialMixer = AVAudioMixerNode()
   private let outputMixer = AVAudioMixerNode()
-  private let buffer: AVAudioPCMBuffer
+  private let file: AVAudioFile
+  private var playbackGeneration = 0
+  private(set) var completedLoops = 0
   private var fadeTask: Task<Void, Never>?
   private var outputSuspended = false
   private var resumeAfterSuspend = false
@@ -38,14 +40,8 @@ final class MusicFileDeck {
   var isPlaying: Bool { started && !outputSuspended && player.isPlaying }
 
   init?(url: URL) {
-    guard let file = try? AVAudioFile(forReading: url), file.length > 0,
-          let buffer = AVAudioPCMBuffer(
-            pcmFormat: file.processingFormat,
-            frameCapacity: AVAudioFrameCount(file.length)),
-          (try? file.read(into: buffer)) != nil, buffer.frameLength > 0 else {
-      return nil
-    }
-    self.buffer = buffer
+    guard let file = try? AVAudioFile(forReading: url), file.length > 0 else { return nil }
+    self.file = file
 
     let bands = equaliser.bands
     bands[0].filterType = .lowShelf
@@ -102,8 +98,10 @@ final class MusicFileDeck {
       return
     }
     if !started {
-      player.scheduleBuffer(buffer, at: nil, options: [.loops])
       started = true
+      playbackGeneration += 1
+      scheduleLoop(generation: playbackGeneration)
+      scheduleLoop(generation: playbackGeneration)
     }
     if !player.isPlaying { player.play() }
     fadeTask = Task { @MainActor [weak self] in
@@ -114,6 +112,16 @@ final class MusicFileDeck {
         self.sourceMixer.outputVolume = Float(step) / 8
       }
       self.fadeTask = nil
+    }
+  }
+
+  private func scheduleLoop(generation: Int) {
+    player.scheduleFile(file, at: nil, completionCallbackType: .dataPlayedBack) { [weak self] _ in
+      Task { @MainActor [weak self] in
+        guard let self, self.started, self.playbackGeneration == generation else { return }
+        self.completedLoops += 1
+        self.scheduleLoop(generation: generation)
+      }
     }
   }
 
@@ -161,6 +169,8 @@ final class MusicFileDeck {
     fadeTask = nil
     outputSuspended = false
     resumeAfterSuspend = false
+    playbackGeneration += 1
+    completedLoops = 0
     player.stop()
     engine.stop()
     started = false

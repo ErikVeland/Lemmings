@@ -661,10 +661,13 @@ private enum LevelPreviewRenderer {
         var manifest = Data()
         for file in files {
             try Task.checkCancellation()
-            let data = try file.data ?? read(file.url)
-            let digest = SHA256.hash(data: data)
-                .map { String(format: "%02x", $0) }
-                .joined()
+            let digest: String
+            if file.data == nil, let cached = FanLevelLibrary.archiveFingerprint(file.url) {
+                digest = cached
+            } else {
+                let data = try file.data ?? read(file.url)
+                digest = SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined()
+            }
             try Task.checkCancellation()
             manifest.append(contentsOf: file.label.utf8)
             manifest.append(0)

@@ -12,6 +12,7 @@ import NxlvKit
 /// The zips are read with the system `unzip` rather than an archive library.
 /// Browsing reads a file per keypress, which is not worth a dependency.
 enum FanLevelLibrary {
+  private static let bundledFingerprints = GameAssetCache<String>(capacity: 4096)
   /// Where the chosen folder is remembered between runs.
   static let folderKey = "FanLevelFolder"
 
@@ -212,8 +213,12 @@ enum FanLevelLibrary {
 
   /// Identifies the exact archive bytes selected by the browser.
   static func archiveFingerprint(_ url: URL) -> String? {
+    let key = GameAssetCache<String>.bundledKey(url).map { "file:" + $0 }
+    if let key, let cached = bundledFingerprints.value(for: key) { return cached }
     guard let data = try? Data(contentsOf: url, options: .mappedIfSafe) else { return nil }
-    return SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined()
+    let result = SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined()
+    if let key { bundledFingerprints.insert(result, for: key) }
+    return result
   }
 
   static func archiveMatches(_ url: URL, fingerprint: String) -> Bool {
@@ -223,6 +228,8 @@ enum FanLevelLibrary {
   /// Hashes game data by relative path and bytes. Moving an unchanged import
   /// keeps its content fingerprint, while any source change invalidates it.
   static func directoryFingerprint(_ root: URL) -> String? {
+    let key = GameAssetCache<String>.bundledKey(root).map { "directory:" + $0 }
+    if let key, let cached = bundledFingerprints.value(for: key) { return cached }
     let root = root.resolvingSymlinksInPath().standardizedFileURL
     guard let enumerator = FileManager.default.enumerator(
       at: root,
@@ -240,7 +247,9 @@ enum FanLevelLibrary {
     let encoder = JSONEncoder()
     encoder.outputFormatting = [.sortedKeys]
     guard !entries.isEmpty, let data = try? encoder.encode(entries) else { return nil }
-    return SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined()
+    let result = SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined()
+    if let key { bundledFingerprints.insert(result, for: key) }
+    return result
   }
 
   static func knownLevelCount(in pack: URL) -> Int? {

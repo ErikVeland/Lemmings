@@ -11,6 +11,7 @@ import NxlvKit
     private let recoveryStore: RunRecoveryStore
     private(set) var storageNotice: String?
     private var canWrite = true
+    private var pendingReplayIDs: Set<UUID> = []
     private let bundledProofs: TrolleyBundledProofs?
     private let playlistDataRemover: (String) -> Void
     var profilesAreWritable: Bool { canWrite }
@@ -290,23 +291,47 @@ import NxlvKit
             try? records.acceptTrolleyMaximum(proof, conditions: conditions, assisted: assisted)
         }
     }
-    /// Called only for a completed movie. A movie hash is local evidence, not replay or server verification.
-    func preserveReplay(_ url: URL, attemptID: UUID) {
+    /// Retain the open file before the recorder can discard its temporary path.
+    /// Copying and checksumming a movie must not block a result or next level.
+    @discardableResult
+    func preserveReplay(_ url: URL, attemptID: UUID) -> Task<Void, Never>? {
         guard canWrite, records.trolley.attempts.contains(where: { $0.id == attemptID }),
-              !records.trolley.replays.contains(where: { $0.attemptID == attemptID }) else { return }
-        do {
-            let relative = "Replays/\(attemptID.uuidString).mp4"
-            let destination = file.deletingLastPathComponent().appendingPathComponent(relative)
-            try FileManager.default.createDirectory(at: destination.deletingLastPathComponent(), withIntermediateDirectories: true)
-            if !FileManager.default.fileExists(atPath: destination.path) { try FileManager.default.copyItem(at: url, to: destination) }
-            let handle = try FileHandle(forReadingFrom: destination)
-            defer { try? handle.close() }
-            var hash = SHA256()
-            while let chunk = try handle.read(upToCount: 1_048_576), !chunk.isEmpty { hash.update(data: chunk) }
-            records.attachTrolleyReplay(.init(attemptID: attemptID, relativePath: relative,
-                sha256: hash.finalize().map { String(format: "%02x", $0) }.joined()))
+              !records.trolley.replays.contains(where: { $0.attemptID == attemptID }),
+              !pendingReplayIDs.contains(attemptID),
+              let source = try? FileHandle(forReadingFrom: url) else { return nil }
+        pendingReplayIDs.insert(attemptID)
+        let relative = "Replays/\(attemptID.uuidString).mp4"
+        let destination = file.deletingLastPathComponent().appendingPathComponent(relative)
+        return Task { [self] in
+            defer { pendingReplayIDs.remove(attemptID) }
+            let digest = await Task.detached(priority: .utility) { () -> String? in
+                defer { try? source.close() }
+                let manager = FileManager.default
+                let staging = destination.appendingPathExtension(UUID().uuidString + ".pending")
+                defer { try? manager.removeItem(at: staging) }
+                do {
+                    try manager.createDirectory(at: destination.deletingLastPathComponent(), withIntermediateDirectories: true)
+                    guard manager.createFile(atPath: staging.path, contents: nil) else { return nil }
+                    let output = try FileHandle(forWritingTo: staging)
+                    defer { try? output.close() }
+                    var hash = SHA256()
+                    while let chunk = try source.read(upToCount: 1_048_576), !chunk.isEmpty {
+                        try output.write(contentsOf: chunk)
+                        hash.update(data: chunk)
+                    }
+                    try output.close()
+                    if manager.fileExists(atPath: destination.path) {
+                        // A previous interrupted retention may have left a complete file.
+                        _ = try manager.replaceItemAt(destination, withItemAt: staging)
+                    } else { try manager.moveItem(at: staging, to: destination) }
+                    return hash.finalize().map { String(format: "%02x", $0) }.joined()
+                } catch { return nil }
+            }.value
+            guard let digest, canWrite,
+                  records.trolley.attempts.contains(where: { $0.id == attemptID }) else { return }
+            records.attachTrolleyReplay(.init(attemptID: attemptID, relativePath: relative, sha256: digest))
             save()
-        } catch { /* Movie retention is optional. The immutable local attempt remains valid. */ }
+        }
     }
     @discardableResult func saveProfile(id: String?, initials: String, portrait: Int, select: Bool) -> ArcadeProfile? {
         guard canWrite else { return nil }

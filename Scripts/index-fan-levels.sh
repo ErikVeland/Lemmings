@@ -7,5 +7,6 @@ mkdir -p "$build_dir"
 python3 "$project_dir/Tools/FanLevelCatalog/prune.py" "$project_dir/Content/LevelPacks" --apply
 swiftc -O -swift-version 6 -I "$library_dir/modules" -L "$library_dir" -lNxlvKit \
   -Xlinker -rpath -Xlinker "$library_dir" -o "$build_dir/Index" \
-  "$project_dir/Tools/FanLevelCatalog/main.swift" "$project_dir/Sources/LemmingsLocal/FanLevelLibrary.swift"
+  "$project_dir/Tools/FanLevelCatalog/main.swift" "$project_dir/Sources/LemmingsLocal/GameAssetCache.swift" \
+  "$project_dir/Sources/LemmingsLocal/FanLevelLibrary.swift"
 "$build_dir/Index" "$project_dir/Content/LevelPacks"

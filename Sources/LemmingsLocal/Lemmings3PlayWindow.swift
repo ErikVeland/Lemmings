@@ -426,11 +426,15 @@ import NxlvKit
         })
     }
 
+    nonisolated private static let browserCache = GameAssetCache<[BrowserLevel]>(capacity: 4)
+
     nonisolated static func browserLevels(root: URL, progressData: [Int: Data]) throws -> [BrowserLevel] {
         var result: [BrowserLevel] = []
         guard let rootRevision = FanLevelLibrary.directoryFingerprint(root) else {
             throw SequelDataError.invalid("The Lemmings 3 game data could not be verified.")
         }
+        let cacheKey = root.standardizedFileURL.path + ":" + rootRevision
+        if let cached = browserCache.value(for: cacheKey) { return cached }
         for tribe in Lemmings3ClassicCampaign.Tribe.allCases {
             try Task.checkCancellation()
             var campaign = try Lemmings3ClassicCampaign(root: root, tribe: tribe)
@@ -470,6 +474,7 @@ import NxlvKit
                     isAvailable: availability[level]))
             }
         }
+        browserCache.insert(result, for: cacheKey)
         return result
     }
     func showLevelHints() {
