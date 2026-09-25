@@ -78,3 +78,12 @@ require(catalogue.track(id: "classic.master-system-oh-no")?.role == "cue", "Oh N
 require(catalogue.track(id: "classic.snes-intermission")?.role == "intermission", "Intermission entered the level rotation")
 require(catalogue.track(id: "classic.snes-staff-roll")?.role == "credits", "Credits entered the level rotation")
 print("PASS SNES title collisions, Archimedes special and Master System cues")
+
+for special in ["beasti", "beastii", "awesome", "menace"] {
+    let track = catalogue.track(id: "classic." + special)!
+    require(track.role == "special" && track.variants.contains { $0.remix == "mandelsoft" }, "Missing named special remix")
+    require(pick(track.id)?.quality == "native-module", "Special remix replaced authentic first visit")
+}
+let paintball = catalogue.tracks.filter { $0.game == "paintball" }
+require(paintball.count == 5 && paintball.allSatisfy { $0.role == "bonus" }, "Paintball remixes were assigned to Classic")
+require(catalogue.track(id: "classic.march-of-the-greentops")?.variants.count == 1, "Unrecognised remixes merged into March of the Greentops")

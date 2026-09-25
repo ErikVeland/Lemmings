@@ -43,3 +43,7 @@ The catalogue now contains 486 playable versions across 226 identities. All 72 a
 Apple AVAudioFile also read all 72 new recordings to their audio end. One SNES MP3 reported EOF 86 samples (about 2 ms) before its advertised length; full FFmpeg decoding passed, and the Apple check treats this small MP3 duration discrepancy as end-of-stream. The remaining files decoded without that discrepancy. This does not establish original-hardware fidelity.
 
 Catalogue coverage and packaging checks passed for all 486 versions, including the new port and failure-cue assertions. Adaptive DJ playback tests passed for assigned tunes, all three engine journeys, protected cues, retry stability and suspended crossfades. The nonseasonal discovery check found 479 tracks; seven seasonal entries remain in the seasonal pool. These changes update source assets and build inputs; no new release app was produced in this step.
+
+## Additional remix conversion
+
+Converted four MandelSoft Classic special remixes and five Paintball remixes from OGG to Apple Lossless M4A. All nine passed full signal/duration checks and Apple AVAudioFile decoding. The report now records 358 verified conversions with zero failures. The catalogue and packaging tests pass for 495 playable versions. No new release build was cut.

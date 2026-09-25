@@ -1,6 +1,6 @@
 # Soundtrack organisation and journey
 
-All 486 playable versions are catalogued under 226 track identities. Browse `Sources/Music/By Track` or [the track catalogue](MusicTrackCatalogue.md).
+All 495 playable versions are catalogued under 210 track identities. Browse `Sources/Music/By Track` or [the track catalogue](MusicTrackCatalogue.md).
 
 The hierarchy is **game → role → track → port → source quality → original/remix**. The browsing folders contain relative symlinks to the original asset layout. They do not consume another copy of the audio or invalidate conversion hashes. The original compressed logs and OGG files are linked beside their playable counterparts. Players and converters skip this view to prevent duplicates.
 
@@ -50,3 +50,5 @@ Full-game packaging copies the catalogue after WAV-to-M4A encoding and rewrites 
 Validation on 25 September 2026: catalogue and packaging checks passed for all 414 versions. Director checks and real audio playback checks passed, including both sequel journeys, retries and paused crossfades. The full desktop app passed Swift type-checking; existing unrelated deprecation/unused-result warnings remain. No release app was rebuilt or installed.
 
 Converted VGZ recordings still contain two loops and a fade. The recording deck repeats the whole file, including the intro and fade. Seamless native loop points, loudness matching and listening checks against original hardware remain unverified. No new visual controls were added.
+
+The four MandelSoft special remixes participate only in their matching special-theme journeys. Five numbered Paintball remixes are catalogued and packaged as separate bonus material, with no inferred Classic level or result assignment.

@@ -4,9 +4,9 @@ Snapshot: 25 September 2026. Counts exclude the `By Track` symlink view. Package
 
 ## Files and provenance
 
-The folder contains **304 VGZ, 22 files named VGM, 23 OGG, 73 MOD, 12 WAV, 51 MP3 and 350 M4A files**. Converted counterparts are not additional compositions. There are **486 directly playable files**. The current [track catalogue](MusicTrackCatalogue.md) now groups all 486 files into 226 identities. Identity counts depend on classification and are not a verified count of unique compositions.
+The folder contains **304 VGZ, 22 files named VGM, 32 OGG, 73 MOD, 12 WAV, 51 MP3 and 359 M4A files**. Converted counterparts are not additional compositions. There are **495 directly playable files**. The current [track catalogue](MusicTrackCatalogue.md) now groups all 495 files into 210 identities. Identity counts depend on classification and are not a verified count of unique compositions.
 
-The conversion report records 349 conversions and 0 failures. See [conversion details](MusicConversion.md) for decoder validation and the finite-loop limitation.
+The conversion report records 358 conversions and 0 failures. See [conversion details](MusicConversion.md) for decoder validation and the finite-loop limitation.
 
 | Source folder | Original formats | M4A counterparts/source | Package provenance |
 | --- | --- | ---: | --- |
@@ -27,7 +27,7 @@ The conversion report records 349 conversions and 0 failures. See [conversion de
 | Lemmings_3D_(PC) | 38 VGZ | 38 | Valley Bell; v1.00; [notes](../Sources/Music/Lemmings_3D_%28PC%29/Lemmings%203D.txt) |
 | Lemmings_Series_(IBM_PC_AT) | 31 VGZ | 31 | Valley Bell; v1.10; [notes](../Sources/Music/Lemmings_Series_%28IBM_PC_AT%29/Lemmings%20Series.txt) |
 | Lemmings_Series_(Tandy_1000) | 29 VGZ | 29 | NewRisingSun; v1.02; [notes](../Sources/Music/Lemmings_Series_%28Tandy_1000%29/Lemmings%20Series.txt) |
-| Remixes | 23 OGG, 1 MP3 | 24 | No package readme |
+| Remixes | 32 OGG, 1 MP3 | 24 | No package readme |
 | holiday_lemmings_music_mod | 3 MOD | 0 | No package readme |
 | lemmings_2_music_mod_tsyu | 14 MOD | 0 | No package readme |
 | lemmings_3_music_mod_tsyu | 8 MOD | 0 | No package readme |
@@ -82,3 +82,11 @@ All 50 new MP3 files passed metadata/duration probing. All 22 SMS files passed g
 The SMS files have `.vgm` extensions but gzip payloads. Its readme header says v1.03 while the history includes v2.00 (6 October 2024), described as a 50 Hz rerip with revised credits. Preserve that discrepancy; the header alone cannot establish the downloaded version. The readme declares a complete dump, no FM soundtrack, and no extra prototype music. Embedded notes include level associations, but runtime mapping still needs verification.
 
 The updated conversion report contains 349 verified outputs. All 72 additions are now playable assets and catalogue entries. MP3 recordings do not establish lossless provenance. None of these source checks establishes inclusion in a released build.
+
+## Additional MandelSoft remixes
+
+Nine more OGG sources are installed: `orig_special_music_mandelsoft` contains Beast I, Beast II, Menace and Awesome; `paintball_music_mandelsoft` contains five numbered `lpb_01`–`lpb_05` tracks. All nine now have Apple Lossless M4A counterparts, preserving their lossy-source classification and original OGG files.
+
+The four named remixes join their matching Classic special identities and remain outside ordinary level music. The five Paintball remixes have separate Paintball bonus identities; their original cue names and roles are unverified. They are packaged and indexed, not substituted for Classic or sequel level themes.
+
+All nine passed conversion, complete Apple audio decoding and catalogue/packaging checks. The current catalogue has 495 versions and 210 identities; identity totals also reflect the recent SNES/Archimedes title reconciliation, so they cannot be derived by adding new files to the earlier identity count.

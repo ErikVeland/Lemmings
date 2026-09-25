@@ -136,16 +136,19 @@ def classify(path, music):
             # The author explicitly identifies 12 as Doggie (unlike the VGM package order).
             keys = ['lemming1','lemming2','lemming3','mountain','tenlemmings','cancan','tim1','tim2','tim3','tim4','tim5','doggie','tim6','tim7','tim8','tim9','tim10']
             key = keys[int(path.stem[-2:])-1]
-        elif path.stem.startswith('ohno_'):
+        elif path.parent.name == 'ohno_music_mandelsoft' and re.fullmatch(r'ohno_\d{2}', path.stem):
             game = 'ohno'; key = 'mandelsoft-'+path.stem
             confidence = 'unverified'; role = 'unverified'
             evidence = 'Numbered remix. Cross-port Oh No numbering differs; exact composition needs listening verification.'
         elif 'medieval' in path.name.lower():
             game = 'lemmings2'; port = 'amiga'; key = 'medieval'; remix = 'amigamer'
             evidence = 'Embedded ID3 title and artist identify Medieval Lemmings Remix by AmiGamer.'
-        else:
+        elif 'march of the greentops' in path.name.lower():
             key = 'march-of-the-greentops'; remix = 'cold-storage'; port = 'amiga'; role = 'bonus'
             evidence = 'Embedded album tags. Preserve as a standalone composer remix until its constituent themes are verified.'
+        else:
+            key = 'unverified-' + slug(relative); remix = 'unverified'; port = 'unknown'; role = 'unverified'; confidence = 'unverified'
+            evidence = 'Unrecognised remix collection. Preserve independently until its composition and credits are verified.'
     if key is None:
         if game == 'classic':
             key = classic_key(title)
