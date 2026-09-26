@@ -68,7 +68,8 @@ extension MusicFileDeck {
     let hz = Double(crossings) * 44100 / Double(samples.count - 8192)
     try require(abs(hz - 880) < 6, "Pause played the melody instead of the rhythm asset: \(hz) Hz")
     deck.suspendOutput()
-    RunLoop.current.run(until: Date().addingTimeInterval(0.06))
+    // Sample mid-brake. The turntable brake takes 0.5 seconds.
+    RunLoop.current.run(until: Date().addingTimeInterval(0.2))
     try require(deck.varispeed.rate < 0.8 && deck.sourceMixer.outputVolume < 0.9 && deck.sourceMixer.outputVolume > 0,
       "Vinyl stop did not reduce both speed and gain")
     try require(deck.musicLayer.outputVolume == 0, "Vinyl stop restored a paused melody")
@@ -79,7 +80,8 @@ extension MusicFileDeck {
     try require(deck.musicLayer.outputVolume == 1 && deck.rhythmLayer.outputVolume == 0 && !deck.rhythmPlayer.isPlaying,
       "Resume retained a second rhythm voice")
     deck.suspendOutput()
-    RunLoop.current.run(until: Date().addingTimeInterval(0.25))
+    // The engine parks after the 0.5-second brake and its 1.2-second reverb tail.
+    RunLoop.current.run(until: Date().addingTimeInterval(1.9))
     try require(!deck.engine.isRunning && !deck.player.isPlaying && deck.sourceMixer.outputVolume == 0,
       "Vinyl stop did not reach silence")
     deck.stop()

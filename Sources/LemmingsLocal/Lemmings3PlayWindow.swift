@@ -1114,8 +1114,9 @@ import NxlvKit
             skip: canSkipLevel ? { [weak self] in self?.skipLevel() } : nil)
     }
     /// Level skips apply to a failed campaign level, not playlists.
+    /// Old school turns them off with the other modern controls.
     private var canSkipLevel: Bool {
-        onSequenceContinue == nil && recordsCampaignProgress && game.saved == 0 && campaign.canSkipLevel
+        audioSettings.modernControlsEnabled && onSequenceContinue == nil && recordsCampaignProgress && game.saved == 0 && campaign.canSkipLevel
             && availability.indices.contains(campaign.index + 1) && availability[campaign.index + 1] == nil
     }
     /// The result screen has already spent the skip. This only moves the campaign.

@@ -6492,8 +6492,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   /// Level skips apply to campaign ranks, not fan packs, playlists or practice.
+  /// Old school turns them off with the other modern controls.
   private var canSkipClassicLevel: Bool {
-    !fanPlaying && sequencePlayingIdentity == nil && classicSelectionRecordsCampaignProgress && flow?.canSkipLevel == true
+    settings.modernControlsEnabled && !fanPlaying && sequencePlayingIdentity == nil
+      && classicSelectionRecordsCampaignProgress && flow?.canSkipLevel == true
   }
 
   /// The result screen has already spent the skip. This only moves the campaign.
