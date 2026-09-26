@@ -6055,7 +6055,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private func loadSoundEffects(from url: URL) {
     do {
       let amiga = Bundle.main.resourceURL?.appendingPathComponent("Ports/amiga_extracted/lemmings")
-      let loaded = try effects.loadMacintoshSounds(imageURL: url, amigaFallbackDirectory: amiga)
+      let loaded = try effects.loadMacintoshSounds(imageURL: url, amigaFallbackDirectory: amiga,
+        supplementDirectory: Bundle.main.resourceURL?.appendingPathComponent("Sounds"))
       setStatus("Loaded \(loaded.count) sound effects.")
     } catch {
       setStatus("Sound effects: \(error)")
@@ -6076,7 +6077,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
       guard let root = Bundle.main.resourceURL else { return }
       let directory = root.appendingPathComponent("Ports/amiga_extracted/lemmings")
       do {
-        let loaded = try effects.loadAmigaSounds(directory: directory, deathFallbackImage: BundledGameResources.macintoshSoundImage())
+        let loaded = try effects.loadAmigaSounds(directory: directory, deathFallbackImage: BundledGameResources.macintoshSoundImage(),
+          supplementDirectory: root.appendingPathComponent("Sounds"))
         setStatus("Loaded \(loaded.count) Amiga sound effects.")
       } catch {
         setStatus("Amiga sound effects: \(error)")
