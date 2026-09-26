@@ -3646,7 +3646,7 @@ extension AppDelegate {
     settingsPage.show()
     host.contentView!.layoutSubtreeIfNeeded()
     let tabs = children(host.contentView!).compactMap { $0 as? GameTabButton }
-    try check(tabs.count == 6, "Settings lost a tab")
+    try check(tabs.count == 7, "Settings lost a tab")
     for tab in tabs {
         try check(tab.frame.width > 0 && tab.frame.height >= 28, "Settings tab lost its input target")
         tab.performClick(nil)

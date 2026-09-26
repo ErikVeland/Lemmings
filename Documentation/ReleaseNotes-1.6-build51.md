@@ -50,6 +50,13 @@ Release base: v1.5.0
   variable speed, modern and original presets, improved pointer targeting,
   keyboard and controller controls, countdowns, hints and saved-run recovery.
 
+## Play insights
+
+- The home screen shows how many lemmings this Mac has saved.
+- **Settings > Play Insights** shows local play counts and lets you clear them.
+- Sharing is off until you choose to enable it. No shared service is configured
+  in the public build, so the app does not send play counts over the network.
+
 ## Fixes
 
 - With Build targeting, a current builder is preferred only while it can accept
