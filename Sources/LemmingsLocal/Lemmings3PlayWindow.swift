@@ -1074,8 +1074,8 @@ import NxlvKit
         let wallet = PrecisionZoomController.shared
         canvas.setPrecisionZoom(wallet.active != nil, at: point)
         speedControl.bulletTimeActive = wallet.active == .superzoom
-        let suffix = wallet.active.map { "  \($0 == .zoom ? "ZOOM" : "SUPER") ON" } ?? ""
-        canvas.precisionStatus = "Z \(wallet.remaining(.zoom))  SHIFT-Z \(wallet.remaining(.superzoom))" + suffix
+        canvas.precisionStatus = PrecisionZoomStatus(zoom: wallet.remaining(.zoom),
+            superzoom: wallet.remaining(.superzoom), active: wallet.active, isEmpty: false)
     }
 
     func suspendForReplay() -> () -> Void {
@@ -1117,8 +1117,9 @@ import NxlvKit
             skip: canSkipLevel ? { [weak self] in self?.skipLevel() } : nil)
     }
     /// Level skips apply to a failed campaign level, not playlists.
+    /// Old school turns them off with the other modern controls.
     private var canSkipLevel: Bool {
-        onSequenceContinue == nil && recordsCampaignProgress && game.saved == 0 && campaign.canSkipLevel
+        audioSettings.modernControlsEnabled && onSequenceContinue == nil && recordsCampaignProgress && game.saved == 0 && campaign.canSkipLevel
             && availability.indices.contains(campaign.index + 1) && availability[campaign.index + 1] == nil
     }
     /// The result screen has already spent the skip. This only moves the campaign.
@@ -1191,10 +1192,11 @@ import NxlvKit
             saved: game.saved, active: game.lemmings.filter(\.active).count,
             unreleased: game.reserve, required: 1)
         failureMood.set(active: impossible)
-        canvas.deathCountdownText = FailureMoodDecision.deathCounterText(
+        let deathCounter = FailureMoodDecision.deathCounter(
             saved: game.saved, active: game.lemmings.filter(\.active).count,
-            unreleased: game.reserve, required: 1,
+            unreleased: game.reserve, required: 1, total: game.configuration.total,
             isComplete: game.isComplete, didWin: game.saved > 0)
+        canvas.deathCountdownText = deathCounter.visible
         dj.updateTelemetry(.init(savedCount: game.saved, requiredCount: 1))
         let justCompleted = game.isComplete && !recorded
         if justCompleted { dj.updateTelemetry(.init(didWin: game.saved > 0, isComplete: true)) }
@@ -1217,7 +1219,7 @@ import NxlvKit
         let transport = rewindOriginState.map { "Rewind active, \($0.tick - game.tick) ticks back. Hold full stop scrubs forward. Escape cancels." } ?? ""
         canvas.rewindOriginTick = rewindOriginState?.tick
         canvas.rewindCurrentTick = game.tick
-        canvas.setAccessibilityLabel("Lemmings 3. \(campaign.tribe.title) level \(campaign.index + 1). \(game.saved) saved, \(game.reserve) in reserve, \(game.remainingSeconds) seconds. \(canvas.deathCountdownText). Selected \(Lemmings3Panel.names[selected]). \(message) \(canvas.precisionStatus). Space pauses. F changes speed. Z or scroll up zooms. Scroll down switches Zoom off. Shift-Z superzooms. \(transport) Escape returns to the main menu. Double-click End Run to finish.")
+        canvas.setAccessibilityLabel("Lemmings 3. \(campaign.tribe.title) level \(campaign.index + 1). \(game.saved) saved, \(game.reserve) in reserve, \(game.remainingSeconds) seconds. \(deathCounter.accessibility). Selected \(Lemmings3Panel.names[selected]). \(message) \(canvas.precisionStatus.accessibility). Space pauses. F changes speed. Z or scroll up zooms. Scroll down switches Zoom off. Shift-Z superzooms. \(transport) Escape returns to the main menu. Double-click End Run to finish.")
         let turn = ArcadeStore.shared.hotSeatIsActive ? ArcadeStore.shared.records.profile(arcadeProfileID) : nil
         canvas.turnBadge.show(initials: turn?.initials, portrait: turn.flatMap { ArcadeWindow.shared.arcadeView.portraitImage($0.portrait) })
         canvas.speedMultiplier = speedControl.multiplier
@@ -1450,9 +1452,10 @@ import NxlvKit
     private var mapHeight = 160
     private(set) var cameraX: CGFloat = 0
     private(set) var cameraY: CGFloat = 0
-    private var precisionLens = PrecisionZoomLens()
+    private var precisionLens = AnimatedPrecisionZoomLens()
     private var precisionScroll = PrecisionZoomScrollGesture()
-    var precisionStatus = "" { didSet { needsDisplay = true } }
+    private let precisionZoomAnimation = PrecisionZoomAnimation()
+    var precisionStatus = PrecisionZoomStatus() { didSet { needsDisplay = true } }
     var deathCountdownText = "" { didSet { if oldValue != deathCountdownText { needsDisplay = true } } }
     var onPrecisionScroll: ((PrecisionZoomScrollAction, CGPoint) -> Void)?
     func setPrecisionZoom(_ enabled: Bool, at cursor: CGPoint? = nil) {
@@ -1460,8 +1463,13 @@ import NxlvKit
         let pointer = cursor ?? pointerPosition ?? controllerPointer
             ?? window.map { convert($0.mouseLocationOutsideOfEventStream, from: nil) } ?? centre
         let anchor = playfieldRect.contains(pointer) ? pointer : centre
-        let delta = precisionLens.transition(to: enabled, at: anchor, scaleX: zoom, scaleY: zoom)
-        pan(delta.x, delta.y)
+        precisionZoomAnimation.start(from: precisionLens.magnification, to: enabled ? 2 : 1,
+            reduceMotion: reduceMotion) { [weak self] magnification in
+                guard let self else { return }
+                let delta = self.precisionLens.transition(toMagnification: magnification, at: anchor,
+                    scaleX: self.zoom, scaleY: self.zoom)
+                self.pan(delta.x, delta.y)
+            }
     }
     override var isFlipped: Bool { true }
     override var acceptsFirstResponder: Bool { true }
@@ -1613,7 +1621,10 @@ import NxlvKit
                 }
             }
             if let origin = rewindOriginTick, origin > rewindCurrentTick {
-                RewindTransportCue.draw(origin: CGPoint(x: screenOrigin.x + 8, y: screenOrigin.y + 14),
+                let badgeScale: CGFloat = bounds.width >= 960 ? 2 : 1
+                let badgeOffset = precisionStatus.isEmpty ? 0 : precisionStatus.size(scale: badgeScale).height + 4
+                RewindTransportCue.draw(origin: CGPoint(x: playfieldRect.minX + 12,
+                    y: playfieldRect.minY + 12 + badgeOffset),
                     currentTick: rewindCurrentTick, originTick: origin, scale: zoom)
             }
         }
@@ -1624,9 +1635,9 @@ import NxlvKit
             drawWorld(game, terrain: terrain)
         }
         FailureMoodOverlay.draw(in: playfieldRect, amount: failureMoodAmount)
-        if menuRows == nil && !precisionStatus.isEmpty {
-            GameTypography.annotation(precisionStatus, at: CGPoint(x: playfieldRect.minX + 12,
-                y: playfieldRect.minY + 25), palette: .blue)
+        if menuRows == nil {
+            _ = precisionStatus.draw(at: CGPoint(x: playfieldRect.minX + 12,
+                y: playfieldRect.minY + 12), scale: bounds.width >= 960 ? 2 : 1)
         }
     }
     private func drawLemmings(_ game: Lemmings3Runtime, ghostsOnly: Bool) {

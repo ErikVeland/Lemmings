@@ -259,7 +259,7 @@ import NxlvKit
     "P":[127,9,9,9,6], "Q":[62,65,81,33,94], "R":[127,9,25,41,70],
     "S":[70,73,73,73,49], "T":[1,1,127,1,1], "U":[63,64,64,64,63],
     "V":[31,32,64,32,31], "W":[63,64,56,64,63], "X":[99,20,8,20,99],
-    "Y":[3,4,120,4,3], "Z":[97,81,73,69,67],
+    "Y":[3,4,120,4,3], "Z":[97,81,73,69,67], "z":[0,68,100,84,76],
     "0":[62,81,73,69,62], "1":[0,66,127,64,0], "2":[98,81,73,73,70],
     "3":[34,65,73,73,54], "4":[24,20,18,127,16], "5":[39,69,69,69,57],
     "6":[60,74,73,73,48], "7":[1,113,9,5,3], "8":[54,73,73,73,54],
@@ -268,9 +268,13 @@ import NxlvKit
     "*" :[20,8,62,8,20], "%":[99,19,8,100,99], "(" :[0,28,34,65,0],
     ")":[0,65,34,28,0], "'" :[0,3,0,0,0], "!" :[0,0,95,0,0],
     ",":[0,64,48,0,0], "<":[8,20,34,65,0], ">":[0,65,34,20,8],
-    "∞" :[28,34,28,34,28], "?" :[2,1,81,9,6], "=" :[20,20,20,20,20]]
-  static func draw(_ text: String, in rect: CGRect, maxScale: CGFloat = 3, highlighted: Character? = nil, palette: MacInterfaceRenderer.Palette = .blue) {
-    let normalized = text.uppercased().replacingOccurrences(of: "×", with: "X")
+    "∞" :[28,34,28,34,28], "💀":[14,123,63,123,14],
+    "?" :[2,1,81,9,6], "=" :[20,20,20,20,20]]
+  static func draw(_ text: String, in rect: CGRect, maxScale: CGFloat = 3,
+                   highlighted: Character? = nil, palette: MacInterfaceRenderer.Palette = .blue,
+                   preservesCase: Bool = false) {
+    let source = text.replacingOccurrences(of: "×", with: "X")
+    let normalized = preservesCase ? source : source.uppercased()
     let scale = max(1, min(maxScale, floor(min(rect.height / 7, rect.width / CGFloat(max(1, normalized.count * 6))))))
     let start = floor(rect.midX - CGFloat(normalized.count * 6 - 1) * scale / 2)
     let top = floor(rect.midY - 3.5 * scale)
@@ -294,6 +298,62 @@ import NxlvKit
         }
       }
     }
+  }
+}
+
+struct PrecisionZoomStatus: Equatable {
+  var zoom = 0
+  var superzoom = 0
+  var active: PrecisionZoomKind?
+  var isEmpty = true
+
+  init(zoom: Int = 0, superzoom: Int = 0, active: PrecisionZoomKind? = nil,
+       isEmpty: Bool = true) {
+    self.zoom = zoom
+    self.superzoom = superzoom
+    self.active = active
+    self.isEmpty = isEmpty
+  }
+
+  var accessibility: String {
+    guard !isEmpty else { return "" }
+    let state = active.map { $0 == .zoom ? "Zoom active" : "Superzoom active" } ?? "Zoom off"
+    return "Zoom, \(zoom) remaining. Superzoom, \(superzoom) remaining. \(state)"
+  }
+
+  func size(scale: CGFloat = 1) -> CGSize {
+    guard !isEmpty else { return .zero }
+    let scale = max(1, floor(scale))
+    let longest = max("z - \(zoom)".count, "Z - \(superzoom)".count)
+    return CGSize(width: CGFloat(longest) * 6 * scale + 8 * scale,
+                  height: 24 * scale)
+  }
+
+  @MainActor @discardableResult
+  func draw(at origin: CGPoint, scale: CGFloat = 1) -> CGSize {
+    guard !isEmpty else { return .zero }
+    let scale = max(1, floor(scale))
+    let rows = [("z - \(zoom)", PrecisionZoomKind.zoom),
+                ("Z - \(superzoom)", PrecisionZoomKind.superzoom)]
+    let badgeSize = size(scale: scale)
+    let width = badgeSize.width
+    let rowHeight = 11 * scale
+    for (index, row) in rows.enumerated() {
+      let rect = CGRect(x: origin.x, y: origin.y + CGFloat(index) * (rowHeight + 2 * scale),
+                        width: width, height: rowHeight)
+      NSColor.black.withAlphaComponent(0.8).setFill()
+      rect.fill()
+      if active == row.1 {
+        NSGraphicsContext.saveGraphicsState()
+        NSGraphicsContext.current?.cgContext.setShouldAntialias(false)
+        NSColor(calibratedRed: 0.45, green: 1, blue: 0.1, alpha: 1).setStroke()
+        NSBezierPath(rect: rect.insetBy(dx: 0.5, dy: 0.5)).stroke()
+        NSGraphicsContext.restoreGraphicsState()
+      }
+      GamePixelText.draw(row.0, in: rect.insetBy(dx: 4 * scale, dy: 2 * scale),
+        maxScale: scale, palette: active == row.1 ? .green : .blue, preservesCase: true)
+    }
+    return badgeSize
   }
 }
 

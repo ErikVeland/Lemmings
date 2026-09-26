@@ -9,11 +9,13 @@ enum FailureMoodDecision {
     return max(0, saved + max(0, active) + max(0, unreleased) - required + 1)
   }
 
-  static func deathCounterText(saved: Int, active: Int, unreleased: Int, required: Int,
-                               isComplete: Bool, didWin: Bool) -> String {
-    if isComplete { return didWin ? "SAFE" : "DEATHS TO FAIL 0" }
-    return deathsUntilUnrecoverable(saved: saved, active: active, unreleased: unreleased, required: required)
-      .map { "DEATHS TO FAIL \($0)" } ?? "SAFE"
+  static func deathCounter(saved: Int, active: Int, unreleased: Int, required: Int, total: Int,
+                           isComplete: Bool, didWin: Bool) -> (visible: String, accessibility: String) {
+    if didWin || saved >= required { return ("SAFE", "Rescue target met") }
+    let limit = max(0, total - required + 1)
+    let remaining = isComplete ? 0 : min(limit,
+      deathsUntilUnrecoverable(saved: saved, active: active, unreleased: unreleased, required: required) ?? 0)
+    return ("\(remaining)/\(limit) 💀", "\(remaining) of \(limit) deaths remain before failure")
   }
 
   /// Returns true when no remaining lemming can meet the rescue requirement.

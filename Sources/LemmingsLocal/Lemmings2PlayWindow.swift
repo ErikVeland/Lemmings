@@ -795,8 +795,8 @@ import NxlvKit
         let wallet = PrecisionZoomController.shared
         canvas.setPrecisionZoom(wallet.active != nil, at: point)
         speedControl.bulletTimeActive = wallet.active == .superzoom
-        let suffix = wallet.active.map { "  \($0 == .zoom ? "ZOOM" : "SUPER") ON" } ?? ""
-        canvas.precisionStatus = "Z \(wallet.remaining(.zoom))  SHIFT-Z \(wallet.remaining(.superzoom))" + suffix
+        canvas.precisionStatus = PrecisionZoomStatus(zoom: wallet.remaining(.zoom),
+            superzoom: wallet.remaining(.superzoom), active: wallet.active, isEmpty: false)
     }
 
     private func captureReplayFrame() {
@@ -951,10 +951,11 @@ import NxlvKit
         canvas.speedLabel = speedControl.panelLabel
         canvas.variableSpeedEnabled = speedControl.variableEnabled
         canvas.isFastForward = fastForward && !paused && screen == .playing && !game.isComplete
-        canvas.deathCountdownText = screen == .playing ? FailureMoodDecision.deathCounterText(
+        let deathCounter = FailureMoodDecision.deathCounter(
             saved: game.saved, active: game.lemmings.filter(\.active).count,
-            unreleased: game.configuration.total - game.released, required: 1,
-            isComplete: game.isComplete, didWin: game.didWin) : ""
+            unreleased: game.configuration.total - game.released, required: 1, total: game.configuration.total,
+            isComplete: game.isComplete, didWin: game.didWin)
+        canvas.deathCountdownText = screen == .playing ? deathCounter.visible : ""
         canvas.update(game)
         let palette = Lemmings2Panel.palette(over: game.configuration.palette, phase: frontTicks / 4)
         let skillFrame: Lemmings2SpriteFrame? = {
@@ -979,7 +980,8 @@ import NxlvKit
         }
         canvas.toolTip = nil
         let transport = rewindOriginState.map { "Rewind active, \($0.tick - game.tick) ticks back. Hold full stop scrubs forward. Escape cancels." } ?? ""
-        canvas.setAccessibilityLabel("Lemmings 2. \(game.configuration.skills[selected].name) selected. \(label). \(paused ? "Paused." : "Running.") \(game.isNuking ? "Nuke active." : "") \(game.released) released, \(game.saved) saved. \(canvas.deathCountdownText). \(canvas.precisionStatus). \(transport)")
+        let deathCounterAccessibility = screen == .playing ? deathCounter.accessibility : ""
+        canvas.setAccessibilityLabel("Lemmings 2. \(game.configuration.skills[selected].name) selected. \(label). \(paused ? "Paused." : "Running.") \(game.isNuking ? "Nuke active." : "") \(game.released) released, \(game.saved) saved. \(deathCounterAccessibility). \(canvas.precisionStatus.accessibility). \(transport)")
     }
     private func update() {
         let now = ProcessInfo.processInfo.systemUptime
@@ -1375,8 +1377,9 @@ import NxlvKit
             skip: canSkipLevel ? { [weak self] in self?.skipLevel() } : nil)
     }
     /// Level skips apply to a failed campaign level, not practice or playlists.
+    /// Old school turns them off with the other modern controls.
     private var canSkipLevel: Bool {
-        practiceLevel == nil && onSequenceContinue == nil && recordsCampaignProgress
+        audioSettings.modernControlsEnabled && practiceLevel == nil && onSequenceContinue == nil && recordsCampaignProgress
             && game?.didWin == false && campaign.canSkipLevel
     }
     /// The result screen has already spent the skip. This only moves the campaign.
@@ -1844,19 +1847,24 @@ import NxlvKit
     var onKey: ((String) -> Void)?
     var cameraX: CGFloat = 0
     var cameraY: CGFloat = 0
-    private var precisionLens = PrecisionZoomLens()
+    private var precisionLens = AnimatedPrecisionZoomLens()
     private var precisionScroll = PrecisionZoomScrollGesture()
-    var precisionStatus = "" { didSet { needsDisplay = true } }
+    private let precisionZoomAnimation = PrecisionZoomAnimation()
+    var precisionStatus = PrecisionZoomStatus() { didSet { needsDisplay = true } }
     var deathCountdownText = "" { didSet { if oldValue != deathCountdownText { needsDisplay = true } } }
     var onPrecisionScroll: ((PrecisionZoomScrollAction, CGPoint) -> Void)?
     func setPrecisionZoom(_ enabled: Bool, at cursor: CGPoint? = nil) {
         let centre = CGPoint(x: gameplayRect.midX, y: gameplayRect.midY)
         let pointer = cursor ?? cursorPoint() ?? centre
         let anchor = gameplayRect.contains(pointer) ? pointer : centre
-        let delta = precisionLens.transition(to: enabled, at: anchor,
-            scaleX: zoom, scaleY: zoom * 1.2)
-        cameraX += delta.x; cameraY += delta.y
-        clampCamera(); needsDisplay = true
+        precisionZoomAnimation.start(from: precisionLens.magnification, to: enabled ? 2 : 1,
+            reduceMotion: reduceMotion) { [weak self] magnification in
+                guard let self else { return }
+                let delta = self.precisionLens.transition(toMagnification: magnification, at: anchor,
+                    scaleX: self.zoom, scaleY: self.zoom * 1.2)
+                self.cameraX += delta.x; self.cameraY += delta.y
+                self.clampCamera(); self.needsDisplay = true
+            }
     }
     private var cameraBounds: (left: CGFloat, top: CGFloat, right: CGFloat, bottom: CGFloat) = (0, 0, 0, 0)
     private var game: Lemmings2Runtime?
@@ -2512,13 +2520,16 @@ import NxlvKit
                         remaining: remaining, in: gameplayRect)
                 }
             }
-            if let focusNotice { GameTypography.annotation(focusNotice, at: CGPoint(x: 12, y: 12)) }
-            if !precisionStatus.isEmpty { GameTypography.annotation(precisionStatus,
-                at: CGPoint(x: gameplayRect.minX + 12, y: gameplayRect.minY + 25), palette: .blue) }
+            let badgeScale: CGFloat = bounds.width >= 960 ? 2 : 1
+            let badgeSize = precisionStatus.draw(at: CGPoint(x: gameplayRect.minX + 12,
+                y: gameplayRect.minY + 12), scale: badgeScale)
+            if let focusNotice { GameTypography.annotation(focusNotice,
+                at: CGPoint(x: gameplayRect.minX + 12, y: gameplayRect.minY + 16 + badgeSize.height)) }
             if !deathCountdownText.isEmpty { GameTypography.annotation(deathCountdownText,
                 at: CGPoint(x: gameplayRect.maxX - 120, y: gameplayRect.minY + 12), palette: .blue) }
             if let origin = rewindOriginTick, origin > rewindCurrentTick {
-                RewindTransportCue.draw(origin: CGPoint(x: 12, y: 12),
+                RewindTransportCue.draw(origin: CGPoint(x: gameplayRect.minX + 12,
+                    y: gameplayRect.minY + 16 + badgeSize.height),
                     currentTick: rewindCurrentTick, originTick: origin, scale: zoom)
             }
         }

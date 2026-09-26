@@ -162,8 +162,8 @@ struct ReticleFeedback {
   func accessibleControls(owner: NSView, transform: (CGRect) -> CGRect = { $0 }) -> [Any] {
     guard phase != .playing else {
       let text = "Game playfield" + (turnInitials.map { ". \($0)'s turn" } ?? "")
-        + (precisionStatus.isEmpty ? "" : ". " + precisionStatus)
-        + (deathCountdownText.isEmpty ? "" : ". " + deathCountdownText)
+        + (precisionStatus.accessibility.isEmpty ? "" : ". " + precisionStatus.accessibility)
+        + (deathCountdownAccessibilityText.isEmpty ? "" : ". " + deathCountdownAccessibilityText)
       return [accessibleElements.element(id: "status", owner: owner, label: text, frame: transform(bounds))]
     }
     var items: [Any] = []
@@ -306,10 +306,12 @@ struct ReticleFeedback {
   var assets: ClassicMainDATAssets?
   var palette: [ClassicRGBColor] = []
   var viewport = Viewport()
-  private var precisionLens = PrecisionZoomLens()
+  private var precisionLens = AnimatedPrecisionZoomLens()
   private var precisionScroll = PrecisionZoomScrollGesture()
-  var precisionStatus = "" { didSet { needsDisplay = true } }
+  private let precisionZoomAnimation = PrecisionZoomAnimation()
+  var precisionStatus = PrecisionZoomStatus() { didSet { needsDisplay = true } }
   var deathCountdownText = "" { didSet { if oldValue != deathCountdownText { needsDisplay = true } } }
+  var deathCountdownAccessibilityText = ""
   var showsDeathCountdownOverlay = false { didSet { needsDisplay = true } }
   var precisionVisibleLevelRect: CGRect {
     let topLeft = viewport.levelPoint(from: precisionLens.source(bounds.origin))
@@ -325,11 +327,15 @@ struct ReticleFeedback {
   }
   func setPrecisionZoom(_ enabled: Bool, at cursor: CGPoint? = nil) {
     let point = cursor.flatMap { bounds.contains($0) ? $0 : nil } ?? precisionAnchor
-    let delta = precisionLens.transition(to: enabled, at: point,
-        scaleX: viewport.zoom, scaleY: viewport.zoom)
-    viewport.scroll(dx: delta.x, dy: delta.y)
-    onViewportChanged?()
-    needsDisplay = true
+    precisionZoomAnimation.start(from: precisionLens.magnification, to: enabled ? 2 : 1,
+      reduceMotion: reduceMotion) { [weak self] magnification in
+        guard let self else { return }
+        let delta = self.precisionLens.transition(toMagnification: magnification, at: point,
+          scaleX: self.viewport.zoom, scaleY: self.viewport.zoom)
+        self.viewport.scroll(dx: delta.x, dy: delta.y)
+        self.onViewportChanged?()
+        self.needsDisplay = true
+      }
   }
   var onAssign: ((Int) -> Void)?
   var onViewportChanged: (() -> Void)?
@@ -726,9 +732,11 @@ struct ReticleFeedback {
       drawRewindCue()
       if phase == .playing {
         drawTurnBadge(); drawCursor()
-        if !precisionStatus.isEmpty { GameTypography.annotation(precisionStatus, at: CGPoint(x: 12, y: 12), palette: .blue) }
+        let zoomBadgeSize = precisionStatus.draw(at: CGPoint(x: 12, y: 12),
+          scale: bounds.width >= 960 ? 2 : 1)
         if showsDeathCountdownOverlay && !deathCountdownText.isEmpty {
-          GameTypography.annotation(deathCountdownText, at: CGPoint(x: 12, y: 25), palette: .blue)
+          GameTypography.annotation(deathCountdownText,
+            at: CGPoint(x: 12, y: 12 + zoomBadgeSize.height + 4), palette: .blue)
         }
       }
     }
@@ -1346,8 +1354,10 @@ struct ReticleFeedback {
       }
     }
     context?.restoreGState()
+    let badgeScale: CGFloat = bounds.width >= 960 ? 2 : 1
+    let badgeOffset = precisionStatus.isEmpty ? 0 : precisionStatus.size(scale: badgeScale).height + 4
     RewindTransportCue.draw(
-      origin: CGPoint(x: 12, y: 12),
+      origin: CGPoint(x: 12, y: 12 + badgeOffset),
       currentTick: rewindCurrentTick,
       originTick: rewindOriginTick
     )

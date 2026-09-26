@@ -6132,12 +6132,13 @@ let achievementProgressKey = "ClassicAchievementProgress"
       "Home \(session.saved)/\(session.required)",
       "\(session.rateLabel) \(session.rate)",
     ]
-    let deathCountdownText = FailureMoodDecision.deathCounterText(
+    let deathCounter = FailureMoodDecision.deathCounter(
       saved: session.saved, active: session.lemmings.count,
-      unreleased: session.total - session.released, required: session.required,
+      unreleased: session.total - session.released, required: session.required, total: session.total,
       isComplete: session.isComplete, didWin: session.didWin)
-    playfield.deathCountdownText = deathCountdownText
-    parts.append(deathCountdownText)
+    playfield.deathCountdownText = deathCounter.visible
+    playfield.deathCountdownAccessibilityText = deathCounter.accessibility
+    parts.append(deathCounter.visible)
     if let seconds = session.remainingSeconds {
       parts.append(String(format: "Time %d:%02d", seconds / 60, seconds % 60))
     }
@@ -6486,8 +6487,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
     let wallet = PrecisionZoomController.shared
     playfield.setPrecisionZoom(wallet.active != nil, at: point)
     speedControl.bulletTimeActive = wallet.active == .superzoom
-    let suffix = wallet.active.map { "  \($0 == .zoom ? "ZOOM" : "SUPER") ON" } ?? ""
-    playfield.precisionStatus = "Z \(wallet.remaining(.zoom))  SHIFT-Z \(wallet.remaining(.superzoom))" + suffix
+    playfield.precisionStatus = PrecisionZoomStatus(zoom: wallet.remaining(.zoom),
+      superzoom: wallet.remaining(.superzoom), active: wallet.active, isEmpty: false)
   }
 
   private func setZoom(_ value: Double) {
@@ -6569,8 +6570,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   /// Level skips apply to campaign ranks, not fan packs, playlists or practice.
+  /// Old school turns them off with the other modern controls.
   private var canSkipClassicLevel: Bool {
-    !fanPlaying && sequencePlayingIdentity == nil && classicSelectionRecordsCampaignProgress && flow?.canSkipLevel == true
+    settings.modernControlsEnabled && !fanPlaying && sequencePlayingIdentity == nil
+      && classicSelectionRecordsCampaignProgress && flow?.canSkipLevel == true
   }
 
   /// The result screen has already spent the skip. This only moves the campaign.
