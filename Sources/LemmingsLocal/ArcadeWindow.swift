@@ -101,6 +101,8 @@ import NxlvKit
         didSet {
             finishCelebration()
             highlightedAwards = []; focusedNewAward = nil; featuredAwardIndex = 0; careerPage = 0
+            // Focus is an index into buttons rebuilt per layout; a new result starts on its primary action.
+            keyboardButton = nil
             celebration = report.map { TrolleyCelebration(report: $0, history: ArcadeStore.shared.records.trolley) }
         }
     }
@@ -809,7 +811,11 @@ import NxlvKit
     override func mouseExited(with event: NSEvent) { hover = nil; needsDisplay = true; NSCursor.arrow.set() }
     override func keyDown(with event: NSEvent) {
         guard event.modifierFlags.intersection([.command, .control, .option]).isEmpty else { super.keyDown(with: event); return }
-        if [48, 123, 124, 125, 126].contains(event.keyCode), !buttons.isEmpty {
+        // Pages with their own arrow navigation keep it; Tab still moves button focus.
+        let horizontal = [123, 124].contains(event.keyCode), vertical = [125, 126].contains(event.keyCode)
+        let pageOwnsArrow = ([.awards, .career, .profiles].contains(mode) && horizontal)
+            || (mode == .awards && level?.conditions != nil && vertical)
+        if [48, 123, 124, 125, 126].contains(event.keyCode), !pageOwnsArrow, !buttons.isEmpty {
             let direction = event.keyCode == 48 ? (event.modifierFlags.contains(.shift) ? -1 : 1) : ([123, 126].contains(event.keyCode) ? -1 : 1)
             keyboardButton = ((keyboardButton ?? (direction > 0 ? -1 : 0)) + direction + buttons.count) % buttons.count
             let item = buttons[keyboardButton!]
