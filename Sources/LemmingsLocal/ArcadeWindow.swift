@@ -5,6 +5,7 @@ import NxlvKit
     static let shared = ArcadeWindow()
     let arcadeView = ArcadeView()
     var confirmSessionChange: ((@escaping () -> Void) -> Void)?
+    var requestReturnToSolo: (() -> Void)?
     var prepareSession: (() -> NSWindow?)?
     var finishSession: (() -> Void)?
     private init() { arcadeView.onClose = { [weak self] in self?.close() } }
@@ -631,6 +632,10 @@ import NxlvKit
         needsDisplay = true
     }
     func confirmReturnToSolo() {
+        if let requestReturnToSolo = ArcadeWindow.shared.requestReturnToSolo {
+            requestReturnToSolo()
+            return
+        }
         GameScreen.shared.confirm("Leave Hot Seat?", detail: "Your shared campaign stays saved for later.",
             actionTitle: "Return to solo", owner: window) { [weak self] in
                 ArcadeStore.shared.endHotSeat()
@@ -696,8 +701,12 @@ import NxlvKit
         button(profilePrimaryTitle, CGRect(x: 496, y: 627, width: 320, height: 55), primary: true,
                enabled: store.profilesAreWritable) { [weak self] in self?.performProfilePrimaryAction() }
         if !profilesReturnToHotSeat {
-            button("Hot Seat", CGRect(x: 832, y: 627, width: 224, height: 55),
-                   enabled: canSwitch || store.hotSeatIsActive) { [weak self] in self?.openSession() }
+            let sessionTitle = store.hotSeatIsActive ? "Return to solo" : "Hot Seat"
+            button(sessionTitle, CGRect(x: 832, y: 627, width: 224, height: 55),
+                   enabled: canSwitch || store.hotSeatIsActive) { [weak self] in
+                if store.hotSeatIsActive { self?.confirmReturnToSolo() }
+                else { self?.openSession() }
+            }
         }
         setAccessibilityLabel("Players. \(records.profiles.map(\.initials).joined(separator: ", ")). Type initials. Arrow keys choose a portrait. Changes save automatically. Enter: \(profilePrimaryTitle). Escape goes back.")
     }

@@ -13,6 +13,7 @@ Each player has three initials and a portrait from the original lemming sprites.
 | Add a player | Select **+ New player**, type initials, choose a portrait, then select **Add player**. |
 | Change initials or portrait | Select the player, then type or choose a portrait. Changes save immediately. |
 | Change the active player | Select the player, then select **Play as**. |
+| Leave Hot Seat | Open **Players**, select **Return to solo**, then confirm. The shared campaign stays in **Saved Hot Seats**. |
 | Delete a player | Select the player, select **Delete**, then confirm. |
 
 The primary action changes with the selection: **Add player**, **Play as** or **Done**.

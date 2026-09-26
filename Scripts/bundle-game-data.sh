@@ -1,6 +1,11 @@
 #!/bin/zsh
 set -euo pipefail
 project_dir="${0:A:h:h}"
+music_bundle="${MUSIC_BUNDLE:-full}"
+if [[ "$music_bundle" != main && "$music_bundle" != full ]]; then
+  echo "MUSIC_BUNDLE must be main or full." >&2
+  exit 1
+fi
 if (( $# != 2 )) || [[ "$2" != all && "$2" != l2 && "$2" != l3 ]]; then
   echo "Usage: bundle-game-data.sh /absolute/App.app/Contents/Resources all|l2|l3" >&2
   exit 1
@@ -61,10 +66,10 @@ music_game=all
 [[ "$2" == l2 ]] && music_game=lemmings2
 [[ "$2" == l3 ]] && music_game=lemmings3
 python3 "$project_dir/Tools/MusicCatalogue/library.py" bundle \
-  --output "$resources_dir/Music" --game "$music_game" --scope "${MUSIC_BUNDLE:-main}"
+  --output "$resources_dir/Music" --game "$music_game" --scope "$music_bundle"
 # Upgrades replace the app bundle, so an update must carry the full soundtrack
 # that earlier builds bundled. Ship AAC copies to stay below 2 GiB.
-if [[ "${MUSIC_BUNDLE:-main}" == full ]]; then
+if [[ "$music_bundle" == full ]]; then
   zsh "$project_dir/Scripts/compact-bundled-music.sh" "$resources_dir/Music"
   python3 "$project_dir/Tools/MusicCatalogue/library.py" playback --output "$resources_dir/Music"
 fi

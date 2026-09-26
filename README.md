@@ -98,7 +98,10 @@ zsh Scripts/build-game-center-snapshot.sh
 
 This builds only the current Mac architecture, signs with the matching Apple
 Development provisioning profile, and writes an app plus ZIP to the build and
-Downloads directories. It does not notarise or run release gates.
+Downloads directories. Local builds include the full soundtrack, using the
+converted AAC cache in `.build/music-aac`; only an explicitly slim release build
+uses the smaller main soundtrack. The snapshot does not notarise or run release
+gates.
 
 Build and test the iPhone and iPad source target:
 

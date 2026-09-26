@@ -19,6 +19,8 @@ print "    Output:       $app_dir"
 mkdir -p "$downloads_dir"
 LEMMINGS_ARCHITECTURES="$(uname -m)" \
   LEMMINGS_SWIFT_OPTIMIZATION="${LEMMINGS_SWIFT_OPTIMIZATION:--O}" \
+  MUSIC_BUNDLE=full \
+  MUSIC_AAC_CACHE="${MUSIC_AAC_CACHE:-$project_dir/.build/music-aac}" \
   ENABLE_APPLE_CAPABILITIES=1 \
   LEMMINGS_BUILD_DIR="$build_dir" \
   zsh "$project_dir/Scripts/build-local-app.sh"

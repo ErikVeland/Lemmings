@@ -276,6 +276,27 @@ extension AppDelegate {
     showProfiles()
     try check(!view.canSwitch && store.hotSeatID == sharedID && arcadeRunID == runID,
       "Profile selection could switch an active Hot Seat to solo")
+    window.contentView?.layoutSubtreeIfNeeded()
+    view.layoutSubtreeIfNeeded()
+    let profileBitmap = view.bitmapImageRepForCachingDisplay(in: view.bounds)!
+    view.cacheDisplay(in: view.bounds, to: profileBitmap)
+    let profileCapture = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
+      .appendingPathComponent(".build/session-ui/hot-seat-profiles.png")
+    try FileManager.default.createDirectory(
+      at: profileCapture.deletingLastPathComponent(), withIntermediateDirectories: true)
+    try profileBitmap.representation(using: .png, properties: [:])!.write(to: profileCapture)
+    guard let directSolo = view.accessibilityChildren()?.compactMap({ $0 as? GameAccessibleElement })
+      .first(where: { $0.accessibilityLabel() == "Return to solo" }) else {
+      throw IntegrationFailure(message: "Players did not expose Return to solo during Hot Seat")
+    }
+    try check(directSolo.accessibilityPerformPress(), "Players Return to solo has no input target")
+    guard let directConfirmation = GameScreen.shared.controllerPage(in: window) as? GameMenuPage,
+      buttons(directConfirmation).contains(where: { $0.title == "Return to solo" }) else {
+      throw IntegrationFailure(message: "Players Return to solo bypassed confirmation")
+    }
+    directConfirmation.onBack?()
+    try check(store.hotSeatID == sharedID && arcadeRunID == runID,
+      "Cancelling Players Return to solo changed the shared run")
     view.openSession()
     guard let profileConfirmation = GameScreen.shared.controllerPage(in: window) as? GameMenuPage else {
       throw IntegrationFailure(message: "Profiles Hot Seat action bypassed confirmation")
@@ -302,14 +323,22 @@ extension AppDelegate {
     (GameScreen.shared.controllerPage(in: window) as? GameMenuPage)?.onBack?()
     view.changeSessionPlayer(guest.id)
     try check(store.hotSeatID == sharedID, "Removing the second player ended Hot Seat before confirmation")
-    guard let soloPage = GameScreen.shared.controllerPage(in: window),
+    (GameScreen.shared.controllerPage(in: window) as? GameMenuPage)?.onBack?()
+    GameScreen.shared.dismissAll()
+    showProfiles()
+    guard let profileSolo = view.accessibilityChildren()?.compactMap({ $0 as? GameAccessibleElement })
+      .first(where: { $0.accessibilityLabel() == "Return to solo" }),
+      profileSolo.accessibilityPerformPress(),
+      let soloPage = GameScreen.shared.controllerPage(in: window),
       let leaveSolo = buttons(soloPage).first(where: { $0.title == "Return to solo" }) else {
-      throw IntegrationFailure(message: "Leaving Hot Seat has no confirmation action")
+      throw IntegrationFailure(message: "Players could not confirm Return to solo")
     }
     leaveSolo.performClick(nil)
     try check(!store.hotSeatIsActive && !GameScreen.shared.isPresented,
-      "Confirmed return to solo failed to leave shared play safely")
-    print("PASS frozen Classic turn identity, confirmed player changes, cleared result actions and solo transition")
+      "Players Return to solo failed to leave shared play safely")
+    try check((try recoveryStore.latest(profileID: host, hotSeatID: sharedID))?.runID == runID,
+      "Players Return to solo did not checkpoint the shared attempt")
+    print("PASS frozen Classic turn identity, confirmed player changes, cleared result actions and direct profile solo transition")
   }
 
   fileprivate func testHandoverPreviousLevel() throws {

@@ -62,7 +62,9 @@ zsh Scripts/build-game-center-snapshot.sh
 ```
 
 The snapshot uses an Apple Development signature and a provisioning profile.
-It runs only on registered Macs. It is not notarised and is not the public download.
+It runs only on registered Macs. It always includes the full soundtrack from
+`Sources/Music`, reusing converted files in `.build/music-aac`. It is not notarised
+and is not the public download.
 
 ## Prepare a release
 

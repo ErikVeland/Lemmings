@@ -6567,6 +6567,24 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   private func installKeyboardShortcuts() {
+    ArcadeWindow.shared.requestReturnToSolo = { [weak self] in
+      guard let self else { return }
+      let arcade = ArcadeStore.shared
+      guard let hotSeatID = arcade.hotSeatID else { return }
+      GameScreen.shared.confirm("Leave Hot Seat?", detail: "Your shared campaign stays saved for later.",
+        actionTitle: "Return to solo", owner: self.window) { [weak self] in
+          guard let self, ArcadeStore.shared === arcade, arcade.hotSeatID == hotSeatID else { return }
+          do {
+            try self.saveBeforeSessionChange()
+            self.returnToLibrary()
+            guard ArcadeStore.shared === arcade, arcade.hotSeatID == hotSeatID else { return }
+            arcade.endHotSeat()
+            ArcadeWindow.shared.finishSession?()
+          } catch {
+            GameScreen.shared.message("Session not changed", detail: error.localizedDescription)
+          }
+        }
+    }
     ArcadeWindow.shared.confirmSessionChange = { [weak self] proceed in
       guard let self else { return }
       guard self.allowNavigationAwayFromSequence() else { return }
