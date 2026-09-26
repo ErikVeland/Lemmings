@@ -2604,7 +2604,8 @@ extension AppDelegate {
     try check(running.currentTick == 0, "The level clock ran behind a game page")
     settings.display = tubeIsActive ? .flat : .monitor
     applyDisplayMode()
-    try check(page.window === window && window.firstResponder === page, "Changing display mode lost the menu")
+    let menuFocused = (window.firstResponder as? NSView).map { $0 === page || $0.isDescendant(of: page) } == true
+    try check(page.window === window && menuFocused, "Changing display mode lost the menu")
     try check(NSApp.windows.count == count, "A game page opened another window")
     GameScreen.shared.dismiss(page)
     step(at: 3.1)

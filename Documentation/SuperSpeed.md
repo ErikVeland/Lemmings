@@ -36,10 +36,10 @@ changes, while brightness, colour and ghost strength blend with speed.
 The centre remains clear, and the screen effect stops above the controls.
 
 **Settings > Gameplay** has separate modern-controls and variable-speed switches.
-**Use OG settings** restores fixed fast-forward and number keys. It also turns
+**Preset > Original** restores fixed fast-forward and number keys. It also turns
 off HD effects, pointer capture, enhanced sequel artwork, shuffle, DJ extras and
 music enhancements. Saves, the chosen machine and volumes stay as set.
-**Use modern defaults** restores the convenience switches. The original fixed
+**Preset > Modern** restores the convenience switches. The original fixed
 fast speeds remain 3× for Classic/L2 and 8× for L3 when variable speed is off.
 
 Moving lemmings leave fading sprite echoes. The ghosts follow actual movement, including
@@ -127,7 +127,8 @@ DJ module and incoming recording checks also passed. Focused L2/L3 canvas
 checks passed for sprite layering, controls, menus and effect lifetimes.
 The 2×, 3×, 5× and 10× renders were generated for all three games.
 
-The complete suites still have validation gaps:
+The following gaps were recorded before build 50. See the
+[build 50 release record](ReleaseReadiness/1.5PublicRelease.md) for current results:
 
 - The installed music library fails the sequel alternate-version assertion.
   The pre-change playback code at `e894667` fails the same assertion.

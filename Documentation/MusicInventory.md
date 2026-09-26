@@ -166,8 +166,8 @@ These links are candidates, not newly bundled tracks. No fan recordings were dow
 - A level selects its named module, or a matching recording. An incomplete recording album falls back to the module. File sorting and shuffle no longer choose an arbitrary song within the selected album.
 - The DJ does not rotate on a timer, rescue quota, release rate, danger or nuke. A completed result can trigger one result cue.
 - Retries restart the assigned tune. Repeated refresh calls for the same attempt do not restart it.
-- Module transitions use tracker tempo and a four-row beat grid, equal-power gains and a low-shelf bass handover. Tempo matching is limited to nearby tempos (within 8%). This is beat alignment, not automatic phrase or key analysis.
-- Recordings have no analysed beat grid. They use the EQ/gain crossfade; do not describe them as beat-matched.
+- Modules and recordings now have per-version timing estimates. Stable estimates can guide nearby tempo matching (within 8%) and compatible whole-bar fades. Native four-row clock timing remains a fallback when no analysed grid is available.
+- Uncertain grids retain timed EQ/gain fades. Bar estimates are automated, with no phrase or key analysis. See the [complete timing audit](MusicTiming.md) for coverage, acceptance rules, and review gaps.
 - There is no identified failure track bundled. The DJ retains the level tune when it cannot find an explicit failure cue.
 - The reference page describes a completion-driven cycle rather than universal per-level assignments. This app uses a stable campaign-index mapping into that cycle so opening a level directly and retrying are predictable. The Amiga named rotation is the default playback policy, even when another platform supplies artwork. Native platform-specific sequencing is not yet verified.
 - Fan level custom song references are not yet a complete import pipeline. Missing external tracks cannot be guaranteed.

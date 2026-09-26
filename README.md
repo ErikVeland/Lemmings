@@ -13,14 +13,17 @@ before distributing a build.
 
 ## Download
 
-The [1.2 build 41 Mac app](https://github.com/ErikVeland/Lemmings/releases/download/v1.2-build41/UltimateLemmings-1.2-build41.zip)
-is the last public download verified in this repository.
+The [1.2 build 41 release](https://github.com/ErikVeland/Lemmings/releases/tag/v1.2-build41)
+is the latest verified public download.
 
-The 1.5 source is at test build 49. Its [test notes](Documentation/ReleaseNotes-1.5-build49.md)
-describe a registered-device snapshot, not a public release package. The intended
-public target is Intel and Apple silicon Macs running macOS 12.3 or later. Publish
-only after the [1.5 readiness gates](Documentation/ReleaseReadiness/1.5PublicRelease.md)
-pass on one frozen commit.
+A universal macOS 1.5 candidate has been built locally for Intel and Apple
+silicon, macOS 12.3 or later. Publication is pending a source decision because
+another release process is using build number 50. Read the
+[draft release notes](Documentation/ReleaseNotes-1.5-build50.md),
+[tester guide](Documentation/BetaTesting.md), and
+[validation record](Documentation/ReleaseReadiness/1.5PublicRelease.md).
+The matching [BBCode draft](Documentation/ReleaseNotes-1.5-build50.bbcode.txt)
+will be ready to post when the final build number and download are confirmed.
 
 ## Start here
 
@@ -39,11 +42,12 @@ pass on one frozen commit.
 - [1.2 handoff](Documentation/ReleaseReadiness/1.2DataIndependentHandoff.md) — data-independent release work and Mac checks.
 - [1.3 mobile handoff](Documentation/ReleaseReadiness/1.3MobileHandoff.md) — iOS source evidence and remaining device checks.
 - [Automatic updates](#automatic-updates) — Sparkle feed and release requirements.
+- [Music timing audit](Documentation/MusicTiming.md) — measured beats, bar estimates and DJ fallback rules.
 - [Automatic update evidence](Documentation/AutomaticUpdates.md) — release checks and records.
 
 The iPhone and iPad 1.3 source and Simulator gates pass. Physical-device,
 VoiceOver, thermal, signing and distribution evidence remain open. The macOS
-product candidate is version 1.5. Active NeoLemmix work remains a separate
+local candidate is version 1.5 build 50. Publication is pending. Active NeoLemmix work remains a separate
 compatibility lane. Classic content is the completed reference engine.
 Lemmings 2 and Lemmings 3 are labelled Preview. The bundled corpus contains
 6,020 Classic-format fan levels in 535 packs; this is not a claim of NeoLemmix

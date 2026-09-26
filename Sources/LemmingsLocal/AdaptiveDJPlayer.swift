@@ -1,10 +1,12 @@
 import AppKit
+import CryptoKit
 import NxlvKit
 
 /// One deck can play either a recording or a native ProTracker module.
 @MainActor private final class DJDeck {
   private var recording: MusicFileDeck?
   private var module: ModuleMusicPlayer?
+  let timing: MusicTimingCatalogue.Entry?
   var volume: Float = 0 { didSet { recording?.volume = volume; module?.setVolume(Double(volume)) } }
   var playbackRate: Float = 1 {
     didSet {
@@ -15,7 +17,8 @@ import NxlvKit
   var isPlaying: Bool { recording?.isPlaying == true || module?.isOutputRunning == true }
   func setSpeedPitch(_ cents: Double) { recording?.setSpeedPitch(cents); module?.setSpeedPitch(cents) }
 
-  init?(_ url: URL, repeats: Bool = true) {
+  init?(_ url: URL, repeats: Bool = true, timing: MusicTimingCatalogue.Entry? = nil) {
+    self.timing = timing
     if url.pathExtension.lowercased() == "mod" {
       let player = ModuleMusicPlayer()
       player.setEnhancements(.faithful)
@@ -28,7 +31,11 @@ import NxlvKit
       recording = player
     }
   }
-  var beatInfo: (bpm: Double, delay: Double)? { module?.beatInfo }
+  var sourceSeconds: Double { recording?.sourceSeconds ?? module?.sourceSeconds ?? 0 }
+  var beatInfo: (bpm: Double, delay: Double)? {
+    if let timing { return timing.nextBeat(at: sourceSeconds, rate: Double(playbackRate)) }
+    return module?.beatInfo
+  }
   func setMixBass(_ gain: Float) { recording?.setMixBass(gain); module?.setMixBass(gain) }
   func play() {
     recording?.play()
@@ -70,6 +77,7 @@ import NxlvKit
   private var currentPool: String?
   private(set) var currentURL: URL?
   private var catalogue: SoundtrackCatalogue?
+  private var timingCatalogue: MusicTimingCatalogue?
   private var catalogueRoot: URL?
   private var availablePaths: Set<String> = []
 
@@ -95,6 +103,7 @@ import NxlvKit
     pools = soundtracks.filter { !$0.value.isEmpty }
     self.catalogueRoot = catalogueRoot
     catalogue = catalogueRoot.flatMap { SoundtrackCatalogue.load(at: $0) }
+    timingCatalogue = catalogueRoot.flatMap { MusicTimingCatalogue.load(at: $0) }
     availablePaths = Set(pools.values.flatMap { $0 }.compactMap { relativePath($0) })
   }
 
@@ -177,7 +186,15 @@ import NxlvKit
   private func makeDeck(_ url: URL) -> DJDeck? {
     let role = relativePath(url).flatMap { catalogue?.entry(path: $0)?.track.role }
     let repeats = !["victory", "failure", "cue", "medal", "milestone"].contains(role ?? "")
-    let deck = DJDeck(url, repeats: repeats)
+    // A replacement file must not inherit the previous recording's beat grid.
+    var timing = relativePath(url).flatMap { timingCatalogue?.entry(path: $0) }
+    if let candidate = timing {
+      let hash = (try? Data(contentsOf: url, options: .mappedIfSafe)).map {
+        SHA256.hash(data: $0).map { String(format: "%02x", $0) }.joined()
+      }
+      if hash != candidate.expectedSHA256 { timing = nil }
+    }
+    let deck = DJDeck(url, repeats: repeats, timing: timing)
     deck?.playbackRate = playbackRate
     deck?.setSpeedPitch(speedPitch)
     return deck
@@ -233,15 +250,24 @@ import NxlvKit
     incoming.volume = 0
     let outgoingBeat = activeDeck?.beatInfo
     let incomingBeat = incoming.beatInfo
-    let beatDelay = min(1, outgoingBeat?.delay ?? 0)
+    var beatDelay = min(1, outgoingBeat?.delay ?? 0)
     var matchedRate = playbackRate
     if let outgoingBeat, let incomingBeat {
       let ratio = outgoingBeat.bpm / incomingBeat.bpm
       if (0.92...1.08).contains(ratio) { matchedRate *= Float(ratio) }
     }
+    matchedRate = min(1.08, max(0.5, matchedRate))
     incoming.playbackRate = matchedRate
     incoming.setMixBass(-18)
-    let duration = outgoingBeat.map { max(seconds, 4 * 60 / $0.bpm) } ?? seconds
+    var duration = seconds
+    var preRoll = 0.0
+    if let outgoing = activeDeck, let grid = outgoing.timing, let incomingGrid = incoming.timing,
+       let plan = grid.barTransition(to: incomingGrid, at: outgoing.sourceSeconds,
+         outgoingRate: Double(outgoing.playbackRate), incomingRate: Double(matchedRate), minimumDuration: seconds) {
+      beatDelay = plan.delay
+      preRoll = plan.preRoll
+      duration = plan.duration
+    }
     if activeIsA { deckB = incoming } else { deckA = incoming }
     activeIsA.toggle()
     currentPool = next.pool
@@ -252,15 +278,28 @@ import NxlvKit
     // from anywhere else.
     fadeTask = Task { @MainActor [weak self] in
       var delay = beatDelay
+      var delayTime = ProcessInfo.processInfo.systemUptime
       while delay > 0, !Task.isCancelled {
         do { try await Task.sleep(nanoseconds: UInt64(Fade.step * 1_000_000_000)) } catch { return }
-        if self?.outputSuspended != true { delay -= Fade.step }
+        let now = ProcessInfo.processInfo.systemUptime
+        if self?.outputSuspended != true { delay -= now - delayTime }
+        delayTime = now
       }
       guard !Task.isCancelled, self?.fadeGeneration == generation else { return }
       while self?.outputSuspended == true {
         do { try await Task.sleep(nanoseconds: UInt64(Fade.step * 1_000_000_000)) } catch { return }
       }
       incoming.play()
+      // Let a short pickup play silently so the fade starts on both downbeats.
+      var pickup = preRoll
+      var pickupTime = ProcessInfo.processInfo.systemUptime
+      while pickup > 0, !Task.isCancelled {
+        do { try await Task.sleep(nanoseconds: UInt64(Fade.step * 1_000_000_000)) } catch { return }
+        guard self?.fadeGeneration == generation else { return }
+        let now = ProcessInfo.processInfo.systemUptime
+        if self?.outputSuspended != true { pickup -= now - pickupTime }
+        pickupTime = now
+      }
       // Measure the clock, not the callbacks. A delayed main actor must not
       // stretch the fade, and suspended time must not advance it.
       var elapsed = 0.0

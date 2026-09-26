@@ -36,7 +36,14 @@ final class MusicFileDeck {
 
   var playbackRate: Float {
     get { varispeed.rate }
-    set { varispeed.rate = min(1, max(0.5, newValue)) }
+    set { varispeed.rate = min(1.08, max(0.5, newValue)) }
+  }
+
+  /// The player's timeline excludes pauses and advances in source samples.
+  var sourceSeconds: Double {
+    guard let renderTime = player.lastRenderTime,
+      let time = player.playerTime(forNodeTime: renderTime), time.sampleRate > 0 else { return 0 }
+    return Double(time.sampleTime) / time.sampleRate
   }
 
   var isPlaying: Bool { started && !outputSuspended && player.isPlaying }

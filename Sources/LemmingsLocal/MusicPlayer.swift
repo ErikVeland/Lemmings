@@ -23,6 +23,7 @@ final class ModuleMusicPlayer: @unchecked Sendable {
   private var isMuted = false
   private var level: Double = 1.0
   private var tempoScale = 1.0
+  private var sourceFrames: Int64 = 0
   private var interpolationPhase = 1.0
   private var currentFrame: (left: Float, right: Float) = (0, 0)
   private var nextFrame: (left: Float, right: Float) = (0, 0)
@@ -212,6 +213,7 @@ final class ModuleMusicPlayer: @unchecked Sendable {
 
   private func nextSourceFrameLocked() -> (left: Float, right: Float) {
     let raw = player!.nextFrame()
+    sourceFrames += 1
     let frame: (left: Float, right: Float)
     if let blendIndex = loopBlendIndex, blendIndex < previousLoopTail.count {
       let amount = Float(blendIndex + 1) / Float(previousLoopTail.count)
@@ -287,6 +289,7 @@ final class ModuleMusicPlayer: @unchecked Sendable {
 
     lock.lock()
     loadedModule = module
+    sourceFrames = 0
     player = ProTrackerEnhancedPlayer(
       module: module, sampleRate: sampleRate, enhancements: enhancements)
     interpolationPhase = 1
@@ -325,6 +328,10 @@ final class ModuleMusicPlayer: @unchecked Sendable {
     }
     return (clock.musicalBPM * tempoScale, clock.secondsUntilNextBeat / tempoScale)
   }
+  var sourceSeconds: Double {
+    lock.lock(); defer { lock.unlock() }
+    return Double(sourceFrames) / sampleRate
+  }
   func setMixBass(_ gain: Float) { mixEQ.bands[0].gain = gain }
 
   /// Gameplay supplies a smoothed pitch in cents. Keep the tracker clock unchanged.
@@ -362,6 +369,7 @@ final class ModuleMusicPlayer: @unchecked Sendable {
     lock.lock()
     enhancements = value
     if let module = loadedModule {
+      sourceFrames = 0
       player = ProTrackerEnhancedPlayer(
         module: module, sampleRate: sampleRate, enhancements: value)
       interpolationPhase = 1
