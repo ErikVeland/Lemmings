@@ -855,6 +855,7 @@ import NxlvKit
                 } else if nukeAction == .activate {
                     beforeNukeInputCount = recoveryInputs.count
                     beforeNuke = game; nukeCount += 1
+                    canvas.startCountdown.cancel()
                     performRecoveryInput(.nuke); paused = false; updateUserMusicPause(); fanSelected = false; accumulator = 0
                 }
             case .fastForward: speedControl.tap(at: time, clickCount: clickCount)

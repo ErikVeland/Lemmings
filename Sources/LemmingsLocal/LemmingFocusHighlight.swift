@@ -6,12 +6,10 @@ import AppKit
                      tint: NSColor, animated: Bool = true) {
         let pixel = max(1, floor(scale))
         let haloRadius = max(4 * pixel, radius * scale * 0.7)
-        let now = ProcessInfo.processInfo.systemUptime
-        // Modulate brightness gently, without moving a ring around the sprite.
-        let shimmer = animated ? 0.008 * sin(now * .pi) : 0
+        let alpha = haloAlpha(at: ProcessInfo.processInfo.systemUptime, animated: animated)
         NSGraphicsContext.saveGraphicsState()
         NSGraphicsContext.current?.shouldAntialias = true
-        if let halo = NSGradient(starting: tint.withAlphaComponent(0.055 + shimmer),
+        if let halo = NSGradient(starting: tint.withAlphaComponent(alpha),
                                  ending: tint.withAlphaComponent(0)) {
             let rect = CGRect(x: point.x - haloRadius, y: point.y - haloRadius,
                               width: haloRadius * 2, height: haloRadius * 2)
@@ -20,6 +18,15 @@ import AppKit
         NSGraphicsContext.restoreGraphicsState()
     }
 
+    /// The halo's centre opacity. The shimmer modulates brightness only; the
+    /// halo never moves. Reduced motion (`animated == false`) keeps it static.
+    static func haloAlpha(at now: TimeInterval, animated: Bool) -> CGFloat {
+        // TODO: pick the base opacity and shimmer depth. The old values
+        // (0.055 ± 0.008) were too faint to see on the playfield.
+        let base: CGFloat = 0.055
+        let shimmer: CGFloat = animated ? 0.008 * sin(now * .pi) : 0
+        return base + shimmer
+    }
 }
 
 @MainActor final class LemmingFocusHighlight {

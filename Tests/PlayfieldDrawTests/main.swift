@@ -203,10 +203,8 @@ private final class TargetingSession: GameSession {
   try require(view.lemming(at: point)?.id == 0, "An already bombed blocker must not take another bomb")
   session.actors[1] = .init(id: 1, x: 97, y: 80, pose: .building, facingLeft: false, animationFrame: 0, countdown: nil)
   view.selectedSkill = { 2 }
-  try require(view.lemming(at: point)?.id == 1 && view.clickTarget(at: point)?.id == 1,
-    "Build must keep the active builder selected")
-  try require(view.reticleState(at: point, now: 1) == .alreadyAssigned,
-    "The retained builder must not claim to accept an early assignment")
+  try require(view.lemming(at: point)?.id == 0 && view.clickTarget(at: point)?.id == 0,
+    "A builder that cannot take Build yet must not block the walker behind it")
   view.favorBuilders = false
   try require(view.lemming(at: point)?.id == 0, "Builder preference opt-out must allow the eligible walker")
   view.favorBuilders = true
@@ -215,7 +213,7 @@ private final class TargetingSession: GameSession {
     "The finished builder must stay selected when it can accept Build")
   session.skills[2] = .init(name: "Builder", count: 0, isInfinite: false)
   try require(view.lemming(at: point) == nil, "An empty Build supply must not retain a target")
-  print("PASS bomb blockers, retained builders, eligibility and independent opt-outs")
+  print("PASS bomb blockers, eligible builders, eligibility and independent opt-outs")
 }
 
 private func require(

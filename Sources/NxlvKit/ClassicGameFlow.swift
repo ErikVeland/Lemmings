@@ -203,6 +203,32 @@ public struct ClassicGameFlow: Sendable {
         screen = .rankComplete(rank: rank.name)
     }
 
+    /// Whether the result on screen is a failure a level skip can pass over.
+    public var canSkipLevel: Bool {
+        guard case let .results(_, saved, required, _) = screen else { return false }
+        return saved < required
+    }
+
+    /// Moves past a failed level without passing it. The next level opens,
+    /// or the next rank's first level when the skipped one ends its rank.
+    /// The caller spends the skip; this only moves the campaign.
+    @discardableResult
+    public mutating func skipLevel(recordsCampaignProgress: Bool = true) -> Bool {
+        guard canSkipLevel, let rank = currentRank else { return false }
+        let next = positionInRank + 1
+        if next < rank.levelIndices.count {
+            positionInRank = next
+            openBriefing(recordsCampaignProgress: recordsCampaignProgress)
+        } else if currentRankIndex + 1 < ranks.count {
+            currentRankIndex += 1
+            positionInRank = 0
+            openBriefing(recordsCampaignProgress: recordsCampaignProgress)
+        } else {
+            screen = .rankSelect
+        }
+        return true
+    }
+
     /// Moves on from a rank completion.
     public mutating func acknowledgeRankComplete(
         recordsCampaignProgress: Bool = true

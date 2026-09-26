@@ -65,6 +65,38 @@ private func testFailingRepeats() throws {
     print("PASS failing a level returns to it")
 }
 
+private func testSkipOpensTheNextLevel() throws {
+    var flow = makeFlow()
+    flow.startGame()
+    flow.selectRank(0)
+    flow.beginPlaying()
+    flow.finishLevel(saved: 10, required: 5, total: 10)
+    try require(!flow.skipLevel(), "a passed level must not take a skip")
+    flow.acknowledgeResults()
+    flow.beginPlaying()
+    flow.finishLevel(saved: 2, required: 5, total: 10)
+    try require(flow.canSkipLevel && flow.skipLevel(), "a failed level must accept a skip")
+    try require(flow.screen == .briefing(level: 2), "a skip must open the next level")
+    try require(!flow.hasPassed(rank: "Fun", position: 1), "a skipped level was recorded as passed")
+    try require(flow.isLevelUnlocked(2), "a skip must unlock the next level")
+    flow.beginPlaying()
+    flow.finishLevel(saved: 0, required: 5, total: 10)
+    try require(flow.skipLevel() && flow.screen == .briefing(level: 3),
+        "skipping the last level of a rank must open the next rank, not a rank completion")
+    flow.beginPlaying()
+    flow.finishLevel(saved: 0, required: 5, total: 10)
+    flow.acknowledgeResults()
+    flow.beginPlaying()
+    flow.finishLevel(saved: 0, required: 5, total: 10)
+    var practice = flow
+    try require(practice.skipLevel(recordsCampaignProgress: false) && !practice.isLevelUnlocked(4),
+        "a skip outside the campaign must not change campaign reach")
+    flow.acknowledgeResults(); flow.selectLevel(rank: 1, position: 1); flow.beginPlaying()
+    flow.finishLevel(saved: 0, required: 5, total: 10)
+    try require(flow.skipLevel() && flow.screen == .rankSelect, "skipping the final level must return to the ranks")
+    print("PASS a skip opens the next level without passing the skipped one")
+}
+
 private func testRankAndGameCompletion() throws {
     var flow = makeFlow()
     flow.startGame()
@@ -238,6 +270,7 @@ do {
     try testTitleToPlaying()
     try testPassingAdvances()
     try testFailingRepeats()
+    try testSkipOpensTheNextLevel()
     try testRankAndGameCompletion()
     try testResumeAtFurthest()
     try testLevelUnlocksFollowProgress()

@@ -720,6 +720,47 @@ func testAchievementCollections() throws {
     print("PASS philosophy hooks, seven boards, real rivalries, ties, efficiency, retries, mastery, progress and profile isolation")
 }
 
+func testLevelSkips() throws {
+    let levels = (1...7).map { conditions(level: "fun-\($0)", fingerprint: "skip-\($0)") }
+    var records = ArcadeRecords()
+    for c in levels { try records.acceptTrolleyMaximum(evidence(58), conditions: c, assisted: false) }
+    let me = ArcadeProfile.legacyID
+    try require(records.levelSkips(profileID: me) == .init(threeStarLevels: 0, spent: 0), "A new player must start without skips")
+    for c in levels.prefix(2) { _ = records.record(run(58, c: c)) }
+    try require(records.levelSkips(profileID: me).available == 0 && records.levelSkips(profileID: me).threeStarLevelsToNext == 1,
+        "Two three-star levels must leave one more to go")
+    _ = records.record(run(58, c: levels[0]))
+    try require(records.levelSkips(profileID: me).available == 0, "Repeating a three-star level must not count twice")
+    _ = records.record(run(58, c: levels[2], rewinds: 1))
+    try require(records.levelSkips(profileID: me).available == 0, "A rewound three-star run must not earn a skip")
+    _ = records.record(run(57, c: levels[3]))
+    try require(records.levelSkips(profileID: me).available == 0, "A two-star clear must not earn a skip")
+    _ = records.record(run(58, c: levels[4]))
+    try require(records.levelSkips(profileID: me).available == 1, "Three unassisted three-star levels must earn one skip")
+
+    let blocked = level(levels[6])
+    try require(records.spendLevelSkip(on: blocked, profileID: me), "An earned skip could not be spent")
+    try require(records.hasSkipped(blocked, profileID: me) && records.levelSkips(profileID: me).available == 0,
+        "Spending a skip must record the level and reduce the balance")
+    try require(!records.spendLevelSkip(on: level(levels[5]), profileID: me), "A skip was spent without a balance")
+    try require(!records.spendLevelSkip(on: blocked, profileID: me), "The same level was skipped twice")
+
+    let guest = records.addProfile(initials: "BOB", portrait: 1, select: false)!
+    try require(records.levelSkips(profileID: guest.id).available == 0 && !records.hasSkipped(blocked, profileID: guest.id),
+        "Skips leaked between players")
+
+    let decoded = try JSONDecoder().decode(ArcadeRecords.self, from: JSONEncoder().encode(records)).validated()
+    try require(decoded.hasSkipped(blocked, profileID: me) && decoded.levelSkips(profileID: me).spent == 1,
+        "Spent skips did not survive saving")
+    var legacy = try JSONSerialization.jsonObject(with: JSONEncoder().encode(records)) as! [String: Any]
+    legacy.removeValue(forKey: "skippedLevels")
+    let older = try JSONDecoder().decode(ArcadeRecords.self, from: JSONSerialization.data(withJSONObject: legacy))
+    try require(older.levelSkips(profileID: me).available == 1, "Records saved before skips must still load with earned skips")
+    _ = records.removeProfile(me)
+    try require(records.levelSkips(profileID: me).spent == 0, "Removing a player kept their spent skips")
+    print("PASS level skips: unassisted three-star levels, one per three, per player, saved and spent once")
+}
+
 func testCelebrationProgress() throws {
     var records = try verifiedRecords()
     let first = records.record(run(40))!
@@ -871,7 +912,7 @@ Task { @MainActor in
     do {
         try testBundledMaximumProofs(); try testBestKnownTargets(); try testFalsifierAward(); try testAchievementCollections()
         try testMetricsAndClassification(); try testRescueGoals(); try testEvidenceAndHistory(); try testBoardsProfilesAndMigration(); try testEngineFamilies()
-        try testCelebrationProgress(); try await testGameCenterSync()
+        try testCelebrationProgress(); try testLevelSkips(); try await testGameCenterSync()
         try await testStoreAndVisuals()
         print("PASS THE TROLLEY"); exit(0)
     } catch { print("FAIL: \(error)"); exit(1) }

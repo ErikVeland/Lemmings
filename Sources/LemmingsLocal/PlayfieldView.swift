@@ -579,8 +579,8 @@ struct ReticleFeedback {
   /// A small allowance covers sprite edges without reaching across the crowd.
   private static let pickBox = (halfWidth: CGFloat(6), top: CGFloat(14), bottom: CGFloat(5))
 
-  /// Hover and input share skill priorities. A current builder stays targeted
-  /// until it can accept another build; an early click does not queue one.
+  /// Hover and input share skill priorities. A current builder takes priority
+  /// only while it can accept Build, so lemmings behind it stay selectable.
   func lemming(at point: CGPoint) -> SessionLemming? {
     guard let session else { return nil }
     let skill = selectedSkill()
@@ -592,7 +592,7 @@ struct ReticleFeedback {
     if favorBuilders, name == "builder", !session.isComplete, !session.isNuking,
        session.skills[skill].isInfinite || session.skills[skill].count > 0,
        let builder = candidates.first(where: {
-         [.building, .shrugging].contains($0.pose) && session.assignmentState(skillIndex: skill, to: $0.id) != .unavailable
+         [.building, .shrugging].contains($0.pose) && session.canAssign(skillIndex: skill, to: $0.id)
        }) {
       return builder
     }

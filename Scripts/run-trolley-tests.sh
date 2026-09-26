@@ -3,6 +3,9 @@ set -euo pipefail
 project_dir="${0:A:h:h}"
 cd "$project_dir"
 build_dir="$project_dir/.build/trolley"
+sparkle_framework="$(SPARKLE_FRAMEWORK_PATH="${SPARKLE_FRAMEWORK_PATH:-}" \
+  zsh "$project_dir/Scripts/ensure-sparkle.sh")"
+sparkle_framework_dir="${sparkle_framework:h}"
 mkdir -p "$build_dir/modules"
 sparkle_framework="$(SPARKLE_FRAMEWORK_PATH="${SPARKLE_FRAMEWORK_PATH:-}" \
   LEMMINGS_BUILD_ROOT="$build_dir/dependencies" zsh "$project_dir/Scripts/ensure-sparkle.sh")"

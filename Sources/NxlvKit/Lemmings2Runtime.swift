@@ -499,7 +499,7 @@ public struct Lemmings2Runtime: Sendable {
                 return blocker
             }
             if preferBuilders, skill == .builder, !isComplete, !isNuking, supplies[slot] > 0,
-               let builder = candidates.filter({ $0.state == .building || ($0.state == .shrugging && canAssign(slot: slot, to: $0.id)) }).min(by: nearer) {
+               let builder = candidates.filter({ [.building, .shrugging].contains($0.state) && canAssign(slot: slot, to: $0.id) }).min(by: nearer) {
                 return builder
             }
         }

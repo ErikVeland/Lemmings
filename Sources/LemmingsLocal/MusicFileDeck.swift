@@ -36,6 +36,16 @@ final class MusicFileDeck {
   private var mixPitch: Double = 0
   private var muted = false
 
+  /// Turntable timings for a pause and the spin-up that follows it.
+  private enum Turntable {
+    static let brakeSeconds = 0.5
+    static let tailSeconds = 1.2
+    static let spinUpSeconds = 0.18
+    static let spinUpFloor: Float = 0.3
+    static let restingWet: Float = 5
+    static let tailWet: Float = 40
+  }
+
   var volume: Float {
     get { masterVolume }
     set {
@@ -96,7 +106,7 @@ final class MusicFileDeck {
     equaliser.globalGain = -1.0
 
     reverb.loadFactoryPreset(.mediumRoom)
-    reverb.wetDryMix = 5
+    reverb.wetDryMix = Turntable.restingWet
 
     engine.attach(player)
     engine.attach(musicLayer)
@@ -150,6 +160,7 @@ final class MusicFileDeck {
 
   func play() {
     setRhythmMode(false)
+    if outputSuspended, started { resumeOutput(); return }
     fadeTask?.cancel()
     fadeTask = nil
     outputSuspended = false
@@ -198,7 +209,7 @@ final class MusicFileDeck {
     }
   }
 
-  /// A short vinyl stop lowers source speed and gain together.
+  /// A vinyl stop slows the source, lets the reverb ring out, then parks the engine.
   func suspendOutput(rhythmOnly: Bool = false) {
     if rhythmOnly, rhythmBuffer != nil, started {
       if outputSuspended { resumeOutput() }
@@ -217,15 +228,19 @@ final class MusicFileDeck {
         guard !Task.isCancelled else { return }
         do { try await Task.sleep(nanoseconds: 8_000_000) } catch { return }
         guard !Task.isCancelled, self.outputSuspended else { return }
-        let remaining = Float(max(0, 1 - (ProcessInfo.processInfo.systemUptime - began) / 0.16))
+        let remaining = Float(max(0, 1 - (ProcessInfo.processInfo.systemUptime - began) / Turntable.brakeSeconds))
+        // Varispeed stops at a quarter speed, so the level carries the end of the brake.
         self.varispeed.rate = max(0.25, self.requestedRate * self.vinyl.rate * remaining * remaining)
-        self.sourceMixer.outputVolume = start * remaining
+        self.sourceMixer.outputVolume = start * remaining.squareRoot()
+        self.reverb.wetDryMix = Turntable.restingWet + (Turntable.tailWet - Turntable.restingWet) * (1 - remaining)
         if remaining == 0 { break }
       }
       guard !Task.isCancelled, self.outputSuspended else { return }
       if self.resumeAfterSuspend { self.player.pause() }
+      do { try await Task.sleep(nanoseconds: UInt64(Turntable.tailSeconds * 1_000_000_000)) } catch { return }
       guard !Task.isCancelled, self.outputSuspended else { return }
       self.engine.pause()
+      self.reverb.wetDryMix = Turntable.restingWet
       self.varispeed.rate = max(0.25, self.requestedRate * self.vinyl.rate)
     }
   }
@@ -236,12 +251,29 @@ final class MusicFileDeck {
     fadeTask?.cancel()
     fadeTask = nil
     outputSuspended = false
-    applyRate()
-    sourceMixer.outputVolume = 1
+    reverb.wetDryMix = Turntable.restingWet
+    varispeed.rate = max(0.25, requestedRate * vinyl.rate * Turntable.spinUpFloor)
+    sourceMixer.outputVolume = Turntable.spinUpFloor
     do { if !engine.isRunning { try engine.start() } }
-    catch { return }
+    catch { applyRate(); sourceMixer.outputVolume = 1; return }
     if resumeAfterSuspend && !player.isPlaying { player.play() }
     resumeAfterSuspend = false
+    // A quick spin-up brings the platter back to speed.
+    fadeTask = Task { @MainActor [weak self] in
+      guard let self else { return }
+      let began = ProcessInfo.processInfo.systemUptime
+      while true {
+        do { try await Task.sleep(nanoseconds: 8_000_000) } catch { return }
+        guard !Task.isCancelled, !self.outputSuspended else { return }
+        let progress = Float(min(1, (ProcessInfo.processInfo.systemUptime - began) / Turntable.spinUpSeconds))
+        let eased = 1 - (1 - progress) * (1 - progress)
+        let speed = Turntable.spinUpFloor + (1 - Turntable.spinUpFloor) * eased
+        self.varispeed.rate = max(0.25, self.requestedRate * self.vinyl.rate * speed)
+        self.sourceMixer.outputVolume = speed
+        if progress == 1 { break }
+      }
+      self.fadeTask = nil
+    }
   }
 
   func setMuted(_ muted: Bool) {

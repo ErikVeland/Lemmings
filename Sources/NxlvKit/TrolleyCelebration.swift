@@ -7,8 +7,9 @@ public struct TrolleyCareerScore: Equatable, Sendable {
     public let clearedLevels: Int
     public let threeStarLevels: Int
 
-    public static func levelKey(_ run: ArcadeRun) -> String {
-        guard let c = run.level.conditions else { return run.level.id }
+    public static func levelKey(_ run: ArcadeRun) -> String { levelKey(run.level) }
+    public static func levelKey(_ level: ArcadeLevel) -> String {
+        guard let c = level.conditions else { return level.id }
         return [c.gameID, c.packID, c.levelID].joined(separator: "|")
     }
     public init(profileID: String, attempts: [TrolleyAttempt], assisted: Bool) {
