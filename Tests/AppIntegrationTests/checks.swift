@@ -2831,6 +2831,7 @@ extension AppDelegate {
     try check(running.currentTick == 0, "The level clock ran behind a game page")
     settings.display = tubeIsActive ? .flat : .monitor
     applyDisplayMode()
+    // Dialog navigation may focus the page's default control rather than the page.
     let menuFocused = (window.firstResponder as? NSView).map { $0 === page || $0.isDescendant(of: page) } == true
     try check(page.window === window && menuFocused, "Changing display mode lost the menu")
     try check(NSApp.windows.count == count, "A game page opened another window")
