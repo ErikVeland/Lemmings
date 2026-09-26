@@ -21,10 +21,10 @@ import AppKit
     /// The halo's centre opacity. The shimmer modulates brightness only; the
     /// halo never moves. Reduced motion (`animated == false`) keeps it static.
     static func haloAlpha(at now: TimeInterval, animated: Bool) -> CGFloat {
-        // TODO: pick the base opacity and shimmer depth. The old values
-        // (0.055 ± 0.008) were too faint to see on the playfield.
-        let base: CGFloat = 0.055
-        let shimmer: CGFloat = animated ? 0.008 * sin(now * .pi) : 0
+        // Keep the cue soft, but strong enough to survive dark backgrounds and
+        // the saturated pixels of a lemming sprite at large integer zooms.
+        let base: CGFloat = 0.18
+        let shimmer: CGFloat = animated ? 0.04 * sin(now * .pi) : 0
         return base + shimmer
     }
 }

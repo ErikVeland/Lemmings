@@ -810,10 +810,9 @@ private func testMacArtworkCropStaysPixelAligned() throws {
   let point = CGPoint(x: 60, y: 40)
   let bounds = CGRect(x: 0, y: 0, width: 300, height: 240)
   for scale in [1.0, 2.0, 3.0] {
-    let pixel = floor(scale)
     let frame = SkillCursorBadge.frame(at: point, scale: scale, size: .one, in: bounds)
-    try require(frame.width == 12 * pixel && frame.height == frame.width,
-      "The baseline icon must use actual 2× artwork at \(scale)x")
+    try require(frame.width == 12 && frame.height == frame.width,
+      "The baseline icon must remain 12 screen points at \(scale)x playfield zoom")
     let doubled = SkillCursorBadge.frame(at: point, scale: scale, size: .two, in: bounds)
     try require(doubled.width == frame.width * 2, "2× icon frame must double 1×")
     let reticle = GameCursor.playfieldPointerFrame(at: point, scale: scale)
@@ -845,7 +844,7 @@ private func testMacArtworkCropStaysPixelAligned() throws {
     try require(count.maxX < point.x && count.minY == icon.minY,
       "Count must sit opposite the icon at the same height")
   }
-  print("PASS readable 2×/4× skill icons, offset and clamping at every edge")
+  print("PASS fixed-screen 2×/4× skill icons, offset and clamping at every edge")
 }
 
 @MainActor private func testClassicSessionRewindBranch() throws {
@@ -898,6 +897,18 @@ private func testMacArtworkCropStaysPixelAligned() throws {
   }
 }
 
+@MainActor private final class HighZoomEmptySkillPreview: NSView {
+  override var isFlipped: Bool { true }
+  override func draw(_ dirtyRect: NSRect) {
+    NSColor.black.setFill()
+    bounds.fill()
+    let point = CGPoint(x: 100, y: 100)
+    GameCursor.drawPlayfieldPointer(at: point, scale: 10, tint: .white)
+    SkillCursorBadge.draw(icon: nil, index: 0, at: point, scale: 10,
+      tint: .white, size: .one, reduceMotion: true, remaining: 0, in: bounds)
+  }
+}
+
 @MainActor private func testSkillCursorBadgeAvailability() throws {
   let opacity = SkillCursorBadge.opacity
   try require(opacity(1, 0, false) == 1 &&
@@ -935,7 +946,35 @@ private func testMacArtworkCropStaysPixelAligned() throws {
   let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
   try bitmap.representation(using: .png, properties: [:])!.write(to:
     root.appendingPathComponent(".build/playfield-draw-tests/skill-badge-availability.png"))
+
+  let highZoom = HighZoomEmptySkillPreview(frame: CGRect(x: 0, y: 0, width: 320, height: 240))
+  let highZoomBitmap = highZoom.bitmapImageRepForCachingDisplay(in: highZoom.bounds)!
+  highZoom.cacheDisplay(in: highZoom.bounds, to: highZoomBitmap)
+  let redCoordinates = (0..<highZoomBitmap.pixelsHigh).flatMap { y in
+    (0..<highZoomBitmap.pixelsWide).compactMap { x -> CGPoint? in
+      guard let colour = highZoomBitmap.colorAt(x: x, y: y)?.usingColorSpace(.deviceRGB),
+        colour.redComponent > 0.5 && colour.redComponent > colour.greenComponent * 2 else { return nil }
+      return CGPoint(x: x, y: y)
+    }
+  }
+  let highZoomScale = CGFloat(highZoomBitmap.pixelsWide) / highZoom.bounds.width
+  let redWidth = (redCoordinates.map(\.x).max() ?? 0) - (redCoordinates.map(\.x).min() ?? 0) + 1
+  try require(!redCoordinates.isEmpty && redWidth / highZoomScale <= 14,
+    "The empty-skill X grew with the playfield zoom")
+  try highZoomBitmap.representation(using: .png, properties: [:])!.write(to:
+    root.appendingPathComponent(".build/playfield-draw-tests/high-zoom-empty-skill.png"))
   print("PASS one-use fade, reduced motion and empty-skill red X")
+}
+
+@MainActor private func testSelectionGlowVisibility() throws {
+  let steady = LemmingSelectionGlow.haloAlpha(at: 0, animated: false)
+  let bright = LemmingSelectionGlow.haloAlpha(at: 0.5, animated: true)
+  let dim = LemmingSelectionGlow.haloAlpha(at: 1.5, animated: true)
+  try require(steady >= 0.15, "The selected-lemming halo is too faint on a dark playfield")
+  try require(bright - dim >= 0.06, "The selected-lemming shimmer is not visibly distinct")
+  try require(LemmingSelectionGlow.haloAlpha(at: 0.5, animated: false) == steady,
+    "Reduced motion must keep the selected-lemming halo steady")
+  print("PASS visible selected-lemming halo and reduced-motion state")
 }
 
 @MainActor private func renderSelectionPreview() throws {
@@ -968,7 +1007,8 @@ private func testMacArtworkCropStaysPixelAligned() throws {
   let view = PlayfieldView(frame: CGRect(x: 0, y: 0, width: 640, height: 320))
   view.session = TargetingSession()
   view.phase = .playing
-  view.deathCountdownText = "DEATHS TO FAIL 1"
+  view.deathCountdownText = "1/1 💀"
+  view.deathCountdownAccessibilityText = "1 of 1 deaths remain before failure"
   view.levelImage = CGContext(data: nil, width: 320, height: 160, bitsPerComponent: 8,
     bytesPerRow: 1280, space: CGColorSpaceCreateDeviceRGB(),
     bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)!.makeImage()
@@ -981,7 +1021,7 @@ private func testMacArtworkCropStaysPixelAligned() throws {
   view.showsDeathCountdownOverlay = true
   try require(image() != flat, "The CRT display hid the death counter")
   let status = view.accessibleControls(owner: view).first as? GameAccessibleElement
-  try require(status?.accessibilityLabel()?.contains("DEATHS TO FAIL 1") == true,
+  try require(status?.accessibilityLabel()?.contains("1 of 1 deaths remain before failure") == true,
     "The death counter was not available to screen readers")
   print("PASS CRT death counter and accessible playfield status")
 }
@@ -989,7 +1029,7 @@ private func testMacArtworkCropStaysPixelAligned() throws {
 @MainActor private func testDeathCountdownStatusStrip() throws {
   let view = PanelView(frame: CGRect(x: 0, y: 0, width: 640, height: 80))
   view.isMenuMode = true
-  view.statusText = "OUT 75/100   HOME 0/90   RATE 99   DEATHS TO FAIL 11   TIME 3:00"
+  view.statusText = "OUT 75/100   HOME 0/90   RATE 99   11/11 💀   TIME 3:00"
   view.progressText = "SAVED 0/90"
   let bitmap = view.bitmapImageRepForCachingDisplay(in: view.bounds)!
   view.cacheDisplay(in: view.bounds, to: bitmap)
@@ -998,6 +1038,35 @@ private func testMacArtworkCropStaysPixelAligned() throws {
     .appendingPathComponent(".build/death-counter-status.png")
   try bitmap.representation(using: .png, properties: [:])!.write(to: output)
   print("PASS death counter between rate and time in the status strip")
+}
+
+@MainActor private func testPrecisionZoomBadges() throws {
+  var lens = AnimatedPrecisionZoomLens()
+  let anchor = CGPoint(x: 80, y: 60)
+  try require(lens.transition(toMagnification: 1.5, at: anchor, scaleX: 3, scaleY: 3) == .zero,
+    "An animated Zoom step moved its cursor target")
+  try require(lens.display(CGPoint(x: 90, y: 65)) == CGPoint(x: 95, y: 67.5),
+    "The intermediate Zoom scale was not smooth")
+  let natural = PrecisionZoomScrollGesture.normalizedDeltas(horizontal: 0, vertical: -8,
+    directionInvertedFromDevice: true)
+  try require(natural.vertical == 8, "Natural scrolling reversed the physical Zoom direction")
+  let status = PrecisionZoomStatus(zoom: 3, superzoom: 12, active: .zoom, isEmpty: false)
+  try require(status.accessibility ==
+    "Zoom, 3 remaining. Superzoom, 12 remaining. Zoom active",
+    "The compact Zoom badges lost their accessible description")
+  let image = NSImage(size: CGSize(width: 180, height: 90))
+  image.lockFocus()
+  NSColor.white.setFill()
+  CGRect(x: 0, y: 0, width: 180, height: 90).fill()
+  let size = status.draw(at: CGPoint(x: 8, y: 8), scale: 2)
+  image.unlockFocus()
+  try require(size.height == 48 && size.width > 0, "The two Zoom badge rows were not laid out")
+  let output = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
+    .deletingLastPathComponent().deletingLastPathComponent()
+    .appendingPathComponent(".build/precision-zoom-badges.png")
+  try image.tiffRepresentation.flatMap(NSBitmapImageRep.init)?.representation(using: .png, properties: [:])?
+    .write(to: output)
+  print("PASS compact lowercase/uppercase Zoom badges, active state and accessibility")
 }
 
 @MainActor private func testFreshLevelCountdown() throws {
@@ -1034,10 +1103,12 @@ private func testMacArtworkCropStaysPixelAligned() throws {
     try testSkillCursorBadgeGeometry()
     try testClassicSessionRewindBranch()
     try testSkillCursorBadgeAvailability()
+    try testSelectionGlowVisibility()
     try testFreshLevelCountdown()
     try testGameCursorRegions()
     try testDeathCountdownInCRT()
     try testDeathCountdownStatusStrip()
+    try testPrecisionZoomBadges()
     try renderSelectionPreview()
     try testMacArtworkCropStaysPixelAligned()
     try testSpeedSpritesStayOnTop()

@@ -160,7 +160,9 @@ final class MusicFileDeck {
 
   func play() {
     setRhythmMode(false)
-    if outputSuspended, started { resumeOutput(); return }
+    // A deck held for its next beat was not playing when paused. Play still
+    // starts it, as it did before the spin-up.
+    if outputSuspended, started { resumeAfterSuspend = true; resumeOutput(); return }
     fadeTask?.cancel()
     fadeTask = nil
     outputSuspended = false
