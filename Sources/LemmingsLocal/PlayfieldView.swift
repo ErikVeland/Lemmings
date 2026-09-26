@@ -167,6 +167,10 @@ struct ReticleFeedback {
         id: "settings", owner: owner, label: "Settings", frame: transform(rect)
       ) { [weak self] in self?.onSettings?() })
     }
+    if let rect = overlayUpdateButtonFrame(), let label = overlayAvailableUpdate {
+      items.append(accessibleElements.element(id: "update", owner: owner,
+        label: label + ". Show update and release notes", frame: transform(rect)) { [weak self] in self?.onUpdate?() })
+    }
     for (index, line) in overlayLines.enumerated() {
       let rect = overlayLineRects.indices.contains(index) ? overlayLineRects[index] : bounds
       let actionable = overlayHighlight != nil || overlayRetryLine == index || overlayReplayLine == index
@@ -186,8 +190,8 @@ struct ReticleFeedback {
       items.append(accessibleElements.element(id: "handover-retry", owner: owner, label: title, frame: transform(rect)) { [weak self] in self?.onHandoverRetry?() })
     }
     for (index, rect) in overlayFooterButtons.enumerated() {
-      items.append(accessibleElements.element(id: "footer-\(index)", owner: owner, label: index == 0 ? "Player profiles" : "Records", frame: transform(rect)) { [weak self] in
-        if index == 0 { self?.onProfiles?() } else { self?.onRecords?() }
+      items.append(accessibleElements.element(id: "footer-\(index)", owner: owner, label: ["Player profiles", "Records", "Playlists"][index], frame: transform(rect)) { [weak self] in
+        self?.activateFooterButton(index)
       })
     }
     return items
@@ -204,9 +208,20 @@ struct ReticleFeedback {
   var overlayProfileInitials: String?
   var onProfiles: (() -> Void)?
   var onRecords: (() -> Void)?
+  var onPlaylists: (() -> Void)?
   var overlayShowsSettingsButton = false
   var onSettings: (() -> Void)?
+  var overlayAvailableUpdate: String?
+  var onUpdate: (() -> Void)?
   private var overlayFooterButtons: [CGRect] = []
+  private func activateFooterButton(_ index: Int) {
+    switch index {
+    case 0: onProfiles?()
+    case 1: onRecords?()
+    case 2: onPlaylists?()
+    default: break
+    }
+  }
   /// Which overlay line is currently chosen, when the screen offers a choice.
   var overlayHighlight: Int?
   /// Marches real lemmings along the foot of the screen.
@@ -436,6 +451,10 @@ struct ReticleFeedback {
   /// Takes a click position directly.
   func handleClick(at point: CGPoint) {
     guard phase == .playing else {
+      if let rect = overlayUpdateButtonFrame(), rect.contains(point) {
+        onUpdate?()
+        return
+      }
       if let rect = overlaySettingsButtonFrame(), rect.contains(point) {
         onSettings?()
         return
@@ -446,7 +465,7 @@ struct ReticleFeedback {
       }
       if overlayProfileInitials != nil,
         let index = overlayFooterButtons.firstIndex(where: { $0.contains(point) }) {
-        if index == 0 { onProfiles?() } else { onRecords?() }
+        activateFooterButton(index)
         return
       }
       if let line = overlayRetryLine, overlayLineRects.indices.contains(line), overlayLineRects[line].contains(point) {
@@ -718,6 +737,14 @@ struct ReticleFeedback {
       height: side)
   }
 
+  private func overlayUpdateButtonFrame(_ layout: OverlayLayout? = nil) -> CGRect? {
+    guard overlayAvailableUpdate != nil, overlayShowsSettingsButton else { return nil }
+    let layout = layout ?? overlayLayout()
+    let side = max(44, 48 * layout.scale)
+    return CGRect(x: layout.board.minX + 18 * layout.scale, y: layout.board.minY + 18 * layout.scale,
+      width: side, height: side)
+  }
+
   private func drawOverlay() {
     overlayLineRects = []
     overlayFooterButtons = []
@@ -799,6 +826,17 @@ struct ReticleFeedback {
           hints: [.interpolation: NSImageInterpolation.none])
       }
     }
+    if let update = overlayUpdateButtonFrame(layout) {
+      let pixel = max(1, floor(scale))
+      GameStoneButton.draw(update, selected: cursorViewPoint.map(update.contains) ?? false, pixel: pixel,
+        backdrop: PanelGlyph.rock.image(fitting: update.size))
+      let well = GameStoneButton.well(update, pixel: pixel).insetBy(dx: 2 * pixel, dy: 2 * pixel)
+      if let image = PanelGlyph.download.image(fitting: well.size) {
+        image.draw(in: CGRect(x: floor(well.midX - image.size.width / 2), y: floor(well.midY - image.size.height / 2),
+          width: image.size.width, height: image.size.height), from: .zero, operation: .sourceOver,
+          fraction: 1, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none])
+      }
+    }
     y += headerHeight
     for (index, line) in overlayLines.enumerated() {
       let row = CGRect(x: board.minX + 18 * scale, y: y,
@@ -850,18 +888,19 @@ struct ReticleFeedback {
         width: board.width - 40 * scale, height: max(36, 48 * scale))
       let footerScale = max(1, Int(scale.rounded()))
       let gap: CGFloat = 12 * scale
-      // The badge carries a hot seat roster like EKV V UVA, so it grows with the
-      // text instead of holding one fixed set of initials. The two buttons keep
-      // a workable width, and menuLine shortens the roster if it still runs out.
+      let labels = ["PROFILES", "RECORDS", "PLAYLISTS"]
+      let count = CGFloat(labels.count)
+      // Let the roster grow while keeping each footer action readable.
       let cell = CGFloat((macInterface?.font(.small)?.cellWidth ?? 8) * footerScale)
       let natural = CGFloat(MacInterfaceRenderer.menuText(initials).count) * cell + 12 * scale
-      let widest = max(64 * scale, footer.width - 2 * (110 * scale) - gap * 2)
+      let minimumButtonWidth = max(110 * scale, 9 * cell + 16 * scale)
+      let widest = max(64 * scale, footer.width - count * (minimumButtonWidth + gap))
       let initialsWidth = max(64 * scale, min(natural, widest))
-      let buttonWidth = min(180 * scale, max(0, (footer.width - initialsWidth - gap * 2) / 2))
-      let start = floor(footer.midX - (initialsWidth + 2 * buttonWidth + 2 * gap) / 2)
+      let buttonWidth = min(180 * scale, max(0, (footer.width - initialsWidth - gap * count) / count))
+      let start = floor(footer.midX - (initialsWidth + count * (buttonWidth + gap)) / 2)
       drawMenuGameText(initials, in: CGRect(x: start, y: footer.minY,
         width: initialsWidth, height: footer.height), face: .small, scale: footerScale, palette: .green)
-      for (index, label) in ["PROFILES", "RECORDS"].enumerated() {
+      for (index, label) in labels.enumerated() {
         let rect = CGRect(x: start + initialsWidth + gap + CGFloat(index) * (buttonWidth + gap),
           y: footer.minY, width: buttonWidth, height: footer.height)
         overlayFooterButtons.append(rect)

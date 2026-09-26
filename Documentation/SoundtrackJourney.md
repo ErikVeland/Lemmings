@@ -14,7 +14,7 @@ The hierarchy is **game → role → track → port → source quality → origi
 - Lemmings 2 advances the tribe's version with its level index. Lemmings 3 advances each tribe tune after its local tune rotation repeats. These are score cycles within a campaign, not a counter of completed playthroughs.
 - Selection depends on the campaign position and installed catalogue. Retries, direct level selection, saved-level reopening and Hot Seat handovers choose the same version. Attempts and wall-clock time do not advance the journey. Adding or removing versions can change future selections.
 - Turning off other soundtracks retains the first version of the assigned tune in all three engines. Missing variants fall back within the same identity; missing catalogue data uses the assigned module.
-- Active gameplay, a rescue quota, danger and nuking do not replace a tune. Paused handovers keep the pending selection silent until playback resumes.
+- Ordinary gameplay, danger and nuking do not replace a tune. Meeting the rescue target permits one transition to a matching win cue or another version of the same composition. Paused handovers keep pending selections silent until playback resumes.
 
 The existing Amiga composition rotation remains the Classic score policy. Artwork selection does not imply a new platform's historical tune order. Exact native port sequencing remains a separate audit.
 
@@ -22,7 +22,7 @@ The existing Amiga composition rotation remains the Classic score policy. Artwor
 
 Special-level themes retain separate identities. Beast I cannot become Beast II, and neither enters the ordinary rotation. Seasonal and prototype/demo material remain separate from released ordinary music. Menus, start cues, medals, milestones, endings, bonus remixes and unknown tracks have their own roles.
 
-A completed result can use only an explicitly classified generic win/loss cue from the current game and port. No such cue means the current track continues. Generic wins never select a medal, an ending or a finale from another game. Medals and campaign-ending music require their own explicit event routing; this change does not add those events.
+Reaching the rescue target can use an explicitly classified generic win cue from the current game and port. Otherwise the DJ selects the next available version of the current composition when alternate soundtracks are enabled. With neither available, the tune continues. A completed loss keeps the current track in funeral mood. Generic wins never select a medal, ending or finale from another game. Medals and campaign endings require their own event routing.
 
 ## Source fidelity and uncertain identities
 
@@ -66,3 +66,7 @@ SNES and SMS win/loss cues retain game-and-port routing. The decoded deck plays 
 All 81 newly selected audio files passed complete Apple audio decoding. One SNES MP3, `13 As Long As You Try Your Best`, raised an end-of-file error in Core Audio. Its verified M4A replacement preserves the decoded samples and lossy provenance. The MP3 is archived through `sourcePath`, and both library scanners exclude it from playback. This does not recover any missing source audio.
 
 Catalogue coverage, new title-collision and cue tests, all three journey playback tests, retries, paused crossfades and the recording-only special passed. The existing first-cycle, seasonal and sequel policies remain in effect.
+
+## Music update 1.6
+
+The main bundle carries 54 essential versions. Another 441 versions are split into 18 optional libraries. Downloaded versions join the same journeys. See [Music update 1.6](MusicUpdate1.6.md) for pause rhythms, vinyl stops, packaging and validation limits.

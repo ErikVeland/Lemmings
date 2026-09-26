@@ -8,7 +8,7 @@ MUSIC=ROOT/'Sources/Music'
 catalogue=json.loads((ROOT/'Resources/Music/catalogue.json').read_text())
 variants=[v for t in catalogue['tracks'] for v in t['variants']]
 known={v['path'] for v in variants}
-actual={p.relative_to(MUSIC).as_posix() for p in MUSIC.rglob('*') if p.is_file() and not p.is_symlink() and p.suffix.lower() in {'.mod','.m4a','.wav','.mp3'}}
+actual={p.relative_to(MUSIC).as_posix() for p in MUSIC.rglob('*') if p.is_file() and not p.is_symlink() and '.rhythm' not in p.parts and p.suffix.lower() in {'.mod','.m4a','.wav','.mp3'}}
 source_only={v['sourcePath'] for v in variants}-known
 actual-=source_only
 assert known==actual, (known-actual,actual-known)

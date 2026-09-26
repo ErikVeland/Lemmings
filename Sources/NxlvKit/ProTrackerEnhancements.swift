@@ -280,6 +280,8 @@ public struct ProTrackerEnhancedPlayer: Sendable {
     private var leftReverb: Reverb
     private var rightReverb: Reverb
     private let usesEqualizer: Bool
+    private let percussionSamples: Set<Int>
+    public var hasRhythm: Bool { !percussionSamples.isEmpty }
 
     public var hasFinished: Bool { player.hasFinished }
 
@@ -291,6 +293,9 @@ public struct ProTrackerEnhancedPlayer: Sendable {
         var player = ProTrackerPlayer(module: module, sampleRate: sampleRate)
         player.interpolation = enhancements.interpolation
         self.player = player
+        percussionSamples = Set(module.samples.indices.filter {
+            ProTrackerPercussion.evidence(for: module.samples[$0]) != nil
+        })
 
         // Which samples are drums depends on the module, so the tuning is
         // worked out here rather than living in a shared preset.
@@ -332,7 +337,7 @@ public struct ProTrackerEnhancedPlayer: Sendable {
         return position == 0 || position == 3
     }
 
-    public mutating func nextFrame() -> (left: Float, right: Float) {
+    public mutating func nextFrame(rhythmAmount: Double = 0) -> (left: Float, right: Float) {
         var buffer = outputs
         outputs = []
         player.nextVoiceOutputs(into: &buffer)
@@ -344,7 +349,8 @@ public struct ProTrackerEnhancedPlayer: Sendable {
         let separation = min(1, max(0, enhancements.stereoSeparation))
         for (index, output) in buffer.enumerated() where output.isActive {
             let tuning = enhancements.voiceTuning[output.sampleIndex]
-            let value = output.value * (tuning?.gain ?? 1)
+            let rhythmGain = percussionSamples.contains(output.sampleIndex) ? 1 : 1 - min(1, max(0, rhythmAmount))
+            let value = output.value * (tuning?.gain ?? 1) * rhythmGain
 
             // -1 is hard left, 1 is hard right.
             var pan = Self.isLeftChannel(index) ? -separation : separation

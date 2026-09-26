@@ -567,6 +567,11 @@ extension Lemmings3PlayWindow {
         }
         canvas.onPanel?(2, 1)
         try assertArtwork(selected == 2, "L3 native panel did not select Jumper")
+        // During the fresh-level countdown, Pause cancels the automatic start.
+        if canvas.startCountdown.isActive {
+            canvas.onPanel?(7, 1)
+            try assertArtwork(!canvas.startCountdown.isActive && paused, "L3 pause icon did not cancel the start countdown")
+        }
         let wasPaused = paused
         canvas.onPanel?(7, 1)
         try assertArtwork(paused != wasPaused, "L3 native pause icon is disconnected")
@@ -619,7 +624,8 @@ extension Lemmings3PlayWindow {
         gameplayKeyboard?.controllerAction(.step(-1))
         try assertArtwork(paused && game.tick == stepTick, "L3 controller backward step did not return one tick")
         gameplayKeyboard?.controllerAction(.retry)
-        try assertArtwork(game.tick == 0 && !paused, "L3 controller retry did not reset the level")
+        // A retry starts over with the fresh-level countdown.
+        try assertArtwork(game.tick == 0 && canvas.startCountdown.isActive, "L3 controller retry did not reset the level")
         gameplayKeyboard?.controllerAction(.endRun)
         try assertArtwork(GameScreen.shared.isPresented && !game.isComplete,
                           "L3 controller end-run skipped confirmation")
@@ -936,7 +942,8 @@ extension Lemmings2PlayWindow {
             "L2 briefing did not identify the incoming player")
         _ = try shot(front, "hot-seat-l2-briefing")
         startLevel()
-        try assertArtwork(!paused && self.game?.tick == 0, "L2 briefing required another action after Begin")
+        // The fresh-level countdown starts play without another action.
+        try assertArtwork((!paused || canvas.startCountdown.isActive) && self.game?.tick == 0, "L2 briefing required another action after Begin")
         restart()
         try assertArtwork(paused && speedControl.multiplier == 1, "Hot Seat retry did not wait at normal speed")
         let handoverTick = self.game?.tick ?? 0
@@ -981,13 +988,31 @@ try Lemmings2PlayWindow(root: l2root).checkRunRecovery()
     try bitmap.representation(using: .png, properties: [:])!.write(to: output.appendingPathComponent("\(type(of: view)).png"))
     event(.leftMouseDown, 102); event(.leftMouseUp, 102.05)
     event(.leftMouseDown, 102.1, clicks: 2); event(.leftMouseUp, 102.15, clicks: 2)
-    try assertArtwork(speed.multiplier == 1, "Sequel double-click restarted speed")
+    // Each middle click toggles, including both clicks of a double-click.
+    try assertArtwork(speed.target == 3, "Sequel middle clicks did not each toggle")
     event(.leftMouseDown, 103); speed.update(at: 105, active: true)
     try assertArtwork(speed.target == 10, "Sequel mouse hold failed")
     event(.leftMouseUp, 105.1)
-    try assertArtwork(speed.multiplier == 1, "Sequel hold release did not return to normal")
+    try assertArtwork(speed.multiplier == 3, "Sequel hold release did not restore cruise")
 }
 extension Lemmings2PlayWindow {
+    /// The first-launch Old school choice reaches this window through the
+    /// shared settings. Original controls must replace every modern aid.
+    fileprivate func checkOriginalPreset() throws {
+        defer { stop() }
+        timer?.invalidate(); timer = nil
+        var original = ClassicSettings(); original.applyExperiencePreset(modern: false)
+        setAudioSettings(original, muted: true)
+        try assertArtwork(gameplayKeyboard?.modern() == false && gameplayKeyboard?.controllerEnabled() == false
+            && gameplayKeyboard?.pauseOnInterruption() == false && !speedControl.variableEnabled
+            && !canvas.favorApproachingLemmings && !canvas.favorBombBlockers && !canvas.favorBuilders,
+            "L2 Old school left modern controls active")
+        var modern = ClassicSettings(); modern.applyExperiencePreset(modern: true)
+        setAudioSettings(modern, muted: true)
+        try assertArtwork(gameplayKeyboard?.modern() == true && speedControl.variableEnabled && canvas.favorApproachingLemmings,
+            "L2 Modern did not restore modern controls")
+        print("PASS L2 Old school and Modern presets reach the play window's controls")
+    }
     fileprivate func checkSpeedMouseControls() throws {
         defer { stop() }
         timer?.invalidate(); timer = nil
@@ -998,6 +1023,23 @@ extension Lemmings2PlayWindow {
     }
 }
 extension Lemmings3PlayWindow {
+    /// The first-launch Old school choice reaches this window through the
+    /// shared settings. Original controls must replace every modern aid.
+    fileprivate func checkOriginalPreset() throws {
+        defer { stop() }
+        timer?.invalidate(); timer = nil
+        var original = ClassicSettings(); original.applyExperiencePreset(modern: false)
+        setAudioSettings(original, muted: true)
+        try assertArtwork(gameplayKeyboard?.modern() == false && gameplayKeyboard?.controllerEnabled() == false
+            && gameplayKeyboard?.pauseOnInterruption() == false && !speedControl.variableEnabled
+            && !canvas.favorApproachingLemmings && !canvas.favorBombBlockers && !canvas.favorBuilders,
+            "L3 Old school left modern controls active")
+        var modern = ClassicSettings(); modern.applyExperiencePreset(modern: true)
+        setAudioSettings(modern, muted: true)
+        try assertArtwork(gameplayKeyboard?.modern() == true && speedControl.variableEnabled && canvas.favorApproachingLemmings,
+            "L3 Modern did not restore modern controls")
+        print("PASS L3 Old school and Modern presets reach the play window's controls")
+    }
     fileprivate func checkSpeedMouseControls() throws {
         defer { stop() }
         timer?.invalidate(); timer = nil
@@ -1009,6 +1051,8 @@ extension Lemmings3PlayWindow {
 }
 try Lemmings2PlayWindow(root: l2root).checkSpeedMouseControls()
 try Lemmings3PlayWindow(root: l3root).checkSpeedMouseControls()
+try Lemmings2PlayWindow(root: l2root).checkOriginalPreset()
+try Lemmings3PlayWindow(root: l3root).checkOriginalPreset()
 
 extension Lemmings2Canvas { fileprivate var speedTestRect: CGRect { speedRect } }
 extension Lemmings3Canvas { fileprivate var speedTestRect: CGRect {

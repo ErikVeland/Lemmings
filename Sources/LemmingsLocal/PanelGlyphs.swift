@@ -9,7 +9,7 @@ enum PanelGlyph: String {
   case undo
   case fastForward
   case rewind, stepBackward, stepForward
-  case settings
+  case settings, download
   /// Shown on the pause button while the level is held, so the button says
   /// what it will do rather than what it did.
   case play
@@ -72,6 +72,13 @@ enum PanelGlyph: String {
         ".####.###.####.",
         "..##..###..##..",
         "......###......",
+      ]
+    case .download:
+      return [
+        ".....###.....", ".....###.....", ".....###.....", ".....###.....",
+        "..#..###..#..", "..#########..", "...#######...", "....#####....",
+        ".....###.....", "......#......", ".............", "##.........##",
+        "#############", "#############",
       ]
     case .pause:
       return [
@@ -147,7 +154,7 @@ enum PanelGlyph: String {
       return Dictionary(uniqueKeysWithValues: Self.classicPalette.enumerated().map { index, colour in
         (Character(String(index, radix: 16)), (colour.red, colour.green, colour.blue))
       })
-    case .play, .fastForward, .undo, .settings, .rewind, .stepBackward, .stepForward:
+    case .play, .fastForward, .undo, .settings, .download, .rewind, .stepBackward, .stepForward:
       return ["#": (194, 224, 158)]
     }
   }

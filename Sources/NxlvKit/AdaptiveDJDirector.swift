@@ -1,6 +1,6 @@
 import Foundation
 
-/// A soundtrack change for a completed game state.
+/// A soundtrack change once a level is won or has reached its rescue target.
 public struct AdaptiveDJCue: Equatable, Sendable {
     public enum Reason: String, Equatable, Sendable, CaseIterable {
         // Keep old identifiers for clients that read earlier cue logs.
@@ -16,7 +16,7 @@ public struct AdaptiveDJCue: Equatable, Sendable {
     }
 }
 
-/// Allows one result transition per level, after play has ended.
+/// Ordinary danger and elapsed time never replace the level track.
 public struct AdaptiveDJDirector: Sendable {
     private var firedReasons: Set<AdaptiveDJCue.Reason> = []
     public init() {}
@@ -24,8 +24,10 @@ public struct AdaptiveDJDirector: Sendable {
     public mutating func reset() { firedReasons.removeAll() }
 
     public mutating func cue(for telemetry: AdaptiveDJEngine.Telemetry) -> AdaptiveDJCue? {
-        guard telemetry.isComplete, firedReasons.isEmpty else { return nil }
-        let reason: AdaptiveDJCue.Reason = telemetry.didWin ? .won : .lost
+        guard firedReasons.isEmpty else { return nil }
+        let secured = telemetry.requiredCount > 0 && telemetry.savedCount >= telemetry.requiredCount
+        guard secured || (telemetry.isComplete && telemetry.didWin) else { return nil }
+        let reason: AdaptiveDJCue.Reason = .won
         firedReasons.insert(reason)
         return AdaptiveDJCue(reason: reason, timing: .atNextPhrase)
     }

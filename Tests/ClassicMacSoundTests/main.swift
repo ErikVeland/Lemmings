@@ -80,9 +80,22 @@ do {
     if !unbound.isEmpty {
         print("     unbound: \(unbound.map(\.rawValue).joined(separator: ", "))")
     }
+    // The Mac disk has no sound for some events. The game fills each gap
+    // from a named Amiga sample, then from a supplied sound named after it.
+    let fallback = unbound.filter { ClassicSoundMapping.amigaVoiceNames[$0] != nil }
+    if !fallback.isEmpty {
+        print("     Amiga fallback: \(fallback.map(\.rawValue).joined(separator: ", "))")
+    }
+    let supplied = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
+        .deletingLastPathComponent().deletingLastPathComponent().appendingPathComponent("Resources/Sounds")
+    let silent = unbound.filter { effect in
+        ClassicSoundMapping.amigaVoiceNames[effect] == nil && !["wav", "m4a", "mp3"].contains {
+            FileManager.default.fileExists(atPath: supplied.appendingPathComponent(effect.rawValue + "." + $0).path)
+        }
+    }
     try require(
-        unbound.isEmpty,
-        "these events would be silent: \(unbound.map(\.rawValue).joined(separator: ", "))")
+        silent.isEmpty,
+        "these events would be silent: \(silent.map(\.rawValue).joined(separator: ", "))")
 
     print("Classic Mac sound tests passed.")
 } catch {

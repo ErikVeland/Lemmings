@@ -65,7 +65,9 @@ class PackageScopeTests(unittest.TestCase):
             write('Resources/Trolley/verified-maxima.json', '{"engineSourceFingerprint":"test"}')
             write('Resources/Hints/classic.json', '{"engineFingerprint":"test"}')
             write('Scripts/build-local-app.sh',
-                  'mkdir -p "$LEMMINGS_BUILD_DIR/Ultimate Lemmings.app/Contents/Resources/Music"\n')
+                  'mkdir -p "$LEMMINGS_BUILD_DIR/Ultimate Lemmings.app/Contents/Resources/Music"\n'
+                  'test "$MUSIC_BUNDLE" = main\n'
+                  'touch "$LEMMINGS_BUILD_DIR/Ultimate Lemmings.app/Contents/Resources/Music/main-bundle"\n')
             write('Scripts/strip-recorded-music.sh', 'touch "$1/stripped"\n')
             write('bin/codesign', '#!/bin/zsh\ntouch "$LEMMINGS_BUILD_DIR/signed"\n', True)
             write('Tools/ReleaseReadiness/audit.py', '''
@@ -76,7 +78,7 @@ if __name__ == '__main__':
     from pathlib import Path
     build = Path(os.environ['LEMMINGS_BUILD_DIR'])
     assert (build / 'signed').exists()
-    assert (build / 'Ultimate Lemmings.app/Contents/Resources/Music/stripped').exists()
+    assert (build / 'Ultimate Lemmings.app/Contents/Resources/Music/main-bundle').exists()
     (build / 'audit-args.json').write_text(json.dumps(sys.argv[1:]))
     raise SystemExit(17)
 ''')

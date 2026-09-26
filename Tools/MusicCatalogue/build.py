@@ -211,7 +211,7 @@ def build(music, destination, links):
     report_path=music/'conversion-report.json'
     converted=json.loads(report_path.read_text())['tracks'] if report_path.exists() else []
     repairs={row['output']:row['source'] for row in converted if Path(row['source']).suffix.lower()=='.mp3' and (music/row['output']).is_file()}
-    files=sorted(p for p in music.rglob('*') if p.is_file() and not p.is_symlink() and 'By Track' not in p.parts and p.suffix.lower() in PLAYABLE and p.relative_to(music).as_posix() not in repairs.values())
+    files=sorted(p for p in music.rglob('*') if p.is_file() and not p.is_symlink() and 'By Track' not in p.parts and '.rhythm' not in p.parts and p.suffix.lower() in PLAYABLE and p.relative_to(music).as_posix() not in repairs.values())
     for path in files:
         track, variant=classify(path,music,repairs.get(path.relative_to(music).as_posix()))
         entry=tracks.setdefault(track['id'],dict(**track,variants=[]))

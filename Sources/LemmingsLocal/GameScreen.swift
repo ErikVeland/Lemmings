@@ -68,7 +68,9 @@ import NxlvKit
             window.setAccessibilityChildren([current.container])
             window.setAccessibilityModal(true)
         } else {
-            window.setAccessibilityChildren(nil)
+            // Clearing the override with nil leaves the window without children.
+            // Restore the current game view, which can change beneath a dialog.
+            window.setAccessibilityChildren(window.contentView.map { NSAccessibility.unignoredChildren(from: [$0]) })
             window.setAccessibilityModal(wasAccessibilityModal)
         }
         NSAccessibility.post(element: window, notification: .layoutChanged)

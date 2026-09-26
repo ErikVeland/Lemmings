@@ -1,11 +1,16 @@
 # Automatic updates
 
-Ultimate Lemmings 1.5 uses Sparkle 2.7.3 for macOS updates.
+Ultimate Lemmings 1.6 uses Sparkle 2.7.3 for macOS updates.
 
 ## Runtime contract
 
 - The app checks the HTTPS appcast once per day.
-- Sparkle downloads and installs signed updates in the background.
+- Compatible updates add a download icon to the home screen. Selecting it opens
+  Sparkle's release notes and update controls.
+- Automatic updates are supported and enabled by default in 1.6. Sparkle respects
+  the player's saved update preferences. Automatic downloads bring the release
+  notes forward, and bundled notes appear after an upgrade.
+- Earlier builds retain their own update preferences until the upgrade finishes.
 - The app verifies the Ed25519 archive signature before extraction.
 - The app shows `Check for Updates…` in the application menu.
 - The feed URL and public key are in the app bundle `Info.plist`.
@@ -13,15 +18,25 @@ Ultimate Lemmings 1.5 uses Sparkle 2.7.3 for macOS updates.
 The private Ed25519 key stays in the release operator's login Keychain. Never
 commit the key or pass the key value as a command argument.
 
-## Current public test
+## Current releases
 
-This candidate proposes tag `v1.5-build50` and archive `UltimateLemmings-1.5-build50.zip`.
-Publication is pending a source decision and a distinct build number. The live
-feed still serves public 1.2 build 41. The intended release is a GitHub prerelease. GitHub's prerelease flag alone does not keep
-an entry out of the Sparkle feed.
+Public 1.5 build 50 is recorded in [its distribution evidence](ReleaseReadiness/1.5Build50Distribution.md).
+The integrated 1.6 build 51 candidate is local. Its appcast must be published only
+with its matching signed and notarised archive.
 
-See the [build 50 validation record](ReleaseReadiness/1.5PublicRelease.md) for
-publication and update results. Build 41 remains the previous stable GitHub release.
+## Player experience
+
+Compatible updates discovered by Sparkle add a pixel download icon to the shared
+home screen. Scheduled checks use a quiet reminder. Selecting the icon or
+**Check for Updates** opens Sparkle's release notes and update controls. Skipping
+a version clears its reminder. A failed network check does not invent availability.
+
+Automatic downloads and installation remain supported. Bundled **What's New**
+notes appear once after each upgrade, even if installation did not show an alert.
+The build is acknowledged only when the player continues. Notes also remain in Help.
+On first launch, the play-style choice precedes the optional soundtrack chooser.
+For returning players, upgrade notes precede that chooser. Audio settings can reopen
+soundtrack downloads at any time.
 
 ## Release procedure
 
@@ -46,8 +61,8 @@ The update ZIP must contain only the notarised app. The Game Center archive is
 not an update candidate.
 
 Release packaging requires a clean worktree. Publication is a separate step
-and needs an authenticated GitHub CLI. The package script uses `v1.5.0` for
-the feed URL by default. Build 50 explicitly sets `RELEASE_TAG=v1.5-build50`.
+and needs an authenticated GitHub CLI. The package script uses `v1.6.0` for
+the feed URL by default. The tag must match the approved release version.
 The publication script requires the tag and stamped notes. Its read-only
 `--check` mode checks that the notes, archive name and signed appcast describe
 the same build. Only the publication run needs `RELEASE_APPROVED=1`.

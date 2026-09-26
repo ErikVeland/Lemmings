@@ -12,7 +12,7 @@ from xml.etree import ElementTree
 
 SPARKLE_NAMESPACE = "http://www.andymatuschak.org/xml-namespaces/sparkle"
 SPARKLE_VERSION = "2.7.3"
-RELEASE_VERSION_PATTERN = re.compile(r"1\.5(?:\.\d+)?")
+RELEASE_VERSION_PATTERN = re.compile(r"1\.6(?:\.\d+)?")
 REQUIRED_SCRIPTS = (
     "Scripts/ensure-sparkle.sh",
     "Scripts/generate-appcast.sh",
@@ -35,7 +35,7 @@ def validate_info_plist(path):
     version = info.get("CFBundleShortVersionString")
     build = info.get("CFBundleVersion")
     if not isinstance(version, str) or not RELEASE_VERSION_PATTERN.fullmatch(version):
-        raise ValueError("Info.plist must identify a 1.5 application.")
+        raise ValueError("Info.plist must identify a 1.6 application.")
     if not isinstance(build, str) or not re.fullmatch(r"\d+", build):
         raise ValueError("Info.plist must contain a numeric build number.")
     _https_url(info.get("SUFeedURL"), "SUFeedURL")
@@ -47,8 +47,11 @@ def validate_info_plist(path):
             raise ValueError
     except (ValueError, TypeError):
         raise ValueError("SUPublicEDKey must contain a base64 Ed25519 public key.")
-    for key in ("SUEnableAutomaticChecks", "SUAutomaticallyUpdate",
-                "SUAllowsAutomaticUpdates", "SUVerifyUpdateBeforeExtraction"):
+    for key in ("SUEnableAutomaticChecks", "SUVerifyUpdateBeforeExtraction"):
+        if info.get(key) is not True:
+            raise ValueError(f"{key} must be true.")
+    # Automatic updates show bundled notes on the next launch.
+    for key in ("SUAutomaticallyUpdate", "SUAllowsAutomaticUpdates"):
         if info.get(key) is not True:
             raise ValueError(f"{key} must be true.")
     if not isinstance(info.get("SUScheduledCheckInterval"), int) or info["SUScheduledCheckInterval"] < 3600:

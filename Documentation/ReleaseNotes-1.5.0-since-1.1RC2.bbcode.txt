@@ -1,0 +1,47 @@
+[b]What else is new in Ultimate Lemmings 1.5.0 since 1.1 RC2?[/b]
+
+These changes include the 1.2 updates and everything added through 1.5.0 (build 50).
+
+[b]Level browser and playlists[/b]
+[list]
+[*]A new CoverFlow browser shows campaigns, fan packs and individual levels with screenshot previews. Browse with the mouse, trackpad, keyboard or controller.
+[*]Create and edit personal playlists, play them in order or shuffle them, and resume a saved playlist run.
+[*]Generate a Random 10 playlist from a chosen pack, or shuffle the installed fan-level library without repeats within a run.
+[*]Reduced Motion replaces the animated carousel with a stable thumbnail list.
+[/list]
+
+[b]Controls and targeting[/b]
+[list]
+[*]Original, Modern and Custom gameplay presets make it easier to choose your preferred controls.
+[*]New targeting options favour blockers when assigning a bomb, and builders when extending a bridge. These apply across Classic, Lemmings 2 and Lemmings 3, using Use tool in Lemmings 3.
+[*]The four-corner cursor shows green for an eligible target, yellow for an ineligible target and grey over empty terrain. Choose no skill icon, 1× or 2×, and optionally show the nearby lemming count.
+[*]Target highlighting uses a subtle halo and shimmer, with a static halo under Reduced Motion.
+[*]New toolbar buttons rewind two seconds or step one tick backward or forward. Play stays paused afterwards. Controls are disabled where the ruleset does not support them.
+[*]Open hints with H, I, F1 or the toolbar. Left and Right move between hint stages. Revealing a full solution still asks for confirmation.
+[*]New levels and retries start after a cancellable 3–2–1 countdown. Saved runs and Hot Seat handovers stay paused until the player is ready.
+[*]Fast-forward now raises the music pitch without changing its tempo. Lemming trails grow longer and softer at higher speeds across all three games.
+[/list]
+
+[b]Soundtrack[/b]
+[list]
+[*]The expanded DJ catalogue contains 495 versions of 210 tunes, including Amiga modules, other ports, composer recordings and fan remixes.
+[*]A tune starts with its original Amiga version. Later levels using that tune can play alternate versions. Retries, saved runs and Hot Seat handovers keep the same version.
+[*]Music stays consistent during a level, with transitions at changes such as the result screen.
+[*]Retry has a vinyl-style stop and spin-up effect.
+[*]The Mac sound set now uses the Amiga pop sample. The SNES recording of "As Long As You Try Your Best" plays to the end.
+[*]Bundled recordings use 192 kbps AAC to keep the download below 2 GB. Amiga modules retain their native playback.
+[/list]
+
+[b]Menus, performance and fixes[/b]
+[list]
+[*]Dialogs support Tab, Shift-Tab, arrow keys and Return. Replay and original-movie controls have keyboard and accessibility actions. Hot Seat handovers also accept keyboard input.
+[*]The normal mouse pointer stays visible over menus and controls. Disappearing cursors in Lemmings 2 and Lemmings 3 are fixed.
+[*]Startup and title-menu navigation are faster. In a test with 516 saved runs, finding the newest run fell from 6.1 seconds to 0.26 seconds.
+[*]Returning to a campaign avoids repeated setup, transition saves no longer block play, and HDR work starts only when needed.
+[*]Fixes cover pause-key repeats, speed-button toggles, clicks behind bridge builders, liquid beneath bridges, missing rescue targets and Classic hints, and the black window on a fresh installation.
+[*]Signed update checks now start with the app. From 1.5, available updates show release notes and let you choose when to install.
+[/list]
+
+[b]NeoLemmix preview[/b]
+
+NeoLemmix work improves level rendering and adds a reader for current .nxrp replay files. Full replay and gameplay compatibility remains unfinished. Fencer, Laserer, skill pickups and several other mechanics are still unsupported. Lemmings 2 and Lemmings 3 also remain previews.

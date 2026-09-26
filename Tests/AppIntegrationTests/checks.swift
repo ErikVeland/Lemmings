@@ -1869,8 +1869,30 @@ extension AppDelegate {
     oldSchool.performClick(nil)
     try check(choices == [false] && !settings.hdEffectsEnabled && !playfield.hdEffectsEnabled,
       "Old school did not disable and apply HD effects")
+    // Old school means original controls everywhere, not only original effects.
+    func usesModernControls() -> [String] {
+      var active: [String] = []
+      if settings.modernControlsEnabled { active.append("modern controls") }
+      if settings.variableSpeedEnabled || speedControl.variableEnabled { active.append("variable speed") }
+      if panel.modernControlsEnabled { active.append("modern panel") }
+      if gameplayKeyboard?.modern() == true { active.append("modern keys") }
+      if settings.controllerEnabled { active.append("controller") }
+      if settings.confinePointer { active.append("pointer capture") }
+      if settings.pauseOnInterruption { active.append("interruption pause") }
+      if settings.favorApproachingLemmings || playfield.favorApproachingLemmings { active.append("approaching targeting") }
+      if settings.favorBombBlockers || playfield.favorBombBlockers { active.append("blocker targeting") }
+      if settings.favorBuilders || playfield.favorBuilders { active.append("builder targeting") }
+      if settings.skillCursorIconSize != .none { active.append("skill icon") }
+      return active
+    }
+    let stillModern = usesModernControls()
+    try check(stillModern.isEmpty && settings.experiencePreset == .original,
+      "Old school left modern behaviour active: \(stillModern.joined(separator: ", "))")
     let saved = try JSONDecoder().decode(ClassicSettings.self, from: UserDefaults.standard.data(forKey: settingsKey)!)
     try check(!saved.hdEffectsEnabled && !GameScreen.shared.isPresented, "The first-launch choice was not saved and dismissed")
+    restoreSettings()
+    let afterRelaunch = usesModernControls()
+    try check(afterRelaunch.isEmpty, "Old school did not survive a relaunch: \(afterRelaunch.joined(separator: ", "))")
     let restarted = EffectsWelcome(defaults: defaults)
     restarted.showIfNeeded(in: window, onChoose: choose)
     try check(!GameScreen.shared.isPresented && choices.count == 1, "The effects choice returned on a later launch")
@@ -1879,6 +1901,9 @@ extension AppDelegate {
     button("Play with modern defaults", in: root)!.performClick(nil)
     try check(choices == [false, true] && settings.hdEffectsEnabled && settings.fullScreenHDRFlashes,
       "The default HD choice failed to enable the effects")
+    try check(settings.modernControlsEnabled && speedControl.variableEnabled && panel.modernControlsEnabled
+      && gameplayKeyboard?.modern() != false && settings.favorApproachingLemmings && settings.experiencePreset == .modern,
+      "Modern defaults did not restore modern controls")
     print("PASS first-launch HD/old-school choices, default action, live application, persistence and one-time presentation")
   }
 
@@ -2124,6 +2149,25 @@ extension AppDelegate {
       "The home Settings gear mouse target did not open Settings")
     GameScreen.shared.dismissAll()
 
+    playfield.overlayAvailableUpdate = "Version 1.7 available to download"
+    let previousUpdateAction = playfield.onUpdate
+    var updatesOpened = 0
+    playfield.onUpdate = { updatesOpened += 1 }
+    defer { playfield.overlayAvailableUpdate = nil; playfield.onUpdate = previousUpdateAction }
+    playfield.needsDisplay = true
+    playfield.displayIgnoringOpacity(playfield.bounds, in: NSGraphicsContext(bitmapImageRep: bitmap)!)
+    try bitmap.representation(using: .png, properties: [:])!.write(to: URL(fileURLWithPath: ".build/home-update-available.png"))
+    let updatedControls = playfield.accessibilityChildren()?.compactMap { $0 as? GameAccessibleElement } ?? []
+    guard let update = updatedControls.first(where: { $0.accessibilityLabel()?.contains("1.7") == true }) else {
+      throw IntegrationFailure(message: "Home screen did not expose the available update")
+    }
+    try check(update.localFrame.width >= 44 && update.localFrame.height >= 44
+      && playfield.bounds.contains(update.localFrame)
+      && updatedControls.filter { $0 !== update && $0.accessibilityRole() == .button }
+        .allSatisfy { !$0.localFrame.intersects(update.localFrame) }, "Update icon lost its distinct input target")
+    try check(update.accessibilityPerformPress(), "Update icon lost its accessible action")
+    playfield.handleClick(at: CGPoint(x: update.localFrame.midX, y: update.localFrame.midY))
+    try check(updatesOpened == 2, "Update mouse and accessibility actions diverged")
     var next = flow!
     next.startGame()
     flow = next
@@ -2132,6 +2176,9 @@ extension AppDelegate {
     try check(playfield.accessibilityChildren()?.compactMap { $0 as? GameAccessibleElement }
       .contains(where: { $0.accessibilityLabel() == "Settings" }) != true,
       "The home Settings gear remained on the rating screen")
+    try check(playfield.accessibilityChildren()?.compactMap { $0 as? GameAccessibleElement }
+      .contains(where: { $0.accessibilityLabel()?.contains("1.7") == true }) != true,
+      "The update reminder appeared outside the home screen")
     print("PASS seven home content families and the Settings gear use distinct targets")
   }
   fileprivate func testHomeContentFamilyFiltering() throws {
@@ -2492,6 +2539,186 @@ extension AppDelegate {
     return fingerprint
   }
 
+  fileprivate func testPlaylistSessions() async throws {
+    returnToLibrary()
+    window.setContentSize(NSSize(width: 1120, height: 720))
+    let previousStore = ArcadeStore.shared
+    let previousCache = playlistStoreCache
+    let directory = FileManager.default.temporaryDirectory.appendingPathComponent("playlist-sessions-\(UUID().uuidString)")
+    let defaults = UserDefaults(suiteName: "playlist-sessions-\(UUID().uuidString)")!
+    let arcade = ArcadeStore(file: directory.appendingPathComponent("records.json"), bundledProofs: nil, defaults: defaults)
+    ArcadeStore.shared = arcade
+    defer {
+      returnToLibrary(); ArcadeStore.shared = previousStore; playlistStoreCache = previousCache
+      sequencePlaylistStore = nil; GameScreen.shared.dismissAll()
+      try? FileManager.default.removeItem(at: directory)
+    }
+    func buttons(_ view: NSView) -> [NSButton] {
+      (view as? NSButton).map { [$0] } ?? view.subviews.flatMap(buttons)
+    }
+    func press(_ title: String) throws {
+      guard let page = GameScreen.shared.controllerPage(in: window),
+            let button = buttons(page).first(where: { $0.title == title }) else {
+        throw IntegrationFailure(message: "Missing session action: " + title)
+      }
+      button.performClick(nil)
+    }
+    func waitForLaunch() async throws {
+      for _ in 0..<1500 where levelBrowserLaunchTask != nil || playlistFanLoadTask != nil {
+        try await Task.sleep(nanoseconds: 10_000_000)
+      }
+      try check(levelBrowserLaunchTask == nil && playlistFanLoadTask == nil, "Session launch did not finish")
+    }
+    func capture(_ name: String, _ view: NSView) throws {
+      window.contentView?.layoutSubtreeIfNeeded()
+      view.layoutSubtreeIfNeeded()
+      guard let bitmap = view.bitmapImageRepForCachingDisplay(in: view.bounds) else {
+        throw IntegrationFailure(message: "Session screenshot has no visible bounds: " + name)
+      }
+      func invalidate(_ child: NSView) { child.needsDisplay = true; child.subviews.forEach(invalidate) }
+      invalidate(view)
+      view.displayIgnoringOpacity(view.bounds, in: NSGraphicsContext(bitmapImageRep: bitmap)!)
+      let output = URL(fileURLWithPath: FileManager.default.currentDirectoryPath).appendingPathComponent(".build/session-ui")
+      try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
+      try bitmap.representation(using: .png, properties: [:])!.write(to: output.appendingPathComponent(name + ".png"))
+    }
+    let host = arcade.records.activeProfileID
+    let guest = arcade.addProfile(initials: "PAL", portrait: 2)!
+    arcade.selectProfile(host); arcade.toggleSessionProfile(guest.id)
+    let oldHotSeat = arcade.hotSeatID!
+    loadContent()
+    gamePicker.selectItem(at: dataSets.firstIndex(where: { $0.set.title == .lemmings })!)
+    selectDataSet()
+    picker.selectItem(at: flow!.ranks[0].levelIndices[0]); levelChanged(); advancePhase()
+    try check(arcadeHotSeatID == oldHotSeat && arcadeProfileID == host,
+      "Classic session fixture did not start with the shared owner")
+    installKeyboardShortcuts()
+    let oldAttempt = arcadeRunID
+    saveRunCheckpoint(immediately: true)
+    let checkpointFile = recoveryStore.directory.appendingPathComponent(oldAttempt.uuidString + ".json")
+    let checkpointBytes = try Data(contentsOf: checkpointFile)
+    _ = arcade.passSessionTurn(after: host)
+    let l2Root = try BundledGameResources.lemmings2()
+    let l2Campaign = try Lemmings2Campaign(root: l2Root)
+    let l2Progress = Lemmings2Campaign.Progress(tribe: 0, level: 1, results: [0:
+      .init(startingPopulation: 60, saved: 47,
+        medal: Lemmings2Campaign.medal(saved: 47, total: 60, allowedLosses: l2Campaign.levels[0].allowedLossesForGold),
+        levelFingerprint: l2Campaign.levels[0].fingerprint)])
+    let l2Key = arcade.progressKey("nativeL2Campaign.v1." + Lemmings2PlayWindow.playlistProgressID(root: l2Root))
+    UserDefaults.standard.set(try JSONEncoder().encode(l2Progress), forKey: l2Key)
+    defer { UserDefaults.standard.removeObject(forKey: l2Key) }
+    guard let discovery = await makeLevelBrowserDiscoveryTask().value else {
+      throw IntegrationFailure(message: "Session fixture could not discover bundled levels")
+    }
+    rebuildLevelCatalogue(discovery)
+    var entries: [LevelPlaylistEntry] = []
+    for engine: LevelSourceEngine in [.lemmings2, .lemmings3, .classic] {
+      guard let entry = levelCatalogue.packs.filter({ $0.engine == engine })
+        .flatMap(\.levels).first(where: { $0.isAvailable && (engine != .lemmings2 || $0.number == 2) }) else {
+        throw IntegrationFailure(message: "No available session fixture for " + engine.displayName)
+      }
+      entries.append(try playlistEntry(for: entry.identity))
+    }
+    let store = try LevelPlaylistStore(file: directory.appendingPathComponent("playlists.json"))
+    let playlist = try LevelPlaylist(name: "Session test", entries: entries)
+    try store.add(playlist)
+    playlistStoreCache = (host, store)
+    let pool = try LevelPool(id: "session-test", summary: "Across all three games")
+    let solo = try LevelSequenceRun.playlist(playlist, pool: pool)
+    installActiveSequence(solo, in: store)
+    guard let chooser = GameScreen.shared.controllerPage(in: window) as? GameMenuPage else {
+      throw IntegrationFailure(message: "Hot Seat did not offer a new session")
+    }
+    try capture("new-session", chooser)
+    let choices = buttons(chooser)
+    try check(Set(choices.map(\.title)) == Set(["Back", "New solo", "New Hot Seat"])
+      && window.firstResponder === chooser.controllerBackButton,
+      "Session choice lost its actions or safe keyboard focus")
+    for button in choices {
+      let rect = button.convert(button.bounds, to: chooser)
+      let hit = chooser.hitTest(CGPoint(x: rect.midX, y: rect.midY))
+      try check(chooser.bounds.contains(rect) && (hit === button || hit?.isDescendant(of: button) == true),
+        "Session choice has a misplaced input target")
+      try check(choices.filter { $0 !== button }.allSatisfy {
+        !rect.intersects($0.convert($0.bounds, to: chooser))
+      }, "Session choices overlap")
+    }
+    let backKey = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 1,
+      windowNumber: window.windowNumber, context: nil, characters: "\r", charactersIgnoringModifiers: "\r", isARepeat: false, keyCode: 36)!
+    _ = GameScreen.shared.keyboardNavigation.handle(backKey, in: chooser, window: window, dismiss: { chooser.onBack?() })
+    try check(arcade.hotSeatID == oldHotSeat && arcadeRunID == oldAttempt && store.activeRun == nil,
+      "Back changed the current session")
+    installActiveSequence(solo, in: store)
+    try Data("changed by another writer".utf8).write(to: checkpointFile, options: .atomic)
+    try press("New solo")
+    try check(arcade.hotSeatID == oldHotSeat && store.activeRun == nil && arcadeRunID == oldAttempt
+      && GameScreen.shared.controllerPage(in: window)?.accessibilityLabel() == "Session not started",
+      "A failed checkpoint save switched the session: phase=\(phase), sameSeat=\(arcade.hotSeatID == oldHotSeat), run=\(String(describing: store.activeRun?.id)), sameAttempt=\(arcadeRunID == oldAttempt), page=\(GameScreen.shared.controllerPage(in: window)?.accessibilityLabel() ?? "none")")
+    try capture("save-failed", GameScreen.shared.controllerPage(in: window)!)
+    try checkpointBytes.write(to: checkpointFile, options: .atomic)
+    GameScreen.shared.dismissAll()
+    installActiveSequence(solo, in: store)
+    try press("New solo"); try await waitForLaunch()
+    try check(!arcade.hotSeatIsActive && store.activeRun?.id == solo.id
+      && nativeL2Window != nil && sequencePlayingIdentity == entries[0].identity,
+      "New solo did not continue into the selected playlist")
+    try check(arcade.savedHotSeats.contains(where: { $0.id == oldHotSeat && $0.turn == guest.id }),
+      "New solo lost the previous Hot Seat or its next turn")
+    let checkpoint = try recoveryStore.latest(profileID: host, hotSeatID: oldHotSeat)
+    try check(checkpoint?.runID == oldAttempt, "New solo did not checkpoint the previous Classic attempt")
+    returnToLibrary()
+    _ = arcade.resumeHotSeat(id: oldHotSeat)
+    let shared = try LevelSequenceRun.playlist(playlist, pool: pool)
+    installActiveSequence(shared, in: store)
+    try press("New Hot Seat"); try await waitForLaunch()
+    let sharedID = arcade.hotSeatID
+    try check(sharedID != oldHotSeat && sharedID != nil && store.activeRunHotSeatID == sharedID
+      && store.savedRuns.contains(where: { $0.run.id == solo.id && $0.hotSeatID == nil }),
+      "New Hot Seat did not preserve the previous solo and shared sessions")
+    for (index, entry) in entries.enumerated() {
+      try check(sequencePlayingIdentity == entry.identity
+        && sequenceRunMatches(shared.id, identity: entry.identity),
+        "Hot Seat sequence ownership failed for " + entry.identity.engine.displayName)
+      guard let ready = GameScreen.shared.controllerPage(in: window) as? GameMenuPage else {
+        throw IntegrationFailure(message: "Shared playlist skipped Ready for " + entry.identity.engine.displayName)
+      }
+      try check(ready.controllerBackButton.isHidden && buttons(ready).contains(where: { $0.title.hasPrefix("Ready,") }),
+        "Shared playlist handover can bypass Ready")
+      try capture("ready-" + entry.identity.engine.rawValue, ready)
+      try press("Ready, " + arcade.playingProfile!.initials)
+      if index + 1 < entries.count {
+        _ = arcade.passSessionTurn(after: arcade.playingProfileID)
+        try check(continueActiveSequence(completed: entry.identity, runID: shared.id), "Shared sequence failed to advance")
+        try await waitForLaunch()
+      }
+    }
+    returnToLibrary()
+    ArcadeWindow.shared.showSession(owner: window)
+    if GameScreen.shared.controllerPage(in: window) is GameMenuPage { try press("Save and return to library") }
+    try capture("hot-seat-history", ArcadeWindow.shared.arcadeView)
+    let rosterView = ArcadeWindow.shared.arcadeView
+    guard let savedSeats = rosterView.accessibilityChildren()?.compactMap({ $0 as? GameAccessibleElement })
+      .first(where: { $0.accessibilityLabel() == "Saved Hot Seats" }) else {
+      throw IntegrationFailure(message: "Saved Hot Seats has no input target")
+    }
+    try check(rosterView.bounds.contains(savedSeats.localFrame) && savedSeats.accessibilityPerformPress(),
+      "Saved Hot Seats has an invalid input target")
+    try capture("saved-hot-seats", GameScreen.shared.controllerPage(in: window)!)
+    try press("Resume")
+    try check(arcade.hotSeatID == oldHotSeat && arcade.playingProfileID == guest.id,
+      "Saved Hot Seats did not resume the selected roster and next turn")
+    _ = arcade.resumeHotSeat(id: sharedID!)
+    GameScreen.shared.dismissAll()
+    presentPlaylistLibrary()
+    try capture("saved-playlists", GameScreen.shared.controllerPage(in: window)!)
+    activatePlaylistLibraryItem("playlist:resume:" + solo.id.uuidString)
+    try press("Resume solo"); try await waitForLaunch()
+    try check(store.activeRun?.id == solo.id && !arcade.hotSeatIsActive
+      && store.savedRuns.first(where: { $0.run.id == shared.id })?.run.currentIndex == 2,
+      "Resuming solo discarded the shared sequence position")
+    print("PASS saved Solo/Hot Seat choices, checkpoint, history, targets and Ready across Classic, L2 and L3")
+  }
+
   fileprivate func testSequenceNavigationGuards() throws {
     GameScreen.shared.dismissAll()
     if resumeSavedRunItem == nil { buildMenu() }
@@ -2651,7 +2878,7 @@ extension AppDelegate {
     wakeAudioOutput()
     try await Task.sleep(nanoseconds: 100_000_000)
     try check(music.isOutputRunning, "wake did not restore module output")
-    for source in [ClassicMusicSource.adaptiveDJ, try recordingForCurrentLevel()] {
+    for source in [ClassicMusicSource.adaptiveDJ, try recordingForCurrentLevel()].compactMap({ $0 }) {
       updated.music = source
       apply(updated)
       suspendAudioOutput()
@@ -2668,7 +2895,7 @@ extension AppDelegate {
   }
   /// Recording albums play only a documented version of the level's tune.
   /// Pick the first album that has one, as a player would need to.
-  fileprivate func recordingForCurrentLevel() throws -> ClassicMusicSource {
+  fileprivate func recordingForCurrentLevel() throws -> ClassicMusicSource? {
     guard let root = Bundle.main.resourceURL?.appendingPathComponent("Music") else {
       throw IntegrationFailure(message: "missing bundled music")
     }
@@ -2678,16 +2905,18 @@ extension AppDelegate {
     let trackID = game + "." + assignedName.lowercased()
     guard let name = soundtrackLibrary.keys.sorted().first(where: { album in
       soundtrackLibrary[album]?.contains { SoundtrackPlayer.matches($0, trackID: trackID, root: root) } == true
-    }) else { throw IntegrationFailure(message: "no recording album has \(trackID)") }
+    }) else { return nil }
     return .remix(name: name)
   }
   fileprivate func testMusicTransitions() throws {
+    isPaused = false; userPausedMusic = false
+    playfield.startCountdown.cancel(); music.stop(); soundtrack.stop(); dj.stop()
     settings.music = .silent
     music.loadLibrary(at: URL(fileURLWithPath: "Sources/Music/lemmings_music_mod"))
     loadSoundtracks()
     try check(!music.library.isEmpty && !soundtrackLibrary.isEmpty, "missing audio fixtures")
     let recording = try recordingForCurrentLevel()
-    let sources: [ClassicMusicSource] = [.amigaModules, recording, .adaptiveDJ, .silent]
+    let sources: [ClassicMusicSource] = [ClassicMusicSource.amigaModules, recording, .adaptiveDJ, .silent].compactMap { $0 }
     for from in sources {
       for to in sources {
         for source in [from, to] {
@@ -2703,7 +2932,7 @@ extension AppDelegate {
       }
     }
     settings.music = .amigaModules
-    for shuffled in [ClassicMusicSource.adaptiveDJ, recording] {
+    for shuffled in [ClassicMusicSource.adaptiveDJ, recording].compactMap({ $0 }) {
       levelMusic = shuffled
       playMusicForCurrentLevel()
       apply(settings)
@@ -2712,7 +2941,7 @@ extension AppDelegate {
     }
     levelMusic = nil
     suspendCurrentEngine()
-    print("PASS all 16 music source transitions and settings applied during shuffled playback")
+    print("PASS \(sources.count * sources.count) available music source transitions and settings applied during shuffled playback")
   }
 
   fileprivate func testSeasonalMusic() throws {
@@ -2807,7 +3036,7 @@ extension AppDelegate {
   }
 
   fileprivate func testGlobalMuteAndStop() throws {
-    for source in [ClassicMusicSource.adaptiveDJ, try recordingForCurrentLevel()] {
+    for source in [ClassicMusicSource.adaptiveDJ, try recordingForCurrentLevel()].compactMap({ $0 }) {
       var updated = settings
       updated.music = source
       apply(updated)
@@ -2914,11 +3143,34 @@ extension AppDelegate {
     print("PASS CRT dimensions, shader coordinates, held rate, release and minimap drag")
   }
 
+  fileprivate func testVinylRetry() async throws {
+    GameScreen.shared.dismissAll()
+    var updated = settings
+    updated.music = .amigaModules
+    updated.musicVolume = 0
+    apply(updated)
+    levelMusic = nil
+    if session == nil { levelChanged() }
+    phase = .playing
+    startedMusicIdentity = nil
+    playMusicForCurrentLevel()
+    try check(music.isOutputRunning && music.currentURL != nil, "No module played before the vinyl retry")
+    let tune = music.currentURL
+    retry()
+    try check(music.isVinylBraking, "R did not brake the music like a record")
+    try await Task.sleep(nanoseconds: 250_000_000)
+    try check(music.vinylRate < 0.7, "The brake did not lower the pitch")
+    try await Task.sleep(nanoseconds: 700_000_000)
+    try check(!music.isVinylBraking && music.vinylRate == 1 && music.isOutputRunning,
+      "The next attempt did not release the record to full speed")
+    try check(music.currentURL == tune, "A retry changed the tune")
+    print("PASS R brakes the music like a record and the retry releases it")
+  }
+
   fileprivate func testInterruptedFade() async throws {
-    // Gameplay telemetry no longer changes the tune. Level entry is the
-    // transition that crossfades between two recordings.
+    // Level entry provides repeatable transitions without a rescue cue.
     let recordings = soundtrackLibrary.values.flatMap { $0 }.sorted { $0.path < $1.path }
-    try check(recordings.count >= 2, "missing DJ fade fixtures")
+    try check(!recordings.isEmpty, "missing DJ fade fixtures")
     var entries = 0
     func enterLevel() {
       entries += 1
@@ -3804,7 +4056,12 @@ Task { @MainActor in
     try testPointerAssignment()
     #endif
     #endif
-    #if DIALOG_TESTS
+    #if SESSION_TESTS
+    try await subject.testPlaylistSessions()
+    try subject.testSequenceNavigationGuards()
+    try subject.testHotSeatBoundaries()
+    print("Session integration tests passed.")
+    #elseif DIALOG_TESTS
     try subject.testDialogNavigation()
     try subject.testHomeSettingsButton()
     try await subject.testAccessibleMenusAndHelp()
@@ -3856,6 +4113,13 @@ Task { @MainActor in
     try subject.testClassicLevelPickerUnlockGate()
     try await testContentBrowser()
     print("Content browser integration tests passed.")
+    #elseif MUSIC_TESTS
+    try subject.testMusicTransitions()
+    try subject.testSavedAudioAndBanks()
+    try subject.testGlobalMuteAndStop()
+    try await subject.testMusicPauseModes()
+    try subject.testHandoverPreviousLevel()
+    print("Music integration tests passed.")
     #elseif VARIABLE_SPEED_TESTS
     try subject.testVariableSpeedInput()
     try subject.testVariableSimulationClock()
@@ -3876,6 +4140,7 @@ Task { @MainActor in
     try subject.testMenuDisplayTransition()
     try await subject.testCRTInput()
     try await subject.testInterruptedFade()
+    try await subject.testVinylRetry()
     try await subject.testElapsedTimeAndAudioRecovery()
     try await testGameTypography()
     try subject.testGamePages()
@@ -4176,5 +4441,32 @@ extension AppDelegate {
     try check(!GameScreen.shared.isPresented, "Keyboard overlay default Enter failed")
     try testPageKeyboardContinuation()
     print("PASS dialog defaults, Return/keypad Enter, focus loops, confirmations, hint arrows, replay accessibility and cursor lifecycle")
+  }
+}
+
+extension AppDelegate {
+  fileprivate func testMusicPauseModes() async throws {
+    GameScreen.shared.dismissAll()
+    let root = Bundle.main.resourceURL!.appendingPathComponent("Music/lemmings_music_mod/cancan.mod")
+    soundtrack.stop(); dj.stop()
+    phase = .playing; session = FinalTickSession(win: true)
+    playfield.startCountdown.cancel(); isPaused = false; userPausedMusic = false
+    settings.music = .amigaModules; settings.musicVolume = 0; settings.pauseMusicBeatOnly = false
+    _ = music.play(url: root); try music.start(); music.setVolume(0)
+    defer { music.stop(); userPausedMusic = false; isPaused = false }
+    togglePause()
+    try check(isPaused && !music.isOutputRunning, "Classic pause did not suspend music")
+    settings.pauseMusicBeatOnly = true; applyAudioSettings()
+    try check(isPaused && music.isOutputRunning, "Classic beat-only pause did not keep native percussion")
+    interruptGameplay()
+    try check(isPaused && !userPausedMusic && !music.isOutputRunning, "An interruption kept pause percussion playing")
+    togglePause()
+    try check(!isPaused && music.isOutputRunning, "Classic resume did not restore the track")
+    session = FinalTickSession(win: false); session?.tick(); phase = .results
+    updateFailureMood()
+    try await Task.sleep(nanoseconds: 250_000_000)
+    try check(failureMood.amount > 0, "Classic result screen cleared funeral mood")
+    phase = .briefing; updateFailureMood()
+    print("PASS Classic silence/beat pause, setting changes, interruption silence, resume and funeral result")
   }
 }

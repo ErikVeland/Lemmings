@@ -9,6 +9,8 @@ The catalogue now offers **495 playable versions**, including 304 chip renders, 
 - [Conversion and validation](MusicConversion.md): formats, checks, hashes and loop limitations.
 - [Archive recovery](VengefulChipRecovery.md): recovered links whose audio availability is unverified.
 
+Version 1.6 bundles 54 essential versions by default; 441 more are packaged as 18 optional libraries. See [Music update 1.6](MusicUpdate1.6.md) for the exact scope and download status.
+
 The audit below is historical. Its missing-platform and uninstalled-remix statements describe Build 44, not the expanded source folder. The current audit supersedes those claims. Source presence does not establish release inclusion or correct runtime assignment.
 
 ## Build 44 audit

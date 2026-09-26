@@ -17,7 +17,7 @@ import NxlvKit
     var profilesAreWritable: Bool { canWrite }
 
     /// The house rule and shared campaign survive app restarts.
-    enum TurnPolicy: String, CaseIterable, Sendable {
+    enum TurnPolicy: String, CaseIterable, Codable, Sendable {
         case everyLevel = "Every level", atFirstFail = "At first fail"
         var title: String { rawValue }
         var detail: String {
@@ -31,7 +31,10 @@ import NxlvKit
     private let defaults: UserDefaults
     var turnPolicy: TurnPolicy {
         get { defaults.string(forKey: Self.turnPolicyKey).flatMap(TurnPolicy.init(rawValue:)) ?? .everyLevel }
-        set { defaults.set(newValue.rawValue, forKey: Self.turnPolicyKey) }
+        set {
+            defaults.set(newValue.rawValue, forKey: Self.turnPolicyKey)
+            persistSession()
+        }
     }
 
     private(set) var sessionProfileIDs: [String] = []
@@ -54,12 +57,14 @@ import NxlvKit
         if let turn = sessionTurnID, !sessionProfileIDs.contains(turn) { sessionTurnID = nil }
         if sessionProfileIDs.count < 2 { endHotSeat() } else { startHotSeatProgress() }
     }
-    private struct SavedHotSeat: Codable {
+    struct SavedHotSeat: Codable {
         let id: String
         let host: String
         let players: [String]
         let turn: String?
         let active: Bool
+        var savedAt: Date?
+        var policy: TurnPolicy?
     }
     private(set) var hotSeatID: String?
     private var hotSeatHostID: String?
@@ -69,8 +74,36 @@ import NxlvKit
     }
     private func persistSession(active: Bool = true) {
         guard let id = hotSeatID, let host = hotSeatHostID else { return }
-        let saved = SavedHotSeat(id: id, host: host, players: sessionProfileIDs, turn: sessionTurnID, active: active)
+        let saved = SavedHotSeat(id: id, host: host, players: sessionProfileIDs, turn: sessionTurnID,
+            active: active, savedAt: Date(), policy: turnPolicy)
         if let data = try? JSONEncoder().encode(saved) { defaults.set(data, forKey: sessionKey(host: host)) }
+        var history = savedSessionHistory(host: host).filter { $0.id != id }
+        history.insert(saved, at: 0)
+        if let data = try? JSONEncoder().encode(history) {
+            defaults.set(data, forKey: sessionKey(host: host) + ".history")
+        }
+    }
+    private func savedSessionHistory(host: String) -> [SavedHotSeat] {
+        guard let data = defaults.data(forKey: sessionKey(host: host) + ".history") else { return [] }
+        return (try? JSONDecoder().decode([SavedHotSeat].self, from: data)) ?? []
+    }
+    var savedHotSeats: [SavedHotSeat] {
+        savedSessionHistory(host: records.activeProfileID).filter {
+            $0.id != hotSeatID && $0.host == records.activeProfileID
+                && $0.players.count >= 2 && Set($0.players).count == $0.players.count
+                && $0.players.contains($0.host) && $0.players.allSatisfy { records.profile($0) != nil }
+        }
+    }
+    @discardableResult func resumeHotSeat(id: String) -> Bool {
+        guard canWrite, storageError == nil else { return false }
+        if id == hotSeatID { return true }
+        guard let saved = savedHotSeats.first(where: { $0.id == id }) else { return false }
+        persistSession(active: false)
+        hotSeatID = saved.id; hotSeatHostID = saved.host; sessionProfileIDs = saved.players
+        sessionTurnID = saved.turn.flatMap { saved.players.contains($0) ? $0 : nil }
+        if let policy = saved.policy { turnPolicy = policy }
+        persistSession()
+        return true
     }
     private func restoreSession(activeOnly: Bool) -> Bool {
         let host = records.activeProfileID
@@ -81,6 +114,7 @@ import NxlvKit
         guard Set(players).count == players.count, players.count >= 2, players.contains(host) else { return false }
         hotSeatID = saved.id; hotSeatHostID = host; sessionProfileIDs = players
         sessionTurnID = saved.turn.flatMap { players.contains($0) ? $0 : nil }
+        if let policy = saved.policy { turnPolicy = policy }
         return true
     }
     func endHotSeat() {
@@ -104,6 +138,7 @@ import NxlvKit
     /// A fresh namespace starts every shared campaign at the beginning.
     @discardableResult func startNewHotSeat() -> Bool {
         guard hotSeatIsActive, canWrite, storageError == nil else { return false }
+        persistSession(active: false)
         hotSeatID = UUID().uuidString
         hotSeatHostID = records.activeProfileID
         sessionTurnID = nil
@@ -229,11 +264,16 @@ import NxlvKit
         }
         // A shared campaign hosted by this player can no longer be resumed.
         let hosted = sessionKey(host: id)
+        var sessions = savedSessionHistory(host: id)
         if let data = defaults.data(forKey: hosted), let saved = try? JSONDecoder().decode(SavedHotSeat.self, from: data) {
+            sessions.append(saved)
+        }
+        for saved in sessions {
             let shared = "HotSeat.\(saved.id)."
             for key in defaults.dictionaryRepresentation().keys where key.hasPrefix(shared) { defaults.removeObject(forKey: key) }
         }
         defaults.removeObject(forKey: hosted)
+        defaults.removeObject(forKey: hosted + ".history")
     }
     func progressKey(_ key: String) -> String {
         // A hot seat campaign is nobody's solo campaign, so it never reads or

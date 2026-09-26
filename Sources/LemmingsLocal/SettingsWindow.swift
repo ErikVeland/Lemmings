@@ -25,6 +25,7 @@ import NxlvKit
   private var soundSlider: NSSlider?
   private var graphicsShuffleCheck: NSButton?
   private var musicShuffleCheck: NSButton?
+  private var pauseBeatCheck: NSButton?
   private var sequelArtworkCheck: NSButton?
   private var pointerCaptureCheck: NSButton?
   private var modernControlsCheck: NSButton?
@@ -447,18 +448,24 @@ import NxlvKit
     let mixes = GameCheckButton(title: "Include L2, L3 and other ports", target: self, action: #selector(djSoundtracksChanged))
     mixes.state = settings.djIncludesOtherSoundtracks ? .on : .off
     djSoundtracksCheck = mixes
-    let folders = GameButton(title: "Open Soundtrack Folder", target: self, action: #selector(openSoundtrackFolder))
+    let folders = GameButton(title: "Download soundtracks", target: self, action: #selector(openMusicLibraries))
+    let beat = GameCheckButton(title: "Keep the rhythm", target: self, action: #selector(pauseBeatChanged))
+    beat.setAccessibilityLabel("Pause: Keep the rhythm")
+    beat.state = settings.pauseMusicBeatOnly ? .on : .off
+    beat.toolTip = "On pause, play only isolated percussion. Tracks without a rhythm part stop."
+    pauseBeatCheck = beat
     return pane([
       ("Music", music),
       ("Music Style", style),
       ("Music Volume", musicLevel),
       ("Shuffle", shuffle),
       ("DJ Mix", mixes),
+      ("Pause", beat),
       ("", folders),
       ("Sound Effects", sound),
       ("Effects Volume", soundLevel),
       ("Bottom Falls", falls),
-    ])
+    ], spacing: 14)
   }
 
   /// Refills the source lists and reselects what is chosen.
@@ -490,6 +497,7 @@ import NxlvKit
       at: ClassicMusicStyle.allCases.firstIndex(of: settings.musicStyle) ?? 0)
     graphicsShuffleCheck?.state = settings.shuffleGraphics ? .on : .off
     musicShuffleCheck?.state = settings.shuffleMusic ? .on : .off
+    pauseBeatCheck?.state = settings.pauseMusicBeatOnly ? .on : .off
     pointerCaptureCheck?.state = settings.confinePointer ? .on : .off
     modernControlsCheck?.state = settings.modernControlsEnabled ? .on : .off
     variableSpeedCheck?.state = settings.variableSpeedEnabled ? .on : .off
@@ -559,6 +567,7 @@ import NxlvKit
     applied.favorBuilders = settings.favorBuilders
     applied.experiencePreset = settings.experiencePreset
     applied.musicStyle = settings.musicStyle
+    applied.pauseMusicBeatOnly = settings.pauseMusicBeatOnly
     applied.pauseOnInterruption = settings.pauseOnInterruption
     applied.unlockAllClassicLevels = settings.unlockAllClassicLevels
     applied.controllerEnabled = settings.controllerEnabled
@@ -645,12 +654,19 @@ import NxlvKit
     changed()
   }
 
+  @objc private func pauseBeatChanged(_ sender: NSButton) {
+    settings.pauseMusicBeatOnly = sender.state == .on
+    changed()
+  }
+
   @objc private func openSoundtrackFolder() {
     guard let root = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first else { return }
     let folder = root.appendingPathComponent("Ultimate Lemmings/Soundtracks", isDirectory: true)
     do { try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true); NSWorkspace.shared.open(folder) }
     catch { GameScreen.shared.message("Soundtrack folder", detail: error.localizedDescription) }
   }
+
+  @objc private func openMusicLibraries() { MusicLibraryWindow.shared.show() }
 
   @objc private func pointerCaptureChanged(_ sender: NSButton) {
     settings.confinePointer = sender.state == .on

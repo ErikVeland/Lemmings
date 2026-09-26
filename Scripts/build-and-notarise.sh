@@ -151,6 +151,7 @@ current_short="${current_head[1,7]}"
 
 release_base="${RELEASE_BASE:-}"
 [[ -n "$release_base" || "$version" != 1.5 ]] || release_base="v1.2-build41"
+[[ -n "$release_base" || "$version" != 1.6 ]] || release_base="v1.5.0"
 [[ -n "$release_base" ]] || fail "Set RELEASE_BASE to the previous release commit or tag."
 git -C "$project_dir" rev-parse --verify "$release_base^{commit}" >/dev/null 2>&1 ||
   fail "RELEASE_BASE does not resolve to a commit: $release_base"
@@ -325,7 +326,13 @@ zsh "$project_dir/Scripts/run-launch-smoke-test.sh" "$standard_app" ||
 mkdir -p "$updates_dir"
 update_zip="$updates_dir/UltimateLemmings-$version-build$build_number.zip"
 ditto -c -k --sequesterRsrc --keepParent "$standard_app" "$update_zip"
-cp "$release_notes" "$updates_dir/UltimateLemmings-$version-build$build_number.txt"
+# GitHub rejects release assets of 2 GiB or more.
+update_bytes="$(stat -f %z "$update_zip")"
+(( update_bytes < 2147483648 )) ||
+  fail "The update archive is $update_bytes bytes. GitHub release assets must be below 2 GiB."
+# The update alert shows these notes. Sparkle reads HTML beside the archive.
+python3 "$project_dir/Tools/ReleaseReadiness/update_notes.py" "$release_notes" \
+  "$updates_dir/UltimateLemmings-$version-build$build_number.html"
 release_tag="${RELEASE_TAG:-v${version}.0}"
 download_url_prefix="${DOWNLOAD_URL_PREFIX:-https://github.com/ErikVeland/Lemmings/releases/download/$release_tag/}"
 [[ "$download_url_prefix" == https://* ]] || fail "DOWNLOAD_URL_PREFIX must use HTTPS."

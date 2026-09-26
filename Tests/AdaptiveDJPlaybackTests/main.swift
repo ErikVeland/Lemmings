@@ -34,6 +34,57 @@ extension MusicFileDeck {
     } }
     try file.write(from: tone)
   }
+  // Distinct tones prove the pause path removes the full mix and plays only
+  // its rhythm asset, rather than filtering or merely turning it down.
+  let rhythmURL = FileManager.default.temporaryDirectory.appendingPathComponent("drum-tone-\(UUID().uuidString).wav")
+  defer { try? FileManager.default.removeItem(at: rhythmURL) }
+  do {
+    let file = try AVAudioFile(forWriting: rhythmURL, settings: format.settings)
+    let buffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: 44100)!
+    buffer.frameLength = 44100
+    for channel in 0..<2 { for frame in 0..<44100 {
+      buffer.floatChannelData![channel][frame] = Float(sin(Double(frame) * 2 * .pi * 880 / 44100)) * 0.25
+    } }
+    try file.write(from: buffer)
+  }
+  do {
+    let deck = MusicFileDeck(url: url, rhythmURL: rhythmURL)!
+    deck.reverb.wetDryMix = 0; deck.equaliser.bypass = true
+    try deck.engine.enableManualRenderingMode(.offline, format: format, maximumFrameCount: 1024)
+    deck.play()
+    RunLoop.current.run(until: Date().addingTimeInterval(0.15))
+    deck.suspendOutput(rhythmOnly: true)
+    RunLoop.current.run(until: Date().addingTimeInterval(0.12))
+    try require(deck.musicLayer.outputVolume == 0 && deck.rhythmLayer.outputVolume == 1,
+      "Rhythm pause left the full recording audible")
+    let buffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: 1024)!
+    var samples: [Float] = []
+    for _ in 0..<32 {
+      let rendered = try deck.engine.renderOffline(1024, to: buffer)
+      try require(rendered == .success, "Rhythm did not render")
+      samples.append(contentsOf: UnsafeBufferPointer(start: buffer.floatChannelData![0], count: Int(buffer.frameLength)))
+    }
+    let crossings = (8193..<samples.count).filter { samples[$0-1] <= 0 && samples[$0] > 0 }.count
+    let hz = Double(crossings) * 44100 / Double(samples.count - 8192)
+    try require(abs(hz - 880) < 6, "Pause played the melody instead of the rhythm asset: \(hz) Hz")
+    deck.suspendOutput()
+    RunLoop.current.run(until: Date().addingTimeInterval(0.06))
+    try require(deck.varispeed.rate < 0.8 && deck.sourceMixer.outputVolume < 0.9 && deck.sourceMixer.outputVolume > 0,
+      "Vinyl stop did not reduce both speed and gain")
+    try require(deck.musicLayer.outputVolume == 0, "Vinyl stop restored a paused melody")
+    deck.resumeOutput()
+    RunLoop.current.run(until: Date().addingTimeInterval(0.25))
+    try require(deck.engine.isRunning && deck.player.isPlaying && deck.varispeed.rate == 1,
+      "A cancelled vinyl stop paused resumed output")
+    try require(deck.musicLayer.outputVolume == 1 && deck.rhythmLayer.outputVolume == 0 && !deck.rhythmPlayer.isPlaying,
+      "Resume retained a second rhythm voice")
+    deck.suspendOutput()
+    RunLoop.current.run(until: Date().addingTimeInterval(0.25))
+    try require(!deck.engine.isRunning && !deck.player.isPlaying && deck.sourceMixer.outputVolume == 0,
+      "Vinyl stop did not reach silence")
+    deck.stop()
+  }
+  print("PASS isolated recording rhythm, vinyl rate/gain ramp, silence and rapid resume")
   for tier in GameplaySpeed.steps {
     let deck = MusicFileDeck(url: url)!
     let ratio = GameplayMusicPitch.ratio(for: tier)
@@ -68,6 +119,7 @@ extension MusicFileDeck {
   for rate: Float in [0.5, 1, 1.04] {
     let deck = MusicFileDeck(url: url)!
     deck.playbackRate = rate
+    if rate > 1 { deck.setMixTempoRatio(Double(rate)) }
     try deck.engine.enableManualRenderingMode(.offline, format: format, maximumFrameCount: 1024)
     try deck.engine.start()
     deck.player.scheduleFile(deck.file, at: nil)
@@ -75,12 +127,19 @@ extension MusicFileDeck {
     let buffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: 1024)!
     for _ in 0..<8 { _ = try deck.engine.renderOffline(1024, to: buffer) }
     let start = deck.sourceSeconds
+    var matchedSamples: [Float] = []
     for _ in 0..<16 {
       let status = try deck.engine.renderOffline(1024, to: buffer)
       try require(status == .success, "Tempo graph failed to render")
+      matchedSamples.append(contentsOf: UnsafeBufferPointer(start: buffer.floatChannelData![0], count: Int(buffer.frameLength)))
     }
     let observedRate = (deck.sourceSeconds - start) * 44100 / (16 * 1024)
     try require(abs(observedRate - Double(rate)) < 0.02, "Source position did not follow the rendered tempo: \(observedRate) vs \(rate)")
+    if rate > 1 {
+      let crossings = (1..<matchedSamples.count).filter { matchedSamples[$0 - 1] <= 0 && matchedSamples[$0] > 0 }.count
+      let hz = Double(crossings) * 44100 / Double(matchedSamples.count)
+      try require(abs(hz - 440) < 6, "Tempo matching changed musical pitch: \(hz) Hz")
+    }
     deck.stop()
   }
   print("PASS rendered music pitch at every tier, unchanged tempo and hard pitch cap")
@@ -95,6 +154,7 @@ extension ModuleMusicPlayer {
   }
 }
 extension MusicFileDeck {
+  fileprivate var rhythmIsPlayingForTest: Bool { rhythmBuffer != nil && rhythmPlayer.isPlaying }
   fileprivate func checkSpeedPitch(_ cents: Double) throws {
     try require(speedPitch.pitch == Float(cents), "Recording missed the speed pitch")
   }
@@ -161,6 +221,12 @@ extension DJDeck {
     for channel in 0..<2 { silence.floatChannelData![channel].initialize(repeating: 0, count: 4410) }
     try file.write(from: silence)
   }
+  let oneShot = MusicFileDeck(url: loopURL, repeats: false, rhythmURL: loopURL)!
+  oneShot.volume = 0; oneShot.play(); oneShot.suspendOutput(rhythmOnly: true)
+  RunLoop.current.run(until: Date().addingTimeInterval(0.4))
+  try require(!oneShot.isPlaying && !oneShot.rhythmIsPlayingForTest, "A completed one-shot left its rhythm loop playing")
+  oneShot.stop()
+  print("PASS one-shot rhythm stops with its cue")
   guard let recording = MusicFileDeck(url: loopURL) else { throw Failure(description: "Streaming fixture did not open") }
   recording.volume = 0; recording.play()
   RunLoop.current.run(until: Date().addingTimeInterval(0.8))
@@ -239,14 +305,15 @@ extension DJDeck {
   player.load(soundtracks: soundtracks, catalogueRoot: root)
   try require(player.currentTrackName == opening, "Danger or library refresh changed level music")
 
-  // Meeting the quota must not interrupt a level that is still active.
+  // The rescue target allows one transition. Completion must not repeat it.
   var rescued = quiet
   rescued.savedCount = 5
   player.updateTelemetry(rescued)
-  try require(player.currentTrackName == opening, "Quota changed active level music")
+  try require(player.currentURL != assigned, "Quota did not start the next version")
+  let celebration = player.currentURL
   rescued.didWin = true; rescued.isComplete = true
   player.updateTelemetry(rescued)
-  try require(player.currentTrackName == opening, "Classic win stole a finale from another game")
+  try require(player.currentURL == celebration, "Completed win repeated the quota transition")
   let nextLevel = root.appendingPathComponent("lemmings_music_mod/doggie.mod")
   player.startLevel(url: nextLevel, identity: "level-two")
   RunLoop.current.run(until: Date().addingTimeInterval(1.2))
@@ -254,7 +321,7 @@ extension DJDeck {
 
   // And it moves once, not on every frame that follows.
   let afterCue = player.currentTrackName
-  for saved in 2...9 {
+  for saved in 2...4 {
     var later = quiet
     later.savedCount = saved
     player.updateTelemetry(later)
@@ -268,8 +335,7 @@ extension DJDeck {
   try require(player.playingDeckCount == 2, "both decks were not audible mid-crossfade")
   let crossfadingTrack = player.currentTrackName
 
-  // Suspending pauses both fading decks without retiring either - resuming
-  // should pick the crossfade back up exactly where it left off.
+  // Suspending silences both decks. Resume replans against the current bar grid.
   player.suspendOutput()
   try require(player.playingDeckCount == 0, "suspending output did not pause both fading decks")
 
@@ -284,7 +350,7 @@ extension DJDeck {
 
   player.resumeOutput()
   try require(
-    player.isCrossfading && player.playingDeckCount == 2 && player.currentTrackName == crossfadingTrack,
+    player.isCrossfading && (1...2).contains(player.playingDeckCount) && player.currentTrackName == crossfadingTrack,
     "resuming did not continue the original crossfade cleanly - a stray start() call left "
       + "\(player.playingDeckCount) deck(s) playing on \"\(player.currentTrackName)\" instead")
 
@@ -324,9 +390,7 @@ extension DJDeck {
   let sms = root.appendingPathComponent("Lemmings-SMS/Lemmings - 02 - Can-Can (Galop Infernal).m4a")
   player.startLevel(url: sms, identity: "sms-result")
   player.updateTelemetry(.init(didWin: false, isComplete: true))
-  try require(player.currentURL?.lastPathComponent == "Lemmings - 20 - Failure.m4a", "SMS failure routing wrong")
-  RunLoop.current.run(until: Date().addingTimeInterval(6))
-  try require(!player.isPlaying, "SMS failure cue looped indefinitely")
+  try require(player.currentURL == sms, "A failure replaced the track instead of preserving funeral mood")
   player.stop()
   print("PASS assigned tracks, score journeys in all engines, protected cues, retry stability and suspended crossfade")
 }

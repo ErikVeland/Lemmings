@@ -8,6 +8,13 @@ import AVFoundation
 final class MusicFileDeck {
   private let engine = AVAudioEngine()
   private let player = AVAudioPlayerNode()
+  private let rhythmPlayer = AVAudioPlayerNode()
+  private let musicLayer = AVAudioMixerNode()
+  private let rhythmLayer = AVAudioMixerNode()
+  private let inputMixer = AVAudioMixerNode()
+  private var rhythmBuffer: AVAudioPCMBuffer?
+  private var rhythmMode = false
+  private var rhythmTask: Task<Void, Never>?
   private let varispeed = AVAudioUnitVarispeed()
   private let speedPitch = AVAudioUnitTimePitch()
   private let equaliser = AVAudioUnitEQ(numberOfBands: 3)
@@ -24,19 +31,24 @@ final class MusicFileDeck {
   private var resumeAfterSuspend = false
   private var started = false
   private var masterVolume: Float = 1
+  private var requestedRate: Float = 1
+  private var gameplayPitch: Double = 0
+  private var mixPitch: Double = 0
   private var muted = false
 
   var volume: Float {
     get { masterVolume }
     set {
       masterVolume = min(1, max(0, newValue))
-      outputMixer.outputVolume = muted ? 0 : masterVolume
+      applyOutputVolume()
     }
   }
 
+  private var vinyl: (rate: Float, gain: Float) = (1, 1)
+
   var playbackRate: Float {
-    get { varispeed.rate }
-    set { varispeed.rate = min(1.08, max(0.5, newValue)) }
+    get { requestedRate }
+    set { requestedRate = min(1.08, max(0.5, newValue)); applyRate() }
   }
 
   /// The player's timeline excludes pauses and advances in source samples.
@@ -46,12 +58,29 @@ final class MusicFileDeck {
     return Double(time.sampleTime) / time.sampleRate
   }
 
+  /// Turntable speed and level for a vinyl stop or start. Varispeed cannot
+  /// go below a quarter speed, so the gain carries the last of the brake.
+  func setVinyl(rate: Double, gain: Double) {
+    vinyl = (Float(rate), Float(min(1, max(0, gain))))
+    applyRate()
+    applyOutputVolume()
+  }
+
+  private func applyRate() { if !outputSuspended { varispeed.rate = max(0.25, requestedRate * vinyl.rate) } }
+  private func applyOutputVolume() { outputMixer.outputVolume = muted ? 0 : masterVolume * vinyl.gain }
+
   var isPlaying: Bool { started && !outputSuspended && player.isPlaying }
 
-  init?(url: URL, repeats: Bool = true) {
+  init?(url: URL, repeats: Bool = true, rhythmURL: URL? = nil) {
     guard let file = try? AVAudioFile(forReading: url), file.length > 0 else { return nil }
     self.file = file
     self.repeats = repeats
+    if let rhythmURL, let drumFile = try? AVAudioFile(forReading: rhythmURL),
+      drumFile.length > 0, Double(drumFile.length) / drumFile.processingFormat.sampleRate <= 13,
+      drumFile.processingFormat.sampleRate == file.processingFormat.sampleRate,
+      drumFile.processingFormat.channelCount == file.processingFormat.channelCount,
+      let buffer = AVAudioPCMBuffer(pcmFormat: drumFile.processingFormat, frameCapacity: AVAudioFrameCount(drumFile.length)),
+      (try? drumFile.read(into: buffer)) != nil { rhythmBuffer = buffer }
 
     let bands = equaliser.bands
     bands[0].filterType = .lowShelf
@@ -70,6 +99,8 @@ final class MusicFileDeck {
     reverb.wetDryMix = 5
 
     engine.attach(player)
+    engine.attach(musicLayer)
+    engine.attach(inputMixer)
     engine.attach(varispeed)
     engine.attach(speedPitch)
     engine.attach(equaliser)
@@ -79,7 +110,15 @@ final class MusicFileDeck {
     engine.attach(outputMixer)
 
     let format = file.processingFormat
-    engine.connect(player, to: varispeed, format: format)
+    engine.connect(player, to: musicLayer, format: format)
+    engine.connect(musicLayer, to: inputMixer, fromBus: 0, toBus: 0, format: format)
+    if rhythmBuffer != nil {
+      engine.attach(rhythmPlayer); engine.attach(rhythmLayer)
+      engine.connect(rhythmPlayer, to: rhythmLayer, format: format)
+      engine.connect(rhythmLayer, to: inputMixer, fromBus: 0, toBus: 1, format: format)
+      rhythmLayer.outputVolume = 0
+    }
+    engine.connect(inputMixer, to: varispeed, format: format)
     engine.connect(varispeed, to: speedPitch, format: format)
     engine.connect(speedPitch, to: equaliser, format: format)
     engine.connect(equaliser, to: sourceMixer, format: format)
@@ -94,16 +133,23 @@ final class MusicFileDeck {
     spatialMixer.sourceMode = .pointSource
     spatialMixer.position = AVAudio3DPoint(x: 0, y: 0, z: -1)
     sourceMixer.outputVolume = 1
-    outputMixer.outputVolume = masterVolume
+    applyOutputVolume()
   }
 
   func setMixBass(_ gain: Float) { equaliser.bands[0].gain = 1.5 + gain; equaliser.bands[0].bypass = false }
 
   func setSpeedPitch(_ cents: Double) {
-    speedPitch.pitch = Float(min(1200 * log2(1.5), max(0, cents)))
+    gameplayPitch = min(1200 * log2(1.5), max(0, cents))
+    speedPitch.pitch = Float(gameplayPitch + mixPitch)
+  }
+
+  func setMixTempoRatio(_ ratio: Double) {
+    mixPitch = -1200 * log2(min(1.08, max(0.92, ratio)))
+    speedPitch.pitch = Float(gameplayPitch + mixPitch)
   }
 
   func play() {
+    setRhythmMode(false)
     fadeTask?.cancel()
     fadeTask = nil
     outputSuspended = false
@@ -124,7 +170,8 @@ final class MusicFileDeck {
       guard let self else { return }
       for step in 1...8 {
         guard !Task.isCancelled, !self.outputSuspended else { return }
-        try? await Task.sleep(nanoseconds: 15_000_000)
+        do { try await Task.sleep(nanoseconds: 15_000_000) } catch { return }
+        guard !Task.isCancelled, !self.outputSuspended else { return }
         self.sourceMixer.outputVolume = Float(step) / 8
       }
       self.fadeTask = nil
@@ -141,13 +188,23 @@ final class MusicFileDeck {
         } else {
           self.started = false
           self.player.stop()
+          self.rhythmTask?.cancel()
+          if self.rhythmBuffer != nil { self.rhythmPlayer.stop() }
+          self.rhythmMode = false
+          self.musicLayer.outputVolume = 1
+          self.rhythmLayer.outputVolume = 0
         }
       }
     }
   }
 
-  /// Cuts the source quickly, then leaves a short room tail before pausing.
-  func suspendOutput() {
+  /// A short vinyl stop lowers source speed and gain together.
+  func suspendOutput(rhythmOnly: Bool = false) {
+    if rhythmOnly, rhythmBuffer != nil, started {
+      if outputSuspended { resumeOutput() }
+      setRhythmMode(true)
+      return
+    }
     guard started, !outputSuspended else { return }
     outputSuspended = true
     resumeAfterSuspend = player.isPlaying
@@ -155,24 +212,31 @@ final class MusicFileDeck {
     fadeTask = Task { @MainActor [weak self] in
       guard let self else { return }
       let start = self.sourceMixer.outputVolume
-      for step in 1...3 {
+      let began = ProcessInfo.processInfo.systemUptime
+      while true {
         guard !Task.isCancelled else { return }
-        try? await Task.sleep(nanoseconds: 8_000_000)
-        self.sourceMixer.outputVolume = start * Float(3 - step) / 3
+        do { try await Task.sleep(nanoseconds: 8_000_000) } catch { return }
+        guard !Task.isCancelled, self.outputSuspended else { return }
+        let remaining = Float(max(0, 1 - (ProcessInfo.processInfo.systemUptime - began) / 0.16))
+        self.varispeed.rate = max(0.25, self.requestedRate * self.vinyl.rate * remaining * remaining)
+        self.sourceMixer.outputVolume = start * remaining
+        if remaining == 0 { break }
       }
       guard !Task.isCancelled, self.outputSuspended else { return }
       if self.resumeAfterSuspend { self.player.pause() }
-      try? await Task.sleep(nanoseconds: 140_000_000)
       guard !Task.isCancelled, self.outputSuspended else { return }
       self.engine.pause()
+      self.varispeed.rate = max(0.25, self.requestedRate * self.vinyl.rate)
     }
   }
 
   func resumeOutput() {
+    setRhythmMode(false)
     guard outputSuspended else { return }
     fadeTask?.cancel()
     fadeTask = nil
     outputSuspended = false
+    applyRate()
     sourceMixer.outputVolume = 1
     do { if !engine.isRunning { try engine.start() } }
     catch { return }
@@ -182,10 +246,13 @@ final class MusicFileDeck {
 
   func setMuted(_ muted: Bool) {
     self.muted = muted
-    outputMixer.outputVolume = muted ? 0 : masterVolume
+    applyOutputVolume()
   }
 
   func stop() {
+    rhythmTask?.cancel(); rhythmTask = nil; rhythmMode = false
+    if rhythmBuffer != nil { rhythmPlayer.stop() }
+    musicLayer.outputVolume = 1; rhythmLayer.outputVolume = 0
     fadeTask?.cancel()
     fadeTask = nil
     outputSuspended = false
@@ -195,5 +262,26 @@ final class MusicFileDeck {
     player.stop()
     engine.stop()
     started = false
+  }
+
+  private func setRhythmMode(_ enabled: Bool) {
+    guard let rhythmBuffer, enabled != rhythmMode else { return }
+    rhythmMode = enabled
+    rhythmTask?.cancel()
+    if enabled && !rhythmPlayer.isPlaying {
+      rhythmPlayer.scheduleBuffer(rhythmBuffer, at: nil, options: .loops)
+      rhythmPlayer.play()
+    }
+    let start = rhythmLayer.outputVolume
+    rhythmTask = Task { @MainActor [weak self] in
+      guard let self else { return }
+      for step in 1...10 {
+        do { try await Task.sleep(nanoseconds: 8_000_000) } catch { return }
+        let gain = start + ((enabled ? 1 : 0) - start) * Float(step) / 10
+        self.musicLayer.outputVolume = 1 - gain
+        self.rhythmLayer.outputVolume = gain
+      }
+      if !enabled { self.rhythmPlayer.stop() }
+    }
   }
 }

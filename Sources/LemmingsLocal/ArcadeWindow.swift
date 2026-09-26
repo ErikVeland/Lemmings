@@ -18,12 +18,14 @@ import NxlvKit
         GameScreen.shared.present(arcadeView, owner: owner)
     }
     func showResult(_ report: ArcadeReport, owner: NSWindow? = nil, retry: @escaping () -> Void,
-                    next: @escaping () -> Void, replay: @escaping (Bool) -> Void, continueTitle: String = "Next level", background: CGImage? = nil, rewardVolume: Double = 0) {
+                    next: @escaping () -> Void, replay: @escaping (Bool) -> Void, continueTitle: String = "Next level", background: CGImage? = nil, rewardVolume: Double = 0,
+                    continueHandlesHandover: Bool = false) {
         arcadeView.rewardVolume = rewardVolume
         arcadeView.mode = .result; arcadeView.report = report; arcadeView.level = report.run.level
         arcadeView.assisted = report.run.assisted; arcadeView.board = .rescue; arcadeView.trolleyBoard = .mostSaved
         arcadeView.boardScope = .level
         arcadeView.continueTitle = continueTitle; arcadeView.background = background
+        arcadeView.continueHandlesHandover = continueHandlesHandover
         arcadeView.onRetry = { [weak self] in self?.close(); retry() }
         arcadeView.onContinue = { [weak self] in self?.close(); next() }
         arcadeView.onReplay = replay
@@ -52,6 +54,33 @@ import NxlvKit
         ArcadeStore.shared.prepareHotSeat()
         arcadeView.mode = .hotSeat
         present(owner: owner)
+    }
+    func showSavedSessions(owner: NSWindow?) {
+        let store = ArcadeStore.shared
+        let sessions = store.savedHotSeats
+        let page = GameMenuPage(title: "Saved Hot Seats")
+        let carousel = LevelCoverFlowView(frame: page.body.bounds)
+        carousel.autoresizingMask = [.width, .height]
+        page.body.addSubview(carousel)
+        let resume = page.addPrimaryAction("Resume") { [weak self, weak page, weak carousel] in
+            guard let self, let page, let id = carousel?.selectedItem?.id else { return }
+            guard store === ArcadeStore.shared, store.resumeHotSeat(id: id) else {
+                GameScreen.shared.message("Session not resumed", detail: store.storageError ?? "This session is no longer available.")
+                return
+            }
+            GameScreen.shared.dismiss(page)
+            self.finishSession?()
+            self.arcadeView.needsDisplay = true
+        }
+        resume.isEnabled = !sessions.isEmpty
+        carousel.configure(items: sessions.map { saved in
+            LevelCoverFlowItem(id: saved.id, title: saved.players.compactMap { store.records.profile($0)?.initials }.joined(separator: " + "),
+                subtitle: "Next turn: " + (store.records.profile(saved.turn ?? saved.host)?.initials ?? "LEM"),
+                detail: saved.savedAt.map { $0.formatted(date: .abbreviated, time: .shortened) } ?? "Shared campaign")
+        }, reduceMotion: NSWorkspace.shared.accessibilityDisplayShouldReduceMotion)
+        carousel.onStart = { [weak resume] _ in resume?.performClick(nil) }
+        page.onBack = { [weak page] in if let page { GameScreen.shared.dismiss(page) } }
+        GameScreen.shared.present(page, owner: owner, focus: carousel)
     }
     func showProfiles(canSwitch: Bool, owner: NSWindow? = nil, beforeSwitch: @escaping () -> Void, afterSwitch: @escaping () -> Void, background: CGImage? = nil) {
         arcadeView.background = background
@@ -118,6 +147,7 @@ import NxlvKit
     var onReplay: ((Bool) -> Void)?
     var onClose: (() -> Void)?
     var continueTitle = "Next level"
+    var continueHandlesHandover = false
     var cleared: Bool { report?.run.qualifies == true }
     var nextSessionPlayer: ArcadeProfile? { ArcadeStore.shared.nextSessionProfile(after: player.id) }
     /// Every level hands over after a clear too. At first fail keeps the winner in.
@@ -130,7 +160,7 @@ import NxlvKit
         if cleared { return handsOverAfterClear.map { "\(continueTitle): \($0.initials)" } ?? continueTitle }
         return nextSessionPlayer.map { "Retry as \($0.initials)" } ?? "Try again"
     }
-    private func showHandover(_ next: ArcadeProfile, owner: NSWindow?) {
+    func showHandover(_ next: ArcadeProfile, owner: NSWindow?) {
         guard let owner else { return }
         let page = GameMenuPage(title: "\(next.initials)'s turn", subtitle: "PASS THE CONTROLS")
         page.controllerBackButton.isHidden = true
@@ -149,9 +179,10 @@ import NxlvKit
     }
     func continueAsNextProfile() {
         let next = handsOverAfterClear, owner = window
+        let handlesHandover = continueHandlesHandover
         if next != nil, !ArcadeStore.shared.passSessionTurn(after: player.id) { needsDisplay = true; return }
         onContinue?()
-        if let next { showHandover(next, owner: owner) }
+        if let next, !handlesHandover { showHandover(next, owner: owner) }
     }
     func performDefaultResultAction() { if cleared { continueAsNextProfile() } else if nextSessionPlayer != nil { retryAsNextProfile() } else { onRetry?() } }
     private(set) var selectedProfileID: String?
@@ -572,11 +603,16 @@ import NxlvKit
                 text("Choose a second player", 64, y, 992, palette: .green)
             }
         }
-        button("Return to solo", CGRect(x: 64, y: 634, width: 270, height: 48)) { [weak self] in self?.confirmReturnToSolo() }
+        button("Return to solo", CGRect(x: 64, y: 634, width: 220, height: 48)) { [weak self] in self?.confirmReturnToSolo() }
         if store.hotSeatIsActive {
-            button("New Hot Seat", CGRect(x: 350, y: 634, width: 360, height: 48)) { [weak self] in self?.confirmNewHotSeat() }
+            button("New Hot Seat", CGRect(x: 300, y: 634, width: 236, height: 48)) { [weak self] in self?.confirmNewHotSeat() }
         }
-        button("Choose a game", CGRect(x: 736, y: 634, width: 320, height: 48), primary: !needsPlayer,
+        if !store.savedHotSeats.isEmpty {
+            button("Saved Hot Seats", CGRect(x: 552, y: 634, width: 240, height: 48)) { [weak self] in
+                ArcadeWindow.shared.showSavedSessions(owner: self?.window)
+            }
+        }
+        button("Choose a game", CGRect(x: 808, y: 634, width: 248, height: 48), primary: !needsPlayer,
                enabled: store.hotSeatIsActive) { [weak self] in self?.closeSession() }
         setAccessibilityLabel("Hot seat. " + store.sessionProfiles.map(\.initials).joined(separator: ", ")
             + ". Pass the turn \(store.turnPolicy.title). \(store.turnPolicy.detail)"
@@ -601,7 +637,7 @@ import NxlvKit
     }
     func confirmNewHotSeat() {
         GameScreen.shared.confirm("Start a new Hot Seat?",
-            detail: "Start every shared campaign from the beginning with these players. This replaces the Hot Seat you can resume. Solo progress, scores and records stay saved.",
+            detail: "Start with these players. Your current Hot Seat will stay saved.",
             actionTitle: "Start new Hot Seat", owner: window) { [weak self] in
                 guard ArcadeStore.shared.startNewHotSeat() else {
                     GameScreen.shared.message("Cannot start Hot Seat", detail: ArcadeStore.shared.storageError

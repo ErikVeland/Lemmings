@@ -46,6 +46,48 @@ func require(_ condition: @autoclosure () -> Bool, _ message: String) throws {
         // Expected: the newer file stays authoritative.
     }
 
+    let legacyFile = directory.appendingPathComponent("legacy-v1.json")
+    var legacy = try JSONSerialization.jsonObject(with: Data(contentsOf: file)) as! [String: Any]
+    legacy["version"] = 1
+    legacy.removeValue(forKey: "savedRuns"); legacy.removeValue(forKey: "activeRunHotSeatID")
+    try JSONSerialization.data(withJSONObject: legacy).write(to: legacyFile)
+    let migrated = try LevelPlaylistStore(file: legacyFile)
+    try require(migrated.activeRun == firstRun && migrated.savedRuns.isEmpty,
+        "A version 1 solo run did not load")
+    try migrated.selectPlaylist(id: first.id)
+    let upgraded = try JSONSerialization.jsonObject(with: Data(contentsOf: legacyFile)) as! [String: Any]
+    try require(upgraded["version"] as? Int == 2,
+        "Session history was left writable by an older app version")
+
+    let sessionsFile = directory.appendingPathComponent("sessions.json")
+    let sessions = try LevelPlaylistStore(file: sessionsFile)
+    try sessions.add(first)
+    try sessions.add(second)
+    try sessions.setActiveRun(firstRun)
+    let sharedRun = try LevelSequenceRun.playlist(second, pool: pool)
+    try sessions.startRun(sharedRun, hotSeatID: "shared-session")
+    let reopenedSessions = try LevelPlaylistStore(file: sessionsFile)
+    try require(reopenedSessions.activeRunHotSeatID == "shared-session"
+        && reopenedSessions.savedRuns.first?.run == firstRun
+        && reopenedSessions.savedRuns.first?.hotSeatID == nil,
+        "Starting Hot Seat did not save the previous solo sequence")
+    try reopenedSessions.resumeRun(id: firstRun.id)
+    try require(reopenedSessions.activeRun == firstRun && reopenedSessions.activeRunHotSeatID == nil
+        && reopenedSessions.savedRuns.first?.run == sharedRun
+        && reopenedSessions.savedRuns.first?.hotSeatID == "shared-session",
+        "Resuming solo lost the shared sequence or its owner")
+    let staleSessions = try LevelPlaylistStore(file: sessionsFile)
+    try reopenedSessions.resumeRun(id: sharedRun.id)
+    do {
+        try staleSessions.startRun(sharedRun, hotSeatID: "other-session")
+        throw SequelDataError.invalid("A stale session writer replaced saved runs")
+    } catch LevelPlaylistStore.Failure.changedOnDisk {}
+    try require(staleSessions.activeRun == firstRun && staleSessions.activeRunHotSeatID == nil,
+        "A failed session save changed in-memory ownership")
+    try reopenedSessions.removePlaylist(id: first.id)
+    try require(reopenedSessions.savedRuns.isEmpty && reopenedSessions.activeRun == sharedRun,
+        "Deleting a playlist retained its archived run or removed another session")
+
     let restored = try LevelPlaylistStore(file: file)
     try require(restored.playlists == [first, second]
         && restored.selectedPlaylistID == second.id
@@ -118,7 +160,7 @@ func require(_ condition: @autoclosure () -> Bool, _ message: String) throws {
     let unsupportedStore = try LevelPlaylistStore(file: unsupportedFile)
     try unsupportedStore.add(first)
     var object = try JSONSerialization.jsonObject(with: Data(contentsOf: unsupportedFile)) as! [String: Any]
-    object["version"] = 2
+    object["version"] = 3
     object.removeValue(forKey: "playlists")
     try JSONSerialization.data(withJSONObject: object).write(to: unsupportedFile, options: .atomic)
     do {
@@ -302,6 +344,7 @@ func testSkillAccounting() throws {
         windowNumber: window.windowNumber, context: nil, eventNumber: 0, clickCount: 1, pressure: 1)!)
     try require(store.records.activeProfile.initials == "XYZ" && before == 0 && after == 0 && closed == 0
         && store.storageError == nil, "Retry did not save the edited initials in place")
+    try shot("profiles-saved")
     key("\r", code: 36)
     try require(closed == 1 && before == 0, "Done did not close the players page without switching")
     view.canSwitch = false; view.selectProfile(store.records.profile(legacy)!)
@@ -402,6 +445,18 @@ func testSkillAccounting() throws {
     let fresh = ArcadeStore(file: directory.appendingPathComponent("records.json"), bundledProofs: nil)
     try require(fresh.hotSeatID == store.hotSeatID && fresh.playingProfileID == host,
         "Relaunch returned to the replaced Hot Seat")
+    let freshID = store.hotSeatID!
+    store.turnPolicy = .everyLevel
+    try require(store.savedHotSeats.contains(where: { $0.id == previousID }),
+        "The previous Hot Seat was not available to resume")
+    try require(store.resumeHotSeat(id: previousID!) && store.progressKey("campaign") == sharedKey
+        && store.playingProfileID == friend.id && store.turnPolicy == .atFirstFail,
+        "Resuming a saved Hot Seat lost progress, roster, turn or house rule")
+    let resumedHistory = ArcadeStore(file: directory.appendingPathComponent("records.json"), bundledProofs: nil)
+    try require(resumedHistory.hotSeatID == previousID
+        && resumedHistory.savedHotSeats.contains(where: { $0.id == freshID }),
+        "Session history did not survive relaunch")
+    try require(store.resumeHotSeat(id: freshID), "Could not resume the new Hot Seat")
     UserDefaults.standard.removeObject(forKey: sharedKey)
     store.turnPolicy = .everyLevel
     store.toggleSessionProfile("missing")
@@ -529,7 +584,11 @@ func testSkillAccounting() throws {
     key("r"); key("o"); key("b")
     try require(store.records.profile(bob!.id)?.initials == "ROB" && ArcadeStore(file: records, bundledProofs: nil, checkpoints: checkpoints)
         .records.profile(bob!.id)?.initials == "ROB", "Edited initials were not saved automatically")
-    key("", code: 124)
+    try shot("edit-player")
+    let nextPortrait = (bob!.portrait + 1) % 8
+    let portraitButton = view.accessibilityChildren()?.compactMap { $0 as? GameAccessibleElement }
+        .first { $0.accessibilityLabel() == "Portrait: " + ArcadeProfile.portraitNames[nextPortrait] }
+    try require(portraitButton?.accessibilityPerformPress() == true, "The next portrait has no input target")
     try require(store.records.profile(bob!.id)?.portrait == (bob!.portrait + 1) % 8, "Portrait change was not saved automatically")
     try require(view.profilePrimaryTitle == "Play as ROB", "Other player did not offer Play as")
     try shot("edit-player")

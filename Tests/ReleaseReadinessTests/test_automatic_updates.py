@@ -14,7 +14,7 @@ from automatic_updates import validate_appcast, validate_info_plist, validate_re
 class AutomaticUpdateTests(unittest.TestCase):
     def test_current_repository_inputs_are_valid(self):
         version, build, items = validate_repository(ROOT, allow_empty=True, allow_stale_release=True)
-        self.assertEqual(version, "1.5")
+        self.assertEqual(version, "1.6")
         self.assertTrue(build.isdigit())
         self.assertGreaterEqual(items, 0)
 

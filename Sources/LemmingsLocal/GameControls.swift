@@ -30,11 +30,11 @@ import AppKit
     }
     override var isFlipped: Bool { true }
     override func draw(_ dirtyRect: NSRect) {
-        let selected = state == .on || isHighlighted
+        let selected = state == .on || state == .mixed || isHighlighted
         let socket = isCheck ? CGRect(x: 0, y: bounds.midY - 10, width: 20, height: 20) : bounds
         GameStoneButton.draw(socket, selected: selected, pixel: 1)
         if isCheck && selected {
-            GamePixelText.draw("X", in: socket.insetBy(dx: 5, dy: 5))
+            GamePixelText.draw(state == .mixed ? "-" : "X", in: socket.insetBy(dx: 5, dy: 5))
         }
         let caption = isCheck ? CGRect(x: 28, y: 0, width: bounds.width - 28, height: bounds.height) : bounds.insetBy(dx: 8, dy: 2)
         GameControlText.draw(title, in: caption, alignment: isCheck ? .left : .center, enabled: isEnabled, role: selected ? .heading : .body)

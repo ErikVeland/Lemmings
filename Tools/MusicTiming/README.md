@@ -49,3 +49,30 @@ cp Resources/Music/timing.json Sources/Music/timing.json
 Use `--limit` only with a separate `--output` path for experiments. Partial catalogues must not replace shipping metadata.
 Do not change a review flag to stable without correcting and checking the beat and downbeat timestamps.
 Replacing only the displayed BPM does not repair a wrong bar phase or a half/double-time interpretation.
+
+## Rhythm-only pause
+
+`rhythm.py` creates two-bar drum loops for recordings with stable measured bars.
+Native modules isolate percussion in the player and need no extra audio assets.
+The recorded run produced 148 loops; unstable grids and clips with little drum
+energy keep the vinyl-stop fallback. These are automated estimates, not manually
+verified stems. Separation can leave some melodic bleed.
+
+```sh
+.build/music-analysis-venv/bin/python -m pip install -r Tools/MusicTiming/requirements-rhythm.txt
+.build/music-analysis-venv/bin/python Tools/MusicTiming/rhythm.py
+cp Resources/Music/rhythm.json Sources/Music/rhythm.json
+```
+
+The first run downloads the official [Demucs](https://github.com/facebookresearch/demucs)
+`htdemucs` model. CPU inference uses four threads, no random shifts and 10% overlap.
+Each clip includes one second of context on either side. The tool crops two
+measured bars, applies 5 ms edge fades, and writes 16-bit ALAC at the source
+recording's sample rate and channel count. Playback never runs the model.
+
+The manifest records source/model/output hashes, selected bars and drum energy.
+Cached clips live in `.build/music-rhythm`; derived audio lives in the ignored
+`Sources/Music/.rhythm` folder. Bump the cache recipe's `schemaVersion` when
+changing the separation or encoding recipe. A changed timing grid, source or
+model already invalidates the corresponding cached loop. `--limit` writes a
+separate partial manifest and cannot replace shipping metadata.

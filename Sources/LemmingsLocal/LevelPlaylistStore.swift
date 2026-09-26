@@ -4,6 +4,11 @@ import NxlvKit
 
 /// Stores one player's playlists and active level sequence outside campaign progress.
 @MainActor final class LevelPlaylistStore {
+    struct SavedRun: Codable {
+        let run: LevelSequenceRun
+        let hotSeatID: String?
+        var l2Progress: [String: Data]?
+    }
     enum Failure: Error, LocalizedError {
         case unsupportedVersion
         case changedOnDisk
@@ -34,13 +39,16 @@ import NxlvKit
     }
 
     private struct Document: Codable {
-        static let currentVersion = 1
+        static let currentVersion = 2
         static let maximumPlaylists = 200
 
-        let version: Int
+        var version: Int
         var playlists: [LevelPlaylist]
         var selectedPlaylistID: UUID?
         var activeRun: LevelSequenceRun?
+        var activeRunHotSeatID: String?
+        var activeRunL2Progress: [String: Data]?
+        var savedRuns: [SavedRun]?
 
         init(
             playlists: [LevelPlaylist] = [],
@@ -54,7 +62,7 @@ import NxlvKit
         }
 
         func validated() throws -> Self {
-            guard version == Self.currentVersion else { throw Failure.unsupportedVersion }
+            guard (1...Self.currentVersion).contains(version) else { throw Failure.unsupportedVersion }
             guard playlists.count <= Self.maximumPlaylists else {
                 throw Failure.tooManyPlaylists
             }
@@ -68,6 +76,18 @@ import NxlvKit
             if case let .playlist(playlistID)? = activeRun?.source,
                !playlists.contains(where: { $0.id == playlistID }) {
                 throw Failure.missingPlaylist
+            }
+            let saved = savedRuns ?? []
+            let ids = saved.map { $0.run.id } + (activeRun.map { [$0.id] } ?? [])
+            guard Set(ids).count == ids.count,
+                  activeRun != nil || activeRunHotSeatID == nil,
+                  activeRunHotSeatID?.isEmpty != true,
+                  saved.allSatisfy({ $0.hotSeatID?.isEmpty != true }) else {
+                throw Failure.invalidDocument
+            }
+            for value in saved {
+                if case let .playlist(id) = value.run.source,
+                   !playlists.contains(where: { $0.id == id }) { throw Failure.missingPlaylist }
             }
             return self
         }
@@ -86,6 +106,9 @@ import NxlvKit
     var playlists: [LevelPlaylist] { document.playlists }
     var selectedPlaylistID: UUID? { document.selectedPlaylistID }
     var activeRun: LevelSequenceRun? { document.activeRun }
+    var activeRunHotSeatID: String? { document.activeRunHotSeatID }
+    var activeRunL2Progress: [String: Data] { document.activeRunL2Progress ?? [:] }
+    var savedRuns: [SavedRun] { document.savedRuns ?? [] }
 
     static func fileURL(profileID: String) -> URL {
         let root = FileManager.default.urls(
@@ -173,6 +196,12 @@ import NxlvKit
         if case let .playlist(activePlaylistID)? = document.activeRun?.source,
            activePlaylistID == id {
             document.activeRun = nil
+            document.activeRunHotSeatID = nil
+            document.activeRunL2Progress = nil
+        }
+        document.savedRuns = savedRuns.filter {
+            if case let .playlist(playlistID) = $0.run.source { return playlistID != id }
+            return true
         }
         do { try save() } catch { document = previous; throw error }
     }
@@ -192,8 +221,33 @@ import NxlvKit
             throw Failure.missingPlaylist
         }
         let previous = document
+        if run?.id != document.activeRun?.id {
+            document.activeRunHotSeatID = nil
+            document.activeRunL2Progress = nil
+        }
         document.activeRun = run
         do { try save() } catch { document = previous; throw error }
+    }
+
+    /// Keep the previous sequence and its turn ownership when starting another session.
+    func startRun(_ run: LevelSequenceRun, hotSeatID: String?, l2Progress: [String: Data]? = nil) throws {
+        if case let .playlist(id) = run.source, playlist(id: id) == nil { throw Failure.missingPlaylist }
+        let previous = document
+        var saved = savedRuns.filter { $0.run.id != run.id }
+        if let active = document.activeRun, active.id != run.id {
+            saved.insert(SavedRun(run: active, hotSeatID: document.activeRunHotSeatID,
+                l2Progress: document.activeRunL2Progress), at: 0)
+        }
+        document.savedRuns = saved
+        document.activeRun = run
+        document.activeRunHotSeatID = hotSeatID
+        document.activeRunL2Progress = l2Progress
+        do { try save() } catch { document = previous; throw error }
+    }
+
+    func resumeRun(id: UUID) throws {
+        guard let saved = savedRuns.first(where: { $0.run.id == id }) else { throw Failure.invalidDocument }
+        try startRun(saved.run, hotSeatID: saved.hotSeatID, l2Progress: saved.l2Progress)
     }
 
     @discardableResult func advanceActiveRun() throws -> Bool {
@@ -208,7 +262,7 @@ import NxlvKit
     private func decode(_ data: Data) throws -> Document {
         let decoder = JSONDecoder()
         let header = try decoder.decode(VersionHeader.self, from: data)
-        guard header.version == Document.currentVersion else {
+        guard (1...Document.currentVersion).contains(header.version) else {
             throw Failure.unsupportedVersion
         }
         return try decoder.decode(Document.self, from: data).validated()
@@ -273,6 +327,7 @@ import NxlvKit
 
     private func save() throws {
         try withLock {
+            document.version = Document.currentVersion
             let encoder = JSONEncoder()
             encoder.outputFormatting = [.sortedKeys]
             let data = try encoder.encode(try document.validated())

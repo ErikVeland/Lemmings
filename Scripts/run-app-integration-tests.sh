@@ -34,6 +34,8 @@ rsync -a --delete "$sparkle_framework" "$test_app/Contents/Frameworks/"
 resource_app="${LEMMINGS_TEST_APP:-$project_dir/.build/local/Ultimate Lemmings.app}"
 ln -sfn "$resource_app/Contents/Resources" "$test_app/Contents/Resources"
 test_flags=()
+if [[ "${TEST_SCOPE:-all}" == sessions ]]; then test_flags+=(-D SESSION_TESTS); fi
+if [[ "${TEST_SCOPE:-all}" == music ]]; then test_flags+=(-D MUSIC_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == dialogs ]]; then test_flags+=(-D DIALOG_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == transport ]]; then test_flags+=(-D TRANSPORT_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == loading-latency ]]; then test_flags+=(-D LOADING_LATENCY_TESTS); fi

@@ -104,6 +104,7 @@ import NxlvKit
     private var pendingTool: Int?
     private var selected = 0
     private var paused = true
+    private var userPausedMusic = false
     private var assignmentFocus = AssignmentFocus()
     private var gameplayKeyboard: GameplayKeyboard?
     func showKeyboardCommands() { gameplayKeyboard?.showHelp() }
@@ -268,7 +269,7 @@ import NxlvKit
             else if let index = SkillShortcuts(names: Array(Lemmings3Panel.names.prefix(5))).index(for: key, current: self.selected, modern: self.audioSettings.modernControlsEnabled) { self.pendingTool = nil; self.canvas.directionPoint = nil; self.selected = index; self.refresh() }
             else if key == " " { self.togglePause() }
             else if key == "." { self.singleStep() }
-            else if key.lowercased() == "r" { self.restart() }
+            else if key.lowercased() == "r" { self.retryLevel() }
 
             else if key == "\u{1b}" { self.showGameMenu() }
         }
@@ -382,7 +383,7 @@ import NxlvKit
         keyboard.controllerTapSpeed = { [weak self] in self?.audioSettings.controllerTapSpeed ?? true }
         keyboard.controllerMappings = { [weak self] in self?.audioSettings.controllerMappings ?? [:] }
         keyboard.controllerSwapSticks = { [weak self] in self?.audioSettings.controllerSwapSticks ?? false }
-        keyboard.retry = { [weak self] in self?.restart() }
+        keyboard.retry = { [weak self] in self?.retryLevel() }
         keyboard.rewind = { [weak self] in _ = self?.rewind(seconds: 2) }
         keyboard.controllerRewindHeld = { [weak self] held in
             guard let self else { return }
@@ -522,6 +523,7 @@ import NxlvKit
         saveCheckpoint(immediately: true)
         guard !game.isComplete else { return }
         paused = true; accumulator = 0; lastTime = ProcessInfo.processInfo.systemUptime
+        userPausedMusic = false; music.suspendOutput(); dj.suspendOutput()
         canvas.capturePointer(active: false)
         refresh()
     }
@@ -541,10 +543,28 @@ import NxlvKit
         warningSound.suspendOutput()
         warningSound.silence()
     }
-    func resumeAudioOutput() throws { try music.resumeOutput(); dj.resumeOutput(); try warningSound.resumeOutput() }
+    func resumeAudioOutput() throws {
+        try warningSound.resumeOutput()
+        if paused && !canvas.startCountdown.isActive && !game.isComplete {
+            music.suspendOutput(rhythmOnly: userPausedMusic && audioSettings.pauseMusicBeatOnly)
+            dj.suspendOutput(rhythmOnly: userPausedMusic && audioSettings.pauseMusicBeatOnly)
+        } else { try music.resumeOutput(); dj.resumeOutput() }
+    }
+    private func updateUserMusicPause() {
+        userPausedMusic = paused
+        if paused {
+            music.suspendOutput(rhythmOnly: audioSettings.pauseMusicBeatOnly)
+            dj.suspendOutput(rhythmOnly: audioSettings.pauseMusicBeatOnly)
+        } else {
+            try? music.resumeOutput(); dj.resumeOutput()
+        }
+    }
     func setAudioSettings(_ settings: ClassicSettings, muted: Bool) {
         let sourceChanged = audioSettings.music != settings.music
         audioSettings = settings
+        if let root = Bundle.main.resourceURL?.appendingPathComponent("Music") {
+            dj.load(soundtracks: SoundtrackPlayer.djSoundtracks(at: root), catalogueRoot: root)
+        }
         speedControl.variableEnabled = settings.modernControlsEnabled && settings.variableSpeedEnabled
         warningSound.setMuted(muted || settings.sound == .silent)
         warningSound.setVolume(settings.soundVolume)
@@ -559,6 +579,7 @@ import NxlvKit
             music.setEnhancements(settings.musicStyle == .modern ? .modern : .faithful)
         }
         if sourceChanged { playLevelMusic() }
+        if userPausedMusic && paused { updateUserMusicPause() }
         canvas.confinePointer = settings.confinePointer
         canvas.reduceMotion = settings.reduceMotion
         canvas.reduceFlashes = settings.reduceFlashes
@@ -614,14 +635,15 @@ import NxlvKit
 
     @objc private func togglePause() {
         if canvas.startCountdown.isActive {
-            canvas.startCountdown.cancel(); paused = true; accumulator = 0; refresh(); return
+            canvas.startCountdown.cancel(); paused = true; accumulator = 0; updateUserMusicPause(); refresh(); return
         }
         saveCheckpoint(immediately: true)
         let wasPaused = paused; paused.toggle(); accumulator = 0
+        updateUserMusicPause()
         if wasPaused { discardRewindOrigin() }
         refresh()
     }
-    @objc private func singleStep() { canvas.startCountdown.cancel(); paused = true; advanceTick(); refresh() }
+    @objc private func singleStep() { canvas.startCountdown.cancel(); paused = true; updateUserMusicPause(); advanceTick(); refresh() }
     private func beginContinuousRewind(advanceImmediately: Bool = true) -> Bool {
         guard game.tick > 0, !rewindHeld else { return false }
         captureRewindOrigin()
@@ -706,7 +728,7 @@ import NxlvKit
         rewindOriginState = nil; rewindOriginInputs = []
         pendingTool = nil; canvas.directionPoint = nil; assignmentFocus.rewind(to: origin.tick)
         canvas.assignmentHighlight.clear(); warningSound.silence()
-        paused = true; accumulator = 0; refresh(); saveCheckpoint(immediately: true)
+        paused = true; accumulator = 0; updateUserMusicPause(); refresh(); saveCheckpoint(immediately: true)
         return true
     }
     @discardableResult
@@ -727,6 +749,7 @@ import NxlvKit
         }
         recoveryInputs = Array(prefix)
         paused = true; accumulator = 0; pendingTool = nil; canvas.directionPoint = nil
+        updateUserMusicPause()
         assignmentFocus.rewind(to: target); canvas.assignmentHighlight.clear(); warningSound.silence(); warningSound.playRewindScrub()
         refresh(); saveCheckpoint(immediately: true)
         if !rewindHeld { setRewindAudioDucked(false) }
@@ -749,6 +772,7 @@ import NxlvKit
         }
         recoveryInputs = Array(prefix)
         paused = true; accumulator = 0; pendingTool = nil; canvas.directionPoint = nil
+        updateUserMusicPause()
         assignmentFocus.rewind(to: target); canvas.assignmentHighlight.clear(); warningSound.silence(); warningSound.playRewindScrub()
         refresh(); saveCheckpoint(immediately: true)
         if !forwardHeld { setRewindAudioDucked(false) }
@@ -780,6 +804,14 @@ import NxlvKit
                 guard let self else { return }
                 self.game.abort(); self.paused = true; self.accumulator = 0; self.refresh()
             }
+    }
+    /// A retry brakes the music like a record stopped by hand, then restarts.
+    private func retryLevel() {
+        music.vinylStop()
+        dj.vinylStop()
+        restart()
+        music.vinylRelease()
+        dj.vinylRelease()
     }
     @objc private func restart() {
         saveCheckpoint(immediately: true, waitForDisk: false)
@@ -893,8 +925,8 @@ import NxlvKit
     private func menuAction(_ row: Int) {
         if onSequenceContinue != nil {
             switch row {
-            case 0: canvas.menuRows = nil; paused = false; accumulator = 0; lastTime = ProcessInfo.processInfo.systemUptime; refresh()
-            case 1: restart()
+            case 0: canvas.menuRows = nil; paused = false; accumulator = 0; updateUserMusicPause(); lastTime = ProcessInfo.processInfo.systemUptime; refresh()
+            case 1: retryLevel()
             case 2: toggleArtwork(); rebuildMenu()
             case 3: showOriginalMovies()
             case 4: canvas.menuRows = nil; close()
@@ -904,8 +936,8 @@ import NxlvKit
             return
         }
         switch row {
-        case 0: canvas.menuRows = nil; paused = false; accumulator = 0; lastTime = ProcessInfo.processInfo.systemUptime; refresh()
-        case 1: restart()
+        case 0: canvas.menuRows = nil; paused = false; accumulator = 0; updateUserMusicPause(); lastTime = ProcessInfo.processInfo.systemUptime; refresh()
+        case 1: retryLevel()
         case 2: menuTribe = (menuTribe + 1) % 3; menuLevel = 0; rebuildMenu()
         case 3: menuLevel = (menuLevel + 29) % 30; rebuildMenu()
         case 4: menuLevel = (menuLevel + 1) % 30; rebuildMenu()
@@ -990,6 +1022,7 @@ import NxlvKit
                 level: arcadeLevel, previousID: previousAttemptID)
         }
         runMovie.begin(ticksPerSecond: Lemmings3Runtime.ticksPerSecond, title: "Lemmings 3 - \(campaign.tribe.title) \(campaign.index + 1)")
+        userPausedMusic = false; try? music.resumeOutput(); dj.resumeOutput()
         playLevelMusic()
         runMovie.onWillReview = { [weak self] in self?.suspendAudioOutput() }
         runMovie.onDidReview = { [weak self] in try? self?.resumeAudioOutput() }
@@ -1025,9 +1058,10 @@ import NxlvKit
             : ArcadeStore.shared.previewReport(for: run)
         guard let arcadeReport else { return }
         if recordsCampaignProgress { runMovie.preserveRecord(arcadeReport) }
-        ArcadeWindow.shared.showResult(arcadeReport, owner: window, retry: { [weak self] in self?.restart() },
+        ArcadeWindow.shared.showResult(arcadeReport, owner: window, retry: { [weak self] in self?.retryLevel() },
             next: { [weak self] in self?.continueArcadeResult() },
-            replay: { [weak self] save in self?.runMovie.review(save: save) }, continueTitle: resultContinueTitle, background: arcadeBackdrop, rewardVolume: warningSound.muted ? 0 : warningSound.volume)
+            replay: { [weak self] save in self?.runMovie.review(save: save) }, continueTitle: resultContinueTitle, background: arcadeBackdrop, rewardVolume: warningSound.muted ? 0 : warningSound.volume,
+            continueHandlesHandover: onSequenceContinue != nil)
     }
     private var resultContinueTitle: String {
         if onSequenceContinue != nil { return game.saved == 0 ? "Retry level" : sequenceContinueTitle }
@@ -1036,7 +1070,7 @@ import NxlvKit
     }
     private func continueArcadeResult() {
         if onSequenceContinue != nil, game.saved == 0 {
-            restart()
+            retryLevel()
             return
         }
         if onSequenceContinue?(game.saved > 0) == true { return }
@@ -1068,6 +1102,11 @@ import NxlvKit
         }
     }
 
+    func saveBeforeSessionChange() throws {
+        saveCheckpoint(immediately: true)
+        try recoveryStore.checkSaveSucceeded()
+    }
+
     private func advanceTick() {
         countdownWarning.reset(seconds: game.remainingSeconds)
         let previousSoundState = Lemmings3SoundCue.Snapshot(game)
@@ -1083,10 +1122,11 @@ import NxlvKit
         })
     }
     private func refresh() {
-        let impossible = canvas.menuRows == nil && !game.isComplete && FailureMoodDecision.isUnrecoverable(
+        let impossible = game.isComplete ? game.saved == 0 : canvas.menuRows == nil && FailureMoodDecision.isUnrecoverable(
             saved: game.saved, active: game.lemmings.filter(\.active).count,
             unreleased: game.reserve, required: 1)
         failureMood.set(active: impossible)
+        dj.updateTelemetry(.init(savedCount: game.saved, requiredCount: 1))
         let justCompleted = game.isComplete && !recorded
         if justCompleted { dj.updateTelemetry(.init(didWin: game.saved > 0, isComplete: true)) }
         if justCompleted {

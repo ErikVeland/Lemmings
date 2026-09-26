@@ -212,6 +212,7 @@ final class RunRecoveryStore: @unchecked Sendable {
     let directory: URL
     private let queue = DispatchQueue(label: "academy.glasscode.lemmings.checkpoints", qos: .utility)
     private var files: [UUID: RunRecoveryFile] = [:]
+    private var lastSaveError: Error?
     init(directory: URL? = nil) {
         if let directory { self.directory = directory }
         else if Bundle.main.bundleIdentifier?.contains("integration-tests") == true {
@@ -236,10 +237,17 @@ final class RunRecoveryStore: @unchecked Sendable {
     func save(_ recovery: RunRecovery, immediately: Bool = false,
               onError: @escaping @MainActor @Sendable (String) -> Void) {
         let operation: @Sendable () -> Void = { [self] in
-            do { try file(recovery.runID).save(recovery) }
-            catch { let message = error.localizedDescription; Task { @MainActor in onError(message) } }
+            do { try file(recovery.runID).save(recovery); lastSaveError = nil }
+            catch {
+                lastSaveError = error
+                let message = error.localizedDescription
+                Task { @MainActor in onError(message) }
+            }
         }
         if immediately { queue.sync(execute: operation) } else { queue.async(execute: operation) }
+    }
+    func checkSaveSucceeded() throws {
+        try queue.sync { if let lastSaveError { throw lastSaveError } }
     }
     func clear(_ id: UUID) throws { try queue.sync { try file(id).save(nil) } }
     /// Unrestorable runs leave Resume. Their bytes move to "Set aside" instead of being deleted.

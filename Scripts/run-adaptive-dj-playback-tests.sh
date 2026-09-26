@@ -12,9 +12,11 @@ swiftc -swift-version 6 -warnings-as-errors -target "$(uname -m)-apple-macos12.3
 
 # Keep signal checks beside the private audio graph, without exposing test APIs.
 cat "$project_dir/Sources/LemmingsLocal/AdaptiveDJPlayer.swift" \
+  "$project_dir/Sources/LemmingsLocal/MusicLibrary.swift" \
   "$project_dir/Sources/LemmingsLocal/MusicFileDeck.swift" \
   "$project_dir/Sources/LemmingsLocal/MusicPlayer.swift" \
   "$project_dir/Sources/LemmingsLocal/SoundtrackPlayer.swift" \
+  "$project_dir/Sources/LemmingsLocal/VinylRamp.swift" \
   "$project_dir/Tests/AdaptiveDJPlaybackTests/main.swift" > "$build_dir/main.swift"
 swiftc -swift-version 6 -warnings-as-errors -target "$(uname -m)-apple-macos12.3" \
   -I "$build_dir/modules" -L "$build_dir" -lNxlvKit \

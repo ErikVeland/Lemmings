@@ -82,6 +82,7 @@ import NxlvKit
     private var accumulator = 0.0
     private var frontTicks = 0
     private var paused = false
+    private var userPausedMusic = false
     private var assignmentFocus = AssignmentFocus()
     private var gameplayKeyboard: GameplayKeyboard?
     func showKeyboardCommands() { gameplayKeyboard?.showHelp() }
@@ -152,6 +153,7 @@ import NxlvKit
     private var level: Lemmings2Level { practiceLevel ?? campaign.current }
 
     init(root: URL, recovery: RunRecovery? = nil, selection: LevelSelection? = nil,
+         sequenceProgress: Data? = nil,
          expectedLevelID: String? = nil,
          expectedSourceRevision: String? = nil,
          recordsCampaignProgress: Bool = true,
@@ -185,7 +187,9 @@ import NxlvKit
         walker = (try? Data(contentsOf:root.appendingPathComponent("WALKER.DAT"))).flatMap { try? Lemmings2Walker(data:$0) }
         self.recordsCampaignProgress = recordsCampaignProgress
         progressKey = Self.campaignProgressKey(root: root)
-        if let data = UserDefaults.standard.data(forKey: progressKey),
+        if !recordsCampaignProgress, let sequenceProgress {
+            try campaign.restore(JSONDecoder().decode(Lemmings2Campaign.Progress.self, from: sequenceProgress))
+        } else if let data = UserDefaults.standard.data(forKey: progressKey),
            let saved = try? JSONDecoder().decode(Lemmings2Campaign.Progress.self, from: data) {
             try? campaign.restore(saved)
         }
@@ -350,7 +354,7 @@ import NxlvKit
         keyboard.controllerTapSpeed = { [weak self] in self?.audioSettings.controllerTapSpeed ?? true }
         keyboard.controllerMappings = { [weak self] in self?.audioSettings.controllerMappings ?? [:] }
         keyboard.controllerSwapSticks = { [weak self] in self?.audioSettings.controllerSwapSticks ?? false }
-        keyboard.retry = { [weak self] in self?.restart() }
+        keyboard.retry = { [weak self] in self?.retryLevel() }
         keyboard.rewind = { [weak self] in _ = self?.rewind(seconds: 2) }
         keyboard.controllerRewindHeld = { [weak self] held in
             guard let self else { return }
@@ -459,6 +463,7 @@ import NxlvKit
     private func interruptGameplay() {
         guard screen == .playing, game?.isComplete == false else { return }
         paused = true; accumulator = 0; lastTime = ProcessInfo.processInfo.systemUptime
+        userPausedMusic = false; music.suspendOutput(); dj.suspendOutput()
         canvas.capturePointer(active: false)
         releasePointerInput(); saveCheckpoint(immediately: true); sounds.silence(); refreshGame()
     }
@@ -482,7 +487,22 @@ import NxlvKit
     }
     func setMuted(_ muted: Bool) { setAudioSettings(audioSettings, muted: muted) }
     func suspendAudioOutput() { saveCheckpoint(immediately: true); music.suspendOutput(); dj.suspendOutput(); sounds.suspendOutput() }
-    func resumeAudioOutput() throws { try music.resumeOutput(); dj.resumeOutput(); try sounds.resumeOutput() }
+    func resumeAudioOutput() throws {
+        try sounds.resumeOutput()
+        if paused && !canvas.startCountdown.isActive && screen == .playing && game?.isComplete == false {
+            music.suspendOutput(rhythmOnly: userPausedMusic && audioSettings.pauseMusicBeatOnly)
+            dj.suspendOutput(rhythmOnly: userPausedMusic && audioSettings.pauseMusicBeatOnly)
+        } else { try music.resumeOutput(); dj.resumeOutput() }
+    }
+    private func updateUserMusicPause() {
+        userPausedMusic = paused
+        if paused {
+            music.suspendOutput(rhythmOnly: audioSettings.pauseMusicBeatOnly)
+            dj.suspendOutput(rhythmOnly: audioSettings.pauseMusicBeatOnly)
+        } else {
+            try? music.resumeOutput(); dj.resumeOutput()
+        }
+    }
     func setAudioSettings(_ settings: ClassicSettings, muted: Bool) {
         let musicChanged = audioSettings.music != settings.music
         audioSettings = settings
@@ -511,6 +531,7 @@ import NxlvKit
         }
         sounds.setMuted(muted || settings.sound == .silent || UserDefaults.standard.bool(forKey: progressKey + ".soundsMuted"))
         if musicChanged { if screen == .playing { playTribeMusic() } else { playMusic("Maintune") } }
+        if userPausedMusic && paused { updateUserMusicPause() }
     }
     static func savedCompletion(root: URL) -> Int {
         guard var campaign = try? Lemmings2Campaign(root: root) else { return 0 }
@@ -578,9 +599,18 @@ import NxlvKit
     }
 
     private static func campaignProgressKey(root: URL) -> String {
+        ArcadeStore.shared.progressKey("nativeL2Campaign.v1." + playlistProgressID(root: root))
+    }
+    static func playlistProgressID(root: URL) -> String {
         let bundled = (try? BundledGameResources.lemmings2())?.standardizedFileURL == root.standardizedFileURL
-        return ArcadeStore.shared.progressKey(
-            "nativeL2Campaign.v1." + (bundled ? "bundled" : root.standardizedFileURL.path))
+        return bundled ? "bundled" : root.standardizedFileURL.path
+    }
+    static func playlistProgress(root: URL) throws -> Data {
+        var campaign = try Lemmings2Campaign(root: root)
+        if let data = UserDefaults.standard.data(forKey: campaignProgressKey(root: root)) {
+            try campaign.restore(JSONDecoder().decode(Lemmings2Campaign.Progress.self, from: data))
+        }
+        return try JSONEncoder().encode(campaign.progress)
     }
     private func playMusic(_ name: String) {
         if audioSettings.music == .adaptiveDJ,
@@ -675,9 +705,18 @@ import NxlvKit
             sounds.silence()
             show(.playing)
             beginReplay()
+            userPausedMusic = false; try? music.resumeOutput(); dj.resumeOutput()
             playTribeMusic()
             refreshGame()
         } catch { explain(String(describing: error), returnTo: .briefing) }
+    }
+    /// A retry brakes the music like a record stopped by hand, then restarts.
+    private func retryLevel() {
+        music.vinylStop()
+        dj.vinylStop()
+        restart()
+        music.vinylRelease()
+        dj.vinylRelease()
     }
     private func restart() {
         saveCheckpoint(immediately: true, waitForDisk: false)
@@ -687,6 +726,7 @@ import NxlvKit
         beforeNuke = nil
         canvas.startCountdown.arm(); paused = true; speedControl.newLevel(); accumulator = 0; nukeGesture.reset(); sounds.silence()
         show(.playing)
+        userPausedMusic = false; try? music.resumeOutput(); dj.resumeOutput()
         playTribeMusic()
         refreshGame()
     }
@@ -742,7 +782,7 @@ import NxlvKit
     private func playFromMenu() {
         if let game, !game.isComplete,
            (practiceLevel != nil && game.configuration.isPractice) || game.configuration.levelFingerprint == level.fingerprint {
-            paused = false; show(.playing); playTribeMusic(); refreshGame()
+            paused = false; updateUserMusicPause(); show(.playing); playTribeMusic(); refreshGame()
         } else { prepareBriefing() }
     }
     private func panelAction(_ slot: Int, clickCount: Int = 1, time: TimeInterval = ProcessInfo.processInfo.systemUptime) {
@@ -758,9 +798,10 @@ import NxlvKit
             switch Lemmings2Control(rawValue: slot) {
             case .pause:
                 if canvas.startCountdown.isActive {
-                    canvas.startCountdown.cancel(); paused = true; accumulator = 0; refreshGame(); return
+                    canvas.startCountdown.cancel(); paused = true; accumulator = 0; updateUserMusicPause(); refreshGame(); return
                 }
                 let wasPaused = paused; paused.toggle(); accumulator = 0
+                updateUserMusicPause()
                 if wasPaused { discardRewindOrigin() }
             case .fan: fanSelected.toggle()
             case .nuke:
@@ -772,7 +813,7 @@ import NxlvKit
                 } else if nukeAction == .activate {
                     beforeNukeInputCount = recoveryInputs.count
                     beforeNuke = game; nukeCount += 1
-                    performRecoveryInput(.nuke); paused = false; fanSelected = false; accumulator = 0
+                    performRecoveryInput(.nuke); paused = false; updateUserMusicPause(); fanSelected = false; accumulator = 0
                 }
             case .fastForward: speedControl.tap(at: time, clickCount: clickCount)
             case nil: break
@@ -831,6 +872,14 @@ import NxlvKit
         } catch { message = error.localizedDescription }
     }
 
+    func saveBeforeSessionChange() throws {
+        guard recordsCampaignProgress else { return }
+        if let checkpoint = try makeCheckpoint(engine: RunRecovery.bundledEngine) {
+            recoveryStore.save(checkpoint, immediately: true) { [weak self] error in self?.message = error }
+        }
+        try recoveryStore.checkSaveSucceeded()
+    }
+
     private func assign(_ x: Int, _ y: Int) {
         nukeGesture.reset()
         if !fanSelected, performRecoveryInput(.machine(x:x,y:y)) { refreshGame(); return }
@@ -847,9 +896,9 @@ import NxlvKit
     }
     private func refreshGame() {
         guard let game else { return }
-        let impossible = screen == .playing && !game.isComplete && FailureMoodDecision.isUnrecoverable(
+        let impossible = (screen == .playing || screen == .results) && (game.isComplete ? !game.didWin : FailureMoodDecision.isUnrecoverable(
             saved: game.saved, active: game.lemmings.filter(\.active).count,
-            unreleased: game.configuration.total - game.released, required: 1)
+            unreleased: game.configuration.total - game.released, required: 1))
         failureMood.set(active: impossible)
         let turn = ArcadeStore.shared.hotSeatIsActive ? ArcadeStore.shared.records.profile(arcadeProfileID) : nil
         canvas.turnBadge.show(initials: turn?.initials, portrait: turn.flatMap { ArcadeWindow.shared.arcadeView.portraitImage($0.portrait) })
@@ -963,7 +1012,7 @@ import NxlvKit
             sounds.play(game.drainSoundEvents())
             canvas.flashExplosions(game)
             self.game = game; refreshGame(); captureReplayFrame()
-            dj.updateTelemetry(.init(savedCount: game.saved, requiredCount: max(1, game.configuration.total - level.allowedLossesForGold), isNuking: game.isNuking))
+            dj.updateTelemetry(.init(savedCount: game.saved, requiredCount: 1, isNuking: game.isNuking))
             if speedControl.variableEnabled && speedControl.multiplier > 1 && ProcessInfo.processInfo.systemUptime >= inputDeadline { break }
         }
         guard game.tick != previousTick else {
@@ -1004,7 +1053,7 @@ import NxlvKit
     private func singleStep() {
         canvas.startCountdown.cancel()
         guard screen == .playing, var game, !game.isComplete, !GameScreen.shared.isPresented else { return }
-        paused = true; accumulator = 0; releasePointerInput()
+        paused = true; accumulator = 0; releasePointerInput(); updateUserMusicPause()
         // Release held fan/aim input before taking the single physics step.
         game = self.game!
         countdownWarning.reset(seconds: game.remainingSeconds)
@@ -1101,7 +1150,7 @@ import NxlvKit
         beforeNukeInputCount = rewindOriginBeforeNukeInputCount
         rewindOriginState = nil; rewindOriginInputs = []
         assignmentFocus.rewind(to: origin.tick); canvas.assignmentHighlight.clear(); sounds.silence()
-        paused = true; accumulator = 0; refreshGame(); saveCheckpoint(immediately: true)
+        paused = true; accumulator = 0; updateUserMusicPause(); refreshGame(); saveCheckpoint(immediately: true)
         return true
     }
     @discardableResult
@@ -1123,7 +1172,7 @@ import NxlvKit
         nukeCount = recoveryInputs.reduce(into: 0) { count, input in
             if case .nuke = input.action { count += 1 }
         }
-        usedRewind = true; paused = true; accumulator = 0
+        usedRewind = true; paused = true; accumulator = 0; updateUserMusicPause()
         assignmentFocus.rewind(to: target); canvas.assignmentHighlight.clear(); sounds.silence(); sounds.playRewindScrub()
         refreshGame(); saveCheckpoint(immediately: true)
         if !rewindHeld { setRewindAudioDucked(false) }
@@ -1148,7 +1197,7 @@ import NxlvKit
         nukeCount = recoveryInputs.reduce(into: 0) { count, input in
             if case .nuke = input.action { count += 1 }
         }
-        usedRewind = true; paused = true; accumulator = 0
+        usedRewind = true; paused = true; accumulator = 0; updateUserMusicPause()
         assignmentFocus.rewind(to: target); canvas.assignmentHighlight.clear(); sounds.silence(); sounds.playRewindScrub()
         refreshGame(); saveCheckpoint(immediately: true)
         if !forwardHeld { setRewindAudioDucked(false) }
@@ -1203,7 +1252,7 @@ import NxlvKit
             else if key == "." { singleStep() }
             else if let game, let index = SkillShortcuts(names: game.configuration.skills.map(\.name)).index(for: key, modern: audioSettings.modernControlsEnabled) { panelAction(index) }
             else if key == " " || key.lowercased() == "p" { panelAction(8) }
-            else if key.lowercased() == "r" { restart() }
+            else if key.lowercased() == "r" { retryLevel() }
         } else if key == "\r" || key == " " {
             if screen == .menu { playFromMenu() }
             else if screen == .briefing { startLevel() }
@@ -1231,7 +1280,7 @@ import NxlvKit
         if practiceLevel != nil { show(.practice); return }
         guard let game else { return }
         if onSequenceContinue != nil, !game.didWin {
-            restart()
+            retryLevel()
             return
         }
         if onSequenceContinue?(game.didWin) == true { return }
@@ -1265,10 +1314,11 @@ import NxlvKit
             : ArcadeStore.shared.previewReport(for: run)
         guard let arcadeReport else { return }
         if recordsCampaignProgress { runMovie.preserveRecord(arcadeReport) }
-        ArcadeWindow.shared.showResult(arcadeReport, owner: window, retry: { [weak self] in self?.restart() },
+        ArcadeWindow.shared.showResult(arcadeReport, owner: window, retry: { [weak self] in self?.retryLevel() },
             next: { [weak self] in self?.continueResult() }, replay: { [weak self] save in self?.runMovie.review(save: save) },
             continueTitle: resultContinueTitle, background: arcadeBackdrop,
-            rewardVolume: sounds.muted ? 0 : audioSettings.soundVolume)
+            rewardVolume: sounds.muted ? 0 : audioSettings.soundVolume,
+            continueHandlesHandover: onSequenceContinue != nil)
     }
     private var resultContinueTitle: String {
         if practiceLevel != nil { return "Practice levels" }
@@ -1355,7 +1405,7 @@ import NxlvKit
             else { startLevel() }
         case .results:
             if (145..<172).contains(y) { runMovie.review(save: x >= 160); return }
-            if inside(0, 178, 100, 22) { restart() }
+            if inside(0, 178, 100, 22) { retryLevel() }
             else if inside(220, 178, 100, 22) { show(.menu) }
             else { continueResult() }
         case .preferences:

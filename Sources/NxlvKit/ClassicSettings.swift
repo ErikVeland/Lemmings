@@ -203,6 +203,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
     public var music: ClassicMusicSource
     public var musicStyle: ClassicMusicStyle
     public var musicVolume: Double
+    public var pauseMusicBeatOnly: Bool
     public var sound: ClassicSoundSource
     public var soundVolume: Double
     public var bottomFallSounds: Bool
@@ -248,6 +249,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         music: ClassicMusicSource = .amigaModules,
         musicStyle: ClassicMusicStyle = .modern,
         musicVolume: Double = 0.8,
+        pauseMusicBeatOnly: Bool = false,
         sound: ClassicSoundSource = .macintoshResources,
         soundVolume: Double = 0.9,
         bottomFallSounds: Bool = true,
@@ -284,6 +286,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         self.music = music
         self.musicStyle = musicStyle
         self.musicVolume = musicVolume
+        self.pauseMusicBeatOnly = pauseMusicBeatOnly
         self.sound = sound
         self.soundVolume = soundVolume
         self.bottomFallSounds = bottomFallSounds
@@ -353,6 +356,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
             ClassicMusicStyle.self, forKey: .musicStyle) ?? fallback.musicStyle
         musicVolume = try values.decodeIfPresent(
             Double.self, forKey: .musicVolume) ?? fallback.musicVolume
+        pauseMusicBeatOnly = try values.decodeIfPresent(Bool.self, forKey: .pauseMusicBeatOnly) ?? false
         sound = source(.sound, fallback.sound)
         soundVolume = try values.decodeIfPresent(
             Double.self, forKey: .soundVolume) ?? fallback.soundVolume
