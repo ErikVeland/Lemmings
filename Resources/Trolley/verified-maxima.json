@@ -1,7 +1,7 @@
 {
-  "engineSourceFingerprint": "ddcf24a7dcdc1633e6b6e11b07c386188f76ab3633cd8f62eb4fc2c2f576a8d3",
+  "engineSourceFingerprint": "7b29d535e6d1a83200f6e96fd0f95fb5d057ec15f6e2a792fb7943a245f7d414",
   "exhaustive": false,
-  "generatedAt": "2026-09-25T13:33:13Z",
+  "generatedAt": "2026-09-26T08:05:46Z",
   "levels": [
     {
       "bestSaved": 10,
@@ -12381,7 +12381,7 @@
       "rank": "Fun",
       "required": 5,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 75,
+      "testedCandidates": 74,
       "title": "Tailor-made for blockers",
       "witness": {
         "completed": true,
@@ -12430,7 +12430,7 @@
       "rank": "Fun",
       "required": 10,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 146,
+      "testedCandidates": 145,
       "title": "A task for blockers and bombers",
       "witness": {
         "completed": true,
@@ -12479,7 +12479,7 @@
       "rank": "Fun",
       "required": 50,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 146,
+      "testedCandidates": 145,
       "title": "Let's block and blow",
       "witness": {
         "completed": true,
@@ -12528,7 +12528,7 @@
       "rank": "Mayhem",
       "required": 60,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 501,
+      "testedCandidates": 500,
       "title": "Down, along, up. In that order",
       "witness": {
         "completed": true,
@@ -12577,7 +12577,7 @@
       "rank": "Mayhem",
       "required": 50,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 501,
+      "testedCandidates": 500,
       "title": "Pillars of Hercules",
       "witness": {
         "completed": true,
@@ -12626,7 +12626,7 @@
       "rank": "Mayhem",
       "required": 46,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 217,
+      "testedCandidates": 216,
       "title": "Time to get up!",
       "witness": {
         "completed": true,
@@ -12675,7 +12675,7 @@
       "rank": "Mayhem",
       "required": 60,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 217,
+      "testedCandidates": 216,
       "title": "The Steel Mines of Kessel",
       "witness": {
         "completed": true,
@@ -12724,7 +12724,7 @@
       "rank": "Mayhem",
       "required": 64,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 288,
+      "testedCandidates": 287,
       "title": "Save Me",
       "witness": {
         "completed": true,
@@ -12773,7 +12773,7 @@
       "rank": "Taxing",
       "required": 78,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 359,
+      "testedCandidates": 358,
       "title": "Every Lemming for himself!!!",
       "witness": {
         "completed": true,
@@ -12822,7 +12822,7 @@
       "rank": "Taxing",
       "required": 64,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 75,
+      "testedCandidates": 74,
       "title": "Bomboozal",
       "witness": {
         "completed": true,
@@ -12871,7 +12871,7 @@
       "rank": "Taxing",
       "required": 48,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 217,
+      "testedCandidates": 216,
       "title": "Call in the bomb squad",
       "witness": {
         "completed": true,
@@ -12920,7 +12920,7 @@
       "rank": "Taxing",
       "required": 56,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 501,
+      "testedCandidates": 500,
       "title": "POOR WEE CREATURES!",
       "witness": {
         "completed": true,
@@ -12969,7 +12969,7 @@
       "rank": "Tricky",
       "required": 6,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 75,
+      "testedCandidates": 74,
       "title": "Ozone friendly Lemmings",
       "witness": {
         "completed": true,
@@ -13018,7 +13018,7 @@
       "rank": "Tricky",
       "required": 40,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 217,
+      "testedCandidates": 216,
       "title": "Luvly Jubly",
       "witness": {
         "completed": true,
@@ -13067,7 +13067,7 @@
       "rank": "Tricky",
       "required": 48,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 75,
+      "testedCandidates": 74,
       "title": "Diet Lemmingaid",
       "witness": {
         "completed": true,
@@ -13116,7 +13116,7 @@
       "rank": "Tricky",
       "required": 9,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 288,
+      "testedCandidates": 287,
       "title": "It's Lemmingentry Watson",
       "witness": {
         "completed": true,
@@ -13165,7 +13165,7 @@
       "rank": "Tricky",
       "required": 48,
       "status": "REPLAY_RECORD",
-      "testedCandidates": 430,
+      "testedCandidates": 429,
       "title": "From The Boundary Line",
       "witness": {
         "completed": true,
