@@ -4,17 +4,21 @@ import NxlvKit
 /// Draws the selected skill as a small, pixel-aligned cursor companion.
 @MainActor enum SkillCursorBadge {
     private static let nativeSide: CGFloat = 6
+    private static var displayPixel: CGFloat {
+        let deviceScale = abs(NSGraphicsContext.current?.cgContext.convertToDeviceSpace(
+            CGSize(width: 1, height: 0)).width ?? 1)
+        return 1 / max(1, deviceScale)
+    }
     private static var cornerGap: CGFloat {
-        let deviceScale = abs(NSGraphicsContext.current?.cgContext.convertToDeviceSpace(CGSize(width: 1, height: 0)).width ?? 1)
-        return 10 / max(1, deviceScale)
+        10 * displayPixel
     }
 
     /**
      * Returns a badge frame diagonally below the reticle’s lower-right corner.
      */
     static func frame(at point: CGPoint, scale: CGFloat, size: SkillCursorIconSize = .one, in bounds: CGRect) -> CGRect {
-        let pixel = max(1, floor(scale))
-        let side = nativeSide * pixel * CGFloat(size.multiplier)
+        let pixel = displayPixel
+        let side = nativeSide * CGFloat(size.multiplier)
         let reticle = GameCursor.playfieldPointerFrame(at: point, scale: scale)
         let gap = cornerGap
         let safeBounds = bounds.insetBy(dx: pixel, dy: pixel)
@@ -72,7 +76,7 @@ import NxlvKit
                      remaining: Int?, now: TimeInterval = ProcessInfo.processInfo.systemUptime, in bounds: CGRect) {
         guard size != .none else { return }
         let multiplier = CGFloat(size.multiplier)
-        let pixel = max(1, floor(scale))
+        let pixel = displayPixel
         let rect = frame(at: point, scale: scale, size: size, in: bounds)
         if remaining == 0 {
             drawEmptyMark(in: rect, pixel: pixel, multiplier: multiplier)

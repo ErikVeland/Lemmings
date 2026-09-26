@@ -410,6 +410,40 @@ extension AppDelegate {
     print("PASS green handover identity, mouse retry of the previous level as UVA, rightmost begin action, shared progress and solo boundaries")
   }
 
+  /// Nuking before the first lemming drops is a common way to end a level.
+  /// It must reach the result screen from the panel and from the frame loop.
+  fileprivate func testEarlyNukeEndsLevel() throws {
+    if window == nil { buildInterface() }
+    GameScreen.shared.dismissAll()
+    settings.music = .silent; loadContent()
+    gamePicker.selectItem(at: dataSets.firstIndex(where: { $0.set.title == .lemmings })!)
+    func enterFreshLevel() throws {
+      selectDataSet(); loadLevel(at: 0); phase = .playing
+      flow?.selectLevel(rank: 0, position: 0, recordsCampaignProgress: false)
+      flow?.beginPlaying()
+      GameScreen.shared.dismissAll()
+      try check(session?.released == 0 && flow?.screen.isPlaying == true, "Early nuke fixture did not start a fresh level")
+    }
+    try enterFreshLevel()
+    try check(playfield.startCountdown.isActive, "Fresh level did not arm its countdown")
+    handle(.nuke)
+    try check(session?.isComplete == true && !playfield.startCountdown.isActive,
+      "A nuke during the countdown did not complete the level")
+    guard case .results(_, 0, _, _)? = flow?.screen else {
+      throw IntegrationFailure(message: "A nuke before the drop did not show the result")
+    }
+    GameScreen.shared.dismissAll()
+    try enterFreshLevel()
+    playfield.startCountdown.cancel(); isPaused = true
+    session?.nuke()
+    step()
+    guard case .results? = flow?.screen else {
+      throw IntegrationFailure(message: "The frame loop left a completed early nuke on the playfield")
+    }
+    GameScreen.shared.dismissAll()
+    print("PASS a nuke before the drop ends the level from the panel and the frame loop")
+  }
+
   fileprivate func testPauseKeyRelease() throws {
     if window == nil { buildInterface() }
     if gameplayKeyboard == nil { installKeyboardShortcuts() }
@@ -4287,6 +4321,7 @@ Task { @MainActor in
     try subject.testVariableSpeedInput()
     try await subject.testLevelHints()
     try subject.testControllerRemapping()
+    try subject.testEarlyNukeEndsLevel()
     try subject.testNeoRunRecovery()
     try subject.testRunRecovery()
     try subject.testFanRunRecovery()
@@ -4361,6 +4396,7 @@ Task { @MainActor in
     try subject.testFanRunRecovery()
     try subject.testEscapeToMainMenu()
     try subject.testPauseKeyRelease()
+    try subject.testEarlyNukeEndsLevel()
     try subject.testInterruptionPolicy()
     try subject.testHotSeatBoundaries()
     try subject.testHandoverPreviousLevel()
