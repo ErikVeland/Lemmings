@@ -1869,8 +1869,30 @@ extension AppDelegate {
     oldSchool.performClick(nil)
     try check(choices == [false] && !settings.hdEffectsEnabled && !playfield.hdEffectsEnabled,
       "Old school did not disable and apply HD effects")
+    // Old school means original controls everywhere, not only original effects.
+    func usesModernControls() -> [String] {
+      var active: [String] = []
+      if settings.modernControlsEnabled { active.append("modern controls") }
+      if settings.variableSpeedEnabled || speedControl.variableEnabled { active.append("variable speed") }
+      if panel.modernControlsEnabled { active.append("modern panel") }
+      if gameplayKeyboard?.modern() == true { active.append("modern keys") }
+      if settings.controllerEnabled { active.append("controller") }
+      if settings.confinePointer { active.append("pointer capture") }
+      if settings.pauseOnInterruption { active.append("interruption pause") }
+      if settings.favorApproachingLemmings || playfield.favorApproachingLemmings { active.append("approaching targeting") }
+      if settings.favorBombBlockers || playfield.favorBombBlockers { active.append("blocker targeting") }
+      if settings.favorBuilders || playfield.favorBuilders { active.append("builder targeting") }
+      if settings.skillCursorIconSize != .none { active.append("skill icon") }
+      return active
+    }
+    let stillModern = usesModernControls()
+    try check(stillModern.isEmpty && settings.experiencePreset == .original,
+      "Old school left modern behaviour active: \(stillModern.joined(separator: ", "))")
     let saved = try JSONDecoder().decode(ClassicSettings.self, from: UserDefaults.standard.data(forKey: settingsKey)!)
     try check(!saved.hdEffectsEnabled && !GameScreen.shared.isPresented, "The first-launch choice was not saved and dismissed")
+    restoreSettings()
+    let afterRelaunch = usesModernControls()
+    try check(afterRelaunch.isEmpty, "Old school did not survive a relaunch: \(afterRelaunch.joined(separator: ", "))")
     let restarted = EffectsWelcome(defaults: defaults)
     restarted.showIfNeeded(in: window, onChoose: choose)
     try check(!GameScreen.shared.isPresented && choices.count == 1, "The effects choice returned on a later launch")
@@ -1879,6 +1901,9 @@ extension AppDelegate {
     button("Play with modern defaults", in: root)!.performClick(nil)
     try check(choices == [false, true] && settings.hdEffectsEnabled && settings.fullScreenHDRFlashes,
       "The default HD choice failed to enable the effects")
+    try check(settings.modernControlsEnabled && speedControl.variableEnabled && panel.modernControlsEnabled
+      && gameplayKeyboard?.modern() != false && settings.favorApproachingLemmings && settings.experiencePreset == .modern,
+      "Modern defaults did not restore modern controls")
     print("PASS first-launch HD/old-school choices, default action, live application, persistence and one-time presentation")
   }
 

@@ -983,6 +983,23 @@ try Lemmings2PlayWindow(root: l2root).checkRunRecovery()
     try assertArtwork(speed.multiplier == 3, "Sequel hold release did not restore cruise")
 }
 extension Lemmings2PlayWindow {
+    /// The first-launch Old school choice reaches this window through the
+    /// shared settings. Original controls must replace every modern aid.
+    fileprivate func checkOriginalPreset() throws {
+        defer { stop() }
+        timer?.invalidate(); timer = nil
+        var original = ClassicSettings(); original.applyExperiencePreset(modern: false)
+        setAudioSettings(original, muted: true)
+        try assertArtwork(gameplayKeyboard?.modern() == false && gameplayKeyboard?.controllerEnabled() == false
+            && gameplayKeyboard?.pauseOnInterruption() == false && !speedControl.variableEnabled
+            && !canvas.favorApproachingLemmings && !canvas.favorBombBlockers && !canvas.favorBuilders,
+            "L2 Old school left modern controls active")
+        var modern = ClassicSettings(); modern.applyExperiencePreset(modern: true)
+        setAudioSettings(modern, muted: true)
+        try assertArtwork(gameplayKeyboard?.modern() == true && speedControl.variableEnabled && canvas.favorApproachingLemmings,
+            "L2 Modern did not restore modern controls")
+        print("PASS L2 Old school and Modern presets reach the play window's controls")
+    }
     fileprivate func checkSpeedMouseControls() throws {
         defer { stop() }
         timer?.invalidate(); timer = nil
@@ -993,6 +1010,23 @@ extension Lemmings2PlayWindow {
     }
 }
 extension Lemmings3PlayWindow {
+    /// The first-launch Old school choice reaches this window through the
+    /// shared settings. Original controls must replace every modern aid.
+    fileprivate func checkOriginalPreset() throws {
+        defer { stop() }
+        timer?.invalidate(); timer = nil
+        var original = ClassicSettings(); original.applyExperiencePreset(modern: false)
+        setAudioSettings(original, muted: true)
+        try assertArtwork(gameplayKeyboard?.modern() == false && gameplayKeyboard?.controllerEnabled() == false
+            && gameplayKeyboard?.pauseOnInterruption() == false && !speedControl.variableEnabled
+            && !canvas.favorApproachingLemmings && !canvas.favorBombBlockers && !canvas.favorBuilders,
+            "L3 Old school left modern controls active")
+        var modern = ClassicSettings(); modern.applyExperiencePreset(modern: true)
+        setAudioSettings(modern, muted: true)
+        try assertArtwork(gameplayKeyboard?.modern() == true && speedControl.variableEnabled && canvas.favorApproachingLemmings,
+            "L3 Modern did not restore modern controls")
+        print("PASS L3 Old school and Modern presets reach the play window's controls")
+    }
     fileprivate func checkSpeedMouseControls() throws {
         defer { stop() }
         timer?.invalidate(); timer = nil
@@ -1004,6 +1038,8 @@ extension Lemmings3PlayWindow {
 }
 try Lemmings2PlayWindow(root: l2root).checkSpeedMouseControls()
 try Lemmings3PlayWindow(root: l3root).checkSpeedMouseControls()
+try Lemmings2PlayWindow(root: l2root).checkOriginalPreset()
+try Lemmings3PlayWindow(root: l3root).checkOriginalPreset()
 
 extension Lemmings2Canvas { fileprivate var speedTestRect: CGRect { speedRect } }
 extension Lemmings3Canvas { fileprivate var speedTestRect: CGRect {
