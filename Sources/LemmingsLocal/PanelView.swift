@@ -267,7 +267,7 @@ enum PanelButton: Equatable {
   /// a second, which is how fast the original moves.
   private static let repeatInterval = 0.02
 
-  private var repeatTimer: Timer?
+  nonisolated(unsafe) private var repeatTimer: Timer?
   private var pointerIsDown = false
 
   /// Both timers are scheduled from a mouse event, so they fire on the main
@@ -309,7 +309,7 @@ enum PanelButton: Equatable {
   /// firing for the life of the run loop, with nothing left to clear it: the
   /// closure holds the bar weakly, so it cannot stop the timer once the bar
   /// has gone.
-  isolated deinit { repeatTimer?.invalidate() }
+  deinit { repeatTimer?.invalidate() }
 
   override func mouseDragged(with event: NSEvent) {
     handlePointerDrag(at: convert(event.locationInWindow, from: nil))

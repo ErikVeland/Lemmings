@@ -156,6 +156,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
     let title: String
     let action: HomeMenuAction
   }
+  private var homeGlobalSaved: Int?
+  private var homeSavedRefreshTask: Task<Void, Never>?
+  private var homeSavedRefreshID = UUID()
+  private var homeSavedLastRefreshAt = -Double.infinity
   private var activeTitle: ClassicTitle?
   private var sequelIsActive: Bool { nativeL2Window != nil || nativeL3Window != nil }
   private var classicContent: NSView?
@@ -562,6 +566,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     migrateStandaloneSaves()
     buildMenu()
     buildInterface()
+    AnonymousTelemetry.shared.onCountsChanged = { [weak self] in self?.homeSavedCountsChanged() }
     traceLaunch("interface")
     installKeyboardShortcuts()
     NotificationCenter.default.addObserver(self, selector: #selector(resumeAudioOutput),
@@ -579,6 +584,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       stylesDirectory = URL(fileURLWithPath: saved, isDirectory: true)
     }
     restoreSettings()
+    AnonymousTelemetry.shared.recordActiveDay()
     if !UserDefaults.standard.bool(forKey: "PreferMacArtworkV1") {
       settings.graphics = .macintosh
       UserDefaults.standard.set(true, forKey: "PreferMacArtworkV1")
@@ -657,7 +663,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
       guard let self else { return }
       self.releaseWelcome.showIfNeeded(in: self.window, existingPlayer: self.wasExistingPlayer) { [weak self] in
         guard let self else { return }
-        MusicLibraryWindow.shared.showIfNeeded(in: self.window)
+        TelemetryConsentWindow.shared.showIfNeeded(in: self.window) { [weak self] in
+          guard let self else { return }
+          MusicLibraryWindow.shared.showIfNeeded(in: self.window)
+        }
       }
     }
     if !needsPlayStyle { next() }
@@ -704,6 +713,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
     hotSeat.target = self; appMenu.addItem(hotSeat)
     let records = NSMenuItem(title: "Level Records…", action: #selector(showLevelRecords), keyEquivalent: "b")
     records.keyEquivalentModifierMask = [.command, .shift]; records.target = self; appMenu.addItem(records)
+    let insights = NSMenuItem(title: "Play Insights…", action: #selector(showPlayInsights), keyEquivalent: "")
+    insights.target = self; appMenu.addItem(insights)
     let replay = NSMenuItem(title: "Replay Last Game", action: #selector(reviewLastGame), keyEquivalent: "v")
     replay.keyEquivalentModifierMask = [.command, .shift]; replay.target = self
     appMenu.addItem(replay)
@@ -1010,6 +1021,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
       settingsWindow?.update(options: options, settings: settings)
     }
     settingsWindow?.show()
+  }
+
+  @objc private func showPlayInsights() {
+    TelemetryDashboard.shared.show(owner: window)
   }
 
   /// Puts a settings change into effect and remembers it.
@@ -1340,6 +1355,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     refreshSequelProgress()
     flow?.acknowledgeGameComplete()
     rebuildLibrary()
+    homeSavedLastRefreshAt = -Double.infinity
     // Put the saved screen setting into force. Without this the tube only
     // engages when the setting is next touched, so a player who chose a
     // monitor last time comes back to a flat picture.
@@ -4872,6 +4888,43 @@ let achievementProgressKey = "ClassicAchievementProgress"
     return items
   }
 
+  private func showHomeSavedCounts() {
+    guard flow?.screen == .title, fanScreen == .off, !fanPlaying, !sequelIsActive else { return }
+    let telemetry = AnonymousTelemetry.shared
+    playfield.overlaySavedCounts = SavedLemmingsCounter(
+      local: telemetry.localSavedTotal,
+      global: telemetry.sharesCounts ? homeGlobalSaved : nil).text
+    playfield.needsDisplay = true
+  }
+
+  private func homeSavedCountsChanged() {
+    if !AnonymousTelemetry.shared.sharesCounts {
+      homeSavedRefreshTask?.cancel()
+      homeSavedRefreshTask = nil
+      homeSavedRefreshID = UUID()
+      homeGlobalSaved = nil
+    }
+    homeSavedLastRefreshAt = -Double.infinity
+    showHomeSavedCounts()
+    refreshHomeSavedCountsIfNeeded()
+  }
+
+  private func refreshHomeSavedCountsIfNeeded(at now: TimeInterval = ProcessInfo.processInfo.systemUptime) {
+    guard flow?.screen == .title, fanScreen == .off, !fanPlaying, !sequelIsActive,
+      AnonymousTelemetry.shared.sharesCounts, homeSavedRefreshTask == nil,
+      now - homeSavedLastRefreshAt >= 60 else { return }
+    homeSavedLastRefreshAt = now
+    let requestID = UUID()
+    homeSavedRefreshID = requestID
+    homeSavedRefreshTask = Task { [weak self] in
+      let total = try? await AnonymousTelemetry.shared.publicSavedTotal()
+      guard let self, self.homeSavedRefreshID == requestID else { return }
+      self.homeSavedRefreshTask = nil
+      self.homeGlobalSaved = AnonymousTelemetry.shared.sharesCounts ? total : nil
+      self.showHomeSavedCounts()
+    }
+  }
+
   /// Measures any unmeasured packs, refreshing the front screen as it goes.
   private func measureFanPacks() {
     let packs = fanPacks.isEmpty ? FanLevelLibrary.packs() : fanPacks
@@ -4930,6 +4983,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   /// Draws whichever fan screen is showing.
   private func renderFanScreen() {
+    playfield.overlaySavedCounts = nil
     playfield.overlayShowsSettingsButton = false
     phase = .briefing
     playfield.phase = .briefing
@@ -5093,6 +5147,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
   /// because that reads the level's position in a run that does not exist.
   private func showFanBriefing(title: String, pack: String) {
     guard let session else { return }
+    playfield.overlaySavedCounts = nil
+    homeSavedLastRefreshAt = -Double.infinity
     playfield.overlayShowsSettingsButton = false
     phase = .briefing
     playfield.phase = .briefing
@@ -5124,6 +5180,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   /// Shows how a fan level ended, and what happens next.
   private func showFanResults() {
     guard let session else { return }
+    playfield.overlaySavedCounts = nil
     playfield.overlayShowsSettingsButton = false
     panel.isMenuMode = false
     let passed = session.saved >= session.required
@@ -5164,6 +5221,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
       panel.isMenuMode = false
       fitClassicDisplay()
       effects.play(.levelStart)
+      if !restoringCheckpoint, let arcadeLevel {
+        AnonymousTelemetry.shared.start(arcadeLevel, hotSeat: arcadeHotSeatID != nil,
+                                        attemptID: arcadeRunID)
+      }
       playfield.needsDisplay = true
       panel.needsDisplay = true
     case .results:
@@ -5288,6 +5349,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
         NeoLemmixSession(
           simulation: simulation, width: rendered.width, height: rendered.height))
       phase = .playing; playfield.phase = .playing
+      if !restoringCheckpoint, let arcadeLevel {
+        AnonymousTelemetry.shared.start(arcadeLevel, hotSeat: arcadeHotSeatID != nil,
+                                        attemptID: arcadeRunID)
+      }
       playfield.overlayTitle = nil; playfield.overlayLines = []; playfield.overlayFooter = nil
       panel.isMenuMode = false
       playfield.needsDisplay = true; panel.needsDisplay = true
@@ -5416,6 +5481,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
         : activeTitle?.displayName ?? campaign?.name ?? "Lemmings"
     }
     if fanPlaying { return }
+    playfield.overlaySavedCounts = nil
+    if flow.screen != .title { homeSavedLastRefreshAt = -Double.infinity }
     playfield.overlayHighlight = nil
     playfield.overlayReplayLine = nil
     playfield.overlayRetryLine = nil
@@ -5449,6 +5516,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
       playfield.overlayProfileInitials = ArcadeStore.shared.hotSeatIsActive
         ? ArcadeStore.shared.sessionProfiles.map(\.initials).joined(separator: " v ")
         : ArcadeStore.shared.records.activeProfile.initials
+      showHomeSavedCounts()
+      refreshHomeSavedCountsIfNeeded()
 
     case .rankSelect:
       phase = .briefing
@@ -5627,6 +5696,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
       flow = current
       renderScreen()
       effects.play(.levelStart)
+      if !restoringCheckpoint, let arcadeLevel {
+        AnonymousTelemetry.shared.start(arcadeLevel, hotSeat: arcadeHotSeatID != nil,
+                                        attemptID: arcadeRunID)
+      }
       return
     case let .results(_, saved, required, _):
       if sequencePlayingIdentity != nil, saved < required {
@@ -5788,6 +5861,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     updateFailureMood()
     refreshTurnDisplay()
     refreshProgressText()
+    refreshHomeSavedCountsIfNeeded(at: now)
     // Limit catch-up after sleep or a long modal interaction.
     let elapsed = min(0.25, max(0, lastStepTime.map { now - $0 } ?? displayInterval))
     lastStepTime = now
@@ -5941,6 +6015,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   private func finishSessionIfNeeded() {
     guard phase == .playing, let session, session.isComplete else { return }
+    if let arcadeLevel {
+      AnonymousTelemetry.shared.finish(arcadeLevel, hotSeat: arcadeHotSeatID != nil,
+                                       attemptID: arcadeRunID, won: session.didWin, saved: session.saved)
+    }
     dj.updateTelemetry(djTelemetry(session))
     let recordsPlayerArtifacts = sequencePlayingIdentity == nil
     runMovie.finish()

@@ -178,6 +178,14 @@ macOS executables and package test targets. `Scripts/build-local-app.sh` builds
 universal arm64/x86_64 Mac bundles and embeds the supplied local game data. It
 targets macOS 12.3 or later.
 
+The macOS app keeps aggregate play counts locally. With consent and a configured
+HTTPS address, it sends fixed-schema count events to the optional collector in
+`Tools/Telemetry/`. The collector stores daily totals and one lifetime rescued
+total. The home screen reads that shared total without an owner token; the
+in-app dashboard needs a token for detailed counts. See
+[`Documentation/PlayInsights.md`](Documentation/PlayInsights.md) for the data
+boundary, deployment requirements and count limits.
+
 `Apps/UltimateLemmingsIOS/UltimateLemmingsIOS.xcodeproj` builds the iOS 16
 application. `Scripts/check-1.3-mobile.sh` validates the metadata and source,
 runs focused mobile tests and builds against the iOS Simulator SDK. The iOS app

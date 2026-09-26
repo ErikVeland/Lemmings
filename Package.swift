@@ -52,6 +52,11 @@ let package = Package(
             path: "Tests/NxlvKitTests"
         ),
         .testTarget(
+            name: "LemmingsLocalTests",
+            dependencies: ["LemmingsLocal", "NxlvKit"],
+            path: "Tests/LemmingsLocalTests"
+        ),
+        .testTarget(
             name: "LemmingsMobileCoreTests",
             dependencies: ["LemmingsMobileCore", "NxlvKit"],
             path: "Tests/LemmingsMobileCoreTests"

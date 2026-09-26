@@ -1026,6 +1026,7 @@ import NxlvKit
         syncPrecisionZoom()
         arcadeReport = nil; skillAssignments = [:]; toolUses = [:]
         arcadeLevelSnapshot = arcadeLevel
+        AnonymousTelemetry.shared.start(arcadeLevel, hotSeat: arcadeHotSeatID != nil, attemptID: arcadeRunID)
         if recordsCampaignProgress {
             ArcadeStore.shared.beginAttempt(id: arcadeRunID, profileID: arcadeProfileID,
                 level: arcadeLevel, previousID: previousAttemptID)
@@ -1093,6 +1094,8 @@ import NxlvKit
     }
     var arcadeBackdrop: CGImage? { ArcadeWindow.captureScene(canvas) }
     private func recordArcadeResult() {
+        AnonymousTelemetry.shared.finish(arcadeLevel, hotSeat: arcadeHotSeatID != nil,
+                                         attemptID: arcadeRunID, won: game.saved > 0, saved: game.saved)
         PrecisionZoomController.shared.finish(attemptID: arcadeRunID, didWin: game.saved > 0)
         syncPrecisionZoom()
         let run = ArcadeRun(id: arcadeRunID, profileID: arcadeProfileID,

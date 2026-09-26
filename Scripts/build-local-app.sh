@@ -13,6 +13,27 @@ if [[ -n "${LEMMINGS_ARCHITECTURES:-}" ]]; then
 fi
 swift_optimization="${LEMMINGS_SWIFT_OPTIMIZATION:--O}"
 
+if [[ -n "${LEMMINGS_TELEMETRY_URL:-}" ]]; then
+  if ! python3 - "$LEMMINGS_TELEMETRY_URL" <<'PYURL'
+import sys
+from urllib.parse import urlsplit
+
+try:
+    url = urlsplit(sys.argv[1])
+    valid = (url.scheme == "https" and url.hostname is not None
+             and url.username is None and url.password is None
+             and not url.query and not url.fragment
+             and (url.port is None or 1 <= url.port <= 65535))
+except ValueError:
+    valid = False
+sys.exit(0 if valid else 1)
+PYURL
+  then
+    print -u2 "LEMMINGS_TELEMETRY_URL must be an HTTPS URL without credentials, query or fragment."
+    exit 1
+  fi
+fi
+
 zsh "$project_dir/Scripts/check-local-build.sh"
 mkdir -p "$contents_dir/MacOS" "$contents_dir/Resources" "$contents_dir/Frameworks"
 sparkle_framework="$(SPARKLE_FRAMEWORK_PATH="${SPARKLE_FRAMEWORK_PATH:-}" \
@@ -64,6 +85,9 @@ else
   lipo -create "${executable_inputs[@]}" -output "$contents_dir/MacOS/LemmingsLocal"
 fi
 cp "$project_dir/Resources/Info.plist" "$contents_dir/Info.plist"
+if [[ -n "${LEMMINGS_TELEMETRY_URL:-}" ]]; then
+  /usr/libexec/PlistBuddy -c "Add :AnonymousTelemetryURL string $LEMMINGS_TELEMETRY_URL" "$contents_dir/Info.plist"
+fi
 rsync -a --delete "$sparkle_framework" "$contents_dir/Frameworks/"
 zsh "$project_dir/Scripts/build-app-icon.sh" "$contents_dir/Resources/AppIcon.icns"
 zsh "$project_dir/Scripts/index-fan-levels.sh" "$build_dir/$(uname -m)"

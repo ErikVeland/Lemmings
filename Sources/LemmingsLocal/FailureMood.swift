@@ -26,7 +26,7 @@ enum FailureMoodDecision {
 
 /// A short transition into the unmistakable, but reversible, failed-run mood.
 @MainActor final class FailureMoodTransition {
-  private var timer: Timer?
+  nonisolated(unsafe) private var timer: Timer?
   private var startedAt = 0.0
   private var startAmount: CGFloat = 0
   private var targetAmount: CGFloat = 0
@@ -57,7 +57,7 @@ enum FailureMoodDecision {
     onChange?(amount)
   }
 
-  isolated deinit { timer?.invalidate() }
+  deinit { timer?.invalidate() }
 }
 
 @MainActor enum FailureMoodOverlay {

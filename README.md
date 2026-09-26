@@ -34,6 +34,7 @@ will be ready to post when the final build number and download are confirmed.
 - [1.5 NeoLemmix source handoff](Documentation/ReleaseReadiness/1.5NeoLemmixHandoff.md) — verified source and corpus evidence, open release gates and non-claims.
 - [QoL roadmap](docs/superpowers/plans/2026-09-23-qol-roadmap.md) — target selection and rewind priorities.
 - [Precision Zoom](Documentation/PrecisionZoom.md) — Z, Shift-Z and scroll controls, earnings and retry rules.
+- [Play insights](Documentation/PlayInsights.md) — home-screen saved counts, consent and collector setup.
 - [Release scope](Documentation/ReleaseScope.md) — the meaning of Complete, Playable and Preview.
 - [Content roadmap](Documentation/ContentUniverseRoadmap.md) — the path towards broader 2D content.
 - [Level browser](Documentation/LevelBrowser.md) — CoverFlow controls, content boundaries and current evidence.
