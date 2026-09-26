@@ -1,4 +1,3 @@
-import AVFoundation
 import AppKit
 import NxlvKit
 
@@ -9,46 +8,81 @@ import NxlvKit
 /// remix. Each folder of audio files is one soundtrack, so a player can keep
 /// several and choose between them.
 ///
-/// The player supplies the files. Nothing here ships with the app.
+/// Recordings come from the main bundle, optional libraries or user files.
 @MainActor final class SoundtrackPlayer {
   /// Extensions the system decoder reads without extra work.
-  static let audioExtensions: Set<String> = ["wav", "aif", "aiff", "mp3", "m4a", "caf", "flac"]
+  static let audioExtensions: Set<String> = ["wav", "aif", "aiff", "aifc", "mp3", "m4a", "caf", "flac"]
 
-  private var player: AVAudioPlayer?
+  private var player: MusicFileDeck?
   private(set) var currentURL: URL?
   private var resumeAfterSleep = false
   private var outputSuspended = false
+  private var pauseUsesRhythm = false
   private(set) var tracks: [URL] = []
   private(set) var volume: Float = 0.8
   private(set) var muted = false
+  private(set) var playbackRate: Float = 1
+  private var speedPitch: Double = 0
 
   /// The soundtracks found under a root, one per folder.
   ///
   /// A folder counts only when it holds audio files directly. Module folders
   /// belong to the module player and are left out.
   static func soundtracks(at root: URL) -> [String: [URL]] {
-    let manager = FileManager.default
-    guard let entries = try? manager.contentsOfDirectory(
-      at: root, includingPropertiesForKeys: [.isDirectoryKey], options: [.skipsHiddenFiles])
-    else { return [:] }
-
     var found: [String: [URL]] = [:]
-    for entry in entries {
-      let isDirectory = (try? entry.resourceValues(forKeys: [.isDirectoryKey]))?.isDirectory
-      guard isDirectory == true else { continue }
-      guard let files = try? manager.contentsOfDirectory(
-        at: entry, includingPropertiesForKeys: nil, options: [.skipsHiddenFiles])
-      else { continue }
-      let audio = files
-        .filter { audioExtensions.contains($0.pathExtension.lowercased()) }
-        .sorted { $0.lastPathComponent < $1.lastPathComponent }
-      if !audio.isEmpty { found[entry.lastPathComponent] = audio }
+    for directory in [root] + MusicLibrary.installedRoots() {
+      for (name, urls) in recordings(in: directory) { found[name, default: []].append(contentsOf: urls) }
     }
-    return found
+    return found.mapValues { Array(Set($0)).sorted { $0.path < $1.path } }
   }
 
-  /// Include installed sequel modules and recordings from other ports.
-  /// Additional soundtrack folders can live in Application Support.
+  private static func recordings(in root: URL) -> [String: [URL]] {
+    let manager = FileManager.default
+    guard let walker = manager.enumerator(at: root,
+      includingPropertiesForKeys: [.isRegularFileKey], options: [.skipsHiddenFiles]) else { return [:] }
+    var found: [String: [URL]] = [:]
+    let sourceOnly = SoundtrackCatalogue.load(at: root)?.sourceOnlyPaths ?? []
+    for case let url as URL in walker {
+      if url.lastPathComponent == "By Track" { walker.skipDescendants(); continue }
+      guard audioExtensions.contains(url.pathExtension.lowercased()),
+            (try? url.resourceValues(forKeys: [.isRegularFileKey]))?.isRegularFile == true else { continue }
+      guard let relative = relativePath(url, under: root), !sourceOnly.contains(relative) else { continue }
+      let folder = (relative as NSString).deletingLastPathComponent
+      found[folder, default: []].append(url)
+    }
+    return found.mapValues { $0.sorted { $0.path < $1.path } }
+  }
+
+  /// The path of a file below a root. The directory enumerator can return
+  /// resolved paths for a root reached through a symbolic link, so compare
+  /// both sides after resolution.
+  static func relativePath(_ url: URL, under root: URL) -> String? {
+    let base = root.resolvingSymlinksInPath().path + "/"
+    let path = url.resolvingSymlinksInPath().path
+    return path.hasPrefix(base) ? String(path.dropFirst(base.count)) : nil
+  }
+
+  /// Resolve recordings through composition identity before using legacy aliases.
+  static func matches(_ url: URL, trackID: String, root: URL) -> Bool {
+    guard let relative = cataloguePath(url, root: root) else { return false }
+    if let entry = SoundtrackCatalogue.load(at: root)?.entry(path: relative) {
+      return entry.track.id == trackID && entry.variant.confidence == "documented"
+    }
+    return LevelMusicSelection.matchesRecording(url.deletingPathExtension().lastPathComponent,
+      track: String(trackID.split(separator: ".").last ?? ""))
+  }
+
+  /// Some port-exclusive themes have no Amiga module counterpart.
+  static func recording(trackID: String, root: URL) -> URL? {
+    guard let catalogue = SoundtrackCatalogue.load(at: root) else { return nil }
+    let paths = Set((catalogue.track(id: trackID)?.variants ?? []).filter {
+      audioExtensions.contains(URL(fileURLWithPath: $0.path).pathExtension.lowercased()) &&
+        FileManager.default.isReadableFile(atPath: root.appendingPathComponent($0.path).path)
+    }.map(\.path))
+    return catalogue.select(trackID: trackID, cycle: 0, availablePaths: paths)
+      .map { root.appendingPathComponent($0.path) }
+  }
+
   static func isSeasonal(_ name: String) -> Bool {
     let name = name.lowercased()
     return ["holiday", "xmas", "christmas"].contains { name.contains($0) }
@@ -62,29 +96,44 @@ import NxlvKit
   }
 
   static func djSoundtracks(at root: URL, includeOtherSoundtracks: Bool = true, seasonal: Bool = false) -> [String: [URL]] {
-    let roots = [root] + (FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first.map {
+    let roots = [root] + MusicLibrary.installedRoots() + (FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first.map {
       [$0.appendingPathComponent("Ultimate Lemmings/Soundtracks", isDirectory: true)]
     } ?? [])
     var found: [String: [URL]] = [:]
     for directory in roots {
       guard let walker = FileManager.default.enumerator(at: directory,
         includingPropertiesForKeys: [.isRegularFileKey], options: [.skipsHiddenFiles]) else { continue }
+      let catalogue = SoundtrackCatalogue.load(at: directory)
+      let sourceOnly = catalogue?.sourceOnlyPaths ?? []
       for case let url as URL in walker {
+        if url.lastPathComponent == "By Track" { walker.skipDescendants(); continue }
         guard audioExtensions.union(["mod"]).contains(url.pathExtension.lowercased()),
               (try? url.resourceValues(forKeys: [.isRegularFileKey]))?.isRegularFile == true else { continue }
-        let relative = url.deletingLastPathComponent().path.replacingOccurrences(of: directory.path + "/", with: "")
+        guard let trackPath = relativePath(url, under: directory), !sourceOnly.contains(trackPath) else { continue }
+        let relative = (trackPath as NSString).deletingLastPathComponent
         let classic = relative == "lemmings_music_mod" || relative.hasPrefix("CoLD SToRAGE - Lemmings - the original AMIGA")
-        let trackPath = relative + "/" + url.lastPathComponent
-        guard isSeasonal(trackPath) == seasonal else { continue }
-        guard seasonal || includeOtherSoundtracks || classic else { continue }
+        let entry = catalogue?.entry(path: trackPath)
+        let isHoliday = entry.map { $0.track.game == "holiday" } ?? isSeasonal(trackPath)
+        guard isHoliday == seasonal else { continue }
+        let exclusiveSpecial = entry.map { $0.track.role == "special" && !$0.track.variants.contains { $0.quality == "native-module" } } ?? false
+        guard seasonal || includeOtherSoundtracks || classic || exclusiveSpecial else { continue }
         found[relative, default: []].append(url)
       }
     }
     return found.mapValues { $0.sorted { $0.path < $1.path } }
   }
 
+  static func cataloguePath(_ url: URL, root: URL) -> String? {
+    if let path = relativePath(url, under: root) { return path }
+    guard let relative = relativePath(url, under: MusicLibrary.directory) else { return nil }
+    let pieces = relative.split(separator: "/")
+    if pieces.count >= 3, !pieces[0].hasPrefix("."), pieces[1] == "Music" { return pieces.dropFirst(2).joined(separator: "/") }
+    return nil
+  }
+
   func load(_ urls: [URL]) {
-    stop()
+    // A braking or resting record keeps its place for the next attempt.
+    if !vinylStopping && !vinylHeld { stop() }
     tracks = urls
   }
 
@@ -93,49 +142,103 @@ import NxlvKit
   func play(index: Int) -> String? {
     guard !tracks.isEmpty else { return nil }
     let url = tracks[((index % tracks.count) + tracks.count) % tracks.count]
-    do {
-      let made = try AVAudioPlayer(contentsOf: url)
-      // A level outlasts a track, so the track repeats, as the module did.
-      made.numberOfLoops = -1
-      made.volume = muted ? 0 : volume
-      made.prepareToPlay()
-      // Stop the old player explicitly before releasing it. AVAudioPlayer does
-      // not drain its output buffer synchronously on deallocation, so simply
-      // replacing `player` can leave both tracks audible at the same time.
-      player?.stop()
-      player = made
-      player?.play()
-      currentURL = url
+    if vinylStopping {
+      // The braking record finishes first. Its release starts this track.
+      vinylPendingIndex = index
       return url.deletingPathExtension().lastPathComponent
-    } catch {
-      return nil
+    }
+    guard let made = MusicFileDeck(url: url, rhythmURL: MusicLibrary.rhythmURL(for: url)) else { return nil }
+    made.volume = muted ? 0 : volume
+    made.playbackRate = playbackRate
+    made.setSpeedPitch(speedPitch)
+    player?.stop()
+    player = made
+    if vinylHeld {
+      vinylHeld = false
+      vinylRamp.run(.start, apply: { made.setVinyl(rate: $0, gain: $1) }) { made.setVinyl(rate: 1, gain: 1) }
+    }
+    made.play()
+    currentURL = url
+    return url.deletingPathExtension().lastPathComponent
+  }
+
+  private let vinylRamp = VinylRamp()
+  private var vinylStopping = false
+  private var vinylHeld = false
+  private var vinylPendingIndex: Int?
+  private var vinylReleaseRequested = false
+
+  /// Brakes the playing track like a record stopped by hand.
+  ///
+  /// `vinylRelease()` lets it run on from the finger hold. A `play(index:)`
+  /// releases its new track instead. Either waits for an unfinished brake.
+  func vinylStop() {
+    guard let deck = player, deck.isPlaying, !vinylStopping, !vinylHeld else { return }
+    vinylStopping = true
+    vinylRamp.run(.stop, apply: { deck.setVinyl(rate: $0, gain: $1) }) { [weak self] in
+      guard let self else { return }
+      self.vinylStopping = false
+      let release = self.vinylReleaseRequested
+      self.vinylReleaseRequested = false
+      // A resting record keeps turning silently at the slowest speed.
+      self.vinylHeld = true
+      if let index = self.vinylPendingIndex {
+        self.vinylPendingIndex = nil
+        self.play(index: index)
+      } else if release {
+        self.vinylRelease()
+      }
     }
   }
 
+  /// Lets a braked track run on from the finger hold.
+  func vinylRelease() {
+    if vinylStopping { vinylReleaseRequested = true; return }
+    guard vinylHeld, let deck = player else { return }
+    vinylHeld = false
+    vinylRamp.run(.start, apply: { deck.setVinyl(rate: $0, gain: $1) }) { deck.setVinyl(rate: 1, gain: 1) }
+  }
+
   func stop() {
+    vinylRamp.cancel()
+    vinylStopping = false
+    vinylHeld = false
+    vinylPendingIndex = nil
+    vinylReleaseRequested = false
     resumeAfterSleep = false
     outputSuspended = false
     player?.stop()
     player = nil
   }
 
-  func suspendOutput() {
-    guard !outputSuspended else { return }
+  func suspendOutput(rhythmOnly: Bool = false) {
+    guard !outputSuspended || pauseUsesRhythm != rhythmOnly else { return }
+    if !outputSuspended { resumeAfterSleep = isPlaying }
     outputSuspended = true
-    resumeAfterSleep = isPlaying
-    player?.pause()
+    pauseUsesRhythm = rhythmOnly
+    player?.suspendOutput(rhythmOnly: rhythmOnly)
   }
 
   func resumeOutput() {
     guard outputSuspended else { return }
     outputSuspended = false
-    if resumeAfterSleep { player?.play() }
+    if resumeAfterSleep { player?.resumeOutput() }
     resumeAfterSleep = false
   }
 
   func setVolume(_ value: Double) {
     volume = Float(min(1, max(0, value)))
     player?.volume = muted ? 0 : volume
+  }
+
+  func setPlaybackRate(_ value: Double) {
+    playbackRate = Float(min(1, max(0.5, value)))
+    player?.playbackRate = playbackRate
+  }
+
+  func setSpeedPitch(_ cents: Double) {
+    speedPitch = cents
+    player?.setSpeedPitch(cents)
   }
 
   func setMuted(_ value: Bool) {

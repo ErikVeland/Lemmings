@@ -15,15 +15,16 @@ clear transport controls.
 | Priority | Milestone | Release position | Reason |
 | --- | --- | --- | --- |
 | P0 | Target-select polish | 1.1 exit gate | The current targeting logic needs a clear visual and a deterministic input path. |
-| P1 | Rewind transport design and Classic prototype | After the 1.1 target baseline | Classic already has exact history. It can prove the interaction, visuals and audio before cross-engine work. |
-| P1 | Lemmings 2 and Lemmings 3 rewind adapters | Next QoL milestone | Rewind must reach all three engines before it becomes a shared player promise. |
+| P1 | Unrecoverable-run mood | 1.1 polish | Tell the player when the rescue target is no longer reachable without changing the simulation or result rules. |
+| P1 | Rewind transport and cross-engine closure | 1.1 CR2 validation | The transport is in the CR2 source candidate. Audio resume and release evidence remain open. |
+| P2 | Content browser and fan playlists | 1.2 content discovery | Players need a clear way to browse the growing fan-level library and create a deliberate or random sequence. |
 | P2 | Verified hints and solution playback | After rewind foundation | Hints depend on checked routes and should follow the same evidence boundary. |
 | P3 | Accessibility and device validation | Alongside every milestone, release gate | The features exist, but physical controllers and complete VoiceOver journeys still need evidence. |
 | P4 | Smart waiting and Hot Seat expansion | Later milestone | These improve comfort, but they do not fix the main input and recovery gaps. |
 
-Target-select is the 1.1 product commitment. Rewind design work can start during
-1.1, but the full rewind feature should not enter the 1.1 exit gate until all
-three engines have the same player-facing contract.
+Target-select and deterministic rewind transport are in the 1.1 CR2 source
+candidate. The 1.1 exit gate still needs one player-facing contract across all
+three engines, audio resume checks and release evidence.
 
 ## P0: target-select polish for 1.1
 
@@ -50,24 +51,31 @@ It must not run a second nearest-lemming calculation.
 | B. Cursor-top badge | Draw the skill icon above the cursor with a one-pixel gap. | It reads as a label for the cursor. | It can overlap terrain, lemming sprites or the top edge of the window. | Use only as an accessibility or high-scale option if testing supports it. |
 | C. HUD mirror | Add a larger selected-skill icon beside the existing skill count. | It is easy to read at every scale. | It does not identify the skill at the point of selection. | Keep as supporting feedback, not the main indicator. |
 
-Use Option A with a small target bracket. Reuse the native skill artwork from
-the existing game controls and bitmap renderers. Render the badge at source
+Use Option A with a small target glow. Reuse the native skill artwork from the
+existing game controls and bitmap renderers. Render the badge at source
 resolution, then scale it with nearest-neighbour filtering.
+
+The target cue must be a soft halo around the selected lemming, not a
+four-corner frame. Use two thin pixel-aligned rings and three short shimmer
+arcs. Keep the outer ring low contrast and let one arc provide the readable
+motion cue. The glow must sit outside the opaque sprite where possible and
+must not hide the lemming's action or change the pick area.
 
 ### Visual target states
 
-Use four small corner brackets around the selected lemming. Keep the brackets
-outside the opaque sprite pixels where possible.
+Use a small halo around the selected lemming. Keep the halo outside the opaque
+sprite pixels where possible.
 
 | State | Shape | Colour | Motion |
 | --- | --- | --- | --- |
 | No candidate | Cursor keeps its normal outline. The badge uses an empty tile. | Grey | None |
-| Eligible target | Four open corner brackets. | Green | None |
-| Existing assignment | Same brackets with a small orange inner mark. | Orange | One short cue only |
-| Successful assignment | Keep the target brackets for the existing feedback interval. | Green | Use the existing 100 ms pulse |
+| Eligible target | Two thin rings and one moving shimmer arc. | Green | Low-amplitude shimmer |
+| Existing assignment | Same halo with an orange tint. | Orange | One short cue only |
+| Successful assignment | Keep the halo for the existing feedback interval. | Green | Use the existing 100 ms pulse |
 
-Shape must carry the state. Colour must not be the only signal. Do not add a
-continuous glow, a pulsing halo or a large label over the playfield.
+The ring and shimmer must carry the state. Colour must not be the only signal.
+Do not add a bright pulse, a large label or a halo that competes with the
+lemming sprite.
 
 The cursor badge must show the selected skill even when no lemming is eligible.
 This tells the player what the next click will try to assign. The skill count
@@ -83,7 +91,7 @@ not already provide them.
 Candidate cycling must:
 
 1. keep the cursor position fixed;
-2. update the bracket and target ID immediately;
+2. update the halo and target ID immediately;
 3. use a stable order based on the resolver result and lemming ID;
 4. assign only after the player clicks or activates the assign action;
 5. return to normal hover resolution when the pointer moves away.
@@ -96,7 +104,7 @@ the player asks to cycle. This keeps the original screen clear.
 1. Extract a small target-selection result for each engine.
 2. Route hover, click, keyboard and controller paths through that result.
 3. Add the cursor-corner skill badge.
-4. Add the restrained target brackets.
+4. Add the restrained target halo and shimmer.
 5. Add candidate cycling through existing focus and remapping paths.
 6. Add settings and controls-help text only where a new action exists.
 7. Test all states at 1×, 2×, CRT mode and enlarged menu settings.
@@ -105,14 +113,35 @@ the player asks to cycle. This keeps the original screen clear.
 
 The 1.1 target feature is complete only when:
 
-- the hover bracket and the click target always match;
+- the hover halo and the click target always match;
 - the selected skill remains visible without covering the target;
 - mouse, keyboard and controller input use the same target ID;
 - the setting-off path matches the previous nearest-target behaviour;
-- no pick radius or eligibility rule changes;
+- no pick radius or eligibility rule changes.
+
+The target cue implementation uses the same glow renderer for Classic,
+Lemmings 2 and Lemmings 3. Classic also keeps the established short green HDR
+assignment pulse as a small target-centred flash. The sequel engines retain
+their current deterministic target boundaries and do not receive a new pick
+radius.
 - reduced-flash mode removes added pulses but keeps the state shape;
 - all three engines pass targeted tests and manual crowded-level checks;
 - screenshots cover eligible, unavailable, duplicate, focused and controller states.
+
+## P1: unrecoverable-run mood
+
+When the saved lemmings, active lemmings and unreleased lemmings cannot reach
+the level requirement, enter a reversible failed-run mood over 0.9 seconds:
+
+- slow module and recorded music to 72% playback speed;
+- apply a restrained colour and black overlay to the playfield;
+- keep controls and the lemming sprites readable;
+- clear the mood when rewind, retry or a new level returns the run to a
+  recoverable state.
+
+This is presentation only. It does not change the simulation clock, physics,
+rescue requirement or result calculation. Classic uses its level requirement;
+the native sequel previews use their current one-lemming completion rule.
 
 ## P1: rewind transport
 
@@ -127,17 +156,28 @@ keyboard and controller maps before implementation.
 
 | Action | Proposed input | Result |
 | --- | --- | --- |
-| Scrub backward | Hold `J`, or hold the controller left transport input | Move back through recorded states. Speed increases while held. |
-| Stop at the current state | `K` or the controller pause action | Keep the selected historical state paused. |
-| Scrub forward | Hold `L`, or hold the controller right transport input | Move through recorded states towards the live edge. |
-| Step one logic tick | Left or right arrow | Move one deterministic tick. |
-| Step one second | Shift plus left or right arrow | Move by one second of engine time. |
+| Scrub backward | Hold `Z`, or use the controller rewind action | Move back through recorded states. The transport remains paused at release. |
+| Stop at the current state | Release `Z` or use the controller pause action | Keep the selected historical state paused. |
+| Scrub forward | Hold `.`, or use Shift + Right | Move through recorded states towards the live edge one tick at a time. |
+| Step one logic tick | Shift + Left or Shift + Right | Move one deterministic tick. |
+| Step one second | Controller rewind action or repeated `Z` | Move through a short time slice without replaying historical sounds. |
 | Resume | Space or the normal Play action | Play from the selected state. |
 | Cancel the scrub | Escape | Return to the state at which rewind started. |
 
 When the player reaches the old live edge, normal play resumes only after an
 explicit Play action. A new skill assignment or rate command from an earlier
 state starts a new replay branch, as Classic history does now.
+
+The current 1.1 slice implements the backward scrub, forward scrub, frame
+stepping, origin ghost and reverse recent-effect cue for Classic. The controller
+rewind modifier uses the same held transport path. The effect renderer now keeps
+a short mixed ring and ducks music during transport. Lemmings 2 and Lemmings 3
+now expose deterministic backward seeking through their existing input logs,
+including controller hold, keyboard seek and branch truncation. Their effect
+mixers now play the same short reverse tape cue and duck module music while a
+held scrub is active. All three engines now show the shared compact transport
+label and history-position rail. Cross-source music capture and resume
+cross-fades remain open for the release gate.
 
 The controls help must show the current time, available history and branch
 behaviour. The transport must work from a keyboard, controller and visible
@@ -160,7 +200,7 @@ small layers:
 The origin ghost should fade when the player stops or resumes. The trails should
 follow the same source-pixel discipline as the existing speed effects. The
 effect must remain readable in flat and CRT modes without covering terrain,
-skill counts or the target bracket.
+skill counts or the target halo.
 
 Respect the accessibility settings:
 
@@ -168,6 +208,20 @@ Respect the accessibility settings:
   the position marker.
 - Reduce added flashes removes transient brightness changes.
 - Mute and volume settings apply to rewind audio.
+
+### Rewind controls
+
+For all engines, tap `,` or `.` to step one tick backward or forward, then hold
+the same adjacent key to scrub continuously. Release the key to leave the run
+paused at the chosen tick. `Space` remains play/pause and `Escape` cancels to
+the rewind origin. The existing `Z` shortcut remains a two-second backward
+seek, and the controller rewind modifier uses the same held transport path.
+The controller rewind modifier uses the same held transport path, ghost and
+reversed-effects cue. Lemmings 2 and Lemmings 3 use the same LT+B held action
+and provide a two-second `Z` seek. Their deterministic state adapters,
+cancel-to-origin path, visual transport cue and adjacent punctuation transport
+are now available. Cross-source music capture and resume cross-fades remain
+open.
 
 ### Audio treatment
 
@@ -192,9 +246,13 @@ fallback must still respect mute, volume and interruption pause.
 4. Add the origin ghost and reverse trails using the existing presentation
    surfaces.
 5. Add the rolling audio buffer and reverse scrub playback.
-6. Add Lemmings 2 history using its recorded input and checkpoint model.
-7. Add Lemmings 3 history using its recorded input and checkpoint model.
-8. Run cross-engine branch, pause, retry, save and result-page checks.
+6. Add Lemmings 2 history using its recorded input and checkpoint model. **Done
+   for deterministic backward seek and branch truncation.**
+7. Add Lemmings 3 history using its recorded input and checkpoint model. **Done
+   for deterministic backward seek and branch truncation.**
+8. Run cross-engine branch, pause, retry, save and result-page checks, then
+   align the remaining transport actions. **Cancel-to-origin and the shared
+   visual transport cue are implemented.**
 
 Do not place rewind controls in `NxlvKit` views. Keep engine state and seek
 contracts in `NxlvKit`. Keep cursor, transport, audio and visual effects in
@@ -219,7 +277,10 @@ Rewind is ready for a player release only when:
 
 After rewind has a shared contract, extend checked hints to L2 and L3. Use the
 same three tiers as Classic. Keep general coaching visibly separate from a
-route-backed hint.
+route-backed hint. Classic checked solution replay now has pause, speed, back
+one second and one-tick forward controls. Its backward and forward seek paths
+now have deterministic state checks and keep the replay canvas on the replaced
+session.
 
 Add a short solution playback action that starts from the current level and
 allows pause, step, speed and rewind. Do not expose a route as verified until
@@ -239,6 +300,62 @@ that 10× speed still leaves long waits. Consider mid-level Hot Seat takeovers
 only after shared attempt ownership and record attribution are defined.
 
 Keep both features outside the 1.1 exit gate.
+
+## P2: content browser and fan playlists for 1.2
+
+The 1.2 content-discovery milestone should make the growing fan-level library
+easy to browse without changing engine rules or content claims.
+
+### Level browser
+
+- Use a CoverFlow-style carousel with one focused pack or level in the centre.
+- Reuse the shipped pixel artwork and existing bitmap controls.
+- Show the source engine, pack name, level name or number and content status.
+- Give the focused item one primary Start action. Keep secondary actions concise.
+- Support mouse, keyboard, controller and VoiceOver navigation.
+- Provide a list or grid fallback when reduced motion is enabled.
+- Keep unverified content outside the normal library unless the player imports
+  it through an explicit path.
+
+The carousel is presentation only. Selection must resolve to a typed catalogue
+entry before the app starts a level. The selected entry must retain its source
+engine and pack identity.
+
+### Fan-level shuffle
+
+Add `Shuffle all` for eligible fan levels. The shuffle pool must use the same
+content-status and engine filters as the browser. It must not repeat a level
+until the pool is exhausted. A new shuffle starts a new order.
+
+Do not combine official campaigns and fan levels silently. Show the active pool
+before the first level starts, and retain the pool identity for recovery and
+results.
+
+### Playlists
+
+Let the player create a playlist in either of these ways:
+
+- select ten eligible levels at random;
+- select and order levels manually.
+
+Store the source engine, pack identity, level identity and catalogue revision
+for every entry. Keep playlist progress separate from campaign progress, Hot
+Seat ownership, saved attempts, replays and verified completion records.
+If an entry no longer resolves, show the issue and let the player remove or
+replace it. Do not silently substitute a different level.
+
+### Exit gate
+
+The feature is ready when all three engines can enter a level from the shared
+browser where their content contracts allow it, and when the following checks
+pass:
+
+- shuffle produces a stable, non-repeating order for a recorded seed;
+- random and manual playlists save, resume and report the correct level;
+- missing or changed catalogue entries fail visibly without corrupting progress;
+- mouse, keyboard, controller, VoiceOver, reduced-motion and focus states work;
+- official, fan, Preview and unverified content keep their existing labels and
+  release boundaries.
 
 ## Design references
 

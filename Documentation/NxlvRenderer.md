@@ -19,12 +19,20 @@ The result also contains static gadget bounds and renderer diagnostics. Style re
 - PNG files are decoded through ImageIO into a fixed RGBA8 format.
 - A terrain pixel is solid when its alpha is not zero.
 - Terrain uses source order. `NO_OVERWRITE`, `ERASE`, steel replacement, and clipping update presentation and physics masks together.
-- Resizable pieces use explicit dimensions, metadata defaults, and tiled nine-slice centers.
+- Resizable pieces use explicit dimensions, metadata defaults and tiled
+  nine-slice centres. CE-style margin trimming handles targets smaller than the
+  declared fixed margins.
 - Piece transforms use a 90-degree clockwise rotation, then horizontal flip, then vertical flip.
 - Terrain groups can use earlier groups. Group member rectangles are normalized to their union before the group is placed.
 - A group rejects mixed steel and non-steel content. Eraser members do not set the group material.
 - The renderer tiles a static background PNG from the level origin.
-- The renderer draws one static primary gadget frame. It supports object transforms, object resize metadata, `NO_OVERWRITE`, `ONLY_ON_TERRAIN`, and background objects.
+- The renderer draws one static primary gadget frame. Animation strips use CE's
+  integer frame division and report unused remainder pixels.
+- Generated `*blank` primary animations retain their declared dimensions.
+  Generated `*PICKUP` animations retain trigger geometry without requiring a
+  non-existent PNG.
+- Static gadgets support object transforms, object resize metadata,
+  `NO_OVERWRITE`, `ONLY_ON_TERRAIN` and background objects.
 - One-way gadget directions follow object transforms. Their trigger masks affect only final, eligible, non-steel terrain.
 
 The implementation follows the public NeoLemmix level and style format documentation. It was written independently and does not include NeoLemmix source code.
@@ -39,6 +47,8 @@ The implementation follows the public NeoLemmix level and style format documenta
 - Style aliases and high-resolution variants must be resolved before rendering.
 - Theme background colors and theme-based object recoloring are not applied.
 - Static gadgets use only the primary animation. Secondary animations, live animation, digits, and state changes are not drawn.
+- Generated pickup skill icons are not drawn. The renderer reports this limit,
+  and the simulation rejects pickup gameplay before the level starts.
 - `RANDOM` initial frames use frame 0 and produce a warning.
 - Moving background gadgets produce a static snapshot and a warning.
 - Trigger masks are clipped to the resized primary graphic. Object physics other than directional one-way masks belongs to the NeoLemmix simulation layer.
@@ -52,7 +62,12 @@ Run:
 zsh Scripts/run-nxlv-renderer-tests.sh
 ```
 
-The tests generate PNG style assets in a temporary directory. They cover transforms, alpha solidity, draw flags, steel, directional one-way masks, nested groups, invalid groups, default and explicit resize, tiled nine-slice output, clipping, background tiling, primary gadget frames, unsafe paths, coordinate overflow, malformed PNG files, and all image limits.
+The tests generate PNG style assets in a temporary directory. They cover
+transforms, alpha solidity, draw flags, steel, directional one-way masks,
+nested groups, invalid groups, default and explicit resize, small-target
+nine-slice trimming, clipping, background tiling, primary gadget frames,
+integer frame division, unsafe paths, coordinate overflow, malformed PNG files
+and all image limits.
 
 Format references:
 

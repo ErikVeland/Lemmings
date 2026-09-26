@@ -70,8 +70,15 @@ NeoLemmix Community Edition source:
 - <https://github.com/Willicious/NeoLemmixCommunityEdition>
 
 NeoLemmix Community Edition is published under a Creative Commons
-Attribution-NonCommercial licence. This project does not include its source,
-styles, levels, or other assets.
+Attribution-NonCommercial 4.0 licence. The reviewed 1.2.0 oracle is commit
+`38d0449f87501798e78ac668a9494848f4aa9649`. Its source credits Eric
+Langedijk for Lemmix, Stephan Neupert and Namida Verasche. This project does
+not include its source, styles, levels or other assets.
+
+The CE repository states that bundled images, music and sound retain their
+creators' copyright and restricts their use to running NeoLemmix. The public CI
+gate therefore does not download or render that corpus. Real-corpus checks are
+local and require content that the tester may lawfully use.
 
 No third-party game-data files or NeoLemmix content should be added to a
 redistributable build without the relevant rights. The application should ask
@@ -142,3 +149,10 @@ SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
 CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+## Sparkle
+
+The macOS app bundles Sparkle 2.7.3 for signed automatic updates. Sparkle is
+available from <https://github.com/sparkle-project/Sparkle>. Its MIT licence and
+the licences for its bundled third-party components are included in the Sparkle
+distribution used to build the app.

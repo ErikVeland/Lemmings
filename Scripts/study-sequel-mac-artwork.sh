@@ -15,7 +15,7 @@ if [[ ! -f "$mac_art/lemmings/manifest.json" ]]; then
 fi
 "$art_python" -c 'import PIL, numpy'
 for tool in reference proof; do
-  swiftc -O -swift-version 6 -target "$(uname -m)-apple-macos13.0" \
+  swiftc -O -swift-version 6 -target "$(uname -m)-apple-macos12.3" \
     -I "$build_dir/modules" -L "$build_dir" -lNxlvKit \
     -Xlinker -rpath -Xlinker "$build_dir" -o "$build_dir/$tool" "Tools/SequelMacArtwork/$tool.swift"
 done

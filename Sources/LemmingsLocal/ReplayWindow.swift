@@ -288,7 +288,7 @@ import UniformTypeIdentifiers
 }
 
 /// Replay controls use the same lettering and stone colours as the game.
-@MainActor private final class ReplayBar: NSView {
+@MainActor final class ReplayBar: NSView, GameDialogCustomNavigation {
   enum Action { case restart, play, slower, faster, save, close }
   var onAction: ((Action) -> Void)?
   var onSeek: ((Double) -> Void)?
@@ -299,6 +299,40 @@ import UniformTypeIdentifiers
   var playing = false
   private var buttons: [(Action, CGRect)] = []
   private var scrub = CGRect.zero
+  private var keyboardIndex: Int? = 1
+  private let accessibleElements = GameAccessibleElements()
+  private var choices: [(Action, String)] { [(.play, playing ? "Pause" : "Play"), (.restart, "Restart"),
+      (.slower, "Slower"), (.faster, "Faster"), (.save, "Save movie"), (.close, "Back")] }
+  private func layoutControls() {
+    scrub = CGRect(x: 24, y: 49, width: bounds.width - 48, height: 7)
+    let width = (bounds.width - 48) / 6
+    buttons = choices.enumerated().map { index, choice in
+      (choice.0, CGRect(x: 24 + CGFloat(index) * width, y: 75, width: width - 10, height: 42))
+    }
+  }
+  override func isAccessibilityElement() -> Bool { true }
+  override func accessibilityRole() -> NSAccessibility.Role? { .group }
+  override func accessibilityChildren() -> [Any]? {
+    layoutControls()
+    let position = accessibleElements.element(id: "position", owner: self, label: "Replay position", frame: scrub.insetBy(dx: 0, dy: -7))
+    position.setAccessibilityRole(.slider)
+    position.readNumber = { [weak self] in (self?.fraction ?? 0) * 100 }
+    position.adjustValue = { [weak self] direction in
+      guard let self else { return }
+      self.onSeek?(min(1, max(0, self.fraction + direction / 100)))
+    }
+    position.writeValue = { [weak self] text in
+      if let value = Double(text), value.isFinite { self?.onSeek?(min(1, max(0, value / 100))) }
+    }
+    position.setAccessibilityMinValue(0); position.setAccessibilityMaxValue(100)
+    position.onFocus = { [weak self] in self?.keyboardIndex = 0; self?.needsDisplay = true }
+    return [position] + buttons.enumerated().map { index, item in
+      let element = accessibleElements.element(id: "replay-\(index)", owner: self,
+        label: choices[index].1, frame: item.1) { [weak self] in self?.onAction?(item.0) }
+      element.onFocus = { [weak self] in self?.keyboardIndex = index + 1; self?.needsDisplay = true }
+      return element
+    }
+  }
   private var font: MacInterfaceRenderer?
   override init(frame: NSRect) {
     super.init(frame: frame)
@@ -328,12 +362,10 @@ import UniformTypeIdentifiers
       GamePixelText.draw(movieTitle, in: titleRect)
       GamePixelText.draw(timing, in: timeRect)
     }
-    scrub = CGRect(x: 24, y: 49, width: bounds.width - 48, height: 7)
+    layoutControls()
     GameStyle.fill(scrub, NSColor(calibratedWhite: 0.2, alpha: 1))
     GameStyle.fill(CGRect(x: scrub.minX, y: scrub.minY, width: scrub.width * fraction, height: scrub.height), NSColor.lightGray)
-    let choices: [(Action, String)] = [(.play, playing ? "Pause" : "Play"), (.restart, "Restart"),
-      (.slower, "- Slower"), (.faster, "+ Faster"), (.save, "Save movie"), (.close, "Back")]
-    buttons = []
+
     for (index, choice) in choices.enumerated() {
       let width = (bounds.width - 48) / 6
       let rect = CGRect(x: 24 + CGFloat(index) * width, y: 75, width: width - 10, height: 42)
@@ -341,7 +373,13 @@ import UniformTypeIdentifiers
       NSColor(calibratedWhite: index == 0 ? 0.96 : 0.29, alpha: 1).setStroke()
       NSBezierPath(rect: rect.insetBy(dx: 0.5, dy: 0.5)).stroke()
       text(choice.1, in: rect)
-      buttons.append((choice.0, rect))
+
+    }
+    if let keyboardIndex {
+      let box = keyboardIndex == 0 ? scrub.insetBy(dx: -3, dy: -5) : buttons[keyboardIndex - 1].1.insetBy(dx: -3, dy: -3)
+      NSColor.white.setStroke()
+      let outline = NSBezierPath(rect: box); outline.lineWidth = 2
+      outline.setLineDash([3, 3], count: 2, phase: 0); outline.stroke()
     }
     let hintRect = CGRect(x: 24, y: 127, width: bounds.width - 48, height: 20)
     if let font { font.menuLine(note, in: hintRect) }
@@ -358,6 +396,22 @@ import UniformTypeIdentifiers
     if scrub.insetBy(dx: 0, dy: -15).contains(point) { onSeek?((point.x - scrub.minX) / scrub.width) }
   }
   override func keyDown(with event: NSEvent) {
+    guard event.modifierFlags.intersection([.command, .control, .option]).isEmpty else { super.keyDown(with: event); return }
+    if event.isARepeat, [36, 76, 49, 53].contains(event.keyCode) { return }
+    if event.keyCode == 48 || [125, 126].contains(event.keyCode) {
+      let back = event.keyCode == 126 || (event.keyCode == 48 && event.modifierFlags.contains(.shift))
+      keyboardIndex = ((keyboardIndex ?? (back ? 0 : -1)) + (back ? -1 : 1) + 7) % 7
+      if let element = accessibilityChildren()?[keyboardIndex!] {
+        NSAccessibility.post(element: element, notification: .focusedUIElementChanged)
+      }
+      needsDisplay = true; return
+    }
+    if [123, 124].contains(event.keyCode) {
+      onSeek?(min(1, max(0, fraction + (event.keyCode == 123 ? -0.01 : 0.01)))); return
+    }
+    if [36, 76, 49].contains(event.keyCode) {
+      onAction?(keyboardIndex.flatMap { $0 > 0 ? choices[$0 - 1].0 : nil } ?? .play); return
+    }
     switch event.charactersIgnoringModifiers?.lowercased() {
     case " ": onAction?(.play)
     case "-", "[": onAction?(.slower)

@@ -1,6 +1,11 @@
 #!/bin/zsh
 set -euo pipefail
 project_dir="${0:A:h:h}"
+music_bundle="${MUSIC_BUNDLE:-full}"
+if [[ "$music_bundle" != main && "$music_bundle" != full ]]; then
+  echo "MUSIC_BUNDLE must be main or full." >&2
+  exit 1
+fi
 if (( $# != 2 )) || [[ "$2" != all && "$2" != l2 && "$2" != l3 ]]; then
   echo "Usage: bundle-game-data.sh /absolute/App.app/Contents/Resources all|l2|l3" >&2
   exit 1
@@ -20,6 +25,9 @@ mkdir -p "$resources_dir/Ports" "$resources_dir/Music"
 mkdir -p "$resources_dir/Hints"
 cp "$project_dir/Resources/Hints/classic.json" "$resources_dir/Hints/classic.json"
 cp "$project_dir/Resources/Hints/solutions.json" "$resources_dir/Hints/solutions.json"
+# Event sounds that no original bank supplies, named after the event.
+mkdir -p "$resources_dir/Sounds"
+rsync -a --exclude=.DS_Store "$project_dir/Resources/Sounds/" "$resources_dir/Sounds/"
 # Assets stay in the ignored app bundle. Original executable engines, machine
 # settings and development overlays are not needed by the native interpreters.
 copy_options=(-a --exclude=.DS_Store --exclude='*.[Ee][Xx][Ee]' --exclude='*.[Cc][Oo][Mm]'
@@ -36,10 +44,6 @@ case "$2" in
     rsync -a --include='*.zip' --include='*.json' --exclude='*' \
       "$project_dir/Content/LevelPacks/" "$resources_dir/LevelPacks/"
     rsync "${copy_options[@]}" "$project_dir/Sources/Ports/" "$resources_dir/Ports/"
-    rsync -a --exclude=.DS_Store --exclude='*.wav' \
-      "$project_dir/Sources/Music/" "$resources_dir/Music/"
-    zsh "$project_dir/Scripts/encode-soundtracks.sh" \
-      "$project_dir/Sources/Music" "$resources_dir/Music"
     zsh "$project_dir/Scripts/prepare-holiday-data.sh" "$resources_dir"
     python3 "$project_dir/Tools/MacArtwork/prepare.py" "$resources_dir/MacArtwork"
     python3 "$project_dir/Tools/AmigaArtwork/prepare.py" "$resources_dir/AmigaArtwork"
@@ -51,14 +55,24 @@ case "$2" in
   l2)
     mkdir -p "$resources_dir/Ports/Lemm2" "$resources_dir/Music/lemmings_2_music_mod_tsyu"
     rsync "${copy_options[@]}" "$project_dir/Sources/Ports/Lemm2/" "$resources_dir/Ports/Lemm2/"
-    rsync -a --exclude=.DS_Store "$project_dir/Sources/Music/lemmings_2_music_mod_tsyu/" "$resources_dir/Music/lemmings_2_music_mod_tsyu/"
     ;;
   l3)
     mkdir -p "$resources_dir/Ports/LEM3CD" "$resources_dir/Music/lemmings_3_music_mod_tsyu"
     rsync "${copy_options[@]}" "$project_dir/Sources/Ports/LEM3CD/" "$resources_dir/Ports/LEM3CD/"
-    rsync -a --exclude=.DS_Store "$project_dir/Sources/Music/lemmings_3_music_mod_tsyu/" "$resources_dir/Music/lemmings_3_music_mod_tsyu/"
     ;;
 esac
+
+music_game=all
+[[ "$2" == l2 ]] && music_game=lemmings2
+[[ "$2" == l3 ]] && music_game=lemmings3
+python3 "$project_dir/Tools/MusicCatalogue/library.py" bundle \
+  --output "$resources_dir/Music" --game "$music_game" --scope "$music_bundle"
+# Upgrades replace the app bundle, so an update must carry the full soundtrack
+# that earlier builds bundled. Ship AAC copies to stay below 2 GiB.
+if [[ "$music_bundle" == full ]]; then
+  zsh "$project_dir/Scripts/compact-bundled-music.sh" "$resources_dir/Music"
+  python3 "$project_dir/Tools/MusicCatalogue/library.py" playback --output "$resources_dir/Music"
+fi
 
 # Standalone sequel players share the in-game profile and Trolley artwork.
 if [[ "$2" == l2 || "$2" == l3 ]]; then

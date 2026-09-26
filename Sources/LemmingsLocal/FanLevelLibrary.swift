@@ -12,6 +12,7 @@ import NxlvKit
 /// The zips are read with the system `unzip` rather than an archive library.
 /// Browsing reads a file per keypress, which is not worth a dependency.
 enum FanLevelLibrary {
+  private static let bundledFingerprints = GameAssetCache<String>(capacity: 4096)
   /// Where the chosen folder is remembered between runs.
   static let folderKey = "FanLevelFolder"
 
@@ -43,11 +44,26 @@ enum FanLevelLibrary {
   enum Progress {
     private static let passedKey = "FanLevelsPassed"
     private static let countsKey = "FanLevelCountsV2"
+    private static let identifierVersion = "v2"
 
-    /// A stable name for one level, so a pack can be renamed on disk without
-    /// losing its record.
+    /// A stable level identity. Catalogue numbers survive descriptive filename
+    /// changes and keep packs with the same display name separate.
     static func identifier(pack: URL, label: String) -> String {
+      stablePrefix(pack) + label
+    }
+
+    static func legacyIdentifier(pack: URL, label: String) -> String {
       "\(displayName(of: pack))|\(label)"
+    }
+
+    private static func stablePrefix(_ pack: URL) -> String {
+      "\(identifierVersion)|\(countKey(pack))|"
+    }
+
+    @MainActor private static func savePassed(_ values: Set<String>) {
+      UserDefaults.standard.set(
+        Array(values).sorted(),
+        forKey: ArcadeStore.shared.progressKey(passedKey))
     }
 
     @MainActor static var passed: Set<String> {
@@ -56,12 +72,23 @@ enum FanLevelLibrary {
 
     @MainActor static func record(pack: URL, label: String) {
       var all = passed
-      guard all.insert(identifier(pack: pack, label: label)).inserted else { return }
-      UserDefaults.standard.set(Array(all).sorted(), forKey: ArcadeStore.shared.progressKey(passedKey))
+      let removedLegacy = all.remove(
+        legacyIdentifier(pack: pack, label: label)) != nil
+      let inserted = all.insert(identifier(pack: pack, label: label)).inserted
+      guard removedLegacy || inserted else { return }
+      savePassed(all)
     }
 
     @MainActor static func hasPassed(pack: URL, label: String) -> Bool {
-      passed.contains(identifier(pack: pack, label: label))
+      let current = identifier(pack: pack, label: label)
+      var all = passed
+      if all.contains(current) { return true }
+      guard all.remove(legacyIdentifier(pack: pack, label: label)) != nil else {
+        return false
+      }
+      all.insert(current)
+      savePassed(all)
+      return true
     }
 
     static func countKey(_ pack: URL) -> String {
@@ -77,6 +104,12 @@ enum FanLevelLibrary {
       let key = countKey(pack)
       guard all[key] != count else { return }
       all[key] = count
+      UserDefaults.standard.set(all, forKey: countsKey)
+    }
+
+    static func removeCount(for pack: URL) {
+      var all = counts
+      guard all.removeValue(forKey: countKey(pack)) != nil else { return }
       UserDefaults.standard.set(all, forKey: countsKey)
     }
 
@@ -103,7 +136,30 @@ enum FanLevelLibrary {
       }
       UserDefaults.standard.set(all, forKey: countsKey)
     }
-    @MainActor static var passedTotal: Int { passed.count }
+    /**
+     * Returns passes that belong to packs currently installed.
+     */
+    @MainActor static func passedCount(for packs: [URL]) -> Int {
+      let all = passed
+      let stablePrefixes = Set(packs.map(stablePrefix))
+      let currentCount = all.count { saved in
+        stablePrefixes.contains { saved.hasPrefix($0) }
+      }
+      let legacyPacks = Dictionary(
+        grouping: packs,
+        by: { legacyIdentifier(pack: $0, label: "") })
+      let legacyCount = all.count { saved in
+        guard !saved.hasPrefix(identifierVersion + "|"),
+              let match = legacyPacks.first(where: {
+                saved.hasPrefix($0.key)
+              }) else { return false }
+        let label = String(saved.dropFirst(match.key.count))
+        return !match.value.contains { pack in
+          all.contains(identifier(pack: pack, label: label))
+        }
+      }
+      return currentCount + legacyCount
+    }
 
     /// Whether every pack in the folder has been measured.
     static func isComplete(for packs: [URL]) -> Bool {
@@ -141,6 +197,65 @@ enum FanLevelLibrary {
     return Int(prefix)
   }
 
+  /// A stable catalogue identity for a pack, independent of its local folder.
+  static func catalogueID(_ url: URL) -> String {
+    packID(url).map { "lldb-\($0)" }
+      ?? "file-" + url.lastPathComponent.lowercased()
+  }
+
+  /// Bundled packs have corpus load, render and run evidence. Other archives
+  /// stay explicit and unverified until they gain the same evidence.
+  static func catalogueStatus(_ url: URL) -> LevelContentStatus {
+    guard let bundledFolder else { return .unverified }
+    return url.deletingLastPathComponent().standardizedFileURL == bundledFolder.standardizedFileURL
+      ? .playable : .unverified
+  }
+
+  /// Identifies the exact archive bytes selected by the browser.
+  static func archiveFingerprint(_ url: URL) -> String? {
+    let key = GameAssetCache<String>.bundledKey(url).map { "file:" + $0 }
+    if let key, let cached = bundledFingerprints.value(for: key) { return cached }
+    guard let data = try? Data(contentsOf: url, options: .mappedIfSafe) else { return nil }
+    let result = SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined()
+    if let key { bundledFingerprints.insert(result, for: key) }
+    return result
+  }
+
+  static func archiveMatches(_ url: URL, fingerprint: String) -> Bool {
+    archiveFingerprint(url) == fingerprint
+  }
+
+  /// Hashes game data by relative path and bytes. Moving an unchanged import
+  /// keeps its content fingerprint, while any source change invalidates it.
+  static func directoryFingerprint(_ root: URL) -> String? {
+    let key = GameAssetCache<String>.bundledKey(root).map { "directory:" + $0 }
+    if let key, let cached = bundledFingerprints.value(for: key) { return cached }
+    let root = root.resolvingSymlinksInPath().standardizedFileURL
+    guard let enumerator = FileManager.default.enumerator(
+      at: root,
+      includingPropertiesForKeys: [.isRegularFileKey],
+      options: [.skipsHiddenFiles]) else { return nil }
+    let ignored = Set(["sav", "mp4", "m4a", "wav", "ogg", "mp3", "mod", "mid", "png", "jpg"])
+    var entries: [String: String] = [:]
+    for case let url as URL in enumerator {
+      if Task.isCancelled { return nil }
+      if ignored.contains(url.pathExtension.lowercased()) { continue }
+      guard (try? url.resourceValues(forKeys: [.isRegularFileKey]).isRegularFile) == true,
+            let fingerprint = archiveFingerprint(url) else { continue }
+      entries[String(url.path.dropFirst(root.path.count))] = fingerprint
+    }
+    let encoder = JSONEncoder()
+    encoder.outputFormatting = [.sortedKeys]
+    guard !entries.isEmpty, let data = try? encoder.encode(entries) else { return nil }
+    let result = SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined()
+    if let key { bundledFingerprints.insert(result, for: key) }
+    return result
+  }
+
+  static func knownLevelCount(in pack: URL) -> Int? {
+    Progress.counts[Progress.countKey(pack)]
+  }
+
   /// Embedded packs stay available even when a chosen folder is missing.
   static func packs() -> [URL] {
     packs(in: [bundledFolder, downloadFolder, folder].compactMap { $0 })
@@ -170,10 +285,42 @@ enum FanLevelLibrary {
 
   /// The levels inside one pack.
   static func entries(in pack: URL) -> [Entry] {
-    let names = shell(["/usr/bin/unzip", "-Z1", pack.path])
-      .split(separator: "\n").map(String.init).sorted()
+    guard !Task.isCancelled else { return [] }
+    let listing = shellResult(["/usr/bin/unzip", "-Z1", pack.path])
+    guard listing.status == 0 else { return [] }
+    return entries(in: pack, names: listing.output
+      .split(separator: "\n").map(String.init).sorted())
+  }
+
+  /**
+   * Returns decoded entries only after `unzip` verifies the complete archive.
+   */
+  static func validatedEntries(in pack: URL) throws -> [Entry] {
+    try Task.checkCancellation()
+    let validation = shellResult(["/usr/bin/unzip", "-tqq", pack.path])
+    guard validation.status == 0 else {
+      throw NSError(
+        domain: "FanLevelLibrary",
+        code: 3,
+        userInfo: [NSLocalizedDescriptionKey: "The fan level archive could not be verified."])
+    }
+    try Task.checkCancellation()
+    let listing = shellResult(["/usr/bin/unzip", "-Z1", pack.path])
+    guard listing.status == 0 else {
+      throw NSError(
+        domain: "FanLevelLibrary",
+        code: 4,
+        userInfo: [NSLocalizedDescriptionKey: "The fan level archive could not be listed."])
+    }
+    return entries(in: pack, names: listing.output
+      .split(separator: "\n").map(String.init).sorted())
+  }
+
+  private static func entries(in pack: URL, names: [String]) -> [Entry] {
+    guard !Task.isCancelled else { return [] }
     var found: [Entry] = []
     for name in names {
+      if Task.isCancelled { return [] }
       let lower = name.lowercased()
       let base = (name as NSString).lastPathComponent.lowercased()
       if lower.hasSuffix(".lvl")
@@ -189,6 +336,7 @@ enum FanLevelLibrary {
           let slots = try? sectionSlots(for: name, count: sections.count, in: pack)
         else { continue }
         for (index, section) in sections.enumerated() {
+          if Task.isCancelled { return [] }
           guard section.data.count >= ClassicLevel.recordSize,
             let level = try? ClassicLevel(
               data: section.data.prefix(ClassicLevel.recordSize))
@@ -395,16 +543,27 @@ enum FanLevelLibrary {
     return process.terminationStatus == 0 && !out.isEmpty ? out : nil
   }
 
-  private static func shell(_ arguments: [String]) -> String {
+  private struct ShellResult {
+    let output: String
+    let status: Int32?
+  }
+
+  private static func shellResult(_ arguments: [String]) -> ShellResult {
     let process = Process()
     process.executableURL = URL(fileURLWithPath: arguments[0])
     process.arguments = Array(arguments.dropFirst())
     let pipe = Pipe()
     process.standardOutput = pipe
     process.standardError = FileHandle.nullDevice
-    guard (try? process.run()) != nil else { return "" }
+    guard (try? process.run()) != nil else { return ShellResult(output: "", status: nil) }
     let out = pipe.fileHandleForReading.readDataToEndOfFile()
     process.waitUntilExit()
-    return String(decoding: out, as: UTF8.self)
+    return ShellResult(
+      output: String(decoding: out, as: UTF8.self),
+      status: process.terminationStatus)
+  }
+
+  private static func shell(_ arguments: [String]) -> String {
+    shellResult(arguments).output
   }
 }

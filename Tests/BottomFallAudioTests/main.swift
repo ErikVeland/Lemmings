@@ -15,6 +15,28 @@ func check(_ value: Bool, _ message: String) {
 }
 let resources = URL(fileURLWithPath: CommandLine.arguments[1])
 let mac = resources.appendingPathComponent("Ports/lemmings_1_5_2/Lemmings_1_5_2.dsk")
+do {
+    // The Mac disk has no Pop. The Mac set borrows the named Amiga sample.
+    let player = SoundEffectPlayer()
+    let alone = try player.loadMacintoshSounds(imageURL: mac)
+    check(!alone.contains(.pop), "The Mac disk unexpectedly gained a Pop sound")
+    let filled = try player.loadMacintoshSounds(imageURL: mac,
+        amigaFallbackDirectory: resources.appendingPathComponent("Ports/amiga_extracted/lemmings"))
+    check(filled.contains(.pop) && Set(alone).isSubset(of: Set(filled)), "The Mac set did not fill Pop from the Amiga bank")
+    let supplied = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
+        .deletingLastPathComponent().deletingLastPathComponent().appendingPathComponent("Resources/Sounds")
+    let complete = try player.loadMacintoshSounds(imageURL: mac,
+        amigaFallbackDirectory: resources.appendingPathComponent("Ports/amiga_extracted/lemmings"), supplementDirectory: supplied)
+    check(Set(complete) == Set(ClassicSoundEffect.allCases), "The Mac set still has a silent event")
+    let amiga = try player.loadAmigaSounds(directory: resources.appendingPathComponent("Ports/amiga_extracted/lemmings"),
+        deathFallbackImage: mac, supplementDirectory: supplied)
+    check(amiga.contains(.yippee), "The Amiga set did not fill Yippee from the supplied sound")
+    let clips = PlayedClips()
+    player.onPlay = { clips.record($0, $1, $2) }
+    player.play(.yippee)
+    check(clips.count == 1, "Yippee did not play")
+    print("PASS Mac and Amiga sets fill Pop and Yippee, and Yippee plays")
+}
 for source in 0..<3 {
     let player = SoundEffectPlayer()
     if source == 0 { try player.loadMacintoshSounds(imageURL: mac) }

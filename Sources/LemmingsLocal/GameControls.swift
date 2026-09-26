@@ -21,17 +21,20 @@ import AppKit
 
 @MainActor class GameButton: NSButton {
     var isCheck: Bool { false }
+    override var acceptsFirstResponder: Bool { isEnabled }
+    override func becomeFirstResponder() -> Bool { needsDisplay = true; return super.becomeFirstResponder() }
+    override func resignFirstResponder() -> Bool { needsDisplay = true; return super.resignFirstResponder() }
     override var intrinsicContentSize: NSSize {
         let width = GameMenuArtwork.renderer()?.width(of: MacInterfaceRenderer.menuText(title), face: .small, scale: 1) ?? CGFloat(title.count * 8)
         return NSSize(width: width + (isCheck ? 32 : 24), height: max(28, super.intrinsicContentSize.height))
     }
     override var isFlipped: Bool { true }
     override func draw(_ dirtyRect: NSRect) {
-        let selected = state == .on || isHighlighted
+        let selected = state == .on || state == .mixed || isHighlighted
         let socket = isCheck ? CGRect(x: 0, y: bounds.midY - 10, width: 20, height: 20) : bounds
         GameStoneButton.draw(socket, selected: selected, pixel: 1)
         if isCheck && selected {
-            GamePixelText.draw("X", in: socket.insetBy(dx: 5, dy: 5))
+            GamePixelText.draw(state == .mixed ? "-" : "X", in: socket.insetBy(dx: 5, dy: 5))
         }
         let caption = isCheck ? CGRect(x: 28, y: 0, width: bounds.width - 28, height: bounds.height) : bounds.insetBy(dx: 8, dy: 2)
         GameControlText.draw(title, in: caption, alignment: isCheck ? .left : .center, enabled: isEnabled, role: selected ? .heading : .body)
@@ -40,6 +43,27 @@ import AppKit
 }
 
 @MainActor final class GameCheckButton: GameButton {
+    override func accessibilityPerformPress() -> Bool {
+        guard isEnabled else { return false }
+        performClick(nil)
+        return true
+    }
+
+    override func mouseDown(with event: NSEvent) {
+        guard isEnabled else { return }
+        window?.makeFirstResponder(self)
+        var inside = bounds.contains(convert(event.locationInWindow, from: nil))
+        highlight(inside)
+        defer { highlight(false) }
+        while let next = window?.nextEvent(matching: [.leftMouseDragged, .leftMouseUp]) {
+            inside = bounds.contains(convert(next.locationInWindow, from: nil))
+            highlight(inside)
+            if next.type == .leftMouseUp {
+                if inside { performClick(nil) }
+                return
+            }
+        }
+    }
     override var isCheck: Bool { true }
     init(title: String, target: AnyObject?, action: Selector?) {
         super.init(frame: .zero)
@@ -94,10 +118,18 @@ import AppKit
 
 @MainActor final class GameSlider: NSSlider {
     override class var cellClass: AnyClass? { get { GameSliderCell.self } set {} }
+    override var acceptsFirstResponder: Bool { isEnabled }
+    override func draw(_ dirtyRect: NSRect) { super.draw(dirtyRect); GameControlText.focus(self) }
 }
 
 /// Choices open in a scrollable game page, including when activated by keyboard.
 @MainActor final class GamePopUpButton: NSPopUpButton {
+    override var acceptsFirstResponder: Bool { isEnabled }
+    override func accessibilityPerformPress() -> Bool {
+        guard isEnabled else { return false }
+        showChoices(); return true
+    }
+    override func accessibilityPerformShowMenu() -> Bool { accessibilityPerformPress() }
     override var isFlipped: Bool { true }
     override func draw(_ dirtyRect: NSRect) {
         GameStoneButton.draw(bounds, selected: false, pixel: 1)
@@ -128,6 +160,7 @@ import AppKit
                 needsDisplay = true
             }
             button.isEnabled = item.isEnabled
+            if index == indexOfSelectedItem { page.preferControllerControl(button) }
             button.frame = CGRect(x: 6, y: list.bounds.height - CGFloat(index + 1) * 44, width: 920, height: 38)
             list.addSubview(button)
         }
@@ -145,6 +178,9 @@ import AppKit
     var font: NSFont?
     override init(frame: NSRect) {
         super.init(frame: frame)
+        setAccessibilityElement(true)
+        setAccessibilityRole(.group)
+        setAccessibilityLabel("Settings sections")
         tabs.tabViewType = .noTabsNoBorder
         tabs.delegate = self
         addSubview(tabs)
@@ -156,6 +192,7 @@ import AppKit
         button.tag = buttons.count
         button.setButtonType(.pushOnPushOff)
         button.setAccessibilityLabel(item.label)
+        button.setAccessibilityRole(.radioButton)
         addSubview(button); buttons.append(button)
         updateSelection()
     }
@@ -166,6 +203,7 @@ import AppKit
     private func updateSelection() {
         for (index, button) in buttons.enumerated() {
             button.state = tabs.selectedTabViewItem === tabs.tabViewItems[index] ? .on : .off
+            button.setAccessibilityValue(button.state == .on ? 1 : 0)
             button.needsDisplay = true
         }
     }

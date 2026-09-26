@@ -17,8 +17,7 @@ enum PanelButton: Equatable {
   var session: (any GameSession)? {
     didSet {
       if oldValue !== session { nukeGesture.reset() }
-      let names = session?.skills.map(\.name) ?? []
-      toolTip = SkillShortcuts(names: names).hint(names: names, modern: modernControlsEnabled) + "\n" + SpeedPanelControls.help
+      toolTip = nil
     }
   }
   private var nukeGesture = NukeClickGesture()
@@ -57,13 +56,16 @@ enum PanelButton: Equatable {
   var panelImage: CGImage?
   var terrainImage: CGImage?
   /// The skill bar belongs to a level in progress, not to a menu.
-  var isMenuMode = false
+  var isMenuMode = false {
+    didSet { if oldValue != isMenuMode { window?.invalidateCursorRects(for: self) } }
+  }
   /// The CRT source reserves exactly 80 pixels for the controls.
   var isCRTSource = false
   var onButton: ((PanelButton) -> Void)?
   var onMinimapScroll: ((Double) -> Void)?
 
   var speedControlBounds: CGRect { buttonFrames.first(where: { $0.0 == .fastForward })?.1 ?? .zero }
+  let timeline = TimelinePanelControls()
   private let accessibleElements = GameAccessibleElements()
   override func isAccessibilityElement() -> Bool { true }
     override func accessibilityRole() -> NSAccessibility.Role? { .group }
@@ -101,10 +103,12 @@ enum PanelButton: Equatable {
         }
       }
     }
-    return result
+    return result + timeline.accessibleControls(owner: owner, transform: transform)
   }
   private var buttonFrames: [(PanelButton, CGRect)] = []
   private var minimapFrame = CGRect.zero
+  /// The minimap's drag area, below the timeline controls.
+  var minimapBounds: CGRect { minimapFrame }
   private var panelFrame = CGRect.zero
   private var panelScale = 1.0
 
@@ -115,6 +119,14 @@ enum PanelButton: Equatable {
   }
 
   override var isFlipped: Bool { true }
+
+  override func resetCursorRects() {
+    addCursorRect(bounds, cursor: NSCursor.arrow)
+  }
+
+  override func cursorUpdate(with event: NSEvent) {
+    NSCursor.arrow.set()
+  }
 
   private let buttonHeight = 34.0
   private let inset = 8.0
@@ -153,6 +165,13 @@ enum PanelButton: Equatable {
       y: panelFrame.minY + 18 * scale,
       width: max(0, panelFrame.maxX - mapLeft - 4 * scale),
       height: 20 * scale)
+    layoutTimeline()
+  }
+
+  private func layoutTimeline() {
+    let height = min(24 * max(1, panelScale / 2), minimapFrame.height * 0.6)
+    timeline.frame = CGRect(x: minimapFrame.minX, y: minimapFrame.maxY - height, width: minimapFrame.width, height: height)
+    minimapFrame.size.height -= height + 2
   }
 
   private func layoutButtons() {
@@ -175,12 +194,15 @@ enum PanelButton: Equatable {
         width: width, height: buttonHeight)
       return (button, frame)
     }
+    panelScale = 1
+    layoutTimeline()
   }
 
   // MARK: - Input
 
   /// Takes a click position directly, for input arriving from the tube view.
   func handleClick(at point: CGPoint, time: TimeInterval = ProcessInfo.processInfo.systemUptime) {
+    if timeline.click(at: point) { return }
     if let match = buttonFrames.first(where: { $0.1.contains(point) }) {
       press(match.0, time: time)
       return
@@ -196,6 +218,7 @@ enum PanelButton: Equatable {
   func handlePointerDown(at point: CGPoint, time: TimeInterval = ProcessInfo.processInfo.systemUptime, clickCount: Int = 1) {
     stopRepeating()
     pointerIsDown = true
+    if timeline.click(at: point) { return }
     if let match = buttonFrames.first(where: { $0.1.contains(point) }) {
       if match.0 == .fastForward, variableSpeedEnabled, let part = SpeedPanelControls.part(at: point, in: match.1) {
         nukeGesture.reset()
@@ -244,7 +267,7 @@ enum PanelButton: Equatable {
   /// a second, which is how fast the original moves.
   private static let repeatInterval = 0.02
 
-  private var repeatTimer: Timer?
+  nonisolated(unsafe) private var repeatTimer: Timer?
   private var pointerIsDown = false
 
   /// Both timers are scheduled from a mouse event, so they fire on the main
@@ -286,7 +309,7 @@ enum PanelButton: Equatable {
   /// firing for the life of the run loop, with nothing left to clear it: the
   /// closure holds the bar weakly, so it cannot stop the timer once the bar
   /// has gone.
-  isolated deinit { repeatTimer?.invalidate() }
+  deinit { repeatTimer?.invalidate() }
 
   override func mouseDragged(with event: NSEvent) {
     handlePointerDrag(at: convert(event.locationInWindow, from: nil))
@@ -325,6 +348,7 @@ enum PanelButton: Equatable {
       drawMinimap()
       drawStatus()
       drawSpeedControls()
+      timeline.draw()
       return
     }
 
@@ -335,6 +359,7 @@ enum PanelButton: Equatable {
     drawMinimap()
     drawStatus()
     drawSpeedControls()
+    timeline.draw()
   }
 
   private func drawSpeedControls() {
@@ -645,12 +670,29 @@ enum PanelButton: Equatable {
   private func drawStatus() {
     let y = usesClassicSkin ? panelFrame.maxY + 4 : inset + buttonHeight + 6
     let box = CGRect(x: inset, y: y, width: bounds.width - inset * 2, height: 20)
-    if let macInterface, let font = macInterface.font(.small), font.covers(gameText(statusText)) {
-      macInterface.draw(gameText(statusText), face: .small, at: CGPoint(x: inset, y: y), scale: 1)
+    let text = gameText(statusText)
+    if let macInterface, let font = macInterface.font(.small), font.covers(text) {
+      macInterface.draw(text, face: .small, at: CGPoint(x: inset, y: y), scale: 1)
     } else {
-      GamePixelText.draw(gameText(statusText), in: box)
+      let naturalWidth = CGFloat(max(1, text.count) * 6)
+      let width = statusTextWidth()
+      NSGraphicsContext.saveGraphicsState()
+      NSBezierPath(rect: box).addClip()
+      GamePixelText.draw(text, in: CGRect(x: inset, y: y, width: width, height: 20),
+        maxScale: width / naturalWidth)
+      NSGraphicsContext.restoreGraphicsState()
     }
     drawProgress(in: box, y: y)
+  }
+
+  private func statusTextWidth() -> CGFloat {
+    let text = gameText(statusText)
+    if let macInterface, let font = macInterface.font(.small), font.covers(text) {
+      return macInterface.width(of: text, face: .small, scale: 1)
+    }
+    let naturalWidth = CGFloat(max(1, text.count) * 6)
+    let scale = max(1, min(2, floor((bounds.width - inset * 2) / naturalWidth)))
+    return naturalWidth * scale
   }
 
   /// Drawn from the right edge inward, so it cannot collide with the status text
@@ -661,17 +703,18 @@ enum PanelButton: Equatable {
     let text = gameText(progressText)
     if let macInterface, let font = macInterface.font(.small), font.covers(text) {
       let width = macInterface.width(of: text, face: .small, scale: 1)
-      let statusWidth = macInterface.width(of: gameText(statusText), face: .small, scale: 1)
       let x = bounds.width - inset - width
-      guard x > inset + statusWidth + 12 else { return }
+      guard x > inset + statusTextWidth() + 12 else { return }
       macInterface.draw(text, face: .small, at: CGPoint(x: x, y: y), scale: 1)
       return
     }
     // The original artwork has no Macintosh interface font. Without this the
     // whole field silently drew nothing for every player using it, which is
     // most of them. Fall back to the same glyphs the status line uses.
-    GamePixelText.draw(text, in: CGRect(
-      x: box.midX, y: box.minY, width: box.width / 2, height: box.height))
+    let width = CGFloat(text.count * 6)
+    let x = bounds.width - inset - width
+    guard x > inset + statusTextWidth() + 12 else { return }
+    GamePixelText.draw(text, in: CGRect(x: x, y: box.minY, width: width, height: box.height), maxScale: 1)
   }
 
   /// Tall enough for the original bar at 3x, plus a status strip beneath it.

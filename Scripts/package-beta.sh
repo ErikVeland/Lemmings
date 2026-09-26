@@ -9,7 +9,9 @@
 #   BETA_SIGNING_IDENTITY  "Developer ID Application: Name (TEAMID)"
 #   BETA_NOTARY_PROFILE    a profile stored by `xcrun notarytool store-credentials`
 #
-# Set BETA_SLIM=1 to leave out the studio recordings. Module music remains.
+# Music defaults to the main soundtracks plus in-app optional libraries.
+# Set MUSIC_BUNDLE=full to include every soundtrack in the initial archive.
+# BETA_SLIM=1 remains an alias for MUSIC_BUNDLE=main.
 #
 # Set BETA_GAME_CENTER=1 to build the worldwide-rankings variant instead. That
 # build is signed with an Apple Development identity and the profile named by
@@ -35,10 +37,15 @@ build_number="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleVersion' "$project_di
 # Version 1.0 and later require Classic closure, even through the beta packager.
 release_scope="$(python3 "$project_dir/Tools/ReleaseReadiness/package_scope.py" "$project_dir")"
 game_center="${BETA_GAME_CENTER:-0}"
+export MUSIC_BUNDLE="${MUSIC_BUNDLE:-main}"
+[[ "${BETA_SLIM:-0}" == 1 ]] && MUSIC_BUNDLE=main
+[[ "$MUSIC_BUNDLE" == main || "$MUSIC_BUNDLE" == full ]] || { echo "MUSIC_BUNDLE must be main or full" >&2; exit 1; }
 variant=""
-[[ "$game_center" == 1 ]] && variant="-gamecenter"
+[[ "$MUSIC_BUNDLE" == full ]] && variant="-full-music"
+[[ "$game_center" == 1 ]] && variant+="-gamecenter"
 zip_path="$build_dir/UltimateLemmings-$version-beta$build_number$variant.zip"
 notes_path="$project_dir/Documentation/ReleaseNotes-beta$build_number.md"
+[[ -f "$notes_path" ]] || notes_path="$project_dir/Documentation/ReleaseNotes-$version-build$build_number.md"
 [[ -f "$notes_path" ]] || { echo "Missing release notes: $notes_path" >&2; exit 1; }
 # A distributable beta must not silently hide stale proofs or hint decks.
 python3 "$project_dir/Tools/TrolleyVerification/catalogue.py" check
@@ -84,19 +91,7 @@ else
   ENABLE_APPLE_CAPABILITIES=0 LEMMINGS_BUILD_DIR="$build_dir" zsh "$project_dir/Scripts/build-local-app.sh" >/dev/null
 fi
 
-if [[ "${BETA_SLIM:-0}" == 1 ]]; then
-  echo "==> Slim build. Removing the studio soundtrack recordings."
-  zsh "$project_dir/Scripts/strip-recorded-music.sh" "$app_dir/Contents/Resources/Music"
-fi
-
 if [[ "$game_center" == 1 ]]; then
-  if [[ "${BETA_SLIM:-0}" == 1 ]]; then
-    # Removing files invalidates the capability signature, so apply it again.
-    echo "==> Re-applying the capability signature after the slim strip"
-    profile_args=()
-    [[ -n "${APPLE_PROVISIONING_PROFILE:-}" ]] && profile_args=(--profile "$APPLE_PROVISIONING_PROFILE")
-    python3 "$project_dir/Scripts/sign-capabilities.py" "$app_dir" "${profile_args[@]}"
-  fi
   echo "==> Checking the Game Center entitlement"
   if ! codesign -d --entitlements :- "$app_dir" 2>/dev/null |
       grep -q 'com.apple.developer.game-center'; then

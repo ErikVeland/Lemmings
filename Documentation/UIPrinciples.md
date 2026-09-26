@@ -19,6 +19,8 @@ sentences. Apply this to new UI and changes to existing UI.
   action name with an invented icon or an initial.
 - Put criteria, records, award descriptions and instructions on their relevant
   detail/help pages. Do not repeat them below the main outcome.
+- Checkbox text and box form one input target. Clicking either toggles the control.
+  Menu gaps and disabled controls must never pass clicks to the underlying screen.
 - Preserve accessible names and keyboard help. Visible captions should not be
   needed to explain a familiar icon, and images must not exclude screen-reader users.
 - Inspect actual renders for success, partial success, failure, active, inactive,
@@ -30,11 +32,13 @@ star states, compact result layout, primary/selected actions, transport icon
 changes and concise skill names beneath HUD counts. This is not a claim that every
 sequel screen or every novice-player journey has been validated.
 
-Assignment feedback follows the engine's actual eligibility rules. Grey means no
-eligible target; green means the nearest target can accept the selected skill.
+Assignment feedback follows the engine's actual eligibility rules. Grey means no lemming is under the pointer; yellow means the lemming cannot
+accept the selected skill; green means the nearest target can accept the selected skill.
 Successful assignments get a 100 ms green pulse, with local HDR brightness when
 available. An existing assignment gets an 80 ms orange cue. An eligible neighbour
-always takes priority over orange. Honour the reduced-flash setting.
+normally takes priority over orange. When Build targeting favours a current builder,
+keep that builder selected until it finishes. Show its actual eligibility and do
+not queue an early click. Honour the reduced-flash setting.
 
 ## Typography
 
@@ -46,3 +50,66 @@ and small blue lettering for body text, quantities and secondary actions.
 Keep each row of peer controls at the same face and scale. Do not size individual
 labels to fill their boxes. Use spacing and grouping to separate supporting
 text from headings. Preserve accessible names and input targets.
+
+## Gameplay pointer
+
+Use four corner brackets at the input position, with strokes one pixel
+wide at every zoom and no central crosshair. Place the selected skill sprite diagonally below
+and right of the bottom-right corner, about 10 screen pixels from each edge. Offer None, 1× and 2×
+skill icon sizes in Gameplay settings. The visible 1× and 2× choices use actual
+2× and 4× artwork. Modern defaults to 1×; Original hides the icon.
+Offer a separate default-off lemming count below-left, aligned with the skill icon and the same distance from the opposite corner.
+Count live sprite centres inside the reticule, regardless of skill eligibility.
+Keep the count available when the icon is hidden.
+Clamp the sprite to the playfield edge. Directional skills must use directional
+artwork rather than falling back to a plain dot.
+When a finite selected skill has one use left, fade only its sprite gently.
+At zero uses, replace the sprite with a steady red X. Reduced motion and reduced
+flashes keep the one-use sprite steady. The None size still hides the badge. Lemmings 3 has no
+shared skill stock: only Use shows the hovered lemming's remaining tool uses.
+
+A selected lemming has a faint, soft halo with a small brightness shimmer.
+Do not draw an outlined ring or an orbiting arc. Reduced motion keeps the halo
+static. Classic, Lemmings 2 and Lemmings 3 use the same cursor and halo renderers.
+
+Gameplay settings offer Original, Modern and Custom presets. Modern enables
+approaching-lemming targeting, blockers for bombs and current builders for Build.
+Original disables these aids. Individual changes select Custom, which persists
+even if the player restores the previous values. Only selecting a preset resets
+its choices. Machine artwork presets preserve targeting preferences.
+L2 retains a builder until native assignment rules allow another build. In L3,
+Use favours bomb-equipped blockers, then active brick builders. These preferences
+do not grant tools, change skill rules or queue builds.
+L2's Exploder can be assigned to blockers; its blast Bomber cannot. The preference
+only applies when the native skill rules permit the assignment.
+
+Level Select uses a dropdown with Player Unlocked (default) and All. It keeps the
+existing Classic progress override and saved choice. L2 and L3 retain their native
+campaign selection rules.
+
+## Fresh level start
+
+Fresh starts and retries show a shared 3–2–1 countdown before play. Only visible,
+active gameplay time advances the countdown. Menus and inactive windows hold it.
+Pause or single-step cancels automatic start. Saved runs remain paused, and
+Hot Seat handovers still wait for the player to indicate readiness.
+
+Handover pages accept Space, Return and keypad Enter for their primary Ready action.
+Held keys must not repeat that action. Pointer confinement also applies to paused
+screens and menus in all three games. Respect the capture preference, Option release,
+window focus, system sheets and app switching.
+
+## Dialog input and accessibility
+
+Return and keypad Enter activate the focused button. A new dialog focuses its
+intended default action. Confirmations focus Back or Cancel. Tab and Shift-Tab
+stay inside the current dialog, and closing a nested dialog restores its previous
+focus. Held activation keys do not repeat. Text fields keep their normal editing
+keys, and VoiceOver modifier combinations pass through to AppKit.
+
+Level hints use Left and Right to revisit hint stages. Arrow keys never accept
+the full-solution confirmation. Up and Down scroll the hint text.
+
+Dialogs and help overlays use the normal system cursor. The gameplay reticle,
+skill icon and count stay hidden until the final dialog or sheet closes. Covered
+game controls are excluded from the active dialog's accessibility tree.

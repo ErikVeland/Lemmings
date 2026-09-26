@@ -11,7 +11,7 @@ import NxlvKit
 
   static func annotation(_ text: String, at point: CGPoint, palette: MacInterfaceRenderer.Palette = .green) {
     let text = MacInterfaceRenderer.menuText(text)
-    if let renderer = GameMenuArtwork.renderer() {
+    if let renderer = GameMenuArtwork.renderer(), renderer.font(.small)?.covers(text) == true {
       renderer.draw(text, face: .small, at: CGPoint(x: point.x.rounded(), y: point.y.rounded()), scale: 1, palette: palette)
     } else {
       GamePixelText.draw(text, in: CGRect(x: point.x, y: point.y, width: CGFloat(text.count * 6), height: 7), maxScale: 1, palette: palette)
@@ -174,7 +174,7 @@ import NxlvKit
       .replacingOccurrences(of: "→", with: "->").replacingOccurrences(of: "←", with: "<-")
       .replacingOccurrences(of: "×", with: "X").replacingOccurrences(of: "↵", with: "ENTER")
       .replacingOccurrences(of: "‹", with: "<").replacingOccurrences(of: "›", with: ">")
-    return String(plain.map { $0.isASCII ? $0 : "?" })
+    return String(plain.map { $0.isASCII || $0 == "💀" ? $0 : "?" })
   }
 
   /// Uses the original glyphs at a fixed size, with the same cell spacing on every page.

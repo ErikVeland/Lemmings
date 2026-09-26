@@ -246,6 +246,15 @@ public struct ProTrackerPlayer: Sendable {
             repeating: .silent, count: module.channelCount)
     }
 
+    public var musicalBPM: Double { Double(beatsPerMinute) * 6 / Double(max(1, speed)) }
+    public var secondsUntilNextBeat: Double {
+        if !hasStarted { return 0 }
+        let elapsedTick = 1 - min(1, max(0, samplesUntilTick / samplesPerTick))
+        let fraction = Double(row % 4) + (Double(tick) + elapsedTick) / Double(max(1, speed))
+        let rowsLeft = 4 - fraction
+        return max(0, rowsLeft * Double(speed) * 2.5 / Double(beatsPerMinute))
+    }
+
     private var samplesPerTick: Double {
         // ProTracker derives the tick rate from the tempo this way.
         sampleRate * 2.5 / Double(beatsPerMinute)

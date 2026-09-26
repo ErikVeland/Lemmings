@@ -9,6 +9,7 @@ from catalogue import PRESENTATION_FILES, fingerprint, validate_catalogue
 root = Path(__file__).resolve().parents[2]
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('verified_sources', type=Path, help='NxlvKit source directory used by the original audit')
+parser.add_argument('--previous-presentation-files', type=Path, help='Exclusion policy used by the original audit, if any')
 parser.add_argument('--write', action='store_true')
 args = parser.parse_args()
 
@@ -23,13 +24,15 @@ base = hashes(args.verified_sources)
 current = hashes(root / 'Sources/NxlvKit')
 source = root / 'Resources/Trolley'
 catalogue = validate_catalogue(source)
-if digest(base) != catalogue['engineSourceFingerprint']:
+previous_exclusions = set(json.loads(args.previous_presentation_files.read_text())) if args.previous_presentation_files else set()
+previous_fingerprint = digest({k: v for k, v in base.items() if k not in previous_exclusions})
+if previous_fingerprint != catalogue['engineSourceFingerprint']:
     raise SystemExit('The supplied source snapshot does not match the original proof identity.')
 base_engine = {k: v for k, v in base.items() if k not in PRESENTATION_FILES}
 current_engine = {k: v for k, v in current.items() if k not in PRESENTATION_FILES}
 if base_engine != current_engine:
     raise SystemExit('Replay-engine sources changed. Run the native replay audit instead.')
-report = {'previousFingerprint': digest(base), 'physicsFingerprint': fingerprint(),
+report = {'previousFingerprint': previous_fingerprint, 'previousExclusions': sorted(previous_exclusions), 'physicsFingerprint': fingerprint(),
           'unchangedEngineFiles': len(base_engine), 'excludedPresentationFiles': sorted(PRESENTATION_FILES),
           'changedPresentationFiles': sorted(k for k in set(base) | set(current) if base.get(k) != current.get(k)),
           'witnesses': len(catalogue['levels']), 'witnessHashesValidated': True,

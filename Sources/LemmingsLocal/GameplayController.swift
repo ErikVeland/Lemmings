@@ -5,7 +5,7 @@ import NxlvKit
 /// Polls connected extended gamepads without taking over input in other apps.
 @MainActor final class GameplayController {
     private weak var keyboard: GameplayKeyboard?
-    private var timer: Timer?
+    nonisolated(unsafe) private var timer: Timer?
     private var bindings = ControllerBindings()
     private var previousMapping: [String: String] = [:]
     private var device: ObjectIdentifier?
@@ -39,6 +39,7 @@ import NxlvKit
         stopBoost(); keyboard?.speedControl?.cancelInput()
         if receivedInput { keyboard?.handleInterruption() }
         receivedInput = false
+        keyboard?.controllerRewindHeld(false)
         bindings.reset(); device = nil; context = nil; wasActive = false
     }
     private func poll() {
@@ -88,6 +89,7 @@ import NxlvKit
         }
         previousMapping = mapping
         let pressed = ControllerBindings.remap(pressed, using: mapping)
+        keyboard.controllerRewindHeld(playing && pressed.contains(.leftTrigger) && pressed.contains(.b))
         wasActive = playing; context = keyboard.controllerContext
         let wasFast = keyboard.speedControl?.isFast == true
         for action in bindings.update(pressed: pressed, inMenu: !playing) {
@@ -116,5 +118,5 @@ import NxlvKit
             if context != keyboard.controllerContext || !keyboard.active() { stopBoost(at: now); break }
         }
     }
-    isolated deinit { timer?.invalidate() }
+    deinit { timer?.invalidate() }
 }

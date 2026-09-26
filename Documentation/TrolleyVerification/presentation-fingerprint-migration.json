@@ -1,18 +1,36 @@
 {
-  "previousFingerprint": "30654a68a6e9744b1ed5c7d8178b0aa8d3be2077f5b4f15d8b2541293b357efb",
-  "physicsFingerprint": "0b21e21b2e59ee69ef018de4bfce50963d3caa16d8a882317787e6f8e8a48328",
-  "unchangedEngineFiles": 101,
-  "excludedPresentationFiles": [
+  "previousFingerprint": "ddcf24a7dcdc1633e6b6e11b07c386188f76ab3633cd8f62eb4fc2c2f576a8d3",
+  "previousExclusions": [
+    "AdaptiveDJDirector.swift",
+    "AssignmentFocus.swift",
     "ClassicSettings.swift",
+    "ControllerBindings.swift",
+    "GameplaySpeed.swift",
     "Lemmings2Controls.swift",
+    "MusicLibraryCatalogue.swift",
+    "MusicRhythmCatalogue.swift",
+    "ProTrackerEnhancements.swift",
     "SkillShortcuts.swift"
+  ],
+  "physicsFingerprint": "ddcf24a7dcdc1633e6b6e11b07c386188f76ab3633cd8f62eb4fc2c2f576a8d3",
+  "unchangedEngineFiles": 105,
+  "excludedPresentationFiles": [
+    "AdaptiveDJDirector.swift",
+    "AssignmentFocus.swift",
+    "ClassicSettings.swift",
+    "ControllerBindings.swift",
+    "GameplaySpeed.swift",
+    "Lemmings2Controls.swift",
+    "MusicLibraryCatalogue.swift",
+    "MusicRhythmCatalogue.swift",
+    "ProTrackerEnhancements.swift",
+    "SkillShortcuts.swift",
+    "VinylMotion.swift"
   ],
   "changedPresentationFiles": [
-    "ClassicSettings.swift",
-    "Lemmings2Controls.swift",
-    "SkillShortcuts.swift"
+    "VinylMotion.swift"
   ],
-  "witnesses": 178,
+  "witnesses": 268,
   "witnessHashesValidated": true,
-  "verifiedSourceSnapshot": "/Users/veland/Lemmings/.build/beta12-followup/source-snapshot/Sources/NxlvKit"
+  "verifiedSourceSnapshot": "/Users/veland/Lemmings/.build/integration-1.6/proof-sources"
 }

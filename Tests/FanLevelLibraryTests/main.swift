@@ -20,6 +20,39 @@ actor Server {
   }
 }
 let root = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
+let passedKey = ArcadeStore.shared.progressKey("FanLevelsPassed")
+let installedPack = URL(fileURLWithPath: "0384-Gronklems-1.zip")
+let removedPack = URL(fileURLWithPath: "0386-Gronklems-1.zip")
+let previousPasses = UserDefaults.standard.object(forKey: passedKey)
+defer {
+  if let previousPasses {
+    UserDefaults.standard.set(previousPasses, forKey: passedKey)
+  } else {
+    UserDefaults.standard.removeObject(forKey: passedKey)
+  }
+}
+UserDefaults.standard.set([
+  FanLevelLibrary.Progress.identifier(pack: installedPack, label: "Shared"),
+  FanLevelLibrary.Progress.identifier(pack: removedPack, label: "Shared"),
+], forKey: passedKey)
+check(FanLevelLibrary.Progress.identifier(pack: installedPack, label: "Shared")
+  != FanLevelLibrary.Progress.identifier(pack: removedPack, label: "Shared"),
+  "same-named catalogue packs keep separate level progress identities")
+check(FanLevelLibrary.Progress.passedCount(for: [installedPack]) == 1,
+  "home progress excludes passes from removed fan packs")
+check(FanLevelLibrary.Progress.passedCount(for: []) == 0,
+  "home progress excludes every pass when no fan packs are installed")
+let legacyPass = FanLevelLibrary.Progress.legacyIdentifier(
+  pack: installedPack, label: "Legacy")
+UserDefaults.standard.set([legacyPass], forKey: passedKey)
+check(FanLevelLibrary.Progress.hasPassed(pack: installedPack, label: "Legacy")
+  && FanLevelLibrary.Progress.passed.contains(
+    FanLevelLibrary.Progress.identifier(pack: installedPack, label: "Legacy"))
+  && !FanLevelLibrary.Progress.passed.contains(legacyPass),
+  "legacy fan progress migrates to a stable pack identity")
+check(FanLevelLibrary.Progress.countKey(URL(fileURLWithPath: "0384-Gronklems-1.zip"))
+  != FanLevelLibrary.Progress.countKey(URL(fileURLWithPath: "0386-Gronklems-1.zip")),
+  "different catalogue packs with the same display name keep separate counts")
 let source = root.appendingPathComponent("Content/LevelPacks/0001-geooPk0.zip")
 let archive = try Data(contentsOf: source)
 let temporary = FileManager.default.temporaryDirectory.appendingPathComponent("FanLibraryTests-\(UUID().uuidString)")
@@ -32,12 +65,19 @@ try archive.write(to: embedded.appendingPathComponent(source.lastPathComponent))
 try archive.write(to: cache.appendingPathComponent("0001-renamed.zip"))
 let merged = FanLevelLibrary.packs(in: [embedded, cache, temporary.appendingPathComponent("missing")])
 check(merged.count == 1 && merged[0].deletingLastPathComponent().resolvingSymlinksInPath().path == embedded.resolvingSymlinksInPath().path, "embedded packs open without a chosen folder and duplicate IDs are excluded")
-check(FanLevelLibrary.Progress.countKey(URL(fileURLWithPath: "0384-Gronklems-1.zip"))
-  != FanLevelLibrary.Progress.countKey(URL(fileURLWithPath: "0386-Gronklems-1.zip")),
-  "different catalogue packs with the same display name keep separate counts")
 let readable = FanLevelLibrary.entries(in: source)
 check(!readable.isEmpty, "embedded pack exposes decoded levels")
 _ = try FanLevelLibrary.level(readable[0], in: source)
+let verifiedReadable = try FanLevelLibrary.validatedEntries(in: source)
+check(verifiedReadable.count == readable.count, "verified archive exposes the complete decoded level list")
+let corruptArchive = temporary.appendingPathComponent("corrupt.zip")
+try Data("not a zip archive".utf8).write(to: corruptArchive)
+do {
+  _ = try FanLevelLibrary.validatedEntries(in: corruptArchive)
+  preconditionFailure("corrupt fan archive accepted")
+} catch {
+  check(true, "corrupt fan archives fail verified playlist discovery")
+}
 let misnamed = root.appendingPathComponent("Content/LevelPacks/0416-grams88.zip")
 let misnamedEntries = FanLevelLibrary.entries(in: misnamed)
 check(misnamedEntries.count >= 20, "binary levels named .ini remain playable")

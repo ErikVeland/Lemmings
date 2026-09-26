@@ -523,7 +523,7 @@ func testEngineFamilies() throws {
     try shot("reward-sequence-before")
     view.startCelebration(reduceMotion: false)
     try require(view.revealedStars == 0, "Reward sequence did not start with empty stars")
-    for _ in 0..<150 where view.revealedStars == 0 { try await Task.sleep(for: .milliseconds(10)) }
+    for _ in 0..<150 where view.revealedStars == 0 { try await Task.sleep(nanoseconds: 10_000_000) }
     try require(view.revealedStars == 1, "First star was not revealed separately: stars=\(view.revealedStars), hidden=\(view.isHidden), window=\(view.window != nil), mode=\(view.mode)")
     try shot("reward-first-star")
     view.page(.goals)
@@ -531,7 +531,7 @@ func testEngineFamilies() throws {
     view.mode = .result; view.startCelebration(reduceMotion: true)
     try require(view.revealedStars == 3 && view.celebrationTask == nil, "Reduced Motion still animated rewards")
     view.startCelebration(reduceMotion: false)
-    for _ in 0..<200 where view.celebrationTask != nil { try await Task.sleep(for: .milliseconds(10)) }
+    for _ in 0..<200 where view.celebrationTask != nil { try await Task.sleep(nanoseconds: 10_000_000) }
     try require(view.revealedStars == 3 && view.celebrationTask == nil, "Reward sequence did not finish")
     let windows = NSApp.windows.count
     let backdrop = ArcadeWindow.captureScene(view)
@@ -545,7 +545,7 @@ func testEngineFamilies() throws {
     for _ in 0..<8 { movie.capture(image) }
     movie.finish(); movie.preserveRecord(report)
     movie.begin(ticksPerSecond: 17, title: "Immediate retry")
-    for _ in 0..<100 where store.records.trolley.replays.isEmpty { try await Task.sleep(for: .milliseconds(100)) }
+    for _ in 0..<100 where store.records.trolley.replays.isEmpty { try await Task.sleep(nanoseconds: 100_000_000) }
     try require(store.records.trolley.replays.first?.attemptID == first, "Record movie lost on immediate retry")
     try require(store.records.trolley.replays.first?.verification == .local, "Movie claimed verified replay")
     try store.acceptMaximum(.init(value: 58, status: .record, source: "Native test record", date: Date(), buildVersion: "test-1"), conditions: c, assisted: false)
@@ -720,6 +720,54 @@ func testAchievementCollections() throws {
     print("PASS philosophy hooks, seven boards, real rivalries, ties, efficiency, retries, mastery, progress and profile isolation")
 }
 
+func testLevelSkips() throws {
+    let levels = (1...7).map { conditions(level: "fun-\($0)", fingerprint: "skip-\($0)") }
+    var records = ArcadeRecords()
+    for c in levels { try records.acceptTrolleyMaximum(evidence(58), conditions: c, assisted: false) }
+    let me = ArcadeProfile.legacyID
+    try require(records.levelSkips(profileID: me) == .init(threeStarLevels: 0, spent: 0), "A new player must start without skips")
+    for c in levels.prefix(2) { _ = records.record(run(58, c: c)) }
+    try require(records.levelSkips(profileID: me).available == 0 && records.levelSkips(profileID: me).threeStarLevelsToNext == 1,
+        "Two three-star levels must leave one more to go")
+    _ = records.record(run(58, c: levels[0]))
+    try require(records.levelSkips(profileID: me).available == 0, "Repeating a three-star level must not count twice")
+    _ = records.record(run(58, c: levels[2], rewinds: 1))
+    try require(records.levelSkips(profileID: me).available == 0, "A rewound three-star run must not earn a skip")
+    _ = records.record(run(57, c: levels[3]))
+    try require(records.levelSkips(profileID: me).available == 0, "A two-star clear must not earn a skip")
+    let earning = records.record(run(58, c: levels[4]))
+    try require(records.levelSkips(profileID: me).available == 1, "Three unassisted three-star levels must earn one skip")
+    try require(earning?.earnedLevelSkip == true, "The run that earned a skip must report it")
+    try require(records.record(run(58, c: levels[5]))?.earnedLevelSkip == false, "A run that earned no skip reported one")
+
+    let blocked = level(levels[6])
+    try require(records.spendLevelSkip(on: blocked, profileID: me), "An earned skip could not be spent")
+    try require(records.hasSkipped(blocked, profileID: me) && records.levelSkips(profileID: me).available == 0,
+        "Spending a skip must record the level and reduce the balance")
+    try require(!records.spendLevelSkip(on: level(levels[5]), profileID: me), "A skip was spent without a balance")
+    try require(!records.spendLevelSkip(on: blocked, profileID: me), "The same level was skipped twice")
+
+    let guest = records.addProfile(initials: "BOB", portrait: 1, select: false)!
+    try require(records.levelSkips(profileID: guest.id).available == 0 && !records.hasSkipped(blocked, profileID: guest.id),
+        "Skips leaked between players")
+
+    let decoded = try JSONDecoder().decode(ArcadeRecords.self, from: JSONEncoder().encode(records)).validated()
+    try require(decoded.hasSkipped(blocked, profileID: me) && decoded.levelSkips(profileID: me).spent == 1,
+        "Spent skips did not survive saving")
+    var legacy = try JSONSerialization.jsonObject(with: JSONEncoder().encode(records)) as! [String: Any]
+    legacy.removeValue(forKey: "skippedLevels")
+    let older = try JSONDecoder().decode(ArcadeRecords.self, from: JSONSerialization.data(withJSONObject: legacy))
+    try require(older.levelSkips(profileID: me).available == 1, "Records saved before skips must still load with earned skips")
+    _ = records.record(run(5, c: levels[6]))
+    try require(records.hasSkipped(blocked, profileID: me), "A failed run returned a skip")
+    _ = records.record(run(40, c: levels[6]))
+    try require(!records.hasSkipped(blocked, profileID: me) && records.levelSkips(profileID: me).available == 1,
+        "Passing a skipped level must return its skip")
+    _ = records.removeProfile(me)
+    try require(records.levelSkips(profileID: me).spent == 0, "Removing a player kept their spent skips")
+    print("PASS level skips: unassisted three-star levels, one per three, per player, saved, spent once and returned on a pass")
+}
+
 func testCelebrationProgress() throws {
     var records = try verifiedRecords()
     let first = records.record(run(40))!
@@ -809,7 +857,7 @@ func testCelebrationProgress() throws {
     var records = try verifiedRecords(); _ = records.record(run(58))
     let service = GameCenterScores(configuration: config, transport: transport, defaults: defaults)
     func settle() async throws {
-        for _ in 0..<100 where service.busy { try await Task.sleep(for: .milliseconds(10)) }
+        for _ in 0..<100 where service.busy { try await Task.sleep(nanoseconds: 10_000_000) }
         try require(!service.busy, "Game Center operation failed to settle")
     }
     service.connect(profileID: ArcadeProfile.legacyID, window: nil, boardID: "stars", history: records.trolley)
@@ -834,7 +882,7 @@ func testCelebrationProgress() throws {
     transport.account = .init(id: "apple-player", name: "Test Player")
     transport.holdLoads = true
     service.refresh(profileID: ArcadeProfile.legacyID, boardID: "stars", history: records.trolley)
-    for _ in 0..<100 where transport.pendingLoads.isEmpty { try await Task.sleep(for: .milliseconds(10)) }
+    for _ in 0..<100 where transport.pendingLoads.isEmpty { try await Task.sleep(nanoseconds: 10_000_000) }
     try require(transport.pendingLoads.count == 1 && service.busy, "Delayed account request did not start")
     transport.account = nil
     service.refresh(profileID: ArcadeProfile.legacyID, boardID: "stars", history: records.trolley)
@@ -871,7 +919,7 @@ Task { @MainActor in
     do {
         try testBundledMaximumProofs(); try testBestKnownTargets(); try testFalsifierAward(); try testAchievementCollections()
         try testMetricsAndClassification(); try testRescueGoals(); try testEvidenceAndHistory(); try testBoardsProfilesAndMigration(); try testEngineFamilies()
-        try testCelebrationProgress(); try await testGameCenterSync()
+        try testCelebrationProgress(); try testLevelSkips(); try await testGameCenterSync()
         try await testStoreAndVisuals()
         print("PASS THE TROLLEY"); exit(0)
     } catch { print("FAIL: \(error)"); exit(1) }

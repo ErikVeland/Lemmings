@@ -20,13 +20,17 @@ generated application bundles stay outside Git.
 ## System shape
 
 ```text
-                         +----------------------+
-                         |   LemmingsLocal      |
-                         |  macOS app shell      |
-                         +----------+-----------+
-                                    |
-                         platform services and UI
-                                    |
+             +----------------------+   +----------------------+
+             |   LemmingsLocal      |   | UltimateLemmingsIOS  |
+             |  macOS app shell     |   | UIKit/Metal app      |
+             +----------+-----------+   +----------+-----------+
+                        |                          |
+             macOS platform services      LemmingsMobileUI
+                                                   |
+                                          LemmingsMobileCore
+                        |                          |
+                        +------------+-------------+
+                                     |
                          +----------v-----------+
                          |       NxlvKit        |
                          | formats, engines,     |
@@ -45,7 +49,7 @@ generated application bundles stay outside Git.
 
 The diagram shows ownership, not a promise that every current type is already
 portable. `NxlvKit` still uses selected Apple frameworks for image, graphics
-and hashing work. The application shell is macOS-specific.
+and hashing work. The macOS and iOS shells own their platform services.
 
 ### `Sources/NxlvKit`
 
@@ -82,6 +86,31 @@ content is normal library content. Playable content states its limits. Preview
 and beta content are labelled. Unverified content is not shown in the normal
 library; it remains available only through an explicit import or developer
 path. See [the content roadmap](Documentation/ContentUniverseRoadmap.md).
+
+### `Sources/LemmingsMobileCore`
+
+`LemmingsMobileCore` is the platform-neutral boundary for the iPhone and iPad
+shell. It owns geometry, safe-area layout decisions, viewport transforms,
+stable touch targeting, input routing, lifecycle state, fixed-tick clocks,
+thermal presentation budgets, versioned checkpoints and typed engine sessions.
+It does not import UIKit, Metal or AVFoundation.
+
+Classic, Lemmings 2 and Lemmings 3 sessions implement the same contract. The
+Classic session includes the current player-facing pixel renderer. The sequel
+sessions expose deterministic input/checkpoint seams, but the 1.3 app does not
+claim player-facing sequel import or rendering.
+
+### `Sources/LemmingsMobileUI` and `Apps/UltimateLemmingsIOS`
+
+`LemmingsMobileUI` owns UIKit, MetalKit, AVFAudio, the system document picker,
+application support paths and mobile view-controller flow. It converts typed
+mobile-core state into pixel controls and a nearest-neighbour Metal playfield.
+It must not own engine rules.
+
+`Apps/UltimateLemmingsIOS` is the thin iOS executable, metadata, asset catalogue
+and UI-test target. Version 1.3 imports a player-owned Classic DOS folder into a
+staged application-support location. Import validates the complete staged copy
+before replacing the prior content and restores the prior copy on failure.
 
 ### `Sources/LemmingsDataTool`
 
@@ -144,28 +173,52 @@ document is the canonical place for the user-facing wording.
 
 ## Build and distribution
 
-`Package.swift` defines the Swift package, the `NxlvKit` library, the native
-macOS executables and the package test target. `Scripts/build-local-app.sh`
-builds universal arm64/x86_64 local bundles and embeds the supplied local game
-data. It targets macOS 13 or later.
+`Package.swift` defines `NxlvKit`, the mobile core and UI libraries, the native
+macOS executables and package test targets. `Scripts/build-local-app.sh` builds
+universal arm64/x86_64 Mac bundles and embeds the supplied local game data. It
+targets macOS 12.3 or later.
+
+The macOS app keeps aggregate play counts locally. With consent and a configured
+HTTPS address, it sends fixed-schema count events to the optional collector in
+`Tools/Telemetry/`. The collector stores daily totals and one lifetime rescued
+total. The home screen reads that shared total without an owner token; the
+in-app dashboard needs a token for detailed counts. See
+[`Documentation/PlayInsights.md`](Documentation/PlayInsights.md) for the data
+boundary, deployment requirements and count limits.
+
+`Apps/UltimateLemmingsIOS/UltimateLemmingsIOS.xcodeproj` builds the iOS 16
+application. `Scripts/check-1.3-mobile.sh` validates the metadata and source,
+runs focused mobile tests and builds against the iOS Simulator SDK. The iOS app
+imports commercial data at runtime; it does not embed that data in its bundle.
 
 The release path is deliberately separate from the local build:
 
-1. `Scripts/build-and-notarise.sh` checks that source changed since the last
-   release notes commit.
-2. It verifies current release notes, creating them from the recent source
-   history when they are absent.
+1. `Scripts/build-and-notarise.sh` checks that source changed since the chosen
+   previous release commit.
+2. It requires tracked, reviewed notes for the exact build. It stamps the
+   frozen commit into the packaged copy.
 3. It builds and signs the standard and Monterey reference targets.
 4. It builds the development-signed Game Center target as a separate archive.
 5. It notarises the two distributable Developer ID archives and verifies them
    with Gatekeeper tooling.
 6. It writes all three timestamped ZIP files to the configured Downloads
    directory.
+7. It writes a separate Sparkle update ZIP containing only the notarised
+   standard app and regenerates the signed `appcast.xml`.
+8. Publication is a separate, reviewed step through
+   `Scripts/publish-github-release.sh`. The packaging script rejects
+   `PUBLISH_GITHUB_RELEASE=1`.
 
 The Game Center archive is intentionally not submitted to Apple notarisation:
 Apple's Developer ID distribution rules reject that entitlement. Its separate
 development-signed status must remain visible in release notes and beta
 instructions.
+
+The app embeds Sparkle 2.7.3 in `Contents/Frameworks`. Sparkle uses the HTTPS
+appcast in the app's `Contents/Info.plist` and verifies update archives with the
+public Ed25519 key in that file. The private key stays in the release operator's
+login Keychain. A release archive with a missing or unsigned appcast entry is
+not an update candidate.
 
 The packaged app uses only resources inside its bundle at runtime. A copied
 bundle must not depend on the source checkout, the current working directory,
@@ -182,6 +235,7 @@ questions.
 | How is the code and release system shaped? | `ARCHITECTURE.md` |
 | What does a player see today? | [`Documentation/Overview.md`](Documentation/Overview.md) |
 | What does Complete, Playable or Preview mean? | [`Documentation/ReleaseScope.md`](Documentation/ReleaseScope.md) |
+| What is in the iPhone/iPad milestone? | [`Documentation/1.3Roadmap.md`](Documentation/1.3Roadmap.md) |
 | What content is planned and how is it gated? | [`Documentation/ContentUniverseRoadmap.md`](Documentation/ContentUniverseRoadmap.md) |
 | What evidence closes a campaign or release gate? | [`Documentation/ReleaseReadiness/`](Documentation/ReleaseReadiness/) and the relevant completion README |
 | How is local beta packaging run? | [`Documentation/BetaTesting.md`](Documentation/BetaTesting.md) |
@@ -195,8 +249,8 @@ revision they describe.
 
 ## Portability seams
 
-The first portability target is a tested engine contract, not a second UI.
-Future iOS, Windows and Linux shells should reuse deterministic simulation,
+The iOS shell now uses a tested engine contract. Future Windows and Linux
+shells, and further mobile engine work, should reuse deterministic simulation,
 level data, replay fixtures and release gates. Platform work should introduce
 small adapters for:
 

@@ -36,15 +36,26 @@ changes, while brightness, colour and ghost strength blend with speed.
 The centre remains clear, and the screen effect stops above the controls.
 
 **Settings > Gameplay** has separate modern-controls and variable-speed switches.
-**Use OG settings** restores fixed fast-forward and number keys. It also turns
+**Preset > Original** restores fixed fast-forward and number keys. It also turns
 off HD effects, pointer capture, enhanced sequel artwork, shuffle, DJ extras and
 music enhancements. Saves, the chosen machine and volumes stay as set.
-**Use modern defaults** restores the convenience switches. The original fixed
+**Preset > Modern** restores the convenience switches. The original fixed
 fast speeds remain 3× for Classic/L2 and 8× for L3 when variable speed is off.
 
 Moving lemmings leave fading sprite echoes. The ghosts follow actual movement, including
 slopes, falls, climbs, and direction changes. Stationary actors and teleports
 do not create a wake. All solid sprites draw after the wakes.
+
+Each fast tier adds a longer, softer tail: two echoes at 2×, three at 3×,
+four at 5× and five at 10×. Distant echoes get fainter and blurrier as speed
+increases. Neighbouring profiles blend during acceleration. Solid artwork stays sharp.
+
+Variable speed also raises music pitch without changing its tempo. The 2×, 3×,
+5× and 10× tiers use pitch ratios of 1.04, 1.09, 1.18 and 1.35 respectively.
+Pitch glides take 120 ms in either direction and cannot exceed 1.50×.
+This applies to native modules, recorded soundtracks and both DJ decks in all
+three games. Returning to normal speed or leaving active gameplay restores
+normal pitch. Fixed-speed OG controls keep normal pitch.
 
 The effect runs in Classic flat and CRT modes, Lemmings 2, and Lemmings 3.
 It works on SDR displays and adds HDR brightness when available. It does not
@@ -60,7 +71,8 @@ game updates do not restart the engagement burst. A simple radial-line effect
 is available when Metal cannot initialise.
 
 Actor wakes are baked into cached textures at the artwork resolution. Each
-actor uses one additional texture draw. The renderer allows at most 24 wakes
+actor uses one additional texture draw at a settled speed, or two while blending
+between speed tiers. The renderer allows at most 24 wakes
 per frame and one per crowd cell. Camera movement does not affect their direction.
 
 Direction is sampled from world positions on each game tick. A three-tick motion
@@ -78,7 +90,11 @@ Previously recorded movies retain their original frames.
 ## Validation
 
 - `Scripts/run-gameplay-speed-tests.sh` checks tiers, ramping, held-key combinations,
-  rapid exits, focus recovery and the original fixed speeds.
+  rapid exits, focus recovery, the original fixed speeds and music pitch glides.
+- `Scripts/run-adaptive-dj-playback-tests.sh --signal-only` renders a tone through
+  the recording graph without installed music. It checks pitch, unchanged tempo
+  and the upper pitch limit. The full script also checks module and incoming-deck
+  routing against the installed soundtrack library. Missing music fails that gate.
 - `TEST_SCOPE=variable-speed Scripts/run-app-integration-tests.sh` checks real key
   events, attached windows, and the actual simulation clock at every speed.
 
@@ -102,3 +118,26 @@ Previously recorded movies retain their original frames.
 A GPU timing sample on the development Mac measured about 1.7 ms for the
 screen effect at 2560×1440. This excludes the base game render and is not a
 guarantee for other displays or GPUs.
+
+### Speed feedback checks, 25 September 2026
+
+The speed-state and Classic drawing suites passed. Offline audio measurements
+passed at all five speeds, including the pitch cap and unchanged tempo. The
+DJ module and incoming recording checks also passed. Focused L2/L3 canvas
+checks passed for sprite layering, controls, menus and effect lifetimes.
+The 2×, 3×, 5× and 10× renders were generated for all three games.
+
+The following gaps were recorded before build 50. See the
+[build 50 release record](ReleaseReadiness/1.5PublicRelease.md) for current results:
+
+- The installed music library fails the sequel alternate-version assertion.
+  The pre-change playback code at `e894667` fails the same assertion.
+- Classic's variable-speed integration checks passed. A later CRT minimap drag
+  assertion used the gap between the minimap and timeline after the layout changed. The test now
+  checks minimap and timeline hit regions separately. Run it on the complete app.
+- The sequel app suite now compiles against the current Settings presets. Its
+  runtime needs the bundled Classic Mac artwork manifest, which this checkout
+  does not have. The canvas checks above ran separately from the Settings test.
+- The no-data signal check passed outside this host's sandbox. The full playback
+  test now fails when the installed music library is missing. It still needs a
+  complete soundtrack run on the data-ready Mac.

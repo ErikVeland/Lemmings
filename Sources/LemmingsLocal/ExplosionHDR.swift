@@ -141,7 +141,12 @@ enum ExplosionHDR {
   static func textureMask(width: Int, height: Int, flashes: [ExplosionFlash], now: TimeInterval = ProcessInfo.processInfo.systemUptime) -> [UInt8] {
     let warm = mask(width: width, height: height, flashes: flashes, now: now)
     let green = mask(width: width, height: height, flashes: flashes, now: now, tint: .green)
-    return zip(warm, green).flatMap { [$0, $1] }
+    var bytes = [UInt8](repeating: 0, count: warm.count * 2)
+    for index in warm.indices {
+      bytes[index * 2] = warm[index]
+      bytes[index * 2 + 1] = green[index]
+    }
+    return bytes
   }
 
   static let shader = """
@@ -319,6 +324,7 @@ enum ExplosionHDR {
   private var speedField = CGRect.zero
   private var maskIsDirty = true
   var isSuperSpeedActive: Bool { speed.enabled }
+  var hasAllocatedFlashMask: Bool { texture != nil }
 
   /// Each blast has a local fireball. A nuke shares the wider exposure bloom.
   func pulse(cores: [CGRect] = [], fullScreen: Bool) {
@@ -436,7 +442,8 @@ enum ExplosionHDR {
     else if let expiry = flashes.map(\.expiresAt).filter({$0.isFinite && $0 > now}).min() { end = expiry }
     else { return }
     expiration = Task { @MainActor [weak self] in
-      do { try await Task.sleep(for:.seconds(end-now)) } catch { return }
+      // Nanoseconds keep this available on macOS 12.3. Duration-based sleep needs macOS 13.
+      do { try await Task.sleep(nanoseconds: UInt64(max(0, end - now) * 1_000_000_000)) } catch { return }
       self?.render()
       self?.scheduleExpiration()
     }
@@ -456,6 +463,15 @@ enum ExplosionHDR {
     let previousCount = flashes.count
     flashes.removeAll { $0.expiresAt <= now }
     if flashes.count != previousCount { maskIsDirty = true }
+    // An idle overlay has no pixels to present. Hide the previous frame without
+    // allocating a full-window mask or waiting for a Metal drawable.
+    let active = !flashes.isEmpty || !timeline.bursts.isEmpty || speed.isAnimating(now: now)
+    surface?.isHidden = !active
+    guard active else {
+      texture = nil
+      if surface == nil { needsDisplay = true }
+      return
+    }
     guard surface != nil else { needsDisplay = true; return }
     guard let gpu, let queue, let pipeline, let surface, let screen = window?.screen,
           bounds.width > 0, bounds.height > 0, !isHidden else { return }

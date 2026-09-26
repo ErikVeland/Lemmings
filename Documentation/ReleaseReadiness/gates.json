@@ -14,8 +14,8 @@
     "area": "Fan and conversion completion",
     "priority": "P0",
     "status": "closed",
-    "exitCriteria": "Fan levels must load and start; they need no winning route (owner decision, 22 September 2026). Require winning routes and progression for all 60 Oh Yes! conversions. Sequel progression is tracked in the sequel gate.",
-    "progress": "22 September: all 6,020 retained fan levels load, render and start. All 60 conversions pass strict replay verification twice, with complete 20/10/30 rank inventories. The combined 352-level Classic quest passes 1,056 run restores, 352 progress resumes, six release transitions and the final result. Missing fixtures, altered outcomes and late inputs fail without replacing successful evidence. All 352 identities have bundled solution replays and verified hints. See ClassicConversionQuest.json, ClassicValidation-current.md and CampaignClosure-2026-09-22.md. L2/L3 remain previews under their separate gate.",
+    "exitCriteria": "Fan levels must load and start; they need no winning route (owner decision, 22 September 2026). Require winning routes and progression for all 60 Oh Yes! conversions. Sequel progression is tracked in the 1.2 sequel completion gate.",
+    "progress": "22 September: all 6,020 retained fan levels load, render and start. All 60 conversions pass strict replay verification twice, with complete 20/10/30 rank inventories. The combined 352-level Classic quest passes 1,056 run restores, 352 progress resumes, six release transitions and the final result. Missing fixtures, altered outcomes and late inputs fail without replacing successful evidence. All 352 identities have bundled solution replays and verified hints. See ClassicConversionQuest.json, ClassicValidation-current.md and CampaignClosure-2026-09-22.md. L2/L3 remain Preview under the open 1.2 sequel completion gate.",
     "scopes": [
       "all",
       "classic-1.0"
@@ -25,11 +25,11 @@
     "area": "Sequel fidelity",
     "priority": "P0",
     "status": "open",
-    "exitCriteria": "Resolve provisional L3 tool, movement and trap semantics against original-engine evidence. Complete environmental effects, original movie audio and story transitions. Extend L2 original-engine comparisons. Record every L2/L3 winning route and verify continuous campaign progression, L2 survivor carry-over and endings.",
+    "exitCriteria": "1.2 completion gate: resolve provisional L3 tool, movement and trap semantics against original-engine evidence. Complete environmental effects, original movie audio and story transitions. Extend L2 original-engine comparisons. Record every L2/L3 winning route and verify continuous campaign progression, L2 survivor carry-over, endings, saved-run recovery, replay identity and result records.",
     "scopes": [
       "all"
     ],
-    "progress": "15 September: Claude’s committed work preserves 73/120 L2 standalone routes and 41/90 L3 routes. Cavelems has a complete ten-level carry-over chain. L2 and L3 remain previews outside Classic 1.0 completion. Current known-route and runtime regression suites passed in the baseline audit."
+    "progress": "15 September: Claude’s committed work preserves 73/120 L2 standalone routes and 41/90 L3 routes. Cavelems has a complete ten-level carry-over chain. L2 and L3 remain Preview, with 96 routes and the 1.2 completion evidence still open. Current known-route and runtime regression suites passed in the baseline audit."
   },
   {
     "area": "Save and interruption recovery",
@@ -69,7 +69,7 @@
     "priority": "P0",
     "status": "partial",
     "exitCriteria": "Freeze the final source and assets. Build both Mac architectures, sign, notarise and verify the downloaded archive. Earlier beta notarisation is not evidence for later local builds.",
-    "progress": "The 1.0 RC1 package was notarised for the main and macOS 12 archives, with a development-signed Game Center archive for registered Macs. The current 1.1 source contains later changes and requires its own source freeze, validation and package.",
+    "progress": "25 September: the working 1.5 source is test build 49, not a frozen public candidate. The last verified public download and stable appcast remain 1.2 build 41. The build 49 Game Center snapshot is development signed for registered Macs; it is not a public beta package. The 1.0 RC1 package was notarised for the main and macOS 12 archives, but that evidence does not certify 1.5. A final source and asset freeze, reviewed notes, full package build, Developer ID signing, notarisation, Gatekeeper validation, hardware checks and a live update from build 41 remain open. See 1.5PublicRelease.md.",
     "scopes": [
       "all",
       "classic-1.0"
@@ -100,11 +100,12 @@
   {
     "area": "iPhone and iPad",
     "priority": "P1",
-    "status": "not-implemented",
+    "status": "partial",
     "exitCriteria": "Build and test the shared library with the iOS SDK. Implement a UIKit/Metal app shell, precise touch selection, safe-area layouts, audio/session interruptions, checkpoints, thermal budgets and device tests. A Package.swift deployment declaration is not an iOS app.",
     "scopes": [
       "all"
-    ]
+    ],
+    "progress": "25 September: the repository now has a version 1.3 UIKit application target for iPhone and iPad, shared mobile-core and UI modules, nearest-neighbour Metal output, direct targeting, pan and anchored zoom, safe-area controls, explicit-resume audio and application lifecycle handling, atomic versioned checkpoints, thermal budgets, privacy metadata, an app icon and an iPhone/iPad CI matrix. All 42 package tests pass, including 13 focused mobile tests for staged import safety, stale-writer rejection, a Classic jumping regression and exact Classic, L2 and L3 checkpoint restoration. Xcode 26.6 compiled Debug and optimised Release Swift builds for both Simulator architectures and an unsigned optimised arm64 device build with the iOS 26.5 SDK. GitHub Actions run 36027222792 passed the source gate for commit 929cc3b6ed69e620471acc1180c7bcf44008d957 with Xcode 16.4, then passed two UI tests with no failures on iPhone 16 Pro and iPad Pro 11-inch (M4) Simulators running iOS 18.5. The Simulator launch-and-rotation gate is closed for that commit. Physical touch, interruption, audio, thermal, VoiceOver, signing, TestFlight and App Store evidence remain open. The player-facing mobile slice imports Classic DOS data only; L2 and L3 mobile import and renderers are not claimed. See 1.3Roadmap.md and 1.3MobileHandoff.md."
   },
   {
     "area": "Switch and consoles",

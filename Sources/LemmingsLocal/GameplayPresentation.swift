@@ -6,7 +6,7 @@ import NxlvKit
   static let maximumTrails = 24
   var multiplier: Double = 3
   private struct TrailKey: Hashable {
-    let direction: Int, pixelX: Int, pixelY: Int
+    let direction: Int, pixelX: Int, pixelY: Int, tier: Int
     let mirrored: Bool
     var motion: CGVector {
       let angle = CGFloat(direction) * .pi / 8
@@ -14,6 +14,9 @@ import NxlvKit
       return CGVector(dx: abs(dx) < 0.0001 ? 0 : dx, dy: abs(dy) < 0.0001 ? 0 : dy)
     }
   }
+  private static let tiers: [Double] = [2, 3, 5, 10]
+  private static let distances: [[CGFloat]] = [[2, 6], [2, 6, 10], [2, 7, 12, 17], [2, 8, 14, 20, 26]]
+
   private struct TrailImage {
     let image: CGImage
     let bounds: CGRect
@@ -149,45 +152,52 @@ import NxlvKit
     }
     // Sixteen cached angles retain slopes without generating a texture for every velocity.
     let direction = currentPositions[actor]?.direction ?? Self.direction(for: motion, retaining: nil)
-    // Original and Macintosh artwork use one or two source pixels per level pixel.
-    let key = TrailKey(direction: direction,
-      pixelX: max(1, Int((pixelSize.width * CGFloat(cached.source.width) / rect.width).rounded())),
-      pixelY: max(1, Int((pixelSize.height * CGFloat(cached.source.height) / rect.height).rounded())),
-      mirrored: mirrored)
-    let trail: TrailImage
-    if let existing = cached.images[key] { trail = existing }
-    else {
-      guard let image = Self.makeTrail(source: cached.source, key: key) else { return }
-      cached.images[key] = image
-      trail = image
+    let speed = min(10, max(2, multiplier))
+    let upper = Self.tiers.firstIndex(where: { $0 >= speed }) ?? 3
+    let lower = max(0, upper - 1)
+    let blend = upper == lower ? 1 : (speed - Self.tiers[lower]) / (Self.tiers[upper] - Self.tiers[lower])
+    context.clip(to: clip)
+    context.setBlendMode(.plusLighter)
+    context.interpolationQuality = .none
+    // Blend only the two neighbouring tiers. Stable speeds use one texture draw.
+    for (tier, weight) in [(lower, 1 - blend), (upper, blend)] where weight > 0 {
+      // Original and Macintosh artwork use one or two source pixels per level pixel.
+      let key = TrailKey(direction: direction,
+        pixelX: max(1, Int((pixelSize.width * CGFloat(cached.source.width) / rect.width).rounded())),
+        pixelY: max(1, Int((pixelSize.height * CGFloat(cached.source.height) / rect.height).rounded())),
+        tier: tier, mirrored: mirrored)
+      let trail: TrailImage
+      if let existing = cached.images[key] { trail = existing }
+      else {
+        guard let image = Self.makeTrail(source: cached.source, key: key) else { continue }
+        cached.images[key] = image
+        trail = image
+      }
+      let scaleX = rect.width / CGFloat(cached.source.width)
+      let scaleY = rect.height / CGFloat(cached.source.height)
+      let tail = CGRect(x: rect.minX + (trail.bounds.minX - trail.origin.x) * scaleX,
+        y: rect.minY + (trail.bounds.minY - trail.origin.y) * scaleY,
+        width: trail.bounds.width * scaleX, height: trail.bounds.height * scaleY)
+      context.saveGState()
+      context.setAlpha(CGFloat(weight) * 0.85)
+      context.translateBy(x: tail.minX, y: tail.maxY)
+      context.scaleBy(x: 1, y: -1)
+      context.draw(trail.image, in: CGRect(origin: .zero, size: tail.size))
+      context.restoreGState()
     }
     occupiedCells |= cell
     drawnTrailCount += 1
-    let scaleX = rect.width / CGFloat(cached.source.width)
-    let scaleY = rect.height / CGFloat(cached.source.height)
-    let tail = CGRect(x: rect.minX + (trail.bounds.minX - trail.origin.x) * scaleX,
-      y: rect.minY + (trail.bounds.minY - trail.origin.y) * scaleY,
-      width: trail.bounds.width * scaleX, height: trail.bounds.height * scaleY)
-    context.clip(to: clip)
-    context.setBlendMode(.plusLighter)
-    // Ghosting alone reads the speed. It must be visible at 2x, not merely
-    // present, and clearly heavier as the speed climbs.
-    context.setAlpha(CGFloat(min(0.92, 0.5 + 0.42 * sqrt(max(0, multiplier - 1) / 4))))
-    context.interpolationQuality = .none
-    context.translateBy(x: tail.minX, y: tail.maxY)
-    context.scaleBy(x: 1, y: -1)
-    context.draw(trail.image, in: CGRect(origin: .zero, size: tail.size))
   }
 
-  /// Bake three echoes into one texture per pose and direction.
-  /// This runs only on a cache miss, at the sprite's own artwork resolution.
+  /// Bake each speed tier at the sprite's artwork resolution on a cache miss.
   private static func makeTrail(source: CGImage, key: TrailKey) -> TrailImage? {
-    // Leave room for the furthest echo and its stretch.
     let motion = key.motion
     let dx = motion.dx * CGFloat(key.pixelX), dy = motion.dy * CGFloat(key.pixelY)
-    let paddingX = CGFloat(key.pixelX)*2, paddingY = CGFloat(key.pixelY)*2
-    let width = source.width + Int(ceil(abs(dx) * 16) + 2 * paddingX)
-    let height = source.height + Int(ceil(abs(dy) * 16) + 2 * paddingY)
+    let distances = Self.distances[key.tier]
+    let reach = distances.last! + 2 + CGFloat(key.tier)
+    let paddingX = CGFloat(key.pixelX) * 5, paddingY = CGFloat(key.pixelY) * 5
+    let width = source.width + Int(ceil(abs(dx) * reach) + 2 * paddingX)
+    let height = source.height + Int(ceil(abs(dy) * reach) + 2 * paddingY)
     guard let context = CGContext(data: nil, width: width, height: height,
       bitsPerComponent: 8, bytesPerRow: width * 4, space: CGColorSpaceCreateDeviceRGB(),
       bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue) else { return nil }
@@ -195,28 +205,34 @@ import NxlvKit
     context.scaleBy(x: 1, y: -1)
     context.setBlendMode(.plusLighter)
     context.interpolationQuality = .low
-    let origin = CGPoint(x: ceil(max(0, dx) * 16) + paddingX, y: ceil(max(0, dy) * 16) + paddingY)
-    func echo(distance: CGFloat, stretch: CGFloat, alpha: CGFloat) {
-      let rect = CGRect(x: origin.x - dx * distance - max(0, dx * stretch),
-        y: origin.y - dy * distance - max(0, dy * stretch),
+    let origin = CGPoint(x: ceil(max(0, dx) * reach) + paddingX, y: ceil(max(0, dy) * reach) + paddingY)
+    func echo(distance: CGFloat, stretch: CGFloat, alpha: CGFloat, offset: CGPoint) {
+      let rect = CGRect(x: origin.x - dx * distance - max(0, dx * stretch) + offset.x,
+        y: origin.y - dy * distance - max(0, dy * stretch) + offset.y,
         width: CGFloat(source.width) + abs(dx * stretch),
         height: CGFloat(source.height) + abs(dy * stretch))
       context.saveGState()
       context.setAlpha(alpha)
-      context.setShadow(offset:.zero,blur:CGFloat(max(key.pixelX,key.pixelY))*0.7,
-        color:CGColor(red:0.1,green:0.7,blue:1,alpha:0.65))
+      context.setShadow(offset: .zero, blur: CGFloat(max(key.pixelX, key.pixelY)) * 0.7,
+        color: CGColor(red: 0.1, green: 0.7, blue: 1, alpha: 0.65))
       context.translateBy(x: key.mirrored ? rect.maxX : rect.minX, y: rect.maxY)
       context.scaleBy(x: key.mirrored ? -1 : 1, y: -1)
       context.draw(source, in: CGRect(origin: .zero, size: rect.size))
       context.restoreGState()
     }
-    // A half-pixel directional blur softens only the ghosts. The weights keep
-    // their total brightness unchanged, and this work runs only on a cache miss.
-    let samples: [(CGFloat, CGFloat)] = [(-1, 0.0625), (-0.5, 0.25), (0, 0.375), (0.5, 0.25), (1, 0.0625)]
-    for (offset, weight) in samples {
-      echo(distance: 12 + offset, stretch: 3, alpha: 0.15 * weight)
-      echo(distance: 7 + offset, stretch: 2, alpha: 0.28 * weight)
-      echo(distance: 3 + offset, stretch: 1, alpha: 0.46 * weight)
+    // A small two-dimensional kernel softens the distant echoes progressively.
+    // Its weights preserve brightness while each higher tier adds fainter tails.
+    let samples: [(CGFloat, CGFloat)] = [(-1, 0.25), (0, 0.5), (1, 0.25)]
+    let farAlpha: CGFloat = [0.18, 0.13, 0.09, 0.055][key.tier]
+    for (index, distance) in distances.enumerated().reversed() {
+      let progress = CGFloat(index) / CGFloat(distances.count - 1)
+      let blur = 0.25 + progress * (0.5 + CGFloat(key.tier) * 0.5)
+      let alpha = 0.46 * pow(farAlpha / 0.46, progress)
+      let stretch = 0.5 + progress * (1.5 + CGFloat(key.tier))
+      for (x, xWeight) in samples { for (y, yWeight) in samples {
+        echo(distance: distance, stretch: stretch, alpha: alpha * xWeight * yWeight,
+          offset: CGPoint(x: x * blur * CGFloat(key.pixelX), y: y * blur * CGFloat(key.pixelY)))
+      } }
     }
     // Remove transparent margins so additive blending touches fewer screen pixels.
     let pixels = context.data!.assumingMemoryBound(to: UInt8.self)
@@ -243,7 +259,7 @@ import NxlvKit
     "P":[127,9,9,9,6], "Q":[62,65,81,33,94], "R":[127,9,25,41,70],
     "S":[70,73,73,73,49], "T":[1,1,127,1,1], "U":[63,64,64,64,63],
     "V":[31,32,64,32,31], "W":[63,64,56,64,63], "X":[99,20,8,20,99],
-    "Y":[3,4,120,4,3], "Z":[97,81,73,69,67],
+    "Y":[3,4,120,4,3], "Z":[97,81,73,69,67], "z":[0,68,100,84,76],
     "0":[62,81,73,69,62], "1":[0,66,127,64,0], "2":[98,81,73,73,70],
     "3":[34,65,73,73,54], "4":[24,20,18,127,16], "5":[39,69,69,69,57],
     "6":[60,74,73,73,48], "7":[1,113,9,5,3], "8":[54,73,73,73,54],
@@ -252,9 +268,13 @@ import NxlvKit
     "*" :[20,8,62,8,20], "%":[99,19,8,100,99], "(" :[0,28,34,65,0],
     ")":[0,65,34,28,0], "'" :[0,3,0,0,0], "!" :[0,0,95,0,0],
     ",":[0,64,48,0,0], "<":[8,20,34,65,0], ">":[0,65,34,20,8],
-    "∞" :[28,34,28,34,28], "?" :[2,1,81,9,6], "=" :[20,20,20,20,20]]
-  static func draw(_ text: String, in rect: CGRect, maxScale: CGFloat = 3, highlighted: Character? = nil, palette: MacInterfaceRenderer.Palette = .blue) {
-    let normalized = text.uppercased().replacingOccurrences(of: "×", with: "X")
+    "∞" :[28,34,28,34,28], "💀":[14,123,63,123,14],
+    "?" :[2,1,81,9,6], "=" :[20,20,20,20,20]]
+  static func draw(_ text: String, in rect: CGRect, maxScale: CGFloat = 3,
+                   highlighted: Character? = nil, palette: MacInterfaceRenderer.Palette = .blue,
+                   preservesCase: Bool = false) {
+    let source = text.replacingOccurrences(of: "×", with: "X")
+    let normalized = preservesCase ? source : source.uppercased()
     let scale = max(1, min(maxScale, floor(min(rect.height / 7, rect.width / CGFloat(max(1, normalized.count * 6))))))
     let start = floor(rect.midX - CGFloat(normalized.count * 6 - 1) * scale / 2)
     let top = floor(rect.midY - 3.5 * scale)
@@ -278,6 +298,62 @@ import NxlvKit
         }
       }
     }
+  }
+}
+
+struct PrecisionZoomStatus: Equatable {
+  var zoom = 0
+  var superzoom = 0
+  var active: PrecisionZoomKind?
+  var isEmpty = true
+
+  init(zoom: Int = 0, superzoom: Int = 0, active: PrecisionZoomKind? = nil,
+       isEmpty: Bool = true) {
+    self.zoom = zoom
+    self.superzoom = superzoom
+    self.active = active
+    self.isEmpty = isEmpty
+  }
+
+  var accessibility: String {
+    guard !isEmpty else { return "" }
+    let state = active.map { $0 == .zoom ? "Zoom active" : "Superzoom active" } ?? "Zoom off"
+    return "Zoom, \(zoom) remaining. Superzoom, \(superzoom) remaining. \(state)"
+  }
+
+  func size(scale: CGFloat = 1) -> CGSize {
+    guard !isEmpty else { return .zero }
+    let scale = max(1, floor(scale))
+    let longest = max("z - \(zoom)".count, "Z - \(superzoom)".count)
+    return CGSize(width: CGFloat(longest) * 6 * scale + 8 * scale,
+                  height: 24 * scale)
+  }
+
+  @MainActor @discardableResult
+  func draw(at origin: CGPoint, scale: CGFloat = 1) -> CGSize {
+    guard !isEmpty else { return .zero }
+    let scale = max(1, floor(scale))
+    let rows = [("z - \(zoom)", PrecisionZoomKind.zoom),
+                ("Z - \(superzoom)", PrecisionZoomKind.superzoom)]
+    let badgeSize = size(scale: scale)
+    let width = badgeSize.width
+    let rowHeight = 11 * scale
+    for (index, row) in rows.enumerated() {
+      let rect = CGRect(x: origin.x, y: origin.y + CGFloat(index) * (rowHeight + 2 * scale),
+                        width: width, height: rowHeight)
+      NSColor.black.withAlphaComponent(0.8).setFill()
+      rect.fill()
+      if active == row.1 {
+        NSGraphicsContext.saveGraphicsState()
+        NSGraphicsContext.current?.cgContext.setShouldAntialias(false)
+        NSColor(calibratedRed: 0.45, green: 1, blue: 0.1, alpha: 1).setStroke()
+        NSBezierPath(rect: rect.insetBy(dx: 0.5, dy: 0.5)).stroke()
+        NSGraphicsContext.restoreGraphicsState()
+      }
+      GamePixelText.draw(row.0, in: rect.insetBy(dx: 4 * scale, dy: 2 * scale),
+        maxScale: scale, palette: active == row.1 ? .green : .blue, preservesCase: true)
+    }
+    return badgeSize
   }
 }
 
@@ -331,6 +407,9 @@ import NxlvKit
         weak var owner: NSView?
         var localFrame = CGRect.zero
         var press: (() -> Void)?
+        var onFocus: (() -> Void)?
+        var readNumber: (() -> Double)?
+        var adjustValue: ((Double) -> Void)?
         var readValue: (() -> String)?
         var writeValue: ((String) -> Void)?
     }
@@ -338,6 +417,9 @@ import NxlvKit
     var owner: NSView? { get { state.owner } set { state.owner = newValue } }
     var localFrame: CGRect { get { state.localFrame } set { state.localFrame = newValue } }
     var press: (() -> Void)? { get { state.press } set { state.press = newValue } }
+    var onFocus: (() -> Void)? { get { state.onFocus } set { state.onFocus = newValue } }
+    var readNumber: (() -> Double)? { get { state.readNumber } set { state.readNumber = newValue } }
+    var adjustValue: ((Double) -> Void)? { get { state.adjustValue } set { state.adjustValue = newValue } }
     var readValue: (() -> String)? { get { state.readValue } set { state.readValue = newValue } }
     var writeValue: ((String) -> Void)? { get { state.writeValue } set { state.writeValue = newValue } }
     init(owner: NSView, label: String, frame: CGRect, press: (() -> Void)? = nil) {
@@ -345,6 +427,7 @@ import NxlvKit
         super.init()
         self.owner = owner; self.localFrame = frame; self.press = press
         setAccessibilityParent(owner)
+        setAccessibilityEnabled(true)
         setAccessibilityRole(press == nil ? .staticText : .button)
         setAccessibilityLabel(label)
     }
@@ -360,7 +443,8 @@ import NxlvKit
         }
     }
     override func accessibilityPerformPress() -> Bool {
-        onMain { [state] in
+        guard isAccessibilityEnabled() else { return false }
+        return onMain { [state] in
             guard let owner = state.owner, owner.window != nil, !owner.isHiddenOrHasHiddenAncestor,
                 let press = state.press else { return false }
             owner.scrollToVisible(state.localFrame)
@@ -369,16 +453,23 @@ import NxlvKit
         }
     }
     override func accessibilityValue() -> Any? {
+        if let value = onMain({ [state] in state.readNumber?() }) { return value }
         let value: String? = onMain { [state] in state.readValue?() }
         return value ?? super.accessibilityValue()
     }
     override func setAccessibilityValue(_ value: Any?) {
-        if let text = value as? String, onMain({ [state] in
+        if let text = (value as? String) ?? (value as? NSNumber)?.stringValue, onMain({ [state] in
             guard let write = state.writeValue else { return false }
             write(text)
             return true
         }) { return }
         super.setAccessibilityValue(value)
+    }
+    override func accessibilityPerformIncrement() -> Bool {
+        onMain { [state] in guard let adjust = state.adjustValue else { return false }; adjust(1); return true }
+    }
+    override func accessibilityPerformDecrement() -> Bool {
+        onMain { [state] in guard let adjust = state.adjustValue else { return false }; adjust(-1); return true }
     }
     override func setAccessibilityFocused(_ focused: Bool) {
         super.setAccessibilityFocused(focused)
@@ -386,6 +477,7 @@ import NxlvKit
         onMain { [state] in
             guard let owner = state.owner, owner.window != nil, !owner.isHiddenOrHasHiddenAncestor else { return }
             owner.scrollToVisible(state.localFrame)
+            state.onFocus?()
         }
     }
 
@@ -400,5 +492,28 @@ import NxlvKit
         element.setAccessibilityRole(press == nil ? .staticText : .button)
         elements[id] = element
         return element
+    }
+}
+
+/// A fresh level starts after three visible seconds. Explicit pause cancels it.
+@MainActor final class FreshLevelCountdown {
+    private(set) var remaining: Double? = nil
+    var isActive: Bool { remaining != nil }
+    var number: Int? { remaining.map { max(1, Int(ceil($0))) } }
+    func arm() { remaining = 3 }
+    func cancel() { remaining = nil }
+    @discardableResult func advance(seconds: Double, visible: Bool) -> Bool {
+        guard visible, let remaining else { return false }
+        let next = remaining - max(0, seconds)
+        if next <= 0 { cancel(); return true }
+        self.remaining = next
+        return false
+    }
+    func draw(in bounds: CGRect) {
+        guard let number else { return }
+        let rect = CGRect(x: floor(bounds.midX - 24), y: floor(bounds.midY - 28), width: 48, height: 56)
+        NSColor.black.withAlphaComponent(0.75).setFill()
+        rect.insetBy(dx: -8, dy: -8).fill()
+        GamePixelText.draw(String(number), in: rect, maxScale: 6, palette: .green)
     }
 }

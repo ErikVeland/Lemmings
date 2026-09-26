@@ -14,10 +14,10 @@ check(speed.multiplier == 1, "Extra clicks must not restart speed")
 speed.tap(at: 7)
 check(speed.target == 10, "Toggle must remember the chosen tier")
 for time in 8...12 { speed.step(-1, at: Double(time)) }
-check(speed.selected == 2 && speed.multiplier == 2, "Decreasing must stop at 2× immediately")
+check(speed.selected == 1 && speed.multiplier == 1 && speed.cruise == 2, "Decreasing must reach 1× and remember 2×")
 speed.reset(at: 13); speed.step(1, at: 14)
-check(speed.target == 3 && speed.cruise == 3, "Choosing a tier must start the selected speed")
-speed.update(at: 15); check(speed.multiplier == 3, "Selected speed must affect the clock")
+check(speed.target == 2 && speed.cruise == 2, "Choosing a tier must start the selected speed")
+speed.update(at: 15); check(speed.multiplier == 2, "Selected speed must affect the clock")
 print("PASS immediate toggle, remembered tiers, bounded arrows and double-click absorption")
 
 for input in [GameplaySpeed.Hold.key, .mouse, .shift, .controller] {
@@ -32,7 +32,7 @@ for input in [GameplaySpeed.Hold.key, .mouse, .shift, .controller] {
     speed.newLevel(at: 24); speed.step(1, at: 25)
     speed.press(input, at: 26); speed.update(at: 28)
     speed.release(input, at: 29)
-    check(speed.multiplier == (input == .key ? 10 : 3), "F must retain the reached tier from an existing cruise")
+    check(speed.multiplier == (input == .key ? 10 : 2), "F must retain the reached tier from an existing cruise")
     speed.press(input, at: 30); speed.update(at: 32); speed.reset(at: 32.1)
     speed.release(input, at: 32.2)
     check(speed.multiplier == 1, "Release after an emergency exit must not restart")
@@ -63,3 +63,42 @@ for legacy in [3.0, 8] {
     original.release(.shift, at: 11); check(original.multiplier == 1, "OG hold did not release")
 }
 print("PASS original fixed-speed controls")
+
+speed.newLevel(at: 100)
+for (time, expected) in [(101.0, 2.0), (101.1, 1), (101.2, 2), (101.3, 1)] {
+    speed.press(.mouse, at: time)
+    speed.release(.mouse, at: time + 0.01)
+    check(speed.target == expected, "Every middle click must toggle, including rapid clicks")
+}
+speed.step(1, at: 102); speed.step(1, at: 103)
+speed.tap(at: 104, absorbRapidClicks: false)
+check(speed.target == 1 && speed.cruise == 3, "Stopping must preserve the chosen fast tier")
+speed.tap(at: 104.1, absorbRapidClicks: false)
+check(speed.target == 3, "Middle toggle must restore the most recent fast tier")
+print("PASS toolbar 1× floor and rapid remembered-speed toggles")
+
+var pitch = GameplayMusicPitch()
+var previousPitch = 1.0
+for (index, tier) in GameplaySpeed.steps.dropFirst().enumerated() {
+    let time = 200 + Double(index)
+    let ratio = GameplayMusicPitch.ratio(for: tier)
+    check(ratio > previousPitch && ratio <= 1.5, "Each tier must raise pitch within the 1.5× cap")
+    pitch.update(speed: tier, at: time)
+    let start = pitch.cents
+    pitch.update(speed: tier, at: time + 0.06)
+    check(pitch.cents > start && pitch.cents < 1200 * log2(ratio), "Pitch must glide without jumping")
+    pitch.update(speed: tier, at: time + 0.13)
+    check(abs(pow(2, pitch.cents / 1200) - ratio) < 0.000001, "Pitch did not settle in 120 ms")
+    previousPitch = ratio
+}
+pitch.update(speed: 1, at: 205)
+pitch.update(speed: 1, at: 205.04)
+let fallingPitch = pitch.cents
+pitch.update(speed: 5, at: 205.04)
+check(pitch.cents == fallingPitch, "A reversed glide jumped in pitch")
+pitch.update(speed: 1, at: 206)
+pitch.update(speed: 1, at: 206.13)
+check(pitch.cents == 0, "Returning to normal retained raised pitch")
+check(GameplayMusicPitch.ratio(for: 100) <= 1.5 && GameplayMusicPitch.ratio(for: 0) == 1,
+      "Out-of-range speed escaped the pitch limits")
+print("PASS per-tier music pitch, 120 ms glides, reversals and pitch cap")
