@@ -121,6 +121,8 @@ public struct ArcadeReport: Sendable {
     public let newRescueBest: Bool
     public let newSkillBest: Bool
     public let trolley: TrolleyReport?
+    /// This run brought the player's earned level skips up by one.
+    public var earnedLevelSkip = false
     public var maximumIsProven: Bool { trolley.map { $0.attempt.maximum.status == .verified } ?? bestKnown.savedAll }
     public var challenge: String {
         if let previousBest, run.saved < previousBest.saved {
@@ -243,8 +245,12 @@ public struct ArcadeRecords: Codable, Equatable, Sendable {
         guard profile(run.profileID) != nil, !runs.contains(where: { $0.id == run.id }),
               !trolley.attempts.contains(where: { $0.id == run.id }),
               run.telemetry == nil || TrolleyHistory.isLegitimate(run) else { return nil }
+        let skipsBefore = levelSkips(profileID: run.profileID).earned
         let trolleyReport = trolley.record(run)
         guard run.telemetry == nil || trolleyReport != nil else { return nil }
+        // Passing a skipped level returns its skip.
+        if run.qualifies { skippedLevels[run.profileID]?.removeAll { $0 == TrolleyCareerScore.levelKey(run.level) } }
+        if skippedLevels[run.profileID]?.isEmpty == true { skippedLevels[run.profileID] = nil }
         let previous = leaderboard(level: run.level, board: .rescue, assisted: run.assisted)
             .first { $0.profileID == run.profileID }
         let key = Self.statsKey(level: run.level, profileID: run.profileID, assisted: run.assisted)
@@ -271,9 +277,11 @@ public struct ArcadeRecords: Codable, Equatable, Sendable {
         }
         runs.removeAll { $0.level.boardID == run.level.boardID && $0.profileID == run.profileID
             && $0.assisted == run.assisted && !keep.contains($0.id) }
-        return ArcadeReport(run: run, previousBest: previous, bestKnown: best, stats: stats,
+        var report = ArcadeReport(run: run, previousBest: previous, bestKnown: best, stats: stats,
             earned: ArcadeLevelAchievement.allCases.filter { stats.achievements.contains($0) && !oldAwards.contains($0) },
             newRescueBest: improved, newSkillBest: efficient, trolley: trolleyReport)
+        report.earnedLevelSkip = levelSkips(profileID: run.profileID).earned > skipsBefore
+        return report
     }
 
     public func validated() throws -> Self {

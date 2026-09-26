@@ -34,11 +34,12 @@ for later. Opening Hot Seat again resumes that shared campaign.
 
 | Result | Primary action | Other choices |
 | --- | --- | --- |
-| Loss | Retry as the next player | Retry as the current player; Back to library |
+| Loss | Retry as the next player | Retry as the current player; Skip as the current player, when they own a skip; Back to library |
 | Clear, Every level | Next level as the next player | Retry as either player |
 | Clear, At first fail | Next level as the current player | Retry as either player |
 
-Buttons name the player who will act. Enter uses the primary action. R retries
+A skip is paid by the player who failed, and the next level passes to the next
+player. See [Level skips](LevelSkips.md). Buttons name the player who will act. Enter uses the primary action. R retries
 as the current player. **Every level** is the default house rule. **At first fail**
 lets a winner keep playing. The rule survives quitting and returning to solo.
 

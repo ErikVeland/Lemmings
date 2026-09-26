@@ -204,9 +204,11 @@ public struct ClassicGameFlow: Sendable {
     }
 
     /// Whether the result on screen is a failure a level skip can pass over.
+    /// The game's final level cannot be skipped.
     public var canSkipLevel: Bool {
-        guard case let .results(_, saved, required, _) = screen else { return false }
-        return saved < required
+        guard case let .results(_, saved, required, _) = screen, saved < required,
+              let rank = currentRank else { return false }
+        return currentRankIndex + 1 < ranks.count || positionInRank + 1 < rank.levelIndices.count
     }
 
     /// Moves past a failed level without passing it. The next level opens,
@@ -219,12 +221,10 @@ public struct ClassicGameFlow: Sendable {
         if next < rank.levelIndices.count {
             positionInRank = next
             openBriefing(recordsCampaignProgress: recordsCampaignProgress)
-        } else if currentRankIndex + 1 < ranks.count {
+        } else {
             currentRankIndex += 1
             positionInRank = 0
             openBriefing(recordsCampaignProgress: recordsCampaignProgress)
-        } else {
-            screen = .rankSelect
         }
         return true
     }

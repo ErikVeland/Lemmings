@@ -1319,7 +1319,18 @@ import NxlvKit
             next: { [weak self] in self?.continueResult() }, replay: { [weak self] save in self?.runMovie.review(save: save) },
             continueTitle: resultContinueTitle, background: arcadeBackdrop,
             rewardVolume: sounds.muted ? 0 : audioSettings.soundVolume,
-            continueHandlesHandover: onSequenceContinue != nil)
+            continueHandlesHandover: onSequenceContinue != nil,
+            skip: canSkipLevel ? { [weak self] in self?.skipLevel() } : nil)
+    }
+    /// Level skips apply to a failed campaign level, not practice or playlists.
+    private var canSkipLevel: Bool {
+        practiceLevel == nil && onSequenceContinue == nil && recordsCampaignProgress
+            && game?.didWin == false && campaign.canSkipLevel
+    }
+    /// The result screen has already spent the skip. This only moves the campaign.
+    private func skipLevel() {
+        guard canSkipLevel, campaign.skipLevel() else { return }
+        persist(); prepareBriefing()
     }
     private var resultContinueTitle: String {
         if practiceLevel != nil { return "Practice levels" }

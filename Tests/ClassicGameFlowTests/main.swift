@@ -93,7 +93,7 @@ private func testSkipOpensTheNextLevel() throws {
         "a skip outside the campaign must not change campaign reach")
     flow.acknowledgeResults(); flow.selectLevel(rank: 1, position: 1); flow.beginPlaying()
     flow.finishLevel(saved: 0, required: 5, total: 10)
-    try require(flow.skipLevel() && flow.screen == .rankSelect, "skipping the final level must return to the ranks")
+    try require(!flow.canSkipLevel && !flow.skipLevel() && flow.screen != .rankSelect, "the game's final level must not take a skip")
     print("PASS a skip opens the next level without passing the skipped one")
 }
 

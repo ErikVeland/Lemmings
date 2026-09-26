@@ -22,6 +22,14 @@ Release base: v1.5.0
 - Mac and Amiga sound sets use the supplied Yippee when their bank has no sample.
   The Mac sound set also uses the Amiga Pop fallback.
 
+## Level skips
+
+- Every third unassisted three-star level earns a level skip.
+- After failing a campaign level in any of the three games, choose **Skip level**
+  to open the next one. Finales cannot be skipped.
+- Clearing a skipped level later returns its skip. In Hot Seat, the player who
+  failed pays for the skip and the turn passes on.
+
 ## Sessions and controls
 
 - Open all your saved playlists and creation tools from **Playlists** on the home screen.
@@ -31,6 +39,15 @@ Release base: v1.5.0
 - This release combines the 1.5 release fixes with the newer 1.6 work. It includes
   variable speed, modern and original presets, improved pointer targeting,
   keyboard and controller controls, countdowns, hints and saved-run recovery.
+
+## Fixes
+
+- With Build targeting, a current builder is preferred only while it can accept
+  another Build. Lemmings behind it stay selectable in Classic and Lemmings 2.
+- A nuke before the first lemming leaves now ends the level at once, without a countdown.
+- Pause stops the music like a turntable, with a short reverb tail, and play spins it back up.
+- After a clear, Return continues to the next level. The arrow keys page through
+  awards, career and portraits again.
 
 ## Updates
 
