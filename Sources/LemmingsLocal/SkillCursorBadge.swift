@@ -59,12 +59,26 @@ import NxlvKit
             maxScale: CGFloat(size == .none ? 2 : size.multiplier), palette: .blue)
     }
 
+    /**
+     * Gently fades the last finite use; reduced motion and unlimited skills stay steady.
+     */
+    static func opacity(remaining: Int?, now: TimeInterval, reduceMotion: Bool) -> CGFloat {
+        guard remaining == 1, !reduceMotion else { return 1 }
+        return CGFloat(0.875 + 0.125 * cos(now * (2 * .pi / 2.4)))
+    }
+
     static func draw(icon: NSImage?, index _: Int, at point: CGPoint, scale: CGFloat,
-                     tint: NSColor, size: SkillCursorIconSize = .one, reduceMotion _: Bool, in bounds: CGRect) {
+                     tint: NSColor, size: SkillCursorIconSize = .one, reduceMotion: Bool,
+                     remaining: Int?, now: TimeInterval = ProcessInfo.processInfo.systemUptime, in bounds: CGRect) {
         guard size != .none else { return }
         let multiplier = CGFloat(size.multiplier)
         let pixel = max(1, floor(scale))
         let rect = frame(at: point, scale: scale, size: size, in: bounds)
+        if remaining == 0 {
+            drawEmptyMark(in: rect, pixel: pixel, multiplier: multiplier)
+            return
+        }
+        let alpha = opacity(remaining: remaining, now: now, reduceMotion: reduceMotion)
         if let icon {
             let available = rect
             let fit = min(multiplier, available.width / max(1, icon.size.width),
@@ -77,16 +91,36 @@ import NxlvKit
                 height: size.height)
             icon.draw(in: iconRect, from: .zero,
                 operation: .sourceOver,
-                fraction: 1,
+                fraction: alpha,
                 respectFlipped: true,
                 hints: [.interpolation: NSImageInterpolation.none.rawValue])
         } else {
-            tint.withAlphaComponent(0.9).setFill()
+            tint.withAlphaComponent(0.9 * alpha).setFill()
             let marker = 2 * pixel
             CGRect(x: rect.maxX - marker - pixel,
                    y: rect.maxY - marker - pixel,
                    width: marker,
                    height: marker).fill()
         }
+    }
+
+    private static func drawEmptyMark(in rect: CGRect, pixel: CGFloat, multiplier: CGFloat) {
+        let stroke = pixel * multiplier
+        let inset = stroke / 2 + pixel
+        let mark = NSBezierPath()
+        mark.move(to: CGPoint(x: rect.minX + inset, y: rect.minY + inset))
+        mark.line(to: CGPoint(x: rect.maxX - inset, y: rect.maxY - inset))
+        mark.move(to: CGPoint(x: rect.maxX - inset, y: rect.minY + inset))
+        mark.line(to: CGPoint(x: rect.minX + inset, y: rect.maxY - inset))
+        mark.lineCapStyle = .square
+        NSGraphicsContext.saveGraphicsState()
+        NSGraphicsContext.current?.shouldAntialias = false
+        mark.lineWidth = stroke + pixel
+        NSColor.black.setStroke()
+        mark.stroke()
+        mark.lineWidth = stroke
+        NSColor(calibratedRed: 0.95, green: 0.17, blue: 0.16, alpha: 1).setStroke()
+        mark.stroke()
+        NSGraphicsContext.restoreGraphicsState()
     }
 }

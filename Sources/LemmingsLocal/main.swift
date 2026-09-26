@@ -517,6 +517,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
       runMovie.discard()
       launchMode = checkpoint.fullQuest == true ? .quest : .singleTitle
       arcadeRunID = checkpoint.runID; arcadeProfileID = checkpoint.profileID; arcadeHotSeatID = checkpoint.hotSeatID
+      PrecisionZoomController.shared.start(attemptID: arcadeRunID, profileID: arcadeProfileID)
+      syncPrecisionZoom()
       panel.selectedSkillIndex = checkpoint.selectedSkill
       playfield.viewport.scrollX = max(0, min(checkpoint.scrollX, Double(restored.levelWidth)))
       playfield.viewport.scrollY = max(0, min(checkpoint.scrollY, Double(restored.levelHeight)))
@@ -861,6 +863,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       return
     }
     tubeIsActive = wantsTube
+    playfield.showsDeathCountdownOverlay = wantsTube
     playfield.presentsHDR = !wantsTube
     panel.handlePointerUp()
     playfield.clearPointer()
@@ -902,10 +905,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
       }
       crtView.onMouseExited = { [weak self] in self?.playfield.clearPointer() }
       crtView.onMouseMoved = { [weak self] point in self?.tubeMove(point) }
-      crtView.onScroll = { [weak self] dx, _ in
+      crtView.onScroll = { [weak self] event, point in
         guard let self else { return }
-        self.playfield.viewport.scroll(dx: -Double(dx), dy: 0)
-        self.syncPanelViewport()
+        self.playfield.handleScroll(event, at: point.flatMap { $0.y < 320 ? $0 : nil },
+          pansVertically: false)
       }
       window.contentView = crtView
       window.makeFirstResponder(crtView)
@@ -1487,6 +1490,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     playfield.selectedSkill = { [weak self] in self?.panel.selectedSkillIndex ?? 0 }
     playfield.onAssign = { [weak self] id in self?.assign(id) }
     playfield.onViewportChanged = { [weak self] in self?.syncPanelViewport() }
+    playfield.onPrecisionScroll = { [weak self] action, point in self?.scrollPrecisionZoom(action, at: point) }
     playfield.onAdvancePhase = { [weak self] in self?.advancePhase() }
     playfield.onHandoverRetry = { [weak self] in self?.retryPreviousHandoverLevel() }
     playfield.onReplay = { [weak self] save in self?.runMovie.review(save: save) }
@@ -5313,6 +5317,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
     hintMap = playfield.levelImage
     let previousAttemptID = arcadeRunID
     arcadeRunID = UUID(); arcadeProfileID = ArcadeStore.shared.playingProfileID; arcadeHotSeatID = ArcadeStore.shared.hotSeatID; arcadeReport = nil
+    if !restoringCheckpoint {
+      PrecisionZoomController.shared.start(attemptID: arcadeRunID, profileID: arcadeProfileID)
+      syncPrecisionZoom()
+    }
     let source = currentNxlvURL.flatMap { try? Data(contentsOf: $0) }
     let fingerprint = TrolleyCapture.sessionFingerprint(new, source: source)
     let gameID = fanPlaying || currentNxlvURL != nil ? "fan" : activeTitle?.rawValue ?? "lemmings"
@@ -5712,7 +5720,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   private func syncPanelViewport() {
     panel.terrainImage = playfield.levelImage
-    panel.visibleLevelRect = playfield.viewport.visibleLevelRect
+    panel.visibleLevelRect = playfield.precisionVisibleLevelRect
     panel.needsDisplay = true
   }
 
@@ -5952,6 +5960,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
         level: arcadeLevel, saved: session.saved, didWin: session.didWin, skills: session.skillAssignments,
         seconds: Double(session.currentTick) / Double(session.ticksPerSecond), assisted: session.usedRewind,
         telemetry: TrolleyCapture.telemetry(session))
+      PrecisionZoomController.shared.finish(attemptID: arcadeRunID, didWin: session.didWin)
+      syncPrecisionZoom()
       arcadeReport = recordsPlayerArtifacts
         ? ArcadeStore.shared.record(run)
         : ArcadeStore.shared.previewReport(for: run)
@@ -6044,6 +6054,12 @@ let achievementProgressKey = "ClassicAchievementProgress"
       "Home \(session.saved)/\(session.required)",
       "\(session.rateLabel) \(session.rate)",
     ]
+    let deathCountdownText = FailureMoodDecision.deathCounterText(
+      saved: session.saved, active: session.lemmings.count,
+      unreleased: session.total - session.released, required: session.required,
+      isComplete: session.isComplete, didWin: session.didWin)
+    playfield.deathCountdownText = deathCountdownText
+    parts.append(deathCountdownText)
     if let seconds = session.remainingSeconds {
       parts.append(String(format: "Time %d:%02d", seconds / 60, seconds % 60))
     }
@@ -6128,6 +6144,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       applyUserMusicPause()
       effects.suspendOutput()
     } else {
+      if phase == .playing { session?.resumeFromRewind() }
       rewindOriginTick = nil
       playfield.endRewindCue()
       do {
@@ -6363,6 +6380,37 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   @objc private func zoomIn() { setZoom(playfield.viewport.zoom + 1) }
   @objc private func zoomOut() { setZoom(playfield.viewport.zoom - 1) }
+
+  private func togglePrecisionZoom(_ kind: PrecisionZoomKind) {
+    guard phase == .playing, session?.isComplete == false else { return }
+    let wallet = PrecisionZoomController.shared
+    guard wallet.toggle(kind) else {
+      setStatus(wallet.storageError ?? (kind == .zoom
+        ? "No Zoom uses. Earn one for every 3 no-Rewind career stars."
+        : "No Superzoom uses. Earn one for every 3 no-Rewind three-star levels."))
+      return
+    }
+    syncPrecisionZoom()
+  }
+
+  private func scrollPrecisionZoom(_ action: PrecisionZoomScrollAction, at point: CGPoint) {
+    guard phase == .playing, session?.isComplete == false else { return }
+    let wallet = PrecisionZoomController.shared
+    switch wallet.applyScroll(action) {
+    case .changed: syncPrecisionZoom(at: point)
+    case .unavailable:
+      setStatus(wallet.storageError ?? "No Zoom uses. Earn one for every 3 no-Rewind career stars.")
+    case .unchanged: break
+    }
+  }
+
+  private func syncPrecisionZoom(at point: CGPoint? = nil) {
+    let wallet = PrecisionZoomController.shared
+    playfield.setPrecisionZoom(wallet.active != nil, at: point)
+    speedControl.bulletTimeActive = wallet.active == .superzoom
+    let suffix = wallet.active.map { "  \($0 == .zoom ? "ZOOM" : "SUPER") ON" } ?? ""
+    playfield.precisionStatus = "Z \(wallet.remaining(.zoom))  SHIFT-Z \(wallet.remaining(.superzoom))" + suffix
+  }
 
   private func setZoom(_ value: Double) {
     // Zoom applies to a level being played. On a menu there is nothing to zoom,
@@ -6632,6 +6680,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       self.panel.selectedSkillIndex = skill; self.assign(id); self.panel.selectedSkillIndex = previous
     }
     keyboard.speedControl = speedControl
+    keyboard.precisionZoom = { [weak self] kind in self?.togglePrecisionZoom(kind) }
     speedControl.onMusicPitchChange = { [weak self] cents in
       self?.music.setSpeedPitch(cents)
       self?.soundtrack.setSpeedPitch(cents)
@@ -6689,7 +6738,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
     keyboard.help = { [weak self] in
       let names = self?.session?.skills.map(\.name) ?? []
-      return SkillShortcuts(names: names).hint(names: names, modern: self?.settings.modernControlsEnabled ?? true) + "\n\nSpace / P: play or pause\nHold , / <: scrub backward\nHold . / >: scrub forward\nTap , / .: step one tick\nZ: rewind 2 seconds\nX: nuke"
+      return SkillShortcuts(names: names).hint(names: names, modern: self?.settings.modernControlsEnabled ?? true) + "\n\nSpace / P: play or pause\nHold , / <: scrub backward\nHold . / >: scrub forward\nTap , / .: step one tick\nZ: 2× Zoom at cursor\nScroll up / down: Zoom on / off at cursor\nShift-Z: 2× Superzoom at cursor, 0.5× time\nPress Z or Shift-Z again to switch off; each start spends one use\nEarn Zoom per 3 no-Rewind stars; Superzoom per 3 no-Rewind three-star levels\nX: nuke"
     }
     keyboard.pauseForHelp = { [weak self] in
       guard let self else { return {} }
@@ -6742,11 +6791,6 @@ let achievementProgressKey = "ClassicAchievementProgress"
       event.modifierFlags.intersection([.command, .control, .option]).isEmpty else { return event }
     if self.window?.firstResponder is NSTextView { return event }
 
-    if event.type == .keyUp, event.keyCode == 6 {
-      guard self.rewindHeld else { return event }
-      self.endContinuousRewind()
-      return nil
-    }
     if event.type == .keyUp, event.charactersIgnoringModifiers == "," {
       self.backwardKeyHeld = false
       self.backwardKeyTimer?.invalidate()
@@ -6811,8 +6855,6 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
 
     switch characters {
-    case "z":
-      if !event.isARepeat { self.beginContinuousRewind() }
     case ",":
       if !event.isARepeat {
         self.backwardKeyHeld = true

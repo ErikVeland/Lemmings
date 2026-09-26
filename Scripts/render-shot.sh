@@ -22,6 +22,8 @@ swiftc -swift-version 6 \
   "$project_dir/Sources/LemmingsLocal/LemmingFocusHighlight.swift" \
   "$project_dir/Sources/LemmingsLocal/GameplayPresentation.swift" \
   "$project_dir/Sources/LemmingsLocal/PlayfieldView.swift" \
+  "$project_dir/Sources/LemmingsLocal/PrecisionZoomLens+AppKit.swift" \
+  "$project_dir/Sources/LemmingsLocal/PrecisionZoomScrollGesture+AppKit.swift" \
   "$project_dir/Sources/LemmingsLocal/ExplosionHDR.swift" \
   "$project_dir/Sources/LemmingsLocal/MacInterfaceRenderer.swift" \
   "$project_dir/Sources/LemmingsLocal/PanelView.swift" \

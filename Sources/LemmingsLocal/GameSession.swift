@@ -73,6 +73,8 @@ protocol GameSession: AnyObject {
   @discardableResult func rewind(seconds: Double) -> Bool
   @discardableResult func stepBackward() -> Bool
   @discardableResult func stepForward() -> Bool
+  /// Commits the current point before live play, without changing forward scrubbing.
+  func resumeFromRewind()
 }
 
 extension GameSession {
@@ -98,6 +100,7 @@ extension GameSession {
   var nukeCount: Int { 0 }
   var rewindCount: Int { 0 }
   var undoCount: Int { 0 }
+  func resumeFromRewind() {}
 }
 
 // MARK: - Classic DOS
@@ -133,7 +136,7 @@ final class ClassicSession: GameSession {
   }
 
   var recoveryEvents: [ClassicDOSReplayEvent] {
-    history.commands.map { ClassicDOSReplayEvent(tick: $0.tick, action: $0.action, afterTick: true) }
+    history.appliedCommands.map { ClassicDOSReplayEvent(tick: $0.tick, action: $0.action, afterTick: true) }
   }
 
   /// Continue a saved run. A build must never strand a saved run, so this
@@ -218,6 +221,8 @@ final class ClassicSession: GameSession {
     tick()
     return true
   }
+
+  func resumeFromRewind() { history.resumeFromCurrentTick() }
 
   var ticksPerSecond: Int { ClassicDOSRules.ticksPerSecond }
 

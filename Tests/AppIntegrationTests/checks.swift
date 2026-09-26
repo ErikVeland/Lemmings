@@ -1583,6 +1583,22 @@ extension AppDelegate {
       "Held speed did not reach the music pitch target")
     _ = keyboard.handle(key(.flagsChanged, 13.3, text: "", code: 56))
     try check(controller.multiplier == 2, "Shift release did not immediately restore cruise")
+    var precisionActions: [PrecisionZoomKind] = []
+    keyboard.precisionZoom = { kind in
+      precisionActions.append(kind)
+      controller.bulletTimeActive = kind == .superzoom && !controller.bulletTimeActive
+    }
+    try check(keyboard.handle(key(.keyDown, 13.4, text: "z", code: 6)) == nil,
+      "Z leaked to the old rewind handler")
+    _ = keyboard.handle(key(.keyDown, 13.45, text: "z", code: 6, repeatKey: true))
+    try check(precisionActions == [.zoom], "Z did not select Zoom once")
+    _ = keyboard.handle(key(.flagsChanged, 13.5, text: "", code: 56, flags: .shift))
+    _ = keyboard.handle(key(.keyDown, 13.6, text: "Z", code: 6, flags: .shift))
+    try check(precisionActions == [.zoom, .superzoom] && controller.multiplier == 0.5
+      && !controller.isFast && controller.panelLabel == "0.5×", "Shift-Z did not enter bullet-time")
+    _ = keyboard.handle(key(.keyDown, 13.7, text: "Z", code: 6, flags: .shift))
+    try check(controller.multiplier == 2, "Switching off Superzoom did not restore cruise speed")
+    _ = keyboard.handle(key(.flagsChanged, 13.8, text: "", code: 56))
     _ = keyboard.handle(key(.keyDown, 14)); _ = keyboard.handle(key(.keyUp, 14.1))
     _ = keyboard.handle(key(.keyDown, 14.2)); _ = keyboard.handle(key(.keyUp, 14.25))
     try check(!controller.isFast, "Rapid F restarted a stopped game")
@@ -1689,6 +1705,51 @@ extension AppDelegate {
     try check(keyboard.helpText.contains("Hold F"), "Keyboard help omitted the F hold")
     print("PASS native mouse toggle, arrows, complete double-click sequence, hold and emergency release")
     print("PASS real key events: tap/hold/release, repeats, rapid exits, shortcut routing, window attachment and OG mode")
+  }
+
+  fileprivate func testPrecisionZoomWallet() throws {
+    let suite = "PrecisionZoomTests." + UUID().uuidString
+    guard let defaults = UserDefaults(suiteName: suite) else {
+      throw IntegrationFailure(message: "Could not create isolated Zoom test storage")
+    }
+    defer { defaults.removePersistentDomain(forName: suite) }
+    var earned = PrecisionZoomEarnings(careerStars: 6, threeStarLevels: 3)
+    let first = UUID()
+    let wallet = PrecisionZoomController(defaults: defaults, earnings: { _ in earned })
+    wallet.start(attemptID: first, profileID: "one")
+    try check(wallet.remaining(.zoom) == 2 && wallet.remaining(.superzoom) == 1,
+      "No-Rewind career earnings were not available")
+    try check(wallet.applyScroll(.zoomIn) == .changed && wallet.remaining(.zoom) == 1,
+      "Scroll up did not spend exactly one Zoom use")
+    try check(wallet.applyScroll(.zoomIn) == .unchanged && wallet.remaining(.zoom) == 1,
+      "Repeated scroll up spent another Zoom use")
+    try check(wallet.applyScroll(.zoomOut) == .changed && wallet.remaining(.zoom) == 1,
+      "Scroll down did not switch off Zoom without a charge")
+    try check(wallet.applyScroll(.zoomOut) == .unchanged && wallet.toggle(.superzoom),
+      "Scroll down altered an inactive Zoom or Superzoom could not start")
+    let restored = PrecisionZoomController(defaults: defaults, earnings: { _ in earned })
+    restored.start(attemptID: first, profileID: "one")
+    try check(restored.active == .superzoom && restored.remaining(.zoom) == 1,
+      "Saved Zoom state did not survive recovery")
+    try check(restored.applyScroll(.zoomIn) == .unchanged && restored.active == .superzoom
+      && restored.remaining(.zoom) == 1, "Scroll up replaced an active Superzoom")
+    try check(restored.applyScroll(.zoomOut) == .changed && restored.active == nil
+      && restored.remaining(.superzoom) == 0, "Scroll down did not switch off Superzoom")
+    restored.finish(attemptID: first, didWin: false)
+    restored.start(attemptID: UUID(), profileID: "one")
+    try check(restored.remaining(.zoom) == 1 && restored.remaining(.superzoom) == 0,
+      "A failed run did not keep its spent uses")
+    restored.start(attemptID: UUID(), profileID: "two")
+    try check(restored.remaining(.zoom) == 2, "Another profile inherited spent uses")
+    earned = PrecisionZoomEarnings(careerStars: 9, threeStarLevels: 6)
+    restored.start(attemptID: UUID(), profileID: "one")
+    try check(restored.remaining(.zoom) == 2 && restored.remaining(.superzoom) == 1,
+      "New stars did not add uses to a failed-run balance")
+    restored.removeProfile("one")
+    restored.start(attemptID: UUID(), profileID: "one")
+    try check(restored.remaining(.zoom) == 3 && restored.remaining(.superzoom) == 2,
+      "Deleted profile costs were retained")
+    print("PASS profile Zoom storage, recovery, failure cost and new earnings")
   }
 
   fileprivate func testHintsFromControlsHelp() async throws {
@@ -4179,6 +4240,7 @@ Task { @MainActor in
     try subject.testTimelineToolbar()
     #elseif TRANSPORT_TESTS
     try subject.testTimelineToolbar()
+    try subject.testPrecisionZoomWallet()
     #elseif LOADING_LATENCY_TESTS
     try await subject.testLoadingLatency()
     #elseif PERFORMANCE_TESTS
@@ -4231,6 +4293,7 @@ Task { @MainActor in
     print("Music integration tests passed.")
     #elseif VARIABLE_SPEED_TESTS
     try subject.testVariableSpeedInput()
+    try subject.testPrecisionZoomWallet()
     try subject.testVariableSimulationClock()
     try subject.testSuperSpeedPresentation()
     try subject.testMenuDisplayTransition()

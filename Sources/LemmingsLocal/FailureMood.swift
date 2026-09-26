@@ -1,9 +1,24 @@
 import AppKit
 
 enum FailureMoodDecision {
+  /**
+   * Counts deaths until rescue becomes impossible. Nil means the target is safe.
+   */
+  static func deathsUntilUnrecoverable(saved: Int, active: Int, unreleased: Int, required: Int) -> Int? {
+    guard saved < required else { return nil }
+    return max(0, saved + max(0, active) + max(0, unreleased) - required + 1)
+  }
+
+  static func deathCounterText(saved: Int, active: Int, unreleased: Int, required: Int,
+                               isComplete: Bool, didWin: Bool) -> String {
+    if isComplete { return didWin ? "SAFE" : "DEATHS TO FAIL 0" }
+    return deathsUntilUnrecoverable(saved: saved, active: active, unreleased: unreleased, required: required)
+      .map { "DEATHS TO FAIL \($0)" } ?? "SAFE"
+  }
+
   /// Returns true when no remaining lemming can meet the rescue requirement.
   static func isUnrecoverable(saved: Int, active: Int, unreleased: Int, required: Int) -> Bool {
-    saved + active + max(0, unreleased) < required
+    deathsUntilUnrecoverable(saved: saved, active: active, unreleased: unreleased, required: required) == 0
   }
 }
 

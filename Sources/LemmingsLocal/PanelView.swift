@@ -670,12 +670,29 @@ enum PanelButton: Equatable {
   private func drawStatus() {
     let y = usesClassicSkin ? panelFrame.maxY + 4 : inset + buttonHeight + 6
     let box = CGRect(x: inset, y: y, width: bounds.width - inset * 2, height: 20)
-    if let macInterface, let font = macInterface.font(.small), font.covers(gameText(statusText)) {
-      macInterface.draw(gameText(statusText), face: .small, at: CGPoint(x: inset, y: y), scale: 1)
+    let text = gameText(statusText)
+    if let macInterface, let font = macInterface.font(.small), font.covers(text) {
+      macInterface.draw(text, face: .small, at: CGPoint(x: inset, y: y), scale: 1)
     } else {
-      GamePixelText.draw(gameText(statusText), in: box)
+      let naturalWidth = CGFloat(max(1, text.count) * 6)
+      let width = statusTextWidth()
+      NSGraphicsContext.saveGraphicsState()
+      NSBezierPath(rect: box).addClip()
+      GamePixelText.draw(text, in: CGRect(x: inset, y: y, width: width, height: 20),
+        maxScale: width / naturalWidth)
+      NSGraphicsContext.restoreGraphicsState()
     }
     drawProgress(in: box, y: y)
+  }
+
+  private func statusTextWidth() -> CGFloat {
+    let text = gameText(statusText)
+    if let macInterface, let font = macInterface.font(.small), font.covers(text) {
+      return macInterface.width(of: text, face: .small, scale: 1)
+    }
+    let naturalWidth = CGFloat(max(1, text.count) * 6)
+    let scale = max(1, min(2, floor((bounds.width - inset * 2) / naturalWidth)))
+    return naturalWidth * scale
   }
 
   /// Drawn from the right edge inward, so it cannot collide with the status text
@@ -686,17 +703,18 @@ enum PanelButton: Equatable {
     let text = gameText(progressText)
     if let macInterface, let font = macInterface.font(.small), font.covers(text) {
       let width = macInterface.width(of: text, face: .small, scale: 1)
-      let statusWidth = macInterface.width(of: gameText(statusText), face: .small, scale: 1)
       let x = bounds.width - inset - width
-      guard x > inset + statusWidth + 12 else { return }
+      guard x > inset + statusTextWidth() + 12 else { return }
       macInterface.draw(text, face: .small, at: CGPoint(x: x, y: y), scale: 1)
       return
     }
     // The original artwork has no Macintosh interface font. Without this the
     // whole field silently drew nothing for every player using it, which is
     // most of them. Fall back to the same glyphs the status line uses.
-    GamePixelText.draw(text, in: CGRect(
-      x: box.midX, y: box.minY, width: box.width / 2, height: box.height))
+    let width = CGFloat(text.count * 6)
+    let x = bounds.width - inset - width
+    guard x > inset + statusTextWidth() + 12 else { return }
+    GamePixelText.draw(text, in: CGRect(x: x, y: box.minY, width: width, height: box.height), maxScale: 1)
   }
 
   /// Tall enough for the original bar at 3x, plus a status strip beneath it.

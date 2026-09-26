@@ -3,7 +3,7 @@ set -euo pipefail
 project_dir="${0:A:h:h}"
 build_dir="$project_dir/.build/classic-dos-rewind-tests"
 classic_data_dir="${1:-$project_dir/Content/lemming1.pc}"
-if [[ ! -d "$classic_data_dir" ]]; then
+if [[ "$classic_data_dir" != --synthetic && ! -d "$classic_data_dir" ]]; then
   print -u2 "Classic data directory does not exist: $classic_data_dir"
   exit 2
 fi
