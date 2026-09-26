@@ -188,6 +188,10 @@ struct ReticleFeedback {
       } : nil
       items.append(accessibleElements.element(id: "line-\(index)", owner: owner, label: line, frame: transform(rect), press: action))
     }
+    if let overlaySavedCounts {
+      items.append(accessibleElements.element(id: "saved-counts", owner: owner,
+        label: overlaySavedCounts, frame: transform(overlaySavedCountsFrame(overlayLayout()))))
+    }
     if overlayHighlight == nil {
       let rect = handoverButtons.count == 2 && overlayHandoverRetryTitle != nil ? handoverButtons[1] : bounds
       items.append(accessibleElements.element(id: "continue", owner: owner, label: overlayHandoverRetryTitle == nil ? "Continue" : "Begin level", frame: transform(rect)) { [weak self] in self?.onAdvancePhase?() })
@@ -210,6 +214,7 @@ struct ReticleFeedback {
   var onHandoverRetry: (() -> Void)?
   private var handoverButtons: [CGRect] = []
   var overlayLines: [String] = []
+  var overlaySavedCounts: String?
   var overlayFooter: String? { didSet { overlayProfileInitials = nil } }
   var overlayProfileInitials: String?
   var onProfiles: (() -> Void)?
@@ -761,12 +766,13 @@ struct ReticleFeedback {
     let showsLogo = overlayTitle == "LEMMINGS" && macInterface?.interface.logo != nil
     let headerUnits: CGFloat = showsLogo ? 116 : 62
     let marchHeight: CGFloat = overlayShowsLemmings ? 64 : 0
+    let savedCountUnits: CGFloat = overlaySavedCounts == nil ? 0 : 40
     let scale = min(2.5, bounds.width / 1100,
       max(1, bounds.height - marchHeight - 24)
-        / (headerUnits + 106 + CGFloat(overlayLines.count) * 42))
+        / (headerUnits + 106 + CGFloat(overlayLines.count) * 42 + savedCountUnits))
     let width = min(bounds.width - 28 * scale, 900 * scale)
     let headerHeight = headerUnits * scale
-    let height = (106 + CGFloat(overlayLines.count) * 42) * scale + headerHeight
+    let height = (106 + CGFloat(overlayLines.count) * 42 + savedCountUnits) * scale + headerHeight
     let board = CGRect(
       x: (bounds.width - width) / 2,
       y: max(12, (bounds.height - marchHeight - height) / 2),
@@ -777,6 +783,13 @@ struct ReticleFeedback {
       rowHeight: 42 * scale,
       headerHeight: headerHeight,
       board: board)
+  }
+
+  private func overlaySavedCountsFrame(_ layout: OverlayLayout) -> CGRect {
+    CGRect(x: layout.board.minX + 20 * layout.scale,
+      y: layout.board.minY + 23 * layout.scale + layout.headerHeight
+        + CGFloat(overlayLines.count) * layout.rowHeight,
+      width: layout.board.width - 40 * layout.scale, height: 32 * layout.scale)
   }
 
   private func overlaySettingsButtonFrame(_ layout: OverlayLayout? = nil) -> CGRect? {
@@ -922,6 +935,11 @@ struct ReticleFeedback {
       }
       if index == 0, turnInitials != nil { drawTurnPortrait(in: row, scale: scale) }
       y += rowHeight
+    }
+    if let overlaySavedCounts {
+      drawMenuGameText(overlaySavedCounts, in: overlaySavedCountsFrame(layout),
+        face: .small, scale: max(1, Int(scale)), palette: .green)
+      y += 40 * scale
     }
     if let retryTitle = overlayHandoverRetryTitle {
       let footer = CGRect(x: board.minX + 20 * scale, y: y + 12 * scale,

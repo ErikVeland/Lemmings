@@ -133,6 +133,8 @@ import NxlvKit
     private func download() {
         let queue = downloadable.filter { selected.contains($0.id) }
         guard !queue.isEmpty, task == nil else { return }
+        let requestedAll = queue.count == downloadable.count
+        if requestedAll { AnonymousTelemetry.shared.soundtrackAllSelected() }
         queueBytes = queue.reduce(0) { $0 + $1.bytes }; completedBytes = 0
         activePack = queue[0].id; progress = 0; failure = nil; refresh()
         task = Task { @MainActor [weak self] in
@@ -149,6 +151,9 @@ import NxlvKit
                     }
                     self.completedBytes += pack.bytes; self.selected.remove(pack.id)
                     NotificationCenter.default.post(name: MusicLibrary.changed, object: nil)
+                }
+                if requestedAll && self.downloadable.isEmpty {
+                    AnonymousTelemetry.shared.soundtrackAllDownloaded()
                 }
             } catch { if !Task.isCancelled { self.failure = error.localizedDescription } }
             self.activePack = nil; self.task = nil; self.refresh()

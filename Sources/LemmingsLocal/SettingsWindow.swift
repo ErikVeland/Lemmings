@@ -6,6 +6,7 @@ import NxlvKit
   private var page: GameMenuPage?
   private var options: ClassicSettingsOptions
   private var settings: ClassicSettings
+  private let telemetry: AnonymousTelemetry
 
   /// Called whenever a choice changes, so the game can follow immediately.
   var onChange: ((ClassicSettings) -> Void)?
@@ -50,13 +51,16 @@ import NxlvKit
   private var hdEffectsCheck: NSButton?
   private var hdrFlashCheck: NSButton?
   private var djSoundtracksCheck: NSButton?
+  private var telemetryCheck: NSButton?
 
   /// Whether the tube simulation is in the live drawing path.
   var videoIsConnected = true
 
-  init(settings: ClassicSettings, options: ClassicSettingsOptions) {
+  init(settings: ClassicSettings, options: ClassicSettingsOptions,
+       telemetry: AnonymousTelemetry = .shared) {
     self.settings = options.correcting(settings)
     self.options = options
+    self.telemetry = telemetry
     super.init()
     NotificationCenter.default.addObserver(self, selector: #selector(refreshSequelArtwork),
                                           name: SequelArtworkPreference.changed, object: nil)
@@ -85,6 +89,7 @@ import NxlvKit
     tabs.addTabViewItem(tab("Graphics", graphicsPane()))
     tabs.addTabViewItem(tab("Video", videoPane()))
     tabs.addTabViewItem(tab("Audio", audioPane()))
+    tabs.addTabViewItem(tab("Privacy", privacyPane()))
     tabs.addTabViewItem(tab("Accessibility", accessibilityPane()))
     tabs.translatesAutoresizingMaskIntoConstraints = false
     page.body.addSubview(tabs)
@@ -468,6 +473,54 @@ import NxlvKit
     ], spacing: 14)
   }
 
+  private func privacyPane() -> NSView {
+    let container = NSView()
+    let share = GameCheckButton(title: "Share play counts", target: self,
+                                action: #selector(telemetryChanged(_:)))
+    share.frame = CGRect(x: 26, y: 386, width: 720, height: 38)
+    share.state = telemetry.sharesCounts ? .on : .off
+    share.isEnabled = telemetry.endpoint != nil
+    share.setAccessibilityLabel("Share play counts")
+    telemetryCheck = share
+    container.addSubview(share)
+    let details = telemetry.endpoint == nil
+        ? ["This build has no shared counts service. Play insights show this Mac only."]
+        : ["Daily use, results, lemmings saved, solo or Hot Seat, and all music.",
+           "No names, IDs, pack names or replays are sent.",
+           "The shared saved total remains until the service owner resets it.",
+           "The service sees your network address during delivery."]
+    for (index, line) in details.enumerated() {
+      let label = GameLabel(labelWithString: line)
+      label.alignment = .left
+      label.frame = CGRect(x: 26, y: 338 - index * 36, width: 900, height: 32)
+      container.addSubview(label)
+    }
+    let insights = GameButton(title: "View play insights", target: self,
+                              action: #selector(openPlayInsights))
+    insights.frame = CGRect(x: 26, y: 170, width: 330, height: 42)
+    container.addSubview(insights)
+    let clear = GameButton(title: "Clear this Mac's counts", target: self,
+                           action: #selector(clearPlayInsights))
+    clear.frame = CGRect(x: 26, y: 106, width: 330, height: 42)
+    container.addSubview(clear)
+    return container
+  }
+
+  @objc private func telemetryChanged(_ sender: NSButton) {
+    telemetry.setSharing(sender.state == .on)
+    telemetryCheck?.state = telemetry.sharesCounts ? .on : .off
+  }
+
+  @objc private func openPlayInsights() {
+    TelemetryDashboard.shared.show(owner: page?.window)
+  }
+
+  @objc private func clearPlayInsights(_ sender: NSButton) {
+    telemetry.clearLocalCounts()
+    sender.title = "Counts cleared"
+    sender.isEnabled = false
+  }
+
   /// Refills the source lists and reselects what is chosen.
   private func rebuildSources() {
     experiencePopUp?.selectItem(at: ClassicExperiencePreset.allCases.firstIndex(of: settings.experiencePreset) ?? 2)
@@ -522,6 +575,7 @@ import NxlvKit
     hdrFlashCheck?.isEnabled = settings.hdEffectsEnabled
     hdrFlashCheck?.state = settings.fullScreenHDRFlashes ? .on : .off
     djSoundtracksCheck?.state = settings.djIncludesOtherSoundtracks ? .on : .off
+    telemetryCheck?.state = telemetry.sharesCounts ? .on : .off
     // Shuffling needs something to choose between.
     graphicsShuffleCheck?.isEnabled = options.graphics.count > 1
     musicShuffleCheck?.isEnabled = options.music.count > 2

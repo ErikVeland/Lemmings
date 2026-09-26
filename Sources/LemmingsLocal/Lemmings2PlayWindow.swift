@@ -749,6 +749,7 @@ import NxlvKit
         syncPrecisionZoom()
         arcadeReport = nil; usedRewind = false; nukeCount = 0; undoCount = 0
         arcadeLevelSnapshot = arcadeLevel
+        if let arcadeLevel { AnonymousTelemetry.shared.start(arcadeLevel, hotSeat: arcadeHotSeatID != nil, attemptID: arcadeRunID) }
         if recordsCampaignProgress, let arcadeLevel { ArcadeStore.shared.beginAttempt(id: arcadeRunID, profileID: arcadeProfileID,
             level: arcadeLevel, previousID: previousAttemptID) }
         runMovie.begin(ticksPerSecond: Lemmings2Runtime.ticksPerSecond, title: "Lemmings 2 - " + level.title)
@@ -1072,6 +1073,10 @@ import NxlvKit
     }
     private func finishIfComplete(_ game: Lemmings2Runtime) {
         if game.isComplete {
+            if let arcadeLevel {
+                AnonymousTelemetry.shared.finish(arcadeLevel, hotSeat: arcadeHotSeatID != nil,
+                                                 attemptID: arcadeRunID, won: game.didWin, saved: game.saved)
+            }
             PrecisionZoomController.shared.finish(attemptID: arcadeRunID, didWin: game.didWin)
             syncPrecisionZoom()
             dj.updateTelemetry(.init(didWin: game.didWin, isComplete: true))
