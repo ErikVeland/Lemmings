@@ -850,6 +850,96 @@ private func testMacArtworkCropStaysPixelAligned() throws {
   print("PASS readable 2×/4× skill icons, offset and clamping at every edge")
 }
 
+@MainActor private func testClassicSessionRewindBranch() throws {
+  let width = 256, height = 96
+  var solid = Data(repeating: 0, count: width * height)
+  for x in 0..<width { solid[48 * width + x] = 1 }
+  let terrain = try ClassicDOSTerrain(width: width, height: height, solidMask: solid,
+    steelMask: Data(repeating: 0, count: solid.count))
+  let configuration = ClassicDOSConfiguration(totalLemmings: 2, requiredToSave: 1,
+    timeLimitTicks: 1_000, initialReleaseRate: 99,
+    entrances: [.init(x: 100, y: 30)], initialSkills: [.climber: 1],
+    maximumX: width - 1, maximumY: height - 1)
+  let session = ClassicSession(simulation: try ClassicDOSSimulation(terrain: terrain,
+    configuration: configuration), width: width, height: height)
+  for _ in 0..<80 { session.tick() }
+  guard let id = session.lemmings.first?.id,
+    let climber = ClassicSkill.allCases.firstIndex(of: .climber) else {
+    throw Failure(description: "The synthetic Classic session has no lemming or climber skill")
+  }
+  try require(session.assign(skillIndex: climber, to: id) == nil && session.recoveryEvents.count == 1,
+    "The test skill was not recorded")
+  for _ in 0..<10 { session.tick() }
+  try require(session.rewind(seconds: 2) && session.recoveryEvents.isEmpty,
+    "A checkpoint at the rewind point still includes the future assignment")
+  let live: any GameSession = session
+  live.resumeFromRewind()
+  for _ in 0..<40 { live.tick() }
+  try require(session.simulation.remainingSkillCount(.climber) == 1 && session.recoveryEvents.isEmpty,
+    "The resumed Classic session replayed the abandoned assignment")
+  print("PASS Classic session checkpoints and resumed play exclude future assignments")
+}
+
+@MainActor private final class SkillBadgePreview: NSView {
+  override var isFlipped: Bool { true }
+  override func draw(_ dirtyRect: NSRect) {
+    NSColor.black.setFill()
+    bounds.fill()
+    let icon = NSImage(size: NSSize(width: 6, height: 6), flipped: true) { _ in
+      NSColor.white.setFill()
+      CGRect(x: 1, y: 0, width: 4, height: 6).fill()
+      return true
+    }
+    for (index, remaining) in [3, 1, 0, nil].enumerated() {
+      let point = CGPoint(x: 40 + index * 80, y: 25)
+      GameCursor.drawPlayfieldPointer(at: point, scale: 1, tint: .white)
+      SkillCursorBadge.draw(icon: icon, index: 0, at: point, scale: 1,
+        tint: .white, size: .one, reduceMotion: false,
+        remaining: remaining, now: 1.2, in: bounds)
+    }
+  }
+}
+
+@MainActor private func testSkillCursorBadgeAvailability() throws {
+  let opacity = SkillCursorBadge.opacity
+  try require(opacity(1, 0, false) == 1 &&
+    abs(opacity(1, 1.2, false) - 0.75) < 0.001 &&
+    abs(opacity(1, 2.4, false) - 1) < 0.001,
+    "The last use must fade slowly between 75% and full opacity")
+  for remaining in [nil, 0, 2, 10] {
+    try require(opacity(remaining, 1.2, false) == 1,
+      "Only one finite use may animate")
+  }
+  try require(opacity(1, 1.2, true) == 1,
+    "Reduced motion must keep the last-use badge steady")
+
+  let preview = SkillBadgePreview(frame: CGRect(x: 0, y: 0, width: 320, height: 80))
+  guard let bitmap = preview.bitmapImageRepForCachingDisplay(in: preview.bounds) else {
+    throw Failure(description: "The badge preview could not render")
+  }
+  preview.cacheDisplay(in: preview.bounds, to: bitmap)
+  let pixelScale = CGFloat(bitmap.pixelsWide) / preview.bounds.width
+  func redPixels(in cell: Int) -> Int {
+    let first = Int(CGFloat(cell * 80) * pixelScale)
+    let last = Int(CGFloat((cell + 1) * 80) * pixelScale)
+    var count = 0
+    for y in 0..<bitmap.pixelsHigh {
+      for x in first..<last {
+        guard let colour = bitmap.colorAt(x: x, y: y)?.usingColorSpace(.deviceRGB) else { continue }
+        if colour.redComponent > 0.5 && colour.redComponent > colour.greenComponent * 2 &&
+          colour.redComponent > colour.blueComponent * 2 { count += 1 }
+      }
+    }
+    return count
+  }
+  try require(redPixels(in: 2) > 0 && redPixels(in: 0) == 0 && redPixels(in: 1) == 0 && redPixels(in: 3) == 0,
+    "Only an empty skill may draw the red X")
+  let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
+  try bitmap.representation(using: .png, properties: [:])!.write(to:
+    root.appendingPathComponent(".build/playfield-draw-tests/skill-badge-availability.png"))
+  print("PASS one-use fade, reduced motion and empty-skill red X")
+}
+
 @MainActor private func renderSelectionPreview() throws {
   let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
   let view = PlayfieldView(frame: CGRect(x: 0, y: 0, width: 640, height: 320))
@@ -874,6 +964,42 @@ private func testMacArtworkCropStaysPixelAligned() throws {
     try bitmap.representation(using: .png, properties: [:])!.write(
       to: root.appendingPathComponent(".build/selection-" + name + ".png"))
   }
+}
+
+@MainActor private func testDeathCountdownInCRT() throws {
+  let view = PlayfieldView(frame: CGRect(x: 0, y: 0, width: 640, height: 320))
+  view.session = TargetingSession()
+  view.phase = .playing
+  view.deathCountdownText = "DEATHS TO FAIL 1"
+  view.levelImage = CGContext(data: nil, width: 320, height: 160, bitsPerComponent: 8,
+    bytesPerRow: 1280, space: CGColorSpaceCreateDeviceRGB(),
+    bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)!.makeImage()
+  func image() -> Data {
+    let bitmap = view.bitmapImageRepForCachingDisplay(in: view.bounds)!
+    view.cacheDisplay(in: view.bounds, to: bitmap)
+    return bitmap.representation(using: .png, properties: [:])!
+  }
+  let flat = image()
+  view.showsDeathCountdownOverlay = true
+  try require(image() != flat, "The CRT display hid the death counter")
+  let status = view.accessibleControls(owner: view).first as? GameAccessibleElement
+  try require(status?.accessibilityLabel()?.contains("DEATHS TO FAIL 1") == true,
+    "The death counter was not available to screen readers")
+  print("PASS CRT death counter and accessible playfield status")
+}
+
+@MainActor private func testDeathCountdownStatusStrip() throws {
+  let view = PanelView(frame: CGRect(x: 0, y: 0, width: 640, height: 80))
+  view.isMenuMode = true
+  view.statusText = "OUT 75/100   HOME 0/90   RATE 99   DEATHS TO FAIL 11   TIME 3:00"
+  view.progressText = "SAVED 0/90"
+  let bitmap = view.bitmapImageRepForCachingDisplay(in: view.bounds)!
+  view.cacheDisplay(in: view.bounds, to: bitmap)
+  let output = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
+    .deletingLastPathComponent().deletingLastPathComponent()
+    .appendingPathComponent(".build/death-counter-status.png")
+  try bitmap.representation(using: .png, properties: [:])!.write(to: output)
+  print("PASS death counter between rate and time in the status strip")
 }
 
 @MainActor private func testFreshLevelCountdown() throws {
@@ -908,8 +1034,12 @@ private func testMacArtworkCropStaysPixelAligned() throws {
   do {
     try testTickDirectionContinuity()
     try testSkillCursorBadgeGeometry()
+    try testClassicSessionRewindBranch()
+    try testSkillCursorBadgeAvailability()
     try testFreshLevelCountdown()
     try testGameCursorRegions()
+    try testDeathCountdownInCRT()
+    try testDeathCountdownStatusStrip()
     try renderSelectionPreview()
     try testMacArtworkCropStaysPixelAligned()
     try testSpeedSpritesStayOnTop()

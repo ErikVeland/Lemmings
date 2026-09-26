@@ -241,6 +241,7 @@ import NxlvKit
         }
         canvas.onPanel = { [weak self] slot, count, time in self?.panelAction(slot, clickCount: count, time: time) }
         canvas.onHover = { [weak self] in self?.refreshGame() }
+        canvas.onPrecisionScroll = { [weak self] action, point in self?.scrollPrecisionZoom(action, at: point) }
         canvas.onKey = { [weak self] key in self?.key(key) }
         let keyboard = GameplayKeyboard(window: window)
         gameplayKeyboard = keyboard
@@ -302,6 +303,7 @@ import NxlvKit
         canvas.onSpeedRelease = { [weak self] time in self?.speedControl.release(.mouse, at: time) }
         canvas.onSpeedStep = { [weak self] direction, time in self?.speedControl.step(direction, at: time) }
         keyboard.speedControl = speedControl
+        keyboard.precisionZoom = { [weak self] kind in self?.togglePrecisionZoom(kind) }
         speedControl.onMusicPitchChange = { [weak self] cents in
             self?.music.setSpeedPitch(cents)
             self?.dj.setSpeedPitch(cents)
@@ -331,13 +333,13 @@ import NxlvKit
         keyboard.skillNames = { [weak self] in self?.game?.configuration.skills.map(\.name) ?? [] }
         keyboard.help = { [weak self] in
             let names = self?.game?.configuration.skills.map(\.name) ?? []
-            return SkillShortcuts(names: names).hint(names: names, modern: self?.audioSettings.modernControlsEnabled ?? false) + "\n\nSpace / P: pause\nR: retry\nHold , / <: scrub backward\nHold . / >: scrub forward after rewind\nTap , / .: step one tick\nZ: rewind 2 seconds"
+            return SkillShortcuts(names: names).hint(names: names, modern: self?.audioSettings.modernControlsEnabled ?? false) + "\n\nSpace / P: pause\nR: retry\nHold , / <: scrub backward\nHold . / >: scrub forward after rewind\nTap , / .: step one tick\nZ: 2× Zoom at cursor\nScroll up / down: Zoom on / off at cursor\nShift-Z: 2× Superzoom at cursor, 0.5× time\nPress Z or Shift-Z again to switch off; each start spends one use\nEarn Zoom per 3 no-Rewind stars; Superzoom per 3 no-Rewind three-star levels"
         }
         keyboard.contextCommands = {
             [KeyboardCommand(keys: "← / → / ↑ / ↓", action: "Pan the level", group: "Camera"),
              KeyboardCommand(keys: "V / S", action: "Review / save replay after a result", group: "Menus & results"),
              KeyboardCommand(keys: "Return / Space", action: "Activate selected menu choice", group: "Menus & results"),
-             KeyboardCommand(keys: "Z / , / LT + B", action: "Rewind the current run", group: "Gameplay"),
+             KeyboardCommand(keys: ", / LT + B", action: "Rewind the current run", group: "Gameplay"),
              KeyboardCommand(keys: ", / .", action: "Step one tick; hold to scrub; release to pause", group: "Gameplay"),
              KeyboardCommand(keys: "P / M / I", action: "From L2 menu: practice / tribe map / introduction", group: "Menus & results"),
              KeyboardCommand(keys: "1–4", action: "Choose practice level", group: "L2 practice"),
@@ -421,6 +423,8 @@ import NxlvKit
             recoveryInputs = saved.inputs; recoveryProgress = saved.progress; recoveryPractice = saved.practice
             recoveryInitialHash = recovery.initialStateHash
             arcadeRunID = recovery.runID; arcadeProfileID = recovery.profileID; arcadeHotSeatID = recovery.hotSeatID
+            PrecisionZoomController.shared.start(attemptID: arcadeRunID, profileID: arcadeProfileID)
+            syncPrecisionZoom()
             usedRewind = recovery.usedRewind; nukeCount = recovery.nukeCount; undoCount = recovery.undoCount
             canvas.startCountdown.cancel()
             selected = recovery.selectedSkill; paused = true; fanSelected = false
@@ -741,6 +745,8 @@ import NxlvKit
         assignmentFocus = AssignmentFocus(); canvas.assignmentHighlight.clear()
         let previousAttemptID = arcadeRunID
         arcadeRunID = UUID(); arcadeProfileID = ArcadeStore.shared.playingProfileID; arcadeHotSeatID = ArcadeStore.shared.hotSeatID
+        PrecisionZoomController.shared.start(attemptID: arcadeRunID, profileID: arcadeProfileID)
+        syncPrecisionZoom()
         arcadeReport = nil; usedRewind = false; nukeCount = 0; undoCount = 0
         arcadeLevelSnapshot = arcadeLevel
         if recordsCampaignProgress, let arcadeLevel { ArcadeStore.shared.beginAttempt(id: arcadeRunID, profileID: arcadeProfileID,
@@ -756,6 +762,42 @@ import NxlvKit
         replaySize = CGSize(width: max(2, floor(canvas.bounds.width * scale / 2) * 2),
                             height: max(2, floor(canvas.bounds.height * scale / 2) * 2))
     }
+    private func togglePrecisionZoom(_ kind: PrecisionZoomKind) {
+        guard screen == .playing, game?.isComplete == false else { return }
+        let wallet = PrecisionZoomController.shared
+        guard wallet.toggle(kind) else {
+            message = wallet.storageError ?? (kind == .zoom
+                ? "No Zoom uses. Earn one for every 3 no-Rewind career stars."
+                : "No Superzoom uses. Earn one for every 3 no-Rewind three-star levels.")
+            canvas.showFocusNotice(message)
+            return
+        }
+        syncPrecisionZoom()
+        refreshGame()
+    }
+
+    private func scrollPrecisionZoom(_ action: PrecisionZoomScrollAction, at point: CGPoint) {
+        guard screen == .playing, game?.isComplete == false else { return }
+        let wallet = PrecisionZoomController.shared
+        switch wallet.applyScroll(action) {
+        case .changed:
+            syncPrecisionZoom(at: point)
+            refreshGame()
+        case .unavailable:
+            message = wallet.storageError ?? "No Zoom uses. Earn one for every 3 no-Rewind career stars."
+            canvas.showFocusNotice(message)
+        case .unchanged: break
+        }
+    }
+
+    private func syncPrecisionZoom(at point: CGPoint? = nil) {
+        let wallet = PrecisionZoomController.shared
+        canvas.setPrecisionZoom(wallet.active != nil, at: point)
+        speedControl.bulletTimeActive = wallet.active == .superzoom
+        let suffix = wallet.active.map { "  \($0 == .zoom ? "ZOOM" : "SUPER") ON" } ?? ""
+        canvas.precisionStatus = "Z \(wallet.remaining(.zoom))  SHIFT-Z \(wallet.remaining(.superzoom))" + suffix
+    }
+
     private func captureReplayFrame() {
         runMovie.recorder?.setMusic(url: dj.isPlaying ? dj.currentURL : music.currentURL,
             gain: globallyMuted || audioSettings.music == .silent || music.muted ? 0 : Float(audioSettings.musicVolume))
@@ -907,6 +949,10 @@ import NxlvKit
         canvas.speedLabel = speedControl.panelLabel
         canvas.variableSpeedEnabled = speedControl.variableEnabled
         canvas.isFastForward = fastForward && !paused && screen == .playing && !game.isComplete
+        canvas.deathCountdownText = screen == .playing ? FailureMoodDecision.deathCounterText(
+            saved: game.saved, active: game.lemmings.filter(\.active).count,
+            unreleased: game.configuration.total - game.released, required: 1,
+            isComplete: game.isComplete, didWin: game.didWin) : ""
         canvas.update(game)
         let palette = Lemmings2Panel.palette(over: game.configuration.palette, phase: frontTicks / 4)
         let skillFrame: Lemmings2SpriteFrame? = {
@@ -931,7 +977,7 @@ import NxlvKit
         }
         canvas.toolTip = nil
         let transport = rewindOriginState.map { "Rewind active, \($0.tick - game.tick) ticks back. Hold full stop scrubs forward. Escape cancels." } ?? ""
-        canvas.setAccessibilityLabel("Lemmings 2. \(game.configuration.skills[selected].name) selected. \(label). \(paused ? "Paused." : "Running.") \(game.isNuking ? "Nuke active." : "") \(game.released) released, \(game.saved) saved. \(transport)")
+        canvas.setAccessibilityLabel("Lemmings 2. \(game.configuration.skills[selected].name) selected. \(label). \(paused ? "Paused." : "Running.") \(game.isNuking ? "Nuke active." : "") \(game.released) released, \(game.saved) saved. \(canvas.deathCountdownText). \(canvas.precisionStatus). \(transport)")
     }
     private func update() {
         let now = ProcessInfo.processInfo.systemUptime
@@ -1025,6 +1071,8 @@ import NxlvKit
     }
     private func finishIfComplete(_ game: Lemmings2Runtime) {
         if game.isComplete {
+            PrecisionZoomController.shared.finish(attemptID: arcadeRunID, didWin: game.didWin)
+            syncPrecisionZoom()
             dj.updateTelemetry(.init(didWin: game.didWin, isComplete: true))
             if recordsCampaignProgress {
                 do { try recoveryStore.clear(arcadeRunID) } catch { message = error.localizedDescription }
@@ -1248,8 +1296,7 @@ import NxlvKit
             }
         }
         if screen == .playing {
-            if key.lowercased() == "z" { _ = rewind(seconds: 2) }
-            else if key == "." { singleStep() }
+            if key == "." { singleStep() }
             else if let game, let index = SkillShortcuts(names: game.configuration.skills.map(\.name)).index(for: key, modern: audioSettings.modernControlsEnabled) { panelAction(index) }
             else if key == " " || key.lowercased() == "p" { panelAction(8) }
             else if key.lowercased() == "r" { retryLevel() }
@@ -1758,7 +1805,10 @@ import NxlvKit
             let y = slot < 10 ? 160 : 180
             let height = slot < 8 ? 40 : 20
             let frame = CGRect(x: panelX + CGFloat(x) * zoom, y: origin.y + CGFloat(y) * zoom * 1.2, width: 32 * zoom, height: CGFloat(height) * zoom * 1.2)
-            children.append(accessibleElements.element(id: "panel-\(slot)", owner: self, label: names[slot], frame: frame) { [weak self] in
+            let label = game.supplies.indices.contains(slot)
+                ? "\(names[slot]), \(game.supplies[slot]) remaining" + (slot == selectedSkillSlot ? ", selected" : "")
+                : names[slot]
+            children.append(accessibleElements.element(id: "panel-\(slot)", owner: self, label: label, frame: frame) { [weak self] in
                 let time = ProcessInfo.processInfo.systemUptime
                 self?.onPanel?(slot, 1, time)
                 if slot == 9 { self?.onPanel?(slot, 2, time + 0.01) }
@@ -1777,6 +1827,20 @@ import NxlvKit
     var onKey: ((String) -> Void)?
     var cameraX: CGFloat = 0
     var cameraY: CGFloat = 0
+    private var precisionLens = PrecisionZoomLens()
+    private var precisionScroll = PrecisionZoomScrollGesture()
+    var precisionStatus = "" { didSet { needsDisplay = true } }
+    var deathCountdownText = "" { didSet { if oldValue != deathCountdownText { needsDisplay = true } } }
+    var onPrecisionScroll: ((PrecisionZoomScrollAction, CGPoint) -> Void)?
+    func setPrecisionZoom(_ enabled: Bool, at cursor: CGPoint? = nil) {
+        let centre = CGPoint(x: gameplayRect.midX, y: gameplayRect.midY)
+        let pointer = cursor ?? cursorPoint() ?? centre
+        let anchor = gameplayRect.contains(pointer) ? pointer : centre
+        let delta = precisionLens.transition(to: enabled, at: anchor,
+            scaleX: zoom, scaleY: zoom * 1.2)
+        cameraX += delta.x; cameraY += delta.y
+        clampCamera(); needsDisplay = true
+    }
     private var cameraBounds: (left: CGFloat, top: CGFloat, right: CGFloat, bottom: CGFloat) = (0, 0, 0, 0)
     private var game: Lemmings2Runtime?
     private var terrain: NSImage?
@@ -1848,7 +1912,8 @@ import NxlvKit
         var label: String?
         if let window, let game {
             let point = controllerPointer ?? convert(window.mouseLocationOutsideOfEventStream, from: nil)
-            let x = (point.x - origin.x) / zoom, y = (point.y - origin.y) / (zoom * 1.2)
+            let source = gameplayRect.contains(point) ? precisionLens.source(point) : point
+            let x = (source.x - origin.x) / zoom, y = (source.y - origin.y) / (zoom * 1.2)
             if (0..<visibleWidth).contains(x), (0..<160).contains(y) {
                 if !fan, let target = game.target(slot: slot, x: Int(x + cameraX), y: Int(y + cameraY), preferApproaching: favorApproachingLemmings,
             preferBombBlockers: favorBombBlockers, preferBuilders: favorBuilders) {
@@ -2011,7 +2076,7 @@ import NxlvKit
         guard !points.isEmpty else { return }
         let cores = points.map { NSRect(x: origin.x + (CGFloat($0.x - 3) - cameraX) * zoom,
             y: origin.y + (CGFloat($0.y - 3) - cameraY) * zoom * 1.2, width: 6 * zoom, height: 6 * zoom * 1.2) }
-        hdrOverlay?.pulse(cores: cores, fullScreen: fullScreenHDRFlashes)
+        hdrOverlay?.pulse(cores: cores.map(precisionLens.display), fullScreen: fullScreenHDRFlashes)
     }
     private var explosion: Lemmings2Explosion?
     func load(level: Lemmings2Level, style: Lemmings2Style, sprites bank: Lemmings2Sprites, intern: Lemmings2SpecialGraphics, explosion: Lemmings2Explosion, walker: Lemmings2Walker?, resetPresentation: Bool = true) throws {
@@ -2397,8 +2462,8 @@ import NxlvKit
             if let id = assignmentHighlight.target ?? (pointerSelectionEnabled ? pointerTarget(slot: selectedSkillSlot) : nil),
                let lem = game?.lemmings.first(where: { $0.id == id && $0.active }) {
                 let focused = assignmentHighlight.target != nil
-                let centre = CGPoint(x: origin.x + (CGFloat(lem.x) - cameraX) * zoom,
-                    y: origin.y + (CGFloat(lem.y - 6) - cameraY) * zoom * 1.2)
+                let centre = precisionLens.display(CGPoint(x: origin.x + (CGFloat(lem.x) - cameraX) * zoom,
+                    y: origin.y + (CGFloat(lem.y - 6) - cameraY) * zoom * 1.2))
                 if focused {
                     assignmentHighlight.draw(at: centre, scale: zoom, tint: .systemYellow, radius: 7)
                 } else {
@@ -2410,8 +2475,8 @@ import NxlvKit
             if !GameCursor.gameplaySuppressed, let point = cursorPoint(), gameplayRect.contains(point) {
                 if showReticleCount {
                     let centres = (game?.lemmings ?? []).filter { $0.active }.map {
-                        CGPoint(x: origin.x + (CGFloat($0.x) - cameraX) * zoom,
-                                y: origin.y + (CGFloat($0.y - 5) - cameraY) * zoom * 1.2)
+                        precisionLens.display(CGPoint(x: origin.x + (CGFloat($0.x) - cameraX) * zoom,
+                                y: origin.y + (CGFloat($0.y - 5) - cameraY) * zoom * 1.2))
                     }
                     let count = SkillCursorBadge.count(centres: centres, at: point, scale: zoom)
                     SkillCursorBadge.drawCount(count, at: point, scale: zoom, size: skillCursorIconSize, icon: skillCursorIconSize == .none ? nil : skillBadge, in: gameplayRect)
@@ -2421,11 +2486,20 @@ import NxlvKit
                     tint: GameCursor.targetTint(eligible: pointerSelectionEnabled && target.map { game?.canAssign(slot: selectedSkillSlot, to: $0) == true } == true,
                         occupied: target != nil))
                 if pointerSelectionEnabled {
+                    let remaining = game.flatMap { game -> Int? in
+                        guard game.supplies.indices.contains(selectedSkillSlot) else { return nil }
+                        return game.supplies[selectedSkillSlot]
+                    }
                     SkillCursorBadge.draw(icon: skillBadge, index: selectedSkillSlot, at: point,
-                        scale: zoom, tint: .systemGreen, size: skillCursorIconSize, reduceMotion: reduceMotion, in: gameplayRect)
+                        scale: zoom, tint: .systemGreen, size: skillCursorIconSize, reduceMotion: reduceMotion || reduceFlashes,
+                        remaining: remaining, in: gameplayRect)
                 }
             }
             if let focusNotice { GameTypography.annotation(focusNotice, at: CGPoint(x: 12, y: 12)) }
+            if !precisionStatus.isEmpty { GameTypography.annotation(precisionStatus,
+                at: CGPoint(x: gameplayRect.minX + 12, y: gameplayRect.minY + 25), palette: .blue) }
+            if !deathCountdownText.isEmpty { GameTypography.annotation(deathCountdownText,
+                at: CGPoint(x: gameplayRect.maxX - 120, y: gameplayRect.minY + 12), palette: .blue) }
             if let origin = rewindOriginTick, origin > rewindCurrentTick {
                 RewindTransportCue.draw(origin: CGPoint(x: 12, y: 12),
                     currentTick: rewindCurrentTick, originTick: origin, scale: zoom)
@@ -2456,6 +2530,7 @@ import NxlvKit
     private func drawWorld(_ game: Lemmings2Runtime, terrain: NSImage) {
         NSGraphicsContext.saveGraphicsState()
         NSBezierPath(rect: NSRect(x: origin.x, y: origin.y, width: visibleWidth * zoom, height: 192 * zoom)).addClip()
+        precisionLens.applyToCurrentGraphicsContext()
         drawImage(terrain, x: 0, y: 0)
         if usesSpeedEffects { drawLemmings(game, ghostsOnly: true) }
         for object in objects where !object.frames.isEmpty {
@@ -2534,8 +2609,9 @@ import NxlvKit
         let p = convert(event.locationInWindow, from: nil)
         layoutTimeline()
         if timeline.click(at: p) { return }
-        let x = (p.x - origin.x) / zoom
-        let y = (p.y - origin.y) / (zoom * 1.2)
+        let source = gameplayRect.contains(p) ? precisionLens.source(p) : p
+        let x = (source.x - origin.x) / zoom
+        let y = (source.y - origin.y) / (zoom * 1.2)
         guard x >= 0, x < visibleWidth, y >= 0, y < 200 else { return }
         if y < 160 { onClick?(Int(x + cameraX), Int(y + cameraY)); onPointer?(Int(x + cameraX), Int(y + cameraY), true) }
         else if variableSpeedEnabled, let part = SpeedPanelControls.part(at: p, in: speedRect) {
@@ -2550,7 +2626,9 @@ import NxlvKit
         trackPointer(at:convert(event.locationInWindow,from:nil),held:held)
     }
     private func trackPointer(at p: NSPoint, held: Bool) {
-        let x = (p.x-origin.x)/zoom, y = (p.y-origin.y)/(zoom*1.2)
+        guard gameplayRect.contains(p) else { onRelease?(); return }
+        let source = precisionLens.source(p)
+        let x = (source.x-origin.x)/zoom, y = (source.y-origin.y)/(zoom*1.2)
         guard x >= 0, x < visibleWidth, y >= 0, y < 160 else { onRelease?(); return }
         onPointer?(Int(x+cameraX),Int(y+cameraY),held)
     }
@@ -2602,8 +2680,9 @@ import NxlvKit
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in self?.focusNotice = nil; self?.needsDisplay = true }
     }
     func pointerTarget(slot: Int) -> Int? {
-        guard let game, let p = cursorPoint() else { return nil }
-        let x = (p.x - origin.x) / zoom, y = (p.y - origin.y) / (zoom * 1.2)
+        guard let game, let p = cursorPoint(), gameplayRect.contains(p) else { return nil }
+        let source = precisionLens.source(p)
+        let x = (source.x - origin.x) / zoom, y = (source.y - origin.y) / (zoom * 1.2)
         guard (0..<visibleWidth).contains(x), (0..<160).contains(y) else { return nil }
         return game.target(slot: slot, x: Int(x + cameraX), y: Int(y + cameraY), preferApproaching: favorApproachingLemmings,
             preferBombBlockers: favorBombBlockers, preferBuilders: favorBuilders)?.id
@@ -2643,6 +2722,14 @@ import NxlvKit
         onHover?()
     }
     override func scrollWheel(with event: NSEvent) {
+        let point = convert(event.locationInWindow, from: nil)
+        if gameplayRect.contains(point), game?.isComplete == false {
+            switch precisionScroll.handle(event) {
+            case .zoom(let action): onPrecisionScroll?(action, point); return
+            case .consumed: return
+            case .pan: break
+            }
+        }
         let horizontal = event.modifierFlags.contains(.shift) ? event.scrollingDeltaY : event.scrollingDeltaX
         pan(x: horizontal * 4, y: event.modifierFlags.contains(.shift) ? 0 : event.scrollingDeltaY * 4)
     }

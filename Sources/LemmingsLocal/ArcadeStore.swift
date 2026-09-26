@@ -208,6 +208,7 @@ import NxlvKit
     @discardableResult func startNewRecords() -> Bool {
         let manager = FileManager.default
         let stamp = UUID().uuidString
+        let previousProfiles = records.profiles.map(\.id)
         do {
             for url in [file, recordFile.backupURL] where manager.fileExists(atPath: url.path) {
                 try manager.moveItem(at: url, to: url.deletingLastPathComponent()
@@ -222,6 +223,9 @@ import NxlvKit
         records = ArcadeRecords(); canWrite = true; storageError = nil; storageNotice = nil
         adoptBundledProofs()
         save()
+        if storageError == nil {
+            for profileID in previousProfiles { PrecisionZoomController.shared.removeProfile(profileID) }
+        }
         return storageError == nil
     }
     /// Players who can be removed now. A player in the current turn or run stays until it ends.
@@ -249,6 +253,7 @@ import NxlvKit
         let folder = file.deletingLastPathComponent()
         for replay in replays { try? FileManager.default.removeItem(at: folder.appendingPathComponent(replay.relativePath)) }
         try? recoveryStore.discard(profileID: id)
+        PrecisionZoomController.shared.removeProfile(id)
         removeSavedProgress(of: id)
         playlistDataRemover(id)
         return true

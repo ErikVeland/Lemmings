@@ -4,6 +4,7 @@ import NxlvKit
 @MainActor final class GameSpeedControl {
     private(set) var state: GameplaySpeed
     private var musicPitch = GameplayMusicPitch()
+    var bulletTimeActive = false { didSet { if oldValue != bulletTimeActive { onChange() } } }
     var onMusicPitchChange: (Double) -> Void = { _ in }
     var onChange: () -> Void = {}
     init(legacyMultiplier: Double = 3) { state = GameplaySpeed(legacyMultiplier: legacyMultiplier) }
@@ -15,11 +16,14 @@ import NxlvKit
             state.variableEnabled = newValue; onChange()
         }
     }
-    var isFast: Bool { state.isFast }
-    var multiplier: Double { state.multiplier }
-    var label: String { state.label }
+    var isFast: Bool { !bulletTimeActive && state.isFast }
+    var multiplier: Double {
+        PrecisionZoomLedger.effectiveSpeed(normal: state.multiplier,
+            active: bulletTimeActive ? .superzoom : nil)
+    }
+    var label: String { bulletTimeActive ? "0.5×" : state.label }
     var target: Double { state.target }
-    var panelLabel: String { state.label }
+    var panelLabel: String { label }
     var choiceLabel: String { "\(Int(state.cruise))×" }
     func pointerDown(at now: TimeInterval, clickCount: Int) {
         state.press(.mouse, at: now)
@@ -28,7 +32,7 @@ import NxlvKit
     func update(at now: TimeInterval, active: Bool) {
         if active { state.update(at: now) } else { state.suspend(at: now) }
         let previous = musicPitch.cents
-        musicPitch.update(speed: active && variableEnabled ? target : 1, at: now)
+        musicPitch.update(speed: active && variableEnabled && !bulletTimeActive ? target : 1, at: now)
         if musicPitch.cents != previous { onMusicPitchChange(musicPitch.cents) }
     }
     func tap(at now: TimeInterval = ProcessInfo.processInfo.systemUptime, clickCount: Int = 1) {
@@ -91,6 +95,7 @@ import NxlvKit
     var hints: (() -> Void)?
     var settings: (() -> Void)?
     var retry: (() -> Void)?
+    var precisionZoom: ((PrecisionZoomKind) -> Void)?
     var rewind: (() -> Void)?
     var controllerRewindHeld: (Bool) -> Void = { _ in }
     var step: ((Int) -> Void)?
@@ -147,6 +152,11 @@ import NxlvKit
             return event
         }
         guard event.type == .keyDown else { return event }
+        if event.charactersIgnoringModifiers?.lowercased() == "z", let precisionZoom {
+            if event.modifierFlags.contains(.shift) { speedControl?.release(.shift, at: now, allowTap: false) }
+            if !event.isARepeat { precisionZoom(event.modifierFlags.contains(.shift) ? .superzoom : .zoom) }
+            return nil
+        }
         // H opens hints. Keep I and F1 as aliases.
         if event.keyCode == 122 || ["h", "i"].contains(event.charactersIgnoringModifiers?.lowercased() ?? ""),
            let hints {
@@ -308,6 +318,7 @@ import NxlvKit
             let action = String(line[line.index(after: colon)...]).trimmingCharacters(in: .whitespaces)
             let lower = line.lowercased()
             let group = controllerSection ? "Controller"
+                : lower.contains("zoom") ? "Camera"
                 : ["speed", "fast-forward", "ramp", "1×"].contains(where: lower.contains) ? "Speed"
                 : ["skill", "assignment", "unassigned"].contains(where: lower.contains) ? "Skills"
                 : lower.contains("entrance") ? "Camera" : "Gameplay"

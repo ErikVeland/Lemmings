@@ -63,6 +63,10 @@ Count live sprite centres inside the reticule, regardless of skill eligibility.
 Keep the count available when the icon is hidden.
 Clamp the sprite to the playfield edge. Directional skills must use directional
 artwork rather than falling back to a plain dot.
+When a finite selected skill has one use left, fade only its sprite gently.
+At zero uses, replace the sprite with a steady red X. Reduced motion and reduced
+flashes keep the one-use sprite steady. The None size still hides the badge. Lemmings 3 has no
+shared skill stock: only Use shows the hovered lemming's remaining tool uses.
 
 A selected lemming has a faint, soft halo with a small brightness shimmer.
 Do not draw an outlined ring or an orbiting arc. Reduced motion keeps the halo

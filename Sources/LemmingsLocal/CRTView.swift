@@ -172,7 +172,7 @@ struct CRTUniforms {
   var onMouseDragged: ((CGPoint) -> Void)?
   var onMouseExited: (() -> Void)?
   var onMouseMoved: ((CGPoint) -> Void)?
-  var onScroll: ((CGFloat, CGFloat) -> Void)?
+  var onScroll: ((NSEvent, CGPoint?) -> Void)?
   /// Source-space area that draws its own pointer. Controls outside it keep the system arrow.
   var gameplayCursorRect: CGRect? {
     didSet {
@@ -368,7 +368,8 @@ struct CRTUniforms {
   }
 
   override func scrollWheel(with event: NSEvent) {
-    onScroll?(event.scrollingDeltaX, event.scrollingDeltaY)
+    let point = sourcePoint(from: convert(event.locationInWindow, from: nil))
+    onScroll?(event, point)
   }
 
   // MARK: - Source

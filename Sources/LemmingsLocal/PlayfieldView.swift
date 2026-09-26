@@ -131,12 +131,16 @@ struct ReticleFeedback {
   private var rewindCueTask: Task<Void, Never>?
   private var hdrOverlay: ExplosionHDRView?
   private(set) var hdrFlashes: [ExplosionFlash] = []
+  private var displayedHDRFlashes: [ExplosionFlash] {
+    hdrFlashes.map { .init(rect: precisionLens.display($0.rect), strength: $0.strength,
+      expiresAt: $0.expiresAt, tint: $0.tint) }
+  }
   private var hdrBirths: [Int:(tick:Int,expires:TimeInterval)] = [:]
   private var hdrLastTick = 0
   var presentsHDR = true {
     didSet {
       hdrOverlay?.isHidden = !presentsHDR
-      hdrOverlay?.update(presentsHDR ? hdrFlashes : [],force:true)
+      hdrOverlay?.update(presentsHDR ? displayedHDRFlashes : [],force:true)
     }
   }
   override func viewDidMoveToWindow() {
@@ -148,7 +152,7 @@ struct ReticleFeedback {
       addSubview(overlay)
       hdrOverlay = overlay
     }
-    hdrOverlay?.update(presentsHDR ? hdrFlashes : [],force:true)
+    hdrOverlay?.update(presentsHDR ? displayedHDRFlashes : [],force:true)
   }
   /// Lines drawn over the level before it starts or after it ends.
   private let accessibleElements = GameAccessibleElements()
@@ -158,6 +162,8 @@ struct ReticleFeedback {
   func accessibleControls(owner: NSView, transform: (CGRect) -> CGRect = { $0 }) -> [Any] {
     guard phase != .playing else {
       let text = "Game playfield" + (turnInitials.map { ". \($0)'s turn" } ?? "")
+        + (precisionStatus.isEmpty ? "" : ". " + precisionStatus)
+        + (deathCountdownText.isEmpty ? "" : ". " + deathCountdownText)
       return [accessibleElements.element(id: "status", owner: owner, label: text, frame: transform(bounds))]
     }
     var items: [Any] = []
@@ -295,8 +301,34 @@ struct ReticleFeedback {
   var assets: ClassicMainDATAssets?
   var palette: [ClassicRGBColor] = []
   var viewport = Viewport()
+  private var precisionLens = PrecisionZoomLens()
+  private var precisionScroll = PrecisionZoomScrollGesture()
+  var precisionStatus = "" { didSet { needsDisplay = true } }
+  var deathCountdownText = "" { didSet { if oldValue != deathCountdownText { needsDisplay = true } } }
+  var showsDeathCountdownOverlay = false { didSet { needsDisplay = true } }
+  var precisionVisibleLevelRect: CGRect {
+    let topLeft = viewport.levelPoint(from: precisionLens.source(bounds.origin))
+    let bottomRight = viewport.levelPoint(from: precisionLens.source(CGPoint(x: bounds.maxX, y: bounds.maxY)))
+    return CGRect(x: topLeft.x, y: topLeft.y,
+      width: bottomRight.x - topLeft.x, height: bottomRight.y - topLeft.y)
+      .intersection(CGRect(origin: .zero, size: viewport.levelSize))
+  }
+  var precisionAnchor: CGPoint {
+    let centre = CGPoint(x: bounds.midX, y: bounds.midY)
+    let point = cursorViewPoint ?? window.map { convert($0.mouseLocationOutsideOfEventStream, from: nil) } ?? centre
+    return bounds.contains(point) ? point : centre
+  }
+  func setPrecisionZoom(_ enabled: Bool, at cursor: CGPoint? = nil) {
+    let point = cursor.flatMap { bounds.contains($0) ? $0 : nil } ?? precisionAnchor
+    let delta = precisionLens.transition(to: enabled, at: point,
+        scaleX: viewport.zoom, scaleY: viewport.zoom)
+    viewport.scroll(dx: delta.x, dy: delta.y)
+    onViewportChanged?()
+    needsDisplay = true
+  }
   var onAssign: ((Int) -> Void)?
   var onViewportChanged: (() -> Void)?
+  var onPrecisionScroll: ((PrecisionZoomScrollAction, CGPoint) -> Void)?
   /// Called when a click should dismiss a briefing or a result.
   var onAdvancePhase: (() -> Void)?
   var onSelectOverlayLine: ((Int) -> Void)?
@@ -358,7 +390,7 @@ struct ReticleFeedback {
     return reticleFeedback.state(eligible: eligible, duplicate: duplicate.map { "\($0.id):\(skill)" }, now: now)
   }
   private var displayedTarget: (id: Int, point: CGPoint, time: TimeInterval)?
-  var pointerLemmingID: Int? { cursorViewPoint.flatMap { clickTarget(at: viewport.levelPoint(from: $0))?.id } }
+  var pointerLemmingID: Int? { cursorViewPoint.flatMap { clickTarget(at: viewport.levelPoint(from: precisionLens.source($0)))?.id } }
   private var cursorViewPoint: CGPoint?
   private var trackingArea: NSTrackingArea?
 
@@ -481,7 +513,7 @@ struct ReticleFeedback {
     }
     assignmentHighlight.clear()
     cursorViewPoint = point
-    let levelPoint = viewport.levelPoint(from: point)
+    let levelPoint = viewport.levelPoint(from: precisionLens.source(point))
     let target = clickTarget(at: levelPoint)
     displayedTarget = nil
     if let target { onAssign?(target.id) }
@@ -527,8 +559,19 @@ struct ReticleFeedback {
   }
 
   override func scrollWheel(with event: NSEvent) {
-    // A trackpad swipe scrolls the level sideways, as the classic game does.
-    viewport.scroll(dx: -Double(event.scrollingDeltaX), dy: -Double(event.scrollingDeltaY))
+    handleScroll(event, at: convert(event.locationInWindow, from: nil))
+  }
+
+  func handleScroll(_ event: NSEvent, at point: CGPoint?, pansVertically: Bool = true) {
+    if phase == .playing, session?.isComplete == false, let point, bounds.contains(point) {
+      switch precisionScroll.handle(event) {
+      case .zoom(let action): onPrecisionScroll?(action, point); return
+      case .consumed: return
+      case .pan: break
+      }
+    }
+    viewport.scroll(dx: -Double(event.scrollingDeltaX),
+      dy: pansVertically ? -Double(event.scrollingDeltaY) : 0)
     onViewportChanged?()
     needsDisplay = true
   }
@@ -627,7 +670,7 @@ struct ReticleFeedback {
       if phase == .playing { startCountdown.draw(in: bounds) }
       // The shared corner reticle also represents the controller pointer.
       if let id = assignmentHighlight.target, let lem = session?.lemmings.first(where: { $0.id == id }) {
-        assignmentHighlight.draw(at: viewport.viewPoint(fromLevel: CGPoint(x: lem.x, y: lem.y - 6)),
+        assignmentHighlight.draw(at: precisionLens.display(viewport.viewPoint(fromLevel: CGPoint(x: lem.x, y: lem.y - 6))),
           scale: viewport.zoom, tint: .systemYellow, radius: 7)
       }
     }
@@ -636,7 +679,7 @@ struct ReticleFeedback {
     let tick = session?.currentTick ?? 0
     if tick < hdrLastTick { hdrBirths.removeAll() }
     hdrLastTick = tick
-    defer { hdrOverlay?.update(presentsHDR ? hdrFlashes : []) }
+    defer { hdrOverlay?.update(presentsHDR ? displayedHDRFlashes : []) }
     refreshClassicScene()
     // Fill the view's own area, not the dirty rectangle. AppKit passes a
     // rectangle that can cover the whole window, because these views share one
@@ -667,12 +710,22 @@ struct ReticleFeedback {
             operation: .sourceOver, fraction: 1, respectFlipped: true, hints: nil)
         }
       } else {
+        NSGraphicsContext.saveGraphicsState()
+        NSBezierPath(rect: bounds).addClip()
+        precisionLens.applyToCurrentGraphicsContext()
         drawLevel(levelImage)
         speedTrails.draw(enabled: hdEffectsEnabled && !reduceMotion && isFastForward && phase == .playing, in: bounds) { drawLemmings() }
+        NSGraphicsContext.restoreGraphicsState()
       }
       FailureMoodOverlay.draw(in: bounds, amount: failureMoodAmount)
       drawRewindCue()
-      if phase == .playing { drawTurnBadge(); drawCursor() }
+      if phase == .playing {
+        drawTurnBadge(); drawCursor()
+        if !precisionStatus.isEmpty { GameTypography.annotation(precisionStatus, at: CGPoint(x: 12, y: 12), palette: .blue) }
+        if showsDeathCountdownOverlay && !deathCountdownText.isEmpty {
+          GameTypography.annotation(deathCountdownText, at: CGPoint(x: 12, y: 25), palette: .blue)
+        }
+      }
     }
     if phase != .playing { drawOverlay() }
   }
@@ -1176,15 +1229,15 @@ struct ReticleFeedback {
 
   private func drawCursor() {
     guard !GameCursor.gameplaySuppressed, let cursorViewPoint else { return }
-    let point = viewport.levelPoint(from: cursorViewPoint)
+    let point = viewport.levelPoint(from: precisionLens.source(cursorViewPoint))
     let target = lemming(at: point)
     let now = ProcessInfo.processInfo.systemUptime
     let state = reticleState(at: point, now: now)
     let pulseTarget = state == .assigned ? session?.lemmings.first(where: { $0.id == assignedTarget }) : nil
     scheduleReticleRedraw()
     displayedTarget = target.map { ($0.id, point, ProcessInfo.processInfo.systemUptime) }
-    let targetPoint = viewport.viewPoint(
-      fromLevel: (pulseTarget ?? target).map { CGPoint(x: CGFloat($0.x), y: CGFloat($0.y) - 5) } ?? point)
+    let targetPoint = precisionLens.display(viewport.viewPoint(
+      fromLevel: (pulseTarget ?? target).map { CGPoint(x: CGFloat($0.x), y: CGFloat($0.y) - 5) } ?? point))
     let color: NSColor
     switch state {
     case .unavailable: color = target == nil ? NSColor(calibratedWhite: 0.6, alpha: 0.9) : .systemYellow
@@ -1219,15 +1272,21 @@ struct ReticleFeedback {
 
     if showReticleCount {
       let centres = (session?.lemmings ?? []).map {
-        viewport.viewPoint(fromLevel: CGPoint(x: CGFloat($0.x), y: CGFloat($0.y) - 5))
+        precisionLens.display(viewport.viewPoint(fromLevel: CGPoint(x: CGFloat($0.x), y: CGFloat($0.y) - 5)))
       }
       let count = SkillCursorBadge.count(centres: centres, at: cursorViewPoint, scale: viewport.zoom)
       SkillCursorBadge.drawCount(count, at: cursorViewPoint, scale: viewport.zoom,
         size: skillCursorIconSize, icon: skillCursorIconSize == .none ? nil : skillBadge(for: selectedSkill()), in: bounds)
     }
-    SkillCursorBadge.draw(icon: skillBadge(for: selectedSkill()), index: selectedSkill(),
+    let skillIndex = selectedSkill()
+    let remaining = session.flatMap { session -> Int? in
+      guard session.skills.indices.contains(skillIndex) else { return nil }
+      let skill = session.skills[skillIndex]
+      return skill.isInfinite ? nil : skill.count
+    }
+    SkillCursorBadge.draw(icon: skillBadge(for: skillIndex), index: skillIndex,
       at: cursorViewPoint, scale: viewport.zoom, tint: color,
-      size: skillCursorIconSize, reduceMotion: reduceMotion, in: bounds)
+      size: skillCursorIconSize, reduceMotion: reduceMotion || reduceFlashes, remaining: remaining, in: bounds)
   }
 
   private func skillBadge(for index: Int) -> NSImage? {
