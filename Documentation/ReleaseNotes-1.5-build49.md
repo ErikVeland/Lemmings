@@ -1,5 +1,9 @@
 # 1.5 test build 49
 
+Snapshot source: `90404b525306f13be6bc3ef6500521fe439868d6`.
+Later RC3 commits also use build 49. These notes do not cover those commits and
+are not a public release draft.
+
 - Use Return or keypad Enter to activate the focused dialog button.
 - Navigate dialog controls with Tab, Shift-Tab and arrow keys. Nested dialogs restore focus when closed.
 - Move backward and forward through hints with Left and Right. Full solutions still require confirmation.

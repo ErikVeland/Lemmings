@@ -213,6 +213,7 @@ def main():
         ("controller", ["zsh", "Scripts/run-controller-qol-tests.sh"]),
         ("variable-speed", ["zsh", "Scripts/run-gameplay-speed-tests.sh"]),
         ("pointer-capture", ["zsh", "Scripts/run-pointer-capture-tests.sh"]),
+        ("dialog-cursor", ["zsh", "Scripts/run-dialog-cursor-tests.sh"]),
         ("hdr-gpu", ["zsh", "Scripts/run-explosion-hdr-tests.sh"]),
         ("rescue-certificates", [sys.executable, "Tools/TrolleyVerification/catalogue.py", "check"]),
     ]:

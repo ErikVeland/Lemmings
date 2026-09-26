@@ -286,6 +286,7 @@ extension SettingsWindow {
         let artwork = SequelArtworkPreference.enabled
         defer { SequelArtworkPreference.setEnabled(artwork) }
         let pane = gameplayPane()
+        rebuildSources()
         let host = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 960, height: 480), styleMask: [], backing: .buffered, defer: false)
         host.contentView = pane
         pane.layoutSubtreeIfNeeded()
@@ -296,19 +297,31 @@ extension SettingsWindow {
         try image.representation(using: .png, properties: [:])!.write(to: folder.appendingPathComponent("gameplay-settings.png"))
         try assertArtwork(modernControlsCheck?.state == .on && variableSpeedCheck?.state == .on,
             "Modern controls and variable speed are not the defaults")
-        useOGSettings()
+        guard let experience = experiencePopUp else {
+            try assertArtwork(false, "Gameplay preset is missing")
+            return
+        }
+        try assertArtwork(experience.titleOfSelectedItem == "Modern", "Modern preset was not selected")
+        experience.selectItem(withTitle: "Original")
+        experienceChanged(experience)
         try assertArtwork(!current.modernControlsEnabled && !current.variableSpeedEnabled && !current.hdEffectsEnabled
-            && !current.confinePointer && !SequelArtworkPreference.enabled && variableSpeedCheck?.isEnabled == false,
-            "The OG action did not switch off the new conveniences")
-        useModernDefaults()
+            && !current.confinePointer && !SequelArtworkPreference.enabled && variableSpeedCheck?.isEnabled == false
+            && experience.titleOfSelectedItem == "Original",
+            "The Original preset did not switch off the new conveniences")
+        experience.selectItem(withTitle: "Modern")
+        experienceChanged(experience)
         try assertArtwork(current.modernControlsEnabled && current.variableSpeedEnabled && current.hdEffectsEnabled
-            && current.confinePointer && SequelArtworkPreference.enabled && variableSpeedCheck?.isEnabled == true,
-            "Modern defaults failed to restore the conveniences")
+            && current.confinePointer && SequelArtworkPreference.enabled && variableSpeedCheck?.isEnabled == true
+            && experience.titleOfSelectedItem == "Modern",
+            "The Modern preset did not restore the conveniences")
         variableSpeedCheck!.performClick(nil)
-        try assertArtwork(!current.variableSpeedEnabled && current.modernControlsEnabled,
-            "Variable speed cannot be disabled independently")
+        try assertArtwork(!current.variableSpeedEnabled && current.modernControlsEnabled
+            && experience.titleOfSelectedItem == "Custom",
+            "Variable speed did not select the Custom preset")
         variableSpeedCheck!.performClick(nil)
-        print("PASS Settings modern/OG presets, individual variable-speed option and default controls")
+        try assertArtwork(experience.titleOfSelectedItem == "Custom",
+            "A manual choice reset the Custom preset")
+        print("PASS Settings Original, Modern and Custom presets, variable speed and default controls")
     }
     fileprivate func checkHDEffectsSetting() throws {
         let pane = videoPane()

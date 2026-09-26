@@ -1,13 +1,25 @@
 # Beta testing
 
-The 1.1 CR2 source candidate is commit `e1a2cbb`. This checklist still needs a
-fresh package and validation record for that candidate. The 1.0 RC1 build 36
-records are in the local archive and do not certify 1.1 CR2.
+The current 1.5 build 49 notes describe a local, registered-device test. They
+do not certify a public beta. Freeze one source commit and use a new build number
+for the next public candidate. Earlier package records do not certify it.
+
+## Public beta boundary
+
+Do not send a Game Center snapshot to an open tester group. It is development
+signed for registered Macs and cannot pass notarisation. Use a Developer ID
+signed, notarised archive for a public beta. Check the downloaded archive with
+Gatekeeper on a clean Mac before inviting testers.
+
+If the beta uses a direct download, keep it separate from the stable Sparkle
+feed. State that updates are manual. Confirm the bundled game and soundtrack
+assets are approved for public distribution. Record known preview limits in
+the beta notes.
 
 ## Local build and notarisation
 
-When the normal beta packaging workflow is not available, run the focused
-tri-archive release script:
+After the current source, notes and proof gates pass, run the tri-archive
+release script:
 
 ```sh
 NOTARY_PROFILE=lemmings-beta zsh Scripts/build-and-notarise.sh
@@ -24,9 +36,9 @@ app-specific password. App Store Connect API-key authentication is also
 available through `ASC_KEY_PATH`, `ASC_KEY_ID` and `ASC_ISSUER_ID`.
 
 Before it builds, the script checks for source changes after the previous
-release, checks the current release notes, creates notes from recent source
-changes when they are missing, and checks that the Monterey worktree contains
-the current commit. It then writes three timestamped ZIP files to
+release, requires tracked notes for the exact build, and checks that the
+Monterey worktree contains the current commit. It does not create missing
+notes. It then writes three timestamped ZIP files to
 `~/Downloads`: Developer ID standard, macOS 12 Monterey and Game Center.
 
 The first two archives are notarised. The Game Center archive is development

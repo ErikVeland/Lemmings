@@ -91,9 +91,10 @@ Previously recorded movies retain their original frames.
 
 - `Scripts/run-gameplay-speed-tests.sh` checks tiers, ramping, held-key combinations,
   rapid exits, focus recovery, the original fixed speeds and music pitch glides.
-- `Scripts/run-adaptive-dj-playback-tests.sh` renders a tone through the actual
-  recording graph at each speed. It checks pitch, unchanged tempo, the upper
-  pitch limit and pitch routing to module and incoming recording decks.
+- `Scripts/run-adaptive-dj-playback-tests.sh --signal-only` renders a tone through
+  the recording graph without installed music. It checks pitch, unchanged tempo
+  and the upper pitch limit. The full script also checks module and incoming-deck
+  routing against the installed soundtrack library. Missing music fails that gate.
 - `TEST_SCOPE=variable-speed Scripts/run-app-integration-tests.sh` checks real key
   events, attached windows, and the actual simulation clock at every speed.
 
@@ -126,11 +127,16 @@ DJ module and incoming recording checks also passed. Focused L2/L3 canvas
 checks passed for sprite layering, controls, menus and effect lifetimes.
 The 2×, 3×, 5× and 10× renders were generated for all three games.
 
-The complete suites still have validation gaps outside this change:
+The complete suites still have validation gaps:
 
 - The installed music library fails the sequel alternate-version assertion.
   The pre-change playback code at `e894667` fails the same assertion.
-- Classic's variable-speed integration checks pass, but the later CRT minimap
-  drag assertion fails.
-- The full sequel app suite calls removed Settings preset methods and cannot
-  compile. The canvas checks above ran separately from those Settings tests.
+- Classic's variable-speed integration checks passed. A later CRT minimap drag
+  assertion used the gap between the minimap and timeline after the layout changed. The test now
+  checks minimap and timeline hit regions separately. Run it on the complete app.
+- The sequel app suite now compiles against the current Settings presets. Its
+  runtime needs the bundled Classic Mac artwork manifest, which this checkout
+  does not have. The canvas checks above ran separately from the Settings test.
+- The no-data signal check passed outside this host's sandbox. The full playback
+  test now fails when the installed music library is missing. It still needs a
+  complete soundtrack run on the data-ready Mac.

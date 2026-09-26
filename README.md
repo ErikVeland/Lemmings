@@ -16,10 +16,11 @@ before distributing a build.
 The [1.2 build 41 Mac app](https://github.com/ErikVeland/Lemmings/releases/download/v1.2-build41/UltimateLemmings-1.2-build41.zip)
 is the last public download verified in this repository.
 
-The 1.5 public release candidate targets Intel and Apple silicon Macs running
-macOS 12.3 or later. Publish the signed archive only after the release gates in
-the [1.5 readiness record](Documentation/ReleaseReadiness/1.5PublicRelease.md)
-pass. The [release notes](Documentation/ReleaseNotes-1.5-build45.md) are a draft.
+The 1.5 source is at test build 49. Its [test notes](Documentation/ReleaseNotes-1.5-build49.md)
+describe a registered-device snapshot, not a public release package. The intended
+public target is Intel and Apple silicon Macs running macOS 12.3 or later. Publish
+only after the [1.5 readiness gates](Documentation/ReleaseReadiness/1.5PublicRelease.md)
+pass on one frozen commit.
 
 ## Start here
 
@@ -61,6 +62,11 @@ real-pack and reference-replay gates pass.
 
 The repository's source and tests remain useful without the commercial data,
 but data-dependent build and evidence gates report their missing inputs.
+Use `TEST_COMPILE_ONLY=1 TEST_SCOPE=dialogs zsh Scripts/run-app-integration-tests.sh`
+to compile the dialog harness without running it. This does not validate a
+bundled app or any gameplay flow.
+Run `zsh Scripts/run-dialog-cursor-tests.sh` for the data-independent focus-order
+and cursor-policy checks.
 
 The iOS source target supports iOS 16 or later. Its first player-facing slice
 imports a player-owned Classic DOS folder through the system document picker.

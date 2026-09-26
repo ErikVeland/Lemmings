@@ -176,7 +176,7 @@ document is the canonical place for the user-facing wording.
 `Package.swift` defines `NxlvKit`, the mobile core and UI libraries, the native
 macOS executables and package test targets. `Scripts/build-local-app.sh` builds
 universal arm64/x86_64 Mac bundles and embeds the supplied local game data. It
-targets macOS 13 or later.
+targets macOS 12.3 or later.
 
 `Apps/UltimateLemmingsIOS/UltimateLemmingsIOS.xcodeproj` builds the iOS 16
 application. `Scripts/check-1.3-mobile.sh` validates the metadata and source,
@@ -185,10 +185,10 @@ imports commercial data at runtime; it does not embed that data in its bundle.
 
 The release path is deliberately separate from the local build:
 
-1. `Scripts/build-and-notarise.sh` checks that source changed since the last
-   release notes commit.
-2. It verifies current release notes, creating them from the recent source
-   history when they are absent.
+1. `Scripts/build-and-notarise.sh` checks that source changed since the chosen
+   previous release commit.
+2. It requires tracked, reviewed notes for the exact build. It stamps the
+   frozen commit into the packaged copy.
 3. It builds and signs the standard and Monterey reference targets.
 4. It builds the development-signed Game Center target as a separate archive.
 5. It notarises the two distributable Developer ID archives and verifies them
@@ -197,8 +197,9 @@ The release path is deliberately separate from the local build:
    directory.
 7. It writes a separate Sparkle update ZIP containing only the notarised
    standard app and regenerates the signed `appcast.xml`.
-8. When `PUBLISH_GITHUB_RELEASE=1`, it uploads that ZIP, creates or updates
-   the tagged GitHub Release, and publishes the appcast to `main`.
+8. Publication is a separate, reviewed step through
+   `Scripts/publish-github-release.sh`. The packaging script rejects
+   `PUBLISH_GITHUB_RELEASE=1`.
 
 The Game Center archive is intentionally not submitted to Apple notarisation:
 Apple's Developer ID distribution rules reject that entitlement. Its separate

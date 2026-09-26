@@ -29,4 +29,13 @@ swiftc -O -swift-version 6 -target "$(uname -m)-apple-macos12.3" \
   -I "$build_dir/modules" -L "$build_dir" -lNxlvKit \
   -Xlinker -rpath -Xlinker "$build_dir" -framework AppKit -framework AVFoundation -framework Metal -framework QuartzCore \
   -o "$build_dir/app-test/Views" "$build_dir/app-test/main.swift" "${app_sources[@]}"
+if [[ "${SEQUEL_COMPILE_ONLY:-0}" == 1 ]]; then
+  print "PASS sequel app test compilation only. The app and input flows were not run."
+  exit 0
+fi
+test_app="${LEMMINGS_TEST_APP:-$project_dir/.build/local/Ultimate Lemmings.app}"
+[[ -f "$test_app/Contents/Resources/MacArtwork/lemmings/manifest.json" ]] || {
+  print -u2 "FAILED: The sequel app test needs the bundled Classic Mac artwork manifest. Build the local app first."
+  exit 1
+}
 python3 "$project_dir/Tools/UITestRunner/run.py" "$build_dir/app-test/Views"

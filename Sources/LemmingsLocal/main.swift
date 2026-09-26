@@ -1538,7 +1538,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   /// Skips the launch transition. AppKit animates into full screen over about a
   /// second, and on a multi-display Mac every screen redraws while it does. The
   /// player asked for the game, not for the animation.
-  func customWindows(toEnterFullScreenFor window: NSWindow) -> [NSWindow]? {
+  func customWindowsToEnterFullScreen(for window: NSWindow) -> [NSWindow]? {
     launchingFullScreen ? [window] : nil
   }
 

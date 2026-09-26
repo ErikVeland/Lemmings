@@ -2900,8 +2900,14 @@ extension AppDelegate {
     var scrolled: Double?
     panel.levelSize = CGSize(width: 1600, height: 160)
     panel.onMinimapScroll = { scrolled = $0 }
-    crtView.onMouseDragged?(CGPoint(x: 550, y: 340))
+    tubeClick(CGPoint(x: 550, y: 330))
+    try check(scrolled != nil, "CRT minimap click did not scroll")
+    scrolled = nil
+    crtView.onMouseDragged?(CGPoint(x: 560, y: 350))
+    try check(scrolled == nil, "CRT timeline drag moved the minimap")
+    crtView.onMouseDragged?(CGPoint(x: 560, y: 330))
     try check(scrolled != nil, "CRT minimap drag did not scroll")
+    crtView.onMouseUp?()
     settings.display = .flat
     applyDisplayMode()
     print("PASS CRT dimensions, shader coordinates, held rate, release and minimap drag")

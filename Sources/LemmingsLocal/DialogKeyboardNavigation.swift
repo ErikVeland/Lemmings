@@ -28,10 +28,32 @@ import AppKit
             view.subviews.forEach(visit)
         }
         visit(root)
-        return result.sorted {
-            let a = $0.convert($0.bounds, to: root), b = $1.convert($1.bounds, to: root)
-            let ay = root.isFlipped ? a.midY : -a.midY, by = root.isFlipped ? b.midY : -b.midY
-            return abs(ay - by) > 8 ? ay < by : a.minX < b.minX
+        struct Target {
+            let view: NSView
+            let frame: CGRect
+            let rowY: CGFloat
+        }
+        let flipped = root.isFlipped
+        let positions: [Target] = result.map { view in
+            let frame = view.convert(view.bounds, to: root)
+            let rowY: CGFloat = flipped ? frame.midY : -frame.midY
+            return Target(view: view, frame: frame, rowY: rowY)
+        }
+        let ordered = positions.sorted { a, b in
+            a.rowY == b.rowY ? a.frame.minX < b.frame.minX : a.rowY < b.rowY
+        }
+        var rows: [[Target]] = []
+        for target in ordered {
+            if let first = rows.last?.first, target.rowY - first.rowY <= 8 {
+                rows[rows.count - 1].append(target)
+            } else {
+                rows.append([target])
+            }
+        }
+        return rows.flatMap { row in
+            row.sorted { a, b in
+                a.frame.minX == b.frame.minX ? a.rowY < b.rowY : a.frame.minX < b.frame.minX
+            }.map(\.view)
         }
     }
 

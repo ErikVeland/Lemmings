@@ -53,5 +53,10 @@ swiftc -swift-version 6 "${compatibility[@]}" "${optimization_flags[@]}" -target
   -Xlinker -rpath -Xlinker "$build_dir" \
   -Xlinker -rpath -Xlinker @executable_path/../Frameworks \
   -o "$test_app/Contents/MacOS/AppIntegrationTests" "${sources[@]}" "$build_dir/main.swift"
+if [[ "${TEST_COMPILE_ONLY:-0}" == 1 ]]; then
+  print "PASS app integration test compilation only ($test_arch, ${TEST_SCOPE:-all})."
+  print "The app, bundled content and input flows were not run."
+  exit 0
+fi
 cd "$project_dir"
 python3 "$project_dir/Tools/UITestRunner/run.py" arch "-$test_arch" "$test_app/Contents/MacOS/AppIntegrationTests"

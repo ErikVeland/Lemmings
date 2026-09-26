@@ -69,7 +69,7 @@
     "priority": "P0",
     "status": "partial",
     "exitCriteria": "Freeze the final source and assets. Build both Mac architectures, sign, notarise and verify the downloaded archive. Earlier beta notarisation is not evidence for later local builds.",
-    "progress": "The 1.0 RC1 package was notarised for the main and macOS 12 archives, with a development-signed Game Center archive for registered Macs. The current source carries 1.2 build 39 and includes Sparkle 2.7.3, a signed appcast path and GitHub release publishing. The data-independent release-input check now runs after appcast generation. A clean 1.2 source freeze, full package build, signing, notarisation, Gatekeeper validation and a live update test remain open.",
+    "progress": "25 September: the working 1.5 source is test build 49, not a frozen public candidate. The last verified public download and stable appcast remain 1.2 build 41. The build 49 Game Center snapshot is development signed for registered Macs; it is not a public beta package. The 1.0 RC1 package was notarised for the main and macOS 12 archives, but that evidence does not certify 1.5. A final source and asset freeze, reviewed notes, full package build, Developer ID signing, notarisation, Gatekeeper validation, hardware checks and a live update from build 41 remain open. See 1.5PublicRelease.md.",
     "scopes": [
       "all",
       "classic-1.0"

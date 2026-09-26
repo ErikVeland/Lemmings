@@ -100,8 +100,9 @@ extension AdaptiveDJPlayer {
   }
 }
 
-@MainActor private func run(_ root: URL) throws {
+@MainActor private func run(_ root: URL, signalOnly: Bool) throws {
   try MusicFileDeck.checkSpeedPitchSignal()
+  if signalOnly { return }
   let loopURL = FileManager.default.temporaryDirectory.appendingPathComponent("music-loop-\(UUID().uuidString).wav")
   defer { try? FileManager.default.removeItem(at: loopURL) }
   let format = AVAudioFormat(standardFormatWithSampleRate: 44100, channels: 2)!
@@ -137,8 +138,7 @@ extension AdaptiveDJPlayer {
 
   let soundtracks = SoundtrackPlayer.djSoundtracks(at: root)
   guard !soundtracks.isEmpty else {
-    print("No soundtrack folders installed. Nothing to mix.")
-    return
+    throw Failure(description: "No soundtrack folders at \(root.path). Build the app or use --signal-only.")
   }
   try require(soundtracks.keys.contains { $0.contains("lemmings_2") }, "L2 modules missing from DJ")
   try require(soundtracks.keys.contains { $0.contains("lemmings_3") }, "L3 modules missing from DJ")
@@ -286,17 +286,17 @@ let app = NSApplication.shared
 app.setActivationPolicy(.accessory)
 
 let arguments = CommandLine.arguments
+let signalOnly = arguments.count == 2 && arguments[1] == "--signal-only"
 let root = URL(
   fileURLWithPath: arguments.count > 1
     ? arguments[1] : ".build/local/Ultimate Lemmings.app/Contents/Resources/Music")
 
 do {
-  guard FileManager.default.fileExists(atPath: root.path) else {
-    print("No Music folder at \(root.path). Build the app first.")
-    exit(0)
-  }
-  try MainActor.assumeIsolated { try run(root) }
-  print("Adaptive DJ playback tests passed.")
+  try require(arguments.count <= 2, "Use one Music folder or --signal-only.")
+  try require(signalOnly || FileManager.default.fileExists(atPath: root.path),
+    "No Music folder at \(root.path). Build the app or use --signal-only.")
+  try MainActor.assumeIsolated { try run(root, signalOnly: signalOnly) }
+  print(signalOnly ? "Adaptive DJ signal tests passed." : "Adaptive DJ playback tests passed.")
 } catch {
   FileHandle.standardError.write(Data("Adaptive DJ playback tests failed: \(error)\n".utf8))
   exit(1)
