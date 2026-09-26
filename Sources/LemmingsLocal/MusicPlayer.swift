@@ -36,8 +36,14 @@ final class ModuleMusicPlayer: @unchecked Sendable {
   private var pauseFadeFrames = 0
   private var rhythmAmount = 0.0
   private var rhythmTarget = 0.0
-  private let vinylStopSeconds = 0.16
+  private let vinylStopSeconds = 0.5
+  /// The reverb rings on after the platter stops, then the engine parks.
+  private let vinylTailSeconds = 1.2
+  private let vinylTailWet: Float = 40
+  private let spinUpSeconds = 0.18
+  private let spinUpFloor = 0.3
   private var startFadeFrames = 0
+  private var spinUpFrames = 0
   private var pauseWorkItem: DispatchWorkItem?
 
   private let loopCrossfadeFrames = 2048
@@ -134,6 +140,7 @@ final class ModuleMusicPlayer: @unchecked Sendable {
     rhythmTarget = 0
     rhythmAmount = 0
     startFadeFrames = 0
+    spinUpFrames = 0
     lock.unlock()
     isRunning = false
   }
@@ -155,18 +162,19 @@ final class ModuleMusicPlayer: @unchecked Sendable {
     pauseWorkItem?.cancel()
     outputSuspended = true
     pauseFadeFrames = Int(sampleRate * vinylStopSeconds)
+    spinUpFrames = 0
     lock.unlock()
-    reverb.wetDryMix = 0
+    reverb.wetDryMix = vinylTailWet
     pauseWorkItem?.cancel()
     let work = DispatchWorkItem { [weak self] in
       guard let self else { return }
       self.lock.lock()
       let shouldPause = self.outputSuspended
       self.lock.unlock()
-      if shouldPause { self.engine.pause() }
+      if shouldPause { self.engine.pause(); self.reverb.wetDryMix = 0 }
     }
     pauseWorkItem = work
-    DispatchQueue.main.asyncAfter(deadline: .now() + vinylStopSeconds + 0.04, execute: work)
+    DispatchQueue.main.asyncAfter(deadline: .now() + vinylStopSeconds + vinylTailSeconds, execute: work)
   }
 
   func resumeOutput() throws {
@@ -174,6 +182,7 @@ final class ModuleMusicPlayer: @unchecked Sendable {
     pauseWorkItem?.cancel()
     pauseWorkItem = nil
     lock.lock()
+    if outputSuspended { spinUpFrames = Int(sampleRate * spinUpSeconds) }
     outputSuspended = false
     rhythmTarget = 0
     pauseFadeFrames = 0
@@ -213,7 +222,7 @@ final class ModuleMusicPlayer: @unchecked Sendable {
         frame = (
           left: currentFrame.left + (nextFrame.left - currentFrame.left) * blend,
           right: currentFrame.right + (nextFrame.right - currentFrame.right) * blend)
-        interpolationPhase += tempoScale * vinylRateLocked * (outputSuspended ? max(0.02, Double(gain) * Double(gain)) : 1)
+        interpolationPhase += tempoScale * vinylRateLocked * (outputSuspended ? max(0.02, Double(gain) * Double(gain)) : spinUpRateLocked())
         while interpolationPhase >= 1 {
           currentFrame = nextFrame
           nextFrame = nextSourceFrameLocked()
@@ -225,6 +234,14 @@ final class ModuleMusicPlayer: @unchecked Sendable {
       left?[index] = frame.left * Float(level) * gain * vinylGain
       right?[index] = frame.right * Float(level) * gain * vinylGain
     }
+  }
+
+  /// Eases the platter from a crawl back to full speed after a pause.
+  private func spinUpRateLocked() -> Double {
+    guard spinUpFrames > 0 else { return 1 }
+    spinUpFrames -= 1
+    let progress = 1 - Double(spinUpFrames) / Double(max(1, Int(sampleRate * spinUpSeconds)))
+    return spinUpFloor + (1 - spinUpFloor) * (1 - (1 - progress) * (1 - progress))
   }
 
   private func startFadeGainLocked() -> Float {

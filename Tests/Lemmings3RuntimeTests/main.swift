@@ -403,6 +403,14 @@ do {
         do { try restored.restore(invalid) } catch { rejectedProgress = true }
         try require(rejectedProgress && restored.progress == progress, "L3 rejects impossible population without mutation")
         try require(!restored.record(native), "L3 rejects a result from another level")
+        var skipping = restored
+        try require(skipping.canSkipLevel && skipping.skipLevel() && skipping.index == 2 && skipping.population == restored.population
+            && skipping.completed[1] == nil, "An L3 skip must open the next level with the same population")
+        try skipping.select(0)
+        try require(!skipping.canSkipLevel, "A completed L3 level took a skip")
+        try skipping.select(29)
+        try require(!skipping.skipLevel() && skipping.index == 29, "The last L3 level took a skip")
+        print("PASS L3 skips keep the population and never pass a completed or final level")
         for number in 2...30 {
             let candidate = campaign.levels[number - 1]
             let perm = try Lemmings3Objects(data: Data(contentsOf: root.appendingPathComponent(String(format: "LEVELS/PERM%03d.OBS", candidate.permanentObjectsReference))))

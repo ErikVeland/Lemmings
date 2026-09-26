@@ -127,8 +127,8 @@ func testFollowerBehindBuilderIsTargeted() throws {
     check(game.target(slot: skillSlot, x: clickX, y: activeBuilder.y - 5)?.id == activeBuilder.id,
         "Turning the setting off should keep the nearest bridge builder")
     check(game.target(slot: builderSlot, x: clickX, y: activeBuilder.y - 5,
-        preferApproaching: true, preferBuilders: true)?.id == activeBuilder.id,
-        "Build must retain the active builder over an eligible follower")
+        preferApproaching: true, preferBuilders: true)?.id == follower.id,
+        "A builder that cannot take Build yet must not block the eligible follower")
     check(game.target(slot: builderSlot, x: clickX, y: activeBuilder.y - 5,
         preferApproaching: true, preferBuilders: false)?.id == follower.id,
         "Builder preference opt-out must select the eligible follower")
@@ -1754,6 +1754,20 @@ do {
         check(nativeRestored.progress == nativeProgress, "Failed native save restore changed state")
         try tribes.select(tribe: 1)
         check(tribes.level == 0 && tribes.population == 60 && tribes.results[0]?.saved == 60, "Tribe progress not independent")
+        check(tribes.canSkipLevel && tribes.skipLevel() && tribes.level == 1 && tribes.population == 60
+            && tribes.results[10] == nil && tribes.unlockedLevel(in: 1) == 1,
+              "A skip must open the next level with the same population and no result")
+        check(!tribes.progress.skipped!.isEmpty && tribes.tribeMedal(1) == .none, "A skipped level earned a tribe medal")
+        var skipRestored = try Lemmings2Campaign(root: root)
+        try skipRestored.restore(JSONDecoder().decode(Lemmings2Campaign.Progress.self, from: JSONEncoder().encode(tribes.progress)))
+        check(skipRestored.progress == tribes.progress && skipRestored.population == 60, "Skipped levels did not survive saving")
+        do { try skipRestored.restore(.init(tribe: 1, level: 1, results: tribes.results, skipped: [10: 61]))
+            check(false, "Save accepted an impossible skipped population") } catch {}
+        let olderSave = try JSONSerialization.jsonObject(with: JSONEncoder().encode(nativeProgress)) as! [String: Any]
+        check(olderSave["skipped"] == nil, "A save without skips wrote an empty skip list")
+        try tribes.select(tribe: 1, level: 0)
+        check(!tribes.canSkipLevel && !tribes.skipLevel() && tribes.level == 0, "A skipped level took a second skip")
+        try tribes.select(tribe: 1)
         check(Lemmings2Campaign.medal(saved: 60, total: 60, allowedLosses: 0) == .gold, "Gold threshold")
         check(Lemmings2Campaign.medal(saved: 59, total: 60, allowedLosses: 1) == .gold, "Allowed gold loss")
         check(Lemmings2Campaign.medal(saved: 30, total: 60, allowedLosses: 0) == .silver, "Silver threshold")

@@ -147,12 +147,14 @@ public struct ArcadeRecords: Codable, Equatable, Sendable {
     /// Keep each player's best solution for every board, plus their latest run.
     public private(set) var runs: [ArcadeRun] = []
     public private(set) var statistics: [String: ArcadeLevelStats] = [:]
+    /// The level keys each player spent a skip on. See `LevelSkips.swift`.
+    public internal(set) var skippedLevels: [String: [String]] = [:]
 
     public init() {
         let first = ArcadeProfile(id: ArcadeProfile.legacyID, initials: "LEM")
         profiles = [first]; activeProfileID = first.id
     }
-    private enum CodingKeys: String, CodingKey { case version, profiles, activeProfileID, runs, statistics, trolley }
+    private enum CodingKeys: String, CodingKey { case version, profiles, activeProfileID, runs, statistics, trolley, skippedLevels }
     public init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
         let oldVersion = try c.decode(Int.self, forKey: .version)
@@ -163,6 +165,7 @@ public struct ArcadeRecords: Codable, Equatable, Sendable {
         statistics = try c.decode([String: ArcadeLevelStats].self, forKey: .statistics)
         trolley = oldVersion == 1 ? (try c.decodeIfPresent(TrolleyHistory.self, forKey: .trolley) ?? TrolleyHistory())
             : try c.decode(TrolleyHistory.self, forKey: .trolley)
+        skippedLevels = try c.decodeIfPresent([String: [String]].self, forKey: .skippedLevels) ?? [:]
         version = 2
     }
     public mutating func beginTrolleyAttempt(_ start: TrolleyStart) {
@@ -194,6 +197,7 @@ public struct ArcadeRecords: Codable, Equatable, Sendable {
         profiles.removeAll { $0.id == id }
         if activeProfileID == id { activeProfileID = profiles[0].id }
         runs.removeAll { $0.profileID == id }
+        skippedLevels[id] = nil
         statistics = statistics.filter { !$0.key.hasSuffix("|\(id)|true") && !$0.key.hasSuffix("|\(id)|false") }
         return trolley.removeProfile(id)
     }
@@ -279,7 +283,8 @@ public struct ArcadeRecords: Codable, Equatable, Sendable {
               profiles.allSatisfy({ !$0.id.isEmpty && !$0.initials.isEmpty && $0.initials.count <= 3
                   && ArcadeProfile.portraitNames.indices.contains($0.portrait) }),
               runs.allSatisfy({ profile($0.profileID) != nil && $0.level.total > 0 && (0...$0.population).contains($0.saved)
-                  && $0.seconds.isFinite && $0.seconds >= 0 && $0.skills.values.allSatisfy { $0 > 0 } })
+                  && $0.seconds.isFinite && $0.seconds >= 0 && $0.skills.values.allSatisfy { $0 > 0 } }),
+              skippedLevels.allSatisfy({ profile($0.key) != nil && Set($0.value).count == $0.value.count })
         else { throw SequelDataError.invalid("Invalid arcade records.") }
         _ = try trolley.validated(profileIDs: Set(profiles.map(\.id)))
         return self

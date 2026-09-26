@@ -5831,7 +5831,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
     if let session, phase == .playing { dj.updateTelemetry(djTelemetry(session)) }
     if advanceFreshLevelStart(seconds: elapsed, visible: window.isKeyWindow) { return }
-    guard phase == .playing, !isPaused, let session, !session.isComplete else { return }
+    guard phase == .playing, let session else { return }
+    // A nuke before any release completes the run without a tick.
+    if session.isComplete { finishSessionIfNeeded(); return }
+    guard !isPaused else { return }
 
     // Each ruleset states its own logic rate. Whole ticks only, so timing does
     // not drift with the display.
@@ -6075,6 +6078,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
       } else {
         session.nuke()
         effects.play(session.lastCues)
+        playfield.startCountdown.cancel()
+        finishSessionIfNeeded()
       }
       playfield.needsDisplay = true
       panel.needsDisplay = true
