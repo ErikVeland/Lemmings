@@ -325,6 +325,10 @@ zsh "$project_dir/Scripts/run-launch-smoke-test.sh" "$standard_app" ||
 mkdir -p "$updates_dir"
 update_zip="$updates_dir/UltimateLemmings-$version-build$build_number.zip"
 ditto -c -k --sequesterRsrc --keepParent "$standard_app" "$update_zip"
+# GitHub rejects release assets of 2 GiB or more.
+update_bytes="$(stat -f %z "$update_zip")"
+(( update_bytes < 2147483648 )) ||
+  fail "The update archive is $update_bytes bytes. GitHub release assets must be below 2 GiB."
 # The update alert shows these notes. Sparkle reads HTML beside the archive.
 python3 "$project_dir/Tools/ReleaseReadiness/update_notes.py" "$release_notes" \
   "$updates_dir/UltimateLemmings-$version-build$build_number.html"

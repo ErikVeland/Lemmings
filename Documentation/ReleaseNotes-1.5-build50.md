@@ -15,6 +15,8 @@ public test and 1.2 releases. Builds 42 to 49 were local test builds.
 - The adaptive DJ now plays from a catalogue of 495 versions of 210 tunes.
   These include Amiga modules, chip recordings from other ports, composer
   recordings and fan remixes.
+- The app includes the recordings as AAC at 192 kbps, to keep the download
+  below 2 GB. Amiga modules play as before.
 - The first time a tune plays, you hear the original Amiga version. Later
   levels with the same tune play other ports and remixes.
 - Retry, level select, saved runs and Hot Seat handovers keep the same

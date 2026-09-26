@@ -66,6 +66,10 @@ music_game=all
 python3 "$project_dir/Tools/MusicCatalogue/package.py" \
   "$project_dir/Resources/Music/catalogue.json" "$project_dir/Sources/Music" \
   "$resources_dir/Music" "$music_game"
+# The full soundtrack must fit a 2 GiB release asset. Ship AAC copies.
+if [[ "$2" == all ]]; then
+  zsh "$project_dir/Scripts/compact-bundled-music.sh" "$resources_dir/Music"
+fi
 
 # Standalone sequel players share the in-game profile and Trolley artwork.
 if [[ "$2" == l2 || "$2" == l3 ]]; then
