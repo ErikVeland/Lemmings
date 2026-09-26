@@ -1219,6 +1219,8 @@ extension AppDelegate {
       "Recovery did not restore exact terrain, crowd, skills and paused tick")
     try check(arcadeRunID == checkpoint.runID && restored.usedRewind && restored.undoCount == original.undoCount
       && panel.selectedSkillIndex == 4, "Recovery lost run identity, assistance or selected skill")
+    // Unpausing commits the rewound point in both runs, as the app does.
+    original.resumeFromRewind(); restored.resumeFromRewind()
     for _ in 0..<70 { original.tick(); restored.tick() }
     try check(ClassicDOSReplayRecorder.stateHash(of: restored.simulation) == ClassicDOSReplayRecorder.stateHash(of: original.simulation),
       "Recovered simulation diverged on continuation")
@@ -2182,6 +2184,11 @@ extension AppDelegate {
     try check(flow?.screen == unmoved, "Skip moved the campaign without a skip to spend")
 
     ArcadeStore.shared = ArcadeStore(file: try recordsWithSkips(1), bundledProofs: nil)
+    let modern = settings
+    var oldSchool = settings; oldSchool.applyExperiencePreset(modern: false); apply(oldSchool)
+    try failFirstClassicLevel()
+    try check(view.availableSkips == 0, "Old school offered a level skip")
+    apply(modern)
     try failFirstClassicLevel()
     let owner = ArcadeStore.shared.records.activeProfileID
     try check(view.availableSkips == 1 && view.skipTitle == "Skip level (1)"
@@ -3334,6 +3341,15 @@ extension AppDelegate {
     print("PASS CRT dimensions, shader coordinates, held rate, release and minimap drag")
   }
 
+  /// Polls until `condition` holds. Returns false when `timeout` passes first.
+  private func waitUntil(_ timeout: TimeInterval, _ condition: () -> Bool) async throws -> Bool {
+    let deadline = ProcessInfo.processInfo.systemUptime + timeout
+    while !condition() {
+      guard ProcessInfo.processInfo.systemUptime < deadline else { return false }
+      try await Task.sleep(nanoseconds: 10_000_000)
+    }
+    return true
+  }
   fileprivate func testVinylRetry() async throws {
     GameScreen.shared.dismissAll()
     var updated = settings
@@ -3349,11 +3365,12 @@ extension AppDelegate {
     let tune = music.currentURL
     retry()
     try check(music.isVinylBraking, "R did not brake the music like a record")
-    try await Task.sleep(nanoseconds: 250_000_000)
-    try check(music.vinylRate < 0.7, "The brake did not lower the pitch")
-    try await Task.sleep(nanoseconds: 700_000_000)
-    try check(!music.isVinylBraking && music.vinylRate == 1 && music.isOutputRunning,
-      "The next attempt did not release the record to full speed")
+    // Level loading can hold the main actor, so wait on the ramp, not a fixed time.
+    // The brake takes 0.45 seconds and the release 0.3 seconds.
+    let braked = try await waitUntil(1) { music.vinylRate < 0.7 }
+    try check(braked, "The brake did not lower the pitch")
+    let released = try await waitUntil(2) { !music.isVinylBraking && music.vinylRate == 1 && music.isOutputRunning }
+    try check(released, "The next attempt did not release the record to full speed")
     try check(music.currentURL == tune, "A retry changed the tune")
     print("PASS R brakes the music like a record and the retry releases it")
   }

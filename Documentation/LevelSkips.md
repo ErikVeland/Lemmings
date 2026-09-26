@@ -22,6 +22,8 @@ three-star levels toward the next skip. Outlined pips show the levels still need
 1. The level is part of a Classic rank, an L2 tribe or an L3 tribe.
 2. The level is not the game's final Classic level or the last level of an L2 or L3 tribe.
 3. The attempt owner has at least one skip.
+4. Modern controls are on. Old school hides Skip with the other modern controls.
+   Earned skips stay saved and return with Modern or Custom.
 
 Playlists, shuffle, fan packs and level-browser practice never offer Skip.
 They already let the player choose another level.
