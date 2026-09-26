@@ -3,6 +3,35 @@
     <channel>
         <title>Ultimate Lemmings</title>
         <item>
+            <title>1.6</title>
+            <pubDate>Sun, 27 Sep 2026 01:08:37 +1000</pubDate>
+            <link>https://github.com/ErikVeland/Lemmings/releases</link>
+            <sparkle:version>51</sparkle:version>
+            <sparkle:shortVersionString>1.6</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>12.3</sparkle:minimumSystemVersion>
+            <description><![CDATA[<html><head><meta charset="utf-8"><style>:root{color-scheme:light dark}body{font:13px -apple-system,sans-serif}h3{font-size:14px;margin:14px 0 4px}h4{font-size:13px;margin:10px 0 2px}ul{padding-left:18px;margin:4px 0}.meta{color:#888;font-size:11px}</style></head><body><h3>Music and soundtracks</h3>
+<ul><li>Mix music on measured beats and compatible bars, with gentle tempo matching.</li><li>Music changes when the rescue target is met. Unwinnable runs retain their tune in funeral mood, including the result screen.</li><li>Turn on <b>Settings &gt; Audio &gt; Pause: Keep the rhythm</b> to hear isolated percussion. Tracks without a usable rhythm part stop with a short vinyl slowdown.</li><li>Higher speed settings add longer ghost trails and a subtle musical pitch rise. At 10× game speed, pitch reaches 1.35× while musical tempo remains steady.</li><li>Retry brakes and releases the music like a vinyl record in all three games.</li><li>Updates from an earlier version keep all 495 soundtrack versions. You do not download them again.</li><li>A new installation includes 54 essential soundtrack versions. Choose the other 441 versions across 18 optional libraries on first launch or in <b>Settings &gt; Audio &gt; Download soundtracks</b>. Select individual libraries or all, see the total size, and continue playing during downloads. Cancel, retry and removal are available.</li><li>Mac and Amiga sound sets use the supplied Yippee when their bank has no sample. The Mac sound set also uses the Amiga Pop fallback.</li></ul>
+<h3>Precision Zoom</h3>
+<ul><li>Press <b>Z</b>, or scroll up over the playfield, to switch 2× Zoom on at the cursor. On a Magic Mouse or trackpad, the zoom follows your scrolling direction setting.</li><li>Press <b>Shift-Z</b> for Superzoom: 2× Zoom with the game at half speed.</li><li>Earn one Zoom use per three no-Rewind career stars, and one Superzoom use per three no-Rewind three-star levels. A badge on the playfield shows the uses left.</li><li><b>Z no longer rewinds.</b> Use comma and full stop to step backward and forward.</li></ul>
+<h3>Level skips</h3>
+<ul><li>Every third unassisted three-star level earns a level skip.</li><li>After failing a campaign level in any of the three games, choose <b>Skip level</b> to open the next one. Finales cannot be skipped.</li><li>Clearing a skipped level later returns its skip. In Hot Seat, the player who failed pays for the skip and the turn passes on.</li><li>Old school hides level skips with the other modern controls. Earned skips stay saved.</li></ul>
+<h3>Sessions and controls</h3>
+<ul><li>Open all your saved playlists and creation tools from <b>Playlists</b> on the home screen.</li><li><b>New solo</b> and <b>New Hot Seat</b> save the current session before starting another. Saved campaigns and playlist positions remain resumable. Hot Seat keeps each session's roster, turn and rules, and all three games wait for Ready on handover.</li><li>This release combines the 1.5 release fixes with the newer 1.6 work. It includes variable speed, modern and original presets, improved pointer targeting, keyboard and controller controls, countdowns, hints and saved-run recovery.</li></ul>
+<h3>Play insights</h3>
+<ul><li>The home screen shows how many lemmings this Mac has saved.</li><li><b>Settings &gt; Play Insights</b> shows local play counts and lets you clear them.</li><li>Sharing is off until you choose to enable it. No shared service is configured in the public build, so the app does not send play counts over the network.</li></ul>
+<h3>Fixes</h3>
+<ul><li>With Build targeting, a current builder is preferred only while it can accept another Build. Lemmings behind it stay selectable in Classic and Lemmings 2.</li><li>A nuke before the first lemming leaves now ends the level at once, without a countdown.</li><li>Pause stops the music like a turntable, with a short reverb tail, and play spins it back up.</li><li>After a clear, Return continues to the next level. The arrow keys page through awards, career and portraits again.</li><li>The death counter shows the deaths left before failure as a fraction, with a skull.</li><li>The selected-lemming glow is now visible on every background.</li><li>The skill icon beside the cursor keeps its size and distance at every zoom.</li><li>A paused song that was waiting for its next beat now resumes with play.</li></ul>
+<h3>Updates</h3>
+<ul><li>A download icon appears on the home screen when Sparkle finds a compatible update. Select it to read the release notes and open the signed update flow.</li><li>Automatic updates remain supported. <b>What's New</b> appears on the first launch after an upgrade, including automatic installations, and stays available in Help. Automatically downloaded updates also bring Sparkle's release notes forward.</li><li>First-launch pages appear in order: play style, upgrade notes when applicable, then optional soundtracks. Choosing <b>Not now</b> keeps the originals ready to play.</li></ul>
+<h3>Downloads</h3>
+<ul><li>New players: download <code>UltimateLemmings-1.6-build51-slim.zip</code>.</li><li>Existing players receive the full update automatically. The full archive, <code>UltimateLemmings-1.6-build51.zip</code>, is also available for a manual upgrade.</li></ul>
+<h3>Soundtrack timing</h3>
+<p>All 495 music versions have timing metadata. Automated analysis found 276 stable BPM estimates and 209 stable bar grids. There are 148 short isolated rhythm loops. Not every downbeat or loop has been checked by ear. Uncertain tracks use a short fade.</p>
+<p class="meta">Build: 51<br>Release commit: c75284a6dd23f4cfdd7a6c6f2b7f47f7f048f8b8<br>Release base: v1.5.0</p></body></html>
+]]></description>
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.6.0/UltimateLemmings-1.6-build51.zip" length="1934004181" type="application/octet-stream" sparkle:edSignature="X0rlEVuMC0HPwBsmcb4Rfydh0hAzS6HBwH8BTZMQ/+JjYgtmqWwhCXvzik+ftxIumuktJSv5zWX+yJ+VkPi4CQ=="/>
+        </item>
+        <item>
             <title>1.5</title>
             <pubDate>Sat, 26 Sep 2026 11:12:55 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
@@ -91,37 +120,6 @@ have no sound, because the Mac disk has no sound for them. Physical Intel and
 minimum-macOS testing is unverified.
 ]]></description>
             <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.2-build41/UltimateLemmings-1.2-build41.zip" length="428870383" type="application/octet-stream" sparkle:edSignature="+CqwI8MXTgQeZQLaSL0cVYcANJ4y+hyUVxELlA4AjHOfM3DVHm9ETNCb+3Hm5Pc6EUn8ZdcbCzEsqzDkHs1iDw=="/>
-        </item>
-        <item>
-            <title>1.2</title>
-            <pubDate>Fri, 25 Sep 2026 02:11:04 +1000</pubDate>
-            <link>https://github.com/ErikVeland/Lemmings/releases</link>
-            <sparkle:version>40</sparkle:version>
-            <sparkle:shortVersionString>1.2</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>12.3</sparkle:minimumSystemVersion>
-            <description sparkle:format="plain-text"><![CDATA[# Ultimate Lemmings 1.2 (build 40)
-
-[Download the Mac app](https://github.com/ErikVeland/Lemmings/releases/download/v1.2-build40/UltimateLemmings-1.2-build40.zip)
-
-Build: 40
-Release commit: b58df9c401173e94891145b19f1e8ab4025bd4e8
-
-Fix automatic updates not starting until the first manual update check. Sparkle
-now starts when the app launches. Existing build 39 installations can select
-**Ultimate Lemmings → Check for Updates…** to download and install this build.
-
-Universal app for Intel and Apple silicon, macOS 12.3 or later. The public app
-and all bundled Sparkle components are Developer ID signed and Apple notarised.
-No device registration is required.
-
-For a new installation, expand the ZIP, move Ultimate Lemmings.app to
-Applications, then open it.
-
-Lemmings 2 and Lemmings 3 remain previews. Known artwork-toggle and controller
-sequence issues remain. Physical Intel and minimum-macOS testing is unverified.
-The device-restricted Game Center variant is not included.
-]]></description>
-            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.2-build40/UltimateLemmings-1.2-build40.zip" length="428869969" type="application/octet-stream" sparkle:edSignature="uoQcPClcjiAdoXqYT3sCdT+WSLT9sK8pdTRY+hsKd235DwIk6M8AbaS7+jGig4dGz+4OhUsh9OVs5uJisIjGDA=="/>
         </item>
     </channel>
 </rss>

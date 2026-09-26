@@ -43,7 +43,16 @@ if [[ -n "$download_zip" ]]; then
   [[ -f "$download_zip" ]] || fail "The download archive does not exist: $download_zip"
   [[ "${download_zip:t}" == "UltimateLemmings-$version-build$build_number-slim.zip" ]] ||
     fail "The download archive name does not match the release notes."
-  ! grep -Fq "${download_zip:t}" "$appcast_path" ||
+  # The notes may name the slim archive. No enclosure may offer it.
+  python3 - "$appcast_path" "${download_zip:t}" <<'CHECK_SLIM' ||
+import sys
+from pathlib import Path
+from urllib.parse import urlparse
+from xml.etree import ElementTree
+feed, name = sys.argv[1:]
+urls = [e.get("url", "") for e in ElementTree.parse(feed).getroot().iter("enclosure")]
+sys.exit(any(Path(urlparse(u).path).name == name for u in urls))
+CHECK_SLIM
     fail "The appcast must not offer the slim download."
 fi
 python3 - "$project_dir" "$appcast_path" "$version" "$build_number" \

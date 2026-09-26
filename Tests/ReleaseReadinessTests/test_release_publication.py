@@ -73,6 +73,22 @@ class ReleasePublicationTests(unittest.TestCase):
         result = self.run_publication("--check", DOWNLOAD_ZIP=str(slim))
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
+    def test_check_allows_notes_that_name_the_slim_download(self):
+        slim = self.archive.with_name("UltimateLemmings-1.5-build45-slim.zip")
+        slim.write_bytes(b"slim download")
+        text = self.appcast.read_text().replace("Release commit:", f"New players: {slim.name}. Release commit:")
+        self.appcast.write_text(text)
+        result = self.run_publication("--check", DOWNLOAD_ZIP=str(slim))
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+    def test_check_rejects_an_appcast_that_offers_the_slim_download(self):
+        slim = self.archive.with_name("UltimateLemmings-1.5-build45-slim.zip")
+        slim.write_bytes(b"slim download")
+        self.appcast.write_text(self.appcast.read_text().replace(
+            "</channel>", f'<item><enclosure url="https://example.invalid/{slim.name}" /></item></channel>'))
+        result = self.run_publication("--check", DOWNLOAD_ZIP=str(slim))
+        self.assertNotEqual(result.returncode, 0)
+
     def test_check_rejects_a_misnamed_slim_download(self):
         slim = self.archive.with_name("UltimateLemmings-1.5-build44-slim.zip")
         slim.write_bytes(b"slim download")
