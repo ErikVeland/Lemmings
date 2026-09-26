@@ -54,9 +54,9 @@ import NxlvKit
 
 /// Shared gameplay keys follow the active window, including an attached sequel.
 @MainActor final class GameplayKeyboard {
-    private var monitor: Any?
-    private var focusObserver: NSObjectProtocol?
-    private var appFocusObserver: NSObjectProtocol?
+    nonisolated(unsafe) private var monitor: Any?
+    nonisolated(unsafe) private var focusObserver: NSObjectProtocol?
+    nonisolated(unsafe) private var appFocusObserver: NSObjectProtocol?
     private weak var window: NSWindow?
     private var controller: GameplayController?
     private var pressedF = false
@@ -397,7 +397,7 @@ import NxlvKit
             }
         }
     }
-    isolated deinit {
+    deinit {
         if let monitor { NSEvent.removeMonitor(monitor) }
         if let focusObserver { NotificationCenter.default.removeObserver(focusObserver) }
         if let appFocusObserver { NotificationCenter.default.removeObserver(appFocusObserver) }
