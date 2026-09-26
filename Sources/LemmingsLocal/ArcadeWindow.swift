@@ -20,7 +20,7 @@ import NxlvKit
     }
     func showResult(_ report: ArcadeReport, owner: NSWindow? = nil, retry: @escaping () -> Void,
                     next: @escaping () -> Void, replay: @escaping (Bool) -> Void, continueTitle: String = "Next level", background: CGImage? = nil, rewardVolume: Double = 0,
-                    continueHandlesHandover: Bool = false) {
+                    continueHandlesHandover: Bool = false, skip: (() -> Void)? = nil) {
         arcadeView.rewardVolume = rewardVolume
         arcadeView.mode = .result; arcadeView.report = report; arcadeView.level = report.run.level
         arcadeView.assisted = report.run.assisted; arcadeView.board = .rescue; arcadeView.trolleyBoard = .mostSaved
@@ -29,6 +29,7 @@ import NxlvKit
         arcadeView.continueHandlesHandover = continueHandlesHandover
         arcadeView.onRetry = { [weak self] in self?.close(); retry() }
         arcadeView.onContinue = { [weak self] in self?.close(); next() }
+        arcadeView.onSkip = skip.map { skip in { [weak self] in self?.close(); skip() } }
         arcadeView.onReplay = replay
         present(owner: owner)
         arcadeView.startCelebration()
@@ -40,7 +41,7 @@ import NxlvKit
         arcadeView.level = level ?? ArcadeStore.shared.records.runs.last?.level
         arcadeView.assisted = false; arcadeView.board = .rescue
         arcadeView.boardScope = .level
-        arcadeView.onRetry = nil; arcadeView.onContinue = nil; arcadeView.onReplay = nil
+        arcadeView.onRetry = nil; arcadeView.onContinue = nil; arcadeView.onSkip = nil; arcadeView.onReplay = nil
         present(owner: owner)
     }
     func showSession(owner: NSWindow? = nil) {
@@ -51,7 +52,7 @@ import NxlvKit
     private func presentSession(owner: NSWindow?) {
         let owner = prepareSession?() ?? owner
         arcadeView.sessionReturnMode = nil
-        arcadeView.report = nil; arcadeView.onRetry = nil; arcadeView.onContinue = nil
+        arcadeView.report = nil; arcadeView.onRetry = nil; arcadeView.onContinue = nil; arcadeView.onSkip = nil
         ArcadeStore.shared.prepareHotSeat()
         arcadeView.mode = .hotSeat
         present(owner: owner)
@@ -147,6 +148,8 @@ import NxlvKit
     var afterSwitch: (() -> Void)?
     var onRetry: (() -> Void)?
     var onContinue: (() -> Void)?
+    /// Set by a campaign when this failed level can take a skip.
+    var onSkip: (() -> Void)?
     var onReplay: ((Bool) -> Void)?
     var onClose: (() -> Void)?
     var continueTitle = "Next level"
@@ -186,6 +189,22 @@ import NxlvKit
         if next != nil, !ArcadeStore.shared.passSessionTurn(after: player.id) { needsDisplay = true; return }
         onContinue?()
         if let next, !handlesHandover { showHandover(next, owner: owner) }
+    }
+    /// The attempt owner's skips, when this failed campaign level can take one.
+    var availableSkips: Int {
+        guard !cleared, onSkip != nil else { return 0 }
+        return ArcadeStore.shared.records.levelSkips(profileID: player.id).available
+    }
+    var skipTitle: String { nextSessionPlayer.map { _ in "Skip as \(player.initials) (\(availableSkips))" } ?? "Skip level (\(availableSkips))" }
+    /// The owner pays. In Hot Seat a skip passes the turn, as a loss does.
+    func skipLevel() {
+        guard availableSkips > 0, let level = report?.run.level else { return }
+        let next = nextSessionPlayer, owner = window
+        if next != nil, !(ArcadeStore.shared.profilesAreWritable && ArcadeStore.shared.storageError == nil) { needsDisplay = true; return }
+        guard ArcadeStore.shared.spendLevelSkip(on: level, profileID: player.id) else { needsDisplay = true; return }
+        if next != nil { _ = ArcadeStore.shared.passSessionTurn(after: player.id) }
+        onSkip?()
+        if let next { showHandover(next, owner: owner) }
     }
     func performDefaultResultAction() { if cleared { continueAsNextProfile() } else if nextSessionPlayer != nil { retryAsNextProfile() } else { onRetry?() } }
     private(set) var selectedProfileID: String?
@@ -397,12 +416,23 @@ import NxlvKit
     func resultActions(y: CGFloat = 573) {
         if let next = nextSessionPlayer {
             let canHandOver = ArcadeStore.shared.profilesAreWritable && ArcadeStore.shared.storageError == nil
-            button("Retry as \(player.initials)", CGRect(x: 64, y: y, width: 330, height: 48)) { [weak self] in self?.onRetry?() }
+            // The four-button loss row narrows this button, so each row draws its own.
+            if cleared || availableSkips == 0 {
+                button("Retry as \(player.initials)", CGRect(x: 64, y: y, width: 330, height: 48)) { [weak self] in self?.onRetry?() }
+            }
             if cleared {
                 let owner = handsOverAfterClear ?? player
                 button("Retry as \(next.initials)", CGRect(x: 412, y: y, width: 296, height: 48), enabled: canHandOver) { [weak self] in self?.retryAsNextProfile() }
                 button("\(continueTitle): \(owner.initials)", CGRect(x: 726, y: y, width: 330, height: 48), primary: true,
                        enabled: handsOverAfterClear == nil || canHandOver) { [weak self] in self?.continueAsNextProfile() }
+            } else if availableSkips > 0 {
+                button("Retry as \(player.initials)", CGRect(x: 64, y: y, width: 220, height: 48)) { [weak self] in self?.onRetry?() }
+                button("Retry as \(next.initials)", CGRect(x: 298, y: y, width: 250, height: 48), primary: true,
+                       enabled: canHandOver) { [weak self] in self?.retryAsNextProfile() }
+                button(skipTitle, CGRect(x: 562, y: y, width: 240, height: 48), enabled: canHandOver) { [weak self] in self?.skipLevel() }
+                button("Back to library", CGRect(x: 816, y: y, width: 240, height: 48)) { [weak self] in
+                    if let prepare = ArcadeWindow.shared.prepareSession { _ = prepare() } else { self?.onClose?() }
+                }
             } else {
                 button("Retry as \(next.initials)", CGRect(x: 412, y: y, width: 330, height: 48), primary: true,
                        enabled: canHandOver) { [weak self] in self?.retryAsNextProfile() }
@@ -410,6 +440,10 @@ import NxlvKit
                     if let prepare = ArcadeWindow.shared.prepareSession { _ = prepare() } else { self?.onClose?() }
                 }
             }
+        } else if availableSkips > 0 {
+            button(primaryResultTitle, CGRect(x: 128, y: y, width: 330, height: 48), primary: true) { [weak self] in self?.performDefaultResultAction() }
+            button(skipTitle, CGRect(x: 478, y: y, width: 290, height: 48)) { [weak self] in self?.skipLevel() }
+            button("Back", CGRect(x: 788, y: y, width: 204, height: 48)) { [weak self] in self?.onClose?() }
         } else {
         button(primaryResultTitle, CGRect(x: cleared ? 592 : 248, y: y, width: 360, height: 48), primary: true) { [weak self] in self?.performDefaultResultAction() }
         button(cleared ? "Retry" : "Back", CGRect(x: cleared ? 168 : 688, y: y, width: 256, height: 48)) { [weak self] in
@@ -897,6 +931,7 @@ import NxlvKit
         case "N": if mode == .result { retryAsNextProfile() }
         case "P": if mode == .result { openSession() }
         case "R": onRetry?()
+        case "K": if mode == .result { skipLevel() }
         case "V": onReplay?(false)
         case "S": onReplay?(true)
         case "B": page(.records)

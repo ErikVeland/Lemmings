@@ -735,8 +735,10 @@ func testLevelSkips() throws {
     try require(records.levelSkips(profileID: me).available == 0, "A rewound three-star run must not earn a skip")
     _ = records.record(run(57, c: levels[3]))
     try require(records.levelSkips(profileID: me).available == 0, "A two-star clear must not earn a skip")
-    _ = records.record(run(58, c: levels[4]))
+    let earning = records.record(run(58, c: levels[4]))
     try require(records.levelSkips(profileID: me).available == 1, "Three unassisted three-star levels must earn one skip")
+    try require(earning?.earnedLevelSkip == true, "The run that earned a skip must report it")
+    try require(records.record(run(58, c: levels[5]))?.earnedLevelSkip == false, "A run that earned no skip reported one")
 
     let blocked = level(levels[6])
     try require(records.spendLevelSkip(on: blocked, profileID: me), "An earned skip could not be spent")
@@ -756,9 +758,14 @@ func testLevelSkips() throws {
     legacy.removeValue(forKey: "skippedLevels")
     let older = try JSONDecoder().decode(ArcadeRecords.self, from: JSONSerialization.data(withJSONObject: legacy))
     try require(older.levelSkips(profileID: me).available == 1, "Records saved before skips must still load with earned skips")
+    _ = records.record(run(5, c: levels[6]))
+    try require(records.hasSkipped(blocked, profileID: me), "A failed run returned a skip")
+    _ = records.record(run(40, c: levels[6]))
+    try require(!records.hasSkipped(blocked, profileID: me) && records.levelSkips(profileID: me).available == 1,
+        "Passing a skipped level must return its skip")
     _ = records.removeProfile(me)
     try require(records.levelSkips(profileID: me).spent == 0, "Removing a player kept their spent skips")
-    print("PASS level skips: unassisted three-star levels, one per three, per player, saved and spent once")
+    print("PASS level skips: unassisted three-star levels, one per three, per player, saved, spent once and returned on a pass")
 }
 
 func testCelebrationProgress() throws {

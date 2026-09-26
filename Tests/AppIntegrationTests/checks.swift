@@ -2123,6 +2123,106 @@ extension AppDelegate {
       "An explicit level selection inherited the previous run's skill")
     print("PASS restart preserves selected skills, including empty slots, while level selection uses its default")
   }
+  /// Records whose owner has earned `skips` from three-star levels outside the Classic campaign.
+  private func recordsWithSkips(_ skips: Int) throws -> URL {
+    var records = ArcadeRecords()
+    for index in 0..<(skips * LevelSkipBalance.threeStarLevelsPerSkip) {
+      let c = TrolleyConditions(gameID: "fixture", packID: "skips", levelID: "star-\(index)", levelFingerprint: "star-\(index)",
+        rulesetVersion: "classic-dos-v1", physicsMode: "classic-dos-v1", population: 60, rescueRequirement: 40,
+        startingSkills: ["builder": 20], timeLimitSeconds: 300, modifiers: [:])
+      try records.acceptTrolleyMaximum(.init(value: 58, status: .verified, source: "Integration proof",
+        date: Date(timeIntervalSince1970: 500), buildVersion: "test-1"), conditions: c, assisted: false)
+      _ = records.record(ArcadeRun(profileID: records.activeProfileID,
+        level: ArcadeLevel(id: c.levelID, title: "Star", game: c.gameID, rules: c.rulesetVersion, total: 60, required: 40, conditions: c),
+        saved: 58, didWin: true, skills: ["builder": 8], seconds: 120,
+        telemetry: .init(released: 60, buildVersion: "test-1")))
+    }
+    let url = FileManager.default.temporaryDirectory.appendingPathComponent("skips-\(UUID().uuidString).json")
+    try ArcadeRecordFile(url: url).save(records)
+    return url
+  }
+  private func failFirstClassicLevel(position: Int = 0) throws {
+    settings.music = .silent
+    loadContent()
+    guard let index = dataSets.firstIndex(where: { $0.set.title == .lemmings }) else {
+      throw IntegrationFailure(message: "Missing bundled Lemmings campaign")
+    }
+    gamePicker.selectItem(at: index); selectDataSet()
+    picker.selectItem(at: position); levelChanged(); advancePhase()
+    for _ in 0..<110 { session?.tick() }
+    session?.nuke()
+    for _ in 0..<2000 where session?.isComplete == false { session?.tick() }
+    finishSessionIfNeeded()
+    try check(phase == .results && session?.didWin == false, "The skip test did not fail its level")
+    arcadeAutoPresent = true; presentArcadeResult(); arcadeAutoPresent = false
+  }
+  /// Draws the result screen, as a player sees it, and keeps a capture for review.
+  @discardableResult private func captureResult(_ name: String) throws -> String {
+    let view = ArcadeWindow.shared.arcadeView
+    guard let bitmap = view.bitmapImageRepForCachingDisplay(in: view.bounds) else {
+      throw IntegrationFailure(message: "The result screen could not be drawn")
+    }
+    view.cacheDisplay(in: view.bounds, to: bitmap)
+    let folder = URL(fileURLWithPath: FileManager.default.currentDirectoryPath).appendingPathComponent(".build/skip-ui")
+    try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+    try bitmap.representation(using: .png, properties: [:])?.write(to: folder.appendingPathComponent(name + ".png"))
+    return view.accessibilityLabel() ?? ""
+  }
+  fileprivate func testLevelSkipResult() throws {
+    let previousStore = ArcadeStore.shared
+    defer { ArcadeStore.shared = previousStore; arcadeAutoPresent = false }
+    let view = ArcadeWindow.shared.arcadeView
+
+    ArcadeStore.shared = ArcadeStore(file: try recordsWithSkips(0), bundledProofs: nil)
+    try failFirstClassicLevel()
+    try check(view.availableSkips == 0 && !(try captureResult("solo-no-skips")).contains("K skips"),
+      "A player without skips was offered one")
+    let unmoved = flow?.screen
+    view.skipLevel()
+    try check(flow?.screen == unmoved, "Skip moved the campaign without a skip to spend")
+
+    ArcadeStore.shared = ArcadeStore(file: try recordsWithSkips(1), bundledProofs: nil)
+    try failFirstClassicLevel()
+    let owner = ArcadeStore.shared.records.activeProfileID
+    try check(view.availableSkips == 1 && view.skipTitle == "Skip level (1)"
+      && (try captureResult("solo-one-skip")).contains("K skips this level"), "An earned skip was not offered")
+    if var earning = view.report {
+      earning.earnedLevelSkip = true; view.report = earning
+      try check((try captureResult("earned-skip-cue")).contains("Earned a level skip"), "The earned skip cue was not announced")
+    }
+    view.page(.career)
+    try check((try captureResult("career-one-skip")).contains("1 level skips. 3 more three-star levels"), "The career page hid the skip balance")
+    view.page(.result)
+    guard let skipped = arcadeLevel, let skippedNumber = flow?.currentNumber else {
+      throw IntegrationFailure(message: "The failed level had no records identity")
+    }
+    view.skipLevel()
+    try check(ArcadeStore.shared.records.hasSkipped(skipped, profileID: owner)
+      && ArcadeStore.shared.records.levelSkips(profileID: owner).available == 0, "Skip did not spend the owner's skip")
+    try check(flow?.currentNumber == skippedNumber + 1, "Skip did not open the next level")
+    if case .briefing = flow?.screen {} else { throw IntegrationFailure(message: "Skip did not open the next briefing") }
+    try check(flow?.hasPassed(rank: flow!.currentRank!.name, position: skippedNumber - 1) == false,
+      "The skipped level was recorded as passed")
+
+    ArcadeStore.shared = ArcadeStore(file: try recordsWithSkips(1), bundledProofs: nil)
+    let store = ArcadeStore.shared, host = store.records.activeProfileID
+    let guest = store.addProfile(initials: "PAL", portrait: 2)!
+    store.selectProfile(host); store.toggleSessionProfile(guest.id)
+    try failFirstClassicLevel()
+    try check(view.skipTitle.hasPrefix("Skip as \(store.records.profile(host)!.initials)"), "Hot Seat Skip did not name its payer")
+    try captureResult("hot-seat-one-skip")
+    let ownerRetry = "Retry as \(store.records.profile(host)!.initials)"
+    let retryButtons = (view.accessibilityChildren() ?? []).compactMap { $0 as? GameAccessibleElement }
+      .filter { $0.accessibilityLabel() == ownerRetry }
+    try check(retryButtons.count == 1, "The Hot Seat loss row drew the owner's Retry twice")
+    view.skipLevel()
+    try check(store.records.levelSkips(profileID: host).available == 0, "Hot Seat Skip did not charge the attempt owner")
+    try check(store.playingProfileID == guest.id,
+      "Hot Seat Skip did not pass the turn like a loss")
+    GameScreen.shared.dismissAll()
+    store.endHotSeat()
+    print("PASS level skips: offered only when owned, owner pays, next level opens, Hot Seat hands over")
+  }
   fileprivate func testBundledRescueTarget() throws {
     settings.music = .silent
     loadContent()
@@ -4246,6 +4346,7 @@ Task { @MainActor in
     try await testGameTypography()
     try subject.testGamePages()
     try subject.testRestartSelection()
+    try subject.testLevelSkipResult()
     try subject.testBundledRescueTarget()
     try subject.testPortArtworkSwitching()
     try subject.testSuperSpeedPresentation()

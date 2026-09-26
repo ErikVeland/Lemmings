@@ -1110,7 +1110,20 @@ import NxlvKit
         ArcadeWindow.shared.showResult(arcadeReport, owner: window, retry: { [weak self] in self?.retryLevel() },
             next: { [weak self] in self?.continueArcadeResult() },
             replay: { [weak self] save in self?.runMovie.review(save: save) }, continueTitle: resultContinueTitle, background: arcadeBackdrop, rewardVolume: warningSound.muted ? 0 : warningSound.volume,
-            continueHandlesHandover: onSequenceContinue != nil)
+            continueHandlesHandover: onSequenceContinue != nil,
+            skip: canSkipLevel ? { [weak self] in self?.skipLevel() } : nil)
+    }
+    /// Level skips apply to a failed campaign level, not playlists.
+    private var canSkipLevel: Bool {
+        onSequenceContinue == nil && recordsCampaignProgress && game.saved == 0 && campaign.canSkipLevel
+            && availability.indices.contains(campaign.index + 1) && availability[campaign.index + 1] == nil
+    }
+    /// The result screen has already spent the skip. This only moves the campaign.
+    private func skipLevel() {
+        guard canSkipLevel else { return }
+        var proposed = campaign
+        guard proposed.skipLevel() else { return }
+        do { try load(proposed) } catch { message = String(describing: error); refresh() }
     }
     private var resultContinueTitle: String {
         if onSequenceContinue != nil { return game.saved == 0 ? "Retry level" : sequenceContinueTitle }

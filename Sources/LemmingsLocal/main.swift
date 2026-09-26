@@ -6486,7 +6486,23 @@ let achievementProgressKey = "ClassicAchievementProgress"
       : flow.map { $0.currentNumber < ($0.currentRank?.levelIndices.count ?? 0) } ?? false
     ArcadeWindow.shared.showResult(arcadeReport, owner: window, retry: { [weak self] in self?.retry() },
       next: { [weak self] in self?.advancePhase() }, replay: { [weak self] save in self?.runMovie.review(save: save) },
-      continueTitle: hasNext ? "Next level" : fanPlaying ? "Level select" : "Continue", background: playfield.levelImage, rewardVolume: effects.muted ? 0 : effects.volume)
+      continueTitle: hasNext ? "Next level" : fanPlaying ? "Level select" : "Continue", background: playfield.levelImage, rewardVolume: effects.muted ? 0 : effects.volume,
+      skip: canSkipClassicLevel ? { [weak self] in self?.skipClassicLevel() } : nil)
+  }
+
+  /// Level skips apply to campaign ranks, not fan packs, playlists or practice.
+  private var canSkipClassicLevel: Bool {
+    !fanPlaying && sequencePlayingIdentity == nil && classicSelectionRecordsCampaignProgress && flow?.canSkipLevel == true
+  }
+
+  /// The result screen has already spent the skip. This only moves the campaign.
+  private func skipClassicLevel() {
+    guard canSkipClassicLevel, var current = flow else { return }
+    handoverRetry = nil
+    current.skipLevel(recordsCampaignProgress: classicSelectionRecordsCampaignProgress)
+    flow = current
+    saveProgress()
+    renderScreen()
   }
 
   @objc private func showLevelRecords() {

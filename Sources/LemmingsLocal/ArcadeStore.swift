@@ -300,6 +300,16 @@ import NxlvKit
             if case ArcadeRecordFile.Failure.changedOnDisk = error { canWrite = false }
         }
     }
+    /// Spends one of the player's skips on a level. The skip counts only when
+    /// the records save, so a failed save never moves the campaign.
+    @discardableResult func spendLevelSkip(on level: ArcadeLevel, profileID: String) -> Bool {
+        guard canWrite, storageError == nil else { return false }
+        let previous = records
+        guard records.spendLevelSkip(on: level, profileID: profileID) else { return false }
+        save()
+        guard storageError == nil else { records = previous; return false }
+        return true
+    }
     @discardableResult func record(_ run: ArcadeRun) -> ArcadeReport? {
         if let conditions = run.level.conditions { acceptBundledProof(for: conditions) }
         let result = records.record(run)
