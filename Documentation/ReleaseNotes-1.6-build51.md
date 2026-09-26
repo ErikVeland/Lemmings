@@ -22,6 +22,15 @@ Release base: v1.5.0
 - Mac and Amiga sound sets use the supplied Yippee when their bank has no sample.
   The Mac sound set also uses the Amiga Pop fallback.
 
+## Precision Zoom
+
+- Press **Z**, or scroll up over the playfield, to switch 2× Zoom on at the cursor.
+  On a Magic Mouse or trackpad, the zoom follows your scrolling direction setting.
+- Press **Shift-Z** for Superzoom: 2× Zoom with the game at half speed.
+- Earn one Zoom use per three no-Rewind career stars, and one Superzoom use per
+  three no-Rewind three-star levels. A badge on the playfield shows the uses left.
+- **Z no longer rewinds.** Use comma and full stop to step backward and forward.
+
 ## Level skips
 
 - Every third unassisted three-star level earns a level skip.
@@ -29,6 +38,7 @@ Release base: v1.5.0
   to open the next one. Finales cannot be skipped.
 - Clearing a skipped level later returns its skip. In Hot Seat, the player who
   failed pays for the skip and the turn passes on.
+- Old school hides level skips with the other modern controls. Earned skips stay saved.
 
 ## Sessions and controls
 
@@ -48,6 +58,10 @@ Release base: v1.5.0
 - Pause stops the music like a turntable, with a short reverb tail, and play spins it back up.
 - After a clear, Return continues to the next level. The arrow keys page through
   awards, career and portraits again.
+- The death counter shows the deaths left before failure as a fraction, with a skull.
+- The selected-lemming glow is now visible on every background.
+- The skill icon beside the cursor keeps its size and distance at every zoom.
+- A paused song that was waiting for its next beat now resumes with play.
 
 ## Updates
 

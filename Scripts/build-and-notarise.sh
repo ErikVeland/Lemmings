@@ -152,6 +152,14 @@ current_head="$(git -C "$project_dir" rev-parse HEAD)"
 current_short="${current_head[1,7]}"
 [[ -z "$(git -C "$project_dir" status --porcelain --untracked-files=all)" ]] ||
   fail "Release packaging requires a clean worktree. Commit the release source first."
+# publish-github-release.sh writes the feed to main. Start from that copy, or
+# the new feed would drop releases that only main records.
+if git -C "$project_dir" fetch -q origin main 2>/dev/null; then
+  git -C "$project_dir" diff --quiet HEAD origin/main -- appcast.xml ||
+    fail "appcast.xml differs from the live feed on origin/main. Sync it before packaging."
+else
+  print -u2 "WARNING: origin/main could not be fetched. The live feed was not compared."
+fi
 
 release_base="${RELEASE_BASE:-}"
 [[ -n "$release_base" || "$version" != 1.5 ]] || release_base="v1.2-build41"
