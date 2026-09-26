@@ -1,6 +1,10 @@
 #!/bin/zsh
 # Build, gate, sign, notarise and verify the three local macOS release targets.
 #
+# Sparkle replaces the whole app bundle, so every build that can replace an
+# installed copy carries the full soundtrack. Only the public fresh-install
+# download is slim; it offers the other versions as optional libraries.
+#
 # Authentication options:
 #   NOTARY_PROFILE    xcrun notarytool keychain profile name
 #   NOTARY_KEYCHAIN   optional keychain file containing that profile
@@ -249,6 +253,9 @@ python3 "$project_dir/Tools/ReleaseReadiness/release_notes.py" \
 
 build_app() {
   local source_dir="$1" output_dir="$2" capabilities="$3"
+  export MUSIC_BUNDLE="${4:-full}"
+  # Both worktrees share one encoder cache, keyed by source content.
+  export MUSIC_AAC_CACHE="${MUSIC_AAC_CACHE:-$project_dir/.build/music-aac}"
   if [[ "$capabilities" == 1 ]]; then
     if [[ -n "${APPLE_PROVISIONING_PROFILE:-}" ]]; then
       (cd "$source_dir" && ENABLE_APPLE_CAPABILITIES=1 \
@@ -291,6 +298,34 @@ notarise_app() {
   package_app "$app" "$final"
 }
 
+# A full build must never offer a library for download. A slim build must.
+check_music_scope() {
+  python3 - "$1/Contents/Resources" "$2" <<'CHECK_MUSIC'
+import json, sys
+from pathlib import Path
+resources, scope = Path(sys.argv[1]), sys.argv[2]
+bundle = json.loads((resources / 'Music/bundle.json').read_text())
+if bundle['scope'] != scope:
+    raise SystemExit(f"FAILED: expected a {scope} soundtrack, found {bundle['scope']}.")
+packs = json.loads((resources / 'Music/libraries.json').read_text())['packs']
+missing = [p['id'] for p in packs if not all((resources / f['path']).is_file()
+           for f in p['files'] if not f['path'].endswith('.json'))]
+if scope == 'full' and missing:
+    raise SystemExit('FAILED: the full build would download ' + ', '.join(missing))
+if scope == 'main' and len(missing) != len(packs):
+    raise SystemExit('FAILED: the slim build bundles an optional library.')
+print(f"{scope} soundtrack: {bundle['trackCount']} versions, {len(packs) - len(missing)} of {len(packs)} libraries included")
+CHECK_MUSIC
+}
+
+check_asset_size() {
+  local bytes
+  bytes="$(stat -f %z "$1")"
+  # GitHub rejects release assets of 2 GiB or more.
+  (( bytes < 2147483648 )) ||
+    fail "${1:t} is $bytes bytes. GitHub release assets must be below 2 GiB."
+}
+
 verify_gatekeeper() {
   local archive="$1" verify_dir verify_app verdict
   verify_dir="$(mktemp -d "${TMPDIR:-/tmp}/lemmings-notarise.XXXXXX")"
@@ -310,8 +345,9 @@ verify_gatekeeper() {
 standard_dir="$run_dir/standard"
 standard_app="$standard_dir/Ultimate Lemmings.app"
 standard_zip="$downloads_dir/UltimateLemmings-$version-build$build_number-$stamp-standard.zip"
-print "==> Building and notarising Developer ID standard target"
-build_app "$project_dir" "$standard_dir" 0
+print "==> Building and notarising Developer ID standard target (full soundtrack)"
+build_app "$project_dir" "$standard_dir" 0 full
+check_music_scope "$standard_app" full || fail "The update build does not carry the full soundtrack."
 print "==> Gate 6: running app integration tests"
 LEMMINGS_TEST_APP="$standard_app" zsh "$project_dir/Scripts/run-app-integration-tests.sh" ||
   fail "The app integration tests failed. Do not release this build."
@@ -326,10 +362,7 @@ zsh "$project_dir/Scripts/run-launch-smoke-test.sh" "$standard_app" ||
 mkdir -p "$updates_dir"
 update_zip="$updates_dir/UltimateLemmings-$version-build$build_number.zip"
 ditto -c -k --sequesterRsrc --keepParent "$standard_app" "$update_zip"
-# GitHub rejects release assets of 2 GiB or more.
-update_bytes="$(stat -f %z "$update_zip")"
-(( update_bytes < 2147483648 )) ||
-  fail "The update archive is $update_bytes bytes. GitHub release assets must be below 2 GiB."
+check_asset_size "$update_zip"
 # The update alert shows these notes. Sparkle reads HTML beside the archive.
 python3 "$project_dir/Tools/ReleaseReadiness/update_notes.py" "$release_notes" \
   "$updates_dir/UltimateLemmings-$version-build$build_number.html"
@@ -340,11 +373,28 @@ DOWNLOAD_URL_PREFIX="$download_url_prefix" APPCAST_PATH="$project_dir/appcast.xm
   UPDATES_DIR="$updates_dir" zsh "$project_dir/Scripts/generate-appcast.sh" "$updates_dir"
 zsh "$project_dir/Scripts/check-release-inputs.sh"
 
+slim_dir="$run_dir/slim"
+slim_app="$slim_dir/Ultimate Lemmings.app"
+# generate_appcast signs every archive in the updates directory. Keep the
+# slim download out of it, so the feed only offers the full soundtrack.
+slim_zip="${updates_dir:h}/downloads/UltimateLemmings-$version-build$build_number-slim.zip"
+mkdir -p "${slim_zip:h}"
+print "==> Building and notarising the slim fresh-install download"
+build_app "$project_dir" "$slim_dir" 0 main
+check_music_scope "$slim_app" main || fail "The slim download bundles optional music."
+sign_developer_id "$slim_app"
+notarise_app "$slim_app" "$run_dir/slim-submission.zip" "$slim_zip"
+check_asset_size "$slim_zip"
+verify_gatekeeper "$slim_zip"
+zsh "$project_dir/Scripts/run-launch-smoke-test.sh" "$slim_app" ||
+  fail "The slim download did not launch cleanly."
+
 monterey_dir="$run_dir/monterey"
 monterey_app="$monterey_dir/Ultimate Lemmings.app"
 monterey_zip="$downloads_dir/UltimateLemmings-$version-build$build_number-$stamp-monterey.zip"
 print "==> Building and notarising macOS 12 Monterey target"
-build_app "$monterey_worktree" "$monterey_dir" 0
+build_app "$monterey_worktree" "$monterey_dir" 0 full
+check_music_scope "$monterey_app" full || fail "The Monterey build does not carry the full soundtrack."
 sign_developer_id "$monterey_app"
 notarise_app "$monterey_app" "$run_dir/monterey-submission.zip" "$monterey_zip"
 verify_gatekeeper "$monterey_zip"
@@ -355,7 +405,7 @@ game_center_dir="$run_dir/gamecenter"
 game_center_app="$game_center_dir/Ultimate Lemmings.app"
 game_center_zip="$downloads_dir/UltimateLemmings-$version-build$build_number-$stamp-gamecenter.zip"
 print "==> Building and signing Game Center target"
-build_app "$project_dir" "$game_center_dir" 1
+build_app "$project_dir" "$game_center_dir" 1 full
 codesign --verify --deep --strict --verbose=1 "$game_center_app"
 codesign -d --entitlements :- "$game_center_app" 2>/dev/null |
   grep -q 'com.apple.developer.game-center' ||
@@ -372,10 +422,11 @@ print "Three target archives created in $downloads_dir:"
 print "  $standard_zip"
 print "  $monterey_zip"
 print "  $game_center_zip"
-print "Signed update ZIP: $update_zip"
+print "Signed update ZIP (full soundtrack): $update_zip"
+print "Fresh-install download (slim): $slim_zip"
 print "Signed appcast: $project_dir/appcast.xml"
 print "Stamped release notes: $release_notes"
 print "Frozen source commit: $current_head"
-shasum -a 256 "$update_zip" "$project_dir/appcast.xml"
+shasum -a 256 "$update_zip" "$slim_zip" "$project_dir/appcast.xml"
 print "No public release was published. Review the packages before publication."
 print "The Game Center archive is signed for registered devices and is not notarised."

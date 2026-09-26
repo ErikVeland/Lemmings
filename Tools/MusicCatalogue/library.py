@@ -2,14 +2,21 @@
 """Build verified optional soundtrack libraries and main/full music bundles."""
 import argparse
 from collections import defaultdict
+from concurrent.futures import ThreadPoolExecutor
 import hashlib
 import json
+import os
 from pathlib import Path
 import shutil
+import subprocess
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[2]
 VERSION = '1.6'
+# The same encoder, bitrate and cache as Scripts/compact-bundled-music.sh, so a
+# library file is byte-identical to the copy inside a full update.
+AAC_BITRATE = int(os.environ.get('MUSIC_AAC_BITRATE', '192000'))
+AAC_CACHE = Path(os.environ.get('MUSIC_AAC_CACHE', ROOT / '.build/music-aac'))
 
 
 def encoded(value):
@@ -56,6 +63,34 @@ def metadata(catalogue, timing):
     return result
 
 
+def aac_copy(source_file, sha):
+    """Return the 192 kbps AAC copy of an Apple Lossless file. Other files stay as they are."""
+    if source_file.suffix.lower() != '.m4a': return source_file
+    info = subprocess.run(['afinfo', source_file], capture_output=True, text=True).stdout
+    if not any(line.startswith('Data format:') and 'alac' in line for line in info.splitlines()): return source_file
+    cached = AAC_CACHE / f'{sha[:40]}-{AAC_BITRATE}.m4a'
+    if not cached.is_file() or cached.stat().st_size == 0:
+        AAC_CACHE.mkdir(parents=True, exist_ok=True)
+        temporary = cached.with_name(cached.name + f'.{os.getpid()}.tmp')
+        subprocess.run(['afconvert', '-f', 'm4af', '-d', 'aac', '-b', str(AAC_BITRATE), '-s', '2', '-q', '127',
+                        source_file, temporary], check=True)
+        temporary.replace(cached)
+    return cached
+
+
+def with_playback(payloads, played):
+    """Point timing and rhythm entries at the hashes of the files that ship."""
+    for name in ('Music/timing.json', 'Music/rhythm.json'):
+        if name not in payloads: continue
+        index = json.loads(payloads[name])
+        for row in index['variants']:
+            row.pop('playbackSHA256', None)
+            if row['path'] in played and played[row['path']] != row['sourceSHA256']:
+                row['playbackSHA256'] = played[row['path']]
+        payloads[name] = encoded(index)
+    return payloads
+
+
 def rhythm_files(payloads):
     return json.loads(payloads.get('Music/rhythm.json', b'{"variants":[]}'))['variants']
 
@@ -70,25 +105,32 @@ def build_packs(source, catalogue, timing, output, base_url):
             identity, label = pack_name(track, variant)
             groups[identity].add(variant['id']); labels[identity] = label
     hashes = {r['variantID']: r['sourceSHA256'] for r in timing['variants']}
+    optional = [(source / v['path'], v['id']) for t in catalogue['tracks'] for v in t['variants'] if v['id'] in set().union(*groups.values())]
+    def prepare(item):
+        source_file, identity = item
+        if digest(source_file) != hashes[identity]: raise ValueError(f'Stale music timing: {source_file}')
+        shipped = aac_copy(source_file, hashes[identity])
+        return identity, shipped, digest(shipped)
+    with ThreadPoolExecutor(os.cpu_count()) as pool: shipped = {i: (f, h) for i, f, h in pool.map(prepare, optional)}
     packs = []
     for identity, ids in sorted(groups.items()):
         subset = select(catalogue, lambda t, v: v['id'] in ids)
-        payloads = metadata(subset, timing)
+        played = {v['path']: shipped[v['id']][1] for t in subset['tracks'] for v in t['variants']}
+        payloads = with_playback(metadata(subset, timing), played)
         files = []
         archive = output / f'{identity}.zip'
         with zipfile.ZipFile(archive, 'w', compression=zipfile.ZIP_DEFLATED, compresslevel=6) as zipped:
             for track in subset['tracks']:
                 for variant in track['variants']:
-                    source_file = source / variant['path']
-                    sha = digest(source_file)
-                    if sha != hashes[variant['id']]: raise ValueError(f'Stale music timing: {source_file}')
+                    shipped_file, sha = shipped[variant['id']]
                     name = 'Music/' + variant['path']
                     # Fixed timestamps make identical libraries byte-for-byte reproducible.
                     info = zipfile.ZipInfo(name, (2026, 1, 1, 0, 0, 0))
-                    info.compress_type = zipfile.ZIP_DEFLATED
-                    with source_file.open('rb') as reader, zipped.open(info, 'w') as writer:
+                    # Encoded audio does not deflate. Store it to save packing time.
+                    info.compress_type = zipfile.ZIP_STORED if shipped_file.suffix.lower() in ('.m4a', '.mp3', '.ogg') else zipfile.ZIP_DEFLATED
+                    with shipped_file.open('rb') as reader, zipped.open(info, 'w') as writer:
                         shutil.copyfileobj(reader, writer)
-                    files.append(dict(path=name, bytes=source_file.stat().st_size, sha256=sha))
+                    files.append(dict(path=name, bytes=shipped_file.stat().st_size, sha256=sha))
             for rhythm in rhythm_files(payloads):
                 loop = source / rhythm['loopPath']
                 if digest(loop) != rhythm['sha256']: raise ValueError(f'Stale drum loop: {loop}')
@@ -135,9 +177,26 @@ def bundle(source, catalogue, timing, target, scope, game, libraries):
     print(f'{scope}: {count} versions, {size / 1_000_000:.1f} MB')
 
 
+def playback(target):
+    """Record the hash of each re-encoded bundled file, so timing and rhythm still match it."""
+    changed = 0
+    for name in ('timing.json', 'rhythm.json'):
+        path = target / name
+        if not path.exists(): continue
+        index = json.loads(path.read_text())
+        for row in index['variants']:
+            bundled = target / row['path']
+            if not bundled.is_file(): continue
+            sha = digest(bundled)
+            row.pop('playbackSHA256', None)
+            if sha != row['sourceSHA256']: row['playbackSHA256'] = sha; changed += 1
+        path.write_bytes(encoded(index))
+    print(f'playback: {changed} re-encoded entries')
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('command', choices=['packs', 'bundle'])
+    parser.add_argument('command', choices=['packs', 'bundle', 'playback'])
     parser.add_argument('--source', type=Path, default=ROOT / 'Sources/Music')
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--base-url', default='https://github.com/ErikVeland/Lemmings/releases/download/music-1.6')
@@ -147,6 +206,7 @@ def main():
     args = parser.parse_args()
     catalogue = json.loads((ROOT / 'Resources/Music/catalogue.json').read_text())
     timing = json.loads((ROOT / 'Resources/Music/timing.json').read_text())
+    if args.command == 'playback': return playback(args.output)
     if args.command == 'packs': build_packs(args.source, catalogue, timing, args.output, args.base_url)
     else: bundle(args.source, catalogue, timing, args.output, args.scope, args.game, args.libraries)
 

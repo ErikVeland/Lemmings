@@ -41,10 +41,10 @@ class ReleasePublicationTests(unittest.TestCase):
         })
         ElementTree.ElementTree(root).write(self.appcast, encoding="utf-8")
 
-    def run_publication(self, *options):
+    def run_publication(self, *options, **extra):
         env = dict(os.environ, RELEASE_TAG="v1.5.0", RELEASE_VERSION="1.5",
                    RELEASE_COMMIT=self.commit, RELEASE_NOTES_PATH=str(self.notes),
-                   APPCAST_PATH=str(self.appcast))
+                   APPCAST_PATH=str(self.appcast), **extra)
         return subprocess.run(
             ["zsh", "Scripts/publish-github-release.sh", *options, str(self.archive)],
             cwd=ROOT, env=env, capture_output=True, text=True, check=False
@@ -66,6 +66,19 @@ class ReleasePublicationTests(unittest.TestCase):
         result = self.run_publication("--check")
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("frozen commit", result.stderr)
+
+    def test_check_accepts_a_matching_slim_download(self):
+        slim = self.archive.with_name("UltimateLemmings-1.5-build45-slim.zip")
+        slim.write_bytes(b"slim download")
+        result = self.run_publication("--check", DOWNLOAD_ZIP=str(slim))
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+    def test_check_rejects_a_misnamed_slim_download(self):
+        slim = self.archive.with_name("UltimateLemmings-1.5-build44-slim.zip")
+        slim.write_bytes(b"slim download")
+        result = self.run_publication("--check", DOWNLOAD_ZIP=str(slim))
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("download archive name", result.stderr)
 
     def test_publication_requires_approval(self):
         result = self.run_publication()

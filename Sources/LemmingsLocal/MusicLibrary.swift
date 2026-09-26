@@ -42,7 +42,7 @@ enum MusicLibrary {
                   let data = try? Data(contentsOf: root.appendingPathComponent("rhythm.json")),
                   let catalogue = try? MusicRhythmCatalogue(data: data),
                   let entry = catalogue.variants.first(where: { $0.path == String(source.standardizedFileURL.path.dropFirst(prefix.count)) }),
-                  (try? hash(source)) == entry.sourceSHA256 else { continue }
+                  (try? hash(source)) == entry.expectedSHA256 else { continue }
             let loop = root.appendingPathComponent(entry.loopPath)
             if (try? hash(loop)) == entry.sha256 { return loop }
         }

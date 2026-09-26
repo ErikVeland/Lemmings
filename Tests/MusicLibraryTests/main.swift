@@ -43,8 +43,27 @@ Task {
             do { _ = try MusicLibraryCatalogue(data: JSONSerialization.data(withJSONObject: payload)) } catch { rejected = true }
             try check(rejected, "Unsafe library path was accepted: \(bad)")
         }
+        // A full update bundles AAC copies. Their rhythm loops must still match.
+        let music = temporary.appendingPathComponent("Music")
+        try FileManager.default.createDirectory(at: music.appendingPathComponent(".rhythm"), withIntermediateDirectories: true)
+        let track = music.appendingPathComponent("Track.m4a"), loop = music.appendingPathComponent(".rhythm/track.m4a")
+        try Data("aac copy".utf8).write(to: track); try Data("drums".utf8).write(to: loop)
+        func rhythm(playback: String?) throws {
+            var entry: [String: Any] = ["path": "Track.m4a", "sourceSHA256": String(repeating: "a", count: 64),
+                "loopPath": ".rhythm/track.m4a", "sha256": try MusicLibrary.hash(loop), "durationSeconds": 2.0]
+            if let playback { entry["playbackSHA256"] = playback }
+            try JSONSerialization.data(withJSONObject: ["schemaVersion": 1, "variants": [entry]])
+                .write(to: music.appendingPathComponent("rhythm.json"))
+        }
+        try rhythm(playback: nil)
+        try check(MusicLibrary.rhythmURL(for: track, musicRoot: music) == nil, "A re-encoded file used the lossless rhythm entry")
+        try rhythm(playback: try MusicLibrary.hash(track))
+        try check(MusicLibrary.rhythmURL(for: track, musicRoot: music) == loop, "A re-encoded file lost its rhythm loop")
+        try rhythm(playback: String(repeating: "b", count: 64))
+        try check(MusicLibrary.rhythmURL(for: track, musicRoot: music) == nil, "A changed file kept its rhythm loop")
         print("PASS complete index, verified installation, source hashes, atomic replacement and corrupt-update preservation")
         print("PASS unsafe path rejection and installed-library discovery")
+        print("PASS rhythm loops follow re-encoded playback hashes")
         exit(0)
     } catch {
         FileHandle.standardError.write(Data("FAIL: \(error)\n".utf8)); exit(1)

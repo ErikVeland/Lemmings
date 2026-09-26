@@ -27,9 +27,10 @@ encode_one() {
 }
 
 before="$(du -sk "$music_dir" | cut -f1)"
-find "$music_dir" -type f -name '*.m4a' -print0 |
+# Rhythm loops are short and their hashes are checked, so they stay lossless.
+find "$music_dir" -path "$music_dir/.rhythm" -prune -o -type f -name '*.m4a' -print0 |
   xargs -0 -n 1 -P "$jobs" zsh -c "$(typeset -f encode_one); encode_one \"\$1\" '$cache_dir' '$bitrate'" _
-remaining="$(find "$music_dir" -type f -name '*.m4a' -exec afinfo {} \; 2>/dev/null | grep -c 'Data format:.*alac' || true)"
+remaining="$(find "$music_dir" -path "$music_dir/.rhythm" -prune -o -type f -name '*.m4a' -exec afinfo {} \; 2>/dev/null | grep -c 'Data format:.*alac' || true)"
 [[ "$remaining" == 0 ]] || { echo "FAILED: $remaining bundled tracks are still lossless." >&2; exit 1; }
 after="$(du -sk "$music_dir" | cut -f1)"
 echo "Compacted bundled music: $((before / 1024)) MB -> $((after / 1024)) MB (AAC $((bitrate / 1000)) kbps)"

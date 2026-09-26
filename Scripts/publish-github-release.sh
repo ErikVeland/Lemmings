@@ -16,6 +16,8 @@ repository="${GITHUB_REPOSITORY:-ErikVeland/Lemmings}"
 version="${RELEASE_VERSION:?Set RELEASE_VERSION to the application version.}"
 source_revision="${RELEASE_COMMIT:-$(git -C "$project_dir" rev-parse HEAD)}"
 approval="${RELEASE_APPROVED:-0}"
+# Optional slim fresh-install archive. The appcast never offers it.
+download_zip="${DOWNLOAD_ZIP:-}"
 
 fail() {
   print -u2 "FAILED: $*"
@@ -37,6 +39,13 @@ build_number="$(sed -n 's/^Build: //p' "$release_notes")"
 [[ "$build_number" == <-> ]] || fail "The release notes need one numeric build number."
 [[ "${update_zip:t}" == "UltimateLemmings-$version-build$build_number.zip" ]] ||
   fail "The update archive name does not match the release notes."
+if [[ -n "$download_zip" ]]; then
+  [[ -f "$download_zip" ]] || fail "The download archive does not exist: $download_zip"
+  [[ "${download_zip:t}" == "UltimateLemmings-$version-build$build_number-slim.zip" ]] ||
+    fail "The download archive name does not match the release notes."
+  ! grep -Fq "${download_zip:t}" "$appcast_path" ||
+    fail "The appcast must not offer the slim download."
+fi
 python3 - "$project_dir" "$appcast_path" "$version" "$build_number" \
   "$update_zip" "$source_revision" <<'CHECK_APPCAST' ||
 import sys
@@ -83,10 +92,10 @@ gh auth status >/dev/null 2>&1 || fail "Authenticate the GitHub CLI before publi
 
 if gh release view "$release_tag" --repo "$repository" >/dev/null 2>&1; then
   print "==> Updating GitHub release $release_tag"
-  gh release upload "$release_tag" "$update_zip" --repo "$repository" --clobber
+  gh release upload "$release_tag" "$update_zip" ${download_zip:+"$download_zip"} --repo "$repository" --clobber
 else
   print "==> Creating GitHub release $release_tag"
-  gh release create "$release_tag" "$update_zip" \
+  gh release create "$release_tag" "$update_zip" ${download_zip:+"$download_zip"} \
     --repo "$repository" \
     --target "$source_revision" \
     --title "Ultimate Lemmings $version" \

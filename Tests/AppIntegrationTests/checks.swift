@@ -3195,9 +3195,17 @@ extension AppDelegate {
     try check(dj.isCrossfading && dj.playingDeckCount == 0, "Suspended fade consumed its remaining duration")
     dj.resumeOutput()
     try await Task.sleep(nanoseconds: 80_000_000)
-    try check(dj.isCrossfading && dj.playingDeckCount == 2, "Resuming skipped the suspended fade")
-    // Simulate a long frame. Fade duration must not depend on timer callback count.
-    usleep(2_800_000)
+    try check(dj.isCrossfading && dj.playingDeckCount >= 1, "Resuming skipped the suspended fade")
+    // Resume plans again from the audible deck's grid. A bar plan can hold the
+    // destination for up to 4 seconds before it starts.
+    let resumed = ProcessInfo.processInfo.systemUptime
+    while dj.isCrossfading && dj.playingDeckCount < 2 && ProcessInfo.processInfo.systemUptime - resumed < 4.5 {
+      try await Task.sleep(nanoseconds: 50_000_000)
+    }
+    try check(dj.isCrossfading && dj.playingDeckCount == 2, "The resumed fade did not start its destination")
+    // Simulate a long frame, longer than a 2-second pickup and a bar-planned
+    // fade. Fade duration must not depend on timer callback count.
+    usleep(7_500_000)
     try await Task.sleep(nanoseconds: 100_000_000)
     try check(!dj.isCrossfading && dj.playingDeckCount == 1, "A delayed main actor stretched the fade")
     enterLevel()

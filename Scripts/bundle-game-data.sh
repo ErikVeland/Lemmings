@@ -62,6 +62,12 @@ music_game=all
 [[ "$2" == l3 ]] && music_game=lemmings3
 python3 "$project_dir/Tools/MusicCatalogue/library.py" bundle \
   --output "$resources_dir/Music" --game "$music_game" --scope "${MUSIC_BUNDLE:-main}"
+# Upgrades replace the app bundle, so an update must carry the full soundtrack
+# that earlier builds bundled. Ship AAC copies to stay below 2 GiB.
+if [[ "${MUSIC_BUNDLE:-main}" == full ]]; then
+  zsh "$project_dir/Scripts/compact-bundled-music.sh" "$resources_dir/Music"
+  python3 "$project_dir/Tools/MusicCatalogue/library.py" playback --output "$resources_dir/Music"
+fi
 
 # Standalone sequel players share the in-game profile and Trolley artwork.
 if [[ "$2" == l2 || "$2" == l3 ]]; then
