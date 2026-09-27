@@ -624,6 +624,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     // instant; a later toggle by the player keeps the normal animation.
     if !window.styleMask.contains(.fullScreen) {
       launchingFullScreen = true
+      traceLaunch("fullscreen-requested")
       window.toggleFullScreen(nil)
     }
     if let index = CommandLine.arguments.firstIndex(of: "--native-l2") {
@@ -1598,15 +1599,18 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   func window(_ window: NSWindow, startCustomAnimationToEnterFullScreenWithDuration duration: TimeInterval) {
+    traceLaunch("fullscreen-animation")
     window.setFrame(window.screen?.frame ?? window.frame, display: true)
   }
 
   func windowDidEnterFullScreen(_ notification: Notification) {
+    if launchingFullScreen { traceLaunch("fullscreen-entered") }
     launchingFullScreen = false
     finishLaunchPresentation()
   }
 
   func windowDidFailToEnterFullScreen(_ window: NSWindow) {
+    if launchingFullScreen { traceLaunch("fullscreen-failed") }
     // Leave the window usable rather than hidden if the transition is refused.
     launchingFullScreen = false
     window.makeKeyAndOrderFront(nil)
@@ -5952,8 +5956,11 @@ let achievementProgressKey = "ClassicAchievementProgress"
     panel.speedLabel = speedControl.panelLabel
     panel.variableSpeedEnabled = speedControl.variableEnabled
     playfield.speedMultiplier = speedControl.multiplier
+    // Wait until the launch window has drawn. Capture before then can trap the
+    // pointer in a window the player cannot see.
     if !sequelIsActive {
-      GameScreen.shared.capturePointer(in: window, enabled: settings.confinePointer && !playfield.usesControllerPointer
+      GameScreen.shared.capturePointer(in: window, enabled: !preparingLaunch
+        && settings.confinePointer && !playfield.usesControllerPointer
         && (phase != .playing || isPaused || GameScreen.shared.isPresented || session?.isComplete == true))
     }
     // Settle the display before an open page can suspend the simulation.

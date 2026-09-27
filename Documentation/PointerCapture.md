@@ -1,11 +1,12 @@
 # Pointer capture
 
-During play, the pointer stays inside the game on its current display. This keeps
-edge scrolling active when another monitor sits beside the game. Capture is on
-by default for classic campaigns, fan levels, Lemmings 2 and Lemmings 3.
+The pointer stays inside the game on its current display. This keeps edge
+scrolling active when another monitor sits beside the game. Capture also applies
+to paused screens and in-game menus. Capture is on by default for classic
+campaigns, fan levels, Lemmings 2 and Lemmings 3.
 
-Hold **Option** to move the pointer outside the game. Pausing, opening a menu or
-switching apps also releases it. Return the pointer to the game to capture it
+Hold **Option** to move the pointer outside the game. System menus, system
+sheets and switching apps also release it. Return the pointer to the game to capture it
 again. To turn capture off, clear **Settings → Video → Pointer → Keep pointer
 inside the game**. The choice persists and survives a graphics preset change.
 
@@ -27,7 +28,12 @@ system cursor stops drawing while an edge is held, even though input keeps
 landing correctly. This showed up along the bottom panel, the window edge
 closest to where players rest the pointer to pick a skill.
 
-Capture starts only after the pointer is inside the game. Focus loss, display
+Capture starts only after the pointer is inside the game, and only while the
+window is on screen according to its occlusion state. A window can be key and
+ordered in without being drawn, for example if a full-screen transition stalls.
+Capture there traps the pointer in a rectangle the player cannot see. Classic
+also waits until the launch window has drawn its first frame. Lemmings 2 and
+Lemmings 3 open after launch, so the occlusion check covers them. Focus loss, display
 changes, window closure, live resizing and system menus reset it. In-game pages
 (Settings, pause) sit above the playfield in the same window rather than
 opening a system menu, so each engine's own "is a page showing" check must gate

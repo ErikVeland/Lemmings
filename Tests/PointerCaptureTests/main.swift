@@ -46,4 +46,15 @@ check(PointerConfinement.quartzPoint(CGPoint(x: 100, y: 1600), primaryDisplayTop
       "An upper display used the wrong Y axis")
 var capture = PointerConfinement()
 check(capture.sample(.zero, in: .zero, active: true, releaseRequested: false) == nil, "An empty view captured the pointer")
-print("PASS pointer capture: sustained edges, four display positions, release, reacquisition, moved windows and Quartz coordinates")
+// A window AppKit calls key and visible can still be off screen, e.g. while a
+// full-screen transition stalls. Capture there traps the pointer in an empty rectangle.
+let ready = PointerCaptureGate(appActive: true, windowKey: true, windowOrdered: true, onScreen: true,
+                               miniaturized: false, viewHidden: false, liveResize: false, sheetAttached: false)
+check(ready.allowsCapture, "A shown, focused game refused capture")
+var offScreen = ready; offScreen.onScreen = false
+check(!offScreen.allowsCapture, "An off-screen window captured the pointer")
+var sheet = ready; sheet.sheetAttached = true
+check(!sheet.allowsCapture, "A system sheet left the pointer captured")
+var background = ready; background.appActive = false
+check(!background.allowsCapture, "A background app captured the pointer")
+print("PASS pointer capture: sustained edges, four display positions, release, reacquisition, moved windows, off-screen windows and Quartz coordinates")
