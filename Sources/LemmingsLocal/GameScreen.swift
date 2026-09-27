@@ -319,10 +319,15 @@ import NxlvKit
     func preferControllerControl(_ control: NSControl) {
         preferredControllerControl = control
     }
-    func addListAction(_ title: String, at index: Int, action: @escaping () -> Void) {
+    @discardableResult func addListAction(
+        _ title: String,
+        at index: Int,
+        action: @escaping () -> Void
+    ) -> NSButton {
         let button = GameActionButton(title: title, primary: false, onPress: action)
         button.frame = CGRect(x: 40, y: 400 - index * 76, width: 860, height: 56)
         body.addSubview(button)
+        return button
     }
     override func performKeyEquivalent(with event: NSEvent) -> Bool {
         if event.isARepeat, [36, 76, 49].contains(event.keyCode) { return true }

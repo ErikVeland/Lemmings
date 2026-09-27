@@ -2821,7 +2821,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private func presentLevelBrowser(for unresolvedPack: LevelCataloguePack) {
     guard unresolvedPack.levels.isEmpty,
           let url = levelBrowserFanPacks[unresolvedPack.id] else {
-      presentResolvedLevelBrowser(unresolvedPack)
+      presentResolvedLevelBrowserOrRatings(unresolvedPack)
       return
     }
     levelBrowserFanLoadTask?.cancel()
@@ -2887,23 +2887,98 @@ let achievementProgressKey = "ClassicAchievementProgress"
         return
       }
       FanLevelLibrary.Progress.setCount(discovery.entries.count, for: url)
-      presentResolvedLevelBrowser(resolveBrowserPack(unresolvedPack, discovery: discovery))
+      presentResolvedLevelBrowserOrRatings(
+        resolveBrowserPack(unresolvedPack, discovery: discovery))
     }
   }
 
-  private func presentResolvedLevelBrowser(_ pack: LevelCataloguePack) {
-    guard !pack.levels.isEmpty else {
+  private struct ClassicBrowserRating {
+    let name: String
+    let levels: [LevelCatalogueEntry]
+  }
+
+  private func classicBrowserRatings(
+    in pack: LevelCataloguePack
+  ) -> [ClassicBrowserRating] {
+    Self.classicBrowserRatings(in: pack) { entry in
+      guard case let .classic(_, dataSet, levelIndex, _, _)? =
+              self.levelBrowserRoutes[entry.identity],
+            dataSet.campaign.levels.indices.contains(levelIndex) else {
+        return nil
+      }
+      return dataSet.campaign.levels[levelIndex].rank
+    }
+  }
+
+  private static func classicBrowserRatings(
+    in pack: LevelCataloguePack,
+    rankForEntry: (LevelCatalogueEntry) -> String?
+  ) -> [ClassicBrowserRating] {
+    guard pack.engine == .classic else { return [] }
+    var names: [String] = []
+    var levelsByName: [String: [LevelCatalogueEntry]] = [:]
+    for entry in pack.levels {
+      guard let name = rankForEntry(entry) else { return [] }
+      if levelsByName[name] == nil { names.append(name) }
+      levelsByName[name, default: []].append(entry)
+    }
+    return names.compactMap { name in
+      levelsByName[name].map { ClassicBrowserRating(name: name, levels: $0) }
+    }
+  }
+
+  private func presentResolvedLevelBrowserOrRatings(
+    _ pack: LevelCataloguePack
+  ) {
+    let ratings = classicBrowserRatings(in: pack)
+    guard ratings.count > 1 else {
+      presentResolvedLevelBrowser(pack)
+      return
+    }
+    presentClassicRatingBrowser(pack: pack, ratings: ratings)
+  }
+
+  private func presentClassicRatingBrowser(
+    pack: LevelCataloguePack,
+    ratings: [ClassicBrowserRating]
+  ) {
+    let page = GameMenuPage(title: pack.name, subtitle: "Ratings")
+    page.onBack = { [weak page] in if let page { GameScreen.shared.dismiss(page) } }
+    var first: NSButton?
+    for (index, rating) in ratings.enumerated() {
+      let button = page.addListAction(
+        "\(rating.name)  \(rating.levels.count) levels",
+        at: index
+      ) { [weak self] in
+        self?.presentResolvedLevelBrowser(
+          pack,
+          levels: rating.levels,
+          rating: rating.name)
+      }
+      if first == nil { first = button }
+    }
+    if let first { page.preferControllerControl(first) }
+    GameScreen.shared.present(page, owner: window, focus: first)
+  }
+
+  private func presentResolvedLevelBrowser(
+    _ pack: LevelCataloguePack,
+    levels: [LevelCatalogueEntry]? = nil,
+    rating: String? = nil
+  ) {
+    let displayedLevels = levels ?? pack.levels
+    guard !displayedLevels.isEmpty else {
       GameScreen.shared.message(pack.name, detail: "This pack has no playable levels.")
       return
     }
     let page = GameMenuPage(
-      title: pack.name,
+      title: rating.map { "\(pack.name) - \($0)" } ?? pack.name,
       subtitle: pack.engine.displayName + " / " + pack.status.displayName)
     let carousel = LevelCoverFlowView(frame: page.body.bounds)
     carousel.autoresizingMask = [.width, .height]
     page.body.addSubview(carousel)
 
-    let identities = Dictionary(pack.levels.map { ($0.identity.levelID, $0.identity) },
+    let identities = Dictionary(displayedLevels.map { ($0.identity.levelID, $0.identity) },
       uniquingKeysWith: { first, _ in first })
     let primary = page.addPrimaryAction("Start") { [weak self, weak carousel] in
       guard let item = carousel?.selectedItem,
@@ -2923,7 +2998,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
     page.onBack = { [weak page] in if let page { GameScreen.shared.dismiss(page) } }
     carousel.onSelectionChanged = { [weak self, weak primary, weak add] item in
-      self?.levelBrowserLevelSelections[pack.id] = item.id
+      self?.levelBrowserLevelSelections[
+        rating.map { pack.id + "#" + $0 } ?? pack.id
+      ] = item.id
       primary?.isEnabled = item.isAvailable
       primary?.needsDisplay = true
       add?.isEnabled = item.isAvailable
@@ -2931,13 +3008,15 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
     carousel.onStart = { [weak primary] _ in primary?.performClick(nil) }
 
-    let total = pack.levels.count
-    let items = pack.levels.enumerated().map { index, entry in
+    let total = displayedLevels.count
+    let items = displayedLevels.enumerated().map { index, entry in
       LevelCoverFlowItem(
         id: entry.identity.levelID,
         title: entry.levelName,
         subtitle: entry.packName + " / " + entry.identity.engine.displayName,
-        detail: "Level \(entry.number)  \(entry.status.displayName)  \(index + 1)/\(total)",
+        detail: rating.map {
+          "\($0) \(index + 1)/\(total)  \(entry.status.displayName)"
+        } ?? "Level \(entry.number)  \(entry.status.displayName)  \(index + 1)/\(total)",
         isAvailable: entry.isAvailable,
         artworkKey: levelPreviewRequests[entry.identity]?.artworkKey,
         availability: entry.availability)
@@ -2945,7 +3024,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
     configureLevelPreviewLoader(carousel)
     carousel.configure(
       items: items,
-      selectedID: levelBrowserLevelSelections[pack.id],
+      selectedID: levelBrowserLevelSelections[
+        rating.map { pack.id + "#" + $0 } ?? pack.id
+      ],
       reduceMotion: settings.reduceMotion || NSWorkspace.shared.accessibilityDisplayShouldReduceMotion)
     add.isEnabled = carousel.selectedItem?.isAvailable == true
     levelBrowserCurrentLevelPage = page

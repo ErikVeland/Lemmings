@@ -1,78 +1,149 @@
-[img]https://iili.io/nBbFOwF.jpg[/img]
+[ATTACH type="full" size="5116x2880"]2663471[/ATTACH]
 
-[b]Ultimate Lemmings 1.6.0 is out.[/b]
+I’ve been building Ultimate Lemmings: an unofficial native macOS project bringing classic Lemmings; Oh No! More Lemmings, the Xmas and Holiday releases, Lemmings 2: The Tribes, and Lemmings 3 into one connected app.
 
-Quick recap for anyone new: Ultimate Lemmings is an unofficial native macOS app that brings classic Lemmings, Oh No! More Lemmings, the Xmas and Holiday releases, Oh Yes! More Lemmings, Lemmings 2: The Tribes and Lemmings 3 into one place. It reads the original game data and runs its own engines, so all the games share profiles, controls, Hot Seat, saves and records.
+It started with wanting to play Lemmings again. It has grown into something closer to how I remember playing it: sitting with other people, arguing over solutions, taking turns, making spectacular mistakes and cheering when we finally get everyone home.
 
-1.5 was about getting everything in. 1.6 is about the evenings you actually spend with it: a DJ that mixes on the beat, a way past the level that has beaten you nine times in a row, and a zoom for the moment you need to see exactly which lemming you are about to doom.
+[ATTACH type="full" size="5118x2880"]2663472[/ATTACH]
 
-[b]If you already have 1.5[/b]
+[B]How is this different from an emulator or another Lemmings engine?[/B]
 
-The update is already waiting for you. 1.5 shows the release notes and asks before it installs. You keep every soundtrack you already had. All 495 versions come with the update, so you do not download any of them again. Your saves, profiles, playlists and Hot Seat games carry across.
+An emulator runs the original game executable inside a recreated machine. Ultimate Lemmings reads the original game data and runs its own native engines, built from the ground up to re-create the original simulation with Swift. That lets the games share menus, profiles, controls, QoL, and saved-game flows, while retaining their different gameplay systems.
 
-[b]The DJ learned to count[/b]
+The aim is to preserve the original puzzles and character while making the whole experience comfortable to play today. That means original campaigns, the sequels, rarely played Macintosh artwork (2x artwork that only appeared in the classic Mac ports, not seen in any other port), shared play and modern controls in one place.
 
-[list]
-[*][b]Mixes on the beat.[/b] Every one of the 495 music versions now has measured timing. Where the beat and bars are stable, the DJ mixes on them with gentle tempo matching instead of just fading. Where they are not, it uses a short fade rather than a trainwreck.
-[*][b]The music knows how you are doing.[/b] It changes when you meet the rescue target. Lose the level for good and the tune plays on in funeral mood, right through the result screen.
-[*][b]Pause like a turntable.[/b] Pause brakes the music like a hand on a record, with a little reverb tail, and play spins it back up. Turn on [b]Keep the rhythm[/b] and pause drops to just the drums instead.
-[*][b]Speed you can hear.[/b] At higher game speeds the music rises in pitch without speeding up, up to 1.35× at 10×.
-[/list]
+Community engines have already done enormous work keeping Lemmings alive, so of course not claiming that every convenience here is a new invention. What makes this project different is the combination and the emphasis on returning to these games with someone sitting beside you.
 
-[b]A much smaller download, if you are new[/b]
+[ATTACH type="full" size="5120x2880"]2663473[/ATTACH]
 
-The fresh download is now [b]150 MB[/b] instead of almost 2 GB. It includes the 54 essential versions: the original modules and the Professor Mariarti theme. The other 441 versions are in 18 optional libraries, 1.81 GB altogether. Pick the ones you want on first launch, or later in [b]Settings > Audio > Download soundtracks[/b]. You can keep playing while they download.
+[B]The artwork deserves its own mention[/B]
 
-[b]Level skips[/b]
+[LIST]
+[*][B]Original 2× Macintosh artwork for Classic.[/B] The Macintosh release has beautifully detailed sprites, terrain and objects. These are actual higher-resolution assets, not simply enlarged DOS pixels. Unless you played the original classic mac games you probably never even thought to emulate them. So most will be playing these for the first time. Which of course means, once you get to L2+L3 you'll see a drastic graphical downgrade, except...
+[*]I've also created [B]NEW 2× Macintosh-style artwork for Lemmings 2 and 3.[/B] This is newly reconstructed artwork based on the original sequel assets and a close study of Classic’s Macintosh art. It is not a recovered Mac release. The extra detail preserves the original collision masks, placement and animation timing.
+[*][B]Classic presentation with optional modern touches.[/B] Original game lettering, selectable graphics and audio, CRT effects and HDR feedback. The Xmas and Holiday games retain their seasonal soundtracks.
+[*][B]ACTUAL NUKES[/B] Now you can REALLY nuke the Lemmings the way you remembered it in your mind. No spoilers. This will blow you away.
+[*][B]Vari-speed[/B] up to 10x across all three games and 6000+ levels (yes, I have included an insane amount of fan-created levels). There's also rewind. Undo nuke. Death sounds for Lemmings falling into the void (user controllable as this varied from port to port).
+[*][B]DJ Soundtrack[/B] Soundtrack now auto-mixes into a new track once the level goal has been met. You can mix and match soundtracks across platforms, ports and games for optimal variation and proper audio cues. Mods have an optional modern sound which brings drums and percussion to the center stage instead of hard panning + modern EQ and sound treatment including Spatial Audio!
+[*][B]THERE'S MORE??[/B] Player profiles. Three star level ratings. Achievements! GLOBAL LEADERBOARDS?‽‽ Per level as well as across all??
+[*][B]OKAY SO YOU KNOW HOW [/B] ...this game is an advanced trolley problem? In addition to all the meta-goals above it will also assign you a philosopher based on your playstyle per level. Useful? No. Utilitarian? You betcha!
+[/LIST]
 
-Everyone has a level. You know the one.
+[ATTACH type="full" size="5116x2874"]2663474[/ATTACH]
 
-Every third level you finish with three stars, without rewind or undo, earns you a skip. Fail a campaign level and [b]Skip level[/b] appears next to Try again. The skipped level stays unbeaten: no stars, no medal. Go back and beat it later and you get the skip back.
+[B]Built for taking turns[/B]
 
-It works in all three games. Finales cannot be skipped. In Hot Seat, the player who failed pays for the skip and the turn passes on, so nobody can skip their way into keeping the seat. Old school mode hides skips along with the other modern help.
+Hot Seat and player profiles exist because that is how I played Lemmings as a kid: alternating attempts with my cousins, sisters and friends.
 
-[b]Precision Zoom[/b]
+There are separate player profiles, persistent shared saves, clear turn ownership, paused handovers and explicit retry choices. You can leave a shared game, play solo and come back without losing your shared progress.
 
-[list]
-[*]Press [b]Z[/b], or scroll up over the playfield, for 2× zoom right at the cursor. On a trackpad or Magic Mouse it follows your scrolling direction setting.
-[*][b]Shift-Z[/b] is Superzoom: 2× zoom with the game at half speed, for the truly desperate.
-[*]Zooms are earned, not free. Career stars earn Zoom and three-star levels earn Superzoom. A little badge on the playfield shows how many you have left.
-[*][b]Heads up:[/b] Z no longer rewinds. Comma and full stop step backward and forward.
-[/list]
+It gives that old “your turn—let’s see you do better” experience a proper home in the game.
 
-[b]Sessions, and a few quality-of-life bits[/b]
+More comfortable to play, without losing the puzzle
 
-[list]
-[*][b]Playlists[/b] on the home screen now opens all your saved playlists and the creation tools in one place.
-[*][b]New solo[/b] and [b]New Hot Seat[/b] save the session you are in before starting another, so you can keep several campaigns and shared games going at once.
-[*]The death counter is now a compact fraction with a skull, so you can see at a glance how many more you can afford to lose.
-[*]The home screen counts how many lemmings you have saved on this Mac. [b]Settings > Play Insights[/b] shows your local play counts. Sharing is off, and this build has no service to send anything to, so nothing leaves your Mac.
-[/list]
+[LIST]
+[*][B]A connected Classic journey[/B]. Full Quest brings 292 Classic-family levels into a six-release progression, weaving together the original game, Oh No! and the festive releases. Oh Yes! More Lemmings is a collection of previously port-exclusive levels from the Amiga versus mode and the Sega Mega Drive Sunsoft port. There is also a library of more than 6,000 fan levels. This is the most complete collection of Lemmings content in one place!
+[*][B]Variable speed.[/B] Tap to toggle fast-forward. Hold F, the Speed button or a controller trigger to ramp up to 10×, then release to return to your previous speed.
+[*][B]Clearer skill targeting[/B]. The reticle shows whether a lemming can accept the selected skill. In a crowd, clicks now favour the lemming approaching you over one walking away, so you rarely tag the wrong lemming by accident. Prefer the old strict-nearest behaviour? It's a toggle in Settings.
+[*][B]Keyboard and controller controls[/B]. Remappable controller bindings, direct skill shortcuts, visible shortcut letters and quick access to pause, hints and menus.
+[*][B]Help over the actual level.[/B] Pause and display keyboard commands over the scene. All 292 official Classic-family levels, plus all 60 Oh Yes! conversions, have tiered hints and verified solution routes.
+[*][B]Saved attempts[/B]. Escape saves your attempt and returns to the menu. Interrupted runs, including fan-level queues, can be recovered and resume paused.
+[*][B]Reasons to revisit levels[/B]. Stars, personal bests, career awards, local records and replays, with verified routes behind supported rescue targets.
+[*][B]Accessibility options[/B]. Scalable menus, reduced motion and flashes, pause on interruption, and clearer keyboard focus and control names.
+[/LIST]
+[ATTACH type="full" size="2946x1826"]2663475[/ATTACH]
 
-[b]Fixed[/b]
+[B]Where it stands: 1.1 RC2 (!)[/B]
 
-[list]
-[*]Build targeting no longer sticks to a builder that cannot take another brick, so the lemmings behind it stay selectable.
-[*]Nuking before the first lemming drops now ends the level straight away.
-[*]After a clear, Return goes on to the next level instead of retrying.
-[*]The selected-lemming glow is actually visible now, and the skill icon beside the cursor keeps its size at every zoom.
-[*]The Mac and Amiga sound sets finally have a Yippee.
-[/list]
+Changes since beta 32
 
-[b]Where it stands[/b]
+[b]Official Classic campaign[/b]
+[LIST]
+[*]The official Classic campaign is complete: all 292 official levels (Lemmings, Oh No! More Lemmings, both Xmas releases, both Holiday releases) have verified winning routes, up from 238/292 at beta 32.
+[*]All 60 Oh Yes! More Lemmings conversions (Amiga versus and Mega Drive Sunsoft levels) now have verified winning routes.
+[*]Oh No!, Xmas and Holiday now run the later DOS rules for those releases: new lemmings leave a hatch one pixel further right, two-hatch levels alternate hatches in turn (A, B, A, B), and a shrugging builder keeps shrugging when given a climber. Original Lemmings is unchanged. Some routes that worked in earlier betas no longer work in these levels under the corrected rules.
+[*]Fan levels no longer need a winning route for Classic 1.0; they must load, render and start. All 6,020 retained fan levels do. Route verification for 6000+ levels is extremely costly to do, so for now just assume they are winnable under the current engine. If not, report back!
+[*]Hints and solution replays cover all 292 official levels and all 60 conversions.
+[*]We tried a stricter steel rule (a destruction mask could no longer clear a steel pixel it briefly overlapped) and reverted it before this candidate. It was correct in isolation, but it broke 57 of the 352 routes above, and we have no way to re-solve that many levels in one pass. All 352 routes are verified again on this build. The stricter steel rule is separate follow-up work.
+[/LIST]
 
-The Classic campaign and all 60 Oh Yes! conversions still have verified winning routes for every level: 352 in total, all re-checked against this release's engine. Lemmings 2 and Lemmings 3 are still playable previews that need wider comparison with the original games.
+[b]Approaching-lemming targeting[/b]
+[LIST]
+[*]New setting, on by default: when a click is ambiguous between two lemmings walking toward each other, the game now favors the one approaching your click over the one walking away from it, and favors a lemming following a builder over the builder itself. Turn it off in Settings if you prefer the old strict nearest-lemming behavior.
+[*]Applies across Classic, Lemmings 2 and Lemmings 3, and to mouse, keyboard and gamepad assignment alike.
+[*]The selected lemming under your cursor now has a subtle highlight glow, and the active skill shows a small badge on the cursor.
+[*]A lemming that receives a skill flashes with a brief acknowledgement pulse.
+[/LIST]
 
-This is a universal app for [b]Intel and Apple silicon, running macOS 12.3 or later[/b].
+[b]Rewind and forward transport[/b]
+[LIST]
+[*]Solution replay and Hot Seat now have transport controls: rewind, pause, and step forward again after a rewind, in Classic, Lemmings 2 and Lemmings 3.
+[*]Rewinding and stepping forward has its own audio cues and a visible transport state on screen.
+[*]Held keys scrub the timeline using the keys next to your rewind/forward bindings, and shifted punctuation keys are accepted for players on non-US keyboard layouts.
+[*]Rewinding back to the exact point you started from now cleanly cancels the rewind instead of leaving it half-active.
+[/LIST]
 
-[b]Things I'd love you to try[/b]
+[b]Sequel progress (preview only)[/b]
+[LIST]
+[*]Lemmings 2 has verified routes for 73 of 120 levels, including the first complete ten-level tribe chain (Cavelems).
+[*]Lemmings 3 has verified routes for 41 of 90 levels, from a new L3 solver.
+[*]No sequel engine physics changed. Both games remain preview status pending wider original-engine comparison.
+[*]Fixed a Lemmings 2 Macintosh-artwork rendering bug: liquid no longer stops filling partway up a column that already has terrain below it.
+[/LIST]
 
-Update from 1.5 and check that your soundtrack is all still there. Earn a skip and use it on your nemesis level. Zoom in on a horrible crowd. Try the new pause in a quiet moment. Download a soundtrack library you have never heard.
+[b]Saved runs and Hot Seat[/b]
+[LIST]
+[*]A saved run no longer breaks when a later build changes the engine. Restore no longer depends on matching the whole-engine fingerprint: it replays under the current rules, then the rules the run started with, then continues from the saved engine state. This includes Hot Seat games. If an earlier build showed Cannot restore run, retry Resume Saved Run on this build instead of discarding it.
+[*]You can delete a player. Deletion removes that player's progress, saved runs, scores, records and achievements, and cannot be undone.
+[*]Changes to a player's initials and portrait save immediately.
+[*]Add player adds a player without switching to them.
+[*]The Hot Seat page has + New player (or press N).
+[*]If the records file cannot be read, select Fix records, or Start new records, if that still fails. The unreadable file stays in the records folder.
+[/LIST]
 
-If something breaks, please tell me your Mac model, macOS version, game and level, and whether you were using a mouse, trackpad, keyboard or controller. Trackpad and Magic Mouse zoom reports are especially welcome, and so are reports from Intel Macs and older macOS versions.
+[b]Gameplay and display fixes[/b]
+[LIST]
+[*]A lemming walking up a slope into an exit is now saved; before, the slope could lift it out of the exit before it reached the middle.
+[*]Classic explosion countdown digits are white and bold again.
+[*]Macintosh-style artwork no longer scrambles small level objects, such as the entrance hatch, on some displays.
+[*]Oh No! Havoc 20 now plays as in the original game: lemmings from the left hatch land on the ledges in the narrow shaft instead of falling to the bottom.
+[*]The CRT effect's intensity slider now scales corner rounding, color convergence, vignette, saturation and brightness together, instead of curvature alone, so partial strength looks consistent end to end.
+[*]Edge scrolling now works right up to the CRT view's curved corners; before, the rounded-corner mask silently blocked edge scrolling near the very edge of the screen.
+[*]In-game views now show a custom pointer instead of the system cursor. If you see the plain system arrow inside the game area, that is a bug: tell us where.
+[*]Opening Settings or another in-game page no longer leaves the Classic playfield's pointer capture active underneath it, so the page's own buttons, such as Settings' "Use OG settings", now click reliably every time.
+[*]Removed the gameplay hover help popups.
+[*]A run that can no longer reach its rescue requirement now shows a distinct "unrecoverable" mood instead of playing out silently to a loss.
+[*]Finished the cross-port DJ soundtrack: every release now has full adaptive-mix music coverage, with improved seasonal playback and mixing.
+[/LIST]
 
-[b][url="https://github.com/ErikVeland/Lemmings/releases/tag/v1.6.0"][size=7]Download Ultimate Lemmings 1.6.0[/size][/url][/b]
+This is a real-device candidate: report your exact Mac model, macOS version,
+and whether it is Intel or Apple silicon on every report.
+[LIST]
+[*]Update from a beta 32 or RC1 install and confirm your saved runs, Hot Seat games and records carry forward without a Cannot restore run error.
+[*]Play any level with Macintosh-style artwork enabled and confirm the entrance hatch and other small objects render cleanly, especially on an external or non-Retina display.
+[*]Play Oh No! Havoc 20, Havoc 5 and Wild 9, and any two-hatch Oh No! or Holiday level. Check that lemmings leave hatches in alternating turn.
+[*]Open hints and solution replays in Oh No!, Xmas and Holiday levels, and in Oh Yes! More Lemmings conversions. Check that each replay wins.
+[*]Add, rename and delete players. Confirm each player keeps only their own progress and records, and a deleted player's saves do not return.
+[*]Try the new approaching-lemming targeting in a crowd of crossing lemmings, in Classic, L2 and L3, with a mouse, keyboard and gamepad. Turn it off in Settings and confirm the old nearest-lemming behavior comes back.
+[*]Watch for the assignment pulse on the lemming you give a skill to, and confirm the game's own pointer shows inside the playfield instead of the system arrow.
+[*]In Classic, open Settings mid-game and confirm its buttons, including "Use OG settings", click on the first try.
+[*]Use rewind and forward transport during a solution replay and during a live Hot Seat turn, including rewinding all the way back to your start point. Check the audio cues and on-screen state match what you did.
+[*]Drag the CRT intensity slider from 0 to full and confirm the corners, color and brightness change together smoothly. Try edge scrolling right into a curved screen corner.
+[*]Monterey testers: launch on macOS 12.3 or later, play all three engines, and check sound, fullscreen, speed changes, save/resume and replay export.
+[*]Game Center testers: connect, submit a score, improve it offline, reconnect, and switch local players. DM me if you want to be on the Game Center track.
+[*]Report frame pacing and stability during long or fast-forwarded sessions, particularly on Intel hardware.
+[/LIST]
 
-New players: [b]UltimateLemmings-1.6-build51-slim.zip[/b] (150 MB)
-Upgrading by hand: [b]UltimateLemmings-1.6-build51.zip[/b] (1.9 GB, every soundtrack included)
-Intel and Apple silicon • macOS 12.3 or later
+[b]Known limits[/b]
+
+Lemmings 2 has preserved wins for 73 of 120 levels and Lemmings 3 for 41 of 90; both remain preview status. Physical Intel, minimum macOS, HDR, multiple displays and sustained performance are what this candidate exists to test, they are not yet established. Live Game Center services under network loss, full VoiceOver listening journeys and physical controller journeys still need tester validation. Two known bugs remain open from before this candidate: toggling Macintosh-style Lemmings 2 artwork on then off does not always restore the exact original frame, and one controller button-combo sequence (retry, rewind and step together) does not route correctly. Both are unrelated to the changes above.
+
+[B]Why I’m still working on it[/B]
+
+I cannot emphasise enough how well this game has held up.
+
+We are playing it NOW, laughing out loud at how we are fkking up levels and solutions, then cheering when something finally works. The Hot Seat features came directly out of those evenings. It is pure joy to play still and I am sad this IP was left on the vine to die (we speak not of the current gacha mobile games).
+
+For me, this is as much fun in 2026 as it was in 1992. Lemmings is a ridiculously good game, and I want more people to have that experience again.
+
+[URL unfurl="true"]https://github.com/ErikVeland/Lemmings/releases/tag/v1.5.0[/URL]

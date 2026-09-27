@@ -2603,6 +2603,74 @@ extension AppDelegate {
       "The family route opened a stale pack after catalogue availability changed")
     print("PASS home families filter the typed catalogue without changing release identities")
   }
+  fileprivate func testClassicRatingBrowser() async throws {
+    GameScreen.shared.dismissAll()
+    func descendants(of view: NSView) -> [NSView] {
+      [view] + view.subviews.flatMap { descendants(of: $0) }
+    }
+    let originalLevelSelections = levelBrowserLevelSelections
+    defer {
+      GameScreen.shared.dismissAll()
+      levelBrowserLevelSelections = originalLevelSelections
+    }
+
+    let names = ["Fun", "Tricky", "Taxing", "Mayhem"]
+    var ranksByLevelID: [String: String] = [:]
+    let entries = names.enumerated().flatMap { rankIndex, rank in
+      (0..<30).map { levelIndex in
+        let levelID = "\(rankIndex)-\(levelIndex)"
+        ranksByLevelID[levelID] = rank
+        return LevelCatalogueEntry(
+          identity: .init(engine: .classic, packID: "classic-ratings", levelID: levelID),
+          packName: "Lemmings",
+          levelName: "\(rank) \(levelIndex + 1)",
+          number: rankIndex * 30 + levelIndex + 1,
+          status: .complete)
+      }
+    }
+    let pack = LevelCataloguePack(
+      engine: .classic, id: "classic-ratings", name: "Lemmings",
+      status: .complete, levels: entries)
+    let ratings = Self.classicBrowserRatings(in: pack) {
+      ranksByLevelID[$0.identity.levelID]
+    }
+    try check(ratings.map(\.name) == names,
+      "Classic ratings did not keep their original order and names")
+
+    presentClassicRatingBrowser(pack: pack, ratings: ratings)
+    guard let ratingPage = GameScreen.shared.controllerPage(in: window) as? GameMenuPage,
+          let fun = descendants(of: ratingPage).compactMap({ $0 as? NSButton })
+            .first(where: { $0.title == "Fun  30 levels" }),
+          let tricky = descendants(of: ratingPage).compactMap({ $0 as? NSButton })
+            .first(where: { $0.title == "Tricky  30 levels" }) else {
+      throw IntegrationFailure(message: "Classic release did not open its rating browser")
+    }
+    window.contentView?.layoutSubtreeIfNeeded()
+    try check(ratingPage.controllerInitialControl === fun
+      && tricky.isEnabled,
+      "Classic rating browser did not expose Fun and Tricky as direct choices")
+    ratingPage.displayIfNeeded()
+    let bitmap = ratingPage.bitmapImageRepForCachingDisplay(in: ratingPage.bounds)!
+    ratingPage.cacheDisplay(in: ratingPage.bounds, to: bitmap)
+    let capture = URL(fileURLWithPath: ".build/classic-rating-browser.png")
+    try FileManager.default.createDirectory(
+      at: capture.deletingLastPathComponent(), withIntermediateDirectories: true)
+    try bitmap.representation(using: .png, properties: [:])!.write(to: capture)
+    fun.performClick(nil)
+    guard let levelPage = GameScreen.shared.controllerPage(in: window) as? GameMenuPage,
+          levelPage !== ratingPage,
+          let levelCarousel = descendants(of: levelPage)
+            .compactMap({ $0 as? LevelCoverFlowView }).first else {
+      throw IntegrationFailure(message: "Classic rating did not open its level browser")
+    }
+    window.contentView?.layoutSubtreeIfNeeded()
+    try check(levelCarousel.selectedItem?.detail.hasPrefix("Fun 1/30") == true,
+      "Classic level browser lost its selected rating and local level number")
+    let controls = descendants(of: ratingPage).compactMap { $0 as? NSButton }
+    try check(controls.allSatisfy { $0.frame.width >= 44 && $0.frame.height >= 44 },
+      "Classic rating browser has an undersized input target")
+    print("PASS Classic releases restore rating selection before level selection")
+  }
   fileprivate func testLevelBrowserRouteIntegrity() async throws {
     GameScreen.shared.dismissAll()
     let folder = URL(fileURLWithPath: ".build/content-browser")
@@ -4359,6 +4427,7 @@ Task { @MainActor in
     try await subject.testHintsFromControlsHelp()
     print("Level hints integration tests passed.")
     #elseif CONTENT_BROWSER_TESTS
+    try await subject.testClassicRatingBrowser()
     try await subject.testLevelBrowserRouteIntegrity()
     try await subject.testPlaylistStartRevalidatesFanSources()
     try subject.testSequenceNavigationGuards()
