@@ -10,9 +10,8 @@ public struct SkillShortcuts {
     /// floater takes U for umbrella.
     public static let preferredLetters: [String: String] = ["floater": "u"]
 
-    /// `i` is reserved because it opens the level hints. Without it a skill can be
-    /// handed `i` as a fallback and its shortcut silently stops working.
-    public init(names: [String], reserved: String = "zqnrpfxi") {
+    /// H opens hints; I remains an alias. Reserve both from skill bindings.
+    public init(names: [String], reserved: String = "zqnrpfxih") {
         var used = Set(reserved.map(String.init))
         var result = [String?](repeating: nil, count: names.count)
         let candidates = names.map { $0.lowercased().filter { $0.isASCII && $0.isLetter }.map(String.init) }
@@ -29,7 +28,7 @@ public struct SkillShortcuts {
             }
         }
         letters = result
-        initials = candidates.map { $0.first }
+        initials = candidates.map { row in row.first.flatMap { reserved.contains($0) ? nil : $0 } }
     }
 
     /// Resolves a key press, cycling when several skills share an initial.

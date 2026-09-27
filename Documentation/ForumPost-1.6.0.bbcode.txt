@@ -1,0 +1,78 @@
+[img]https://iili.io/nBbFOwF.jpg[/img]
+
+[b]Ultimate Lemmings 1.6.0 is out.[/b]
+
+Quick recap for anyone new: Ultimate Lemmings is an unofficial native macOS app that brings classic Lemmings, Oh No! More Lemmings, the Xmas and Holiday releases, Oh Yes! More Lemmings, Lemmings 2: The Tribes and Lemmings 3 into one place. It reads the original game data and runs its own engines, so all the games share profiles, controls, Hot Seat, saves and records.
+
+1.5 was about getting everything in. 1.6 is about the evenings you actually spend with it: a DJ that mixes on the beat, a way past the level that has beaten you nine times in a row, and a zoom for the moment you need to see exactly which lemming you are about to doom.
+
+[b]If you already have 1.5[/b]
+
+The update is already waiting for you. 1.5 shows the release notes and asks before it installs. You keep every soundtrack you already had. All 495 versions come with the update, so you do not download any of them again. Your saves, profiles, playlists and Hot Seat games carry across.
+
+[b]The DJ learned to count[/b]
+
+[list]
+[*][b]Mixes on the beat.[/b] Every one of the 495 music versions now has measured timing. Where the beat and bars are stable, the DJ mixes on them with gentle tempo matching instead of just fading. Where they are not, it uses a short fade rather than a trainwreck.
+[*][b]The music knows how you are doing.[/b] It changes when you meet the rescue target. Lose the level for good and the tune plays on in funeral mood, right through the result screen.
+[*][b]Pause like a turntable.[/b] Pause brakes the music like a hand on a record, with a little reverb tail, and play spins it back up. Turn on [b]Keep the rhythm[/b] and pause drops to just the drums instead.
+[*][b]Speed you can hear.[/b] At higher game speeds the music rises in pitch without speeding up, up to 1.35× at 10×.
+[/list]
+
+[b]A much smaller download, if you are new[/b]
+
+The fresh download is now [b]150 MB[/b] instead of almost 2 GB. It includes the 54 essential versions: the original modules and the Professor Mariarti theme. The other 441 versions are in 18 optional libraries, 1.81 GB altogether. Pick the ones you want on first launch, or later in [b]Settings > Audio > Download soundtracks[/b]. You can keep playing while they download.
+
+[b]Level skips[/b]
+
+Everyone has a level. You know the one.
+
+Every third level you finish with three stars, without rewind or undo, earns you a skip. Fail a campaign level and [b]Skip level[/b] appears next to Try again. The skipped level stays unbeaten: no stars, no medal. Go back and beat it later and you get the skip back.
+
+It works in all three games. Finales cannot be skipped. In Hot Seat, the player who failed pays for the skip and the turn passes on, so nobody can skip their way into keeping the seat. Old school mode hides skips along with the other modern help.
+
+[b]Precision Zoom[/b]
+
+[list]
+[*]Press [b]Z[/b], or scroll up over the playfield, for 2× zoom right at the cursor. On a trackpad or Magic Mouse it follows your scrolling direction setting.
+[*][b]Shift-Z[/b] is Superzoom: 2× zoom with the game at half speed, for the truly desperate.
+[*]Zooms are earned, not free. Career stars earn Zoom and three-star levels earn Superzoom. A little badge on the playfield shows how many you have left.
+[*][b]Heads up:[/b] Z no longer rewinds. Comma and full stop step backward and forward.
+[/list]
+
+[b]Sessions, and a few quality-of-life bits[/b]
+
+[list]
+[*][b]Playlists[/b] on the home screen now opens all your saved playlists and the creation tools in one place.
+[*][b]New solo[/b] and [b]New Hot Seat[/b] save the session you are in before starting another, so you can keep several campaigns and shared games going at once.
+[*]The death counter is now a compact fraction with a skull, so you can see at a glance how many more you can afford to lose.
+[*]The home screen counts how many lemmings you have saved on this Mac. [b]Settings > Play Insights[/b] shows your local play counts. Sharing is off, and this build has no service to send anything to, so nothing leaves your Mac.
+[/list]
+
+[b]Fixed[/b]
+
+[list]
+[*]Build targeting no longer sticks to a builder that cannot take another brick, so the lemmings behind it stay selectable.
+[*]Nuking before the first lemming drops now ends the level straight away.
+[*]After a clear, Return goes on to the next level instead of retrying.
+[*]The selected-lemming glow is actually visible now, and the skill icon beside the cursor keeps its size at every zoom.
+[*]The Mac and Amiga sound sets finally have a Yippee.
+[/list]
+
+[b]Where it stands[/b]
+
+The Classic campaign and all 60 Oh Yes! conversions still have verified winning routes for every level: 352 in total, all re-checked against this release's engine. Lemmings 2 and Lemmings 3 are still playable previews that need wider comparison with the original games.
+
+This is a universal app for [b]Intel and Apple silicon, running macOS 12.3 or later[/b].
+
+[b]Things I'd love you to try[/b]
+
+Update from 1.5 and check that your soundtrack is all still there. Earn a skip and use it on your nemesis level. Zoom in on a horrible crowd. Try the new pause in a quiet moment. Download a soundtrack library you have never heard.
+
+If something breaks, please tell me your Mac model, macOS version, game and level, and whether you were using a mouse, trackpad, keyboard or controller. Trackpad and Magic Mouse zoom reports are especially welcome, and so are reports from Intel Macs and older macOS versions.
+
+[b][url="https://github.com/ErikVeland/Lemmings/releases/tag/v1.6.0"][size=7]Download Ultimate Lemmings 1.6.0[/size][/url][/b]
+
+New players: [b]UltimateLemmings-1.6-build51-slim.zip[/b] (150 MB)
+Upgrading by hand: [b]UltimateLemmings-1.6-build51.zip[/b] (1.9 GB, every soundtrack included)
+Intel and Apple silicon • macOS 12.3 or later

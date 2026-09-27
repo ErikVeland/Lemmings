@@ -93,8 +93,8 @@ enum ClassicLiquidFill {
         for column in left..<right {
             for row in max(0, y)..<height {
                 let p = (row * width + column) * 4
-                // A pool ends at its floor, including newly built terrain.
-                if solid[(row / scale) * (width / scale) + column / scale] != 0 { break }
+                // Terrain hides the liquid locally; bridges must not cut off the column below.
+                if solid[(row / scale) * (width / scale) + column / scale] != 0 { continue }
                 guard row >= top, pixels[p + 3] == 0 else { continue }
                 pixels[p] = UInt8((colour >> 16) & 255)
                 pixels[p + 1] = UInt8((colour >> 8) & 255)

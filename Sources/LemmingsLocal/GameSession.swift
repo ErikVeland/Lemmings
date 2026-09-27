@@ -45,6 +45,8 @@ protocol GameSession: AnyObject {
   var remainingSeconds: Int? { get }
   var isComplete: Bool { get }
   var didWin: Bool { get }
+  /// True while the remaining active and unreleased lemmings can still meet the target.
+  var canStillReachRequirement: Bool { get }
   var isNuking: Bool { get }
 
   var skills: [SessionSkill] { get }
@@ -71,9 +73,15 @@ protocol GameSession: AnyObject {
   @discardableResult func rewind(seconds: Double) -> Bool
   @discardableResult func stepBackward() -> Bool
   @discardableResult func stepForward() -> Bool
+  /// Commits the current point before live play, without changing forward scrubbing.
+  func resumeFromRewind()
 }
 
 extension GameSession {
+  var canStillReachRequirement: Bool {
+    !FailureMoodDecision.isUnrecoverable(saved: saved, active: lemmings.count,
+      unreleased: total - released, required: required)
+  }
   func canAssign(skillIndex: Int, to lemmingID: Int) -> Bool {
     assignmentState(skillIndex: skillIndex, to: lemmingID) == .eligible
   }
@@ -92,6 +100,7 @@ extension GameSession {
   var nukeCount: Int { 0 }
   var rewindCount: Int { 0 }
   var undoCount: Int { 0 }
+  func resumeFromRewind() {}
 }
 
 // MARK: - Classic DOS
@@ -127,7 +136,7 @@ final class ClassicSession: GameSession {
   }
 
   var recoveryEvents: [ClassicDOSReplayEvent] {
-    history.commands.map { ClassicDOSReplayEvent(tick: $0.tick, action: $0.action, afterTick: true) }
+    history.appliedCommands.map { ClassicDOSReplayEvent(tick: $0.tick, action: $0.action, afterTick: true) }
   }
 
   /// Continue a saved run. A build must never strand a saved run, so this
@@ -212,6 +221,8 @@ final class ClassicSession: GameSession {
     tick()
     return true
   }
+
+  func resumeFromRewind() { history.resumeFromCurrentTick() }
 
   var ticksPerSecond: Int { ClassicDOSRules.ticksPerSecond }
 

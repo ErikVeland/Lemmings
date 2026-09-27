@@ -12,8 +12,25 @@ func require(_ value: Bool, _ message: String) throws {
   }
   try require(ExplosionHDR.headroom(1) == 1 && ExplosionHDR.headroom(12) == 8 && ExplosionHDR.headroom(.nan) == 1,
     "display headroom is not bounded")
+  let host = NSWindow(contentRect: CGRect(x: 0, y: 0, width: 1600, height: 1000),
+    styleMask: [.titled], backing: .buffered, defer: false)
+  let idle = ExplosionHDRView(frame: host.contentView!.bounds)
+  host.contentView?.addSubview(idle)
+  idle.layout()
+  idle.update([], force: true)
+  try require(!idle.hasAllocatedFlashMask, "An idle full-screen overlay allocated an HDR mask")
+  idle.update([.init(rect: CGRect(x: 10, y: 10, width: 4, height: 4), strength: 1)])
+  try require(idle.hasAllocatedFlashMask, "An active flash did not allocate its mask")
+  idle.clear()
+  try require(!idle.hasAllocatedFlashMask && idle.layer?.isHidden == true,
+    "Clearing the last flash left an idle mask or visible frame")
+  print("PASS idle HDR overlay skips masks and clears the last effect")
   let flashes = [ExplosionFlash(rect:CGRect(x:1,y:1,width:2,height:2),strength:1,expiresAt:20),
                  ExplosionFlash(rect:CGRect(x:5,y:5,width:1,height:1),strength:0.5,expiresAt:20)]
+  let combined = ExplosionHDR.textureMask(width: 8, height: 8, flashes: flashes, now: 10)
+  let expected = zip(ExplosionHDR.mask(width: 8, height: 8, flashes: flashes, now: 10),
+    ExplosionHDR.mask(width: 8, height: 8, flashes: flashes, now: 10, tint: .green)).flatMap { [$0, $1] }
+  try require(combined == expected, "Interleaved HDR mask changed its channels")
   let mask = ExplosionHDR.mask(width:8,height:8,flashes:flashes,now:10)
   try require(mask.filter {$0>0}.count == 5, "HDR mask escaped the explosion core")
   try require(ExplosionHDR.mask(width:8,height:8,flashes:flashes,now:20).allSatisfy {$0 == 0},

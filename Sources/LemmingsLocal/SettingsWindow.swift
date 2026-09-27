@@ -6,11 +6,13 @@ import NxlvKit
   private var page: GameMenuPage?
   private var options: ClassicSettingsOptions
   private var settings: ClassicSettings
+  private let telemetry: AnonymousTelemetry
 
   /// Called whenever a choice changes, so the game can follow immediately.
   var onChange: ((ClassicSettings) -> Void)?
 
   private var presetPopUp: NSPopUpButton?
+  private var experiencePopUp: NSPopUpButton?
   private var graphicsPopUp: NSPopUpButton?
   private var depthPopUp: NSPopUpButton?
   private var displayPopUp: NSPopUpButton?
@@ -24,12 +26,18 @@ import NxlvKit
   private var soundSlider: NSSlider?
   private var graphicsShuffleCheck: NSButton?
   private var musicShuffleCheck: NSButton?
+  private var pauseBeatCheck: NSButton?
   private var sequelArtworkCheck: NSButton?
   private var pointerCaptureCheck: NSButton?
   private var modernControlsCheck: NSButton?
   private var variableSpeedCheck: NSButton?
   private var interruptionCheck: NSButton?
+  private var reticleCountCheck: NSButton?
+  private var skillCursorSizePopUp: NSPopUpButton?
   private var favorApproachingCheck: NSButton?
+  private var favorBombBlockersCheck: NSButton?
+  private var favorBuildersCheck: NSButton?
+  private var levelSelectionPopUp: NSPopUpButton?
   private var controllerCheck: NSButton?
   private var controllerTapCheck: NSButton?
   private var controllerSwapCheck: NSButton?
@@ -43,13 +51,16 @@ import NxlvKit
   private var hdEffectsCheck: NSButton?
   private var hdrFlashCheck: NSButton?
   private var djSoundtracksCheck: NSButton?
+  private var telemetryCheck: NSButton?
 
   /// Whether the tube simulation is in the live drawing path.
   var videoIsConnected = true
 
-  init(settings: ClassicSettings, options: ClassicSettingsOptions) {
+  init(settings: ClassicSettings, options: ClassicSettingsOptions,
+       telemetry: AnonymousTelemetry = .shared) {
     self.settings = options.correcting(settings)
     self.options = options
+    self.telemetry = telemetry
     super.init()
     NotificationCenter.default.addObserver(self, selector: #selector(refreshSequelArtwork),
                                           name: SequelArtworkPreference.changed, object: nil)
@@ -78,6 +89,7 @@ import NxlvKit
     tabs.addTabViewItem(tab("Graphics", graphicsPane()))
     tabs.addTabViewItem(tab("Video", videoPane()))
     tabs.addTabViewItem(tab("Audio", audioPane()))
+    tabs.addTabViewItem(tab("Privacy", privacyPane()))
     tabs.addTabViewItem(tab("Accessibility", accessibilityPane()))
     tabs.translatesAutoresizingMaskIntoConstraints = false
     page.body.addSubview(tabs)
@@ -102,7 +114,7 @@ import NxlvKit
   // MARK: - Building panes
 
   /// Lays out labelled rows down a pane.
-  private func pane(_ rows: [(String, NSView)]) -> NSView {
+  private func pane(_ rows: [(String, NSView)], spacing: CGFloat = 22) -> NSView {
     let container = NSView()
     var previous: NSView?
     for (label, control) in rows {
@@ -125,7 +137,7 @@ import NxlvKit
           equalTo: container.trailingAnchor, constant: -18),
         control.topAnchor.constraint(
           equalTo: previous?.bottomAnchor ?? container.topAnchor,
-          constant: previous == nil ? 32 : 22),
+          constant: previous == nil ? 32 : spacing),
       ])
       previous = control
     }
@@ -149,6 +161,18 @@ import NxlvKit
   }
 
   private func gameplayPane() -> NSView {
+    let experience = popUp(#selector(experienceChanged))
+    experience.addItems(withTitles: ClassicExperiencePreset.allCases.map(\.title))
+    experience.setAccessibilityLabel("Gameplay preset")
+    experiencePopUp = experience
+    let count = GameCheckButton(title: "Show lemming count", target: self, action: #selector(reticleCountChanged))
+    count.state = settings.showReticleCount ? .on : .off
+    reticleCountCheck = count
+    let iconSize = popUp(#selector(skillCursorSizeChanged))
+    iconSize.addItems(withTitles: SkillCursorIconSize.allCases.map(\.title))
+    iconSize.selectItem(at: SkillCursorIconSize.allCases.firstIndex(of: settings.skillCursorIconSize) ?? 1)
+    iconSize.setAccessibilityLabel("Skill icon size")
+    skillCursorSizePopUp = iconSize
     let modern = GameCheckButton(title: "Modern keyboard controls", target: self, action: #selector(modernControlsChanged))
     modernControlsCheck = modern
     let variable = GameCheckButton(title: "Variable speed: 2×, 3×, 5×, 10×", target: self, action: #selector(variableSpeedChanged))
@@ -160,17 +184,38 @@ import NxlvKit
     favorApproaching.toolTip = "When a click could match more than one lemming, pick the one still approaching. Skip the one that already turned away."
     favorApproaching.state = settings.favorApproachingLemmings ? .on : .off
     favorApproachingCheck = favorApproaching
+    let bombBlockers = GameCheckButton(title: "Favor blockers for bombs", target: self, action: #selector(favorBombBlockersChanged))
+    bombBlockers.state = settings.favorBombBlockers ? .on : .off
+    favorBombBlockersCheck = bombBlockers
+    let builders = GameCheckButton(title: "Favor current builders for Build", target: self, action: #selector(favorBuildersChanged))
+    builders.state = settings.favorBuilders ? .on : .off
+    favorBuildersCheck = builders
+    let targeting = NSStackView(views: [favorApproaching, bombBlockers, builders])
+    targeting.orientation = .vertical; targeting.alignment = .leading; targeting.spacing = 8
+    let levelSelection = popUp(#selector(levelSelectionChanged))
+    levelSelection.addItems(withTitles: ["Player Unlocked", "All"])
+    levelSelection.setAccessibilityLabel("Level selection")
+    levelSelection.toolTip = "Choose which Classic levels are available for direct selection."
+    levelSelection.selectItem(at: settings.unlockAllClassicLevels ? 1 : 0)
+    levelSelectionPopUp = levelSelection
     variable.toolTip = SpeedPanelControls.help
-    let og = GameButton(title: "Use OG settings", target: self, action: #selector(useOGSettings))
-    let defaults = GameButton(title: "Use modern defaults", target: self, action: #selector(useModernDefaults))
-    let buttons = NSStackView(views: [og, defaults]); buttons.orientation = .horizontal; buttons.spacing = 16
-    og.toolTip = "Restore fixed fast-forward, number keys and original presentation. Saves and volume choices stay as set."
     modern.state = settings.modernControlsEnabled ? .on : .off
     variable.state = settings.variableSpeedEnabled ? .on : .off
     variable.isEnabled = settings.modernControlsEnabled
-    return pane([("Controls", modern), ("Speed", variable), ("Pause", interruption), ("Targeting", favorApproaching), ("Experience", buttons)])
+    return pane([
+      ("Preset", experience), ("Controls", modern), ("Speed", variable), ("Pause", interruption),
+      ("Targeting", targeting), ("Skill icon", iconSize), ("Reticule", count), ("Level Select", levelSelection),
+    ], spacing: 14)
   }
 
+  @objc private func reticleCountChanged(_ sender: NSButton) {
+    settings.showReticleCount = sender.state == .on
+    changed()
+  }
+  @objc private func skillCursorSizeChanged(_ sender: NSPopUpButton) {
+    settings.skillCursorIconSize = SkillCursorIconSize.allCases[sender.indexOfSelectedItem]
+    changed()
+  }
   @objc private func modernControlsChanged(_ sender: NSButton) {
     settings.modernControlsEnabled = sender.state == .on
     variableSpeedCheck?.isEnabled = settings.modernControlsEnabled
@@ -184,8 +229,25 @@ import NxlvKit
     settings.favorApproachingLemmings = sender.state == .on
     changed()
   }
-  @objc private func useOGSettings() { applyExperiencePreset(modern: false) }
-  @objc private func useModernDefaults() { applyExperiencePreset(modern: true) }
+  @objc private func levelSelectionChanged(_ sender: NSPopUpButton) {
+    guard (0...1).contains(sender.indexOfSelectedItem) else { return }
+    settings.unlockAllClassicLevels = sender.indexOfSelectedItem == 1
+    changed()
+  }
+  @objc private func favorBombBlockersChanged(_ sender: NSButton) {
+    settings.favorBombBlockers = sender.state == .on; changed()
+  }
+  @objc private func favorBuildersChanged(_ sender: NSButton) {
+    settings.favorBuilders = sender.state == .on; changed()
+  }
+  @objc private func experienceChanged(_ sender: NSPopUpButton) {
+    guard ClassicExperiencePreset.allCases.indices.contains(sender.indexOfSelectedItem) else { return }
+    switch ClassicExperiencePreset.allCases[sender.indexOfSelectedItem] {
+    case .original: applyExperiencePreset(modern: false)
+    case .modern: applyExperiencePreset(modern: true)
+    case .custom: settings.experiencePreset = .custom; changed()
+    }
+  }
   private func controllerPane() -> NSView {
     let enabled = GameCheckButton(title: "Enable gamepad controls", target: self, action: #selector(controllerChanged))
     let tap = GameCheckButton(title: "Tap RT to toggle fast-forward; hold RT for a temporary boost", target: self, action: #selector(controllerTapChanged))
@@ -263,7 +325,7 @@ import NxlvKit
   private func applyExperiencePreset(modern: Bool) {
     settings.applyExperiencePreset(modern: modern)
     SequelArtworkPreference.setEnabled(modern)
-    rebuildSources(); markCustom(); changed()
+    rebuildSources(); markCustom(); changed(customizeExperience: false)
   }
 
   private func graphicsPane() -> NSView {
@@ -296,6 +358,7 @@ import NxlvKit
 
   @objc private func sequelArtworkChanged(_ sender: NSButton) {
     SequelArtworkPreference.setEnabled(sender.state == .on)
+    changed()
   }
 
   @objc private func refreshSequelArtwork() {
@@ -390,22 +453,77 @@ import NxlvKit
     let mixes = GameCheckButton(title: "Include L2, L3 and other ports", target: self, action: #selector(djSoundtracksChanged))
     mixes.state = settings.djIncludesOtherSoundtracks ? .on : .off
     djSoundtracksCheck = mixes
-    let folders = GameButton(title: "Open Soundtrack Folder", target: self, action: #selector(openSoundtrackFolder))
+    let folders = GameButton(title: "Download soundtracks", target: self, action: #selector(openMusicLibraries))
+    let beat = GameCheckButton(title: "Keep the rhythm", target: self, action: #selector(pauseBeatChanged))
+    beat.setAccessibilityLabel("Pause: Keep the rhythm")
+    beat.state = settings.pauseMusicBeatOnly ? .on : .off
+    beat.toolTip = "On pause, play only isolated percussion. Tracks without a rhythm part stop."
+    pauseBeatCheck = beat
     return pane([
       ("Music", music),
       ("Music Style", style),
       ("Music Volume", musicLevel),
       ("Shuffle", shuffle),
       ("DJ Mix", mixes),
+      ("Pause", beat),
       ("", folders),
       ("Sound Effects", sound),
       ("Effects Volume", soundLevel),
       ("Bottom Falls", falls),
-    ])
+    ], spacing: 14)
+  }
+
+  private func privacyPane() -> NSView {
+    let container = NSView()
+    let share = GameCheckButton(title: "Share play counts", target: self,
+                                action: #selector(telemetryChanged(_:)))
+    share.frame = CGRect(x: 26, y: 386, width: 720, height: 38)
+    share.state = telemetry.sharesCounts ? .on : .off
+    share.isEnabled = telemetry.endpoint != nil
+    share.setAccessibilityLabel("Share play counts")
+    telemetryCheck = share
+    container.addSubview(share)
+    let details = telemetry.endpoint == nil
+        ? ["This build has no shared counts service. Play insights show this Mac only."]
+        : ["Daily use, results, lemmings saved, solo or Hot Seat, and all music.",
+           "No names, IDs, pack names or replays are sent.",
+           "The shared saved total remains until the service owner resets it.",
+           "The service sees your network address during delivery."]
+    for (index, line) in details.enumerated() {
+      let label = GameLabel(labelWithString: line)
+      label.alignment = .left
+      label.frame = CGRect(x: 26, y: 338 - index * 36, width: 900, height: 32)
+      container.addSubview(label)
+    }
+    let insights = GameButton(title: "View play insights", target: self,
+                              action: #selector(openPlayInsights))
+    insights.frame = CGRect(x: 26, y: 170, width: 330, height: 42)
+    container.addSubview(insights)
+    let clear = GameButton(title: "Clear this Mac's counts", target: self,
+                           action: #selector(clearPlayInsights))
+    clear.frame = CGRect(x: 26, y: 106, width: 330, height: 42)
+    container.addSubview(clear)
+    return container
+  }
+
+  @objc private func telemetryChanged(_ sender: NSButton) {
+    telemetry.setSharing(sender.state == .on)
+    telemetryCheck?.state = telemetry.sharesCounts ? .on : .off
+  }
+
+  @objc private func openPlayInsights() {
+    TelemetryDashboard.shared.show(owner: page?.window)
+  }
+
+  @objc private func clearPlayInsights(_ sender: NSButton) {
+    telemetry.clearLocalCounts()
+    sender.title = "Counts cleared"
+    sender.isEnabled = false
   }
 
   /// Refills the source lists and reselects what is chosen.
   private func rebuildSources() {
+    experiencePopUp?.selectItem(at: ClassicExperiencePreset.allCases.firstIndex(of: settings.experiencePreset) ?? 2)
     graphicsPopUp?.removeAllItems()
     for option in options.graphics { graphicsPopUp?.addItem(withTitle: option.displayName) }
     if let index = options.graphics.firstIndex(of: settings.graphics) {
@@ -432,12 +550,18 @@ import NxlvKit
       at: ClassicMusicStyle.allCases.firstIndex(of: settings.musicStyle) ?? 0)
     graphicsShuffleCheck?.state = settings.shuffleGraphics ? .on : .off
     musicShuffleCheck?.state = settings.shuffleMusic ? .on : .off
+    pauseBeatCheck?.state = settings.pauseMusicBeatOnly ? .on : .off
     pointerCaptureCheck?.state = settings.confinePointer ? .on : .off
     modernControlsCheck?.state = settings.modernControlsEnabled ? .on : .off
     variableSpeedCheck?.state = settings.variableSpeedEnabled ? .on : .off
     variableSpeedCheck?.isEnabled = settings.modernControlsEnabled
     interruptionCheck?.state = settings.pauseOnInterruption ? .on : .off
+    reticleCountCheck?.state = settings.showReticleCount ? .on : .off
+    skillCursorSizePopUp?.selectItem(at: SkillCursorIconSize.allCases.firstIndex(of: settings.skillCursorIconSize) ?? 1)
     favorApproachingCheck?.state = settings.favorApproachingLemmings ? .on : .off
+    favorBombBlockersCheck?.state = settings.favorBombBlockers ? .on : .off
+    favorBuildersCheck?.state = settings.favorBuilders ? .on : .off
+    levelSelectionPopUp?.selectItem(at: settings.unlockAllClassicLevels ? 1 : 0)
     controllerCheck?.state = settings.controllerEnabled ? .on : .off
     controllerTapCheck?.state = settings.controllerTapSpeed ? .on : .off
     controllerSwapCheck?.state = settings.controllerSwapSticks ? .on : .off
@@ -451,6 +575,7 @@ import NxlvKit
     hdrFlashCheck?.isEnabled = settings.hdEffectsEnabled
     hdrFlashCheck?.state = settings.fullScreenHDRFlashes ? .on : .off
     djSoundtracksCheck?.state = settings.djIncludesOtherSoundtracks ? .on : .off
+    telemetryCheck?.state = telemetry.sharesCounts ? .on : .off
     // Shuffling needs something to choose between.
     graphicsShuffleCheck?.isEnabled = options.graphics.count > 1
     musicShuffleCheck?.isEnabled = options.music.count > 2
@@ -458,7 +583,10 @@ import NxlvKit
 
   // MARK: - Changes
 
-  private func changed() {
+  private func changed(customizeExperience: Bool = true) {
+    if customizeExperience { settings.experiencePreset = .custom }
+    experiencePopUp?.selectItem(at: ClassicExperiencePreset.allCases.firstIndex(of: settings.experiencePreset) ?? 2)
+    experiencePopUp?.needsDisplay = true
     GameAccessibility.interfaceSize = settings.interfaceSize
     GameScreen.shared.reattach()
     onChange?(settings)
@@ -486,7 +614,16 @@ import NxlvKit
     applied.shuffleMusic = settings.shuffleMusic
     applied.modernControlsEnabled = settings.modernControlsEnabled
     applied.variableSpeedEnabled = settings.variableSpeedEnabled
+    applied.showReticleCount = settings.showReticleCount
+    applied.skillCursorIconSize = settings.skillCursorIconSize
+    applied.favorApproachingLemmings = settings.favorApproachingLemmings
+    applied.favorBombBlockers = settings.favorBombBlockers
+    applied.favorBuilders = settings.favorBuilders
+    applied.experiencePreset = settings.experiencePreset
+    applied.musicStyle = settings.musicStyle
+    applied.pauseMusicBeatOnly = settings.pauseMusicBeatOnly
     applied.pauseOnInterruption = settings.pauseOnInterruption
+    applied.unlockAllClassicLevels = settings.unlockAllClassicLevels
     applied.controllerEnabled = settings.controllerEnabled
     applied.controllerTapSpeed = settings.controllerTapSpeed
     applied.controllerSwapSticks = settings.controllerSwapSticks
@@ -501,7 +638,7 @@ import NxlvKit
     settings = applied
     rebuildSources()
     presetPopUp?.selectItem(at: index + 1)
-    changed()
+    changed(customizeExperience: false)
   }
 
   @objc private func graphicsChanged(_ sender: NSPopUpButton) {
@@ -571,12 +708,19 @@ import NxlvKit
     changed()
   }
 
+  @objc private func pauseBeatChanged(_ sender: NSButton) {
+    settings.pauseMusicBeatOnly = sender.state == .on
+    changed()
+  }
+
   @objc private func openSoundtrackFolder() {
     guard let root = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first else { return }
     let folder = root.appendingPathComponent("Ultimate Lemmings/Soundtracks", isDirectory: true)
     do { try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true); NSWorkspace.shared.open(folder) }
     catch { GameScreen.shared.message("Soundtrack folder", detail: error.localizedDescription) }
   }
+
+  @objc private func openMusicLibraries() { MusicLibraryWindow.shared.show() }
 
   @objc private func pointerCaptureChanged(_ sender: NSButton) {
     settings.confinePointer = sender.state == .on

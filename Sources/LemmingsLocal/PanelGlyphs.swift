@@ -8,6 +8,8 @@ enum PanelGlyph: String {
   case pause
   case undo
   case fastForward
+  case rewind, stepBackward, stepForward
+  case settings, download
   /// Shown on the pause button while the level is held, so the button says
   /// what it will do rather than what it did.
   case play
@@ -47,6 +49,37 @@ enum PanelGlyph: String {
       return [".....####...", "...########.", "..###....###", "..##......##", "#.##........", "####........", "###.........", "####........", "#####.......", "...........#", "...#########", ".....#####.."]
     case .fastForward:
       return ["#.....#.....", "##....##....", "###...###...", "####..####..", "#####.#####.", "############", "#####.#####.", "####..####..", "###...###...", "##....##....", "#.....#.....", "............"]
+    case .rewind:
+      return PanelGlyph.fastForward.rows.map { String($0.reversed()) }
+    case .stepForward:
+      return ["#.......##", "##......##", "###.....##", "####....##", "#####...##", "######..##", "#####...##", "####....##", "###.....##", "##......##", "#.......##"]
+    case .stepBackward:
+      return PanelGlyph.stepForward.rows.map { String($0.reversed()) }
+    case .settings:
+      return [
+        "......###......",
+        "..##..###..##..",
+        ".####.###.####.",
+        ".#############.",
+        "..####...####..",
+        "...##.....##...",
+        "####.......####",
+        "#####.....#####",
+        "####.......####",
+        "...##.....##...",
+        "..####...####..",
+        ".#############.",
+        ".####.###.####.",
+        "..##..###..##..",
+        "......###......",
+      ]
+    case .download:
+      return [
+        ".....###.....", ".....###.....", ".....###.....", ".....###.....",
+        "..#..###..#..", "..#########..", "...#######...", "....#####....",
+        ".....###.....", "......#......", ".............", "##.........##",
+        "#############", "#############",
+      ]
     case .pause:
       return [
         "aaa99aa9aabbaa99999a90aaab90",
@@ -121,7 +154,7 @@ enum PanelGlyph: String {
       return Dictionary(uniqueKeysWithValues: Self.classicPalette.enumerated().map { index, colour in
         (Character(String(index, radix: 16)), (colour.red, colour.green, colour.blue))
       })
-    case .play, .fastForward, .undo:
+    case .play, .fastForward, .undo, .settings, .download, .rewind, .stepBackward, .stepForward:
       return ["#": (194, 224, 158)]
     }
   }
@@ -232,7 +265,7 @@ enum PanelGlyph: String {
 
 /// Shared speed control geometry for flat, CRT and sequel panels.
 @MainActor enum SpeedPanelControls {
-    static let help = "Click speed to toggle. Hold to boost; release to return. Arrows apply 2×, 3×, 5× or 10× immediately."
+    static let help = "Click speed to toggle. Hold to boost; release to return. Arrows apply 1×, 2×, 3×, 5× or 10× immediately."
     static func part(at point: CGPoint, in rect: CGRect) -> Int? {
         guard rect.contains(point) else { return nil }
         if point.x < rect.minX + rect.width * 0.22 { return -1 }

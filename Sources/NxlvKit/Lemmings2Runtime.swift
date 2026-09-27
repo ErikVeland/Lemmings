@@ -482,13 +482,27 @@ public struct Lemmings2Runtime: Sendable {
         default: return true
         }
     }
-    /// Hover, click and keyboard/gamepad assignment all use this same,
-    /// stable, eligible-first target selection. A follower approaching a
-    /// bridge builder is preferred when the setting is on.
-    public func target(slot: Int, x: Int, y: Int, preferApproaching: Bool = false) -> Lemming? {
+    /// Hover and input share skill priorities without changing assignment rules.
+    public func target(slot: Int, x: Int, y: Int, preferApproaching: Bool = false,
+                       preferBombBlockers: Bool = false, preferBuilders: Bool = false) -> Lemming? {
         let candidates = lemmings.filter { $0.active && $0.state != .exiting && $0.state != .exploding &&
             abs($0.x - x) <= 9 && abs($0.y - 5 - y) <= 12 }
         func distance(_ lem: Lemming) -> Int { abs(lem.x - x) + abs(lem.y - 5 - y) }
+        func nearer(_ a: Lemming, _ b: Lemming) -> Bool {
+            let da = distance(a), db = distance(b)
+            return da == db ? a.id < b.id : da < db
+        }
+        if configuration.skills.indices.contains(slot) {
+            let skill = configuration.skills[slot]
+            if preferBombBlockers, [.bomber, .blastBomber].contains(skill),
+               let blocker = candidates.filter({ $0.state == .blocking && canAssign(slot: slot, to: $0.id) }).min(by: nearer) {
+                return blocker
+            }
+            if preferBuilders, skill == .builder, !isComplete, !isNuking, supplies[slot] > 0,
+               let builder = candidates.filter({ [.building, .shrugging].contains($0.state) && canAssign(slot: slot, to: $0.id) }).min(by: nearer) {
+                return builder
+            }
+        }
         guard let nearest = candidates.min(by: { a, b in
             let eligibleA = canAssign(slot: slot, to: a.id), eligibleB = canAssign(slot: slot, to: b.id)
             if eligibleA != eligibleB { return eligibleA }

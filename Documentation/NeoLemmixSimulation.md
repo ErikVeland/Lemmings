@@ -2,7 +2,12 @@
 
 `NeoLemmixSimulation` is a deterministic, fixed-tick native engine for low-resolution NeoLemmix levels. It has no rendering dependency. The caller supplies collision masks, entrance data, trigger zones, preplaced lemmings, traits, and skill inventory.
 
-The implementation uses NeoLemmix 12.14 behavior as an oracle. It is a clean-room Swift implementation. It does not include source text or binary assets from NeoLemmix.
+The implementation uses NeoLemmix 12.14 behaviour as an oracle. The current
+Community Edition contract is CE 1.2.0 at commit
+[`38d0449f87501798e78ac668a9494848f4aa9649`](https://github.com/Willicious/NeoLemmixCommunityEdition/commit/38d0449f87501798e78ac668a9494848f4aa9649).
+The Swift implementation was written for this project using the published
+formats and CE behaviour as references. It does not include NeoLemmix source
+text or binary assets.
 
 ## Public inputs and state
 
@@ -10,6 +15,9 @@ The implementation uses NeoLemmix 12.14 behavior as an oracle. It is a clean-roo
 - `NeoLemmixConfiguration` stores timing, entrances, zones, preplaced lemmings, traits, and skills.
 - `NeoLemmixConfiguration(level:renderedLevel:)` converts an `NxlvLevel` and `NxlvRenderedLevel`.
 - `NeoLemmixReplayCommand` schedules an assignment, spawn interval change, or nuke command by tick and sequence.
+- `NxrpReplayDecoder` imports current section-based `.nxrp` metadata and
+  commands. It retains all 21 current skill names, including skills that the
+  simulator rejects explicitly.
 - `NeoLemmixSnapshot` contains the complete observable state and the events from the last tick.
 - `NeoLemmixSimulation` is `Codable`, `Equatable`, and `Sendable`. An encoded state continues deterministically after decoding.
 
@@ -65,7 +73,8 @@ The engine does not silently substitute another action for an unsupported skill.
 
 ## Compatibility limits
 
-Phase 1 is not a replay-compatibility claim. These items still need work before the engine can claim NeoLemmix 12.14 or CE 1.1.2 parity:
+Phase 1 is not a replay-compatibility claim. These items still need work before
+the engine can claim NeoLemmix 12.14 or CE 1.2.0 parity:
 
 - Canonical terrain mask shapes for Basher, Miner, Bomber, and Stoner. Phase 1 uses deterministic procedural shapes.
 - Fencer and Laserer actions and their terrain masks.
@@ -74,8 +83,9 @@ Phase 1 is not a replay-compatibility claim. These items still need work before 
 - Updraft, splat pad, anti-splat pad, force field, splitter, button, locked exit, pickup, teleporter, receiver, and portal effects.
 - Gadget animation keyframes, trap occupancy, and paired gadget state.
 - Zombie infection, neutralizer, deneutralizer, skill-adder, and skill-remover effects.
-- Superlemming behavior and CE-specific physics changes.
-- Golden replay comparison against NeoLemmix 12.14 and CE 1.1.2.
+- Superlemming behaviour and CE-specific physics changes.
+- Legacy `.nxrp` import where retained packs require it.
+- Golden replay comparison against NeoLemmix 12.14 and CE 1.2.0.
 
 Callers must treat unsupported level effects as a load diagnostic until these items are implemented.
 
@@ -85,6 +95,22 @@ Run:
 
 ```sh
 zsh Scripts/run-neolemmix-simulation-tests.sh
+zsh Scripts/run-neolemmix-replay-tests.sh
 ```
 
-The script compiles all `NxlvKit` sources and the focused test executable with Swift 6 and warnings as errors. The test groups cover spawn timing, movement, assignments, all implemented skills, steel, directional one-way terrain, hazards, NXLV conversion, replay order, inventory, nuke behavior, and deterministic Codable continuation.
+The scripts compile all `NxlvKit` sources and focused test executables with
+Swift 6 and warnings as errors. The test groups cover spawn timing, movement,
+assignments, all implemented skills, steel, directional one-way terrain,
+hazards, NXLV conversion, replay ordering, inventory, nuke behaviour, current
+replay decoding and deterministic Codable continuation.
+
+Run the combined source gate with:
+
+```sh
+zsh Scripts/check-1.5-neolemmix.sh
+```
+
+The [1.5 roadmap](1.5Roadmap.md) defines the pinned real-level corpus, strict
+runnable mode and external replay evidence. The development corpus can pass
+while it reports unsupported mechanics. Only the strict runnable and reference
+replay gates can close those compatibility claims.

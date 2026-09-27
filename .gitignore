@@ -17,6 +17,10 @@ Sources/lemmings_*/
 main
 *.app
 
+# Sparkle framework downloads. The pinned copy lives in .build/dependencies
+# via Scripts/ensure-sparkle.sh; never commit a manual download.
+/Sparkle-*/
+
 # Local archive of superseded documentation. Current release and design docs stay tracked.
 .archive/
 

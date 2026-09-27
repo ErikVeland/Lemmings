@@ -38,6 +38,44 @@ def select_profile(paths, identities):
     raise SystemExit('No valid macOS provisioning profile for academy.glasscode.lemmings with both capabilities and an installed signing identity. Download the profile from Apple Developer, then retry.')
 
 
+def sign(identity, path, *extra):
+    subprocess.run(['codesign', '--force', '--options', 'runtime', '--timestamp', '--sign', identity, *extra, str(path)], check=True)
+
+
+def sign_framework(identity, framework):
+    # Sign nested code inside-out, as Sparkle's documentation requires. The
+    # Downloader service keeps its own sandbox entitlements.
+    version = framework / 'Versions/Current'
+    for service in sorted((version / 'XPCServices').glob('*.xpc')):
+        extra = ('--preserve-metadata=entitlements',) if service.stem == 'Downloader' else ()
+        sign(identity, service, *extra)
+    for helper in (version / 'Autoupdate', version / 'Updater.app'):
+        if helper.exists():
+            sign(identity, helper)
+    sign(identity, framework)
+
+
+def team_identifier(path):
+    details = subprocess.run(['codesign', '-dv', str(path)], capture_output=True, text=True).stderr
+    match = re.search(r'^TeamIdentifier=(.+)$', details, re.MULTILINE)
+    return match.group(1) if match else 'not set'
+
+
+def require_one_team(app):
+    # Hardened runtime refuses to load code from a different team at launch.
+    # codesign --verify --deep does not detect this.
+    frameworks = app / 'Contents/Frameworks'
+    code = [app] + sorted(frameworks.glob('*.dylib'))
+    for framework in sorted(frameworks.glob('*.framework')):
+        version = framework / 'Versions/Current'
+        code += [framework] + sorted((version / 'XPCServices').glob('*.xpc'))
+        code += [path for path in (version / 'Autoupdate', version / 'Updater.app') if path.exists()]
+    expected = team_identifier(app)
+    wrong = [str(path.relative_to(app)) + ' (' + team_identifier(path) + ')' for path in code if team_identifier(path) != expected]
+    if expected == 'not set' or wrong:
+        raise SystemExit('Signed code does not match the app team ' + expected + ': ' + ', '.join(wrong))
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('app', type=pathlib.Path)
@@ -73,10 +111,12 @@ def main():
         entitlements_path = pathlib.Path(temporary) / 'app.entitlements'
         entitlements_path.write_bytes(plistlib.dumps(entitlements))
         for library in sorted((contents / 'Frameworks').glob('*.dylib')):
-            subprocess.run(['codesign', '--force', '--options', 'runtime', '--timestamp', '--sign', identity, str(library)], check=True)
-        subprocess.run(['codesign', '--force', '--options', 'runtime', '--timestamp', '--sign', identity,
-                        '--entitlements', str(entitlements_path), str(args.app)], check=True)
+            sign(identity, library)
+        for framework in sorted((contents / 'Frameworks').glob('*.framework')):
+            sign_framework(identity, framework)
+        sign(identity, args.app, '--entitlements', str(entitlements_path))
     subprocess.run(['codesign', '--verify', '--deep', '--strict', str(args.app)], check=True)
+    require_one_team(args.app)
     signed = subprocess.run(['codesign', '-d', '--entitlements', ':-', str(args.app)], capture_output=True, check=True)
     actual = plistlib.loads(signed.stdout)
     if not all(actual.get(key) is True for key in CAPABILITIES):

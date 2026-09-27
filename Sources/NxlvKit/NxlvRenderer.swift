@@ -1008,29 +1008,56 @@ private struct NxlvRenderEngine {
       )
     }
     let animation = metadata.animations[primaryIndex]
-    let expectedBaseName = animation.name.map { "\(piece)_\($0)" } ?? piece
-    let primaryURLs = asset.graphicURLs.filter {
-      normalize($0.deletingPathExtension().lastPathComponent) == normalize(expectedBaseName)
+    var frame: PixelPlane
+    if let generatedName = animation.name, generatedName.hasPrefix("*") {
+      let width = animation.declaredWidth
+        ?? max(1, (metadata.triggerX ?? 0) + (metadata.triggerWidth ?? 1))
+      let height = animation.declaredHeight
+        ?? max(1, (metadata.triggerY ?? 0) + (metadata.triggerHeight ?? 1))
+      guard width > 0, height > 0 else {
+        append(
+          .error,
+          .invalidPlacement,
+          "Object '\(style):\(piece)' has an invalid generated animation size.",
+          line: gadget.source.openingLine
+        )
+        return nil
+      }
+      frame = PixelPlane(width: width, height: height)
+      if generatedName.caseInsensitiveCompare("*PICKUP") == .orderedSame {
+        append(
+          .warning,
+          .unsupportedGadget,
+          "Static rendering omits the generated skill icon for '\(style):\(piece)'.",
+          line: gadget.source.openingLine
+        )
+      }
+    } else {
+      let expectedBaseName = animation.name.map { "\(piece)_\($0)" } ?? piece
+      let primaryURLs = asset.graphicURLs.filter {
+        normalize($0.deletingPathExtension().lastPathComponent) == normalize(expectedBaseName)
+      }
+      guard primaryURLs.count == 1 else {
+        append(
+          .error,
+          .missingResolvedAsset,
+          "Object '\(style):\(piece)' does not have exactly one resolved primary animation graphic.",
+          line: gadget.source.openingLine
+        )
+        return nil
+      }
+      guard
+        let strip = decodeGraphic(primaryURLs[0], asset: asset),
+        let decodedFrame = animationFrame(
+          from: strip,
+          animation: animation,
+          effect: metadata.effect,
+          line: gadget.source.openingLine,
+          description: "object '\(style):\(piece)'"
+        )
+      else { return nil }
+      frame = decodedFrame
     }
-    guard primaryURLs.count == 1 else {
-      append(
-        .error,
-        .missingResolvedAsset,
-        "Object '\(style):\(piece)' does not have exactly one resolved primary animation graphic.",
-        line: gadget.source.openingLine
-      )
-      return nil
-    }
-    guard
-      let strip = decodeGraphic(primaryURLs[0], asset: asset),
-      var frame = animationFrame(
-        from: strip,
-        animation: animation,
-        effect: metadata.effect,
-        line: gadget.source.openingLine,
-        description: "object '\(style):\(piece)'"
-      )
-    else { return nil }
 
     setTriggerMask(
       in: &frame,
@@ -1089,23 +1116,35 @@ private struct NxlvRenderEngine {
     let frameWidth: Int
     let frameHeight: Int
     if animation.usesHorizontalStrip {
-      guard strip.width.isMultiple(of: frameCount) else {
+      guard strip.width >= frameCount else {
         append(
           .error, .invalidAnimationStrip,
-          "The \(description) horizontal strip has an invalid width.", line: line)
+          "The \(description) horizontal strip is too short for its frame count.", line: line)
         return nil
       }
       frameWidth = strip.width / frameCount
       frameHeight = strip.height
+      if !strip.width.isMultiple(of: frameCount) {
+        append(
+          .warning, .invalidAnimationStrip,
+          "The \(description) horizontal strip has remainder pixels; integer frame division was used.",
+          line: line)
+      }
     } else {
-      guard strip.height.isMultiple(of: frameCount) else {
+      guard strip.height >= frameCount else {
         append(
           .error, .invalidAnimationStrip,
-          "The \(description) vertical strip has an invalid height.", line: line)
+          "The \(description) vertical strip is too short for its frame count.", line: line)
         return nil
       }
       frameWidth = strip.width
       frameHeight = strip.height / frameCount
+      if !strip.height.isMultiple(of: frameCount) {
+        append(
+          .warning, .invalidAnimationStrip,
+          "The \(description) vertical strip has remainder pixels; integer frame division was used.",
+          line: line)
+      }
     }
     guard frameWidth > 0, frameHeight > 0 else {
       append(
@@ -1509,12 +1548,34 @@ private struct NxlvRenderEngine {
     guard enabled, sourceLength != targetLength else {
       return Array(0..<sourceLength)
     }
-    let leading = leading ?? 0
-    let trailing = trailing ?? 0
-    guard leading >= 0, trailing >= 0,
-      leading + trailing < sourceLength,
-      leading + trailing <= targetLength
-    else {
+    var leading = leading ?? 0
+    var trailing = trailing ?? 0
+    guard leading >= 0, trailing >= 0 else {
+      append(
+        .error,
+        .invalidNineSlice,
+        "The \(description) has invalid \(axisName) nine-slice margins.",
+        line: line
+      )
+      return nil
+    }
+    let overlap = leading + trailing - targetLength
+    if overlap > 0 {
+      leading -= overlap / 2
+      trailing -= overlap / 2
+      if !overlap.isMultiple(of: 2) {
+        if leading >= trailing { leading -= 1 } else { trailing -= 1 }
+      }
+      if leading < 0 {
+        trailing += leading
+        leading = 0
+      }
+      if trailing < 0 {
+        leading += trailing
+        trailing = 0
+      }
+    }
+    guard leading >= 0, trailing >= 0, leading + trailing < sourceLength else {
       append(
         .error,
         .invalidNineSlice,

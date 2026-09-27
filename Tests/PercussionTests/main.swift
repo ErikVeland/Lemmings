@@ -128,6 +128,34 @@ private func testModernCentresPercussionAndFaithfulDoesNot() throws {
     print("PASS modern centres the beat and faithful leaves it where it was")
 }
 
+private func testRhythmStemKeepsTheClockAndRejectsMelody() throws {
+    var bytes = [UInt8](repeating: 0, count: 1084 + 1024 + 128)
+    bytes[950] = 1
+    for (index, value) in "M.K.".utf8.enumerated() { bytes[1080 + index] = value }
+    for (sample, name) in ["kick", "organ"].enumerated() {
+        let header = 20 + sample * 30
+        for (index, value) in name.utf8.enumerated() { bytes[header + index] = value }
+        bytes[header + 23] = 32; bytes[header + 25] = 64; bytes[header + 29] = 32
+        let period = sample == 0 ? 428 : 214
+        let note = 1084 + sample * 4
+        bytes[note] = UInt8(period >> 8); bytes[note + 1] = UInt8(period & 255)
+        bytes[note + 2] = UInt8((sample + 1) << 4)
+        for frame in 0..<64 { bytes[2108 + sample * 64 + frame] = UInt8(bitPattern: frame < 32 ? 100 : -100) }
+    }
+    let module = try ProTrackerModule(data: Data(bytes))
+    var full = ProTrackerEnhancedPlayer(module: module), rhythm = ProTrackerEnhancedPlayer(module: module)
+    var melodyEnergy: Float = 0, drumEnergy: Float = 0
+    for _ in 0..<4410 {
+        let mixed = full.nextFrame(), drums = rhythm.nextFrame(rhythmAmount: 1)
+        try require(drums.right == 0, "Melody leaked into the native rhythm channel")
+        try require(abs(mixed.left - drums.left) < 0.000001, "Rhythm isolation altered the drum samples")
+        melodyEnergy += abs(mixed.right); drumEnergy += abs(drums.left)
+    }
+    try require(drumEnergy > 1 && melodyEnergy > 1, "Rhythm fixture did not render both instruments")
+    try require(full.player.secondsUntilNextBeat == rhythm.player.secondsUntilNextBeat, "Rhythm isolation moved the tracker clock")
+    print("PASS native rhythm keeps exact drum samples and clock, with no melodic voice")
+}
+
 do {
     try testDrumNamesAreRecognised()
     try testInstrumentsAreNotMistakenForDrums()
@@ -136,6 +164,7 @@ do {
     try testCentringKeepsExistingTuning()
     try testAskingForNoCentringChangesNothing()
     try testModernCentresPercussionAndFaithfulDoesNot()
+    try testRhythmStemKeepsTheClockAndRejectsMelody()
     print("Percussion tests passed.")
 } catch {
     FileHandle.standardError.write(Data("Percussion tests failed: \(error)\n".utf8))

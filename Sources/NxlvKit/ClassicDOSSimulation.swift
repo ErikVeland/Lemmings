@@ -1134,15 +1134,22 @@ public struct ClassicDOSSimulation: Codable, Equatable, Sendable {
         _ lemming: inout ClassicDOSLemming,
         events: inout [ClassicDOSEvent]
     ) -> Bool {
-        var distance = 0
-        while distance < 2,
-              hasPixelClipped(x: lemming.foot.x, y: lemming.foot.y - 1, minimumY: -distance - 1) {
-            distance += 1
-            lemming.foot.y -= 1
-        }
+        let distance = jumpRise(from: lemming.foot)
+        lemming.foot.y -= distance
         if distance < 2 { transition(&lemming, to: .walking, events: &events) }
         checkLevelTop(&lemming, events: &events)
         return true
+    }
+
+    private func jumpRise(from foot: ClassicDOSPoint) -> Int {
+        var distance = 0
+        var y = foot.y
+        while distance < 2,
+              hasPixelClipped(x: foot.x, y: y - 1, minimumY: -distance - 1) {
+            distance += 1
+            y -= 1
+        }
+        return distance
     }
 
     private mutating func handleClimbing(

@@ -21,11 +21,11 @@ import NxlvKit
                 }
             }
             for star in 1...celebration.goals.stars {
-                do { try await Task.sleep(for: .milliseconds(180)) } catch { return }
+                do { try await Task.sleep(nanoseconds: 180_000_000) } catch { return }
                 guard let self, self.mode == .result, !self.isHidden, self.window != nil else { return }
                 self.revealedStars = star; self.stampedStar = star; self.needsDisplay = true
                 self.rewardChimes.play(star: star, volume: self.rewardVolume)
-                do { try await Task.sleep(for: .milliseconds(90)) } catch { return }
+                do { try await Task.sleep(nanoseconds: 90_000_000) } catch { return }
                 self.stampedStar = nil; self.needsDisplay = true
             }
             self?.celebrationTask = nil
@@ -62,7 +62,9 @@ import NxlvKit
         resultActions(y: 453)
         let maximum = run.level.conditions.map { ArcadeStore.shared.records.trolley.maximum(conditions: $0, assisted: run.assisted) } ?? TrolleyMaximum()
         let awardText = c.newAwards.map { "New career award: \($0.award.title). \($0.award.detail)" }.joined(separator: " ")
-        setAccessibilityLabel("\(player.initials)'s attempt. \(outcome). \(run.level.title). \(rescueSummary(run, maximum: maximum)) \(c.goals.stars) of 3 stars this run. Level best: \(c.bestStars) stars. \(c.nextGoal) \(c.recordMessage). New level awards: \(c.levelAwards.map(\.title).joined(separator: ", ")). \(awardText) Career: \(c.career.stars) stars, plus \(c.addedStars). \(c.nextCareerGoal.map { $0.award.title + ": " + $0.status + ". " + $0.next } ?? "") Local Most Saved: \(c.ranks.first?.label ?? "No record"). Enter: \(primaryResultTitle). R retries. N retries as the next session player. P opens session players. V opens replay. B opens records. A opens achievements. G opens level goals. C opens career progress. D opens details. Escape returns.")
+        setAccessibilityLabel("\(player.initials)'s attempt. \(outcome). \(run.level.title). \(rescueSummary(run, maximum: maximum)) \(c.goals.stars) of 3 stars this run. Level best: \(c.bestStars) stars. \(c.nextGoal) \(c.recordMessage). New level awards: \(c.levelAwards.map(\.title).joined(separator: ", ")). \(awardText) Career: \(c.career.stars) stars, plus \(c.addedStars). \(c.nextCareerGoal.map { $0.award.title + ": " + $0.status + ". " + $0.next } ?? "") Local Most Saved: \(c.ranks.first?.label ?? "No record"). Enter: \(primaryResultTitle). R retries. N retries as the next session player. P opens session players. V opens replay. B opens records. A opens achievements. G opens level goals. C opens career progress. D opens details. Escape returns."
+            + (report.earnedLevelSkip ? " Earned a level skip." : "")
+            + (availableSkips > 0 ? " \(skipTitle). K skips this level." : ""))
     }
     private func drawResultLevelCard(_ c: TrolleyCelebration) {
         let rect = CGRect(x: 80, y: 285, width: 466, height: 116)
@@ -77,8 +79,13 @@ import NxlvKit
     private func drawResultCareerCard(_ c: TrolleyCelebration) {
         GameStyle.fill(CGRect(x: 566, y: 285, width: 474, height: 116), GameStyle.gold.withAlphaComponent(0.09))
         let new = c.newAwards
+        let earnedSkip = report?.earnedLevelSkip == true
         link("\(report?.run.assisted == true ? "REWIND CAREER" : "CAREER")  \(c.career.stars) STARS" + (c.addedStars > 0 ? "  (+\(c.addedStars))" : "") + " >",
-             CGRect(x: 582, y: 292, width: 442, height: 30), alignment: .left, palette: .green) { [weak self] in self?.page(.career) }
+             CGRect(x: 582, y: 292, width: earnedSkip ? 300 : 442, height: 30), alignment: .left, palette: .green) { [weak self] in self?.page(.career) }
+        // A skip is earned once, so the result shows it once.
+        if earnedSkip {
+            link("+1 SKIP", CGRect(x: 894, y: 292, width: 130, height: 30), alignment: .right, palette: .green) { [weak self] in self?.page(.career) }
+        }
         if !new.isEmpty {
             let selected = new[featuredAwardIndex % new.count]
             link("NEW: \(selected.award.title) >", CGRect(x: 582, y: 320, width: 442, height: 30), alignment: .left) { [weak self] in
@@ -139,7 +146,8 @@ import NxlvKit
             let progress = award.progress(attempts: history.attempts, profileID: player.id)
             return TrolleyAwardDelta(award: award, before: progress, after: progress, isNew: false)
         }
-        text("\(score.stars) stars   \(score.clearedLevels) cleared   \(score.threeStarLevels) three-star levels", 80, 212, 960)
+        text("\(score.stars) stars   \(score.clearedLevels) cleared   \(score.threeStarLevels) three-star levels", 80, 212, assisted ? 960 : 640)
+        if !assisted { drawSkipBalance(ArcadeStore.shared.records.levelSkips(profileID: player.id)) }
         let milestones = deltas.filter { $0.after.goal > 1 }
         let pages = max(1, (milestones.count + 3) / 4)
         for (index, delta) in milestones.dropFirst((careerPage % pages) * 4).prefix(4).enumerated() {
@@ -152,7 +160,22 @@ import NxlvKit
         link("More \(careerPage % pages + 1)/\(pages) >", CGRect(x: 786, y: 574, width: 254, height: 34)) { [weak self] in self?.careerPage += 1; self?.needsDisplay = true }
         link("Career leaderboard >", CGRect(x: 80, y: 574, width: 590, height: 34), alignment: .left) { [weak self] in self?.boardScope = .career; self?.page(.records) }
         pageFooter()
-        setAccessibilityLabel("Career progress. \(score.stars) stars, plus \(celebration?.addedStars ?? 0) this run. \(score.clearedLevels) distinct levels cleared. \(score.threeStarLevels) three-star levels. " + milestones.map { $0.award.title + ": " + $0.status + ". " + $0.next }.joined(separator: " "))
+        setAccessibilityLabel("Career progress. \(score.stars) stars, plus \(celebration?.addedStars ?? 0) this run. \(score.clearedLevels) distinct levels cleared. \(score.threeStarLevels) three-star levels. " + (assisted ? "" : { let skips = ArcadeStore.shared.records.levelSkips(profileID: player.id)
+            return "\(skips.available) level skips. \(skips.threeStarLevelsToNext) more three-star levels for the next. " }())
+            + milestones.map { $0.award.title + ": " + $0.status + ". " + $0.next }.joined(separator: " "))
+    }
+    /// Skips to spend, then filled and outlined pips for three-star levels toward the next one.
+    private func drawSkipBalance(_ skips: LevelSkipBalance) {
+        text("SKIPS \(skips.available)", 740, 212, 180, alignment: .right, palette: .green)
+        let done = LevelSkipBalance.threeStarLevelsPerSkip - skips.threeStarLevelsToNext
+        for index in 0..<LevelSkipBalance.threeStarLevelsPerSkip {
+            let pip = CGRect(x: 940 + CGFloat(index) * 34, y: 216, width: 20, height: 20)
+            if index < done { GameStyle.fill(pip, GameStyle.gold) }
+            else {
+                GameStyle.gold.setStroke()
+                let outline = NSBezierPath(rect: pip.insetBy(dx: 1, dy: 1)); outline.lineWidth = 2; outline.stroke()
+            }
+        }
     }
     func boardScopeLinks() {
         // This row replaces the generic game subtitle on leaderboard pages.

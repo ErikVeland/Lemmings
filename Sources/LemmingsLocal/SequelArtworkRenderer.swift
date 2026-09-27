@@ -51,16 +51,17 @@ import NxlvKit
 
     func image(width: Int, height: Int, pixels: [UInt8], palette: [UInt8],
                opaque: [Bool]? = nil, category: SequelMacCategory, frontEnd: Bool = false) throws -> NSImage {
+        let enabled = SequelArtworkPreference.enabled
         var digest = SHA256()
-        digest.update(data: Data("\(SequelMacArtwork.revision)/\(SequelArtworkPreference.enabled)/\(width)/\(height)/\(category.rawValue)/front-end-1/\(frontEnd)".utf8))
+        digest.update(data: Data("\(SequelMacArtwork.revision)/\(enabled)/\(width)/\(height)/\(category.rawValue)/front-end-1/\(frontEnd)".utf8))
         digest.update(data: Data(pixels)); digest.update(data: Data(palette))
         if let opaque { digest.update(data: Data(opaque.map { $0 ? 1 : 0 })) }
         else { digest.update(data: Data([2])) }
         let key = digest.finalize().map { String(format: "%02x", $0) }.joined() as NSString
         if let cached = cache.object(forKey: key) { return cached }
         let source = try SequelMacFrame(width: width, height: height, pixels: pixels, palette: palette, opaque: opaque)
-        var frame = try SequelArtworkPreference.enabled ? SequelMacArtwork.reconstruct(source, category: category) : source
-        if SequelArtworkPreference.enabled && frontEnd {
+        var frame = try enabled ? SequelMacArtwork.reconstruct(source, category: category) : source
+        if enabled && frontEnd {
             frame = try Self.frontEndContours(source, reconstructed: frame)
         }
         guard let provider = CGDataProvider(data: Data(frame.rgba) as CFData),

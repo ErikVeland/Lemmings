@@ -25,6 +25,10 @@ final class SoundEffectPlayer: @unchecked Sendable {
   private var voices: [Voice]
   private var isMuted = false
   private var level: Double = 1.0
+  private let recentSampleLimit = 44_100
+  private var recentSamples: [Float]
+  private var recentSamplePositions: [Int64]
+  private var latestRecentSample: Int64?
 
   private let sampleRate = 44100.0
   private(set) var isRunning = false
@@ -32,6 +36,8 @@ final class SoundEffectPlayer: @unchecked Sendable {
 
   init(voiceCount: Int = 16) {
     voices = [Voice](repeating: Voice(), count: max(1, voiceCount))
+    recentSamples = [Float](repeating: 0, count: recentSampleLimit)
+    recentSamplePositions = [Int64](repeating: .min, count: recentSampleLimit)
     // A short builder-like chink is available even in previews without a bank.
     library[.builderWarning] = (0..<3528).map { i in
       let t = Double(i) / 44100
@@ -53,13 +59,13 @@ final class SoundEffectPlayer: @unchecked Sendable {
     engine.connect(environment, to: engine.mainMixerNode, format: stereo)
     for index in voices.indices {
       let mixer = AVAudioMixerNode()
-      let node = AVAudioSourceNode(format: mono) { [weak self] _, _, frameCount, buffers in
+      let node = AVAudioSourceNode(format: mono) { [weak self] _, timestamp, frameCount, buffers in
         let list = UnsafeMutableAudioBufferListPointer(buffers)
         guard let self else {
           for buffer in list { memset(buffer.mData, 0, Int(buffer.mDataByteSize)) }
           return noErr
         }
-        self.fillVoice(index, buffers: list, frames: Int(frameCount))
+        self.fillVoice(index, buffers: list, frames: Int(frameCount), sampleTime: timestamp.pointee.mSampleTime)
         return noErr
       }
       engine.attach(node)
@@ -99,22 +105,36 @@ final class SoundEffectPlayer: @unchecked Sendable {
     if isRunning && !engine.isRunning { try engine.start() }
   }
 
-  private func fillVoice(_ index: Int, buffers: UnsafeMutableAudioBufferListPointer, frames: Int) {
+  private func fillVoice(_ index: Int, buffers: UnsafeMutableAudioBufferListPointer, frames: Int, sampleTime: Double) {
     lock.lock()
     defer { lock.unlock() }
     var voice = voices[index]
+    let start = sampleTime.isFinite && sampleTime >= 0
+      ? Int64(sampleTime.rounded())
+      : (latestRecentSample.map { $0 + 1 } ?? 0)
     for frame in 0..<frames {
       var sample: Float = 0
+      var sourceSample: Float = 0
       if !isMuted && voice.isActive {
         let position = Int(voice.position)
         if position < voice.samples.count {
-          sample = voice.samples[position] * Float(level) * 0.6
+          sourceSample = voice.samples[position]
+          sample = sourceSample * Float(level) * 0.6
           voice.position += voice.increment
         } else {
           voice.isActive = false
         }
       }
       for buffer in buffers { buffer.mData?.assumingMemoryBound(to: Float.self)[frame] = sample }
+
+      let position = start + Int64(frame)
+      let slot = Int((position % Int64(recentSampleLimit) + Int64(recentSampleLimit)) % Int64(recentSampleLimit))
+      if recentSamplePositions[slot] != position {
+        recentSamplePositions[slot] = position
+        recentSamples[slot] = 0
+      }
+      recentSamples[slot] += sourceSample
+      latestRecentSample = max(latestRecentSample ?? position, position)
     }
     voices[index] = voice
   }
@@ -124,9 +144,12 @@ final class SoundEffectPlayer: @unchecked Sendable {
   /// Loads effects from a Macintosh disk image.
   ///
   /// The Mac release names its sounds, so the binding is by name rather than
-  /// by position, and each sound keeps the rate its resource records.
+  /// by position, and each sound keeps the rate its resource records. The Mac
+  /// disk has no sound for some events. A named Amiga sample fills each gap,
+  /// then a supplied sound named after the event.
   @discardableResult
-  func loadMacintoshSounds(imageURL: URL) throws -> [ClassicSoundEffect] {
+  func loadMacintoshSounds(imageURL: URL, amigaFallbackDirectory: URL? = nil,
+                           supplementDirectory: URL? = nil) throws -> [ClassicSoundEffect] {
     let image = try Data(contentsOf: imageURL, options: .mappedIfSafe)
     let volume = try ClassicHFSVolume(image: image)
     let fork = try volume.resourceFork(named: "Lemmings")
@@ -145,11 +168,50 @@ final class SoundEffectPlayer: @unchecked Sendable {
       library[effect] = sound.floatSamples()
       rates[effect] = sound.sampleRate
     }
+    if let amigaFallbackDirectory {
+      // A missing or damaged Amiga bank leaves these gaps silent, as before.
+      let amiga = (try? Self.amigaSounds(in: amigaFallbackDirectory)) ?? [:]
+      for (effect, name) in ClassicSoundMapping.amigaVoiceNames where library[effect] == nil {
+        guard let sound = amiga[name.lowercased()] else { continue }
+        library[effect] = sound.samples
+        rates[effect] = sound.sampleRate
+      }
+    }
+    fillFromSupplementLocked(supplementDirectory)
     let loaded = library.keys.sorted { $0.rawValue < $1.rawValue }
     lock.unlock()
 
     loadedEffects = loaded
     return loaded
+  }
+
+  /// Fills each still-silent event from a sound file named after it, such as
+  /// `yippee.mp3`. Neither the Mac disk nor the Amiga banks has a Yippee.
+  private func fillFromSupplementLocked(_ directory: URL?) {
+    guard let directory else { return }
+    for effect in ClassicSoundEffect.allCases where library[effect] == nil {
+      for ext in ["wav", "m4a", "mp3"] {
+        let url = directory.appendingPathComponent(effect.rawValue).appendingPathExtension(ext)
+        guard let decoded = Self.monoSamples(url) else { continue }
+        library[effect] = decoded.samples
+        rates[effect] = decoded.rate
+        break
+      }
+    }
+  }
+
+  /// Decodes a sound file to mono samples at its own rate.
+  private static func monoSamples(_ url: URL) -> (samples: [Float], rate: Double)? {
+    guard let file = try? AVAudioFile(forReading: url), file.length > 0,
+          let buffer = AVAudioPCMBuffer(pcmFormat: file.processingFormat, frameCapacity: AVAudioFrameCount(file.length)),
+          (try? file.read(into: buffer)) != nil, let channels = buffer.floatChannelData else { return nil }
+    let count = Int(buffer.frameLength), channelCount = Int(buffer.format.channelCount)
+    guard count > 0, channelCount > 0 else { return nil }
+    var samples = [Float](repeating: 0, count: count)
+    for channel in 0..<channelCount {
+      for index in 0..<count { samples[index] += channels[channel][index] / Float(channelCount) }
+    }
+    return (samples, file.processingFormat.sampleRate)
   }
 
   /// Loads the Amiga digitised sounds from the two banks on the game disk.
@@ -160,22 +222,15 @@ final class SoundEffectPlayer: @unchecked Sendable {
   /// says which effect they belong to, and binding them to a guess would play
   /// the wrong sound rather than none.
   @discardableResult
-  func loadAmigaSounds(directory: URL, deathFallbackImage: URL? = nil) throws -> [ClassicSoundEffect] {
+  func loadAmigaSounds(directory: URL, deathFallbackImage: URL? = nil,
+                       supplementDirectory: URL? = nil) throws -> [ClassicSoundEffect] {
     // The Amiga death sample is unnamed. Use the identified Macintosh voice.
     var death: ClassicMacSound?
     if let image = deathFallbackImage {
       let volume = try ClassicHFSVolume(image: Data(contentsOf: image, options: .mappedIfSafe))
       death = ClassicMacSoundDecoder.sounds(in: try volume.resourceFork(named: "Lemmings")).first { $0.name == "Die" }
     }
-    var byName: [String: AmigaSound] = [:]
-    for bank in ["basicfx", "fullfx"] {
-      let url = directory.appendingPathComponent(bank)
-      guard let data = try? Data(contentsOf: url, options: .mappedIfSafe) else { continue }
-      for sound in try AmigaSoundBank.decode(data) {
-        guard let name = sound.name else { continue }
-        byName[name.lowercased()] = sound
-      }
-    }
+    let byName = try Self.amigaSounds(in: directory)
 
     lock.lock()
     library = [:]
@@ -186,11 +241,26 @@ final class SoundEffectPlayer: @unchecked Sendable {
       library[effect] = sound.samples
       rates[effect] = sound.sampleRate
     }
+    fillFromSupplementLocked(supplementDirectory)
     let loaded = library.keys.sorted { $0.rawValue < $1.rawValue }
     lock.unlock()
 
     loadedEffects = loaded
     return loaded
+  }
+
+  /// The named samples in the two Amiga banks, keyed by lower-case name.
+  private static func amigaSounds(in directory: URL) throws -> [String: AmigaSound] {
+    var byName: [String: AmigaSound] = [:]
+    for bank in ["basicfx", "fullfx"] {
+      let url = directory.appendingPathComponent(bank)
+      guard let data = try? Data(contentsOf: url, options: .mappedIfSafe) else { continue }
+      for sound in try AmigaSoundBank.decode(data) {
+        guard let name = sound.name else { continue }
+        byName[name.lowercased()] = sound
+      }
+    }
+    return byName
   }
 
   // MARK: - Playing
@@ -211,6 +281,26 @@ final class SoundEffectPlayer: @unchecked Sendable {
     lock.lock()
     defer { lock.unlock() }
     for index in voices.indices { voices[index].isActive = false }
+  }
+
+  /// Plays a short reversed slice of recent effects while the run is scrubbed.
+  /// This gives rewind the character of a tape transport without changing the
+  /// original effect samples or adding a new game sound.
+  func playRewindScrub() {
+    lock.lock()
+    defer { lock.unlock() }
+    guard !isMuted, let latest = latestRecentSample else { return }
+    var samples: [Float] = []
+    samples.reserveCapacity(11_025)
+    for offset in 0..<11_025 {
+      let position = latest - Int64(offset)
+      let slot = Int((position % Int64(recentSampleLimit) + Int64(recentSampleLimit)) % Int64(recentSampleLimit))
+      guard recentSamplePositions[slot] == position else { break }
+      samples.append(recentSamples[slot])
+    }
+    guard !samples.isEmpty else { return }
+    let index = voices.firstIndex { !$0.isActive } ?? voices.startIndex
+    voices[index] = Voice(samples: samples, position: 0, increment: 1, isActive: true)
   }
 
   /// Turns a stereo position into a pair of channel gains.
@@ -237,7 +327,6 @@ final class SoundEffectPlayer: @unchecked Sendable {
     guard !isMuted, let samples = library[effect], !samples.isEmpty else { return }
     let rate = rates[effect] ?? sampleRate
     onPlay?(samples, rate, Float(level) * 0.6)
-
     var slot = voices.firstIndex { !$0.isActive }
     if slot == nil {
       // Steal the voice closest to finishing, which is least noticeable.

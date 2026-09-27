@@ -1,7 +1,7 @@
 import AppKit
 import NxlvKit
 
-/// Reveals one tier per explicit click. Reopening always starts with the nudge.
+/// Hints move one tier per deliberate action. Reopening starts with the nudge.
 @MainActor final class LevelHintWindow {
     static let shared = LevelHintWindow()
     private(set) var page: GameMenuPage?
@@ -20,13 +20,18 @@ import NxlvKit
         content.autoresizingMask = [.width, .height]
         page.body.addSubview(content)
         revealedTier = 0
+        let previous = page.addSecondaryAction("Previous") {}
+        previous.setAccessibilityLabel("Previous hint")
+        previous.isEnabled = false
         let next = page.addPrimaryAction(deck.checked ? "Reveal the approach" : "Make a small plan") {}
         // No Return shortcut: repeated help keys must not uncover another tier.
         next.keyEquivalent = ""
         var solution: VerifiedSolution?
         var checking = solutionSession != nil
-        let refreshAction = { [weak self, weak next] in
+        let refreshAction = { [weak self, weak next, weak previous] in
             guard let self, let next else { return }
+            previous?.isEnabled = self.revealedTier > 0
+            previous?.needsDisplay = true
             let final = self.revealedTier + 1 >= deck.stages.count
             next.title = final ? (solution != nil ? "Show solution replay" : checking ? "Checking solution..." : "All hints revealed")
                 : self.revealedTier == 1 ? (deck.checked ? "Reveal opening moves" : "Show practice tips")
@@ -56,6 +61,7 @@ import NxlvKit
                     replay.show(owner: owner)
                 }
                 confirm.keyEquivalent = ""
+                warning.preferControllerControl(warning.controllerBackButton)
                 GameScreen.shared.present(warning, owner: owner, focus: warning.controllerBackButton)
             }
         }
@@ -71,6 +77,16 @@ import NxlvKit
                 refreshAction()
             }
         }
+        let moveHint: (Int) -> Void = { [weak self, weak content] direction in
+            guard let self else { return }
+            let tier = min(deck.stages.count - 1, max(0, self.revealedTier + direction))
+            guard tier != self.revealedTier else { return }
+            self.revealedTier = tier
+            content?.tier = tier
+            refreshAction()
+        }
+        (previous as? GameActionButton)?.onPress = { moveHint(-1) }
+        page.onHorizontalNavigation = moveHint
         next.target = action; next.action = #selector(HintRevealAction.reveal)
         content.revealAction = action
         page.onBack = { [weak page] in if let page { GameScreen.shared.dismiss(page) } }
@@ -146,9 +162,13 @@ import NxlvKit
         note.stringValue = deck.checked
             ? (tier == 2 ? "Match the direction and adjust crowd spacing. Release rate, timing and your current terrain can change the opening." : "No moves are made for you. Reveal another hint only when you want more detail.")
             : "General coaching for this level."
-        setAccessibilityLabel("\(progress.stringValue). \(stage.title). \(stage.body). \(note.stringValue)")
+        setAccessibilityElement(true)
+        setAccessibilityRole(.group)
+        setAccessibilityLabel("Hint text")
+        setAccessibilityHelp("Left and right arrows change hints. Up and down arrows scroll the text.")
         resetScroll = true
         needsLayout = true; needsDisplay = true
+        NSAccessibility.post(element: heading, notification: .valueChanged)
     }
     override func layout() {
         super.layout()

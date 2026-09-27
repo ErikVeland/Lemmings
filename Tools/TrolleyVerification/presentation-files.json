@@ -4,5 +4,10 @@
   "SkillShortcuts.swift",
   "GameplaySpeed.swift",
   "AssignmentFocus.swift",
-  "ControllerBindings.swift"
+  "ControllerBindings.swift",
+  "AdaptiveDJDirector.swift",
+  "ProTrackerEnhancements.swift",
+  "MusicLibraryCatalogue.swift",
+  "MusicRhythmCatalogue.swift",
+  "VinylMotion.swift"
 ]

@@ -32,7 +32,7 @@ for frame in [CGRect(x: 0, y: 0, width: 2560, height: 1440),
           "Releasing Option pulled the pointer back from another display")
     _ = capture.sample(centre, in: frame, active: true, releaseRequested: false)
     check(capture.sample(outside, in: frame, active: false, releaseRequested: false) == nil && !capture.isCaptured,
-          "Pause, menus, focus loss or disabling capture failed to release it")
+          "Focus loss or disabling capture failed to release it")
     _ = capture.sample(centre, in: frame, active: true, releaseRequested: false)
     let moved = frame.offsetBy(dx: frame.width * 2, dy: 0)
     check(capture.sample(centre, in: moved, active: true, releaseRequested: false) == nil,

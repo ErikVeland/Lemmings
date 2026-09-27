@@ -54,6 +54,15 @@ public struct Lemmings3ClassicCampaign: Sendable {
         completed[index] = max(completed[index] ?? 0, game.survivors)
         return true
     }
+    /// A skip passes over an unbeaten level that is not the tribe's last.
+    public var canSkipLevel: Bool { levels.indices.contains(index + 1) && completed[index] == nil }
+
+    /// Moves to the next level with the same population. The caller spends the skip.
+    @discardableResult public mutating func skipLevel() -> Bool {
+        guard canSkipLevel else { return false }
+        index += 1
+        return true
+    }
     @discardableResult public mutating func advance(after game: Lemmings3Runtime) -> Bool {
         guard levels.indices.contains(index + 1), record(game) else { return false }
         population = game.survivors; index += 1; return true

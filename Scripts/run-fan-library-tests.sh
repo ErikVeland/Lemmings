@@ -14,6 +14,7 @@ fi
 swiftc -O -swift-version 6 -I "$library_dir/modules" -L "$library_dir" -lNxlvKit \
   -Xlinker -rpath -Xlinker "$library_dir" -o "$build_dir/Tests" \
   "$project_dir/Tests/FanLevelLibraryTests/main.swift" \
+  "$project_dir/Sources/LemmingsLocal/GameAssetCache.swift" \
   "$project_dir/Sources/LemmingsLocal/FanLevelLibrary.swift" \
   "$project_dir/Sources/LemmingsLocal/FanLevelUpdates.swift"
 cd "$project_dir"

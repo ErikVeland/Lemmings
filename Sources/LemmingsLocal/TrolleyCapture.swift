@@ -60,6 +60,8 @@ import NxlvKit
     /// File paths are relative, so moving an unchanged pack does not invalidate its records.
     private static var contentCache: [String: (Date, Int, String)] = [:]
     static func contentFingerprint(root: URL) -> String {
+        if GameAssetCache<String>.bundledKey(root) != nil,
+           let cached = FanLevelLibrary.directoryFingerprint(root) { return cached }
         let root = root.resolvingSymlinksInPath().standardizedFileURL
         let keys: [URLResourceKey] = [.isRegularFileKey, .contentModificationDateKey, .fileSizeKey]
         guard let enumerator = FileManager.default.enumerator(at: root, includingPropertiesForKeys: keys,

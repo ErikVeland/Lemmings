@@ -90,18 +90,24 @@ def main():
     base = args.out.resolve()
     base.mkdir(parents=True, exist_ok=False)
     logs, library, frozen = base / "logs", base / "library", base / "source"
-    for path in [logs, library / "modules", frozen]:
+    module_cache = base / "module-cache"
+    for path in [logs, library / "modules", frozen, module_cache]:
         path.mkdir(parents=True, exist_ok=True)
     before = manifest(input_paths(app))
     (base / "inputs.json").write_text(json.dumps(before, indent=2) + "\n")
     for source in ROOT.glob("Sources/NxlvKit/*.swift"):
         shutil.copy2(source, frozen / source.name)
     checks = []
-    compiler_target = f"{platform.machine()}-apple-macos13.0"
+    compiler_target = f"{platform.machine()}-apple-macos12.3"
 
     def run(name, commands, env=None):
-        env = dict(env or os.environ, LEMMINGS_TEST_APP=str(app),
-                   CAMPAIGN_TEST_RESOURCES=str(app / "Contents/Resources"))
+        env = dict(env or os.environ)
+        env.update(
+            LEMMINGS_TEST_APP=str(app),
+            CAMPAIGN_TEST_RESOURCES=str(app / "Contents/Resources"),
+            CLANG_MODULE_CACHE_PATH=str(module_cache),
+            SWIFT_MODULE_CACHE_PATH=str(module_cache),
+        )
         started = time.monotonic()
         code = 0
         with (logs / (name + ".log")).open("w") as output:
@@ -121,10 +127,12 @@ def main():
         return result
 
     def compile_command(source, output, extra=()):
-        return ["swiftc", "-O", "-swift-version", "6", "-target", compiler_target, *extra, "-I", library / "modules", "-L", library,
+        return ["swiftc", "-O", "-swift-version", "6", "-target", compiler_target,
+                "-module-cache-path", module_cache, *extra, "-I", library / "modules", "-L", library,
                 "-lNxlvKit", "-Xlinker", "-rpath", "-Xlinker", library, "-o", output, source]
 
-    checks.append(run("shared-library", [["swiftc", "-O", "-swift-version", "6", "-target", compiler_target, "-parse-as-library",
+    checks.append(run("shared-library", [["swiftc", "-O", "-swift-version", "6", "-target", compiler_target,
+        "-module-cache-path", module_cache, "-parse-as-library",
         "-emit-module", "-emit-library", "-module-name", "NxlvKit", "-emit-module-path",
         library / "modules/NxlvKit.swiftmodule", "-Xlinker", "-install_name", "-Xlinker",
         "@rpath/libNxlvKit.dylib", "-o", library / "libNxlvKit.dylib", *sorted(frozen.glob("*.swift"))]]))
@@ -197,6 +205,7 @@ def main():
     for name, command in [
         ("audit-integrity", [sys.executable, "Tests/ReleaseReadinessTests/test_audit.py"]),
         ("package-closure", [sys.executable, "Tests/ReleaseReadinessTests/test_package_scope.py"]),
+        ("automatic-updates", [sys.executable, "Tests/ReleaseReadinessTests/test_automatic_updates.py"]),
         ("classic-panel-art", [sys.executable, "Tools/ClassicPanelArt/check.py"]),
         ("fan-pruning", [sys.executable, "Tools/FanLevelCatalog/test_prune.py"]),
         ("retained-rescue-targets", [sys.executable, "Tools/TrolleyVerification/test_retained_targets.py"]),
@@ -204,6 +213,7 @@ def main():
         ("controller", ["zsh", "Scripts/run-controller-qol-tests.sh"]),
         ("variable-speed", ["zsh", "Scripts/run-gameplay-speed-tests.sh"]),
         ("pointer-capture", ["zsh", "Scripts/run-pointer-capture-tests.sh"]),
+        ("dialog-cursor", ["zsh", "Scripts/run-dialog-cursor-tests.sh"]),
         ("hdr-gpu", ["zsh", "Scripts/run-explosion-hdr-tests.sh"]),
         ("rescue-certificates", [sys.executable, "Tools/TrolleyVerification/catalogue.py", "check"]),
     ]:

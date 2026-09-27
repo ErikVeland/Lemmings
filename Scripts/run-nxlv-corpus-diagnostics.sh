@@ -4,8 +4,12 @@ set -euo pipefail
 project_dir="${0:A:h:h}"
 build_dir="$project_dir/.build/nxlv-corpus-diagnostics"
 
-if (( $# != 2 )); then
-  print -u2 "Usage: $0 <levels-directory> <styles-directory>"
+if (( $# < 2 || $# > 3 )); then
+  print -u2 "Usage: $0 <levels-directory> <styles-directory> [--require-runnable]"
+  exit 2
+fi
+if (( $# == 3 )) && [[ "$3" != "--require-runnable" ]]; then
+  print -u2 "Usage: $0 <levels-directory> <styles-directory> [--require-runnable]"
   exit 2
 fi
 
@@ -25,4 +29,4 @@ swiftc -swift-version 6 -warnings-as-errors \
   -o "$build_dir/NxlvCorpusDiagnostics" \
   "$project_dir/Tests/NxlvCorpusDiagnostics/main.swift"
 
-"$build_dir/NxlvCorpusDiagnostics" "$1" "$2"
+"$build_dir/NxlvCorpusDiagnostics" "$@"

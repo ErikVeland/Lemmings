@@ -239,6 +239,21 @@ func makeObjectFixtures(_ styles: URL) throws {
     """,
     to: objects.appendingPathComponent("decor.nxmo")
   )
+  try writePNG(
+    width: 1,
+    height: 5,
+    pixels: [.red, .green, .blue, .yellow, .magenta],
+    to: objects.appendingPathComponent("remainder.png")
+  )
+  try write(
+    """
+    $PRIMARY_ANIMATION
+      FRAMES 2
+      INITIAL_FRAME 1
+    $END
+    """,
+    to: objects.appendingPathComponent("remainder.nxmo")
+  )
 }
 
 func testTransforms(_ styles: URL) throws {
@@ -521,6 +536,14 @@ func testNineSliceAndDefaults(_ styles: URL) throws {
       WIDTH 4
       HEIGHT 5
     $END
+    $TERRAIN
+      STYLE test
+      PIECE nine
+      X 9
+      Y 0
+      WIDTH 1
+      HEIGHT 1
+    $END
     """)
   let result = try render(fixture, styles: styles)
   let output = try unwrap(result.renderedLevel, "The nine-slice fixture did not render.")
@@ -531,6 +554,30 @@ func testNineSliceAndDefaults(_ styles: URL) throws {
   try expect(pixel(output, x: 4, y: 3) == .black, "The bottom-right margin changed.")
   try expect(pixel(output, x: 3, y: 2) == .white, "The nine-slice center did not tile.")
   try expect(pixel(output, x: 9, y: 5) == .black, "Explicit resize or clipping failed.")
+  try expect(pixel(output, x: 9, y: 0) == .black, "Small nine-slice margins were not trimmed like CE.")
+}
+
+func testRemainderAnimationStrip(_ styles: URL) throws {
+  let fixture = try level(
+    """
+    TITLE Animation remainder
+    WIDTH 2
+    HEIGHT 2
+    $GADGET
+      STYLE test
+      PIECE remainder
+      X 0
+      Y 0
+    $END
+    """)
+  let result = try render(fixture, styles: styles)
+  let output = try unwrap(result.renderedLevel, "The remainder animation did not render.")
+  try expect(pixel(output, x: 0, y: 0) == .blue, "CE integer frame division was not used.")
+  try expect(
+    has(.invalidAnimationStrip, in: result),
+    "Remainder pixels in an animation strip were not reported."
+  )
+  try expect(!result.hasErrors, "A CE-compatible remainder strip was rejected.")
 }
 
 func testBackgroundAndPrimaryGadget(_ styles: URL) throws {
@@ -712,6 +759,7 @@ struct NxlvRendererTests {
     try testTerrainCompositionAndOneWay(styles)
     try testGroups(styles)
     try testNineSliceAndDefaults(styles)
+    try testRemainderAnimationStrip(styles)
     try testBackgroundAndPrimaryGadget(styles)
     try testPNGAndPathLimits(fixture)
     print(

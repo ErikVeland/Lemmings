@@ -22,7 +22,8 @@ NAMES = {
 }
 
 
-# These files route input or store presentation preferences. Replays bypass them.
+# These files route input, store presentation preferences or produce music.
+# Fixed-input simulation replays do not call them.
 PRESENTATION_FILES = set(json.loads((Path(__file__).with_name("presentation-files.json")).read_text()))
 
 
