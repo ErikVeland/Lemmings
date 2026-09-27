@@ -293,9 +293,12 @@ public struct ProTrackerEnhancedPlayer: Sendable {
         var player = ProTrackerPlayer(module: module, sampleRate: sampleRate)
         player.interpolation = enhancements.interpolation
         self.player = player
-        percussionSamples = Set(module.samples.indices.filter {
+        let namedPercussion = Set(module.samples.indices.filter {
             ProTrackerPercussion.evidence(for: module.samples[$0]) != nil
         })
+        percussionSamples = enhancements == .modern
+            ? namedPercussion.union(ProTrackerHolidayMix.percussionSamples(for: module))
+            : namedPercussion
 
         // Which samples are drums depends on the module, so the tuning is
         // worked out here rather than living in a shared preset.
@@ -305,6 +308,10 @@ public struct ProTrackerEnhancedPlayer: Sendable {
                 for: module,
                 amount: enhancements.percussionCentering,
                 existing: enhancements.voiceTuning)
+        }
+        if enhancements == .modern {
+            resolved.voiceTuning = ProTrackerHolidayMix.tuning(
+                for: module, existing: resolved.voiceTuning)
         }
         self.enhancements = resolved
         outputs = [ProTrackerVoiceOutput](

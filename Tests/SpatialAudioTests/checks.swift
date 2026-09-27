@@ -22,16 +22,44 @@ extension SoundEffectPlayer {
     engine.disableManualRenderingMode()
     return (left, right)
   }
+
+  func pauseBacklogForCheck() throws -> (Double, Double) {
+    try start()
+    engine.stop()
+    let format = AVAudioFormat(standardFormatWithSampleRate: 44100, channels: 2)!
+    try engine.enableManualRenderingMode(.offline, format: format, maximumFrameCount: 512)
+    try engine.start()
+    play(.builderWarning)
+    suspendOutput()
+    play(.builderWarning)
+    try resumeOutput()
+    let buffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: 512)!
+    func energy() throws -> Double {
+      let result = try engine.renderOffline(512, to: buffer)
+      precondition(result == .success)
+      return (0..<Int(buffer.frameLength)).reduce(0) { total, index in
+        total + abs(Double(buffer.floatChannelData![0][index]))
+      }
+    }
+    let stale = try energy()
+    play(.builderWarning)
+    let fresh = try energy()
+    stop()
+    engine.disableManualRenderingMode()
+    return (stale, fresh)
+  }
 }
 let player = SoundEffectPlayer(voiceCount: 4)
 let left = try player.renderForCheck(pan: -1)
 let right = try player.renderForCheck(pan: 1)
 precondition(left.0 > left.1 && right.1 > right.0)
 precondition(left.0 > 0 && right.1 > 0)
+let backlog = try player.pauseBacklogForCheck()
+precondition(backlog.0 == 0 && backlog.1 > 0)
 try player.start()
 player.setMuted(true)
 player.play(.builderWarning)
 player.suspendOutput()
 try player.resumeOutput()
 player.stop()
-print("Spatial audio: finite output, left/right positioning, restart, mute and pause/resume passed", left, right)
+print("Spatial audio: finite output, positioning, restart, mute and pause backlog passed", left, right)

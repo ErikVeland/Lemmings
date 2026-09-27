@@ -29,18 +29,18 @@ do {
         amigaFallbackDirectory: resources.appendingPathComponent("Ports/amiga_extracted/lemmings"), supplementDirectory: supplied)
     check(Set(complete) == Set(ClassicSoundEffect.allCases), "The Mac set still has a silent event")
     let amiga = try player.loadAmigaSounds(directory: resources.appendingPathComponent("Ports/amiga_extracted/lemmings"),
-        deathFallbackImage: mac, supplementDirectory: supplied)
-    check(amiga.contains(.yippee), "The Amiga set did not fill Yippee from the supplied sound")
+        macintoshFallbackImage: mac, supplementDirectory: supplied)
+    check(Set(amiga) == Set(ClassicSoundEffect.allCases), "The Amiga set still has a silent event")
     let clips = PlayedClips()
     player.onPlay = { clips.record($0, $1, $2) }
     player.play(.yippee)
     check(clips.count == 1, "Yippee did not play")
-    print("PASS Mac and Amiga sets fill Pop and Yippee, and Yippee plays")
+    print("PASS Mac and Amiga sets cover every cue, and Yippee plays")
 }
 for source in 0..<3 {
     let player = SoundEffectPlayer()
     if source == 0 { try player.loadMacintoshSounds(imageURL: mac) }
-    if source == 1 { try player.loadAmigaSounds(directory: resources.appendingPathComponent("Ports/amiga_extracted/lemmings"), deathFallbackImage: mac) }
+    if source == 1 { try player.loadAmigaSounds(directory: resources.appendingPathComponent("Ports/amiga_extracted/lemmings"), macintoshFallbackImage: mac) }
     if source == 2 { try player.loadLemmings3Sounds(root: resources.appendingPathComponent("Ports/LEM3CD")) }
     let clips = PlayedClips()
     player.onPlay = { clips.record($0, $1, $2) }

@@ -68,9 +68,12 @@ At zero uses, replace the sprite with a steady red X. Reduced motion and reduced
 flashes keep the one-use sprite steady. The None size still hides the badge. Lemmings 3 has no
 shared skill stock: only Use shows the hovered lemming's remaining tool uses.
 
-A selected lemming has a faint, soft halo with a small brightness shimmer.
-Do not draw an outlined ring or an orbiting arc. Reduced motion keeps the halo
-static. Classic, Lemmings 2 and Lemmings 3 use the same cursor and halo renderers.
+A selected lemming has a soft, clearly visible halo with a small brightness shimmer.
+A small solid marker above its head identifies the exact target against busy
+terrain and overlapping sprites. Do not draw an outlined ring or an orbiting arc.
+A narrow shimmer crosses only the selected sprite's opaque pixels. Reduced
+motion and reduced flashes keep the sprite highlight steady. Classic, Lemmings 2
+and Lemmings 3 use the same cursor and target cue renderers.
 
 Gameplay settings offer Original, Modern and Custom presets. Modern enables
 approaching-lemming targeting, blockers for bombs and current builders for Build.

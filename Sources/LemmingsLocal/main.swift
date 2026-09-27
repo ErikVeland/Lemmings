@@ -1641,18 +1641,22 @@ let achievementProgressKey = "ClassicAchievementProgress"
   @objc nonisolated private func resumeAudioOutput() {
     Task { @MainActor [weak self] in
       guard let self, !self.audioIsSleeping else { return }
-      do {
-        if self.phase == .playing && self.isPaused && !self.playfield.startCountdown.isActive && self.session?.isComplete == false {
-          self.music.suspendOutput(rhythmOnly: self.userPausedMusic && self.settings.pauseMusicBeatOnly)
-          self.soundtrack.suspendOutput(rhythmOnly: self.userPausedMusic && self.settings.pauseMusicBeatOnly)
-          self.dj.suspendOutput(rhythmOnly: self.userPausedMusic && self.settings.pauseMusicBeatOnly)
-        } else {
-          try self.music.resumeOutput(); self.soundtrack.resumeOutput(); self.dj.resumeOutput()
-        }
-        try self.effects.resumeOutput()
-        try self.nativeL2Window?.resumeAudioOutput()
-        try self.nativeL3Window?.resumeAudioOutput()
-      } catch { self.setStatus("Audio unavailable: \(error.localizedDescription)") }
+      if self.phase == .playing && self.isPaused && !self.playfield.startCountdown.isActive && self.session?.isComplete == false {
+        self.music.suspendOutput(rhythmOnly: self.userPausedMusic && self.settings.pauseMusicBeatOnly)
+        self.soundtrack.suspendOutput(rhythmOnly: self.userPausedMusic && self.settings.pauseMusicBeatOnly)
+        self.dj.suspendOutput(rhythmOnly: self.userPausedMusic && self.settings.pauseMusicBeatOnly)
+      } else {
+        do { try self.music.resumeOutput() }
+        catch { self.setStatus("Audio unavailable: \(error.localizedDescription)") }
+        self.soundtrack.resumeOutput()
+        self.dj.resumeOutput()
+      }
+      do { try self.effects.resumeOutput() }
+      catch { self.setStatus("Audio unavailable: \(error.localizedDescription)") }
+      do { try self.nativeL2Window?.resumeAudioOutput() }
+      catch { self.setStatus("Audio unavailable: \(error.localizedDescription)") }
+      do { try self.nativeL3Window?.resumeAudioOutput() }
+      catch { self.setStatus("Audio unavailable: \(error.localizedDescription)") }
     }
   }
 
@@ -5451,6 +5455,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   private func adopt(_ new: any GameSession) {
     saveRunCheckpoint(immediately: true, waitForDisk: false)
+    effects.silence()
+    try? effects.resumeOutput()
     lastCheckpointTime = 0
     screenFlash.clear()
     assignmentFocus = AssignmentFocus()
@@ -6309,19 +6315,17 @@ let achievementProgressKey = "ClassicAchievementProgress"
     panel.needsDisplay = true
     if isPaused {
       applyUserMusicPause()
-      effects.suspendOutput()
+      effects.silence()
     } else {
       if phase == .playing { session?.resumeFromRewind() }
       rewindOriginTick = nil
       playfield.endRewindCue()
-      do {
-        try music.resumeOutput()
-        soundtrack.resumeOutput()
-        dj.resumeOutput()
-        try effects.resumeOutput()
-      } catch {
-        setStatus("Audio unavailable: \(error.localizedDescription)")
-      }
+      do { try music.resumeOutput() }
+      catch { setStatus("Audio unavailable: \(error.localizedDescription)") }
+      soundtrack.resumeOutput()
+      dj.resumeOutput()
+      do { try effects.resumeOutput() }
+      catch { setStatus("Audio unavailable: \(error.localizedDescription)") }
       lastStepTime = nil
     }
   }
@@ -6401,7 +6405,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       guard let root = Bundle.main.resourceURL else { return }
       let directory = root.appendingPathComponent("Ports/amiga_extracted/lemmings")
       do {
-        let loaded = try effects.loadAmigaSounds(directory: directory, deathFallbackImage: BundledGameResources.macintoshSoundImage(),
+        let loaded = try effects.loadAmigaSounds(directory: directory, macintoshFallbackImage: BundledGameResources.macintoshSoundImage(),
           supplementDirectory: root.appendingPathComponent("Sounds"))
         setStatus("Loaded \(loaded.count) Amiga sound effects.")
       } catch {

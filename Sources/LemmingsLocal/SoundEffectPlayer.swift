@@ -24,6 +24,7 @@ final class SoundEffectPlayer: @unchecked Sendable {
   private var rates: [ClassicSoundEffect: Double] = [:]
   private var voices: [Voice]
   private var isMuted = false
+  private var outputSuspended = false
   private var level: Double = 1.0
   private let recentSampleLimit = 44_100
   private var recentSamples: [Float]
@@ -81,6 +82,9 @@ final class SoundEffectPlayer: @unchecked Sendable {
     do { try engine.start() }
     catch { detachSources(); throw error }
     isRunning = true
+    lock.lock()
+    outputSuspended = false
+    lock.unlock()
   }
 
   private func detachSources() {
@@ -97,12 +101,26 @@ final class SoundEffectPlayer: @unchecked Sendable {
     detachSources()
     silence()
     isRunning = false
+    lock.lock()
+    outputSuspended = false
+    lock.unlock()
   }
 
-  func suspendOutput() { if isRunning { engine.pause() } }
+  func suspendOutput() {
+    guard isRunning else { return }
+    lock.lock()
+    outputSuspended = true
+    for index in voices.indices { voices[index].isActive = false }
+    lock.unlock()
+    engine.pause()
+  }
 
   func resumeOutput() throws {
-    if isRunning && !engine.isRunning { try engine.start() }
+    guard isRunning else { return }
+    if !engine.isRunning { try engine.start() }
+    lock.lock()
+    outputSuspended = false
+    lock.unlock()
   }
 
   private func fillVoice(_ index: Int, buffers: UnsafeMutableAudioBufferListPointer, frames: Int, sampleTime: Double) {
@@ -220,25 +238,31 @@ final class SoundEffectPlayer: @unchecked Sendable {
   /// trap sounds. Names are matched without case, because the banks mix
   /// `Splat` with `chink`. Sounds whose name is empty are skipped: nothing
   /// says which effect they belong to, and binding them to a guess would play
-  /// the wrong sound rather than none.
+  /// the wrong sound rather than none. The Macintosh recording fills gaps
+  /// where the Amiga banks have no named sample.
   @discardableResult
-  func loadAmigaSounds(directory: URL, deathFallbackImage: URL? = nil,
+  func loadAmigaSounds(directory: URL, macintoshFallbackImage: URL? = nil,
                        supplementDirectory: URL? = nil) throws -> [ClassicSoundEffect] {
-    // The Amiga death sample is unnamed. Use the identified Macintosh voice.
-    var death: ClassicMacSound?
-    if let image = deathFallbackImage {
+    var macintosh: [String: ClassicMacSound] = [:]
+    if let image = macintoshFallbackImage {
       let volume = try ClassicHFSVolume(image: Data(contentsOf: image, options: .mappedIfSafe))
-      death = ClassicMacSoundDecoder.sounds(in: try volume.resourceFork(named: "Lemmings")).first { $0.name == "Die" }
+      for sound in ClassicMacSoundDecoder.sounds(in: try volume.resourceFork(named: "Lemmings")) {
+        if let name = sound.name { macintosh[name] = sound }
+      }
     }
     let byName = try Self.amigaSounds(in: directory)
 
     lock.lock()
     library = [:]
     rates = [:]
-    if let death { library[.fallOut] = death.floatSamples(); rates[.fallOut] = death.sampleRate }
     for (effect, name) in ClassicSoundMapping.amigaVoiceNames {
       guard let sound = byName[name.lowercased()] else { continue }
       library[effect] = sound.samples
+      rates[effect] = sound.sampleRate
+    }
+    for (effect, name) in ClassicSoundMapping.macintoshNames where library[effect] == nil {
+      guard let sound = macintosh[name] else { continue }
+      library[effect] = sound.floatSamples()
       rates[effect] = sound.sampleRate
     }
     fillFromSupplementLocked(supplementDirectory)
@@ -289,7 +313,7 @@ final class SoundEffectPlayer: @unchecked Sendable {
   func playRewindScrub() {
     lock.lock()
     defer { lock.unlock() }
-    guard !isMuted, let latest = latestRecentSample else { return }
+    guard !isMuted, !outputSuspended, let latest = latestRecentSample else { return }
     var samples: [Float] = []
     samples.reserveCapacity(11_025)
     for offset in 0..<11_025 {
@@ -324,7 +348,7 @@ final class SoundEffectPlayer: @unchecked Sendable {
     lock.lock()
     defer { lock.unlock() }
     guard effect != .fallOut || bottomFallSounds else { return }
-    guard !isMuted, let samples = library[effect], !samples.isEmpty else { return }
+    guard !isMuted, !outputSuspended, let samples = library[effect], !samples.isEmpty else { return }
     let rate = rates[effect] ?? sampleRate
     onPlay?(samples, rate, Float(level) * 0.6)
     var slot = voices.firstIndex { !$0.isActive }

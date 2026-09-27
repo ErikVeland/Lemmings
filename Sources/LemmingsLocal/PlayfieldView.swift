@@ -351,6 +351,8 @@ struct ReticleFeedback {
 
   private var spriteCache: [String: NSImage] = [:]
   private var spritePixels: [String: CGImage] = [:]
+  private var shimmerTargetID: Int?
+  private var shimmerSprite: (pixels: CGImage, rect: CGRect)?
   private var skillBadgeCache: [Int: NSImage] = [:]
   var usesControllerPointer: Bool { controllerPointer != nil }
   private var controllerPointer: CGPoint?
@@ -391,7 +393,7 @@ struct ReticleFeedback {
   }
 
   func reticleState(at point: CGPoint, now: TimeInterval) -> ReticleState {
-    let target = lemming(at: point)
+    let target = clickTarget(at: point)
     let eligible = target.map { session?.canAssign(skillIndex: selectedSkill(), to: $0.id) == true } ?? false
     if eligible { return reticleFeedback.state(eligible: true, duplicate: nil, now: now) }
     let skill = selectedSkill()
@@ -1114,11 +1116,18 @@ struct ReticleFeedback {
   private func drawLemmings() {
     guard let session else { return }
     let lemmings = session.lemmings
+    shimmerTargetID = phase == .playing && !GameCursor.gameplaySuppressed
+      ? assignmentHighlight.target ?? pointerLemmingID : nil
+    shimmerSprite = nil
     if hdEffectsEnabled && !reduceMotion && isFastForward && phase == .playing {
       for lemming in lemmings { draw(lemming, ghostsOnly: true) }
     }
     // Every solid lemming and its labels cover every ghost, including neighbours.
     for lemming in lemmings { draw(lemming) }
+    if let shimmerSprite {
+      LemmingSelectionGlow.drawSpriteShimmer(sprite: shimmerSprite.pixels, in: shimmerSprite.rect,
+        scale: viewport.zoom, animated: !reduceMotion && !reduceFlashes)
+    }
   }
 
   func updateSpeedTrails() {
@@ -1190,6 +1199,7 @@ struct ReticleFeedback {
           return
         }
         drawSprite(sprite, key: key, in: rect, alpha: fraction)
+        captureShimmerSprite(for: lemming.id, key: key, sprite: sprite, in: rect)
         drawAssignmentPulse(for: lemming.id, key: key, sprite: sprite, in: rect)
         if pose == .explosion { drawBombCore(in: rect, tick: lemming.animationFrame, actor:lemming.id) }
         if let countdown = lemming.countdown { drawCountdown(countdown, above: rect) }
@@ -1224,6 +1234,7 @@ struct ReticleFeedback {
       return
     }
     drawSprite(sprite, key: key, in: rect, alpha: fraction)
+    captureShimmerSprite(for: lemming.id, key: key, sprite: sprite, in: rect)
     drawAssignmentPulse(for: lemming.id, key: key, sprite: sprite, in: rect)
     if pose == .explosion { drawBombCore(in: rect, tick: lemming.animationFrame, actor:lemming.id) }
 
@@ -1238,6 +1249,13 @@ struct ReticleFeedback {
     else { return }
     assignmentPulse.draw(sprite: pixels, in: rect, scale: viewport.zoom,
       reduceMotion: reduceMotion, reduceFlashes: reduceFlashes)
+  }
+
+  private func captureShimmerSprite(for id: Int, key: String, sprite: NSImage, in rect: CGRect) {
+    guard shimmerTargetID == id,
+          let pixels = spritePixels[key] ?? sprite.cgImage(forProposedRect: nil, context: nil, hints: nil)
+    else { return }
+    shimmerSprite = (pixels, rect)
   }
 
   private func drawCountdown(_ countdown: Int, above rect: CGRect) {
@@ -1256,7 +1274,7 @@ struct ReticleFeedback {
   private func drawCursor() {
     guard !GameCursor.gameplaySuppressed, let cursorViewPoint else { return }
     let point = viewport.levelPoint(from: precisionLens.source(cursorViewPoint))
-    let target = lemming(at: point)
+    let target = clickTarget(at: point)
     let now = ProcessInfo.processInfo.systemUptime
     let state = reticleState(at: point, now: now)
     let pulseTarget = state == .assigned ? session?.lemmings.first(where: { $0.id == assignedTarget }) : nil
