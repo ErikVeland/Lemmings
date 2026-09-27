@@ -254,6 +254,49 @@ func makeObjectFixtures(_ styles: URL) throws {
     """,
     to: objects.appendingPathComponent("remainder.nxmo")
   )
+  try writePNG(
+    width: 2,
+    height: 1,
+    pixels: [.cyan, .cyan],
+    to: objects.appendingPathComponent("paint.png")
+  )
+  try write(
+    """
+    EFFECT PAINT
+    $PRIMARY_ANIMATION
+      FRAMES 1
+    $END
+    """,
+    to: objects.appendingPathComponent("paint.nxmo")
+  )
+}
+
+func testPaintClipsToTerrain(_ styles: URL) throws {
+  let fixture = try level(
+    """
+    TITLE Paint clipping
+    WIDTH 3
+    HEIGHT 1
+    $TERRAIN
+      STYLE test
+      PIECE blue
+      X 1
+      Y 0
+    $END
+    $GADGET
+      STYLE test
+      PIECE paint
+      X 0
+      Y 0
+    $END
+    """)
+  let output = try unwrap(
+    render(fixture, styles: styles).renderedLevel, "The paint fixture did not render."
+  )
+  try expect(pixel(output, x: 0, y: 0) == .clear,
+             "Paint appeared without terrain beneath it.")
+  try expect(pixel(output, x: 1, y: 0) == .cyan,
+             "Paint did not cover the terrain pixel.")
 }
 
 func testTransforms(_ styles: URL) throws {
@@ -761,6 +804,7 @@ struct NxlvRendererTests {
     try testNineSliceAndDefaults(styles)
     try testRemainderAnimationStrip(styles)
     try testBackgroundAndPrimaryGadget(styles)
+    try testPaintClipsToTerrain(styles)
     try testPNGAndPathLimits(fixture)
     print(
       "NXLV renderer tests passed: transforms, terrain flags, masks, groups, resize, clipping, static layers, and PNG safety."

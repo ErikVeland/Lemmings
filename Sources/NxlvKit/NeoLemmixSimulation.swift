@@ -176,6 +176,11 @@ public enum NeoLemmixZoneEffect: String, Codable, Sendable {
     case fire
     case trap
     case oneShotTrap
+    case splatPad
+    case antiSplatPad
+    case pickupSkill
+    case lockedExit
+    case unlockButton
 }
 
 public struct NeoLemmixZone: Codable, Equatable, Sendable, Identifiable {
@@ -183,17 +188,23 @@ public struct NeoLemmixZone: Codable, Equatable, Sendable, Identifiable {
     public let effect: NeoLemmixZoneEffect
     public let bounds: NeoLemmixRect
     public let isDisarmable: Bool
+    public let skill: NeoLemmixSkill?
+    public let skillCount: Int?
 
     public init(
         id: Int,
         effect: NeoLemmixZoneEffect,
         bounds: NeoLemmixRect,
-        isDisarmable: Bool = false
+        isDisarmable: Bool = false,
+        skill: NeoLemmixSkill? = nil,
+        skillCount: Int? = nil
     ) {
         self.id = id
         self.effect = effect
         self.bounds = bounds
         self.isDisarmable = isDisarmable
+        self.skill = skill
+        self.skillCount = skillCount
     }
 }
 
@@ -441,6 +452,13 @@ public struct NeoLemmixConfiguration: Codable, Equatable, Sendable {
                 "Each zone must have a positive width and height."
             )
         }
+        guard zones.allSatisfy({
+            $0.effect != .pickupSkill || ($0.skill != nil && ($0.skillCount ?? 0) > 0)
+        }) else {
+            throw NeoLemmixSimulationError.invalidConfiguration(
+                "Each skill pickup needs a known skill and a positive count."
+            )
+        }
         let lemmingsToSpawn = totalLemmings - preplacedLemmings.count
         if lemmingsToSpawn > 0,
            entrances.allSatisfy({ $0.lemmingLimit != nil }),
@@ -556,6 +574,10 @@ public struct NeoLemmixConfiguration: Codable, Equatable, Sendable {
                 ))
             case .exit:
                 zones.append(NeoLemmixZone(id: zones.count, effect: .exit, bounds: bounds))
+            case .lockedExit:
+                zones.append(NeoLemmixZone(id: zones.count, effect: .lockedExit, bounds: bounds))
+            case .unlockButton:
+                zones.append(NeoLemmixZone(id: zones.count, effect: .unlockButton, bounds: bounds))
             case .water:
                 zones.append(NeoLemmixZone(id: zones.count, effect: .water, bounds: bounds))
             case .fire:
@@ -573,6 +595,23 @@ public struct NeoLemmixConfiguration: Codable, Equatable, Sendable {
                     effect: .oneShotTrap,
                     bounds: bounds,
                     isDisarmable: true
+                ))
+            case .splatPad:
+                zones.append(NeoLemmixZone(id: zones.count, effect: .splatPad, bounds: bounds))
+            case .antiSplatPad:
+                zones.append(NeoLemmixZone(id: zones.count, effect: .antiSplatPad, bounds: bounds))
+            case .pickupSkill:
+                guard let skill = source?.skillType else {
+                    throw NeoLemmixSimulationError.invalidConfiguration(
+                        "A skill pickup has no known skill."
+                    )
+                }
+                zones.append(NeoLemmixZone(
+                    id: zones.count,
+                    effect: .pickupSkill,
+                    bounds: bounds,
+                    skill: NeoLemmixSkill(skill),
+                    skillCount: max(1, source?.skillCount ?? 1)
                 ))
             default:
                 break
@@ -740,6 +779,8 @@ public enum NeoLemmixEvent: Codable, Equatable, Sendable {
     case terrainRemoved(lemmingID: Int, pixelCount: Int)
     case hazardTriggered(lemmingID: Int, zoneID: Int, effect: NeoLemmixZoneEffect)
     case zoneDisarmed(lemmingID: Int, zoneID: Int)
+    case skillPickedUp(lemmingID: Int, zoneID: Int, skill: NeoLemmixSkill, count: Int)
+    case buttonPressed(lemmingID: Int, zoneID: Int)
     case cloned(sourceID: Int, cloneID: Int)
     case removed(lemmingID: Int, reason: NeoLemmixRemovalReason)
     case completed(didWin: Bool)
@@ -1515,6 +1556,22 @@ private extension NeoLemmixSimulation {
             let matchingZones = configuration.zones.filter {
                 !disabledZoneIDs.contains($0.id) && $0.bounds.contains(point)
             }
+            if !lemming.traits.contains(.zombie) {
+                if let zone = matchingZones.last(where: { $0.effect == .pickupSkill }),
+                   let skill = zone.skill, let count = zone.skillCount {
+                    disabledZoneIDs.insert(zone.id)
+                    if case let .finite(current) = skills[skill] ?? .finite(0) {
+                        skills[skill] = .finite(current >= 99 ? 99 : current + min(count, 99 - current))
+                    }
+                    lastTickEvents.append(.skillPickedUp(
+                        lemmingID: lemming.id, zoneID: zone.id, skill: skill, count: count
+                    ))
+                }
+                if let zone = matchingZones.last(where: { $0.effect == .unlockButton }) {
+                    disabledZoneIDs.insert(zone.id)
+                    lastTickEvents.append(.buttonPressed(lemmingID: lemming.id, zoneID: zone.id))
+                }
+            }
             for zone in matchingZones {
                 switch zone.effect {
                 case .fire:
@@ -1556,8 +1613,11 @@ private extension NeoLemmixSimulation {
                         if zone.effect == .oneShotTrap { disabledZoneIDs.insert(zone.id) }
                     }
                     return
-                case .exit:
+                case .exit, .lockedExit:
                     guard !lemming.traits.contains(.zombie) else { continue }
+                    if zone.effect == .lockedExit && configuration.zones.contains(where: {
+                        $0.effect == .unlockButton && !disabledZoneIDs.contains($0.id)
+                    }) { continue }
                     lemming.position = point
                     lastTickEvents.append(.hazardTriggered(
                         lemmingID: lemming.id,
@@ -1566,6 +1626,10 @@ private extension NeoLemmixSimulation {
                     ))
                     transition(&lemming, to: .exiting)
                     return
+                case .splatPad, .antiSplatPad:
+                    continue
+                case .pickupSkill, .unlockButton:
+                    continue
                 }
             }
         }
@@ -1817,7 +1881,16 @@ private extension NeoLemmixSimulation {
             }
         }
         if moved < 3 {
-            if lemming.fallDistance > NeoLemmixRules.maximumSafeFallDistance {
+            let protected = lemming.traits.contains(.floater)
+                || lemming.traits.contains(.glider)
+                || configuration.zones.contains {
+                    $0.effect == .antiSplatPad && $0.bounds.contains(lemming.position)
+                }
+            let forcedSplat = configuration.zones.contains {
+                $0.effect == .splatPad && $0.bounds.contains(lemming.position)
+            }
+            if !protected && (lemming.fallDistance > NeoLemmixRules.maximumSafeFallDistance
+                || forcedSplat) {
                 transition(&lemming, to: .splatting)
             } else {
                 lemming.fallDistance = 0

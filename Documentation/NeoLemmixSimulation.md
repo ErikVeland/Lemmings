@@ -14,10 +14,13 @@ text or binary assets.
 - `NeoLemmixTerrain` stores solid, steel, and one-way masks.
 - `NeoLemmixConfiguration` stores timing, entrances, zones, preplaced lemmings, traits, and skills.
 - `NeoLemmixConfiguration(level:renderedLevel:)` converts an `NxlvLevel` and `NxlvRenderedLevel`.
+- The static renderer clips paint objects to solid terrain.
 - `NeoLemmixReplayCommand` schedules an assignment, spawn interval change, or nuke command by tick and sequence.
 - `NxrpReplayDecoder` imports current section-based `.nxrp` metadata and
   commands. It retains all 21 current skill names, including skills that the
   simulator rejects explicitly.
+- `NxrpReplayPlayback` checks the recorded level and live assignment state,
+  applies source commands in CE frame order and checks the rescue frame.
 - `NeoLemmixSnapshot` contains the complete observable state and the events from the last tick.
 - `NeoLemmixSimulation` is `Codable`, `Equatable`, and `Sendable`. An encoded state continues deterministically after decoding.
 
@@ -33,7 +36,8 @@ The phase-1 engine implements these fixed values and state transitions:
 - A minimum spawn interval of 4 ticks.
 - Walking, step-up, ascending, falling, climbing, hoisting, floating, and splatting.
 - A maximum safe fall distance of 62 pixels.
-- Exit, water, fire, reusable trap, and one-shot trap zones.
+- Exit, locked exit, button, pickup, water, fire, reusable trap, one-shot
+  trap, splat pad and anti-splat pad zones.
 - Preplaced lemmings, entrance traits, entrance limits, neutral lemmings, and zombies.
 - Finite and infinite skill supplies.
 - Steel and directional one-way destruction checks.
@@ -80,12 +84,14 @@ the engine can claim NeoLemmix 12.14 or CE 1.2.0 parity:
 - Fencer and Laserer actions and their terrain masks.
 - Exact multi-entrance spawn-order edge cases.
 - Exact Slider dehoist transitions and wall pinning.
-- Updraft, splat pad, anti-splat pad, force field, splitter, button, locked exit, pickup, teleporter, receiver, and portal effects.
+- Updraft, force field, splitter, teleporter, receiver, and portal effects.
+- Reference visual checks for pickup icons, button state and locked exits.
 - Gadget animation keyframes, trap occupancy, and paired gadget state.
 - Zombie infection, neutralizer, deneutralizer, skill-adder, and skill-remover effects.
 - Superlemming behaviour and CE-specific physics changes.
 - Legacy `.nxrp` import where retained packs require it.
-- Golden replay comparison against NeoLemmix 12.14 and CE 1.2.0.
+- Golden replay comparison against NeoLemmix 12.14 and CE 1.2.0. Checked
+  playback has only synthetic fixtures, including same-frame clone assignment.
 
 Callers must treat unsupported level effects as a load diagnostic until these items are implemented.
 
@@ -102,7 +108,8 @@ The scripts compile all `NxlvKit` sources and focused test executables with
 Swift 6 and warnings as errors. The test groups cover spawn timing, movement,
 assignments, all implemented skills, steel, directional one-way terrain,
 hazards, NXLV conversion, replay ordering, inventory, nuke behaviour, current
-replay decoding and deterministic Codable continuation.
+replay decoding, checked source-frame playback and deterministic Codable
+continuation.
 
 Run the combined source gate with:
 
@@ -110,7 +117,7 @@ Run the combined source gate with:
 zsh Scripts/check-1.5-neolemmix.sh
 ```
 
-The [1.5 roadmap](1.5Roadmap.md) defines the pinned real-level corpus, strict
+The [1.7 roadmap](1.7Roadmap.md) defines the pinned real-level corpus, strict
 runnable mode and external replay evidence. The development corpus can pass
 while it reports unsupported mechanics. Only the strict runnable and reference
 replay gates can close those compatibility claims.

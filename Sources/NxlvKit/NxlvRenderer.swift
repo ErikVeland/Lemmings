@@ -818,7 +818,7 @@ private struct NxlvRenderEngine {
       let clipMask: [UInt8]?
       if directional {
         clipMask = terrain.oneWayEligible
-      } else if gadget.onlyOnTerrain {
+      } else if prepared.effect == .paint || gadget.onlyOnTerrain {
         clipMask = terrain.solid
       } else {
         clipMask = nil

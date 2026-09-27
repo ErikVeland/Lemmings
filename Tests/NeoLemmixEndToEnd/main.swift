@@ -184,7 +184,7 @@ do {
     }
     let hatchMetadata = styles.appendingPathComponent("testpack/objects/hatch.nxmo")
     let originalMetadata = try String(contentsOf: hatchMetadata, encoding: .utf8)
-    for effect in ["TELEPORTER", "LOCKEDEXIT", "UPDRAFT", "FORCELEFT"] {
+    for effect in ["TELEPORTER", "SPLITTER", "UPDRAFT", "FORCELEFT"] {
         try write(originalMetadata.replacingOccurrences(of: "ENTRANCE", with: effect), to: hatchMetadata)
         let changed = NxlvRenderer().render(level: level, resolution: NxlvStyleResolver(stylesRootURL: styles).resolve(level: level))
         guard let image = changed.renderedLevel else { throw Failure(description: "Unsupported gadget test did not render") }

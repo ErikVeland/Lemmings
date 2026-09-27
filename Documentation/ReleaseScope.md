@@ -1,8 +1,9 @@
 # Release scope
 
 Classic 1.0 is the historical macOS release baseline, confirmed on 13 September 2026.
-The current local candidate is macOS 1.5 build 50. Publication is pending. L2 and L3 remain
-previews. Updated 25 September 2026 for the 1.5 release scope.
+The macOS 1.5 build 50 distribution is recorded. The 1.6 build 51 candidate
+has local validation but no recorded distribution. L2 and L3 remain Preview.
+Updated 26 September 2026 for the 1.7, 1.8 and 2.0 roadmap targets.
 Automated checks support the recorded routes;
 remaining compatibility and hardware claims still need validation. See the [gate register](ReleaseReadiness/gates.json)
 and the current [Classic validation](ReleaseReadiness/ClassicValidation-current.md).
@@ -29,10 +30,9 @@ Lemmings 2 and Lemmings 3 remain Preview. NeoLemmix import remains Beta or
 Preview until the real-pack, runnable, replay and behaviour gates pass.
 
 The 1.5 crash, startup, input and gameplay-cursor fixes are release changes.
-Fresh source, app, signing, notarisation, Gatekeeper and live-update evidence
-must still describe the same final commit.
-See [1.5 public release readiness](ReleaseReadiness/1.5PublicRelease.md) for the
-current gate state.
+See the [1.5 distribution record](ReleaseReadiness/1.5Build50Distribution.md).
+The 1.6 candidate needs signing, notarisation, Gatekeeper and live-update
+evidence for its final commit. See the [1.6 validation record](ReleaseReadiness/1.6LocalValidation.md).
 
 ## Classic
 
@@ -91,12 +91,12 @@ Both play through their campaigns with original artwork, music and interfaces.
 Lemmings 3 keeps provisional rules in several areas, and its environmental
 effects, movie soundtracks and story transitions are incomplete.
 
-The 1.2 roadmap makes completion verification the exit gate for both sequels.
+The 1.8 roadmap makes completion verification the exit gate for both sequels.
 They remain Preview until all advertised levels have winning-route evidence,
 engine-fidelity comparisons, continuous progression, recovery checks, media
 closure and verified endings.
 
-## iPhone and iPad 1.3
+## iPhone and iPad 2.0
 
 The repository contains an iOS 16 UIKit/Metal application target. Its first
 player-facing slice imports a player-owned Classic DOS folder. It uses the same
@@ -104,16 +104,17 @@ deterministic Classic simulation as the Mac application and adds direct touch,
 pan, zoom, safe-area controls, interruption recovery and thermal presentation
 budgets.
 
-This is a development source claim. It is not a tested iPhone/iPad release.
+The 1.3 source milestone is development evidence, not a tested iPhone/iPad release.
 Lemmings 2 and Lemmings 3 have shared mobile session and checkpoint adapters,
-but no player-facing mobile import or renderer. Simulator, physical-device,
-accessibility, signing and distribution gates remain open. See the
-[1.3 roadmap](1.3Roadmap.md).
+but no player-facing mobile import or renderer. Recorded Simulator checks pass
+for the 1.3 source commit. Physical-device, accessibility, signing and
+distribution gates remain open. See the
+[2.0 roadmap](2.0Roadmap.md).
 
 ## Not in this release
 
-The macOS 1.5 release does not include iPhone, iPad or consoles. Mobile 1.3 is a
-separate target and release gate. Consoles have no application target. A Mac
+The macOS 1.5 release does not include iPhone, iPad or consoles. Mobile 2.0 is a
+separate release gate. Consoles have no application target. A Mac
 release does not imply support for either platform group.
 
 ## Open before 1.0

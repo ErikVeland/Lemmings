@@ -57,6 +57,29 @@ private func testCurrentReplay() throws {
         NeoLemmixReplayCommand(tick: 60, sequence: 1, command: .setSpawnInterval(8)),
         NeoLemmixReplayCommand(tick: 120, sequence: 2, command: .nuke),
     ], "Replay commands did not preserve source order or values.")
+    try require(replay.commandEvidence == [
+        .assignment(
+            sequence: 0,
+            lemmingIdentifier: "ABCDEF",
+            x: 20,
+            y: 40,
+            direction: .right,
+            highlighted: false
+        ),
+        .spawnInterval(sequence: 1, spawnedLemmings: 1),
+    ], "Replay assignment and spawn cross-checks were not retained.")
+    try require(replay.recordedCheckIssues().isEmpty,
+                "A complete replay reported missing source checks.")
+
+    let matchingLevel = try NxlvLevel(text: "TITLE Fixture\nID x1234ABCD\nVERSION x00000002")
+        .unwrap("A matching level did not decode.")
+    try replay.verifyLevelIdentity(matchingLevel)
+    let otherLevel = try NxlvLevel(text: "TITLE Fixture\nID x1234ABCD\nVERSION x00000003")
+        .unwrap("A changed level did not decode.")
+    do {
+        try replay.verifyLevelIdentity(otherLevel)
+        throw TestFailure(description: "A replay accepted a changed level version.")
+    } catch NxrpReplayIdentityError.differentLevel {}
 }
 
 private func testAllCurrentSkillsAndIntervalAlias() throws {
@@ -100,6 +123,188 @@ private func testAllCurrentSkillsAndIntervalAlias() throws {
     )
 }
 
+private func testSourceDirectionAliases() throws {
+    let decoded = NxrpReplayDecoder.decode("""
+    $ASSIGNMENT
+      FRAME 1
+      LEM_INDEX 0
+      LEM_DIR l
+      ACTION builder
+    $END
+    $ASSIGNMENT
+      FRAME 2
+      LEM_INDEX 1
+      LEM_DIR R
+      ACTION builder
+    $END
+    """)
+    let replay = try decoded.replay.unwrap("A direction-alias replay did not decode.")
+    try require(replay.commandEvidence == [
+        .assignment(sequence: 0, lemmingIdentifier: nil, x: nil, y: nil,
+                    direction: .left, highlighted: false),
+        .assignment(sequence: 1, lemmingIdentifier: nil, x: nil, y: nil,
+                    direction: .right, highlighted: false),
+    ], "NeoLemmix replay direction aliases were not retained.")
+}
+
+private func testCheckedPlayback() throws {
+    let level = try NxlvLevel(text: """
+    TITLE Checked replay
+    ID x0000000A
+    VERSION x00000001
+    WIDTH 64
+    HEIGHT 64
+    LEMMINGS 1
+    SAVE_REQUIREMENT 1
+    SPAWN_INTERVAL 10
+    $SKILLSET
+      CLIMBER 1
+      CLONER 1
+    $END
+    $GADGET
+      STYLE default
+      PIECE exit
+      X 22
+      Y 40
+    $END
+    $LEMMING
+      X 20
+      Y 48
+    $END
+    """).unwrap("The checked replay level did not decode.")
+    let pixels = 64 * 64
+    let solid = (0..<pixels).map { $0 / 64 >= 48 ? UInt8(1) : UInt8(0) }
+    let rendered = NxlvRenderedLevel(
+        width: 64,
+        height: 64,
+        rgba: Array(repeating: 0, count: pixels * 4),
+        solidMask: solid,
+        steelMask: Array(repeating: 0, count: pixels),
+        oneWayMask: Array(repeating: 0, count: pixels),
+        oneWayEligibleMask: Array(repeating: 0, count: pixels),
+        gadgets: [NxlvRenderedGadget(
+            style: "default", piece: "exit", effect: .exit,
+            x: 22, y: 40, width: 8, height: 12,
+            triggerX: 22, triggerY: 46, triggerWidth: 6, triggerHeight: 3
+        )]
+    )
+    var baseline = try NeoLemmixSimulation(level: level, renderedLevel: rendered)
+    baseline.enqueue(.setSpawnInterval(4), atTick: 1)
+    baseline.enqueue(.assign(lemmingID: 0, skill: .climber), atTick: 1)
+    for _ in 0..<100 where baseline.savedCount == 0 { baseline.tick() }
+    try require(baseline.savedCount == 1, "The checked replay fixture did not reach its exit.")
+
+    func replayText(x: Int = 20, spawned: Int = 1) -> String {
+        """
+        ID x0000000A
+        VERSION x00000001
+        COMPLETION_FRAME \(baseline.tickCount)
+        $ASSIGNMENT
+          FRAME 0
+          LEM_INDEX 0
+          LEM_IDENTIFIER P20.48
+          LEM_X \(x)
+          LEM_Y 48
+          LEM_DIR right
+          ACTION climber
+        $END
+        $SPAWN_INTERVAL
+          FRAME 0
+          RATE 4
+          SPAWNED \(spawned)
+        $END
+        """
+    }
+    let replay = try NxrpReplayDecoder.decode(replayText()).replay
+        .unwrap("The checked replay did not decode.")
+    var playback = try NxrpReplayPlayback(replay: replay, level: level, renderedLevel: rendered)
+    let firstEvents = try playback.step()
+    try require(firstEvents.first == .spawnIntervalChanged(4),
+                "CE spawn-interval changes did not run before assignments.")
+    try require(firstEvents.contains(.assignment(.assigned(lemmingID: 0, skill: .climber))),
+                "The frame-zero assignment did not run on the first native tick.")
+    try playback.runToExpectedFrame()
+    try require(playback.simulation.savedCount == 1,
+                "The checked replay did not reach its recorded rescue frame.")
+    var repeated = try NxrpReplayPlayback(replay: replay, level: level, renderedLevel: rendered)
+    try repeated.runToExpectedFrame()
+    try require(repeated.simulation.snapshot() == playback.simulation.snapshot(),
+                "Checked replay playback changed between identical runs.")
+
+    let moved = try NxrpReplayDecoder.decode(replayText(x: 21)).replay
+        .unwrap("The changed-position replay did not decode.")
+    var movedPlayback = try NxrpReplayPlayback(replay: moved, level: level, renderedLevel: rendered)
+    do {
+        try movedPlayback.step()
+        throw TestFailure(description: "A replay accepted changed lemming coordinates.")
+    } catch NxrpReplayPlaybackError.assignmentStateMismatch(sequence: 0) {}
+
+    let countChanged = try NxrpReplayDecoder.decode(replayText(spawned: 2)).replay
+        .unwrap("The changed-spawn replay did not decode.")
+    var countPlayback = try NxrpReplayPlayback(
+        replay: countChanged, level: level, renderedLevel: rendered
+    )
+    do {
+        try countPlayback.step()
+        throw TestFailure(description: "A replay accepted a changed spawned count.")
+    } catch NxrpReplayPlaybackError.spawnedCountMismatch(sequence: 1) {}
+    try require(countPlayback.simulation.queuedCommands.isEmpty,
+                "A rejected replay left a partial command queue.")
+
+    var cloneBaseline = try NeoLemmixSimulation(level: level, renderedLevel: rendered)
+    cloneBaseline.enqueue(.assign(lemmingID: 0, skill: .cloner), atTick: 1)
+    cloneBaseline.enqueue(.assign(lemmingID: 1, skill: .climber), atTick: 1)
+    for _ in 0..<100 where cloneBaseline.savedCount == 0 { cloneBaseline.tick() }
+    try require(cloneBaseline.savedCount > 0, "The clone replay fixture did not reach an exit.")
+    let cloneText = """
+    ID x0000000A
+    VERSION x00000001
+    COMPLETION_FRAME \(cloneBaseline.tickCount)
+    $ASSIGNMENT
+      FRAME 0
+      LEM_INDEX 0
+      LEM_IDENTIFIER P20.48
+      LEM_X 20
+      LEM_Y 48
+      LEM_DIR right
+      ACTION cloner
+    $END
+    $ASSIGNMENT
+      FRAME 0
+      LEM_INDEX 1
+      LEM_IDENTIFIER C0
+      LEM_X 20
+      LEM_Y 48
+      LEM_DIR left
+      ACTION climber
+    $END
+    """
+    let cloneReplay = try NxrpReplayDecoder.decode(cloneText).replay
+        .unwrap("The same-frame clone replay did not decode.")
+    var clonePlayback = try NxrpReplayPlayback(
+        replay: cloneReplay, level: level, renderedLevel: rendered
+    )
+    let cloneEvents = try clonePlayback.step()
+    try require(cloneEvents.contains(.assignment(.assigned(lemmingID: 1, skill: .climber))),
+                "The same-frame assignment to the clone was not applied.")
+    try clonePlayback.runToExpectedFrame()
+    try require(clonePlayback.simulation.snapshot() == cloneBaseline.snapshot(),
+                "The same-frame clone replay diverged from direct assignments.")
+
+    let changedClone = try NxrpReplayDecoder.decode(
+        cloneText.replacingOccurrences(of: "LEM_IDENTIFIER C0", with: "LEM_IDENTIFIER C1")
+    ).replay.unwrap("The changed clone replay did not decode.")
+    var changedClonePlayback = try NxrpReplayPlayback(
+        replay: changedClone, level: level, renderedLevel: rendered
+    )
+    do {
+        try changedClonePlayback.step()
+        throw TestFailure(description: "A replay accepted a clone with a changed identifier.")
+    } catch NxrpReplayPlaybackError.missingLemming(sequence: 1) {}
+    try require(changedClonePlayback.simulation.queuedCommands.isEmpty,
+                "A rejected clone replay left a partial command queue.")
+}
+
 private func testDiagnostics() throws {
     let legacy = NxrpReplayDecoder.decode("ACTIONS\nASSIGNMENT 1 2 BUILDER\n")
     try require(
@@ -131,6 +336,46 @@ private func testDiagnostics() throws {
         unterminated.diagnostics.contains { $0.code == .malformedDocument },
         "An unterminated section was not rejected."
     )
+
+    let invalidChecks = NxrpReplayDecoder.decode("""
+    $ASSIGNMENT
+      FRAME 1
+      LEM_INDEX 0
+      LEM_X wrong
+      LEM_DIR sideways
+      ACTION builder
+    $END
+    $SPAWN_INTERVAL
+      FRAME 2
+      RATE 8
+      SPAWNED -1
+    $END
+    """)
+    try require(invalidChecks.replay == nil, "Invalid replay cross-checks were accepted.")
+    try require(
+        invalidChecks.diagnostics.contains { $0.code == .malformedInteger }
+            && invalidChecks.diagnostics.filter { $0.code == .invalidValue }.count == 2,
+        "Invalid replay cross-check fields were not diagnosed."
+    )
+
+    let incomplete = NxrpReplayDecoder.decode("""
+    $ASSIGNMENT
+      FRAME 1
+      LEM_INDEX 0
+      ACTION builder
+    $END
+    """)
+    let incompleteReplay = try incomplete.replay.unwrap("A minimal import replay did not decode.")
+    try require(
+        incompleteReplay.recordedCheckIssues() == [
+            .missingLevelIdentity, .missingCompletionFrame, .missingAssignmentCheck(0)
+        ],
+        "The replay gate did not identify missing playback source checks."
+    )
+
+    let zeroFrame = NxrpReplayDecoder.decode("ID x1\nVERSION x1\nCOMPLETION_FRAME 0")
+    try require(zeroFrame.replay?.recordedCheckIssues() == [.missingCompletionFrame],
+                "A zero completion frame was accepted as winning replay evidence.")
 }
 
 private extension Optional {
@@ -145,6 +390,10 @@ do {
     print("PASS current CE replay metadata and command decoding")
     try testAllCurrentSkillsAndIntervalAlias()
     print("PASS all 21 current replay skills and spawn-interval aliases")
+    try testSourceDirectionAliases()
+    print("PASS source replay direction aliases")
+    try testCheckedPlayback()
+    print("PASS source-frame timing, CE command order and replay state checks")
     try testDiagnostics()
     print("PASS malformed and legacy replay diagnostics")
     print("NeoLemmix replay tests passed.")

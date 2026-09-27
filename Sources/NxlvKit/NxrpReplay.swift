@@ -73,11 +73,102 @@ public struct NxrpMetadata: Sendable, Equatable {
 public struct NxrpReplay: Sendable, Equatable {
     public let metadata: NxrpMetadata
     public let commands: [NeoLemmixReplayCommand]
+    public let commandEvidence: [NxrpCommandEvidence]
 
-    public init(metadata: NxrpMetadata, commands: [NeoLemmixReplayCommand]) {
+    public init(
+        metadata: NxrpMetadata,
+        commands: [NeoLemmixReplayCommand],
+        commandEvidence: [NxrpCommandEvidence] = []
+    ) {
         self.metadata = metadata
         self.commands = commands
+        self.commandEvidence = commandEvidence
     }
+
+    /// Rejects a replay when its recorded level identity does not match.
+    public func verifyLevelIdentity(_ level: NxlvLevel) throws {
+        guard let recordedID = metadata.levelID,
+              let recordedVersion = metadata.levelVersion,
+              let levelID = level.id,
+              let levelVersion = level.version else {
+            throw NxrpReplayIdentityError.missingIdentity
+        }
+        guard recordedID == levelID, recordedVersion == levelVersion else {
+            throw NxrpReplayIdentityError.differentLevel
+        }
+    }
+
+    /// Lists source fields needed before a decoded replay can be checked.
+    public func recordedCheckIssues() -> [NxrpRecordedCheckIssue] {
+        var issues: [NxrpRecordedCheckIssue] = []
+        if metadata.levelID == nil || metadata.levelVersion == nil {
+            issues.append(.missingLevelIdentity)
+        }
+        if (metadata.expectedCompletionFrame ?? 0) <= 0 {
+            issues.append(.missingCompletionFrame)
+        }
+
+        for command in commands {
+            switch command.command {
+            case .assign:
+                let complete = commandEvidence.contains { evidence in
+                    if case let .assignment(sequence, identifier, x, y, direction, _) = evidence {
+                        return sequence == command.sequence && identifier != nil
+                            && x != nil && y != nil && direction != nil
+                    }
+                    return false
+                }
+                if !complete { issues.append(.missingAssignmentCheck(command.sequence)) }
+            case .setSpawnInterval:
+                let complete = commandEvidence.contains { evidence in
+                    if case let .spawnInterval(sequence, spawned) = evidence {
+                        return sequence == command.sequence && spawned != nil
+                    }
+                    return false
+                }
+                if !complete { issues.append(.missingSpawnCheck(command.sequence)) }
+            case .nuke:
+                break
+            }
+        }
+        return issues
+    }
+}
+
+public enum NxrpReplayIdentityError: Error, Equatable, Sendable {
+    case missingIdentity
+    case differentLevel
+}
+
+public enum NxrpRecordedCheckIssue: Equatable, Sendable, CustomStringConvertible {
+    case missingLevelIdentity
+    case missingCompletionFrame
+    case missingAssignmentCheck(UInt64)
+    case missingSpawnCheck(UInt64)
+
+    public var description: String {
+        switch self {
+        case .missingLevelIdentity: "missing level ID or version"
+        case .missingCompletionFrame: "missing completion frame"
+        case let .missingAssignmentCheck(sequence):
+            "assignment \(sequence) lacks identifier, position or direction"
+        case let .missingSpawnCheck(sequence):
+            "spawn interval \(sequence) lacks spawned count"
+        }
+    }
+}
+
+/// Retains source checks used to detect replay drift before native playback.
+public enum NxrpCommandEvidence: Equatable, Sendable {
+    case assignment(
+        sequence: UInt64,
+        lemmingIdentifier: String?,
+        x: Int?,
+        y: Int?,
+        direction: NeoLemmixDirection?,
+        highlighted: Bool
+    )
+    case spawnInterval(sequence: UInt64, spawnedLemmings: Int?)
 }
 
 public struct NxrpDecodeResult: Sendable {
@@ -171,6 +262,7 @@ public enum NxrpReplayDecoder {
         )
 
         var commands: [NeoLemmixReplayCommand] = []
+        var commandEvidence: [NxrpCommandEvidence] = []
         var sequence: UInt64 = 0
 
         for entry in document.entries {
@@ -205,6 +297,19 @@ public enum NxrpReplayDecoder {
                     continue
                 }
                 guard let frame, let lemmingIndex else { continue }
+                let identifier = Self.optionalString("lem_identifier", in: section)
+                    .map { $0.uppercased() }
+                let x = Self.optionalInteger("lem_x", in: section, diagnostics: &diagnostics)
+                let y = Self.optionalInteger("lem_y", in: section, diagnostics: &diagnostics)
+                let direction = Self.optionalDirection(in: section, diagnostics: &diagnostics)
+                commandEvidence.append(.assignment(
+                    sequence: sequence,
+                    lemmingIdentifier: identifier,
+                    x: x,
+                    y: y,
+                    direction: direction,
+                    highlighted: section.hasLine("highlit")
+                ))
                 commands.append(NeoLemmixReplayCommand(
                     tick: frame,
                     sequence: sequence,
@@ -222,6 +327,13 @@ public enum NxrpReplayDecoder {
                     rateKey, minimum: 1, in: section, diagnostics: &diagnostics
                 )
                 guard let frame, let interval else { continue }
+                let spawned = Self.optionalInteger(
+                    "spawned", minimum: 0, in: section, diagnostics: &diagnostics
+                )
+                commandEvidence.append(.spawnInterval(
+                    sequence: sequence,
+                    spawnedLemmings: spawned
+                ))
                 commands.append(NeoLemmixReplayCommand(
                     tick: frame,
                     sequence: sequence,
@@ -253,9 +365,66 @@ public enum NxrpReplayDecoder {
 
         let hasErrors = diagnostics.contains { $0.severity == .error }
         return NxrpDecodeResult(
-            replay: hasErrors ? nil : NxrpReplay(metadata: metadata, commands: commands),
+            replay: hasErrors ? nil : NxrpReplay(
+                metadata: metadata,
+                commands: commands,
+                commandEvidence: commandEvidence
+            ),
             diagnostics: diagnostics
         )
+    }
+
+    private static func optionalString(_ key: String, in section: NxlvSection) -> String? {
+        section.trimmedLine(key).flatMap { $0.isEmpty ? nil : $0 }
+    }
+
+    private static func optionalInteger(
+        _ key: String,
+        minimum: Int? = nil,
+        in section: NxlvSection,
+        diagnostics: inout [NxrpDiagnostic]
+    ) -> Int? {
+        guard let record = section.lastLineRecord(key) else { return nil }
+        guard let value = NxlvNumber.integer(record.value) else {
+            diagnostics.append(NxrpDiagnostic(
+                severity: .error,
+                code: .malformedInteger,
+                message: "\(record.originalKeyword) must be an integer.",
+                line: record.lineNumber
+            ))
+            return nil
+        }
+        if let minimum, value < minimum {
+            diagnostics.append(NxrpDiagnostic(
+                severity: .error,
+                code: .invalidValue,
+                message: "\(record.originalKeyword) must be at least \(minimum).",
+                line: record.lineNumber
+            ))
+            return nil
+        }
+        return value
+    }
+
+    private static func optionalDirection(
+        in section: NxlvSection,
+        diagnostics: inout [NxrpDiagnostic]
+    ) -> NeoLemmixDirection? {
+        guard let record = section.lastLineRecord("lem_dir") else { return nil }
+        let first = record.value.trimmingCharacters(in: .whitespacesAndNewlines)
+            .lowercased().first
+        switch first {
+        case "l": return .left
+        case "r": return .right
+        default:
+            diagnostics.append(NxrpDiagnostic(
+                severity: .error,
+                code: .invalidValue,
+                message: "LEM_DIR must start with L or R.",
+                line: record.lineNumber
+            ))
+            return nil
+        }
     }
 
     private static func requiredInteger(

@@ -235,7 +235,7 @@ questions.
 | How is the code and release system shaped? | `ARCHITECTURE.md` |
 | What does a player see today? | [`Documentation/Overview.md`](Documentation/Overview.md) |
 | What does Complete, Playable or Preview mean? | [`Documentation/ReleaseScope.md`](Documentation/ReleaseScope.md) |
-| What is in the iPhone/iPad milestone? | [`Documentation/1.3Roadmap.md`](Documentation/1.3Roadmap.md) |
+| What is in the iPhone/iPad milestone? | [`Documentation/2.0Roadmap.md`](Documentation/2.0Roadmap.md) |
 | What content is planned and how is it gated? | [`Documentation/ContentUniverseRoadmap.md`](Documentation/ContentUniverseRoadmap.md) |
 | What evidence closes a campaign or release gate? | [`Documentation/ReleaseReadiness/`](Documentation/ReleaseReadiness/) and the relevant completion README |
 | How is local beta packaging run? | [`Documentation/BetaTesting.md`](Documentation/BetaTesting.md) |

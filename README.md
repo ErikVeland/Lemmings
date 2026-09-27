@@ -1,9 +1,10 @@
 # Ultimate Lemmings
 
 Ultimate Lemmings is an unofficial native Swift port of the 2D Lemmings games.
-The current release shell is for macOS, and version 1.3 adds an iPhone/iPad
-development target. It uses native interpreters and does not run DOS code
-through an emulator. Commercial game data is not committed to this repository;
+The current release shell is for macOS. Version 1.3 added an iPhone/iPad
+development target. Version 2.0 is the planned mobile release. The app uses
+native interpreters and does not run DOS code through an emulator. Commercial
+game data is not committed to this repository;
 local builds use the assets supplied in `Sources/Ports`, `Sources/Music` and
 `Content/` when present.
 
@@ -13,24 +14,22 @@ before distributing a build.
 
 ## Download
 
-The [1.2 build 41 release](https://github.com/ErikVeland/Lemmings/releases/tag/v1.2-build41)
-is the latest verified public download.
+The [1.5 build 50 release](https://github.com/ErikVeland/Lemmings/releases/tag/v1.5.0)
+has a recorded public distribution and update check.
 
-A universal macOS 1.5 candidate has been built locally for Intel and Apple
-silicon, macOS 12.3 or later. Publication is pending a source decision because
-another release process is using build number 50. Read the
-[draft release notes](Documentation/ReleaseNotes-1.5-build50.md),
+The macOS 1.6 build 51 candidate has local validation. Its signed distribution
+and live update still need release checks. Read the
+[1.6 release notes](Documentation/ReleaseNotes-1.6-build51.md),
 [tester guide](Documentation/BetaTesting.md), and
-[validation record](Documentation/ReleaseReadiness/1.5PublicRelease.md).
-The matching [BBCode draft](Documentation/ReleaseNotes-1.5-build50.bbcode.txt)
-will be ready to post when the final build number and download are confirmed.
+[validation record](Documentation/ReleaseReadiness/1.6LocalValidation.md).
 
 ## Start here
 
 - [Architecture](ARCHITECTURE.md) — module boundaries, runtime flow and release packaging.
 - [Project overview](Documentation/Overview.md) — player-facing status and roadmap.
-- [1.3 mobile roadmap](Documentation/1.3Roadmap.md) — iPhone/iPad scope, source state and device gates.
-- [1.5 NeoLemmix roadmap](Documentation/1.5Roadmap.md) — pinned oracle, executable gates and compatibility limits.
+- [2.0 mobile roadmap](Documentation/2.0Roadmap.md) — iPhone/iPad scope, source state and device gates.
+- [1.7 NeoLemmix roadmap](Documentation/1.7Roadmap.md) — pinned oracle, executable gates and compatibility limits.
+- [1.8 sequel gate](Documentation/ContentUniverseRoadmap.md#18--lemmings-2-and-lemmings-3-completion) — winning routes, engine fidelity and campaign evidence.
 - [1.5 NeoLemmix source handoff](Documentation/ReleaseReadiness/1.5NeoLemmixHandoff.md) — verified source and corpus evidence, open release gates and non-claims.
 - [QoL roadmap](docs/superpowers/plans/2026-09-23-qol-roadmap.md) — target selection and rewind priorities.
 - [Precision Zoom](Documentation/PrecisionZoom.md) — Z, Shift-Z and scroll controls, earnings and retry rules.
@@ -40,7 +39,7 @@ will be ready to post when the final build number and download are confirmed.
 - [Level browser](Documentation/LevelBrowser.md) — CoverFlow controls, content boundaries and current evidence.
 - [Beta testing](Documentation/BetaTesting.md) — local package and validation procedure.
 - [Release evidence](Documentation/ReleaseReadiness/) — current gate records and manifests.
-- [1.5 public release readiness](Documentation/ReleaseReadiness/1.5PublicRelease.md) — current candidate gates and handoff conditions.
+- [1.6 local validation](Documentation/ReleaseReadiness/1.6LocalValidation.md) — current candidate checks and distribution conditions.
 - [1.2 handoff](Documentation/ReleaseReadiness/1.2DataIndependentHandoff.md) — data-independent release work and Mac checks.
 - [1.3 mobile handoff](Documentation/ReleaseReadiness/1.3MobileHandoff.md) — iOS source evidence and remaining device checks.
 - [Automatic updates](#automatic-updates) — Sparkle feed and release requirements.
@@ -48,13 +47,14 @@ will be ready to post when the final build number and download are confirmed.
 - [Automatic update evidence](Documentation/AutomaticUpdates.md) — release checks and records.
 
 The iPhone and iPad 1.3 source and Simulator gates pass. Physical-device,
-VoiceOver, thermal, signing and distribution evidence remain open. The macOS
-local candidate is version 1.5 build 50. Publication is pending. Active NeoLemmix work remains a separate
-compatibility lane. Classic content is the completed reference engine.
+VoiceOver, thermal, signing and distribution evidence remain open for 2.0.
+The macOS local candidate is version 1.6 build 51. NeoLemmix compatibility
+targets 1.7. Classic content is the completed reference engine.
 Lemmings 2 and Lemmings 3 are labelled Preview. The bundled corpus contains
 6,020 Classic-format fan levels in 535 packs; this is not a claim of NeoLemmix
 fan-pack compatibility. NeoLemmix support remains Beta or Preview until its
-real-pack and reference-replay gates pass.
+real-pack and reference-replay gates pass. Lemmings 2 and Lemmings 3 completion
+targets 1.8.
 
 ## Requirements
 
@@ -121,7 +121,7 @@ zsh Scripts/check-1.5-neolemmix.sh
 ```
 
 Pass a checkout of the pinned NeoLemmix Community Edition oracle to add the
-real level-corpus gate. See the [1.5 roadmap](Documentation/1.5Roadmap.md) for
+real level-corpus gate. See the [1.7 roadmap](Documentation/1.7Roadmap.md) for
 the strict runnable and replay commands. A source-gate pass is not a full
 NeoLemmix compatibility claim.
 

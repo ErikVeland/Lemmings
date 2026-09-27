@@ -26,8 +26,10 @@ private func replayURLs(beneath root: URL) throws -> [URL] {
 
 private func run() throws {
     let arguments = Array(CommandLine.arguments.dropFirst())
-    guard arguments.count == 1 else {
-        throw CorpusFailure(description: "Usage: NxrpCorpusDiagnostics <replays-directory>")
+    guard arguments.count == 1
+        || (arguments.count == 2 && arguments[1] == "--require-replay-fields") else {
+        throw CorpusFailure(description:
+            "Usage: NxrpCorpusDiagnostics <replays-directory> [--require-replay-fields]")
     }
     let root = URL(fileURLWithPath: arguments[0], isDirectory: true)
     let urls = try replayURLs(beneath: root)
@@ -38,6 +40,7 @@ private func run() throws {
     var commandCount = 0
     var warningCount = 0
     var unsupportedAssignments = 0
+    var missingReplayFields = 0
     var failures: [String] = []
 
     for url in urls {
@@ -58,6 +61,13 @@ private func run() throws {
                 throw CorpusFailure(description: details)
             }
             commandCount += replay.commands.count
+            let missingFields = replay.recordedCheckIssues()
+            missingReplayFields += missingFields.count
+            if arguments.count == 2, !missingFields.isEmpty {
+                throw CorpusFailure(description:
+                    "Replay lacks required source fields: "
+                        + missingFields.prefix(4).map(\.description).joined(separator: "; ") + ".")
+            }
             unsupportedAssignments += replay.commands.reduce(into: 0) { count, item in
                 if case let .assign(_, skill) = item.command,
                    NeoLemmixRules.unsupportedSkills.contains(skill) {
@@ -73,6 +83,7 @@ private func run() throws {
     print(
         "NXRP corpus: \(urls.count) replays, \(commandCount) commands, "
             + "\(warningCount) warnings, \(unsupportedAssignments) unsupported assignments, "
+            + "\(missingReplayFields) missing replay fields, "
             + "\(failures.count) failures."
     )
     if !failures.isEmpty {

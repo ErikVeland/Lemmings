@@ -498,6 +498,19 @@ private func testNxlvAdapter() throws {
                 triggerWidth: 4,
                 triggerHeight: 3
             ),
+            NxlvRenderedGadget(
+                style: "default",
+                piece: "splat_pad",
+                effect: .splatPad,
+                x: 20,
+                y: 48,
+                width: 4,
+                height: 1,
+                triggerX: 20,
+                triggerY: 48,
+                triggerWidth: 4,
+                triggerHeight: 1
+            ),
         ]
     )
     let simulation = try NeoLemmixSimulation(level: level, renderedLevel: rendered)
@@ -515,6 +528,8 @@ private func testNxlvAdapter() throws {
                 "NXLV entrance trait was not converted.")
     try require(simulation.configuration.zones.first?.effect == .exit,
                 "Rendered exit was not converted.")
+    try require(simulation.configuration.zones.last?.effect == .splatPad,
+                "Rendered splat pad was not converted.")
     try require(simulation.skills[.builder] == .finite(3), "Finite NXLV skill supply was not converted.")
     try require(simulation.skills[.climber] == .infinite, "Infinite NXLV skill supply was not converted.")
     try require(try lemming(simulation).traits.contains(.climber),
@@ -581,6 +596,119 @@ private func testReplayOrderAndInventory() throws {
     try require(simulation.skills[.walker] == .finite(1), "Replay assignment did not consume inventory.")
 }
 
+private func testSplatPadLanding() throws {
+    let landing = NeoLemmixRect(x: 20, y: 48, width: 1, height: 1)
+    let splat = NeoLemmixZone(id: 1, effect: .splatPad, bounds: landing)
+    let antiSplat = NeoLemmixZone(id: 2, effect: .antiSplatPad, bounds: landing)
+    let preplaced = NeoLemmixPreplacedLemming(position: NeoLemmixPoint(x: 20, y: 40))
+
+    var forced = try NeoLemmixSimulation(
+        terrain: terrain(),
+        configuration: configuration(zones: [splat], preplaced: [preplaced])
+    )
+    for _ in 0..<5 where try lemming(forced).action == .falling { forced.tick() }
+    try require(try lemming(forced).action == .splatting,
+                "A splat pad did not make a short fall fatal.")
+
+    var protected = try NeoLemmixSimulation(
+        terrain: terrain(),
+        configuration: configuration(zones: [splat, antiSplat], preplaced: [preplaced])
+    )
+    for _ in 0..<5 where try lemming(protected).action == .falling { protected.tick() }
+    try require(try lemming(protected).action == .walking,
+                "An anti-splat pad did not override a splat pad at the landing point.")
+
+    let deepLanding = NeoLemmixRect(x: 20, y: 100, width: 1, height: 1)
+    var longFall = try NeoLemmixSimulation(
+        terrain: terrain(height: 128, floorY: 100),
+        configuration: configuration(
+            zones: [NeoLemmixZone(id: 3, effect: .antiSplatPad, bounds: deepLanding)],
+            preplaced: [NeoLemmixPreplacedLemming(position: NeoLemmixPoint(x: 20, y: 20))]
+        )
+    )
+    for _ in 0..<40 where try lemming(longFall).action == .falling { longFall.tick() }
+    try require(try lemming(longFall).action == .walking,
+                "An anti-splat pad did not protect a long fall.")
+}
+
+private func testSkillPickup() throws {
+    let pickup = NeoLemmixZone(
+        id: 21,
+        effect: .pickupSkill,
+        bounds: NeoLemmixRect(x: 21, y: 48, width: 1, height: 1),
+        skill: .builder,
+        skillCount: 5
+    )
+    let simulation = try walkingSimulation(
+        zones: [pickup], skills: [.builder: .finite(96)]
+    )
+    try require(simulation.skills[.builder] == .finite(99),
+                "A pickup did not apply the CE finite-stock cap.")
+    try require(simulation.disabledZoneIDs.contains(21),
+                "A used pickup remained available.")
+    try require(simulation.lastTickEvents.contains(.skillPickedUp(
+        lemmingID: 0, zoneID: 21, skill: .builder, count: 5
+    )), "A pickup did not report its skill and count.")
+    let saved = try JSONEncoder().encode(simulation)
+    let restored = try JSONDecoder().decode(NeoLemmixSimulation.self, from: saved)
+    try require(restored == simulation, "A used pickup changed after save restoration.")
+
+    let zombie = try walkingSimulation(
+        zones: [pickup], traits: [.zombie], skills: [.builder: .finite(0)]
+    )
+    try require(zombie.skills[.builder] == .finite(0),
+                "A zombie collected a pickup.")
+    try require(!zombie.disabledZoneIDs.contains(21),
+                "A zombie consumed a pickup.")
+
+    let topPickup = NeoLemmixZone(
+        id: 22, effect: .pickupSkill,
+        bounds: pickup.bounds, skill: .miner, skillCount: 2
+    )
+    let overlap = try walkingSimulation(
+        zones: [pickup, topPickup], skills: [.builder: .finite(0), .miner: .finite(0)]
+    )
+    try require(overlap.disabledZoneIDs == [22] && overlap.skills[.miner] == .finite(2),
+                "The topmost overlapping pickup did not take priority.")
+}
+
+private func testLockedExitButtons() throws {
+    let first = NeoLemmixZone(
+        id: 30, effect: .unlockButton,
+        bounds: NeoLemmixRect(x: 21, y: 48, width: 1, height: 1)
+    )
+    let second = NeoLemmixZone(
+        id: 31, effect: .unlockButton,
+        bounds: NeoLemmixRect(x: 23, y: 48, width: 1, height: 1)
+    )
+    let exit = NeoLemmixZone(
+        id: 32, effect: .lockedExit,
+        bounds: NeoLemmixRect(x: 22, y: 48, width: 3, height: 1)
+    )
+    var simulation = try walkingSimulation(zones: [first, second, exit])
+    try require(simulation.disabledZoneIDs == [30], "The first button was not consumed.")
+    simulation.tick()
+    try require(try lemming(simulation).action == .walking,
+                "The locked exit accepted a lemming before all buttons were pressed.")
+    let restored = try JSONDecoder().decode(
+        NeoLemmixSimulation.self, from: JSONEncoder().encode(simulation)
+    )
+    try require(restored == simulation, "Button state changed after save restoration.")
+    let events = simulation.tick()
+    try require(events.contains(.buttonPressed(lemmingID: 0, zoneID: 31)),
+                "The second button did not activate.")
+    try require(try lemming(simulation).action == .exiting,
+                "The final button did not unlock the exit on the same tick.")
+
+    let zombie = try walkingSimulation(zones: [first], traits: [.zombie])
+    try require(zombie.disabledZoneIDs.isEmpty, "A zombie pressed an exit button.")
+
+    var noButtons = try walkingSimulation(zones: [exit])
+    noButtons.tick()
+    try require(try lemming(noButtons).action == .exiting,
+                "A locked exit with no buttons did not start open.")
+}
+
 private func testCodableContinuation() throws {
     var original = try walkingSimulation()
     original.enqueue(.assign(lemmingID: 0, skill: .builder), atTick: 3)
@@ -622,6 +750,9 @@ private let tests: [(String, () throws -> Void)] = [
     ("cloner", testCloner),
     ("unsupported skill diagnostics", testUnsupportedSkillsAreExplicit),
     ("replay order and inventory", testReplayOrderAndInventory),
+    ("splat pad landing", testSplatPadLanding),
+    ("skill pickup", testSkillPickup),
+    ("locked exits and buttons", testLockedExitButtons),
     ("Codable continuation", testCodableContinuation),
     ("nuke and completion", testNukeAndCompletion),
 ]

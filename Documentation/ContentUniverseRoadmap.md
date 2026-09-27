@@ -101,9 +101,28 @@ The content atlas still needs the complete supported-pack catalogue. A signed
 package, physical controller use and a complete VoiceOver journey still need
 validation on the release Mac.
 
-### L2 and L3 completion verification
+### 1.7 — NeoLemmix compatibility
 
-Make sequel completion verification a 1.2 exit gate. Keep the current Preview
+Target NeoLemmix 12.14 data and replay compatibility, plus the current
+NeoLemmix Community Edition contract.
+
+The gate requires real packs and reference replays, not synthetic fixtures
+only. It includes styles, lemming sprites, all standard skills, terrain masks,
+gadgets, special effects, zombies, Superlemming, pack progress and recovery.
+
+Until this gate passes, NeoLemmix support remains Beta or Preview and stays out
+of the completed main library.
+
+The executable development plan is in the [1.7 NeoLemmix roadmap](1.7Roadmap.md).
+The source gate uses NeoLemmix Community Edition 1.2.0 at a pinned commit. It
+separates level import and rendering from runnable mechanics, and it has a
+strict mode that fails while any required mechanic remains unsupported. The
+current-format replay decoder is covered by synthetic tests. Real reference
+replays and native result comparison remain mandatory external evidence.
+
+### 1.8 — Lemmings 2 and Lemmings 3 completion
+
+Make sequel completion verification the 1.8 exit gate. Keep the current Preview
 labels until every condition passes:
 
 - preserve and replay a winning route for all 120 Lemmings 2 levels and all 90
@@ -121,24 +140,12 @@ The current baseline is 73/120 Lemmings 2 routes and 41/90 Lemmings 3 routes.
 The missing 96 routes are an open verification gap, not evidence that those
 levels are broken. A passing load or smoke check does not close this gate.
 
-### 1.5 — NeoLemmix compatibility
+### 2.0 — iPhone and iPad release
 
-Target NeoLemmix 12.14 data and replay compatibility, plus the current
-NeoLemmix Community Edition contract.
-
-The gate requires real packs and reference replays, not synthetic fixtures
-only. It includes styles, lemming sprites, all standard skills, terrain masks,
-gadgets, special effects, zombies, Superlemming, pack progress and recovery.
-
-Until this gate passes, NeoLemmix support remains Beta or Preview and stays out
-of the completed main library.
-
-The executable development plan is in the [1.5 NeoLemmix roadmap](1.5Roadmap.md).
-The source gate uses NeoLemmix Community Edition 1.2.0 at a pinned commit. It
-separates level import and rendering from runnable mechanics, and it has a
-strict mode that fails while any required mechanic remains unsupported. The
-current-format replay decoder is covered by synthetic tests. Real reference
-replays and native result comparison remain mandatory external evidence.
+Complete the physical-device, accessibility, performance, signing and
+distribution gates for the player-facing Classic mobile app. The 1.3 source
+milestone and Simulator checks are development evidence, not 2.0 acceptance.
+See the [2.0 iPhone and iPad roadmap](2.0Roadmap.md).
 
 ### Later — wider 2D content
 

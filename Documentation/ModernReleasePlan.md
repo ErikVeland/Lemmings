@@ -1,6 +1,11 @@
 # Modern Lemmings release plan
 
-Updated 25 September 2026. This is the current engineering plan, not an announcement of an official release.
+Updated 26 September 2026. This is the current engineering plan, not an announcement of an official release.
+
+The next planned release milestones are 1.7 NeoLemmix compatibility, 1.8
+Lemmings 2 and Lemmings 3 completion, and 2.0 iPhone and iPad. The existing
+1.3 mobile and 1.5 NeoLemmix source work is development evidence for those
+later gates. See the [project overview](Overview.md) for current release status.
 
 The objective is an official-quality edition that preserves the original puzzles and makes them comfortable to play on modern devices. The strongest route is to finish and prove the Mac reference build, bring the same rules and replay fixtures to iPhone and iPad, then reach Windows and Linux. Consoles are not a current target; see the platform plan below.
 
@@ -51,7 +56,7 @@ Additional product work includes input remapping, left-handed touch layouts, loc
 | Platform | Starting point | Next demonstrable result |
 | --- | --- | --- |
 | macOS | Running AppKit/Metal app, universal arm64/x86_64 binaries targeting macOS 13 | Signed reference candidate with hardware and novice-play evidence. |
-| iPhone/iPad | A version 1.3 UIKit/Metal target imports player-owned Classic DOS data. Shared mobile contracts cover direct targeting, pan/zoom, safe areas, interruption checkpoints and thermal budgets. Synthetic checkpoint tests cover all three native engines; only Classic is player-facing on mobile. | Run the iPhone/iPad Simulator matrix, then validate touch, audio routes, background termination, thermal behaviour, accessibility, signing and complete journeys on physical devices. Add player-facing L2/L3 import and renderers only under their Preview wording. |
+| iPhone/iPad | A version 1.3 UIKit/Metal source target imports player-owned Classic DOS data. Shared mobile contracts cover direct targeting, pan/zoom, safe areas, interruption checkpoints and thermal budgets. Synthetic checkpoint tests cover all three native engines; only Classic is player-facing on mobile. | For 2.0, validate touch, audio routes, background termination, thermal behaviour, accessibility, signing and complete journeys on physical devices. Add player-facing L2/L3 import and renderers only under their Preview wording. |
 | Windows/Linux | `Package.swift` declares only macOS and iOS. `NxlvKit` imports CoreGraphics, ImageIO and CryptoKit, all Apple-only. There is no Windows or Linux target. | Replace the Apple-only graphics, image and hashing dependencies with portable equivalents, then build a non-AppKit interface that runs the same replay fixtures. |
 
 Consoles (Switch, PlayStation, Xbox) are not a current target. This repository has no console target, no approved SDK integration and no relationship with a console platform owner. Revisit this only after a decision to pursue it.

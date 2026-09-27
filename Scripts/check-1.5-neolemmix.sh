@@ -9,9 +9,10 @@ ce_root=""
 replays_root=""
 require_ce_corpus=0
 require_runnable_corpus=0
+require_replay_fields=0
 
 usage() {
-  print -u2 "Usage: zsh Scripts/check-1.5-neolemmix.sh [--ce-root PATH] [--replays-root PATH] [--require-ce-corpus] [--require-runnable-corpus]"
+  print -u2 "Usage: zsh Scripts/check-1.5-neolemmix.sh [--ce-root PATH] [--replays-root PATH] [--require-ce-corpus] [--require-runnable-corpus] [--require-replay-fields]"
 }
 
 while (( $# > 0 )); do
@@ -33,6 +34,10 @@ while (( $# > 0 )); do
     --require-runnable-corpus)
       require_ce_corpus=1
       require_runnable_corpus=1
+      shift
+      ;;
+    --require-replay-fields)
+      require_replay_fields=1
       shift
       ;;
     *)
@@ -97,8 +102,16 @@ else
 fi
 
 if [[ -n "$replays_root" ]]; then
-  zsh Scripts/run-nxrp-corpus-diagnostics.sh "$replays_root"
+  replay_arguments=("$replays_root")
+  if (( require_replay_fields )); then
+    replay_arguments+=(--require-replay-fields)
+  fi
+  zsh Scripts/run-nxrp-corpus-diagnostics.sh "${replay_arguments[@]}"
   print "PASS supplied NXRP import corpus gate"
 else
+  if (( require_replay_fields )); then
+    print -u2 "FAILED: --require-replay-fields needs --replays-root PATH."
+    exit 1
+  fi
   print "OPEN reference replay corpus and native replay-result comparison"
 fi

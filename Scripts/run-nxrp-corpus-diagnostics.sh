@@ -4,8 +4,12 @@ set -euo pipefail
 project_dir="${0:A:h:h}"
 build_dir="$project_dir/.build/nxrp-corpus-diagnostics"
 
-if (( $# != 1 )); then
-  print -u2 "Usage: $0 <replays-directory>"
+if (( $# < 1 || $# > 2 )); then
+  print -u2 "Usage: $0 <replays-directory> [--require-replay-fields]"
+  exit 2
+fi
+if (( $# == 2 )) && [[ "$2" != "--require-replay-fields" ]]; then
+  print -u2 "Usage: $0 <replays-directory> [--require-replay-fields]"
   exit 2
 fi
 
