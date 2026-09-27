@@ -3324,15 +3324,15 @@ extension AppDelegate {
     updated.sound = .macintoshResources
     apply(updated)
     let macEffects = effects.loadedEffects
-    try check(!macEffects.isEmpty, "bundled Macintosh bank did not load")
+    try check(Set(macEffects) == Set(ClassicSoundEffect.allCases), "bundled Macintosh bank has missing effects")
     updated.sound = .amigaVoices
     apply(updated)
     let amigaEffects = effects.loadedEffects
-    try check(!amigaEffects.isEmpty && amigaEffects != macEffects, "Amiga bank did not replace Macintosh")
+    try check(Set(amigaEffects) == Set(ClassicSoundEffect.allCases), "Amiga bank has missing effects")
     updated.sound = .macintoshResources
     apply(updated)
     try check(effects.loadedEffects == macEffects, "Macintosh bank did not return")
-    print("PASS saved silence, volume and preset; live Macintosh/Amiga bank replacement")
+    print("PASS saved silence, volume and preset; Macintosh/Amiga sound coverage")
   }
 
   fileprivate func testGlobalMuteAndStop() throws {

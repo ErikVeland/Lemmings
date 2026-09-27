@@ -12,6 +12,7 @@ final class Lemmings2SoundPlayer: @unchecked Sendable {
     private let lock = NSLock()
     private var mixer: Lemmings2SoundMixer
     private var volume: Float = 1
+    private var outputSuspended = false
     private var recentSamples = [Float](repeating: 0, count: 44_100)
     private var recentPositions = [Int64](repeating: Int64.min, count: 44_100)
     private var recentPosition: Int64 = 0
@@ -66,11 +67,13 @@ final class Lemmings2SoundPlayer: @unchecked Sendable {
         source = node
         do { try engine.start() }
         catch { detachSources(); throw error }
+        lock.lock(); outputSuspended = false; lock.unlock()
     }
     func stop() {
         engine.stop()
         detachSources()
         silence()
+        lock.lock(); outputSuspended = false; lock.unlock()
     }
     private func detachSources() {
         guard let source else { return }
@@ -85,6 +88,7 @@ final class Lemmings2SoundPlayer: @unchecked Sendable {
     }
     func playRewindScrub() {
         lock.lock(); defer { lock.unlock() }
+        guard !outputSuspended else { return }
         let count = min(15_435, recentSamples.count)
         var samples: [Float] = []; samples.reserveCapacity(count)
         for offset in 0..<count {
@@ -96,14 +100,26 @@ final class Lemmings2SoundPlayer: @unchecked Sendable {
         rewindSamples = samples
         rewindIndex = 0
     }
-    func suspendOutput() { if source != nil { engine.pause() } }
-    func resumeOutput() throws { if source != nil && !engine.isRunning { try engine.start() } }
+    func suspendOutput() {
+        guard source != nil else { return }
+        lock.lock()
+        outputSuspended = true
+        mixer.silence(); rewindSamples = []; rewindIndex = 0
+        lock.unlock()
+        engine.pause()
+    }
+    func resumeOutput() throws {
+        guard source != nil else { return }
+        if !engine.isRunning { try engine.start() }
+        lock.lock(); outputSuspended = false; lock.unlock()
+    }
     private var bottomFallSounds = true
     func setBottomFallSounds(_ enabled: Bool) {
         lock.lock(); defer { lock.unlock() }; bottomFallSounds = enabled
     }
     func play(_ requests: [Lemmings2SoundRequest]) {
         lock.lock(); defer { lock.unlock() }
+        guard !outputSuspended else { return }
         // Simultaneous lemmings share a cue, without stacking dozens of copies.
         var played: Set<Lemmings2SoundRequest> = []
         for request in requests where played.insert(request).inserted {

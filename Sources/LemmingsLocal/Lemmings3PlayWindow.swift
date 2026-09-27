@@ -1641,6 +1641,9 @@ import NxlvKit
         }
     }
     private func drawLemmings(_ game: Lemmings3Runtime, ghostsOnly: Bool) {
+        let selectedID = !ghostsOnly && !GameCursor.gameplaySuppressed && menuRows == nil
+            ? assignmentHighlight.target ?? pointerTarget : nil
+        var selectedSprite: (pixels: CGImage, rect: CGRect)?
         for lem in game.lemmings where lem.active {
             // Animation IDs and anchors remain provisional. The bytes are native.
             let animation = lem.direction > 0 ? 0 : 1
@@ -1660,10 +1663,14 @@ import NxlvKit
             let spriteRect = CGRect(x: origin.x + (CGFloat(lem.x) - sprite.size.width / 2 - cameraX) * zoom,
                 y: origin.y + (CGFloat(lem.y) - sprite.size.height - cameraY) * zoom,
                 width: sprite.size.width * zoom, height: sprite.size.height * zoom)
-            if assignmentPulse.target == lem.id,
-               let pixels = sprite.cgImage(forProposedRect: nil, context: nil, hints: nil) {
+            let pixels = (assignmentPulse.target == lem.id || selectedID == lem.id)
+                ? sprite.cgImage(forProposedRect: nil, context: nil, hints: nil) : nil
+            if assignmentPulse.target == lem.id, let pixels {
                 assignmentPulse.draw(sprite: pixels, in: spriteRect, scale: zoom,
                     reduceMotion: reduceMotion, reduceFlashes: reduceFlashes)
+            }
+            if selectedID == lem.id, let pixels {
+                selectedSprite = (pixels, spriteRect)
             }
             if lem.charmedBy != nil {
                 GameTypography.annotation("Charmed", at: NSPoint(x: origin.x + (CGFloat(lem.x - 8) - cameraX) * zoom,
@@ -1673,6 +1680,11 @@ import NxlvKit
                 let label = lem.tool == nil ? "\(tool.label) \((lem.mobilityTicks + 22) / 23)s" : "\(tool.label)\(lem.quantity)"
                 GameTypography.annotation(label, at: NSPoint(x: origin.x + (CGFloat(lem.x - 4) - cameraX) * zoom, y: origin.y + (CGFloat(lem.y - 23) - cameraY) * zoom), palette: .blue)
             }
+        }
+        if let selectedSprite {
+            LemmingSelectionGlow.drawSpriteShimmer(sprite: selectedSprite.pixels,
+                in: selectedSprite.rect, scale: zoom,
+                animated: !reduceMotion && !reduceFlashes)
         }
     }
     private func drawWorld(_ game: Lemmings3Runtime, terrain: NSImage) {

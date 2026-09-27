@@ -2206,6 +2206,9 @@ import NxlvKit
     }
     private func drawLemmings(_ game: Lemmings2Runtime, ghostsOnly: Bool) {
         let palette = game.configuration.palette
+        let selectedID = !ghostsOnly && !GameCursor.gameplaySuppressed
+            ? assignmentHighlight.target ?? (pointerSelectionEnabled ? pointerTarget(slot: selectedSkillSlot) : nil) : nil
+        var selectedSprite: (pixels: CGImage, rect: CGRect, mirrored: Bool)?
         for lem in game.lemmings where lem.active && lem.state != .trapped {
             let motion = ghostsOnly ? speedTrails.motion(actor: lem.id) : .zero
             if ghostsOnly && motion == .zero { continue }
@@ -2433,10 +2436,14 @@ import NxlvKit
             let spriteRect = CGRect(x: origin.x + (CGFloat(lem.x + offsetX + sprite.x) - cameraX) * zoom,
                 y: origin.y + (CGFloat(lem.y + offsetY + sprite.y) - cameraY) * zoom * 1.2,
                 width: sprite.image.size.width * zoom, height: sprite.image.size.height * zoom * 1.2)
-            if assignmentPulse.target == lem.id,
-               let pixels = sprite.image.cgImage(forProposedRect: nil, context: nil, hints: nil) {
+            let pixels = (assignmentPulse.target == lem.id || selectedID == lem.id)
+                ? sprite.image.cgImage(forProposedRect: nil, context: nil, hints: nil) : nil
+            if assignmentPulse.target == lem.id, let pixels {
                 assignmentPulse.draw(sprite: pixels, in: spriteRect, scale: zoom,
                     reduceMotion: reduceMotion, reduceFlashes: reduceFlashes)
+            }
+            if selectedID == lem.id, let pixels {
+                selectedSprite = (pixels, spriteRect, mirrored)
             }
             if let ticks = lem.bombTicks, let numbers = sprites["COUNTDOWN"], numbers.indices.contains(ticks >> 4) {
                 let number = numbers[ticks >> 4]
@@ -2476,6 +2483,11 @@ import NxlvKit
                 GameTypography.annotation(text, at: NSPoint(x: origin.x + (CGFloat(lem.x) - cameraX) * zoom,
                     y: origin.y + (CGFloat(lem.y - 16) - cameraY) * zoom * 1.2), palette: .blue)
             }
+        }
+        if let selectedSprite {
+            LemmingSelectionGlow.drawSpriteShimmer(sprite: selectedSprite.pixels,
+                in: selectedSprite.rect, scale: zoom, mirrored: selectedSprite.mirrored,
+                animated: !reduceMotion && !reduceFlashes)
         }
     }
     override func draw(_ dirtyRect: NSRect) {
