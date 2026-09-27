@@ -35,7 +35,7 @@ public struct NxrpDiagnostic: Sendable, Equatable {
 }
 
 /// Identifies the level and player recorded in a current-format NeoLemmix replay.
-public struct NxrpMetadata: Sendable, Equatable {
+public struct NxrpMetadata: Codable, Sendable, Equatable {
     public let user: String?
     public let title: String?
     public let author: String?
@@ -70,7 +70,7 @@ public struct NxrpMetadata: Sendable, Equatable {
 }
 
 /// A decoded current-format `.nxrp` replay.
-public struct NxrpReplay: Sendable, Equatable {
+public struct NxrpReplay: Codable, Sendable, Equatable {
     public let metadata: NxrpMetadata
     public let commands: [NeoLemmixReplayCommand]
     public let commandEvidence: [NxrpCommandEvidence]
@@ -89,11 +89,12 @@ public struct NxrpReplay: Sendable, Equatable {
     public func verifyLevelIdentity(_ level: NxlvLevel) throws {
         guard let recordedID = metadata.levelID,
               let recordedVersion = metadata.levelVersion,
-              let levelID = level.id,
-              let levelVersion = level.version else {
+              let levelID = level.id else {
             throw NxrpReplayIdentityError.missingIdentity
         }
-        guard recordedID == levelID, recordedVersion == levelVersion else {
+        // NeoLemmix initializes an omitted NXLV VERSION field to zero, and
+        // writes that zero explicitly into the replay.
+        guard recordedID == levelID, recordedVersion == (level.version ?? 0) else {
             throw NxrpReplayIdentityError.differentLevel
         }
     }
@@ -112,8 +113,11 @@ public struct NxrpReplay: Sendable, Equatable {
             switch command.command {
             case .assign:
                 let complete = commandEvidence.contains { evidence in
-                    if case let .assignment(sequence, identifier, x, y, direction, _) = evidence {
-                        return sequence == command.sequence && identifier != nil
+                    if case let .assignment(sequence, _, x, y, direction, _) = evidence {
+                        // NeoLemmix replays written before stable lemming identifiers
+                        // use LEM_INDEX. Coordinates and direction still provide the
+                        // state check needed to reject a drifted assignment.
+                        return sequence == command.sequence
                             && x != nil && y != nil && direction != nil
                     }
                     return false
@@ -151,7 +155,7 @@ public enum NxrpRecordedCheckIssue: Equatable, Sendable, CustomStringConvertible
         case .missingLevelIdentity: "missing level ID or version"
         case .missingCompletionFrame: "missing completion frame"
         case let .missingAssignmentCheck(sequence):
-            "assignment \(sequence) lacks identifier, position or direction"
+            "assignment \(sequence) lacks position or direction"
         case let .missingSpawnCheck(sequence):
             "spawn interval \(sequence) lacks spawned count"
         }
@@ -159,7 +163,7 @@ public enum NxrpRecordedCheckIssue: Equatable, Sendable, CustomStringConvertible
 }
 
 /// Retains source checks used to detect replay drift before native playback.
-public enum NxrpCommandEvidence: Equatable, Sendable {
+public enum NxrpCommandEvidence: Codable, Equatable, Sendable {
     case assignment(
         sequence: UInt64,
         lemmingIdentifier: String?,

@@ -10,6 +10,30 @@ struct SessionLemming {
   let facingLeft: Bool
   let animationFrame: Int
   let countdown: Int?
+  let neoAction: NeoLemmixAction?
+  let neoTraits: Set<NeoLemmixTrait>
+
+  init(
+    id: Int,
+    x: Int,
+    y: Int,
+    pose: ClassicLemmingPose,
+    facingLeft: Bool,
+    animationFrame: Int,
+    countdown: Int?,
+    neoAction: NeoLemmixAction? = nil,
+    neoTraits: Set<NeoLemmixTrait> = []
+  ) {
+    self.id = id
+    self.x = x
+    self.y = y
+    self.pose = pose
+    self.facingLeft = facingLeft
+    self.animationFrame = animationFrame
+    self.countdown = countdown
+    self.neoAction = neoAction
+    self.neoTraits = neoTraits
+  }
 }
 
 struct SessionSkill {
@@ -89,7 +113,8 @@ extension GameSession {
     guard let lemming = lemmings.first(where: { $0.id == lemmingID }) else { return false }
     if skill == "bomber" { return lemming.countdown != nil }
     let poses: [String: ClassicLemmingPose] = ["blocker": .blocking, "builder": .building,
-      "basher": .bashing, "miner": .mining, "digger": .digging]
+      "basher": .bashing, "fencer": .bashing, "laserer": .bashing,
+      "miner": .mining, "digger": .digging]
     return poses[skill] == lemming.pose
   }
   var exitX: Int? { nil }
@@ -342,7 +367,7 @@ func spritePose(for action: ClassicDOSAction) -> ClassicLemmingPose {
 
 func spritePose(for action: NeoLemmixAction) -> ClassicLemmingPose {
   switch action {
-  case .walking, .reaching, .shimmying, .sliding, .disarming: return .walking
+  case .walking, .reaching, .shimmying, .sliding, .disarming, .teleporting: return .walking
   case .ascending, .jumping: return .jumping
   case .falling: return .falling
   case .climbing: return .climbing
@@ -351,7 +376,7 @@ func spritePose(for action: NeoLemmixAction) -> ClassicLemmingPose {
   case .swimming, .drowning: return .drowning
   case .blocking: return .blocking
   case .building, .platforming, .stacking: return .building
-  case .bashing: return .bashing
+  case .bashing, .fencing, .lasering: return .bashing
   case .mining: return .mining
   case .digging: return .digging
   case .shrugging: return .shrugging
@@ -398,6 +423,10 @@ final class NeoLemmixSession: GameSession {
   func restore(_ checkpoint: RunRecovery) throws {
     _ = try checkpoint.validated()
     guard let saved = checkpoint.neo, currentTick == 0 else { throw RunRecoveryError.differentGame }
+    guard saved.initialState.configuration == initialSimulation.configuration,
+      saved.initialState.terrain == initialSimulation.terrain else {
+      throw RunRecoveryError.differentGame
+    }
     if saved.initialState == initialSimulation, (try? replay(checkpoint, saved)) != nil { return }
     guard saved.state.tickCount == checkpoint.tick else { throw RunRecoveryError.differentGame }
     simulation = saved.state; recoveryInputs = saved.inputs
@@ -439,13 +468,15 @@ final class NeoLemmixSession: GameSession {
   var ticksPerSecond: Int { NeoLemmixRules.ticksPerSecond }
 
   var lemmings: [SessionLemming] {
-    simulation.lemmings.filter(\.isActive).map {
+    simulation.lemmings.filter { $0.isActive && $0.action != .teleporting }.map {
       SessionLemming(
         id: $0.id, x: $0.position.x, y: $0.position.y,
         pose: spritePose(for: $0.action),
         facingLeft: $0.direction == .left,
         animationFrame: $0.animationFrame,
-        countdown: $0.bomberCountdown)
+        countdown: $0.bomberCountdown,
+        neoAction: $0.action,
+        neoTraits: $0.traits)
     }
   }
 

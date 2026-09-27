@@ -156,6 +156,28 @@ private func testPreplacedTraitsAndCoreMovement() throws {
     faller.run(ticks: 8)
     try require(try lemming(faller).action == .floating, "The floater did not open after a long fall.")
 
+    var floaterFrame = try NeoLemmixSimulation(
+        terrain: terrain(floorY: 85),
+        configuration: configuration(preplaced: [
+            NeoLemmixPreplacedLemming(
+                position: NeoLemmixPoint(x: 20, y: 10),
+                traits: [.floater]
+            ),
+        ])
+    )
+    floaterFrame.run(ticks: 6)
+    try require(
+        try lemming(floaterFrame).action == .falling
+            && lemming(floaterFrame).position.y == 28,
+        "The floater opened partway through a falling physics frame."
+    )
+    floaterFrame.tick()
+    try require(
+        try lemming(floaterFrame).action == .floating
+            && lemming(floaterFrame).position.y == 28,
+        "The floater did not open at the start of the next physics frame."
+    )
+
     var glider = try walkingSimulation(
         terrain: terrain(floorY: 85),
         traits: [.glider],
@@ -253,6 +275,11 @@ private func testWalkerJumperAndShimmier() throws {
         [.reaching, .shimmying].contains(try lemming(shimmier).action),
         "The shimmier did not reach the ceiling."
     )
+    var reaching = try walkingSimulation()
+    try require(reaching.assign(skill: .shimmier, to: 0).wasAssigned,
+                "A grounded worker could not start reaching without a ceiling.")
+    try require(try lemming(reaching).action == .reaching,
+                "A grounded Shimmier assignment did not enter the Reacher action.")
 }
 
 private func testBlockerAndConstructiveSkills() throws {
@@ -266,8 +293,98 @@ private func testBlockerAndConstructiveSkills() throws {
     )
     blockers.tick()
     try require(blockers.assign(skill: .blocker, to: 0).wasAssigned, "Blocker assignment failed.")
-    blockers.run(ticks: 8)
-    try require(try lemming(blockers, id: 1).direction == .left, "The blocker field did not turn a walker.")
+    blockers.run(ticks: 5)
+    let rightFacingTurn = try lemming(blockers, id: 1)
+    try require(rightFacingTurn.direction == .left, "The blocker field did not turn a walker.")
+    try require(
+        rightFacingTurn.position.x == 26,
+        "A right-facing blocker's force lobe did not turn the walker at the CE position."
+    )
+
+    let mirrored = [
+        NeoLemmixPreplacedLemming(position: NeoLemmixPoint(x: 30, y: 48), direction: .left),
+        NeoLemmixPreplacedLemming(position: NeoLemmixPoint(x: 40, y: 48), direction: .left),
+    ]
+    var mirroredBlockers = try NeoLemmixSimulation(
+        terrain: terrain(),
+        configuration: configuration(total: 2, preplaced: mirrored)
+    )
+    mirroredBlockers.tick()
+    try require(
+        mirroredBlockers.assign(skill: .blocker, to: 0).wasAssigned,
+        "Mirrored Blocker assignment failed."
+    )
+    mirroredBlockers.run(ticks: 5)
+    let leftFacingTurn = try lemming(mirroredBlockers, id: 1)
+    try require(leftFacingTurn.direction == .right, "The mirrored blocker field did not turn a walker.")
+    try require(
+        leftFacingTurn.position.x == 34,
+        "A left-facing blocker's force lobe did not turn the walker at the CE position."
+    )
+
+    let builderPair = [
+        NeoLemmixPreplacedLemming(position: NeoLemmixPoint(x: 30, y: 48), direction: .right),
+        NeoLemmixPreplacedLemming(position: NeoLemmixPoint(x: 28, y: 48), direction: .right),
+    ]
+    var blockerBuilder = try NeoLemmixSimulation(
+        terrain: terrain(),
+        configuration: configuration(total: 2, preplaced: builderPair)
+    )
+    try require(blockerBuilder.assign(skill: .blocker, to: 0).wasAssigned,
+                "The Builder-exception Blocker assignment failed.")
+    try require(blockerBuilder.assign(skill: .builder, to: 1).wasAssigned,
+                "The Builder-exception Builder assignment failed.")
+    blockerBuilder.tick()
+    try require(try lemming(blockerBuilder, id: 1).direction == .right,
+                "A newly building lemming was turned by the middle of its Blocker field.")
+
+    let lobeOverlapPair = [
+        NeoLemmixPreplacedLemming(position: NeoLemmixPoint(x: 30, y: 48), direction: .right),
+        NeoLemmixPreplacedLemming(position: NeoLemmixPoint(x: 22, y: 48), direction: .right),
+    ]
+    var lobeOverlap = try NeoLemmixSimulation(
+        terrain: terrain(),
+        configuration: configuration(total: 2, preplaced: lobeOverlapPair)
+    )
+    try require(lobeOverlap.assign(skill: .blocker, to: 0).wasAssigned,
+                "The first lobe-overlap Blocker assignment failed.")
+    try require(lobeOverlap.assign(skill: .blocker, to: 1).wasAssigned,
+                "A force lobe incorrectly counted as the central Blocker overlap band.")
+
+    let ohNoPair = [
+        NeoLemmixPreplacedLemming(position: NeoLemmixPoint(x: 30, y: 48), direction: .right),
+        NeoLemmixPreplacedLemming(position: NeoLemmixPoint(x: 24, y: 48), direction: .right),
+    ]
+    var ohNoBlocker = try NeoLemmixSimulation(
+        terrain: terrain(),
+        configuration: configuration(total: 2, preplaced: ohNoPair)
+    )
+    try require(ohNoBlocker.assign(skill: .blocker, to: 0).wasAssigned,
+                "The Oh-No Blocker assignment failed.")
+    try require(ohNoBlocker.assign(skill: .bomber, to: 0).wasAssigned,
+                "The Blocker Bomber assignment failed.")
+    ohNoBlocker.tick()
+    try require(try lemming(ohNoBlocker).action == .ohNo,
+                "A grounded Blocker did not enter its Oh-No animation.")
+    try require(try lemming(ohNoBlocker, id: 1).direction == .left,
+                "A grounded Oh-No Blocker dropped its force field before exploding.")
+
+    var hollowDiggerTerrain = try terrain(floorY: nil)
+    for x in 14...26 {
+        for y in 47...50 { hollowDiggerTerrain.setSolid(true, x: x, y: y) }
+    }
+    hollowDiggerTerrain.setSolid(false, x: 20, y: 49)
+    var hollowDigger = try walkingSimulation(
+        terrain: hollowDiggerTerrain,
+        position: NeoLemmixPoint(x: 20, y: 48)
+    )
+    try require(hollowDigger.assign(skill: .digger, to: 0).wasAssigned,
+                "The hollow-foot Digger assignment failed.")
+    hollowDigger.tick()
+    try require(!hollowDigger.terrain.isSolid(x: 20, y: 49),
+                "The hollow-foot Blocker fixture unexpectedly has a center ground pixel.")
+    try require(hollowDigger.assign(skill: .blocker, to: 0).wasAssigned,
+                "A working lemming without a center foot pixel could not become a Blocker.")
 
     let constructive: [(NeoLemmixSkill, Int)] = [(.builder, 9), (.platformer, 9), (.stacker, 7)]
     for (skill, ticks) in constructive {
@@ -285,6 +402,11 @@ private func testBlockerAndConstructiveSkills() throws {
         try require(
             simulation.terrainRevision > revision,
             "The \(skill.rawValue) did not add terrain."
+        )
+        let expectedShade = skill == .stacker ? UInt8(5) : UInt8(1)
+        try require(
+            simulation.terrain.constructionShadeMask?.contains(expectedShade) == true,
+            "The \(skill.rawValue) did not retain its CE construction gradient step."
         )
     }
 }
@@ -305,9 +427,19 @@ private func testDestructiveSkillsAndMaterials() throws {
             (protectedDown, .down),
         ]
     ))
+    let basherStart = try lemming(basher).position
     try require(basher.assign(skill: .basher, to: 0).wasAssigned, "Basher assignment failed.")
-    basher.run(ticks: 5)
+    basher.run(ticks: 2)
     try require(basher.terrainRevision > 0, "Basher did not remove terrain.")
+    try require(!basher.terrain.isSolid(x: basherStart.x + 5, y: basherStart.y - 9),
+                "The first Basher mask did not remove its top span.")
+    try require(basher.terrain.isSolid(x: basherStart.x + 6, y: basherStart.y - 9),
+                "The first Basher mask exceeded its top span.")
+    try require(!basher.terrain.isSolid(x: basherStart.x + 4, y: basherStart.y - 7),
+                "The first Basher mask did not remove its middle span.")
+    try require(basher.terrain.isSolid(x: basherStart.x + 5, y: basherStart.y - 7),
+                "The first Basher mask exceeded its middle span.")
+    basher.run(ticks: 3)
     try require(
         basher.terrain.isSolid(x: protectedLeft.x, y: protectedLeft.y),
         "Left one-way terrain did not protect against a right-facing basher."
@@ -322,9 +454,18 @@ private func testDestructiveSkillsAndMaterials() throws {
     )
 
     var miner = try walkingSimulation(terrain: terrain(extraSolid: wall))
+    let minerStart = try lemming(miner).position
     try require(miner.assign(skill: .miner, to: 0).wasAssigned, "Miner assignment failed.")
-    miner.run(ticks: 2)
+    miner.run(ticks: 1)
     try require(miner.terrainRevision > 0, "Miner did not remove terrain.")
+    try require(!miner.terrain.isSolid(x: minerStart.x + 7, y: minerStart.y - 10),
+                "The first Miner mask did not remove its widest span.")
+    try require(miner.terrain.isSolid(x: minerStart.x + 8, y: minerStart.y - 10),
+                "The first Miner mask exceeded its widest span.")
+    try require(!miner.terrain.isSolid(x: minerStart.x + 2, y: minerStart.y - 6),
+                "The first Miner mask did not remove its narrow tail.")
+    try require(miner.terrain.isSolid(x: minerStart.x + 3, y: minerStart.y - 6),
+                "The first Miner mask exceeded its narrow tail.")
 
     var filledRows: [NeoLemmixPoint] = []
     for x in 0..<128 { filledRows.append(NeoLemmixPoint(x: x, y: 47)) }
@@ -358,8 +499,45 @@ private func testDestructiveSkillsAndMaterials() throws {
 }
 
 private func testBomberAndStoner() throws {
+    var fallingBomber = try walkingSimulation(
+        terrain: terrain(floorY: 70),
+        traits: [.climber, .slider, .swimmer, .floater, .disarmer],
+        position: .init(x: 20, y: 30)
+    )
+    let fallingStart = try lemming(fallingBomber).position
+    try require(fallingBomber.assign(skill: .bomber, to: 0).wasAssigned,
+                "Falling Bomber assignment failed.")
+    fallingBomber.tick()
+    try require(try lemming(fallingBomber).position == fallingStart,
+                "An airborne instant Bomber moved before its explosion frame.")
+    try require(try lemming(fallingBomber).action == .exploding,
+                "An airborne instant Bomber did not bypass the Oh-No animation.")
+    try require(try lemming(fallingBomber).hasBeenOhNo == false,
+                "An airborne instant Bomber incorrectly recorded an Oh-No transition.")
+
+    let updraft = NeoLemmixZone(
+        id: 40,
+        effect: .updraft,
+        bounds: NeoLemmixRect(x: 0, y: 0, width: 128, height: 70)
+    )
+    var updraftBomber = try walkingSimulation(
+        terrain: terrain(floorY: 70),
+        zones: [updraft],
+        position: .init(x: 20, y: 30)
+    )
+    let updraftStart = try lemming(updraftBomber).position
+    try require(updraftBomber.assign(skill: .bomber, to: 0).wasAssigned,
+                "Updraft Bomber assignment failed.")
+    updraftBomber.tick()
+    try require(try lemming(updraftBomber).position == updraftStart,
+                "An airborne instant Bomber moved in an updraft before exploding.")
+
     let steelPixel = NeoLemmixPoint(x: 20, y: 48)
-    var bomber = try walkingSimulation(terrain: terrain(steel: [steelPixel]))
+    var blastArea: [NeoLemmixPoint] = []
+    for x in 10...32 { for y in 30...50 { blastArea.append(.init(x: x, y: y)) } }
+    var bomber = try walkingSimulation(terrain: terrain(extraSolid: blastArea, steel: [steelPixel]))
+    let bomberLemming = try lemming(bomber)
+    let bomberStart = bomberLemming.position
     try require(bomber.assign(skill: .bomber, to: 0).wasAssigned, "Bomber assignment failed.")
     bomber.run(ticks: 18)
     try require(try lemming(bomber).removalReason == .exploded, "Bomber did not explode.")
@@ -369,12 +547,44 @@ private func testBomberAndStoner() throws {
             && bomber.terrain.isSteel(x: steelPixel.x, y: steelPixel.y),
         "Bomber removed steel terrain."
     )
+    let bomberLeft = bomberStart.x + (bomberLemming.direction == .right ? 1 : 0) - 8
+    let bomberTop = bomberStart.y - 14
+    try require(!bomber.terrain.isSolid(x: bomberLeft, y: bomberTop + 10),
+                "Bomber did not apply the left edge of its full-width CE mask row at \(bomberLeft),\(bomberTop + 10).")
+    try require(!bomber.terrain.isSolid(x: bomberLeft + 15, y: bomberTop + 10),
+                "Bomber did not apply the right edge of its full-width CE mask row at \(bomberLeft + 15),\(bomberTop + 10).")
+    try require(bomber.terrain.isSolid(x: bomberLeft, y: bomberTop),
+                "Bomber removed a transparent corner outside the CE mask.")
+    try require(!bomber.terrain.isSolid(x: bomberLeft + 7, y: bomberTop),
+                "Bomber did not apply the top CE mask span.")
 
     var stoner = try walkingSimulation(terrain: terrain(floorY: 70), position: .init(x: 20, y: 30))
     try require(stoner.assign(skill: .stoner, to: 0).wasAssigned, "Stoner assignment failed.")
     stoner.run(ticks: 18)
-    try require(try lemming(stoner).removalReason == .stoned, "Stoner did not finish.")
+    let finishedStoner = try lemming(stoner)
+    try require(finishedStoner.removalReason == .stoned, "Stoner did not finish.")
     try require(stoner.terrainRevision > 0, "Stoner did not add terrain.")
+    let stonerLeft = finishedStoner.position.x + (finishedStoner.direction == .right ? 1 : 0) - 8
+    let stonerTop = finishedStoner.position.y - 10
+    try require(stoner.terrain.isSolid(x: stonerLeft + 7, y: stonerTop)
+                && stoner.terrain.isSolid(x: stonerLeft + 8, y: stonerTop),
+                "Stoner did not apply the top CE mask span.")
+    try require(
+        stoner.terrain.stonerOwnerID(x: stonerLeft + 7, y: stonerTop) == finishedStoner.id
+            && stoner.terrain.stonerOwnerID(x: stonerLeft + 8, y: stonerTop) == finishedStoner.id,
+        "Stoner terrain did not retain its visual owner."
+    )
+    try require(
+        stoner.terrain.stonerSourceIndex(x: stonerLeft + 7, y: stonerTop) == 7
+            && stoner.terrain.stonerSourceIndex(x: stonerLeft + 8, y: stonerTop) == 8,
+        "Stoner terrain did not retain its canonical source pixels."
+    )
+    try require(!stoner.terrain.isSolid(x: stonerLeft + 6, y: stonerTop),
+                "Stoner filled a transparent pixel outside the CE mask.")
+    var destroyedStonerTerrain = stoner.terrain
+    _ = destroyedStonerTerrain.setSolid(false, x: stonerLeft + 7, y: stonerTop)
+    try require(destroyedStonerTerrain.stonerOwnerID(x: stonerLeft + 7, y: stonerTop) == nil,
+                "Destroyed Stoner terrain retained stale visual provenance.")
 }
 
 private func testSwimmingAndHazards() throws {
@@ -420,8 +630,56 @@ private func testSwimmingAndHazards() throws {
     )
     var trapped = try walkingSimulation(zones: [trap])
     trapped.run(ticks: 2)
-    try require(try lemming(trapped).action == .vaporizing, "Trap did not catch a lemming.")
+    try require(try lemming(trapped).removalReason == .trapped, "Trap did not catch a lemming.")
     try require(trapped.disabledZoneIDs.contains(13), "One-shot trap remained enabled.")
+
+    let repeatingTrap = NeoLemmixZone(
+        id: 14,
+        effect: .trap,
+        bounds: NeoLemmixRect(x: 21, y: 48, width: 1, height: 1),
+        animationFrames: 4
+    )
+    let pair = [
+        NeoLemmixPreplacedLemming(position: .init(x: 20, y: 48)),
+        NeoLemmixPreplacedLemming(position: .init(x: 20, y: 48)),
+    ]
+    var occupiedTrap = try NeoLemmixSimulation(
+        terrain: terrain(),
+        configuration: configuration(total: 2, zones: [repeatingTrap], preplaced: pair)
+    )
+    occupiedTrap.tick()
+    try require(occupiedTrap.lemmings.filter { $0.removalReason == .trapped }.count == 1,
+                "A busy repeating trap caught more than one lemming.")
+    try require(occupiedTrap.activeLemmings.count == 1,
+                "A busy repeating trap did not let the next lemming pass.")
+    try require(occupiedTrap.gadgetAnimationFrames?[14] == 1,
+                "A triggered trap did not advance to primary frame 1 on its trigger tick.")
+    let savedTrap = try JSONDecoder().decode(
+        NeoLemmixSimulation.self, from: JSONEncoder().encode(occupiedTrap)
+    )
+    try require(savedTrap == occupiedTrap,
+                "A trap animation changed after save restoration.")
+    occupiedTrap.tick()
+    try require(occupiedTrap.gadgetAnimationFrames?[14] == 2,
+                "A triggered trap did not advance to primary frame 2.")
+    occupiedTrap.tick()
+    try require(occupiedTrap.gadgetAnimationFrames?[14] == 3,
+                "A triggered trap did not advance to primary frame 3.")
+    occupiedTrap.tick()
+    try require(occupiedTrap.gadgetAnimationFrames?[14] == 0,
+                "A triggered trap did not return to primary frame 0.")
+
+    let staggered = [
+        NeoLemmixPreplacedLemming(position: .init(x: 20, y: 48)),
+        NeoLemmixPreplacedLemming(position: .init(x: 16, y: 48)),
+    ]
+    var reusable = try NeoLemmixSimulation(
+        terrain: terrain(),
+        configuration: configuration(total: 2, zones: [repeatingTrap], preplaced: staggered)
+    )
+    reusable.run(ticks: 5)
+    try require(reusable.lemmings.filter { $0.removalReason == .trapped }.count == 2,
+                "A repeating trap was not ready on the first pass after its animation wrapped.")
 }
 
 private func testNxlvAdapter() throws {
@@ -444,7 +702,7 @@ private func testNxlvAdapter() throws {
       PIECE hatch
       X 10
       Y 8
-      DIRECTION LEFT
+      FLIP_HORIZONTAL
       FLOATER
     $END
 
@@ -452,6 +710,13 @@ private func testNxlvAdapter() throws {
       STYLE default
       PIECE exit
       X 50
+      Y 40
+    $END
+
+    $GADGET
+      STYLE default
+      PIECE trap
+      X 30
       Y 40
     $END
 
@@ -511,6 +776,20 @@ private func testNxlvAdapter() throws {
                 triggerWidth: 4,
                 triggerHeight: 1
             ),
+            NxlvRenderedGadget(
+                style: "default",
+                piece: "trap",
+                effect: .trap,
+                x: 30,
+                y: 40,
+                width: 12,
+                height: 16,
+                triggerX: 34,
+                triggerY: 48,
+                triggerWidth: 2,
+                triggerHeight: 2,
+                animationFrames: 20
+            ),
         ]
     )
     let simulation = try NeoLemmixSimulation(level: level, renderedLevel: rendered)
@@ -523,17 +802,108 @@ private func testNxlvAdapter() throws {
     try require(simulation.configuration.entrances.first?.position == .init(x: 12, y: 10),
                 "Rendered entrance trigger position was not used.")
     try require(simulation.configuration.entrances.first?.direction == .left,
-                "NXLV entrance direction was not converted.")
+                "A horizontally flipped NXLV entrance did not spawn left-facing lemmings.")
     try require(simulation.configuration.entrances.first?.traits.contains(.floater) == true,
                 "NXLV entrance trait was not converted.")
     try require(simulation.configuration.zones.first?.effect == .exit,
                 "Rendered exit was not converted.")
-    try require(simulation.configuration.zones.last?.effect == .splatPad,
+    try require(simulation.configuration.zones.contains(where: { $0.effect == .splatPad }),
                 "Rendered splat pad was not converted.")
+    try require(
+        simulation.configuration.zones.first(where: { $0.effect == .trap })?.animationFrames == 20,
+        "A rendered trap did not retain its primary-animation busy cycle."
+    )
     try require(simulation.skills[.builder] == .finite(3), "Finite NXLV skill supply was not converted.")
     try require(simulation.skills[.climber] == .infinite, "Infinite NXLV skill supply was not converted.")
     try require(try lemming(simulation).traits.contains(.climber),
                 "NXLV preplaced trait was not converted.")
+}
+
+private func testGadgetLemmingCaps() throws {
+    let text = """
+    TITLE Gadget Caps
+    LEMMINGS 5
+    SAVE_REQUIREMENT 4
+    WIDTH 64
+    HEIGHT 64
+
+    $GADGET
+      STYLE default
+      PIECE hatch
+      X 10
+      Y 8
+      LEMMINGS 2
+    $END
+
+    $GADGET
+      STYLE default
+      PIECE exit
+      X 50
+      Y 40
+      LEMMINGS 1
+    $END
+    """
+    let level = try requireValue(NxlvLevel(text: text), "Gadget-cap fixture did not parse.")
+    let baseTerrain = try terrain(width: 64, height: 64, floorY: 48)
+    let rendered = NxlvRenderedLevel(
+        width: 64,
+        height: 64,
+        rgba: Array(repeating: 0, count: 64 * 64 * 4),
+        solidMask: baseTerrain.solidMask,
+        steelMask: baseTerrain.steelMask,
+        oneWayMask: baseTerrain.oneWayMask,
+        oneWayEligibleMask: Array(repeating: 0, count: 64 * 64),
+        gadgets: [
+            NxlvRenderedGadget(
+                style: "default", piece: "hatch", effect: .entrance,
+                x: 10, y: 8, width: 16, height: 16,
+                triggerX: 12, triggerY: 10, triggerWidth: 1, triggerHeight: 1
+            ),
+            NxlvRenderedGadget(
+                style: "default", piece: "exit", effect: .exit,
+                x: 50, y: 40, width: 12, height: 16,
+                triggerX: 52, triggerY: 45, triggerWidth: 4, triggerHeight: 3
+            ),
+        ]
+    )
+    let adapted = try NeoLemmixSimulation(level: level, renderedLevel: rendered)
+    try require(adapted.configuration.totalLemmings == 2,
+                "Finite entrance capacity did not lower the CE lemming total.")
+    try require(adapted.configuration.requiredToSave == 1,
+                "Finite exit capacity did not lower the CE rescue target.")
+    try require(adapted.configuration.entrances.first?.lemmingLimit == 2,
+                "Entrance capacity was not retained.")
+    try require(adapted.configuration.zones.first?.lemmingLimit == 1,
+                "Exit capacity was not retained.")
+
+    let zeroCap = NeoLemmixEntrance(
+        id: 0,
+        position: NeoLemmixPoint(x: 10, y: 10),
+        lemmingLimit: 0
+    )
+    try require(zeroCap.lemmingLimit == nil, "A zero gadget cap was not treated as unlimited.")
+
+    let finiteExit = NeoLemmixZone(
+        id: 0,
+        effect: .exit,
+        bounds: NeoLemmixRect(x: 20, y: 40, width: 2, height: 10),
+        lemmingLimit: 1
+    )
+    var capped = try NeoLemmixSimulation(
+        terrain: terrain(),
+        configuration: configuration(
+            total: 2,
+            required: 1,
+            zones: [finiteExit],
+            preplaced: [
+                .init(position: .init(x: 20, y: 48)),
+                .init(position: .init(x: 20, y: 48)),
+            ]
+        )
+    )
+    capped.tick()
+    try require(capped.lemmings.filter { $0.action == .exiting }.count == 1,
+                "A finite exit accepted more lemmings than its capacity.")
 }
 
 private func testDisarmer() throws {
@@ -562,17 +932,105 @@ private func testCloner() throws {
 }
 
 private func testUnsupportedSkillsAreExplicit() throws {
-    for skill in [NeoLemmixSkill.fencer, .laserer] {
-        var simulation = try walkingSimulation()
-        try require(
-            simulation.assign(skill: skill, to: 0) == .rejected(
-                lemmingID: 0,
-                skill: skill,
-                reason: .unsupportedSkill
-            ),
-            "\(skill.rawValue) did not return an unsupported result."
-        )
+    try require(NeoLemmixRules.unsupportedSkills.isEmpty,
+                "A current NeoLemmix skill is still marked unsupported.")
+}
+
+private func testFencer() throws {
+    var wall: [NeoLemmixPoint] = []
+    for x in 24...36 {
+        for y in 38...48 { wall.append(.init(x: x, y: y)) }
     }
+    var simulation = try walkingSimulation(
+        terrain: terrain(extraSolid: wall),
+        skills: [.fencer: .finite(1)]
+    )
+    try require(simulation.assign(skill: .fencer, to: 0).wasAssigned,
+                "Fencer assignment failed.")
+    try require(try lemming(simulation).action == .fencing,
+                "Fencer did not enter its action.")
+    try require(simulation.skills[.fencer] == .finite(0),
+                "Fencer inventory was not consumed.")
+    let startX = try lemming(simulation).position.x
+
+    simulation.run(ticks: 5)
+    try require(!simulation.terrain.isSolid(x: startX + 4, y: 38),
+                "The highest Fencer mask span was not removed.")
+    try require(!simulation.terrain.isSolid(x: startX + 6, y: 40),
+                "The widest Fencer mask span was not removed.")
+    try require(simulation.terrain.isSolid(x: startX + 3, y: 38),
+                "The Fencer mask removed a pixel before its highest span.")
+    try require(simulation.terrain.isSolid(x: startX + 7, y: 40),
+                "The Fencer mask removed a pixel beyond its widest span.")
+
+    var protectedTerrain = try terrain(
+        extraSolid: wall,
+        steel: [.init(x: 25, y: 38)],
+        oneWay: [(.init(x: 27, y: 40), .down)]
+    )
+    protectedTerrain.setOneWay(.up, x: 26, y: 40)
+    var protected = try walkingSimulation(
+        terrain: protectedTerrain,
+        skills: [.fencer: .infinite]
+    )
+    try require(protected.assign(skill: .fencer, to: 0).wasAssigned,
+                "Protected-terrain Fencer assignment failed.")
+    protected.run(ticks: 5)
+    try require(protected.terrain.isSolid(x: 25, y: 38),
+                "Fencer removed steel.")
+    try require(protected.terrain.isSolid(x: 27, y: 40),
+                "Fencer removed down one-way terrain.")
+    try require(!protected.terrain.isSolid(x: 26, y: 40),
+                "Up one-way terrain incorrectly stopped a Fencer.")
+
+    var open = try walkingSimulation(skills: [.fencer: .infinite])
+    try require(open.assign(skill: .fencer, to: 0).wasAssigned,
+                "Open-terrain Fencer assignment failed.")
+    open.run(ticks: 5)
+    try require(try lemming(open).action == .walking,
+                "A Fencer continued without terrain to remove.")
+}
+
+private func testLaserer() throws {
+    var targetBlock: [NeoLemmixPoint] = []
+    for x in 22...32 {
+        for y in 34...44 { targetBlock.append(.init(x: x, y: y)) }
+    }
+    var simulation = try walkingSimulation(
+        terrain: terrain(extraSolid: targetBlock),
+        skills: [.laserer: .finite(1)]
+    )
+    let origin = try lemming(simulation).position
+    try require(simulation.assign(skill: .laserer, to: 0).wasAssigned,
+                "Laserer assignment failed.")
+    simulation.tick()
+    let laserer = try lemming(simulation)
+    try require(laserer.action == .lasering && laserer.laserHitPoint != nil,
+                "Laserer did not retain its hit point.")
+    let hit = try requireValue(laserer.laserHitPoint, "Laserer hit point was missing.")
+    try require(!simulation.terrain.isSolid(x: hit.x, y: hit.y - 4),
+                "The top of the Laserer mask was not removed.")
+    try require(!simulation.terrain.isSolid(x: hit.x + 4, y: hit.y),
+                "The side of the Laserer mask was not removed.")
+    try require(simulation.terrain.isSolid(x: hit.x + 4, y: hit.y - 4),
+                "The Laserer mask removed a pixel outside its shape.")
+    try require(simulation.skills[.laserer] == .finite(0),
+                "Laserer inventory was not consumed.")
+    try require(laserer.position == origin, "Laserer moved while firing.")
+
+    var steelTerrain = try terrain(extraSolid: targetBlock)
+    for point in targetBlock { steelTerrain.setSteel(true, x: point.x, y: point.y) }
+    var blocked = try walkingSimulation(
+        terrain: steelTerrain,
+        skills: [.laserer: .infinite]
+    )
+    try require(blocked.assign(skill: .laserer, to: 0).wasAssigned,
+                "Steel-facing Laserer assignment failed.")
+    blocked.run(ticks: 10)
+    try require(try lemming(blocked).action == .walking,
+                "A Laserer did not stop after ten blocked ticks.")
+    try require(blocked.terrain.isSolid(x: 24, y: 40),
+                "Laserer removed steel.")
 }
 
 private func testReplayOrderAndInventory() throws {
@@ -672,6 +1130,83 @@ private func testSkillPickup() throws {
                 "The topmost overlapping pickup did not take priority.")
 }
 
+private func testTriggeredAnimationsAndSecondaries() throws {
+    let busySecondary = NeoLemmixSecondaryAnimationDefinition(
+        frameCount: 3,
+        initialState: .pause,
+        initiallyVisible: false,
+        triggers: [
+            NxlvRenderedAnimationTrigger(condition: .busy, state: .play, isVisible: true),
+        ]
+    )
+    let triggered = NeoLemmixZone(
+        id: 70,
+        effect: .animation,
+        bounds: NeoLemmixRect(x: 21, y: 48, width: 1, height: 1),
+        animationFrames: 4,
+        visualGadgetID: 9,
+        secondaryAnimations: [busySecondary]
+    )
+    var simulation = try walkingSimulation(zones: [triggered])
+    try require(simulation.gadgetAnimationFrames?[70] == 1,
+                "A triggered animation did not enter primary frame 1.")
+    try require(simulation.secondaryAnimationStates?[9] == [
+        NeoLemmixSecondaryAnimationState(frame: 1, state: .play, isVisible: true),
+    ], "A BUSY secondary did not become visible and advance.")
+
+    let encoded = try JSONEncoder().encode(simulation)
+    var restored = try JSONDecoder().decode(NeoLemmixSimulation.self, from: encoded)
+    try require(restored == simulation,
+                "A trigger-controlled secondary changed during recovery.")
+    simulation.tick()
+    restored.tick()
+    try require(restored == simulation,
+                "A recovered trigger-controlled secondary diverged.")
+    simulation.run(ticks: 2)
+    try require(simulation.gadgetAnimationFrames?[70] == 0,
+                "A triggered animation did not return to frame zero.")
+    try require(simulation.secondaryAnimationStates?[9] == [
+        NeoLemmixSecondaryAnimationState(frame: 0, state: .pause, isVisible: false),
+    ], "A BUSY secondary did not return to its hidden base state.")
+
+    let exhaustedSecondary = NeoLemmixSecondaryAnimationDefinition(
+        frameCount: 1,
+        initialState: .pause,
+        initiallyVisible: false,
+        triggers: [
+            NxlvRenderedAnimationTrigger(
+                condition: .disabled, state: .pause, isVisible: true
+            ),
+            NxlvRenderedAnimationTrigger(
+                condition: .busy, state: .play, isVisible: true
+            ),
+            NxlvRenderedAnimationTrigger(
+                condition: .exhausted, state: .pause, isVisible: false
+            ),
+        ]
+    )
+    let once = NeoLemmixZone(
+        id: 71,
+        effect: .animationOnce,
+        bounds: NeoLemmixRect(x: 21, y: 48, width: 1, height: 1),
+        animationFrames: 4,
+        visualGadgetID: 10,
+        secondaryAnimations: [exhaustedSecondary]
+    )
+    var oneShot = try walkingSimulation(zones: [once])
+    try require(oneShot.disabledZoneIDs.contains(71),
+                "ANIMATIONONCE remained triggerable after activation.")
+    try require(oneShot.gadgetAnimationFrames?[71] == 2,
+                "ANIMATIONONCE did not advance from its CE frame-one idle state.")
+    try require(oneShot.secondaryAnimationStates?[10]?.first?.state == .play,
+                "The later BUSY trigger did not override DISABLED while ANIMATIONONCE played.")
+    oneShot.run(ticks: 2)
+    try require(oneShot.gadgetAnimationFrames?[71] == 0,
+                "ANIMATIONONCE did not settle on exhausted frame zero.")
+    try require(oneShot.secondaryAnimationStates?[10]?.first?.isVisible == false,
+                "The later EXHAUSTED trigger did not override the other one-shot states.")
+}
+
 private func testLockedExitButtons() throws {
     let first = NeoLemmixZone(
         id: 30, effect: .unlockButton,
@@ -707,6 +1242,228 @@ private func testLockedExitButtons() throws {
     noButtons.tick()
     try require(try lemming(noButtons).action == .exiting,
                 "A locked exit with no buttons did not start open.")
+
+    let animatedButton = NeoLemmixZone(
+        id: 33, effect: .unlockButton,
+        bounds: NeoLemmixRect(x: 21, y: 48, width: 1, height: 1),
+        animationFrames: 4
+    )
+    let animatedExit = NeoLemmixZone(
+        id: 34, effect: .lockedExit,
+        bounds: NeoLemmixRect(x: 80, y: 48, width: 1, height: 1),
+        animationFrames: 4
+    )
+    var animated = try NeoLemmixSimulation(
+        terrain: terrain(),
+        configuration: configuration(zones: [animatedButton, animatedExit])
+    )
+    try require(animated.gadgetAnimationFrames == [33: 1, 34: 1],
+                "Buttons and locked exits did not start on CE frame 1.")
+    animated.tick()
+    try require(animated.gadgetAnimationFrames == [33: 2, 34: 2],
+                "The press tick did not advance button and exit animations to frame 2.")
+    let midAnimation = try JSONDecoder().decode(
+        NeoLemmixSimulation.self, from: JSONEncoder().encode(animated)
+    )
+    try require(midAnimation == animated,
+                "A gadget transition changed after save restoration.")
+    animated.tick()
+    try require(animated.gadgetAnimationFrames == [33: 3, 34: 3],
+                "Button and exit animations did not advance to frame 3.")
+    animated.tick()
+    try require(animated.gadgetAnimationFrames == [33: 0, 34: 0],
+                "Button and exit animations did not settle permanently on frame 0.")
+}
+
+private func testForceFieldsAndSplitter() throws {
+    let force = NeoLemmixZone(
+        id: 40,
+        effect: .forceRight,
+        bounds: NeoLemmixRect(x: 19, y: 48, width: 1, height: 1)
+    )
+    let forced = try walkingSimulation(zones: [force], direction: .left)
+    try require(try lemming(forced).direction == .right,
+                "A right force field did not turn a left-facing lemming.")
+
+    let splitter = NeoLemmixZone(
+        id: 41,
+        effect: .splitter,
+        bounds: NeoLemmixRect(x: 21, y: 48, width: 1, height: 1),
+        direction: .left
+    )
+    let preplaced = [
+        NeoLemmixPreplacedLemming(position: .init(x: 20, y: 48)),
+        NeoLemmixPreplacedLemming(position: .init(x: 20, y: 48)),
+    ]
+    var split = try NeoLemmixSimulation(
+        terrain: terrain(),
+        configuration: configuration(total: 2, zones: [splitter], preplaced: preplaced)
+    )
+    split.tick()
+    try require(try lemming(split, id: 0).direction == .left,
+                "The splitter did not use its initial direction.")
+    try require(try lemming(split, id: 1).direction == .right,
+                "The splitter did not alternate its direction.")
+    try require(split.splitterDirections?[41] == .left,
+                "The splitter did not retain its next direction.")
+    let restored = try JSONDecoder().decode(
+        NeoLemmixSimulation.self, from: JSONEncoder().encode(split)
+    )
+    try require(restored == split, "Splitter state changed after save restoration.")
+}
+
+private func testTeleporter() throws {
+    let teleporter = NeoLemmixZone(
+        id: 50,
+        effect: .teleporter,
+        bounds: NeoLemmixRect(x: 21, y: 48, width: 1, height: 1),
+        pairing: 7,
+        flipsLemming: true,
+        animationFrames: 2
+    )
+    let receiver = NeoLemmixZone(
+        id: 51,
+        effect: .receiver,
+        bounds: NeoLemmixRect(x: 70, y: 48, width: 2, height: 2),
+        pairing: 7,
+        animationFrames: 2
+    )
+    var simulation = try walkingSimulation(zones: [teleporter, receiver])
+    try require(try lemming(simulation).action == .teleporting,
+                "A teleporter did not hide its lemming.")
+    try require(try lemming(simulation).direction == .left,
+                "A flipped teleporter did not turn its lemming.")
+    simulation.run(ticks: 3)
+    let arrived = try lemming(simulation)
+    try require(arrived.action == .walking,
+                "A receiver did not return control after its animation delay.")
+    try require(arrived.position == .init(x: 70, y: 48),
+                "A receiver used the wrong trigger origin.")
+
+    let restored = try JSONDecoder().decode(
+        NeoLemmixSimulation.self,
+        from: JSONEncoder().encode(try walkingSimulation(zones: [teleporter, receiver]))
+    )
+    try require(try lemming(restored).action == .teleporting,
+                "Save restoration lost an in-flight teleport.")
+
+    let pair = [
+        NeoLemmixPreplacedLemming(position: .init(x: 20, y: 48)),
+        NeoLemmixPreplacedLemming(position: .init(x: 20, y: 48)),
+    ]
+    var occupied = try NeoLemmixSimulation(
+        terrain: terrain(),
+        configuration: configuration(
+            total: 2,
+            zones: [teleporter, receiver],
+            preplaced: pair
+        )
+    )
+    occupied.tick()
+    try require(occupied.lemmings.filter { $0.action == .teleporting }.count == 1,
+                "A busy teleporter accepted more than one lemming.")
+    try require(occupied.lemmings.filter { $0.action == .walking }.count == 1,
+                "A busy teleporter did not let the next lemming pass.")
+}
+
+private func testUpdraftAndZombieInfection() throws {
+    let updraft = NeoLemmixZone(
+        id: 60,
+        effect: .updraft,
+        bounds: NeoLemmixRect(x: 19, y: 10, width: 3, height: 39)
+    )
+    let falling = NeoLemmixPreplacedLemming(position: .init(x: 20, y: 20))
+    var lifted = try NeoLemmixSimulation(
+        terrain: terrain(),
+        configuration: configuration(zones: [updraft], preplaced: [falling])
+    )
+    lifted.tick()
+    try require(try lemming(lifted).position.y == 22,
+                "An updraft did not reduce falling speed to two pixels.")
+    try require(try lemming(lifted).fallDistance == 0,
+                "An updraft did not reset splat distance.")
+    lifted.run(ticks: 30)
+    try require(try lemming(lifted).action == .walking,
+                "A fall through an updraft still splatted.")
+
+    let pair = [
+        NeoLemmixPreplacedLemming(
+            position: .init(x: 20, y: 48),
+            direction: .right,
+            traits: [.zombie]
+        ),
+        NeoLemmixPreplacedLemming(position: .init(x: 21, y: 48), direction: .right),
+    ]
+    var infected = try NeoLemmixSimulation(
+        terrain: terrain(),
+        configuration: configuration(total: 2, preplaced: pair)
+    )
+    infected.tick()
+    try require(try lemming(infected, id: 1).traits.contains(.zombie),
+                "A nearby zombie did not infect a normal lemming.")
+}
+
+private func testStateChangers() throws {
+    let bounds = NeoLemmixRect(x: 21, y: 48, width: 1, height: 1)
+    let neutralized = try walkingSimulation(zones: [
+        NeoLemmixZone(id: 70, effect: .neutralizer, bounds: bounds),
+    ])
+    try require(try lemming(neutralized).traits.contains(.neutral),
+                "A neutralizer did not make a lemming neutral.")
+
+    let deneutralized = try walkingSimulation(
+        zones: [NeoLemmixZone(id: 71, effect: .deneutralizer, bounds: bounds)],
+        traits: [.neutral]
+    )
+    try require(!lemming(deneutralized).traits.contains(.neutral),
+                "A deneutralizer did not restore a neutral lemming.")
+
+    let added = try walkingSimulation(zones: [
+        NeoLemmixZone(id: 72, effect: .addSkill, bounds: bounds, skill: .climber),
+    ])
+    try require(try lemming(added).traits.contains(.climber),
+                "A skill-adder did not grant its permanent skill.")
+
+    let removed = try walkingSimulation(
+        zones: [NeoLemmixZone(id: 73, effect: .removeSkills, bounds: bounds)],
+        traits: [.slider, .climber, .swimmer, .disarmer]
+    )
+    let remaining = try lemming(removed).traits
+    try require(remaining.isDisjoint(with: [.slider, .climber, .swimmer, .disarmer]),
+                "A skill-remover left a permanent skill assigned.")
+}
+
+private func testPortals() throws {
+    let source = NeoLemmixZone(
+        id: 80,
+        effect: .portal,
+        bounds: NeoLemmixRect(x: 21, y: 48, width: 1, height: 1),
+        pairing: 9
+    )
+    let destination = NeoLemmixZone(
+        id: 81,
+        effect: .portal,
+        bounds: NeoLemmixRect(x: 70, y: 44, width: 5, height: 5),
+        pairing: 9
+    )
+    let overlappingExit = NeoLemmixZone(
+        id: 82,
+        effect: .exit,
+        bounds: source.bounds
+    )
+    var simulation = try walkingSimulation(zones: [overlappingExit, source, destination])
+    try require(try lemming(simulation).portalWarpFrame == 1,
+                "A portal did not start its warp sequence.")
+    try require(try lemming(simulation).action != .exiting,
+                "An overlapping exit ran before the CE portal trigger.")
+    simulation.run(ticks: 3)
+    try require(try lemming(simulation).position == .init(x: 72, y: 48),
+                "A portal did not use the destination centre and bottom.")
+    try require(try lemming(simulation).portalWarpFrame == 4,
+                "A portal moved on the wrong warp frame.")
+    simulation.run(ticks: 3)
+    try require(try lemming(simulation).portalWarpFrame == nil,
+                "A portal did not release its lemming on frame seven.")
 }
 
 private func testCodableContinuation() throws {
@@ -746,13 +1503,22 @@ private let tests: [(String, () throws -> Void)] = [
     ("bomber and stoner", testBomberAndStoner),
     ("swimming and hazards", testSwimmingAndHazards),
     ("NXLV adapter", testNxlvAdapter),
+    ("gadget lemming caps", testGadgetLemmingCaps),
     ("disarmer", testDisarmer),
     ("cloner", testCloner),
+    ("fencer", testFencer),
+    ("laserer", testLaserer),
     ("unsupported skill diagnostics", testUnsupportedSkillsAreExplicit),
     ("replay order and inventory", testReplayOrderAndInventory),
     ("splat pad landing", testSplatPadLanding),
     ("skill pickup", testSkillPickup),
+    ("triggered animations and secondaries", testTriggeredAnimationsAndSecondaries),
     ("locked exits and buttons", testLockedExitButtons),
+    ("force fields and splitter", testForceFieldsAndSplitter),
+    ("teleporter", testTeleporter),
+    ("updraft and zombie infection", testUpdraftAndZombieInfection),
+    ("state changers", testStateChangers),
+    ("portals", testPortals),
     ("Codable continuation", testCodableContinuation),
     ("nuke and completion", testNukeAndCompletion),
 ]
@@ -764,7 +1530,7 @@ do {
     }
     print(
         "NeoLemmix simulation tests passed: \(tests.count) groups, "
-            + "19 implemented skills, 2 explicit unsupported skills."
+            + "21 implemented skills, 0 explicit unsupported skills."
     )
 } catch {
     fputs("NeoLemmix simulation test failed: \(error)\n", stderr)

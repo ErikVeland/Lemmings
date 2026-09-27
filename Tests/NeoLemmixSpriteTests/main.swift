@@ -1,0 +1,313 @@
+import AppKit
+import Foundation
+import NxlvKit
+
+struct Failure: Error, CustomStringConvertible { let description: String }
+func require(_ condition: Bool, _ message: String) throws {
+  if !condition { throw Failure(description: message) }
+}
+
+let names = [
+  "walker", "ascender", "faller", "climber", "hoister", "floater", "glider",
+  "dehoister", "slider", "swimmer", "blocker", "builder", "platformer", "stacker",
+  "basher", "fencer", "laserer", "miner", "digger", "jumper", "reacher", "shimmier",
+  "disarmer", "shrugger", "ohnoer", "stoner", "bomber", "splatter", "exiter",
+  "drowner", "burner",
+]
+
+func png(width: Int, height: Int, frames: Int) throws -> Data {
+  var bytes = [UInt8](repeating: 0, count: width * height * 4)
+  let half = width / 2
+  for y in 0..<height {
+    let frame = y / (height / frames)
+    for x in 0..<width {
+      let offset = (y * width + x) * 4
+      let color: (UInt8, UInt8, UInt8)
+      if x < half {
+        if frame == 1 {
+          color = (0xF0, 0xD0, 0xD0)
+        } else if y.isMultiple(of: height / frames) {
+          color = (0x30, 0x30, 0xA0)
+        } else {
+          color = (0x40, 0x40, 0xE0)
+        }
+      } else {
+        color = (0x00, 0xB0, 0x00)
+      }
+      bytes[offset] = color.0
+      bytes[offset + 1] = color.1
+      bytes[offset + 2] = color.2
+      bytes[offset + 3] = 0xFF
+    }
+  }
+  guard let provider = CGDataProvider(data: Data(bytes) as CFData),
+        let image = CGImage(
+          width: width,
+          height: height,
+          bitsPerComponent: 8,
+          bitsPerPixel: 32,
+          bytesPerRow: width * 4,
+          space: CGColorSpaceCreateDeviceRGB(),
+          bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.last.rawValue),
+          provider: provider,
+          decode: nil,
+          shouldInterpolate: false,
+          intent: .defaultIntent
+        ),
+        let data = NSBitmapImageRep(cgImage: image).representation(using: .png, properties: [:]) else {
+    throw Failure(description: "Could not make a PNG fixture")
+  }
+  return data
+}
+
+func color(_ image: NSImage, x: Int, y: Int) throws -> (Int, Int, Int) {
+  guard let cg = image.cgImage(forProposedRect: nil, context: nil, hints: nil) else {
+    throw Failure(description: "Could not inspect sprite frame")
+  }
+  var bytes = [UInt8](repeating: 0, count: cg.width * cg.height * 4)
+  guard let context = CGContext(
+    data: &bytes,
+    width: cg.width,
+    height: cg.height,
+    bitsPerComponent: 8,
+    bytesPerRow: cg.width * 4,
+    space: CGColorSpaceCreateDeviceRGB(),
+    bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue
+  ) else { throw Failure(description: "Could not inspect sprite pixels") }
+  context.translateBy(x: 0, y: CGFloat(cg.height))
+  context.scaleBy(x: 1, y: -1)
+  context.draw(cg, in: CGRect(x: 0, y: 0, width: cg.width, height: cg.height))
+  let offset = (y * cg.width + x) * 4
+  return (Int(bytes[offset]), Int(bytes[offset + 1]), Int(bytes[offset + 2]))
+}
+
+func syntheticStyles() throws -> URL {
+  let root = FileManager.default.temporaryDirectory
+    .appendingPathComponent("NeoLemmixSpriteTests-\(UUID().uuidString)")
+  let theme = root.appendingPathComponent("fixture")
+  let lemmings = root.appendingPathComponent("fixture_sprites/lemmings")
+  try FileManager.default.createDirectory(at: theme, withIntermediateDirectories: true)
+  try FileManager.default.createDirectory(at: lemmings, withIntermediateDirectories: true)
+  try """
+  LEMMINGS fixture_sprites
+  $COLORS
+    LEMMING_CLOTHES xEF2020
+    LEMMING_NEUTRAL_CLOTHES xCCCCCC
+  $END
+  """.write(to: theme.appendingPathComponent("theme.nxtm"), atomically: true, encoding: .utf8)
+
+  var animations = "$ANIMATIONS\n"
+  for name in names {
+    let frames = name == "walker" ? 2 : (name == "jumper" || name == "slider" ? 3 : 1)
+    animations += """
+      $\(name.uppercased())
+        FRAMES \(frames)
+        \(name == "slider" ? "LOOP_TO_FRAME 1" : "")
+        $RIGHT
+          FOOT_X 1
+          FOOT_Y 3
+        $END
+        $LEFT
+          FOOT_X 2
+          FOOT_Y 3
+        $END
+      $END
+    """ + "\n"
+    try png(width: 8, height: frames * 4, frames: frames)
+      .write(to: lemmings.appendingPathComponent("\(name).png"))
+  }
+  animations += "$END\n"
+  let scheme = """
+  $SPRITESET_RECOLORING
+    LEMMING_HAIR x00B000
+    LEMMING_CLOTHES x4040E0
+    LEMMING_SKIN xF0D0D0
+    LEMMING_ZOMBIE_SKIN x808080
+    LEMMING_ATHLETE_HAIR x4040DF
+    LEMMING_NEUTRAL_CLOTHES x888888
+  $END
+  $STATE_RECOLORING
+    $ATHLETE
+      FROM x00B000
+      TO x4040DF
+    $END
+    $ZOMBIE
+      FROM xF0D0D0
+      TO x808080
+    $END
+    $NEUTRAL
+      FROM x4040E0
+      TO x888888
+    $END
+  $END
+  $SHADES
+    $SHADE
+      PRIMARY x4040E0
+      ALT x3030A0
+    $END
+  $END
+  \(animations)
+  """
+  try scheme.write(to: lemmings.appendingPathComponent("scheme.nxmi"), atomically: true, encoding: .utf8)
+  return root
+}
+
+func writeContactSheet(styles: URL, theme: String, output: URL) throws {
+  let sprites = try NeoLemmixSpriteSet(stylesRootURL: styles, themeStyle: theme)
+  let actions = NeoLemmixAction.allCases.filter { ![.teleporting, .removed].contains($0) }
+  let scale = 2, cellWidth = 96, cellHeight = 72, columns = 8
+  let rows = (actions.count + columns - 1) / columns
+  let image = NSImage(size: NSSize(width: columns * cellWidth, height: rows * cellHeight))
+  image.lockFocus()
+  NSColor(calibratedWhite: 0.08, alpha: 1).setFill()
+  NSRect(origin: .zero, size: image.size).fill()
+  NSGraphicsContext.current?.imageInterpolation = .none
+  for (index, action) in actions.enumerated() {
+    guard let frame = sprites.frame(action: action, direction: index.isMultiple(of: 2) ? .right : .left,
+                                    animationFrame: index % 12, traits: []) else { continue }
+    let column = index % columns, row = rows - 1 - index / columns
+    let rect = NSRect(
+      x: column * cellWidth + (cellWidth - Int(frame.image.size.width) * scale) / 2,
+      y: row * cellHeight + 20,
+      width: Int(frame.image.size.width) * scale,
+      height: Int(frame.image.size.height) * scale
+    )
+    frame.image.draw(in: rect, from: .zero, operation: .sourceOver, fraction: 1)
+    let label = action.rawValue as NSString
+    label.draw(at: NSPoint(x: column * cellWidth + 4, y: row * cellHeight + 5), withAttributes: [
+      .font: NSFont.monospacedSystemFont(ofSize: 9, weight: .regular),
+      .foregroundColor: NSColor.white,
+    ])
+  }
+  image.unlockFocus()
+  guard let cg = image.cgImage(forProposedRect: nil, context: nil, hints: nil),
+        let data = NSBitmapImageRep(cgImage: cg).representation(using: .png, properties: [:]) else {
+    throw Failure(description: "Could not encode contact sheet")
+  }
+  try data.write(to: output)
+}
+
+func verifyCorpus(levels: URL, styles: URL) throws {
+  guard let enumerator = FileManager.default.enumerator(
+    at: levels,
+    includingPropertiesForKeys: [.isRegularFileKey],
+    options: [.skipsHiddenFiles, .skipsPackageDescendants]
+  ) else { throw Failure(description: "Could not enumerate the level corpus") }
+  let urls = enumerator.compactMap { item -> URL? in
+    guard let url = item as? URL,
+          url.pathExtension.caseInsensitiveCompare("nxlv") == .orderedSame,
+          (try? url.resourceValues(forKeys: [.isRegularFileKey]).isRegularFile) == true else { return nil }
+    return url
+  }
+  var themes: Set<String> = []
+  for url in urls {
+    let data = try Data(contentsOf: url, options: .mappedIfSafe)
+    guard let text = String(data: data, encoding: .utf8) ?? String(data: data, encoding: .isoLatin1),
+          let level = NxlvLevel(text: text) else {
+      throw Failure(description: "Could not decode \(url.path)")
+    }
+    themes.insert(level.themeStyle.isEmpty ? "default" : level.themeStyle)
+  }
+  var frames = 0
+  for theme in themes.sorted() {
+    let sprites = try NeoLemmixSpriteSet(stylesRootURL: styles, themeStyle: theme)
+    guard let stoner = sprites.stonerTerrain(),
+          stoner.size == NSSize(width: 16, height: 11),
+          let stonerPixels = sprites.stonerTerrainPixels(),
+          stonerPixels.width == 16,
+          stonerPixels.height == 11,
+          stonerPixels.rgba.count == 16 * 11 * 4 else {
+      throw Failure(description: "\(theme) did not resolve the canonical 16x11 Stoner terrain mask")
+    }
+    for action in NeoLemmixAction.allCases where ![.teleporting, .removed].contains(action) {
+      for direction in [NeoLemmixDirection.left, .right] {
+        for traits: Set<NeoLemmixTrait> in [[], [.climber], [.zombie], [.neutral]] {
+          guard sprites.frame(
+            action: action,
+            direction: direction,
+            animationFrame: 11,
+            traits: traits
+          ) != nil else {
+            throw Failure(description: "\(theme) has no \(direction.rawValue) \(action.rawValue) frame")
+          }
+          frames += 1
+        }
+      }
+    }
+  }
+  print("PASS NeoLemmix sprite corpus: \(urls.count) levels, \(themes.count) themes, \(frames) state/direction/action frames")
+}
+
+do {
+  if CommandLine.arguments.count == 4, CommandLine.arguments[1] == "--corpus" {
+    try verifyCorpus(
+      levels: URL(fileURLWithPath: CommandLine.arguments[2], isDirectory: true),
+      styles: URL(fileURLWithPath: CommandLine.arguments[3], isDirectory: true)
+    )
+    exit(0)
+  }
+  if CommandLine.arguments.count == 4 {
+    try writeContactSheet(
+      styles: URL(fileURLWithPath: CommandLine.arguments[1]),
+      theme: CommandLine.arguments[2],
+      output: URL(fileURLWithPath: CommandLine.arguments[3])
+    )
+    print("PASS NeoLemmix sprite contact sheet")
+    exit(0)
+  }
+
+  let root = try syntheticStyles()
+  defer { try? FileManager.default.removeItem(at: root) }
+  let sprites = try NeoLemmixSpriteSet(stylesRootURL: root, themeStyle: "fixture")
+  let right = try requireValue(
+    sprites.frame(action: .walking, direction: .right, animationFrame: 0, traits: []),
+    "Right Walker frame was missing"
+  )
+  try require(right.image.size == NSSize(width: 4, height: 4), "Walker frame dimensions were wrong")
+  try require(right.footX == 1 && right.footY == 3, "Right Walker foot anchor was wrong")
+  try require(try color(right.image, x: 0, y: 1) == (0xEF, 0x20, 0x20), "Theme recoloring was not applied")
+  let themedShade = try color(right.image, x: 0, y: 0)
+  try require(themedShade != (0x30, 0x30, 0xA0) && themedShade != (0xEF, 0x20, 0x20),
+              "Theme shade shift was not preserved")
+  let left = try requireValue(
+    sprites.frame(action: .walking, direction: .left, animationFrame: 0, traits: [.climber]),
+    "Left athlete Walker frame was missing"
+  )
+  try require(left.footX == 2 && left.footY == 3, "Left Walker foot anchor was wrong")
+  try require(try color(left.image, x: 0, y: 0) == (0x40, 0x40, 0xDF), "Athlete recoloring was not applied")
+  let neutral = try requireValue(
+    sprites.frame(action: .walking, direction: .right, animationFrame: 0, traits: [.neutral]),
+    "Neutral Walker frame was missing"
+  )
+  try require(try color(neutral.image, x: 0, y: 1) == (0xCC, 0xCC, 0xCC), "Neutral theme recoloring was not applied")
+  try require(try color(neutral.image, x: 0, y: 0) != (0xCC, 0xCC, 0xCC),
+              "Neutral shade shift was not preserved")
+  let jumper0 = try requireValue(
+    sprites.frame(action: .jumping, direction: .right, animationFrame: 5, traits: []),
+    "Jumper ascent frame was missing"
+  )
+  let jumper1 = try requireValue(
+    sprites.frame(action: .jumping, direction: .right, animationFrame: 6, traits: []),
+    "Jumper peak frame was missing"
+  )
+  let jumper2 = try requireValue(
+    sprites.frame(action: .jumping, direction: .right, animationFrame: 7, traits: []),
+    "Jumper descent frame was missing"
+  )
+  try require(try color(jumper0.image, x: 0, y: 1) == (0xEF, 0x20, 0x20), "Jumper progress 5 did not use frame 0")
+  try require(try color(jumper1.image, x: 0, y: 1) == (0xF0, 0xD0, 0xD0), "Jumper progress 6 did not use frame 1")
+  try require(try color(jumper2.image, x: 0, y: 1) == (0xEF, 0x20, 0x20), "Jumper progress 7 did not use frame 2")
+  for action in NeoLemmixAction.allCases where ![.teleporting, .removed].contains(action) {
+    try require(sprites.frame(action: action, direction: .right, animationFrame: 7, traits: []) != nil,
+                "\(action.rawValue) did not resolve to native artwork")
+  }
+  print("PASS NeoLemmix sprite resolution, geometry, direction, shade/state recoloring, frame selection, and action coverage")
+} catch {
+  fputs("FAIL: \(error)\n", stderr)
+  exit(1)
+}
+
+func requireValue<T>(_ value: T?, _ message: String) throws -> T {
+  guard let value else { throw Failure(description: message) }
+  return value
+}

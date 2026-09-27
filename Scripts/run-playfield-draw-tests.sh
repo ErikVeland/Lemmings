@@ -37,5 +37,6 @@ swiftc -swift-version 6 -warnings-as-errors \
   "$project_dir/Sources/LemmingsLocal/PanelGlyphs.swift" \
   "$project_dir/Sources/LemmingsLocal/RunRecovery.swift" \
   "$project_dir/Sources/LemmingsLocal/GameSession.swift" \
+  "$project_dir/Sources/LemmingsLocal/NeoLemmixSpriteSet.swift" \
   "$project_dir/Tests/PlayfieldDrawTests/main.swift"
 "$build_dir/PlayfieldDrawTests"

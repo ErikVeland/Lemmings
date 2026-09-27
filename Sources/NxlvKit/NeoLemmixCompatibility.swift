@@ -14,21 +14,14 @@ extension NeoLemmixRules {
                  .animationOnce, .splatPad, .antiSplatPad, .pickupSkill,
                  .lockedExit, .unlockButton, .paint:
                 break
-            case .teleporter, .receiver: features.insert("teleporters")
-            case .updraft: features.insert("updrafts")
-            case .splitter: features.insert("splitters")
-            case .forceLeft, .forceRight: features.insert("force fields")
-            case .neutralizer, .deneutralizer: features.insert("neutral state changers")
-            case .addSkill, .removeSkills: features.insert("skill state changers")
-            case .portal: features.insert("portals")
+            case .teleporter, .receiver: break
+            case .updraft: break
+            case .splitter, .forceLeft, .forceRight: break
+            case .neutralizer, .deneutralizer, .addSkill, .removeSkills: break
+            case .portal: break
             case let .unknown(name): features.insert("object effect \(name)")
             }
         }
-        if level.preplacedLemmings.contains(where: { $0.traits.contains(.zombie) })
-            || level.gadgets.contains(where: { $0.lemmingTraits.contains(.zombie) }) {
-            features.insert("zombie infection")
-        }
-        if level.document.hasLine("superlemming") { features.insert("Superlemming") }
         return features.sorted()
     }
 }

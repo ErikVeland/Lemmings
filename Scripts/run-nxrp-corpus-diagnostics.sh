@@ -29,4 +29,4 @@ swiftc -swift-version 6 -warnings-as-errors \
   -o "$build_dir/NxrpCorpusDiagnostics" \
   "$project_dir/Tests/NxrpCorpusDiagnostics/main.swift"
 
-"$build_dir/NxrpCorpusDiagnostics" "$1"
+"$build_dir/NxrpCorpusDiagnostics" "$@"

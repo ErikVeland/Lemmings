@@ -78,4 +78,91 @@ do {
     throw Failure(description: "a run from another level was accepted")
 } catch RunRecoveryError.differentGame {}
 
-print("PASS cross-build recovery: old-rule replay, saved-state fallback, encoded state, foreign-level refusal")
+func neoSession(changedTerrain: Bool = false) throws -> NeoLemmixSession {
+    var terrain = try NeoLemmixTerrain(width: 96, height: 64)
+    for x in 0..<96 { _ = terrain.setSolid(true, x: x, y: 48) }
+    if changedTerrain { _ = terrain.setSolid(true, x: 40, y: 47) }
+    let configuration = try NeoLemmixConfiguration(
+        totalLemmings: 1,
+        requiredToSave: 1,
+        spawnInterval: 12,
+        entrances: [],
+        preplacedLemmings: [
+            NeoLemmixPreplacedLemming(
+                position: NeoLemmixPoint(x: 20, y: 48),
+                direction: .right
+            ),
+        ],
+        skills: [.builder: .finite(2), .jumper: .finite(2)]
+    )
+    return NeoLemmixSession(
+        simulation: try NeoLemmixSimulation(terrain: terrain, configuration: configuration),
+        width: terrain.width,
+        height: terrain.height
+    )
+}
+
+func neoCheckpoint(_ played: NeoLemmixSession) -> RunRecovery {
+    var checkpoint = RunRecovery(
+        engine: "an earlier NeoLemmix engine",
+        profileID: "player",
+        runID: UUID(),
+        dataSetID: "neolemmix",
+        levelIndex: 0,
+        levelFingerprint: "fixture-level",
+        initialStateHash: "verified-by-state-equality",
+        tick: played.currentTick,
+        events: [],
+        stateHash: "verified-by-state-equality",
+        usedRewind: false,
+        nukeCount: 0,
+        rewindCount: 0,
+        undoCount: 0,
+        selectedSkill: 0,
+        scrollX: 0,
+        scrollY: 0
+    )
+    checkpoint.neo = played.recovery
+    checkpoint.sourcePath = "/fixture.nxlv"
+    return checkpoint
+}
+
+// 5. NeoLemmix input replay restores exactly and continues deterministically.
+let neoBefore = try neoSession()
+guard let builder = neoBefore.skills.firstIndex(where: { $0.name == "Builder" }) else {
+    throw Failure(description: "NeoLemmix recovery fixture has no Builder")
+}
+try require(neoBefore.assign(skillIndex: builder, to: 0) == nil, "NeoLemmix recovery assignment failed")
+for _ in 0..<24 { neoBefore.tick() }
+neoBefore.adjustRate(by: -2)
+for _ in 0..<8 { neoBefore.tick() }
+let neoSaved = neoCheckpoint(neoBefore)
+let neoResumed = try neoSession()
+try neoResumed.restore(neoSaved)
+try require(neoResumed.simulation == neoBefore.simulation, "NeoLemmix replay restore changed state")
+for _ in 0..<80 { neoBefore.tick(); neoResumed.tick() }
+try require(neoResumed.simulation == neoBefore.simulation, "NeoLemmix replay restore diverged")
+try require(!neoResumed.usedRewind, "Exact NeoLemmix replay restore became assisted")
+
+// 6. A later build may use the retained state only when the source content is unchanged.
+var fallback = neoSaved
+var driftedInitial = fallback.neo!.initialState
+_ = driftedInitial.enqueue(.nuke)
+fallback.neo = NeoRunRecovery(
+    initialState: driftedInitial,
+    state: fallback.neo!.state,
+    inputs: fallback.neo!.inputs
+)
+let neoFromState = try neoSession()
+try neoFromState.restore(try JSONDecoder().decode(
+    RunRecovery.self,
+    from: JSONEncoder().encode(fallback)
+))
+try require(neoFromState.simulation == fallback.neo!.state, "NeoLemmix saved-state fallback changed state")
+try require(neoFromState.usedRewind, "NeoLemmix saved-state fallback was not marked assisted")
+do {
+    try neoSession(changedTerrain: true).restore(fallback)
+    throw Failure(description: "NeoLemmix recovery accepted changed level content")
+} catch RunRecoveryError.differentGame {}
+
+print("PASS cross-build recovery: Classic and NeoLemmix replay, saved-state fallback, encoded state, and changed-content refusal")

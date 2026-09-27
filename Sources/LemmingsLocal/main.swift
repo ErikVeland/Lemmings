@@ -328,6 +328,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private weak var playlistFanLoadingPage: GameMenuPage?
   private weak var playlistLibraryPage: GameMenuPage?
   private weak var playlistEditorPage: GameMenuPage?
+  private var difficultyTask: Task<Void, Never>?
+  private var difficultyCacheLoaded = false
+  private var difficultyProfiles: [LevelCatalogueIdentity: DifficultyProfile] = [:]
   private var playlistEditorID: UUID?
   private var playlistLibrarySelection: String?
   private var playlistStoreCache: (profileID: String, store: LevelPlaylistStore)?
@@ -3258,6 +3261,16 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   private func presentPlaylistLibrary() {
+    if !difficultyCacheLoaded {
+      difficultyCacheLoaded = true
+      Task { [weak self] in
+        let profiles = await Task.detached(priority: .utility) { DifficultyLibrary.cachedProfiles() }.value
+        guard let self else { return }
+        for profile in profiles where self.playlistSourceRevision(for: profile.key.identity) == profile.key.levelRevision {
+          self.difficultyProfiles[profile.key.identity] = profile
+        }
+      }
+    }
     if let previous = playlistLibraryPage, GameScreen.shared.contains(previous) {
       GameScreen.shared.dismiss(previous)
     }
@@ -3309,6 +3322,11 @@ let achievementProgressKey = "ClassicAchievementProgress"
         artworkKey: levelPreviewRequests[saved.run.currentEntry.identity]?.artworkKey)
     }
     items.append(LevelCoverFlowItem(
+      id: "playlist:progression",
+      title: "Progression",
+      subtitle: "Generate a learning sequence",
+      detail: "Estimated difficulty"))
+    items.append(LevelCoverFlowItem(
       id: "playlist:new",
       title: "New playlist",
       subtitle: "Choose and order levels",
@@ -3354,6 +3372,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   private func activatePlaylistLibraryItem(_ id: String) {
     switch id {
+    case "playlist:progression":
+      presentProgressionPolicies()
     case "playlist:new":
       do {
         let store = try playlistStore()
@@ -3397,6 +3417,109 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
   }
 
+  private func presentProgressionPolicies() {
+    let page = ProgressionMenu.policies { [weak self] policy in
+      guard let self else { return }
+      if policy == .techniqueCurriculum { self.presentProgressionTechniques() }
+      else { self.prepareProgression(policy: policy) }
+    }
+    GameScreen.shared.present(page, owner: window)
+  }
+
+  private func presentProgressionTechniques() {
+    let page = GameMenuPage(title: "Technique Curriculum", subtitle: "Choose a technique")
+    page.onBack = { [weak page] in if let page { GameScreen.shared.dismiss(page) } }
+    let skills = ["builder", "basher", "miner", "digger", "blocker", "climber", "floater", "skill-cancellation"]
+    var first: NSButton?
+    for (index, skill) in skills.enumerated() {
+      let button = page.addListAction(skill.replacingOccurrences(of: "-", with: " ").capitalized, at: index) { [weak self] in
+        self?.prepareProgression(policy: .techniqueCurriculum, technique: skill)
+      }
+      if first == nil { first = button }
+    }
+    GameScreen.shared.present(page, owner: window, focus: first)
+  }
+
+  private func prepareProgression(policy: ProgressionPolicy, technique: String? = nil) {
+    ensureFanPacksResolved(forPackIDs: Set(levelBrowserFanPacks.keys), title: policy.name) { [weak self] failures in
+      self?.generateProgression(policy: policy, technique: technique, sourceFailures: failures.sorted())
+    }
+  }
+
+  private func generateProgression(policy: ProgressionPolicy, technique: String?, sourceFailures: [String]) {
+    difficultyTask?.cancel()
+    let ownerProfileID = ArcadeStore.shared.playingProfileID
+    var inputs: [DifficultyLibrary.Input] = []
+    for pack in levelCatalogue.packs {
+      for level in pack.levels {
+        guard let entry = try? playlistEntry(for: level.identity), let route = levelBrowserRoutes[level.identity] else { continue }
+        let source: DifficultyLibrary.Source
+        let official: Bool
+        switch route {
+        case let .classic(root, dataSet, index, _, _):
+          let level = dataSet.campaign.levels[index]
+          source = .classic(level.level, root: root, rank: level.rank, number: level.number)
+          official = dataSet.kind != .scanned && dataSet.title != nil
+        case let .fan(pack, entry, _): source = .fan(pack, entry); official = false
+        case let .lemmings2(root, selection, _, _):
+          source = .lemmings2(root, tribe: selection.tribe, level: selection.level); official = true
+        case let .lemmings3(root, selection, _, _):
+          source = .lemmings3(root, tribe: selection.tribe, level: selection.level); official = true
+        }
+        inputs.append(.init(entry: entry, source: source, isOfficial: official, campaignOrder: inputs.count))
+      }
+    }
+    let page = GameMenuPage(title: policy.name, subtitle: "Analysing available levels")
+    page.setDetail("0/\(inputs.count)")
+    let frozenInputs = inputs
+    let worker = Task.detached(priority: .utility) {
+      try await DifficultyLibrary.analyse(frozenInputs, sourceFailures: sourceFailures) { current, total in
+        if current == total || current % 25 == 0 {
+          await MainActor.run { page.setDetail("\(current)/\(total)") }
+        }
+      }
+    }
+    page.onBack = { [weak self, weak page] in
+      worker.cancel(); self?.difficultyTask?.cancel()
+      if let page { GameScreen.shared.dismiss(page) }
+    }
+    GameScreen.shared.present(page, owner: window)
+    difficultyTask = Task { [weak self, weak page] in
+      do {
+        let output = try await worker.value
+        try Task.checkCancellation()
+        guard let self, let page, GameScreen.shared.contains(page),
+              ArcadeStore.shared.playingProfileID == ownerProfileID else { return }
+        if policy == .techniqueCurriculum, let technique,
+           !output.candidates.contains(where: { $0.profile.detectedTechniques.contains(technique) }) {
+          GameScreen.shared.dismiss(page)
+          GameScreen.shared.message("Technique unavailable", detail: "No validated local solution demonstrates this technique.")
+          return
+        }
+        var config = ProgressionConfiguration(); config.technique = technique
+        if policy == .originalPlus { config.maximumLevels = LevelPlaylist.maximumEntries }
+        let result = try await Task.detached(priority: .userInitiated) {
+          let result = try ProgressionGenerator.generate(candidates: output.candidates, policy: policy,
+            configuration: config, statistics: output.statistics)
+          try DifficultyLibrary.saveDiagnostics(result)
+          return result
+        }.value
+        try Task.checkCancellation()
+        guard GameScreen.shared.contains(page), ArcadeStore.shared.playingProfileID == ownerProfileID else { return }
+        for candidate in output.candidates { self.difficultyProfiles[candidate.entry.identity] = candidate.profile }
+        let playlist = try result.playlist()
+        try self.playlistStore().add(playlist)
+        self.playlistLibrarySelection = "playlist:saved:\(playlist.id.uuidString)"
+        GameScreen.shared.dismiss(page)
+        self.presentPlaylistEditor(id: playlist.id)
+      } catch is CancellationError {
+      } catch {
+        if let page { GameScreen.shared.dismiss(page) }
+        GameScreen.shared.message("Progression not created", detail: error.localizedDescription)
+      }
+    }
+  }
+
   private func playlistCoverItem(
     _ saved: LevelPlaylistEntry,
     position: Int,
@@ -3409,7 +3532,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
         id: saved.id.uuidString,
         title: current.levelName,
         subtitle: current.packName + " / " + current.identity.engine.displayName,
-        detail: "Level \(current.number)  \(suffix)",
+        detail: difficultyProfiles[current.identity].map { "\($0.confidence == .low ? "Estimate" : "Difficulty"): \($0.grade.name)  \(suffix)" } ?? "Level \(current.number)  \(suffix)",
         artworkKey: levelPreviewRequests[current.identity]?.artworkKey)
     case let .locked(current):
       return LevelCoverFlowItem(
@@ -5414,7 +5537,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
         setStatus("Missing style data: \(missing.first?.message ?? "unknown")")
         return
       }
-      let result = NxlvRenderer().render(level: level, resolution: resolution)
+      let result = NxlvRenderer(retainsVisualLayers: true).render(
+        level: level,
+        resolution: resolution
+      )
       guard let rendered = result.renderedLevel, !result.hasErrors else {
         setStatus("Could not render \(url.lastPathComponent).")
         return
@@ -5423,16 +5549,22 @@ let achievementProgressKey = "ClassicAchievementProgress"
         width: rendered.width, height: rendered.height, rgba: rendered.rgba)
       else { return }
       let simulation = try NeoLemmixSimulation(level: level, renderedLevel: rendered)
+      let neoSprites = try NeoLemmixSpriteSet(
+        stylesRootURL: stylesDirectory,
+        themeStyle: level.themeStyle
+      )
 
       returnToLibrary()
       flow = nil
       activeTitle = nil
       playfield.classicScene = nil
+      playfield.neoScene = rendered
       playfield.macScene = nil
       playfield.macArtwork = nil
       panel.macArtwork = nil
       playfield.imageScale = 1
       playfield.levelImage = image
+      playfield.neoSprites = neoSprites
       currentNxlvURL = url
       adopt(
         NeoLemmixSession(
@@ -5455,8 +5587,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   private func adopt(_ new: any GameSession) {
     saveRunCheckpoint(immediately: true, waitForDisk: false)
-    effects.silence()
-    try? effects.resumeOutput()
+    if !(new is NeoLemmixSession) {
+      playfield.neoSprites = nil
+      playfield.neoScene = nil
+    }
     lastCheckpointTime = 0
     screenFlash.clear()
     assignmentFocus = AssignmentFocus()
@@ -5479,10 +5613,12 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
     let source = currentNxlvURL.flatMap { try? Data(contentsOf: $0) }
     let fingerprint = TrolleyCapture.sessionFingerprint(new, source: source)
-    let gameID = fanPlaying || currentNxlvURL != nil ? "fan" : activeTitle?.rawValue ?? "lemmings"
-    let packID = fanPlaying ? (fanPack?.lastPathComponent ?? "fan")
-      : (dataSets.indices.contains(gamePicker.indexOfSelectedItem)
-        ? dataSetID(dataSets[gamePicker.indexOfSelectedItem]) : gameID)
+    let gameID = currentNxlvURL != nil ? "neolemmix"
+      : fanPlaying ? "fan" : activeTitle?.rawValue ?? "lemmings"
+    let packID = currentNxlvURL?.deletingLastPathComponent().lastPathComponent
+      ?? (fanPlaying ? (fanPack?.lastPathComponent ?? "fan")
+        : (dataSets.indices.contains(gamePicker.indexOfSelectedItem)
+          ? dataSetID(dataSets[gamePicker.indexOfSelectedItem]) : gameID))
     let stableID: String
     if fanPlaying, fanQueue.indices.contains(fanQueueIndex) {
       let entry = fanQueue[fanQueueIndex]
@@ -5494,7 +5630,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
         startingSkills: TrolleyCapture.skills(new.skills), timeLimitSeconds: new.remainingSeconds.map(Double.init))
     arcadeLevel = ArcadeLevel(id: gameID + ":" + stableID,
         title: currentNxlvURL?.deletingPathExtension().lastPathComponent ?? artworkLevel?.title ?? "Lemmings",
-        game: fanPlaying || currentNxlvURL != nil ? "Fan levels" : activeTitle?.displayName ?? campaign?.name ?? "Lemmings",
+        game: currentNxlvURL != nil ? "NeoLemmix"
+          : fanPlaying ? "Fan levels" : activeTitle?.displayName ?? campaign?.name ?? "Lemmings",
         rules: rules, total: new.total, required: new.required, conditions: conditions)
     if !restoringCheckpoint {
       if sequencePlayingIdentity == nil {

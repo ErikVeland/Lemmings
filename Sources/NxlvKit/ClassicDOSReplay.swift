@@ -187,7 +187,8 @@ public enum ClassicDOSReplayPlayer {
         _ replay: ClassicDOSReplay,
         simulation: ClassicDOSSimulation,
         tickLimit: Int = defaultTickLimit,
-        verify: Bool = true
+        verify: Bool = true,
+        observe: ((ClassicDOSSimulation) throws -> Void)? = nil
     ) throws -> ClassicDOSReplayOutcome {
         var simulation = simulation
 
@@ -229,6 +230,7 @@ public enum ClassicDOSReplayPlayer {
                 case let .releaseRate(value): simulation.setReleaseRate(value)
                 case .nuke: simulation.beginNuke()
                 }
+                try observe?(simulation)
             }
         }
         try applyLiveCommands(at: simulation.tickCount, to: &simulation)
@@ -244,6 +246,7 @@ public enum ClassicDOSReplayPlayer {
                 }
             }
             _ = simulation.tick()
+            try observe?(simulation)
             try applyLiveCommands(at: simulation.tickCount, to: &simulation)
             ticks += 1
         }

@@ -69,7 +69,8 @@ zsh Scripts/run-nxlv-renderer-tests.sh
 zsh Scripts/run-neolemmix-simulation-tests.sh
 zsh Scripts/run-neolemmix-replay-tests.sh
 zsh Scripts/run-neolemmix-end-to-end.sh
-print "PASS 1.5 parser, style, renderer, simulation, replay-import and end-to-end source gates"
+zsh Scripts/run-neolemmix-sprite-tests.sh
+print "PASS parser, style, renderer, simulation, replay-import, end-to-end and native sprite source gates"
 
 if [[ -n "$ce_root" ]]; then
   [[ -d "$ce_root/data/external/levels" && -d "$ce_root/data/external/styles" ]] || {

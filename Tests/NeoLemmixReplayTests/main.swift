@@ -80,6 +80,14 @@ private func testCurrentReplay() throws {
         try replay.verifyLevelIdentity(otherLevel)
         throw TestFailure(description: "A replay accepted a changed level version.")
     } catch NxrpReplayIdentityError.differentLevel {}
+
+    let zeroVersionReplay = NxrpReplay(
+        metadata: NxrpMetadata(levelID: 0x1234_ABCD, levelVersion: 0),
+        commands: []
+    )
+    let implicitZeroLevel = try NxlvLevel(text: "TITLE Fixture\nID x1234ABCD")
+        .unwrap("An implicit-version level did not decode.")
+    try zeroVersionReplay.verifyLevelIdentity(implicitZeroLevel)
 }
 
 private func testAllCurrentSkillsAndIntervalAlias() throws {
@@ -145,6 +153,25 @@ private func testSourceDirectionAliases() throws {
         .assignment(sequence: 1, lemmingIdentifier: nil, x: nil, y: nil,
                     direction: .right, highlighted: false),
     ], "NeoLemmix replay direction aliases were not retained.")
+}
+
+private func testLegacyIndexAssignmentChecks() throws {
+    let decoded = NxrpReplayDecoder.decode("""
+    ID x1
+    VERSION 1
+    COMPLETION_FRAME 10
+    $ASSIGNMENT
+      FRAME 1
+      LEM_INDEX 0
+      LEM_X 20
+      LEM_Y 40
+      LEM_DIR right
+      ACTION builder
+    $END
+    """)
+    let replay = try decoded.replay.unwrap("An index-based replay did not decode.")
+    try require(replay.recordedCheckIssues().isEmpty,
+                "A replay with the source index and state checks required a newer identifier.")
 }
 
 private func testCheckedPlayback() throws {
@@ -223,13 +250,104 @@ private func testCheckedPlayback() throws {
                 "CE spawn-interval changes did not run before assignments.")
     try require(firstEvents.contains(.assignment(.assigned(lemmingID: 0, skill: .climber))),
                 "The frame-zero assignment did not run on the first native tick.")
+    let checkpoint = try JSONEncoder().encode(playback)
+    var recoveredPlayback = try JSONDecoder().decode(NxrpReplayPlayback.self, from: checkpoint)
     try playback.runToExpectedFrame()
+    try recoveredPlayback.runToExpectedFrame()
     try require(playback.simulation.savedCount == 1,
                 "The checked replay did not reach its recorded rescue frame.")
+    try require(recoveredPlayback == playback,
+                "Encoded checked replay playback diverged after recovery.")
     var repeated = try NxrpReplayPlayback(replay: replay, level: level, renderedLevel: rendered)
     try repeated.runToExpectedFrame()
     try require(repeated.simulation.snapshot() == playback.simulation.snapshot(),
                 "Checked replay playback changed between identical runs.")
+
+    let sourceText = replayText()
+        .replacingOccurrences(of: "VERSION x00000001", with: "VERSION x00000000")
+        .replacingOccurrences(
+            of: "COMPLETION_FRAME \(baseline.tickCount)\n",
+            with: ""
+        )
+    let sourceReplay = try NxrpReplayDecoder.decode(sourceText).replay
+        .unwrap("The older source-compatible replay did not decode.")
+    var sourcePlayback = try NxrpReplayPlayback(
+        sourceCompatibleReplay: sourceReplay,
+        level: level,
+        renderedLevel: rendered
+    )
+    let sourceCompleted = try sourcePlayback.runToSourceCutoff()
+    try require(sourceCompleted,
+                "The older source-compatible replay did not complete.")
+    try require(sourcePlayback.simulation.savedCount == 1,
+                "The older replay did not preserve its winning result.")
+
+    let checkedSourceReplay = try NxrpReplayDecoder.decode(
+        sourceText.replacingOccurrences(
+            of: "VERSION x00000000\n",
+            with: "VERSION x00000000\nCOMPLETION_FRAME \(baseline.tickCount)\n"
+        )
+    ).replay.unwrap("The source-compatible replay with a completion frame did not decode.")
+    var checkedSourcePlayback = try NxrpReplayPlayback(
+        sourceCompatibleReplay: checkedSourceReplay,
+        level: level,
+        renderedLevel: rendered
+    )
+    let checkedSourceCompleted = try checkedSourcePlayback.runToSourceCutoff()
+    try require(checkedSourceCompleted,
+                "Source-compatible playback continued past its matching rescue frame.")
+
+    let staleCheckedSourceReplay = try NxrpReplayDecoder.decode(
+        sourceText.replacingOccurrences(
+            of: "VERSION x00000000\n",
+            with: "VERSION x00000000\nCOMPLETION_FRAME \(baseline.tickCount + 1)\n"
+        )
+    ).replay.unwrap("The source replay with a stale completion frame did not decode.")
+    var staleCheckedSourcePlayback = try NxrpReplayPlayback(
+        sourceCompatibleReplay: staleCheckedSourceReplay,
+        level: level,
+        renderedLevel: rendered
+    )
+    let staleCheckedSourceCompleted = try staleCheckedSourcePlayback.runToSourceCutoff()
+    try require(staleCheckedSourceCompleted,
+                "CE-compatible checking rejected a replay that completed before its stale frame.")
+
+    let sourceMoved = try NxrpReplayDecoder.decode(
+        sourceText.replacingOccurrences(of: "LEM_X 20", with: "LEM_X 21")
+    ).replay.unwrap("The source replay with repair metadata drift did not decode.")
+    var sourceMovedPlayback = try NxrpReplayPlayback(
+        sourceCompatibleReplay: sourceMoved,
+        level: level,
+        renderedLevel: rendered
+    )
+    let sourceMovedCompleted = try sourceMovedPlayback.runToSourceCutoff()
+    try require(sourceMovedCompleted,
+                "CE-compatible playback treated repair coordinates as a precondition.")
+
+    let rejectedSourceText = sourceText + """
+
+    $ASSIGNMENT
+      FRAME 1
+      LEM_INDEX 0
+      LEM_IDENTIFIER P20.48
+      LEM_X 21
+      LEM_Y 48
+      LEM_DIR right
+      ACTION climber
+    $END
+    """
+    let rejectedSource = try NxrpReplayDecoder.decode(rejectedSourceText).replay
+        .unwrap("The source replay with a rejected assignment did not decode.")
+    var rejectedSourcePlayback = try NxrpReplayPlayback(
+        sourceCompatibleReplay: rejectedSource,
+        level: level,
+        renderedLevel: rendered
+    )
+    let rejectedSourceCompleted = try rejectedSourcePlayback.runToSourceCutoff()
+    try require(rejectedSourceCompleted,
+                "CE-compatible playback aborted after a rejected assignment.")
+    try require(rejectedSourcePlayback.sourceAssignmentRejections.count == 1,
+                "CE-compatible playback did not retain its ignored assignment rejection.")
 
     let moved = try NxrpReplayDecoder.decode(replayText(x: 21)).replay
         .unwrap("The changed-position replay did not decode.")
@@ -237,7 +355,7 @@ private func testCheckedPlayback() throws {
     do {
         try movedPlayback.step()
         throw TestFailure(description: "A replay accepted changed lemming coordinates.")
-    } catch NxrpReplayPlaybackError.assignmentStateMismatch(sequence: 0) {}
+    } catch NxrpReplayPlaybackError.assignmentStateMismatch(sequence: 0, _, _, _, _, _) {}
 
     let countChanged = try NxrpReplayDecoder.decode(replayText(spawned: 2)).replay
         .unwrap("The changed-spawn replay did not decode.")
@@ -392,6 +510,8 @@ do {
     print("PASS all 21 current replay skills and spawn-interval aliases")
     try testSourceDirectionAliases()
     print("PASS source replay direction aliases")
+    try testLegacyIndexAssignmentChecks()
+    print("PASS legacy replay index fallback with source state checks")
     try testCheckedPlayback()
     print("PASS source-frame timing, CE command order and replay state checks")
     try testDiagnostics()

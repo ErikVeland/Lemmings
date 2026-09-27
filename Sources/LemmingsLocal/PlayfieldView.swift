@@ -274,6 +274,9 @@ struct ReticleFeedback {
   var classicScene: ClassicRenderedLevel? {
     didSet { sceneTick = nil }
   }
+  var neoScene: NxlvRenderedLevel? {
+    didSet { sceneTick = nil }
+  }
   private var sceneTick: Int?
   #if PERFORMANCE_TESTS
   var sceneRenderSeconds = 0.0
@@ -299,11 +302,49 @@ struct ReticleFeedback {
     levelImage = image
     sceneTick = session.currentTick
   }
+
+  private func refreshNeoScene() {
+    guard let neoScene, let session = session as? NeoLemmixSession,
+          sceneTick != session.currentTick else { return }
+    let stoner = neoSprites?.stonerTerrainPixels()
+    let rgba = NeoLemmixSceneFrame.rgba(
+      neoScene,
+      terrain: session.simulation.terrain,
+      stonerRGBA: stoner?.rgba ?? [],
+      stonerWidth: stoner?.width ?? 16,
+      stonerHeight: stoner?.height ?? 11,
+      zones: session.simulation.configuration.zones,
+      disabledZoneIDs: session.simulation.disabledZoneIDs,
+      gadgetAnimationFrames: session.simulation.gadgetAnimationFrames,
+      secondaryAnimationStates: session.simulation.secondaryAnimationStates,
+      tickCount: session.simulation.tickCount,
+      entranceOpenTick: session.simulation.configuration.entranceOpenTick,
+      splitterDirections: session.simulation.splitterDirections
+    )
+    guard let provider = CGDataProvider(data: Data(rgba) as CFData),
+          let image = CGImage(
+            width: neoScene.width,
+            height: neoScene.height,
+            bitsPerComponent: 8,
+            bitsPerPixel: 32,
+            bytesPerRow: neoScene.width * 4,
+            space: CGColorSpaceCreateDeviceRGB(),
+            bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.last.rawValue),
+            provider: provider,
+            decode: nil,
+            shouldInterpolate: false,
+            intent: .defaultIntent
+          ) else { return }
+    imageScale = 1
+    levelImage = image
+    sceneTick = session.currentTick
+  }
   var session: (any GameSession)? {
     didSet { if oldValue !== session { reticleFeedback = ReticleFeedback(); assignedTarget = nil; displayedTarget = nil; hdrBirths.removeAll(); hdrLastTick = 0; speedTrails.reset() } }
   }
   var failureMoodAmount: CGFloat = 0
   var assets: ClassicMainDATAssets?
+  var neoSprites: NeoLemmixSpriteSet? { didSet { invalidateSprites() } }
   var palette: [ClassicRGBColor] = []
   var viewport = Viewport()
   private var precisionLens = AnimatedPrecisionZoomLens()
@@ -694,6 +735,7 @@ struct ReticleFeedback {
     hdrLastTick = tick
     defer { hdrOverlay?.update(presentsHDR ? displayedHDRFlashes : []) }
     refreshClassicScene()
+    refreshNeoScene()
     // Fill the view's own area, not the dirty rectangle. AppKit passes a
     // rectangle that can cover the whole window, because these views share one
     // backing layer.
@@ -1171,6 +1213,39 @@ struct ReticleFeedback {
   private func draw(_ lemming: SessionLemming, ghostsOnly: Bool = false) {
     let motion = ghostsOnly ? speedTrails.motion(actor: lemming.id) : .zero
     if ghostsOnly && motion == .zero { return }
+    if let action = lemming.neoAction, let neoSprites,
+       let frame = neoSprites.frame(
+         action: action,
+         direction: lemming.facingLeft ? .left : .right,
+         animationFrame: lemming.animationFrame,
+         traits: lemming.neoTraits
+       ) {
+      let key = "neo-\(frame.cacheKey)"
+      let origin = viewport.viewPoint(fromLevel: CGPoint(
+        x: lemming.x - frame.footX,
+        y: lemming.y - frame.footY
+      ))
+      var rect = CGRect(
+        x: origin.x,
+        y: origin.y,
+        width: frame.image.size.width * viewport.zoom,
+        height: frame.image.size.height * viewport.zoom
+      )
+      var fraction: CGFloat = 1
+      if action == .exploding { (rect, fraction) = bombPop(rect, tick: lemming.animationFrame) }
+      guard rect.intersects(bounds), fraction > 0.01 else { return }
+      if ghostsOnly {
+        speedTrails.drawBehind(actor: lemming.id, sprite: frame.image, in: rect, motion: motion,
+          pixelSize: CGSize(width: viewport.zoom, height: viewport.zoom))
+        return
+      }
+      drawSprite(frame.image, key: key, in: rect, alpha: fraction)
+      drawAssignmentPulse(for: lemming.id, key: key, sprite: frame.image, in: rect)
+      if action == .exploding { drawBombCore(in: rect, tick: lemming.animationFrame, actor: lemming.id) }
+      if let countdown = lemming.countdown { drawCountdown(countdown, above: rect) }
+      return
+    }
+
     guard let assets, !palette.isEmpty else { return }
     let direction: ClassicSpriteDirection = lemming.facingLeft ? .left : .right
     let pose = lemming.pose

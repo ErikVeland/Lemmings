@@ -1,0 +1,5158 @@
+[
+  {
+    "title": "Bashing & Building",
+    "events": [
+      {
+        "tick": 118,
+        "action": {
+          "releaseRate": {
+            "_0": 66
+          }
+        }
+      },
+      {
+        "tick": 118,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "climber"
+          }
+        }
+      },
+      {
+        "tick": 214,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 426,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 506,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "basher"
+          }
+        }
+      },
+      {
+        "tick": 512,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 727,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 807,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "basher"
+          }
+        }
+      },
+      {
+        "tick": 812,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 1034,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 1227,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 1485,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "basher"
+          }
+        }
+      },
+      {
+        "tick": 1951,
+        "action": {
+          "assign": {
+            "lemmingID": 49,
+            "skill": "basher"
+          }
+        }
+      },
+      {
+        "tick": 2000,
+        "action": {
+          "assign": {
+            "lemmingID": 48,
+            "skill": "basher"
+          }
+        }
+      },
+      {
+        "tick": 2250,
+        "action": {
+          "assign": {
+            "lemmingID": 48,
+            "skill": "basher"
+          }
+        }
+      }
+    ],
+    "cues": [
+      {
+        "tick": 118,
+        "id": 0,
+        "skill": "climber",
+        "x": 882,
+        "y": 152
+      },
+      {
+        "tick": 214,
+        "id": 0,
+        "skill": "builder",
+        "x": 798,
+        "y": 152
+      },
+      {
+        "tick": 426,
+        "id": 0,
+        "skill": "builder",
+        "x": 762,
+        "y": 131
+      },
+      {
+        "tick": 506,
+        "id": 0,
+        "skill": "basher",
+        "x": 752,
+        "y": 126
+      },
+      {
+        "tick": 512,
+        "id": 0,
+        "skill": "builder",
+        "x": 751,
+        "y": 126
+      },
+      {
+        "tick": 727,
+        "id": 0,
+        "skill": "builder",
+        "x": 715,
+        "y": 98
+      },
+      {
+        "tick": 807,
+        "id": 0,
+        "skill": "basher",
+        "x": 705,
+        "y": 93
+      },
+      {
+        "tick": 812,
+        "id": 0,
+        "skill": "builder",
+        "x": 705,
+        "y": 93
+      },
+      {
+        "tick": 1034,
+        "id": 0,
+        "skill": "builder",
+        "x": 663,
+        "y": 63
+      },
+      {
+        "tick": 1227,
+        "id": 0,
+        "skill": "builder",
+        "x": 639,
+        "y": 51
+      },
+      {
+        "tick": 1485,
+        "id": 0,
+        "skill": "basher",
+        "x": 806,
+        "y": 152
+      },
+      {
+        "tick": 1951,
+        "id": 49,
+        "skill": "basher",
+        "x": 618,
+        "y": 29
+      },
+      {
+        "tick": 2000,
+        "id": 48,
+        "skill": "basher",
+        "x": 651,
+        "y": 16
+      },
+      {
+        "tick": 2250,
+        "id": 48,
+        "skill": "basher",
+        "x": 829,
+        "y": 16
+      }
+    ],
+    "origin": {
+      "file": "Bashing & Building.lrb",
+      "sha256": "f1ed0d4502d761b2ce81e48aa9aa2c1bef166ff3021e3ea2c254952f3c890f9d"
+    },
+    "packID": "fan:lldb-219",
+    "archive": "0219-Nepster01.zip",
+    "member": "Solutions V6/Bashing & Building.lrb"
+  },
+  {
+    "title": "Broken Symmetry",
+    "events": [
+      {
+        "tick": 19,
+        "action": {
+          "releaseRate": {
+            "_0": 1
+          }
+        }
+      },
+      {
+        "tick": 72,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "floater"
+          }
+        }
+      },
+      {
+        "tick": 88,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 217,
+        "action": {
+          "assign": {
+            "lemmingID": 2,
+            "skill": "miner"
+          }
+        }
+      },
+      {
+        "tick": 333,
+        "action": {
+          "releaseRate": {
+            "_0": 99
+          }
+        }
+      },
+      {
+        "tick": 463,
+        "action": {
+          "assign": {
+            "lemmingID": 3,
+            "skill": "blocker"
+          }
+        }
+      },
+      {
+        "tick": 704,
+        "action": {
+          "assign": {
+            "lemmingID": 2,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 986,
+        "action": {
+          "assign": {
+            "lemmingID": 59,
+            "skill": "bomber"
+          }
+        }
+      },
+      {
+        "tick": 1138,
+        "action": {
+          "assign": {
+            "lemmingID": 2,
+            "skill": "digger"
+          }
+        }
+      },
+      {
+        "tick": 1539,
+        "action": {
+          "assign": {
+            "lemmingID": 2,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 1807,
+        "action": {
+          "nuke": {}
+        }
+      }
+    ],
+    "cues": [
+      {
+        "tick": 72,
+        "id": 0,
+        "skill": "floater",
+        "x": 792,
+        "y": 71
+      },
+      {
+        "tick": 88,
+        "id": 0,
+        "skill": "builder",
+        "x": 804,
+        "y": 77
+      },
+      {
+        "tick": 217,
+        "id": 2,
+        "skill": "miner",
+        "x": 780,
+        "y": 78
+      },
+      {
+        "tick": 463,
+        "id": 3,
+        "skill": "blocker",
+        "x": 642,
+        "y": 29
+      },
+      {
+        "tick": 704,
+        "id": 2,
+        "skill": "builder",
+        "x": 777,
+        "y": 29
+      },
+      {
+        "tick": 986,
+        "id": 59,
+        "skill": "bomber",
+        "x": 796,
+        "y": 72
+      },
+      {
+        "tick": 1138,
+        "id": 2,
+        "skill": "digger",
+        "x": 1029,
+        "y": 29
+      },
+      {
+        "tick": 1539,
+        "id": 2,
+        "skill": "builder",
+        "x": 1029,
+        "y": 80
+      }
+    ],
+    "origin": {
+      "file": "Broken Symmetry.lrb",
+      "sha256": "92b64a8c5b0ef6038cdd5a0bc65c69a92a6ebea2f7debacef480813b6d1985f3"
+    },
+    "packID": "fan:lldb-219",
+    "archive": "0219-Nepster01.zip",
+    "member": "Solutions V6/Broken Symmetry.lrb"
+  },
+  {
+    "title": "Devil's Right Hand",
+    "events": [
+      {
+        "tick": 19,
+        "action": {
+          "releaseRate": {
+            "_0": 1
+          }
+        }
+      },
+      {
+        "tick": 191,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "blocker"
+          }
+        }
+      },
+      {
+        "tick": 230,
+        "action": {
+          "assign": {
+            "lemmingID": 1,
+            "skill": "blocker"
+          }
+        }
+      },
+      {
+        "tick": 414,
+        "action": {
+          "assign": {
+            "lemmingID": 4,
+            "skill": "bomber"
+          }
+        }
+      },
+      {
+        "tick": 450,
+        "action": {
+          "assign": {
+            "lemmingID": 2,
+            "skill": "floater"
+          }
+        }
+      },
+      {
+        "tick": 503,
+        "action": {
+          "assign": {
+            "lemmingID": 8,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 616,
+        "action": {
+          "assign": {
+            "lemmingID": 6,
+            "skill": "floater"
+          }
+        }
+      },
+      {
+        "tick": 638,
+        "action": {
+          "assign": {
+            "lemmingID": 6,
+            "skill": "basher"
+          }
+        }
+      },
+      {
+        "tick": 672,
+        "action": {
+          "assign": {
+            "lemmingID": 2,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 705,
+        "action": {
+          "assign": {
+            "lemmingID": 6,
+            "skill": "climber"
+          }
+        }
+      },
+      {
+        "tick": 844,
+        "action": {
+          "assign": {
+            "lemmingID": 10,
+            "skill": "climber"
+          }
+        }
+      },
+      {
+        "tick": 861,
+        "action": {
+          "releaseRate": {
+            "_0": 93
+          }
+        }
+      },
+      {
+        "tick": 1161,
+        "action": {
+          "assign": {
+            "lemmingID": 10,
+            "skill": "bomber"
+          }
+        }
+      },
+      {
+        "tick": 1561,
+        "action": {
+          "assign": {
+            "lemmingID": 6,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 1719,
+        "action": {
+          "assign": {
+            "lemmingID": 78,
+            "skill": "climber"
+          }
+        }
+      },
+      {
+        "tick": 1748,
+        "action": {
+          "assign": {
+            "lemmingID": 78,
+            "skill": "floater"
+          }
+        }
+      },
+      {
+        "tick": 1807,
+        "action": {
+          "assign": {
+            "lemmingID": 6,
+            "skill": "basher"
+          }
+        }
+      },
+      {
+        "tick": 2053,
+        "action": {
+          "assign": {
+            "lemmingID": 78,
+            "skill": "basher"
+          }
+        }
+      },
+      {
+        "tick": 2618,
+        "action": {
+          "nuke": {}
+        }
+      }
+    ],
+    "cues": [
+      {
+        "tick": 191,
+        "id": 0,
+        "skill": "blocker",
+        "x": 924,
+        "y": 67
+      },
+      {
+        "tick": 230,
+        "id": 1,
+        "skill": "blocker",
+        "x": 459,
+        "y": 146
+      },
+      {
+        "tick": 414,
+        "id": 4,
+        "skill": "bomber",
+        "x": 905,
+        "y": 67
+      },
+      {
+        "tick": 450,
+        "id": 2,
+        "skill": "floater",
+        "x": 785,
+        "y": 137
+      },
+      {
+        "tick": 503,
+        "id": 8,
+        "skill": "builder",
+        "x": 812,
+        "y": 67
+      },
+      {
+        "tick": 616,
+        "id": 6,
+        "skill": "floater",
+        "x": 829,
+        "y": 138
+      },
+      {
+        "tick": 638,
+        "id": 6,
+        "skill": "basher",
+        "x": 811,
+        "y": 146
+      },
+      {
+        "tick": 672,
+        "id": 2,
+        "skill": "builder",
+        "x": 810,
+        "y": 146
+      },
+      {
+        "tick": 705,
+        "id": 6,
+        "skill": "climber",
+        "x": 771,
+        "y": 146
+      },
+      {
+        "tick": 844,
+        "id": 10,
+        "skill": "climber",
+        "x": 818,
+        "y": 141
+      },
+      {
+        "tick": 1161,
+        "id": 10,
+        "skill": "bomber",
+        "x": 654,
+        "y": 67
+      },
+      {
+        "tick": 1561,
+        "id": 6,
+        "skill": "builder",
+        "x": 594,
+        "y": 146
+      },
+      {
+        "tick": 1719,
+        "id": 78,
+        "skill": "climber",
+        "x": 693,
+        "y": 146
+      },
+      {
+        "tick": 1748,
+        "id": 78,
+        "skill": "floater",
+        "x": 689,
+        "y": 134
+      },
+      {
+        "tick": 1807,
+        "id": 6,
+        "skill": "basher",
+        "x": 661,
+        "y": 146
+      },
+      {
+        "tick": 2053,
+        "id": 78,
+        "skill": "basher",
+        "x": 547,
+        "y": 146
+      }
+    ],
+    "origin": {
+      "file": "Devil's Right Hand_1.lrb",
+      "sha256": "3346ceb49ca68cd1955172777a4a7f12cd70ac0e4b5f3635eae1ba23961413e6"
+    },
+    "packID": "fan:lldb-219",
+    "archive": "0219-Nepster01.zip",
+    "member": "Solutions V6/Devil's Right Hand_1.lrb"
+  },
+  {
+    "title": "Devil's Right Hand",
+    "events": [
+      {
+        "tick": 62,
+        "action": {
+          "releaseRate": {
+            "_0": 1
+          }
+        }
+      },
+      {
+        "tick": 81,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "blocker"
+          }
+        }
+      },
+      {
+        "tick": 117,
+        "action": {
+          "assign": {
+            "lemmingID": 1,
+            "skill": "blocker"
+          }
+        }
+      },
+      {
+        "tick": 188,
+        "action": {
+          "assign": {
+            "lemmingID": 2,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 441,
+        "action": {
+          "assign": {
+            "lemmingID": 4,
+            "skill": "bomber"
+          }
+        }
+      },
+      {
+        "tick": 611,
+        "action": {
+          "assign": {
+            "lemmingID": 2,
+            "skill": "floater"
+          }
+        }
+      },
+      {
+        "tick": 646,
+        "action": {
+          "assign": {
+            "lemmingID": 6,
+            "skill": "floater"
+          }
+        }
+      },
+      {
+        "tick": 653,
+        "action": {
+          "assign": {
+            "lemmingID": 2,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 695,
+        "action": {
+          "assign": {
+            "lemmingID": 8,
+            "skill": "floater"
+          }
+        }
+      },
+      {
+        "tick": 701,
+        "action": {
+          "assign": {
+            "lemmingID": 8,
+            "skill": "climber"
+          }
+        }
+      },
+      {
+        "tick": 729,
+        "action": {
+          "assign": {
+            "lemmingID": 6,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 838,
+        "action": {
+          "releaseRate": {
+            "_0": 99
+          }
+        }
+      },
+      {
+        "tick": 887,
+        "action": {
+          "assign": {
+            "lemmingID": 10,
+            "skill": "basher"
+          }
+        }
+      },
+      {
+        "tick": 946,
+        "action": {
+          "assign": {
+            "lemmingID": 2,
+            "skill": "basher"
+          }
+        }
+      },
+      {
+        "tick": 989,
+        "action": {
+          "assign": {
+            "lemmingID": 6,
+            "skill": "basher"
+          }
+        }
+      },
+      {
+        "tick": 1031,
+        "action": {
+          "assign": {
+            "lemmingID": 2,
+            "skill": "climber"
+          }
+        }
+      },
+      {
+        "tick": 1036,
+        "action": {
+          "assign": {
+            "lemmingID": 6,
+            "skill": "climber"
+          }
+        }
+      },
+      {
+        "tick": 1076,
+        "action": {
+          "assign": {
+            "lemmingID": 2,
+            "skill": "bomber"
+          }
+        }
+      },
+      {
+        "tick": 1889,
+        "action": {
+          "nuke": {}
+        }
+      }
+    ],
+    "cues": [
+      {
+        "tick": 81,
+        "id": 0,
+        "skill": "blocker",
+        "x": 814,
+        "y": 67
+      },
+      {
+        "tick": 117,
+        "id": 1,
+        "skill": "blocker",
+        "x": 472,
+        "y": 146
+      },
+      {
+        "tick": 188,
+        "id": 2,
+        "skill": "builder",
+        "x": 801,
+        "y": 67
+      },
+      {
+        "tick": 441,
+        "id": 4,
+        "skill": "bomber",
+        "x": 655,
+        "y": 67
+      },
+      {
+        "tick": 611,
+        "id": 2,
+        "skill": "floater",
+        "x": 579,
+        "y": 144
+      },
+      {
+        "tick": 646,
+        "id": 6,
+        "skill": "floater",
+        "x": 579,
+        "y": 144
+      },
+      {
+        "tick": 653,
+        "id": 2,
+        "skill": "builder",
+        "x": 553,
+        "y": 146
+      },
+      {
+        "tick": 695,
+        "id": 8,
+        "skill": "floater",
+        "x": 614,
+        "y": 67
+      },
+      {
+        "tick": 701,
+        "id": 8,
+        "skill": "climber",
+        "x": 608,
+        "y": 67
+      },
+      {
+        "tick": 729,
+        "id": 6,
+        "skill": "builder",
+        "x": 594,
+        "y": 146
+      },
+      {
+        "tick": 887,
+        "id": 10,
+        "skill": "basher",
+        "x": 547,
+        "y": 146
+      },
+      {
+        "tick": 946,
+        "id": 2,
+        "skill": "basher",
+        "x": 664,
+        "y": 146
+      },
+      {
+        "tick": 989,
+        "id": 6,
+        "skill": "basher",
+        "x": 675,
+        "y": 146
+      },
+      {
+        "tick": 1031,
+        "id": 2,
+        "skill": "climber",
+        "x": 700,
+        "y": 146
+      },
+      {
+        "tick": 1036,
+        "id": 6,
+        "skill": "climber",
+        "x": 695,
+        "y": 146
+      },
+      {
+        "tick": 1076,
+        "id": 2,
+        "skill": "bomber",
+        "x": 745,
+        "y": 146
+      }
+    ],
+    "origin": {
+      "file": "Devil's Right Hand_2_Akseli.lrb",
+      "sha256": "c8f9240dc444fa9e138e321e359d853a5097af01ca1f66a0799544280a391767"
+    },
+    "packID": "fan:lldb-219",
+    "archive": "0219-Nepster01.zip",
+    "member": "Solutions V6/Devil's Right Hand_2_Akseli.lrb"
+  },
+  {
+    "title": "Devil's Right Hand",
+    "events": [
+      {
+        "tick": 21,
+        "action": {
+          "releaseRate": {
+            "_0": 1
+          }
+        }
+      },
+      {
+        "tick": 197,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "blocker"
+          }
+        }
+      },
+      {
+        "tick": 231,
+        "action": {
+          "assign": {
+            "lemmingID": 1,
+            "skill": "blocker"
+          }
+        }
+      },
+      {
+        "tick": 460,
+        "action": {
+          "assign": {
+            "lemmingID": 2,
+            "skill": "floater"
+          }
+        }
+      },
+      {
+        "tick": 531,
+        "action": {
+          "assign": {
+            "lemmingID": 4,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 597,
+        "action": {
+          "assign": {
+            "lemmingID": 2,
+            "skill": "climber"
+          }
+        }
+      },
+      {
+        "tick": 751,
+        "action": {
+          "assign": {
+            "lemmingID": 10,
+            "skill": "bomber"
+          }
+        }
+      },
+      {
+        "tick": 779,
+        "action": {
+          "assign": {
+            "lemmingID": 2,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 799,
+        "action": {
+          "assign": {
+            "lemmingID": 6,
+            "skill": "bomber"
+          }
+        }
+      },
+      {
+        "tick": 892,
+        "action": {
+          "assign": {
+            "lemmingID": 4,
+            "skill": "floater"
+          }
+        }
+      },
+      {
+        "tick": 902,
+        "action": {
+          "assign": {
+            "lemmingID": 4,
+            "skill": "basher"
+          }
+        }
+      },
+      {
+        "tick": 993,
+        "action": {
+          "assign": {
+            "lemmingID": 8,
+            "skill": "floater"
+          }
+        }
+      },
+      {
+        "tick": 1020,
+        "action": {
+          "assign": {
+            "lemmingID": 4,
+            "skill": "climber"
+          }
+        }
+      },
+      {
+        "tick": 1073,
+        "action": {
+          "assign": {
+            "lemmingID": 8,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 1148,
+        "action": {
+          "releaseRate": {
+            "_0": 99
+          }
+        }
+      },
+      {
+        "tick": 1321,
+        "action": {
+          "assign": {
+            "lemmingID": 8,
+            "skill": "basher"
+          }
+        }
+      },
+      {
+        "tick": 1379,
+        "action": {
+          "assign": {
+            "lemmingID": 4,
+            "skill": "basher"
+          }
+        }
+      },
+      {
+        "tick": 1975,
+        "action": {
+          "nuke": {}
+        }
+      }
+    ],
+    "cues": [
+      {
+        "tick": 197,
+        "id": 0,
+        "skill": "blocker",
+        "x": 930,
+        "y": 67
+      },
+      {
+        "tick": 231,
+        "id": 1,
+        "skill": "blocker",
+        "x": 458,
+        "y": 146
+      },
+      {
+        "tick": 460,
+        "id": 2,
+        "skill": "floater",
+        "x": 785,
+        "y": 143
+      },
+      {
+        "tick": 531,
+        "id": 4,
+        "skill": "builder",
+        "x": 796,
+        "y": 67
+      },
+      {
+        "tick": 597,
+        "id": 2,
+        "skill": "climber",
+        "x": 727,
+        "y": 146
+      },
+      {
+        "tick": 751,
+        "id": 10,
+        "skill": "bomber",
+        "x": 894,
+        "y": 67
+      },
+      {
+        "tick": 779,
+        "id": 2,
+        "skill": "builder",
+        "x": 802,
+        "y": 101
+      },
+      {
+        "tick": 799,
+        "id": 6,
+        "skill": "bomber",
+        "x": 636,
+        "y": 67
+      },
+      {
+        "tick": 892,
+        "id": 4,
+        "skill": "floater",
+        "x": 818,
+        "y": 138
+      },
+      {
+        "tick": 902,
+        "id": 4,
+        "skill": "basher",
+        "x": 812,
+        "y": 146
+      },
+      {
+        "tick": 993,
+        "id": 8,
+        "skill": "floater",
+        "x": 560,
+        "y": 114
+      },
+      {
+        "tick": 1020,
+        "id": 4,
+        "skill": "climber",
+        "x": 721,
+        "y": 146
+      },
+      {
+        "tick": 1073,
+        "id": 8,
+        "skill": "builder",
+        "x": 593,
+        "y": 146
+      },
+      {
+        "tick": 1321,
+        "id": 8,
+        "skill": "basher",
+        "x": 662,
+        "y": 146
+      },
+      {
+        "tick": 1379,
+        "id": 4,
+        "skill": "basher",
+        "x": 550,
+        "y": 146
+      }
+    ],
+    "origin": {
+      "file": "Devil's Right Hand_3_geoo.lrb",
+      "sha256": "a9b075102d2bf90d90997dc3305dffc7a1fb1358a70fad17eec38ec8c2eba48c"
+    },
+    "packID": "fan:lldb-219",
+    "archive": "0219-Nepster01.zip",
+    "member": "Solutions V6/Devil's Right Hand_3_geoo.lrb"
+  },
+  {
+    "title": "Dirt Runner",
+    "events": [
+      {
+        "tick": 8,
+        "action": {
+          "releaseRate": {
+            "_0": 50
+          }
+        }
+      },
+      {
+        "tick": 106,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 304,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 490,
+        "action": {
+          "releaseRate": {
+            "_0": 99
+          }
+        }
+      },
+      {
+        "tick": 650,
+        "action": {
+          "assign": {
+            "lemmingID": 7,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 754,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 972,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "basher"
+          }
+        }
+      },
+      {
+        "tick": 1208,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 1524,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 1754,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 1980,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 2176,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 2372,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 2621,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 3064,
+        "action": {
+          "assign": {
+            "lemmingID": 7,
+            "skill": "basher"
+          }
+        }
+      },
+      {
+        "tick": 3169,
+        "action": {
+          "assign": {
+            "lemmingID": 7,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 3431,
+        "action": {
+          "assign": {
+            "lemmingID": 7,
+            "skill": "basher"
+          }
+        }
+      },
+      {
+        "tick": 3527,
+        "action": {
+          "assign": {
+            "lemmingID": 7,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 3760,
+        "action": {
+          "assign": {
+            "lemmingID": 7,
+            "skill": "builder"
+          }
+        }
+      }
+    ],
+    "cues": [
+      {
+        "tick": 106,
+        "id": 0,
+        "skill": "builder",
+        "x": 1130,
+        "y": 131
+      },
+      {
+        "tick": 304,
+        "id": 0,
+        "skill": "builder",
+        "x": 1106,
+        "y": 119
+      },
+      {
+        "tick": 650,
+        "id": 7,
+        "skill": "builder",
+        "x": 1037,
+        "y": 143
+      },
+      {
+        "tick": 754,
+        "id": 0,
+        "skill": "builder",
+        "x": 1082,
+        "y": 107
+      },
+      {
+        "tick": 972,
+        "id": 0,
+        "skill": "basher",
+        "x": 1042,
+        "y": 82
+      },
+      {
+        "tick": 1208,
+        "id": 0,
+        "skill": "builder",
+        "x": 909,
+        "y": 44
+      },
+      {
+        "tick": 1524,
+        "id": 0,
+        "skill": "builder",
+        "x": 773,
+        "y": 84
+      },
+      {
+        "tick": 1754,
+        "id": 0,
+        "skill": "builder",
+        "x": 720,
+        "y": 76
+      },
+      {
+        "tick": 1980,
+        "id": 0,
+        "skill": "builder",
+        "x": 673,
+        "y": 76
+      },
+      {
+        "tick": 2176,
+        "id": 0,
+        "skill": "builder",
+        "x": 649,
+        "y": 64
+      },
+      {
+        "tick": 2372,
+        "id": 0,
+        "skill": "builder",
+        "x": 625,
+        "y": 52
+      },
+      {
+        "tick": 2621,
+        "id": 0,
+        "skill": "builder",
+        "x": 676,
+        "y": 76
+      },
+      {
+        "tick": 3064,
+        "id": 7,
+        "skill": "basher",
+        "x": 603,
+        "y": 41
+      },
+      {
+        "tick": 3169,
+        "id": 7,
+        "skill": "builder",
+        "x": 569,
+        "y": 41
+      },
+      {
+        "tick": 3431,
+        "id": 7,
+        "skill": "basher",
+        "x": 490,
+        "y": 42
+      },
+      {
+        "tick": 3527,
+        "id": 7,
+        "skill": "builder",
+        "x": 443,
+        "y": 45
+      },
+      {
+        "tick": 3760,
+        "id": 7,
+        "skill": "builder",
+        "x": 390,
+        "y": 56
+      }
+    ],
+    "origin": {
+      "file": "Dirt Runner.lrb",
+      "sha256": "436739a6f0854fdd6bf00ee80a4ad4e99377872cc2b849b30dab8d53bc5980af"
+    },
+    "packID": "fan:lldb-219",
+    "archive": "0219-Nepster01.zip",
+    "member": "Solutions V6/Dirt Runner.lrb"
+  },
+  {
+    "title": "Dunes",
+    "events": [
+      {
+        "tick": 17,
+        "action": {
+          "releaseRate": {
+            "_0": 1
+          }
+        }
+      },
+      {
+        "tick": 148,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "basher"
+          }
+        }
+      },
+      {
+        "tick": 174,
+        "action": {
+          "assign": {
+            "lemmingID": 1,
+            "skill": "climber"
+          }
+        }
+      },
+      {
+        "tick": 252,
+        "action": {
+          "assign": {
+            "lemmingID": 2,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 475,
+        "action": {
+          "assign": {
+            "lemmingID": 7,
+            "skill": "blocker"
+          }
+        }
+      },
+      {
+        "tick": 564,
+        "action": {
+          "assign": {
+            "lemmingID": 9,
+            "skill": "miner"
+          }
+        }
+      },
+      {
+        "tick": 643,
+        "action": {
+          "releaseRate": {
+            "_0": 99
+          }
+        }
+      }
+    ],
+    "cues": [
+      {
+        "tick": 148,
+        "id": 0,
+        "skill": "basher",
+        "x": 890,
+        "y": 139
+      },
+      {
+        "tick": 174,
+        "id": 1,
+        "skill": "climber",
+        "x": 712,
+        "y": 132
+      },
+      {
+        "tick": 252,
+        "id": 2,
+        "skill": "builder",
+        "x": 892,
+        "y": 139
+      },
+      {
+        "tick": 475,
+        "id": 7,
+        "skill": "blocker",
+        "x": 695,
+        "y": 117
+      },
+      {
+        "tick": 564,
+        "id": 9,
+        "skill": "miner",
+        "x": 678,
+        "y": 118
+      }
+    ],
+    "origin": {
+      "file": "Dunes.lrb",
+      "sha256": "58b7638c0772d408288a268f40f46dc34d7eb9665333abe29a9c322fd973ae72"
+    },
+    "packID": "fan:lldb-219",
+    "archive": "0219-Nepster01.zip",
+    "member": "Solutions V6/Dunes.lrb"
+  },
+  {
+    "title": "Dying Dream",
+    "events": [
+      {
+        "tick": 13,
+        "action": {
+          "releaseRate": {
+            "_0": 50
+          }
+        }
+      },
+      {
+        "tick": 103,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "bomber"
+          }
+        }
+      },
+      {
+        "tick": 130,
+        "action": {
+          "assign": {
+            "lemmingID": 1,
+            "skill": "bomber"
+          }
+        }
+      },
+      {
+        "tick": 157,
+        "action": {
+          "assign": {
+            "lemmingID": 3,
+            "skill": "blocker"
+          }
+        }
+      },
+      {
+        "tick": 212,
+        "action": {
+          "assign": {
+            "lemmingID": 2,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 486,
+        "action": {
+          "assign": {
+            "lemmingID": 2,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 680,
+        "action": {
+          "assign": {
+            "lemmingID": 2,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 1051,
+        "action": {
+          "assign": {
+            "lemmingID": 2,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 1245,
+        "action": {
+          "assign": {
+            "lemmingID": 2,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 1447,
+        "action": {
+          "assign": {
+            "lemmingID": 3,
+            "skill": "bomber"
+          }
+        }
+      }
+    ],
+    "cues": [
+      {
+        "tick": 103,
+        "id": 0,
+        "skill": "bomber",
+        "x": 777,
+        "y": 18
+      },
+      {
+        "tick": 130,
+        "id": 1,
+        "skill": "bomber",
+        "x": 776,
+        "y": 18
+      },
+      {
+        "tick": 157,
+        "id": 3,
+        "skill": "blocker",
+        "x": 751,
+        "y": 26
+      },
+      {
+        "tick": 212,
+        "id": 2,
+        "skill": "builder",
+        "x": 830,
+        "y": 21
+      },
+      {
+        "tick": 486,
+        "id": 2,
+        "skill": "builder",
+        "x": 918,
+        "y": 41
+      },
+      {
+        "tick": 680,
+        "id": 2,
+        "skill": "builder",
+        "x": 942,
+        "y": 29
+      },
+      {
+        "tick": 1051,
+        "id": 2,
+        "skill": "builder",
+        "x": 794,
+        "y": 132
+      },
+      {
+        "tick": 1245,
+        "id": 2,
+        "skill": "builder",
+        "x": 770,
+        "y": 120
+      },
+      {
+        "tick": 1447,
+        "id": 3,
+        "skill": "bomber",
+        "x": 751,
+        "y": 26
+      }
+    ],
+    "origin": {
+      "file": "Dying Dream.lrb",
+      "sha256": "d08b1b3f0ebf656b14c6f1743925f0fffdf1d298c73941a32db7601be653883e"
+    },
+    "packID": "fan:lldb-219",
+    "archive": "0219-Nepster01.zip",
+    "member": "Solutions V6/Dying Dream.lrb"
+  },
+  {
+    "title": "Just a random heap of junk!",
+    "events": [
+      {
+        "tick": 25,
+        "action": {
+          "releaseRate": {
+            "_0": 90
+          }
+        }
+      },
+      {
+        "tick": 68,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 82,
+        "action": {
+          "assign": {
+            "lemmingID": 3,
+            "skill": "blocker"
+          }
+        }
+      },
+      {
+        "tick": 90,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "blocker"
+          }
+        }
+      },
+      {
+        "tick": 112,
+        "action": {
+          "assign": {
+            "lemmingID": 2,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 119,
+        "action": {
+          "assign": {
+            "lemmingID": 1,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 311,
+        "action": {
+          "assign": {
+            "lemmingID": 2,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 591,
+        "action": {
+          "assign": {
+            "lemmingID": 2,
+            "skill": "basher"
+          }
+        }
+      },
+      {
+        "tick": 686,
+        "action": {
+          "assign": {
+            "lemmingID": 2,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 798,
+        "action": {
+          "assign": {
+            "lemmingID": 2,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 844,
+        "action": {
+          "assign": {
+            "lemmingID": 43,
+            "skill": "miner"
+          }
+        }
+      },
+      {
+        "tick": 1292,
+        "action": {
+          "assign": {
+            "lemmingID": 33,
+            "skill": "miner"
+          }
+        }
+      },
+      {
+        "tick": 1597,
+        "action": {
+          "assign": {
+            "lemmingID": 33,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 1621,
+        "action": {
+          "assign": {
+            "lemmingID": 33,
+            "skill": "miner"
+          }
+        }
+      },
+      {
+        "tick": 1764,
+        "action": {
+          "assign": {
+            "lemmingID": 33,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 1929,
+        "action": {
+          "assign": {
+            "lemmingID": 3,
+            "skill": "basher"
+          }
+        }
+      },
+      {
+        "tick": 2131,
+        "action": {
+          "assign": {
+            "lemmingID": 3,
+            "skill": "builder"
+          }
+        }
+      }
+    ],
+    "cues": [
+      {
+        "tick": 68,
+        "id": 0,
+        "skill": "builder",
+        "x": 868,
+        "y": 106
+      },
+      {
+        "tick": 82,
+        "id": 3,
+        "skill": "blocker",
+        "x": 753,
+        "y": 24
+      },
+      {
+        "tick": 90,
+        "id": 0,
+        "skill": "blocker",
+        "x": 870,
+        "y": 105
+      },
+      {
+        "tick": 112,
+        "id": 2,
+        "skill": "builder",
+        "x": 894,
+        "y": 132
+      },
+      {
+        "tick": 119,
+        "id": 1,
+        "skill": "builder",
+        "x": 806,
+        "y": 24
+      },
+      {
+        "tick": 311,
+        "id": 2,
+        "skill": "builder",
+        "x": 918,
+        "y": 120
+      },
+      {
+        "tick": 591,
+        "id": 2,
+        "skill": "basher",
+        "x": 1007,
+        "y": 95
+      },
+      {
+        "tick": 686,
+        "id": 2,
+        "skill": "builder",
+        "x": 1037,
+        "y": 95
+      },
+      {
+        "tick": 798,
+        "id": 2,
+        "skill": "builder",
+        "x": 943,
+        "y": 159
+      },
+      {
+        "tick": 844,
+        "id": 43,
+        "skill": "miner",
+        "x": 873,
+        "y": 25
+      },
+      {
+        "tick": 1292,
+        "id": 33,
+        "skill": "miner",
+        "x": 781,
+        "y": 25
+      },
+      {
+        "tick": 1597,
+        "id": 33,
+        "skill": "builder",
+        "x": 729,
+        "y": 50
+      },
+      {
+        "tick": 1621,
+        "id": 33,
+        "skill": "miner",
+        "x": 735,
+        "y": 48
+      },
+      {
+        "tick": 1764,
+        "id": 33,
+        "skill": "builder",
+        "x": 759,
+        "y": 112
+      },
+      {
+        "tick": 1929,
+        "id": 3,
+        "skill": "basher",
+        "x": 876,
+        "y": 114
+      },
+      {
+        "tick": 2131,
+        "id": 3,
+        "skill": "builder",
+        "x": 811,
+        "y": 114
+      }
+    ],
+    "origin": {
+      "file": "Just a random heap of junk!_1.lrb",
+      "sha256": "477e1aa00958b60202cfd4c522e1a1dff696040a1403fb09c23d8e143a255216"
+    },
+    "packID": "fan:lldb-219",
+    "archive": "0219-Nepster01.zip",
+    "member": "Solutions V6/Just a random heap of junk!_1.lrb"
+  },
+  {
+    "title": "Just a random heap of junk!",
+    "events": [
+      {
+        "tick": 49,
+        "action": {
+          "releaseRate": {
+            "_0": 90
+          }
+        }
+      },
+      {
+        "tick": 91,
+        "action": {
+          "assign": {
+            "lemmingID": 2,
+            "skill": "blocker"
+          }
+        }
+      },
+      {
+        "tick": 120,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 132,
+        "action": {
+          "assign": {
+            "lemmingID": 3,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 147,
+        "action": {
+          "assign": {
+            "lemmingID": 11,
+            "skill": "blocker"
+          }
+        }
+      },
+      {
+        "tick": 178,
+        "action": {
+          "assign": {
+            "lemmingID": 1,
+            "skill": "miner"
+          }
+        }
+      },
+      {
+        "tick": 391,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "basher"
+          }
+        }
+      },
+      {
+        "tick": 429,
+        "action": {
+          "assign": {
+            "lemmingID": 17,
+            "skill": "basher"
+          }
+        }
+      },
+      {
+        "tick": 455,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 483,
+        "action": {
+          "assign": {
+            "lemmingID": 1,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 487,
+        "action": {
+          "assign": {
+            "lemmingID": 17,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 506,
+        "action": {
+          "assign": {
+            "lemmingID": 1,
+            "skill": "miner"
+          }
+        }
+      },
+      {
+        "tick": 553,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 625,
+        "action": {
+          "assign": {
+            "lemmingID": 1,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 834,
+        "action": {
+          "assign": {
+            "lemmingID": 1,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 1028,
+        "action": {
+          "assign": {
+            "lemmingID": 1,
+            "skill": "miner"
+          }
+        }
+      },
+      {
+        "tick": 1249,
+        "action": {
+          "assign": {
+            "lemmingID": 51,
+            "skill": "builder"
+          }
+        }
+      }
+    ],
+    "cues": [
+      {
+        "tick": 91,
+        "id": 2,
+        "skill": "blocker",
+        "x": 875,
+        "y": 113
+      },
+      {
+        "tick": 120,
+        "id": 0,
+        "skill": "builder",
+        "x": 920,
+        "y": 158
+      },
+      {
+        "tick": 132,
+        "id": 3,
+        "skill": "builder",
+        "x": 803,
+        "y": 24
+      },
+      {
+        "tick": 147,
+        "id": 11,
+        "skill": "blocker",
+        "x": 754,
+        "y": 24
+      },
+      {
+        "tick": 178,
+        "id": 1,
+        "skill": "miner",
+        "x": 781,
+        "y": 25
+      },
+      {
+        "tick": 391,
+        "id": 0,
+        "skill": "basher",
+        "x": 1013,
+        "y": 89
+      },
+      {
+        "tick": 429,
+        "id": 17,
+        "skill": "basher",
+        "x": 852,
+        "y": 24
+      },
+      {
+        "tick": 455,
+        "id": 0,
+        "skill": "builder",
+        "x": 1033,
+        "y": 89
+      },
+      {
+        "tick": 483,
+        "id": 1,
+        "skill": "builder",
+        "x": 729,
+        "y": 50
+      },
+      {
+        "tick": 487,
+        "id": 17,
+        "skill": "builder",
+        "x": 837,
+        "y": 24
+      },
+      {
+        "tick": 506,
+        "id": 1,
+        "skill": "miner",
+        "x": 734,
+        "y": 49
+      },
+      {
+        "tick": 553,
+        "id": 0,
+        "skill": "builder",
+        "x": 953,
+        "y": 149
+      },
+      {
+        "tick": 625,
+        "id": 1,
+        "skill": "builder",
+        "x": 753,
+        "y": 112
+      },
+      {
+        "tick": 834,
+        "id": 1,
+        "skill": "builder",
+        "x": 786,
+        "y": 99
+      },
+      {
+        "tick": 1028,
+        "id": 1,
+        "skill": "miner",
+        "x": 810,
+        "y": 88
+      },
+      {
+        "tick": 1249,
+        "id": 51,
+        "skill": "builder",
+        "x": 857,
+        "y": 24
+      }
+    ],
+    "origin": {
+      "file": "Just a random heap of junk!_2.lrb",
+      "sha256": "a271aa5f256300e276ace7688d745cbc37ec7e3967c8a684ca9801913e9c9186"
+    },
+    "packID": "fan:lldb-219",
+    "archive": "0219-Nepster01.zip",
+    "member": "Solutions V6/Just a random heap of junk!_2.lrb"
+  },
+  {
+    "title": "Just a random heap of junk!",
+    "events": [
+      {
+        "tick": 4,
+        "action": {
+          "releaseRate": {
+            "_0": 90
+          }
+        }
+      },
+      {
+        "tick": 85,
+        "action": {
+          "assign": {
+            "lemmingID": 2,
+            "skill": "blocker"
+          }
+        }
+      },
+      {
+        "tick": 120,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 245,
+        "action": {
+          "assign": {
+            "lemmingID": 1,
+            "skill": "blocker"
+          }
+        }
+      },
+      {
+        "tick": 256,
+        "action": {
+          "assign": {
+            "lemmingID": 3,
+            "skill": "miner"
+          }
+        }
+      },
+      {
+        "tick": 323,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 556,
+        "action": {
+          "assign": {
+            "lemmingID": 33,
+            "skill": "blocker"
+          }
+        }
+      },
+      {
+        "tick": 699,
+        "action": {
+          "assign": {
+            "lemmingID": 59,
+            "skill": "miner"
+          }
+        }
+      },
+      {
+        "tick": 712,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "miner"
+          }
+        }
+      },
+      {
+        "tick": 758,
+        "action": {
+          "assign": {
+            "lemmingID": 59,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 931,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 1006,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 1323,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "basher"
+          }
+        }
+      },
+      {
+        "tick": 1352,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 1595,
+        "action": {
+          "assign": {
+            "lemmingID": 2,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 1789,
+        "action": {
+          "assign": {
+            "lemmingID": 2,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 1988,
+        "action": {
+          "assign": {
+            "lemmingID": 2,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 2045,
+        "action": {
+          "assign": {
+            "lemmingID": 58,
+            "skill": "basher"
+          }
+        }
+      }
+    ],
+    "cues": [
+      {
+        "tick": 85,
+        "id": 2,
+        "skill": "blocker",
+        "x": 869,
+        "y": 107
+      },
+      {
+        "tick": 120,
+        "id": 0,
+        "skill": "builder",
+        "x": 920,
+        "y": 158
+      },
+      {
+        "tick": 245,
+        "id": 1,
+        "skill": "blocker",
+        "x": 714,
+        "y": 24
+      },
+      {
+        "tick": 256,
+        "id": 3,
+        "skill": "miner",
+        "x": 719,
+        "y": 25
+      },
+      {
+        "tick": 323,
+        "id": 0,
+        "skill": "builder",
+        "x": 947,
+        "y": 146
+      },
+      {
+        "tick": 556,
+        "id": 33,
+        "skill": "blocker",
+        "x": 775,
+        "y": 48
+      },
+      {
+        "tick": 699,
+        "id": 59,
+        "skill": "miner",
+        "x": 728,
+        "y": 30
+      },
+      {
+        "tick": 712,
+        "id": 0,
+        "skill": "miner",
+        "x": 1008,
+        "y": 95
+      },
+      {
+        "tick": 758,
+        "id": 59,
+        "skill": "builder",
+        "x": 718,
+        "y": 35
+      },
+      {
+        "tick": 931,
+        "id": 0,
+        "skill": "builder",
+        "x": 1046,
+        "y": 114
+      },
+      {
+        "tick": 1006,
+        "id": 0,
+        "skill": "builder",
+        "x": 1007,
+        "y": 95
+      },
+      {
+        "tick": 1323,
+        "id": 0,
+        "skill": "basher",
+        "x": 878,
+        "y": 116
+      },
+      {
+        "tick": 1352,
+        "id": 0,
+        "skill": "builder",
+        "x": 870,
+        "y": 116
+      },
+      {
+        "tick": 1595,
+        "id": 2,
+        "skill": "builder",
+        "x": 984,
+        "y": 83
+      },
+      {
+        "tick": 1789,
+        "id": 2,
+        "skill": "builder",
+        "x": 960,
+        "y": 71
+      },
+      {
+        "tick": 1988,
+        "id": 2,
+        "skill": "builder",
+        "x": 936,
+        "y": 59
+      },
+      {
+        "tick": 2045,
+        "id": 58,
+        "skill": "basher",
+        "x": 933,
+        "y": 57
+      }
+    ],
+    "origin": {
+      "file": "Just a random heap of junk!_3_Turrican.lrb",
+      "sha256": "550c2e9f4183107e9ca1be3eff1261a6d2712f6ea4026523b9745636773cbca1"
+    },
+    "packID": "fan:lldb-219",
+    "archive": "0219-Nepster01.zip",
+    "member": "Solutions V6/Just a random heap of junk!_3_Turrican.lrb"
+  },
+  {
+    "title": "Just a random heap of junk!",
+    "events": [
+      {
+        "tick": 49,
+        "action": {
+          "releaseRate": {
+            "_0": 90
+          }
+        }
+      },
+      {
+        "tick": 49,
+        "action": {
+          "releaseRate": {
+            "_0": 99
+          }
+        }
+      },
+      {
+        "tick": 61,
+        "action": {
+          "assign": {
+            "lemmingID": 1,
+            "skill": "blocker"
+          }
+        }
+      },
+      {
+        "tick": 76,
+        "action": {
+          "assign": {
+            "lemmingID": 2,
+            "skill": "blocker"
+          }
+        }
+      },
+      {
+        "tick": 121,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 314,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 559,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "basher"
+          }
+        }
+      },
+      {
+        "tick": 825,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 1003,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "basher"
+          }
+        }
+      },
+      {
+        "tick": 1034,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 1214,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 1226,
+        "action": {
+          "assign": {
+            "lemmingID": 39,
+            "skill": "miner"
+          }
+        }
+      },
+      {
+        "tick": 1452,
+        "action": {
+          "assign": {
+            "lemmingID": 51,
+            "skill": "miner"
+          }
+        }
+      },
+      {
+        "tick": 1727,
+        "action": {
+          "assign": {
+            "lemmingID": 55,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 1746,
+        "action": {
+          "assign": {
+            "lemmingID": 25,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 1944,
+        "action": {
+          "assign": {
+            "lemmingID": 25,
+            "skill": "miner"
+          }
+        }
+      },
+      {
+        "tick": 2262,
+        "action": {
+          "assign": {
+            "lemmingID": 2,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 2299,
+        "action": {
+          "assign": {
+            "lemmingID": 25,
+            "skill": "builder"
+          }
+        }
+      }
+    ],
+    "cues": [
+      {
+        "tick": 61,
+        "id": 1,
+        "skill": "blocker",
+        "x": 752,
+        "y": 24
+      },
+      {
+        "tick": 76,
+        "id": 2,
+        "skill": "blocker",
+        "x": 868,
+        "y": 106
+      },
+      {
+        "tick": 121,
+        "id": 0,
+        "skill": "builder",
+        "x": 921,
+        "y": 159
+      },
+      {
+        "tick": 314,
+        "id": 0,
+        "skill": "builder",
+        "x": 945,
+        "y": 147
+      },
+      {
+        "tick": 559,
+        "id": 0,
+        "skill": "basher",
+        "x": 898,
+        "y": 136
+      },
+      {
+        "tick": 825,
+        "id": 0,
+        "skill": "builder",
+        "x": 813,
+        "y": 136
+      },
+      {
+        "tick": 1003,
+        "id": 0,
+        "skill": "basher",
+        "x": 791,
+        "y": 125
+      },
+      {
+        "tick": 1034,
+        "id": 0,
+        "skill": "builder",
+        "x": 781,
+        "y": 125
+      },
+      {
+        "tick": 1214,
+        "id": 0,
+        "skill": "builder",
+        "x": 763,
+        "y": 115
+      },
+      {
+        "tick": 1226,
+        "id": 39,
+        "skill": "miner",
+        "x": 777,
+        "y": 25
+      },
+      {
+        "tick": 1452,
+        "id": 51,
+        "skill": "miner",
+        "x": 734,
+        "y": 44
+      },
+      {
+        "tick": 1727,
+        "id": 55,
+        "skill": "builder",
+        "x": 779,
+        "y": 106
+      },
+      {
+        "tick": 1746,
+        "id": 25,
+        "skill": "builder",
+        "x": 786,
+        "y": 99
+      },
+      {
+        "tick": 1944,
+        "id": 25,
+        "skill": "miner",
+        "x": 810,
+        "y": 88
+      },
+      {
+        "tick": 2262,
+        "id": 2,
+        "skill": "builder",
+        "x": 869,
+        "y": 114
+      },
+      {
+        "tick": 2299,
+        "id": 25,
+        "skill": "builder",
+        "x": 870,
+        "y": 117
+      }
+    ],
+    "origin": {
+      "file": "Just a random heap of junk!_4_Akseli.lrb",
+      "sha256": "31b662c589773ca337c405077d4b3349993ae116a38ba635a2b785561579825d"
+    },
+    "packID": "fan:lldb-219",
+    "archive": "0219-Nepster01.zip",
+    "member": "Solutions V6/Just a random heap of junk!_4_Akseli.lrb"
+  },
+  {
+    "title": "Lemming Playground",
+    "events": [
+      {
+        "tick": 15,
+        "action": {
+          "releaseRate": {
+            "_0": 50
+          }
+        }
+      },
+      {
+        "tick": 70,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "basher"
+          }
+        }
+      },
+      {
+        "tick": 165,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 178,
+        "action": {
+          "assign": {
+            "lemmingID": 2,
+            "skill": "floater"
+          }
+        }
+      },
+      {
+        "tick": 190,
+        "action": {
+          "assign": {
+            "lemmingID": 4,
+            "skill": "floater"
+          }
+        }
+      },
+      {
+        "tick": 204,
+        "action": {
+          "assign": {
+            "lemmingID": 2,
+            "skill": "miner"
+          }
+        }
+      },
+      {
+        "tick": 563,
+        "action": {
+          "assign": {
+            "lemmingID": 2,
+            "skill": "bomber"
+          }
+        }
+      },
+      {
+        "tick": 587,
+        "action": {
+          "assign": {
+            "lemmingID": 2,
+            "skill": "climber"
+          }
+        }
+      },
+      {
+        "tick": 624,
+        "action": {
+          "assign": {
+            "lemmingID": 18,
+            "skill": "basher"
+          }
+        }
+      },
+      {
+        "tick": 740,
+        "action": {
+          "assign": {
+            "lemmingID": 4,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 782,
+        "action": {
+          "assign": {
+            "lemmingID": 10,
+            "skill": "bomber"
+          }
+        }
+      },
+      {
+        "tick": 784,
+        "action": {
+          "releaseRate": {
+            "_0": 99
+          }
+        }
+      },
+      {
+        "tick": 927,
+        "action": {
+          "assign": {
+            "lemmingID": 47,
+            "skill": "digger"
+          }
+        }
+      },
+      {
+        "tick": 1317,
+        "action": {
+          "assign": {
+            "lemmingID": 49,
+            "skill": "climber"
+          }
+        }
+      },
+      {
+        "tick": 1667,
+        "action": {
+          "assign": {
+            "lemmingID": 49,
+            "skill": "digger"
+          }
+        }
+      },
+      {
+        "tick": 2795,
+        "action": {
+          "assign": {
+            "lemmingID": 45,
+            "skill": "miner"
+          }
+        }
+      },
+      {
+        "tick": 2815,
+        "action": {
+          "assign": {
+            "lemmingID": 49,
+            "skill": "blocker"
+          }
+        }
+      },
+      {
+        "tick": 3114,
+        "action": {
+          "assign": {
+            "lemmingID": 45,
+            "skill": "blocker"
+          }
+        }
+      },
+      {
+        "tick": 3264,
+        "action": {
+          "nuke": {}
+        }
+      }
+    ],
+    "cues": [
+      {
+        "tick": 70,
+        "id": 0,
+        "skill": "basher",
+        "x": 540,
+        "y": 52
+      },
+      {
+        "tick": 165,
+        "id": 0,
+        "skill": "builder",
+        "x": 570,
+        "y": 52
+      },
+      {
+        "tick": 178,
+        "id": 2,
+        "skill": "floater",
+        "x": 571,
+        "y": 119
+      },
+      {
+        "tick": 190,
+        "id": 4,
+        "skill": "floater",
+        "x": 548,
+        "y": 52
+      },
+      {
+        "tick": 204,
+        "id": 2,
+        "skill": "miner",
+        "x": 587,
+        "y": 120
+      },
+      {
+        "tick": 563,
+        "id": 2,
+        "skill": "bomber",
+        "x": 644,
+        "y": 117
+      },
+      {
+        "tick": 587,
+        "id": 2,
+        "skill": "climber",
+        "x": 664,
+        "y": 97
+      },
+      {
+        "tick": 624,
+        "id": 18,
+        "skill": "basher",
+        "x": 590,
+        "y": 41
+      },
+      {
+        "tick": 740,
+        "id": 4,
+        "skill": "builder",
+        "x": 694,
+        "y": 65
+      },
+      {
+        "tick": 782,
+        "id": 10,
+        "skill": "bomber",
+        "x": 592,
+        "y": 41
+      },
+      {
+        "tick": 927,
+        "id": 47,
+        "skill": "digger",
+        "x": 1059,
+        "y": 52
+      },
+      {
+        "tick": 1317,
+        "id": 49,
+        "skill": "climber",
+        "x": 1047,
+        "y": 144
+      },
+      {
+        "tick": 1667,
+        "id": 49,
+        "skill": "digger",
+        "x": 906,
+        "y": 10
+      },
+      {
+        "tick": 2795,
+        "id": 45,
+        "skill": "miner",
+        "x": 1009,
+        "y": 119
+      },
+      {
+        "tick": 2815,
+        "id": 49,
+        "skill": "blocker",
+        "x": 832,
+        "y": 94
+      },
+      {
+        "tick": 3114,
+        "id": 45,
+        "skill": "blocker",
+        "x": 878,
+        "y": 64
+      }
+    ],
+    "origin": {
+      "file": "Lemming Playground_1.lrb",
+      "sha256": "1fadcaa46e0a2870a25e0a72f6bc1a470b32c07c1a6039e6a016432ce6aba4a6"
+    },
+    "packID": "fan:lldb-219",
+    "archive": "0219-Nepster01.zip",
+    "member": "Solutions V6/Lemming Playground_1.lrb"
+  },
+  {
+    "title": "Lemming Playground",
+    "events": [
+      {
+        "tick": 60,
+        "action": {
+          "releaseRate": {
+            "_0": 50
+          }
+        }
+      },
+      {
+        "tick": 60,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "climber"
+          }
+        }
+      },
+      {
+        "tick": 107,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 419,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "digger"
+          }
+        }
+      },
+      {
+        "tick": 454,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 565,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "miner"
+          }
+        }
+      },
+      {
+        "tick": 1107,
+        "action": {
+          "releaseRate": {
+            "_0": 99
+          }
+        }
+      },
+      {
+        "tick": 1225,
+        "action": {
+          "assign": {
+            "lemmingID": 47,
+            "skill": "digger"
+          }
+        }
+      },
+      {
+        "tick": 1651,
+        "action": {
+          "assign": {
+            "lemmingID": 49,
+            "skill": "basher"
+          }
+        }
+      },
+      {
+        "tick": 1787,
+        "action": {
+          "assign": {
+            "lemmingID": 49,
+            "skill": "miner"
+          }
+        }
+      },
+      {
+        "tick": 1881,
+        "action": {
+          "assign": {
+            "lemmingID": 47,
+            "skill": "blocker"
+          }
+        }
+      },
+      {
+        "tick": 1940,
+        "action": {
+          "assign": {
+            "lemmingID": 49,
+            "skill": "blocker"
+          }
+        }
+      },
+      {
+        "tick": 2092,
+        "action": {
+          "nuke": {}
+        }
+      }
+    ],
+    "cues": [
+      {
+        "tick": 60,
+        "id": 0,
+        "skill": "climber",
+        "x": 536,
+        "y": 35
+      },
+      {
+        "tick": 107,
+        "id": 0,
+        "skill": "builder",
+        "x": 567,
+        "y": 38
+      },
+      {
+        "tick": 419,
+        "id": 0,
+        "skill": "digger",
+        "x": 677,
+        "y": 10
+      },
+      {
+        "tick": 454,
+        "id": 0,
+        "skill": "builder",
+        "x": 677,
+        "y": 15
+      },
+      {
+        "tick": 565,
+        "id": 0,
+        "skill": "miner",
+        "x": 621,
+        "y": 11
+      },
+      {
+        "tick": 1225,
+        "id": 47,
+        "skill": "digger",
+        "x": 1059,
+        "y": 52
+      },
+      {
+        "tick": 1651,
+        "id": 49,
+        "skill": "basher",
+        "x": 1009,
+        "y": 118
+      },
+      {
+        "tick": 1787,
+        "id": 49,
+        "skill": "miner",
+        "x": 909,
+        "y": 131
+      },
+      {
+        "tick": 1881,
+        "id": 47,
+        "skill": "blocker",
+        "x": 832,
+        "y": 94
+      },
+      {
+        "tick": 1940,
+        "id": 49,
+        "skill": "blocker",
+        "x": 878,
+        "y": 64
+      }
+    ],
+    "origin": {
+      "file": "Lemming Playground_2.lrb",
+      "sha256": "e6ea30c4f5039098d8a97129c5d92cb8f337046c7c45705e4e4ff93dd9e6f3cb"
+    },
+    "packID": "fan:lldb-219",
+    "archive": "0219-Nepster01.zip",
+    "member": "Solutions V6/Lemming Playground_2.lrb"
+  },
+  {
+    "title": "Lemming Playground",
+    "events": [
+      {
+        "tick": 60,
+        "action": {
+          "releaseRate": {
+            "_0": 50
+          }
+        }
+      },
+      {
+        "tick": 60,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "climber"
+          }
+        }
+      },
+      {
+        "tick": 105,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 304,
+        "action": {
+          "assign": {
+            "lemmingID": 8,
+            "skill": "climber"
+          }
+        }
+      },
+      {
+        "tick": 336,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "blocker"
+          }
+        }
+      },
+      {
+        "tick": 379,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "bomber"
+          }
+        }
+      },
+      {
+        "tick": 430,
+        "action": {
+          "assign": {
+            "lemmingID": 8,
+            "skill": "miner"
+          }
+        }
+      },
+      {
+        "tick": 570,
+        "action": {
+          "releaseRate": {
+            "_0": 99
+          }
+        }
+      },
+      {
+        "tick": 767,
+        "action": {
+          "assign": {
+            "lemmingID": 47,
+            "skill": "digger"
+          }
+        }
+      },
+      {
+        "tick": 1195,
+        "action": {
+          "assign": {
+            "lemmingID": 49,
+            "skill": "basher"
+          }
+        }
+      },
+      {
+        "tick": 1230,
+        "action": {
+          "assign": {
+            "lemmingID": 47,
+            "skill": "blocker"
+          }
+        }
+      },
+      {
+        "tick": 1381,
+        "action": {
+          "assign": {
+            "lemmingID": 49,
+            "skill": "digger"
+          }
+        }
+      },
+      {
+        "tick": 1569,
+        "action": {
+          "assign": {
+            "lemmingID": 49,
+            "skill": "basher"
+          }
+        }
+      },
+      {
+        "tick": 1577,
+        "action": {
+          "assign": {
+            "lemmingID": 49,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 1758,
+        "action": {
+          "assign": {
+            "lemmingID": 45,
+            "skill": "miner"
+          }
+        }
+      }
+    ],
+    "cues": [
+      {
+        "tick": 60,
+        "id": 0,
+        "skill": "climber",
+        "x": 536,
+        "y": 35
+      },
+      {
+        "tick": 105,
+        "id": 0,
+        "skill": "builder",
+        "x": 565,
+        "y": 36
+      },
+      {
+        "tick": 304,
+        "id": 8,
+        "skill": "climber",
+        "x": 534,
+        "y": 52
+      },
+      {
+        "tick": 336,
+        "id": 0,
+        "skill": "blocker",
+        "x": 596,
+        "y": 10
+      },
+      {
+        "tick": 379,
+        "id": 0,
+        "skill": "bomber",
+        "x": 596,
+        "y": 10
+      },
+      {
+        "tick": 430,
+        "id": 8,
+        "skill": "miner",
+        "x": 564,
+        "y": 36
+      },
+      {
+        "tick": 767,
+        "id": 47,
+        "skill": "digger",
+        "x": 1059,
+        "y": 52
+      },
+      {
+        "tick": 1195,
+        "id": 49,
+        "skill": "basher",
+        "x": 1009,
+        "y": 118
+      },
+      {
+        "tick": 1230,
+        "id": 47,
+        "skill": "blocker",
+        "x": 1004,
+        "y": 118
+      },
+      {
+        "tick": 1381,
+        "id": 49,
+        "skill": "digger",
+        "x": 949,
+        "y": 85
+      },
+      {
+        "tick": 1569,
+        "id": 49,
+        "skill": "basher",
+        "x": 908,
+        "y": 69
+      },
+      {
+        "tick": 1577,
+        "id": 49,
+        "skill": "builder",
+        "x": 905,
+        "y": 69
+      },
+      {
+        "tick": 1758,
+        "id": 45,
+        "skill": "miner",
+        "x": 1014,
+        "y": 123
+      }
+    ],
+    "origin": {
+      "file": "Lemming Playground_3_Akseli.lrb",
+      "sha256": "9de1d08443b125fc7817e2a32ee1938220b93f59b6b7892ac985430902d1e004"
+    },
+    "packID": "fan:lldb-219",
+    "archive": "0219-Nepster01.zip",
+    "member": "Solutions V6/Lemming Playground_3_Akseli.lrb"
+  },
+  {
+    "title": "Time Gate",
+    "events": [
+      {
+        "tick": 50,
+        "action": {
+          "releaseRate": {
+            "_0": 30
+          }
+        }
+      },
+      {
+        "tick": 270,
+        "action": {
+          "assign": {
+            "lemmingID": 1,
+            "skill": "digger"
+          }
+        }
+      },
+      {
+        "tick": 273,
+        "action": {
+          "releaseRate": {
+            "_0": 99
+          }
+        }
+      },
+      {
+        "tick": 299,
+        "action": {
+          "assign": {
+            "lemmingID": 7,
+            "skill": "blocker"
+          }
+        }
+      },
+      {
+        "tick": 324,
+        "action": {
+          "assign": {
+            "lemmingID": 9,
+            "skill": "digger"
+          }
+        }
+      },
+      {
+        "tick": 405,
+        "action": {
+          "assign": {
+            "lemmingID": 3,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 517,
+        "action": {
+          "assign": {
+            "lemmingID": 5,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 851,
+        "action": {
+          "assign": {
+            "lemmingID": 3,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 945,
+        "action": {
+          "assign": {
+            "lemmingID": 5,
+            "skill": "basher"
+          }
+        }
+      },
+      {
+        "tick": 994,
+        "action": {
+          "assign": {
+            "lemmingID": 5,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 1256,
+        "action": {
+          "assign": {
+            "lemmingID": 1,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 1311,
+        "action": {
+          "assign": {
+            "lemmingID": 9,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 1402,
+        "action": {
+          "assign": {
+            "lemmingID": 8,
+            "skill": "basher"
+          }
+        }
+      },
+      {
+        "tick": 1475,
+        "action": {
+          "assign": {
+            "lemmingID": 2,
+            "skill": "basher"
+          }
+        }
+      },
+      {
+        "tick": 1876,
+        "action": {
+          "nuke": {}
+        }
+      }
+    ],
+    "cues": [
+      {
+        "tick": 270,
+        "id": 1,
+        "skill": "digger",
+        "x": 876,
+        "y": 32
+      },
+      {
+        "tick": 299,
+        "id": 7,
+        "skill": "blocker",
+        "x": 711,
+        "y": 32
+      },
+      {
+        "tick": 324,
+        "id": 9,
+        "skill": "digger",
+        "x": 680,
+        "y": 32
+      },
+      {
+        "tick": 405,
+        "id": 3,
+        "skill": "builder",
+        "x": 827,
+        "y": 71
+      },
+      {
+        "tick": 517,
+        "id": 5,
+        "skill": "builder",
+        "x": 791,
+        "y": 68
+      },
+      {
+        "tick": 851,
+        "id": 3,
+        "skill": "builder",
+        "x": 776,
+        "y": 151
+      },
+      {
+        "tick": 945,
+        "id": 5,
+        "skill": "basher",
+        "x": 794,
+        "y": 139
+      },
+      {
+        "tick": 994,
+        "id": 5,
+        "skill": "builder",
+        "x": 816,
+        "y": 141
+      },
+      {
+        "tick": 1256,
+        "id": 1,
+        "skill": "builder",
+        "x": 876,
+        "y": 156
+      },
+      {
+        "tick": 1311,
+        "id": 9,
+        "skill": "builder",
+        "x": 680,
+        "y": 156
+      },
+      {
+        "tick": 1402,
+        "id": 8,
+        "skill": "basher",
+        "x": 929,
+        "y": 143
+      },
+      {
+        "tick": 1475,
+        "id": 2,
+        "skill": "basher",
+        "x": 628,
+        "y": 143
+      }
+    ],
+    "origin": {
+      "file": "Time Gate.lrb",
+      "sha256": "f3bc153b0f6ea5689194d4daec3d6a4151e2bf3f5ac412424219d86930676218"
+    },
+    "packID": "fan:lldb-219",
+    "archive": "0219-Nepster01.zip",
+    "member": "Solutions V6/Time Gate.lrb"
+  },
+  {
+    "title": "Travelling Lemmings",
+    "events": [
+      {
+        "tick": 11,
+        "action": {
+          "releaseRate": {
+            "_0": 50
+          }
+        }
+      },
+      {
+        "tick": 89,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "digger"
+          }
+        }
+      },
+      {
+        "tick": 142,
+        "action": {
+          "assign": {
+            "lemmingID": 2,
+            "skill": "digger"
+          }
+        }
+      },
+      {
+        "tick": 184,
+        "action": {
+          "assign": {
+            "lemmingID": 4,
+            "skill": "digger"
+          }
+        }
+      },
+      {
+        "tick": 218,
+        "action": {
+          "releaseRate": {
+            "_0": 99
+          }
+        }
+      },
+      {
+        "tick": 342,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 394,
+        "action": {
+          "assign": {
+            "lemmingID": 48,
+            "skill": "digger"
+          }
+        }
+      },
+      {
+        "tick": 538,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 734,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 776,
+        "action": {
+          "assign": {
+            "lemmingID": 48,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 854,
+        "action": {
+          "assign": {
+            "lemmingID": 48,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 878,
+        "action": {
+          "assign": {
+            "lemmingID": 48,
+            "skill": "climber"
+          }
+        }
+      },
+      {
+        "tick": 932,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 954,
+        "action": {
+          "assign": {
+            "lemmingID": 2,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 980,
+        "action": {
+          "assign": {
+            "lemmingID": 4,
+            "skill": "blocker"
+          }
+        }
+      },
+      {
+        "tick": 1050,
+        "action": {
+          "assign": {
+            "lemmingID": 2,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 1244,
+        "action": {
+          "assign": {
+            "lemmingID": 48,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 1341,
+        "action": {
+          "assign": {
+            "lemmingID": 2,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 1439,
+        "action": {
+          "assign": {
+            "lemmingID": 48,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 1561,
+        "action": {
+          "assign": {
+            "lemmingID": 2,
+            "skill": "basher"
+          }
+        }
+      },
+      {
+        "tick": 1602,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "basher"
+          }
+        }
+      },
+      {
+        "tick": 1636,
+        "action": {
+          "assign": {
+            "lemmingID": 48,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 1646,
+        "action": {
+          "assign": {
+            "lemmingID": 2,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 1680,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 1831,
+        "action": {
+          "assign": {
+            "lemmingID": 48,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 1970,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "basher"
+          }
+        }
+      },
+      {
+        "tick": 2157,
+        "action": {
+          "assign": {
+            "lemmingID": 48,
+            "skill": "digger"
+          }
+        }
+      },
+      {
+        "tick": 2227,
+        "action": {
+          "assign": {
+            "lemmingID": 2,
+            "skill": "basher"
+          }
+        }
+      },
+      {
+        "tick": 2344,
+        "action": {
+          "assign": {
+            "lemmingID": 48,
+            "skill": "bomber"
+          }
+        }
+      }
+    ],
+    "cues": [
+      {
+        "tick": 89,
+        "id": 0,
+        "skill": "digger",
+        "x": 775,
+        "y": 37
+      },
+      {
+        "tick": 142,
+        "id": 2,
+        "skill": "digger",
+        "x": 772,
+        "y": 32
+      },
+      {
+        "tick": 184,
+        "id": 4,
+        "skill": "digger",
+        "x": 758,
+        "y": 32
+      },
+      {
+        "tick": 342,
+        "id": 0,
+        "skill": "builder",
+        "x": 775,
+        "y": 69
+      },
+      {
+        "tick": 394,
+        "id": 48,
+        "skill": "digger",
+        "x": 744,
+        "y": 29
+      },
+      {
+        "tick": 538,
+        "id": 0,
+        "skill": "builder",
+        "x": 799,
+        "y": 57
+      },
+      {
+        "tick": 734,
+        "id": 0,
+        "skill": "builder",
+        "x": 823,
+        "y": 45
+      },
+      {
+        "tick": 776,
+        "id": 48,
+        "skill": "builder",
+        "x": 744,
+        "y": 77
+      },
+      {
+        "tick": 854,
+        "id": 48,
+        "skill": "builder",
+        "x": 720,
+        "y": 140
+      },
+      {
+        "tick": 878,
+        "id": 48,
+        "skill": "climber",
+        "x": 718,
+        "y": 139
+      },
+      {
+        "tick": 932,
+        "id": 0,
+        "skill": "builder",
+        "x": 847,
+        "y": 33
+      },
+      {
+        "tick": 954,
+        "id": 2,
+        "skill": "builder",
+        "x": 772,
+        "y": 134
+      },
+      {
+        "tick": 980,
+        "id": 4,
+        "skill": "blocker",
+        "x": 758,
+        "y": 132
+      },
+      {
+        "tick": 1050,
+        "id": 2,
+        "skill": "builder",
+        "x": 802,
+        "y": 140
+      },
+      {
+        "tick": 1244,
+        "id": 48,
+        "skill": "builder",
+        "x": 602,
+        "y": 140
+      },
+      {
+        "tick": 1341,
+        "id": 2,
+        "skill": "builder",
+        "x": 848,
+        "y": 140
+      },
+      {
+        "tick": 1439,
+        "id": 48,
+        "skill": "builder",
+        "x": 578,
+        "y": 128
+      },
+      {
+        "tick": 1561,
+        "id": 2,
+        "skill": "basher",
+        "x": 871,
+        "y": 140
+      },
+      {
+        "tick": 1602,
+        "id": 0,
+        "skill": "basher",
+        "x": 982,
+        "y": 140
+      },
+      {
+        "tick": 1636,
+        "id": 48,
+        "skill": "builder",
+        "x": 554,
+        "y": 116
+      },
+      {
+        "tick": 1646,
+        "id": 2,
+        "skill": "builder",
+        "x": 907,
+        "y": 140
+      },
+      {
+        "tick": 1680,
+        "id": 0,
+        "skill": "builder",
+        "x": 953,
+        "y": 140
+      },
+      {
+        "tick": 1831,
+        "id": 48,
+        "skill": "builder",
+        "x": 530,
+        "y": 104
+      },
+      {
+        "tick": 1970,
+        "id": 0,
+        "skill": "basher",
+        "x": 1046,
+        "y": 140
+      },
+      {
+        "tick": 2157,
+        "id": 48,
+        "skill": "digger",
+        "x": 632,
+        "y": 98
+      },
+      {
+        "tick": 2227,
+        "id": 2,
+        "skill": "basher",
+        "x": 784,
+        "y": 140
+      },
+      {
+        "tick": 2344,
+        "id": 48,
+        "skill": "bomber",
+        "x": 632,
+        "y": 122
+      }
+    ],
+    "origin": {
+      "file": "Travelling Lemmings_1.lrb",
+      "sha256": "66002dd54c4d9faa7477d2c628b4364e9131be1d118cc3f5fc7416b917c1c8c6"
+    },
+    "packID": "fan:lldb-219",
+    "archive": "0219-Nepster01.zip",
+    "member": "Solutions V6/Travelling Lemmings_1.lrb"
+  },
+  {
+    "title": "Travelling Lemmings",
+    "events": [
+      {
+        "tick": 24,
+        "action": {
+          "releaseRate": {
+            "_0": 50
+          }
+        }
+      },
+      {
+        "tick": 90,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "digger"
+          }
+        }
+      },
+      {
+        "tick": 126,
+        "action": {
+          "assign": {
+            "lemmingID": 2,
+            "skill": "digger"
+          }
+        }
+      },
+      {
+        "tick": 178,
+        "action": {
+          "releaseRate": {
+            "_0": 99
+          }
+        }
+      },
+      {
+        "tick": 330,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 526,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 720,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 736,
+        "action": {
+          "assign": {
+            "lemmingID": 40,
+            "skill": "climber"
+          }
+        }
+      },
+      {
+        "tick": 916,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 927,
+        "action": {
+          "assign": {
+            "lemmingID": 2,
+            "skill": "blocker"
+          }
+        }
+      },
+      {
+        "tick": 932,
+        "action": {
+          "assign": {
+            "lemmingID": 40,
+            "skill": "digger"
+          }
+        }
+      },
+      {
+        "tick": 1012,
+        "action": {
+          "assign": {
+            "lemmingID": 40,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 1268,
+        "action": {
+          "assign": {
+            "lemmingID": 40,
+            "skill": "basher"
+          }
+        }
+      },
+      {
+        "tick": 1313,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "basher"
+          }
+        }
+      },
+      {
+        "tick": 1347,
+        "action": {
+          "assign": {
+            "lemmingID": 40,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 1386,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 1659,
+        "action": {
+          "assign": {
+            "lemmingID": 40,
+            "skill": "basher"
+          }
+        }
+      },
+      {
+        "tick": 1675,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 1793,
+        "action": {
+          "assign": {
+            "lemmingID": 40,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 2155,
+        "action": {
+          "assign": {
+            "lemmingID": 40,
+            "skill": "basher"
+          }
+        }
+      },
+      {
+        "tick": 2335,
+        "action": {
+          "assign": {
+            "lemmingID": 40,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 2672,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 2723,
+        "action": {
+          "assign": {
+            "lemmingID": 40,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 2918,
+        "action": {
+          "assign": {
+            "lemmingID": 40,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 3113,
+        "action": {
+          "assign": {
+            "lemmingID": 40,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 3308,
+        "action": {
+          "assign": {
+            "lemmingID": 40,
+            "skill": "builder"
+          }
+        }
+      },
+      {
+        "tick": 3649,
+        "action": {
+          "assign": {
+            "lemmingID": 40,
+            "skill": "digger"
+          }
+        }
+      },
+      {
+        "tick": 3859,
+        "action": {
+          "assign": {
+            "lemmingID": 40,
+            "skill": "bomber"
+          }
+        }
+      }
+    ],
+    "cues": [
+      {
+        "tick": 90,
+        "id": 0,
+        "skill": "digger",
+        "x": 776,
+        "y": 39
+      },
+      {
+        "tick": 126,
+        "id": 2,
+        "skill": "digger",
+        "x": 756,
+        "y": 31
+      },
+      {
+        "tick": 330,
+        "id": 0,
+        "skill": "builder",
+        "x": 776,
+        "y": 69
+      },
+      {
+        "tick": 526,
+        "id": 0,
+        "skill": "builder",
+        "x": 800,
+        "y": 57
+      },
+      {
+        "tick": 720,
+        "id": 0,
+        "skill": "builder",
+        "x": 824,
+        "y": 45
+      },
+      {
+        "tick": 736,
+        "id": 40,
+        "skill": "climber",
+        "x": 752,
+        "y": 108
+      },
+      {
+        "tick": 916,
+        "id": 0,
+        "skill": "builder",
+        "x": 848,
+        "y": 33
+      },
+      {
+        "tick": 927,
+        "id": 2,
+        "skill": "blocker",
+        "x": 756,
+        "y": 132
+      },
+      {
+        "tick": 932,
+        "id": 40,
+        "skill": "digger",
+        "x": 784,
+        "y": 64
+      },
+      {
+        "tick": 1012,
+        "id": 40,
+        "skill": "builder",
+        "x": 801,
+        "y": 140
+      },
+      {
+        "tick": 1268,
+        "id": 40,
+        "skill": "basher",
+        "x": 878,
+        "y": 140
+      },
+      {
+        "tick": 1313,
+        "id": 0,
+        "skill": "basher",
+        "x": 982,
+        "y": 140
+      },
+      {
+        "tick": 1347,
+        "id": 40,
+        "skill": "builder",
+        "x": 908,
+        "y": 140
+      },
+      {
+        "tick": 1386,
+        "id": 0,
+        "skill": "builder",
+        "x": 958,
+        "y": 140
+      },
+      {
+        "tick": 1659,
+        "id": 40,
+        "skill": "basher",
+        "x": 1044,
+        "y": 140
+      },
+      {
+        "tick": 1675,
+        "id": 0,
+        "skill": "builder",
+        "x": 845,
+        "y": 140
+      },
+      {
+        "tick": 1793,
+        "id": 40,
+        "skill": "builder",
+        "x": 1129,
+        "y": 140
+      },
+      {
+        "tick": 2155,
+        "id": 40,
+        "skill": "basher",
+        "x": 785,
+        "y": 140
+      },
+      {
+        "tick": 2335,
+        "id": 40,
+        "skill": "builder",
+        "x": 720,
+        "y": 140
+      },
+      {
+        "tick": 2672,
+        "id": 0,
+        "skill": "builder",
+        "x": 672,
+        "y": 140
+      },
+      {
+        "tick": 2723,
+        "id": 40,
+        "skill": "builder",
+        "x": 604,
+        "y": 140
+      },
+      {
+        "tick": 2918,
+        "id": 40,
+        "skill": "builder",
+        "x": 580,
+        "y": 128
+      },
+      {
+        "tick": 3113,
+        "id": 40,
+        "skill": "builder",
+        "x": 556,
+        "y": 116
+      },
+      {
+        "tick": 3308,
+        "id": 40,
+        "skill": "builder",
+        "x": 532,
+        "y": 104
+      },
+      {
+        "tick": 3649,
+        "id": 40,
+        "skill": "digger",
+        "x": 631,
+        "y": 98
+      },
+      {
+        "tick": 3859,
+        "id": 40,
+        "skill": "bomber",
+        "x": 631,
+        "y": 125
+      }
+    ],
+    "origin": {
+      "file": "Travelling Lemmings_2_geoo.lrb",
+      "sha256": "c78832d1961b71b9baa6b18056680403371ca8a9a6154ea37a24df1e1ba620eb"
+    },
+    "packID": "fan:lldb-219",
+    "archive": "0219-Nepster01.zip",
+    "member": "Solutions V6/Travelling Lemmings_2_geoo.lrb"
+  },
+  {
+    "title": "Unreachable Heights",
+    "events": [
+      {
+        "tick": 6,
+        "action": {
+          "releaseRate": {
+            "_0": 99
+          }
+        }
+      },
+      {
+        "tick": 66,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "blocker"
+          }
+        }
+      },
+      {
+        "tick": 70,
+        "action": {
+          "assign": {
+            "lemmingID": 2,
+            "skill": "digger"
+          }
+        }
+      },
+      {
+        "tick": 72,
+        "action": {
+          "assign": {
+            "lemmingID": 2,
+            "skill": "basher"
+          }
+        }
+      },
+      {
+        "tick": 82,
+        "action": {
+          "assign": {
+            "lemmingID": 1,
+            "skill": "climber"
+          }
+        }
+      },
+      {
+        "tick": 494,
+        "action": {
+          "assign": {
+            "lemmingID": 5,
+            "skill": "climber"
+          }
+        }
+      },
+      {
+        "tick": 601,
+        "action": {
+          "assign": {
+            "lemmingID": 1,
+            "skill": "digger"
+          }
+        }
+      },
+      {
+        "tick": 627,
+        "action": {
+          "assign": {
+            "lemmingID": 1,
+            "skill": "blocker"
+          }
+        }
+      },
+      {
+        "tick": 1028,
+        "action": {
+          "assign": {
+            "lemmingID": 1,
+            "skill": "bomber"
+          }
+        }
+      },
+      {
+        "tick": 1106,
+        "action": {
+          "assign": {
+            "lemmingID": 5,
+            "skill": "digger"
+          }
+        }
+      },
+      {
+        "tick": 1217,
+        "action": {
+          "assign": {
+            "lemmingID": 5,
+            "skill": "blocker"
+          }
+        }
+      },
+      {
+        "tick": 1555,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "basher"
+          }
+        }
+      },
+      {
+        "tick": 1691,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "digger"
+          }
+        }
+      },
+      {
+        "tick": 1698,
+        "action": {
+          "assign": {
+            "lemmingID": 24,
+            "skill": "blocker"
+          }
+        }
+      },
+      {
+        "tick": 1700,
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "basher"
+          }
+        }
+      },
+      {
+        "tick": 1950,
+        "action": {
+          "assign": {
+            "lemmingID": 24,
+            "skill": "basher"
+          }
+        }
+      },
+      {
+        "tick": 2032,
+        "action": {
+          "assign": {
+            "lemmingID": 5,
+            "skill": "digger"
+          }
+        }
+      },
+      {
+        "tick": 2096,
+        "action": {
+          "assign": {
+            "lemmingID": 24,
+            "skill": "blocker"
+          }
+        }
+      },
+      {
+        "tick": 2106,
+        "action": {
+          "assign": {
+            "lemmingID": 5,
+            "skill": "basher"
+          }
+        }
+      }
+    ],
+    "cues": [
+      {
+        "tick": 66,
+        "id": 0,
+        "skill": "blocker",
+        "x": 733,
+        "y": 146
+      },
+      {
+        "tick": 70,
+        "id": 2,
+        "skill": "digger",
+        "x": 729,
+        "y": 146
+      },
+      {
+        "tick": 72,
+        "id": 2,
+        "skill": "basher",
+        "x": 729,
+        "y": 147
+      },
+      {
+        "tick": 82,
+        "id": 1,
+        "skill": "climber",
+        "x": 715,
+        "y": 146
+      },
+      {
+        "tick": 494,
+        "id": 5,
+        "skill": "climber",
+        "x": 791,
+        "y": 109
+      },
+      {
+        "tick": 601,
+        "id": 1,
+        "skill": "digger",
+        "x": 919,
+        "y": 12
+      },
+      {
+        "tick": 627,
+        "id": 1,
+        "skill": "blocker",
+        "x": 919,
+        "y": 41
+      },
+      {
+        "tick": 1028,
+        "id": 1,
+        "skill": "bomber",
+        "x": 919,
+        "y": 41
+      },
+      {
+        "tick": 1106,
+        "id": 5,
+        "skill": "digger",
+        "x": 915,
+        "y": 41
+      },
+      {
+        "tick": 1217,
+        "id": 5,
+        "skill": "blocker",
+        "x": 829,
+        "y": 53
+      },
+      {
+        "tick": 1555,
+        "id": 0,
+        "skill": "basher",
+        "x": 816,
+        "y": 118
+      },
+      {
+        "tick": 1691,
+        "id": 0,
+        "skill": "digger",
+        "x": 776,
+        "y": 118
+      },
+      {
+        "tick": 1698,
+        "id": 24,
+        "skill": "blocker",
+        "x": 773,
+        "y": 119
+      },
+      {
+        "tick": 1700,
+        "id": 0,
+        "skill": "basher",
+        "x": 776,
+        "y": 120
+      },
+      {
+        "tick": 1950,
+        "id": 24,
+        "skill": "basher",
+        "x": 843,
+        "y": 61
+      },
+      {
+        "tick": 2032,
+        "id": 5,
+        "skill": "digger",
+        "x": 793,
+        "y": 53
+      },
+      {
+        "tick": 2096,
+        "id": 24,
+        "skill": "blocker",
+        "x": 790,
+        "y": 61
+      },
+      {
+        "tick": 2106,
+        "id": 5,
+        "skill": "basher",
+        "x": 793,
+        "y": 63
+      }
+    ],
+    "origin": {
+      "file": "Unreachable Heights.lrb",
+      "sha256": "9556ea150356f45bf99a38b8397594058fc5fe97df96286a81f0832b051202d1"
+    },
+    "packID": "fan:lldb-470",
+    "archive": "0470-Unreachable-Heights.zip",
+    "member": "Unreachable Heights/Solution/Unreachable Heights.lrb"
+  }
+]

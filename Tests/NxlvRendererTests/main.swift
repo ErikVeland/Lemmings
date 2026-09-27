@@ -101,6 +101,16 @@ func pixel(_ rendered: NxlvRenderedLevel, x: Int, y: Int) -> TestColor {
   )
 }
 
+func pixel(_ rgba: [UInt8], width: Int, x: Int, y: Int) -> TestColor {
+  let offset = (y * width + x) * 4
+  return TestColor(
+    red: rgba[offset],
+    green: rgba[offset + 1],
+    blue: rgba[offset + 2],
+    alpha: rgba[offset + 3]
+  )
+}
+
 func mask(_ values: [UInt8], width: Int, x: Int, y: Int) -> UInt8 {
   values[y * width + x]
 }
@@ -126,6 +136,15 @@ func render(
 }
 
 func makeTerrainFixtures(_ styles: URL) throws {
+  try write(
+    """
+    LEMMINGS default
+    $COLORS
+      MASK xA1B2C3
+    $END
+    """,
+    to: styles.appendingPathComponent("test/theme.nxtm")
+  )
   let terrain = styles.appendingPathComponent("test/terrain", isDirectory: true)
   try writePNG(
     width: 2,
@@ -269,6 +288,248 @@ func makeObjectFixtures(_ styles: URL) throws {
     """,
     to: objects.appendingPathComponent("paint.nxmo")
   )
+  try writePNG(
+    width: 2,
+    height: 2,
+    pixels: Array(repeating: .green, count: 4),
+    to: objects.appendingPathComponent("overflow_exit.png")
+  )
+  try write(
+    """
+    EFFECT EXIT
+    TRIGGER_X 0
+    TRIGGER_Y 1
+    TRIGGER_WIDTH 2
+    TRIGGER_HEIGHT 2
+    $PRIMARY_ANIMATION
+      FRAMES 1
+    $END
+    """,
+    to: objects.appendingPathComponent("overflow_exit.nxmo")
+  )
+  for (name, effect) in [("button", "UNLOCKBUTTON"), ("locked", "LOCKEDEXIT")] {
+    try writePNG(
+      width: 1,
+      height: 4,
+      pixels: [.red, .green, .blue, .yellow],
+      to: objects.appendingPathComponent("\(name).png")
+    )
+    try write(
+      """
+      EFFECT \(effect)
+      TRIGGER_X 0
+      TRIGGER_Y 0
+      TRIGGER_WIDTH 1
+      TRIGGER_HEIGHT 1
+      $PRIMARY_ANIMATION
+        FRAMES 4
+      $END
+      """,
+      to: objects.appendingPathComponent("\(name).nxmo")
+    )
+  }
+  try writePNG(
+    width: 1,
+    height: 4,
+    pixels: [.red, .green, .blue, .yellow],
+    to: objects.appendingPathComponent("live_trap.png")
+  )
+  try write(
+    """
+    EFFECT TRAP
+    TRIGGER_X 0
+    TRIGGER_Y 0
+    TRIGGER_WIDTH 1
+    TRIGGER_HEIGHT 1
+    $PRIMARY_ANIMATION
+      FRAMES 4
+    $END
+    """,
+    to: objects.appendingPathComponent("live_trap.nxmo")
+  )
+  try writePNG(
+    width: 1,
+    height: 4,
+    pixels: [.red, .green, .blue, .yellow],
+    to: objects.appendingPathComponent("live_exit.png")
+  )
+  try write(
+    """
+    EFFECT EXIT
+    TRIGGER_X 0
+    TRIGGER_Y 0
+    TRIGGER_WIDTH 1
+    TRIGGER_HEIGHT 1
+    $PRIMARY_ANIMATION
+      FRAMES 4
+    $END
+    """,
+    to: objects.appendingPathComponent("live_exit.nxmo")
+  )
+  try writePNG(
+    width: 1,
+    height: 4,
+    pixels: [.red, .green, .blue, .yellow],
+    to: objects.appendingPathComponent("live_entrance.png")
+  )
+  try write(
+    """
+    EFFECT ENTRANCE
+    TRIGGER_X 0
+    TRIGGER_Y 0
+    $PRIMARY_ANIMATION
+      FRAMES 4
+    $END
+    """,
+    to: objects.appendingPathComponent("live_entrance.nxmo")
+  )
+  try writePNG(
+    width: 1,
+    height: 2,
+    pixels: [.red, .green],
+    to: objects.appendingPathComponent("live_splitter.png")
+  )
+  try write(
+    """
+    EFFECT SPLITTER
+    TRIGGER_X 0
+    TRIGGER_Y 0
+    TRIGGER_WIDTH 1
+    TRIGGER_HEIGHT 1
+    $PRIMARY_ANIMATION
+      FRAMES 2
+    $END
+    """,
+    to: objects.appendingPathComponent("live_splitter.nxmo")
+  )
+  try writePNG(
+    width: 1,
+    height: 1,
+    pixels: [.red],
+    to: objects.appendingPathComponent("secondary.png")
+  )
+  try writePNG(
+    width: 1,
+    height: 2,
+    pixels: [.green, .blue],
+    to: objects.appendingPathComponent("secondary_glow.png")
+  )
+  try writePNG(
+    width: 1,
+    height: 2,
+    pixels: [.cyan, .magenta],
+    to: objects.appendingPathComponent("secondary_pause.png")
+  )
+  try writePNG(
+    width: 1,
+    height: 2,
+    pixels: [.yellow, .orange],
+    to: objects.appendingPathComponent("secondary_loop.png")
+  )
+  try write(
+    """
+    EFFECT EXIT
+    TRIGGER_X 0
+    TRIGGER_Y 0
+    TRIGGER_WIDTH 1
+    TRIGGER_HEIGHT 1
+    $PRIMARY_ANIMATION
+      FRAMES 1
+    $END
+    $ANIMATION
+      NAME glow
+      FRAMES 2
+      OFFSET_X 1
+      Z_INDEX 2
+    $END
+    $ANIMATION
+      NAME pause
+      FRAMES 2
+      OFFSET_X 2
+      INITIAL_FRAME 1
+      STATE PAUSE
+      Z_INDEX 2
+    $END
+    $ANIMATION
+      NAME loop
+      FRAMES 2
+      OFFSET_X 3
+      INITIAL_FRAME 1
+      STATE LOOPTOZERO
+      Z_INDEX 2
+    $END
+    """,
+    to: objects.appendingPathComponent("secondary.nxmo")
+  )
+  try writePNG(
+    width: 1,
+    height: 1,
+    pixels: [.red],
+    to: objects.appendingPathComponent("triggered_secondary.png")
+  )
+  try writePNG(
+    width: 1,
+    height: 1,
+    pixels: [.green],
+    to: objects.appendingPathComponent("triggered_secondary_busy.png")
+  )
+  try write(
+    """
+    EFFECT TRAP
+    TRIGGER_X 0
+    TRIGGER_Y 0
+    TRIGGER_WIDTH 1
+    TRIGGER_HEIGHT 1
+    $PRIMARY_ANIMATION
+      FRAMES 1
+    $END
+    $ANIMATION
+      NAME busy
+      FRAMES 1
+      OFFSET_X 1
+      HIDE
+      $TRIGGER
+        CONDITION BUSY
+      $END
+    $END
+    """,
+    to: objects.appendingPathComponent("triggered_secondary.nxmo")
+  )
+}
+
+func testTriggerOutsideGraphic(_ styles: URL) throws {
+  let fixture = try level(
+    """
+    TITLE Trigger outside graphic
+    WIDTH 8
+    HEIGHT 8
+    $GADGET
+      STYLE test
+      PIECE overflow_exit
+      X 3
+      Y 2
+    $END
+
+    $GADGET
+      STYLE test
+      PIECE overflow_exit
+      X 0
+      Y 4
+      FLIP_HORIZONTAL
+    $END
+    """)
+  let output = try unwrap(
+    render(fixture, styles: styles).renderedLevel,
+    "The trigger-overflow fixture did not render."
+  )
+  let gadget = try unwrap(output.gadgets.first, "The trigger-overflow gadget was omitted.")
+  try expect(gadget.triggerX == 3 && gadget.triggerY == 3,
+             "The trigger-overflow origin changed.")
+  try expect(gadget.triggerWidth == 2 && gadget.triggerHeight == 2,
+             "A trigger row outside the graphic was clipped.")
+  let flipped = try unwrap(output.gadgets.dropFirst().first, "The flipped trigger gadget was omitted.")
+  try expect(flipped.triggerX == 0 && flipped.triggerY == 5,
+             "A visual flip incorrectly mirrored the trigger rectangle.")
 }
 
 func testPaintClipsToTerrain(_ styles: URL) throws {
@@ -431,6 +692,8 @@ func testTerrainCompositionAndOneWay(_ styles: URL) throws {
   )
   try expect(mask(output.solidMask, width: 6, x: 0, y: 3) == 0, "Alpha 0 became solid.")
   try expect(mask(output.solidMask, width: 6, x: 1, y: 3) == 1, "Nonzero alpha was not solid.")
+  try expect(mask(output.terrainOpaqueMask, width: 6, x: 1, y: 3) == 0,
+             "Partially transparent terrain became visually opaque.")
 }
 
 func testGroups(_ styles: URL) throws {
@@ -488,6 +751,50 @@ func testGroups(_ styles: URL) throws {
     mask(output.oneWayEligibleMask, width: 7, x: 2, y: 1) == 1,
     "The outer group ONE_WAY flag was not applied."
   )
+
+  let croppedGroup = try level(
+    """
+    TITLE Cropped group
+    WIDTH 5
+    HEIGHT 2
+    $TERRAINGROUP
+      NAME cropped
+      $TERRAIN
+        STYLE test
+        PIECE red
+        X 10
+        Y 10
+      $END
+      $TERRAIN
+        STYLE test
+        PIECE eraser
+        X 10
+        Y 10
+        ERASE
+      $END
+      $TERRAIN
+        STYLE test
+        PIECE eraser
+        X 10
+        Y 11
+        ERASE
+      $END
+    $END
+    $TERRAIN
+      STYLE *GROUP
+      PIECE cropped
+      X 1
+      Y 0
+    $END
+    """)
+  let croppedOutput = try unwrap(
+    render(croppedGroup, styles: styles).renderedLevel,
+    "The cropped terrain-group fixture did not render."
+  )
+  try expect(pixel(croppedOutput, x: 1, y: 0) == .red,
+             "The composite group retained its erased transparent margin.")
+  try expect(pixel(croppedOutput, x: 0, y: 0) == .clear,
+             "The cropped composite moved before its placement coordinate.")
 
   let forward = try level(
     """
@@ -787,6 +1094,430 @@ func testPNGAndPathLimits(_ fixture: URL) throws {
   try expect(has(.unsafeGraphicPath, in: unsafeResult), "An escaping graphic path was accepted.")
 }
 
+func testLiveTerrainSceneFrame(_ styles: URL) throws {
+  let retainedResult = try render(
+    level(
+      """
+      TITLE Retained live layers
+      THEME test
+      WIDTH 3
+      HEIGHT 1
+      $TERRAIN
+        STYLE test
+        PIECE blue
+        X 0
+        Y 0
+      $END
+      """
+    ),
+    styles: styles,
+    renderer: NxlvRenderer(retainsVisualLayers: true)
+  )
+  let retained = try unwrap(retainedResult.renderedLevel, "The retained-layer fixture did not render.")
+  try expect(retained.backgroundRGBA.count == 12, "The background layer was not retained.")
+  try expect(retained.terrainRGBA.count == 12, "The terrain layer was not retained.")
+  try expect(retained.foregroundRGBA.count == 12, "The foreground layer was not retained.")
+  try expect(
+    retained.constructiveRGBA == [0xA1, 0xB2, 0xC3, 0xFF],
+    "The theme MASK colour was not retained for constructed terrain."
+  )
+
+  let blue = [UInt8](arrayLiteral: 0, 0, 255, 255)
+  let clear = [UInt8](arrayLiteral: 0, 0, 0, 0)
+  let red = [UInt8](arrayLiteral: 255, 0, 0, 255)
+  let green = [UInt8](arrayLiteral: 0, 255, 0, 255)
+  let magenta = [UInt8](arrayLiteral: 255, 0, 255, 255)
+  let partial = [UInt8](arrayLiteral: 0, 255, 0, 1)
+  let rendered = NxlvRenderedLevel(
+    width: 6,
+    height: 1,
+    rgba: red + red + blue + blue + green + partial,
+    solidMask: [1, 1, 0, 0, 0, 1],
+    steelMask: [0, 0, 0, 0, 0, 0],
+    oneWayMask: [0, 0, 0, 0, 0, 0],
+    oneWayEligibleMask: [0, 0, 0, 0, 0, 0],
+    gadgets: [],
+    terrainOpaqueMask: [1, 1, 0, 0, 0, 0],
+    backgroundRGBA: blue + blue + blue + blue + blue + blue,
+    terrainRGBA: red + red + clear + clear + clear + partial,
+    foregroundRGBA: clear + clear + clear + clear + green + clear,
+    constructiveRGBA: [255, 255, 0, 255]
+  )
+  var terrain = try NeoLemmixTerrain(
+    width: 6,
+    height: 1,
+    solidMask: rendered.solidMask,
+    steelMask: rendered.steelMask,
+    oneWayMask: rendered.oneWayMask,
+    visualOpaqueMask: rendered.terrainOpaqueMask
+  )
+  _ = terrain.setSolid(false, x: 0, y: 0)
+  _ = terrain.setSolid(false, x: 1, y: 0)
+  _ = terrain.setConstructiveSolid(x: 1, y: 0, shade: 0)
+  _ = terrain.setConstructiveSolid(x: 2, y: 0, shade: 11)
+  _ = terrain.setStonerSolid(x: 3, y: 0, ownerID: 7, sourceIndex: 0)
+  _ = terrain.setStonerSolid(x: 4, y: 0, ownerID: 8, sourceIndex: 0)
+  _ = terrain.setConstructiveSolid(x: 5, y: 0, shade: 6)
+
+  let frame = NeoLemmixSceneFrame.rgba(
+    rendered,
+    terrain: terrain,
+    stonerRGBA: magenta,
+    stonerWidth: 1,
+    stonerHeight: 1
+  )
+  try expect(
+    pixel(frame, width: 6, x: 0, y: 0) == .blue,
+    "Removed terrain did not reveal the background layer."
+  )
+  try expect(
+    pixel(frame, width: 6, x: 1, y: 0)
+      == TestColor(red: 231, green: 231, blue: 0, alpha: 255),
+    "Rebuilt terrain did not replace original art with CE's first gradient step."
+  )
+  try expect(
+    pixel(frame, width: 6, x: 2, y: 0)
+      == TestColor(red: 255, green: 255, blue: 20, alpha: 255),
+    "Constructed terrain did not use CE's final gradient step."
+  )
+  try expect(
+    pixel(frame, width: 6, x: 3, y: 0) == .magenta,
+    "The canonical Stoner source pixel did not enter the terrain layer."
+  )
+  try expect(
+    pixel(frame, width: 6, x: 4, y: 0) == .green,
+    "The foreground gadget did not stay above Stoner terrain."
+  )
+  try expect(
+    pixel(frame, width: 6, x: 5, y: 0) == .yellow,
+    "A constructive pixel did not replace partially transparent terrain."
+  )
+}
+
+func testLiveButtonAndLockedExitStates(_ styles: URL) throws {
+  let fixture = try level(
+    """
+    TITLE Live button states
+    WIDTH 2
+    HEIGHT 1
+    $GADGET
+      STYLE test
+      PIECE button
+      X 0
+      Y 0
+    $END
+    $GADGET
+      STYLE test
+      PIECE button
+      X 0
+      Y 0
+    $END
+    $GADGET
+      STYLE test
+      PIECE locked
+      X 1
+      Y 0
+    $END
+    """
+  )
+  let result = try render(
+    fixture,
+    styles: styles,
+    renderer: NxlvRenderer(retainsVisualLayers: true)
+  )
+  let rendered = try unwrap(result.renderedLevel, "The live button fixture did not render.")
+  try expect(rendered.gadgets.count == 3, "The live gadget descriptors are missing.")
+  try expect(rendered.gadgets.allSatisfy { $0.animationRGBA.count == 4 },
+             "The primary animation frames were not retained.")
+  let terrain = try NeoLemmixTerrain(width: 2, height: 1)
+  let zones = [
+    NeoLemmixZone(id: 0, effect: .unlockButton, bounds: .init(x: 0, y: 0, width: 1, height: 1)),
+    NeoLemmixZone(id: 1, effect: .unlockButton, bounds: .init(x: 0, y: 0, width: 1, height: 1)),
+    NeoLemmixZone(id: 2, effect: .lockedExit, bounds: .init(x: 1, y: 0, width: 1, height: 1)),
+  ]
+  let locked = NeoLemmixSceneFrame.rgba(rendered, terrain: terrain, zones: zones)
+  try expect(pixel(locked, width: 2, x: 0, y: 0) == .green,
+             "An unpressed button did not use CE frame 1.")
+  try expect(pixel(locked, width: 2, x: 1, y: 0) == .green,
+             "A locked exit did not use CE frame 1.")
+
+  let transitioning = NeoLemmixSceneFrame.rgba(
+    rendered,
+    terrain: terrain,
+    zones: zones,
+    disabledZoneIDs: [1],
+    gadgetAnimationFrames: [0: 1, 1: 2, 2: 3]
+  )
+  try expect(pixel(transitioning, width: 2, x: 0, y: 0) == .blue,
+             "A pressed button did not render its live transition frame.")
+  try expect(pixel(transitioning, width: 2, x: 1, y: 0) == .yellow,
+             "An unlocking exit did not render its live transition frame.")
+
+  let open = NeoLemmixSceneFrame.rgba(
+    rendered,
+    terrain: terrain,
+    zones: zones,
+    disabledZoneIDs: [0, 1]
+  )
+  try expect(pixel(open, width: 2, x: 0, y: 0) == .red,
+             "A pressed button did not settle on CE frame 0.")
+  try expect(pixel(open, width: 2, x: 1, y: 0) == .red,
+             "An unlocked exit did not settle on CE frame 0.")
+
+  let noButton = NeoLemmixSceneFrame.rgba(rendered, terrain: terrain, zones: [zones[2]])
+  try expect(pixel(noButton, width: 2, x: 1, y: 0) == .red,
+             "A locked exit with no buttons did not start open.")
+
+  let staticOpenResult = try render(
+    level(
+      """
+      TITLE Static open locked exit
+      WIDTH 1
+      HEIGHT 1
+      $GADGET
+        STYLE test
+        PIECE locked
+        X 0
+        Y 0
+      $END
+      """
+    ),
+    styles: styles
+  )
+  let staticOpen = try unwrap(
+    staticOpenResult.renderedLevel,
+    "The static open locked-exit fixture did not render."
+  )
+  try expect(pixel(staticOpen, x: 0, y: 0) == .red,
+             "Static rendering left a no-button locked exit on frame 1.")
+
+  let trapResult = try render(
+    level(
+      """
+      TITLE Live trap state
+      WIDTH 1
+      HEIGHT 1
+      $GADGET
+        STYLE test
+        PIECE live_trap
+        X 0
+        Y 0
+      $END
+      """
+    ),
+    styles: styles,
+    renderer: NxlvRenderer(retainsVisualLayers: true)
+  )
+  let trap = try unwrap(trapResult.renderedLevel, "The live trap fixture did not render.")
+  let trapZone = NeoLemmixZone(
+    id: 9,
+    effect: .trap,
+    bounds: .init(x: 0, y: 0, width: 1, height: 1),
+    animationFrames: 4
+  )
+  let activeTrap = NeoLemmixSceneFrame.rgba(
+    trap,
+    terrain: try NeoLemmixTerrain(width: 1, height: 1),
+    zones: [trapZone],
+    gadgetAnimationFrames: [9: 3]
+  )
+  try expect(pixel(activeTrap, width: 1, x: 0, y: 0) == .yellow,
+             "A triggered trap did not render its live primary frame.")
+
+  let exitResult = try render(
+    level(
+      """
+      TITLE Always animated exit
+      WIDTH 1
+      HEIGHT 1
+      $GADGET
+        STYLE test
+        PIECE live_exit
+        X 0
+        Y 0
+      $END
+      """
+    ),
+    styles: styles,
+    renderer: NxlvRenderer(retainsVisualLayers: true)
+  )
+  let animatedExit = try unwrap(exitResult.renderedLevel, "The live exit fixture did not render.")
+  let exitFrame = NeoLemmixSceneFrame.rgba(
+    animatedExit,
+    terrain: try NeoLemmixTerrain(width: 1, height: 1),
+    tickCount: 3
+  )
+  try expect(pixel(exitFrame, width: 1, x: 0, y: 0) == .yellow,
+             "An always-animated gadget did not advance with the simulation tick.")
+
+  let entranceResult = try render(
+    level(
+      """
+      TITLE Opening entrance
+      WIDTH 1
+      HEIGHT 1
+      $GADGET
+        STYLE test
+        PIECE live_entrance
+        X 0
+        Y 0
+      $END
+      """
+    ),
+    styles: styles,
+    renderer: NxlvRenderer(retainsVisualLayers: true)
+  )
+  let entrance = try unwrap(
+    entranceResult.renderedLevel,
+    "The opening entrance fixture did not render."
+  )
+  let closedEntrance = NeoLemmixSceneFrame.rgba(
+    entrance,
+    terrain: try NeoLemmixTerrain(width: 1, height: 1),
+    tickCount: 34,
+    entranceOpenTick: 35
+  )
+  let openingEntrance = NeoLemmixSceneFrame.rgba(
+    entrance,
+    terrain: try NeoLemmixTerrain(width: 1, height: 1),
+    tickCount: 35,
+    entranceOpenTick: 35
+  )
+  let openedEntrance = NeoLemmixSceneFrame.rgba(
+    entrance,
+    terrain: try NeoLemmixTerrain(width: 1, height: 1),
+    tickCount: 37,
+    entranceOpenTick: 35
+  )
+  try expect(pixel(closedEntrance, width: 1, x: 0, y: 0) == .green,
+             "A closed entrance did not remain on CE frame 1.")
+  try expect(pixel(openingEntrance, width: 1, x: 0, y: 0) == .blue,
+             "An entrance did not advance on its opening tick.")
+  try expect(pixel(openedEntrance, width: 1, x: 0, y: 0) == .red,
+             "An entrance did not settle on frame 0 after opening.")
+
+  let splitterResult = try render(
+    level(
+      """
+      TITLE Live splitter direction
+      WIDTH 1
+      HEIGHT 1
+      $GADGET
+        STYLE test
+        PIECE live_splitter
+        X 0
+        Y 0
+      $END
+      """
+    ),
+    styles: styles,
+    renderer: NxlvRenderer(retainsVisualLayers: true)
+  )
+  let splitter = try unwrap(
+    splitterResult.renderedLevel,
+    "The live splitter fixture did not render."
+  )
+  let splitterZone = NeoLemmixZone(
+    id: 12,
+    effect: .splitter,
+    bounds: .init(x: 0, y: 0, width: 1, height: 1)
+  )
+  let sendsLeft = NeoLemmixSceneFrame.rgba(
+    splitter,
+    terrain: try NeoLemmixTerrain(width: 1, height: 1),
+    zones: [splitterZone],
+    splitterDirections: [12: .left]
+  )
+  let sendsRight = NeoLemmixSceneFrame.rgba(
+    splitter,
+    terrain: try NeoLemmixTerrain(width: 1, height: 1),
+    zones: [splitterZone],
+    splitterDirections: [12: .right]
+  )
+  try expect(pixel(sendsLeft, width: 1, x: 0, y: 0) == .green,
+             "A splitter set to send left did not render CE frame 1.")
+  try expect(pixel(sendsRight, width: 1, x: 0, y: 0) == .red,
+             "A splitter set to send right did not render CE frame 0.")
+
+  let secondaryResult = try render(
+    level(
+      """
+      TITLE Unconditional secondary animation
+      WIDTH 4
+      HEIGHT 1
+      $GADGET
+        STYLE test
+        PIECE secondary
+        X 0
+        Y 0
+      $END
+      """
+    ),
+    styles: styles,
+    renderer: NxlvRenderer(retainsVisualLayers: true)
+  )
+  let secondary = try unwrap(
+    secondaryResult.renderedLevel,
+    "The unconditional secondary fixture did not render."
+  )
+  try expect(!has(.secondaryAnimationsOmitted, in: secondaryResult),
+             "An unconditional secondary animation was reported as omitted.")
+  try expect(pixel(secondary, x: 0, y: 0) == .red,
+             "The secondary fixture lost its primary layer.")
+  try expect(pixel(secondary, x: 1, y: 0) == .green,
+             "The secondary fixture did not render its initial frame and offset.")
+  try expect(pixel(secondary, x: 2, y: 0) == .magenta,
+             "A paused secondary did not render its selected initial frame.")
+  try expect(pixel(secondary, x: 3, y: 0) == .orange,
+             "A loop-to-zero secondary did not render its selected initial frame.")
+  let advancedSecondary = NeoLemmixSceneFrame.rgba(
+    secondary,
+    terrain: try NeoLemmixTerrain(width: 4, height: 1),
+    tickCount: 1
+  )
+  try expect(pixel(advancedSecondary, width: 4, x: 1, y: 0) == .blue,
+             "An unconditional secondary animation did not advance with the simulation tick.")
+  try expect(pixel(advancedSecondary, width: 4, x: 2, y: 0) == .magenta,
+             "A paused secondary animation advanced unexpectedly.")
+  try expect(pixel(advancedSecondary, width: 4, x: 3, y: 0) == .yellow,
+             "A loop-to-zero secondary did not settle on frame 0.")
+
+  let triggeredResult = try render(
+    level(
+      """
+      TITLE Trigger-controlled secondary animation
+      WIDTH 2
+      HEIGHT 1
+      $GADGET
+        STYLE test
+        PIECE triggered_secondary
+        X 0
+        Y 0
+      $END
+      """
+    ),
+    styles: styles,
+    renderer: NxlvRenderer(retainsVisualLayers: true)
+  )
+  let triggered = try unwrap(
+    triggeredResult.renderedLevel,
+    "The trigger-controlled secondary fixture did not render."
+  )
+  try expect(!has(.secondaryAnimationsOmitted, in: triggeredResult),
+             "A trigger-controlled secondary was reported as omitted.")
+  try expect(pixel(triggered, x: 0, y: 0) == .red && pixel(triggered, x: 1, y: 0) == .clear,
+             "A hidden trigger-controlled secondary was drawn while idle.")
+  let busySecondary = NeoLemmixSceneFrame.rgba(
+    triggered,
+    terrain: try NeoLemmixTerrain(width: 2, height: 1),
+    secondaryAnimationStates: [
+      0: [NeoLemmixSecondaryAnimationState(frame: 0, state: .play, isVisible: true)],
+    ]
+  )
+  try expect(pixel(busySecondary, width: 2, x: 1, y: 0) == .green,
+             "A visible BUSY secondary animation did not render.")
+}
+
 @main
 struct NxlvRendererTests {
   static func main() throws {
@@ -805,9 +1536,12 @@ struct NxlvRendererTests {
     try testRemainderAnimationStrip(styles)
     try testBackgroundAndPrimaryGadget(styles)
     try testPaintClipsToTerrain(styles)
+    try testTriggerOutsideGraphic(styles)
     try testPNGAndPathLimits(fixture)
+    try testLiveTerrainSceneFrame(styles)
+    try testLiveButtonAndLockedExitStates(styles)
     print(
-      "NXLV renderer tests passed: transforms, terrain flags, masks, groups, resize, clipping, static layers, and PNG safety."
+      "NXLV renderer tests passed: transforms, terrain flags, masks, groups, resize, clipping, live terrain layers, and PNG safety."
     )
   }
 }
