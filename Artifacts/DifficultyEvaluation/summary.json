@@ -1,6 +1,7 @@
 {
   "fanLevels": 6022,
-  "generatedAt": "2026-09-28T12:02:04.001044+00:00",
+  "generatedAt": "2026-09-28T12:38:30.400771+00:00",
+  "independentPhysicsParityVerified": 0,
   "levels": 6816,
   "neoLemmixLevels": 794,
   "neoPassiveRuns": 152,
@@ -16,10 +17,10 @@
     ".build/full-difficulty-evaluation/neolemmix/report.json": "6fd6bc1d6daa6bf7a3059907f706731066926b061fb9a537ceede4fc6d83fee1",
     ".build/neolemmix-passive-evaluation/results.json": "6a24277c41feaeec683138abbb5d84b87e29904a05b4f5a217ff59263634b501",
     "Artifacts/ClassicProgression/audit.json": "efa53badcaa0862e4b7a285e72be2c5b232e741c42eba63d1c1c0655e72cd4d9",
-    "Artifacts/LearningJourney/fan-evidence.json": "8c9ed999441caab5f317247a500758468378fe1569ce544bb7e4cb3a7d72db65"
+    "Artifacts/LearningJourney/fan-evidence.json": "3e3290e9f75e1a4d61bfafbbe1dd1325f5a0a2b91e3c2b8d098f8849b7fa06be"
   },
-  "unverifiedFan": 5229,
+  "unverifiedFan": 5226,
   "unverifiedNeoLemmix": 519,
-  "verifiedFanWins": 793,
+  "verifiedFanWins": 796,
   "verifiedNeoLemmixWins": 275
 }

@@ -9,45 +9,16 @@
           }
         },
         "afterTick" : true,
-        "tick" : 86
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 1,
-            "skill" : "floater"
-          }
-        },
-        "afterTick" : true,
-        "tick" : 114
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 2,
-            "skill" : "floater"
-          }
-        },
-        "afterTick" : true,
-        "tick" : 142
-      },
-      {
-        "action" : {
-          "nuke" : {
-
-          }
-        },
-        "afterTick" : true,
-        "tick" : 161
+        "tick" : 76
       }
     ],
     "expected" : {
       "didWin" : true,
-      "released" : 4,
+      "released" : 10,
       "required" : 1,
-      "saved" : 3,
-      "stateHash" : "e79fe91f219e4b58905381e697dffb4412daca2d8815746d3c6817ed55016b98",
-      "ticks" : 217
+      "saved" : 1,
+      "stateHash" : "d710c80216c1a3b8edbb6085d7d1e417fcfb43474261ee3d75df0055d95a1eaf",
+      "ticks" : 375
     },
     "initialStateHash" : "00079469f152600b26d64bc207fac09baafbac266e5f41ce49fa8d559a571949",
     "number" : 2,
@@ -1916,7 +1887,7 @@
     },
     "initialStateHash" : "0a0d2efdbab64b25b7482ac1ca94d9321f1edf8412d4cabe7a05c8fc50617899",
     "number" : 23,
-    "rank" : "fan:lldb-569",
+    "rank" : "fan:lldb-577",
     "title" : "From The Boundary Line"
   },
   "0b729d3f5727926958fd103151028916a59534a838f0a34a1a30dfe177d43a5f" : {
@@ -1935,6 +1906,32 @@
     "number" : 7,
     "rank" : "fan:lldb-583",
     "title" : "Give And Take"
+  },
+  "0badb0a11a885520b8394695f984bae9595d87bbad66fa590527ddf8c4153a5f" : {
+    "events" : [
+      {
+        "action" : {
+          "assign" : {
+            "lemmingID" : 1,
+            "skill" : "digger"
+          }
+        },
+        "afterTick" : true,
+        "tick" : 61
+      }
+    ],
+    "expected" : {
+      "didWin" : true,
+      "released" : 80,
+      "required" : 4,
+      "saved" : 4,
+      "stateHash" : "8590b797bff7874b02b1e95ed1a10922fd3922a40818cadd966a1baec987ac2f",
+      "ticks" : 401
+    },
+    "initialStateHash" : "0badb0a11a885520b8394695f984bae9595d87bbad66fa590527ddf8c4153a5f",
+    "number" : 2,
+    "rank" : "fan:lldb-430",
+    "title" : "The Lucky 4"
   },
   "0d20e75debb2e3b2ce076eb1ad4c7ab181c5221906c84fc5c89fa337ea8b1476" : {
     "events" : [
@@ -2145,7 +2142,7 @@
     },
     "initialStateHash" : "0e0196704c77ad2562551e9b6e50b104f74930c963a0d5409fd55b9c07a4b738",
     "number" : 28,
-    "rank" : "fan:lldb-571",
+    "rank" : "fan:lldb-576",
     "title" : "Mind the step....."
   },
   "0e51d13e254123c1f98df58fa7f1033cd58dac880c91ae1fb57550d0eac37acb" : {
@@ -2157,11 +2154,11 @@
       "released" : 4,
       "required" : 0,
       "saved" : 0,
-      "stateHash" : "c5623ce98f7927c8775e04133df286cb872d3f647a0f46ca8edb2d5a42015f5d",
+      "stateHash" : "69c0aa6c834209918dcfc2448b39594f28e4b45694a6f5c72329c81ee60737b7",
       "ticks" : 1020
     },
     "initialStateHash" : "0e51d13e254123c1f98df58fa7f1033cd58dac880c91ae1fb57550d0eac37acb",
-    "number" : 2,
+    "number" : 3,
     "rank" : "fan:lldb-447",
     "title" : "Test Timing"
   },
@@ -3496,7 +3493,7 @@
     },
     "initialStateHash" : "10a14d2662f716147e8070ce946684ad6a1d100072b46da884d2bebdad30a67d",
     "number" : 19,
-    "rank" : "fan:lldb-568",
+    "rank" : "fan:lldb-573",
     "title" : "Take good care of my Lemmings"
   },
   "11610b829c34589fdbe8f62e846951b900f0b7d523d9b0d36a016fa76b51235f" : {
@@ -4052,7 +4049,7 @@
     },
     "initialStateHash" : "11a5ebabdf97b69f56239ccecd1ca7cb5d35a9f7d3eda561290f1ad4d1d69768",
     "number" : 16,
-    "rank" : "fan:lldb-570",
+    "rank" : "fan:lldb-578",
     "title" : "Mary Poppins` land"
   },
   "12c81983a426584f96a363741b667332d30c51b0462d1daa6cf48813c4d36103" : {
@@ -5087,7 +5084,7 @@
     },
     "initialStateHash" : "14968b197803f209ca2a5b7d6a7a248d42580fcb287f02f5df6dfb950e3ed386",
     "number" : 8,
-    "rank" : "fan:lldb-568",
+    "rank" : "fan:lldb-573",
     "title" : "Not as complicated as it looks"
   },
   "14d9f840d2aaae15011ea6928beb7aff2b635a4239af2c1cdf2ecd777efcc88e" : {
@@ -5752,7 +5749,7 @@
     },
     "initialStateHash" : "163ffe376d8eaefb7d276ce5a59ec6d1a30548938ff590f36619a92e41aa54c5",
     "number" : 11,
-    "rank" : "fan:lldb-570",
+    "rank" : "fan:lldb-578",
     "title" : "The ascending pillar scenario"
   },
   "1687b9def449df51579a692c005b348493d761effbc1e6953463920dfd31b021" : {
@@ -6426,7 +6423,7 @@
     },
     "initialStateHash" : "1977551b53a63320225d8e2291775207ebe0fbda0f5a0ae4c620946626b5b440",
     "number" : 5,
-    "rank" : "fan:lldb-571",
+    "rank" : "fan:lldb-576",
     "title" : "Down, along, up. In that order"
   },
   "19f7d3638cdcf3563e52d28408bcb2e2bee8e1f215bbc36ad6b5c9754f68a65f" : {
@@ -7044,7 +7041,7 @@
     },
     "initialStateHash" : "1c8b0f6f04ed70e860913b04a66c820fde3e5356888c65dafd774222477f1dac",
     "number" : 20,
-    "rank" : "fan:lldb-569",
+    "rank" : "fan:lldb-577",
     "title" : "One way digging to freedom"
   },
   "1cfd416011723d7f5ca713bc09a1b765db77bb0e14489e2034a05e481de7690e" : {
@@ -7485,7 +7482,7 @@
     },
     "initialStateHash" : "1f5565dbf6ffc44dc7ea72f0c1ee7e4847e480f5befe2aaef505c4579f39214e",
     "number" : 2,
-    "rank" : "fan:lldb-570",
+    "rank" : "fan:lldb-578",
     "title" : "Watch out, there`s traps about"
   },
   "1f6cf2fa3b53b73161c462ec80cc1a0ac1c74be54c9ae2504e13b650401be748" : {
@@ -8085,7 +8082,7 @@
     },
     "initialStateHash" : "22fd1e068d5c68b5904ee42c162ed4d4016103ecddc7585bae1876390ad8f1c7",
     "number" : 10,
-    "rank" : "fan:lldb-569",
+    "rank" : "fan:lldb-577",
     "title" : "There's a lot of them about"
   },
   "243c215fa1885de91bcd0de56997beadbd8fee7d8a2d561a2907531a9cb0b0ec" : {
@@ -8153,7 +8150,7 @@
     },
     "initialStateHash" : "243c215fa1885de91bcd0de56997beadbd8fee7d8a2d561a2907531a9cb0b0ec",
     "number" : 28,
-    "rank" : "fan:lldb-569",
+    "rank" : "fan:lldb-577",
     "title" : "Lost something?"
   },
   "255405b7cad971d43186bc365a8eb2435092e59e982625b2b0f7b087c830520f" : {
@@ -8846,7 +8843,38 @@
             "skill" : "digger"
           }
         },
-        "tick" : 60
+        "afterTick" : true,
+        "tick" : 163
+      },
+      {
+        "action" : {
+          "assign" : {
+            "lemmingID" : 4,
+            "skill" : "digger"
+          }
+        },
+        "afterTick" : true,
+        "tick" : 298
+      },
+      {
+        "action" : {
+          "assign" : {
+            "lemmingID" : 5,
+            "skill" : "digger"
+          }
+        },
+        "afterTick" : true,
+        "tick" : 339
+      },
+      {
+        "action" : {
+          "assign" : {
+            "lemmingID" : 1,
+            "skill" : "digger"
+          }
+        },
+        "afterTick" : true,
+        "tick" : 363
       }
     ],
     "expected" : {
@@ -8854,8 +8882,8 @@
       "released" : 10,
       "required" : 1,
       "saved" : 10,
-      "stateHash" : "1288da27377367eb24e5a7c90e3bb71f77610690824bc62dd83c054bb6eae037",
-      "ticks" : 662
+      "stateHash" : "11d91a782c07e6af46af4acaa3bd23477d2b6b81181f401ee3feb99cd7d2c1b5",
+      "ticks" : 861
     },
     "initialStateHash" : "2a358d4fc3b729d14841d32027e08fa8edb4a0ce128afa226a9c13805980a8a1",
     "number" : 1,
@@ -9736,7 +9764,7 @@
     },
     "initialStateHash" : "2b6a35fe4d8be2203bcee68bd616407a6ff5e4395c1e86b25898d33269e028d5",
     "number" : 30,
-    "rank" : "fan:lldb-570",
+    "rank" : "fan:lldb-578",
     "title" : "We all fall down"
   },
   "2b85e48488e93545deca8c92730df501032050734e2f73081e0126905438403e" : {
@@ -9832,7 +9860,7 @@
     },
     "initialStateHash" : "2b85e48488e93545deca8c92730df501032050734e2f73081e0126905438403e",
     "number" : 24,
-    "rank" : "fan:lldb-570",
+    "rank" : "fan:lldb-578",
     "title" : "Take a running jump....."
   },
   "2cc5258ea8e5aea5f3cee8ad4f4f28773165cc9c2d3d009748ce727c5b1ef31f" : {
@@ -10856,7 +10884,7 @@
     },
     "initialStateHash" : "2cc5258ea8e5aea5f3cee8ad4f4f28773165cc9c2d3d009748ce727c5b1ef31f",
     "number" : 30,
-    "rank" : "fan:lldb-569",
+    "rank" : "fan:lldb-577",
     "title" : "The Crankshaft"
   },
   "2d6ae97e74a3db0c0221d1663ca2eccad367910a22f5ebe30341f37074f21cbc" : {
@@ -11364,115 +11392,16 @@
           }
         },
         "afterTick" : true,
-        "tick" : 60
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 1,
-            "skill" : "digger"
-          }
-        },
-        "afterTick" : true,
-        "tick" : 84
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 1,
-            "skill" : "digger"
-          }
-        },
-        "afterTick" : true,
-        "tick" : 86
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 0,
-            "skill" : "digger"
-          }
-        },
-        "afterTick" : true,
-        "tick" : 94
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 1,
-            "skill" : "digger"
-          }
-        },
-        "afterTick" : true,
-        "tick" : 96
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 0,
-            "skill" : "digger"
-          }
-        },
-        "afterTick" : true,
-        "tick" : 104
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 1,
-            "skill" : "digger"
-          }
-        },
-        "afterTick" : true,
-        "tick" : 106
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 2,
-            "skill" : "digger"
-          }
-        },
-        "afterTick" : true,
-        "tick" : 109
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 0,
-            "skill" : "digger"
-          }
-        },
-        "afterTick" : true,
-        "tick" : 114
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 1,
-            "skill" : "digger"
-          }
-        },
-        "afterTick" : true,
-        "tick" : 116
-      },
-      {
-        "action" : {
-          "nuke" : {
-
-          }
-        },
-        "afterTick" : true,
-        "tick" : 623
+        "tick" : 97
       }
     ],
     "expected" : {
       "didWin" : true,
       "released" : 10,
       "required" : 1,
-      "saved" : 10,
-      "stateHash" : "84cb3a00391aa4b78101da8ea30f013684837ce21b3baff70c322e05d38cd9c7",
-      "ticks" : 696
+      "saved" : 9,
+      "stateHash" : "48103910625e4c9160a97241f6d800fc8900727307773a8d8275ad27d55ad1cc",
+      "ticks" : 1059
     },
     "initialStateHash" : "32c54c12b944144977be1963b0971c8a53a139a170791258053dfbc9c813fc26",
     "number" : 8,
@@ -12040,7 +11969,7 @@
     },
     "initialStateHash" : "33b0999a51e27098be5ebc7ffb4f6518b102ccb9b8c83a8c4d060480f11cad20",
     "number" : 13,
-    "rank" : "fan:lldb-568",
+    "rank" : "fan:lldb-573",
     "title" : "We all fall down"
   },
   "33f684bdbfbb5f1b3b0894a6ee77ef8de2cf0a2423e92acb56233f3eeb0fff8d" : {
@@ -14934,7 +14863,7 @@
     },
     "initialStateHash" : "39a2ce8f290e5f76d6a7eb8c3b921765cc3f84ba787eb3a226553d3018018619",
     "number" : 8,
-    "rank" : "fan:lldb-571",
+    "rank" : "fan:lldb-576",
     "title" : "Last one out is a rotten egg!"
   },
   "3baa8b823ca4c2078d7bfd3f5dc44f76c34b8f74ed5088991efe61d33415c217" : {
@@ -15074,7 +15003,7 @@
     },
     "initialStateHash" : "3baa8b823ca4c2078d7bfd3f5dc44f76c34b8f74ed5088991efe61d33415c217",
     "number" : 29,
-    "rank" : "fan:lldb-569",
+    "rank" : "fan:lldb-577",
     "title" : "Rainbow Island"
   },
   "3c082711d202851d57450c74f9684748ea80e6e5dba9d32887b642339fe659f7" : {
@@ -16096,96 +16025,26 @@
             "skill" : "floater"
           }
         },
-        "tick" : 54
+        "afterTick" : true,
+        "tick" : 187
       },
       {
         "action" : {
           "assign" : {
-            "lemmingID" : 1,
+            "lemmingID" : 29,
             "skill" : "floater"
           }
         },
-        "tick" : 82
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 2,
-            "skill" : "floater"
-          }
-        },
-        "tick" : 110
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 3,
-            "skill" : "floater"
-          }
-        },
-        "tick" : 138
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 4,
-            "skill" : "floater"
-          }
-        },
-        "tick" : 166
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 5,
-            "skill" : "floater"
-          }
-        },
-        "tick" : 194
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 6,
-            "skill" : "floater"
-          }
-        },
-        "tick" : 222
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 7,
-            "skill" : "floater"
-          }
-        },
-        "tick" : 250
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 8,
-            "skill" : "floater"
-          }
-        },
-        "tick" : 278
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 9,
-            "skill" : "floater"
-          }
-        },
-        "tick" : 306
+        "afterTick" : true,
+        "tick" : 205
       }
     ],
     "expected" : {
       "didWin" : true,
       "released" : 80,
       "required" : 1,
-      "saved" : 7,
-      "stateHash" : "920b4842e580644ef2bce080c581b4e24ded1abb5881c0d68a2e503e0bb22100",
+      "saved" : 2,
+      "stateHash" : "d412025e95165719a852aa3a924ff5987ad68fadd775eb3c07b9226454889869",
       "ticks" : 544
     },
     "initialStateHash" : "3c47f1c6859be66ddacd39849b5fcca9f343a476c6ac86505c5933fd85a30ac1",
@@ -16302,7 +16161,7 @@
     },
     "initialStateHash" : "3c6f6421ba54a7f1c04cbdfe153f18bb81a761b9133794bb6917011b9c1d862c",
     "number" : 22,
-    "rank" : "fan:lldb-570",
+    "rank" : "fan:lldb-578",
     "title" : "Come on over to my place"
   },
   "3caa28176a86bcee4eb5df3508c5b9213b5d38de711a344ffb747298fe182afd" : {
@@ -17858,7 +17717,7 @@
     },
     "initialStateHash" : "4011a3bfc76af5b856c491f355f678430b85f99dc77aa308def3ad7930fe8371",
     "number" : 9,
-    "rank" : "fan:lldb-571",
+    "rank" : "fan:lldb-576",
     "title" : "Curse of the Pharaohs"
   },
   "40249d54877df06aaf075b59f195551980aecc0e2e71175b991599fdccbf03f9" : {
@@ -18952,8 +18811,8 @@
       "ticks" : 1192
     },
     "initialStateHash" : "4386f610b392dc6e63da9d42239c7c1c8d44ebb44c122f405ba12cd99072b200",
-    "number" : 9,
-    "rank" : "fan:lldb-141",
+    "number" : 11,
+    "rank" : "fan:lldb-143",
     "title" : "Simply Smashing"
   },
   "43906531ee5dbbb4dd39d47f5124e39d092829eb300a3c7911e03271c6591ee5" : {
@@ -19057,7 +18916,7 @@
     },
     "initialStateHash" : "43906531ee5dbbb4dd39d47f5124e39d092829eb300a3c7911e03271c6591ee5",
     "number" : 3,
-    "rank" : "fan:lldb-569",
+    "rank" : "fan:lldb-577",
     "title" : "A ladder would be handy"
   },
   "43d6612fefecdcfa273ac2f1ce8564afbbe44c27c0b4104659c18eec06eeb747" : {
@@ -21153,8 +21012,8 @@
       "ticks" : 2393
     },
     "initialStateHash" : "487ac2a0cd827da499c8cb62d8fcf08904848433be7970f244eb7aab3c9a66ca",
-    "number" : 2,
-    "rank" : "fan:lldb-99",
+    "number" : 11,
+    "rank" : "fan:lldb-517",
     "title" : "It Takes Two To Tango"
   },
   "48e0e54b04a72ca59dee67ab5eb182bae62b0e62d2d17a000d86864c134cbc15" : {
@@ -22258,8 +22117,8 @@
       "ticks" : 473
     },
     "initialStateHash" : "492ea47b21a06f3f2b6d48a45992a512a615b025409b760e6cbf7c24bdf015fd",
-    "number" : 6,
-    "rank" : "fan:lldb-141",
+    "number" : 8,
+    "rank" : "fan:lldb-143",
     "title" : "Splunk n' country"
   },
   "4a9880acd3a818f9ddb077591e203da062a831c60b89b919c65201069275cba0" : {
@@ -23024,7 +22883,7 @@
     },
     "initialStateHash" : "4d401169ce0d74105414b8fad725a05e545ce305e72288d632e51be0d49a4d54",
     "number" : 23,
-    "rank" : "fan:lldb-571",
+    "rank" : "fan:lldb-576",
     "title" : "Going up......."
   },
   "4d46398d71ebc3ab993ede0a390eb1e15c41dca080dcae921fe7230c12df8a72" : {
@@ -24003,7 +23862,7 @@
     },
     "initialStateHash" : "4ecabea83bcd5a2234f4a6628914403aa5b211b76827a544339df1547f83be59",
     "number" : 11,
-    "rank" : "fan:lldb-571",
+    "rank" : "fan:lldb-576",
     "title" : "We all fall down"
   },
   "519f7d3c98eca39526b3b16495fef07096983cc72b85595aaeee627d26e9539f" : {
@@ -24192,7 +24051,7 @@
     },
     "initialStateHash" : "519f7d3c98eca39526b3b16495fef07096983cc72b85595aaeee627d26e9539f",
     "number" : 27,
-    "rank" : "fan:lldb-570",
+    "rank" : "fan:lldb-578",
     "title" : "Call in the bomb squad"
   },
   "51c33bdb9812247f247001365ebeb7f7a32a2fb179e2e1a5a78be39cfbf1abf4" : {
@@ -24820,7 +24679,7 @@
     },
     "initialStateHash" : "593ad70c5e3fe7eff12f6136712c5e93a441d42c827e719a7b64e1ffb251484b",
     "number" : 7,
-    "rank" : "fan:lldb-570",
+    "rank" : "fan:lldb-578",
     "title" : "Every Lemming for himself!!!"
   },
   "598b0345c9c52e9258869c210a3b919ebec4f0be9269374310239d7dae0d41fd" : {
@@ -24915,7 +24774,7 @@
     },
     "initialStateHash" : "598b0345c9c52e9258869c210a3b919ebec4f0be9269374310239d7dae0d41fd",
     "number" : 25,
-    "rank" : "fan:lldb-570",
+    "rank" : "fan:lldb-578",
     "title" : "Follow the leader..."
   },
   "5a2e32b89e88ea6bd717de435be3153ef243110d055fcc63e4d581c96bb9576e" : {
@@ -25220,8 +25079,8 @@
       "ticks" : 971
     },
     "initialStateHash" : "5b8287e3925ded85b41b819ec8ad1c2d10bc4286782b6550144e0d4329c35441",
-    "number" : 3,
-    "rank" : "fan:lldb-88",
+    "number" : 4,
+    "rank" : "fan:lldb-517",
     "title" : "Up Up UP They Go"
   },
   "5d1e45a1a1794743d5202e4999cdd1d068257a4a65865a5b876cf00f7450213a" : {
@@ -25401,7 +25260,7 @@
           }
         },
         "afterTick" : true,
-        "tick" : 123
+        "tick" : 131
       },
       {
         "action" : {
@@ -25411,7 +25270,7 @@
           }
         },
         "afterTick" : true,
-        "tick" : 151
+        "tick" : 333
       },
       {
         "action" : {
@@ -25421,7 +25280,7 @@
           }
         },
         "afterTick" : true,
-        "tick" : 179
+        "tick" : 446
       },
       {
         "action" : {
@@ -25431,7 +25290,7 @@
           }
         },
         "afterTick" : true,
-        "tick" : 207
+        "tick" : 648
       },
       {
         "action" : {
@@ -25441,25 +25300,16 @@
           }
         },
         "afterTick" : true,
-        "tick" : 235
-      },
-      {
-        "action" : {
-          "nuke" : {
-
-          }
-        },
-        "afterTick" : true,
-        "tick" : 495
+        "tick" : 850
       }
     ],
     "expected" : {
       "didWin" : true,
       "released" : 5,
       "required" : 1,
-      "saved" : 4,
-      "stateHash" : "2d0357b9d7ed4c7dae62b62d80f610f2eb905852ae51ee59db3a265e90c19854",
-      "ticks" : 646
+      "saved" : 2,
+      "stateHash" : "483174bbe91887123dfeb1cedc36cb7f433885135f79c3a0183d3a32ff90d22d",
+      "ticks" : 1029
     },
     "initialStateHash" : "5f10916c2af146d7a4fbb3fc06e65edb8f50026ff2f779b6b408f45734fc1be0",
     "number" : 1,
@@ -26233,7 +26083,7 @@
     },
     "initialStateHash" : "608d33118e9f5e724f0c2af6091b6c208ff8166b734f6b7a05a50565fb898e34",
     "number" : 15,
-    "rank" : "fan:lldb-570",
+    "rank" : "fan:lldb-578",
     "title" : "What an AWESOME level"
   },
   "60d070e86c916b7cb1e69aa45a98484a655596b069ee036a08406512d50eca7c" : {
@@ -26605,7 +26455,7 @@
     },
     "initialStateHash" : "64592a75358d472f27493edc4656a00d61f52a23aad1268e7348763c61e4a951",
     "number" : 29,
-    "rank" : "fan:lldb-570",
+    "rank" : "fan:lldb-578",
     "title" : "How do I dig up the way?"
   },
   "64b0d0a6a984f0d50fd4c29c2e4c970cf15020d2697e0884848cba7aca57c4fc" : {
@@ -26774,6 +26624,32 @@
     "number" : 5,
     "rank" : "fan:lldb-489",
     "title" : "Lemming sanctuary in sight"
+  },
+  "6566ea5f9145ee398fb57e6fdf7f64f4cce2729bc3f443441a2455650cf96e21" : {
+    "events" : [
+      {
+        "action" : {
+          "assign" : {
+            "lemmingID" : 1,
+            "skill" : "builder"
+          }
+        },
+        "afterTick" : true,
+        "tick" : 314
+      }
+    ],
+    "expected" : {
+      "didWin" : true,
+      "released" : 99,
+      "required" : 1,
+      "saved" : 52,
+      "stateHash" : "db7f1d82642e0615afeec0c40283fee854e931fc9da58f033320d34cc6a9f7c2",
+      "ticks" : 718
+    },
+    "initialStateHash" : "6566ea5f9145ee398fb57e6fdf7f64f4cce2729bc3f443441a2455650cf96e21",
+    "number" : 3,
+    "rank" : "fan:lldb-593",
+    "title" : "Ismo rock"
   },
   "67a967369e7db6c755e2cad93f7031703329201f2f88d711bf4f281862e4cc15" : {
     "events" : [
@@ -27572,9 +27448,9 @@
       "ticks" : 1126
     },
     "initialStateHash" : "6cddb58ecf9637f1be99312437231461a1953d88d59c5983d05309ceff69641d",
-    "number" : 4,
-    "rank" : "fan:lldb-103",
-    "title" : "Just Float"
+    "number" : 2,
+    "rank" : "fan:lldb-517",
+    "title" : "Just Float!"
   },
   "707bd05f3a4fcd1e6bed7b63671c34d6253ab3052ac31f7486a1585c64801741" : {
     "events" : [
@@ -28274,7 +28150,7 @@
           }
         },
         "afterTick" : true,
-        "tick" : 83
+        "tick" : 94
       },
       {
         "action" : {
@@ -28284,37 +28160,7 @@
           }
         },
         "afterTick" : true,
-        "tick" : 111
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 2,
-            "skill" : "climber"
-          }
-        },
-        "afterTick" : true,
-        "tick" : 139
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 3,
-            "skill" : "climber"
-          }
-        },
-        "afterTick" : true,
-        "tick" : 167
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 4,
-            "skill" : "climber"
-          }
-        },
-        "afterTick" : true,
-        "tick" : 195
+        "tick" : 147
       },
       {
         "action" : {
@@ -28324,17 +28170,47 @@
           }
         },
         "afterTick" : true,
-        "tick" : 223
+        "tick" : 209
       },
       {
         "action" : {
           "assign" : {
-            "lemmingID" : 6,
+            "lemmingID" : 3,
             "skill" : "climber"
           }
         },
         "afterTick" : true,
-        "tick" : 251
+        "tick" : 229
+      },
+      {
+        "action" : {
+          "assign" : {
+            "lemmingID" : 2,
+            "skill" : "climber"
+          }
+        },
+        "afterTick" : true,
+        "tick" : 277
+      },
+      {
+        "action" : {
+          "assign" : {
+            "lemmingID" : 9,
+            "skill" : "climber"
+          }
+        },
+        "afterTick" : true,
+        "tick" : 336
+      },
+      {
+        "action" : {
+          "assign" : {
+            "lemmingID" : 4,
+            "skill" : "climber"
+          }
+        },
+        "afterTick" : true,
+        "tick" : 359
       },
       {
         "action" : {
@@ -28344,25 +28220,36 @@
           }
         },
         "afterTick" : true,
-        "tick" : 279
+        "tick" : 417
       },
       {
         "action" : {
-          "nuke" : {
-
+          "assign" : {
+            "lemmingID" : 6,
+            "skill" : "climber"
           }
         },
         "afterTick" : true,
-        "tick" : 285
+        "tick" : 456
+      },
+      {
+        "action" : {
+          "assign" : {
+            "lemmingID" : 8,
+            "skill" : "climber"
+          }
+        },
+        "afterTick" : true,
+        "tick" : 522
       }
     ],
     "expected" : {
       "didWin" : true,
-      "released" : 9,
+      "released" : 10,
       "required" : 1,
-      "saved" : 4,
-      "stateHash" : "8c1f56230424269ffc3ac905aa879e44b6ab35f9818cb75db46f0b1de71a1466",
-      "ticks" : 440
+      "saved" : 10,
+      "stateHash" : "0fdd432dc9aa3e9ba5fcfbe535c326f1fb5f0c8b3a38e6d21c030a308c7bce65",
+      "ticks" : 713
     },
     "initialStateHash" : "764035a081454a42c93c90fb76402946d8b8720aa9e3f74ab4069d021051ab8b",
     "number" : 1,
@@ -31623,7 +31510,7 @@
     },
     "initialStateHash" : "7c57f53cdc2cb2aa3cd0edaca11469d343b6e30796d1d5be6ccfc96a948289f0",
     "number" : 20,
-    "rank" : "fan:lldb-570",
+    "rank" : "fan:lldb-575",
     "title" : "Walk the web rope"
   },
   "7c80e9c622ada731736519934cb2257c9167c81e15b23bc342b4bd9f2d6cf7a3" : {
@@ -31790,7 +31677,7 @@
     },
     "initialStateHash" : "7c80e9c622ada731736519934cb2257c9167c81e15b23bc342b4bd9f2d6cf7a3",
     "number" : 8,
-    "rank" : "fan:lldb-569",
+    "rank" : "fan:lldb-577",
     "title" : "Lemming sanctuary in sight"
   },
   "7d8818c4b4c43ac8b39d99789e22d8bfbe40f9cef3d810ab9c3a749f59f448df" : {
@@ -32215,8 +32102,8 @@
     },
     "initialStateHash" : "7e4984097b94bc4526c86efb9e5da850c85c7e9e4625b7fe2f867ec6d8a687d7",
     "number" : 1,
-    "rank" : "fan:lldb-88",
-    "title" : "Bash This"
+    "rank" : "fan:lldb-517",
+    "title" : "Bash This!"
   },
   "7f32e66df4ae90f0a158e0bcc22626369ff1e4f1d9c046f89168da8f08409e27" : {
     "events" : [
@@ -32356,7 +32243,7 @@
     },
     "initialStateHash" : "7f32e66df4ae90f0a158e0bcc22626369ff1e4f1d9c046f89168da8f08409e27",
     "number" : 26,
-    "rank" : "fan:lldb-569",
+    "rank" : "fan:lldb-577",
     "title" : "I have a cunning plan"
   },
   "7f7d1a643f57477bffe016bb45c4030f5fccc68f9aa3beefa4b78ceaa826451f" : {
@@ -35200,7 +35087,7 @@
     },
     "initialStateHash" : "8280ff7c96d35fcbeccc0d3bdb189098b7cbab4ecfdbe5231d53dee22e549683",
     "number" : 4,
-    "rank" : "fan:lldb-569",
+    "rank" : "fan:lldb-577",
     "title" : "Here's one I prepared earlier"
   },
   "82bd5ee9352b7f653d6d3606174f1b9b9c10743959935e47634e874fa3f8bfb5" : {
@@ -37031,7 +36918,7 @@
     },
     "initialStateHash" : "88fabbdd7faa6983c621c340b04d6786026b0e3eca82c5de505e673624b2b216",
     "number" : 10,
-    "rank" : "fan:lldb-221",
+    "rank" : "fan:lldb-424",
     "title" : "Unused blank generic level"
   },
   "891d966029bb6cc6454e1ef4014b1a4d23a10c5696945ca4f0160b50a7b6e818" : {
@@ -37509,196 +37396,17 @@
             "skill" : "floater"
           }
         },
+        "afterTick" : true,
         "tick" : 54
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 1,
-            "skill" : "floater"
-          }
-        },
-        "tick" : 95
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 2,
-            "skill" : "floater"
-          }
-        },
-        "tick" : 136
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 3,
-            "skill" : "floater"
-          }
-        },
-        "tick" : 177
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 4,
-            "skill" : "floater"
-          }
-        },
-        "tick" : 218
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 5,
-            "skill" : "floater"
-          }
-        },
-        "tick" : 259
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 6,
-            "skill" : "floater"
-          }
-        },
-        "tick" : 300
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 0,
-            "skill" : "basher"
-          }
-        },
-        "tick" : 324
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 7,
-            "skill" : "floater"
-          }
-        },
-        "tick" : 341
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 8,
-            "skill" : "floater"
-          }
-        },
-        "tick" : 382
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 9,
-            "skill" : "floater"
-          }
-        },
-        "tick" : 423
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 10,
-            "skill" : "floater"
-          }
-        },
-        "tick" : 464
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 11,
-            "skill" : "floater"
-          }
-        },
-        "tick" : 505
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 12,
-            "skill" : "floater"
-          }
-        },
-        "tick" : 546
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 13,
-            "skill" : "floater"
-          }
-        },
-        "tick" : 587
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 14,
-            "skill" : "floater"
-          }
-        },
-        "tick" : 628
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 15,
-            "skill" : "floater"
-          }
-        },
-        "tick" : 669
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 16,
-            "skill" : "floater"
-          }
-        },
-        "tick" : 710
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 17,
-            "skill" : "floater"
-          }
-        },
-        "tick" : 751
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 18,
-            "skill" : "floater"
-          }
-        },
-        "tick" : 792
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 19,
-            "skill" : "floater"
-          }
-        },
-        "tick" : 833
       }
     ],
     "expected" : {
       "didWin" : true,
       "released" : 10,
       "required" : 1,
-      "saved" : 9,
-      "stateHash" : "c4f0ff4d10ad2bac4cb91dbf23e1ea81545d9b13b6833133402dc6ca232dc2f0",
-      "ticks" : 532
+      "saved" : 1,
+      "stateHash" : "74c556ddeb622bc214bb07cfcfe955fbb30c22ad529cdf242c9f43bf69256e03",
+      "ticks" : 433
     },
     "initialStateHash" : "8c3c6d35299f8ac9c1d553ef32794b2f36aa86fbf7e0e43cab8bf757734f55b5",
     "number" : 1,
@@ -38423,7 +38131,7 @@
     },
     "initialStateHash" : "8ec49d91d1070579ac85839c6ba6418247fffae1b36249f9b2246473d0678192",
     "number" : 23,
-    "rank" : "fan:lldb-570",
+    "rank" : "fan:lldb-578",
     "title" : "King of the castle"
   },
   "8fdd753169564ff734eafc558dc0af5c239765f68d2ecf663088d31a9fe2a2a4" : {
@@ -38431,65 +38139,12 @@
       {
         "action" : {
           "assign" : {
-            "lemmingID" : 0,
-            "skill" : "miner"
-          }
-        },
-        "tick" : 152
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 0,
-            "skill" : "blocker"
-          }
-        },
-        "tick" : 176
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 0,
-            "skill" : "miner"
-          }
-        },
-        "tick" : 240
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 0,
+            "lemmingID" : 5,
             "skill" : "digger"
           }
         },
-        "tick" : 248
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 0,
-            "skill" : "blocker"
-          }
-        },
-        "tick" : 256
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 2,
-            "skill" : "miner"
-          }
-        },
-        "tick" : 272
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 2,
-            "skill" : "miner"
-          }
-        },
-        "tick" : 288
+        "afterTick" : true,
+        "tick" : 202
       }
     ],
     "expected" : {
@@ -38497,8 +38152,8 @@
       "released" : 10,
       "required" : 1,
       "saved" : 10,
-      "stateHash" : "94c59504a2f9367f4a971aafa9411d5b7569ee93ef7687b1a83b27d60eb8e5a3",
-      "ticks" : 796
+      "stateHash" : "cf952f8048acc52f96943e27e6e31d7e078a4f30779e713097546dc9775f974f",
+      "ticks" : 782
     },
     "initialStateHash" : "8fdd753169564ff734eafc558dc0af5c239765f68d2ecf663088d31a9fe2a2a4",
     "number" : 1,
@@ -38832,7 +38487,7 @@
     },
     "initialStateHash" : "90948426281b52c9787085b899ede52192d1c997afbb44c3d66a376184319903",
     "number" : 15,
-    "rank" : "fan:lldb-568",
+    "rank" : "fan:lldb-573",
     "title" : "Don't let your eyes deceive you"
   },
   "9168fe84f7e19d05ae0967af0e8d89ef0f58db6f8ecffe7f5d9de7760371dace" : {
@@ -40249,7 +39904,7 @@
     },
     "initialStateHash" : "962c3813b553a154e8e7048cb6865ce848a903dbe2f672d0ae042910f4903741",
     "number" : 12,
-    "rank" : "fan:lldb-570",
+    "rank" : "fan:lldb-578",
     "title" : "Livin` On The Edge"
   },
   "9667fd948d791de673f38145e6790632abf0544d2f97a6afe18a7bfa5d15bf3e" : {
@@ -40951,7 +40606,7 @@
     },
     "initialStateHash" : "9891bc52ef188b89180bef26fdd997a506c3cc1b69ef64989a11b52db8e7d933",
     "number" : 7,
-    "rank" : "fan:lldb-569",
+    "rank" : "fan:lldb-577",
     "title" : "Been there, seen it, done it"
   },
   "98a511957fddee7ee4d6bf0db44e36f2fd2209d17ab0740172482fa942be6393" : {
@@ -41021,7 +40676,7 @@
     },
     "initialStateHash" : "98a511957fddee7ee4d6bf0db44e36f2fd2209d17ab0740172482fa942be6393",
     "number" : 1,
-    "rank" : "fan:lldb-569",
+    "rank" : "fan:lldb-577",
     "title" : "This should be a doddle!"
   },
   "98a567cc50d2ffb999a311ff7527ee523039576906a4491cffe4e8586a4d2c0c" : {
@@ -42192,9 +41847,35 @@
       "ticks" : 2554
     },
     "initialStateHash" : "9e4c13cd09db9ce3aa34e427196151133ef7f237b5b8528e0bcba7b829545f32",
-    "number" : 4,
-    "rank" : "fan:lldb-99",
+    "number" : 14,
+    "rank" : "fan:lldb-517",
     "title" : "The Green Mile"
+  },
+  "SHA256 digest: 02ae3e2e8bfa10a07d5024ad254d3ed3c4cd8fb8cc4d3d2274a16ff028123e06" : {
+    "events" : [
+      {
+        "action" : {
+          "assign" : {
+            "lemmingID" : 0,
+            "skill" : "floater"
+          }
+        },
+        "afterTick" : true,
+        "tick" : 234
+      }
+    ],
+    "expected" : {
+      "didWin" : true,
+      "released" : 10,
+      "required" : 1,
+      "saved" : 1,
+      "stateHash" : "ceac7d563ca51bd4bc73253850ffa30e6d26d3856895abaec4384a6e9c3c950e",
+      "ticks" : 524
+    },
+    "initialStateHash" : "dd2f0d933b3492bf7f0e26d15bfa3190a1a782d5ff3fc001d05758b694db8a04",
+    "number" : 3,
+    "rank" : "fan:lldb-530",
+    "title" : "Only Floaters Can Survive This"
   },
   "SHA256 digest: 037af58167a50f0ab36138a98cddc3dba53eb9168ff7f315f881707ced7c7c8d" : {
     "events" : [
@@ -48118,6 +47799,32 @@
     "number" : 1,
     "rank" : "fan:lldb-224",
     "title" : "Snow Lev 1"
+  },
+  "SHA256 digest: 1e1f868da2b6d3c2a4038872ec80192f5714f7364e8b02348e98e54146766c74" : {
+    "events" : [
+      {
+        "action" : {
+          "assign" : {
+            "lemmingID" : 0,
+            "skill" : "digger"
+          }
+        },
+        "afterTick" : true,
+        "tick" : 97
+      }
+    ],
+    "expected" : {
+      "didWin" : true,
+      "released" : 10,
+      "required" : 1,
+      "saved" : 9,
+      "stateHash" : "48103910625e4c9160a97241f6d800fc8900727307773a8d8275ad27d55ad1cc",
+      "ticks" : 1059
+    },
+    "initialStateHash" : "32c54c12b944144977be1963b0971c8a53a139a170791258053dfbc9c813fc26",
+    "number" : 8,
+    "rank" : "fan:lldb-547",
+    "title" : "Diggin' to a better world"
   },
   "SHA256 digest: 1e30133f5e636f5b30fbf4e4104af709a8b04c0d4c547230aab93fe036b6a39f" : {
     "events" : [
@@ -58498,6 +58205,32 @@
     "rank" : "fan:lldb-569",
     "title" : "Here's one I prepared earlier"
   },
+  "SHA256 digest: 4b8d2f6d8ad9f82d438930ff1ad325085e4bcabe4af1d81ed9092bd26b0f3916" : {
+    "events" : [
+      {
+        "action" : {
+          "assign" : {
+            "lemmingID" : 1,
+            "skill" : "builder"
+          }
+        },
+        "afterTick" : true,
+        "tick" : 314
+      }
+    ],
+    "expected" : {
+      "didWin" : true,
+      "released" : 99,
+      "required" : 1,
+      "saved" : 52,
+      "stateHash" : "db7f1d82642e0615afeec0c40283fee854e931fc9da58f033320d34cc6a9f7c2",
+      "ticks" : 718
+    },
+    "initialStateHash" : "6566ea5f9145ee398fb57e6fdf7f64f4cce2729bc3f443441a2455650cf96e21",
+    "number" : 3,
+    "rank" : "fan:lldb-593",
+    "title" : "Ismo rock"
+  },
   "SHA256 digest: 4bca730f487b11408643269a1c7c71fac12e412f118382a3c01fab3579f3d38a" : {
     "events" : [
       {
@@ -66418,6 +66151,32 @@
     "rank" : "fan:lldb-546",
     "title" : "Miners Can Mine Diagonally"
   },
+  "SHA256 digest: 6cdaa6d741858cf40a126c10628b8c23a9804156074e2a38c14f8f75aaf6db10" : {
+    "events" : [
+      {
+        "action" : {
+          "assign" : {
+            "lemmingID" : 5,
+            "skill" : "digger"
+          }
+        },
+        "afterTick" : true,
+        "tick" : 202
+      }
+    ],
+    "expected" : {
+      "didWin" : true,
+      "released" : 10,
+      "required" : 1,
+      "saved" : 10,
+      "stateHash" : "cf952f8048acc52f96943e27e6e31d7e078a4f30779e713097546dc9775f974f",
+      "ticks" : 782
+    },
+    "initialStateHash" : "8fdd753169564ff734eafc558dc0af5c239765f68d2ecf663088d31a9fe2a2a4",
+    "number" : 1,
+    "rank" : "fan:lldb-530",
+    "title" : "Just Dig!"
+  },
   "SHA256 digest: 6d1521781f5b187eeb22ce290c2e08eee857c190b4b0c7f79372ac8caccf4864" : {
     "events" : [
       {
@@ -72261,6 +72020,32 @@
     "rank" : "fan:lldb-480",
     "title" : "Inroducing SUPERLEMMING"
   },
+  "SHA256 digest: 7f99229deb0dc2b1670e07def237697ff37a503d090bc0c7586f9b6b11c9280d" : {
+    "events" : [
+      {
+        "action" : {
+          "assign" : {
+            "lemmingID" : 0,
+            "skill" : "floater"
+          }
+        },
+        "afterTick" : true,
+        "tick" : 54
+      }
+    ],
+    "expected" : {
+      "didWin" : true,
+      "released" : 10,
+      "required" : 1,
+      "saved" : 1,
+      "stateHash" : "e56c3e0eece5ec2708dea16abdaadfd6b2196b825a1e0b27a7306fdb581cddad",
+      "ticks" : 480
+    },
+    "initialStateHash" : "c7e79edd477c919ef4cc735417cafd8740fee6660d4363f143ecc7c440b74de6",
+    "number" : 2,
+    "rank" : "fan:lldb-488",
+    "title" : "Only floaters can survive this"
+  },
   "SHA256 digest: 809c3a96ba17b183b58972640b20415f54c6dc6ee43079296d15da375fa357a9" : {
     "events" : [
       {
@@ -76522,6 +76307,32 @@
     "rank" : "fan:lldb-558",
     "title" : "Float and Dig"
   },
+  "SHA256 digest: 921ec0caec0b9b3171fd8301a3a5cacac9d5be8ddb9a06649bb9a5544fe5ba81" : {
+    "events" : [
+      {
+        "action" : {
+          "assign" : {
+            "lemmingID" : 0,
+            "skill" : "floater"
+          }
+        },
+        "afterTick" : true,
+        "tick" : 76
+      }
+    ],
+    "expected" : {
+      "didWin" : true,
+      "released" : 10,
+      "required" : 1,
+      "saved" : 1,
+      "stateHash" : "d710c80216c1a3b8edbb6085d7d1e417fcfb43474261ee3d75df0055d95a1eaf",
+      "ticks" : 375
+    },
+    "initialStateHash" : "00079469f152600b26d64bc207fac09baafbac266e5f41ce49fa8d559a571949",
+    "number" : 2,
+    "rank" : "fan:lldb-505",
+    "title" : "Only Float is Survive"
+  },
   "SHA256 digest: 9630f2fdb210088cc74574edf08fccd11146472dfe5e29b30d3c79ac60435844" : {
     "events" : [
       {
@@ -78167,6 +77978,42 @@
     "number" : 7,
     "rank" : "fan:lldb-547",
     "title" : "Mienrs <--- lol, typo"
+  },
+  "SHA256 digest: 993f09f6b5f64b66dd451991b3b5850dd33af8912f939ba7fc0c5d193e6434fb" : {
+    "events" : [
+      {
+        "action" : {
+          "assign" : {
+            "lemmingID" : 0,
+            "skill" : "floater"
+          }
+        },
+        "afterTick" : true,
+        "tick" : 54
+      },
+      {
+        "action" : {
+          "assign" : {
+            "lemmingID" : 3,
+            "skill" : "floater"
+          }
+        },
+        "afterTick" : true,
+        "tick" : 183
+      }
+    ],
+    "expected" : {
+      "didWin" : true,
+      "released" : 10,
+      "required" : 2,
+      "saved" : 2,
+      "stateHash" : "0e1ad91a0bf0d5f20ed856f4107286b9bf357d57778094d2e8e0ab27e1c51265",
+      "ticks" : 689
+    },
+    "initialStateHash" : "bf77e9732180413a825eaefbac6f911068d12d26dcdaf2c7da453da7b7aa6186",
+    "number" : 2,
+    "rank" : "fan:lldb-547",
+    "title" : "Float to safety"
   },
   "SHA256 digest: 99abebbf2210b1742c4ecd7d6eead1bbb34ef38bfc55c41a8b6c3ed64a5d343c" : {
     "events" : [
@@ -82890,6 +82737,52 @@
     "number" : 2,
     "rank" : "fan:lldb-488",
     "title" : "Only floaters can survive this"
+  },
+  "SHA256 digest: b24f58a4804618b9bfb80fe1f78f199de21ef1536d9c5509d8018caeabda066b" : {
+    "events" : [
+      {
+        "action" : {
+          "assign" : {
+            "lemmingID" : 0,
+            "skill" : "basher"
+          }
+        },
+        "afterTick" : true,
+        "tick" : 65
+      },
+      {
+        "action" : {
+          "assign" : {
+            "lemmingID" : 0,
+            "skill" : "basher"
+          }
+        },
+        "afterTick" : true,
+        "tick" : 112
+      },
+      {
+        "action" : {
+          "assign" : {
+            "lemmingID" : 1,
+            "skill" : "basher"
+          }
+        },
+        "afterTick" : true,
+        "tick" : 149
+      }
+    ],
+    "expected" : {
+      "didWin" : true,
+      "released" : 10,
+      "required" : 1,
+      "saved" : 10,
+      "stateHash" : "703d7d3b7aa274c121061c7572f4e63faf242b034b765ead713b46a1345e3eef",
+      "ticks" : 533
+    },
+    "initialStateHash" : "aa284bd43d5b21d39df8e6a313da109d9cca302cdd5cae631faf13d2028b1519",
+    "number" : 6,
+    "rank" : "fan:lldb-547",
+    "title" : "Cellbash"
   },
   "SHA256 digest: b2d32e8b1ead1fffee89a4e9e41f40b8d6c5926e6d97ea1f3531f64239cde878" : {
     "events" : [
@@ -88045,6 +87938,32 @@
     "rank" : "fan:lldb-102",
     "title" : "In And Out"
   },
+  "SHA256 digest: c4ec952c2078b964b89fae4a3169af29eecde5c83cbb944d6d5c773337ca95ef" : {
+    "events" : [
+      {
+        "action" : {
+          "assign" : {
+            "lemmingID" : 1,
+            "skill" : "digger"
+          }
+        },
+        "afterTick" : true,
+        "tick" : 61
+      }
+    ],
+    "expected" : {
+      "didWin" : true,
+      "released" : 80,
+      "required" : 4,
+      "saved" : 4,
+      "stateHash" : "8590b797bff7874b02b1e95ed1a10922fd3922a40818cadd966a1baec987ac2f",
+      "ticks" : 401
+    },
+    "initialStateHash" : "0badb0a11a885520b8394695f984bae9595d87bbad66fa590527ddf8c4153a5f",
+    "number" : 2,
+    "rank" : "fan:lldb-430",
+    "title" : "The Lucky 4"
+  },
   "SHA256 digest: c527a0c82bbacea15f2595f944d01d3d4028e0628c5364d8849125ac72eefeb6" : {
     "events" : [
       {
@@ -91807,6 +91726,32 @@
     "number" : 12,
     "rank" : "fan:lldb-547",
     "title" : "Remember where you find them!"
+  },
+  "SHA256 digest: cf99892491f5780a0578287b600c44b15472ad22ab3986b70b5fc4a1e238ca43" : {
+    "events" : [
+      {
+        "action" : {
+          "assign" : {
+            "lemmingID" : 0,
+            "skill" : "floater"
+          }
+        },
+        "afterTick" : true,
+        "tick" : 54
+      }
+    ],
+    "expected" : {
+      "didWin" : true,
+      "released" : 10,
+      "required" : 1,
+      "saved" : 1,
+      "stateHash" : "74c556ddeb622bc214bb07cfcfe955fbb30c22ad529cdf242c9f43bf69256e03",
+      "ticks" : 433
+    },
+    "initialStateHash" : "8c3c6d35299f8ac9c1d553ef32794b2f36aa86fbf7e0e43cab8bf757734f55b5",
+    "number" : 1,
+    "rank" : "fan:lldb-535",
+    "title" : "Floating Down!"
   },
   "SHA256 digest: d00d3092ae7dce96758c562b619398bf0ab87495a99894f81391b0423cda61e6" : {
     "events" : [
@@ -100860,6 +100805,32 @@
     "rank" : "fan:lldb-568",
     "title" : "A Beast of a level"
   },
+  "SHA256 digest: f044c4b5ddc97c4c3f6720598acb9df18fbcec658de8d34b873fa1fca8c2cf33" : {
+    "events" : [
+      {
+        "action" : {
+          "assign" : {
+            "lemmingID" : 3,
+            "skill" : "floater"
+          }
+        },
+        "afterTick" : true,
+        "tick" : 276
+      }
+    ],
+    "expected" : {
+      "didWin" : true,
+      "released" : 10,
+      "required" : 1,
+      "saved" : 1,
+      "stateHash" : "b455ef697ad90d9480124c2d61d51d56a061825c0214190a28c763e38236f713",
+      "ticks" : 613
+    },
+    "initialStateHash" : "a656dfb704878b7977ee13f28eab093939e9e61fa726f325e5693e4101e7c9b7",
+    "number" : 7,
+    "rank" : "fan:lldb-12",
+    "title" : "PRACTICE: FLOATER"
+  },
   "SHA256 digest: f0a21743f92211c55db393462d3c4788049d2889b655bbca80c7ac02c3211d09" : {
     "events" : [
       {
@@ -107028,7 +106999,7 @@
     },
     "initialStateHash" : "a385810805f534f537142ab11b3b49c5a75a6d9c3042a11f208bb67d9d40e7d2",
     "number" : 18,
-    "rank" : "fan:lldb-571",
+    "rank" : "fan:lldb-576",
     "title" : "And then there were four...."
   },
   "a486978c9de6ba2ee56228181eae2a94fbaeb3ffdf62ff76c847b3b9548f490d" : {
@@ -108029,7 +108000,7 @@
     },
     "initialStateHash" : "a4ea359abaafc1ff09e02f3c1b433e1ee1cbaf66fbd91fb4908d47e1c5b13830",
     "number" : 28,
-    "rank" : "fan:lldb-570",
+    "rank" : "fan:lldb-578",
     "title" : "POOR WEE CREATURES!"
   },
   "a5ba81d8f41222e3d00260ccc1c3aa775e73e85bcee7f8c553fc14c3c6d42b41" : {
@@ -108270,41 +108241,11 @@
     },
     "initialStateHash" : "a62adeb105014fd67d337e46e75c80899cfa668b5466e765ccf43ffd970f8912",
     "number" : 20,
-    "rank" : "fan:lldb-568",
+    "rank" : "fan:lldb-573",
     "title" : "We are now at LEMCON ONE"
   },
   "a656dfb704878b7977ee13f28eab093939e9e61fa726f325e5693e4101e7c9b7" : {
     "events" : [
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 0,
-            "skill" : "floater"
-          }
-        },
-        "afterTick" : true,
-        "tick" : 142
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 1,
-            "skill" : "floater"
-          }
-        },
-        "afterTick" : true,
-        "tick" : 190
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 2,
-            "skill" : "floater"
-          }
-        },
-        "afterTick" : true,
-        "tick" : 238
-      },
       {
         "action" : {
           "assign" : {
@@ -108313,76 +108254,16 @@
           }
         },
         "afterTick" : true,
-        "tick" : 286
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 4,
-            "skill" : "floater"
-          }
-        },
-        "afterTick" : true,
-        "tick" : 334
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 5,
-            "skill" : "floater"
-          }
-        },
-        "afterTick" : true,
-        "tick" : 382
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 6,
-            "skill" : "floater"
-          }
-        },
-        "afterTick" : true,
-        "tick" : 430
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 7,
-            "skill" : "floater"
-          }
-        },
-        "afterTick" : true,
-        "tick" : 478
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 8,
-            "skill" : "floater"
-          }
-        },
-        "afterTick" : true,
-        "tick" : 526
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 9,
-            "skill" : "floater"
-          }
-        },
-        "afterTick" : true,
-        "tick" : 574
+        "tick" : 276
       }
     ],
     "expected" : {
       "didWin" : true,
       "released" : 10,
       "required" : 1,
-      "saved" : 10,
-      "stateHash" : "5dfc1e83db952b3e3456833fccd1cd0dcb7ae0e60caaa13b12c235643c4e4032",
-      "ticks" : 743
+      "saved" : 1,
+      "stateHash" : "b455ef697ad90d9480124c2d61d51d56a061825c0214190a28c763e38236f713",
+      "ticks" : 613
     },
     "initialStateHash" : "a656dfb704878b7977ee13f28eab093939e9e61fa726f325e5693e4101e7c9b7",
     "number" : 7,
@@ -108675,7 +108556,7 @@
     },
     "initialStateHash" : "a75736e774ea7742335ded0793113ec4f9dde421f68fce16a20e88624dc5f639",
     "number" : 3,
-    "rank" : "fan:lldb-570",
+    "rank" : "fan:lldb-578",
     "title" : "Heaven can wait (we hope!!!!)"
   },
   "a84f16f6d4a7a693f94bbaad135b71a1682e2566d67453ea3b9af45a767b2047" : {
@@ -109385,6 +109266,52 @@
     "rank" : "fan:lldb-105",
     "title" : "Something isn't right here..."
   },
+  "aa284bd43d5b21d39df8e6a313da109d9cca302cdd5cae631faf13d2028b1519" : {
+    "events" : [
+      {
+        "action" : {
+          "assign" : {
+            "lemmingID" : 0,
+            "skill" : "basher"
+          }
+        },
+        "afterTick" : true,
+        "tick" : 65
+      },
+      {
+        "action" : {
+          "assign" : {
+            "lemmingID" : 0,
+            "skill" : "basher"
+          }
+        },
+        "afterTick" : true,
+        "tick" : 112
+      },
+      {
+        "action" : {
+          "assign" : {
+            "lemmingID" : 1,
+            "skill" : "basher"
+          }
+        },
+        "afterTick" : true,
+        "tick" : 149
+      }
+    ],
+    "expected" : {
+      "didWin" : true,
+      "released" : 10,
+      "required" : 1,
+      "saved" : 10,
+      "stateHash" : "703d7d3b7aa274c121061c7572f4e63faf242b034b765ead713b46a1345e3eef",
+      "ticks" : 533
+    },
+    "initialStateHash" : "aa284bd43d5b21d39df8e6a313da109d9cca302cdd5cae631faf13d2028b1519",
+    "number" : 6,
+    "rank" : "fan:lldb-547",
+    "title" : "Cellbash"
+  },
   "ab946423c3b27d4cf99585e75b62998d4096ff2d55dae557b16aa7bf41307d34" : {
     "events" : [
       {
@@ -109505,7 +109432,7 @@
     },
     "initialStateHash" : "ab946423c3b27d4cf99585e75b62998d4096ff2d55dae557b16aa7bf41307d34",
     "number" : 13,
-    "rank" : "fan:lldb-570",
+    "rank" : "fan:lldb-578",
     "title" : "Upsidedown World"
   },
   "abb4ee80721e95786b077904bcab2f48e0b87adbd2e6f26a70a4ecb67909917b" : {
@@ -109794,8 +109721,8 @@
       "ticks" : 2726
     },
     "initialStateHash" : "ac1307d75ce96c785ff0c7f9bcfdcc5cbd558fb6852f48baa4c668944b63bbe5",
-    "number" : 5,
-    "rank" : "fan:lldb-88",
+    "number" : 6,
+    "rank" : "fan:lldb-517",
     "title" : "Step By Step Guide To Building"
   },
   "ad4a7c661b7f66cb22b0c04ff9cc8f2ec32526d7727a48127113b45661f70bdf" : {
@@ -110559,7 +110486,7 @@
     },
     "initialStateHash" : "b42e0e4efead303fe586c76ac0dceaad70dd28dfa2fef8428dcf237c77e7c802",
     "number" : 25,
-    "rank" : "fan:lldb-568",
+    "rank" : "fan:lldb-573",
     "title" : "Lemmings Lemmings everywhere"
   },
   "b4a897ffd1bbba8255237291f5ce57c67c7e9b34e810f783bb34621dba4df11f" : {
@@ -111297,7 +111224,7 @@
     },
     "initialStateHash" : "b6da170b003d880438f45c54b435f801e2a4900d6edca31d9fb629ecc7182f6f",
     "number" : 28,
-    "rank" : "fan:lldb-568",
+    "rank" : "fan:lldb-573",
     "title" : "If only they could fly"
   },
   "b80912e13229ca31f9656a14be8e0db58938828cd6bb7446336c219be3a60587" : {
@@ -112038,8 +111965,8 @@
       "ticks" : 1194
     },
     "initialStateHash" : "baaa40886ad49924707c0ba281e0d92d31f07192d3ddcd832831492a46d4acad",
-    "number" : 6,
-    "rank" : "fan:lldb-99",
+    "number" : 20,
+    "rank" : "fan:lldb-517",
     "title" : "Frostbite"
   },
   "bf77e9732180413a825eaefbac6f911068d12d26dcdaf2c7da453da7b7aa6186" : {
@@ -112052,27 +111979,7 @@
           }
         },
         "afterTick" : true,
-        "tick" : 63
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 1,
-            "skill" : "floater"
-          }
-        },
-        "afterTick" : true,
-        "tick" : 106
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 2,
-            "skill" : "floater"
-          }
-        },
-        "afterTick" : true,
-        "tick" : 149
+        "tick" : 54
       },
       {
         "action" : {
@@ -112082,85 +111989,16 @@
           }
         },
         "afterTick" : true,
-        "tick" : 192
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 4,
-            "skill" : "floater"
-          }
-        },
-        "afterTick" : true,
-        "tick" : 235
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 5,
-            "skill" : "floater"
-          }
-        },
-        "afterTick" : true,
-        "tick" : 278
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 6,
-            "skill" : "floater"
-          }
-        },
-        "afterTick" : true,
-        "tick" : 321
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 7,
-            "skill" : "floater"
-          }
-        },
-        "afterTick" : true,
-        "tick" : 364
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 8,
-            "skill" : "floater"
-          }
-        },
-        "afterTick" : true,
-        "tick" : 407
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 9,
-            "skill" : "floater"
-          }
-        },
-        "afterTick" : true,
-        "tick" : 450
-      },
-      {
-        "action" : {
-          "nuke" : {
-
-          }
-        },
-        "afterTick" : true,
-        "tick" : 523
+        "tick" : 183
       }
     ],
     "expected" : {
       "didWin" : true,
       "released" : 10,
       "required" : 2,
-      "saved" : 4,
-      "stateHash" : "daf8dfa48d4308883c2702382c4d550c0cd99f25d28bd97ef4a4b87f6f0f9711",
-      "ticks" : 678
+      "saved" : 2,
+      "stateHash" : "0e1ad91a0bf0d5f20ed856f4107286b9bf357d57778094d2e8e0ab27e1c51265",
+      "ticks" : 689
     },
     "initialStateHash" : "bf77e9732180413a825eaefbac6f911068d12d26dcdaf2c7da453da7b7aa6186",
     "number" : 2,
@@ -112653,7 +112491,7 @@
     },
     "initialStateHash" : "c1ef011a68192bd9b7f6cd7454ece4ada4e8726d6b802c5a057fce4a929e65ab",
     "number" : 4,
-    "rank" : "fan:lldb-571",
+    "rank" : "fan:lldb-576",
     "title" : "The Crossroads"
   },
   "c40da02aa5fd9a41a289b691c8fa5bad5dbf4151a64e50b721f7c3b745988f61" : {
@@ -112820,7 +112658,7 @@
     },
     "initialStateHash" : "c4a8ab83b36bfbf5139aa8f86a28d0975737468283b77f6dbd99dc07a8fe869a",
     "number" : 25,
-    "rank" : "fan:lldb-569",
+    "rank" : "fan:lldb-577",
     "title" : "Cascade"
   },
   "c4fe1bcdfc952370f3fbe859ee916e586f791841feab937e3cc658dcc90dabf1" : {
@@ -113015,75 +112853,16 @@
           }
         },
         "afterTick" : true,
-        "tick" : 197
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 1,
-            "skill" : "floater"
-          }
-        },
-        "afterTick" : true,
-        "tick" : 225
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 2,
-            "skill" : "floater"
-          }
-        },
-        "afterTick" : true,
-        "tick" : 253
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 3,
-            "skill" : "floater"
-          }
-        },
-        "afterTick" : true,
-        "tick" : 281
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 4,
-            "skill" : "floater"
-          }
-        },
-        "afterTick" : true,
-        "tick" : 309
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 5,
-            "skill" : "floater"
-          }
-        },
-        "afterTick" : true,
-        "tick" : 337
-      },
-      {
-        "action" : {
-          "nuke" : {
-
-          }
-        },
-        "afterTick" : true,
-        "tick" : 349
+        "tick" : 54
       }
     ],
     "expected" : {
       "didWin" : true,
       "released" : 10,
       "required" : 1,
-      "saved" : 4,
-      "stateHash" : "78bdd6454ec7380cf6f57807f525e814ea876e62a4541f0a598de81d6dd34d2d",
-      "ticks" : 505
+      "saved" : 1,
+      "stateHash" : "e56c3e0eece5ec2708dea16abdaadfd6b2196b825a1e0b27a7306fdb581cddad",
+      "ticks" : 480
     },
     "initialStateHash" : "c7e79edd477c919ef4cc735417cafd8740fee6660d4363f143ecc7c440b74de6",
     "number" : 2,
@@ -113096,28 +112875,21 @@
         "action" : {
           "assign" : {
             "lemmingID" : 0,
-            "skill" : "miner"
+            "skill" : "digger"
           }
         },
-        "tick" : 152
+        "afterTick" : true,
+        "tick" : 64
       },
       {
         "action" : {
           "assign" : {
-            "lemmingID" : 0,
-            "skill" : "blocker"
+            "lemmingID" : 1,
+            "skill" : "digger"
           }
         },
-        "tick" : 176
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 0,
-            "skill" : "miner"
-          }
-        },
-        "tick" : 240
+        "afterTick" : true,
+        "tick" : 114
       },
       {
         "action" : {
@@ -113126,43 +112898,27 @@
             "skill" : "digger"
           }
         },
-        "tick" : 248
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 0,
-            "skill" : "blocker"
-          }
-        },
-        "tick" : 256
+        "afterTick" : true,
+        "tick" : 164
       },
       {
         "action" : {
           "assign" : {
             "lemmingID" : 2,
-            "skill" : "miner"
+            "skill" : "digger"
           }
         },
-        "tick" : 272
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 2,
-            "skill" : "miner"
-          }
-        },
-        "tick" : 288
+        "afterTick" : true,
+        "tick" : 165
       }
     ],
     "expected" : {
       "didWin" : true,
       "released" : 10,
       "required" : 1,
-      "saved" : 10,
-      "stateHash" : "8a4dd39a01d36f4bea3f1cdae44c7fb142c8d787a5548c007fa26812c5c9a528",
-      "ticks" : 866
+      "saved" : 3,
+      "stateHash" : "f6882ea42b66ca624cda554953554a9459a5ab64a90d9a3a573798ea11f48a5a",
+      "ticks" : 529
     },
     "initialStateHash" : "ca2464b68dd9d6dfdf67c4ea1dacf4be8888cf0fd8fb902b6898888e68bba22f",
     "number" : 1,
@@ -113910,7 +113666,7 @@
     },
     "initialStateHash" : "d15184ce14acd90964efb9db77fa7e4d45efe90d04e59b5311055e41f8dc92c9",
     "number" : 27,
-    "rank" : "fan:lldb-569",
+    "rank" : "fan:lldb-577",
     "title" : "The Island of the Wicker people"
   },
   "d29d4276ff4dfb3e412c186c4ac0d25944f2717a07cd8af9c01b2336d7e923c2" : {
@@ -114462,7 +114218,7 @@
     },
     "initialStateHash" : "d46110b40d8ea86b05d305eba31dbd2f1ce0ba17ec3747dd94e727d7befd7371",
     "number" : 29,
-    "rank" : "fan:lldb-568",
+    "rank" : "fan:lldb-573",
     "title" : "worra lorra lemmings"
   },
   "d521c68f33ce2c2b730e1a22dbfe59e9c92d98d00a601f4ae10b3fa6b103899b" : {
@@ -114727,7 +114483,7 @@
     },
     "initialStateHash" : "d521c68f33ce2c2b730e1a22dbfe59e9c92d98d00a601f4ae10b3fa6b103899b",
     "number" : 9,
-    "rank" : "fan:lldb-568",
+    "rank" : "fan:lldb-573",
     "title" : "As long as you try your best"
   },
   "d56a1306b17b73551e245fe5106aa34939493b849e92695f313903bcfd419bca" : {
@@ -116089,7 +115845,7 @@
     },
     "initialStateHash" : "d98854eb427ec2cf981b119d988e8d42d92bc669ba2701947f088e5c151c4a1e",
     "number" : 20,
-    "rank" : "fan:lldb-571",
+    "rank" : "fan:lldb-576",
     "title" : "No added colours or Lemmings"
   },
   "db0627cd2c6faad49fcc75e65c1505248600a941807b2cd25489f1de3aedcf19" : {
@@ -117416,55 +117172,16 @@
           }
         },
         "afterTick" : true,
-        "tick" : 244
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 1,
-            "skill" : "floater"
-          }
-        },
-        "afterTick" : true,
-        "tick" : 272
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 2,
-            "skill" : "floater"
-          }
-        },
-        "afterTick" : true,
-        "tick" : 300
-      },
-      {
-        "action" : {
-          "assign" : {
-            "lemmingID" : 3,
-            "skill" : "floater"
-          }
-        },
-        "afterTick" : true,
-        "tick" : 328
-      },
-      {
-        "action" : {
-          "nuke" : {
-
-          }
-        },
-        "afterTick" : true,
-        "tick" : 341
+        "tick" : 234
       }
     ],
     "expected" : {
       "didWin" : true,
       "released" : 10,
       "required" : 1,
-      "saved" : 4,
-      "stateHash" : "efb28aa07b111861bc86f7c566ec8554da07ba669652517d433d23274aa190d3",
-      "ticks" : 497
+      "saved" : 1,
+      "stateHash" : "ceac7d563ca51bd4bc73253850ffa30e6d26d3856895abaec4384a6e9c3c950e",
+      "ticks" : 524
     },
     "initialStateHash" : "dd2f0d933b3492bf7f0e26d15bfa3190a1a782d5ff3fc001d05758b694db8a04",
     "number" : 3,
@@ -117634,7 +117351,7 @@
     },
     "initialStateHash" : "ddeeeabcd2eb1a0ea8ed92be79edcc2574f9784f594781085b527868ea739abb",
     "number" : 7,
-    "rank" : "fan:lldb-571",
+    "rank" : "fan:lldb-576",
     "title" : "Poles Apart"
   },
   "df20a79d5ece016cdff2e06a482b7a700e46da5dc0493c116f31b3e14d9b7163" : {
@@ -119801,7 +119518,7 @@
     },
     "initialStateHash" : "e09e4e3c73aae11fab81f67fc5452005edea895dfddde62d45607d6e8f8b9e0d",
     "number" : 5,
-    "rank" : "fan:lldb-570",
+    "rank" : "fan:lldb-578",
     "title" : "The Prison!"
   },
   "e0f9a46edd722e7110d82fe146b7bfb254d03bc60f1b5aacaebd160ca7d26049" : {
@@ -120147,7 +119864,7 @@
     },
     "initialStateHash" : "e281bfe9659b6d5dfe238a2f57f2f24e5080dc70c5af62d84c7437abaf388c3f",
     "number" : 21,
-    "rank" : "fan:lldb-568",
+    "rank" : "fan:lldb-573",
     "title" : "You Live and Lem"
   },
   "e36edeed600759fa2b14d56c839f6972e0e7f4c45f3307c20b1982e9e5ef80b9" : {
@@ -120336,8 +120053,8 @@
       "ticks" : 1057
     },
     "initialStateHash" : "e637758eb503a939546153f120073937a1bdcd064fd890ba83e70244fcdb245b",
-    "number" : 8,
-    "rank" : "fan:lldb-88",
+    "number" : 9,
+    "rank" : "fan:lldb-517",
     "title" : "V For Vendetta"
   },
   "e65d916482082026d80e40d5f082e47c545b0d2398f98c5596fa622686504183" : {
@@ -121311,7 +121028,7 @@
     },
     "initialStateHash" : "e7c754d8523631c29b3f801ccc0300bc98a9e41e9dd84290dfb77406392ca76e",
     "number" : 22,
-    "rank" : "fan:lldb-569",
+    "rank" : "fan:lldb-577",
     "title" : "Turn around young lemmings!"
   },
   "e843642877a0dc1282fcdda541975280b50cc5d55f72c48d7c9e511fc077c236" : {
@@ -122180,7 +121897,7 @@
     },
     "initialStateHash" : "eb8e781e5b4fd931530c9ac78f081d02082f8091f8ff588cf64fb89ab551b75b",
     "number" : 26,
-    "rank" : "fan:lldb-570",
+    "rank" : "fan:lldb-578",
     "title" : "Triple Trouble"
   },
   "eba8fe9c51311489eb65c1cc9f5c995c06dcbd7930349f8708da2876e98e03f8" : {
@@ -122648,8 +122365,8 @@
       "ticks" : 5100
     },
     "initialStateHash" : "ef4c2e42a8538af09bf7fd5c9ee10b9d19b10f87098ba540ab54c5bef06a0a22",
-    "number" : 1,
-    "rank" : "fan:lldb-99",
+    "number" : 10,
+    "rank" : "fan:lldb-517",
     "title" : "Merry Lemmings"
   },
   "efa3b7b56ccf814910fad9bdb65e4a8a1d5167e6667e155dc145fd47f4ce6c15" : {
@@ -122923,7 +122640,7 @@
     },
     "initialStateHash" : "efa3b7b56ccf814910fad9bdb65e4a8a1d5167e6667e155dc145fd47f4ce6c15",
     "number" : 17,
-    "rank" : "fan:lldb-570",
+    "rank" : "fan:lldb-578",
     "title" : "X marks the spot"
   },
   "f042085ab2b252b4bebc471646c2432fa496d73f6b3000ac662e3502ed6b3cbe" : {
@@ -124107,7 +123824,7 @@
     },
     "initialStateHash" : "f2e7fb38833c9a9345070096f25a9764588f096feaa831b48679d8741ea05d05",
     "number" : 2,
-    "rank" : "fan:lldb-569",
+    "rank" : "fan:lldb-577",
     "title" : "We all fall down"
   },
   "f2fa97848baae040674734e59ee654bc746b0f8962160bcdfc2982c90b596538" : {
@@ -124928,7 +124645,7 @@
     },
     "initialStateHash" : "f620dfb7983f1f8b944c40be442430392f3978a64d33543245921f47beab2329",
     "number" : 3,
-    "rank" : "fan:lldb-571",
+    "rank" : "fan:lldb-576",
     "title" : "It`s hero time!"
   },
   "f6b02a206c3fb8107be49b7d3cf9b21447c43ad2ecc33b2735082803e0aebc23" : {
@@ -125724,7 +125441,7 @@
     },
     "initialStateHash" : "fc33da2232922e3a432ade56a5e16171f7142f5467597a52dbbffe0118466e9b",
     "number" : 27,
-    "rank" : "fan:lldb-568",
+    "rank" : "fan:lldb-573",
     "title" : "Let's be careful out there"
   },
   "fc79ddd3060b8f81c94669067cc3c22cf4e3c70c2e3091d479837cf463acc354" : {
@@ -126281,7 +125998,7 @@
     },
     "initialStateHash" : "fd0457ca294c9b5c4630559d09be3942bebdbfb020acabd57dbcd978f92a1af9",
     "number" : 4,
-    "rank" : "fan:lldb-568",
+    "rank" : "fan:lldb-573",
     "title" : "Now use miners and climbers"
   },
   "fd4d719ad3a5b67f4fd6f847091807775d57c523882f39a88c49d07358a4f430" : {

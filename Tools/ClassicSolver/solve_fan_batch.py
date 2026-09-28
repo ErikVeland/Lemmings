@@ -16,6 +16,7 @@ def main():
     parser.add_argument("--seconds", type=float, default=5)
     parser.add_argument("--width", type=int, default=48)
     parser.add_argument("--max-levels", type=int, default=0)
+    parser.add_argument("--order", choices=("hash", "score"), default="hash")
     args = parser.parse_args()
     args.output.mkdir(parents=True, exist_ok=True)
     ledger_path = args.output / "attempts.jsonl"
@@ -31,7 +32,9 @@ def main():
         if prefix.isdigit():
             packs["fan:lldb-" + str(int(prefix))] = pack
     attempted = solved = failed = 0
-    for row in sorted(rows, key=lambda item: item["initialHash"] or ""):
+    ordering = ((lambda item: (item["profile"]["overallScore"], item["initialHash"] or ""))
+                if args.order == "score" else (lambda item: item["initialHash"] or ""))
+    for row in sorted(rows, key=ordering):
         if row["official"] or not row["playable"] or row["profile"]["confidence"] != "low":
             continue
         digest = row["initialHash"]

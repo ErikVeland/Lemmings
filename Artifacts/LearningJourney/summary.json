@@ -1,24 +1,24 @@
 {
-  "fan": 187,
-  "fanPacks": 79,
+  "fan": 190,
+  "fanPacks": 81,
   "fanScoreRange": [
-    45.88639215686275,
+    43.13294117647059,
     659.8979215686275
   ],
   "largestDemandStep": 55.25,
   "largestScoreStep": 291.17365722668046,
-  "levels": 504,
+  "levels": 507,
   "newOhNoLargestIncomingStep": 150.83103210640587,
   "official": 317,
   "ohNoLevels": 100,
   "originalOhNoLargestStep": 348.76846324965845,
   "preparationGaps": 0,
-  "scoreDecreases": 230,
+  "scoreDecreases": 233,
   "stages": {
-    "Difficult": 270,
+    "Difficult": 272,
     "Expert": 115,
-    "Fun": 30,
-    "Intermediate": 89
+    "Fun": 34,
+    "Intermediate": 86
   },
   "supportTransitions": 2
 }

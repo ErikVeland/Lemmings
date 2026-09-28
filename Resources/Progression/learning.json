@@ -37,16 +37,16 @@
       "demand" : 55.25,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
-        "id" : "034935E3-DB24-A6D6-E83C-8E09838E59B2",
+        "id" : "1ACE16BA-0B6C-8952-9579-285195F9A500",
         "identity" : {
           "engine" : "classic",
-          "levelID" : "KillerMaster 1 Tame 1.dat#1",
-          "packID" : "fan:lldb-505"
+          "levelID" : "Mikepak07.dat#6",
+          "packID" : "fan:lldb-12"
         },
-        "levelNameSnapshot" : "Only Float is Survive",
-        "levelNumberSnapshot" : 2,
-        "packNameSnapshot" : "KillerMasters Lemmings 1 Tame",
-        "sourceRevision" : "cea49c6853a73f4a693cd63586ed044e2c939a7ce2457d6e3317bbc95d8ff4c9"
+        "levelNameSnapshot" : "PRACTICE: FLOATER",
+        "levelNumberSnapshot" : 7,
+        "packNameSnapshot" : "Mikepak07",
+        "sourceRevision" : "a0c42f85672784f435e4bc0b0659ecd877fc994fa1ba24fc5d2af7d98f95c1dc"
       },
       "focus" : "Discover: Floater",
       "intrinsicDemand" : 55.25,
@@ -57,7 +57,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 46.83690196078432,
+      "score" : 44.46760784313726,
       "stage" : "Fun"
     },
     {
@@ -97,16 +97,16 @@
       "demand" : 55.25,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
-        "id" : "F5F143C1-9BE2-7BE6-75D3-D5812ECE3D36",
+        "id" : "034935E3-DB24-A6D6-E83C-8E09838E59B2",
         "identity" : {
           "engine" : "classic",
-          "levelID" : "TWPAK00.dat#2",
-          "packID" : "fan:lldb-302"
+          "levelID" : "KillerMaster 1 Tame 1.dat#1",
+          "packID" : "fan:lldb-505"
         },
-        "levelNameSnapshot" : "Float Or Die",
-        "levelNumberSnapshot" : 3,
-        "packNameSnapshot" : "TWPAK00",
-        "sourceRevision" : "742f9b1f32285477bd4f4234cccac8b6cf64dd488bbe5a2faa6940e002c7c1f2"
+        "levelNameSnapshot" : "Only Float is Survive",
+        "levelNumberSnapshot" : 2,
+        "packNameSnapshot" : "KillerMasters Lemmings 1 Tame",
+        "sourceRevision" : "cea49c6853a73f4a693cd63586ed044e2c939a7ce2457d6e3317bbc95d8ff4c9"
       },
       "focus" : "Practise: Floater",
       "intrinsicDemand" : 55.25,
@@ -117,7 +117,67 @@
       "preparationGaps" : [
 
       ],
-      "score" : 46.526086248934014,
+      "score" : 43.13294117647059,
+      "stage" : "Fun"
+    },
+    {
+      "concepts" : [
+        "basher"
+      ],
+      "demand" : 57.996078431372545,
+      "entry" : {
+        "catalogueRevision" : "1.2-runtime-v2",
+        "id" : "4BE0B4DA-2611-ADB9-9AE1-DA0207D453C0",
+        "identity" : {
+          "engine" : "classic",
+          "levelID" : "Ji Hoon Heaven 1.DAT#5",
+          "packID" : "fan:lldb-547"
+        },
+        "levelNameSnapshot" : "Cellbash",
+        "levelNumberSnapshot" : 6,
+        "packNameSnapshot" : "Ji Hoons Lemmings Remake Heaven",
+        "sourceRevision" : "8d2daffec1cf660515ad4680e015d48b923b81b70afa10956729a179c81e3971"
+      },
+      "focus" : "Discover: Basher",
+      "intrinsicDemand" : 57.996078431372545,
+      "introduced" : [
+        "basher"
+      ],
+      "needsSupport" : false,
+      "preparationGaps" : [
+
+      ],
+      "score" : 48.608980392156866,
+      "stage" : "Fun"
+    },
+    {
+      "concepts" : [
+        "floater"
+      ],
+      "demand" : 55.25,
+      "entry" : {
+        "catalogueRevision" : "1.2-runtime-v2",
+        "id" : "85B67FA0-9577-3C48-586E-C7403EABC555",
+        "identity" : {
+          "engine" : "classic",
+          "levelID" : "Holiday cLemmings Frost 1.DAT#0",
+          "packID" : "fan:lldb-535"
+        },
+        "levelNameSnapshot" : "Floating Down!",
+        "levelNumberSnapshot" : 1,
+        "packNameSnapshot" : "Holiday cLemmings Frost",
+        "sourceRevision" : "e0b4def872bc847330ee71afc5a6e602c97aaefe65f5b0f86d28af0145245339"
+      },
+      "focus" : "Practise: Floater",
+      "intrinsicDemand" : 55.25,
+      "introduced" : [
+
+      ],
+      "needsSupport" : false,
+      "preparationGaps" : [
+
+      ],
+      "score" : 43.45819607843138,
       "stage" : "Fun"
     },
     {
@@ -152,6 +212,36 @@
     },
     {
       "concepts" : [
+        "floater"
+      ],
+      "demand" : 55.25,
+      "entry" : {
+        "catalogueRevision" : "1.2-runtime-v2",
+        "id" : "F5F143C1-9BE2-7BE6-75D3-D5812ECE3D36",
+        "identity" : {
+          "engine" : "classic",
+          "levelID" : "TWPAK00.dat#2",
+          "packID" : "fan:lldb-302"
+        },
+        "levelNameSnapshot" : "Float Or Die",
+        "levelNumberSnapshot" : 3,
+        "packNameSnapshot" : "TWPAK00",
+        "sourceRevision" : "742f9b1f32285477bd4f4234cccac8b6cf64dd488bbe5a2faa6940e002c7c1f2"
+      },
+      "focus" : "Practise: Floater",
+      "intrinsicDemand" : 55.25,
+      "introduced" : [
+
+      ],
+      "needsSupport" : false,
+      "preparationGaps" : [
+
+      ],
+      "score" : 46.526086248934014,
+      "stage" : "Fun"
+    },
+    {
+      "concepts" : [
         "miner"
       ],
       "demand" : 61.42483660130719,
@@ -178,6 +268,36 @@
 
       ],
       "score" : 46.86045751633987,
+      "stage" : "Fun"
+    },
+    {
+      "concepts" : [
+        "digger"
+      ],
+      "demand" : 61.84117647058824,
+      "entry" : {
+        "catalogueRevision" : "1.2-runtime-v2",
+        "id" : "0C59E266-E439-8BAE-B484-82E55CBE0C41",
+        "identity" : {
+          "engine" : "classic",
+          "levelID" : "Ji Hoon Heaven 1.DAT#7",
+          "packID" : "fan:lldb-547"
+        },
+        "levelNameSnapshot" : "Diggin' to a better world",
+        "levelNumberSnapshot" : 8,
+        "packNameSnapshot" : "Ji Hoons Lemmings Remake Heaven",
+        "sourceRevision" : "8d2daffec1cf660515ad4680e015d48b923b81b70afa10956729a179c81e3971"
+      },
+      "focus" : "Practise: Digger",
+      "intrinsicDemand" : 61.84117647058824,
+      "introduced" : [
+
+      ],
+      "needsSupport" : false,
+      "preparationGaps" : [
+
+      ],
+      "score" : 46.96870588235294,
       "stage" : "Fun"
     },
     {
@@ -212,6 +332,36 @@
     },
     {
       "concepts" : [
+        "floater"
+      ],
+      "demand" : 69.9093137254902,
+      "entry" : {
+        "catalogueRevision" : "1.2-runtime-v2",
+        "id" : "E159AFC4-77E2-87B0-02BE-475E7B9799D6",
+        "identity" : {
+          "engine" : "classic",
+          "levelID" : "Ji Hoon Heaven 1.DAT#1",
+          "packID" : "fan:lldb-547"
+        },
+        "levelNameSnapshot" : "Float to safety",
+        "levelNumberSnapshot" : 2,
+        "packNameSnapshot" : "Ji Hoons Lemmings Remake Heaven",
+        "sourceRevision" : "8d2daffec1cf660515ad4680e015d48b923b81b70afa10956729a179c81e3971"
+      },
+      "focus" : "Practise: Floater",
+      "intrinsicDemand" : 69.9093137254902,
+      "introduced" : [
+
+      ],
+      "needsSupport" : false,
+      "preparationGaps" : [
+
+      ],
+      "score" : 50.6107225705313,
+      "stage" : "Fun"
+    },
+    {
+      "concepts" : [
         "basher"
       ],
       "demand" : 88.10588235294118,
@@ -228,10 +378,10 @@
         "packNameSnapshot" : "Lemmings",
         "sourceRevision" : "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7"
       },
-      "focus" : "Discover: Basher",
+      "focus" : "Practise: Basher",
       "intrinsicDemand" : 88.10588235294118,
       "introduced" : [
-        "basher"
+
       ],
       "needsSupport" : false,
       "preparationGaps" : [
@@ -812,36 +962,6 @@
 
       ],
       "score" : 69.26389017050265,
-      "stage" : "Fun"
-    },
-    {
-      "concepts" : [
-        "floater"
-      ],
-      "demand" : 170.47450980392156,
-      "entry" : {
-        "catalogueRevision" : "1.2-runtime-v2",
-        "id" : "85B67FA0-9577-3C48-586E-C7403EABC555",
-        "identity" : {
-          "engine" : "classic",
-          "levelID" : "Holiday cLemmings Frost 1.DAT#0",
-          "packID" : "fan:lldb-535"
-        },
-        "levelNameSnapshot" : "Floating Down!",
-        "levelNumberSnapshot" : 1,
-        "packNameSnapshot" : "Holiday cLemmings Frost",
-        "sourceRevision" : "e0b4def872bc847330ee71afc5a6e602c97aaefe65f5b0f86d28af0145245339"
-      },
-      "focus" : "Practise: Floater",
-      "intrinsicDemand" : 170.47450980392156,
-      "introduced" : [
-
-      ],
-      "needsSupport" : false,
-      "preparationGaps" : [
-
-      ],
-      "score" : 81.34326271952224,
       "stage" : "Fun"
     },
     {
@@ -3204,66 +3324,6 @@
     },
     {
       "concepts" : [
-        "digger"
-      ],
-      "demand" : 324.01176470588234,
-      "entry" : {
-        "catalogueRevision" : "1.2-runtime-v2",
-        "id" : "0C59E266-E439-8BAE-B484-82E55CBE0C41",
-        "identity" : {
-          "engine" : "classic",
-          "levelID" : "Ji Hoon Heaven 1.DAT#7",
-          "packID" : "fan:lldb-547"
-        },
-        "levelNameSnapshot" : "Diggin' to a better world",
-        "levelNumberSnapshot" : 8,
-        "packNameSnapshot" : "Ji Hoons Lemmings Remake Heaven",
-        "sourceRevision" : "8d2daffec1cf660515ad4680e015d48b923b81b70afa10956729a179c81e3971"
-      },
-      "focus" : "Practise: Digger",
-      "intrinsicDemand" : 324.01176470588234,
-      "introduced" : [
-
-      ],
-      "needsSupport" : false,
-      "preparationGaps" : [
-
-      ],
-      "score" : 121.62595829673187,
-      "stage" : "Intermediate"
-    },
-    {
-      "concepts" : [
-        "floater"
-      ],
-      "demand" : 325.0254901960784,
-      "entry" : {
-        "catalogueRevision" : "1.2-runtime-v2",
-        "id" : "1ACE16BA-0B6C-8952-9579-285195F9A500",
-        "identity" : {
-          "engine" : "classic",
-          "levelID" : "Mikepak07.dat#6",
-          "packID" : "fan:lldb-12"
-        },
-        "levelNameSnapshot" : "PRACTICE: FLOATER",
-        "levelNumberSnapshot" : 7,
-        "packNameSnapshot" : "Mikepak07",
-        "sourceRevision" : "a0c42f85672784f435e4bc0b0659ecd877fc994fa1ba24fc5d2af7d98f95c1dc"
-      },
-      "focus" : "Practise: Floater",
-      "intrinsicDemand" : 325.0254901960784,
-      "introduced" : [
-
-      ],
-      "needsSupport" : false,
-      "preparationGaps" : [
-
-      ],
-      "score" : 121.88952692418285,
-      "stage" : "Intermediate"
-    },
-    {
-      "concepts" : [
         "climber"
       ],
       "demand" : 326.7083333333333,
@@ -3290,36 +3350,6 @@
 
       ],
       "score" : 120.01846766857051,
-      "stage" : "Intermediate"
-    },
-    {
-      "concepts" : [
-        "floater"
-      ],
-      "demand" : 336.27941176470586,
-      "entry" : {
-        "catalogueRevision" : "1.2-runtime-v2",
-        "id" : "E159AFC4-77E2-87B0-02BE-475E7B9799D6",
-        "identity" : {
-          "engine" : "classic",
-          "levelID" : "Ji Hoon Heaven 1.DAT#1",
-          "packID" : "fan:lldb-547"
-        },
-        "levelNameSnapshot" : "Float to safety",
-        "levelNumberSnapshot" : 2,
-        "packNameSnapshot" : "Ji Hoons Lemmings Remake Heaven",
-        "sourceRevision" : "8d2daffec1cf660515ad4680e015d48b923b81b70afa10956729a179c81e3971"
-      },
-      "focus" : "Practise: Floater",
-      "intrinsicDemand" : 336.27941176470586,
-      "introduced" : [
-
-      ],
-      "needsSupport" : false,
-      "preparationGaps" : [
-
-      ],
-      "score" : 124.81554653202598,
       "stage" : "Intermediate"
     },
     {
@@ -4301,6 +4331,36 @@
 
       ],
       "score" : 232.69786318754583,
+      "stage" : "Difficult"
+    },
+    {
+      "concepts" : [
+        "builder"
+      ],
+      "demand" : 378.34046345811055,
+      "entry" : {
+        "catalogueRevision" : "1.2-runtime-v2",
+        "id" : "60832135-9DEE-582A-27F3-ABC3CC27D771",
+        "identity" : {
+          "engine" : "classic",
+          "levelID" : "Lemmy556 Superpack.dat#2",
+          "packID" : "fan:lldb-593"
+        },
+        "levelNameSnapshot" : "Ismo rock",
+        "levelNumberSnapshot" : 3,
+        "packNameSnapshot" : "Lemmy556 Superpack",
+        "sourceRevision" : "5f4796c435de9cadf8ed8e731606db6878c5b96092eb1188cdc37b28c79741d3"
+      },
+      "focus" : "Practise: Builder",
+      "intrinsicDemand" : 378.34046345811055,
+      "introduced" : [
+
+      ],
+      "needsSupport" : false,
+      "preparationGaps" : [
+
+      ],
+      "score" : 213.85852049910872,
       "stage" : "Difficult"
     },
     {
@@ -11455,6 +11515,36 @@
 
       ],
       "score" : 286.1449215562869,
+      "stage" : "Difficult"
+    },
+    {
+      "concepts" : [
+        "digger"
+      ],
+      "demand" : 539.75,
+      "entry" : {
+        "catalogueRevision" : "1.2-runtime-v2",
+        "id" : "5508F8B8-0728-ADE1-BD70-885100D12364",
+        "identity" : {
+          "engine" : "classic",
+          "levelID" : "LDChallenge01.dat#1",
+          "packID" : "fan:lldb-430"
+        },
+        "levelNameSnapshot" : "The Lucky 4",
+        "levelNumberSnapshot" : 2,
+        "packNameSnapshot" : "Level Design Game 01",
+        "sourceRevision" : "bdbf943f510410b7e4c304ff57a31b83134d51b32a6aeed2432eaa6f2804d835"
+      },
+      "focus" : "Practise: Digger",
+      "intrinsicDemand" : 539.75,
+      "introduced" : [
+
+      ],
+      "needsSupport" : false,
+      "preparationGaps" : [
+
+      ],
+      "score" : 250.40372549019605,
       "stage" : "Difficult"
     },
     {

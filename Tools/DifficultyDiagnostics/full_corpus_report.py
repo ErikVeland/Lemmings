@@ -53,6 +53,7 @@ def main():
                      "replay_sha256": profile["key"]["replayRevision"].rsplit(" ", 1)[-1]
                      if verified else "",
                      "completion": "verified win" if verified else "no verified win",
+                     "physics_parity": "not independently checked",
                      "playtest": "replay verified" if verified else "bounded search or metadata only",
                      "issue": row.get("issue") or ""})
     for profile in neo:
@@ -70,6 +71,7 @@ def main():
                      "replay_sha256": profile["key"]["replayRevision"].split(":", 1)[0]
                      if replay_win else "",
                      "completion": "verified win" if replay_win or passive_win else "no verified win",
+                     "physics_parity": "not independently checked",
                      "playtest": ("source-compatible replay verified" if source_compatible else "replay verified")
                      if replay_win else "replay analysis failed" if path in neo_failures else status,
                      "issue": neo_failures.get(path) or ", ".join(run.get("features", []))
@@ -77,7 +79,7 @@ def main():
     rows.sort(key=lambda row: (row["source"], row["pack"], row["level"]))
     OUTPUT.mkdir(parents=True, exist_ok=True)
     with (OUTPUT / "levels.csv").open("w", newline="") as stream:
-        writer = csv.DictWriter(stream, fieldnames=list(rows[0]))
+        writer = csv.DictWriter(stream, fieldnames=list(rows[0]), lineterminator="\n")
         writer.writeheader()
         writer.writerows(rows)
     sources = {str(path.relative_to(ROOT)): digest(path) for path in (CLASSIC, FAN, NEO, NEO_REPORT)}
@@ -92,6 +94,7 @@ def main():
                "unverifiedFan": counts[("Classic fan", "no verified win")],
                "verifiedNeoLemmixWins": counts[("NeoLemmix", "verified win")],
                "unverifiedNeoLemmix": counts[("NeoLemmix", "no verified win")],
+               "independentPhysicsParityVerified": 0,
                "neoPlaytestStatuses": dict(Counter(row["playtest"] for row in rows if row["source"] == "NeoLemmix"))}
     (OUTPUT / "summary.json").write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n")
     (OUTPUT / "README.md").write_text(
@@ -106,6 +109,8 @@ def main():
         "Source-compatible replays have a changed level version, so the native win is valid but source parity is unverified.\n\n"
         "The `issue` column records a replay-analysis failure where one occurred. Such rows keep their "
         "metadata score and do not count as verified wins.\n\n"
+        "A native win shows that this engine can complete the level. It does not independently prove "
+        "physics parity with the source engine. The `physics_parity` column keeps that gate separate.\n\n"
         "Third-party replay archives and community styles remain in the ignored local build folder. "
         "The repository does not redistribute them. See `summary.json` for source digests.\n")
     print(json.dumps(summary, indent=2))

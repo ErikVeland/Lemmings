@@ -20,6 +20,13 @@ def write(path, value):
 if sys.argv[1] == 'collect':
     base = {key(r): r for r in read(BASE)}
     best = dict(base)
+    if (OUT / 'fan-evidence.json').exists():
+        for row in read(OUT / 'fan-evidence.json'):
+            original = base[key(row)]
+            assert row['initialHash'] == original['initialHash']
+            assert row['entry']['sourceRevision'] == original['entry']['sourceRevision']
+            if row['profile']['confidence'] != 'low':
+                best[key(row)] = row
     solutions = read(OUT / 'candidate-solutions.json')
     scenarios = read(OUT / 'scenarios.json') if (OUT / 'scenarios.json').exists() else {'official':[], 'fan':{}}
     for folder in map(pathlib.Path, sys.argv[2:]):
