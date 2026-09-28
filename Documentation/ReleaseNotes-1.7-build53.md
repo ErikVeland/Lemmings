@@ -24,8 +24,10 @@ Release base: v1.6.0
 
 ## Oh My! All Lemmings!
 
-- The all-games campaign is now a learning journey. It shows the next lesson,
-  its stage and focus, and your solved count.
+- The all-games campaign is now a learning journey of 537 levels from Fun to
+  Expert. It shows the next lesson, its stage and focus, and your solved count.
+- The journey is for one player. It leaves out two-player levels, and a puzzle
+  that several ports repeat appears once.
 - Pause a lesson to get hints, keep a level for later, or leave. Choose
   **Revisit** to play the levels that you kept for later.
 

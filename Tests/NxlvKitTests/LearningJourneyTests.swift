@@ -99,6 +99,10 @@ struct LearningJourneyTests {
         progress.record(values[0].entry.identity, won: false)
         #expect(progress.completed.count == 1)
         #expect(progress.later.isEmpty)
+        // A win on a level that a later journey removed stays saved but does not count.
+        progress.record(try candidate(9, score: 40).entry.identity, won: true)
+        #expect(progress.completed.count == 2)
+        #expect(progress.solvedCount(in: journey) == 1)
         #expect(try JSONDecoder().decode(LearningJourneyProgress.self, from: JSONEncoder().encode(progress)) == progress)
     }
 }

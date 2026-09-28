@@ -4043,7 +4043,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
         let pending = progress.unseen(in: journey)
         let next = active?.currentEntry ?? pending.first
         let lesson = journey.lessons.first { $0.entry.identity == next?.identity }
-        let page = LearningJourneyMenu.hub(next: lesson, solved: progress.completed.count,
+        let page = LearningJourneyMenu.hub(next: lesson, solved: progress.solvedCount(in: journey),
           total: journey.lessons.count, later: progress.revisit(in: journey).count, resume: active != nil,
           play: { [weak self] in
             guard let self else { return }
@@ -5405,7 +5405,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       items.append(HomeMenuItem(title: "RESUME - " + initials, action: .resume))
     }
     items.append(HomeMenuItem(
-      title: "\(Self.allLemmingsMenuTitle)  \((try? playlistStore().learningProgress.completed.count) ?? 0)/\(LearningJourneyLibrary.journey?.lessons.count ?? 0)",
+      title: "\(Self.allLemmingsMenuTitle)  \(LearningJourneyLibrary.journey.flatMap { journey in try? playlistStore().learningProgress.solvedCount(in: journey) } ?? 0)/\(LearningJourneyLibrary.journey?.lessons.count ?? 0)",
       action: .fullQuest))
     items += HomeContentFamily.allCases.map {
       HomeMenuItem(title: homeContentRow($0), action: .browse($0))

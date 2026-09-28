@@ -2393,7 +2393,9 @@ extension AppDelegate {
     }) else {
       throw IntegrationFailure(message: "The home screen omitted the all-level run")
     }
-    let journeyCompleted = (try? playlistStore().learningProgress.completed.count) ?? 0
+    let journeyCompleted = LearningJourneyLibrary.journey.flatMap { journey in
+      try? playlistStore().learningProgress.solvedCount(in: journey)
+    } ?? 0
     let journeyLessons = LearningJourneyLibrary.journey?.lessons.count ?? 0
     try check(journeyLessons > 0 && allLemmings.title
       == "\(Self.allLemmingsMenuTitle)  \(journeyCompleted)/\(journeyLessons)",

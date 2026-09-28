@@ -183,6 +183,11 @@ public struct LearningJourneyProgress: Codable, Equatable, Sendable {
     public func unseen(in journey: LearningJourney) -> [LevelPlaylistEntry] {
         journey.lessons.map(\.entry).filter { !completed.contains($0.identity) && !later.contains($0.identity) }
     }
+    /// Solved lessons in this journey. Wins on levels that a later journey
+    /// version removed stay recorded but do not count here.
+    public func solvedCount(in journey: LearningJourney) -> Int {
+        journey.lessons.filter { completed.contains($0.entry.identity) }.count
+    }
     public func revisit(in journey: LearningJourney) -> [LevelPlaylistEntry] {
         journey.lessons.map(\.entry).filter { later.contains($0.identity) && !completed.contains($0.identity) }
     }
