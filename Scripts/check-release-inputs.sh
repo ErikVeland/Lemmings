@@ -25,4 +25,11 @@ args=(--root "$project_dir")
 python3 "$project_dir/Tools/ReleaseReadiness/automatic_updates.py" "${args[@]}"
 git -C "$project_dir" diff --check
 version="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$project_dir/Resources/Info.plist")"
+# The What's New page is written by hand for each release.
+notes_version="$(sed -n 's/.*static let notesVersion = "\([^"]*\)".*/\1/p' \
+  "$project_dir/Sources/LemmingsLocal/ReleaseWelcome.swift")"
+[[ "$notes_version" == "$version" ]] || {
+  print -u2 "FAILED: What's New describes $notes_version, but Info.plist is $version. Update ReleaseWelcome.swift."
+  exit 1
+}
 print "PASS data-independent $version release checks"

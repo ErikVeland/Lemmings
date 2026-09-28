@@ -2393,9 +2393,11 @@ extension AppDelegate {
     }) else {
       throw IntegrationFailure(message: "The home screen omitted the all-level run")
     }
-    try check(allLemmings.title
-      == "\(Self.allLemmingsMenuTitle)  \(library.passed)/\(library.total)",
-      "The all-level run did not use its player-facing name and non-fan total")
+    let journeyCompleted = (try? playlistStore().learningProgress.completed.count) ?? 0
+    let journeyLessons = LearningJourneyLibrary.journey?.lessons.count ?? 0
+    try check(journeyLessons > 0 && allLemmings.title
+      == "\(Self.allLemmingsMenuTitle)  \(journeyCompleted)/\(journeyLessons)",
+      "The all-level run did not use its player-facing name and journey progress")
     let nonFanTitles = Set(HomeContentFamily.allCases
       .filter { $0 != .fan }.flatMap(\.titles))
     try check(nonFanTitles == Set(ClassicTitle.allCases),

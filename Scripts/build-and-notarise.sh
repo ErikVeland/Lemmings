@@ -164,6 +164,7 @@ fi
 release_base="${RELEASE_BASE:-}"
 [[ -n "$release_base" || "$version" != 1.5 ]] || release_base="v1.2-build41"
 [[ -n "$release_base" || "$version" != 1.6 ]] || release_base="v1.5.0"
+[[ -n "$release_base" || "$version" != 1.7 ]] || release_base="v1.6.0"
 [[ -n "$release_base" ]] || fail "Set RELEASE_BASE to the previous release commit or tag."
 git -C "$project_dir" rev-parse --verify "$release_base^{commit}" >/dev/null 2>&1 ||
   fail "RELEASE_BASE does not resolve to a commit: $release_base"

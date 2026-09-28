@@ -3,6 +3,16 @@ import AppKit
 /// Local notes also appear after an update installs without an update alert.
 @MainActor final class ReleaseWelcome {
     static let seenKey = "WhatsNewSeenBuild"
+    /// The release these notes describe. A test fails when Info.plist moves on
+    /// to a new version and these notes stay behind.
+    static let notesVersion = "1.7"
+    static let subtitle = "The NeoLemmix update"
+    static let sections = [
+        ("NeoLemmix levels included", "788 NeoLemmix levels ship with the game. Add your own packs and styles from Level Select."),
+        ("Oh My! All Lemmings!", "A guided journey through every game. Keep a level for later and revisit it when you are ready."),
+        ("See your target", "The selected lemming has a clearer halo and a marker above its head."),
+        ("All the 1.6 improvements", "Beat-aligned music, optional soundtrack libraries, Precision Zoom and level skips.")
+    ]
     private let defaults: UserDefaults
     private let build: Int
     private let version: String
@@ -10,7 +20,7 @@ import AppKit
 
     init(defaults: UserDefaults = .standard,
         build: Int = Int(Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "0") ?? 0,
-        version: String = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.6") {
+        version: String = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? ReleaseWelcome.notesVersion) {
         self.defaults = defaults; self.build = build; self.version = version
     }
     func showIfNeeded(in window: NSWindow, existingPlayer: Bool, completion: @escaping () -> Void) {
@@ -26,13 +36,8 @@ import AppKit
     }
     func show(in window: NSWindow, completion: @escaping () -> Void = {}) {
         if let page, GameScreen.shared.contains(page) { GameScreen.shared.present(page, owner: window); return }
-        let page = GameMenuPage(title: "What's new in \(version)", subtitle: "The music update")
-        let sections = [
-            ("Music that moves with you", "Beat-aligned mixes, gentle speed pitch and vinyl stops. Keep the rhythm while paused."),
-            ("More soundtracks, smaller download", "The originals are included. Choose extra soundtrack libraries now or in Settings > Audio."),
-            ("Keep every session", "Start solo or Hot Seat while saving your current run. Open Playlists from the home screen."),
-            ("All the 1.5 improvements", "Variable speed, modern and original presets, better controls, sound fallbacks and reliable saved runs.")
-        ]
+        let page = GameMenuPage(title: "What's new in \(version)", subtitle: Self.subtitle)
+        let sections = Self.sections
         for (index, section) in sections.enumerated() {
             let y = CGFloat(344 - index * 108)
             let heading = GameLabel(labelWithString: section.0)

@@ -12,7 +12,7 @@ from xml.etree import ElementTree
 
 SPARKLE_NAMESPACE = "http://www.andymatuschak.org/xml-namespaces/sparkle"
 SPARKLE_VERSION = "2.7.3"
-RELEASE_VERSION_PATTERN = re.compile(r"1\.6(?:\.\d+)?")
+RELEASE_VERSION_PATTERN = re.compile(r"1\.7(?:\.\d+)?")
 REQUIRED_SCRIPTS = (
     "Scripts/ensure-sparkle.sh",
     "Scripts/generate-appcast.sh",
@@ -35,7 +35,7 @@ def validate_info_plist(path):
     version = info.get("CFBundleShortVersionString")
     build = info.get("CFBundleVersion")
     if not isinstance(version, str) or not RELEASE_VERSION_PATTERN.fullmatch(version):
-        raise ValueError("Info.plist must identify a 1.6 application.")
+        raise ValueError("Info.plist must identify a 1.7 application.")
     if not isinstance(build, str) or not re.fullmatch(r"\d+", build):
         raise ValueError("Info.plist must contain a numeric build number.")
     _https_url(info.get("SUFeedURL"), "SUFeedURL")
