@@ -65,9 +65,9 @@ enum LevelPreviewSource: Sendable {
      */
     func sourceRevision(rootRevision: String? = nil) throws -> String {
         switch self {
-        case let .classic(_, root, _, sourceFingerprint):
+        case let .classic(dataSet, root, _, sourceFingerprint):
             guard let revision = sourceFingerprint
-                    ?? FanLevelLibrary.directoryFingerprint(root) else {
+                    ?? FanLevelLibrary.classicSourceRevision(for: dataSet.title, root: root) else {
                 throw LevelPreviewError.levelUnavailable
             }
             return revision
@@ -505,7 +505,7 @@ private enum LevelPreviewRenderer {
         levelIndex: Int,
         sourceFingerprint: String?
     ) throws -> LevelPreviewBitmap {
-        try validateDirectory(root, fingerprint: sourceFingerprint)
+        try validateDirectory(root, dataSet: dataSet, fingerprint: sourceFingerprint)
         guard dataSet.campaign.levels.indices.contains(levelIndex) else {
             throw LevelPreviewError.levelUnavailable
         }
@@ -533,7 +533,7 @@ private enum LevelPreviewRenderer {
             ground: ground,
             special: special,
             mechanics: ClassicDOSMechanics(title: dataSet.title, rank: entry.rank))
-        try validateDirectory(root, fingerprint: sourceFingerprint)
+        try validateDirectory(root, dataSet: dataSet, fingerprint: sourceFingerprint)
         return bitmap
     }
 
@@ -710,9 +710,11 @@ private enum LevelPreviewRenderer {
             y: level.screenY)
     }
 
-    private static func validateDirectory(_ root: URL, fingerprint: String?) throws {
+    private static func validateDirectory(
+        _ root: URL, dataSet: ClassicDataSet, fingerprint: String?
+    ) throws {
         guard let fingerprint else { return }
-        guard FanLevelLibrary.directoryFingerprint(root) == fingerprint else {
+        guard FanLevelLibrary.classicSourceRevision(for: dataSet.title, root: root) == fingerprint else {
             throw LevelPreviewError.contentChanged
         }
     }

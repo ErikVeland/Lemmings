@@ -2567,7 +2567,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
         guard !Task.isCancelled else { return nil }
         let refreshedClassic = classic.compactMap { source -> LevelBrowserClassicSource? in
           guard !Task.isCancelled else { return nil }
-          guard let before = FanLevelLibrary.directoryFingerprint(source.directory) else {
+          guard let before = FanLevelLibrary.classicSourceRevision(
+            for: source.dataSet.title, root: source.directory) else {
             return nil
           }
           if source.isVerified {
@@ -2580,7 +2581,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
           }
           guard
                 let dataSet = try? ClassicDataSet.detect(directory: source.directory),
-                let fingerprint = FanLevelLibrary.directoryFingerprint(source.directory),
+                let fingerprint = FanLevelLibrary.classicSourceRevision(
+                  for: dataSet.title, root: source.directory),
                 fingerprint == before
           else { return nil }
           return LevelBrowserClassicSource(
@@ -4902,7 +4904,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     do {
       try Task.checkCancellation()
       if let expectedFingerprint,
-         FanLevelLibrary.directoryFingerprint(directory) != expectedFingerprint {
+         FanLevelLibrary.classicSourceRevision(for: dataSet.title, root: directory) != expectedFingerprint {
         return .failed("The imported game data changed. Open Level Select and choose the level again.")
       }
       guard dataSet.campaign.levels.indices.contains(levelIndex) else {
@@ -4934,7 +4936,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
         mechanics: ClassicDOSMechanics(title: dataSet.title, rank: campaignLevel.rank))
       try Task.checkCancellation()
       if let expectedFingerprint,
-         FanLevelLibrary.directoryFingerprint(directory) != expectedFingerprint {
+         FanLevelLibrary.classicSourceRevision(for: dataSet.title, root: directory) != expectedFingerprint {
         return .failed("The imported game data changed. Open Level Select and choose the level again.")
       }
       return .ready(prepared)
@@ -5079,7 +5081,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
       guard beginSequenceLaunch(runID: sequenceRunID, identity: identity) else { return }
       if GameAssetCache<String>.bundledKey(dataSetDirectory) != nil,
          loadedArtworkDirectory?.standardizedFileURL == dataSetDirectory.standardizedFileURL,
-         FanLevelLibrary.directoryFingerprint(dataSetDirectory) == sourceRevision,
+         FanLevelLibrary.classicSourceRevision(
+           for: browserDataSet.title, root: dataSetDirectory) == sourceRevision,
          let assets {
         let prepared = PreparedClassicArtwork(grounds: grounds, specials: specials, assets: assets,
           directory: dataSetDirectory, portArtworkFamily: portArtworkFamily)

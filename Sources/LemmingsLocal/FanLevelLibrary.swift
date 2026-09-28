@@ -13,6 +13,11 @@ import NxlvKit
 /// Browsing reads a file per keypress, which is not worth a dependency.
 enum FanLevelLibrary {
   private static let bundledFingerprints = GameAssetCache<String>(capacity: 4096)
+  /**
+   * These source bytes used the whole Ports revision in existing learning runs.
+   */
+  private static let previousOhYesScopedRevision = "843c764dea3913f6e03c46d08b0fa53761dcc48c65b6628bbe7f0d01204df9ad"
+  private static let previousOhYesSavedRevision = "fc020d72e88706953d4737e1b5fa09f5b653d7a70e4e1c1fa1cfa5546a24a908"
   /// Where the chosen folder is remembered between runs.
   static let folderKey = "FanLevelFolder"
 
@@ -250,6 +255,29 @@ enum FanLevelLibrary {
     let result = SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined()
     if let key { bundledFingerprints.insert(result, for: key) }
     return result
+  }
+
+  /**
+   * Identifies the data used by one Classic campaign.
+   */
+  static func classicSourceRevision(for title: ClassicTitle?, root: URL) -> String? {
+    guard title == .ohYesMoreLemmings else { return directoryFingerprint(root) }
+    let folders = Set(AmigaVersusCampaign.sources.map { "amiga_extracted/" + $0.family }
+      + [PortExclusivePack.sunsoftFolder,
+         ClassicStyleResolver.Release.lemmings.folders[0],
+         ClassicStyleResolver.Release.ohNoMore.folders[0]])
+    var revisions: [String: String] = [:]
+    for folder in folders {
+      revisions[folder] = directoryFingerprint(root.appendingPathComponent(folder)) ?? "missing"
+    }
+    let encoder = JSONEncoder()
+    encoder.outputFormatting = [.sortedKeys]
+    guard let data = try? encoder.encode(revisions) else { return nil }
+    let scoped = SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined()
+    if scoped == previousOhYesScopedRevision {
+      return previousOhYesSavedRevision
+    }
+    return scoped
   }
 
   static func knownLevelCount(in pack: URL) -> Int? {

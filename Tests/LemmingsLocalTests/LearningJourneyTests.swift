@@ -10,6 +10,35 @@ final class LearningJourneyDesktopTests: XCTestCase {
             levelNameSnapshot: "Lesson \(index)", levelNumberSnapshot: index + 1)
     }
 
+    func testOhYesRevisionIgnoresUnrelatedPorts() throws {
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        defer { try? FileManager.default.removeItem(at: root) }
+        let folders = ["amiga_extracted/lemmings", "amiga_extracted/ohno",
+            PortExclusivePack.sunsoftFolder,
+            ClassicStyleResolver.Release.lemmings.folders[0],
+            ClassicStyleResolver.Release.ohNoMore.folders[0]]
+        for folder in folders {
+            let directory = root.appendingPathComponent(folder)
+            try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+            try Data("original".utf8).write(to: directory.appendingPathComponent("game.dat"))
+        }
+        let original = try XCTUnwrap(FanLevelLibrary.classicSourceRevision(
+            for: .ohYesMoreLemmings, root: root))
+        let unrelated = root.appendingPathComponent("Lemm2/new.dat")
+        try FileManager.default.createDirectory(at: unrelated.deletingLastPathComponent(),
+            withIntermediateDirectories: true)
+        try Data("other game".utf8).write(to: unrelated)
+        XCTAssertEqual(FanLevelLibrary.classicSourceRevision(for: .ohYesMoreLemmings, root: root), original)
+        for folder in folders {
+            let file = root.appendingPathComponent(folder).appendingPathComponent("game.dat")
+            try Data("changed".utf8).write(to: file)
+            XCTAssertNotEqual(FanLevelLibrary.classicSourceRevision(for: .ohYesMoreLemmings, root: root), original,
+                "Changing \(folder) must invalidate the source revision")
+            try Data("original".utf8).write(to: file)
+            XCTAssertEqual(FanLevelLibrary.classicSourceRevision(for: .ohYesMoreLemmings, root: root), original)
+        }
+    }
+
     @MainActor func testVisitsPersistAtomicallyAndOldDocumentsMigrate() throws {
         let folder = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
