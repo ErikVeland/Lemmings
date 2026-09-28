@@ -33,6 +33,14 @@ let encoder = JSONEncoder()
 encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
 var results: [Result] = []
 var profiles: [DifficultyProfile] = []
+try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
+@MainActor func record(_ item: Result, count: Int) throws {
+    results.append(item)
+    try encoder.encode(results).write(to: output.appendingPathComponent("results.json"), options: .atomic)
+    try encoder.encode(profiles).write(to: output.appendingPathComponent("profiles.json"), options: .atomic)
+    print("Passive evaluation \(count)/\(urls.count): \(item.status)")
+    fflush(stdout)
+}
 for (index, url) in urls.enumerated() {
     let path = String(url.path.dropFirst(levelsRoot.path.count + 1))
     do {
@@ -48,8 +56,8 @@ for (index, url) in urls.enumerated() {
         }
         let features = NeoLemmixRules.unsupportedFeatures(level: level, renderedLevel: rendered)
         if !features.isEmpty {
-            results.append(Result(path: path, status: "unsupported", ticks: nil, saved: nil,
-                                  required: level.saveRequirement, score: nil, features: features, issue: nil))
+            try record(Result(path: path, status: "unsupported", ticks: nil, saved: nil,
+                              required: level.saveRequirement, score: nil, features: features, issue: nil), count: index + 1)
             continue
         }
         var simulation = try NeoLemmixSimulation(level: level, renderedLevel: rendered)
@@ -70,20 +78,13 @@ for (index, url) in urls.enumerated() {
             score = profile.overallScore
             profiles.append(profile)
         }
-        results.append(Result(path: path, status: status, ticks: simulation.tickCount,
-                              saved: simulation.savedCount, required: level.saveRequirement,
-                              score: score, features: [], issue: nil))
+        try record(Result(path: path, status: status, ticks: simulation.tickCount,
+                          saved: simulation.savedCount, required: level.saveRequirement,
+                          score: score, features: [], issue: nil), count: index + 1)
     } catch {
-        results.append(Result(path: path, status: "error", ticks: nil, saved: nil,
-                              required: nil, score: nil, features: [], issue: String(describing: error)))
-    }
-    if (index + 1).isMultiple(of: 50) || index + 1 == urls.count {
-        print("Passive evaluation \(index + 1)/\(urls.count)")
-        fflush(stdout)
+        try record(Result(path: path, status: "error", ticks: nil, saved: nil,
+                          required: nil, score: nil, features: [], issue: String(describing: error)), count: index + 1)
     }
 }
-try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
-try encoder.encode(results).write(to: output.appendingPathComponent("results.json"), options: .atomic)
-try encoder.encode(profiles).write(to: output.appendingPathComponent("profiles.json"), options: .atomic)
 let counts = Dictionary(grouping: results, by: \.status).mapValues(\.count)
 print("Evaluated \(results.count): \(counts)")
