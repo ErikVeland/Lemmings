@@ -35,6 +35,14 @@ struct EvidenceRow: Codable {
         let verifyOnly = ProcessInfo.processInfo.environment["FAN_VERIFY_ONLY"] == "1"
         var verifiedCount = 0
         let semanticsOnly = ProcessInfo.processInfo.environment["FAN_SEMANTICS_ONLY"] == "1"
+        var portDescriptors: [String: [String: Any]] = [:]
+        func describe(_ identity: LevelCatalogueIdentity, _ level: ClassicLevel, _ sim: ClassicDOSSimulation) throws {
+            guard ProcessInfo.processInfo.environment["FAN_PORT_AUDIT"] == "1" else { return }
+            var fields = try JSONSerialization.jsonObject(with: encoder.encode(level)) as! [String: Any]
+            fields["skills"] = Dictionary(uniqueKeysWithValues: level.skills.map { ($0.key.rawValue, $0.value) })
+            fields["geometryHash"] = geometry(sim)
+            portDescriptors[identity.packID + "\0" + identity.levelID] = fields
+        }
         var officialScenarios = Set<String>()
         var fanScenarios: [String: String] = [:]
         func scenario(_ level: ClassicLevel, _ sim: ClassicDOSSimulation) throws -> String {
@@ -70,13 +78,15 @@ struct EvidenceRow: Codable {
         }
         if let set = try PortExclusivePack.dataSet(amigaRoot: ports.appendingPathComponent("amiga_extracted"), portsRoot: ports) { sets.append((set,ports)) }
         for (set,url) in sets {
-            for item in set.campaign.levels {
+            for (index, item) in set.campaign.levels.enumerated() {
                 let art = set.title == .ohYesMoreLemmings ? PortExclusivePack.artworkDirectory(for: item, portsRoot: ports) : url
                 let fallback = set.title == .ohYesMoreLemmings ? PortExclusivePack.fallbackArtworkDirectory(for: item, portsRoot: ports) : nil
                 let ground = try ClassicGroundSet.load(style: item.level.groundStyle, from: art, fallbackDirectory: fallback)
                 let special = item.level.specialStyle > 0 ? try ClassicSpecialGraphic.load(index: item.level.specialStyle - 1, from: art, fallbackDirectory: fallback) : nil
                 let rendered = try ClassicLevelRenderer.render(item.level, groundSet: ground, specialGraphic: special)
                 let sim = try ClassicDOSSimulation(level: item.level, renderedLevel: rendered, mainDATAssets: assets(fallback ?? art), mechanics: ClassicDOSMechanics(title: set.title, rank: item.rank))
+                try describe(.init(engine: .classic, packID: set.identifierKey,
+                    levelID: "\(index):\(item.rank):\(item.number):\(item.archiveFile):\(item.archiveSection)"), item.level, sim)
                 officialScenarios.insert(try scenario(item.level, sim))
                 if let replay = solutions[ClassicDOSReplayRecorder.stateHash(of: sim)] { templates[geometry(sim), default: []].append(replay.events); nearbyTemplates.append((sketch(sim), replay.events)) }
             }
@@ -90,6 +100,9 @@ struct EvidenceRow: Codable {
             try encoder.encode(found).write(to: savedURL, options: .atomic)
             try encoder.encode(officialScenarios.sorted()).write(to: output.appendingPathComponent("official-scenarios.json"), options: .atomic)
             try encoder.encode(fanScenarios).write(to: output.appendingPathComponent("fan-scenarios.json"), options: .atomic)
+            if !portDescriptors.isEmpty {
+                try JSONSerialization.data(withJSONObject: portDescriptors, options: [.sortedKeys]).write(to: output.appendingPathComponent("port-descriptors.json"), options: .atomic)
+            }
             try encoder.encode(failures).write(to: output.appendingPathComponent("failures.json"), options: .atomic)
         }
         for (packNumber, pack) in packs.enumerated() {
@@ -102,6 +115,7 @@ struct EvidenceRow: Codable {
                     let special = try FanLevelLibrary.specialGraphic(for: level, entry: item, pack: pack, portsRoot: ports)
                     let rendered = try ClassicLevelRenderer.render(level, groundSet: ground, specialGraphic: special)
                     let initial = try ClassicDOSSimulation(level: level, renderedLevel: rendered, mainDATAssets: assets(ports.appendingPathComponent("lemmings_dos_1991-07-30")))
+                    try describe(id, level, initial)
                     let hash = ClassicDOSReplayRecorder.stateHash(of: initial)
                     guard hash == rows[index].initialHash else { throw LevelPlaylistError.invalidEntry }
                     if verifyOnly {

@@ -32,6 +32,21 @@ struct LearningJourneyTests {
         let reversedOrigins = [ProgressionCandidate(entry: high.entry, profile: high.profile, isOfficial: false, campaignOrder: 0), low]
         #expect(try LearningJourney.generate(reversedOrigins) == journey)
     }
+    @Test func multiplayerSourcesCannotEnterTheLearningPath() throws {
+        for (pack, name, level) in [("fan:lldb-404", "Renamed pack", "0"),
+            ("test", "Genesis 2P 2", "0"), ("test", "Amiga Two Player", "0"),
+            ("ohYesMoreLemmings-OHYES-60", "Oh Yes!", "0:Lemmings Versus:1:0:0")] {
+            let entry = try LevelPlaylistEntry(identity: .init(engine: .classic, packID: pack, levelID: level),
+                catalogueRevision: "v1", sourceRevision: "v1", packNameSnapshot: name,
+                levelNameSnapshot: "Puzzle", levelNumberSnapshot: 1)
+            let profile = DifficultyProfile(key: .init(identity: entry.identity, levelRevision: "v1"), confidence: .medium, components: .init())
+            #expect(!LearningJourney.isSinglePlayer(entry))
+            #expect(throws: LevelPlaylistError.self) {
+                try LearningJourney.generate([.init(entry: entry, profile: profile, isOfficial: true)])
+            }
+        }
+        #expect(LearningJourney.isSinglePlayer(try candidate(1, score: 40).entry))
+    }
     @Test func aLowAverageCannotHideExpertTiming() throws {
         let timed = try candidate(0, score: 0, concepts: ["builder"])
         let precise = DifficultyProfile(key: timed.profile.key, confidence: .medium,

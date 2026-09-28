@@ -26,14 +26,14 @@ if args.count > 3 {
 struct Scenarios: Decodable { let official: [String]; let fan: [String: String] }
 let scenarios = try JSONDecoder().decode(Scenarios.self, from: Data(contentsOf: URL(fileURLWithPath: args[4])))
 var usedScenarios = Set(scenarios.official)
-let official = rows.filter(\.official)
-var hashes = Set(official.compactMap(\.initialHash))
+let official = rows.filter { $0.official && LearningJourney.isSinglePlayer($0.entry, sourceRank: $0.profile.sourceRank) }
+var hashes = Set(rows.filter(\.official).compactMap(\.initialHash))
 let selectionOrder = rows.sorted {
     if $0.profile.overallScore != $1.profile.overallScore { return $0.profile.overallScore < $1.profile.overallScore }
     return $0.entry.identity.packID + $0.entry.identity.levelID < $1.entry.identity.packID + $1.entry.identity.levelID
 }
 let selected = selectionOrder.filter {
-    guard $0.playable, $0.profile.confidence != .low else { return false }
+    guard LearningJourney.isSinglePlayer($0.entry, sourceRank: $0.profile.sourceRank), $0.playable, $0.profile.confidence != .low else { return false }
     if $0.official { return true }
     // Empty or hands-free fan records do not teach a bridge concept.
     guard !$0.profile.detectedTechniques.isEmpty,

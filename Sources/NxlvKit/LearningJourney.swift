@@ -3,9 +3,18 @@ import Foundation
 /// A teaching order, independent of retail ranks. Estimates never certify human insight.
 public struct LearningJourney: Codable, Equatable, Sendable {
     public static let title = "Oh My! All Lemmings!"
-    public static let version = "learning-3"
+    public static let version = "learning-4"
     public static let playlistID = UUID(uuidString: "80368144-659B-4697-B2D0-76894BF20B18")!
     public static let maximumScoreStep = 65.0
+
+    /// These sources contain competitive two-player puzzles, even when a replay
+    /// can win them in the single-player simulation.
+    public static func isSinglePlayer(_ entry: LevelPlaylistEntry, sourceRank: String? = nil) -> Bool {
+        let multiplayerPacks: Set<String> = ["fan:lldb-404", "fan:lldb-405", "fan:lldb-572", "fan:lldb-582", "fan:lldb-583"]
+        guard !multiplayerPacks.contains(entry.identity.packID) else { return false }
+        let metadata = [entry.packNameSnapshot, entry.identity.levelID, sourceRank ?? ""].joined(separator: " ").lowercased()
+        return metadata.range(of: #"\b(versus|multiplayer|2p|two[\s_-]*player|2[\s_-]*player)\b"#, options: .regularExpression) == nil
+    }
 
     public enum Stage: String, Codable, CaseIterable, Sendable {
         case fun = "Fun", intermediate = "Intermediate", difficult = "Difficult", expert = "Expert"
@@ -39,7 +48,7 @@ public struct LearningJourney: Codable, Equatable, Sendable {
         guard version == Self.version, !lessons.isEmpty,
               lessons.count <= LevelPlaylist.maximumEntries,
               Set(lessons.map { $0.entry.identity }).count == lessons.count,
-              lessons.allSatisfy({ $0.entry.identity.engine == .classic && $0.score.isFinite
+              lessons.allSatisfy({ $0.entry.identity.engine == .classic && Self.isSinglePlayer($0.entry) && $0.score.isFinite
                   && $0.demand.isFinite && (0...1000).contains($0.demand)
                   && $0.stage == Stage.forDemand($0.demand) }),
               zip(lessons, lessons.dropFirst()).allSatisfy({
@@ -72,7 +81,7 @@ public struct LearningJourney: Codable, Equatable, Sendable {
     public static func generate(_ candidates: [ProgressionCandidate]) throws -> Self {
         guard !candidates.isEmpty, candidates.count <= LevelPlaylist.maximumEntries,
               Set(candidates.map { $0.entry.identity }).count == candidates.count,
-              candidates.allSatisfy({ $0.entry.identity.engine == .classic && $0.profile.confidence != .low
+              candidates.allSatisfy({ $0.entry.identity.engine == .classic && isSinglePlayer($0.entry, sourceRank: $0.profile.sourceRank) && $0.profile.confidence != .low
                   && $0.entry.identity == $0.profile.key.identity
                   && $0.entry.sourceRevision == $0.profile.key.levelRevision }) else { throw LevelPlaylistError.invalidPool }
         let basicSkills: Set<String> = ["climber", "floater", "bomber", "blocker", "builder", "basher", "miner", "digger"]
