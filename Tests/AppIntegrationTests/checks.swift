@@ -2828,6 +2828,83 @@ extension AppDelegate {
     print("PASS all \(journey.lessons.count) journey lessons resolve and can start")
   }
 
+  fileprivate func testLearningJourneySessionsStart() async throws {
+    guard let journey = LearningJourneyLibrary.journey else {
+      throw IntegrationFailure(message: "The bundled learning journey did not load")
+    }
+    let directory = FileManager.default.temporaryDirectory
+      .appendingPathComponent("learning-sessions-\(UUID().uuidString)")
+    let previousArcade = ArcadeStore.shared
+    let previousCache = playlistStoreCache
+    let previousSequenceStore = sequencePlaylistStore
+    let defaultsName = "learning-sessions-\(UUID().uuidString)"
+    let defaults = UserDefaults(suiteName: defaultsName)!
+    let arcade = ArcadeStore(file: directory.appendingPathComponent("records.json"),
+      bundledProofs: nil, defaults: defaults)
+    ArcadeStore.shared = arcade
+    defer {
+      returnToLibrary()
+      ArcadeStore.shared = previousArcade
+      playlistStoreCache = previousCache
+      sequencePlaylistStore = previousSequenceStore
+      GameScreen.shared.dismissAll()
+      defaults.removePersistentDomain(forName: defaultsName)
+      try? FileManager.default.removeItem(at: directory)
+    }
+    try check(arcade.addProfile(initials: "PAL", portrait: 2, select: false) != nil,
+      "The journey test could not create a Hot Seat guest")
+    let store = try LevelPlaylistStore(file: directory.appendingPathComponent("playlists.json"))
+    try store.add(journey.playlist())
+    playlistStoreCache = (arcade.records.activeProfileID, store)
+    let entries = journey.lessons.map(\.entry)
+    let first = entries[0].identity
+    func waitForLaunch() async throws {
+      for _ in 0..<3000 where playlistFanLoadTask != nil || levelBrowserLaunchTask != nil {
+        try await Task.sleep(nanoseconds: 10_000_000)
+      }
+      try check(playlistFanLoadTask == nil && levelBrowserLaunchTask == nil,
+        "The journey session launch did not finish")
+    }
+    func buttons(_ view: NSView) -> [NSButton] {
+      (view as? NSButton).map { [$0] } ?? view.subviews.flatMap(buttons)
+    }
+    startLearningEntries(entries, in: store)
+    try await waitForLaunch()
+    try check(store.activeRun?.currentEntry.identity == first
+      && sequencePlayingIdentity == first && !arcade.hotSeatIsActive,
+      "New solo did not start the learning journey")
+    let firstSoloID = store.activeRun!.id
+    returnToLibrary()
+    startLearningEntries(entries, in: store)
+    guard let soloChooser = GameScreen.shared.controllerPage(in: window) as? GameMenuPage,
+          let newSolo = buttons(soloChooser).first(where: { $0.title == "New solo" }) else {
+      throw IntegrationFailure(message: "The journey did not offer New solo")
+    }
+    newSolo.performClick(nil)
+    try await waitForLaunch()
+    try check(store.activeRun?.currentEntry.identity == first
+      && sequencePlayingIdentity == first && !arcade.hotSeatIsActive
+      && store.activeRun?.id != firstSoloID
+      && store.savedRuns.contains(where: { $0.run.id == firstSoloID }),
+      "New solo did not replace and save the learning journey session")
+    let soloID = store.activeRun!.id
+    returnToLibrary()
+    startLearningEntries(entries, in: store)
+    guard let chooser = GameScreen.shared.controllerPage(in: window) as? GameMenuPage,
+          let newHotSeat = buttons(chooser).first(where: { $0.title == "New Hot Seat" }) else {
+      throw IntegrationFailure(message: "The journey did not offer New Hot Seat")
+    }
+    newHotSeat.performClick(nil)
+    try await waitForLaunch()
+    let ready = GameScreen.shared.controllerPage(in: window)
+    try check(arcade.hotSeatIsActive && store.activeRunHotSeatID == arcade.hotSeatID
+      && sequencePlayingIdentity == first
+      && store.savedRuns.contains(where: { $0.run.id == soloID })
+      && ready.map { buttons($0).contains(where: { $0.title.hasPrefix("Ready,") }) } == true,
+      "New Hot Seat did not start the learning journey or show Ready")
+    print("PASS learning journey starts in solo and Hot Seat")
+  }
+
   /// The CE packs ship in the app. They need no folder choice, and a saved run
   /// finds its level by ID after the path it saved no longer exists.
   fileprivate func testBundledNeoLemmixPacks() throws {
@@ -4631,7 +4708,7 @@ Task { @MainActor in
   do {
     let subject = AppDelegate()
     subject.prepareArcadeTests()
-    #if !CURSOR_INPUT_TESTS && !LOADING_LATENCY_TESTS && !TRANSPORT_TESTS && !DIALOG_TESTS && !NEO_RECOVERY_TESTS && !NEO_PACK_TESTS
+    #if !CURSOR_INPUT_TESTS && !LOADING_LATENCY_TESTS && !TRANSPORT_TESTS && !DIALOG_TESTS && !NEO_RECOVERY_TESTS && !NEO_PACK_TESTS && !LEARNING_TESTS
     try subject.testFailureMoodDecision()
     try subject.testSteppedCompletion()
     try subject.testFirstLaunchEffects()
@@ -4647,6 +4724,7 @@ Task { @MainActor in
     print("NeoLemmix recovery integration tests passed.")
     #elseif LEARNING_TESTS
     try await subject.testLearningJourneyEntriesResolve()
+    try await subject.testLearningJourneySessionsStart()
     print("Learning journey integration tests passed.")
     #elseif NEO_PACK_TESTS
     try subject.testBundledNeoLemmixPacks()
@@ -4771,6 +4849,8 @@ Task { @MainActor in
     try subject.testSequenceNavigationGuards()
     try subject.testClassicLevelPickerUnlockGate()
     try await testContentBrowser()
+    try await subject.testLearningJourneyEntriesResolve()
+    try await subject.testLearningJourneySessionsStart()
     print("App integration tests passed.")
     #endif
     exit(0)

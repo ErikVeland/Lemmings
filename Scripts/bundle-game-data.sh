@@ -53,7 +53,8 @@ case "$2" in
     fi
     rsync -a --delete --exclude=.DS_Store \
       "$project_dir/Content/NeoLemmix/" "$resources_dir/NeoLemmix/"
-    rsync "${copy_options[@]}" "$project_dir/Sources/Ports/" "$resources_dir/Ports/"
+    rsync "${copy_options[@]}" --delete --delete-excluded \
+      "$project_dir/Sources/Ports/" "$resources_dir/Ports/"
     zsh "$project_dir/Scripts/prepare-holiday-data.sh" "$resources_dir"
     python3 "$project_dir/Tools/MacArtwork/prepare.py" "$resources_dir/MacArtwork"
     python3 "$project_dir/Tools/AmigaArtwork/prepare.py" "$resources_dir/AmigaArtwork"

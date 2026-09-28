@@ -111,7 +111,8 @@ struct ImportedFanReplay: Decodable {
         }
         campaigns.sort { ($0.0.title?.canonOrder ?? 999) < ($1.0.title?.canonOrder ?? 999) }
         for (set, root) in campaigns where !rebuild {
-            guard let fingerprint = FanLevelLibrary.directoryFingerprint(root) else { throw LevelPlaylistError.invalidEntry }
+            guard let fingerprint = FanLevelLibrary.classicSourceRevision(
+                for: set.title, root: root) else { throw LevelPlaylistError.invalidEntry }
             for (index, item) in set.campaign.levels.enumerated() {
                 let identity = LevelCatalogueIdentity(engine: .classic, packID: set.identifierKey,
                     levelID: "\(index):\(item.rank):\(item.number):\(item.archiveFile):\(item.archiveSection)")
