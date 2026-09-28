@@ -23,7 +23,9 @@ func png(width: Int, height: Int, frames: Int) throws -> Data {
     for x in 0..<width {
       let offset = (y * width + x) * 4
       let color: (UInt8, UInt8, UInt8)
-      if x < half {
+      // NeoLemmix stores left-facing frames first and right-facing frames
+      // second, despite listing RIGHT before LEFT in scheme.nxmi.
+      if x >= half {
         if frame == 1 {
           color = (0xF0, 0xD0, 0xD0)
         } else if y.isMultiple(of: height / frames) {
@@ -105,11 +107,11 @@ func syntheticStyles() throws -> URL {
         \(name == "slider" ? "LOOP_TO_FRAME 1" : "")
         $RIGHT
           FOOT_X 1
-          FOOT_Y 3
+          FOOT_Y \(name == "ohnoer" ? 2 : 3)
         $END
         $LEFT
           FOOT_X 2
-          FOOT_Y 3
+          FOOT_Y \(name == "ohnoer" ? 2 : 3)
         $END
       $END
     """ + "\n"
@@ -165,6 +167,9 @@ func writeContactSheet(styles: URL, theme: String, output: URL) throws {
   for (index, action) in actions.enumerated() {
     guard let frame = sprites.frame(action: action, direction: index.isMultiple(of: 2) ? .right : .left,
                                     animationFrame: index % 12, traits: []) else { continue }
+    try require(frame.width > 0 && frame.height > 0
+      && frame.rgba.count == frame.width * frame.height * 4,
+      "Sprite frame did not expose deterministic RGBA capture pixels")
     let column = index % columns, row = rows - 1 - index / columns
     let rect = NSRect(
       x: column * cellWidth + (cellWidth - Int(frame.image.size.width) * scale) / 2,
@@ -209,6 +214,7 @@ func verifyCorpus(levels: URL, styles: URL) throws {
     themes.insert(level.themeStyle.isEmpty ? "default" : level.themeStyle)
   }
   var frames = 0
+  var pickupFrames = 0
   for theme in themes.sorted() {
     let sprites = try NeoLemmixSpriteSet(stylesRootURL: styles, themeStyle: theme)
     guard let stoner = sprites.stonerTerrain(),
@@ -227,15 +233,58 @@ func verifyCorpus(levels: URL, styles: URL) throws {
             direction: direction,
             animationFrame: 11,
             traits: traits
-          ) != nil else {
+          ).map({ $0.width > 0 && $0.height > 0
+            && $0.rgba.count == $0.width * $0.height * 4 }) == true else {
             throw Failure(description: "\(theme) has no \(direction.rawValue) \(action.rawValue) frame")
           }
           frames += 1
         }
       }
     }
+    let gadgets = NxlvSkill.allCases.enumerated().map { index, skill in
+      """
+      $GADGET
+        STYLE default
+        PIECE pickup
+        X \(index * 24 + 6)
+        Y 6
+        SKILL \(skill.keyword)
+        SKILL_COUNT 1
+      $END
+      """
+    }.joined(separator: "\n")
+    guard let pickupLevel = NxlvLevel(text: """
+      TITLE Generated pickup corpus
+      THEME \(theme)
+      WIDTH \(NxlvSkill.allCases.count * 24 + 12)
+      HEIGHT 36
+      LEMMINGS 0
+      SAVE_REQUIREMENT 0
+      \(gadgets)
+      """) else {
+      throw Failure(description: "\(theme) pickup fixture did not parse")
+    }
+    let resolution = NxlvStyleResolver(stylesRootURL: styles).resolve(level: pickupLevel)
+    let result = NxlvRenderer(retainsVisualLayers: true).render(
+      level: pickupLevel, resolution: resolution
+    )
+    guard !result.hasErrors, let rendered = result.renderedLevel,
+          rendered.gadgets.count == NxlvSkill.allCases.count else {
+      throw Failure(description: "\(theme) did not render every generated pickup")
+    }
+    for (index, gadget) in rendered.gadgets.enumerated() {
+      guard gadget.animationRGBA.count == NxlvSkill.allCases.count * 2,
+            gadget.initialAnimationFrame == index * 2 + 1,
+            gadget.animationRGBA[gadget.initialAnimationFrame]
+              .enumerated().contains(where: {
+                $0.offset % 4 == 3 && $0.element != 0
+              }) else {
+        throw Failure(description: "\(theme) generated pickup \(index) has invalid CE frames")
+      }
+      pickupFrames += gadget.animationRGBA.count
+    }
   }
-  print("PASS NeoLemmix sprite corpus: \(urls.count) levels, \(themes.count) themes, \(frames) state/direction/action frames")
+  print("PASS NeoLemmix sprite corpus: \(urls.count) levels, \(themes.count) themes, \(frames) state/direction/action frames, \(pickupFrames) generated pickup frames")
 }
 
 do {
@@ -275,6 +324,16 @@ do {
   )
   try require(left.footX == 2 && left.footY == 3, "Left Walker foot anchor was wrong")
   try require(try color(left.image, x: 0, y: 0) == (0x40, 0x40, 0xDF), "Athlete recoloring was not applied")
+  for trait: NeoLemmixTrait in [.slider, .climber, .swimmer, .floater, .glider, .disarmer] {
+    let permanent = try requireValue(
+      sprites.frame(action: .walking, direction: .left, animationFrame: 0, traits: [trait]),
+      "Permanent-skill Walker frame was missing"
+    )
+    try require(
+      try color(permanent.image, x: 0, y: 0) == (0x40, 0x40, 0xDF),
+      "Permanent skill \(trait.rawValue) did not use CE athlete recoloring"
+    )
+  }
   let neutral = try requireValue(
     sprites.frame(action: .walking, direction: .right, animationFrame: 0, traits: [.neutral]),
     "Neutral Walker frame was missing"
@@ -297,6 +356,18 @@ do {
   try require(try color(jumper0.image, x: 0, y: 1) == (0xEF, 0x20, 0x20), "Jumper progress 5 did not use frame 0")
   try require(try color(jumper1.image, x: 0, y: 1) == (0xF0, 0xD0, 0xD0), "Jumper progress 6 did not use frame 1")
   try require(try color(jumper2.image, x: 0, y: 1) == (0xEF, 0x20, 0x20), "Jumper progress 7 did not use frame 2")
+  let stoning = try requireValue(
+    sprites.frame(action: .stoning, direction: .right, animationFrame: 0, traits: []),
+    "Stoning frame was missing"
+  )
+  let stoneFinish = try requireValue(
+    sprites.frame(action: .stoneFinish, direction: .right, animationFrame: 0, traits: []),
+    "Stone-finish frame was missing"
+  )
+  try require(stoning.footY == 2 && stoning.cacheKey.hasPrefix("ohnoer-"),
+              "Stoning did not use CE's Oh-No animation and anchor")
+  try require(stoneFinish.footY == 3 && stoneFinish.cacheKey.hasPrefix("stoner-"),
+              "Stone finish did not use CE's one-frame Stoner burst")
   for action in NeoLemmixAction.allCases where ![.teleporting, .removed].contains(action) {
     try require(sprites.frame(action: action, direction: .right, animationFrame: 7, traits: []) != nil,
                 "\(action.rawValue) did not resolve to native artwork")

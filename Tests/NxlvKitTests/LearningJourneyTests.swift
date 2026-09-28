@@ -1,0 +1,89 @@
+import Foundation
+import Testing
+@testable import NxlvKit
+
+struct LearningJourneyTests {
+    func candidate(_ index: Int, score: Double, concepts: [String] = ["builder"], confidence: DifficultyConfidence = .medium) throws -> ProgressionCandidate {
+        let identity = LevelCatalogueIdentity(engine: .classic, packID: "test", levelID: "\(index)")
+        let key = DifficultyCacheKey(identity: identity, levelRevision: "v1")
+        let profile = DifficultyProfile(key: key, confidence: confidence,
+            components: .init(techniqueBurden: score, solutionComplexity: score, executionPrecision: score,
+                              concurrencyBurden: score, constraintPressure: score, deductionComplexityProxy: score),
+            detectedTechniques: concepts)
+        let entry = try LevelPlaylistEntry(identity: identity, catalogueRevision: "v1", sourceRevision: "v1",
+            packNameSnapshot: "Test", levelNameSnapshot: "Level \(index)", levelNumberSnapshot: index + 1)
+        return .init(entry: entry, profile: profile, isOfficial: true, campaignOrder: index)
+    }
+    @Test func keepsTheWholeCampaignAndFillsTheRetailJump() throws {
+        let values = try (0..<352).map { try candidate($0, score: Double($0) * 2) }
+        let journey = try LearningJourney.generate(values.reversed())
+        #expect(journey.lessons.count == 352)
+        #expect(Set(journey.lessons.map { $0.entry.identity }) == Set(values.map { $0.entry.identity }))
+        #expect(try journey == LearningJourney.generate(values))
+        #expect(zip(journey.lessons, journey.lessons.dropFirst()).allSatisfy { $1.score - $0.score <= LearningJourney.maximumScoreStep })
+    }
+    @Test func originAndRetailRankCannotOverrideDifficulty() throws {
+        let low = try candidate(7, score: 40, concepts: ["miner"])
+        let high = try candidate(0, score: 300, concepts: ["digger"])
+        let fan = ProgressionCandidate(entry: low.entry, profile: low.profile, isOfficial: false, campaignOrder: 999)
+        let journey = try LearningJourney.generate([high, fan])
+        #expect(journey.lessons.map(\.score) == [40, 300])
+        #expect(journey.lessons.first?.entry.identity == fan.entry.identity)
+        let reversedOrigins = [ProgressionCandidate(entry: high.entry, profile: high.profile, isOfficial: false, campaignOrder: 0), low]
+        #expect(try LearningJourney.generate(reversedOrigins) == journey)
+    }
+    @Test func aLowAverageCannotHideExpertTiming() throws {
+        let timed = try candidate(0, score: 0, concepts: ["builder"])
+        let precise = DifficultyProfile(key: timed.profile.key, confidence: .medium,
+            components: .init(executionPrecision: 950), detectedTechniques: ["builder"])
+        let ordinary = try candidate(1, score: 300, concepts: ["builder"])
+        let result = try LearningJourney.generate([.init(entry: timed.entry, profile: precise, isOfficial: false), ordinary])
+        #expect(precise.overallScore < ordinary.profile.overallScore)
+        #expect(result.lessons.last?.entry.identity == timed.entry.identity)
+        #expect(result.lessons.last?.stage == .expert)
+    }
+    @Test func isolatedPracticePrecedesCombinationsAndPassiveLevelsDoNotOpen() throws {
+        let passive = try candidate(0, score: 40, concepts: [])
+        let dig = try candidate(1, score: 50, concepts: ["digger"])
+        let build = try candidate(2, score: 200, concepts: ["builder"])
+        let combine = try candidate(3, score: 60, concepts: ["builder", "digger"])
+        let result = try LearningJourney.generate([combine, build, passive, dig])
+        #expect(result.lessons.first?.entry.identity == dig.entry.identity)
+        let builderIndex = result.lessons.firstIndex { $0.entry.identity == build.entry.identity }!
+        let combinationIndex = result.lessons.firstIndex { $0.entry.identity == combine.entry.identity }!
+        #expect(builderIndex < combinationIndex)
+        #expect(result.lessons[combinationIndex].preparationGaps.isEmpty)
+    }
+    @Test func nearEqualRepetitionsAreSpacedAndOriginDoesNotChooseTheOpening() throws {
+        let dig1 = try candidate(1, score: 45, concepts: ["digger"])
+        let dig2 = try candidate(2, score: 46, concepts: ["digger"])
+        let float = try candidate(3, score: 48, concepts: ["floater"])
+        let result = try LearningJourney.generate([dig2, float, dig1])
+        #expect(result.lessons.map(\.concepts) == [["digger"], ["floater"], ["digger"]])
+    }
+    @Test func unsupportedGapsAreFlaggedAndPriorsRejected() throws {
+        let first = try candidate(0, score: 10)
+        let hard = try candidate(1, score: 900, concepts: ["builder", "miner", "blocker"])
+        let result = try LearningJourney.generate([hard, first])
+        #expect(result.lessons.last?.needsSupport == true)
+        let unknown = try candidate(2, score: 50, confidence: .low)
+        #expect(throws: LevelPlaylistError.self) {
+            try LearningJourney.generate([first, unknown])
+        }
+    }
+    @Test func DifficultyOrderAndParkingDoesNotAwardAWin() throws {
+        let values = try [candidate(0, score: 30, concepts: ["digger"]), candidate(1, score: 50), candidate(2, score: 70, concepts: ["builder", "digger"])]
+        let journey = try LearningJourney.generate(values.reversed())
+        #expect(journey.lessons.map { $0.entry.identity } == values.map { $0.entry.identity })
+        var progress = LearningJourneyProgress()
+        progress.record(values[0].entry.identity, won: false)
+        #expect(progress.completed.isEmpty)
+        #expect(progress.revisit(in: journey).map(\.identity) == [values[0].entry.identity])
+        #expect(progress.unseen(in: journey).count == 2)
+        progress.record(values[0].entry.identity, won: true)
+        progress.record(values[0].entry.identity, won: false)
+        #expect(progress.completed.count == 1)
+        #expect(progress.later.isEmpty)
+        #expect(try JSONDecoder().decode(LearningJourneyProgress.self, from: JSONEncoder().encode(progress)) == progress)
+    }
+}

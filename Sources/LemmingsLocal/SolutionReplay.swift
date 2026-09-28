@@ -9,8 +9,12 @@ struct VerifiedSolution: Sendable {
     static func load(initial: ClassicDOSSimulation, from root: URL?) -> Self? {
         guard let root,
               let data = try? Data(contentsOf: root.appendingPathComponent("Hints/solutions.json")),
-              let records = try? JSONDecoder().decode([String: ClassicDOSReplay].self, from: data),
-              let replay = records[ClassicDOSReplayRecorder.stateHash(of: initial)] else { return nil }
+              var records = try? JSONDecoder().decode([String: ClassicDOSReplay].self, from: data) else { return nil }
+        if let extraData = try? Data(contentsOf: root.appendingPathComponent("Progression/solutions.json")),
+           let extra = try? JSONDecoder().decode([String: ClassicDOSReplay].self, from: extraData) {
+            records.merge(extra) { original, _ in original }
+        }
+        guard let replay = records[ClassicDOSReplayRecorder.stateHash(of: initial)] else { return nil }
         return validate(replay, initial: initial)
     }
 

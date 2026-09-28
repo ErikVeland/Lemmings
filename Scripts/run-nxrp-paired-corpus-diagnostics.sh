@@ -5,8 +5,8 @@ project_dir="${0:A:h:h}"
 build_dir="$project_dir/.build/nxrp-paired-corpus-diagnostics"
 source_dir="$build_dir/source"
 
-if (( $# != 3 )); then
-  print -u2 "Usage: $0 <levels-directory> <replays-directory> <styles-directory>"
+if (( $# < 3 )); then
+  print -u2 "Usage: $0 <levels-directory> <replays-directory> <styles-directory> [state or pack-journey options]"
   exit 2
 fi
 

@@ -48,6 +48,8 @@ if [[ "${TEST_SCOPE:-all}" == release-blockers ]]; then test_flags+=(-D RELEASE_
 if [[ "${TEST_SCOPE:-all}" == hints ]]; then test_flags+=(-D HINT_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == controller ]]; then test_flags+=(-D CONTROLLER_QOL_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == content-browser ]]; then test_flags+=(-D CONTENT_BROWSER_TESTS); fi
+if [[ "${TEST_SCOPE:-all}" == neo-recovery ]]; then test_flags+=(-D NEO_RECOVERY_TESTS); fi
+if [[ "${TEST_SCOPE:-all}" == neo-pack ]]; then test_flags+=(-D NEO_PACK_TESTS); fi
 swiftc -swift-version 6 "${compatibility[@]}" "${optimization_flags[@]}" -target "$test_arch-apple-macos12.3" -D APP_INTEGRATION_TESTS "${test_flags[@]}" \
   -I "$build_dir/modules" -L "$build_dir" -lNxlvKit \
   -F "$sparkle_framework_dir" -framework Sparkle \

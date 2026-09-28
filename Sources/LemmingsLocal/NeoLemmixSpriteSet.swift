@@ -25,6 +25,9 @@ enum NeoLemmixSpriteSetError: Error, LocalizedError {
 final class NeoLemmixSpriteSet {
   struct Frame {
     let image: NSImage
+    let rgba: [UInt8]
+    let width: Int
+    let height: Int
     let footX: Int
     let footY: Int
     let cacheKey: String
@@ -173,7 +176,10 @@ final class NeoLemmixSpriteSet {
     let traitKey = traits.map(\.rawValue).sorted().joined(separator: ",")
     let cacheKey = "\(name)-\(direction.rawValue)-\(index)-\(traitKey)"
     if let cached = frameCache[cacheKey] { return cached }
-    let column = direction == .left ? 1 : 0
+    // NeoLemmix sprite sheets store left-facing frames in the first column
+    // and right-facing frames in the second. This ordering is the reverse of
+    // the direction sections in scheme.nxmi.
+    let column = direction == .left ? 0 : 1
     let crop = CGRect(
       x: column * animation.frameWidth,
       y: index * animation.frameHeight,
@@ -181,10 +187,14 @@ final class NeoLemmixSpriteSet {
       height: animation.frameHeight
     )
     guard let pixels = animation.sheet.cropping(to: crop),
-          let recolored = recolor(pixels, traits: traits) else { return nil }
+          let recolored = recolor(pixels, traits: traits),
+          let rgba = Self.rgba(recolored) else { return nil }
     let foot = direction == .left ? animation.leftFoot : animation.rightFoot
     let result = Frame(
       image: NSImage(cgImage: recolored, size: NSSize(width: animation.frameWidth, height: animation.frameHeight)),
+      rgba: rgba,
+      width: animation.frameWidth,
+      height: animation.frameHeight,
       footX: foot.x,
       footY: foot.y,
       cacheKey: cacheKey
@@ -246,7 +256,9 @@ final class NeoLemmixSpriteSet {
     for offset in stride(from: 0, to: bytes.count, by: 4) where bytes[offset + 3] != 0 {
       let source = Self.color(bytes[offset], bytes[offset + 1], bytes[offset + 2])
       var color = baseRecoloring[source] ?? source
-      if traits.contains(.climber) || traits.contains(.slider) {
+      if !traits.isDisjoint(with: [
+        .slider, .climber, .swimmer, .floater, .glider, .disarmer,
+      ]) {
         color = athleteRecoloring[color] ?? color
       }
       if traits.contains(.zombie) { color = zombieRecoloring[color] ?? color }
@@ -303,7 +315,8 @@ final class NeoLemmixSpriteSet {
     case .disarming: "disarmer"
     case .shrugging: "shrugger"
     case .ohNo: "ohnoer"
-    case .stoning, .stoneFinish: "stoner"
+    case .stoning: "ohnoer"
+    case .stoneFinish: "stoner"
     case .exploding: "bomber"
     case .splatting: "splatter"
     case .exiting: "exiter"

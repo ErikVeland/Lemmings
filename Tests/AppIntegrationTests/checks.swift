@@ -829,6 +829,7 @@ extension AppDelegate {
   }
 
   fileprivate func testNeoRunRecovery() throws {
+    if window == nil { buildInterface() }
     var terrain = try NeoLemmixTerrain(width: 512, height: 96)
     for x in 0..<512 { terrain.setSolid(true, x: x, y: 48) }
     let config = try NeoLemmixConfiguration(totalLemmings: 1, requiredToSave: 0,
@@ -848,8 +849,17 @@ extension AppDelegate {
       events: [], stateHash: "state", usedRewind: original.usedRewind, nukeCount: original.nukeCount,
       rewindCount: original.rewindCount, undoCount: original.undoCount, selectedSkill: 1, scrollX: 0, scrollY: 0)
     checkpoint.neo = original.recovery; checkpoint.sourcePath = "/test.nxlv"
+    checkpoint.neoPackID = "neolemmix:test-pack"
+    checkpoint.neoLevelID = "x0000000000000001"
+    checkpoint.neoPackName = "Test pack"
     let restored = fresh()
-    try restored.restore(JSONDecoder().decode(RunRecovery.self, from: JSONEncoder().encode(checkpoint)))
+    let decoded = try JSONDecoder().decode(
+      RunRecovery.self, from: JSONEncoder().encode(checkpoint))
+    try check(decoded.neoPackID == checkpoint.neoPackID
+      && decoded.neoLevelID == checkpoint.neoLevelID
+      && decoded.neoPackName == checkpoint.neoPackName,
+      "Neo recovery lost its stable catalogue identity")
+    try restored.restore(decoded)
     try check(restored.simulation == original.simulation && restored.skillAssignments == original.skillAssignments,
       "Neo recovery changed the simulation or skill counts")
     try check(restored.canUndoNuke && restored.undoCount == 1 && restored.nukeCount == 2,
@@ -877,9 +887,53 @@ extension AppDelegate {
     let oldStyles = stylesDirectory
     defer { stylesDirectory = oldStyles }
     stylesDirectory = directory
+    let theme = directory.appendingPathComponent("fixture")
+    let lemmings = directory.appendingPathComponent("fixture_sprites/lemmings")
+    try FileManager.default.createDirectory(at: theme, withIntermediateDirectories: true)
+    try FileManager.default.createDirectory(at: lemmings, withIntermediateDirectories: true)
+    try "LEMMINGS fixture_sprites\n".write(
+      to: theme.appendingPathComponent("theme.nxtm"), atomically: true, encoding: .utf8)
+    let animationNames = [
+      "walker", "ascender", "faller", "climber", "hoister", "floater", "glider",
+      "dehoister", "slider", "swimmer", "blocker", "builder", "platformer", "stacker",
+      "basher", "fencer", "laserer", "miner", "digger", "jumper", "reacher",
+      "shimmier", "disarmer", "shrugger", "ohnoer", "stoner", "bomber", "splatter",
+      "exiter", "drowner", "burner",
+    ]
+    let pixels = [UInt8](repeating: 0xFF, count: 8 * 4 * 4)
+    guard let provider = CGDataProvider(data: Data(pixels) as CFData),
+          let image = CGImage(
+            width: 8, height: 4, bitsPerComponent: 8, bitsPerPixel: 32,
+            bytesPerRow: 32, space: CGColorSpaceCreateDeviceRGB(),
+            bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.last.rawValue),
+            provider: provider, decode: nil, shouldInterpolate: false, intent: .defaultIntent),
+          let png = NSBitmapImageRep(cgImage: image).representation(using: .png, properties: [:]) else {
+      throw IntegrationFailure(message: "Could not create the Neo sprite fixture")
+    }
+    var animations = "$ANIMATIONS\n"
+    for name in animationNames {
+      animations += """
+        $\(name.uppercased())
+          FRAMES 1
+          $RIGHT
+            FOOT_X 2
+            FOOT_Y 3
+          $END
+          $LEFT
+            FOOT_X 2
+            FOOT_Y 3
+          $END
+        $END
+      """ + "\n"
+      try png.write(to: lemmings.appendingPathComponent("\(name).png"))
+    }
+    animations += "$END\n"
+    try animations.write(
+      to: lemmings.appendingPathComponent("scheme.nxmi"), atomically: true, encoding: .utf8)
     let file = directory.appendingPathComponent("recovery.nxlv")
-    try """
+    let source = """
     TITLE Recovery test
+    THEME fixture
     WIDTH 200
     HEIGHT 200
     LEMMINGS 1
@@ -892,7 +946,8 @@ extension AppDelegate {
       X 40
       Y 20
     $END
-    """.write(to: file, atomically: true, encoding: .utf8)
+    """
+    try source.write(to: file, atomically: true, encoding: .utf8)
     loadNxlv(file)
     guard let live = session as? NeoLemmixSession else { throw IntegrationFailure(message: "Neo file did not load") }
     try check(phase == .playing && !panel.isMenuMode, "Opening a Neo file left the game in its menu")
@@ -908,8 +963,15 @@ extension AppDelegate {
     try check(arcadeRunID == disk.runID && ArcadeStore.shared.records.trolley.starts.count == starts,
       "Neo file restore counted a new attempt")
     GameScreen.shared.dismissAll()
+    try (source + "\n# changed visual content\n").write(
+      to: file, atomically: true, encoding: .utf8)
+    restoreRun(disk)
+    try check(arcadeRunID != disk.runID && GameScreen.shared.isPresented,
+      "Neo recovery accepted changed source content")
+    GameScreen.shared.dismissAll()
+    try source.write(to: file, atomically: true, encoding: .utf8)
     try recoveryStore.clear(disk.runID)
-    print("PASS Neo checkpoint round trip, assignment, queued rate/nuke, undo, counters, continuation and transactional rejection")
+    print("PASS Neo checkpoint round trip, assignment, queued rate/nuke, undo, counters, continuation, changed-content rejection and transactional rejection")
   }
 
   fileprivate func testFanRunRecovery() throws {
@@ -2721,6 +2783,167 @@ extension AppDelegate {
     print("PASS changed and removed level routes fail visibly")
   }
 
+  /// The CE packs ship in the app. They need no folder choice, and a saved run
+  /// finds its level by ID after the path it saved no longer exists.
+  fileprivate func testBundledNeoLemmixPacks() throws {
+    if window == nil { buildInterface() }
+    GameScreen.shared.dismissAll()
+    let oldStyles = stylesDirectory, oldRoot = neoLevelsDirectory
+    defer { stylesDirectory = oldStyles; neoLevelsDirectory = oldRoot; GameScreen.shared.dismissAll() }
+    stylesDirectory = nil
+    neoLevelsDirectory = nil
+    let bundled = try BundledGameResources.neoLemmix()
+    try check(neoLemmixSources == [bundled] && !homeContentRow(.neolemmix).contains("NO PACKS"),
+      "Bundled NeoLemmix packs still need a folder choice")
+    let library = NeoLemmixLibrary.discover(neoLemmixSources)
+    rebuildLevelCatalogue(LevelBrowserDiscovery(
+      classic: [], neoLemmix: library,
+      lemmings2Root: nil, lemmings2: [], lemmings3Root: nil, lemmings3: []))
+    let neoPacks = levelCatalogue.packs.filter { $0.engine == .neolemmix }
+    let entries = neoPacks.flatMap(\.levels)
+    try check(neoPacks.count == 3 && entries.count == 788
+      && entries.filter { $0.availability == .unavailable }.count == 75,
+      "Bundled NeoLemmix catalogue lost packs or community-style availability")
+
+    guard let pack = library.first(where: { $0.pack.title == "Lemmings Redux" }),
+          let level = pack.pack.levels.first(where: { pack.stylesRoot(for: $0) != nil }) else {
+      throw IntegrationFailure(message: "No ready bundled Redux level")
+    }
+    let identity = LevelCatalogueIdentity(engine: .neolemmix, packID: pack.pack.id, levelID: level.levelID)
+    try check(loadNxlv(level.url, stylesDirectory: pack.stylesRoot(for: level),
+      catalogueIdentity: identity, packName: pack.pack.title), "Bundled NeoLemmix level did not start")
+    guard let live = session as? NeoLemmixSession else {
+      throw IntegrationFailure(message: "Bundled NeoLemmix level did not load a Neo session")
+    }
+    for _ in 0..<30 { live.tick() }
+    saveRunCheckpoint(immediately: true)
+    guard var disk = try recoveryStore.latest(profileID: arcadeProfileID), disk.neo != nil else {
+      throw IntegrationFailure(message: "Bundled NeoLemmix run was not saved")
+    }
+    try check(disk.neoPackID == pack.pack.id && disk.neoLevelID == level.levelID,
+      "Bundled NeoLemmix checkpoint lost its stable IDs")
+    disk.sourcePath = "/private/tmp/removed-neolemmix-ce/levels/" + level.relativePath
+    GameScreen.shared.dismissAll()
+    restoreRun(disk)
+    try check((session as? NeoLemmixSession)?.simulation == live.simulation && phase == .playing && isPaused,
+      "A bundled NeoLemmix run did not restore after its saved path was removed")
+    try recoveryStore.clear(disk.runID)
+    print("PASS bundled NeoLemmix packs: no folder prompt, 788 levels, 75 need community styles, restore by stable IDs")
+  }
+
+  fileprivate func testNeoLemmixPackBrowser() async throws {
+    if window == nil { buildInterface() }
+    GameScreen.shared.dismissAll()
+    let root = FileManager.default.temporaryDirectory
+      .appendingPathComponent("NeoPackBrowser-\(UUID())")
+    let rank = root.appendingPathComponent("First", isDirectory: true)
+    try FileManager.default.createDirectory(at: rank, withIntermediateDirectories: true)
+    let theme = root.appendingPathComponent("fixture", isDirectory: true)
+    try FileManager.default.createDirectory(at: theme, withIntermediateDirectories: true)
+    try "LEMMINGS fixture\n".write(
+      to: theme.appendingPathComponent("theme.nxtm"), atomically: true, encoding: .utf8)
+    defer { try? FileManager.default.removeItem(at: root); GameScreen.shared.dismissAll() }
+    try "TITLE Browser Pack\nAUTHOR Test\n".write(
+      to: root.appendingPathComponent("info.nxmi"), atomically: true, encoding: .utf8)
+    try "$GROUP\n NAME First Steps\n FOLDER First\n$END\n".write(
+      to: root.appendingPathComponent("levels.nxmi"), atomically: true, encoding: .utf8)
+    try "LEVEL one.nxlv\nLEVEL two.nxlv\n".write(
+      to: rank.appendingPathComponent("levels.nxmi"), atomically: true, encoding: .utf8)
+    func source(_ title: String, _ id: String) -> String {
+      "TITLE \(title)\nID \(id)\nTHEME fixture\nWIDTH 320\nHEIGHT 160\nLEMMINGS 1\nSAVE_REQUIREMENT 1\n"
+    }
+    let firstURL = rank.appendingPathComponent("one.nxlv")
+    try source("One", "x1").write(to: firstURL, atomically: true, encoding: .utf8)
+    try source("Two", "x2").write(
+      to: rank.appendingPathComponent("two.nxlv"), atomically: true, encoding: .utf8)
+    let packs = try NeoLemmixPackLibrary.discover(in: root)
+    let discovery = LevelBrowserDiscovery(
+      classic: [], neoLemmixRoot: root,
+      neoLemmix: NeoLemmixLibrary.discover([.init(levelsRoot: root, stylesRoot: root)]),
+      lemmings2Root: nil, lemmings2: [], lemmings3Root: nil, lemmings3: [])
+    let oldStyles = stylesDirectory
+    let oldRoot = neoLevelsDirectory
+    defer { stylesDirectory = oldStyles; neoLevelsDirectory = oldRoot }
+    stylesDirectory = root
+    neoLevelsDirectory = root
+    rebuildLevelCatalogue(discovery)
+    guard let pack = levelCatalogue.packs.first(where: { $0.engine == .neolemmix }) else {
+      throw IntegrationFailure(message: "NeoLemmix pack did not enter the typed catalogue")
+    }
+    try check(pack.levels.map(\.levelName) == ["One", "Two"]
+      && pack.levels.map(\.identity.levelID) == ["x0000000000000001", "x0000000000000002"]
+      && neoLemmixBrowserRatings(in: pack).map(\.name) == ["First Steps"]
+      && levelBrowserPacks(for: .neolemmix).map(\.id) == [pack.id],
+      "NeoLemmix browser lost manifest order, IDs, groups or family routing")
+    let playlist = try playlistEntry(for: pack.levels[0].identity)
+    try check(playlist.sourceRevision == packs[0].levels[0].sourceRevision,
+      "NeoLemmix playlist did not retain the exact level revision")
+    guard let previewRequest = levelPreviewRequests[pack.levels[0].identity] else {
+      throw IntegrationFailure(message: "NeoLemmix level did not register a preview")
+    }
+    let preview = try await LevelPreviewStore.shared.bitmap(for: previewRequest)
+    try check(preview.width == 320 && preview.height == 160,
+      "NeoLemmix preview did not use the shared browser dimensions")
+    let completedIdentity = pack.levels[0].identity
+    let completedConditions = TrolleyConditions(
+      gameID: "neolemmix",
+      packID: completedIdentity.packID,
+      levelID: completedIdentity.levelID,
+      levelFingerprint: packs[0].levels[0].sourceRevision,
+      rulesetVersion: "neolemmix-v1",
+      physicsMode: "neolemmix-v1",
+      population: 1,
+      rescueRequirement: 1,
+      startingSkills: [:],
+      timeLimitSeconds: nil)
+    let completedLevel = ArcadeLevel(
+      id: "neolemmix:\(completedIdentity.levelID)",
+      title: pack.levels[0].levelName,
+      game: pack.name,
+      rules: "neolemmix-v1",
+      total: 1,
+      required: 1,
+      conditions: completedConditions)
+    try check(ArcadeStore.shared.record(ArcadeRun(
+      profileID: ArcadeStore.shared.records.activeProfileID,
+      level: completedLevel,
+      saved: 1,
+      didWin: true,
+      skills: [:],
+      seconds: 1,
+      telemetry: TrolleyTelemetry(released: 1))) != nil,
+      "NeoLemmix completion fixture was not recorded")
+    try check(ArcadeStore.shared.records.trolley.attempts.contains { attempt in
+      attempt.run.profileID == ArcadeStore.shared.records.activeProfileID
+        && attempt.run.didWin
+        && attempt.run.level.conditions?.gameID == "neolemmix"
+        && attempt.run.level.conditions?.packID == completedIdentity.packID
+        && attempt.run.level.conditions?.levelID == completedIdentity.levelID
+    }, "NeoLemmix completion record lost its stable identity")
+    presentResolvedLevelBrowser(pack)
+    guard let completionCarousel = levelBrowserCurrentLevelPage?.body.subviews
+      .compactMap({ $0 as? LevelCoverFlowView }).first else {
+      throw IntegrationFailure(message: "NeoLemmix completion browser was not presented")
+    }
+    try check(completionCarousel.selectedItem?.detail.contains("✓") == true,
+      "NeoLemmix browser did not show the completion mark for its stable identity: "
+        + (completionCarousel.selectedItem?.detail ?? "no selected item"))
+    GameScreen.shared.dismissAll()
+    let previousSession = session
+    try source("Changed", "x1").write(to: firstURL, atomically: true, encoding: .utf8)
+    do {
+      _ = try await LevelPreviewStore.shared.bitmap(for: previewRequest)
+      throw IntegrationFailure(message: "A changed NeoLemmix source reused its stale preview")
+    } catch let failure as IntegrationFailure {
+      throw failure
+    } catch {}
+    startBrowserLevel(pack.levels[0].identity)
+    try check(session === previousSession
+      && GameScreen.shared.controllerPage(in: window)?.accessibilityLabel() == "One",
+      "A changed NeoLemmix pack started under a stale catalogue identity")
+    print("PASS NeoLemmix packs keep manifest order, rank groups, stable IDs and source validation")
+  }
+
   fileprivate func testPlaylistStartRevalidatesFanSources() async throws {
     GameScreen.shared.dismissAll()
     let folder = URL(fileURLWithPath: ".build/content-browser")
@@ -4363,7 +4586,7 @@ Task { @MainActor in
   do {
     let subject = AppDelegate()
     subject.prepareArcadeTests()
-    #if !CURSOR_INPUT_TESTS && !LOADING_LATENCY_TESTS && !TRANSPORT_TESTS && !DIALOG_TESTS
+    #if !CURSOR_INPUT_TESTS && !LOADING_LATENCY_TESTS && !TRANSPORT_TESTS && !DIALOG_TESTS && !NEO_RECOVERY_TESTS && !NEO_PACK_TESTS
     try subject.testFailureMoodDecision()
     try subject.testSteppedCompletion()
     try subject.testFirstLaunchEffects()
@@ -4374,7 +4597,14 @@ Task { @MainActor in
     try testPointerAssignment()
     #endif
     #endif
-    #if SESSION_TESTS
+    #if NEO_RECOVERY_TESTS
+    try subject.testNeoRunRecovery()
+    print("NeoLemmix recovery integration tests passed.")
+    #elseif NEO_PACK_TESTS
+    try subject.testBundledNeoLemmixPacks()
+    try await subject.testNeoLemmixPackBrowser()
+    print("NeoLemmix pack integration tests passed.")
+    #elseif SESSION_TESTS
     try await subject.testPlaylistSessions()
     try subject.testSequenceNavigationGuards()
     try subject.testHotSeatBoundaries()
@@ -4428,6 +4658,7 @@ Task { @MainActor in
     print("Level hints integration tests passed.")
     #elseif CONTENT_BROWSER_TESTS
     try await subject.testClassicRatingBrowser()
+    try await subject.testNeoLemmixPackBrowser()
     try await subject.testLevelBrowserRouteIntegrity()
     try await subject.testPlaylistStartRevalidatesFanSources()
     try subject.testSequenceNavigationGuards()

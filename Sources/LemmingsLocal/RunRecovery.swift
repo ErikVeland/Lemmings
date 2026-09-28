@@ -31,6 +31,9 @@ struct RunRecovery: Codable, Sendable {
     var l2: L2RunRecovery? = nil
     var l3: L3RunRecovery? = nil
     var neo: NeoRunRecovery? = nil
+    var neoPackID: String? = nil
+    var neoLevelID: String? = nil
+    var neoPackName: String? = nil
     var fan: FanRunRecovery? = nil
     /// The Classic engine state at `tick`. A later build restores from it
     /// when its engine no longer replays `events` to the same state, so an
@@ -72,6 +75,8 @@ struct RunRecovery: Codable, Sendable {
         }
         if let neo {
             guard events.isEmpty, sourcePath?.hasPrefix("/") == true,
+                  [neoPackID, neoLevelID, neoPackName].compactMap({ $0 })
+                    .allSatisfy({ !$0.isEmpty && $0.utf8.count <= 4096 }),
                   neo.state.tickCount == tick else { throw RunRecoveryError.invalid }
             try neo.validate()
         }

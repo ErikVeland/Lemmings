@@ -7,6 +7,7 @@ let displayInterval = 1.0 / 60.0
 let contentPathKey = "ClassicDataDirectory"
 let gamePathsKey = "ClassicGameDirectories"
 let stylesPathKey = "NeoLemmixStylesDirectory"
+let neoLevelsPathKey = "NeoLemmixLevelsDirectory"
 let progressKey = "ModernCampaignProgress"
 let musicPathKey = "MusicDirectory"
 let musicPresetKey = "MusicUsesModernPreset"
@@ -26,7 +27,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     FileHandle.standardError.write(Data(String(format: "LAUNCH %.3f %@\n", elapsed, stage).utf8))
   }
 
-  private static let allLemmingsMenuTitle = "Oh My! ALL Lemmings!"
+  private static let allLemmingsMenuTitle = LearningJourney.title
   private let updates = AppUpdates()
   private let releaseWelcome = ReleaseWelcome()
   private var window: NSWindow!
@@ -52,6 +53,14 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private var macArtworkCache: [String: ClassicMacArtwork] = [:]
   private var contentDirectory: URL?
   private var stylesDirectory: URL?
+  private var neoLevelsDirectory: URL?
+  private var currentNeoStylesRoot: URL?
+  /// The bundled CE packs come first, so a player's copy cannot replace them.
+  private var neoLemmixSources: [NeoLemmixLibrary.Source] {
+    [try? BundledGameResources.neoLemmix()].compactMap { $0 }
+      + [neoLevelsDirectory.map { NeoLemmixLibrary.Source(levelsRoot: $0, stylesRoot: stylesDirectory) }]
+        .compactMap { $0 }
+  }
 
   private var session: (any GameSession)?
   private var timer: Timer?
@@ -99,6 +108,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     case holiday
     case ohYes
     case fan
+    case neolemmix
     case lemmings2
     case lemmings3
 
@@ -109,6 +119,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       case .holiday: return "Holiday Lemmings"
       case .ohYes: return "Oh Yes! More Lemmings"
       case .fan: return "Fan Lemmings"
+      case .neolemmix: return "NeoLemmix"
       case .lemmings2: return "Lemmings 2"
       case .lemmings3: return "Lemmings 3"
       }
@@ -122,7 +133,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
         return [.xmasLemmings1991, .xmasLemmings1992,
           .holidayLemmings1993, .holidayLemmings1994]
       case .ohYes: return [.ohYesMoreLemmings]
-      case .fan: return []
+      case .fan, .neolemmix: return []
       case .lemmings2: return [.lemmings2TheTribes]
       case .lemmings3: return [.lemmings3TheChronicles]
       }
@@ -230,6 +241,13 @@ let achievementProgressKey = "ClassicAchievementProgress"
       sourceFingerprint: String?,
       sourceRevision: String)
     case fan(pack: URL, entry: FanLevelLibrary.Entry, archiveFingerprint: String)
+    case neolemmix(
+      level: NeoLemmixPackLevel,
+      packRoot: URL,
+      packID: String,
+      packName: String,
+      packRevision: String,
+      stylesRoot: URL?)
     case lemmings2(
       root: URL,
       selection: Lemmings2PlayWindow.LevelSelection,
@@ -250,10 +268,30 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
   private struct LevelBrowserDiscovery: Sendable {
     let classic: [LevelBrowserClassicSource]
+    let neoLemmixRoot: URL?
+    let neoLemmix: [NeoLemmixLibrary.Pack]
     let lemmings2Root: URL?
     let lemmings2: [Lemmings2PlayWindow.BrowserLevel]
     let lemmings3Root: URL?
     let lemmings3: [Lemmings3PlayWindow.BrowserLevel]
+
+    init(
+      classic: [LevelBrowserClassicSource],
+      neoLemmixRoot: URL? = nil,
+      neoLemmix: [NeoLemmixLibrary.Pack] = [],
+      lemmings2Root: URL?,
+      lemmings2: [Lemmings2PlayWindow.BrowserLevel],
+      lemmings3Root: URL?,
+      lemmings3: [Lemmings3PlayWindow.BrowserLevel]
+    ) {
+      self.classic = classic
+      self.neoLemmixRoot = neoLemmixRoot
+      self.neoLemmix = neoLemmix
+      self.lemmings2Root = lemmings2Root
+      self.lemmings2 = lemmings2
+      self.lemmings3Root = lemmings3Root
+      self.lemmings3 = lemmings3
+    }
   }
   private struct LevelBrowserFanDiscovery: Sendable {
     let fingerprint: String
@@ -300,6 +338,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private static let levelCatalogueRevision = "1.2-runtime-v2"
   private var levelCatalogue = LevelCatalogue(revision: "1.2-runtime-v2", packs: [])
   private var levelBrowserRoutes: [LevelCatalogueIdentity: LevelBrowserRoute] = [:]
+  private var neoCatalogueTotal = 0
   private var levelPreviewRequests: [LevelCatalogueIdentity: LevelPreviewRequest] = [:]
   private var levelBrowserPackFamilies: [String: HomeContentFamily] = [:]
   private var levelBrowserFanPacks: [String: URL] = [:]
@@ -345,6 +384,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private var levelsMenu: NSMenu?
   /// Set while an unofficial level is loaded, so retry reloads that file.
   private var currentNxlvURL: URL?
+  private var currentNeoCatalogueIdentity: LevelCatalogueIdentity?
+  private var currentNeoPackName: String?
   private var nativeL2Window: Lemmings2PlayWindow?
   private var nativeL3Window: Lemmings3PlayWindow?
 
@@ -401,6 +442,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
         undoCount: neo.undoCount, selectedSkill: panel.selectedSkillIndex,
         scrollX: playfield.viewport.scrollX, scrollY: playfield.viewport.scrollY)
       checkpoint.neo = neo.recovery; checkpoint.sourcePath = url.path
+      checkpoint.neoPackID = currentNeoCatalogueIdentity?.packID
+      checkpoint.neoLevelID = currentNeoCatalogueIdentity?.levelID
+      checkpoint.neoPackName = currentNeoPackName
     } else { return }
     lastCheckpointTime = now
     checkpoint.hotSeatID = arcadeHotSeatID
@@ -474,8 +518,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
         guard let index = classicIndex,
           dataSets[index].set.campaign.levels.indices.contains(checkpoint.levelIndex) else { throw RunRecoveryError.differentGame }
       } else {
-        guard let path = checkpoint.sourcePath, FileManager.default.fileExists(atPath: path),
-          stylesDirectory != nil else { throw RunRecoveryError.differentGame }
+        guard neoCheckpointLevel(checkpoint) != nil else { throw RunRecoveryError.differentGame }
       }
       saveRunCheckpoint(immediately: true)
       restoringCheckpoint = true
@@ -506,9 +549,20 @@ let achievementProgressKey = "ClassicAchievementProgress"
         else { throw RunRecoveryError.differentGame }
         _ = advanceFanPlay()
         try classic.restore(checkpoint)
-      } else if checkpoint.neo != nil, let path = checkpoint.sourcePath {
-        loadNxlv(URL(fileURLWithPath: path))
+      } else if checkpoint.neo != nil, let located = neoCheckpointLevel(checkpoint) {
+        let identity = checkpoint.neoPackID.flatMap { packID in
+          checkpoint.neoLevelID.map {
+            LevelCatalogueIdentity(engine: .neolemmix, packID: packID, levelID: $0)
+          }
+        }
+        loadNxlv(
+          located.url,
+          stylesDirectory: located.styles,
+          catalogueIdentity: identity,
+          packName: checkpoint.neoPackName)
         guard let neo = session as? NeoLemmixSession else { throw RunRecoveryError.differentGame }
+        guard arcadeLevel?.conditions?.levelFingerprint == checkpoint.levelFingerprint
+        else { throw RunRecoveryError.differentGame }
         try neo.restore(checkpoint)
       } else if let index = classicIndex {
         launchMode = .singleTitle; activeTitle = dataSets[index].set.title
@@ -585,6 +639,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
     if let saved = UserDefaults.standard.string(forKey: stylesPathKey) {
       stylesDirectory = URL(fileURLWithPath: saved, isDirectory: true)
+    }
+    if let saved = UserDefaults.standard.string(forKey: neoLevelsPathKey) {
+      neoLevelsDirectory = URL(fileURLWithPath: saved, isDirectory: true)
     }
     restoreSettings()
     AnonymousTelemetry.shared.recordActiveDay()
@@ -781,6 +838,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     _ = add(fileMenu, "Fan Levels…", #selector(showFanLevels), "f",
       modifiers: [.command, .shift])
     _ = add(fileMenu, "Add Fan Level Folder…", #selector(chooseFanFolder), "")
+    _ = add(fileMenu, "Add NeoLemmix Packs…", #selector(chooseNeoLemmixPacks), "")
     _ = add(fileMenu, "Open Level File…", #selector(chooseNxlvLevel), "O",
             modifiers: [.command, .shift])
     fileMenu.addItem(.separator())
@@ -1349,6 +1407,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
     suspendCurrentEngine(savesProgress: !wasSequenceActive)
     activeTitle = nil
     currentNxlvURL = nil
+    currentNeoStylesRoot = nil
+    currentNeoCatalogueIdentity = nil
+    currentNeoPackName = nil
     window.contentView = classicContent ?? plainRoot
     window.resizeIncrements = NSSize(width: 1, height: 1)
     window.minSize = NSSize(width: 900, height: 620)
@@ -2018,6 +2079,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
     installClassicArtwork(prepared)
     currentNxlvURL = nil
+    currentNeoStylesRoot = nil
     if replacement != nil {
       dataSets[index] = entry
       gamePicker.item(at: index)?.title =
@@ -2221,6 +2283,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     specialOverride: ClassicSpecialGraphic? = nil, assetsOverride: ClassicMainDATAssets? = nil
   ) -> Bool {
     currentNxlvURL = nil
+    currentNeoStylesRoot = nil
     let level = entry.level
     do {
       if groundOverride == nil, dataSets.indices.contains(gamePicker.indexOfSelectedItem) {
@@ -2367,7 +2430,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     openLevelBrowser(family: nil)
   }
 
-  private func openLevelBrowser(family: HomeContentFamily?, showsPlaylists: Bool = false) {
+  private func openLevelBrowser(family: HomeContentFamily?, showsPlaylists: Bool = false, showsJourney: Bool = false) {
     guard allowNavigationAwayFromSequence() else { return }
     // Keep one pack browser root so live catalogue refreshes always update the
     // page the player can return to.
@@ -2375,11 +2438,12 @@ let achievementProgressKey = "ClassicAchievementProgress"
       GameScreen.shared.dismiss(page)
     }
     if let prepared = preparedLevelBrowserDiscovery,
-       prepared.classic.map({ $0.directory }) == dataSets.map({ $0.directory }) {
-      presentPreparedLevelBrowser(prepared, family: family, showsPlaylists: showsPlaylists)
+       prepared.classic.map({ $0.directory }) == dataSets.map({ $0.directory }),
+       prepared.neoLemmixRoot?.standardizedFileURL == neoLevelsDirectory?.standardizedFileURL {
+      presentPreparedLevelBrowser(prepared, family: family, showsPlaylists: showsPlaylists, showsJourney: showsJourney)
       return
     }
-    let browserTitle = showsPlaylists ? "Playlists" : family?.displayName ?? "Level Select"
+    let browserTitle = showsJourney ? LearningJourney.title : showsPlaylists ? "Playlists" : family?.displayName ?? "Level Select"
     let loadingPage = GameMenuPage(title: browserTitle)
     levelBrowserLoadingPage = loadingPage
     loadingPage.setDetail("Loading the level catalogue.")
@@ -2420,6 +2484,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       rebuildLevelCatalogue(discovery)
       levelBrowserLoadingPage = nil
       GameScreen.shared.dismiss(loadingPage)
+      if showsJourney { presentLearningJourney(); return }
       if showsPlaylists {
         presentPlaylistLibrary()
         return
@@ -2460,6 +2525,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
     let lemmings3Progress = lemmings3Root.map {
       Lemmings3PlayWindow.browserProgressData(root: $0)
     } ?? [:]
+    let neoLemmixRoot = neoLevelsDirectory
+    let neoLemmixSources = neoLemmixSources
 
     return Task.detached(priority: .utility) {
       () -> LevelBrowserDiscovery? in
@@ -2490,6 +2557,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
             isVerified: false)
         }
         guard !Task.isCancelled else { return nil }
+        let neoLemmix = NeoLemmixLibrary.discover(neoLemmixSources)
+        guard !Task.isCancelled else { return nil }
         let lemmings2 = lemmings2Root.flatMap {
           try? Lemmings2PlayWindow.browserLevels(
             root: $0, progressData: lemmings2Progress)
@@ -2502,6 +2571,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
         guard !Task.isCancelled else { return nil }
         return LevelBrowserDiscovery(
           classic: refreshedClassic,
+          neoLemmixRoot: neoLemmixRoot,
+          neoLemmix: neoLemmix,
           lemmings2Root: lemmings2Root,
           lemmings2: lemmings2,
           lemmings3Root: lemmings3Root,
@@ -2519,13 +2590,16 @@ let achievementProgressKey = "ClassicAchievementProgress"
       self.levelBrowserWarmTask = nil
       if let discovery, discovery.classic.allSatisfy(\.isVerified) {
         self.preparedLevelBrowserDiscovery = discovery
+        self.neoCatalogueTotal = discovery.neoLemmix.reduce(0) { $0 + $1.pack.levels.count }
+        if self.flow?.screen == .title { self.renderScreen() }
       }
     }
   }
 
   private func presentPreparedLevelBrowser(_ discovery: LevelBrowserDiscovery, family: HomeContentFamily?,
-    showsPlaylists: Bool = false) {
+    showsPlaylists: Bool = false, showsJourney: Bool = false) {
     rebuildLevelCatalogue(discovery)
+    if showsJourney { presentLearningJourney(); return }
     if showsPlaylists {
       presentPlaylistLibrary()
       return
@@ -2543,6 +2617,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     levelBrowserPackFamilies = [:]
     levelBrowserFanPacks = [:]
     levelBrowserFanEntries = [:]
+    neoCatalogueTotal = 0
     var packs: [LevelCataloguePack] = []
 
     for source in discovery.classic {
@@ -2592,6 +2667,47 @@ let achievementProgressKey = "ClassicAchievementProgress"
       packs.append(pack)
       levelBrowserPackFamilies[browserPackKey(pack)] =
         HomeContentFamily.family(for: dataSet.title, kind: dataSet.kind)
+    }
+
+    for neoEntry in discovery.neoLemmix {
+      let neoPack = neoEntry.pack
+      let levels = neoPack.levels.enumerated().map { index, level in
+        let neoStyles = neoEntry.stylesRoot(for: level)
+        let identity = LevelCatalogueIdentity(
+          engine: .neolemmix,
+          packID: neoPack.id,
+          levelID: level.levelID)
+        levelBrowserRoutes[identity] = .neolemmix(
+          level: level,
+          packRoot: neoPack.rootURL,
+          packID: neoPack.id,
+          packName: neoPack.title,
+          packRevision: neoPack.sourceRevision,
+          stylesRoot: neoStyles)
+        if let neoStyles {
+          registerLevelPreview(
+            identity: identity,
+            source: .neolemmix(
+              level: level.url,
+              styles: neoStyles,
+              expectedSourceRevision: level.sourceRevision))
+        }
+        return LevelCatalogueEntry(
+          identity: identity,
+          packName: neoPack.title,
+          levelName: level.title.isEmpty ? "Level \(index + 1)" : level.title,
+          number: index + 1,
+          status: .beta,
+          availability: neoStyles == nil ? .unavailable : .available)
+      }
+      packs.append(LevelCataloguePack(
+        engine: .neolemmix,
+        id: neoPack.id,
+        name: neoPack.title,
+        status: .beta,
+        levels: levels))
+      levelBrowserPackFamilies["neolemmix:" + neoPack.id] = .neolemmix
+      neoCatalogueTotal += levels.count
     }
 
     if let root = discovery.lemmings2Root, !discovery.lemmings2.isEmpty {
@@ -2938,10 +3054,29 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
   }
 
+  private func neoLemmixBrowserRatings(
+    in pack: LevelCataloguePack
+  ) -> [ClassicBrowserRating] {
+    guard pack.engine == .neolemmix else { return [] }
+    var names: [String] = []
+    var levelsByName: [String: [LevelCatalogueEntry]] = [:]
+    for entry in pack.levels {
+      guard case let .neolemmix(level, _, _, _, _, _)? = levelBrowserRoutes[entry.identity],
+            let name = level.groups.first, !name.isEmpty else { return [] }
+      if levelsByName[name] == nil { names.append(name) }
+      levelsByName[name, default: []].append(entry)
+    }
+    return names.compactMap { name in
+      levelsByName[name].map { ClassicBrowserRating(name: name, levels: $0) }
+    }
+  }
+
   private func presentResolvedLevelBrowserOrRatings(
     _ pack: LevelCataloguePack
   ) {
-    let ratings = classicBrowserRatings(in: pack)
+    let ratings = pack.engine == .neolemmix
+      ? neoLemmixBrowserRatings(in: pack)
+      : classicBrowserRatings(in: pack)
     guard ratings.count > 1 else {
       presentResolvedLevelBrowser(pack)
       return
@@ -3021,13 +3156,23 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
     let total = displayedLevels.count
     let items = displayedLevels.enumerated().map { index, entry in
-      LevelCoverFlowItem(
+      let completed = entry.identity.engine == .neolemmix
+        && ArcadeStore.shared.records.trolley.attempts.contains { attempt in
+          guard attempt.run.profileID == ArcadeStore.shared.records.activeProfileID,
+                attempt.run.didWin,
+                let conditions = attempt.run.level.conditions else { return false }
+          return conditions.gameID == "neolemmix"
+            && conditions.packID == entry.identity.packID
+            && conditions.levelID == entry.identity.levelID
+      }
+      let completion = completed ? "  ✓" : ""
+      return LevelCoverFlowItem(
         id: entry.identity.levelID,
         title: entry.levelName,
         subtitle: entry.packName + " / " + entry.identity.engine.displayName,
         detail: rating.map {
-          "\($0) \(index + 1)/\(total)  \(entry.status.displayName)"
-        } ?? "Level \(entry.number)  \(entry.status.displayName)  \(index + 1)/\(total)",
+          "\($0) \(index + 1)/\(total)  \(entry.status.displayName)\(completion)"
+        } ?? "Level \(entry.number)  \(entry.status.displayName)  \(index + 1)/\(total)\(completion)",
         isAvailable: entry.isAvailable,
         artworkKey: levelPreviewRequests[entry.identity]?.artworkKey,
         availability: entry.availability)
@@ -3120,6 +3265,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
       return sourceRevision
     case let .fan(_, _, archiveFingerprint):
       return archiveFingerprint
+    case let .neolemmix(level, _, _, _, _, _):
+      return level.sourceRevision
     case let .lemmings2(_, _, _, sourceRevision):
       return sourceRevision
     case let .lemmings3(_, _, _, sourceRevision):
@@ -3446,10 +3593,11 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
   }
 
-  private func generateProgression(policy: ProgressionPolicy, technique: String?, sourceFailures: [String]) {
+  private func generateProgression(policy: ProgressionPolicy, technique: String?, sourceFailures initialSourceFailures: [String]) {
     difficultyTask?.cancel()
     let ownerProfileID = ArcadeStore.shared.playingProfileID
     var inputs: [DifficultyLibrary.Input] = []
+    var sourceFailures = initialSourceFailures
     for pack in levelCatalogue.packs {
       for level in pack.levels {
         guard let entry = try? playlistEntry(for: level.identity), let route = levelBrowserRoutes[level.identity] else { continue }
@@ -3461,6 +3609,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
           source = .classic(level.level, root: root, rank: level.rank, number: level.number)
           official = dataSet.kind != .scanned && dataSet.title != nil
         case let .fan(pack, entry, _): source = .fan(pack, entry); official = false
+        case .neolemmix:
+          sourceFailures.append("NeoLemmix difficulty analysis is not yet available.")
+          continue
         case let .lemmings2(root, selection, _, _):
           source = .lemmings2(root, tribe: selection.tribe, level: selection.level); official = true
         case let .lemmings3(root, selection, _, _):
@@ -3857,6 +4008,114 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
   }
 
+  private var isLearningJourneyActive: Bool {
+    sequencePlayingIdentity != nil
+      && sequencePlaylistStore?.activeRun?.source == .playlist(LearningJourney.playlistID)
+  }
+
+  private func sequenceEntryCanStart(_ entry: LevelPlaylistEntry, run: LevelSequenceRun) -> Bool {
+    switch playlistResolution(for: entry) {
+    case .available: return true
+    case .locked: return run.source == .playlist(LearningJourney.playlistID) && entry.identity.engine == .classic
+    default: return false
+    }
+  }
+
+  private func presentLearningJourney() {
+    guard let journey = LearningJourneyLibrary.journey else {
+      GameScreen.shared.message(Self.allLemmingsMenuTitle, detail: "The learning path is missing from this build.")
+      return
+    }
+    ensureFanPacksResolved(for: journey.lessons.map(\.entry), title: Self.allLemmingsMenuTitle) { [weak self] failures in
+      guard let self else { return }
+      do {
+        let store = try self.playlistStore()
+        let playlist = try journey.playlist()
+        if let existing = store.playlist(id: playlist.id) {
+          if existing.entries != playlist.entries { try store.update(playlist, select: false) }
+        } else { try store.add(playlist, select: false) }
+        guard failures.isEmpty else {
+          GameScreen.shared.message("Journey unavailable", detail: "A required fan pack could not be read.")
+          return
+        }
+        let active = store.activeRun.flatMap { $0.source == .playlist(LearningJourney.playlistID) && $0.pool.id == LearningJourney.version ? $0 : nil }
+        let progress = store.learningProgress
+        let pending = progress.unseen(in: journey)
+        let next = active?.currentEntry ?? pending.first
+        let lesson = journey.lessons.first { $0.entry.identity == next?.identity }
+        let page = LearningJourneyMenu.hub(next: lesson, solved: progress.completed.count,
+          total: journey.lessons.count, later: progress.revisit(in: journey).count, resume: active != nil,
+          play: { [weak self] in
+            guard let self else { return }
+            if active != nil { self.startActiveSequence() }
+            else { self.startLearningEntries(pending, in: store) }
+          }, revisit: { [weak self] in self?.presentLearningRevisit() })
+        GameScreen.shared.present(page, owner: self.window)
+      } catch { GameScreen.shared.message("Journey unavailable", detail: error.localizedDescription) }
+    }
+  }
+
+  private func startLearningEntries(_ entries: [LevelPlaylistEntry], in store: LevelPlaylistStore) {
+    do {
+      let run = try LevelSequenceRun(source: .playlist(LearningJourney.playlistID),
+        pool: .init(id: LearningJourney.version, summary: LearningJourney.title), entries: entries)
+      installActiveSequence(run, in: store)
+    } catch { GameScreen.shared.message("Journey unavailable", detail: error.localizedDescription) }
+  }
+
+  private func presentLearningRevisit(offset: Int = 0) {
+    guard let journey = LearningJourneyLibrary.journey, let store = try? playlistStore() else { return }
+    let entries = store.learningProgress.revisit(in: journey)
+    let page = GameMenuPage(title: "Come back to these")
+    for (index, entry) in entries.dropFirst(offset).prefix(5).enumerated() {
+      page.addListAction(entry.levelNameSnapshot, at: index) { [weak self] in
+        self?.startLearningEntries([entry], in: store)
+      }
+    }
+    if entries.count > offset + 5 { page.addPrimaryAction("More") { [weak self] in self?.presentLearningRevisit(offset: offset + 5) } }
+    page.onBack = { [weak page] in if let page { GameScreen.shared.dismiss(page) } }
+    GameScreen.shared.present(page, owner: window)
+  }
+
+  private func dismissLearningPause() {
+    if let page = GameScreen.shared.controllerPage(in: window) { GameScreen.shared.dismiss(page) }
+  }
+
+  private func presentLearningPause() {
+    guard isLearningJourneyActive, let run = sequencePlaylistStore?.activeRun else { return }
+    isPaused = true; panel.isPaused = true; accumulator = 0; lastStepTime = nil
+    let page = LearningJourneyMenu.pause(title: run.currentEntry.levelNameSnapshot,
+      resume: { [weak self] in
+        self?.dismissLearningPause()
+        self?.isPaused = false; self?.panel.isPaused = false; self?.lastStepTime = nil
+      }, hints: { [weak self] in self?.dismissLearningPause(); self?.showLearningHints() },
+      later: { [weak self] in self?.dismissLearningPause(); self?.deferLearningLevel(runID: run.id, level: run.currentEntry.identity) },
+      leave: { [weak self] in self?.returnToLibrary(); self?.presentLearningJourney() })
+    GameScreen.shared.present(page, owner: window)
+  }
+
+  private func showLearningHints() {
+    guard isLearningJourneyActive else { return }
+    if session?.isComplete == true { retry() }
+    isPaused = true; panel.isPaused = true; accumulator = 0; lastStepTime = nil
+    showLevelHints()
+  }
+
+  private func deferLearningLevel(runID: UUID, level: LevelCatalogueIdentity) {
+    guard isLearningJourneyActive, let store = sequencePlaylistStore, let run = store.activeRun,
+          run.id == runID, run.currentEntry.identity == level else { return }
+    do {
+      let arcade = ArcadeStore.shared
+      let playerID = arcade.playingProfileID
+      guard arcade.profilesAreWritable, arcade.storageError == nil else { return }
+      let advanced = try store.advanceLearningJourney(runID: run.id, won: false)
+      if arcade.hotSeatIsActive { _ = arcade.passSessionTurn(after: playerID) }
+      returnToLibrary()
+      if advanced { sequencePlaylistStore = store; startActiveSequence() }
+      else { try store.setActiveRun(nil); presentLearningJourney() }
+    } catch { GameScreen.shared.message("Journey not advanced", detail: error.localizedDescription) }
+  }
+
   private func installActiveSequence(
     _ run: LevelSequenceRun,
     in store: LevelPlaylistStore
@@ -3877,7 +4136,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
           GameScreen.shared.message("Session not started", detail: "The player or saved session changed. Choose the playlist again.")
           return
         }
-        guard failures.isEmpty, run.entries.allSatisfy({ self.playlistResolution(for: $0).canStart }) else {
+        guard failures.isEmpty, run.entries.allSatisfy({ self.sequenceEntryCanStart($0, run: run) }) else {
           GameScreen.shared.message("Session not started", detail: "A level was locked, removed or changed. Check the playlist and try again.")
           return
         }
@@ -4571,13 +4830,16 @@ let achievementProgressKey = "ClassicAchievementProgress"
       guard let run = store.activeRun,
             run.id == runID,
             run.currentEntry.identity == identity else { return false }
-      if try store.advanceActiveRun(), let next = store.activeRun {
+      let learning = run.source == .playlist(LearningJourney.playlistID)
+      let advanced = try (learning ? store.advanceLearningJourney(runID: runID, won: true) : store.advanceActiveRun())
+      if advanced, let next = store.activeRun {
         returnToLibrary()
         sequencePlaylistStore = store
         startBrowserLevel(next.currentEntry.identity, sequenceRunID: runID)
       } else {
         try store.setActiveRun(nil)
         returnToLibrary()
+        if learning { presentLearningJourney(); return true }
         presentPlaylistLibrary()
         GameScreen.shared.message(
           "Run complete",
@@ -4871,6 +5133,46 @@ let achievementProgressKey = "ClassicAchievementProgress"
           }
         }
       }
+    case let .neolemmix(level, packRoot, packID, packName, _, neoStyles):
+      guard let neoStyles else {
+        GameScreen.shared.message(
+          "NeoLemmix styles needed",
+          detail: "This level uses community styles. Choose Add NeoLemmix Packs and select a NeoLemmix folder with its styles.")
+        return
+      }
+      guard beginSequenceLaunch(runID: sequenceRunID, identity: identity) else { return }
+      let currentPack = try? NeoLemmixPackLibrary.discover(in: packRoot).first
+      guard currentPack?.id == packID,
+            currentPack?.levels.contains(where: {
+              $0.levelID == level.levelID && $0.sourceRevision == level.sourceRevision
+            }) == true else {
+        clearSequenceLaunch(sequenceRunID)
+        GameScreen.shared.message(
+          entry.levelName,
+          detail: "The NeoLemmix pack changed. Open Level Select and choose the level again.")
+        return
+      }
+      guard sequenceLaunchCanCommit(runID: sequenceRunID, identity: identity) else { return }
+      saveRunCheckpoint(immediately: true, waitForDisk: false)
+      if loadNxlv(
+        level.url,
+        stylesDirectory: neoStyles,
+        catalogueIdentity: identity,
+        packName: packName,
+        sequenceIdentity: sequenceRunID == nil ? nil : identity,
+        expectedSourceRevision: level.sourceRevision) {
+        if let sequenceRunID {
+          setSequencePlayingIdentity(identity)
+          clearSequenceLaunch(sequenceRunID)
+          presentSequenceHandover()
+        } else {
+          setSequencePlayingIdentity(nil)
+          sequencePlaylistStore = nil
+        }
+        launchMode = .singleTitle
+      } else {
+        clearSequenceLaunch(sequenceRunID)
+      }
     case let .lemmings2(root, selection, expectedLevelID, sourceRevision):
       guard beginSequenceLaunch(runID: sequenceRunID, identity: identity) else { return }
       saveRunCheckpoint(immediately: true)
@@ -5071,6 +5373,17 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   private func homeContentRow(_ family: HomeContentFamily) -> String {
     if family == .fan { return fanHomeRow() }
+    if family == .neolemmix {
+      guard !neoLemmixSources.isEmpty else { return "NEOLEMMIX  — NO PACKS" }
+      let passed = Set(ArcadeStore.shared.records.trolley.attempts.compactMap { attempt -> String? in
+        guard attempt.run.profileID == ArcadeStore.shared.records.activeProfileID,
+              attempt.run.didWin,
+              let conditions = attempt.run.level.conditions,
+              conditions.gameID == "neolemmix" else { return nil }
+        return conditions.packID + "\u{0}" + conditions.levelID
+      }).count
+      return "NEOLEMMIX  \(min(passed, neoCatalogueTotal))/\(neoCatalogueTotal)"
+    }
     let installed = library.entries.filter {
       family.titles.contains($0.title) && $0.available
     }
@@ -5092,7 +5405,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       items.append(HomeMenuItem(title: "RESUME - " + initials, action: .resume))
     }
     items.append(HomeMenuItem(
-      title: "\(Self.allLemmingsMenuTitle)  \(library.passed)/\(library.total)",
+      title: "\(Self.allLemmingsMenuTitle)  \((try? playlistStore().learningProgress.completed.count) ?? 0)/\(LearningJourneyLibrary.journey?.lessons.count ?? 0)",
       action: .fullQuest))
     items += HomeContentFamily.allCases.map {
       HomeMenuItem(title: homeContentRow($0), action: .browse($0))
@@ -5507,10 +5820,71 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
   }
 
-  private func loadNxlv(_ url: URL) {
+  @objc private func chooseNeoLemmixPacks() {
+    guard allowNavigationAwayFromSequence() else { return }
+    Task { @MainActor [weak self] in
+      guard let self,
+            let root = await self.pickDirectory(
+              "Choose a NeoLemmix pack, or the 'levels' directory that contains packs.") else { return }
+      do {
+        let packs = try await Task.detached(priority: .userInitiated) {
+          try NeoLemmixPackLibrary.discover(in: root)
+        }.value
+        guard !packs.isEmpty else {
+          GameScreen.shared.message("NeoLemmix", detail: "No NeoLemmix packs were found in that folder.")
+          return
+        }
+        if self.stylesDirectory == nil {
+          let sibling = root.deletingLastPathComponent().appendingPathComponent(
+            "styles", isDirectory: true)
+          if (try? sibling.resourceValues(forKeys: [.isDirectoryKey]).isDirectory) == true {
+            self.stylesDirectory = sibling
+          } else {
+            guard let styles = await self.pickDirectory(
+              "Choose the matching NeoLemmix 'styles' directory.") else { return }
+            self.stylesDirectory = styles
+          }
+          UserDefaults.standard.set(self.stylesDirectory?.path, forKey: stylesPathKey)
+        }
+        self.neoLevelsDirectory = root
+        UserDefaults.standard.set(root.path, forKey: neoLevelsPathKey)
+        self.preparedLevelBrowserDiscovery = nil
+        self.levelBrowserWarmTask?.cancel()
+        self.levelBrowserWarmTask = nil
+        self.openLevelBrowser(family: nil)
+      } catch {
+        GameScreen.shared.message("Cannot add NeoLemmix packs", detail: String(describing: error))
+      }
+    }
+  }
+
+  /// Finds a saved NeoLemmix run by pack and level ID first, so a moved app or
+  /// a removed CE copy does not strand it. Older runs fall back to their path.
+  private func neoCheckpointLevel(_ checkpoint: RunRecovery) -> (url: URL, styles: URL?)? {
+    if let packID = checkpoint.neoPackID, let levelID = checkpoint.neoLevelID,
+       let found = NeoLemmixLibrary.locate(
+         packID: packID, levelID: levelID, in: neoLemmixSources) {
+      return found.stylesRoot.map { _ in (found.level.url, found.stylesRoot) }
+    }
+    guard let path = checkpoint.sourcePath, FileManager.default.fileExists(atPath: path) else { return nil }
+    let url = URL(fileURLWithPath: path)
+    let styles = NeoLemmixLibrary.stylesRoot(
+      for: url, candidates: neoLemmixSources.compactMap(\.stylesRoot) + [stylesDirectory].compactMap { $0 })
+    return styles.map { _ in (url, styles) }
+  }
+
+  @discardableResult
+  private func loadNxlv(
+    _ url: URL,
+    stylesDirectory suppliedStyles: URL? = nil,
+    catalogueIdentity: LevelCatalogueIdentity? = nil,
+    packName: String? = nil,
+    sequenceIdentity: LevelCatalogueIdentity? = nil,
+    expectedSourceRevision: String? = nil
+  ) -> Bool {
     // A NeoLemmix level draws every piece from a style pack, so the styles
     // directory must be known before the level can render.
-    if stylesDirectory == nil {
+    if suppliedStyles == nil && stylesDirectory == nil {
       Task { @MainActor [weak self] in
         guard let self else { return }
         guard let styles = await self.pickDirectory("Choose the NeoLemmix 'styles' directory.") else {
@@ -5521,21 +5895,31 @@ let achievementProgressKey = "ClassicAchievementProgress"
         UserDefaults.standard.set(styles.path, forKey: stylesPathKey)
         self.loadNxlv(url)
       }
-      return
+      return false
     }
-    guard let stylesDirectory else { return }
+    guard let stylesDirectory = suppliedStyles ?? stylesDirectory else { return false }
 
     do {
-      let text = try String(contentsOf: url, encoding: .utf8)
+      let source = try Data(contentsOf: url)
+      if let expectedSourceRevision,
+         ArcadeStore.fingerprint(source) != expectedSourceRevision {
+        setStatus("The selected NeoLemmix level changed. Open Level Select and choose it again.")
+        return false
+      }
+      guard let text = String(data: source, encoding: .utf8)
+              ?? String(data: source, encoding: .isoLatin1) else {
+        setStatus("Could not read \(url.lastPathComponent).")
+        return false
+      }
       guard let level = NxlvLevel(text: text) else {
         setStatus("Could not parse \(url.lastPathComponent).")
-        return
+        return false
       }
       let resolution = NxlvStyleResolver(stylesRootURL: stylesDirectory).resolve(level: level)
       let missing = resolution.diagnostics.filter { $0.severity == .error }
       guard resolution.isComplete else {
         setStatus("Missing style data: \(missing.first?.message ?? "unknown")")
-        return
+        return false
       }
       let result = NxlvRenderer(retainsVisualLayers: true).render(
         level: level,
@@ -5543,11 +5927,11 @@ let achievementProgressKey = "ClassicAchievementProgress"
       )
       guard let rendered = result.renderedLevel, !result.hasErrors else {
         setStatus("Could not render \(url.lastPathComponent).")
-        return
+        return false
       }
       guard let image = makeImage(
         width: rendered.width, height: rendered.height, rgba: rendered.rgba)
-      else { return }
+      else { return false }
       let simulation = try NeoLemmixSimulation(level: level, renderedLevel: rendered)
       let neoSprites = try NeoLemmixSpriteSet(
         stylesRootURL: stylesDirectory,
@@ -5566,6 +5950,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
       playfield.levelImage = image
       playfield.neoSprites = neoSprites
       currentNxlvURL = url
+      currentNeoStylesRoot = stylesDirectory
+      currentNeoCatalogueIdentity = catalogueIdentity
+      currentNeoPackName = packName
+      setSequencePlayingIdentity(sequenceIdentity)
       adopt(
         NeoLemmixSession(
           simulation: simulation, width: rendered.width, height: rendered.height))
@@ -5578,8 +5966,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
       panel.isMenuMode = false
       playfield.needsDisplay = true; panel.needsDisplay = true
       window.title = "Ultimate Lemmings — \(level.title)"
+      return true
     } catch {
       setStatus("NeoLemmix error: \(error)")
+      return false
     }
   }
 
@@ -5615,7 +6005,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
     let fingerprint = TrolleyCapture.sessionFingerprint(new, source: source)
     let gameID = currentNxlvURL != nil ? "neolemmix"
       : fanPlaying ? "fan" : activeTitle?.rawValue ?? "lemmings"
-    let packID = currentNxlvURL?.deletingLastPathComponent().lastPathComponent
+    let packID = currentNeoCatalogueIdentity?.packID
+      ?? currentNxlvURL?.deletingLastPathComponent().lastPathComponent
       ?? (fanPlaying ? (fanPack?.lastPathComponent ?? "fan")
         : (dataSets.indices.contains(gamePicker.indexOfSelectedItem)
           ? dataSetID(dataSets[gamePicker.indexOfSelectedItem]) : gameID))
@@ -5623,14 +6014,18 @@ let achievementProgressKey = "ClassicAchievementProgress"
     if fanPlaying, fanQueue.indices.contains(fanQueueIndex) {
       let entry = fanQueue[fanQueueIndex]
       stableID = entry.file + ":" + (entry.section.map(String.init) ?? "whole-file")
-    } else { stableID = currentNxlvURL?.lastPathComponent ?? "level-\(picker.indexOfSelectedItem)" }
+    } else {
+      stableID = currentNeoCatalogueIdentity?.levelID
+        ?? currentNxlvURL?.lastPathComponent
+        ?? "level-\(picker.indexOfSelectedItem)"
+    }
     let rules = new is ClassicSession ? "classic-dos-v1" : "neolemmix-v1"
     let conditions = TrolleyConditions(gameID: gameID, packID: packID, levelID: stableID, levelFingerprint: fingerprint,
         rulesetVersion: rules, physicsMode: rules, population: new.total, rescueRequirement: new.required,
         startingSkills: TrolleyCapture.skills(new.skills), timeLimitSeconds: new.remainingSeconds.map(Double.init))
     arcadeLevel = ArcadeLevel(id: gameID + ":" + stableID,
         title: currentNxlvURL?.deletingPathExtension().lastPathComponent ?? artworkLevel?.title ?? "Lemmings",
-        game: currentNxlvURL != nil ? "NeoLemmix"
+        game: currentNxlvURL != nil ? (currentNeoPackName ?? "NeoLemmix")
           : fanPlaying ? "Fan levels" : activeTitle?.displayName ?? campaign?.name ?? "Lemmings",
         rules: rules, total: new.total, required: new.required, conditions: conditions)
     if !restoringCheckpoint {
@@ -5909,9 +6304,12 @@ let achievementProgressKey = "ClassicAchievementProgress"
       case .resume:
         if let checkpoint = menuRecovery { restoreRun(checkpoint) }
       case .fullQuest:
-        launchMode = .quest
-        if let title = library.questStart { launchTitle(title) }
+        openLevelBrowser(family: nil, showsJourney: true)
       case let .browse(family):
+        if family == .neolemmix, neoLemmixSources.isEmpty {
+          chooseNeoLemmixPacks()
+          return
+        }
         openLevelBrowser(family: family)
       }
       return
@@ -6757,7 +7155,22 @@ let achievementProgressKey = "ClassicAchievementProgress"
     if fanPlaying, fanQueue.indices.contains(fanQueueIndex) {
       loadCurrentFanLevel()
     } else if let url = currentNxlvURL {
-      loadNxlv(url)
+      let identity = currentNeoCatalogueIdentity
+      let packName = currentNeoPackName
+      let sequenceIdentity = sequencePlayingIdentity
+      let sourceRevision: String? = identity.flatMap {
+        guard case let .neolemmix(level, _, _, _, _, _)? = levelBrowserRoutes[$0] else {
+          return nil
+        }
+        return level.sourceRevision
+      }
+      loadNxlv(
+        url,
+        stylesDirectory: currentNeoStylesRoot,
+        catalogueIdentity: identity,
+        packName: packName,
+        sequenceIdentity: sequenceIdentity,
+        expectedSourceRevision: sourceRevision)
     } else {
       levelChanged()
     }
@@ -6787,7 +7200,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
         continueTitle: title,
         background: playfield.levelImage,
         rewardVolume: effects.muted ? 0 : effects.volume,
-        continueHandlesHandover: true)
+        continueHandlesHandover: true,
+        later: isLearningJourneyActive ? { [weak self] in self?.deferLearningLevel(runID: run.id, level: run.currentEntry.identity) } : nil,
+        hints: isLearningJourneyActive ? { [weak self] in self?.showLearningHints() } : nil)
       return
     }
     let hasNext = fanPlaying ? fanQueueIndex + 1 < fanQueue.count
@@ -7082,6 +7497,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     keyboard.escape = { [weak self, weak keyboard] in
       guard let self else { return }
       if self.cancelRewindToOrigin() { return }
+      if self.isLearningJourneyActive { self.presentLearningPause(); return }
       let resume = keyboard?.pauseForHelp() ?? {}
       let alert = NSAlert(); alert.messageText = "Paused"
       alert.addButton(withTitle: "Resume"); alert.addButton(withTitle: "Retry level")

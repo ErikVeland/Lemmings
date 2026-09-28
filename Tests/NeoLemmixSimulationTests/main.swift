@@ -132,7 +132,75 @@ private func testRulesAndSpawnTiming() throws {
     try require(first.traits.contains(.climber), "The entrance trait was not applied.")
 }
 
+private func testMultipleEntranceOrder() throws {
+    let entrances = [
+        NeoLemmixEntrance(
+            id: 10, position: .init(x: 10, y: 10), lemmingLimit: 1
+        ),
+        NeoLemmixEntrance(
+            id: 20, position: .init(x: 20, y: 10)
+        ),
+        NeoLemmixEntrance(
+            id: 30, position: .init(x: 30, y: 10), lemmingLimit: 2
+        ),
+    ]
+    let preplaced = NeoLemmixPreplacedLemming(position: .init(x: 5, y: 48))
+    var simulation = try NeoLemmixSimulation(
+        terrain: terrain(),
+        configuration: configuration(
+            total: 7,
+            spawnInterval: 4,
+            entrances: entrances,
+            preplaced: [preplaced]
+        )
+    )
+    var entranceOrder: [Int] = []
+    while entranceOrder.count < 6 {
+        for event in simulation.tick() {
+            if case let .hatched(_, entranceID) = event { entranceOrder.append(entranceID) }
+        }
+    }
+    try require(
+        entranceOrder == [10, 20, 30, 20, 30, 20],
+        "CE multi-entrance order was \(entranceOrder)."
+    )
+}
+
+private func testRenderOrder() throws {
+    let equal = NeoLemmixRenderOrder.sorted(Array(0..<20)) { _ in 0 }
+    try require(
+        equal == [14, 13, 12, 11, 10, 19, 18, 17, 16, 15,
+                  4, 3, 2, 1, 0, 9, 8, 7, 6, 5],
+        "CE equal-priority quicksort permutation was \(equal)."
+    )
+    try require(
+        NeoLemmixRenderOrder.priority(action: .exiting, traits: []) == 24,
+        "CE Exiter render priority changed."
+    )
+    try require(
+        NeoLemmixRenderOrder.priority(action: .walking, traits: [.neutral]) == 80,
+        "CE Neutral render priority changed."
+    )
+    try require(
+        NeoLemmixRenderOrder.priority(action: .walking, traits: [.zombie]) == 72,
+        "CE Zombie render priority changed."
+    )
+    try require(
+        NeoLemmixRenderOrder.priority(
+            action: .walking, traits: [.climber], isSelected: true, isHighlighted: true
+        ) == 252,
+        "CE selected permanent-skill render priority changed."
+    )
+}
+
 private func testPreplacedTraitsAndCoreMovement() throws {
+    var walkerCycle = try walkingSimulation()
+    walkerCycle.run(ticks: 6)
+    try require(
+        try lemming(walkerCycle).animationFrame == 7,
+        "Walker artwork did not retain CE's eight-frame visual cycle."
+    )
+
     var wallPoints: [NeoLemmixPoint] = []
     for y in 36...48 { wallPoints.append(NeoLemmixPoint(x: 24, y: y)) }
     var simulation = try walkingSimulation(
@@ -148,6 +216,25 @@ private func testPreplacedTraitsAndCoreMovement() throws {
         "The climber did not use the wall."
     )
 
+    var clipPoints = wallPoints
+    clipPoints.append(NeoLemmixPoint(x: 23, y: 41))
+    var clippedClimber = try walkingSimulation(
+        terrain: terrain(extraSolid: clipPoints),
+        traits: [.climber],
+        position: NeoLemmixPoint(x: 20, y: 48)
+    )
+    for _ in 0..<20 where (try lemming(clippedClimber).action) != .falling {
+        clippedClimber.tick()
+    }
+    let clipped = try lemming(clippedClimber)
+    try require(
+        clipped.action == .falling
+            && clipped.fallDistance == 2
+            && clipped.trueFallDistance == 1,
+        "A clipped Climber ended as \(clipped.action.rawValue) with fall counters "
+            + "\(clipped.fallDistance)/\(clipped.trueFallDistance)."
+    )
+
     var faller = try walkingSimulation(
         terrain: terrain(floorY: 85),
         traits: [.floater],
@@ -155,6 +242,25 @@ private func testPreplacedTraitsAndCoreMovement() throws {
     )
     faller.run(ticks: 8)
     try require(try lemming(faller).action == .floating, "The floater did not open after a long fall.")
+
+    var safeFaller = try NeoLemmixSimulation(
+        terrain: terrain(floorY: 48),
+        configuration: configuration(preplaced: [
+            NeoLemmixPreplacedLemming(position: NeoLemmixPoint(x: 20, y: 40)),
+        ])
+    )
+    try require(
+        try lemming(safeFaller).fallDistance == 1
+            && lemming(safeFaller).trueFallDistance == 1,
+        "An initial CE Faller did not start with one fallen pixel."
+    )
+    safeFaller.run(ticks: 7)
+    try require(
+        try lemming(safeFaller).action == .walking
+            && lemming(safeFaller).fallDistance > 0
+            && lemming(safeFaller).trueFallDistance > 0,
+        "A safe landing did not retain CE's last fall counters."
+    )
 
     var floaterFrame = try NeoLemmixSimulation(
         terrain: terrain(floorY: 85),
@@ -250,6 +356,19 @@ private func testPermanentSkillAssignments() throws {
         try lemming(slider).action == .dehoisting,
         "Slider did not start dehoisting at a supported ledge."
     )
+
+    var wall = try terrain(floorY: nil)
+    for x in 0...21 { wall.setSolid(true, x: x, y: 48) }
+    for y in 49..<80 { wall.setSolid(true, x: 21, y: y) }
+    var wallSlider = try walkingSimulation(terrain: wall)
+    try require(wallSlider.assign(skill: .slider, to: 0).wasAssigned,
+                "Wall Slider setup failed.")
+    wallSlider.run(ticks: 8)
+    let resumedSlider = try lemming(wallSlider)
+    try require(resumedSlider.action == .sliding,
+                "Dehoister did not resume sliding against a continued wall.")
+    try require(resumedSlider.dehoistPinY == nil,
+                "Dehoister retained CE's temporary terrain pin after entering Slider.")
 }
 
 private func testWalkerJumperAndShimmier() throws {
@@ -381,6 +500,8 @@ private func testBlockerAndConstructiveSkills() throws {
     try require(hollowDigger.assign(skill: .digger, to: 0).wasAssigned,
                 "The hollow-foot Digger assignment failed.")
     hollowDigger.tick()
+    try require(try lemming(hollowDigger).animationFrame == 1,
+                "The first Digger tick delayed CE's visible animation with its physics cycle.")
     try require(!hollowDigger.terrain.isSolid(x: 20, y: 49),
                 "The hollow-foot Blocker fixture unexpectedly has a center ground pixel.")
     try require(hollowDigger.assign(skill: .blocker, to: 0).wasAssigned,
@@ -407,6 +528,11 @@ private func testBlockerAndConstructiveSkills() throws {
         try require(
             simulation.terrain.constructionShadeMask?.contains(expectedShade) == true,
             "The \(skill.rawValue) did not retain its CE construction gradient step."
+        )
+        simulation.run(ticks: 240)
+        try require(
+            try lemming(simulation).bricksRemaining == 0,
+            "The \(skill.rawValue) brick counter survived its CE action transition."
         )
     }
 }
@@ -1333,7 +1459,19 @@ private func testTeleporter() throws {
                 "A teleporter did not hide its lemming.")
     try require(try lemming(simulation).direction == .left,
                 "A flipped teleporter did not turn its lemming.")
-    simulation.run(ticks: 3)
+    try require(simulation.gadgetAnimationFrames?[50] == 1
+                && simulation.gadgetAnimationFrames?[51] == 0,
+                "A teleporter did not begin before its receiver.")
+    simulation.tick()
+    try require(simulation.gadgetAnimationFrames?[50] == 0
+                && simulation.gadgetAnimationFrames?[51] == 0,
+                "A teleporter did not hand its lemming to the receiver at frame completion.")
+    try require(try lemming(simulation).position == .init(x: 70, y: 48),
+                "A hidden lemming did not move at the teleporter transfer frame.")
+    simulation.tick()
+    try require(simulation.gadgetAnimationFrames?[51] == 1,
+                "A receiver did not start on the tick after teleporter transfer.")
+    simulation.tick()
     let arrived = try lemming(simulation)
     try require(arrived.action == .walking,
                 "A receiver did not return control after its animation delay.")
@@ -1364,6 +1502,29 @@ private func testTeleporter() throws {
                 "A busy teleporter accepted more than one lemming.")
     try require(occupied.lemmings.filter { $0.action == .walking }.count == 1,
                 "A busy teleporter did not let the next lemming pass.")
+
+    let instantTeleporter = NeoLemmixZone(
+        id: 52,
+        effect: .teleporter,
+        bounds: NeoLemmixRect(x: 21, y: 48, width: 1, height: 1),
+        pairing: 8,
+        animationFrames: 1
+    )
+    let instantReceiver = NeoLemmixZone(
+        id: 53,
+        effect: .receiver,
+        bounds: NeoLemmixRect(x: 80, y: 48, width: 1, height: 1),
+        pairing: 8,
+        animationFrames: 1
+    )
+    var instant = try walkingSimulation(zones: [instantTeleporter, instantReceiver])
+    let instantTransferred = try lemming(instant)
+    try require(instantTransferred.action == .teleporting
+                && instantTransferred.position == .init(x: 80, y: 48),
+                "A one-frame teleporter did not transfer on its trigger tick.")
+    instant.tick()
+    try require(try lemming(instant).action == .walking,
+                "A one-frame receiver did not release on the next tick.")
 }
 
 private func testUpdraftAndZombieInfection() throws {
@@ -1495,6 +1656,8 @@ private func testNukeAndCompletion() throws {
 
 private let tests: [(String, () throws -> Void)] = [
     ("rules and spawn timing", testRulesAndSpawnTiming),
+    ("multiple entrance order", testMultipleEntranceOrder),
+    ("CE lemming render order", testRenderOrder),
     ("preplaced traits and core movement", testPreplacedTraitsAndCoreMovement),
     ("permanent skills", testPermanentSkillAssignments),
     ("walker, jumper, and shimmier", testWalkerJumperAndShimmier),

@@ -79,6 +79,9 @@ The macOS player resolves the level theme's `LEMMINGS` style at runtime, reads
 its `scheme.nxmi`, uses the declared direction-specific foot anchors and applies
 athlete, zombie, neutral and theme recoloring, including declared alternate
 shades. Jumper artwork follows CE's `0...5`, `6`, and `7...12` progress buckets.
+The Stoning phase uses CE's 16-frame Oh-No artwork and its `FOOT_Y 10`
+anchor; only the one-frame stone burst uses the Stoner artwork and its
+`FOOT_Y 25` anchor.
 It does not bundle third-party sprite pixels. The pinned corpus resolves 15,104
 representative frames across all 794 levels and 59 themes.
 
@@ -113,35 +116,26 @@ primary frames from the deterministic simulation tick. Entrances remain on
 frame 1 until their configured opening tick, advance on that tick, and settle
 on frame 0 after the opening cycle.
 
-## Compatibility limits
+## Compatibility boundary
 
-The strict 794-level corpus is runnable, but this is not yet a full
-replay-compatibility claim. These items still need work before
-the engine can claim NeoLemmix 12.14 or CE 1.2.0 parity:
+The current NeoLemmix 12.14 and CE 1.2.0 contract is closed by the strict
+794-level source corpus, the 160-route Redux replay corpus, an independent CE
+terminal-state manifest, and live CE pixel captures for all 21 current skills.
+The final-state comparison matches every scalar, lemming, gadget and terrain
+field in all 160 records. The selected visual matrix matches all 68 frames with
+zero mutually visible RGB differences across seven style families.
 
-- Reference capture checks for pickup icons, button state and locked exits.
-- Capture comparison for live terrain pixels and layer composition.
-- Remaining trigger-controlled secondary and moving-background animation,
-  generated pickup icons, and paired teleporter/receiver state. Unconditional
-  secondary layers retain their offsets, Z-order, resize and live frame cycle.
-  Triggered traps render and enforce their declared primary-animation interval.
-- Exact oracle comparisons for remaining skill, updraft, splitter, teleporter,
-  receiver, portal, zombie and state-changer edge cases.
-- CE-specific physics changes. The legacy LVL Superlemming marker remains a
-  separate Classic-family format concern; CE 1.2 does not parse it from NXLV.
-- Legacy `.nxrp` import where retained packs require it.
-- Final-state comparison against a captured CE oracle. A March 2025 Redux
-  solution set completes 160/160 native runs and matches all 160 recorded
-  rescue frames; all 158 exact-version pairs complete. An older exact-version
-  archive completes 159/160, with one source result still needed to classify
-  its `Manic 32` route.
+Legacy `.nxrp` formats remain outside the current section-based replay contract.
+The legacy LVL Superlemming marker remains a separate Classic-family format
+concern because CE 1.2 does not parse it from NXLV. Unknown future skills and
+object effects produce explicit diagnostics instead of silent fallback.
 
 Basher, Miner, Bomber, Stoner, Fencer and Laserer use the CE mask geometry as
 coordinate spans; the repository does not contain the oracle bitmap files.
 Grounded Bombers and Stoners use the CE Oh-No fall behavior. Airborne instant
 assignments bypass Oh-No and enter the explosion or stone-finish action.
 
-Callers must treat unsupported level effects as a load diagnostic until these items are implemented.
+Callers must treat unknown future level effects as a load diagnostic.
 
 ## Verification
 

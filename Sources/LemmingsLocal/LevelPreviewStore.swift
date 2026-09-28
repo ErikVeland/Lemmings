@@ -23,6 +23,10 @@ enum LevelPreviewSource: Sendable {
         entry: FanLevelLibrary.Entry,
         archiveFingerprint: String,
         portsRoot: URL)
+    case neolemmix(
+        level: URL,
+        styles: URL,
+        expectedSourceRevision: String)
     case lemmings2(
         root: URL,
         selection: Lemmings2PlayWindow.LevelSelection,
@@ -41,6 +45,10 @@ enum LevelPreviewSource: Sendable {
             return ["fan-classic", pack.standardizedFileURL.path, entry.file,
                     String(entry.section ?? -1), archiveFingerprint,
                     portsRoot.standardizedFileURL.path].joined(separator: "\u{0}")
+        case let .neolemmix(level, styles, expectedSourceRevision):
+            return ["neolemmix", level.standardizedFileURL.path,
+                    styles.standardizedFileURL.path, expectedSourceRevision]
+                .joined(separator: "\u{0}")
         case let .lemmings2(root, selection, expectedLevelID):
             return ["lemmings2", root.standardizedFileURL.path,
                     String(selection.tribe), String(selection.level), expectedLevelID]
@@ -65,6 +73,11 @@ enum LevelPreviewSource: Sendable {
             return revision
         case let .fanClassic(_, _, archiveFingerprint, _):
             return archiveFingerprint
+        case .neolemmix:
+            guard let dependency = try LevelPreviewRenderer.dependencyFingerprint(for: self) else {
+                throw LevelPreviewError.levelUnavailable
+            }
+            return dependency
         case let .lemmings2(root, _, _), let .lemmings3(root, _, _):
             guard let dependency = try LevelPreviewRenderer.dependencyFingerprint(for: self) else {
                 throw LevelPreviewError.levelUnavailable
@@ -189,7 +202,7 @@ actor LevelPreviewStore {
         switch request.source {
         case .classic, .fanClassic:
             return StorageIdentity(key: request.artworkKey, dependencyFingerprint: nil)
-        case .lemmings2, .lemmings3:
+        case .neolemmix, .lemmings2, .lemmings3:
             break
         }
         let fingerprintTask = Task.detached(priority: .userInitiated) {
@@ -352,6 +365,11 @@ private enum LevelPreviewRenderer {
                 entry: entry,
                 archiveFingerprint: archiveFingerprint,
                 portsRoot: portsRoot)
+        case let .neolemmix(level, styles, expectedSourceRevision):
+            bitmap = try renderNeoLemmix(
+                levelURL: level,
+                stylesRoot: styles,
+                expectedSourceRevision: expectedSourceRevision)
         case let .lemmings2(root, selection, expectedLevelID):
             bitmap = try renderLemmings2(
                 root: root,
@@ -379,6 +397,26 @@ private enum LevelPreviewRenderer {
         switch source {
         case .classic, .fanClassic:
             return nil
+        case let .neolemmix(levelURL, stylesRoot, expectedSourceRevision):
+            let data = try read(levelURL)
+            guard digest(data) == expectedSourceRevision,
+                  let text = String(data: data, encoding: .utf8)
+                    ?? String(data: data, encoding: .isoLatin1),
+                  let level = NxlvLevel(text: text) else {
+                throw LevelPreviewError.contentChanged
+            }
+            let resolution = NxlvStyleResolver(stylesRootURL: stylesRoot).resolve(level: level)
+            guard resolution.isComplete else { throw LevelPreviewError.levelUnavailable }
+            var dependencies = [Dependency("level", levelURL, data: data)]
+            for asset in resolution.assets {
+                dependencies += asset.graphicURLs.enumerated().map {
+                    Dependency("graphic-\($0.offset)", $0.element)
+                }
+                if let metadata = asset.metadataURL {
+                    dependencies.append(Dependency("metadata", metadata))
+                }
+            }
+            return try fingerprint(files: dependencies)
         case let .lemmings2(root, selection, _):
             guard Lemmings2Campaign.tribeNames.indices.contains(selection.tribe),
                   (0..<10).contains(selection.level),
@@ -430,6 +468,35 @@ private enum LevelPreviewRenderer {
                     format: "LEVELS/TEMP%03d.OBS", level.temporaryObjectsReference)))
             ])
         }
+    }
+
+    private static func renderNeoLemmix(
+        levelURL: URL,
+        stylesRoot: URL,
+        expectedSourceRevision: String
+    ) throws -> LevelPreviewBitmap {
+        let data = try read(levelURL)
+        guard digest(data) == expectedSourceRevision,
+              let text = String(data: data, encoding: .utf8)
+                ?? String(data: data, encoding: .isoLatin1),
+              let level = NxlvLevel(text: text) else {
+            throw LevelPreviewError.contentChanged
+        }
+        let resolution = NxlvStyleResolver(stylesRootURL: stylesRoot).resolve(level: level)
+        guard resolution.isComplete else { throw LevelPreviewError.levelUnavailable }
+        let result = NxlvRenderer(retainsVisualLayers: true).render(
+            level: level,
+            resolution: resolution)
+        guard let rendered = result.renderedLevel, !result.hasErrors else {
+            throw LevelPreviewError.levelUnavailable
+        }
+        try Task.checkCancellation()
+        return try crop(
+            rgba: Data(rendered.rgba),
+            sourceWidth: rendered.width,
+            sourceHeight: rendered.height,
+            x: level.startX,
+            y: level.startY)
     }
 
     private static func renderClassic(
@@ -655,6 +722,10 @@ private enum LevelPreviewRenderer {
         let data = try Data(contentsOf: url)
         try Task.checkCancellation()
         return data
+    }
+
+    private static func digest(_ data: Data) -> String {
+        SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined()
     }
 
     private static func fingerprint(files: [Dependency]) throws -> String {

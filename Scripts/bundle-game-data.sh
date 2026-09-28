@@ -25,6 +25,9 @@ mkdir -p "$resources_dir/Ports" "$resources_dir/Music"
 mkdir -p "$resources_dir/Hints"
 cp "$project_dir/Resources/Hints/classic.json" "$resources_dir/Hints/classic.json"
 cp "$project_dir/Resources/Hints/solutions.json" "$resources_dir/Hints/solutions.json"
+mkdir -p "$resources_dir/Progression"
+cp "$project_dir/Resources/Progression/learning.json" "$resources_dir/Progression/learning.json"
+cp "$project_dir/Resources/Progression/solutions.json" "$resources_dir/Progression/solutions.json"
 # Event sounds that no original bank supplies, named after the event.
 mkdir -p "$resources_dir/Sounds"
 rsync -a --exclude=.DS_Store "$project_dir/Resources/Sounds/" "$resources_dir/Sounds/"
@@ -43,6 +46,13 @@ case "$2" in
     python3 "$project_dir/Tools/FanLevelCatalog/prune.py" "$project_dir/Content/LevelPacks"
     rsync -a --include='*.zip' --include='*.json' --exclude='*' \
       "$project_dir/Content/LevelPacks/" "$resources_dir/LevelPacks/"
+    # CE levels and DMA styles. Scripts/prepare-neolemmix-content.sh makes them.
+    if [[ ! -f "$project_dir/Content/NeoLemmix/manifest.json" ]]; then
+      echo "Missing NeoLemmix packs. Run Scripts/prepare-neolemmix-content.sh." >&2
+      exit 1
+    fi
+    rsync -a --delete --exclude=.DS_Store \
+      "$project_dir/Content/NeoLemmix/" "$resources_dir/NeoLemmix/"
     rsync "${copy_options[@]}" "$project_dir/Sources/Ports/" "$resources_dir/Ports/"
     zsh "$project_dir/Scripts/prepare-holiday-data.sh" "$resources_dir"
     python3 "$project_dir/Tools/MacArtwork/prepare.py" "$resources_dir/MacArtwork"

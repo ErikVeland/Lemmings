@@ -55,6 +55,7 @@ protocol GameSession: AnyObject {
   var ticksPerSecond: Int { get }
 
   var lemmings: [SessionLemming] { get }
+  func lemmingsForRendering(selectedID: Int?, highlightedID: Int?) -> [SessionLemming]
   var entranceX: Int? { get }
   var exitX: Int? { get }
   var entranceY: Int? { get }
@@ -102,6 +103,10 @@ protocol GameSession: AnyObject {
 }
 
 extension GameSession {
+  func lemmingsForRendering(selectedID: Int?, highlightedID: Int?) -> [SessionLemming] {
+    lemmings
+  }
+
   var canStillReachRequirement: Bool {
     !FailureMoodDecision.isUnrecoverable(saved: saved, active: lemmings.count,
       unreleased: total - released, required: required)
@@ -468,16 +473,28 @@ final class NeoLemmixSession: GameSession {
   var ticksPerSecond: Int { NeoLemmixRules.ticksPerSecond }
 
   var lemmings: [SessionLemming] {
-    simulation.lemmings.filter { $0.isActive && $0.action != .teleporting }.map {
-      SessionLemming(
-        id: $0.id, x: $0.position.x, y: $0.position.y,
-        pose: spritePose(for: $0.action),
-        facingLeft: $0.direction == .left,
-        animationFrame: $0.animationFrame,
-        countdown: $0.bomberCountdown,
-        neoAction: $0.action,
-        neoTraits: $0.traits)
-    }
+    simulation.lemmings.filter { $0.isActive && $0.action != .teleporting }.map(sessionLemming)
+  }
+
+  func lemmingsForRendering(selectedID: Int?, highlightedID: Int?) -> [SessionLemming] {
+    // CE sorts removed and teleporting entries too, then skips them while
+    // drawing. Their positions in the unstable sort affect overlapping actors.
+    NeoLemmixRenderOrder.sorted(
+      simulation.lemmings,
+      selectedID: selectedID,
+      highlightedID: highlightedID
+    ).filter { $0.isActive && $0.action != .teleporting }.map(sessionLemming)
+  }
+
+  private func sessionLemming(_ lemming: NeoLemmixLemming) -> SessionLemming {
+    SessionLemming(
+      id: lemming.id, x: lemming.position.x, y: lemming.position.y,
+      pose: spritePose(for: lemming.action),
+      facingLeft: lemming.direction == .left,
+      animationFrame: lemming.animationFrame,
+      countdown: lemming.bomberCountdown,
+      neoAction: lemming.action,
+      neoTraits: lemming.traits)
   }
 
   var entranceX: Int? { simulation.configuration.entrances.first?.position.x }

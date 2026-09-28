@@ -34,11 +34,16 @@ private func levelURLs(beneath root: URL) throws -> [URL] {
 
 private func run() throws {
     let arguments = Array(CommandLine.arguments.dropFirst())
-    guard arguments.count == 2 || (arguments.count == 3 && arguments[2] == "--require-runnable") else {
+    let options = Set(arguments.dropFirst(2))
+    guard (2...4).contains(arguments.count),
+          options.isSubset(of: ["--require-runnable", "--warnings-only"]),
+          options.count == arguments.count - 2 else {
         throw CorpusFailure(
-            description: "Usage: NxlvCorpusDiagnostics <levels-directory> <styles-directory> [--require-runnable]"
+            description: "Usage: NxlvCorpusDiagnostics <levels-directory> <styles-directory> [--require-runnable] [--warnings-only]"
         )
     }
+    let requireRunnable = options.contains("--require-runnable")
+    let warningsOnly = options.contains("--warnings-only")
     let levelsRoot = URL(fileURLWithPath: arguments[0], isDirectory: true)
     let stylesRoot = URL(fileURLWithPath: arguments[1], isDirectory: true)
     let urls = try levelURLs(beneath: levelsRoot)
@@ -50,6 +55,8 @@ private func run() throws {
     let renderer = NxlvRenderer()
     var failures: [String] = []
     var warnings = 0
+    var warningCounts: [String: Int] = [:]
+    var warningSamples: [String: [String]] = [:]
     var simulatedTicks = 0
     var unsupportedLevels: [(path: String, features: [String])] = []
 
@@ -66,7 +73,15 @@ private func run() throws {
                 throw CorpusFailure(description: "The level text is too large or undecodable.")
             }
             let decode = NxlvLevel.decode(text: text)
-            warnings += decode.diagnostics.filter { $0.severity == .warning }.count
+            let parseWarnings = decode.diagnostics.filter { $0.severity == .warning }
+            warnings += parseWarnings.count
+            for warning in parseWarnings {
+                let key = "parse.\(warning.code.rawValue)"
+                warningCounts[key, default: 0] += 1
+                if warningSamples[key, default: []].count < 8 {
+                    warningSamples[key, default: []].append("\(relative): \(warning.message)")
+                }
+            }
             let parseErrors = decode.diagnostics.filter { $0.severity == .error }
             guard let level = decode.level, parseErrors.isEmpty else {
                 throw CorpusFailure(description: parseErrors.prefix(4).map {
@@ -79,7 +94,15 @@ private func run() throws {
             }
 
             let resolution = resolver.resolve(level: level)
-            warnings += resolution.diagnostics.filter { $0.severity == .warning }.count
+            let styleWarnings = resolution.diagnostics.filter { $0.severity == .warning }
+            warnings += styleWarnings.count
+            for warning in styleWarnings {
+                let key = "style.\(warning.code.rawValue)"
+                warningCounts[key, default: 0] += 1
+                if warningSamples[key, default: []].count < 8 {
+                    warningSamples[key, default: []].append("\(relative): \(warning.message)")
+                }
+            }
             let styleErrors = resolution.diagnostics.filter { $0.severity == .error }
             guard styleErrors.isEmpty else {
                 throw CorpusFailure(description: styleErrors.prefix(4).map {
@@ -92,7 +115,15 @@ private func run() throws {
             }
 
             let rendering = renderer.render(level: level, resolution: resolution)
-            warnings += rendering.diagnostics.filter { $0.severity == .warning }.count
+            let renderWarnings = rendering.diagnostics.filter { $0.severity == .warning }
+            warnings += renderWarnings.count
+            for warning in renderWarnings {
+                let key = "render.\(warning.code.rawValue)"
+                warningCounts[key, default: 0] += 1
+                if warningSamples[key, default: []].count < 8 {
+                    warningSamples[key, default: []].append("\(relative): \(warning.message)")
+                }
+            }
             let renderErrors = rendering.diagnostics.filter { $0.severity == .error }
             guard !rendering.hasErrors,
                   renderErrors.isEmpty,
@@ -115,22 +146,24 @@ private func run() throws {
                 continue
             }
 
-            var original = try NeoLemmixSimulation(level: level, renderedLevel: rendered)
-            original.run(ticks: 256)
-            simulatedTicks += original.tickCount
-            var restored = try JSONDecoder().decode(
-                NeoLemmixSimulation.self,
-                from: JSONEncoder().encode(original)
-            )
-            for _ in 0..<64 where !original.isComplete {
-                let originalEvents = original.tick()
-                let restoredEvents = restored.tick()
-                guard originalEvents == restoredEvents, original == restored else {
-                    throw CorpusFailure(
-                        description: "Codable continuation diverged at tick \(original.tickCount)."
-                    )
+            if !warningsOnly {
+                var original = try NeoLemmixSimulation(level: level, renderedLevel: rendered)
+                original.run(ticks: 256)
+                simulatedTicks += original.tickCount
+                var restored = try JSONDecoder().decode(
+                    NeoLemmixSimulation.self,
+                    from: JSONEncoder().encode(original)
+                )
+                for _ in 0..<64 where !original.isComplete {
+                    let originalEvents = original.tick()
+                    let restoredEvents = restored.tick()
+                    guard originalEvents == restoredEvents, original == restored else {
+                        throw CorpusFailure(
+                            description: "Codable continuation diverged at tick \(original.tickCount)."
+                        )
+                    }
+                    simulatedTicks += 1
                 }
-                simulatedTicks += 1
             }
         } catch {
             failures.append("\(relative): \(error)")
@@ -146,6 +179,10 @@ private func run() throws {
             + "\(warnings) warnings, \(unsupportedLevels.count) unsupported, "
             + "\(failures.count) import/render failures."
     )
+    for code in warningCounts.keys.sorted() {
+        print("WARN \(code): \(warningCounts[code, default: 0])")
+        for sample in warningSamples[code, default: []] { print("  \(sample)") }
+    }
     let featureCounts = unsupportedLevels
         .flatMap(\.features)
         .reduce(into: [String: Int]()) { counts, feature in counts[feature, default: 0] += 1 }
@@ -157,7 +194,7 @@ private func run() throws {
         if failures.count > 40 { print("...and \(failures.count - 40) more failures") }
         throw CorpusFailure(description: "NXLV corpus verification failed.")
     }
-    if arguments.last == "--require-runnable", !unsupportedLevels.isEmpty {
+    if requireRunnable, !unsupportedLevels.isEmpty {
         for item in unsupportedLevels.prefix(40) {
             print("OPEN \(item.path): \(item.features.joined(separator: ", "))")
         }

@@ -73,16 +73,22 @@ NeoLemmix Community Edition is published under a Creative Commons
 Attribution-NonCommercial 4.0 licence. The reviewed 1.2.0 oracle is commit
 `38d0449f87501798e78ac668a9494848f4aa9649`. Its source credits Eric
 Langedijk for Lemmix, Stephan Neupert and Namida Verasche. This project does
-not include its source, styles, levels or other assets.
+not include its source code.
 
 The CE repository states that bundled images, music and sound retain their
 creators' copyright and restricts their use to running NeoLemmix. The public CI
-gate therefore does not download or render that corpus. Real-corpus checks are
-local and require content that the tester may lawfully use.
+gate therefore does not download or render that corpus.
 
-No third-party game-data files or NeoLemmix content should be added to a
-redistributable build without the relevant rights. The application should ask
-players to import data they lawfully possess.
+On 28 September 2026 the owner decided to bundle the CE levels, as the app
+bundles fan level packs. The app also bundles the 26 styles that CE
+`License.txt` assigns to DMA. These are conversions of the original assets
+that the owner approved for distribution on 15 September. The app does not
+bundle community styles, CE interface graphics, music or sound. Levels that
+need community styles stay unavailable until the player adds a NeoLemmix folder
+with those styles. The bundle carries CE `License.txt` next to the levels.
+`Scripts/prepare-neolemmix-content.sh` records the source commit and the style
+list. CC BY-NC 4.0 does not permit commercial use. A paid release needs
+separate permission from the CE authors.
 
 ## resource_dasm format reference
 

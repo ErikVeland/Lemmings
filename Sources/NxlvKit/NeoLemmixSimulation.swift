@@ -1083,6 +1083,9 @@ public struct NeoLemmixLemming: Codable, Equatable, Sendable, Identifiable {
     public var cloneParentID: Int?
     public var pendingRemovalReason: NeoLemmixRemovalReason?
     public var removalReason: NeoLemmixRemovalReason?
+    /// CE keeps the action field after removal. Retain it so invisible entries
+    /// still receive the same priority during CE's unstable render sort.
+    public var renderOrderActionBeforeRemoval: NeoLemmixAction?
     public var isStartingAction: Bool
     /// CE permanently excludes a lemming from skill-adder gadgets after its
     /// first Oh-No transition. Optional for older encoded recovery states.
@@ -1127,6 +1130,7 @@ public struct NeoLemmixLemming: Codable, Equatable, Sendable, Identifiable {
         self.cloneParentID = cloneParentID
         self.pendingRemovalReason = nil
         self.removalReason = nil
+        self.renderOrderActionBeforeRemoval = nil
         self.isStartingAction = true
         self.hasBeenOhNo = false
     }
@@ -1307,6 +1311,10 @@ public struct NeoLemmixSimulation: Codable, Equatable, Sendable {
                 lemming.action = .shimmying
             } else if !terrain.isSolid(x: preplaced.position.x, y: preplaced.position.y) {
                 lemming.action = .falling
+                // CE enters every initial Faller through Transition, which
+                // seeds both fall counters at one before the first update.
+                lemming.fallDistance = 1
+                lemming.trueFallDistance = 1
                 lemming.traits.remove(.blocker)
             } else if preplaced.traits.contains(.blocker)
                 && !initialLemmings.contains(where: {
@@ -1342,7 +1350,7 @@ public struct NeoLemmixSimulation: Codable, Equatable, Sendable {
             configuration.zones.compactMap { zone in
                 guard [
                     NeoLemmixZoneEffect.unlockButton, .lockedExit, .trap, .oneShotTrap,
-                    .animation, .animationOnce,
+                    .animation, .animationOnce, .teleporter, .receiver,
                 ].contains(zone.effect) else { return nil }
                 let frameCount = max(1, zone.animationFrames ?? 1)
                 let startsOpen = zone.effect == .lockedExit && !hasButtons
@@ -1651,7 +1659,10 @@ private extension NeoLemmixSimulation {
 
     func primaryFrame(for zone: NeoLemmixZone) -> Int {
         if let frame = gadgetAnimationFrames?[zone.id] { return frame }
-        if zone.effect == .pickupSkill { return disabledZoneIDs.contains(zone.id) ? 0 : 1 }
+        if zone.effect == .pickupSkill {
+            let skillIndex = zone.skill.flatMap { NeoLemmixSkill.allCases.firstIndex(of: $0) } ?? 0
+            return skillIndex * 2 + (disabledZoneIDs.contains(zone.id) ? 0 : 1)
+        }
         if (gadgetBusyUntil?[zone.id] ?? 0) > tickCount {
             let frameCount = max(1, zone.animationFrames ?? 1)
             return max(1, frameCount - max(0, (gadgetBusyUntil?[zone.id] ?? tickCount) - tickCount))
@@ -1712,6 +1723,23 @@ private extension NeoLemmixSimulation {
             }
             let frameCount = max(1, zone.animationFrames ?? 1)
             let nextFrame = (gadgetAnimationFrames?[zoneID] ?? 1) + 1
+            if zone.effect == .teleporter,
+               let pairing = zone.pairing,
+               let receiver = configuration.zones.first(where: {
+                   $0.effect == .receiver && $0.pairing == pairing
+               }) {
+                let transferFrame = zone.keyFrame.map { max(1, $0) } ?? frameCount
+                if nextFrame == transferFrame,
+                   let lemmingIndex = lemmings.firstIndex(where: {
+                       $0.action == .teleporting && $0.teleportTargetZoneID == receiver.id
+                   }) {
+                    lemmings[lemmingIndex].position = NeoLemmixPoint(
+                        x: receiver.bounds.x, y: receiver.bounds.y
+                    )
+                    gadgetAnimationFrames?[receiver.id] = 0
+                    gadgetAnimatingZoneIDs?.insert(receiver.id)
+                }
+            }
             if nextFrame >= frameCount {
                 gadgetAnimationFrames?[zoneID] = 0
                 finished.insert(zoneID)
@@ -2014,12 +2042,14 @@ private extension NeoLemmixSimulation {
         if nextSpawnCountdown > 0 { nextSpawnCountdown -= 1 }
         guard nextSpawnCountdown == 0, let entranceIndex = nextAvailableEntranceIndex() else { return }
         let entrance = configuration.entrances[entranceIndex]
-        let lemming = NeoLemmixLemming(
+        var lemming = NeoLemmixLemming(
             id: nextLemmingID,
             position: entrance.position,
             direction: entrance.direction,
             traits: entrance.traits
         )
+        lemming.fallDistance = 1
+        lemming.trueFallDistance = 1
         lemmings.append(lemming)
         nextLemmingID += 1
         releasedCount += 1
@@ -2139,11 +2169,17 @@ private extension NeoLemmixSimulation {
         lemming.action = target
         lemming.animationFrame = 0
         lemming.actionProgress = 0
+        // CE clears this counter on every action transition, then initializes it
+        // again only for Builder, Platformer, and Stacker. Keeping the completed
+        // skill's value makes restored/canonical states diverge after construction.
+        lemming.bricksRemaining = 0
         lemming.isStartingAction = target == .hoisting ? oldIsStartingAction : true
         lemming.targetZoneID = target == .disarming ? lemming.targetZoneID : nil
         if target == .dehoisting {
             lemming.dehoistPinY = lemming.position.y
-        } else if target != .sliding {
+        } else {
+            // CE keeps the virtual pin only while Dehoisting. Entering Slider
+            // clears it, including the Dehoister-to-Slider wall transition.
             lemming.dehoistPinY = nil
         }
         if target != .lasering { lemming.laserHitPoint = nil }
@@ -2189,6 +2225,7 @@ private extension NeoLemmixSimulation {
         if reason == .saved { savedCount += 1 } else { lostCount += 1 }
         lemming.traits.remove(.blocker)
         lemming.removalReason = reason
+        lemming.renderOrderActionBeforeRemoval = lemming.action
         lemming.action = .removed
         lemming.animationFrame = 0
         lastTickEvents.append(.removed(lemmingID: lemming.id, reason: reason))
@@ -2638,6 +2675,11 @@ private extension NeoLemmixSimulation {
                     } else {
                         if gadgetBusyUntil == nil { gadgetBusyUntil = [:] }
                         gadgetBusyUntil?[zone.id] = tickCount + (zone.animationFrames ?? 1)
+                        if gadgetAnimationFrames == nil { gadgetAnimationFrames = [:] }
+                        // CE marks the trap triggered during lemming handling,
+                        // then advances frame 0 to frame 1 in UpdateGadgets on
+                        // the same tick.
+                        gadgetAnimationFrames?[zone.id] = 0
                         if gadgetAnimatingZoneIDs == nil { gadgetAnimatingZoneIDs = [] }
                         gadgetAnimatingZoneIDs?.insert(zone.id)
                         if zone.effect == .oneShotTrap { disabledZoneIDs.insert(zone.id) }
@@ -2675,11 +2717,18 @@ private extension NeoLemmixSimulation {
                     lemming.teleportTargetZoneID = receiver.id
                     let departure = zone.keyFrame.map { max(1, $0) }
                         ?? zone.animationFrames ?? 1
-                    let arrival = receiver.keyFrame.map { max(1, $0) }
-                        ?? max(1, (receiver.animationFrames ?? 1) - 1)
+                    // CE tests the receiver's previous frame before gadgets
+                    // advance. The lemming reappears when that frame reaches
+                    // KEY_FRAME - 1, or the final frame when KEY_FRAME is 0.
+                    let arrival = receiver.keyFrame.map { max(0, $0 - 1) }
+                        ?? max(0, (receiver.animationFrames ?? 1) - 1)
                     lemming.teleportTicksRemaining = departure + arrival
                     lemming.teleportReturnAction = returnAction
                     if gadgetBusyUntil == nil { gadgetBusyUntil = [:] }
+                    if gadgetAnimationFrames == nil { gadgetAnimationFrames = [:] }
+                    gadgetAnimationFrames?[zone.id] = 0
+                    if gadgetAnimatingZoneIDs == nil { gadgetAnimatingZoneIDs = [] }
+                    gadgetAnimatingZoneIDs?.insert(zone.id)
                     let readyTick = tickCount + departure + arrival
                     for paired in configuration.zones where
                         (paired.effect == .teleporter || paired.effect == .receiver)
@@ -3009,7 +3058,11 @@ private extension NeoLemmixSimulation {
     }
 
     mutating func updateWalking(_ lemming: inout NeoLemmixLemming) {
-        lemming.animationFrame %= 4
+        // CE advances all eight Walker artwork frames. Its separate physics
+        // frame has a four-frame cycle, but walking movement does not inspect
+        // that value; folding the shared native frame at four skipped the
+        // second half of every visible gait cycle.
+        lemming.animationFrame %= 8
         lemming.position.x += lemming.direction.rawValue
         var deltaY = findGroundPixel(x: lemming.position.x, y: lemming.position.y)
 
@@ -3047,6 +3100,10 @@ private extension NeoLemmixSimulation {
     }
 
     mutating func updateAscending(_ lemming: inout NeoLemmixLemming) {
+        // CE's single-frame Ascender artwork is folded back to frame zero by
+        // the renderer after each physics update. Store that visible frame in
+        // canonical state as well.
+        lemming.animationFrame = 0
         var moved = 0
         while moved < 2,
               lemming.actionProgress < 5,
@@ -3120,8 +3177,6 @@ private extension NeoLemmixSimulation {
                 || forcedSplat) {
                 return .splatting
             } else {
-                lemming.fallDistance = 0
-                lemming.trueFallDistance = 0
                 return .walking
             }
         }
@@ -3136,8 +3191,6 @@ private extension NeoLemmixSimulation {
         let ground = max(0, findGroundPixel(x: lemming.position.x, y: lemming.position.y))
         if maximum > ground {
             lemming.position.y += ground
-            lemming.fallDistance = 0
-            lemming.trueFallDistance = 0
             transition(&lemming, to: .walking)
         } else {
             lemming.position.y += maximum
@@ -3162,14 +3215,10 @@ private extension NeoLemmixSimulation {
             lemming.direction = lemming.direction.opposite
         } else if ground < 0 {
             lemming.position.y += ground
-            lemming.fallDistance = 0
-            lemming.trueFallDistance = 0
             transition(&lemming, to: .walking)
         } else if maximum > 0 {
             if maximum > ground {
                 lemming.position.y += ground
-                lemming.fallDistance = 0
-                lemming.trueFallDistance = 0
                 transition(&lemming, to: .walking)
             } else {
                 lemming.position.y += maximum
@@ -3205,7 +3254,10 @@ private extension NeoLemmixSimulation {
                 } else {
                     lemming.position.x -= lemming.direction.rawValue
                     transition(&lemming, to: .falling, turn: true)
-                    lemming.fallDistance = 1
+                    // CE applies its climber-clip inconsistency fix after the
+                    // transition has seeded a one-pixel fall, so only the
+                    // normal fall counter advances to two here.
+                    lemming.fallDistance += 1
                 }
             } else if !terrain.isSolid(
                 x: lemming.position.x,
@@ -3289,7 +3341,6 @@ private extension NeoLemmixSimulation {
     mutating func updateSwimming(_ lemming: inout NeoLemmixLemming) {
         lemming.animationFrame %= 8
         lemming.fallDistance = 0
-        lemming.trueFallDistance = 0
         lemming.position.x += lemming.direction.rawValue
 
         if !isInWater(lemming.position)
@@ -3478,15 +3529,16 @@ private extension NeoLemmixSimulation {
 
     mutating func updateDigging(_ lemming: inout NeoLemmixLemming) {
         if lemming.animationFrame > 15 { lemming.animationFrame = 0 }
+        let physicsFrame = lemming.isStartingAction
+            ? 0 : (lemming.animationFrame + 15) % 16
         if lemming.isStartingAction {
             lemming.isStartingAction = false
             _ = digRow(for: lemming, y: lemming.position.y - 1)
-            // CE cancels the first physics-frame advance, making the first
-            // digger cycle one frame longer and applying both initial rows on
-            // the assignment frame.
-            lemming.animationFrame = max(0, lemming.animationFrame - 1)
+            // CE cancels only the first physics-frame advance. LemFrame still
+            // advances, so Digger artwork remains one frame ahead of its
+            // delayed terrain cycle after assignment.
         }
-        if lemming.animationFrame == 0 || lemming.animationFrame == 8 {
+        if physicsFrame == 0 || physicsFrame == 8 {
             lemming.position.y += 1
             let removed = digRow(for: lemming, y: lemming.position.y - 1)
             let blocked = isIndestructible(

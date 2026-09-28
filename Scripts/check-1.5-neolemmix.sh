@@ -70,6 +70,8 @@ zsh Scripts/run-neolemmix-simulation-tests.sh
 zsh Scripts/run-neolemmix-replay-tests.sh
 zsh Scripts/run-neolemmix-end-to-end.sh
 zsh Scripts/run-neolemmix-sprite-tests.sh
+zsh -n Scripts/run-neolemmix-ce-final-state-oracle.sh
+ruby -c Tools/NeoLemmixCEFinalState/export.rb >/dev/null
 print "PASS parser, style, renderer, simulation, replay-import, end-to-end and native sprite source gates"
 
 if [[ -n "$ce_root" ]]; then

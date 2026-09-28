@@ -75,18 +75,66 @@ public enum NeoLemmixSceneFrame {
                 terrain[offset + 3] = maskColor[3]
             }
         }
-
         var result = rendered.backgroundRGBA
+        let hasRetainedGadgets = !rendered.gadgets.isEmpty
+            && rendered.gadgets.allSatisfy({ !$0.animationRGBA.isEmpty })
+        if hasRetainedGadgets {
+            for (visualGadgetID, gadget) in rendered.gadgets.enumerated()
+                where gadget.effect == .background {
+                let frame = (gadget.initialAnimationFrame + max(0, tickCount))
+                    % gadget.animationRGBA.count
+                let movement = backgroundMovement(
+                    gadget,
+                    tickCount: tickCount,
+                    levelWidth: rendered.width,
+                    levelHeight: rendered.height
+                )
+                var layers: [(
+                    zIndex: Int, order: Int, rgba: [UInt8], width: Int,
+                    height: Int, x: Int, y: Int
+                )] = [(
+                    gadget.primaryZIndex, 0, gadget.animationRGBA[frame],
+                    gadget.width, gadget.height,
+                    gadget.x + movement.x, gadget.y + movement.y
+                )]
+                appendSecondaryLayers(
+                    gadget,
+                    visualGadgetID: visualGadgetID,
+                    primaryFrame: frame,
+                    secondaryAnimationStates: secondaryAnimationStates,
+                    tickCount: tickCount,
+                    deltaX: movement.x,
+                    deltaY: movement.y,
+                    to: &layers
+                )
+                for layer in layers.sorted(by: {
+                    $0.zIndex == $1.zIndex
+                        ? $0.order < $1.order : $0.zIndex < $1.zIndex
+                }) {
+                    compositePlaced(
+                        layer.rgba,
+                        width: layer.width,
+                        height: layer.height,
+                        x: layer.x,
+                        y: layer.y,
+                        noOverwrite: gadget.noOverwrite,
+                        canvasWidth: rendered.width,
+                        canvasHeight: rendered.height,
+                        over: &result
+                    )
+                }
+            }
+        }
         composite(terrain, over: &result)
-        if !rendered.gadgets.isEmpty,
-           rendered.gadgets.allSatisfy({ !$0.animationRGBA.isEmpty }) {
+        if hasRetainedGadgets {
             var foreground = Array(repeating: UInt8(0), count: byteCount)
             let hasButtons = zones.contains { $0.effect == .unlockButton }
             let hasUnpressedButton = zones.contains {
                 $0.effect == .unlockButton && !disabledZoneIDs.contains($0.id)
             }
             var claimedZoneIDs: Set<Int> = []
-            for (visualGadgetID, gadget) in rendered.gadgets.enumerated() {
+            for (visualGadgetID, gadget) in rendered.gadgets.enumerated()
+                where gadget.effect != .background {
                 let zone = matchingZone(
                     for: gadget,
                     in: zones,
@@ -108,6 +156,10 @@ public enum NeoLemmixSceneFrame {
                         frame = pressed ? 0 : gadget.initialAnimationFrame
                     case .lockedExit:
                         frame = hasButtons && hasUnpressedButton ? gadget.initialAnimationFrame : 0
+                    case .pickupSkill:
+                        let used = zone.map { disabledZoneIDs.contains($0.id) } ?? false
+                        frame = used ? max(0, gadget.initialAnimationFrame - 1)
+                            : gadget.initialAnimationFrame
                     case .entrance:
                         if let entranceOpenTick, tickCount >= entranceOpenTick {
                             let openingFrame = 2 + tickCount - entranceOpenTick
@@ -132,39 +184,17 @@ public enum NeoLemmixSceneFrame {
                     gadget.primaryZIndex, 0, gadget.animationRGBA[frame],
                     gadget.width, gadget.height, gadget.x, gadget.y
                 )]
-                for (index, animation) in gadget.secondaryAnimations.enumerated()
-                    where !animation.framesRGBA.isEmpty {
-                    let liveState = secondaryAnimationStates?[visualGadgetID]?[safe: index]
-                    if let liveState,
-                       !liveState.isVisible && liveState.state == .pause { continue }
-                    if liveState == nil && !animation.initiallyVisible { continue }
-                    let secondaryFrame: Int
-                    switch liveState?.state ?? animation.state {
-                    case .play:
-                        secondaryFrame = liveState?.frame
-                            ?? (animation.initialFrame + max(0, tickCount))
-                                % animation.framesRGBA.count
-                    case .pause:
-                        secondaryFrame = liveState?.frame ?? animation.initialFrame
-                    case .stop:
-                        secondaryFrame = 0
-                    case .loopToZero:
-                        if let liveState {
-                            secondaryFrame = liveState.frame
-                        } else {
-                            let ticksToZero = animation.framesRGBA.count - animation.initialFrame
-                            secondaryFrame = tickCount >= ticksToZero
-                                ? 0 : animation.initialFrame + max(0, tickCount)
-                        }
-                    case .matchPrimary:
-                        secondaryFrame = liveState?.frame ?? frame % animation.framesRGBA.count
-                    }
-                    guard animation.framesRGBA.indices.contains(secondaryFrame) else { continue }
-                    layers.append((
-                        animation.zIndex, index + 1, animation.framesRGBA[secondaryFrame],
-                        animation.width, animation.height, animation.x, animation.y
-                    ))
-                }
+                appendSecondaryLayers(
+                    gadget,
+                    visualGadgetID: visualGadgetID,
+                    primaryFrame: frame,
+                    secondaryAnimationStates: secondaryAnimationStates,
+                    tickCount: tickCount,
+                    deltaX: 0,
+                    deltaY: 0,
+                    to: &layers
+                )
+                let noOverwritePrior = foreground
                 for layer in layers.sorted(by: {
                     $0.zIndex == $1.zIndex
                         ? $0.order < $1.order : $0.zIndex < $1.zIndex
@@ -176,6 +206,8 @@ public enum NeoLemmixSceneFrame {
                         x: layer.x,
                         y: layer.y,
                         noOverwrite: gadget.noOverwrite,
+                        noOverwriteAgainst: terrain,
+                        noOverwritePrior: noOverwritePrior,
                         canvasWidth: rendered.width,
                         canvasHeight: rendered.height,
                         over: &foreground
@@ -187,6 +219,114 @@ public enum NeoLemmixSceneFrame {
             composite(rendered.foregroundRGBA, over: &result)
         }
         return result
+    }
+
+    private static func appendSecondaryLayers(
+        _ gadget: NxlvRenderedGadget,
+        visualGadgetID: Int,
+        primaryFrame: Int,
+        secondaryAnimationStates: [Int: [NeoLemmixSecondaryAnimationState]]?,
+        tickCount: Int,
+        deltaX: Int,
+        deltaY: Int,
+        to layers: inout [(
+            zIndex: Int, order: Int, rgba: [UInt8], width: Int,
+            height: Int, x: Int, y: Int
+        )]
+    ) {
+        for (index, animation) in gadget.secondaryAnimations.enumerated()
+            where !animation.framesRGBA.isEmpty {
+            let liveState = secondaryAnimationStates?[visualGadgetID]?[safe: index]
+            if let liveState,
+               !liveState.isVisible && liveState.state == .pause { continue }
+            if liveState == nil && !animation.initiallyVisible { continue }
+            let secondaryFrame: Int
+            switch liveState?.state ?? animation.state {
+            case .play:
+                secondaryFrame = liveState?.frame
+                    ?? (animation.initialFrame + max(0, tickCount))
+                        % animation.framesRGBA.count
+            case .pause:
+                secondaryFrame = liveState?.frame ?? animation.initialFrame
+            case .stop:
+                secondaryFrame = 0
+            case .loopToZero:
+                if let liveState {
+                    secondaryFrame = liveState.frame
+                } else {
+                    let ticksToZero = animation.framesRGBA.count - animation.initialFrame
+                    secondaryFrame = tickCount >= ticksToZero
+                        ? 0 : animation.initialFrame + max(0, tickCount)
+                }
+            case .matchPrimary:
+                secondaryFrame = liveState?.frame
+                    ?? primaryFrame % animation.framesRGBA.count
+            }
+            guard animation.framesRGBA.indices.contains(secondaryFrame) else { continue }
+            layers.append((
+                animation.zIndex,
+                index + 1,
+                animation.framesRGBA[secondaryFrame],
+                animation.width,
+                animation.height,
+                animation.x + deltaX,
+                animation.y + deltaY
+            ))
+        }
+    }
+
+    private static func backgroundMovement(
+        _ gadget: NxlvRenderedGadget,
+        tickCount: Int,
+        levelWidth: Int,
+        levelHeight: Int
+    ) -> (x: Int, y: Int) {
+        guard tickCount > 0, gadget.backgroundSpeed != 0 else { return (0, 0) }
+        let movement = [0, 1, 2, 2, 2, 2, 2, 1, 0, -1, -2, -2, -2, -2, -2, -1]
+        let angle = ((gadget.backgroundAngle % 16) + 16) % 16
+        let rawX = backgroundDisplacement(
+            coefficient: movement[angle], speed: gadget.backgroundSpeed, ticks: tickCount
+        )
+        let rawY = backgroundDisplacement(
+            coefficient: movement[(angle + 12) % 16],
+            speed: gadget.backgroundSpeed,
+            ticks: tickCount
+        )
+        let horizontalSpan = max(1, levelWidth + gadget.width)
+        let verticalSpan = max(1, levelHeight + gadget.height)
+        let movedX = positiveModulo(
+            gadget.backgroundOriginX + rawX + gadget.width,
+            horizontalSpan
+        ) - gadget.width
+        let movedY = positiveModulo(
+            gadget.backgroundOriginY + rawY + gadget.height,
+            verticalSpan
+        ) - gadget.height
+        return (
+            movedX - gadget.backgroundOriginX,
+            movedY - gadget.backgroundOriginY
+        )
+    }
+
+    private static func backgroundDisplacement(
+        coefficient: Int,
+        speed: Int,
+        ticks: Int
+    ) -> Int {
+        func step(_ iteration: Int) -> Int {
+            let next = (2 * speed * (iteration + 1)) / 17
+            let current = (2 * speed * iteration) / 17
+            return (coefficient * (next - current)) / 2
+        }
+        let cycle = (0..<17).reduce(0) { $0 + step($1) }
+        let cycles = ticks / 17
+        let remainder = ticks % 17
+        return cycles * cycle + (0..<remainder).reduce(0) { $0 + step($1) }
+    }
+
+    private static func positiveModulo(_ value: Int, _ modulus: Int) -> Int {
+        let remainder = value % modulus
+        return remainder >= 0 ? remainder : remainder + modulus
     }
 
     private static func matchingZone(
@@ -216,7 +356,7 @@ public enum NeoLemmixSceneFrame {
 
     private static func alwaysAnimates(_ effect: NxlvObjectEffect) -> Bool {
         switch effect {
-        case .none, .exit, .fire, .water, .updraft, .splatPad, .antiSplatPad,
+        case .none, .background, .exit, .fire, .water, .updraft, .splatPad, .antiSplatPad,
              .oneWayLeft, .oneWayRight, .oneWayDown, .oneWayUp,
              .forceLeft, .forceRight, .paint, .portal, .neutralizer,
              .deneutralizer, .removeSkills:
@@ -281,6 +421,8 @@ public enum NeoLemmixSceneFrame {
         x destinationX: Int,
         y destinationY: Int,
         noOverwrite: Bool,
+        noOverwriteAgainst: [UInt8]? = nil,
+        noOverwritePrior: [UInt8]? = nil,
         canvasWidth: Int,
         canvasHeight: Int,
         over destination: inout [UInt8]
@@ -295,7 +437,13 @@ public enum NeoLemmixSceneFrame {
                 let sourceOffset = (sourceY * width + sourceX) * 4
                 guard source[sourceOffset + 3] > 0 else { continue }
                 let destinationOffset = (canvasY * canvasWidth + canvasX) * 4
-                if noOverwrite && destination[destinationOffset + 3] > 0 { continue }
+                if noOverwrite {
+                    let alphaOffset = destinationOffset + 3
+                    let occupied = noOverwritePrior?[safe: alphaOffset]
+                        ?? destination[alphaOffset]
+                    if occupied > 0
+                        || (noOverwriteAgainst?[safe: alphaOffset] ?? 0) > 0 { continue }
+                }
                 compositePixel(source, at: sourceOffset, over: &destination, at: destinationOffset)
             }
         }

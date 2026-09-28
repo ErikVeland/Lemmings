@@ -7,6 +7,7 @@ enum LegacySaveMigration {
     static let marker = "LegacySaveMigration.v1"
     private static let preferences: Set<String> = [
         "ClassicDataDirectory", "ClassicGameDirectories", "NeoLemmixStylesDirectory",
+        "NeoLemmixLevelsDirectory",
         "MusicDirectory", "MusicUsesModernPreset", "MacintoshDiskImage", "ClassicSettings",
         "AudioMuted", "PreferMacArtworkV1", "SequelMacArtworkEnabledV2", "HDEffectsChoiceV1", "FanLevelFolder"
     ]

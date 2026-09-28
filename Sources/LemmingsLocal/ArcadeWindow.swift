@@ -20,7 +20,8 @@ import NxlvKit
     }
     func showResult(_ report: ArcadeReport, owner: NSWindow? = nil, retry: @escaping () -> Void,
                     next: @escaping () -> Void, replay: @escaping (Bool) -> Void, continueTitle: String = "Next level", background: CGImage? = nil, rewardVolume: Double = 0,
-                    continueHandlesHandover: Bool = false, skip: (() -> Void)? = nil) {
+                    continueHandlesHandover: Bool = false, skip: (() -> Void)? = nil,
+                    later: (() -> Void)? = nil, hints: (() -> Void)? = nil) {
         arcadeView.rewardVolume = rewardVolume
         arcadeView.mode = .result; arcadeView.report = report; arcadeView.level = report.run.level
         arcadeView.assisted = report.run.assisted; arcadeView.board = .rescue; arcadeView.trolleyBoard = .mostSaved
@@ -30,6 +31,8 @@ import NxlvKit
         arcadeView.onRetry = { [weak self] in self?.close(); retry() }
         arcadeView.onContinue = { [weak self] in self?.close(); next() }
         arcadeView.onSkip = skip.map { skip in { [weak self] in self?.close(); skip() } }
+        arcadeView.onLater = later.map { action in { [weak self] in self?.close(); action() } }
+        arcadeView.onHints = hints.map { action in { [weak self] in self?.close(); action() } }
         arcadeView.onReplay = replay
         present(owner: owner)
         arcadeView.startCelebration()
@@ -41,6 +44,7 @@ import NxlvKit
         arcadeView.level = level ?? ArcadeStore.shared.records.runs.last?.level
         arcadeView.assisted = false; arcadeView.board = .rescue
         arcadeView.boardScope = .level
+        arcadeView.onLater = nil; arcadeView.onHints = nil
         arcadeView.onRetry = nil; arcadeView.onContinue = nil; arcadeView.onSkip = nil; arcadeView.onReplay = nil
         present(owner: owner)
     }
@@ -52,7 +56,8 @@ import NxlvKit
     private func presentSession(owner: NSWindow?) {
         let owner = prepareSession?() ?? owner
         arcadeView.sessionReturnMode = nil
-        arcadeView.report = nil; arcadeView.onRetry = nil; arcadeView.onContinue = nil; arcadeView.onSkip = nil
+        arcadeView.report = nil; arcadeView.onLater = nil; arcadeView.onHints = nil
+        arcadeView.onRetry = nil; arcadeView.onContinue = nil; arcadeView.onSkip = nil
         ArcadeStore.shared.prepareHotSeat()
         arcadeView.mode = .hotSeat
         present(owner: owner)
@@ -150,6 +155,8 @@ import NxlvKit
     var onContinue: (() -> Void)?
     /// Set by a campaign when this failed level can take a skip.
     var onSkip: (() -> Void)?
+    var onLater: (() -> Void)?
+    var onHints: (() -> Void)?
     var onReplay: ((Bool) -> Void)?
     var onClose: (() -> Void)?
     var continueTitle = "Next level"
@@ -414,6 +421,13 @@ import NxlvKit
         popover.show(relativeTo: anchor, of: self, preferredEdge: .maxY)
     }
     func resultActions(y: CGFloat = 573) {
+        if !cleared, onLater != nil {
+            button(primaryResultTitle, CGRect(x: 64, y: y, width: 290, height: 48), primary: true) { [weak self] in self?.performDefaultResultAction() }
+            button("Hints", CGRect(x: 372, y: y, width: 208, height: 48)) { [weak self] in self?.onHints?() }
+            button("Try later", CGRect(x: 598, y: y, width: 248, height: 48)) { [weak self] in self?.onLater?() }
+            button("Back", CGRect(x: 864, y: y, width: 192, height: 48)) { [weak self] in self?.onClose?() }
+            return
+        }
         if let next = nextSessionPlayer {
             let canHandOver = ArcadeStore.shared.profilesAreWritable && ArcadeStore.shared.storageError == nil
             // The four-button loss row narrows this button, so each row draws its own.

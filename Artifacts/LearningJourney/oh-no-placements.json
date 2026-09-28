@@ -1,0 +1,602 @@
+[
+  {
+    "level": "Citizen Lemming",
+    "rank": "Tame",
+    "score": 80.85539215686275,
+    "step": 26
+  },
+  {
+    "level": "Lemmings For Presidents!",
+    "rank": "Tame",
+    "score": 114.93400781756145,
+    "step": 29
+  },
+  {
+    "level": "Thunder-Lemmings are go!",
+    "rank": "Tame",
+    "score": 151.61641699423208,
+    "step": 37
+  },
+  {
+    "level": "Get a little extra help",
+    "rank": "Tame",
+    "score": 120.08263157894737,
+    "step": 42
+  },
+  {
+    "level": "Custom built for Lemmings",
+    "rank": "Tame",
+    "score": 166.54490823035815,
+    "step": 54
+  },
+  {
+    "level": "Honey, I Saved The Lemmings",
+    "rank": "Tame",
+    "score": 132.06004901960785,
+    "step": 72
+  },
+  {
+    "level": "Intsy-Wintsy...Lemming?",
+    "rank": "Tame",
+    "score": 132.74,
+    "step": 73
+  },
+  {
+    "level": "No Problemming!",
+    "rank": "Crazy",
+    "score": 260.1643010019038,
+    "step": 93
+  },
+  {
+    "level": "Lemming Friendly",
+    "rank": "Crazy",
+    "score": 253.65851774042955,
+    "step": 104
+  },
+  {
+    "level": "Many Lemmings make level work",
+    "rank": "Crazy",
+    "score": 149.28972350383594,
+    "step": 106
+  },
+  {
+    "level": "Ice Ice Lemming",
+    "rank": "Crazy",
+    "score": 262.47423523423424,
+    "step": 115
+  },
+  {
+    "level": "Lemming Express",
+    "rank": "Crazy",
+    "score": 182.04356739794923,
+    "step": 124
+  },
+  {
+    "level": "Last Lemming To Lemmingcentral",
+    "rank": "Wicked",
+    "score": 190.08430100190384,
+    "step": 127
+  },
+  {
+    "level": "Meeting Adjourned",
+    "rank": "Wild",
+    "score": 269.1182916300652,
+    "step": 128
+  },
+  {
+    "level": "Down And Out Lemmings",
+    "rank": "Tame",
+    "score": 215.08268575851392,
+    "step": 131
+  },
+  {
+    "level": "Lemming Hotel",
+    "rank": "Wild",
+    "score": 242.86046474890577,
+    "step": 137
+  },
+  {
+    "level": "A TOWERING PROBLEM",
+    "rank": "Wicked",
+    "score": 304.89242553321947,
+    "step": 138
+  },
+  {
+    "level": "Gone With The Lemming",
+    "rank": "Tame",
+    "score": 216.32949948400412,
+    "step": 146
+  },
+  {
+    "level": "It`s a trade off",
+    "rank": "Crazy",
+    "score": 272.0327659874961,
+    "step": 149
+  },
+  {
+    "level": "Downwardly Mobile Lemmings",
+    "rank": "Tame",
+    "score": 160.5063725490196,
+    "step": 152
+  },
+  {
+    "level": "New Lemmings On The Block",
+    "rank": "Tame",
+    "score": 161.1582843137255,
+    "step": 154
+  },
+  {
+    "level": "Lemming Head",
+    "rank": "Wild",
+    "score": 297.541416994232,
+    "step": 157
+  },
+  {
+    "level": "Flow Control",
+    "rank": "Havoc",
+    "score": 249.06266106442575,
+    "step": 172
+  },
+  {
+    "level": "Quote: \"That`s a good level\"",
+    "rank": "Crazy",
+    "score": 271.7390853156293,
+    "step": 173
+  },
+  {
+    "level": "SNOW JOKE",
+    "rank": "Wild",
+    "score": 266.4068210418299,
+    "step": 175
+  },
+  {
+    "level": "Dangerzone",
+    "rank": "Tame",
+    "score": 240.4304856216831,
+    "step": 185
+  },
+  {
+    "level": "With Compliments",
+    "rank": "Tame",
+    "score": 231.34225783456102,
+    "step": 201
+  },
+  {
+    "level": "The Lemming Learning Curve",
+    "rank": "Wicked",
+    "score": 325.11423202614384,
+    "step": 202
+  },
+  {
+    "level": "Ice Station Lemming",
+    "rank": "Wild",
+    "score": 243.0209992237264,
+    "step": 212
+  },
+  {
+    "level": "Have an ice day",
+    "rank": "Havoc",
+    "score": 284.077700628019,
+    "step": 213
+  },
+  {
+    "level": "Dolly Dimple",
+    "rank": "Crazy",
+    "score": 312.58981123790835,
+    "step": 217
+  },
+  {
+    "level": "LOoK BeFoRe YoU LeAp!",
+    "rank": "Havoc",
+    "score": 296.6790497610032,
+    "step": 221
+  },
+  {
+    "level": "Rent-a-Lemming",
+    "rank": "Tame",
+    "score": 319.2599745528273,
+    "step": 234
+  },
+  {
+    "level": "Higgledy Piggledy",
+    "rank": "Wild",
+    "score": 316.87131039148613,
+    "step": 240
+  },
+  {
+    "level": "Worra load of old blocks!",
+    "rank": "Crazy",
+    "score": 363.15600781756143,
+    "step": 246
+  },
+  {
+    "level": "Scaling the Heights",
+    "rank": "Havoc",
+    "score": 372.1743010019038,
+    "step": 249
+  },
+  {
+    "level": "You Take the High Road",
+    "rank": "Wild",
+    "score": 383.34749418922576,
+    "step": 254
+  },
+  {
+    "level": "DON`T PANIC",
+    "rank": "Crazy",
+    "score": 325.4752661064426,
+    "step": 278
+  },
+  {
+    "level": "Suicidal Tendencies",
+    "rank": "Wicked",
+    "score": 318.34789947320246,
+    "step": 279
+  },
+  {
+    "level": "PoP TiL YoU DrOp!",
+    "rank": "Wicked",
+    "score": 233.05489017050266,
+    "step": 283
+  },
+  {
+    "level": "Looks a Bit Nippy Out There",
+    "rank": "Havoc",
+    "score": 271.13546928181376,
+    "step": 289
+  },
+  {
+    "level": "Lemming about town",
+    "rank": "Havoc",
+    "score": 321.74172300261426,
+    "step": 294
+  },
+  {
+    "level": "Five Alive",
+    "rank": "Wicked",
+    "score": 330.160828758938,
+    "step": 303
+  },
+  {
+    "level": "And now, the end is near...",
+    "rank": "Crazy",
+    "score": 320.71448179271715,
+    "step": 306
+  },
+  {
+    "level": "LeMming ToMato KetchUp fAcilitY",
+    "rank": "Wicked",
+    "score": 326.419554249134,
+    "step": 310
+  },
+  {
+    "level": "Undercover Lemming",
+    "rank": "Tame",
+    "score": 252.68078724632576,
+    "step": 311
+  },
+  {
+    "level": "HIGHLAND FLING",
+    "rank": "Havoc",
+    "score": 400.7200543260538,
+    "step": 313
+  },
+  {
+    "level": "There`s madness in the method",
+    "rank": "Havoc",
+    "score": 391.1248092280146,
+    "step": 314
+  },
+  {
+    "level": "Up, Down or Round and Round",
+    "rank": "Wicked",
+    "score": 242.66875886655282,
+    "step": 322
+  },
+  {
+    "level": "Lemmingdelica",
+    "rank": "Wild",
+    "score": 267.4830368973238,
+    "step": 328
+  },
+  {
+    "level": "Dr Lemminggood",
+    "rank": "Wild",
+    "score": 252.8701093874712,
+    "step": 329
+  },
+  {
+    "level": "Got anything....Lemmingy???",
+    "rank": "Wild",
+    "score": 322.9611646803065,
+    "step": 330
+  },
+  {
+    "level": "Down the tube",
+    "rank": "Wicked",
+    "score": 327.0568418308334,
+    "step": 331
+  },
+  {
+    "level": "How on Earth?",
+    "rank": "Wicked",
+    "score": 327.66141699423207,
+    "step": 335
+  },
+  {
+    "level": "24 hour Lemathon",
+    "rank": "Crazy",
+    "score": 328.40726221830056,
+    "step": 336
+  },
+  {
+    "level": "This Corrosion",
+    "rank": "Wicked",
+    "score": 342.8443010019039,
+    "step": 338
+  },
+  {
+    "level": "Temple of Love",
+    "rank": "Wicked",
+    "score": 408.9240000000001,
+    "step": 359
+  },
+  {
+    "level": "ICE SPY",
+    "rank": "Wild",
+    "score": 398.2619480607274,
+    "step": 364
+  },
+  {
+    "level": "ROCKY VI",
+    "rank": "Crazy",
+    "score": 310.7856935908495,
+    "step": 367
+  },
+  {
+    "level": "The Lemming Funhouse",
+    "rank": "Wicked",
+    "score": 448.1128294920268,
+    "step": 376
+  },
+  {
+    "level": "Mutiny On The Bounty",
+    "rank": "Wild",
+    "score": 329.91400069661813,
+    "step": 377
+  },
+  {
+    "level": "Almost Nearly Virtual Reality",
+    "rank": "Wicked",
+    "score": 305.6043301594982,
+    "step": 378
+  },
+  {
+    "level": "The Chain with no name",
+    "rank": "Wild",
+    "score": 315.67824582321276,
+    "step": 379
+  },
+  {
+    "level": "Oh No! It`s the 4TH DIMENSION!",
+    "rank": "Wicked",
+    "score": 332.17644514106263,
+    "step": 380
+  },
+  {
+    "level": "On the Antarctic Coast",
+    "rank": "Crazy",
+    "score": 362.7503476868425,
+    "step": 381
+  },
+  {
+    "level": "PoP YoR ToP!!!",
+    "rank": "Wild",
+    "score": 329.6606092436975,
+    "step": 383
+  },
+  {
+    "level": "NO PROBLEM",
+    "rank": "Crazy",
+    "score": 388.4762490626312,
+    "step": 384
+  },
+  {
+    "level": "DIGGING FOR VICTORY",
+    "rank": "Crazy",
+    "score": 396.33545132870125,
+    "step": 386
+  },
+  {
+    "level": "The Stack",
+    "rank": "Crazy",
+    "score": 429.63093592213664,
+    "step": 390
+  },
+  {
+    "level": "Welcome to the party, pal!",
+    "rank": "Havoc",
+    "score": 366.9626715645634,
+    "step": 392
+  },
+  {
+    "level": "LoTs moRe wHeRe TheY caMe fRom",
+    "rank": "Wicked",
+    "score": 423.8975923184305,
+    "step": 393
+  },
+  {
+    "level": "Inroducing SUPERLEMMING",
+    "rank": "Wicked",
+    "score": 366.7278921568627,
+    "step": 394
+  },
+  {
+    "level": "Be more than just a number",
+    "rank": "Havoc",
+    "score": 435.17999999999995,
+    "step": 397
+  },
+  {
+    "level": "ROCKY ROAD",
+    "rank": "Wicked",
+    "score": 413.28622091580075,
+    "step": 399
+  },
+  {
+    "level": "SPAM,SPAM,SPAM,EGG AND LEMMING",
+    "rank": "Wicked",
+    "score": 414.4760534160524,
+    "step": 404
+  },
+  {
+    "level": "Lemming Productions Present...",
+    "rank": "Tame",
+    "score": 424.8960093574932,
+    "step": 406
+  },
+  {
+    "level": "Time waits for no Lemming",
+    "rank": "Crazy",
+    "score": 397.44998820971836,
+    "step": 423
+  },
+  {
+    "level": "It`s the price you have to pay",
+    "rank": "Havoc",
+    "score": 452.11096860187513,
+    "step": 427
+  },
+  {
+    "level": "Lemming Rhythms",
+    "rank": "Wild",
+    "score": 394.9645052295262,
+    "step": 430
+  },
+  {
+    "level": "Take care, Sweetie",
+    "rank": "Wild",
+    "score": 338.9190866097103,
+    "step": 437
+  },
+  {
+    "level": "Who`s That Lemming",
+    "rank": "Tame",
+    "score": 373.3382089374072,
+    "step": 447
+  },
+  {
+    "level": "It`s all a matter of timing",
+    "rank": "Havoc",
+    "score": 299.52237383063334,
+    "step": 448
+  },
+  {
+    "level": "KEEP ON TRUCKING",
+    "rank": "Crazy",
+    "score": 434.90202863549104,
+    "step": 450
+  },
+  {
+    "level": "Where Lemmings Dare",
+    "rank": "Havoc",
+    "score": 497.35711239272484,
+    "step": 452
+  },
+  {
+    "level": "THE SILENCE OF THE LEMMINGS",
+    "rank": "Wild",
+    "score": 481.37289947320244,
+    "step": 453
+  },
+  {
+    "level": "Tubular Lemmings",
+    "rank": "Havoc",
+    "score": 481.5880627881214,
+    "step": 454
+  },
+  {
+    "level": "Just A Quicky",
+    "rank": "Wild",
+    "score": 439.0263598254332,
+    "step": 456
+  },
+  {
+    "level": "Not just a pretty Lemming",
+    "rank": "Tame",
+    "score": 468.8510948286058,
+    "step": 464
+  },
+  {
+    "level": "It`s a tight fit!",
+    "rank": "Wild",
+    "score": 442.8715269241829,
+    "step": 468
+  },
+  {
+    "level": "ONWARD AND UPWARD",
+    "rank": "Wild",
+    "score": 507.9719888896569,
+    "step": 469
+  },
+  {
+    "level": "Creature Discomforts",
+    "rank": "Havoc",
+    "score": 517.8743315771402,
+    "step": 470
+  },
+  {
+    "level": "And now this...",
+    "rank": "Tame",
+    "score": 396.83771874132884,
+    "step": 473
+  },
+  {
+    "level": "Snuggle up to a Lemming",
+    "rank": "Tame",
+    "score": 480.10781678054445,
+    "step": 475
+  },
+  {
+    "level": "Lemmings in a situation",
+    "rank": "Havoc",
+    "score": 457.2926912909508,
+    "step": 477
+  },
+  {
+    "level": "Chill out!",
+    "rank": "Wicked",
+    "score": 558.373137254902,
+    "step": 538
+  },
+  {
+    "level": "AAAAAARRRRRRGGGGGGHHHHHH!!!!!!",
+    "rank": "Havoc",
+    "score": 477.1742855134113,
+    "step": 540
+  },
+  {
+    "level": "Now get out of that!",
+    "rank": "Havoc",
+    "score": 293.68643593460376,
+    "step": 543
+  },
+  {
+    "level": "The race against cliches",
+    "rank": "Havoc",
+    "score": 433.1251450849306,
+    "step": 544
+  },
+  {
+    "level": "Synchronised Lemming",
+    "rank": "Havoc",
+    "score": 565.099945169618,
+    "step": 548
+  },
+  {
+    "level": "Across The Gap",
+    "rank": "Crazy",
+    "score": 555.3545751633986,
+    "step": 558
+  }
+]

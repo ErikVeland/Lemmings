@@ -39,7 +39,7 @@ import NxlvKit
     }
 
     private struct Document: Codable {
-        static let currentVersion = 2
+        static let currentVersion = 3
         static let maximumPlaylists = 200
 
         var version: Int
@@ -49,6 +49,7 @@ import NxlvKit
         var activeRunHotSeatID: String?
         var activeRunL2Progress: [String: Data]?
         var savedRuns: [SavedRun]?
+        var learningProgress: LearningJourneyProgress?
 
         init(
             playlists: [LevelPlaylist] = [],
@@ -109,6 +110,21 @@ import NxlvKit
     var activeRunHotSeatID: String? { document.activeRunHotSeatID }
     var activeRunL2Progress: [String: Data] { document.activeRunL2Progress ?? [:] }
     var savedRuns: [SavedRun] { document.savedRuns ?? [] }
+    var learningProgress: LearningJourneyProgress { document.learningProgress ?? .init() }
+
+    /// Save the visit and next position together. A deferred level is never a win.
+    @discardableResult func advanceLearningJourney(runID: UUID, won: Bool) throws -> Bool {
+        guard var run = document.activeRun, run.id == runID,
+              run.source == .playlist(LearningJourney.playlistID) else { throw Failure.invalidDocument }
+        let previous = document
+        var progress = learningProgress
+        progress.record(run.currentEntry.identity, won: won)
+        document.learningProgress = progress
+        let advanced = run.advance()
+        document.activeRun = run
+        do { try save() } catch { document = previous; throw error }
+        return advanced
+    }
 
     static func fileURL(profileID: String) -> URL {
         let root = FileManager.default.urls(

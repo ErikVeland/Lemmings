@@ -404,6 +404,21 @@ func makeObjectFixtures(_ styles: URL) throws {
   )
   try writePNG(
     width: 1,
+    height: 2,
+    pixels: [.red, .green],
+    to: objects.appendingPathComponent("moving_background.png")
+  )
+  try write(
+    """
+    EFFECT BACKGROUND
+    $PRIMARY_ANIMATION
+      FRAMES 2
+    $END
+    """,
+    to: objects.appendingPathComponent("moving_background.nxmo")
+  )
+  try writePNG(
+    width: 1,
     height: 1,
     pixels: [.red],
     to: objects.appendingPathComponent("secondary.png")
@@ -494,6 +509,33 @@ func makeObjectFixtures(_ styles: URL) throws {
     $END
     """,
     to: objects.appendingPathComponent("triggered_secondary.nxmo")
+  )
+  try writePNG(
+    width: 2,
+    height: 1,
+    pixels: [.red, .red],
+    to: objects.appendingPathComponent("no_overwrite_layers.png")
+  )
+  try writePNG(
+    width: 2,
+    height: 1,
+    pixels: [.green, .green],
+    to: objects.appendingPathComponent("no_overwrite_layers_top.png")
+  )
+  try write(
+    """
+    EFFECT DECORATION
+    $PRIMARY_ANIMATION
+      FRAMES 1
+      Z_INDEX 1
+    $END
+    $ANIMATION
+      NAME top
+      FRAMES 1
+      Z_INDEX 2
+    $END
+    """,
+    to: objects.appendingPathComponent("no_overwrite_layers.nxmo")
   )
 }
 
@@ -1192,6 +1234,7 @@ func testLiveTerrainSceneFrame(_ styles: URL) throws {
     pixel(frame, width: 6, x: 5, y: 0) == .yellow,
     "A constructive pixel did not replace partially transparent terrain."
   )
+
 }
 
 func testLiveButtonAndLockedExitStates(_ styles: URL) throws {
@@ -1516,6 +1559,95 @@ func testLiveButtonAndLockedExitStates(_ styles: URL) throws {
   )
   try expect(pixel(busySecondary, width: 2, x: 1, y: 0) == .green,
              "A visible BUSY secondary animation did not render.")
+
+  let movingResult = try render(
+    level(
+      """
+      TITLE Moving background
+      WIDTH 4
+      HEIGHT 1
+      $GADGET
+        STYLE test
+        PIECE moving_background
+        X 0
+        Y 0
+        ANGLE 4
+        SPEED 17
+      $END
+      """
+    ),
+    styles: styles,
+    renderer: NxlvRenderer(retainsVisualLayers: true)
+  )
+  let moving = try unwrap(movingResult.renderedLevel, "The moving-background fixture did not render.")
+  try expect(!has(.unsupportedGadget, in: movingResult),
+             "A moving background was reported as unsupported.")
+  try expect(pixel(moving, x: 0, y: 0) == .red,
+             "A moving background lost its initial frame.")
+  let moved = NeoLemmixSceneFrame.rgba(
+    moving,
+    terrain: try NeoLemmixTerrain(width: 4, height: 1),
+    tickCount: 1
+  )
+  try expect(pixel(moved, width: 4, x: 0, y: 0) == .clear
+                && pixel(moved, width: 4, x: 2, y: 0) == .green,
+             "A moving background did not use CE direction, speed, frame, and layer timing.")
+}
+
+func testNoOverwriteWithinGadgetLayers(_ styles: URL) throws {
+  let result = try render(
+    level(
+      """
+      TITLE NO_OVERWRITE gadget layers
+      WIDTH 2
+      HEIGHT 1
+      $TERRAIN
+        STYLE test
+        PIECE blue
+        X 1
+        Y 0
+      $END
+      $GADGET
+        STYLE test
+        PIECE no_overwrite_layers
+        X 0
+        Y 0
+        NO_OVERWRITE
+      $END
+      """
+    ),
+    styles: styles,
+    renderer: NxlvRenderer(retainsVisualLayers: true)
+  )
+  let rendered = try unwrap(result.renderedLevel, "The NO_OVERWRITE layer fixture did not render.")
+  try expect(
+    pixel(rendered, x: 0, y: 0) == .green,
+    "NO_OVERWRITE blocked a later Z-layer from the same gadget."
+  )
+  try expect(
+    pixel(rendered, x: 1, y: 0) == .blue,
+    "NO_OVERWRITE replaced existing terrain."
+  )
+
+  let live = NeoLemmixSceneFrame.rgba(
+    rendered,
+    terrain: try NeoLemmixTerrain(
+      width: 2,
+      height: 1,
+      solidMask: rendered.solidMask,
+      steelMask: rendered.steelMask,
+      oneWayMask: rendered.oneWayMask,
+      visualOpaqueMask: rendered.terrainOpaqueMask
+    )
+  )
+  try expect(
+    pixel(live, width: 2, x: 0, y: 0) == .green,
+    "Live NO_OVERWRITE compositing blocked a later Z-layer from the same gadget."
+  )
+  try expect(
+    pixel(live, width: 2, x: 1, y: 0) == .blue,
+    "Live NO_OVERWRITE compositing replaced existing terrain."
+  )
 }
 
 @main
@@ -1540,6 +1672,7 @@ struct NxlvRendererTests {
     try testPNGAndPathLimits(fixture)
     try testLiveTerrainSceneFrame(styles)
     try testLiveButtonAndLockedExitStates(styles)
+    try testNoOverwriteWithinGadgetLayers(styles)
     print(
       "NXLV renderer tests passed: transforms, terrain flags, masks, groups, resize, clipping, live terrain layers, and PNG safety."
     )

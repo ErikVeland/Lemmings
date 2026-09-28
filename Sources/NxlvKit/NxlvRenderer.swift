@@ -127,6 +127,13 @@ public struct NxlvRenderedGadget: Sendable, Equatable {
   /// remain an explicit renderer limit until their CE state machine is wired.
   public let secondaryAnimations: [NxlvRenderedGadgetAnimation]
   public let noOverwrite: Bool
+  /// CE moving-background parameters. Zero speed means no translation.
+  public let backgroundSpeed: Int
+  public let backgroundAngle: Int
+  /// Whole-object origin used for CE border wrapping. Animation offsets are
+  /// retained separately in the layer coordinates above.
+  public let backgroundOriginX: Int
+  public let backgroundOriginY: Int
 
   public init(
     style: String,
@@ -146,7 +153,11 @@ public struct NxlvRenderedGadget: Sendable, Equatable {
     initialAnimationFrame: Int = 0,
     primaryZIndex: Int = 1,
     secondaryAnimations: [NxlvRenderedGadgetAnimation] = [],
-    noOverwrite: Bool = false
+    noOverwrite: Bool = false,
+    backgroundSpeed: Int = 0,
+    backgroundAngle: Int = 0,
+    backgroundOriginX: Int? = nil,
+    backgroundOriginY: Int? = nil
   ) {
     self.style = style
     self.piece = piece
@@ -166,6 +177,10 @@ public struct NxlvRenderedGadget: Sendable, Equatable {
     self.primaryZIndex = primaryZIndex
     self.secondaryAnimations = secondaryAnimations
     self.noOverwrite = noOverwrite
+    self.backgroundSpeed = backgroundSpeed
+    self.backgroundAngle = ((backgroundAngle % 16) + 16) % 16
+    self.backgroundOriginX = backgroundOriginX ?? x
+    self.backgroundOriginY = backgroundOriginY ?? y
   }
 }
 
@@ -537,6 +552,7 @@ private struct NxlvRenderEngine {
     buildTerrainGroups()
 
     var backgroundLayer = PixelPlane(width: level.width, height: level.height)
+    var liveBackgroundLayer = PixelPlane(width: level.width, height: level.height)
     var terrainLayer = PixelPlane(
       width: level.width,
       height: level.height,
@@ -550,7 +566,13 @@ private struct NxlvRenderEngine {
     let preparedGadgets = prepareGadgets()
 
     drawBackground(into: &backgroundLayer)
-    drawBackgroundGadgets(preparedGadgets, into: &backgroundLayer)
+    liveBackgroundLayer = backgroundLayer
+    drawBackgroundGadgets(
+      preparedGadgets,
+      initial: &backgroundLayer,
+      liveBase: &liveBackgroundLayer,
+      renderedGadgets: &renderedGadgets
+    )
     drawTerrain(into: &terrainLayer)
     drawForegroundGadgets(
       preparedGadgets,
@@ -577,7 +599,7 @@ private struct NxlvRenderEngine {
         terrainOpaqueMask: stride(from: 3, to: terrainLayer.rgba.count, by: 4).map {
           terrainLayer.rgba[$0] == 255 ? 1 : 0
         },
-        backgroundRGBA: retainsVisualLayers ? backgroundLayer.rgba : [],
+        backgroundRGBA: retainsVisualLayers ? liveBackgroundLayer.rgba : [],
         terrainRGBA: retainsVisualLayers ? terrainLayer.rgba : [],
         foregroundRGBA: retainsVisualLayers ? foregroundLayer.rgba : [],
         constructiveRGBA: themeMaskRGBA()
@@ -984,7 +1006,9 @@ private struct NxlvRenderEngine {
 
   private mutating func drawBackgroundGadgets(
     _ gadgets: [PreparedGadgetPlacement],
-    into canvas: inout PixelPlane
+    initial: inout PixelPlane,
+    liveBase: inout PixelPlane,
+    renderedGadgets: inout [NxlvRenderedGadget]
   ) {
     for item in gadgets where item.prepared.effect == .background {
       let objectX = item.x - item.prepared.animationOffsetX
@@ -996,9 +1020,63 @@ private struct NxlvRenderEngine {
           y: objectY + layer.offsetY,
           noOverwrite: item.source.noOverwrite,
           clipToSolid: nil,
-          into: &canvas
+          into: &initial
         )
       }
+      let isDynamic = (item.source.speed ?? 0) != 0
+        || item.prepared.frames.count > 1
+        || item.prepared.secondaryAnimations.contains { $0.frames.count > 1 }
+      guard isDynamic else {
+        for layer in staticVisualLayers(item.prepared) {
+          compositeVisual(
+            layer.plane,
+            atX: objectX + layer.offsetX,
+            y: objectY + layer.offsetY,
+            noOverwrite: item.source.noOverwrite,
+            clipToSolid: nil,
+            into: &liveBase
+          )
+        }
+        continue
+      }
+      renderedGadgets.append(NxlvRenderedGadget(
+        style: item.style,
+        piece: item.piece,
+        effect: .background,
+        x: item.x,
+        y: item.y,
+        width: item.prepared.plane.width,
+        height: item.prepared.plane.height,
+        triggerX: nil,
+        triggerY: nil,
+        triggerWidth: nil,
+        triggerHeight: nil,
+        animationFrames: item.prepared.animationFrames,
+        keyFrame: item.prepared.keyFrame,
+        animationRGBA: retainsVisualLayers ? item.prepared.frames.map(\.rgba) : [],
+        initialAnimationFrame: item.prepared.initialFrame,
+        primaryZIndex: item.prepared.primaryZIndex,
+        secondaryAnimations: retainsVisualLayers ? item.prepared.secondaryAnimations.map { animation in
+          NxlvRenderedGadgetAnimation(
+            name: animation.name,
+            x: objectX + animation.offsetX,
+            y: objectY + animation.offsetY,
+            width: animation.frames[0].width,
+            height: animation.frames[0].height,
+            zIndex: animation.zIndex,
+            framesRGBA: animation.frames.map(\.rgba),
+            initialFrame: animation.initialFrame,
+            state: animation.state,
+            initiallyVisible: animation.initiallyVisible,
+            triggers: animation.triggers
+          )
+        } : [],
+        noOverwrite: item.source.noOverwrite,
+        backgroundSpeed: item.source.speed ?? 0,
+        backgroundAngle: item.source.angle ?? 0,
+        backgroundOriginX: objectX,
+        backgroundOriginY: objectY
+      ))
     }
   }
 
@@ -1071,12 +1149,15 @@ private struct NxlvRenderEngine {
       } else {
         clipMask = nil
       }
+      let noOverwritePrior = foreground.rgba
       for layer in staticVisualLayers(prepared, primaryFrame: primaryFrame) {
         compositeVisual(
           layer.plane,
           atX: objectX + layer.offsetX,
           y: objectY + layer.offsetY,
           noOverwrite: gadget.noOverwrite,
+          noOverwriteAgainst: terrain.rgba,
+          noOverwritePrior: noOverwritePrior,
           clipToSolid: clipMask,
           into: &foreground
         )
@@ -1302,14 +1383,6 @@ private struct NxlvRenderEngine {
       )
       return nil
     }
-    if metadata.effect == .background, let speed = gadget.speed, speed != 0 {
-      append(
-        .warning,
-        .unsupportedGadget,
-        "Static rendering does not animate moving background gadget '\(style):\(piece)'.",
-        line: gadget.source.openingLine
-      )
-    }
     guard let primaryIndex = metadata.animations.firstIndex(where: { $0.isPrimary }) else {
       append(
         .error,
@@ -1323,27 +1396,55 @@ private struct NxlvRenderEngine {
     var sourceFrames: [PixelPlane]
     var initialFrame = 0
     if let generatedName = animation.name, generatedName.hasPrefix("*") {
-      let width = animation.declaredWidth
-        ?? max(1, (metadata.triggerX ?? 0) + (metadata.triggerWidth ?? 1))
-      let height = animation.declaredHeight
-        ?? max(1, (metadata.triggerY ?? 0) + (metadata.triggerHeight ?? 1))
-      guard width > 0, height > 0 else {
-        append(
-          .error,
-          .invalidPlacement,
-          "Object '\(style):\(piece)' has an invalid generated animation size.",
-          line: gadget.source.openingLine
-        )
-        return nil
-      }
-      sourceFrames = [PixelPlane(width: width, height: height)]
-      if generatedName.caseInsensitiveCompare("*PICKUP") == .orderedSame {
-        append(
-          .warning,
-          .unsupportedGadget,
-          "Static rendering omits the generated skill icon for '\(style):\(piece)'.",
-          line: gadget.source.openingLine
-        )
+      if generatedName.caseInsensitiveCompare("*PICKUP") == .orderedSame,
+         let themeAsset = resolution.assets.first(where: { $0.reference.kind == .theme }),
+         let skill = gadget.skillType {
+        let eraserAnimation = metadata.animations.first {
+          $0.name?.caseInsensitiveCompare("skill_mask") == .orderedSame
+        }
+        let eraserFrames = eraserAnimation.flatMap {
+          decodedAnimationFrames(
+            $0,
+            piece: piece,
+            asset: asset,
+            line: gadget.source.openingLine,
+            description: "pickup eraser for object '\(style):\(piece)'"
+          )
+        }
+        guard let generated = NeoLemmixPickupGraphics.make(
+          themeAsset: themeAsset,
+          stylesRootURL: themeAsset.styleDirectoryURL.deletingLastPathComponent(),
+          eraseFrames: eraserFrames?.map(\.rgba),
+          eraseWidth: eraserFrames?.first?.width ?? 0,
+          eraseHeight: eraserFrames?.first?.height ?? 0
+        ) else {
+          append(
+            .error,
+            .missingResolvedAsset,
+            "Object '\(style):\(piece)' could not generate its CE pickup skill artwork.",
+            line: gadget.source.openingLine
+          )
+          return nil
+        }
+        sourceFrames = generated.framesRGBA.map {
+          PixelPlane(width: generated.width, height: generated.height, rgba: $0)
+        }
+        initialFrame = (NxlvSkill.allCases.firstIndex(of: skill) ?? 0) * 2 + 1
+      } else {
+        let width = animation.declaredWidth
+          ?? max(1, (metadata.triggerX ?? 0) + (metadata.triggerWidth ?? 1))
+        let height = animation.declaredHeight
+          ?? max(1, (metadata.triggerY ?? 0) + (metadata.triggerHeight ?? 1))
+        guard width > 0, height > 0 else {
+          append(
+            .error,
+            .invalidPlacement,
+            "Object '\(style):\(piece)' has an invalid generated animation size.",
+            line: gadget.source.openingLine
+          )
+          return nil
+        }
+        sourceFrames = [PixelPlane(width: width, height: height)]
       }
     } else {
       let expectedBaseName = animation.name.map { "\(piece)_\($0)" } ?? piece
@@ -1701,13 +1802,14 @@ private struct NxlvRenderEngine {
       }
       selectedFrame = min(max(0, index), frameCount - 1)
     case .random:
-      selectedFrame = 0
-      append(
-        .warning,
-        .randomInitialFrame,
-        "Static rendering uses frame 0 for RANDOM INITIAL_FRAME in \(description).",
-        line: line
-      )
+      // CE accepts any frame in the strip here. Use a stable distribution so
+      // repeated instances do not all start at frame zero and recovery or
+      // replay rendering does not change after a reload.
+      var hash: UInt64 = 14_695_981_039_346_656_037
+      for byte in "\(description)#\(line ?? 0)".utf8 {
+        hash = (hash ^ UInt64(byte)) &* 1_099_511_628_211
+      }
+      selectedFrame = Int(hash % UInt64(frameCount))
     case nil:
       selectedFrame = defaultInitialFrame(for: effect, frameCount: frameCount)
     }
@@ -2045,7 +2147,7 @@ private struct NxlvRenderEngine {
     description: String
   ) -> Int? {
     if !isResizable {
-      if requested != nil {
+      if let requested, requested != source {
         append(
           .warning,
           .unsupportedResize,
@@ -2292,6 +2394,8 @@ private struct NxlvRenderEngine {
     atX destinationX: Int,
     y destinationY: Int,
     noOverwrite: Bool,
+    noOverwriteAgainst: [UInt8]? = nil,
+    noOverwritePrior: [UInt8]? = nil,
     clipToSolid: [UInt8]?,
     into canvas: inout PixelPlane
   ) {
@@ -2313,7 +2417,11 @@ private struct NxlvRenderEngine {
         guard sourcePixel.alpha > 0 else { continue }
         let destinationIndex = canvasY * canvas.width + canvasX
         if let clipToSolid, clipToSolid[destinationIndex] == 0 { continue }
-        if noOverwrite, canvas.rgba[destinationIndex * 4 + 3] > 0 { continue }
+        if noOverwrite {
+          let offset = destinationIndex * 4 + 3
+          let occupied = noOverwritePrior?[offset] ?? canvas.rgba[offset]
+          if occupied > 0 || (noOverwriteAgainst?[offset] ?? 0) > 0 { continue }
+        }
         canvas.setPixel(
           sourceOver(sourcePixel, canvas.pixel(destinationIndex)),
           at: destinationIndex

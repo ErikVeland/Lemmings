@@ -1165,7 +1165,10 @@ struct ReticleFeedback {
       for lemming in lemmings { draw(lemming, ghostsOnly: true) }
     }
     // Every solid lemming and its labels cover every ghost, including neighbours.
-    for lemming in lemmings { draw(lemming) }
+    let solidLemmings = session.lemmingsForRendering(
+      selectedID: assignmentHighlight.target,
+      highlightedID: pointerLemmingID)
+    for lemming in solidLemmings { draw(lemming) }
     if let shimmerSprite {
       LemmingSelectionGlow.drawSpriteShimmer(sprite: shimmerSprite.pixels, in: shimmerSprite.rect,
         scale: viewport.zoom, animated: !reduceMotion && !reduceFlashes)

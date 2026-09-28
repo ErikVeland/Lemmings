@@ -55,6 +55,27 @@ do {
             check(titles.contains(.holidayLemmings1993) && titles.contains(.holidayLemmings1994),
                   "Retail Holiday campaigns are missing from the bundle")
             check(BundledGameResources.macintoshSoundImage(in: bundle) != nil, "Embedded Macintosh sound source is missing")
+            let neo = try BundledGameResources.neoLemmix(in: bundle)
+            let neoStyles = try FileManager.default.contentsOfDirectory(atPath: neo.stylesRoot!.path)
+                .filter { !$0.hasPrefix(".") }
+            check(neoStyles.count == 26, "The bundle must carry exactly the 26 DMA NeoLemmix styles")
+            check(FileManager.default.fileExists(atPath: neo.levelsRoot.deletingLastPathComponent()
+                .appendingPathComponent("License.txt").path), "The NeoLemmix CE licence is missing")
+            let neoPacks = NeoLemmixLibrary.discover([neo])
+            check(neoPacks.count == 3 && neoPacks.reduce(0, { $0 + $1.pack.levels.count }) == 788,
+                  "Embedded NeoLemmix CE packs are incomplete")
+            var neoReady = 0
+            for pack in neoPacks {
+                for level in pack.pack.levels {
+                    guard let styles = pack.stylesRoot(for: level) else { continue }
+                    let text = try String(contentsOf: level.url, encoding: .utf8)
+                    guard let parsed = NxlvLevel(text: text) else { throw SequelDataError.invalid(level.relativePath) }
+                    check(NxlvStyleResolver(stylesRootURL: styles).resolve(level: parsed).isComplete,
+                          "NeoLemmix level shown as ready cannot resolve: \(level.relativePath)")
+                    neoReady += 1
+                }
+            }
+            check(neoReady == 713, "Expected 713 ready NeoLemmix levels, found \(neoReady)")
             for name in ["Graphics", "Levels"] {
                 let fork = resources.appendingPathComponent("Ports/MacResourceForks/mac_extracted/Holiday_Lem93_94/Extras/X-Mas Demo '92/" + name + ".rsrc")
                 let bytes = try Data(contentsOf: fork)
@@ -71,7 +92,7 @@ do {
                       "Embedded asset still links to the source checkout")
             }
         }
-        print("PASS \(bundle.bundleURL.lastPathComponent): 124 L2 maps, original UI and cursors, 80 sound clips, masks, sprites and 14 music modules embedded")
+        print("PASS \(bundle.bundleURL.lastPathComponent): 124 L2 maps, original UI and cursors, 80 sound clips, masks, sprites, 14 music modules and the NeoLemmix CE packs embedded")
     }
 } catch {
     FileHandle.standardError.write(Data("FAIL: \(error)\n".utf8)); exit(1)
