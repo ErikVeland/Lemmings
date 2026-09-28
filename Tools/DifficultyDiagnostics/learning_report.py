@@ -54,14 +54,31 @@ elif sys.argv[1] == 'report':
     assert all(int(a/35) <= int(b/35) for a,b in zip(demands, demands[1:]))
     assert all(stages.index(a['stage']) <= stages.index(b['stage']) for a,b in zip(lessons,lessons[1:]))
     assert lessons[0]['concepts']
-    assert sum(r['official'] for r in selected) == 352
+    official_rows = [r for r in read(BASE) if r['official'] and not any(token in (r['entry']['identity']['levelID'] + ' ' + (r['profile'].get('sourceRank') or '')).lower() for token in ('versus', '2p', 'two player'))]
+    def normal_title(row):
+        return ''.join(c for c in row['entry']['levelNameSnapshot'].lower() if c.isalnum())
+    official_hashes, official_titles = set(), set()
+    def official_priority(row):
+        return {'Lemmings': 0, 'Oh No! More Lemmings': 1}.get(row['entry']['packNameSnapshot'], 2), row['order']
+    for row in sorted(official_rows, key=official_priority):
+        pack_title = (row['entry']['packNameSnapshot'], normal_title(row))
+        if row['initialHash'] not in official_hashes and pack_title not in official_titles:
+            official_hashes.add(row['initialHash'])
+            official_titles.add(pack_title)
+    assert sum(r['official'] for r in selected) == len(official_hashes)
+    assert len({r['initialHash'] for r in selected}) == len(selected)
+    assert len({(r['entry']['packNameSnapshot'], normal_title(r)) for r in selected}) == len(selected)
+    assert not any(any(token in (r['entry']['packNameSnapshot'] + ' ' + r['entry']['identity']['levelID'] + ' ' + (r['profile'].get('sourceRank') or '')).lower() for token in ('versus', '2p', 'two player')) for r in selected)
+    assert all(r['entry']['packNameSnapshot'] not in ('Amiga Fun', 'Amiga Tricky', 'Amiga Taxing', 'Amiga Mayhem') for r in selected if not r['official'])
+    assert len({(r['entry']['packNameSnapshot'], normal_title(r)) for r in selected if r['official']}) == len(official_hashes)
     fan = [r for r in selected if not r['official']]
+    assert not {normal_title(r) for r in fan}.intersection({normal_title(r) for r in selected if r['official']})
     assert all(r['profile']['confidence'] != 'low' and r['profile']['detectedTechniques'] for r in fan)
     scenarios = read(OUT / 'scenarios.json')
     fan_scenarios = [scenarios['fan'][r['entry']['identity']['packID']+'\0'+r['entry']['identity']['levelID']] for r in fan]
     assert len(set(fan_scenarios)) == len(fan_scenarios)
     assert not set(fan_scenarios).intersection(scenarios['official'])
-    assert {key(r) for r in selected if r['official']} == {key(r) for r in read(BASE) if r['official']}
+    assert {r['initialHash'] for r in selected if r['official']} == official_hashes
     assert all(l['score'] == r['profile']['overallScore'] for l,r in zip(lessons,selected))
     all_solutions = read(OUT / 'candidate-solutions.json')
     solutions = {r['initialHash']: all_solutions.get(r['profile']['key']['replayRevision'], all_solutions.get(r['initialHash'])) for r in fan}
@@ -73,7 +90,7 @@ elif sys.argv[1] == 'report':
     old_ohno_jump = max(b['profile']['overallScore']-a['profile']['overallScore'] for a,b in zip(original_ohno, original_ohno[1:]))
     new_ohno_jump = max(scores[i]-scores[i-1] for i in range(1,len(scores)) if selected[i]['entry']['packNameSnapshot'] == 'Oh No! More Lemmings')
     assert len(ohno) == 100
-    summary = {'originalOhNoLargestStep':old_ohno_jump, 'newOhNoLargestIncomingStep':new_ohno_jump, 'levels':len(lessons), 'official':352, 'fan':len(fan),
+    summary = {'originalOhNoLargestStep':old_ohno_jump, 'newOhNoLargestIncomingStep':new_ohno_jump, 'levels':len(lessons), 'official':len(official_hashes), 'fan':len(fan),
                'fanPacks':len({r['entry']['identity']['packID'] for r in fan}),
                'largestScoreStep':max(jumps), 'scoreDecreases':sum(j < 0 for j in jumps),
                'largestDemandStep':max(b-a for a,b in zip(demands,demands[1:])),
@@ -97,9 +114,9 @@ elif sys.argv[1] == 'report':
     write(OUT / 'transitions.json', transitions)
     write(OUT / 'oh-no-placements.json', [{'step':i,'level':l['entry']['levelNameSnapshot'],'rank':r['profile'].get('sourceRank'),'score':l['score']} for i,l,r in ohno])
     lines = ['# Oh My! All Lemmings!', '',
-        f"{len(lessons)} levels: all 352 official Classic levels and {len(fan)} distinct replay-validated fan levels from {summary['fanPacks']} packs.", '',
+        f"{len(lessons)} distinct single-player levels: {summary['official']} official puzzles and {len(fan)} replay-validated library levels from {summary['fanPacks']} packs.", '',
         '## Ordering', '',
-        'The path progresses through Fun, Intermediate, Difficult and Expert. A hard timing, coordination or planning demand cannot be cancelled by easy dimensions in a weighted average. Pack origin, retail rank and campaign order do not determine placement. All Oh No! levels are interleaved with the rest of the pool.', '',
+        'The path progresses through Fun, Intermediate, Difficult and Expert. A hard timing, coordination or planning demand cannot be cancelled by easy dimensions in a weighted average. Official levels take priority within comparable demand bands. Retail rank and campaign order do not determine placement. All Oh No! levels are interleaved with the rest of the pool.', '',
         f"Stages: {'; '.join(stage + ' ' + str(summary['stages'][stage]) for stage in stages)}. Largest upward curriculum-demand step: {summary['largestDemandStep']:.2f}/1000. Transitions requiring review: {summary['supportTransitions']}; missing basic-skill preparation: {summary['preparationGaps']}.", '',
         '| Stage | Steps | Teaching focus |', '| --- | ---: | --- |',
         *[f"| {stage} | {next(i+1 for i,l in enumerate(lessons) if l['stage']==stage)}–{max(i+1 for i,l in enumerate(lessons) if l['stage']==stage)} | {focus} |" for stage,focus in zip(stages, ['Single skills and simple combinations', 'Skill combinations and crowd management', 'Longer plans and tighter resources', 'Precision, complex plans and coordination']) if summary['stages'][stage]], '',
@@ -111,10 +128,10 @@ elif sys.argv[1] == 'report':
         '## Remaining transition reviews', '',
         *[f"- Step {t['step']}, **{t['level']}** ({t['stage']}): new execution-demand high rises by {t['newComponentHighs']['executionPrecision']:.1f}/1000. Check timing forgiveness with a novice before calling this transition smooth." for t in transitions if t['needsSupport']], '',
         '## Fan evidence', '',
-        'The full Classic corpus contains 6,374 entries. Additional routes are proposed from matching terrain, similar terrain and bounded reactive skill policies. Each accepted route is replayed against the complete candidate simulation, checked for a winning result, and analysed with timing perturbations. Source fingerprints and initial-state hashes must match. Blank/hands-free fan entries are excluded from bridges. Fan copies of official puzzles are excluded using a gameplay signature that ignores names and viewport positions, includes resources, objects and rendered masks, and is independent of the release variant. Duplicate fan scenarios and initial states are also excluded. Unsolved candidates retain low confidence and are not passed off as measured bridges.', '',
+        'The full Classic corpus contains 6,374 entries. Additional routes are proposed from matching terrain, similar terrain and bounded reactive skill policies. Each accepted route is replayed against the complete candidate simulation, checked for a winning result, and analysed with timing perturbations. Source fingerprints and initial-state hashes must match. Blank/hands-free fan entries are excluded from bridges. Fan copies of official puzzles are excluded using a gameplay signature that ignores names and viewport positions, includes resources, objects and rendered masks, and is independent of the release variant. Duplicate official and fan initial states are excluded. Competitive two-player levels are excluded. Unsolved candidates retain low confidence and are not passed off as measured bridges.', '',
         'The bounded search is not a complete solver. Failure to find a route does not imply that a level is impossible. The chosen fan count is an outcome of evidence and deduplication, not a quota.', '',
         '## Validation', '',
-        'The generator checks reversed-input determinism, complete official coverage and the exact replay digest for every selected fan level. The existing 220 selected fan witnesses were previously replayed successfully against the native simulation; this revision changes their order, not their levels or solutions. See validation.json for the current test and build results. Human insight, stage calibration and novice frustration still need playtesting.', '',
+        'The generator checks reversed-input determinism, distinct single-player official coverage and the exact replay digest for every selected fan level. See validation.json for the current test and build results. Human insight, stage calibration and novice frustration still need playtesting.', '',
         '## Saved progress', '',
         'Solved and parked levels remain saved by identity. Opening the main path rebuilds the remaining order when an older curriculum version is active. The old run remains in saved runs. Try later remains free and grants no win. It is a recovery action, not evidence that a difficulty gap is filled.', '',
         '## Reproduce', '',
@@ -128,6 +145,24 @@ elif sys.argv[1] == 'report':
         values=[str(i),lesson['stage'],lesson['entry']['levelNameSnapshot'],lesson['entry']['packNameSnapshot']+' / '+(row['profile'].get('sourceRank') or 'Fan'),f"{lesson['score']:.2f}",f"{lesson['demand']:.2f}",'Review' if lesson['needsSupport'] else '']
         lines.append('| '+' | '.join(v.replace('|','\\|') for v in values)+' |')
     (OUT / 'README.md').write_text('\n'.join(lines)+'\n')
+    bbcode = [
+        '[b]Oh My! All Lemmings![/b]',
+        '[i]A proposed learning path through single-player Classic Lemmings, from Fun to Expert[/i]', '',
+        f"The path has {len(lessons)} distinct puzzles: {summary['official']} official levels and {len(fan)} selected library levels from {summary['fanPacks']} packs. All 100 Oh No! More Lemmings levels are included.", '',
+        'Official levels take priority when puzzles have comparable demands. Alternate ports of the original Classic campaign, repeated puzzles and two-player levels are excluded.', '',
+        'The order uses measured solution, timing, coordination and resource demands. It introduces skills before combining them and spaces repeated practice. The stages are editorial estimates. Novice playtesting is still needed.', '',
+        '[b]Full order[/b]', ''
+    ]
+    for stage in stages:
+        stage_lessons = [(i, lesson, row) for i, (lesson, row) in enumerate(zip(lessons, selected), 1) if lesson['stage'] == stage]
+        if not stage_lessons:
+            continue
+        bbcode.extend([f"[b]{stage} — levels {stage_lessons[0][0]}–{stage_lessons[-1][0]} ({len(stage_lessons)} levels)[/b]", '[list]'])
+        for i, lesson, row in stage_lessons:
+            origin = 'official' if row['official'] else 'library'
+            bbcode.append(f"[*][b]{i}. {lesson['entry']['levelNameSnapshot']}[/b] — {lesson['entry']['packNameSnapshot']} (source entry {lesson['entry']['levelNumberSnapshot']}; {origin})")
+        bbcode.extend(['[/list]', ''])
+    (OUT / 'Oh My! All Lemmings! - BBCode.txt').write_text('\n'.join(bbcode).rstrip() + '\n')
     print(json.dumps(summary,indent=2))
 else:
     raise SystemExit('Usage: learning_report.py collect OUTPUT... | report')

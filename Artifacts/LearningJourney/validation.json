@@ -1,55 +1,20 @@
 {
-  "fullSuiteTestsPassed": 94,
-  "sourceMatchesAnalysisSnapshot": {
-    "ClassicDOSSimulation.swift": "52d1b6f69c33b52d6ab140c3651fc1d3d368fb7b6aa2742c78514324effe6951",
-    "ClassicDOSReplay.swift": "70737294b81132a7d5285661035780b3f02590e15da00a60a84c819a2006e042",
-    "ClassicDifficultyAnalysis.swift": "4b85011b7be0a01a42151f2f56712b0df0eb6a8eee8bee30c793bc1f127f95d6",
-    "DifficultyTechniques.swift": "53960fa097eb9d4bdfabc05c7cf68bd1e4a47300898ccfdf1f84126cac6a5e57",
-    "DifficultyPerturbation.swift": "09710695e8c63512f0864ac97ff74b8891811bacf3ce25191928469aa7bd96b6",
-    "DifficultyCalibration.swift": "e1c457601155b171681227e7d14cf9fc5fb06144434ed7cb273b0a04b5f64066",
-    "DifficultyProfile.swift": "01162b1c127d2c994e50a73940e07a678bd614519ded76bf3d7c33e6cf82d567"
-  },
-  "order": "Fun \u2192 Intermediate \u2192 Difficult \u2192 Expert; hardest-demand floors, 35-point bands and skill preparation; source-neutral",
-  "searchPasses": [
-    {
-      "method": "exact terrain",
-      "packs": 536,
-      "trials": 5599,
-      "winningStateHashesWithinPass": 118
-    },
-    {
-      "method": "reactive policies",
-      "packs": 536,
-      "trials": 48463,
-      "winningStateHashesWithinPass": 220
-    },
-    {
-      "method": "similar terrain",
-      "packs": 536,
-      "trials": 34954,
-      "winningStateHashesWithinPass": 195
-    }
-  ],
-  "trialTotal": 89016,
-  "officialPuzzleCopiesExcluded": 348,
-  "selectedFanReplaysVerified": 220,
-  "selectedFanProfilesMatchBundledReplayDigests": true,
-  "localArm64AppBuild": "passed",
-  "liveMainMenuLevelCount": 572,
-  "signedBundleVerified": true,
-  "version": "learning-3",
-  "previousLiveJourneyHub": "Passed: 0/572, Surprise Package?, enabled Let's play; shipped pixel artwork rendered",
-  "liveJourneyHub": "Passed: Fun \u2022 Discover: Digger; Just dig !; Solved 0/572; enabled, focused Let's play; shipped bitmap artwork.",
+  "version": "learning-5",
+  "scope": "Generated Classic single-player learning path",
+  "generator": "Scripts/generate-learning-journey.sh passed with Xcode toolchain",
+  "report": "Tools/DifficultyDiagnostics/learning_report.py report passed",
+  "focusedTests": "LearningJourneyTests: 8 passed",
   "curriculumChecks": {
-    "allOfficialLevels": 352,
+    "lessons": 503,
+    "distinctOfficialPuzzles": 317,
+    "distinctLibraryPuzzles": 186,
     "allOhNoLevels": 100,
-    "distinctFanLevels": 220,
-    "deterministicReversedInput": true,
+    "uniqueIdentities": 503,
+    "uniqueInitialStates": 503,
+    "twoPlayerLevels": 0,
     "missingBasicSkillPreparation": 0,
-    "timingTransitionsForPlaytest": 2,
     "largestCurriculumDemandStep": 55.25,
-    "rawScoresUnchanged": true
+    "transitionsForPlaytest": 2
   },
-  "uiInputTests": "Start, resume, explored, complete, pause and shared engine result targets passed.",
-  "bundledManifestMatchesSource": true
+  "limits": "The generated path and focused tests do not validate novice difficulty or the rendered app flow."
 }
