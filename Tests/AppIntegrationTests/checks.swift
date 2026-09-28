@@ -2822,13 +2822,24 @@ extension AppDelegate {
     try check(blocked.isEmpty, "Journey lessons cannot start: " + blocked.map {
       "\($0.key) \($0.value.count), e.g. \($0.value.prefix(3).joined(separator: "; "))"
     }.sorted().joined(separator: " | "))
-    print("PASS all \(journey.lessons.count) journey lessons resolve and can start")
+    print("PASS all \(journey.lessons.count) journey lessons resolve and pass session preflight")
   }
 
   fileprivate func testLearningJourneySessionsStart() async throws {
     guard let journey = LearningJourneyLibrary.journey else {
       throw IntegrationFailure(message: "The bundled learning journey did not load")
     }
+    let previousMusic = settings.music
+    let previousMusicVolume = settings.musicVolume
+    let previousShuffleMusic = settings.shuffleMusic
+    let previousAudioMuted = audioMuted
+    let previousMusicDirectory = UserDefaults.standard.string(forKey: musicPathKey)
+    UserDefaults.standard.removeObject(forKey: musicPathKey)
+    settings.music = .amigaModules
+    settings.musicVolume = 0.5
+    settings.shuffleMusic = false
+    audioMuted = false
+    applyAudioSettings()
     let directory = FileManager.default.temporaryDirectory
       .appendingPathComponent("learning-sessions-\(UUID().uuidString)")
     let previousArcade = ArcadeStore.shared
@@ -2840,7 +2851,14 @@ extension AppDelegate {
       bundledProofs: nil, defaults: defaults)
     ArcadeStore.shared = arcade
     defer {
-      returnToLibrary()
+      resetToLibrary(resumeMusic: false)
+      settings.music = previousMusic
+      settings.musicVolume = previousMusicVolume
+      settings.shuffleMusic = previousShuffleMusic
+      audioMuted = previousAudioMuted
+      if let previousMusicDirectory { UserDefaults.standard.set(previousMusicDirectory, forKey: musicPathKey) }
+      else { UserDefaults.standard.removeObject(forKey: musicPathKey) }
+      applyAudioSettings()
       ArcadeStore.shared = previousArcade
       playlistStoreCache = previousCache
       sequencePlaylistStore = previousSequenceStore
@@ -2868,7 +2886,9 @@ extension AppDelegate {
     startLearningEntries(entries, in: store)
     try await waitForLaunch()
     try check(store.activeRun?.currentEntry.identity == first
-      && sequencePlayingIdentity == first && !arcade.hotSeatIsActive,
+      && sequencePlayingIdentity == first && !arcade.hotSeatIsActive
+      && music.isOutputRunning && music.currentURL != nil
+      && !music.muted && music.volume > 0,
       "New solo did not start the learning journey")
     let firstSoloID = store.activeRun!.id
     returnToLibrary()
@@ -2881,6 +2901,8 @@ extension AppDelegate {
     try await waitForLaunch()
     try check(store.activeRun?.currentEntry.identity == first
       && sequencePlayingIdentity == first && !arcade.hotSeatIsActive
+      && music.isOutputRunning && music.currentURL != nil
+      && !music.muted && music.volume > 0
       && store.activeRun?.id != firstSoloID
       && store.savedRuns.contains(where: { $0.run.id == firstSoloID }),
       "New solo did not replace and save the learning journey session")
