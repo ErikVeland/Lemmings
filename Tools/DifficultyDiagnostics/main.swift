@@ -35,12 +35,20 @@ for (index, url) in levelFiles.enumerated() {
         let data = try Data(contentsOf: url)
         guard let text = String(data: data, encoding: .utf8), let level = NxlvLevel.decode(text: text).level else { continue }
         let relative = String(url.path.dropFirst(levelsRoot.path.count + 1))
-        let identity = LevelCatalogueIdentity(engine: .classic, packID: url.deletingLastPathComponent().lastPathComponent, levelID: relative)
+        let identity = LevelCatalogueIdentity(engine: .neolemmix, packID: url.deletingLastPathComponent().lastPathComponent, levelID: relative)
         let revision = digest(data)
         var key = DifficultyCacheKey(identity: identity, levelRevision: revision, simulationVersion: simulationRevision)
         var profile = DifficultyScorer.analyse(key: key, metadata: DifficultyMetadataEvidence(level: level))
-        if let id = level.id, let pair = replayByID[id]?.first(where: { $0.0.metadata.levelVersion == (level.version ?? 0) }) {
+        if let id = level.id, let matches = replayByID[id],
+           let pair = matches.first(where: { $0.0.metadata.levelVersion == (level.version ?? 0) }) ?? matches.first {
             do {
+                let versionMismatch = pair.0.metadata.levelVersion != (level.version ?? 0)
+                let source = pair.0.metadata
+                let replay = versionMismatch ? NxrpReplay(
+                    metadata: NxrpMetadata(user: source.user, title: source.title, author: source.author,
+                        game: source.game, group: source.group, levelPosition: source.levelPosition,
+                        levelID: source.levelID, levelVersion: level.version ?? 0),
+                    commands: pair.0.commands, commandEvidence: pair.0.commandEvidence) : pair.0
                 let resolution = resolver.resolve(level: level)
                 let result = renderer.render(level: level, resolution: resolution)
                 guard let rendered = result.renderedLevel, !result.hasErrors else {
@@ -52,9 +60,10 @@ for (index, url) in levelFiles.enumerated() {
                 let encoder = JSONEncoder(); encoder.outputFormatting = [.sortedKeys]
                 var assetData = try encoder.encode(terrain)
                 assetData.append(try encoder.encode(NeoLemmixConfiguration(level: level, renderedLevel: rendered).zones))
-                key = DifficultyCacheKey(identity: identity, levelRevision: revision, replayRevision: pair.1,
+                key = DifficultyCacheKey(identity: identity, levelRevision: revision,
+                    replayRevision: pair.1 + (versionMismatch ? ":source-compatible" : ""),
                     assetsRevision: digest(assetData) + "-probes-\(maxProbes)", simulationVersion: simulationRevision)
-                profile = try NeoLemmixDifficultyAnalysis.analyse(level: level, rendered: rendered, replay: pair.0,
+                profile = try NeoLemmixDifficultyAnalysis.analyse(level: level, rendered: rendered, replay: replay,
                     key: key, maximumProbeRuns: maxProbes)
             } catch { failures.append("\(relative): \(error)") }
         }

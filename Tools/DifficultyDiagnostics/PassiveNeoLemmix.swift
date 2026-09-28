@@ -31,8 +31,12 @@ let resolver = NxlvStyleResolver(stylesRootURL: stylesRoot)
 let renderer = NxlvRenderer()
 let encoder = JSONEncoder()
 encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+let previous = (try? JSONDecoder().decode([Result].self,
+    from: Data(contentsOf: output.appendingPathComponent("results.json")))) ?? []
+let previousByPath = Dictionary(uniqueKeysWithValues: previous.map { ($0.path, $0) })
 var results: [Result] = []
-var profiles: [DifficultyProfile] = []
+var profiles = (try? JSONDecoder().decode([DifficultyProfile].self,
+    from: Data(contentsOf: output.appendingPathComponent("profiles.json")))) ?? []
 try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
 @MainActor func record(_ item: Result, count: Int) throws {
     results.append(item)
@@ -43,6 +47,10 @@ try FileManager.default.createDirectory(at: output, withIntermediateDirectories:
 }
 for (index, url) in urls.enumerated() {
     let path = String(url.path.dropFirst(levelsRoot.path.count + 1))
+    if let earlier = previousByPath[path], earlier.status != "error" {
+        try record(earlier, count: index + 1)
+        continue
+    }
     do {
         let data = try Data(contentsOf: url)
         guard let text = String(data: data, encoding: .utf8),
@@ -69,7 +77,7 @@ for (index, url) in urls.enumerated() {
         if simulation.didWin, let id = level.id {
             let replay = NxrpReplay(metadata: NxrpMetadata(levelID: id,
                 levelVersion: level.version ?? 0, expectedCompletionFrame: simulation.tickCount), commands: [])
-            let identity = LevelCatalogueIdentity(engine: .classic,
+            let identity = LevelCatalogueIdentity(engine: .neolemmix,
                 packID: url.deletingLastPathComponent().lastPathComponent, levelID: path)
             let key = DifficultyCacheKey(identity: identity, levelRevision: digest(data),
                 replayRevision: digest(try encoder.encode(replay)), assetsRevision: digest(Data(rendered.solidMask)))

@@ -12,6 +12,7 @@ ROOT = Path(__file__).resolve().parents[2]
 CLASSIC = ROOT / "Artifacts/ClassicProgression/audit.json"
 FAN = ROOT / "Artifacts/LearningJourney/fan-evidence.json"
 NEO = ROOT / ".build/full-difficulty-evaluation/neolemmix/profiles.json"
+NEO_REPORT = ROOT / ".build/full-difficulty-evaluation/neolemmix/report.json"
 PASSIVE = ROOT / ".build/neolemmix-passive-evaluation/results.json"
 OUTPUT = ROOT / "Artifacts/DifficultyEvaluation"
 
@@ -33,6 +34,10 @@ def main():
     classic.update({identity(row): row for row in read(FAN)})
     fan = [row for row in classic.values() if not row["official"]]
     neo = read(NEO)
+    neo_failures = {}
+    for failure in read(NEO_REPORT)["failures"]:
+        path, _, reason = failure.partition(": ")
+        neo_failures[path] = reason
     passive = {row["path"]: row for row in read(PASSIVE)} if PASSIVE.exists() else {}
     assert len(fan) == 6022, len(fan)
     assert len(neo) == 794, len(neo)
@@ -45,6 +50,8 @@ def main():
                      "title": row["entry"]["levelNameSnapshot"],
                      "score": round(profile["overallScore"], 2),
                      "confidence": profile["confidence"],
+                     "replay_sha256": profile["key"]["replayRevision"].rsplit(" ", 1)[-1]
+                     if verified else "",
                      "completion": "verified win" if verified else "no verified win",
                      "playtest": "replay verified" if verified else "bounded search or metadata only",
                      "issue": row.get("issue") or ""})
@@ -53,26 +60,34 @@ def main():
         run = passive.get(path, {})
         status = run.get("status", "not run")
         score = run.get("score") or profile["overallScore"]
+        replay_win = profile["confidence"] != "low"
+        passive_win = status == "passive-win" and run.get("score") is not None
+        source_compatible = profile["key"]["replayRevision"].endswith(":source-compatible")
         rows.append({"source": "NeoLemmix", "pack": path.split("/", 1)[0],
                      "level": path, "title": path.rsplit("/", 1)[-1].removesuffix(".nxlv"),
                      "score": round(score, 2),
-                     "confidence": "high" if status == "passive-win" and run.get("score") is not None else profile["confidence"],
-                     "completion": "verified win" if status == "passive-win" and run.get("score") is not None else "no verified win",
-                     "playtest": status,
-                     "issue": ", ".join(run.get("features", [])) or run.get("issue", "")})
+                     "confidence": "high" if passive_win else profile["confidence"],
+                     "replay_sha256": profile["key"]["replayRevision"].split(":", 1)[0]
+                     if replay_win else "",
+                     "completion": "verified win" if replay_win or passive_win else "no verified win",
+                     "playtest": ("source-compatible replay verified" if source_compatible else "replay verified")
+                     if replay_win else "replay analysis failed" if path in neo_failures else status,
+                     "issue": neo_failures.get(path) or ", ".join(run.get("features", []))
+                     or run.get("issue", "")})
     rows.sort(key=lambda row: (row["source"], row["pack"], row["level"]))
     OUTPUT.mkdir(parents=True, exist_ok=True)
     with (OUTPUT / "levels.csv").open("w", newline="") as stream:
         writer = csv.DictWriter(stream, fieldnames=list(rows[0]))
         writer.writeheader()
         writer.writerows(rows)
-    sources = {str(path.relative_to(ROOT)): digest(path) for path in (CLASSIC, FAN, NEO)}
+    sources = {str(path.relative_to(ROOT)): digest(path) for path in (CLASSIC, FAN, NEO, NEO_REPORT)}
     if PASSIVE.exists():
         sources[str(PASSIVE.relative_to(ROOT))] = digest(PASSIVE)
     counts = Counter((row["source"], row["completion"]) for row in rows)
     summary = {"generatedAt": datetime.now(timezone.utc).isoformat(),
                "sourceDigests": sources, "levels": len(rows), "fanLevels": len(fan),
                "neoLemmixLevels": len(neo), "neoPassiveRuns": len(passive),
+               "neoReplayAnalysisFailures": len(neo_failures),
                "verifiedFanWins": counts[("Classic fan", "verified win")],
                "unverifiedFan": counts[("Classic fan", "no verified win")],
                "verifiedNeoLemmixWins": counts[("NeoLemmix", "verified win")],
@@ -87,7 +102,12 @@ def main():
         f"{summary['verifiedNeoLemmixWins']} NeoLemmix scores. "
         f"The remaining {summary['unverifiedFan'] + summary['unverifiedNeoLemmix']} scores need a verified win.\n\n"
         "The `playtest` column records the latest check. A passive loss or timeout only describes a run "
-        "without player input. It does not prove that the level is impossible. See `summary.json` for source digests.\n")
+        "without player input. It does not prove that the level is impossible. "
+        "Source-compatible replays have a changed level version, so the native win is valid but source parity is unverified.\n\n"
+        "The `issue` column records a replay-analysis failure where one occurred. Such rows keep their "
+        "metadata score and do not count as verified wins.\n\n"
+        "Third-party replay archives and community styles remain in the ignored local build folder. "
+        "The repository does not redistribute them. See `summary.json` for source digests.\n")
     print(json.dumps(summary, indent=2))
 
 
