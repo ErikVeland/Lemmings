@@ -22,7 +22,7 @@ struct LearningJourneyTests {
         #expect(try journey == LearningJourney.generate(values))
         #expect(zip(journey.lessons, journey.lessons.dropFirst()).allSatisfy { $1.score - $0.score <= LearningJourney.maximumScoreStep })
     }
-    @Test func originAndRetailRankCannotOverrideDifficulty() throws {
+    @Test func officialLevelsLeadComparablePortLevelsWithoutOverridingDifficulty() throws {
         let low = try candidate(7, score: 40, concepts: ["miner"])
         let high = try candidate(0, score: 300, concepts: ["digger"])
         let fan = ProgressionCandidate(entry: low.entry, profile: low.profile, isOfficial: false, campaignOrder: 999)
@@ -31,6 +31,9 @@ struct LearningJourneyTests {
         #expect(journey.lessons.first?.entry.identity == fan.entry.identity)
         let reversedOrigins = [ProgressionCandidate(entry: high.entry, profile: high.profile, isOfficial: false, campaignOrder: 0), low]
         #expect(try LearningJourney.generate(reversedOrigins) == journey)
+        let official = try candidate(1, score: 40, concepts: ["miner"])
+        let comparable = try LearningJourney.generate([fan, official])
+        #expect(comparable.lessons.first?.entry.identity == official.entry.identity)
     }
     @Test func multiplayerSourcesCannotEnterTheLearningPath() throws {
         for (pack, name, level) in [("fan:lldb-404", "Renamed pack", "0"),

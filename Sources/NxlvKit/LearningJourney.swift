@@ -3,7 +3,7 @@ import Foundation
 /// A teaching order, independent of retail ranks. Estimates never certify human insight.
 public struct LearningJourney: Codable, Equatable, Sendable {
     public static let title = "Oh My! All Lemmings!"
-    public static let version = "learning-4"
+    public static let version = "learning-5"
     public static let playlistID = UUID(uuidString: "80368144-659B-4697-B2D0-76894BF20B18")!
     public static let maximumScoreStep = 65.0
 
@@ -77,7 +77,8 @@ public struct LearningJourney: Codable, Equatable, Sendable {
 
     /// Work through narrow demand bands. Within each band, prepare combinations,
     /// space repeated practice and prefer a small increase in execution demands.
-    /// Neither pack origin nor retail order is a teaching prerequisite.
+    /// Official puzzles take priority over other puzzles within a demand band.
+    /// Retail order is not a teaching prerequisite.
     public static func generate(_ candidates: [ProgressionCandidate]) throws -> Self {
         guard !candidates.isEmpty, candidates.count <= LevelPlaylist.maximumEntries,
               Set(candidates.map { $0.entry.identity }).count == candidates.count,
@@ -136,6 +137,7 @@ public struct LearningJourney: Codable, Equatable, Sendable {
                 return opening + Double(gaps(p).count) * 1000 + Double(max(0, unfamiliar - 1)) * 1000
                     + (passive ? 2000 : 0) + (twice ? 500 : repeated ? 65 : 0)
                     + rise * 0.10 + placementDemand(p) + p.components.solutionComplexity * 0.05
+                    + (candidate.isOfficial ? 0 : 100)
             }
             let next = eligible.min {
                 let a = cost($0), b = cost($1)

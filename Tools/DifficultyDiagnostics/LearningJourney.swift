@@ -27,22 +27,57 @@ struct Scenarios: Decodable { let official: [String]; let fan: [String: String] 
 let scenarios = try JSONDecoder().decode(Scenarios.self, from: Data(contentsOf: URL(fileURLWithPath: args[4])))
 var usedScenarios = Set(scenarios.official)
 let official = rows.filter { $0.official && LearningJourney.isSinglePlayer($0.entry, sourceRank: $0.profile.sourceRank) }
-var hashes = Set(rows.filter(\.official).compactMap(\.initialHash))
+guard official.allSatisfy({ $0.initialHash != nil }) else { throw LevelPlaylistError.invalidPool }
+func title(_ row: Row) -> String {
+    row.entry.levelNameSnapshot.lowercased().filter { $0.isLetter || $0.isNumber }
+}
+// Prefer the mainline release when the same official puzzle also appeared in a seasonal pack.
+func officialPriority(_ row: Row) -> Int {
+    switch row.entry.packNameSnapshot {
+    case "Lemmings": return 0
+    case "Oh No! More Lemmings": return 1
+    default: return 2
+    }
+}
+var officialHashes = Set<String>()
+var officialTitlesByPack = Set<String>()
+let uniqueOfficial = official.sorted {
+    let left = officialPriority($0), right = officialPriority($1)
+    return left == right ? $0.order < $1.order : left < right
+}.filter { row in
+    let packTitle = row.entry.packNameSnapshot + "\0" + title(row)
+    guard let hash = row.initialHash, !officialHashes.contains(hash), !officialTitlesByPack.contains(packTitle) else { return false }
+    officialHashes.insert(hash)
+    officialTitlesByPack.insert(packTitle)
+    return true
+}
+var hashes = officialHashes
+let officialTitles = Set(uniqueOfficial.map(title))
+var titlesByPack = officialTitlesByPack
 let selectionOrder = rows.sorted {
     if $0.profile.overallScore != $1.profile.overallScore { return $0.profile.overallScore < $1.profile.overallScore }
     return $0.entry.identity.packID + $0.entry.identity.levelID < $1.entry.identity.packID + $1.entry.identity.levelID
 }
+let officialIDs = Set(uniqueOfficial.map { $0.entry.identity })
 let selected = selectionOrder.filter {
     guard LearningJourney.isSinglePlayer($0.entry, sourceRank: $0.profile.sourceRank), $0.playable, $0.profile.confidence != .low else { return false }
-    if $0.official { return true }
+    if $0.official { return officialIDs.contains($0.entry.identity) }
+    // Port packs with numbered ranks are alternate presentations of the main Classic campaign.
+    let pack = $0.entry.packNameSnapshot
+    if ["Amiga Fun", "Amiga Tricky", "Amiga Taxing", "Amiga Mayhem"].contains(pack) { return false }
+    if officialTitles.contains(title($0)) { return false }
     // Empty or hands-free fan records do not teach a bridge concept.
     guard !$0.profile.detectedTechniques.isEmpty,
           let scenario = scenarios.fan[$0.entry.identity.packID + "\0" + $0.entry.identity.levelID],
-          usedScenarios.insert(scenario).inserted else { return false }
-    guard let hash = $0.initialHash else { return false }
-    return hashes.insert(hash).inserted
+          let hash = $0.initialHash,
+          !usedScenarios.contains(scenario), !hashes.contains(hash),
+          !titlesByPack.contains(pack + "\0" + title($0)) else { return false }
+    usedScenarios.insert(scenario)
+    hashes.insert(hash)
+    titlesByPack.insert(pack + "\0" + title($0))
+    return true
 }
-guard selected.filter(\.official).count == official.count else { throw LevelPlaylistError.invalidPool }
+guard selected.filter(\.official).count == uniqueOfficial.count else { throw LevelPlaylistError.invalidPool }
 let candidates = selected.map { ProgressionCandidate(entry: $0.entry, profile: $0.profile, isOfficial: $0.official, campaignOrder: $0.order) }
 let journey = try LearningJourney.generate(candidates)
 let repeated = try LearningJourney.generate(candidates.reversed())
@@ -72,5 +107,5 @@ let output = URL(fileURLWithPath: args[2])
 try FileManager.default.createDirectory(at: output.deletingLastPathComponent(), withIntermediateDirectories: true)
 try encoder.encode(journey).write(to: output, options: .atomic)
 let jumps = zip(journey.lessons, journey.lessons.dropFirst()).map { $1.demand - $0.demand }
-print("\(journey.lessons.count) lessons; \(official.count) official; \(selected.count - official.count) fan. Largest curriculum demand step: \(jumps.max() ?? 0). Support flags: \(journey.lessons.filter(\.needsSupport).count).")
+print("\(journey.lessons.count) lessons; \(uniqueOfficial.count) official; \(selected.count - uniqueOfficial.count) fan. Largest curriculum demand step: \(jumps.max() ?? 0). Support flags: \(journey.lessons.filter(\.needsSupport).count).")
 for lesson in journey.lessons.prefix(20) { print("\(Int(lesson.score)): \(lesson.entry.levelNameSnapshot) — \(lesson.focus)") }
