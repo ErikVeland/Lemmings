@@ -20,12 +20,12 @@ def write(path, value):
 if sys.argv[1] == 'collect':
     base = {key(r): r for r in read(BASE)}
     best = dict(base)
-    solutions = read(ROOT / 'Resources/Progression/solutions.json')
-    scenarios = {'official':[], 'fan':{}}
+    solutions = read(OUT / 'candidate-solutions.json')
+    scenarios = read(OUT / 'scenarios.json') if (OUT / 'scenarios.json').exists() else {'official':[], 'fan':{}}
     for folder in map(pathlib.Path, sys.argv[2:]):
         if (folder / 'fan-scenarios.json').exists():
             scenarios['fan'].update(read(folder / 'fan-scenarios.json'))
-            scenarios['official'] = read(folder / 'official-scenarios.json')
+            scenarios['official'] = sorted(set(scenarios['official']) | set(read(folder / 'official-scenarios.json')))
         folder_solutions = read(folder / 'solutions.json')
         solutions.update(folder_solutions)
         for row in read(folder / 'audit.json'):
@@ -37,7 +37,9 @@ if sys.argv[1] == 'collect':
             previous = best[key(row)]
             if previous['profile']['confidence'] == 'low' or row['profile']['overallScore'] < previous['profile']['overallScore']:
                 best[key(row)] = row
-                solutions[row['profile']['key']['replayRevision']] = folder_solutions[row['initialHash']]
+                replay = folder_solutions.get(row['initialHash']) or solutions.get(row['profile']['key']['replayRevision'])
+                assert replay and replay['initialStateHash'] == row['initialHash'] and replay['expected']['didWin']
+                solutions[row['profile']['key']['replayRevision']] = replay
     changed = [r for k, r in sorted(best.items()) if r != base[k]]
     write(OUT / 'fan-evidence.json', changed)
     write(OUT / 'candidate-solutions.json', solutions)

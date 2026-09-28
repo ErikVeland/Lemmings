@@ -6089,6 +6089,262 @@
   {
     "entry": {
       "catalogueRevision": "1.2-runtime-v2",
+      "id": "CF04D376-EE61-F418-5FBC-43925A2455B2",
+      "identity": {
+        "engine": "classic",
+        "levelID": "Fun 16.lvl#-1",
+        "packID": "fan:lldb-568"
+      },
+      "levelNameSnapshot": "Fun 16.lvl",
+      "levelNumberSnapshot": 16,
+      "packNameSnapshot": "Amiga Fun",
+      "sourceRevision": "89a2836ecd5e48a91e48af510d27b2551e9434d9ccd39c28932c230a7d077619"
+    },
+    "initialHash": "08b240ce045478a48be2cb583b71ae5db32484b5e0fa4d85fc421099b1236dcc",
+    "issue": "replay saved mismatch: expected 80, got 0",
+    "official": false,
+    "order": 5935,
+    "playable": true,
+    "profile": {
+      "components": {
+        "concurrencyBurden": 850,
+        "constraintPressure": 767.1764705882352,
+        "deductionComplexityProxy": 200,
+        "executionPrecision": 0,
+        "solutionComplexity": 167.70780907334512,
+        "techniqueBurden": 260
+      },
+      "confidence": "medium",
+      "criticalActions": [],
+      "detectedTechniques": [
+        "builder",
+        "multiple-worker-coordination"
+      ],
+      "explanation": [
+        "1 used skill types; 9 assigned workers; 0 same-worker skill changes.",
+        "Maximum concurrent worker regions: 3.",
+        "Timing probes: 10. Untested alternatives remain unknown.",
+        "Deduction is a conservative proxy. Observed techniques are not proof of necessity.",
+        "Source rank: fan:lldb-568."
+      ],
+      "key": {
+        "analyserVersion": "difficulty-2",
+        "assetsRevision": "08b240ce045478a48be2cb583b71ae5db32484b5e0fa4d85fc421099b1236dcc:probes-10",
+        "identity": {
+          "engine": "classic",
+          "levelID": "Fun 16.lvl#-1",
+          "packID": "fan:lldb-568"
+        },
+        "levelRevision": "89a2836ecd5e48a91e48af510d27b2551e9434d9ccd39c28932c230a7d077619",
+        "replayRevision": "SHA256 digest: fc6538680d50af45f5ea0279687e6b55215b1c605593046620d060ba83cadd3f",
+        "simulationVersion": "neolemmix-ce-2026-09-27"
+      },
+      "overallScore": 326.12865917260655,
+      "precision": {
+        "actions": [
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 5
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 6
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 7
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 8
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 9
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 10
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 11
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 12
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 13
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 14
+          }
+        ],
+        "alternativeRunCount": 0,
+        "assignmentCount": 20,
+        "completed": false,
+        "orderingOutcomes": [],
+        "runCount": 10,
+        "selectionOutcomes": []
+      },
+      "prerequisiteConcepts": [],
+      "sourceRank": "fan:lldb-568"
+    }
+  },
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
+      "id": "825DCDCA-0BDE-71D2-0D63-3F6907CF59B7",
+      "identity": {
+        "engine": "classic",
+        "levelID": "Fun 16.lvl#-1",
+        "packID": "fan:lldb-573"
+      },
+      "levelNameSnapshot": "Fun 16.lvl",
+      "levelNumberSnapshot": 16,
+      "packNameSnapshot": "Amiga Fun Budget",
+      "sourceRevision": "7677f392af2992ace26b6e7bfed099c323bf4e57ecd1031576adaca837929574"
+    },
+    "initialHash": "08b240ce045478a48be2cb583b71ae5db32484b5e0fa4d85fc421099b1236dcc",
+    "issue": "replay saved mismatch: expected 80, got 0",
+    "official": false,
+    "order": 6075,
+    "playable": true,
+    "profile": {
+      "components": {
+        "concurrencyBurden": 850,
+        "constraintPressure": 767.1764705882352,
+        "deductionComplexityProxy": 200,
+        "executionPrecision": 0,
+        "solutionComplexity": 167.70780907334512,
+        "techniqueBurden": 260
+      },
+      "confidence": "medium",
+      "criticalActions": [],
+      "detectedTechniques": [
+        "builder",
+        "multiple-worker-coordination"
+      ],
+      "explanation": [
+        "1 used skill types; 9 assigned workers; 0 same-worker skill changes.",
+        "Maximum concurrent worker regions: 3.",
+        "Timing probes: 10. Untested alternatives remain unknown.",
+        "Deduction is a conservative proxy. Observed techniques are not proof of necessity.",
+        "Source rank: fan:lldb-573."
+      ],
+      "key": {
+        "analyserVersion": "difficulty-2",
+        "assetsRevision": "08b240ce045478a48be2cb583b71ae5db32484b5e0fa4d85fc421099b1236dcc:probes-10",
+        "identity": {
+          "engine": "classic",
+          "levelID": "Fun 16.lvl#-1",
+          "packID": "fan:lldb-573"
+        },
+        "levelRevision": "7677f392af2992ace26b6e7bfed099c323bf4e57ecd1031576adaca837929574",
+        "replayRevision": "SHA256 digest: f99a2b4a965e0fc5c345ba8eb15da0367da546e221ac04f05cde3b88ef74382a",
+        "simulationVersion": "neolemmix-ce-2026-09-27"
+      },
+      "overallScore": 326.12865917260655,
+      "precision": {
+        "actions": [
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 5
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 6
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 7
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 8
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 9
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 10
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 11
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 12
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 13
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 14
+          }
+        ],
+        "alternativeRunCount": 0,
+        "assignmentCount": 20,
+        "completed": false,
+        "orderingOutcomes": [],
+        "runCount": 10,
+        "selectionOutcomes": []
+      },
+      "prerequisiteConcepts": [],
+      "sourceRank": "fan:lldb-573"
+    }
+  },
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
       "id": "B4BEAFC8-1B63-A727-148E-3975DED7E658",
       "identity": {
         "engine": "classic",
@@ -17116,6 +17372,132 @@
         ],
         "alternativeRunCount": 0,
         "assignmentCount": 10,
+        "completed": false,
+        "orderingOutcomes": [],
+        "runCount": 10,
+        "selectionOutcomes": []
+      },
+      "prerequisiteConcepts": [],
+      "sourceRank": "fan:lldb-505"
+    }
+  },
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
+      "id": "2E8473C8-74C9-0160-0B0E-BF74E4C30CBC",
+      "identity": {
+        "engine": "classic",
+        "levelID": "KillerMaster 1 Tame 1.dat#7",
+        "packID": "fan:lldb-505"
+      },
+      "levelNameSnapshot": "Crush & Crash 3",
+      "levelNumberSnapshot": 8,
+      "packNameSnapshot": "KillerMasters Lemmings 1 Tame",
+      "sourceRevision": "cea49c6853a73f4a693cd63586ed044e2c939a7ce2457d6e3317bbc95d8ff4c9"
+    },
+    "initialHash": "feea10ea402400d95f3414f079a744f4f0ab0a9fc0e1e1fef12630ddb34d60b1",
+    "official": false,
+    "order": 4851,
+    "playable": true,
+    "profile": {
+      "components": {
+        "concurrencyBurden": 0,
+        "constraintPressure": 216.32549019607842,
+        "deductionComplexityProxy": 30,
+        "executionPrecision": 0,
+        "solutionComplexity": 64.01955000865388,
+        "techniqueBurden": 65
+      },
+      "confidence": "medium",
+      "criticalActions": [],
+      "detectedTechniques": [
+        "digger"
+      ],
+      "explanation": [
+        "1 used skill types; 1 assigned workers; 0 same-worker skill changes.",
+        "Maximum concurrent worker regions: 1.",
+        "Timing probes: 10. Untested alternatives remain unknown.",
+        "Deduction is a conservative proxy. Observed techniques are not proof of necessity.",
+        "Source rank: fan:lldb-505."
+      ],
+      "key": {
+        "analyserVersion": "difficulty-2",
+        "assetsRevision": "feea10ea402400d95f3414f079a744f4f0ab0a9fc0e1e1fef12630ddb34d60b1:probes-10",
+        "identity": {
+          "engine": "classic",
+          "levelID": "KillerMaster 1 Tame 1.dat#7",
+          "packID": "fan:lldb-505"
+        },
+        "levelRevision": "cea49c6853a73f4a693cd63586ed044e2c939a7ce2457d6e3317bbc95d8ff4c9",
+        "replayRevision": "SHA256 digest: 99abebbf2210b1742c4ecd7d6eead1bbb34ef38bfc55c41a8b6c3ed64a5d343c",
+        "simulationVersion": "neolemmix-ce-2026-09-27"
+      },
+      "overallScore": 60.55661472739405,
+      "precision": {
+        "actions": [
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 1
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 2
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 3
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 4
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 5
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 6
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 7
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 8
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 23
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 24
+          }
+        ],
+        "alternativeRunCount": 0,
+        "assignmentCount": 17,
         "completed": false,
         "orderingOutcomes": [],
         "runCount": 10,
@@ -47548,6 +47930,69 @@
         },
         "levelRevision": "3249c3fa5f489d9f5469a67504a7a4883391f471109208558c332132cad3e646",
         "replayRevision": "SHA256 digest: e782c1aa1d2cc82d7caefec8a458def3c96368aacc732084bcc0e0e5a3519c34",
+        "simulationVersion": "neolemmix-ce-2026-09-27"
+      },
+      "overallScore": 30.700000000000003,
+      "precision": {
+        "actions": [],
+        "alternativeRunCount": 0,
+        "assignmentCount": 0,
+        "completed": true,
+        "orderingOutcomes": [],
+        "runCount": 0,
+        "selectionOutcomes": []
+      },
+      "prerequisiteConcepts": [],
+      "sourceRank": "fan:lldb-447"
+    }
+  },
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
+      "id": "FD62BC96-2DA3-AA0E-5A98-5B2C6341CEFB",
+      "identity": {
+        "engine": "classic",
+        "levelID": "ccxtestlevels.dat#2",
+        "packID": "fan:lldb-447"
+      },
+      "levelNameSnapshot": "Test Timing",
+      "levelNumberSnapshot": 3,
+      "packNameSnapshot": "ccexplores test levels",
+      "sourceRevision": "3249c3fa5f489d9f5469a67504a7a4883391f471109208558c332132cad3e646"
+    },
+    "initialHash": "0e51d13e254123c1f98df58fa7f1033cd58dac880c91ae1fb57550d0eac37acb",
+    "official": false,
+    "order": 4182,
+    "playable": true,
+    "profile": {
+      "components": {
+        "concurrencyBurden": 0,
+        "constraintPressure": 220,
+        "deductionComplexityProxy": 30,
+        "executionPrecision": 0,
+        "solutionComplexity": 0,
+        "techniqueBurden": 0
+      },
+      "confidence": "high",
+      "criticalActions": [],
+      "detectedTechniques": [],
+      "explanation": [
+        "0 used skill types; 0 assigned workers; 0 same-worker skill changes.",
+        "Maximum concurrent worker regions: 0.",
+        "Timing probes: 0. Untested alternatives remain unknown.",
+        "Deduction is a conservative proxy. Observed techniques are not proof of necessity.",
+        "Source rank: fan:lldb-447."
+      ],
+      "key": {
+        "analyserVersion": "difficulty-2",
+        "assetsRevision": "0e51d13e254123c1f98df58fa7f1033cd58dac880c91ae1fb57550d0eac37acb:probes-10",
+        "identity": {
+          "engine": "classic",
+          "levelID": "ccxtestlevels.dat#2",
+          "packID": "fan:lldb-447"
+        },
+        "levelRevision": "3249c3fa5f489d9f5469a67504a7a4883391f471109208558c332132cad3e646",
+        "replayRevision": "SHA256 digest: 7b553006b0289993dd818f74fabfaf7566713134ba239146dc5bd32eac4befa0",
         "simulationVersion": "neolemmix-ce-2026-09-27"
       },
       "overallScore": 30.700000000000003,

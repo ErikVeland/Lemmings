@@ -1,5 +1,5 @@
 {
-  "fan": 186,
+  "fan": 187,
   "fanPacks": 79,
   "fanScoreRange": [
     45.88639215686275,
@@ -7,17 +7,17 @@
   ],
   "largestDemandStep": 55.25,
   "largestScoreStep": 291.17365722668046,
-  "levels": 503,
+  "levels": 504,
   "newOhNoLargestIncomingStep": 150.83103210640587,
   "official": 317,
   "ohNoLevels": 100,
   "originalOhNoLargestStep": 348.76846324965845,
   "preparationGaps": 0,
-  "scoreDecreases": 229,
+  "scoreDecreases": 230,
   "stages": {
     "Difficult": 270,
     "Expert": 115,
-    "Fun": 29,
+    "Fun": 30,
     "Intermediate": 89
   },
   "supportTransitions": 2
