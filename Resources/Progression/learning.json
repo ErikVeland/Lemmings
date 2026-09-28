@@ -332,6 +332,36 @@
     },
     {
       "concepts" : [
+        "digger"
+      ],
+      "demand" : 108.16274509803921,
+      "entry" : {
+        "catalogueRevision" : "1.2-runtime-v2",
+        "id" : "2E8473C8-74C9-0160-0B0E-BF74E4C30CBC",
+        "identity" : {
+          "engine" : "classic",
+          "levelID" : "KillerMaster 1 Tame 1.dat#7",
+          "packID" : "fan:lldb-505"
+        },
+        "levelNameSnapshot" : "Crush & Crash 3",
+        "levelNumberSnapshot" : 8,
+        "packNameSnapshot" : "KillerMasters Lemmings 1 Tame",
+        "sourceRevision" : "cea49c6853a73f4a693cd63586ed044e2c939a7ce2457d6e3317bbc95d8ff4c9"
+      },
+      "focus" : "Practise: Digger",
+      "intrinsicDemand" : 108.16274509803921,
+      "introduced" : [
+
+      ],
+      "needsSupport" : false,
+      "preparationGaps" : [
+
+      ],
+      "score" : 60.55661472739405,
+      "stage" : "Fun"
+    },
+    {
+      "concepts" : [
         "climber"
       ],
       "demand" : 118.49019607843138,
@@ -16448,5 +16478,5 @@
       "stage" : "Expert"
     }
   ],
-  "version" : "learning-5"
+  "version" : "learning-6"
 }

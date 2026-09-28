@@ -94,7 +94,11 @@ struct EvidenceRow: Codable {
         let rowIndex = Dictionary(uniqueKeysWithValues: rows.indices.map { (rows[$0].entry.identity, $0) })
         var attempts = 0, distinct = Set<String>(), failures: [String] = []
         let measuredPacks = Set(rows.filter { !$0.official && $0.profile.confidence != .low }.map { $0.entry.identity.packID })
-        let packs = FanLevelLibrary.packs(in: [root.appendingPathComponent("LevelPacks"), FanLevelLibrary.downloadFolder]).filter { !(semanticsOnly || verifyOnly) || measuredPacks.contains("fan:" + FanLevelLibrary.catalogueID($0)) }
+        let onlyPack = ProcessInfo.processInfo.environment["FAN_ONLY_PACK"]
+        let packs = FanLevelLibrary.packs(in: [root.appendingPathComponent("LevelPacks"), FanLevelLibrary.downloadFolder]).filter {
+            let packID = "fan:" + FanLevelLibrary.catalogueID($0)
+            return (onlyPack == nil || onlyPack == packID) && (!(semanticsOnly || verifyOnly) || measuredPacks.contains(packID))
+        }
         func save() throws {
             try encoder.encode(rows).write(to: output.appendingPathComponent("audit.json"), options: .atomic)
             try encoder.encode(found).write(to: savedURL, options: .atomic)
@@ -133,7 +137,19 @@ struct EvidenceRow: Codable {
                     let scenarioHash = try scenario(level, initial)
                     fanScenarios[id.packID + "\0" + id.levelID] = scenarioHash
                     if semanticsOnly || officialScenarios.contains(scenarioHash) { continue }
-                    var witness = solutions[hash]
+                    var witness: ClassicDOSReplay?
+                    let solverReplay = ProcessInfo.processInfo.environment["FAN_SOLVER_REPLAYS"].flatMap {
+                        try? decoder.decode(ClassicDOSReplay.self, from: Data(contentsOf:
+                            URL(fileURLWithPath: $0).appendingPathComponent(hash + ".json")))
+                    }
+                    if let saved = solverReplay ?? solutions[hash] {
+                        let candidate = ClassicDOSReplay(rank: id.packID, number: rows[index].entry.levelNumberSnapshot,
+                            title: level.title, initialStateHash: hash, events: saved.events)
+                        if let outcome = try? ClassicDOSReplayPlayer.run(candidate, simulation: initial, verify: false), outcome.didWin {
+                            witness = ClassicDOSReplay(rank: candidate.rank, number: candidate.number, title: candidate.title,
+                                initialStateHash: hash, events: candidate.events, expected: outcome)
+                        }
+                    }
                     let key = geometry(initial)
                     if witness == nil && distinct.insert(hash).inserted {
                         // A matching mask only proposes a route. Objects, resources and mechanics

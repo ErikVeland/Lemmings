@@ -12,7 +12,8 @@ import NxlvKit
 // Usage: ClassicSolver DATA LEVEL OUT [--width N] [--seconds S] [--rate R] [--prefix PLAN]
 // PLAN holds forced inputs as [{"tick": T, "id": N, "skill": S} or {"tick": T, "rate": R}],
 // applied after their ticks; the search fills in everything else.
-// DATA is a DOS data directory, or `conversion:PORTS` for the Oh Yes! pack.
+// DATA is a DOS data directory, `conversion:PORTS` for the Oh Yes! pack, or
+// `fan:PACK` for a fan archive. Fan levels also require `--resources RESOURCES`.
 
 struct Failure: Error, CustomStringConvertible { let description: String }
 
@@ -23,6 +24,26 @@ func option(_ name: String) -> String? {
 }
 
 func loadLevel(_ argument: String, _ index: Int) throws -> (ClassicDOSSimulation, ClassicCampaignLevel) {
+    if argument.hasPrefix("fan:") {
+        guard let resources = option("--resources") else {
+            throw Failure(description: "fan levels require --resources RESOURCES")
+        }
+        let pack = URL(fileURLWithPath: String(argument.dropFirst("fan:".count)))
+        let root = URL(fileURLWithPath: resources)
+        let entries = try FanLevelLibrary.validatedEntries(in: pack)
+        guard entries.indices.contains(index) else { throw Failure(description: "fan level index is out of range") }
+        let item = entries[index]
+        let (level, style) = try FanLevelLibrary.level(item, in: pack)
+        let ground = try FanLevelLibrary.groundSet(for: level, styleName: style,
+            portsRoot: root.appendingPathComponent("Ports"), pack: pack, entry: item)
+        let special = try FanLevelLibrary.specialGraphic(for: level, entry: item, pack: pack,
+            portsRoot: root.appendingPathComponent("Ports"))
+        let rendered = try ClassicLevelRenderer.render(level, groundSet: ground, specialGraphic: special)
+        let assets = try ClassicMainDATAssets.load(from: root.appendingPathComponent("Ports/lemmings_dos_1991-07-30"))
+        let simulation = try ClassicDOSSimulation(level: level, renderedLevel: rendered, mainDATAssets: assets)
+        let entry = ClassicCampaignLevel.standalone(level, rank: "fan:" + FanLevelLibrary.catalogueID(pack), number: index + 1)
+        return (simulation, entry)
+    }
     var campaign: ClassicCampaign, title: ClassicTitle?, root: URL, fallback: URL? = nil
     if argument.hasPrefix("conversion:") {
         let ports = URL(fileURLWithPath: String(argument.dropFirst("conversion:".count)))
@@ -252,7 +273,10 @@ if let best {
     let replay = ClassicDOSReplay(rank: entry.rank, number: entry.number, title: entry.level.title.trimmingCharacters(in: .whitespaces),
         initialStateHash: ClassicDOSReplayRecorder.stateHash(of: base), events: best.events, expected: outcome)
     let encoder = JSONEncoder(); encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
-    try encoder.encode(replay).write(to: URL(fileURLWithPath: args[3]))
+    let destination = args.contains("--hash-named")
+        ? URL(fileURLWithPath: args[3]).appendingPathComponent(replay.initialStateHash + ".json")
+        : URL(fileURLWithPath: args[3])
+    try encoder.encode(replay).write(to: destination, options: .atomic)
     print("SOLVED \(entry.rank) \(entry.number) saved \(s.savedCount)/\(s.configuration.requiredToSave) inputs \(best.events.count) expanded \(expanded) in \(seconds)s")
 } else {
     let s = bestPartial?.sim

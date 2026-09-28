@@ -42795,6 +42795,295 @@
     "rank": "fan:lldb-568",
     "title": "Now use miners and climbers"
   },
+  "feea10ea402400d95f3414f079a744f4f0ab0a9fc0e1e1fef12630ddb34d60b1": {
+    "events": [
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 55
+          }
+        },
+        "tick": 17
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "digger"
+          }
+        },
+        "tick": 66
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "miner"
+          }
+        },
+        "tick": 69
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "digger"
+          }
+        },
+        "tick": 70
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "miner"
+          }
+        },
+        "tick": 73
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "digger"
+          }
+        },
+        "tick": 74
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        },
+        "tick": 115
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "climber"
+          }
+        },
+        "tick": 173
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        },
+        "tick": 268
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 56
+          }
+        },
+        "tick": 286
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 57
+          }
+        },
+        "tick": 287
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 58
+          }
+        },
+        "tick": 288
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 59
+          }
+        },
+        "tick": 289
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 60
+          }
+        },
+        "tick": 290
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 61
+          }
+        },
+        "tick": 291
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 62
+          }
+        },
+        "tick": 292
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 63
+          }
+        },
+        "tick": 293
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 64
+          }
+        },
+        "tick": 294
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 65
+          }
+        },
+        "tick": 295
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 66
+          }
+        },
+        "tick": 296
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 67
+          }
+        },
+        "tick": 297
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 68
+          }
+        },
+        "tick": 298
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 99
+          }
+        },
+        "tick": 298
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        },
+        "tick": 467
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        },
+        "tick": 668
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "digger"
+          }
+        },
+        "tick": 1042
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        },
+        "tick": 1340
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        },
+        "tick": 1533
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "miner"
+          }
+        },
+        "tick": 1631
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "miner"
+          }
+        },
+        "tick": 2035
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        },
+        "tick": 2188
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "digger"
+          }
+        },
+        "tick": 2430
+      }
+    ],
+    "expected": {
+      "didWin": true,
+      "released": 40,
+      "required": 20,
+      "saved": 40,
+      "stateHash": "3e1e2ee90569a2fc8df520a4725cbf8c2946b7d14687b9dd68a2452ff21ab038",
+      "ticks": 1383
+    },
+    "initialStateHash": "feea10ea402400d95f3414f079a744f4f0ab0a9fc0e1e1fef12630ddb34d60b1",
+    "number": 8,
+    "rank": "fan:lldb-505",
+    "title": "Crush & Crash 3"
+  },
   "ff95f2e9c01249f25a83dedff21ccca4b48c72b1aca2331a7931d6b216ad3de0": {
     "events": [
       {

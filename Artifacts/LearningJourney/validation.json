@@ -1,20 +1,34 @@
 {
-  "version": "learning-5",
+  "version": "learning-6",
   "scope": "Generated Classic single-player learning path",
   "generator": "Scripts/generate-learning-journey.sh passed with Xcode toolchain",
   "report": "Tools/DifficultyDiagnostics/learning_report.py report passed",
   "focusedTests": "LearningJourneyTests: 8 passed",
+  "fanSearch": {
+    "fullPassPacks": 535,
+    "fullPassRouteAttempts": 72731,
+    "holidayRetryPacks": 4,
+    "holidayRetryAttempts": 477,
+    "staleReplayRetryPacks": 6,
+    "staleReplayRetryAttempts": 775,
+    "newReplayBackedProfiles": 4,
+    "newPathLessons": 1,
+    "ratedFanProfiles": 793,
+    "ratedFanSignatureFailures": 0,
+    "targetedRetryFailures": 0
+  },
   "curriculumChecks": {
-    "lessons": 503,
+    "lessons": 504,
     "distinctOfficialPuzzles": 317,
-    "distinctLibraryPuzzles": 186,
+    "distinctLibraryPuzzles": 187,
     "allOhNoLevels": 100,
-    "uniqueIdentities": 503,
-    "uniqueInitialStates": 503,
+    "uniqueIdentities": 504,
+    "uniqueInitialStates": 504,
     "twoPlayerLevels": 0,
     "missingBasicSkillPreparation": 0,
     "largestCurriculumDemandStep": 55.25,
     "transitionsForPlaytest": 2
   },
-  "limits": "The generated path and focused tests do not validate novice difficulty or the rendered app flow."
+  "limits": "The bounded search does not solve every fan level. The new Digger practice lesson does not reduce the largest demand step or the two flagged transitions. Novice difficulty and the rendered app flow remain unverified.",
+  "desktopTests": "LearningJourneyDesktopTests: 3 passed"
 }
