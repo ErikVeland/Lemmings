@@ -2832,12 +2832,14 @@ extension AppDelegate {
     let previousMusic = settings.music
     let previousMusicVolume = settings.musicVolume
     let previousShuffleMusic = settings.shuffleMusic
+    let previousLevelMusic = levelMusic
     let previousAudioMuted = audioMuted
     let previousMusicDirectory = UserDefaults.standard.string(forKey: musicPathKey)
     UserDefaults.standard.removeObject(forKey: musicPathKey)
     settings.music = .amigaModules
     settings.musicVolume = 0.5
     settings.shuffleMusic = false
+    levelMusic = nil
     audioMuted = false
     applyAudioSettings()
     let directory = FileManager.default.temporaryDirectory
@@ -2855,6 +2857,7 @@ extension AppDelegate {
       settings.music = previousMusic
       settings.musicVolume = previousMusicVolume
       settings.shuffleMusic = previousShuffleMusic
+      levelMusic = previousLevelMusic
       audioMuted = previousAudioMuted
       if let previousMusicDirectory { UserDefaults.standard.set(previousMusicDirectory, forKey: musicPathKey) }
       else { UserDefaults.standard.removeObject(forKey: musicPathKey) }
@@ -2873,8 +2876,40 @@ extension AppDelegate {
     playlistStoreCache = (arcade.records.activeProfileID, store)
     let entries = journey.lessons.map(\.entry)
     let first = entries[0].identity
-    func waitForLaunch() async throws {
+    try check(entries.count > 1 && entries[1].identity.packID.hasPrefix("fan:"),
+      "The second journey lesson is not a fan level")
+    guard let moduleRoot = BundledGameResources.music("lemmings_music_mod") else {
+      throw IntegrationFailure(message: "The bundled Classic music is missing")
+    }
+    let openingTrack = moduleRoot.appendingPathComponent("cancan.mod").standardizedFileURL
+    let nextTrack = moduleRoot.appendingPathComponent("lemming1.mod").standardizedFileURL
+    func sameFile(_ actual: URL?, _ expected: URL) -> Bool {
+      actual?.resolvingSymlinksInPath().standardizedFileURL
+        == expected.resolvingSymlinksInPath().standardizedFileURL
+    }
+    guard let lemmingsIndex = dataSets.firstIndex(where: { $0.set.title == .lemmings }) else {
+      throw IntegrationFailure(message: "The bundled Lemmings campaign is missing")
+    }
+    gamePicker.selectItem(at: lemmingsIndex)
+    selectDataSet()
+    returnToLibrary()
+    music.stop(); soundtrack.stop(); dj.stop()
+    music.loadLibrary(at: moduleRoot)
+    try check(music.play(url: openingTrack) != nil,
+      "The opening Can-Can module could not load")
+    try music.start()
+    music.setVolume(settings.musicVolume)
+    try check(music.isOutputRunning && sameFile(music.currentURL, openingTrack),
+      "The opening Can-Can module did not start")
+    func waitForLaunch(keepingOutgoingTrack outgoing: URL? = nil) async throws {
+      var previousSeconds = music.sourceSeconds
       for _ in 0..<3000 where playlistFanLoadTask != nil || levelBrowserLaunchTask != nil {
+        if let outgoing {
+          try check(music.isOutputRunning && sameFile(music.currentURL, outgoing)
+            && music.sourceSeconds >= previousSeconds,
+            "The outgoing module stopped or restarted while the next lesson loaded")
+          previousSeconds = music.sourceSeconds
+        }
         try await Task.sleep(nanoseconds: 10_000_000)
       }
       try check(playlistFanLoadTask == nil && levelBrowserLaunchTask == nil,
@@ -2884,13 +2919,84 @@ extension AppDelegate {
       (view as? NSButton).map { [$0] } ?? view.subviews.flatMap(buttons)
     }
     startLearningEntries(entries, in: store)
-    try await waitForLaunch()
+    try await waitForLaunch(keepingOutgoingTrack: openingTrack)
     try check(store.activeRun?.currentEntry.identity == first
       && sequencePlayingIdentity == first && !arcade.hotSeatIsActive
       && music.isOutputRunning && music.currentURL != nil
       && !music.muted && music.volume > 0,
       "New solo did not start the learning journey")
     let firstSoloID = store.activeRun!.id
+    try check(sameFile(music.currentURL, openingTrack),
+      "The first journey lesson did not start Can-Can")
+    let openingAdvanced = try await waitUntil(3) { music.sourceSeconds > 0.2 }
+    try check(openingAdvanced, "The opening module did not advance before handoff")
+    let beforeRetry = music.sourceSeconds
+    retry()
+    try check(sequencePlayingIdentity == first && music.isOutputRunning
+      && sameFile(music.currentURL, openingTrack)
+      && music.sourceSeconds >= beforeRetry && !music.isVinylBraking,
+      "Retry restarted or braked the first journey lesson's music")
+    let retryAdvanced = try await waitUntil(2) { music.sourceSeconds > beforeRetry }
+    try check(retryAdvanced, "The opening module stopped advancing after retry")
+    let beforeHandoff = music.sourceSeconds
+    try check(continueActiveSequence(completed: first, runID: firstSoloID),
+      "The first journey lesson did not advance")
+    try check(music.isOutputRunning && sameFile(music.currentURL, openingTrack)
+      && music.sourceSeconds >= beforeHandoff,
+      "Handoff stopped or restarted the outgoing module")
+    let duringHandoff = music.sourceSeconds
+    try await waitForLaunch(keepingOutgoingTrack: openingTrack)
+    try check(store.activeRun?.currentEntry.identity == entries[1].identity
+      && sequencePlayingIdentity == entries[1].identity && fanPlaying,
+      "The second journey lesson did not start: fan=\(fanPlaying), sequence=\(String(describing: sequencePlayingIdentity)), page=\(GameScreen.shared.controllerPage(in: window)?.accessibilityLabel() ?? "none")")
+    try check(music.isOutputRunning && sameFile(music.currentURL, openingTrack)
+      && music.sourceSeconds >= duringHandoff,
+      "The outgoing module did not continue during the second lesson")
+    try check(dj.isPlaying && sameFile(dj.currentURL, nextTrack),
+      "The second journey lesson did not select lemming1.mod: DJ playing=\(dj.isPlaying), URL=\(dj.currentURL?.path ?? "none")")
+    let beforeInterruptedBridge = music.sourceSeconds
+    dj.stop()
+    let recovered = try await waitUntil(2) {
+      legacyMusicHandoffTask == nil && music.isOutputRunning
+        && music.volume >= settings.musicVolume * 0.95
+    }
+    try check(recovered && music.sourceSeconds >= beforeInterruptedBridge
+      && sameFile(music.currentURL, openingTrack),
+      "A stopped incoming deck did not restore the outgoing module")
+    let retried = try await waitUntil(2) {
+      dj.isPlaying && sameFile(dj.currentURL, nextTrack)
+    }
+    try check(retried, "The second lesson's music did not restart after its output stopped")
+    let beforeReversal = music.sourceSeconds
+    try check(playLearningJourneyMusic(assignedName: "cancan", game: "classic", position: 17)
+      && music.isOutputRunning && sameFile(music.currentURL, openingTrack)
+      && music.sourceSeconds >= beforeReversal,
+      "A rapid return to Can-Can restarted the outgoing module")
+    let reversed = try await waitUntil(5) {
+      !dj.isPlaying && music.isOutputRunning && music.sourceSeconds > beforeReversal
+    }
+    try check(reversed, "The DJ did not retire after the bridge reversed to Can-Can")
+    let beforeSecondMix = music.sourceSeconds
+    try check(playLearningJourneyMusic(assignedName: "lemming1", game: "classic", position: 1)
+      && music.isOutputRunning && music.sourceSeconds >= beforeSecondMix
+      && dj.isPlaying && sameFile(dj.currentURL, nextTrack),
+      "The bridge did not resume the second lesson from the original module position")
+    let retired = try await waitUntil(5) {
+      !music.isOutputRunning && dj.isPlaying && sameFile(dj.currentURL, nextTrack)
+    }
+    try check(retired, "The outgoing module did not retire after the level handoff")
+    returnToLibrary()
+    startLearningEntries([entries[1]], in: store)
+    guard let subsetChooser = GameScreen.shared.controllerPage(in: window) as? GameMenuPage,
+          let subsetSolo = buttons(subsetChooser).first(where: { $0.title == "New solo" }) else {
+      throw IntegrationFailure(message: "The second-lesson session did not offer New solo")
+    }
+    subsetSolo.performClick(nil)
+    try await waitForLaunch()
+    try check(store.activeRun?.currentEntry.identity == entries[1].identity
+      && sequencePlayingIdentity == entries[1].identity
+      && dj.isPlaying && sameFile(dj.currentURL, nextTrack),
+      "A new session at the second lesson selected the wrong track")
     returnToLibrary()
     startLearningEntries(entries, in: store)
     guard let soloChooser = GameScreen.shared.controllerPage(in: window) as? GameMenuPage,

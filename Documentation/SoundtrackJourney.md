@@ -18,6 +18,12 @@ The hierarchy is **game → role → track → port → source quality → origi
 
 The existing Amiga composition rotation remains the Classic score policy. Artwork selection does not imply a new platform's historical tune order. Exact native port sequencing remains a separate audit.
 
+## Main learning playlist handover
+
+The main learning playlist (Golden Path) selects music from each lesson's position in the full journey, including fan levels and saved runs that start partway through. It keeps the player's selected music source and style. The outgoing track continues while the next lesson loads, so the library screen does not leave a silence gap. When the next lesson selects the same audio file, playback continues from its current position. Retrying a lesson also keeps that track playing. A different selection starts at the next level and uses an immediate 2.6-second equal-power crossfade.
+
+Golden Path leaves each selected track playing until the next lesson: rescue and result cues do not substitute another tune. Outside Golden Path, an Adaptive DJ cue waits until its track has played at least 30 seconds of source audio and, when the beat estimate is reliable, at least 16 measured bars. If the level ends before this opening section finishes, the deferred cue is discarded. A player can still advance to another Golden Path lesson during an opening section; the next lesson's selection then starts immediately and crossfades from the outgoing track.
+
 ## Preserve special music
 
 Special-level themes retain separate identities. Beast I cannot become Beast II, and neither enters the ordinary rotation. Seasonal and prototype/demo material remain separate from released ordinary music. Menus, start cues, medals, milestones, endings, bonus remixes and unknown tracks have their own roles.
