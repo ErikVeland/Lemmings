@@ -76,8 +76,6 @@ func color(_ image: NSImage, x: Int, y: Int) throws -> (Int, Int, Int) {
     space: CGColorSpaceCreateDeviceRGB(),
     bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue
   ) else { throw Failure(description: "Could not inspect sprite pixels") }
-  context.translateBy(x: 0, y: CGFloat(cg.height))
-  context.scaleBy(x: 1, y: -1)
   context.draw(cg, in: CGRect(x: 0, y: 0, width: cg.width, height: cg.height))
   let offset = (y * cg.width + x) * 4
   return (Int(bytes[offset]), Int(bytes[offset + 1]), Int(bytes[offset + 2]))
@@ -371,6 +369,32 @@ do {
   for action in NeoLemmixAction.allCases where ![.teleporting, .removed].contains(action) {
     try require(sprites.frame(action: action, direction: .right, animationFrame: 7, traits: []) != nil,
                 "\(action.rawValue) did not resolve to native artwork")
+  }
+  // Recoloring keeps alpha, so a frame's opacity must match its sheet crop row for row.
+  // A vertical flip here drew every lemming upside down in 1.7.0.
+  let realStyles = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
+    .appendingPathComponent("../../Content/NeoLemmix/styles").standardizedFileURL
+  if FileManager.default.fileExists(atPath: realStyles.appendingPathComponent("default/lemmings/walker.png").path) {
+    let real = try NeoLemmixSpriteSet(stylesRootURL: realStyles, themeStyle: "orig_dirt")
+    let walker = try requireValue(real.frame(action: .walking, direction: .right, animationFrame: 0, traits: []),
+                                  "Real walker frame did not resolve")
+    let sheet = try requireValue(NSImage(contentsOf: realStyles.appendingPathComponent("default/lemmings/walker.png"))?
+      .cgImage(forProposedRect: nil, context: nil, hints: nil), "Real walker sheet did not load")
+    func alphaRows(_ image: CGImage) -> [[UInt8]] {
+      var bytes = [UInt8](repeating: 0, count: image.width * image.height * 4)
+      let context = CGContext(data: &bytes, width: image.width, height: image.height, bitsPerComponent: 8,
+        bytesPerRow: image.width * 4, space: CGColorSpaceCreateDeviceRGB(),
+        bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)!
+      context.draw(image, in: CGRect(x: 0, y: 0, width: image.width, height: image.height))
+      return (0..<image.height).map { y in (0..<image.width).map { bytes[(y * image.width + $0) * 4 + 3] } }
+    }
+    let frameImage = try requireValue(walker.image.cgImage(forProposedRect: nil, context: nil, hints: nil), "No frame pixels")
+    let rightColumn = sheet.width / 2
+    let source = try requireValue(sheet.cropping(to: CGRect(x: rightColumn, y: 0, width: walker.width, height: walker.height)),
+                                  "Walker crop failed")
+    try require(alphaRows(frameImage) == alphaRows(source), "Real walker frame is not upright")
+    let rgbaAlpha = (0..<walker.height).map { y in (0..<walker.width).map { walker.rgba[(y * walker.width + $0) * 4 + 3] } }
+    try require(rgbaAlpha == alphaRows(source), "Real walker RGBA rows are not upright")
   }
   print("PASS NeoLemmix sprite resolution, geometry, direction, shade/state recoloring, frame selection, and action coverage")
 } catch {

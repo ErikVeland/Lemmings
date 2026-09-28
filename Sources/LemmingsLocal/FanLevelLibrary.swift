@@ -225,6 +225,13 @@ enum FanLevelLibrary {
     archiveFingerprint(url) == fingerprint
   }
 
+  /// "/relative/path" of an enumerated file. The enumerator may report a root
+  /// under /private (App Translocation, /tmp) that `resolvingSymlinksInPath`
+  /// shortens, so the key comes from the file's depth, not from the root's spelling.
+  static func relativeKey(_ url: URL, level: Int) -> String {
+    "/" + url.pathComponents.suffix(level).joined(separator: "/")
+  }
+
   /// Hashes game data by relative path and bytes. Moving an unchanged import
   /// keeps its content fingerprint, while any source change invalidates it.
   static func directoryFingerprint(_ root: URL) -> String? {
@@ -242,7 +249,7 @@ enum FanLevelLibrary {
       if ignored.contains(url.pathExtension.lowercased()) { continue }
       guard (try? url.resourceValues(forKeys: [.isRegularFileKey]).isRegularFile) == true,
             let fingerprint = archiveFingerprint(url) else { continue }
-      entries[String(url.path.dropFirst(root.path.count))] = fingerprint
+      entries[relativeKey(url, level: enumerator.level)] = fingerprint
     }
     let encoder = JSONEncoder()
     encoder.outputFormatting = [.sortedKeys]

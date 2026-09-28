@@ -607,40 +607,6 @@ let achievementProgressKey = "ClassicAchievementProgress"
   func applicationWillTerminate(_ notification: Notification) { saveRunCheckpoint(immediately: true); ClassicRouteRecorder.flush() }
 
   func applicationDidFinishLaunching(_ notification: Notification) {
-    // TEMPORARY journey probe. Do not commit.
-    if ProcessInfo.processInfo.environment["LEMMINGS_JOURNEY_PROBE"] == "1" {
-      Task { @MainActor in
-        self.buildInterface(); self.settings.music = .silent; self.loadContent()
-        guard let journey = LearningJourneyLibrary.journey,
-              let discovery = await self.makeLevelBrowserDiscoveryTask().value else { print("PROBE no journey/catalogue"); exit(2) }
-        self.rebuildLevelCatalogue(discovery)
-        self.ensureFanPacksResolved(for: journey.lessons.map(\.entry), title: "Probe") { failures in
-          print("PROBE fan failures:", failures.sorted())
-          let run = try! LevelSequenceRun(source: .playlist(LearningJourney.playlistID),
-            pool: .init(id: LearningJourney.version, summary: LearningJourney.title), entries: journey.lessons.map(\.entry))
-          var n = 0
-          for (i, lesson) in journey.lessons.enumerated() where !self.sequenceEntryCanStart(lesson.entry, run: run) {
-            let e = lesson.entry
-            let kind: String
-            switch self.playlistResolution(for: e) {
-            case .available: kind = "available"
-            case .locked: kind = "locked"
-            case .unavailable: kind = "unavailable"
-            case .changed:
-              kind = "changed rev=\(e.catalogueRevision)/\(self.levelCatalogue.revision) src=\(e.sourceRevision)/\(self.playlistSourceRevision(for: e.identity) ?? "nil")"
-            case .missing:
-              kind = "missing resolve=\(self.levelCatalogue.resolve(e.identity) != nil) route=\(self.levelBrowserRoutes[e.identity] != nil)"
-            }
-            n += 1
-            if n <= 25 { print("PROBE \(i + 1) \(e.identity.packID) \(e.identity.levelID) \(e.packNameSnapshot) / \(e.levelNameSnapshot): \(kind)") }
-          }
-          let classicPacks = self.levelCatalogue.packs.filter { $0.engine == .classic && !$0.id.hasPrefix("fan:") }.map(\.id)
-          print("PROBE blocked \(n) of \(journey.lessons.count); classic packs: \(classicPacks)")
-          exit(0)
-        }
-      }
-      return
-    }
     preparingLaunch = true
     wasExistingPlayer = UserDefaults.standard.bool(forKey: EffectsWelcome.choiceKey)
       || UserDefaults.standard.object(forKey: settingsKey) != nil
@@ -3331,7 +3297,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
     guard let current = levelCatalogue.resolve(saved.identity),
           levelBrowserRoutes[saved.identity] != nil else { return .missing }
     guard saved.catalogueRevision == levelCatalogue.revision,
-          saved.sourceRevision == playlistSourceRevision(for: saved.identity) else {
+          saved.sourceRevision == playlistSourceRevision(for: saved.identity)
+            || isBundledClassic(current) else {
       return .changed
     }
     switch liveLevelAvailability(current) {
@@ -3339,6 +3306,14 @@ let achievementProgressKey = "ClassicAchievementProgress"
     case .locked: return .locked(current)
     case .unavailable: return .unavailable(current)
     }
+  }
+
+  /// Bundled campaigns ship with the app, so their bytes may change between builds
+  /// (and differ from the dev tree the golden path is generated from) without the
+  /// level changing. Saved runs and playlists must survive that.
+  private func isBundledClassic(_ entry: LevelCatalogueEntry) -> Bool {
+    guard case .classic? = levelBrowserRoutes[entry.identity] else { return false }
+    return entry.status == .complete
   }
 
   private func liveLevelAvailability(_ entry: LevelCatalogueEntry) -> LevelAvailability {
@@ -4170,8 +4145,11 @@ let achievementProgressKey = "ClassicAchievementProgress"
           GameScreen.shared.message("Session not started", detail: "The player or saved session changed. Choose the playlist again.")
           return
         }
-        guard failures.isEmpty, run.entries.allSatisfy({ self.sequenceEntryCanStart($0, run: run) }) else {
-          GameScreen.shared.message("Session not started", detail: "A level was locked, removed or changed. Check the playlist and try again.")
+        if let blocked = run.entries.first(where: {
+          failures.contains($0.identity.packID) || !self.sequenceEntryCanStart($0, run: run)
+        }) {
+          GameScreen.shared.message("Session not started",
+            detail: "\(blocked.levelNameSnapshot) (\(blocked.packNameSnapshot)) was locked, removed or changed. Check the playlist and try again.")
           return
         }
         guard arcade.profilesAreWritable, arcade.storageError == nil else {
@@ -5997,7 +5975,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
                                         attemptID: arcadeRunID)
       }
       playfield.overlayTitle = nil; playfield.overlayLines = []; playfield.overlayFooter = nil
+      // Only fitClassicDisplay gives the collapsed menu panel its height back.
       panel.isMenuMode = false
+      fitClassicDisplay()
       playfield.needsDisplay = true; panel.needsDisplay = true
       window.title = "Ultimate Lemmings — \(level.title)"
       return true

@@ -2814,7 +2814,10 @@ extension AppDelegate {
       case .available: kind = "available"
       case .locked: kind = "locked"
       case .unavailable: kind = "unavailable"
-      case .changed: kind = "changed"
+      case .changed:
+        kind = "changed"
+        let live = playlistSourceRevision(for: lesson.entry.identity) ?? "none"
+        blocked["revisions", default: []].append("\(lesson.entry.packNameSnapshot): saved \(lesson.entry.sourceRevision.prefix(12)) live \(live.prefix(12))")
       case .missing: kind = "missing"
       }
       blocked[kind, default: []].append(lesson.entry.packNameSnapshot + " / " + lesson.entry.levelNameSnapshot)

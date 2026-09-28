@@ -224,8 +224,7 @@ final class NeoLemmixSpriteSet {
       space: CGColorSpaceCreateDeviceRGB(),
       bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue
     ) else { return nil }
-    context.translateBy(x: 0, y: CGFloat(height))
-    context.scaleBy(x: 1, y: -1)
+    // Bitmap memory is top row first, as drawPixels and the scene compositor expect.
     context.draw(image, in: CGRect(x: 0, y: 0, width: width, height: height))
     for offset in stride(from: 0, to: bytes.count, by: 4) {
       let alpha = Int(bytes[offset + 3])
@@ -249,8 +248,7 @@ final class NeoLemmixSpriteSet {
       space: CGColorSpaceCreateDeviceRGB(),
       bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue
     ) else { return nil }
-    context.translateBy(x: 0, y: CGFloat(height))
-    context.scaleBy(x: 1, y: -1)
+    // Bitmap memory is top row first, as drawPixels and the scene compositor expect.
     context.draw(image, in: CGRect(x: 0, y: 0, width: width, height: height))
 
     for offset in stride(from: 0, to: bytes.count, by: 4) where bytes[offset + 3] != 0 {

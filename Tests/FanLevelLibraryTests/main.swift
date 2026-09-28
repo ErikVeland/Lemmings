@@ -1,3 +1,4 @@
+import CryptoKit
 import Foundation
 import NxlvKit
 
@@ -395,3 +396,26 @@ for (index, slots) in [[0, 0], [-1, 2], [0], [0, 10000]].enumerated() {
     preconditionFailure("invalid mapping selected directly")
   } catch { check(true, "invalid saved slot mapping is rejected") }
 }
+
+// A root under /private (App Translocation, /tmp) must give the same folder
+// fingerprint, with the same "/relative" keys, as the unprefixed path.
+let fingerprintRoot = FileManager.default.temporaryDirectory.appendingPathComponent("fingerprint-\(UUID())")
+try FileManager.default.createDirectory(at: fingerprintRoot.appendingPathComponent("LEVELS"), withIntermediateDirectories: true)
+try Data("main".utf8).write(to: fingerprintRoot.appendingPathComponent("MAIN.DAT"))
+try Data("level".utf8).write(to: fingerprintRoot.appendingPathComponent("LEVELS/LEVEL000.DAT"))
+try Data("hidden".utf8).write(to: fingerprintRoot.appendingPathComponent(".hidden"))
+try Data("music".utf8).write(to: fingerprintRoot.appendingPathComponent("LEVELS/song.mod"))
+defer { try? FileManager.default.removeItem(at: fingerprintRoot) }
+let plainPath = fingerprintRoot.resolvingSymlinksInPath().path
+let privatePath = plainPath.hasPrefix("/private/") ? plainPath : "/private" + plainPath
+let expectedEntries = [
+  "/LEVELS/LEVEL000.DAT": FanLevelLibrary.archiveFingerprint(fingerprintRoot.appendingPathComponent("LEVELS/LEVEL000.DAT"))!,
+  "/MAIN.DAT": FanLevelLibrary.archiveFingerprint(fingerprintRoot.appendingPathComponent("MAIN.DAT"))!,
+]
+let fingerprintEncoder = JSONEncoder(); fingerprintEncoder.outputFormatting = [.sortedKeys]
+let expectedFingerprint = SHA256.hash(data: try fingerprintEncoder.encode(expectedEntries))
+  .map { String(format: "%02x", $0) }.joined()
+check(FanLevelLibrary.directoryFingerprint(URL(fileURLWithPath: plainPath)) == expectedFingerprint,
+      "folder fingerprint keys files by their path inside the folder")
+check(FanLevelLibrary.directoryFingerprint(URL(fileURLWithPath: privatePath)) == expectedFingerprint,
+      "a folder under /private keeps its fingerprint")

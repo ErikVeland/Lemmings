@@ -78,7 +78,7 @@ import NxlvKit
                 guard let data = try? Data(contentsOf: url) else { return UUID().uuidString }
                 hash = ArcadeStore.fingerprint(data); contentCache[url.path] = (date, size, hash)
             }
-            entries[String(url.path.dropFirst(root.path.count))] = hash
+            entries[FanLevelLibrary.relativeKey(url, level: enumerator.level)] = hash
         }
         let encoder = JSONEncoder(); encoder.outputFormatting = [.sortedKeys]
         return ArcadeStore.fingerprint((try? encoder.encode(entries)) ?? Data(UUID().uuidString.utf8))
