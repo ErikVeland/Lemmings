@@ -607,6 +607,40 @@ let achievementProgressKey = "ClassicAchievementProgress"
   func applicationWillTerminate(_ notification: Notification) { saveRunCheckpoint(immediately: true); ClassicRouteRecorder.flush() }
 
   func applicationDidFinishLaunching(_ notification: Notification) {
+    // TEMPORARY journey probe. Do not commit.
+    if ProcessInfo.processInfo.environment["LEMMINGS_JOURNEY_PROBE"] == "1" {
+      Task { @MainActor in
+        self.buildInterface(); self.settings.music = .silent; self.loadContent()
+        guard let journey = LearningJourneyLibrary.journey,
+              let discovery = await self.makeLevelBrowserDiscoveryTask().value else { print("PROBE no journey/catalogue"); exit(2) }
+        self.rebuildLevelCatalogue(discovery)
+        self.ensureFanPacksResolved(for: journey.lessons.map(\.entry), title: "Probe") { failures in
+          print("PROBE fan failures:", failures.sorted())
+          let run = try! LevelSequenceRun(source: .playlist(LearningJourney.playlistID),
+            pool: .init(id: LearningJourney.version, summary: LearningJourney.title), entries: journey.lessons.map(\.entry))
+          var n = 0
+          for (i, lesson) in journey.lessons.enumerated() where !self.sequenceEntryCanStart(lesson.entry, run: run) {
+            let e = lesson.entry
+            let kind: String
+            switch self.playlistResolution(for: e) {
+            case .available: kind = "available"
+            case .locked: kind = "locked"
+            case .unavailable: kind = "unavailable"
+            case .changed:
+              kind = "changed rev=\(e.catalogueRevision)/\(self.levelCatalogue.revision) src=\(e.sourceRevision)/\(self.playlistSourceRevision(for: e.identity) ?? "nil")"
+            case .missing:
+              kind = "missing resolve=\(self.levelCatalogue.resolve(e.identity) != nil) route=\(self.levelBrowserRoutes[e.identity] != nil)"
+            }
+            n += 1
+            if n <= 25 { print("PROBE \(i + 1) \(e.identity.packID) \(e.identity.levelID) \(e.packNameSnapshot) / \(e.levelNameSnapshot): \(kind)") }
+          }
+          let classicPacks = self.levelCatalogue.packs.filter { $0.engine == .classic && !$0.id.hasPrefix("fan:") }.map(\.id)
+          print("PROBE blocked \(n) of \(journey.lessons.count); classic packs: \(classicPacks)")
+          exit(0)
+        }
+      }
+      return
+    }
     preparingLaunch = true
     wasExistingPlayer = UserDefaults.standard.bool(forKey: EffectsWelcome.choiceKey)
       || UserDefaults.standard.object(forKey: settingsKey) != nil

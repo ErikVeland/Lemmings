@@ -2787,6 +2787,44 @@ extension AppDelegate {
     print("PASS changed and removed level routes fail visibly")
   }
 
+  /// Every journey lesson must resolve against the live catalogue, or no
+  /// journey session can start.
+  fileprivate func testLearningJourneyEntriesResolve() async throws {
+    if window == nil { buildInterface() }
+    GameScreen.shared.dismissAll()
+    settings.music = .silent; loadContent()
+    guard let journey = LearningJourneyLibrary.journey else {
+      throw IntegrationFailure(message: "The bundled learning journey did not load")
+    }
+    guard let discovery = await makeLevelBrowserDiscoveryTask().value else {
+      throw IntegrationFailure(message: "The level catalogue did not load")
+    }
+    rebuildLevelCatalogue(discovery)
+    let failures: Set<String> = await withCheckedContinuation { continuation in
+      ensureFanPacksResolved(for: journey.lessons.map(\.entry), title: "Journey test") { continuation.resume(returning: $0) }
+    }
+    try check(failures.isEmpty, "Journey fan packs did not resolve: \(failures.sorted().prefix(5))")
+    let run = try LevelSequenceRun(source: .playlist(LearningJourney.playlistID),
+      pool: .init(id: LearningJourney.version, summary: LearningJourney.title),
+      entries: journey.lessons.map(\.entry))
+    var blocked: [String: [String]] = [:]
+    for lesson in journey.lessons where !sequenceEntryCanStart(lesson.entry, run: run) {
+      let kind: String
+      switch playlistResolution(for: lesson.entry) {
+      case .available: kind = "available"
+      case .locked: kind = "locked"
+      case .unavailable: kind = "unavailable"
+      case .changed: kind = "changed"
+      case .missing: kind = "missing"
+      }
+      blocked[kind, default: []].append(lesson.entry.packNameSnapshot + " / " + lesson.entry.levelNameSnapshot)
+    }
+    try check(blocked.isEmpty, "Journey lessons cannot start: " + blocked.map {
+      "\($0.key) \($0.value.count), e.g. \($0.value.prefix(3).joined(separator: "; "))"
+    }.sorted().joined(separator: " | "))
+    print("PASS all \(journey.lessons.count) journey lessons resolve and can start")
+  }
+
   /// The CE packs ship in the app. They need no folder choice, and a saved run
   /// finds its level by ID after the path it saved no longer exists.
   fileprivate func testBundledNeoLemmixPacks() throws {
@@ -4604,6 +4642,9 @@ Task { @MainActor in
     #if NEO_RECOVERY_TESTS
     try subject.testNeoRunRecovery()
     print("NeoLemmix recovery integration tests passed.")
+    #elseif LEARNING_TESTS
+    try await subject.testLearningJourneyEntriesResolve()
+    print("Learning journey integration tests passed.")
     #elseif NEO_PACK_TESTS
     try subject.testBundledNeoLemmixPacks()
     try await subject.testNeoLemmixPackBrowser()
