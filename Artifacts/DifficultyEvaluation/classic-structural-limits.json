@@ -1,614 +1,72 @@
 {
-  "descriptorSHA256": "b1a0d95279706dac0d2005cd7101fd9ea4131d9701d765ac304b1606fafa881b",
-  "diagnostic": "Exact bundled Classic archive rendered with native style assets and simulated with traditional Lemmix object limits",
+  "diagnostic": "Exact bundled Classic fan levels under the native fan object and rescue rules",
+  "descriptorSHA256": "57d9ef27f1530073f06a28bd1cabcfd2c43a885679ec2ad56bb74e6923a3a548",
   "records": [
     {
-      "entranceCount": 1,
-      "exitObjectSlots": [
-        21
-      ],
-      "exitTriggerCount": 0,
-      "identity": {
-        "engine": "classic",
-        "levelID": "Giga pack 09.dat#3",
-        "packID": "fan:lldb-171"
-      },
-      "initialStateHash": "c2fe1c15f61a2941887d6fc5fce217a1f16b747609419b176f52b1543daa36f7",
-      "levelSourceRevision": "47e0617d94895001361db1030169ce26764aca68a61ff70de9d3edd1a0550ae9",
-      "reason": "no functional exit",
-      "requiredToSave": 74,
-      "title": "To the life boats",
-      "totalLemmings": 80
-    },
-    {
-      "entranceCount": 1,
-      "exitObjectSlots": [
-        29
-      ],
-      "exitTriggerCount": 0,
-      "identity": {
-        "engine": "classic",
-        "levelID": "finpak01.DAT#1",
-        "packID": "fan:lldb-195"
-      },
-      "initialStateHash": "a25fec2a601728021790496280fc858b8b94a04e5444ef669f44b69ad9da5825",
-      "levelSourceRevision": "b1a21281cacb7902eafeb83aa0a411c819e4dd2dfac568279e1ab69362ec08c7",
-      "reason": "no functional exit",
-      "requiredToSave": 17,
-      "title": "A little bit too short?",
-      "totalLemmings": 25
-    },
-    {
-      "entranceCount": 1,
-      "exitObjectSlots": [
-        17
-      ],
-      "exitTriggerCount": 0,
-      "identity": {
-        "engine": "classic",
-        "levelID": "ANTHPCK5.DAT#4",
-        "packID": "fan:lldb-225"
-      },
-      "initialStateHash": "97d7e25660f9e8967fd9133287e1ef446eec8e2213cd35b70fbd5e30747e319c",
-      "levelSourceRevision": "dba9b23e61ec73dc0a22e49385a9dacbb45eb5db64bf064a794d8376617f5c1c",
-      "reason": "no functional exit",
-      "requiredToSave": 65,
-      "title": "The holy path",
-      "totalLemmings": 65
-    },
-    {
-      "entranceCount": 1,
-      "exitObjectSlots": [
-        23
-      ],
-      "exitTriggerCount": 0,
-      "identity": {
-        "engine": "classic",
-        "levelID": "JEFFPCK3.DAT#6",
-        "packID": "fan:lldb-237"
-      },
-      "initialStateHash": "a206b771b03ab90d8391de5681552e9c5f2bfb69ddd4e9e39549639e4a14c8e3",
-      "levelSourceRevision": "f4661115b7742bc24ceda38b5141163faf6114aac5df92316770008eada593fd",
-      "reason": "no functional exit",
-      "requiredToSave": 78,
-      "title": "Volcano!!!",
-      "totalLemmings": 80
-    },
-    {
-      "entranceCount": 1,
-      "exitObjectSlots": [
-        22
-      ],
-      "exitTriggerCount": 0,
-      "identity": {
-        "engine": "classic",
-        "levelID": "JEFFPCK4.DAT#1",
-        "packID": "fan:lldb-238"
-      },
-      "initialStateHash": "cf513b3180a1455ab141708ccc9844e5018ff2c9cde7752db6dfd98def1d7fae",
-      "levelSourceRevision": "f38aaba525de1b48ae3d1f50ded010fdb62199d0d8042791457b95bc9ebe0fe7",
-      "reason": "no functional exit",
-      "requiredToSave": 60,
-      "title": "The Frozen River",
-      "totalLemmings": 60
-    },
-    {
-      "entranceCount": 1,
-      "exitObjectSlots": [
-        28
-      ],
-      "exitTriggerCount": 0,
-      "identity": {
-        "engine": "classic",
-        "levelID": "JEFFPCK5.DAT#2",
-        "packID": "fan:lldb-239"
-      },
-      "initialStateHash": "a59419bd1e0604287ed7551c69f5335e0e450a6d9f631a247a38e3bdd30faddf",
-      "levelSourceRevision": "2a8fe57c15aa75c93754c4943f4977cca0928183c80426c7219e75bdf1bf42fc",
-      "reason": "no functional exit",
-      "requiredToSave": 58,
-      "title": "Ring-Round-the-Lemming",
-      "totalLemmings": 60
-    },
-    {
-      "entranceCount": 1,
-      "exitObjectSlots": [
-        25
-      ],
-      "exitTriggerCount": 0,
-      "identity": {
-        "engine": "classic",
-        "levelID": "LARSPACK.DAT#3",
-        "packID": "fan:lldb-243"
-      },
-      "initialStateHash": "613cbbd9347dc206b52c707c9f19531eeaa1dfec7b4f2b5c30ff1b3951e0436e",
-      "levelSourceRevision": "f08272503d1ba8802029294d01fdfac5639407f8fdc3bf1d96232847d4e4e744",
-      "reason": "no functional exit",
-      "requiredToSave": 50,
-      "title": "The rock",
-      "totalLemmings": 50
-    },
-    {
-      "entranceCount": 1,
-      "exitObjectSlots": [
-        20
-      ],
-      "exitTriggerCount": 0,
-      "identity": {
-        "engine": "classic",
-        "levelID": "CRISFN02.dat#5",
-        "packID": "fan:lldb-266"
-      },
-      "initialStateHash": "437c49d098332c92ef50a44fc1cc5a228780d8115273f3054a425c191a6eb6cf",
-      "levelSourceRevision": "ca8350f116a45b7c71d03cc3e236ad90a91dd5f176e930f038835793c1ca2969",
-      "reason": "no functional exit",
-      "requiredToSave": 66,
-      "title": "Gloomy bridgers",
-      "totalLemmings": 70
-    },
-    {
-      "entranceCount": 1,
-      "exitObjectSlots": [
-        25
-      ],
-      "exitTriggerCount": 0,
-      "identity": {
-        "engine": "classic",
-        "levelID": "LEMERINewlvls.dat#3",
-        "packID": "fan:lldb-298"
-      },
-      "initialStateHash": "d53aeda80a95b4cd87b486dc055750930081efe5fa1301fc6eb1082fc2a06d25",
-      "levelSourceRevision": "bb76d39675ecd16008ace25069363f71579861058e18b8437dbd384cab536ba9",
-      "reason": "no functional exit",
-      "requiredToSave": 78,
-      "title": "LemEdit generated Level",
-      "totalLemmings": 80
-    },
-    {
-      "entranceCount": 3,
-      "exitObjectSlots": [
-        18
-      ],
-      "exitTriggerCount": 0,
-      "identity": {
-        "engine": "classic",
-        "levelID": "LEMERITraplvls.dat#1",
-        "packID": "fan:lldb-299"
-      },
-      "initialStateHash": "9bb832365a305132d09ffc6f79f8220947ed75ac8166f678b60ed7a898ee5b66",
-      "levelSourceRevision": "5d0c632c38ec16cbaf30b3906d528efa8521b260a1dedb9e744cf6e9faff6037",
-      "reason": "no functional exit",
-      "requiredToSave": 2,
-      "title": "Lemmings 2: The traps",
-      "totalLemmings": 80
-    },
-    {
-      "entranceCount": 1,
-      "exitObjectSlots": [
-        21,
-        23
-      ],
-      "exitTriggerCount": 0,
-      "identity": {
-        "engine": "classic",
-        "levelID": "LEMERITraplvls.dat#4",
-        "packID": "fan:lldb-299"
-      },
-      "initialStateHash": "9fbeb1913ff0bce442690151d68f193529d9125956cf4d0b51122646f1f8b30e",
-      "levelSourceRevision": "5d0c632c38ec16cbaf30b3906d528efa8521b260a1dedb9e744cf6e9faff6037",
-      "reason": "no functional exit",
-      "requiredToSave": 70,
-      "title": "Trapworks",
-      "totalLemmings": 80
-    },
-    {
-      "entranceCount": 1,
-      "exitObjectSlots": [
-        30
-      ],
-      "exitTriggerCount": 0,
-      "identity": {
-        "engine": "classic",
-        "levelID": "Pacpack1.dat#5",
-        "packID": "fan:lldb-300"
-      },
-      "initialStateHash": "5a91bfa757738925e59f9735271ac0eb42fb751b51ad9fb8a62d6f1b52b849b1",
-      "levelSourceRevision": "bf56ce993f34fd605f172268c84df8946afc0907b00d6cd4297e5020f742fead",
-      "reason": "no functional exit",
-      "requiredToSave": 80,
-      "title": "Snow Initials",
-      "totalLemmings": 80
-    },
-    {
-      "entranceCount": 1,
-      "exitObjectSlots": [
-        19
-      ],
-      "exitTriggerCount": 0,
-      "identity": {
-        "engine": "classic",
-        "levelID": "TWPAK06.dat#9",
-        "packID": "fan:lldb-308"
-      },
-      "initialStateHash": "1961c22be2a461370cebf0bf4ded60bae8956c6f8847eb2d9c7cd2643bc97c1a",
-      "levelSourceRevision": "634bb4055b04c58b26970644f70b184a97987bd613cbb3b497d73dacf925a13c",
-      "reason": "no functional exit",
-      "requiredToSave": 1,
-      "title": "Me, Myself And Ice",
-      "totalLemmings": 1
-    },
-    {
-      "entranceCount": 1,
-      "exitObjectSlots": [
-        23
-      ],
-      "exitTriggerCount": 0,
-      "identity": {
-        "engine": "classic",
-        "levelID": "joem1.dat#2",
-        "packID": "fan:lldb-317"
-      },
-      "initialStateHash": "cefb64e4d3dcd54bd3747b5df95c5068ac6a0a31f87761fe71c44a608eeb9843",
-      "levelSourceRevision": "ebd0f5401693ba0038f81ce31381bca4471314ad26e16ec9bdddaeb591907405",
-      "reason": "no functional exit",
-      "requiredToSave": 50,
-      "title": "Bloodfalls",
-      "totalLemmings": 80
-    },
-    {
-      "entranceCount": 2,
-      "exitObjectSlots": [
-        22
-      ],
-      "exitTriggerCount": 0,
-      "identity": {
-        "engine": "classic",
-        "levelID": "JM07.DAT#0",
-        "packID": "fan:lldb-333"
-      },
-      "initialStateHash": "6c2203895151ac3720cdedf79baca7e64a2da65bac9b699edfdceccab0e5d479",
-      "levelSourceRevision": "edadf10af11c0cca7a77d558f95892cd6f981ef3eb23546068dbd9f31db4106c",
-      "reason": "no functional exit",
-      "requiredToSave": 48,
-      "title": "Deep Inside",
-      "totalLemmings": 80
-    },
-    {
-      "entranceCount": 1,
-      "exitObjectSlots": [
-        23
-      ],
-      "exitTriggerCount": 0,
-      "identity": {
-        "engine": "classic",
-        "levelID": "MARSHY02.DAT#9",
-        "packID": "fan:lldb-346"
-      },
-      "initialStateHash": "b59d22071e5a88171f500d12b7a29355311bba9936527fc9bc0fe1c31dc09c56",
-      "levelSourceRevision": "df65461b7eeff0907473ac0b6798c650976d748ec07f7d824a625d93cb6169ad",
-      "reason": "no functional exit",
-      "requiredToSave": 80,
-      "title": "Disused Land",
-      "totalLemmings": 80
-    },
-    {
-      "entranceCount": 2,
-      "exitObjectSlots": [
-        27
-      ],
-      "exitTriggerCount": 0,
-      "identity": {
-        "engine": "classic",
-        "levelID": "oldbutgo.dat#1",
-        "packID": "fan:lldb-358"
-      },
-      "initialStateHash": "81811bc30695174120f4d35c18d6c5fa6d4272031affdc21500f5f509f480de7",
-      "levelSourceRevision": "7f95c3c5a2ab5f8705e8af8c8e8284781785d58c85008a28e0bc5eed73d319ab",
-      "reason": "no functional exit",
-      "requiredToSave": 60,
-      "title": "Twined serpants think alike",
-      "totalLemmings": 80
-    },
-    {
-      "entranceCount": 1,
-      "exitObjectSlots": [
-        22
-      ],
-      "exitTriggerCount": 0,
-      "identity": {
-        "engine": "classic",
-        "levelID": "oldbutgo.dat#4",
-        "packID": "fan:lldb-358"
-      },
-      "initialStateHash": "3817b3acba669930d1e4d183e369eaf6c309181c1b2a77be2438d3242ed443d7",
-      "levelSourceRevision": "7f95c3c5a2ab5f8705e8af8c8e8284781785d58c85008a28e0bc5eed73d319ab",
-      "reason": "no functional exit",
-      "requiredToSave": 70,
-      "title": "Who hired that lousy builder?",
-      "totalLemmings": 80
-    },
-    {
-      "entranceCount": 1,
-      "exitObjectSlots": [
-        29
-      ],
-      "exitTriggerCount": 0,
-      "identity": {
-        "engine": "classic",
-        "levelID": "oldbutgo.dat#7",
-        "packID": "fan:lldb-358"
-      },
-      "initialStateHash": "e9df341fd2b82727bfab74491d4b80ccef10b3dc1fbe19ae557d3d8c39f6425d",
-      "levelSourceRevision": "7f95c3c5a2ab5f8705e8af8c8e8284781785d58c85008a28e0bc5eed73d319ab",
-      "reason": "no functional exit",
-      "requiredToSave": 70,
-      "title": "Lemzoberranzan",
-      "totalLemmings": 80
-    },
-    {
-      "entranceCount": 1,
-      "exitObjectSlots": [
-        3
-      ],
-      "exitTriggerCount": 1,
       "identity": {
         "engine": "classic",
         "levelID": "Gronklems -1.dat#1",
         "packID": "fan:lldb-386"
       },
-      "initialStateHash": "95b273d59a6ea938badc0fa94a67cc4c58b4a281a1265dc94d17a2d81876ff5e",
-      "levelSourceRevision": "217d8d3e5d5c6924855d568071573fb4d89205d2d8e581f37ffba9c0793d21b4",
-      "reason": "rescue requirement exceeds population",
-      "requiredToSave": 37,
       "title": "gronklems -1.dat 2",
-      "totalLemmings": 20
-    },
-    {
+      "levelSourceRevision": "217d8d3e5d5c6924855d568071573fb4d89205d2d8e581f37ffba9c0793d21b4",
+      "initialStateHash": "95b273d59a6ea938badc0fa94a67cc4c58b4a281a1265dc94d17a2d81876ff5e",
+      "reason": "rescue requirement exceeds population",
+      "exitObjectSlots": [
+        3
+      ],
+      "exitTriggerCount": 1,
       "entranceCount": 1,
-      "exitObjectSlots": [
-        22
-      ],
-      "exitTriggerCount": 0,
-      "identity": {
-        "engine": "classic",
-        "levelID": "bigqtwo.dat#3",
-        "packID": "fan:lldb-417"
-      },
-      "initialStateHash": "15d7810e0966aaf9f7a5883e60c2b4acad64949aea3be15bec6cfa30aa7a94a8",
-      "levelSourceRevision": "c767bed9035530c59a057612c578fcfb4b31569673b55366c290e9cb51d0d606",
-      "reason": "no functional exit",
-      "requiredToSave": 40,
-      "title": "The Cystel Calls!",
-      "totalLemmings": 80
+      "totalLemmings": 20,
+      "requiredToSave": 37
     },
     {
-      "entranceCount": 1,
-      "exitObjectSlots": [
-        26
-      ],
-      "exitTriggerCount": 0,
-      "identity": {
-        "engine": "classic",
-        "levelID": "bigqtwo.dat#6",
-        "packID": "fan:lldb-417"
-      },
-      "initialStateHash": "e94c8b4a8eae3bb22eae2ea52602a0f5b70c7cef1429ca30a98c9387d9a005a7",
-      "levelSourceRevision": "c767bed9035530c59a057612c578fcfb4b31569673b55366c290e9cb51d0d606",
-      "reason": "no functional exit",
-      "requiredToSave": 60,
-      "title": "The big land before the steel!",
-      "totalLemmings": 80
-    },
-    {
-      "entranceCount": 2,
-      "exitObjectSlots": [
-        30
-      ],
-      "exitTriggerCount": 0,
-      "identity": {
-        "engine": "classic",
-        "levelID": "bigqtwo.dat#8",
-        "packID": "fan:lldb-417"
-      },
-      "initialStateHash": "6e935ded008661e73858c2d42b14dd6b99cc31a0ca14d029f04f0d4d2fd5a77e",
-      "levelSourceRevision": "c767bed9035530c59a057612c578fcfb4b31569673b55366c290e9cb51d0d606",
-      "reason": "no functional exit",
-      "requiredToSave": 40,
-      "title": "I put my hands... On my head...",
-      "totalLemmings": 80
-    },
-    {
-      "entranceCount": 3,
-      "exitObjectSlots": [
-        16
-      ],
-      "exitTriggerCount": 0,
-      "identity": {
-        "engine": "classic",
-        "levelID": "Badpack.dat#0",
-        "packID": "fan:lldb-425"
-      },
-      "initialStateHash": "b84977b6a76b6ca099d280c0e1521d36503e47917fd89f03369e67da7bb8d8e2",
-      "levelSourceRevision": "33e7f4cef4a048c1cf98942824001304e0fe866644bc598449cc1c60aa3072c6",
-      "reason": "no functional exit",
-      "requiredToSave": 18,
-      "title": "and 90's for all!",
-      "totalLemmings": 80
-    },
-    {
-      "entranceCount": 1,
-      "exitObjectSlots": [],
-      "exitTriggerCount": 0,
       "identity": {
         "engine": "classic",
         "levelID": "LDChallenge08.dat#1",
         "packID": "fan:lldb-437"
       },
-      "initialStateHash": "d41c5e82e292f61bb29b6095aa4c2d5f9b9230635c5287d5408e06faceb68b41",
-      "levelSourceRevision": "76c552fad59139decedda40d3b2adef946a42a2661cfc18f432263a290251949",
-      "reason": "no functional exit",
-      "requiredToSave": 2,
       "title": "ldchallenge08.dat 2",
-      "totalLemmings": 2
-    },
-    {
-      "entranceCount": 2,
-      "exitObjectSlots": [
-        23
-      ],
-      "exitTriggerCount": 0,
-      "identity": {
-        "engine": "classic",
-        "levelID": "JMGM01.dat#0",
-        "packID": "fan:lldb-454"
-      },
-      "initialStateHash": "6b506c466cf8c539b9e23e8e42b92bf70ed60ab5949d10b482c8db49b47202f9",
-      "levelSourceRevision": "293df1223bdb86b95ad2084c13e6e395f7eb7dee5d551d9ce8a84c161d8f4c83",
+      "levelSourceRevision": "76c552fad59139decedda40d3b2adef946a42a2661cfc18f432263a290251949",
+      "initialStateHash": "d41c5e82e292f61bb29b6095aa4c2d5f9b9230635c5287d5408e06faceb68b41",
       "reason": "no functional exit",
-      "requiredToSave": 76,
-      "title": "New Life",
-      "totalLemmings": 80
-    },
-    {
-      "entranceCount": 1,
-      "exitObjectSlots": [
-        22
-      ],
-      "exitTriggerCount": 0,
-      "identity": {
-        "engine": "classic",
-        "levelID": "joem4.dat#3",
-        "packID": "fan:lldb-468"
-      },
-      "initialStateHash": "b2e5f075d6a033cc3b5143b472c0f400a4e28fca50ccf14a7cd679638d495c86",
-      "levelSourceRevision": "e4292c3d8fd808e2e376320c3ab0f64ac8dded25e802aaf64079ba8a17adaa0a",
-      "reason": "no functional exit",
-      "requiredToSave": 50,
-      "title": "Snow,Snow,Snow and Snow",
-      "totalLemmings": 60
-    },
-    {
-      "entranceCount": 1,
       "exitObjectSlots": [],
       "exitTriggerCount": 0,
+      "entranceCount": 1,
+      "totalLemmings": 2,
+      "requiredToSave": 2
+    },
+    {
       "identity": {
         "engine": "classic",
         "levelID": "KillerMaster 1 Wicked 1.dat#3",
         "packID": "fan:lldb-508"
       },
-      "initialStateHash": "3165283e3caa6d7a5c82ed9a59f456a1b9605625ce50295c185710ba1c7f4b94",
-      "levelSourceRevision": "8796628daeb9740224381ce7cfea7801a98dcb7ee9e4573498083928ea2f52d9",
-      "reason": "no functional exit",
-      "requiredToSave": 20,
       "title": "Type this Word!",
-      "totalLemmings": 40
-    },
-    {
-      "entranceCount": 1,
+      "levelSourceRevision": "8796628daeb9740224381ce7cfea7801a98dcb7ee9e4573498083928ea2f52d9",
+      "initialStateHash": "3165283e3caa6d7a5c82ed9a59f456a1b9605625ce50295c185710ba1c7f4b94",
+      "reason": "no functional exit",
       "exitObjectSlots": [],
       "exitTriggerCount": 0,
+      "entranceCount": 1,
+      "totalLemmings": 40,
+      "requiredToSave": 20
+    },
+    {
       "identity": {
         "engine": "classic",
         "levelID": "KillerMaster 1 Havoc 2.dat#7",
         "packID": "fan:lldb-509"
       },
-      "initialStateHash": "8c9c087dbf32c0055ef26a286a964359e345830f3fce8033efdbb602cd022f46",
-      "levelSourceRevision": "c9f03833927f3136fb7f69fbe8a35dc57f23cc709c13caf5fb8e1a6bdb644950",
-      "reason": "no functional exit",
-      "requiredToSave": 1,
       "title": "Choose your lucky PASSWORD!",
-      "totalLemmings": 1
-    },
-    {
+      "levelSourceRevision": "c9f03833927f3136fb7f69fbe8a35dc57f23cc709c13caf5fb8e1a6bdb644950",
+      "initialStateHash": "8c9c087dbf32c0055ef26a286a964359e345830f3fce8033efdbb602cd022f46",
+      "reason": "no functional exit",
+      "exitObjectSlots": [],
+      "exitTriggerCount": 0,
       "entranceCount": 1,
-      "exitObjectSlots": [
-        16
-      ],
-      "exitTriggerCount": 0,
-      "identity": {
-        "engine": "classic",
-        "levelID": "Lemmy556 Statues.dat#5",
-        "packID": "fan:lldb-63"
-      },
-      "initialStateHash": "267f6a50721f9d587c18c0973e3d366f62f63fb705284b77ea1c816140b94e5e",
-      "levelSourceRevision": "c20e7b75f4257f27dd14c1cb1d94d3b50e0be928b0c08db6c4c59f0b38f190d3",
-      "reason": "no functional exit",
-      "requiredToSave": 78,
-      "title": "Nessy needs you!",
-      "totalLemmings": 80
-    },
-    {
-      "entranceCount": 1,
-      "exitObjectSlots": [
-        21
-      ],
-      "exitTriggerCount": 0,
-      "identity": {
-        "engine": "classic",
-        "levelID": "Lemmy556 More levels.dat#15",
-        "packID": "fan:lldb-68"
-      },
-      "initialStateHash": "b55f361cc5eaf4cba0d8be25bbbc5967f36197950b67df6f7714eabf53428172",
-      "levelSourceRevision": "a1883fb43a9148fb8feeb3cf88b817663bd9bb9b5e23ae179ffe5c6166686b81",
-      "reason": "no functional exit",
-      "requiredToSave": 40,
-      "title": "Water in menacing???",
-      "totalLemmings": 80
-    },
-    {
-      "entranceCount": 3,
-      "exitObjectSlots": [
-        17
-      ],
-      "exitTriggerCount": 0,
-      "identity": {
-        "engine": "classic",
-        "levelID": "epic01.dat#9",
-        "packID": "fan:lldb-86"
-      },
-      "initialStateHash": "1455df8fa912c828229d0c73587d043c11a1d6d1e50df70724e0515d08ee3c08",
-      "levelSourceRevision": "3b88c8674ceccb6e9956e3d346d01d84d46165cbd69e634bb12643f18bde3d87",
-      "reason": "no functional exit",
-      "requiredToSave": 80,
-      "title": "The Lemmings Plead for Help",
-      "totalLemmings": 80
-    },
-    {
-      "entranceCount": 1,
-      "exitObjectSlots": [
-        21
-      ],
-      "exitTriggerCount": 0,
-      "identity": {
-        "engine": "classic",
-        "levelID": "Timpack8.dat#2",
-        "packID": "fan:lldb-95"
-      },
-      "initialStateHash": "7336d633b7861c41c9bbaa525ac03fe535b8bb7919617440f2309aaad283de98",
-      "levelSourceRevision": "56337c940d0e924b0dca3be4278276a3dd471f87b783ecc40570000de25637a7",
-      "reason": "no functional exit",
-      "requiredToSave": 78,
-      "title": "Danger Lemmings",
-      "totalLemmings": 80
-    },
-    {
-      "entranceCount": 1,
-      "exitObjectSlots": [
-        21
-      ],
-      "exitTriggerCount": 0,
-      "identity": {
-        "engine": "classic",
-        "levelID": "Timpack11.dat#5",
-        "packID": "fan:lldb-98"
-      },
-      "initialStateHash": "4af51a4c2fa2ec70e2fefd55b880f3005ac821691415c6ce8a4f1718870de867",
-      "levelSourceRevision": "3bc5cec1faeabdb6d3eebc80c44d7c133a186efa5a445766111477824d3612f1",
-      "reason": "no functional exit",
-      "requiredToSave": 77,
-      "title": "Alphabet Soup",
-      "totalLemmings": 80
+      "totalLemmings": 1,
+      "requiredToSave": 1
     }
-  ],
-  "sourceRule": "https://www.neolemmix.com/old/nle_piece_properties.html"
+  ]
 }

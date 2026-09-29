@@ -1,19 +1,19 @@
 # Oh My! All Lemmings!
 
-1572 distinct single-player levels: 317 official puzzles and 1255 replay-validated library levels from 287 packs.
+1573 distinct single-player levels: 317 official puzzles and 1256 replay-validated library levels from 287 packs.
 
 ## Ordering
 
 The path progresses through Fun, Intermediate, Difficult and Expert. A hard timing, coordination or planning demand cannot be cancelled by easy dimensions in a weighted average. Official levels take priority within comparable demand bands. Retail rank and campaign order do not determine placement. All Oh No! levels are interleaved with the rest of the pool.
 
-Stages: Fun 83; Intermediate 290; Difficult 900; Expert 299. Largest upward curriculum-demand step: 42.50/1000. Transitions requiring review: 2; missing basic-skill preparation: 0.
+Stages: Fun 83; Intermediate 290; Difficult 900; Expert 300. Largest upward curriculum-demand step: 42.50/1000. Transitions requiring review: 2; missing basic-skill preparation: 0.
 
 | Stage | Steps | Teaching focus |
 | --- | ---: | --- |
 | Fun | 1–83 | Single skills and simple combinations |
 | Intermediate | 84–373 | Skill combinations and crowd management |
 | Difficult | 374–1273 | Longer plans and tighter resources |
-| Expert | 1274–1572 | Precision, complex plans and coordination |
+| Expert | 1274–1573 | Precision, complex plans and coordination |
 
 Curriculum demand is the maximum of the unchanged evidence score, 0.85 × technique, precision, concurrency and deduction, 0.70 × solution complexity, 0.50 × constraints, and 90 × additional concepts. A combination also waits for its easiest available isolated skill lessons. These weights and the stage thresholds (180, 360, 600) are editorial estimates, not player-calibrated difficulty measurements.
 
@@ -1585,47 +1585,48 @@ The committed supplemental profiles and winning fan replays allow the playlist t
 | 1526 | Expert | The race against cliches | Oh No! More Lemmings / Havoc | 433.13 | 776.14 |  |
 | 1527 | Expert | Firestorm | GARJEN04 / fan:lldb-284 | 431.34 | 773.50 |  |
 | 1528 | Expert | Objects? What Objects? | TWPAK10 / fan:lldb-312 | 493.87 | 781.15 |  |
-| 1529 | Expert | MENACING !! | Lemmings / Tricky | 565.10 | 803.25 |  |
-| 1530 | Expert | The house of Lem | Conway10 / fan:lldb-259 | 572.66 | 782.00 |  |
-| 1531 | Expert | And then there were four.... | Lemmings / Mayhem | 569.32 | 816.00 |  |
-| 1532 | Expert | Synchronised Lemming | Oh No! More Lemmings / Havoc | 565.10 | 816.00 |  |
-| 1533 | Expert | Pedantic Lemmings | AkseliPack01 / fan:lldb-220 | 581.17 | 810.00 |  |
-| 1534 | Expert | Mayhem 18.lvl | Amiga Mayhem Budget / fan:lldb-571 | 572.62 | 816.00 |  |
-| 1535 | Expert | Have you seen this level before? | lm set13 / fan:lldb-59 | 587.18 | 810.00 |  |
-| 1536 | Expert | A Magician Would Be Handy | Lemmings Plus DOS Project Wimpy / fan:lldb-552 | 596.43 | 811.75 |  |
-| 1537 | Expert | Tower of Ice | lm set13 / fan:lldb-59 | 650.98 | 810.00 |  |
-| 1538 | Expert | Build The Way | Ji Hoons Lemmings Remake Heaven / fan:lldb-547 | 251.14 | 850.00 |  |
-| 1539 | Expert | Climb and Dig | brickpk1 / fan:lldb-558 | 332.86 | 850.00 |  |
-| 1540 | Expert | Celestial Lemmings | TWPAK01 / fan:lldb-303 | 344.42 | 850.00 |  |
-| 1541 | Expert | Snow Lev 4 | ANTHPCK4 / fan:lldb-224 | 362.82 | 850.00 |  |
-| 1542 | Expert | Climb and Bomb | brickpk1 / fan:lldb-558 | 366.31 | 850.00 |  |
-| 1543 | Expert | Warming Up | ssam1221s Lemmings Tame / fan:lldb-512 | 394.02 | 843.48 |  |
-| 1544 | Expert | Betcha can't save just one! | ISteve02 / fan:lldb-23 | 391.56 | 843.48 |  |
-| 1545 | Expert | The Plight of Icarus | ISteve03 / fan:lldb-21 | 393.99 | 850.00 |  |
-| 1546 | Expert | Steel blocks are not perfect... | ssam1221s Lemmings Wicked / fan:lldb-515 | 407.68 | 850.00 |  |
-| 1547 | Expert | Keep your hair on Mr. Lemming | Lemmings / Fun | 427.47 | 850.00 |  |
-| 1548 | Expert | A BeastII of a level | Lemmings / Mayhem | 450.37 | 850.00 |  |
-| 1549 | Expert | Don't do anything too hasty | Lemmings / Fun | 442.35 | 850.00 |  |
-| 1550 | Expert | Happy New Year II! | Holiday Lemmings 1994 / Frost | 441.86 | 843.48 |  |
-| 1551 | Expert | Lemmintaschen? | Holiday Lemmings 1994 / Hail | 474.65 | 843.48 |  |
-| 1552 | Expert | Oscillating Lemmings | Pieuws Lemmings 2007 Peace / fan:lldb-542 | 466.96 | 850.00 |  |
-| 1553 | Expert | It is very complicated | Insulfrog LVL PK 1 / fan:lldb-373 | 478.39 | 850.00 |  |
-| 1554 | Expert | Tailor-made for Athletes | JEFFPCK1 / fan:lldb-235 | 479.06 | 850.00 |  |
-| 1555 | Expert | The Awesome level returns! | Mikes Lemmix Pack / fan:lldb-591 | 506.07 | 850.00 |  |
-| 1556 | Expert | Turn baby Turn. | ANTHPCK3 / fan:lldb-223 | 538.00 | 850.00 |  |
-| 1557 | Expert | Sudenly lemming | Lemmings platinum Careful Part 1 / fan:lldb-188 | 543.92 | 850.00 |  |
-| 1558 | Expert | This is a doddle | JM09 / fan:lldb-335 | 543.20 | 850.00 |  |
-| 1559 | Expert | Across The Gap | Oh No! More Lemmings / Crazy | 555.35 | 850.00 |  |
-| 1560 | Expert | Swallowing method 1 | Lemmings platinum Fragle part 2 / fan:lldb-181 | 553.79 | 850.00 |  |
-| 1561 | Expert | It Takes Two To Tango | Van Clan Tame / fan:lldb-99 | 576.36 | 850.00 |  |
-| 1562 | Expert | Make a Best - Click Time | KillerMasters Lemmings 1 Havoc / fan:lldb-509 | 583.69 | 850.00 |  |
-| 1563 | Expert | Floaters Away! | cLemmings Tricky / fan:lldb-527 | 589.55 | 850.00 |  |
-| 1564 | Expert | Be Careful... | Lemmings Plus DOS Project Mild / fan:lldb-551 | 583.08 | 850.00 |  |
-| 1565 | Expert | Wall of Wisdom | Lemmings Plus DOS Project Danger / fan:lldb-554 | 606.61 | 850.00 |  |
-| 1566 | Expert | The Shaft (Part 2) | ISteve04 / fan:lldb-24 | 605.45 | 850.00 |  |
-| 1567 | Expert | And then there were another four | Conway Challenges 2 / fan:lldb-264 | 600.18 | 850.00 |  |
-| 1568 | Expert | Hold them back | CPs Level Pack / fan:lldb-472 | 625.39 | 850.00 |  |
-| 1569 | Expert | Free Lemmings | Oh No More cLemmings Tame / fan:lldb-530 | 620.59 | 850.00 |  |
-| 1570 | Expert | The Graveyard | Lemmings Plus DOS Project Mild / fan:lldb-551 | 633.39 | 850.00 |  |
-| 1571 | Expert | Double Lemmings | KillerMasters Lemmings 2 Tame / fan:lldb-510 | 631.46 | 850.00 |  |
-| 1572 | Expert | Remember where you find them! | Ji Hoons Lemmings Remake Heaven / fan:lldb-547 | 659.90 | 850.00 |  |
+| 1529 | Expert | Me, Myself And Ice | TWPAK06 / fan:lldb-308 | 514.13 | 790.50 |  |
+| 1530 | Expert | MENACING !! | Lemmings / Tricky | 565.10 | 803.25 |  |
+| 1531 | Expert | The house of Lem | Conway10 / fan:lldb-259 | 572.66 | 782.00 |  |
+| 1532 | Expert | And then there were four.... | Lemmings / Mayhem | 569.32 | 816.00 |  |
+| 1533 | Expert | Synchronised Lemming | Oh No! More Lemmings / Havoc | 565.10 | 816.00 |  |
+| 1534 | Expert | Pedantic Lemmings | AkseliPack01 / fan:lldb-220 | 581.17 | 810.00 |  |
+| 1535 | Expert | Mayhem 18.lvl | Amiga Mayhem Budget / fan:lldb-571 | 572.62 | 816.00 |  |
+| 1536 | Expert | Have you seen this level before? | lm set13 / fan:lldb-59 | 587.18 | 810.00 |  |
+| 1537 | Expert | A Magician Would Be Handy | Lemmings Plus DOS Project Wimpy / fan:lldb-552 | 596.43 | 811.75 |  |
+| 1538 | Expert | Tower of Ice | lm set13 / fan:lldb-59 | 650.98 | 810.00 |  |
+| 1539 | Expert | Build The Way | Ji Hoons Lemmings Remake Heaven / fan:lldb-547 | 251.14 | 850.00 |  |
+| 1540 | Expert | Climb and Dig | brickpk1 / fan:lldb-558 | 332.86 | 850.00 |  |
+| 1541 | Expert | Celestial Lemmings | TWPAK01 / fan:lldb-303 | 344.42 | 850.00 |  |
+| 1542 | Expert | Snow Lev 4 | ANTHPCK4 / fan:lldb-224 | 362.82 | 850.00 |  |
+| 1543 | Expert | Climb and Bomb | brickpk1 / fan:lldb-558 | 366.31 | 850.00 |  |
+| 1544 | Expert | Warming Up | ssam1221s Lemmings Tame / fan:lldb-512 | 394.02 | 843.48 |  |
+| 1545 | Expert | Betcha can't save just one! | ISteve02 / fan:lldb-23 | 391.56 | 843.48 |  |
+| 1546 | Expert | The Plight of Icarus | ISteve03 / fan:lldb-21 | 393.99 | 850.00 |  |
+| 1547 | Expert | Steel blocks are not perfect... | ssam1221s Lemmings Wicked / fan:lldb-515 | 407.68 | 850.00 |  |
+| 1548 | Expert | Keep your hair on Mr. Lemming | Lemmings / Fun | 427.47 | 850.00 |  |
+| 1549 | Expert | A BeastII of a level | Lemmings / Mayhem | 450.37 | 850.00 |  |
+| 1550 | Expert | Don't do anything too hasty | Lemmings / Fun | 442.35 | 850.00 |  |
+| 1551 | Expert | Happy New Year II! | Holiday Lemmings 1994 / Frost | 441.86 | 843.48 |  |
+| 1552 | Expert | Lemmintaschen? | Holiday Lemmings 1994 / Hail | 474.65 | 843.48 |  |
+| 1553 | Expert | Oscillating Lemmings | Pieuws Lemmings 2007 Peace / fan:lldb-542 | 466.96 | 850.00 |  |
+| 1554 | Expert | It is very complicated | Insulfrog LVL PK 1 / fan:lldb-373 | 478.39 | 850.00 |  |
+| 1555 | Expert | Tailor-made for Athletes | JEFFPCK1 / fan:lldb-235 | 479.06 | 850.00 |  |
+| 1556 | Expert | The Awesome level returns! | Mikes Lemmix Pack / fan:lldb-591 | 506.07 | 850.00 |  |
+| 1557 | Expert | Turn baby Turn. | ANTHPCK3 / fan:lldb-223 | 538.00 | 850.00 |  |
+| 1558 | Expert | Sudenly lemming | Lemmings platinum Careful Part 1 / fan:lldb-188 | 543.92 | 850.00 |  |
+| 1559 | Expert | This is a doddle | JM09 / fan:lldb-335 | 543.20 | 850.00 |  |
+| 1560 | Expert | Across The Gap | Oh No! More Lemmings / Crazy | 555.35 | 850.00 |  |
+| 1561 | Expert | Swallowing method 1 | Lemmings platinum Fragle part 2 / fan:lldb-181 | 553.79 | 850.00 |  |
+| 1562 | Expert | It Takes Two To Tango | Van Clan Tame / fan:lldb-99 | 576.36 | 850.00 |  |
+| 1563 | Expert | Make a Best - Click Time | KillerMasters Lemmings 1 Havoc / fan:lldb-509 | 583.69 | 850.00 |  |
+| 1564 | Expert | Floaters Away! | cLemmings Tricky / fan:lldb-527 | 589.55 | 850.00 |  |
+| 1565 | Expert | Be Careful... | Lemmings Plus DOS Project Mild / fan:lldb-551 | 583.08 | 850.00 |  |
+| 1566 | Expert | Wall of Wisdom | Lemmings Plus DOS Project Danger / fan:lldb-554 | 606.61 | 850.00 |  |
+| 1567 | Expert | The Shaft (Part 2) | ISteve04 / fan:lldb-24 | 605.45 | 850.00 |  |
+| 1568 | Expert | And then there were another four | Conway Challenges 2 / fan:lldb-264 | 600.18 | 850.00 |  |
+| 1569 | Expert | Hold them back | CPs Level Pack / fan:lldb-472 | 625.39 | 850.00 |  |
+| 1570 | Expert | Free Lemmings | Oh No More cLemmings Tame / fan:lldb-530 | 620.59 | 850.00 |  |
+| 1571 | Expert | The Graveyard | Lemmings Plus DOS Project Mild / fan:lldb-551 | 633.39 | 850.00 |  |
+| 1572 | Expert | Double Lemmings | KillerMasters Lemmings 2 Tame / fan:lldb-510 | 631.46 | 850.00 |  |
+| 1573 | Expert | Remember where you find them! | Ji Hoons Lemmings Remake Heaven / fan:lldb-547 | 659.90 | 850.00 |  |

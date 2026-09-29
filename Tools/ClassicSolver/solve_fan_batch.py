@@ -24,6 +24,7 @@ def main():
     parser.add_argument("--save-partials", action="store_true")
     parser.add_argument("--max-levels", type=int, default=0)
     parser.add_argument("--order", choices=("hash", "score", "near-win"), default="hash")
+    parser.add_argument("--include-structural", action="store_true")
     args = parser.parse_args()
     if args.rate is not None and not 1 <= args.rate <= 99:
         parser.error("--rate must be between 1 and 99")
@@ -75,7 +76,8 @@ def main():
         return item["initialHash"] or ""
     for row in sorted(rows, key=ordering):
         if (row["official"] or not row["playable"] or row["profile"]["confidence"] != "low"
-                or identity(row) in verified_identities or identity(row) in structural_identities):
+                or identity(row) in verified_identities
+                or (identity(row) in structural_identities and not args.include_structural)):
             continue
         digest = row["initialHash"]
         old = previous.get(identity(row))

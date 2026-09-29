@@ -49,7 +49,12 @@ extension Score {
         let exits = game.configuration.exits
         let field = DistanceFields.shared.field(for: game.configuration)
         func toExit(_ x: Int, _ y: Int) -> Int {
-            let straight = exits.map { abs(x - ($0.x + $0.width / 2)) + abs(y - ($0.y + $0.height / 2)) }.min() ?? 0
+            let distances = exits.map { exit -> Int in
+                let centreX = exit.x + exit.width / 2
+                let centreY = exit.y + exit.height / 2
+                return abs(x - centreX) + abs(y - centreY)
+            }
+            let straight = distances.min() ?? 0
             return field.distance(x: x, y: y, fallback: straight)
         }
         let entrance = game.configuration.entrance

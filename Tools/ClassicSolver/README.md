@@ -16,6 +16,9 @@ The beam search is bounded. An `UNSOLVED` result means that it found no winning
 route within the chosen search limits. It does not prove that a level is
 impossible. Do not count an attempt as a scored level until
 `ExpandFanEvidence` produces a winning profile and replay.
+When an exit is separated from the lemmings by solid terrain, the distance
+estimate uses geometric distance until an open route exists. This lets the
+search keep Builder and digging candidates that can cross the barrier.
 
 Use `--fallback N` and `--refire N` to test shorter decision intervals in a
 batch. The batch ledger records both values so a new setting gets its own
@@ -29,8 +32,11 @@ an untested range without repeating earlier shifts. Feed the candidate folder
 to `ExpandFanEvidence`, then run strict exact-level replay verification before
 adding any win to the ledger.
 
-Use `--golems-objects` only for fan-level compatibility research. It activates
-all 32 object slots, as the pinned Golems assembly does. The default retains
-the DOS rule for official levels and existing replay evidence. A route found
-under this option needs a matching fan runtime and fresh difficulty audit
-before it can enter the ledger.
+The default fan runtime activates all 32 object slots when the DOS rule would
+leave the level without a functional exit. Official levels keep the DOS rule.
+Use `--include-structural` for a batch that retests previously blocked levels
+after a native rule changes. Check every resulting candidate on its exact
+bundled level before adding a score.
+Use `--golems-objects` to test all 32 slots on other fan levels as a separate
+compatibility probe. A route found under that override needs a matching fan
+runtime and fresh difficulty audit before it can enter the ledger.

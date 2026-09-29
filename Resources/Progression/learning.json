@@ -50570,6 +50570,42 @@
     {
       "concepts" : [
         "basher",
+        "builder",
+        "climber",
+        "digger",
+        "floater",
+        "miner",
+        "release-rate-manipulation"
+      ],
+      "demand" : 790.5,
+      "entry" : {
+        "catalogueRevision" : "1.2-runtime-v2",
+        "id" : "8AC1D19F-DD5D-9D29-49FB-A266B4DE73A4",
+        "identity" : {
+          "engine" : "classic",
+          "levelID" : "TWPAK06.dat#9",
+          "packID" : "fan:lldb-308"
+        },
+        "levelNameSnapshot" : "Me, Myself And Ice",
+        "levelNumberSnapshot" : 10,
+        "packNameSnapshot" : "TWPAK06",
+        "sourceRevision" : "634bb4055b04c58b26970644f70b184a97987bd613cbb3b497d73dacf925a13c"
+      },
+      "focus" : "Combine: Basher + Builder",
+      "intrinsicDemand" : 790.5,
+      "introduced" : [
+
+      ],
+      "needsSupport" : false,
+      "preparationGaps" : [
+
+      ],
+      "score" : 514.1325272331154,
+      "stage" : "Expert"
+    },
+    {
+      "concepts" : [
+        "basher",
         "blocker",
         "builder",
         "climber",

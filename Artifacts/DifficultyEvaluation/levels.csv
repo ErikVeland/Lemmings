@@ -520,7 +520,7 @@ Classic fan,fan:lldb-170,Giga pack 08.dat#9,1 for the money 2 for the show,89.5,
 Classic fan,fan:lldb-171,Giga pack 09.dat#0,Ice staion tsunami,75.25,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-171,Giga pack 09.dat#1,IM C.O.L.D.,56.17,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-171,Giga pack 09.dat#2,Frozen in the airport,81.21,low,,no verified win,not independently checked,bounded search or metadata only,
-Classic fan,fan:lldb-171,Giga pack 09.dat#3,To the life boats,112.06,low,,no verified win,not independently checked,no functional exit,Exit object in inactive slot(s) 21
+Classic fan,fan:lldb-171,Giga pack 09.dat#3,To the life boats,112.06,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-171,Giga pack 09.dat#4,The land of the lemming,104.8,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-171,Giga pack 09.dat#5,"Save a friend,get a friend",81.5,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-171,Giga pack 09.dat#6,Good housekeeping,114.46,low,,no verified win,not independently checked,bounded search or metadata only,
@@ -794,7 +794,7 @@ Classic fan,fan:lldb-194,ClamSpamXmas10.dat#1,Wall hacks,77,low,,no verified win
 Classic fan,fan:lldb-194,ClamSpamXmas10.dat#2,A.T. on a shoestring,75.25,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-194,ClamSpamXmas10.dat#3,Oh... Christmas tree.,72.15,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-195,finpak01.DAT#0,Magic Wishing Wells,87.06,low,,no verified win,not independently checked,bounded search or metadata only,
-Classic fan,fan:lldb-195,finpak01.DAT#1,A little bit too short?,80.5,low,,no verified win,not independently checked,no functional exit,Exit object in inactive slot(s) 29
+Classic fan,fan:lldb-195,finpak01.DAT#1,A little bit too short?,80.5,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-195,finpak01.DAT#2,Fiery Depths,104.8,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-195,finpak01.DAT#3,The Lazy Lemming,69,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-195,finpak01.DAT#4,Follow the big red arrow,110.83,low,,no verified win,not independently checked,bounded search or metadata only,
@@ -1156,7 +1156,7 @@ Classic fan,fan:lldb-225,ANTHPCK5.DAT#0,The wall of death,264.37,medium,6ba1b10c
 Classic fan,fan:lldb-225,ANTHPCK5.DAT#1,The delivery service,102,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-225,ANTHPCK5.DAT#2,The quick and the dead,448.75,medium,24b0046a697e4b1d99b284f84af74950876c1692723cf61dee884136b75b8054,verified win,not independently checked,replay verified,
 Classic fan,fan:lldb-225,ANTHPCK5.DAT#3,Scaffolding,113.57,low,,no verified win,not independently checked,bounded search or metadata only,
-Classic fan,fan:lldb-225,ANTHPCK5.DAT#4,The holy path,109.65,low,,no verified win,not independently checked,no functional exit,Exit object in inactive slot(s) 17
+Classic fan,fan:lldb-225,ANTHPCK5.DAT#4,The holy path,109.65,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-225,ANTHPCK5.DAT#5,Alexander Lemming,105.81,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-225,ANTHPCK5.DAT#6,Tunneling under,300.59,medium,8b350629c725282e68334e66c26d1b6df6a3eab11eb8ab9932fb56479681c309,verified win,not independently checked,replay verified,
 Classic fan,fan:lldb-225,ANTHPCK5.DAT#7,Waste High!,578.72,medium,b13faac78f2b9f83ec5ea965db99d3b42cb896bfacf294e5e1c8a602ea2dde7b,verified win,not independently checked,replay verified,
@@ -1288,12 +1288,12 @@ Classic fan,fan:lldb-237,JEFFPCK3.DAT#2,Lemming Symphony,102.44,low,,no verified
 Classic fan,fan:lldb-237,JEFFPCK3.DAT#3,The Golden Chain,113.85,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-237,JEFFPCK3.DAT#4,Beware the Exit,115.9,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-237,JEFFPCK3.DAT#5,Timing's the Lem,71.8,low,,no verified win,not independently checked,bounded search or metadata only,
-Classic fan,fan:lldb-237,JEFFPCK3.DAT#6,Volcano!!!,96.34,low,,no verified win,not independently checked,no functional exit,Exit object in inactive slot(s) 23
+Classic fan,fan:lldb-237,JEFFPCK3.DAT#6,Volcano!!!,96.34,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-237,JEFFPCK3.DAT#7,Upside-down Exit??,106.5,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-237,JEFFPCK3.DAT#8,I Love Lemmings,357.13,medium,4b69a2454c4d18bab03cc0d621950d6e202eb028472e76c661aa9181c846786a,verified win,not independently checked,replay verified,
 Classic fan,fan:lldb-237,JEFFPCK3.DAT#9,The Crystal Net,96.5,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-238,JEFFPCK4.DAT#0,Amo Te Tredain,116.49,low,,no verified win,not independently checked,bounded search or metadata only,
-Classic fan,fan:lldb-238,JEFFPCK4.DAT#1,The Frozen River,90.9,low,,no verified win,not independently checked,no functional exit,Exit object in inactive slot(s) 22
+Classic fan,fan:lldb-238,JEFFPCK4.DAT#1,The Frozen River,90.9,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-238,JEFFPCK4.DAT#2,"Up, Across & Down",68.88,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-238,JEFFPCK4.DAT#3,We All Mine Down,70.75,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-238,JEFFPCK4.DAT#4,It's Hero Time Again!,114.5,low,,no verified win,not independently checked,bounded search or metadata only,
@@ -1304,7 +1304,7 @@ Classic fan,fan:lldb-238,JEFFPCK4.DAT#8,Swiggly Wiggly Lemmly,87.47,low,,no veri
 Classic fan,fan:lldb-238,JEFFPCK4.DAT#9,One Must Die...,267.79,high,612797552970a112e7d6bec52e7531a4f61ab199963ad7194550f4f09dca9685,verified win,not independently checked,replay verified,
 Classic fan,fan:lldb-239,JEFFPCK5.DAT#0,An 'Easy' Trek,72.15,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-239,JEFFPCK5.DAT#1,Bomb Combo Colony,42.44,low,,no verified win,not independently checked,bounded search or metadata only,
-Classic fan,fan:lldb-239,JEFFPCK5.DAT#2,Ring-Round-the-Lemming,96.07,low,,no verified win,not independently checked,no functional exit,Exit object in inactive slot(s) 28
+Classic fan,fan:lldb-239,JEFFPCK5.DAT#2,Ring-Round-the-Lemming,96.07,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-239,JEFFPCK5.DAT#3,Let's Get Wet,100.38,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-239,JEFFPCK5.DAT#4,No Time to Toy Around,115.09,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-239,JEFFPCK5.DAT#5,"Go Undercover, Agent Lemming",89.5,low,,no verified win,not independently checked,bounded search or metadata only,
@@ -1355,7 +1355,7 @@ Classic fan,fan:lldb-242,JOHNPACK.DAT#9,Unused blank generic level,2.86,high,563
 Classic fan,fan:lldb-243,LARSPACK.DAT#0,Thanx level ...,439.75,medium,361837de159b09753f18d41f75afb4c49a2787372712c62580669a742f8584b2,verified win,not independently checked,replay verified,
 Classic fan,fan:lldb-243,LARSPACK.DAT#1,Warm-up exercise,358.49,medium,b13e88a40f539987af93b4b0073e2445d25619866b94846e6da9fe3d76d5b6fc,verified win,not independently checked,replay verified,
 Classic fan,fan:lldb-243,LARSPACK.DAT#2,Lets go to hell,335.85,medium,c99b048740343028a9b7d76177aec4c7f309f2d33bc4e37316dde5f4e8e28378,verified win,not independently checked,replay verified,
-Classic fan,fan:lldb-243,LARSPACK.DAT#3,The rock,90.9,low,,no verified win,not independently checked,no functional exit,Exit object in inactive slot(s) 25
+Classic fan,fan:lldb-243,LARSPACK.DAT#3,The rock,90.9,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-243,LARSPACK.DAT#4,Untitled - Rocky teeth cave ?,290.29,medium,c385cc468234f0cd0262cad9bf57ea7f220132abed77012e2709d33112bb03ab,verified win,not independently checked,replay verified,
 Classic fan,fan:lldb-243,LARSPACK.DAT#5,Crystal cave,349.67,medium,67b147d012e9d373cd0b2aeecf0a280022c935de19655be8007d3d9c4eb4b388,verified win,not independently checked,replay verified,
 Classic fan,fan:lldb-243,LARSPACK.DAT#6,Unused blank generic level,2.86,high,56336e3748f1959f040da7f09808ff50102f68f1288f0d0aa09a4dc8dcd72e16,verified win,not independently checked,replay verified,
@@ -1587,7 +1587,7 @@ Classic fan,fan:lldb-266,CRISFN02.dat#1,Lemming hell,312.69,medium,c255225bd1da3
 Classic fan,fan:lldb-266,CRISFN02.dat#2,Poles to exit,164.04,medium,846816760ef527d5dd9c414a4ffa2f05e8f1d7b13b1b18c49abcf7a2e17fe453,verified win,not independently checked,replay verified,
 Classic fan,fan:lldb-266,CRISFN02.dat#3,"Industry ""Hanger""",390.4,medium,0b647a41fed72622d3ae2cea664e4d9035be9b50910c6b04dc8a40f2f828aff0,verified win,not independently checked,replay verified,
 Classic fan,fan:lldb-266,CRISFN02.dat#4,Everyone turn right!,72.15,low,,no verified win,not independently checked,bounded search or metadata only,
-Classic fan,fan:lldb-266,CRISFN02.dat#5,Gloomy bridgers,93.24,low,,no verified win,not independently checked,no functional exit,Exit object in inactive slot(s) 20
+Classic fan,fan:lldb-266,CRISFN02.dat#5,Gloomy bridgers,93.24,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-266,CRISFN02.dat#6,Groups in danger,73.82,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-266,CRISFN02.dat#7,"Volcano ""Villarrica""",86.36,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-266,CRISFN02.dat#8,In need for help,81.2,low,,no verified win,not independently checked,bounded search or metadata only,
@@ -1922,17 +1922,17 @@ Classic fan,fan:lldb-297,JUANJO7B.DAT#1,63. Logical level3 (updated),95.75,low,,
 Classic fan,fan:lldb-298,LEMERINewlvls.dat#0,LemEdit generated Level,58.09,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-298,LEMERINewlvls.dat#1,test01,73.25,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-298,LEMERINewlvls.dat#2,LemEdit generated Level,46,low,,no verified win,not independently checked,bounded search or metadata only,
-Classic fan,fan:lldb-298,LEMERINewlvls.dat#3,LemEdit generated Level,82.44,low,,no verified win,not independently checked,no functional exit,Exit object in inactive slot(s) 25
+Classic fan,fan:lldb-298,LEMERINewlvls.dat#3,LemEdit generated Level,82.44,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-298,LEMERINewlvls.dat#4,LemEdit generated Level,71.5,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-298,LEMERINewlvls.dat#5,LemEdit generated Level,73.25,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-298,LEMERINewlvls.dat#6,LemEdit generated Level,81.62,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-298,LEMERINewlvls.dat#7,LemEdit generated Level,71.5,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-298,LEMERINewlvls.dat#8,LemEdit generated Level,71.5,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-299,LEMERITraplvls.dat#0,trapsville,54.18,low,,no verified win,not independently checked,bounded search or metadata only,
-Classic fan,fan:lldb-299,LEMERITraplvls.dat#1,Lemmings 2: The traps,66.86,low,,no verified win,not independently checked,no functional exit,Exit object in inactive slot(s) 18
+Classic fan,fan:lldb-299,LEMERITraplvls.dat#1,Lemmings 2: The traps,66.86,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-299,LEMERITraplvls.dat#2,Twisty Traps,80.59,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-299,LEMERITraplvls.dat#3,The fiery shaft,90.43,low,,no verified win,not independently checked,bounded search or metadata only,
-Classic fan,fan:lldb-299,LEMERITraplvls.dat#4,Trapworks,88.24,low,,no verified win,not independently checked,no functional exit,"Exit object in inactive slot(s) 21, 23"
+Classic fan,fan:lldb-299,LEMERITraplvls.dat#4,Trapworks,88.24,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-299,LEMERITraplvls.dat#5,Mines of DOOM,68.88,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-299,LEMERITraplvls.dat#6,The Lemmpress,59.03,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-299,LEMERITraplvls.dat#7,This should be a doddle: Part 2,69.94,low,,no verified win,not independently checked,bounded search or metadata only,
@@ -1962,7 +1962,7 @@ Classic fan,fan:lldb-300,Pacpack1.dat#1,Weight Lifting,90.25,low,,no verified wi
 Classic fan,fan:lldb-300,Pacpack1.dat#2,The Lemmites I,66.56,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-300,Pacpack1.dat#3,Crazy Climber I,69,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-300,Pacpack1.dat#4,Bomb the Base,86.12,low,,no verified win,not independently checked,bounded search or metadata only,
-Classic fan,fan:lldb-300,Pacpack1.dat#5,Snow Initials,67.25,low,,no verified win,not independently checked,no functional exit,Exit object in inactive slot(s) 30
+Classic fan,fan:lldb-300,Pacpack1.dat#5,Snow Initials,67.25,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-300,Pacpack1.dat#6,The Lemmites II,61.12,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-300,Pacpack1.dat#7,Crazy Climber II,83,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-300,Pacpack1.dat#8,Abracadabra...,81.5,low,,no verified win,not independently checked,bounded search or metadata only,
@@ -2046,7 +2046,7 @@ Classic fan,fan:lldb-308,TWPAK06.dat#5,Lemmings: Fireworks Simulator,209.54,medi
 Classic fan,fan:lldb-308,TWPAK06.dat#6,Lemmings: Smoothie Maker,80.81,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-308,TWPAK06.dat#7,Hellp!!,68.19,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-308,TWPAK06.dat#8,Lemmy Out Of 'Ere,112.88,low,,no verified win,not independently checked,bounded search or metadata only,
-Classic fan,fan:lldb-308,TWPAK06.dat#9,"Me, Myself And Ice",106.2,low,,no verified win,not independently checked,no functional exit,Exit object in inactive slot(s) 19
+Classic fan,fan:lldb-308,TWPAK06.dat#9,"Me, Myself And Ice",514.13,medium,7fecca8fedde7b55790fa6b3209eb469290ab6bd7b4e18dbe3d29a0d88c2def1,verified win,not independently checked,replay verified,
 Classic fan,fan:lldb-309,TWPAK07.dat#0,Lemming Proof Fence,114.5,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-309,TWPAK07.dat#1,Montizuma's Revenge,95.93,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-309,TWPAK07.dat#2,Three Lemmings Sitting On A Wall,66.08,low,,no verified win,not independently checked,bounded search or metadata only,
@@ -2139,7 +2139,7 @@ Classic fan,fan:lldb-316,twbestof.dat#8,Are You Burning?,64.95,low,,no verified 
 Classic fan,fan:lldb-316,twbestof.dat#9,...And Out Come The Bashers,69.12,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-317,joem1.dat#0,The Armoury,84,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-317,joem1.dat#1,Unholy Cathedral,95.28,low,,no verified win,not independently checked,bounded search or metadata only,
-Classic fan,fan:lldb-317,joem1.dat#2,Bloodfalls,102.31,low,,no verified win,not independently checked,no functional exit,Exit object in inactive slot(s) 23
+Classic fan,fan:lldb-317,joem1.dat#2,Bloodfalls,102.31,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-317,joem1.dat#3,Land of Destruction,206.99,medium,f11be340efd8372ab18e519fdad284305b1e0577b8d24aa9000ae6a4929e4db5,verified win,not independently checked,replay verified,
 Classic fan,fan:lldb-317,joem1.dat#4,Think Fast!,69,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-317,joem1.dat#5,Disaster Area,111.03,low,,no verified win,not independently checked,bounded search or metadata only,
@@ -2314,7 +2314,7 @@ Classic fan,fan:lldb-332,JM06.DAT#6,Land of Pharaohs,112.06,low,,no verified win
 Classic fan,fan:lldb-332,JM06.DAT#7,No Man's Kind,106.08,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-332,JM06.DAT#8,There's a way to get to it,71.9,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-332,JM06.DAT#9,Task Force,100.8,low,,no verified win,not independently checked,bounded search or metadata only,
-Classic fan,fan:lldb-333,JM07.DAT#0,Deep Inside,89,low,,no verified win,not independently checked,no functional exit,Exit object in inactive slot(s) 22
+Classic fan,fan:lldb-333,JM07.DAT#0,Deep Inside,89,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-333,JM07.DAT#1,Careless clicking causes death,90.75,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-333,JM07.DAT#2,Flatline,73.62,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-333,JM07.DAT#4,Just Four,106.5,low,,no verified win,not independently checked,bounded search or metadata only,
@@ -2459,7 +2459,7 @@ Classic fan,fan:lldb-346,MARSHY02.DAT#5,The bridges have been cut off,95.34,low,
 Classic fan,fan:lldb-346,MARSHY02.DAT#6,This is a builder-less level,94,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-346,MARSHY02.DAT#7,Above us is a tower,74.75,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-346,MARSHY02.DAT#8,Where can you spot an exit?,74.81,low,,no verified win,not independently checked,bounded search or metadata only,
-Classic fan,fan:lldb-346,MARSHY02.DAT#9,Disused Land,87.75,low,,no verified win,not independently checked,no functional exit,Exit object in inactive slot(s) 23
+Classic fan,fan:lldb-346,MARSHY02.DAT#9,Disused Land,87.75,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-347,MARSHY03.DAT#0,Let's go to the moon,92,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-347,MARSHY03.DAT#1,Go out for a walk?,79.5,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-347,MARSHY03.DAT#2,Salvage Boat,83.25,low,,no verified win,not independently checked,bounded search or metadata only,
@@ -2574,13 +2574,13 @@ Classic fan,fan:lldb-357,Modlvls.dat#7,No Rendezvous at the Mountain,94.62,low,,
 Classic fan,fan:lldb-357,Modlvls.dat#8,The Cascade: Part II,422.21,medium,bf4fe310580391e44aabaf6d56ae3f205e46db733567dcdda5bcce311644ec93,verified win,not independently checked,replay verified,
 Classic fan,fan:lldb-357,Modlvls.dat#9,Spilled Pea Soup,87.47,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-358,oldbutgo.dat#0,Peers of Steel,116.49,low,,no verified win,not independently checked,bounded search or metadata only,
-Classic fan,fan:lldb-358,oldbutgo.dat#1,Twined serpants think alike,106.38,low,,no verified win,not independently checked,no functional exit,Exit object in inactive slot(s) 27
+Classic fan,fan:lldb-358,oldbutgo.dat#1,Twined serpants think alike,106.38,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-358,oldbutgo.dat#2,steterint max,113.87,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-358,oldbutgo.dat#3,FOR THE D'NI!,90.25,low,,no verified win,not independently checked,bounded search or metadata only,
-Classic fan,fan:lldb-358,oldbutgo.dat#4,Who hired that lousy builder?,110.44,low,,no verified win,not independently checked,no functional exit,Exit object in inactive slot(s) 22
+Classic fan,fan:lldb-358,oldbutgo.dat#4,Who hired that lousy builder?,110.44,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-358,oldbutgo.dat#5,Agh! More 1 pixel gaps!,82.93,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-358,oldbutgo.dat#6,Halfway to Lemzoberranzan,82.78,low,,no verified win,not independently checked,bounded search or metadata only,
-Classic fan,fan:lldb-358,oldbutgo.dat#7,Lemzoberranzan,86.84,low,,no verified win,not independently checked,no functional exit,Exit object in inactive slot(s) 29
+Classic fan,fan:lldb-358,oldbutgo.dat#7,Lemzoberranzan,86.84,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-358,oldbutgo.dat#8,Solo 1: It's full of stars!,106.5,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-358,oldbutgo.dat#9,Solo 2: Is that... The pyrimid?,70.75,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-359,wade.DAT#0,The Serpent's Lair,116.81,low,,no verified win,not independently checked,bounded search or metadata only,
@@ -3177,12 +3177,12 @@ Classic fan,fan:lldb-416,Which Way Should we Go.ini#-1,Which Way Should we Go.in
 Classic fan,fan:lldb-417,bigqtwo.dat#0,"It's your skull, Buckaroo!",59,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-417,bigqtwo.dat#1,"Down, Down, Down, and Down!",83.43,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-417,bigqtwo.dat#2,Oh! No! Reflectors!,58.88,low,,no verified win,not independently checked,bounded search or metadata only,
-Classic fan,fan:lldb-417,bigqtwo.dat#3,The Cystel Calls!,93.4,low,,no verified win,not independently checked,no functional exit,Exit object in inactive slot(s) 22
+Classic fan,fan:lldb-417,bigqtwo.dat#3,The Cystel Calls!,93.4,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-417,bigqtwo.dat#4,SO NEAR AND YET SO FAR!,65.25,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-417,bigqtwo.dat#5,Two islands and two lakes,368.68,medium,920d589c60100f7def80d4d461f61cd5cf163f10e226f723d66c6d3c0137b410,verified win,not independently checked,replay verified,
-Classic fan,fan:lldb-417,bigqtwo.dat#6,The big land before the steel!,71.67,low,,no verified win,not independently checked,no functional exit,Exit object in inactive slot(s) 26
+Classic fan,fan:lldb-417,bigqtwo.dat#6,The big land before the steel!,71.67,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-417,bigqtwo.dat#7,STEEL MAN COMES CALLIN' AT DOOR,85.44,low,,no verified win,not independently checked,bounded search or metadata only,
-Classic fan,fan:lldb-417,bigqtwo.dat#8,I put my hands... On my head...,79.5,low,,no verified win,not independently checked,no functional exit,Exit object in inactive slot(s) 30
+Classic fan,fan:lldb-417,bigqtwo.dat#8,I put my hands... On my head...,79.5,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-417,bigqtwo.dat#9,"Crystel, Steel, and Teamwork.",71.19,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-418,bigqthree.dat#0,Escape from the Watergate Hotel,64.34,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-419,Dehodson.dat#0,Pillars of character,394.41,medium,8d1a9120e5eef00f2b3b2958bec4aa6f7fbb05824c5b8ec88d1b089129fc238c,verified win,not independently checked,replay verified,
@@ -3210,7 +3210,7 @@ Classic fan,fan:lldb-424,andi2.dat#6,Unused blank generic level,2.86,high,56336e
 Classic fan,fan:lldb-424,andi2.dat#7,Unused blank generic level,2.86,high,56336e3748f1959f040da7f09808ff50102f68f1288f0d0aa09a4dc8dcd72e16,verified win,not independently checked,replay verified,
 Classic fan,fan:lldb-424,andi2.dat#8,Unused blank generic level,2.86,high,56336e3748f1959f040da7f09808ff50102f68f1288f0d0aa09a4dc8dcd72e16,verified win,not independently checked,replay verified,
 Classic fan,fan:lldb-424,andi2.dat#9,Unused blank generic level,2.86,high,56336e3748f1959f040da7f09808ff50102f68f1288f0d0aa09a4dc8dcd72e16,verified win,not independently checked,replay verified,
-Classic fan,fan:lldb-425,Badpack.dat#0,and 90's for all!,90.71,low,,no verified win,not independently checked,no functional exit,Exit object in inactive slot(s) 16
+Classic fan,fan:lldb-425,Badpack.dat#0,and 90's for all!,90.71,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-426,GM06.dat#0,The Great Migration '06,98.38,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-427,Neato.dat#0,The Sword,263.1,medium,c85be21a6187b2e6bcf85a94929a665510d1f9549151d3b98c1d3918e2f15cf8,verified win,not independently checked,replay verified,
 Classic fan,fan:lldb-428,Bipolar.dat#0,Bipolar Maniac,101.19,low,,no verified win,not independently checked,bounded search or metadata only,
@@ -3310,7 +3310,7 @@ Classic fan,fan:lldb-451,insulfrogextra.dat#0,Tunnelers,59,low,,no verified win,
 Classic fan,fan:lldb-452,isuotherlevels.dat#0,Cannonball,97.94,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-452,isuotherlevels.dat#1,Minerminute,62.62,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-453,Jazzem.dat#0,Lemmings at Tiffany's,295.1,medium,3dec230a101b09466d800b7a6512041dd7c83a9376dd68f2c9b95ca776886d5b,verified win,not independently checked,replay verified,
-Classic fan,fan:lldb-454,JMGM01.dat#0,New Life,115.68,low,,no verified win,not independently checked,no functional exit,Exit object in inactive slot(s) 23
+Classic fan,fan:lldb-454,JMGM01.dat#0,New Life,115.68,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-454,JMGM01.dat#1,No use for a steel area,72.81,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-454,JMGM01.dat#2,Episode 2: Torment,111.84,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-454,JMGM01.dat#3,Back in Hell,239.66,medium,3ff7a7d60d25c69cf6af70afc1600b033667f9cf3c644463b96906369e0ee8d3,verified win,not independently checked,replay verified,
@@ -3402,7 +3402,7 @@ Classic fan,fan:lldb-467,Web3.dat#0,Web 3.0,114.5,low,,no verified win,not indep
 Classic fan,fan:lldb-468,joem4.dat#0,The exit has been blocked,340.67,medium,35263f82761bad00030429b833c7c7a5a2d957ad47cc4980717a3d763f14c5b9,verified win,not independently checked,replay verified,
 Classic fan,fan:lldb-468,joem4.dat#1,The freezing cold,525.16,medium,09bded3dfd788b9e256e107490f351bc04d07ef54ed227e22b61622f780e0676,verified win,not independently checked,replay verified,
 Classic fan,fan:lldb-468,joem4.dat#2,Best be careful out there,386.85,medium,c86ccd096febc60e3d5ef2b761b7fb8c787245141dc435a94e74864d7da6bfab,verified win,not independently checked,replay verified,
-Classic fan,fan:lldb-468,joem4.dat#3,"Snow,Snow,Snow and Snow",84.08,low,,no verified win,not independently checked,no functional exit,Exit object in inactive slot(s) 22
+Classic fan,fan:lldb-468,joem4.dat#3,"Snow,Snow,Snow and Snow",84.08,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-468,joem4.dat#4,Bash and build,114.5,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-468,joem4.dat#5,Only two minutes left,70.75,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-468,joem4.dat#6,C for ur self,372.14,medium,b93c469d6d44bd4a0b5390386540998e554220e3d1728ed4a86d9dc975e438ca,verified win,not independently checked,replay verified,
@@ -5661,7 +5661,7 @@ Classic fan,fan:lldb-63,Lemmy556 Statues.dat#10,Lem statues 3,94.31,low,,no veri
 Classic fan,fan:lldb-63,Lemmy556 Statues.dat#2,Dog from hell!!!!!!!!!!,98.55,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-63,Lemmy556 Statues.dat#3,Groke!!!!!,102.59,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-63,Lemmy556 Statues.dat#4,Groke!!!!!SUPER!!!!!!!!,102.59,low,,no verified win,not independently checked,bounded search or metadata only,
-Classic fan,fan:lldb-63,Lemmy556 Statues.dat#5,Nessy needs you!,102.59,low,,no verified win,not independently checked,no functional exit,Exit object in inactive slot(s) 16
+Classic fan,fan:lldb-63,Lemmy556 Statues.dat#5,Nessy needs you!,102.59,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-63,Lemmy556 Statues.dat#6,Lemon lime,83.56,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-63,Lemmy556 Statues.dat#7,Pacman,81.5,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-63,Lemmy556 Statues.dat#8,Lem statue,113.69,low,,no verified win,not independently checked,bounded search or metadata only,
@@ -5712,7 +5712,7 @@ Classic fan,fan:lldb-68,Lemmy556 More levels.dat#11,Traps and Lemmings,112.07,lo
 Classic fan,fan:lldb-68,Lemmy556 More levels.dat#12,Trippy...,38.84,high,595f8b2a2a25bb9f23eb1f578b56bfa6de69be0a8ffdd95918f2459276a86391,verified win,not independently checked,replay verified,
 Classic fan,fan:lldb-68,Lemmy556 More levels.dat#13,Now you use bombs and builders,52.75,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-68,Lemmy556 More levels.dat#14,Lemmings san!Use builder!,62.75,low,,no verified win,not independently checked,bounded search or metadata only,
-Classic fan,fan:lldb-68,Lemmy556 More levels.dat#15,Water in menacing???,99.65,low,,no verified win,not independently checked,no functional exit,Exit object in inactive slot(s) 21
+Classic fan,fan:lldb-68,Lemmy556 More levels.dat#15,Water in menacing???,99.65,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-68,Lemmy556 More levels.dat#2,team working,104.19,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-68,Lemmy556 More levels.dat#3,Simple lemminga level,190.18,medium,854767933dd29c6de260e2513dcd3be632db37e0676a0b437efd2b4c2c7ddd33,verified win,not independently checked,replay verified,
 Classic fan,fan:lldb-68,Lemmy556 More levels.dat#4,Oh God!This is slow!,86.05,low,,no verified win,not independently checked,bounded search or metadata only,
@@ -5885,7 +5885,7 @@ Classic fan,fan:lldb-86,epic01.dat#5,Up a Roof Lesson 2,67.12,low,,no verified w
 Classic fan,fan:lldb-86,epic01.dat#6,Menacing II:  The Revenge,56.21,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-86,epic01.dat#7,Mount Pillar,101.59,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-86,epic01.dat#8,SPLAT!,90.9,low,,no verified win,not independently checked,bounded search or metadata only,
-Classic fan,fan:lldb-86,epic01.dat#9,The Lemmings Plead for Help,87.75,low,,no verified win,not independently checked,no functional exit,Exit object in inactive slot(s) 17
+Classic fan,fan:lldb-86,epic01.dat#9,The Lemmings Plead for Help,87.75,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-87,FleechPack(v1).dat#0,Four Lemmings And A Funeral,106.38,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-87,FleechPack(v1).dat#1,Hypothermia,105.69,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-87,FleechPack(v1).dat#2,How To Kill A Lemming,105.79,low,,no verified win,not independently checked,bounded search or metadata only,
@@ -5973,7 +5973,7 @@ Classic fan,fan:lldb-94,Timpack7.dat#8,What the Hell?,101.19,low,,no verified wi
 Classic fan,fan:lldb-94,Timpack7.dat#9,...Is All You Need,93.59,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-95,Timpack8.dat#0,Tee'd Off,96.34,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-95,Timpack8.dat#1,Mount Everest,113.69,low,,no verified win,not independently checked,bounded search or metadata only,
-Classic fan,fan:lldb-95,Timpack8.dat#2,Danger Lemmings,91.49,low,,no verified win,not independently checked,no functional exit,Exit object in inactive slot(s) 21
+Classic fan,fan:lldb-95,Timpack8.dat#2,Danger Lemmings,91.49,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-95,Timpack8.dat#3,All The Lonely Lemmings,70.75,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-95,Timpack8.dat#4,Thunder Bolts Of Lightning,98.14,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-95,Timpack8.dat#5,Burn In Hell,96.34,low,,no verified win,not independently checked,bounded search or metadata only,
@@ -6006,7 +6006,7 @@ Classic fan,fan:lldb-98,Timpack11.dat#1,Stairway To Nowhere,134.12,medium,32e214
 Classic fan,fan:lldb-98,Timpack11.dat#2,Its A Long Way Down,74.44,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-98,Timpack11.dat#3,Legend Of The Triforce,80.54,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-98,Timpack11.dat#4,Boxed In,83.69,low,,no verified win,not independently checked,bounded search or metadata only,
-Classic fan,fan:lldb-98,Timpack11.dat#5,Alphabet Soup,88.28,low,,no verified win,not independently checked,no functional exit,Exit object in inactive slot(s) 21
+Classic fan,fan:lldb-98,Timpack11.dat#5,Alphabet Soup,88.28,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-98,Timpack11.dat#6,Lems In The Sky With Diamonds,106.09,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-98,Timpack11.dat#7,Spiderlem,66.97,low,,no verified win,not independently checked,bounded search or metadata only,
 Classic fan,fan:lldb-99,TimpackA.dat#0,Merry Lemmings,149.84,medium,8e096cc0455b12ffbd129887cbc64d3bb25e4a5084c42baed211603621b499ae,verified win,not independently checked,replay verified,

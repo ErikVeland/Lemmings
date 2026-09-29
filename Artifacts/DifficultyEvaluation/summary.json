@@ -1,6 +1,6 @@
 {
   "fanLevels": 6020,
-  "generatedAt": "2026-09-29T13:14:10.615894+00:00",
+  "generatedAt": "2026-09-29T14:08:32.619679+00:00",
   "independentPhysicsParityVerified": 0,
   "levels": 6814,
   "neoLemmixLevels": 794,
@@ -18,16 +18,16 @@
     ".build/full-difficulty-evaluation/neolemmix/report.json": "2a053b068d8e9235072c9fcec08a0015dab330d2626d6c14d2c699e3a021ac8d",
     ".build/neolemmix-passive-evaluation/results.json": "6a24277c41feaeec683138abbb5d84b87e29904a05b4f5a217ff59263634b501",
     "Artifacts/ClassicProgression/audit.json": "efa53badcaa0862e4b7a285e72be2c5b232e741c42eba63d1c1c0655e72cd4d9",
-    "Artifacts/DifficultyEvaluation/classic-structural-limits.json": "fcce5cddb24a55ad05c4826e034721731ecd002dbc03376e330353d6dc9db4b1",
-    "Artifacts/LearningJourney/fan-evidence.json": "480dd5dcff7cfb5e7e1732f42375118177ea08faf7add5129a4f8ca8265ed0f6",
+    "Artifacts/DifficultyEvaluation/classic-structural-limits.json": "b624056d1f15e5dacd1408f6d526d22e4455758919c2bf80116780a713c28a55",
+    "Artifacts/LearningJourney/fan-evidence.json": "f4cb2e6d629fb96b72d08a5d12dfacf43c15fe49e449971fb46b85cc6763d342",
     "Content/LevelPacks/packs.json": "70dfc22a5a682c9b3536f2e3bfe64e551f45d315722a76bf6994a868eabb68b1"
   },
   "structuralExcessRequirementFan": 1,
-  "structuralNoExitFan": 33,
-  "unverifiedFan": 3926,
+  "structuralNoExitFan": 3,
+  "unverifiedFan": 3925,
   "unverifiedNeoLemmix": 472,
-  "unverifiedNonOfficial": 3929,
+  "unverifiedNonOfficial": 3928,
   "unverifiedOfficialConversions": 469,
-  "verifiedFanWins": 2094,
+  "verifiedFanWins": 2095,
   "verifiedNeoLemmixWins": 322
 }

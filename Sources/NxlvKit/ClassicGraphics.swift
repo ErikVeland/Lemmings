@@ -490,7 +490,9 @@ public enum ClassicObjectSemantics: String, Codable, Sendable {
 
     var interactiveObjectSlotLimit: Int { self == .golems ? 32 : 16 }
 
-    /// Activate Golems slots when the DOS rule leaves a fan level without an exit.
+    /**
+     * Activates Golems slots when the DOS rule leaves a fan level without an exit.
+     */
     public static func forFanLevel(_ level: ClassicLevel, groundSet: ClassicGroundSet) -> Self {
         let exits = level.objects.filter {
             groundSet.objects[$0.id]?.triggerEffect == ClassicDOSObjectEffect.exit.rawValue

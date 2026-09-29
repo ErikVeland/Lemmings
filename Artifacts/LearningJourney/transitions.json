@@ -41277,12 +41277,39 @@
   },
   {
     "componentChanges": {
-      "concurrencyBurden": 600,
-      "constraintPressure": -299.2783719548425,
-      "deductionComplexityProxy": 750,
+      "concurrencyBurden": 0,
+      "constraintPressure": 41.710239651416146,
+      "deductionComplexityProxy": 735,
       "executionPrecision": -918.9982961889068,
       "solutionComplexity": 521.3117409353088,
-      "techniqueBurden": 195
+      "techniqueBurden": 130
+    },
+    "curriculumDemand": 790.5,
+    "intrinsicDemand": 790.5,
+    "introduced": [],
+    "level": "Me, Myself And Ice",
+    "needsSupport": false,
+    "newComponentHighs": {
+      "concurrencyBurden": 0,
+      "constraintPressure": 0,
+      "deductionComplexityProxy": 20,
+      "executionPrecision": 0,
+      "solutionComplexity": 0,
+      "techniqueBurden": 0
+    },
+    "preparationGaps": [],
+    "rawScore": 514.1325272331154,
+    "stage": "Expert",
+    "step": 1529
+  },
+  {
+    "componentChanges": {
+      "concurrencyBurden": 600,
+      "constraintPressure": -340.98861160625864,
+      "deductionComplexityProxy": 15,
+      "executionPrecision": 0,
+      "solutionComplexity": 0,
+      "techniqueBurden": 65
     },
     "curriculumDemand": 803.25,
     "intrinsicDemand": 803.25,
@@ -41292,7 +41319,7 @@
     "newComponentHighs": {
       "concurrencyBurden": 0,
       "constraintPressure": 0,
-      "deductionComplexityProxy": 35,
+      "deductionComplexityProxy": 15,
       "executionPrecision": 0,
       "solutionComplexity": 0,
       "techniqueBurden": 0
@@ -41300,7 +41327,7 @@
     "preparationGaps": [],
     "rawScore": 565.1040077243018,
     "stage": "Expert",
-    "step": 1529
+    "step": 1530
   },
   {
     "componentChanges": {
@@ -41327,7 +41354,7 @@
     "preparationGaps": [],
     "rawScore": 572.6619414900092,
     "stage": "Expert",
-    "step": 1530
+    "step": 1531
   },
   {
     "componentChanges": {
@@ -41354,7 +41381,7 @@
     "preparationGaps": [],
     "rawScore": 569.3221655174585,
     "stage": "Expert",
-    "step": 1531
+    "step": 1532
   },
   {
     "componentChanges": {
@@ -41381,7 +41408,7 @@
     "preparationGaps": [],
     "rawScore": 565.099945169618,
     "stage": "Expert",
-    "step": 1532
+    "step": 1533
   },
   {
     "componentChanges": {
@@ -41408,7 +41435,7 @@
     "preparationGaps": [],
     "rawScore": 581.1712921312869,
     "stage": "Expert",
-    "step": 1533
+    "step": 1534
   },
   {
     "componentChanges": {
@@ -41435,7 +41462,7 @@
     "preparationGaps": [],
     "rawScore": 572.6245620316198,
     "stage": "Expert",
-    "step": 1534
+    "step": 1535
   },
   {
     "componentChanges": {
@@ -41462,7 +41489,7 @@
     "preparationGaps": [],
     "rawScore": 587.1826542913894,
     "stage": "Expert",
-    "step": 1535
+    "step": 1536
   },
   {
     "componentChanges": {
@@ -41489,7 +41516,7 @@
     "preparationGaps": [],
     "rawScore": 596.4303349673203,
     "stage": "Expert",
-    "step": 1536
+    "step": 1537
   },
   {
     "componentChanges": {
@@ -41516,7 +41543,7 @@
     "preparationGaps": [],
     "rawScore": 650.9766339869282,
     "stage": "Expert",
-    "step": 1537
+    "step": 1538
   },
   {
     "componentChanges": {
@@ -41543,7 +41570,7 @@
     "preparationGaps": [],
     "rawScore": 251.13565233358466,
     "stage": "Expert",
-    "step": 1538
+    "step": 1539
   },
   {
     "componentChanges": {
@@ -41570,7 +41597,7 @@
     "preparationGaps": [],
     "rawScore": 332.860487877716,
     "stage": "Expert",
-    "step": 1539
+    "step": 1540
   },
   {
     "componentChanges": {
@@ -41597,7 +41624,7 @@
     "preparationGaps": [],
     "rawScore": 344.4177883068729,
     "stage": "Expert",
-    "step": 1540
+    "step": 1541
   },
   {
     "componentChanges": {
@@ -41624,7 +41651,7 @@
     "preparationGaps": [],
     "rawScore": 362.81592829391917,
     "stage": "Expert",
-    "step": 1541
+    "step": 1542
   },
   {
     "componentChanges": {
@@ -41651,7 +41678,7 @@
     "preparationGaps": [],
     "rawScore": 366.30744866202974,
     "stage": "Expert",
-    "step": 1542
+    "step": 1543
   },
   {
     "componentChanges": {
@@ -41678,7 +41705,7 @@
     "preparationGaps": [],
     "rawScore": 394.02180337694017,
     "stage": "Expert",
-    "step": 1543
+    "step": 1544
   },
   {
     "componentChanges": {
@@ -41705,7 +41732,7 @@
     "preparationGaps": [],
     "rawScore": 391.5562739651755,
     "stage": "Expert",
-    "step": 1544
+    "step": 1545
   },
   {
     "componentChanges": {
@@ -41732,7 +41759,7 @@
     "preparationGaps": [],
     "rawScore": 393.9927969639469,
     "stage": "Expert",
-    "step": 1545
+    "step": 1546
   },
   {
     "componentChanges": {
@@ -41759,7 +41786,7 @@
     "preparationGaps": [],
     "rawScore": 407.67663286004057,
     "stage": "Expert",
-    "step": 1546
+    "step": 1547
   },
   {
     "componentChanges": {
@@ -41786,7 +41813,7 @@
     "preparationGaps": [],
     "rawScore": 427.4696470588235,
     "stage": "Expert",
-    "step": 1547
+    "step": 1548
   },
   {
     "componentChanges": {
@@ -41813,7 +41840,7 @@
     "preparationGaps": [],
     "rawScore": 450.3695294117647,
     "stage": "Expert",
-    "step": 1548
+    "step": 1549
   },
   {
     "componentChanges": {
@@ -41840,7 +41867,7 @@
     "preparationGaps": [],
     "rawScore": 442.34913632119515,
     "stage": "Expert",
-    "step": 1549
+    "step": 1550
   },
   {
     "componentChanges": {
@@ -41867,7 +41894,7 @@
     "preparationGaps": [],
     "rawScore": 441.86206481484857,
     "stage": "Expert",
-    "step": 1550
+    "step": 1551
   },
   {
     "componentChanges": {
@@ -41894,7 +41921,7 @@
     "preparationGaps": [],
     "rawScore": 474.6492347494891,
     "stage": "Expert",
-    "step": 1551
+    "step": 1552
   },
   {
     "componentChanges": {
@@ -41921,7 +41948,7 @@
     "preparationGaps": [],
     "rawScore": 466.96003172162614,
     "stage": "Expert",
-    "step": 1552
+    "step": 1553
   },
   {
     "componentChanges": {
@@ -41948,7 +41975,7 @@
     "preparationGaps": [],
     "rawScore": 478.385253231117,
     "stage": "Expert",
-    "step": 1553
+    "step": 1554
   },
   {
     "componentChanges": {
@@ -41975,7 +42002,7 @@
     "preparationGaps": [],
     "rawScore": 479.06085525103794,
     "stage": "Expert",
-    "step": 1554
+    "step": 1555
   },
   {
     "componentChanges": {
@@ -42002,7 +42029,7 @@
     "preparationGaps": [],
     "rawScore": 506.07459138041185,
     "stage": "Expert",
-    "step": 1555
+    "step": 1556
   },
   {
     "componentChanges": {
@@ -42029,7 +42056,7 @@
     "preparationGaps": [],
     "rawScore": 537.9972313213974,
     "stage": "Expert",
-    "step": 1556
+    "step": 1557
   },
   {
     "componentChanges": {
@@ -42056,7 +42083,7 @@
     "preparationGaps": [],
     "rawScore": 543.9205859169316,
     "stage": "Expert",
-    "step": 1557
+    "step": 1558
   },
   {
     "componentChanges": {
@@ -42083,7 +42110,7 @@
     "preparationGaps": [],
     "rawScore": 543.2042745098039,
     "stage": "Expert",
-    "step": 1558
+    "step": 1559
   },
   {
     "componentChanges": {
@@ -42110,7 +42137,7 @@
     "preparationGaps": [],
     "rawScore": 555.3545751633986,
     "stage": "Expert",
-    "step": 1559
+    "step": 1560
   },
   {
     "componentChanges": {
@@ -42137,7 +42164,7 @@
     "preparationGaps": [],
     "rawScore": 553.7944798200971,
     "stage": "Expert",
-    "step": 1560
+    "step": 1561
   },
   {
     "componentChanges": {
@@ -42164,7 +42191,7 @@
     "preparationGaps": [],
     "rawScore": 576.3552829131653,
     "stage": "Expert",
-    "step": 1561
+    "step": 1562
   },
   {
     "componentChanges": {
@@ -42191,7 +42218,7 @@
     "preparationGaps": [],
     "rawScore": 583.6852941176471,
     "stage": "Expert",
-    "step": 1562
+    "step": 1563
   },
   {
     "componentChanges": {
@@ -42218,7 +42245,7 @@
     "preparationGaps": [],
     "rawScore": 589.5531372549019,
     "stage": "Expert",
-    "step": 1563
+    "step": 1564
   },
   {
     "componentChanges": {
@@ -42245,7 +42272,7 @@
     "preparationGaps": [],
     "rawScore": 583.0843660130719,
     "stage": "Expert",
-    "step": 1564
+    "step": 1565
   },
   {
     "componentChanges": {
@@ -42272,7 +42299,7 @@
     "preparationGaps": [],
     "rawScore": 606.6095163398693,
     "stage": "Expert",
-    "step": 1565
+    "step": 1566
   },
   {
     "componentChanges": {
@@ -42299,7 +42326,7 @@
     "preparationGaps": [],
     "rawScore": 605.4514849137223,
     "stage": "Expert",
-    "step": 1566
+    "step": 1567
   },
   {
     "componentChanges": {
@@ -42326,7 +42353,7 @@
     "preparationGaps": [],
     "rawScore": 600.181939870049,
     "stage": "Expert",
-    "step": 1567
+    "step": 1568
   },
   {
     "componentChanges": {
@@ -42353,7 +42380,7 @@
     "preparationGaps": [],
     "rawScore": 625.3931764705882,
     "stage": "Expert",
-    "step": 1568
+    "step": 1569
   },
   {
     "componentChanges": {
@@ -42380,7 +42407,7 @@
     "preparationGaps": [],
     "rawScore": 620.5866862745098,
     "stage": "Expert",
-    "step": 1569
+    "step": 1570
   },
   {
     "componentChanges": {
@@ -42407,7 +42434,7 @@
     "preparationGaps": [],
     "rawScore": 633.392705882353,
     "stage": "Expert",
-    "step": 1570
+    "step": 1571
   },
   {
     "componentChanges": {
@@ -42434,7 +42461,7 @@
     "preparationGaps": [],
     "rawScore": 631.4636078431372,
     "stage": "Expert",
-    "step": 1571
+    "step": 1572
   },
   {
     "componentChanges": {
@@ -42461,6 +42488,6 @@
     "preparationGaps": [],
     "rawScore": 659.8979215686275,
     "stage": "Expert",
-    "step": 1572
+    "step": 1573
   }
 ]

@@ -139752,6 +139752,138 @@
   {
     "entry": {
       "catalogueRevision": "1.2-runtime-v2",
+      "id": "8AC1D19F-DD5D-9D29-49FB-A266B4DE73A4",
+      "identity": {
+        "engine": "classic",
+        "levelID": "TWPAK06.dat#9",
+        "packID": "fan:lldb-308"
+      },
+      "levelNameSnapshot": "Me, Myself And Ice",
+      "levelNumberSnapshot": 10,
+      "packNameSnapshot": "TWPAK06",
+      "sourceRevision": "634bb4055b04c58b26970644f70b184a97987bd613cbb3b497d73dacf925a13c"
+    },
+    "initialHash": "1961c22be2a461370cebf0bf4ded60bae8956c6f8847eb2d9c7cd2643bc97c1a",
+    "official": false,
+    "order": 3102,
+    "playable": true,
+    "profile": {
+      "components": {
+        "concurrencyBurden": 0,
+        "constraintPressure": 761.7886710239651,
+        "deductionComplexityProxy": 930,
+        "executionPrecision": 0,
+        "solutionComplexity": 1000,
+        "techniqueBurden": 520
+      },
+      "confidence": "medium",
+      "criticalActions": [],
+      "detectedTechniques": [
+        "basher",
+        "builder",
+        "climber",
+        "digger",
+        "floater",
+        "miner",
+        "release-rate-manipulation"
+      ],
+      "explanation": [
+        "6 used skill types; 1 assigned workers; 24 same-worker skill changes.",
+        "Maximum concurrent worker regions: 1.",
+        "Timing probes: 10. Untested alternatives remain unknown.",
+        "Deduction is a conservative proxy. Observed techniques are not proof of necessity.",
+        "Source rank: fan:lldb-308."
+      ],
+      "key": {
+        "analyserVersion": "difficulty-2",
+        "assetsRevision": "1961c22be2a461370cebf0bf4ded60bae8956c6f8847eb2d9c7cd2643bc97c1a:probes-10",
+        "identity": {
+          "engine": "classic",
+          "levelID": "TWPAK06.dat#9",
+          "packID": "fan:lldb-308"
+        },
+        "levelRevision": "634bb4055b04c58b26970644f70b184a97987bd613cbb3b497d73dacf925a13c",
+        "replayRevision": "SHA256 digest: 7fecca8fedde7b55790fa6b3209eb469290ab6bd7b4e18dbe3d29a0d88c2def1",
+        "simulationVersion": "neolemmix-ce-2026-09-27"
+      },
+      "overallScore": 514.1325272331154,
+      "precision": {
+        "actions": [
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 1
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 2
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 3
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 4
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 5
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 6
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 7
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 8
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 9
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 10
+          }
+        ],
+        "alternativeRunCount": 0,
+        "assignmentCount": 48,
+        "completed": false,
+        "orderingOutcomes": [],
+        "runCount": 10,
+        "selectionOutcomes": []
+      },
+      "prerequisiteConcepts": [],
+      "sourceRank": "fan:lldb-308"
+    }
+  },
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
       "id": "7B7CAC2B-497A-8799-BF0D-EECCA2C4D8EB",
       "identity": {
         "engine": "classic",

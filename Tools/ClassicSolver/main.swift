@@ -77,6 +77,7 @@ func loadLevel(_ argument: String, _ index: Int) throws -> (ClassicDOSSimulation
 struct DistanceField {
     static let cell = 4
     let columns: Int, rows: Int, steps: [Int]
+    let exitCentres: [(x: Int, y: Int)]
     init(_ sim: ClassicDOSSimulation) {
         let cell = Self.cell, width = sim.terrain.width, height = sim.terrain.height
         columns = (width + cell - 1) / cell; rows = (height + cell - 1) / cell
@@ -90,6 +91,9 @@ struct DistanceField {
             open[r * columns + c] = any
         } }
         var steps = [Int](repeating: .max, count: columns * rows), queue: [Int] = []
+        exitCentres = sim.configuration.triggers.filter { $0.effect == .exit }.map {
+            (($0.bounds.x1 + $0.bounds.x2) / 2, ($0.bounds.y1 + $0.bounds.y2) / 2)
+        }
         for trigger in sim.configuration.triggers where trigger.effect == .exit {
             let b = trigger.bounds
             let i = min(rows - 1, max(0, (b.y1 + b.y2) / 2 / cell)) * columns + min(columns - 1, max(0, (b.x1 + b.x2) / 2 / cell))
@@ -115,7 +119,8 @@ struct DistanceField {
             let s = steps[(r + dr) * columns + c]
             if s != .max { return s * Self.cell }
         }
-        return Self.cell * (columns + rows) * 4
+        let unreachableBase = Self.cell * (columns + rows) * 4
+        return unreachableBase + (exitCentres.map { abs(x - $0.x) + abs(y - $0.y) }.min() ?? 0)
     }
 }
 

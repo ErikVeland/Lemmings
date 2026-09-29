@@ -132,12 +132,14 @@ remain open. See the [1.7 roadmap](1.7Roadmap.md).
 need proof. Both games also need engine-fidelity, campaign-progression, media
 and recovery evidence. Until the 1.8 gate passes, both games remain Preview.
 
-**2.0: finish physical iPhone and iPad acceptance.** The repository has a UIKit/Metal app
-target, player-owned Classic data import, direct crowd selection, pan and zoom,
-safe-area controls, interruption checkpoints and presentation-only thermal
-budgets. The shared session and checkpoint boundary covers Classic, Lemmings 2
-and Lemmings 3, but only Classic is player-facing mobile content. See the
-[2.0 mobile roadmap](2.0Roadmap.md).
+**2.0: complete physical iPhone and iPad acceptance, including launch support
+for iPhone Duo.** The repository has a UIKit/Metal app target, player-owned
+Classic data import, direct crowd selection, pan and zoom, safe-area controls,
+interruption checkpoints and presentation-only thermal budgets. The shared
+session and checkpoint boundary covers Classic, Lemmings 2 and Lemmings 3, but
+only Classic is player-facing mobile content. Duo must adapt the same session
+across its closed, open and partially folded poses. See the
+[2.0 mobile roadmap](2.0Roadmap.md) for the requirements and release gates.
 
 The GitHub iPhone and iPad Simulator matrix passes. The remaining gates are
 physical touch, audio, background, thermal, accessibility, signing and
