@@ -419,3 +419,21 @@ check(FanLevelLibrary.directoryFingerprint(URL(fileURLWithPath: plainPath)) == e
       "folder fingerprint keys files by their path inside the folder")
 check(FanLevelLibrary.directoryFingerprint(URL(fileURLWithPath: privatePath)) == expectedFingerprint,
       "a folder under /private keeps its fingerprint")
+
+let lateExitPack = root.appendingPathComponent("Content/LevelPacks/0308-TWPAK06.zip")
+let lateExitEntry = try FanLevelLibrary.validatedEntries(in: lateExitPack).first {
+  $0.file == "TWPAK06.dat" && $0.section == 9
+}!
+let (lateExitLevel, lateExitStyle) = try FanLevelLibrary.level(lateExitEntry, in: lateExitPack)
+let lateExitGround = try FanLevelLibrary.groundSet(for: lateExitLevel, styleName: lateExitStyle,
+  portsRoot: ports, pack: lateExitPack, entry: lateExitEntry)
+check(ClassicObjectSemantics.forFanLevel(lateExitLevel, groundSet: lateExitGround) == .golems,
+      "fan level with only a later exit selects all 32 object slots")
+let lateExitScene = try ClassicLevelRenderer.render(lateExitLevel, groundSet: lateExitGround,
+  objectSemantics: .forFanLevel(lateExitLevel, groundSet: lateExitGround))
+check(lateExitScene.triggers.contains { $0.effect == 1 },
+      "bundled fan level has a functional exit")
+let officialFirst = try ClassicDataSet.detect(directory: originalStyles).campaign.levels[0].level
+let officialGround = try ClassicGroundSet.load(style: officialFirst.groundStyle, from: originalStyles)
+check(ClassicObjectSemantics.forFanLevel(officialFirst, groundSet: officialGround) == .dos,
+      "level with an ordinary exit retains DOS object slots")
