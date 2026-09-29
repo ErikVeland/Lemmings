@@ -5,7 +5,7 @@ import AppKit
     static let seenKey = "WhatsNewSeenBuild"
     /// The release these notes describe. A test fails when Info.plist moves on
     /// to a new version and these notes stay behind.
-    static let notesVersion = "1.7.1"
+    static let notesVersion = "1.7.2"
     static let subtitle = "The NeoLemmix update"
     static let sections = [
         ("NeoLemmix levels included", "788 NeoLemmix levels ship with the game. Add your own packs and styles from Level Select."),
