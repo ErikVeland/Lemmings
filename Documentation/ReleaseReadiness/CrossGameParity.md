@@ -22,6 +22,8 @@ This requirement is also recorded in `AGENTS.md`.
 | New-level handover | Briefing | Briefing | Paused play |
 | Forward single step | Yes | Yes, added in this pass | Yes |
 | Rewind/backward step | Classic DOS history | Not implemented | Not implemented |
+| Release rate keys (− / +, double-tap for minimum / maximum) | Yes, also fan levels and NeoLemmix | No release rate in L2 | No release rate in L3 |
+| N nuke toggle, press again to undo | Yes, X remains an alias | Yes, no double-click needed from the key | No nuke in L3 |
 | Tiered hints | Checked hints and general coaching | General coaching | General coaching |
 | Automatic completed input routes | Classic DOS, including fan levels | Existing recorder | Not implemented |
 | Verified solution playback | Matching bundled routes only | Not implemented | Not implemented |

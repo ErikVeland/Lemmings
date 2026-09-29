@@ -274,6 +274,7 @@ import NxlvKit
         keyboard.movePointer = { [weak self] dx, dy in self?.canvas.moveControllerPointer(dx, dy) }
         keyboard.panCamera = { [weak self] dx, dy in self?.canvas.controllerPan(dx, dy) }
         keyboard.menuActive = { [weak self] in self?.screen == .menu && self?.game != nil }
+        keyboard.nukeToggle = { [weak self] in self?.toggleNukeFromKeyboard() }
         keyboard.menuKey = { [weak self] key in
             guard let self else { return }
             if key == "\u{1b}" { self.playFromMenu() } else { self.key(key) }
@@ -828,6 +829,28 @@ import NxlvKit
             paused = false; updateUserMusicPause(); show(.playing); playTribeMusic(); refreshGame()
         } else { prepareBriefing() }
     }
+    private func undoNuke() {
+        guard let beforeNuke else { return }
+        usedRewind = true; undoCount += 1
+        lastFanInput = nil; lastAimInput = nil
+        recoveryInputs = Array(recoveryInputs.prefix(beforeNukeInputCount))
+        game = beforeNuke; assignmentFocus.rewind(to: beforeNuke.tick); canvas.assignmentHighlight.clear(); self.beforeNuke = nil; sounds.silence(); accumulator = 0
+    }
+    private func activateNuke() {
+        beforeNukeInputCount = recoveryInputs.count
+        beforeNuke = game; nukeCount += 1
+        canvas.startCountdown.cancel()
+        performRecoveryInput(.nuke); paused = false; updateUserMusicPause(); fanSelected = false; accumulator = 0
+    }
+    /// N is a deliberate key press, so it needs no double-click like the panel button.
+    private func toggleNukeFromKeyboard() {
+        guard screen == .playing, let game, !game.isComplete, beforeNuke != nil || !game.isNuking else { return }
+        nukeGesture.reset()
+        if beforeNuke != nil { undoNuke() } else { activateNuke() }
+        if paused { releasePointerInput(); saveCheckpoint(immediately: true) }
+        else if !fanSelected { performRecoveryInput(.fan(x:0,y:0,active:false)) }
+        refreshGame()
+    }
     private func panelAction(_ slot: Int, clickCount: Int = 1, time: TimeInterval = ProcessInfo.processInfo.systemUptime) {
         guard (0..<12).contains(slot), screen == .playing, game?.isComplete == false else { return }
         if let click = Lemmings2SoundRequest.panel(slot: slot) { sounds.play([click]) }
@@ -848,17 +871,7 @@ import NxlvKit
                 if wasPaused { discardRewindOrigin() }
             case .fan: fanSelected.toggle()
             case .nuke:
-                if nukeAction == .undo, let beforeNuke {
-                    usedRewind = true; undoCount += 1
-                    lastFanInput = nil; lastAimInput = nil
-                    recoveryInputs = Array(recoveryInputs.prefix(beforeNukeInputCount))
-                    game = beforeNuke; assignmentFocus.rewind(to: beforeNuke.tick); canvas.assignmentHighlight.clear(); self.beforeNuke = nil; sounds.silence(); accumulator = 0
-                } else if nukeAction == .activate {
-                    beforeNukeInputCount = recoveryInputs.count
-                    beforeNuke = game; nukeCount += 1
-                    canvas.startCountdown.cancel()
-                    performRecoveryInput(.nuke); paused = false; updateUserMusicPause(); fanSelected = false; accumulator = 0
-                }
+                if nukeAction == .undo { undoNuke() } else if nukeAction == .activate { activateNuke() }
             case .fastForward: speedControl.tap(at: time, clickCount: clickCount)
             case nil: break
             }

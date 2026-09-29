@@ -88,6 +88,8 @@ protocol GameSession: AnyObject {
   func assign(skillIndex: Int, to lemmingID: Int) -> String?
   func assignmentState(skillIndex: Int, to lemmingID: Int) -> AssignmentState
   func adjustRate(by delta: Int)
+  /// Moves the release rate to its maximum or minimum in one step.
+  func setRateLimit(maximum: Bool)
   func nuke()
   var canUndoNuke: Bool { get }
   func undoNuke()
@@ -323,6 +325,8 @@ final class ClassicSession: GameSession {
   }
 
   func adjustRate(by delta: Int) { history.setReleaseRate(simulation.releaseRate + delta) }
+  // The simulation clamps to the level's own rate and 99.
+  func setRateLimit(maximum: Bool) { history.setReleaseRate(maximum ? 99 : 0) }
   var canUndoNuke: Bool { beforeNuke != nil }
   func nuke() {
     guard !simulation.isComplete, !simulation.isNuking, beforeNuke == nil else { return }
@@ -575,6 +579,15 @@ final class NeoLemmixSession: GameSession {
   func adjustRate(by delta: Int) {
     recoveryInputs.append(.init(tick: currentTick, action: .rate(delta: delta)))
     _ = simulation.enqueue(.setSpawnInterval(simulation.spawnInterval + delta))
+  }
+
+  /// The highest release rate is the shortest spawn interval. Record the exact
+  /// step, so the input log replays the same change.
+  func setRateLimit(maximum: Bool) {
+    guard !simulation.configuration.spawnIntervalLocked else { return }
+    let target = maximum ? NeoLemmixRules.minimumSpawnInterval : simulation.configuration.spawnInterval
+    let delta = target - simulation.spawnInterval
+    if delta != 0 { adjustRate(by: delta) }
   }
 
   var canUndoNuke: Bool { beforeNuke != nil }

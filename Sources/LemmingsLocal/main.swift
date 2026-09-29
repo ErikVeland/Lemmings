@@ -7476,6 +7476,16 @@ let achievementProgressKey = "ClassicAchievementProgress"
       let adjustment = self.session?.rateLabel == "Interval" ? -delta : delta
       self.handle(adjustment < 0 ? .rateDown : .rateUp)
     }
+    keyboard.rateLimit = { [weak self] direction in
+      guard let self, let session = self.session else { return }
+      session.setRateLimit(maximum: direction > 0)
+      self.playfield.needsDisplay = true; self.panel.needsDisplay = true
+      self.updateStatus()
+    }
+    keyboard.nukeToggle = { [weak self] in
+      guard let self, self.phase == .playing, self.session?.isComplete == false else { return }
+      self.handle(.nuke)
+    }
     keyboard.centre = { [weak self] entrance in
       guard let self, let session = self.session, let x = entrance ? session.entranceX : session.exitX else { return }
       if let y = entrance ? session.entranceY : session.exitY {
@@ -7655,7 +7665,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
         self.flow = current
         self.renderScreen()
       }
-    case "n": self.nextLevel()
+    // While playing, N is the nuke toggle. Elsewhere it still opens the next level.
+    case "n": if self.phase == .playing { self.handle(.nuke) } else { self.nextLevel() }
     case "r": self.retry()
     case " ":
       if self.phase == .playing { self.togglePause() } else { self.advancePhase() }

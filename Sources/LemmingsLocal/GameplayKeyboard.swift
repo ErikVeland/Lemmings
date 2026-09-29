@@ -82,6 +82,11 @@ import NxlvKit
     var cycle: (Int) -> Void = { _ in }
     var centre: (Bool) -> Void = { _ in }
     var rate: ((Int) -> Void)?
+    /// A double tap of + or - moves the release rate to its maximum or minimum.
+    var rateLimit: ((Int) -> Void)?
+    /// N nukes, or undoes the nuke while that is still possible.
+    var nukeToggle: (() -> Void)?
+    private var rateTap = DoubleTap()
     var focusUnassigned: (Int) -> Void = { _ in }
     var focusLast: () -> Void = {}
     var repeatAssignment: () -> Void = {}
@@ -213,7 +218,20 @@ import NxlvKit
             showHelp()
             return nil
         }
-        if ["-", "−", "+", "="].contains(key), let rate { rate(key == "-" || key == "−" ? -1 : 1); return nil }
+        if ["-", "−", "+", "="].contains(key), let rate {
+            let direction = key == "-" || key == "−" ? -1 : 1
+            if rateTap.press(direction < 0 ? "-" : "+", at: now, interval: NSEvent.doubleClickInterval,
+                             isRepeat: event.isARepeat), let rateLimit {
+                rateLimit(direction)
+            } else {
+                rate(direction)
+            }
+            return nil
+        }
+        if event.charactersIgnoringModifiers?.lowercased() == "n", let nukeToggle {
+            if !event.isARepeat { nukeToggle() }
+            return nil
+        }
         return event
     }
     var controllerAvailable: Bool {
@@ -286,7 +304,11 @@ import NxlvKit
         } else { sections.append("Modern keyboard shortcuts are off. Number keys select skills.") }
         sections.append("Escape: save run and return to main menu\n?: controls help")
         if hints != nil { sections.append("H / F1: level goals and tiered hints") }
-        if rate != nil { sections.append("− / +: release rate") }
+        if rate != nil {
+            sections.append("− / +: release rate"
+                + (rateLimit != nil ? "\nDouble-tap − / +: minimum / maximum release rate" : ""))
+        }
+        if nukeToggle != nil { sections.append("N: nuke; press again to undo the nuke") }
         if controllerEnabled() {
             sections.append(ControllerDevicePresentation.help(mapping: controllerMappings(),
                 variableSpeed: speedControl?.variableEnabled == true, tapSpeed: controllerTapSpeed(),

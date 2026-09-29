@@ -837,6 +837,13 @@ extension AppDelegate {
       skills: [.walker: .infinite, .builder: .finite(5)])
     let initial = try NeoLemmixSimulation(terrain: terrain, configuration: config)
     func fresh() -> NeoLemmixSession { NeoLemmixSession(simulation: initial, width: 512, height: 96) }
+    let limited = fresh()
+    limited.setRateLimit(maximum: true); limited.tick()
+    try check(limited.simulation.spawnInterval == NeoLemmixRules.minimumSpawnInterval,
+      "Double-tap + did not reach the shortest NeoLemmix spawn interval")
+    limited.setRateLimit(maximum: false); limited.tick()
+    try check(limited.simulation.spawnInterval == initial.configuration.spawnInterval,
+      "Double-tap - did not return to the level's own spawn interval")
     let original = fresh()
     for _ in 0..<12 { original.tick() }
     try check(original.assign(skillIndex: 1, to: 0) == nil, "Neo fixture could not assign builder")
@@ -1729,6 +1736,28 @@ extension AppDelegate {
     _ = keyboard.handle(key(.keyDown, 14)); _ = keyboard.handle(key(.keyUp, 14.1))
     _ = keyboard.handle(key(.keyDown, 14.2)); _ = keyboard.handle(key(.keyUp, 14.25))
     try check(!controller.isFast, "Rapid F restarted a stopped game")
+    var rateSteps: [Int] = [], rateLimits: [Int] = [], nukes = 0
+    keyboard.rate = { rateSteps.append($0) }
+    keyboard.rateLimit = { rateLimits.append($0) }
+    keyboard.nukeToggle = { nukes += 1 }
+    let interval = NSEvent.doubleClickInterval
+    _ = keyboard.handle(key(.keyDown, 20, text: "=", code: 24))
+    _ = keyboard.handle(key(.keyDown, 20 + interval / 2, text: "=", code: 24))
+    try check(rateSteps == [1] && rateLimits == [1], "Double-tap = did not set the maximum release rate")
+    _ = keyboard.handle(key(.keyDown, 21, text: "-", code: 27))
+    _ = keyboard.handle(key(.keyDown, 21.05, text: "-", code: 27, repeatKey: true))
+    _ = keyboard.handle(key(.keyDown, 21.1, text: "-", code: 27, repeatKey: true))
+    try check(rateSteps == [1, -1, -1, -1] && rateLimits == [1], "Holding - did not step the release rate one at a time")
+    _ = keyboard.handle(key(.keyDown, 22, text: "-", code: 27))
+    _ = keyboard.handle(key(.keyDown, 22 + interval * 2, text: "-", code: 27))
+    try check(rateLimits == [1], "A slow second - press set the minimum release rate")
+    _ = keyboard.handle(key(.keyDown, 30, text: "-", code: 27))
+    _ = keyboard.handle(key(.keyDown, 30 + interval / 2, text: "-", code: 27))
+    try check(rateLimits == [1, -1], "Double-tap - did not set the minimum release rate")
+    try check(keyboard.handle(key(.keyDown, 31, text: "n", code: 45)) == nil, "N leaked past the nuke toggle")
+    _ = keyboard.handle(key(.keyDown, 31.05, text: "n", code: 45, repeatKey: true))
+    try check(nukes == 1, "N did not toggle the nuke exactly once per press")
+    keyboard.rate = nil; keyboard.rateLimit = nil; keyboard.nukeToggle = nil
     _ = keyboard.handle(key(.keyDown, 15, text: "}", code: 30, flags: .shift))
     try check(controller.target == 2 && controller.state.cruise == 2, "Shift+] did not apply the selected tier")
     _ = keyboard.handle(key(.keyDown, 16, text: "|", code: 42, flags: .shift))
@@ -2019,6 +2048,7 @@ private final class FinalTickSession: GameSession {
   func assign(skillIndex: Int, to lemmingID: Int) -> String? { nil }
   func assignmentState(skillIndex: Int, to lemmingID: Int) -> AssignmentState { .unavailable }
   func adjustRate(by delta: Int) {}
+  func setRateLimit(maximum: Bool) {}
   func nuke() {}
   let canUndoNuke = false
   func undoNuke() {}
