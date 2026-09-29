@@ -17,3 +17,10 @@ and Lemmings 3. Check all three engines when changing controls, turn ownership,
 retry/continue actions, handovers, hints or saved-run navigation. Reuse shared
 controls and flows. Keep handovers paused until the player is ready. Record
 engine-specific limits and validation gaps instead of silently omitting support.
+
+# Transitory write-ups
+
+Keep posts, forum threads, social media drafts and other one-off write-ups out
+of the repository. Write them to `~/Documents/Ultimate Lemmings/Posts`. The
+repository keeps only material that stays current: feature docs, roadmaps, the
+current release notes and release evidence that a gate or roadmap cites.

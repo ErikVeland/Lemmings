@@ -108,20 +108,18 @@ what lets the release notes above be trusted rather than taken on faith.
 ## Where the project stands right now
 
 The official Classic campaign closed at 352/352 on 22 September 2026. The
-[macOS 1.5 build 50 distribution record](ReleaseReadiness/1.5Build50Distribution.md)
-records the published package and a successful update from 1.2 build 41.
-The 1.6 build 51 source has [local validation](ReleaseReadiness/1.6LocalValidation.md),
-but its distribution gates remain open. The 1.3 development milestone added
+current public release is 1.7.1 build 54. The
+[1.7 distribution record](ReleaseReadiness/1.7Build53Distribution.md) covers the
+1.7.0 package, its gates and the live update feed. The 1.3 development milestone added
 an iPhone and iPad target. Its source and recorded Simulator gates pass.
 Physical-device, VoiceOver, thermal, signing and distribution evidence remain
 open before the planned 2.0 mobile release.
 
 ## Roadmap
 
-**1.6: finish the Mac music release.** The local candidate includes adaptive
-music, optional soundtrack libraries, level skips and session changes. Verify
-public library downloads, then freeze, sign, notarise and test the actual app
-update. See the [1.6 validation record](ReleaseReadiness/1.6LocalValidation.md).
+**1.6 and 1.7: shipped.** 1.6.0 added adaptive music, optional soundtrack
+libraries, level skips and saved sessions. 1.7.0 added the bundled NeoLemmix
+packs and the Oh My! All Lemmings! learning journey. 1.7.1 fixed journey sessions.
 
 **1.7: close NeoLemmix compatibility.** The source recognises NeoLemmix
 levels, styles and the current section-based replay format. The development

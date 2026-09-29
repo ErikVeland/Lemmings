@@ -14,14 +14,10 @@ before distributing a build.
 
 ## Download
 
-The [1.5 build 50 release](https://github.com/ErikVeland/Lemmings/releases/tag/v1.5.0)
-has a recorded public distribution and update check.
-
-The macOS 1.6 build 51 candidate has local validation. Its signed distribution
-and live update still need release checks. Read the
-[1.6 release notes](Documentation/ReleaseNotes-1.6-build51.md),
-[tester guide](Documentation/BetaTesting.md), and
-[validation record](Documentation/ReleaseReadiness/1.6LocalValidation.md).
+Download [1.7.1 build 54](https://github.com/ErikVeland/Lemmings/releases/tag/v1.7.1),
+the current public release. Installed copies update automatically. Read the
+[1.7.1 release notes](Documentation/ReleaseNotes-1.7.1-build54.md) and the
+[tester guide](Documentation/BetaTesting.md).
 
 ## Start here
 
@@ -31,7 +27,6 @@ and live update still need release checks. Read the
 - [1.7 NeoLemmix roadmap](Documentation/1.7Roadmap.md) — pinned oracle, executable gates and compatibility limits.
 - [1.8 sequel gate](Documentation/ContentUniverseRoadmap.md#18--lemmings-2-and-lemmings-3-completion) — winning routes, engine fidelity and campaign evidence.
 - [1.5 NeoLemmix source handoff](Documentation/ReleaseReadiness/1.5NeoLemmixHandoff.md) — verified source and corpus evidence, open release gates and non-claims.
-- [QoL roadmap](docs/superpowers/plans/2026-09-23-qol-roadmap.md) — target selection and rewind priorities.
 - [Precision Zoom](Documentation/PrecisionZoom.md) — Z, Shift-Z and scroll controls, earnings and retry rules.
 - [Play insights](Documentation/PlayInsights.md) — home-screen saved counts, consent and collector setup.
 - [Release scope](Documentation/ReleaseScope.md) — the meaning of Complete, Playable and Preview.
@@ -39,8 +34,7 @@ and live update still need release checks. Read the
 - [Level browser](Documentation/LevelBrowser.md) — CoverFlow controls, content boundaries and current evidence.
 - [Beta testing](Documentation/BetaTesting.md) — local package and validation procedure.
 - [Release evidence](Documentation/ReleaseReadiness/) — current gate records and manifests.
-- [1.6 local validation](Documentation/ReleaseReadiness/1.6LocalValidation.md) — current candidate checks and distribution conditions.
-- [1.2 handoff](Documentation/ReleaseReadiness/1.2DataIndependentHandoff.md) — data-independent release work and Mac checks.
+- [1.7 distribution](Documentation/ReleaseReadiness/1.7Build53Distribution.md) — the 1.7.0 release record and its gates.
 - [1.3 mobile handoff](Documentation/ReleaseReadiness/1.3MobileHandoff.md) — iOS source evidence and remaining device checks.
 - [Automatic updates](#automatic-updates) — Sparkle feed and release requirements.
 - [Music timing audit](Documentation/MusicTiming.md) — measured beats, bar estimates and DJ fallback rules.

@@ -20,9 +20,9 @@ commit the key or pass the key value as a command argument.
 
 ## Current releases
 
-Public 1.5 build 50 is recorded in [its distribution evidence](ReleaseReadiness/1.5Build50Distribution.md).
-The integrated 1.6 build 51 candidate is local. Its appcast must be published only
-with its matching signed and notarised archive.
+Public 1.7.1 build 54 is the current release. The [1.7 distribution record](ReleaseReadiness/1.7Build53Distribution.md)
+covers the 1.7.0 archives, gates and live feed. Publish an appcast only with its
+matching signed and notarised archive.
 
 ## Player experience
 

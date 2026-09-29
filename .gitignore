@@ -35,3 +35,11 @@ __pycache__/
 
 # Claude Code worktrees are their own checkouts, not content of this one.
 .claude/worktrees/
+
+# Posts and other transitory write-ups live outside the repo, in
+# ~/Documents/Ultimate Lemmings/Posts.
+*.bbcode.txt
+*BBCode*.txt
+Documentation/ForumPost-*
+Documentation/ForumThread-*
+Documentation/Threads*
