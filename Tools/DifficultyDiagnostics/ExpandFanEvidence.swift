@@ -152,7 +152,8 @@ struct RetimedFanWitness: Codable {
                     let (level, style) = try FanLevelLibrary.level(item, in: pack)
                     let ground = try FanLevelLibrary.groundSet(for: level, styleName: style, portsRoot: ports, pack: pack, entry: item)
                     let special = try FanLevelLibrary.specialGraphic(for: level, entry: item, pack: pack, portsRoot: ports)
-                    let rendered = try ClassicLevelRenderer.render(level, groundSet: ground, specialGraphic: special)
+                    let rendered = try ClassicLevelRenderer.render(level, groundSet: ground, specialGraphic: special,
+                        objectSemantics: .forFanLevel(level, groundSet: ground))
                     let initial = try ClassicDOSSimulation(level: level, renderedLevel: rendered, mainDATAssets: assets(ports.appendingPathComponent("lemmings_dos_1991-07-30")))
                     try describe(id, level, initial)
                     let hash = ClassicDOSReplayRecorder.stateHash(of: initial)
@@ -282,6 +283,48 @@ struct RetimedFanWitness: Codable {
                                 if cursor + 1 < multiCount {
                                     for position in (cursor + 1)..<multiCount {
                                         picked[position] = picked[position - 1] + 1
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if witness == nil, ProcessInfo.processInfo.environment["FAN_RELEASE_RATE_SWEEP"] == "1",
+                       level.skills.values.allSatisfy({ $0 == 0 }) {
+                        for rate in 1...99 where witness == nil {
+                            let events = [ClassicDOSReplayEvent(tick: 0, action: .releaseRate(rate), afterTick: true)]
+                            let candidate = ClassicDOSReplay(rank: id.packID,
+                                number: rows[index].entry.levelNumberSnapshot, title: level.title,
+                                initialStateHash: hash, events: events)
+                            attempts += 1
+                            if let outcome = try? ClassicDOSReplayPlayer.run(candidate,
+                                simulation: initial, verify: false), outcome.didWin {
+                                witness = ClassicDOSReplay(rank: candidate.rank, number: candidate.number,
+                                    title: candidate.title, initialStateHash: hash,
+                                    events: events, expected: outcome)
+                            }
+                        }
+                    }
+                    if witness == nil, ProcessInfo.processInfo.environment["FAN_RELEASE_RATE_CHANGE_SWEEP"] == "1",
+                       level.skills.values.allSatisfy({ $0 == 0 }) {
+                        let rates = [1, 25, 50, 75, 99]
+                        let latest = min(3_060, max(17, level.timeLimitMinutes * 1_020))
+                        for firstRate in rates where witness == nil {
+                            for switchTick in stride(from: 17, through: latest, by: 17) where witness == nil {
+                                for secondRate in rates where secondRate != firstRate && witness == nil {
+                                    let events = [
+                                        ClassicDOSReplayEvent(tick: 0, action: .releaseRate(firstRate), afterTick: true),
+                                        ClassicDOSReplayEvent(tick: switchTick,
+                                            action: .releaseRate(secondRate), afterTick: true)
+                                    ]
+                                    let candidate = ClassicDOSReplay(rank: id.packID,
+                                        number: rows[index].entry.levelNumberSnapshot, title: level.title,
+                                        initialStateHash: hash, events: events)
+                                    attempts += 1
+                                    if let outcome = try? ClassicDOSReplayPlayer.run(candidate,
+                                        simulation: initial, verify: false), outcome.didWin {
+                                        witness = ClassicDOSReplay(rank: candidate.rank, number: candidate.number,
+                                            title: candidate.title, initialStateHash: hash,
+                                            events: events, expected: outcome)
                                     }
                                 }
                             }

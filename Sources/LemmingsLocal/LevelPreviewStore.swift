@@ -563,7 +563,8 @@ private enum LevelPreviewRenderer {
             level: level,
             ground: ground,
             special: special,
-            mechanics: ClassicDOSMechanics(title: nil, rank: "Fan"))
+            mechanics: ClassicDOSMechanics(title: nil, rank: "Fan"),
+            objectSemantics: .forFanLevel(level, groundSet: ground))
         guard FanLevelLibrary.archiveMatches(pack, fingerprint: archiveFingerprint) else {
             throw LevelPreviewError.contentChanged
         }
@@ -586,12 +587,14 @@ private enum LevelPreviewRenderer {
         level: ClassicLevel,
         ground: ClassicGroundSet,
         special: ClassicSpecialGraphic?,
-        mechanics: ClassicDOSMechanics
+        mechanics: ClassicDOSMechanics,
+        objectSemantics: ClassicObjectSemantics = .dos
     ) throws -> LevelPreviewBitmap {
         let rendered = try ClassicLevelRenderer.render(
             level,
             groundSet: ground,
-            specialGraphic: special)
+            specialGraphic: special,
+            objectSemantics: objectSemantics)
         let simulation = try ClassicDOSSimulation(
             level: level,
             renderedLevel: rendered,

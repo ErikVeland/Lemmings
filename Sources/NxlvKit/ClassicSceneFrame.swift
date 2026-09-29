@@ -21,7 +21,8 @@ public enum ClassicSceneFrame {
         for object in level.objects {
             let graphic = object.graphic
             let placement = object.placement
-            let interactive = placement.slot < 16 && graphic.triggerEffect != 0
+            let interactive = placement.slot < level.interactiveObjectSlotLimit
+                && graphic.triggerEffect != 0
             let cooldown = interactive ? simulation.objectCooldown(at: triggerIndex) : 0
             if interactive { triggerIndex += 1 }
             guard !object.rgbaFrames.isEmpty else { continue }

@@ -9,7 +9,9 @@ import NxlvKit
 // space, then fewer inputs. A win is written as a live after-tick replay; the
 // strict `recorded` import in Tools/ClassicCompletion verifies it again.
 //
-// Usage: ClassicSolver DATA LEVEL OUT [--width N] [--seconds S] [--rate R] [--prefix PLAN]
+// Usage: ClassicSolver DATA LEVEL OUT [--width N] [--seconds S] [--rate R]
+//        [--fallback N] [--refire N] [--prefix PLAN] [--partial-out]
+//        [--golems-objects] for fan levels whose later object slots must be active
 // PLAN holds forced inputs as [{"tick": T, "id": N, "skill": S} or {"tick": T, "rate": R}],
 // applied after their ticks; the search fills in everything else.
 // DATA is a DOS data directory, `conversion:PORTS` for the Oh Yes! pack, or
@@ -38,7 +40,10 @@ func loadLevel(_ argument: String, _ index: Int) throws -> (ClassicDOSSimulation
             portsRoot: root.appendingPathComponent("Ports"), pack: pack, entry: item)
         let special = try FanLevelLibrary.specialGraphic(for: level, entry: item, pack: pack,
             portsRoot: root.appendingPathComponent("Ports"))
-        let rendered = try ClassicLevelRenderer.render(level, groundSet: ground, specialGraphic: special)
+        let rendered = try ClassicLevelRenderer.render(level, groundSet: ground,
+            specialGraphic: special,
+            objectSemantics: CommandLine.arguments.contains("--golems-objects")
+                ? .golems : .forFanLevel(level, groundSet: ground))
         let assets = try ClassicMainDATAssets.load(from: root.appendingPathComponent("Ports/lemmings_dos_1991-07-30"))
         let simulation = try ClassicDOSSimulation(level: level, renderedLevel: rendered, mainDATAssets: assets)
         let entry = ClassicCampaignLevel.standalone(level, rank: "fan:" + FanLevelLibrary.catalogueID(pack), number: index + 1)
@@ -224,7 +229,7 @@ func advance(_ c: inout Candidate) -> Bool {
 }
 
 var best: Candidate?, bestPartial: Candidate?, expanded = 0
-@MainActor func consider(_ c: Candidate) {
+func consider(_ c: Candidate) {
     if c.sim.isComplete && c.sim.didWin, best.map({ Score($0, field) < Score(c, field) }) ?? true { best = c }
     if bestPartial.map({ Score($0, field) < Score(c, field) }) ?? true { bestPartial = c }
 }
@@ -285,6 +290,13 @@ if let proposal, let outcome = verifiedOutcome, outcome.didWin {
     print("SOLVED \(entry.rank) \(entry.number) saved \(outcome.saved)/\(outcome.required) inputs \(replay.events.count) expanded \(expanded) in \(seconds)s")
 } else {
     let s = bestPartial?.sim
+    if args.contains("--partial-out"), let proposal {
+        let encoder = JSONEncoder(); encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+        let destination = args.contains("--hash-named")
+            ? URL(fileURLWithPath: args[3]).appendingPathComponent(proposal.initialStateHash + ".partial.json")
+            : URL(fileURLWithPath: args[3] + ".partial.json")
+        try encoder.encode(proposal).write(to: destination, options: .atomic)
+    }
     print("UNSOLVED \(entry.rank) \(entry.number) best saved \(s?.savedCount ?? 0)/\(base.configuration.requiredToSave) expanded \(expanded) in \(seconds)s")
     exit(1)
 }

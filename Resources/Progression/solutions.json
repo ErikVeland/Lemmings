@@ -4084,6 +4084,61 @@
     "rank": "fan:lldb-553",
     "title": "Lemming Entertainment Center"
   },
+  "05aaa4d34843eaf9a5c52a585b18da5357d91ed6f864230199cc243342f352b0": {
+    "events": [
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 99
+          }
+        },
+        "afterTick": true,
+        "tick": 0
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "blocker"
+          }
+        },
+        "afterTick": true,
+        "tick": 212
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 1,
+            "skill": "blocker"
+          }
+        },
+        "afterTick": true,
+        "tick": 493
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 3,
+            "skill": "blocker"
+          }
+        },
+        "afterTick": true,
+        "tick": 731
+      }
+    ],
+    "expected": {
+      "didWin": true,
+      "released": 50,
+      "required": 45,
+      "saved": 45,
+      "stateHash": "e6628adfd81b4031415156d01bfb1d131bfec7ab01902a3680df97fd8e09d738",
+      "ticks": 1020
+    },
+    "initialStateHash": "05aaa4d34843eaf9a5c52a585b18da5357d91ed6f864230199cc243342f352b0",
+    "number": 2,
+    "rank": "fan:lldb-280",
+    "title": "Look familiar? LOOK AGAIN!"
+  },
   "0609fbd4efba4db1444238e803f9c6d49585425601ff3f80821f86a6593b0400": {
     "events": [
       {
@@ -70553,6 +70608,151 @@
     "rank": "fan:lldb-553",
     "title": "Fallen"
   },
+  "31b8b5e71f2e01286e5824554a4fd1200eae6753382858e553105dfff75a65ff": {
+    "events": [
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 99
+          }
+        },
+        "afterTick": true,
+        "tick": 0
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 1,
+            "skill": "miner"
+          }
+        },
+        "afterTick": true,
+        "tick": 193
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 1,
+            "skill": "builder"
+          }
+        },
+        "afterTick": true,
+        "tick": 227
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 2,
+            "skill": "builder"
+          }
+        },
+        "afterTick": true,
+        "tick": 231
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 5,
+            "skill": "builder"
+          }
+        },
+        "afterTick": true,
+        "tick": 244
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 6,
+            "skill": "builder"
+          }
+        },
+        "afterTick": true,
+        "tick": 250
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 25,
+            "skill": "builder"
+          }
+        },
+        "afterTick": true,
+        "tick": 257
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 37,
+            "skill": "builder"
+          }
+        },
+        "afterTick": true,
+        "tick": 273
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 13,
+            "skill": "builder"
+          }
+        },
+        "afterTick": true,
+        "tick": 297
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 14,
+            "skill": "builder"
+          }
+        },
+        "afterTick": true,
+        "tick": 299
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 21,
+            "skill": "builder"
+          }
+        },
+        "afterTick": true,
+        "tick": 498
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 13,
+            "skill": "builder"
+          }
+        },
+        "afterTick": true,
+        "tick": 513
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 14,
+            "skill": "builder"
+          }
+        },
+        "afterTick": true,
+        "tick": 521
+      }
+    ],
+    "expected": {
+      "didWin": true,
+      "released": 70,
+      "required": 70,
+      "saved": 70,
+      "stateHash": "03aecadcab462a602c4492f5d850bfac6f745aa3a755ce6d6aa62f206d8bb05d",
+      "ticks": 1018
+    },
+    "initialStateHash": "31b8b5e71f2e01286e5824554a4fd1200eae6753382858e553105dfff75a65ff",
+    "number": 3,
+    "rank": "fan:lldb-331",
+    "title": "Let you down"
+  },
   "321649d825c4540f5b2f5eb9433e54e17c5e6c2a74648029172ba1e9e7d1879f": {
     "events": [
       {
@@ -72851,6 +73051,101 @@
     "number": 8,
     "rank": "fan:lldb-547",
     "title": "Diggin' to a better world"
+  },
+  "33049a4c73774b69277e168e544f1422c0cbe019ae1f3ac1b270f764a96234c8": {
+    "events": [
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 99
+          }
+        },
+        "afterTick": true,
+        "tick": 0
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "miner"
+          }
+        },
+        "afterTick": true,
+        "tick": 201
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 1,
+            "skill": "miner"
+          }
+        },
+        "afterTick": true,
+        "tick": 264
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 1,
+            "skill": "miner"
+          }
+        },
+        "afterTick": true,
+        "tick": 337
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 1,
+            "skill": "miner"
+          }
+        },
+        "afterTick": true,
+        "tick": 398
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 1,
+            "skill": "miner"
+          }
+        },
+        "afterTick": true,
+        "tick": 475
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 1,
+            "skill": "miner"
+          }
+        },
+        "afterTick": true,
+        "tick": 585
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 1,
+            "skill": "miner"
+          }
+        },
+        "afterTick": true,
+        "tick": 699
+      }
+    ],
+    "expected": {
+      "didWin": true,
+      "released": 10,
+      "required": 1,
+      "saved": 1,
+      "stateHash": "8158d990777c5ac350efd40da9f4e74b75b470f2a878c5838c40c75f8d37390b",
+      "ticks": 820
+    },
+    "initialStateHash": "33049a4c73774b69277e168e544f1422c0cbe019ae1f3ac1b270f764a96234c8",
+    "number": 2,
+    "rank": "fan:lldb-12",
+    "title": "PRACTICE: MINER"
   },
   "333739d952872f8f85bde03ee05e8d6acdc8cae4760976b817d52382bc34b3b5": {
     "events": [
@@ -109834,6 +110129,131 @@
     "rank": "fan:lldb-509",
     "title": "Emerald Mountain"
   },
+  "4c92044a669f902595b748d7bc3bb31ce2b7bb883460bc8a4319576c96c2257a": {
+    "events": [
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 99
+          }
+        },
+        "afterTick": true,
+        "tick": 0
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "bomber"
+          }
+        },
+        "afterTick": true,
+        "tick": 61
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 7,
+            "skill": "bomber"
+          }
+        },
+        "afterTick": true,
+        "tick": 183
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 6,
+            "skill": "bomber"
+          }
+        },
+        "afterTick": true,
+        "tick": 158
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 1,
+            "skill": "bomber"
+          }
+        },
+        "afterTick": true,
+        "tick": 334
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 2,
+            "skill": "bomber"
+          }
+        },
+        "afterTick": true,
+        "tick": 479
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 3,
+            "skill": "bomber"
+          }
+        },
+        "afterTick": true,
+        "tick": 651
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 4,
+            "skill": "bomber"
+          }
+        },
+        "afterTick": true,
+        "tick": 774
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 5,
+            "skill": "bomber"
+          }
+        },
+        "afterTick": true,
+        "tick": 894
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 8,
+            "skill": "bomber"
+          }
+        },
+        "afterTick": true,
+        "tick": 1011
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 9,
+            "skill": "bomber"
+          }
+        },
+        "afterTick": true,
+        "tick": 2003
+      }
+    ],
+    "expected": {
+      "didWin": true,
+      "released": 10,
+      "required": 1,
+      "saved": 3,
+      "stateHash": "5e37db4f198b3736567a8b22329a6f409a8932748bebd95343ea8e4877488438",
+      "ticks": 948
+    },
+    "initialStateHash": "4c92044a669f902595b748d7bc3bb31ce2b7bb883460bc8a4319576c96c2257a",
+    "number": 3,
+    "rank": "fan:lldb-240",
+    "title": "Training 03 - Let's Bomb!"
+  },
   "4ce84238248e5693a59b0d9a4464e7bcb50ea6d98564ebed76e585d16203b4a5": {
     "events": [
       {
@@ -132846,6 +133266,61 @@
     "number": 13,
     "rank": "fan:lldb-545",
     "title": "The Barbarous Bars"
+  },
+  "5b80517ffd5c645a5668d3e17cc635b4bf5effcd31f3e403d88102a2a736a4b2": {
+    "events": [
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 99
+          }
+        },
+        "afterTick": true,
+        "tick": 0
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        },
+        "afterTick": true,
+        "tick": 560
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 1,
+            "skill": "builder"
+          }
+        },
+        "afterTick": true,
+        "tick": 566
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 10,
+            "skill": "builder"
+          }
+        },
+        "afterTick": true,
+        "tick": 609
+      }
+    ],
+    "expected": {
+      "didWin": true,
+      "released": 80,
+      "required": 64,
+      "saved": 64,
+      "stateHash": "281a261d9182b5e6ea1fd92d78c91bde2000ac1a632ac1cf34b687d518c6ed00",
+      "ticks": 925
+    },
+    "initialStateHash": "5b80517ffd5c645a5668d3e17cc635b4bf5effcd31f3e403d88102a2a736a4b2",
+    "number": 5,
+    "rank": "fan:lldb-327",
+    "title": "Tightrope"
   },
   "5b8287e3925ded85b41b819ec8ad1c2d10bc4286782b6550144e0d4329c35441": {
     "events": [
@@ -162182,6 +162657,121 @@
     "number": 15,
     "rank": "fan:lldb-514",
     "title": "Go Behind and Look for Exit (2)"
+  },
+  "7068d400d9f0f24ca81e8a86df171244d1711d93568f9de929027f661faf89c0": {
+    "events": [
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 99
+          }
+        },
+        "afterTick": true,
+        "tick": 0
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "bomber"
+          }
+        },
+        "afterTick": true,
+        "tick": 99
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 7,
+            "skill": "bomber"
+          }
+        },
+        "afterTick": true,
+        "tick": 195
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 9,
+            "skill": "bomber"
+          }
+        },
+        "afterTick": true,
+        "tick": 197
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 4,
+            "skill": "bomber"
+          }
+        },
+        "afterTick": true,
+        "tick": 200
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 1,
+            "skill": "bomber"
+          }
+        },
+        "afterTick": true,
+        "tick": 290
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 3,
+            "skill": "bomber"
+          }
+        },
+        "afterTick": true,
+        "tick": 342
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 5,
+            "skill": "bomber"
+          }
+        },
+        "afterTick": true,
+        "tick": 445
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 6,
+            "skill": "bomber"
+          }
+        },
+        "afterTick": true,
+        "tick": 460
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 2,
+            "skill": "bomber"
+          }
+        },
+        "afterTick": true,
+        "tick": 568
+      }
+    ],
+    "expected": {
+      "didWin": true,
+      "released": 10,
+      "required": 1,
+      "saved": 1,
+      "stateHash": "5fd0c96487d53363c49578b912a6b5f2e10a4425aecc03da31f2056dbccbd938",
+      "ticks": 810
+    },
+    "initialStateHash": "7068d400d9f0f24ca81e8a86df171244d1711d93568f9de929027f661faf89c0",
+    "number": 6,
+    "rank": "fan:lldb-12",
+    "title": "PRACTICE: EXPLODER"
   },
   "707bd05f3a4fcd1e6bed7b63671c34d6253ab3052ac31f7486a1585c64801741": {
     "events": [
@@ -256650,6 +257240,51 @@
     "rank": "fan:lldb-559",
     "title": "Build and Dig"
   },
+  "b2339f6483b7d89ccfbe802cee8d9f952094ed1b7241fa88c5b3cba6491c1582": {
+    "events": [
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 99
+          }
+        },
+        "afterTick": true,
+        "tick": 0
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "bomber"
+          }
+        },
+        "afterTick": true,
+        "tick": 548
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 1,
+            "skill": "blocker"
+          }
+        },
+        "afterTick": true,
+        "tick": 631
+      }
+    ],
+    "expected": {
+      "didWin": true,
+      "released": 80,
+      "required": 79,
+      "saved": 79,
+      "stateHash": "190ba66496370db8ff044bf4d5b78d7f4f6e843e66801774da084120c4df9370",
+      "ticks": 980
+    },
+    "initialStateHash": "b2339f6483b7d89ccfbe802cee8d9f952094ed1b7241fa88c5b3cba6491c1582",
+    "number": 1,
+    "rank": "fan:lldb-182",
+    "title": "Back home"
+  },
   "b249ce03f3dab7b59c1360d87e5f6414c82e34f311b8bc135024a5b928fee2ad": {
     "events": [
       {
@@ -323135,6 +323770,41 @@
     "rank": "fan:lldb-569",
     "title": "Turn around young lemmings!"
   },
+  "e857b2833a967b42fb41f0fa03dda371b16456339bfc41f5a544a33c1d222fe9": {
+    "events": [
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 50
+          }
+        },
+        "afterTick": true,
+        "tick": 0
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 1,
+            "skill": "bomber"
+          }
+        },
+        "afterTick": true,
+        "tick": 208
+      }
+    ],
+    "expected": {
+      "didWin": true,
+      "released": 4,
+      "required": 3,
+      "saved": 3,
+      "stateHash": "33fd69e05a4f6f0c7845cf5b469d9aee27cec7b277ed1c4fe89eecd6fee8c460",
+      "ticks": 682
+    },
+    "initialStateHash": "e857b2833a967b42fb41f0fa03dda371b16456339bfc41f5a544a33c1d222fe9",
+    "number": 10,
+    "rank": "fan:lldb-238",
+    "title": "One Must Die..."
+  },
   "e85fc56b3692a1cbd368c9460591d66078ebf8899b9fa5326a76e391422b6555": {
     "events": [
       {
@@ -342169,6 +342839,51 @@
     "rank": "fan:lldb-528",
     "title": "Hunting Lemmings"
   },
+  "f593f0a7ed9e9f91506f3a6dee28ee2fd3ee42ec893bebafa73b6933fba1eb96": {
+    "events": [
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 99
+          }
+        },
+        "afterTick": true,
+        "tick": 0
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 1,
+            "skill": "bomber"
+          }
+        },
+        "afterTick": true,
+        "tick": 94
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 11,
+            "skill": "bomber"
+          }
+        },
+        "afterTick": true,
+        "tick": 427
+      }
+    ],
+    "expected": {
+      "didWin": true,
+      "released": 20,
+      "required": 10,
+      "saved": 18,
+      "stateHash": "a42f799e28f17e330660dd45f9e80e518896216b417ef74fa8a120054ce3e18d",
+      "ticks": 672
+    },
+    "initialStateHash": "f593f0a7ed9e9f91506f3a6dee28ee2fd3ee42ec893bebafa73b6933fba1eb96",
+    "number": 6,
+    "rank": "fan:lldb-308",
+    "title": "Lemmings: Fireworks Simulator"
+  },
   "f618e289b1720d750de85671ad5357b8f71cfe14b575afd639fc2d45bc9fed6d": {
     "events": [
       {
@@ -344709,6 +345424,61 @@
     "number": 12,
     "rank": "fan:lldb-217",
     "title": "The Wormery"
+  },
+  "f834be23d1809ab04dc36bd995e4333f20f0b7520868081563608444aa02d25b": {
+    "events": [
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 99
+          }
+        },
+        "afterTick": true,
+        "tick": 0
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        },
+        "afterTick": true,
+        "tick": 377
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 1,
+            "skill": "basher"
+          }
+        },
+        "afterTick": true,
+        "tick": 409
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 11,
+            "skill": "miner"
+          }
+        },
+        "afterTick": true,
+        "tick": 416
+      }
+    ],
+    "expected": {
+      "didWin": true,
+      "released": 80,
+      "required": 1,
+      "saved": 60,
+      "stateHash": "1f6a315ecdf2c1986cfaa3f7eccc0062e58d4ef1418d9b9509fa7fd58d8d1a88",
+      "ticks": 1020
+    },
+    "initialStateHash": "f834be23d1809ab04dc36bd995e4333f20f0b7520868081563608444aa02d25b",
+    "number": 20,
+    "rank": "fan:lldb-513",
+    "title": "The Chosen One"
   },
   "f85d809ca2245789321f7b63f92f94ba1c3c0df7a9d735c2988b63b44d5e2664": {
     "events": [

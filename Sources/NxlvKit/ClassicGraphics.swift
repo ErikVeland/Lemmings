@@ -476,13 +476,35 @@ public struct ClassicRenderedLevel: Codable, Equatable, Sendable {
     public let entrances: [ClassicPoint]
     public let triggers: [ClassicTriggerZone]
     public let objects: [ClassicRenderedObject]
+
+    /// The rendered trigger count identifies which object rule was used.
+    public var interactiveObjectSlotLimit: Int {
+        let dosTriggers = objects.filter { $0.placement.slot < 16 && $0.graphic.triggerEffect != 0 }.count
+        return triggers.count > dosTriggers ? 32 : 16
+    }
+}
+
+public enum ClassicObjectSemantics: String, Codable, Sendable {
+    case dos
+    case golems
+
+    var interactiveObjectSlotLimit: Int { self == .golems ? 32 : 16 }
+
+    /// Activate Golems slots when the DOS rule leaves a fan level without an exit.
+    public static func forFanLevel(_ level: ClassicLevel, groundSet: ClassicGroundSet) -> Self {
+        let exits = level.objects.filter {
+            groundSet.objects[$0.id]?.triggerEffect == ClassicDOSObjectEffect.exit.rawValue
+        }
+        return !exits.isEmpty && exits.allSatisfy { $0.slot >= 16 } ? .golems : .dos
+    }
 }
 
 public enum ClassicLevelRenderer {
     public static func render(
         _ level: ClassicLevel,
         groundSet: ClassicGroundSet,
-        specialGraphic: ClassicSpecialGraphic? = nil
+        specialGraphic: ClassicSpecialGraphic? = nil,
+        objectSemantics: ClassicObjectSemantics = .dos
     ) throws -> ClassicRenderedLevel {
         let width = ClassicLevel.width
         let height = ClassicLevel.height
@@ -567,9 +589,9 @@ public enum ClassicLevelRenderer {
             if placement.id == 1 {
                 entrances.append(ClassicPoint(x: placement.x + 16, y: placement.y + 6))
             }
-            // DOS renders all 32 slots, but only the first 16 populate the
-            // interactive object map. Later placements are visual fakes.
-            if placement.slot < 16, graphic.triggerEffect != 0 {
+            // DOS activates the first 16 slots. Golems processes all 32.
+            if placement.slot < objectSemantics.interactiveObjectSlotLimit,
+               graphic.triggerEffect != 0 {
                 let triggerBaseX = placement.x & ~3
                 let triggerBaseY = placement.y & ~3
                 triggers.append(ClassicTriggerZone(

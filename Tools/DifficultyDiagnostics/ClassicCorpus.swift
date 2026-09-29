@@ -148,7 +148,8 @@ struct ImportedFanReplay: Decodable {
                         rows.append(audit(entry: saved, level: loaded.0, rank: nil, official: false, order: rows.count) {
                             let ground = try FanLevelLibrary.groundSet(for: loaded.0, styleName: loaded.1, portsRoot: ports, pack: pack, entry: item)
                             let special = try FanLevelLibrary.specialGraphic(for: loaded.0, entry: item, pack: pack, portsRoot: ports)
-                            let rendered = try ClassicLevelRenderer.render(loaded.0, groundSet: ground, specialGraphic: special)
+                            let rendered = try ClassicLevelRenderer.render(loaded.0, groundSet: ground, specialGraphic: special,
+                                objectSemantics: .forFanLevel(loaded.0, groundSet: ground))
                             return try ClassicDOSSimulation(level: loaded.0, renderedLevel: rendered,
                                 mainDATAssets: mainAssets(ports.appendingPathComponent("lemmings_dos_1991-07-30")))
                         })
@@ -181,7 +182,8 @@ struct ImportedFanReplay: Decodable {
                               && $0.entry.identity.levelID == item.file + "#\(item.section ?? -1)" }) else { throw LevelPlaylistError.invalidEntry }
                     let ground = try FanLevelLibrary.groundSet(for: level, styleName: style, portsRoot: ports, pack: pack, entry: item)
                     let special = try FanLevelLibrary.specialGraphic(for: level, entry: item, pack: pack, portsRoot: ports)
-                    let rendered = try ClassicLevelRenderer.render(level, groundSet: ground, specialGraphic: special)
+                    let rendered = try ClassicLevelRenderer.render(level, groundSet: ground, specialGraphic: special,
+                        objectSemantics: .forFanLevel(level, groundSet: ground))
                     let initial = try ClassicDOSSimulation(level: level, renderedLevel: rendered,
                         mainDATAssets: mainAssets(ports.appendingPathComponent("lemmings_dos_1991-07-30")))
                     let hash = ClassicDOSReplayRecorder.stateHash(of: initial)

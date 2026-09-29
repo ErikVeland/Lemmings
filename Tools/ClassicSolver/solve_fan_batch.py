@@ -19,6 +19,9 @@ def main():
     parser.add_argument("--seconds", type=float, default=5)
     parser.add_argument("--width", type=int, default=48)
     parser.add_argument("--rate", type=int)
+    parser.add_argument("--fallback", type=int, default=170)
+    parser.add_argument("--refire", type=int, default=120)
+    parser.add_argument("--save-partials", action="store_true")
     parser.add_argument("--max-levels", type=int, default=0)
     parser.add_argument("--order", choices=("hash", "score", "near-win"), default="hash")
     args = parser.parse_args()
@@ -50,6 +53,10 @@ def main():
             for row in json.loads(evidence_path.read_text())
             if row["profile"]["confidence"] != "low"
         }
+    limits_path = pathlib.Path(__file__).resolve().parents[2] / "Artifacts/DifficultyEvaluation/classic-structural-limits.json"
+    structural_identities = {
+        identity(row) for row in json.loads(limits_path.read_text())["records"]
+    } if limits_path.exists() else set()
     packs = {}
     for pack in (args.resources / "LevelPacks").glob("*.zip"):
         prefix = pack.name.split("-", 1)[0]
@@ -68,13 +75,16 @@ def main():
         return item["initialHash"] or ""
     for row in sorted(rows, key=ordering):
         if (row["official"] or not row["playable"] or row["profile"]["confidence"] != "low"
-                or identity(row) in verified_identities):
+                or identity(row) in verified_identities or identity(row) in structural_identities):
             continue
         digest = row["initialHash"]
         old = previous.get(identity(row))
         prior_search_ran = old and completed_search(old)
         if (prior_search_ran and old.get("solverRevision") == solver_revision
                 and old.get("rate") == args.rate
+                and old.get("fallback", 170) == args.fallback
+                and old.get("refire", 120) == args.refire
+                and (old.get("savePartials", False) or not args.save_partials)
                 and old["seconds"] >= args.seconds and old["width"] >= args.width):
             continue
         pack = packs.get(row["entry"]["identity"]["packID"])
@@ -88,9 +98,12 @@ def main():
         command = [str(args.solver), "fan:" + str(pack),
                    str(row["entry"]["levelNumberSnapshot"]), str(level_output),
                    "--resources", str(args.resources), "--seconds", str(args.seconds),
-                   "--width", str(args.width), "--hash-named"]
+                   "--width", str(args.width), "--fallback", str(args.fallback),
+                   "--refire", str(args.refire), "--hash-named"]
         if args.rate is not None:
             command.extend(["--rate", str(args.rate)])
+        if args.save_partials:
+            command.append("--partial-out")
         started = time.monotonic()
         result = subprocess.run(command, capture_output=True, text=True, check=False)
         did_solve = result.returncode == 0 and candidate.exists()
@@ -99,6 +112,8 @@ def main():
         record = {"hash": digest, "identity": row["entry"]["identity"],
                   "seconds": args.seconds, "width": args.width,
                   "rate": args.rate,
+                  "fallback": args.fallback, "refire": args.refire,
+                  "savePartials": args.save_partials,
                   "solverRevision": solver_revision,
                   "elapsed": round(time.monotonic() - started, 2),
                   "solved": did_solve,

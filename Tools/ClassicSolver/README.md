@@ -16,3 +16,21 @@ The beam search is bounded. An `UNSOLVED` result means that it found no winning
 route within the chosen search limits. It does not prove that a level is
 impossible. Do not count an attempt as a scored level until
 `ExpandFanEvidence` produces a winning profile and replay.
+
+Use `--fallback N` and `--refire N` to test shorter decision intervals in a
+batch. The batch ledger records both values so a new setting gets its own
+attempt. Use the solver's `--partial-out` option for a focused search if an
+unsolved route needs inspection. A `.partial.json` file is a research lead;
+it is not a winning replay or a difficulty score.
+
+`generate_solver_partial_retimes.py` makes bounded one-command timing
+candidates from these partial routes. Use `--minimum N --radius M` to search
+an untested range without repeating earlier shifts. Feed the candidate folder
+to `ExpandFanEvidence`, then run strict exact-level replay verification before
+adding any win to the ledger.
+
+Use `--golems-objects` only for fan-level compatibility research. It activates
+all 32 object slots, as the pinned Golems assembly does. The default retains
+the DOS rule for official levels and existing replay evidence. A route found
+under this option needs a matching fan runtime and fresh difficulty audit
+before it can enter the ledger.

@@ -79,6 +79,18 @@ struct LearningJourneyTests {
         let result = try LearningJourney.generate([dig2, float, dig1])
         #expect(result.lessons.map(\.concepts) == [["digger"], ["floater"], ["digger"]])
     }
+    @Test func rawReplayScoreKeepsAComparableDemandBandSmooth() throws {
+        let first = try candidate(0, score: 240, concepts: ["digger"])
+        let high = try candidate(1, score: 260, concepts: ["builder"])
+        let low = try candidate(2, score: 0, concepts: ["builder"])
+        let precise = DifficultyProfile(key: low.profile.key, confidence: .medium,
+            components: .init(executionPrecision: 300), detectedTechniques: ["builder"])
+        #expect(precise.overallScore + 10 < high.profile.overallScore)
+        let fan = ProgressionCandidate(entry: low.entry, profile: precise, isOfficial: false)
+        let result = try LearningJourney.generate([high, fan, first])
+        #expect(result.lessons.map(\.entry.identity) == [first.entry.identity, low.entry.identity, high.entry.identity])
+        #expect(result.lessons.allSatisfy { $0.preparationGaps.isEmpty })
+    }
     @Test func unsupportedGapsAreFlaggedAndPriorsRejected() throws {
         let first = try candidate(0, score: 10)
         let hard = try candidate(1, score: 900, concepts: ["builder", "miner", "blocker"])

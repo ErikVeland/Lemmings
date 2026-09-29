@@ -625,7 +625,8 @@ public struct ClassicDOSSimulation: Codable, Equatable, Sendable {
         mechanics: ClassicDOSMechanics = .original
     ) throws {
         let interactiveObjects = renderedLevel.objects.filter {
-            $0.placement.slot < 16 && $0.graphic.triggerEffect != 0
+            $0.placement.slot < renderedLevel.interactiveObjectSlotLimit
+                && $0.graphic.triggerEffect != 0
         }
         let triggers = renderedLevel.triggers.enumerated().map { index, zone in
             let object = interactiveObjects.indices.contains(index) ? interactiveObjects[index] : nil

@@ -256,6 +256,7 @@ private func testClassicGraphics(projectDirectory: URL) throws {
     var renderedCount = 0
     var visualFakeCount = 0
     var effectBearingFakeCount = 0
+    var checkedExtendedObjects = false
     for item in campaign.levels {
         let sourceKey = "\(item.archiveFile):\(item.archiveSection)"
         guard renderedSources.insert(sourceKey).inserted else { continue }
@@ -280,6 +281,21 @@ private func testClassicGraphics(projectDirectory: URL) throws {
             rendered.triggers.count == expectedInteractiveTriggerCount,
             "fake object slot created an interactive trigger in \(sourceKey)"
         )
+        if !checkedExtendedObjects, visualFakes.contains(where: {
+            (groundSet.objects[$0.id]?.triggerEffect ?? 0) != 0
+        }) {
+            let extended = try ClassicLevelRenderer.render(item.level, groundSet: groundSet,
+                specialGraphic: special, objectSemantics: .golems)
+            let allEffects = item.level.objects.filter {
+                (groundSet.objects[$0.id]?.triggerEffect ?? 0) != 0
+            }.count
+            try expect(extended.triggers.count == allEffects && extended.interactiveObjectSlotLimit == 32,
+                "Golems rule did not activate all 32 object slots in \(sourceKey)")
+            let simulation = try ClassicDOSSimulation(level: item.level, renderedLevel: extended)
+            try expect(simulation.configuration.triggers.count == allEffects,
+                "Golems simulation omitted a rendered trigger in \(sourceKey)")
+            checkedExtendedObjects = true
+        }
         if sourceKey == "9:1" {
             try expect(
                 rendered.entrances.contains(ClassicPoint(x: 720, y: 42)),
@@ -293,6 +309,7 @@ private func testClassicGraphics(projectDirectory: URL) throws {
         renderedCount += 1
     }
     try expect(renderedCount == 80, "expected to render all 80 physical level maps")
+    try expect(checkedExtendedObjects, "no source level exercised a late interactive object")
     try expect(visualFakeCount == 40, "expected 40 visual objects after interactive slot 15")
     try expect(effectBearingFakeCount == 7, "expected seven effect-bearing visual fake objects")
     try expect(expectedRenderedHashes.keys.allSatisfy(renderedSources.contains), "not all rendered map goldens were exercised")

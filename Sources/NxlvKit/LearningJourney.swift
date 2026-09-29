@@ -121,6 +121,12 @@ public struct LearningJourney: Codable, Equatable, Sendable {
                 let value = placementDemand($0.profile)
                 return Stage.forDemand(value) == stage && Int(value / 35) == band
             }
+            // Keep practice prerequisites and raw replay scores close before
+            // using origin, technique spacing and execution cost to break ties.
+            let prepared = eligible.filter { gaps($0.profile).isEmpty }
+            let available = prepared.isEmpty ? eligible : prepared
+            let lowestScore = available.map { $0.profile.overallScore }.min()!
+            let smooth = available.filter { $0.profile.overallScore <= lowestScore + 10 }
             func cost(_ candidate: ProgressionCandidate) -> Double {
                 let p = candidate.profile
                 let concepts = Set(p.detectedTechniques)
@@ -139,7 +145,7 @@ public struct LearningJourney: Codable, Equatable, Sendable {
                     + rise * 0.10 + placementDemand(p) + p.components.solutionComplexity * 0.05
                     + (candidate.isOfficial ? 0 : 100)
             }
-            let next = eligible.min {
+            let next = smooth.min {
                 let a = cost($0), b = cost($1)
                 return a == b ? $0.stableKey < $1.stableKey : a < b
             }!

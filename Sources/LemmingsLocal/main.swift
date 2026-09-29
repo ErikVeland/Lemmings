@@ -2297,11 +2297,12 @@ let achievementProgressKey = "ClassicAchievementProgress"
         return false
       }
       let rendered = try ClassicLevelRenderer.render(
-        level, groundSet: ground, specialGraphic: groundOverride == nil ? specials[level.specialStyle] : specialOverride)
+        level, groundSet: ground, specialGraphic: groundOverride == nil ? specials[level.specialStyle] : specialOverride,
+        objectSemantics: groundOverride == nil ? .dos : .forFanLevel(level, groundSet: ground))
 
       // The DOS engine derives entrances, exits and hazards from the level's
       // own trigger zones, so nothing is positioned by hand here. Fan levels
-      // (with a ground override) keep the original rules.
+      // with only late exits use Golems object slots.
       var title: ClassicTitle?
       if groundOverride == nil, dataSets.indices.contains(gamePicker.indexOfSelectedItem) {
         title = dataSets[gamePicker.indexOfSelectedItem].set.title
@@ -4949,7 +4950,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
       let assets = try ClassicMainDATAssets.load(
         from: portsRoot.appendingPathComponent("lemmings_dos_1991-07-30"))
       let rendered = try ClassicLevelRenderer.render(
-        level, groundSet: ground, specialGraphic: special)
+        level, groundSet: ground, specialGraphic: special,
+        objectSemantics: .forFanLevel(level, groundSet: ground))
       _ = try ClassicDOSSimulation(
         level: level,
         renderedLevel: rendered,

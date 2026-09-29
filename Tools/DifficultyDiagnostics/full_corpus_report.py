@@ -15,6 +15,7 @@ BUNDLED_FAN_PACKS = ROOT / "Content/LevelPacks"
 NEO = ROOT / ".build/full-difficulty-evaluation/neolemmix/profiles.json"
 NEO_REPORT = ROOT / ".build/full-difficulty-evaluation/neolemmix/report.json"
 PASSIVE = ROOT / ".build/neolemmix-passive-evaluation/results.json"
+STRUCTURAL = ROOT / "Artifacts/DifficultyEvaluation/classic-structural-limits.json"
 OUTPUT = ROOT / "Artifacts/DifficultyEvaluation"
 PARTIAL_SOURCE_ASSIGNMENTS = {
     "NeoLemmix_Introduction_Pack/Advanced_Training/Beam_Up_The_Equipment!.nxlv":
@@ -61,6 +62,12 @@ def main():
         == bundled_pack_revisions[row["entry"]["identity"]["packID"]]
         for row in fan
     )
+    structural_records = read(STRUCTURAL)["records"] if STRUCTURAL.exists() else []
+    structural = {
+        (record["identity"]["packID"], record["identity"]["levelID"]): record
+        for record in structural_records
+    }
+    assert len(structural) == len(structural_records)
     neo = read(NEO)
     neo_failures = {}
     for failure in read(NEO_REPORT)["failures"]:
@@ -73,6 +80,17 @@ def main():
     for row in fan:
         profile = row["profile"]
         verified = profile["confidence"] != "low"
+        level_id = row["entry"]["identity"]
+        limit = structural.get((level_id["packID"], level_id["levelID"]))
+        if limit:
+            assert not verified and limit["levelSourceRevision"] == row["entry"]["sourceRevision"]
+            assert limit["initialStateHash"] == row["initialHash"]
+            if limit["reason"] == "no functional exit":
+                assert limit["requiredToSave"] > 0 and limit["exitTriggerCount"] == 0
+                assert not limit["exitObjectSlots"] or min(limit["exitObjectSlots"]) >= 16
+            else:
+                assert limit["reason"] == "rescue requirement exceeds population"
+                assert limit["requiredToSave"] > limit["totalLemmings"]
         rows.append({"source": "Classic fan", "pack": row["entry"]["identity"]["packID"],
                      "level": row["entry"]["identity"]["levelID"],
                      "title": row["entry"]["levelNameSnapshot"],
@@ -82,8 +100,13 @@ def main():
                      if verified else "",
                      "completion": "verified win" if verified else "no verified win",
                      "physics_parity": "not independently checked",
-                     "playtest": "replay verified" if verified else "bounded search or metadata only",
-                     "issue": row.get("issue") or ""})
+                     "playtest": "replay verified" if verified else
+                     limit["reason"] if limit else "bounded search or metadata only",
+                     "issue": (f"Exit object in inactive slot(s) {', '.join(map(str, limit['exitObjectSlots']))}"
+                               if limit["exitObjectSlots"] else "No exit object in the bundled level")
+                     if limit and limit["reason"] == "no functional exit" else
+                     f"Requires {limit['requiredToSave']} saves from {limit['totalLemmings']} lemmings"
+                     if limit else row.get("issue") or ""})
     for profile in neo:
         path = profile["key"]["identity"]["levelID"]
         run = passive.get(path, {})
@@ -122,6 +145,8 @@ def main():
     sources[str(pack_manifest.relative_to(ROOT))] = digest(pack_manifest)
     if PASSIVE.exists():
         sources[str(PASSIVE.relative_to(ROOT))] = digest(PASSIVE)
+    if STRUCTURAL.exists():
+        sources[str(STRUCTURAL.relative_to(ROOT))] = digest(STRUCTURAL)
     counts = Counter((row["source"], row["completion"]) for row in rows)
     unverified_official_conversions = sum(
         row["completion"] == "no verified win" and row["pack"] == "Original_Lemmings"
@@ -141,6 +166,10 @@ def main():
                "unverifiedNeoLemmix": counts[("NeoLemmix", "no verified win")],
                "unverifiedNonOfficial": unverified_non_official,
                "unverifiedOfficialConversions": unverified_official_conversions,
+               "structuralNoExitFan": sum(record["reason"] == "no functional exit"
+                                          for record in structural_records),
+               "structuralExcessRequirementFan": sum(record["reason"] == "rescue requirement exceeds population"
+                                                      for record in structural_records),
                "independentPhysicsParityVerified": 0,
                "partialSourceAssignmentMatches": sum(
                    row["physics_parity"].startswith("partial source assignment match")
@@ -155,12 +184,22 @@ def main():
         f"Verified winning replays support {summary['verifiedFanWins']} Classic fan scores and "
         f"{summary['verifiedNeoLemmixWins']} NeoLemmix scores. "
         f"The remaining {summary['unverifiedNonOfficial']} non-official scores and "
-        f"{summary['unverifiedOfficialConversions']} official conversion scores need a verified win.\n\n"
+        f"{summary['unverifiedOfficialConversions']} official conversion scores lack a verified win. "
+        f"Of the non-official rows, {len(structural)} bundled Classic levels cannot win under "
+        "the current native object and rescue rules recorded below.\n\n"
         "The `playtest` column records the latest check. A passive loss or timeout only describes a run "
         "without player input. It does not prove that the level is impossible. "
         "Source-compatible replays can have an absent or different level version; their native wins are valid, but source parity is unverified.\n\n"
         "The `issue` column records a replay-analysis failure where one occurred. Such rows keep their "
         "metadata score and do not count as verified wins.\n\n"
+        "Classic fan rows marked `no functional exit` lack an exit or have exits only in slots 16 or later. "
+        "Traditional Lemmix draws those late objects without activating them, and the native engine "
+        "follows that rule. The inspected Golems assembly initialises and advances all 32 gadget slots. "
+        "The 30 late-exit levels are therefore native compatibility gaps against Golems, while three "
+        "levels contain no exit object. See [the traditional Lemmix object rule]"
+        "(https://www.neolemmix.com/old/nle_piece_properties.html), `classic-structural-limits.json` "
+        "and `validation.md`. A row marked `rescue requirement exceeds population` also cannot win "
+        "on the bundled level.\n\n"
         "A native win shows that this engine can complete the level. It does not independently prove "
         "physics parity with the source engine. The `physics_parity` column records partial "
         "assignment-state matches where checked and keeps the full parity gate separate.\n\n"
