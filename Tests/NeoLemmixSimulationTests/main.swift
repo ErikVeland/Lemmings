@@ -535,6 +535,40 @@ private func testBlockerAndConstructiveSkills() throws {
             "The \(skill.rawValue) brick counter survived its CE action transition."
         )
     }
+
+    let lowStackTerrain = try terrain(floorY: nil, extraSolid: [.init(x: 20, y: 48)])
+    var lowStack = try NeoLemmixSimulation(
+        terrain: lowStackTerrain,
+        configuration: configuration(preplaced: [
+            .init(position: .init(x: 20, y: 48)),
+        ])
+    )
+    try require(lowStack.assign(skill: .stacker, to: 0).wasAssigned,
+                "The low Stacker assignment failed.")
+    try require(try lemming(lowStack).stackLow == true,
+                "The Stacker did not detect an unsupported forward foot pixel.")
+    lowStack.run(ticks: 7)
+    try require(lowStack.terrain.isSolid(x: 21, y: 48),
+                "The low Stacker did not place its first brick at foot height.")
+    try require(!lowStack.terrain.isSolid(x: 21, y: 47),
+                "The low Stacker placed its first brick one row too high.")
+
+    var blockedTerrain = try terrain()
+    for x in 21...23 {
+        blockedTerrain.setSolid(true, x: x, y: 47)
+        blockedTerrain.setSolid(true, x: x, y: 46)
+    }
+    var blockedStack = try NeoLemmixSimulation(
+        terrain: blockedTerrain,
+        configuration: configuration(preplaced: [
+            .init(position: .init(x: 20, y: 48)),
+        ])
+    )
+    try require(blockedStack.assign(skill: .stacker, to: 0).wasAssigned,
+                "The blocked Stacker assignment failed.")
+    blockedStack.run(ticks: 8)
+    try require(try lemming(blockedStack).direction == .left,
+                "A Stacker that could not place a brick did not turn around.")
 }
 
 private func testDestructiveSkillsAndMaterials() throws {
@@ -1043,8 +1077,25 @@ private func testDisarmer() throws {
     try require(simulation.assign(skill: .disarmer, to: 0).wasAssigned, "Disarmer assignment failed.")
     simulation.run(ticks: 2)
     try require(try lemming(simulation).action == .disarming, "Disarmer did not start fixing the trap.")
+    try require(simulation.disabledZoneIDs.contains(20), "Disarmer did not disable the trap immediately.")
     simulation.run(ticks: 42)
-    try require(simulation.disabledZoneIDs.contains(20), "Disarmer did not disable the trap.")
+    try require(simulation.disabledZoneIDs.contains(20), "Disarmed trap was re-enabled.")
+
+    var convoy = try NeoLemmixSimulation(
+        terrain: terrain(),
+        configuration: configuration(
+            total: 2,
+            zones: [trap],
+            preplaced: [
+                .init(position: .init(x: 20, y: 48), traits: [.disarmer]),
+                .init(position: .init(x: 18, y: 48)),
+            ]
+        )
+    )
+    convoy.run(ticks: 6)
+    try require(convoy.disabledZoneIDs.contains(20), "The first lemming did not disarm the trap.")
+    try require(try lemming(convoy, id: 1).removalReason != .trapped,
+                "The trap caught a following lemming during the fixing animation.")
 }
 
 private func testCloner() throws {
@@ -1411,6 +1462,19 @@ private func testForceFieldsAndSplitter() throws {
     try require(try lemming(forced).direction == .right,
                 "A right force field did not turn a left-facing lemming.")
 
+    let jumpForce = NeoLemmixZone(
+        id: 42,
+        effect: .forceRight,
+        bounds: NeoLemmixRect(x: 13, y: 0, width: 2, height: 100)
+    )
+    var jumper = try walkingSimulation(zones: [jumpForce], direction: .left)
+    try require(jumper.assign(skill: .jumper, to: 0).wasAssigned,
+                "Jumper assignment failed before the force-field check.")
+    jumper.run(ticks: 3)
+    let turnedJumper = try lemming(jumper)
+    try require(turnedJumper.direction == .right && turnedJumper.position.x > 13,
+                "A force field did not turn a Jumper before its next microstep.")
+
     let splitter = NeoLemmixZone(
         id: 41,
         effect: .splitter,
@@ -1475,8 +1539,54 @@ private func testTeleporter() throws {
     let arrived = try lemming(simulation)
     try require(arrived.action == .walking,
                 "A receiver did not return control after its animation delay.")
-    try require(arrived.position == .init(x: 70, y: 48),
-                "A receiver used the wrong trigger origin.")
+    try require(arrived.position == .init(x: 69, y: 48),
+                "A receiver did not resume walking from its trigger origin.")
+
+    let earlierReceiver = NeoLemmixZone(
+        id: 49,
+        effect: .receiver,
+        bounds: NeoLemmixRect(x: 70, y: 48, width: 2, height: 2),
+        pairing: 7,
+        animationFrames: 2
+    )
+    var reversedOrder = try walkingSimulation(zones: [earlierReceiver, teleporter])
+    reversedOrder.tick()
+    try require(reversedOrder.gadgetAnimationFrames?[49] == 1
+                && lemming(reversedOrder).action == .teleporting,
+                "An earlier receiver did not advance on the transfer tick.")
+    reversedOrder.tick()
+    try require(try lemming(reversedOrder).action == .walking,
+                "An earlier receiver did not release one tick sooner.")
+
+    let zeroKeyTeleporter = NeoLemmixZone(
+        id: 54,
+        effect: .teleporter,
+        bounds: NeoLemmixRect(x: 21, y: 48, width: 1, height: 1),
+        pairing: 9,
+        animationFrames: 2,
+        keyFrame: 0
+    )
+    let zeroKeyReceiver = NeoLemmixZone(
+        id: 55,
+        effect: .receiver,
+        bounds: NeoLemmixRect(x: 70, y: 48, width: 2, height: 2),
+        pairing: 9,
+        animationFrames: 2,
+        keyFrame: 0
+    )
+    var zeroKey = try walkingSimulation(zones: [zeroKeyTeleporter, zeroKeyReceiver])
+    try require(try lemming(zeroKey).position != .init(x: 70, y: 48),
+                "KEY_FRAME 0 transferred before the teleporter animation finished.")
+    zeroKey.tick()
+    try require(try lemming(zeroKey).position == .init(x: 70, y: 48)
+                && lemming(zeroKey).action == .teleporting,
+                "KEY_FRAME 0 did not transfer at the end of the teleporter animation.")
+    zeroKey.tick()
+    try require(try lemming(zeroKey).action == .teleporting,
+                "KEY_FRAME 0 released before the receiver animation finished.")
+    zeroKey.tick()
+    try require(try lemming(zeroKey).action == .walking,
+                "KEY_FRAME 0 did not release after the receiver animation.")
 
     let restored = try JSONDecoder().decode(
         NeoLemmixSimulation.self,
@@ -1484,6 +1594,47 @@ private func testTeleporter() throws {
     )
     try require(try lemming(restored).action == .teleporting,
                 "Save restoration lost an in-flight teleport.")
+
+    let constructiveTeleporter = NeoLemmixZone(
+        id: 56,
+        effect: .teleporter,
+        bounds: NeoLemmixRect(x: 22, y: 48, width: 1, height: 1),
+        pairing: 10,
+        animationFrames: 2
+    )
+    let constructiveReceiver = NeoLemmixZone(
+        id: 57,
+        effect: .receiver,
+        bounds: NeoLemmixRect(x: 70, y: 48, width: 2, height: 2),
+        pairing: 10,
+        animationFrames: 2
+    )
+    let bridgeFloor = (0...21).map { NeoLemmixPoint(x: $0, y: 48) }
+        + (70..<128).map { NeoLemmixPoint(x: $0, y: 48) }
+    var constructive = try walkingSimulation(
+        terrain: terrain(floorY: nil, extraSolid: bridgeFloor),
+        zones: [constructiveTeleporter, constructiveReceiver]
+    )
+    try require(constructive.assign(skill: .platformer, to: 0).wasAssigned,
+                "Platformer assignment failed before the teleport check.")
+    for _ in 0..<40 {
+        if try lemming(constructive).action == .teleporting { break }
+        constructive.tick()
+    }
+    let hiddenConstructor = try lemming(constructive)
+    try require(hiddenConstructor.action == .teleporting
+                && hiddenConstructor.teleportReturnBricksRemaining != nil,
+                "The teleporter did not retain the Platformer's brick count.")
+    for _ in 0..<8 {
+        if try lemming(constructive).action != .teleporting { break }
+        constructive.tick()
+    }
+    let resumedConstructor = try lemming(constructive)
+    try require(resumedConstructor.action == .platforming
+                && resumedConstructor.bricksRemaining <= hiddenConstructor.teleportReturnBricksRemaining!
+                && resumedConstructor.bricksRemaining >= hiddenConstructor.teleportReturnBricksRemaining! - 1
+                && resumedConstructor.animationFrame == (hiddenConstructor.teleportReturnAnimationFrame! + 1) % 16,
+                "The receiver restarted an active Platformer instead of resuming it.")
 
     let pair = [
         NeoLemmixPreplacedLemming(position: .init(x: 20, y: 48)),

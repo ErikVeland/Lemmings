@@ -235,7 +235,7 @@ public struct NxrpReplayPlayback: Codable, Equatable, Sendable {
                     if case let .spawnInterval(sequence, _) = $0 { return sequence == item.sequence }
                     return false
                 }), case let .spawnInterval(_, spawned?) = evidence,
-                    spawned == simulation.lemmings.count else {
+                    (!validatesRecordedState || spawned == simulation.lemmings.count) else {
                     throw NxrpReplayPlaybackError.spawnedCountMismatch(sequence: item.sequence)
                 }
                 command = .setSpawnInterval(interval)

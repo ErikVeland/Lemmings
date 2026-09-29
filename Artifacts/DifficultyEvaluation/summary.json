@@ -1,26 +1,30 @@
 {
-  "fanLevels": 6022,
-  "generatedAt": "2026-09-28T12:38:30.400771+00:00",
+  "fanLevels": 6020,
+  "generatedAt": "2026-09-29T11:41:56.978046+00:00",
   "independentPhysicsParityVerified": 0,
-  "levels": 6816,
+  "levels": 6814,
   "neoLemmixLevels": 794,
   "neoPassiveRuns": 152,
   "neoPlaytestStatuses": {
-    "not run": 389,
-    "replay analysis failed": 130,
-    "replay verified": 266,
-    "source-compatible replay verified": 9
+    "not run": 363,
+    "replay analysis failed": 109,
+    "replay verified": 310,
+    "source-compatible replay verified": 12
   },
-  "neoReplayAnalysisFailures": 130,
+  "neoReplayAnalysisFailures": 109,
+  "partialSourceAssignmentMatches": 3,
   "sourceDigests": {
-    ".build/full-difficulty-evaluation/neolemmix/profiles.json": "ac7d40c25e8000fcab6e75138538c52e6b03eecf31a994cdf6c7599eec85efe4",
-    ".build/full-difficulty-evaluation/neolemmix/report.json": "6fd6bc1d6daa6bf7a3059907f706731066926b061fb9a537ceede4fc6d83fee1",
+    ".build/full-difficulty-evaluation/neolemmix/profiles.json": "bcc3539e56a981bba091e09f9dbb43902e001a940e0e03f36c9a8ccd5e4b1a71",
+    ".build/full-difficulty-evaluation/neolemmix/report.json": "2a053b068d8e9235072c9fcec08a0015dab330d2626d6c14d2c699e3a021ac8d",
     ".build/neolemmix-passive-evaluation/results.json": "6a24277c41feaeec683138abbb5d84b87e29904a05b4f5a217ff59263634b501",
     "Artifacts/ClassicProgression/audit.json": "efa53badcaa0862e4b7a285e72be2c5b232e741c42eba63d1c1c0655e72cd4d9",
-    "Artifacts/LearningJourney/fan-evidence.json": "3e3290e9f75e1a4d61bfafbbe1dd1325f5a0a2b91e3c2b8d098f8849b7fa06be"
+    "Artifacts/LearningJourney/fan-evidence.json": "7f0b690d3c13d6ea25ac63d0da50e1442900e7fc1c72b7555cbe7aa427e0a5b2",
+    "Content/LevelPacks/packs.json": "70dfc22a5a682c9b3536f2e3bfe64e551f45d315722a76bf6994a868eabb68b1"
   },
-  "unverifiedFan": 5226,
-  "unverifiedNeoLemmix": 519,
-  "verifiedFanWins": 796,
-  "verifiedNeoLemmixWins": 275
+  "unverifiedFan": 3936,
+  "unverifiedNeoLemmix": 472,
+  "unverifiedNonOfficial": 3939,
+  "unverifiedOfficialConversions": 469,
+  "verifiedFanWins": 2084,
+  "verifiedNeoLemmixWins": 322
 }

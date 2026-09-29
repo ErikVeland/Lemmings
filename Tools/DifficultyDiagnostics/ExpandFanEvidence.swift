@@ -15,6 +15,12 @@ struct EvidenceRow: Codable {
     let initialHash: String?
     let issue: String?
 }
+struct RetimedFanWitness: Codable {
+    let candidateReplaySHA256: String
+    let eventIndex: Int
+    let originalTick: Int
+    let nativeTick: Int
+}
 @main struct ExpandFanEvidence {
     @MainActor static func main() throws {
         let args = CommandLine.arguments
@@ -27,12 +33,29 @@ struct EvidenceRow: Codable {
         var rows = try decoder.decode([EvidenceRow].self, from: Data(contentsOf: URL(fileURLWithPath: args[2])))
         var solutions = try decoder.decode([String: ClassicDOSReplay].self, from: Data(contentsOf: root.appendingPathComponent("Hints/solutions.json")))
         if let extras = try? decoder.decode([String: ClassicDOSReplay].self, from: Data(contentsOf: root.appendingPathComponent("Progression/solutions.json"))) { solutions.merge(extras) { a, _ in a } }
+        if let path = ProcessInfo.processInfo.environment["FAN_CANDIDATE_SOLUTIONS"],
+           let candidates = try? decoder.decode([String: ClassicDOSReplay].self, from: Data(contentsOf: URL(fileURLWithPath: path))) {
+            solutions.merge(candidates) { a, _ in a }
+        }
         let savedURL = output.appendingPathComponent("solutions.json")
         var found = (try? decoder.decode([String: ClassicDOSReplay].self, from: Data(contentsOf: savedURL))) ?? [:]
+        var foundHashes = Set(found.values.map(\.initialStateHash))
         solutions.merge(found) { a, _ in a }
+        var solverReplays: [String: [ClassicDOSReplay]] = [:]
+        if let directory = ProcessInfo.processInfo.environment["FAN_SOLVER_REPLAYS"] {
+            for url in (try? FileManager.default.contentsOfDirectory(
+                at: URL(fileURLWithPath: directory), includingPropertiesForKeys: nil
+            ))?.filter({ $0.pathExtension == "json" }).sorted(by: { $0.lastPathComponent < $1.lastPathComponent }) ?? [] {
+                let name = url.deletingPathExtension().lastPathComponent
+                guard name.count >= 64,
+                      let replay = try? decoder.decode(ClassicDOSReplay.self, from: Data(contentsOf: url)) else { continue }
+                solverReplays[String(name.prefix(64)), default: []].append(replay)
+            }
+        }
         var templates: [String: [[ClassicDOSReplayEvent]]] = [:]
         func geometry(_ sim: ClassicDOSSimulation) -> String { SHA256.hash(data: sim.terrain.solidMask + sim.terrain.steelMask).description }
         let verifyOnly = ProcessInfo.processInfo.environment["FAN_VERIFY_ONLY"] == "1"
+        let describeOnly = ProcessInfo.processInfo.environment["FAN_DESCRIBE_ONLY"] == "1"
         var verifiedCount = 0
         let semanticsOnly = ProcessInfo.processInfo.environment["FAN_SEMANTICS_ONLY"] == "1"
         var portDescriptors: [String: [String: Any]] = [:]
@@ -41,6 +64,10 @@ struct EvidenceRow: Codable {
             var fields = try JSONSerialization.jsonObject(with: encoder.encode(level)) as! [String: Any]
             fields["skills"] = Dictionary(uniqueKeysWithValues: level.skills.map { ($0.key.rawValue, $0.value) })
             fields["geometryHash"] = geometry(sim)
+            fields["entranceCount"] = sim.configuration.entrances.count
+            fields["exitTriggerCount"] = sim.configuration.triggers.filter { $0.effect == .exit }.count
+            fields["totalLemmings"] = sim.configuration.totalLemmings
+            fields["requiredToSave"] = sim.configuration.requiredToSave
             portDescriptors[identity.packID + "\0" + identity.levelID] = fields
         }
         var officialScenarios = Set<String>()
@@ -93,11 +120,16 @@ struct EvidenceRow: Codable {
         }
         let rowIndex = Dictionary(uniqueKeysWithValues: rows.indices.map { (rows[$0].entry.identity, $0) })
         var attempts = 0, distinct = Set<String>(), failures: [String] = []
+        var retimedWitnesses: [String: RetimedFanWitness] = [:]
         let measuredPacks = Set(rows.filter { !$0.official && $0.profile.confidence != .low }.map { $0.entry.identity.packID })
         let onlyPack = ProcessInfo.processInfo.environment["FAN_ONLY_PACK"]
+        let onlyPacks = ProcessInfo.processInfo.environment["FAN_ONLY_PACKS_FILE"].flatMap {
+            try? String(contentsOfFile: $0, encoding: .utf8)
+        }.map { Set($0.split(whereSeparator: \.isNewline).map(String.init)) }
         let packs = FanLevelLibrary.packs(in: [root.appendingPathComponent("LevelPacks"), FanLevelLibrary.downloadFolder]).filter {
             let packID = "fan:" + FanLevelLibrary.catalogueID($0)
-            return (onlyPack == nil || onlyPack == packID) && (!(semanticsOnly || verifyOnly) || measuredPacks.contains(packID))
+            return (onlyPack == nil || onlyPack == packID) && (onlyPacks?.contains(packID) ?? true)
+                && (!(semanticsOnly || verifyOnly) || measuredPacks.contains(packID))
         }
         func save() throws {
             try encoder.encode(rows).write(to: output.appendingPathComponent("audit.json"), options: .atomic)
@@ -108,11 +140,14 @@ struct EvidenceRow: Codable {
                 try JSONSerialization.data(withJSONObject: portDescriptors, options: [.sortedKeys]).write(to: output.appendingPathComponent("port-descriptors.json"), options: .atomic)
             }
             try encoder.encode(failures).write(to: output.appendingPathComponent("failures.json"), options: .atomic)
+            if !retimedWitnesses.isEmpty {
+                try encoder.encode(retimedWitnesses).write(to: output.appendingPathComponent("retimed-witnesses.json"), options: .atomic)
+            }
         }
         for (packNumber, pack) in packs.enumerated() {
             for item in try FanLevelLibrary.validatedEntries(in: pack) {
                 let id = LevelCatalogueIdentity(engine: .classic, packID: "fan:" + FanLevelLibrary.catalogueID(pack), levelID: item.file + "#\(item.section ?? -1)")
-                guard let index = rowIndex[id], ((semanticsOnly || verifyOnly) ? rows[index].profile.confidence != .low : rows[index].profile.confidence == .low) else { continue }
+                guard let index = rowIndex[id], describeOnly || ((semanticsOnly || verifyOnly) ? rows[index].profile.confidence != .low : rows[index].profile.confidence == .low) else { continue }
                 do {
                     let (level, style) = try FanLevelLibrary.level(item, in: pack)
                     let ground = try FanLevelLibrary.groundSet(for: level, styleName: style, portsRoot: ports, pack: pack, entry: item)
@@ -122,12 +157,22 @@ struct EvidenceRow: Codable {
                     try describe(id, level, initial)
                     let hash = ClassicDOSReplayRecorder.stateHash(of: initial)
                     guard hash == rows[index].initialHash else { throw LevelPlaylistError.invalidEntry }
+                    if describeOnly { continue }
                     if verifyOnly {
                         guard FanLevelLibrary.archiveFingerprint(pack) == rows[index].entry.sourceRevision,
-                              let replay = solutions[hash], let expected = replay.expected, expected.didWin else { throw LevelPlaylistError.invalidEntry }
+                              let stored = solutions[rows[index].profile.key.replayRevision] ?? solutions[hash],
+                              stored.initialStateHash == hash,
+                              let expected = stored.expected, expected.didWin else { throw LevelPlaylistError.invalidEntry }
+                        let replay = ClassicDOSReplay(rank: id.packID, number: rows[index].entry.levelNumberSnapshot,
+                            title: level.title, initialStateHash: hash, events: stored.events, expected: expected)
                         let digest = SHA256.hash(data: try encoder.encode(replay)).description
-                        guard rows[index].profile.key.replayRevision == digest || rows[index].profile.key.replayRevision == String(digest.dropFirst("SHA256 digest: ".count)) else {
-                            throw NSError(domain: "Evidence", code: 1, userInfo: [NSLocalizedDescriptionKey: "Profile and bundled witness differ: " + level.title])
+                        let storedDigest = SHA256.hash(data: try encoder.encode(stored)).description
+                        let replayRevision = rows[index].profile.key.replayRevision
+                        guard [digest, storedDigest].contains(where: {
+                            replayRevision == $0 || replayRevision == String($0.dropFirst("SHA256 digest: ".count))
+                        }) else {
+                            throw NSError(domain: "Evidence", code: 1, userInfo: [NSLocalizedDescriptionKey:
+                                "Profile and bundled witness differ: \(level.title); target \(digest); stored \(storedDigest)"])
                         }
                         let result = try ClassicDOSReplayPlayer.run(replay, simulation: initial)
                         guard result.didWin else { throw DifficultyAnalysisError.replayDidNotWin }
@@ -136,18 +181,110 @@ struct EvidenceRow: Codable {
                     }
                     let scenarioHash = try scenario(level, initial)
                     fanScenarios[id.packID + "\0" + id.levelID] = scenarioHash
-                    if semanticsOnly || officialScenarios.contains(scenarioHash) { continue }
+                    if semanticsOnly { continue }
                     var witness: ClassicDOSReplay?
-                    let solverReplay = ProcessInfo.processInfo.environment["FAN_SOLVER_REPLAYS"].flatMap {
-                        try? decoder.decode(ClassicDOSReplay.self, from: Data(contentsOf:
-                            URL(fileURLWithPath: $0).appendingPathComponent(hash + ".json")))
-                    }
-                    if let saved = solverReplay ?? solutions[hash] {
+                    for saved in (solverReplays[hash] ?? []) + (solutions[hash].map { [$0] } ?? []) where witness == nil {
                         let candidate = ClassicDOSReplay(rank: id.packID, number: rows[index].entry.levelNumberSnapshot,
                             title: level.title, initialStateHash: hash, events: saved.events)
                         if let outcome = try? ClassicDOSReplayPlayer.run(candidate, simulation: initial, verify: false), outcome.didWin {
                             witness = ClassicDOSReplay(rank: candidate.rank, number: candidate.number, title: candidate.title,
                                 initialStateHash: hash, events: candidate.events, expected: outcome)
+                        }
+                        if witness == nil, ProcessInfo.processInfo.environment["FAN_RETIME_SEARCH"] == "1",
+                           saved.events.count <= 24 {
+                            let radius = min(8, max(1, Int(ProcessInfo.processInfo.environment["FAN_RETIME_RADIUS"] ?? "2") ?? 2))
+                            let minimum = min(radius, max(1,
+                                Int(ProcessInfo.processInfo.environment["FAN_RETIME_MIN_RADIUS"] ?? "1") ?? 1))
+                            let offsets = (minimum...radius).flatMap { [-$0, $0] }
+                            for eventIndex in saved.events.indices where witness == nil {
+                                for offset in offsets where witness == nil {
+                                    let original = saved.events[eventIndex]
+                                    let shiftedTick = original.tick + offset
+                                    guard shiftedTick >= 0 else { continue }
+                                    var shifted = saved.events
+                                    shifted[eventIndex] = ClassicDOSReplayEvent(
+                                        tick: shiftedTick, action: original.action, afterTick: original.afterTick)
+                                    let shiftedReplay = ClassicDOSReplay(rank: id.packID,
+                                        number: rows[index].entry.levelNumberSnapshot, title: level.title,
+                                        initialStateHash: hash, events: shifted)
+                                    attempts += 1
+                                    if let outcome = try? ClassicDOSReplayPlayer.run(shiftedReplay,
+                                        simulation: initial, verify: false), outcome.didWin {
+                                        witness = ClassicDOSReplay(rank: shiftedReplay.rank,
+                                            number: shiftedReplay.number, title: shiftedReplay.title,
+                                            initialStateHash: hash, events: shifted, expected: outcome)
+                                        retimedWitnesses[id.packID + "\0" + id.levelID] = RetimedFanWitness(
+                                            candidateReplaySHA256: SHA256.hash(data: try encoder.encode(saved))
+                                                .map { String(format: "%02x", $0) }.joined(),
+                                            eventIndex: eventIndex, originalTick: original.tick,
+                                            nativeTick: shiftedTick)
+                                    }
+                                }
+                            }
+                        }
+                        let multiCount: Int
+                        if ProcessInfo.processInfo.environment["FAN_TWO_EVENT_RETIME_SEARCH"] == "1" { multiCount = 2 }
+                        else if ProcessInfo.processInfo.environment["FAN_THREE_EVENT_RETIME_SEARCH"] == "1" { multiCount = 3 }
+                        else if ProcessInfo.processInfo.environment["FAN_FOUR_EVENT_RETIME_SEARCH"] == "1" { multiCount = 4 }
+                        else { multiCount = 0 }
+                        let defaultMaximum = multiCount == 2 ? 8 : multiCount == 3 ? 6 : 5
+                        let maximumEvents = min(12, max(multiCount,
+                            Int(ProcessInfo.processInfo.environment["FAN_MULTI_MAX_EVENTS"] ?? "") ?? defaultMaximum))
+                        if witness == nil, multiCount >= 2,
+                           (multiCount...maximumEvents).contains(saved.events.count),
+                           solverReplays[hash]?.contains(saved) == true {
+                            let radius = min(2, max(1,
+                                Int(ProcessInfo.processInfo.environment["FAN_MULTI_OFFSET_RADIUS"] ?? "1") ?? 1))
+                            let offsets = (1...radius).flatMap { [-$0, $0] }
+                            var picked = Array(0..<multiCount)
+                            var variants = 1
+                            var places = Array(repeating: 1, count: multiCount)
+                            for position in picked.indices.reversed() {
+                                places[position] = variants
+                                variants *= offsets.count
+                            }
+                            while witness == nil {
+                                for variant in 0..<variants where witness == nil {
+                                    var shifted = saved.events
+                                    var valid = true
+                                    for position in picked.indices {
+                                        let eventIndex = picked[position]
+                                        let offset = offsets[(variant / places[position]) % offsets.count]
+                                        let tick = saved.events[eventIndex].tick + offset
+                                        if tick < 0 { valid = false; break }
+                                        shifted[eventIndex] = .init(tick: tick,
+                                            action: shifted[eventIndex].action, afterTick: shifted[eventIndex].afterTick)
+                                    }
+                                    if !valid { continue }
+                                    let shiftedReplay = ClassicDOSReplay(rank: id.packID,
+                                        number: rows[index].entry.levelNumberSnapshot, title: level.title,
+                                        initialStateHash: hash, events: shifted)
+                                    attempts += 1
+                                    if let outcome = try? ClassicDOSReplayPlayer.run(shiftedReplay,
+                                        simulation: initial, verify: false), outcome.didWin {
+                                        witness = ClassicDOSReplay(rank: shiftedReplay.rank,
+                                            number: shiftedReplay.number, title: shiftedReplay.title,
+                                            initialStateHash: hash, events: shifted, expected: outcome)
+                                        let first = picked[0]
+                                        retimedWitnesses[id.packID + "\0" + id.levelID] = RetimedFanWitness(
+                                            candidateReplaySHA256: SHA256.hash(data: try encoder.encode(saved))
+                                                .map { String(format: "%02x", $0) }.joined(),
+                                            eventIndex: first, originalTick: saved.events[first].tick,
+                                            nativeTick: shifted[first].tick)
+                                    }
+                                }
+                                var cursor = multiCount - 1
+                                while cursor >= 0 && picked[cursor] == saved.events.count - multiCount + cursor {
+                                    cursor -= 1
+                                }
+                                if cursor < 0 { break }
+                                picked[cursor] += 1
+                                if cursor + 1 < multiCount {
+                                    for position in (cursor + 1)..<multiCount {
+                                        picked[position] = picked[position - 1] + 1
+                                    }
+                                }
+                            }
                         }
                     }
                     let key = geometry(initial)
@@ -244,13 +381,16 @@ struct EvidenceRow: Codable {
                             replayRevision: SHA256.hash(data: try encoder.encode(witness)).description, assetsRevision: hash + ":probes-10")
                         rows[index].profile = try ClassicDifficultyAnalysis.analyse(initial: initial, replay: witness, key: profileKey, maximumProbeRuns: 10)
                         solutions[hash] = witness; found[hash] = witness
+                        solutions[profileKey.replayRevision] = witness
+                        found[profileKey.replayRevision] = witness
+                        foundHashes.insert(hash)
                         if !witness.events.isEmpty { templates[key, default: []].append(witness.events) }
-                        print("WIN \(found.count): \(level.title) [\(Int(rows[index].profile.overallScore))]"); fflush(stdout)
+                        print("WIN \(foundHashes.count): \(level.title) [\(Int(rows[index].profile.overallScore))]"); fflush(stdout)
                     }
                 } catch { failures.append("\(id.packID)/\(id.levelID): \(error)") }
             }
             if packNumber % 10 == 0 { try save() }
-            print("PACK \(packNumber+1)/\(packs.count), \(attempts) trials, \(found.count) new distinct witnesses"); fflush(stdout)
+            print("PACK \(packNumber+1)/\(packs.count), \(attempts) trials, \(foundHashes.count) new distinct witnesses"); fflush(stdout)
         }
         try save()
         if verifyOnly {

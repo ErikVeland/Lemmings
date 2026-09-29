@@ -19,9 +19,13 @@ def write(path, value):
 
 if sys.argv[1] == 'collect':
     base = {key(r): r for r in read(BASE)}
+    bundled_fan_packs = {'fan:lldb-' + str(pack['id'])
+                         for pack in read(ROOT / 'Content/LevelPacks/packs.json')}
     best = dict(base)
     if (OUT / 'fan-evidence.json').exists():
         for row in read(OUT / 'fan-evidence.json'):
+            if not row['official'] and row['entry']['identity']['packID'] not in bundled_fan_packs:
+                continue
             original = base[key(row)]
             assert row['initialHash'] == original['initialHash']
             assert row['entry']['sourceRevision'] == original['entry']['sourceRevision']
@@ -36,6 +40,8 @@ if sys.argv[1] == 'collect':
         folder_solutions = read(folder / 'solutions.json')
         solutions.update(folder_solutions)
         for row in read(folder / 'audit.json'):
+            if not row['official'] and row['entry']['identity']['packID'] not in bundled_fan_packs:
+                continue
             original = base[key(row)]
             if row['official'] or row['profile']['confidence'] == 'low':
                 continue
@@ -44,8 +50,14 @@ if sys.argv[1] == 'collect':
             previous = best[key(row)]
             if previous['profile']['confidence'] == 'low' or row['profile']['overallScore'] < previous['profile']['overallScore']:
                 best[key(row)] = row
-                replay = folder_solutions.get(row['initialHash']) or solutions.get(row['profile']['key']['replayRevision'])
+                replay_revision = row['profile']['key']['replayRevision']
+                replay = (folder_solutions.get(replay_revision) or solutions.get(replay_revision)
+                          or folder_solutions.get(row['initialHash']))
                 assert replay and replay['initialStateHash'] == row['initialHash'] and replay['expected']['didWin']
+                if replay['rank'] != row['entry']['identity']['packID'] or replay['number'] != row['entry']['levelNumberSnapshot']:
+                    replay = dict(replay, rank=row['entry']['identity']['packID'],
+                                  number=row['entry']['levelNumberSnapshot'],
+                                  title=row['entry']['levelNameSnapshot'] if replay['title'] else '')
                 solutions[row['profile']['key']['replayRevision']] = replay
     changed = [r for k, r in sorted(best.items()) if r != base[k]]
     write(OUT / 'fan-evidence.json', changed)

@@ -368,6 +368,14 @@ private func testCheckedPlayback() throws {
     } catch NxrpReplayPlaybackError.spawnedCountMismatch(sequence: 1) {}
     try require(countPlayback.simulation.queuedCommands.isEmpty,
                 "A rejected replay left a partial command queue.")
+    var sourceCountPlayback = try NxrpReplayPlayback(
+        sourceCompatibleReplay: countChanged, level: level, renderedLevel: rendered
+    )
+    let sourceCountCompleted = try sourceCountPlayback.runToSourceCutoff()
+    try require(sourceCountCompleted,
+                "Source-compatible playback rejected a recorded spawned-count mismatch.")
+    try require(sourceCountPlayback.simulation.savedCount == 1,
+                "The tolerated spawned-count mismatch changed the winning result.")
 
     var cloneBaseline = try NeoLemmixSimulation(level: level, renderedLevel: rendered)
     cloneBaseline.enqueue(.assign(lemmingID: 0, skill: .cloner), atTick: 1)

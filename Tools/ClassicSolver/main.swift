@@ -266,18 +266,23 @@ search: while !beam.isEmpty && best == nil && Date().timeIntervalSince(started) 
     }
 }
 let seconds = Int(Date().timeIntervalSince(started))
-if let best {
-    let s = best.sim
-    let outcome = ClassicDOSReplayOutcome(ticks: s.tickCount, released: s.releasedCount, saved: s.savedCount,
-        required: s.configuration.requiredToSave, didWin: true, stateHash: ClassicDOSReplayRecorder.stateHash(of: s))
-    let replay = ClassicDOSReplay(rank: entry.rank, number: entry.number, title: entry.level.title.trimmingCharacters(in: .whitespaces),
-        initialStateHash: ClassicDOSReplayRecorder.stateHash(of: base), events: best.events, expected: outcome)
+let route = best ?? bestPartial
+let proposal = route.map {
+    ClassicDOSReplay(rank: entry.rank, number: entry.number,
+        title: entry.level.title.trimmingCharacters(in: .whitespaces),
+        initialStateHash: ClassicDOSReplayRecorder.stateHash(of: base), events: $0.events)
+}
+let verifiedOutcome = proposal.flatMap { try? ClassicDOSReplayPlayer.run($0, simulation: base) }
+if let proposal, let outcome = verifiedOutcome, outcome.didWin {
+    let replay = ClassicDOSReplay(rank: proposal.rank, number: proposal.number,
+        title: proposal.title, initialStateHash: proposal.initialStateHash,
+        events: proposal.events, expected: outcome)
     let encoder = JSONEncoder(); encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
     let destination = args.contains("--hash-named")
         ? URL(fileURLWithPath: args[3]).appendingPathComponent(replay.initialStateHash + ".json")
         : URL(fileURLWithPath: args[3])
     try encoder.encode(replay).write(to: destination, options: .atomic)
-    print("SOLVED \(entry.rank) \(entry.number) saved \(s.savedCount)/\(s.configuration.requiredToSave) inputs \(best.events.count) expanded \(expanded) in \(seconds)s")
+    print("SOLVED \(entry.rank) \(entry.number) saved \(outcome.saved)/\(outcome.required) inputs \(replay.events.count) expanded \(expanded) in \(seconds)s")
 } else {
     let s = bestPartial?.sim
     print("UNSOLVED \(entry.rank) \(entry.number) best saved \(s?.savedCount ?? 0)/\(base.configuration.requiredToSave) expanded \(expanded) in \(seconds)s")

@@ -1,0 +1,30 @@
+[
+  {
+    "level": "NeoLemmix_Introduction_Pack/Basic_Training_2/Lab_Workout.nxlv",
+    "source_archive_sha256": "e437225e184699e71817fd6fe7270b3a4ecb3145884ab4ad4ab1ef61fa710de5",
+    "source_path": "04 Basic Training 2/05 Lab_Workout__2022-02-07_00-26-43.nxrp",
+    "source_replay_sha256": "194c455df48c0189165de73cddadbfb20c1754ce697f5a458ec3e95e3e64189e",
+    "edits": [
+      {
+        "from": "FRAME 752",
+        "to": "FRAME 758",
+        "expected_occurrences": 1
+      }
+    ],
+    "native_replay_sha256": "5dd3a8cfff95a1a6d0b7a29b5cede850f18f68c837d46d97759fb2d2122c0c5d"
+  },
+  {
+    "level": "NeoLemmix_Introduction_Pack/Basic_Training_1/Slider's_Sacrifice.nxlv",
+    "source_archive_sha256": "e437225e184699e71817fd6fe7270b3a4ecb3145884ab4ad4ab1ef61fa710de5",
+    "source_path": "03 Basic Training 1/28 Slider's_Sacrifice__2022-02-06_22-32-33.nxrp",
+    "source_replay_sha256": "c121b7360baa70c4fa0be474646b3359d723b5432fb58405718db7172542dda5",
+    "edits": [
+      {
+        "from": "FRAME 807",
+        "to": "FRAME 806",
+        "expected_occurrences": 1
+      }
+    ],
+    "native_replay_sha256": "ee0741aac590b23f1ee84c9d7383af5e386e42b2eb2d507ec5b1dfdda4ff0052"
+  }
+]
