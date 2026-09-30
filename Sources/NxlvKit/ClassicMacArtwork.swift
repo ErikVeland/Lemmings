@@ -113,7 +113,8 @@ public struct ClassicMacScene: Sendable {
 
     public init(level source: ClassicLevel, rendered: ClassicRenderedLevel, artwork: ClassicMacArtwork, groundSet: ClassicGroundSet? = nil) throws {
         width = rendered.width * 2; height = rendered.height * 2
-        level = rendered; self.artwork = artwork; style = source.groundStyle
+        let style = groundSet?.style ?? source.groundStyle
+        level = rendered; self.artwork = artwork; self.style = style
         guard artwork.banks[1500 + style] != nil else {
             throw SequelDataError.invalid("No Mac terrain for this style.")
         }
@@ -122,7 +123,7 @@ public struct ClassicMacScene: Sendable {
                 throw SequelDataError.invalid("Missing Mac object definition.")
             }
             let seq = definitions[object.placement.id]
-            guard seq.count > 0, (0..<seq.count).allSatisfy({ artwork.frame(1600 + source.groundStyle, seq.base + $0) != nil }) else {
+            guard seq.count > 0, (0..<seq.count).allSatisfy({ artwork.frame(1600 + style, seq.base + $0) != nil }) else {
                 throw SequelDataError.invalid("Missing Mac object animation.")
             }
         }

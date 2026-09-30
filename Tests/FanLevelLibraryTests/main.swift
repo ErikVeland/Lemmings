@@ -139,10 +139,22 @@ for slot in 0..<10 {
   let expected = try ClassicGroundSet.load(style: slot < 5 ? slot : (slot < 9 ? slot - 5 : 2),
     from: slot < 5 ? originalStyles : (slot < 9 ? extraStyles : ports.appendingPathComponent("holiday_native_1994")))
   check(resolved == expected, "custom graphics slot \(slot) uses its own release assets")
+  check(FanLevelLibrary.artworkFamily(for: resolved, portsRoot: ports)
+    == (slot < 5 ? "lemmings" : slot < 9 ? "ohno" : "holiday"),
+    "alternate artwork for slot \(slot) follows its resolved release")
 }
 let emptyLevel = try ClassicLevel(data: Data(repeating: 0, count: ClassicLevel.recordSize))
 let namedSnow = try FanLevelLibrary.groundSet(for: emptyLevel, styleName: " Snow ", portsRoot: ports)
 check(namedSnow == (try ClassicGroundSet.load(style: 2, from: extraStyles)), "named graphics take precedence over the numeric slot")
+check(FanLevelLibrary.artworkFamily(for: namedSnow, portsRoot: ports) == "ohno",
+  "named Snow does not use the numeric slot's original artwork")
+var customGround = try JSONSerialization.jsonObject(with: JSONEncoder().encode(namedSnow)) as! [String: Any]
+var customPalette = customGround["terrainPalette"] as! [[String: Any]]
+customPalette[0]["red"] = 123
+customGround["terrainPalette"] = customPalette
+let recoloured = try JSONDecoder().decode(ClassicGroundSet.self, from: JSONSerialization.data(withJSONObject: customGround))
+check(FanLevelLibrary.artworkFamily(for: recoloured, portsRoot: ports) == nil,
+  "custom pack artwork is not replaced by an unrelated stock bank")
 for name in ["xmas", "christmas"] {
   let ground = try FanLevelLibrary.groundSet(for: emptyLevel, styleName: name, portsRoot: ports)
   check(ground == (try ClassicGroundSet.load(style: 2, from: ports.appendingPathComponent("holiday_native_1994"))), "\(name) resolves Holiday graphics")

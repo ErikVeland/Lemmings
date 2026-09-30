@@ -503,6 +503,31 @@ enum FanLevelLibrary {
     return try ClassicGroundSet.load(style: index, from: directory)
   }
 
+  private static let presentationGrounds = GameAssetCache<ClassicGroundSet>(capacity: 32)
+
+  /// Alternate artwork is safe only when it belongs to the exact resolved ground set.
+  static func artworkFamily(for ground: ClassicGroundSet, portsRoot: URL) -> String? {
+    for (folder, family) in [
+      ("holiday_native_1994", "holiday"),
+      ("lemmings_dos_1991-07-30", "lemmings"),
+      ("oh_no_more_lemmings_dos-1991-11-14_2232", "ohno"),
+      ("xmas_dos_XmasLemmingsV1.9", "xmas"),
+      ("xmas_dos_XmasLemmingsV1.9a1", "xmas")
+    ] {
+      let directory = portsRoot.appendingPathComponent(folder)
+      let key = GameAssetCache<ClassicGroundSet>.bundledKey(directory).map { "\($0):\(ground.style)" }
+      let reference: ClassicGroundSet
+      if let key, let cached = presentationGrounds.value(for: key) { reference = cached }
+      else {
+        guard let loaded = try? ClassicGroundSet.load(style: ground.style, from: directory) else { continue }
+        reference = loaded
+        if let key { presentationGrounds.insert(loaded, for: key) }
+      }
+      if reference == ground { return family }
+    }
+    return nil
+  }
+
   static func specialGraphic(for level: ClassicLevel, entry: Entry, pack: URL, portsRoot: URL) throws -> ClassicSpecialGraphic? {
     guard level.specialStyle != 0 else { return nil }
     let index = level.specialStyle - 1

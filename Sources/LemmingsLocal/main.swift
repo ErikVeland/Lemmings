@@ -1145,7 +1145,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     applyDisplayMode()
     if artworkChanged, !sequelIsActive, let level = artworkLevel,
       let rendered = playfield.classicScene {
-      configureArtwork(level, rendered: rendered)
+      configureArtwork(level, rendered: rendered, groundOverride: artworkGroundOverride)
       panel.needsDisplay = true
       playfield.needsDisplay = true
     }
@@ -2200,6 +2200,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   private var artworkLevel: ClassicLevel?
+  private var artworkGroundOverride: ClassicGroundSet?
 
   nonisolated private static let decodedClassicArtwork = GameAssetCache<PreparedClassicArtwork>(capacity: 8)
 
@@ -2329,7 +2330,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       playfield.invalidateSprites()
       playfield.classicScene = rendered
       playfield.levelImage = image
-      configureArtwork(level, rendered: rendered)
+      configureArtwork(level, rendered: rendered, groundOverride: groundOverride)
       if var palette = try? ClassicLemmingPalette.inLevelVGA(
         terrainPalette: ground.terrainPalette) {
         // Reducing the palette rather than the pixels means terrain, sprites
@@ -2353,25 +2354,34 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
   }
 
-  private func configureArtwork(_ level: ClassicLevel, rendered: ClassicRenderedLevel) {
+  private func configureArtwork(_ level: ClassicLevel, rendered: ClassicRenderedLevel,
+    groundOverride: ClassicGroundSet? = nil) {
     playfield.macScene = nil
     playfield.macArtwork = nil
     playfield.imageScale = 1
     panel.macArtwork = nil
     artworkLevel = level
+    artworkGroundOverride = groundOverride
     guard [.macintosh, .amiga].contains(activeGraphics),
-      dataSets.indices.contains(gamePicker.indexOfSelectedItem),
+      groundOverride != nil || dataSets.indices.contains(gamePicker.indexOfSelectedItem),
       let resources = Bundle.main.resourceURL else { return }
     let source = activeGraphics == .amiga ? "AmigaArtwork" : "MacArtwork"
     let root = resources.appendingPathComponent(source)
     let family: String
-    switch dataSets[gamePicker.indexOfSelectedItem].set.title {
-    case .lemmings: family = "lemmings"
-    case .ohNoMoreLemmings: family = "ohno"
-    case .xmasLemmings1991, .xmasLemmings1992: family = "xmas"
-    case .holidayLemmings1993, .holidayLemmings1994: family = "holiday"
-    case .ohYesMoreLemmings: guard let portArtworkFamily else { return }; family = portArtworkFamily
-    default: return
+    let fanFamily = groundOverride.flatMap {
+      FanLevelLibrary.artworkFamily(for: $0, portsRoot: resources.appendingPathComponent("Ports"))
+    }
+    if groundOverride != nil {
+      family = fanFamily ?? "lemmings"
+    } else {
+      switch dataSets[gamePicker.indexOfSelectedItem].set.title {
+      case .lemmings: family = "lemmings"
+      case .ohNoMoreLemmings: family = "ohno"
+      case .xmasLemmings1991, .xmasLemmings1992: family = "xmas"
+      case .holidayLemmings1993, .holidayLemmings1994: family = "holiday"
+      case .ohYesMoreLemmings: guard let portArtworkFamily else { return }; family = portArtworkFamily
+      default: return
+      }
     }
     do {
       let key = source + "/" + family
@@ -2383,7 +2393,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
       }
       playfield.macArtwork = art
       panel.macArtwork = art
-      playfield.macScene = try ClassicMacScene(level: level, rendered: rendered, artwork: art, groundSet: grounds[level.groundStyle])
+      // Custom terrain and special pictures retain the pixels used by collision.
+      guard groundOverride == nil || (fanFamily != nil && level.specialStyle == 0) else { return }
+      playfield.macScene = try ClassicMacScene(level: level, rendered: rendered, artwork: art,
+        groundSet: groundOverride ?? grounds[level.groundStyle])
     } catch {
       setStatus("\(settings.graphics.displayName) artwork unavailable for this level: \(error)")
     }
@@ -4071,11 +4084,16 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
   }
 
-  private func startLearningEntries(_ entries: [LevelPlaylistEntry], in store: LevelPlaylistStore) {
+  private func startLearningEntries(_ entries: [LevelPlaylistEntry], in store: LevelPlaylistStore,
+    allowsFullRestart: Bool = true) {
     do {
       let run = try LevelSequenceRun(source: .playlist(LearningJourney.playlistID),
         pool: .init(id: LearningJourney.version, summary: LearningJourney.title), entries: entries)
-      installActiveSequence(run, in: store)
+      let freshRun = try allowsFullRestart ? LearningJourneyLibrary.journey.map {
+        try LevelSequenceRun(source: .playlist(LearningJourney.playlistID),
+          pool: .init(id: LearningJourney.version, summary: LearningJourney.title), entries: $0.lessons.map(\.entry))
+      } : nil
+      installActiveSequence(run, in: store, newSession: freshRun)
     } catch { GameScreen.shared.message("Journey unavailable", detail: error.localizedDescription) }
   }
 
@@ -4085,7 +4103,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     let page = GameMenuPage(title: "Come back to these")
     for (index, entry) in entries.dropFirst(offset).prefix(5).enumerated() {
       page.addListAction(entry.levelNameSnapshot, at: index) { [weak self] in
-        self?.startLearningEntries([entry], in: store)
+        self?.startLearningEntries([entry], in: store, allowsFullRestart: false)
       }
     }
     if entries.count > offset + 5 { page.addPrimaryAction("More") { [weak self] in self?.presentLearningRevisit(offset: offset + 5) } }
@@ -4134,13 +4152,14 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   private func installActiveSequence(
     _ run: LevelSequenceRun,
-    in store: LevelPlaylistStore
+    in store: LevelPlaylistStore,
+    newSession: LevelSequenceRun? = nil
   ) {
     let arcade = ArcadeStore.shared
     let ownerProfileID = arcade.records.activeProfileID
     let originalHotSeatID = arcade.hotSeatID
     let originalRunID = store.activeRun?.id
-    let begin: (Bool) -> Void = { [weak self] hotSeat in
+    let begin: (Bool, LevelSequenceRun) -> Void = { [weak self] hotSeat, run in
       guard let self else { return }
       self.ensureFanPacksResolved(for: run.entries, title: "Start session") { [weak self] failures in
         guard let self else { return }
@@ -4193,12 +4212,12 @@ let achievementProgressKey = "ClassicAchievementProgress"
         }
       }
     }
-    guard arcade.hotSeatIsActive || store.activeRun != nil else { begin(false); return }
+    guard arcade.hotSeatIsActive || store.activeRun != nil else { begin(false, run); return }
     let page = GameMenuPage(title: "Start a new session?")
     page.setDetail("Your current session will stay saved.")
-    let solo = page.addPrimaryAction("New solo") { begin(false) }
+    let solo = page.addPrimaryAction("New solo") { begin(false, newSession ?? run) }
     solo.frame = CGRect(x: 688, y: 466, width: 288, height: 48)
-    let hotSeat = page.addSecondaryAction("New Hot Seat") { begin(true) }
+    let hotSeat = page.addSecondaryAction("New Hot Seat") { begin(true, newSession ?? run) }
     page.controllerBackButton.frame = CGRect(x: 144, y: 466, width: 224, height: 48)
     hotSeat.frame = CGRect(x: 384, y: 466, width: 288, height: 48)
     hotSeat.isEnabled = arcade.records.profiles.count >= 2
@@ -6478,7 +6497,15 @@ let achievementProgressKey = "ClassicAchievementProgress"
       return
     }
     var parts: [String] = []
-    if let flow, let rank = flow.currentRank {
+    if isLearningJourneyActive, let journey = LearningJourneyLibrary.journey,
+      let index = journey.lessons.firstIndex(where: { $0.entry.identity == sequencePlayingIdentity }) {
+      parts.append("JOURNEY \(index + 1)/\(journey.lessons.count)")
+    } else if let run = sequencePlaylistStore?.activeRun, run.currentEntry.identity == sequencePlayingIdentity {
+      parts.append("LEVEL \(run.currentIndex + 1)/\(run.entries.count)")
+    } else if fanPlaying, let entry = fanQueue.indices.contains(fanQueueIndex) ? fanQueue[fanQueueIndex] : nil,
+      let index = fanEntries.firstIndex(where: { $0.file == entry.file && $0.section == entry.section }) {
+      parts.append("LEVEL \(index + 1)/\(fanEntries.count)")
+    } else if !fanPlaying, currentNxlvURL == nil, let flow, let rank = flow.currentRank {
       parts.append("\(rank.name.uppercased()) \(flow.currentNumber)/\(rank.levelIndices.count)")
     }
     parts.append("SAVED \(session.saved)/\(session.required)")

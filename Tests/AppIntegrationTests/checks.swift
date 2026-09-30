@@ -3099,8 +3099,12 @@ extension AppDelegate {
       && sequencePlayingIdentity == first && !arcade.hotSeatIsActive,
       "New solo did not start the learning journey")
     let firstSoloID = store.activeRun!.id
+    try check(try store.advanceLearningJourney(runID: firstSoloID, won: true),
+      "The first journey lesson did not complete")
+    let pending = store.learningProgress.unseen(in: journey)
+    try check(pending.first?.identity != first, "The restart fixture did not have prior player progress")
     returnToLibrary()
-    startLearningEntries(entries, in: store)
+    startLearningEntries(pending, in: store)
     guard let soloChooser = GameScreen.shared.controllerPage(in: window) as? GameMenuPage,
           let newSolo = buttons(soloChooser).first(where: { $0.title == "New solo" }) else {
       throw IntegrationFailure(message: "The journey did not offer New solo")
@@ -3114,7 +3118,7 @@ extension AppDelegate {
       "New solo did not replace and save the learning journey session")
     let soloID = store.activeRun!.id
     returnToLibrary()
-    startLearningEntries(entries, in: store)
+    startLearningEntries(pending, in: store)
     guard let chooser = GameScreen.shared.controllerPage(in: window) as? GameMenuPage,
           let newHotSeat = buttons(chooser).first(where: { $0.title == "New Hot Seat" }) else {
       throw IntegrationFailure(message: "The journey did not offer New Hot Seat")
@@ -3124,10 +3128,58 @@ extension AppDelegate {
     let ready = GameScreen.shared.controllerPage(in: window)
     try check(arcade.hotSeatIsActive && store.activeRunHotSeatID == arcade.hotSeatID
       && sequencePlayingIdentity == first
+      && artworkLevel?.title == "Just dig!"
+      && store.activeRun?.entries.count == journey.lessons.count
+      && isPaused
       && store.savedRuns.contains(where: { $0.run.id == soloID })
       && ready.map { buttons($0).contains(where: { $0.title.hasPrefix("Ready,") }) } == true,
       "New Hot Seat did not start the learning journey or show Ready")
-    print("PASS learning journey starts in solo and Hot Seat")
+    print("PASS new solo and Hot Seat journeys start at Just dig! despite prior player progress; handover remains paused")
+
+    // Follow the actual mixed-campaign route that previously drew snow as marble.
+    GameScreen.shared.dismissAll()
+    try check(try store.advanceLearningJourney(runID: store.activeRun!.id, won: true),
+      "The Hot Seat journey did not advance to its floater lesson")
+    returnToLibrary()
+    sequencePlaylistStore = store
+    settings.graphics = .macintosh
+    startActiveSequence()
+    try await waitForLaunch()
+    try check(fanPlaying && artworkLevel?.title == "Floating Down!",
+      "The second journey lesson did not load Floating Down!")
+    guard let ports = Bundle.main.resourceURL?.appendingPathComponent("Ports"),
+      let rendered = playfield.classicScene, let level = artworkLevel,
+      let scene = playfield.macScene, let game = session as? ClassicSession else {
+      throw IntegrationFailure(message: "The snow lesson did not have a rendered scene")
+    }
+    let snow = try ClassicGroundSet.load(style: 2, from: ports.appendingPathComponent("holiday_native_1994"))
+    let holiday = try ClassicMacArtwork(directory: Bundle.main.resourceURL!.appendingPathComponent("MacArtwork/holiday"))
+    let expected = try ClassicMacScene(level: level, rendered: rendered, artwork: holiday, groundSet: snow)
+    try check(scene.terrainRGBA == expected.terrainRGBA && artworkGroundOverride == snow,
+      "The snow lesson reused another campaign's terrain artwork")
+    let initialHash = ClassicDOSReplayRecorder.stateHash(of: game.simulation)
+    for graphics in [ClassicGraphicsSource.dosVGA, .amiga, .macintosh] {
+      var updated = settings; updated.graphics = graphics; apply(updated)
+      try check(ClassicDOSReplayRecorder.stateHash(of: game.simulation) == initialHash,
+        "Changing graphics changed the fan level's collision or simulation")
+      if graphics == .macintosh {
+        try check(playfield.macScene?.terrainRGBA == expected.terrainRGBA,
+          "Changing graphics lost the resolved snow artwork")
+      }
+    }
+    GameScreen.shared.dismissAll()
+    phase = .playing; playfield.phase = .playing
+    playfield.overlayTitle = nil; playfield.overlayLines = []; playfield.overlayFooter = nil
+    refreshProgressText()
+    try check(panel.progressText.hasPrefix("JOURNEY 2/\(journey.lessons.count)"),
+      "A fan lesson retained the Classic campaign's Fun 1/30 HUD")
+    let captureFolder = URL(fileURLWithPath: ".build/journey-regression")
+    try FileManager.default.createDirectory(at: captureFolder, withIntermediateDirectories: true)
+    if let bitmap = playfield.bitmapImageRepForCachingDisplay(in: playfield.bounds) {
+      playfield.cacheDisplay(in: playfield.bounds, to: bitmap)
+      try bitmap.representation(using: .png, properties: [:])?.write(to: captureFolder.appendingPathComponent("floating-down-mac.png"))
+    }
+    print("PASS Floating Down! uses Holiday snow artwork, retains collision through graphics changes and shows JOURNEY 2")
   }
 
   /// The CE packs ship in the app. They need no folder choice, and a saved run
