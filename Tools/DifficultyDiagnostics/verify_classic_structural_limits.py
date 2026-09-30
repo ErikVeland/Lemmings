@@ -10,7 +10,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 RAW_SOURCE = ROOT / ".build/learning-evidence/fan-slot-scan/evaluated/port-descriptors.json"
 SOURCE = ROOT / ".build/learning-evidence/fan-slot-scan/evaluated/bundled-port-descriptors.json"
-AUDIT = ROOT / ".build/learning-evidence/fan-slot-scan/evaluated/audit.json"
+SCAN_AUDIT = ROOT / ".build/learning-evidence/fan-slot-scan/evaluated/audit.json"
+AUDIT = ROOT / "Artifacts/ClassicProgression/audit.json"
 RECORDS = ROOT / "Artifacts/DifficultyEvaluation/classic-structural-limits.json"
 
 
@@ -21,7 +22,7 @@ def main():
                     json.loads((ROOT / "Content/LevelPacks/packs.json").read_text())}
         bundled = {key: value for key, value in raw.items()
                    if key.split("\0", 1)[0] in pack_ids}
-        assert len(bundled) == sum(1 for row in json.loads(AUDIT.read_text())
+        assert len(bundled) == sum(1 for row in json.loads(SCAN_AUDIT.read_text())
                                    if row["entry"]["identity"]["packID"] in pack_ids)
         temporary = SOURCE.with_suffix(".tmp")
         temporary.write_text(json.dumps(bundled, sort_keys=True, separators=(",", ":")) + "\n")

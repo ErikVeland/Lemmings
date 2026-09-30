@@ -71,6 +71,7 @@ struct GolemsObjectComparison: Codable {
         let rebaseExpected = ProcessInfo.processInfo.environment["FAN_REBASE_EXPECTED"] == "1"
         let compareGolemsObjects = ProcessInfo.processInfo.environment["FAN_COMPARE_GOLEMS_OBJECTS"] == "1"
         let golemsObjects = ProcessInfo.processInfo.environment["FAN_GOLEMS_OBJECTS"] == "1"
+        let fanClock: ClassicDOSClock = ProcessInfo.processInfo.environment["CLASSIC_FAN_CLOCK"] == "dos" ? .dos : .golems
         let describeOnly = ProcessInfo.processInfo.environment["FAN_DESCRIBE_ONLY"] == "1"
         guard !rebaseExpected || (verifyOnly && !compareGolemsObjects && !describeOnly) else {
             throw LevelPlaylistError.invalidPool
@@ -178,7 +179,8 @@ struct GolemsObjectComparison: Codable {
                     let special = try FanLevelLibrary.specialGraphic(for: level, entry: item, pack: pack, portsRoot: ports)
                     let rendered = try ClassicLevelRenderer.render(level, groundSet: ground, specialGraphic: special,
                         objectSemantics: (compareGolemsObjects || golemsObjects) ? .golems : .forFanLevel(level, groundSet: ground))
-                    let initial = try ClassicDOSSimulation(level: level, renderedLevel: rendered, mainDATAssets: assets(ports.appendingPathComponent("lemmings_dos_1991-07-30")))
+                    let initial = try ClassicDOSSimulation(level: level, renderedLevel: rendered,
+                        mainDATAssets: assets(ports.appendingPathComponent("lemmings_dos_1991-07-30")), clock: fanClock)
                     try describe(id, level, initial)
                     let hash = ClassicDOSReplayRecorder.stateHash(of: initial)
                     guard compareGolemsObjects || hash == rows[index].initialHash else { throw LevelPlaylistError.invalidEntry }

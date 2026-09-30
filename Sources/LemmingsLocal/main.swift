@@ -2310,12 +2310,14 @@ let achievementProgressKey = "ClassicAchievementProgress"
         title = dataSets[gamePicker.indexOfSelectedItem].set.title
       }
       let mechanics = ClassicDOSMechanics(title: title, rank: entry.rank)
+      let clock: ClassicDOSClock = groundOverride == nil ? .dos : .golems
       let simulation: ClassicDOSSimulation
       if let assets = assetsOverride ?? assets {
         simulation = try ClassicDOSSimulation(
-          level: level, renderedLevel: rendered, mainDATAssets: assets, mechanics: mechanics)
+          level: level, renderedLevel: rendered, mainDATAssets: assets, mechanics: mechanics, clock: clock)
       } else {
-        simulation = try ClassicDOSSimulation(level: level, renderedLevel: rendered, mechanics: mechanics)
+        simulation = try ClassicDOSSimulation(level: level, renderedLevel: rendered,
+          mechanics: mechanics, clock: clock)
       }
       guard let image = makeImage(
         width: rendered.width, height: rendered.height, rgba: [UInt8](rendered.rgba))

@@ -1,0 +1,56 @@
+[
+  {
+    "actualStoredReplayRevision": "SHA256 digest: 28309041ba09b08e165fb0562c8dfb36ba1910bb316f10a8751a8bdf4de787a5",
+    "archiveSHA256": "05bdb88c0f61a971f881a9e4c8dae9bfa1148a540f2a5a671a5f8bac86b37314",
+    "claimedOldReplayRevision": "SHA256 digest: 32932ad0c78aa4dc0e3322f7bd881c4a9e3a77d7e3d5448f8efbb54e5e5f0361",
+    "golemsInitialHash": "0ec773aa2a31c917945ca4936b42303aca44956e8aed5a1d275e26871f3d8ef1",
+    "identity": {
+      "engine": "classic",
+      "levelID": "Timpack1.dat#1",
+      "packID": "fan:lldb-88"
+    },
+    "nativeCompletionTick": 587,
+    "nativeRequired": 25,
+    "nativeSaved": 47,
+    "newDifficultyScore": 85.35384685744151,
+    "newReplayRevision": "SHA256 digest: c0cc90966110f606259737e921b0bacf8b2d662706a245b5992d0698e93a4deb",
+    "oldInitialHash": "7ce045ed06f37e8482e435016dbd5737133717f6f5d75847eae43b0f21021c09",
+    "verification": "Stored commands won again under DOS and Golems clocks on the exact bundled level; Golems route received ten probes. Original claimed digest remains unverified."
+  },
+  {
+    "actualStoredReplayRevision": "SHA256 digest: c87d0788d1abc053591868c066e3b73c10e32e1e7ffc86105098af3832b67969",
+    "archiveSHA256": "05bdb88c0f61a971f881a9e4c8dae9bfa1148a540f2a5a671a5f8bac86b37314",
+    "claimedOldReplayRevision": "SHA256 digest: 5ac7389fe77feb2f0a2474415e204fd151b161a18279cf7c4a751677b9db28b7",
+    "golemsInitialHash": "bfa553536aa3119b4ead773975102d6b6f38979427399ea9d7408af7ebc4c596",
+    "identity": {
+      "engine": "classic",
+      "levelID": "Timpack1.dat#5",
+      "packID": "fan:lldb-88"
+    },
+    "nativeCompletionTick": 604,
+    "nativeRequired": 25,
+    "nativeSaved": 46,
+    "newDifficultyScore": 86.55393495109617,
+    "newReplayRevision": "SHA256 digest: 421d71aed3915a5bc306eceaca60807377012a4488b5fc7f01c39ab967d49f2d",
+    "oldInitialHash": "176d43902b8ce8edfb345905f612f2753075ba50457f063579bae795b73bbed4",
+    "verification": "Stored commands won again under DOS and Golems clocks on the exact bundled level; Golems route received ten probes. Original claimed digest remains unverified."
+  },
+  {
+    "actualStoredReplayRevision": "SHA256 digest: 71b62b516b36b5cef0904ba4dc7681f549d9a3d5f7bbdebf170c1b41812c0450",
+    "archiveSHA256": "3a049d43042d6380f653db4196379a320bc75aaac51c7e028c1aae286e9690d4",
+    "claimedOldReplayRevision": "SHA256 digest: 7132d61e971b0a2857785b43cbaafd2c0e84371048c938f4b01fcc1c5a0fe67b",
+    "golemsInitialHash": "a3bcde7ebfc36ca67e8ceb39dc2e249c2a2fb8b6c08bb8afb8f039f0082a2b3c",
+    "identity": {
+      "engine": "classic",
+      "levelID": "Timpack3.dat#5",
+      "packID": "fan:lldb-90"
+    },
+    "nativeCompletionTick": 848,
+    "nativeRequired": 77,
+    "nativeSaved": 77,
+    "newDifficultyScore": 171.30608682869462,
+    "newReplayRevision": "SHA256 digest: 8d6f4c56a1b7985f577d007f2fb905b5b0d9f0ac875c1843890a30b6d6cec036",
+    "oldInitialHash": "abecdab5f250c9b978e51221e794a04de618a711b243e9e5a034e9b444b5a422",
+    "verification": "Stored commands won again under DOS and Golems clocks on the exact bundled level; Golems route received ten probes. Original claimed digest remains unverified."
+  }
+]

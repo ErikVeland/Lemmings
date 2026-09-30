@@ -51,8 +51,8 @@ struct ImportedFanReplay: Decodable {
                replay.expected?.didWin == true, replays[replay.initialStateHash] == nil { replays[replay.initialStateHash] = replay }
         }
         let revision = ProcessInfo.processInfo.environment["DIFFICULTY_SIMULATION_REVISION"] ?? DifficultyModel.simulationVersion
-        let fanClock: ClassicDOSClock = ProcessInfo.processInfo.environment["CLASSIC_FAN_CLOCK"] == "golems"
-            ? .golems : .dos
+        let fanClock: ClassicDOSClock = ProcessInfo.processInfo.environment["CLASSIC_FAN_CLOCK"] == "dos"
+            ? .dos : .golems
         let fanOnly = ProcessInfo.processInfo.environment["CLASSIC_AUDIT_FAN_ONLY"] == "1"
         let cacheURL = output.appendingPathComponent("audit.json")
         let cached = (try? decoder.decode([AuditedClassicLevel].self, from: Data(contentsOf: cacheURL))) ?? []

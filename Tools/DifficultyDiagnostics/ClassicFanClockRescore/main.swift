@@ -31,6 +31,7 @@ struct Rescored: Codable {
     let oldHash: String
     let newHash: String
     let analysisRevision: String?
+    let recoveredOldReplayDigest: String?
 }
 
 guard CommandLine.arguments.count == 4 else {
@@ -61,12 +62,20 @@ let packs = Dictionary(uniqueKeysWithValues: FanLevelLibrary.packs(in: [resource
 })
 let output = URL(fileURLWithPath: CommandLine.arguments[3])
 let analysisRevision = "golems-clock-2-limit-from-clock-1"
+let recoverableReplayKeys: Set<String> = [
+    "fan:lldb-88\0Timpack1.dat#1",
+    "fan:lldb-88\0Timpack1.dat#5",
+    "fan:lldb-90\0Timpack3.dat#5",
+]
 let previous = (try? decoder.decode([Rescored].self, from: Data(contentsOf: output))) ?? []
 let completed = Dictionary(uniqueKeysWithValues: previous.filter { $0.analysisRevision == analysisRevision }.map {
     ($0.row.entry.identity.packID + "\0" + $0.row.entry.identity.levelID, $0)
 })
+let start = Int(ProcessInfo.processInfo.environment["CLOCK_RESCORE_START"] ?? "") ?? 0
 let limit = Int(ProcessInfo.processInfo.environment["CLOCK_RESCORE_LIMIT"] ?? "") ?? checks.count
-let selected = Array(checks.prefix(limit))
+precondition(start >= 0 && start <= limit && limit <= checks.count)
+let selected = Array(checks[start..<limit])
+print("RANGE", start, limit, "of", checks.count)
 let assets = try ClassicMainDATAssets.load(from: ports.appendingPathComponent("lemmings_dos_1991-07-30"))
 var packEntries: [String: [FanLevelLibrary.Entry]] = [:]
 var results: [Rescored] = []
@@ -109,9 +118,19 @@ for check in selected {
               let oldReplay = solutions[old.profile.key.replayRevision] ?? hints[check.oldHash] ?? solutions[check.oldHash],
               oldReplay.initialStateHash == check.oldHash else { throw NSError(domain: "Rescore", code: 3) }
         let oldDigest = SHA256.hash(data: try encoder.encode(oldReplay)).description
-        guard old.profile.key.replayRevision == oldDigest ||
-              old.profile.key.replayRevision == String(oldDigest.dropFirst("SHA256 digest: ".count)) else {
-            throw NSError(domain: "Rescore", code: 4)
+        let oldDigestMatches = old.profile.key.replayRevision == oldDigest ||
+            old.profile.key.replayRevision == String(oldDigest.dropFirst("SHA256 digest: ".count))
+        if !oldDigestMatches {
+            guard recoverableReplayKeys.contains(identityKey) else { throw NSError(domain: "Rescore", code: 4) }
+            let dosInitial = try ClassicDOSSimulation(level: level, renderedLevel: rendered,
+                mainDATAssets: assets, clock: .dos)
+            guard ClassicDOSReplayRecorder.stateHash(of: dosInitial) == check.oldHash else {
+                throw NSError(domain: "Rescore", code: 4)
+            }
+            let oldCandidate = ClassicDOSReplay(rank: oldReplay.rank, number: oldReplay.number,
+                title: oldReplay.title, initialStateHash: check.oldHash, events: oldReplay.events)
+            guard try ClassicDOSReplayPlayer.run(oldCandidate, simulation: dosInitial,
+                tickLimit: 20_000).didWin else { throw NSError(domain: "Rescore", code: 4) }
         }
         let candidate = ClassicDOSReplay(rank: oldReplay.rank, number: oldReplay.number,
             title: oldReplay.title, initialStateHash: hash, events: oldReplay.events)
@@ -128,7 +147,8 @@ for check in selected {
         let row = EvidenceRow(entry: old.entry, profile: profile, official: false, order: old.order,
             playable: old.playable, initialHash: hash, issue: nil)
         results.append(Rescored(row: row, replay: witness, oldHash: check.oldHash,
-            newHash: hash, analysisRevision: analysisRevision))
+            newHash: hash, analysisRevision: analysisRevision,
+            recoveredOldReplayDigest: oldDigestMatches ? nil : oldDigest))
         print("SCORED", results.count + errors.count, profile.overallScore)
         fflush(stdout)
     } catch {
