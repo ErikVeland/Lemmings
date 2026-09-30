@@ -1,7 +1,7 @@
 {
-  "engineSourceFingerprint": "8c81fe9e578e33c895efc2445593b3889452bafbeb5a8a9f6f4e02b64abea785",
+  "engineSourceFingerprint": "08906f3e78a56f4fa2d68c79e5e822b14042d275af4482bb285200123efc9d89",
   "exhaustive": false,
-  "generatedAt": "2026-09-30T01:36:14Z",
+  "generatedAt": "2026-09-30T06:37:10Z",
   "levels": [
     {
       "bestSaved": 10,
@@ -20130,7 +20130,7 @@
       "rank": "Lemmings Versus",
       "required": 20,
       "status": "OBSERVED",
-      "testedCandidates": 2,
+      "testedCandidates": 3,
       "title": "Cross-over Point",
       "witness": {
         "completed": true,
