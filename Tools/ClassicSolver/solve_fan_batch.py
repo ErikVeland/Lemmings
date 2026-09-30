@@ -19,6 +19,8 @@ def main():
     parser.add_argument("--seconds", type=float, default=5)
     parser.add_argument("--width", type=int, default=48)
     parser.add_argument("--rate", type=int)
+    parser.add_argument("--adaptive-rate", action="store_true")
+    parser.add_argument("--prefer-progress", action="store_true")
     parser.add_argument("--fallback", type=int, default=170)
     parser.add_argument("--refire", type=int, default=120)
     parser.add_argument("--save-partials", action="store_true")
@@ -84,6 +86,8 @@ def main():
         prior_search_ran = old and completed_search(old)
         if (prior_search_ran and old.get("solverRevision") == solver_revision
                 and old.get("rate") == args.rate
+                and old.get("adaptiveRate", False) == args.adaptive_rate
+                and old.get("preferProgress", False) == args.prefer_progress
                 and old.get("fallback", 170) == args.fallback
                 and old.get("refire", 120) == args.refire
                 and (old.get("savePartials", False) or not args.save_partials)
@@ -104,6 +108,10 @@ def main():
                    "--refire", str(args.refire), "--hash-named"]
         if args.rate is not None:
             command.extend(["--rate", str(args.rate)])
+        if args.adaptive_rate:
+            command.append("--adaptive-rate")
+        if args.prefer_progress:
+            command.append("--prefer-progress")
         if args.save_partials:
             command.append("--partial-out")
         started = time.monotonic()
@@ -114,6 +122,8 @@ def main():
         record = {"hash": digest, "identity": row["entry"]["identity"],
                   "seconds": args.seconds, "width": args.width,
                   "rate": args.rate,
+                  "adaptiveRate": args.adaptive_rate,
+                  "preferProgress": args.prefer_progress,
                   "fallback": args.fallback, "refire": args.refire,
                   "savePartials": args.save_partials,
                   "solverRevision": solver_revision,

@@ -121,11 +121,15 @@ NeoLemmix compatibility claim.
 
 ## Verification
 
-Run the release audit for the current source and fixture set:
+Run the routine minor-release audit for the current source and fixture set:
 
 ```sh
 python3 Tools/ReleaseReadiness/audit.py --app
 ```
+
+This checks preserved solution fixture hashes and focused engine regressions.
+It does not replay every campaign route. Use `--scope all` after changes that
+can alter campaign outcomes. See the [release replay policy](Documentation/ReleaseScope.md#release-replay-policy).
 
 Run the principal deterministic gates when working on the engines:
 

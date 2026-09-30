@@ -144,6 +144,30 @@ private func testInitialHashGuard(content: Content) throws {
     print("PASS initial state hash rejects mismatched data")
 }
 
+private func testSpeculativeEarlyStop(content: Content) throws {
+    let (simulation, entry) = try content.simulation(at: 2)
+    let replay = ClassicDOSReplay(
+        rank: entry.rank,
+        number: entry.number,
+        title: entry.level.title.trimmingCharacters(in: .whitespaces),
+        initialStateHash: ClassicDOSReplayRecorder.stateHash(of: simulation),
+        events: []
+    )
+    let short = try ClassicDOSReplayPlayer.run(
+        replay, simulation: simulation, tickLimit: searchTickLimit,
+        verify: false, stopWhenUnwinnable: true)
+    try require(!short.didWin, "speculative replay reported a win after losing too many lemmings")
+    do {
+        let full = try ClassicDOSReplayPlayer.run(
+            replay, simulation: simulation, tickLimit: searchTickLimit, verify: false)
+        try require(short.ticks < full.ticks,
+            "speculative replay did not stop before the full loss: \(short.ticks), \(full.ticks)")
+    } catch ClassicDOSReplayError.tickLimitReached(_) {
+        try require(short.ticks < searchTickLimit, "speculative replay reached the full tick limit")
+    }
+    print("PASS speculative loss stops before full replay completion")
+}
+
 private func testRoundTrip(_ replay: ClassicDOSReplay) throws {
     let encoder = JSONEncoder()
     encoder.outputFormatting = [.sortedKeys, .prettyPrinted]
@@ -164,6 +188,7 @@ do {
     let content = try Content(directory: directory)
     try testDeterminism(content: content)
     try testInitialHashGuard(content: content)
+    try testSpeculativeEarlyStop(content: content)
 
     // Fun 1 is the canonical one-assignment level.
     let solved = try findSingleAssignmentWin(
@@ -188,6 +213,10 @@ do {
     let verified = try ClassicDOSReplayPlayer.run(
         solved, simulation: content.simulation(at: 0).0, tickLimit: searchTickLimit, verify: true)
     try require(verified == expected, "verified replay did not match its recorded outcome")
+    let speculativeWin = try ClassicDOSReplayPlayer.run(
+        solved, simulation: content.simulation(at: 0).0, tickLimit: searchTickLimit,
+        verify: false, stopWhenUnwinnable: true)
+    try require(speculativeWin == verified, "speculative check changed a winning replay")
     print("PASS recorded replay verifies against a fresh simulation")
 
     try testRoundTrip(solved)

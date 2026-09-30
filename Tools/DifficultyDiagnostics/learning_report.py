@@ -93,6 +93,10 @@ elif sys.argv[1] == 'report':
     assert all(r['entry']['packNameSnapshot'] not in ('Amiga Fun', 'Amiga Tricky', 'Amiga Taxing', 'Amiga Mayhem') for r in selected if not r['official'])
     assert len({(r['entry']['packNameSnapshot'], normal_title(r)) for r in selected if r['official']}) == len(official_hashes)
     fan = [r for r in selected if not r['official']]
+    bundled_fan_packs = {'fan:lldb-' + str(pack['id'])
+                         for pack in read(ROOT / 'Content/LevelPacks/packs.json')}
+    assert all(not r['entry']['identity']['packID'].startswith('fan:lldb-')
+               or r['entry']['identity']['packID'] in bundled_fan_packs for r in fan)
     assert not {normal_title(r) for r in fan}.intersection({normal_title(r) for r in selected if r['official']})
     assert all(r['profile']['confidence'] != 'low' and r['profile']['detectedTechniques'] for r in fan)
     scenarios = read(OUT / 'scenarios.json')

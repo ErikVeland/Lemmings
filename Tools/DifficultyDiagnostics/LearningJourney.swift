@@ -12,6 +12,12 @@ struct Row: Decodable {
 }
 let args = CommandLine.arguments
 var rows = try JSONDecoder().decode([Row].self, from: Data(contentsOf: URL(fileURLWithPath: args[1])))
+struct BundledPack: Decodable { let id: Int }
+let project = URL(fileURLWithPath: args[1]).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
+let bundledPacks = try Set(JSONDecoder().decode([BundledPack].self,
+    from: Data(contentsOf: project.appendingPathComponent("Content/LevelPacks/packs.json")))
+    .map { "fan:lldb-\($0.id)" })
+rows.removeAll { $0.entry.identity.packID.hasPrefix("fan:lldb-") && !bundledPacks.contains($0.entry.identity.packID) }
 if args.count > 3 {
     let extra = try JSONDecoder().decode([Row].self, from: Data(contentsOf: URL(fileURLWithPath: args[3])))
     let byID = Dictionary(uniqueKeysWithValues: extra.map { ($0.entry.identity, $0) })

@@ -1503,7 +1503,8 @@ public struct ClassicDOSSimulation: Codable, Equatable, Sendable {
         ))
         switch trigger.effect {
         case .exit:
-            if lemming.action != .falling, hasWalkedIntoExit(lemming, zone: trigger.bounds) {
+            if lemming.action == .splatting ||
+                (lemming.action != .falling && hasWalkedIntoExit(lemming, zone: trigger.bounds)) {
                 transition(&lemming, to: .exiting, events: &events)
             }
         case .forceLeft:

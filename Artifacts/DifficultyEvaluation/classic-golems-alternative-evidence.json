@@ -1,0 +1,117 @@
+[
+  {
+    "entry" : {
+      "catalogueRevision" : "1.2-runtime-v2",
+      "id" : "E1ED181D-18D7-3EA9-480C-5B28038BB268",
+      "identity" : {
+        "engine" : "classic",
+        "levelID" : "CALEPCK2.DAT#2",
+        "packID" : "fan:lldb-228"
+      },
+      "levelNameSnapshot" : "Double Diamond",
+      "levelNumberSnapshot" : 3,
+      "packNameSnapshot" : "CALEPCK2",
+      "sourceRevision" : "21dc674b0e3066d0495658a1b4c8a3f9beab3a45a2a36f344d5e687f4be24ac6"
+    },
+    "initialHash" : "decfb7ba1a72cf69be6a8832f385e9ab39f86bd94935c8e0b3d6e0b64e09b58a",
+    "official" : false,
+    "order" : 2329,
+    "playable" : true,
+    "profile" : {
+      "components" : {
+        "concurrencyBurden" : 0,
+        "constraintPressure" : 792.1666666666666,
+        "deductionComplexityProxy" : 190,
+        "executionPrecision" : 704.5696796730189,
+        "solutionComplexity" : 411.0195500086539,
+        "techniqueBurden" : 390
+      },
+      "confidence" : "medium",
+      "criticalActions" : [
+        1,
+        2,
+        3
+      ],
+      "detectedTechniques" : [
+        "basher",
+        "blocker",
+        "bomber",
+        "builder",
+        "release-rate-manipulation"
+      ],
+      "explanation" : [
+        "4 used skill types; 3 assigned workers; 2 same-worker skill changes.",
+        "Maximum concurrent worker regions: 1.",
+        "Timing probes: 10. Untested alternatives remain unknown.",
+        "Deduction is a conservative proxy. Observed techniques are not proof of necessity.",
+        "Source rank: fan:lldb-228."
+      ],
+      "key" : {
+        "analyserVersion" : "difficulty-2",
+        "assetsRevision" : "decfb7ba1a72cf69be6a8832f385e9ab39f86bd94935c8e0b3d6e0b64e09b58a:probes-10",
+        "identity" : {
+          "engine" : "classic",
+          "levelID" : "CALEPCK2.DAT#2",
+          "packID" : "fan:lldb-228"
+        },
+        "levelRevision" : "21dc674b0e3066d0495658a1b4c8a3f9beab3a45a2a36f344d5e687f4be24ac6",
+        "replayRevision" : "SHA256 digest: 7784359f3f00f72ed5df323ede2f9acefff4187aaf89afebac57a58a82c9809e",
+        "simulationVersion" : "neolemmix-ce-2026-09-27"
+      },
+      "overallScore" : 445.11990360317435,
+      "precision" : {
+        "actions" : [
+          {
+            "outcomes" : {
+              "-1" : false,
+              "1" : false
+            },
+            "sequence" : 1
+          },
+          {
+            "outcomes" : {
+              "-1" : false,
+              "1" : false
+            },
+            "sequence" : 2
+          },
+          {
+            "outcomes" : {
+              "-1" : false,
+              "1" : false
+            },
+            "sequence" : 3
+          },
+          {
+            "outcomes" : {
+              "-1" : true,
+              "1" : true
+            },
+            "sequence" : 4
+          },
+          {
+            "outcomes" : {
+              "-1" : true,
+              "1" : true
+            },
+            "sequence" : 5
+          }
+        ],
+        "alternativeRunCount" : 0,
+        "assignmentCount" : 5,
+        "completed" : false,
+        "orderingOutcomes" : [
+
+        ],
+        "runCount" : 10,
+        "selectionOutcomes" : [
+
+        ]
+      },
+      "prerequisiteConcepts" : [
+
+      ],
+      "sourceRank" : "fan:lldb-228"
+    }
+  }
+]

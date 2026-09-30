@@ -181,13 +181,15 @@ public enum ClassicDOSReplayPlayer {
     ///
     /// Skill assignments go through `schedule`, so the engine applies them in
     /// its own DOS order. Release-rate and nuke changes apply before the tick
-    /// they are recorded against.
+    /// they are recorded against. Speculative searches can stop once too many
+    /// lemmings have been lost; verified replays always run to completion.
     @discardableResult
     public static func run(
         _ replay: ClassicDOSReplay,
         simulation: ClassicDOSSimulation,
         tickLimit: Int = defaultTickLimit,
         verify: Bool = true,
+        stopWhenUnwinnable: Bool = false,
         observe: ((ClassicDOSSimulation) throws -> Void)? = nil
     ) throws -> ClassicDOSReplayOutcome {
         var simulation = simulation
@@ -249,6 +251,10 @@ public enum ClassicDOSReplayPlayer {
             try observe?(simulation)
             try applyLiveCommands(at: simulation.tickCount, to: &simulation)
             ticks += 1
+            if !verify && stopWhenUnwinnable &&
+                simulation.lostCount > simulation.configuration.totalLemmings - simulation.configuration.requiredToSave {
+                break
+            }
         }
 
         let outcome = ClassicDOSReplayOutcome(

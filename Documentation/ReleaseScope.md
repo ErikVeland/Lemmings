@@ -4,7 +4,7 @@ Classic 1.0 is the historical macOS release baseline, confirmed on 13 September 
 The current public macOS release is 1.7.1 build 54. Releases 1.6.0 and 1.7.0
 are published, and the [1.7 distribution record](ReleaseReadiness/1.7Build53Distribution.md)
 covers the last full release run. L2 and L3 remain Preview.
-Updated 26 September 2026 for the 1.7, 1.8 and 2.0 roadmap targets.
+Updated 30 September 2026 for the 1.7, 1.8 and 2.0 roadmap targets.
 Automated checks support the recorded routes;
 remaining compatibility and hardware claims still need validation. See the [gate register](ReleaseReadiness/gates.json)
 and the current [Classic validation](ReleaseReadiness/ClassicValidation-current.md).
@@ -22,6 +22,26 @@ a level nobody has recorded a win for yet.
 
 **Preview.** The game runs and is enjoyable, and its rules are not yet proven
 against the original engine. Expect differences.
+
+## Release replay policy
+
+Winning replays and their solvability and difficulty evidence are durable
+release evidence. A routine minor release keeps this evidence and does not
+replay every level again. It checks the stored fixture manifests and runs the
+focused engine regression suites.
+
+Run the full campaign replay gates when a change can alter outcomes across a
+campaign. This includes changes to simulation ticks, movement or collision,
+terrain or skill rules, replay decoding or execution, level data, or a broad
+engine rewrite. Re-run affected routes for local engine changes that do not
+meet this threshold. Do not replace a winning route or recalculate a difficulty
+score unless the route no longer wins or a full campaign change requires a new
+baseline.
+
+The minor audit proves that preserved fixture files match their recorded
+hashes. It does not prove that every route still wins on the new engine. The
+full audit provides that proof. Record the chosen scope and any affected-route
+checks with the release evidence.
 
 ## macOS 1.5 public scope
 
