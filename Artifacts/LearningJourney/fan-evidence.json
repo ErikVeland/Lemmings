@@ -248780,5 +248780,233 @@
       "prerequisiteConcepts": [],
       "sourceRank": "fan:lldb-554"
     }
+  },
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
+      "id": "E442722C-D577-6FA5-CC06-0A5964D5BD9E",
+      "identity": {
+        "engine": "classic",
+        "levelID": "joe04.dat#8",
+        "packID": "fan:lldb-131"
+      },
+      "levelNameSnapshot": "Eater of Luck",
+      "levelNumberSnapshot": 9,
+      "packNameSnapshot": "joe04",
+      "sourceRevision": "357a48d29036fe4b5e51d4dd461da9b7a3d99d5fec1ceca65a3be9f4829c610f"
+    },
+    "initialHash": "e5ef5b94aea73c5b1e8107d5d9e7ead271c0b94467f68a502b27c7166e6187cc",
+    "official": false,
+    "order": 1477,
+    "playable": true,
+    "profile": {
+      "components": {
+        "concurrencyBurden": 0,
+        "constraintPressure": 433.54202767523043,
+        "deductionComplexityProxy": 95,
+        "executionPrecision": 256.875,
+        "solutionComplexity": 259,
+        "techniqueBurden": 325
+      },
+      "confidence": "medium",
+      "criticalActions": [
+        4
+      ],
+      "detectedTechniques": [
+        "builder",
+        "climber",
+        "miner",
+        "release-rate-manipulation"
+      ],
+      "explanation": [
+        "3 used skill types; 2 assigned workers; 1 same-worker skill changes.",
+        "Maximum concurrent worker regions: 1.",
+        "Timing probes: 10. Untested alternatives remain unknown.",
+        "Deduction is a conservative proxy. Observed techniques are not proof of necessity.",
+        "Source rank: fan:lldb-131."
+      ],
+      "key": {
+        "analyserVersion": "difficulty-2",
+        "assetsRevision": "e5ef5b94aea73c5b1e8107d5d9e7ead271c0b94467f68a502b27c7166e6187cc:probes-10",
+        "identity": {
+          "engine": "classic",
+          "levelID": "joe04.dat#8",
+          "packID": "fan:lldb-131"
+        },
+        "levelRevision": "357a48d29036fe4b5e51d4dd461da9b7a3d99d5fec1ceca65a3be9f4829c610f",
+        "replayRevision": "SHA256 digest: 065df9c83c597cee22aa484189ec3a2803e370c195ce974113cadead62f9109d",
+        "simulationVersion": "neolemmix-ce-2026-09-27"
+      },
+      "overallScore": 252.61546359777995,
+      "precision": {
+        "actions": [
+          {
+            "outcomes": {
+              "-1": false,
+              "-2": false,
+              "1": true,
+              "2": true
+            },
+            "sequence": 1
+          },
+          {
+            "outcomes": {
+              "-1": false,
+              "-2": true,
+              "1": true
+            },
+            "sequence": 3
+          },
+          {
+            "outcomes": {
+              "-1": true,
+              "-2": false,
+              "1": false
+            },
+            "sequence": 4
+          }
+        ],
+        "alternativeRunCount": 0,
+        "assignmentCount": 3,
+        "completed": false,
+        "orderingOutcomes": [],
+        "runCount": 10,
+        "selectionOutcomes": []
+      },
+      "prerequisiteConcepts": [],
+      "sourceRank": "fan:lldb-131"
+    }
+  },
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
+      "id": "32EF9BB3-AB1E-235B-BBBE-04B387D11FE8",
+      "identity": {
+        "engine": "classic",
+        "levelID": "LEMERINewlvls.dat#7",
+        "packID": "fan:lldb-298"
+      },
+      "levelNameSnapshot": "LemEdit generated Level",
+      "levelNumberSnapshot": 8,
+      "packNameSnapshot": "LEMERINewlvls",
+      "sourceRevision": "bb76d39675ecd16008ace25069363f71579861058e18b8437dbd384cab536ba9"
+    },
+    "initialHash": "b47fc7eb179d18017de736788628c61bc740029a961127945f35047c7d7c04ea",
+    "official": false,
+    "order": 3001,
+    "playable": true,
+    "profile": {
+      "components": {
+        "concurrencyBurden": 670,
+        "constraintPressure": 910,
+        "deductionComplexityProxy": 170,
+        "executionPrecision": 0,
+        "solutionComplexity": 743,
+        "techniqueBurden": 735
+      },
+      "confidence": "medium",
+      "criticalActions": [],
+      "detectedTechniques": [
+        "basher",
+        "blocker",
+        "builder",
+        "digger",
+        "floater",
+        "multiple-worker-coordination",
+        "release-rate-manipulation"
+      ],
+      "explanation": [
+        "5 used skill types; 10 assigned workers; 4 same-worker skill changes.",
+        "Maximum concurrent worker regions: 2.",
+        "Timing probes: 10. Untested alternatives remain unknown.",
+        "Deduction is a conservative proxy. Observed techniques are not proof of necessity.",
+        "Source rank: fan:lldb-298."
+      ],
+      "key": {
+        "analyserVersion": "difficulty-2",
+        "assetsRevision": "b47fc7eb179d18017de736788628c61bc740029a961127945f35047c7d7c04ea:probes-10",
+        "identity": {
+          "engine": "classic",
+          "levelID": "LEMERINewlvls.dat#7",
+          "packID": "fan:lldb-298"
+        },
+        "levelRevision": "bb76d39675ecd16008ace25069363f71579861058e18b8437dbd384cab536ba9",
+        "replayRevision": "SHA256 digest: 77ba3ea853c0196174bf0158ac336e738b9e8adb15e5797d7f616caa640f5cb8",
+        "simulationVersion": "neolemmix-ce-2026-09-27"
+      },
+      "overallScore": 564.51,
+      "precision": {
+        "actions": [
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 0
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 2
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 3
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 4
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 5
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 6
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 7
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 8
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 9
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 10
+          }
+        ],
+        "alternativeRunCount": 0,
+        "assignmentCount": 15,
+        "completed": false,
+        "orderingOutcomes": [],
+        "runCount": 10,
+        "selectionOutcomes": []
+      },
+      "prerequisiteConcepts": [],
+      "sourceRank": "fan:lldb-298"
+    }
   }
 ]

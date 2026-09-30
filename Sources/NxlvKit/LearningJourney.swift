@@ -3,7 +3,7 @@ import Foundation
 /// A teaching order, independent of retail ranks. Estimates never certify human insight.
 public struct LearningJourney: Codable, Equatable, Sendable {
     public static let title = "Oh My! All Lemmings!"
-    public static let version = "learning-8"
+    public static let version = "learning-9"
     public static let playlistID = UUID(uuidString: "80368144-659B-4697-B2D0-76894BF20B18")!
     public static let maximumScoreStep = 65.0
 
@@ -20,12 +20,8 @@ public struct LearningJourney: Codable, Equatable, Sendable {
         case fun = "Fun", intermediate = "Intermediate", difficult = "Difficult", expert = "Expert"
         public var order: Int { Self.allCases.firstIndex(of: self)! }
         public static func forLesson(demand: Double, objective: String?) -> Self {
-            // Authored objectives distinguish introductions from combinations.
-            // Keep the measured demand intact when naming the teaching phase.
-            if let objective {
-                if objective.hasPrefix("introduce:") { return .fun }
-                if demand < 360 { return .intermediate }
-            }
+            if demand < 180 { return .fun }
+            if objective != nil, objective?.hasPrefix("introduce:") != true, demand < 360 { return .intermediate }
             return forDemand(demand)
         }
         public static func forDemand(_ demand: Double) -> Self {
@@ -75,6 +71,25 @@ public struct LearningJourney: Codable, Equatable, Sendable {
         return try LevelPlaylist(id: Self.playlistID, name: Self.title, entries: lessons.map(\.entry))
     }
 
+    /// Use retail rank and full-rescue requirements as conservative placement floors.
+    /// These are editorial estimates, not human-calibrated difficulty scores.
+    public static func rankDemandFloor(for entry: LevelPlaylistEntry, sourceRank: String?) -> Double {
+        let rank = [sourceRank ?? "", entry.packNameSnapshot].joined(separator: " ").lowercased()
+        let words = Set(rank.split { !$0.isLetter && !$0.isNumber }.map(String.init))
+        if !words.isDisjoint(with: ["fun", "easy", "tame"]) { return 0 }
+        if !words.isDisjoint(with: ["tricky", "medium", "flurry"]) { return 180 }
+        if !words.isDisjoint(with: ["taxing", "hard", "awkward"]) { return 360 }
+        if !words.isDisjoint(with: ["mayhem", "daunting", "crazy", "wild", "expert", "insane"]) { return 600 }
+        return 0
+    }
+
+    public static func hasRecognisedRank(for entry: LevelPlaylistEntry, sourceRank: String?) -> Bool {
+        let rank = [sourceRank ?? "", entry.packNameSnapshot].joined(separator: " ").lowercased()
+        let words = Set(rank.split { !$0.isLetter && !$0.isNumber }.map(String.init))
+        return !words.isDisjoint(with: ["fun", "easy", "tame", "tricky", "medium", "flurry",
+            "taxing", "hard", "awkward", "mayhem", "daunting", "crazy", "wild", "expert", "insane"])
+    }
+
     /// Use the hardest observed demand as a floor. These curriculum weights and
     /// stage boundaries are editorial estimates, not a new human-calibrated model.
     public static func demand(for profile: DifficultyProfile) -> Double {
@@ -109,16 +124,38 @@ public struct LearningJourney: Codable, Equatable, Sendable {
                 && $0.profile.detectedTechniques.contains(skill) }.map { demand(for: $0.profile) }.sorted()
             return values.count >= 2 ? (skill, values[1]) : nil
         })
-        func placementDemand(_ profile: DifficultyProfile) -> Double {
-            guard profile.detectedTechniques.count > 1 else { return demand(for: profile) }
+        var practice: [String: Int] = [:]
+        var lessons: [Lesson] = []
+        func missingPractice(_ profile: DifficultyProfile) -> [String] {
+            guard profile.detectedTechniques.count > 1 else { return [] }
+            let required = profile.detectedTechniques.count > 2 ? 2 : 1
+            return Set(profile.detectedTechniques + profile.prerequisiteConcepts).intersection(basicSkills)
+                .filter { practice[$0, default: 0] < required }.sorted()
+        }
+        func placementDemand(_ candidate: ProgressionCandidate) -> Double {
+            let profile = candidate.profile
+            let rankFloor = candidate.rankIsUnverified ? 180.0
+                : Self.rankDemandFloor(for: candidate.entry, sourceRank: profile.sourceRank)
+            let rescueFloor = candidate.requiresFullRescue ? 360.0 : 0.0
+            let missingPracticeFloor = missingPractice(profile).isEmpty ? 0.0 : 180.0
+            let sequenceFloor = lessons.last?.demand ?? 0.0
+            let observed = demand(for: profile)
+            guard profile.detectedTechniques.count > 1 else {
+                return [observed, rankFloor, rescueFloor, sequenceFloor].max()!
+            }
             // A combination cannot precede its easiest available isolated lesson.
             let preparation = profile.detectedTechniques.count > 2
                 ? profile.detectedTechniques.compactMap { secondPractice[$0] }.max() ?? 0 : 0
-            return max(demand(for: profile), profile.detectedTechniques.compactMap { foundations[$0] }.max() ?? 0, preparation)
+            return [observed, profile.detectedTechniques.compactMap { foundations[$0] }.max() ?? 0,
+                    preparation, rankFloor, rescueFloor, missingPracticeFloor, sequenceFloor].max()!
+        }
+        func effectiveDemand(_ candidate: ProgressionCandidate) -> Double {
+            [demand(for: candidate.profile),
+             candidate.rankIsUnverified ? 180.0
+                : Self.rankDemandFloor(for: candidate.entry, sourceRank: candidate.profile.sourceRank),
+             candidate.requiresFullRescue ? 360.0 : 0.0].max()!
         }
         var remaining = candidates.sorted { $0.stableKey < $1.stableKey }
-        var practice: [String: Int] = [:]
-        var lessons: [Lesson] = []
         var previous: DifficultyProfile?
         var exposure = [Double](repeating: 0, count: 6)
         func dimensions(_ p: DifficultyProfile) -> [Double] {
@@ -127,23 +164,22 @@ public struct LearningJourney: Codable, Equatable, Sendable {
                     c.concurrencyBurden, c.constraintPressure, c.deductionComplexityProxy]
         }
         func gaps(_ p: DifficultyProfile) -> [String] {
-            guard p.detectedTechniques.count > 1 else { return [] }
-            let required = p.detectedTechniques.count > 2 ? 2 : 1
-            return Set(p.detectedTechniques + p.prerequisiteConcepts).intersection(basicSkills)
-                .filter { practice[$0, default: 0] < required }.sorted()
+            missingPractice(p)
         }
         while !remaining.isEmpty {
             try Task.checkCancellation()
-            let minimum = remaining.map { placementDemand($0.profile) }.min()!
-            let stage = Stage.forDemand(minimum)
+            func stage(for candidate: ProgressionCandidate) -> Stage {
+                Stage.forLesson(demand: placementDemand(candidate), objective: objectives[candidate.entry.identity])
+            }
+            let currentStage = remaining.map { stage(for: $0) }.min { $0.order < $1.order }!
+            let minimum = remaining.filter { stage(for: $0) == currentStage }.map(placementDemand).min()!
             let band = Int(minimum / 35)
             let eligible = remaining.filter {
-                let value = placementDemand($0.profile)
-                return Stage.forDemand(value) == stage && Int(value / 35) == band
+                return stage(for: $0) == currentStage && Int(placementDemand($0) / 35) == band
             }
             // Keep practice prerequisites and raw replay scores close before
             // using origin, technique spacing and execution cost to break ties.
-            let gradual = eligible.filter { placementDemand($0.profile) - (lessons.last?.demand ?? minimum) <= maximumScoreStep }
+            let gradual = eligible.filter { placementDemand($0) - (lessons.last?.demand ?? minimum) <= maximumScoreStep }
             let bounded = gradual.isEmpty ? eligible : gradual
             let prepared = bounded.filter { gaps($0.profile).isEmpty }
             let available = prepared.isEmpty ? bounded : prepared
@@ -164,7 +200,7 @@ public struct LearningJourney: Codable, Equatable, Sendable {
                 let opening = lessons.isEmpty ? p.components.solutionComplexity * 2 : 0
                 return opening + Double(gaps(p).count) * 1000 + Double(max(0, unfamiliar - 1)) * 1000
                     + (passive ? 2000 : 0) + (twice ? 500 : repeated ? 65 : 0)
-                    + rise * 0.10 + placementDemand(p) + p.components.solutionComplexity * 0.05
+                    + rise * 0.10 + effectiveDemand(candidate) + p.components.solutionComplexity * 0.05
                     + (candidate.isOfficial ? 0 : 100)
             }
             let next = smooth.min {
@@ -174,7 +210,7 @@ public struct LearningJourney: Codable, Equatable, Sendable {
             let p = next.profile
             let new = p.detectedTechniques.filter { practice[$0, default: 0] == 0 }.sorted()
             let missing = gaps(p)
-            let value = placementDemand(p)
+            let value = placementDemand(next)
             let demandJump = value - (lessons.last?.demand ?? value)
             let unseenDemand = zip(dimensions(p), exposure).map { max(0, $0 - $1) }.max() ?? 0
             let topics = new.isEmpty ? p.detectedTechniques : new

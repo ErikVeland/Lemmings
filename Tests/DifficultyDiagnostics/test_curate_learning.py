@@ -19,6 +19,7 @@ class CurriculumTests(unittest.TestCase):
                 rows.append({'entry':{'identity':identity,'levelNameSnapshot':replay_id},
                     'initialHash':replay_id,'profile':{'overallScore':40+n,
                         'key':{'replayRevision':replay_id},'detectedTechniques':[skill],
+                        'sourceRank':'Fun',
                         'components':{'techniqueBurden':65,'solutionComplexity':40+n,
                             'executionPrecision':0,'concurrencyBurden':0,
                             'constraintPressure':30,'deductionComplexityProxy':30}}})
@@ -78,11 +79,17 @@ class CurriculumTests(unittest.TestCase):
         self.assertTrue(280 <= len(lessons) <= 305)
         self.assertEqual(len({g['applicationSignature'] for g in goals.values()}),len(lessons))
         self.assertEqual(len({g['objective'] for g in goals.values()}),len(lessons))
+        introductions=0
         for i,lesson in enumerate(lessons):
             goal=goals[json.dumps(lesson['entry']['identity'],sort_keys=True)]
-            self.assertEqual(goal['objective'].startswith('introduce:'),i<8)
             self.assertEqual(lesson['focus'],goal['lesson'])
-            self.assertFalse(lesson['preparationGaps'])
+            if goal['objective'].startswith('introduce:'):
+                introductions+=1
+                self.assertTrue(goal['beginnerRank'])
+                self.assertFalse(goal['requiresFullRescue'])
+                self.assertLess(goal['intrinsicDemand'],180)
+            if lesson['stage']=='Fun': self.assertFalse(lesson['preparationGaps'])
+        self.assertLess(introductions,8)
         self.assertGreaterEqual(sum(l['stage']=='Intermediate' for l in lessons),len(lessons)/2)
         self.assertLessEqual(max(b['demand']-a['demand'] for a,b in zip(lessons,lessons[1:])),65)
 

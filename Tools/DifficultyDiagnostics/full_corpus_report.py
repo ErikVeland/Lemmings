@@ -144,7 +144,7 @@ def main():
         rows.append({"source": "Classic fan", "pack": row["entry"]["identity"]["packID"],
                      "level": row["entry"]["identity"]["levelID"],
                      "title": row["entry"]["levelNameSnapshot"],
-                     "score": round(profile["overallScore"], 2),
+                     "score": round(profile["overallScore"], 2) if verified else "",
                      "confidence": profile["confidence"],
                      "replay_sha256": profile["key"]["replayRevision"].rsplit(" ", 1)[-1]
                      if verified else "",
@@ -175,7 +175,7 @@ def main():
         )
         rows.append({"source": "NeoLemmix", "pack": path.split("/", 1)[0],
                      "level": path, "title": path.rsplit("/", 1)[-1].removesuffix(".nxlv"),
-                     "score": round(score, 2),
+                     "score": round(score, 2) if replay_win else "",
                      "confidence": "high" if passive_win else profile["confidence"],
                      "replay_sha256": replay_digest
                      if replay_win else "",
@@ -262,18 +262,19 @@ def main():
     (OUTPUT / "README.md").write_text(
         "# Difficulty evaluation\n\n"
         f"This ledger covers {len(fan)} bundled Classic fan levels and {len(neo)} bundled NeoLemmix levels. "
-        "Every row has a difficulty score. A low-confidence score is a metadata estimate, not a completed playtest.\n\n"
+        "A row has a difficulty score only when a winning replay supports it. "
+        "Low-confidence metadata estimates remain outside the score column.\n\n"
         f"Verified winning replays support {summary['verifiedFanWins']} Classic fan scores and "
         f"{summary['verifiedNeoLemmixWins']} NeoLemmix scores. "
-        f"The remaining {summary['unverifiedNonOfficial']} non-official scores and "
-        f"{summary['unverifiedOfficialConversions']} official conversion scores lack a verified win. "
+        f"The remaining {summary['unverifiedNonOfficial']} non-official levels and "
+        f"{summary['unverifiedOfficialConversions']} official conversion levels have no replay-based score. "
         f"Of the non-official rows, {len(structural)} bundled Classic levels cannot win under "
         "the current native object and rescue rules recorded below.\n\n"
         "The `playtest` column records the latest check. A passive loss or timeout only describes a run "
         "without player input. It does not prove that the level is impossible. "
         "Source-compatible replays can have an absent or different level version; their native wins are valid, but source parity is unverified.\n\n"
-        "The `issue` column records a replay-analysis failure where one occurred. Such rows keep their "
-        "metadata score and do not count as verified wins.\n\n"
+        "The `issue` column records a replay-analysis failure where one occurred. Such rows have "
+        "no replay-based score and do not count as verified wins.\n\n"
         "Classic fan rows marked `no functional exit` contain no exit object. "
         "The native fan runtime activates all 32 object slots when every exit would otherwise "
         "be inactive under the DOS rule. This gives the 30 late-exit levels functional exits; "

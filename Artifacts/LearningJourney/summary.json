@@ -1,22 +1,23 @@
 {
-  "candidatePool": 1540,
+  "candidatePool": 1542,
   "duplicateObjectives": 0,
-  "fan": 137,
-  "fanPacks": 80,
-  "largestDemandStep": 49,
-  "largestScoreStep": 73.81583510677387,
-  "levels": 292,
-  "official": 155,
+  "fan": 134,
+  "fanPacks": 78,
+  "fullRescueRequirements": 34,
+  "largestDemandStep": 48,
+  "largestScoreStep": 119.59272449985806,
+  "levels": 290,
+  "official": 156,
   "ohNoLevels": 51,
-  "preparationGaps": 0,
-  "skillIntroductions": 8,
+  "preparationGaps": 3,
+  "skillIntroductions": 6,
   "stages": {
-    "Difficult": 90,
-    "Expert": 34,
-    "Fun": 8,
-    "Intermediate": 160
+    "Difficult": 109,
+    "Expert": 60,
+    "Fun": 7,
+    "Intermediate": 114
   },
-  "supportTransitions": 2,
+  "supportTransitions": 6,
   "targetSize": 292,
-  "version": "learning-8"
+  "version": "learning-9"
 }

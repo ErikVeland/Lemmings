@@ -42,7 +42,7 @@ struct LearningJourneyTests {
         let objectives = [dig.entry.identity: "introduce:digger", build.entry.identity: "introduce:builder",
                           combine.entry.identity: "chain:digger:builder"]
         let result = try LearningJourney.generate([combine, build, dig], objectives: objectives)
-        #expect(result.lessons.map(\.stage) == [.fun, .fun, .intermediate])
+        #expect(result.lessons.map(\.stage) == [.fun, .fun, .fun])
         #expect(result.lessons.last?.score == combine.profile.overallScore)
         #expect(throws: LevelPlaylistError.self) {
             try LearningJourney.generate([dig, build], objectives: [dig.entry.identity: "same", build.entry.identity: "same"])
