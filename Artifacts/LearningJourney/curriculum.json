@@ -1,0 +1,863 @@
+{
+  "lessons": [
+    {
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "Ji Hoon Heaven 1.DAT#5",
+        "packID": "fan:lldb-547"
+      },
+      "intrinsicDemand": 57.996078431372545,
+      "lesson": "Discover: Basher",
+      "level": "Cellbash",
+      "objective": "introduce:basher",
+      "purpose": "First assignment of the basher skill."
+    },
+    {
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "joem7.dat#9",
+        "packID": "fan:lldb-322"
+      },
+      "intrinsicDemand": 138.05490196078432,
+      "lesson": "Discover: Blocker",
+      "level": "Nuclear War on the dance floor",
+      "objective": "introduce:blocker",
+      "purpose": "First assignment of the blocker skill."
+    },
+    {
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "Lemmings Plus DOS Project - 03 - Mild (Part 3).dat#1",
+        "packID": "fan:lldb-551"
+      },
+      "intrinsicDemand": 61.22941176470589,
+      "lesson": "Discover: Bomber",
+      "level": "Blow Down!",
+      "objective": "introduce:bomber",
+      "purpose": "First assignment of the bomber skill."
+    },
+    {
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "KillerMaster 1 Tame 1.dat#4",
+        "packID": "fan:lldb-505"
+      },
+      "intrinsicDemand": 113.57664884135474,
+      "lesson": "Discover: Builder",
+      "level": "The Broken Stair",
+      "objective": "introduce:builder",
+      "purpose": "First assignment of the builder skill."
+    },
+    {
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "TWPAK00.dat#1",
+        "packID": "fan:lldb-302"
+      },
+      "intrinsicDemand": 58.12737001211542,
+      "lesson": "Discover: Climber",
+      "level": "Climin' Death Mountain",
+      "objective": "introduce:climber",
+      "purpose": "First assignment of the climber skill."
+    },
+    {
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "0:Fun:1:9:1",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "intrinsicDemand": 55.25,
+      "lesson": "Discover: Digger",
+      "level": "Just dig!",
+      "objective": "introduce:digger",
+      "purpose": "First assignment of the digger skill."
+    },
+    {
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "KillerMaster 1 Tame 1.dat#1",
+        "packID": "fan:lldb-505"
+      },
+      "intrinsicDemand": 55.25,
+      "lesson": "Discover: Floater",
+      "level": "Only Float is Survive",
+      "objective": "introduce:floater",
+      "purpose": "First assignment of the floater skill."
+    },
+    {
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "Ji Hoon Heaven 1.DAT#6",
+        "packID": "fan:lldb-547"
+      },
+      "intrinsicDemand": 61.42483660130719,
+      "lesson": "Discover: Miner",
+      "level": "Mienrs <--- lol, typo",
+      "objective": "introduce:miner",
+      "purpose": "First assignment of the miner skill."
+    },
+    {
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "5:Flurry:6:4:5",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "intrinsicDemand": 187.0,
+      "lesson": "Basher then Builder",
+      "level": "Lemming Snowfall",
+      "objective": "chain:basher:builder",
+      "purpose": "Change the same worker from basher to builder in a winning route."
+    },
+    {
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "CRISFN11.dat#8",
+        "packID": "fan:lldb-275"
+      },
+      "intrinsicDemand": 295.6764705882353,
+      "lesson": "Basher then Digger",
+      "level": "The crystal caverns",
+      "objective": "chain:basher:digger",
+      "purpose": "Change the same worker from basher to digger in a winning route."
+    },
+    {
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "5:Fun:6:9:4",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "intrinsicDemand": 173.50419599705384,
+      "lesson": "Blocker then Bomber",
+      "level": "A task for blockers and bombers",
+      "objective": "chain:blocker:bomber",
+      "purpose": "Change the same worker from blocker to bomber in a winning route."
+    },
+    {
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "Van Clan Tame 1.dat#9",
+        "packID": "fan:lldb-517"
+      },
+      "intrinsicDemand": 220.41666666666669,
+      "lesson": "Blocker then Miner",
+      "level": "Merry Lemmings",
+      "objective": "chain:blocker:miner",
+      "purpose": "Change the same worker from blocker to miner in a winning route."
+    },
+    {
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "7:Fun:8:0:6",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "intrinsicDemand": 209.58369363238518,
+      "lesson": "Builder then Basher",
+      "level": "Not as complicated as it looks",
+      "objective": "chain:builder:basher",
+      "purpose": "Change the same worker from builder to basher in a winning route."
+    },
+    {
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "The lemming google pack.dat#4",
+        "packID": "fan:lldb-179"
+      },
+      "intrinsicDemand": 266.11764705882354,
+      "lesson": "Builder then Climber",
+      "level": "An \"l\" to serch",
+      "objective": "chain:builder:climber",
+      "purpose": "Change the same worker from builder to climber in a winning route."
+    },
+    {
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "Above The Pepsi Max.ini#-1",
+        "packID": "fan:lldb-416"
+      },
+      "intrinsicDemand": 330.87745098039215,
+      "lesson": "Builder then Floater",
+      "level": "Above The Pepsi Max.ini",
+      "objective": "chain:builder:floater",
+      "purpose": "Change the same worker from builder to floater in a winning route."
+    },
+    {
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "CRISFN03.dat#4",
+        "packID": "fan:lldb-267"
+      },
+      "intrinsicDemand": 348.296218487395,
+      "lesson": "Builder then Miner",
+      "level": "Out of BASHERS???",
+      "objective": "chain:builder:miner",
+      "purpose": "Change the same worker from builder to miner in a winning route."
+    },
+    {
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "Pieuw 2007 Awkward 2.DAT#3",
+        "packID": "fan:lldb-543"
+      },
+      "intrinsicDemand": 311.7450980392157,
+      "lesson": "Climber then Bomber",
+      "level": "Make a choice",
+      "objective": "chain:climber:bomber",
+      "purpose": "Change the same worker from climber to bomber in a winning route."
+    },
+    {
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "Martin Zurlinden 02.dat#0",
+        "packID": "fan:lldb-245"
+      },
+      "intrinsicDemand": 337.846218487395,
+      "lesson": "Climber then Builder",
+      "level": "The Lemmyrinth",
+      "objective": "chain:climber:builder",
+      "purpose": "Change the same worker from climber to builder in a winning route."
+    },
+    {
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "LEVELPAK.DAT#1",
+        "packID": "fan:lldb-216"
+      },
+      "intrinsicDemand": 328.18039215686275,
+      "lesson": "Climber then Floater",
+      "level": "Save the Lemmings with Floaters",
+      "objective": "chain:climber:floater",
+      "purpose": "Change the same worker from climber to floater in a winning route."
+    },
+    {
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "10:Flurry:11:5:2",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "intrinsicDemand": 196.203431372549,
+      "lesson": "Digger then Basher",
+      "level": "At Home in a Cave",
+      "objective": "chain:digger:basher",
+      "purpose": "Change the same worker from digger to basher in a winning route."
+    },
+    {
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "48:Mega Drive Sunsoft:19:0:48",
+        "packID": "ohYesMoreLemmings-OHYES-60"
+      },
+      "intrinsicDemand": 275.9313725490196,
+      "lesson": "Digger then Builder",
+      "level": "Let's go camping.",
+      "objective": "chain:digger:builder",
+      "purpose": "Change the same worker from digger to builder in a winning route."
+    },
+    {
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "1:Flurry:2:4:1",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "intrinsicDemand": 170.45922559655327,
+      "lesson": "Floater then Basher",
+      "level": "Floating Lemming Flurry",
+      "objective": "chain:floater:basher",
+      "purpose": "Change the same worker from floater to basher in a winning route."
+    },
+    {
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "OhNoMorecLemmings Tame 1.DAT#9",
+        "packID": "fan:lldb-530"
+      },
+      "intrinsicDemand": 182.75,
+      "lesson": "Miner then Builder",
+      "level": "It'll be Comin' Round the Mtn.",
+      "objective": "chain:miner:builder",
+      "purpose": "Change the same worker from miner to builder in a winning route."
+    },
+    {
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "brickpk1.dat#10",
+        "packID": "fan:lldb-558"
+      },
+      "intrinsicDemand": 293.0424836601307,
+      "lesson": "Miner then Floater",
+      "level": "Float and Dig",
+      "objective": "chain:miner:floater",
+      "purpose": "Change the same worker from miner to floater in a winning route."
+    },
+    {
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "12:Tame:13:11:4",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "intrinsicDemand": 151.61641699423208,
+      "lesson": "Split jobs: Basher + Builder",
+      "level": "Thunder-Lemmings are go!",
+      "objective": "split:basher:builder",
+      "purpose": "Assign basher and builder to separate workers without changing their skills."
+    },
+    {
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "17:Tame:18:12:1",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "intrinsicDemand": 147.3235294117647,
+      "lesson": "Split jobs: Basher + Miner",
+      "level": "Lemmings For Presidents!",
+      "objective": "split:basher:miner",
+      "purpose": "Assign basher and miner to separate workers without changing their skills."
+    },
+    {
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "JM04.DAT#9",
+        "packID": "fan:lldb-330"
+      },
+      "intrinsicDemand": 165.65126050420167,
+      "lesson": "Split jobs: Blocker + Builder",
+      "level": "Build a Bridge",
+      "objective": "split:blocker:builder",
+      "purpose": "Assign blocker and builder to separate workers without changing their skills."
+    },
+    {
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "brickpk2.dat#1",
+        "packID": "fan:lldb-559"
+      },
+      "intrinsicDemand": 134.94292717086836,
+      "lesson": "Split jobs: Blocker + Digger",
+      "level": "Block and Dig",
+      "objective": "split:blocker:digger",
+      "purpose": "Assign blocker and digger to separate workers without changing their skills."
+    },
+    {
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "22:Crazy:3:1:4",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "intrinsicDemand": 303.69166666666666,
+      "lesson": "Split jobs: Bomber + Builder",
+      "level": "Many Lemmings make level work",
+      "objective": "split:bomber:builder",
+      "purpose": "Assign bomber and builder to separate workers without changing their skills."
+    },
+    {
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "29:Blizzard:14:7:5",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "intrinsicDemand": 204.53125,
+      "lesson": "Split jobs: Digger + Miner",
+      "level": "The Undiscovered Country",
+      "objective": "split:digger:miner",
+      "purpose": "Assign digger and miner to separate workers without changing their skills."
+    },
+    {
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "117:Mayhem:28:8:6",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "intrinsicDemand": 210.7,
+      "lesson": "Sequence: Basher + Builder + Digger",
+      "level": "Mind the step.....",
+      "objective": "sequence:basher:builder:digger",
+      "purpose": "Plan a three-skill sequence on one worker: basher, builder, digger."
+    },
+    {
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "OhNoMorecLemmings Tame 2.DAT#8",
+        "packID": "fan:lldb-530"
+      },
+      "intrinsicDemand": 261.1273700121154,
+      "lesson": "Sequence: Basher + Builder + Miner",
+      "level": "The Great Lemming Road",
+      "objective": "sequence:basher:builder:miner",
+      "purpose": "Plan a three-skill sequence on one worker: basher, builder, miner."
+    },
+    {
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "pieuw01.dat#0",
+        "packID": "fan:lldb-393"
+      },
+      "intrinsicDemand": 303.58178134528384,
+      "lesson": "Sequence: Basher + Digger + Miner",
+      "level": "Iron Industry",
+      "objective": "sequence:basher:digger:miner",
+      "purpose": "Plan a three-skill sequence on one worker: basher, digger, miner."
+    },
+    {
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "0:Tame:1:10:0",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "intrinsicDemand": 326.2,
+      "lesson": "Sequence: Blocker + Digger + Miner",
+      "level": "Down And Out Lemmings",
+      "objective": "sequence:blocker:digger:miner",
+      "purpose": "Plan a three-skill sequence on one worker: blocker, digger, miner."
+    },
+    {
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "TWPAK12.dat#9",
+        "packID": "fan:lldb-314"
+      },
+      "intrinsicDemand": 273.0,
+      "lesson": "Sequence: Builder + Climber + Floater",
+      "level": "Lemm Of All Trades",
+      "objective": "sequence:builder:climber:floater",
+      "purpose": "Plan a three-skill sequence on one worker: builder, climber, floater."
+    },
+    {
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "6:Fun:7:9:7",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "intrinsicDemand": 221.0,
+      "lesson": "Two active workers",
+      "level": "Builders will help you here",
+      "objective": "coordinate",
+      "purpose": "Manage two working regions in one route."
+    },
+    {
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "Deceit Extras 1.DAT#3",
+        "packID": "fan:lldb-546"
+      },
+      "intrinsicDemand": 192.5,
+      "lesson": "Control crowd spacing",
+      "level": "Blockers can block others",
+      "objective": "spacing",
+      "purpose": "Change the release rate while preparing a route."
+    },
+    {
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "Lemmings Plus DOS Project - 03 - Mild (Part 3).dat#5",
+        "packID": "fan:lldb-551"
+      },
+      "intrinsicDemand": 276.25,
+      "lesson": "Sequence and coordinate",
+      "level": "No Salvation I",
+      "objective": "sequence-coordination",
+      "purpose": "Change a worker\u2019s job while managing another working region."
+    },
+    {
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "Orig Extra Levels.dat#0",
+        "packID": "fan:lldb-407"
+      },
+      "intrinsicDemand": 221.0,
+      "lesson": "Sequence and space",
+      "level": "Test map",
+      "objective": "sequence-spacing",
+      "purpose": "Change a worker\u2019s job and control the flow of followers."
+    },
+    {
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "Fun 08.lvl#-1",
+        "packID": "fan:lldb-573"
+      },
+      "intrinsicDemand": 212.5,
+      "lesson": "Return to an earlier skill",
+      "level": "Fun 08.lvl",
+      "objective": "return-to-skill",
+      "purpose": "Reuse a worker by returning to an earlier job after a different assignment."
+    },
+    {
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "PSP Special2.dat#5",
+        "packID": "fan:lldb-218"
+      },
+      "intrinsicDemand": 276.25,
+      "lesson": "Contain and prepare",
+      "level": "Gather round and break away",
+      "objective": "contain-route",
+      "purpose": "Use a blocker while two terrain-changing skills prepare the route."
+    },
+    {
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "ISteve03.dat#9",
+        "packID": "fan:lldb-21"
+      },
+      "intrinsicDemand": 270.80419599705385,
+      "lesson": "Scout and prepare",
+      "level": "4 Pixels (or so) from Victory",
+      "objective": "scout-route",
+      "purpose": "Give a permanent skill to one worker while other workers modify the route."
+    },
+    {
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "pieuw02.dat#7",
+        "packID": "fan:lldb-394"
+      },
+      "intrinsicDemand": 301.3578431372549,
+      "lesson": "Plan the skill budget",
+      "level": "Underground Exit",
+      "objective": "resource-planning",
+      "purpose": "Complete a short route with higher measured resource pressure."
+    },
+    {
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "OhNoMorecLemmings Tame 2.DAT#3",
+        "packID": "fan:lldb-530"
+      },
+      "intrinsicDemand": 360,
+      "lesson": "Plan four skills",
+      "level": "The Mountain Peaks",
+      "objective": "long-plan",
+      "purpose": "Organise a route using four familiar skills."
+    },
+    {
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "CRISFN02.dat#0",
+        "packID": "fan:lldb-266"
+      },
+      "intrinsicDemand": 365.5,
+      "lesson": "Coordinate a busier route",
+      "level": "Lemmings to the aid",
+      "objective": "three-regions",
+      "purpose": "Manage a route with higher measured coordination demands."
+    },
+    {
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "TWPAK02.dat#4",
+        "packID": "fan:lldb-304"
+      },
+      "intrinsicDemand": 400.7294117647059,
+      "lesson": "Budget a longer route",
+      "level": "Lets Bash That Guy!",
+      "objective": "tight-budget",
+      "purpose": "Combine four skills under high measured resource pressure."
+    },
+    {
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "89:Havoc:10:0:3",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "intrinsicDemand": 361.8179271708683,
+      "lesson": "Time the crowd",
+      "level": "Flow Control",
+      "objective": "precision-spacing",
+      "purpose": "Combine timing-sensitive assignments with release-rate control."
+    },
+    {
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "7:Tame:8:10:7",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "intrinsicDemand": 377.08178134528384,
+      "lesson": "Chain a longer plan",
+      "level": "Dangerzone",
+      "objective": "long-sequence",
+      "purpose": "Manage several changes of job on one worker."
+    },
+    {
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "ANTHPCK3.DAT#2",
+        "packID": "fan:lldb-223"
+      },
+      "intrinsicDemand": 420.0882352941176,
+      "lesson": "Sequence on a budget",
+      "level": "One walked over the lemming nest",
+      "objective": "sequence-economy",
+      "purpose": "Combine a long single-worker sequence with a restricted skill budget."
+    },
+    {
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "Lemmings Plus DOS Project - 04 - Wimpy (Part 1).dat#5",
+        "packID": "fan:lldb-552"
+      },
+      "intrinsicDemand": 459.0,
+      "lesson": "Time two work areas",
+      "level": "Two Pathways",
+      "objective": "timing-coordination",
+      "purpose": "Combine measured timing pressure with concurrent work."
+    },
+    {
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "TimpackD.dat#7",
+        "packID": "fan:lldb-102"
+      },
+      "intrinsicDemand": 470.8954663513416,
+      "lesson": "Space a longer plan",
+      "level": "Below Freezing Point",
+      "objective": "spacing-long-plan",
+      "purpose": "Control crowd spacing through a route that uses five skills."
+    },
+    {
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "GARJEN01.dat#0",
+        "packID": "fan:lldb-281"
+      },
+      "intrinsicDemand": 514.25,
+      "lesson": "Share scarce skills",
+      "level": "Three-way Call",
+      "objective": "economy-coordination",
+      "purpose": "Combine a high resource pressure with work across several regions."
+    },
+    {
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "Genesis Mayhem.dat#29",
+        "packID": "fan:lldb-491"
+      },
+      "intrinsicDemand": 555.1136850060576,
+      "lesson": "Plan five linked jobs",
+      "level": "Lemmings' Ark",
+      "objective": "sequence-five-skills",
+      "purpose": "Use five distinct skills in one worker\u2019s sequence."
+    },
+    {
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "Lemmings Plus DOS Project - 06 - Wimpy (Part 3).dat#9",
+        "packID": "fan:lldb-552"
+      },
+      "intrinsicDemand": 663.9592255965532,
+      "lesson": "Expert: scout and construct",
+      "level": "Counterlogical",
+      "objective": "expert-scout",
+      "purpose": "Carry permanent skills through a complex construction sequence."
+    },
+    {
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "Lemmings Plus DOS Project - 09 - Medi (Part 3).dat#9",
+        "packID": "fan:lldb-553"
+      },
+      "intrinsicDemand": 691.3954663513416,
+      "lesson": "Expert: combine demands",
+      "level": "Consider Everything...",
+      "objective": "expert-integration",
+      "purpose": "Combine long worker sequences, crowd spacing and concurrent work."
+    },
+    {
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "27:Crazy:8:3:5",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "intrinsicDemand": 624.75,
+      "lesson": "Expert: skill economy",
+      "level": "KEEP ON TRUCKING",
+      "objective": "expert-budget",
+      "purpose": "Combine a complex multi-skill route with high resource pressure."
+    },
+    {
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "91:Havoc:12:0:0",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "intrinsicDemand": 603.5,
+      "lesson": "Expert: coordination",
+      "level": "It`s all a matter of timing",
+      "objective": "expert-coordination",
+      "purpose": "Apply the learned techniques across highly concurrent work."
+    },
+    {
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "Lemmings Plus DOS Project - 04 - Wimpy (Part 1).dat#0",
+        "packID": "fan:lldb-552"
+      },
+      "intrinsicDemand": 622.4552606476334,
+      "lesson": "Expert: precision",
+      "level": "Lemming Net",
+      "objective": "expert-precision",
+      "purpose": "Apply familiar skills with demanding assignment timing."
+    }
+  ],
+  "limits": "Objectives describe observed routes. Novice readability and the necessity of these techniques require playtesting.",
+  "poolSize": 1607,
+  "unavailableOptionalObjectives": [
+    "chain:basher:blocker",
+    "chain:basher:bomber",
+    "chain:basher:climber",
+    "chain:basher:floater",
+    "chain:basher:miner",
+    "chain:blocker:basher",
+    "chain:blocker:builder",
+    "chain:blocker:climber",
+    "chain:blocker:digger",
+    "chain:blocker:floater",
+    "chain:bomber:basher",
+    "chain:bomber:blocker",
+    "chain:bomber:builder",
+    "chain:bomber:climber",
+    "chain:bomber:digger",
+    "chain:bomber:floater",
+    "chain:bomber:miner",
+    "chain:builder:blocker",
+    "chain:builder:bomber",
+    "chain:builder:digger",
+    "chain:climber:basher",
+    "chain:climber:blocker",
+    "chain:climber:digger",
+    "chain:climber:miner",
+    "chain:digger:blocker",
+    "chain:digger:bomber",
+    "chain:digger:climber",
+    "chain:digger:floater",
+    "chain:digger:miner",
+    "chain:floater:blocker",
+    "chain:floater:bomber",
+    "chain:floater:builder",
+    "chain:floater:climber",
+    "chain:floater:digger",
+    "chain:floater:miner",
+    "chain:miner:basher",
+    "chain:miner:blocker",
+    "chain:miner:bomber",
+    "chain:miner:climber",
+    "chain:miner:digger",
+    "split:basher:blocker",
+    "split:basher:bomber",
+    "split:basher:climber",
+    "split:basher:digger",
+    "split:basher:floater",
+    "split:blocker:bomber",
+    "split:blocker:climber",
+    "split:blocker:floater",
+    "split:blocker:miner",
+    "split:bomber:climber",
+    "split:bomber:digger",
+    "split:bomber:floater",
+    "split:bomber:miner",
+    "split:builder:climber",
+    "split:builder:digger",
+    "split:builder:floater",
+    "split:builder:miner",
+    "split:climber:digger",
+    "split:climber:floater",
+    "split:climber:miner",
+    "split:digger:floater",
+    "split:floater:miner",
+    "sequence:basher:blocker:bomber",
+    "sequence:basher:blocker:builder",
+    "sequence:basher:blocker:digger",
+    "sequence:basher:blocker:floater",
+    "sequence:basher:blocker:miner",
+    "sequence:basher:bomber:builder",
+    "sequence:basher:bomber:climber",
+    "sequence:basher:bomber:digger",
+    "sequence:basher:bomber:miner",
+    "sequence:basher:builder:climber",
+    "sequence:basher:builder:floater",
+    "sequence:basher:climber:digger",
+    "sequence:basher:climber:floater",
+    "sequence:basher:climber:miner",
+    "sequence:basher:digger:floater",
+    "sequence:blocker:bomber:builder",
+    "sequence:blocker:bomber:climber",
+    "sequence:blocker:builder:climber",
+    "sequence:blocker:builder:digger",
+    "sequence:blocker:builder:miner",
+    "sequence:blocker:climber:floater",
+    "sequence:blocker:climber:miner",
+    "sequence:bomber:builder:climber",
+    "sequence:bomber:builder:floater",
+    "sequence:bomber:builder:miner",
+    "sequence:bomber:climber:digger",
+    "sequence:bomber:climber:floater",
+    "sequence:bomber:digger:miner",
+    "sequence:builder:climber:digger",
+    "sequence:builder:climber:miner",
+    "sequence:builder:digger:floater",
+    "sequence:builder:digger:miner",
+    "sequence:builder:floater:miner",
+    "sequence:climber:digger:floater",
+    "spacing-coordination",
+    "integrated-plan",
+    "precision-economy",
+    "expert-sequencing"
+  ],
+  "version": "curriculum-1"
+}

@@ -1,34 +1,46 @@
 {
-  "version": "learning-6",
-  "scope": "Generated Classic single-player learning path",
-  "generator": "Scripts/generate-learning-journey.sh passed with Xcode toolchain",
-  "report": "Tools/DifficultyDiagnostics/learning_report.py report passed",
-  "focusedTests": "LearningJourneyTests: 8 passed",
-  "fanSearch": {
-    "fullPassPacks": 535,
-    "fullPassRouteAttempts": 72731,
-    "holidayRetryPacks": 4,
-    "holidayRetryAttempts": 477,
-    "staleReplayRetryPacks": 6,
-    "staleReplayRetryAttempts": 775,
-    "newReplayBackedProfiles": 4,
-    "newPathLessons": 1,
-    "ratedFanProfiles": 793,
-    "ratedFanSignatureFailures": 0,
-    "targetedRetryFailures": 0
-  },
+  "version": "learning-7",
+  "scope": "Selective single-player curriculum; complete catalogue remains separate",
   "curriculumChecks": {
-    "lessons": 504,
-    "distinctOfficialPuzzles": 317,
-    "distinctLibraryPuzzles": 187,
-    "allOhNoLevels": 100,
-    "uniqueIdentities": 504,
-    "uniqueInitialStates": 504,
-    "twoPlayerLevels": 0,
-    "missingBasicSkillPreparation": 0,
-    "largestCurriculumDemandStep": 55.25,
-    "transitionsForPlaytest": 2
+    "candidatePool": 1607,
+    "duplicateObjectives": 0,
+    "fan": 40,
+    "fanPacks": 33,
+    "largestDemandStep": 55.41764705882355,
+    "largestScoreStep": 191.77612008624487,
+    "levels": 58,
+    "official": 18,
+    "ohNoLevels": 8,
+    "preparationGaps": 0,
+    "skillIntroductions": 8,
+    "stages": {
+      "Difficult": 10,
+      "Expert": 5,
+      "Fun": 8,
+      "Intermediate": 35
+    },
+    "supportTransitions": 6,
+    "version": "learning-7"
   },
-  "limits": "The bounded search does not solve every fan level. The new Digger practice lesson does not reduce the largest demand step or the two flagged transitions. Novice difficulty and the rendered app flow remain unverified.",
-  "desktopTests": "LearningJourneyDesktopTests: 3 passed"
+  "focusedTests": {
+    "swiftJourneyTests": 10,
+    "desktopJourneyTests": 4,
+    "pythonDiagnosticsTests": 7,
+    "status": "passed"
+  },
+  "fanEvidence": "All 40 selected fan profiles match their existing winning replay digests and initial-state hashes. No simulation rules changed in this revision.",
+  "localArm64AppBuild": "passed; final executable rebuilt after welcome copy change; capability signing and deep strict signature verification passed",
+  "limits": [
+    "Replay roles do not prove novice readability or necessary techniques.",
+    "Six transitions require playtesting.",
+    "Geometry-specific teaching such as steel and safe drop height still needs authored review."
+  ],
+  "librarySolutionsPreserved": true,
+  "bundledCurriculum": "Byte-for-byte match with Resources/Progression/learning.json",
+  "liveUI": {
+    "status": "passed",
+    "observed": "Main menu shows 1/58 retained progress. Journey hub shows Fun / Discover: Floater, Only Float is Survive, Solved 1/58, Back and enabled Let\u2019s play controls. Rendered text and targets inspected.",
+    "scope": "Opened journey hub without starting or completing a level; welcome copy compiled but its dismissed panel was not reopened."
+  },
+  "unrelatedBuildNotice": "Build reports stale Trolley certificates; those targets remain unverified. This revision does not change Trolley certification."
 }

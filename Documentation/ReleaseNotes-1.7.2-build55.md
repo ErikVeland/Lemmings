@@ -1,4 +1,4 @@
-# Ultimate Lemmings 1.7.2 — Faster Controls, a Longer Journey and NeoLemmix
+# Ultimate Lemmings 1.7.2 — Faster Controls, a Selective Journey and NeoLemmix
 
 Build: 55
 Release base: v1.7.1
@@ -11,10 +11,11 @@ These notes cover all of 1.7: the 1.7.0 release and the 1.7.1 and 1.7.2 updates.
   A single press still changes the rate by one step.
 - Press N to nuke. Press N again to undo the nuke while undo is still possible.
   Outside play, N in Classic still opens the next level.
-- Oh My! All Lemmings! now has 1,607 lessons, up from 507. The journey adds
-  1,100 fan levels, and each one has a verified win.
-- The lesson order is smoother. Each lesson stays close in difficulty to the
-  lesson before it.
+- Oh My! All Lemmings! now selects 58 lessons by teaching purpose: eight skill
+  introductions, 35 intermediate lessons, ten difficult lessons and five expert
+  challenges. Each objective has one example. The full library remains available.
+- The order considers skill preparation and measured demands. Six transitions
+  remain flagged for novice playtesting.
 - 30 more Classic fan levels can be completed. The DOS rules ignored the exits
   on these levels. The exits now work, as they do in the fan editors.
 - 2,136 Classic fan levels now have a verified win.
@@ -34,7 +35,7 @@ These notes cover all of 1.7: the 1.7.0 release and the 1.7.1 and 1.7.2 updates.
 
 ## Oh My! All Lemmings!
 
-- The all-games campaign is a learning journey from Fun to Expert. It shows the
+- The recommended Classic path is a learning journey from Fun to Expert. It shows the
   next lesson, its stage and focus, and your solved count.
 - The journey is for one player. It leaves out two-player levels, and a puzzle
   that several ports repeat appears once.

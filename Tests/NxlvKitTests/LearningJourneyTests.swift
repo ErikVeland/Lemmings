@@ -35,6 +35,19 @@ struct LearningJourneyTests {
         let comparable = try LearningJourney.generate([fan, official])
         #expect(comparable.lessons.first?.entry.identity == official.entry.identity)
     }
+    @Test func authoredObjectivesSeparateIntroductionsFromCombinations() throws {
+        let dig = try candidate(0, score: 40, concepts: ["digger"])
+        let build = try candidate(1, score: 50, concepts: ["builder"])
+        let combine = try candidate(2, score: 80, concepts: ["builder", "digger"])
+        let objectives = [dig.entry.identity: "introduce:digger", build.entry.identity: "introduce:builder",
+                          combine.entry.identity: "chain:digger:builder"]
+        let result = try LearningJourney.generate([combine, build, dig], objectives: objectives)
+        #expect(result.lessons.map(\.stage) == [.fun, .fun, .intermediate])
+        #expect(result.lessons.last?.score == combine.profile.overallScore)
+        #expect(throws: LevelPlaylistError.self) {
+            try LearningJourney.generate([dig, build], objectives: [dig.entry.identity: "same", build.entry.identity: "same"])
+        }
+    }
     @Test func multiplayerSourcesCannotEnterTheLearningPath() throws {
         for (pack, name, level) in [("fan:lldb-404", "Renamed pack", "0"),
             ("test", "Genesis 2P 2", "0"), ("test", "Amiga Two Player", "0"),
