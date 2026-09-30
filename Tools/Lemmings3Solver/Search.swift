@@ -80,7 +80,7 @@ struct L3Detector: Sendable {
             guard game.tick - lastDecisionTick >= fallback else { return nil }
             lastDecisionTick = game.tick
             let walking = game.lemmings.filter { $0.active && $0.state == .walking }.map(\.id)
-            return Array(walking.prefix(1))
+            return Array(walking.prefix(3))
         }
         lastDecisionTick = game.tick
         var offered: [Int] = []
