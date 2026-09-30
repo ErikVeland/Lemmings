@@ -2,11 +2,11 @@
   "comparison": "Published replay header versus selected exact-input native winning replay",
   "counts": {
     "differentSaved": 16,
-    "differentTicks": 122,
-    "sameSaved": 115,
+    "differentTicks": 123,
+    "sameSaved": 116,
     "sameTicks": 9
   },
-  "distinctLevels": 131,
+  "distinctLevels": 132,
   "limits": "Saved and tick counts are outcome checks, not full physics or terrain parity.",
   "records": [
     {
@@ -87,6 +87,54 @@
       "publishedReplaySHA256": "9089cacfa81e141a85774bfad88456494c09446ab9da61d9eee4b206bac3a420",
       "publishedReplayURL": "https://lldb.camanis.net/level/223/6",
       "publishedSaved": 73,
+      "sourceGameMode": 3
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "ANTHPCK4.DAT#6",
+        "packID": "fan:lldb-224"
+      },
+      "levelSourceRevision": "b2818e41664bbcc98870c9a7c5e6f20258004495061503f5c373fa255188223d",
+      "nativeCompletionTicks": 5832,
+      "nativeReplaySHA256": "1a422df6a9e808848f9e4610364e9d64c24f8fd3c9df70e724c3dad96d4ad713",
+      "nativeSaved": 40,
+      "publishedHeaderTicks": 5846,
+      "publishedReplaySHA256": "ceba4339c9c537515ac6f498a349810025fef0dcd047812f5dd80c54b0210720",
+      "publishedReplayURL": "https://lldb.camanis.net/level/224/7",
+      "publishedSaved": 40,
+      "sourceGameMode": 3
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "ANTHPCK4.DAT#8",
+        "packID": "fan:lldb-224"
+      },
+      "levelSourceRevision": "b2818e41664bbcc98870c9a7c5e6f20258004495061503f5c373fa255188223d",
+      "nativeCompletionTicks": 970,
+      "nativeReplaySHA256": "8dd12d6931dff68c68391d6066070771ea295b43bd15dfc96b310c135cde0147",
+      "nativeSaved": 75,
+      "publishedHeaderTicks": 968,
+      "publishedReplaySHA256": "279149f13bc4405d299d971b2596d2d1288c39135b645997d135a01e9baa840a",
+      "publishedReplayURL": "https://lldb.camanis.net/level/224/9",
+      "publishedSaved": 75,
+      "sourceGameMode": 3
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "ANTHPCK4.DAT#9",
+        "packID": "fan:lldb-224"
+      },
+      "levelSourceRevision": "b2818e41664bbcc98870c9a7c5e6f20258004495061503f5c373fa255188223d",
+      "nativeCompletionTicks": 4032,
+      "nativeReplaySHA256": "fdf3c652ed88b872acfd0d5448cfd7e3d4f0aee12b9871064bfe8de30e2dc273",
+      "nativeSaved": 80,
+      "publishedHeaderTicks": 4022,
+      "publishedReplaySHA256": "d894a6abfdc8e802af03f7e7dcc0d6c9b6cb9d329692d7817f8cc778073b8d15",
+      "publishedReplayURL": "https://lldb.camanis.net/level/224/10",
+      "publishedSaved": 80,
       "sourceGameMode": 3
     },
     {
@@ -423,22 +471,6 @@
       "publishedReplaySHA256": "b1f072ecb7d4423291dad5023434573db0f5cee968eb355aa11746daaebd8b62",
       "publishedReplayURL": "https://lldb.camanis.net/level/491/11",
       "publishedSaved": 80,
-      "sourceGameMode": 3
-    },
-    {
-      "identity": {
-        "engine": "classic",
-        "levelID": "Genesis Present.dat#18",
-        "packID": "fan:lldb-492"
-      },
-      "levelSourceRevision": "52c417ec72a99555caa15c1fb308a618759532d2059baefca16c67417d0a5c2c",
-      "nativeCompletionTicks": 542,
-      "nativeReplaySHA256": "09ae82aca362789714a2898465b589648408c435e76fb4589d6eb2451c31c78f",
-      "nativeSaved": 100,
-      "publishedHeaderTicks": 543,
-      "publishedReplaySHA256": "148b334bb10f159af37fc93da481bb7d454814edb4afef006418d77023945abd",
-      "publishedReplayURL": "https://lldb.camanis.net/level/492/19",
-      "publishedSaved": 100,
       "sourceGameMode": 3
     },
     {
@@ -1916,22 +1948,6 @@
     {
       "identity": {
         "engine": "classic",
-        "levelID": "hubbart.dat#9",
-        "packID": "fan:lldb-173"
-      },
-      "levelSourceRevision": "ec7ef0118b1ab4baebdae02cc808fe0766d593a76a213f2dcc004a508c780203",
-      "nativeCompletionTicks": 425,
-      "nativeReplaySHA256": "0ca6af13c4fd4b75e09b051c723c466778c6066a56a0b26c07c45ceb18e346fd",
-      "nativeSaved": 80,
-      "publishedHeaderTicks": 426,
-      "publishedReplaySHA256": "0d705f4689fc4a84b819610fa2fedb075c2cdfb7b668a037625e9e3d36a6f58a",
-      "publishedReplayURL": "https://lldb.camanis.net/level/173/10",
-      "publishedSaved": 80,
-      "sourceGameMode": 3
-    },
-    {
-      "identity": {
-        "engine": "classic",
         "levelID": "hubbart2.dat#0",
         "packID": "fan:lldb-174"
       },
@@ -2106,5 +2122,5 @@
       "sourceGameMode": 3
     }
   ],
-  "sourceReplays": 131
+  "sourceReplays": 132
 }

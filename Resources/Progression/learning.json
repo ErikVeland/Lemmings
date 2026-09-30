@@ -33656,6 +33656,40 @@
     },
     {
       "concepts" : [
+        "basher",
+        "builder",
+        "miner",
+        "multiple-worker-coordination",
+        "release-rate-manipulation"
+      ],
+      "demand" : 514.25,
+      "entry" : {
+        "catalogueRevision" : "1.2-runtime-v2",
+        "id" : "2DBADA2D-C223-1C00-A754-E134AA7A7ECE",
+        "identity" : {
+          "engine" : "classic",
+          "levelID" : "ANTHPCK4.DAT#8",
+          "packID" : "fan:lldb-224"
+        },
+        "levelNameSnapshot" : "Snow Lev 9",
+        "levelNumberSnapshot" : 8,
+        "packNameSnapshot" : "ANTHPCK4",
+        "sourceRevision" : "b2818e41664bbcc98870c9a7c5e6f20258004495061503f5c373fa255188223d"
+      },
+      "focus" : "Combine: Basher + Builder",
+      "intrinsicDemand" : 514.25,
+      "introduced" : [
+
+      ],
+      "needsSupport" : false,
+      "preparationGaps" : [
+
+      ],
+      "score" : 357.10393180918174,
+      "stage" : "Difficult"
+    },
+    {
+      "concepts" : [
         "blocker",
         "bomber",
         "release-rate-manipulation"
@@ -35146,6 +35180,40 @@
 
       ],
       "score" : 383.1349299719888,
+      "stage" : "Difficult"
+    },
+    {
+      "concepts" : [
+        "basher",
+        "builder",
+        "climber",
+        "multiple-worker-coordination",
+        "release-rate-manipulation"
+      ],
+      "demand" : 514.25,
+      "entry" : {
+        "catalogueRevision" : "1.2-runtime-v2",
+        "id" : "32420FD3-BF63-1AC9-AC4B-477A4218BF0E",
+        "identity" : {
+          "engine" : "classic",
+          "levelID" : "ANTHPCK4.DAT#9",
+          "packID" : "fan:lldb-224"
+        },
+        "levelNameSnapshot" : "Snow Lev 10",
+        "levelNumberSnapshot" : 9,
+        "packNameSnapshot" : "ANTHPCK4",
+        "sourceRevision" : "b2818e41664bbcc98870c9a7c5e6f20258004495061503f5c373fa255188223d"
+      },
+      "focus" : "Combine: Basher + Builder",
+      "intrinsicDemand" : 514.25,
+      "introduced" : [
+
+      ],
+      "needsSupport" : false,
+      "preparationGaps" : [
+
+      ],
+      "score" : 394.30320856492904,
       "stage" : "Difficult"
     },
     {
@@ -40063,6 +40131,41 @@
 
       ],
       "score" : 416.2183405658992,
+      "stage" : "Difficult"
+    },
+    {
+      "concepts" : [
+        "blocker",
+        "builder",
+        "digger",
+        "miner",
+        "multiple-worker-coordination",
+        "release-rate-manipulation"
+      ],
+      "demand" : 569.5,
+      "entry" : {
+        "catalogueRevision" : "1.2-runtime-v2",
+        "id" : "389FD935-3C9E-4AAF-7F9B-491E22F0F2B8",
+        "identity" : {
+          "engine" : "classic",
+          "levelID" : "ANTHPCK4.DAT#6",
+          "packID" : "fan:lldb-224"
+        },
+        "levelNameSnapshot" : "Snow Lev 7",
+        "levelNumberSnapshot" : 6,
+        "packNameSnapshot" : "ANTHPCK4",
+        "sourceRevision" : "b2818e41664bbcc98870c9a7c5e6f20258004495061503f5c373fa255188223d"
+      },
+      "focus" : "Combine: Blocker + Builder",
+      "intrinsicDemand" : 569.5,
+      "introduced" : [
+
+      ],
+      "needsSupport" : false,
+      "preparationGaps" : [
+
+      ],
+      "score" : 410.85796431826657,
       "stage" : "Difficult"
     },
     {

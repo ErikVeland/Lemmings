@@ -10,6 +10,8 @@ fan levels, and records every attempt in `attempts.jsonl`. It skips attempts
 already made with at least the requested time and width. The output directory
 can be passed as `FAN_SOLVER_REPLAYS` to `ExpandFanEvidence`. That tool replays
 each candidate in the native simulation before it assigns a score.
+The batch uses the Golems clock for bundled fan levels. Use `--clock dos` only
+for a comparison run; the attempt ledger keeps the clock setting.
 Set `FAN_ONLY_PACK=fan:lldb-N` for a targeted verification pass.
 
 The beam search is bounded. An `UNSOLVED` result means that it found no winning

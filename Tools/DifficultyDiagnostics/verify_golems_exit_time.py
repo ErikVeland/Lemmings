@@ -1,4 +1,4 @@
-"""Check exit saving and timeout control flow in the pinned Golems assembly."""
+"""Check exit, timeout and fall rules in the pinned Golems assembly."""
 
 import hashlib
 import struct
@@ -12,6 +12,7 @@ METHODS = {
     "GameState.ctor": (0x48A4, "da3409ac72c01b59e85bf68fb9955f5c93b636beda6f93b4c5c9c26fd838a7b1"),
     "GameState.AdvanceCore": (0x67AC, "fef6cc57aae633d447a33f84b73ecf9fe550e96255dbaa5494e0acc815a44e51"),
     "GameState.AdvanceExitingGolem": (0x7CFE, "98de0448ceabff8904e6315161adb6ab9ea5d5a2a69404943988f500fe2b9766"),
+    "GameState.AdvanceFallingGolem": (0x6DB0, "bfaaf05ae1000f79dffd84d47b8ad028abc0d05bc2efb69c2c4fd5528562276e"),
     "GameState.AdvanceTime": (0x84D8, "460e38a579a03f2e29c597faf98a11a91bee4c2e66fbf437bc9ba19de1f32eaa"),
 }
 
@@ -53,6 +54,12 @@ def main():
     assert bytes.fromhex("03 7b 25 03 00 04 2d 17") in exiting
     assert bytes.fromhex("02 02 28 7b 00 00 06 17 58 d2 28 7c 00 00 06") in exiting
 
+    falling = bodies["GameState.AdvanceFallingGolem"]
+    # Fall height at most 60 bypasses the splat branch; larger falls set activity 1.
+    assert bytes.fromhex("03 7b 20 03 00 04 1f 3c 31 36 03 17 28 64 03 00 06") in falling
+    native = (ROOT / "Sources/NxlvKit/ClassicDOSSimulation.swift").read_text()
+    assert "public static let maximumSafeFallDistance = 60" in native
+
     core = bodies["GameState.AdvanceCore"]
     # The tick advances lemmings before it advances the clock.
     advance_golems = core.index(bytes.fromhex("02 28 c9 00 00 06"))
@@ -88,7 +95,7 @@ def main():
             else:
                 seconds -= 1
     assert advance == 1022
-    print("Verified pinned Golems exit animation and one-minute timer: Done is set on advance 1022.")
+    print("Verified pinned Golems exit, fall limit and one-minute timer: Done is set on advance 1022.")
 
 
 if __name__ == "__main__":

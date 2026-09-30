@@ -28128,11 +28128,38 @@
   },
   {
     "componentChanges": {
-      "concurrencyBurden": -250,
-      "constraintPressure": 550.7022875816992,
-      "deductionComplexityProxy": -195,
+      "concurrencyBurden": 180,
+      "constraintPressure": -21.576947535771126,
+      "deductionComplexityProxy": -45,
+      "executionPrecision": 0,
+      "solutionComplexity": -61.84358712999449,
+      "techniqueBurden": 0
+    },
+    "curriculumDemand": 514.25,
+    "intrinsicDemand": 514.25,
+    "introduced": [],
+    "level": "Snow Lev 9",
+    "needsSupport": false,
+    "newComponentHighs": {
+      "concurrencyBurden": 0,
+      "constraintPressure": 0,
+      "deductionComplexityProxy": 0,
+      "executionPrecision": 0,
+      "solutionComplexity": 0,
+      "techniqueBurden": 0
+    },
+    "preparationGaps": [],
+    "rawScore": 357.10393180918174,
+    "stage": "Difficult",
+    "step": 1042
+  },
+  {
+    "componentChanges": {
+      "concurrencyBurden": -430,
+      "constraintPressure": 572.2792351174704,
+      "deductionComplexityProxy": -150,
       "executionPrecision": 600.625,
-      "solutionComplexity": -295.8435871299945,
+      "solutionComplexity": -234.0,
       "techniqueBurden": -345
     },
     "curriculumDemand": 510.53125,
@@ -28151,7 +28178,7 @@
     "preparationGaps": [],
     "rawScore": 347.49523237445294,
     "stage": "Difficult",
-    "step": 1042
+    "step": 1043
   },
   {
     "componentChanges": {
@@ -28178,7 +28205,7 @@
     "preparationGaps": [],
     "rawScore": 362.7503476868425,
     "stage": "Difficult",
-    "step": 1043
+    "step": 1044
   },
   {
     "componentChanges": {
@@ -28205,7 +28232,7 @@
     "preparationGaps": [],
     "rawScore": 366.7278921568627,
     "stage": "Difficult",
-    "step": 1044
+    "step": 1045
   },
   {
     "componentChanges": {
@@ -28232,7 +28259,7 @@
     "preparationGaps": [],
     "rawScore": 366.9626715645634,
     "stage": "Difficult",
-    "step": 1045
+    "step": 1046
   },
   {
     "componentChanges": {
@@ -28259,7 +28286,7 @@
     "preparationGaps": [],
     "rawScore": 359.35482422602996,
     "stage": "Difficult",
-    "step": 1046
+    "step": 1047
   },
   {
     "componentChanges": {
@@ -28286,7 +28313,7 @@
     "preparationGaps": [],
     "rawScore": 357.91455424913397,
     "stage": "Difficult",
-    "step": 1047
+    "step": 1048
   },
   {
     "componentChanges": {
@@ -28313,7 +28340,7 @@
     "preparationGaps": [],
     "rawScore": 358.54262745098043,
     "stage": "Difficult",
-    "step": 1048
+    "step": 1049
   },
   {
     "componentChanges": {
@@ -28340,7 +28367,7 @@
     "preparationGaps": [],
     "rawScore": 365.2176053555554,
     "stage": "Difficult",
-    "step": 1049
+    "step": 1050
   },
   {
     "componentChanges": {
@@ -28367,7 +28394,7 @@
     "preparationGaps": [],
     "rawScore": 360.07877905939154,
     "stage": "Difficult",
-    "step": 1050
+    "step": 1051
   },
   {
     "componentChanges": {
@@ -28394,7 +28421,7 @@
     "preparationGaps": [],
     "rawScore": 358.48631895501643,
     "stage": "Difficult",
-    "step": 1051
+    "step": 1052
   },
   {
     "componentChanges": {
@@ -28421,7 +28448,7 @@
     "preparationGaps": [],
     "rawScore": 358.7827033947711,
     "stage": "Difficult",
-    "step": 1052
+    "step": 1053
   },
   {
     "componentChanges": {
@@ -28448,7 +28475,7 @@
     "preparationGaps": [],
     "rawScore": 369.4248210418299,
     "stage": "Difficult",
-    "step": 1053
+    "step": 1054
   },
   {
     "componentChanges": {
@@ -28475,7 +28502,7 @@
     "preparationGaps": [],
     "rawScore": 368.6838313469732,
     "stage": "Difficult",
-    "step": 1054
+    "step": 1055
   },
   {
     "componentChanges": {
@@ -28502,7 +28529,7 @@
     "preparationGaps": [],
     "rawScore": 359.72436233075877,
     "stage": "Difficult",
-    "step": 1055
+    "step": 1056
   },
   {
     "componentChanges": {
@@ -28529,7 +28556,7 @@
     "preparationGaps": [],
     "rawScore": 367.38260200380773,
     "stage": "Difficult",
-    "step": 1056
+    "step": 1057
   },
   {
     "componentChanges": {
@@ -28556,7 +28583,7 @@
     "preparationGaps": [],
     "rawScore": 372.1391176470588,
     "stage": "Difficult",
-    "step": 1057
+    "step": 1058
   },
   {
     "componentChanges": {
@@ -28583,7 +28610,7 @@
     "preparationGaps": [],
     "rawScore": 363.7253973863889,
     "stage": "Difficult",
-    "step": 1058
+    "step": 1059
   },
   {
     "componentChanges": {
@@ -28610,7 +28637,7 @@
     "preparationGaps": [],
     "rawScore": 362.25578182614373,
     "stage": "Difficult",
-    "step": 1059
+    "step": 1060
   },
   {
     "componentChanges": {
@@ -28637,7 +28664,7 @@
     "preparationGaps": [],
     "rawScore": 376.1468857919735,
     "stage": "Difficult",
-    "step": 1060
+    "step": 1061
   },
   {
     "componentChanges": {
@@ -28664,7 +28691,7 @@
     "preparationGaps": [],
     "rawScore": 377.3525840336134,
     "stage": "Difficult",
-    "step": 1061
+    "step": 1062
   },
   {
     "componentChanges": {
@@ -28691,7 +28718,7 @@
     "preparationGaps": [],
     "rawScore": 374.36497198879556,
     "stage": "Difficult",
-    "step": 1062
+    "step": 1063
   },
   {
     "componentChanges": {
@@ -28718,7 +28745,7 @@
     "preparationGaps": [],
     "rawScore": 377.6865098039216,
     "stage": "Difficult",
-    "step": 1063
+    "step": 1064
   },
   {
     "componentChanges": {
@@ -28745,7 +28772,7 @@
     "preparationGaps": [],
     "rawScore": 377.00275886655277,
     "stage": "Difficult",
-    "step": 1064
+    "step": 1065
   },
   {
     "componentChanges": {
@@ -28772,7 +28799,7 @@
     "preparationGaps": [],
     "rawScore": 378.4585431802783,
     "stage": "Difficult",
-    "step": 1065
+    "step": 1066
   },
   {
     "componentChanges": {
@@ -28799,7 +28826,7 @@
     "preparationGaps": [],
     "rawScore": 378.0466020038077,
     "stage": "Difficult",
-    "step": 1066
+    "step": 1067
   },
   {
     "componentChanges": {
@@ -28826,7 +28853,7 @@
     "preparationGaps": [],
     "rawScore": 375.46784313725493,
     "stage": "Difficult",
-    "step": 1067
+    "step": 1068
   },
   {
     "componentChanges": {
@@ -28853,7 +28880,7 @@
     "preparationGaps": [],
     "rawScore": 368.6397957475699,
     "stage": "Difficult",
-    "step": 1068
+    "step": 1069
   },
   {
     "componentChanges": {
@@ -28880,7 +28907,7 @@
     "preparationGaps": [],
     "rawScore": 379.79945620991833,
     "stage": "Difficult",
-    "step": 1069
+    "step": 1070
   },
   {
     "componentChanges": {
@@ -28907,7 +28934,7 @@
     "preparationGaps": [],
     "rawScore": 383.3646931587666,
     "stage": "Difficult",
-    "step": 1070
+    "step": 1071
   },
   {
     "componentChanges": {
@@ -28934,7 +28961,7 @@
     "preparationGaps": [],
     "rawScore": 379.0272431116791,
     "stage": "Difficult",
-    "step": 1071
+    "step": 1072
   },
   {
     "componentChanges": {
@@ -28961,7 +28988,7 @@
     "preparationGaps": [],
     "rawScore": 382.07758624893404,
     "stage": "Difficult",
-    "step": 1072
+    "step": 1073
   },
   {
     "componentChanges": {
@@ -28988,7 +29015,7 @@
     "preparationGaps": [],
     "rawScore": 384.7895543847601,
     "stage": "Difficult",
-    "step": 1073
+    "step": 1074
   },
   {
     "componentChanges": {
@@ -29015,7 +29042,7 @@
     "preparationGaps": [],
     "rawScore": 377.0449782528841,
     "stage": "Difficult",
-    "step": 1074
+    "step": 1075
   },
   {
     "componentChanges": {
@@ -29042,7 +29069,7 @@
     "preparationGaps": [],
     "rawScore": 376.37374425368233,
     "stage": "Difficult",
-    "step": 1075
+    "step": 1076
   },
   {
     "componentChanges": {
@@ -29069,7 +29096,7 @@
     "preparationGaps": [],
     "rawScore": 388.4762490626312,
     "stage": "Difficult",
-    "step": 1076
+    "step": 1077
   },
   {
     "componentChanges": {
@@ -29096,7 +29123,7 @@
     "preparationGaps": [],
     "rawScore": 390.18764997442423,
     "stage": "Difficult",
-    "step": 1077
+    "step": 1078
   },
   {
     "componentChanges": {
@@ -29123,7 +29150,7 @@
     "preparationGaps": [],
     "rawScore": 388.36445879795366,
     "stage": "Difficult",
-    "step": 1078
+    "step": 1079
   },
   {
     "componentChanges": {
@@ -29150,7 +29177,7 @@
     "preparationGaps": [],
     "rawScore": 386.856122876585,
     "stage": "Difficult",
-    "step": 1079
+    "step": 1080
   },
   {
     "componentChanges": {
@@ -29177,7 +29204,7 @@
     "preparationGaps": [],
     "rawScore": 386.8492393424835,
     "stage": "Difficult",
-    "step": 1080
+    "step": 1081
   },
   {
     "componentChanges": {
@@ -29204,7 +29231,7 @@
     "preparationGaps": [],
     "rawScore": 385.4473215430516,
     "stage": "Difficult",
-    "step": 1081
+    "step": 1082
   },
   {
     "componentChanges": {
@@ -29231,7 +29258,7 @@
     "preparationGaps": [],
     "rawScore": 381.8346197442372,
     "stage": "Difficult",
-    "step": 1082
+    "step": 1083
   },
   {
     "componentChanges": {
@@ -29258,7 +29285,7 @@
     "preparationGaps": [],
     "rawScore": 380.507054249134,
     "stage": "Difficult",
-    "step": 1083
+    "step": 1084
   },
   {
     "componentChanges": {
@@ -29285,7 +29312,7 @@
     "preparationGaps": [],
     "rawScore": 392.59292026220584,
     "stage": "Difficult",
-    "step": 1084
+    "step": 1085
   },
   {
     "componentChanges": {
@@ -29312,15 +29339,42 @@
     "preparationGaps": [],
     "rawScore": 383.1349299719888,
     "stage": "Difficult",
-    "step": 1085
+    "step": 1086
   },
   {
     "componentChanges": {
       "concurrencyBurden": -250,
-      "constraintPressure": -333.94740684152447,
+      "constraintPressure": -272.1232492997199,
       "deductionComplexityProxy": 180,
       "executionPrecision": 0,
-      "solutionComplexity": 293.88268714730225,
+      "solutionComplexity": 302.0195500086538,
+      "techniqueBurden": 0
+    },
+    "curriculumDemand": 514.25,
+    "intrinsicDemand": 514.25,
+    "introduced": [],
+    "level": "Snow Lev 10",
+    "needsSupport": false,
+    "newComponentHighs": {
+      "concurrencyBurden": 0,
+      "constraintPressure": 0,
+      "deductionComplexityProxy": 0,
+      "executionPrecision": 0,
+      "solutionComplexity": 0,
+      "techniqueBurden": 0
+    },
+    "preparationGaps": [],
+    "rawScore": 394.30320856492904,
+    "stage": "Difficult",
+    "step": 1087
+  },
+  {
+    "componentChanges": {
+      "concurrencyBurden": 0,
+      "constraintPressure": -61.824157541804595,
+      "deductionComplexityProxy": 0,
+      "executionPrecision": 0,
+      "solutionComplexity": -8.136862861351574,
       "techniqueBurden": 0
     },
     "curriculumDemand": 514.25,
@@ -29339,7 +29393,7 @@
     "preparationGaps": [],
     "rawScore": 384.4759582549971,
     "stage": "Difficult",
-    "step": 1086
+    "step": 1088
   },
   {
     "componentChanges": {
@@ -29366,7 +29420,7 @@
     "preparationGaps": [],
     "rawScore": 396.33545132870125,
     "stage": "Difficult",
-    "step": 1087
+    "step": 1089
   },
   {
     "componentChanges": {
@@ -29393,7 +29447,7 @@
     "preparationGaps": [],
     "rawScore": 407.7986813684849,
     "stage": "Difficult",
-    "step": 1088
+    "step": 1090
   },
   {
     "componentChanges": {
@@ -29420,7 +29474,7 @@
     "preparationGaps": [],
     "rawScore": 403.08384161815036,
     "stage": "Difficult",
-    "step": 1089
+    "step": 1091
   },
   {
     "componentChanges": {
@@ -29447,7 +29501,7 @@
     "preparationGaps": [],
     "rawScore": 404.938569055536,
     "stage": "Difficult",
-    "step": 1090
+    "step": 1092
   },
   {
     "componentChanges": {
@@ -29474,7 +29528,7 @@
     "preparationGaps": [],
     "rawScore": 407.7794180631628,
     "stage": "Difficult",
-    "step": 1091
+    "step": 1093
   },
   {
     "componentChanges": {
@@ -29501,7 +29555,7 @@
     "preparationGaps": [],
     "rawScore": 400.03740450422896,
     "stage": "Difficult",
-    "step": 1092
+    "step": 1094
   },
   {
     "componentChanges": {
@@ -29528,7 +29582,7 @@
     "preparationGaps": [],
     "rawScore": 407.2136813684849,
     "stage": "Difficult",
-    "step": 1093
+    "step": 1095
   },
   {
     "componentChanges": {
@@ -29555,7 +29609,7 @@
     "preparationGaps": [],
     "rawScore": 402.6843979165368,
     "stage": "Difficult",
-    "step": 1094
+    "step": 1096
   },
   {
     "componentChanges": {
@@ -29582,7 +29636,7 @@
     "preparationGaps": [],
     "rawScore": 403.05554376527397,
     "stage": "Difficult",
-    "step": 1095
+    "step": 1097
   },
   {
     "componentChanges": {
@@ -29609,7 +29663,7 @@
     "preparationGaps": [],
     "rawScore": 406.4132225705313,
     "stage": "Difficult",
-    "step": 1096
+    "step": 1098
   },
   {
     "componentChanges": {
@@ -29636,7 +29690,7 @@
     "preparationGaps": [],
     "rawScore": 401.9844817927171,
     "stage": "Difficult",
-    "step": 1097
+    "step": 1099
   },
   {
     "componentChanges": {
@@ -29663,7 +29717,7 @@
     "preparationGaps": [],
     "rawScore": 400.1124944425033,
     "stage": "Difficult",
-    "step": 1098
+    "step": 1100
   },
   {
     "componentChanges": {
@@ -29690,7 +29744,7 @@
     "preparationGaps": [],
     "rawScore": 413.28622091580075,
     "stage": "Difficult",
-    "step": 1099
+    "step": 1101
   },
   {
     "componentChanges": {
@@ -29717,7 +29771,7 @@
     "preparationGaps": [],
     "rawScore": 412.84211960861114,
     "stage": "Difficult",
-    "step": 1100
+    "step": 1102
   },
   {
     "componentChanges": {
@@ -29744,7 +29798,7 @@
     "preparationGaps": [],
     "rawScore": 416.805661465249,
     "stage": "Difficult",
-    "step": 1101
+    "step": 1103
   },
   {
     "componentChanges": {
@@ -29771,7 +29825,7 @@
     "preparationGaps": [],
     "rawScore": 418.060967260378,
     "stage": "Difficult",
-    "step": 1102
+    "step": 1104
   },
   {
     "componentChanges": {
@@ -29798,7 +29852,7 @@
     "preparationGaps": [],
     "rawScore": 412.0801424844281,
     "stage": "Difficult",
-    "step": 1103
+    "step": 1105
   },
   {
     "componentChanges": {
@@ -29825,7 +29879,7 @@
     "preparationGaps": [],
     "rawScore": 423.8975923184305,
     "stage": "Difficult",
-    "step": 1104
+    "step": 1106
   },
   {
     "componentChanges": {
@@ -29852,7 +29906,7 @@
     "preparationGaps": [],
     "rawScore": 423.18971404822355,
     "stage": "Difficult",
-    "step": 1105
+    "step": 1107
   },
   {
     "componentChanges": {
@@ -29879,7 +29933,7 @@
     "preparationGaps": [],
     "rawScore": 423.70671111187914,
     "stage": "Difficult",
-    "step": 1106
+    "step": 1108
   },
   {
     "componentChanges": {
@@ -29906,7 +29960,7 @@
     "preparationGaps": [],
     "rawScore": 424.2817152719353,
     "stage": "Difficult",
-    "step": 1107
+    "step": 1109
   },
   {
     "componentChanges": {
@@ -29933,7 +29987,7 @@
     "preparationGaps": [],
     "rawScore": 416.0275362960215,
     "stage": "Difficult",
-    "step": 1108
+    "step": 1110
   },
   {
     "componentChanges": {
@@ -29960,7 +30014,7 @@
     "preparationGaps": [],
     "rawScore": 423.94564457124164,
     "stage": "Difficult",
-    "step": 1109
+    "step": 1111
   },
   {
     "componentChanges": {
@@ -29987,7 +30041,7 @@
     "preparationGaps": [],
     "rawScore": 415.28758537429024,
     "stage": "Difficult",
-    "step": 1110
+    "step": 1112
   },
   {
     "componentChanges": {
@@ -30014,7 +30068,7 @@
     "preparationGaps": [],
     "rawScore": 425.62096477746104,
     "stage": "Difficult",
-    "step": 1111
+    "step": 1113
   },
   {
     "componentChanges": {
@@ -30041,7 +30095,7 @@
     "preparationGaps": [],
     "rawScore": 422.20724128133895,
     "stage": "Difficult",
-    "step": 1112
+    "step": 1114
   },
   {
     "componentChanges": {
@@ -30068,7 +30122,7 @@
     "preparationGaps": [],
     "rawScore": 423.18631442210835,
     "stage": "Difficult",
-    "step": 1113
+    "step": 1115
   },
   {
     "componentChanges": {
@@ -30095,7 +30149,7 @@
     "preparationGaps": [],
     "rawScore": 415.672199039587,
     "stage": "Difficult",
-    "step": 1114
+    "step": 1116
   },
   {
     "componentChanges": {
@@ -30122,7 +30176,7 @@
     "preparationGaps": [],
     "rawScore": 425.9336813684849,
     "stage": "Difficult",
-    "step": 1115
+    "step": 1117
   },
   {
     "componentChanges": {
@@ -30149,7 +30203,7 @@
     "preparationGaps": [],
     "rawScore": 418.25150781756145,
     "stage": "Difficult",
-    "step": 1116
+    "step": 1118
   },
   {
     "componentChanges": {
@@ -30176,7 +30230,7 @@
     "preparationGaps": [],
     "rawScore": 429.63093592213664,
     "stage": "Difficult",
-    "step": 1117
+    "step": 1119
   },
   {
     "componentChanges": {
@@ -30203,7 +30257,7 @@
     "preparationGaps": [],
     "rawScore": 435.17999999999995,
     "stage": "Difficult",
-    "step": 1118
+    "step": 1120
   },
   {
     "componentChanges": {
@@ -30230,7 +30284,7 @@
     "preparationGaps": [],
     "rawScore": 435.75282913165273,
     "stage": "Difficult",
-    "step": 1119
+    "step": 1121
   },
   {
     "componentChanges": {
@@ -30257,7 +30311,7 @@
     "preparationGaps": [],
     "rawScore": 428.68201342020456,
     "stage": "Difficult",
-    "step": 1120
+    "step": 1122
   },
   {
     "componentChanges": {
@@ -30284,7 +30338,7 @@
     "preparationGaps": [],
     "rawScore": 437.0012213053547,
     "stage": "Difficult",
-    "step": 1121
+    "step": 1123
   },
   {
     "componentChanges": {
@@ -30311,7 +30365,7 @@
     "preparationGaps": [],
     "rawScore": 429.10006446244165,
     "stage": "Difficult",
-    "step": 1122
+    "step": 1124
   },
   {
     "componentChanges": {
@@ -30338,7 +30392,7 @@
     "preparationGaps": [],
     "rawScore": 448.1128294920268,
     "stage": "Difficult",
-    "step": 1123
+    "step": 1125
   },
   {
     "componentChanges": {
@@ -30365,7 +30419,7 @@
     "preparationGaps": [],
     "rawScore": 446.045735813083,
     "stage": "Difficult",
-    "step": 1124
+    "step": 1126
   },
   {
     "componentChanges": {
@@ -30392,7 +30446,7 @@
     "preparationGaps": [],
     "rawScore": 443.291772440734,
     "stage": "Difficult",
-    "step": 1125
+    "step": 1127
   },
   {
     "componentChanges": {
@@ -30419,7 +30473,7 @@
     "preparationGaps": [],
     "rawScore": 441.5712000430234,
     "stage": "Difficult",
-    "step": 1126
+    "step": 1128
   },
   {
     "componentChanges": {
@@ -30446,7 +30500,7 @@
     "preparationGaps": [],
     "rawScore": 441.8514451410626,
     "stage": "Difficult",
-    "step": 1127
+    "step": 1129
   },
   {
     "componentChanges": {
@@ -30473,7 +30527,7 @@
     "preparationGaps": [],
     "rawScore": 453.1871943051565,
     "stage": "Difficult",
-    "step": 1128
+    "step": 1130
   },
   {
     "componentChanges": {
@@ -30500,7 +30554,7 @@
     "preparationGaps": [],
     "rawScore": 445.7787299578557,
     "stage": "Difficult",
-    "step": 1129
+    "step": 1131
   },
   {
     "componentChanges": {
@@ -30527,7 +30581,7 @@
     "preparationGaps": [],
     "rawScore": 453.5463920969794,
     "stage": "Difficult",
-    "step": 1130
+    "step": 1132
   },
   {
     "componentChanges": {
@@ -30554,7 +30608,7 @@
     "preparationGaps": [],
     "rawScore": 450.9753476868425,
     "stage": "Difficult",
-    "step": 1131
+    "step": 1133
   },
   {
     "componentChanges": {
@@ -30581,7 +30635,7 @@
     "preparationGaps": [],
     "rawScore": 450.9212300397837,
     "stage": "Difficult",
-    "step": 1132
+    "step": 1134
   },
   {
     "componentChanges": {
@@ -30608,7 +30662,7 @@
     "preparationGaps": [],
     "rawScore": 451.1314578646489,
     "stage": "Difficult",
-    "step": 1133
+    "step": 1135
   },
   {
     "componentChanges": {
@@ -30635,7 +30689,7 @@
     "preparationGaps": [],
     "rawScore": 456.87046474890576,
     "stage": "Difficult",
-    "step": 1134
+    "step": 1136
   },
   {
     "componentChanges": {
@@ -30662,7 +30716,7 @@
     "preparationGaps": [],
     "rawScore": 489.9513177186376,
     "stage": "Difficult",
-    "step": 1135
+    "step": 1137
   },
   {
     "componentChanges": {
@@ -30689,7 +30743,7 @@
     "preparationGaps": [],
     "rawScore": 197.941045751634,
     "stage": "Difficult",
-    "step": 1136
+    "step": 1138
   },
   {
     "componentChanges": {
@@ -30716,7 +30770,7 @@
     "preparationGaps": [],
     "rawScore": 250.40372549019605,
     "stage": "Difficult",
-    "step": 1137
+    "step": 1139
   },
   {
     "componentChanges": {
@@ -30743,7 +30797,7 @@
     "preparationGaps": [],
     "rawScore": 286.1449215562869,
     "stage": "Difficult",
-    "step": 1138
+    "step": 1140
   },
   {
     "componentChanges": {
@@ -30770,7 +30824,7 @@
     "preparationGaps": [],
     "rawScore": 293.347734204793,
     "stage": "Difficult",
-    "step": 1139
+    "step": 1141
   },
   {
     "componentChanges": {
@@ -30797,7 +30851,7 @@
     "preparationGaps": [],
     "rawScore": 321.3428716402062,
     "stage": "Difficult",
-    "step": 1140
+    "step": 1142
   },
   {
     "componentChanges": {
@@ -30824,7 +30878,7 @@
     "preparationGaps": [],
     "rawScore": 315.7586274509804,
     "stage": "Difficult",
-    "step": 1141
+    "step": 1143
   },
   {
     "componentChanges": {
@@ -30851,7 +30905,7 @@
     "preparationGaps": [],
     "rawScore": 326.9062136999144,
     "stage": "Difficult",
-    "step": 1142
+    "step": 1144
   },
   {
     "componentChanges": {
@@ -30878,7 +30932,7 @@
     "preparationGaps": [],
     "rawScore": 343.60521567393386,
     "stage": "Difficult",
-    "step": 1143
+    "step": 1145
   },
   {
     "componentChanges": {
@@ -30905,7 +30959,7 @@
     "preparationGaps": [],
     "rawScore": 357.3418140390288,
     "stage": "Difficult",
-    "step": 1144
+    "step": 1146
   },
   {
     "componentChanges": {
@@ -30932,7 +30986,7 @@
     "preparationGaps": [],
     "rawScore": 368.4217529156007,
     "stage": "Difficult",
-    "step": 1145
+    "step": 1147
   },
   {
     "componentChanges": {
@@ -30959,7 +31013,7 @@
     "preparationGaps": [],
     "rawScore": 365.43454037915785,
     "stage": "Difficult",
-    "step": 1146
+    "step": 1148
   },
   {
     "componentChanges": {
@@ -30986,7 +31040,7 @@
     "preparationGaps": [],
     "rawScore": 374.16069409207125,
     "stage": "Difficult",
-    "step": 1147
+    "step": 1149
   },
   {
     "componentChanges": {
@@ -31013,7 +31067,7 @@
     "preparationGaps": [],
     "rawScore": 366.88253722932615,
     "stage": "Difficult",
-    "step": 1148
+    "step": 1150
   },
   {
     "componentChanges": {
@@ -31040,7 +31094,7 @@
     "preparationGaps": [],
     "rawScore": 373.5911637470018,
     "stage": "Difficult",
-    "step": 1149
+    "step": 1151
   },
   {
     "componentChanges": {
@@ -31067,7 +31121,7 @@
     "preparationGaps": [],
     "rawScore": 368.98253722932617,
     "stage": "Difficult",
-    "step": 1150
+    "step": 1152
   },
   {
     "componentChanges": {
@@ -31094,7 +31148,7 @@
     "preparationGaps": [],
     "rawScore": 379.18384710184694,
     "stage": "Difficult",
-    "step": 1151
+    "step": 1153
   },
   {
     "componentChanges": {
@@ -31121,7 +31175,7 @@
     "preparationGaps": [],
     "rawScore": 372.7215023098614,
     "stage": "Difficult",
-    "step": 1152
+    "step": 1154
   },
   {
     "componentChanges": {
@@ -31148,7 +31202,7 @@
     "preparationGaps": [],
     "rawScore": 377.22413724256137,
     "stage": "Difficult",
-    "step": 1153
+    "step": 1155
   },
   {
     "componentChanges": {
@@ -31175,7 +31229,7 @@
     "preparationGaps": [],
     "rawScore": 376.0566601183784,
     "stage": "Difficult",
-    "step": 1154
+    "step": 1156
   },
   {
     "componentChanges": {
@@ -31202,7 +31256,7 @@
     "preparationGaps": [],
     "rawScore": 394.920903345397,
     "stage": "Difficult",
-    "step": 1155
+    "step": 1157
   },
   {
     "componentChanges": {
@@ -31229,7 +31283,7 @@
     "preparationGaps": [],
     "rawScore": 389.41284713040227,
     "stage": "Difficult",
-    "step": 1156
+    "step": 1158
   },
   {
     "componentChanges": {
@@ -31256,7 +31310,7 @@
     "preparationGaps": [],
     "rawScore": 394.920903345397,
     "stage": "Difficult",
-    "step": 1157
+    "step": 1159
   },
   {
     "componentChanges": {
@@ -31283,7 +31337,7 @@
     "preparationGaps": [],
     "rawScore": 392.18446533390136,
     "stage": "Difficult",
-    "step": 1158
+    "step": 1160
   },
   {
     "componentChanges": {
@@ -31310,7 +31364,7 @@
     "preparationGaps": [],
     "rawScore": 387.62602483736936,
     "stage": "Difficult",
-    "step": 1159
+    "step": 1161
   },
   {
     "componentChanges": {
@@ -31337,7 +31391,7 @@
     "preparationGaps": [],
     "rawScore": 387.0465881754107,
     "stage": "Difficult",
-    "step": 1160
+    "step": 1162
   },
   {
     "componentChanges": {
@@ -31364,7 +31418,7 @@
     "preparationGaps": [],
     "rawScore": 408.0654386051148,
     "stage": "Difficult",
-    "step": 1161
+    "step": 1163
   },
   {
     "componentChanges": {
@@ -31391,7 +31445,7 @@
     "preparationGaps": [],
     "rawScore": 405.91160379888976,
     "stage": "Difficult",
-    "step": 1162
+    "step": 1164
   },
   {
     "componentChanges": {
@@ -31418,7 +31472,7 @@
     "preparationGaps": [],
     "rawScore": 408.09506664109085,
     "stage": "Difficult",
-    "step": 1163
+    "step": 1165
   },
   {
     "componentChanges": {
@@ -31445,7 +31499,7 @@
     "preparationGaps": [],
     "rawScore": 403.4951230122111,
     "stage": "Difficult",
-    "step": 1164
+    "step": 1166
   },
   {
     "componentChanges": {
@@ -31472,7 +31526,7 @@
     "preparationGaps": [],
     "rawScore": 403.07077681966535,
     "stage": "Difficult",
-    "step": 1165
+    "step": 1167
   },
   {
     "componentChanges": {
@@ -31499,7 +31553,7 @@
     "preparationGaps": [],
     "rawScore": 399.0344562099184,
     "stage": "Difficult",
-    "step": 1166
+    "step": 1168
   },
   {
     "componentChanges": {
@@ -31526,7 +31580,7 @@
     "preparationGaps": [],
     "rawScore": 415.1391911724065,
     "stage": "Difficult",
-    "step": 1167
+    "step": 1169
   },
   {
     "componentChanges": {
@@ -31553,7 +31607,7 @@
     "preparationGaps": [],
     "rawScore": 414.4760534160524,
     "stage": "Difficult",
-    "step": 1168
+    "step": 1170
   },
   {
     "componentChanges": {
@@ -31580,7 +31634,7 @@
     "preparationGaps": [],
     "rawScore": 419.1972294547881,
     "stage": "Difficult",
-    "step": 1169
+    "step": 1171
   },
   {
     "componentChanges": {
@@ -31607,7 +31661,7 @@
     "preparationGaps": [],
     "rawScore": 409.642292131287,
     "stage": "Difficult",
-    "step": 1170
+    "step": 1172
   },
   {
     "componentChanges": {
@@ -31634,7 +31688,7 @@
     "preparationGaps": [],
     "rawScore": 411.28909219988617,
     "stage": "Difficult",
-    "step": 1171
+    "step": 1173
   },
   {
     "componentChanges": {
@@ -31661,7 +31715,7 @@
     "preparationGaps": [],
     "rawScore": 424.8960093574932,
     "stage": "Difficult",
-    "step": 1172
+    "step": 1174
   },
   {
     "componentChanges": {
@@ -31688,7 +31742,7 @@
     "preparationGaps": [],
     "rawScore": 419.1972294547881,
     "stage": "Difficult",
-    "step": 1173
+    "step": 1175
   },
   {
     "componentChanges": {
@@ -31715,7 +31769,7 @@
     "preparationGaps": [],
     "rawScore": 426.15857551170774,
     "stage": "Difficult",
-    "step": 1174
+    "step": 1176
   },
   {
     "componentChanges": {
@@ -31742,7 +31796,7 @@
     "preparationGaps": [],
     "rawScore": 427.16984126984124,
     "stage": "Difficult",
-    "step": 1175
+    "step": 1177
   },
   {
     "componentChanges": {
@@ -31769,7 +31823,7 @@
     "preparationGaps": [],
     "rawScore": 420.9289098972922,
     "stage": "Difficult",
-    "step": 1176
+    "step": 1178
   },
   {
     "componentChanges": {
@@ -31796,7 +31850,7 @@
     "preparationGaps": [],
     "rawScore": 427.1145738569772,
     "stage": "Difficult",
-    "step": 1177
+    "step": 1179
   },
   {
     "componentChanges": {
@@ -31823,7 +31877,7 @@
     "preparationGaps": [],
     "rawScore": 424.4335166881783,
     "stage": "Difficult",
-    "step": 1178
+    "step": 1180
   },
   {
     "componentChanges": {
@@ -31850,7 +31904,7 @@
     "preparationGaps": [],
     "rawScore": 434.14705424913393,
     "stage": "Difficult",
-    "step": 1179
+    "step": 1181
   },
   {
     "componentChanges": {
@@ -31877,7 +31931,7 @@
     "preparationGaps": [],
     "rawScore": 433.60096766857055,
     "stage": "Difficult",
-    "step": 1180
+    "step": 1182
   },
   {
     "componentChanges": {
@@ -31904,7 +31958,7 @@
     "preparationGaps": [],
     "rawScore": 449.582648008435,
     "stage": "Difficult",
-    "step": 1181
+    "step": 1183
   },
   {
     "componentChanges": {
@@ -31931,7 +31985,7 @@
     "preparationGaps": [],
     "rawScore": 453.5338961214548,
     "stage": "Difficult",
-    "step": 1182
+    "step": 1184
   },
   {
     "componentChanges": {
@@ -31958,7 +32012,7 @@
     "preparationGaps": [],
     "rawScore": 448.9853948980998,
     "stage": "Difficult",
-    "step": 1183
+    "step": 1185
   },
   {
     "componentChanges": {
@@ -31985,7 +32039,7 @@
     "preparationGaps": [],
     "rawScore": 448.74995829673196,
     "stage": "Difficult",
-    "step": 1184
+    "step": 1186
   },
   {
     "componentChanges": {
@@ -32012,7 +32066,7 @@
     "preparationGaps": [],
     "rawScore": 454.46239285348094,
     "stage": "Difficult",
-    "step": 1185
+    "step": 1187
   },
   {
     "componentChanges": {
@@ -32039,7 +32093,7 @@
     "preparationGaps": [],
     "rawScore": 463.55554900726725,
     "stage": "Difficult",
-    "step": 1186
+    "step": 1188
   },
   {
     "componentChanges": {
@@ -32066,7 +32120,7 @@
     "preparationGaps": [],
     "rawScore": 480.17770339477113,
     "stage": "Difficult",
-    "step": 1187
+    "step": 1189
   },
   {
     "componentChanges": {
@@ -32093,7 +32147,7 @@
     "preparationGaps": [],
     "rawScore": 475.88464413915875,
     "stage": "Difficult",
-    "step": 1188
+    "step": 1190
   },
   {
     "componentChanges": {
@@ -32120,7 +32174,7 @@
     "preparationGaps": [],
     "rawScore": 473.60382257129936,
     "stage": "Difficult",
-    "step": 1189
+    "step": 1191
   },
   {
     "componentChanges": {
@@ -32147,7 +32201,7 @@
     "preparationGaps": [],
     "rawScore": 484.8459856986028,
     "stage": "Difficult",
-    "step": 1190
+    "step": 1192
   },
   {
     "componentChanges": {
@@ -32174,7 +32228,7 @@
     "preparationGaps": [],
     "rawScore": 479.7815994274353,
     "stage": "Difficult",
-    "step": 1191
+    "step": 1193
   },
   {
     "componentChanges": {
@@ -32201,7 +32255,7 @@
     "preparationGaps": [],
     "rawScore": 496.02341864896266,
     "stage": "Difficult",
-    "step": 1192
+    "step": 1194
   },
   {
     "componentChanges": {
@@ -32228,7 +32282,7 @@
     "preparationGaps": [],
     "rawScore": 298.4586744842281,
     "stage": "Difficult",
-    "step": 1193
+    "step": 1195
   },
   {
     "componentChanges": {
@@ -32255,7 +32309,7 @@
     "preparationGaps": [],
     "rawScore": 325.3197163105611,
     "stage": "Difficult",
-    "step": 1194
+    "step": 1196
   },
   {
     "componentChanges": {
@@ -32282,7 +32336,7 @@
     "preparationGaps": [],
     "rawScore": 321.1365196078431,
     "stage": "Difficult",
-    "step": 1195
+    "step": 1197
   },
   {
     "componentChanges": {
@@ -32309,7 +32363,7 @@
     "preparationGaps": [],
     "rawScore": 325.7457075964517,
     "stage": "Difficult",
-    "step": 1196
+    "step": 1198
   },
   {
     "componentChanges": {
@@ -32336,7 +32390,7 @@
     "preparationGaps": [],
     "rawScore": 319.46074027370184,
     "stage": "Difficult",
-    "step": 1197
+    "step": 1199
   },
   {
     "componentChanges": {
@@ -32363,7 +32417,7 @@
     "preparationGaps": [],
     "rawScore": 335.97916032300805,
     "stage": "Difficult",
-    "step": 1198
+    "step": 1200
   },
   {
     "componentChanges": {
@@ -32390,7 +32444,7 @@
     "preparationGaps": [],
     "rawScore": 329.21854895972444,
     "stage": "Difficult",
-    "step": 1199
+    "step": 1201
   },
   {
     "componentChanges": {
@@ -32417,7 +32471,7 @@
     "preparationGaps": [],
     "rawScore": 343.2944334365325,
     "stage": "Difficult",
-    "step": 1200
+    "step": 1202
   },
   {
     "componentChanges": {
@@ -32444,7 +32498,7 @@
     "preparationGaps": [],
     "rawScore": 346.6325559038646,
     "stage": "Difficult",
-    "step": 1201
+    "step": 1203
   },
   {
     "componentChanges": {
@@ -32471,7 +32525,7 @@
     "preparationGaps": [],
     "rawScore": 346.62301151802035,
     "stage": "Difficult",
-    "step": 1202
+    "step": 1204
   },
   {
     "componentChanges": {
@@ -32498,7 +32552,7 @@
     "preparationGaps": [],
     "rawScore": 344.0178857728709,
     "stage": "Difficult",
-    "step": 1203
+    "step": 1205
   },
   {
     "componentChanges": {
@@ -32525,7 +32579,7 @@
     "preparationGaps": [],
     "rawScore": 356.8737497869983,
     "stage": "Difficult",
-    "step": 1204
+    "step": 1206
   },
   {
     "componentChanges": {
@@ -32552,7 +32606,7 @@
     "preparationGaps": [],
     "rawScore": 360.214375424287,
     "stage": "Difficult",
-    "step": 1205
+    "step": 1207
   },
   {
     "componentChanges": {
@@ -32579,7 +32633,7 @@
     "preparationGaps": [],
     "rawScore": 354.9250068842568,
     "stage": "Difficult",
-    "step": 1206
+    "step": 1208
   },
   {
     "componentChanges": {
@@ -32606,7 +32660,7 @@
     "preparationGaps": [],
     "rawScore": 365.9725248373693,
     "stage": "Difficult",
-    "step": 1207
+    "step": 1209
   },
   {
     "componentChanges": {
@@ -32633,7 +32687,7 @@
     "preparationGaps": [],
     "rawScore": 381.05260503795273,
     "stage": "Difficult",
-    "step": 1208
+    "step": 1210
   },
   {
     "componentChanges": {
@@ -32660,7 +32714,7 @@
     "preparationGaps": [],
     "rawScore": 378.0080882352941,
     "stage": "Difficult",
-    "step": 1209
+    "step": 1211
   },
   {
     "componentChanges": {
@@ -32687,7 +32741,7 @@
     "preparationGaps": [],
     "rawScore": 382.2288725490195,
     "stage": "Difficult",
-    "step": 1210
+    "step": 1212
   },
   {
     "componentChanges": {
@@ -32714,7 +32768,7 @@
     "preparationGaps": [],
     "rawScore": 382.45986951081045,
     "stage": "Difficult",
-    "step": 1211
+    "step": 1213
   },
   {
     "componentChanges": {
@@ -32741,7 +32795,7 @@
     "preparationGaps": [],
     "rawScore": 376.6853581707026,
     "stage": "Difficult",
-    "step": 1212
+    "step": 1214
   },
   {
     "componentChanges": {
@@ -32768,7 +32822,7 @@
     "preparationGaps": [],
     "rawScore": 397.44998820971836,
     "stage": "Difficult",
-    "step": 1213
+    "step": 1215
   },
   {
     "componentChanges": {
@@ -32795,7 +32849,7 @@
     "preparationGaps": [],
     "rawScore": 394.9645052295262,
     "stage": "Difficult",
-    "step": 1214
+    "step": 1216
   },
   {
     "componentChanges": {
@@ -32822,7 +32876,7 @@
     "preparationGaps": [],
     "rawScore": 388.16951348446355,
     "stage": "Difficult",
-    "step": 1215
+    "step": 1217
   },
   {
     "componentChanges": {
@@ -32849,7 +32903,7 @@
     "preparationGaps": [],
     "rawScore": 394.4066049234725,
     "stage": "Difficult",
-    "step": 1216
+    "step": 1218
   },
   {
     "componentChanges": {
@@ -32876,7 +32930,7 @@
     "preparationGaps": [],
     "rawScore": 392.5871478392155,
     "stage": "Difficult",
-    "step": 1217
+    "step": 1219
   },
   {
     "componentChanges": {
@@ -32903,7 +32957,7 @@
     "preparationGaps": [],
     "rawScore": 394.64187056265956,
     "stage": "Difficult",
-    "step": 1218
+    "step": 1220
   },
   {
     "componentChanges": {
@@ -32930,7 +32984,7 @@
     "preparationGaps": [],
     "rawScore": 387.4647323744528,
     "stage": "Difficult",
-    "step": 1219
+    "step": 1221
   },
   {
     "componentChanges": {
@@ -32957,7 +33011,7 @@
     "preparationGaps": [],
     "rawScore": 396.1234615990741,
     "stage": "Difficult",
-    "step": 1220
+    "step": 1222
   },
   {
     "componentChanges": {
@@ -32984,7 +33038,7 @@
     "preparationGaps": [],
     "rawScore": 404.3781462031422,
     "stage": "Difficult",
-    "step": 1221
+    "step": 1223
   },
   {
     "componentChanges": {
@@ -33011,7 +33065,7 @@
     "preparationGaps": [],
     "rawScore": 401.1339235934742,
     "stage": "Difficult",
-    "step": 1222
+    "step": 1224
   },
   {
     "componentChanges": {
@@ -33038,7 +33092,7 @@
     "preparationGaps": [],
     "rawScore": 394.63916085589244,
     "stage": "Difficult",
-    "step": 1223
+    "step": 1225
   },
   {
     "componentChanges": {
@@ -33065,7 +33119,7 @@
     "preparationGaps": [],
     "rawScore": 407.26392679815365,
     "stage": "Difficult",
-    "step": 1224
+    "step": 1226
   },
   {
     "componentChanges": {
@@ -33092,7 +33146,7 @@
     "preparationGaps": [],
     "rawScore": 414.05180100190387,
     "stage": "Difficult",
-    "step": 1225
+    "step": 1227
   },
   {
     "componentChanges": {
@@ -33119,7 +33173,7 @@
     "preparationGaps": [],
     "rawScore": 415.1439353656964,
     "stage": "Difficult",
-    "step": 1226
+    "step": 1228
   },
   {
     "componentChanges": {
@@ -33146,7 +33200,7 @@
     "preparationGaps": [],
     "rawScore": 413.7684980136398,
     "stage": "Difficult",
-    "step": 1227
+    "step": 1229
   },
   {
     "componentChanges": {
@@ -33173,15 +33227,42 @@
     "preparationGaps": [],
     "rawScore": 416.2183405658992,
     "stage": "Difficult",
-    "step": 1228
+    "step": 1230
   },
   {
     "componentChanges": {
-      "concurrencyBurden": 250,
-      "constraintPressure": 129.81045751633985,
-      "deductionComplexityProxy": -70,
+      "concurrencyBurden": -70,
+      "constraintPressure": -53.975723622782425,
+      "deductionComplexityProxy": 90,
       "executionPrecision": 0,
-      "solutionComplexity": -232.01955000865388,
+      "solutionComplexity": 20.256671924223042,
+      "techniqueBurden": 0
+    },
+    "curriculumDemand": 569.5,
+    "intrinsicDemand": 569.5,
+    "introduced": [],
+    "level": "Snow Lev 7",
+    "needsSupport": false,
+    "newComponentHighs": {
+      "concurrencyBurden": 0,
+      "constraintPressure": 0,
+      "deductionComplexityProxy": 0,
+      "executionPrecision": 0,
+      "solutionComplexity": 0,
+      "techniqueBurden": 0
+    },
+    "preparationGaps": [],
+    "rawScore": 410.85796431826657,
+    "stage": "Difficult",
+    "step": 1231
+  },
+  {
+    "componentChanges": {
+      "concurrencyBurden": 320,
+      "constraintPressure": 183.78618113912228,
+      "deductionComplexityProxy": -160,
+      "executionPrecision": 0,
+      "solutionComplexity": -252.27622193287692,
       "techniqueBurden": 0
     },
     "curriculumDemand": 569.5,
@@ -33200,7 +33281,7 @@
     "preparationGaps": [],
     "rawScore": 409.6493990411195,
     "stage": "Difficult",
-    "step": 1229
+    "step": 1232
   },
   {
     "componentChanges": {
@@ -33227,7 +33308,7 @@
     "preparationGaps": [],
     "rawScore": 411.2201967750495,
     "stage": "Difficult",
-    "step": 1230
+    "step": 1233
   },
   {
     "componentChanges": {
@@ -33254,7 +33335,7 @@
     "preparationGaps": [],
     "rawScore": 412.333428800389,
     "stage": "Difficult",
-    "step": 1231
+    "step": 1234
   },
   {
     "componentChanges": {
@@ -33281,7 +33362,7 @@
     "preparationGaps": [],
     "rawScore": 413.7738402175901,
     "stage": "Difficult",
-    "step": 1232
+    "step": 1235
   },
   {
     "componentChanges": {
@@ -33308,7 +33389,7 @@
     "preparationGaps": [],
     "rawScore": 406.41568378692796,
     "stage": "Difficult",
-    "step": 1233
+    "step": 1236
   },
   {
     "componentChanges": {
@@ -33335,7 +33416,7 @@
     "preparationGaps": [],
     "rawScore": 420.05131895501637,
     "stage": "Difficult",
-    "step": 1234
+    "step": 1237
   },
   {
     "componentChanges": {
@@ -33362,7 +33443,7 @@
     "preparationGaps": [],
     "rawScore": 417.72314248442814,
     "stage": "Difficult",
-    "step": 1235
+    "step": 1238
   },
   {
     "componentChanges": {
@@ -33389,7 +33470,7 @@
     "preparationGaps": [],
     "rawScore": 424.8590333763567,
     "stage": "Difficult",
-    "step": 1236
+    "step": 1239
   },
   {
     "componentChanges": {
@@ -33416,7 +33497,7 @@
     "preparationGaps": [],
     "rawScore": 417.1727323744529,
     "stage": "Difficult",
-    "step": 1237
+    "step": 1240
   },
   {
     "componentChanges": {
@@ -33443,7 +33524,7 @@
     "preparationGaps": [],
     "rawScore": 428.9542156862745,
     "stage": "Difficult",
-    "step": 1238
+    "step": 1241
   },
   {
     "componentChanges": {
@@ -33470,7 +33551,7 @@
     "preparationGaps": [],
     "rawScore": 426.01287943327645,
     "stage": "Difficult",
-    "step": 1239
+    "step": 1242
   },
   {
     "componentChanges": {
@@ -33497,7 +33578,7 @@
     "preparationGaps": [],
     "rawScore": 428.2716314441277,
     "stage": "Difficult",
-    "step": 1240
+    "step": 1243
   },
   {
     "componentChanges": {
@@ -33524,7 +33605,7 @@
     "preparationGaps": [],
     "rawScore": 427.27416666666664,
     "stage": "Difficult",
-    "step": 1241
+    "step": 1244
   },
   {
     "componentChanges": {
@@ -33551,7 +33632,7 @@
     "preparationGaps": [],
     "rawScore": 426.27343319944384,
     "stage": "Difficult",
-    "step": 1242
+    "step": 1245
   },
   {
     "componentChanges": {
@@ -33578,7 +33659,7 @@
     "preparationGaps": [],
     "rawScore": 419.78726213452666,
     "stage": "Difficult",
-    "step": 1243
+    "step": 1246
   },
   {
     "componentChanges": {
@@ -33605,7 +33686,7 @@
     "preparationGaps": [],
     "rawScore": 430.5816314441278,
     "stage": "Difficult",
-    "step": 1244
+    "step": 1247
   },
   {
     "componentChanges": {
@@ -33632,7 +33713,7 @@
     "preparationGaps": [],
     "rawScore": 420.66591100443674,
     "stage": "Difficult",
-    "step": 1245
+    "step": 1248
   },
   {
     "componentChanges": {
@@ -33659,7 +33740,7 @@
     "preparationGaps": [],
     "rawScore": 431.97839250517177,
     "stage": "Difficult",
-    "step": 1246
+    "step": 1249
   },
   {
     "componentChanges": {
@@ -33686,7 +33767,7 @@
     "preparationGaps": [],
     "rawScore": 432.9433287589379,
     "stage": "Difficult",
-    "step": 1247
+    "step": 1250
   },
   {
     "componentChanges": {
@@ -33713,7 +33794,7 @@
     "preparationGaps": [],
     "rawScore": 436.9411123927249,
     "stage": "Difficult",
-    "step": 1248
+    "step": 1251
   },
   {
     "componentChanges": {
@@ -33740,7 +33821,7 @@
     "preparationGaps": [],
     "rawScore": 433.29453886331305,
     "stage": "Difficult",
-    "step": 1249
+    "step": 1252
   },
   {
     "componentChanges": {
@@ -33767,7 +33848,7 @@
     "preparationGaps": [],
     "rawScore": 433.4372294547881,
     "stage": "Difficult",
-    "step": 1250
+    "step": 1253
   },
   {
     "componentChanges": {
@@ -33794,7 +33875,7 @@
     "preparationGaps": [],
     "rawScore": 430.89723995898976,
     "stage": "Difficult",
-    "step": 1251
+    "step": 1254
   },
   {
     "componentChanges": {
@@ -33821,7 +33902,7 @@
     "preparationGaps": [],
     "rawScore": 443.60130636705605,
     "stage": "Difficult",
-    "step": 1252
+    "step": 1255
   },
   {
     "componentChanges": {
@@ -33848,7 +33929,7 @@
     "preparationGaps": [],
     "rawScore": 433.68263094831684,
     "stage": "Difficult",
-    "step": 1253
+    "step": 1256
   },
   {
     "componentChanges": {
@@ -33875,7 +33956,7 @@
     "preparationGaps": [],
     "rawScore": 446.9525490196079,
     "stage": "Difficult",
-    "step": 1254
+    "step": 1257
   },
   {
     "componentChanges": {
@@ -33902,7 +33983,7 @@
     "preparationGaps": [],
     "rawScore": 445.95258624893404,
     "stage": "Difficult",
-    "step": 1255
+    "step": 1258
   },
   {
     "componentChanges": {
@@ -33929,7 +34010,7 @@
     "preparationGaps": [],
     "rawScore": 438.72547840579676,
     "stage": "Difficult",
-    "step": 1256
+    "step": 1259
   },
   {
     "componentChanges": {
@@ -33956,7 +34037,7 @@
     "preparationGaps": [],
     "rawScore": 452.11096860187513,
     "stage": "Difficult",
-    "step": 1257
+    "step": 1260
   },
   {
     "componentChanges": {
@@ -33983,7 +34064,7 @@
     "preparationGaps": [],
     "rawScore": 449.8338307619776,
     "stage": "Difficult",
-    "step": 1258
+    "step": 1261
   },
   {
     "componentChanges": {
@@ -34010,7 +34091,7 @@
     "preparationGaps": [],
     "rawScore": 443.75121369991444,
     "stage": "Difficult",
-    "step": 1259
+    "step": 1262
   },
   {
     "componentChanges": {
@@ -34037,7 +34118,7 @@
     "preparationGaps": [],
     "rawScore": 452.28091823462336,
     "stage": "Difficult",
-    "step": 1260
+    "step": 1263
   },
   {
     "componentChanges": {
@@ -34064,7 +34145,7 @@
     "preparationGaps": [],
     "rawScore": 449.52244907454616,
     "stage": "Difficult",
-    "step": 1261
+    "step": 1264
   },
   {
     "componentChanges": {
@@ -34091,7 +34172,7 @@
     "preparationGaps": [],
     "rawScore": 442.77146067146333,
     "stage": "Difficult",
-    "step": 1262
+    "step": 1265
   },
   {
     "componentChanges": {
@@ -34118,7 +34199,7 @@
     "preparationGaps": [],
     "rawScore": 453.46997178792105,
     "stage": "Difficult",
-    "step": 1263
+    "step": 1266
   },
   {
     "componentChanges": {
@@ -34145,7 +34226,7 @@
     "preparationGaps": [],
     "rawScore": 445.09250721182224,
     "stage": "Difficult",
-    "step": 1264
+    "step": 1267
   },
   {
     "componentChanges": {
@@ -34172,7 +34253,7 @@
     "preparationGaps": [],
     "rawScore": 443.60130636705605,
     "stage": "Difficult",
-    "step": 1265
+    "step": 1268
   },
   {
     "componentChanges": {
@@ -34199,7 +34280,7 @@
     "preparationGaps": [],
     "rawScore": 458.69520074696544,
     "stage": "Difficult",
-    "step": 1266
+    "step": 1269
   },
   {
     "componentChanges": {
@@ -34226,7 +34307,7 @@
     "preparationGaps": [],
     "rawScore": 460.678046950538,
     "stage": "Difficult",
-    "step": 1267
+    "step": 1270
   },
   {
     "componentChanges": {
@@ -34253,7 +34334,7 @@
     "preparationGaps": [],
     "rawScore": 458.14206903193616,
     "stage": "Difficult",
-    "step": 1268
+    "step": 1271
   },
   {
     "componentChanges": {
@@ -34280,7 +34361,7 @@
     "preparationGaps": [],
     "rawScore": 457.0441739830064,
     "stage": "Difficult",
-    "step": 1269
+    "step": 1272
   },
   {
     "componentChanges": {
@@ -34307,7 +34388,7 @@
     "preparationGaps": [],
     "rawScore": 460.8723112379084,
     "stage": "Difficult",
-    "step": 1270
+    "step": 1273
   },
   {
     "componentChanges": {
@@ -34334,7 +34415,7 @@
     "preparationGaps": [],
     "rawScore": 456.8118962029256,
     "stage": "Difficult",
-    "step": 1271
+    "step": 1274
   },
   {
     "componentChanges": {
@@ -34361,7 +34442,7 @@
     "preparationGaps": [],
     "rawScore": 465.0770868347339,
     "stage": "Difficult",
-    "step": 1272
+    "step": 1275
   },
   {
     "componentChanges": {
@@ -34388,7 +34469,7 @@
     "preparationGaps": [],
     "rawScore": 464.8047004751063,
     "stage": "Difficult",
-    "step": 1273
+    "step": 1276
   },
   {
     "componentChanges": {
@@ -34415,7 +34496,7 @@
     "preparationGaps": [],
     "rawScore": 455.19106185361034,
     "stage": "Difficult",
-    "step": 1274
+    "step": 1277
   },
   {
     "componentChanges": {
@@ -34442,7 +34523,7 @@
     "preparationGaps": [],
     "rawScore": 469.0636496424219,
     "stage": "Difficult",
-    "step": 1275
+    "step": 1278
   },
   {
     "componentChanges": {
@@ -34469,7 +34550,7 @@
     "preparationGaps": [],
     "rawScore": 470.13381895501635,
     "stage": "Difficult",
-    "step": 1276
+    "step": 1279
   },
   {
     "componentChanges": {
@@ -34496,7 +34577,7 @@
     "preparationGaps": [],
     "rawScore": 465.29717121625424,
     "stage": "Difficult",
-    "step": 1277
+    "step": 1280
   },
   {
     "componentChanges": {
@@ -34523,7 +34604,7 @@
     "preparationGaps": [],
     "rawScore": 466.48792387848886,
     "stage": "Difficult",
-    "step": 1278
+    "step": 1281
   },
   {
     "componentChanges": {
@@ -34550,7 +34631,7 @@
     "preparationGaps": [],
     "rawScore": 479.41550072517356,
     "stage": "Difficult",
-    "step": 1279
+    "step": 1282
   },
   {
     "componentChanges": {
@@ -34577,7 +34658,7 @@
     "preparationGaps": [],
     "rawScore": 480.6332268907563,
     "stage": "Difficult",
-    "step": 1280
+    "step": 1283
   },
   {
     "componentChanges": {
@@ -34604,7 +34685,7 @@
     "preparationGaps": [],
     "rawScore": 492.98977847439596,
     "stage": "Difficult",
-    "step": 1281
+    "step": 1284
   },
   {
     "componentChanges": {
@@ -34631,7 +34712,7 @@
     "preparationGaps": [],
     "rawScore": 487.2822016975116,
     "stage": "Difficult",
-    "step": 1282
+    "step": 1285
   },
   {
     "componentChanges": {
@@ -34658,7 +34739,7 @@
     "preparationGaps": [],
     "rawScore": 484.57299922372636,
     "stage": "Difficult",
-    "step": 1283
+    "step": 1286
   },
   {
     "componentChanges": {
@@ -34685,7 +34766,7 @@
     "preparationGaps": [],
     "rawScore": 489.99049488051713,
     "stage": "Difficult",
-    "step": 1284
+    "step": 1287
   },
   {
     "componentChanges": {
@@ -34712,7 +34793,7 @@
     "preparationGaps": [],
     "rawScore": 504.00207352534767,
     "stage": "Difficult",
-    "step": 1285
+    "step": 1288
   },
   {
     "componentChanges": {
@@ -34739,7 +34820,7 @@
     "preparationGaps": [],
     "rawScore": 505.9602196508666,
     "stage": "Difficult",
-    "step": 1286
+    "step": 1289
   },
   {
     "componentChanges": {
@@ -34766,7 +34847,7 @@
     "preparationGaps": [],
     "rawScore": 502.6460897500439,
     "stage": "Difficult",
-    "step": 1287
+    "step": 1290
   },
   {
     "componentChanges": {
@@ -34793,7 +34874,7 @@
     "preparationGaps": [],
     "rawScore": 507.0869141931117,
     "stage": "Difficult",
-    "step": 1288
+    "step": 1291
   },
   {
     "componentChanges": {
@@ -34820,7 +34901,7 @@
     "preparationGaps": [],
     "rawScore": 506.2926175810286,
     "stage": "Difficult",
-    "step": 1289
+    "step": 1292
   },
   {
     "componentChanges": {
@@ -34847,7 +34928,7 @@
     "preparationGaps": [],
     "rawScore": 514.2994484928104,
     "stage": "Difficult",
-    "step": 1290
+    "step": 1293
   },
   {
     "componentChanges": {
@@ -34874,7 +34955,7 @@
     "preparationGaps": [],
     "rawScore": 551.106333161382,
     "stage": "Difficult",
-    "step": 1291
+    "step": 1294
   },
   {
     "componentChanges": {
@@ -34901,7 +34982,7 @@
     "preparationGaps": [],
     "rawScore": 561.9370545153694,
     "stage": "Difficult",
-    "step": 1292
+    "step": 1295
   },
   {
     "componentChanges": {
@@ -34928,7 +35009,7 @@
     "preparationGaps": [],
     "rawScore": 297.5956879168998,
     "stage": "Difficult",
-    "step": 1293
+    "step": 1296
   },
   {
     "componentChanges": {
@@ -34955,7 +35036,7 @@
     "preparationGaps": [],
     "rawScore": 318.2067336685338,
     "stage": "Difficult",
-    "step": 1294
+    "step": 1297
   },
   {
     "componentChanges": {
@@ -34982,7 +35063,7 @@
     "preparationGaps": [],
     "rawScore": 317.21533497572335,
     "stage": "Difficult",
-    "step": 1295
+    "step": 1298
   },
   {
     "componentChanges": {
@@ -35009,7 +35090,7 @@
     "preparationGaps": [],
     "rawScore": 321.0067336685338,
     "stage": "Difficult",
-    "step": 1296
+    "step": 1299
   },
   {
     "componentChanges": {
@@ -35036,7 +35117,7 @@
     "preparationGaps": [],
     "rawScore": 327.0947336685338,
     "stage": "Difficult",
-    "step": 1297
+    "step": 1300
   },
   {
     "componentChanges": {
@@ -35063,7 +35144,7 @@
     "preparationGaps": [],
     "rawScore": 338.9190866097103,
     "stage": "Difficult",
-    "step": 1298
+    "step": 1301
   },
   {
     "componentChanges": {
@@ -35090,7 +35171,7 @@
     "preparationGaps": [],
     "rawScore": 407.058125132618,
     "stage": "Difficult",
-    "step": 1299
+    "step": 1302
   },
   {
     "componentChanges": {
@@ -35117,7 +35198,7 @@
     "preparationGaps": [],
     "rawScore": 421.9826262841691,
     "stage": "Difficult",
-    "step": 1300
+    "step": 1303
   },
   {
     "componentChanges": {
@@ -35144,7 +35225,7 @@
     "preparationGaps": [],
     "rawScore": 420.3269526227822,
     "stage": "Difficult",
-    "step": 1301
+    "step": 1304
   },
   {
     "componentChanges": {
@@ -35171,7 +35252,7 @@
     "preparationGaps": [],
     "rawScore": 441.67160294957955,
     "stage": "Difficult",
-    "step": 1302
+    "step": 1305
   },
   {
     "componentChanges": {
@@ -35198,7 +35279,7 @@
     "preparationGaps": [],
     "rawScore": 442.3794358749911,
     "stage": "Difficult",
-    "step": 1303
+    "step": 1306
   },
   {
     "componentChanges": {
@@ -35225,7 +35306,7 @@
     "preparationGaps": [],
     "rawScore": 455.3632209158007,
     "stage": "Difficult",
-    "step": 1304
+    "step": 1307
   },
   {
     "componentChanges": {
@@ -35252,7 +35333,7 @@
     "preparationGaps": [],
     "rawScore": 513.7639660138399,
     "stage": "Difficult",
-    "step": 1305
+    "step": 1308
   },
   {
     "componentChanges": {
@@ -35279,7 +35360,7 @@
     "preparationGaps": [],
     "rawScore": 550.1517663482723,
     "stage": "Difficult",
-    "step": 1306
+    "step": 1309
   },
   {
     "componentChanges": {
@@ -35306,7 +35387,7 @@
     "preparationGaps": [],
     "rawScore": 243.12590854924616,
     "stage": "Expert",
-    "step": 1307
+    "step": 1310
   },
   {
     "componentChanges": {
@@ -35333,7 +35414,7 @@
     "preparationGaps": [],
     "rawScore": 299.52237383063334,
     "stage": "Expert",
-    "step": 1308
+    "step": 1311
   },
   {
     "componentChanges": {
@@ -35360,7 +35441,7 @@
     "preparationGaps": [],
     "rawScore": 298.37965644840585,
     "stage": "Expert",
-    "step": 1309
+    "step": 1312
   },
   {
     "componentChanges": {
@@ -35387,7 +35468,7 @@
     "preparationGaps": [],
     "rawScore": 315.62181968018996,
     "stage": "Expert",
-    "step": 1310
+    "step": 1313
   },
   {
     "componentChanges": {
@@ -35414,7 +35495,7 @@
     "preparationGaps": [],
     "rawScore": 330.22716566452755,
     "stage": "Expert",
-    "step": 1311
+    "step": 1314
   },
   {
     "componentChanges": {
@@ -35441,7 +35522,7 @@
     "preparationGaps": [],
     "rawScore": 349.1967884394126,
     "stage": "Expert",
-    "step": 1312
+    "step": 1315
   },
   {
     "componentChanges": {
@@ -35468,7 +35549,7 @@
     "preparationGaps": [],
     "rawScore": 346.6451402134556,
     "stage": "Expert",
-    "step": 1313
+    "step": 1316
   },
   {
     "componentChanges": {
@@ -35495,7 +35576,7 @@
     "preparationGaps": [],
     "rawScore": 351.29678843941264,
     "stage": "Expert",
-    "step": 1314
+    "step": 1317
   },
   {
     "componentChanges": {
@@ -35522,7 +35603,7 @@
     "preparationGaps": [],
     "rawScore": 345.831046099943,
     "stage": "Expert",
-    "step": 1315
+    "step": 1318
   },
   {
     "componentChanges": {
@@ -35549,7 +35630,7 @@
     "preparationGaps": [],
     "rawScore": 373.3382089374072,
     "stage": "Expert",
-    "step": 1316
+    "step": 1319
   },
   {
     "componentChanges": {
@@ -35576,7 +35657,7 @@
     "preparationGaps": [],
     "rawScore": 378.1400672775779,
     "stage": "Expert",
-    "step": 1317
+    "step": 1320
   },
   {
     "componentChanges": {
@@ -35603,7 +35684,7 @@
     "preparationGaps": [],
     "rawScore": 369.11895329025356,
     "stage": "Expert",
-    "step": 1318
+    "step": 1321
   },
   {
     "componentChanges": {
@@ -35630,7 +35711,7 @@
     "preparationGaps": [],
     "rawScore": 388.999667358973,
     "stage": "Expert",
-    "step": 1319
+    "step": 1322
   },
   {
     "componentChanges": {
@@ -35657,7 +35738,7 @@
     "preparationGaps": [],
     "rawScore": 392.49934976734136,
     "stage": "Expert",
-    "step": 1320
+    "step": 1323
   },
   {
     "componentChanges": {
@@ -35684,7 +35765,7 @@
     "preparationGaps": [],
     "rawScore": 388.16685116790154,
     "stage": "Expert",
-    "step": 1321
+    "step": 1324
   },
   {
     "componentChanges": {
@@ -35711,7 +35792,7 @@
     "preparationGaps": [],
     "rawScore": 382.85553880134705,
     "stage": "Expert",
-    "step": 1322
+    "step": 1325
   },
   {
     "componentChanges": {
@@ -35738,7 +35819,7 @@
     "preparationGaps": [],
     "rawScore": 393.69965556869136,
     "stage": "Expert",
-    "step": 1323
+    "step": 1326
   },
   {
     "componentChanges": {
@@ -35765,7 +35846,7 @@
     "preparationGaps": [],
     "rawScore": 390.7958270676692,
     "stage": "Expert",
-    "step": 1324
+    "step": 1327
   },
   {
     "componentChanges": {
@@ -35792,7 +35873,7 @@
     "preparationGaps": [],
     "rawScore": 405.03558332926923,
     "stage": "Expert",
-    "step": 1325
+    "step": 1328
   },
   {
     "componentChanges": {
@@ -35819,7 +35900,7 @@
     "preparationGaps": [],
     "rawScore": 403.3732337750131,
     "stage": "Expert",
-    "step": 1326
+    "step": 1329
   },
   {
     "componentChanges": {
@@ -35846,7 +35927,7 @@
     "preparationGaps": [],
     "rawScore": 423.23938270125024,
     "stage": "Expert",
-    "step": 1327
+    "step": 1330
   },
   {
     "componentChanges": {
@@ -35873,7 +35954,7 @@
     "preparationGaps": [],
     "rawScore": 415.9775153817569,
     "stage": "Expert",
-    "step": 1328
+    "step": 1331
   },
   {
     "componentChanges": {
@@ -35900,7 +35981,7 @@
     "preparationGaps": [],
     "rawScore": 434.90202863549104,
     "stage": "Expert",
-    "step": 1329
+    "step": 1332
   },
   {
     "componentChanges": {
@@ -35927,7 +36008,7 @@
     "preparationGaps": [],
     "rawScore": 427.6720660560953,
     "stage": "Expert",
-    "step": 1330
+    "step": 1333
   },
   {
     "componentChanges": {
@@ -35954,7 +36035,7 @@
     "preparationGaps": [],
     "rawScore": 426.05039904111953,
     "stage": "Expert",
-    "step": 1331
+    "step": 1334
   },
   {
     "componentChanges": {
@@ -35981,7 +36062,7 @@
     "preparationGaps": [],
     "rawScore": 439.0263598254332,
     "stage": "Expert",
-    "step": 1332
+    "step": 1335
   },
   {
     "componentChanges": {
@@ -36008,7 +36089,7 @@
     "preparationGaps": [],
     "rawScore": 443.09847458138273,
     "stage": "Expert",
-    "step": 1333
+    "step": 1336
   },
   {
     "componentChanges": {
@@ -36035,7 +36116,7 @@
     "preparationGaps": [],
     "rawScore": 439.7815559038646,
     "stage": "Expert",
-    "step": 1334
+    "step": 1337
   },
   {
     "componentChanges": {
@@ -36062,7 +36143,7 @@
     "preparationGaps": [],
     "rawScore": 445.5481348016885,
     "stage": "Expert",
-    "step": 1335
+    "step": 1338
   },
   {
     "componentChanges": {
@@ -36089,7 +36170,7 @@
     "preparationGaps": [],
     "rawScore": 439.74709803921576,
     "stage": "Expert",
-    "step": 1336
+    "step": 1339
   },
   {
     "componentChanges": {
@@ -36116,7 +36197,7 @@
     "preparationGaps": [],
     "rawScore": 436.87037485888106,
     "stage": "Expert",
-    "step": 1337
+    "step": 1340
   },
   {
     "componentChanges": {
@@ -36143,7 +36224,7 @@
     "preparationGaps": [],
     "rawScore": 453.8051706312587,
     "stage": "Expert",
-    "step": 1338
+    "step": 1341
   },
   {
     "componentChanges": {
@@ -36170,7 +36251,7 @@
     "preparationGaps": [],
     "rawScore": 449.53624906263127,
     "stage": "Expert",
-    "step": 1339
+    "step": 1342
   },
   {
     "componentChanges": {
@@ -36197,7 +36278,7 @@
     "preparationGaps": [],
     "rawScore": 450.38149416067046,
     "stage": "Expert",
-    "step": 1340
+    "step": 1343
   },
   {
     "componentChanges": {
@@ -36224,7 +36305,7 @@
     "preparationGaps": [],
     "rawScore": 448.7973717727459,
     "stage": "Expert",
-    "step": 1341
+    "step": 1344
   },
   {
     "componentChanges": {
@@ -36251,7 +36332,7 @@
     "preparationGaps": [],
     "rawScore": 454.00930100190385,
     "stage": "Expert",
-    "step": 1342
+    "step": 1345
   },
   {
     "componentChanges": {
@@ -36278,7 +36359,7 @@
     "preparationGaps": [],
     "rawScore": 444.4225737384328,
     "stage": "Expert",
-    "step": 1343
+    "step": 1346
   },
   {
     "componentChanges": {
@@ -36305,7 +36386,7 @@
     "preparationGaps": [],
     "rawScore": 467.56803921568627,
     "stage": "Expert",
-    "step": 1344
+    "step": 1347
   },
   {
     "componentChanges": {
@@ -36332,7 +36413,7 @@
     "preparationGaps": [],
     "rawScore": 462.74284055321147,
     "stage": "Expert",
-    "step": 1345
+    "step": 1348
   },
   {
     "componentChanges": {
@@ -36359,7 +36440,7 @@
     "preparationGaps": [],
     "rawScore": 457.75126611905034,
     "stage": "Expert",
-    "step": 1346
+    "step": 1349
   },
   {
     "componentChanges": {
@@ -36386,7 +36467,7 @@
     "preparationGaps": [],
     "rawScore": 473.7703794332764,
     "stage": "Expert",
-    "step": 1347
+    "step": 1350
   },
   {
     "componentChanges": {
@@ -36413,7 +36494,7 @@
     "preparationGaps": [],
     "rawScore": 468.6484431452167,
     "stage": "Expert",
-    "step": 1348
+    "step": 1351
   },
   {
     "componentChanges": {
@@ -36440,7 +36521,7 @@
     "preparationGaps": [],
     "rawScore": 472.78502357243514,
     "stage": "Expert",
-    "step": 1349
+    "step": 1352
   },
   {
     "componentChanges": {
@@ -36467,7 +36548,7 @@
     "preparationGaps": [],
     "rawScore": 478.8343373816992,
     "stage": "Expert",
-    "step": 1350
+    "step": 1353
   },
   {
     "componentChanges": {
@@ -36494,7 +36575,7 @@
     "preparationGaps": [],
     "rawScore": 477.43582104182997,
     "stage": "Expert",
-    "step": 1351
+    "step": 1354
   },
   {
     "componentChanges": {
@@ -36521,7 +36602,7 @@
     "preparationGaps": [],
     "rawScore": 468.93262745098036,
     "stage": "Expert",
-    "step": 1352
+    "step": 1355
   },
   {
     "componentChanges": {
@@ -36548,7 +36629,7 @@
     "preparationGaps": [],
     "rawScore": 473.0591249633986,
     "stage": "Expert",
-    "step": 1353
+    "step": 1356
   },
   {
     "componentChanges": {
@@ -36575,7 +36656,7 @@
     "preparationGaps": [],
     "rawScore": 470.0599464059968,
     "stage": "Expert",
-    "step": 1354
+    "step": 1357
   },
   {
     "componentChanges": {
@@ -36602,7 +36683,7 @@
     "preparationGaps": [],
     "rawScore": 480.82472945478816,
     "stage": "Expert",
-    "step": 1355
+    "step": 1358
   },
   {
     "componentChanges": {
@@ -36629,7 +36710,7 @@
     "preparationGaps": [],
     "rawScore": 479.08814902037585,
     "stage": "Expert",
-    "step": 1356
+    "step": 1359
   },
   {
     "componentChanges": {
@@ -36656,7 +36737,7 @@
     "preparationGaps": [],
     "rawScore": 471.17982883585773,
     "stage": "Expert",
-    "step": 1357
+    "step": 1360
   },
   {
     "componentChanges": {
@@ -36683,7 +36764,7 @@
     "preparationGaps": [],
     "rawScore": 481.5880627881214,
     "stage": "Expert",
-    "step": 1358
+    "step": 1361
   },
   {
     "componentChanges": {
@@ -36710,7 +36791,7 @@
     "preparationGaps": [],
     "rawScore": 481.37289947320244,
     "stage": "Expert",
-    "step": 1359
+    "step": 1362
   },
   {
     "componentChanges": {
@@ -36737,7 +36818,7 @@
     "preparationGaps": [],
     "rawScore": 488.34783084575145,
     "stage": "Expert",
-    "step": 1360
+    "step": 1363
   },
   {
     "componentChanges": {
@@ -36764,7 +36845,7 @@
     "preparationGaps": [],
     "rawScore": 486.76182481102546,
     "stage": "Expert",
-    "step": 1361
+    "step": 1364
   },
   {
     "componentChanges": {
@@ -36791,7 +36872,7 @@
     "preparationGaps": [],
     "rawScore": 485.55686274509804,
     "stage": "Expert",
-    "step": 1362
+    "step": 1365
   },
   {
     "componentChanges": {
@@ -36818,7 +36899,7 @@
     "preparationGaps": [],
     "rawScore": 484.29101100360737,
     "stage": "Expert",
-    "step": 1363
+    "step": 1366
   },
   {
     "componentChanges": {
@@ -36845,7 +36926,7 @@
     "preparationGaps": [],
     "rawScore": 497.35711239272484,
     "stage": "Expert",
-    "step": 1364
+    "step": 1367
   },
   {
     "componentChanges": {
@@ -36872,7 +36953,7 @@
     "preparationGaps": [],
     "rawScore": 487.68567709487473,
     "stage": "Expert",
-    "step": 1365
+    "step": 1368
   },
   {
     "componentChanges": {
@@ -36899,7 +36980,7 @@
     "preparationGaps": [],
     "rawScore": 507.80873867331195,
     "stage": "Expert",
-    "step": 1366
+    "step": 1369
   },
   {
     "componentChanges": {
@@ -36926,7 +37007,7 @@
     "preparationGaps": [],
     "rawScore": 509.72794849281036,
     "stage": "Expert",
-    "step": 1367
+    "step": 1370
   },
   {
     "componentChanges": {
@@ -36953,7 +37034,7 @@
     "preparationGaps": [],
     "rawScore": 501.3294901960784,
     "stage": "Expert",
-    "step": 1368
+    "step": 1371
   },
   {
     "componentChanges": {
@@ -36980,7 +37061,7 @@
     "preparationGaps": [],
     "rawScore": 507.0661211073218,
     "stage": "Expert",
-    "step": 1369
+    "step": 1372
   },
   {
     "componentChanges": {
@@ -37007,7 +37088,7 @@
     "preparationGaps": [],
     "rawScore": 519.4144980136399,
     "stage": "Expert",
-    "step": 1370
+    "step": 1373
   },
   {
     "componentChanges": {
@@ -37034,7 +37115,7 @@
     "preparationGaps": [],
     "rawScore": 540.2575849012901,
     "stage": "Expert",
-    "step": 1371
+    "step": 1374
   },
   {
     "componentChanges": {
@@ -37061,7 +37142,7 @@
     "preparationGaps": [],
     "rawScore": 548.7645415255478,
     "stage": "Expert",
-    "step": 1372
+    "step": 1375
   },
   {
     "componentChanges": {
@@ -37088,7 +37169,7 @@
     "preparationGaps": [],
     "rawScore": 572.742405898624,
     "stage": "Expert",
-    "step": 1373
+    "step": 1376
   },
   {
     "componentChanges": {
@@ -37115,7 +37196,7 @@
     "preparationGaps": [],
     "rawScore": 222.91583291899406,
     "stage": "Expert",
-    "step": 1374
+    "step": 1377
   },
   {
     "componentChanges": {
@@ -37142,7 +37223,7 @@
     "preparationGaps": [],
     "rawScore": 239.65934802166788,
     "stage": "Expert",
-    "step": 1375
+    "step": 1378
   },
   {
     "componentChanges": {
@@ -37169,7 +37250,7 @@
     "preparationGaps": [],
     "rawScore": 260.0488231150725,
     "stage": "Expert",
-    "step": 1376
+    "step": 1379
   },
   {
     "componentChanges": {
@@ -37196,7 +37277,7 @@
     "preparationGaps": [],
     "rawScore": 324.2245960528556,
     "stage": "Expert",
-    "step": 1377
+    "step": 1380
   },
   {
     "componentChanges": {
@@ -37223,7 +37304,7 @@
     "preparationGaps": [],
     "rawScore": 355.5338770986072,
     "stage": "Expert",
-    "step": 1378
+    "step": 1381
   },
   {
     "componentChanges": {
@@ -37250,7 +37331,7 @@
     "preparationGaps": [],
     "rawScore": 357.1298944667242,
     "stage": "Expert",
-    "step": 1379
+    "step": 1382
   },
   {
     "componentChanges": {
@@ -37277,7 +37358,7 @@
     "preparationGaps": [],
     "rawScore": 393.2678994732025,
     "stage": "Expert",
-    "step": 1380
+    "step": 1383
   },
   {
     "componentChanges": {
@@ -37304,7 +37385,7 @@
     "preparationGaps": [],
     "rawScore": 405.19063725490196,
     "stage": "Expert",
-    "step": 1381
+    "step": 1384
   },
   {
     "componentChanges": {
@@ -37331,7 +37412,7 @@
     "preparationGaps": [],
     "rawScore": 401.5422503275654,
     "stage": "Expert",
-    "step": 1382
+    "step": 1385
   },
   {
     "componentChanges": {
@@ -37358,7 +37439,7 @@
     "preparationGaps": [],
     "rawScore": 413.7189803921569,
     "stage": "Expert",
-    "step": 1383
+    "step": 1386
   },
   {
     "componentChanges": {
@@ -37385,7 +37466,7 @@
     "preparationGaps": [],
     "rawScore": 419.2622317701424,
     "stage": "Expert",
-    "step": 1384
+    "step": 1387
   },
   {
     "componentChanges": {
@@ -37412,7 +37493,7 @@
     "preparationGaps": [],
     "rawScore": 425.52530811918524,
     "stage": "Expert",
-    "step": 1385
+    "step": 1388
   },
   {
     "componentChanges": {
@@ -37439,7 +37520,7 @@
     "preparationGaps": [],
     "rawScore": 417.87530975277,
     "stage": "Expert",
-    "step": 1386
+    "step": 1389
   },
   {
     "componentChanges": {
@@ -37466,7 +37547,7 @@
     "preparationGaps": [],
     "rawScore": 417.42438725083787,
     "stage": "Expert",
-    "step": 1387
+    "step": 1390
   },
   {
     "componentChanges": {
@@ -37493,7 +37574,7 @@
     "preparationGaps": [],
     "rawScore": 446.37346802119146,
     "stage": "Expert",
-    "step": 1388
+    "step": 1391
   },
   {
     "componentChanges": {
@@ -37520,7 +37601,7 @@
     "preparationGaps": [],
     "rawScore": 442.8715269241829,
     "stage": "Expert",
-    "step": 1389
+    "step": 1392
   },
   {
     "componentChanges": {
@@ -37547,7 +37628,7 @@
     "preparationGaps": [],
     "rawScore": 439.2571014399618,
     "stage": "Expert",
-    "step": 1390
+    "step": 1393
   },
   {
     "componentChanges": {
@@ -37574,7 +37655,7 @@
     "preparationGaps": [],
     "rawScore": 452.476919672338,
     "stage": "Expert",
-    "step": 1391
+    "step": 1394
   },
   {
     "componentChanges": {
@@ -37601,7 +37682,7 @@
     "preparationGaps": [],
     "rawScore": 450.92446802119144,
     "stage": "Expert",
-    "step": 1392
+    "step": 1395
   },
   {
     "componentChanges": {
@@ -37628,7 +37709,7 @@
     "preparationGaps": [],
     "rawScore": 456.93344348633195,
     "stage": "Expert",
-    "step": 1393
+    "step": 1396
   },
   {
     "componentChanges": {
@@ -37655,7 +37736,7 @@
     "preparationGaps": [],
     "rawScore": 468.8510948286058,
     "stage": "Expert",
-    "step": 1394
+    "step": 1397
   },
   {
     "componentChanges": {
@@ -37682,7 +37763,7 @@
     "preparationGaps": [],
     "rawScore": 461.9683690294461,
     "stage": "Expert",
-    "step": 1395
+    "step": 1398
   },
   {
     "componentChanges": {
@@ -37709,7 +37790,7 @@
     "preparationGaps": [],
     "rawScore": 478.7934696735838,
     "stage": "Expert",
-    "step": 1396
+    "step": 1399
   },
   {
     "componentChanges": {
@@ -37736,7 +37817,7 @@
     "preparationGaps": [],
     "rawScore": 517.8743315771402,
     "stage": "Expert",
-    "step": 1397
+    "step": 1400
   },
   {
     "componentChanges": {
@@ -37763,7 +37844,7 @@
     "preparationGaps": [],
     "rawScore": 507.9719888896569,
     "stage": "Expert",
-    "step": 1398
+    "step": 1401
   },
   {
     "componentChanges": {
@@ -37790,7 +37871,7 @@
     "preparationGaps": [],
     "rawScore": 520.8701543751632,
     "stage": "Expert",
-    "step": 1399
+    "step": 1402
   },
   {
     "componentChanges": {
@@ -37817,7 +37898,7 @@
     "preparationGaps": [],
     "rawScore": 543.9936493686849,
     "stage": "Expert",
-    "step": 1400
+    "step": 1403
   },
   {
     "componentChanges": {
@@ -37844,7 +37925,7 @@
     "preparationGaps": [],
     "rawScore": 544.5489169942321,
     "stage": "Expert",
-    "step": 1401
+    "step": 1404
   },
   {
     "componentChanges": {
@@ -37871,7 +37952,7 @@
     "preparationGaps": [],
     "rawScore": 554.1121123927248,
     "stage": "Expert",
-    "step": 1402
+    "step": 1405
   },
   {
     "componentChanges": {
@@ -37898,7 +37979,7 @@
     "preparationGaps": [],
     "rawScore": 264.5772574776555,
     "stage": "Expert",
-    "step": 1403
+    "step": 1406
   },
   {
     "componentChanges": {
@@ -37925,7 +38006,7 @@
     "preparationGaps": [],
     "rawScore": 360.9158457129496,
     "stage": "Expert",
-    "step": 1404
+    "step": 1407
   },
   {
     "componentChanges": {
@@ -37952,7 +38033,7 @@
     "preparationGaps": [],
     "rawScore": 396.83771874132884,
     "stage": "Expert",
-    "step": 1405
+    "step": 1408
   },
   {
     "componentChanges": {
@@ -37979,7 +38060,7 @@
     "preparationGaps": [],
     "rawScore": 398.040571636416,
     "stage": "Expert",
-    "step": 1406
+    "step": 1409
   },
   {
     "componentChanges": {
@@ -38006,7 +38087,7 @@
     "preparationGaps": [],
     "rawScore": 416.6628091510948,
     "stage": "Expert",
-    "step": 1407
+    "step": 1410
   },
   {
     "componentChanges": {
@@ -38033,7 +38114,7 @@
     "preparationGaps": [],
     "rawScore": 418.76280915109476,
     "stage": "Expert",
-    "step": 1408
+    "step": 1411
   },
   {
     "componentChanges": {
@@ -38060,7 +38141,7 @@
     "preparationGaps": [],
     "rawScore": 430.0289742877504,
     "stage": "Expert",
-    "step": 1409
+    "step": 1412
   },
   {
     "componentChanges": {
@@ -38087,7 +38168,7 @@
     "preparationGaps": [],
     "rawScore": 457.2926912909508,
     "stage": "Expert",
-    "step": 1410
+    "step": 1413
   },
   {
     "componentChanges": {
@@ -38114,7 +38195,7 @@
     "preparationGaps": [],
     "rawScore": 468.8594353656964,
     "stage": "Expert",
-    "step": 1411
+    "step": 1414
   },
   {
     "componentChanges": {
@@ -38141,7 +38222,7 @@
     "preparationGaps": [],
     "rawScore": 480.10781678054445,
     "stage": "Expert",
-    "step": 1412
+    "step": 1415
   },
   {
     "componentChanges": {
@@ -38168,7 +38249,7 @@
     "preparationGaps": [],
     "rawScore": 486.6946501591106,
     "stage": "Expert",
-    "step": 1413
+    "step": 1416
   },
   {
     "componentChanges": {
@@ -38195,7 +38276,7 @@
     "preparationGaps": [],
     "rawScore": 483.0897490911866,
     "stage": "Expert",
-    "step": 1414
+    "step": 1417
   },
   {
     "componentChanges": {
@@ -38222,7 +38303,7 @@
     "preparationGaps": [],
     "rawScore": 497.1982427022931,
     "stage": "Expert",
-    "step": 1415
+    "step": 1418
   },
   {
     "componentChanges": {
@@ -38249,7 +38330,7 @@
     "preparationGaps": [],
     "rawScore": 501.5518055514915,
     "stage": "Expert",
-    "step": 1416
+    "step": 1419
   },
   {
     "componentChanges": {
@@ -38276,7 +38357,7 @@
     "preparationGaps": [],
     "rawScore": 495.04902367592666,
     "stage": "Expert",
-    "step": 1417
+    "step": 1420
   },
   {
     "componentChanges": {
@@ -38303,7 +38384,7 @@
     "preparationGaps": [],
     "rawScore": 518.7637474079007,
     "stage": "Expert",
-    "step": 1418
+    "step": 1421
   },
   {
     "componentChanges": {
@@ -38330,7 +38411,7 @@
     "preparationGaps": [],
     "rawScore": 510.87749782316615,
     "stage": "Expert",
-    "step": 1419
+    "step": 1422
   },
   {
     "componentChanges": {
@@ -38357,7 +38438,7 @@
     "preparationGaps": [],
     "rawScore": 510.02406405305555,
     "stage": "Expert",
-    "step": 1420
+    "step": 1423
   },
   {
     "componentChanges": {
@@ -38384,7 +38465,7 @@
     "preparationGaps": [],
     "rawScore": 515.7814971389961,
     "stage": "Expert",
-    "step": 1421
+    "step": 1424
   },
   {
     "componentChanges": {
@@ -38411,7 +38492,7 @@
     "preparationGaps": [],
     "rawScore": 516.5921804637355,
     "stage": "Expert",
-    "step": 1422
+    "step": 1425
   },
   {
     "componentChanges": {
@@ -38438,7 +38519,7 @@
     "preparationGaps": [],
     "rawScore": 525.1595734534183,
     "stage": "Expert",
-    "step": 1423
+    "step": 1426
   },
   {
     "componentChanges": {
@@ -38465,7 +38546,7 @@
     "preparationGaps": [],
     "rawScore": 521.6739267981536,
     "stage": "Expert",
-    "step": 1424
+    "step": 1427
   },
   {
     "componentChanges": {
@@ -38492,7 +38573,7 @@
     "preparationGaps": [],
     "rawScore": 538.0044997914666,
     "stage": "Expert",
-    "step": 1425
+    "step": 1428
   },
   {
     "componentChanges": {
@@ -38519,7 +38600,7 @@
     "preparationGaps": [],
     "rawScore": 533.7423447671778,
     "stage": "Expert",
-    "step": 1426
+    "step": 1429
   },
   {
     "componentChanges": {
@@ -38546,7 +38627,7 @@
     "preparationGaps": [],
     "rawScore": 545.3219713134089,
     "stage": "Expert",
-    "step": 1427
+    "step": 1430
   },
   {
     "componentChanges": {
@@ -38573,7 +38654,7 @@
     "preparationGaps": [],
     "rawScore": 545.8165963428605,
     "stage": "Expert",
-    "step": 1428
+    "step": 1431
   },
   {
     "componentChanges": {
@@ -38600,7 +38681,7 @@
     "preparationGaps": [],
     "rawScore": 539.8804758177615,
     "stage": "Expert",
-    "step": 1429
+    "step": 1432
   },
   {
     "componentChanges": {
@@ -38627,7 +38708,7 @@
     "preparationGaps": [],
     "rawScore": 544.4877114601883,
     "stage": "Expert",
-    "step": 1430
+    "step": 1433
   },
   {
     "componentChanges": {
@@ -38654,7 +38735,7 @@
     "preparationGaps": [],
     "rawScore": 542.7528667934639,
     "stage": "Expert",
-    "step": 1431
+    "step": 1434
   },
   {
     "componentChanges": {
@@ -38681,7 +38762,7 @@
     "preparationGaps": [],
     "rawScore": 536.758122876585,
     "stage": "Expert",
-    "step": 1432
+    "step": 1435
   },
   {
     "componentChanges": {
@@ -38708,7 +38789,7 @@
     "preparationGaps": [],
     "rawScore": 553.2028994732024,
     "stage": "Expert",
-    "step": 1433
+    "step": 1436
   },
   {
     "componentChanges": {
@@ -38735,7 +38816,7 @@
     "preparationGaps": [],
     "rawScore": 548.1453866658422,
     "stage": "Expert",
-    "step": 1434
+    "step": 1437
   },
   {
     "componentChanges": {
@@ -38762,7 +38843,7 @@
     "preparationGaps": [],
     "rawScore": 576.6754353656963,
     "stage": "Expert",
-    "step": 1435
+    "step": 1438
   },
   {
     "componentChanges": {
@@ -38789,7 +38870,7 @@
     "preparationGaps": [],
     "rawScore": 281.8183917929274,
     "stage": "Expert",
-    "step": 1436
+    "step": 1439
   },
   {
     "componentChanges": {
@@ -38816,7 +38897,7 @@
     "preparationGaps": [],
     "rawScore": 273.4183917929274,
     "stage": "Expert",
-    "step": 1437
+    "step": 1440
   },
   {
     "componentChanges": {
@@ -38843,7 +38924,7 @@
     "preparationGaps": [],
     "rawScore": 283.9183917929274,
     "stage": "Expert",
-    "step": 1438
+    "step": 1441
   },
   {
     "componentChanges": {
@@ -38870,7 +38951,7 @@
     "preparationGaps": [],
     "rawScore": 356.1177450980392,
     "stage": "Expert",
-    "step": 1439
+    "step": 1442
   },
   {
     "componentChanges": {
@@ -38897,7 +38978,7 @@
     "preparationGaps": [],
     "rawScore": 365.9808809456797,
     "stage": "Expert",
-    "step": 1440
+    "step": 1443
   },
   {
     "componentChanges": {
@@ -38924,7 +39005,7 @@
     "preparationGaps": [],
     "rawScore": 361.8276013071895,
     "stage": "Expert",
-    "step": 1441
+    "step": 1444
   },
   {
     "componentChanges": {
@@ -38951,7 +39032,7 @@
     "preparationGaps": [],
     "rawScore": 364.92480392156864,
     "stage": "Expert",
-    "step": 1442
+    "step": 1445
   },
   {
     "componentChanges": {
@@ -38978,7 +39059,7 @@
     "preparationGaps": [],
     "rawScore": 374.3849403700874,
     "stage": "Expert",
-    "step": 1443
+    "step": 1446
   },
   {
     "componentChanges": {
@@ -39005,7 +39086,7 @@
     "preparationGaps": [],
     "rawScore": 371.56552614379086,
     "stage": "Expert",
-    "step": 1444
+    "step": 1447
   },
   {
     "componentChanges": {
@@ -39032,7 +39113,7 @@
     "preparationGaps": [],
     "rawScore": 382.5409692904275,
     "stage": "Expert",
-    "step": 1445
+    "step": 1448
   },
   {
     "componentChanges": {
@@ -39059,7 +39140,7 @@
     "preparationGaps": [],
     "rawScore": 385.79943137254907,
     "stage": "Expert",
-    "step": 1446
+    "step": 1449
   },
   {
     "componentChanges": {
@@ -39086,7 +39167,7 @@
     "preparationGaps": [],
     "rawScore": 381.73836635706914,
     "stage": "Expert",
-    "step": 1447
+    "step": 1450
   },
   {
     "componentChanges": {
@@ -39113,7 +39194,7 @@
     "preparationGaps": [],
     "rawScore": 383.06639353285175,
     "stage": "Expert",
-    "step": 1448
+    "step": 1451
   },
   {
     "componentChanges": {
@@ -39140,7 +39221,7 @@
     "preparationGaps": [],
     "rawScore": 398.8749354186119,
     "stage": "Expert",
-    "step": 1449
+    "step": 1452
   },
   {
     "componentChanges": {
@@ -39167,7 +39248,7 @@
     "preparationGaps": [],
     "rawScore": 398.2226078431372,
     "stage": "Expert",
-    "step": 1450
+    "step": 1453
   },
   {
     "componentChanges": {
@@ -39194,7 +39275,7 @@
     "preparationGaps": [],
     "rawScore": 397.0893627450981,
     "stage": "Expert",
-    "step": 1451
+    "step": 1454
   },
   {
     "componentChanges": {
@@ -39221,7 +39302,7 @@
     "preparationGaps": [],
     "rawScore": 389.7033333333334,
     "stage": "Expert",
-    "step": 1452
+    "step": 1455
   },
   {
     "componentChanges": {
@@ -39248,7 +39329,7 @@
     "preparationGaps": [],
     "rawScore": 394.4529458450047,
     "stage": "Expert",
-    "step": 1453
+    "step": 1456
   },
   {
     "componentChanges": {
@@ -39275,7 +39356,7 @@
     "preparationGaps": [],
     "rawScore": 405.15475579322634,
     "stage": "Expert",
-    "step": 1454
+    "step": 1457
   },
   {
     "componentChanges": {
@@ -39302,7 +39383,7 @@
     "preparationGaps": [],
     "rawScore": 400.32260784313723,
     "stage": "Expert",
-    "step": 1455
+    "step": 1458
   },
   {
     "componentChanges": {
@@ -39329,7 +39410,7 @@
     "preparationGaps": [],
     "rawScore": 417.09171568627454,
     "stage": "Expert",
-    "step": 1456
+    "step": 1459
   },
   {
     "componentChanges": {
@@ -39356,7 +39437,7 @@
     "preparationGaps": [],
     "rawScore": 418.7695813406663,
     "stage": "Expert",
-    "step": 1457
+    "step": 1460
   },
   {
     "componentChanges": {
@@ -39383,7 +39464,7 @@
     "preparationGaps": [],
     "rawScore": 413.2641176470588,
     "stage": "Expert",
-    "step": 1458
+    "step": 1461
   },
   {
     "componentChanges": {
@@ -39410,7 +39491,7 @@
     "preparationGaps": [],
     "rawScore": 414.12140616246495,
     "stage": "Expert",
-    "step": 1459
+    "step": 1462
   },
   {
     "componentChanges": {
@@ -39437,7 +39518,7 @@
     "preparationGaps": [],
     "rawScore": 411.23629551820727,
     "stage": "Expert",
-    "step": 1460
+    "step": 1463
   },
   {
     "componentChanges": {
@@ -39464,7 +39545,7 @@
     "preparationGaps": [],
     "rawScore": 423.4173529411765,
     "stage": "Expert",
-    "step": 1461
+    "step": 1464
   },
   {
     "componentChanges": {
@@ -39491,7 +39572,7 @@
     "preparationGaps": [],
     "rawScore": 415.36411764705883,
     "stage": "Expert",
-    "step": 1462
+    "step": 1465
   },
   {
     "componentChanges": {
@@ -39518,7 +39599,7 @@
     "preparationGaps": [],
     "rawScore": 415.84181372549017,
     "stage": "Expert",
-    "step": 1463
+    "step": 1466
   },
   {
     "componentChanges": {
@@ -39545,7 +39626,7 @@
     "preparationGaps": [],
     "rawScore": 426.1464853719266,
     "stage": "Expert",
-    "step": 1464
+    "step": 1467
   },
   {
     "componentChanges": {
@@ -39572,7 +39653,7 @@
     "preparationGaps": [],
     "rawScore": 426.9110259103642,
     "stage": "Expert",
-    "step": 1465
+    "step": 1468
   },
   {
     "componentChanges": {
@@ -39599,7 +39680,7 @@
     "preparationGaps": [],
     "rawScore": 422.08764705882356,
     "stage": "Expert",
-    "step": 1466
+    "step": 1469
   },
   {
     "componentChanges": {
@@ -39626,7 +39707,7 @@
     "preparationGaps": [],
     "rawScore": 434.66895238095236,
     "stage": "Expert",
-    "step": 1467
+    "step": 1470
   },
   {
     "componentChanges": {
@@ -39653,7 +39734,7 @@
     "preparationGaps": [],
     "rawScore": 426.32231372549023,
     "stage": "Expert",
-    "step": 1468
+    "step": 1471
   },
   {
     "componentChanges": {
@@ -39680,7 +39761,7 @@
     "preparationGaps": [],
     "rawScore": 429.01102591036414,
     "stage": "Expert",
-    "step": 1469
+    "step": 1472
   },
   {
     "componentChanges": {
@@ -39707,7 +39788,7 @@
     "preparationGaps": [],
     "rawScore": 438.532679738562,
     "stage": "Expert",
-    "step": 1470
+    "step": 1473
   },
   {
     "componentChanges": {
@@ -39734,7 +39815,7 @@
     "preparationGaps": [],
     "rawScore": 444.10862745098046,
     "stage": "Expert",
-    "step": 1471
+    "step": 1474
   },
   {
     "componentChanges": {
@@ -39761,7 +39842,7 @@
     "preparationGaps": [],
     "rawScore": 457.2159640522876,
     "stage": "Expert",
-    "step": 1472
+    "step": 1475
   },
   {
     "componentChanges": {
@@ -39788,7 +39869,7 @@
     "preparationGaps": [],
     "rawScore": 460.79947899159663,
     "stage": "Expert",
-    "step": 1473
+    "step": 1476
   },
   {
     "componentChanges": {
@@ -39815,7 +39896,7 @@
     "preparationGaps": [],
     "rawScore": 452.92546218487394,
     "stage": "Expert",
-    "step": 1474
+    "step": 1477
   },
   {
     "componentChanges": {
@@ -39842,7 +39923,7 @@
     "preparationGaps": [],
     "rawScore": 461.24810644257707,
     "stage": "Expert",
-    "step": 1475
+    "step": 1478
   },
   {
     "componentChanges": {
@@ -39869,7 +39950,7 @@
     "preparationGaps": [],
     "rawScore": 457.2159640522876,
     "stage": "Expert",
-    "step": 1476
+    "step": 1479
   },
   {
     "componentChanges": {
@@ -39896,7 +39977,7 @@
     "preparationGaps": [],
     "rawScore": 462.1494645969498,
     "stage": "Expert",
-    "step": 1477
+    "step": 1480
   },
   {
     "componentChanges": {
@@ -39923,7 +40004,7 @@
     "preparationGaps": [],
     "rawScore": 459.3715009746589,
     "stage": "Expert",
-    "step": 1478
+    "step": 1481
   },
   {
     "componentChanges": {
@@ -39950,7 +40031,7 @@
     "preparationGaps": [],
     "rawScore": 469.0598459383753,
     "stage": "Expert",
-    "step": 1479
+    "step": 1482
   },
   {
     "componentChanges": {
@@ -39977,7 +40058,7 @@
     "preparationGaps": [],
     "rawScore": 468.06549019607843,
     "stage": "Expert",
-    "step": 1480
+    "step": 1483
   },
   {
     "componentChanges": {
@@ -40004,7 +40085,7 @@
     "preparationGaps": [],
     "rawScore": 488.65657765737876,
     "stage": "Expert",
-    "step": 1481
+    "step": 1484
   },
   {
     "componentChanges": {
@@ -40031,7 +40112,7 @@
     "preparationGaps": [],
     "rawScore": 479.8,
     "stage": "Expert",
-    "step": 1482
+    "step": 1485
   },
   {
     "componentChanges": {
@@ -40058,7 +40139,7 @@
     "preparationGaps": [],
     "rawScore": 480.6931302521008,
     "stage": "Expert",
-    "step": 1483
+    "step": 1486
   },
   {
     "componentChanges": {
@@ -40085,7 +40166,7 @@
     "preparationGaps": [],
     "rawScore": 479.29050980392157,
     "stage": "Expert",
-    "step": 1484
+    "step": 1487
   },
   {
     "componentChanges": {
@@ -40112,7 +40193,7 @@
     "preparationGaps": [],
     "rawScore": 488.6744288472965,
     "stage": "Expert",
-    "step": 1485
+    "step": 1488
   },
   {
     "componentChanges": {
@@ -40139,7 +40220,7 @@
     "preparationGaps": [],
     "rawScore": 483.5260722394221,
     "stage": "Expert",
-    "step": 1486
+    "step": 1489
   },
   {
     "componentChanges": {
@@ -40166,7 +40247,7 @@
     "preparationGaps": [],
     "rawScore": 480.1347991301784,
     "stage": "Expert",
-    "step": 1487
+    "step": 1490
   },
   {
     "componentChanges": {
@@ -40193,7 +40274,7 @@
     "preparationGaps": [],
     "rawScore": 495.6765776573788,
     "stage": "Expert",
-    "step": 1488
+    "step": 1491
   },
   {
     "componentChanges": {
@@ -40220,7 +40301,7 @@
     "preparationGaps": [],
     "rawScore": 490.34675583566764,
     "stage": "Expert",
-    "step": 1489
+    "step": 1492
   },
   {
     "componentChanges": {
@@ -40247,7 +40328,7 @@
     "preparationGaps": [],
     "rawScore": 503.7398431372549,
     "stage": "Expert",
-    "step": 1490
+    "step": 1493
   },
   {
     "componentChanges": {
@@ -40274,7 +40355,7 @@
     "preparationGaps": [],
     "rawScore": 497.5409803921569,
     "stage": "Expert",
-    "step": 1491
+    "step": 1494
   },
   {
     "componentChanges": {
@@ -40301,7 +40382,7 @@
     "preparationGaps": [],
     "rawScore": 494.1629411764706,
     "stage": "Expert",
-    "step": 1492
+    "step": 1495
   },
   {
     "componentChanges": {
@@ -40328,7 +40409,7 @@
     "preparationGaps": [],
     "rawScore": 506.1465196078431,
     "stage": "Expert",
-    "step": 1493
+    "step": 1496
   },
   {
     "componentChanges": {
@@ -40355,7 +40436,7 @@
     "preparationGaps": [],
     "rawScore": 513.6976666666667,
     "stage": "Expert",
-    "step": 1494
+    "step": 1497
   },
   {
     "componentChanges": {
@@ -40382,7 +40463,7 @@
     "preparationGaps": [],
     "rawScore": 508.24651960784314,
     "stage": "Expert",
-    "step": 1495
+    "step": 1498
   },
   {
     "componentChanges": {
@@ -40409,7 +40490,7 @@
     "preparationGaps": [],
     "rawScore": 509.2083977591036,
     "stage": "Expert",
-    "step": 1496
+    "step": 1499
   },
   {
     "componentChanges": {
@@ -40436,7 +40517,7 @@
     "preparationGaps": [],
     "rawScore": 516.3702352941177,
     "stage": "Expert",
-    "step": 1497
+    "step": 1500
   },
   {
     "componentChanges": {
@@ -40463,7 +40544,7 @@
     "preparationGaps": [],
     "rawScore": 508.02338725083786,
     "stage": "Expert",
-    "step": 1498
+    "step": 1501
   },
   {
     "componentChanges": {
@@ -40490,7 +40571,7 @@
     "preparationGaps": [],
     "rawScore": 518.0898431372549,
     "stage": "Expert",
-    "step": 1499
+    "step": 1502
   },
   {
     "componentChanges": {
@@ -40517,7 +40598,7 @@
     "preparationGaps": [],
     "rawScore": 519.7974411764706,
     "stage": "Expert",
-    "step": 1500
+    "step": 1503
   },
   {
     "componentChanges": {
@@ -40544,7 +40625,7 @@
     "preparationGaps": [],
     "rawScore": 526.3070549535604,
     "stage": "Expert",
-    "step": 1501
+    "step": 1504
   },
   {
     "componentChanges": {
@@ -40571,7 +40652,7 @@
     "preparationGaps": [],
     "rawScore": 524.0897821350762,
     "stage": "Expert",
-    "step": 1502
+    "step": 1505
   },
   {
     "componentChanges": {
@@ -40598,7 +40679,7 @@
     "preparationGaps": [],
     "rawScore": 524.8217532467532,
     "stage": "Expert",
-    "step": 1503
+    "step": 1506
   },
   {
     "componentChanges": {
@@ -40625,7 +40706,7 @@
     "preparationGaps": [],
     "rawScore": 518.4224019607843,
     "stage": "Expert",
-    "step": 1504
+    "step": 1507
   },
   {
     "componentChanges": {
@@ -40652,7 +40733,7 @@
     "preparationGaps": [],
     "rawScore": 523.9559675659738,
     "stage": "Expert",
-    "step": 1505
+    "step": 1508
   },
   {
     "componentChanges": {
@@ -40679,7 +40760,7 @@
     "preparationGaps": [],
     "rawScore": 518.0898431372549,
     "stage": "Expert",
-    "step": 1506
+    "step": 1509
   },
   {
     "componentChanges": {
@@ -40706,7 +40787,7 @@
     "preparationGaps": [],
     "rawScore": 537.8098655462185,
     "stage": "Expert",
-    "step": 1507
+    "step": 1510
   },
   {
     "componentChanges": {
@@ -40733,7 +40814,7 @@
     "preparationGaps": [],
     "rawScore": 537.2543697478992,
     "stage": "Expert",
-    "step": 1508
+    "step": 1511
   },
   {
     "componentChanges": {
@@ -40760,7 +40841,7 @@
     "preparationGaps": [],
     "rawScore": 536.6207786377709,
     "stage": "Expert",
-    "step": 1509
+    "step": 1512
   },
   {
     "componentChanges": {
@@ -40787,7 +40868,7 @@
     "preparationGaps": [],
     "rawScore": 536.1505174291939,
     "stage": "Expert",
-    "step": 1510
+    "step": 1513
   },
   {
     "componentChanges": {
@@ -40814,7 +40895,7 @@
     "preparationGaps": [],
     "rawScore": 538.7207786377709,
     "stage": "Expert",
-    "step": 1511
+    "step": 1514
   },
   {
     "componentChanges": {
@@ -40841,7 +40922,7 @@
     "preparationGaps": [],
     "rawScore": 537.2543697478992,
     "stage": "Expert",
-    "step": 1512
+    "step": 1515
   },
   {
     "componentChanges": {
@@ -40868,7 +40949,7 @@
     "preparationGaps": [],
     "rawScore": 538.5287450980392,
     "stage": "Expert",
-    "step": 1513
+    "step": 1516
   },
   {
     "componentChanges": {
@@ -40895,7 +40976,7 @@
     "preparationGaps": [],
     "rawScore": 537.8098655462185,
     "stage": "Expert",
-    "step": 1514
+    "step": 1517
   },
   {
     "componentChanges": {
@@ -40922,7 +41003,7 @@
     "preparationGaps": [],
     "rawScore": 533.391294117647,
     "stage": "Expert",
-    "step": 1515
+    "step": 1518
   },
   {
     "componentChanges": {
@@ -40949,7 +41030,7 @@
     "preparationGaps": [],
     "rawScore": 537.3380784313725,
     "stage": "Expert",
-    "step": 1516
+    "step": 1519
   },
   {
     "componentChanges": {
@@ -40976,7 +41057,7 @@
     "preparationGaps": [],
     "rawScore": 539.37720821662,
     "stage": "Expert",
-    "step": 1517
+    "step": 1520
   },
   {
     "componentChanges": {
@@ -41003,7 +41084,7 @@
     "preparationGaps": [],
     "rawScore": 543.2143067226891,
     "stage": "Expert",
-    "step": 1518
+    "step": 1521
   },
   {
     "componentChanges": {
@@ -41030,7 +41111,7 @@
     "preparationGaps": [],
     "rawScore": 539.2249346405229,
     "stage": "Expert",
-    "step": 1519
+    "step": 1522
   },
   {
     "componentChanges": {
@@ -41057,7 +41138,7 @@
     "preparationGaps": [],
     "rawScore": 535.262612044818,
     "stage": "Expert",
-    "step": 1520
+    "step": 1523
   },
   {
     "componentChanges": {
@@ -41084,7 +41165,7 @@
     "preparationGaps": [],
     "rawScore": 554.1723137254902,
     "stage": "Expert",
-    "step": 1521
+    "step": 1524
   },
   {
     "componentChanges": {
@@ -41111,7 +41192,7 @@
     "preparationGaps": [],
     "rawScore": 548.3673529411765,
     "stage": "Expert",
-    "step": 1522
+    "step": 1525
   },
   {
     "componentChanges": {
@@ -41138,7 +41219,7 @@
     "preparationGaps": [],
     "rawScore": 558.373137254902,
     "stage": "Expert",
-    "step": 1523
+    "step": 1526
   },
   {
     "componentChanges": {
@@ -41165,7 +41246,7 @@
     "preparationGaps": [],
     "rawScore": 559.5567888973771,
     "stage": "Expert",
-    "step": 1524
+    "step": 1527
   },
   {
     "componentChanges": {
@@ -41192,7 +41273,7 @@
     "preparationGaps": [],
     "rawScore": 552.5792614379086,
     "stage": "Expert",
-    "step": 1525
+    "step": 1528
   },
   {
     "componentChanges": {
@@ -41219,7 +41300,7 @@
     "preparationGaps": [],
     "rawScore": 558.541450180072,
     "stage": "Expert",
-    "step": 1526
+    "step": 1529
   },
   {
     "componentChanges": {
@@ -41246,7 +41327,7 @@
     "preparationGaps": [],
     "rawScore": 549.7305687830687,
     "stage": "Expert",
-    "step": 1527
+    "step": 1530
   },
   {
     "componentChanges": {
@@ -41273,7 +41354,7 @@
     "preparationGaps": [],
     "rawScore": 562.6583886888088,
     "stage": "Expert",
-    "step": 1528
+    "step": 1531
   },
   {
     "componentChanges": {
@@ -41300,7 +41381,7 @@
     "preparationGaps": [],
     "rawScore": 561.0320588235294,
     "stage": "Expert",
-    "step": 1529
+    "step": 1532
   },
   {
     "componentChanges": {
@@ -41327,7 +41408,7 @@
     "preparationGaps": [],
     "rawScore": 564.056550802139,
     "stage": "Expert",
-    "step": 1530
+    "step": 1533
   },
   {
     "componentChanges": {
@@ -41354,7 +41435,7 @@
     "preparationGaps": [],
     "rawScore": 554.5375,
     "stage": "Expert",
-    "step": 1531
+    "step": 1534
   },
   {
     "componentChanges": {
@@ -41381,7 +41462,7 @@
     "preparationGaps": [],
     "rawScore": 561.422431372549,
     "stage": "Expert",
-    "step": 1532
+    "step": 1535
   },
   {
     "componentChanges": {
@@ -41408,7 +41489,7 @@
     "preparationGaps": [],
     "rawScore": 575.0920490196079,
     "stage": "Expert",
-    "step": 1533
+    "step": 1536
   },
   {
     "componentChanges": {
@@ -41435,7 +41516,7 @@
     "preparationGaps": [],
     "rawScore": 590.5728235294118,
     "stage": "Expert",
-    "step": 1534
+    "step": 1537
   },
   {
     "componentChanges": {
@@ -41462,7 +41543,7 @@
     "preparationGaps": [],
     "rawScore": 582.6251895424837,
     "stage": "Expert",
-    "step": 1535
+    "step": 1538
   },
   {
     "componentChanges": {
@@ -41489,7 +41570,7 @@
     "preparationGaps": [],
     "rawScore": 582.4996183473389,
     "stage": "Expert",
-    "step": 1536
+    "step": 1539
   },
   {
     "componentChanges": {
@@ -41516,7 +41597,7 @@
     "preparationGaps": [],
     "rawScore": 582.48153887762,
     "stage": "Expert",
-    "step": 1537
+    "step": 1540
   },
   {
     "componentChanges": {
@@ -41543,7 +41624,7 @@
     "preparationGaps": [],
     "rawScore": 626.9820915032681,
     "stage": "Expert",
-    "step": 1538
+    "step": 1541
   },
   {
     "componentChanges": {
@@ -41570,7 +41651,7 @@
     "preparationGaps": [],
     "rawScore": 449.98160784313734,
     "stage": "Expert",
-    "step": 1539
+    "step": 1542
   },
   {
     "componentChanges": {
@@ -41597,7 +41678,7 @@
     "preparationGaps": [],
     "rawScore": 477.1742855134113,
     "stage": "Expert",
-    "step": 1540
+    "step": 1543
   },
   {
     "componentChanges": {
@@ -41624,7 +41705,7 @@
     "preparationGaps": [],
     "rawScore": 469.1800186900409,
     "stage": "Expert",
-    "step": 1541
+    "step": 1544
   },
   {
     "componentChanges": {
@@ -41651,7 +41732,7 @@
     "preparationGaps": [],
     "rawScore": 480.25766278238785,
     "stage": "Expert",
-    "step": 1542
+    "step": 1545
   },
   {
     "componentChanges": {
@@ -41678,7 +41759,7 @@
     "preparationGaps": [],
     "rawScore": 519.8438907563025,
     "stage": "Expert",
-    "step": 1543
+    "step": 1546
   },
   {
     "componentChanges": {
@@ -41705,7 +41786,7 @@
     "preparationGaps": [],
     "rawScore": 519.7687254901961,
     "stage": "Expert",
-    "step": 1544
+    "step": 1547
   },
   {
     "componentChanges": {
@@ -41732,7 +41813,7 @@
     "preparationGaps": [],
     "rawScore": 554.4931252501001,
     "stage": "Expert",
-    "step": 1545
+    "step": 1548
   },
   {
     "componentChanges": {
@@ -41759,7 +41840,7 @@
     "preparationGaps": [],
     "rawScore": 555.488251633987,
     "stage": "Expert",
-    "step": 1546
+    "step": 1549
   },
   {
     "componentChanges": {
@@ -41786,7 +41867,7 @@
     "preparationGaps": [],
     "rawScore": 545.7761347673202,
     "stage": "Expert",
-    "step": 1547
+    "step": 1550
   },
   {
     "componentChanges": {
@@ -41813,7 +41894,7 @@
     "preparationGaps": [],
     "rawScore": 557.7923751416067,
     "stage": "Expert",
-    "step": 1548
+    "step": 1551
   },
   {
     "componentChanges": {
@@ -41840,7 +41921,7 @@
     "preparationGaps": [],
     "rawScore": 572.3633053221289,
     "stage": "Expert",
-    "step": 1549
+    "step": 1552
   },
   {
     "componentChanges": {
@@ -41867,7 +41948,7 @@
     "preparationGaps": [],
     "rawScore": 567.9673582476225,
     "stage": "Expert",
-    "step": 1550
+    "step": 1553
   },
   {
     "componentChanges": {
@@ -41894,7 +41975,7 @@
     "preparationGaps": [],
     "rawScore": 578.7226666067833,
     "stage": "Expert",
-    "step": 1551
+    "step": 1554
   },
   {
     "componentChanges": {
@@ -41921,7 +42002,7 @@
     "preparationGaps": [],
     "rawScore": 586.0281624649859,
     "stage": "Expert",
-    "step": 1552
+    "step": 1555
   },
   {
     "componentChanges": {
@@ -41948,7 +42029,7 @@
     "preparationGaps": [],
     "rawScore": 581.9501233826865,
     "stage": "Expert",
-    "step": 1553
+    "step": 1556
   },
   {
     "componentChanges": {
@@ -41975,7 +42056,7 @@
     "preparationGaps": [],
     "rawScore": 576.282431372549,
     "stage": "Expert",
-    "step": 1554
+    "step": 1557
   },
   {
     "componentChanges": {
@@ -42002,7 +42083,7 @@
     "preparationGaps": [],
     "rawScore": 270.77179518626184,
     "stage": "Expert",
-    "step": 1555
+    "step": 1558
   },
   {
     "componentChanges": {
@@ -42029,7 +42110,7 @@
     "preparationGaps": [],
     "rawScore": 293.68643593460376,
     "stage": "Expert",
-    "step": 1556
+    "step": 1559
   },
   {
     "componentChanges": {
@@ -42056,7 +42137,7 @@
     "preparationGaps": [],
     "rawScore": 354.5502758038848,
     "stage": "Expert",
-    "step": 1557
+    "step": 1560
   },
   {
     "componentChanges": {
@@ -42083,7 +42164,7 @@
     "preparationGaps": [],
     "rawScore": 380.38607623201347,
     "stage": "Expert",
-    "step": 1558
+    "step": 1561
   },
   {
     "componentChanges": {
@@ -42110,7 +42191,7 @@
     "preparationGaps": [],
     "rawScore": 391.6325241698979,
     "stage": "Expert",
-    "step": 1559
+    "step": 1562
   },
   {
     "componentChanges": {
@@ -42137,7 +42218,7 @@
     "preparationGaps": [],
     "rawScore": 405.5904065228391,
     "stage": "Expert",
-    "step": 1560
+    "step": 1563
   },
   {
     "componentChanges": {
@@ -42164,7 +42245,7 @@
     "preparationGaps": [],
     "rawScore": 433.1251450849306,
     "stage": "Expert",
-    "step": 1561
+    "step": 1564
   },
   {
     "componentChanges": {
@@ -42191,7 +42272,7 @@
     "preparationGaps": [],
     "rawScore": 431.3361568627451,
     "stage": "Expert",
-    "step": 1562
+    "step": 1565
   },
   {
     "componentChanges": {
@@ -42218,7 +42299,7 @@
     "preparationGaps": [],
     "rawScore": 493.87127231044485,
     "stage": "Expert",
-    "step": 1563
+    "step": 1566
   },
   {
     "componentChanges": {
@@ -42245,7 +42326,7 @@
     "preparationGaps": [],
     "rawScore": 514.1325272331154,
     "stage": "Expert",
-    "step": 1564
+    "step": 1567
   },
   {
     "componentChanges": {
@@ -42272,7 +42353,7 @@
     "preparationGaps": [],
     "rawScore": 565.1040077243018,
     "stage": "Expert",
-    "step": 1565
+    "step": 1568
   },
   {
     "componentChanges": {
@@ -42299,7 +42380,7 @@
     "preparationGaps": [],
     "rawScore": 572.6619414900092,
     "stage": "Expert",
-    "step": 1566
+    "step": 1569
   },
   {
     "componentChanges": {
@@ -42326,7 +42407,7 @@
     "preparationGaps": [],
     "rawScore": 569.3221655174585,
     "stage": "Expert",
-    "step": 1567
+    "step": 1570
   },
   {
     "componentChanges": {
@@ -42353,7 +42434,7 @@
     "preparationGaps": [],
     "rawScore": 565.099945169618,
     "stage": "Expert",
-    "step": 1568
+    "step": 1571
   },
   {
     "componentChanges": {
@@ -42380,7 +42461,7 @@
     "preparationGaps": [],
     "rawScore": 581.1712921312869,
     "stage": "Expert",
-    "step": 1569
+    "step": 1572
   },
   {
     "componentChanges": {
@@ -42407,7 +42488,7 @@
     "preparationGaps": [],
     "rawScore": 572.6245620316198,
     "stage": "Expert",
-    "step": 1570
+    "step": 1573
   },
   {
     "componentChanges": {
@@ -42434,7 +42515,7 @@
     "preparationGaps": [],
     "rawScore": 587.1826542913894,
     "stage": "Expert",
-    "step": 1571
+    "step": 1574
   },
   {
     "componentChanges": {
@@ -42461,7 +42542,7 @@
     "preparationGaps": [],
     "rawScore": 596.4303349673203,
     "stage": "Expert",
-    "step": 1572
+    "step": 1575
   },
   {
     "componentChanges": {
@@ -42488,7 +42569,7 @@
     "preparationGaps": [],
     "rawScore": 650.9766339869282,
     "stage": "Expert",
-    "step": 1573
+    "step": 1576
   },
   {
     "componentChanges": {
@@ -42515,7 +42596,7 @@
     "preparationGaps": [],
     "rawScore": 251.13565233358466,
     "stage": "Expert",
-    "step": 1574
+    "step": 1577
   },
   {
     "componentChanges": {
@@ -42542,7 +42623,7 @@
     "preparationGaps": [],
     "rawScore": 332.860487877716,
     "stage": "Expert",
-    "step": 1575
+    "step": 1578
   },
   {
     "componentChanges": {
@@ -42569,7 +42650,7 @@
     "preparationGaps": [],
     "rawScore": 344.4177883068729,
     "stage": "Expert",
-    "step": 1576
+    "step": 1579
   },
   {
     "componentChanges": {
@@ -42596,7 +42677,7 @@
     "preparationGaps": [],
     "rawScore": 362.81592829391917,
     "stage": "Expert",
-    "step": 1577
+    "step": 1580
   },
   {
     "componentChanges": {
@@ -42623,7 +42704,7 @@
     "preparationGaps": [],
     "rawScore": 366.30744866202974,
     "stage": "Expert",
-    "step": 1578
+    "step": 1581
   },
   {
     "componentChanges": {
@@ -42650,7 +42731,7 @@
     "preparationGaps": [],
     "rawScore": 370.8623961500101,
     "stage": "Expert",
-    "step": 1579
+    "step": 1582
   },
   {
     "componentChanges": {
@@ -42677,7 +42758,7 @@
     "preparationGaps": [],
     "rawScore": 394.02180337694017,
     "stage": "Expert",
-    "step": 1580
+    "step": 1583
   },
   {
     "componentChanges": {
@@ -42704,7 +42785,7 @@
     "preparationGaps": [],
     "rawScore": 391.5562739651755,
     "stage": "Expert",
-    "step": 1581
+    "step": 1584
   },
   {
     "componentChanges": {
@@ -42731,7 +42812,7 @@
     "preparationGaps": [],
     "rawScore": 393.9927969639469,
     "stage": "Expert",
-    "step": 1582
+    "step": 1585
   },
   {
     "componentChanges": {
@@ -42758,7 +42839,7 @@
     "preparationGaps": [],
     "rawScore": 407.67663286004057,
     "stage": "Expert",
-    "step": 1583
+    "step": 1586
   },
   {
     "componentChanges": {
@@ -42785,7 +42866,7 @@
     "preparationGaps": [],
     "rawScore": 427.4696470588235,
     "stage": "Expert",
-    "step": 1584
+    "step": 1587
   },
   {
     "componentChanges": {
@@ -42812,7 +42893,7 @@
     "preparationGaps": [],
     "rawScore": 450.3695294117647,
     "stage": "Expert",
-    "step": 1585
+    "step": 1588
   },
   {
     "componentChanges": {
@@ -42839,7 +42920,7 @@
     "preparationGaps": [],
     "rawScore": 442.34913632119515,
     "stage": "Expert",
-    "step": 1586
+    "step": 1589
   },
   {
     "componentChanges": {
@@ -42866,7 +42947,7 @@
     "preparationGaps": [],
     "rawScore": 441.86206481484857,
     "stage": "Expert",
-    "step": 1587
+    "step": 1590
   },
   {
     "componentChanges": {
@@ -42893,7 +42974,7 @@
     "preparationGaps": [],
     "rawScore": 474.6492347494891,
     "stage": "Expert",
-    "step": 1588
+    "step": 1591
   },
   {
     "componentChanges": {
@@ -42920,7 +43001,7 @@
     "preparationGaps": [],
     "rawScore": 466.96003172162614,
     "stage": "Expert",
-    "step": 1589
+    "step": 1592
   },
   {
     "componentChanges": {
@@ -42947,7 +43028,7 @@
     "preparationGaps": [],
     "rawScore": 478.385253231117,
     "stage": "Expert",
-    "step": 1590
+    "step": 1593
   },
   {
     "componentChanges": {
@@ -42974,7 +43055,7 @@
     "preparationGaps": [],
     "rawScore": 479.06085525103794,
     "stage": "Expert",
-    "step": 1591
+    "step": 1594
   },
   {
     "componentChanges": {
@@ -43001,7 +43082,7 @@
     "preparationGaps": [],
     "rawScore": 506.07459138041185,
     "stage": "Expert",
-    "step": 1592
+    "step": 1595
   },
   {
     "componentChanges": {
@@ -43028,7 +43109,7 @@
     "preparationGaps": [],
     "rawScore": 537.9972313213974,
     "stage": "Expert",
-    "step": 1593
+    "step": 1596
   },
   {
     "componentChanges": {
@@ -43055,7 +43136,7 @@
     "preparationGaps": [],
     "rawScore": 543.9205859169316,
     "stage": "Expert",
-    "step": 1594
+    "step": 1597
   },
   {
     "componentChanges": {
@@ -43082,7 +43163,7 @@
     "preparationGaps": [],
     "rawScore": 543.2042745098039,
     "stage": "Expert",
-    "step": 1595
+    "step": 1598
   },
   {
     "componentChanges": {
@@ -43109,7 +43190,7 @@
     "preparationGaps": [],
     "rawScore": 555.3545751633986,
     "stage": "Expert",
-    "step": 1596
+    "step": 1599
   },
   {
     "componentChanges": {
@@ -43136,7 +43217,7 @@
     "preparationGaps": [],
     "rawScore": 553.7944798200971,
     "stage": "Expert",
-    "step": 1597
+    "step": 1600
   },
   {
     "componentChanges": {
@@ -43163,7 +43244,7 @@
     "preparationGaps": [],
     "rawScore": 576.3552829131653,
     "stage": "Expert",
-    "step": 1598
+    "step": 1601
   },
   {
     "componentChanges": {
@@ -43190,7 +43271,7 @@
     "preparationGaps": [],
     "rawScore": 583.6852941176471,
     "stage": "Expert",
-    "step": 1599
+    "step": 1602
   },
   {
     "componentChanges": {
@@ -43217,7 +43298,7 @@
     "preparationGaps": [],
     "rawScore": 589.5531372549019,
     "stage": "Expert",
-    "step": 1600
+    "step": 1603
   },
   {
     "componentChanges": {
@@ -43244,7 +43325,7 @@
     "preparationGaps": [],
     "rawScore": 583.0843660130719,
     "stage": "Expert",
-    "step": 1601
+    "step": 1604
   },
   {
     "componentChanges": {
@@ -43271,7 +43352,7 @@
     "preparationGaps": [],
     "rawScore": 606.6095163398693,
     "stage": "Expert",
-    "step": 1602
+    "step": 1605
   },
   {
     "componentChanges": {
@@ -43298,7 +43379,7 @@
     "preparationGaps": [],
     "rawScore": 605.4514849137223,
     "stage": "Expert",
-    "step": 1603
+    "step": 1606
   },
   {
     "componentChanges": {
@@ -43325,7 +43406,7 @@
     "preparationGaps": [],
     "rawScore": 600.181939870049,
     "stage": "Expert",
-    "step": 1604
+    "step": 1607
   },
   {
     "componentChanges": {
@@ -43352,7 +43433,7 @@
     "preparationGaps": [],
     "rawScore": 625.3931764705882,
     "stage": "Expert",
-    "step": 1605
+    "step": 1608
   },
   {
     "componentChanges": {
@@ -43379,7 +43460,7 @@
     "preparationGaps": [],
     "rawScore": 620.5866862745098,
     "stage": "Expert",
-    "step": 1606
+    "step": 1609
   },
   {
     "componentChanges": {
@@ -43406,7 +43487,7 @@
     "preparationGaps": [],
     "rawScore": 633.392705882353,
     "stage": "Expert",
-    "step": 1607
+    "step": 1610
   },
   {
     "componentChanges": {
@@ -43433,7 +43514,7 @@
     "preparationGaps": [],
     "rawScore": 631.4636078431372,
     "stage": "Expert",
-    "step": 1608
+    "step": 1611
   },
   {
     "componentChanges": {
@@ -43460,6 +43541,6 @@
     "preparationGaps": [],
     "rawScore": 659.8979215686275,
     "stage": "Expert",
-    "step": 1609
+    "step": 1612
   }
 ]

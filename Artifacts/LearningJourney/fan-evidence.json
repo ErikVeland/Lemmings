@@ -3418,6 +3418,397 @@
   {
     "entry": {
       "catalogueRevision": "1.2-runtime-v2",
+      "id": "389FD935-3C9E-4AAF-7F9B-491E22F0F2B8",
+      "identity": {
+        "engine": "classic",
+        "levelID": "ANTHPCK4.DAT#6",
+        "packID": "fan:lldb-224"
+      },
+      "levelNameSnapshot": "Snow Lev 7",
+      "levelNumberSnapshot": 6,
+      "packNameSnapshot": "ANTHPCK4",
+      "sourceRevision": "b2818e41664bbcc98870c9a7c5e6f20258004495061503f5c373fa255188223d"
+    },
+    "initialHash": "66f93cf80fc4b2c27c48649dd02a857a1ed3a8965f2f96ccdccd11214200a99d",
+    "official": false,
+    "order": 2293,
+    "playable": true,
+    "profile": {
+      "components": {
+        "concurrencyBurden": 180,
+        "constraintPressure": 590.2530345471522,
+        "deductionComplexityProxy": 260,
+        "executionPrecision": 0,
+        "solutionComplexity": 568.2957719415308,
+        "techniqueBurden": 670
+      },
+      "confidence": "medium",
+      "criticalActions": [],
+      "detectedTechniques": [
+        "blocker",
+        "builder",
+        "digger",
+        "miner",
+        "multiple-worker-coordination",
+        "release-rate-manipulation"
+      ],
+      "explanation": [
+        "4 used skill types; 3 assigned workers; 4 same-worker skill changes.",
+        "Maximum concurrent worker regions: 2.",
+        "Timing probes: 10. Untested alternatives remain unknown.",
+        "Deduction is a conservative proxy. Observed techniques are not proof of necessity.",
+        "Source rank: fan:lldb-224."
+      ],
+      "key": {
+        "analyserVersion": "difficulty-2",
+        "assetsRevision": "66f93cf80fc4b2c27c48649dd02a857a1ed3a8965f2f96ccdccd11214200a99d:probes-10",
+        "identity": {
+          "engine": "classic",
+          "levelID": "ANTHPCK4.DAT#6",
+          "packID": "fan:lldb-224"
+        },
+        "levelRevision": "b2818e41664bbcc98870c9a7c5e6f20258004495061503f5c373fa255188223d",
+        "replayRevision": "SHA256 digest: 1a422df6a9e808848f9e4610364e9d64c24f8fd3c9df70e724c3dad96d4ad713",
+        "simulationVersion": "neolemmix-ce-2026-09-27"
+      },
+      "overallScore": 410.85796431826657,
+      "precision": {
+        "actions": [
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 1
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 2
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 86
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 97
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 98
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 99
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 100
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 101
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 102
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 103
+          }
+        ],
+        "alternativeRunCount": 0,
+        "assignmentCount": 28,
+        "completed": false,
+        "orderingOutcomes": [],
+        "runCount": 10,
+        "selectionOutcomes": []
+      },
+      "prerequisiteConcepts": [],
+      "sourceRank": "fan:lldb-224"
+    }
+  },
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
+      "id": "2DBADA2D-C223-1C00-A754-E134AA7A7ECE",
+      "identity": {
+        "engine": "classic",
+        "levelID": "ANTHPCK4.DAT#8",
+        "packID": "fan:lldb-224"
+      },
+      "levelNameSnapshot": "Snow Lev 9",
+      "levelNumberSnapshot": 8,
+      "packNameSnapshot": "ANTHPCK4",
+      "sourceRevision": "b2818e41664bbcc98870c9a7c5e6f20258004495061503f5c373fa255188223d"
+    },
+    "initialHash": "5b319addeb5f251a56ab6ab49462be6f55fd7c35597086e2b028d6885fad70fb",
+    "official": false,
+    "order": 2295,
+    "playable": true,
+    "profile": {
+      "components": {
+        "concurrencyBurden": 430,
+        "constraintPressure": 416.8433139021374,
+        "deductionComplexityProxy": 180,
+        "executionPrecision": 0,
+        "solutionComplexity": 378.0195500086539,
+        "techniqueBurden": 605
+      },
+      "confidence": "medium",
+      "criticalActions": [],
+      "detectedTechniques": [
+        "basher",
+        "builder",
+        "miner",
+        "multiple-worker-coordination",
+        "release-rate-manipulation"
+      ],
+      "explanation": [
+        "3 used skill types; 6 assigned workers; 2 same-worker skill changes.",
+        "Maximum concurrent worker regions: 3.",
+        "Timing probes: 10. Untested alternatives remain unknown.",
+        "Deduction is a conservative proxy. Observed techniques are not proof of necessity.",
+        "Source rank: fan:lldb-224."
+      ],
+      "key": {
+        "analyserVersion": "difficulty-2",
+        "assetsRevision": "5b319addeb5f251a56ab6ab49462be6f55fd7c35597086e2b028d6885fad70fb:probes-10",
+        "identity": {
+          "engine": "classic",
+          "levelID": "ANTHPCK4.DAT#8",
+          "packID": "fan:lldb-224"
+        },
+        "levelRevision": "b2818e41664bbcc98870c9a7c5e6f20258004495061503f5c373fa255188223d",
+        "replayRevision": "SHA256 digest: 8dd12d6931dff68c68391d6066070771ea295b43bd15dfc96b310c135cde0147",
+        "simulationVersion": "neolemmix-ce-2026-09-27"
+      },
+      "overallScore": 357.10393180918174,
+      "precision": {
+        "actions": [
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 1
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 2
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 3
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 4
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 5
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 6
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 7
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 8
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 9
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 10
+          }
+        ],
+        "alternativeRunCount": 0,
+        "assignmentCount": 11,
+        "completed": false,
+        "orderingOutcomes": [],
+        "runCount": 10,
+        "selectionOutcomes": []
+      },
+      "prerequisiteConcepts": [],
+      "sourceRank": "fan:lldb-224"
+    }
+  },
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
+      "id": "32420FD3-BF63-1AC9-AC4B-477A4218BF0E",
+      "identity": {
+        "engine": "classic",
+        "levelID": "ANTHPCK4.DAT#9",
+        "packID": "fan:lldb-224"
+      },
+      "levelNameSnapshot": "Snow Lev 10",
+      "levelNumberSnapshot": 9,
+      "packNameSnapshot": "ANTHPCK4",
+      "sourceRevision": "b2818e41664bbcc98870c9a7c5e6f20258004495061503f5c373fa255188223d"
+    },
+    "initialHash": "13ba13bb941d86427a370561ecfeb4d03a81702c008766e1f8afd9a294586a62",
+    "official": false,
+    "order": 2296,
+    "playable": true,
+    "profile": {
+      "components": {
+        "concurrencyBurden": 320,
+        "constraintPressure": 319.99159663865544,
+        "deductionComplexityProxy": 335,
+        "executionPrecision": 0,
+        "solutionComplexity": 620.0195500086538,
+        "techniqueBurden": 605
+      },
+      "confidence": "medium",
+      "criticalActions": [],
+      "detectedTechniques": [
+        "basher",
+        "builder",
+        "climber",
+        "multiple-worker-coordination",
+        "release-rate-manipulation"
+      ],
+      "explanation": [
+        "3 used skill types; 6 assigned workers; 5 same-worker skill changes.",
+        "Maximum concurrent worker regions: 2.",
+        "Timing probes: 10. Untested alternatives remain unknown.",
+        "Deduction is a conservative proxy. Observed techniques are not proof of necessity.",
+        "Source rank: fan:lldb-224."
+      ],
+      "key": {
+        "analyserVersion": "difficulty-2",
+        "assetsRevision": "13ba13bb941d86427a370561ecfeb4d03a81702c008766e1f8afd9a294586a62:probes-10",
+        "identity": {
+          "engine": "classic",
+          "levelID": "ANTHPCK4.DAT#9",
+          "packID": "fan:lldb-224"
+        },
+        "levelRevision": "b2818e41664bbcc98870c9a7c5e6f20258004495061503f5c373fa255188223d",
+        "replayRevision": "SHA256 digest: fdf3c652ed88b872acfd0d5448cfd7e3d4f0aee12b9871064bfe8de30e2dc273",
+        "simulationVersion": "neolemmix-ce-2026-09-27"
+      },
+      "overallScore": 394.30320856492904,
+      "precision": {
+        "actions": [
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 1
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 2
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 3
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 4
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 5
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 6
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 7
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 8
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 9
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 10
+          }
+        ],
+        "alternativeRunCount": 0,
+        "assignmentCount": 23,
+        "completed": false,
+        "orderingOutcomes": [],
+        "runCount": 10,
+        "selectionOutcomes": []
+      },
+      "prerequisiteConcepts": [],
+      "sourceRank": "fan:lldb-224"
+    }
+  },
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
       "id": "91576126-222A-1C87-2A1E-00E5271AE2B2",
       "identity": {
         "engine": "classic",
@@ -203802,145 +204193,6 @@
       },
       "prerequisiteConcepts": [],
       "sourceRank": "fan:lldb-136"
-    }
-  },
-  {
-    "entry" : {
-      "catalogueRevision" : "1.2-runtime-v2",
-      "id" : "4E05272D-2B8A-0AFA-01C7-BE79284AE38B",
-      "identity" : {
-        "engine" : "classic",
-        "levelID" : "justdigcomp.dat#1",
-        "packID" : "fan:lldb-374"
-      },
-      "levelNameSnapshot" : "Juanjos Just dig!",
-      "levelNumberSnapshot" : 2,
-      "packNameSnapshot" : "justdigcomp",
-      "sourceRevision" : "aafbe56bf545df649edde5ca3bd4e51b8f5c834e52772aaf339003420d473a26"
-    },
-    "initialHash" : "172a947b95629f69ab15a3a297f9c4c0e62dac6448733cb2bbf3651c2ac8ec84",
-    "official" : false,
-    "order" : 3736,
-    "playable" : true,
-    "profile" : {
-      "components" : {
-        "concurrencyBurden" : 530,
-        "constraintPressure" : 828.75,
-        "deductionComplexityProxy" : 135,
-        "executionPrecision" : 0,
-        "solutionComplexity" : 505.53272943230144,
-        "techniqueBurden" : 670
-      },
-      "confidence" : "medium",
-      "criticalActions" : [
-
-      ],
-      "detectedTechniques" : [
-        "basher",
-        "builder",
-        "climber",
-        "digger",
-        "multiple-worker-coordination",
-        "release-rate-manipulation"
-      ],
-      "explanation" : [
-        "4 used skill types; 29 assigned workers; 3 same-worker skill changes.",
-        "Maximum concurrent worker regions: 2.",
-        "Timing probes: 10. Untested alternatives remain unknown.",
-        "Deduction is a conservative proxy. Observed techniques are not proof of necessity.",
-        "Source rank: fan:lldb-374."
-      ],
-      "key" : {
-        "analyserVersion" : "difficulty-2",
-        "assetsRevision" : "172a947b95629f69ab15a3a297f9c4c0e62dac6448733cb2bbf3651c2ac8ec84:probes-10",
-        "identity" : {
-          "engine" : "classic",
-          "levelID" : "justdigcomp.dat#1",
-          "packID" : "fan:lldb-374"
-        },
-        "levelRevision" : "aafbe56bf545df649edde5ca3bd4e51b8f5c834e52772aaf339003420d473a26",
-        "replayRevision" : "SHA256 digest: 91e83fcdadbb12e18318a8f8a5289cc1ece4db434c27c78323606b3dd0ba490e",
-        "simulationVersion" : "neolemmix-ce-2026-09-27"
-      },
-      "overallScore" : 464.8047004751063,
-      "precision" : {
-        "actions" : [
-          {
-            "outcomes" : {
-              "-1" : false
-            },
-            "sequence" : 0
-          },
-          {
-            "outcomes" : {
-              "-1" : true
-            },
-            "sequence" : 1
-          },
-          {
-            "outcomes" : {
-              "-1" : true
-            },
-            "sequence" : 28
-          },
-          {
-            "outcomes" : {
-              "-1" : true
-            },
-            "sequence" : 3
-          },
-          {
-            "outcomes" : {
-              "-1" : true
-            },
-            "sequence" : 29
-          },
-          {
-            "outcomes" : {
-              "-1" : true
-            },
-            "sequence" : 30
-          },
-          {
-            "outcomes" : {
-              "-1" : true
-            },
-            "sequence" : 31
-          },
-          {
-            "outcomes" : {
-              "-1" : true
-            },
-            "sequence" : 32
-          },
-          {
-            "outcomes" : {
-              "-1" : true
-            },
-            "sequence" : 4
-          },
-          {
-            "outcomes" : {
-              "-1" : true
-            },
-            "sequence" : 5
-          }
-        ],
-        "alternativeRunCount" : 0,
-        "assignmentCount" : 32,
-        "completed" : false,
-        "orderingOutcomes" : [
-
-        ],
-        "runCount" : 10,
-        "selectionOutcomes" : [
-
-        ]
-      },
-      "prerequisiteConcepts" : [
-
-      ],
-      "sourceRank" : "fan:lldb-374"
     }
   }
 ]

@@ -1,25 +1,25 @@
 # Oh My! All Lemmings!
 
-1609 distinct single-player levels: 317 official puzzles and 1292 replay-validated library levels from 294 packs.
+1612 distinct single-player levels: 317 official puzzles and 1295 replay-validated library levels from 294 packs.
 
 ## Ordering
 
 The path progresses through Fun, Intermediate, Difficult and Expert. A hard timing, coordination or planning demand cannot be cancelled by easy dimensions in a weighted average. Official levels take priority within comparable demand bands. Retail rank and campaign order do not determine placement. All Oh No! levels are interleaved with the rest of the pool.
 
-Stages: Fun 84; Intermediate 292; Difficult 930; Expert 303. Largest upward curriculum-demand step: 48.00/1000. Transitions requiring review: 2; missing basic-skill preparation: 0.
+Stages: Fun 84; Intermediate 292; Difficult 933; Expert 303. Largest upward curriculum-demand step: 48.00/1000. Transitions requiring review: 2; missing basic-skill preparation: 0.
 
 | Stage | Steps | Teaching focus |
 | --- | ---: | --- |
 | Fun | 1–84 | Single skills and simple combinations |
 | Intermediate | 85–376 | Skill combinations and crowd management |
-| Difficult | 377–1306 | Longer plans and tighter resources |
-| Expert | 1307–1609 | Precision, complex plans and coordination |
+| Difficult | 377–1309 | Longer plans and tighter resources |
+| Expert | 1310–1612 | Precision, complex plans and coordination |
 
 Curriculum demand is the maximum of the unchanged evidence score, 0.85 × technique, precision, concurrency and deduction, 0.70 × solution complexity, 0.50 × constraints, and 90 × additional concepts. A combination also waits for its easiest available isolated skill lessons. These weights and the stage thresholds (180, 360, 600) are editorial estimates, not player-calibrated difficulty measurements.
 
 Within each stage, 35-point bands allow spaced practice and small relief steps. Selection favours prepared combinations, avoids consecutive identical technique sets when comparable alternatives exist, and reduces upward component changes. Two-skill combinations require one earlier exposure per basic skill; larger combinations seek two. Exposure means a practice opportunity, not demonstrated mastery. New coordination and crowd-spacing concepts can be introduced through familiar skills.
 
-Raw evidence scores remain unchanged and are reported separately. Their largest upward step is 96.34, with 726 decreases. The curriculum demand does not certify every component transition as smooth; all component changes and support flags are retained in transitions.json.
+Raw evidence scores remain unchanged and are reported separately. Their largest upward step is 96.34, with 728 decreases. The curriculum demand does not certify every component transition as smooth; all component changes and support flags are retained in transitions.json.
 
 Oh No! has all 100 levels in the shared path. Its original largest raw-score jump was 348.77; its largest incoming raw-score jump here is 56.40. This is a diagnostic, not the sequencing objective.
 
@@ -28,7 +28,7 @@ The score uses validated solution techniques, solution complexity, timing pertur
 ## Remaining transition reviews
 
 - Step 80, **Cliff Climber Lemming** (Fun): new execution-demand high rises by 176.7/1000. Check timing forgiveness with a novice before calling this transition smooth.
-- Step 1439, **I've lost that Lemming feeling** (Expert): new execution-demand high rises by 0.0/1000. Check timing forgiveness with a novice before calling this transition smooth.
+- Step 1442, **I've lost that Lemming feeling** (Expert): new execution-demand high rises by 0.0/1000. Check timing forgiveness with a novice before calling this transition smooth.
 
 ## Fan evidence
 
@@ -1098,571 +1098,574 @@ The committed supplemental profiles and winning fan replays allow the playlist t
 | 1039 | Difficult | Next Floor, please! | JANNPCK4 / fan:lldb-234 | 350.33 | 514.25 |  |
 | 1040 | Difficult | Temporary peace | Genesis Taxing / fan:lldb-490 | 352.78 | 514.25 |  |
 | 1041 | Difficult | Deja Vu | cLemmings Tricky / fan:lldb-527 | 353.26 | 514.25 |  |
-| 1042 | Difficult | Back home | hubbart7 / fan:lldb-182 | 347.50 | 510.53 |  |
-| 1043 | Difficult | On the Antarctic Coast | Oh No! More Lemmings / Crazy | 362.75 | 514.25 |  |
-| 1044 | Difficult | Inroducing SUPERLEMMING | Oh No! More Lemmings / Wicked | 366.73 | 509.60 |  |
-| 1045 | Difficult | Welcome to the party, pal! | Oh No! More Lemmings / Havoc | 366.96 | 514.25 |  |
-| 1046 | Difficult | Lemmings-preying iron plate | Genesis Present / fan:lldb-492 | 359.35 | 514.25 |  |
-| 1047 | Difficult | GO FOR IT! | Master System Remakes / fan:lldb-80 | 357.91 | 514.25 |  |
-| 1048 | Difficult | The Invisible Bridge | JM12 / fan:lldb-338 | 358.54 | 514.25 |  |
-| 1049 | Difficult | Which Way Do We Go? | Lemmings The Official Companion / fan:lldb-585 | 365.22 | 514.25 |  |
-| 1050 | Difficult | The abyss 2 | CRISFN04 / fan:lldb-268 | 360.08 | 514.25 |  |
-| 1051 | Difficult | Warm-up exercise | LARSPACK / fan:lldb-243 | 358.49 | 514.25 |  |
-| 1052 | Difficult | Underground city | Genesis Present / fan:lldb-492 | 358.78 | 514.25 |  |
-| 1053 | Difficult | Puffy Want More! | cLemmings Tricky / fan:lldb-527 | 369.42 | 514.25 |  |
-| 1054 | Difficult | Two islands and two lakes | bigqtwo / fan:lldb-417 | 368.68 | 514.25 |  |
-| 1055 | Difficult | Double Diamond | CALEPCK2 / fan:lldb-228 | 359.72 | 497.75 |  |
-| 1056 | Difficult | Finding a place to stay | geooPk0 / fan:lldb-1 | 367.38 | 496.40 |  |
-| 1057 | Difficult | C for ur self | joem4 / fan:lldb-468 | 372.14 | 514.25 |  |
-| 1058 | Difficult | Lemming Polishing Co. | cLemmings Fun / fan:lldb-526 | 363.73 | 514.25 |  |
-| 1059 | Difficult | Natural life | Genesis Present / fan:lldb-492 | 362.26 | 514.25 |  |
-| 1060 | Difficult | Bullshit-lemmings | hubbart5 / fan:lldb-177 | 376.15 | 514.25 |  |
-| 1061 | Difficult | Lemming Distillation | cLemmings Taxing / fan:lldb-528 | 377.35 | 514.25 |  |
-| 1062 | Difficult | Doom-Box | brickpk3 / fan:lldb-560 | 374.36 | 514.25 |  |
-| 1063 | Difficult | Precarious oasis | Genesis Present / fan:lldb-492 | 377.69 | 514.25 |  |
-| 1064 | Difficult | Pitfall | Genesis Present / fan:lldb-492 | 377.00 | 514.25 |  |
-| 1065 | Difficult | Watch your fingertip! | Genesis Taxing / fan:lldb-490 | 378.46 | 514.25 |  |
-| 1066 | Difficult | Lemmings on a Thread | Pieuw02 / fan:lldb-394 | 378.05 | 492.13 |  |
-| 1067 | Difficult | Loud and Clear | ANTHPCK3 / fan:lldb-223 | 375.47 | 502.60 |  |
-| 1068 | Difficult | Lemming Language | Oh No More cLemmings Crazy / fan:lldb-531 | 368.64 | 522.82 |  |
-| 1069 | Difficult | For Mr. Dodochacalo & Mr. Pieuw | AkseliPack01 / fan:lldb-220 | 379.80 | 514.25 |  |
-| 1070 | Difficult | Lighting up The Sky | cLemmings Ultimate Edition Simple / fan:lldb-564 | 383.36 | 514.25 |  |
-| 1071 | Difficult | If my name isn't Shadow Box..... | QBeez04 / fan:lldb-49 | 379.03 | 514.25 |  |
-| 1072 | Difficult | Hell World | Pieuws Lemmings 2007 Awkward / fan:lldb-543 | 382.08 | 514.25 |  |
-| 1073 | Difficult | Escape the wolfs claw! | LEVIPAK1 / fan:lldb-365 | 384.79 | 514.25 |  |
-| 1074 | Difficult | A whole new year of lemmings!!! | New Year Lemmings 1991 92 / fan:lldb-557 | 377.04 | 511.37 |  |
-| 1075 | Difficult | You Just Lost The Game!!! | Lemmings Plus DOS Project Mild / fan:lldb-551 | 376.37 | 513.10 |  |
-| 1076 | Difficult | NO PROBLEM | Oh No! More Lemmings / Crazy | 388.48 | 490.03 |  |
-| 1077 | Difficult | One man does all the hard work | PSP Special 11 26 of 36 / fan:lldb-217 | 390.19 | 514.25 |  |
-| 1078 | Difficult | A twisted Platform | ANTHPCK2 / fan:lldb-222 | 388.36 | 514.25 |  |
-| 1079 | Difficult | IceTown | Save the Lemmings / fan:lldb-584 | 386.86 | 514.25 |  |
-| 1080 | Difficult | Best be careful out there | joem4 / fan:lldb-468 | 386.85 | 514.25 |  |
-| 1081 | Difficult | Antiprolemmingterralationness | cLemmings Tricky / fan:lldb-527 | 385.45 | 514.25 |  |
-| 1082 | Difficult | Buried under the blizzard | CRISFN12 / fan:lldb-276 | 381.83 | 518.03 |  |
-| 1083 | Difficult | This is a typical Splatt level | New Year Lemmings 1991 92 / fan:lldb-557 | 380.51 | 514.25 |  |
-| 1084 | Difficult | Achtung Lemming | MazuLems 01 / fan:lldb-244 | 392.59 | 514.25 |  |
-| 1085 | Difficult | Some bubble ways get hard! | CRISFN12 / fan:lldb-276 | 383.13 | 514.25 |  |
-| 1086 | Difficult | We All Die Someday | Lemmings Plus DOS Project Mild / fan:lldb-551 | 384.48 | 514.25 |  |
-| 1087 | Difficult | DIGGING FOR VICTORY | Oh No! More Lemmings / Crazy | 396.34 | 492.20 |  |
-| 1088 | Difficult | Cascade | Lemmings / Tricky | 407.80 | 515.82 |  |
-| 1089 | Difficult | Lets move | JM11 / fan:lldb-337 | 403.08 | 514.25 |  |
-| 1090 | Difficult | Party Time! | JM14 / fan:lldb-340 | 404.94 | 514.25 |  |
-| 1091 | Difficult | Three steps to heaven | PSP Special 11 26 of 36 / fan:lldb-217 | 407.78 | 514.25 |  |
-| 1092 | Difficult | Broken Bridges | lm set10 / fan:lldb-51 | 400.04 | 514.25 |  |
-| 1093 | Difficult | Tricky 25.lvl | Amiga Tricky Budget / fan:lldb-569 | 407.21 | 515.82 |  |
-| 1094 | Difficult | Someone must make an effort! | CRISFN05 / fan:lldb-269 | 402.68 | 514.25 |  |
-| 1095 | Difficult | Tank! | GeoffLems Minipack / fan:lldb-413 | 403.06 | 492.94 |  |
-| 1096 | Difficult | Let's get together. | Genesis Mayhem / fan:lldb-491 | 406.41 | 514.25 |  |
-| 1097 | Difficult | Jump down! | Genesis Taxing / fan:lldb-490 | 401.98 | 514.25 |  |
-| 1098 | Difficult | Sci-Fi Stereo | CRISFN09 / fan:lldb-273 | 400.11 | 514.25 |  |
-| 1099 | Difficult | ROCKY ROAD | Oh No! More Lemmings / Wicked | 413.29 | 521.98 |  |
-| 1100 | Difficult | Up on the Rooftops | Holiday Lemmings 1994 / Frost | 412.84 | 514.25 |  |
-| 1101 | Difficult | Six Ways to Success (I Guess) | MazuLems 03 / fan:lldb-246 | 416.81 | 514.25 |  |
-| 1102 | Difficult | Lem up! | cLemmings Mayhem / fan:lldb-529 | 418.06 | 492.83 |  |
-| 1103 | Difficult | Geros Segros! | JANNPCK2 / fan:lldb-232 | 412.08 | 514.25 |  |
-| 1104 | Difficult | LoTs moRe wHeRe TheY caMe fRom | Oh No! More Lemmings / Wicked | 423.90 | 514.25 |  |
-| 1105 | Difficult | Sir Edmund Hilemming | Holiday Lemmings 1994 / Hail | 423.19 | 514.25 |  |
-| 1106 | Difficult | Pipe dreams | CRISFN09 / fan:lldb-273 | 423.71 | 514.25 |  |
-| 1107 | Difficult | Creativity Beyond Lemmings . . . | Oh No More cLemmings Wild / fan:lldb-532 | 424.28 | 495.47 |  |
-| 1108 | Difficult | This is not a prison | Pieuws Lemmings 2007 Peace / fan:lldb-542 | 416.03 | 514.25 |  |
-| 1109 | Difficult | This Is... | Lemmings Plus DOS Project Medi / fan:lldb-553 | 423.95 | 514.25 |  |
-| 1110 | Difficult | Lemming in a Cone | MazuLems 02 / fan:lldb-245 | 415.29 | 506.83 |  |
-| 1111 | Difficult | The gate trap Lemmings. | Oh Yes! More Lemmings! / Mega Drive Sunsoft | 425.62 | 503.58 |  |
-| 1112 | Difficult | The Cascade: Part II | Modlvls / fan:lldb-357 | 422.21 | 515.82 |  |
-| 1113 | Difficult | Arch-Nemesis | GARJEN03 / fan:lldb-283 | 423.19 | 514.25 |  |
-| 1114 | Difficult | Lemmings Everywhere | cLemmings Fun / fan:lldb-526 | 415.67 | 514.25 |  |
-| 1115 | Difficult | Don't settle for anything less | Conway Challenges 1 / fan:lldb-263 | 425.93 | 515.82 |  |
-| 1116 | Difficult | Nostalgia for a Misspent Youth | weirdy04 version 2 / fan:lldb-136 | 418.25 | 514.25 |  |
-| 1117 | Difficult | The Stack | Oh No! More Lemmings / Crazy | 429.63 | 490.04 |  |
-| 1118 | Difficult | Be more than just a number | Oh No! More Lemmings / Havoc | 435.18 | 514.25 |  |
-| 1119 | Difficult | Pillar talking | PSP Special 1 10 of 36 / fan:lldb-216 | 435.75 | 514.25 |  |
-| 1120 | Difficult | The China Syndrome | MazuLems 01 / fan:lldb-244 | 428.68 | 514.25 |  |
-| 1121 | Difficult | Private room available | Genesis Present / fan:lldb-492 | 437.00 | 514.25 |  |
-| 1122 | Difficult | Forest of ilussion | CRISFN08 / fan:lldb-272 | 429.10 | 514.25 |  |
-| 1123 | Difficult | The Lemming Funhouse | Oh No! More Lemmings / Wicked | 448.11 | 518.74 |  |
-| 1124 | Difficult | Dad's Ugly Green Chair Level | TWPAK13 / fan:lldb-315 | 446.05 | 496.66 |  |
-| 1125 | Difficult | Going Under | Lemmings Plus DOS Project Medi / fan:lldb-553 | 443.29 | 514.25 |  |
-| 1126 | Difficult | Path Integral Formalism | cLemmings Taxing / fan:lldb-528 | 441.57 | 514.25 |  |
-| 1127 | Difficult | Emerald Mountain | KillerMasters Lemmings 1 Havoc / fan:lldb-509 | 441.85 | 504.03 |  |
-| 1128 | Difficult | Meet & Greet | MazuLems 03 / fan:lldb-246 | 453.19 | 490.48 |  |
-| 1129 | Difficult | Doomed | JannPck3 / fan:lldb-233 | 445.78 | 510.00 |  |
-| 1130 | Difficult | Ten Green Lemmings | cLemmings Taxing / fan:lldb-528 | 453.55 | 510.00 |  |
-| 1131 | Difficult | The Quartet | cLemmings Taxing / fan:lldb-528 | 450.98 | 514.25 |  |
-| 1132 | Difficult | Oh No!  Squish. | Lemmings The Official Companion / fan:lldb-585 | 450.92 | 514.25 |  |
-| 1133 | Difficult | No One Here But Us Three | TWPAK01 / fan:lldb-303 | 451.13 | 509.61 |  |
-| 1134 | Difficult | Three-way Call | GARJEN01 / fan:lldb-281 | 456.87 | 514.25 |  |
-| 1135 | Difficult | Di-Lemm-A | cLemmings Mayhem / fan:lldb-529 | 489.95 | 514.25 |  |
-| 1136 | Difficult | Mine Your Own Bussiness | TWPAK00 / fan:lldb-302 | 197.94 | 539.75 |  |
-| 1137 | Difficult | The Lucky 4 | Level Design Game 01 / fan:lldb-430 | 250.40 | 539.75 |  |
-| 1138 | Difficult | Merry Christmaze | Holiday Lemmings 1994 / Hail | 286.14 | 552.13 |  |
-| 1139 | Difficult | Challenge Solution Simon | Level Design Game 01 / fan:lldb-430 | 293.35 | 539.75 |  |
-| 1140 | Difficult | Doomsday | Oh Yes! More Lemmings! / Mega Drive Sunsoft | 321.34 | 536.48 |  |
-| 1141 | Difficult | the rediscovery | hubbart / fan:lldb-173 | 315.76 | 539.75 |  |
-| 1142 | Difficult | Born a blocker, die a blocker | PSP Special 27 36 / fan:lldb-218 | 326.91 | 533.30 |  |
-| 1143 | Difficult | On The Pier | Lemmings Plus DOS Project Mild / fan:lldb-551 | 343.61 | 552.13 |  |
-| 1144 | Difficult | Tribute to M.C.Escher (remake) | LEMREMAKE / fan:lldb-465 | 357.34 | 529.56 |  |
-| 1145 | Difficult | One way digging to freedom | Lemmings / Tricky | 368.42 | 549.40 |  |
-| 1146 | Difficult | No Salvation V | Lemmings Plus DOS Project PSYCHO / fan:lldb-555 | 365.43 | 540.00 |  |
-| 1147 | Difficult | 5 Ways To Get Through | Van Clan Wild / fan:lldb-519 | 374.16 | 540.00 |  |
-| 1148 | Difficult | Level 02.lvl | Amiga Demo / fan:lldb-581 | 366.88 | 549.40 |  |
-| 1149 | Difficult | It's upwards, but where? | CRISFN03 / fan:lldb-267 | 373.59 | 558.61 |  |
-| 1150 | Difficult | Tricky 20.lvl | Amiga Tricky Budget / fan:lldb-569 | 368.98 | 549.40 |  |
-| 1151 | Difficult | An Unfriendly Gesture | cLemmings Taxing / fan:lldb-528 | 379.18 | 540.00 |  |
-| 1152 | Difficult | Climb and Float | brickpk1 / fan:lldb-558 | 372.72 | 554.90 |  |
-| 1153 | Difficult | Clumps | Pieuws Lemmings 2007 Artful / fan:lldb-544 | 377.22 | 552.13 |  |
-| 1154 | Difficult | Snow mining | CRISFN11 / fan:lldb-275 | 376.06 | 552.13 |  |
-| 1155 | Difficult | A ladder would be handy | Lemmings / Tricky | 394.92 | 540.00 |  |
-| 1156 | Difficult | ohnomoreclemmings crazy 1.dat 9 | Oh No More cLemmings Crazy / fan:lldb-531 | 389.41 | 542.08 |  |
-| 1157 | Difficult | Tricky 03.lvl | Amiga Tricky Budget / fan:lldb-569 | 394.92 | 540.00 |  |
-| 1158 | Difficult | Save 'em First... | JEFFPCK7 / fan:lldb-241 | 392.18 | 544.00 |  |
-| 1159 | Difficult | Cordial Acceptance | cLemmings Tricky / fan:lldb-527 | 387.63 | 540.00 |  |
-| 1160 | Difficult | Inside Outside | Lemmings Plus DOS Project Danger / fan:lldb-554 | 387.05 | 548.83 |  |
-| 1161 | Difficult | Keep your hair on | JM14 / fan:lldb-340 | 408.07 | 540.00 |  |
-| 1162 | Difficult | Down in the dumps | ANTHPCK3 / fan:lldb-223 | 405.91 | 540.00 |  |
-| 1163 | Difficult | Just 17 | PSP Special 1 10 of 36 / fan:lldb-216 | 408.10 | 540.00 |  |
-| 1164 | Difficult | A ladder would be handy (Part2) | JM01 / fan:lldb-327 | 403.50 | 540.00 |  |
-| 1165 | Difficult | FlameBungee | KillerMasters Lemmings 1 Tame / fan:lldb-505 | 403.07 | 554.90 |  |
-| 1166 | Difficult | Excavations in the Cubic Cave | Mikes Lemmix Pack / fan:lldb-591 | 399.03 | 556.98 |  |
-| 1167 | Difficult | Happy New Year! | Holiday Lemmings 1994 / Frost | 415.14 | 529.82 |  |
-| 1168 | Difficult | SPAM,SPAM,SPAM,EGG AND LEMMING | Oh No! More Lemmings / Wicked | 414.48 | 540.00 |  |
-| 1169 | Difficult | How do I dig up the way? | Lemmings / Taxing | 419.20 | 540.00 |  |
-| 1170 | Difficult | Lem- me- in. | ANTHPCK5 / fan:lldb-225 | 409.64 | 540.00 |  |
-| 1171 | Difficult | NULL | 1tseug / fan:lldb-35 | 411.29 | 540.00 |  |
-| 1172 | Difficult | Lemming Productions Present... | Oh No! More Lemmings / Tame | 424.90 | 540.00 |  |
-| 1173 | Difficult | Taxing 29.lvl | Amiga Taxing Budget / fan:lldb-570 | 419.20 | 540.00 |  |
-| 1174 | Difficult | Cascading exit | Epic giga01 / fan:lldb-139 | 426.16 | 540.00 |  |
-| 1175 | Difficult | Miner under Control | Pieuws Lemmings 2007 Insane / fan:lldb-545 | 427.17 | 540.00 |  |
-| 1176 | Difficult | Pachelbel's "Canon in Splat" | cLemmings Taxing / fan:lldb-528 | 420.93 | 540.00 |  |
-| 1177 | Difficult | Wild Lemmings | Oh No More cLemmings Wild / fan:lldb-532 | 427.11 | 526.88 |  |
-| 1178 | Difficult | Crystal Clear Lemmings | MazuLems 01 / fan:lldb-244 | 424.43 | 541.11 |  |
-| 1179 | Difficult | Splunk n' country | Epic Giga03 / fan:lldb-141 | 434.15 | 546.48 |  |
-| 1180 | Difficult | Lucky Four | cLemmings Taxing / fan:lldb-528 | 433.60 | 544.00 |  |
-| 1181 | Difficult | Have a nice day! | Lemmings / Mayhem | 449.58 | 540.00 |  |
-| 1182 | Difficult | The hunt is on! | QBeez03 / fan:lldb-33 | 453.53 | 540.00 |  |
-| 1183 | Difficult | Tricky 14.lvl | Amiga Tricky Budget / fan:lldb-574 | 448.99 | 538.33 |  |
-| 1184 | Difficult | The quick and the dead | ANTHPCK5 / fan:lldb-225 | 448.75 | 558.96 |  |
-| 1185 | Difficult | Just a random heap of junk! | Nepster01 / fan:lldb-219 | 454.46 | 556.53 |  |
-| 1186 | Difficult | Salvation or Damnation? | Yawg03 / fan:lldb-107 | 463.56 | 552.13 |  |
-| 1187 | Difficult | Faithful Friends | GARJEN09 / fan:lldb-289 | 480.18 | 533.06 |  |
-| 1188 | Difficult | Lemmings' Ark | Genesis Mayhem / fan:lldb-491 | 475.88 | 555.11 |  |
-| 1189 | Difficult | Wallace and Gromit's Lem 'n Go | Lemmings platinum Dangerous Part 1 / fan:lldb-190 | 473.60 | 551.40 |  |
-| 1190 | Difficult | Watch Ye Step! | ISteve01 / fan:lldb-20 | 484.85 | 540.00 |  |
-| 1191 | Difficult | be happy | extreme / fan:lldb-53 | 479.78 | 552.13 |  |
-| 1192 | Difficult | Marooned | Ron Stards Rodents / fan:lldb-471 | 496.02 | 555.11 |  |
-| 1193 | Difficult | Virus Rush | KillerMasters Lemmings 2 Tame / fan:lldb-510 | 298.46 | 569.50 |  |
-| 1194 | Difficult | A Beast of a level | Lemmings / Fun | 325.32 | 564.18 |  |
-| 1195 | Difficult | A Dangerous Mining Operation | cLemmings Fun / fan:lldb-526 | 321.14 | 569.50 |  |
-| 1196 | Difficult | Down With The Lemmings | Lemmings Plus DOS Project Wimpy / fan:lldb-552 | 325.75 | 569.50 |  |
-| 1197 | Difficult | Grassy Dreams | cLemmings Fun / fan:lldb-526 | 319.46 | 569.50 |  |
-| 1198 | Difficult | Brick plot | CRISFN01 / fan:lldb-265 | 335.98 | 569.50 |  |
-| 1199 | Difficult | Let's come to the party | CRISFN05 / fan:lldb-269 | 329.22 | 578.00 |  |
-| 1200 | Difficult | Take A Shortcut! | Lemmings Plus DOS Project Mild / fan:lldb-551 | 343.29 | 569.50 |  |
-| 1201 | Difficult | Huff and Puff | cLemmings Fun / fan:lldb-526 | 346.63 | 569.50 |  |
-| 1202 | Difficult | It's a strange land! | Lemmings Plus DOS Project Wimpy / fan:lldb-552 | 346.62 | 569.50 |  |
-| 1203 | Difficult | Force Field | Lemmings Plus DOS Project Medi / fan:lldb-553 | 344.02 | 574.03 |  |
-| 1204 | Difficult | And the rock cried out... | JANNPCK2 / fan:lldb-232 | 356.87 | 569.50 |  |
-| 1205 | Difficult | A Snowplow Would Be Handy | Lemmings Plus DOS Project Wimpy / fan:lldb-552 | 360.21 | 569.50 |  |
-| 1206 | Difficult | Breakthrough | Lemmings Plus DOS Project Danger / fan:lldb-554 | 354.93 | 590.11 |  |
-| 1207 | Difficult | Let me get out of here! | Genesis Present / fan:lldb-492 | 365.97 | 569.50 |  |
-| 1208 | Difficult | Bubbling lagoon | CRISFN14 / fan:lldb-278 | 381.05 | 569.50 |  |
-| 1209 | Difficult | Lemmings Now Looked Up | Deceits Lemmings Fun / fan:lldb-522 | 378.01 | 569.50 |  |
-| 1210 | Difficult | Armageddon! | CRISFN07 / fan:lldb-271 | 382.23 | 569.50 |  |
-| 1211 | Difficult | Animal or Vegetable? | Save the Lemmings / fan:lldb-584 | 382.46 | 569.50 |  |
-| 1212 | Difficult | Dark dawn | Genesis Fun / fan:lldb-488 | 376.69 | 569.50 |  |
-| 1213 | Difficult | Time waits for no Lemming | Oh No! More Lemmings / Crazy | 397.45 | 569.50 |  |
-| 1214 | Difficult | Lemming Rhythms | Oh No! More Lemmings / Wild | 394.96 | 581.48 |  |
-| 1215 | Difficult | Palm ground | CRISFN11 / fan:lldb-275 | 388.17 | 569.50 |  |
-| 1216 | Difficult | Pillars of character | Dehodson / fan:lldb-419 | 394.41 | 569.50 |  |
-| 1217 | Difficult | Old MacDonald Had a Farm... | Lemmings The Official Companion / fan:lldb-585 | 392.59 | 569.50 |  |
-| 1218 | Difficult | Wood piece | Pieuws Lemmings 2007 Peace / fan:lldb-542 | 394.64 | 569.50 |  |
-| 1219 | Difficult | Saviour | Lemmings Plus DOS Project Wimpy / fan:lldb-552 | 387.46 | 569.50 |  |
-| 1220 | Difficult | To Life, and Lots of Presents | Holiday cLemmings Frost / fan:lldb-535 | 396.12 | 569.50 |  |
-| 1221 | Difficult | The Three Cs | cLemmings Tricky / fan:lldb-527 | 404.38 | 569.50 |  |
-| 1222 | Difficult | Green Stars | JEFFPCK3 / fan:lldb-237 | 401.13 | 583.08 |  |
-| 1223 | Difficult | Grounded! | Lemmings Plus DOS Project Danger / fan:lldb-554 | 394.64 | 580.58 |  |
-| 1224 | Difficult | Seeing double! | PSP Special 11 26 of 36 / fan:lldb-217 | 407.26 | 560.48 |  |
-| 1225 | Difficult | The Lake of Fire | JANNPCK1 / fan:lldb-231 | 414.05 | 569.50 |  |
-| 1226 | Difficult | Level 05.lvl | Amiga Demo / fan:lldb-581 | 415.14 | 569.50 |  |
-| 1227 | Difficult | Lemmings search for treasure. | Genesis Taxing / fan:lldb-490 | 413.77 | 569.50 |  |
-| 1228 | Difficult | Taxing 15.lvl | Amiga Taxing Budget / fan:lldb-575 | 416.22 | 569.50 |  |
-| 1229 | Difficult | Save Thy Lemmings | JANNPCK1 / fan:lldb-231 | 409.65 | 569.50 |  |
-| 1230 | Difficult | In an Anthill | Pieuws Lemmings 2007 Awkward / fan:lldb-543 | 411.22 | 578.00 |  |
-| 1231 | Difficult | Ecsape From Nightmare | ssam1221s Lemmings Havoc / fan:lldb-563 | 412.33 | 560.51 |  |
-| 1232 | Difficult | Lemmings standing on the earth | Genesis Present / fan:lldb-492 | 413.77 | 569.50 |  |
-| 1233 | Difficult | Lemming Playground | Nepster01 / fan:lldb-219 | 406.42 | 585.56 |  |
-| 1234 | Difficult | The Landing Trail | Pieuw01 / fan:lldb-393 | 420.05 | 569.50 |  |
-| 1235 | Difficult | With A Quirk Or Two... | Lemmings Plus DOS Project Danger / fan:lldb-554 | 417.72 | 569.50 |  |
-| 1236 | Difficult | Snowed In! | Lemmings Plus DOS Project PSYCHO / fan:lldb-555 | 424.86 | 569.50 |  |
-| 1237 | Difficult | Tomorrow Ends Today | Eymerich02 / fan:lldb-4 | 417.17 | 569.50 |  |
-| 1238 | Difficult | Anticlimacticism V | cLemmings Tricky / fan:lldb-527 | 428.95 | 569.50 |  |
-| 1239 | Difficult | Lemming Bubbles | Oh No More cLemmings Crazy / fan:lldb-531 | 426.01 | 569.50 |  |
-| 1240 | Difficult | Taxing 01.lvl | Amiga Taxing Budget / fan:lldb-575 | 428.27 | 569.50 |  |
-| 1241 | Difficult | INCONCEIVABLE! (Steve) | justdigcomp / fan:lldb-374 | 427.27 | 569.50 |  |
-| 1242 | Difficult | Be careful when you build! | CRISFN14 / fan:lldb-278 | 426.27 | 569.50 |  |
-| 1243 | Difficult | The Flood | PSP Special 11 26 of 36 / fan:lldb-217 | 419.79 | 574.03 |  |
-| 1244 | Difficult | This might be a doddle! | Insulfrog LVL PK 1 / fan:lldb-373 | 430.58 | 569.50 |  |
-| 1245 | Difficult | Steps | Insulfrog LVL PK 1 / fan:lldb-373 | 420.67 | 569.50 |  |
-| 1246 | Difficult | Water processing plant | Oh Yes! More Lemmings! / Mega Drive Sunsoft | 431.98 | 569.50 |  |
-| 1247 | Difficult | Lemmings at the Wall | Oh No More cLemmings Crazy / fan:lldb-531 | 432.94 | 569.50 |  |
-| 1248 | Difficult | Could be easier... | JANNPCK2 / fan:lldb-232 | 436.94 | 569.50 |  |
-| 1249 | Difficult | Flugtag! | ISteve02 / fan:lldb-23 | 433.29 | 569.50 |  |
-| 1250 | Difficult | Botanical reserch | Lemmings platinum Dangerous Part 2 / fan:lldb-191 | 433.44 | 569.50 |  |
-| 1251 | Difficult | Bubble cavern | CRISFN15 / fan:lldb-279 | 430.90 | 569.50 |  |
-| 1252 | Difficult | X marks the spot | Lemmings / Taxing | 443.60 | 592.94 |  |
-| 1253 | Difficult | Mayhem 15.lvl | Amiga Mayhem Budget / fan:lldb-576 | 433.68 | 569.50 |  |
-| 1254 | Difficult | Just a minute (Part Three) | Oh Yes! More Lemmings! / Mega Drive Sunsoft | 446.95 | 569.50 |  |
-| 1255 | Difficult | Final Impediment 2 | Conway13 / fan:lldb-262 | 445.95 | 569.50 |  |
-| 1256 | Difficult | Circular Wavelength | Lemmings Plus DOS Project Danger / fan:lldb-554 | 438.73 | 569.50 |  |
-| 1257 | Difficult | It`s the price you have to pay | Oh No! More Lemmings / Havoc | 452.11 | 569.50 |  |
-| 1258 | Difficult | Through the Block | Pieuw01 / fan:lldb-393 | 449.83 | 569.50 |  |
-| 1259 | Difficult | Pure Agony | Braden12 First Levelpack from OpenSea Facebook / fan:lldb-586 | 443.75 | 569.50 |  |
-| 1260 | Difficult | Beat the Clock | cLemmings Mayhem / fan:lldb-529 | 452.28 | 569.50 |  |
-| 1261 | Difficult | Mayhem 01.lvl | Amiga Mayhem Budget / fan:lldb-576 | 449.52 | 569.50 |  |
-| 1262 | Difficult | Frostlemm | Oh No More cLemmings Tame / fan:lldb-530 | 442.77 | 569.50 |  |
-| 1263 | Difficult | Taxing 14.lvl | Amiga Taxing Budget / fan:lldb-575 | 453.47 | 569.50 |  |
-| 1264 | Difficult | Lemmings of Bodom | JANNPCK2 / fan:lldb-232 | 445.09 | 582.90 |  |
-| 1265 | Difficult | Taxing 17.lvl | Amiga Taxing Budget / fan:lldb-570 | 443.60 | 592.94 |  |
-| 1266 | Difficult | The Picard Maneuver part 1 | mobius2 / fan:lldb-205 | 458.70 | 569.50 |  |
-| 1267 | Difficult | Lets Go Sledding!! | Lemmings The Official Companion / fan:lldb-585 | 460.68 | 569.50 |  |
-| 1268 | Difficult | Rock crystal!! | CRISFN03 / fan:lldb-267 | 458.14 | 569.50 |  |
-| 1269 | Difficult | Crystal point | PSP Special 1 10 of 36 / fan:lldb-216 | 457.04 | 569.50 |  |
-| 1270 | Difficult | Once a Lemming, Always a Lemming | cLemmings Taxing / fan:lldb-528 | 460.87 | 569.50 |  |
-| 1271 | Difficult | Tropical sunshine | CRISFN13 / fan:lldb-277 | 456.81 | 569.50 |  |
-| 1272 | Difficult | Careful with traps | CRISFN15 / fan:lldb-279 | 465.08 | 572.60 |  |
-| 1273 | Difficult | Juanjos Just dig! | justdigcomp / fan:lldb-374 | 464.80 | 569.50 |  |
-| 1274 | Difficult | Fire Fun | cLemmings Taxing / fan:lldb-528 | 455.19 | 592.01 |  |
-| 1275 | Difficult | Lemming Graveyard | cLemmings Taxing / fan:lldb-528 | 469.06 | 569.50 |  |
-| 1276 | Difficult | Cranial Stress | cLemmings Tricky / fan:lldb-527 | 470.13 | 569.50 |  |
-| 1277 | Difficult | The big U-Turn | Pieuw01 / fan:lldb-393 | 465.30 | 569.50 |  |
-| 1278 | Difficult | Chemical dissease | CRISFN07 / fan:lldb-271 | 466.49 | 569.50 |  |
-| 1279 | Difficult | Emmings!  (No L) | Holiday Lemmings 1994 / Hail | 479.42 | 569.50 |  |
-| 1280 | Difficult | Evil whisper | Genesis Present / fan:lldb-492 | 480.63 | 569.50 |  |
-| 1281 | Difficult | Through the Block | Pieuws Lemmings 2007 Insane / fan:lldb-545 | 492.99 | 569.50 |  |
-| 1282 | Difficult | Lightspeed Lemming | Lemmings Plus DOS Project PSYCHO / fan:lldb-555 | 487.28 | 569.50 |  |
-| 1283 | Difficult | Were ready for landing | Giga pack 04 / fan:lldb-165 | 484.57 | 564.18 |  |
-| 1284 | Difficult | The Three Musketeers | cLemmings Mayhem / fan:lldb-529 | 489.99 | 594.50 |  |
-| 1285 | Difficult | No hurry, Relax. | Genesis Mayhem / fan:lldb-491 | 504.00 | 569.50 |  |
-| 1286 | Difficult | Now we're cooking on gas | lm set05 / fan:lldb-45 | 505.96 | 569.50 |  |
-| 1287 | Difficult | Pillars of the Earth | cLemmings Mayhem / fan:lldb-529 | 502.65 | 569.50 |  |
-| 1288 | Difficult | Bubble underground | CRISFN06 / fan:lldb-270 | 507.09 | 570.98 |  |
-| 1289 | Difficult | Not as Easy as It Looks | cLemmings Tricky / fan:lldb-527 | 506.29 | 569.50 |  |
-| 1290 | Difficult | Simply Smashing | Epic Giga03 / fan:lldb-141 | 514.30 | 569.50 |  |
-| 1291 | Difficult | End of quarantine | Ron Stards Rodents / fan:lldb-471 | 551.11 | 577.12 |  |
-| 1292 | Difficult | Why do you all look the same? | AkseliPack01 / fan:lldb-220 | 561.94 | 569.50 |  |
-| 1293 | Difficult | With A Little Help From... | Yawg02 / fan:lldb-85 | 297.60 | 598.88 |  |
-| 1294 | Difficult | Compression Method 1 | Lemmings / Taxing | 318.21 | 598.88 |  |
-| 1295 | Difficult | Hard when you don't know how | MARSHY02 / fan:lldb-346 | 317.22 | 598.88 |  |
-| 1296 | Difficult | Again & Again | JM03 / fan:lldb-329 | 321.01 | 598.88 |  |
-| 1297 | Difficult | Puzzle Time.ini | grams88 / fan:lldb-416 | 327.09 | 598.88 |  |
-| 1298 | Difficult | Take care, Sweetie | Oh No! More Lemmings / Wild | 338.92 | 598.88 |  |
-| 1299 | Difficult | Lemming City | Pieuws Lemmings 2007 Awkward / fan:lldb-543 | 407.06 | 598.00 |  |
-| 1300 | Difficult | Patience | Lemmings / Fun | 421.98 | 595.98 |  |
-| 1301 | Difficult | Need I re-MINED you? | CSTame1 / fan:lldb-83 | 420.33 | 598.88 |  |
-| 1302 | Difficult | Go Thataway! | Holiday Lemmings 1994 / Hail | 441.67 | 598.88 |  |
-| 1303 | Difficult | Tricky 05.lvl | Amiga Tricky Budget / fan:lldb-574 | 442.38 | 595.98 |  |
-| 1304 | Difficult | Science from the 4th dimension | Mikes Lemmix Pack / fan:lldb-591 | 455.36 | 595.48 |  |
-| 1305 | Difficult | Fall and no life (Part Two) | Oh Yes! More Lemmings! / Mega Drive Sunsoft | 513.76 | 595.48 |  |
-| 1306 | Difficult | Four Play | Holiday Lemmings 1994 / Frost | 550.15 | 598.88 |  |
-| 1307 | Expert | Lemming Net | Lemmings Plus DOS Project Wimpy / fan:lldb-552 | 243.13 | 622.46 |  |
-| 1308 | Expert | It`s all a matter of timing | Oh No! More Lemmings / Havoc | 299.52 | 603.50 |  |
-| 1309 | Expert | Going down to... | CRISFN01 / fan:lldb-265 | 298.38 | 622.46 |  |
-| 1310 | Expert | We All Fall Up | TWPAK05 / fan:lldb-307 | 315.62 | 629.00 |  |
-| 1311 | Expert | Climbing the Mountain | cLemmings Fun / fan:lldb-526 | 330.23 | 611.46 |  |
-| 1312 | Expert | The Prison! | Lemmings / Taxing | 349.20 | 623.68 |  |
-| 1313 | Expert | Zigzag World | Pieuws Lemmings 2007 Awkward / fan:lldb-543 | 346.65 | 613.18 |  |
-| 1314 | Expert | Taxing 05.lvl | Amiga Taxing Budget / fan:lldb-570 | 351.30 | 623.68 |  |
-| 1315 | Expert | Lemmings of the West | Oh No More cLemmings Tame / fan:lldb-530 | 345.83 | 624.75 |  |
-| 1316 | Expert | Who`s That Lemming | Oh No! More Lemmings / Tame | 373.34 | 606.82 |  |
-| 1317 | Expert | Tricky 13.lvl | Amiga Tricky Budget / fan:lldb-574 | 378.14 | 624.75 |  |
-| 1318 | Expert | The Thin Red Line (Colorblind) | ISteve01 / fan:lldb-20 | 369.12 | 610.90 |  |
-| 1319 | Expert | SUNSOFT Special | Oh Yes! More Lemmings! / Mega Drive Sunsoft | 389.00 | 600.61 |  |
-| 1320 | Expert | The lemming water faculty | Giga pack 07 / fan:lldb-169 | 392.50 | 623.48 |  |
-| 1321 | Expert | A Tribute to Flagpole Sitting | ISteve02 / fan:lldb-23 | 388.17 | 624.75 |  |
-| 1322 | Expert | Googly-Pops Has Lost One Eye | TWPAK10 / fan:lldb-312 | 382.86 | 622.46 |  |
-| 1323 | Expert | The Prima Publishing Level | Lemmings The Official Companion / fan:lldb-585 | 393.70 | 624.75 |  |
-| 1324 | Expert | Oh snap, it's a lemmings level | Ji Hoons Lemmings Remake Sky / fan:lldb-548 | 390.80 | 625.10 |  |
-| 1325 | Expert | Mayhem 25.lvl | Amiga Mayhem Budget / fan:lldb-576 | 405.04 | 624.75 |  |
-| 1326 | Expert | The Snowy Ages | Holiday cLemmings Frost / fan:lldb-535 | 403.37 | 624.75 |  |
-| 1327 | Expert | Upsidedown World | Lemmings / Taxing | 423.24 | 611.11 |  |
-| 1328 | Expert | Overheat | Ji Hoons Lemmings Remake Earth / fan:lldb-549 | 415.98 | 621.40 |  |
-| 1329 | Expert | KEEP ON TRUCKING | Oh No! More Lemmings / Crazy | 434.90 | 624.75 |  |
-| 1330 | Expert | A trapdoor above the rest. | ANTHPCK3 / fan:lldb-223 | 427.67 | 624.75 |  |
-| 1331 | Expert | Taxing 13.lvl | Amiga Taxing Budget / fan:lldb-570 | 426.05 | 611.11 |  |
-| 1332 | Expert | Just A Quicky | Oh No! More Lemmings / Wild | 439.03 | 611.11 |  |
-| 1333 | Expert | The Search for Lem | Holiday Lemmings 1993 / Blizzard | 443.10 | 624.75 |  |
-| 1334 | Expert | Not as easy as it looks | CRISFN04 / fan:lldb-268 | 439.78 | 624.75 |  |
-| 1335 | Expert | Dangerous Fire Pit | epic03 / fan:lldb-129 | 445.55 | 624.75 |  |
-| 1336 | Expert | Thanx level ... | LARSPACK / fan:lldb-243 | 439.75 | 607.60 |  |
-| 1337 | Expert | Meet the Nessy Again | Deceits Lemmings Tricky / fan:lldb-523 | 436.87 | 619.30 |  |
-| 1338 | Expert | Upsidedown Islands | lm set04 / fan:lldb-44 | 453.81 | 619.53 |  |
-| 1339 | Expert | Lemming Entertainment Center | Lemmings Plus DOS Project Medi / fan:lldb-553 | 449.54 | 624.75 |  |
-| 1340 | Expert | Lemming eater | Genesis Mayhem / fan:lldb-491 | 450.38 | 624.75 |  |
-| 1341 | Expert | The Road to Boneland | lm set10 / fan:lldb-51 | 448.80 | 624.75 |  |
-| 1342 | Expert | Wild World of Lemmings! | Lemmings The Official Companion / fan:lldb-585 | 454.01 | 624.75 |  |
-| 1343 | Expert | Don't bash the wall | JM10 / fan:lldb-336 | 444.42 | 629.00 |  |
-| 1344 | Expert | Polar Expedition | Holiday Lemmings 1994 / Hail | 467.57 | 624.75 |  |
-| 1345 | Expert | INTIMIDATING(ish) | Master System Remakes / fan:lldb-80 | 462.74 | 624.75 |  |
-| 1346 | Expert | The Mad Freezer | Oh No More cLemmings Crazy / fan:lldb-531 | 457.75 | 624.75 |  |
-| 1347 | Expert | As long as we try our best | joem4 / fan:lldb-468 | 473.77 | 605.51 |  |
-| 1348 | Expert | The Power Of Three.... | Van Clan Wild / fan:lldb-519 | 468.65 | 624.75 |  |
-| 1349 | Expert | The Other Side. | Genesis Mayhem / fan:lldb-491 | 472.79 | 624.75 |  |
-| 1350 | Expert | Getting There... | Lemmings Plus DOS Project Medi / fan:lldb-553 | 478.83 | 624.75 |  |
-| 1351 | Expert | Tailor-made for... wait | wade / fan:lldb-359 | 477.44 | 624.75 |  |
-| 1352 | Expert | It's easy ! | Mikepak00 / fan:lldb-5 | 468.93 | 624.75 |  |
-| 1353 | Expert | Lunch time | Genesis Taxing / fan:lldb-490 | 473.06 | 624.75 |  |
-| 1354 | Expert | All's fair in Love and War | cLemmings Mayhem / fan:lldb-529 | 470.06 | 624.75 |  |
-| 1355 | Expert | Who can do the rest? | lm set04 / fan:lldb-44 | 480.82 | 624.75 |  |
-| 1356 | Expert | It looks pretty simple | lm set13 / fan:lldb-59 | 479.09 | 624.75 |  |
-| 1357 | Expert | Snow Lev 2 | ANTHPCK4 / fan:lldb-224 | 471.18 | 624.75 |  |
-| 1358 | Expert | Tubular Lemmings | Oh No! More Lemmings / Havoc | 481.59 | 602.03 |  |
-| 1359 | Expert | THE SILENCE OF THE LEMMINGS | Oh No! More Lemmings / Wild | 481.37 | 624.75 |  |
-| 1360 | Expert | LmSO4 - Lemmingic Acid | JOHNPACK / fan:lldb-242 | 488.35 | 624.75 |  |
-| 1361 | Expert | Constructive criticism. | isupck02 / fan:lldb-353 | 486.76 | 624.75 |  |
-| 1362 | Expert | Unimatrix zero | LEVIPAK4 / fan:lldb-368 | 485.56 | 624.75 |  |
-| 1363 | Expert | C'mon everybody body | Giga pack 08 / fan:lldb-170 | 484.29 | 607.81 |  |
-| 1364 | Expert | Where Lemmings Dare | Oh No! More Lemmings / Havoc | 497.36 | 624.75 |  |
-| 1365 | Expert | Pleasure to Meet You | cLemmings Taxing / fan:lldb-528 | 487.69 | 620.18 |  |
-| 1366 | Expert | Catch-22 | ISteve01 / fan:lldb-20 | 507.81 | 601.34 |  |
-| 1367 | Expert | Lucy 26 Degree | Deceits Lemmings Extras / fan:lldb-546 | 509.73 | 624.75 |  |
-| 1368 | Expert | Warrior of Ice | JannPck3 / fan:lldb-233 | 501.33 | 624.75 |  |
-| 1369 | Expert | The Abyss | Van Clan Havoc / fan:lldb-521 | 507.07 | 624.75 |  |
-| 1370 | Expert | Final impediment | Genesis Present / fan:lldb-492 | 519.41 | 624.75 |  |
-| 1371 | Expert | There`s a method in the madness | geooPk0 / fan:lldb-1 | 540.26 | 624.75 |  |
-| 1372 | Expert | Follow Me | geooPk1 / fan:lldb-2 | 548.76 | 624.90 |  |
-| 1373 | Expert | Multi-Task Lemmings | ISteve02 / fan:lldb-23 | 572.74 | 624.75 |  |
-| 1374 | Expert | Stuck | MARSHY04 / fan:lldb-348 | 222.92 | 651.67 |  |
-| 1375 | Expert | Back in Hell | JMGM01 / fan:lldb-454 | 239.66 | 637.50 |  |
-| 1376 | Expert | Nuclear Bomb | GARJEN03 / fan:lldb-283 | 260.05 | 637.06 |  |
-| 1377 | Expert | Don't be desesperate ! | Mikepak10 / fan:lldb-15 | 324.22 | 637.50 |  |
-| 1378 | Expert | Circular Dependency | Level Design Game 06 / fan:lldb-435 | 355.53 | 637.50 |  |
-| 1379 | Expert | I Love Lemmings | JEFFPCK3 / fan:lldb-237 | 357.13 | 642.40 |  |
-| 1380 | Expert | Save Me | Lemmings / Mayhem | 393.27 | 646.46 |  |
-| 1381 | Expert | Husky Lemmings | Pieuws Lemmings 2007 Insane / fan:lldb-545 | 405.19 | 663.60 |  |
-| 1382 | Expert | Mayhem 26.lvl | Amiga Mayhem Budget / fan:lldb-576 | 401.54 | 663.38 |  |
-| 1383 | Expert | Variety Day | Lemmings Plus DOS Project PSYCHO / fan:lldb-555 | 413.72 | 630.00 |  |
-| 1384 | Expert | Icy Poles | JEFFPCK1 / fan:lldb-235 | 419.26 | 645.88 |  |
-| 1385 | Expert | Roman rendezvous | ANTHPCK1 / fan:lldb-221 | 425.53 | 646.72 |  |
-| 1386 | Expert | Crazy stairs | Giga pack 07 / fan:lldb-169 | 417.88 | 658.51 |  |
-| 1387 | Expert | End With a BANG! | cLemmings Taxing / fan:lldb-528 | 417.42 | 663.00 |  |
-| 1388 | Expert | There's a lot of them about | Lemmings / Tricky | 446.37 | 663.00 |  |
-| 1389 | Expert | It`s a tight fit! | Oh No! More Lemmings / Wild | 442.87 | 656.96 |  |
-| 1390 | Expert | It's A Thin Line! | Lemmings Plus DOS Project Wimpy / fan:lldb-552 | 439.26 | 631.32 |  |
-| 1391 | Expert | >>>>wAy Up YoNdEr<<<< | ISteve01 / fan:lldb-20 | 452.48 | 663.00 |  |
-| 1392 | Expert | Tricky 10.lvl | Amiga Tricky Budget / fan:lldb-569 | 450.92 | 663.00 |  |
-| 1393 | Expert | The snow is bad | CRISFN10 / fan:lldb-274 | 456.93 | 663.00 |  |
-| 1394 | Expert | Not just a pretty Lemming | Oh No! More Lemmings / Tame | 468.85 | 630.00 |  |
-| 1395 | Expert | Counterlogical | Lemmings Plus DOS Project Wimpy / fan:lldb-552 | 461.97 | 663.96 |  |
-| 1396 | Expert | Lair Of The Fallen Lemming | Ji Hoons Lemmings Remake Hell / fan:lldb-550 | 478.79 | 630.00 |  |
-| 1397 | Expert | Creature Discomforts | Oh No! More Lemmings / Havoc | 517.87 | 655.94 |  |
-| 1398 | Expert | ONWARD AND UPWARD | Oh No! More Lemmings / Wild | 507.97 | 658.48 |  |
-| 1399 | Expert | Tension sheet,good idea | LEVIPAK2 / fan:lldb-366 | 520.87 | 630.00 |  |
-| 1400 | Expert | Death In All Directions | Lemmings Plus DOS Project Danger / fan:lldb-554 | 543.99 | 630.00 |  |
-| 1401 | Expert | Your time is up! | ssam1221s Lemmings Wild / fan:lldb-514 | 544.55 | 630.48 |  |
-| 1402 | Expert | Fearsome Rain | Pieuw02 / fan:lldb-394 | 554.11 | 641.80 |  |
-| 1403 | Expert | If only this were Lemmings 3... | CSTame1 / fan:lldb-83 | 264.58 | 669.01 |  |
-| 1404 | Expert | This Trick again | Pieuws Lemmings 2007 Insane / fan:lldb-545 | 360.92 | 669.01 |  |
-| 1405 | Expert | And now this... | Oh No! More Lemmings / Tame | 396.84 | 673.32 |  |
-| 1406 | Expert | LEMMINGS | fishthekiller99 / fan:lldb-71 | 398.04 | 674.08 |  |
-| 1407 | Expert | I have a cunning plan | Lemmings / Tricky | 416.66 | 672.48 |  |
-| 1408 | Expert | Tricky 26.lvl | Amiga Tricky Budget / fan:lldb-569 | 418.76 | 672.48 |  |
-| 1409 | Expert | LEMMINGS IS KILLING | Oh No More cLemmings Crazy / fan:lldb-531 | 430.03 | 692.33 |  |
-| 1410 | Expert | Lemmings in a situation | Oh No! More Lemmings / Havoc | 457.29 | 680.30 |  |
-| 1411 | Expert | LemEdit generated Level | fullglitch / fan:lldb-422 | 468.86 | 685.58 |  |
-| 1412 | Expert | Snuggle up to a Lemming | Oh No! More Lemmings / Tame | 480.11 | 673.32 |  |
-| 1413 | Expert | The T Level | Lemmings Plus DOS Project Medi / fan:lldb-553 | 486.69 | 680.00 |  |
-| 1414 | Expert | Anticlimacticism III | cLemmings Tricky / fan:lldb-527 | 483.09 | 680.00 |  |
-| 1415 | Expert | Oogilemming! | Holiday Lemmings 1993 / Blizzard | 497.20 | 680.00 |  |
-| 1416 | Expert | Origins and Lemmings | Lemmings / Fun | 501.55 | 667.72 |  |
-| 1417 | Expert | In the Cave | KillerMasters Lemmings 1 Crazy / fan:lldb-506 | 495.05 | 680.00 |  |
-| 1418 | Expert | The bubble ploters | CRISFN03 / fan:lldb-267 | 518.76 | 670.40 |  |
-| 1419 | Expert | Ice cavern | CRISFN15 / fan:lldb-279 | 510.88 | 665.68 |  |
-| 1420 | Expert | Do it the easy way! | joem8 / fan:lldb-323 | 510.02 | 680.00 |  |
-| 1421 | Expert | Lemming Extravaganza | cLemmings Taxing / fan:lldb-528 | 515.78 | 680.00 |  |
-| 1422 | Expert | A wee bit of magic | Snow remakes 01 / fan:lldb-144 | 516.59 | 680.00 |  |
-| 1423 | Expert | The freezing cold | joem4 / fan:lldb-468 | 525.16 | 680.00 |  |
-| 1424 | Expert | Clinging on for Dear Life | cLemmings Tricky / fan:lldb-527 | 521.67 | 689.28 |  |
-| 1425 | Expert | Level 03.lvl | Amiga Demo / fan:lldb-581 | 538.00 | 680.00 |  |
-| 1426 | Expert | Watch right and left! | Genesis Taxing / fan:lldb-490 | 533.74 | 680.00 |  |
-| 1427 | Expert | Upset Lemming | geooPk1 / fan:lldb-2 | 545.32 | 680.00 |  |
-| 1428 | Expert | The lemming bedroom | ANTHPCK3 / fan:lldb-223 | 545.82 | 680.00 |  |
-| 1429 | Expert | Level 02.lvl | Amiga Magazine Demo / fan:lldb-594 | 539.88 | 680.00 |  |
-| 1430 | Expert | Consider Everything... | Lemmings Plus DOS Project Medi / fan:lldb-553 | 544.49 | 691.40 |  |
-| 1431 | Expert | Two Minute Warning | MazuLems 01 / fan:lldb-244 | 542.75 | 680.00 |  |
-| 1432 | Expert | We need a blow torch NOW! | GARJEN01 / fan:lldb-281 | 536.76 | 679.48 |  |
-| 1433 | Expert | Get the Point? | Holiday Lemmings 1994 / Hail | 553.20 | 688.50 |  |
-| 1434 | Expert | Awaiting the Winter Frost | JannPck3 / fan:lldb-233 | 548.15 | 669.94 |  |
-| 1435 | Expert | The Dark Cave behind CliffTown | Pieuws Lemmings 2007 Insane / fan:lldb-545 | 576.68 | 680.00 |  |
-| 1436 | Expert | Heaven can wait (we hope!!!!) | Lemmings / Taxing | 281.82 | 722.50 |  |
-| 1437 | Expert | Lemmings Get Lost in Afterlife | ssam1221s Lemmings Wicked / fan:lldb-515 | 273.42 | 722.50 |  |
-| 1438 | Expert | Taxing 03.lvl | Amiga Taxing Budget / fan:lldb-570 | 283.92 | 722.50 |  |
-| 1439 | Expert | I've lost that Lemming feeling | Lemmings / Fun | 356.12 | 700.00 | Review |
-| 1440 | Expert | Nightmare on Lem street | Lemmings / Fun | 365.98 | 700.00 |  |
-| 1441 | Expert | They just keep on coming | Lemmings / Tricky | 361.83 | 700.00 |  |
-| 1442 | Expert | Christmas Bonus | Xmas Lemmings 1991 / Xmas | 364.92 | 700.00 |  |
-| 1443 | Expert | All the 6`s ........ | Lemmings / Tricky | 374.38 | 700.00 |  |
-| 1444 | Expert | These walls | JMGM02 / fan:lldb-455 | 371.57 | 700.00 |  |
-| 1445 | Expert | And a Happy New Year! | Holiday Lemmings 1994 / Hail | 382.54 | 700.00 |  |
-| 1446 | Expert | Merry Christmas Mr Lemming | Xmas Lemmings 1991 / Xmas | 385.80 | 700.00 |  |
-| 1447 | Expert | Lemmingology | Lemmings / Tricky | 381.74 | 700.00 |  |
-| 1448 | Expert | Lemming's Night | Oh No More cLemmings Tame / fan:lldb-530 | 383.07 | 700.00 |  |
-| 1449 | Expert | Lemmings...The Motion Picture | Holiday Lemmings 1993 / Blizzard | 398.87 | 700.00 |  |
-| 1450 | Expert | Last one out is a rotten egg! | Lemmings / Mayhem | 398.22 | 700.00 |  |
-| 1451 | Expert | One way or another | Lemmings / Mayhem | 397.09 | 700.00 |  |
-| 1452 | Expert | Let's get it Started | Deceits Lemmings Extras / fan:lldb-546 | 389.70 | 700.00 |  |
-| 1453 | Expert | Chain Reaction | Ji Hoons Lemmings Remake Earth / fan:lldb-549 | 394.45 | 700.00 |  |
-| 1454 | Expert | The searing heat!!! | ANTHPCK1 / fan:lldb-221 | 405.15 | 700.00 |  |
-| 1455 | Expert | Mayhem 08.lvl | Amiga Mayhem Budget / fan:lldb-571 | 400.32 | 700.00 |  |
-| 1456 | Expert | The Far Side | Lemmings / Mayhem | 417.09 | 700.00 |  |
-| 1457 | Expert | Lemming Drops | Lemmings / Tricky | 418.77 | 700.00 |  |
-| 1458 | Expert | The Island of the Wicker people | Lemmings / Tricky | 413.26 | 700.00 |  |
-| 1459 | Expert | -->  Wrong Way!  --> | ISteve02 / fan:lldb-23 | 414.12 | 700.00 |  |
-| 1460 | Expert | Feel the pain | joem5 / fan:lldb-320 | 411.24 | 700.00 |  |
-| 1461 | Expert | Stairway to Heaven | MazuLems 01 / fan:lldb-244 | 423.42 | 700.00 |  |
-| 1462 | Expert | Tricky 27.lvl | Amiga Tricky Budget / fan:lldb-569 | 415.36 | 700.00 |  |
-| 1463 | Expert | Quickie... | Pieuws Lemmings 2007 Artful / fan:lldb-544 | 415.84 | 700.00 |  |
-| 1464 | Expert | A Lemming Holiday | Xmas Lemmings 1992 / Xmas | 426.15 | 700.00 |  |
-| 1465 | Expert | Here's one I prepared earlier | Lemmings / Tricky | 426.91 | 700.00 |  |
-| 1466 | Expert | DO NOT ENTER | QBeez03 / fan:lldb-33 | 422.09 | 700.00 |  |
-| 1467 | Expert | Izzie Wizzie lemmings get busy | Lemmings / Taxing | 434.67 | 700.00 |  |
-| 1468 | Expert | Simple warm-up | geooPk0 / fan:lldb-1 | 426.32 | 700.00 |  |
-| 1469 | Expert | Tricky 04.lvl | Amiga Tricky Budget / fan:lldb-569 | 429.01 | 700.00 |  |
-| 1470 | Expert | Anticimacticism IV | cLemmings Tricky / fan:lldb-527 | 438.53 | 700.00 |  |
-| 1471 | Expert | From The Boundary Line part two | Conway Challenges 1 / fan:lldb-263 | 444.11 | 700.00 |  |
-| 1472 | Expert | Stepping Stones | Lemmings / Mayhem | 457.22 | 700.00 |  |
-| 1473 | Expert | POOR WEE CREATURES! | Lemmings / Taxing | 460.80 | 700.00 |  |
-| 1474 | Expert | Day tripper | Giga pack 01 / fan:lldb-160 | 452.93 | 700.00 |  |
-| 1475 | Expert | Taxing 28.lvl | Amiga Taxing Budget / fan:lldb-570 | 461.25 | 700.00 |  |
-| 1476 | Expert | Do the Lemmys way! | Lemmy556 My little levels / fan:lldb-65 | 457.22 | 700.00 |  |
-| 1477 | Expert | The Swamp | TimpackB / fan:lldb-100 | 462.15 | 700.00 |  |
-| 1478 | Expert | Up, Down, Round & Round! | Lemmings Plus DOS Project Wimpy / fan:lldb-552 | 459.37 | 700.00 |  |
-| 1479 | Expert | Pipeline Problem | Lemmings Plus DOS Project Danger / fan:lldb-554 | 469.06 | 700.00 |  |
-| 1480 | Expert | Poor Construction | ssam1221s Lemmings Wild / fan:lldb-514 | 468.07 | 700.00 |  |
-| 1481 | Expert | Don't let your eyes deceive you | Lemmings / Fun | 488.66 | 700.00 |  |
-| 1482 | Expert | The Needs of the Many... | Holiday Lemmings 1993 / Blizzard | 479.80 | 700.00 |  |
-| 1483 | Expert | The Great Pillar | CPs Level Pack / fan:lldb-472 | 480.69 | 700.00 |  |
-| 1484 | Expert | City Of The Damned | Van Clan Crazy / fan:lldb-518 | 479.29 | 700.00 |  |
-| 1485 | Expert | Nowhere Near.... | Master System Remakes / fan:lldb-80 | 488.67 | 700.00 |  |
-| 1486 | Expert | Let's Play Gyrodrop | KillerMasters Lemmings 1 Crazy / fan:lldb-506 | 483.53 | 700.00 |  |
-| 1487 | Expert | Welcome to Night-City! | Mikepak08 / fan:lldb-13 | 480.13 | 700.00 |  |
-| 1488 | Expert | Fun 15.lvl | Amiga Fun Budget / fan:lldb-568 | 495.68 | 700.00 |  |
-| 1489 | Expert | Pipework | Insulfrog LVL PK 1 / fan:lldb-373 | 490.35 | 700.00 |  |
-| 1490 | Expert | In And Out | TimpackD / fan:lldb-102 | 503.74 | 700.00 |  |
-| 1491 | Expert | Catch more floaters. | Genesis Fun / fan:lldb-488 | 497.54 | 700.00 |  |
-| 1492 | Expert | Prepare to be Mindblown | Oh No More cLemmings Crazy / fan:lldb-531 | 494.16 | 700.00 |  |
-| 1493 | Expert | The ascending pillar scenario | Lemmings / Taxing | 506.15 | 700.00 |  |
-| 1494 | Expert | Mission Lempossible II | joe04 / fan:lldb-131 | 513.70 | 700.00 |  |
-| 1495 | Expert | Taxing 11.lvl | Amiga Taxing Budget / fan:lldb-570 | 508.25 | 700.00 |  |
-| 1496 | Expert | The Only Way is Up | MazuLems 02 / fan:lldb-245 | 509.21 | 700.00 |  |
-| 1497 | Expert | flag test map | Orig Extra Levels / fan:lldb-407 | 516.37 | 700.00 |  |
-| 1498 | Expert | The magnificent severn | doggycharly random lvls / fan:lldb-78 | 508.02 | 720.00 |  |
-| 1499 | Expert | From The Boundary Line | Lemmings / Tricky | 518.09 | 700.00 |  |
-| 1500 | Expert | An Exit Isn't Just For Christmas | TWPAK10 / fan:lldb-312 | 519.80 | 700.00 |  |
-| 1501 | Expert | The Lemming Tower | cLemmings Fun / fan:lldb-526 | 526.31 | 700.00 |  |
-| 1502 | Expert | Chilean coliseum II | CRISFN14 / fan:lldb-278 | 524.09 | 700.00 |  |
-| 1503 | Expert | -Teen Ninety-Four | Holiday cLemmings Frost / fan:lldb-535 | 524.82 | 700.00 |  |
-| 1504 | Expert | The Peaks | Oh No More cLemmings Crazy / fan:lldb-531 | 518.42 | 700.00 |  |
-| 1505 | Expert | Bubbles in the Lemms | Oh No More cLemmings Tame / fan:lldb-530 | 523.96 | 700.00 |  |
-| 1506 | Expert | Tricky 23.lvl | Amiga Tricky Budget / fan:lldb-569 | 518.09 | 700.00 |  |
-| 1507 | Expert | Watch out, there`s traps about | Lemmings / Taxing | 537.81 | 700.00 |  |
-| 1508 | Expert | The Crankshaft | Lemmings / Tricky | 537.25 | 700.00 |  |
-| 1509 | Expert | Been there, seen it, done it | Lemmings / Tricky | 536.62 | 700.00 |  |
-| 1510 | Expert | Rendezvous at the Mountain | Lemmings / Mayhem | 536.15 | 700.00 |  |
-| 1511 | Expert | Tricky 07.lvl | Amiga Tricky Budget / fan:lldb-569 | 538.72 | 700.00 |  |
-| 1512 | Expert | Tricky 30.lvl | Amiga Tricky Budget / fan:lldb-569 | 537.25 | 700.00 |  |
-| 1513 | Expert | Through the thicket | geooPk0 / fan:lldb-1 | 538.53 | 700.00 |  |
-| 1514 | Expert | Taxing 02.lvl | Amiga Taxing Budget / fan:lldb-570 | 537.81 | 700.00 |  |
-| 1515 | Expert | Devil's Right Hand | Nepster01 / fan:lldb-219 | 533.39 | 700.00 |  |
-| 1516 | Expert | Proffesional Preferences | Oh No More cLemmings Crazy / fan:lldb-531 | 537.34 | 700.00 |  |
-| 1517 | Expert | How do I dig out a path? | Genesis Taxing / fan:lldb-490 | 539.38 | 700.00 |  |
-| 1518 | Expert | More 'No Builder Problems' | geooPk1 / fan:lldb-2 | 543.21 | 700.00 |  |
-| 1519 | Expert | One Step At A Time | Lemmings Plus DOS Project Wimpy / fan:lldb-552 | 539.22 | 700.00 |  |
-| 1520 | Expert | Rhapsody | ISteve01 / fan:lldb-20 | 535.26 | 720.00 |  |
-| 1521 | Expert | Pillars of Hercules | Lemmings / Mayhem | 554.17 | 700.00 |  |
-| 1522 | Expert | The Incinerator | cLemmings Taxing / fan:lldb-528 | 548.37 | 700.00 |  |
-| 1523 | Expert | Chill out! | Oh No! More Lemmings / Wicked | 558.37 | 700.00 |  |
-| 1524 | Expert | The bricks of death | CRISFN08 / fan:lldb-272 | 559.56 | 700.00 |  |
-| 1525 | Expert | Mastermined | MazuLems 02 / fan:lldb-245 | 552.58 | 700.00 |  |
-| 1526 | Expert | Lemming In Zest | GeoffLems Minipack / fan:lldb-413 | 558.54 | 700.00 |  |
-| 1527 | Expert | Chilean coliseum I | CRISFN06 / fan:lldb-270 | 549.73 | 700.00 |  |
-| 1528 | Expert | The Fast Food Kitchen... | Lemmings / Mayhem | 562.66 | 700.00 |  |
-| 1529 | Expert | Please remain calm | Giga pack 04 / fan:lldb-165 | 561.03 | 700.00 |  |
-| 1530 | Expert | Again, Your time is up! | ssam1221s Lemmings Wild / fan:lldb-514 | 564.06 | 700.00 |  |
-| 1531 | Expert | The snow palace | Mikepak10 / fan:lldb-15 | 554.54 | 700.00 |  |
-| 1532 | Expert | The Green Mile | Van Clan Tame / fan:lldb-99 | 561.42 | 700.00 |  |
-| 1533 | Expert | Travelling Lemmings | Nepster01 / fan:lldb-219 | 575.09 | 700.00 |  |
-| 1534 | Expert | Mayhem 29.lvl | Amiga Mayhem Budget / fan:lldb-576 | 590.57 | 700.00 |  |
-| 1535 | Expert | The Barbarous Bars | Pieuws Lemmings 2007 Insane / fan:lldb-545 | 582.63 | 700.00 |  |
-| 1536 | Expert | The Dirty Work | cLemmings Tricky / fan:lldb-527 | 582.50 | 700.00 |  |
-| 1537 | Expert | Labyrinth of Despair | Lemmings Plus DOS Project Wimpy / fan:lldb-552 | 582.48 | 722.50 |  |
-| 1538 | Expert | Lemmingology (Part 2) | JM01 / fan:lldb-327 | 626.98 | 700.00 |  |
-| 1539 | Expert | Lemming Athletics | cLemmings Fun / fan:lldb-526 | 449.98 | 748.00 |  |
-| 1540 | Expert | AAAAAARRRRRRGGGGGGHHHHHH!!!!!! | Oh No! More Lemmings / Havoc | 477.17 | 748.00 |  |
-| 1541 | Expert | Lemmings to next floor | CRISFN07 / fan:lldb-271 | 469.18 | 756.50 |  |
-| 1542 | Expert | Impossible mission | joem2 / fan:lldb-318 | 480.26 | 748.00 |  |
-| 1543 | Expert | Up and Over | cLemmings Tricky / fan:lldb-527 | 519.84 | 735.25 |  |
-| 1544 | Expert | First-come, First-serve | cLemmings Taxing / fan:lldb-528 | 519.77 | 760.75 |  |
-| 1545 | Expert | volando en la loca busqueda | doggycharly random lvls / fan:lldb-78 | 554.49 | 735.25 |  |
-| 1546 | Expert | The Golden Gate | TimpackC / fan:lldb-101 | 555.49 | 765.00 |  |
-| 1547 | Expert | Dual Lemmings | cLemmings Tricky / fan:lldb-527 | 545.78 | 756.50 |  |
-| 1548 | Expert | It Came Upon a Lemnight Clear | Holiday Lemmings 1993 / Blizzard | 557.79 | 735.25 |  |
-| 1549 | Expert | Trading and Cooperating | geooPk1 / fan:lldb-2 | 572.36 | 735.25 |  |
-| 1550 | Expert | Zygoptera | AkseliPack01 / fan:lldb-220 | 567.97 | 735.25 |  |
-| 1551 | Expert | Waste High! | ANTHPCK5 / fan:lldb-225 | 578.72 | 735.25 |  |
-| 1552 | Expert | A group of entrances | Genesis Mayhem / fan:lldb-491 | 586.03 | 735.25 |  |
-| 1553 | Expert | Three Birds With One Stone | Lemmings Plus DOS Project PSYCHO / fan:lldb-555 | 581.95 | 735.25 |  |
-| 1554 | Expert | The Crystalline Fortress | Mikes Lemmix Pack / fan:lldb-591 | 576.28 | 739.50 |  |
-| 1555 | Expert | Head for the Hills! | Holiday Lemmings 1993 / Flurry | 270.77 | 781.15 |  |
-| 1556 | Expert | Now get out of that! | Oh No! More Lemmings / Havoc | 293.69 | 785.88 |  |
-| 1557 | Expert | The Loser's Loop | ISteve03 / fan:lldb-21 | 354.55 | 785.88 |  |
-| 1558 | Expert | The Traffic Light Of Lemmland | TWPAK09 / fan:lldb-311 | 380.39 | 781.15 |  |
-| 1559 | Expert | (Un)pleasant side effect | geooPkG / fan:lldb-108 | 391.63 | 785.88 |  |
-| 1560 | Expert | Oh no! More challenges! | CSTame1 / fan:lldb-83 | 405.59 | 785.88 |  |
-| 1561 | Expert | The race against cliches | Oh No! More Lemmings / Havoc | 433.13 | 776.14 |  |
-| 1562 | Expert | Firestorm | GARJEN04 / fan:lldb-284 | 431.34 | 773.50 |  |
-| 1563 | Expert | Objects? What Objects? | TWPAK10 / fan:lldb-312 | 493.87 | 781.15 |  |
-| 1564 | Expert | Me, Myself And Ice | TWPAK06 / fan:lldb-308 | 514.13 | 790.50 |  |
-| 1565 | Expert | MENACING !! | Lemmings / Tricky | 565.10 | 803.25 |  |
-| 1566 | Expert | The house of Lem | Conway10 / fan:lldb-259 | 572.66 | 782.00 |  |
-| 1567 | Expert | And then there were four.... | Lemmings / Mayhem | 569.32 | 816.00 |  |
-| 1568 | Expert | Synchronised Lemming | Oh No! More Lemmings / Havoc | 565.10 | 816.00 |  |
-| 1569 | Expert | Pedantic Lemmings | AkseliPack01 / fan:lldb-220 | 581.17 | 810.00 |  |
-| 1570 | Expert | Mayhem 18.lvl | Amiga Mayhem Budget / fan:lldb-571 | 572.62 | 816.00 |  |
-| 1571 | Expert | Have you seen this level before? | lm set13 / fan:lldb-59 | 587.18 | 810.00 |  |
-| 1572 | Expert | A Magician Would Be Handy | Lemmings Plus DOS Project Wimpy / fan:lldb-552 | 596.43 | 811.75 |  |
-| 1573 | Expert | Tower of Ice | lm set13 / fan:lldb-59 | 650.98 | 810.00 |  |
-| 1574 | Expert | Build The Way | Ji Hoons Lemmings Remake Heaven / fan:lldb-547 | 251.14 | 850.00 |  |
-| 1575 | Expert | Climb and Dig | brickpk1 / fan:lldb-558 | 332.86 | 850.00 |  |
-| 1576 | Expert | Celestial Lemmings | TWPAK01 / fan:lldb-303 | 344.42 | 850.00 |  |
-| 1577 | Expert | Snow Lev 4 | ANTHPCK4 / fan:lldb-224 | 362.82 | 850.00 |  |
-| 1578 | Expert | Climb and Bomb | brickpk1 / fan:lldb-558 | 366.31 | 850.00 |  |
-| 1579 | Expert | Us and them | joe02 / fan:lldb-127 | 370.86 | 850.00 |  |
-| 1580 | Expert | Warming Up | ssam1221s Lemmings Tame / fan:lldb-512 | 394.02 | 843.48 |  |
-| 1581 | Expert | Betcha can't save just one! | ISteve02 / fan:lldb-23 | 391.56 | 843.48 |  |
-| 1582 | Expert | The Plight of Icarus | ISteve03 / fan:lldb-21 | 393.99 | 850.00 |  |
-| 1583 | Expert | Steel blocks are not perfect... | ssam1221s Lemmings Wicked / fan:lldb-515 | 407.68 | 850.00 |  |
-| 1584 | Expert | Keep your hair on Mr. Lemming | Lemmings / Fun | 427.47 | 850.00 |  |
-| 1585 | Expert | A BeastII of a level | Lemmings / Mayhem | 450.37 | 850.00 |  |
-| 1586 | Expert | Don't do anything too hasty | Lemmings / Fun | 442.35 | 850.00 |  |
-| 1587 | Expert | Happy New Year II! | Holiday Lemmings 1994 / Frost | 441.86 | 843.48 |  |
-| 1588 | Expert | Lemmintaschen? | Holiday Lemmings 1994 / Hail | 474.65 | 843.48 |  |
-| 1589 | Expert | Oscillating Lemmings | Pieuws Lemmings 2007 Peace / fan:lldb-542 | 466.96 | 850.00 |  |
-| 1590 | Expert | It is very complicated | Insulfrog LVL PK 1 / fan:lldb-373 | 478.39 | 850.00 |  |
-| 1591 | Expert | Tailor-made for Athletes | JEFFPCK1 / fan:lldb-235 | 479.06 | 850.00 |  |
-| 1592 | Expert | The Awesome level returns! | Mikes Lemmix Pack / fan:lldb-591 | 506.07 | 850.00 |  |
-| 1593 | Expert | Turn baby Turn. | ANTHPCK3 / fan:lldb-223 | 538.00 | 850.00 |  |
-| 1594 | Expert | Sudenly lemming | Lemmings platinum Careful Part 1 / fan:lldb-188 | 543.92 | 850.00 |  |
-| 1595 | Expert | This is a doddle | JM09 / fan:lldb-335 | 543.20 | 850.00 |  |
-| 1596 | Expert | Across The Gap | Oh No! More Lemmings / Crazy | 555.35 | 850.00 |  |
-| 1597 | Expert | Swallowing method 1 | Lemmings platinum Fragle part 2 / fan:lldb-181 | 553.79 | 850.00 |  |
-| 1598 | Expert | It Takes Two To Tango | Van Clan Tame / fan:lldb-99 | 576.36 | 850.00 |  |
-| 1599 | Expert | Make a Best - Click Time | KillerMasters Lemmings 1 Havoc / fan:lldb-509 | 583.69 | 850.00 |  |
-| 1600 | Expert | Floaters Away! | cLemmings Tricky / fan:lldb-527 | 589.55 | 850.00 |  |
-| 1601 | Expert | Be Careful... | Lemmings Plus DOS Project Mild / fan:lldb-551 | 583.08 | 850.00 |  |
-| 1602 | Expert | Wall of Wisdom | Lemmings Plus DOS Project Danger / fan:lldb-554 | 606.61 | 850.00 |  |
-| 1603 | Expert | The Shaft (Part 2) | ISteve04 / fan:lldb-24 | 605.45 | 850.00 |  |
-| 1604 | Expert | And then there were another four | Conway Challenges 2 / fan:lldb-264 | 600.18 | 850.00 |  |
-| 1605 | Expert | Hold them back | CPs Level Pack / fan:lldb-472 | 625.39 | 850.00 |  |
-| 1606 | Expert | Free Lemmings | Oh No More cLemmings Tame / fan:lldb-530 | 620.59 | 850.00 |  |
-| 1607 | Expert | The Graveyard | Lemmings Plus DOS Project Mild / fan:lldb-551 | 633.39 | 850.00 |  |
-| 1608 | Expert | Double Lemmings | KillerMasters Lemmings 2 Tame / fan:lldb-510 | 631.46 | 850.00 |  |
-| 1609 | Expert | Remember where you find them! | Ji Hoons Lemmings Remake Heaven / fan:lldb-547 | 659.90 | 850.00 |  |
+| 1042 | Difficult | Snow Lev 9 | ANTHPCK4 / fan:lldb-224 | 357.10 | 514.25 |  |
+| 1043 | Difficult | Back home | hubbart7 / fan:lldb-182 | 347.50 | 510.53 |  |
+| 1044 | Difficult | On the Antarctic Coast | Oh No! More Lemmings / Crazy | 362.75 | 514.25 |  |
+| 1045 | Difficult | Inroducing SUPERLEMMING | Oh No! More Lemmings / Wicked | 366.73 | 509.60 |  |
+| 1046 | Difficult | Welcome to the party, pal! | Oh No! More Lemmings / Havoc | 366.96 | 514.25 |  |
+| 1047 | Difficult | Lemmings-preying iron plate | Genesis Present / fan:lldb-492 | 359.35 | 514.25 |  |
+| 1048 | Difficult | GO FOR IT! | Master System Remakes / fan:lldb-80 | 357.91 | 514.25 |  |
+| 1049 | Difficult | The Invisible Bridge | JM12 / fan:lldb-338 | 358.54 | 514.25 |  |
+| 1050 | Difficult | Which Way Do We Go? | Lemmings The Official Companion / fan:lldb-585 | 365.22 | 514.25 |  |
+| 1051 | Difficult | The abyss 2 | CRISFN04 / fan:lldb-268 | 360.08 | 514.25 |  |
+| 1052 | Difficult | Warm-up exercise | LARSPACK / fan:lldb-243 | 358.49 | 514.25 |  |
+| 1053 | Difficult | Underground city | Genesis Present / fan:lldb-492 | 358.78 | 514.25 |  |
+| 1054 | Difficult | Puffy Want More! | cLemmings Tricky / fan:lldb-527 | 369.42 | 514.25 |  |
+| 1055 | Difficult | Two islands and two lakes | bigqtwo / fan:lldb-417 | 368.68 | 514.25 |  |
+| 1056 | Difficult | Double Diamond | CALEPCK2 / fan:lldb-228 | 359.72 | 497.75 |  |
+| 1057 | Difficult | Finding a place to stay | geooPk0 / fan:lldb-1 | 367.38 | 496.40 |  |
+| 1058 | Difficult | C for ur self | joem4 / fan:lldb-468 | 372.14 | 514.25 |  |
+| 1059 | Difficult | Lemming Polishing Co. | cLemmings Fun / fan:lldb-526 | 363.73 | 514.25 |  |
+| 1060 | Difficult | Natural life | Genesis Present / fan:lldb-492 | 362.26 | 514.25 |  |
+| 1061 | Difficult | Bullshit-lemmings | hubbart5 / fan:lldb-177 | 376.15 | 514.25 |  |
+| 1062 | Difficult | Lemming Distillation | cLemmings Taxing / fan:lldb-528 | 377.35 | 514.25 |  |
+| 1063 | Difficult | Doom-Box | brickpk3 / fan:lldb-560 | 374.36 | 514.25 |  |
+| 1064 | Difficult | Precarious oasis | Genesis Present / fan:lldb-492 | 377.69 | 514.25 |  |
+| 1065 | Difficult | Pitfall | Genesis Present / fan:lldb-492 | 377.00 | 514.25 |  |
+| 1066 | Difficult | Watch your fingertip! | Genesis Taxing / fan:lldb-490 | 378.46 | 514.25 |  |
+| 1067 | Difficult | Lemmings on a Thread | Pieuw02 / fan:lldb-394 | 378.05 | 492.13 |  |
+| 1068 | Difficult | Loud and Clear | ANTHPCK3 / fan:lldb-223 | 375.47 | 502.60 |  |
+| 1069 | Difficult | Lemming Language | Oh No More cLemmings Crazy / fan:lldb-531 | 368.64 | 522.82 |  |
+| 1070 | Difficult | For Mr. Dodochacalo & Mr. Pieuw | AkseliPack01 / fan:lldb-220 | 379.80 | 514.25 |  |
+| 1071 | Difficult | Lighting up The Sky | cLemmings Ultimate Edition Simple / fan:lldb-564 | 383.36 | 514.25 |  |
+| 1072 | Difficult | If my name isn't Shadow Box..... | QBeez04 / fan:lldb-49 | 379.03 | 514.25 |  |
+| 1073 | Difficult | Hell World | Pieuws Lemmings 2007 Awkward / fan:lldb-543 | 382.08 | 514.25 |  |
+| 1074 | Difficult | Escape the wolfs claw! | LEVIPAK1 / fan:lldb-365 | 384.79 | 514.25 |  |
+| 1075 | Difficult | A whole new year of lemmings!!! | New Year Lemmings 1991 92 / fan:lldb-557 | 377.04 | 511.37 |  |
+| 1076 | Difficult | You Just Lost The Game!!! | Lemmings Plus DOS Project Mild / fan:lldb-551 | 376.37 | 513.10 |  |
+| 1077 | Difficult | NO PROBLEM | Oh No! More Lemmings / Crazy | 388.48 | 490.03 |  |
+| 1078 | Difficult | One man does all the hard work | PSP Special 11 26 of 36 / fan:lldb-217 | 390.19 | 514.25 |  |
+| 1079 | Difficult | A twisted Platform | ANTHPCK2 / fan:lldb-222 | 388.36 | 514.25 |  |
+| 1080 | Difficult | IceTown | Save the Lemmings / fan:lldb-584 | 386.86 | 514.25 |  |
+| 1081 | Difficult | Best be careful out there | joem4 / fan:lldb-468 | 386.85 | 514.25 |  |
+| 1082 | Difficult | Antiprolemmingterralationness | cLemmings Tricky / fan:lldb-527 | 385.45 | 514.25 |  |
+| 1083 | Difficult | Buried under the blizzard | CRISFN12 / fan:lldb-276 | 381.83 | 518.03 |  |
+| 1084 | Difficult | This is a typical Splatt level | New Year Lemmings 1991 92 / fan:lldb-557 | 380.51 | 514.25 |  |
+| 1085 | Difficult | Achtung Lemming | MazuLems 01 / fan:lldb-244 | 392.59 | 514.25 |  |
+| 1086 | Difficult | Some bubble ways get hard! | CRISFN12 / fan:lldb-276 | 383.13 | 514.25 |  |
+| 1087 | Difficult | Snow Lev 10 | ANTHPCK4 / fan:lldb-224 | 394.30 | 514.25 |  |
+| 1088 | Difficult | We All Die Someday | Lemmings Plus DOS Project Mild / fan:lldb-551 | 384.48 | 514.25 |  |
+| 1089 | Difficult | DIGGING FOR VICTORY | Oh No! More Lemmings / Crazy | 396.34 | 492.20 |  |
+| 1090 | Difficult | Cascade | Lemmings / Tricky | 407.80 | 515.82 |  |
+| 1091 | Difficult | Lets move | JM11 / fan:lldb-337 | 403.08 | 514.25 |  |
+| 1092 | Difficult | Party Time! | JM14 / fan:lldb-340 | 404.94 | 514.25 |  |
+| 1093 | Difficult | Three steps to heaven | PSP Special 11 26 of 36 / fan:lldb-217 | 407.78 | 514.25 |  |
+| 1094 | Difficult | Broken Bridges | lm set10 / fan:lldb-51 | 400.04 | 514.25 |  |
+| 1095 | Difficult | Tricky 25.lvl | Amiga Tricky Budget / fan:lldb-569 | 407.21 | 515.82 |  |
+| 1096 | Difficult | Someone must make an effort! | CRISFN05 / fan:lldb-269 | 402.68 | 514.25 |  |
+| 1097 | Difficult | Tank! | GeoffLems Minipack / fan:lldb-413 | 403.06 | 492.94 |  |
+| 1098 | Difficult | Let's get together. | Genesis Mayhem / fan:lldb-491 | 406.41 | 514.25 |  |
+| 1099 | Difficult | Jump down! | Genesis Taxing / fan:lldb-490 | 401.98 | 514.25 |  |
+| 1100 | Difficult | Sci-Fi Stereo | CRISFN09 / fan:lldb-273 | 400.11 | 514.25 |  |
+| 1101 | Difficult | ROCKY ROAD | Oh No! More Lemmings / Wicked | 413.29 | 521.98 |  |
+| 1102 | Difficult | Up on the Rooftops | Holiday Lemmings 1994 / Frost | 412.84 | 514.25 |  |
+| 1103 | Difficult | Six Ways to Success (I Guess) | MazuLems 03 / fan:lldb-246 | 416.81 | 514.25 |  |
+| 1104 | Difficult | Lem up! | cLemmings Mayhem / fan:lldb-529 | 418.06 | 492.83 |  |
+| 1105 | Difficult | Geros Segros! | JANNPCK2 / fan:lldb-232 | 412.08 | 514.25 |  |
+| 1106 | Difficult | LoTs moRe wHeRe TheY caMe fRom | Oh No! More Lemmings / Wicked | 423.90 | 514.25 |  |
+| 1107 | Difficult | Sir Edmund Hilemming | Holiday Lemmings 1994 / Hail | 423.19 | 514.25 |  |
+| 1108 | Difficult | Pipe dreams | CRISFN09 / fan:lldb-273 | 423.71 | 514.25 |  |
+| 1109 | Difficult | Creativity Beyond Lemmings . . . | Oh No More cLemmings Wild / fan:lldb-532 | 424.28 | 495.47 |  |
+| 1110 | Difficult | This is not a prison | Pieuws Lemmings 2007 Peace / fan:lldb-542 | 416.03 | 514.25 |  |
+| 1111 | Difficult | This Is... | Lemmings Plus DOS Project Medi / fan:lldb-553 | 423.95 | 514.25 |  |
+| 1112 | Difficult | Lemming in a Cone | MazuLems 02 / fan:lldb-245 | 415.29 | 506.83 |  |
+| 1113 | Difficult | The gate trap Lemmings. | Oh Yes! More Lemmings! / Mega Drive Sunsoft | 425.62 | 503.58 |  |
+| 1114 | Difficult | The Cascade: Part II | Modlvls / fan:lldb-357 | 422.21 | 515.82 |  |
+| 1115 | Difficult | Arch-Nemesis | GARJEN03 / fan:lldb-283 | 423.19 | 514.25 |  |
+| 1116 | Difficult | Lemmings Everywhere | cLemmings Fun / fan:lldb-526 | 415.67 | 514.25 |  |
+| 1117 | Difficult | Don't settle for anything less | Conway Challenges 1 / fan:lldb-263 | 425.93 | 515.82 |  |
+| 1118 | Difficult | Nostalgia for a Misspent Youth | weirdy04 version 2 / fan:lldb-136 | 418.25 | 514.25 |  |
+| 1119 | Difficult | The Stack | Oh No! More Lemmings / Crazy | 429.63 | 490.04 |  |
+| 1120 | Difficult | Be more than just a number | Oh No! More Lemmings / Havoc | 435.18 | 514.25 |  |
+| 1121 | Difficult | Pillar talking | PSP Special 1 10 of 36 / fan:lldb-216 | 435.75 | 514.25 |  |
+| 1122 | Difficult | The China Syndrome | MazuLems 01 / fan:lldb-244 | 428.68 | 514.25 |  |
+| 1123 | Difficult | Private room available | Genesis Present / fan:lldb-492 | 437.00 | 514.25 |  |
+| 1124 | Difficult | Forest of ilussion | CRISFN08 / fan:lldb-272 | 429.10 | 514.25 |  |
+| 1125 | Difficult | The Lemming Funhouse | Oh No! More Lemmings / Wicked | 448.11 | 518.74 |  |
+| 1126 | Difficult | Dad's Ugly Green Chair Level | TWPAK13 / fan:lldb-315 | 446.05 | 496.66 |  |
+| 1127 | Difficult | Going Under | Lemmings Plus DOS Project Medi / fan:lldb-553 | 443.29 | 514.25 |  |
+| 1128 | Difficult | Path Integral Formalism | cLemmings Taxing / fan:lldb-528 | 441.57 | 514.25 |  |
+| 1129 | Difficult | Emerald Mountain | KillerMasters Lemmings 1 Havoc / fan:lldb-509 | 441.85 | 504.03 |  |
+| 1130 | Difficult | Meet & Greet | MazuLems 03 / fan:lldb-246 | 453.19 | 490.48 |  |
+| 1131 | Difficult | Doomed | JannPck3 / fan:lldb-233 | 445.78 | 510.00 |  |
+| 1132 | Difficult | Ten Green Lemmings | cLemmings Taxing / fan:lldb-528 | 453.55 | 510.00 |  |
+| 1133 | Difficult | The Quartet | cLemmings Taxing / fan:lldb-528 | 450.98 | 514.25 |  |
+| 1134 | Difficult | Oh No!  Squish. | Lemmings The Official Companion / fan:lldb-585 | 450.92 | 514.25 |  |
+| 1135 | Difficult | No One Here But Us Three | TWPAK01 / fan:lldb-303 | 451.13 | 509.61 |  |
+| 1136 | Difficult | Three-way Call | GARJEN01 / fan:lldb-281 | 456.87 | 514.25 |  |
+| 1137 | Difficult | Di-Lemm-A | cLemmings Mayhem / fan:lldb-529 | 489.95 | 514.25 |  |
+| 1138 | Difficult | Mine Your Own Bussiness | TWPAK00 / fan:lldb-302 | 197.94 | 539.75 |  |
+| 1139 | Difficult | The Lucky 4 | Level Design Game 01 / fan:lldb-430 | 250.40 | 539.75 |  |
+| 1140 | Difficult | Merry Christmaze | Holiday Lemmings 1994 / Hail | 286.14 | 552.13 |  |
+| 1141 | Difficult | Challenge Solution Simon | Level Design Game 01 / fan:lldb-430 | 293.35 | 539.75 |  |
+| 1142 | Difficult | Doomsday | Oh Yes! More Lemmings! / Mega Drive Sunsoft | 321.34 | 536.48 |  |
+| 1143 | Difficult | the rediscovery | hubbart / fan:lldb-173 | 315.76 | 539.75 |  |
+| 1144 | Difficult | Born a blocker, die a blocker | PSP Special 27 36 / fan:lldb-218 | 326.91 | 533.30 |  |
+| 1145 | Difficult | On The Pier | Lemmings Plus DOS Project Mild / fan:lldb-551 | 343.61 | 552.13 |  |
+| 1146 | Difficult | Tribute to M.C.Escher (remake) | LEMREMAKE / fan:lldb-465 | 357.34 | 529.56 |  |
+| 1147 | Difficult | One way digging to freedom | Lemmings / Tricky | 368.42 | 549.40 |  |
+| 1148 | Difficult | No Salvation V | Lemmings Plus DOS Project PSYCHO / fan:lldb-555 | 365.43 | 540.00 |  |
+| 1149 | Difficult | 5 Ways To Get Through | Van Clan Wild / fan:lldb-519 | 374.16 | 540.00 |  |
+| 1150 | Difficult | Level 02.lvl | Amiga Demo / fan:lldb-581 | 366.88 | 549.40 |  |
+| 1151 | Difficult | It's upwards, but where? | CRISFN03 / fan:lldb-267 | 373.59 | 558.61 |  |
+| 1152 | Difficult | Tricky 20.lvl | Amiga Tricky Budget / fan:lldb-569 | 368.98 | 549.40 |  |
+| 1153 | Difficult | An Unfriendly Gesture | cLemmings Taxing / fan:lldb-528 | 379.18 | 540.00 |  |
+| 1154 | Difficult | Climb and Float | brickpk1 / fan:lldb-558 | 372.72 | 554.90 |  |
+| 1155 | Difficult | Clumps | Pieuws Lemmings 2007 Artful / fan:lldb-544 | 377.22 | 552.13 |  |
+| 1156 | Difficult | Snow mining | CRISFN11 / fan:lldb-275 | 376.06 | 552.13 |  |
+| 1157 | Difficult | A ladder would be handy | Lemmings / Tricky | 394.92 | 540.00 |  |
+| 1158 | Difficult | ohnomoreclemmings crazy 1.dat 9 | Oh No More cLemmings Crazy / fan:lldb-531 | 389.41 | 542.08 |  |
+| 1159 | Difficult | Tricky 03.lvl | Amiga Tricky Budget / fan:lldb-569 | 394.92 | 540.00 |  |
+| 1160 | Difficult | Save 'em First... | JEFFPCK7 / fan:lldb-241 | 392.18 | 544.00 |  |
+| 1161 | Difficult | Cordial Acceptance | cLemmings Tricky / fan:lldb-527 | 387.63 | 540.00 |  |
+| 1162 | Difficult | Inside Outside | Lemmings Plus DOS Project Danger / fan:lldb-554 | 387.05 | 548.83 |  |
+| 1163 | Difficult | Keep your hair on | JM14 / fan:lldb-340 | 408.07 | 540.00 |  |
+| 1164 | Difficult | Down in the dumps | ANTHPCK3 / fan:lldb-223 | 405.91 | 540.00 |  |
+| 1165 | Difficult | Just 17 | PSP Special 1 10 of 36 / fan:lldb-216 | 408.10 | 540.00 |  |
+| 1166 | Difficult | A ladder would be handy (Part2) | JM01 / fan:lldb-327 | 403.50 | 540.00 |  |
+| 1167 | Difficult | FlameBungee | KillerMasters Lemmings 1 Tame / fan:lldb-505 | 403.07 | 554.90 |  |
+| 1168 | Difficult | Excavations in the Cubic Cave | Mikes Lemmix Pack / fan:lldb-591 | 399.03 | 556.98 |  |
+| 1169 | Difficult | Happy New Year! | Holiday Lemmings 1994 / Frost | 415.14 | 529.82 |  |
+| 1170 | Difficult | SPAM,SPAM,SPAM,EGG AND LEMMING | Oh No! More Lemmings / Wicked | 414.48 | 540.00 |  |
+| 1171 | Difficult | How do I dig up the way? | Lemmings / Taxing | 419.20 | 540.00 |  |
+| 1172 | Difficult | Lem- me- in. | ANTHPCK5 / fan:lldb-225 | 409.64 | 540.00 |  |
+| 1173 | Difficult | NULL | 1tseug / fan:lldb-35 | 411.29 | 540.00 |  |
+| 1174 | Difficult | Lemming Productions Present... | Oh No! More Lemmings / Tame | 424.90 | 540.00 |  |
+| 1175 | Difficult | Taxing 29.lvl | Amiga Taxing Budget / fan:lldb-570 | 419.20 | 540.00 |  |
+| 1176 | Difficult | Cascading exit | Epic giga01 / fan:lldb-139 | 426.16 | 540.00 |  |
+| 1177 | Difficult | Miner under Control | Pieuws Lemmings 2007 Insane / fan:lldb-545 | 427.17 | 540.00 |  |
+| 1178 | Difficult | Pachelbel's "Canon in Splat" | cLemmings Taxing / fan:lldb-528 | 420.93 | 540.00 |  |
+| 1179 | Difficult | Wild Lemmings | Oh No More cLemmings Wild / fan:lldb-532 | 427.11 | 526.88 |  |
+| 1180 | Difficult | Crystal Clear Lemmings | MazuLems 01 / fan:lldb-244 | 424.43 | 541.11 |  |
+| 1181 | Difficult | Splunk n' country | Epic Giga03 / fan:lldb-141 | 434.15 | 546.48 |  |
+| 1182 | Difficult | Lucky Four | cLemmings Taxing / fan:lldb-528 | 433.60 | 544.00 |  |
+| 1183 | Difficult | Have a nice day! | Lemmings / Mayhem | 449.58 | 540.00 |  |
+| 1184 | Difficult | The hunt is on! | QBeez03 / fan:lldb-33 | 453.53 | 540.00 |  |
+| 1185 | Difficult | Tricky 14.lvl | Amiga Tricky Budget / fan:lldb-574 | 448.99 | 538.33 |  |
+| 1186 | Difficult | The quick and the dead | ANTHPCK5 / fan:lldb-225 | 448.75 | 558.96 |  |
+| 1187 | Difficult | Just a random heap of junk! | Nepster01 / fan:lldb-219 | 454.46 | 556.53 |  |
+| 1188 | Difficult | Salvation or Damnation? | Yawg03 / fan:lldb-107 | 463.56 | 552.13 |  |
+| 1189 | Difficult | Faithful Friends | GARJEN09 / fan:lldb-289 | 480.18 | 533.06 |  |
+| 1190 | Difficult | Lemmings' Ark | Genesis Mayhem / fan:lldb-491 | 475.88 | 555.11 |  |
+| 1191 | Difficult | Wallace and Gromit's Lem 'n Go | Lemmings platinum Dangerous Part 1 / fan:lldb-190 | 473.60 | 551.40 |  |
+| 1192 | Difficult | Watch Ye Step! | ISteve01 / fan:lldb-20 | 484.85 | 540.00 |  |
+| 1193 | Difficult | be happy | extreme / fan:lldb-53 | 479.78 | 552.13 |  |
+| 1194 | Difficult | Marooned | Ron Stards Rodents / fan:lldb-471 | 496.02 | 555.11 |  |
+| 1195 | Difficult | Virus Rush | KillerMasters Lemmings 2 Tame / fan:lldb-510 | 298.46 | 569.50 |  |
+| 1196 | Difficult | A Beast of a level | Lemmings / Fun | 325.32 | 564.18 |  |
+| 1197 | Difficult | A Dangerous Mining Operation | cLemmings Fun / fan:lldb-526 | 321.14 | 569.50 |  |
+| 1198 | Difficult | Down With The Lemmings | Lemmings Plus DOS Project Wimpy / fan:lldb-552 | 325.75 | 569.50 |  |
+| 1199 | Difficult | Grassy Dreams | cLemmings Fun / fan:lldb-526 | 319.46 | 569.50 |  |
+| 1200 | Difficult | Brick plot | CRISFN01 / fan:lldb-265 | 335.98 | 569.50 |  |
+| 1201 | Difficult | Let's come to the party | CRISFN05 / fan:lldb-269 | 329.22 | 578.00 |  |
+| 1202 | Difficult | Take A Shortcut! | Lemmings Plus DOS Project Mild / fan:lldb-551 | 343.29 | 569.50 |  |
+| 1203 | Difficult | Huff and Puff | cLemmings Fun / fan:lldb-526 | 346.63 | 569.50 |  |
+| 1204 | Difficult | It's a strange land! | Lemmings Plus DOS Project Wimpy / fan:lldb-552 | 346.62 | 569.50 |  |
+| 1205 | Difficult | Force Field | Lemmings Plus DOS Project Medi / fan:lldb-553 | 344.02 | 574.03 |  |
+| 1206 | Difficult | And the rock cried out... | JANNPCK2 / fan:lldb-232 | 356.87 | 569.50 |  |
+| 1207 | Difficult | A Snowplow Would Be Handy | Lemmings Plus DOS Project Wimpy / fan:lldb-552 | 360.21 | 569.50 |  |
+| 1208 | Difficult | Breakthrough | Lemmings Plus DOS Project Danger / fan:lldb-554 | 354.93 | 590.11 |  |
+| 1209 | Difficult | Let me get out of here! | Genesis Present / fan:lldb-492 | 365.97 | 569.50 |  |
+| 1210 | Difficult | Bubbling lagoon | CRISFN14 / fan:lldb-278 | 381.05 | 569.50 |  |
+| 1211 | Difficult | Lemmings Now Looked Up | Deceits Lemmings Fun / fan:lldb-522 | 378.01 | 569.50 |  |
+| 1212 | Difficult | Armageddon! | CRISFN07 / fan:lldb-271 | 382.23 | 569.50 |  |
+| 1213 | Difficult | Animal or Vegetable? | Save the Lemmings / fan:lldb-584 | 382.46 | 569.50 |  |
+| 1214 | Difficult | Dark dawn | Genesis Fun / fan:lldb-488 | 376.69 | 569.50 |  |
+| 1215 | Difficult | Time waits for no Lemming | Oh No! More Lemmings / Crazy | 397.45 | 569.50 |  |
+| 1216 | Difficult | Lemming Rhythms | Oh No! More Lemmings / Wild | 394.96 | 581.48 |  |
+| 1217 | Difficult | Palm ground | CRISFN11 / fan:lldb-275 | 388.17 | 569.50 |  |
+| 1218 | Difficult | Pillars of character | Dehodson / fan:lldb-419 | 394.41 | 569.50 |  |
+| 1219 | Difficult | Old MacDonald Had a Farm... | Lemmings The Official Companion / fan:lldb-585 | 392.59 | 569.50 |  |
+| 1220 | Difficult | Wood piece | Pieuws Lemmings 2007 Peace / fan:lldb-542 | 394.64 | 569.50 |  |
+| 1221 | Difficult | Saviour | Lemmings Plus DOS Project Wimpy / fan:lldb-552 | 387.46 | 569.50 |  |
+| 1222 | Difficult | To Life, and Lots of Presents | Holiday cLemmings Frost / fan:lldb-535 | 396.12 | 569.50 |  |
+| 1223 | Difficult | The Three Cs | cLemmings Tricky / fan:lldb-527 | 404.38 | 569.50 |  |
+| 1224 | Difficult | Green Stars | JEFFPCK3 / fan:lldb-237 | 401.13 | 583.08 |  |
+| 1225 | Difficult | Grounded! | Lemmings Plus DOS Project Danger / fan:lldb-554 | 394.64 | 580.58 |  |
+| 1226 | Difficult | Seeing double! | PSP Special 11 26 of 36 / fan:lldb-217 | 407.26 | 560.48 |  |
+| 1227 | Difficult | The Lake of Fire | JANNPCK1 / fan:lldb-231 | 414.05 | 569.50 |  |
+| 1228 | Difficult | Level 05.lvl | Amiga Demo / fan:lldb-581 | 415.14 | 569.50 |  |
+| 1229 | Difficult | Lemmings search for treasure. | Genesis Taxing / fan:lldb-490 | 413.77 | 569.50 |  |
+| 1230 | Difficult | Taxing 15.lvl | Amiga Taxing Budget / fan:lldb-575 | 416.22 | 569.50 |  |
+| 1231 | Difficult | Snow Lev 7 | ANTHPCK4 / fan:lldb-224 | 410.86 | 569.50 |  |
+| 1232 | Difficult | Save Thy Lemmings | JANNPCK1 / fan:lldb-231 | 409.65 | 569.50 |  |
+| 1233 | Difficult | In an Anthill | Pieuws Lemmings 2007 Awkward / fan:lldb-543 | 411.22 | 578.00 |  |
+| 1234 | Difficult | Ecsape From Nightmare | ssam1221s Lemmings Havoc / fan:lldb-563 | 412.33 | 560.51 |  |
+| 1235 | Difficult | Lemmings standing on the earth | Genesis Present / fan:lldb-492 | 413.77 | 569.50 |  |
+| 1236 | Difficult | Lemming Playground | Nepster01 / fan:lldb-219 | 406.42 | 585.56 |  |
+| 1237 | Difficult | The Landing Trail | Pieuw01 / fan:lldb-393 | 420.05 | 569.50 |  |
+| 1238 | Difficult | With A Quirk Or Two... | Lemmings Plus DOS Project Danger / fan:lldb-554 | 417.72 | 569.50 |  |
+| 1239 | Difficult | Snowed In! | Lemmings Plus DOS Project PSYCHO / fan:lldb-555 | 424.86 | 569.50 |  |
+| 1240 | Difficult | Tomorrow Ends Today | Eymerich02 / fan:lldb-4 | 417.17 | 569.50 |  |
+| 1241 | Difficult | Anticlimacticism V | cLemmings Tricky / fan:lldb-527 | 428.95 | 569.50 |  |
+| 1242 | Difficult | Lemming Bubbles | Oh No More cLemmings Crazy / fan:lldb-531 | 426.01 | 569.50 |  |
+| 1243 | Difficult | Taxing 01.lvl | Amiga Taxing Budget / fan:lldb-575 | 428.27 | 569.50 |  |
+| 1244 | Difficult | INCONCEIVABLE! (Steve) | justdigcomp / fan:lldb-374 | 427.27 | 569.50 |  |
+| 1245 | Difficult | Be careful when you build! | CRISFN14 / fan:lldb-278 | 426.27 | 569.50 |  |
+| 1246 | Difficult | The Flood | PSP Special 11 26 of 36 / fan:lldb-217 | 419.79 | 574.03 |  |
+| 1247 | Difficult | This might be a doddle! | Insulfrog LVL PK 1 / fan:lldb-373 | 430.58 | 569.50 |  |
+| 1248 | Difficult | Steps | Insulfrog LVL PK 1 / fan:lldb-373 | 420.67 | 569.50 |  |
+| 1249 | Difficult | Water processing plant | Oh Yes! More Lemmings! / Mega Drive Sunsoft | 431.98 | 569.50 |  |
+| 1250 | Difficult | Lemmings at the Wall | Oh No More cLemmings Crazy / fan:lldb-531 | 432.94 | 569.50 |  |
+| 1251 | Difficult | Could be easier... | JANNPCK2 / fan:lldb-232 | 436.94 | 569.50 |  |
+| 1252 | Difficult | Flugtag! | ISteve02 / fan:lldb-23 | 433.29 | 569.50 |  |
+| 1253 | Difficult | Botanical reserch | Lemmings platinum Dangerous Part 2 / fan:lldb-191 | 433.44 | 569.50 |  |
+| 1254 | Difficult | Bubble cavern | CRISFN15 / fan:lldb-279 | 430.90 | 569.50 |  |
+| 1255 | Difficult | X marks the spot | Lemmings / Taxing | 443.60 | 592.94 |  |
+| 1256 | Difficult | Mayhem 15.lvl | Amiga Mayhem Budget / fan:lldb-576 | 433.68 | 569.50 |  |
+| 1257 | Difficult | Just a minute (Part Three) | Oh Yes! More Lemmings! / Mega Drive Sunsoft | 446.95 | 569.50 |  |
+| 1258 | Difficult | Final Impediment 2 | Conway13 / fan:lldb-262 | 445.95 | 569.50 |  |
+| 1259 | Difficult | Circular Wavelength | Lemmings Plus DOS Project Danger / fan:lldb-554 | 438.73 | 569.50 |  |
+| 1260 | Difficult | It`s the price you have to pay | Oh No! More Lemmings / Havoc | 452.11 | 569.50 |  |
+| 1261 | Difficult | Through the Block | Pieuw01 / fan:lldb-393 | 449.83 | 569.50 |  |
+| 1262 | Difficult | Pure Agony | Braden12 First Levelpack from OpenSea Facebook / fan:lldb-586 | 443.75 | 569.50 |  |
+| 1263 | Difficult | Beat the Clock | cLemmings Mayhem / fan:lldb-529 | 452.28 | 569.50 |  |
+| 1264 | Difficult | Mayhem 01.lvl | Amiga Mayhem Budget / fan:lldb-576 | 449.52 | 569.50 |  |
+| 1265 | Difficult | Frostlemm | Oh No More cLemmings Tame / fan:lldb-530 | 442.77 | 569.50 |  |
+| 1266 | Difficult | Taxing 14.lvl | Amiga Taxing Budget / fan:lldb-575 | 453.47 | 569.50 |  |
+| 1267 | Difficult | Lemmings of Bodom | JANNPCK2 / fan:lldb-232 | 445.09 | 582.90 |  |
+| 1268 | Difficult | Taxing 17.lvl | Amiga Taxing Budget / fan:lldb-570 | 443.60 | 592.94 |  |
+| 1269 | Difficult | The Picard Maneuver part 1 | mobius2 / fan:lldb-205 | 458.70 | 569.50 |  |
+| 1270 | Difficult | Lets Go Sledding!! | Lemmings The Official Companion / fan:lldb-585 | 460.68 | 569.50 |  |
+| 1271 | Difficult | Rock crystal!! | CRISFN03 / fan:lldb-267 | 458.14 | 569.50 |  |
+| 1272 | Difficult | Crystal point | PSP Special 1 10 of 36 / fan:lldb-216 | 457.04 | 569.50 |  |
+| 1273 | Difficult | Once a Lemming, Always a Lemming | cLemmings Taxing / fan:lldb-528 | 460.87 | 569.50 |  |
+| 1274 | Difficult | Tropical sunshine | CRISFN13 / fan:lldb-277 | 456.81 | 569.50 |  |
+| 1275 | Difficult | Careful with traps | CRISFN15 / fan:lldb-279 | 465.08 | 572.60 |  |
+| 1276 | Difficult | Juanjos Just dig! | justdigcomp / fan:lldb-374 | 464.80 | 569.50 |  |
+| 1277 | Difficult | Fire Fun | cLemmings Taxing / fan:lldb-528 | 455.19 | 592.01 |  |
+| 1278 | Difficult | Lemming Graveyard | cLemmings Taxing / fan:lldb-528 | 469.06 | 569.50 |  |
+| 1279 | Difficult | Cranial Stress | cLemmings Tricky / fan:lldb-527 | 470.13 | 569.50 |  |
+| 1280 | Difficult | The big U-Turn | Pieuw01 / fan:lldb-393 | 465.30 | 569.50 |  |
+| 1281 | Difficult | Chemical dissease | CRISFN07 / fan:lldb-271 | 466.49 | 569.50 |  |
+| 1282 | Difficult | Emmings!  (No L) | Holiday Lemmings 1994 / Hail | 479.42 | 569.50 |  |
+| 1283 | Difficult | Evil whisper | Genesis Present / fan:lldb-492 | 480.63 | 569.50 |  |
+| 1284 | Difficult | Through the Block | Pieuws Lemmings 2007 Insane / fan:lldb-545 | 492.99 | 569.50 |  |
+| 1285 | Difficult | Lightspeed Lemming | Lemmings Plus DOS Project PSYCHO / fan:lldb-555 | 487.28 | 569.50 |  |
+| 1286 | Difficult | Were ready for landing | Giga pack 04 / fan:lldb-165 | 484.57 | 564.18 |  |
+| 1287 | Difficult | The Three Musketeers | cLemmings Mayhem / fan:lldb-529 | 489.99 | 594.50 |  |
+| 1288 | Difficult | No hurry, Relax. | Genesis Mayhem / fan:lldb-491 | 504.00 | 569.50 |  |
+| 1289 | Difficult | Now we're cooking on gas | lm set05 / fan:lldb-45 | 505.96 | 569.50 |  |
+| 1290 | Difficult | Pillars of the Earth | cLemmings Mayhem / fan:lldb-529 | 502.65 | 569.50 |  |
+| 1291 | Difficult | Bubble underground | CRISFN06 / fan:lldb-270 | 507.09 | 570.98 |  |
+| 1292 | Difficult | Not as Easy as It Looks | cLemmings Tricky / fan:lldb-527 | 506.29 | 569.50 |  |
+| 1293 | Difficult | Simply Smashing | Epic Giga03 / fan:lldb-141 | 514.30 | 569.50 |  |
+| 1294 | Difficult | End of quarantine | Ron Stards Rodents / fan:lldb-471 | 551.11 | 577.12 |  |
+| 1295 | Difficult | Why do you all look the same? | AkseliPack01 / fan:lldb-220 | 561.94 | 569.50 |  |
+| 1296 | Difficult | With A Little Help From... | Yawg02 / fan:lldb-85 | 297.60 | 598.88 |  |
+| 1297 | Difficult | Compression Method 1 | Lemmings / Taxing | 318.21 | 598.88 |  |
+| 1298 | Difficult | Hard when you don't know how | MARSHY02 / fan:lldb-346 | 317.22 | 598.88 |  |
+| 1299 | Difficult | Again & Again | JM03 / fan:lldb-329 | 321.01 | 598.88 |  |
+| 1300 | Difficult | Puzzle Time.ini | grams88 / fan:lldb-416 | 327.09 | 598.88 |  |
+| 1301 | Difficult | Take care, Sweetie | Oh No! More Lemmings / Wild | 338.92 | 598.88 |  |
+| 1302 | Difficult | Lemming City | Pieuws Lemmings 2007 Awkward / fan:lldb-543 | 407.06 | 598.00 |  |
+| 1303 | Difficult | Patience | Lemmings / Fun | 421.98 | 595.98 |  |
+| 1304 | Difficult | Need I re-MINED you? | CSTame1 / fan:lldb-83 | 420.33 | 598.88 |  |
+| 1305 | Difficult | Go Thataway! | Holiday Lemmings 1994 / Hail | 441.67 | 598.88 |  |
+| 1306 | Difficult | Tricky 05.lvl | Amiga Tricky Budget / fan:lldb-574 | 442.38 | 595.98 |  |
+| 1307 | Difficult | Science from the 4th dimension | Mikes Lemmix Pack / fan:lldb-591 | 455.36 | 595.48 |  |
+| 1308 | Difficult | Fall and no life (Part Two) | Oh Yes! More Lemmings! / Mega Drive Sunsoft | 513.76 | 595.48 |  |
+| 1309 | Difficult | Four Play | Holiday Lemmings 1994 / Frost | 550.15 | 598.88 |  |
+| 1310 | Expert | Lemming Net | Lemmings Plus DOS Project Wimpy / fan:lldb-552 | 243.13 | 622.46 |  |
+| 1311 | Expert | It`s all a matter of timing | Oh No! More Lemmings / Havoc | 299.52 | 603.50 |  |
+| 1312 | Expert | Going down to... | CRISFN01 / fan:lldb-265 | 298.38 | 622.46 |  |
+| 1313 | Expert | We All Fall Up | TWPAK05 / fan:lldb-307 | 315.62 | 629.00 |  |
+| 1314 | Expert | Climbing the Mountain | cLemmings Fun / fan:lldb-526 | 330.23 | 611.46 |  |
+| 1315 | Expert | The Prison! | Lemmings / Taxing | 349.20 | 623.68 |  |
+| 1316 | Expert | Zigzag World | Pieuws Lemmings 2007 Awkward / fan:lldb-543 | 346.65 | 613.18 |  |
+| 1317 | Expert | Taxing 05.lvl | Amiga Taxing Budget / fan:lldb-570 | 351.30 | 623.68 |  |
+| 1318 | Expert | Lemmings of the West | Oh No More cLemmings Tame / fan:lldb-530 | 345.83 | 624.75 |  |
+| 1319 | Expert | Who`s That Lemming | Oh No! More Lemmings / Tame | 373.34 | 606.82 |  |
+| 1320 | Expert | Tricky 13.lvl | Amiga Tricky Budget / fan:lldb-574 | 378.14 | 624.75 |  |
+| 1321 | Expert | The Thin Red Line (Colorblind) | ISteve01 / fan:lldb-20 | 369.12 | 610.90 |  |
+| 1322 | Expert | SUNSOFT Special | Oh Yes! More Lemmings! / Mega Drive Sunsoft | 389.00 | 600.61 |  |
+| 1323 | Expert | The lemming water faculty | Giga pack 07 / fan:lldb-169 | 392.50 | 623.48 |  |
+| 1324 | Expert | A Tribute to Flagpole Sitting | ISteve02 / fan:lldb-23 | 388.17 | 624.75 |  |
+| 1325 | Expert | Googly-Pops Has Lost One Eye | TWPAK10 / fan:lldb-312 | 382.86 | 622.46 |  |
+| 1326 | Expert | The Prima Publishing Level | Lemmings The Official Companion / fan:lldb-585 | 393.70 | 624.75 |  |
+| 1327 | Expert | Oh snap, it's a lemmings level | Ji Hoons Lemmings Remake Sky / fan:lldb-548 | 390.80 | 625.10 |  |
+| 1328 | Expert | Mayhem 25.lvl | Amiga Mayhem Budget / fan:lldb-576 | 405.04 | 624.75 |  |
+| 1329 | Expert | The Snowy Ages | Holiday cLemmings Frost / fan:lldb-535 | 403.37 | 624.75 |  |
+| 1330 | Expert | Upsidedown World | Lemmings / Taxing | 423.24 | 611.11 |  |
+| 1331 | Expert | Overheat | Ji Hoons Lemmings Remake Earth / fan:lldb-549 | 415.98 | 621.40 |  |
+| 1332 | Expert | KEEP ON TRUCKING | Oh No! More Lemmings / Crazy | 434.90 | 624.75 |  |
+| 1333 | Expert | A trapdoor above the rest. | ANTHPCK3 / fan:lldb-223 | 427.67 | 624.75 |  |
+| 1334 | Expert | Taxing 13.lvl | Amiga Taxing Budget / fan:lldb-570 | 426.05 | 611.11 |  |
+| 1335 | Expert | Just A Quicky | Oh No! More Lemmings / Wild | 439.03 | 611.11 |  |
+| 1336 | Expert | The Search for Lem | Holiday Lemmings 1993 / Blizzard | 443.10 | 624.75 |  |
+| 1337 | Expert | Not as easy as it looks | CRISFN04 / fan:lldb-268 | 439.78 | 624.75 |  |
+| 1338 | Expert | Dangerous Fire Pit | epic03 / fan:lldb-129 | 445.55 | 624.75 |  |
+| 1339 | Expert | Thanx level ... | LARSPACK / fan:lldb-243 | 439.75 | 607.60 |  |
+| 1340 | Expert | Meet the Nessy Again | Deceits Lemmings Tricky / fan:lldb-523 | 436.87 | 619.30 |  |
+| 1341 | Expert | Upsidedown Islands | lm set04 / fan:lldb-44 | 453.81 | 619.53 |  |
+| 1342 | Expert | Lemming Entertainment Center | Lemmings Plus DOS Project Medi / fan:lldb-553 | 449.54 | 624.75 |  |
+| 1343 | Expert | Lemming eater | Genesis Mayhem / fan:lldb-491 | 450.38 | 624.75 |  |
+| 1344 | Expert | The Road to Boneland | lm set10 / fan:lldb-51 | 448.80 | 624.75 |  |
+| 1345 | Expert | Wild World of Lemmings! | Lemmings The Official Companion / fan:lldb-585 | 454.01 | 624.75 |  |
+| 1346 | Expert | Don't bash the wall | JM10 / fan:lldb-336 | 444.42 | 629.00 |  |
+| 1347 | Expert | Polar Expedition | Holiday Lemmings 1994 / Hail | 467.57 | 624.75 |  |
+| 1348 | Expert | INTIMIDATING(ish) | Master System Remakes / fan:lldb-80 | 462.74 | 624.75 |  |
+| 1349 | Expert | The Mad Freezer | Oh No More cLemmings Crazy / fan:lldb-531 | 457.75 | 624.75 |  |
+| 1350 | Expert | As long as we try our best | joem4 / fan:lldb-468 | 473.77 | 605.51 |  |
+| 1351 | Expert | The Power Of Three.... | Van Clan Wild / fan:lldb-519 | 468.65 | 624.75 |  |
+| 1352 | Expert | The Other Side. | Genesis Mayhem / fan:lldb-491 | 472.79 | 624.75 |  |
+| 1353 | Expert | Getting There... | Lemmings Plus DOS Project Medi / fan:lldb-553 | 478.83 | 624.75 |  |
+| 1354 | Expert | Tailor-made for... wait | wade / fan:lldb-359 | 477.44 | 624.75 |  |
+| 1355 | Expert | It's easy ! | Mikepak00 / fan:lldb-5 | 468.93 | 624.75 |  |
+| 1356 | Expert | Lunch time | Genesis Taxing / fan:lldb-490 | 473.06 | 624.75 |  |
+| 1357 | Expert | All's fair in Love and War | cLemmings Mayhem / fan:lldb-529 | 470.06 | 624.75 |  |
+| 1358 | Expert | Who can do the rest? | lm set04 / fan:lldb-44 | 480.82 | 624.75 |  |
+| 1359 | Expert | It looks pretty simple | lm set13 / fan:lldb-59 | 479.09 | 624.75 |  |
+| 1360 | Expert | Snow Lev 2 | ANTHPCK4 / fan:lldb-224 | 471.18 | 624.75 |  |
+| 1361 | Expert | Tubular Lemmings | Oh No! More Lemmings / Havoc | 481.59 | 602.03 |  |
+| 1362 | Expert | THE SILENCE OF THE LEMMINGS | Oh No! More Lemmings / Wild | 481.37 | 624.75 |  |
+| 1363 | Expert | LmSO4 - Lemmingic Acid | JOHNPACK / fan:lldb-242 | 488.35 | 624.75 |  |
+| 1364 | Expert | Constructive criticism. | isupck02 / fan:lldb-353 | 486.76 | 624.75 |  |
+| 1365 | Expert | Unimatrix zero | LEVIPAK4 / fan:lldb-368 | 485.56 | 624.75 |  |
+| 1366 | Expert | C'mon everybody body | Giga pack 08 / fan:lldb-170 | 484.29 | 607.81 |  |
+| 1367 | Expert | Where Lemmings Dare | Oh No! More Lemmings / Havoc | 497.36 | 624.75 |  |
+| 1368 | Expert | Pleasure to Meet You | cLemmings Taxing / fan:lldb-528 | 487.69 | 620.18 |  |
+| 1369 | Expert | Catch-22 | ISteve01 / fan:lldb-20 | 507.81 | 601.34 |  |
+| 1370 | Expert | Lucy 26 Degree | Deceits Lemmings Extras / fan:lldb-546 | 509.73 | 624.75 |  |
+| 1371 | Expert | Warrior of Ice | JannPck3 / fan:lldb-233 | 501.33 | 624.75 |  |
+| 1372 | Expert | The Abyss | Van Clan Havoc / fan:lldb-521 | 507.07 | 624.75 |  |
+| 1373 | Expert | Final impediment | Genesis Present / fan:lldb-492 | 519.41 | 624.75 |  |
+| 1374 | Expert | There`s a method in the madness | geooPk0 / fan:lldb-1 | 540.26 | 624.75 |  |
+| 1375 | Expert | Follow Me | geooPk1 / fan:lldb-2 | 548.76 | 624.90 |  |
+| 1376 | Expert | Multi-Task Lemmings | ISteve02 / fan:lldb-23 | 572.74 | 624.75 |  |
+| 1377 | Expert | Stuck | MARSHY04 / fan:lldb-348 | 222.92 | 651.67 |  |
+| 1378 | Expert | Back in Hell | JMGM01 / fan:lldb-454 | 239.66 | 637.50 |  |
+| 1379 | Expert | Nuclear Bomb | GARJEN03 / fan:lldb-283 | 260.05 | 637.06 |  |
+| 1380 | Expert | Don't be desesperate ! | Mikepak10 / fan:lldb-15 | 324.22 | 637.50 |  |
+| 1381 | Expert | Circular Dependency | Level Design Game 06 / fan:lldb-435 | 355.53 | 637.50 |  |
+| 1382 | Expert | I Love Lemmings | JEFFPCK3 / fan:lldb-237 | 357.13 | 642.40 |  |
+| 1383 | Expert | Save Me | Lemmings / Mayhem | 393.27 | 646.46 |  |
+| 1384 | Expert | Husky Lemmings | Pieuws Lemmings 2007 Insane / fan:lldb-545 | 405.19 | 663.60 |  |
+| 1385 | Expert | Mayhem 26.lvl | Amiga Mayhem Budget / fan:lldb-576 | 401.54 | 663.38 |  |
+| 1386 | Expert | Variety Day | Lemmings Plus DOS Project PSYCHO / fan:lldb-555 | 413.72 | 630.00 |  |
+| 1387 | Expert | Icy Poles | JEFFPCK1 / fan:lldb-235 | 419.26 | 645.88 |  |
+| 1388 | Expert | Roman rendezvous | ANTHPCK1 / fan:lldb-221 | 425.53 | 646.72 |  |
+| 1389 | Expert | Crazy stairs | Giga pack 07 / fan:lldb-169 | 417.88 | 658.51 |  |
+| 1390 | Expert | End With a BANG! | cLemmings Taxing / fan:lldb-528 | 417.42 | 663.00 |  |
+| 1391 | Expert | There's a lot of them about | Lemmings / Tricky | 446.37 | 663.00 |  |
+| 1392 | Expert | It`s a tight fit! | Oh No! More Lemmings / Wild | 442.87 | 656.96 |  |
+| 1393 | Expert | It's A Thin Line! | Lemmings Plus DOS Project Wimpy / fan:lldb-552 | 439.26 | 631.32 |  |
+| 1394 | Expert | >>>>wAy Up YoNdEr<<<< | ISteve01 / fan:lldb-20 | 452.48 | 663.00 |  |
+| 1395 | Expert | Tricky 10.lvl | Amiga Tricky Budget / fan:lldb-569 | 450.92 | 663.00 |  |
+| 1396 | Expert | The snow is bad | CRISFN10 / fan:lldb-274 | 456.93 | 663.00 |  |
+| 1397 | Expert | Not just a pretty Lemming | Oh No! More Lemmings / Tame | 468.85 | 630.00 |  |
+| 1398 | Expert | Counterlogical | Lemmings Plus DOS Project Wimpy / fan:lldb-552 | 461.97 | 663.96 |  |
+| 1399 | Expert | Lair Of The Fallen Lemming | Ji Hoons Lemmings Remake Hell / fan:lldb-550 | 478.79 | 630.00 |  |
+| 1400 | Expert | Creature Discomforts | Oh No! More Lemmings / Havoc | 517.87 | 655.94 |  |
+| 1401 | Expert | ONWARD AND UPWARD | Oh No! More Lemmings / Wild | 507.97 | 658.48 |  |
+| 1402 | Expert | Tension sheet,good idea | LEVIPAK2 / fan:lldb-366 | 520.87 | 630.00 |  |
+| 1403 | Expert | Death In All Directions | Lemmings Plus DOS Project Danger / fan:lldb-554 | 543.99 | 630.00 |  |
+| 1404 | Expert | Your time is up! | ssam1221s Lemmings Wild / fan:lldb-514 | 544.55 | 630.48 |  |
+| 1405 | Expert | Fearsome Rain | Pieuw02 / fan:lldb-394 | 554.11 | 641.80 |  |
+| 1406 | Expert | If only this were Lemmings 3... | CSTame1 / fan:lldb-83 | 264.58 | 669.01 |  |
+| 1407 | Expert | This Trick again | Pieuws Lemmings 2007 Insane / fan:lldb-545 | 360.92 | 669.01 |  |
+| 1408 | Expert | And now this... | Oh No! More Lemmings / Tame | 396.84 | 673.32 |  |
+| 1409 | Expert | LEMMINGS | fishthekiller99 / fan:lldb-71 | 398.04 | 674.08 |  |
+| 1410 | Expert | I have a cunning plan | Lemmings / Tricky | 416.66 | 672.48 |  |
+| 1411 | Expert | Tricky 26.lvl | Amiga Tricky Budget / fan:lldb-569 | 418.76 | 672.48 |  |
+| 1412 | Expert | LEMMINGS IS KILLING | Oh No More cLemmings Crazy / fan:lldb-531 | 430.03 | 692.33 |  |
+| 1413 | Expert | Lemmings in a situation | Oh No! More Lemmings / Havoc | 457.29 | 680.30 |  |
+| 1414 | Expert | LemEdit generated Level | fullglitch / fan:lldb-422 | 468.86 | 685.58 |  |
+| 1415 | Expert | Snuggle up to a Lemming | Oh No! More Lemmings / Tame | 480.11 | 673.32 |  |
+| 1416 | Expert | The T Level | Lemmings Plus DOS Project Medi / fan:lldb-553 | 486.69 | 680.00 |  |
+| 1417 | Expert | Anticlimacticism III | cLemmings Tricky / fan:lldb-527 | 483.09 | 680.00 |  |
+| 1418 | Expert | Oogilemming! | Holiday Lemmings 1993 / Blizzard | 497.20 | 680.00 |  |
+| 1419 | Expert | Origins and Lemmings | Lemmings / Fun | 501.55 | 667.72 |  |
+| 1420 | Expert | In the Cave | KillerMasters Lemmings 1 Crazy / fan:lldb-506 | 495.05 | 680.00 |  |
+| 1421 | Expert | The bubble ploters | CRISFN03 / fan:lldb-267 | 518.76 | 670.40 |  |
+| 1422 | Expert | Ice cavern | CRISFN15 / fan:lldb-279 | 510.88 | 665.68 |  |
+| 1423 | Expert | Do it the easy way! | joem8 / fan:lldb-323 | 510.02 | 680.00 |  |
+| 1424 | Expert | Lemming Extravaganza | cLemmings Taxing / fan:lldb-528 | 515.78 | 680.00 |  |
+| 1425 | Expert | A wee bit of magic | Snow remakes 01 / fan:lldb-144 | 516.59 | 680.00 |  |
+| 1426 | Expert | The freezing cold | joem4 / fan:lldb-468 | 525.16 | 680.00 |  |
+| 1427 | Expert | Clinging on for Dear Life | cLemmings Tricky / fan:lldb-527 | 521.67 | 689.28 |  |
+| 1428 | Expert | Level 03.lvl | Amiga Demo / fan:lldb-581 | 538.00 | 680.00 |  |
+| 1429 | Expert | Watch right and left! | Genesis Taxing / fan:lldb-490 | 533.74 | 680.00 |  |
+| 1430 | Expert | Upset Lemming | geooPk1 / fan:lldb-2 | 545.32 | 680.00 |  |
+| 1431 | Expert | The lemming bedroom | ANTHPCK3 / fan:lldb-223 | 545.82 | 680.00 |  |
+| 1432 | Expert | Level 02.lvl | Amiga Magazine Demo / fan:lldb-594 | 539.88 | 680.00 |  |
+| 1433 | Expert | Consider Everything... | Lemmings Plus DOS Project Medi / fan:lldb-553 | 544.49 | 691.40 |  |
+| 1434 | Expert | Two Minute Warning | MazuLems 01 / fan:lldb-244 | 542.75 | 680.00 |  |
+| 1435 | Expert | We need a blow torch NOW! | GARJEN01 / fan:lldb-281 | 536.76 | 679.48 |  |
+| 1436 | Expert | Get the Point? | Holiday Lemmings 1994 / Hail | 553.20 | 688.50 |  |
+| 1437 | Expert | Awaiting the Winter Frost | JannPck3 / fan:lldb-233 | 548.15 | 669.94 |  |
+| 1438 | Expert | The Dark Cave behind CliffTown | Pieuws Lemmings 2007 Insane / fan:lldb-545 | 576.68 | 680.00 |  |
+| 1439 | Expert | Heaven can wait (we hope!!!!) | Lemmings / Taxing | 281.82 | 722.50 |  |
+| 1440 | Expert | Lemmings Get Lost in Afterlife | ssam1221s Lemmings Wicked / fan:lldb-515 | 273.42 | 722.50 |  |
+| 1441 | Expert | Taxing 03.lvl | Amiga Taxing Budget / fan:lldb-570 | 283.92 | 722.50 |  |
+| 1442 | Expert | I've lost that Lemming feeling | Lemmings / Fun | 356.12 | 700.00 | Review |
+| 1443 | Expert | Nightmare on Lem street | Lemmings / Fun | 365.98 | 700.00 |  |
+| 1444 | Expert | They just keep on coming | Lemmings / Tricky | 361.83 | 700.00 |  |
+| 1445 | Expert | Christmas Bonus | Xmas Lemmings 1991 / Xmas | 364.92 | 700.00 |  |
+| 1446 | Expert | All the 6`s ........ | Lemmings / Tricky | 374.38 | 700.00 |  |
+| 1447 | Expert | These walls | JMGM02 / fan:lldb-455 | 371.57 | 700.00 |  |
+| 1448 | Expert | And a Happy New Year! | Holiday Lemmings 1994 / Hail | 382.54 | 700.00 |  |
+| 1449 | Expert | Merry Christmas Mr Lemming | Xmas Lemmings 1991 / Xmas | 385.80 | 700.00 |  |
+| 1450 | Expert | Lemmingology | Lemmings / Tricky | 381.74 | 700.00 |  |
+| 1451 | Expert | Lemming's Night | Oh No More cLemmings Tame / fan:lldb-530 | 383.07 | 700.00 |  |
+| 1452 | Expert | Lemmings...The Motion Picture | Holiday Lemmings 1993 / Blizzard | 398.87 | 700.00 |  |
+| 1453 | Expert | Last one out is a rotten egg! | Lemmings / Mayhem | 398.22 | 700.00 |  |
+| 1454 | Expert | One way or another | Lemmings / Mayhem | 397.09 | 700.00 |  |
+| 1455 | Expert | Let's get it Started | Deceits Lemmings Extras / fan:lldb-546 | 389.70 | 700.00 |  |
+| 1456 | Expert | Chain Reaction | Ji Hoons Lemmings Remake Earth / fan:lldb-549 | 394.45 | 700.00 |  |
+| 1457 | Expert | The searing heat!!! | ANTHPCK1 / fan:lldb-221 | 405.15 | 700.00 |  |
+| 1458 | Expert | Mayhem 08.lvl | Amiga Mayhem Budget / fan:lldb-571 | 400.32 | 700.00 |  |
+| 1459 | Expert | The Far Side | Lemmings / Mayhem | 417.09 | 700.00 |  |
+| 1460 | Expert | Lemming Drops | Lemmings / Tricky | 418.77 | 700.00 |  |
+| 1461 | Expert | The Island of the Wicker people | Lemmings / Tricky | 413.26 | 700.00 |  |
+| 1462 | Expert | -->  Wrong Way!  --> | ISteve02 / fan:lldb-23 | 414.12 | 700.00 |  |
+| 1463 | Expert | Feel the pain | joem5 / fan:lldb-320 | 411.24 | 700.00 |  |
+| 1464 | Expert | Stairway to Heaven | MazuLems 01 / fan:lldb-244 | 423.42 | 700.00 |  |
+| 1465 | Expert | Tricky 27.lvl | Amiga Tricky Budget / fan:lldb-569 | 415.36 | 700.00 |  |
+| 1466 | Expert | Quickie... | Pieuws Lemmings 2007 Artful / fan:lldb-544 | 415.84 | 700.00 |  |
+| 1467 | Expert | A Lemming Holiday | Xmas Lemmings 1992 / Xmas | 426.15 | 700.00 |  |
+| 1468 | Expert | Here's one I prepared earlier | Lemmings / Tricky | 426.91 | 700.00 |  |
+| 1469 | Expert | DO NOT ENTER | QBeez03 / fan:lldb-33 | 422.09 | 700.00 |  |
+| 1470 | Expert | Izzie Wizzie lemmings get busy | Lemmings / Taxing | 434.67 | 700.00 |  |
+| 1471 | Expert | Simple warm-up | geooPk0 / fan:lldb-1 | 426.32 | 700.00 |  |
+| 1472 | Expert | Tricky 04.lvl | Amiga Tricky Budget / fan:lldb-569 | 429.01 | 700.00 |  |
+| 1473 | Expert | Anticimacticism IV | cLemmings Tricky / fan:lldb-527 | 438.53 | 700.00 |  |
+| 1474 | Expert | From The Boundary Line part two | Conway Challenges 1 / fan:lldb-263 | 444.11 | 700.00 |  |
+| 1475 | Expert | Stepping Stones | Lemmings / Mayhem | 457.22 | 700.00 |  |
+| 1476 | Expert | POOR WEE CREATURES! | Lemmings / Taxing | 460.80 | 700.00 |  |
+| 1477 | Expert | Day tripper | Giga pack 01 / fan:lldb-160 | 452.93 | 700.00 |  |
+| 1478 | Expert | Taxing 28.lvl | Amiga Taxing Budget / fan:lldb-570 | 461.25 | 700.00 |  |
+| 1479 | Expert | Do the Lemmys way! | Lemmy556 My little levels / fan:lldb-65 | 457.22 | 700.00 |  |
+| 1480 | Expert | The Swamp | TimpackB / fan:lldb-100 | 462.15 | 700.00 |  |
+| 1481 | Expert | Up, Down, Round & Round! | Lemmings Plus DOS Project Wimpy / fan:lldb-552 | 459.37 | 700.00 |  |
+| 1482 | Expert | Pipeline Problem | Lemmings Plus DOS Project Danger / fan:lldb-554 | 469.06 | 700.00 |  |
+| 1483 | Expert | Poor Construction | ssam1221s Lemmings Wild / fan:lldb-514 | 468.07 | 700.00 |  |
+| 1484 | Expert | Don't let your eyes deceive you | Lemmings / Fun | 488.66 | 700.00 |  |
+| 1485 | Expert | The Needs of the Many... | Holiday Lemmings 1993 / Blizzard | 479.80 | 700.00 |  |
+| 1486 | Expert | The Great Pillar | CPs Level Pack / fan:lldb-472 | 480.69 | 700.00 |  |
+| 1487 | Expert | City Of The Damned | Van Clan Crazy / fan:lldb-518 | 479.29 | 700.00 |  |
+| 1488 | Expert | Nowhere Near.... | Master System Remakes / fan:lldb-80 | 488.67 | 700.00 |  |
+| 1489 | Expert | Let's Play Gyrodrop | KillerMasters Lemmings 1 Crazy / fan:lldb-506 | 483.53 | 700.00 |  |
+| 1490 | Expert | Welcome to Night-City! | Mikepak08 / fan:lldb-13 | 480.13 | 700.00 |  |
+| 1491 | Expert | Fun 15.lvl | Amiga Fun Budget / fan:lldb-568 | 495.68 | 700.00 |  |
+| 1492 | Expert | Pipework | Insulfrog LVL PK 1 / fan:lldb-373 | 490.35 | 700.00 |  |
+| 1493 | Expert | In And Out | TimpackD / fan:lldb-102 | 503.74 | 700.00 |  |
+| 1494 | Expert | Catch more floaters. | Genesis Fun / fan:lldb-488 | 497.54 | 700.00 |  |
+| 1495 | Expert | Prepare to be Mindblown | Oh No More cLemmings Crazy / fan:lldb-531 | 494.16 | 700.00 |  |
+| 1496 | Expert | The ascending pillar scenario | Lemmings / Taxing | 506.15 | 700.00 |  |
+| 1497 | Expert | Mission Lempossible II | joe04 / fan:lldb-131 | 513.70 | 700.00 |  |
+| 1498 | Expert | Taxing 11.lvl | Amiga Taxing Budget / fan:lldb-570 | 508.25 | 700.00 |  |
+| 1499 | Expert | The Only Way is Up | MazuLems 02 / fan:lldb-245 | 509.21 | 700.00 |  |
+| 1500 | Expert | flag test map | Orig Extra Levels / fan:lldb-407 | 516.37 | 700.00 |  |
+| 1501 | Expert | The magnificent severn | doggycharly random lvls / fan:lldb-78 | 508.02 | 720.00 |  |
+| 1502 | Expert | From The Boundary Line | Lemmings / Tricky | 518.09 | 700.00 |  |
+| 1503 | Expert | An Exit Isn't Just For Christmas | TWPAK10 / fan:lldb-312 | 519.80 | 700.00 |  |
+| 1504 | Expert | The Lemming Tower | cLemmings Fun / fan:lldb-526 | 526.31 | 700.00 |  |
+| 1505 | Expert | Chilean coliseum II | CRISFN14 / fan:lldb-278 | 524.09 | 700.00 |  |
+| 1506 | Expert | -Teen Ninety-Four | Holiday cLemmings Frost / fan:lldb-535 | 524.82 | 700.00 |  |
+| 1507 | Expert | The Peaks | Oh No More cLemmings Crazy / fan:lldb-531 | 518.42 | 700.00 |  |
+| 1508 | Expert | Bubbles in the Lemms | Oh No More cLemmings Tame / fan:lldb-530 | 523.96 | 700.00 |  |
+| 1509 | Expert | Tricky 23.lvl | Amiga Tricky Budget / fan:lldb-569 | 518.09 | 700.00 |  |
+| 1510 | Expert | Watch out, there`s traps about | Lemmings / Taxing | 537.81 | 700.00 |  |
+| 1511 | Expert | The Crankshaft | Lemmings / Tricky | 537.25 | 700.00 |  |
+| 1512 | Expert | Been there, seen it, done it | Lemmings / Tricky | 536.62 | 700.00 |  |
+| 1513 | Expert | Rendezvous at the Mountain | Lemmings / Mayhem | 536.15 | 700.00 |  |
+| 1514 | Expert | Tricky 07.lvl | Amiga Tricky Budget / fan:lldb-569 | 538.72 | 700.00 |  |
+| 1515 | Expert | Tricky 30.lvl | Amiga Tricky Budget / fan:lldb-569 | 537.25 | 700.00 |  |
+| 1516 | Expert | Through the thicket | geooPk0 / fan:lldb-1 | 538.53 | 700.00 |  |
+| 1517 | Expert | Taxing 02.lvl | Amiga Taxing Budget / fan:lldb-570 | 537.81 | 700.00 |  |
+| 1518 | Expert | Devil's Right Hand | Nepster01 / fan:lldb-219 | 533.39 | 700.00 |  |
+| 1519 | Expert | Proffesional Preferences | Oh No More cLemmings Crazy / fan:lldb-531 | 537.34 | 700.00 |  |
+| 1520 | Expert | How do I dig out a path? | Genesis Taxing / fan:lldb-490 | 539.38 | 700.00 |  |
+| 1521 | Expert | More 'No Builder Problems' | geooPk1 / fan:lldb-2 | 543.21 | 700.00 |  |
+| 1522 | Expert | One Step At A Time | Lemmings Plus DOS Project Wimpy / fan:lldb-552 | 539.22 | 700.00 |  |
+| 1523 | Expert | Rhapsody | ISteve01 / fan:lldb-20 | 535.26 | 720.00 |  |
+| 1524 | Expert | Pillars of Hercules | Lemmings / Mayhem | 554.17 | 700.00 |  |
+| 1525 | Expert | The Incinerator | cLemmings Taxing / fan:lldb-528 | 548.37 | 700.00 |  |
+| 1526 | Expert | Chill out! | Oh No! More Lemmings / Wicked | 558.37 | 700.00 |  |
+| 1527 | Expert | The bricks of death | CRISFN08 / fan:lldb-272 | 559.56 | 700.00 |  |
+| 1528 | Expert | Mastermined | MazuLems 02 / fan:lldb-245 | 552.58 | 700.00 |  |
+| 1529 | Expert | Lemming In Zest | GeoffLems Minipack / fan:lldb-413 | 558.54 | 700.00 |  |
+| 1530 | Expert | Chilean coliseum I | CRISFN06 / fan:lldb-270 | 549.73 | 700.00 |  |
+| 1531 | Expert | The Fast Food Kitchen... | Lemmings / Mayhem | 562.66 | 700.00 |  |
+| 1532 | Expert | Please remain calm | Giga pack 04 / fan:lldb-165 | 561.03 | 700.00 |  |
+| 1533 | Expert | Again, Your time is up! | ssam1221s Lemmings Wild / fan:lldb-514 | 564.06 | 700.00 |  |
+| 1534 | Expert | The snow palace | Mikepak10 / fan:lldb-15 | 554.54 | 700.00 |  |
+| 1535 | Expert | The Green Mile | Van Clan Tame / fan:lldb-99 | 561.42 | 700.00 |  |
+| 1536 | Expert | Travelling Lemmings | Nepster01 / fan:lldb-219 | 575.09 | 700.00 |  |
+| 1537 | Expert | Mayhem 29.lvl | Amiga Mayhem Budget / fan:lldb-576 | 590.57 | 700.00 |  |
+| 1538 | Expert | The Barbarous Bars | Pieuws Lemmings 2007 Insane / fan:lldb-545 | 582.63 | 700.00 |  |
+| 1539 | Expert | The Dirty Work | cLemmings Tricky / fan:lldb-527 | 582.50 | 700.00 |  |
+| 1540 | Expert | Labyrinth of Despair | Lemmings Plus DOS Project Wimpy / fan:lldb-552 | 582.48 | 722.50 |  |
+| 1541 | Expert | Lemmingology (Part 2) | JM01 / fan:lldb-327 | 626.98 | 700.00 |  |
+| 1542 | Expert | Lemming Athletics | cLemmings Fun / fan:lldb-526 | 449.98 | 748.00 |  |
+| 1543 | Expert | AAAAAARRRRRRGGGGGGHHHHHH!!!!!! | Oh No! More Lemmings / Havoc | 477.17 | 748.00 |  |
+| 1544 | Expert | Lemmings to next floor | CRISFN07 / fan:lldb-271 | 469.18 | 756.50 |  |
+| 1545 | Expert | Impossible mission | joem2 / fan:lldb-318 | 480.26 | 748.00 |  |
+| 1546 | Expert | Up and Over | cLemmings Tricky / fan:lldb-527 | 519.84 | 735.25 |  |
+| 1547 | Expert | First-come, First-serve | cLemmings Taxing / fan:lldb-528 | 519.77 | 760.75 |  |
+| 1548 | Expert | volando en la loca busqueda | doggycharly random lvls / fan:lldb-78 | 554.49 | 735.25 |  |
+| 1549 | Expert | The Golden Gate | TimpackC / fan:lldb-101 | 555.49 | 765.00 |  |
+| 1550 | Expert | Dual Lemmings | cLemmings Tricky / fan:lldb-527 | 545.78 | 756.50 |  |
+| 1551 | Expert | It Came Upon a Lemnight Clear | Holiday Lemmings 1993 / Blizzard | 557.79 | 735.25 |  |
+| 1552 | Expert | Trading and Cooperating | geooPk1 / fan:lldb-2 | 572.36 | 735.25 |  |
+| 1553 | Expert | Zygoptera | AkseliPack01 / fan:lldb-220 | 567.97 | 735.25 |  |
+| 1554 | Expert | Waste High! | ANTHPCK5 / fan:lldb-225 | 578.72 | 735.25 |  |
+| 1555 | Expert | A group of entrances | Genesis Mayhem / fan:lldb-491 | 586.03 | 735.25 |  |
+| 1556 | Expert | Three Birds With One Stone | Lemmings Plus DOS Project PSYCHO / fan:lldb-555 | 581.95 | 735.25 |  |
+| 1557 | Expert | The Crystalline Fortress | Mikes Lemmix Pack / fan:lldb-591 | 576.28 | 739.50 |  |
+| 1558 | Expert | Head for the Hills! | Holiday Lemmings 1993 / Flurry | 270.77 | 781.15 |  |
+| 1559 | Expert | Now get out of that! | Oh No! More Lemmings / Havoc | 293.69 | 785.88 |  |
+| 1560 | Expert | The Loser's Loop | ISteve03 / fan:lldb-21 | 354.55 | 785.88 |  |
+| 1561 | Expert | The Traffic Light Of Lemmland | TWPAK09 / fan:lldb-311 | 380.39 | 781.15 |  |
+| 1562 | Expert | (Un)pleasant side effect | geooPkG / fan:lldb-108 | 391.63 | 785.88 |  |
+| 1563 | Expert | Oh no! More challenges! | CSTame1 / fan:lldb-83 | 405.59 | 785.88 |  |
+| 1564 | Expert | The race against cliches | Oh No! More Lemmings / Havoc | 433.13 | 776.14 |  |
+| 1565 | Expert | Firestorm | GARJEN04 / fan:lldb-284 | 431.34 | 773.50 |  |
+| 1566 | Expert | Objects? What Objects? | TWPAK10 / fan:lldb-312 | 493.87 | 781.15 |  |
+| 1567 | Expert | Me, Myself And Ice | TWPAK06 / fan:lldb-308 | 514.13 | 790.50 |  |
+| 1568 | Expert | MENACING !! | Lemmings / Tricky | 565.10 | 803.25 |  |
+| 1569 | Expert | The house of Lem | Conway10 / fan:lldb-259 | 572.66 | 782.00 |  |
+| 1570 | Expert | And then there were four.... | Lemmings / Mayhem | 569.32 | 816.00 |  |
+| 1571 | Expert | Synchronised Lemming | Oh No! More Lemmings / Havoc | 565.10 | 816.00 |  |
+| 1572 | Expert | Pedantic Lemmings | AkseliPack01 / fan:lldb-220 | 581.17 | 810.00 |  |
+| 1573 | Expert | Mayhem 18.lvl | Amiga Mayhem Budget / fan:lldb-571 | 572.62 | 816.00 |  |
+| 1574 | Expert | Have you seen this level before? | lm set13 / fan:lldb-59 | 587.18 | 810.00 |  |
+| 1575 | Expert | A Magician Would Be Handy | Lemmings Plus DOS Project Wimpy / fan:lldb-552 | 596.43 | 811.75 |  |
+| 1576 | Expert | Tower of Ice | lm set13 / fan:lldb-59 | 650.98 | 810.00 |  |
+| 1577 | Expert | Build The Way | Ji Hoons Lemmings Remake Heaven / fan:lldb-547 | 251.14 | 850.00 |  |
+| 1578 | Expert | Climb and Dig | brickpk1 / fan:lldb-558 | 332.86 | 850.00 |  |
+| 1579 | Expert | Celestial Lemmings | TWPAK01 / fan:lldb-303 | 344.42 | 850.00 |  |
+| 1580 | Expert | Snow Lev 4 | ANTHPCK4 / fan:lldb-224 | 362.82 | 850.00 |  |
+| 1581 | Expert | Climb and Bomb | brickpk1 / fan:lldb-558 | 366.31 | 850.00 |  |
+| 1582 | Expert | Us and them | joe02 / fan:lldb-127 | 370.86 | 850.00 |  |
+| 1583 | Expert | Warming Up | ssam1221s Lemmings Tame / fan:lldb-512 | 394.02 | 843.48 |  |
+| 1584 | Expert | Betcha can't save just one! | ISteve02 / fan:lldb-23 | 391.56 | 843.48 |  |
+| 1585 | Expert | The Plight of Icarus | ISteve03 / fan:lldb-21 | 393.99 | 850.00 |  |
+| 1586 | Expert | Steel blocks are not perfect... | ssam1221s Lemmings Wicked / fan:lldb-515 | 407.68 | 850.00 |  |
+| 1587 | Expert | Keep your hair on Mr. Lemming | Lemmings / Fun | 427.47 | 850.00 |  |
+| 1588 | Expert | A BeastII of a level | Lemmings / Mayhem | 450.37 | 850.00 |  |
+| 1589 | Expert | Don't do anything too hasty | Lemmings / Fun | 442.35 | 850.00 |  |
+| 1590 | Expert | Happy New Year II! | Holiday Lemmings 1994 / Frost | 441.86 | 843.48 |  |
+| 1591 | Expert | Lemmintaschen? | Holiday Lemmings 1994 / Hail | 474.65 | 843.48 |  |
+| 1592 | Expert | Oscillating Lemmings | Pieuws Lemmings 2007 Peace / fan:lldb-542 | 466.96 | 850.00 |  |
+| 1593 | Expert | It is very complicated | Insulfrog LVL PK 1 / fan:lldb-373 | 478.39 | 850.00 |  |
+| 1594 | Expert | Tailor-made for Athletes | JEFFPCK1 / fan:lldb-235 | 479.06 | 850.00 |  |
+| 1595 | Expert | The Awesome level returns! | Mikes Lemmix Pack / fan:lldb-591 | 506.07 | 850.00 |  |
+| 1596 | Expert | Turn baby Turn. | ANTHPCK3 / fan:lldb-223 | 538.00 | 850.00 |  |
+| 1597 | Expert | Sudenly lemming | Lemmings platinum Careful Part 1 / fan:lldb-188 | 543.92 | 850.00 |  |
+| 1598 | Expert | This is a doddle | JM09 / fan:lldb-335 | 543.20 | 850.00 |  |
+| 1599 | Expert | Across The Gap | Oh No! More Lemmings / Crazy | 555.35 | 850.00 |  |
+| 1600 | Expert | Swallowing method 1 | Lemmings platinum Fragle part 2 / fan:lldb-181 | 553.79 | 850.00 |  |
+| 1601 | Expert | It Takes Two To Tango | Van Clan Tame / fan:lldb-99 | 576.36 | 850.00 |  |
+| 1602 | Expert | Make a Best - Click Time | KillerMasters Lemmings 1 Havoc / fan:lldb-509 | 583.69 | 850.00 |  |
+| 1603 | Expert | Floaters Away! | cLemmings Tricky / fan:lldb-527 | 589.55 | 850.00 |  |
+| 1604 | Expert | Be Careful... | Lemmings Plus DOS Project Mild / fan:lldb-551 | 583.08 | 850.00 |  |
+| 1605 | Expert | Wall of Wisdom | Lemmings Plus DOS Project Danger / fan:lldb-554 | 606.61 | 850.00 |  |
+| 1606 | Expert | The Shaft (Part 2) | ISteve04 / fan:lldb-24 | 605.45 | 850.00 |  |
+| 1607 | Expert | And then there were another four | Conway Challenges 2 / fan:lldb-264 | 600.18 | 850.00 |  |
+| 1608 | Expert | Hold them back | CPs Level Pack / fan:lldb-472 | 625.39 | 850.00 |  |
+| 1609 | Expert | Free Lemmings | Oh No More cLemmings Tame / fan:lldb-530 | 620.59 | 850.00 |  |
+| 1610 | Expert | The Graveyard | Lemmings Plus DOS Project Mild / fan:lldb-551 | 633.39 | 850.00 |  |
+| 1611 | Expert | Double Lemmings | KillerMasters Lemmings 2 Tame / fan:lldb-510 | 631.46 | 850.00 |  |
+| 1612 | Expert | Remember where you find them! | Ji Hoons Lemmings Remake Heaven / fan:lldb-547 | 659.90 | 850.00 |  |

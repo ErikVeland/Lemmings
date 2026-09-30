@@ -11,7 +11,7 @@ import NxlvKit
 //
 // Usage: ClassicSolver DATA LEVEL OUT [--width N] [--seconds S] [--rate R]
 //        [--fallback N] [--refire N] [--prefix PLAN] [--partial-out]
-//        [--golems-objects] [--prefer-progress]
+//        [--golems-objects] [--golems-clock] [--prefer-progress]
 //        for fan levels whose later object slots must be active
 // PLAN holds forced inputs as [{"tick": T, "id": N, "skill": S} or {"tick": T, "rate": R}],
 // applied after their ticks; the search fills in everything else.
@@ -48,7 +48,9 @@ func loadLevel(_ argument: String, _ index: Int) throws -> (ClassicDOSSimulation
             objectSemantics: CommandLine.arguments.contains("--golems-objects")
                 ? .golems : .forFanLevel(level, groundSet: ground))
         let assets = try ClassicMainDATAssets.load(from: root.appendingPathComponent("Ports/lemmings_dos_1991-07-30"))
-        let simulation = try ClassicDOSSimulation(level: level, renderedLevel: rendered, mainDATAssets: assets)
+        let clock: ClassicDOSClock = CommandLine.arguments.contains("--golems-clock") ? .golems : .dos
+        let simulation = try ClassicDOSSimulation(level: level, renderedLevel: rendered,
+            mainDATAssets: assets, clock: clock)
         let entry = ClassicCampaignLevel.standalone(level, rank: "fan:" + FanLevelLibrary.catalogueID(pack), number: index + 1)
         return (simulation, entry)
     }
@@ -215,6 +217,7 @@ func fingerprint(_ sim: ClassicDOSSimulation) -> String { ClassicDOSReplayRecord
 let args = CommandLine.arguments
 guard args.count >= 4 else { throw Failure(description: "usage: ClassicSolver DATA LEVEL OUT [--width N] [--seconds S] [--rate R]") }
 let (base, entry) = try loadLevel(args[1], Int(args[2])! - 1)
+let tickLimit = max(ClassicDOSReplayPlayer.defaultTickLimit, base.configuration.timeLimitTicks ?? 0)
 let width = Int(option("--width") ?? "48")!
 let budget = Double(option("--seconds") ?? "300")!
 let maxDepth = Int(option("--depth") ?? "100000")!
@@ -234,7 +237,7 @@ let forced: [Int: [Forced]] = try option("--prefix").map {
 } ?? [:]
 
 func advance(_ c: inout Candidate) -> Bool {
-    while !c.sim.isComplete && c.sim.tickCount < ClassicDOSReplayPlayer.defaultTickLimit {
+    while !c.sim.isComplete && c.sim.tickCount < tickLimit {
         _ = c.sim.tick()
         for f in forced[c.sim.tickCount] ?? [] {
             if let rate = f.rate {
@@ -315,7 +318,9 @@ let proposal = route.map {
         title: entry.level.title.trimmingCharacters(in: .whitespaces),
         initialStateHash: ClassicDOSReplayRecorder.stateHash(of: base), events: $0.events)
 }
-let verifiedOutcome = proposal.flatMap { try? ClassicDOSReplayPlayer.run($0, simulation: base) }
+let verifiedOutcome = proposal.flatMap {
+    try? ClassicDOSReplayPlayer.run($0, simulation: base, tickLimit: tickLimit)
+}
 if let proposal, let outcome = verifiedOutcome, outcome.didWin {
     let replay = ClassicDOSReplay(rank: proposal.rank, number: proposal.number,
         title: proposal.title, initialStateHash: proposal.initialStateHash,
