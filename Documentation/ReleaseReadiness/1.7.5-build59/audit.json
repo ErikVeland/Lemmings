@@ -273,6 +273,6 @@
     "remainingSessions": "passed; see remainder.txt",
     "controlsHelpActivation": "blocked by offscreen policy",
     "signedLaunch": "requires explicit foreground/audio permission",
-    "notarisation": "missing Keychain profile"
+    "notarisation": "submitted; Apple In Progress: ba6ec0fd-77ba-4271-83f8-f20afe2d53b7"
   }
 }
