@@ -22,7 +22,7 @@
         "levelID": "joem7.dat#9",
         "packID": "fan:lldb-322"
       },
-      "intrinsicDemand": 138.05490196078432,
+      "intrinsicDemand": 138.04900039200314,
       "lesson": "Discover: Blocker",
       "level": "Nuclear War on the dance floor",
       "objective": "introduce:blocker",
@@ -36,7 +36,7 @@
         "levelID": "Lemmings Plus DOS Project - 03 - Mild (Part 3).dat#1",
         "packID": "fan:lldb-551"
       },
-      "intrinsicDemand": 61.22941176470589,
+      "intrinsicDemand": 61.220305762446095,
       "lesson": "Discover: Bomber",
       "level": "Blow Down!",
       "objective": "introduce:bomber",
@@ -50,7 +50,7 @@
         "levelID": "KillerMaster 1 Tame 1.dat#4",
         "packID": "fan:lldb-505"
       },
-      "intrinsicDemand": 113.57664884135474,
+      "intrinsicDemand": 113.5604575745697,
       "lesson": "Discover: Builder",
       "level": "The Broken Stair",
       "objective": "introduce:builder",
@@ -106,7 +106,7 @@
         "levelID": "Ji Hoon Heaven 1.DAT#6",
         "packID": "fan:lldb-547"
       },
-      "intrinsicDemand": 61.42483660130719,
+      "intrinsicDemand": 61.41604050963738,
       "lesson": "Discover: Miner",
       "level": "Mienrs <--- lol, typo",
       "objective": "introduce:miner",
@@ -134,7 +134,7 @@
         "levelID": "CRISFN11.dat#8",
         "packID": "fan:lldb-275"
       },
-      "intrinsicDemand": 295.6764705882353,
+      "intrinsicDemand": 295.5852105778648,
       "lesson": "Basher then Digger",
       "level": "The crystal caverns",
       "objective": "chain:basher:digger",
@@ -190,7 +190,7 @@
         "levelID": "The lemming google pack.dat#4",
         "packID": "fan:lldb-179"
       },
-      "intrinsicDemand": 266.11764705882354,
+      "intrinsicDemand": 266.10094740280954,
       "lesson": "Builder then Climber",
       "level": "An \"l\" to serch",
       "objective": "chain:builder:climber",
@@ -204,7 +204,7 @@
         "levelID": "Above The Pepsi Max.ini#-1",
         "packID": "fan:lldb-416"
       },
-      "intrinsicDemand": 330.87745098039215,
+      "intrinsicDemand": 330.84762371386574,
       "lesson": "Builder then Floater",
       "level": "Above The Pepsi Max.ini",
       "objective": "chain:builder:floater",
@@ -218,7 +218,7 @@
         "levelID": "CRISFN03.dat#4",
         "packID": "fan:lldb-267"
       },
-      "intrinsicDemand": 348.296218487395,
+      "intrinsicDemand": 348.2111375402267,
       "lesson": "Builder then Miner",
       "level": "Out of BASHERS???",
       "objective": "chain:builder:miner",
@@ -232,7 +232,7 @@
         "levelID": "Pieuw 2007 Awkward 2.DAT#3",
         "packID": "fan:lldb-543"
       },
-      "intrinsicDemand": 311.7450980392157,
+      "intrinsicDemand": 311.72121509064186,
       "lesson": "Climber then Bomber",
       "level": "Make a choice",
       "objective": "chain:climber:bomber",
@@ -246,7 +246,7 @@
         "levelID": "Martin Zurlinden 02.dat#0",
         "packID": "fan:lldb-245"
       },
-      "intrinsicDemand": 337.846218487395,
+      "intrinsicDemand": 337.8162625301003,
       "lesson": "Climber then Builder",
       "level": "The Lemmyrinth",
       "objective": "chain:climber:builder",
@@ -260,7 +260,7 @@
         "levelID": "LEVELPAK.DAT#1",
         "packID": "fan:lldb-216"
       },
-      "intrinsicDemand": 328.18039215686275,
+      "intrinsicDemand": 328.17839639286416,
       "lesson": "Climber then Floater",
       "level": "Save the Lemmings with Floaters",
       "objective": "chain:climber:floater",
@@ -330,7 +330,7 @@
         "levelID": "brickpk1.dat#10",
         "packID": "fan:lldb-558"
       },
-      "intrinsicDemand": 293.0424836601307,
+      "intrinsicDemand": 293.02743305029395,
       "lesson": "Miner then Floater",
       "level": "Float and Dig",
       "objective": "chain:miner:floater",
@@ -372,7 +372,7 @@
         "levelID": "JM04.DAT#9",
         "packID": "fan:lldb-330"
       },
-      "intrinsicDemand": 165.65126050420167,
+      "intrinsicDemand": 165.6313490507924,
       "lesson": "Split jobs: Blocker + Builder",
       "level": "Build a Bridge",
       "objective": "split:blocker:builder",
@@ -386,7 +386,7 @@
         "levelID": "brickpk2.dat#1",
         "packID": "fan:lldb-559"
       },
-      "intrinsicDemand": 134.94292717086836,
+      "intrinsicDemand": 134.933086022258,
       "lesson": "Split jobs: Blocker + Digger",
       "level": "Block and Dig",
       "objective": "split:blocker:digger",
@@ -890,7 +890,7 @@
         "levelID": "Pieuw 2007 Awkward 2.DAT#9",
         "packID": "fan:lldb-543"
       },
-      "intrinsicDemand": 351.22058823529414,
+      "intrinsicDemand": 351.17205618161034,
       "lesson": "Link: Basher + Builder + Basher",
       "level": "The end",
       "objective": "apply:e6b4114e664a43701ba1",
@@ -904,7 +904,7 @@
         "levelID": "ANTHPCK5.DAT#6",
         "packID": "fan:lldb-225"
       },
-      "intrinsicDemand": 352.6764705882353,
+      "intrinsicDemand": 352.50489236790605,
       "lesson": "Link: Miner + Basher + Digger",
       "level": "Tunneling under",
       "objective": "apply:38fe83ab816a55aa95ea",
@@ -946,7 +946,7 @@
         "levelID": "Deceit Tricky 1.dat#2",
         "packID": "fan:lldb-523"
       },
-      "intrinsicDemand": 353.65098039215684,
+      "intrinsicDemand": 353.63582908663267,
       "lesson": "Link: Digger + Builder",
       "level": "PiPeLiNe PaRaLLeL",
       "objective": "apply:a7693ef3be0777d16307",
@@ -1016,7 +1016,7 @@
         "levelID": "ssam1221 Tame 1.dat#1",
         "packID": "fan:lldb-512"
       },
-      "intrinsicDemand": 356.9362745098039,
+      "intrinsicDemand": 356.8893241919686,
       "lesson": "Link: Blocker + Bomber",
       "level": "Sacrifice",
       "objective": "apply:6373088230a79002e727",
@@ -1100,7 +1100,7 @@
         "levelID": "Lemmings Plus DOS Project - 10 - Danger (Part 1).dat#4",
         "packID": "fan:lldb-554"
       },
-      "intrinsicDemand": 358.79411764705884,
+      "intrinsicDemand": 358.7659157688541,
       "lesson": "Link: Basher + Builder",
       "level": "Some Kind Of Lemming",
       "objective": "apply:2ec8ada1b61cd76683ef",
@@ -1184,7 +1184,7 @@
         "levelID": "Giga pack 09.dat#8",
         "packID": "fan:lldb-171"
       },
-      "intrinsicDemand": 359.1813725490196,
+      "intrinsicDemand": 359.17442430181285,
       "lesson": "Link: Basher + Climber + Builder",
       "level": "A long way to go",
       "objective": "apply:5471c5a42c1ddaba67a9",
@@ -1254,7 +1254,7 @@
         "levelID": "Deceit Fun.dat#3",
         "packID": "fan:lldb-522"
       },
-      "intrinsicDemand": 359.2485014005602,
+      "intrinsicDemand": 359.2435213830755,
       "lesson": "Link: Floater + Builder",
       "level": "Romeo n Juliet",
       "objective": "apply:f15e3f2ca6ba225862ac",
@@ -1268,7 +1268,7 @@
         "levelID": "Deceit Fun.dat#4",
         "packID": "fan:lldb-522"
       },
-      "intrinsicDemand": 281.1470588235294,
+      "intrinsicDemand": 281.13746243303274,
       "lesson": "Link: Basher + Floater",
       "level": "Freedom of the Lemmings",
       "objective": "apply:588ab329ba5dddc3f0c2",
@@ -1324,7 +1324,7 @@
         "levelID": "Lemmings Plus DOS Project - 12 - Danger (Part 3).dat#4",
         "packID": "fan:lldb-554"
       },
-      "intrinsicDemand": 359.2882352941176,
+      "intrinsicDemand": 359.27414085979353,
       "lesson": "Link: Climber + Basher + Builder",
       "level": "Use The Pen!!!",
       "objective": "apply:e5599ed7db9a2c71897b",
@@ -1338,7 +1338,7 @@
         "levelID": "Pieuw 2007 Artful 2.DAT#1",
         "packID": "fan:lldb-544"
       },
-      "intrinsicDemand": 284.39460784313724,
+      "intrinsicDemand": 284.3744896292667,
       "lesson": "Link: Basher + Digger + Builder",
       "level": "Underground Exit",
       "objective": "apply:83ddc556b5db9848c7fa",
@@ -1394,7 +1394,7 @@
         "levelID": "Lemmy556 More levels.dat#8",
         "packID": "fan:lldb-68"
       },
-      "intrinsicDemand": 359.9866946778711,
+      "intrinsicDemand": 359.9321393591717,
       "lesson": "Link: Floater + Builder",
       "level": "Take new Lemmings!",
       "objective": "apply:e9ba70a8da8cd74bf86c",
@@ -1408,7 +1408,7 @@
         "levelID": "TWPAK08.dat#6",
         "packID": "fan:lldb-310"
       },
-      "intrinsicDemand": 284.6666666666667,
+      "intrinsicDemand": 284.6609172873383,
       "lesson": "Link: Builder + Miner",
       "level": "Fun For The Whole Family!",
       "objective": "apply:5caf26e921b18b1f0222",
@@ -1464,7 +1464,7 @@
         "levelID": "Pieuw 2007 Artful 1.DAT#5",
         "packID": "fan:lldb-544"
       },
-      "intrinsicDemand": 285.9228758169935,
+      "intrinsicDemand": 285.90141519703894,
       "lesson": "Share: Bomber + Miner",
       "level": "Have a Pleasant Journey !",
       "objective": "apply:edf88a25d3be154beb64",
@@ -1478,7 +1478,7 @@
         "levelID": "Pieuw 2007 Peace 1.DAT#3",
         "packID": "fan:lldb-542"
       },
-      "intrinsicDemand": 259.83496732026146,
+      "intrinsicDemand": 259.80486610058784,
       "lesson": "Link: Miner + Bomber",
       "level": "Subterranean Exit",
       "objective": "apply:936f5c67062c1cc74980",
@@ -1534,7 +1534,7 @@
         "levelID": "Giga pack 08.dat#5",
         "packID": "fan:lldb-170"
       },
-      "intrinsicDemand": 262.0220588235294,
+      "intrinsicDemand": 262.0129838314552,
       "lesson": "Link: Digger + Builder",
       "level": "The gauntlet",
       "objective": "apply:a7d416f0ae33fd8e34d5",
@@ -1576,7 +1576,7 @@
         "levelID": "Lemmings Plus DOS Project - 15 - PSYCHO (Part 3).dat#2",
         "packID": "fan:lldb-555"
       },
-      "intrinsicDemand": 294.84313725490193,
+      "intrinsicDemand": 294.7181996086106,
       "lesson": "Link: Digger + Basher",
       "level": "Death Row",
       "objective": "apply:b60979d19c86858d0b75",
@@ -1618,7 +1618,7 @@
         "levelID": "CRISFN01.dat#9",
         "packID": "fan:lldb-265"
       },
-      "intrinsicDemand": 269.97584033613447,
+      "intrinsicDemand": 269.9679711565388,
       "lesson": "Link: Floater + Digger",
       "level": "The waterfall",
       "objective": "apply:db20f0986dda25b23031",
@@ -1632,7 +1632,7 @@
         "levelID": "Pieuw 2007 Peace 2.DAT#3",
         "packID": "fan:lldb-542"
       },
-      "intrinsicDemand": 294.9235294117647,
+      "intrinsicDemand": 294.90787926303415,
       "lesson": "Link: Basher + Builder",
       "level": "The Strange Relict of Rhodes",
       "objective": "apply:20a62759127df7ca6a9b",
@@ -1688,7 +1688,7 @@
         "levelID": "CRISFN14.dat#7",
         "packID": "fan:lldb-278"
       },
-      "intrinsicDemand": 296.48366013071893,
+      "intrinsicDemand": 296.48088859849724,
       "lesson": "Link: Digger + Basher + Builder",
       "level": "Pink pyramid",
       "objective": "apply:5649e28aa6ce342a8a59",
@@ -1730,7 +1730,7 @@
         "levelID": "Pieuw 2007 Artful 1.DAT#6",
         "packID": "fan:lldb-544"
       },
-      "intrinsicDemand": 274.2455648926237,
+      "intrinsicDemand": 274.213679201269,
       "lesson": "Share: Basher + Bomber",
       "level": "Terrorist Attack",
       "objective": "apply:673ea192dc31203c52ba",
@@ -1744,7 +1744,7 @@
         "levelID": "brickpk1.dat#4",
         "packID": "fan:lldb-558"
       },
-      "intrinsicDemand": 297.0437675070028,
+      "intrinsicDemand": 297.0263176314132,
       "lesson": "Link: Climber + Basher",
       "level": "Climb and Bash",
       "objective": "apply:edf81bde62b36f0b8282",
@@ -1856,7 +1856,7 @@
         "levelID": "MARTPCK1.DAT#0",
         "packID": "fan:lldb-495"
       },
-      "intrinsicDemand": 315.51274509803915,
+      "intrinsicDemand": 315.4903152049649,
       "lesson": "Link: Blocker + Bomber",
       "level": "A Giant Leap for Lemmingkind",
       "objective": "apply:5ce32412dc7a32fae0e4",
@@ -1898,7 +1898,7 @@
         "levelID": "Jeffpck1.dat#0",
         "packID": "fan:lldb-354"
       },
-      "intrinsicDemand": 297.5802365757314,
+      "intrinsicDemand": 297.57922192089114,
       "lesson": "Link: Builder + Basher",
       "level": "The Iron Puzzle",
       "objective": "apply:afdf08b98f3d3f985b33",
@@ -1912,7 +1912,7 @@
         "levelID": "geooPk1.dat#1",
         "packID": "fan:lldb-2"
       },
-      "intrinsicDemand": 315.9158496732026,
+      "intrinsicDemand": 315.875864227775,
       "lesson": "Link: Builder + Bomber",
       "level": "Twice the same?",
       "objective": "apply:5f607df2a3c805a78f26",
@@ -1968,7 +1968,7 @@
         "levelID": "brickpk2.dat#4",
         "packID": "fan:lldb-559"
       },
-      "intrinsicDemand": 316.40161064425774,
+      "intrinsicDemand": 316.3746762791349,
       "lesson": "Share: Basher + Digger",
       "level": "Bash and Dig",
       "objective": "apply:4faf84c6ba77419d6222",
@@ -2024,7 +2024,7 @@
         "levelID": "brickpk1.dat#8",
         "packID": "fan:lldb-558"
       },
-      "intrinsicDemand": 316.58088235294116,
+      "intrinsicDemand": 316.55254777070064,
       "lesson": "Link: Floater + Basher",
       "level": "Float and Bash",
       "objective": "apply:c8910b4e7379cfa5dcd1",
@@ -2080,7 +2080,7 @@
         "levelID": "cLemmings Tricky 1.DAT#6",
         "packID": "fan:lldb-527"
       },
-      "intrinsicDemand": 316.8122549019608,
+      "intrinsicDemand": 316.80051940415524,
       "lesson": "Link: Builder + Basher",
       "level": "Maniacal Lemmings",
       "objective": "apply:2e3a3b2f6a198c62f4bb",
@@ -2192,7 +2192,7 @@
         "levelID": "CRISFN13.dat#5",
         "packID": "fan:lldb-277"
       },
-      "intrinsicDemand": 318.1692853457173,
+      "intrinsicDemand": 318.15479352782194,
       "lesson": "Link: Blocker + Bomber",
       "level": "The pit of doom",
       "objective": "apply:fae7a97cffd55a415b93",
@@ -2248,7 +2248,7 @@
         "levelID": "cLemmings Tricky 2.DAT#6",
         "packID": "fan:lldb-527"
       },
-      "intrinsicDemand": 324.953431372549,
+      "intrinsicDemand": 324.9092801175318,
       "lesson": "Link: Digger + Builder",
       "level": "Dead Lemmings Tell no Tales",
       "objective": "apply:acbef88adc234036ce49",
@@ -2304,7 +2304,7 @@
         "levelID": "Genesis Tricky.dat#15",
         "packID": "fan:lldb-489"
       },
-      "intrinsicDemand": 325.23333333333335,
+      "intrinsicDemand": 325.2222657781262,
       "lesson": "Link: Miner + Basher",
       "level": "Lovely jubilee",
       "objective": "apply:662ffabe3d2e0848e6f1",
@@ -2360,7 +2360,7 @@
         "levelID": "JANNPCK1.DAT#6",
         "packID": "fan:lldb-231"
       },
-      "intrinsicDemand": 330.6764705882353,
+      "intrinsicDemand": 330.6636613092905,
       "lesson": "Link: Digger + Basher",
       "level": "Bridge over the iced water",
       "objective": "apply:e47d284e80759e6eb09b",
@@ -2402,7 +2402,7 @@
         "levelID": "QBeez06.dat#6",
         "packID": "fan:lldb-414"
       },
-      "intrinsicDemand": 307.7058823529412,
+      "intrinsicDemand": 307.6804670912951,
       "lesson": "Link: Digger + Basher",
       "level": "What comes down must go up.",
       "objective": "apply:25c24a98ceae25389b33",
@@ -2416,7 +2416,7 @@
         "levelID": "Yawg05.dat#1",
         "packID": "fan:lldb-110"
       },
-      "intrinsicDemand": 330.87254901960785,
+      "intrinsicDemand": 330.8073783872021,
       "lesson": "Link: Basher + Digger + Builder",
       "level": "Compression Method X",
       "objective": "apply:e520a4f94867b7fc5ba4",
@@ -2430,7 +2430,7 @@
         "levelID": "LDChallenge03.dat#3",
         "packID": "fan:lldb-432"
       },
-      "intrinsicDemand": 232.38536953242834,
+      "intrinsicDemand": 232.3722220546995,
       "lesson": "Share: Blocker + Miner",
       "level": "A toe",
       "objective": "apply:47265b039d962fb39cee",
@@ -2458,7 +2458,7 @@
         "levelID": "TWPAK04.dat#2",
         "packID": "fan:lldb-306"
       },
-      "intrinsicDemand": 307.9967320261438,
+      "intrinsicDemand": 307.8745379430311,
       "lesson": "Link: Digger + Builder",
       "level": "Snow Way!",
       "objective": "apply:cc25b0b00d435b3a70e5",
@@ -2486,7 +2486,7 @@
         "levelID": "brickpk1.dat#2",
         "packID": "fan:lldb-558"
       },
-      "intrinsicDemand": 232.82679738562092,
+      "intrinsicDemand": 232.81188765512738,
       "lesson": "Link: Climber + Blocker",
       "level": "Climb and Block",
       "objective": "apply:aa7c855685257fa11ffb",
@@ -2514,7 +2514,7 @@
         "levelID": "Genesis Tricky.dat#11",
         "packID": "fan:lldb-489"
       },
-      "intrinsicDemand": 313.07450980392156,
+      "intrinsicDemand": 313.0674245393963,
       "lesson": "Link: Climber + Bomber",
       "level": "Go out for a walk?",
       "objective": "apply:c9f74fd23b99f4c76fd0",
@@ -2542,7 +2542,7 @@
         "levelID": "brickpk1.dat#3",
         "packID": "fan:lldb-558"
       },
-      "intrinsicDemand": 236.7450980392157,
+      "intrinsicDemand": 236.72762900065317,
       "lesson": "Link: Climber + Builder",
       "level": "Climb and Build",
       "objective": "apply:18aac37181b1ed0596c6",
@@ -2556,7 +2556,7 @@
         "levelID": "Genesis Tricky.dat#12",
         "packID": "fan:lldb-489"
       },
-      "intrinsicDemand": 279.3660130718954,
+      "intrinsicDemand": 279.3549370617187,
       "lesson": "Link: Builder + Miner",
       "level": "Salvage boat",
       "objective": "apply:73599c9b81371f98bfb3",
@@ -3613,18 +3613,18 @@
       "purpose": "Worker roles: bomber; bomber + digger. Job changes: digger \u2192 bomber."
     },
     {
-      "applicationSignature": "{\"changes\": [[\"basher\", \"builder\"], [\"blocker\", \"builder\"], [\"builder\", \"basher\"], [\"digger\", \"builder\"]], \"concepts\": [\"basher\", \"blocker\", \"builder\", \"digger\", \"multiple-worker-coordination\", \"release-rate-manipulation\"], \"roles\": [[\"basher\", \"builder\", \"digger\"], [\"blocker\", \"builder\"]], \"sequences\": [[\"digger\", \"builder\", \"basher\"]]}",
+      "applicationSignature": "{\"changes\": [[\"builder\", \"digger\"], [\"digger\", \"builder\"], [\"miner\", \"builder\"]], \"concepts\": [\"blocker\", \"builder\", \"digger\", \"miner\", \"multiple-worker-coordination\", \"release-rate-manipulation\"], \"roles\": [[\"blocker\"], [\"builder\", \"digger\"], [\"builder\", \"miner\"]], \"sequences\": []}",
       "evidence": "winning replay assignments and measured profile",
       "identity": {
         "engine": "classic",
-        "levelID": "AkseliPack01.dat#5",
-        "packID": "fan:lldb-220"
+        "levelID": "ANTHPCK4.DAT#6",
+        "packID": "fan:lldb-224"
       },
       "intrinsicDemand": 569.5,
-      "lesson": "Link: Blocker + Builder",
-      "level": "Why do you all look the same?",
-      "objective": "apply:04677b1138a16de7b869",
-      "purpose": "Worker roles: basher + builder + digger; blocker + builder. Job changes: basher \u2192 builder; blocker \u2192 builder; builder \u2192 basher; digger \u2192 builder. Three-step plans: digger \u2192 builder \u2192 basher. Also practise multiple-worker-coordination, release-rate-manipulation."
+      "lesson": "Link: Miner + Builder",
+      "level": "Snow Lev 7",
+      "objective": "apply:02691dd559a2085fb9dd",
+      "purpose": "Worker roles: blocker; builder + digger; builder + miner. Job changes: builder \u2192 digger; digger \u2192 builder; miner \u2192 builder. Also practise multiple-worker-coordination, release-rate-manipulation."
     },
     {
       "applicationSignature": "{\"changes\": [[\"climber\", \"blocker\"]], \"concepts\": [\"blocker\", \"climber\"], \"roles\": [[\"blocker\", \"climber\"], [\"climber\"]], \"sequences\": []}",
@@ -4090,7 +4090,7 @@
     }
   ],
   "limits": "Objectives describe observed routes. Novice readability and the necessity of these techniques require playtesting.",
-  "poolSize": 1534,
+  "poolSize": 1540,
   "selectionPolicy": "Official first within comparable 35-point demand bands; distinct observed applications; Classic mechanics only.",
   "targetSize": 292,
   "unavailableOptionalObjectives": [

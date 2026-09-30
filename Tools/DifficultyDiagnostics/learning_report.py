@@ -1,5 +1,6 @@
 """Collect validated native evidence and describe the generated learning path."""
 import json
+import os
 import pathlib
 import sys
 
@@ -168,8 +169,8 @@ elif sys.argv[1] == 'report':
         lines.append('| '+' | '.join(v.replace('|',r'\|') for v in values)+' |')
     (OUT/'README.md').write_text('\n'.join(lines)+'\n')
     # Forum drafts belong outside the repository.
-    posts = pathlib.Path.home()/'Documents/Ultimate Lemmings/Posts'
-    posts.mkdir(parents=True,exist_ok=True)
+    posts = None if os.environ.get('LEMMINGS_SKIP_POST_EXPORT') == '1' else pathlib.Path.home()/'Documents/Ultimate Lemmings/Posts'
+    if posts is not None: posts.mkdir(parents=True,exist_ok=True)
     bbcode = ['[b]Oh My! All Lemmings![/b]','',
         f"A selective learning journey of {len(lessons)} levels. The complete library and original campaigns remain available separately.",'',
         'The first eight lessons introduce each basic skill once. Most of the following teaching work is in combinations, sequences and intermediate strategy. Every selected level has a distinct objective. Two-player levels and repeated port puzzles are excluded.','',
@@ -182,7 +183,7 @@ elif sys.argv[1] == 'report':
         for i,l in group:
             bbcode.append(f"[*][b]{i}. {l['entry']['levelNameSnapshot']}[/b] — {l['entry']['packNameSnapshot']}. [i]{goals[key(l)]['purpose']}[/i]")
         bbcode += ['[/list]','']
-    (posts/'Oh My! All Lemmings! - BBCode.txt').write_text('\n'.join(bbcode)+'\n')
+    if posts is not None: (posts/'Oh My! All Lemmings! - BBCode.txt').write_text('\n'.join(bbcode)+'\n')
     print(json.dumps(summary,indent=2))
 else:
     raise SystemExit('Usage: learning_report.py collect OUTPUT... | report')

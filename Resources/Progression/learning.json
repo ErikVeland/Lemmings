@@ -59,7 +59,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 43.45819607843138,
+      "score" : 43.45724421795374,
       "stage" : "Fun"
     },
     {
@@ -90,14 +90,14 @@
       "preparationGaps" : [
 
       ],
-      "score" : 50.79342553321947,
+      "score" : 50.79196147068344,
       "stage" : "Fun"
     },
     {
       "concepts" : [
         "miner"
       ],
-      "demand" : 61.42483660130719,
+      "demand" : 61.41604050963738,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "53A340B5-1FB4-A93D-EEF2-DFD30AD5D57E",
@@ -112,7 +112,7 @@
         "sourceRevision" : "8d2daffec1cf660515ad4680e015d48b923b81b70afa10956729a179c81e3971"
       },
       "focus" : "Discover: Miner",
-      "intrinsicDemand" : 61.42483660130719,
+      "intrinsicDemand" : 61.41604050963738,
       "introduced" : [
         "miner"
       ],
@@ -121,14 +121,14 @@
       "preparationGaps" : [
 
       ],
-      "score" : 46.86045751633987,
+      "score" : 46.85817053250572,
       "stage" : "Fun"
     },
     {
       "concepts" : [
         "bomber"
       ],
-      "demand" : 61.22941176470589,
+      "demand" : 61.220305762446095,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "B645A6FB-5FFB-3059-578F-E526B43ECCA3",
@@ -143,7 +143,7 @@
         "sourceRevision" : "587fa1a85d2ce0c3d0c8b50d9fa6c23a5d224c5b100e7c364088fde33e35798e"
       },
       "focus" : "Discover: Bomber",
-      "intrinsicDemand" : 61.22941176470589,
+      "intrinsicDemand" : 61.220305762446095,
       "introduced" : [
         "bomber"
       ],
@@ -152,7 +152,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 52.981064053055604,
+      "score" : 52.97869649246806,
       "stage" : "Fun"
     },
     {
@@ -190,7 +190,7 @@
       "concepts" : [
         "builder"
       ],
-      "demand" : 113.57664884135474,
+      "demand" : 113.5604575745697,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "688ADEDF-082E-956F-7DDC-EB8309EA5910",
@@ -205,7 +205,7 @@
         "sourceRevision" : "cea49c6853a73f4a693cd63586ed044e2c939a7ce2457d6e3317bbc95d8ff4c9"
       },
       "focus" : "Discover: Builder",
-      "intrinsicDemand" : 113.57664884135474,
+      "intrinsicDemand" : 113.5604575745697,
       "introduced" : [
         "builder"
       ],
@@ -214,14 +214,14 @@
       "preparationGaps" : [
 
       ],
-      "score" : 69.0128281719547,
+      "score" : 69.00861844259059,
       "stage" : "Fun"
     },
     {
       "concepts" : [
         "blocker"
       ],
-      "demand" : 138.05490196078432,
+      "demand" : 138.04900039200314,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "0881D0E0-6BE2-B464-63F1-AE01E5FD128E",
@@ -236,7 +236,7 @@
         "sourceRevision" : "61cfce03b0bae24b31d5c3f3b650446ebe2774a5327c6b27e37e78ef890119c8"
       },
       "focus" : "Discover: Blocker",
-      "intrinsicDemand" : 138.05490196078432,
+      "intrinsicDemand" : 138.04900039200314,
       "introduced" : [
         "blocker"
       ],
@@ -245,7 +245,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 71.68427450980391,
+      "score" : 71.68274010192081,
       "stage" : "Fun"
     },
     {
@@ -253,7 +253,7 @@
         "blocker",
         "digger"
       ],
-      "demand" : 138.05490196078432,
+      "demand" : 138.04900039200314,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "0EFF9C38-5461-4B6B-0B4E-16FEEA568E2E",
@@ -268,7 +268,7 @@
         "sourceRevision" : "8d0c1f847913a4f82cfc2f0151384aa5147b5a6b30a414f60cfeeb61802d4253"
       },
       "focus" : "Split jobs: Blocker + Digger",
-      "intrinsicDemand" : 134.94292717086836,
+      "intrinsicDemand" : 134.933086022258,
       "introduced" : [
 
       ],
@@ -277,7 +277,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 116.75376306823348,
+      "score" : 116.75120436959479,
       "stage" : "Intermediate"
     },
     {
@@ -349,7 +349,7 @@
         "blocker",
         "builder"
       ],
-      "demand" : 165.65126050420167,
+      "demand" : 165.6313490507924,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "FB6BEF8C-20D7-4A9F-7D4C-B905A1073112",
@@ -364,7 +364,7 @@
         "sourceRevision" : "a6262d91e48bfe322ac212e12bbac0e7c89a5300f4b53aa070cad58f97148bb3"
       },
       "focus" : "Split jobs: Blocker + Builder",
-      "intrinsicDemand" : 165.65126050420167,
+      "intrinsicDemand" : 165.6313490507924,
       "introduced" : [
 
       ],
@@ -373,7 +373,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 124.58351890349891,
+      "score" : 124.5783419256125,
       "stage" : "Intermediate"
     },
     {
@@ -565,7 +565,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 135.11573071972228,
+      "score" : 135.11153198181864,
       "stage" : "Intermediate"
     },
     {
@@ -727,7 +727,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 158.45870798319328,
+      "score" : 158.45280065210798,
       "stage" : "Intermediate"
     },
     {
@@ -760,7 +760,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 125.42559511955092,
+      "score" : 125.42455972397364,
       "stage" : "Intermediate"
     },
     {
@@ -793,7 +793,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 122.60045429958657,
+      "score" : 122.59835932721894,
       "stage" : "Intermediate"
     },
     {
@@ -826,7 +826,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 124.88843137254901,
+      "score" : 124.88644191820201,
       "stage" : "Intermediate"
     },
     {
@@ -891,7 +891,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 141.70450980392158,
+      "score" : 141.70156409251274,
       "stage" : "Intermediate"
     },
     {
@@ -924,7 +924,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 143.95157551170777,
+      "score" : 143.95026532961847,
       "stage" : "Intermediate"
     },
     {
@@ -957,7 +957,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 147.07600408313635,
+      "score" : 147.0749003241656,
       "stage" : "Intermediate"
     },
     {
@@ -990,7 +990,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 153.06192845288425,
+      "score" : 153.0609621141041,
       "stage" : "Intermediate"
     },
     {
@@ -1023,106 +1023,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 146.6509023090934,
-      "stage" : "Intermediate"
-    },
-    {
-      "concepts" : [
-        "basher",
-        "miner",
-        "release-rate-manipulation"
-      ],
-      "demand" : 221,
-      "entry" : {
-        "catalogueRevision" : "1.2-runtime-v2",
-        "id" : "907EA18F-03C9-276F-9DBE-DCC244970313",
-        "identity" : {
-          "engine" : "classic",
-          "levelID" : "EMPACK.DAT#0",
-          "packID" : "fan:lldb-230"
-        },
-        "levelNameSnapshot" : "100% Pure Woven Lemming",
-        "levelNumberSnapshot" : 1,
-        "packNameSnapshot" : "EMPACK",
-        "sourceRevision" : "11b17987dd468fd902a7a37fc8709f67c866de48bbf92d53a80c9c6cc2264cde"
-      },
-      "focus" : "Link: Basher + Miner",
-      "intrinsicDemand" : 221,
-      "introduced" : [
-
-      ],
-      "needsSupport" : false,
-      "objective" : "apply:74b9d9d868ecfc8f8b1c",
-      "preparationGaps" : [
-
-      ],
-      "score" : 149.22310118864524,
-      "stage" : "Intermediate"
-    },
-    {
-      "concepts" : [
-        "basher",
-        "digger",
-        "release-rate-manipulation"
-      ],
-      "demand" : 221,
-      "entry" : {
-        "catalogueRevision" : "1.2-runtime-v2",
-        "id" : "85B406C5-604C-C360-7CC4-1515DCE90BFA",
-        "identity" : {
-          "engine" : "classic",
-          "levelID" : "Lemmings Plus DOS Project - 02 - Mild (Part 2).dat#7",
-          "packID" : "fan:lldb-551"
-        },
-        "levelNameSnapshot" : "Dying Not Reccomended",
-        "levelNumberSnapshot" : 18,
-        "packNameSnapshot" : "Lemmings Plus DOS Project Mild",
-        "sourceRevision" : "587fa1a85d2ce0c3d0c8b50d9fa6c23a5d224c5b100e7c364088fde33e35798e"
-      },
-      "focus" : "Link: Basher + Digger",
-      "intrinsicDemand" : 221,
-      "introduced" : [
-
-      ],
-      "needsSupport" : false,
-      "objective" : "apply:513344e709e2ca18dd11",
-      "preparationGaps" : [
-
-      ],
-      "score" : 144.6693374613003,
-      "stage" : "Intermediate"
-    },
-    {
-      "concepts" : [
-        "basher",
-        "builder",
-        "release-rate-manipulation"
-      ],
-      "demand" : 221,
-      "entry" : {
-        "catalogueRevision" : "1.2-runtime-v2",
-        "id" : "F42AE031-5EDE-E773-F259-B6A89684068F",
-        "identity" : {
-          "engine" : "classic",
-          "levelID" : "Pieuw 2007 Peace 1.DAT#5",
-          "packID" : "fan:lldb-542"
-        },
-        "levelNameSnapshot" : "Rising to Paradise",
-        "levelNumberSnapshot" : 6,
-        "packNameSnapshot" : "Pieuws Lemmings 2007 Peace",
-        "sourceRevision" : "f1ecfbe225c1039af701815227b4af13bcf5f45ac22c7e672357b5ff485e659e"
-      },
-      "focus" : "Link: Basher + Builder",
-      "intrinsicDemand" : 221,
-      "introduced" : [
-
-      ],
-      "needsSupport" : false,
-      "objective" : "apply:ca47a836b8af0302fe47",
-      "preparationGaps" : [
-
-      ],
-      "score" : 156.3316784321406,
+      "score" : 146.6437719359339,
       "stage" : "Intermediate"
     },
     {
@@ -1155,7 +1056,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 147.55270339477107,
+      "score" : 147.55092690625276,
       "stage" : "Intermediate"
     },
     {
@@ -1192,72 +1093,6 @@
     },
     {
       "concepts" : [
-        "bomber",
-        "builder",
-        "release-rate-manipulation"
-      ],
-      "demand" : 221,
-      "entry" : {
-        "catalogueRevision" : "1.2-runtime-v2",
-        "id" : "1A7B498B-63DB-3BDB-C1AA-85018AAD539D",
-        "identity" : {
-          "engine" : "classic",
-          "levelID" : "Genesis Taxing.dat#13",
-          "packID" : "fan:lldb-490"
-        },
-        "levelNameSnapshot" : "Value each moment",
-        "levelNumberSnapshot" : 14,
-        "packNameSnapshot" : "Genesis Taxing",
-        "sourceRevision" : "38f13b44cfdb5722c4c1438286a633a0c3f6234d72625152cd311f2294445223"
-      },
-      "focus" : "Share: Bomber + Builder",
-      "intrinsicDemand" : 221,
-      "introduced" : [
-
-      ],
-      "needsSupport" : false,
-      "objective" : "apply:5292c748354af6188955",
-      "preparationGaps" : [
-
-      ],
-      "score" : 161.33875490196078,
-      "stage" : "Intermediate"
-    },
-    {
-      "concepts" : [
-        "basher",
-        "bomber",
-        "release-rate-manipulation"
-      ],
-      "demand" : 221,
-      "entry" : {
-        "catalogueRevision" : "1.2-runtime-v2",
-        "id" : "A72FB839-6668-EC6D-F260-07154C24FBEA",
-        "identity" : {
-          "engine" : "classic",
-          "levelID" : "LEMPACK.DAT#0",
-          "packID" : "fan:lldb-472"
-        },
-        "levelNameSnapshot" : "Lake in the Cavern",
-        "levelNumberSnapshot" : 1,
-        "packNameSnapshot" : "CPs Level Pack",
-        "sourceRevision" : "0aa4c6e70d8b2adeae926a70f881a18fbbc9dabf150fc7ee345681e3500753f8"
-      },
-      "focus" : "Link: Basher + Bomber",
-      "intrinsicDemand" : 221,
-      "introduced" : [
-
-      ],
-      "needsSupport" : false,
-      "objective" : "apply:f7d6ace7c6859b7b98fc",
-      "preparationGaps" : [
-
-      ],
-      "score" : 162.54279213128694,
-      "stage" : "Intermediate"
-    },
-    {
-      "concepts" : [
         "basher",
         "digger",
         "release-rate-manipulation"
@@ -1265,28 +1100,28 @@
       "demand" : 221,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
-        "id" : "3B28BD56-8C1C-2CD9-90BE-850D0A9397E2",
+        "id" : "85B406C5-604C-C360-7CC4-1515DCE90BFA",
         "identity" : {
           "engine" : "classic",
-          "levelID" : "Lemmings Plus DOS Project - 05 - Wimpy (Part 2).dat#7",
-          "packID" : "fan:lldb-552"
+          "levelID" : "Lemmings Plus DOS Project - 02 - Mild (Part 2).dat#7",
+          "packID" : "fan:lldb-551"
         },
-        "levelNameSnapshot" : "Down The Wall",
+        "levelNameSnapshot" : "Dying Not Reccomended",
         "levelNumberSnapshot" : 18,
-        "packNameSnapshot" : "Lemmings Plus DOS Project Wimpy",
-        "sourceRevision" : "8187c19df391ea59e594bf9e4779b7ec81fb0034bc4a899ae09aee7396b3c042"
+        "packNameSnapshot" : "Lemmings Plus DOS Project Mild",
+        "sourceRevision" : "587fa1a85d2ce0c3d0c8b50d9fa6c23a5d224c5b100e7c364088fde33e35798e"
       },
-      "focus" : "Link: Digger + Basher",
+      "focus" : "Link: Basher + Digger",
       "intrinsicDemand" : 221,
       "introduced" : [
 
       ],
       "needsSupport" : false,
-      "objective" : "apply:99830bdae8532214f446",
+      "objective" : "apply:513344e709e2ca18dd11",
       "preparationGaps" : [
 
       ],
-      "score" : 156.3443962848297,
+      "score" : 144.6677942602488,
       "stage" : "Intermediate"
     },
     {
@@ -1319,7 +1154,139 @@
       "preparationGaps" : [
 
       ],
-      "score" : 165.8976470588235,
+      "score" : 165.8953168692016,
+      "stage" : "Intermediate"
+    },
+    {
+      "concepts" : [
+        "basher",
+        "digger",
+        "release-rate-manipulation"
+      ],
+      "demand" : 221,
+      "entry" : {
+        "catalogueRevision" : "1.2-runtime-v2",
+        "id" : "3B28BD56-8C1C-2CD9-90BE-850D0A9397E2",
+        "identity" : {
+          "engine" : "classic",
+          "levelID" : "Lemmings Plus DOS Project - 05 - Wimpy (Part 2).dat#7",
+          "packID" : "fan:lldb-552"
+        },
+        "levelNameSnapshot" : "Down The Wall",
+        "levelNumberSnapshot" : 18,
+        "packNameSnapshot" : "Lemmings Plus DOS Project Wimpy",
+        "sourceRevision" : "8187c19df391ea59e594bf9e4779b7ec81fb0034bc4a899ae09aee7396b3c042"
+      },
+      "focus" : "Link: Digger + Basher",
+      "intrinsicDemand" : 221,
+      "introduced" : [
+
+      ],
+      "needsSupport" : false,
+      "objective" : "apply:99830bdae8532214f446",
+      "preparationGaps" : [
+
+      ],
+      "score" : 156.34221997565456,
+      "stage" : "Intermediate"
+    },
+    {
+      "concepts" : [
+        "basher",
+        "builder",
+        "release-rate-manipulation"
+      ],
+      "demand" : 221,
+      "entry" : {
+        "catalogueRevision" : "1.2-runtime-v2",
+        "id" : "F42AE031-5EDE-E773-F259-B6A89684068F",
+        "identity" : {
+          "engine" : "classic",
+          "levelID" : "Pieuw 2007 Peace 1.DAT#5",
+          "packID" : "fan:lldb-542"
+        },
+        "levelNameSnapshot" : "Rising to Paradise",
+        "levelNumberSnapshot" : 6,
+        "packNameSnapshot" : "Pieuws Lemmings 2007 Peace",
+        "sourceRevision" : "f1ecfbe225c1039af701815227b4af13bcf5f45ac22c7e672357b5ff485e659e"
+      },
+      "focus" : "Link: Basher + Builder",
+      "intrinsicDemand" : 221,
+      "introduced" : [
+
+      ],
+      "needsSupport" : false,
+      "objective" : "apply:ca47a836b8af0302fe47",
+      "preparationGaps" : [
+
+      ],
+      "score" : 156.32413903928787,
+      "stage" : "Intermediate"
+    },
+    {
+      "concepts" : [
+        "basher",
+        "bomber",
+        "release-rate-manipulation"
+      ],
+      "demand" : 221,
+      "entry" : {
+        "catalogueRevision" : "1.2-runtime-v2",
+        "id" : "A72FB839-6668-EC6D-F260-07154C24FBEA",
+        "identity" : {
+          "engine" : "classic",
+          "levelID" : "LEMPACK.DAT#0",
+          "packID" : "fan:lldb-472"
+        },
+        "levelNameSnapshot" : "Lake in the Cavern",
+        "levelNumberSnapshot" : 1,
+        "packNameSnapshot" : "CPs Level Pack",
+        "sourceRevision" : "0aa4c6e70d8b2adeae926a70f881a18fbbc9dabf150fc7ee345681e3500753f8"
+      },
+      "focus" : "Link: Basher + Bomber",
+      "intrinsicDemand" : 221,
+      "introduced" : [
+
+      ],
+      "needsSupport" : false,
+      "objective" : "apply:f7d6ace7c6859b7b98fc",
+      "preparationGaps" : [
+
+      ],
+      "score" : 162.54052129555166,
+      "stage" : "Intermediate"
+    },
+    {
+      "concepts" : [
+        "bomber",
+        "builder",
+        "release-rate-manipulation"
+      ],
+      "demand" : 221,
+      "entry" : {
+        "catalogueRevision" : "1.2-runtime-v2",
+        "id" : "1A7B498B-63DB-3BDB-C1AA-85018AAD539D",
+        "identity" : {
+          "engine" : "classic",
+          "levelID" : "Genesis Taxing.dat#13",
+          "packID" : "fan:lldb-490"
+        },
+        "levelNameSnapshot" : "Value each moment",
+        "levelNumberSnapshot" : 14,
+        "packNameSnapshot" : "Genesis Taxing",
+        "sourceRevision" : "38f13b44cfdb5722c4c1438286a633a0c3f6234d72625152cd311f2294445223"
+      },
+      "focus" : "Share: Bomber + Builder",
+      "intrinsicDemand" : 221,
+      "introduced" : [
+
+      ],
+      "needsSupport" : false,
+      "objective" : "apply:5292c748354af6188955",
+      "preparationGaps" : [
+
+      ],
+      "score" : 161.33603821656052,
       "stage" : "Intermediate"
     },
     {
@@ -1352,7 +1319,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 173.53586962935486,
+      "score" : 173.48889982773557,
       "stage" : "Intermediate"
     },
     {
@@ -1361,7 +1328,7 @@
         "miner",
         "release-rate-manipulation"
       ],
-      "demand" : 232.38536953242834,
+      "demand" : 232.3722220546995,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "1D00C7DE-11F3-1DC6-6AE8-5F17AB54AA4F",
@@ -1376,7 +1343,7 @@
         "sourceRevision" : "44e3df78b0ec0e9a20c8be79429ce55de175f2020d9c91677ed1819445df8cee"
       },
       "focus" : "Share: Blocker + Miner",
-      "intrinsicDemand" : 232.38536953242834,
+      "intrinsicDemand" : 232.3722220546995,
       "introduced" : [
 
       ],
@@ -1385,7 +1352,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 165.07161307266344,
+      "score" : 165.06819472845393,
       "stage" : "Intermediate"
     },
     {
@@ -1418,7 +1385,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 175.15214413915876,
+      "score" : 175.15050641154716,
       "stage" : "Intermediate"
     },
     {
@@ -1451,7 +1418,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 182.90140884504112,
+      "score" : 182.8976343352372,
       "stage" : "Intermediate"
     },
     {
@@ -1484,7 +1451,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 175.53925781756143,
+      "score" : 175.53784211745153,
       "stage" : "Intermediate"
     },
     {
@@ -1517,7 +1484,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 182.91112177502578,
+      "score" : 182.9098071963523,
       "stage" : "Intermediate"
     },
     {
@@ -1550,7 +1517,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 176.9588444188686,
+      "score" : 176.95279459027182,
       "stage" : "Intermediate"
     },
     {
@@ -1583,40 +1550,40 @@
       "preparationGaps" : [
 
       ],
-      "score" : 196.67424217837444,
+      "score" : 196.67151189959102,
       "stage" : "Intermediate"
     },
     {
       "concepts" : [
-        "blocker",
-        "bomber",
+        "basher",
+        "miner",
         "release-rate-manipulation"
       ],
       "demand" : 221,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
-        "id" : "2061642B-DE56-DDDD-B699-8B322D005111",
+        "id" : "907EA18F-03C9-276F-9DBE-DCC244970313",
         "identity" : {
           "engine" : "classic",
-          "levelID" : "Genesis Present.dat#15",
-          "packID" : "fan:lldb-492"
+          "levelID" : "EMPACK.DAT#0",
+          "packID" : "fan:lldb-230"
         },
-        "levelNameSnapshot" : "A Trap is a trap.",
-        "levelNumberSnapshot" : 16,
-        "packNameSnapshot" : "Genesis Present",
-        "sourceRevision" : "52c417ec72a99555caa15c1fb308a618759532d2059baefca16c67417d0a5c2c"
+        "levelNameSnapshot" : "100% Pure Woven Lemming",
+        "levelNumberSnapshot" : 1,
+        "packNameSnapshot" : "EMPACK",
+        "sourceRevision" : "11b17987dd468fd902a7a37fc8709f67c866de48bbf92d53a80c9c6cc2264cde"
       },
-      "focus" : "Share: Blocker + Bomber",
+      "focus" : "Link: Basher + Miner",
       "intrinsicDemand" : 221,
       "introduced" : [
 
       ],
       "needsSupport" : false,
-      "objective" : "apply:12186cbd8ec518d2ded1",
+      "objective" : "apply:74b9d9d868ecfc8f8b1c",
       "preparationGaps" : [
 
       ],
-      "score" : 194.9221874379814,
+      "score" : 188.2230940640341,
       "stage" : "Intermediate"
     },
     {
@@ -1649,7 +1616,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 188.52692714646275,
+      "score" : 188.52314095159713,
       "stage" : "Intermediate"
     },
     {
@@ -1720,6 +1687,39 @@
     },
     {
       "concepts" : [
+        "blocker",
+        "bomber",
+        "release-rate-manipulation"
+      ],
+      "demand" : 221,
+      "entry" : {
+        "catalogueRevision" : "1.2-runtime-v2",
+        "id" : "2061642B-DE56-DDDD-B699-8B322D005111",
+        "identity" : {
+          "engine" : "classic",
+          "levelID" : "Genesis Present.dat#15",
+          "packID" : "fan:lldb-492"
+        },
+        "levelNameSnapshot" : "A Trap is a trap.",
+        "levelNumberSnapshot" : 16,
+        "packNameSnapshot" : "Genesis Present",
+        "sourceRevision" : "52c417ec72a99555caa15c1fb308a618759532d2059baefca16c67417d0a5c2c"
+      },
+      "focus" : "Share: Blocker + Bomber",
+      "intrinsicDemand" : 221,
+      "introduced" : [
+
+      ],
+      "needsSupport" : false,
+      "objective" : "apply:12186cbd8ec518d2ded1",
+      "preparationGaps" : [
+
+      ],
+      "score" : 194.91651000044857,
+      "stage" : "Intermediate"
+    },
+    {
+      "concepts" : [
         "digger",
         "miner",
         "release-rate-manipulation"
@@ -1748,7 +1748,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 206.60618487394956,
+      "score" : 206.60448339586713,
       "stage" : "Intermediate"
     },
     {
@@ -1782,7 +1782,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 176.1343999744242,
+      "score" : 176.1325753919844,
       "stage" : "Intermediate"
     },
     {
@@ -1790,7 +1790,7 @@
         "builder",
         "climber"
       ],
-      "demand" : 266.11764705882354,
+      "demand" : 266.10094740280954,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "9AB25F2D-3586-0D62-54DF-F42C5B58ECA8",
@@ -1805,7 +1805,7 @@
         "sourceRevision" : "4545eeb5effc99790773b4862e7c0e427ac112d5f09e484cc42d6de81362e089"
       },
       "focus" : "Builder then Climber",
-      "intrinsicDemand" : 266.11764705882354,
+      "intrinsicDemand" : 266.10094740280954,
       "introduced" : [
 
       ],
@@ -1814,7 +1814,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 168.55047840579675,
+      "score" : 168.54613649523313,
       "stage" : "Intermediate"
     },
     {
@@ -1847,7 +1847,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 164.20376271952225,
+      "score" : 164.19965191330246,
       "stage" : "Intermediate"
     },
     {
@@ -1913,7 +1913,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 178.82900344859615,
+      "score" : 178.82469259779563,
       "stage" : "Intermediate"
     },
     {
@@ -1922,7 +1922,7 @@
         "climber",
         "release-rate-manipulation"
       ],
-      "demand" : 266.11764705882354,
+      "demand" : 266.10094740280954,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "33D863E2-1A0F-46BC-1FCC-8F0839AC5685",
@@ -1937,7 +1937,7 @@
         "sourceRevision" : "f117ea9ccfc582e2704c654b2e11b16a8c7cb79e99600a180e356f0cac2ab53f"
       },
       "focus" : "Link: Climber + Blocker",
-      "intrinsicDemand" : 232.82679738562092,
+      "intrinsicDemand" : 232.81188765512738,
       "introduced" : [
 
       ],
@@ -1946,7 +1946,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 183.4492683221653,
+      "score" : 183.44539179223696,
       "stage" : "Intermediate"
     },
     {
@@ -1955,7 +1955,7 @@
         "bomber",
         "release-rate-manipulation"
       ],
-      "demand" : 274.2455648926237,
+      "demand" : 274.213679201269,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "5D5F79D1-85BB-849E-21EC-5EBAB8E8FDBA",
@@ -1970,7 +1970,7 @@
         "sourceRevision" : "fc9991e07984a0eecfcd19be9ec2be19e8647a93b3282aa0eef563ceb5091446"
       },
       "focus" : "Share: Basher + Bomber",
-      "intrinsicDemand" : 274.2455648926237,
+      "intrinsicDemand" : 274.213679201269,
       "introduced" : [
 
       ],
@@ -1979,7 +1979,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 176.46384687208214,
+      "score" : 176.45555659232994,
       "stage" : "Intermediate"
     },
     {
@@ -2079,7 +2079,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 180.9658039215686,
+      "score" : 180.96406507252055,
       "stage" : "Intermediate"
     },
     {
@@ -2113,7 +2113,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 186.99261129173343,
+      "score" : 186.98852246843458,
       "stage" : "Intermediate"
     },
     {
@@ -2122,7 +2122,7 @@
         "miner",
         "release-rate-manipulation"
       ],
-      "demand" : 259.83496732026146,
+      "demand" : 259.80486610058784,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "986F7207-4D76-060B-C612-0F36D31244A9",
@@ -2137,7 +2137,7 @@
         "sourceRevision" : "f1ecfbe225c1039af701815227b4af13bcf5f45ac22c7e672357b5ff485e659e"
       },
       "focus" : "Link: Miner + Bomber",
-      "intrinsicDemand" : 259.83496732026146,
+      "intrinsicDemand" : 259.80486610058784,
       "introduced" : [
 
       ],
@@ -2146,7 +2146,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 187.13698167377063,
+      "score" : 187.12915535665547,
       "stage" : "Intermediate"
     },
     {
@@ -2214,7 +2214,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 193.00508531562934,
+      "score" : 193.00150209951263,
       "stage" : "Intermediate"
     },
     {
@@ -2223,7 +2223,7 @@
         "climber",
         "release-rate-manipulation"
       ],
-      "demand" : 266.11764705882354,
+      "demand" : 266.10094740280954,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "D372CDF4-FFFA-5845-3EB8-040802857F6D",
@@ -2238,7 +2238,7 @@
         "sourceRevision" : "f117ea9ccfc582e2704c654b2e11b16a8c7cb79e99600a180e356f0cac2ab53f"
       },
       "focus" : "Link: Climber + Builder",
-      "intrinsicDemand" : 236.7450980392157,
+      "intrinsicDemand" : 236.72762900065317,
       "introduced" : [
 
       ],
@@ -2247,7 +2247,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 193.56802649209993,
+      "score" : 193.56348454207367,
       "stage" : "Intermediate"
     },
     {
@@ -2289,7 +2289,7 @@
         "digger",
         "release-rate-manipulation"
       ],
-      "demand" : 262.0220588235294,
+      "demand" : 262.0129838314552,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "02F03C7A-C561-9063-8F15-B1EC7B2F84E3",
@@ -2304,7 +2304,7 @@
         "sourceRevision" : "d0bcba7005ae346622fbe5a409a049c870a426eb3b9dd0fc46fe3a01d605cf15"
       },
       "focus" : "Link: Digger + Builder",
-      "intrinsicDemand" : 262.0220588235294,
+      "intrinsicDemand" : 262.0129838314552,
       "introduced" : [
 
       ],
@@ -2313,7 +2313,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 203.80562546462028,
+      "score" : 203.803265966681,
       "stage" : "Intermediate"
     },
     {
@@ -2322,7 +2322,7 @@
         "floater",
         "release-rate-manipulation"
       ],
-      "demand" : 269.97584033613447,
+      "demand" : 269.9679711565388,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "B02816AD-B663-FFA9-B665-88B86480A03D",
@@ -2337,7 +2337,7 @@
         "sourceRevision" : "c3b7844f28dc81810eaef140a7e6786b0b92f2edff29f7812d8b035b308e880f"
       },
       "focus" : "Link: Floater + Digger",
-      "intrinsicDemand" : 269.97584033613447,
+      "intrinsicDemand" : 269.9679711565388,
       "introduced" : [
 
       ],
@@ -2346,7 +2346,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 203.9276557795867,
+      "score" : 203.92560979289183,
       "stage" : "Intermediate"
     },
     {
@@ -2380,7 +2380,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 196.5182968588841,
+      "score" : 196.51454700498005,
       "stage" : "Intermediate"
     },
     {
@@ -2413,7 +2413,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 205.16326797385622,
+      "score" : 205.15582625734814,
       "stage" : "Intermediate"
     },
     {
@@ -2447,7 +2447,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 203.01198562168304,
+      "score" : 203.00981151079998,
       "stage" : "Intermediate"
     },
     {
@@ -2480,7 +2480,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 195.52039215686275,
+      "score" : 195.51991577724536,
       "stage" : "Intermediate"
     },
     {
@@ -2579,7 +2579,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 213.86111472739404,
+      "score" : 213.85662584266817,
       "stage" : "Intermediate"
     },
     {
@@ -2612,7 +2612,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 210.1007752901959,
+      "score" : 210.09862418190332,
       "stage" : "Intermediate"
     },
     {
@@ -2646,7 +2646,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 225.76373764627456,
+      "score" : 225.76232545665735,
       "stage" : "Intermediate"
     },
     {
@@ -2656,7 +2656,7 @@
         "miner",
         "release-rate-manipulation"
       ],
-      "demand" : 279.3660130718954,
+      "demand" : 279.3549370617187,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "4DAF3424-1320-E2C9-5CF4-1BE3DEC273FB",
@@ -2671,7 +2671,7 @@
         "sourceRevision" : "d3a60e754dd580f50f3c846b76a977903ccb3ca4997613cd7cde7879d632b080"
       },
       "focus" : "Link: Builder + Miner",
-      "intrinsicDemand" : 279.3660130718954,
+      "intrinsicDemand" : 279.3549370617187,
       "introduced" : [
 
       ],
@@ -2680,7 +2680,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 227.3465803929249,
+      "score" : 227.34370063027896,
       "stage" : "Intermediate"
     },
     {
@@ -2714,7 +2714,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 234.80899964762685,
+      "score" : 234.8055067663979,
       "stage" : "Intermediate"
     },
     {
@@ -2748,7 +2748,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 239.30867719576176,
+      "score" : 239.30491371969316,
       "stage" : "Intermediate"
     },
     {
@@ -2782,7 +2782,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 252.03225032756538,
+      "score" : 252.02944750514283,
       "stage" : "Intermediate"
     },
     {
@@ -2816,7 +2816,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 252.99664575240203,
+      "score" : 252.94144526124666,
       "stage" : "Intermediate"
     },
     {
@@ -2849,7 +2849,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 244.59936729468566,
+      "score" : 244.59567422800018,
       "stage" : "Intermediate"
     },
     {
@@ -2956,7 +2956,7 @@
         "floater",
         "miner"
       ],
-      "demand" : 293.0424836601307,
+      "demand" : 293.02743305029395,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "1DD77A2D-E507-DE63-89CA-2889D06EA202",
@@ -2971,7 +2971,7 @@
         "sourceRevision" : "f117ea9ccfc582e2704c654b2e11b16a8c7cb79e99600a180e356f0cac2ab53f"
       },
       "focus" : "Miner then Floater",
-      "intrinsicDemand" : 293.0424836601307,
+      "intrinsicDemand" : 293.02743305029395,
       "introduced" : [
 
       ],
@@ -2980,7 +2980,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 173.51624865443875,
+      "score" : 173.5123354958812,
       "stage" : "Intermediate"
     },
     {
@@ -3012,7 +3012,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 176.9947510138187,
+      "score" : 176.99073253586698,
       "stage" : "Intermediate"
     },
     {
@@ -3078,7 +3078,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 190.9755849837815,
+      "score" : 190.9744822531856,
       "stage" : "Intermediate"
     },
     {
@@ -3120,7 +3120,7 @@
         "builder",
         "digger"
       ],
-      "demand" : 284.39460784313724,
+      "demand" : 284.3744896292667,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "3D8907E9-BD89-A1E0-A5D7-BD9D5208644C",
@@ -3135,7 +3135,7 @@
         "sourceRevision" : "fc9991e07984a0eecfcd19be9ec2be19e8647a93b3282aa0eef563ceb5091446"
       },
       "focus" : "Link: Basher + Digger + Builder",
-      "intrinsicDemand" : 284.39460784313724,
+      "intrinsicDemand" : 284.3744896292667,
       "introduced" : [
 
       ],
@@ -3144,7 +3144,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 204.61689904111952,
+      "score" : 204.61166830551318,
       "stage" : "Intermediate"
     },
     {
@@ -3153,7 +3153,7 @@
         "climber",
         "release-rate-manipulation"
       ],
-      "demand" : 297.0437675070028,
+      "demand" : 297.0263176314132,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "D85F6D34-D0B7-7707-9C9F-B2E5AAD9F521",
@@ -3168,7 +3168,7 @@
         "sourceRevision" : "f117ea9ccfc582e2704c654b2e11b16a8c7cb79e99600a180e356f0cac2ab53f"
       },
       "focus" : "Link: Climber + Basher",
-      "intrinsicDemand" : 297.0437675070028,
+      "intrinsicDemand" : 297.0263176314132,
       "introduced" : [
 
       ],
@@ -3177,7 +3177,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 210.09557072422723,
+      "score" : 210.09103375657392,
       "stage" : "Intermediate"
     },
     {
@@ -3186,7 +3186,7 @@
         "builder",
         "digger"
       ],
-      "demand" : 294.84313725490193,
+      "demand" : 294.7181996086106,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "5201A5BF-E5C5-9A1A-F7E0-F8708EAB69C0",
@@ -3201,7 +3201,7 @@
         "sourceRevision" : "f0f2d7fb836a800589844b2c64b57c6eb83af930cd80b596df96c4d295dddb13"
       },
       "focus" : "Link: Digger + Basher",
-      "intrinsicDemand" : 294.84313725490193,
+      "intrinsicDemand" : 294.7181996086106,
       "introduced" : [
 
       ],
@@ -3210,7 +3210,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 203.88910585677712,
+      "score" : 203.8566220687414,
       "stage" : "Intermediate"
     },
     {
@@ -3275,7 +3275,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 215.30597510345459,
+      "score" : 215.30282275258872,
       "stage" : "Intermediate"
     },
     {
@@ -3308,7 +3308,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 211.87697254978764,
+      "score" : 211.86265075575324,
       "stage" : "Intermediate"
     },
     {
@@ -3341,7 +3341,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 209.52936274509804,
+      "score" : 209.52573248407643,
       "stage" : "Intermediate"
     },
     {
@@ -3351,7 +3351,7 @@
         "floater",
         "release-rate-manipulation"
       ],
-      "demand" : 281.1470588235294,
+      "demand" : 281.13746243303274,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "82730D3C-78D9-A903-0F4D-98300EF34C4E",
@@ -3366,7 +3366,7 @@
         "sourceRevision" : "0e07b84b0edaeb479f1d11be3213130d5211dcc82fc7fcfbe7143cc85a564ace"
       },
       "focus" : "Link: Basher + Floater",
-      "intrinsicDemand" : 281.1470588235294,
+      "intrinsicDemand" : 281.13746243303274,
       "introduced" : [
 
       ],
@@ -3375,7 +3375,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 229.3225362960215,
+      "score" : 229.32004123449235,
       "stage" : "Intermediate"
     },
     {
@@ -3385,7 +3385,7 @@
         "digger",
         "release-rate-manipulation"
       ],
-      "demand" : 296.48366013071893,
+      "demand" : 296.48088859849724,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "1A15C2A3-FA72-E4FF-72EC-8389F3FFD017",
@@ -3400,7 +3400,7 @@
         "sourceRevision" : "d4799509e28cf7d168f15f512a98642af7a107ce573d45659442ead54d6ab8a3"
       },
       "focus" : "Link: Digger + Basher + Builder",
-      "intrinsicDemand" : 296.48366013071893,
+      "intrinsicDemand" : 296.48088859849724,
       "introduced" : [
 
       ],
@@ -3409,7 +3409,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 232.41575163398693,
+      "score" : 232.41503103560927,
       "stage" : "Intermediate"
     },
     {
@@ -3417,7 +3417,7 @@
         "basher",
         "digger"
       ],
-      "demand" : 295.6764705882353,
+      "demand" : 295.5852105778648,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "0DE2078E-58CD-D9BF-33AF-B7F5A6E8BF6B",
@@ -3432,7 +3432,7 @@
         "sourceRevision" : "57f9871dc77797e9de33684616a66ab82022fe70197a838fc2dea3a241595757"
       },
       "focus" : "Basher then Digger",
-      "intrinsicDemand" : 295.6764705882353,
+      "intrinsicDemand" : 295.5852105778648,
       "introduced" : [
 
       ],
@@ -3441,7 +3441,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 227.92254901960783,
+      "score" : 227.89882141691152,
       "stage" : "Intermediate"
     },
     {
@@ -3474,7 +3474,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 224.01609470521166,
+      "score" : 224.012535670308,
       "stage" : "Intermediate"
     },
     {
@@ -3482,7 +3482,7 @@
         "bomber",
         "climber"
       ],
-      "demand" : 311.7450980392157,
+      "demand" : 311.72121509064186,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "664B4325-842D-9618-1FC8-217F25EF3B65",
@@ -3497,7 +3497,7 @@
         "sourceRevision" : "dd8cb81a28c705620de06c72a7b8c3166dcf84d6862df40974d8c6b6246d7ea8"
       },
       "focus" : "Climber then Bomber",
-      "intrinsicDemand" : 311.7450980392157,
+      "intrinsicDemand" : 311.72121509064186,
       "introduced" : [
 
       ],
@@ -3506,7 +3506,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 222.47802649209996,
+      "score" : 222.47181692547076,
       "stage" : "Intermediate"
     },
     {
@@ -3515,7 +3515,7 @@
         "miner",
         "release-rate-manipulation"
       ],
-      "demand" : 285.9228758169935,
+      "demand" : 285.90141519703894,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "9943EAEB-6EDF-B101-D6A5-F4B84E67B877",
@@ -3530,7 +3530,7 @@
         "sourceRevision" : "fc9991e07984a0eecfcd19be9ec2be19e8647a93b3282aa0eef563ceb5091446"
       },
       "focus" : "Share: Bomber + Miner",
-      "intrinsicDemand" : 285.9228758169935,
+      "intrinsicDemand" : 285.90141519703894,
       "introduced" : [
 
       ],
@@ -3539,7 +3539,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 237.4949477124183,
+      "score" : 237.48936795123012,
       "stage" : "Intermediate"
     },
     {
@@ -3548,7 +3548,7 @@
         "miner",
         "release-rate-manipulation"
       ],
-      "demand" : 284.6666666666667,
+      "demand" : 284.6609172873383,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "7B7CAC2B-497A-8799-BF0D-EECCA2C4D8EB",
@@ -3563,7 +3563,7 @@
         "sourceRevision" : "f94f553269e5905504794d67259eea0f78bbf8a85c9ac19135df60c47855dc39"
       },
       "focus" : "Link: Builder + Miner",
-      "intrinsicDemand" : 284.6666666666667,
+      "intrinsicDemand" : 284.6609172873383,
       "introduced" : [
 
       ],
@@ -3572,7 +3572,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 239.87447350383596,
+      "score" : 239.87297866521058,
       "stage" : "Intermediate"
     },
     {
@@ -3606,7 +3606,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 234.42560496551155,
+      "score" : 234.42173377313023,
       "stage" : "Intermediate"
     },
     {
@@ -3681,7 +3681,7 @@
         "digger",
         "release-rate-manipulation"
       ],
-      "demand" : 307.9967320261438,
+      "demand" : 307.8745379430311,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "86F4833E-4375-C684-46EF-CAF0063351DA",
@@ -3696,7 +3696,7 @@
         "sourceRevision" : "f601908d736e005e8c5cf4c3591b012a80227855a13d3a70274f2edcbad45c09"
       },
       "focus" : "Link: Digger + Builder",
-      "intrinsicDemand" : 307.9967320261438,
+      "intrinsicDemand" : 307.8745379430311,
       "introduced" : [
 
       ],
@@ -3705,7 +3705,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 248.8239006543628,
+      "score" : 248.7921301927535,
       "stage" : "Intermediate"
     },
     {
@@ -3715,7 +3715,7 @@
         "digger",
         "release-rate-manipulation"
       ],
-      "demand" : 313.07450980392156,
+      "demand" : 313.0674245393963,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "B158A23C-2547-3F34-C061-E7AD60F6D056",
@@ -3730,7 +3730,7 @@
         "sourceRevision" : "d3a60e754dd580f50f3c846b76a977903ccb3ca4997613cd7cde7879d632b080"
       },
       "focus" : "Link: Climber + Bomber",
-      "intrinsicDemand" : 313.07450980392156,
+      "intrinsicDemand" : 313.0674245393963,
       "introduced" : [
 
       ],
@@ -3739,7 +3739,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 265.144122876585,
+      "score" : 265.1422807078084,
       "stage" : "Intermediate"
     },
     {
@@ -3773,7 +3773,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 258.84857385697717,
+      "score" : 258.84606667576077,
       "stage" : "Intermediate"
     },
     {
@@ -3807,7 +3807,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 261.01845564892625,
+      "score" : 261.016551927971,
       "stage" : "Intermediate"
     },
     {
@@ -3841,7 +3841,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 281.82236921501556,
+      "score" : 281.81948065920125,
       "stage" : "Intermediate"
     },
     {
@@ -3874,7 +3874,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 284.23804974478134,
+      "score" : 284.22206745288787,
       "stage" : "Intermediate"
     },
     {
@@ -3884,7 +3884,7 @@
         "miner",
         "release-rate-manipulation"
       ],
-      "demand" : 294.9235294117647,
+      "demand" : 294.90787926303415,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "FDC654A5-229C-8682-1D85-C7B750293CA9",
@@ -3899,7 +3899,7 @@
         "sourceRevision" : "f1ecfbe225c1039af701815227b4af13bcf5f45ac22c7e672357b5ff485e659e"
       },
       "focus" : "Link: Basher + Builder",
-      "intrinsicDemand" : 294.9235294117647,
+      "intrinsicDemand" : 294.90787926303415,
       "introduced" : [
 
       ],
@@ -3908,7 +3908,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 289.2600078175615,
+      "score" : 289.2559387788915,
       "stage" : "Intermediate"
     },
     {
@@ -3918,7 +3918,7 @@
         "builder",
         "digger"
       ],
-      "demand" : 307.7058823529412,
+      "demand" : 307.6804670912951,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "F1BFD0A4-9C7A-2943-D717-F46A8657D8C0",
@@ -3933,7 +3933,7 @@
         "sourceRevision" : "765e8fc1c78826eebf02a390bc46be04fd2b994418d4ac57389332b14fbfa7d1"
       },
       "focus" : "Link: Digger + Basher",
-      "intrinsicDemand" : 307.7058823529412,
+      "intrinsicDemand" : 307.6804670912951,
       "introduced" : [
 
       ],
@@ -3942,7 +3942,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 281.84827973933017,
+      "score" : 281.8416717713022,
       "stage" : "Intermediate"
     },
     {
@@ -3951,7 +3951,7 @@
         "builder",
         "multiple-worker-coordination"
       ],
-      "demand" : 297.5802365757314,
+      "demand" : 297.57922192089114,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "39EF3776-F37C-3613-3A2D-8A179E86E6F9",
@@ -3966,7 +3966,7 @@
         "sourceRevision" : "ae4c5fa8e32543669347093064a4cd1fa8318d6bbd93690ea1ae1eac68a3a4e7"
       },
       "focus" : "Link: Builder + Basher",
-      "intrinsicDemand" : 297.5802365757314,
+      "intrinsicDemand" : 297.57922192089114,
       "introduced" : [
 
       ],
@@ -3975,7 +3975,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 297.5802365757314,
+      "score" : 297.57922192089114,
       "stage" : "Intermediate"
     },
     {
@@ -3983,7 +3983,7 @@
         "builder",
         "climber"
       ],
-      "demand" : 337.846218487395,
+      "demand" : 337.8162625301003,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "2CAE9327-04EF-19B6-1A78-9E8B704A1441",
@@ -3998,7 +3998,7 @@
         "sourceRevision" : "ab231d4cf7985f416429c859113385b7bebccd4686d8e6acc72026b5bd89d2de"
       },
       "focus" : "Climber then Builder",
-      "intrinsicDemand" : 337.846218487395,
+      "intrinsicDemand" : 337.8162625301003,
       "introduced" : [
 
       ],
@@ -4007,7 +4007,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 173.38573480285862,
+      "score" : 173.377946253962,
       "stage" : "Intermediate"
     },
     {
@@ -4016,7 +4016,7 @@
         "digger",
         "release-rate-manipulation"
       ],
-      "demand" : 316.40161064425774,
+      "demand" : 316.3746762791349,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "2A61E742-CBFC-DD41-BDD1-EFD9E39EBDD8",
@@ -4031,7 +4031,7 @@
         "sourceRevision" : "8d0c1f847913a4f82cfc2f0151384aa5147b5a6b30a414f60cfeeb61802d4253"
       },
       "focus" : "Share: Basher + Digger",
-      "intrinsicDemand" : 316.40161064425774,
+      "intrinsicDemand" : 316.3746762791349,
       "introduced" : [
 
       ],
@@ -4040,7 +4040,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 185.78871976941085,
+      "score" : 185.7817168344789,
       "stage" : "Intermediate"
     },
     {
@@ -4082,7 +4082,7 @@
         "floater",
         "release-rate-manipulation"
       ],
-      "demand" : 316.58088235294116,
+      "demand" : 316.55254777070064,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "09793EAA-8D48-76C1-258C-FD17E3608CA2",
@@ -4097,7 +4097,7 @@
         "sourceRevision" : "f117ea9ccfc582e2704c654b2e11b16a8c7cb79e99600a180e356f0cac2ab53f"
       },
       "focus" : "Link: Floater + Basher",
-      "intrinsicDemand" : 316.58088235294116,
+      "intrinsicDemand" : 316.55254777070064,
       "introduced" : [
 
       ],
@@ -4106,7 +4106,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 205.81244640599678,
+      "score" : 205.80507941461426,
       "stage" : "Intermediate"
     },
     {
@@ -4250,7 +4250,7 @@
         "builder",
         "release-rate-manipulation"
       ],
-      "demand" : 318.1692853457173,
+      "demand" : 318.15479352782194,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "EBD7F7C5-9F2B-465B-CC09-9508C9FCE56C",
@@ -4265,7 +4265,7 @@
         "sourceRevision" : "1d52c584e24ffcbb1e76f5fd14d54b337c44fccef3bed898733c579d5627fb9b"
       },
       "focus" : "Link: Blocker + Bomber",
-      "intrinsicDemand" : 318.1692853457173,
+      "intrinsicDemand" : 318.15479352782194,
       "introduced" : [
 
       ],
@@ -4274,7 +4274,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 231.09390436038916,
+      "score" : 231.09013648773637,
       "stage" : "Intermediate"
     },
     {
@@ -4284,7 +4284,7 @@
         "builder",
         "release-rate-manipulation"
       ],
-      "demand" : 316.8122549019608,
+      "demand" : 316.80051940415524,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "59C33305-8A87-A027-4445-E3B445968C1F",
@@ -4299,7 +4299,7 @@
         "sourceRevision" : "360975e95d67e698ebbcd4c2f2ce97f150bfe819ab03e43d5c8f67cc38664ed3"
       },
       "focus" : "Link: Builder + Basher",
-      "intrinsicDemand" : 316.8122549019608,
+      "intrinsicDemand" : 316.80051940415524,
       "introduced" : [
 
       ],
@@ -4308,7 +4308,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 240.54107644501244,
+      "score" : 240.538025215583,
       "stage" : "Intermediate"
     },
     {
@@ -4318,7 +4318,7 @@
         "miner",
         "release-rate-manipulation"
       ],
-      "demand" : 325.23333333333335,
+      "demand" : 325.2222657781262,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "FD9E1E1F-B921-FD03-E0EF-76A13F73A3C3",
@@ -4333,7 +4333,7 @@
         "sourceRevision" : "d3a60e754dd580f50f3c846b76a977903ccb3ca4997613cd7cde7879d632b080"
       },
       "focus" : "Link: Miner + Basher",
-      "intrinsicDemand" : 325.23333333333335,
+      "intrinsicDemand" : 325.2222657781262,
       "introduced" : [
 
       ],
@@ -4342,7 +4342,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 232.93055683716935,
+      "score" : 232.92767927281548,
       "stage" : "Intermediate"
     },
     {
@@ -4350,7 +4350,7 @@
         "builder",
         "floater"
       ],
-      "demand" : 330.87745098039215,
+      "demand" : 330.84762371386574,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "26092D1E-20D1-9CA7-B64A-B065732FBBCA",
@@ -4365,7 +4365,7 @@
         "sourceRevision" : "b33f3e29a9f703ed3959e189f2146cf378922649a790e30316f4b82969c794e6"
       },
       "focus" : "Builder then Floater",
-      "intrinsicDemand" : 330.87745098039215,
+      "intrinsicDemand" : 330.84762371386574,
       "introduced" : [
 
       ],
@@ -4374,7 +4374,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 230.57034081889248,
+      "score" : 230.5625857295956,
       "stage" : "Intermediate"
     },
     {
@@ -4382,7 +4382,7 @@
         "climber",
         "floater"
       ],
-      "demand" : 328.18039215686275,
+      "demand" : 328.17839639286416,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "B436F095-576C-EB14-C2FC-B585450CF570",
@@ -4397,7 +4397,7 @@
         "sourceRevision" : "a5836d5864bf2847e640d2bb852f991ccb3b68643f6b4eaa8a1252067aa02ad1"
       },
       "focus" : "Climber then Floater",
-      "intrinsicDemand" : 328.18039215686275,
+      "intrinsicDemand" : 328.17839639286416,
       "introduced" : [
 
       ],
@@ -4406,7 +4406,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 232.60980143398677,
+      "score" : 232.60928253534715,
       "stage" : "Intermediate"
     },
     {
@@ -4449,7 +4449,7 @@
         "builder",
         "multiple-worker-coordination"
       ],
-      "demand" : 315.9158496732026,
+      "demand" : 315.875864227775,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "D5EA0BA4-3D8F-8023-10F4-7E6B782479DC",
@@ -4464,7 +4464,7 @@
         "sourceRevision" : "4b7101f984e3ae81971b18a5ae393ca4012695528c1bbd5bb89bec70f188497f"
       },
       "focus" : "Link: Builder + Bomber",
-      "intrinsicDemand" : 315.9158496732026,
+      "intrinsicDemand" : 315.875864227775,
       "introduced" : [
 
       ],
@@ -4473,7 +4473,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 258.9695379092648,
+      "score" : 258.95914169345355,
       "stage" : "Intermediate"
     },
     {
@@ -4483,7 +4483,7 @@
         "builder",
         "release-rate-manipulation"
       ],
-      "demand" : 315.51274509803915,
+      "demand" : 315.4903152049649,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "DE26F3EB-51BE-9F0E-691F-3012AED8EFC4",
@@ -4498,7 +4498,7 @@
         "sourceRevision" : "02dde42ce00cffb0a126928f96abb6df8d29b45465bb761cc0a88632828ef832"
       },
       "focus" : "Link: Blocker + Bomber",
-      "intrinsicDemand" : 315.51274509803915,
+      "intrinsicDemand" : 315.4903152049649,
       "introduced" : [
 
       ],
@@ -4507,7 +4507,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 251.70191572929787,
+      "score" : 251.69608395709858,
       "stage" : "Intermediate"
     },
     {
@@ -4541,7 +4541,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 249.357479876161,
+      "score" : 249.35511231557348,
       "stage" : "Intermediate"
     },
     {
@@ -4618,7 +4618,7 @@
         "digger",
         "release-rate-manipulation"
       ],
-      "demand" : 324.953431372549,
+      "demand" : 324.9092801175318,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "C5C67984-7E01-40FA-F60F-B20C1D13CA58",
@@ -4633,7 +4633,7 @@
         "sourceRevision" : "360975e95d67e698ebbcd4c2f2ce97f150bfe819ab03e43d5c8f67cc38664ed3"
       },
       "focus" : "Link: Digger + Builder",
-      "intrinsicDemand" : 324.953431372549,
+      "intrinsicDemand" : 324.9092801175318,
       "introduced" : [
 
       ],
@@ -4642,7 +4642,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 262.4845588235294,
+      "score" : 262.47307949722494,
       "stage" : "Intermediate"
     },
     {
@@ -4710,7 +4710,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 277.0950426547186,
+      "score" : 277.08922480744036,
       "stage" : "Intermediate"
     },
     {
@@ -4720,7 +4720,7 @@
         "digger",
         "release-rate-manipulation"
       ],
-      "demand" : 330.6764705882353,
+      "demand" : 330.6636613092905,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "20A4D1ED-F3F0-48FB-6374-B7493866B728",
@@ -4735,7 +4735,7 @@
         "sourceRevision" : "aaa56f49a12a373893d97334fece3e11a69d3bb011c391ea30bff5de532d7772"
       },
       "focus" : "Link: Digger + Basher",
-      "intrinsicDemand" : 330.6764705882353,
+      "intrinsicDemand" : 330.6636613092905,
       "introduced" : [
 
       ],
@@ -4744,7 +4744,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 272.80018335484505,
+      "score" : 272.7968529423194,
       "stage" : "Intermediate"
     },
     {
@@ -4752,7 +4752,7 @@
         "builder",
         "miner"
       ],
-      "demand" : 348.296218487395,
+      "demand" : 348.2111375402267,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "0CBE5048-E04A-753D-03F6-8A5AAED680BA",
@@ -4767,7 +4767,7 @@
         "sourceRevision" : "2ed764d3fae12252aae70b4949673ba5e248526d2c83ae1267ace9d861e91401"
       },
       "focus" : "Builder then Miner",
-      "intrinsicDemand" : 348.296218487395,
+      "intrinsicDemand" : 348.2111375402267,
       "introduced" : [
 
       ],
@@ -4776,7 +4776,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 269.37016179647634,
+      "score" : 269.3480407502126,
       "stage" : "Intermediate"
     },
     {
@@ -4853,7 +4853,7 @@
         "digger",
         "release-rate-manipulation"
       ],
-      "demand" : 330.87254901960785,
+      "demand" : 330.8073783872021,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "233A9F90-1231-EA17-4FE2-A899D403CCEB",
@@ -4868,7 +4868,7 @@
         "sourceRevision" : "6096c998d47beba853cf7013d27fc8c8a80eedccb1df27ca65740c8cc9ed14ba"
       },
       "focus" : "Link: Basher + Digger + Builder",
-      "intrinsicDemand" : 330.87254901960785,
+      "intrinsicDemand" : 330.8073783872021,
       "introduced" : [
 
       ],
@@ -4877,7 +4877,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 285.1216130726635,
+      "score" : 285.10466870823797,
       "stage" : "Intermediate"
     },
     {
@@ -4911,7 +4911,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 283.8289026574025,
+      "score" : 283.82660104557783,
       "stage" : "Intermediate"
     },
     {
@@ -5047,7 +5047,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 301.2505755117078,
+      "score" : 301.2100805191902,
       "stage" : "Intermediate"
     },
     {
@@ -5157,7 +5157,7 @@
         "bomber",
         "release-rate-manipulation"
       ],
-      "demand" : 356.9362745098039,
+      "demand" : 356.8893241919686,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "4C8C411E-DBE9-438C-9F8F-D9F193C6D828",
@@ -5172,7 +5172,7 @@
         "sourceRevision" : "1962aedf16c3708f1269c3e8fcd7099d81f6e237a93b2544c5c343c18dd08a11"
       },
       "focus" : "Link: Blocker + Bomber",
-      "intrinsicDemand" : 356.9362745098039,
+      "intrinsicDemand" : 356.8893241919686,
       "introduced" : [
 
       ],
@@ -5181,7 +5181,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 202.7377323744529,
+      "score" : 202.72552529181573,
       "stage" : "Intermediate"
     },
     {
@@ -5191,7 +5191,7 @@
         "climber",
         "release-rate-manipulation"
       ],
-      "demand" : 359.2882352941176,
+      "demand" : 359.27414085979353,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "8CBC8D24-86D5-DD45-1B8B-E5CFB5B2EB0B",
@@ -5206,7 +5206,7 @@
         "sourceRevision" : "bc6910d89e3d4625677d173dd9289ac64e19378a58c5ae9c2f2285875fdfeede"
       },
       "focus" : "Link: Climber + Basher + Builder",
-      "intrinsicDemand" : 359.2882352941176,
+      "intrinsicDemand" : 359.27414085979353,
       "introduced" : [
 
       ],
@@ -5215,7 +5215,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 250.14494117647055,
+      "score" : 250.1412766235463,
       "stage" : "Intermediate"
     },
     {
@@ -5224,7 +5224,7 @@
         "digger",
         "multiple-worker-coordination"
       ],
-      "demand" : 353.65098039215684,
+      "demand" : 353.63582908663267,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "56C2FCF8-37CB-633D-FE1A-65054F46E7B5",
@@ -5239,7 +5239,7 @@
         "sourceRevision" : "d0a5a5fd593a5d0014a255e631a302f6ce35165c11ad36c685a3bdae074bd13e"
       },
       "focus" : "Link: Digger + Builder",
-      "intrinsicDemand" : 353.65098039215684,
+      "intrinsicDemand" : 353.63582908663267,
       "introduced" : [
 
       ],
@@ -5248,7 +5248,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 268.46914507246345,
+      "score" : 268.4652057330271,
       "stage" : "Intermediate"
     },
     {
@@ -5258,7 +5258,7 @@
         "builder",
         "miner"
       ],
-      "demand" : 358.79411764705884,
+      "demand" : 358.7659157688541,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "1A13E101-07F6-25F5-5976-BE0B0ECB5235",
@@ -5273,7 +5273,7 @@
         "sourceRevision" : "bc6910d89e3d4625677d173dd9289ac64e19378a58c5ae9c2f2285875fdfeede"
       },
       "focus" : "Link: Basher + Builder",
-      "intrinsicDemand" : 358.79411764705884,
+      "intrinsicDemand" : 358.7659157688541,
       "introduced" : [
 
       ],
@@ -5282,7 +5282,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 274.49788758246734,
+      "score" : 274.49055509413415,
       "stage" : "Intermediate"
     },
     {
@@ -5359,7 +5359,7 @@
         "floater",
         "release-rate-manipulation"
       ],
-      "demand" : 359.9866946778711,
+      "demand" : 359.9321393591717,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "496A0E3D-8C07-B33A-432F-4A8C25EC9373",
@@ -5374,7 +5374,7 @@
         "sourceRevision" : "a1883fb43a9148fb8feeb3cf88b817663bd9bb9b5e23ae179ffe5c6166686b81"
       },
       "focus" : "Link: Floater + Builder",
-      "intrinsicDemand" : 359.9866946778711,
+      "intrinsicDemand" : 359.9321393591717,
       "introduced" : [
 
       ],
@@ -5383,7 +5383,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 289.5563209572517,
+      "score" : 289.54213657438993,
       "stage" : "Intermediate"
     },
     {
@@ -5393,7 +5393,7 @@
         "miner",
         "release-rate-manipulation"
       ],
-      "demand" : 352.6764705882353,
+      "demand" : 352.50489236790605,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "89D55DA1-DE91-2538-45E7-14F25B954FF5",
@@ -5408,7 +5408,7 @@
         "sourceRevision" : "dba9b23e61ec73dc0a22e49385a9dacbb45eb5db64bf064a794d8376617f5c1c"
       },
       "focus" : "Link: Miner + Basher + Digger",
-      "intrinsicDemand" : 352.6764705882353,
+      "intrinsicDemand" : 352.50489236790605,
       "introduced" : [
 
       ],
@@ -5417,7 +5417,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 300.5906326805066,
+      "score" : 300.54602234322095,
       "stage" : "Intermediate"
     },
     {
@@ -5460,7 +5460,7 @@
         "builder",
         "multiple-worker-coordination"
       ],
-      "demand" : 351.22058823529414,
+      "demand" : 351.17205618161034,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "01542E02-F942-E032-6AA7-27A44372A2E8",
@@ -5475,7 +5475,7 @@
         "sourceRevision" : "dd8cb81a28c705620de06c72a7b8c3166dcf84d6862df40974d8c6b6246d7ea8"
       },
       "focus" : "Link: Basher + Builder + Basher",
-      "intrinsicDemand" : 351.22058823529414,
+      "intrinsicDemand" : 351.17205618161034,
       "introduced" : [
 
       ],
@@ -5484,7 +5484,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 327.9318815766676,
+      "score" : 327.9192632427098,
       "stage" : "Intermediate"
     },
     {
@@ -5494,7 +5494,7 @@
         "climber",
         "multiple-worker-coordination"
       ],
-      "demand" : 359.1813725490196,
+      "demand" : 359.17442430181285,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "DEB6B089-34F3-7D79-269B-4FDB3A7D075C",
@@ -5509,7 +5509,7 @@
         "sourceRevision" : "47e0617d94895001361db1030169ce26764aca68a61ff70de9d3edd1a0550ae9"
       },
       "focus" : "Link: Basher + Climber + Builder",
-      "intrinsicDemand" : 359.1813725490196,
+      "intrinsicDemand" : 359.17442430181285,
       "introduced" : [
 
       ],
@@ -5518,7 +5518,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 322.3200563359475,
+      "score" : 322.3182497916738,
       "stage" : "Intermediate"
     },
     {
@@ -5528,7 +5528,7 @@
         "floater",
         "multiple-worker-coordination"
       ],
-      "demand" : 359.2485014005602,
+      "demand" : 359.2435213830755,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "06E93FE9-FD4A-984F-BAB8-FF14F8996803",
@@ -5543,7 +5543,7 @@
         "sourceRevision" : "0e07b84b0edaeb479f1d11be3213130d5211dcc82fc7fcfbe7143cc85a564ace"
       },
       "focus" : "Link: Floater + Builder",
-      "intrinsicDemand" : 359.2485014005602,
+      "intrinsicDemand" : 359.2435213830755,
       "introduced" : [
 
       ],
@@ -5552,7 +5552,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 359.2485014005602,
+      "score" : 359.2435213830755,
       "stage" : "Intermediate"
     },
     {
@@ -7531,7 +7531,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 456.87046474890576,
+      "score" : 456.8425491144835,
       "stage" : "Difficult"
     },
     {
@@ -7566,7 +7566,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 453.5463920969794,
+      "score" : 453.5400919727494,
       "stage" : "Difficult"
     },
     {
@@ -7632,7 +7632,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 326.9062136999144,
+      "score" : 326.897342399802,
       "stage" : "Difficult"
     },
     {
@@ -7668,7 +7668,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 357.3418140390288,
+      "score" : 357.33784032852554,
       "stage" : "Difficult"
     },
     {
@@ -7885,7 +7885,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 427.1145738569772,
+      "score" : 427.1048881820016,
       "stage" : "Difficult"
     },
     {
@@ -7958,7 +7958,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 480.17770339477113,
+      "score" : 480.15052924793315,
       "stage" : "Difficult"
     },
     {
@@ -7994,7 +7994,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 475.88464413915875,
+      "score" : 475.8722627853433,
       "stage" : "Difficult"
     },
     {
@@ -8135,7 +8135,43 @@
       "preparationGaps" : [
 
       ],
-      "score" : 407.26392679815365,
+      "score" : 407.25896305460054,
+      "stage" : "Difficult"
+    },
+    {
+      "concepts" : [
+        "blocker",
+        "builder",
+        "digger",
+        "miner",
+        "multiple-worker-coordination",
+        "release-rate-manipulation"
+      ],
+      "demand" : 569.5,
+      "entry" : {
+        "catalogueRevision" : "1.2-runtime-v2",
+        "id" : "389FD935-3C9E-4AAF-7F9B-491E22F0F2B8",
+        "identity" : {
+          "engine" : "classic",
+          "levelID" : "ANTHPCK4.DAT#6",
+          "packID" : "fan:lldb-224"
+        },
+        "levelNameSnapshot" : "Snow Lev 7",
+        "levelNumberSnapshot" : 6,
+        "packNameSnapshot" : "ANTHPCK4",
+        "sourceRevision" : "b2818e41664bbcc98870c9a7c5e6f20258004495061503f5c373fa255188223d"
+      },
+      "focus" : "Link: Miner + Builder",
+      "intrinsicDemand" : 569.5,
+      "introduced" : [
+
+      ],
+      "needsSupport" : false,
+      "objective" : "apply:02691dd559a2085fb9dd",
+      "preparationGaps" : [
+
+      ],
+      "score" : 410.85142254501847,
       "stage" : "Difficult"
     },
     {
@@ -8169,7 +8205,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 412.333428800389,
+      "score" : 412.3283934745813,
       "stage" : "Difficult"
     },
     {
@@ -8383,43 +8419,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 484.57299922372636,
-      "stage" : "Difficult"
-    },
-    {
-      "concepts" : [
-        "basher",
-        "blocker",
-        "builder",
-        "digger",
-        "multiple-worker-coordination",
-        "release-rate-manipulation"
-      ],
-      "demand" : 569.5,
-      "entry" : {
-        "catalogueRevision" : "1.2-runtime-v2",
-        "id" : "80691273-D323-53F6-2BBC-C1EBE8B98842",
-        "identity" : {
-          "engine" : "classic",
-          "levelID" : "AkseliPack01.dat#5",
-          "packID" : "fan:lldb-220"
-        },
-        "levelNameSnapshot" : "Why do you all look the same?",
-        "levelNumberSnapshot" : 6,
-        "packNameSnapshot" : "AkseliPack01",
-        "sourceRevision" : "91d3fe47ec7780e3aaa34c45fcb0f77d14e445adc7132ab4e1a1c842fa50f198"
-      },
-      "focus" : "Link: Blocker + Builder",
-      "intrinsicDemand" : 569.5,
-      "introduced" : [
-
-      ],
-      "needsSupport" : false,
-      "objective" : "apply:04677b1138a16de7b869",
-      "preparationGaps" : [
-
-      ],
-      "score" : 561.9370545153694,
+      "score" : 484.56423463313905,
       "stage" : "Difficult"
     },
     {
@@ -8446,7 +8446,7 @@
       "introduced" : [
 
       ],
-      "needsSupport" : false,
+      "needsSupport" : true,
       "objective" : "apply:8eb4e2395128b35e52f0",
       "preparationGaps" : [
 
@@ -8486,7 +8486,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 407.058125132618,
+      "score" : 407.048019583852,
       "stage" : "Difficult"
     },
     {
@@ -8595,7 +8595,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 455.3632209158007,
+      "score" : 455.3568854379796,
       "stage" : "Difficult"
     },
     {
@@ -8697,7 +8697,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 243.12590854924616,
+      "score" : 243.12408176851426,
       "stage" : "Expert"
     },
     {
@@ -9708,7 +9708,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 519.8438907563025,
+      "score" : 519.8394128353027,
       "stage" : "Expert"
     },
     {
@@ -9786,7 +9786,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 567.9673582476225,
+      "score" : 567.963217860334,
       "stage" : "Expert"
     },
     {
@@ -9825,7 +9825,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 578.7226666067833,
+      "score" : 578.7104878881621,
       "stage" : "Expert"
     },
     {
@@ -9864,7 +9864,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 586.0281624649859,
+      "score" : 586.0236163969312,
       "stage" : "Expert"
     },
     {
@@ -9903,7 +9903,7 @@
       "preparationGaps" : [
 
       ],
-      "score" : 581.9501233826865,
+      "score" : 581.9472089286547,
       "stage" : "Expert"
     }
   ],

@@ -227,8 +227,11 @@ struct GolemsObjectComparison: Codable {
                             throw NSError(domain: "Evidence", code: 1, userInfo: [NSLocalizedDescriptionKey:
                                 "Profile and bundled witness differ: \(level.title); target \(digest); stored \(storedDigest)"])
                         }
+                        let tickLimit = max(ClassicDOSReplayPlayer.defaultTickLimit,
+                            initial.configuration.timeLimitTicks ?? 0,
+                            expected.ticks + ClassicDOSRules.ticksPerSecond)
                         let result = try ClassicDOSReplayPlayer.run(replay, simulation: initial,
-                            verify: !rebaseExpected)
+                            tickLimit: tickLimit, verify: !rebaseExpected)
                         guard result.didWin else { throw DifficultyAnalysisError.replayDidNotWin }
                         if rebaseExpected {
                             let updated = ClassicDOSReplay(rank: stored.rank, number: stored.number,

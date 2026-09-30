@@ -1,10 +1,10 @@
 {
-  "candidatePool": 1534,
+  "candidatePool": 1540,
   "duplicateObjectives": 0,
   "fan": 137,
   "fanPacks": 80,
   "largestDemandStep": 49,
-  "largestScoreStep": 77.36405529164301,
+  "largestScoreStep": 73.81583510677387,
   "levels": 292,
   "official": 155,
   "ohNoLevels": 51,
@@ -16,7 +16,7 @@
     "Fun": 8,
     "Intermediate": 160
   },
-  "supportTransitions": 1,
+  "supportTransitions": 2,
   "targetSize": 292,
   "version": "learning-8"
 }

@@ -20,9 +20,12 @@ struct VerifiedSolution: Sendable {
 
     static func validate(_ replay: ClassicDOSReplay, initial: ClassicDOSSimulation) -> Self? {
         guard let expected = replay.expected, expected.didWin,
-              expected.ticks > 0, expected.ticks <= ClassicDOSReplayPlayer.defaultTickLimit,
+              expected.ticks > 0,
               replay.events.allSatisfy({ $0.tick >= ($0.afterTick == true ? 0 : 1) && $0.tick <= expected.ticks }),
-              let outcome = try? ClassicDOSReplayPlayer.run(replay, simulation: initial),
+              let outcome = try? ClassicDOSReplayPlayer.run(replay, simulation: initial,
+                  tickLimit: max(ClassicDOSReplayPlayer.defaultTickLimit,
+                      initial.configuration.timeLimitTicks ?? 0,
+                      expected.ticks + ClassicDOSRules.ticksPerSecond)),
               outcome == expected, outcome.didWin else { return nil }
         return Self(replay: replay, initial: initial)
     }
