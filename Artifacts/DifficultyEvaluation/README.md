@@ -2,7 +2,7 @@
 
 This ledger covers 6020 bundled Classic fan levels and 794 bundled NeoLemmix levels. Every row has a difficulty score. A low-confidence score is a metadata estimate, not a completed playtest.
 
-Verified winning replays support 2136 Classic fan scores and 322 NeoLemmix scores. The remaining 3887 non-official scores and 469 official conversion scores lack a verified win. Of the non-official rows, 4 bundled Classic levels cannot win under the current native object and rescue rules recorded below.
+Verified winning replays support 2138 Classic fan scores and 322 NeoLemmix scores. The remaining 3885 non-official scores and 469 official conversion scores lack a verified win. Of the non-official rows, 4 bundled Classic levels cannot win under the current native object and rescue rules recorded below.
 
 The `playtest` column records the latest check. A passive loss or timeout only describes a run without player input. It does not prove that the level is impossible. Source-compatible replays can have an absent or different level version; their native wins are valid, but source parity is unverified.
 
@@ -11,6 +11,8 @@ The `issue` column records a replay-analysis failure where one occurred. Such ro
 Classic fan rows marked `no functional exit` contain no exit object. The native fan runtime activates all 32 object slots when every exit would otherwise be inactive under the DOS rule. This gives the 30 late-exit levels functional exits; the ledger records their winning evidence separately. The inspected Golems assembly processes all 32 slots. Other native fan levels still use DOS object semantics, so full Golems parity is not established. See [the traditional Lemmix object rule](https://www.neolemmix.com/old/nle_piece_properties.html), `classic-structural-limits.json` and `validation.md`. A row marked `rescue requirement exceeds population` also cannot win on the bundled level.
 
 A native win shows that this engine can complete the level. It does not independently prove physics parity with the source engine. The `physics_parity` column records partial assignment-state matches and known object-rule replay differences where checked. The full parity gate remains separate.
+
+The pinned Golems timer allows two more update cycles than the current native DOS clock on timed levels. [The clock audit](classic-fan-clock-audit.json) strictly replays all 2,138 verified Classic fan witnesses with those two cycles added: all retain their wins, while 2,137 initial-state hashes change. Fan playback and ledger scores have not yet migrated to that clock. See `validation.md` and `Tools/DifficultyDiagnostics/ClassicFanClockAudit/main.swift` for the source check and replay audit.
 
 The Classic replay initial-state hash covers the starting counters, workers and terrain mask. It does not include configured object triggers. An archive fingerprint and a replay run under the current object rule are required alongside that hash. `FAN_COMPARE_GOLEMS_OBJECTS=1` with `FAN_VERIFY_ONLY=1` in `ExpandFanEvidence` compares selected winning replays with all 32 object slots active. `classic-golems-object-comparisons.json` records those native rule comparisons; `python3 Tools/DifficultyDiagnostics/verify_golems_object_comparisons.py` checks their level and replay identities. These comparisons are not full source-physics checks.
 

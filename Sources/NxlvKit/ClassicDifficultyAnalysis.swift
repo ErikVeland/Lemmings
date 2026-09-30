@@ -6,9 +6,12 @@ public enum ClassicDifficultyAnalysis {
                                key: DifficultyCacheKey,
                                maximumProbeRuns: Int = DifficultyModel.maximumProbeRuns) throws -> DifficultyProfile {
         guard replay.expected?.didWin == true else { throw DifficultyAnalysisError.replayDidNotWin }
+        let tickLimit = max(ClassicDOSReplayPlayer.defaultTickLimit,
+            initial.configuration.timeLimitTicks ?? 0,
+            (replay.expected?.ticks ?? 0) + ClassicDOSRules.ticksPerSecond)
         var evidence = DifficultySolutionEvidence()
         var assigned: Set<Int> = []
-        let outcome = try ClassicDOSReplayPlayer.run(replay, simulation: initial) { simulation in
+        let outcome = try ClassicDOSReplayPlayer.run(replay, simulation: initial, tickLimit: tickLimit) { simulation in
             try Task.checkCancellation()
             for event in simulation.lastTickEvents {
                 switch event {
@@ -47,7 +50,8 @@ public enum ClassicDifficultyAnalysis {
             let variant = ClassicDOSReplay(rank: replay.rank, number: replay.number, title: replay.title,
                 initialStateHash: replay.initialStateHash, events: events)
             do {
-                return try ClassicDOSReplayPlayer.run(variant, simulation: initial, verify: false) { _ in
+                return try ClassicDOSReplayPlayer.run(variant, simulation: initial,
+                    tickLimit: tickLimit, verify: false) { _ in
                     try Task.checkCancellation()
                 }.didWin
             } catch ClassicDOSReplayError.commandRejected { return false }

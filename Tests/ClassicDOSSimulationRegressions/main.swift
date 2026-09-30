@@ -1056,6 +1056,11 @@ private func testOhNoMoreMechanics(dataDirectory: URL) throws {
     let rendered = try ClassicLevelRenderer.render(level, groundSet: ClassicGroundSet.load(style: level.groundStyle, from: dataDirectory))
     let original = try ClassicDOSSimulation(level: level, renderedLevel: rendered)
     let later = try ClassicDOSSimulation(level: level, renderedLevel: rendered, mechanics: .ohNoMore)
+    let golemsClock = try ClassicDOSSimulation(level: level, renderedLevel: rendered, clock: .golems)
+    try require(golemsClock.configuration.timeLimitTicks == original.configuration.timeLimitTicks.map { $0 + 2 },
+        "Golems timer should allow two final ticks")
+    try require(ClassicDOSReplayRecorder.stateHash(of: original) != ClassicDOSReplayRecorder.stateHash(of: golemsClock),
+        "a changed clock must change the replay identity")
     try require(zip(original.configuration.entrances, later.configuration.entrances).allSatisfy { $0.x + 1 == $1.x && $0.y == $1.y },
         "later hatch offset should be x+25")
     try require(ClassicDOSReplayRecorder.stateHash(of: original) != ClassicDOSReplayRecorder.stateHash(of: later),

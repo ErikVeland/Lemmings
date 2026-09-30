@@ -1,0 +1,83 @@
+{
+  "components" : {
+    "concurrencyBurden" : 0,
+    "constraintPressure" : 1000,
+    "deductionComplexityProxy" : 160,
+    "executionPrecision" : 268.3333333333333,
+    "solutionComplexity" : 289,
+    "techniqueBurden" : 325
+  },
+  "confidence" : "medium",
+  "criticalActions" : [
+    3
+  ],
+  "detectedTechniques" : [
+    "builder",
+    "climber",
+    "floater",
+    "release-rate-manipulation"
+  ],
+  "explanation" : [
+    "3 used skill types; 1 assigned workers; 2 same-worker skill changes.",
+    "Maximum concurrent worker regions: 1.",
+    "Timing probes: 10. Untested alternatives remain unknown.",
+    "Deduction is a conservative proxy. Observed techniques are not proof of necessity.",
+    "Source rank: fan:lldb-554."
+  ],
+  "key" : {
+    "analyserVersion" : "difficulty-2",
+    "assetsRevision" : "e1bb3e7abcadb0cdf26305371e18932e9b6b30309b4a5e1b11a0a1190faef98c:probes-10",
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "Lemmings Plus DOS Project - 10 - Danger (Part 1).dat#5",
+      "packID" : "fan:lldb-554"
+    },
+    "levelRevision" : "bc6910d89e3d4625677d173dd9289ac64e19378a58c5ae9c2f2285875fdfeede",
+    "replayRevision" : "SHA256 digest: f8f39131e3ae2b5f5dab781223bbd68f49d11e15a196c620c8554be3120fd5ad",
+    "simulationVersion" : "neolemmix-ce-2026-09-27:golems-clock-2"
+  },
+  "overallScore" : 339.69666666666666,
+  "precision" : {
+    "actions" : [
+      {
+        "outcomes" : {
+          "-1" : true,
+          "-2" : true,
+          "1" : true,
+          "2" : true
+        },
+        "sequence" : 1
+      },
+      {
+        "outcomes" : {
+          "-1" : true,
+          "-2" : false,
+          "1" : true
+        },
+        "sequence" : 2
+      },
+      {
+        "outcomes" : {
+          "-1" : false,
+          "-2" : false,
+          "1" : false
+        },
+        "sequence" : 3
+      }
+    ],
+    "alternativeRunCount" : 0,
+    "assignmentCount" : 3,
+    "completed" : false,
+    "orderingOutcomes" : [
+
+    ],
+    "runCount" : 10,
+    "selectionOutcomes" : [
+
+    ]
+  },
+  "prerequisiteConcepts" : [
+
+  ],
+  "sourceRank" : "fan:lldb-554"
+}

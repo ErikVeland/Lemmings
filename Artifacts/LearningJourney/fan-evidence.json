@@ -203803,5 +203803,144 @@
       "prerequisiteConcepts": [],
       "sourceRank": "fan:lldb-136"
     }
+  },
+  {
+    "entry" : {
+      "catalogueRevision" : "1.2-runtime-v2",
+      "id" : "4E05272D-2B8A-0AFA-01C7-BE79284AE38B",
+      "identity" : {
+        "engine" : "classic",
+        "levelID" : "justdigcomp.dat#1",
+        "packID" : "fan:lldb-374"
+      },
+      "levelNameSnapshot" : "Juanjos Just dig!",
+      "levelNumberSnapshot" : 2,
+      "packNameSnapshot" : "justdigcomp",
+      "sourceRevision" : "aafbe56bf545df649edde5ca3bd4e51b8f5c834e52772aaf339003420d473a26"
+    },
+    "initialHash" : "172a947b95629f69ab15a3a297f9c4c0e62dac6448733cb2bbf3651c2ac8ec84",
+    "official" : false,
+    "order" : 3736,
+    "playable" : true,
+    "profile" : {
+      "components" : {
+        "concurrencyBurden" : 530,
+        "constraintPressure" : 828.75,
+        "deductionComplexityProxy" : 135,
+        "executionPrecision" : 0,
+        "solutionComplexity" : 505.53272943230144,
+        "techniqueBurden" : 670
+      },
+      "confidence" : "medium",
+      "criticalActions" : [
+
+      ],
+      "detectedTechniques" : [
+        "basher",
+        "builder",
+        "climber",
+        "digger",
+        "multiple-worker-coordination",
+        "release-rate-manipulation"
+      ],
+      "explanation" : [
+        "4 used skill types; 29 assigned workers; 3 same-worker skill changes.",
+        "Maximum concurrent worker regions: 2.",
+        "Timing probes: 10. Untested alternatives remain unknown.",
+        "Deduction is a conservative proxy. Observed techniques are not proof of necessity.",
+        "Source rank: fan:lldb-374."
+      ],
+      "key" : {
+        "analyserVersion" : "difficulty-2",
+        "assetsRevision" : "172a947b95629f69ab15a3a297f9c4c0e62dac6448733cb2bbf3651c2ac8ec84:probes-10",
+        "identity" : {
+          "engine" : "classic",
+          "levelID" : "justdigcomp.dat#1",
+          "packID" : "fan:lldb-374"
+        },
+        "levelRevision" : "aafbe56bf545df649edde5ca3bd4e51b8f5c834e52772aaf339003420d473a26",
+        "replayRevision" : "SHA256 digest: 91e83fcdadbb12e18318a8f8a5289cc1ece4db434c27c78323606b3dd0ba490e",
+        "simulationVersion" : "neolemmix-ce-2026-09-27"
+      },
+      "overallScore" : 464.8047004751063,
+      "precision" : {
+        "actions" : [
+          {
+            "outcomes" : {
+              "-1" : false
+            },
+            "sequence" : 0
+          },
+          {
+            "outcomes" : {
+              "-1" : true
+            },
+            "sequence" : 1
+          },
+          {
+            "outcomes" : {
+              "-1" : true
+            },
+            "sequence" : 28
+          },
+          {
+            "outcomes" : {
+              "-1" : true
+            },
+            "sequence" : 3
+          },
+          {
+            "outcomes" : {
+              "-1" : true
+            },
+            "sequence" : 29
+          },
+          {
+            "outcomes" : {
+              "-1" : true
+            },
+            "sequence" : 30
+          },
+          {
+            "outcomes" : {
+              "-1" : true
+            },
+            "sequence" : 31
+          },
+          {
+            "outcomes" : {
+              "-1" : true
+            },
+            "sequence" : 32
+          },
+          {
+            "outcomes" : {
+              "-1" : true
+            },
+            "sequence" : 4
+          },
+          {
+            "outcomes" : {
+              "-1" : true
+            },
+            "sequence" : 5
+          }
+        ],
+        "alternativeRunCount" : 0,
+        "assignmentCount" : 32,
+        "completed" : false,
+        "orderingOutcomes" : [
+
+        ],
+        "runCount" : 10,
+        "selectionOutcomes" : [
+
+        ]
+      },
+      "prerequisiteConcepts" : [
+
+      ],
+      "sourceRank" : "fan:lldb-374"
+    }
   }
 ]

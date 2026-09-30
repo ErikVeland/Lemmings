@@ -31331,6 +31331,37 @@
     },
     {
       "concepts" : [
+        "basher",
+        "digger"
+      ],
+      "demand" : 492.45098039215685,
+      "entry" : {
+        "catalogueRevision" : "1.2-runtime-v2",
+        "id" : "0D3B6DF7-DD93-DC79-FFB2-0E3AD84983AA",
+        "identity" : {
+          "engine" : "classic",
+          "levelID" : "Pieuw 2007 Insane 2.DAT#7",
+          "packID" : "fan:lldb-545"
+        },
+        "levelNameSnapshot" : "The Crossing (Part II)",
+        "levelNumberSnapshot" : 18,
+        "packNameSnapshot" : "Pieuws Lemmings 2007 Insane",
+        "sourceRevision" : "0b5e4bfede58cb4d8acee4ff5fb4d28ef912a472c1a5405271dc61453d7292f5"
+      },
+      "focus" : "Combine: Basher + Digger",
+      "intrinsicDemand" : 492.45098039215685,
+      "introduced" : [
+
+      ],
+      "needsSupport" : false,
+      "preparationGaps" : [
+
+      ],
+      "score" : 269.12155590386465,
+      "stage" : "Difficult"
+    },
+    {
+      "concepts" : [
         "bomber"
       ],
       "demand" : 510.53125,
@@ -41564,6 +41595,41 @@
 
       ],
       "score" : 465.0770868347339,
+      "stage" : "Difficult"
+    },
+    {
+      "concepts" : [
+        "basher",
+        "builder",
+        "climber",
+        "digger",
+        "multiple-worker-coordination",
+        "release-rate-manipulation"
+      ],
+      "demand" : 569.5,
+      "entry" : {
+        "catalogueRevision" : "1.2-runtime-v2",
+        "id" : "4E05272D-2B8A-0AFA-01C7-BE79284AE38B",
+        "identity" : {
+          "engine" : "classic",
+          "levelID" : "justdigcomp.dat#1",
+          "packID" : "fan:lldb-374"
+        },
+        "levelNameSnapshot" : "Juanjos Just dig!",
+        "levelNumberSnapshot" : 2,
+        "packNameSnapshot" : "justdigcomp",
+        "sourceRevision" : "aafbe56bf545df649edde5ca3bd4e51b8f5c834e52772aaf339003420d473a26"
+      },
+      "focus" : "Combine: Basher + Builder",
+      "intrinsicDemand" : 569.5,
+      "introduced" : [
+
+      ],
+      "needsSupport" : false,
+      "preparationGaps" : [
+
+      ],
+      "score" : 464.8047004751063,
       "stage" : "Difficult"
     },
     {
