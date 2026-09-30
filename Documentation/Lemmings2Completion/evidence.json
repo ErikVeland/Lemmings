@@ -8,14 +8,14 @@
     "egyptian": 8,
     "highland": 3,
     "medieval": 4,
-    "outdoor": 7,
+    "outdoor": 8,
     "polar": 6,
     "shadow": 3,
     "space": 5,
     "sports": 7
   },
   "quality": {
-    "bareSurvivals": 43
+    "bareSurvivals": 44
   },
   "chainedLevels": {
     "beach": 1,
@@ -512,6 +512,16 @@
       "startingPopulation": 60,
       "saved": 1,
       "ticks": 1892
+    },
+    {
+      "fixture": "Tests/Lemmings2CompletionTests/Fixtures/outdoor-04.json",
+      "sha256": "1fb14e0a7daf731b4bc74c0fbcd9eff308c2f6e7e6d0eb2c56c06fb7644a5d38",
+      "tribe": "outdoor",
+      "level": 4,
+      "levelSHA256": "ef251a14bb922a1bf105c47637a5a8e6e532050a40d2a8254e0851409f388b5c",
+      "startingPopulation": 60,
+      "saved": 1,
+      "ticks": 2775
     },
     {
       "fixture": "Tests/Lemmings2CompletionTests/Fixtures/outdoor-05.json",
