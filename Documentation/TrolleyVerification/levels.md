@@ -449,7 +449,7 @@ See [method and limitations](README.md) and [exact conditions and evidence](audi
 | Lemmings Versus 17: The Crystal Cavern Mark II | 40 | 30 | 40 | 40 | 0 | [Verified](witnesses/ohYesMoreLemmings-16.json) |
 | Lemmings Versus 18: The Rope Bridge | 50 | 26 | 26 | — | — | [Observed](witnesses/ohYesMoreLemmings-17.json) |
 | Lemmings Versus 19: Islands in the Sky | 40 | 26 | 39 | — | — | [Observed](witnesses/ohYesMoreLemmings-18.json) |
-| Lemmings Versus 20: Cross-over Point | 40 | 20 | 21 | — | — | [Observed](witnesses/ohYesMoreLemmings-19.json) |
+| Lemmings Versus 20: Cross-over Point | 40 | 20 | 37 | — | — | [Observed](witnesses/ohYesMoreLemmings-19.json) |
 | Mega Drive Sunsoft 1: Rules to fall | 20 | 10 | 20 | 20 | 0 | [Verified](witnesses/ohYesMoreLemmings-30.json) |
 | Mega Drive Sunsoft 2: Inside the bone | 50 | 50 | 50 | 50 | 0 | [Verified](witnesses/ohYesMoreLemmings-31.json) |
 | Mega Drive Sunsoft 3: Anxiety | 60 | 60 | 60 | 60 | 0 | [Verified](witnesses/ohYesMoreLemmings-32.json) |

@@ -1,9 +1,9 @@
-# Ultimate Lemmings 1.7.2 — Faster Controls, a Selective Journey and NeoLemmix
+# Ultimate Lemmings 1.7.3 — Faster Controls, a Selective Journey and NeoLemmix
 
-Build: 55
+Build: 56
 Release base: v1.7.1
 
-These notes cover all of 1.7: the 1.7.0 release and the 1.7.1 and 1.7.2 updates.
+These notes cover the changes since the public 1.7.1 release.
 
 ## New since 1.7.1
 

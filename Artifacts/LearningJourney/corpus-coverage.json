@@ -1,0 +1,43 @@
+{
+  "campaigns": [
+    {
+      "confirmedScored": 120,
+      "corpusLevels": 120,
+      "pack": "Lemmings",
+      "selected": 50
+    },
+    {
+      "confirmedScored": 100,
+      "corpusLevels": 100,
+      "pack": "Oh No! More Lemmings",
+      "selected": 51
+    },
+    {
+      "confirmedScored": 4,
+      "corpusLevels": 4,
+      "pack": "Xmas Lemmings 1991",
+      "selected": 1
+    },
+    {
+      "confirmedScored": 4,
+      "corpusLevels": 4,
+      "pack": "Xmas Lemmings 1992",
+      "selected": 0
+    },
+    {
+      "confirmedScored": 32,
+      "corpusLevels": 32,
+      "pack": "Holiday Lemmings 1993",
+      "selected": 20
+    },
+    {
+      "confirmedScored": 32,
+      "corpusLevels": 32,
+      "pack": "Holiday Lemmings 1994",
+      "selected": 16
+    }
+  ],
+  "eligiblePool": 1534,
+  "scope": "Classic mechanics only, per user direction. L2/L3 evidence remains outside this journey.",
+  "sizeReference": 292
+}

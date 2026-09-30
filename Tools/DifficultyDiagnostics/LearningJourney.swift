@@ -2,7 +2,7 @@ import Foundation
 import CryptoKit
 import NxlvKit
 
-struct Row: Decodable {
+struct Row: Codable {
     let entry: LevelPlaylistEntry
     let profile: DifficultyProfile
     let official: Bool
@@ -65,12 +65,12 @@ let selectionOrder = rows.sorted {
     return $0.entry.identity.packID + $0.entry.identity.levelID < $1.entry.identity.packID + $1.entry.identity.levelID
 }
 let officialIDs = Set(uniqueOfficial.map { $0.entry.identity })
-let selected = selectionOrder.filter {
+let pool = selectionOrder.filter {
     guard LearningJourney.isSinglePlayer($0.entry, sourceRank: $0.profile.sourceRank), $0.playable, $0.profile.confidence != .low else { return false }
     if $0.official { return officialIDs.contains($0.entry.identity) }
     // Port packs with numbered ranks are alternate presentations of the main Classic campaign.
     let pack = $0.entry.packNameSnapshot
-    if ["Amiga Fun", "Amiga Tricky", "Amiga Taxing", "Amiga Mayhem"].contains(pack) { return false }
+    if ["Amiga Fun", "Amiga Tricky", "Amiga Taxing", "Amiga Mayhem"].contains(where: { pack.hasPrefix($0) }) { return false }
     if officialTitles.contains(title($0)) { return false }
     // Empty or hands-free fan records do not teach a bridge concept.
     guard !$0.profile.detectedTechniques.isEmpty,
@@ -83,10 +83,25 @@ let selected = selectionOrder.filter {
     titlesByPack.insert(pack + "\0" + title($0))
     return true
 }
-guard selected.filter(\.official).count == uniqueOfficial.count else { throw LevelPlaylistError.invalidPool }
+guard pool.filter(\.official).count == uniqueOfficial.count else { throw LevelPlaylistError.invalidPool }
+let poolEncoder = JSONEncoder(); poolEncoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+let poolURL = project.appendingPathComponent(".build/learning-journey/pool.json")
+try poolEncoder.encode(pool).write(to: poolURL, options: .atomic)
+if ProcessInfo.processInfo.environment["LEARNING_EXPORT_POOL"] == "1" { exit(0) }
+struct Curriculum: Decodable {
+    struct Goal: Decodable { let identity: LevelCatalogueIdentity; let objective: String; let lesson: String }
+    let lessons: [Goal]
+}
+let curriculum = try JSONDecoder().decode(Curriculum.self, from: Data(contentsOf: project.appendingPathComponent("Artifacts/LearningJourney/curriculum.json")))
+let goals = Dictionary(uniqueKeysWithValues: curriculum.lessons.map { ($0.identity, $0) })
+guard Set(curriculum.lessons.map(\.objective)).count == curriculum.lessons.count else { throw LevelPlaylistError.invalidPool }
+let selected = pool.filter { goals[$0.entry.identity] != nil }
+guard selected.count == goals.count else { throw LevelPlaylistError.invalidPool }
 let candidates = selected.map { ProgressionCandidate(entry: $0.entry, profile: $0.profile, isOfficial: $0.official, campaignOrder: $0.order) }
-let journey = try LearningJourney.generate(candidates)
-let repeated = try LearningJourney.generate(candidates.reversed())
+let focuses = goals.mapValues(\.lesson)
+let objectives = goals.mapValues(\.objective)
+let journey = try LearningJourney.generate(candidates, focuses: focuses, objectives: objectives)
+let repeated = try LearningJourney.generate(candidates.reversed(), focuses: focuses, objectives: objectives)
 guard journey == repeated else { throw LevelPlaylistError.invalidSequence }
 let encoder = JSONEncoder(); encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
 // Keep each profile tied to the exact replay that produced its measurements.
@@ -113,5 +128,5 @@ let output = URL(fileURLWithPath: args[2])
 try FileManager.default.createDirectory(at: output.deletingLastPathComponent(), withIntermediateDirectories: true)
 try encoder.encode(journey).write(to: output, options: .atomic)
 let jumps = zip(journey.lessons, journey.lessons.dropFirst()).map { $1.demand - $0.demand }
-print("\(journey.lessons.count) lessons; \(uniqueOfficial.count) official; \(selected.count - uniqueOfficial.count) fan. Largest curriculum demand step: \(jumps.max() ?? 0). Support flags: \(journey.lessons.filter(\.needsSupport).count).")
+print("\(journey.lessons.count) lessons; \(selected.filter(\.official).count) official; \(selected.filter { !$0.official }.count) fan. Largest curriculum demand step: \(jumps.max() ?? 0). Support flags: \(journey.lessons.filter(\.needsSupport).count).")
 for lesson in journey.lessons.prefix(20) { print("\(Int(lesson.score)): \(lesson.entry.levelNameSnapshot) — \(lesson.focus)") }
