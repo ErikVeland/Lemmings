@@ -5,13 +5,12 @@ import AppKit
     static let seenKey = "WhatsNewSeenBuild"
     /// The release these notes describe. A test fails when Info.plist moves on
     /// to a new version and these notes stay behind.
-    static let notesVersion = "1.7.3"
-    static let subtitle = "Everything new in 1.7"
+    static let notesVersion = "1.7.4"
+    static let subtitle = "Selection effects and more verified levels"
     static let sections = [
-        ("Faster controls", "Double-tap − or + for the lowest or highest release rate. N nukes, and N again undoes it. The selected lemming has a clearer marker."),
-        ("Oh My! All Lemmings!", "292 Classic lessons, with official levels preferred. Most of the journey builds intermediate techniques and strategy."),
-        ("NeoLemmix levels included", "788 NeoLemmix levels ship with the game. Add your own packs and styles from Level Select."),
-        ("More fan levels verified", "2,136 Classic fan levels have a verified win. 30 levels with ignored exits can now be completed.")
+        ("Choose your selection effect", "Settings > Gameplay now offers None, Obvious and Modern. Obvious restores the game-pixel halo and marker. The choice applies across all three games."),
+        ("Modern outline and bloom", "A crisp white outline shimmers around the selected sprite, with a subtle green halo. Reduced motion and reduced flashes keep the effect steady."),
+        ("More fan levels verified", "Five more Classic fan levels have verified winning replays, bringing the total to 2,141. Lemmings 2 and Lemmings 3 remain in Preview.")
     ]
     private let defaults: UserDefaults
     private let build: Int

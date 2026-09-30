@@ -1,6 +1,5 @@
 import AppKit
 
-/// A pixel-aligned selection cue for a focused or hovered lemming.
 @MainActor enum LemmingSelectionGlow {
     static func draw(at point: CGPoint, scale: CGFloat, radius: CGFloat = 7,
                      tint: NSColor, animated: Bool = true) {
@@ -44,33 +43,6 @@ import AppKit
         NSGraphicsContext.restoreGraphicsState()
     }
 
-    /// Brightens only opaque pixels of the selected sprite.
-    static func drawSpriteShimmer(
-        sprite: CGImage, in rect: CGRect, scale: CGFloat, mirrored: Bool = false,
-        animated: Bool, now: TimeInterval = ProcessInfo.processInfo.systemUptime
-    ) {
-        guard rect.width > 0, rect.height > 0,
-              let context = NSGraphicsContext.current?.cgContext else { return }
-        let pixel = max(1, floor(scale))
-        context.saveGState()
-        if mirrored {
-            context.translateBy(x: rect.midX * 2, y: 0)
-            context.scaleBy(x: -1, y: 1)
-        }
-        context.clip(to: rect, mask: sprite)
-        NSColor.white.withAlphaComponent(0.12).setFill()
-        rect.fill()
-        if animated {
-            let width = max(pixel, floor(rect.width * 0.18 / pixel) * pixel)
-            let phase = CGFloat(now.truncatingRemainder(dividingBy: 1.4) / 1.4)
-            let x = rect.minX - width + (rect.width + 2 * width) * phase
-            NSColor.white.withAlphaComponent(0.42).setFill()
-            CGRect(x: floor(x / pixel) * pixel, y: rect.minY,
-                   width: width, height: rect.height).fill()
-        }
-        context.restoreGState()
-    }
-
     /// The halo's centre opacity. The shimmer modulates brightness only; the
     /// halo never moves. Reduced motion (`animated == false`) keeps it static.
     static func haloAlpha(at now: TimeInterval, animated: Bool) -> CGFloat {
@@ -91,12 +63,6 @@ import AppKit
     private var id: Int?
     private var until: TimeInterval = 0
     var target: Int? { ProcessInfo.processInfo.systemUptime < until ? id : nil }
-    var reduceMotion = false
     func show(_ id: Int) { self.id = id; until = ProcessInfo.processInfo.systemUptime + 2 }
     func clear() { id = nil }
-    func draw(at point: CGPoint, scale: CGFloat, tint: NSColor = .systemYellow, radius: CGFloat = 7) {
-        guard target != nil else { return }
-        LemmingSelectionGlow.draw(at: point, scale: scale, radius: radius,
-                                  tint: tint, animated: !reduceMotion)
-    }
 }

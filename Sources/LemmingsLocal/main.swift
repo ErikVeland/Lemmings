@@ -1127,6 +1127,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     playfield.hdEffectsEnabled = settings.hdEffectsEnabled
     playfield.showReticleCount = settings.showReticleCount
     playfield.skillCursorIconSize = settings.skillCursorIconSize
+    playfield.lemmingSelectionStyle = settings.lemmingSelectionStyle
     playfield.favorApproachingLemmings = settings.favorApproachingLemmings
     playfield.favorBombBlockers = settings.favorBombBlockers
     playfield.favorBuilders = settings.favorBuilders
@@ -1174,6 +1175,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     playfield.hdEffectsEnabled = settings.hdEffectsEnabled
     playfield.showReticleCount = settings.showReticleCount
     playfield.skillCursorIconSize = settings.skillCursorIconSize
+    playfield.lemmingSelectionStyle = settings.lemmingSelectionStyle
     playfield.favorApproachingLemmings = settings.favorApproachingLemmings
     playfield.favorBombBlockers = settings.favorBombBlockers
     playfield.favorBuilders = settings.favorBuilders
@@ -6559,7 +6561,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
         playfield.frame = wanted
         playfield.viewport.viewSize = wanted.size
       }
-      if let frame = composeNativeFrame() { crtView.setSource(frame, flashes: playfield.hdrFlashes) }
+      if let frame = composeNativeFrame() {
+        crtView.setSource(frame, flashes: playfield.hdrFlashes, selection: playfield.selectionEffect)
+      }
     }
     if let session, phase == .playing { dj.updateTelemetry(djTelemetry(session)) }
     if advanceFreshLevelStart(seconds: elapsed, visible: window.isKeyWindow) { return }

@@ -163,6 +163,11 @@ public enum ClassicExperiencePreset: String, CaseIterable, Codable, Sendable {
     public var title: String { rawValue.capitalized }
 }
 
+public enum LemmingSelectionStyle: String, CaseIterable, Codable, Sendable {
+    case none, obvious, modern
+    public var title: String { rawValue.capitalized }
+}
+
 public struct ClassicSettings: Equatable, Codable, Sendable {
     // Graphics
     public var graphics: ClassicGraphicsSource
@@ -180,6 +185,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
     public var pauseOnInterruption: Bool
     public var showReticleCount: Bool
     public var skillCursorIconSize: SkillCursorIconSize
+    public var lemmingSelectionStyle: LemmingSelectionStyle
     public var favorApproachingLemmings: Bool
     public var favorBombBlockers: Bool
     public var favorBuilders: Bool
@@ -231,6 +237,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         pauseOnInterruption: Bool = true,
         showReticleCount: Bool = false,
         skillCursorIconSize: SkillCursorIconSize = .one,
+        lemmingSelectionStyle: LemmingSelectionStyle = .modern,
         favorApproachingLemmings: Bool = true,
         favorBombBlockers: Bool = true,
         favorBuilders: Bool = true,
@@ -268,6 +275,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         self.pauseOnInterruption = pauseOnInterruption
         self.showReticleCount = showReticleCount
         self.skillCursorIconSize = skillCursorIconSize
+        self.lemmingSelectionStyle = lemmingSelectionStyle
         self.favorApproachingLemmings = favorApproachingLemmings
         self.favorBombBlockers = favorBombBlockers
         self.favorBuilders = favorBuilders
@@ -336,6 +344,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         pauseOnInterruption = try values.decodeIfPresent(Bool.self, forKey: .pauseOnInterruption) ?? modernControlsEnabled
         showReticleCount = (try? values.decodeIfPresent(Bool.self, forKey: .showReticleCount)) ?? false
         skillCursorIconSize = (try? values.decodeIfPresent(SkillCursorIconSize.self, forKey: .skillCursorIconSize)) ?? .one
+        lemmingSelectionStyle = source(.lemmingSelectionStyle, modernControlsEnabled ? .modern : .none)
         favorApproachingLemmings = try values.decodeIfPresent(Bool.self, forKey: .favorApproachingLemmings) ?? modernControlsEnabled
         favorBombBlockers = try values.decodeIfPresent(Bool.self, forKey: .favorBombBlockers) ?? modernControlsEnabled
         favorBuilders = try values.decodeIfPresent(Bool.self, forKey: .favorBuilders) ?? modernControlsEnabled
@@ -391,6 +400,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         favorBombBlockers = modern
         favorBuilders = modern
         skillCursorIconSize = modern ? .one : .none
+        lemmingSelectionStyle = modern ? .modern : .none
         showReticleCount = false
         controllerEnabled = modern
         controllerTapSpeed = modern

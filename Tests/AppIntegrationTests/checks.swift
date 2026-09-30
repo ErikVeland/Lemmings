@@ -8,6 +8,201 @@ private func check(_ value: @autoclosure () throws -> Bool, _ message: String) t
   override var isKeyWindow: Bool { true }
 }
 
+@MainActor func validateSelectionCanvas(_ canvas: NSView, name: String,
+    effect: () -> LemmingSelectionEffect?, reduce: (Bool) -> Void,
+    style: (LemmingSelectionStyle) -> Void, refocus: () -> Void) async throws {
+  let folder = URL(fileURLWithPath: ".build/selection-hdr")
+  try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+  @discardableResult func draw() -> NSBitmapImageRep {
+    canvas.needsDisplay = true
+    let bitmap = canvas.bitmapImageRepForCachingDisplay(in: canvas.bounds)!
+    canvas.cacheDisplay(in: canvas.bounds, to: bitmap)
+    canvas.displayIfNeeded()
+    CATransaction.flush()
+    return bitmap
+  }
+  style(.modern)
+  for reduced in [false, true] {
+    reduce(reduced); refocus(); draw()
+    guard let selection = effect() else { throw IntegrationFailure(message: name + " did not publish its selected sprite") }
+    if !reduced {
+      try NSBitmapImageRep(cgImage: selection.sprite).representation(using: .png, properties: [:])!.write(
+        to: folder.appendingPathComponent(name + "-sprite.png"))
+    }
+    try check(selection.animated == !reduced && selection.extendedBrightness == !reduced,
+      name + " ignored reduced effects")
+    try check(selection.rect.intersects(selection.clipRect), name + " selected an offscreen sprite")
+    let overlay = canvas.subviews.compactMap { $0 as? ExplosionHDRView }.first
+    try check(overlay?.canRenderSelection == true && overlay?.selection?.rect == selection.rect,
+      name + " did not present the selection through Metal")
+    try check(overlay?.hitTest(CGPoint(x: selection.rect.midX, y: selection.rect.midY)) == nil,
+      name + " selection intercepted input")
+    try await Task.sleep(nanoseconds: 100_000_000)
+    guard let host = canvas.window, let image = CGWindowListCreateImage(.null,
+      .optionIncludingWindow, CGWindowID(host.windowNumber), [.boundsIgnoreFraming, .bestResolution]) else {
+      throw IntegrationFailure(message: name + " could not capture its composited window")
+    }
+    let bitmap = NSBitmapImageRep(cgImage: image)
+    try bitmap.representation(using: .png, properties: [:])!.write(to:
+      folder.appendingPathComponent(name + (reduced ? "-steady" : "-animated") + ".png"))
+  }
+  GameCursor.gameplaySuppressed = true
+  draw()
+  GameCursor.gameplaySuppressed = false
+  try check(effect() == nil, name + " retained selection behind a dialog")
+  var plain: Data?, plainHidden: Data?
+  for choice in [LemmingSelectionStyle.none, .obvious] {
+    style(choice); reduce(true); refocus()
+    let bitmap = draw()
+    let pixels = bitmap.representation(using: .png, properties: [:])!
+    try pixels.write(to: folder.appendingPathComponent(name + "-" + choice.rawValue + ".png"))
+    try check(effect() == nil && canvas.subviews.compactMap { $0 as? ExplosionHDRView }.first?.selection == nil,
+      name + " kept the Modern overlay in " + choice.title)
+    if choice == .none {
+      plain = pixels
+      GameCursor.gameplaySuppressed = true
+      plainHidden = draw().representation(using: .png, properties: [:])!
+      GameCursor.gameplaySuppressed = false
+    }
+    else {
+      try check(pixels != plain, name + " did not draw the Obvious halo and marker")
+      GameCursor.gameplaySuppressed = true
+      let hidden = draw().representation(using: .png, properties: [:])!
+      GameCursor.gameplaySuppressed = false
+      try check(hidden == plainHidden, name + " retained the Obvious halo behind a dialog")
+    }
+  }
+  style(.modern); reduce(false); refocus(); draw()
+  print("PASS \(name) None/Obvious/Modern, animated/steady output, dialog suppression and click-through")
+}
+
+extension AppDelegate {
+  fileprivate func testSelectionSettings() throws {
+    let preferences = SettingsWindow(settings: ClassicSettings(), options: settingsOptions())
+    var applied: [LemmingSelectionStyle] = []
+    preferences.onChange = { applied.append($0.lemmingSelectionStyle) }
+    window.makeKeyAndOrderFront(nil)
+    preferences.show()
+    let root = window.contentView!
+    func descendants(_ view: NSView) -> [NSView] { [view] + view.subviews.flatMap { descendants($0) } }
+    func popup(_ label: String) throws -> NSPopUpButton {
+      guard let control = descendants(root).compactMap({ $0 as? NSPopUpButton }).first(where: { $0.accessibilityLabel() == label }) else {
+        throw IntegrationFailure(message: "Missing setting: " + label)
+      }
+      return control
+    }
+    func capture(_ name: String) throws {
+      root.layoutSubtreeIfNeeded()
+      let bitmap = root.bitmapImageRepForCachingDisplay(in: root.bounds)!
+      root.cacheDisplay(in: root.bounds, to: bitmap)
+      try bitmap.representation(using: .png, properties: [:])!.write(to:
+        URL(fileURLWithPath: ".build/selection-settings-" + name + ".png"))
+    }
+    let selection = try popup("Selection effect"), preset = try popup("Gameplay preset")
+    try check(selection.itemTitles == ["None", "Obvious", "Modern"] && selection.titleOfSelectedItem == "Modern",
+      "Selection choices or default are wrong")
+    for choice in LemmingSelectionStyle.allCases {
+      root.layoutSubtreeIfNeeded()
+      let centre = CGPoint(x: selection.bounds.midX, y: selection.bounds.midY)
+      try check(root.hitTest(selection.convert(centre, to: root)) === selection, "Selection control is obscured")
+      try check(selection.accessibilityPerformPress(), "Selection choices did not open")
+      guard let page = GameScreen.shared.controllerPage(in: window),
+        let button = descendants(page).compactMap({ $0 as? NSButton }).first(where: { $0.title == choice.title }) else {
+        throw IntegrationFailure(message: "Missing selection choice: " + choice.title)
+      }
+      try capture("choices")
+      let point = CGPoint(x: button.bounds.midX, y: button.bounds.midY)
+      try check(root.hitTest(button.convert(point, to: root)) === button, "Selection choice has the wrong input target")
+      if choice == .modern {
+        window.makeFirstResponder(button)
+        let event = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 1,
+          windowNumber: window.windowNumber, context: nil, characters: "\r", charactersIgnoringModifiers: "\r",
+          isARepeat: false, keyCode: 36)!
+        try check(GameScreen.shared.handleDialogKey(event), "Selection choice ignored Return")
+      } else {
+        let location = button.convert(point, to: nil)
+        let down = NSEvent.mouseEvent(with: .leftMouseDown, location: location, modifierFlags: [], timestamp: 1,
+          windowNumber: window.windowNumber, context: nil, eventNumber: 0, clickCount: 1, pressure: 1)!
+        let up = NSEvent.mouseEvent(with: .leftMouseUp, location: location, modifierFlags: [], timestamp: 1.1,
+          windowNumber: window.windowNumber, context: nil, eventNumber: 1, clickCount: 1, pressure: 0)!
+        NSApp.postEvent(up, atStart: true); window.sendEvent(down)
+        if let release = NSApp.nextEvent(matching: .leftMouseUp, until: .distantPast, inMode: .default, dequeue: true) {
+          NSApp.sendEvent(release)
+        }
+      }
+      try check(preferences.current.lemmingSelectionStyle == choice && applied.last == choice
+        && preferences.current.experiencePreset == .custom && selection.titleOfSelectedItem == choice.title,
+        "Selection choice did not apply immediately as Custom")
+      try capture(choice.rawValue)
+    }
+    for (index, expected) in [(0, LemmingSelectionStyle.none), (1, .modern)] {
+      preset.selectItem(at: index); _ = preset.sendAction(preset.action, to: preset.target)
+      try check(preferences.current.lemmingSelectionStyle == expected && selection.titleOfSelectedItem == expected.title,
+        "Gameplay preset did not update selection effects")
+    }
+    selection.selectItem(at: 1); _ = selection.sendAction(selection.action, to: selection.target)
+    for label in ["Selection effect", "Skill icon size", "Level selection"] {
+      let control = try popup(label)
+      root.layoutSubtreeIfNeeded()
+      try check(control.visibleRect.contains(control.bounds.insetBy(dx: 1, dy: 1)), label + " is clipped")
+      try check(root.hitTest(control.convert(CGPoint(x: control.bounds.midX, y: control.bounds.midY), to: root)) === control,
+        label + " is covered by another control")
+    }
+    GameScreen.shared.dismissAll()
+    let restored = try JSONDecoder().decode(ClassicSettings.self, from: JSONEncoder().encode(preferences.current))
+    let reopened = SettingsWindow(settings: restored, options: settingsOptions())
+    reopened.show()
+    try check(try popup("Selection effect").titleOfSelectedItem == "Obvious"
+      && reopened.current.experiencePreset == .custom, "Selection did not survive reopening Settings")
+    try capture("saved-obvious")
+    GameScreen.shared.dismissAll()
+    print("PASS selection Settings choices, mouse/keyboard targets, presets, persistence and layout")
+  }
+
+  fileprivate func testSelectionRendering() async throws {
+    if window == nil { buildInterface() }
+    GameScreen.shared.dismissAll()
+    settings.music = .silent; settings.confinePointer = false
+    settings.display = .flat; settings.reduceMotion = false; settings.reduceFlashes = false
+    loadContent()
+    try testSelectionSettings()
+    guard let index = dataSets.firstIndex(where: { $0.set.title == .lemmings }) else {
+      throw IntegrationFailure(message: "Missing Classic content")
+    }
+    gamePicker.selectItem(at: index); selectDataSet()
+    picker.selectItem(at: 0); levelChanged(); advancePhase()
+    isPaused = true; playfield.startCountdown.cancel()
+    for _ in 0..<100 { session?.tick() }
+    applyDisplayMode(); window.makeKeyAndOrderFront(nil); window.contentView?.layoutSubtreeIfNeeded()
+    if let lemming = session?.lemmings.first {
+      focusLemming(lemming.id)
+    }
+    try await validateSelectionCanvas(playfield, name: "classic", effect: { self.playfield.selectionEffect },
+      reduce: { self.playfield.reduceMotion = $0; self.playfield.reduceFlashes = $0 },
+      style: { choice in var updated = self.settings; updated.lemmingSelectionStyle = choice; self.apply(updated) },
+      refocus: { if let lemming = self.session?.lemmings.first { self.focusLemming(lemming.id) } })
+    settings.display = .monitor
+    playfield.reduceMotion = false; playfield.reduceFlashes = false
+    step(at: 10)
+    if let lemming = session?.lemmings.first { focusLemming(lemming.id) }
+    step(at: 10.01)
+    try check(crtView.isAvailable && playfield.selectionEffect != nil && !playfield.presentsHDR,
+      "Classic did not route its selection through the final CRT pass")
+    try await Task.sleep(nanoseconds: 100_000_000)
+    guard let crt = CGWindowListCreateImage(.null, .optionIncludingWindow,
+      CGWindowID(window.windowNumber), [.boundsIgnoreFraming, .bestResolution]) else {
+      throw IntegrationFailure(message: "Cannot capture CRT selection")
+    }
+    try NSBitmapImageRep(cgImage: crt).representation(using: .png, properties: [:])!.write(
+      to: URL(fileURLWithPath: ".build/selection-hdr/classic-crt.png"))
+    window.orderOut(nil)
+    let l2 = try Lemmings2PlayWindow(root: BundledGameResources.lemmings2(), recordsCampaignProgress: false)
+    try await l2.testSelectionRendering(); l2.window?.orderOut(nil)
+    let l3 = try Lemmings3PlayWindow(root: BundledGameResources.lemmings3(), recordsCampaignProgress: false)
+    try await l3.testSelectionRendering(); l3.window?.orderOut(nil)
+  }
+}
+
 extension AppDelegate {
   /// Fixtures jump to later levels. The level picker refuses a locked
   /// level and stays on the current one.
@@ -4738,7 +4933,7 @@ Task { @MainActor in
   do {
     let subject = AppDelegate()
     subject.prepareArcadeTests()
-    #if !CURSOR_INPUT_TESTS && !LOADING_LATENCY_TESTS && !TRANSPORT_TESTS && !DIALOG_TESTS && !NEO_RECOVERY_TESTS && !NEO_PACK_TESTS && !LEARNING_TESTS
+    #if !SELECTION_HDR_TESTS && !CURSOR_INPUT_TESTS && !LOADING_LATENCY_TESTS && !TRANSPORT_TESTS && !DIALOG_TESTS && !NEO_RECOVERY_TESTS && !NEO_PACK_TESTS && !LEARNING_TESTS
     try subject.testFailureMoodDecision()
     try subject.testSteppedCompletion()
     try subject.testFirstLaunchEffects()
@@ -4749,7 +4944,10 @@ Task { @MainActor in
     try testPointerAssignment()
     #endif
     #endif
-    #if NEO_RECOVERY_TESTS
+    #if SELECTION_HDR_TESTS
+    try await subject.testSelectionRendering()
+    print("Selection HDR integration tests passed.")
+    #elseif NEO_RECOVERY_TESTS
     try subject.testNeoRunRecovery()
     print("NeoLemmix recovery integration tests passed.")
     #elseif LEARNING_TESTS

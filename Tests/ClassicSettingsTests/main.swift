@@ -22,6 +22,17 @@ private func testOptionsFollowInstalledData() throws {
         "Classic levels must follow campaign progress by default")
     try require(upgraded.skillCursorIconSize == .one && upgraded.skillCursorIconSize.multiplier == 2,
         "Existing players must default to real 2× artwork labelled 1×")
+    try require(upgraded.lemmingSelectionStyle == .modern, "Selection must default to Modern")
+    for style in LemmingSelectionStyle.allCases {
+        var settings = upgraded
+        settings.lemmingSelectionStyle = style
+        let restored = try JSONDecoder().decode(ClassicSettings.self, from: JSONEncoder().encode(settings))
+        try require(restored.lemmingSelectionStyle == style, "Selection style must persist")
+    }
+    let unknownSelection = try JSONDecoder().decode(ClassicSettings.self,
+        from: Data("{\"lemmingSelectionStyle\":\"unknown\",\"musicVolume\":0.25}".utf8))
+    try require(unknownSelection.lemmingSelectionStyle == .modern && unknownSelection.musicVolume == 0.25,
+        "An unknown selection style must preserve other settings")
     for size in SkillCursorIconSize.allCases {
         var settings = upgraded
         settings.skillCursorIconSize = size
@@ -82,14 +93,17 @@ private func testTargetingPresetsAndIconMigration() throws {
     let originalSave = try JSONDecoder().decode(ClassicSettings.self,
         from: Data("{\"modernControlsEnabled\":false,\"skillCursorIconSize\":\"none\"}".utf8))
     try require(!originalSave.favorBombBlockers && !originalSave.favorBuilders
-        && originalSave.skillCursorIconSize == .none, "Migration must respect Original choices")
+        && originalSave.skillCursorIconSize == .none && originalSave.lemmingSelectionStyle == .none,
+        "Migration must respect Original choices")
     settings.applyExperiencePreset(modern: false)
     try require(settings.experiencePreset == .original && !settings.favorApproachingLemmings
-        && !settings.favorBombBlockers && !settings.favorBuilders && settings.skillCursorIconSize == .none,
+        && !settings.favorBombBlockers && !settings.favorBuilders && settings.skillCursorIconSize == .none
+        && settings.lemmingSelectionStyle == .none,
         "Original must disable targeting aids and the icon")
     settings.applyExperiencePreset(modern: true)
     try require(settings.experiencePreset == .modern && settings.favorApproachingLemmings
-        && settings.favorBombBlockers && settings.favorBuilders && settings.skillCursorIconSize == .one,
+        && settings.favorBombBlockers && settings.favorBuilders && settings.skillCursorIconSize == .one
+        && settings.lemmingSelectionStyle == .modern,
         "Modern must restore all targeting aids and the baseline icon")
     settings.experiencePreset = .custom
     settings.favorBombBlockers = false

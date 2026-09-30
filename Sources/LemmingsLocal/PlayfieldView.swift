@@ -103,7 +103,6 @@ struct ReticleFeedback {
   }
   var reduceMotion = false {
     didSet {
-      assignmentHighlight.reduceMotion = reduceMotion
       if reduceMotion { speedTrails.reset() }
       needsDisplay = true
     }
@@ -116,6 +115,7 @@ struct ReticleFeedback {
   }
   let startCountdown = FreshLevelCountdown()
   var showReticleCount = false
+  var lemmingSelectionStyle: LemmingSelectionStyle = .modern { didSet { needsDisplay = true } }
     var skillCursorIconSize: SkillCursorIconSize = .one
     var favorApproachingLemmings = true
     var favorBombBlockers = true
@@ -130,6 +130,7 @@ struct ReticleFeedback {
   private var rewindCurrentTick = 0
   private var rewindCueTask: Task<Void, Never>?
   private var hdrOverlay: ExplosionHDRView?
+  private(set) var selectionEffect: LemmingSelectionEffect?
   private(set) var hdrFlashes: [ExplosionFlash] = []
   private var displayedHDRFlashes: [ExplosionFlash] {
     hdrFlashes.map { .init(rect: precisionLens.display($0.rect), strength: $0.strength,
@@ -140,6 +141,7 @@ struct ReticleFeedback {
   var presentsHDR = true {
     didSet {
       hdrOverlay?.isHidden = !presentsHDR
+      if !presentsHDR { hdrOverlay?.updateSelection(nil) }
       hdrOverlay?.update(presentsHDR ? displayedHDRFlashes : [],force:true)
     }
   }
@@ -392,8 +394,8 @@ struct ReticleFeedback {
 
   private var spriteCache: [String: NSImage] = [:]
   private var spritePixels: [String: CGImage] = [:]
-  private var shimmerTargetID: Int?
-  private var shimmerSprite: (pixels: CGImage, rect: CGRect)?
+  private var selectionTargetID: Int?
+  private var selectedSprite: (pixels: CGImage, rect: CGRect)?
   private var skillBadgeCache: [Int: NSImage] = [:]
   var usesControllerPointer: Bool { controllerPointer != nil }
   private var controllerPointer: CGPoint?
@@ -720,12 +722,18 @@ struct ReticleFeedback {
   // MARK: - Drawing
 
   override func draw(_ dirtyRect: NSRect) {
+    selectionEffect = nil
     defer {
       if phase == .playing { startCountdown.draw(in: bounds) }
-      // The shared corner reticle also represents the controller pointer.
-      if let id = assignmentHighlight.target, let lem = session?.lemmings.first(where: { $0.id == id }) {
-        assignmentHighlight.draw(at: precisionLens.display(viewport.viewPoint(fromLevel: CGPoint(x: lem.x, y: lem.y - 6))),
-          scale: viewport.zoom, tint: .systemYellow, radius: 7)
+      if lemmingSelectionStyle == .obvious, phase == .playing, !GameCursor.gameplaySuppressed,
+         let id = assignmentHighlight.target, let lem = session?.lemmings.first(where: { $0.id == id }) {
+        LemmingSelectionGlow.draw(at: precisionLens.display(viewport.viewPoint(fromLevel: CGPoint(x: lem.x, y: lem.y - 6))),
+          scale: viewport.zoom, tint: .systemYellow, animated: !reduceMotion && !reduceFlashes)
+      }
+      hdrOverlay?.updateSelection(presentsHDR ? selectionEffect : nil)
+      if presentsHDR, hdrOverlay?.canRenderSelection != true || NSGraphicsContext.current?.isDrawingToScreen == false,
+         let selectionEffect {
+        LemmingSelectionRenderer.drawFallback(selectionEffect)
       }
     }
     updateSpeedTrails()
@@ -1158,9 +1166,9 @@ struct ReticleFeedback {
   private func drawLemmings() {
     guard let session else { return }
     let lemmings = session.lemmings
-    shimmerTargetID = phase == .playing && !GameCursor.gameplaySuppressed
+    selectionTargetID = phase == .playing && !GameCursor.gameplaySuppressed
       ? assignmentHighlight.target ?? pointerLemmingID : nil
-    shimmerSprite = nil
+    selectedSprite = nil
     if hdEffectsEnabled && !reduceMotion && isFastForward && phase == .playing {
       for lemming in lemmings { draw(lemming, ghostsOnly: true) }
     }
@@ -1169,9 +1177,11 @@ struct ReticleFeedback {
       selectedID: assignmentHighlight.target,
       highlightedID: pointerLemmingID)
     for lemming in solidLemmings { draw(lemming) }
-    if let shimmerSprite {
-      LemmingSelectionGlow.drawSpriteShimmer(sprite: shimmerSprite.pixels, in: shimmerSprite.rect,
-        scale: viewport.zoom, animated: !reduceMotion && !reduceFlashes)
+    if lemmingSelectionStyle == .modern, let selectedSprite {
+      selectionEffect = LemmingSelectionEffect(sprite: selectedSprite.pixels,
+        rect: precisionLens.display(selectedSprite.rect), clipRect: bounds,
+        animated: !reduceMotion && !reduceFlashes,
+        extendedBrightness: hdEffectsEnabled && !reduceFlashes, bloom: hdEffectsEnabled)
     }
   }
 
@@ -1243,6 +1253,7 @@ struct ReticleFeedback {
         return
       }
       drawSprite(frame.image, key: key, in: rect, alpha: fraction)
+      captureSelectionSprite(for: lemming.id, key: key, sprite: frame.image, in: rect)
       drawAssignmentPulse(for: lemming.id, key: key, sprite: frame.image, in: rect)
       if action == .exploding { drawBombCore(in: rect, tick: lemming.animationFrame, actor: lemming.id) }
       if let countdown = lemming.countdown { drawCountdown(countdown, above: rect) }
@@ -1277,7 +1288,7 @@ struct ReticleFeedback {
           return
         }
         drawSprite(sprite, key: key, in: rect, alpha: fraction)
-        captureShimmerSprite(for: lemming.id, key: key, sprite: sprite, in: rect)
+        captureSelectionSprite(for: lemming.id, key: key, sprite: sprite, in: rect)
         drawAssignmentPulse(for: lemming.id, key: key, sprite: sprite, in: rect)
         if pose == .explosion { drawBombCore(in: rect, tick: lemming.animationFrame, actor:lemming.id) }
         if let countdown = lemming.countdown { drawCountdown(countdown, above: rect) }
@@ -1312,7 +1323,7 @@ struct ReticleFeedback {
       return
     }
     drawSprite(sprite, key: key, in: rect, alpha: fraction)
-    captureShimmerSprite(for: lemming.id, key: key, sprite: sprite, in: rect)
+    captureSelectionSprite(for: lemming.id, key: key, sprite: sprite, in: rect)
     drawAssignmentPulse(for: lemming.id, key: key, sprite: sprite, in: rect)
     if pose == .explosion { drawBombCore(in: rect, tick: lemming.animationFrame, actor:lemming.id) }
 
@@ -1329,11 +1340,11 @@ struct ReticleFeedback {
       reduceMotion: reduceMotion, reduceFlashes: reduceFlashes)
   }
 
-  private func captureShimmerSprite(for id: Int, key: String, sprite: NSImage, in rect: CGRect) {
-    guard shimmerTargetID == id,
+  private func captureSelectionSprite(for id: Int, key: String, sprite: NSImage, in rect: CGRect) {
+    guard selectionTargetID == id,
           let pixels = spritePixels[key] ?? sprite.cgImage(forProposedRect: nil, context: nil, hints: nil)
     else { return }
-    shimmerSprite = (pixels, rect)
+    selectedSprite = (pixels, rect)
   }
 
   private func drawCountdown(_ countdown: Int, above rect: CGRect) {
@@ -1378,16 +1389,12 @@ struct ReticleFeedback {
         strength: 0.45, expiresAt: expires, tint: .green))
     }
 
-    // The lemming, rather than the pointer, is the point of attention. Keep
-    // this cue soft so it confirms the target without changing play timing or
-    // obscuring the native sprite artwork.
-    if target != nil, assignmentHighlight.target == nil {
-      LemmingSelectionGlow.draw(at: targetPoint, scale: viewport.zoom, radius: 7,
-        tint: color, animated: !reduceMotion)
+    if lemmingSelectionStyle == .obvious, target != nil, assignmentHighlight.target == nil {
+      LemmingSelectionGlow.draw(at: targetPoint, scale: viewport.zoom,
+        tint: color, animated: !reduceMotion && !reduceFlashes)
     }
 
-    // Keep the reticle at the actual cursor position. The target glow remains
-    // separate, so a target offset does not change click precision.
+    // The reticle stays at the input position. Selection effects follow the target.
     GameCursor.drawPlayfieldPointer(at: cursorViewPoint, scale: viewport.zoom,
       tint: GameCursor.targetTint(eligible: target.map { session?.canAssign(skillIndex: selectedSkill(), to: $0.id) == true } == true,
         occupied: session?.lemmings.contains { contains($0, point) } == true))
