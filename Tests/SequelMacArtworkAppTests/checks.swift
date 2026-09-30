@@ -452,7 +452,7 @@ extension Lemmings2PlayWindow {
             hasMacintoshDisk: false, moduleCount: 0, remixFolders: [], hasSoundtracks: false)
         let settings = SettingsWindow(settings: ClassicSettings(), options: options)
         try settings.checkHDEffectsSetting()
-        try settings.checkExperiencePreset()
+        try SettingsWindow(settings: ClassicSettings(), options: options).checkExperiencePreset()
         let checkbox = settings.artworkCheckboxForTest()
         checkbox.performClick(nil)
         try assertArtwork(checkbox.state == .on && SequelArtworkPreference.enabled,
