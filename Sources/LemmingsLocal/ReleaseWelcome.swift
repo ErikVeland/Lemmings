@@ -6,11 +6,11 @@ import AppKit
     /// The release these notes describe. A test fails when Info.plist moves on
     /// to a new version and these notes stay behind.
     static let notesVersion = "1.7.4"
-    static let subtitle = "Selection effects and more verified levels"
+    static let subtitle = "Fresh sessions and correct fan artwork"
     static let sections = [
-        ("Choose your selection effect", "Settings > Gameplay now offers None, Obvious and Modern. Obvious restores the game-pixel halo and marker. The choice applies across all three games."),
-        ("Modern outline and bloom", "A crisp white outline shimmers around the selected sprite, with a subtle green halo. Reduced motion and reduced flashes keep the effect steady."),
-        ("More fan levels verified", "Five more Classic fan levels have verified winning replays, bringing the total to 2,141. Lemmings 2 and Lemmings 3 remain in Preview.")
+        ("New means new", "New solo and Hot Seat sessions start at the first level. Previous sessions stay saved. Profile achievements and scores are kept."),
+        ("Correct fan terrain", "Fan levels use artwork that matches their terrain. Floating Down! now shows its snow landscape. The HUD shows the active journey position."),
+        ("Choose your selection effect", "Settings > Gameplay offers None, Obvious and Modern. Modern adds a crisp white outline and subtle green bloom. The choice applies across all three games.")
     ]
     private let defaults: UserDefaults
     private let build: Int

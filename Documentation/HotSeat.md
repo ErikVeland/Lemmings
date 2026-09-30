@@ -58,6 +58,17 @@ Starting a playlist or shuffle during Hot Seat offers **New solo**, **New Hot Se
 and **Back**. Both start actions save the current attempt first. New Hot Seat uses
 the current roster and starts with the host. Back leaves the session unchanged.
 
+Every new session starts at the first entry of its chosen campaign or playlist.
+A new **Oh My! ALL Lemmings!** journey starts with **Just dig!**, even if a player
+completed it before. Profile achievements, scores and learning history stay saved.
+Continue and Resume use the saved session position. A journey from another
+Hot Seat or a solo run cannot become the new session's current journey.
+
+L2 playlists starting at level one have no inherited completions or skips.
+If a playlist explicitly starts later in a tribe, it retains only the preceding
+levels needed for that level's population. L3 playlists start without inherited
+campaign completions. Neither action overwrites the saved campaign.
+
 Previous playlist positions stay in **Playlists** as **Resume solo** or
 **Resume Hot Seat**. A playlist resumes at the start of its saved level. Campaign
 attempts keep their full checkpoint. Shared playlists use the same result and
@@ -82,3 +93,6 @@ solution completed by two people does not become one person's individual record.
 - `TEST_SCOPE=sessions Scripts/run-app-integration-tests.sh`: session choices,
   cancellation, checkpoint preservation, saved sequence positions, rendered input
   targets and Ready after Classic, L2 and L3 launches.
+- `TEST_SCOPE=learning Scripts/run-app-integration-tests.sh`: fresh solo and
+  Hot Seat journeys after prior profile progress, session ownership, Holiday
+  terrain in Floating Down!, graphics changes and the journey HUD position.

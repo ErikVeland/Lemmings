@@ -625,11 +625,20 @@ import NxlvKit
         let bundled = (try? BundledGameResources.lemmings2())?.standardizedFileURL == root.standardizedFileURL
         return bundled ? "bundled" : root.standardizedFileURL.path
     }
-    static func playlistProgress(root: URL) throws -> Data {
+    static func playlistProgress(root: URL, startingAt selections: [LevelSelection]) throws -> Data {
         var campaign = try Lemmings2Campaign(root: root)
         if let data = UserDefaults.standard.data(forKey: campaignProgressKey(root: root)) {
             try campaign.restore(JSONDecoder().decode(Lemmings2Campaign.Progress.self, from: data))
         }
+        // A playlist may explicitly start partway through a tribe. Retain only
+        // the predecessors needed to supply that level's starting population.
+        var first: [Int: Int] = [:]
+        for selection in selections where first[selection.tribe] == nil { first[selection.tribe] = selection.level }
+        let initial = try Lemmings2Campaign(root: root).progress
+        let fresh = Lemmings2Campaign.Progress(tribe: initial.tribe, level: initial.level,
+            results: campaign.results.filter { $0.key % 10 < (first[$0.key / 10] ?? 0) },
+            skipped: campaign.skipped.filter { $0.key % 10 < (first[$0.key / 10] ?? 0) })
+        try campaign.restore(fresh)
         return try JSONEncoder().encode(campaign.progress)
     }
     private func playMusic(_ name: String) {

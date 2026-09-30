@@ -1,5 +1,6 @@
 [
   "ClassicSettings.swift",
+  "ClassicMacArtwork.swift",
   "Lemmings2Controls.swift",
   "SkillShortcuts.swift",
   "GameplaySpeed.swift",

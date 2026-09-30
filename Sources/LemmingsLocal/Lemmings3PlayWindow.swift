@@ -138,10 +138,12 @@ import NxlvKit
         let bundled = (try? BundledGameResources.lemmings3())?.standardizedFileURL == root.standardizedFileURL
         return bundled ? "bundled" : root.standardizedFileURL.path
     }
-    private static func session(root: URL, tribe: Lemmings3ClassicCampaign.Tribe) throws -> Session {
+    private static func session(root: URL, tribe: Lemmings3ClassicCampaign.Tribe,
+      restoresCampaignProgress: Bool = true) throws -> Session {
         var sequence = try Lemmings3ClassicCampaign(root: root, tribe: tribe)
         let key = ArcadeStore.shared.progressKey("nativeL3\(tribe.title)Preview.v1." + storageIdentity(root))
-        if let data = UserDefaults.standard.data(forKey: key), let progress = try? JSONDecoder().decode(Lemmings3ClassicCampaign.Progress.self, from: data) { try? sequence.restore(progress) }
+        if restoresCampaignProgress, let data = UserDefaults.standard.data(forKey: key),
+          let progress = try? JSONDecoder().decode(Lemmings3ClassicCampaign.Progress.self, from: data) { try? sequence.restore(progress) }
         let decodedStyle = try Lemmings3Style(directory: root.appendingPathComponent("STYLES"), number: tribe.rawValue)
         let availability: [String?] = sequence.levels.map { entry in
             do {
@@ -188,7 +190,7 @@ import NxlvKit
             ?? Lemmings3ClassicCampaign.Tribe(rawValue: UserDefaults.standard.integer(
                 forKey: ArcadeStore.shared.progressKey("nativeL3SelectedTribe.v1." + Self.storageIdentity(root))))
             ?? .classic
-        let session = try Self.session(root: root, tribe: selectedTribe)
+        let session = try Self.session(root: root, tribe: selectedTribe, restoresCampaignProgress: recordsCampaignProgress)
         var sequence = session.campaign
         if let saved = recovery?.l3 { try sequence.restore(saved.progress) }
         if recovery == nil, let selection {
@@ -441,6 +443,7 @@ import NxlvKit
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
     #if APP_INTEGRATION_TESTS
+    var testCampaignProgress: Lemmings3ClassicCampaign.Progress { campaign.progress }
     func testSelectionRendering() async throws {
         timer?.invalidate(); canvas.confinePointer = false; audioSettings.confinePointer = false
         paused = true; canvas.startCountdown.cancel(); canvas.menuRows = nil
@@ -848,7 +851,7 @@ import NxlvKit
         guard onSequenceContinue == nil else { return }
         guard let tribe = Lemmings3ClassicCampaign.Tribe(rawValue: menuTribe + 1), tribe != campaign.tribe else { return }
         do {
-            var session = try Self.session(root: dataRoot, tribe: tribe)
+            var session = try Self.session(root: dataRoot, tribe: tribe, restoresCampaignProgress: recordsCampaignProgress)
             try session.campaign.select(menuLevel)
             let level = session.campaign.levels[session.campaign.index]
             let perm = try Lemmings3Objects(data: Data(contentsOf: dataRoot.appendingPathComponent(String(format: "LEVELS/PERM%03d.OBS", level.permanentObjectsReference))))
@@ -964,7 +967,8 @@ import NxlvKit
         case 4: menuLevel = (menuLevel + 1) % 30; rebuildMenu()
         case 5:
             let selectedTribe = Lemmings3ClassicCampaign.Tribe.allCases[menuTribe]
-            if let session = try? Self.session(root: dataRoot, tribe: selectedTribe), session.availability[menuLevel] != nil {
+            if let session = try? Self.session(root: dataRoot, tribe: selectedTribe,
+              restoresCampaignProgress: recordsCampaignProgress), session.availability[menuLevel] != nil {
                 canvas.menuNotice = "LEVEL NOT AVAILABLE"; rebuildMenu(); return
             }
             if menuTribe != campaign.tribe.rawValue - 1 { chooseTribe() }

@@ -4067,9 +4067,12 @@ let achievementProgressKey = "ClassicAchievementProgress"
           GameScreen.shared.message("Journey unavailable", detail: "A required fan pack could not be read.")
           return
         }
-        let active = store.activeRun.flatMap { $0.source == .playlist(LearningJourney.playlistID) && $0.pool.id == LearningJourney.version ? $0 : nil }
+        let active = store.activeRun.flatMap {
+          $0.source == .playlist(LearningJourney.playlistID) && $0.pool.id == LearningJourney.version
+            && store.activeRunHotSeatID == ArcadeStore.shared.hotSeatID ? $0 : nil
+        }
         let progress = store.learningProgress
-        let pending = progress.unseen(in: journey)
+        let pending = journey.lessons.map(\.entry)
         let next = active?.currentEntry ?? pending.first
         let lesson = journey.lessons.first { $0.entry.identity == next?.identity }
         let page = LearningJourneyMenu.hub(next: lesson, solved: progress.solvedCount(in: journey),
@@ -4187,7 +4190,14 @@ let achievementProgressKey = "ClassicAchievementProgress"
           for entry in run.entries {
             if case let .lemmings2(root, _, _, _)? = self.levelBrowserRoutes[entry.identity] {
               let key = Lemmings2PlayWindow.playlistProgressID(root: root)
-              if l2Progress[key] == nil { l2Progress[key] = try Lemmings2PlayWindow.playlistProgress(root: root) }
+              if l2Progress[key] == nil {
+                let selections = run.entries.compactMap { entry -> Lemmings2PlayWindow.LevelSelection? in
+                  guard case let .lemmings2(otherRoot, selection, _, _)? = self.levelBrowserRoutes[entry.identity],
+                    Lemmings2PlayWindow.playlistProgressID(root: otherRoot) == key else { return nil }
+                  return selection
+                }
+                l2Progress[key] = try Lemmings2PlayWindow.playlistProgress(root: root, startingAt: selections)
+              }
             }
           }
           try self.saveBeforeSessionChange()

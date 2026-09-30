@@ -3104,6 +3104,24 @@ extension AppDelegate {
     let pending = store.learningProgress.unseen(in: journey)
     try check(pending.first?.identity != first, "The restart fixture did not have prior player progress")
     returnToLibrary()
+    arcade.prepareHotSeat()
+    let profileRecords = arcade.records
+    try check(arcade.startNewHotSeat(), "The fresh Hot Seat fixture did not start")
+    presentLearningJourney()
+    try await waitForLaunch()
+    guard let hub = GameScreen.shared.controllerPage(in: window) else {
+      throw IntegrationFailure(message: "The fresh Hot Seat journey hub did not open")
+    }
+    func labels(_ view: NSView) -> [String] {
+      (view as? NSTextField).map { [$0.stringValue] } ?? view.subviews.flatMap(labels)
+    }
+    try check(labels(hub).contains(where: { $0.contains("Just dig!") })
+      && buttons(hub).contains(where: { $0.title == "Let's play" })
+      && !buttons(hub).contains(where: { $0.title == "Continue" }),
+      "A new Hot Seat inherited another session's journey position")
+    try check(arcade.records == profileRecords && store.learningProgress.completed.contains(first),
+      "A new Hot Seat erased profile scores, achievements or saved learning history")
+    GameScreen.shared.dismissAll()
     startLearningEntries(pending, in: store)
     guard let soloChooser = GameScreen.shared.controllerPage(in: window) as? GameMenuPage,
           let newSolo = buttons(soloChooser).first(where: { $0.title == "New solo" }) else {
@@ -3169,6 +3187,8 @@ extension AppDelegate {
     }
     GameScreen.shared.dismissAll()
     phase = .playing; playfield.phase = .playing
+    playfield.startCountdown.cancel()
+    for _ in 0..<225 { game.tick() }
     playfield.overlayTitle = nil; playfield.overlayLines = []; playfield.overlayFooter = nil
     refreshProgressText()
     try check(panel.progressText.hasPrefix("JOURNEY 2/\(journey.lessons.count)"),
@@ -3528,6 +3548,27 @@ extension AppDelegate {
     let l2Key = arcade.progressKey("nativeL2Campaign.v1." + Lemmings2PlayWindow.playlistProgressID(root: l2Root))
     UserDefaults.standard.set(try JSONEncoder().encode(l2Progress), forKey: l2Key)
     defer { UserDefaults.standard.removeObject(forKey: l2Key) }
+    let newL2Progress = try JSONDecoder().decode(Lemmings2Campaign.Progress.self,
+      from: Lemmings2PlayWindow.playlistProgress(root: l2Root, startingAt: [.init(tribe: 0, level: 0)]))
+    try check(newL2Progress.results.isEmpty && newL2Progress.skipped?.isEmpty != false,
+      "A new L2 playlist at level one inherited campaign results")
+    try check(try JSONDecoder().decode(Lemmings2Campaign.Progress.self,
+      from: UserDefaults.standard.data(forKey: l2Key)!) == l2Progress,
+      "A fresh L2 session changed saved campaign progress")
+    let l3Root = try BundledGameResources.lemmings3()
+    let l3Key = arcade.progressKey("nativeL3ClassicPreview.v1.bundled")
+    let l3Progress = Lemmings3ClassicCampaign.Progress(index: 1, population: 20,
+      completed: [0: 20], tribe: .classic)
+    let l3Bytes = try JSONEncoder().encode(l3Progress)
+    UserDefaults.standard.set(l3Bytes, forKey: l3Key)
+    defer { UserDefaults.standard.removeObject(forKey: l3Key) }
+    let freshL3 = try Lemmings3PlayWindow(root: l3Root,
+      selection: .init(tribe: .classic, level: 0), recordsCampaignProgress: false)
+    try check(freshL3.testCampaignProgress.index == 0 && freshL3.testCampaignProgress.completed.isEmpty,
+      "A new L3 playlist inherited campaign completions")
+    freshL3.stop(); freshL3.close()
+    try check(UserDefaults.standard.data(forKey: l3Key) == l3Bytes,
+      "A fresh L3 session changed saved campaign progress")
     guard let discovery = await makeLevelBrowserDiscoveryTask().value else {
       throw IntegrationFailure(message: "Session fixture could not discover bundled levels")
     }
@@ -3778,6 +3819,21 @@ extension AppDelegate {
     try check(confirmed == 1 && !GameScreen.shared.isPresented && NSApp.windows.count == count,
       "Native confirmation failed to invoke its action and return to the game")
     print("PASS same-window pages, paused clock, display changes, focus and resuming play")
+    let welcome = ReleaseWelcome(build: 58, version: ReleaseWelcome.notesVersion)
+    welcome.show(in: window)
+    guard let notes = GameScreen.shared.controllerPage(in: window) else {
+      throw IntegrationFailure(message: "Release notes did not open")
+    }
+    notes.layoutSubtreeIfNeeded()
+    let notesBitmap = notes.bitmapImageRepForCachingDisplay(in: notes.bounds)!
+    notes.cacheDisplay(in: notes.bounds, to: notesBitmap)
+    try notesBitmap.representation(using: .png, properties: [:])!.write(
+      to: output.deletingLastPathComponent().appendingPathComponent("release-welcome.png"))
+    let continueKey = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [],
+      timestamp: 0, windowNumber: window.windowNumber, context: nil, characters: "\r",
+      charactersIgnoringModifiers: "\r", isARepeat: false, keyCode: 36)!
+    try check(GameScreen.shared.handleDialogKey(continueKey) && !GameScreen.shared.isPresented,
+      "Release notes Continue did not return to the game")
   }
   fileprivate func testElapsedTimeAndAudioRecovery() async throws {
     phase = .playing
@@ -5131,6 +5187,7 @@ Task { @MainActor in
     try await testContentBrowser()
     try await subject.testLearningJourneyEntriesResolve()
     try await subject.testLearningJourneySessionsStart()
+    try await subject.testPlaylistSessions()
     print("App integration tests passed.")
     #endif
     exit(0)
