@@ -1842,11 +1842,11 @@
     },
     {
       "fixture": "Tests/ClassicFamilyCompletionTests/Fixtures/ohYesMoreLemmings/lemmings versus-20.json",
-      "sha256": "f54457d90831a00b4c30092ea65bfded7cc559c01df9aa3edf565e68c3b66980",
+      "sha256": "3f1a6edd41e9723b9d63ddaba2c847a745aa41622292f37c18ee274361fa9ff1",
       "game": "ohYesMoreLemmings",
       "level": "Lemmings Versus 20",
-      "saved": 21,
-      "lost": 19,
+      "saved": 37,
+      "lost": 3,
       "reserves": 0,
       "ticks": 1629
     },

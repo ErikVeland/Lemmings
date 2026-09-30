@@ -6,12 +6,12 @@ import AppKit
     /// The release these notes describe. A test fails when Info.plist moves on
     /// to a new version and these notes stay behind.
     static let notesVersion = "1.7.2"
-    static let subtitle = "The NeoLemmix update"
+    static let subtitle = "Everything new in 1.7"
     static let sections = [
+        ("Faster controls", "Double-tap − or + for the lowest or highest release rate. N nukes, and N again undoes it. The selected lemming has a clearer marker."),
+        ("Oh My! All Lemmings!", "A guided journey of 1,607 lessons through every game, in a smoother order. Keep a level for later and revisit it."),
         ("NeoLemmix levels included", "788 NeoLemmix levels ship with the game. Add your own packs and styles from Level Select."),
-        ("Oh My! All Lemmings!", "A guided journey through every game. Keep a level for later and revisit it when you are ready."),
-        ("See your target", "The selected lemming has a clearer halo and a marker above its head."),
-        ("All the 1.6 improvements", "Beat-aligned music, optional soundtrack libraries, Precision Zoom and level skips.")
+        ("More fan levels verified", "2,136 Classic fan levels have a verified win. 30 levels with ignored exits can now be completed.")
     ]
     private let defaults: UserDefaults
     private let build: Int

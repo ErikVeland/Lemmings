@@ -1,7 +1,7 @@
 {
-  "engineSourceFingerprint": "01695d060f752f453b73c9ba854755f554c96e257267968d78706b45c8e4a2a3",
+  "engineSourceFingerprint": "8c81fe9e578e33c895efc2445593b3889452bafbeb5a8a9f6f4e02b64abea785",
   "exhaustive": false,
-  "generatedAt": "2026-09-29T14:39:54Z",
+  "generatedAt": "2026-09-30T01:36:14Z",
   "levels": [
     {
       "bestSaved": 10,
@@ -20098,7 +20098,7 @@
       }
     },
     {
-      "bestSaved": 21,
+      "bestSaved": 37,
       "conditions": {
         "gameID": "ohYesMoreLemmings",
         "levelFingerprint": "61bffbfb11424aa771b2f9d8ece820ffb212763d1acc612a190e3d016ef13d38",
@@ -20123,24 +20123,24 @@
         "timeLimitSeconds": 360
       },
       "gameID": "ohYesMoreLemmings",
-      "lossesInBestSolution": 19,
+      "lossesInBestSolution": 3,
       "notes": [],
       "number": 20,
       "population": 40,
       "rank": "Lemmings Versus",
       "required": 20,
       "status": "OBSERVED",
-      "testedCandidates": 3,
+      "testedCandidates": 2,
       "title": "Cross-over Point",
       "witness": {
         "completed": true,
         "didWin": true,
-        "lost": 19,
+        "lost": 3,
         "path": "witnesses/ohYesMoreLemmings-19.json",
         "released": 40,
         "retainedReserves": 0,
-        "saved": 21,
-        "sha256": "f54457d90831a00b4c30092ea65bfded7cc559c01df9aa3edf565e68c3b66980",
+        "saved": 37,
+        "sha256": "3f1a6edd41e9723b9d63ddaba2c847a745aa41622292f37c18ee274361fa9ff1",
         "ticks": 1629
       }
     },
