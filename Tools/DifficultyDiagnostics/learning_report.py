@@ -74,6 +74,7 @@ elif sys.argv[1] == 'report':
     goals = {json.dumps(g['identity'],sort_keys=True):g for g in curriculum['lessons']}
     assert set(goals) == {key(l) for l in lessons}
     assert len({g['objective'] for g in goals.values()}) == len(lessons)
+    assert len({g['applicationSignature'] for g in goals.values()}) == len(lessons)
     introductions = [g for g in goals.values() if g['objective'].startswith('introduce:')]
     assert len(introductions) == 8
     assert all(goals[key(l)]['objective'].startswith('introduce:') for l in lessons[:8])
@@ -100,7 +101,7 @@ elif sys.argv[1] == 'report':
     library_solutions.update(solutions)
     write(ROOT/'Resources/Progression/solutions.json',library_solutions)
     summary = {'version':manifest['version'], 'candidatePool':curriculum['poolSize'],
-        'levels':len(lessons), 'official':sum(r['official'] for r in selected), 'fan':len(fan),
+        'targetSize':curriculum['targetSize'], 'levels':len(lessons), 'official':sum(r['official'] for r in selected), 'fan':len(fan),
         'fanPacks':len({r['entry']['identity']['packID'] for r in fan}),
         'stages':{stage:sum(l['stage']==stage for l in lessons) for stage in stages},
         'skillIntroductions':len(introductions), 'duplicateObjectives':0,
@@ -111,6 +112,18 @@ elif sys.argv[1] == 'report':
         'ohNoLevels':sum(r['entry']['packNameSnapshot']=='Oh No! More Lemmings' for r in selected)}
     assert summary['stages']['Intermediate'] > max(v for k,v in summary['stages'].items() if k != 'Intermediate')
     write(OUT/'summary.json',summary)
+    expected = {'Lemmings':120, 'Oh No! More Lemmings':100, 'Xmas Lemmings 1991':4,
+                'Xmas Lemmings 1992':4, 'Holiday Lemmings 1993':32, 'Holiday Lemmings 1994':32}
+    corpus = []
+    for pack, count in expected.items():
+        source = [r for r in read(BASE) if r['official'] and r['entry']['packNameSnapshot'] == pack]
+        assert len(source) == count, (pack, len(source), count)
+        corpus.append({'pack':pack, 'corpusLevels':len(source),
+                       'confirmedScored':sum(r['profile']['confidence'] != 'low' for r in source),
+                       'selected':sum(l['entry']['packNameSnapshot'] == pack for l in lessons)})
+    write(OUT/'corpus-coverage.json', {'sizeReference':292, 'campaigns':corpus,
+        'scope':'Classic mechanics only, per user direction. L2/L3 evidence remains outside this journey.',
+        'eligiblePool':curriculum['poolSize']})
     exposure = {k:0 for k in selected[0]['profile']['components']}
     transitions = []
     for i,(lesson,row) in enumerate(zip(lessons,selected)):
@@ -136,7 +149,8 @@ elif sys.argv[1] == 'report':
         '## Selection before ordering','',
         'The recommended journey is a selective curriculum. The complete library and original campaigns remain available separately. It has no requirement to include every official level or every validated fan level.','',
         'The first eight lessons introduce the eight basic skills once each. Later lessons need a distinct objective: change one worker’s job, split jobs between workers, plan a three-skill sequence, control spacing, coordinate work, or combine planning, timing and resource demands. A repeated tutorial is not a bridge.','',
-        'One level represents each objective. Repeated assignments of the same skill collapse when detecting worker sequences. Three-skill sequences use one representative per skill set rather than every permutation. Passive levels and unassigned extra practice are omitted.','',
+        'The target is roughly 292 levels: the combined size of Classic, Oh No! and the 72 seasonal levels. The path uses Classic mechanics only. Confirmed L2/L3 levels remain outside this journey. All six source campaigns are checked in corpus-coverage.json.','',
+        'Official levels take priority within comparable 35-point demand bands. Library levels supply missing applications. An application signature records the skill set, job changes, three-step sequences and worker roles. Identical signatures are excluded even across different titles. Repeated assignments, worker counts and score buckets do not create new lessons. These are evidence-based distinctions that still need human review.', '',
         'The Fun stage contains only the eight introductions. Simple combinations begin Intermediate even when their numerical demand is low. Difficult and Expert retain the existing demand boundaries. Intermediate lessons are the majority of the path. Candidates are selected for their teaching role before the existing demand model orders them. No score is altered to make the chart look smoother.','',
         '## Evidence and limits','',
         'Objectives are inferred from winning replay commands and measured profiles. They describe an observed route, not a proved necessary technique or a human difficulty rating. Geometry-specific lessons such as steel recognition and safe digging depth are not reliably detected by the current evidence. Those require authored review before claiming complete teaching coverage.','',
@@ -159,6 +173,7 @@ elif sys.argv[1] == 'report':
     bbcode = ['[b]Oh My! All Lemmings![/b]','',
         f"A selective learning journey of {len(lessons)} levels. The complete library and original campaigns remain available separately.",'',
         'The first eight lessons introduce each basic skill once. Most of the following teaching work is in combinations, sequences and intermediate strategy. Every selected level has a distinct objective. Two-player levels and repeated port puzzles are excluded.','',
+        'Official levels take priority where they fit the lesson and difficulty. The corpus includes all Classic, Oh No! and seasonal levels. This journey uses Classic mechanics only.', '',
         'This is a replay-informed candidate curriculum. The objectives and difficulty curve still need novice playtesting. It is not a certified wall-free path.','',
         '[b]Full order[/b]','']
     for stage in stages:

@@ -11,11 +11,12 @@ These notes cover all of 1.7: the 1.7.0 release and the 1.7.1 and 1.7.2 updates.
   A single press still changes the rate by one step.
 - Press N to nuke. Press N again to undo the nuke while undo is still possible.
   Outside play, N in Classic still opens the next level.
-- Oh My! All Lemmings! now selects 58 lessons by teaching purpose: eight skill
-  introductions, 35 intermediate lessons, ten difficult lessons and five expert
-  challenges. Each objective has one example. The full library remains available.
-- The order considers skill preparation and measured demands. Six transitions
-  remain flagged for novice playtesting.
+- Oh My! All Lemmings! now selects 292 lessons: eight skill introductions,
+  160 intermediate applications, 90 difficult lessons and 34 expert challenges.
+  Official levels take priority within comparable difficulty bands. The corpus
+  includes all 120 Classic, 100 Oh No! and 72 seasonal levels. Repeated tutorials,
+  duplicate observed applications and port copies are excluded. One transition
+  remains flagged for playtesting. L2/L3 mechanics stay outside this journey.
 - 30 more Classic fan levels can be completed. The DOS rules ignored the exits
   on these levels. The exits now work, as they do in the fan editors.
 - 2,136 Classic fan levels now have a verified win.

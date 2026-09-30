@@ -50,12 +50,33 @@ class CurriculumTests(unittest.TestCase):
         self.assertEqual(result['triples'],set())
         self.assertEqual(result['pairs'],{('builder','basher'),('basher','builder')})
 
+    def test_official_preference_stays_inside_comparable_difficulty(self):
+        rows,replays = self.pool()
+        for row in rows:
+            row['official'] = row['entry']['levelNameSnapshot'].endswith('1')
+        result = curation.select(rows,replays)
+        self.assertTrue(all(l['level'].endswith('1') for l in result['lessons']))
+        for row in rows:
+            if row['official']: row['profile']['overallScore'] = 300
+        result = curation.select(rows,replays)
+        self.assertTrue(all(l['level'].endswith('0') for l in result['lessons']))
+
+    def test_roles_not_worker_count_define_an_application(self):
+        rows,_ = self.pool()
+        def signature(ids):
+            events=[{'tick':i,'action':{'assign':{'lemmingID':worker,'skill':'builder'}}}
+                    for i,worker in enumerate(ids)]
+            return curation.application_signature(curation.features(rows[0], {'events':events}))
+        self.assertEqual(signature([0]), signature([1,2,3]))
+
     def test_current_path_is_selective_and_intermediate_led(self):
         plan=json.loads((ROOT/'Artifacts/LearningJourney/curriculum.json').read_text())
         manifest=json.loads((ROOT/'Resources/Progression/learning.json').read_text())
         goals={json.dumps(l['identity'],sort_keys=True):l for l in plan['lessons']}
         lessons=manifest['lessons']
         self.assertLess(len(lessons),plan['poolSize'])
+        self.assertTrue(280 <= len(lessons) <= 305)
+        self.assertEqual(len({g['applicationSignature'] for g in goals.values()}),len(lessons))
         self.assertEqual(len({g['objective'] for g in goals.values()}),len(lessons))
         for i,lesson in enumerate(lessons):
             goal=goals[json.dumps(lesson['entry']['identity'],sort_keys=True)]

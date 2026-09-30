@@ -70,7 +70,7 @@ let pool = selectionOrder.filter {
     if $0.official { return officialIDs.contains($0.entry.identity) }
     // Port packs with numbered ranks are alternate presentations of the main Classic campaign.
     let pack = $0.entry.packNameSnapshot
-    if ["Amiga Fun", "Amiga Tricky", "Amiga Taxing", "Amiga Mayhem"].contains(pack) { return false }
+    if ["Amiga Fun", "Amiga Tricky", "Amiga Taxing", "Amiga Mayhem"].contains(where: { pack.hasPrefix($0) }) { return false }
     if officialTitles.contains(title($0)) { return false }
     // Empty or hands-free fan records do not teach a bridge concept.
     guard !$0.profile.detectedTechniques.isEmpty,

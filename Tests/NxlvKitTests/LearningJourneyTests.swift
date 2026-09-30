@@ -48,6 +48,17 @@ struct LearningJourneyTests {
             try LearningJourney.generate([dig, build], objectives: [dig.entry.identity: "same", build.entry.identity: "same"])
         }
     }
+    @Test func complexRoutesWaitForSecondBasicSkillPractice() throws {
+        let climb = try candidate(0, score: 55, concepts: ["climber"])
+        let build = try candidate(1, score: 60, concepts: ["builder"])
+        let short = try candidate(2, score: 260, concepts: ["climber", "builder"])
+        let complex = try candidate(3, score: 225, concepts: ["climber", "builder", "release-rate-manipulation"])
+        let result = try LearningJourney.generate([complex, short, build, climb])
+        #expect(result.lessons.map(\.entry.identity) == [climb, build, short, complex].map(\.entry.identity))
+        #expect(result.lessons.last?.preparationGaps.isEmpty == true)
+        #expect(result.lessons.last?.score == complex.profile.overallScore)
+        #expect(result.lessons.last!.demand >= result.lessons.last!.intrinsicDemand)
+    }
     @Test func multiplayerSourcesCannotEnterTheLearningPath() throws {
         for (pack, name, level) in [("fan:lldb-404", "Renamed pack", "0"),
             ("test", "Genesis 2P 2", "0"), ("test", "Amiga Two Player", "0"),

@@ -4,6 +4,7 @@ Replay actions establish what a route does, not what a novice must discover.
 Keep the curriculum separate from the complete catalogue and original campaigns.
 """
 import collections
+import hashlib
 import json
 import pathlib
 
@@ -39,6 +40,13 @@ def features(row, replay):
             'chains': chains}
 
 
+def application_signature(f):
+    """Repeated jobs, worker IDs and source titles do not create new lessons."""
+    return json.dumps({'concepts': sorted(f['concepts']),
+                       'changes': sorted(f['pairs']), 'sequences': sorted(f['triples']),
+                       'roles': sorted({tuple(sorted(set(c))) for c in f['chains']})}, sort_keys=True)
+
+
 def select(pool, replays):
     pool = sorted(pool, key=lambda r: (demand(r), r['profile']['components']['solutionComplexity'],
                                      r['profile']['overallScore'], key(r)))
@@ -47,15 +55,20 @@ def select(pool, replays):
         replay = replays.get(row['profile']['key']['replayRevision']) or replays.get(row['initialHash'])
         if replay and replay.get('expected', {}).get('didWin') and replay['initialStateHash'] == row['initialHash']:
             evidence[key(row)] = features(row, replay)
-    chosen = {}; missing = []
+    chosen = {}; missing = []; used_signatures = set()
 
     def choose(objective, lesson, purpose, predicate, lower=0, upper=1000):
         options = [r for r in pool if key(r) in evidence and key(r) not in chosen
-                   and lower <= demand(r) <= upper and predicate(r, evidence[key(r)])]
+                   and lower <= demand(r) <= upper and predicate(r, evidence[key(r)])
+                   and application_signature(evidence[key(r)]) not in used_signatures]
         if not options:
             missing.append(objective)
             return
-        row = options[0]
+        # Prefer official evidence when it fits the same narrow demand window.
+        floor = min(demand(r) for r in options)
+        nearby = [r for r in options if demand(r) <= floor + 35]
+        row = min(nearby, key=lambda r: (not r.get('official', False), demand(r), key(r)))
+        used_signatures.add(application_signature(evidence[key(row)]))
         chosen[key(row)] = {'identity': row['entry']['identity'], 'objective': objective,
             'lesson': lesson, 'purpose': purpose, 'evidence': 'winning replay assignments and measured profile',
             'level': row['entry']['levelNameSnapshot'], 'intrinsicDemand': demand(row)}
@@ -130,6 +143,8 @@ def select(pool, replays):
          lambda r,f: any(len(set(c)) >= 5 for c in f['chains']),550,649),
         ('precision-economy', 'Precision on a budget', 'Combine substantial timing and resource pressure.',
          lambda r,f: r['profile']['components']['executionPrecision'] >= 600 and r['profile']['components']['constraintPressure'] >= 800,630,719),
+        ('growing-coordination', 'Coordinate a larger plan', 'Bridge moderate coordination and expert concurrency with a busier familiar-skill route.',
+         lambda r,f: 600 <= r['profile']['components']['concurrencyBurden'] <= 640,500,599),
         ('expert-scout', 'Expert: scout and construct', 'Carry permanent skills through a complex construction sequence.',
          lambda r,f: any({'climber','floater','builder'} <= set(c) and len(c) >= 5 for c in f['chains']),640,679),
         ('expert-sequencing', 'Expert: linked work areas', 'Combine substantial coordination with long worker sequences.',
@@ -145,11 +160,61 @@ def select(pool, replays):
     ]
     for objective,lesson,purpose,predicate,lower,upper in strategies:
         choose(objective,lesson,purpose,predicate,lower,upper)
+    # Grow applications of skills, not more introductions. An application is
+    # distinct only when the observed worker roles or skill transitions differ.
+    # No title, pack, score bucket or worker count makes a new application.
+    targets = [('Intermediate', 160, 0, 359.999),
+               ('Difficult', 90, 360, 599.999), ('Expert', 34, 600, 750)]
+    for stage, target, lower, upper in targets:
+        def in_stage(row):
+            return lower <= demand(row) <= upper
+        current = [r for r in pool if key(r) in chosen and in_stage(r)
+                   and not chosen[key(r)]['objective'].startswith('introduce:')]
+        while len(current) < target:
+            options = [r for r in pool if key(r) in evidence and key(r) not in chosen
+                       and in_stage(r) and len(evidence[key(r)]['skills']) >= 2
+                       and application_signature(evidence[key(r)]) not in used_signatures]
+            if not options:
+                break
+            # Spread applications across demand bands. In comparable windows,
+            # choose official puzzles before library alternatives.
+            points = sorted([max(lower, 90), upper] + [demand(r) for r in current])
+            available_bands = sorted({int(demand(r)/35) for r in options})
+            def band_priority(band):
+                count = sum(int(demand(r)/35) == band for r in current)
+                distance = min(abs(band*35+17.5-p) for p in points)
+                return (count, -distance, band)
+            band = min(available_bands, key=band_priority)
+            nearby = [r for r in options if int(demand(r)/35) == band]
+            row = min(nearby, key=lambda r: (not r.get('official', False), demand(r), key(r)))
+            f = evidence[key(row)]
+            signature = application_signature(f)
+            objective = 'apply:' + hashlib.sha256(signature.encode()).hexdigest()[:20]
+            chains = sorted({tuple(c) for c in f['chains'] if len(c) > 1}, key=lambda c: (len(c), c))
+            roles = sorted({tuple(sorted(set(c))) for c in f['chains']})
+            extras = sorted(f['concepts'] - BASIC)
+            purpose = 'Worker roles: ' + '; '.join(' + '.join(c) for c in roles) + '.'
+            if f['pairs']:
+                purpose += ' Job changes: ' + '; '.join(a+' → '+b for a,b in sorted(f['pairs'])) + '.'
+            if f['triples']:
+                purpose += ' Three-step plans: ' + '; '.join(' → '.join(c) for c in sorted(f['triples'])) + '.'
+            if extras:
+                purpose += ' Also practise ' + ', '.join(extras) + '.'
+            focus = ('Link: ' + ' + '.join(s.capitalize() for s in chains[0][:3])) if chains else ('Share: ' + ' + '.join(s.capitalize() for s in sorted(f['skills'])[:3]))
+            chosen[key(row)] = {'identity': row['entry']['identity'], 'objective': objective,
+                'lesson': focus, 'purpose': purpose,
+                'evidence': 'winning replay assignments and measured profile',
+                'level': row['entry']['levelNameSnapshot'], 'intrinsicDemand': demand(row)}
+            used_signatures.add(signature)
+            current.append(row)
     lessons = list(chosen.values())
+    for lesson in lessons:
+        lesson['applicationSignature'] = application_signature(evidence[json.dumps(lesson['identity'], sort_keys=True)])
     foundations = [l for l in lessons if l['objective'].startswith('introduce:')]
     assert len(foundations) == 8, 'A basic skill has no safe introductory witness'
     assert len({l['objective'] for l in lessons}) == len(lessons)
-    return {'version':'curriculum-1', 'poolSize':len(pool), 'lessons':lessons,
+    return {'version':'curriculum-2', 'targetSize':292, 'poolSize':len(pool), 'lessons':lessons,
+            'selectionPolicy':'Official first within comparable 35-point demand bands; distinct observed applications; Classic mechanics only.',
             'unavailableOptionalObjectives':missing,
             'limits':'Objectives describe observed routes. Novice readability and the necessity of these techniques require playtesting.'}
 

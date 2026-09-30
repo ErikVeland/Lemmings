@@ -3,7 +3,7 @@ import Foundation
 /// A teaching order, independent of retail ranks. Estimates never certify human insight.
 public struct LearningJourney: Codable, Equatable, Sendable {
     public static let title = "Oh My! All Lemmings!"
-    public static let version = "learning-7"
+    public static let version = "learning-8"
     public static let playlistID = UUID(uuidString: "80368144-659B-4697-B2D0-76894BF20B18")!
     public static let maximumScoreStep = 65.0
 
@@ -102,10 +102,19 @@ public struct LearningJourney: Codable, Equatable, Sendable {
             let concept = candidate.profile.detectedTechniques[0]
             foundations[concept] = min(foundations[concept] ?? 1000, demand(for: candidate.profile))
         }
+        // Three-concept routes need two earlier encounters with each basic skill.
+        // Include short combinations when finding the second practice floor.
+        let secondPractice = Dictionary(uniqueKeysWithValues: basicSkills.compactMap { skill -> (String, Double)? in
+            let values = candidates.filter { $0.profile.detectedTechniques.count <= 2
+                && $0.profile.detectedTechniques.contains(skill) }.map { demand(for: $0.profile) }.sorted()
+            return values.count >= 2 ? (skill, values[1]) : nil
+        })
         func placementDemand(_ profile: DifficultyProfile) -> Double {
             guard profile.detectedTechniques.count > 1 else { return demand(for: profile) }
             // A combination cannot precede its easiest available isolated lesson.
-            return max(demand(for: profile), profile.detectedTechniques.compactMap { foundations[$0] }.max() ?? 0)
+            let preparation = profile.detectedTechniques.count > 2
+                ? profile.detectedTechniques.compactMap { secondPractice[$0] }.max() ?? 0 : 0
+            return max(demand(for: profile), profile.detectedTechniques.compactMap { foundations[$0] }.max() ?? 0, preparation)
         }
         var remaining = candidates.sorted { $0.stableKey < $1.stableKey }
         var practice: [String: Int] = [:]

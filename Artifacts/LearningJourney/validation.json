@@ -1,46 +1,59 @@
 {
-  "version": "learning-7",
-  "scope": "Selective single-player curriculum; complete catalogue remains separate",
+  "version": "learning-8",
+  "scope": "Classic mechanics only; official-first curriculum of roughly three campaigns",
   "curriculumChecks": {
-    "candidatePool": 1607,
+    "candidatePool": 1534,
     "duplicateObjectives": 0,
-    "fan": 40,
-    "fanPacks": 33,
-    "largestDemandStep": 55.41764705882355,
-    "largestScoreStep": 191.77612008624487,
-    "levels": 58,
-    "official": 18,
-    "ohNoLevels": 8,
+    "fan": 137,
+    "fanPacks": 80,
+    "largestDemandStep": 49,
+    "largestScoreStep": 77.36405529164301,
+    "levels": 292,
+    "official": 155,
+    "ohNoLevels": 51,
     "preparationGaps": 0,
     "skillIntroductions": 8,
     "stages": {
-      "Difficult": 10,
-      "Expert": 5,
+      "Difficult": 90,
+      "Expert": 34,
       "Fun": 8,
-      "Intermediate": 35
+      "Intermediate": 160
     },
-    "supportTransitions": 6,
-    "version": "learning-7"
+    "supportTransitions": 1,
+    "targetSize": 292,
+    "version": "learning-8"
   },
   "focusedTests": {
-    "swiftJourneyTests": 10,
+    "swiftJourneyTests": 11,
     "desktopJourneyTests": 4,
-    "pythonDiagnosticsTests": 7,
+    "pythonDiagnosticsTests": 9,
     "status": "passed"
   },
-  "fanEvidence": "All 40 selected fan profiles match their existing winning replay digests and initial-state hashes. No simulation rules changed in this revision.",
-  "localArm64AppBuild": "passed; final executable rebuilt after welcome copy change; capability signing and deep strict signature verification passed",
+  "fanEvidence": "All 137 selected library profiles match their existing winning replay digests and initial-state hashes. No simulation rules changed in this revision.",
+  "sourceDigests": {
+    "Artifacts/ClassicProgression/audit.json": "7f765b18604df94d68ae642a45e758a9a4879d6aedb10423ccfadaebf256d671",
+    "Artifacts/LearningJourney/fan-evidence.json": "cc4f3916a25d075d93297a32e0507e47ad778bf22e584962b3c815fa2a32620c",
+    "Artifacts/LearningJourney/candidate-solutions.json": "eca3da705209134b30dfd53c6c3d4646d61def1d4f2899536dc70541aef0d516",
+    "Artifacts/LearningJourney/scenarios.json": "81e29282a7cfadea006091e325e482ba397dadd9b4cc728640d132967f4fbcb5"
+  },
+  "localArm64AppBuild": "passed; capability signing and deep strict signature verification passed",
   "limits": [
-    "Replay roles do not prove novice readability or necessary techniques.",
-    "Six transitions require playtesting.",
+    "Replay role signatures distinguish observed solutions, not proven distinct human learning experiences.",
     "Geometry-specific teaching such as steel and safe drop height still needs authored review."
   ],
+  "playtestTransitions": [
+    {
+      "step": 13,
+      "level": "Thunder-Lemmings are go!",
+      "reasons": [
+        "New component high: executionPrecision"
+      ]
+    }
+  ],
   "librarySolutionsPreserved": true,
-  "bundledCurriculum": "Byte-for-byte match with Resources/Progression/learning.json",
+  "bundledCurriculum": "Byte-for-byte match with final Resources/Progression/learning.json",
   "liveUI": {
     "status": "passed",
-    "observed": "Main menu shows 1/58 retained progress. Journey hub shows Fun / Discover: Floater, Only Float is Survive, Solved 1/58, Back and enabled Let\u2019s play controls. Rendered text and targets inspected.",
-    "scope": "Opened journey hub without starting or completing a level; welcome copy compiled but its dismissed panel was not reopened."
-  },
-  "unrelatedBuildNotice": "Build reports stale Trolley certificates; those targets remain unverified. This revision does not change Trolley certification."
+    "observed": "Main menu and journey hub show retained 1/292 progress. Next lesson is Floating Down!, Fun / Discover: Floater. Back and enabled Let\u2019s play controls render correctly. No level was started or completed during verification."
+  }
 }
