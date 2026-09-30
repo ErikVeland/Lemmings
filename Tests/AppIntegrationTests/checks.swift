@@ -5307,6 +5307,8 @@ Task { @MainActor in
   do {
     let subject = AppDelegate()
     subject.prepareArcadeTests()
+    // Match normal startup: use the packaged index before opening the home screen.
+    FanLevelLibrary.Progress.seedBundledCounts()
     #if !SELECTION_HDR_TESTS && !CURSOR_INPUT_TESTS && !LOADING_LATENCY_TESTS && !TRANSPORT_TESTS && !DIALOG_TESTS && !NEO_RECOVERY_TESTS && !NEO_PACK_TESTS && !LEARNING_TESTS
     try subject.testFailureMoodDecision()
     try subject.testSteppedCompletion()
