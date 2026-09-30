@@ -10,7 +10,7 @@
     "medieval": 4,
     "outdoor": 8,
     "polar": 6,
-    "shadow": 3,
+    "shadow": 4,
     "space": 5,
     "sports": 7
   },
@@ -632,6 +632,16 @@
       "startingPopulation": 60,
       "saved": 1,
       "ticks": 2149
+    },
+    {
+      "fixture": "Tests/Lemmings2CompletionTests/Fixtures/shadow-02.json",
+      "sha256": "d30a72019a2e05d9afdf8ff6f62dbe23cb037fe72336d051e6087fe034c2aa00",
+      "tribe": "shadow",
+      "level": 2,
+      "levelSHA256": "12e6e9496d1e6e37f11d49e7cac47251527d54fd7e47d75ed67abf6747544455",
+      "startingPopulation": 60,
+      "saved": 7,
+      "ticks": 8115
     },
     {
       "fixture": "Tests/Lemmings2CompletionTests/Fixtures/shadow-03.json",

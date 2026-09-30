@@ -6,7 +6,7 @@ It uses the same replay code as the runtime suite, so the two cannot drift apart
 
 ## Coverage
 
-74 of the 120 campaign levels have a recorded winning route. 46 do not.
+75 of the 120 campaign levels have a recorded winning route. 45 do not.
 
 | Tribe | Recorded routes | Levels that chain |
 | --- | ---: | ---: |
@@ -19,7 +19,7 @@ It uses the same replay code as the runtime suite, so the two cannot drift apart
 | Medieval | 4 | 1 |
 | Outdoor | 8 | 3 |
 | Polar | 6 | 4 |
-| Shadow | 3 | 1 |
+| Shadow | 4 | 1 |
 | Space | 5 | 2 |
 | Sports | 7 | 7 |
 
@@ -28,7 +28,7 @@ a win. Loading and rendering are separate checks. They do not prove a solution.
 
 ## Route quality
 
-The recorded routes earn 11 gold, 13 silver and 50 bronze medals.
+The recorded routes earn 11 gold, 13 silver and 51 bronze medals.
 
 Every winning route earns at least bronze, so a medal alone does not show how
 well a route plays. 44 routes save one lemming from a larger crowd. Most of them start with sixty. They count as bronze or silver.
