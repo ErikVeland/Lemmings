@@ -7625,6 +7625,13 @@ let achievementProgressKey = "ClassicAchievementProgress"
     guard event.type == .keyDown else { return event }
     if event.isARepeat, [" ", "p"].contains(event.charactersIgnoringModifiers ?? "") { return nil }
 
+    // A directly launched or restored game can outlive the campaign menu state.
+    // Pause the active game before considering Space as a menu continuation.
+    if phase == .playing, event.keyCode == 49 || event.charactersIgnoringModifiers?.lowercased() == "p" {
+      if !event.isARepeat { togglePause() }
+      return nil
+    }
+
     if event.keyCode == 122 || ["h", "i"].contains(event.charactersIgnoringModifiers?.lowercased() ?? "") {
       if !event.isARepeat { self.showLevelHints() }
       return nil

@@ -171541,14 +171541,15 @@
         "concurrencyBurden": 0,
         "constraintPressure": 122.83208101927475,
         "deductionComplexityProxy": 30,
-        "executionPrecision": 0,
+        "executionPrecision": 275,
         "solutionComplexity": 57,
-        "techniqueBurden": 65
+        "techniqueBurden": 195
       },
-      "confidence": "medium",
+      "confidence": "high",
       "criticalActions": [],
       "detectedTechniques": [
-        "miner"
+        "miner",
+        "release-rate-manipulation"
       ],
       "explanation": [
         "1 used skill types; 1 assigned workers; 0 same-worker skill changes.",
@@ -171558,84 +171559,39 @@
         "Source rank: fan:lldb-547."
       ],
       "key": {
-        "analyserVersion": "difficulty-2",
-        "assetsRevision": "79a2588b526c78e6d0febfef0d982167a1f5ab08586bd101fb9307bce4498519:probes-10",
+        "analyserVersion": "difficulty-3",
+        "assetsRevision": "79a2588b526c78e6d0febfef0d982167a1f5ab08586bd101fb9307bce4498519:probes-160",
         "identity": {
           "engine": "classic",
           "levelID": "Ji Hoon Heaven 1.DAT#6",
           "packID": "fan:lldb-547"
         },
         "levelRevision": "8d2daffec1cf660515ad4680e015d48b923b81b70afa10956729a179c81e3971",
-        "replayRevision": "SHA256 digest: f7b4b10774a6fb15a47ab4a406fecce7f7d5e14e2bb98cc1a13a9c71b219c33a",
+        "replayRevision": "SHA256 digest: 438fdab058563975ac5b70960d6c47f152bff1cfa150095387d95dbb1c76b65f",
         "simulationVersion": "neolemmix-ce-2026-09-27:golems-clock-2-limit-from-clock-1"
       },
-      "overallScore": 46.85817053250572,
+      "overallScore": 134.3581705325057,
       "precision": {
         "actions": [
           {
             "outcomes": {
-              "-1": true
+              "-1": true,
+              "-16": false,
+              "-2": true,
+              "-4": true,
+              "-8": true,
+              "1": false,
+              "16": true,
+              "2": true,
+              "4": true,
+              "8": false
             },
             "sequence": 1
-          },
-          {
-            "outcomes": {
-              "-1": true
-            },
-            "sequence": 2
-          },
-          {
-            "outcomes": {
-              "-1": true
-            },
-            "sequence": 3
-          },
-          {
-            "outcomes": {
-              "-1": true
-            },
-            "sequence": 4
-          },
-          {
-            "outcomes": {
-              "-1": true
-            },
-            "sequence": 5
-          },
-          {
-            "outcomes": {
-              "-1": true
-            },
-            "sequence": 6
-          },
-          {
-            "outcomes": {
-              "-1": true
-            },
-            "sequence": 7
-          },
-          {
-            "outcomes": {
-              "-1": true
-            },
-            "sequence": 8
-          },
-          {
-            "outcomes": {
-              "-1": true
-            },
-            "sequence": 23
-          },
-          {
-            "outcomes": {
-              "-1": true
-            },
-            "sequence": 24
           }
         ],
         "alternativeRunCount": 0,
-        "assignmentCount": 17,
-        "completed": false,
+        "assignmentCount": 1,
+        "completed": true,
         "orderingOutcomes": [],
         "runCount": 10,
         "selectionOutcomes": []

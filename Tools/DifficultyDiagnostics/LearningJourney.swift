@@ -29,6 +29,19 @@ if args.count > 3 {
         return original.profile.confidence == .low || candidate.profile.overallScore < original.profile.overallScore ? candidate : original
     }
 }
+// Reviewed corrections can raise a score. Do not keep an older underestimate
+// merely because it has a lower score than the corrected evidence.
+let reviewedURL = project.appendingPathComponent("Artifacts/LearningJourney/reviewed-evidence.json")
+if let data = try? Data(contentsOf: reviewedURL) {
+    let reviewed = try JSONDecoder().decode([Row].self, from: data)
+    for correction in reviewed {
+        guard let index = rows.firstIndex(where: { $0.entry.identity == correction.entry.identity }),
+              rows[index].entry.sourceRevision == correction.entry.sourceRevision,
+              rows[index].initialHash == correction.initialHash,
+              correction.profile.confidence != .low else { throw LevelPlaylistError.invalidEntry }
+        rows[index] = correction
+    }
+}
 struct Scenarios: Decodable { let official: [String]; let fan: [String: String] }
 let scenarios = try JSONDecoder().decode(Scenarios.self, from: Data(contentsOf: URL(fileURLWithPath: args[4])))
 var usedScenarios = Set(scenarios.official)

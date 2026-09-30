@@ -157,6 +157,11 @@ import NxlvKit
             return event
         }
         guard event.type == .keyDown else { return event }
+        // Handle pause before AppKit sends Space to the focused control or canvas.
+        if event.keyCode == 49 || event.charactersIgnoringModifiers?.lowercased() == "p" {
+            if !event.isARepeat { togglePause() }
+            return nil
+        }
         if event.charactersIgnoringModifiers?.lowercased() == "z", let precisionZoom {
             if event.modifierFlags.contains(.shift) { speedControl?.release(.shift, at: now, allowTap: false) }
             if !event.isARepeat { precisionZoom(event.modifierFlags.contains(.shift) ? .superzoom : .zoom) }

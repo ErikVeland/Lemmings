@@ -68,6 +68,8 @@ if sys.argv[1] == 'collect':
 elif sys.argv[1] == 'report':
     rows = {key(r): r for r in read(BASE)}
     rows.update({key(r): r for r in read(OUT / 'fan-evidence.json')})
+    if (OUT / 'reviewed-evidence.json').exists():
+        rows.update({key(r): r for r in read(OUT / 'reviewed-evidence.json')})
     manifest = read(ROOT / 'Resources/Progression/learning.json')
     lessons = manifest['lessons']
     selected = [rows[key(l)] for l in lessons]
@@ -152,10 +154,13 @@ elif sys.argv[1] == 'report':
         'The first eight lessons introduce the eight basic skills once each. Later lessons need a distinct objective: change one worker’s job, split jobs between workers, plan a three-skill sequence, control spacing, coordinate work, or combine planning, timing and resource demands. A repeated tutorial is not a bridge.','',
         'The target is roughly 292 levels: the combined size of Classic, Oh No! and the 72 seasonal levels. The path uses Classic mechanics only. Confirmed L2/L3 levels remain outside this journey. All six source campaigns are checked in corpus-coverage.json.','',
         'Official levels take priority within comparable 35-point demand bands. Library levels supply missing applications. An application signature records the skill set, job changes, three-step sequences and worker roles. Identical signatures are excluded even across different titles. Repeated assignments, worker counts and score buckets do not create new lessons. These are evidence-based distinctions that still need human review.', '',
-        'The Fun stage contains only the eight introductions. Simple combinations begin Intermediate even when their numerical demand is low. Difficult and Expert retain the existing demand boundaries. Intermediate lessons are the majority of the path. Candidates are selected for their teaching role before the existing demand model orders them. No score is altered to make the chart look smoother.','',
+        'The Fun stage contains introductions below 180 demand. More demanding introductions and simple combinations begin Intermediate. Difficult and Expert retain the existing demand boundaries. Intermediate lessons are the majority of the path. Candidates are selected for their teaching role before the existing demand model orders them. No score is altered to make the chart look smoother.','',
         '## Evidence and limits','',
         'Objectives are inferred from winning replay commands and measured profiles. They describe an observed route, not a proved necessary technique or a human difficulty rating. Geometry-specific lessons such as steel recognition and safe digging depth are not reliably detected by the current evidence. Those require authored review before claiming complete teaching coverage.','',
         'The selector retains multiplayer and port-duplicate exclusions. The generator checks each selected fan witness against its profile digest and source identity. Basic introductions, unique objectives, source coverage of the selected list and reversed-input ordering are checked.','',
+        'Reviewed corrections in `reviewed-evidence.json` override older scores even when the corrected demand is higher. Replay inputs must fit inside the verified completion time. All eight introductions precede combinations, with original evidence scores retained.','',
+        'The miner introduction was reviewed after Mienrs <--- lol, typo exposed missed timing and release-rate demands. Its repaired replay remains available in the library. The broader cached corpus has not yet been reanalysed with the corrected detector.','',
+        'No current miner-only witness meets the forgiving introductory threshold. Honey, I Saved The Lemmings has complete timing probes and a winning replay. It appears as an Intermediate introduction with a support flag for the demand increase. This remains a teaching gap for novice playtesting.','',
         f"Stages: {summary['stages']}. Basic introductions: 8. Duplicate objectives: 0. Largest demand increase: {summary['largestDemandStep']:.2f}/1000. Preparation gaps: {summary['preparationGaps']}.",'',
         '## Transitions for playtesting','',
         *[f"- {t['step']}. {t['level']}: {'; '.join(t['reasons'])}." for t in transitions if t['needsSupport']], '',

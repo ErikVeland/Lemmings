@@ -99,18 +99,18 @@
       "purpose": "First assignment of the floater skill."
     },
     {
-      "applicationSignature": "{\"changes\": [[\"builder\", \"climber\"], [\"builder\", \"digger\"], [\"builder\", \"miner\"], [\"climber\", \"builder\"], [\"digger\", \"builder\"], [\"digger\", \"miner\"], [\"miner\", \"builder\"], [\"miner\", \"digger\"]], \"concepts\": [\"miner\"], \"roles\": [[\"builder\", \"climber\", \"digger\", \"miner\"]], \"sequences\": [[\"climber\", \"builder\", \"digger\"], [\"digger\", \"builder\", \"climber\"], [\"digger\", \"builder\", \"miner\"], [\"miner\", \"builder\", \"digger\"], [\"miner\", \"digger\", \"builder\"]]}",
+      "applicationSignature": "{\"changes\": [], \"concepts\": [\"miner\"], \"roles\": [[\"miner\"]], \"sequences\": []}",
       "evidence": "winning replay assignments and measured profile",
       "identity": {
         "engine": "classic",
-        "levelID": "Ji Hoon Heaven 1.DAT#6",
-        "packID": "fan:lldb-547"
+        "levelID": "16:Tame:17:12:0",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
       },
-      "intrinsicDemand": 61.41604050963738,
+      "intrinsicDemand": 233.75,
       "lesson": "Discover: Miner",
-      "level": "Mienrs <--- lol, typo",
+      "level": "Honey, I Saved The Lemmings",
       "objective": "introduce:miner",
-      "purpose": "First assignment of the miner skill."
+      "purpose": "Introduce miner and practise assignment timing."
     },
     {
       "applicationSignature": "{\"changes\": [[\"basher\", \"builder\"], [\"builder\", \"basher\"]], \"concepts\": [\"basher\", \"builder\"], \"roles\": [[\"basher\", \"builder\"]], \"sequences\": []}",
@@ -4195,5 +4195,5 @@
     "precision-economy",
     "expert-sequencing"
   ],
-  "version": "curriculum-2"
+  "version": "curriculum-3"
 }

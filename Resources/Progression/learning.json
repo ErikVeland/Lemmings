@@ -95,37 +95,6 @@
     },
     {
       "concepts" : [
-        "miner"
-      ],
-      "demand" : 61.41604050963738,
-      "entry" : {
-        "catalogueRevision" : "1.2-runtime-v2",
-        "id" : "53A340B5-1FB4-A93D-EEF2-DFD30AD5D57E",
-        "identity" : {
-          "engine" : "classic",
-          "levelID" : "Ji Hoon Heaven 1.DAT#6",
-          "packID" : "fan:lldb-547"
-        },
-        "levelNameSnapshot" : "Mienrs <--- lol, typo",
-        "levelNumberSnapshot" : 7,
-        "packNameSnapshot" : "Ji Hoons Lemmings Remake Heaven",
-        "sourceRevision" : "8d2daffec1cf660515ad4680e015d48b923b81b70afa10956729a179c81e3971"
-      },
-      "focus" : "Discover: Miner",
-      "intrinsicDemand" : 61.41604050963738,
-      "introduced" : [
-        "miner"
-      ],
-      "needsSupport" : false,
-      "objective" : "introduce:miner",
-      "preparationGaps" : [
-
-      ],
-      "score" : 46.85817053250572,
-      "stage" : "Fun"
-    },
-    {
-      "concepts" : [
         "bomber"
       ],
       "demand" : 61.220305762446095,
@@ -250,34 +219,33 @@
     },
     {
       "concepts" : [
-        "blocker",
-        "digger"
+        "miner"
       ],
-      "demand" : 138.04900039200314,
+      "demand" : 233.75,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
-        "id" : "0EFF9C38-5461-4B6B-0B4E-16FEEA568E2E",
+        "id" : "903D32E3-B1AC-10AB-1346-B7DFE0C0F9D8",
         "identity" : {
           "engine" : "classic",
-          "levelID" : "brickpk2.dat#1",
-          "packID" : "fan:lldb-559"
+          "levelID" : "16:Tame:17:12:0",
+          "packID" : "ohNoMoreLemmings-DLVEL-100"
         },
-        "levelNameSnapshot" : "Block and Dig",
-        "levelNumberSnapshot" : 2,
-        "packNameSnapshot" : "brickpk2",
-        "sourceRevision" : "8d0c1f847913a4f82cfc2f0151384aa5147b5a6b30a414f60cfeeb61802d4253"
+        "levelNameSnapshot" : "Honey, I Saved The Lemmings",
+        "levelNumberSnapshot" : 17,
+        "packNameSnapshot" : "Oh No! More Lemmings",
+        "sourceRevision" : "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25"
       },
-      "focus" : "Split jobs: Blocker + Digger",
-      "intrinsicDemand" : 134.933086022258,
+      "focus" : "Discover: Miner",
+      "intrinsicDemand" : 233.75,
       "introduced" : [
-
+        "miner"
       ],
-      "needsSupport" : false,
-      "objective" : "split:blocker:digger",
+      "needsSupport" : true,
+      "objective" : "introduce:miner",
       "preparationGaps" : [
 
       ],
-      "score" : 116.75120436959479,
+      "score" : 132.06004901960785,
       "stage" : "Intermediate"
     },
     {
@@ -285,7 +253,7 @@
         "basher",
         "miner"
       ],
-      "demand" : 147.3235294117647,
+      "demand" : 233.75,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "918B6CF4-6BB3-0C4D-7E4E-AA58FEB48A0C",
@@ -315,9 +283,73 @@
     {
       "concepts" : [
         "blocker",
+        "release-rate-manipulation"
+      ],
+      "demand" : 233.75,
+      "entry" : {
+        "catalogueRevision" : "1.2-runtime-v2",
+        "id" : "71683445-3B98-5E6E-2D21-16E9C0DBD90A",
+        "identity" : {
+          "engine" : "classic",
+          "levelID" : "Deceit Extras 1.DAT#3",
+          "packID" : "fan:lldb-546"
+        },
+        "levelNameSnapshot" : "Blockers can block others",
+        "levelNumberSnapshot" : 4,
+        "packNameSnapshot" : "Deceits Lemmings Extras",
+        "sourceRevision" : "164a98b095105dfa73a6bd8df695b6eff20947227f5c0c35d6c6e366f758de6a"
+      },
+      "focus" : "Control crowd spacing",
+      "intrinsicDemand" : 192.5,
+      "introduced" : [
+        "release-rate-manipulation"
+      ],
+      "needsSupport" : false,
+      "objective" : "spacing",
+      "preparationGaps" : [
+
+      ],
+      "score" : 116.08,
+      "stage" : "Intermediate"
+    },
+    {
+      "concepts" : [
+        "blocker",
+        "digger"
+      ],
+      "demand" : 233.75,
+      "entry" : {
+        "catalogueRevision" : "1.2-runtime-v2",
+        "id" : "0EFF9C38-5461-4B6B-0B4E-16FEEA568E2E",
+        "identity" : {
+          "engine" : "classic",
+          "levelID" : "brickpk2.dat#1",
+          "packID" : "fan:lldb-559"
+        },
+        "levelNameSnapshot" : "Block and Dig",
+        "levelNumberSnapshot" : 2,
+        "packNameSnapshot" : "brickpk2",
+        "sourceRevision" : "8d0c1f847913a4f82cfc2f0151384aa5147b5a6b30a414f60cfeeb61802d4253"
+      },
+      "focus" : "Split jobs: Blocker + Digger",
+      "intrinsicDemand" : 134.933086022258,
+      "introduced" : [
+
+      ],
+      "needsSupport" : false,
+      "objective" : "split:blocker:digger",
+      "preparationGaps" : [
+
+      ],
+      "score" : 116.75120436959479,
+      "stage" : "Intermediate"
+    },
+    {
+      "concepts" : [
+        "blocker",
         "bomber"
       ],
-      "demand" : 173.50419599705384,
+      "demand" : 233.75,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "4BF6467C-8180-DA95-641A-E654C4BBA609",
@@ -349,7 +381,7 @@
         "blocker",
         "builder"
       ],
-      "demand" : 165.6313490507924,
+      "demand" : 233.75,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "FB6BEF8C-20D7-4A9F-7D4C-B905A1073112",
@@ -378,365 +410,11 @@
     },
     {
       "concepts" : [
-        "basher",
-        "builder"
-      ],
-      "demand" : 151.61641699423208,
-      "entry" : {
-        "catalogueRevision" : "1.2-runtime-v2",
-        "id" : "1833A6B2-C374-A1D5-7F42-709D8F620590",
-        "identity" : {
-          "engine" : "classic",
-          "levelID" : "12:Tame:13:11:4",
-          "packID" : "ohNoMoreLemmings-DLVEL-100"
-        },
-        "levelNameSnapshot" : "Thunder-Lemmings are go!",
-        "levelNumberSnapshot" : 13,
-        "packNameSnapshot" : "Oh No! More Lemmings",
-        "sourceRevision" : "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25"
-      },
-      "focus" : "Split jobs: Basher + Builder",
-      "intrinsicDemand" : 151.61641699423208,
-      "introduced" : [
-
-      ],
-      "needsSupport" : true,
-      "objective" : "split:basher:builder",
-      "preparationGaps" : [
-
-      ],
-      "score" : 151.61641699423208,
-      "stage" : "Intermediate"
-    },
-    {
-      "concepts" : [
-        "basher",
-        "floater"
-      ],
-      "demand" : 170.45922559655327,
-      "entry" : {
-        "catalogueRevision" : "1.2-runtime-v2",
-        "id" : "70AAF590-F8F2-1DEB-3498-3886AB2D7C6C",
-        "identity" : {
-          "engine" : "classic",
-          "levelID" : "1:Flurry:2:4:1",
-          "packID" : "holidayLemmings1993-MACLEVL-32"
-        },
-        "levelNameSnapshot" : "Floating Lemming Flurry",
-        "levelNumberSnapshot" : 2,
-        "packNameSnapshot" : "Holiday Lemmings 1993",
-        "sourceRevision" : "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e"
-      },
-      "focus" : "Floater then Basher",
-      "intrinsicDemand" : 170.45922559655327,
-      "introduced" : [
-
-      ],
-      "needsSupport" : false,
-      "objective" : "chain:floater:basher",
-      "preparationGaps" : [
-
-      ],
-      "score" : 146.74437006143773,
-      "stage" : "Intermediate"
-    },
-    {
-      "concepts" : [
-        "blocker",
-        "release-rate-manipulation"
-      ],
-      "demand" : 192.5,
-      "entry" : {
-        "catalogueRevision" : "1.2-runtime-v2",
-        "id" : "71683445-3B98-5E6E-2D21-16E9C0DBD90A",
-        "identity" : {
-          "engine" : "classic",
-          "levelID" : "Deceit Extras 1.DAT#3",
-          "packID" : "fan:lldb-546"
-        },
-        "levelNameSnapshot" : "Blockers can block others",
-        "levelNumberSnapshot" : 4,
-        "packNameSnapshot" : "Deceits Lemmings Extras",
-        "sourceRevision" : "164a98b095105dfa73a6bd8df695b6eff20947227f5c0c35d6c6e366f758de6a"
-      },
-      "focus" : "Control crowd spacing",
-      "intrinsicDemand" : 192.5,
-      "introduced" : [
-        "release-rate-manipulation"
-      ],
-      "needsSupport" : false,
-      "objective" : "spacing",
-      "preparationGaps" : [
-
-      ],
-      "score" : 116.08,
-      "stage" : "Intermediate"
-    },
-    {
-      "concepts" : [
-        "basher",
-        "builder"
-      ],
-      "demand" : 187,
-      "entry" : {
-        "catalogueRevision" : "1.2-runtime-v2",
-        "id" : "0258E1CF-4C20-0ED2-FEE8-25C87BFD2B5D",
-        "identity" : {
-          "engine" : "classic",
-          "levelID" : "5:Flurry:6:4:5",
-          "packID" : "holidayLemmings1993-MACLEVL-32"
-        },
-        "levelNameSnapshot" : "Lemming Snowfall",
-        "levelNumberSnapshot" : 6,
-        "packNameSnapshot" : "Holiday Lemmings 1993",
-        "sourceRevision" : "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e"
-      },
-      "focus" : "Basher then Builder",
-      "intrinsicDemand" : 187,
-      "introduced" : [
-
-      ],
-      "needsSupport" : false,
-      "objective" : "chain:basher:builder",
-      "preparationGaps" : [
-
-      ],
-      "score" : 141.83925559857894,
-      "stage" : "Intermediate"
-    },
-    {
-      "concepts" : [
-        "basher",
-        "digger"
-      ],
-      "demand" : 196.203431372549,
-      "entry" : {
-        "catalogueRevision" : "1.2-runtime-v2",
-        "id" : "C5AC8D9C-E8F3-E1D3-8D60-0426ED5F57AC",
-        "identity" : {
-          "engine" : "classic",
-          "levelID" : "10:Flurry:11:5:2",
-          "packID" : "holidayLemmings1993-MACLEVL-32"
-        },
-        "levelNameSnapshot" : "At Home in a Cave",
-        "levelNumberSnapshot" : 11,
-        "packNameSnapshot" : "Holiday Lemmings 1993",
-        "sourceRevision" : "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e"
-      },
-      "focus" : "Digger then Basher",
-      "intrinsicDemand" : 196.203431372549,
-      "introduced" : [
-
-      ],
-      "needsSupport" : false,
-      "objective" : "chain:digger:basher",
-      "preparationGaps" : [
-
-      ],
-      "score" : 142.14289215686276,
-      "stage" : "Intermediate"
-    },
-    {
-      "concepts" : [
-        "builder",
-        "miner"
-      ],
-      "demand" : 182.75,
-      "entry" : {
-        "catalogueRevision" : "1.2-runtime-v2",
-        "id" : "E790DC42-C2BC-90D7-B0D2-827A882DDE7E",
-        "identity" : {
-          "engine" : "classic",
-          "levelID" : "OhNoMorecLemmings Tame 1.DAT#9",
-          "packID" : "fan:lldb-530"
-        },
-        "levelNameSnapshot" : "It'll be Comin' Round the Mtn.",
-        "levelNumberSnapshot" : 10,
-        "packNameSnapshot" : "Oh No More cLemmings Tame",
-        "sourceRevision" : "b4cce71d3c06d23b8211c86de6f76ff300331d8adc0c121d3f0924ce4a23037a"
-      },
-      "focus" : "Miner then Builder",
-      "intrinsicDemand" : 182.75,
-      "introduced" : [
-
-      ],
-      "needsSupport" : false,
-      "objective" : "chain:miner:builder",
-      "preparationGaps" : [
-
-      ],
-      "score" : 135.11153198181864,
-      "stage" : "Intermediate"
-    },
-    {
-      "concepts" : [
-        "basher",
-        "builder",
-        "miner"
-      ],
-      "demand" : 180,
-      "entry" : {
-        "catalogueRevision" : "1.2-runtime-v2",
-        "id" : "544A9C6D-45D9-37E0-BA4B-80C76D76A89E",
-        "identity" : {
-          "engine" : "classic",
-          "levelID" : "57:Tricky:28:1:5",
-          "packID" : "lemmings-LEVEL-120"
-        },
-        "levelNameSnapshot" : "Lost something?",
-        "levelNumberSnapshot" : 58,
-        "packNameSnapshot" : "Lemmings",
-        "sourceRevision" : "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7"
-      },
-      "focus" : "Share: Basher + Builder + Miner",
-      "intrinsicDemand" : 180,
-      "introduced" : [
-
-      ],
-      "needsSupport" : false,
-      "objective" : "apply:b46b95fcfe91fb465742",
-      "preparationGaps" : [
-
-      ],
-      "score" : 148.88073984370524,
-      "stage" : "Intermediate"
-    },
-    {
-      "concepts" : [
-        "basher",
-        "builder"
-      ],
-      "demand" : 209.58369363238518,
-      "entry" : {
-        "catalogueRevision" : "1.2-runtime-v2",
-        "id" : "D718DED4-C544-4DD0-C9AB-7CBD89C1B49F",
-        "identity" : {
-          "engine" : "classic",
-          "levelID" : "7:Fun:8:0:6",
-          "packID" : "lemmings-LEVEL-120"
-        },
-        "levelNameSnapshot" : "Not as complicated as it looks",
-        "levelNumberSnapshot" : 8,
-        "packNameSnapshot" : "Lemmings",
-        "sourceRevision" : "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7"
-      },
-      "focus" : "Builder then Basher",
-      "intrinsicDemand" : 209.58369363238518,
-      "introduced" : [
-
-      ],
-      "needsSupport" : false,
-      "objective" : "chain:builder:basher",
-      "preparationGaps" : [
-
-      ],
-      "score" : 149.9693177186376,
-      "stage" : "Intermediate"
-    },
-    {
-      "concepts" : [
-        "digger",
-        "miner"
-      ],
-      "demand" : 204.53125,
-      "entry" : {
-        "catalogueRevision" : "1.2-runtime-v2",
-        "id" : "6A43A961-40AC-E2F1-0ECC-FA26430C5EB3",
-        "identity" : {
-          "engine" : "classic",
-          "levelID" : "29:Blizzard:14:7:5",
-          "packID" : "holidayLemmings1993-MACLEVL-32"
-        },
-        "levelNameSnapshot" : "The Undiscovered Country",
-        "levelNumberSnapshot" : 30,
-        "packNameSnapshot" : "Holiday Lemmings 1993",
-        "sourceRevision" : "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e"
-      },
-      "focus" : "Split jobs: Digger + Miner",
-      "intrinsicDemand" : 204.53125,
-      "introduced" : [
-
-      ],
-      "needsSupport" : false,
-      "objective" : "split:digger:miner",
-      "preparationGaps" : [
-
-      ],
-      "score" : 159.70795023937663,
-      "stage" : "Intermediate"
-    },
-    {
-      "concepts" : [
-        "basher",
-        "builder"
-      ],
-      "demand" : 189.125,
-      "entry" : {
-        "catalogueRevision" : "1.2-runtime-v2",
-        "id" : "8BB007B2-665C-FE46-1465-706953C99CEF",
-        "identity" : {
-          "engine" : "classic",
-          "levelID" : "19:Tame:20:12:3",
-          "packID" : "ohNoMoreLemmings-DLVEL-100"
-        },
-        "levelNameSnapshot" : "Custom built for Lemmings",
-        "levelNumberSnapshot" : 20,
-        "packNameSnapshot" : "Oh No! More Lemmings",
-        "sourceRevision" : "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25"
-      },
-      "focus" : "Link: Basher + Builder",
-      "intrinsicDemand" : 189.125,
-      "introduced" : [
-
-      ],
-      "needsSupport" : false,
-      "objective" : "apply:4581d4f159c9a1e2da56",
-      "preparationGaps" : [
-
-      ],
-      "score" : 166.54490823035815,
-      "stage" : "Intermediate"
-    },
-    {
-      "concepts" : [
-        "blocker",
-        "bomber",
-        "builder"
-      ],
-      "demand" : 189.7,
-      "entry" : {
-        "catalogueRevision" : "1.2-runtime-v2",
-        "id" : "ED774739-BD9F-97C0-7B8B-2F49DCA41363",
-        "identity" : {
-          "engine" : "classic",
-          "levelID" : "CRISFN01.dat#0",
-          "packID" : "fan:lldb-265"
-        },
-        "levelNameSnapshot" : "Jungle!!",
-        "levelNumberSnapshot" : 1,
-        "packNameSnapshot" : "CRISFN01",
-        "sourceRevision" : "c3b7844f28dc81810eaef140a7e6786b0b92f2edff29f7812d8b035b308e880f"
-      },
-      "focus" : "Link: Blocker + Bomber",
-      "intrinsicDemand" : 189.7,
-      "introduced" : [
-
-      ],
-      "needsSupport" : false,
-      "objective" : "apply:bd793e8ea0fd1edfb9d5",
-      "preparationGaps" : [
-
-      ],
-      "score" : 158.45280065210798,
-      "stage" : "Intermediate"
-    },
-    {
-      "concepts" : [
         "builder",
         "digger",
         "release-rate-manipulation"
       ],
-      "demand" : 221,
+      "demand" : 233.75,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "8DC09AB0-3127-F6A6-E88B-51F29C5EBA7F",
@@ -769,7 +447,7 @@
         "miner",
         "release-rate-manipulation"
       ],
-      "demand" : 221,
+      "demand" : 233.75,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "22EF22E6-6632-93C3-399E-86F741F2CD75",
@@ -802,7 +480,7 @@
         "builder",
         "release-rate-manipulation"
       ],
-      "demand" : 221,
+      "demand" : 233.75,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "A7F5386E-12A5-D1D1-4B9E-15CAC9C55497",
@@ -831,10 +509,171 @@
     },
     {
       "concepts" : [
+        "basher",
+        "digger"
+      ],
+      "demand" : 233.75,
+      "entry" : {
+        "catalogueRevision" : "1.2-runtime-v2",
+        "id" : "C5AC8D9C-E8F3-E1D3-8D60-0426ED5F57AC",
+        "identity" : {
+          "engine" : "classic",
+          "levelID" : "10:Flurry:11:5:2",
+          "packID" : "holidayLemmings1993-MACLEVL-32"
+        },
+        "levelNameSnapshot" : "At Home in a Cave",
+        "levelNumberSnapshot" : 11,
+        "packNameSnapshot" : "Holiday Lemmings 1993",
+        "sourceRevision" : "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e"
+      },
+      "focus" : "Digger then Basher",
+      "intrinsicDemand" : 196.203431372549,
+      "introduced" : [
+
+      ],
+      "needsSupport" : false,
+      "objective" : "chain:digger:basher",
+      "preparationGaps" : [
+
+      ],
+      "score" : 142.14289215686276,
+      "stage" : "Intermediate"
+    },
+    {
+      "concepts" : [
+        "basher",
+        "builder"
+      ],
+      "demand" : 233.75,
+      "entry" : {
+        "catalogueRevision" : "1.2-runtime-v2",
+        "id" : "0258E1CF-4C20-0ED2-FEE8-25C87BFD2B5D",
+        "identity" : {
+          "engine" : "classic",
+          "levelID" : "5:Flurry:6:4:5",
+          "packID" : "holidayLemmings1993-MACLEVL-32"
+        },
+        "levelNameSnapshot" : "Lemming Snowfall",
+        "levelNumberSnapshot" : 6,
+        "packNameSnapshot" : "Holiday Lemmings 1993",
+        "sourceRevision" : "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e"
+      },
+      "focus" : "Basher then Builder",
+      "intrinsicDemand" : 187,
+      "introduced" : [
+
+      ],
+      "needsSupport" : false,
+      "objective" : "chain:basher:builder",
+      "preparationGaps" : [
+
+      ],
+      "score" : 141.83925559857894,
+      "stage" : "Intermediate"
+    },
+    {
+      "concepts" : [
+        "builder",
+        "miner"
+      ],
+      "demand" : 233.75,
+      "entry" : {
+        "catalogueRevision" : "1.2-runtime-v2",
+        "id" : "E790DC42-C2BC-90D7-B0D2-827A882DDE7E",
+        "identity" : {
+          "engine" : "classic",
+          "levelID" : "OhNoMorecLemmings Tame 1.DAT#9",
+          "packID" : "fan:lldb-530"
+        },
+        "levelNameSnapshot" : "It'll be Comin' Round the Mtn.",
+        "levelNumberSnapshot" : 10,
+        "packNameSnapshot" : "Oh No More cLemmings Tame",
+        "sourceRevision" : "b4cce71d3c06d23b8211c86de6f76ff300331d8adc0c121d3f0924ce4a23037a"
+      },
+      "focus" : "Miner then Builder",
+      "intrinsicDemand" : 182.75,
+      "introduced" : [
+
+      ],
+      "needsSupport" : false,
+      "objective" : "chain:miner:builder",
+      "preparationGaps" : [
+
+      ],
+      "score" : 135.11153198181864,
+      "stage" : "Intermediate"
+    },
+    {
+      "concepts" : [
+        "basher",
+        "builder",
+        "miner"
+      ],
+      "demand" : 233.75,
+      "entry" : {
+        "catalogueRevision" : "1.2-runtime-v2",
+        "id" : "544A9C6D-45D9-37E0-BA4B-80C76D76A89E",
+        "identity" : {
+          "engine" : "classic",
+          "levelID" : "57:Tricky:28:1:5",
+          "packID" : "lemmings-LEVEL-120"
+        },
+        "levelNameSnapshot" : "Lost something?",
+        "levelNumberSnapshot" : 58,
+        "packNameSnapshot" : "Lemmings",
+        "sourceRevision" : "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7"
+      },
+      "focus" : "Share: Basher + Builder + Miner",
+      "intrinsicDemand" : 180,
+      "introduced" : [
+
+      ],
+      "needsSupport" : false,
+      "objective" : "apply:b46b95fcfe91fb465742",
+      "preparationGaps" : [
+
+      ],
+      "score" : 148.88073984370524,
+      "stage" : "Intermediate"
+    },
+    {
+      "concepts" : [
+        "basher",
+        "builder"
+      ],
+      "demand" : 233.75,
+      "entry" : {
+        "catalogueRevision" : "1.2-runtime-v2",
+        "id" : "D718DED4-C544-4DD0-C9AB-7CBD89C1B49F",
+        "identity" : {
+          "engine" : "classic",
+          "levelID" : "7:Fun:8:0:6",
+          "packID" : "lemmings-LEVEL-120"
+        },
+        "levelNameSnapshot" : "Not as complicated as it looks",
+        "levelNumberSnapshot" : 8,
+        "packNameSnapshot" : "Lemmings",
+        "sourceRevision" : "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7"
+      },
+      "focus" : "Builder then Basher",
+      "intrinsicDemand" : 209.58369363238518,
+      "introduced" : [
+
+      ],
+      "needsSupport" : false,
+      "objective" : "chain:builder:basher",
+      "preparationGaps" : [
+
+      ],
+      "score" : 149.9693177186376,
+      "stage" : "Intermediate"
+    },
+    {
+      "concepts" : [
         "builder",
         "multiple-worker-coordination"
       ],
-      "demand" : 221,
+      "demand" : 233.75,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "519E4051-2E27-FA8D-3BB1-A4BD59C0E7BD",
@@ -863,11 +702,75 @@
     },
     {
       "concepts" : [
+        "basher",
+        "builder"
+      ],
+      "demand" : 233.75,
+      "entry" : {
+        "catalogueRevision" : "1.2-runtime-v2",
+        "id" : "1833A6B2-C374-A1D5-7F42-709D8F620590",
+        "identity" : {
+          "engine" : "classic",
+          "levelID" : "12:Tame:13:11:4",
+          "packID" : "ohNoMoreLemmings-DLVEL-100"
+        },
+        "levelNameSnapshot" : "Thunder-Lemmings are go!",
+        "levelNumberSnapshot" : 13,
+        "packNameSnapshot" : "Oh No! More Lemmings",
+        "sourceRevision" : "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25"
+      },
+      "focus" : "Split jobs: Basher + Builder",
+      "intrinsicDemand" : 151.61641699423208,
+      "introduced" : [
+
+      ],
+      "needsSupport" : false,
+      "objective" : "split:basher:builder",
+      "preparationGaps" : [
+
+      ],
+      "score" : 151.61641699423208,
+      "stage" : "Intermediate"
+    },
+    {
+      "concepts" : [
+        "basher",
+        "floater"
+      ],
+      "demand" : 233.75,
+      "entry" : {
+        "catalogueRevision" : "1.2-runtime-v2",
+        "id" : "70AAF590-F8F2-1DEB-3498-3886AB2D7C6C",
+        "identity" : {
+          "engine" : "classic",
+          "levelID" : "1:Flurry:2:4:1",
+          "packID" : "holidayLemmings1993-MACLEVL-32"
+        },
+        "levelNameSnapshot" : "Floating Lemming Flurry",
+        "levelNumberSnapshot" : 2,
+        "packNameSnapshot" : "Holiday Lemmings 1993",
+        "sourceRevision" : "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e"
+      },
+      "focus" : "Floater then Basher",
+      "intrinsicDemand" : 170.45922559655327,
+      "introduced" : [
+
+      ],
+      "needsSupport" : false,
+      "objective" : "chain:floater:basher",
+      "preparationGaps" : [
+
+      ],
+      "score" : 146.74437006143773,
+      "stage" : "Intermediate"
+    },
+    {
+      "concepts" : [
         "builder",
         "miner",
         "release-rate-manipulation"
       ],
-      "demand" : 221,
+      "demand" : 233.75,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "4C6E1EA5-36D5-C7E0-C4CE-515781DAFFA2",
@@ -900,7 +803,7 @@
         "digger",
         "release-rate-manipulation"
       ],
-      "demand" : 221,
+      "demand" : 233.75,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "68933E40-4704-ADEF-F2E4-DC8AFDE93808",
@@ -933,7 +836,7 @@
         "builder",
         "release-rate-manipulation"
       ],
-      "demand" : 221,
+      "demand" : 233.75,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "39C36CB1-1DB4-34C1-0E54-B87D12724084",
@@ -966,7 +869,7 @@
         "miner",
         "release-rate-manipulation"
       ],
-      "demand" : 221,
+      "demand" : 233.75,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "992F3C44-97C9-C14C-12D0-18021208917A",
@@ -999,7 +902,7 @@
         "digger",
         "release-rate-manipulation"
       ],
-      "demand" : 221,
+      "demand" : 233.75,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "C9765A2E-4281-2A34-7B75-60D6769279CC",
@@ -1032,7 +935,7 @@
         "floater",
         "release-rate-manipulation"
       ],
-      "demand" : 221,
+      "demand" : 233.75,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "5DCA307D-9524-2417-5269-15A5CD27F23D",
@@ -1064,7 +967,7 @@
         "blocker",
         "miner"
       ],
-      "demand" : 220.41666666666669,
+      "demand" : 233.75,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "3BCA3CB4-ED80-5877-9ED7-BD378D011148",
@@ -1097,7 +1000,7 @@
         "digger",
         "release-rate-manipulation"
       ],
-      "demand" : 221,
+      "demand" : 233.75,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "85B406C5-604C-C360-7CC4-1515DCE90BFA",
@@ -1126,134 +1029,34 @@
     },
     {
       "concepts" : [
-        "builder",
-        "miner",
-        "release-rate-manipulation"
-      ],
-      "demand" : 221,
-      "entry" : {
-        "catalogueRevision" : "1.2-runtime-v2",
-        "id" : "65E2122D-6FA8-A68A-EFCE-32F0A80719C3",
-        "identity" : {
-          "engine" : "classic",
-          "levelID" : "Genesis Tricky.dat#10",
-          "packID" : "fan:lldb-489"
-        },
-        "levelNameSnapshot" : "Let's go to the moon!",
-        "levelNumberSnapshot" : 11,
-        "packNameSnapshot" : "Genesis Tricky",
-        "sourceRevision" : "d3a60e754dd580f50f3c846b76a977903ccb3ca4997613cd7cde7879d632b080"
-      },
-      "focus" : "Link: Miner + Builder",
-      "intrinsicDemand" : 221,
-      "introduced" : [
-
-      ],
-      "needsSupport" : false,
-      "objective" : "apply:44e64b4f569fd5fc15aa",
-      "preparationGaps" : [
-
-      ],
-      "score" : 165.8953168692016,
-      "stage" : "Intermediate"
-    },
-    {
-      "concepts" : [
-        "basher",
         "digger",
-        "release-rate-manipulation"
+        "miner"
       ],
-      "demand" : 221,
+      "demand" : 233.75,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
-        "id" : "3B28BD56-8C1C-2CD9-90BE-850D0A9397E2",
+        "id" : "6A43A961-40AC-E2F1-0ECC-FA26430C5EB3",
         "identity" : {
           "engine" : "classic",
-          "levelID" : "Lemmings Plus DOS Project - 05 - Wimpy (Part 2).dat#7",
-          "packID" : "fan:lldb-552"
+          "levelID" : "29:Blizzard:14:7:5",
+          "packID" : "holidayLemmings1993-MACLEVL-32"
         },
-        "levelNameSnapshot" : "Down The Wall",
-        "levelNumberSnapshot" : 18,
-        "packNameSnapshot" : "Lemmings Plus DOS Project Wimpy",
-        "sourceRevision" : "8187c19df391ea59e594bf9e4779b7ec81fb0034bc4a899ae09aee7396b3c042"
+        "levelNameSnapshot" : "The Undiscovered Country",
+        "levelNumberSnapshot" : 30,
+        "packNameSnapshot" : "Holiday Lemmings 1993",
+        "sourceRevision" : "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e"
       },
-      "focus" : "Link: Digger + Basher",
-      "intrinsicDemand" : 221,
+      "focus" : "Split jobs: Digger + Miner",
+      "intrinsicDemand" : 204.53125,
       "introduced" : [
 
       ],
       "needsSupport" : false,
-      "objective" : "apply:99830bdae8532214f446",
+      "objective" : "split:digger:miner",
       "preparationGaps" : [
 
       ],
-      "score" : 156.34221997565456,
-      "stage" : "Intermediate"
-    },
-    {
-      "concepts" : [
-        "basher",
-        "builder",
-        "release-rate-manipulation"
-      ],
-      "demand" : 221,
-      "entry" : {
-        "catalogueRevision" : "1.2-runtime-v2",
-        "id" : "F42AE031-5EDE-E773-F259-B6A89684068F",
-        "identity" : {
-          "engine" : "classic",
-          "levelID" : "Pieuw 2007 Peace 1.DAT#5",
-          "packID" : "fan:lldb-542"
-        },
-        "levelNameSnapshot" : "Rising to Paradise",
-        "levelNumberSnapshot" : 6,
-        "packNameSnapshot" : "Pieuws Lemmings 2007 Peace",
-        "sourceRevision" : "f1ecfbe225c1039af701815227b4af13bcf5f45ac22c7e672357b5ff485e659e"
-      },
-      "focus" : "Link: Basher + Builder",
-      "intrinsicDemand" : 221,
-      "introduced" : [
-
-      ],
-      "needsSupport" : false,
-      "objective" : "apply:ca47a836b8af0302fe47",
-      "preparationGaps" : [
-
-      ],
-      "score" : 156.32413903928787,
-      "stage" : "Intermediate"
-    },
-    {
-      "concepts" : [
-        "basher",
-        "bomber",
-        "release-rate-manipulation"
-      ],
-      "demand" : 221,
-      "entry" : {
-        "catalogueRevision" : "1.2-runtime-v2",
-        "id" : "A72FB839-6668-EC6D-F260-07154C24FBEA",
-        "identity" : {
-          "engine" : "classic",
-          "levelID" : "LEMPACK.DAT#0",
-          "packID" : "fan:lldb-472"
-        },
-        "levelNameSnapshot" : "Lake in the Cavern",
-        "levelNumberSnapshot" : 1,
-        "packNameSnapshot" : "CPs Level Pack",
-        "sourceRevision" : "0aa4c6e70d8b2adeae926a70f881a18fbbc9dabf150fc7ee345681e3500753f8"
-      },
-      "focus" : "Link: Basher + Bomber",
-      "intrinsicDemand" : 221,
-      "introduced" : [
-
-      ],
-      "needsSupport" : false,
-      "objective" : "apply:f7d6ace7c6859b7b98fc",
-      "preparationGaps" : [
-
-      ],
-      "score" : 162.54052129555166,
+      "score" : 159.70795023937663,
       "stage" : "Intermediate"
     },
     {
@@ -1262,7 +1065,7 @@
         "builder",
         "release-rate-manipulation"
       ],
-      "demand" : 221,
+      "demand" : 233.75,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "1A7B498B-63DB-3BDB-C1AA-85018AAD539D",
@@ -1291,44 +1094,11 @@
     },
     {
       "concepts" : [
-        "basher",
-        "builder",
-        "release-rate-manipulation"
-      ],
-      "demand" : 221,
-      "entry" : {
-        "catalogueRevision" : "1.2-runtime-v2",
-        "id" : "B9ECB7CA-F190-94CE-351D-DA7842E2D1B6",
-        "identity" : {
-          "engine" : "classic",
-          "levelID" : "ANTHPCK1.DAT#4",
-          "packID" : "fan:lldb-221"
-        },
-        "levelNameSnapshot" : "The metal walkway",
-        "levelNumberSnapshot" : 5,
-        "packNameSnapshot" : "ANTHPCK1",
-        "sourceRevision" : "bc279d343623526a42bfcb359467cf3e65e8e52da06996a76f7c18e0fb7dfe0c"
-      },
-      "focus" : "Sequence and space",
-      "intrinsicDemand" : 221,
-      "introduced" : [
-
-      ],
-      "needsSupport" : false,
-      "objective" : "sequence-spacing",
-      "preparationGaps" : [
-
-      ],
-      "score" : 173.48889982773557,
-      "stage" : "Intermediate"
-    },
-    {
-      "concepts" : [
         "blocker",
         "miner",
         "release-rate-manipulation"
       ],
-      "demand" : 232.3722220546995,
+      "demand" : 233.75,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "1D00C7DE-11F3-1DC6-6AE8-5F17AB54AA4F",
@@ -1361,7 +1131,171 @@
         "builder",
         "release-rate-manipulation"
       ],
-      "demand" : 221,
+      "demand" : 233.75,
+      "entry" : {
+        "catalogueRevision" : "1.2-runtime-v2",
+        "id" : "F42AE031-5EDE-E773-F259-B6A89684068F",
+        "identity" : {
+          "engine" : "classic",
+          "levelID" : "Pieuw 2007 Peace 1.DAT#5",
+          "packID" : "fan:lldb-542"
+        },
+        "levelNameSnapshot" : "Rising to Paradise",
+        "levelNumberSnapshot" : 6,
+        "packNameSnapshot" : "Pieuws Lemmings 2007 Peace",
+        "sourceRevision" : "f1ecfbe225c1039af701815227b4af13bcf5f45ac22c7e672357b5ff485e659e"
+      },
+      "focus" : "Link: Basher + Builder",
+      "intrinsicDemand" : 221,
+      "introduced" : [
+
+      ],
+      "needsSupport" : false,
+      "objective" : "apply:ca47a836b8af0302fe47",
+      "preparationGaps" : [
+
+      ],
+      "score" : 156.32413903928787,
+      "stage" : "Intermediate"
+    },
+    {
+      "concepts" : [
+        "basher",
+        "bomber",
+        "release-rate-manipulation"
+      ],
+      "demand" : 233.75,
+      "entry" : {
+        "catalogueRevision" : "1.2-runtime-v2",
+        "id" : "A72FB839-6668-EC6D-F260-07154C24FBEA",
+        "identity" : {
+          "engine" : "classic",
+          "levelID" : "LEMPACK.DAT#0",
+          "packID" : "fan:lldb-472"
+        },
+        "levelNameSnapshot" : "Lake in the Cavern",
+        "levelNumberSnapshot" : 1,
+        "packNameSnapshot" : "CPs Level Pack",
+        "sourceRevision" : "0aa4c6e70d8b2adeae926a70f881a18fbbc9dabf150fc7ee345681e3500753f8"
+      },
+      "focus" : "Link: Basher + Bomber",
+      "intrinsicDemand" : 221,
+      "introduced" : [
+
+      ],
+      "needsSupport" : false,
+      "objective" : "apply:f7d6ace7c6859b7b98fc",
+      "preparationGaps" : [
+
+      ],
+      "score" : 162.54052129555166,
+      "stage" : "Intermediate"
+    },
+    {
+      "concepts" : [
+        "basher",
+        "digger",
+        "release-rate-manipulation"
+      ],
+      "demand" : 233.75,
+      "entry" : {
+        "catalogueRevision" : "1.2-runtime-v2",
+        "id" : "3B28BD56-8C1C-2CD9-90BE-850D0A9397E2",
+        "identity" : {
+          "engine" : "classic",
+          "levelID" : "Lemmings Plus DOS Project - 05 - Wimpy (Part 2).dat#7",
+          "packID" : "fan:lldb-552"
+        },
+        "levelNameSnapshot" : "Down The Wall",
+        "levelNumberSnapshot" : 18,
+        "packNameSnapshot" : "Lemmings Plus DOS Project Wimpy",
+        "sourceRevision" : "8187c19df391ea59e594bf9e4779b7ec81fb0034bc4a899ae09aee7396b3c042"
+      },
+      "focus" : "Link: Digger + Basher",
+      "intrinsicDemand" : 221,
+      "introduced" : [
+
+      ],
+      "needsSupport" : false,
+      "objective" : "apply:99830bdae8532214f446",
+      "preparationGaps" : [
+
+      ],
+      "score" : 156.34221997565456,
+      "stage" : "Intermediate"
+    },
+    {
+      "concepts" : [
+        "basher",
+        "builder"
+      ],
+      "demand" : 233.75,
+      "entry" : {
+        "catalogueRevision" : "1.2-runtime-v2",
+        "id" : "8BB007B2-665C-FE46-1465-706953C99CEF",
+        "identity" : {
+          "engine" : "classic",
+          "levelID" : "19:Tame:20:12:3",
+          "packID" : "ohNoMoreLemmings-DLVEL-100"
+        },
+        "levelNameSnapshot" : "Custom built for Lemmings",
+        "levelNumberSnapshot" : 20,
+        "packNameSnapshot" : "Oh No! More Lemmings",
+        "sourceRevision" : "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25"
+      },
+      "focus" : "Link: Basher + Builder",
+      "intrinsicDemand" : 189.125,
+      "introduced" : [
+
+      ],
+      "needsSupport" : false,
+      "objective" : "apply:4581d4f159c9a1e2da56",
+      "preparationGaps" : [
+
+      ],
+      "score" : 166.54490823035815,
+      "stage" : "Intermediate"
+    },
+    {
+      "concepts" : [
+        "blocker",
+        "bomber",
+        "builder"
+      ],
+      "demand" : 233.75,
+      "entry" : {
+        "catalogueRevision" : "1.2-runtime-v2",
+        "id" : "ED774739-BD9F-97C0-7B8B-2F49DCA41363",
+        "identity" : {
+          "engine" : "classic",
+          "levelID" : "CRISFN01.dat#0",
+          "packID" : "fan:lldb-265"
+        },
+        "levelNameSnapshot" : "Jungle!!",
+        "levelNumberSnapshot" : 1,
+        "packNameSnapshot" : "CRISFN01",
+        "sourceRevision" : "c3b7844f28dc81810eaef140a7e6786b0b92f2edff29f7812d8b035b308e880f"
+      },
+      "focus" : "Link: Blocker + Bomber",
+      "intrinsicDemand" : 189.7,
+      "introduced" : [
+
+      ],
+      "needsSupport" : false,
+      "objective" : "apply:bd793e8ea0fd1edfb9d5",
+      "preparationGaps" : [
+
+      ],
+      "score" : 158.45280065210798,
+      "stage" : "Intermediate"
+    },
+    {
+      "concepts" : [
+        "basher",
+        "builder",
+        "release-rate-manipulation"
+      ],
+      "demand" : 233.75,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "4C06D8F9-4985-5E1E-FAE9-8132C8EC6EB3",
@@ -1390,11 +1324,44 @@
     },
     {
       "concepts" : [
+        "builder",
+        "miner",
+        "release-rate-manipulation"
+      ],
+      "demand" : 233.75,
+      "entry" : {
+        "catalogueRevision" : "1.2-runtime-v2",
+        "id" : "65E2122D-6FA8-A68A-EFCE-32F0A80719C3",
+        "identity" : {
+          "engine" : "classic",
+          "levelID" : "Genesis Tricky.dat#10",
+          "packID" : "fan:lldb-489"
+        },
+        "levelNameSnapshot" : "Let's go to the moon!",
+        "levelNumberSnapshot" : 11,
+        "packNameSnapshot" : "Genesis Tricky",
+        "sourceRevision" : "d3a60e754dd580f50f3c846b76a977903ccb3ca4997613cd7cde7879d632b080"
+      },
+      "focus" : "Link: Miner + Builder",
+      "intrinsicDemand" : 221,
+      "introduced" : [
+
+      ],
+      "needsSupport" : false,
+      "objective" : "apply:44e64b4f569fd5fc15aa",
+      "preparationGaps" : [
+
+      ],
+      "score" : 165.8953168692016,
+      "stage" : "Intermediate"
+    },
+    {
+      "concepts" : [
         "blocker",
         "floater",
         "release-rate-manipulation"
       ],
-      "demand" : 221,
+      "demand" : 233.75,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "28FF8D3C-79D0-1F7C-CF6E-462C4B59A997",
@@ -1424,10 +1391,43 @@
     {
       "concepts" : [
         "basher",
+        "builder",
+        "release-rate-manipulation"
+      ],
+      "demand" : 233.75,
+      "entry" : {
+        "catalogueRevision" : "1.2-runtime-v2",
+        "id" : "B9ECB7CA-F190-94CE-351D-DA7842E2D1B6",
+        "identity" : {
+          "engine" : "classic",
+          "levelID" : "ANTHPCK1.DAT#4",
+          "packID" : "fan:lldb-221"
+        },
+        "levelNameSnapshot" : "The metal walkway",
+        "levelNumberSnapshot" : 5,
+        "packNameSnapshot" : "ANTHPCK1",
+        "sourceRevision" : "bc279d343623526a42bfcb359467cf3e65e8e52da06996a76f7c18e0fb7dfe0c"
+      },
+      "focus" : "Sequence and space",
+      "intrinsicDemand" : 221,
+      "introduced" : [
+
+      ],
+      "needsSupport" : false,
+      "objective" : "sequence-spacing",
+      "preparationGaps" : [
+
+      ],
+      "score" : 173.48889982773557,
+      "stage" : "Intermediate"
+    },
+    {
+      "concepts" : [
+        "basher",
         "miner",
         "release-rate-manipulation"
       ],
-      "demand" : 221,
+      "demand" : 233.75,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "264AF796-6D57-D9B8-A30E-5880C7963296",
@@ -1460,7 +1460,7 @@
         "digger",
         "release-rate-manipulation"
       ],
-      "demand" : 221,
+      "demand" : 233.75,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "7415279A-3A1F-206D-8671-8A83A7D3033F",
@@ -1493,7 +1493,7 @@
         "blocker",
         "release-rate-manipulation"
       ],
-      "demand" : 221,
+      "demand" : 233.75,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "68A7FA85-F7A6-D88C-AF57-4E74403D6FD6",
@@ -1526,7 +1526,7 @@
         "builder",
         "release-rate-manipulation"
       ],
-      "demand" : 221,
+      "demand" : 233.75,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "B7A65E22-52E5-4AB2-4954-A3C1D111838B",
@@ -1559,7 +1559,7 @@
         "miner",
         "release-rate-manipulation"
       ],
-      "demand" : 221,
+      "demand" : 233.75,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "907EA18F-03C9-276F-9DBE-DCC244970313",
@@ -1592,7 +1592,7 @@
         "builder",
         "release-rate-manipulation"
       ],
-      "demand" : 221,
+      "demand" : 233.75,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "2C526382-8367-B0A0-DC81-E0412823C029",
@@ -1625,7 +1625,7 @@
         "builder",
         "digger"
       ],
-      "demand" : 210.7,
+      "demand" : 233.75,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "ED5FC010-219B-A5FA-1139-2741A0AF750A",
@@ -1658,7 +1658,7 @@
         "builder",
         "miner"
       ],
-      "demand" : 228.08333333333331,
+      "demand" : 233.75,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "7A871636-8B80-08A2-0334-1F824E0F0985",
@@ -1691,7 +1691,7 @@
         "bomber",
         "release-rate-manipulation"
       ],
-      "demand" : 221,
+      "demand" : 233.75,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "2061642B-DE56-DDDD-B699-8B322D005111",
@@ -1724,7 +1724,7 @@
         "miner",
         "release-rate-manipulation"
       ],
-      "demand" : 221,
+      "demand" : 233.75,
       "entry" : {
         "catalogueRevision" : "1.2-runtime-v2",
         "id" : "1E12E7AE-718C-237E-A106-59F49862CD69",
@@ -9907,5 +9907,5 @@
       "stage" : "Expert"
     }
   ],
-  "version" : "learning-8"
+  "version" : "learning-9"
 }

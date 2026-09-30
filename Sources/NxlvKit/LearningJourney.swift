@@ -3,7 +3,7 @@ import Foundation
 /// A teaching order, independent of retail ranks. Estimates never certify human insight.
 public struct LearningJourney: Codable, Equatable, Sendable {
     public static let title = "Oh My! All Lemmings!"
-    public static let version = "learning-8"
+    public static let version = "learning-9"
     public static let playlistID = UUID(uuidString: "80368144-659B-4697-B2D0-76894BF20B18")!
     public static let maximumScoreStep = 65.0
 
@@ -23,7 +23,7 @@ public struct LearningJourney: Codable, Equatable, Sendable {
             // Authored objectives distinguish introductions from combinations.
             // Keep the measured demand intact when naming the teaching phase.
             if let objective {
-                if objective.hasPrefix("introduce:") { return .fun }
+                if objective.hasPrefix("introduce:") { return forDemand(demand) }
                 if demand < 360 { return .intermediate }
             }
             return forDemand(demand)
@@ -109,12 +109,18 @@ public struct LearningJourney: Codable, Equatable, Sendable {
                 && $0.profile.detectedTechniques.contains(skill) }.map { demand(for: $0.profile) }.sorted()
             return values.count >= 2 ? (skill, values[1]) : nil
         })
+        let introductionFloor = candidates.filter {
+            objectives[$0.entry.identity]?.hasPrefix("introduce:") == true
+        }.map { demand(for: $0.profile) }.max() ?? 0
         func placementDemand(_ profile: DifficultyProfile) -> Double {
-            guard profile.detectedTechniques.count > 1 else { return demand(for: profile) }
+            let openingFloor = objectives[profile.key.identity]?.hasPrefix("introduce:") == true
+                ? 0 : introductionFloor
+            guard profile.detectedTechniques.count > 1 else { return max(demand(for: profile), openingFloor) }
             // A combination cannot precede its easiest available isolated lesson.
             let preparation = profile.detectedTechniques.count > 2
                 ? profile.detectedTechniques.compactMap { secondPractice[$0] }.max() ?? 0 : 0
-            return max(demand(for: profile), profile.detectedTechniques.compactMap { foundations[$0] }.max() ?? 0, preparation)
+            return max(demand(for: profile), profile.detectedTechniques.compactMap { foundations[$0] }.max() ?? 0,
+                       preparation, openingFloor)
         }
         var remaining = candidates.sorted { $0.stableKey < $1.stableKey }
         var practice: [String: Int] = [:]
@@ -146,7 +152,8 @@ public struct LearningJourney: Codable, Equatable, Sendable {
             let gradual = eligible.filter { placementDemand($0.profile) - (lessons.last?.demand ?? minimum) <= maximumScoreStep }
             let bounded = gradual.isEmpty ? eligible : gradual
             let prepared = bounded.filter { gaps($0.profile).isEmpty }
-            let available = prepared.isEmpty ? bounded : prepared
+            let introductions = bounded.filter { objectives[$0.entry.identity]?.hasPrefix("introduce:") == true }
+            let available = introductions.isEmpty ? (prepared.isEmpty ? bounded : prepared) : introductions
             let lowestScore = available.map { $0.profile.overallScore }.min()!
             let smooth = available.filter { $0.profile.overallScore <= lowestScore + 10 }
             func cost(_ candidate: ProgressionCandidate) -> Double {

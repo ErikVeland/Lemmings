@@ -83,37 +83,10 @@
   {
     "componentChanges": {
       "concurrencyBurden": 0,
-      "constraintPressure": 29.96008512023063,
-      "deductionComplexityProxy": -30,
+      "constraintPressure": 29.568615625848068,
+      "deductionComplexityProxy": -10,
       "executionPrecision": 0,
-      "solutionComplexity": -26.039100017307746,
-      "techniqueBurden": 0
-    },
-    "demand": 61.41604050963738,
-    "level": "Mienrs <--- lol, typo",
-    "needsSupport": false,
-    "newComponentHighs": {
-      "concurrencyBurden": 0,
-      "constraintPressure": 16.275218274176723,
-      "deductionComplexityProxy": 0,
-      "executionPrecision": 0,
-      "solutionComplexity": 0,
-      "techniqueBurden": 0
-    },
-    "objective": "introduce:miner",
-    "preparationGaps": [],
-    "rawScore": 46.85817053250572,
-    "reasons": [],
-    "stage": "Fun",
-    "step": 4
-  },
-  {
-    "componentChanges": {
-      "concurrencyBurden": 0,
-      "constraintPressure": -0.3914694943825623,
-      "deductionComplexityProxy": 20,
-      "executionPrecision": 0,
-      "solutionComplexity": 21.688259064691252,
+      "solutionComplexity": -4.350840952616494,
       "techniqueBurden": 0
     },
     "demand": 61.220305762446095,
@@ -121,7 +94,7 @@
     "needsSupport": false,
     "newComponentHighs": {
       "concurrencyBurden": 0,
-      "constraintPressure": 0,
+      "constraintPressure": 15.88374877979416,
       "deductionComplexityProxy": 0,
       "executionPrecision": 0,
       "solutionComplexity": 0,
@@ -132,7 +105,7 @@
     "rawScore": 52.97869649246806,
     "reasons": [],
     "stage": "Fun",
-    "step": 5
+    "step": 4
   },
   {
     "componentChanges": {
@@ -148,7 +121,7 @@
     "needsSupport": false,
     "newComponentHighs": {
       "concurrencyBurden": 0,
-      "constraintPressure": 53.379683686607606,
+      "constraintPressure": 53.77115318099017,
       "deductionComplexityProxy": 0,
       "executionPrecision": 0,
       "solutionComplexity": 27.474079406339825,
@@ -159,7 +132,7 @@
     "rawScore": 67.67042888496717,
     "reasons": [],
     "stage": "Fun",
-    "step": 6
+    "step": 5
   },
   {
     "componentChanges": {
@@ -186,7 +159,7 @@
     "rawScore": 69.00861844259059,
     "reasons": [],
     "stage": "Fun",
-    "step": 7
+    "step": 6
   },
   {
     "componentChanges": {
@@ -213,18 +186,102 @@
     "rawScore": 71.68274010192081,
     "reasons": [],
     "stage": "Fun",
+    "step": 7
+  },
+  {
+    "componentChanges": {
+      "concurrencyBurden": 0,
+      "constraintPressure": 3.671607059130963,
+      "deductionComplexityProxy": 70,
+      "executionPrecision": 275,
+      "solutionComplexity": 0,
+      "techniqueBurden": 0
+    },
+    "demand": 233.75,
+    "level": "Honey, I Saved The Lemmings",
+    "needsSupport": true,
+    "newComponentHighs": {
+      "concurrencyBurden": 0,
+      "constraintPressure": 3.671607059130963,
+      "deductionComplexityProxy": 70,
+      "executionPrecision": 275,
+      "solutionComplexity": 0,
+      "techniqueBurden": 0
+    },
+    "objective": "introduce:miner",
+    "preparationGaps": [],
+    "rawScore": 132.06004901960785,
+    "reasons": [
+      "Curriculum demand rises by 95.7",
+      "New component high: executionPrecision"
+    ],
+    "stage": "Intermediate",
     "step": 8
   },
   {
     "componentChanges": {
-      "concurrencyBurden": 70,
-      "constraintPressure": -6.231828739490254,
-      "deductionComplexityProxy": -40,
-      "executionPrecision": 0,
-      "solutionComplexity": 106.03910001730776,
+      "concurrencyBurden": 0,
+      "constraintPressure": 14.877450980392155,
+      "deductionComplexityProxy": -20,
+      "executionPrecision": -275,
+      "solutionComplexity": 95.86313713864834,
       "techniqueBurden": 65
     },
-    "demand": 138.04900039200314,
+    "demand": 233.75,
+    "level": "Lemmings For Presidents!",
+    "needsSupport": false,
+    "newComponentHighs": {
+      "concurrencyBurden": 0,
+      "constraintPressure": 14.877450980392155,
+      "deductionComplexityProxy": 0,
+      "executionPrecision": 0,
+      "solutionComplexity": 42.34995771500077,
+      "techniqueBurden": 65
+    },
+    "objective": "split:basher:miner",
+    "preparationGaps": [],
+    "rawScore": 114.93400781756145,
+    "reasons": [],
+    "stage": "Intermediate",
+    "step": 9
+  },
+  {
+    "componentChanges": {
+      "concurrencyBurden": 0,
+      "constraintPressure": 90.35294117647061,
+      "deductionComplexityProxy": -120,
+      "executionPrecision": 0,
+      "solutionComplexity": -83.86313713864834,
+      "techniqueBurden": 65
+    },
+    "demand": 233.75,
+    "level": "Blockers can block others",
+    "needsSupport": false,
+    "newComponentHighs": {
+      "concurrencyBurden": 0,
+      "constraintPressure": 90.35294117647061,
+      "deductionComplexityProxy": 0,
+      "executionPrecision": 0,
+      "solutionComplexity": 0,
+      "techniqueBurden": 65
+    },
+    "objective": "spacing",
+    "preparationGaps": [],
+    "rawScore": 116.08,
+    "reasons": [],
+    "stage": "Intermediate",
+    "step": 10
+  },
+  {
+    "componentChanges": {
+      "concurrencyBurden": 70,
+      "constraintPressure": -115.13382795548398,
+      "deductionComplexityProxy": 30,
+      "executionPrecision": 0,
+      "solutionComplexity": 94.03910001730776,
+      "techniqueBurden": -65
+    },
+    "demand": 233.75,
     "level": "Block and Dig",
     "needsSupport": false,
     "newComponentHighs": {
@@ -232,53 +289,26 @@
       "constraintPressure": 0,
       "deductionComplexityProxy": 0,
       "executionPrecision": 0,
-      "solutionComplexity": 52.52592059366019,
-      "techniqueBurden": 65
+      "solutionComplexity": 10.17596287865942,
+      "techniqueBurden": 0
     },
     "objective": "split:blocker:digger",
     "preparationGaps": [],
     "rawScore": 116.75120436959479,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 9
+    "step": 11
   },
   {
     "componentChanges": {
       "concurrencyBurden": -70,
-      "constraintPressure": 24.780886779013372,
-      "deductionComplexityProxy": 90,
+      "constraintPressure": -10.748524985692484,
+      "deductionComplexityProxy": 70,
       "executionPrecision": 0,
-      "solutionComplexity": -10.17596287865942,
+      "solutionComplexity": 84.82403712134058,
       "techniqueBurden": 0
     },
-    "demand": 147.3235294117647,
-    "level": "Lemmings For Presidents!",
-    "needsSupport": false,
-    "newComponentHighs": {
-      "concurrencyBurden": 0,
-      "constraintPressure": 18.549058039523118,
-      "deductionComplexityProxy": 50,
-      "executionPrecision": 0,
-      "solutionComplexity": 0,
-      "techniqueBurden": 0
-    },
-    "objective": "split:basher:miner",
-    "preparationGaps": [],
-    "rawScore": 114.93400781756145,
-    "reasons": [],
-    "stage": "Intermediate",
-    "step": 10
-  },
-  {
-    "componentChanges": {
-      "concurrencyBurden": 0,
-      "constraintPressure": -35.529411764705856,
-      "deductionComplexityProxy": -20,
-      "executionPrecision": 0,
-      "solutionComplexity": 95.0,
-      "techniqueBurden": 0
-    },
-    "demand": 173.50419599705384,
+    "demand": 233.75,
     "level": "A task for blockers and bombers",
     "needsSupport": false,
     "newComponentHighs": {
@@ -294,7 +324,7 @@
     "rawScore": 129.81518428814968,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 11
+    "step": 12
   },
   {
     "componentChanges": {
@@ -305,12 +335,12 @@
       "solutionComplexity": -75.98044999134612,
       "techniqueBurden": 0
     },
-    "demand": 165.6313490507924,
+    "demand": 233.75,
     "level": "Build a Bridge",
     "needsSupport": false,
     "newComponentHighs": {
       "concurrencyBurden": 0,
-      "constraintPressure": 36.615639278055426,
+      "constraintPressure": 0,
       "deductionComplexityProxy": 0,
       "executionPrecision": 0,
       "solutionComplexity": 0,
@@ -321,87 +351,58 @@
     "rawScore": 124.5783419256125,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 12
-  },
-  {
-    "componentChanges": {
-      "concurrencyBurden": -70,
-      "constraintPressure": -36.09603143491819,
-      "deductionComplexityProxy": 120,
-      "executionPrecision": 176.66666666666666,
-      "solutionComplexity": -13.194428082610983,
-      "techniqueBurden": 0
-    },
-    "demand": 151.61641699423208,
-    "level": "Thunder-Lemmings are go!",
-    "needsSupport": true,
-    "newComponentHighs": {
-      "concurrencyBurden": 0,
-      "constraintPressure": 0,
-      "deductionComplexityProxy": 0,
-      "executionPrecision": 176.66666666666666,
-      "solutionComplexity": 0,
-      "techniqueBurden": 0
-    },
-    "objective": "split:basher:builder",
-    "preparationGaps": [],
-    "rawScore": 151.61641699423208,
-    "reasons": [
-      "New component high: executionPrecision"
-    ],
-    "stage": "Intermediate",
     "step": 13
   },
   {
     "componentChanges": {
-      "concurrencyBurden": 140,
-      "constraintPressure": -68.078431372549,
-      "deductionComplexityProxy": 35,
-      "executionPrecision": -176.66666666666666,
-      "solutionComplexity": 84.82492035895632,
-      "techniqueBurden": 0
+      "concurrencyBurden": -70,
+      "constraintPressure": -190.953015624125,
+      "deductionComplexityProxy": 120,
+      "executionPrecision": 0,
+      "solutionComplexity": -27.86313713864834,
+      "techniqueBurden": 130
     },
-    "demand": 170.45922559655327,
-    "level": "Floating Lemming Flurry",
+    "demand": 233.75,
+    "level": "Heading on in...",
     "needsSupport": false,
     "newComponentHighs": {
-      "concurrencyBurden": 70,
+      "concurrencyBurden": 0,
       "constraintPressure": 0,
-      "deductionComplexityProxy": 35,
+      "deductionComplexityProxy": 0,
       "executionPrecision": 0,
       "solutionComplexity": 0,
-      "techniqueBurden": 0
+      "techniqueBurden": 65
     },
-    "objective": "chain:floater:basher",
+    "objective": "apply:a6b50ebc850c287c2637",
     "preparationGaps": [],
-    "rawScore": 146.74437006143773,
+    "rawScore": 125.42455972397364,
     "reasons": [],
     "stage": "Intermediate",
     "step": 14
   },
   {
     "componentChanges": {
-      "concurrencyBurden": -140,
-      "constraintPressure": 157.91176470588238,
-      "deductionComplexityProxy": -155,
+      "concurrencyBurden": 0,
+      "constraintPressure": -91.35538766734379,
+      "deductionComplexityProxy": 35,
       "executionPrecision": 0,
-      "solutionComplexity": -174.51317942364756,
-      "techniqueBurden": 65
+      "solutionComplexity": 30.0,
+      "techniqueBurden": 0
     },
-    "demand": 192.5,
-    "level": "Blockers can block others",
+    "demand": 233.75,
+    "level": "Test map",
     "needsSupport": false,
     "newComponentHighs": {
       "concurrencyBurden": 0,
-      "constraintPressure": 53.73730189841518,
-      "deductionComplexityProxy": 0,
+      "constraintPressure": 0,
+      "deductionComplexityProxy": 15,
       "executionPrecision": 0,
       "solutionComplexity": 0,
-      "techniqueBurden": 65
+      "techniqueBurden": 0
     },
-    "objective": "spacing",
+    "objective": "apply:5037f5c3405ec4519cd8",
     "preparationGaps": [],
-    "rawScore": 116.08,
+    "rawScore": 122.59835932721894,
     "reasons": [],
     "stage": "Intermediate",
     "step": 15
@@ -409,26 +410,26 @@
   {
     "componentChanges": {
       "concurrencyBurden": 0,
-      "constraintPressure": -99.07189542483661,
-      "deductionComplexityProxy": 190,
+      "constraintPressure": 143.40295071451482,
+      "deductionComplexityProxy": -155,
       "executionPrecision": 0,
-      "solutionComplexity": 189.03910001730776,
-      "techniqueBurden": -65
+      "solutionComplexity": -25.01955000865388,
+      "techniqueBurden": 0
     },
-    "demand": 187,
-    "level": "Lemming Snowfall",
+    "demand": 233.75,
+    "level": "Create & Remove Collection",
     "needsSupport": false,
     "newComponentHighs": {
       "concurrencyBurden": 0,
       "constraintPressure": 0,
-      "deductionComplexityProxy": 35,
+      "deductionComplexityProxy": 0,
       "executionPrecision": 0,
-      "solutionComplexity": 10.17596287865942,
+      "solutionComplexity": 0,
       "techniqueBurden": 0
     },
-    "objective": "chain:basher:builder",
+    "objective": "apply:d5974ca2f9321a7596e4",
     "preparationGaps": [],
-    "rawScore": 141.83925559857894,
+    "rawScore": 124.88644191820201,
     "reasons": [],
     "stage": "Intermediate",
     "step": 16
@@ -436,13 +437,13 @@
   {
     "componentChanges": {
       "concurrencyBurden": 0,
-      "constraintPressure": 106.47875816993462,
-      "deductionComplexityProxy": -55,
+      "constraintPressure": 200.04961722046716,
+      "deductionComplexityProxy": 135,
       "executionPrecision": 0,
-      "solutionComplexity": -44.03910001730776,
-      "techniqueBurden": 0
+      "solutionComplexity": 65,
+      "techniqueBurden": -130
     },
-    "demand": 196.203431372549,
+    "demand": 233.75,
     "level": "At Home in a Cave",
     "needsSupport": false,
     "newComponentHighs": {
@@ -463,13 +464,40 @@
   {
     "componentChanges": {
       "concurrencyBurden": 0,
-      "constraintPressure": -117.71367053289367,
-      "deductionComplexityProxy": 50,
+      "constraintPressure": -106.47875816993462,
+      "deductionComplexityProxy": 55,
       "executionPrecision": 0,
-      "solutionComplexity": 21.688259064691238,
+      "solutionComplexity": 44.03910001730776,
       "techniqueBurden": 0
     },
-    "demand": 182.75,
+    "demand": 233.75,
+    "level": "Lemming Snowfall",
+    "needsSupport": false,
+    "newComponentHighs": {
+      "concurrencyBurden": 0,
+      "constraintPressure": 0,
+      "deductionComplexityProxy": 35,
+      "executionPrecision": 0,
+      "solutionComplexity": 10.17596287865942,
+      "techniqueBurden": 0
+    },
+    "objective": "chain:basher:builder",
+    "preparationGaps": [],
+    "rawScore": 141.83925559857894,
+    "reasons": [],
+    "stage": "Intermediate",
+    "step": 18
+  },
+  {
+    "componentChanges": {
+      "concurrencyBurden": 0,
+      "constraintPressure": -11.23491236295905,
+      "deductionComplexityProxy": -5,
+      "executionPrecision": 0,
+      "solutionComplexity": -22.350840952616522,
+      "techniqueBurden": 0
+    },
+    "demand": 233.75,
     "level": "It'll be Comin' Round the Mtn.",
     "needsSupport": false,
     "newComponentHighs": {
@@ -485,7 +513,7 @@
     "rawScore": 135.11153198181864,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 18
+    "step": 19
   },
   {
     "componentChanges": {
@@ -496,7 +524,7 @@
       "solutionComplexity": -2.825121926042897,
       "techniqueBurden": 65
     },
-    "demand": 180,
+    "demand": 233.75,
     "level": "Lost something?",
     "needsSupport": false,
     "newComponentHighs": {
@@ -512,7 +540,7 @@
     "rawScore": 148.88073984370524,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 19
+    "step": 20
   },
   {
     "componentChanges": {
@@ -523,7 +551,7 @@
       "solutionComplexity": 66.54213947904478,
       "techniqueBurden": -65
     },
-    "demand": 209.58369363238518,
+    "demand": 233.75,
     "level": "Not as complicated as it looks",
     "needsSupport": false,
     "newComponentHighs": {
@@ -539,184 +567,22 @@
     "rawScore": 149.9693177186376,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 20
-  },
-  {
-    "componentChanges": {
-      "concurrencyBurden": 0,
-      "constraintPressure": 59.219172113289744,
-      "deductionComplexityProxy": -170,
-      "executionPrecision": 240.625,
-      "solutionComplexity": -155.38572660903924,
-      "techniqueBurden": 0
-    },
-    "demand": 204.53125,
-    "level": "The Undiscovered Country",
-    "needsSupport": false,
-    "newComponentHighs": {
-      "concurrencyBurden": 0,
-      "constraintPressure": 0,
-      "deductionComplexityProxy": 0,
-      "executionPrecision": 63.95833333333334,
-      "solutionComplexity": 0,
-      "techniqueBurden": 0
-    },
-    "objective": "split:digger:miner",
-    "preparationGaps": [],
-    "rawScore": 159.70795023937663,
-    "reasons": [],
-    "stage": "Intermediate",
     "step": 21
   },
   {
     "componentChanges": {
-      "concurrencyBurden": 0,
-      "constraintPressure": -57.951009058594195,
-      "deductionComplexityProxy": 135,
-      "executionPrecision": -18.125,
-      "solutionComplexity": 38.84358712999446,
-      "techniqueBurden": 0
-    },
-    "demand": 189.125,
-    "level": "Custom built for Lemmings",
-    "needsSupport": false,
-    "newComponentHighs": {
-      "concurrencyBurden": 0,
-      "constraintPressure": 0,
-      "deductionComplexityProxy": 0,
-      "executionPrecision": 0,
-      "solutionComplexity": 0,
-      "techniqueBurden": 0
-    },
-    "objective": "apply:4581d4f159c9a1e2da56",
-    "preparationGaps": [],
-    "rawScore": 166.54490823035815,
-    "reasons": [],
-    "stage": "Intermediate",
-    "step": 22
-  },
-  {
-    "componentChanges": {
-      "concurrencyBurden": 0,
-      "constraintPressure": 54.36755840194195,
-      "deductionComplexityProxy": -90,
-      "executionPrecision": -222.5,
-      "solutionComplexity": 88.13686286135166,
-      "techniqueBurden": 65
-    },
-    "demand": 189.7,
-    "level": "Jungle!!",
-    "needsSupport": false,
-    "newComponentHighs": {
-      "concurrencyBurden": 0,
-      "constraintPressure": 0,
-      "deductionComplexityProxy": 0,
-      "executionPrecision": 0,
-      "solutionComplexity": 0,
-      "techniqueBurden": 0
-    },
-    "objective": "apply:bd793e8ea0fd1edfb9d5",
-    "preparationGaps": [],
-    "rawScore": 158.45280065210798,
-    "reasons": [],
-    "stage": "Intermediate",
-    "step": 23
-  },
-  {
-    "componentChanges": {
-      "concurrencyBurden": 0,
-      "constraintPressure": -193.78878407721692,
-      "deductionComplexityProxy": 55,
-      "executionPrecision": 0,
-      "solutionComplexity": -126.98044999134612,
-      "techniqueBurden": 65
-    },
-    "demand": 221,
-    "level": "Heading on in...",
-    "needsSupport": false,
-    "newComponentHighs": {
-      "concurrencyBurden": 0,
-      "constraintPressure": 0,
-      "deductionComplexityProxy": 0,
-      "executionPrecision": 0,
-      "solutionComplexity": 0,
-      "techniqueBurden": 65
-    },
-    "objective": "apply:a6b50ebc850c287c2637",
-    "preparationGaps": [],
-    "rawScore": 125.42455972397364,
-    "reasons": [],
-    "stage": "Intermediate",
-    "step": 24
-  },
-  {
-    "componentChanges": {
-      "concurrencyBurden": 0,
-      "constraintPressure": -91.35538766734379,
-      "deductionComplexityProxy": 35,
-      "executionPrecision": 0,
-      "solutionComplexity": 30.0,
-      "techniqueBurden": 0
-    },
-    "demand": 221,
-    "level": "Test map",
-    "needsSupport": false,
-    "newComponentHighs": {
-      "concurrencyBurden": 0,
-      "constraintPressure": 0,
-      "deductionComplexityProxy": 0,
-      "executionPrecision": 0,
-      "solutionComplexity": 0,
-      "techniqueBurden": 0
-    },
-    "objective": "apply:5037f5c3405ec4519cd8",
-    "preparationGaps": [],
-    "rawScore": 122.59835932721894,
-    "reasons": [],
-    "stage": "Intermediate",
-    "step": 25
-  },
-  {
-    "componentChanges": {
-      "concurrencyBurden": 0,
-      "constraintPressure": 143.40295071451482,
-      "deductionComplexityProxy": -155,
-      "executionPrecision": 0,
-      "solutionComplexity": -25.01955000865388,
-      "techniqueBurden": 0
-    },
-    "demand": 221,
-    "level": "Create & Remove Collection",
-    "needsSupport": false,
-    "newComponentHighs": {
-      "concurrencyBurden": 0,
-      "constraintPressure": 0,
-      "deductionComplexityProxy": 0,
-      "executionPrecision": 0,
-      "solutionComplexity": 0,
-      "techniqueBurden": 0
-    },
-    "objective": "apply:d5974ca2f9321a7596e4",
-    "preparationGaps": [],
-    "rawScore": 124.88644191820201,
-    "reasons": [],
-    "stage": "Intermediate",
-    "step": 26
-  },
-  {
-    "componentChanges": {
       "concurrencyBurden": 180,
-      "constraintPressure": 11.358440749878923,
-      "deductionComplexityProxy": 20,
+      "constraintPressure": -74.74705882352947,
+      "deductionComplexityProxy": -170,
       "executionPrecision": 0,
-      "solutionComplexity": -21,
-      "techniqueBurden": 0
+      "solutionComplexity": -171.40527661769312,
+      "techniqueBurden": 130
     },
-    "demand": 221,
+    "demand": 233.75,
     "level": "Lemming sanctuary in sight",
     "needsSupport": false,
     "newComponentHighs": {
-      "concurrencyBurden": 40,
+      "concurrencyBurden": 110,
       "constraintPressure": 0,
       "deductionComplexityProxy": 0,
       "executionPrecision": 0,
@@ -728,18 +594,72 @@
     "rawScore": 146.54303921568626,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 27
+    "step": 22
   },
   {
     "componentChanges": {
       "concurrencyBurden": -180,
-      "constraintPressure": 33.06557597558822,
+      "constraintPressure": 91.45098039215685,
       "deductionComplexityProxy": 100,
+      "executionPrecision": 176.66666666666666,
+      "solutionComplexity": 30.688259064691238,
+      "techniqueBurden": -130
+    },
+    "demand": 233.75,
+    "level": "Thunder-Lemmings are go!",
+    "needsSupport": false,
+    "newComponentHighs": {
+      "concurrencyBurden": 0,
+      "constraintPressure": 0,
+      "deductionComplexityProxy": 0,
       "executionPrecision": 0,
-      "solutionComplexity": 33,
+      "solutionComplexity": 0,
       "techniqueBurden": 0
     },
-    "demand": 221,
+    "objective": "split:basher:builder",
+    "preparationGaps": [],
+    "rawScore": 151.61641699423208,
+    "reasons": [],
+    "stage": "Intermediate",
+    "step": 23
+  },
+  {
+    "componentChanges": {
+      "concurrencyBurden": 140,
+      "constraintPressure": -68.078431372549,
+      "deductionComplexityProxy": 35,
+      "executionPrecision": -176.66666666666666,
+      "solutionComplexity": 84.82492035895632,
+      "techniqueBurden": 0
+    },
+    "demand": 233.75,
+    "level": "Floating Lemming Flurry",
+    "needsSupport": false,
+    "newComponentHighs": {
+      "concurrencyBurden": 0,
+      "constraintPressure": 0,
+      "deductionComplexityProxy": 0,
+      "executionPrecision": 0,
+      "solutionComplexity": 0,
+      "techniqueBurden": 0
+    },
+    "objective": "chain:floater:basher",
+    "preparationGaps": [],
+    "rawScore": 146.74437006143773,
+    "reasons": [],
+    "stage": "Intermediate",
+    "step": 24
+  },
+  {
+    "componentChanges": {
+      "concurrencyBurden": -140,
+      "constraintPressure": 9.693026955980372,
+      "deductionComplexityProxy": -35,
+      "executionPrecision": 0,
+      "solutionComplexity": -82.51317942364756,
+      "techniqueBurden": 130
+    },
+    "demand": 233.75,
     "level": "Be RiGhT bAcK!",
     "needsSupport": false,
     "newComponentHighs": {
@@ -755,7 +675,7 @@
     "rawScore": 141.70156409251274,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 28
+    "step": 25
   },
   {
     "componentChanges": {
@@ -766,7 +686,7 @@
       "solutionComplexity": 13.01955000865388,
       "techniqueBurden": 0
     },
-    "demand": 221,
+    "demand": 233.75,
     "level": "With Lemmings on Top",
     "needsSupport": false,
     "newComponentHighs": {
@@ -782,7 +702,7 @@
     "rawScore": 143.95026532961847,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 29
+    "step": 26
   },
   {
     "componentChanges": {
@@ -793,7 +713,7 @@
       "solutionComplexity": 47.0,
       "techniqueBurden": 0
     },
-    "demand": 221,
+    "demand": 233.75,
     "level": "BashintheDirectionoftheArrows",
     "needsSupport": false,
     "newComponentHighs": {
@@ -809,7 +729,7 @@
     "rawScore": 147.0749003241656,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 30
+    "step": 27
   },
   {
     "componentChanges": {
@@ -820,7 +740,7 @@
       "solutionComplexity": 30.0,
       "techniqueBurden": 0
     },
-    "demand": 221,
+    "demand": 233.75,
     "level": "Bridge Across, Mine Through",
     "needsSupport": false,
     "newComponentHighs": {
@@ -836,7 +756,7 @@
     "rawScore": 153.0609621141041,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 31
+    "step": 28
   },
   {
     "componentChanges": {
@@ -847,7 +767,7 @@
       "solutionComplexity": -77.0,
       "techniqueBurden": 0
     },
-    "demand": 221,
+    "demand": 233.75,
     "level": "Avoid the Fall !",
     "needsSupport": false,
     "newComponentHighs": {
@@ -863,7 +783,7 @@
     "rawScore": 146.6437719359339,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 32
+    "step": 29
   },
   {
     "componentChanges": {
@@ -874,7 +794,7 @@
       "solutionComplexity": -7.506370585006323,
       "techniqueBurden": 0
     },
-    "demand": 221,
+    "demand": 233.75,
     "level": "Float and Bomb",
     "needsSupport": false,
     "newComponentHighs": {
@@ -890,7 +810,7 @@
     "rawScore": 147.55092690625276,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 33
+    "step": 30
   },
   {
     "componentChanges": {
@@ -901,7 +821,7 @@
       "solutionComplexity": 47.48682057635244,
       "techniqueBurden": -130
     },
-    "demand": 220.41666666666669,
+    "demand": 233.75,
     "level": "Merry Lemmings",
     "needsSupport": false,
     "newComponentHighs": {
@@ -917,7 +837,7 @@
     "rawScore": 149.8383333333333,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 34
+    "step": 31
   },
   {
     "componentChanges": {
@@ -928,7 +848,7 @@
       "solutionComplexity": 0,
       "techniqueBurden": 130
     },
-    "demand": 221,
+    "demand": 233.75,
     "level": "Dying Not Reccomended",
     "needsSupport": false,
     "newComponentHighs": {
@@ -944,46 +864,19 @@
     "rawScore": 144.6677942602488,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 35
+    "step": 32
   },
   {
     "componentChanges": {
       "concurrencyBurden": 0,
-      "constraintPressure": 67.98094314579077,
-      "deductionComplexityProxy": 45,
-      "executionPrecision": 0,
-      "solutionComplexity": 42,
-      "techniqueBurden": 0
+      "constraintPressure": 186.62196136326116,
+      "deductionComplexityProxy": -135,
+      "executionPrecision": 240.625,
+      "solutionComplexity": -69.98044999134612,
+      "techniqueBurden": -130
     },
-    "demand": 221,
-    "level": "Let's go to the moon!",
-    "needsSupport": false,
-    "newComponentHighs": {
-      "concurrencyBurden": 0,
-      "constraintPressure": 0,
-      "deductionComplexityProxy": 10,
-      "executionPrecision": 0,
-      "solutionComplexity": 0,
-      "techniqueBurden": 0
-    },
-    "objective": "apply:44e64b4f569fd5fc15aa",
-    "preparationGaps": [],
-    "rawScore": 165.8953168692016,
-    "reasons": [],
-    "stage": "Intermediate",
-    "step": 36
-  },
-  {
-    "componentChanges": {
-      "concurrencyBurden": 0,
-      "constraintPressure": 16.43771620348403,
-      "deductionComplexityProxy": -35,
-      "executionPrecision": 0,
-      "solutionComplexity": -42,
-      "techniqueBurden": 0
-    },
-    "demand": 221,
-    "level": "Down The Wall",
+    "demand": 233.75,
+    "level": "The Undiscovered Country",
     "needsSupport": false,
     "newComponentHighs": {
       "concurrencyBurden": 0,
@@ -993,77 +886,23 @@
       "solutionComplexity": 0,
       "techniqueBurden": 0
     },
-    "objective": "apply:99830bdae8532214f446",
+    "objective": "split:digger:miner",
     "preparationGaps": [],
-    "rawScore": 156.34221997565456,
+    "rawScore": 159.70795023937663,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 37
+    "step": 33
   },
   {
     "componentChanges": {
       "concurrencyBurden": 0,
-      "constraintPressure": -5.765368696913555,
-      "deductionComplexityProxy": -130,
-      "executionPrecision": 0,
-      "solutionComplexity": 44.68825906469124,
-      "techniqueBurden": 0
+      "constraintPressure": 102.74914599298256,
+      "deductionComplexityProxy": 40,
+      "executionPrecision": -240.625,
+      "solutionComplexity": 4.98044999134612,
+      "techniqueBurden": 130
     },
-    "demand": 221,
-    "level": "Rising to Paradise",
-    "needsSupport": false,
-    "newComponentHighs": {
-      "concurrencyBurden": 0,
-      "constraintPressure": 0,
-      "deductionComplexityProxy": 0,
-      "executionPrecision": 0,
-      "solutionComplexity": 0,
-      "techniqueBurden": 0
-    },
-    "objective": "apply:ca47a836b8af0302fe47",
-    "preparationGaps": [],
-    "rawScore": 156.32413903928787,
-    "reasons": [],
-    "stage": "Intermediate",
-    "step": 38
-  },
-  {
-    "componentChanges": {
-      "concurrencyBurden": 0,
-      "constraintPressure": 73.83006984610171,
-      "deductionComplexityProxy": 80,
-      "executionPrecision": 0,
-      "solutionComplexity": -40.8251219260429,
-      "techniqueBurden": 0
-    },
-    "demand": 221,
-    "level": "Lake in the Cavern",
-    "needsSupport": false,
-    "newComponentHighs": {
-      "concurrencyBurden": 0,
-      "constraintPressure": 0,
-      "deductionComplexityProxy": 0,
-      "executionPrecision": 0,
-      "solutionComplexity": 0,
-      "techniqueBurden": 0
-    },
-    "objective": "apply:f7d6ace7c6859b7b98fc",
-    "preparationGaps": [],
-    "rawScore": 162.54052129555166,
-    "reasons": [],
-    "stage": "Intermediate",
-    "step": 39
-  },
-  {
-    "componentChanges": {
-      "concurrencyBurden": 0,
-      "constraintPressure": 136.88774685778077,
-      "deductionComplexityProxy": -55,
-      "executionPrecision": 0,
-      "solutionComplexity": -68.86313713864834,
-      "techniqueBurden": 0
-    },
-    "demand": 221,
+    "demand": 233.75,
     "level": "Value each moment",
     "needsSupport": false,
     "newComponentHighs": {
@@ -1079,45 +918,18 @@
     "rawScore": 161.33603821656052,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 40
+    "step": 34
   },
   {
     "componentChanges": {
       "concurrencyBurden": 0,
-      "constraintPressure": -16.164918390221544,
-      "deductionComplexityProxy": 125,
+      "constraintPressure": 24.313380905087456,
+      "deductionComplexityProxy": -60,
       "executionPrecision": 0,
-      "solutionComplexity": 25.01955000865388,
+      "solutionComplexity": 21.688259064691238,
       "techniqueBurden": 0
     },
-    "demand": 221,
-    "level": "The metal walkway",
-    "needsSupport": false,
-    "newComponentHighs": {
-      "concurrencyBurden": 0,
-      "constraintPressure": 0,
-      "deductionComplexityProxy": 0,
-      "executionPrecision": 0,
-      "solutionComplexity": 0,
-      "techniqueBurden": 0
-    },
-    "objective": "sequence-spacing",
-    "preparationGaps": [],
-    "rawScore": 173.48889982773557,
-    "reasons": [],
-    "stage": "Intermediate",
-    "step": 41
-  },
-  {
-    "componentChanges": {
-      "concurrencyBurden": 0,
-      "constraintPressure": 40.478299295309,
-      "deductionComplexityProxy": -185,
-      "executionPrecision": 0,
-      "solutionComplexity": -3.3312909439626424,
-      "techniqueBurden": 0
-    },
-    "demand": 232.3722220546995,
+    "demand": 233.75,
     "level": "A toe",
     "needsSupport": false,
     "newComponentHighs": {
@@ -1133,18 +945,153 @@
     "rawScore": 165.06819472845393,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 42
+    "step": 35
   },
   {
     "componentChanges": {
       "concurrencyBurden": 0,
-      "constraintPressure": -42.619787112143,
-      "deductionComplexityProxy": 65,
+      "constraintPressure": -235.03119760896993,
+      "deductionComplexityProxy": 35,
       "executionPrecision": 0,
-      "solutionComplexity": 50.33129094396264,
+      "solutionComplexity": 88.0,
       "techniqueBurden": 0
     },
-    "demand": 221,
+    "demand": 233.75,
+    "level": "Rising to Paradise",
+    "needsSupport": false,
+    "newComponentHighs": {
+      "concurrencyBurden": 0,
+      "constraintPressure": 0,
+      "deductionComplexityProxy": 0,
+      "executionPrecision": 0,
+      "solutionComplexity": 0,
+      "techniqueBurden": 0
+    },
+    "objective": "apply:ca47a836b8af0302fe47",
+    "preparationGaps": [],
+    "rawScore": 156.32413903928787,
+    "reasons": [],
+    "stage": "Intermediate",
+    "step": 36
+  },
+  {
+    "componentChanges": {
+      "concurrencyBurden": 0,
+      "constraintPressure": 73.83006984610171,
+      "deductionComplexityProxy": 80,
+      "executionPrecision": 0,
+      "solutionComplexity": -40.8251219260429,
+      "techniqueBurden": 0
+    },
+    "demand": 233.75,
+    "level": "Lake in the Cavern",
+    "needsSupport": false,
+    "newComponentHighs": {
+      "concurrencyBurden": 0,
+      "constraintPressure": 0,
+      "deductionComplexityProxy": 0,
+      "executionPrecision": 0,
+      "solutionComplexity": 0,
+      "techniqueBurden": 0
+    },
+    "objective": "apply:f7d6ace7c6859b7b98fc",
+    "preparationGaps": [],
+    "rawScore": 162.54052129555166,
+    "reasons": [],
+    "stage": "Intermediate",
+    "step": 37
+  },
+  {
+    "componentChanges": {
+      "concurrencyBurden": 0,
+      "constraintPressure": -68.06470114918815,
+      "deductionComplexityProxy": 50,
+      "executionPrecision": 0,
+      "solutionComplexity": -3.863137138648341,
+      "techniqueBurden": 0
+    },
+    "demand": 233.75,
+    "level": "Down The Wall",
+    "needsSupport": false,
+    "newComponentHighs": {
+      "concurrencyBurden": 0,
+      "constraintPressure": 0,
+      "deductionComplexityProxy": 0,
+      "executionPrecision": 0,
+      "solutionComplexity": 0,
+      "techniqueBurden": 0
+    },
+    "objective": "apply:99830bdae8532214f446",
+    "preparationGaps": [],
+    "rawScore": 156.34221997565456,
+    "reasons": [],
+    "stage": "Intermediate",
+    "step": 38
+  },
+  {
+    "componentChanges": {
+      "concurrencyBurden": 0,
+      "constraintPressure": 44.252292955392164,
+      "deductionComplexityProxy": -10,
+      "executionPrecision": 222.5,
+      "solutionComplexity": -31.13686286135166,
+      "techniqueBurden": -130
+    },
+    "demand": 233.75,
+    "level": "Custom built for Lemmings",
+    "needsSupport": false,
+    "newComponentHighs": {
+      "concurrencyBurden": 0,
+      "constraintPressure": 0,
+      "deductionComplexityProxy": 0,
+      "executionPrecision": 0,
+      "solutionComplexity": 0,
+      "techniqueBurden": 0
+    },
+    "objective": "apply:4581d4f159c9a1e2da56",
+    "preparationGaps": [],
+    "rawScore": 166.54490823035815,
+    "reasons": [],
+    "stage": "Intermediate",
+    "step": 39
+  },
+  {
+    "componentChanges": {
+      "concurrencyBurden": 0,
+      "constraintPressure": 54.36755840194195,
+      "deductionComplexityProxy": -90,
+      "executionPrecision": -222.5,
+      "solutionComplexity": 88.13686286135166,
+      "techniqueBurden": 65
+    },
+    "demand": 233.75,
+    "level": "Jungle!!",
+    "needsSupport": false,
+    "newComponentHighs": {
+      "concurrencyBurden": 0,
+      "constraintPressure": 0,
+      "deductionComplexityProxy": 0,
+      "executionPrecision": 0,
+      "solutionComplexity": 0,
+      "techniqueBurden": 0
+    },
+    "objective": "apply:bd793e8ea0fd1edfb9d5",
+    "preparationGaps": [],
+    "rawScore": 158.45280065210798,
+    "reasons": [],
+    "stage": "Intermediate",
+    "step": 40
+  },
+  {
+    "componentChanges": {
+      "concurrencyBurden": 0,
+      "constraintPressure": 88.02619044257926,
+      "deductionComplexityProxy": 0,
+      "executionPrecision": 0,
+      "solutionComplexity": -49.98044999134612,
+      "techniqueBurden": 65
+    },
+    "demand": 233.75,
     "level": "It is impossible to do?",
     "needsSupport": false,
     "newComponentHighs": {
@@ -1160,18 +1107,45 @@
     "rawScore": 175.15050641154716,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 43
+    "step": 41
   },
   {
     "componentChanges": {
       "concurrencyBurden": 0,
-      "constraintPressure": -89.56055443315341,
-      "deductionComplexityProxy": 35,
+      "constraintPressure": -203.0837580033974,
+      "deductionComplexityProxy": 135,
       "executionPrecision": 0,
-      "solutionComplexity": 77.0,
+      "solutionComplexity": 34.98044999134612,
       "techniqueBurden": 0
     },
-    "demand": 221,
+    "demand": 233.75,
+    "level": "Let's go to the moon!",
+    "needsSupport": false,
+    "newComponentHighs": {
+      "concurrencyBurden": 0,
+      "constraintPressure": 0,
+      "deductionComplexityProxy": 10,
+      "executionPrecision": 0,
+      "solutionComplexity": 0,
+      "techniqueBurden": 0
+    },
+    "objective": "apply:44e64b4f569fd5fc15aa",
+    "preparationGaps": [],
+    "rawScore": 165.8953168692016,
+    "reasons": [],
+    "stage": "Intermediate",
+    "step": 42
+  },
+  {
+    "componentChanges": {
+      "concurrencyBurden": 0,
+      "constraintPressure": 113.523203570244,
+      "deductionComplexityProxy": -100,
+      "executionPrecision": 0,
+      "solutionComplexity": 42.01955000865388,
+      "techniqueBurden": 0
+    },
+    "demand": 233.75,
     "level": "Float and Block",
     "needsSupport": false,
     "newComponentHighs": {
@@ -1187,18 +1161,45 @@
     "rawScore": 182.8976343352372,
     "reasons": [],
     "stage": "Intermediate",
+    "step": 43
+  },
+  {
+    "componentChanges": {
+      "concurrencyBurden": 0,
+      "constraintPressure": 91.70204224998741,
+      "deductionComplexityProxy": 85,
+      "executionPrecision": 0,
+      "solutionComplexity": -124.0,
+      "techniqueBurden": 0
+    },
+    "demand": 233.75,
+    "level": "The metal walkway",
+    "needsSupport": false,
+    "newComponentHighs": {
+      "concurrencyBurden": 0,
+      "constraintPressure": 0,
+      "deductionComplexityProxy": 0,
+      "executionPrecision": 0,
+      "solutionComplexity": 0,
+      "techniqueBurden": 0
+    },
+    "objective": "sequence-spacing",
+    "preparationGaps": [],
+    "rawScore": 173.48889982773557,
+    "reasons": [],
+    "stage": "Intermediate",
     "step": 44
   },
   {
     "componentChanges": {
       "concurrencyBurden": 0,
-      "constraintPressure": -183.12793374141867,
-      "deductionComplexityProxy": 80,
+      "constraintPressure": -274.82997599140606,
+      "deductionComplexityProxy": -5,
       "executionPrecision": 213.90625,
-      "solutionComplexity": -145.15641287000554,
+      "solutionComplexity": -21.15641287000554,
       "techniqueBurden": 0
     },
-    "demand": 221,
+    "demand": 233.75,
     "level": "Welcome Back!",
     "needsSupport": false,
     "newComponentHighs": {
@@ -1225,14 +1226,14 @@
       "solutionComplexity": -3.863137138648341,
       "techniqueBurden": 0
     },
-    "demand": 221,
+    "demand": 233.75,
     "level": "Symmetry",
     "needsSupport": false,
     "newComponentHighs": {
       "concurrencyBurden": 0,
       "constraintPressure": 0,
       "deductionComplexityProxy": 0,
-      "executionPrecision": 16.25,
+      "executionPrecision": 0,
       "solutionComplexity": 0,
       "techniqueBurden": 0
     },
@@ -1252,7 +1253,7 @@
       "solutionComplexity": 3.863137138648341,
       "techniqueBurden": 0
     },
-    "demand": 221,
+    "demand": 233.75,
     "level": "Block and Bash",
     "needsSupport": false,
     "newComponentHighs": {
@@ -1279,7 +1280,7 @@
       "solutionComplexity": 21.15641287000554,
       "techniqueBurden": 0
     },
-    "demand": 221,
+    "demand": 233.75,
     "level": "You Want Me To Go Where???",
     "needsSupport": false,
     "newComponentHighs": {
@@ -1306,7 +1307,7 @@
       "solutionComplexity": 47.0,
       "techniqueBurden": 0
     },
-    "demand": 221,
+    "demand": 233.75,
     "level": "100% Pure Woven Lemming",
     "needsSupport": false,
     "newComponentHighs": {
@@ -1333,7 +1334,7 @@
       "solutionComplexity": 56.68825906469124,
       "techniqueBurden": 0
     },
-    "demand": 221,
+    "demand": 233.75,
     "level": "Don't leave any Lemmings",
     "needsSupport": false,
     "newComponentHighs": {
@@ -1360,7 +1361,7 @@
       "solutionComplexity": 23.292190926654882,
       "techniqueBurden": -65
     },
-    "demand": 210.7,
+    "demand": 233.75,
     "level": "Mind the step.....",
     "needsSupport": false,
     "newComponentHighs": {
@@ -1387,14 +1388,14 @@
       "solutionComplexity": -42,
       "techniqueBurden": 0
     },
-    "demand": 228.08333333333331,
+    "demand": 233.75,
     "level": "You Live and Lem",
     "needsSupport": false,
     "newComponentHighs": {
       "concurrencyBurden": 0,
       "constraintPressure": 0,
       "deductionComplexityProxy": 0,
-      "executionPrecision": 11.458333333333314,
+      "executionPrecision": 0,
       "solutionComplexity": 0,
       "techniqueBurden": 0
     },
@@ -1414,7 +1415,7 @@
       "solutionComplexity": -95.96089998269224,
       "techniqueBurden": 65
     },
-    "demand": 221,
+    "demand": 233.75,
     "level": "A Trap is a trap.",
     "needsSupport": false,
     "newComponentHighs": {
@@ -1441,7 +1442,7 @@
       "solutionComplexity": 50.96089998269224,
       "techniqueBurden": 0
     },
-    "demand": 221,
+    "demand": 233.75,
     "level": "That, Though, Is a Lemming",
     "needsSupport": false,
     "newComponentHighs": {
@@ -2501,7 +2502,7 @@
       "concurrencyBurden": 0,
       "constraintPressure": 0,
       "deductionComplexityProxy": 0,
-      "executionPrecision": 91.66666666666669,
+      "executionPrecision": 85,
       "solutionComplexity": 0,
       "techniqueBurden": 0
     },

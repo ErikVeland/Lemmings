@@ -22,7 +22,7 @@ class CurriculumTests(unittest.TestCase):
                         'components':{'techniqueBurden':65,'solutionComplexity':40+n,
                             'executionPrecision':0,'concurrencyBurden':0,
                             'constraintPressure':30,'deductionComplexityProxy':30}}})
-                replays[replay_id] = {'initialStateHash':replay_id,'expected':{'didWin':True},
+                replays[replay_id] = {'initialStateHash':replay_id,'expected':{'didWin':True,'ticks':100},
                     'events':[{'tick':10,'action':{'assign':{'lemmingID':0,'skill':skill}}}]}
         return rows,replays
 
@@ -39,6 +39,30 @@ class CurriculumTests(unittest.TestCase):
         for key,replay in replays.items():
             if key.startswith('floater'): replay['expected']['didWin'] = False
         with self.assertRaises(AssertionError): curation.select(rows,replays)
+
+    def test_replays_rejected_by_hints_cannot_supply_a_lesson(self):
+        rows,replays = self.pool()
+        for replay_id,replay in replays.items():
+            if replay_id.endswith('0'):
+                replay['events'].append({'tick':101,'action':{'nuke':{}}})
+            if replay_id.endswith('1'):
+                replay['events'][0]['tick'] = 0
+        result = curation.select(rows,replays)
+        self.assertTrue(all(l['level'].endswith('2') for l in result['lessons']))
+
+    def test_demanding_introduction_requires_complete_probes(self):
+        rows,replays = self.pool()
+        for row in rows:
+            if row['profile']['detectedTechniques'] == ['miner']:
+                row['profile']['components']['executionPrecision'] = 275
+                row['profile']['precision'] = {'completed': False}
+        with self.assertRaises(AssertionError): curation.select(rows,replays)
+        reviewed = next(r for r in rows if r['entry']['levelNameSnapshot'] == 'miner2')
+        reviewed['profile']['precision']['completed'] = True
+        result = curation.select(rows,replays)
+        lesson = next(l for l in result['lessons'] if l['objective'] == 'introduce:miner')
+        self.assertEqual(lesson['level'], 'miner2')
+        self.assertGreaterEqual(lesson['intrinsicDemand'], 180)
 
     def test_repeated_builders_are_not_new_sequences(self):
         rows,_ = self.pool()
@@ -84,6 +108,8 @@ class CurriculumTests(unittest.TestCase):
             self.assertEqual(lesson['focus'],goal['lesson'])
             self.assertFalse(lesson['preparationGaps'])
         self.assertGreaterEqual(sum(l['stage']=='Intermediate' for l in lessons),len(lessons)/2)
-        self.assertLessEqual(max(b['demand']-a['demand'] for a,b in zip(lessons,lessons[1:])),65)
+        for a,b in zip(lessons,lessons[1:]):
+            if b['demand']-a['demand'] > 65:
+                self.assertTrue(b['needsSupport'])
 
 if __name__=='__main__': unittest.main()

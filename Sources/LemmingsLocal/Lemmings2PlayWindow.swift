@@ -440,6 +440,12 @@ import NxlvKit
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
     #if APP_INTEGRATION_TESTS
+    func testPauseKeyboard() throws {
+        timer?.invalidate()
+        prepareBriefing(); startLevel(); canvas.startCountdown.cancel(); paused = false
+        defer { if let window { gameplayKeyboard?.bind(to: window) } }
+        try validatePauseKeyboard(gameplayKeyboard!, name: "Lemmings 2", paused: { self.paused })
+    }
     func testSelectionRendering() async throws {
         timer?.invalidate(); audioSettings.confinePointer = false
         prepareBriefing(); startLevel(); paused = true; canvas.startCountdown.cancel()
@@ -449,10 +455,12 @@ import NxlvKit
         present()
         try await validateSelectionCanvas(canvas, name: "lemmings2", effect: { self.canvas.selectionEffect },
             reduce: { self.canvas.reduceMotion = $0; self.canvas.reduceFlashes = $0 },
+            hdEffects: { self.canvas.hdEffectsEnabled = $0 },
             style: { choice in
                 var settings = self.audioSettings; settings.lemmingSelectionStyle = choice
                 self.setAudioSettings(settings, muted: true)
-            }, refocus: { if let id = self.game?.lemmings.first(where: { $0.active })?.id { self.canvas.focusLemming(id) } })
+            }, refocus: { if let id = self.game?.lemmings.first(where: { $0.active })?.id { self.canvas.focusLemming(id) } },
+            advance: { self.game?.step(); self.game?.step(); self.refreshGame() })
     }
     func testTimelinePanel() throws {
         prepareBriefing(); startLevel()
@@ -2526,17 +2534,14 @@ import NxlvKit
             selectionEffect = LemmingSelectionEffect(sprite: selectedSprite.pixels,
                 rect: precisionLens.display(selectedSprite.rect), clipRect: gameplayRect,
                 mirrored: selectedSprite.mirrored,
-                animated: !reduceMotion && !reduceFlashes,
-                extendedBrightness: hdEffectsEnabled && !reduceFlashes, bloom: hdEffectsEnabled)
+                time: reduceMotion || reduceFlashes ? nil : Double(game.tick) / Lemmings2Runtime.ticksPerSecond)
         }
     }
     override func draw(_ dirtyRect: NSRect) {
         selectionEffect = nil
         defer {
-            hdrOverlay?.updateSelection(selectionEffect)
-            if hdrOverlay?.canRenderSelection != true || NSGraphicsContext.current?.isDrawingToScreen == false,
-               let selectionEffect {
-                LemmingSelectionRenderer.drawFallback(selectionEffect)
+            if let selectionEffect {
+                LemmingSelectionRenderer.draw(selectionEffect)
             }
         }
         layoutTimeline()

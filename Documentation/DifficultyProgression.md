@@ -100,6 +100,12 @@ recorded finish frame. Two inconclusive runs stop further timing work. Classic
 retains the replay player's existing ceiling. Cancellation is
 checked between probes and during simulation.
 
+Classic probes only skill inputs that succeeded in the baseline playback.
+Rejected legacy assignments and commands after completion do not consume the
+probe budget. Rate changes are detected for both legacy and live input timing.
+These corrections use analyser version `difficulty-3`. Older stored corpus
+profiles remain historical evidence until reanalysed.
+
 A perturbation may finish earlier or later than its reference solution. Its
 recorded completion frame is therefore removed; baseline validation remains
 strict. Invalid target assignments can fail. A simulation timeout is unknown,

@@ -11,11 +11,27 @@ public enum ClassicDifficultyAnalysis {
             (replay.expected?.ticks ?? 0) + ClassicDOSRules.ticksPerSecond)
         var evidence = DifficultySolutionEvidence()
         var assigned: Set<Int> = []
+        var previousRate = initial.releaseRate
+        var previousObservedTick = initial.tickCount
+        var successfulInputs: Set<Int> = []
         let outcome = try ClassicDOSReplayPlayer.run(replay, simulation: initial, tickLimit: tickLimit) { simulation in
             try Task.checkCancellation()
+            // The player observes the tick, then each live input at that tick.
+            let afterTick = simulation.tickCount == previousObservedTick
+            previousObservedTick = simulation.tickCount
+            // Legacy rate inputs run before tick(), which replaces lastTickEvents.
+            if simulation.releaseRate != previousRate {
+                evidence.observedConcepts.insert("release-rate-manipulation")
+                previousRate = simulation.releaseRate
+            }
             for event in simulation.lastTickEvents {
                 switch event {
                 case let .skillAssigned(id, skill):
+                    if let input = replay.events.enumerated().first(where: {
+                        !successfulInputs.contains($0.offset) && $0.element.tick == simulation.tickCount
+                            && ($0.element.afterTick == true) == afterTick
+                            && $0.element.action == .assign(lemmingID: id, skill: skill)
+                    }) { successfulInputs.insert(input.offset) }
                     let worker = simulation.lemmings.first { $0.id == id }
                     evidence.assignments.append(.init(frame: simulation.tickCount, worker: id, skill: skill.rawValue,
                         x: worker?.foot.x ?? 0, y: worker?.foot.y ?? 0))
@@ -38,8 +54,10 @@ public enum ClassicDifficultyAnalysis {
         }
         guard outcome.didWin else { throw DifficultyAnalysisError.replayDidNotWin }
         let assignments = replay.events.enumerated().compactMap { index, event -> NeoLemmixReplayCommand? in
-            guard case let .assign(id, skill) = event.action,
+            guard successfulInputs.contains(index), case let .assign(id, skill) = event.action,
                   let nativeSkill = NeoLemmixSkill(rawValue: skill.rawValue) else { return nil }
+            // Failed legacy inputs and commands after completion cannot consume
+            // the timing budget or dilute the measured execution burden.
             return .init(tick: event.tick, sequence: UInt64(index), command: .assign(lemmingID: id, skill: nativeSkill))
         }
         let precision = try DifficultyPerturbation.analyse(commands: assignments, maximumRuns: maximumProbeRuns) { commands in

@@ -1,6 +1,6 @@
 # Oh My! All Lemmings!
 
-292 selected lessons from 1540 validated, deduplicated single-player candidates. 155 official levels and 137 library levels.
+292 selected lessons from 1540 validated, deduplicated single-player candidates. 156 official levels and 136 library levels.
 
 ## Selection before ordering
 
@@ -12,7 +12,7 @@ The target is roughly 292 levels: the combined size of Classic, Oh No! and the 7
 
 Official levels take priority within comparable 35-point demand bands. Library levels supply missing applications. An application signature records the skill set, job changes, three-step sequences and worker roles. Identical signatures are excluded even across different titles. Repeated assignments, worker counts and score buckets do not create new lessons. These are evidence-based distinctions that still need human review.
 
-The Fun stage contains only the eight introductions. Simple combinations begin Intermediate even when their numerical demand is low. Difficult and Expert retain the existing demand boundaries. Intermediate lessons are the majority of the path. Candidates are selected for their teaching role before the existing demand model orders them. No score is altered to make the chart look smoother.
+The Fun stage contains introductions below 180 demand. More demanding introductions and simple combinations begin Intermediate. Difficult and Expert retain the existing demand boundaries. Intermediate lessons are the majority of the path. Candidates are selected for their teaching role before the existing demand model orders them. No score is altered to make the chart look smoother.
 
 ## Evidence and limits
 
@@ -20,11 +20,17 @@ Objectives are inferred from winning replay commands and measured profiles. They
 
 The selector retains multiplayer and port-duplicate exclusions. The generator checks each selected fan witness against its profile digest and source identity. Basic introductions, unique objectives, source coverage of the selected list and reversed-input ordering are checked.
 
-Stages: {'Fun': 8, 'Intermediate': 160, 'Difficult': 90, 'Expert': 34}. Basic introductions: 8. Duplicate objectives: 0. Largest demand increase: 49.00/1000. Preparation gaps: 0.
+Reviewed corrections in `reviewed-evidence.json` override older scores even when the corrected demand is higher. Replay inputs must fit inside the verified completion time. All eight introductions precede combinations, with original evidence scores retained.
+
+The miner introduction was reviewed after Mienrs <--- lol, typo exposed missed timing and release-rate demands. Its repaired replay remains available in the library. The broader cached corpus has not yet been reanalysed with the corrected detector.
+
+No current miner-only witness meets the forgiving introductory threshold. Honey, I Saved The Lemmings has complete timing probes and a winning replay. It appears as an Intermediate introduction with a support flag for the demand increase. This remains a teaching gap for novice playtesting.
+
+Stages: {'Fun': 7, 'Intermediate': 161, 'Difficult': 90, 'Expert': 34}. Basic introductions: 8. Duplicate objectives: 0. Largest demand increase: 95.70/1000. Preparation gaps: 0.
 
 ## Transitions for playtesting
 
-- 13. Thunder-Lemmings are go!: New component high: executionPrecision.
+- 8. Honey, I Saved The Lemmings: Curriculum demand rises by 95.7; New component high: executionPrecision.
 - 252. Take care, Sweetie: New component high: executionPrecision.
 
 A support flag remains a review request. An absent flag is not proof that a novice will find a solution obvious.
@@ -42,47 +48,47 @@ Solved and parked levels stay saved by identity. A new curriculum version rebuil
 | 1 | Fun | Just dig! | Lemmings | First assignment of the digger skill. |
 | 2 | Fun | Floating Down! | Holiday cLemmings Frost | First assignment of the floater skill. |
 | 3 | Fun | Climin' Death Mountain | TWPAK00 | First assignment of the climber skill. |
-| 4 | Fun | Mienrs <--- lol, typo | Ji Hoons Lemmings Remake Heaven | First assignment of the miner skill. |
-| 5 | Fun | Blow Down! | Lemmings Plus DOS Project Mild | First assignment of the bomber skill. |
-| 6 | Fun | You need bashers this time | Lemmings | First assignment of the basher skill. |
-| 7 | Fun | The Broken Stair | KillerMasters Lemmings 1 Tame | First assignment of the builder skill. |
-| 8 | Fun | Nuclear War on the dance floor | joem7 | First assignment of the blocker skill. |
-| 9 | Intermediate | Block and Dig | brickpk2 | Assign blocker and digger to separate workers without changing their skills. |
-| 10 | Intermediate | Lemmings For Presidents! | Oh No! More Lemmings | Assign basher and miner to separate workers without changing their skills. |
-| 11 | Intermediate | A task for blockers and bombers | Lemmings | Change the same worker from blocker to bomber in a winning route. |
-| 12 | Intermediate | Build a Bridge | JM04 | Assign blocker and builder to separate workers without changing their skills. |
-| 13 | Intermediate | Thunder-Lemmings are go! | Oh No! More Lemmings | Assign basher and builder to separate workers without changing their skills. |
-| 14 | Intermediate | Floating Lemming Flurry | Holiday Lemmings 1993 | Change the same worker from floater to basher in a winning route. |
-| 15 | Intermediate | Blockers can block others | Deceits Lemmings Extras | Change the release rate while preparing a route. |
-| 16 | Intermediate | Lemming Snowfall | Holiday Lemmings 1993 | Change the same worker from basher to builder in a winning route. |
+| 4 | Fun | Blow Down! | Lemmings Plus DOS Project Mild | First assignment of the bomber skill. |
+| 5 | Fun | You need bashers this time | Lemmings | First assignment of the basher skill. |
+| 6 | Fun | The Broken Stair | KillerMasters Lemmings 1 Tame | First assignment of the builder skill. |
+| 7 | Fun | Nuclear War on the dance floor | joem7 | First assignment of the blocker skill. |
+| 8 | Intermediate | Honey, I Saved The Lemmings | Oh No! More Lemmings | Introduce miner and practise assignment timing. |
+| 9 | Intermediate | Lemmings For Presidents! | Oh No! More Lemmings | Assign basher and miner to separate workers without changing their skills. |
+| 10 | Intermediate | Blockers can block others | Deceits Lemmings Extras | Change the release rate while preparing a route. |
+| 11 | Intermediate | Block and Dig | brickpk2 | Assign blocker and digger to separate workers without changing their skills. |
+| 12 | Intermediate | A task for blockers and bombers | Lemmings | Change the same worker from blocker to bomber in a winning route. |
+| 13 | Intermediate | Build a Bridge | JM04 | Assign blocker and builder to separate workers without changing their skills. |
+| 14 | Intermediate | Heading on in... | Lemmings Plus DOS Project Mild | Worker roles: builder; digger. Also practise release-rate-manipulation. |
+| 15 | Intermediate | Test map | Orig Extra Levels | Worker roles: digger + miner. Job changes: digger → miner. Also practise release-rate-manipulation. |
+| 16 | Intermediate | Create & Remove Collection | KillerMasters Lemmings 1 Tame | Worker roles: basher; builder. Also practise release-rate-manipulation. |
 | 17 | Intermediate | At Home in a Cave | Holiday Lemmings 1993 | Change the same worker from digger to basher in a winning route. |
-| 18 | Intermediate | It'll be Comin' Round the Mtn. | Oh No More cLemmings Tame | Change the same worker from miner to builder in a winning route. |
-| 19 | Intermediate | Lost something? | Lemmings | Worker roles: basher; builder; miner. |
-| 20 | Intermediate | Not as complicated as it looks | Lemmings | Change the same worker from builder to basher in a winning route. |
-| 21 | Intermediate | The Undiscovered Country | Holiday Lemmings 1993 | Assign digger and miner to separate workers without changing their skills. |
-| 22 | Intermediate | Custom built for Lemmings | Oh No! More Lemmings | Worker roles: basher + builder. Job changes: basher → builder. |
-| 23 | Intermediate | Jungle!! | CRISFN01 | Worker roles: blocker + bomber; builder. Job changes: blocker → bomber. |
-| 24 | Intermediate | Heading on in... | Lemmings Plus DOS Project Mild | Worker roles: builder; digger. Also practise release-rate-manipulation. |
-| 25 | Intermediate | Test map | Orig Extra Levels | Worker roles: digger + miner. Job changes: digger → miner. Also practise release-rate-manipulation. |
-| 26 | Intermediate | Create & Remove Collection | KillerMasters Lemmings 1 Tame | Worker roles: basher; builder. Also practise release-rate-manipulation. |
-| 27 | Intermediate | Lemming sanctuary in sight | Lemmings | Manage two working regions in one route. |
-| 28 | Intermediate | Be RiGhT bAcK! | Oh No More cLemmings Tame | Worker roles: builder; miner. Also practise release-rate-manipulation. |
-| 29 | Intermediate | With Lemmings on Top | cLemmings Fun | Worker roles: basher + digger. Job changes: basher → digger. Also practise release-rate-manipulation. |
-| 30 | Intermediate | BashintheDirectionoftheArrows | PSP Special 1 10 of 36 | Worker roles: basher; basher + builder. Job changes: builder → basher. Also practise release-rate-manipulation. |
-| 31 | Intermediate | Bridge Across, Mine Through | PSP Special 1 10 of 36 | Reuse a worker by returning to an earlier job after a different assignment. |
-| 32 | Intermediate | Avoid the Fall ! | Pieuws Lemmings 2007 Peace | Worker roles: basher + digger. Job changes: digger → basher. Also practise release-rate-manipulation. |
-| 33 | Intermediate | Float and Bomb | brickpk1 | Worker roles: bomber; floater. Also practise release-rate-manipulation. |
-| 34 | Intermediate | Merry Lemmings | Van Clan Tame | Change the same worker from blocker to miner in a winning route. |
-| 35 | Intermediate | Dying Not Reccomended | Lemmings Plus DOS Project Mild | Worker roles: basher + digger; digger. Job changes: basher → digger. Also practise release-rate-manipulation. |
-| 36 | Intermediate | Let's go to the moon! | Genesis Tricky | Worker roles: builder + miner. Job changes: miner → builder. Also practise release-rate-manipulation. |
-| 37 | Intermediate | Down The Wall | Lemmings Plus DOS Project Wimpy | Worker roles: basher; basher + digger. Job changes: digger → basher. Also practise release-rate-manipulation. |
-| 38 | Intermediate | Rising to Paradise | Pieuws Lemmings 2007 Peace | Worker roles: basher; basher + builder; builder. Job changes: basher → builder. Also practise release-rate-manipulation. |
-| 39 | Intermediate | Lake in the Cavern | CPs Level Pack | Worker roles: basher + bomber; bomber. Job changes: basher → bomber. Also practise release-rate-manipulation. |
-| 40 | Intermediate | Value each moment | Genesis Taxing | Worker roles: bomber; builder. Also practise release-rate-manipulation. |
-| 41 | Intermediate | The metal walkway | ANTHPCK1 | Change a worker’s job and control the flow of followers. |
-| 42 | Intermediate | A toe | Level Design Game 03 | Worker roles: blocker; miner. Also practise release-rate-manipulation. |
-| 43 | Intermediate | It is impossible to do? | CRISFN04 | Worker roles: basher + builder; builder. Job changes: basher → builder. Also practise release-rate-manipulation. |
-| 44 | Intermediate | Float and Block | brickpk1 | Worker roles: blocker + floater; floater. Job changes: floater → blocker. Also practise release-rate-manipulation. |
+| 18 | Intermediate | Lemming Snowfall | Holiday Lemmings 1993 | Change the same worker from basher to builder in a winning route. |
+| 19 | Intermediate | It'll be Comin' Round the Mtn. | Oh No More cLemmings Tame | Change the same worker from miner to builder in a winning route. |
+| 20 | Intermediate | Lost something? | Lemmings | Worker roles: basher; builder; miner. |
+| 21 | Intermediate | Not as complicated as it looks | Lemmings | Change the same worker from builder to basher in a winning route. |
+| 22 | Intermediate | Lemming sanctuary in sight | Lemmings | Manage two working regions in one route. |
+| 23 | Intermediate | Thunder-Lemmings are go! | Oh No! More Lemmings | Assign basher and builder to separate workers without changing their skills. |
+| 24 | Intermediate | Floating Lemming Flurry | Holiday Lemmings 1993 | Change the same worker from floater to basher in a winning route. |
+| 25 | Intermediate | Be RiGhT bAcK! | Oh No More cLemmings Tame | Worker roles: builder; miner. Also practise release-rate-manipulation. |
+| 26 | Intermediate | With Lemmings on Top | cLemmings Fun | Worker roles: basher + digger. Job changes: basher → digger. Also practise release-rate-manipulation. |
+| 27 | Intermediate | BashintheDirectionoftheArrows | PSP Special 1 10 of 36 | Worker roles: basher; basher + builder. Job changes: builder → basher. Also practise release-rate-manipulation. |
+| 28 | Intermediate | Bridge Across, Mine Through | PSP Special 1 10 of 36 | Reuse a worker by returning to an earlier job after a different assignment. |
+| 29 | Intermediate | Avoid the Fall ! | Pieuws Lemmings 2007 Peace | Worker roles: basher + digger. Job changes: digger → basher. Also practise release-rate-manipulation. |
+| 30 | Intermediate | Float and Bomb | brickpk1 | Worker roles: bomber; floater. Also practise release-rate-manipulation. |
+| 31 | Intermediate | Merry Lemmings | Van Clan Tame | Change the same worker from blocker to miner in a winning route. |
+| 32 | Intermediate | Dying Not Reccomended | Lemmings Plus DOS Project Mild | Worker roles: basher + digger; digger. Job changes: basher → digger. Also practise release-rate-manipulation. |
+| 33 | Intermediate | The Undiscovered Country | Holiday Lemmings 1993 | Assign digger and miner to separate workers without changing their skills. |
+| 34 | Intermediate | Value each moment | Genesis Taxing | Worker roles: bomber; builder. Also practise release-rate-manipulation. |
+| 35 | Intermediate | A toe | Level Design Game 03 | Worker roles: blocker; miner. Also practise release-rate-manipulation. |
+| 36 | Intermediate | Rising to Paradise | Pieuws Lemmings 2007 Peace | Worker roles: basher; basher + builder; builder. Job changes: basher → builder. Also practise release-rate-manipulation. |
+| 37 | Intermediate | Lake in the Cavern | CPs Level Pack | Worker roles: basher + bomber; bomber. Job changes: basher → bomber. Also practise release-rate-manipulation. |
+| 38 | Intermediate | Down The Wall | Lemmings Plus DOS Project Wimpy | Worker roles: basher; basher + digger. Job changes: digger → basher. Also practise release-rate-manipulation. |
+| 39 | Intermediate | Custom built for Lemmings | Oh No! More Lemmings | Worker roles: basher + builder. Job changes: basher → builder. |
+| 40 | Intermediate | Jungle!! | CRISFN01 | Worker roles: blocker + bomber; builder. Job changes: blocker → bomber. |
+| 41 | Intermediate | It is impossible to do? | CRISFN04 | Worker roles: basher + builder; builder. Job changes: basher → builder. Also practise release-rate-manipulation. |
+| 42 | Intermediate | Let's go to the moon! | Genesis Tricky | Worker roles: builder + miner. Job changes: miner → builder. Also practise release-rate-manipulation. |
+| 43 | Intermediate | Float and Block | brickpk1 | Worker roles: blocker + floater; floater. Job changes: floater → blocker. Also practise release-rate-manipulation. |
+| 44 | Intermediate | The metal walkway | ANTHPCK1 | Change a worker’s job and control the flow of followers. |
 | 45 | Intermediate | Welcome Back! | KillerMasters Lemmings 2 Tame | Worker roles: basher; miner. Also practise release-rate-manipulation. |
 | 46 | Intermediate | Symmetry | EMPACK | Worker roles: blocker; digger. Also practise release-rate-manipulation. |
 | 47 | Intermediate | Block and Bash | brickpk2 | Worker roles: basher; blocker. Also practise release-rate-manipulation. |

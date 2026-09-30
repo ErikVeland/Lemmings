@@ -25,12 +25,14 @@ Choose **Settings > Gameplay > Selection**:
 
 - **None** removes the selection highlight for an old-school look.
 - **Obvious** restores the game-pixel halo and overhead marker.
-- **Modern** adds a white shimmering outline and subtle green bloom. The outline
-  stays two physical display pixels wide. The halo gently pulses every two seconds.
+- **Modern** adds a steady white outline and a visible mint-green halo with a
+  gentle brightness pulse. The outline stays two physical display pixels wide
+  and follows the current sprite frame. The halo also works with HD effects off.
 
-The choice applies across Classic, Lemmings 2 and Lemmings 3. Reduced motion and
-reduced flashes keep the effects steady. Reduced flashes also limit brightness
-to standard display levels.
+The choice applies across Classic, Lemmings 2 and Lemmings 3. Modern reuses cached
+sprite masks and draws with the game frame, without a separate full-window HDR
+surface or animation timer. Pausing holds the halo, and reduced motion or reduced
+flashes keep it steady. It stays at standard display brightness.
 
 ## More verified levels
 

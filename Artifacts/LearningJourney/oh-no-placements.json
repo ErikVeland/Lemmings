@@ -1,18 +1,23 @@
 [
   {
+    "level": "Honey, I Saved The Lemmings",
+    "objective": "introduce:miner",
+    "step": 8
+  },
+  {
     "level": "Lemmings For Presidents!",
     "objective": "split:basher:miner",
-    "step": 10
+    "step": 9
   },
   {
     "level": "Thunder-Lemmings are go!",
     "objective": "split:basher:builder",
-    "step": 13
+    "step": 23
   },
   {
     "level": "Custom built for Lemmings",
     "objective": "apply:4581d4f159c9a1e2da56",
-    "step": 22
+    "step": 39
   },
   {
     "level": "No Problemming!",

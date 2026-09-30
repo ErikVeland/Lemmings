@@ -20,4 +20,4 @@ swiftc -swift-version 6 -target "$(uname -m)-apple-macos12.3" \
   -F "$sparkle_framework_dir" -framework Sparkle -Xlinker -rpath -Xlinker "$sparkle_framework_dir" \
   -framework AppKit -framework AVFoundation -framework Metal -framework QuartzCore \
   -o "$build_dir/trolley-tests" "${sources[@]}" Tests/TrolleyTests/main.swift
-"$build_dir/trolley-tests"
+python3 "$project_dir/Tools/UITestRunner/run.py" "$build_dir/trolley-tests"

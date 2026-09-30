@@ -313,9 +313,6 @@ enum ExplosionHDR {
   private var pipeline: MTLRenderPipelineState?
   private var nuclearPipeline: MTLRenderPipelineState?
   private var speedPipeline: MTLRenderPipelineState?
-  private var selectionRenderer: LemmingSelectionRenderer?
-  private(set) var selection: LemmingSelectionEffect?
-  var canRenderSelection: Bool { selectionRenderer != nil && surface != nil }
   private var surface: CAMetalLayer?
   private var texture: MTLTexture?
   private var flashes: [ExplosionFlash] = []
@@ -355,17 +352,9 @@ enum ExplosionHDR {
   }
 
   func clear() {
-    selection = nil
     speed = SuperSpeedTimeline()
     speedMotionTime = 0; speedMotionLast = nil
     clearExplosions()
-  }
-
-  func updateSelection(_ selection: LemmingSelectionEffect?) {
-    let wasActive = self.selection != nil
-    self.selection = selection
-    if wasActive || selection != nil { render() }
-    scheduleExpiration()
   }
 
   func setSuperSpeed(_ enabled: Bool, in field: CGRect, immediate: Bool = false, multiplier: Double = 3) {
@@ -413,7 +402,6 @@ enum ExplosionHDR {
       nuclearPipeline = try gpu.makeRenderPipelineState(descriptor:descriptor)
       descriptor.fragmentFunction = library.makeFunction(name:"speed_fragment")
       speedPipeline = try gpu.makeRenderPipelineState(descriptor:descriptor)
-      selectionRenderer = try? LemmingSelectionRenderer(device: gpu)
     } catch {
       // AppKit still draws a visible blast if Metal compilation fails.
       self.layer = CALayer(); surface = nil; pipeline = nil
@@ -450,7 +438,7 @@ enum ExplosionHDR {
     expiration?.cancel()
     let now = ProcessInfo.processInfo.systemUptime
     let end: TimeInterval
-    if !timeline.bursts.isEmpty || speed.isAnimating(now: now) || selection?.animated == true { end = now + 1.0/60 }
+    if !timeline.bursts.isEmpty || speed.isAnimating(now: now) { end = now + 1.0/60 }
     else if let expiry = flashes.map(\.expiresAt).filter({$0.isFinite && $0 > now}).min() { end = expiry }
     else { return }
     expiration = Task { @MainActor [weak self] in
@@ -477,8 +465,10 @@ enum ExplosionHDR {
     if flashes.count != previousCount { maskIsDirty = true }
     // An idle overlay has no pixels to present. Hide the previous frame without
     // allocating a full-window mask or waiting for a Metal drawable.
-    let activeSelection = GameCursor.gameplaySuppressed ? nil : selection
-    let active = !flashes.isEmpty || !timeline.bursts.isEmpty || speed.isAnimating(now: now) || activeSelection != nil
+    let active = !flashes.isEmpty || !timeline.bursts.isEmpty || speed.isAnimating(now: now)
+    // AppKit can restore a backing layer's visibility during display. Hide the
+    // view too, so idle effects stay out of window composition.
+    isHidden = !active
     surface?.isHidden = !active
     guard active else {
       texture = nil
@@ -521,10 +511,6 @@ enum ExplosionHDR {
       encoder.setFragmentTexture(texture,index:0)
       encoder.setFragmentBytes(&headroom,length:MemoryLayout<Float>.size,index:0)
       encoder.drawPrimitives(type:.triangleStrip,vertexStart:0,vertexCount:4)
-    }
-    if let activeSelection {
-      selectionRenderer?.encode(activeSelection, sourceSize: bounds.size, outputSize: surface.drawableSize,
-        headroom: headroom, now: now, into: encoder)
     }
     if let speedPipeline, speed.isAnimating(now: now) {
       var uniforms = SuperSpeedUniforms(

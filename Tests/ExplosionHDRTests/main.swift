@@ -51,7 +51,8 @@ func require(_ value: Bool, _ message: String) throws {
   let black = texture(.rgba16Float,bytes:[UInt8](repeating:0,count:8*8*8),row:64)
 
   func render<T>(code: String, vertex: String, fragment: String, textures: [MTLTexture], uniforms: T,
-                 width: Int = 8, height: Int = 8, bursts: [SIMD4<Float>] = []) throws -> [Float] {
+                 width: Int = 8, height: Int = 8, bursts: [SIMD4<Float>] = [],
+                 encode: ((MTLRenderCommandEncoder) -> Void)? = nil) throws -> [Float] {
     let library = try gpu.makeLibrary(source:code,options:nil)
     let p = MTLRenderPipelineDescriptor()
     p.vertexFunction = library.makeFunction(name:vertex)
@@ -65,6 +66,7 @@ func require(_ value: Bool, _ message: String) throws {
     pass.colorAttachments[0].texture = output
     pass.colorAttachments[0].loadAction = .clear
     pass.colorAttachments[0].storeAction = .store
+    pass.colorAttachments[0].clearColor = MTLClearColorMake(0, 0, 0, 0)
     let encoder = command.makeRenderCommandEncoder(descriptor:pass)!
     encoder.setRenderPipelineState(pipeline)
     for (i,t) in textures.enumerated() { encoder.setFragmentTexture(t,index:i) }
@@ -73,7 +75,8 @@ func require(_ value: Bool, _ message: String) throws {
     if !bursts.isEmpty {
       bursts.withUnsafeBytes { encoder.setFragmentBytes($0.baseAddress!,length:$0.count,index:1) }
     }
-    encoder.drawPrimitives(type:.triangleStrip,vertexStart:0,vertexCount:4)
+    if let encode { encode(encoder) }
+    else { encoder.drawPrimitives(type:.triangleStrip,vertexStart:0,vertexCount:4) }
     encoder.endEncoding()
     let rowBytes = ((width*8+255)/256)*256
     let buffer = gpu.makeBuffer(length:rowBytes*height,options:.storageModeShared)!
@@ -100,10 +103,9 @@ func require(_ value: Bool, _ message: String) throws {
     selectionTexture.replace(region: MTLRegionMake2D(0, 0, selectionMask.width, selectionMask.height),
       mipmapLevel: 0, withBytes: $0.baseAddress!, bytesPerRow: selectionMask.width * 2)
   }
-  func selection(_ effect: LemmingSelectionEffect, backing: Int = 1, now: Double = 0,
-                 headroom: Float = 8, curved: Bool = false) throws -> [Float] {
+  func selection(_ effect: LemmingSelectionEffect, backing: Int = 1, curved: Bool = false) throws -> [Float] {
     var u = LemmingSelectionUniforms(effect, sourceSize: CGSize(width: 64, height: 64),
-      outputSize: CGSize(width: 64 * backing, height: 64 * backing), headroom: headroom, now: now)
+      outputSize: CGSize(width: 64 * backing, height: 64 * backing))
     if curved { u.glass = SIMD4(3, 4, 0, 0) }
     return try render(code: LemmingSelectionRenderer.shader, vertex: "selection_vertex", fragment: "selection_fragment",
       textures: [selectionTexture], uniforms: u, width: 64 * backing, height: 64 * backing)
@@ -134,50 +136,110 @@ func require(_ value: Bool, _ message: String) throws {
       try require((pixels[index + 3] > 0.5) == outlined,
         "Selection outline escaped two physical pixels at zoom \(zoom), backing \(backing), mirror \(mirrored), CRT \(curved), pixel \(x),\(y)")
       if outlined {
-        try require(pixels[index] > 1 && pixels[index] == pixels[index + 1] && pixels[index] == pixels[index + 2],
-          "Selection border lost neutral HDR white")
+        try require(pixels[index] == 1 && pixels[index] == pixels[index + 1] && pixels[index] == pixels[index + 2],
+          "Selection border lost neutral SDR white")
       }
     } }
   } } } }
   effect.rect = CGRect(x: 16, y: 16, width: 12, height: 16)
   effect.mirrored = false
-  try require(try selection(effect, now: 0) != selection(effect, now: 0.2), "White marching highlights did not animate")
-  effect.animated = false
-  try require(try selection(effect, now: 0) == selection(effect, now: 1), "Reduced motion did not hold selection steady")
-  effect.extendedBrightness = false
-  try require(try selection(effect).allSatisfy { $0 <= 1 }, "Reduced flashes exceeded SDR white")
-  effect.extendedBrightness = true
+  try require(try selection(effect).allSatisfy { $0 <= 1 }, "Selection exceeded SDR white")
   effect.bloom = true
-  let selectionBloom = try selection(effect, headroom: 1)
+  let selectionBloom = try selection(effect)
   let near = (24 * 64 + 13) * 4
   try require(selectionBloom[near + 1] > selectionBloom[near] && selectionBloom[near + 1] > selectionBloom[near + 2]
-    && selectionBloom[near + 1] >= 0.015 && selectionBloom[near + 3] < 0.06,
+    && selectionBloom[near + 1] >= 0.20 && selectionBloom[near + 3] < 0.65,
     "Selection bloom must remain visible in SDR outside the two-pixel border")
   try require(selectionBloom[(24 * 64 + 17) * 4 + 3] == 0 && selectionBloom[(63 * 64 + 63) * 4 + 3] == 0,
     "Selection bloom changed the sprite interior or distant terrain")
-  effect.animated = true
-  for headroom: Float in [1, 8] {
-    let low = try selection(effect, now: 0, headroom: headroom)
-    let peak = try selection(effect, now: 1, headroom: headroom)
-    try require(low[near + 1] >= 0.015 && peak[near + 1] > low[near + 1] * 1.8,
-      "The halo pulse must stay visible and have a distinct brightness peak in SDR and HDR")
-    try require(try selection(effect, now: 2, headroom: headroom) == low,
-      "The halo did not repeat smoothly after two seconds")
-    for index in stride(from: 0, to: low.count, by: 4) {
-      try require((low[index + 3] > 0) == (peak[index + 3] > 0),
-        "Pulsing changed the halo footprint instead of only its brightness")
-    }
+
+  // Use the production encoder as well as the full-screen reference shader.
+  // A bad curved scissor would pass shader-only tests but cut off the highlight.
+  let renderer = try LemmingSelectionRenderer(device: gpu)
+  for x: CGFloat in [-4, 0, 16, 44, 60] { for y: CGFloat in [0, 20, 52] {
+    effect.rect = CGRect(x: x, y: y, width: 12, height: 16)
+    let size = CGSize(width: 128, height: 128)
+    let encoded = try render(code: LemmingSelectionRenderer.shader, vertex: "selection_vertex", fragment: "selection_fragment",
+      textures: [], uniforms: Float(0), width: 128, height: 128, encode: { encoder in
+        renderer.encode(effect, sourceSize: CGSize(width: 64, height: 64), outputSize: size,
+          glass: SIMD4(3, 4, 0, 0), into: encoder)
+      })
+    let reference = try selection(effect, backing: 2, curved: true)
+    try require(encoded == reference, "Curved selection scissor cut off the outline or glow at \(x),\(y), index \(zip(encoded, reference).enumerated().first(where: { $0.element.0 != $0.element.1 })?.offset ?? -1)")
+  } }
+  // Exercise the flat-mode renderer used on screen, including sprite holes,
+  // fractional zoom, mirroring, Retina, clipping and animation-frame reuse.
+  func raster(_ effect: LemmingSelectionEffect, backing: Int = 1) -> [UInt8] {
+    let size = 64 * backing
+    let context = CGContext(data: nil, width: size, height: size, bitsPerComponent: 8,
+      bytesPerRow: size * 4, space: CGColorSpaceCreateDeviceRGB(),
+      bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)!
+    context.translateBy(x: 0, y: CGFloat(size))
+    context.scaleBy(x: CGFloat(backing), y: -CGFloat(backing))
+    NSGraphicsContext.saveGraphicsState()
+    NSGraphicsContext.current = NSGraphicsContext(cgContext: context, flipped: true)
+    LemmingSelectionRenderer.draw(effect)
+    NSGraphicsContext.restoreGraphicsState()
+    return Array(UnsafeBufferPointer(start: context.data!.assumingMemoryBound(to: UInt8.self), count: size * size * 4))
   }
-  effect.animated = false
-  try require(try selection(effect, now: 0) == selection(effect, now: 1),
-    "Reduced effects must hold the halo and outline steady")
-  idle.updateSelection(effect)
-  try require(idle.canRenderSelection && idle.selection != nil && !idle.hasAllocatedFlashMask,
-    "Selection did not use its own small sprite mask")
-  try require(idle.hitTest(CGPoint(x: 20, y: 20)) == nil, "Selection overlay intercepted gameplay input")
-  idle.updateSelection(nil)
-  try require(idle.layer?.isHidden == true, "Removing a selection left a stale outline")
-  print("PASS two physical pixel outline, HDR white, white shimmer, pulsing green bloom, Retina, CRT, mirror, reduced effects and click-through")
+  effect.bloom = false
+  for backing in [1, 2] { for zoom: CGFloat in [1, 2, 4, 6.5] { for mirrored in [false, true] {
+    effect.rect = CGRect(x: 16, y: 16, width: 3 * zoom, height: 4 * zoom * 1.2)
+    effect.mirrored = mirrored
+    let flat = raster(effect, backing: backing)
+    let metal = try selection(effect, backing: backing)
+    for index in stride(from: 0, to: flat.count, by: 4) {
+      try require((flat[index + 3] > 127) == (metal[index + 3] > 0.5),
+        "Flat and CRT outlines differ at zoom \(zoom), backing \(backing), mirror \(mirrored), pixel \(index / 4)")
+    }
+  } } }
+  effect.rect = CGRect(x: 16, y: 16, width: 12, height: 16)
+  effect.mirrored = false; effect.bloom = true
+  let flatBloom = raster(effect)
+  try require(flatBloom[near + 1] > flatBloom[near] && flatBloom[near + 1] >= 50,
+    "Flat selection lost its green bloom")
+  try require(flatBloom[(24 * 64 + 17) * 4 + 3] == 0, "Flat selection tinted the sprite interior")
+  effect.time = 0
+  let low = raster(effect), lowCRT = try selection(effect)
+  effect.time = 1.4
+  let peak = raster(effect), peakCRT = try selection(effect)
+  try require(low[near + 1] >= 40 && peak[near + 1] > low[near + 1] + 12,
+    "The halo must stay visible at its low point and breathe in flat output")
+  try require(lowCRT[near + 1] >= 0.16 && peakCRT[near + 1] > lowCRT[near + 1] * 1.3,
+    "The halo must stay visible at its low point and breathe in CRT output")
+  let rim = (24 * 64 + 15) * 4
+  try require(low[rim] == 255 && peak[rim] == 255, "The pulse dimmed the targeting outline")
+  effect.time = 2.8
+  try require(raster(effect) == low, "Halo animation did not repeat after 2.8 seconds")
+  effect.time = nil
+  let steady = raster(effect)
+  try require(steady == raster(effect) && steady[near + 1] > low[near + 1] && steady[near + 1] < peak[near + 1],
+    "Reduced effects must hold a visible midpoint")
+  effect.clipRect = CGRect(x: 20, y: 20, width: 10, height: 10)
+  let cropped = raster(effect)
+  for y in 0..<64 { for x in 0..<64 where !effect.clipRect.contains(CGPoint(x: x, y: y)) {
+    try require(cropped[(y * 64 + x) * 4 + 3] == 0, "Selection escaped its playfield clip")
+  } }
+  let cached = LemmingSelectionRenderer.mask(sprite)!
+  try require(cached.bytes.withUnsafeBufferPointer { $0.baseAddress } == selectionMask.bytes.withUnsafeBufferPointer { $0.baseAddress },
+    "A repeated animation frame rebuilt its selection mask")
+  effect.clipRect = CGRect(x: 0, y: 0, width: 64, height: 64)
+  let start = ProcessInfo.processInfo.systemUptime
+  for _ in 0..<240 { _ = raster(effect, backing: 2) }
+  print(String(format: "Selection raster benchmark: %.3f ms/frame (includes bitmap allocation and readback)",
+    (ProcessInfo.processInfo.systemUptime - start) * 1000 / 240))
+  for _ in 0..<140 {
+    let copy = CGImage(width: 3, height: 4, bitsPerComponent: 8, bitsPerPixel: 32,
+      bytesPerRow: 12, space: CGColorSpaceCreateDeviceRGB(),
+      bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedLast.rawValue),
+      provider: CGDataProvider(data: Data(spriteBytes) as CFData)!, decode: nil, shouldInterpolate: false, intent: .defaultIntent)!
+    _ = LemmingSelectionRenderer.mask(copy)
+  }
+  try require(LemmingSelectionRenderer.cachedFrameCount == LemmingSelectionRenderer.cacheLimit, "Selection cache is unbounded")
+  try require(!idle.hasAllocatedFlashMask && idle.layer?.isHidden == true,
+    "Drawing selection woke the full-window HDR surface")
+  try require(idle.hitTest(CGPoint(x: 20, y: 20)) == nil, "Effects overlay intercepted gameplay input")
+  print("PASS cached flat/CRT outlines, visible breathing halo, Retina, fractional zoom, mirror, clipping and idle HDR")
 
   let hdr = try render(code:ExplosionHDR.shader,vertex:"flash_vertex",fragment:"flash_fragment",textures:[maskTexture],uniforms:Float(8))
   let sdr = try render(code:ExplosionHDR.shader,vertex:"flash_vertex",fragment:"flash_fragment",textures:[maskTexture],uniforms:Float(1))

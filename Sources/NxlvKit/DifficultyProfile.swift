@@ -43,7 +43,7 @@ public struct DifficultyComponents: Codable, Equatable, Sendable {
 
 /// Bump this version for scoring, detector, or probe-policy changes.
 public enum DifficultyModel {
-    public static let version = "difficulty-2"
+    public static let version = "difficulty-3"
     public static let simulationVersion = "neolemmix-ce-2026-09-27"
     // Technique and dependency evidence dominate. Deduction receives the least weight.
     public static let weights = [0.25, 0.22, 0.20, 0.13, 0.13, 0.07]

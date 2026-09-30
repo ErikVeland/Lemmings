@@ -53,7 +53,11 @@ def select(pool, replays):
     evidence = {}
     for row in pool:
         replay = replays.get(row['profile']['key']['replayRevision']) or replays.get(row['initialHash'])
-        if replay and replay.get('expected', {}).get('didWin') and replay['initialStateHash'] == row['initialHash']:
+        if (replay and replay.get('expected', {}).get('didWin')
+                and replay['expected']['ticks'] > 0
+                and replay['initialStateHash'] == row['initialHash']
+                and all((0 if e.get('afterTick') else 1) <= e['tick'] <= replay['expected']['ticks']
+                        for e in replay['events'])):
             evidence[key(row)] = features(row, replay)
     chosen = {}; missing = []; used_signatures = set()
 
@@ -63,7 +67,7 @@ def select(pool, replays):
                    and application_signature(evidence[key(r)]) not in used_signatures]
         if not options:
             missing.append(objective)
-            return
+            return False
         # Prefer official evidence when it fits the same narrow demand window.
         floor = min(demand(r) for r in options)
         nearby = [r for r in options if demand(r) <= floor + 35]
@@ -72,12 +76,24 @@ def select(pool, replays):
         chosen[key(row)] = {'identity': row['entry']['identity'], 'objective': objective,
             'lesson': lesson, 'purpose': purpose, 'evidence': 'winning replay assignments and measured profile',
             'level': row['entry']['levelNameSnapshot'], 'intrinsicDemand': demand(row)}
+        return True
 
     # One isolated introduction per skill, irrespective of original rank or pack.
     for skill in sorted(BASIC):
-        choose('introduce:'+skill, 'Discover: '+skill.capitalize(),
+        objective = 'introduce:'+skill
+        if choose(objective, 'Discover: '+skill.capitalize(),
                'First assignment of the '+skill+' skill.',
-               lambda r,f,s=skill: f['concepts'] == {s} and r['profile']['components']['executionPrecision'] <= 180)
+               lambda r,f,s=skill: f['concepts'] == {s}
+                   and r['profile']['components']['executionPrecision'] <= 180, upper=179.999):
+            continue
+        # If there is no forgiving witness, use a fully probed intermediate
+        # introduction. Keep its measured demand and flag any preparation jump.
+        missing.remove(objective)
+        choose(objective, 'Discover: '+skill.capitalize(),
+               'Introduce '+skill+' and practise assignment timing.',
+               lambda r,f,s=skill: f['concepts'] == {s}
+                   and r['profile'].get('precision', {}).get('completed') is True
+                   and r['profile']['components']['executionPrecision'] <= 300, upper=299)
 
     # A transition on one worker is different from assigning two independent jobs.
     # Only short, forgiving routes qualify as intermediate teaching examples.
@@ -213,7 +229,7 @@ def select(pool, replays):
     foundations = [l for l in lessons if l['objective'].startswith('introduce:')]
     assert len(foundations) == 8, 'A basic skill has no safe introductory witness'
     assert len({l['objective'] for l in lessons}) == len(lessons)
-    return {'version':'curriculum-2', 'targetSize':292, 'poolSize':len(pool), 'lessons':lessons,
+    return {'version':'curriculum-3', 'targetSize':292, 'poolSize':len(pool), 'lessons':lessons,
             'selectionPolicy':'Official first within comparable 35-point demand bands; distinct observed applications; Classic mechanics only.',
             'unavailableOptionalObjectives':missing,
             'limits':'Objectives describe observed routes. Novice readability and the necessity of these techniques require playtesting.'}

@@ -59,6 +59,30 @@ struct LearningJourneyTests {
         #expect(result.lessons.last?.score == complex.profile.overallScore)
         #expect(result.lessons.last!.demand >= result.lessons.last!.intrinsicDemand)
     }
+
+    @Test func authoredIntroductionsFinishBeforeEarlyCombinations() throws {
+        let dig = try candidate(0, score: 55, concepts: ["digger"])
+        let block = try candidate(1, score: 138, concepts: ["blocker"])
+        let mine = try candidate(2, score: 164, concepts: ["miner"])
+        let combine = try candidate(3, score: 138, concepts: ["blocker", "digger"])
+        let objectives = [dig.entry.identity: "introduce:digger", block.entry.identity: "introduce:blocker",
+                          mine.entry.identity: "introduce:miner", combine.entry.identity: "split:blocker:digger"]
+        let result = try LearningJourney.generate([combine, mine, block, dig], objectives: objectives)
+        #expect(result.lessons.map(\.entry.identity) == [dig, block, mine, combine].map(\.entry.identity))
+        #expect(result.lessons.last?.score == combine.profile.overallScore)
+        #expect(result.lessons.last?.demand == mine.profile.overallScore)
+        #expect(result.lessons.last?.stage == .intermediate)
+    }
+
+    @Test func introductionDoesNotConcealIntermediateDemand() throws {
+        let first = try candidate(0, score: 138, concepts: ["blocker"])
+        let mine = try candidate(1, score: 234, concepts: ["miner"])
+        let result = try LearningJourney.generate([mine, first], objectives: [
+            first.entry.identity: "introduce:blocker", mine.entry.identity: "introduce:miner"])
+        #expect(result.lessons.last?.stage == .intermediate)
+        #expect(result.lessons.last?.needsSupport == true)
+        #expect(result.lessons.last?.score == mine.profile.overallScore)
+    }
     @Test func multiplayerSourcesCannotEnterTheLearningPath() throws {
         for (pack, name, level) in [("fan:lldb-404", "Renamed pack", "0"),
             ("test", "Genesis 2P 2", "0"), ("test", "Amiga Two Player", "0"),

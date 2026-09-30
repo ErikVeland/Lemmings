@@ -1,4 +1,5 @@
 // Appended to main.swift by the runner to exercise private app wiring directly.
+import ImageIO
 private struct IntegrationFailure: Error { let message: String }
 private func check(_ value: @autoclosure () throws -> Bool, _ message: String) throws {
   if try value() == false { throw IntegrationFailure(message: message) }
@@ -8,9 +9,110 @@ private func check(_ value: @autoclosure () throws -> Bool, _ message: String) t
   override var isKeyWindow: Bool { true }
 }
 
+@MainActor func validatePauseKeyboard(_ keyboard: GameplayKeyboard, name: String, paused: () -> Bool) throws {
+  let host = SpeedTestWindow(contentRect: CGRect(x: 0, y: 0, width: 400, height: 300),
+    styleMask: [], backing: .buffered, defer: false)
+  let button = NSButton(title: "Focused control", target: nil, action: nil)
+  host.contentView = NSView(frame: CGRect(x: 0, y: 0, width: 400, height: 300))
+  host.contentView!.addSubview(button)
+  keyboard.bind(to: host)
+  try check(host.makeFirstResponder(button), "Pause fixture did not focus its control")
+  func event(_ type: NSEvent.EventType, key: String, code: UInt16, repeated: Bool = false,
+             modifiers: NSEvent.ModifierFlags = []) -> NSEvent {
+    NSEvent.keyEvent(with: type, location: .zero, modifierFlags: modifiers, timestamp: 1,
+      windowNumber: host.windowNumber, context: nil, characters: key,
+      charactersIgnoringModifiers: key, isARepeat: repeated, keyCode: code)!
+  }
+  for (key, code) in [(" ", UInt16(49)), ("p", UInt16(35))] {
+    let before = paused()
+    try check(keyboard.handle(event(.keyDown, key: key, code: code)) == nil && paused() != before,
+      name + " did not pause with a control focused")
+    _ = keyboard.handle(event(.keyDown, key: key, code: code, repeated: true))
+    _ = keyboard.handle(event(.keyUp, key: key, code: code))
+    try check(paused() != before, name + " repeated or released pause")
+    _ = keyboard.handle(event(.keyDown, key: key, code: code))
+    try check(paused() == before, name + " did not resume on the next press")
+    for flags in [NSEvent.ModifierFlags.command, .control, .option] {
+      try check(keyboard.handle(event(.keyDown, key: key, code: code, modifiers: flags)) != nil
+        && paused() == before, name + " intercepted a modified shortcut")
+    }
+  }
+  let editor = NSTextView(frame: host.contentView!.bounds)
+  host.contentView!.addSubview(editor); host.makeFirstResponder(editor)
+  let before = paused()
+  try check(keyboard.handle(event(.keyDown, key: " ", code: 49)) != nil && paused() == before,
+    name + " intercepted text entry")
+  host.makeFirstResponder(button)
+  let active = keyboard.active
+  keyboard.active = { false }
+  defer { keyboard.active = active }
+  try check(keyboard.handle(event(.keyDown, key: " ", code: 49)) != nil && paused() == before,
+    name + " intercepted a menu or handover")
+  print("PASS \(name) shared Space/P pause, focused control, repeat/release, modifiers, text and menu routing")
+}
+
+/// Capture the actual native sprite and terrain at both ends of the halo pulse.
+@MainActor private func previewSelection(_ selection: LemmingSelectionEffect, background: CGImage,
+    canvasSize: CGSize, name: String, folder: URL) throws {
+  let backing = CGFloat(background.width) / canvasSize.width
+  let dx = selection.rect.width / CGFloat(selection.sprite.width)
+  let dy = selection.rect.height / CGFloat(selection.sprite.height)
+  let region = selection.rect.insetBy(dx: -max(20, 18 * dx), dy: -max(20, 18 * dy))
+    .intersection(CGRect(origin: .zero, size: canvasSize))
+  let crop = CGRect(x: region.minX * backing, y: region.minY * backing,
+    width: region.width * backing, height: region.height * backing).integral
+  let terrain = background.cropping(to: crop)!
+  func snapshot(time: TimeInterval?, bloom: Bool = true) -> (CGImage, Double) {
+    let context = CGContext(data: nil, width: terrain.width, height: terrain.height, bitsPerComponent: 8,
+      bytesPerRow: terrain.width * 4, space: CGColorSpaceCreateDeviceRGB(),
+      bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)!
+    context.draw(terrain, in: CGRect(x: 0, y: 0, width: terrain.width, height: terrain.height))
+    context.translateBy(x: -crop.minX, y: CGFloat(terrain.height) + crop.minY)
+    context.scaleBy(x: backing, y: -backing)
+    var effect = selection
+    effect.time = time; effect.bloom = bloom
+    NSGraphicsContext.saveGraphicsState()
+    NSGraphicsContext.current = NSGraphicsContext(cgContext: context, flipped: true)
+    let start = ProcessInfo.processInfo.systemUptime
+    LemmingSelectionRenderer.draw(effect)
+    let elapsed = ProcessInfo.processInfo.systemUptime - start
+    NSGraphicsContext.restoreGraphicsState()
+    return (context.makeImage()!, elapsed * 1000)
+  }
+  let low = snapshot(time: 0).0, peak = snapshot(time: 1.4).0
+  let bare = NSBitmapImageRep(cgImage: snapshot(time: 0, bloom: false).0)
+  let dim = NSBitmapImageRep(cgImage: low)
+  var visible = 0
+  for y in 0..<dim.pixelsHigh { for x in 0..<dim.pixelsWide {
+    let a = dim.colorAt(x: x, y: y)!.usingColorSpace(.deviceRGB)!
+    let b = bare.colorAt(x: x, y: y)!.usingColorSpace(.deviceRGB)!
+    if a.greenComponent > b.greenComponent + 0.06 { visible += 1 }
+  } }
+  try check(visible > 40, name + " halo disappears against native terrain at its low point")
+  for (label, image) in [("low", low), ("peak", peak)] {
+    try NSBitmapImageRep(cgImage: image).representation(using: .png, properties: [:])!.write(
+      to: folder.appendingPathComponent(name + "-halo-" + label + ".png"))
+  }
+  let gif = CGImageDestinationCreateWithURL(folder.appendingPathComponent(name + "-halo.gif") as CFURL,
+    "com.compuserve.gif" as CFString, 28, nil)!
+  CGImageDestinationSetProperties(gif, [kCGImagePropertyGIFDictionary: [kCGImagePropertyGIFLoopCount: 0]] as CFDictionary)
+  var costs: [Double] = []
+  for frame in 0..<120 {
+    let (image, cost) = snapshot(time: Double(frame % 28) / 10)
+    costs.append(cost)
+    if frame < 28 {
+      CGImageDestinationAddImage(gif, image, [kCGImagePropertyGIFDictionary: [kCGImagePropertyGIFDelayTime: 0.1]] as CFDictionary)
+    }
+  }
+  try check(CGImageDestinationFinalize(gif), name + " halo preview could not be saved")
+  costs.sort()
+  print(String(format: "PASS %@ visible halo on native terrain; cached draw mean %.3f ms, p95 %.3f ms",
+    name, costs.reduce(0, +) / Double(costs.count), costs[Int(Double(costs.count) * 0.95)]))
+}
+
 @MainActor func validateSelectionCanvas(_ canvas: NSView, name: String,
-    effect: () -> LemmingSelectionEffect?, reduce: (Bool) -> Void,
-    style: (LemmingSelectionStyle) -> Void, refocus: () -> Void) async throws {
+    effect: () -> LemmingSelectionEffect?, reduce: (Bool) -> Void, hdEffects: (Bool) -> Void,
+    style: (LemmingSelectionStyle) -> Void, refocus: () -> Void, advance: () -> Void) async throws {
   let folder = URL(fileURLWithPath: ".build/selection-hdr")
   try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
   @discardableResult func draw() -> NSBitmapImageRep {
@@ -22,29 +124,23 @@ private func check(_ value: @autoclosure () throws -> Bool, _ message: String) t
     return bitmap
   }
   style(.modern)
-  for reduced in [false, true] {
-    reduce(reduced); refocus(); draw()
+  for (reduced, hd) in [(false, true), (true, true), (false, false), (true, false)] {
+    hdEffects(hd); reduce(reduced); refocus(); let bitmap = draw()
     guard let selection = effect() else { throw IntegrationFailure(message: name + " did not publish its selected sprite") }
     if !reduced {
       try NSBitmapImageRep(cgImage: selection.sprite).representation(using: .png, properties: [:])!.write(
         to: folder.appendingPathComponent(name + "-sprite.png"))
     }
-    try check(selection.animated == !reduced && selection.extendedBrightness == !reduced,
-      name + " ignored reduced effects")
+    try check(selection.bloom && (selection.time == nil) == reduced,
+      name + " lost its halo with HD effects off or ignored reduced effects")
     try check(selection.rect.intersects(selection.clipRect), name + " selected an offscreen sprite")
     let overlay = canvas.subviews.compactMap { $0 as? ExplosionHDRView }.first
-    try check(overlay?.canRenderSelection == true && overlay?.selection?.rect == selection.rect,
-      name + " did not present the selection through Metal")
+    try check(overlay?.layer?.isHidden != false && overlay?.hasAllocatedFlashMask != true,
+      name + " selection woke the full-window HDR surface")
     try check(overlay?.hitTest(CGPoint(x: selection.rect.midX, y: selection.rect.midY)) == nil,
       name + " selection intercepted input")
-    try await Task.sleep(nanoseconds: 100_000_000)
-    guard let host = canvas.window, let image = CGWindowListCreateImage(.null,
-      .optionIncludingWindow, CGWindowID(host.windowNumber), [.boundsIgnoreFraming, .bestResolution]) else {
-      throw IntegrationFailure(message: name + " could not capture its composited window")
-    }
-    let bitmap = NSBitmapImageRep(cgImage: image)
     try bitmap.representation(using: .png, properties: [:])!.write(to:
-      folder.appendingPathComponent(name + (reduced ? "-steady" : "-animated") + ".png"))
+      folder.appendingPathComponent(name + (reduced ? "-reduced" : "-modern") + (hd ? "" : "-hd-off") + ".png"))
   }
   GameCursor.gameplaySuppressed = true
   draw()
@@ -56,7 +152,7 @@ private func check(_ value: @autoclosure () throws -> Bool, _ message: String) t
     let bitmap = draw()
     let pixels = bitmap.representation(using: .png, properties: [:])!
     try pixels.write(to: folder.appendingPathComponent(name + "-" + choice.rawValue + ".png"))
-    try check(effect() == nil && canvas.subviews.compactMap { $0 as? ExplosionHDRView }.first?.selection == nil,
+    try check(effect() == nil,
       name + " kept the Modern overlay in " + choice.title)
     if choice == .none {
       plain = pixels
@@ -72,8 +168,27 @@ private func check(_ value: @autoclosure () throws -> Bool, _ message: String) t
       try check(hidden == plainHidden, name + " retained the Obvious halo behind a dialog")
     }
   }
-  style(.modern); reduce(false); refocus(); draw()
-  print("PASS \(name) None/Obvious/Modern, animated/steady output, dialog suppression and click-through")
+  style(.modern); hdEffects(true); reduce(false); refocus(); draw()
+  if let selection = effect(), let plain, let background = NSBitmapImageRep(data: plain)?.cgImage {
+    try previewSelection(selection, background: background, canvasSize: canvas.bounds.size, name: name, folder: folder)
+  }
+  var poses = Set<Data>()
+  for tick in 0..<8 {
+    advance(); refocus()
+    let bitmap = draw()
+    guard let selection = effect() else { throw IntegrationFailure(message: name + " lost selection while sprites moved") }
+    poses.insert(NSBitmapImageRep(cgImage: selection.sprite).representation(using: .png, properties: [:])!)
+    let entries = LemmingSelectionRenderer.cachedFrameCount
+    let heldTime = selection.time
+    draw(); draw()
+    try check(effect()?.time == heldTime, name + " animated selection while the simulation was paused")
+    try check(LemmingSelectionRenderer.cachedFrameCount == entries, name + " rebuilt a cached sprite frame")
+    if tick == 0 || tick == 7 {
+      try bitmap.representation(using: .png, properties: [:])!.write(to: folder.appendingPathComponent(name + "-frame-" + String(tick) + ".png"))
+    }
+  }
+  try check(poses.count > 1, name + " selection did not track the sprite animation")
+  print("PASS \(name) None/Obvious/Modern, native animation frames, cache reuse, dialog suppression and click-through")
 }
 
 extension AppDelegate {
@@ -179,8 +294,10 @@ extension AppDelegate {
     }
     try await validateSelectionCanvas(playfield, name: "classic", effect: { self.playfield.selectionEffect },
       reduce: { self.playfield.reduceMotion = $0; self.playfield.reduceFlashes = $0 },
+      hdEffects: { self.playfield.hdEffectsEnabled = $0 },
       style: { choice in var updated = self.settings; updated.lemmingSelectionStyle = choice; self.apply(updated) },
-      refocus: { if let lemming = self.session?.lemmings.first { self.focusLemming(lemming.id) } })
+      refocus: { if let lemming = self.session?.lemmings.first { self.focusLemming(lemming.id) } },
+      advance: { self.session?.tick(); self.session?.tick() })
     settings.display = .monitor
     playfield.reduceMotion = false; playfield.reduceFlashes = false
     step(at: 10)
@@ -188,6 +305,7 @@ extension AppDelegate {
     step(at: 10.01)
     try check(crtView.isAvailable && playfield.selectionEffect != nil && !playfield.presentsHDR,
       "Classic did not route its selection through the final CRT pass")
+    #if !SELECTION_RASTER_TESTS
     try await Task.sleep(nanoseconds: 100_000_000)
     guard let crt = CGWindowListCreateImage(.null, .optionIncludingWindow,
       CGWindowID(window.windowNumber), [.boundsIgnoreFraming, .bestResolution]) else {
@@ -195,6 +313,9 @@ extension AppDelegate {
     }
     try NSBitmapImageRep(cgImage: crt).representation(using: .png, properties: [:])!.write(
       to: URL(fileURLWithPath: ".build/selection-hdr/classic-crt.png"))
+    #else
+    print("SKIP composited CRT window capture in offscreen mode; covered by offscreen Metal pixel tests")
+    #endif
     window.orderOut(nil)
     let l2 = try Lemmings2PlayWindow(root: BundledGameResources.lemmings2(), recordsCampaignProgress: false)
     try await l2.testSelectionRendering(); l2.window?.orderOut(nil)
@@ -819,6 +940,23 @@ extension AppDelegate {
       try check(!isPaused, "Second pause press did not resume play")
     }
     print("PASS Space and P pause once per press, ignore repeat and remain paused on release")
+    try validatePauseKeyboard(gameplayKeyboard!, name: "Classic", paused: { self.isPaused })
+    gameplayKeyboard?.bind(to: window)
+    // Imported fan play keeps a separate phase from the original campaign.
+    let activeFlow = flow, wasFanPlaying = fanPlaying
+    defer { flow = activeFlow; fanPlaying = wasFanPlaying }
+    flow?.selectLevel(rank: 0, position: 0)
+    let space = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 1,
+      windowNumber: window.windowNumber, context: nil, characters: " ", charactersIgnoringModifiers: " ",
+      isARepeat: false, keyCode: 49)!
+    for fan in [false, true] {
+      fanPlaying = fan
+      _ = handleClassicKeyboardEvent(space)
+      try check(isPaused, "Space advanced campaign state instead of pausing gameplay (fan: \(fan))")
+      _ = handleClassicKeyboardEvent(space)
+      try check(!isPaused, "Space did not resume gameplay (fan: \(fan))")
+    }
+    print("PASS Classic and fan Space pause independently of campaign menu state")
   }
 
   fileprivate func testInterruptionPolicy() throws {
@@ -5056,7 +5194,7 @@ Task { @MainActor in
     #endif
     #if SELECTION_HDR_TESTS
     try await subject.testSelectionRendering()
-    print("Selection HDR integration tests passed.")
+    print("Selection integration tests passed.")
     #elseif NEO_RECOVERY_TESTS
     try subject.testNeoRunRecovery()
     print("NeoLemmix recovery integration tests passed.")
@@ -5146,6 +5284,10 @@ Task { @MainActor in
     print("Variable speed integration tests passed.")
     #elseif CURSOR_INPUT_TESTS
     try subject.testPauseKeyRelease()
+    let pauseL2 = try Lemmings2PlayWindow(root: BundledGameResources.lemmings2(), recordsCampaignProgress: false)
+    try pauseL2.testPauseKeyboard()
+    let pauseL3 = try Lemmings3PlayWindow(root: BundledGameResources.lemmings3(), recordsCampaignProgress: false)
+    try pauseL3.testPauseKeyboard()
     print("Cursor input integration tests passed.")
     #elseif HD_EFFECTS_TESTS
     try subject.testSuperSpeedPresentation()

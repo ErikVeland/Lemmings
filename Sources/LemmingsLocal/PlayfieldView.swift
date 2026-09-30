@@ -141,7 +141,6 @@ struct ReticleFeedback {
   var presentsHDR = true {
     didSet {
       hdrOverlay?.isHidden = !presentsHDR
-      if !presentsHDR { hdrOverlay?.updateSelection(nil) }
       hdrOverlay?.update(presentsHDR ? displayedHDRFlashes : [],force:true)
     }
   }
@@ -423,10 +422,16 @@ struct ReticleFeedback {
   private func scheduleReticleRedraw() {
     let remaining = reticleFeedback.nextChange - ProcessInfo.processInfo.systemUptime
     let assignmentRemaining = assignmentPulse.remaining
-    let shimmer = cursorViewPoint != nil && !reduceMotion && session != nil
-    let delay = max(remaining, assignmentRemaining, shimmer ? 1.0 / 30.0 : 0)
-    guard delay > 0 else { return }
+    let skill = session.flatMap { session in
+      session.skills.indices.contains(selectedSkill()) ? session.skills[selectedSkill()] : nil
+    }
+    let fadingBadge = skillCursorIconSize != .none && skill?.isInfinite == false && skill?.count == 1
+    let animatedPointer = cursorViewPoint != nil && !reduceMotion && !reduceFlashes && session != nil
+      && (lemmingSelectionStyle == .obvious || fadingBadge)
+    let delay = max(remaining, assignmentRemaining, animatedPointer ? 1.0 / 30.0 : 0)
     reticleRedraw?.cancel()
+    reticleRedraw = nil
+    guard delay > 0 else { return }
     reticleRedraw = Task { [weak self] in
       try? await Task.sleep(nanoseconds: UInt64((delay + 0.005) * 1_000_000_000))
       guard !Task.isCancelled else { return }
@@ -730,10 +735,8 @@ struct ReticleFeedback {
         LemmingSelectionGlow.draw(at: precisionLens.display(viewport.viewPoint(fromLevel: CGPoint(x: lem.x, y: lem.y - 6))),
           scale: viewport.zoom, tint: .systemYellow, animated: !reduceMotion && !reduceFlashes)
       }
-      hdrOverlay?.updateSelection(presentsHDR ? selectionEffect : nil)
-      if presentsHDR, hdrOverlay?.canRenderSelection != true || NSGraphicsContext.current?.isDrawingToScreen == false,
-         let selectionEffect {
-        LemmingSelectionRenderer.drawFallback(selectionEffect)
+      if presentsHDR, let selectionEffect {
+        LemmingSelectionRenderer.draw(selectionEffect)
       }
     }
     updateSpeedTrails()
@@ -1180,8 +1183,7 @@ struct ReticleFeedback {
     if lemmingSelectionStyle == .modern, let selectedSprite {
       selectionEffect = LemmingSelectionEffect(sprite: selectedSprite.pixels,
         rect: precisionLens.display(selectedSprite.rect), clipRect: bounds,
-        animated: !reduceMotion && !reduceFlashes,
-        extendedBrightness: hdEffectsEnabled && !reduceFlashes, bloom: hdEffectsEnabled)
+        time: reduceMotion || reduceFlashes ? nil : Double(session.currentTick) / Double(session.ticksPerSecond))
     }
   }
 

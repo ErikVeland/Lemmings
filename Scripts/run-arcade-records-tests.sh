@@ -14,4 +14,4 @@ swiftc "$test_optimisation" -swift-version 6 -target "$(uname -m)-apple-macos12.
   -I "$build_dir/modules" -L "$build_dir" -lNxlvKit -Xlinker -rpath -Xlinker "$build_dir" \
   -framework AppKit -framework AVFoundation -framework Metal -framework QuartzCore \
   -o "$build_dir/arcade-tests" "${sources[@]}" Tests/ArcadeRecordsTests/main.swift
-"$build_dir/arcade-tests"
+python3 "$project_dir/Tools/UITestRunner/run.py" "$build_dir/arcade-tests"
