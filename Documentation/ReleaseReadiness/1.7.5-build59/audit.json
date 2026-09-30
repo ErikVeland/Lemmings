@@ -1,0 +1,278 @@
+{
+  "version": "1.7.5",
+  "build": 59,
+  "sourceCommit": "1a74f74e8fb4b8c20fc3a6309d007e1aeaf61bb0",
+  "coreAuditCommit": "e3dac667ed4264152e38caafc6f9ffcc9f67d228",
+  "sourceDrift": [],
+  "scope": "minor",
+  "checks": [
+    {
+      "name": "shared-library",
+      "status": "passed",
+      "seconds": 150.6
+    },
+    {
+      "name": "ClassicGameFlowTests",
+      "status": "passed",
+      "seconds": 1.3
+    },
+    {
+      "name": "ClassicSettingsTests",
+      "status": "passed",
+      "seconds": 1.3
+    },
+    {
+      "name": "ClassicSoundCueTests",
+      "status": "passed",
+      "seconds": 1.3
+    },
+    {
+      "name": "AudioMatrixTests",
+      "status": "passed",
+      "seconds": 1.3
+    },
+    {
+      "name": "NeoLemmixSimulationTests",
+      "status": "passed",
+      "seconds": 3.7
+    },
+    {
+      "name": "NxlvRendererTests",
+      "status": "passed",
+      "seconds": 2.3
+    },
+    {
+      "name": "NxlvStyleResolverTests",
+      "status": "passed",
+      "seconds": 1.4
+    },
+    {
+      "name": "ClassicDOSSimulationRegressions",
+      "status": "passed",
+      "seconds": 6.2
+    },
+    {
+      "name": "ClassicDOSRewindTests",
+      "status": "passed",
+      "seconds": 1.2
+    },
+    {
+      "name": "ClassicDOSReplayTests",
+      "status": "passed",
+      "seconds": 1.1
+    },
+    {
+      "name": "ProTrackerTests",
+      "status": "passed",
+      "seconds": 1.4
+    },
+    {
+      "name": "PercussionTests",
+      "status": "passed",
+      "seconds": 1.2
+    },
+    {
+      "name": "AdaptiveDJDirectorTests",
+      "status": "passed",
+      "seconds": 1.0
+    },
+    {
+      "name": "FLICTests",
+      "status": "passed",
+      "seconds": 3.4
+    },
+    {
+      "name": "Lemmings2RuntimeTests",
+      "status": "passed",
+      "seconds": 55.8
+    },
+    {
+      "name": "Lemmings2IntroTests",
+      "status": "passed",
+      "seconds": 2.5
+    },
+    {
+      "name": "Lemmings3RuntimeTests",
+      "status": "passed",
+      "seconds": 5.5
+    },
+    {
+      "name": "Lemmings3SoundTests",
+      "status": "passed",
+      "seconds": 1.1
+    },
+    {
+      "name": "UnifiedGameTests",
+      "status": "passed",
+      "seconds": 2.5
+    },
+    {
+      "name": "ClassicSagaTests",
+      "status": "passed",
+      "seconds": 1.4
+    },
+    {
+      "name": "PlatformProfileTests",
+      "status": "passed",
+      "seconds": 1.2
+    },
+    {
+      "name": "AmigaSoundTests",
+      "status": "passed",
+      "seconds": 1.0
+    },
+    {
+      "name": "AmigaVersusTests",
+      "status": "passed",
+      "seconds": 1.7
+    },
+    {
+      "name": "BundledGameResourcesTests",
+      "status": "passed",
+      "seconds": 31.3
+    },
+    {
+      "name": "PlatformExclusiveTests",
+      "status": "passed",
+      "seconds": 1.4
+    },
+    {
+      "name": "NeoLemmixEndToEnd",
+      "status": "passed",
+      "seconds": 1.4
+    },
+    {
+      "name": "PortableTests",
+      "status": "passed",
+      "seconds": 3.1
+    },
+    {
+      "name": "ModernEngineTests",
+      "status": "passed",
+      "seconds": 0.7
+    },
+    {
+      "name": "SequelDataTests",
+      "status": "passed",
+      "seconds": 4.3
+    },
+    {
+      "name": "save-recovery",
+      "status": "passed",
+      "seconds": 2.8
+    },
+    {
+      "name": "run-recovery-files",
+      "status": "passed",
+      "seconds": 6.4
+    },
+    {
+      "name": "cross-build-recovery",
+      "status": "passed",
+      "seconds": 8.7
+    },
+    {
+      "name": "fan-library",
+      "status": "passed",
+      "seconds": 17.3
+    },
+    {
+      "name": "preserved-solution-manifests",
+      "status": "passed",
+      "seconds": 0.5
+    },
+    {
+      "name": "audit-integrity",
+      "status": "passed",
+      "seconds": 0.1
+    },
+    {
+      "name": "package-closure",
+      "status": "passed",
+      "seconds": 0.6
+    },
+    {
+      "name": "automatic-updates",
+      "status": "passed",
+      "seconds": 0.1
+    },
+    {
+      "name": "classic-panel-art",
+      "status": "passed",
+      "seconds": 0.0
+    },
+    {
+      "name": "fan-pruning",
+      "status": "passed",
+      "seconds": 0.1
+    },
+    {
+      "name": "retained-rescue-targets",
+      "status": "passed",
+      "seconds": 0.1
+    },
+    {
+      "name": "hint-catalogue",
+      "status": "passed",
+      "seconds": 2.4
+    },
+    {
+      "name": "controller",
+      "status": "passed",
+      "seconds": 1.1
+    },
+    {
+      "name": "variable-speed",
+      "status": "passed",
+      "seconds": 0.9
+    },
+    {
+      "name": "pointer-capture",
+      "status": "passed",
+      "seconds": 1.3
+    },
+    {
+      "name": "dialog-cursor",
+      "status": "passed",
+      "seconds": 1.9
+    },
+    {
+      "name": "hdr-gpu",
+      "status": "passed",
+      "seconds": 8.4
+    },
+    {
+      "name": "rescue-certificates",
+      "status": "passed",
+      "seconds": 0.1
+    },
+    {
+      "name": "replay-movies",
+      "status": "not-run"
+    },
+    {
+      "name": "mac-app-integration",
+      "status": "not-run"
+    },
+    {
+      "name": "local-performance-measurement",
+      "status": "not-run"
+    },
+    {
+      "name": "sequel-views",
+      "status": "not-run"
+    },
+    {
+      "name": "arcade-records",
+      "status": "not-run"
+    }
+  ],
+  "status": "candidate; publication blocked on notarisation and signed launch check",
+  "supplemental": {
+    "recovery": "passed before scratch-fixture failure; see recovery-partial.txt",
+    "remainingSessions": "passed; see remainder.txt",
+    "controlsHelpActivation": "blocked by offscreen policy",
+    "signedLaunch": "requires explicit foreground/audio permission",
+    "notarisation": "missing Keychain profile"
+  }
+}

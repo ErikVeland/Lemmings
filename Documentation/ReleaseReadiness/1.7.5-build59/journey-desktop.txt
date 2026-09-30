@@ -1,0 +1,18 @@
+UI test windows: offscreen; audio: muted
+Test Suite 'Selected tests' started at 2026-10-01 00:34:19.164.
+Test Suite 'LemmingsLocalTests.xctest' started at 2026-10-01 00:34:19.166.
+Test Suite 'LearningJourneyDesktopTests' started at 2026-10-01 00:34:19.166.
+Test Case '-[LemmingsLocalTests.LearningJourneyDesktopTests testJourneyPagesRenderWithUsableTargets]' started.
+Test Case '-[LemmingsLocalTests.LearningJourneyDesktopTests testJourneyPagesRenderWithUsableTargets]' passed (0.272 seconds).
+Test Case '-[LemmingsLocalTests.LearningJourneyDesktopTests testLearningFailureActionsAndSharedEngineDefaults]' started.
+Test Case '-[LemmingsLocalTests.LearningJourneyDesktopTests testLearningFailureActionsAndSharedEngineDefaults]' passed (0.189 seconds).
+Test Case '-[LemmingsLocalTests.LearningJourneyDesktopTests testOhYesRevisionIgnoresUnrelatedPorts]' started.
+Test Case '-[LemmingsLocalTests.LearningJourneyDesktopTests testOhYesRevisionIgnoresUnrelatedPorts]' passed (0.014 seconds).
+Test Case '-[LemmingsLocalTests.LearningJourneyDesktopTests testVisitsPersistAtomicallyAndOldDocumentsMigrate]' started.
+Test Case '-[LemmingsLocalTests.LearningJourneyDesktopTests testVisitsPersistAtomicallyAndOldDocumentsMigrate]' passed (0.005 seconds).
+Test Suite 'LearningJourneyDesktopTests' passed at 2026-10-01 00:34:19.647.
+	 Executed 4 tests, with 0 failures (0 unexpected) in 0.480 (0.480) seconds
+Test Suite 'LemmingsLocalTests.xctest' passed at 2026-10-01 00:34:19.647.
+	 Executed 4 tests, with 0 failures (0 unexpected) in 0.480 (0.480) seconds
+Test Suite 'Selected tests' passed at 2026-10-01 00:34:19.647.
+	 Executed 4 tests, with 0 failures (0 unexpected) in 0.480 (0.483) seconds

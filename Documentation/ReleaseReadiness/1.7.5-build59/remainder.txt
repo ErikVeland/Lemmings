@@ -1,0 +1,13 @@
+UI test windows: offscreen; audio: muted
+PASS all 16 music source transitions, seasonal DJ pools and campaign music boundaries
+PASS changed and removed level routes fail visibly
+PASS background fan preparation preserves the browser and Back, and cannot reopen after navigation
+PASS Playlist Play and Shuffle all revalidate fan archives at confirmation time
+PASS active sequences guard navigation and pending starts can be cancelled
+PASS legacy Classic level pop-up enforces progress and reflects the unlock override
+PASS typed CoverFlow selection, mouse, keyboard, controller, VoiceOver and reduced motion
+PASS all 290 journey lessons resolve and can start
+PASS new solo and Hot Seat journeys start at Just dig! despite prior player progress; handover remains paused
+PASS Floating Down! uses Holiday snow artwork, retains collision through graphics changes ; the current second lesson shows JOURNEY 2
+PASS saved Solo/Hot Seat choices, checkpoint, history, targets and Ready across Classic, L2 and L3
+PASS release remainder: recovery, Hot Seat, library and journey checks; controls-help activation excluded and unverified

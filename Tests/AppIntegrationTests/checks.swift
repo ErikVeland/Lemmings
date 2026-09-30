@@ -3385,8 +3385,25 @@ extension AppDelegate {
     settings.graphics = .macintosh
     startActiveSequence()
     try await waitForLaunch()
+    try check(sequencePlayingIdentity == entries[1].identity
+      && artworkLevel?.title == entries[1].levelNameSnapshot,
+      "The second journey lesson did not match the bundled teaching order")
+    GameScreen.shared.dismissAll()
+    phase = .playing; playfield.phase = .playing
+    playfield.startCountdown.cancel()
+    refreshProgressText()
+    try check(panel.progressText.hasPrefix("JOURNEY 2/\(journey.lessons.count)"),
+      "A fan lesson retained the Classic campaign's Fun 1/30 HUD")
+
+    // Keep the snow-art regression independent of generated lesson order.
+    returnToLibrary()
+    guard let snowEntry = levelCatalogue.packs.flatMap(\.levels).first(where: {
+      $0.identity.packID == "fan:lldb-535" && $0.levelName == "Floating Down!"
+    }) else { throw IntegrationFailure(message: "The snow artwork fixture is missing") }
+    startBrowserLevel(snowEntry.identity)
+    try await waitForLaunch()
     try check(fanPlaying && artworkLevel?.title == "Floating Down!",
-      "The second journey lesson did not load Floating Down!")
+      "The snow artwork fixture did not start")
     guard let ports = Bundle.main.resourceURL?.appendingPathComponent("Ports"),
       let rendered = playfield.classicScene, let level = artworkLevel,
       let scene = playfield.macScene, let game = session as? ClassicSession else {
@@ -3413,15 +3430,13 @@ extension AppDelegate {
     for _ in 0..<225 { game.tick() }
     playfield.overlayTitle = nil; playfield.overlayLines = []; playfield.overlayFooter = nil
     refreshProgressText()
-    try check(panel.progressText.hasPrefix("JOURNEY 2/\(journey.lessons.count)"),
-      "A fan lesson retained the Classic campaign's Fun 1/30 HUD")
     let captureFolder = URL(fileURLWithPath: ".build/journey-regression")
     try FileManager.default.createDirectory(at: captureFolder, withIntermediateDirectories: true)
     if let bitmap = playfield.bitmapImageRepForCachingDisplay(in: playfield.bounds) {
       playfield.cacheDisplay(in: playfield.bounds, to: bitmap)
       try bitmap.representation(using: .png, properties: [:])?.write(to: captureFolder.appendingPathComponent("floating-down-mac.png"))
     }
-    print("PASS Floating Down! uses Holiday snow artwork, retains collision through graphics changes and shows JOURNEY 2")
+    print("PASS Floating Down! uses Holiday snow artwork, retains collision through graphics changes; the current second lesson shows JOURNEY 2")
   }
 
   /// The CE packs ship in the app. They need no folder choice, and a saved run
@@ -4231,6 +4246,8 @@ extension AppDelegate {
       }
       gamePicker.selectItem(at: index)
       for source in [ClassicMusicSource.amigaModules, recording, .adaptiveDJ] {
+        // Direct picker changes bypass the normal level-start identity reset.
+        startedMusicIdentity = nil
         settings.music = source
         playMusicForCurrentLevel()
         let url = dj.isPlaying ? dj.currentURL : soundtrack.isPlaying ? soundtrack.currentURL : music.currentURL
@@ -4238,6 +4255,7 @@ extension AppDelegate {
       }
     }
     fanPlaying = true
+    startedMusicIdentity = nil
     settings.music = .amigaModules
     playMusicForCurrentLevel()
     try check(music.currentURL.map { !isChristmas($0) } == true, "fan level retained Christmas modules")
