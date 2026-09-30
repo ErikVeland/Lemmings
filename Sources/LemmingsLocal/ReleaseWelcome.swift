@@ -8,9 +8,9 @@ import AppKit
     static let notesVersion = "1.7.5"
     static let subtitle = "Better sound, clearer controls, reliable sessions"
     static let sections = [
-        ("Music and spatial sound", "Modern restores centred drums and a gentler stereo spread in Adaptive DJ. Gameplay sounds follow the camera. HD nukes add restrained bass and a hollow music countdown."),
+        ("Music and spatial sound", "Modern centres drums and softens stereo in Adaptive DJ. Sounds follow the camera. HD nuke countdowns hollow out music and add restrained bass."),
         ("Home and Goal", "H centres Home; G centres Goal. In Lemmings 2, G selects Glider first when available. Press G again for Goal. Use / for hints and ? for controls."),
-        ("Fresh sessions and selection", "New sessions start at the beginning and keep previous progress saved. Fan terrain artwork is corrected. Choose None, Obvious or Modern selection effects in Gameplay settings.")
+        ("Fresh sessions and selection", "New sessions start at the beginning. Earlier progress stays saved. Fan artwork matches its terrain. Choose None, Obvious or Modern selection in Gameplay.")
     ]
     private let defaults: UserDefaults
     private let build: Int
