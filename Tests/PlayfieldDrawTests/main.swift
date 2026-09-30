@@ -32,6 +32,7 @@ private final class BombPreviewSession: GameSession {
   func assign(skillIndex: Int, to lemmingID: Int) -> String? { nil }
   func assignmentState(skillIndex: Int, to lemmingID: Int) -> AssignmentState { .unavailable }
   func adjustRate(by delta: Int) {}
+  func setRateLimit(maximum: Bool) {}
   func nuke() {}
   func undoNuke() {}
   func rewind(seconds: Double) -> Bool { false }
@@ -61,6 +62,7 @@ private final class TargetingSession: GameSession {
     return .eligible
   }
   func adjustRate(by delta: Int) {}
+  func setRateLimit(maximum: Bool) {}
   func nuke() {}
   func undoNuke() {}
   func rewind(seconds: Double) -> Bool { false }
@@ -966,132 +968,6 @@ private func testMacArtworkCropStaysPixelAligned() throws {
   print("PASS one-use fade, reduced motion and empty-skill red X")
 }
 
-@MainActor private func testSelectionGlowVisibility() throws {
-  let steady = LemmingSelectionGlow.haloAlpha(at: 0, animated: false)
-  let bright = LemmingSelectionGlow.haloAlpha(at: 0.5, animated: true)
-  let dim = LemmingSelectionGlow.haloAlpha(at: 1.5, animated: true)
-  try require(steady >= 0.55, "The selected-lemming halo is too faint on a dark playfield")
-  try require(bright - dim >= 0.10, "The selected-lemming shimmer is not visibly distinct")
-  try require(LemmingSelectionGlow.haloAlpha(at: 0.5, animated: false) == steady,
-    "Reduced motion must keep the selected-lemming halo steady")
-  print("PASS visible selected-lemming halo and reduced-motion state")
-}
-
-@MainActor private final class TargetMarkerPreview: NSView {
-  var backgroundWhite: CGFloat = 0.5
-  var centre = CGPoint(x: 48, y: 48)
-  var scale: CGFloat = 2
-  var tint: NSColor = .systemGreen
-  override var isFlipped: Bool { true }
-  override func draw(_ dirtyRect: NSRect) {
-    NSColor(calibratedWhite: backgroundWhite, alpha: 1).setFill()
-    bounds.fill()
-    LemmingSelectionGlow.draw(at: centre, scale: scale, tint: tint, animated: false)
-  }
-}
-
-@MainActor private func testHaloContrast() throws {
-  for background: CGFloat in [0.1, 0.85] {
-    for scale: CGFloat in [1, 2, 4] {
-      for tint: NSColor in [.systemGreen, .systemYellow] {
-        let view = TargetMarkerPreview(frame: CGRect(x: 0, y: 0, width: 160, height: 160))
-        view.backgroundWhite = background
-        view.centre = CGPoint(x: 80, y: 80)
-        view.scale = scale
-        view.tint = tint
-        let bitmap = view.bitmapImageRepForCachingDisplay(in: view.bounds)!
-        view.cacheDisplay(in: view.bounds, to: bitmap)
-        let y = 80 - Int(4 * scale)
-        guard let colour = bitmap.colorAt(x: 80, y: y)?.usingColorSpace(.deviceRGB) else {
-          throw Failure(description: "The target halo did not render at \(scale)x")
-        }
-        let contrast = max(abs(colour.redComponent - background),
-          abs(colour.greenComponent - background), abs(colour.blueComponent - background))
-        try require(contrast >= 0.18,
-          "The target halo is too faint on a \(background) background at \(scale)x")
-      }
-    }
-  }
-  print("PASS target halo remains visible on bright and dark terrain at 1x, 2x and 4x")
-}
-
-@MainActor private func testTargetMarkerVisibility() throws {
-  let view = TargetMarkerPreview(frame: CGRect(x: 0, y: 0, width: 96, height: 96))
-  let bitmap = view.bitmapImageRepForCachingDisplay(in: view.bounds)!
-  view.cacheDisplay(in: view.bounds, to: bitmap)
-  var coloured = 0
-  var dark = 0
-  for y in 16..<32 {
-    for x in 38..<58 {
-      guard let colour = bitmap.colorAt(x: x, y: y)?.usingColorSpace(.deviceRGB) else { continue }
-      if colour.greenComponent > colour.redComponent + 0.2 { coloured += 1 }
-      if colour.redComponent < 0.1 && colour.greenComponent < 0.1 { dark += 1 }
-    }
-  }
-  try require(coloured >= 8 && dark >= 8,
-    "The targeted lemming needs a solid, outlined marker above its sprite")
-  print("PASS targeted lemming has a visible, outlined marker")
-}
-
-@MainActor private final class SpriteShimmerPreview: NSView {
-  let sprite: CGImage = {
-    let context = CGContext(data: nil, width: 8, height: 8, bitsPerComponent: 8,
-      bytesPerRow: 0, space: CGColorSpaceCreateDeviceRGB(),
-      bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)!
-    context.clear(CGRect(x: 0, y: 0, width: 8, height: 8))
-    context.setFillColor(CGColor(red: 0.15, green: 0.35, blue: 0.8, alpha: 1))
-    context.fill(CGRect(x: 1, y: 1, width: 4, height: 6))
-    return context.makeImage()!
-  }()
-  var moment: TimeInterval = 0
-  var animated = true
-  var mirrored = false
-  override var isFlipped: Bool { true }
-  override func draw(_ dirtyRect: NSRect) {
-    NSColor(calibratedWhite: 0.25, alpha: 1).setFill()
-    bounds.fill()
-    let rect = CGRect(x: 32, y: 32, width: 32, height: 32)
-    let context = NSGraphicsContext.current!.cgContext
-    context.saveGState()
-    context.interpolationQuality = .none
-    if mirrored { context.translateBy(x: rect.midX * 2, y: 0); context.scaleBy(x: -1, y: 1) }
-    context.translateBy(x: rect.minX, y: rect.maxY)
-    context.scaleBy(x: 1, y: -1)
-    context.draw(sprite, in: CGRect(origin: .zero, size: rect.size))
-    context.restoreGState()
-    LemmingSelectionGlow.drawSpriteShimmer(sprite: sprite, in: rect, scale: 4,
-      mirrored: mirrored, animated: animated, now: moment)
-  }
-}
-
-@MainActor private func testSpriteShimmerStaysOnSelectedPixels() throws {
-  func colour(at point: CGPoint, moment: TimeInterval, animated: Bool, mirrored: Bool) -> NSColor {
-    let view = SpriteShimmerPreview(frame: CGRect(x: 0, y: 0, width: 96, height: 96))
-    view.moment = moment; view.animated = animated; view.mirrored = mirrored
-    let bitmap = view.bitmapImageRepForCachingDisplay(in: view.bounds)!
-    view.cacheDisplay(in: view.bounds, to: bitmap)
-    return bitmap.colorAt(x: Int(point.x), y: Int(point.y))!.usingColorSpace(.deviceRGB)!
-  }
-  let centre = CGPoint(x: 49, y: 48)
-  let before = colour(at: centre, moment: 0, animated: true, mirrored: false)
-  let during = colour(at: centre, moment: 0.7, animated: true, mirrored: false)
-  try require(during.redComponent > before.redComponent + 0.15,
-    "The shimmer did not brighten the selected sprite")
-  let outside = CGPoint(x: 34, y: 34)
-  let outsideBefore = colour(at: outside, moment: 0, animated: true, mirrored: false)
-  let untouched = colour(at: outside, moment: 0.7, animated: true, mirrored: false)
-  try require(untouched == outsideBefore,
-    "The sprite shimmer changed terrain outside the sprite mask")
-  let stillBefore = colour(at: centre, moment: 0, animated: false, mirrored: false)
-  let stillAfter = colour(at: centre, moment: 0.7, animated: false, mirrored: false)
-  try require(stillBefore == stillAfter, "Reduced motion changed the steady sprite highlight")
-  let mirroredInside = colour(at: CGPoint(x: 57, y: 48), moment: 0.7, animated: false, mirrored: true)
-  let mirroredOutside = colour(at: CGPoint(x: 37, y: 48), moment: 0.7, animated: false, mirrored: true)
-  try require(mirroredInside.blueComponent > 0.5 && mirroredOutside == outsideBefore,
-    "The shimmer mask did not follow a mirrored sprite")
-  print("PASS sprite shimmer follows opaque pixels, mirrors correctly and respects reduced motion")
-}
-
 @MainActor private func renderSelectionPreview() throws {
   let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
   let view = PlayfieldView(frame: CGRect(x: 0, y: 0, width: 640, height: 320))
@@ -1113,9 +989,19 @@ private func testMacArtworkCropStaysPixelAligned() throws {
     view.needsDisplay = true
     let bitmap = view.bitmapImageRepForCachingDisplay(in: view.bounds)!
     view.cacheDisplay(in: view.bounds, to: bitmap)
+    try require(view.selectionEffect != nil && view.selectionEffect?.animated == false,
+      "Classic did not publish its selected sprite or reduced-motion state")
+    try require(view.selectionEffect?.rect.contains(CGPoint(x: 320, y: 150)) == true,
+      "Classic's selection mask does not follow the displayed sprite")
     try bitmap.representation(using: .png, properties: [:])!.write(
       to: root.appendingPathComponent(".build/selection-" + name + ".png"))
   }
+  GameCursor.gameplaySuppressed = true
+  let covered = view.bitmapImageRepForCachingDisplay(in: view.bounds)!
+  view.cacheDisplay(in: view.bounds, to: covered)
+  GameCursor.gameplaySuppressed = false
+  try require(view.selectionEffect == nil, "Covered gameplay retained its selection effect")
+  print("PASS Classic selection sprite, reduced motion and dialog suppression")
 }
 
 @MainActor private func testDeathCountdownInCRT() throws {
@@ -1218,10 +1104,6 @@ private func testMacArtworkCropStaysPixelAligned() throws {
     try testSkillCursorBadgeGeometry()
     try testClassicSessionRewindBranch()
     try testSkillCursorBadgeAvailability()
-    try testSelectionGlowVisibility()
-    try testHaloContrast()
-    try testTargetMarkerVisibility()
-    try testSpriteShimmerStaysOnSelectedPixels()
     try testFreshLevelCountdown()
     try testGameCursorRegions()
     try testDeathCountdownInCRT()

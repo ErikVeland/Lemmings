@@ -68,12 +68,31 @@ At zero uses, replace the sprite with a steady red X. Reduced motion and reduced
 flashes keep the one-use sprite steady. The None size still hides the badge. Lemmings 3 has no
 shared skill stock: only Use shows the hovered lemming's remaining tool uses.
 
-A selected lemming has a soft, clearly visible halo with a small brightness shimmer.
-A small solid marker above its head identifies the exact target against busy
-terrain and overlapping sprites. Do not draw an outlined ring or an orbiting arc.
-A narrow shimmer crosses only the selected sprite's opaque pixels. Reduced
-motion and reduced flashes keep the sprite highlight steady. Classic, Lemmings 2
-and Lemmings 3 use the same cursor and target cue renderers.
+Gameplay settings offer None, Obvious and Modern selection effects. None adds no
+selection highlight. Obvious restores the game-scale coloured halo and overhead
+pixel marker. Original selects None, and the Modern preset selects Modern.
+An individual choice persists as part of the Custom preset. Machine artwork
+presets preserve this choice.
+
+Modern gives the selected lemming a white silhouette outline exactly two physical
+display pixels wide after zoom, Retina scaling and CRT projection. White highlights march
+along the outline without black segments. A soft green Gaussian bloom follows
+the sprite's silhouette in linear HDR and remains visible in SDR. Its brightness
+breathes smoothly over two seconds without changing its shape or disappearing.
+Modern does not tint the sprite interior, draw a radial halo or add an overhead marker.
+Reduced motion and reduced flashes keep both the outline and halo steady.
+Reduced flashes also limit selection brightness to SDR.
+The reticle retains the skill eligibility colours. Classic, Lemmings 2 and
+Lemmings 3 share the selection renderer and keep its surface transparent to input.
+
+L2's mask follows the primary lemming sprite, including mirroring and its vertical
+pixel aspect. Separate projectiles, flames, balloons and parachutes are not part
+of that mask. L3 follows the sprite that its current animation mapping renders.
+Bitmap captures and machines without Metal retain a steady white SDR outline.
+GPU checks cover two-pixel width at 1×/2× backing scale, fractional zoom, mirroring,
+CRT curvature, HDR values and reduced effects. App captures cover the native
+walking sprites in all three engines. Other poses and L2 attachments still need
+a full visual sweep.
 
 Gameplay settings offer Original, Modern and Custom presets. Modern enables
 approaching-lemming targeting, blockers for bombs and current builders for Build.

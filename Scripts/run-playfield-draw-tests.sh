@@ -30,6 +30,7 @@ swiftc -swift-version 6 -warnings-as-errors \
   "$project_dir/Sources/LemmingsLocal/PrecisionZoomLens+AppKit.swift" \
   "$project_dir/Sources/LemmingsLocal/PrecisionZoomScrollGesture+AppKit.swift" \
   "$project_dir/Sources/LemmingsLocal/ExplosionHDR.swift" \
+  "$project_dir/Sources/LemmingsLocal/LemmingSelectionHDR.swift" \
   "$project_dir/Sources/LemmingsLocal/MacInterfaceRenderer.swift" \
   "$project_dir/Sources/LemmingsLocal/GameMenuArtwork.swift" \
   "$project_dir/Sources/LemmingsLocal/PanelView.swift" \

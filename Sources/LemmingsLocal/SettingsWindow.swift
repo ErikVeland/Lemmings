@@ -34,6 +34,7 @@ import NxlvKit
   private var interruptionCheck: NSButton?
   private var reticleCountCheck: NSButton?
   private var skillCursorSizePopUp: NSPopUpButton?
+  private var selectionStylePopUp: NSPopUpButton?
   private var favorApproachingCheck: NSButton?
   private var favorBombBlockersCheck: NSButton?
   private var favorBuildersCheck: NSButton?
@@ -173,6 +174,10 @@ import NxlvKit
     iconSize.selectItem(at: SkillCursorIconSize.allCases.firstIndex(of: settings.skillCursorIconSize) ?? 1)
     iconSize.setAccessibilityLabel("Skill icon size")
     skillCursorSizePopUp = iconSize
+    let selection = popUp(#selector(selectionStyleChanged))
+    selection.addItems(withTitles: LemmingSelectionStyle.allCases.map(\.title))
+    selection.setAccessibilityLabel("Selection effect")
+    selectionStylePopUp = selection
     let modern = GameCheckButton(title: "Modern keyboard controls", target: self, action: #selector(modernControlsChanged))
     modernControlsCheck = modern
     let variable = GameCheckButton(title: "Variable speed: 2×, 3×, 5×, 10×", target: self, action: #selector(variableSpeedChanged))
@@ -204,8 +209,8 @@ import NxlvKit
     variable.isEnabled = settings.modernControlsEnabled
     return pane([
       ("Preset", experience), ("Controls", modern), ("Speed", variable), ("Pause", interruption),
-      ("Targeting", targeting), ("Skill icon", iconSize), ("Reticule", count), ("Level Select", levelSelection),
-    ], spacing: 14)
+      ("Targeting", targeting), ("Selection", selection), ("Skill icon", iconSize), ("Reticule", count), ("Level Select", levelSelection),
+    ], spacing: 8)
   }
 
   @objc private func reticleCountChanged(_ sender: NSButton) {
@@ -214,6 +219,11 @@ import NxlvKit
   }
   @objc private func skillCursorSizeChanged(_ sender: NSPopUpButton) {
     settings.skillCursorIconSize = SkillCursorIconSize.allCases[sender.indexOfSelectedItem]
+    changed()
+  }
+  @objc private func selectionStyleChanged(_ sender: NSPopUpButton) {
+    guard LemmingSelectionStyle.allCases.indices.contains(sender.indexOfSelectedItem) else { return }
+    settings.lemmingSelectionStyle = LemmingSelectionStyle.allCases[sender.indexOfSelectedItem]
     changed()
   }
   @objc private func modernControlsChanged(_ sender: NSButton) {
@@ -558,6 +568,7 @@ import NxlvKit
     interruptionCheck?.state = settings.pauseOnInterruption ? .on : .off
     reticleCountCheck?.state = settings.showReticleCount ? .on : .off
     skillCursorSizePopUp?.selectItem(at: SkillCursorIconSize.allCases.firstIndex(of: settings.skillCursorIconSize) ?? 1)
+    selectionStylePopUp?.selectItem(at: LemmingSelectionStyle.allCases.firstIndex(of: settings.lemmingSelectionStyle) ?? 2)
     favorApproachingCheck?.state = settings.favorApproachingLemmings ? .on : .off
     favorBombBlockersCheck?.state = settings.favorBombBlockers ? .on : .off
     favorBuildersCheck?.state = settings.favorBuilders ? .on : .off
@@ -616,6 +627,7 @@ import NxlvKit
     applied.variableSpeedEnabled = settings.variableSpeedEnabled
     applied.showReticleCount = settings.showReticleCount
     applied.skillCursorIconSize = settings.skillCursorIconSize
+    applied.lemmingSelectionStyle = settings.lemmingSelectionStyle
     applied.favorApproachingLemmings = settings.favorApproachingLemmings
     applied.favorBombBlockers = settings.favorBombBlockers
     applied.favorBuilders = settings.favorBuilders

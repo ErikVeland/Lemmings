@@ -440,6 +440,20 @@ import NxlvKit
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
     #if APP_INTEGRATION_TESTS
+    func testSelectionRendering() async throws {
+        timer?.invalidate(); audioSettings.confinePointer = false
+        prepareBriefing(); startLevel(); paused = true; canvas.startCountdown.cancel()
+        for _ in 0..<120 { game?.step() }
+        refreshGame()
+        if let id = game?.lemmings.first(where: { $0.active })?.id { canvas.focusLemming(id) }
+        present()
+        try await validateSelectionCanvas(canvas, name: "lemmings2", effect: { self.canvas.selectionEffect },
+            reduce: { self.canvas.reduceMotion = $0; self.canvas.reduceFlashes = $0 },
+            style: { choice in
+                var settings = self.audioSettings; settings.lemmingSelectionStyle = choice
+                self.setAudioSettings(settings, muted: true)
+            }, refocus: { if let id = self.game?.lemmings.first(where: { $0.active })?.id { self.canvas.focusLemming(id) } })
+    }
     func testTimelinePanel() throws {
         prepareBriefing(); startLevel()
         try validateTimelineCanvas(canvas, timeline: canvas.timeline, name: "lemmings2",
@@ -517,6 +531,7 @@ import NxlvKit
         canvas.hdEffectsEnabled = settings.hdEffectsEnabled
         canvas.showReticleCount = settings.showReticleCount
         canvas.skillCursorIconSize = settings.skillCursorIconSize
+        canvas.lemmingSelectionStyle = settings.lemmingSelectionStyle
         canvas.favorApproachingLemmings = settings.favorApproachingLemmings
         canvas.favorBombBlockers = settings.favorBombBlockers
         canvas.favorBuilders = settings.favorBuilders
@@ -2060,7 +2075,6 @@ import NxlvKit
     }
     var reduceMotion = false {
         didSet {
-            assignmentHighlight.reduceMotion = reduceMotion
             if reduceMotion { speedTrails.reset() }
             syncSpeedEffects(); needsDisplay = true
         }
@@ -2081,6 +2095,7 @@ import NxlvKit
     var variableSpeedEnabled = true
     let startCountdown = FreshLevelCountdown()
     var showReticleCount = false
+    var lemmingSelectionStyle: LemmingSelectionStyle = .modern { didSet { needsDisplay = true } }
     var skillCursorIconSize: SkillCursorIconSize = .one
     var favorApproachingLemmings = true
     var favorBombBlockers = true
@@ -2092,6 +2107,7 @@ import NxlvKit
     var fullScreenHDRFlashes = true { didSet { if !fullScreenHDRFlashes { hdrOverlay?.clearExplosions() } } }
     private let speedTrails = SpeedTrails()
     private var hdrOverlay: ExplosionHDRView?
+    private(set) var selectionEffect: LemmingSelectionEffect?
     override func viewDidMoveToWindow() {
         super.viewDidMoveToWindow()
         if window != nil, hdrOverlay == nil {
@@ -2497,30 +2513,35 @@ import NxlvKit
                     y: origin.y + (CGFloat(lem.y - 16) - cameraY) * zoom * 1.2), palette: .blue)
             }
         }
-        if let selectedSprite {
-            LemmingSelectionGlow.drawSpriteShimmer(sprite: selectedSprite.pixels,
-                in: selectedSprite.rect, scale: zoom, mirrored: selectedSprite.mirrored,
-                animated: !reduceMotion && !reduceFlashes)
+        if lemmingSelectionStyle == .modern, let selectedSprite {
+            selectionEffect = LemmingSelectionEffect(sprite: selectedSprite.pixels,
+                rect: precisionLens.display(selectedSprite.rect), clipRect: gameplayRect,
+                mirrored: selectedSprite.mirrored,
+                animated: !reduceMotion && !reduceFlashes,
+                extendedBrightness: hdEffectsEnabled && !reduceFlashes, bloom: hdEffectsEnabled)
         }
     }
     override func draw(_ dirtyRect: NSRect) {
+        selectionEffect = nil
+        defer {
+            hdrOverlay?.updateSelection(selectionEffect)
+            if hdrOverlay?.canRenderSelection != true || NSGraphicsContext.current?.isDrawingToScreen == false,
+               let selectionEffect {
+                LemmingSelectionRenderer.drawFallback(selectionEffect)
+            }
+        }
         layoutTimeline()
         defer { timeline.draw() }
         defer { startCountdown.draw(in: gameplayRect) }
         defer {
-            // The shared corner reticle also represents the controller pointer.
-            if let id = assignmentHighlight.target ?? (pointerSelectionEnabled ? pointerTarget(slot: selectedSkillSlot) : nil),
+            if lemmingSelectionStyle == .obvious, !GameCursor.gameplaySuppressed,
+               let id = assignmentHighlight.target ?? (pointerSelectionEnabled ? pointerTarget(slot: selectedSkillSlot) : nil),
                let lem = game?.lemmings.first(where: { $0.id == id && $0.active }) {
-                let focused = assignmentHighlight.target != nil
                 let centre = precisionLens.display(CGPoint(x: origin.x + (CGFloat(lem.x) - cameraX) * zoom,
                     y: origin.y + (CGFloat(lem.y - 6) - cameraY) * zoom * 1.2))
-                if focused {
-                    assignmentHighlight.draw(at: centre, scale: zoom, tint: .systemYellow, radius: 7)
-                } else {
-                    LemmingSelectionGlow.draw(at: centre, scale: zoom, radius: 7,
-                        tint: GameCursor.targetTint(eligible: game?.canAssign(slot: selectedSkillSlot, to: id) == true, occupied: true),
-                        animated: !reduceMotion)
-                }
+                let tint = assignmentHighlight.target != nil ? NSColor.systemYellow
+                    : GameCursor.targetTint(eligible: game?.canAssign(slot: selectedSkillSlot, to: id) == true, occupied: true)
+                LemmingSelectionGlow.draw(at: centre, scale: zoom, tint: tint, animated: !reduceMotion && !reduceFlashes)
             }
             if !GameCursor.gameplaySuppressed, let point = cursorPoint(), gameplayRect.contains(point) {
                 if showReticleCount {
