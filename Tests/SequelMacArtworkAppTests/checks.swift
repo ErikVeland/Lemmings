@@ -450,8 +450,10 @@ extension Lemmings2PlayWindow {
         let original = try shot(canvas, "l2-beach-settings-pc")
         let options = ClassicSettingsOptions.available(hasDOSData: true, hasAmigaDisk: false,
             hasMacintoshDisk: false, moduleCount: 0, remixFolders: [], hasSoundtracks: false)
+        // The HD check deliberately selects Custom. Test default presets on a fresh pane.
+        let hdSettings = SettingsWindow(settings: ClassicSettings(), options: options)
+        try hdSettings.checkHDEffectsSetting()
         let settings = SettingsWindow(settings: ClassicSettings(), options: options)
-        try settings.checkHDEffectsSetting()
         try settings.checkExperiencePreset()
         let checkbox = settings.artworkCheckboxForTest()
         checkbox.performClick(nil)
