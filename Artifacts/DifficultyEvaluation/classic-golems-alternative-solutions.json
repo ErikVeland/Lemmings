@@ -1,0 +1,152 @@
+{
+  "SHA256 digest: 7784359f3f00f72ed5df323ede2f9acefff4187aaf89afebac57a58a82c9809e" : {
+    "events" : [
+      {
+        "action" : {
+          "releaseRate" : {
+            "_0" : 99
+          }
+        },
+        "afterTick" : true,
+        "tick" : 0
+      },
+      {
+        "action" : {
+          "assign" : {
+            "lemmingID" : 0,
+            "skill" : "blocker"
+          }
+        },
+        "afterTick" : true,
+        "tick" : 86
+      },
+      {
+        "action" : {
+          "assign" : {
+            "lemmingID" : 1,
+            "skill" : "bomber"
+          }
+        },
+        "afterTick" : true,
+        "tick" : 86
+      },
+      {
+        "action" : {
+          "assign" : {
+            "lemmingID" : 1,
+            "skill" : "builder"
+          }
+        },
+        "afterTick" : true,
+        "tick" : 117
+      },
+      {
+        "action" : {
+          "assign" : {
+            "lemmingID" : 2,
+            "skill" : "basher"
+          }
+        },
+        "afterTick" : true,
+        "tick" : 133
+      },
+      {
+        "action" : {
+          "assign" : {
+            "lemmingID" : 1,
+            "skill" : "basher"
+          }
+        },
+        "afterTick" : true,
+        "tick" : 135
+      }
+    ],
+    "expected" : {
+      "didWin" : true,
+      "released" : 40,
+      "required" : 39,
+      "saved" : 39,
+      "stateHash" : "6135dae21087e1ce5017c2edf80f52e060f68941c449a11f8b512eb0235ce597",
+      "ticks" : 425
+    },
+    "initialStateHash" : "decfb7ba1a72cf69be6a8832f385e9ab39f86bd94935c8e0b3d6e0b64e09b58a",
+    "number" : 3,
+    "rank" : "fan:lldb-228",
+    "title" : "Double Diamond"
+  },
+  "decfb7ba1a72cf69be6a8832f385e9ab39f86bd94935c8e0b3d6e0b64e09b58a" : {
+    "events" : [
+      {
+        "action" : {
+          "releaseRate" : {
+            "_0" : 99
+          }
+        },
+        "afterTick" : true,
+        "tick" : 0
+      },
+      {
+        "action" : {
+          "assign" : {
+            "lemmingID" : 0,
+            "skill" : "blocker"
+          }
+        },
+        "afterTick" : true,
+        "tick" : 86
+      },
+      {
+        "action" : {
+          "assign" : {
+            "lemmingID" : 1,
+            "skill" : "bomber"
+          }
+        },
+        "afterTick" : true,
+        "tick" : 86
+      },
+      {
+        "action" : {
+          "assign" : {
+            "lemmingID" : 1,
+            "skill" : "builder"
+          }
+        },
+        "afterTick" : true,
+        "tick" : 117
+      },
+      {
+        "action" : {
+          "assign" : {
+            "lemmingID" : 2,
+            "skill" : "basher"
+          }
+        },
+        "afterTick" : true,
+        "tick" : 133
+      },
+      {
+        "action" : {
+          "assign" : {
+            "lemmingID" : 1,
+            "skill" : "basher"
+          }
+        },
+        "afterTick" : true,
+        "tick" : 135
+      }
+    ],
+    "expected" : {
+      "didWin" : true,
+      "released" : 40,
+      "required" : 39,
+      "saved" : 39,
+      "stateHash" : "6135dae21087e1ce5017c2edf80f52e060f68941c449a11f8b512eb0235ce597",
+      "ticks" : 425
+    },
+    "initialStateHash" : "decfb7ba1a72cf69be6a8832f385e9ab39f86bd94935c8e0b3d6e0b64e09b58a",
+    "number" : 3,
+    "rank" : "fan:lldb-228",
+    "title" : "Double Diamond"
+  }
+}

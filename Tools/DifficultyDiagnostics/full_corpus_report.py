@@ -16,6 +16,11 @@ NEO = ROOT / ".build/full-difficulty-evaluation/neolemmix/profiles.json"
 NEO_REPORT = ROOT / ".build/full-difficulty-evaluation/neolemmix/report.json"
 PASSIVE = ROOT / ".build/neolemmix-passive-evaluation/results.json"
 STRUCTURAL = ROOT / "Artifacts/DifficultyEvaluation/classic-structural-limits.json"
+GOLEMS_OBJECTS = ROOT / "Artifacts/DifficultyEvaluation/classic-golems-object-comparisons.json"
+GOLEMS_ALTERNATIVES = ROOT / "Artifacts/DifficultyEvaluation/classic-golems-alternative-evidence.json"
+GOLEMS_ALTERNATIVE_SOLUTIONS = ROOT / "Artifacts/DifficultyEvaluation/classic-golems-alternative-solutions.json"
+SOURCE_OUTCOMES = ROOT / "Artifacts/DifficultyEvaluation/classic-source-outcomes.json"
+CLASSIC_NEO_DERIVATIONS = ROOT / "Artifacts/DifficultyEvaluation/classic-neolemmix-replay-derivations.json"
 OUTPUT = ROOT / "Artifacts/DifficultyEvaluation"
 PARTIAL_SOURCE_ASSIGNMENTS = {
     "NeoLemmix_Introduction_Pack/Advanced_Training/Beam_Up_The_Equipment!.nxlv":
@@ -68,6 +73,24 @@ def main():
         for record in structural_records
     }
     assert len(structural) == len(structural_records)
+    golems_records = read(GOLEMS_OBJECTS) if GOLEMS_OBJECTS.exists() else []
+    golems_objects = {
+        (record["identity"]["packID"], record["identity"]["levelID"]): record
+        for record in golems_records
+    }
+    assert len(golems_objects) == len(golems_records)
+    golems_alternative_records = read(GOLEMS_ALTERNATIVES) if GOLEMS_ALTERNATIVES.exists() else []
+    golems_alternatives = {
+        (record["entry"]["identity"]["packID"], record["entry"]["identity"]["levelID"]): record
+        for record in golems_alternative_records
+    }
+    assert len(golems_alternatives) == len(golems_alternative_records)
+    source_outcome_records = read(SOURCE_OUTCOMES)["records"] if SOURCE_OUTCOMES.exists() else []
+    source_outcomes = {
+        (record["identity"]["packID"], record["identity"]["levelID"]): record
+        for record in source_outcome_records
+    }
+    assert len(source_outcomes) == len(source_outcome_records)
     neo = read(NEO)
     neo_failures = {}
     for failure in read(NEO_REPORT)["failures"]:
@@ -82,6 +105,33 @@ def main():
         verified = profile["confidence"] != "low"
         level_id = row["entry"]["identity"]
         limit = structural.get((level_id["packID"], level_id["levelID"]))
+        object_comparison = golems_objects.get((level_id["packID"], level_id["levelID"]))
+        object_alternative = golems_alternatives.get((level_id["packID"], level_id["levelID"]))
+        source_outcome = source_outcomes.get((level_id["packID"], level_id["levelID"]))
+        if source_outcome:
+            assert verified
+            assert source_outcome["levelSourceRevision"] == row["entry"]["sourceRevision"]
+        if object_comparison:
+            assert verified
+            assert object_comparison["sourceRevision"] == row["entry"]["sourceRevision"]
+            assert object_comparison["replayRevision"] == profile["key"]["replayRevision"]
+            assert object_comparison["nativeInitialHash"] == row["initialHash"]
+        object_route_differs = object_comparison and (
+            object_comparison.get("golemsSaved") != object_comparison["nativeSaved"]
+            or object_comparison.get("golemsTicks") != object_comparison["nativeTicks"]
+        )
+        parity_observations = []
+        if object_route_differs:
+            parity_observations.append("Golems object-rule replay differs")
+        if object_alternative:
+            assert object_route_differs and object_alternative["entry"]["sourceRevision"] == row["entry"]["sourceRevision"]
+            parity_observations.append("alternate Golems object-rule replay verified")
+        if source_outcome and source_outcome["nativeSaved"] != source_outcome["publishedSaved"]:
+            parity_observations.append("published replay saved header differs")
+        if source_outcome and abs(
+            source_outcome["nativeCompletionTicks"] - source_outcome["publishedHeaderTicks"]
+        ) > 5:
+            parity_observations.append("published replay completion header differs by over 5 ticks")
         if limit:
             assert not verified and limit["levelSourceRevision"] == row["entry"]["sourceRevision"]
             assert limit["initialStateHash"] == row["initialHash"]
@@ -99,7 +149,8 @@ def main():
                      "replay_sha256": profile["key"]["replayRevision"].rsplit(" ", 1)[-1]
                      if verified else "",
                      "completion": "verified win" if verified else "no verified win",
-                     "physics_parity": "not independently checked",
+                     "physics_parity": "; ".join(parity_observations) if parity_observations
+                     else "not independently checked",
                      "playtest": "replay verified" if verified else
                      limit["reason"] if limit else "bounded search or metadata only",
                      "issue": (f"Exit object in inactive slot(s) {', '.join(map(str, limit['exitObjectSlots']))}"
@@ -147,6 +198,16 @@ def main():
         sources[str(PASSIVE.relative_to(ROOT))] = digest(PASSIVE)
     if STRUCTURAL.exists():
         sources[str(STRUCTURAL.relative_to(ROOT))] = digest(STRUCTURAL)
+    if GOLEMS_OBJECTS.exists():
+        sources[str(GOLEMS_OBJECTS.relative_to(ROOT))] = digest(GOLEMS_OBJECTS)
+    for path in (GOLEMS_ALTERNATIVES, GOLEMS_ALTERNATIVE_SOLUTIONS):
+        if path.exists():
+            sources[str(path.relative_to(ROOT))] = digest(path)
+    if SOURCE_OUTCOMES.exists():
+        sources[str(SOURCE_OUTCOMES.relative_to(ROOT))] = digest(SOURCE_OUTCOMES)
+    classic_neo_derivations = read(CLASSIC_NEO_DERIVATIONS)["records"] if CLASSIC_NEO_DERIVATIONS.exists() else []
+    if CLASSIC_NEO_DERIVATIONS.exists():
+        sources[str(CLASSIC_NEO_DERIVATIONS.relative_to(ROOT))] = digest(CLASSIC_NEO_DERIVATIONS)
     counts = Counter((row["source"], row["completion"]) for row in rows)
     unverified_official_conversions = sum(
         row["completion"] == "no verified win" and row["pack"] == "Original_Lemmings"
@@ -170,6 +231,27 @@ def main():
                                           for record in structural_records),
                "structuralExcessRequirementFan": sum(record["reason"] == "rescue requirement exceeds population"
                                                       for record in structural_records),
+               "golemsObjectComparisons": len(golems_records),
+               "golemsObjectReplayDifferences": sum(
+                   record.get("golemsSaved") != record["nativeSaved"]
+                   or record.get("golemsTicks") != record["nativeTicks"]
+                   for record in golems_records),
+               "golemsObjectLostWins": sum(not record["golemsDidWin"] for record in golems_records),
+               "golemsObjectReplayErrors": sum(record.get("error") is not None
+                                                 for record in golems_records),
+               "golemsObjectAlternativeWins": len(golems_alternative_records),
+               "classicNeoLemmixInputWins": len(classic_neo_derivations),
+               "classicSourceOutcomeComparisons": len(source_outcome_records),
+               "classicSourceOutcomeMatchesWithinFiveTicks": sum(
+                   record["nativeSaved"] == record["publishedSaved"]
+                   and abs(record["nativeCompletionTicks"] - record["publishedHeaderTicks"]) <= 5
+                   for record in source_outcome_records),
+               "classicSourceSavedHeaderDifferences": sum(
+                   record["nativeSaved"] != record["publishedSaved"]
+                   for record in source_outcome_records),
+               "classicSourceCompletionHeaderOutliers": sum(
+                   abs(record["nativeCompletionTicks"] - record["publishedHeaderTicks"]) > 5
+                   for record in source_outcome_records),
                "independentPhysicsParityVerified": 0,
                "partialSourceAssignmentMatches": sum(
                    row["physics_parity"].startswith("partial source assignment match")
@@ -204,7 +286,39 @@ def main():
         "on the bundled level.\n\n"
         "A native win shows that this engine can complete the level. It does not independently prove "
         "physics parity with the source engine. The `physics_parity` column records partial "
-        "assignment-state matches where checked and keeps the full parity gate separate.\n\n"
+        "assignment-state matches and known object-rule replay differences where checked. "
+        "The full parity gate remains separate.\n\n"
+        "The Classic replay initial-state hash covers the starting counters, workers and terrain "
+        "mask. It does not include configured object triggers. An archive fingerprint and a replay "
+        "run under the current object rule are required alongside that hash. "
+        "`FAN_COMPARE_GOLEMS_OBJECTS=1` with `FAN_VERIFY_ONLY=1` in `ExpandFanEvidence` "
+        "compares selected winning replays with all 32 object slots active. "
+        "`classic-golems-object-comparisons.json` records those native rule comparisons; "
+        "`python3 Tools/DifficultyDiagnostics/verify_golems_object_comparisons.py` checks "
+        "their level and replay identities. These comparisons are not full source-physics checks.\n\n"
+        f"{len(golems_alternative_records)} affected "
+        f"{'level has' if len(golems_alternative_records) == 1 else 'levels have'} a separate "
+        "strictly replayed win under Golems' 32-slot object rule. "
+        "The alternative score and replay are in `classic-golems-alternative-evidence.json` "
+        "and `classic-golems-alternative-solutions.json`. "
+        "Set `FAN_GOLEMS_OBJECTS=1` and `FAN_VERIFY_ONLY=1` in `ExpandFanEvidence` "
+        "to recheck these alternative replays. "
+        "This is object-rule compatibility evidence, not full source physics parity.\n\n"
+        "`classic-source-outcomes.json` compares unchanged published replay inputs against "
+        "their saved-count and completion-tick headers. The `physics_parity` column flags saved-count "
+        "differences and completion differences over five ticks. "
+        f"Saved count and completion within five ticks match on "
+        f"{summary['classicSourceOutcomeMatchesWithinFiveTicks']} of "
+        f"{summary['classicSourceOutcomeComparisons']} unchanged source-input comparisons. "
+        "A published header is limited "
+        "outcome evidence, not a full simulation trace.\n\n"
+        f"{len(classic_neo_derivations)} bundled Classic fan levels also have exact native wins "
+        "from published Lemmings Plus I NeoLemmix replay inputs. Their source archive, "
+        "per-replay digests and native replay digests are in "
+        "`classic-neolemmix-replay-derivations.json`. "
+        "Run `python3 Tools/DifficultyDiagnostics/verify_classic_neolemmix_replay_derivations.py` "
+        "to check the identities, digests and input conversion; the optional source archive "
+        "adds source-byte checks. These native wins do not establish source physics parity.\n\n"
         "Third-party replay archives and community styles remain in the ignored local build folder. "
         "The repository does not redistribute them. See `summary.json` for source digests.\n")
     print(json.dumps(summary, indent=2))

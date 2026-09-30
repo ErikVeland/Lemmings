@@ -21,6 +21,19 @@ struct RetimedFanWitness: Codable {
     let originalTick: Int
     let nativeTick: Int
 }
+struct GolemsObjectComparison: Codable {
+    let identity: LevelCatalogueIdentity
+    let sourceRevision: String
+    let replayRevision: String
+    let nativeInitialHash: String
+    let golemsInitialHash: String
+    let nativeSaved: Int
+    let nativeTicks: Int
+    let golemsSaved: Int?
+    let golemsTicks: Int?
+    let golemsDidWin: Bool
+    let error: String?
+}
 @main struct ExpandFanEvidence {
     @MainActor static func main() throws {
         let args = CommandLine.arguments
@@ -55,8 +68,16 @@ struct RetimedFanWitness: Codable {
         var templates: [String: [[ClassicDOSReplayEvent]]] = [:]
         func geometry(_ sim: ClassicDOSSimulation) -> String { SHA256.hash(data: sim.terrain.solidMask + sim.terrain.steelMask).description }
         let verifyOnly = ProcessInfo.processInfo.environment["FAN_VERIFY_ONLY"] == "1"
+        let rebaseExpected = ProcessInfo.processInfo.environment["FAN_REBASE_EXPECTED"] == "1"
+        let compareGolemsObjects = ProcessInfo.processInfo.environment["FAN_COMPARE_GOLEMS_OBJECTS"] == "1"
+        let golemsObjects = ProcessInfo.processInfo.environment["FAN_GOLEMS_OBJECTS"] == "1"
         let describeOnly = ProcessInfo.processInfo.environment["FAN_DESCRIBE_ONLY"] == "1"
+        guard !rebaseExpected || (verifyOnly && !compareGolemsObjects && !describeOnly) else {
+            throw LevelPlaylistError.invalidPool
+        }
+        guard !compareGolemsObjects || (verifyOnly && !describeOnly) else { throw LevelPlaylistError.invalidPool }
         var verifiedCount = 0
+        var golemsComparisons: [GolemsObjectComparison] = []
         let semanticsOnly = ProcessInfo.processInfo.environment["FAN_SEMANTICS_ONLY"] == "1"
         var portDescriptors: [String: [String: Any]] = [:]
         func describe(_ identity: LevelCatalogueIdentity, _ level: ClassicLevel, _ sim: ClassicDOSSimulation) throws {
@@ -143,6 +164,9 @@ struct RetimedFanWitness: Codable {
             if !retimedWitnesses.isEmpty {
                 try encoder.encode(retimedWitnesses).write(to: output.appendingPathComponent("retimed-witnesses.json"), options: .atomic)
             }
+            if compareGolemsObjects {
+                try encoder.encode(golemsComparisons).write(to: output.appendingPathComponent("golems-object-comparisons.json"), options: .atomic)
+            }
         }
         for (packNumber, pack) in packs.enumerated() {
             for item in try FanLevelLibrary.validatedEntries(in: pack) {
@@ -153,13 +177,39 @@ struct RetimedFanWitness: Codable {
                     let ground = try FanLevelLibrary.groundSet(for: level, styleName: style, portsRoot: ports, pack: pack, entry: item)
                     let special = try FanLevelLibrary.specialGraphic(for: level, entry: item, pack: pack, portsRoot: ports)
                     let rendered = try ClassicLevelRenderer.render(level, groundSet: ground, specialGraphic: special,
-                        objectSemantics: .forFanLevel(level, groundSet: ground))
+                        objectSemantics: (compareGolemsObjects || golemsObjects) ? .golems : .forFanLevel(level, groundSet: ground))
                     let initial = try ClassicDOSSimulation(level: level, renderedLevel: rendered, mainDATAssets: assets(ports.appendingPathComponent("lemmings_dos_1991-07-30")))
                     try describe(id, level, initial)
                     let hash = ClassicDOSReplayRecorder.stateHash(of: initial)
-                    guard hash == rows[index].initialHash else { throw LevelPlaylistError.invalidEntry }
+                    guard compareGolemsObjects || hash == rows[index].initialHash else { throw LevelPlaylistError.invalidEntry }
                     if describeOnly { continue }
                     if verifyOnly {
+                        if compareGolemsObjects {
+                            let row = rows[index]
+                            guard FanLevelLibrary.archiveFingerprint(pack) == row.entry.sourceRevision,
+                                  let nativeHash = row.initialHash,
+                                  let stored = solutions[row.profile.key.replayRevision] ?? solutions[nativeHash],
+                                  stored.initialStateHash == nativeHash,
+                                  let expected = stored.expected, expected.didWin else { throw LevelPlaylistError.invalidEntry }
+                            let replayRevision = SHA256.hash(data: try encoder.encode(stored)).description
+                            guard row.profile.key.replayRevision == replayRevision ||
+                                  row.profile.key.replayRevision == String(replayRevision.dropFirst("SHA256 digest: ".count)) else {
+                                throw LevelPlaylistError.invalidEntry
+                            }
+                            let replay = ClassicDOSReplay(rank: id.packID, number: row.entry.levelNumberSnapshot,
+                                title: level.title, initialStateHash: hash, events: stored.events)
+                            var outcome: ClassicDOSReplayOutcome?
+                            var replayError: String?
+                            do { outcome = try ClassicDOSReplayPlayer.run(replay, simulation: initial, verify: false) }
+                            catch { replayError = String(describing: error) }
+                            golemsComparisons.append(GolemsObjectComparison(identity: id,
+                                sourceRevision: row.entry.sourceRevision, replayRevision: row.profile.key.replayRevision,
+                                nativeInitialHash: nativeHash, golemsInitialHash: hash,
+                                nativeSaved: expected.saved, nativeTicks: expected.ticks,
+                                golemsSaved: outcome?.saved, golemsTicks: outcome?.ticks,
+                                golemsDidWin: outcome?.didWin ?? false, error: replayError))
+                            continue
+                        }
                         guard FanLevelLibrary.archiveFingerprint(pack) == rows[index].entry.sourceRevision,
                               let stored = solutions[rows[index].profile.key.replayRevision] ?? solutions[hash],
                               stored.initialStateHash == hash,
@@ -175,8 +225,22 @@ struct RetimedFanWitness: Codable {
                             throw NSError(domain: "Evidence", code: 1, userInfo: [NSLocalizedDescriptionKey:
                                 "Profile and bundled witness differ: \(level.title); target \(digest); stored \(storedDigest)"])
                         }
-                        let result = try ClassicDOSReplayPlayer.run(replay, simulation: initial)
+                        let result = try ClassicDOSReplayPlayer.run(replay, simulation: initial,
+                            verify: !rebaseExpected)
                         guard result.didWin else { throw DifficultyAnalysisError.replayDidNotWin }
+                        if rebaseExpected {
+                            let updated = ClassicDOSReplay(rank: stored.rank, number: stored.number,
+                                title: stored.title, initialStateHash: hash, events: stored.events,
+                                expected: result)
+                            let revision = SHA256.hash(data: try encoder.encode(updated)).description
+                            let key = DifficultyCacheKey(identity: id,
+                                levelRevision: rows[index].entry.sourceRevision,
+                                replayRevision: revision, assetsRevision: hash + ":probes-10")
+                            rows[index].profile = try ClassicDifficultyAnalysis.analyse(
+                                initial: initial, replay: updated, key: key, maximumProbeRuns: 10)
+                            found[revision] = updated
+                            found[hash] = updated
+                        }
                         verifiedCount += 1
                         continue
                     }
@@ -187,7 +251,9 @@ struct RetimedFanWitness: Codable {
                     for saved in (solverReplays[hash] ?? []) + (solutions[hash].map { [$0] } ?? []) where witness == nil {
                         let candidate = ClassicDOSReplay(rank: id.packID, number: rows[index].entry.levelNumberSnapshot,
                             title: level.title, initialStateHash: hash, events: saved.events)
-                        if let outcome = try? ClassicDOSReplayPlayer.run(candidate, simulation: initial, verify: false), outcome.didWin {
+                        if let outcome = try? ClassicDOSReplayPlayer.run(
+                            candidate, simulation: initial, verify: false, stopWhenUnwinnable: true
+                        ), outcome.didWin {
                             witness = ClassicDOSReplay(rank: candidate.rank, number: candidate.number, title: candidate.title,
                                 initialStateHash: hash, events: candidate.events, expected: outcome)
                         }
@@ -436,6 +502,13 @@ struct RetimedFanWitness: Codable {
             print("PACK \(packNumber+1)/\(packs.count), \(attempts) trials, \(foundHashes.count) new distinct witnesses"); fflush(stdout)
         }
         try save()
+        if compareGolemsObjects {
+            print("Compared \(golemsComparisons.count)/\(rows.filter { !$0.official }.count) selected fan replays under Golems object slots")
+            guard failures.isEmpty, golemsComparisons.count == rows.filter({ !$0.official }).count else {
+                throw LevelPlaylistError.invalidSequence
+            }
+            return
+        }
         if verifyOnly {
             print("Verified \(verifiedCount)/\(rows.filter { !$0.official }.count) selected fan levels")
             guard failures.isEmpty, verifiedCount == rows.filter({ !$0.official }).count else { throw LevelPlaylistError.invalidSequence }

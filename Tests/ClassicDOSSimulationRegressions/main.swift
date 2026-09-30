@@ -763,6 +763,42 @@ private func testExitTakesTheLemmingAtTheMiddle() throws {
     print("PASS exits centre flat-ground arrivals and accept sloped approaches from either direction")
 }
 
+private func testDirectDropRequiresSplat() throws {
+    let midairExit = ClassicDOSTrigger(
+        id: 1, effect: .exit,
+        bounds: ClassicDOSRect(x1: 20, y1: 30, x2: 24, y2: 36)
+    )
+    var falling = try ClassicDOSSimulation(
+        terrain: emptyTerrain(),
+        configuration: configuration(
+            totalLemmings: 1, releaseRate: 99,
+            entrances: [ClassicDOSPoint(x: 20, y: 0)],
+            triggers: [midairExit], maximumX: 63, maximumY: 95
+        )
+    )
+    while !falling.isComplete && falling.tickCount < 150 {
+        falling.tick()
+    }
+    try require(falling.savedCount == 0, "ordinary faller entered an exit in midair")
+
+    let groundExit = ClassicDOSTrigger(
+        id: 2, effect: .exit,
+        bounds: ClassicDOSRect(x1: 20, y1: 68, x2: 24, y2: 80)
+    )
+    var splatting = try ClassicDOSSimulation(
+        terrain: floorTerrain(width: 64, height: 96, floorY: 76),
+        configuration: configuration(
+            totalLemmings: 1, releaseRate: 99,
+            entrances: [ClassicDOSPoint(x: 20, y: 0)],
+            triggers: [groundExit], maximumX: 63, maximumY: 95
+        )
+    )
+    while !splatting.isComplete && splatting.tickCount < 150 {
+        splatting.tick()
+    }
+    try require(splatting.savedCount == 1, "splatting lemming did not enter the exit")
+}
+
 private func testCoolingTrapEmitsOneActivation() throws {
     let trigger = ClassicDOSTrigger(
         id: 3,
@@ -1076,6 +1112,7 @@ private func run() throws {
     try testReleaseRateZeroCanBeRestored()
     try testCoolingTrapEmitsOneActivation()
     try testExitTakesTheLemmingAtTheMiddle()
+    try testDirectDropRequiresSplat()
     try testSplatterWaterUsesZeroHorizontalVelocity()
     try testDeterministicCodableContinuation()
     try testReplayInsertionOrdering()

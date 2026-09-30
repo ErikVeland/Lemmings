@@ -1,6 +1,6 @@
 # Modern Lemmings release plan
 
-Updated 26 September 2026. This is the current engineering plan, not an announcement of an official release.
+Updated 30 September 2026. This is the current engineering plan, not an announcement of an official release.
 
 The next planned release milestones are 1.7 NeoLemmix compatibility, 1.8
 Lemmings 2 and Lemmings 3 completion, and 2.0 iPhone and iPad. The existing
@@ -41,7 +41,7 @@ Campaign counts come from the committed [campaign evidence](CampaignCompletion/e
 The next Mac milestone is a reproducible evaluation build with these requirements:
 
 1. All current regression checks pass against a recorded source and fixture manifest.
-2. Every campaign advertised as complete has a winning route for every level and verified progression. Continue to label incomplete sequel support accurately.
+2. Preserve winning routes and their solvability and difficulty evidence for every campaign advertised as complete. Use the [release replay policy](ReleaseScope.md#release-replay-policy) to choose between the minor audit and full campaign replay gates. Continue to label incomplete sequel support accurately.
 3. Novice players can start, select skills, pause, request a nudge, retry and finish using each supported input device.
 4. Focus loss, disconnected controllers, audio interruptions, sleep, failed saves and restored sessions cannot silently lose a run.
 5. Run an extended hardware matrix: physical Intel, the minimum macOS version, current Apple Silicon, multiple screens, SDR/HDR, 60/120 Hz, Bluetooth/USB controllers and repeated engine switching.
@@ -70,13 +70,21 @@ device results are not claimed. Apple documents [virtual controls for controller
 
 ## Repeatable verification
 
-Run from the repository:
+Run the routine minor-release audit from the repository:
 
 ```sh
 python3 Tools/ReleaseReadiness/audit.py --app
 ```
 
-The audit creates a new directory under `.build/release-audit`, compiles the shared library from copied sources, runs 28 engine/data suites, verifies original, additional classic-family and L3 campaign routes, and checks controller, variable-speed, pointer and HDR behaviour. `--app` also runs the full app and sequel view suites. Runs preserve logs, source, fixture and asset hashes, JSON results and a readable report. Hashes include the resource bundle used by app tests. Source changes during a run are reported as drift and cause failure. Failed checks never become passes through a cached result.
+This checks preserved solution fixture hashes and runs focused engine
+regressions. It does not replay every campaign route. Run the full replay audit
+after a change listed in the [release replay policy](ReleaseScope.md#release-replay-policy):
+
+```sh
+python3 Tools/ReleaseReadiness/audit.py --app --scope all
+```
+
+The audit creates a new directory under `.build/release-audit`, compiles the shared library from copied sources, runs engine and data suites, and checks controller, variable-speed, pointer and HDR behaviour. The default `minor` scope checks preserved route manifests without replaying every campaign route. The `all` scope also verifies every campaign route. `--app` runs the full app and sequel view suites. Runs preserve logs, source, fixture and asset hashes, JSON results and a readable report. Hashes include the resource bundle used by app tests. Source changes during a run are reported as drift and cause failure. Failed checks never become passes through a cached result.
 
 Without `--app`, the app suites are explicitly **not run**. This is useful during engine work but is not a complete application check. `--require-closure` also fails because hardware, publishing and other platform gates remain open. The tool deliberately does not issue a release-ready certificate.
 

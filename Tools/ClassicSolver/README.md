@@ -26,6 +26,17 @@ attempt. Use the solver's `--partial-out` option for a focused search if an
 unsolved route needs inspection. A `.partial.json` file is a research lead;
 it is not a winning replay or a difficulty score.
 
+Use `--adaptive-rate` to let the solver raise the release rate at up to two
+decision points. It tests rates 25, 50, 75 and 99 above the current rate.
+The default search still uses a fixed rate. The batch ledger records this
+option separately. A candidate still needs an exact bundled-level replay and
+strict verification before it receives a score.
+
+Use `--prefer-progress` to rank routes nearer an exit before routes that keep
+more spare lemmings. The default keeps the survivor-first ranking. The batch
+ledger records this mode separately, so it does not skip an earlier search
+with the other ranking. A route still needs exact-level verification.
+
 `generate_solver_partial_retimes.py` makes bounded one-command timing
 candidates from these partial routes. Use `--minimum N --radius M` to search
 an untested range without repeating earlier shifts. Feed the candidate folder
@@ -40,3 +51,6 @@ bundled level before adding a score.
 Use `--golems-objects` to test all 32 slots on other fan levels as a separate
 compatibility probe. A route found under that override needs a matching fan
 runtime and fresh difficulty audit before it can enter the ledger.
+Set `FAN_GOLEMS_OBJECTS=1` in `ExpandFanEvidence` to analyse or strictly verify
+such a route under the same 32-slot rule. Keep that evidence separate from a
+default fan-runtime replay and score.

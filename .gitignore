@@ -1,7 +1,7 @@
 # Commercial game data. Never commit. The player imports data they own.
-Content/
-Sources/Music/
-Sources/Ports/
+Content
+Sources/Music
+Sources/Ports
 Sources/lemmings_*/
 *.mod
 *.ipf
