@@ -3113,12 +3113,14 @@ extension AppDelegate {
       throw IntegrationFailure(message: "The fresh Hot Seat journey hub did not open")
     }
     func labels(_ view: NSView) -> [String] {
-      (view as? NSTextField).map { [$0.stringValue] } ?? view.subviews.flatMap(labels)
+      [view.accessibilityLabel() ?? ""]
+        + ((view as? NSTextField).map { [$0.stringValue] } ?? [])
+        + view.subviews.flatMap(labels)
     }
     try check(labels(hub).contains(where: { $0.contains("Just dig!") })
       && buttons(hub).contains(where: { $0.title == "Let's play" })
       && !buttons(hub).contains(where: { $0.title == "Continue" }),
-      "A new Hot Seat inherited another session's journey position")
+      "A new Hot Seat inherited another session's journey position: \(labels(hub)), \(buttons(hub).map(\.title))")
     try check(arcade.records == profileRecords && store.learningProgress.completed.contains(first),
       "A new Hot Seat erased profile scores, achievements or saved learning history")
     GameScreen.shared.dismissAll()
