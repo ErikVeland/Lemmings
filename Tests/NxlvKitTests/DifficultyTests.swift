@@ -286,6 +286,35 @@ struct DifficultyTests {
         #expect(profile.detectedTechniques.isEmpty)
     }
 
+    @Test func classicDifficultyAnalysesAWinAtTheSourceClockLimit() throws {
+        let width = 96, height = 96
+        let terrain = try ClassicDOSTerrain(width: width, height: height,
+            solidMask: Data((0..<(width * height)).map { $0 / width >= 64 ? UInt8(1) : UInt8(0) }),
+            steelMask: Data(repeating: 0, count: width * height))
+        let configuration = ClassicDOSConfiguration(totalLemmings: 1, requiredToSave: 0,
+            timeLimitTicks: ClassicDOSReplayPlayer.defaultTickLimit + 2,
+            initialReleaseRate: 99, entrances: [.init(x: 16, y: 30)],
+            initialSkills: [.blocker: 1], maximumX: width - 1, maximumY: height - 1)
+        let initial = try ClassicDOSSimulation(terrain: terrain, configuration: configuration)
+        var probe = initial
+        while !probe.lemmings.contains(where: { $0.action == .walking }), probe.tickCount < 200 { _ = probe.tick() }
+        #expect(probe.lemmings.contains(where: { $0.action == .walking }))
+        let hash = ClassicDOSReplayRecorder.stateHash(of: initial)
+        let event = ClassicDOSReplayEvent(tick: probe.tickCount,
+            action: .assign(lemmingID: 0, skill: .blocker), afterTick: true)
+        let replay = ClassicDOSReplay(rank: "Fixture", number: 1, title: "Timed blocker",
+            initialStateHash: hash, events: [event])
+        let expected = try ClassicDOSReplayPlayer.run(replay, simulation: initial,
+            tickLimit: configuration.timeLimitTicks!)
+        #expect(expected.didWin)
+        #expect(expected.ticks == configuration.timeLimitTicks)
+        let checked = ClassicDOSReplay(rank: replay.rank, number: replay.number, title: replay.title,
+            initialStateHash: hash, events: replay.events, expected: expected)
+        let profile = try ClassicDifficultyAnalysis.analyse(initial: initial, replay: checked,
+            key: key("source-clock"), maximumProbeRuns: 1)
+        #expect(profile.confidence != .low)
+    }
+
     @Test func routineCrowdAssignmentsAreNotIndependentWorkers() {
         var many = solution()
         many.assignments = (0..<10).map { .init(frame: $0 * 20, worker: $0, skill: "builder") }

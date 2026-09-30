@@ -51,6 +51,9 @@ struct ImportedFanReplay: Decodable {
                replay.expected?.didWin == true, replays[replay.initialStateHash] == nil { replays[replay.initialStateHash] = replay }
         }
         let revision = ProcessInfo.processInfo.environment["DIFFICULTY_SIMULATION_REVISION"] ?? DifficultyModel.simulationVersion
+        let fanClock: ClassicDOSClock = ProcessInfo.processInfo.environment["CLASSIC_FAN_CLOCK"] == "golems"
+            ? .golems : .dos
+        let fanOnly = ProcessInfo.processInfo.environment["CLASSIC_AUDIT_FAN_ONLY"] == "1"
         let cacheURL = output.appendingPathComponent("audit.json")
         let cached = (try? decoder.decode([AuditedClassicLevel].self, from: Data(contentsOf: cacheURL))) ?? []
         let cache = Dictionary(cached.map { ($0.entry.identity, $0) }, uniquingKeysWith: { _, last in last })
@@ -110,7 +113,7 @@ struct ImportedFanReplay: Decodable {
             campaigns.append((set, ports))
         }
         campaigns.sort { ($0.0.title?.canonOrder ?? 999) < ($1.0.title?.canonOrder ?? 999) }
-        for (set, root) in campaigns where !rebuild {
+        for (set, root) in campaigns where !rebuild && !fanOnly {
             guard let fingerprint = FanLevelLibrary.classicSourceRevision(
                 for: set.title, root: root) else { throw LevelPlaylistError.invalidEntry }
             for (index, item) in set.campaign.levels.enumerated() {
@@ -135,7 +138,10 @@ struct ImportedFanReplay: Decodable {
             }
             try encoder.encode(rows).write(to: cacheURL, options: .atomic)
         }
-        let packs = FanLevelLibrary.packs(in: [resources.appendingPathComponent("LevelPacks"), FanLevelLibrary.downloadFolder] + (FanLevelLibrary.folder.map { [$0] } ?? []))
+        let packFolders = fanOnly ? [resources.appendingPathComponent("LevelPacks")]
+            : [resources.appendingPathComponent("LevelPacks"), FanLevelLibrary.downloadFolder]
+                + (FanLevelLibrary.folder.map { [$0] } ?? [])
+        let packs = FanLevelLibrary.packs(in: packFolders)
         for (packIndex, pack) in packs.enumerated() where !rebuild {
             do {
                 let entries = try FanLevelLibrary.validatedEntries(in: pack)
@@ -151,7 +157,8 @@ struct ImportedFanReplay: Decodable {
                             let rendered = try ClassicLevelRenderer.render(loaded.0, groundSet: ground, specialGraphic: special,
                                 objectSemantics: .forFanLevel(loaded.0, groundSet: ground))
                             return try ClassicDOSSimulation(level: loaded.0, renderedLevel: rendered,
-                                mainDATAssets: mainAssets(ports.appendingPathComponent("lemmings_dos_1991-07-30")))
+                                mainDATAssets: mainAssets(ports.appendingPathComponent("lemmings_dos_1991-07-30")),
+                                clock: fanClock)
                         })
                     } catch { problems.append("\(pack.lastPathComponent) / \(item.label): \(error)") }
                 }
@@ -160,6 +167,12 @@ struct ImportedFanReplay: Decodable {
                 print("Fan packs \(packIndex + 1)/\(packs.count), audited \(rows.count) levels"); fflush(stdout)
                 try encoder.encode(rows).write(to: cacheURL, options: .atomic)
             }
+        }
+        if fanOnly {
+            try encoder.encode(rows).write(to: cacheURL, options: .atomic)
+            try encoder.encode(problems).write(to: output.appendingPathComponent("failures.json"), options: .atomic)
+            print("Fan-only audit: \(rows.count) levels, \(problems.count) failures")
+            return
         }
         if rebuild {
             problems = (try? decoder.decode([String].self, from: Data(contentsOf: output.appendingPathComponent("failures.json")))) ?? []
@@ -185,7 +198,8 @@ struct ImportedFanReplay: Decodable {
                     let rendered = try ClassicLevelRenderer.render(level, groundSet: ground, specialGraphic: special,
                         objectSemantics: .forFanLevel(level, groundSet: ground))
                     let initial = try ClassicDOSSimulation(level: level, renderedLevel: rendered,
-                        mainDATAssets: mainAssets(ports.appendingPathComponent("lemmings_dos_1991-07-30")))
+                        mainDATAssets: mainAssets(ports.appendingPathComponent("lemmings_dos_1991-07-30")),
+                        clock: fanClock)
                     let hash = ClassicDOSReplayRecorder.stateHash(of: initial)
                     let replay = ClassicDOSReplay(rank: candidate.packID, number: rows[index].entry.levelNumberSnapshot,
                         title: level.title, initialStateHash: hash, events: candidate.events)

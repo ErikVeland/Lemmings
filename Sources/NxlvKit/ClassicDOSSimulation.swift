@@ -37,6 +37,15 @@ public enum ClassicDOSRules {
     }
 }
 
+/// The source clock used for a Classic-format level. Golems advances two
+/// further cycles before ending a timed level.
+public enum ClassicDOSClock: String, Codable, Sendable {
+    case dos
+    case golems
+
+    public var finalTickAllowance: Int { self == .golems ? 2 : 0 }
+}
+
 /// The DOS rule set a level runs under.
 ///
 /// Oh No! More Lemmings changed three behaviours, and the Xmas and Holiday
@@ -622,7 +631,8 @@ public struct ClassicDOSSimulation: Codable, Equatable, Sendable {
         level: ClassicLevel,
         renderedLevel: ClassicRenderedLevel,
         destructionMasks: ClassicDOSDestructionMaskSet? = nil,
-        mechanics: ClassicDOSMechanics = .original
+        mechanics: ClassicDOSMechanics = .original,
+        clock: ClassicDOSClock = .dos
     ) throws {
         let interactiveObjects = renderedLevel.objects.filter {
             $0.placement.slot < renderedLevel.interactiveObjectSlotLimit
@@ -650,7 +660,7 @@ public struct ClassicDOSSimulation: Codable, Equatable, Sendable {
                 )
         }
         let timeLimit = level.timeLimitMinutes > 0
-            ? level.timeLimitMinutes * 60 * ClassicDOSRules.ticksPerSecond
+            ? level.timeLimitMinutes * 60 * ClassicDOSRules.ticksPerSecond + clock.finalTickAllowance
             : nil
         let configuration = ClassicDOSConfiguration(
             totalLemmings: level.lemmingCount,
@@ -679,7 +689,8 @@ public struct ClassicDOSSimulation: Codable, Equatable, Sendable {
         level: ClassicLevel,
         renderedLevel: ClassicRenderedLevel,
         mainDATAssets: ClassicMainDATAssets,
-        mechanics: ClassicDOSMechanics = .original
+        mechanics: ClassicDOSMechanics = .original,
+        clock: ClassicDOSClock = .dos
     ) throws {
         try self.init(
             level: level,
@@ -687,7 +698,8 @@ public struct ClassicDOSSimulation: Codable, Equatable, Sendable {
             destructionMasks: ClassicDOSDestructionMaskSet(
                 mainDATMasks: mainDATAssets.destructionMasks
             ),
-            mechanics: mechanics
+            mechanics: mechanics,
+            clock: clock
         )
     }
 

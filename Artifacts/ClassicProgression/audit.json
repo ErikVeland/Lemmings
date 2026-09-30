@@ -196469,6 +196469,7 @@
       "sourceRevision" : "697a9fc2adb8c4a7e2b49b2741eee766cf7d944fe40b66640827db12163f0b99"
     },
     "initialHash" : "2318c29c79b7e711c1dabd6948510faa43fd74b98fd0ea381822d14339782912",
+    "issue" : "No stocked skills. Native lemmings remain in a terrain pocket below the exits; fixed release rates 1–99 and every single-Nuke tick at both the starting rate and rate 99 found no win. Source physics parity remains unverified.",
     "official" : false,
     "order" : 3050,
     "playable" : true,
@@ -235053,40 +235054,123 @@
     "playable" : true,
     "profile" : {
       "components" : {
-        "concurrencyBurden" : 0,
-        "constraintPressure" : 203.125,
-        "deductionComplexityProxy" : 160,
+        "concurrencyBurden" : 530,
+        "constraintPressure" : 828.75,
+        "deductionComplexityProxy" : 135,
         "executionPrecision" : 0,
-        "solutionComplexity" : 90,
-        "techniqueBurden" : 72
+        "solutionComplexity" : 505.53272943230144,
+        "techniqueBurden" : 670
       },
-      "confidence" : "low",
+      "confidence" : "medium",
       "criticalActions" : [
 
       ],
       "detectedTechniques" : [
-
+        "basher",
+        "builder",
+        "climber",
+        "digger",
+        "multiple-worker-coordination",
+        "release-rate-manipulation"
       ],
       "explanation" : [
-        "Estimate from resources and object structure; no validated solution.",
-        "Precision, required techniques and human deduction are unknown."
+        "4 used skill types; 29 assigned workers; 3 same-worker skill changes.",
+        "Maximum concurrent worker regions: 2.",
+        "Timing probes: 10. Untested alternatives remain unknown.",
+        "Deduction is a conservative proxy. Observed techniques are not proof of necessity.",
+        "Source rank: fan:lldb-374."
       ],
       "key" : {
         "analyserVersion" : "difficulty-2",
-        "assetsRevision" : "classic-corpus-probes-10",
+        "assetsRevision" : "172a947b95629f69ab15a3a297f9c4c0e62dac6448733cb2bbf3651c2ac8ec84:probes-10",
         "identity" : {
           "engine" : "classic",
           "levelID" : "justdigcomp.dat#1",
           "packID" : "fan:lldb-374"
         },
         "levelRevision" : "aafbe56bf545df649edde5ca3bd4e51b8f5c834e52772aaf339003420d473a26",
-        "replayRevision" : "none",
-        "simulationVersion" : "37b26668bcf05cf182f04321cb5b4f4ecf274393d7b29dd858dc1f69569bd509"
+        "replayRevision" : "SHA256 digest: 91e83fcdadbb12e18318a8f8a5289cc1ece4db434c27c78323606b3dd0ba490e",
+        "simulationVersion" : "neolemmix-ce-2026-09-27"
       },
-      "overallScore" : 75.40625,
+      "overallScore" : 464.8047004751063,
+      "precision" : {
+        "actions" : [
+          {
+            "outcomes" : {
+              "-1" : false
+            },
+            "sequence" : 0
+          },
+          {
+            "outcomes" : {
+              "-1" : true
+            },
+            "sequence" : 1
+          },
+          {
+            "outcomes" : {
+              "-1" : true
+            },
+            "sequence" : 28
+          },
+          {
+            "outcomes" : {
+              "-1" : true
+            },
+            "sequence" : 3
+          },
+          {
+            "outcomes" : {
+              "-1" : true
+            },
+            "sequence" : 29
+          },
+          {
+            "outcomes" : {
+              "-1" : true
+            },
+            "sequence" : 30
+          },
+          {
+            "outcomes" : {
+              "-1" : true
+            },
+            "sequence" : 31
+          },
+          {
+            "outcomes" : {
+              "-1" : true
+            },
+            "sequence" : 32
+          },
+          {
+            "outcomes" : {
+              "-1" : true
+            },
+            "sequence" : 4
+          },
+          {
+            "outcomes" : {
+              "-1" : true
+            },
+            "sequence" : 5
+          }
+        ],
+        "alternativeRunCount" : 0,
+        "assignmentCount" : 32,
+        "completed" : false,
+        "orderingOutcomes" : [
+
+        ],
+        "runCount" : 10,
+        "selectionOutcomes" : [
+
+        ]
+      },
       "prerequisiteConcepts" : [
 
-      ]
+      ],
+      "sourceRank" : "fan:lldb-374"
     }
   },
   {
@@ -258670,6 +258754,7 @@
       "sourceRevision" : "65c251590f612944e636a2e6755b6104a9cacf65ab86b351eb0d3578371adebe"
     },
     "initialHash" : "398f42ee21136f3888b6cd01a5a39e92f60a3c3168acee160a9b07fad3e05673",
+    "issue" : "No stocked skills. At the fastest release rate, the sole surviving lemming is exiting when the 1,020-tick limit ends. Fixed release rates 1–99 and every single-Nuke tick found no win. Source physics parity remains unverified.",
     "official" : false,
     "order" : 4157,
     "playable" : true,
@@ -349251,39 +349336,78 @@
     "profile" : {
       "components" : {
         "concurrencyBurden" : 0,
-        "constraintPressure" : 250,
-        "deductionComplexityProxy" : 160,
-        "executionPrecision" : 0,
-        "solutionComplexity" : 90,
-        "techniqueBurden" : 72
+        "constraintPressure" : 984.9019607843137,
+        "deductionComplexityProxy" : 70,
+        "executionPrecision" : 360,
+        "solutionComplexity" : 144.01955000865388,
+        "techniqueBurden" : 130
       },
-      "confidence" : "low",
+      "confidence" : "medium",
       "criticalActions" : [
-
+        1
       ],
       "detectedTechniques" : [
-
+        "basher",
+        "digger"
       ],
       "explanation" : [
-        "Estimate from resources and object structure; no validated solution.",
-        "Precision, required techniques and human deduction are unknown."
+        "2 used skill types; 2 assigned workers; 0 same-worker skill changes.",
+        "Maximum concurrent worker regions: 1.",
+        "Timing probes: 10. Untested alternatives remain unknown.",
+        "Deduction is a conservative proxy. Observed techniques are not proof of necessity.",
+        "Source rank: fan:lldb-545."
       ],
       "key" : {
         "analyserVersion" : "difficulty-2",
-        "assetsRevision" : "classic-corpus-probes-10",
+        "assetsRevision" : "8eef3e8f17b9bb1d5998853f5e83f6fee225b6efd7ee07dd749470701e13f598:probes-10",
         "identity" : {
           "engine" : "classic",
           "levelID" : "Pieuw 2007 Insane 2.DAT#7",
           "packID" : "fan:lldb-545"
         },
         "levelRevision" : "0b5e4bfede58cb4d8acee4ff5fb4d28ef912a472c1a5405271dc61453d7292f5",
-        "replayRevision" : "none",
-        "simulationVersion" : "37b26668bcf05cf182f04321cb5b4f4ecf274393d7b29dd858dc1f69569bd509"
+        "replayRevision" : "SHA256 digest: 54d216b8e501b956f487ee55d4a14c399b0a863fe08b244d5ae24de32e9496ca",
+        "simulationVersion" : "neolemmix-ce-2026-09-27"
       },
-      "overallScore" : 81.5,
+      "overallScore" : 269.12155590386465,
+      "precision" : {
+        "actions" : [
+          {
+            "outcomes" : {
+              "-1" : false,
+              "-2" : false,
+              "-4" : false,
+              "1" : true,
+              "2" : true
+            },
+            "sequence" : 0
+          },
+          {
+            "outcomes" : {
+              "-1" : false,
+              "-2" : false,
+              "-4" : false,
+              "1" : false,
+              "2" : false
+            },
+            "sequence" : 1
+          }
+        ],
+        "alternativeRunCount" : 0,
+        "assignmentCount" : 2,
+        "completed" : false,
+        "orderingOutcomes" : [
+
+        ],
+        "runCount" : 10,
+        "selectionOutcomes" : [
+
+        ]
+      },
       "prerequisiteConcepts" : [
 
-      ]
+      ],
+      "sourceRank" : "fan:lldb-545"
     }
   },
   {
@@ -360053,6 +360177,7 @@
       "sourceRevision" : "bc6910d89e3d4625677d173dd9289ac64e19378a58c5ae9c2f2285875fdfeede"
     },
     "initialHash" : "58d8da50ab5991d1f70f24045422ad9540ef9aca7b7e4d1cbb3d5bc02de3708a",
+    "issue" : "Native 48/50 route reaches the exit with the final two lemmings still exiting when the time limit ends; no verified win, and source physics parity remains unverified.",
     "official" : false,
     "order" : 5756,
     "playable" : true,

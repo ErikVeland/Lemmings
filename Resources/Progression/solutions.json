@@ -32632,6 +32632,351 @@
     "rank": "fan:lldb-553",
     "title": "Lemmingsense"
   },
+  "172a947b95629f69ab15a3a297f9c4c0e62dac6448733cb2bbf3651c2ac8ec84": {
+    "events": [
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 1,
+            "skill": "digger"
+          }
+        },
+        "afterTick": true,
+        "tick": 158
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 5,
+            "skill": "builder"
+          }
+        },
+        "afterTick": true,
+        "tick": 205
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 99
+          }
+        },
+        "afterTick": true,
+        "tick": 275
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 3,
+            "skill": "climber"
+          }
+        },
+        "afterTick": true,
+        "tick": 275
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 1,
+            "skill": "basher"
+          }
+        },
+        "afterTick": true,
+        "tick": 360
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "climber"
+          }
+        },
+        "afterTick": true,
+        "tick": 383
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 1,
+            "skill": "climber"
+          }
+        },
+        "afterTick": true,
+        "tick": 389
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 5,
+            "skill": "climber"
+          }
+        },
+        "afterTick": true,
+        "tick": 394
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 2,
+            "skill": "climber"
+          }
+        },
+        "afterTick": true,
+        "tick": 442
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 4,
+            "skill": "climber"
+          }
+        },
+        "afterTick": true,
+        "tick": 489
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 6,
+            "skill": "climber"
+          }
+        },
+        "afterTick": true,
+        "tick": 546
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 8,
+            "skill": "climber"
+          }
+        },
+        "afterTick": true,
+        "tick": 601
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 12,
+            "skill": "climber"
+          }
+        },
+        "afterTick": true,
+        "tick": 618
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 16,
+            "skill": "climber"
+          }
+        },
+        "afterTick": true,
+        "tick": 632
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 20,
+            "skill": "climber"
+          }
+        },
+        "afterTick": true,
+        "tick": 645
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 24,
+            "skill": "climber"
+          }
+        },
+        "afterTick": true,
+        "tick": 659
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 28,
+            "skill": "climber"
+          }
+        },
+        "afterTick": true,
+        "tick": 665
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 32,
+            "skill": "climber"
+          }
+        },
+        "afterTick": true,
+        "tick": 665
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 36,
+            "skill": "climber"
+          }
+        },
+        "afterTick": true,
+        "tick": 665
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 40,
+            "skill": "climber"
+          }
+        },
+        "afterTick": true,
+        "tick": 665
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 44,
+            "skill": "climber"
+          }
+        },
+        "afterTick": true,
+        "tick": 665
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 48,
+            "skill": "climber"
+          }
+        },
+        "afterTick": true,
+        "tick": 665
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 52,
+            "skill": "climber"
+          }
+        },
+        "afterTick": true,
+        "tick": 665
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 56,
+            "skill": "climber"
+          }
+        },
+        "afterTick": true,
+        "tick": 665
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 60,
+            "skill": "climber"
+          }
+        },
+        "afterTick": true,
+        "tick": 665
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 64,
+            "skill": "climber"
+          }
+        },
+        "afterTick": true,
+        "tick": 665
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 68,
+            "skill": "climber"
+          }
+        },
+        "afterTick": true,
+        "tick": 665
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 72,
+            "skill": "climber"
+          }
+        },
+        "afterTick": true,
+        "tick": 665
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 7,
+            "skill": "climber"
+          }
+        },
+        "afterTick": true,
+        "tick": 251
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 11,
+            "skill": "climber"
+          }
+        },
+        "afterTick": true,
+        "tick": 291
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 15,
+            "skill": "climber"
+          }
+        },
+        "afterTick": true,
+        "tick": 307
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 19,
+            "skill": "climber"
+          }
+        },
+        "afterTick": true,
+        "tick": 323
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 23,
+            "skill": "climber"
+          }
+        },
+        "afterTick": true,
+        "tick": 339
+      }
+    ],
+    "expected": {
+      "didWin": true,
+      "released": 80,
+      "required": 65,
+      "saved": 65,
+      "stateHash": "cc159adcffd0e6f130ae85d61be324d5877a85be8e9e14a2430b08dc2b416255",
+      "ticks": 3060
+    },
+    "initialStateHash": "172a947b95629f69ab15a3a297f9c4c0e62dac6448733cb2bbf3651c2ac8ec84",
+    "number": 2,
+    "rank": "fan:lldb-374",
+    "title": "Juanjos Just dig!"
+  },
   "176235279801268c05fd9afa55f8cb249ecf1c1e300e246a5aed8aa5597266f6": {
     "events": [
       {
@@ -209154,6 +209499,42 @@
     "number": 23,
     "rank": "fan:lldb-570",
     "title": "King of the castle"
+  },
+  "8eef3e8f17b9bb1d5998853f5e83f6fee225b6efd7ee07dd749470701e13f598": {
+    "events": [
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 1,
+            "skill": "digger"
+          }
+        },
+        "afterTick": true,
+        "tick": 322
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 2,
+            "skill": "basher"
+          }
+        },
+        "afterTick": true,
+        "tick": 498
+      }
+    ],
+    "expected": {
+      "didWin": true,
+      "released": 3,
+      "required": 3,
+      "saved": 3,
+      "stateHash": "0d924d44764386c797c9e1704145bc008c241fcd6db8e009cde01c7f843bab1c",
+      "ticks": 950
+    },
+    "initialStateHash": "8eef3e8f17b9bb1d5998853f5e83f6fee225b6efd7ee07dd749470701e13f598",
+    "number": 18,
+    "rank": "fan:lldb-545",
+    "title": "The Crossing (Part II)"
   },
   "8f0f0c8dbe87693f73f6d8784779ae2e943bfa69373053fef8912de0c75e28f4": {
     "events": [

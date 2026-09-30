@@ -1,0 +1,55 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "afterTick" : true,
+      "tick" : 0
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 49,
+          "skill" : "climber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 282
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 49,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 604
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 49,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 632
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 50,
+    "required" : 50,
+    "saved" : 50,
+    "stateHash" : "ccc89735f09bf23cdc3253f14184eef0d9ed02cbbb3e8f11cd59262434634e00",
+    "ticks" : 1022
+  },
+  "initialStateHash" : "e1bb3e7abcadb0cdf26305371e18932e9b6b30309b4a5e1b11a0a1190faef98c",
+  "number" : 6,
+  "rank" : "fan:lldb-554",
+  "title" : "Alternative Logic"
+}
