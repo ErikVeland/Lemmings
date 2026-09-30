@@ -7,6 +7,7 @@ import collections
 import hashlib
 import json
 import pathlib
+import re
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 OUT = ROOT / 'Artifacts/LearningJourney'
@@ -17,12 +18,22 @@ def key(row):
     return json.dumps(row['entry']['identity'], sort_keys=True)
 
 
+def beginner_rank(row):
+    source = (row['profile'].get('sourceRank', '') + ' ' + row['entry'].get('packNameSnapshot', '')).lower()
+    return any(re.search(r'\b' + rank + r'\b', source) for rank in ('fun', 'easy', 'tame'))
+
+
 def demand(row):
     p = row['profile']; c = p['components']
     return max(p['overallScore'], c['techniqueBurden']*.85, c['solutionComplexity']*.7,
                c['executionPrecision']*.85, c['concurrencyBurden']*.85,
                c['deductionComplexityProxy']*.85, c['constraintPressure']*.5,
                max(0, len(p['detectedTechniques'])-1)*90)
+
+
+def requires_full_rescue(row, replay):
+    expected = replay.get('expected', {})
+    return expected.get('required') is not None and expected.get('required') == expected.get('released')
 
 
 def features(row, replay):
@@ -65,35 +76,33 @@ def select(pool, replays):
         options = [r for r in pool if key(r) in evidence and key(r) not in chosen
                    and lower <= demand(r) <= upper and predicate(r, evidence[key(r)])
                    and application_signature(evidence[key(r)]) not in used_signatures]
+        if objective.startswith('introduce:'):
+            options = [r for r in options if beginner_rank(r)
+                       and demand(r) < 180
+                       and not requires_full_rescue(r, replays.get(r['profile']['key']['replayRevision'])
+                                                    or replays.get(r['initialHash'], {}))]
         if not options:
             missing.append(objective)
-            return False
+            return
         # Prefer official evidence when it fits the same narrow demand window.
         floor = min(demand(r) for r in options)
         nearby = [r for r in options if demand(r) <= floor + 35]
         row = min(nearby, key=lambda r: (not r.get('official', False), demand(r), key(r)))
+        witness = replays.get(row['profile']['key']['replayRevision']) or replays.get(row['initialHash'], {})
         used_signatures.add(application_signature(evidence[key(row)]))
         chosen[key(row)] = {'identity': row['entry']['identity'], 'objective': objective,
             'lesson': lesson, 'purpose': purpose, 'evidence': 'winning replay assignments and measured profile',
-            'level': row['entry']['levelNameSnapshot'], 'intrinsicDemand': demand(row)}
-        return True
+            'level': row['entry']['levelNameSnapshot'], 'intrinsicDemand': demand(row),
+            'sourceRank': row['profile'].get('sourceRank'), 'beginnerRank': beginner_rank(row),
+            'requiresFullRescue': requires_full_rescue(row, witness)}
 
-    # One isolated introduction per skill, irrespective of original rank or pack.
+    # Introductions must come from a low-demand Fun, Easy or Tame source.
+    # Missing introductions stay missing instead of promoting an expert puzzle.
     for skill in sorted(BASIC):
-        objective = 'introduce:'+skill
-        if choose(objective, 'Discover: '+skill.capitalize(),
+        choose('introduce:'+skill, 'Discover: '+skill.capitalize(),
                'First assignment of the '+skill+' skill.',
-               lambda r,f,s=skill: f['concepts'] == {s}
-                   and r['profile']['components']['executionPrecision'] <= 180, upper=179.999):
-            continue
-        # If there is no forgiving witness, use a fully probed intermediate
-        # introduction. Keep its measured demand and flag any preparation jump.
-        missing.remove(objective)
-        choose(objective, 'Discover: '+skill.capitalize(),
-               'Introduce '+skill+' and practise assignment timing.',
-               lambda r,f,s=skill: f['concepts'] == {s}
-                   and r['profile'].get('precision', {}).get('completed') is True
-                   and r['profile']['components']['executionPrecision'] <= 300, upper=299)
+               lambda r,f,s=skill: f['concepts'] == {s} and r['profile']['components']['executionPrecision'] <= 180,
+               upper=180)
 
     # A transition on one worker is different from assigning two independent jobs.
     # Only short, forgiving routes qualify as intermediate teaching examples.
@@ -220,19 +229,20 @@ def select(pool, replays):
             chosen[key(row)] = {'identity': row['entry']['identity'], 'objective': objective,
                 'lesson': focus, 'purpose': purpose,
                 'evidence': 'winning replay assignments and measured profile',
-                'level': row['entry']['levelNameSnapshot'], 'intrinsicDemand': demand(row)}
+                'level': row['entry']['levelNameSnapshot'], 'intrinsicDemand': demand(row),
+                'sourceRank': row['profile'].get('sourceRank'), 'beginnerRank': beginner_rank(row),
+                'requiresFullRescue': requires_full_rescue(row, replays.get(row['profile']['key']['replayRevision'])
+                                                           or replays.get(row['initialHash'], {}))}
             used_signatures.add(signature)
             current.append(row)
     lessons = list(chosen.values())
     for lesson in lessons:
         lesson['applicationSignature'] = application_signature(evidence[json.dumps(lesson['identity'], sort_keys=True)])
-    foundations = [l for l in lessons if l['objective'].startswith('introduce:')]
-    assert len(foundations) == 8, 'A basic skill has no safe introductory witness'
     assert len({l['objective'] for l in lessons}) == len(lessons)
     return {'version':'curriculum-3', 'targetSize':292, 'poolSize':len(pool), 'lessons':lessons,
             'selectionPolicy':'Official first within comparable 35-point demand bands; distinct observed applications; Classic mechanics only.',
             'unavailableOptionalObjectives':missing,
-            'limits':'Objectives describe observed routes. Novice readability and the necessity of these techniques require playtesting.'}
+            'limits':'Objectives describe observed routes. Opening introductions require a low-demand Fun, Easy or Tame candidate whose winning witness does not require a full rescue. Missing introductions are deferred. Novice readability and technique necessity require playtesting.'}
 
 
 if __name__ == '__main__':

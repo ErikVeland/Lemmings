@@ -19,6 +19,7 @@ class CurriculumTests(unittest.TestCase):
                 rows.append({'entry':{'identity':identity,'levelNameSnapshot':replay_id},
                     'initialHash':replay_id,'profile':{'overallScore':40+n,
                         'key':{'replayRevision':replay_id},'detectedTechniques':[skill],
+                        'sourceRank':'Fun',
                         'components':{'techniqueBurden':65,'solutionComplexity':40+n,
                             'executionPrecision':0,'concurrencyBurden':0,
                             'constraintPressure':30,'deductionComplexityProxy':30}}})
@@ -38,7 +39,7 @@ class CurriculumTests(unittest.TestCase):
         rows,replays = self.pool()
         for key,replay in replays.items():
             if key.startswith('floater'): replay['expected']['didWin'] = False
-        with self.assertRaises(AssertionError): curation.select(rows,replays)
+        self.assertIn('introduce:floater', curation.select(rows,replays)['unavailableOptionalObjectives'])
 
     def test_replays_rejected_by_hints_cannot_supply_a_lesson(self):
         rows,replays = self.pool()
@@ -50,19 +51,15 @@ class CurriculumTests(unittest.TestCase):
         result = curation.select(rows,replays)
         self.assertTrue(all(l['level'].endswith('2') for l in result['lessons']))
 
-    def test_demanding_introduction_requires_complete_probes(self):
+    def test_demanding_introduction_stays_deferred_even_with_complete_probes(self):
         rows,replays = self.pool()
         for row in rows:
             if row['profile']['detectedTechniques'] == ['miner']:
                 row['profile']['components']['executionPrecision'] = 275
-                row['profile']['precision'] = {'completed': False}
-        with self.assertRaises(AssertionError): curation.select(rows,replays)
-        reviewed = next(r for r in rows if r['entry']['levelNameSnapshot'] == 'miner2')
-        reviewed['profile']['precision']['completed'] = True
+                row['profile']['precision'] = {'completed': True}
         result = curation.select(rows,replays)
-        lesson = next(l for l in result['lessons'] if l['objective'] == 'introduce:miner')
-        self.assertEqual(lesson['level'], 'miner2')
-        self.assertGreaterEqual(lesson['intrinsicDemand'], 180)
+        self.assertIn('introduce:miner', result['unavailableOptionalObjectives'])
+        self.assertFalse(any(l['objective'] == 'introduce:miner' for l in result['lessons']))
 
     def test_repeated_builders_are_not_new_sequences(self):
         rows,_ = self.pool()
@@ -93,7 +90,7 @@ class CurriculumTests(unittest.TestCase):
             return curation.application_signature(curation.features(rows[0], {'events':events}))
         self.assertEqual(signature([0]), signature([1,2,3]))
 
-    def test_current_path_is_selective_and_intermediate_led(self):
+    def test_current_path_is_selective_and_respects_placement_floors(self):
         plan=json.loads((ROOT/'Artifacts/LearningJourney/curriculum.json').read_text())
         manifest=json.loads((ROOT/'Resources/Progression/learning.json').read_text())
         goals={json.dumps(l['identity'],sort_keys=True):l for l in plan['lessons']}
@@ -102,12 +99,22 @@ class CurriculumTests(unittest.TestCase):
         self.assertTrue(280 <= len(lessons) <= 305)
         self.assertEqual(len({g['applicationSignature'] for g in goals.values()}),len(lessons))
         self.assertEqual(len({g['objective'] for g in goals.values()}),len(lessons))
+        introductions=0
         for i,lesson in enumerate(lessons):
             goal=goals[json.dumps(lesson['entry']['identity'],sort_keys=True)]
-            self.assertEqual(goal['objective'].startswith('introduce:'),i<8)
             self.assertEqual(lesson['focus'],goal['lesson'])
-            self.assertFalse(lesson['preparationGaps'])
-        self.assertGreaterEqual(sum(l['stage']=='Intermediate' for l in lessons),len(lessons)/2)
+            if goal['objective'].startswith('introduce:'):
+                introductions+=1
+                self.assertTrue(goal['beginnerRank'])
+                self.assertFalse(goal['requiresFullRescue'])
+                self.assertLess(goal['intrinsicDemand'],180)
+            if lesson['stage']=='Fun': self.assertFalse(lesson['preparationGaps'])
+        self.assertLess(introductions,8)
+        self.assertTrue(all(b['demand'] >= a['demand'] for a,b in zip(lessons,lessons[1:])))
+        summary=json.loads((ROOT/'Artifacts/LearningJourney/summary.json').read_text())
+        self.assertEqual(summary['levels'],len(lessons))
+        self.assertEqual(summary['stages'],{stage:sum(l['stage']==stage for l in lessons)
+                         for stage in ('Fun','Intermediate','Difficult','Expert')})
         for a,b in zip(lessons,lessons[1:]):
             if b['demand']-a['demand'] > 65:
                 self.assertTrue(b['needsSupport'])

@@ -27,6 +27,9 @@ def main():
     solutions = json.loads((ROOT / "Artifacts/LearningJourney/candidate-solutions.json").read_text())
     audit = json.loads((ROOT / "Artifacts/ClassicProgression/audit.json").read_text())
     sources = {(row["entry"]["identity"]["packID"], row["entry"]["identity"]["levelID"]): row for row in audit}
+    clock_records = json.loads((EVIDENCE / "classic-fan-clock-audit.json").read_text())
+    clocks = {(row["packID"], row["levelID"]): row for row in clock_records}
+    assert len(clocks) == len(clock_records)
     with (EVIDENCE / "levels.csv").open(newline="") as stream:
         ledger = {(row["pack"], row["level"]): row for row in csv.DictReader(stream)}
     current = superseded = 0
@@ -38,13 +41,14 @@ def main():
         assert entry["completion"] == "verified win"
         selected = solutions["SHA256 digest: " + entry["replay_sha256"]]
         assert selected["initialStateHash"] == sources[key]["initialHash"]
+        assert selected["initialStateHash"] == clocks[key]["newHash"]
         assert selected["expected"]["didWin"]
         if entry["replay_sha256"] == record["nativeReplaySHA256"]:
             current += 1
         else:
             superseded += 1
         native = solutions["SHA256 digest: " + record["nativeReplaySHA256"]]
-        assert native["initialStateHash"] == sources[key]["initialHash"]
+        assert native["initialStateHash"] == clocks[key]["oldHash"]
         assert native["expected"]["didWin"]
         source_events = json.loads(json.dumps(native["events"]))
         if "adjustedEvents" in record:
@@ -84,7 +88,7 @@ def main():
         assert any(hashlib.sha256(replay_bytes(page, match["recordIndex"])).hexdigest()
                    == match["sourceReplaySHA256"] for page in pages)
     print(f"Verified {len(records)} Classic replay derivations and source records: "
-          f"{current} selected, {superseded} superseded by other verified wins.")
+          f"{current} current, {superseded} historical DOS-clock inputs with current Golems-clock wins.")
 
 
 if __name__ == "__main__":

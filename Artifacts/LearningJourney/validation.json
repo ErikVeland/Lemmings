@@ -67,5 +67,22 @@
     "Resources/Progression/solutions.json": "063c38a00cf9cfc98de99ba775687a217b8cadff9e618418de67a6499af69050",
     "Sources/NxlvKit/ClassicDifficultyAnalysis.swift": "e11c9aed2ad88c551461e98f23db22f31ee1c83aa85b5ae22345d3b442d0b1c7"
   },
-  "version": "learning-9"
+  "version": "learning-9",
+  "status": "Historical validation of local commit 9f70a347; superseded by the remote journey merged from 54913345. Counts, ordering, digests and UI evidence below do not validate the merged journey.",
+  "mergeValidation": {
+    "remoteJourney": "54913345b32a6193d603a8b6af7cfeeeb892162b",
+    "localGameplay": "9f70a347",
+    "pythonTests": 11,
+    "swiftTests": 34,
+    "journeySolutionAndRenderTests": 3,
+    "transportTests": "passed offscreen and muted for Classic, Lemmings 2 and Lemmings 3",
+    "pauseInputTests": "passed offscreen and muted in all three engines, including Classic fan levels, focused controls, repeat/release, modifiers, text and menu routing",
+    "selectionTests": "pixel and native canvas tests passed offscreen and muted in all three engines; captures inspected with HD effects off",
+    "libraryReplayRepair": "Retained the local corrected Mienrs <--- lol, typo replay after the remote version failed VerifiedSolution.load. All three journey solution/render tests then passed.",
+    "limits": [
+      "Remote curriculum labels The Undiscovered Country, Steel Block Party and Yo-yo Lem-lem as requiring full rescue, but their shipped placement demands are below 360. Remote ordering is preserved.",
+      "Full corpus replay verification was not rerun.",
+      "Composited CRT windows and packaged launch smoke require a separately authorised visible run."
+    ]
+  }
 }

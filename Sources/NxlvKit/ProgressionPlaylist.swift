@@ -19,8 +19,16 @@ public struct ProgressionCandidate: Sendable {
     /// Supplied by the authoritative content adapter; never inferred from filenames.
     public let isOfficial: Bool
     public let campaignOrder: Int
-    public init(entry: LevelPlaylistEntry, profile: DifficultyProfile, isOfficial: Bool, campaignOrder: Int = 0) {
-        self.entry = entry; self.profile = profile; self.isOfficial = isOfficial; self.campaignOrder = campaignOrder
+    /// True when the winning witness must save every released lemming.
+    public let requiresFullRescue: Bool
+    /// True when the source does not identify a recognised campaign rank.
+    public let rankIsUnverified: Bool
+    public init(entry: LevelPlaylistEntry, profile: DifficultyProfile, isOfficial: Bool,
+                campaignOrder: Int = 0, requiresFullRescue: Bool = false,
+                rankIsUnverified: Bool = false) {
+        self.entry = entry; self.profile = profile; self.isOfficial = isOfficial
+        self.campaignOrder = campaignOrder; self.requiresFullRescue = requiresFullRescue
+        self.rankIsUnverified = rankIsUnverified
     }
     var stableKey: String { [entry.identity.engine.rawValue, entry.identity.packID, entry.identity.levelID].joined(separator: "\u{0}") }
 }

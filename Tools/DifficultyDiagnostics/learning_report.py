@@ -68,8 +68,6 @@ if sys.argv[1] == 'collect':
 elif sys.argv[1] == 'report':
     rows = {key(r): r for r in read(BASE)}
     rows.update({key(r): r for r in read(OUT / 'fan-evidence.json')})
-    if (OUT / 'reviewed-evidence.json').exists():
-        rows.update({key(r): r for r in read(OUT / 'reviewed-evidence.json')})
     manifest = read(ROOT / 'Resources/Progression/learning.json')
     lessons = manifest['lessons']
     selected = [rows[key(l)] for l in lessons]
@@ -79,9 +77,7 @@ elif sys.argv[1] == 'report':
     assert len({g['objective'] for g in goals.values()}) == len(lessons)
     assert len({g['applicationSignature'] for g in goals.values()}) == len(lessons)
     introductions = [g for g in goals.values() if g['objective'].startswith('introduce:')]
-    assert len(introductions) == 8
-    assert all(goals[key(l)]['objective'].startswith('introduce:') for l in lessons[:8])
-    assert not any(goals[key(l)]['objective'].startswith('introduce:') for l in lessons[8:])
+    assert len(introductions) <= 8
     scores = [l['score'] for l in lessons]
     demands = [l['demand'] for l in lessons]
     stages = ['Fun','Intermediate','Difficult','Expert']
@@ -99,6 +95,11 @@ elif sys.argv[1] == 'report':
     witnesses = read(OUT/'candidate-solutions.json')
     solutions = {r['initialHash']:witnesses[r['profile']['key']['replayRevision']] for r in fan}
     assert all(replay['expected']['didWin'] for replay in solutions.values())
+    full_rescue_count = 0
+    for row in selected:
+        expected = witnesses.get(row['profile']['key']['replayRevision'], {}).get('expected', {})
+        if expected.get('required') is not None and expected.get('required') == expected.get('released'):
+            full_rescue_count += 1
     # Removing a recommendation must not remove a library level's existing hints.
     library_solutions = read(ROOT/'Resources/Progression/solutions.json')
     library_solutions.update(solutions)
@@ -108,6 +109,7 @@ elif sys.argv[1] == 'report':
         'fanPacks':len({r['entry']['identity']['packID'] for r in fan}),
         'stages':{stage:sum(l['stage']==stage for l in lessons) for stage in stages},
         'skillIntroductions':len(introductions), 'duplicateObjectives':0,
+        'fullRescueRequirements':full_rescue_count,
         'largestDemandStep':max(b-a for a,b in zip(demands,demands[1:])),
         'largestScoreStep':max(b-a for a,b in zip(scores,scores[1:])),
         'preparationGaps':sum(bool(l['preparationGaps']) for l in lessons),
@@ -151,17 +153,14 @@ elif sys.argv[1] == 'report':
         f"{len(lessons)} selected lessons from {curriculum['poolSize']} validated, deduplicated single-player candidates. {summary['official']} official levels and {len(fan)} library levels.",'',
         '## Selection before ordering','',
         'The recommended journey is a selective curriculum. The complete library and original campaigns remain available separately. It has no requirement to include every official level or every validated fan level.','',
-        'The first eight lessons introduce the eight basic skills once each. Later lessons need a distinct objective: change one worker’s job, split jobs between workers, plan a three-skill sequence, control spacing, coordinate work, or combine planning, timing and resource demands. A repeated tutorial is not a bridge.','',
+        'Skill introductions no longer force their way into the opening lessons. The order uses source rank and winning replay evidence. Fun, Easy and Tame levels can start the path. Levels with a Tricky or higher rank, unknown rank, or a full-rescue requirement have a higher placement floor. The model still needs novice playtesting.','',
         'The target is roughly 292 levels: the combined size of Classic, Oh No! and the 72 seasonal levels. The path uses Classic mechanics only. Confirmed L2/L3 levels remain outside this journey. All six source campaigns are checked in corpus-coverage.json.','',
         'Official levels take priority within comparable 35-point demand bands. Library levels supply missing applications. An application signature records the skill set, job changes, three-step sequences and worker roles. Identical signatures are excluded even across different titles. Repeated assignments, worker counts and score buckets do not create new lessons. These are evidence-based distinctions that still need human review.', '',
-        'The Fun stage contains introductions below 180 demand. More demanding introductions and simple combinations begin Intermediate. Difficult and Expert retain the existing demand boundaries. Intermediate lessons are the majority of the path. Candidates are selected for their teaching role before the existing demand model orders them. No score is altered to make the chart look smoother.','',
+        'The Fun stage contains beginner-ranked levels below the demand threshold. Unknown ranks and Tricky or higher ranks move to later stages. A winning route that must save every released lemming starts at Difficult. These rules do not prove that a level is easy. Difficult and Expert retain the existing demand boundaries.','',
         '## Evidence and limits','',
         'Objectives are inferred from winning replay commands and measured profiles. They describe an observed route, not a proved necessary technique or a human difficulty rating. Geometry-specific lessons such as steel recognition and safe digging depth are not reliably detected by the current evidence. Those require authored review before claiming complete teaching coverage.','',
         'The selector retains multiplayer and port-duplicate exclusions. The generator checks each selected fan witness against its profile digest and source identity. Basic introductions, unique objectives, source coverage of the selected list and reversed-input ordering are checked.','',
-        'Reviewed corrections in `reviewed-evidence.json` override older scores even when the corrected demand is higher. Replay inputs must fit inside the verified completion time. All eight introductions precede combinations, with original evidence scores retained.','',
-        'The miner introduction was reviewed after Mienrs <--- lol, typo exposed missed timing and release-rate demands. Its repaired replay remains available in the library. The broader cached corpus has not yet been reanalysed with the corrected detector.','',
-        'No current miner-only witness meets the forgiving introductory threshold. Honey, I Saved The Lemmings has complete timing probes and a winning replay. It appears as an Intermediate introduction with a support flag for the demand increase. This remains a teaching gap for novice playtesting.','',
-        f"Stages: {summary['stages']}. Basic introductions: 8. Duplicate objectives: 0. Largest demand increase: {summary['largestDemandStep']:.2f}/1000. Preparation gaps: {summary['preparationGaps']}.",'',
+        f"Stages: {summary['stages']}. Skill introductions: {summary['skillIntroductions']}. Full-rescue requirements: {summary['fullRescueRequirements']}. Duplicate objectives: 0. Largest demand increase: {summary['largestDemandStep']:.2f}/1000. Preparation gaps: {summary['preparationGaps']}.",'',
         '## Transitions for playtesting','',
         *[f"- {t['step']}. {t['level']}: {'; '.join(t['reasons'])}." for t in transitions if t['needsSupport']], '',
         'A support flag remains a review request. An absent flag is not proof that a novice will find a solution obvious.','',
@@ -178,7 +177,7 @@ elif sys.argv[1] == 'report':
     if posts is not None: posts.mkdir(parents=True,exist_ok=True)
     bbcode = ['[b]Oh My! All Lemmings![/b]','',
         f"A selective learning journey of {len(lessons)} levels. The complete library and original campaigns remain available separately.",'',
-        'The first eight lessons introduce each basic skill once. Most of the following teaching work is in combinations, sequences and intermediate strategy. Every selected level has a distinct objective. Two-player levels and repeated port puzzles are excluded.','',
+        'Low-demand Fun, Easy and Tame levels form the opening. The journey delays introductions that lack a suitable beginner-ranked witness. It does not force every skill into the first eight lessons.','',
         'Official levels take priority where they fit the lesson and difficulty. The corpus includes all Classic, Oh No! and seasonal levels. This journey uses Classic mechanics only.', '',
         'This is a replay-informed candidate curriculum. The objectives and difficulty curve still need novice playtesting. It is not a certified wall-free path.','',
         '[b]Full order[/b]','']

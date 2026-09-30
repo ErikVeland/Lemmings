@@ -29,19 +29,6 @@ if args.count > 3 {
         return original.profile.confidence == .low || candidate.profile.overallScore < original.profile.overallScore ? candidate : original
     }
 }
-// Reviewed corrections can raise a score. Do not keep an older underestimate
-// merely because it has a lower score than the corrected evidence.
-let reviewedURL = project.appendingPathComponent("Artifacts/LearningJourney/reviewed-evidence.json")
-if let data = try? Data(contentsOf: reviewedURL) {
-    let reviewed = try JSONDecoder().decode([Row].self, from: data)
-    for correction in reviewed {
-        guard let index = rows.firstIndex(where: { $0.entry.identity == correction.entry.identity }),
-              rows[index].entry.sourceRevision == correction.entry.sourceRevision,
-              rows[index].initialHash == correction.initialHash,
-              correction.profile.confidence != .low else { throw LevelPlaylistError.invalidEntry }
-        rows[index] = correction
-    }
-}
 struct Scenarios: Decodable { let official: [String]; let fan: [String: String] }
 let scenarios = try JSONDecoder().decode(Scenarios.self, from: Data(contentsOf: URL(fileURLWithPath: args[4])))
 var usedScenarios = Set(scenarios.official)
@@ -110,14 +97,7 @@ let goals = Dictionary(uniqueKeysWithValues: curriculum.lessons.map { ($0.identi
 guard Set(curriculum.lessons.map(\.objective)).count == curriculum.lessons.count else { throw LevelPlaylistError.invalidPool }
 let selected = pool.filter { goals[$0.entry.identity] != nil }
 guard selected.count == goals.count else { throw LevelPlaylistError.invalidPool }
-let candidates = selected.map { ProgressionCandidate(entry: $0.entry, profile: $0.profile, isOfficial: $0.official, campaignOrder: $0.order) }
-let focuses = goals.mapValues(\.lesson)
-let objectives = goals.mapValues(\.objective)
-let journey = try LearningJourney.generate(candidates, focuses: focuses, objectives: objectives)
-let repeated = try LearningJourney.generate(candidates.reversed(), focuses: focuses, objectives: objectives)
-guard journey == repeated else { throw LevelPlaylistError.invalidSequence }
 let encoder = JSONEncoder(); encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
-// Keep each profile tied to the exact replay that produced its measurements.
 let indexURL = URL(fileURLWithPath: args[3]).deletingLastPathComponent().appendingPathComponent("candidate-solutions.json")
 var witnesses = try JSONDecoder().decode([String: ClassicDOSReplay].self, from: Data(contentsOf: indexURL))
 let legacyURL = URL(fileURLWithPath: args[1]).deletingLastPathComponent().appendingPathComponent("verified-fan-replays.json")
@@ -128,6 +108,20 @@ if let data = try? Data(contentsOf: legacyURL), let legacy = try? JSONDecoder().
         witnesses[digest.map { String(format: "%02x", $0) }.joined()] = replay
     }
 }
+let candidates = selected.map { row in
+    let replay = witnesses[row.profile.key.replayRevision] ?? witnesses[row.initialHash ?? ""]
+    let requiredAll = replay?.expected.map { $0.required == $0.released } ?? false
+    return ProgressionCandidate(entry: row.entry, profile: row.profile, isOfficial: row.official,
+                                campaignOrder: row.order, requiresFullRescue: requiredAll,
+                                rankIsUnverified: !LearningJourney.hasRecognisedRank(for: row.entry,
+                                    sourceRank: row.profile.sourceRank))
+}
+let focuses = goals.mapValues(\.lesson)
+let objectives = goals.mapValues(\.objective)
+let journey = try LearningJourney.generate(candidates, focuses: focuses, objectives: objectives)
+let repeated = try LearningJourney.generate(candidates.reversed(), focuses: focuses, objectives: objectives)
+guard journey == repeated else { throw LevelPlaylistError.invalidSequence }
+// Keep each profile tied to the exact replay that produced its measurements.
 for row in selected where !row.official {
     guard let replay = witnesses[row.profile.key.replayRevision], replay.expected?.didWin == true,
           replay.initialStateHash == row.initialHash else { throw LevelPlaylistError.invalidEntry }

@@ -5,51 +5,27 @@ import NxlvKit
 
 /// Loads real fan assets without creating an application or a window.
 final class JourneySolutionTests: XCTestCase {
-    func testMinerIntroductionHasACompleteIntermediateWitness() throws {
+    func testFullRescueWitnessCannotBecomeAnOpeningIntroduction() throws {
         let project = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
             .deletingLastPathComponent().deletingLastPathComponent()
-        let resources = ProcessInfo.processInfo.environment["LEMMINGS_TEST_APP"].map {
-            URL(fileURLWithPath: $0).appendingPathComponent("Contents/Resources")
-        } ?? project.appendingPathComponent(".build/local/Ultimate Lemmings.app/Contents/Resources")
-        let ports = resources.appendingPathComponent("Ports")
-        guard FileManager.default.fileExists(atPath: ports.path) else {
-            throw XCTSkip("Build the local game resources to validate the miner introduction")
-        }
         let journey = try JSONDecoder().decode(LearningJourney.self,
             from: Data(contentsOf: project.appendingPathComponent("Resources/Progression/learning.json")))
-        let lesson = try XCTUnwrap(journey.lessons.first { $0.objective == "introduce:miner" })
-        let roots = try FileManager.default.contentsOfDirectory(at: ports, includingPropertiesForKeys: nil)
-        let root = try XCTUnwrap(roots.first {
-            (try? ClassicDataSet.detect(directory: $0))?.identifierKey == lesson.entry.identity.packID
-        })
-        let set = try ClassicDataSet.detect(directory: root)
-        let item = set.campaign.levels[lesson.entry.levelNumberSnapshot - 1]
-        XCTAssertEqual(item.level.title, "Honey, I Saved The Lemmings")
-        XCTAssertEqual(lesson.stage, .intermediate)
-        XCTAssertTrue(lesson.needsSupport)
-        let ground = try ClassicGroundSet.load(style: item.level.groundStyle, from: root)
-        let rendered = try ClassicLevelRenderer.render(item.level, groundSet: ground)
-        let initial = try ClassicDOSSimulation(level: item.level, renderedLevel: rendered,
-            mainDATAssets: ClassicMainDATAssets.load(from: root),
-            mechanics: ClassicDOSMechanics(title: set.title, rank: item.rank))
-        let solution = try XCTUnwrap(VerifiedSolution.load(initial: initial, from: project.appendingPathComponent("Resources")))
-        let profile = try ClassicDifficultyAnalysis.analyse(initial: initial, replay: solution.replay,
-            key: .init(identity: lesson.entry.identity, levelRevision: "regression"))
-        XCTAssertEqual(profile.detectedTechniques, ["miner"])
-        XCTAssertEqual(profile.precision?.completed, true)
-        XCTAssertLessThanOrEqual(profile.components.executionPrecision, 300)
-        XCTAssertEqual(solution.replay.expected?.saved, solution.replay.expected?.released)
+        XCTAssertFalse(journey.lessons.contains { $0.objective == "introduce:miner" })
+        for lesson in journey.lessons where lesson.entry.levelNameSnapshot == "Honey, I Saved The Lemmings" {
+            XCTAssertGreaterThanOrEqual(lesson.demand, 360)
+            XCTAssertNotEqual(lesson.stage, .fun)
+        }
     }
 
-    @MainActor func testIntermediateIntroductionRendersWithUsableTargets() throws {
+    @MainActor func testOpeningLessonRendersWithUsableTargets() throws {
         _ = NSApplication.shared
         let project = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
             .deletingLastPathComponent().deletingLastPathComponent()
         let journey = try JSONDecoder().decode(LearningJourney.self,
             from: Data(contentsOf: project.appendingPathComponent("Resources/Progression/learning.json")))
-        let lesson = try XCTUnwrap(journey.lessons.first { $0.objective == "introduce:miner" })
+        let lesson = try XCTUnwrap(journey.lessons.first)
         var started = false
-        let page = LearningJourneyMenu.hub(next: lesson, solved: 7, total: journey.lessons.count,
+        let page = LearningJourneyMenu.hub(next: lesson, solved: 0, total: journey.lessons.count,
             later: 0, resume: false, play: { started = true }, revisit: {})
         let window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 1120, height: 720),
             styleMask: [.titled], backing: .buffered, defer: false)
@@ -73,7 +49,7 @@ final class JourneySolutionTests: XCTestCase {
         let output = project.appendingPathComponent(".build/journey-review")
         try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
         try XCTUnwrap(bitmap.representation(using: .png, properties: [:]))
-            .write(to: output.appendingPathComponent("miner-introduction.png"))
+            .write(to: output.appendingPathComponent("opening-lesson.png"))
         try XCTUnwrap(controls(page).first { $0.title == "Let's play" }).performClick(nil)
         XCTAssertTrue(started)
     }
