@@ -10,6 +10,7 @@ import NxlvKit
 /// swap buffers without locking, which is worth doing if this ever glitches.
 final class ModuleMusicPlayer: @unchecked Sendable {
   private let engine = AVAudioEngine()
+  private let nukeEQ = AVAudioUnitEQ(numberOfBands: 2)
   private let speedPitch = AVAudioUnitTimePitch()
   private let reverb = AVAudioUnitReverb()
   private let mixEQ = AVAudioUnitEQ(numberOfBands: 1)
@@ -92,16 +93,21 @@ final class ModuleMusicPlayer: @unchecked Sendable {
     mixEQ.bands[0].filterType = .lowShelf
     mixEQ.bands[0].frequency = 180
     mixEQ.bands[0].bypass = false
+    engine.attach(nukeEQ)
+    nukeEQ.bands[0].filterType = .lowShelf
+    nukeEQ.bands[0].frequency = 400
+    nukeEQ.bands[1].filterType = .highShelf
+    nukeEQ.bands[1].frequency = 1800
+    nukeEQ.bands.forEach { $0.bypass = false }
     engine.attach(reverb)
     engine.attach(spatialMixer)
     reverb.loadFactoryPreset(.mediumRoom)
     reverb.wetDryMix = 0
-    spatialMixer.renderingAlgorithm = .auto
-    spatialMixer.sourceMode = .pointSource
-    spatialMixer.position = AVAudio3DPoint(x: 0, y: 0, z: -1)
+    // Music stays stereo. Positional effects use a separate environment node.
     engine.connect(node, to: speedPitch, format: format)
     engine.connect(speedPitch, to: mixEQ, format: format)
-    engine.connect(mixEQ, to: reverb, format: format)
+    engine.connect(mixEQ, to: nukeEQ, format: format)
+    engine.connect(nukeEQ, to: reverb, format: format)
     engine.connect(reverb, to: spatialMixer, format: format)
     engine.connect(spatialMixer, to: engine.mainMixerNode, format: format)
     sourceNode = node
@@ -113,6 +119,7 @@ final class ModuleMusicPlayer: @unchecked Sendable {
       engine.detach(spatialMixer)
       engine.detach(reverb)
       engine.detach(mixEQ)
+      engine.detach(nukeEQ)
       sourceNode = nil
       throw error
     }
@@ -133,6 +140,7 @@ final class ModuleMusicPlayer: @unchecked Sendable {
     engine.detach(spatialMixer)
     engine.detach(reverb)
     engine.detach(mixEQ)
+    engine.detach(nukeEQ)
     sourceNode = nil
     lock.lock()
     outputSuspended = false
@@ -470,6 +478,14 @@ final class ModuleMusicPlayer: @unchecked Sendable {
     lock.lock(); defer { lock.unlock() }
     return Double(sourceFrames) / sampleRate
   }
+  /// Independent of the DJ bass swap and the user's normal music mix.
+  func setNukeAmount(_ value: Float) {
+    let amount = value.isFinite ? min(1, max(0, value)) : 0
+    nukeEQ.bands[0].gain = -24 * amount
+    nukeEQ.bands[1].gain = -30 * amount
+    nukeEQ.globalGain = -5 * amount
+  }
+
   func setMixBass(_ gain: Float) { mixEQ.bands[0].gain = gain }
 
   /// Gameplay supplies a smoothed pitch in cents. Keep the tracker clock unchanged.
@@ -508,16 +524,12 @@ final class ModuleMusicPlayer: @unchecked Sendable {
     return level
   }
 
-  /// Applies new processing, keeping the tune playing from the start.
+  /// Applies new processing without restarting the tune or its beat clock.
   func setEnhancements(_ value: ProTrackerEnhancements) {
     lock.lock()
+    guard enhancements != value else { lock.unlock(); return }
     enhancements = value
-    if let module = loadedModule {
-      sourceFrames = 0
-      player = ProTrackerEnhancedPlayer(
-        module: module, sampleRate: sampleRate, enhancements: value)
-      interpolationPhase = 1
-    }
+    player = player?.replacingEnhancements(value)
     lock.unlock()
   }
 

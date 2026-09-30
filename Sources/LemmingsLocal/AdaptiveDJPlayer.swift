@@ -25,12 +25,12 @@ import NxlvKit
   func matchTempo(_ ratio: Float, base: Float) { matchRatio = ratio; setBaseRate(base) }
   func setSpeedPitch(_ cents: Double) { recording?.setSpeedPitch(cents); module?.setSpeedPitch(cents) }
 
-  init?(_ url: URL, repeats: Bool = true, timing: MusicTimingCatalogue.Entry? = nil, rhythmURL: URL? = nil) {
+  init?(_ url: URL, repeats: Bool = true, timing: MusicTimingCatalogue.Entry? = nil, rhythmURL: URL? = nil, enhancements: ProTrackerEnhancements = .modern) {
     self.url = url
     self.timing = timing
     if url.pathExtension.lowercased() == "mod" {
       let player = ModuleMusicPlayer()
-      player.setEnhancements(.faithful)
+      player.setEnhancements(enhancements)
       player.setVolume(0)
       guard player.play(url: url) != nil else { return nil }
       module = player
@@ -45,6 +45,8 @@ import NxlvKit
     if let timing { return timing.nextBeat(at: sourceSeconds, rate: Double(playbackRate)) }
     return module?.beatInfo
   }
+  func setEnhancements(_ value: ProTrackerEnhancements) { module?.setEnhancements(value) }
+  func setNukeAmount(_ amount: Float) { recording?.setNukeAmount(amount); module?.setNukeAmount(amount) }
   func setMixBass(_ gain: Float) { recording?.setMixBass(gain); module?.setMixBass(gain) }
   func play() {
     recording?.play()
@@ -84,6 +86,7 @@ import NxlvKit
   private var fadingOut: DJDeck?
   private var playbackRate: Float = 1
   private var speedPitch: Double = 0
+  private var enhancements: ProTrackerEnhancements = .modern
   private var journeyCycle = 0
   private var allowCelebrationAlternates = true
 
@@ -282,6 +285,13 @@ import NxlvKit
 
   // MARK: - Decks
 
+  private var nukeAmount: Float = 0
+  func setNukeAmount(_ amount: Float) {
+    nukeAmount = amount
+    deckA?.setNukeAmount(amount)
+    deckB?.setNukeAmount(amount)
+  }
+
   private func makeDeck(_ url: URL) -> DJDeck? {
     let role = relativePath(url).flatMap { catalogue?.entry(path: $0)?.track.role }
     let repeats = !["victory", "failure", "cue", "medal", "milestone"].contains(role ?? "")
@@ -293,10 +303,19 @@ import NxlvKit
       }
       if hash != candidate.expectedSHA256 { timing = nil }
     }
-    let deck = DJDeck(url, repeats: repeats, timing: timing, rhythmURL: MusicLibrary.rhythmURL(for: url, musicRoot: catalogueRoot))
+    let deck = DJDeck(url, repeats: repeats, timing: timing, rhythmURL: MusicLibrary.rhythmURL(for: url, musicRoot: catalogueRoot), enhancements: enhancements)
     deck?.playbackRate = playbackRate
     deck?.setSpeedPitch(speedPitch)
+    deck?.setNukeAmount(nukeAmount)
     return deck
+  }
+
+  /// Apply the shared MOD mix to both decks and all later tracks.
+  func setEnhancements(_ value: ProTrackerEnhancements) {
+    guard enhancements != value else { return }
+    enhancements = value
+    deckA?.setEnhancements(value)
+    deckB?.setEnhancements(value)
   }
 
   func setPlaybackRate(_ value: Double) {

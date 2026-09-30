@@ -26,6 +26,25 @@ public enum ClassicSoundEffect: String, CaseIterable, Codable, Sendable {
 
 /// Turns engine events into sound requests.
 public enum ClassicSoundCue {
+    /// Keep each event's origin until the presentation layer places its sound.
+    public static func positionedCues(for events: [ClassicDOSEvent],
+                                      lemmings: [ClassicDOSLemming], entrances: [ClassicDOSPoint]) -> [PositionedSoundCue] {
+        let positions = Dictionary(uniqueKeysWithValues: lemmings.map { ($0.id, GameplaySoundPoint(x: Double($0.foot.x), y: Double($0.foot.y))) })
+        return events.flatMap { event -> [PositionedSoundCue] in
+            let id: Int?
+            switch event {
+            case let .skillAssigned(lemmingID, _), let .saved(lemmingID), let .builderWarning(lemmingID),
+                 let .hitSteel(lemmingID), let .fellOut(lemmingID), let .actionChanged(lemmingID, _, _): id = lemmingID
+            case .entrancesOpened:
+                return entrances.flatMap { point in cues(for: [event]).map {
+                    PositionedSoundCue($0, at: GameplaySoundPoint(x: Double(point.x), y: Double(point.y)))
+                } }
+            default: id = nil
+            }
+            return cues(for: [event]).map { PositionedSoundCue($0, at: id.flatMap { positions[$0] }) }
+        }
+    }
+
     /// Maps one tick's events to the sounds that tick should play.
     ///
     /// Duplicates are collapsed. A nuke can push a dozen lemmings into the

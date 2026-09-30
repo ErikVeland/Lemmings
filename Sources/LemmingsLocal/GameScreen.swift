@@ -6,6 +6,7 @@ import NxlvKit
     static let shared = GameScreen()
     weak var gameWindow: NSWindow?
     var onPresent: (() -> Void)?
+    var onNavigate: (() -> Void)?
     private struct Page {
         let view: NSView
         var focus: NSResponder?
@@ -27,6 +28,7 @@ import NxlvKit
                 let beginning = notification.name == NSWindow.willBeginSheetNotification
                 MainActor.assumeIsolated {
                     if let window, window === self?.gameWindow, beginning {
+                        self?.onNavigate?()
                         self?.updateCursor(suppressed: true)
                     }
                 }
@@ -92,6 +94,7 @@ import NxlvKit
         if !pages.isEmpty, gameWindow !== window { dismissAll() }
         gameWindow = window
         updateCursor(suppressed: true)
+        onNavigate?()
         onPresent?()
         if let page = view as? GameMenuPage { page.captureBackdrop(window.contentView!) }
         if let index = pages.firstIndex(where: { $0.view === view }) {
@@ -127,6 +130,7 @@ import NxlvKit
     }
     func dismiss(_ view: NSView) {
         guard let index = pages.firstIndex(where: { $0.view === view }) else { return }
+        onNavigate?()
         while pages.count > index {
             let page = pages.removeLast()
             page.view.removeFromSuperview()
@@ -142,6 +146,7 @@ import NxlvKit
     func dismissAll() { if let first = pages.first { dismiss(first.view) } }
     func chooseFile(_ panel: NSOpenPanel) async -> URL? {
         guard let gameWindow else { return nil }
+        onNavigate?()
         onPresent?()
         return await withCheckedContinuation { continuation in
             panel.beginSheetModal(for: gameWindow) { response in

@@ -124,7 +124,7 @@ public enum ClassicColorDepth: String, Equatable, Codable, CaseIterable, Sendabl
 public enum ClassicMusicStyle: String, Equatable, Codable, CaseIterable, Sendable {
     /// Exactly as the hardware played it.
     case faithful
-    /// Widened, equalised and given a small room.
+    /// Narrower MOD stereo, centred percussion, EQ and a small room.
     case modern
 
     public var displayName: String {

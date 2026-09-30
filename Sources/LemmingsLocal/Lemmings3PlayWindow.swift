@@ -234,6 +234,11 @@ import NxlvKit
             self.canvas.needsDisplay = true
         }
         try warningSound.loadLemmings3Sounds(root: root)
+        canvas.onCameraChanged = { [weak self] in
+            guard let self else { return }
+            self.warningSound.setViewport(self.canvas.soundViewport)
+        }
+
         window.title = "Lemmings 3 — \(campaign.tribe.title) \(campaign.index + 1) — Experimental native preview"
         window.delegate = self; window.isReleasedWhenClosed = false
         window.minSize = NSSize(width: 850, height: 540)
@@ -373,7 +378,7 @@ import NxlvKit
             return SkillShortcuts(names: names).hint(names: names, modern: self?.audioSettings.modernControlsEnabled ?? false) + "\n\nSpace: pause\nR: retry\nHold , / <: scrub backward\nHold . / >: scrub forward after rewind\nTap , / .: step one tick\nZ: 2× Zoom at cursor\nScroll up / down: Zoom on / off at cursor\nShift-Z: 2× Superzoom at cursor, 0.5× time\nPress Z or Shift-Z again to switch off; each start spends one use\nEarn Zoom per 3 no-Rewind stars; Superzoom per 3 no-Rewind three-star levels"
         }
         keyboard.contextCommands = {
-            [KeyboardCommand(keys: "← / → / ↑ / ↓", action: "Pan the level", group: "Camera"),
+            [KeyboardCommand(keys: "Arrow keys", action: "Pan the level", group: "Camera"),
              KeyboardCommand(keys: "V / S", action: "Review / save replay after a result", group: "Menus & results"),
              KeyboardCommand(keys: "Return / Space", action: "Activate selected menu choice", group: "Menus & results"),
              KeyboardCommand(keys: ", / LT + B", action: "Rewind the current run", group: "Gameplay"),
@@ -468,6 +473,10 @@ import NxlvKit
     }
     func testTimelinePanel() throws {
         canvas.menuRows = nil
+        if let keyboard = gameplayKeyboard {
+            try validateCameraKeyboard(keyboard, name: "lemmings3")
+            if let window { keyboard.bind(to: window) }
+        }
         try validateTimelineCanvas(canvas, timeline: canvas.timeline, name: "lemmings3",
             tick: { self.game.tick }, paused: { self.paused })
     }
@@ -602,6 +611,7 @@ import NxlvKit
         try? warningSound.start()
         musicGain = Float(settings.musicVolume)
         music.setVolume(settings.musicVolume)
+        dj.setEnhancements(settings.musicStyle == .modern ? .modern : .faithful)
         dj.setVolume(settings.musicVolume)
         dj.setMuted(muted || settings.music == .silent)
         music.setMuted(muted || settings.music == .silent)
@@ -926,7 +936,7 @@ import NxlvKit
                 direction: action == .use ? direction.rawValue : nil))
             assignmentFocus.record(id: id, skill: selected, tick: game.tick)
             canvas.didAssign(to: id)
-            warningSound.play(action == .use && lem.tool == .bomb ? .ohNo : .assignSkill)
+            warningSound.play(action == .use && lem.tool == .bomb ? .ohNo : .assignSkill, at: GameplaySoundPoint(x: Double(lem.x), y: Double(lem.y)))
             skillAssignments[action.rawValue, default: 0] += 1
             if action == .use, let tool = lem.tool { toolUses[String(describing: tool), default: 0] += 1 }
         }
@@ -1205,7 +1215,7 @@ import NxlvKit
         let previousSoundState = Lemmings3SoundCue.Snapshot(game)
         game.step()
         saveCheckpoint()
-        warningSound.play(Lemmings3SoundCue.cues(before: previousSoundState, after: .init(game)))
+        warningSound.play(Lemmings3SoundCue.positionedCues(before: previousSoundState, after: .init(game)))
         if countdownWarning.update(seconds: game.remainingSeconds) { warningSound.play(.builderWarning) }
         canvas.flashExplosions(game)
         canvas.game = game
@@ -1478,8 +1488,21 @@ import NxlvKit
     private var creatureImages: [Int: [[NSImage]]] = [:]
     private var mapWidth = 320
     private var mapHeight = 160
-    private(set) var cameraX: CGFloat = 0
-    private(set) var cameraY: CGFloat = 0
+    private(set) var cameraX: CGFloat = 0 { didSet { onCameraChanged?() } }
+    private(set) var cameraY: CGFloat = 0 { didSet { onCameraChanged?() } }
+    var onCameraChanged: (() -> Void)?
+    override func setFrameSize(_ newSize: NSSize) {
+        super.setFrameSize(newSize)
+        onCameraChanged?()
+    }
+    var soundViewport: GameplaySoundViewport {
+        let topLeft = precisionLens.source(playfieldRect.origin)
+        let bottomRight = precisionLens.source(CGPoint(x: playfieldRect.maxX, y: playfieldRect.maxY))
+        return GameplaySoundViewport(x: Double(cameraX + (topLeft.x - origin.x) / zoom),
+          y: Double(cameraY + (topLeft.y - origin.y) / (zoom)),
+          width: Double((bottomRight.x - topLeft.x) / zoom), height: Double((bottomRight.y - topLeft.y) / (zoom)))
+    }
+
     private var precisionLens = AnimatedPrecisionZoomLens()
     private var precisionScroll = PrecisionZoomScrollGesture()
     private let precisionZoomAnimation = PrecisionZoomAnimation()

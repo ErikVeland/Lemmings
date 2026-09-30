@@ -25,6 +25,32 @@ Variable-speed pitch remains independent of the mix tempo. The 1×, 2×, 3×, 5�
 and 10× settings use pitch ratios 1, 1.04, 1.09, 1.18 and 1.35, with a 120 ms
 glide and a hard cap of 1.50.
 
+## Modern mix and spatial audio
+
+Modern applies the same native MOD processing in direct playback and Adaptive DJ
+across Classic, Lemmings 2 and Lemmings 3. It pulls identified percussion 85%
+toward the centre, reduces stereo separation to 80%, and adds EQ and 7% reverb.
+It retains the original samples, notes and tracker timing. Changing the style
+updates both DJ decks without restarting the tune. Faithful restores the original
+MOD panning and bypasses this processing.
+
+The DJ previously forced native modules to Faithful, even with Modern selected.
+The shared setting now reaches existing decks and each new track. The headless
+regression check is
+`python3 Tools/UITestRunner/run.py zsh Scripts/run-adaptive-dj-playback-tests.sh --mix-only`.
+It renders a synthetic MOD into memory and checks both decks, future tracks,
+drum balance, Faithful panning and unchanged playback timing.
+
+Recordings use their existing stereo master with light EQ and room reverb.
+They do not expose individual MOD voices, so the native percussion centring does
+not apply to them. Pause rhythm excerpts are not full-song stems.
+
+Music remains stereo. Spatial rendering applies to sound effects: Classic,
+Lemmings 2 and Lemmings 3 position individual effects relative to the camera.
+Supported output can use Apple's personal spatial profile. This does not
+provide head tracking or a spatial remix of the soundtrack. See
+[spatial audio setup](GameCenterSetup.md#spatial-sound-effects).
+
 ## Pause
 
 The opt-in Audio setting isolates classified native percussion voices without
@@ -86,3 +112,25 @@ vinyl motion, Mac Pop and supplied Yippee fallbacks, formatted Sparkle notes, ar
 size checks and updated Old school validation. The split 1.6 bundle replaces the
 full-library AAC conversion path so timing and rhythm hashes continue to match.
 No replay-engine source changes were needed.
+
+### Nuke countdown audio
+
+With HD Effects enabled, Classic and Lemmings 2 sweep the music into a hollow,
+quiet midrange over 350 ms when a nuke countdown starts. A separate EQ stage
+cuts bass by 24 dB, treble by 30 dB and overall gain by 5 dB at full depth.
+It composes with the DJ bass swap, Modern/Faithful mix, speed and pause controls;
+it does not restart a track. Both DJ decks and replacement tracks inherit the
+current amount. Undo, rewind before the nuke, completion and leaving gameplay
+restore the ordinary mix.
+
+The original effects remain intact. A quiet 350 ms downward bass pulse marks
+the countdown, with a slightly stronger pulse beneath explosions. A small octave
+component helps smaller speakers. Explosion accents retain their world position
+and cannot retrigger more than once per 300 ms. They use the existing effects
+volume, mute and suspension controls. HD Effects off disables these additions.
+Lemmings 3 has no mass-nuke countdown, so it does not use this treatment.
+
+`Scripts/run-nuke-audio-tests.sh` checks the recording EQ signal, restoration,
+bass envelope, source position, burst limit and mute without hardware output.
+The DJ mix tests also check that nuke EQ reaches both MOD decks and replacement
+tracks. These mechanical checks do not replace headphone and speaker listening.

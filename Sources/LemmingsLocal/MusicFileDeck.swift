@@ -7,6 +7,7 @@ import AVFoundation
 @MainActor
 final class MusicFileDeck {
   private let engine = AVAudioEngine()
+  private let nukeEQ = AVAudioUnitEQ(numberOfBands: 2)
   private let player = AVAudioPlayerNode()
   private let rhythmPlayer = AVAudioPlayerNode()
   private let musicLayer = AVAudioMixerNode()
@@ -115,6 +116,12 @@ final class MusicFileDeck {
     engine.attach(speedPitch)
     engine.attach(equaliser)
     engine.attach(sourceMixer)
+    engine.attach(nukeEQ)
+    nukeEQ.bands[0].filterType = .lowShelf
+    nukeEQ.bands[0].frequency = 400
+    nukeEQ.bands[1].filterType = .highShelf
+    nukeEQ.bands[1].frequency = 1800
+    nukeEQ.bands.forEach { $0.bypass = false }
     engine.attach(reverb)
     engine.attach(spatialMixer)
     engine.attach(outputMixer)
@@ -132,18 +139,23 @@ final class MusicFileDeck {
     engine.connect(varispeed, to: speedPitch, format: format)
     engine.connect(speedPitch, to: equaliser, format: format)
     engine.connect(equaliser, to: sourceMixer, format: format)
-    engine.connect(sourceMixer, to: reverb, format: format)
+    engine.connect(sourceMixer, to: nukeEQ, format: format)
+    engine.connect(nukeEQ, to: reverb, format: format)
     engine.connect(reverb, to: spatialMixer, format: format)
     engine.connect(spatialMixer, to: outputMixer, format: format)
     engine.connect(outputMixer, to: engine.mainMixerNode, format: format)
 
-    // Let Core Audio choose the best available spatial algorithm for the
-    // current output device. Keep the source centred, like a DJ master bus.
-    spatialMixer.renderingAlgorithm = .auto
-    spatialMixer.sourceMode = .pointSource
-    spatialMixer.position = AVAudio3DPoint(x: 0, y: 0, z: -1)
+    // Music stays stereo. Positional effects use a separate environment node.
     sourceMixer.outputVolume = 1
     applyOutputVolume()
+  }
+
+  /// Independent of the DJ bass swap and the user's normal music mix.
+  func setNukeAmount(_ value: Float) {
+    let amount = value.isFinite ? min(1, max(0, value)) : 0
+    nukeEQ.bands[0].gain = -24 * amount
+    nukeEQ.bands[1].gain = -30 * amount
+    nukeEQ.globalGain = -5 * amount
   }
 
   func setMixBass(_ gain: Float) { equaliser.bands[0].gain = 1.5 + gain; equaliser.bands[0].bypass = false }

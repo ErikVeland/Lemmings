@@ -118,6 +118,12 @@ Level Select uses a dropdown with Player Unlocked (default) and All. It keeps th
 existing Classic progress override and saved choice. L2 and L3 retain their native
 campaign selection rules.
 
+Catalogue discovery, fan-pack reading and level preparation stay in the background.
+Keep the current menu visible and usable until the destination is ready. Back,
+another destination or a different selection cancels pending preparation. Do not
+show a separate screen for internal loading work. Show an error only when the
+player needs to act. Hot Seat still waits at Ready before play begins.
+
 ## Fresh level start
 
 Fresh starts and retries show a shared 3–2–1 countdown before play. Only visible,
@@ -148,3 +154,17 @@ the full-solution confirmation. Up and Down scroll the hint text.
 Dialogs and help overlays use the normal system cursor. The gameplay reticle,
 skill icon and count stay hidden until the final dialog or sheet closes. Covered
 game controls are excluded from the active dialog's accessibility tree.
+
+## Camera keys and positional sound
+
+With Modern controls, H or Home centres the entrance. G or End centres the goal.
+In L2, G first selects Hang Glider when the level includes it. G with Hang Glider
+selected centres the goal. End always centres the goal. Other skills keep their
+number keys and available letter shortcuts. Slash opens hints; question mark
+opens controls help. I and F1 remain hint aliases. Text entry, app shortcuts,
+menus and Hot Seat Ready retain their input ownership.
+
+Effect positions follow the visible playfield, including camera movement, aspect
+ratio and precision zoom. Keep events on the correct side when offscreen and
+reduce their level with distance. Global warnings and interface sounds stay
+centred. Do not add continuous construction loops over the original soundtrack.

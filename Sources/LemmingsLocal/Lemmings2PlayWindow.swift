@@ -65,6 +65,7 @@ import NxlvKit
     private let masks: Lemmings2TerrainMasks
     private let music = ModuleMusicPlayer()
     private let failureMood = FailureMoodTransition()
+    private let nukeMood = FailureMoodTransition(duration: 0.35)
     private var audioSettings = ClassicSettings()
     private var globallyMuted = false
     private let sounds: Lemmings2SoundPlayer
@@ -205,6 +206,11 @@ import NxlvKit
         super.init(window: NSWindow(contentRect: NSRect(x: 0, y: 0, width: 960, height: 720),
             styleMask: [.titled, .closable, .miniaturizable, .resizable], backing: .buffered, defer: false))
         guard let window else { return }
+        nukeMood.onChange = { [weak self] amount in
+            guard let self else { return }
+            self.music.setNukeAmount(Float(amount))
+            self.dj.setNukeAmount(Float(amount))
+        }
         failureMood.onChange = { [weak self] amount in
             guard let self else { return }
             self.canvas.failureMoodAmount = amount
@@ -232,6 +238,10 @@ import NxlvKit
             self.hoverTribe = self.tribeAt(x, y); self.front.needsDisplay = true
         }
         front.onKey = { [weak self] key in self?.key(key) }
+        canvas.onCameraChanged = { [weak self] in
+            guard let self else { return }
+            self.sounds.setViewport(self.canvas.soundViewport)
+        }
         canvas.onClick = { [weak self] x, y in self?.assign(x, y) }
         canvas.onRelease = { [weak self] in self?.releasePointerInput() }
         canvas.onPointer = { [weak self] x, y, held in
@@ -316,6 +326,10 @@ import NxlvKit
                   let index = SkillShortcuts.cycle(from: self.selected, direction: direction, available: game.supplies.map { $0 > 0 }) else { return }
             self.panelAction(index)
         }
+        keyboard.selectGliderBeforeGoal = { [weak self] in
+            guard let self, let slot = self.game?.configuration.skills.firstIndex(of: .hangGlider), self.selected != slot else { return false }
+            self.selected = slot; self.fanSelected = false; self.refreshGame(); return true
+        }
         keyboard.centre = { [weak self] entrance in self?.canvas.centre(onEntrance: entrance) }
         keyboard.mainMenu = { [weak self] in
             guard let self else { return }
@@ -337,7 +351,7 @@ import NxlvKit
             return SkillShortcuts(names: names).hint(names: names, modern: self?.audioSettings.modernControlsEnabled ?? false) + "\n\nSpace / P: pause\nR: retry\nHold , / <: scrub backward\nHold . / >: scrub forward after rewind\nTap , / .: step one tick\nZ: 2× Zoom at cursor\nScroll up / down: Zoom on / off at cursor\nShift-Z: 2× Superzoom at cursor, 0.5× time\nPress Z or Shift-Z again to switch off; each start spends one use\nEarn Zoom per 3 no-Rewind stars; Superzoom per 3 no-Rewind three-star levels"
         }
         keyboard.contextCommands = {
-            [KeyboardCommand(keys: "← / → / ↑ / ↓", action: "Pan the level", group: "Camera"),
+            [KeyboardCommand(keys: "Arrow keys", action: "Pan the level", group: "Camera"),
              KeyboardCommand(keys: "V / S", action: "Review / save replay after a result", group: "Menus & results"),
              KeyboardCommand(keys: "Return / Space", action: "Activate selected menu choice", group: "Menus & results"),
              KeyboardCommand(keys: ", / LT + B", action: "Rewind the current run", group: "Gameplay"),
@@ -464,6 +478,10 @@ import NxlvKit
     }
     func testTimelinePanel() throws {
         prepareBriefing(); startLevel()
+        if let keyboard = gameplayKeyboard {
+            try validateCameraKeyboard(keyboard, name: "lemmings2")
+            if let window { keyboard.bind(to: window) }
+        }
         try validateTimelineCanvas(canvas, timeline: canvas.timeline, name: "lemmings2",
             tick: { self.game?.tick ?? -1 }, paused: { self.paused })
     }
@@ -547,6 +565,7 @@ import NxlvKit
         if let root = Bundle.main.resourceURL?.appendingPathComponent("Music") {
             dj.load(soundtracks: SoundtrackPlayer.djSoundtracks(at: root), catalogueRoot: root)
         }
+        dj.setEnhancements(settings.musicStyle == .modern ? .modern : .faithful)
         dj.setVolume(settings.musicVolume)
         dj.setMuted(muted || settings.music == .silent || UserDefaults.standard.bool(forKey: progressKey + ".musicMuted"))
         globallyMuted = muted
@@ -690,7 +709,10 @@ import NxlvKit
         }
         if screen == .practice { practiceLevel = nil; game = nil; initial = nil }
         nukeGesture.reset()
-        if screen != .playing { sounds.silence(); releasePointerInput() }
+        if screen != .playing {
+            nukeMood.set(active: false); sounds.setNukeActive(false)
+            sounds.silence(); releasePointerInput()
+        }
         self.screen = screen; frontTicks = 0
         let incoming = screen == .briefing && ArcadeStore.shared.hotSeatIsActive
             ? ArcadeStore.shared.records.profile(ArcadeStore.shared.playingProfileID) : nil
@@ -984,6 +1006,9 @@ import NxlvKit
         refreshGame()
     }
     private func refreshGame() {
+        let nuking = screen == .playing && game?.isNuking == true && game?.isComplete == false && canvas.hdEffectsEnabled
+        nukeMood.set(active: nuking)
+        sounds.setNukeActive(nuking)
         guard let game else { return }
         let impossible = (screen == .playing || screen == .results) && (game.isComplete ? !game.didWin : FailureMoodDecision.isUnrecoverable(
             saved: game.saved, active: game.lemmings.filter(\.active).count,
@@ -1890,8 +1915,16 @@ import NxlvKit
     var onPanel: ((Int, Int, TimeInterval) -> Void)?
     var onHover: (() -> Void)?
     var onKey: ((String) -> Void)?
-    var cameraX: CGFloat = 0
-    var cameraY: CGFloat = 0
+    var cameraX: CGFloat = 0 { didSet { onCameraChanged?() } }
+    var cameraY: CGFloat = 0 { didSet { onCameraChanged?() } }
+    var onCameraChanged: (() -> Void)?
+    var soundViewport: GameplaySoundViewport {
+        let topLeft = precisionLens.source(gameplayRect.origin)
+        let bottomRight = precisionLens.source(CGPoint(x: gameplayRect.maxX, y: gameplayRect.maxY))
+        return GameplaySoundViewport(x: Double(cameraX + (topLeft.x - origin.x) / zoom),
+          y: Double(cameraY + (topLeft.y - origin.y) / (zoom * 1.2)),
+          width: Double((bottomRight.x - topLeft.x) / zoom), height: Double((bottomRight.y - topLeft.y) / (zoom * 1.2)))
+    }
     private var precisionLens = AnimatedPrecisionZoomLens()
     private var precisionScroll = PrecisionZoomScrollGesture()
     private let precisionZoomAnimation = PrecisionZoomAnimation()

@@ -9,4 +9,4 @@ swiftc -swift-version 6 -warnings-as-errors -framework AppKit \
   "$project_dir/Sources/LemmingsLocal/DialogKeyboardNavigation.swift" \
   "$project_dir/Sources/LemmingsLocal/GameCursor.swift" \
   "$project_dir/Tests/DialogCursorTests/main.swift"
-"$build_dir/tests"
+python3 "$project_dir/Tools/UITestRunner/run.py" "$build_dir/tests"

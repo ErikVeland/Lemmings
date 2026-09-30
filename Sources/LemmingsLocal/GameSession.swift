@@ -84,6 +84,7 @@ protocol GameSession: AnyObject {
   func tick()
   /// Sounds the last tick asked for. Empty when nothing happened.
   var lastCues: [ClassicSoundEffect] { get }
+  var lastPositionedCues: [PositionedSoundCue] { get }
   /// Returns nil when the assignment lands, or a reason when it does not.
   func assign(skillIndex: Int, to lemmingID: Int) -> String?
   func assignmentState(skillIndex: Int, to lemmingID: Int) -> AssignmentState
@@ -105,6 +106,7 @@ protocol GameSession: AnyObject {
 }
 
 extension GameSession {
+  var lastPositionedCues: [PositionedSoundCue] { lastCues.map { PositionedSoundCue($0) } }
   func lemmingsForRendering(selectedID: Int?, highlightedID: Int?) -> [SessionLemming] {
     lemmings
   }
@@ -298,6 +300,12 @@ final class ClassicSession: GameSession {
   }
 
   private(set) var lastCues: [ClassicSoundEffect] = []
+  var lastPositionedCues: [PositionedSoundCue] {
+    guard !lastCues.isEmpty else { return [] }
+    return ClassicSoundCue.positionedCues(for: simulation.lastTickEvents,
+      lemmings: simulation.lemmings, entrances: simulation.configuration.entrances)
+  }
+
 
   func tick() { lastCues = ClassicSoundCue.cues(for: history.tick()) }
 

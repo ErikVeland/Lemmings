@@ -151,6 +151,7 @@ import NxlvKit
     made.volume = muted ? 0 : volume
     made.playbackRate = playbackRate
     made.setSpeedPitch(speedPitch)
+    made.setNukeAmount(nukeAmount)
     player?.stop()
     player = made
     if vinylHeld {
@@ -224,6 +225,12 @@ import NxlvKit
     outputSuspended = false
     if resumeAfterSleep { player?.resumeOutput() }
     resumeAfterSleep = false
+  }
+
+  private var nukeAmount: Float = 0
+  func setNukeAmount(_ amount: Float) {
+    nukeAmount = amount
+    player?.setNukeAmount(amount)
   }
 
   func setVolume(_ value: Double) {

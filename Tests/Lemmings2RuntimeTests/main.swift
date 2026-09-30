@@ -493,7 +493,7 @@ func testTribeNuke() throws {
     game.step()
     check(game.isComplete && game.lost == 1 && game.blastFlashes.count == 1,
           "Non-Classic nuke used the Classic explosion delay")
-    check(game.drainSoundEvents().filter{$0 == .init(.explode)}.count == 1, "Tribe nuke missed its explosion cue")
+    check(game.drainSoundEvents().filter{$0.sample == Lemmings2SoundCue.explode.rawValue}.count == 1, "Tribe nuke missed its explosion cue")
     check(Lemmings2SoundRequest.assignment(skill:.jumper,tribe:0).sample == 15, "Jumper cue differs")
     check(Lemmings2SoundRequest.assignment(skill:.superlem,tribe:1).sample == 30, "Superlem cue differs")
     check(Lemmings2SoundRequest.assignment(skill:.surfer,tribe:1).sample == 36, "Surfer cue differs")
@@ -1359,6 +1359,7 @@ func testControlsAndSoundEvents() throws {
     var falls: [Lemmings2SoundRequest] = []
     for _ in 0..<200 { falling.step(); falls += falling.drainSoundEvents() }
     check(falls.filter { $0.isBottomFall }.count == 1 && falling.lost == 1, "L2 must identify bottom deaths once")
+    check(falls.first(where: { $0.isBottomFall })?.point != nil, "Bottom death lost its world position")
     check(!Lemmings2SoundRequest(.fallOut).isBottomFall, "Other boundary deaths must retain their sound")
     check(Lemmings2Control.slot(x: 304, y: 170) == Lemmings2Control.nuke.rawValue, "Mushroom cloud must be nuke, not fan")
     check(Lemmings2Control.slot(x: 272, y: 190) == Lemmings2Control.fan.rawValue, "Lower-left control must be fan")
@@ -1393,7 +1394,10 @@ func testControlsAndSoundEvents() throws {
     let slot = c.skills.firstIndex(of: .climber)!, lem = run.lemmings[0]
     check(run.target(slot: slot, x: lem.x, y: lem.y - 5)?.id == 0, "Closest eligible hover target")
     check(run.assign(slot: slot, to: 0), "Selection assignment")
-    check(run.drainSoundEvents() == [.init(.assignSkill)], "Successful assignment has no native cue")
+    let assignedSounds = run.drainSoundEvents()
+    check(assignedSounds.count == 1 && assignedSounds[0].sample == Lemmings2SoundCue.assignSkill.rawValue,
+          "Successful assignment has no native cue")
+    check(assignedSounds[0].point == GameplaySoundPoint(x: Double(lem.x), y: Double(lem.y)), "Assignment lost its world position")
     check(!run.assign(slot: slot, to: 0) && run.drainSoundEvents().isEmpty, "Failed assignment played sound")
     check(run.target(slot: slot, x: lem.x, y: lem.y - 5)?.id == 1, "Ineligible overlapping lemming stole selection")
     let supplies = run.supplies
@@ -1412,7 +1416,7 @@ func testControlsAndSoundEvents() throws {
     var explosions = 0
     for _ in 0..<180 {
         run.step()
-        explosions += run.drainSoundEvents().filter { $0 == .init(.explode) }.count
+        explosions += run.drainSoundEvents().filter { $0.sample == Lemmings2SoundCue.explode.rawValue }.count
     }
     check(run.isComplete && run.lost == 3 && run.saved == 0 && explosions == 3, "Nuke did not explode all three lemmings with sound")
     check(run.drainSoundEvents().isEmpty, "Sound events replayed after drain")

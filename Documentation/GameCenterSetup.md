@@ -88,7 +88,13 @@ career rankings, as illustrated by the
 
 Classic and Lemmings 3 effects use a fixed pool of mono sources through
 `AVAudioEnvironmentNode`. The game places each source across a 120-degree arc
-using its existing screen pan. Lemmings 2 effects use a centred mono source.
+using event positions relative to the visible camera. Lemmings 2 now uses eight
+independent mono sources through the same renderer, preserving its native sample
+rates and pitches. The vertical view spans 60 degrees. Panning, resizing and
+precision zoom move the listener for both new and still-playing sounds.
+Offscreen sources retain their side and become quieter with distance. Nearby
+duplicate cues collapse into one voice per 32-pixel region, while opposite sides
+remain distinct. Interface clicks and countdown warnings remain centred.
 Music keeps its existing stereo mix. Automatic rendering selects processing for
 supported output hardware. The signed spatial profile entitlement lets Apple's
 renderer use the listener's personal profile when one is available.
@@ -105,6 +111,23 @@ with compatible headphones and a provisioned build.
 Apple documents [personal spatial audio profiles](https://developer.apple.com/documentation/phase/personalizing-spatial-audio-in-your-app),
 [mono spatial sources](https://developer.apple.com/documentation/avfaudio/avaudioenvironmentnode),
 and [macOS distribution limitations](https://developer.apple.com/macos/distribution/).
+
+Classic positions death, rescue, entrance, skill and builder-warning events. L3
+positions deaths, rescues, assignments and each placed brick. L2 positions native
+death, building, assignment, entrance, projectile and interaction cues. L2 still
+has no mapped exit cheer. Recorded replay audio remains a mono mix rather than a
+recording of the live spatial renderer.
+
+Offline checks render a sustained sound while the camera moves past it, and
+verify left/right energy, offscreen attenuation, duplicate handling, mute and
+pause backlog. Native input checks run through the offscreen, muted UI runner.
+The camera-key checks passed in all three engines, including repeat suppression,
+text and modifier guards, rendered help and button targets. The L2 runtime suite
+passed all 120 level-load checks, 73 recorded completion fixtures and its
+survivor carry-over checks after adding event positions.
+Listening on headphones and speakers, personal profiles, and full release replay
+proof validation remain separate checks. L2's source change adds sound positions
+only, but its source fingerprint changes and needs the normal release audit.
 
 ## Development activation on 11 September 2026
 

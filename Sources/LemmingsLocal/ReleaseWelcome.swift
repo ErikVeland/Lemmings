@@ -5,12 +5,12 @@ import AppKit
     static let seenKey = "WhatsNewSeenBuild"
     /// The release these notes describe. A test fails when Info.plist moves on
     /// to a new version and these notes stay behind.
-    static let notesVersion = "1.7.4"
-    static let subtitle = "Fresh sessions and correct fan artwork"
+    static let notesVersion = "1.7.5"
+    static let subtitle = "Better sound, clearer controls, reliable sessions"
     static let sections = [
-        ("New means new", "New solo and Hot Seat sessions start at the first level. Previous sessions stay saved. Profile achievements and scores are kept."),
-        ("Correct fan terrain", "Fan levels use artwork that matches their terrain. Floating Down! now shows its snow landscape. The HUD shows the active journey position."),
-        ("Choose your selection effect", "Settings > Gameplay offers None, Obvious and Modern. Modern adds a crisp white outline and subtle green bloom. The choice applies across all three games.")
+        ("Music and spatial sound", "Modern restores centred drums and a gentler stereo spread in Adaptive DJ. Gameplay sounds follow the camera. HD nukes add restrained bass and a hollow music countdown."),
+        ("Home and Goal", "H centres Home; G centres Goal. In Lemmings 2, G selects Glider first when available. Press G again for Goal. Use / for hints and ? for controls."),
+        ("Fresh sessions and selection", "New sessions start at the beginning and keep previous progress saved. Fan terrain artwork is corrected. Choose None, Obvious or Modern selection effects in Gameplay settings.")
     ]
     private let defaults: UserDefaults
     private let build: Int

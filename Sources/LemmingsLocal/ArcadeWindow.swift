@@ -422,10 +422,17 @@ import NxlvKit
     }
     func resultActions(y: CGFloat = 573) {
         if !cleared, onLater != nil {
-            button(primaryResultTitle, CGRect(x: 64, y: y, width: 290, height: 48), primary: true) { [weak self] in self?.performDefaultResultAction() }
-            button("Hints", CGRect(x: 372, y: y, width: 208, height: 48)) { [weak self] in self?.onHints?() }
-            button("Try later", CGRect(x: 598, y: y, width: 248, height: 48)) { [weak self] in self?.onLater?() }
-            button("Back", CGRect(x: 864, y: y, width: 192, height: 48)) { [weak self] in self?.onClose?() }
+            if nextSessionPlayer != nil {
+                button("Retry as \(player.initials)", CGRect(x: 64, y: y, width: 250, height: 48)) { [weak self] in self?.onRetry?() }
+                button(primaryResultTitle, CGRect(x: 332, y: y, width: 290, height: 48), primary: true) { [weak self] in self?.performDefaultResultAction() }
+                button("Hints", CGRect(x: 640, y: y, width: 168, height: 48)) { [weak self] in self?.onHints?() }
+                button("Try later", CGRect(x: 826, y: y, width: 230, height: 48)) { [weak self] in self?.onLater?() }
+            } else {
+                button(primaryResultTitle, CGRect(x: 64, y: y, width: 290, height: 48), primary: true) { [weak self] in self?.performDefaultResultAction() }
+                button("Hints", CGRect(x: 372, y: y, width: 208, height: 48)) { [weak self] in self?.onHints?() }
+                button("Try later", CGRect(x: 598, y: y, width: 248, height: 48)) { [weak self] in self?.onLater?() }
+                button("Back", CGRect(x: 864, y: y, width: 192, height: 48)) { [weak self] in self?.onClose?() }
+            }
             return
         }
         if let next = nextSessionPlayer {

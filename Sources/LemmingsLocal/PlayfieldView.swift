@@ -355,6 +355,12 @@ struct ReticleFeedback {
   var deathCountdownText = "" { didSet { if oldValue != deathCountdownText { needsDisplay = true } } }
   var deathCountdownAccessibilityText = ""
   var showsDeathCountdownOverlay = false { didSet { needsDisplay = true } }
+  var soundViewport: GameplaySoundViewport {
+    let topLeft = viewport.levelPoint(from: precisionLens.source(bounds.origin))
+    let bottomRight = viewport.levelPoint(from: precisionLens.source(CGPoint(x: bounds.maxX, y: bounds.maxY)))
+    return GameplaySoundViewport(x: topLeft.x, y: topLeft.y,
+      width: bottomRight.x - topLeft.x, height: bottomRight.y - topLeft.y)
+  }
   var precisionVisibleLevelRect: CGRect {
     let topLeft = viewport.levelPoint(from: precisionLens.source(bounds.origin))
     let bottomRight = viewport.levelPoint(from: precisionLens.source(CGPoint(x: bounds.maxX, y: bounds.maxY)))

@@ -9,6 +9,55 @@ private func check(_ value: @autoclosure () throws -> Bool, _ message: String) t
   override var isKeyWindow: Bool { true }
 }
 
+@MainActor func validateCameraKeyboard(_ keyboard: GameplayKeyboard, name: String) throws {
+  let host = SpeedTestWindow(contentRect: CGRect(x: 0, y: 0, width: 1100, height: 760),
+    styleMask: [], backing: .buffered, defer: false)
+  let originalCentre = keyboard.centre, originalActive = keyboard.active, originalModern = keyboard.modern
+  defer { keyboard.centre = originalCentre; keyboard.active = originalActive; keyboard.modern = originalModern }
+  keyboard.bind(to: host); keyboard.active = { true }; keyboard.modern = { true }
+  var centres: [Bool] = []
+  keyboard.centre = { entrance in originalCentre(entrance); centres.append(entrance) }
+  func key(_ letter: String, repeatKey: Bool = false, modifiers: NSEvent.ModifierFlags = []) -> NSEvent {
+    NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: modifiers, timestamp: 1,
+      windowNumber: host.windowNumber, context: nil, characters: letter, charactersIgnoringModifiers: letter,
+      isARepeat: repeatKey, keyCode: letter == "h" ? 4 : 5)!
+  }
+  try check(keyboard.handle(key("h")) == nil && centres == [true], name + " H did not centre the entrance")
+  _ = keyboard.handle(key("h", repeatKey: true))
+  try check(centres == [true], name + " repeated H")
+  _ = keyboard.handle(key("g")); _ = keyboard.handle(key("g"))
+  try check(centres.last == false, name + " G did not reach the goal")
+  let count = centres.count
+  _ = keyboard.handle(key("g", repeatKey: true))
+  try check(centres.count == count, name + " repeated G")
+  try check(keyboard.handle(key("h", modifiers: [.command])) != nil, "Command-H was stolen")
+  let gliderHandler = keyboard.selectGliderBeforeGoal
+  var gliderSelected = false
+  keyboard.selectGliderBeforeGoal = {
+    guard !gliderSelected else { return false }; gliderSelected = true; return true
+  }
+  centres = []
+  _ = keyboard.handle(key("g"))
+  try check(gliderSelected && centres.isEmpty, "First G did not select Glider")
+  _ = keyboard.handle(key("g"))
+  try check(centres == [false], "Second G did not centre the goal")
+  keyboard.selectGliderBeforeGoal = gliderHandler
+  let text = NSTextView(frame: host.contentView!.bounds)
+  host.contentView!.addSubview(text); host.makeFirstResponder(text)
+  try check(keyboard.handle(key("h")) != nil, "Text entry was stolen")
+  host.makeFirstResponder(nil)
+  let overlay = KeyboardOverlayView(commands: keyboard.commandRows, modern: true, hints: true)
+  overlay.frame = host.contentView!.bounds; host.contentView!.addSubview(overlay); overlay.layoutSubtreeIfNeeded()
+  let buttons = overlay.subviews.compactMap { $0 as? NSButton }
+  try check(buttons.count == 3 && buttons.allSatisfy { overlay.hitTest(CGPoint(x: $0.frame.midX, y: $0.frame.midY)) === $0 },
+    "Camera help overlay lost its button targets")
+  let bitmap = overlay.bitmapImageRepForCachingDisplay(in: overlay.bounds)!
+  overlay.cacheDisplay(in: overlay.bounds, to: bitmap)
+  try FileManager.default.createDirectory(atPath: ".build/transport", withIntermediateDirectories: true)
+  try bitmap.representation(using: .png, properties: [:])!.write(to: URL(fileURLWithPath: ".build/transport/" + name + "-camera-help.png"))
+  print("PASS " + name + " camera keys, repeat suppression, modifier/text guards and rendered help targets")
+}
+
 @MainActor func validatePauseKeyboard(_ keyboard: GameplayKeyboard, name: String, paused: () -> Bool) throws {
   let host = SpeedTestWindow(contentRect: CGRect(x: 0, y: 0, width: 400, height: 300),
     styleMask: [], backing: .buffered, defer: false)
@@ -2010,15 +2059,15 @@ extension AppDelegate {
       keyboard.modern = { modern }
       for repeated in [false, true] {
         let event = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 2,
-          windowNumber: host.windowNumber, context: nil, characters: "h", charactersIgnoringModifiers: "h",
-          isARepeat: repeated, keyCode: 4)!
-        try check(keyboard.handle(event) == nil, "H leaked into gameplay")
+          windowNumber: host.windowNumber, context: nil, characters: "/", charactersIgnoringModifiers: "/",
+          isARepeat: repeated, keyCode: 44)!
+        try check(keyboard.handle(event) == nil, "Slash leaked into gameplay")
       }
     }
-    try check(opened == 3, "H did not open hints once in each control mode")
+    try check(opened == 3, "Slash did not open hints once in each control mode")
     let hintSkills = SkillShortcuts(names: ["Hopper", "Hiker", "Shimmier"])
     try check(hintSkills.index(for: "h", current: 0) == nil && !hintSkills.letters.contains("h"),
-      "A skill claimed H from hints")
+      "A skill claimed H from the camera")
     try testTimelinePanelControls()
 
     let fallback = LevelHintDeck.practice(title: "Fan level", skills: ["Builder"])
@@ -2629,6 +2678,39 @@ extension AppDelegate {
     try bitmap.representation(using: .png, properties: [:])?.write(to: folder.appendingPathComponent(name + ".png"))
     return view.accessibilityLabel() ?? ""
   }
+  fileprivate func testHotSeatJourneyRetry() throws {
+    GameScreen.shared.dismissAll()
+    let previous = ArcadeStore.shared
+    let store = ArcadeStore(file: try recordsWithSkips(0), bundledProofs: nil)
+    ArcadeStore.shared = store
+    let view = ArcadeWindow.shared.arcadeView
+    defer {
+      view.onLater = nil; view.onHints = nil
+      GameScreen.shared.dismissAll(); store.endHotSeat(); ArcadeStore.shared = previous
+    }
+    let host = store.records.activeProfileID
+    let guest = store.addProfile(initials: "PAL", portrait: 2)!
+    store.selectProfile(host); store.toggleSessionProfile(guest.id)
+    try failFirstClassicLevel()
+    view.onLater = {}; view.onHints = {}
+    try captureResult("hot-seat-journey-retry")
+    let controls = (view.accessibilityChildren() ?? []).compactMap { $0 as? GameAccessibleElement }
+    let ownerTitle = "Retry as \(store.records.profile(host)!.initials)"
+    guard let retry = controls.first(where: { $0.accessibilityLabel() == ownerTitle }),
+      let next = controls.first(where: { $0.accessibilityLabel() == "Retry as PAL" }) else {
+      throw IntegrationFailure(message: "Journey result omitted a named Hot Seat retry")
+    }
+    try check(!controls.contains(where: { $0.accessibilityLabel() == "Back" })
+      && retry.accessibilityFrame().maxX <= next.accessibilityFrame().minX,
+      "Journey retry kept Back or overlapped the next player's target")
+    let runID = arcadeRunID
+    try check(retry.accessibilityPerformPress(), "Same-player retry has no input action")
+    try check(arcadeProfileID == host && store.playingProfileID == host
+      && arcadeRunID != runID && phase == .playing && isPaused && panel.isPaused,
+      "Journey retry changed owner, failed to restart, or skipped the paused start")
+    print("PASS Hot Seat journey names both retries; same-player retry restarts paused with the attempt owner")
+  }
+
   fileprivate func testLevelSkipResult() throws {
     let previousStore = ArcadeStore.shared
     defer { ArcadeStore.shared = previousStore; arcadeAutoPresent = false }
@@ -3566,6 +3648,52 @@ extension AppDelegate {
         "Fan-source revalidation did not finish")
     }
 
+    _ = try resolveFixture()
+    levelCatalogue = LevelCatalogue(revision: "pending-fan-test", packs: [placeholder])
+    presentLevelPackBrowser(packs: [placeholder], title: "Fan levels")
+    guard let sourcePage = levelBrowserPackPage else {
+      throw IntegrationFailure(message: "The fan pack browser did not open")
+    }
+    sourcePage.layoutSubtreeIfNeeded()
+    presentLevelBrowser(for: placeholder)
+    try check(GameScreen.shared.controllerPage(in: window) === sourcePage
+      && levelBrowserFanLoadTask != nil,
+      "Reading a fan pack replaced the useful browser with a waiting screen")
+    let back = sourcePage.controllerBackButton
+    try check(back.isEnabled && !back.isHidden && back.window === window,
+      "Back is not available while a fan pack is prepared")
+    let point = back.convert(NSPoint(x: back.bounds.midX, y: back.bounds.midY), to: sourcePage)
+    try check(sourcePage.hitTest(point) === back,
+      "The fan preparation intercepted the Back target")
+    if let view = window.contentView,
+       let bitmap = view.bitmapImageRepForCachingDisplay(in: view.bounds) {
+      view.cacheDisplay(in: view.bounds, to: bitmap)
+      try bitmap.representation(using: .png, properties: [:])?.write(
+        to: folder.appendingPathComponent("background-fan-browser.png"))
+    }
+    back.performClick(nil)
+    try check(levelBrowserFanLoadTask == nil && !GameScreen.shared.contains(sourcePage),
+      "Back did not cancel fan preparation")
+    try await Task.sleep(nanoseconds: 100_000_000)
+    try check(GameScreen.shared.controllerPage(in: window) == nil,
+      "Cancelled fan preparation reopened the browser")
+
+    GameScreen.shared.present(sourcePage, owner: window)
+    var completedCancelledRequest = false
+    ensureFanPacksResolved(forPackIDs: [packID], title: "Fan levels", reloadResolved: true) { _ in
+      completedCancelledRequest = true
+    }
+    try check(GameScreen.shared.controllerPage(in: window) === sourcePage,
+      "Playlist preparation presented a waiting screen")
+    let otherPage = GameMenuPage(title: "Playlists")
+    GameScreen.shared.present(otherPage, owner: window)
+    try await Task.sleep(nanoseconds: 100_000_000)
+    try check(!completedCancelledRequest && playlistFanLoadTask == nil
+      && GameScreen.shared.controllerPage(in: window) === otherPage,
+      "Fan preparation replaced the player's new destination")
+    GameScreen.shared.dismissAll()
+    print("PASS background fan preparation preserves the browser and Back, and cannot reopen after navigation")
+
     let resolved = try resolveFixture()
     guard let level = resolved.levels.first else {
       throw IntegrationFailure(message: "The fan-source fixture had no levels")
@@ -3851,16 +3979,14 @@ extension AppDelegate {
     refreshSequenceNavigationAvailability()
     try check(resumeSavedRunItem?.isEnabled == false,
       "A pending sequence left Resume Saved Run enabled")
-    resumeSavedRun()
-    showHotSeat()
-    try check(sequenceLaunchRunID == pendingRunID && !GameScreen.shared.isPresented,
-      "Alternate navigation cancelled or covered a pending sequence launch")
+    try check(allowNavigationAwayFromSequence() && sequenceLaunchRunID == nil,
+      "Alternate navigation did not cancel the pending sequence launch")
     sequenceLaunchRunID = nil
     refreshSequenceNavigationAvailability()
     try check(resumeSavedRunItem?.isEnabled == true
       && gamePicker.isEnabled && picker.isEnabled,
       "Leaving a sequence did not restore normal navigation")
-    print("PASS active and pending sequences guard saved-run, game, level and Hot Seat navigation")
+    print("PASS active sequences guard navigation and pending starts can be cancelled")
   }
 
   fileprivate func testClassicLevelPickerUnlockGate() throws {
@@ -5125,7 +5251,7 @@ extension AppDelegate {
     for pass in 1...2 {
       GameScreen.shared.dismissAll()
       measure("Classic browser \(pass)") { openLevelBrowser(family: .classic) }
-      try check(levelBrowserLoadingPage == nil, "Prepared browser showed a loading page")
+      try check(levelBrowserLoadTask == nil, "Prepared browser showed a loading page")
       try check(GameScreen.shared.controllerPage(in: window) != nil, "Prepared browser was not presented")
     }
     try await Task.sleep(nanoseconds: 250_000_000)
@@ -5135,7 +5261,7 @@ extension AppDelegate {
     }
     let selected = levelBrowserPacks(for: .classic).first!.levels.first!
     measure("Prepared Classic Start") { startBrowserLevel(selected.identity) }
-    try check(levelBrowserLaunchPage == nil && artworkLevel?.title == selected.levelName,
+    try check(levelBrowserLaunchTask == nil && artworkLevel?.title == selected.levelName,
       "Prepared Start showed a loading page or opened the wrong level")
     GameScreen.shared.dismissAll()
     let replayFolder = FileManager.default.temporaryDirectory.appendingPathComponent("replay-latency-\(UUID().uuidString)")
@@ -5229,6 +5355,7 @@ Task { @MainActor in
     try subject.testPageKeyboardContinuation()
     try subject.testHotSeatBoundaries()
     try subject.testHandoverPreviousLevel()
+    try subject.testHotSeatJourneyRetry()
     try subject.testRunRecovery()
     try subject.testFanRunRecovery()
     try subject.testEscapeToMainMenu()
@@ -5273,6 +5400,7 @@ Task { @MainActor in
     try subject.testGlobalMuteAndStop()
     try await subject.testMusicPauseModes()
     try subject.testHandoverPreviousLevel()
+    try subject.testHotSeatJourneyRetry()
     print("Music integration tests passed.")
     #elseif VARIABLE_SPEED_TESTS
     try subject.testVariableSpeedInput()
@@ -5323,6 +5451,7 @@ Task { @MainActor in
     try subject.testInterruptionPolicy()
     try subject.testHotSeatBoundaries()
     try subject.testHandoverPreviousLevel()
+    try subject.testHotSeatJourneyRetry()
     try subject.testSeasonalMusic()
     try await subject.testLevelBrowserRouteIntegrity()
     try await subject.testPlaylistStartRevalidatesFanSources()
@@ -5447,6 +5576,11 @@ extension AppDelegate {
     }
     gamePicker.selectItem(at: gameIndex); selectDataSet(); loadLevel(at: 0)
     phase = .playing; panel.isMenuMode = false
+    installKeyboardShortcuts()
+    if let keyboard = gameplayKeyboard {
+      try validateCameraKeyboard(keyboard, name: "classic")
+      keyboard.bind(to: window)
+    }
     for tube in [false, true] {
       panel.isCRTSource = tube
       panel.frame = CGRect(x: 0, y: 0, width: tube ? 640 : 1050, height: tube ? 80 : panel.intrinsicHeight)
@@ -5474,18 +5608,18 @@ extension AppDelegate {
       keyboard.modern = { modern }
       for repeated in [false, true] {
         let event = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 1,
-          windowNumber: host.windowNumber, context: nil, characters: "h", charactersIgnoringModifiers: "h",
-          isARepeat: repeated, keyCode: 4)!
-        try check(keyboard.handle(event) == nil, "H leaked into skill selection")
+          windowNumber: host.windowNumber, context: nil, characters: "/", charactersIgnoringModifiers: "/",
+          isARepeat: repeated, keyCode: 44)!
+        try check(keyboard.handle(event) == nil, "Slash leaked into skill selection")
       }
     }
-    try check(hints == 2, "H repeated or failed in a control mode")
+    try check(hints == 2, "Slash repeated or failed in a control mode")
     try check(SkillShortcuts(names: ["Hopper", "Hiker"]).index(for: "h", current: 0) == nil, "Skills claimed H")
     let l2 = try Lemmings2PlayWindow(root: BundledGameResources.lemmings2(), recordsCampaignProgress: false)
     try l2.testTimelinePanel(); l2.window?.orderOut(nil)
     let l3 = try Lemmings3PlayWindow(root: BundledGameResources.lemmings3(), recordsCampaignProgress: false)
     try l3.testTimelinePanel(); l3.window?.orderOut(nil)
-    print("PASS H hints and Classic flat/CRT timeline toolbar")
+    print("PASS Slash hints and Classic flat/CRT timeline toolbar")
   }
 }
 

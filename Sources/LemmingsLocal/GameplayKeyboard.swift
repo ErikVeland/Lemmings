@@ -81,6 +81,8 @@ import NxlvKit
     var menuKey: (String) -> Void = { _ in }
     var cycle: (Int) -> Void = { _ in }
     var centre: (Bool) -> Void = { _ in }
+    /// L2 gives Glider the first G press. Return false to centre the goal.
+    var selectGliderBeforeGoal: (() -> Bool)?
     var rate: ((Int) -> Void)?
     /// A double tap of + or - moves the release rate to its maximum or minimum.
     var rateLimit: ((Int) -> Void)?
@@ -167,10 +169,17 @@ import NxlvKit
             if !event.isARepeat { precisionZoom(event.modifierFlags.contains(.shift) ? .superzoom : .zoom) }
             return nil
         }
-        // H opens hints. Keep I and F1 as aliases.
-        if event.keyCode == 122 || ["h", "i"].contains(event.charactersIgnoringModifiers?.lowercased() ?? ""),
+        // Slash opens hints. Question mark keeps the controls guide.
+        if event.keyCode == 122 || event.characters == "/" || event.charactersIgnoringModifiers?.lowercased() == "i",
            let hints {
             if !event.isARepeat { hints() }
+            return nil
+        }
+        if modern(), let letter = event.charactersIgnoringModifiers?.lowercased(), ["h", "g"].contains(letter) {
+            if !event.isARepeat {
+                if letter == "h" { centre(true) }
+                else if selectGliderBeforeGoal?() != true { centre(false) }
+            }
             return nil
         }
         let key = event.characters ?? ""
@@ -305,10 +314,11 @@ import NxlvKit
         let speedHelp = (speedControl?.help ?? "").replacingOccurrences(of: " or RT", with: "").replacingOccurrences(of: "F or controller B", with: "F")
         var sections = [help(), speedHelp]
         if modern() {
-            sections.append("Tab / Shift-Tab: next / previous available skill\nHome / End: entrance / exit\n[ / ]: previous / next unassigned lemming\n\\: focus last assignment\nReturn: repeat last skill")
+            let goal = selectGliderBeforeGoal == nil ? "G / End: centre goal" : "G: Glider, then goal\nEnd: centre goal"
+            sections.append("Tab / Shift-Tab: next / previous available skill\nH / Home: centre entrance\n" + goal + "\n[ / ]: previous / next unassigned lemming\n\\: focus last assignment\nReturn: repeat last skill")
         } else { sections.append("Modern keyboard shortcuts are off. Number keys select skills.") }
         sections.append("Escape: save run and return to main menu\n?: controls help")
-        if hints != nil { sections.append("H / F1: level goals and tiered hints") }
+        if hints != nil { sections.append("Slash / I / F1: level goals and tiered hints") }
         if rate != nil {
             sections.append("− / +: release rate"
                 + (rateLimit != nil ? "\nDouble-tap − / +: minimum / maximum release rate" : ""))
@@ -348,7 +358,7 @@ import NxlvKit
                 : lower.contains("zoom") ? "Camera"
                 : ["speed", "fast-forward", "ramp", "1×"].contains(where: lower.contains) ? "Speed"
                 : ["skill", "assignment", "unassigned"].contains(where: lower.contains) ? "Skills"
-                : lower.contains("entrance") ? "Camera" : "Gameplay"
+                : ["entrance", "centre goal", "Glider, then goal".lowercased()].contains(where: lower.contains) ? "Camera" : "Gameplay"
             rows.append(KeyboardCommand(keys: keys, action: action, group: group))
         }
         if speedControl?.variableEnabled == true {
