@@ -8,7 +8,7 @@ do {
         throw NSError(domain: "BundleGameAssets", code: 1,
                       userInfo: [NSLocalizedDescriptionKey: "Expected source Ports and embedded Ports directories."])
     }
-    let source = URL(fileURLWithPath: CommandLine.arguments[1], isDirectory: true).standardizedFileURL
+    let source = URL(fileURLWithPath: CommandLine.arguments[1], isDirectory: true).standardizedFileURL.resolvingSymlinksInPath()
     let destination = URL(fileURLWithPath: CommandLine.arguments[2], isDirectory: true).standardizedFileURL
     let keys: [URLResourceKey] = [.isRegularFileKey, .isSymbolicLinkKey]
     guard let walker = FileManager.default.enumerator(at: source, includingPropertiesForKeys: keys) else {
