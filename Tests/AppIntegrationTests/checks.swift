@@ -5643,6 +5643,15 @@ extension AppDelegate {
   }
 }
 
+@MainActor private final class OriginalMovieAudioProbe: OriginalMovieAudio {
+  var playCount = 0
+  var pauseCount = 0
+  var stopCount = 0
+  func play() -> Bool { playCount += 1; return true }
+  func pause() { pauseCount += 1 }
+  func stop() { stopCount += 1 }
+}
+
 extension AppDelegate {
   fileprivate func testDialogNavigation() throws {
     if window == nil { buildInterface() }
@@ -5741,17 +5750,23 @@ extension AppDelegate {
     try check(actions == 4, "Replay selected button failed")
     try capture(bar, "replay-focus")
     GameScreen.shared.dismissAll()
-    let movie = try OriginalMoviePlayer(url: BundledGameResources.lemmings3().appendingPathComponent("MOVIE/INTRO.FLI"))
+    let movieAudio = OriginalMovieAudioProbe()
+    let movie = try OriginalMoviePlayer(
+      url: BundledGameResources.lemmings3().appendingPathComponent("MOVIE/INTRO.FLI"), soundtrack: movieAudio)
     try check(movie.present(owner: host), "Original movie did not open")
+    try check(movieAudio.playCount == 1, "Original movie did not start its soundtrack")
     key(36)
     try check(movie.paused, "Original movie Return did not activate Pause")
+    try check(movieAudio.pauseCount == 1, "Original movie did not pause its soundtrack")
     key(76)
     try check(!movie.paused, "Original movie keypad Enter did not activate Play")
+    try check(movieAudio.playCount == 2, "Original movie did not resume its soundtrack")
     key(48)
     try check((host.firstResponder as? NSButton)?.title == "Back", "Movie controls were not keyboard navigable")
     try capture(movie, "original-movie")
     key(76)
     try check(!GameScreen.shared.isPresented, "Original movie selected Back failed")
+    try check(movieAudio.stopCount == 1, "Original movie did not stop its soundtrack on close")
     let overlay = KeyboardOverlayView(commands: [], modern: true, hints: true)
     overlay.onClose = { GameScreen.shared.dismiss(overlay) }
     GameScreen.shared.present(overlay, owner: host)
