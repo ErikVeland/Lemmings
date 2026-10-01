@@ -1,5 +1,14 @@
 import AppKit
+import AVFoundation
 import NxlvKit
+
+@MainActor protocol OriginalMovieAudio: AnyObject {
+    @discardableResult func play() -> Bool
+    func pause()
+    func stop()
+}
+
+extension AVAudioPlayer: OriginalMovieAudio {}
 
 /// Decodes one original FLIC frame at a time inside the game window.
 @MainActor final class OriginalMoviePlayer: NSView {
@@ -17,6 +26,7 @@ import NxlvKit
         }
     }
     private let movie: FLICMovie
+    private let soundtrack: (any OriginalMovieAudio)?
     private var decoder: FLICMovie.Decoder
     private var frameImage: CGImage?
     private var timer: Timer?
@@ -32,12 +42,13 @@ import NxlvKit
     override var acceptsFirstResponder: Bool { true }
     override var isFlipped: Bool { true }
 
-    init(url: URL) throws {
+    init(url: URL, soundtrack: (any OriginalMovieAudio)? = nil) throws {
         movie = try FLICMovie(contentsOf: url)
         guard movie.width > 0, movie.height > 0, movie.width <= 1920, movie.height <= 1080,
               movie.frameCount > 0, movie.frameOffsets.count >= movie.frameCount else {
             throw SequelDataError.invalid("The original movie has invalid frame dimensions or missing frames.")
         }
+        self.soundtrack = soundtrack
         decoder = movie.makeDecoder()
         super.init(frame: .zero)
         try readFrame()
@@ -58,6 +69,7 @@ import NxlvKit
             let callback = self?.onClose; self?.onClose = nil; callback?()
         }) else { return false }
         lastTime = ProcessInfo.processInfo.systemUptime
+        soundtrack?.play()
         timer = Timer.scheduledTimer(withTimeInterval: 1.0 / 60, repeats: true) { [weak self] _ in
             MainActor.assumeIsolated {
                 guard let self else { return }
@@ -69,11 +81,12 @@ import NxlvKit
         }
         return true
     }
-    func stop() { timer?.invalidate(); timer = nil }
+    func stop() { timer?.invalidate(); timer = nil; soundtrack?.stop() }
     func close() { GameScreen.shared.dismiss(self) }
     func togglePause() {
         guard !finished else { return }
         paused.toggle(); accumulator = 0; lastTime = ProcessInfo.processInfo.systemUptime
+        if paused { soundtrack?.pause() } else { soundtrack?.play() }
         updatePlaybackControls(); needsDisplay = true
     }
     private func updatePlaybackControls() {

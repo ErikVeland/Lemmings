@@ -1,4 +1,5 @@
 import AppKit
+import AVFoundation
 import CryptoKit
 import NxlvKit
 
@@ -93,6 +94,7 @@ import NxlvKit
     private let dj = AdaptiveDJPlayer()
     private let failureMood = FailureMoodTransition()
     private var musicGain: Float = 0.8
+    private var movieMusicMuted = false
     private var audioSettings = ClassicSettings()
     private let runMovie = RunMovie()
     private var originalMovie: OriginalMoviePlayer?
@@ -567,6 +569,7 @@ import NxlvKit
     func setAudioSettings(_ settings: ClassicSettings, muted: Bool) {
         let sourceChanged = audioSettings.music != settings.music
         audioSettings = settings
+        movieMusicMuted = muted
         if let root = Bundle.main.resourceURL?.appendingPathComponent("Music") {
             dj.load(soundtracks: SoundtrackPlayer.djSoundtracks(at: root), catalogueRoot: root)
         }
@@ -972,7 +975,15 @@ import NxlvKit
     }
     private func playOriginalMovie(_ movie: OriginalMoviePlayer.Movie) {
         do {
-            let player = try OriginalMoviePlayer(url: dataRoot.appendingPathComponent("MOVIE/" + movie.rawValue))
+            var soundtrack: AVAudioPlayer?
+            if movie == .introduction, audioSettings.music != .silent, !movieMusicMuted,
+               let root = Bundle.main.resourceURL {
+                let url = root.appendingPathComponent("Music/All_New_World_of_Lemmings_(IBM_PC_AT)/01 Intro.m4a")
+                soundtrack = try? AVAudioPlayer(contentsOf: url)
+                soundtrack?.volume = musicGain
+            }
+            let player = try OriginalMoviePlayer(
+                url: dataRoot.appendingPathComponent("MOVIE/" + movie.rawValue), soundtrack: soundtrack)
             suspendAudioOutput()
             player.onClose = { [weak self] in
                 self?.originalMovie = nil
