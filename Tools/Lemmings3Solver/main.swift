@@ -20,8 +20,14 @@ let out = URL(fileURLWithPath: option("--out") ?? ".build/l3-solver/candidates")
 try FileManager.default.createDirectory(at: out, withIntermediateDirectories: true)
 let encoder = JSONEncoder()
 encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
-let optionValues = Set(["--budget", "--beam", "--depth", "--out"].compactMap { option($0) })
-var requested = Set(arguments.filter { !optionValues.contains($0) }.compactMap(Int.init))
+let valuedOptions: Set<String> = ["--budget", "--beam", "--depth", "--out"]
+var requested: Set<Int> = []
+var skipOptionValue = false
+for argument in arguments {
+    if skipOptionValue { skipOptionValue = false; continue }
+    if valuedOptions.contains(argument) { skipOptionValue = true; continue }
+    if let level = Int(argument) { requested.insert(level) }
+}
 let missingOnly = arguments.contains("missing")
 
 var failed = false
