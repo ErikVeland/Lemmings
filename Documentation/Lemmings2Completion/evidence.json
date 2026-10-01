@@ -8,14 +8,14 @@
     "egyptian": 8,
     "highland": 3,
     "medieval": 4,
-    "outdoor": 7,
+    "outdoor": 8,
     "polar": 6,
-    "shadow": 3,
+    "shadow": 4,
     "space": 5,
     "sports": 7
   },
   "quality": {
-    "bareSurvivals": 43
+    "bareSurvivals": 44
   },
   "chainedLevels": {
     "beach": 1,
@@ -514,6 +514,16 @@
       "ticks": 1892
     },
     {
+      "fixture": "Tests/Lemmings2CompletionTests/Fixtures/outdoor-04.json",
+      "sha256": "1fb14e0a7daf731b4bc74c0fbcd9eff308c2f6e7e6d0eb2c56c06fb7644a5d38",
+      "tribe": "outdoor",
+      "level": 4,
+      "levelSHA256": "ef251a14bb922a1bf105c47637a5a8e6e532050a40d2a8254e0851409f388b5c",
+      "startingPopulation": 60,
+      "saved": 1,
+      "ticks": 2775
+    },
+    {
       "fixture": "Tests/Lemmings2CompletionTests/Fixtures/outdoor-05.json",
       "sha256": "10fda4f27f2c3db03514ef3236d89511646a426d82c38c2528ae98a32afa77ae",
       "tribe": "outdoor",
@@ -622,6 +632,16 @@
       "startingPopulation": 60,
       "saved": 1,
       "ticks": 2149
+    },
+    {
+      "fixture": "Tests/Lemmings2CompletionTests/Fixtures/shadow-02.json",
+      "sha256": "d30a72019a2e05d9afdf8ff6f62dbe23cb037fe72336d051e6087fe034c2aa00",
+      "tribe": "shadow",
+      "level": 2,
+      "levelSHA256": "12e6e9496d1e6e37f11d49e7cac47251527d54fd7e47d75ed67abf6747544455",
+      "startingPopulation": 60,
+      "saved": 7,
+      "ticks": 8115
     },
     {
       "fixture": "Tests/Lemmings2CompletionTests/Fixtures/shadow-03.json",

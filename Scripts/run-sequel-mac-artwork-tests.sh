@@ -3,6 +3,10 @@ set -euo pipefail
 project_dir="${0:A:h:h}"
 build_dir="$project_dir/.build/sequel-mac-artwork"
 module_cache="$build_dir/ModuleCache"
+sparkle_framework="$(SPARKLE_FRAMEWORK_PATH="${SPARKLE_FRAMEWORK_PATH:-}" \
+  LEMMINGS_BUILD_ROOT="$build_dir/dependencies" \
+  zsh "$project_dir/Scripts/ensure-sparkle.sh")"
+sparkle_framework_dir="${sparkle_framework:h}"
 mkdir -p "$build_dir/modules" "$build_dir/app-test" "$module_cache"
 cd "$project_dir"
 swiftc -O -swift-version 6 -warnings-as-errors -target "$(uname -m)-apple-macos12.3" \
@@ -27,7 +31,8 @@ app_sources=("${(@)app_sources:#*/SettingsWindow.swift}")
 swiftc -O -swift-version 6 -target "$(uname -m)-apple-macos12.3" \
   -module-cache-path "$module_cache" \
   -I "$build_dir/modules" -L "$build_dir" -lNxlvKit \
-  -Xlinker -rpath -Xlinker "$build_dir" -framework AppKit -framework AVFoundation -framework Metal -framework QuartzCore \
+  -F "$sparkle_framework_dir" -framework Sparkle \
+  -Xlinker -rpath -Xlinker "$build_dir" -Xlinker -rpath -Xlinker "$sparkle_framework_dir" -framework AppKit -framework AVFoundation -framework Metal -framework QuartzCore \
   -o "$build_dir/app-test/Views" "$build_dir/app-test/main.swift" "${app_sources[@]}"
 if [[ "${SEQUEL_COMPILE_ONLY:-0}" == 1 ]]; then
   print "PASS sequel app test compilation only. The app and input flows were not run."

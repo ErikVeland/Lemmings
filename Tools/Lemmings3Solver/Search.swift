@@ -180,16 +180,37 @@ func l3Fingerprint(_ game: Lemmings3Runtime) -> UInt64 {
         var bits = UInt64(bitPattern: Int64(number))
         for _ in 0..<8 { value = (value ^ (bits & 0xff)) &* 0x0000_0100_0000_01b3; bits >>= 8 }
     }
-    add(game.tick); add(game.released)
+    add(game.tick); add(game.released); add(game.bonusSeconds); add(game.isComplete ? 1 : 0)
     for lemming in game.lemmings {
-        add(lemming.id); add(lemming.x); add(lemming.y); add(lemming.direction); add(lemming.age)
-        for byte in lemming.state.rawValue.utf8 { add(Int(byte)) }; add(lemming.tool?.rawValue ?? -1); add(lemming.quantity)
-        add(lemming.mobilityTool?.rawValue ?? -1); add(lemming.mobilityTicks)
+        for byte in lemming.state.rawValue.utf8 { add(Int(byte)) }
+        for byte in lemming.workDirection.rawValue.utf8 { add(Int(byte)) }
+        for number in [lemming.id, lemming.x, lemming.y, lemming.direction, lemming.age,
+                       lemming.fall, lemming.velocityY, lemming.tool?.rawValue ?? -1,
+                       lemming.quantity, lemming.swimTicks, lemming.trapTicks,
+                       lemming.mobilityTool?.rawValue ?? -1, lemming.mobilityTicks,
+                       lemming.charmedBy ?? -1, lemming.charmTicks, lemming.charmImmunity] { add(number) }
     }
-    for pickup in game.pickups { add(pickup.id); add(pickup.x); add(pickup.y); add(pickup.quantity) }
+    for pickup in game.pickups {
+        for number in [pickup.id, pickup.tool.rawValue, pickup.x, pickup.y,
+                       pickup.quantity, pickup.ignoredBy ?? -1] { add(number) }
+    }
     for (key, solid) in game.terrainEdits.sorted(by: { $0.key < $1.key }) { add(key); add(solid ? 1 : 0) }
-    for bomb in game.explosives { add(bomb.id); add(bomb.x); add(bomb.y); add(bomb.age) }
-    for creature in game.creatures { add(creature.id); add(creature.x); add(creature.y); add(creature.alive ? 1 : 0) }
+    for bomb in game.explosives {
+        for number in [bomb.id, bomb.tool.rawValue, bomb.x, bomb.y,
+                       bomb.velocityX, bomb.velocityY, bomb.age] { add(number) }
+    }
+    for ball in game.fireballs {
+        for number in [ball.x, ball.y, ball.direction, ball.age] { add(number) }
+    }
+    for creature in game.creatures {
+        for byte in creature.digDirection.rawValue.utf8 { add(Int(byte)) }
+        for number in [creature.id, creature.kind.rawValue, creature.x, creature.y,
+                       creature.direction, creature.alive ? 1 : 0, creature.target ?? -1,
+                       creature.cooldown, creature.age] { add(number) }
+    }
+    for trap in game.configuration.traps.sorted(by: { $0.id < $1.id }) {
+        add(trap.id); add(game.trapFrame(id: trap.id))
+    }
     return value
 }
 
