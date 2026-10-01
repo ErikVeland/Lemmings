@@ -192,49 +192,238 @@
   },
   {
     "componentChanges": {
-      "concurrencyBurden": 140,
-      "constraintPressure": -68.078431372549,
-      "deductionComplexityProxy": 35,
+      "concurrencyBurden": 0,
+      "constraintPressure": -172.33458564739186,
+      "deductionComplexityProxy": -120,
       "executionPrecision": -176.66666666666666,
-      "solutionComplexity": 84.82492035895632,
-      "techniqueBurden": 0
+      "solutionComplexity": -101.68825906469124,
+      "techniqueBurden": -65
     },
     "demand": 180,
-    "level": "Floating Lemming Flurry",
+    "level": "Mienrs <--- lol, typo",
     "needsSupport": false,
     "newComponentHighs": {
-      "concurrencyBurden": 140,
+      "concurrencyBurden": 0,
       "constraintPressure": 0,
-      "deductionComplexityProxy": 35,
+      "deductionComplexityProxy": 0,
       "executionPrecision": 0,
-      "solutionComplexity": 84.82492035895632,
+      "solutionComplexity": 0,
       "techniqueBurden": 0
     },
-    "objective": "chain:floater:basher",
+    "objective": "introduce:miner",
     "preparationGaps": [],
-    "rawScore": 146.74437006143773,
+    "rawScore": 46.85817053250572,
     "reasons": [],
     "stage": "Intermediate",
     "step": 8
   },
   {
     "componentChanges": {
-      "concurrencyBurden": -140,
-      "constraintPressure": 58.839869281045765,
-      "deductionComplexityProxy": 35,
+      "concurrencyBurden": 0,
+      "constraintPressure": 153.2659197647315,
+      "deductionComplexityProxy": 70,
       "executionPrecision": 0,
-      "solutionComplexity": 14.525920593660203,
+      "solutionComplexity": 0,
       "techniqueBurden": 0
     },
-    "demand": 187,
+    "demand": 180,
+    "level": "Nuclear War on the dance floor",
+    "needsSupport": false,
+    "newComponentHighs": {
+      "concurrencyBurden": 0,
+      "constraintPressure": 0,
+      "deductionComplexityProxy": 0,
+      "executionPrecision": 0,
+      "solutionComplexity": 0,
+      "techniqueBurden": 0
+    },
+    "objective": "introduce:blocker",
+    "preparationGaps": [],
+    "rawScore": 71.68274010192081,
+    "reasons": [],
+    "stage": "Intermediate",
+    "step": 9
+  },
+  {
+    "componentChanges": {
+      "concurrencyBurden": 0,
+      "constraintPressure": 18.549058039523118,
+      "deductionComplexityProxy": 50,
+      "executionPrecision": 0,
+      "solutionComplexity": 95.86313713864834,
+      "techniqueBurden": 65
+    },
+    "demand": 180,
+    "level": "Lemmings For Presidents!",
+    "needsSupport": false,
+    "newComponentHighs": {
+      "concurrencyBurden": 0,
+      "constraintPressure": 0,
+      "deductionComplexityProxy": 0,
+      "executionPrecision": 0,
+      "solutionComplexity": 0,
+      "techniqueBurden": 0
+    },
+    "objective": "split:basher:miner",
+    "preparationGaps": [],
+    "rawScore": 114.93400781756145,
+    "reasons": [],
+    "stage": "Intermediate",
+    "step": 10
+  },
+  {
+    "componentChanges": {
+      "concurrencyBurden": 0,
+      "constraintPressure": 43.35294117647061,
+      "deductionComplexityProxy": -90,
+      "executionPrecision": 0,
+      "solutionComplexity": -76.84358712999446,
+      "techniqueBurden": 65
+    },
+    "demand": 180,
+    "level": "PRACTICE: CLIMBER",
+    "needsSupport": false,
+    "newComponentHighs": {
+      "concurrencyBurden": 0,
+      "constraintPressure": 42.83333333333337,
+      "deductionComplexityProxy": 0,
+      "executionPrecision": 0,
+      "solutionComplexity": 0,
+      "techniqueBurden": 65
+    },
+    "objective": "prepare:climber-spacing",
+    "preparationGaps": [],
+    "rawScore": 113.61430100190385,
+    "reasons": [],
+    "stage": "Intermediate",
+    "step": 11
+  },
+  {
+    "componentChanges": {
+      "concurrencyBurden": 70,
+      "constraintPressure": -68.13382795548398,
+      "deductionComplexityProxy": 0,
+      "executionPrecision": 0,
+      "solutionComplexity": 87.01955000865388,
+      "techniqueBurden": -65
+    },
+    "demand": 180,
+    "level": "Block and Dig",
+    "needsSupport": false,
+    "newComponentHighs": {
+      "concurrencyBurden": 70,
+      "constraintPressure": 0,
+      "deductionComplexityProxy": 0,
+      "executionPrecision": 0,
+      "solutionComplexity": 4.350840952616522,
+      "techniqueBurden": 0
+    },
+    "objective": "split:blocker:digger",
+    "preparationGaps": [],
+    "rawScore": 116.75120436959479,
+    "reasons": [],
+    "stage": "Intermediate",
+    "step": 12
+  },
+  {
+    "componentChanges": {
+      "concurrencyBurden": 0,
+      "constraintPressure": 61.3965260570688,
+      "deductionComplexityProxy": -30,
+      "executionPrecision": 0,
+      "solutionComplexity": 8.84358712999446,
+      "techniqueBurden": 0
+    },
+    "demand": 180,
+    "level": "Build a Bridge",
+    "needsSupport": false,
+    "newComponentHighs": {
+      "concurrencyBurden": 0,
+      "constraintPressure": 0,
+      "deductionComplexityProxy": 0,
+      "executionPrecision": 0,
+      "solutionComplexity": 8.84358712999446,
+      "techniqueBurden": 0
+    },
+    "objective": "split:blocker:builder",
+    "preparationGaps": [],
+    "rawScore": 124.5783419256125,
+    "reasons": [],
+    "stage": "Intermediate",
+    "step": 13
+  },
+  {
+    "componentChanges": {
+      "concurrencyBurden": -70,
+      "constraintPressure": 53.73730189841518,
+      "deductionComplexityProxy": 0,
+      "executionPrecision": 0,
+      "solutionComplexity": -102.88268714730222,
+      "techniqueBurden": 65
+    },
+    "demand": 192.5,
+    "level": "Blockers can block others",
+    "needsSupport": false,
+    "newComponentHighs": {
+      "concurrencyBurden": 0,
+      "constraintPressure": 47,
+      "deductionComplexityProxy": 0,
+      "executionPrecision": 0,
+      "solutionComplexity": 0,
+      "techniqueBurden": 0
+    },
+    "objective": "spacing",
+    "preparationGaps": [],
+    "rawScore": 116.08,
+    "reasons": [],
+    "stage": "Intermediate",
+    "step": 14
+  },
+  {
+    "componentChanges": {
+      "concurrencyBurden": 0,
+      "constraintPressure": -125.88235294117646,
+      "deductionComplexityProxy": 100,
+      "executionPrecision": 0,
+      "solutionComplexity": 178.86313713864834,
+      "techniqueBurden": -65
+    },
+    "demand": 192.5,
+    "level": "A task for blockers and bombers",
+    "needsSupport": false,
+    "newComponentHighs": {
+      "concurrencyBurden": 0,
+      "constraintPressure": 0,
+      "deductionComplexityProxy": 0,
+      "executionPrecision": 0,
+      "solutionComplexity": 75.98044999134612,
+      "techniqueBurden": 0
+    },
+    "objective": "chain:blocker:bomber",
+    "preparationGaps": [],
+    "rawScore": 129.81518428814968,
+    "reasons": [],
+    "stage": "Intermediate",
+    "step": 15
+  },
+  {
+    "componentChanges": {
+      "concurrencyBurden": 0,
+      "constraintPressure": 26.810457516339852,
+      "deductionComplexityProxy": 90,
+      "executionPrecision": 0,
+      "solutionComplexity": 10.17596287865942,
+      "techniqueBurden": 0
+    },
+    "demand": 192.5,
     "level": "Lemming Snowfall",
     "needsSupport": false,
     "newComponentHighs": {
       "concurrencyBurden": 0,
       "constraintPressure": 0,
-      "deductionComplexityProxy": 35,
+      "deductionComplexityProxy": 70,
       "executionPrecision": 0,
-      "solutionComplexity": 14.525920593660203,
+      "solutionComplexity": 10.17596287865942,
       "techniqueBurden": 0
     },
     "objective": "chain:basher:builder",
@@ -242,7 +431,7 @@
     "rawScore": 141.83925559857894,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 9
+    "step": 16
   },
   {
     "componentChanges": {
@@ -258,7 +447,7 @@
     "needsSupport": false,
     "newComponentHighs": {
       "concurrencyBurden": 0,
-      "constraintPressure": 97.24019607843138,
+      "constraintPressure": 7.40686274509801,
       "deductionComplexityProxy": 0,
       "executionPrecision": 0,
       "solutionComplexity": 0,
@@ -269,15 +458,96 @@
     "rawScore": 142.14289215686276,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 10
+    "step": 17
   },
   {
     "componentChanges": {
       "concurrencyBurden": 0,
-      "constraintPressure": -113.94411764705876,
-      "deductionComplexityProxy": 55,
+      "constraintPressure": -117.71367053289367,
+      "deductionComplexityProxy": 50,
       "executionPrecision": 0,
-      "solutionComplexity": 85.40527661769312,
+      "solutionComplexity": 21.688259064691238,
+      "techniqueBurden": 0
+    },
+    "demand": 196.203431372549,
+    "level": "It'll be Comin' Round the Mtn.",
+    "needsSupport": false,
+    "newComponentHighs": {
+      "concurrencyBurden": 0,
+      "constraintPressure": 0,
+      "deductionComplexityProxy": 0,
+      "executionPrecision": 0,
+      "solutionComplexity": 0,
+      "techniqueBurden": 0
+    },
+    "objective": "chain:miner:builder",
+    "preparationGaps": [],
+    "rawScore": 135.11153198181864,
+    "reasons": [],
+    "stage": "Intermediate",
+    "step": 18
+  },
+  {
+    "componentChanges": {
+      "concurrencyBurden": 0,
+      "constraintPressure": 15.313343735508113,
+      "deductionComplexityProxy": -55,
+      "executionPrecision": 0,
+      "solutionComplexity": -2.825121926042897,
+      "techniqueBurden": 65
+    },
+    "demand": 196.203431372549,
+    "level": "Lost something?",
+    "needsSupport": false,
+    "newComponentHighs": {
+      "concurrencyBurden": 0,
+      "constraintPressure": 0,
+      "deductionComplexityProxy": 0,
+      "executionPrecision": 0,
+      "solutionComplexity": 0,
+      "techniqueBurden": 0
+    },
+    "objective": "apply:b46b95fcfe91fb465742",
+    "preparationGaps": [],
+    "rawScore": 148.88073984370524,
+    "reasons": [],
+    "stage": "Intermediate",
+    "step": 19
+  },
+  {
+    "componentChanges": {
+      "concurrencyBurden": 140,
+      "constraintPressure": -62.91830065359483,
+      "deductionComplexityProxy": 25,
+      "executionPrecision": 0,
+      "solutionComplexity": 10.650042284999216,
+      "techniqueBurden": -65
+    },
+    "demand": 196.203431372549,
+    "level": "Floating Lemming Flurry",
+    "needsSupport": false,
+    "newComponentHighs": {
+      "concurrencyBurden": 70,
+      "constraintPressure": 0,
+      "deductionComplexityProxy": 0,
+      "executionPrecision": 0,
+      "solutionComplexity": 0,
+      "techniqueBurden": 0
+    },
+    "objective": "chain:floater:basher",
+    "preparationGaps": [],
+    "rawScore": 146.74437006143773,
+    "reasons": [],
+    "stage": "Intermediate",
+    "step": 20
+  },
+  {
+    "componentChanges": {
+      "concurrencyBurden": -140,
+      "constraintPressure": 51.374509803921626,
+      "deductionComplexityProxy": 35,
+      "executionPrecision": 0,
+      "solutionComplexity": 55.89209719404556,
       "techniqueBurden": 0
     },
     "demand": 209.58369363238518,
@@ -296,15 +566,42 @@
     "rawScore": 149.9693177186376,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 11
+    "step": 21
   },
   {
     "componentChanges": {
       "concurrencyBurden": 0,
-      "constraintPressure": 1.268163054695549,
-      "deductionComplexityProxy": -35,
-      "executionPrecision": 222.5,
-      "solutionComplexity": -116.54213947904478,
+      "constraintPressure": 59.219172113289744,
+      "deductionComplexityProxy": -170,
+      "executionPrecision": 240.625,
+      "solutionComplexity": -155.38572660903924,
+      "techniqueBurden": 0
+    },
+    "demand": 209.58369363238518,
+    "level": "The Undiscovered Country",
+    "needsSupport": false,
+    "newComponentHighs": {
+      "concurrencyBurden": 0,
+      "constraintPressure": 0,
+      "deductionComplexityProxy": 0,
+      "executionPrecision": 63.95833333333334,
+      "solutionComplexity": 0,
+      "techniqueBurden": 0
+    },
+    "objective": "split:digger:miner",
+    "preparationGaps": [],
+    "rawScore": 159.70795023937663,
+    "reasons": [],
+    "stage": "Intermediate",
+    "step": 22
+  },
+  {
+    "componentChanges": {
+      "concurrencyBurden": 0,
+      "constraintPressure": -57.951009058594195,
+      "deductionComplexityProxy": 135,
+      "executionPrecision": -18.125,
+      "solutionComplexity": 38.84358712999446,
       "techniqueBurden": 0
     },
     "demand": 209.58369363238518,
@@ -314,7 +611,7 @@
       "concurrencyBurden": 0,
       "constraintPressure": 0,
       "deductionComplexityProxy": 0,
-      "executionPrecision": 45.83333333333334,
+      "executionPrecision": 0,
       "solutionComplexity": 0,
       "techniqueBurden": 0
     },
@@ -323,239 +620,15 @@
     "rawScore": 166.54490823035815,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 12
+    "step": 23
   },
   {
     "componentChanges": {
       "concurrencyBurden": 0,
-      "constraintPressure": 14.916150670794593,
-      "deductionComplexityProxy": -35,
+      "constraintPressure": 54.36755840194195,
+      "deductionComplexityProxy": -90,
       "executionPrecision": -222.5,
-      "solutionComplexity": -30.0,
-      "techniqueBurden": 0
-    },
-    "demand": 209.58369363238518,
-    "level": "Lemmings For Presidents!",
-    "needsSupport": true,
-    "newComponentHighs": {
-      "concurrencyBurden": 0,
-      "constraintPressure": 0,
-      "deductionComplexityProxy": 0,
-      "executionPrecision": 0,
-      "solutionComplexity": 0,
-      "techniqueBurden": 0
-    },
-    "objective": "split:basher:miner",
-    "preparationGaps": [
-      "miner"
-    ],
-    "rawScore": 114.93400781756145,
-    "reasons": [
-      "Preparation: miner"
-    ],
-    "stage": "Intermediate",
-    "step": 13
-  },
-  {
-    "componentChanges": {
-      "concurrencyBurden": 0,
-      "constraintPressure": -19.953866611325054,
-      "deductionComplexityProxy": 65,
-      "executionPrecision": 0,
-      "solutionComplexity": 82.8251219260429,
-      "techniqueBurden": 0
-    },
-    "demand": 209.58369363238518,
-    "level": "It'll be Comin' Round the Mtn.",
-    "needsSupport": false,
-    "newComponentHighs": {
-      "concurrencyBurden": 0,
-      "constraintPressure": 0,
-      "deductionComplexityProxy": 0,
-      "executionPrecision": 0,
-      "solutionComplexity": 0,
-      "techniqueBurden": 0
-    },
-    "objective": "chain:miner:builder",
-    "preparationGaps": [],
-    "rawScore": 135.11153198181864,
-    "reasons": [],
-    "stage": "Intermediate",
-    "step": 14
-  },
-  {
-    "componentChanges": {
-      "concurrencyBurden": 0,
-      "constraintPressure": 15.313343735508113,
-      "deductionComplexityProxy": -55,
-      "executionPrecision": 0,
-      "solutionComplexity": -2.825121926042897,
-      "techniqueBurden": 65
-    },
-    "demand": 209.58369363238518,
-    "level": "Lost something?",
-    "needsSupport": false,
-    "newComponentHighs": {
-      "concurrencyBurden": 0,
-      "constraintPressure": 0,
-      "deductionComplexityProxy": 0,
-      "executionPrecision": 0,
-      "solutionComplexity": 0,
-      "techniqueBurden": 65
-    },
-    "objective": "apply:b46b95fcfe91fb465742",
-    "preparationGaps": [],
-    "rawScore": 148.88073984370524,
-    "reasons": [],
-    "stage": "Intermediate",
-    "step": 15
-  },
-  {
-    "componentChanges": {
-      "concurrencyBurden": 0,
-      "constraintPressure": 47.67538126361654,
-      "deductionComplexityProxy": -110,
-      "executionPrecision": 240.625,
-      "solutionComplexity": -88.84358712999446,
-      "techniqueBurden": -65
-    },
-    "demand": 209.58369363238518,
-    "level": "The Undiscovered Country",
-    "needsSupport": false,
-    "newComponentHighs": {
-      "concurrencyBurden": 0,
-      "constraintPressure": 0,
-      "deductionComplexityProxy": 0,
-      "executionPrecision": 18.125,
-      "solutionComplexity": 0,
-      "techniqueBurden": 0
-    },
-    "objective": "split:digger:miner",
-    "preparationGaps": [],
-    "rawScore": 159.70795023937663,
-    "reasons": [],
-    "stage": "Intermediate",
-    "step": 16
-  },
-  {
-    "componentChanges": {
-      "concurrencyBurden": 70,
-      "constraintPressure": -67.81574516681297,
-      "deductionComplexityProxy": 10,
-      "executionPrecision": -240.625,
-      "solutionComplexity": 19.01955000865388,
-      "techniqueBurden": 0
-    },
-    "demand": 209.58369363238518,
-    "level": "Block and Dig",
-    "needsSupport": true,
-    "newComponentHighs": {
-      "concurrencyBurden": 0,
-      "constraintPressure": 0,
-      "deductionComplexityProxy": 0,
-      "executionPrecision": 0,
-      "solutionComplexity": 0,
-      "techniqueBurden": 0
-    },
-    "objective": "split:blocker:digger",
-    "preparationGaps": [
-      "blocker"
-    ],
-    "rawScore": 116.75120436959479,
-    "reasons": [
-      "Preparation: blocker"
-    ],
-    "stage": "Intermediate",
-    "step": 17
-  },
-  {
-    "componentChanges": {
-      "concurrencyBurden": 0,
-      "constraintPressure": 61.3965260570688,
-      "deductionComplexityProxy": -30,
-      "executionPrecision": 0,
-      "solutionComplexity": 8.84358712999446,
-      "techniqueBurden": 0
-    },
-    "demand": 209.58369363238518,
-    "level": "Build a Bridge",
-    "needsSupport": false,
-    "newComponentHighs": {
-      "concurrencyBurden": 0,
-      "constraintPressure": 0,
-      "deductionComplexityProxy": 0,
-      "executionPrecision": 0,
-      "solutionComplexity": 0,
-      "techniqueBurden": 0
-    },
-    "objective": "split:blocker:builder",
-    "preparationGaps": [],
-    "rawScore": 124.5783419256125,
-    "reasons": [],
-    "stage": "Intermediate",
-    "step": 18
-  },
-  {
-    "componentChanges": {
-      "concurrencyBurden": -70,
-      "constraintPressure": 53.73730189841518,
-      "deductionComplexityProxy": 0,
-      "executionPrecision": 0,
-      "solutionComplexity": -102.88268714730222,
-      "techniqueBurden": 65
-    },
-    "demand": 209.58369363238518,
-    "level": "Blockers can block others",
-    "needsSupport": false,
-    "newComponentHighs": {
-      "concurrencyBurden": 0,
-      "constraintPressure": 0,
-      "deductionComplexityProxy": 0,
-      "executionPrecision": 0,
-      "solutionComplexity": 0,
-      "techniqueBurden": 0
-    },
-    "objective": "spacing",
-    "preparationGaps": [],
-    "rawScore": 116.08,
-    "reasons": [],
-    "stage": "Intermediate",
-    "step": 19
-  },
-  {
-    "componentChanges": {
-      "concurrencyBurden": 0,
-      "constraintPressure": -125.88235294117646,
-      "deductionComplexityProxy": 100,
-      "executionPrecision": 0,
-      "solutionComplexity": 178.86313713864834,
-      "techniqueBurden": -65
-    },
-    "demand": 209.58369363238518,
-    "level": "A task for blockers and bombers",
-    "needsSupport": false,
-    "newComponentHighs": {
-      "concurrencyBurden": 0,
-      "constraintPressure": 0,
-      "deductionComplexityProxy": 0,
-      "executionPrecision": 0,
-      "solutionComplexity": 0,
-      "techniqueBurden": 0
-    },
-    "objective": "chain:blocker:bomber",
-    "preparationGaps": [],
-    "rawScore": 129.81518428814968,
-    "reasons": [],
-    "stage": "Intermediate",
-    "step": 20
-  },
-  {
-    "componentChanges": {
-      "concurrencyBurden": 0,
-      "constraintPressure": 74.98081949585321,
-      "deductionComplexityProxy": -35,
-      "executionPrecision": 0,
-      "solutionComplexity": 23.13686286135166,
+      "solutionComplexity": 88.13686286135166,
       "techniqueBurden": 65
     },
     "demand": 209.58369363238518,
@@ -574,7 +647,7 @@
     "rawScore": 158.45280065210798,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 21
+    "step": 24
   },
   {
     "componentChanges": {
@@ -601,7 +674,7 @@
     "rawScore": 125.42455972397364,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 22
+    "step": 25
   },
   {
     "componentChanges": {
@@ -628,42 +701,15 @@
     "rawScore": 122.59835932721894,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 23
-  },
-  {
-    "componentChanges": {
-      "concurrencyBurden": 0,
-      "constraintPressure": 143.40295071451482,
-      "deductionComplexityProxy": -155,
-      "executionPrecision": 0,
-      "solutionComplexity": -25.01955000865388,
-      "techniqueBurden": 0
-    },
-    "demand": 221,
-    "level": "Create & Remove Collection",
-    "needsSupport": false,
-    "newComponentHighs": {
-      "concurrencyBurden": 0,
-      "constraintPressure": 0,
-      "deductionComplexityProxy": 0,
-      "executionPrecision": 0,
-      "solutionComplexity": 0,
-      "techniqueBurden": 0
-    },
-    "objective": "apply:d5974ca2f9321a7596e4",
-    "preparationGaps": [],
-    "rawScore": 124.88644191820201,
-    "reasons": [],
-    "stage": "Intermediate",
-    "step": 24
+    "step": 26
   },
   {
     "componentChanges": {
       "concurrencyBurden": 180,
-      "constraintPressure": 11.358440749878923,
-      "deductionComplexityProxy": 20,
+      "constraintPressure": 154.76139146439374,
+      "deductionComplexityProxy": -135,
       "executionPrecision": 0,
-      "solutionComplexity": -21,
+      "solutionComplexity": -46.01955000865388,
       "techniqueBurden": 0
     },
     "demand": 221,
@@ -682,7 +728,7 @@
     "rawScore": 146.54303921568626,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 25
+    "step": 27
   },
   {
     "componentChanges": {
@@ -709,7 +755,7 @@
     "rawScore": 141.70156409251274,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 26
+    "step": 28
   },
   {
     "componentChanges": {
@@ -736,7 +782,7 @@
     "rawScore": 143.95026532961847,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 27
+    "step": 29
   },
   {
     "componentChanges": {
@@ -763,7 +809,7 @@
     "rawScore": 147.0749003241656,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 28
+    "step": 30
   },
   {
     "componentChanges": {
@@ -790,7 +836,7 @@
     "rawScore": 153.0609621141041,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 29
+    "step": 31
   },
   {
     "componentChanges": {
@@ -817,7 +863,7 @@
     "rawScore": 146.6437719359339,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 30
+    "step": 32
   },
   {
     "componentChanges": {
@@ -844,7 +890,7 @@
     "rawScore": 147.55092690625276,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 31
+    "step": 33
   },
   {
     "componentChanges": {
@@ -871,7 +917,7 @@
     "rawScore": 149.8383333333333,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 32
+    "step": 34
   },
   {
     "componentChanges": {
@@ -898,7 +944,7 @@
     "rawScore": 144.6677942602488,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 33
+    "step": 35
   },
   {
     "componentChanges": {
@@ -925,7 +971,7 @@
     "rawScore": 165.8953168692016,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 34
+    "step": 36
   },
   {
     "componentChanges": {
@@ -952,7 +998,7 @@
     "rawScore": 156.34221997565456,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 35
+    "step": 37
   },
   {
     "componentChanges": {
@@ -979,7 +1025,7 @@
     "rawScore": 156.32413903928787,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 36
+    "step": 38
   },
   {
     "componentChanges": {
@@ -1006,7 +1052,7 @@
     "rawScore": 162.54052129555166,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 37
+    "step": 39
   },
   {
     "componentChanges": {
@@ -1033,7 +1079,7 @@
     "rawScore": 165.06819472845393,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 38
+    "step": 40
   },
   {
     "componentChanges": {
@@ -1060,16 +1106,43 @@
     "rawScore": 175.15050641154716,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 39
+    "step": 41
   },
   {
     "componentChanges": {
       "concurrencyBurden": 0,
-      "constraintPressure": -89.56055443315341,
-      "deductionComplexityProxy": 35,
+      "constraintPressure": 22.87534300274399,
+      "deductionComplexityProxy": 70,
       "executionPrecision": 0,
-      "solutionComplexity": 77.0,
+      "solutionComplexity": 53.84358712999449,
+      "techniqueBurden": -65
+    },
+    "demand": 232.3722220546995,
+    "level": "PRACTICE: STEEL",
+    "needsSupport": false,
+    "newComponentHighs": {
+      "concurrencyBurden": 0,
+      "constraintPressure": 0,
+      "deductionComplexityProxy": 0,
+      "executionPrecision": 0,
+      "solutionComplexity": 0,
       "techniqueBurden": 0
+    },
+    "objective": "contain-route",
+    "preparationGaps": [],
+    "rawScore": 178.61989017050266,
+    "reasons": [],
+    "stage": "Intermediate",
+    "step": 42
+  },
+  {
+    "componentChanges": {
+      "concurrencyBurden": 0,
+      "constraintPressure": -112.4358974358974,
+      "deductionComplexityProxy": -35,
+      "executionPrecision": 0,
+      "solutionComplexity": 23.15641287000551,
+      "techniqueBurden": 65
     },
     "demand": 232.3722220546995,
     "level": "Float and Block",
@@ -1087,7 +1160,7 @@
     "rawScore": 182.8976343352372,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 40
+    "step": 43
   },
   {
     "componentChanges": {
@@ -1114,7 +1187,7 @@
     "rawScore": 175.53784211745153,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 41
+    "step": 44
   },
   {
     "componentChanges": {
@@ -1141,7 +1214,7 @@
     "rawScore": 182.9098071963523,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 42
+    "step": 45
   },
   {
     "componentChanges": {
@@ -1168,42 +1241,15 @@
     "rawScore": 176.95279459027182,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 43
+    "step": 46
   },
   {
     "componentChanges": {
       "concurrencyBurden": 0,
-      "constraintPressure": 20.686972907061318,
-      "deductionComplexityProxy": 125,
-      "executionPrecision": 18.125,
-      "solutionComplexity": 21.15641287000554,
-      "techniqueBurden": 0
-    },
-    "demand": 232.3722220546995,
-    "level": "You Want Me To Go Where???",
-    "needsSupport": false,
-    "newComponentHighs": {
-      "concurrencyBurden": 0,
-      "constraintPressure": 0,
-      "deductionComplexityProxy": 0,
-      "executionPrecision": 0,
-      "solutionComplexity": 0,
-      "techniqueBurden": 0
-    },
-    "objective": "apply:055a0d5a06f9c48c7ceb",
-    "preparationGaps": [],
-    "rawScore": 196.67151189959102,
-    "reasons": [],
-    "stage": "Intermediate",
-    "step": 44
-  },
-  {
-    "componentChanges": {
-      "concurrencyBurden": 0,
-      "constraintPressure": -90.48782950428429,
-      "deductionComplexityProxy": 30,
-      "executionPrecision": -45.625,
-      "solutionComplexity": 47.0,
+      "constraintPressure": -69.80085659722297,
+      "deductionComplexityProxy": 155,
+      "executionPrecision": -27.5,
+      "solutionComplexity": 68.15641287000554,
       "techniqueBurden": 0
     },
     "demand": 232.3722220546995,
@@ -1222,7 +1268,7 @@
     "rawScore": 188.2230940640341,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 45
+    "step": 47
   },
   {
     "componentChanges": {
@@ -1249,18 +1295,45 @@
     "rawScore": 188.52314095159713,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 46
+    "step": 48
   },
   {
     "componentChanges": {
       "concurrencyBurden": -210,
-      "constraintPressure": 4.690072288307704,
-      "deductionComplexityProxy": 110,
+      "constraintPressure": 257.33590642209185,
+      "deductionComplexityProxy": -20,
+      "executionPrecision": 0,
+      "solutionComplexity": -44.68825906469124,
+      "techniqueBurden": 0
+    },
+    "demand": 232.81188765512738,
+    "level": "Climb and Block",
+    "needsSupport": false,
+    "newComponentHighs": {
+      "concurrencyBurden": 0,
+      "constraintPressure": 0.879331200855745,
+      "deductionComplexityProxy": 0,
+      "executionPrecision": 0,
+      "solutionComplexity": 0,
+      "techniqueBurden": 0
+    },
+    "objective": "apply:aa7c855685257fa11ffb",
+    "preparationGaps": [],
+    "rawScore": 183.44539179223696,
+    "reasons": [],
+    "stage": "Intermediate",
+    "step": 49
+  },
+  {
+    "componentChanges": {
+      "concurrencyBurden": 0,
+      "constraintPressure": -252.64583413378415,
+      "deductionComplexityProxy": 130,
       "executionPrecision": 268.3333333333333,
-      "solutionComplexity": -18.707809073345118,
+      "solutionComplexity": 25.98044999134612,
       "techniqueBurden": -65
     },
-    "demand": 232.3722220546995,
+    "demand": 232.81188765512738,
     "level": "You Live and Lem",
     "needsSupport": false,
     "newComponentHighs": {
@@ -1276,18 +1349,45 @@
     "rawScore": 202.83379901960782,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 47
+    "step": 50
   },
   {
     "componentChanges": {
       "concurrencyBurden": 0,
-      "constraintPressure": 214.6982741823051,
-      "deductionComplexityProxy": -115,
-      "executionPrecision": -114.58333333333331,
-      "solutionComplexity": -95.96089998269224,
+      "constraintPressure": 35.577527267276935,
+      "deductionComplexityProxy": -40,
+      "executionPrecision": -27.708333333333314,
+      "solutionComplexity": -84.98044999134612,
       "techniqueBurden": 65
     },
-    "demand": 232.3722220546995,
+    "demand": 232.81188765512738,
+    "level": "You Want Me To Go Where???",
+    "needsSupport": false,
+    "newComponentHighs": {
+      "concurrencyBurden": 0,
+      "constraintPressure": 0,
+      "deductionComplexityProxy": 0,
+      "executionPrecision": 0,
+      "solutionComplexity": 0,
+      "techniqueBurden": 0
+    },
+    "objective": "apply:055a0d5a06f9c48c7ceb",
+    "preparationGaps": [],
+    "rawScore": 196.67151189959102,
+    "reasons": [],
+    "stage": "Intermediate",
+    "step": 51
+  },
+  {
+    "componentChanges": {
+      "concurrencyBurden": 0,
+      "constraintPressure": 179.12074691502818,
+      "deductionComplexityProxy": -75,
+      "executionPrecision": -86.875,
+      "solutionComplexity": -10.98044999134612,
+      "techniqueBurden": 0
+    },
+    "demand": 232.81188765512738,
     "level": "A Trap is a trap.",
     "needsSupport": false,
     "newComponentHighs": {
@@ -1303,18 +1403,45 @@
     "rawScore": 194.91651000044857,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 48
+    "step": 52
   },
   {
     "componentChanges": {
-      "concurrencyBurden": 0,
-      "constraintPressure": -195.37249692902827,
-      "deductionComplexityProxy": 75,
-      "executionPrecision": 103.125,
-      "solutionComplexity": 50.96089998269224,
+      "concurrencyBurden": 70,
+      "constraintPressure": 45.77904264253061,
+      "deductionComplexityProxy": -15,
+      "executionPrecision": -153.75,
+      "solutionComplexity": 69.98044999134612,
       "techniqueBurden": 0
     },
-    "demand": 232.3722220546995,
+    "demand": 236.72762900065317,
+    "level": "Climb and Build",
+    "needsSupport": false,
+    "newComponentHighs": {
+      "concurrencyBurden": 0,
+      "constraintPressure": 7.831482691051576,
+      "deductionComplexityProxy": 0,
+      "executionPrecision": 0,
+      "solutionComplexity": 0,
+      "techniqueBurden": 0
+    },
+    "objective": "apply:18aac37181b1ed0596c6",
+    "preparationGaps": [],
+    "rawScore": 193.56348454207367,
+    "reasons": [],
+    "stage": "Intermediate",
+    "step": 53
+  },
+  {
+    "componentChanges": {
+      "concurrencyBurden": -70,
+      "constraintPressure": -241.15153957155889,
+      "deductionComplexityProxy": 90,
+      "executionPrecision": 256.875,
+      "solutionComplexity": -19.01955000865388,
+      "techniqueBurden": 0
+    },
+    "demand": 236.72762900065317,
     "level": "That, Though, Is a Lemming",
     "needsSupport": false,
     "newComponentHighs": {
@@ -1330,18 +1457,45 @@
     "rawScore": 206.60448339586713,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 49
+    "step": 54
   },
   {
     "componentChanges": {
       "concurrencyBurden": 0,
-      "constraintPressure": 46.92492302683519,
-      "deductionComplexityProxy": 15,
+      "constraintPressure": -63.536320408210315,
+      "deductionComplexityProxy": -65,
       "executionPrecision": -256.875,
-      "solutionComplexity": 162.51317942364756,
+      "solutionComplexity": 172.86313713864837,
       "techniqueBurden": -65
     },
-    "demand": 263.5592255965533,
+    "demand": 270.80419599705385,
+    "level": "4 Pixels (or so) from Victory",
+    "needsSupport": false,
+    "newComponentHighs": {
+      "concurrencyBurden": 0,
+      "constraintPressure": 0,
+      "deductionComplexityProxy": 0,
+      "executionPrecision": 0,
+      "solutionComplexity": 87.45786052095525,
+      "techniqueBurden": 0
+    },
+    "objective": "scout-route",
+    "preparationGaps": [],
+    "rawScore": 164.19965191330246,
+    "reasons": [],
+    "stage": "Intermediate",
+    "step": 55
+  },
+  {
+    "componentChanges": {
+      "concurrencyBurden": 0,
+      "constraintPressure": 110.4612434350455,
+      "deductionComplexityProxy": 80,
+      "executionPrecision": 0,
+      "solutionComplexity": -10.349957715000812,
+      "techniqueBurden": 0
+    },
+    "demand": 270.80419599705385,
     "level": "32 Lemmings Below Zero",
     "needsSupport": false,
     "newComponentHighs": {
@@ -1349,7 +1503,7 @@
       "constraintPressure": 0,
       "deductionComplexityProxy": 0,
       "executionPrecision": 0,
-      "solutionComplexity": 77.10790280595444,
+      "solutionComplexity": 0,
       "techniqueBurden": 0
     },
     "objective": "apply:dd0a1bc05418c915cd7c",
@@ -1357,7 +1511,7 @@
     "rawScore": 181.8826228625582,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 50
+    "step": 56
   },
   {
     "componentChanges": {
@@ -1368,7 +1522,7 @@
       "solutionComplexity": -3.474079406339797,
       "techniqueBurden": 0
     },
-    "demand": 263.5592255965533,
+    "demand": 270.80419599705385,
     "level": "The Great Lemming Road",
     "needsSupport": false,
     "newComponentHighs": {
@@ -1384,7 +1538,7 @@
     "rawScore": 178.82469259779563,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 51
+    "step": 57
   },
   {
     "componentChanges": {
@@ -1395,7 +1549,7 @@
       "solutionComplexity": -0.17596287865939075,
       "techniqueBurden": 65
     },
-    "demand": 270,
+    "demand": 270.80419599705385,
     "level": "Just When You Think You Know!",
     "needsSupport": false,
     "newComponentHighs": {
@@ -1411,7 +1565,7 @@
     "rawScore": 176.1325753919844,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 52
+    "step": 58
   },
   {
     "componentChanges": {
@@ -1438,7 +1592,7 @@
     "rawScore": 180.96406507252055,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 53
+    "step": 59
   },
   {
     "componentChanges": {
@@ -1454,7 +1608,7 @@
     "needsSupport": false,
     "newComponentHighs": {
       "concurrencyBurden": 0,
-      "constraintPressure": 83.68291429313894,
+      "constraintPressure": 74.97210040123161,
       "deductionComplexityProxy": 0,
       "executionPrecision": 0,
       "solutionComplexity": 0,
@@ -1465,7 +1619,7 @@
     "rawScore": 176.45555659232994,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 54
+    "step": 60
   },
   {
     "componentChanges": {
@@ -1492,7 +1646,7 @@
     "rawScore": 190.0787843137255,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 55
+    "step": 61
   },
   {
     "componentChanges": {
@@ -1519,7 +1673,7 @@
     "rawScore": 190.58245497353954,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 56
+    "step": 62
   },
   {
     "componentChanges": {
@@ -1546,7 +1700,7 @@
     "rawScore": 186.98852246843458,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 57
+    "step": 63
   },
   {
     "componentChanges": {
@@ -1573,43 +1727,43 @@
     "rawScore": 187.12915535665547,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 58
+    "step": 64
   },
   {
     "componentChanges": {
       "concurrencyBurden": 0,
-      "constraintPressure": -105.96630832364372,
-      "deductionComplexityProxy": -15,
+      "constraintPressure": -277.2538498482345,
+      "deductionComplexityProxy": 145,
       "executionPrecision": 0,
-      "solutionComplexity": 36.186416956355714,
-      "techniqueBurden": 65
+      "solutionComplexity": 168.65004228499922,
+      "techniqueBurden": 0
     },
     "demand": 276.25,
-    "level": "Gather round and break away",
+    "level": "If only they could fly",
     "needsSupport": false,
     "newComponentHighs": {
       "concurrencyBurden": 0,
       "constraintPressure": 0,
-      "deductionComplexityProxy": 0,
+      "deductionComplexityProxy": 10,
       "executionPrecision": 0,
       "solutionComplexity": 0,
       "techniqueBurden": 0
     },
-    "objective": "apply:9c37b6103e1f9fd73f20",
+    "objective": "apply:42975ccb197cfa2950e4",
     "preparationGaps": [],
-    "rawScore": 196.51454700498005,
+    "rawScore": 198.33916417908483,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 59
+    "step": 65
   },
   {
     "componentChanges": {
       "concurrencyBurden": 0,
-      "constraintPressure": -113.35726158823365,
-      "deductionComplexityProxy": 85,
+      "constraintPressure": 57.930279936357124,
+      "deductionComplexityProxy": -75,
       "executionPrecision": 0,
-      "solutionComplexity": 23.969995913649825,
-      "techniqueBurden": 0
+      "solutionComplexity": -108.49362941499368,
+      "techniqueBurden": 65
     },
     "demand": 276.25,
     "level": "LemEdit generated Level",
@@ -1627,7 +1781,7 @@
     "rawScore": 193.00150209951263,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 60
+    "step": 66
   },
   {
     "componentChanges": {
@@ -1654,7 +1808,7 @@
     "rawScore": 204.01073237445286,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 61
+    "step": 67
   },
   {
     "componentChanges": {
@@ -1681,16 +1835,70 @@
     "rawScore": 203.803265966681,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 62
+    "step": 68
   },
   {
     "componentChanges": {
       "concurrencyBurden": 0,
-      "constraintPressure": -292.1152406123881,
-      "deductionComplexityProxy": 45,
+      "constraintPressure": -110.3825437853784,
+      "deductionComplexityProxy": -135,
       "executionPrecision": 0,
-      "solutionComplexity": 80.8251219260429,
+      "solutionComplexity": 1.186416956355714,
       "techniqueBurden": 65
+    },
+    "demand": 276.25,
+    "level": "Gather round and break away",
+    "needsSupport": false,
+    "newComponentHighs": {
+      "concurrencyBurden": 0,
+      "constraintPressure": 0,
+      "deductionComplexityProxy": 0,
+      "executionPrecision": 0,
+      "solutionComplexity": 0,
+      "techniqueBurden": 0
+    },
+    "objective": "apply:9c37b6103e1f9fd73f20",
+    "preparationGaps": [],
+    "rawScore": 196.51454700498005,
+    "reasons": [],
+    "stage": "Intermediate",
+    "step": 69
+  },
+  {
+    "componentChanges": {
+      "concurrencyBurden": 250,
+      "constraintPressure": -26.060144974853984,
+      "deductionComplexityProxy": 0,
+      "executionPrecision": 0,
+      "solutionComplexity": -93.04955409500405,
+      "techniqueBurden": 0
+    },
+    "demand": 276.25,
+    "level": "The abyss",
+    "needsSupport": false,
+    "newComponentHighs": {
+      "concurrencyBurden": 40,
+      "constraintPressure": 0,
+      "deductionComplexityProxy": 0,
+      "executionPrecision": 0,
+      "solutionComplexity": 0,
+      "techniqueBurden": 0
+    },
+    "objective": "apply:1475006b1b71573f847e",
+    "preparationGaps": [],
+    "rawScore": 205.15582625734814,
+    "reasons": [],
+    "stage": "Intermediate",
+    "step": 70
+  },
+  {
+    "componentChanges": {
+      "concurrencyBurden": -250,
+      "constraintPressure": -155.67255185215572,
+      "deductionComplexityProxy": 180,
+      "executionPrecision": 0,
+      "solutionComplexity": 172.68825906469124,
+      "techniqueBurden": 0
     },
     "demand": 276.25,
     "level": "Crematory Chamber",
@@ -1698,7 +1906,7 @@
     "newComponentHighs": {
       "concurrencyBurden": 0,
       "constraintPressure": 0,
-      "deductionComplexityProxy": 30,
+      "deductionComplexityProxy": 20,
       "executionPrecision": 0,
       "solutionComplexity": 0,
       "techniqueBurden": 0
@@ -1708,7 +1916,7 @@
     "rawScore": 203.00981151079998,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 63
+    "step": 71
   },
   {
     "componentChanges": {
@@ -1735,42 +1943,15 @@
     "rawScore": 213.85662584266817,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 64
+    "step": 72
   },
   {
     "componentChanges": {
-      "concurrencyBurden": 250,
-      "constraintPressure": 94.6423185891062,
-      "deductionComplexityProxy": -120,
-      "executionPrecision": 0,
-      "solutionComplexity": -205.01955000865388,
-      "techniqueBurden": 0
-    },
-    "demand": 276.25,
-    "level": "The abyss",
-    "needsSupport": false,
-    "newComponentHighs": {
-      "concurrencyBurden": 40,
-      "constraintPressure": 0,
-      "deductionComplexityProxy": 0,
-      "executionPrecision": 0,
-      "solutionComplexity": 0,
-      "techniqueBurden": 0
-    },
-    "objective": "apply:1475006b1b71573f847e",
-    "preparationGaps": [],
-    "rawScore": 205.15582625734814,
-    "reasons": [],
-    "stage": "Intermediate",
-    "step": 65
-  },
-  {
-    "componentChanges": {
-      "concurrencyBurden": -250,
-      "constraintPressure": -214.11262285533417,
-      "deductionComplexityProxy": 115,
+      "concurrencyBurden": 0,
+      "constraintPressure": -119.47030426622797,
+      "deductionComplexityProxy": -5,
       "executionPrecision": 213.90625,
-      "solutionComplexity": 136.86313713864837,
+      "solutionComplexity": -68.15641287000551,
       "techniqueBurden": 0
     },
     "demand": 276.25,
@@ -1789,7 +1970,7 @@
     "rawScore": 225.76232545665735,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 66
+    "step": 73
   },
   {
     "componentChanges": {
@@ -1816,7 +1997,7 @@
     "rawScore": 244.59567422800018,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 67
+    "step": 74
   },
   {
     "componentChanges": {
@@ -1843,181 +2024,15 @@
     "rawScore": 234.8055067663979,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 68
+    "step": 75
   },
   {
     "componentChanges": {
       "concurrencyBurden": 0,
-      "constraintPressure": 307.81445001649206,
-      "deductionComplexityProxy": -50,
-      "executionPrecision": -50.334821428571445,
-      "solutionComplexity": 88.13686286135163,
-      "techniqueBurden": -65
-    },
-    "demand": 276.25,
-    "level": "Tightrope City",
-    "needsSupport": false,
-    "newComponentHighs": {
-      "concurrencyBurden": 0,
-      "constraintPressure": 2.4206808131483513,
-      "deductionComplexityProxy": 0,
-      "executionPrecision": 0,
-      "solutionComplexity": 9.486820576352443,
-      "techniqueBurden": 0
-    },
-    "objective": "apply:7b45462b89c5880bce8b",
-    "preparationGaps": [],
-    "rawScore": 264.39453081232494,
-    "reasons": [],
-    "stage": "Intermediate",
-    "step": 69
-  },
-  {
-    "componentChanges": {
-      "concurrencyBurden": 0,
-      "constraintPressure": -382.08064119414917,
-      "deductionComplexityProxy": -25,
-      "executionPrecision": -163.57142857142856,
-      "solutionComplexity": 0.8631371386483693,
-      "techniqueBurden": -65
-    },
-    "demand": 276.25,
-    "level": "4 Pixels (or so) from Victory",
-    "needsSupport": true,
-    "newComponentHighs": {
-      "concurrencyBurden": 0,
-      "constraintPressure": 0,
-      "deductionComplexityProxy": 0,
-      "executionPrecision": 0,
-      "solutionComplexity": 0.8631371386483693,
-      "techniqueBurden": 0
-    },
-    "objective": "scout-route",
-    "preparationGaps": [
-      "climber"
-    ],
-    "rawScore": 164.19965191330246,
-    "reasons": [
-      "Preparation: climber"
-    ],
-    "stage": "Intermediate",
-    "step": 70
-  },
-  {
-    "componentChanges": {
-      "concurrencyBurden": 0,
-      "constraintPressure": 296.8563772887176,
-      "deductionComplexityProxy": -25,
-      "executionPrecision": 0,
-      "solutionComplexity": -153.8435871299945,
-      "techniqueBurden": 65
-    },
-    "demand": 276.25,
-    "level": "Climb and Block",
-    "needsSupport": false,
-    "newComponentHighs": {
-      "concurrencyBurden": 0,
-      "constraintPressure": 0,
-      "deductionComplexityProxy": 0,
-      "executionPrecision": 0,
-      "solutionComplexity": 0,
-      "techniqueBurden": 0
-    },
-    "objective": "apply:aa7c855685257fa11ffb",
-    "preparationGaps": [],
-    "rawScore": 183.44539179223696,
-    "reasons": [],
-    "stage": "Intermediate",
-    "step": 71
-  },
-  {
-    "componentChanges": {
-      "concurrencyBurden": 0,
-      "constraintPressure": -223.26789295731356,
-      "deductionComplexityProxy": 145,
-      "executionPrecision": 0,
-      "solutionComplexity": 153.49362941499368,
-      "techniqueBurden": 0
-    },
-    "demand": 276.25,
-    "level": "If only they could fly",
-    "needsSupport": false,
-    "newComponentHighs": {
-      "concurrencyBurden": 0,
-      "constraintPressure": 0,
-      "deductionComplexityProxy": 0,
-      "executionPrecision": 0,
-      "solutionComplexity": 0,
-      "techniqueBurden": 0
-    },
-    "objective": "apply:42975ccb197cfa2950e4",
-    "preparationGaps": [],
-    "rawScore": 198.33916417908483,
-    "reasons": [],
-    "stage": "Intermediate",
-    "step": 72
-  },
-  {
-    "componentChanges": {
-      "concurrencyBurden": 70,
-      "constraintPressure": 231.09937564836514,
-      "deductionComplexityProxy": -145,
-      "executionPrecision": 0,
-      "solutionComplexity": -153.49362941499368,
-      "techniqueBurden": 0
-    },
-    "demand": 276.25,
-    "level": "Climb and Build",
-    "needsSupport": false,
-    "newComponentHighs": {
-      "concurrencyBurden": 0,
-      "constraintPressure": 0,
-      "deductionComplexityProxy": 0,
-      "executionPrecision": 0,
-      "solutionComplexity": 0,
-      "techniqueBurden": 0
-    },
-    "objective": "apply:18aac37181b1ed0596c6",
-    "preparationGaps": [],
-    "rawScore": 193.56348454207367,
-    "reasons": [],
-    "stage": "Intermediate",
-    "step": 73
-  },
-  {
-    "componentChanges": {
-      "concurrencyBurden": -70,
-      "constraintPressure": 30.273181826212237,
-      "deductionComplexityProxy": 60,
-      "executionPrecision": 176.66666666666666,
-      "solutionComplexity": 35.66870905603736,
-      "techniqueBurden": 65
-    },
-    "demand": 276.25,
-    "level": "Satan Loves You",
-    "needsSupport": false,
-    "newComponentHighs": {
-      "concurrencyBurden": 0,
-      "constraintPressure": 0,
-      "deductionComplexityProxy": 0,
-      "executionPrecision": 0,
-      "solutionComplexity": 0,
-      "techniqueBurden": 0
-    },
-    "objective": "apply:923d8cf140e725ea72c9",
-    "preparationGaps": [],
-    "rawScore": 252.02944750514283,
-    "reasons": [],
-    "stage": "Intermediate",
-    "step": 74
-  },
-  {
-    "componentChanges": {
-      "concurrencyBurden": 0,
-      "constraintPressure": -70.18641215228814,
-      "deductionComplexityProxy": -60,
-      "executionPrecision": 80.20833333333334,
-      "solutionComplexity": -9.688259064691238,
+      "constraintPressure": 190.50843847603616,
+      "deductionComplexityProxy": -100,
+      "executionPrecision": 42.96875,
+      "solutionComplexity": -38.86313713864837,
       "techniqueBurden": 0
     },
     "demand": 276.25,
@@ -2036,16 +2051,70 @@
     "rawScore": 252.61546359777995,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 75
+    "step": 76
   },
   {
     "componentChanges": {
       "concurrencyBurden": 0,
-      "constraintPressure": 152.51283842535747,
-      "deductionComplexityProxy": 20,
-      "executionPrecision": -256.875,
-      "solutionComplexity": -0.930895896342065,
-      "techniqueBurden": -195
+      "constraintPressure": 70.18641215228814,
+      "deductionComplexityProxy": 60,
+      "executionPrecision": -80.20833333333334,
+      "solutionComplexity": 9.688259064691238,
+      "techniqueBurden": 0
+    },
+    "demand": 276.25,
+    "level": "Satan Loves You",
+    "needsSupport": false,
+    "newComponentHighs": {
+      "concurrencyBurden": 0,
+      "constraintPressure": 0,
+      "deductionComplexityProxy": 0,
+      "executionPrecision": 0,
+      "solutionComplexity": 0,
+      "techniqueBurden": 0
+    },
+    "objective": "apply:923d8cf140e725ea72c9",
+    "preparationGaps": [],
+    "rawScore": 252.02944750514283,
+    "reasons": [],
+    "stage": "Intermediate",
+    "step": 77
+  },
+  {
+    "componentChanges": {
+      "concurrencyBurden": 0,
+      "constraintPressure": 47.11959938816773,
+      "deductionComplexityProxy": -10,
+      "executionPrecision": -13.095238095238102,
+      "solutionComplexity": 117.31174093530876,
+      "techniqueBurden": -65
+    },
+    "demand": 276.25,
+    "level": "Tightrope City",
+    "needsSupport": false,
+    "newComponentHighs": {
+      "concurrencyBurden": 0,
+      "constraintPressure": 2.4206808131483513,
+      "deductionComplexityProxy": 0,
+      "executionPrecision": 0,
+      "solutionComplexity": 0,
+      "techniqueBurden": 0
+    },
+    "objective": "apply:7b45462b89c5880bce8b",
+    "preparationGaps": [],
+    "rawScore": 264.39453081232494,
+    "reasons": [],
+    "stage": "Intermediate",
+    "step": 78
+  },
+  {
+    "componentChanges": {
+      "concurrencyBurden": 0,
+      "constraintPressure": 35.2068268849016,
+      "deductionComplexityProxy": -30,
+      "executionPrecision": -163.57142857142856,
+      "solutionComplexity": -127.93089589634207,
+      "techniqueBurden": -130
     },
     "demand": 293.02743305029395,
     "level": "Float and Dig",
@@ -2063,7 +2132,7 @@
     "rawScore": 173.5123354958812,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 76
+    "step": 79
   },
   {
     "componentChanges": {
@@ -2090,7 +2159,7 @@
     "rawScore": 176.99073253586698,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 77
+    "step": 80
   },
   {
     "componentChanges": {
@@ -2117,7 +2186,7 @@
     "rawScore": 189.3074382568058,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 78
+    "step": 81
   },
   {
     "componentChanges": {
@@ -2144,7 +2213,7 @@
     "rawScore": 190.9744822531856,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 79
+    "step": 82
   },
   {
     "componentChanges": {
@@ -2166,12 +2235,12 @@
       "solutionComplexity": 0,
       "techniqueBurden": 0
     },
-    "objective": "contain-route",
+    "objective": "resource-planning",
     "preparationGaps": [],
     "rawScore": 209.58000482596725,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 80
+    "step": 83
   },
   {
     "componentChanges": {
@@ -2198,16 +2267,43 @@
     "rawScore": 203.8566220687414,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 81
+    "step": 84
   },
   {
     "componentChanges": {
       "concurrencyBurden": 0,
-      "constraintPressure": -68.93313124336487,
-      "deductionComplexityProxy": -70,
-      "executionPrecision": 360,
-      "solutionComplexity": -123.84358712999449,
-      "techniqueBurden": -65
+      "constraintPressure": -381.9138590368997,
+      "deductionComplexityProxy": -35,
+      "executionPrecision": 342.8125,
+      "solutionComplexity": -153.8435871299945,
+      "techniqueBurden": 65
+    },
+    "demand": 306,
+    "level": "Hot Dungeon",
+    "needsSupport": false,
+    "newComponentHighs": {
+      "concurrencyBurden": 0,
+      "constraintPressure": 0,
+      "deductionComplexityProxy": 0,
+      "executionPrecision": 0,
+      "solutionComplexity": 0,
+      "techniqueBurden": 0
+    },
+    "objective": "apply:d5974ca2f9321a7596e4",
+    "preparationGaps": [],
+    "rawScore": 202.72473122534564,
+    "reasons": [],
+    "stage": "Intermediate",
+    "step": 85
+  },
+  {
+    "componentChanges": {
+      "concurrencyBurden": 0,
+      "constraintPressure": 312.9807277935348,
+      "deductionComplexityProxy": -35,
+      "executionPrecision": 17.1875,
+      "solutionComplexity": 30.0,
+      "techniqueBurden": -130
     },
     "demand": 306,
     "level": "Turn around and look.",
@@ -2225,7 +2321,7 @@
     "rawScore": 218.49972583850519,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 82
+    "step": 86
   },
   {
     "componentChanges": {
@@ -2252,7 +2348,7 @@
     "rawScore": 215.30282275258872,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 83
+    "step": 87
   },
   {
     "componentChanges": {
@@ -2279,7 +2375,7 @@
     "rawScore": 209.52573248407643,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 84
+    "step": 88
   },
   {
     "componentChanges": {
@@ -2306,7 +2402,7 @@
     "rawScore": 224.012535670308,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 85
+    "step": 89
   },
   {
     "componentChanges": {
@@ -2333,7 +2429,7 @@
     "rawScore": 234.42173377313023,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 86
+    "step": 90
   },
   {
     "componentChanges": {
@@ -2360,7 +2456,7 @@
     "rawScore": 237.48936795123012,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 87
+    "step": 91
   },
   {
     "componentChanges": {
@@ -2387,7 +2483,7 @@
     "rawScore": 239.87297866521058,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 88
+    "step": 92
   },
   {
     "componentChanges": {
@@ -2414,7 +2510,7 @@
     "rawScore": 232.41503103560927,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 89
+    "step": 93
   },
   {
     "componentChanges": {
@@ -2436,50 +2532,23 @@
       "solutionComplexity": 0,
       "techniqueBurden": 0
     },
-    "objective": "resource-planning",
+    "objective": "apply:1a5a9d093f0dab24edbd",
     "preparationGaps": [],
     "rawScore": 246.93838235294118,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 90
+    "step": 94
   },
   {
     "componentChanges": {
       "concurrencyBurden": -250,
-      "constraintPressure": 9.531907902322018,
-      "deductionComplexityProxy": 30,
+      "constraintPressure": -366.59281542112194,
+      "deductionComplexityProxy": 120,
       "executionPrecision": 176.66666666666666,
-      "solutionComplexity": 54.68825906469124,
+      "solutionComplexity": 219.68825906469124,
       "techniqueBurden": 0
     },
-    "demand": 313.0674245393963,
-    "level": "Go out for a walk?",
-    "needsSupport": false,
-    "newComponentHighs": {
-      "concurrencyBurden": 0,
-      "constraintPressure": 9.531907902322018,
-      "deductionComplexityProxy": 0,
-      "executionPrecision": 0,
-      "solutionComplexity": 0,
-      "techniqueBurden": 0
-    },
-    "objective": "apply:c9f74fd23b99f4c76fd0",
-    "preparationGaps": [],
-    "rawScore": 265.1422807078084,
-    "reasons": [],
-    "stage": "Intermediate",
-    "step": 91
-  },
-  {
-    "componentChanges": {
-      "concurrencyBurden": 0,
-      "constraintPressure": -376.12472332344396,
-      "deductionComplexityProxy": 90,
-      "executionPrecision": 0.0,
-      "solutionComplexity": 165.0,
-      "techniqueBurden": 0
-    },
-    "demand": 313.0674245393963,
+    "demand": 308.3014705882353,
     "level": "The great escape",
     "needsSupport": false,
     "newComponentHighs": {
@@ -2495,7 +2564,7 @@
     "rawScore": 258.84606667576077,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 92
+    "step": 95
   },
   {
     "componentChanges": {
@@ -2506,7 +2575,7 @@
       "solutionComplexity": 2.3117409353087623,
       "techniqueBurden": 0
     },
-    "demand": 313.0674245393963,
+    "demand": 308.3014705882353,
     "level": "Toy Train",
     "needsSupport": false,
     "newComponentHighs": {
@@ -2522,7 +2591,7 @@
     "rawScore": 261.016551927971,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 93
+    "step": 96
   },
   {
     "componentChanges": {
@@ -2533,7 +2602,7 @@
       "solutionComplexity": -62.96089998269224,
       "techniqueBurden": 0
     },
-    "demand": 313.0674245393963,
+    "demand": 308.3014705882353,
     "level": "Starry Level",
     "needsSupport": false,
     "newComponentHighs": {
@@ -2549,7 +2618,7 @@
     "rawScore": 281.81948065920125,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 94
+    "step": 97
   },
   {
     "componentChanges": {
@@ -2560,7 +2629,7 @@
       "solutionComplexity": -43.17596287865939,
       "techniqueBurden": 0
     },
-    "demand": 313.0674245393963,
+    "demand": 308.3014705882353,
     "level": "The Iron Puzzle",
     "needsSupport": false,
     "newComponentHighs": {
@@ -2576,7 +2645,7 @@
     "rawScore": 297.57922192089114,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 95
+    "step": 98
   },
   {
     "componentChanges": {
@@ -2587,7 +2656,7 @@
       "solutionComplexity": -2.0,
       "techniqueBurden": 0
     },
-    "demand": 313.0674245393963,
+    "demand": 308.3014705882353,
     "level": "The Strange Relict of Rhodes",
     "needsSupport": false,
     "newComponentHighs": {
@@ -2603,7 +2672,7 @@
     "rawScore": 289.2559387788915,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 96
+    "step": 99
   },
   {
     "componentChanges": {
@@ -2630,7 +2699,7 @@
     "rawScore": 215.08268575851392,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 97
+    "step": 100
   },
   {
     "componentChanges": {
@@ -2657,7 +2726,7 @@
     "rawScore": 216.32949948400412,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 98
+    "step": 101
   },
   {
     "componentChanges": {
@@ -2684,7 +2753,7 @@
     "rawScore": 239.78717913676914,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 99
+    "step": 102
   },
   {
     "componentChanges": {
@@ -2700,7 +2769,7 @@
     "needsSupport": false,
     "newComponentHighs": {
       "concurrencyBurden": 0,
-      "constraintPressure": 37.345543078070136,
+      "constraintPressure": 46.877450980392155,
       "deductionComplexityProxy": 0,
       "executionPrecision": 0,
       "solutionComplexity": 0,
@@ -2711,7 +2780,7 @@
     "rawScore": 232.6196514554985,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 100
+    "step": 103
   },
   {
     "componentChanges": {
@@ -2738,7 +2807,7 @@
     "rawScore": 239.12351909184727,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 101
+    "step": 104
   },
   {
     "componentChanges": {
@@ -2765,7 +2834,7 @@
     "rawScore": 231.09013648773637,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 102
+    "step": 105
   },
   {
     "componentChanges": {
@@ -2792,7 +2861,7 @@
     "rawScore": 240.538025215583,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 103
+    "step": 106
   },
   {
     "componentChanges": {
@@ -2819,7 +2888,7 @@
     "rawScore": 232.92767927281548,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 104
+    "step": 107
   },
   {
     "componentChanges": {
@@ -2846,7 +2915,7 @@
     "rawScore": 232.60928253534715,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 105
+    "step": 108
   },
   {
     "componentChanges": {
@@ -2873,7 +2942,7 @@
     "rawScore": 256.8568602427421,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 106
+    "step": 109
   },
   {
     "componentChanges": {
@@ -2900,7 +2969,7 @@
     "rawScore": 258.95914169345355,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 107
+    "step": 110
   },
   {
     "componentChanges": {
@@ -2927,7 +2996,7 @@
     "rawScore": 251.69608395709858,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 108
+    "step": 111
   },
   {
     "componentChanges": {
@@ -2954,7 +3023,7 @@
     "rawScore": 249.35511231557348,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 109
+    "step": 112
   },
   {
     "componentChanges": {
@@ -2981,7 +3050,7 @@
     "rawScore": 262.47307949722494,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 110
+    "step": 113
   },
   {
     "componentChanges": {
@@ -3008,7 +3077,7 @@
     "rawScore": 273.1174852900536,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 111
+    "step": 114
   },
   {
     "componentChanges": {
@@ -3035,7 +3104,7 @@
     "rawScore": 272.7968529423194,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 112
+    "step": 115
   },
   {
     "componentChanges": {
@@ -3062,7 +3131,7 @@
     "rawScore": 283.85185434173667,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 113
+    "step": 116
   },
   {
     "componentChanges": {
@@ -3089,7 +3158,7 @@
     "rawScore": 285.10466870823797,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 114
+    "step": 117
   },
   {
     "componentChanges": {
@@ -3116,7 +3185,7 @@
     "rawScore": 304.89242553321947,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 115
+    "step": 118
   },
   {
     "componentChanges": {
@@ -3143,7 +3212,7 @@
     "rawScore": 305.14526867047437,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 116
+    "step": 119
   },
   {
     "componentChanges": {
@@ -3170,7 +3239,7 @@
     "rawScore": 301.04710203236306,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 117
+    "step": 120
   },
   {
     "componentChanges": {
@@ -3197,7 +3266,7 @@
     "rawScore": 348.4027319601136,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 118
+    "step": 121
   },
   {
     "componentChanges": {
@@ -3224,7 +3293,7 @@
     "rawScore": 205.58978113989033,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 119
+    "step": 122
   },
   {
     "componentChanges": {
@@ -3251,7 +3320,7 @@
     "rawScore": 202.72552529181573,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 120
+    "step": 123
   },
   {
     "componentChanges": {
@@ -3278,7 +3347,7 @@
     "rawScore": 322.3182497916738,
     "reasons": [],
     "stage": "Intermediate",
-    "step": 121
+    "step": 124
   },
   {
     "componentChanges": {
@@ -3305,7 +3374,7 @@
     "rawScore": 161.33603821656052,
     "reasons": [],
     "stage": "Difficult",
-    "step": 122
+    "step": 125
   },
   {
     "componentChanges": {
@@ -3332,7 +3401,7 @@
     "rawScore": 173.48889982773557,
     "reasons": [],
     "stage": "Difficult",
-    "step": 123
+    "step": 126
   },
   {
     "componentChanges": {
@@ -3359,7 +3428,7 @@
     "rawScore": 168.54613649523313,
     "reasons": [],
     "stage": "Difficult",
-    "step": 124
+    "step": 127
   },
   {
     "componentChanges": {
@@ -3386,7 +3455,7 @@
     "rawScore": 173.377946253962,
     "reasons": [],
     "stage": "Difficult",
-    "step": 125
+    "step": 128
   },
   {
     "componentChanges": {
@@ -3413,7 +3482,7 @@
     "rawScore": 185.7817168344789,
     "reasons": [],
     "stage": "Difficult",
-    "step": 126
+    "step": 129
   },
   {
     "componentChanges": {
@@ -3440,7 +3509,7 @@
     "rawScore": 203.92560979289183,
     "reasons": [],
     "stage": "Difficult",
-    "step": 127
+    "step": 130
   },
   {
     "componentChanges": {
@@ -3467,7 +3536,7 @@
     "rawScore": 204.61166830551318,
     "reasons": [],
     "stage": "Difficult",
-    "step": 128
+    "step": 131
   },
   {
     "componentChanges": {
@@ -3494,7 +3563,7 @@
     "rawScore": 195.51991577724536,
     "reasons": [],
     "stage": "Difficult",
-    "step": 129
+    "step": 132
   },
   {
     "componentChanges": {
@@ -3521,7 +3590,7 @@
     "rawScore": 211.40329703324772,
     "reasons": [],
     "stage": "Difficult",
-    "step": 130
+    "step": 133
   },
   {
     "componentChanges": {
@@ -3548,7 +3617,7 @@
     "rawScore": 205.80507941461426,
     "reasons": [],
     "stage": "Difficult",
-    "step": 131
+    "step": 134
   },
   {
     "componentChanges": {
@@ -3575,7 +3644,7 @@
     "rawScore": 210.09103375657392,
     "reasons": [],
     "stage": "Difficult",
-    "step": 132
+    "step": 135
   },
   {
     "componentChanges": {
@@ -3602,7 +3671,7 @@
     "rawScore": 210.09862418190332,
     "reasons": [],
     "stage": "Difficult",
-    "step": 133
+    "step": 136
   },
   {
     "componentChanges": {
@@ -3629,7 +3698,7 @@
     "rawScore": 211.86265075575324,
     "reasons": [],
     "stage": "Difficult",
-    "step": 134
+    "step": 137
   },
   {
     "componentChanges": {
@@ -3656,43 +3725,16 @@
     "rawScore": 229.32004123449235,
     "reasons": [],
     "stage": "Difficult",
-    "step": 135
+    "step": 138
   },
   {
     "componentChanges": {
-      "concurrencyBurden": 70,
-      "constraintPressure": 99.42032256166601,
-      "deductionComplexityProxy": 75,
-      "executionPrecision": 0,
-      "solutionComplexity": 103.26319346403028,
-      "techniqueBurden": -195
-    },
-    "demand": 360,
-    "level": "Above The Pepsi Max.ini",
-    "needsSupport": false,
-    "newComponentHighs": {
       "concurrencyBurden": 0,
-      "constraintPressure": 0,
-      "deductionComplexityProxy": 0,
-      "executionPrecision": 0,
-      "solutionComplexity": 0,
-      "techniqueBurden": 0
-    },
-    "objective": "chain:builder:floater",
-    "preparationGaps": [],
-    "rawScore": 230.5625857295956,
-    "reasons": [],
-    "stage": "Difficult",
-    "step": 136
-  },
-  {
-    "componentChanges": {
-      "concurrencyBurden": -70,
-      "constraintPressure": -38.25281724644776,
-      "deductionComplexityProxy": -100,
+      "constraintPressure": 61.16750531521825,
+      "deductionComplexityProxy": -25,
       "executionPrecision": 195,
-      "solutionComplexity": -118.26319346403028,
-      "techniqueBurden": 0
+      "solutionComplexity": -15.0,
+      "techniqueBurden": -195
     },
     "demand": 360,
     "level": "Make a choice",
@@ -3710,7 +3752,7 @@
     "rawScore": 222.47181692547076,
     "reasons": [],
     "stage": "Difficult",
-    "step": 137
+    "step": 139
   },
   {
     "componentChanges": {
@@ -3737,7 +3779,7 @@
     "rawScore": 227.89882141691152,
     "reasons": [],
     "stage": "Difficult",
-    "step": 138
+    "step": 140
   },
   {
     "componentChanges": {
@@ -3764,7 +3806,7 @@
     "rawScore": 238.73469409207127,
     "reasons": [],
     "stage": "Difficult",
-    "step": 139
+    "step": 141
   },
   {
     "componentChanges": {
@@ -3791,7 +3833,7 @@
     "rawScore": 249.06266106442575,
     "reasons": [],
     "stage": "Difficult",
-    "step": 140
+    "step": 142
   },
   {
     "componentChanges": {
@@ -3818,7 +3860,7 @@
     "rawScore": 240.4304856216831,
     "reasons": [],
     "stage": "Difficult",
-    "step": 141
+    "step": 143
   },
   {
     "componentChanges": {
@@ -3845,7 +3887,7 @@
     "rawScore": 239.30491371969316,
     "reasons": [],
     "stage": "Difficult",
-    "step": 142
+    "step": 144
   },
   {
     "componentChanges": {
@@ -3872,7 +3914,7 @@
     "rawScore": 252.94144526124666,
     "reasons": [],
     "stage": "Difficult",
-    "step": 143
+    "step": 145
   },
   {
     "componentChanges": {
@@ -3899,7 +3941,7 @@
     "rawScore": 248.7921301927535,
     "reasons": [],
     "stage": "Difficult",
-    "step": 144
+    "step": 146
   },
   {
     "componentChanges": {
@@ -3926,7 +3968,7 @@
     "rawScore": 260.08308782095486,
     "reasons": [],
     "stage": "Difficult",
-    "step": 145
+    "step": 147
   },
   {
     "componentChanges": {
@@ -3953,7 +3995,7 @@
     "rawScore": 250.1412766235463,
     "reasons": [],
     "stage": "Difficult",
-    "step": 146
+    "step": 148
   },
   {
     "componentChanges": {
@@ -3980,7 +4022,7 @@
     "rawScore": 261.73358239596456,
     "reasons": [],
     "stage": "Difficult",
-    "step": 147
+    "step": 149
   },
   {
     "componentChanges": {
@@ -4007,7 +4049,7 @@
     "rawScore": 269.7555823959646,
     "reasons": [],
     "stage": "Difficult",
-    "step": 148
+    "step": 150
   },
   {
     "componentChanges": {
@@ -4034,7 +4076,7 @@
     "rawScore": 262.66288758246736,
     "reasons": [],
     "stage": "Difficult",
-    "step": 149
+    "step": 151
   },
   {
     "componentChanges": {
@@ -4061,7 +4103,7 @@
     "rawScore": 271.56434021759014,
     "reasons": [],
     "stage": "Difficult",
-    "step": 150
+    "step": 152
   },
   {
     "componentChanges": {
@@ -4088,7 +4130,7 @@
     "rawScore": 265.2956608273371,
     "reasons": [],
     "stage": "Difficult",
-    "step": 151
+    "step": 153
   },
   {
     "componentChanges": {
@@ -4115,7 +4157,7 @@
     "rawScore": 275.781751982296,
     "reasons": [],
     "stage": "Difficult",
-    "step": 152
+    "step": 154
   },
   {
     "componentChanges": {
@@ -4142,7 +4184,7 @@
     "rawScore": 274.49055509413415,
     "reasons": [],
     "stage": "Difficult",
-    "step": 153
+    "step": 155
   },
   {
     "componentChanges": {
@@ -4169,7 +4211,7 @@
     "rawScore": 268.4652057330271,
     "reasons": [],
     "stage": "Difficult",
-    "step": 154
+    "step": 156
   },
   {
     "componentChanges": {
@@ -4196,7 +4238,7 @@
     "rawScore": 277.08922480744036,
     "reasons": [],
     "stage": "Difficult",
-    "step": 155
+    "step": 157
   },
   {
     "componentChanges": {
@@ -4223,7 +4265,7 @@
     "rawScore": 269.3480407502126,
     "reasons": [],
     "stage": "Difficult",
-    "step": 156
+    "step": 158
   },
   {
     "componentChanges": {
@@ -4250,7 +4292,7 @@
     "rawScore": 288.4429333341014,
     "reasons": [],
     "stage": "Difficult",
-    "step": 157
+    "step": 159
   },
   {
     "componentChanges": {
@@ -4277,7 +4319,7 @@
     "rawScore": 284.22206745288787,
     "reasons": [],
     "stage": "Difficult",
-    "step": 158
+    "step": 160
   },
   {
     "componentChanges": {
@@ -4304,7 +4346,7 @@
     "rawScore": 281.8416717713022,
     "reasons": [],
     "stage": "Difficult",
-    "step": 159
+    "step": 161
   },
   {
     "componentChanges": {
@@ -4331,7 +4373,7 @@
     "rawScore": 283.82660104557783,
     "reasons": [],
     "stage": "Difficult",
-    "step": 160
+    "step": 162
   },
   {
     "componentChanges": {
@@ -4358,7 +4400,7 @@
     "rawScore": 289.54213657438993,
     "reasons": [],
     "stage": "Difficult",
-    "step": 161
+    "step": 163
   },
   {
     "componentChanges": {
@@ -4385,7 +4427,7 @@
     "rawScore": 300.54602234322095,
     "reasons": [],
     "stage": "Difficult",
-    "step": 162
+    "step": 164
   },
   {
     "componentChanges": {
@@ -4412,7 +4454,7 @@
     "rawScore": 301.2100805191902,
     "reasons": [],
     "stage": "Difficult",
-    "step": 163
+    "step": 165
   },
   {
     "componentChanges": {
@@ -4439,7 +4481,7 @@
     "rawScore": 318.9432668026586,
     "reasons": [],
     "stage": "Difficult",
-    "step": 164
+    "step": 166
   },
   {
     "componentChanges": {
@@ -4466,7 +4508,7 @@
     "rawScore": 320.7880236009906,
     "reasons": [],
     "stage": "Difficult",
-    "step": 165
+    "step": 167
   },
   {
     "componentChanges": {
@@ -4493,7 +4535,7 @@
     "rawScore": 327.9192632427098,
     "reasons": [],
     "stage": "Difficult",
-    "step": 166
+    "step": 168
   },
   {
     "componentChanges": {
@@ -4520,7 +4562,7 @@
     "rawScore": 359.2435213830755,
     "reasons": [],
     "stage": "Difficult",
-    "step": 167
+    "step": 169
   },
   {
     "componentChanges": {
@@ -4547,7 +4589,7 @@
     "rawScore": 289.294204244704,
     "reasons": [],
     "stage": "Difficult",
-    "step": 168
+    "step": 170
   },
   {
     "componentChanges": {
@@ -4574,7 +4616,7 @@
     "rawScore": 288.6567609305363,
     "reasons": [],
     "stage": "Difficult",
-    "step": 169
+    "step": 171
   },
   {
     "componentChanges": {
@@ -4601,7 +4643,7 @@
     "rawScore": 284.077700628019,
     "reasons": [],
     "stage": "Difficult",
-    "step": 170
+    "step": 172
   },
   {
     "componentChanges": {
@@ -4628,7 +4670,7 @@
     "rawScore": 299.57876993540856,
     "reasons": [],
     "stage": "Difficult",
-    "step": 171
+    "step": 173
   },
   {
     "componentChanges": {
@@ -4655,7 +4697,7 @@
     "rawScore": 309.7101141014938,
     "reasons": [],
     "stage": "Difficult",
-    "step": 172
+    "step": 174
   },
   {
     "componentChanges": {
@@ -4682,7 +4724,7 @@
     "rawScore": 320.7689088450411,
     "reasons": [],
     "stage": "Difficult",
-    "step": 173
+    "step": 175
   },
   {
     "componentChanges": {
@@ -4709,7 +4751,7 @@
     "rawScore": 325.11423202614384,
     "reasons": [],
     "stage": "Difficult",
-    "step": 174
+    "step": 176
   },
   {
     "componentChanges": {
@@ -4736,7 +4778,7 @@
     "rawScore": 341.86466085589245,
     "reasons": [],
     "stage": "Difficult",
-    "step": 175
+    "step": 177
   },
   {
     "componentChanges": {
@@ -4763,7 +4805,7 @@
     "rawScore": 357.490324929972,
     "reasons": [],
     "stage": "Difficult",
-    "step": 176
+    "step": 178
   },
   {
     "componentChanges": {
@@ -4790,7 +4832,7 @@
     "rawScore": 382.46980915109475,
     "reasons": [],
     "stage": "Difficult",
-    "step": 177
+    "step": 179
   },
   {
     "componentChanges": {
@@ -4817,7 +4859,7 @@
     "rawScore": 208.04780143398676,
     "reasons": [],
     "stage": "Difficult",
-    "step": 178
+    "step": 180
   },
   {
     "componentChanges": {
@@ -4844,7 +4886,7 @@
     "rawScore": 236.9489464059968,
     "reasons": [],
     "stage": "Difficult",
-    "step": 179
+    "step": 181
   },
   {
     "componentChanges": {
@@ -4871,7 +4913,7 @@
     "rawScore": 236.12182752255916,
     "reasons": [],
     "stage": "Difficult",
-    "step": 180
+    "step": 182
   },
   {
     "componentChanges": {
@@ -4898,7 +4940,7 @@
     "rawScore": 252.68078724632576,
     "reasons": [],
     "stage": "Difficult",
-    "step": 181
+    "step": 183
   },
   {
     "componentChanges": {
@@ -4925,7 +4967,7 @@
     "rawScore": 318.34789947320246,
     "reasons": [],
     "stage": "Difficult",
-    "step": 182
+    "step": 184
   },
   {
     "componentChanges": {
@@ -4952,7 +4994,7 @@
     "rawScore": 321.74172300261426,
     "reasons": [],
     "stage": "Difficult",
-    "step": 183
+    "step": 185
   },
   {
     "componentChanges": {
@@ -4979,7 +5021,7 @@
     "rawScore": 330.160828758938,
     "reasons": [],
     "stage": "Difficult",
-    "step": 184
+    "step": 186
   },
   {
     "componentChanges": {
@@ -5006,7 +5048,7 @@
     "rawScore": 343.0108369496163,
     "reasons": [],
     "stage": "Difficult",
-    "step": 185
+    "step": 187
   },
   {
     "componentChanges": {
@@ -5033,7 +5075,7 @@
     "rawScore": 360.25247186984905,
     "reasons": [],
     "stage": "Difficult",
-    "step": 186
+    "step": 188
   },
   {
     "componentChanges": {
@@ -5060,7 +5102,7 @@
     "rawScore": 357.29687047994975,
     "reasons": [],
     "stage": "Difficult",
-    "step": 187
+    "step": 189
   },
   {
     "componentChanges": {
@@ -5087,7 +5129,7 @@
     "rawScore": 410.5740881754107,
     "reasons": [],
     "stage": "Difficult",
-    "step": 188
+    "step": 190
   },
   {
     "componentChanges": {
@@ -5114,7 +5156,7 @@
     "rawScore": 257.2009383753502,
     "reasons": [],
     "stage": "Difficult",
-    "step": 189
+    "step": 191
   },
   {
     "componentChanges": {
@@ -5141,7 +5183,7 @@
     "rawScore": 288.4997549019608,
     "reasons": [],
     "stage": "Difficult",
-    "step": 190
+    "step": 192
   },
   {
     "componentChanges": {
@@ -5168,7 +5210,7 @@
     "rawScore": 298.856054249134,
     "reasons": [],
     "stage": "Difficult",
-    "step": 191
+    "step": 193
   },
   {
     "componentChanges": {
@@ -5195,7 +5237,7 @@
     "rawScore": 308.87352450573985,
     "reasons": [],
     "stage": "Difficult",
-    "step": 192
+    "step": 194
   },
   {
     "componentChanges": {
@@ -5222,7 +5264,7 @@
     "rawScore": 305.4834631986927,
     "reasons": [],
     "stage": "Difficult",
-    "step": 193
+    "step": 195
   },
   {
     "componentChanges": {
@@ -5249,7 +5291,7 @@
     "rawScore": 327.66141699423207,
     "reasons": [],
     "stage": "Difficult",
-    "step": 194
+    "step": 196
   },
   {
     "componentChanges": {
@@ -5276,7 +5318,7 @@
     "rawScore": 337.93822350383596,
     "reasons": [],
     "stage": "Difficult",
-    "step": 195
+    "step": 197
   },
   {
     "componentChanges": {
@@ -5303,7 +5345,7 @@
     "rawScore": 331.0599166626026,
     "reasons": [],
     "stage": "Difficult",
-    "step": 196
+    "step": 198
   },
   {
     "componentChanges": {
@@ -5330,7 +5372,7 @@
     "rawScore": 342.8443010019039,
     "reasons": [],
     "stage": "Difficult",
-    "step": 197
+    "step": 199
   },
   {
     "componentChanges": {
@@ -5357,7 +5399,7 @@
     "rawScore": 346.795735813083,
     "reasons": [],
     "stage": "Difficult",
-    "step": 198
+    "step": 200
   },
   {
     "componentChanges": {
@@ -5384,7 +5426,7 @@
     "rawScore": 345.948214379853,
     "reasons": [],
     "stage": "Difficult",
-    "step": 199
+    "step": 201
   },
   {
     "componentChanges": {
@@ -5411,7 +5453,7 @@
     "rawScore": 366.7278921568627,
     "reasons": [],
     "stage": "Difficult",
-    "step": 200
+    "step": 202
   },
   {
     "componentChanges": {
@@ -5438,7 +5480,7 @@
     "rawScore": 412.84211960861114,
     "reasons": [],
     "stage": "Difficult",
-    "step": 201
+    "step": 203
   },
   {
     "componentChanges": {
@@ -5465,7 +5507,7 @@
     "rawScore": 423.18971404822355,
     "reasons": [],
     "stage": "Difficult",
-    "step": 202
+    "step": 204
   },
   {
     "componentChanges": {
@@ -5492,7 +5534,7 @@
     "rawScore": 425.62096477746104,
     "reasons": [],
     "stage": "Difficult",
-    "step": 203
+    "step": 205
   },
   {
     "componentChanges": {
@@ -5519,7 +5561,7 @@
     "rawScore": 456.8425491144835,
     "reasons": [],
     "stage": "Difficult",
-    "step": 204
+    "step": 206
   },
   {
     "componentChanges": {
@@ -5548,7 +5590,7 @@
       "New component high: concurrencyBurden"
     ],
     "stage": "Difficult",
-    "step": 205
+    "step": 207
   },
   {
     "componentChanges": {
@@ -5575,7 +5617,7 @@
     "rawScore": 321.3428716402062,
     "reasons": [],
     "stage": "Difficult",
-    "step": 206
+    "step": 208
   },
   {
     "componentChanges": {
@@ -5602,7 +5644,7 @@
     "rawScore": 326.897342399802,
     "reasons": [],
     "stage": "Difficult",
-    "step": 207
+    "step": 209
   },
   {
     "componentChanges": {
@@ -5629,7 +5671,7 @@
     "rawScore": 357.33784032852554,
     "reasons": [],
     "stage": "Difficult",
-    "step": 208
+    "step": 210
   },
   {
     "componentChanges": {
@@ -5656,7 +5698,7 @@
     "rawScore": 368.4217529156007,
     "reasons": [],
     "stage": "Difficult",
-    "step": 209
+    "step": 211
   },
   {
     "componentChanges": {
@@ -5683,7 +5725,7 @@
     "rawScore": 394.920903345397,
     "reasons": [],
     "stage": "Difficult",
-    "step": 210
+    "step": 212
   },
   {
     "componentChanges": {
@@ -5710,7 +5752,7 @@
     "rawScore": 415.1391911724065,
     "reasons": [],
     "stage": "Difficult",
-    "step": 211
+    "step": 213
   },
   {
     "componentChanges": {
@@ -5737,7 +5779,7 @@
     "rawScore": 414.4760534160524,
     "reasons": [],
     "stage": "Difficult",
-    "step": 212
+    "step": 214
   },
   {
     "componentChanges": {
@@ -5764,7 +5806,7 @@
     "rawScore": 424.8960093574932,
     "reasons": [],
     "stage": "Difficult",
-    "step": 213
+    "step": 215
   },
   {
     "componentChanges": {
@@ -5791,7 +5833,7 @@
     "rawScore": 480.15052924793315,
     "reasons": [],
     "stage": "Difficult",
-    "step": 214
+    "step": 216
   },
   {
     "componentChanges": {
@@ -5818,7 +5860,7 @@
     "rawScore": 325.3197163105611,
     "reasons": [],
     "stage": "Difficult",
-    "step": 215
+    "step": 217
   },
   {
     "componentChanges": {
@@ -5845,7 +5887,7 @@
     "rawScore": 412.3283934745813,
     "reasons": [],
     "stage": "Difficult",
-    "step": 216
+    "step": 218
   },
   {
     "componentChanges": {
@@ -5872,7 +5914,7 @@
     "rawScore": 410.85142254501847,
     "reasons": [],
     "stage": "Difficult",
-    "step": 217
+    "step": 219
   },
   {
     "componentChanges": {
@@ -5899,7 +5941,7 @@
     "rawScore": 407.25896305460054,
     "reasons": [],
     "stage": "Difficult",
-    "step": 218
+    "step": 220
   },
   {
     "componentChanges": {
@@ -5926,7 +5968,7 @@
     "rawScore": 431.97839250517177,
     "reasons": [],
     "stage": "Difficult",
-    "step": 219
+    "step": 221
   },
   {
     "componentChanges": {
@@ -5953,7 +5995,7 @@
     "rawScore": 446.9525490196079,
     "reasons": [],
     "stage": "Difficult",
-    "step": 220
+    "step": 222
   },
   {
     "componentChanges": {
@@ -5980,7 +6022,7 @@
     "rawScore": 452.11096860187513,
     "reasons": [],
     "stage": "Difficult",
-    "step": 221
+    "step": 223
   },
   {
     "componentChanges": {
@@ -6007,7 +6049,7 @@
     "rawScore": 443.60130636705605,
     "reasons": [],
     "stage": "Difficult",
-    "step": 222
+    "step": 224
   },
   {
     "componentChanges": {
@@ -6034,7 +6076,7 @@
     "rawScore": 479.41550072517356,
     "reasons": [],
     "stage": "Difficult",
-    "step": 223
+    "step": 225
   },
   {
     "componentChanges": {
@@ -6061,7 +6103,7 @@
     "rawScore": 484.56423463313905,
     "reasons": [],
     "stage": "Difficult",
-    "step": 224
+    "step": 226
   },
   {
     "componentChanges": {
@@ -6088,7 +6130,7 @@
     "rawScore": 407.048019583852,
     "reasons": [],
     "stage": "Difficult",
-    "step": 225
+    "step": 227
   },
   {
     "componentChanges": {
@@ -6115,7 +6157,7 @@
     "rawScore": 421.9826262841691,
     "reasons": [],
     "stage": "Difficult",
-    "step": 226
+    "step": 228
   },
   {
     "componentChanges": {
@@ -6144,7 +6186,7 @@
       "New component high: executionPrecision"
     ],
     "stage": "Difficult",
-    "step": 227
+    "step": 229
   },
   {
     "componentChanges": {
@@ -6171,7 +6213,7 @@
     "rawScore": 455.3568854379796,
     "reasons": [],
     "stage": "Difficult",
-    "step": 228
+    "step": 230
   },
   {
     "componentChanges": {
@@ -6198,7 +6240,7 @@
     "rawScore": 513.7639660138399,
     "reasons": [],
     "stage": "Difficult",
-    "step": 229
+    "step": 231
   },
   {
     "componentChanges": {
@@ -6225,7 +6267,7 @@
     "rawScore": 550.1517663482723,
     "reasons": [],
     "stage": "Difficult",
-    "step": 230
+    "step": 232
   },
   {
     "componentChanges": {
@@ -6252,7 +6294,7 @@
     "rawScore": 149.28972350383594,
     "reasons": [],
     "stage": "Expert",
-    "step": 231
+    "step": 233
   },
   {
     "componentChanges": {
@@ -6279,7 +6321,7 @@
     "rawScore": 199.1795518207283,
     "reasons": [],
     "stage": "Expert",
-    "step": 232
+    "step": 234
   },
   {
     "componentChanges": {
@@ -6306,7 +6348,7 @@
     "rawScore": 212.48383316564656,
     "reasons": [],
     "stage": "Expert",
-    "step": 233
+    "step": 235
   },
   {
     "componentChanges": {
@@ -6333,7 +6375,7 @@
     "rawScore": 230.65036318754585,
     "reasons": [],
     "stage": "Expert",
-    "step": 234
+    "step": 236
   },
   {
     "componentChanges": {
@@ -6360,7 +6402,7 @@
     "rawScore": 252.8701093874712,
     "reasons": [],
     "stage": "Expert",
-    "step": 235
+    "step": 237
   },
   {
     "componentChanges": {
@@ -6387,7 +6429,7 @@
     "rawScore": 243.12408176851426,
     "reasons": [],
     "stage": "Expert",
-    "step": 236
+    "step": 238
   },
   {
     "componentChanges": {
@@ -6414,7 +6456,7 @@
     "rawScore": 260.1643010019038,
     "reasons": [],
     "stage": "Expert",
-    "step": 237
+    "step": 239
   },
   {
     "componentChanges": {
@@ -6441,7 +6483,7 @@
     "rawScore": 253.65851774042955,
     "reasons": [],
     "stage": "Expert",
-    "step": 238
+    "step": 240
   },
   {
     "componentChanges": {
@@ -6468,7 +6510,7 @@
     "rawScore": 272.0327659874961,
     "reasons": [],
     "stage": "Expert",
-    "step": 239
+    "step": 241
   },
   {
     "componentChanges": {
@@ -6495,7 +6537,7 @@
     "rawScore": 269.1182916300652,
     "reasons": [],
     "stage": "Expert",
-    "step": 240
+    "step": 242
   },
   {
     "componentChanges": {
@@ -6522,7 +6564,7 @@
     "rawScore": 292.1967889207805,
     "reasons": [],
     "stage": "Expert",
-    "step": 241
+    "step": 243
   },
   {
     "componentChanges": {
@@ -6549,7 +6591,7 @@
     "rawScore": 297.541416994232,
     "reasons": [],
     "stage": "Expert",
-    "step": 242
+    "step": 244
   },
   {
     "componentChanges": {
@@ -6576,7 +6618,7 @@
     "rawScore": 299.52237383063334,
     "reasons": [],
     "stage": "Expert",
-    "step": 243
+    "step": 245
   },
   {
     "componentChanges": {
@@ -6603,7 +6645,7 @@
     "rawScore": 319.7414484928103,
     "reasons": [],
     "stage": "Expert",
-    "step": 244
+    "step": 246
   },
   {
     "componentChanges": {
@@ -6630,7 +6672,7 @@
     "rawScore": 310.7856935908495,
     "reasons": [],
     "stage": "Expert",
-    "step": 245
+    "step": 247
   },
   {
     "componentChanges": {
@@ -6657,7 +6699,7 @@
     "rawScore": 322.9611646803065,
     "reasons": [],
     "stage": "Expert",
-    "step": 246
+    "step": 248
   },
   {
     "componentChanges": {
@@ -6684,7 +6726,7 @@
     "rawScore": 325.4752661064426,
     "reasons": [],
     "stage": "Expert",
-    "step": 247
+    "step": 249
   },
   {
     "componentChanges": {
@@ -6711,7 +6753,7 @@
     "rawScore": 342.90082875893796,
     "reasons": [],
     "stage": "Expert",
-    "step": 248
+    "step": 250
   },
   {
     "componentChanges": {
@@ -6738,7 +6780,7 @@
     "rawScore": 338.9190866097103,
     "reasons": [],
     "stage": "Expert",
-    "step": 249
+    "step": 251
   },
   {
     "componentChanges": {
@@ -6765,7 +6807,7 @@
     "rawScore": 362.7503476868425,
     "reasons": [],
     "stage": "Expert",
-    "step": 250
+    "step": 252
   },
   {
     "componentChanges": {
@@ -6792,7 +6834,7 @@
     "rawScore": 373.3382089374072,
     "reasons": [],
     "stage": "Expert",
-    "step": 251
+    "step": 253
   },
   {
     "componentChanges": {
@@ -6819,7 +6861,7 @@
     "rawScore": 388.999667358973,
     "reasons": [],
     "stage": "Expert",
-    "step": 252
+    "step": 254
   },
   {
     "componentChanges": {
@@ -6846,7 +6888,7 @@
     "rawScore": 397.44998820971836,
     "reasons": [],
     "stage": "Expert",
-    "step": 253
+    "step": 255
   },
   {
     "componentChanges": {
@@ -6873,7 +6915,7 @@
     "rawScore": 388.4762490626312,
     "reasons": [],
     "stage": "Expert",
-    "step": 254
+    "step": 256
   },
   {
     "componentChanges": {
@@ -6900,7 +6942,7 @@
     "rawScore": 396.33545132870125,
     "reasons": [],
     "stage": "Expert",
-    "step": 255
+    "step": 257
   },
   {
     "componentChanges": {
@@ -6927,7 +6969,7 @@
     "rawScore": 394.9645052295262,
     "reasons": [],
     "stage": "Expert",
-    "step": 256
+    "step": 258
   },
   {
     "componentChanges": {
@@ -6954,7 +6996,7 @@
     "rawScore": 429.63093592213664,
     "reasons": [],
     "stage": "Expert",
-    "step": 257
+    "step": 259
   },
   {
     "componentChanges": {
@@ -6981,7 +7023,7 @@
     "rawScore": 434.90202863549104,
     "reasons": [],
     "stage": "Expert",
-    "step": 258
+    "step": 260
   },
   {
     "componentChanges": {
@@ -7008,7 +7050,7 @@
     "rawScore": 427.1048881820016,
     "reasons": [],
     "stage": "Expert",
-    "step": 259
+    "step": 261
   },
   {
     "componentChanges": {
@@ -7035,7 +7077,7 @@
     "rawScore": 439.0263598254332,
     "reasons": [],
     "stage": "Expert",
-    "step": 260
+    "step": 262
   },
   {
     "componentChanges": {
@@ -7062,7 +7104,7 @@
     "rawScore": 449.582648008435,
     "reasons": [],
     "stage": "Expert",
-    "step": 261
+    "step": 263
   },
   {
     "componentChanges": {
@@ -7089,7 +7131,7 @@
     "rawScore": 481.5880627881214,
     "reasons": [],
     "stage": "Expert",
-    "step": 262
+    "step": 264
   },
   {
     "componentChanges": {
@@ -7116,7 +7158,7 @@
     "rawScore": 475.8722627853433,
     "reasons": [],
     "stage": "Expert",
-    "step": 263
+    "step": 265
   },
   {
     "componentChanges": {
@@ -7143,7 +7185,7 @@
     "rawScore": 393.2678994732025,
     "reasons": [],
     "stage": "Expert",
-    "step": 264
+    "step": 266
   },
   {
     "componentChanges": {
@@ -7170,7 +7212,7 @@
     "rawScore": 442.8715269241829,
     "reasons": [],
     "stage": "Expert",
-    "step": 265
+    "step": 267
   },
   {
     "componentChanges": {
@@ -7197,7 +7239,7 @@
     "rawScore": 446.37346802119146,
     "reasons": [],
     "stage": "Expert",
-    "step": 266
+    "step": 268
   },
   {
     "componentChanges": {
@@ -7224,7 +7266,7 @@
     "rawScore": 468.8510948286058,
     "reasons": [],
     "stage": "Expert",
-    "step": 267
+    "step": 269
   },
   {
     "componentChanges": {
@@ -7251,7 +7293,7 @@
     "rawScore": 517.8743315771402,
     "reasons": [],
     "stage": "Expert",
-    "step": 268
+    "step": 270
   },
   {
     "componentChanges": {
@@ -7278,7 +7320,7 @@
     "rawScore": 507.9719888896569,
     "reasons": [],
     "stage": "Expert",
-    "step": 269
+    "step": 271
   },
   {
     "componentChanges": {
@@ -7305,7 +7347,7 @@
     "rawScore": 396.83771874132884,
     "reasons": [],
     "stage": "Expert",
-    "step": 270
+    "step": 272
   },
   {
     "componentChanges": {
@@ -7332,7 +7374,7 @@
     "rawScore": 416.6628091510948,
     "reasons": [],
     "stage": "Expert",
-    "step": 271
+    "step": 273
   },
   {
     "componentChanges": {
@@ -7359,7 +7401,7 @@
     "rawScore": 457.2926912909508,
     "reasons": [],
     "stage": "Expert",
-    "step": 272
+    "step": 274
   },
   {
     "componentChanges": {
@@ -7386,7 +7428,7 @@
     "rawScore": 480.10781678054445,
     "reasons": [],
     "stage": "Expert",
-    "step": 273
+    "step": 275
   },
   {
     "componentChanges": {
@@ -7413,7 +7455,7 @@
     "rawScore": 501.5518055514915,
     "reasons": [],
     "stage": "Expert",
-    "step": 274
+    "step": 276
   },
   {
     "componentChanges": {
@@ -7440,7 +7482,7 @@
     "rawScore": 497.1982427022931,
     "reasons": [],
     "stage": "Expert",
-    "step": 275
+    "step": 277
   },
   {
     "componentChanges": {
@@ -7467,7 +7509,7 @@
     "rawScore": 553.2028994732024,
     "reasons": [],
     "stage": "Expert",
-    "step": 276
+    "step": 278
   },
   {
     "componentChanges": {
@@ -7494,7 +7536,7 @@
     "rawScore": 385.79943137254907,
     "reasons": [],
     "stage": "Expert",
-    "step": 277
+    "step": 279
   },
   {
     "componentChanges": {
@@ -7521,7 +7563,7 @@
     "rawScore": 417.09171568627454,
     "reasons": [],
     "stage": "Expert",
-    "step": 278
+    "step": 280
   },
   {
     "componentChanges": {
@@ -7548,7 +7590,7 @@
     "rawScore": 457.2159640522876,
     "reasons": [],
     "stage": "Expert",
-    "step": 279
+    "step": 281
   },
   {
     "componentChanges": {
@@ -7575,7 +7617,7 @@
     "rawScore": 488.65657765737876,
     "reasons": [],
     "stage": "Expert",
-    "step": 280
+    "step": 282
   },
   {
     "componentChanges": {
@@ -7602,7 +7644,7 @@
     "rawScore": 536.1505174291939,
     "reasons": [],
     "stage": "Expert",
-    "step": 281
+    "step": 283
   },
   {
     "componentChanges": {
@@ -7629,7 +7671,7 @@
     "rawScore": 562.6583886888088,
     "reasons": [],
     "stage": "Expert",
-    "step": 282
+    "step": 284
   },
   {
     "componentChanges": {
@@ -7656,7 +7698,7 @@
     "rawScore": 558.373137254902,
     "reasons": [],
     "stage": "Expert",
-    "step": 283
+    "step": 285
   },
   {
     "componentChanges": {
@@ -7683,7 +7725,7 @@
     "rawScore": 477.1742855134113,
     "reasons": [],
     "stage": "Expert",
-    "step": 284
+    "step": 286
   },
   {
     "componentChanges": {
@@ -7710,7 +7752,7 @@
     "rawScore": 519.8394128353027,
     "reasons": [],
     "stage": "Expert",
-    "step": 285
+    "step": 287
   },
   {
     "componentChanges": {
@@ -7737,7 +7779,7 @@
     "rawScore": 557.7923751416067,
     "reasons": [],
     "stage": "Expert",
-    "step": 286
+    "step": 288
   },
   {
     "componentChanges": {
@@ -7764,7 +7806,7 @@
     "rawScore": 567.963217860334,
     "reasons": [],
     "stage": "Expert",
-    "step": 287
+    "step": 289
   },
   {
     "componentChanges": {
@@ -7791,7 +7833,7 @@
     "rawScore": 578.7104878881621,
     "reasons": [],
     "stage": "Expert",
-    "step": 288
+    "step": 290
   },
   {
     "componentChanges": {
@@ -7818,7 +7860,7 @@
     "rawScore": 586.0236163969312,
     "reasons": [],
     "stage": "Expert",
-    "step": 289
+    "step": 291
   },
   {
     "componentChanges": {
@@ -7845,6 +7887,6 @@
     "rawScore": 581.9472089286547,
     "reasons": [],
     "stage": "Expert",
-    "step": 290
+    "step": 292
   }
 ]

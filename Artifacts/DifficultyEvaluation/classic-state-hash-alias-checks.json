@@ -1,0 +1,309 @@
+{
+  "description": "Exact-bundle replay transfer check for Classic fan rows that share an initial-state hash with a scored row. The replay state hash does not include entrance or trigger geometry; a shared hash is not proof of the same puzzle or winning behaviour. No target gained a verified win or score.",
+  "nativeLibrarySHA256": "88cecd0189ea0d5b677e876184c919b0a8fb72ecbfdc355b23f1d2b8d6235e69",
+  "checkedArchives": 20,
+  "donorWins": 9,
+  "targetWins": 0,
+  "targetAssignmentRejections": 2,
+  "differentSceneGeometry": 11,
+  "differentPuzzleScenario": 11,
+  "records": [
+    {
+      "identity": {
+        "packID": "fan:lldb-66",
+        "levelID": "Lemmy556 My little levels 2.dat#4"
+      },
+      "archive": "0066-Lemmy556-My-little-levels-2.zip",
+      "archiveSHA256": "963dd4d3cd016df98aedcb0890f7eff91b6255e57858474295da25d7a8216756",
+      "initialStateHash": "4850b69e3a28c0f9085c0533fc4c027f5e2c8adc8b8e8a389e5d78f8e38b1700",
+      "sceneGeometrySHA256": "4a9c1be5b900b7c0f9e2fe88cc18045fc9483a7e59ba74882a95e90cf02d647c",
+      "puzzleScenarioSHA256": "SHA256 digest: ebd6072284e032a4f734a47504cf60e8d1f1e64dd1542c61767bb84a9f64bcae",
+      "donorIdentity": {
+        "engine": "classic",
+        "levelID": "Taxing.DAT#2",
+        "packID": "fan:lldb-475"
+      },
+      "donorSceneGeometrySHA256": "7ac741e707e78def2b74c91acc415fc33861f6d7d961c3269fa0e072fc6afec2",
+      "donorPuzzleScenarioSHA256": "SHA256 digest: 2f31459e159a5c1f8ce8999163b50c459b845d3f6a826618b50a788720ea7737",
+      "donorLedgerReplaySHA256": "4ba066b3016bdc278a2f8cf9a48497b717d7544a9abd66091f5e36fa70348f89",
+      "donorOutcome": {
+        "status": "win",
+        "detail": "80 80 2028 4850b69e3a28c0f9085c0533fc4c027f5e2c8adc8b8e8a389e5d78f8e38b1700 090aac4737a7470f62c9f79f1fc234bf7af2d388b9e431c22ce4b95534026357"
+      },
+      "targetOutcome": {
+        "status": "loss",
+        "detail": "0 80"
+      }
+    },
+    {
+      "identity": {
+        "packID": "fan:lldb-80",
+        "levelID": "Master System Remakes.dat#5"
+      },
+      "archive": "0080-Master-System-Remakes.zip",
+      "archiveSHA256": "bae8cb65d910af0259378eab5ac9ed089135b7d3728d8a0d3897cad72232b515",
+      "initialStateHash": "9ffce32777b2628bfcd8abf5a13a24b7113c98b263f1ed79142ea1fd41ca7d5b",
+      "sceneGeometrySHA256": "3ec54853e0007df9697bd21f8182f925d17034759df9834324f8f9c098a1c420",
+      "puzzleScenarioSHA256": "SHA256 digest: 82f16ec745cdbdde400613008ee1ba60a502fa19f717fde3f940fdb22486a314",
+      "donorIdentity": {
+        "engine": "classic",
+        "levelID": "Master System Remakes.dat#2",
+        "packID": "fan:lldb-80"
+      },
+      "donorSceneGeometrySHA256": "d85dff04e22576d2abc76b556d003bf65e4478a9bd67010b769f594243be2058",
+      "donorPuzzleScenarioSHA256": "SHA256 digest: 95a7f9ab54684a68e0d99d2b6101dd3f44334598c04b2ab3e17175bd5250bf10",
+      "donorLedgerReplaySHA256": "2225f1189bee89a0b1f38f71aac1068fbd181e09aca53a28d15f813888656ac3",
+      "donorOutcome": {
+        "status": "win",
+        "detail": "20 15 5069 9ffce32777b2628bfcd8abf5a13a24b7113c98b263f1ed79142ea1fd41ca7d5b 2225f1189bee89a0b1f38f71aac1068fbd181e09aca53a28d15f813888656ac3"
+      },
+      "targetOutcome": {
+        "status": "error",
+        "detail": "engine refused to queue basher for lemming 1 at tick 2190"
+      }
+    },
+    {
+      "identity": {
+        "packID": "fan:lldb-199",
+        "levelID": "TMChallenge.dat#1"
+      },
+      "archive": "0199-TMChallenge.zip",
+      "archiveSHA256": "430e28353b3144eda2389e0a9e8f74b07e8c70053413126a3e2fc72a5019b00b",
+      "initialStateHash": "9ad9b913094b037fb8fd690d3259343cf07139a14f4d7da02456ce0e3873b6df",
+      "sceneGeometrySHA256": "813e333b70e9d456469f341946608e953c02689b6734a7e2b8018cdbda5302bd",
+      "puzzleScenarioSHA256": "SHA256 digest: cb2dd41583c42f3775d77f16dc8375eb7f37af52493c6f00e2bdc8c13a59fe20",
+      "donorIdentity": {
+        "engine": "classic",
+        "levelID": "Fun.DAT#9",
+        "packID": "fan:lldb-473"
+      },
+      "donorSceneGeometrySHA256": "b716e983f9daa5d820555202bf5985c313a0162aef2b2cdb8874e8c9a93e2cc6",
+      "donorPuzzleScenarioSHA256": "SHA256 digest: b6ca73db7064f0a6004140e60d1b181d0caa3377c8a0225a07f7ff4676db47f2",
+      "donorLedgerReplaySHA256": "9dbc26752044ab5e8b03c0360a24e746e2fd9c6572c0fcee5ba0c63332eee093",
+      "donorOutcome": {
+        "status": "win",
+        "detail": "20 10 470 9ad9b913094b037fb8fd690d3259343cf07139a14f4d7da02456ce0e3873b6df df325d525c75f5c1764a4c93d3405cd0ef5f3c04147e767d21672c50425e7b64"
+      },
+      "targetOutcome": {
+        "status": "loss",
+        "detail": "0 10"
+      }
+    },
+    {
+      "identity": {
+        "packID": "fan:lldb-199",
+        "levelID": "TMChallenge.dat#4"
+      },
+      "archive": "0199-TMChallenge.zip",
+      "archiveSHA256": "430e28353b3144eda2389e0a9e8f74b07e8c70053413126a3e2fc72a5019b00b",
+      "initialStateHash": "1f6875ddd25e71deadf7fd261f3f5605284558aa13fe647b42f9375f131b3b9f",
+      "sceneGeometrySHA256": "9bd088c8e2409f93e442d97a52465569d4154580857d3d49d984edf2fda9a3b7",
+      "puzzleScenarioSHA256": "SHA256 digest: 4d5fe4680e6ad6532add93fa1df90bca663b3437b1f073f9b4715439c739adf4",
+      "donorIdentity": {
+        "engine": "classic",
+        "levelID": "Taxing.DAT#3",
+        "packID": "fan:lldb-475"
+      },
+      "donorSceneGeometrySHA256": "68245ed0f603a63ad26021b713ae17e83f25a7d6fb730877d9068ddeb00a3165",
+      "donorPuzzleScenarioSHA256": "SHA256 digest: 3724b4df855b3ec8ae77073892292689a22dc9bdd4d10d3804080024e37a559d",
+      "donorLedgerReplaySHA256": "0efdaf04d7b36d21f0abafb082d1c1d8d65fbed60c896266ab588b5df0d398a6",
+      "donorOutcome": {
+        "status": "win",
+        "detail": "40 30 3850 1f6875ddd25e71deadf7fd261f3f5605284558aa13fe647b42f9375f131b3b9f 905fe490835f60bfda31014f6c9e1eef8565b72c84c530bcac4b452068a98ba6"
+      },
+      "targetOutcome": {
+        "status": "loss",
+        "detail": "0 30"
+      }
+    },
+    {
+      "identity": {
+        "packID": "fan:lldb-199",
+        "levelID": "TMChallenge.dat#5"
+      },
+      "archive": "0199-TMChallenge.zip",
+      "archiveSHA256": "430e28353b3144eda2389e0a9e8f74b07e8c70053413126a3e2fc72a5019b00b",
+      "initialStateHash": "58bf0e1dbfb64e0547adab4b112a000c09e64c6c39431b3c3c8c3bd66bf38de8",
+      "sceneGeometrySHA256": "88cd640a8906a46c2f93177fdf3dfb0240d635064d471bafe7d60cdbadb59780",
+      "puzzleScenarioSHA256": "SHA256 digest: 017ed73b9e915dc487e9c9a2a5c7a09ad1652fd6285681fe9a7e58839cb097fa",
+      "donorIdentity": {
+        "engine": "classic",
+        "levelID": "Taxing.DAT#9",
+        "packID": "fan:lldb-475"
+      },
+      "donorSceneGeometrySHA256": "dd7148f3a0841121b86b535474c1d629df5498ee509ab9f8c263d88268b2dceb",
+      "donorPuzzleScenarioSHA256": "SHA256 digest: 08e2a276a30a4710634ff67c3d6ec298b2b26a6b956d75a47fa26ab8ed50a543",
+      "donorLedgerReplaySHA256": "8feaef9fca4872e43fec57e5c34044b75825fb98286b2df04c33a2be65d3c127",
+      "donorOutcome": {
+        "status": "win",
+        "detail": "5 5 1258 58bf0e1dbfb64e0547adab4b112a000c09e64c6c39431b3c3c8c3bd66bf38de8 21c2ddb443b588fb132e09bc8c65bd3c6bbef5928cf3e7fa003f71176a939e7d"
+      },
+      "targetOutcome": {
+        "status": "loss",
+        "detail": "0 5"
+      }
+    },
+    {
+      "identity": {
+        "packID": "fan:lldb-199",
+        "levelID": "TMChallenge.dat#6"
+      },
+      "archive": "0199-TMChallenge.zip",
+      "archiveSHA256": "430e28353b3144eda2389e0a9e8f74b07e8c70053413126a3e2fc72a5019b00b",
+      "initialStateHash": "784f3537fc51291625fd2060409a658ad5fc973cf44993a3e1f0ffca1b1fb98b",
+      "sceneGeometrySHA256": "132c13897651cc2ddeaef3a3b1510888b5b0350706761e047768de45b828bb93",
+      "puzzleScenarioSHA256": "SHA256 digest: aa44080326399dfecf24e3e57b1c0dd2eecc80339bf8fc28b0e0f00821f4e6ed",
+      "donorIdentity": {
+        "engine": "classic",
+        "levelID": "Taxing.DAT#26",
+        "packID": "fan:lldb-475"
+      },
+      "donorSceneGeometrySHA256": "54bce6b3c9299a2b701cee23b4048063f09103aa31a7ca08775835bec9c74c0e",
+      "donorPuzzleScenarioSHA256": "SHA256 digest: c87f8c0d289c676485710186d85092a5f887b31ca7093d0b44e387be8078b146",
+      "donorLedgerReplaySHA256": "71c3824fe97cb9d13e4a06b4e830d7488b16d091ee82185ad8a752837a59bcaf",
+      "donorOutcome": {
+        "status": "win",
+        "detail": "77 48 2579 784f3537fc51291625fd2060409a658ad5fc973cf44993a3e1f0ffca1b1fb98b 7c45c9e65bcfc4c971fef5f2f88a564763ecaf559fd96fd34ed0a4e23aabb7bc"
+      },
+      "targetOutcome": {
+        "status": "loss",
+        "detail": "0 48"
+      }
+    },
+    {
+      "identity": {
+        "packID": "fan:lldb-199",
+        "levelID": "TMChallenge.dat#7"
+      },
+      "archive": "0199-TMChallenge.zip",
+      "archiveSHA256": "430e28353b3144eda2389e0a9e8f74b07e8c70053413126a3e2fc72a5019b00b",
+      "initialStateHash": "ae8d62287fc1c1cf2dfb826c4127429f02cdd456a959bb3716c6b7b693195ef8",
+      "sceneGeometrySHA256": "7c7b24acf7866b2d567f6c1b299df6fe13a040dd3f1b592a8d80f1e7c166d426",
+      "puzzleScenarioSHA256": "SHA256 digest: 0fdfbf38de9a2196d7798d754618d106439c8424e508f419e7270c91b858501a",
+      "donorIdentity": {
+        "engine": "classic",
+        "levelID": "Mayhem.DAT#12",
+        "packID": "fan:lldb-476"
+      },
+      "donorSceneGeometrySHA256": "f9f65ffe1c68a672a16d7efd154c78b77eeff50684eb7fb26801ae55c9eed900",
+      "donorPuzzleScenarioSHA256": "SHA256 digest: 74ff61b48421185bb08c591a0833ddf49bccd75f1e817aa4583bcac665d5eea6",
+      "donorLedgerReplaySHA256": "6cad3a286bcc8aace698124aebdf2bd76fdcb2f6612005e5f9a4f90b07f15281",
+      "donorOutcome": {
+        "status": "win",
+        "detail": "2 2 860 ae8d62287fc1c1cf2dfb826c4127429f02cdd456a959bb3716c6b7b693195ef8 4acbdfa10dc820310845f65599294875d52afea0c64df88d9d85d6bd7110ec11"
+      },
+      "targetOutcome": {
+        "status": "loss",
+        "detail": "0 2"
+      }
+    },
+    {
+      "identity": {
+        "packID": "fan:lldb-514",
+        "levelID": "ssam1221 Wild 2.dat#2"
+      },
+      "archive": "0514-ssam1221s-Lemmings-Wild.zip",
+      "archiveSHA256": "acb58ceaf0ecb6266e4eab3d8f9bdd75029bf512858bc2dfb9ee9901c5e68cc0",
+      "initialStateHash": "d122cfd09c34885e333010bf5ab98ed7102071d20072023e628ec6733e2a0bc5",
+      "sceneGeometrySHA256": "76047acff6bc25446eb852d1b82d1d731e024bb90cdca9d08710db2acec4ee38",
+      "puzzleScenarioSHA256": "SHA256 digest: a81a97252a8a8f8caf726d36ba3b910761f95a1a3d804fd98da39dace7b39308",
+      "donorIdentity": {
+        "engine": "classic",
+        "levelID": "Crazy.DAT#10",
+        "packID": "fan:lldb-478"
+      },
+      "donorSceneGeometrySHA256": "f43f3b5f69685d87aa9a88e88d5f187e36fe431c1ecf9894e46304c4d9f1fb8b",
+      "donorPuzzleScenarioSHA256": "SHA256 digest: 7c21f525e2d944053612cdec45a20c33226c030a1a567696e2702bc134810ddf",
+      "donorLedgerReplaySHA256": "b0e270d1945dcaecad9699327ac07eb15da52b577b8d4a3d492db4c4a184734b",
+      "donorOutcome": {
+        "status": "win",
+        "detail": "8 8 1022 d122cfd09c34885e333010bf5ab98ed7102071d20072023e628ec6733e2a0bc5 b0e270d1945dcaecad9699327ac07eb15da52b577b8d4a3d492db4c4a184734b"
+      },
+      "targetOutcome": {
+        "status": "error",
+        "detail": "engine refused to queue builder for lemming 3 at tick 512"
+      }
+    },
+    {
+      "identity": {
+        "packID": "fan:lldb-547",
+        "levelID": "Ji Hoon Heaven 2.DAT#3"
+      },
+      "archive": "0547-Ji-Hoons-Lemmings-Remake-Heaven.zip",
+      "archiveSHA256": "8d2daffec1cf660515ad4680e015d48b923b81b70afa10956729a179c81e3971",
+      "initialStateHash": "d5fd9683ebb289e83978d88e971d257acc902bd01fd71d0bff506017c997e37a",
+      "sceneGeometrySHA256": "537345ae7ca9ea79fc94b008be9ea5961ad65adc687092f7014371a8c063a3eb",
+      "puzzleScenarioSHA256": "SHA256 digest: 9a3950a1a8991e8148de132b312f602be69739c6c3882b792fc26414e9f3b98d",
+      "donorIdentity": {
+        "engine": "classic",
+        "levelID": "Ji Hoon Earth 2.DAT#3",
+        "packID": "fan:lldb-549"
+      },
+      "donorSceneGeometrySHA256": "add8320175bf024146afc963f495f73779408ea87253d0d63d8466e059d12d4f",
+      "donorPuzzleScenarioSHA256": "SHA256 digest: 4c08fe2f697c0c34ba189727ce48a9dcb7a90cabb9d1c82d847396ddc240ae21",
+      "donorLedgerReplaySHA256": "cf8950d3babe12fc3fb0dc418174b732ded5a1ccc8118258807d09fe92bfbcc9",
+      "donorOutcome": {
+        "status": "win",
+        "detail": "19 12 8162 d5fd9683ebb289e83978d88e971d257acc902bd01fd71d0bff506017c997e37a cf8950d3babe12fc3fb0dc418174b732ded5a1ccc8118258807d09fe92bfbcc9"
+      },
+      "targetOutcome": {
+        "status": "loss",
+        "detail": "0 12"
+      }
+    },
+    {
+      "identity": {
+        "packID": "fan:lldb-548",
+        "levelID": "Ji Hoon Sky 1.DAT#5"
+      },
+      "archive": "0548-Ji-Hoons-Lemmings-Remake-Sky.zip",
+      "archiveSHA256": "be7597710bb1f6b1421623c630bb9528ac16c8968a833980f6f8441c93cfd196",
+      "initialStateHash": "d5fd9683ebb289e83978d88e971d257acc902bd01fd71d0bff506017c997e37a",
+      "sceneGeometrySHA256": "bc09adb39b14d86ebd45d927a6ee027ef59e7c797c87d2c8f9f7ec3ed9129aba",
+      "puzzleScenarioSHA256": "SHA256 digest: ec0d86fcdafaf3585b08bb8e75ad9467bba0cd4a21145ca0563f7570dbdaffea",
+      "donorIdentity": {
+        "engine": "classic",
+        "levelID": "Ji Hoon Earth 2.DAT#3",
+        "packID": "fan:lldb-549"
+      },
+      "donorSceneGeometrySHA256": "add8320175bf024146afc963f495f73779408ea87253d0d63d8466e059d12d4f",
+      "donorPuzzleScenarioSHA256": "SHA256 digest: 4c08fe2f697c0c34ba189727ce48a9dcb7a90cabb9d1c82d847396ddc240ae21",
+      "donorLedgerReplaySHA256": "cf8950d3babe12fc3fb0dc418174b732ded5a1ccc8118258807d09fe92bfbcc9",
+      "donorOutcome": {
+        "status": "win",
+        "detail": "19 12 8162 d5fd9683ebb289e83978d88e971d257acc902bd01fd71d0bff506017c997e37a cf8950d3babe12fc3fb0dc418174b732ded5a1ccc8118258807d09fe92bfbcc9"
+      },
+      "targetOutcome": {
+        "status": "loss",
+        "detail": "0 12"
+      }
+    },
+    {
+      "identity": {
+        "packID": "fan:lldb-550",
+        "levelID": "Ji Hoon Hell 1.DAT#4"
+      },
+      "archive": "0550-Ji-Hoons-Lemmings-Remake-Hell.zip",
+      "archiveSHA256": "46cdcf82e7f6ae545c6302d6c3ad2b4c3f8bf3692a62b077ba26b4781eb5b7cc",
+      "initialStateHash": "d5fd9683ebb289e83978d88e971d257acc902bd01fd71d0bff506017c997e37a",
+      "sceneGeometrySHA256": "77ae16cd179c51cdb4b640d5fe7ba7b73142f66e4f44478cf254498efe5f616f",
+      "puzzleScenarioSHA256": "SHA256 digest: 50e5c02f0e7d2e5d0422f5baeba5bc38768c531d2a69ebf2e62504f3a5911ee1",
+      "donorIdentity": {
+        "engine": "classic",
+        "levelID": "Ji Hoon Earth 2.DAT#3",
+        "packID": "fan:lldb-549"
+      },
+      "donorSceneGeometrySHA256": "add8320175bf024146afc963f495f73779408ea87253d0d63d8466e059d12d4f",
+      "donorPuzzleScenarioSHA256": "SHA256 digest: 4c08fe2f697c0c34ba189727ce48a9dcb7a90cabb9d1c82d847396ddc240ae21",
+      "donorLedgerReplaySHA256": "cf8950d3babe12fc3fb0dc418174b732ded5a1ccc8118258807d09fe92bfbcc9",
+      "donorOutcome": {
+        "status": "win",
+        "detail": "19 12 8162 d5fd9683ebb289e83978d88e971d257acc902bd01fd71d0bff506017c997e37a cf8950d3babe12fc3fb0dc418174b732ded5a1ccc8118258807d09fe92bfbcc9"
+      },
+      "targetOutcome": {
+        "status": "loss",
+        "detail": "0 12"
+      }
+    }
+  ]
+}

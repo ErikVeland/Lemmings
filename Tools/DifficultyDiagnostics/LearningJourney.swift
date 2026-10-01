@@ -13,7 +13,11 @@ struct Row: Codable {
 let args = CommandLine.arguments
 var rows = try JSONDecoder().decode([Row].self, from: Data(contentsOf: URL(fileURLWithPath: args[1])))
 struct BundledPack: Decodable { let id: Int }
+struct SourceEngineFamilies: Decodable { let lemminiPackIDs: [Int] }
 let project = URL(fileURLWithPath: args[1]).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
+let sourceFamilies = try JSONDecoder().decode(SourceEngineFamilies.self,
+    from: Data(contentsOf: project.appendingPathComponent("Artifacts/DifficultyEvaluation/source-engine-families.json")))
+let lemminiPackIDs = Set(sourceFamilies.lemminiPackIDs.map { "fan:lldb-\($0)" })
 let bundledPacks = try Set(JSONDecoder().decode([BundledPack].self,
     from: Data(contentsOf: project.appendingPathComponent("Content/LevelPacks/packs.json")))
     .map { "fan:lldb-\($0.id)" })
@@ -68,6 +72,8 @@ let officialIDs = Set(uniqueOfficial.map { $0.entry.identity })
 let pool = selectionOrder.filter {
     guard LearningJourney.isSinglePlayer($0.entry, sourceRank: $0.profile.sourceRank), $0.playable, $0.profile.confidence != .low else { return false }
     if $0.official { return officialIDs.contains($0.entry.identity) }
+    // A Classic win from a Lemmini pack cannot establish the intended source behaviour.
+    if lemminiPackIDs.contains($0.entry.identity.packID) { return false }
     // Port packs with numbered ranks are alternate presentations of the main Classic campaign.
     let pack = $0.entry.packNameSnapshot
     if ["Amiga Fun", "Amiga Tricky", "Amiga Taxing", "Amiga Mayhem"].contains(where: { pack.hasPrefix($0) }) { return false }

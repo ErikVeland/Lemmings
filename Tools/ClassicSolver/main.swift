@@ -223,7 +223,9 @@ let budget = Double(option("--seconds") ?? "300")!
 let maxDepth = Int(option("--depth") ?? "100000")!
 let adaptiveRate = args.contains("--adaptive-rate")
 let field = DistanceField(base)
-let started = Date()
+let started = ProcessInfo.processInfo.systemUptime
+let deadline = started + budget
+func timeExpired() -> Bool { ProcessInfo.processInfo.systemUptime >= deadline }
 let skills: [ClassicSkill] = [.builder, .basher, .miner, .digger, .blocker, .climber, .floater, .bomber]
 var start = Candidate(sim: base, detector: Detector(refire: Int(option("--refire") ?? "120")!, fallback: Int(option("--fallback") ?? "170")!))
 if let rate = option("--rate").flatMap(Int.init) {
@@ -238,6 +240,7 @@ let forced: [Int: [Forced]] = try option("--prefix").map {
 
 func advance(_ c: inout Candidate) -> Bool {
     while !c.sim.isComplete && c.sim.tickCount < tickLimit {
+        if c.sim.tickCount.isMultiple(of: 64) && timeExpired() { return false }
         _ = c.sim.tick()
         for f in forced[c.sim.tickCount] ?? [] {
             if let rate = f.rate {
@@ -253,7 +256,6 @@ func advance(_ c: inout Candidate) -> Bool {
 }
 
 var best: Candidate?, bestPartial: Candidate?, expanded = 0
-@MainActor
 func consider(_ c: Candidate) {
     if c.sim.isComplete && c.sim.didWin, best.map({ Score($0, field) < Score(c, field) }) ?? true { best = c }
     if bestPartial.map({ Score($0, field) < Score(c, field) }) ?? true { bestPartial = c }
@@ -262,9 +264,10 @@ _ = advance(&start)
 start.key = fingerprint(start.sim) + (adaptiveRate ? "|0" : "")
 consider(start)
 var beam = start.sim.isComplete ? [] : [start]
-search: while !beam.isEmpty && best == nil && Date().timeIntervalSince(started) < budget {
+search: while !beam.isEmpty && best == nil && !timeExpired() {
     var next: [String: Candidate] = [:]
     for node in beam {
+        if timeExpired() { break search }
         guard node.depth < maxDepth else { continue }
         var choices: [Choice] = [.wait]
         for id in node.decision {
@@ -278,6 +281,7 @@ search: while !beam.isEmpty && best == nil && Date().timeIntervalSince(started) 
             }
         }
         for choice in choices {
+            if timeExpired() { break search }
             var child = node
             switch choice {
             case .wait:
@@ -300,7 +304,7 @@ search: while !beam.isEmpty && best == nil && Date().timeIntervalSince(started) 
             if let existing = next[child.key], !(Score(existing, field) < Score(child, field)) { continue }
             next[child.key] = child
         }
-        if Date().timeIntervalSince(started) >= budget { break }
+        if timeExpired() { break search }
     }
     beam = next.values.sorted { Score($1, field) < Score($0, field) }.prefix(width).map { $0 }
     if !beam.contains(where: { $0.events.count == start.events.count }), let waiting = next.values.first(where: { $0.events.count == start.events.count }) {
@@ -311,7 +315,7 @@ search: while !beam.isEmpty && best == nil && Date().timeIntervalSince(started) 
         print("ROUND expanded \(expanded) beam \(beam.count) tick \(top.sim.tickCount) depth \(top.depth) saved \(top.sim.savedCount) lost \(top.sim.lostCount) inputs \(top.events.count)")
     }
 }
-let seconds = Int(Date().timeIntervalSince(started))
+let seconds = Int(ProcessInfo.processInfo.systemUptime - started)
 let route = best ?? bestPartial
 let proposal = route.map {
     ClassicDOSReplay(rank: entry.rank, number: entry.number,

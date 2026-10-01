@@ -5,253 +5,253 @@
     "step": 7
   },
   {
-    "level": "Custom built for Lemmings",
-    "objective": "apply:4581d4f159c9a1e2da56",
-    "step": 12
-  },
-  {
     "level": "Lemmings For Presidents!",
     "objective": "split:basher:miner",
-    "step": 13
+    "step": 10
+  },
+  {
+    "level": "Custom built for Lemmings",
+    "objective": "apply:4581d4f159c9a1e2da56",
+    "step": 23
   },
   {
     "level": "Down And Out Lemmings",
     "objective": "sequence:blocker:digger:miner",
-    "step": 97
+    "step": 100
   },
   {
     "level": "Gone With The Lemming",
     "objective": "apply:4739c098fdfba2c6ba18",
-    "step": 98
+    "step": 101
   },
   {
     "level": "A TOWERING PROBLEM",
     "objective": "apply:c960be0abb6c029217e5",
-    "step": 115
+    "step": 118
   },
   {
     "level": "Flow Control",
     "objective": "precision-spacing",
-    "step": 140
+    "step": 142
   },
   {
     "level": "Dangerzone",
     "objective": "long-sequence",
-    "step": 141
+    "step": 143
   },
   {
     "level": "Have an ice day",
     "objective": "apply:9c66baa011691a27091f",
-    "step": 170
+    "step": 172
   },
   {
     "level": "The Lemming Learning Curve",
     "objective": "apply:2fd99bf0932cf7f0dabe",
-    "step": 174
+    "step": 176
   },
   {
     "level": "Undercover Lemming",
     "objective": "apply:c18e1f4945f167a62b0b",
-    "step": 181
+    "step": 183
   },
   {
     "level": "Suicidal Tendencies",
     "objective": "apply:cb9c5a0048d500e33fb4",
-    "step": 182
+    "step": 184
   },
   {
     "level": "Lemming about town",
     "objective": "sequence-economy",
-    "step": 183
+    "step": 185
   },
   {
     "level": "Five Alive",
     "objective": "apply:316d2b39d2b885e84298",
-    "step": 184
+    "step": 186
   },
   {
     "level": "How on Earth?",
     "objective": "apply:3b855df4e4a1e58b82a2",
-    "step": 194
+    "step": 196
   },
   {
     "level": "This Corrosion",
     "objective": "apply:33f271848130193249fc",
-    "step": 197
+    "step": 199
   },
   {
     "level": "Inroducing SUPERLEMMING",
     "objective": "apply:548ae95f6f6ae34db6ca",
-    "step": 200
+    "step": 202
   },
   {
     "level": "SPAM,SPAM,SPAM,EGG AND LEMMING",
     "objective": "apply:607360f878508b44cf06",
-    "step": 212
+    "step": 214
   },
   {
     "level": "Lemming Productions Present...",
     "objective": "apply:3fd25d7602891214436c",
-    "step": 213
+    "step": 215
   },
   {
     "level": "It`s the price you have to pay",
     "objective": "apply:3d04cd5f742105bfb979",
-    "step": 221
+    "step": 223
   },
   {
     "level": "Many Lemmings make level work",
     "objective": "split:bomber:builder",
-    "step": 231
+    "step": 233
   },
   {
     "level": "Dr Lemminggood",
     "objective": "apply:3e0120e51625d6d372dc",
-    "step": 235
+    "step": 237
   },
   {
     "level": "No Problemming!",
     "objective": "sequence-coordination",
-    "step": 237
+    "step": 239
   },
   {
     "level": "Lemming Friendly",
     "objective": "apply:96363eac028db697d22c",
-    "step": 238
+    "step": 240
   },
   {
     "level": "It`s a trade off",
     "objective": "apply:246887fd0cd82c9cd576",
-    "step": 239
+    "step": 241
   },
   {
     "level": "Meeting Adjourned",
     "objective": "apply:09833f660f4fc103424a",
-    "step": 240
+    "step": 242
   },
   {
     "level": "Lemming Head",
     "objective": "apply:675d1a8b31d8d213dcb4",
-    "step": 242
+    "step": 244
   },
   {
     "level": "It`s all a matter of timing",
     "objective": "expert-coordination",
-    "step": 243
+    "step": 245
   },
   {
     "level": "ROCKY VI",
     "objective": "apply:35bd7fecfe845ca8304a",
-    "step": 245
+    "step": 247
   },
   {
     "level": "Got anything....Lemmingy???",
     "objective": "apply:d66eba3e13c35631b4d1",
-    "step": 246
+    "step": 248
   },
   {
     "level": "DON`T PANIC",
     "objective": "apply:1489db3e0652b4130ec0",
-    "step": 247
+    "step": 249
   },
   {
     "level": "Take care, Sweetie",
     "objective": "apply:8eb4e2395128b35e52f0",
-    "step": 249
+    "step": 251
   },
   {
     "level": "On the Antarctic Coast",
     "objective": "apply:6da423d7f71c74f7843a",
-    "step": 250
+    "step": 252
   },
   {
     "level": "Who`s That Lemming",
     "objective": "apply:f024e3640710e68285f5",
-    "step": 251
+    "step": 253
   },
   {
     "level": "Time waits for no Lemming",
     "objective": "apply:dafc7a18582aaca1788c",
-    "step": 253
+    "step": 255
   },
   {
     "level": "NO PROBLEM",
     "objective": "apply:e09e8ebb96bc871c444b",
-    "step": 254
+    "step": 256
   },
   {
     "level": "DIGGING FOR VICTORY",
     "objective": "spacing-long-plan",
-    "step": 255
+    "step": 257
   },
   {
     "level": "Lemming Rhythms",
     "objective": "apply:ecd103c2839c77a032fa",
-    "step": 256
+    "step": 258
   },
   {
     "level": "The Stack",
     "objective": "apply:1da6b6b1821eae6f8bcd",
-    "step": 257
+    "step": 259
   },
   {
     "level": "KEEP ON TRUCKING",
     "objective": "expert-budget",
-    "step": 258
+    "step": 260
   },
   {
     "level": "Just A Quicky",
     "objective": "apply:a4b763153949836d4f7c",
-    "step": 260
+    "step": 262
   },
   {
     "level": "Tubular Lemmings",
     "objective": "apply:eb94c9a0fdbc63193177",
-    "step": 262
+    "step": 264
   },
   {
     "level": "It`s a tight fit!",
     "objective": "apply:ede376fce23379103642",
-    "step": 265
+    "step": 267
   },
   {
     "level": "Not just a pretty Lemming",
     "objective": "apply:bc2e072ea781c51d0128",
-    "step": 267
+    "step": 269
   },
   {
     "level": "Creature Discomforts",
     "objective": "apply:5a43d24cc697dd8e6166",
-    "step": 268
+    "step": 270
   },
   {
     "level": "ONWARD AND UPWARD",
     "objective": "apply:d0487298848a6403c731",
-    "step": 269
+    "step": 271
   },
   {
     "level": "And now this...",
     "objective": "apply:5b0e05ba56fb1a2949d8",
-    "step": 270
+    "step": 272
   },
   {
     "level": "Lemmings in a situation",
     "objective": "apply:8a07e62006f2977c8957",
-    "step": 272
+    "step": 274
   },
   {
     "level": "Snuggle up to a Lemming",
     "objective": "apply:0f8172bd8289e941f2eb",
-    "step": 273
+    "step": 275
   },
   {
     "level": "Chill out!",
     "objective": "expert-integration",
-    "step": 283
+    "step": 285
   },
   {
     "level": "AAAAAARRRRRRGGGGGGHHHHHH!!!!!!",
     "objective": "apply:9b67f76b377c3bdd198c",
-    "step": 284
+    "step": 286
   }
 ]

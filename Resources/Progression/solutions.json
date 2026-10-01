@@ -68895,6 +68895,112 @@
     "rank": "fan:lldb-458",
     "title": "Kindness That Can Kill"
   },
+  "2f670609091c0379479da82e05d38fb5009d8bed6462c4b82850487f5cdc1905": {
+    "events": [
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        },
+        "afterTick": true,
+        "tick": 230
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        },
+        "afterTick": true,
+        "tick": 430
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        },
+        "afterTick": true,
+        "tick": 630
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        },
+        "afterTick": true,
+        "tick": 830
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        },
+        "afterTick": true,
+        "tick": 1030
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        },
+        "afterTick": true,
+        "tick": 1230
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        },
+        "afterTick": true,
+        "tick": 1249
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "blocker"
+          }
+        },
+        "afterTick": true,
+        "tick": 1420
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 1,
+            "skill": "basher"
+          }
+        },
+        "afterTick": true,
+        "tick": 1507
+      }
+    ],
+    "expected": {
+      "didWin": true,
+      "released": 20,
+      "required": 15,
+      "saved": 19,
+      "stateHash": "9e2878f2e09a181b54ae0edea00898999b741cba3974017cf5bf469d2e27a4cf",
+      "ticks": 5102
+    },
+    "initialStateHash": "2f670609091c0379479da82e05d38fb5009d8bed6462c4b82850487f5cdc1905",
+    "number": 10,
+    "rank": "fan:lldb-12",
+    "title": "PRACTICE: STEEL"
+  },
   "2fbcb4830961c71cb0bcc490498bb1cb9a4d1eacaf120768bdacad30616c832a": {
     "events": [
       {
@@ -156322,6 +156428,72 @@
     "number": 30,
     "rank": "fan:lldb-570",
     "title": "We all fall down"
+  },
+  "6aeb505c56ef5e2e34b069b79c14fa2bd3b9410f4b7e612e229c1c5b88923fa4": {
+    "events": [
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "climber"
+          }
+        },
+        "afterTick": true,
+        "tick": 110
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 1,
+            "skill": "climber"
+          }
+        },
+        "afterTick": true,
+        "tick": 158
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "blocker"
+          }
+        },
+        "afterTick": true,
+        "tick": 410
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 1,
+            "skill": "basher"
+          }
+        },
+        "afterTick": true,
+        "tick": 478
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "bomber"
+          }
+        },
+        "afterTick": true,
+        "tick": 810
+      }
+    ],
+    "expected": {
+      "didWin": true,
+      "released": 20,
+      "required": 15,
+      "saved": 18,
+      "stateHash": "435fd1fb4d440c9900a44885848e6cd93e108f02da6228fb8cf71cbfda2b544a",
+      "ticks": 1267
+    },
+    "initialStateHash": "6aeb505c56ef5e2e34b069b79c14fa2bd3b9410f4b7e612e229c1c5b88923fa4",
+    "number": 9,
+    "rank": "fan:lldb-12",
+    "title": "PRACTICE: DIRECTIONNAL ARROWS"
   },
   "6b88faa1b08c7cdd741d46058568eab967148cfeb6fe66b4f4c0bfc759da0f25": {
     "events": [

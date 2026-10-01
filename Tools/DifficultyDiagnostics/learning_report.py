@@ -153,8 +153,9 @@ elif sys.argv[1] == 'report':
         f"{len(lessons)} selected lessons from {curriculum['poolSize']} validated, deduplicated single-player candidates. {summary['official']} official levels and {len(fan)} library levels.",'',
         '## Selection before ordering','',
         'The recommended journey is a selective curriculum. The complete library and original campaigns remain available separately. It has no requirement to include every official level or every validated fan level.','',
-        'Skill introductions no longer force their way into the opening lessons. The order uses source rank and winning replay evidence. Fun, Easy and Tame levels can start the path. Levels with a Tricky or higher rank, unknown rank, or a full-rescue requirement have a higher placement floor. The model still needs novice playtesting.','',
+        'Skill introductions no longer force their way into the opening lessons. The order uses source rank and winning replay evidence. Fun, Easy and Tame levels can start the path. A low-demand witness from another rank can introduce a skill in Intermediate when no beginner-ranked witness qualifies. Levels with a Tricky or higher rank, unknown rank, or a full-rescue requirement have a higher placement floor. The model still needs novice playtesting.','',
         'The target is roughly 292 levels: the combined size of Classic, Oh No! and the 72 seasonal levels. The path uses Classic mechanics only. Confirmed L2/L3 levels remain outside this journey. All six source campaigns are checked in corpus-coverage.json.','',
+        'Packs identified as Lemmini are excluded from this Classic learning path. Two levels in those packs have native Classic wins, but source-engine behaviour is unverified. See `../DifficultyEvaluation/source-engine-families.json` and its validation notes.','',
         'Official levels take priority within comparable 35-point demand bands. Library levels supply missing applications. An application signature records the skill set, job changes, three-step sequences and worker roles. Identical signatures are excluded even across different titles. Repeated assignments, worker counts and score buckets do not create new lessons. These are evidence-based distinctions that still need human review.', '',
         'The Fun stage contains beginner-ranked levels below the demand threshold. Unknown ranks and Tricky or higher ranks move to later stages. A winning route that must save every released lemming starts at Difficult. These rules do not prove that a level is easy. Difficult and Expert retain the existing demand boundaries.','',
         '## Evidence and limits','',
@@ -177,7 +178,7 @@ elif sys.argv[1] == 'report':
     if posts is not None: posts.mkdir(parents=True,exist_ok=True)
     bbcode = ['[b]Oh My! All Lemmings![/b]','',
         f"A selective learning journey of {len(lessons)} levels. The complete library and original campaigns remain available separately.",'',
-        'Low-demand Fun, Easy and Tame levels form the opening. The journey delays introductions that lack a suitable beginner-ranked witness. It does not force every skill into the first eight lessons.','',
+        'Low-demand Fun, Easy and Tame levels form the opening. A skill without a suitable beginner-ranked witness can be introduced in Intermediate using a low-demand verified route.','',
         'Official levels take priority where they fit the lesson and difficulty. The corpus includes all Classic, Oh No! and seasonal levels. This journey uses Classic mechanics only.', '',
         'This is a replay-informed candidate curriculum. The objectives and difficulty curve still need novice playtesting. It is not a certified wall-free path.','',
         '[b]Full order[/b]','']

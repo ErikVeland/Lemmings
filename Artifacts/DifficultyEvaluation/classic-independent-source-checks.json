@@ -1,0 +1,378 @@
+{
+  "description": "Independent browser source-engine outcomes for unchanged published inputs on exact bundled levels. Outcome matches alone do not establish full physics parity.",
+  "records": [
+    {
+      "identity": {
+        "packID": "fan:lldb-430",
+        "levelID": "LDChallenge01.dat#2"
+      },
+      "levelSourceRevision": "bdbf943f510410b7e4c304ff57a31b83134d51b32a6aeed2432eaa6f2804d835",
+      "sourceAndBundledLevelDataSHA256": "e0eb4fbd6f41836d7d29c9a35a8e274a6c7c6032f78419d137ca7c060dbacf05",
+      "sourceAndNativeGraphicsSHA256": {
+        "GROUND4O.DAT": "9669ee978e5adf5f8d5bfeb80ccc5d6c20e75e32f55e2a5c1c738f64af8faa91",
+        "VGAGR4.DAT": "40a99d3d9540609da9d6a74c07a832786818aed361326e37c01a909a1615921d"
+      },
+      "nativeInitialHash": "24dd45af88f254d5e3479f9f055af419ac5a4dccb92088d015f710d6b7468d3e",
+      "publishedReplaySHA256": "042a6744b089fe315a2d7c4c05e91356a154d6f34b2d5b1fc4f94bd7ce2239ad",
+      "publishedReplayEvents": "Cycle 58: release rate 99 and Builder for lemming 0; the earlier diagnostic candidate omitted the rate event",
+      "sourceURL": "https://lldb.camanis.net/level/430/3",
+      "sourceGameDataHash": "88E58304E8DA0DAA8C8167CE9C14E046",
+      "sourceMainJSSHA256": "c467eab99315555391542d7c79a2976b28c1c674dadd01ccf261d7792eabeace",
+      "sourceBrowser": "Firefox 151.0.2",
+      "sourceSaved": 4,
+      "sourceRequired": 4,
+      "sourceTotal": 10,
+      "sourceCompletionCycles": 362,
+      "nativeSaved": 0,
+      "nativeRequired": 4,
+      "nativeTotal": 10,
+      "nativeReplayEndTick": 156,
+      "nativeFirstRejectedAssignment": "Builder for lemming 0 at tick 58; native lemming was falling",
+      "sourceNoInputControl": {
+        "saved": 0,
+        "required": 4,
+        "completionCycles": 125,
+        "resultPath": ".build/full-difficulty-evaluation/clock-rescore/pinpoint-source-20261002/firefox-golems-parity-430-3-no-input-result.json",
+        "interpretation": "The source replay has two simultaneous commands, so this control does not isolate the Builder effect"
+      },
+      "rateCommandIsolation": {
+        "nativeInitialHash": "24dd45af88f254d5e3479f9f055af419ac5a4dccb92088d015f710d6b7468d3e",
+        "nativeRateOnlySaved": 0,
+        "nativeRateOnlyCompletionTick": 156,
+        "nativeBothCommands": "Builder rejected at tick 58",
+        "sourceRateOnlyAttempt": "Modified source replay failed to load with GenericInvalidData; no source outcome claim",
+        "scratchInputs": ".build/full-difficulty-evaluation/clock-rescore/pinpoint-source-20261002/rate-only.json and exact-actions.json"
+      },
+      "sourceEarlyFrameObservation": {
+        "canvasRectangle": "x=0.5 y=41.5 width=1365 height=600 CSS pixels for a 455x200 canvas",
+        "firstLemmingVisible": "absent after 54 Tick calls; visible after 58 Tick calls",
+        "limit": "Rendered frames bound first visibility, not the exact source hatch event or replay-command application cycle",
+        "evidencePath": ".build/full-difficulty-evaluation/clock-rescore/pinpoint-source-20261002/source-early-58.png"
+      },
+      "isolatedReleaseTimingTrial": {
+        "scope": "Ignored scratch native library only; entrance-open tick changed from 35 to 4, with the 20-tick first-release countdown and bundled level unchanged",
+        "firstNativeHatchTick": 23,
+        "publishedBuilderAtTick58": "accepted for lemming 0",
+        "saved": 0,
+        "required": 4,
+        "completionTick": 285,
+        "sourceNoInputCompletionCycles": 125,
+        "scratchNoInputLastLossTick": 125,
+        "golemsObjectSemanticsResult": "same 0/10 outcome with all object slots active",
+        "tracePath": ".build/full-difficulty-evaluation/clock-rescore/pinpoint-source-20261002/hatch23/trace.log",
+        "interpretation": "The 125-tick no-input ending matches the source numerically, but source frames show the first lemming only after roughly 54–58 Tick calls. The 23-tick scratch hatch is not a source-timing match. This trial does not establish the underlying physics difference."
+      },
+      "isolatedFallingBuilderTrial": {
+        "scope": "Ignored scratch native library with the shipped timing and one added Builder assignment action: falling; diagnostic replay kept the source Builder but omitted its simultaneous release-rate command",
+        "sourceFrameComparison": "At Tick call 60 the source replay changes lemming 0's visible state while the no-input source frame leaves it falling",
+        "strictReplaySHA256": "61f4ab4c46b1ed9ff8ec76c62bf8c5b48cdd03d776f0caaf02b8d2b67dbe48c4",
+        "scratchLibrarySHA256": "cbdd22243e9631dac6532c1c48256bbd2fdf8ae37e4effc8937b8ede246ac9d7",
+        "saved": 4,
+        "required": 4,
+        "total": 10,
+        "completionTick": 383,
+        "strictReplayVerified": true,
+        "bothSourceCommandsScratchPlayback": "4/10 at tick 383 after adding the omitted release-rate 99 command; the source replay path bypasses the interactive falling guard",
+        "sourceCompletionCycles": 362,
+        "otherPublishedReplayTrial": {
+          "scope": "16 recorded unscored source routes on their exact bundled archives under the same scratch rule",
+          "scratchWins": 0,
+          "routesPastTheirPriorFirstBuilderRejection": 1,
+          "advancedRoute": "fan:lldb-225/ANTHPCK5.DAT#3 advanced from a Builder rejection at tick 462 to a Basher rejection at tick 521",
+          "resultPath": ".build/full-difficulty-evaluation/clock-rescore/pinpoint-source-20261002/airbuilder/recent-results.log"
+        },
+        "speculativeFallingBasherTrial": {
+          "scope": "Ignored scratch library allowing Builder and Basher assignments during falling; the source interactive selectors reject falling, but the replay path calls the assignment methods directly",
+          "publishedRoutesTested": 16,
+          "scratchWins": 0,
+          "advancedRoute": "fan:lldb-225/ANTHPCK5.DAT#3 advanced past Basher tick 521 and then rejected Basher for lemming 4 at tick 809",
+          "resultPath": ".build/full-difficulty-evaluation/clock-rescore/pinpoint-source-20261002/airbuilderbasher/recent-results.log"
+        },
+        "verifyLogPath": ".build/full-difficulty-evaluation/clock-rescore/pinpoint-source-20261002/airbuilder/strict/verify.log",
+        "interpretation": "Allowing the published Builder while the native lemming is falling recovers a native win in the scratch profile. The pinned Golems replay path bypasses the interactive falling guard, so this result is consistent with source replay assignment semantics. The 21-cycle completion difference and untested intermediate source states prevent a full physics-parity or shipped-win claim."
+      },
+      "independentBuilderAssignmentRule": {
+        "assemblyPath": ".build/learning-evidence/Golems.Core.dll",
+        "assemblySHA256": "38cb69f18f5055821a496336a948fc30596e56c607c3ddddfb4675be78a5873e",
+        "golemActivityFallingEnumValue": 3,
+        "activityFlagFormula": "1 << (GolemActivity - 1) for this non-special activity",
+        "fallingActivityFlag": 4,
+        "builderRejectedActivityMaskHex": "0x7aef",
+        "basherRejectedActivityMaskHex": "0x7b6f",
+        "interactiveBuilderSelectorRejectsFalling": true,
+        "interactiveBasherSelectorRejectsFalling": true,
+        "replayAssignmentCallPath": "ReplayableGameState.AdvanceCore -> GameState.TryAdvance -> GameState.TryPerformAction -> GameState.AssignBuildSkill",
+        "replayPathCallsInteractiveBuilderSelector": false,
+        "replayPathCallsInteractiveBuilderPredicate": false,
+        "verification": "python3 Tools/DifficultyDiagnostics/verify_golems_exit_time.py",
+        "interpretation": "The source interactive selectors reject falling Builder and Basher targets. The source replay path calls the assignment methods directly and bypasses those selectors. The scratch win is consistent with source replay assignment semantics, but source state and full physics parity remain unverified."
+      },
+      "sourcePhysicsParity": "outcome mismatch",
+      "sourceResultPath": ".build/full-difficulty-evaluation/clock-rescore/pinpoint-source-20261002/firefox-golems-parity-430-3-result.json",
+      "nativeTracePath": ".build/full-difficulty-evaluation/clock-rescore/pinpoint-source-20261002/native-source-trace.log"
+    },
+    {
+      "identity": {
+        "packID": "fan:lldb-495",
+        "levelID": "MARTPCK1.DAT#0"
+      },
+      "levelSourceRevision": "02dde42ce00cffb0a126928f96abb6df8d29b45465bb761cc0a88632828ef832",
+      "sourceAndBundledLevelDataSHA256": "f23db5808c2077f72a37733d3d936f875de974b84ade35411356c4047d3a0b43",
+      "nativeInitialHash": "9dbb7f7eb5899cea84af37415d088b31d6709fef4e0c12be946a642c4a014750",
+      "publishedReplaySHA256": "312b02e8ede4c261d8070b0714ab4d76d6c90e78147213799593eca692ca4584",
+      "nativeReplaySHA256": "efa7199dbb7bc6cc72261774a1e310b5c6f3a6d305d6d9ed10378f76eafc4c75",
+      "sourceURL": "https://lldb.camanis.net/level/495/1",
+      "sourceGameDataHash": "0B86EBE199115ADCE597C2D40B6F189A",
+      "sourceMainJSSHA256": "c467eab99315555391542d7c79a2976b28c1c674dadd01ccf261d7792eabeace",
+      "sourceBrowser": "Firefox 151.0.2",
+      "sourceSaved": 48,
+      "sourceRequired": 48,
+      "sourceTotal": 50,
+      "sourceCompletionCycles": 1698,
+      "nativeSaved": 48,
+      "nativeRequired": 48,
+      "nativeTotal": 50,
+      "nativeReplayEndTick": 1698,
+      "sourcePhysicsParity": "outcome and completion-time match",
+      "physicsParityLimit": "Intermediate lemming states and terrain changes not checked",
+      "sourceResultPath": ".build/full-difficulty-evaluation/clock-rescore/holy-cow-trace-20261002/firefox-golems-parity-495-1-result.json"
+    },
+    {
+      "identity": {
+        "packID": "fan:lldb-495",
+        "levelID": "MARTPCK1.DAT#8"
+      },
+      "levelSourceRevision": "02dde42ce00cffb0a126928f96abb6df8d29b45465bb761cc0a88632828ef832",
+      "nativeInitialHash": "d26a47a2b22c2eb4c90f91b09574e8ce1ccb93fc139ad74829313803b7b3b2e6",
+      "publishedReplaySHA256": "44f3377e2662932749f4412677524cf6debb403e0f3913c77c4ecd5574f95e7d",
+      "sourceURL": "https://lldb.camanis.net/level/play/495/9/Holy-Cow",
+      "sourceGameDataHash": "0B86EBE199115ADCE597C2D40B6F189A",
+      "sourceMainJSSHA256": "c467eab99315555391542d7c79a2976b28c1c674dadd01ccf261d7792eabeace",
+      "sourceBrowser": "Firefox 151.0.2",
+      "sourceSaved": 18,
+      "sourceRequired": 16,
+      "sourceTotal": 20,
+      "sourceCompletionCycles": 2676,
+      "nativeSaved": 0,
+      "nativeRequired": 16,
+      "nativeTotal": 20,
+      "nativeReplayEndTick": 4082,
+      "nativeAssignmentsAccepted": true,
+      "isolatedGolemsObjectTrial": {
+        "scope": "scratch fall-counter limit 66 with all 32 object slots active",
+        "originalHatchRules": "all 36 assignments accepted; 0/16 saved by tick 4082",
+        "laterReleaseHatchRules": "Builder for lemming 2 rejected at tick 1306",
+        "interpretation": "Activating the later object slots did not resolve this source/native route difference."
+      },
+      "sourcePhysicsParity": "outcome mismatch"
+    },
+    {
+      "identity": {
+        "packID": "fan:lldb-496",
+        "levelID": "MARTPCK2.DAT#0"
+      },
+      "levelSourceRevision": "fbf2f7723f9042ccda838524e4a366e035f49c34d2d1422a7eca9017a9cb01cb",
+      "nativeInitialHash": "e8db8d97f121f6bc2a3b2be6615ab0def164a86d6d6b93d05be521cec9c96f68",
+      "publishedReplaySHA256": "9593f795e3fa645aaca303b5f1b5a45fd563b2719c14223162c4dd7cd9ebaed5",
+      "sourceURL": "https://lldb.camanis.net/level/play/496/1/Its-Raining-Lemmings",
+      "sourceGameDataHash": "F1841540DD121A89F5884F62778CF87B",
+      "sourceMainJSSHA256": "c467eab99315555391542d7c79a2976b28c1c674dadd01ccf261d7792eabeace",
+      "sourceBrowser": "Firefox 151.0.2",
+      "sourceSaved": 60,
+      "sourceRequired": 60,
+      "sourceTotal": 60,
+      "sourceCompletionCycles": 743,
+      "nativeSaved": null,
+      "nativeRequired": 60,
+      "nativeTotal": 60,
+      "nativeFirstRejectedAssignment": "Builder for lemming 1 at tick 167",
+      "nativeBestDroppedAssignmentVariantSaved": 2,
+      "isolatedRuleTrial": {
+        "scope": "ignored scratch build only; shipped DOS fall limit remains 60",
+        "sourceRuleReference": "https://lldb.camanis.net/help/uploading-a-level-pack",
+        "sourceVariant": "GOLEMS.DAT; release X25, A-B-A-B for two hatches, splat above 63 source pixels",
+        "scratchChange": "ClassicDOSRules.maximumSafeFallDistance 60 to 66; the native fall counter starts at 3",
+        "originalMechanics": {
+          "saved": 60,
+          "required": 60,
+          "completionTick": 746
+        },
+        "laterReleaseMechanics": {
+          "saved": 60,
+          "required": 60,
+          "completionTick": 745
+        },
+        "existingSamePackWitnesses": {
+          "tested": 5,
+          "retainedWins": 0,
+          "rejectedAssignmentLevelSections": [
+            1,
+            3,
+            9
+          ],
+          "acceptedButLostLevelSections": [
+            2,
+            5
+          ]
+        },
+        "bothConfirmedGolemsPackWitnesses": {
+          "tested": 14,
+          "retainedWins": 3,
+          "retainedWinLevelSectionsInPack495": [
+            0,
+            3,
+            5
+          ],
+          "rejectedAssignments": 7,
+          "acceptedButLost": 4,
+          "scratchResultPath": ".build/full-difficulty-evaluation/clock-rescore/splat63/scored-replay-results.log"
+        },
+        "firstRejectedAssignmentRetiming": {
+          "scope": "scratch raised-fall and later-release hatch rules; original witness inputs from both confirmed Golems packs",
+          "shiftRangeTicks": [
+            -24,
+            24
+          ],
+          "testedRejectedWitnesses": 7,
+          "strictScratchWins": [
+            {
+              "packID": "fan:lldb-495",
+              "levelID": "MARTPCK1.DAT#2",
+              "shiftTicks": -3,
+              "saved": 49,
+              "required": 49,
+              "replaySHA256": "72334d78be2be65abc7e103f4a25a9169d2b27e3119cb7dc52ba584491c6c4f0"
+            },
+            {
+              "packID": "fan:lldb-495",
+              "levelID": "MARTPCK1.DAT#7",
+              "shiftTicks": -1,
+              "saved": 57,
+              "required": 57,
+              "replaySHA256": "e1f372dce58af35d4f8b1642002723a5847dc6fae3302117eccecf5b957d9752"
+            },
+            {
+              "packID": "fan:lldb-496",
+              "levelID": "MARTPCK2.DAT#1",
+              "shiftTicks": -18,
+              "saved": 46,
+              "required": 40,
+              "replaySHA256": "a0af3239c497c770f9ea7e1fb4e45daea2fce9c19f1bc7b39290b30fcda0b306"
+            }
+          ],
+          "scratchResultPath": ".build/full-difficulty-evaluation/clock-rescore/splat63/first-rejection-radius24.log",
+          "exactBundledArchiveStrictRecheck": "3/3 initial hashes, expected outcomes and wins matched on Content/LevelPacks",
+          "interpretation": "Three of seven rejected current witnesses can be retimed to win under the isolated candidate profile. This is not a shipped-engine score or source parity check."
+        },
+        "singleSkillRetiming": {
+          "scope": "scratch raised-fall and later-release hatch rules; each assigned-skill event shifted alone within 16 ticks",
+          "testedAdditionalWitnesses": 8,
+          "additionalStrictScratchWins": [
+            {
+              "packID": "fan:lldb-495",
+              "levelID": "MARTPCK1.DAT#6",
+              "skill": "bomber",
+              "shiftTicks": -16,
+              "saved": 56,
+              "required": 56,
+              "replaySHA256": "a87aeebf22c7a936007e41c1a52232aad6094d8a3c1cfa4d4f7c2140dc919783"
+            },
+            {
+              "packID": "fan:lldb-496",
+              "levelID": "MARTPCK2.DAT#5",
+              "skill": "bomber",
+              "shiftTicks": -4,
+              "saved": 6,
+              "required": 5,
+              "replaySHA256": "dd5233ea37fb8728c98db6968d4293814e49349a7b98c0fef1aa9a59446bb154"
+            },
+            {
+              "packID": "fan:lldb-496",
+              "levelID": "MARTPCK2.DAT#9",
+              "skill": "builder",
+              "shiftTicks": -1,
+              "saved": 1,
+              "required": 1,
+              "replaySHA256": "eaa2afc1ba7260375a835f880c74f74ae9b57ced06ea81f9a202aad8e990e2cf"
+            }
+          ],
+          "remainingCurrentWitnessesWithoutScratchWin": [
+            "fan:lldb-495/MARTPCK1.DAT#1",
+            "fan:lldb-495/MARTPCK1.DAT#4",
+            "fan:lldb-495/MARTPCK1.DAT#9",
+            "fan:lldb-496/MARTPCK2.DAT#2",
+            "fan:lldb-496/MARTPCK2.DAT#3"
+          ],
+          "exactBundledArchiveStrictRecheck": "6/6 migration candidates passed initial hashes, expected outcomes and wins on Content/LevelPacks",
+          "interpretation": "Nine of 14 current scored witnesses have a strict win under the isolated full-profile trial: three unchanged and six retimed. This does not establish source physics parity."
+        },
+        "originalHatchRulesWithRaisedFallLimit": {
+          "testedCurrentWitnesses": 14,
+          "retainedWins": 14,
+          "scratchResultPath": ".build/full-difficulty-evaluation/clock-rescore/splat63/scored-replay-original-hatches.log",
+          "sourceProfileLimit": "The original hatch offset and shrug-climb behaviour do not match Golems even though these native witnesses still win."
+        },
+        "scratchLibrarySHA256": "726d49616b111d1d5e10599a67d6826f6d65582862ed7b2f7447d083aaca395a",
+        "interpretation": "The source input wins under an isolated candidate profile, but two completion ticks still differ. Switching the two confirmed Golems packs invalidates 11 of 14 current witnesses, so no shipped native win or replay-based score is claimed.",
+        "alternatePublishedRouteTrial": {
+          "scope": "Exact bundled Golems archives with the isolated raised-fall and later-release hatch profile; cached alternate public inputs from matching puzzle hashes",
+          "strictScratchWins": [
+            {
+              "identity": {
+                "packID": "fan:lldb-495",
+                "levelID": "MARTPCK1.DAT#1"
+              },
+              "title": "Stairway to Heaven",
+              "sourceURL": "https://lldb.camanis.net/level/244/2",
+              "sourceReplaySHA256": "051e3d24f91160249a4e50c755604fb633494ae129b1a2be8db372ec5a0c54a1",
+              "nativeInitialHash": "ef3c77b9d0b7bb53bb81502a7c570bdaee1f1ef490393344356b1bc828d44f15",
+              "saved": 60,
+              "required": 60,
+              "completionTick": 1651,
+              "scratchReplaySHA256": "2ec7107f8f9958e431999b472f8341421a6d69d6cc8f31510bf2358eedc028cc",
+              "scratchReplayPath": ".build/full-difficulty-evaluation/clock-rescore/splat63/fan-lldb-495-1-alternate.json",
+              "shippedCurrentExactInput": {
+                "saved": 0,
+                "required": 60,
+                "completionTick": 4082,
+                "didWin": false,
+                "initialHash": "cfb96768ec8ee06b887ec28b35b4ed6e220cff56b05e8e212437789c7d20f663"
+              }
+            },
+            {
+              "identity": {
+                "packID": "fan:lldb-496",
+                "levelID": "MARTPCK2.DAT#6"
+              },
+              "title": "Cliffhanger",
+              "sourceURL": "https://lldb.camanis.net/level/496/7",
+              "sourceReplaySHA256": "2a3567a6c484d98138db7ff7c8caf1f8f8e377b42cec7818f57d33487071654a",
+              "sourceSaved": 30,
+              "sourceCompletionTick": 1603,
+              "nativeInitialHash": "01b6b29e23de1bdefb483740d23567d9c9fc2abf97ad47c865d556b5a8185130",
+              "saved": 30,
+              "required": 30,
+              "completionTick": 1600,
+              "scratchReplaySHA256": "490e17f425def4c93cdf0ac559274315d797a4e12b97f1bafedd64b1409dcccc",
+              "scratchReplayPath": ".build/full-difficulty-evaluation/clock-rescore/splat63/fan-lldb-496-6-alternate.json",
+              "shippedCurrentExactInput": {
+                "saved": 15,
+                "required": 30,
+                "completionTick": 3062,
+                "didWin": false,
+                "initialHash": "f7f4cf413bd45109f14c40113c4d14afdcdd8e3e8706d803abf71ac7b1eb646b"
+              }
+            }
+          ],
+          "exactBundledArchiveStrictRecheck": "2/2 initial hashes, stored expected outcomes and wins matched on Content/LevelPacks",
+          "otherAlternateAttempt": "MARTPCK1.DAT#4 alternate 64-event route rejected its Climber assignment at tick 47; shifting that first rejected assignment within 24 ticks yielded no accepted candidate.",
+          "otherUnscoredAttempts": "MARTPCK2.DAT#4 published route rejected its Basher assignment at tick 934; 48 accepted one-event shifts within 24 ticks saved zero. MARTPCK2.DAT#6 first published route rejected its Miner assignment at tick 821; the second public route is the strict scratch win above.",
+          "coverageAfterTrial": "10/14 existing scored Golems entries have replacement or unchanged strict scratch wins. Cliffhanger and It's Raining Lemmings are two further strict scratch wins without shipped native scores. Four current scored entries and four currently unscored entries remain without a scratch win.",
+          "interpretation": "The exact alternate inputs lose under the current shipped source build: 0/60 for Stairway to Heaven and 15/30 for Cliffhanger. Their wins exist only under the isolated unshipped rule profile. The 15-tick and 3-tick source/scratch completion differences prevent a parity claim. Neither replay changes the shipped ledger or score.",
+          "shippedCurrentLibrarySHA256": "88cecd0189ea0d5b677e876184c919b0a8fb72ecbfdc355b23f1d2b8d6235e69"
+        }
+      },
+      "sourcePhysicsParity": "assignment mismatch"
+    }
+  ]
+}

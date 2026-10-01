@@ -20,8 +20,11 @@ GOLEMS_OBJECTS = ROOT / "Artifacts/DifficultyEvaluation/classic-golems-object-co
 GOLEMS_ALTERNATIVES = ROOT / "Artifacts/DifficultyEvaluation/classic-golems-alternative-evidence.json"
 GOLEMS_ALTERNATIVE_SOLUTIONS = ROOT / "Artifacts/DifficultyEvaluation/classic-golems-alternative-solutions.json"
 SOURCE_OUTCOMES = ROOT / "Artifacts/DifficultyEvaluation/classic-source-outcomes.json"
+INDEPENDENT_SOURCE_CHECKS = ROOT / "Artifacts/DifficultyEvaluation/classic-independent-source-checks.json"
+STATE_HASH_ALIASES = ROOT / "Artifacts/DifficultyEvaluation/classic-state-hash-alias-checks.json"
 CLASSIC_NEO_DERIVATIONS = ROOT / "Artifacts/DifficultyEvaluation/classic-neolemmix-replay-derivations.json"
 OUTPUT = ROOT / "Artifacts/DifficultyEvaluation"
+SOURCE_FAMILIES = OUTPUT / "source-engine-families.json"
 PARTIAL_SOURCE_ASSIGNMENTS = {
     "NeoLemmix_Introduction_Pack/Advanced_Training/Beam_Up_The_Equipment!.nxlv":
         ("aa256c48ee1bb20077d0b22b7ccfee6ed4b6835467422fc318e0770c2bdcac7d", 5),
@@ -29,6 +32,80 @@ PARTIAL_SOURCE_ASSIGNMENTS = {
         ("437ad8f26c6a13ad6f7f83ec26e138c64be10be8d2f3d9f7ad0a54455e82106e", 11),
     "NeoLemmix_Introduction_Pack/Basic_Training_2/Counterclockwise.nxlv":
         ("2acdf4bf8dd221d1cc9b3287f38eda854e1f58522c6aaf54b274ae16f7099c67", 16),
+}
+NATIVE_OBSTRUCTIONS = {
+    ("fan:lldb-66", "Lemmy556 My little levels 2.dat#9"): {
+        "sourceRevision": "963dd4d3cd016df98aedcb0890f7eff91b6255e57858474295da25d7a8216756",
+        "initialHash": "1bfbdc625156837f956e92a596690f2c704b96021276293a336d6a5598aa5774",
+        "issue": "Sole lemming falls out at tick 94; no stocked skill accepts an assignment before then",
+    },
+    ("fan:lldb-537", "Holiday cLemmings Flurry 1.DAT#2"): {
+        "sourceRevision": "d4a17f5380fd0315dd62fc6947535c459088a28d620a6fa3d0ff27c34e50e540",
+        "initialHash": "e356fa325bdbfd6f7ee00a062d1e4f700fae14cbafd3360907716b91381a3113",
+        "issue": "Sole lemming enters fire at tick 89; no stocked skill accepts an assignment before then",
+    },
+    ("fan:lldb-211", "More Levels/5)Sacrifice.ini#-1"): {
+        "sourceRevision": "4fc97baad0e98022cd89fd9983569a8a2961258619ed83e490491d7f75a788c2",
+        "initialHash": "9de18503cf98b718bd9f67590ed6a60d478b45d178dd59b0a880911bd31b9128",
+        "issue": "Both lemmings spawn at y=181 below the native maximum y=163 and are lost at ticks 54 and 82 before a skill can be assigned",
+    },
+    ("fan:lldb-469", "blessed_are_the_bricks.ini#-1"): {
+        "sourceRevision": "96c8a2546b2b5e249c66111e6553ed3146c55f570cc47ccf33ad96b9359060c2",
+        "initialHash": "8cead17b2e52c361976969e3165a559e6a1c122b987abc98bd999207b34de332",
+        "issue": "Only native exit trigger starts at y=284 below the maximum playable y=163",
+    },
+    ("fan:lldb-204", "Gronklems #5/9) Optical Fibre Land.ini#-1"): {
+        "sourceRevision": "75a78c065d97fb8d712aadf84ecf22464ae05f6018758a6902737ea7e1c7d716",
+        "initialHash": "e885b76ac5c9d3b42ed8c5de0d90614d3e2c075b2376cfb752a3ac7f04d72005",
+        "issue": "Only native exit trigger starts at y=212 below the maximum playable y=163",
+    },
+    ("fan:lldb-369", "03 - Reciprocity.ini#-1"): {
+        "sourceRevision": "50356f4c0234731587eeb93030ee4e771ab9f7b73abd76195a19af50aef284dc",
+        "initialHash": "3c9f58c102633349339a22a2159a0ef75ab4aadb866a046ce4f6ee9af66fd1b7",
+        "issue": "Only native exit trigger starts at y=280 below the maximum playable y=163",
+    },
+    ("fan:lldb-203", "Gronklems 6 v2/8) Just Over the Hill.ini#-1"): {
+        "sourceRevision": "1900e4554d946d2e464f8a69cff2f2a915c72294c9c57bc2b563cbea3ebb9af0",
+        "initialHash": "fa4ec99ff512e3db8742144aa0255ebe96ec7b37e1cc7918b32860ea84581e10",
+        "issue": "Only hatch is at y=170 and only exit starts at y=220 below the maximum playable y=163",
+    },
+    ("fan:lldb-208", "Gronklems 7/8) Industrial Park.ini#-1"): {
+        "sourceRevision": "653a50ccce0eac0c98c88c590d3de2b462ac3b990e26d01636d9085c22325ca8",
+        "initialHash": "ef58792caad2084636d546eb4e73815060def8cb640f70adc1a6c1cdf4a31103",
+        "issue": "Requires 3/3 saves but two of three native hatches are at y=236 below the maximum playable y=163",
+    },
+    ("fan:lldb-200", "Gronklems #4 (v3)/6) Welcome to Lemmingopolis.ini#-1"): {
+        "sourceRevision": "df9f798f55c909c8f0ef925a70b9dea3a607455ce9b63b3d40ebded40ff0d29f",
+        "initialHash": "376c3484ab3796b4beccda22739131ae3d08de61f3ba7f6c1143fd3c9dc52ebf",
+        "issue": "Only native exit trigger starts at y=216 below the maximum playable y=163",
+    },
+    ("fan:lldb-203", "Original Levels/8) Just Over the Hill.ini#-1"): {
+        "sourceRevision": "1900e4554d946d2e464f8a69cff2f2a915c72294c9c57bc2b563cbea3ebb9af0",
+        "initialHash": "8f393575f18965873170e5fd49a21d589d611925a42c72bfb6aaf71e01319e92",
+        "issue": "Only hatch is at y=170 and only exit starts at y=228 below the maximum playable y=163",
+    },
+    ("fan:lldb-206", "8 Tres Hombres.ini#-1"): {
+        "sourceRevision": "a7fbd3d48290b5fcf49cb6ca7a8b24b010546ab3d8ab1c5feb7f09821d59e9c2",
+        "initialHash": "2b666731fe53452f221de84f15f5fded5385fc60cd27177ed0ae017221a22844",
+        "issue": "Requires 3/3 saves but two of three native hatches are at y=182 and y=180 below the maximum playable y=163",
+    },
+    ("fan:lldb-397", "2010 CONTEST/05pieuw.ini#-1"): {
+        "sourceRevision": "7cb5a7b687cccdbe290028ae7648bb15809b3248a3cf9330d418ce16240d63f2",
+        "initialHash": "050a40a4c721470ecd550ae11e1d3259885f184d55600d6a3ddaac210ef4e776",
+        "issue": "Both native exit triggers start at y=272 below the maximum playable y=163",
+    },
+    ("fan:lldb-215", "6 Last Lemming Standing.ini#-1"): {
+        "sourceRevision": "9ca65d28f41157293456671bdf2ff1ee84d1ec8525cb7cbc5dcf63fa574058a5",
+        "initialHash": "f4fcd13ecbf93f6368d0d1af52d496d6452f97d45951c6b5e56e8e2957b801d9",
+        "issue": "Only native exit trigger starts at y=268 below the maximum playable y=163",
+    },
+}
+NATIVE_RATE_SWEEPS = {
+    ("fan:lldb-433", "LDChallenge04.dat#1"): {
+        "sourceRevision": "65c251590f612944e636a2e6755b6104a9cacf65ab86b351eb0d3578371adebe",
+        "initialHash": "a9822a2149ca78d371b258aa71041f04970d57377fb9cbf66a0ea47dd32c9e6f",
+        "issue": "No stocked skills; all 99 fixed starting release rates saved 0/1. In-level rate changes remain untested",
+    },
 }
 
 
@@ -91,6 +168,22 @@ def main():
         for record in source_outcome_records
     }
     assert len(source_outcomes) == len(source_outcome_records)
+    independent_source_records = read(INDEPENDENT_SOURCE_CHECKS)["records"] if INDEPENDENT_SOURCE_CHECKS.exists() else []
+    independent_source_checks = {
+        (record["identity"]["packID"], record["identity"]["levelID"]): record
+        for record in independent_source_records
+    }
+    assert len(independent_source_checks) == len(independent_source_records)
+    state_hash_aliases = read(STATE_HASH_ALIASES)["records"] if STATE_HASH_ALIASES.exists() else []
+    for record in state_hash_aliases:
+        target = classic[json.dumps({"engine": "classic", **record["identity"]}, sort_keys=True)]
+        donor = classic[json.dumps({"engine": "classic", **record["donorIdentity"]}, sort_keys=True)]
+        assert record["initialStateHash"] == target["initialHash"] == donor["initialHash"]
+        assert record["archiveSHA256"] == target["entry"]["sourceRevision"]
+        assert record["sceneGeometrySHA256"] != record["donorSceneGeometrySHA256"]
+        assert record["puzzleScenarioSHA256"] != record["donorPuzzleScenarioSHA256"]
+        assert record["donorOutcome"]["status"] == "win"
+        assert record["targetOutcome"]["status"] != "win"
     neo = read(NEO)
     neo_failures = {}
     for failure in read(NEO_REPORT)["failures"]:
@@ -99,18 +192,65 @@ def main():
     passive = {row["path"]: row for row in read(PASSIVE)} if PASSIVE.exists() else {}
     assert len(fan) == 6020, len(fan)
     assert len(neo) == 794, len(neo)
+    lemmini_pack_ids = {
+        f"fan:lldb-{pack_id}" for pack_id in read(SOURCE_FAMILIES)["lemminiPackIDs"]
+    }
+    golems_pack_ids = {
+        f"fan:lldb-{pack_id}" for pack_id in read(SOURCE_FAMILIES)["golemsPackIDs"]
+    }
+    assert lemmini_pack_ids <= manifest_pack_ids
+    assert golems_pack_ids <= manifest_pack_ids
+    assert not lemmini_pack_ids & golems_pack_ids
+    assert all(
+        row["entry"]["identity"]["levelID"].lower().endswith((".ini#-1", ".lvl#-1"))
+        for row in fan if row["entry"]["identity"]["packID"] in lemmini_pack_ids
+    )
     rows = []
     for row in fan:
         profile = row["profile"]
         verified = profile["confidence"] != "low"
         level_id = row["entry"]["identity"]
+        lemmini_source = level_id["packID"] in lemmini_pack_ids
+        golems_source = level_id["packID"] in golems_pack_ids
         limit = structural.get((level_id["packID"], level_id["levelID"]))
+        native_obstruction = NATIVE_OBSTRUCTIONS.get((level_id["packID"], level_id["levelID"]))
+        rate_sweep = NATIVE_RATE_SWEEPS.get((level_id["packID"], level_id["levelID"]))
+        if native_obstruction:
+            assert not verified
+            assert row["entry"]["sourceRevision"] == native_obstruction["sourceRevision"]
+            assert row["initialHash"] == native_obstruction["initialHash"]
+        if rate_sweep:
+            assert not verified
+            assert row["entry"]["sourceRevision"] == rate_sweep["sourceRevision"]
+            assert row["initialHash"] == rate_sweep["initialHash"]
         object_comparison = golems_objects.get((level_id["packID"], level_id["levelID"]))
         object_alternative = golems_alternatives.get((level_id["packID"], level_id["levelID"]))
         source_outcome = source_outcomes.get((level_id["packID"], level_id["levelID"]))
+        independent_source = independent_source_checks.get((level_id["packID"], level_id["levelID"]))
         if source_outcome:
             assert verified
             assert source_outcome["levelSourceRevision"] == row["entry"]["sourceRevision"]
+        if independent_source:
+            assert independent_source["levelSourceRevision"] == row["entry"]["sourceRevision"]
+            assert independent_source["nativeInitialHash"] == row["initialHash"]
+            assert independent_source["sourceRequired"] == independent_source["nativeRequired"]
+            assert independent_source["sourceTotal"] == independent_source["nativeTotal"]
+            if independent_source["sourcePhysicsParity"] == "outcome mismatch":
+                assert independent_source["nativeSaved"] is not None
+                assert independent_source["sourceSaved"] != independent_source["nativeSaved"]
+            elif independent_source["sourcePhysicsParity"] == "assignment mismatch":
+                assert independent_source["nativeSaved"] is None
+                assert independent_source["nativeFirstRejectedAssignment"]
+            else:
+                assert independent_source["sourcePhysicsParity"] == "outcome and completion-time match"
+                assert verified and source_outcome
+                assert independent_source["nativeSaved"] == independent_source["sourceSaved"]
+                assert independent_source["nativeSaved"] == source_outcome["nativeSaved"]
+                assert independent_source["sourceCompletionCycles"] == independent_source["nativeReplayEndTick"]
+                assert independent_source["nativeReplayEndTick"] == source_outcome["nativeCompletionTicks"]
+                assert independent_source["nativeReplaySHA256"] == profile["key"]["replayRevision"].rsplit(" ", 1)[-1]
+            if independent_source["sourcePhysicsParity"] != "outcome and completion-time match":
+                assert not verified
         if object_comparison:
             assert verified
             assert object_comparison["sourceRevision"] == row["entry"]["sourceRevision"]
@@ -132,6 +272,12 @@ def main():
             source_outcome["nativeCompletionTicks"] - source_outcome["publishedHeaderTicks"]
         ) > 5:
             parity_observations.append("published replay completion header differs by over 5 ticks")
+        if independent_source:
+            parity_observations.append({
+                "outcome mismatch": "independent source/native replay outcome mismatch",
+                "assignment mismatch": "independent source replay assignment rejected natively",
+                "outcome and completion-time match": "independent outcome and timing match; terrain unverified",
+            }[independent_source["sourcePhysicsParity"]])
         if limit:
             assert not verified and limit["levelSourceRevision"] == row["entry"]["sourceRevision"]
             assert limit["initialStateHash"] == row["initialHash"]
@@ -152,12 +298,18 @@ def main():
                      "physics_parity": "; ".join(parity_observations) if parity_observations
                      else "not independently checked",
                      "playtest": "replay verified" if verified else
-                     limit["reason"] if limit else "bounded search or metadata only",
+                     "independent source win; native replay fails" if independent_source and not verified else
+                     limit["reason"] if limit else
+                     "native obstruction traced" if native_obstruction else
+                     "fixed release-rate sweep" if rate_sweep else "bounded search or metadata only",
                      "issue": (f"Exit object in inactive slot(s) {', '.join(map(str, limit['exitObjectSlots']))}"
                                if limit["exitObjectSlots"] else "No exit object in the bundled level")
                      if limit and limit["reason"] == "no functional exit" else
                      f"Requires {limit['requiredToSave']} saves from {limit['totalLemmings']} lemmings"
-                     if limit else row.get("issue") or ""})
+                     if limit else native_obstruction["issue"] if native_obstruction else
+                     rate_sweep["issue"] if rate_sweep else row.get("issue") or "",
+                     "source_engine": "Lemmini" if lemmini_source else
+                     "Golems" if golems_source else "not independently classified"})
     for profile in neo:
         path = profile["key"]["identity"]["levelID"]
         run = passive.get(path, {})
@@ -184,7 +336,7 @@ def main():
                      "playtest": ("source-compatible replay verified" if source_compatible else "replay verified")
                      if replay_win else "replay analysis failed" if path in neo_failures else status,
                      "issue": neo_failures.get(path) or ", ".join(run.get("features", []))
-                     or run.get("issue", "")})
+                     or run.get("issue", ""), "source_engine": "NeoLemmix"})
     rows.sort(key=lambda row: (row["source"], row["pack"], row["level"]))
     OUTPUT.mkdir(parents=True, exist_ok=True)
     with (OUTPUT / "levels.csv").open("w", newline="") as stream:
@@ -194,6 +346,7 @@ def main():
     sources = {str(path.relative_to(ROOT)): digest(path) for path in (CLASSIC, FAN, NEO, NEO_REPORT)}
     pack_manifest = BUNDLED_FAN_PACKS / "packs.json"
     sources[str(pack_manifest.relative_to(ROOT))] = digest(pack_manifest)
+    sources[str(SOURCE_FAMILIES.relative_to(ROOT))] = digest(SOURCE_FAMILIES)
     if PASSIVE.exists():
         sources[str(PASSIVE.relative_to(ROOT))] = digest(PASSIVE)
     if STRUCTURAL.exists():
@@ -205,10 +358,18 @@ def main():
             sources[str(path.relative_to(ROOT))] = digest(path)
     if SOURCE_OUTCOMES.exists():
         sources[str(SOURCE_OUTCOMES.relative_to(ROOT))] = digest(SOURCE_OUTCOMES)
+    if INDEPENDENT_SOURCE_CHECKS.exists():
+        sources[str(INDEPENDENT_SOURCE_CHECKS.relative_to(ROOT))] = digest(INDEPENDENT_SOURCE_CHECKS)
+    if STATE_HASH_ALIASES.exists():
+        sources[str(STATE_HASH_ALIASES.relative_to(ROOT))] = digest(STATE_HASH_ALIASES)
     classic_neo_derivations = read(CLASSIC_NEO_DERIVATIONS)["records"] if CLASSIC_NEO_DERIVATIONS.exists() else []
     if CLASSIC_NEO_DERIVATIONS.exists():
         sources[str(CLASSIC_NEO_DERIVATIONS.relative_to(ROOT))] = digest(CLASSIC_NEO_DERIVATIONS)
     counts = Counter((row["source"], row["completion"]) for row in rows)
+    lemmini_rows = [row for row in rows if row["source_engine"] == "Lemmini"]
+    assert len(lemmini_rows) == 299, len(lemmini_rows)
+    golems_rows = [row for row in rows if row["source_engine"] == "Golems"]
+    assert len(golems_rows) == 20, len(golems_rows)
     unverified_official_conversions = sum(
         row["completion"] == "no verified win" and row["pack"] == "Original_Lemmings"
         for row in rows
@@ -223,6 +384,11 @@ def main():
                "neoReplayAnalysisFailures": len(neo_failures),
                "verifiedFanWins": counts[("Classic fan", "verified win")],
                "unverifiedFan": counts[("Classic fan", "no verified win")],
+               "fixedRateSweepFan": len(NATIVE_RATE_SWEEPS),
+               "lemminiSourceLevelsInClassicLane": len(lemmini_rows),
+               "golemsSourceLevelsInClassicLane": len(golems_rows),
+               "lemminiSourceLevelsWithoutVerifiedWin": sum(
+                   row["completion"] == "no verified win" for row in lemmini_rows),
                "verifiedNeoLemmixWins": counts[("NeoLemmix", "verified win")],
                "unverifiedNeoLemmix": counts[("NeoLemmix", "no verified win")],
                "unverifiedNonOfficial": unverified_non_official,
@@ -252,6 +418,7 @@ def main():
                "classicSourceCompletionHeaderOutliers": sum(
                    abs(record["nativeCompletionTicks"] - record["publishedHeaderTicks"]) > 5
                    for record in source_outcome_records),
+               "classicStateHashAliasChecks": len(state_hash_aliases),
                "independentPhysicsParityVerified": 0,
                "partialSourceAssignmentMatches": sum(
                    row["physics_parity"].startswith("partial source assignment match")
@@ -261,9 +428,21 @@ def main():
     (OUTPUT / "summary.json").write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n")
     (OUTPUT / "README.md").write_text(
         "# Difficulty evaluation\n\n"
-        f"This ledger covers {len(fan)} bundled Classic fan levels and {len(neo)} bundled NeoLemmix levels. "
+        f"This ledger covers {len(fan)} bundled fan levels in the native Classic playback lane "
+        f"and {len(neo)} bundled NeoLemmix levels. "
         "A row has a difficulty score only when a winning replay supports it. "
         "Low-confidence metadata estimates remain outside the score column.\n\n"
+        f"{len(lemmini_rows)} rows in the Classic playback lane come from 20 packs that "
+        "LLDB identifies as Lemmini. Two have a native Classic win and replay-based score; "
+        f"{summary['lemminiSourceLevelsWithoutVerifiedWin']} remain unverified. "
+        "The `source_engine` column separates known source families from the current "
+        "playback lane; most other fan packs are not independently classified there. "
+        "Classic's 160-pixel playfield cannot represent several of these levels' hatch "
+        "and exit coordinates. This is an engine-family compatibility gap, not proof that "
+        "the source puzzles are unsolvable. See `validation.md` for the pack list.\n\n"
+        f"{len(golems_rows)} levels in packs 495 and 496 use the Golems source player. "
+        "Their source-engine label does not establish native physics parity. "
+        "See `validation.md` and `classic-independent-source-checks.json`.\n\n"
         f"Verified winning replays support {summary['verifiedFanWins']} Classic fan scores and "
         f"{summary['verifiedNeoLemmixWins']} NeoLemmix scores. "
         f"The remaining {summary['unverifiedNonOfficial']} non-official levels and "
@@ -289,6 +468,17 @@ def main():
         "physics parity with the source engine. The `physics_parity` column records partial "
         "assignment-state matches and known object-rule replay differences where checked. "
         "The full parity gate remains separate.\n\n"
+        "`classic-independent-source-checks.json` records Golems browser runs of published "
+        "`Holy Cow!` and `It's Raining Lemmings` replays. The source engine wins both. "
+        "The exact native `Holy Cow!` input saves 0 of 20 after the source saves 18 of 20; "
+        "the other input has a native assignment rejection. Both ledger rows flag these "
+        "parity failures and stay unscored until native winning replays exist.\n\n"
+        "An isolated Golems fall-rule trial wins `It's Raining Lemmings` with the published "
+        "input, but ends two ticks later than the source under later-release hatch rules. "
+        "Across the two confirmed Golems packs, the same trial invalidates 11 of 14 "
+        "current scored witnesses. The trial "
+        "is diagnostic evidence; it is not a shipped native replay or a new ledger score. "
+        "See `validation.md` and `classic-independent-source-checks.json`.\n\n"
         "Bundled Classic fan playback uses the Golems timed-level clock, which allows two more "
         "update cycles than the DOS clock. Official Classic levels retain the DOS clock. "
         "[The clock audit](classic-fan-clock-audit.json) replayed 2,138 earlier fan witnesses: "
@@ -298,8 +488,10 @@ def main():
         "`source-clock-candidates/replay-integrity-repairs.json`. See `validation.md` and "
         "`Tools/DifficultyDiagnostics/ClassicFanClockAudit/main.swift` for the source check.\n\n"
         "The Classic replay initial-state hash covers the starting counters, workers and terrain "
-        "mask. It does not include configured object triggers. An archive fingerprint and a replay "
-        "run under the current object rule are required alongside that hash. "
+        "mask. It omits entrance and trigger geometry. "
+        f"{len(state_hash_aliases)} unscored levels share that hash with scored levels but have different geometry. "
+        "None won with a transferred replay. See `classic-state-hash-alias-checks.json`. "
+        "Verify the exact archive fingerprint, level identity and native replay outcome for each row. "
         "`FAN_COMPARE_GOLEMS_OBJECTS=1` with `FAN_VERIFY_ONLY=1` in `ExpandFanEvidence` "
         "compares selected winning replays with all 32 object slots active. "
         "`classic-golems-object-comparisons.json` records those native rule comparisons; "

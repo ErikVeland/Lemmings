@@ -73,10 +73,12 @@ def select(pool, replays):
                    and lower <= demand(r) <= upper and predicate(r, evidence[key(r)])
                    and application_signature(evidence[key(r)]) not in used_signatures]
         if objective.startswith('introduce:'):
-            options = [r for r in options if beginner_rank(r)
-                       and demand(r) < 180
+            options = [r for r in options if demand(r) < 180
                        and not requires_full_rescue(r, replays.get(r['profile']['key']['replayRevision'])
                                                     or replays.get(r['initialHash'], {}))]
+            beginner_options = [r for r in options if beginner_rank(r)]
+            if beginner_options:
+                options = beginner_options
         if not options:
             missing.append(objective)
             return
@@ -92,13 +94,20 @@ def select(pool, replays):
             'sourceRank': row['profile'].get('sourceRank'), 'beginnerRank': beginner_rank(row),
             'requiresFullRescue': requires_full_rescue(row, witness)}
 
-    # Introductions must come from a low-demand Fun, Easy or Tame source.
-    # Missing introductions stay missing instead of promoting an expert puzzle.
+    # Prefer a low-demand Fun, Easy or Tame source. A low-demand witness from
+    # another rank can prepare a skill in Intermediate when none is available.
     for skill in sorted(BASIC):
         choose('introduce:'+skill, 'Discover: '+skill.capitalize(),
                'First assignment of the '+skill+' skill.',
                lambda r,f,s=skill: f['concepts'] == {s} and r['profile']['components']['executionPrecision'] <= 180,
                upper=180)
+
+    # Give Climbers a second, low-demand use before the selected three-skill
+    # scouting route. The first Climber introduction alone leaves a gap there.
+    choose('prepare:climber-spacing', 'Climber with crowd spacing',
+           'Apply Climber again while changing the release rate.',
+           lambda r,f: f['concepts'] == {'climber', 'release-rate-manipulation'},
+           lower=120, upper=275)
 
     # A transition on one worker is different from assigning two independent jobs.
     # Only short, forgiving routes qualify as intermediate teaching examples.
@@ -236,9 +245,9 @@ def select(pool, replays):
         lesson['applicationSignature'] = application_signature(evidence[json.dumps(lesson['identity'], sort_keys=True)])
     assert len({l['objective'] for l in lessons}) == len(lessons)
     return {'version':'curriculum-3', 'targetSize':292, 'poolSize':len(pool), 'lessons':lessons,
-            'selectionPolicy':'Official first within comparable 35-point demand bands; distinct observed applications; Classic mechanics only.',
+            'selectionPolicy':'Official first within comparable 35-point demand bands; distinct observed applications; known Lemmini source packs excluded from the Classic path.',
             'unavailableOptionalObjectives':missing,
-            'limits':'Objectives describe observed routes. Opening introductions require a low-demand Fun, Easy or Tame candidate whose winning witness does not require a full rescue. Missing introductions are deferred. Novice readability and technique necessity require playtesting.'}
+            'limits':'Objectives describe observed routes. Opening introductions prefer a low-demand Fun, Easy or Tame candidate. When none is available, a low-demand non-beginner witness may introduce the skill in Intermediate. Full-rescue witnesses are excluded from introductions. Novice readability and technique necessity require playtesting.'}
 
 
 if __name__ == '__main__':

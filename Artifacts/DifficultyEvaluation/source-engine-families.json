@@ -1,0 +1,27 @@
+{
+  "lemminiPackIDs": [
+    200,
+    201,
+    203,
+    204,
+    206,
+    208,
+    209,
+    211,
+    215,
+    369,
+    396,
+    397,
+    401,
+    402,
+    406,
+    408,
+    415,
+    416,
+    466,
+    469
+  ],
+  "golemsPackIDs": [495, 496],
+  "golemsEvidence": "The LLDB browser players for packs 495 and 496 select GOLEMS.DAT (game mode 3); see https://lldb.camanis.net/levelpack/495 and https://lldb.camanis.net/levelpack/496.",
+  "source": "https://lldb.camanis.net/levelpack/{id}"
+}
