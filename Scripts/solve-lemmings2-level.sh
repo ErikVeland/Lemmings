@@ -18,4 +18,25 @@ swiftc -O -swift-version 6 -warnings-as-errors \
   -I "$build_dir/modules" -L "$build_dir" -lNxlvKit \
   -Xlinker -rpath -Xlinker "$build_dir" \
   Tools/Lemmings2Solver/*.swift -o "$build_dir/solver"
-exec "$build_dir/solver" level "$data" "$@"
+# Cap a slow candidate advance outside the solver's internal time checks.
+python3 - "$build_dir/solver" "$data" "$@" <<'PYTHON'
+import subprocess
+import sys
+
+solver, data, *args = sys.argv[1:]
+budget = 900.0
+if "--budget" in args:
+    index = args.index("--budget")
+    if index + 1 < len(args):
+        try:
+            budget = float(args[index + 1])
+        except ValueError:
+            pass
+limit = max(1.0, budget) + 15.0
+try:
+    result = subprocess.run([solver, "level", data, *args], timeout=limit, check=False)
+except subprocess.TimeoutExpired:
+    print(f"TIMEOUT: L2 solver exceeded its {limit:g}-second wall limit.", file=sys.stderr)
+    sys.exit(124)
+sys.exit(result.returncode)
+PYTHON
