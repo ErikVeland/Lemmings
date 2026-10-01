@@ -10,8 +10,8 @@ public struct SkillShortcuts {
     /// floater takes U for umbrella.
     public static let preferredLetters: [String: String] = ["floater": "u"]
 
-    /// H opens hints; I remains an alias. Reserve both from skill bindings.
-    public init(names: [String], reserved: String = "zqnrpfxih") {
+    /// Reserve camera and help keys. Glider retains the first G press in L2.
+    public init(names: [String], reserved: String = "zqnrpfxihg") {
         var used = Set(reserved.map(String.init))
         var result = [String?](repeating: nil, count: names.count)
         let candidates = names.map { $0.lowercased().filter { $0.isASCII && $0.isLetter }.map(String.init) }
@@ -27,6 +27,7 @@ public struct SkillShortcuts {
                 used.insert(letter)
             }
         }
+        if let glider = names.firstIndex(where: { ["glider", "hang glider"].contains($0.lowercased()) }) { result[glider] = "g" }
         letters = result
         initials = candidates.map { row in row.first.flatMap { reserved.contains($0) ? nil : $0 } }
     }

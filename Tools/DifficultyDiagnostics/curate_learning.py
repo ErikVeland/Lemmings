@@ -64,7 +64,11 @@ def select(pool, replays):
     evidence = {}
     for row in pool:
         replay = replays.get(row['profile']['key']['replayRevision']) or replays.get(row['initialHash'])
-        if replay and replay.get('expected', {}).get('didWin') and replay['initialStateHash'] == row['initialHash']:
+        if (replay and replay.get('expected', {}).get('didWin')
+                and replay['expected']['ticks'] > 0
+                and replay['initialStateHash'] == row['initialHash']
+                and all((0 if e.get('afterTick') else 1) <= e['tick'] <= replay['expected']['ticks']
+                        for e in replay['events'])):
             evidence[key(row)] = features(row, replay)
     chosen = {}; missing = []; used_signatures = set()
 

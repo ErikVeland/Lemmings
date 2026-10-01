@@ -338,6 +338,14 @@ public struct ProTrackerEnhancedPlayer: Sendable {
             || enhancements.highGainDB != 0
     }
 
+    /// Replace mix processing without moving the tracker clock or sample cursors.
+    public func replacingEnhancements(_ value: ProTrackerEnhancements) -> Self {
+        var replacement = Self(module: player.module, sampleRate: player.sampleRate, enhancements: value)
+        replacement.player = player
+        replacement.player.interpolation = value.interpolation
+        return replacement
+    }
+
     /// The Amiga panned its four voices left, right, right, left.
     private static func isLeftChannel(_ index: Int) -> Bool {
         let position = index % 4

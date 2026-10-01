@@ -74,25 +74,34 @@ pixel marker. Original selects None, and the Modern preset selects Modern.
 An individual choice persists as part of the Custom preset. Machine artwork
 presets preserve this choice.
 
-Modern gives the selected lemming a white silhouette outline exactly two physical
-display pixels wide after zoom, Retina scaling and CRT projection. White highlights march
-along the outline without black segments. A soft green Gaussian bloom follows
-the sprite's silhouette in linear HDR and remains visible in SDR. Its brightness
-breathes smoothly over two seconds without changing its shape or disappearing.
-Modern does not tint the sprite interior, draw a radial halo or add an overhead marker.
-Reduced motion and reduced flashes keep both the outline and halo steady.
-Reduced flashes also limit selection brightness to SDR.
-The reticle retains the skill eligibility colours. Classic, Lemmings 2 and
-Lemmings 3 share the selection renderer and keep its surface transparent to input.
+Modern gives the selected lemming a steady white silhouette outline exactly two
+physical display pixels wide after zoom, Retina scaling and CRT projection.
+Modern always includes a mint-green halo, including when HD effects are off.
+A brighter inner glow and soft outer falloff follow the silhouette. Build the
+halo from distance to the silhouette so thin limbs do not lose their glow.
+Its brightness breathes gently over 2.8 seconds of simulation time, with a
+visible floor. The outline stays steady. Both stay at SDR brightness and
+preserve the sprite interior. The reticle retains the skill eligibility colours.
+
+Classic, Lemmings 2 and Lemmings 3 draw selection with the current sprite frame.
+Flat mode uses the game's bitmap draw. CRT adds selection to its existing frame.
+Selection must not activate the full-window HDR overlay, request a drawable of
+its own or schedule a timer. Cache masks and glow images across animation frames
+with a fixed entry limit. Keep bitmap clipping and CRT shading local to the sprite.
+The effect adds no input surface. Pausing holds the current brightness, and
+reduced motion or reduced flashes hold the midpoint. Reuse the same cached glow
+for every pulse phase. Change its opacity rather than blurring it again.
 
 L2's mask follows the primary lemming sprite, including mirroring and its vertical
 pixel aspect. Separate projectiles, flames, balloons and parachutes are not part
 of that mask. L3 follows the sprite that its current animation mapping renders.
-Bitmap captures and machines without Metal retain a steady white SDR outline.
-GPU checks cover two-pixel width at 1×/2× backing scale, fractional zoom, mirroring,
-CRT curvature, HDR values and reduced effects. App captures cover the native
-walking sprites in all three engines. Other poses and L2 attachments still need
-a full visual sweep.
+Bitmap captures and machines without Metal use the same outline and green bloom.
+Headless pixel checks cover two-pixel width at 1×/2× backing scale, fractional zoom,
+mirroring, clipping, curved CRT output, pulse limits and cache reuse. Native
+canvas captures check halo visibility against all three games' terrain with
+HD effects both on and off, and record cached draw costs on real sprites.
+Composited CRT window captures need an explicitly requested visible test run. Other poses and L2 attachments still
+need a full visual sweep.
 
 Gameplay settings offer Original, Modern and Custom presets. Modern enables
 approaching-lemming targeting, blockers for bombs and current builders for Build.
@@ -109,12 +118,22 @@ Level Select uses a dropdown with Player Unlocked (default) and All. It keeps th
 existing Classic progress override and saved choice. L2 and L3 retain their native
 campaign selection rules.
 
+Catalogue discovery, fan-pack reading and level preparation stay in the background.
+Keep the current menu visible and usable until the destination is ready. Back,
+another destination or a different selection cancels pending preparation. Do not
+show a separate screen for internal loading work. Show an error only when the
+player needs to act. Hot Seat still waits at Ready before play begins.
+
 ## Fresh level start
 
 Fresh starts and retries show a shared 3–2–1 countdown before play. Only visible,
 active gameplay time advances the countdown. Menus and inactive windows hold it.
 Pause or single-step cancels automatic start. Saved runs remain paused, and
 Hot Seat handovers still wait for the player to indicate readiness.
+
+Space and P toggle pause once per press during gameplay in all three engines,
+including imported fan levels. Key repeat and key release do not toggle pause.
+Text entry and menu/handover actions retain their own Space handling.
 
 Handover pages accept Space, Return and keypad Enter for their primary Ready action.
 Held keys must not repeat that action. Pointer confinement also applies to paused
@@ -135,3 +154,17 @@ the full-solution confirmation. Up and Down scroll the hint text.
 Dialogs and help overlays use the normal system cursor. The gameplay reticle,
 skill icon and count stay hidden until the final dialog or sheet closes. Covered
 game controls are excluded from the active dialog's accessibility tree.
+
+## Camera keys and positional sound
+
+With Modern controls, H or Home centres the entrance. G or End centres the goal.
+In L2, G first selects Hang Glider when the level includes it. G with Hang Glider
+selected centres the goal. End always centres the goal. Other skills keep their
+number keys and available letter shortcuts. Slash opens hints; question mark
+opens controls help. I and F1 remain hint aliases. Text entry, app shortcuts,
+menus and Hot Seat Ready retain their input ownership.
+
+Effect positions follow the visible playfield, including camera movement, aspect
+ratio and precision zoom. Keep events on the correct side when offscreen and
+reduce their level with distance. Global warnings and interface sounds stay
+centred. Do not add continuous construction loops over the original soundtrack.

@@ -49,6 +49,9 @@ for _ in 0..<250 {
     let before = Lemmings3SoundCue.Snapshot(game)
     game.step()
     cues += Lemmings3SoundCue.cues(before: before, after: .init(game))
+    for cue in Lemmings3SoundCue.positionedCues(before: before, after: .init(game)) where cue.effect == .exitLevel {
+        try require(cue.point != nil && abs(cue.point!.x - 110) < 20, "L3 exit voice lost its source position")
+    }
 }
 try require(cues.filter { $0 == .letsGo }.count == 1 && cues.filter { $0 == .doorOpen }.count == 1, "Hatch voices must play once")
 try require(game.saved == 3 && cues.filter { $0 == .exitLevel }.count == 3, "Rescue voices must follow new rescues")
@@ -65,6 +68,24 @@ for _ in 0..<100 {
     let before = Lemmings3SoundCue.Snapshot(falling)
     falling.step()
     falls += Lemmings3SoundCue.cues(before: before, after: .init(falling))
+    for cue in Lemmings3SoundCue.positionedCues(before: before, after: .init(falling)) where cue.effect == .fallOut {
+        try require(cue.point != nil && cue.point!.y >= Double(height), "L3 bottom death lost its source position")
+    }
 }
 try require(falling.lost == 3 && falls.contains(.fallOut) && !falls.contains(.splat), "Bottom falls must have a separate death cue")
 print("PASS L3 bottom deaths are distinct from other losses")
+
+var builder = try Lemmings3Runtime(configuration: .init(width: width, height: height, attributes: tags,
+    entrance: .init(x: 20, y: 40), exits: [.init(x: 110, y: 46)], total: 1, releaseInterval: 1, releaseDelay: 0,
+    pickups: [.init(id: 0, tool: .bricks, x: 20, y: 40)]))
+for _ in 0..<12 { builder.step() }
+try require(builder.useTool(to: 0, direction: .upRight), "Builder audio fixture did not start")
+let beforeBrick = Lemmings3SoundCue.Snapshot(builder)
+builder.step()
+let brickSounds = Lemmings3SoundCue.positionedCues(before: beforeBrick, after: .init(builder))
+try require(brickSounds.count == 1 && brickSounds[0].effect == .builderWarning
+    && brickSounds[0].point == GameplaySoundPoint(x: Double(builder.lemmings[0].x), y: Double(builder.lemmings[0].y)),
+    "Placed brick did not produce a positioned chink")
+try require(Lemmings3SoundCue.positionedCues(before: .init(builder), after: .init(builder)).isEmpty,
+    "Paused builder repeated its chink")
+print("PASS L3 positioned exit, death and brick cues, with no paused duplicates")

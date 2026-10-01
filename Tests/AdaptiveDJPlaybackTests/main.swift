@@ -162,6 +162,7 @@ extension MusicFileDeck {
   }
 }
 extension DJDeck {
+  fileprivate var moduleForMixTest: ModuleMusicPlayer? { module }
   fileprivate func checkSpeedPitch(_ cents: Double) throws {
     try recording?.checkSpeedPitch(cents)
     try module?.checkSpeedPitch(cents)
@@ -210,7 +211,77 @@ extension DJDeck {
   }
 }
 
+// No engine is started: these checks render the real MOD mixer into memory.
+extension ModuleMusicPlayer {
+  fileprivate var nukeGainForTest: Float { nukeEQ.globalGain }
+  fileprivate func checkModernMix() throws {
+    try require(usesModernPreset, "DJ module ignored Modern")
+    let mix = player!.enhancements
+    try require(mix.voiceTuning[0]?.centering == ProTrackerEnhancements.modern.percussionCentering,
+      "DJ module lost drum centring")
+    try require(mix.stereoSeparation == 0.8 && mix.reverbMix == 0.07 && mix.lowGainDB > 0 && mix.highGainDB > 0,
+      "DJ module lost its stereo, EQ or reverb treatment")
+    var left = 0.0, right = 0.0
+    for _ in 0..<4410 {
+      let frame = nextSourceFrameLocked()
+      left += Double(frame.left * frame.left); right += Double(frame.right * frame.right)
+    }
+    try require(right / left > 0.5, "Modern left-channel drum did not reach both ears")
+    let seconds = sourceSeconds
+    let beat = player!.player.secondsUntilNextBeat
+    setEnhancements(.faithful)
+    try require(sourceSeconds == seconds && player!.player.secondsUntilNextBeat == beat,
+      "Changing music style restarted the track or beat grid")
+    var rightEnergy: Float = 0
+    for _ in 0..<4410 { rightEnergy += abs(nextSourceFrameLocked().right) }
+    try require(rightEnergy == 0, "Faithful retained modern panning or a reverb tail")
+    setEnhancements(.modern)
+    let current = sourceSeconds
+    setEnhancements(.modern)
+    try require(sourceSeconds == current, "Reapplying Modern restarted the tune")
+  }
+}
+
+extension AdaptiveDJPlayer {
+  fileprivate static func checkModernMixRouting() throws {
+    let url = FileManager.default.temporaryDirectory.appendingPathComponent("mix-test-\(UUID().uuidString).mod")
+    defer { try? FileManager.default.removeItem(at: url) }
+    var bytes = [UInt8](repeating: 0, count: 1084 + 1024 + 64)
+    bytes[950] = 1
+    for (index, value) in "M.K.".utf8.enumerated() { bytes[1080 + index] = value }
+    for (index, value) in "kick".utf8.enumerated() { bytes[20 + index] = value }
+    bytes[43] = 32; bytes[45] = 64; bytes[49] = 32
+    bytes[1084] = 1; bytes[1085] = 172; bytes[1086] = 16
+    for frame in 0..<64 { bytes[2108 + frame] = UInt8(bitPattern: frame < 32 ? 100 : -100) }
+    try Data(bytes).write(to: url)
+    let dj = AdaptiveDJPlayer()
+    dj.deckA = dj.makeDeck(url); dj.deckB = dj.makeDeck(url)
+    try require(dj.deckA?.moduleForMixTest != nil && dj.deckB?.moduleForMixTest != nil, "MOD decks did not load")
+    try dj.deckA!.moduleForMixTest!.checkModernMix()
+    try dj.deckB!.moduleForMixTest!.checkModernMix()
+    dj.setEnhancements(.faithful)
+    try require(dj.deckA?.moduleForMixTest?.usesModernPreset == false && dj.deckB?.moduleForMixTest?.usesModernPreset == false,
+      "Faithful did not reach both crossfade decks")
+    try require(dj.makeDeck(url)?.moduleForMixTest?.usesModernPreset == false, "New deck forgot Faithful")
+    dj.setEnhancements(.modern)
+    try require(dj.deckA?.moduleForMixTest?.usesModernPreset == true && dj.deckB?.moduleForMixTest?.usesModernPreset == true,
+      "Modern did not reach both crossfade decks")
+    try require(dj.makeDeck(url)?.moduleForMixTest?.usesModernPreset == true, "New deck forgot Modern")
+    dj.setNukeAmount(1)
+    try require(dj.deckA?.moduleForMixTest?.nukeGainForTest == -5 && dj.deckB?.moduleForMixTest?.nukeGainForTest == -5,
+      "Nuke EQ did not reach both decks")
+    try require(dj.makeDeck(url)?.moduleForMixTest?.nukeGainForTest == -5, "New deck lost nuke EQ")
+    dj.setNukeAmount(0)
+    try require(dj.deckA?.moduleForMixTest?.nukeGainForTest == 0 && dj.deckB?.moduleForMixTest?.nukeGainForTest == 0,
+      "Nuke undo did not restore both decks")
+    print("PASS DJ nuke EQ propagation, replacement deck and restoration")
+    print("PASS DJ Modern/Faithful routing, drum signal, EQ/reverb and uninterrupted tracker clock")
+  }
+}
+
 @MainActor private func run(_ root: URL, signalOnly: Bool) throws {
+  try AdaptiveDJPlayer.checkModernMixRouting()
+  if CommandLine.arguments.contains("--mix-only") { return }
   try MusicFileDeck.checkSpeedPitchSignal()
   if signalOnly { return }
   let loopURL = FileManager.default.temporaryDirectory.appendingPathComponent("music-loop-\(UUID().uuidString).wav")
@@ -401,17 +472,18 @@ let app = NSApplication.shared
 app.setActivationPolicy(.accessory)
 
 let arguments = CommandLine.arguments
-let signalOnly = arguments.count == 2 && arguments[1] == "--signal-only"
+let signalOnly = arguments.count == 2 && ["--signal-only", "--mix-only"].contains(arguments[1])
 let root = URL(
   fileURLWithPath: arguments.count > 1
     ? arguments[1] : ".build/local/Ultimate Lemmings.app/Contents/Resources/Music")
 
 do {
-  try require(arguments.count <= 2, "Use one Music folder or --signal-only.")
+  try require(arguments.count <= 2, "Use one Music folder, --signal-only or --mix-only.")
   try require(signalOnly || FileManager.default.fileExists(atPath: root.path),
     "No Music folder at \(root.path). Build the app or use --signal-only.")
   try MainActor.assumeIsolated { try run(root, signalOnly: signalOnly) }
-  print(signalOnly ? "Adaptive DJ signal tests passed." : "Adaptive DJ playback tests passed.")
+  print(arguments.contains("--mix-only") ? "Adaptive DJ mix tests passed." :
+    signalOnly ? "Adaptive DJ signal tests passed." : "Adaptive DJ playback tests passed.")
 } catch {
   FileHandle.standardError.write(Data("Adaptive DJ playback tests failed: \(error)\n".utf8))
   exit(1)

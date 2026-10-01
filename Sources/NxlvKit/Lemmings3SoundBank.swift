@@ -45,11 +45,34 @@ public enum Lemmings3SoundCue {
     public struct Snapshot: Sendable {
         let released: Int, saved: Int, lost: Int
         let bottomDeaths: Set<Int>
+        let lemmings: [Int: Lemmings3Runtime.Lemming]
+        let entrance: GameplaySoundPoint?
         public init(_ game: Lemmings3Runtime) {
+            lemmings = Dictionary(uniqueKeysWithValues: game.lemmings.map { ($0.id, $0) })
+            entrance = GameplaySoundPoint(x: Double(game.configuration.entrance.x), y: Double(game.configuration.entrance.y))
             released = game.released; saved = game.saved; lost = game.lost
             bottomDeaths = Set(game.lemmings.filter { $0.state == .dead && $0.y >= game.configuration.height }.map(\.id))
         }
     }
+    public static func positionedCues(before: Snapshot, after: Snapshot) -> [PositionedSoundCue] {
+        var result: [PositionedSoundCue] = []
+        if before.released == 0 && after.released > 0 {
+            result += [.init(.doorOpen, at: after.entrance), .init(.letsGo, at: after.entrance)]
+        }
+        for lem in after.lemmings.values.sorted(by: { $0.id < $1.id }) {
+            let previous = before.lemmings[lem.id]
+            let point = GameplaySoundPoint(x: Double(lem.x), y: Double(lem.y))
+            if lem.state == .saved && previous?.state != .saved { result.append(.init(.exitLevel, at: point)) }
+            if lem.state == .dead && previous?.state != .dead {
+                result.append(.init(after.bottomDeaths.contains(lem.id) ? .fallOut : .splat, at: point))
+            }
+            if let previous, previous.state == .building, lem.quantity < previous.quantity {
+                result.append(.init(.builderWarning, at: point))
+            }
+        }
+        return result
+    }
+
     /// Collapse simultaneous arrivals and losses to one voice per event kind.
     public static func cues(before: Snapshot, after: Snapshot) -> [ClassicSoundEffect] {
         var result: [ClassicSoundEffect] = []

@@ -10,6 +10,9 @@ final class SoundEffectPlayer: @unchecked Sendable {
     var position: Double = 0
     var increment: Double = 1
     var isActive = false
+    var worldPoint: GameplaySoundPoint?
+    var gain: Float = 0.6
+    var distanceGain: Float = 1
   }
 
   var onPlay: (@Sendable ([Float], Double, Float) -> Void)?
@@ -26,6 +29,7 @@ final class SoundEffectPlayer: @unchecked Sendable {
   private var isMuted = false
   private var outputSuspended = false
   private var level: Double = 1.0
+  private var viewport = GameplaySoundViewport(x: 0, y: 0, width: 320, height: 160)
   private let recentSampleLimit = 44_100
   private var recentSamples: [Float]
   private var recentSamplePositions: [Int64]
@@ -136,8 +140,9 @@ final class SoundEffectPlayer: @unchecked Sendable {
       if !isMuted && voice.isActive {
         let position = Int(voice.position)
         if position < voice.samples.count {
-          sourceSample = voice.samples[position]
-          sample = sourceSample * Float(level) * 0.6
+          let next = min(position + 1, voice.samples.count - 1)
+          sourceSample = voice.samples[position] + (voice.samples[next] - voice.samples[position]) * Float(voice.position - Double(position))
+          sample = sourceSample * Float(level) * voice.gain * voice.distanceGain
           voice.position += voice.increment
         } else {
           voice.isActive = false
@@ -325,6 +330,7 @@ final class SoundEffectPlayer: @unchecked Sendable {
     guard !samples.isEmpty else { return }
     let index = voices.firstIndex { !$0.isActive } ?? voices.startIndex
     voices[index] = Voice(samples: samples, position: 0, increment: 1, isActive: true)
+    if spatialMixers.indices.contains(index) { spatialMixers[index].position = AVAudio3DPoint(x: 0, y: 0, z: -1) }
   }
 
   /// Turns a stereo position into a pair of channel gains.
@@ -344,30 +350,90 @@ final class SoundEffectPlayer: @unchecked Sendable {
     lock.lock(); defer { lock.unlock() }; bottomFallSounds = enabled
   }
 
-  func play(_ effect: ClassicSoundEffect, pan: Float = 0.0) {
-    lock.lock()
-    defer { lock.unlock() }
-    guard effect != .fallOut || bottomFallSounds else { return }
-    guard !isMuted, !outputSuspended, let samples = library[effect], !samples.isEmpty else { return }
-    let rate = rates[effect] ?? sampleRate
-    onPlay?(samples, rate, Float(level) * 0.6)
-    var slot = voices.firstIndex { !$0.isActive }
-    if slot == nil {
-      // Steal the voice closest to finishing, which is least noticeable.
-      slot = voices.indices.max {
-        let a = voices[$0].samples.count - Int(voices[$0].position)
-        let b = voices[$1].samples.count - Int(voices[$1].position)
-        return a > b
-      }
-    }
-    guard let index = slot else { return }
-    let clampedPan = pan.isFinite ? max(-1, min(1, pan)) : 0
+  /// Refresh active one-shots as well as the next event when the camera moves.
+  func setViewport(_ value: GameplaySoundViewport) {
+    lock.lock(); defer { lock.unlock() }
+    viewport = value
+    for index in voices.indices where voices[index].isActive { placeVoice(index) }
+  }
+
+  private func placeVoice(_ index: Int) {
+    guard let point = voices[index].worldPoint else { return }
+    let placement = viewport.placement(of: point)
+    voices[index].distanceGain = placement.gain
     if spatialMixers.indices.contains(index) {
-      let angle = clampedPan * Float.pi / 3
+      spatialMixers[index].position = AVAudio3DPoint(x: placement.x, y: placement.y, z: placement.z)
+    }
+  }
+
+  private var nukeActive = false
+  private var lastNukeImpact = -Double.infinity
+  // A brief downward pitch sweep, with a quiet octave for smaller speakers.
+  static let nukeBass: [Float] = (0..<15_435).map { i in
+    let t = Double(i) / 44100
+    let phase = 2 * Double.pi * (48 * t + 22 * 0.045 * (1 - exp(-t / 0.045)))
+    let envelope = min(1, t / 0.012) * exp(-t * 14) * pow(max(0, 1 - t / 0.35), 2)
+    return Float((sin(phase) + 0.18 * sin(phase * 2)) * envelope)
+  }
+
+  func setNukeActive(_ active: Bool) {
+    lock.lock(); defer { lock.unlock() }
+    guard active != nukeActive else { return }
+    nukeActive = active
+    lastNukeImpact = -Double.infinity
+    if active {
+      playLocked(samples: Self.nukeBass, rate: sampleRate, gain: 0.12, pan: 0, at: nil)
+    }
+  }
+
+  func playNukeImpact(at point: GameplaySoundPoint?) {
+    lock.lock(); defer { lock.unlock() }
+    playNukeImpactLocked(at: point)
+  }
+
+  private func playNukeImpactLocked(at point: GameplaySoundPoint?) {
+    let now = ProcessInfo.processInfo.systemUptime
+    guard nukeActive, !isMuted, !outputSuspended, now - lastNukeImpact >= 0.3 else { return }
+    lastNukeImpact = now
+    playLocked(samples: Self.nukeBass, rate: sampleRate, gain: 0.22, pan: 0, at: point)
+  }
+
+  func play(_ effect: ClassicSoundEffect, pan: Float = 0.0, at point: GameplaySoundPoint? = nil) {
+    lock.lock(); defer { lock.unlock() }
+    guard effect != .fallOut || bottomFallSounds, let samples = library[effect] else { return }
+    playLocked(samples: samples, rate: rates[effect] ?? sampleRate, gain: 0.6, pan: pan, at: point)
+    if effect == .explode || effect == .pop { playNukeImpactLocked(at: point) }
+  }
+
+  /// Shared spatial voices also play L2's original bank and sample pitches.
+  func play(samples: [Float], rate: Double, gain: Float = 0.5, at point: GameplaySoundPoint? = nil) {
+    lock.lock(); defer { lock.unlock() }
+    playLocked(samples: samples, rate: rate, gain: gain, pan: 0, at: point)
+  }
+
+  private func playLocked(samples: [Float], rate: Double, gain: Float, pan: Float, at point: GameplaySoundPoint?) {
+    guard !isMuted, !outputSuspended, !samples.isEmpty, rate.isFinite, rate > 0 else { return }
+    let index = voices.firstIndex { !$0.isActive } ?? voices.indices.min {
+      (Double(voices[$0].samples.count) - voices[$0].position) / voices[$0].increment <
+      (Double(voices[$1].samples.count) - voices[$1].position) / voices[$1].increment
+    }!
+    voices[index] = Voice(samples: samples, position: 0, increment: rate / sampleRate,
+                          isActive: true, worldPoint: point, gain: gain)
+    if spatialMixers.indices.contains(index) {
+      let angle = (pan.isFinite ? max(-1, min(1, pan)) : 0) * Float.pi / 3
       spatialMixers[index].position = AVAudio3DPoint(x: sin(angle), y: 0, z: -cos(angle))
     }
-    voices[index] = Voice(
-      samples: samples, position: 0, increment: rate / sampleRate, isActive: true)
+    placeVoice(index)
+    onPlay?(samples, rate, Float(level) * gain * voices[index].distanceGain)
+  }
+
+  func play(_ cues: [PositionedSoundCue]) {
+    // Collapse nearby copies, while retaining distinct sources on opposite sides.
+    var seen = Set<String>()
+    for cue in cues {
+      let region = cue.point.map { "\(Int(floor($0.x / 32))),\(Int(floor($0.y / 32)))" } ?? "interface"
+      if seen.insert(cue.effect.rawValue + region).inserted { play(cue.effect, at: cue.point) }
+    }
   }
 
   func play(_ effects: [ClassicSoundEffect], pan: Float = 0.0) {

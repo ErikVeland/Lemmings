@@ -1,0 +1,498 @@
+[
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
+      "id": "6DAD234C-24D1-61FC-39E7-BC6028BB45FA",
+      "identity": {
+        "engine": "classic",
+        "levelID": "36:Mega Drive Sunsoft:7:0:36",
+        "packID": "ohYesMoreLemmings-OHYES-60"
+      },
+      "levelNameSnapshot": "Everyone turn left (Part two)",
+      "levelNumberSnapshot": 37,
+      "packNameSnapshot": "Oh Yes! More Lemmings!",
+      "sourceRevision": "fc020d72e88706953d4737e1b5fa09f5b653d7a70e4e1c1fa1cfa5546a24a908"
+    },
+    "initialHash": "91ccded33931b089533867ceff6986b2ee88a9e27d4b0aebcf779e4e3aafbd9b",
+    "official": true,
+    "order": 296,
+    "playable": true,
+    "profile": {
+      "components": {
+        "concurrencyBurden": 0,
+        "constraintPressure": 328.6367880485527,
+        "deductionComplexityProxy": 90,
+        "executionPrecision": 1000,
+        "solutionComplexity": 97.70780907334513,
+        "techniqueBurden": 65
+      },
+      "confidence": "medium",
+      "criticalActions": [
+        0,
+        1,
+        2,
+        8,
+        10,
+        12,
+        14
+      ],
+      "detectedTechniques": [
+        "miner"
+      ],
+      "explanation": [
+        "1 used skill types; 10 assigned workers; 0 same-worker skill changes.",
+        "Maximum concurrent worker regions: 1.",
+        "Timing probes: 160. Untested alternatives remain unknown.",
+        "Deduction is a conservative proxy. Observed techniques are not proof of necessity.",
+        "Source rank: Mega Drive Sunsoft."
+      ],
+      "key": {
+        "analyserVersion": "difficulty-3",
+        "assetsRevision": "91ccded33931b089533867ceff6986b2ee88a9e27d4b0aebcf779e4e3aafbd9b:probes-160",
+        "identity": {
+          "engine": "classic",
+          "levelID": "36:Mega Drive Sunsoft:7:0:36",
+          "packID": "ohYesMoreLemmings-OHYES-60"
+        },
+        "levelRevision": "fc020d72e88706953d4737e1b5fa09f5b653d7a70e4e1c1fa1cfa5546a24a908",
+        "replayRevision": "SHA256 digest: 3c84eaf094d703223e7a1cd7693af824d7529784ea3d85c789ee5dac289e5106",
+        "simulationVersion": "37b26668bcf05cf182f04321cb5b4f4ecf274393d7b29dd858dc1f69569bd509"
+      },
+      "overallScore": 286.7685004424478,
+      "precision": {
+        "actions": [
+          {
+            "outcomes": {
+              "-1": true,
+              "-2": false,
+              "-4": false,
+              "-8": false,
+              "1": false,
+              "2": false,
+              "4": false,
+              "8": false
+            },
+            "sequence": 0
+          },
+          {
+            "outcomes": {
+              "-1": false,
+              "-2": false,
+              "-4": false,
+              "-8": false,
+              "1": true,
+              "2": false,
+              "4": false,
+              "8": false
+            },
+            "sequence": 1
+          },
+          {
+            "outcomes": {
+              "-1": true,
+              "-2": false,
+              "-4": false,
+              "-8": false,
+              "1": false,
+              "2": false,
+              "4": false,
+              "8": true
+            },
+            "sequence": 2
+          },
+          {
+            "outcomes": {
+              "-1": true,
+              "-2": true,
+              "-4": false,
+              "-8": true,
+              "1": true,
+              "2": true,
+              "4": true,
+              "8": false
+            },
+            "sequence": 3
+          },
+          {
+            "outcomes": {
+              "-1": true,
+              "-2": true,
+              "-4": true,
+              "-8": false,
+              "1": false,
+              "2": false,
+              "4": false,
+              "8": false
+            },
+            "sequence": 4
+          },
+          {
+            "outcomes": {
+              "-1": false,
+              "-2": false,
+              "-4": false,
+              "-8": false,
+              "1": true,
+              "2": true,
+              "4": true,
+              "8": true
+            },
+            "sequence": 5
+          },
+          {
+            "outcomes": {
+              "-1": true,
+              "-2": true,
+              "-4": true,
+              "-8": false,
+              "1": false,
+              "2": false,
+              "4": false,
+              "8": true
+            },
+            "sequence": 6
+          },
+          {
+            "outcomes": {
+              "-1": false,
+              "-2": false,
+              "-4": false,
+              "-8": true,
+              "1": true,
+              "2": true,
+              "4": true,
+              "8": true
+            },
+            "sequence": 7
+          },
+          {
+            "outcomes": {
+              "-1": false,
+              "-2": true,
+              "-4": true,
+              "-8": true,
+              "1": true,
+              "2": false,
+              "4": false,
+              "8": false
+            },
+            "sequence": 8
+          },
+          {
+            "outcomes": {
+              "-1": true,
+              "-2": true,
+              "-4": false,
+              "-8": true,
+              "1": false,
+              "2": false,
+              "4": true,
+              "8": true
+            },
+            "sequence": 9
+          },
+          {
+            "outcomes": {
+              "-1": false,
+              "-2": true,
+              "-4": true,
+              "-8": true,
+              "1": false,
+              "2": false,
+              "4": true,
+              "8": true
+            },
+            "sequence": 10
+          },
+          {
+            "outcomes": {
+              "-1": true,
+              "-2": true,
+              "-4": true,
+              "-8": true,
+              "1": true,
+              "2": true,
+              "4": true,
+              "8": true
+            },
+            "sequence": 11
+          },
+          {
+            "outcomes": {
+              "-1": false,
+              "-2": false,
+              "-4": false,
+              "-8": true,
+              "1": true,
+              "2": false,
+              "4": false,
+              "8": false
+            },
+            "sequence": 12
+          },
+          {
+            "outcomes": {
+              "-1": true,
+              "-2": false,
+              "-4": false,
+              "-8": false,
+              "1": true,
+              "2": true,
+              "4": true,
+              "8": true
+            },
+            "sequence": 13
+          },
+          {
+            "outcomes": {
+              "-1": true,
+              "-2": false,
+              "-4": false,
+              "-8": false,
+              "1": false,
+              "2": false,
+              "4": false,
+              "8": false
+            },
+            "sequence": 14
+          },
+          {
+            "outcomes": {
+              "-1": true,
+              "-2": false,
+              "-4": true,
+              "-8": false,
+              "1": true,
+              "2": true,
+              "4": true,
+              "8": true
+            },
+            "sequence": 15
+          },
+          {
+            "outcomes": {
+              "-1": false,
+              "-2": true,
+              "-4": true,
+              "-8": true,
+              "1": true,
+              "2": true,
+              "4": true,
+              "8": false
+            },
+            "sequence": 16
+          },
+          {
+            "outcomes": {
+              "-1": true,
+              "-2": true,
+              "-4": true,
+              "-8": true,
+              "1": false,
+              "2": false,
+              "4": true,
+              "8": true
+            },
+            "sequence": 17
+          },
+          {
+            "outcomes": {
+              "-1": true,
+              "-2": true,
+              "-4": true,
+              "-8": true,
+              "1": true,
+              "2": true,
+              "4": false,
+              "8": false
+            },
+            "sequence": 18
+          },
+          {
+            "outcomes": {
+              "-1": true,
+              "-2": true,
+              "-4": true,
+              "-8": false,
+              "1": true,
+              "2": true,
+              "4": true,
+              "8": true
+            },
+            "sequence": 19
+          }
+        ],
+        "alternativeRunCount": 0,
+        "assignmentCount": 20,
+        "completed": false,
+        "orderingOutcomes": [],
+        "runCount": 160,
+        "selectionOutcomes": []
+      },
+      "prerequisiteConcepts": [],
+      "sourceRank": "Mega Drive Sunsoft"
+    }
+  },
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
+      "id": "6391D56B-776A-BFF0-A23C-7F3743FEB75F",
+      "identity": {
+        "engine": "classic",
+        "levelID": "4:Flurry:5:4:4",
+        "packID": "holidayLemmings1993-MACLEVL-32"
+      },
+      "levelNameSnapshot": "Christmas South of the Equator",
+      "levelNumberSnapshot": 5,
+      "packNameSnapshot": "Holiday Lemmings 1993",
+      "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e"
+    },
+    "initialHash": "2e2ca9584121f816f2a2e4acc107e904f3546ebc4d6c01b2f27623b61df9ccd2",
+    "official": true,
+    "order": 232,
+    "playable": true,
+    "profile": {
+      "components": {
+        "concurrencyBurden": 0,
+        "constraintPressure": 218.41960784313727,
+        "deductionComplexityProxy": 170,
+        "executionPrecision": 275,
+        "solutionComplexity": 57,
+        "techniqueBurden": 65
+      },
+      "confidence": "high",
+      "criticalActions": [],
+      "detectedTechniques": [
+        "miner"
+      ],
+      "explanation": [
+        "1 used skill types; 1 assigned workers; 0 same-worker skill changes.",
+        "Maximum concurrent worker regions: 1.",
+        "Timing probes: 10. Untested alternatives remain unknown.",
+        "Deduction is a conservative proxy. Observed techniques are not proof of necessity.",
+        "Source rank: Flurry."
+      ],
+      "key": {
+        "analyserVersion": "difficulty-3",
+        "assetsRevision": "2e2ca9584121f816f2a2e4acc107e904f3546ebc4d6c01b2f27623b61df9ccd2:probes-160",
+        "identity": {
+          "engine": "classic",
+          "levelID": "4:Flurry:5:4:4",
+          "packID": "holidayLemmings1993-MACLEVL-32"
+        },
+        "levelRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+        "replayRevision": "SHA256 digest: c8d047c29c81bcb8f682845c5d5d10d2a71bd136c692c9e2498ec51693c9d96b",
+        "simulationVersion": "37b26668bcf05cf182f04321cb5b4f4ecf274393d7b29dd858dc1f69569bd509"
+      },
+      "overallScore": 124.08454901960785,
+      "precision": {
+        "actions": [
+          {
+            "outcomes": {
+              "-1": true,
+              "-16": false,
+              "-2": true,
+              "-4": true,
+              "-8": true,
+              "1": true,
+              "16": false,
+              "2": false,
+              "4": false,
+              "8": false
+            },
+            "sequence": 0
+          }
+        ],
+        "alternativeRunCount": 0,
+        "assignmentCount": 1,
+        "completed": true,
+        "orderingOutcomes": [],
+        "runCount": 10,
+        "selectionOutcomes": []
+      },
+      "prerequisiteConcepts": [],
+      "sourceRank": "Flurry"
+    }
+  },
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
+      "id": "903D32E3-B1AC-10AB-1346-B7DFE0C0F9D8",
+      "identity": {
+        "engine": "classic",
+        "levelID": "16:Tame:17:12:0",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "levelNameSnapshot": "Honey, I Saved The Lemmings",
+      "levelNumberSnapshot": 17,
+      "packNameSnapshot": "Oh No! More Lemmings",
+      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25"
+    },
+    "initialHash": "83f049d8098c9441bae1d919ec9358f8d3ecfad05bec2d7d2e34245bc476efb0",
+    "official": true,
+    "order": 140,
+    "playable": true,
+    "profile": {
+      "components": {
+        "concurrencyBurden": 0,
+        "constraintPressure": 279.76960784313724,
+        "deductionComplexityProxy": 170,
+        "executionPrecision": 275,
+        "solutionComplexity": 57,
+        "techniqueBurden": 65
+      },
+      "confidence": "high",
+      "criticalActions": [],
+      "detectedTechniques": [
+        "miner"
+      ],
+      "explanation": [
+        "1 used skill types; 1 assigned workers; 0 same-worker skill changes.",
+        "Maximum concurrent worker regions: 1.",
+        "Timing probes: 10. Untested alternatives remain unknown.",
+        "Deduction is a conservative proxy. Observed techniques are not proof of necessity.",
+        "Source rank: Tame."
+      ],
+      "key": {
+        "analyserVersion": "difficulty-3",
+        "assetsRevision": "83f049d8098c9441bae1d919ec9358f8d3ecfad05bec2d7d2e34245bc476efb0:probes-160",
+        "identity": {
+          "engine": "classic",
+          "levelID": "16:Tame:17:12:0",
+          "packID": "ohNoMoreLemmings-DLVEL-100"
+        },
+        "levelRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+        "replayRevision": "SHA256 digest: f5f4b7b193ff189141e7aa7728128aa8bb7f8ad31ecb38b38fa943e36b6e8d20",
+        "simulationVersion": "37b26668bcf05cf182f04321cb5b4f4ecf274393d7b29dd858dc1f69569bd509"
+      },
+      "overallScore": 132.06004901960785,
+      "precision": {
+        "actions": [
+          {
+            "outcomes": {
+              "-1": true,
+              "-16": false,
+              "-2": true,
+              "-4": false,
+              "-8": false,
+              "1": true,
+              "16": false,
+              "2": true,
+              "4": true,
+              "8": true
+            },
+            "sequence": 0
+          }
+        ],
+        "alternativeRunCount": 0,
+        "assignmentCount": 1,
+        "completed": true,
+        "orderingOutcomes": [],
+        "runCount": 10,
+        "selectionOutcomes": []
+      },
+      "prerequisiteConcepts": [],
+      "sourceRank": "Tame"
+    }
+  }
+]

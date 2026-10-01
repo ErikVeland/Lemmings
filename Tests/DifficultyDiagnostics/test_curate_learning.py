@@ -23,7 +23,7 @@ class CurriculumTests(unittest.TestCase):
                         'components':{'techniqueBurden':65,'solutionComplexity':40+n,
                             'executionPrecision':0,'concurrencyBurden':0,
                             'constraintPressure':30,'deductionComplexityProxy':30}}})
-                replays[replay_id] = {'initialStateHash':replay_id,'expected':{'didWin':True},
+                replays[replay_id] = {'initialStateHash':replay_id,'expected':{'didWin':True,'ticks':100},
                     'events':[{'tick':10,'action':{'assign':{'lemmingID':0,'skill':skill}}}]}
         return rows,replays
 
@@ -39,7 +39,27 @@ class CurriculumTests(unittest.TestCase):
         rows,replays = self.pool()
         for key,replay in replays.items():
             if key.startswith('floater'): replay['expected']['didWin'] = False
-        with self.assertRaises(AssertionError): curation.select(rows,replays)
+        self.assertIn('introduce:floater', curation.select(rows,replays)['unavailableOptionalObjectives'])
+
+    def test_replays_rejected_by_hints_cannot_supply_a_lesson(self):
+        rows,replays = self.pool()
+        for replay_id,replay in replays.items():
+            if replay_id.endswith('0'):
+                replay['events'].append({'tick':101,'action':{'nuke':{}}})
+            if replay_id.endswith('1'):
+                replay['events'][0]['tick'] = 0
+        result = curation.select(rows,replays)
+        self.assertTrue(all(l['level'].endswith('2') for l in result['lessons']))
+
+    def test_demanding_introduction_stays_deferred_even_with_complete_probes(self):
+        rows,replays = self.pool()
+        for row in rows:
+            if row['profile']['detectedTechniques'] == ['miner']:
+                row['profile']['components']['executionPrecision'] = 275
+                row['profile']['precision'] = {'completed': True}
+        result = curation.select(rows,replays)
+        self.assertIn('introduce:miner', result['unavailableOptionalObjectives'])
+        self.assertFalse(any(l['objective'] == 'introduce:miner' for l in result['lessons']))
 
     def test_repeated_builders_are_not_new_sequences(self):
         rows,_ = self.pool()
@@ -70,7 +90,7 @@ class CurriculumTests(unittest.TestCase):
             return curation.application_signature(curation.features(rows[0], {'events':events}))
         self.assertEqual(signature([0]), signature([1,2,3]))
 
-    def test_current_path_is_selective_and_intermediate_led(self):
+    def test_current_path_is_selective_and_respects_placement_floors(self):
         plan=json.loads((ROOT/'Artifacts/LearningJourney/curriculum.json').read_text())
         manifest=json.loads((ROOT/'Resources/Progression/learning.json').read_text())
         goals={json.dumps(l['identity'],sort_keys=True):l for l in plan['lessons']}
@@ -90,7 +110,13 @@ class CurriculumTests(unittest.TestCase):
                 self.assertLess(goal['intrinsicDemand'],180)
             if lesson['stage']=='Fun': self.assertFalse(lesson['preparationGaps'])
         self.assertLess(introductions,8)
-        self.assertGreaterEqual(sum(l['stage']=='Intermediate' for l in lessons),len(lessons)/2)
-        self.assertLessEqual(max(b['demand']-a['demand'] for a,b in zip(lessons,lessons[1:])),65)
+        self.assertTrue(all(b['demand'] >= a['demand'] for a,b in zip(lessons,lessons[1:])))
+        summary=json.loads((ROOT/'Artifacts/LearningJourney/summary.json').read_text())
+        self.assertEqual(summary['levels'],len(lessons))
+        self.assertEqual(summary['stages'],{stage:sum(l['stage']==stage for l in lessons)
+                         for stage in ('Fun','Intermediate','Difficult','Expert')})
+        for a,b in zip(lessons,lessons[1:]):
+            if b['demand']-a['demand'] > 65:
+                self.assertTrue(b['needsSupport'])
 
 if __name__=='__main__': unittest.main()

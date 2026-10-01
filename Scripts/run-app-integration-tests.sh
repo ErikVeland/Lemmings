@@ -1,6 +1,10 @@
 #!/bin/zsh
 set -euo pipefail
 project_dir="${0:A:h:h}"
+if [[ "${TEST_SCOPE:-all}" == selection-hdr && "${TEST_COMPILE_ONLY:-0}" != 1 && "${LEMMINGS_TEST_WINDOWS:-offscreen}" == offscreen ]]; then
+  print -u2 "Selection HDR checks need composited windows. Set LEMMINGS_TEST_WINDOWS=secondary or foreground."
+  exit 2
+fi
 test_arch="${TEST_ARCH:-$(uname -m)}"
 [[ "$test_arch" == arm64 || "$test_arch" == x86_64 ]] || exit 1
 build_dir="$project_dir/.build/app-integration-tests-$test_arch"
@@ -35,6 +39,7 @@ resource_app="${LEMMINGS_TEST_APP:-$project_dir/.build/local/Ultimate Lemmings.a
 ln -sfn "$resource_app/Contents/Resources" "$test_app/Contents/Resources"
 test_flags=()
 if [[ "${TEST_SCOPE:-all}" == selection-hdr ]]; then test_flags+=(-D SELECTION_HDR_TESTS); fi
+if [[ "${TEST_SCOPE:-all}" == selection-raster ]]; then test_flags+=(-D SELECTION_HDR_TESTS -D SELECTION_RASTER_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == sessions ]]; then test_flags+=(-D SESSION_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == music ]]; then test_flags+=(-D MUSIC_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == dialogs ]]; then test_flags+=(-D DIALOG_TESTS); fi

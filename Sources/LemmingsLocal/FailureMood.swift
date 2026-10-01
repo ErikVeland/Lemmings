@@ -27,6 +27,8 @@ enum FailureMoodDecision {
 /// A short transition into the unmistakable, but reversible, failed-run mood.
 @MainActor final class FailureMoodTransition {
   nonisolated(unsafe) private var timer: Timer?
+  private let duration: Double
+  init(duration: Double = 0.9) { self.duration = duration }
   private var startedAt = 0.0
   private var startAmount: CGFloat = 0
   private var targetAmount: CGFloat = 0
@@ -44,7 +46,7 @@ enum FailureMoodDecision {
     timer = Timer.scheduledTimer(withTimeInterval: 1.0 / 30.0, repeats: true) { [weak self] _ in
       MainActor.assumeIsolated {
         guard let self else { return }
-        let progress = min(1, max(0, (ProcessInfo.processInfo.systemUptime - self.startedAt) / 0.9))
+        let progress = min(1, max(0, (ProcessInfo.processInfo.systemUptime - self.startedAt) / self.duration))
         let eased = progress * progress * (3 - 2 * progress)
         self.amount = self.startAmount + (self.targetAmount - self.startAmount) * CGFloat(eased)
         self.onChange?(self.amount)

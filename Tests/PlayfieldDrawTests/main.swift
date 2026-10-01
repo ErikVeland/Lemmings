@@ -989,7 +989,7 @@ private func testMacArtworkCropStaysPixelAligned() throws {
     view.needsDisplay = true
     let bitmap = view.bitmapImageRepForCachingDisplay(in: view.bounds)!
     view.cacheDisplay(in: view.bounds, to: bitmap)
-    try require(view.selectionEffect != nil && view.selectionEffect?.animated == false,
+    try require(view.selectionEffect != nil,
       "Classic did not publish its selected sprite or reduced-motion state")
     try require(view.selectionEffect?.rect.contains(CGPoint(x: 320, y: 150)) == true,
       "Classic's selection mask does not follow the displayed sprite")

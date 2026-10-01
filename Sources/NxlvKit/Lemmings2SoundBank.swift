@@ -8,6 +8,10 @@ public enum Lemmings2SoundCue: Int, Sendable, Hashable {
 }
 
 public struct Lemmings2SoundRequest: Sendable, Hashable {
+    public private(set) var point: GameplaySoundPoint?
+    public func positioned(x: Int, y: Int) -> Self {
+        var copy = self; copy.point = GameplaySoundPoint(x: Double(x), y: Double(y)); return copy
+    }
     public let isBottomFall: Bool
     public let sample: Int
     public let timeConstant: UInt8?

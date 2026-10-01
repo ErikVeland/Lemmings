@@ -4,6 +4,13 @@
 # signed bundle that ships.
 set -euo pipefail
 
+# The signed shipping app must exercise its real full-screen launch. It cannot
+# load the test runner's window policy under the hardened runtime.
+if [[ "${LEMMINGS_TEST_WINDOWS:-offscreen}" != foreground ]]; then
+  print -u2 "Launch smoke needs the real desktop. Run with LEMMINGS_TEST_WINDOWS=foreground when the playfield is free."
+  exit 2
+fi
+
 app="${1:?Usage: run-launch-smoke-test.sh APP [SECONDS]}"
 seconds="${2:-${LAUNCH_SMOKE_SECONDS:-15}}"
 app="${app:A}"

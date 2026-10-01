@@ -68,6 +68,30 @@ bundled app or any gameplay flow.
 Run `zsh Scripts/run-dialog-cursor-tests.sh` for the data-independent focus-order
 and cursor-policy checks.
 
+Native UI tests use offscreen windows by default. They still render captures
+and exercise controls without covering the game. They need a logged-in macOS
+desktop. This is not a WindowServer-free CI mode.
+Mechanical tests also default to `LEMMINGS_TEST_AUDIO=muted`. The runner silences
+music, effects, replay audio and alert beeps without changing system volume or
+saved preferences. Playback clocks still run. Keep audio muted in every window
+mode. Use `LEMMINGS_TEST_AUDIO=audible` only for an explicitly requested listening
+test. Run `zsh Scripts/run-ui-test-runner-tests.sh` to check these safeguards.
+Keep automated runs headless while the user tests gameplay. Report failures and
+checks that require visible windows in the test output. Never switch to a visible
+mode automatically. The following visible modes require an explicit user request.
+Set `LEMMINGS_TEST_WINDOWS=secondary` to show test windows on the second display
+(offscreen if there is only one display or the window is too large).
+This mode allows composited captures and may activate the test app at launch.
+Set `LEMMINGS_TEST_WINDOWS=foreground`
+for desktop focus checks or manual inspection. The arcade suite reports its
+desktop focus check as skipped unless foreground mode is selected.
+Offscreen mode preserves bitmap rendering and responder-chain checks. Use
+`TEST_SCOPE=selection-raster` for selection checks across all three engines. Metal/HDR
+window-composition checks (`TEST_SCOPE=selection-hdr`) need secondary or foreground mode.
+The runner applies this policy to test processes only. Packaged-app launch smoke
+tests require `LEMMINGS_TEST_WINDOWS=foreground` because they exercise the signed
+app's real launch and full-screen presentation.
+
 The iOS source target supports iOS 16 or later. Its first player-facing slice
 imports a player-owned Classic DOS folder through the system document picker.
 It does not package commercial game data.

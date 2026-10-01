@@ -315,6 +315,42 @@ struct DifficultyTests {
         #expect(profile.confidence != .low)
     }
 
+    @Test func classicTimingBudgetOnlyMeasuresSuccessfulInputs() throws {
+        let width = 96, height = 96
+        let terrain = try ClassicDOSTerrain(width: width, height: height,
+            solidMask: Data((0..<(width * height)).map { $0 / width >= 64 ? UInt8(1) : UInt8(0) }),
+            steelMask: Data(repeating: 0, count: width * height))
+        let configuration = ClassicDOSConfiguration(totalLemmings: 1, requiredToSave: 1,
+            timeLimitTicks: 1000, initialReleaseRate: 55, entrances: [.init(x: 16, y: 30)],
+            triggers: [.init(id: 0, effect: .exit, bounds: .init(x1: 48, y1: 60, x2: 64, y2: 68))],
+            initialSkills: [.climber: 1],
+            maximumX: width - 1, maximumY: height - 1)
+        let initial = try ClassicDOSSimulation(terrain: terrain, configuration: configuration)
+        var probe = initial
+        while !probe.lemmings.contains(where: { $0.action == .walking }) { _ = probe.tick() }
+        for live in [false, true] {
+            var events = (1...12).map {
+                ClassicDOSReplayEvent(tick: $0, action: .assign(lemmingID: 0, skill: .basher))
+            }
+            events += [.init(tick: live ? 0 : 1, action: .releaseRate(99), afterTick: live),
+                       .init(tick: probe.tickCount, action: .assign(lemmingID: 0, skill: .climber), afterTick: live),
+                       .init(tick: 2000, action: .assign(lemmingID: 0, skill: .miner))]
+            let replay = ClassicDOSReplay(rank: "Fixture", number: 1, title: "Noisy inputs",
+                initialStateHash: ClassicDOSReplayRecorder.stateHash(of: initial), events: events)
+            let expected = try ClassicDOSReplayPlayer.run(replay, simulation: initial)
+            #expect(expected.didWin)
+            let checked = ClassicDOSReplay(rank: replay.rank, number: replay.number, title: replay.title,
+                initialStateHash: replay.initialStateHash, events: events, expected: expected)
+            let profile = try ClassicDifficultyAnalysis.analyse(initial: initial, replay: checked,
+                key: key(), maximumProbeRuns: 10)
+            #expect(profile.detectedTechniques == ["climber", "release-rate-manipulation"])
+            #expect(profile.precision?.assignmentCount == 1)
+            #expect(profile.precision?.runCount == 10)
+            #expect(profile.precision?.completed == true)
+            #expect(profile.precision?.actions.first?.sequence == 13)
+        }
+    }
+
     @Test func routineCrowdAssignmentsAreNotIndependentWorkers() {
         var many = solution()
         many.assignments = (0..<10).map { .init(frame: $0 * 20, worker: $0, skill: "builder") }

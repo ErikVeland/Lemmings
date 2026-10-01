@@ -517,7 +517,6 @@ struct CRTUniforms {
       descriptor.colorAttachments[0].storeAction = .store
       if let encoder = buffer.makeRenderCommandEncoder(descriptor: descriptor) {
         selectionRenderer.encode(selection, sourceSize: sourceSize, outputSize: layer.drawableSize,
-          headroom: uniforms.hdrHeadroom, now: ProcessInfo.processInfo.systemUptime,
           glass: SIMD4(settings.curvature, settings.curvatureY, settings.cornerRadius, settings.cornerSoftness),
           into: encoder)
         encoder.endEncoding()
