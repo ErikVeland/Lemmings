@@ -46,6 +46,7 @@ if [[ "${TEST_SCOPE:-all}" == dialogs ]]; then test_flags+=(-D DIALOG_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == transport ]]; then test_flags+=(-D TRANSPORT_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == loading-latency ]]; then test_flags+=(-D LOADING_LATENCY_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == cursor-input ]]; then test_flags+=(-D CURSOR_INPUT_TESTS); fi
+if [[ "${TEST_SCOPE:-all}" == release-ui ]]; then test_flags+=(-D RELEASE_UI_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == hot-seat ]]; then test_flags+=(-D HOT_SEAT_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == hd-effects ]]; then test_flags+=(-D HD_EFFECTS_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == variable-speed ]]; then test_flags+=(-D VARIABLE_SPEED_TESTS); fi

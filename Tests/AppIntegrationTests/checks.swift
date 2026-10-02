@@ -4130,6 +4130,7 @@ extension AppDelegate {
   }
 
   fileprivate func testGamePages() throws {
+    playfield.startCountdown.cancel()
     let running = FinalTickSession(win: false, finalTick: 1000)
     session = running; phase = .playing; isPaused = false; lastStepTime = 1; accumulator = 0
     let count = NSApp.windows.count
@@ -4165,7 +4166,7 @@ extension AppDelegate {
     try check(confirmed == 1 && !GameScreen.shared.isPresented && NSApp.windows.count == count,
       "Native confirmation failed to invoke its action and return to the game")
     print("PASS same-window pages, paused clock, display changes, focus and resuming play")
-    let welcome = ReleaseWelcome(build: 58, version: ReleaseWelcome.notesVersion)
+    let welcome = ReleaseWelcome(build: 61, version: ReleaseWelcome.notesVersion)
     welcome.show(in: window)
     guard let notes = GameScreen.shared.controllerPage(in: window) else {
       throw IntegrationFailure(message: "Release notes did not open")
@@ -5392,7 +5393,7 @@ Task { @MainActor in
     subject.prepareArcadeTests()
     // Match normal startup: use the packaged index before opening the home screen.
     FanLevelLibrary.Progress.seedBundledCounts()
-    #if !SELECTION_HDR_TESTS && !CURSOR_INPUT_TESTS && !LOADING_LATENCY_TESTS && !TRANSPORT_TESTS && !DIALOG_TESTS && !NEO_RECOVERY_TESTS && !NEO_PACK_TESTS && !LEARNING_TESTS
+    #if !SELECTION_HDR_TESTS && !CURSOR_INPUT_TESTS && !RELEASE_UI_TESTS && !LOADING_LATENCY_TESTS && !TRANSPORT_TESTS && !DIALOG_TESTS && !NEO_RECOVERY_TESTS && !NEO_PACK_TESTS && !LEARNING_TESTS
     try subject.testFailureMoodDecision()
     try subject.testSteppedCompletion()
     try subject.testFirstLaunchEffects()
@@ -5495,6 +5496,23 @@ Task { @MainActor in
     try subject.testMenuDisplayTransition()
     try await subject.testCRTInput()
     print("Variable speed integration tests passed.")
+    #elseif RELEASE_UI_TESTS
+    try subject.testPauseKeyRelease()
+    let pauseL2 = try Lemmings2PlayWindow(root: BundledGameResources.lemmings2(), recordsCampaignProgress: false)
+    try pauseL2.testPauseKeyboard()
+    let pauseL3 = try Lemmings3PlayWindow(root: BundledGameResources.lemmings3(), recordsCampaignProgress: false)
+    try pauseL3.testPauseKeyboard()
+    try subject.testPageKeyboardContinuation()
+    try subject.testDialogNavigation()
+    try subject.testGamePages()
+    try subject.testEarlyNukeEndsLevel()
+    try subject.testRunRecovery()
+    try subject.testFanRunRecovery()
+    try subject.testNeoRunRecovery()
+    try await subject.testLearningJourneyEntriesResolve()
+    try await subject.testLearningJourneySessionsStart()
+    try await subject.testPlaylistSessions()
+    print("PASS release UI: cursor presets, backpacks, input, dialogs, welcome, nuke, recovery, journey and cross-game sessions")
     #elseif CURSOR_INPUT_TESTS
     try subject.testPauseKeyRelease()
     let pauseL2 = try Lemmings2PlayWindow(root: BundledGameResources.lemmings2(), recordsCampaignProgress: false)
