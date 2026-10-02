@@ -55,6 +55,30 @@ do {
     try require(aborted.isComplete && aborted.lost == 1 && aborted.tick == abortedTick, "L3 abort is terminal")
     print("PASS experimental L3 landing, blocker, turn, jump, exit and deterministic ticks")
 
+    func riseGame(direction: Int, blockedAhead: Bool = false) throws -> Lemmings3Runtime {
+        var terrain = [UInt16](repeating: 0x1000, count: 128 * 64)
+        for y in 48..<64 { for x in 0..<128 { terrain[y * 128 + x] = 0x20 } }
+        let wallX = 20 + direction
+        for y in 42..<48 { terrain[y * 128 + wallX] = 0x20 }
+        if blockedAhead { terrain[34 * 128 + wallX + direction * 8] = 0x20 }
+        var run = try Lemmings3Runtime(configuration: .init(width: 128, height: 64, attributes: terrain,
+            entrance: .init(x: 20, y: 40), exits: [.init(x: 110, y: 46)],
+            total: 1, releaseInterval: 1, releaseDelay: 0))
+        for _ in 0..<6 { run.step() }
+        if direction < 0 { try require(run.assign(.walker, to: 0), "L3 faces the left rise") }
+        run.step()
+        return run
+    }
+    for direction in [-1, 1] {
+        let risen = try riseGame(direction: direction)
+        try require(risen.lemmings[0].x == 20 + direction && risen.lemmings[0].y == 42,
+            "L3 crosses a six-pixel rise in either direction")
+    }
+    let blockedRise = try riseGame(direction: 1, blockedAhead: true)
+    try require(blockedRise.lemmings[0].x == 20 && blockedRise.lemmings[0].direction == -1,
+        "L3 checks projected clearance before a high rise")
+    print("PASS L3 directional high rise and projected clearance")
+
     var trapTags = tags
     for y in 46..<48 { for x in 40..<56 { trapTags[y * 128 + x] = 0x4000 } }
     let trap = Lemmings3Runtime.Trap(id: 0, cells: [.init(x: 40, y: 46), .init(x: 48, y: 46)], frameCount: 12)

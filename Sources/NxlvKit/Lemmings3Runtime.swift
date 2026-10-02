@@ -596,7 +596,12 @@ public struct Lemmings3Runtime: Sendable {
                 if lemmings.contains(where: { $0.state == .blocking && $0.id != lem.id && abs($0.y - lem.y) < 5 && abs($0.x - nx) < 9 && ($0.x - lem.x) * lem.direction > 0 }) {
                     lem.direction *= -1
                 } else if isSolid(nx, lem.y - 1) {
-                    if let rise = (1...4).first(where: { isSolid(nx, lem.y - $0) && !isSolid(nx, lem.y - $0 - 1) }) { lem.x = nx; lem.y -= rise }
+                    let contactPhase = lem.direction > 0 ? 5 : 3
+                    let maxRise = (nx & 7) == contactPhase ? 8 : 4
+                    if let rise = (1...maxRise).first(where: { rise in
+                        isSolid(nx, lem.y - rise) && !isSolid(nx, lem.y - rise - 1) &&
+                        (rise <= 4 || (0..<4).allSatisfy { !isSolid(nx + lem.direction * 8, lem.y - 14 + 2 * $0) })
+                    }) { lem.x = nx; lem.y -= rise }
                     else if lem.mobilityTool == .sucker { lem.state = .climbing; lem.age = 0 }
                     else { lem.direction *= -1 }
                 } else {
