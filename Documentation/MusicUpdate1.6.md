@@ -96,8 +96,9 @@ See [packaging](../Tools/MusicCatalogue/README.md) and
   compensation, rhythm isolation, vinyl stop and rapid resume.
 - App tests cover pause input and retry behaviour in all three engines. Rendered
   Audio and library states have input-target and keyboard checks.
-- The local build is not a public release. The `music-1.6` asset URLs are prepared
-  but the archives are not published; live public downloads are unverified.
+- The `music-1.6` archives are public. On 2 October 2026, all 18 asset sizes and
+  hashes matched the bundled catalogue, and all download URLs returned ZIP data.
+  See the [live checks](ReleaseReadiness/1.7.7-build61/slim-live-libraries.json).
 - The fingerprint migration verified that all 105 replay-engine files are
   unchanged, validated all 268 witness hashes, and excluded four music-only files
   from future physics identities. Rescue proofs and hints use the new identity.

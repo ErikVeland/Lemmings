@@ -1,0 +1,8 @@
+{
+  "sourceCommit": "17498ea029200507d6064ce897d6711f45938079",
+  "musicScope": "main",
+  "musicVersions": 54,
+  "optionalLibraries": 18,
+  "unchangedFilesOutsideMusicBeforeSigning": 13679,
+  "compiledCode": "copied from the published 1.7.7 build 61 without recompilation"
+}

@@ -1,0 +1,24 @@
+PASS complete index, verified installation, source hashes, atomic replacement and corrupt-update preservation
+PASS unsafe path rejection and installed-library discovery
+PASS rhythm loops follow re-encoded playback hashes
+PASS composer: complete archive and every file hash
+PASS demos: complete archive and every file hash
+PASS port-arcade: complete archive and every file hash
+PASS port-archimedes: complete archive and every file hash
+PASS port-dos-opl2: complete archive and every file hash
+PASS port-dos-opl3: complete archive and every file hash
+PASS port-fm-towns: complete archive and every file hash
+PASS port-game-boy: complete archive and every file hash
+PASS port-lynx: complete archive and every file hash
+PASS port-master-system: complete archive and every file hash
+PASS port-mega-drive: complete archive and every file hash
+PASS port-nes: complete archive and every file hash
+PASS port-pc-98: complete archive and every file hash
+PASS port-snes: complete archive and every file hash
+PASS port-spectrum: complete archive and every file hash
+PASS port-tandy: complete archive and every file hash
+PASS port-x68000: complete archive and every file hash
+PASS remixes: complete archive and every file hash
+PASS main + optional libraries cover all 495 versions exactly once
+main: 54 versions, 5.6 MB
+PASS slim packaging rebuilds the main soundtrack set and drops other recordings

@@ -25,6 +25,13 @@ Public 1.7.7 build 61 is the current release. The
 the notarised archive, signed live feed and validation limits. Publish an
 appcast only with its matching signed and notarised archive.
 
+Public releases require a slim fresh-install download. It includes the
+54 essential music versions and offers missing optional libraries on first
+launch. Libraries already downloaded to Application Support are retained.
+The full archive remains the Sparkle update because older apps also store
+optional music inside the app bundle. Moving those updates to slim packages
+requires a migration that preserves that music before Sparkle replaces the app.
+
 ## Player experience
 
 Compatible updates discovered by Sparkle add a pixel download icon to the shared
@@ -44,8 +51,9 @@ soundtrack downloads at any time.
 1. Freeze the source and assets.
 2. Run `Scripts/build-and-notarise.sh` without publication.
 3. Check the printed ZIPs, stamped notes, signed appcast and release gates.
-4. Set `RELEASE_TAG`, `RELEASE_VERSION`, `RELEASE_COMMIT` and
-   `RELEASE_NOTES_PATH` from the package run.
+4. Set `RELEASE_TAG`, `RELEASE_VERSION`, `RELEASE_COMMIT`, `RELEASE_NOTES_PATH`
+   and `DOWNLOAD_ZIP` from the package run. `DOWNLOAD_ZIP` is the notarised slim
+   archive. It is required, even when the full update archive is ready first.
 5. Run `Scripts/publish-github-release.sh --check` with the printed update ZIP path.
 6. For public tests, create a GitHub prerelease with the exact tag and frozen commit.
 7. Publish the verified ZIP and attachments. Update `main/appcast.xml` with the signed feed.

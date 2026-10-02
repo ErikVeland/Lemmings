@@ -6,8 +6,9 @@ The current public macOS release is 1.7.7 build 61. The
 the notarised full-soundtrack update, signed feed and validation limits. This
 release adds Original cursors, optional Classic skill backpacks, revised icon
 and count sizes, and the nuke music sweep. Fan replay state/timing differences
-remain documented. Optional slim and additional target archives are not
-published for this build. L2 and L3 remain Preview and NeoLemmix remains Beta.
+remain documented. The required [slim download is being restored](ReleaseReadiness/1.7.7SlimDownload.md);
+its notarisation is blocked by a Keychain credential lookup failure. Additional
+target archives are not published. L2 and L3 remain Preview and NeoLemmix remains Beta.
 Foreground shipping-app launch and audible checks were not run for 1.7.7.
 Updated 2 October 2026 for the 1.7, 1.8 and 2.0 roadmap targets.
 Automated checks support the recorded routes;

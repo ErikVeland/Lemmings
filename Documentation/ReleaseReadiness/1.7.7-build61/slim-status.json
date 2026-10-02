@@ -1,0 +1,9 @@
+{
+  "state": "awaiting-notarisation-credentials",
+  "sourceCommit": "17498ea029200507d6064ce897d6711f45938079",
+  "submissionArchive": "slim-submission.zip",
+  "submissionBytes": 159204622,
+  "submissionSHA256": "5ce807ac609f33cfb4ba7573cdad5a8a7d0d2f8b0a4bbb1407f3fbeefb760fdb",
+  "error": "No Keychain password item found for profile: lemmings-beta",
+  "published": false
+}
