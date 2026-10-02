@@ -3,12 +3,12 @@
 Classic 1.0 is the historical macOS release baseline, confirmed on 13 September 2026.
 The current public macOS release is 1.7.7 build 61. The
 [1.7.7 distribution record](ReleaseReadiness/1.7.7Build61Distribution.md) records
-the notarised full-soundtrack update, signed feed and validation limits. This
+the notarised slim download, full-soundtrack update, signed feed and validation limits. This
 release adds Original cursors, optional Classic skill backpacks, revised icon
 and count sizes, and the nuke music sweep. Fan replay state/timing differences
-remain documented. The required [slim download is being restored](ReleaseReadiness/1.7.7SlimDownload.md);
-its notarisation is blocked by a Keychain credential lookup failure. Additional
-target archives are not published. L2 and L3 remain Preview and NeoLemmix remains Beta.
+remain documented. The required [slim download is published](ReleaseReadiness/1.7.7SlimDownload.md)
+and is recommended for fresh installations. Additional target archives are not
+published. L2 and L3 remain Preview and NeoLemmix remains Beta.
 Foreground shipping-app launch and audible checks were not run for 1.7.7.
 Updated 2 October 2026 for the 1.7, 1.8 and 2.0 roadmap targets.
 Automated checks support the recorded routes;

@@ -3,6 +3,8 @@
 Build: 61
 Release base: v1.7.6
 
+[Download the slim app (159 MB)](https://github.com/ErikVeland/Lemmings/releases/download/v1.7.7/UltimateLemmings-1.7.7-build61-slim.zip)
+
 ## Original cursors and clearer selection
 
 Gameplay settings now offer Original and Modern cursors across Classic,
@@ -46,6 +48,10 @@ replays still differ in final state or completion timing.
 
 ## Update
 
-Use Check for Updates, or download UltimateLemmings-1.7.7-build61.zip for a fresh
-installation. The universal macOS app includes the full soundtrack and supports
-macOS 12.3 or later.
+For a fresh installation, choose `UltimateLemmings-1.7.7-build61-slim.zip`.
+It includes the original soundtracks and offers the extra libraries on first
+launch. Previously downloaded libraries are detected and retained.
+
+Existing players can use Check for Updates. Its full archive preserves music
+bundled inside older apps. Both downloads contain the same universal macOS app
+and support macOS 12.3 or later.

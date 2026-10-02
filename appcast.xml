@@ -21,7 +21,8 @@
 <p>An exact bundled Golems challenge pack now selects its matching native mechanics in gameplay and previews. Pass Interference has a recorded winning route using ordinary player assignments. The evidence catalogue now records 2,154 Classic fan wins and 322 NeoLemmix wins. Additional source-rule and sequel investigations are retained separately from winning routes.</p>
 <p>Lemmings 2 and Lemmings 3 remain Preview. NeoLemmix remains Beta. Recorded native wins do not establish complete source-engine physics parity. Some Golems evidence replays still differ in final state or completion timing.</p>
 <h3>Update</h3>
-<p>Use Check for Updates, or download UltimateLemmings-1.7.7-build61.zip for a fresh installation. The universal macOS app includes the full soundtrack and supports macOS 12.3 or later.</p>
+<p>For a fresh installation, choose <code>UltimateLemmings-1.7.7-build61-slim.zip</code>. It includes the original soundtracks and offers the extra libraries on first launch. Previously downloaded libraries are detected and retained.</p>
+<p>Existing players can use Check for Updates. Its full archive preserves music bundled inside older apps. Both downloads contain the same universal macOS app and support macOS 12.3 or later.</p>
 <p class="meta">Build: 61<br>Release commit: 17498ea029200507d6064ce897d6711f45938079<br>Release base: v1.7.6</p></body></html>
 ]]></description>
             <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.7.7/UltimateLemmings-1.7.7-build61.zip" length="1943260816" type="application/octet-stream" sparkle:edSignature="anOj2bxCnEfbPj0xySrpVwwaXEYlpL/JrBCzkUowmI8M4B3rT+bHeTj8eSgmBQEAOaNFNdJgXll125aaSWm/BQ=="/>

@@ -22,7 +22,7 @@ commit the key or pass the key value as a command argument.
 
 Public 1.7.7 build 61 is the current release. The
 [1.7.7 distribution record](ReleaseReadiness/1.7.7Build61Distribution.md) covers
-the notarised archive, signed live feed and validation limits. Publish an
+the notarised archives, signed live feed and validation limits. Publish an
 appcast only with its matching signed and notarised archive.
 
 Public releases require a slim fresh-install download. It includes the

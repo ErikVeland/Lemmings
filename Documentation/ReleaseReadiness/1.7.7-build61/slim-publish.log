@@ -1,0 +1,6 @@
+Uploading the notarised slim archive.
+PASS public slim size and SHA-256; existing full archive unchanged.
+https://github.com/ErikVeland/Lemmings/releases/tag/v1.7.7
+Updated the release page to recommend the slim download.
+Published the corrected notes in the update feed: 4ca91badf57ee2f502bed5fe47b7d49ea3527574
+PASS public slim download, hashes, source tag, release notes and corrected live feed.
