@@ -1,0 +1,114 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 60
+        }
+      },
+      "afterTick" : true,
+      "tick" : 192
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 192
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 88
+        }
+      },
+      "afterTick" : true,
+      "tick" : 193
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 718
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 936
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "climber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1301
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "climber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1322
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 5,
+          "skill" : "climber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1345
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 7,
+          "skill" : "climber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1368
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "climber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1432
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 8,
+    "required" : 8,
+    "saved" : 8,
+    "stateHash" : "b98a150bd54ab90754218c43b9edb138078335294cab3e07a0be0464d7cfab5d",
+    "ticks" : 2133
+  },
+  "initialStateHash" : "99bb37a5a2b05262917bb1f6dc7417f0a7064be03934662505dd0fb64efca094",
+  "number" : 4,
+  "rank" : "fan:lldb-217",
+  "title" : "Tunnel vision"
+}

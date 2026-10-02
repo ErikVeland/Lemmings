@@ -1,0 +1,92 @@
+{
+  "components" : {
+    "concurrencyBurden" : 0,
+    "constraintPressure" : 730.184338486102,
+    "deductionComplexityProxy" : 195,
+    "executionPrecision" : 0,
+    "solutionComplexity" : 396.0195500086539,
+    "techniqueBurden" : 195
+  },
+  "confidence" : "medium",
+  "criticalActions" : [
+
+  ],
+  "detectedTechniques" : [
+    "builder",
+    "climber",
+    "digger"
+  ],
+  "explanation" : [
+    "3 used skill types; 2 assigned workers; 3 same-worker skill changes.",
+    "Maximum concurrent worker regions: 1.",
+    "Timing probes: 10. Untested alternatives remain unknown.",
+    "Deduction is a conservative proxy. Observed techniques are not proof of necessity.",
+    "Source rank: fan:lldb-351."
+  ],
+  "key" : {
+    "analyserVersion" : "difficulty-3",
+    "assetsRevision" : "c10c708751646d97fcb725fcd71d4a47fa088bd69470b4a7d8998df02f529459:probes-10",
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "MARSHY07.DAT#3",
+      "packID" : "fan:lldb-351"
+    },
+    "levelRevision" : "5242934a769947f697468058b9827c8cce6249ea75ecdb56ef0e8a47ca284403",
+    "replayRevision" : "SHA256 digest: 5810e086756401f7e20bed1f793db053f9cac822552e6f845346a7ffe9f17b6a",
+    "simulationVersion" : "neolemmix-ce-2026-09-27"
+  },
+  "overallScore" : 244.4482650050971,
+  "precision" : {
+    "actions" : [
+      {
+        "outcomes" : {
+          "-1" : true,
+          "1" : true
+        },
+        "sequence" : 1
+      },
+      {
+        "outcomes" : {
+          "-1" : true,
+          "1" : true
+        },
+        "sequence" : 2
+      },
+      {
+        "outcomes" : {
+          "-1" : true,
+          "1" : true
+        },
+        "sequence" : 3
+      },
+      {
+        "outcomes" : {
+          "-1" : true,
+          "1" : true
+        },
+        "sequence" : 4
+      },
+      {
+        "outcomes" : {
+          "-1" : true,
+          "1" : true
+        },
+        "sequence" : 5
+      }
+    ],
+    "alternativeRunCount" : 0,
+    "assignmentCount" : 5,
+    "completed" : false,
+    "orderingOutcomes" : [
+
+    ],
+    "runCount" : 10,
+    "selectionOutcomes" : [
+
+    ]
+  },
+  "prerequisiteConcepts" : [
+
+  ],
+  "sourceRank" : "fan:lldb-351"
+}

@@ -563,7 +563,7 @@ private enum LevelPreviewRenderer {
             level: level,
             ground: ground,
             special: special,
-            mechanics: FanLevelLibrary.mechanics(for: pack),
+            mechanics: FanLevelLibrary.mechanics(for: pack, entry: entry),
             objectSemantics: .forFanLevel(level, groundSet: ground))
         guard FanLevelLibrary.archiveMatches(pack, fingerprint: archiveFingerprint) else {
             throw LevelPreviewError.contentChanged

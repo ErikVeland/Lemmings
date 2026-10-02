@@ -1,0 +1,1114 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 2
+        }
+      },
+      "afterTick" : true,
+      "tick" : 6
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 3
+        }
+      },
+      "afterTick" : true,
+      "tick" : 7
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 4
+        }
+      },
+      "afterTick" : true,
+      "tick" : 8
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 5
+        }
+      },
+      "afterTick" : true,
+      "tick" : 9
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 6
+        }
+      },
+      "afterTick" : true,
+      "tick" : 10
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 7
+        }
+      },
+      "afterTick" : true,
+      "tick" : 11
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 8
+        }
+      },
+      "afterTick" : true,
+      "tick" : 12
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 9
+        }
+      },
+      "afterTick" : true,
+      "tick" : 13
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 10
+        }
+      },
+      "afterTick" : true,
+      "tick" : 14
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 11
+        }
+      },
+      "afterTick" : true,
+      "tick" : 15
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 12
+        }
+      },
+      "afterTick" : true,
+      "tick" : 16
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 13
+        }
+      },
+      "afterTick" : true,
+      "tick" : 17
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 14
+        }
+      },
+      "afterTick" : true,
+      "tick" : 18
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 15
+        }
+      },
+      "afterTick" : true,
+      "tick" : 19
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 16
+        }
+      },
+      "afterTick" : true,
+      "tick" : 20
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 17
+        }
+      },
+      "afterTick" : true,
+      "tick" : 21
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 18
+        }
+      },
+      "afterTick" : true,
+      "tick" : 22
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 19
+        }
+      },
+      "afterTick" : true,
+      "tick" : 23
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 20
+        }
+      },
+      "afterTick" : true,
+      "tick" : 24
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 21
+        }
+      },
+      "afterTick" : true,
+      "tick" : 25
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 22
+        }
+      },
+      "afterTick" : true,
+      "tick" : 26
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 23
+        }
+      },
+      "afterTick" : true,
+      "tick" : 27
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 24
+        }
+      },
+      "afterTick" : true,
+      "tick" : 28
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 25
+        }
+      },
+      "afterTick" : true,
+      "tick" : 29
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 26
+        }
+      },
+      "afterTick" : true,
+      "tick" : 30
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 27
+        }
+      },
+      "afterTick" : true,
+      "tick" : 31
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 28
+        }
+      },
+      "afterTick" : true,
+      "tick" : 32
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 29
+        }
+      },
+      "afterTick" : true,
+      "tick" : 33
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 30
+        }
+      },
+      "afterTick" : true,
+      "tick" : 34
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 31
+        }
+      },
+      "afterTick" : true,
+      "tick" : 35
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 32
+        }
+      },
+      "afterTick" : true,
+      "tick" : 36
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 33
+        }
+      },
+      "afterTick" : true,
+      "tick" : 37
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 34
+        }
+      },
+      "afterTick" : true,
+      "tick" : 38
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 35
+        }
+      },
+      "afterTick" : true,
+      "tick" : 39
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 36
+        }
+      },
+      "afterTick" : true,
+      "tick" : 40
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 37
+        }
+      },
+      "afterTick" : true,
+      "tick" : 41
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 38
+        }
+      },
+      "afterTick" : true,
+      "tick" : 42
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 37
+        }
+      },
+      "afterTick" : true,
+      "tick" : 43
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 36
+        }
+      },
+      "afterTick" : true,
+      "tick" : 44
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 37
+        }
+      },
+      "afterTick" : true,
+      "tick" : 58
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "climber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 77
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "climber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 118
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "climber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 133
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 171
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "climber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 193
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "climber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 202
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 223
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 5,
+          "skill" : "climber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 237
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 6,
+          "skill" : "climber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 268
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 283
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 7,
+          "skill" : "climber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 322
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 4,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 367
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 38
+        }
+      },
+      "afterTick" : true,
+      "tick" : 382
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 39
+        }
+      },
+      "afterTick" : true,
+      "tick" : 383
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 40
+        }
+      },
+      "afterTick" : true,
+      "tick" : 384
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 41
+        }
+      },
+      "afterTick" : true,
+      "tick" : 385
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 42
+        }
+      },
+      "afterTick" : true,
+      "tick" : 386
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 43
+        }
+      },
+      "afterTick" : true,
+      "tick" : 387
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 44
+        }
+      },
+      "afterTick" : true,
+      "tick" : 388
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 45
+        }
+      },
+      "afterTick" : true,
+      "tick" : 389
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 46
+        }
+      },
+      "afterTick" : true,
+      "tick" : 390
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 47
+        }
+      },
+      "afterTick" : true,
+      "tick" : 391
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 48
+        }
+      },
+      "afterTick" : true,
+      "tick" : 392
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 49
+        }
+      },
+      "afterTick" : true,
+      "tick" : 393
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 50
+        }
+      },
+      "afterTick" : true,
+      "tick" : 394
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 51
+        }
+      },
+      "afterTick" : true,
+      "tick" : 395
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 52
+        }
+      },
+      "afterTick" : true,
+      "tick" : 396
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 53
+        }
+      },
+      "afterTick" : true,
+      "tick" : 397
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 54
+        }
+      },
+      "afterTick" : true,
+      "tick" : 398
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 55
+        }
+      },
+      "afterTick" : true,
+      "tick" : 399
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 56
+        }
+      },
+      "afterTick" : true,
+      "tick" : 400
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 57
+        }
+      },
+      "afterTick" : true,
+      "tick" : 401
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 58
+        }
+      },
+      "afterTick" : true,
+      "tick" : 402
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 59
+        }
+      },
+      "afterTick" : true,
+      "tick" : 403
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 60
+        }
+      },
+      "afterTick" : true,
+      "tick" : 404
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 61
+        }
+      },
+      "afterTick" : true,
+      "tick" : 405
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 62
+        }
+      },
+      "afterTick" : true,
+      "tick" : 406
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 63
+        }
+      },
+      "afterTick" : true,
+      "tick" : 407
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 64
+        }
+      },
+      "afterTick" : true,
+      "tick" : 408
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 65
+        }
+      },
+      "afterTick" : true,
+      "tick" : 409
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 66
+        }
+      },
+      "afterTick" : true,
+      "tick" : 410
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 5,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 428
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 7,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 512
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 14,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 521
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 67
+        }
+      },
+      "afterTick" : true,
+      "tick" : 536
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 68
+        }
+      },
+      "afterTick" : true,
+      "tick" : 537
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 69
+        }
+      },
+      "afterTick" : true,
+      "tick" : 538
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 70
+        }
+      },
+      "afterTick" : true,
+      "tick" : 539
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 71
+        }
+      },
+      "afterTick" : true,
+      "tick" : 540
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 72
+        }
+      },
+      "afterTick" : true,
+      "tick" : 541
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 73
+        }
+      },
+      "afterTick" : true,
+      "tick" : 542
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 74
+        }
+      },
+      "afterTick" : true,
+      "tick" : 543
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 75
+        }
+      },
+      "afterTick" : true,
+      "tick" : 544
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 76
+        }
+      },
+      "afterTick" : true,
+      "tick" : 545
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 77
+        }
+      },
+      "afterTick" : true,
+      "tick" : 546
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 78
+        }
+      },
+      "afterTick" : true,
+      "tick" : 547
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 79
+        }
+      },
+      "afterTick" : true,
+      "tick" : 548
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 80
+        }
+      },
+      "afterTick" : true,
+      "tick" : 549
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 81
+        }
+      },
+      "afterTick" : true,
+      "tick" : 550
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 82
+        }
+      },
+      "afterTick" : true,
+      "tick" : 551
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 83
+        }
+      },
+      "afterTick" : true,
+      "tick" : 552
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 84
+        }
+      },
+      "afterTick" : true,
+      "tick" : 553
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 85
+        }
+      },
+      "afterTick" : true,
+      "tick" : 554
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 86
+        }
+      },
+      "afterTick" : true,
+      "tick" : 555
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 87
+        }
+      },
+      "afterTick" : true,
+      "tick" : 556
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 88
+        }
+      },
+      "afterTick" : true,
+      "tick" : 557
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 89
+        }
+      },
+      "afterTick" : true,
+      "tick" : 558
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 90
+        }
+      },
+      "afterTick" : true,
+      "tick" : 559
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 91
+        }
+      },
+      "afterTick" : true,
+      "tick" : 560
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 92
+        }
+      },
+      "afterTick" : true,
+      "tick" : 561
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 93
+        }
+      },
+      "afterTick" : true,
+      "tick" : 562
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 94
+        }
+      },
+      "afterTick" : true,
+      "tick" : 563
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 95
+        }
+      },
+      "afterTick" : true,
+      "tick" : 564
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 96
+        }
+      },
+      "afterTick" : true,
+      "tick" : 565
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 97
+        }
+      },
+      "afterTick" : true,
+      "tick" : 566
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 98
+        }
+      },
+      "afterTick" : true,
+      "tick" : 567
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "afterTick" : true,
+      "tick" : 568
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 622
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 723
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 768
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 60,
+    "required" : 54,
+    "saved" : 54,
+    "stateHash" : "4854a434972b92bcc8a5c1852a1a49bea8f30fb8573a228563958ca73dc5f5f3",
+    "ticks" : 1022
+  },
+  "initialStateHash" : "5bd9d9cf8fa68dea42edf4ff2f73e98c3d1d03b10c0a0ac0c88241d17fad6e83",
+  "number" : 3,
+  "rank" : "fan:lldb-497",
+  "title" : "Stalkers"
+}

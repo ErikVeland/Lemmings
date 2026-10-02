@@ -55,6 +55,14 @@ whole time budget near the hatch. Use it for a known narrow timing window or
 with a longer bound. This pass does not cover routes that need a second skill.
 An unsuccessful run is only a bounded search result.
 
+Use `--sweep-single` to try one after-tick skill assignment to every active
+lemming on each tick of a fixed-rate, no-input route. It runs each assignment
+without further inputs and does not prune by beam score. It cannot be combined
+with `--prefix`, `--adaptive-rate` or `--rollout-single`. The unsolved report
+gives the last waiting-route tick, assignments started, continuations completed
+and whether the deadline expired. A completed sweep covers only this one-skill,
+fixed-rate search; it does not establish that a level is impossible.
+
 `generate_solver_partial_retimes.py` makes bounded one-command timing
 candidates from these partial routes. Use `--minimum N --radius M` to search
 an untested range without repeating earlier shifts. Feed the candidate folder

@@ -1,7 +1,7 @@
 {
   "components" : {
     "concurrencyBurden" : 320,
-    "constraintPressure" : 865.249313994512,
+    "constraintPressure" : 865.1630733045865,
     "deductionComplexityProxy" : 330,
     "executionPrecision" : 0,
     "solutionComplexity" : 945,
@@ -36,10 +36,10 @@
       "packID" : "fan:lldb-224"
     },
     "levelRevision" : "b2818e41664bbcc98870c9a7c5e6f20258004495061503f5c373fa255188223d",
-    "replayRevision" : "8889d84d869c1fbee09951d7622c8d2fbfcd79b4b36e838f8fc594dd2798ef95",
-    "simulationVersion" : "neolemmix-ce-2026-09-27:golems-phase-minus-one"
+    "replayRevision" : "8d7274688c78c56d8626a4f109607036f10c6695432cb98c4aa40dd1e095736a",
+    "simulationVersion" : "neolemmix-ce-2026-09-27:golems-phase-minus-one:exit-contact"
   },
-  "overallScore" : 568.8324108192866,
+  "overallScore" : 568.8211995295962,
   "precision" : {
     "actions" : [
       {

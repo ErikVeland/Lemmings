@@ -1,0 +1,135 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "afterTick" : true,
+      "tick" : 67
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "climber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 67
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 113
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 5,
+          "skill" : "climber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 114
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 5,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 159
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 313
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 5,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 354
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 469
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 5,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 513
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 64,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 607
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 71,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 653
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 78,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1201
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 80,
+    "required" : 80,
+    "saved" : 80,
+    "stateHash" : "95fbe37e5e14bbe420e0daf542e6f703a4b116f37f7d7868bc1a30b213547ae1",
+    "ticks" : 1727
+  },
+  "initialStateHash" : "95080ced277400b2c51d85020b9080fcbc29cae022ccf550ca54e1d4ecf15327",
+  "number" : 4,
+  "rank" : "fan:lldb-105",
+  "title" : "Storming the Castle"
+}

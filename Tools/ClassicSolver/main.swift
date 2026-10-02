@@ -11,7 +11,7 @@ import NxlvKit
 //
 // Usage: ClassicSolver DATA LEVEL OUT [--width N] [--seconds S] [--rate R]
 //        [--fallback N] [--refire N] [--prefix PLAN] [--partial-out]
-//        [--rollout-single]
+//        [--rollout-single] [--sweep-single]
 //        [--golems-objects] [--golems-clock] [--golems-mechanics]
 //        [--prefer-progress]
 // Use --golems-objects for fan levels whose later object slots must be active.
@@ -226,6 +226,10 @@ let budget = Double(option("--seconds") ?? "300")!
 let maxDepth = Int(option("--depth") ?? "100000")!
 let adaptiveRate = args.contains("--adaptive-rate")
 let rolloutSingle = args.contains("--rollout-single")
+let sweepSingle = args.contains("--sweep-single")
+if sweepSingle && (adaptiveRate || rolloutSingle) {
+    throw Failure(description: "--sweep-single requires a fixed rate and cannot be combined with --rollout-single")
+}
 let field = DistanceField(base)
 let started = ProcessInfo.processInfo.systemUptime
 let deadline = started + budget
@@ -241,6 +245,9 @@ struct Forced: Decodable { let tick: Int; let id: Int?; let skill: ClassicSkill?
 let forced: [Int: [Forced]] = try option("--prefix").map {
     Dictionary(grouping: try JSONDecoder().decode([Forced].self, from: Data(contentsOf: URL(fileURLWithPath: $0))), by: \.tick)
 } ?? [:]
+if sweepSingle && !forced.isEmpty {
+    throw Failure(description: "--sweep-single cannot be combined with --prefix")
+}
 
 func advance(_ c: inout Candidate) -> Bool {
     while !c.sim.isComplete && c.sim.tickCount < tickLimit {
@@ -262,82 +269,123 @@ func advance(_ c: inout Candidate) -> Bool {
 var best: Candidate?, bestPartial: Candidate?, expanded = 0
 var singleSkillRollouts: Set<String> = []
 var waitingRouteTick = 0
-func consider(_ c: Candidate) {
+var sweptAssignments = 0
+var completedSweepContinuations = 0
+@MainActor func consider(_ c: Candidate) {
     if c.sim.isComplete && c.sim.didWin, best.map({ Score($0, field) < Score(c, field) }) ?? true { best = c }
     if bestPartial.map({ Score($0, field) < Score(c, field) }) ?? true { bestPartial = c }
 }
-_ = advance(&start)
-waitingRouteTick = start.sim.tickCount
-start.key = fingerprint(start.sim) + (adaptiveRate ? "|0" : "")
-consider(start)
-var beam = start.sim.isComplete ? [] : [start]
-search: while !beam.isEmpty && best == nil && !timeExpired() {
-    var next: [String: Candidate] = [:]
-    for node in beam {
-        if timeExpired() { break search }
-        guard node.depth < maxDepth else { continue }
-        var choices: [Choice] = [.wait]
-        for id in node.decision {
-            for skill in skills where node.sim.remainingSkillCount(skill) > 0 {
-                choices.append(.assign(id, skill))
+if sweepSingle {
+    var waiting = start
+    bestPartial = start
+    sweep: while !waiting.sim.isComplete && waiting.sim.tickCount < tickLimit && !timeExpired() {
+        _ = waiting.sim.tick()
+        waitingRouteTick = waiting.sim.tickCount
+        if waiting.sim.didWin { best = waiting; break }
+        for lemming in waiting.sim.lemmings where lemming.isActive {
+            for skill in skills where waiting.sim.remainingSkillCount(skill) > 0 {
+                if timeExpired() { break sweep }
+                var continuation = waiting
+                guard continuation.sim.assign(skill, to: lemming.id) == .assigned else { continue }
+                continuation.events.append(.init(tick: waiting.sim.tickCount,
+                    action: .assign(lemmingID: lemming.id, skill: skill), afterTick: true))
+                sweptAssignments += 1
+                expanded += 1
+                while !continuation.sim.isComplete && continuation.sim.tickCount < tickLimit {
+                    if continuation.sim.tickCount.isMultiple(of: 64) && timeExpired() { break }
+                    _ = continuation.sim.tick()
+                    if continuation.sim.lostCount > continuation.sim.configuration.totalLemmings
+                        - continuation.sim.configuration.requiredToSave { break }
+                }
+                if continuation.sim.isComplete || continuation.sim.tickCount >= tickLimit
+                    || continuation.sim.lostCount > continuation.sim.configuration.totalLemmings
+                        - continuation.sim.configuration.requiredToSave {
+                    completedSweepContinuations += 1
+                }
+                if continuation.sim.savedCount > (bestPartial?.sim.savedCount ?? 0) {
+                    consider(continuation)
+                }
+                if continuation.sim.didWin { best = continuation; break sweep }
             }
         }
-        if adaptiveRate && node.rateChanges < 2 && node.sim.releasedCount < node.sim.configuration.totalLemmings {
-            for rate in [25, 50, 75, 99] where rate > node.sim.releaseRate {
-                choices.append(.releaseRate(rate))
-            }
-        }
-        for choice in choices {
+        if waiting.sim.lostCount > waiting.sim.configuration.totalLemmings
+            - waiting.sim.configuration.requiredToSave { break }
+    }
+    if best == nil { consider(waiting) }
+} else {
+    _ = advance(&start)
+    waitingRouteTick = start.sim.tickCount
+    start.key = fingerprint(start.sim) + (adaptiveRate ? "|0" : "")
+    consider(start)
+    var beam = start.sim.isComplete ? [] : [start]
+    search: while !beam.isEmpty && best == nil && !timeExpired() {
+        var next: [String: Candidate] = [:]
+        for node in beam {
             if timeExpired() { break search }
-            var child = node
-            switch choice {
-            case .wait:
-                break
-            case let .assign(id, skill):
-                guard child.sim.assign(skill, to: id) == .assigned else { continue }
-                child.events.append(.init(tick: child.sim.tickCount, action: .assign(lemmingID: id, skill: skill), afterTick: true))
-            case let .releaseRate(rate):
-                child.sim.setReleaseRate(rate)
-                child.events.append(.init(tick: child.sim.tickCount, action: .releaseRate(rate), afterTick: true))
-                child.rateChanges += 1
-            }
-            child.depth += 1
-            expanded += 1
-            let alive = advance(&child)
-            if child.events.count == start.events.count {
-                waitingRouteTick = max(waitingRouteTick, child.sim.tickCount)
-            }
-            child.key = fingerprint(child.sim) + (adaptiveRate ? "|\(child.rateChanges)" : "")
-            consider(child)
-            if best != nil { break search }
-            if rolloutSingle, child.events.count == 1,
-               case .assign = child.events[0].action,
-               forced.keys.allSatisfy({ $0 <= child.sim.tickCount }) {
-                let event = child.events[0]
-                let signature = "\(event.tick)|\(event.action)"
-                if singleSkillRollouts.insert(signature).inserted {
-                    var continuation = child
-                    while !continuation.sim.isComplete && continuation.sim.tickCount < tickLimit {
-                        if continuation.sim.tickCount.isMultiple(of: 64) && timeExpired() { break }
-                        _ = continuation.sim.tick()
-                        if continuation.sim.lostCount > continuation.sim.configuration.totalLemmings - continuation.sim.configuration.requiredToSave { break }
-                    }
-                    if continuation.sim.didWin { best = continuation; break search }
+            guard node.depth < maxDepth else { continue }
+            var choices: [Choice] = [.wait]
+            for id in node.decision {
+                for skill in skills where node.sim.remainingSkillCount(skill) > 0 {
+                    choices.append(.assign(id, skill))
                 }
             }
-            guard alive, !child.sim.isComplete else { continue }
-            if let existing = next[child.key], !(Score(existing, field) < Score(child, field)) { continue }
-            next[child.key] = child
+            if adaptiveRate && node.rateChanges < 2 && node.sim.releasedCount < node.sim.configuration.totalLemmings {
+                for rate in [25, 50, 75, 99] where rate > node.sim.releaseRate {
+                    choices.append(.releaseRate(rate))
+                }
+            }
+            for choice in choices {
+                if timeExpired() { break search }
+                var child = node
+                switch choice {
+                case .wait:
+                    break
+                case let .assign(id, skill):
+                    guard child.sim.assign(skill, to: id) == .assigned else { continue }
+                    child.events.append(.init(tick: child.sim.tickCount, action: .assign(lemmingID: id, skill: skill), afterTick: true))
+                case let .releaseRate(rate):
+                    child.sim.setReleaseRate(rate)
+                    child.events.append(.init(tick: child.sim.tickCount, action: .releaseRate(rate), afterTick: true))
+                    child.rateChanges += 1
+                }
+                child.depth += 1
+                expanded += 1
+                let alive = advance(&child)
+                if child.events.count == start.events.count {
+                    waitingRouteTick = max(waitingRouteTick, child.sim.tickCount)
+                }
+                child.key = fingerprint(child.sim) + (adaptiveRate ? "|\(child.rateChanges)" : "")
+                consider(child)
+                if best != nil { break search }
+                if rolloutSingle, child.events.count == 1,
+                   case .assign = child.events[0].action,
+                   forced.keys.allSatisfy({ $0 <= child.sim.tickCount }) {
+                    let event = child.events[0]
+                    let signature = "\(event.tick)|\(event.action)"
+                    if singleSkillRollouts.insert(signature).inserted {
+                        var continuation = child
+                        while !continuation.sim.isComplete && continuation.sim.tickCount < tickLimit {
+                            if continuation.sim.tickCount.isMultiple(of: 64) && timeExpired() { break }
+                            _ = continuation.sim.tick()
+                            if continuation.sim.lostCount > continuation.sim.configuration.totalLemmings - continuation.sim.configuration.requiredToSave { break }
+                        }
+                        if continuation.sim.didWin { best = continuation; break search }
+                    }
+                }
+                guard alive, !child.sim.isComplete else { continue }
+                if let existing = next[child.key], !(Score(existing, field) < Score(child, field)) { continue }
+                next[child.key] = child
+            }
+            if timeExpired() { break search }
         }
-        if timeExpired() { break search }
-    }
-    beam = next.values.sorted { Score($1, field) < Score($0, field) }.prefix(width).map { $0 }
-    if !beam.contains(where: { $0.events.count == start.events.count }), let waiting = next.values.first(where: { $0.events.count == start.events.count }) {
-        if beam.count == width { beam.removeLast() }
-        beam.append(waiting)
-    }
-    if ProcessInfo.processInfo.environment["SOLVER_TRACE"] != nil, let top = beam.first {
-        print("ROUND expanded \(expanded) beam \(beam.count) tick \(top.sim.tickCount) depth \(top.depth) saved \(top.sim.savedCount) lost \(top.sim.lostCount) inputs \(top.events.count)")
+        beam = next.values.sorted { Score($1, field) < Score($0, field) }.prefix(width).map { $0 }
+        if !beam.contains(where: { $0.events.count == start.events.count }), let waiting = next.values.first(where: { $0.events.count == start.events.count }) {
+            if beam.count == width { beam.removeLast() }
+            beam.append(waiting)
+        }
+        if ProcessInfo.processInfo.environment["SOLVER_TRACE"] != nil, let top = beam.first {
+            print("ROUND expanded \(expanded) beam \(beam.count) tick \(top.sim.tickCount) depth \(top.depth) saved \(top.sim.savedCount) lost \(top.sim.lostCount) inputs \(top.events.count)")
+        }
     }
 }
 let seconds = Int(ProcessInfo.processInfo.systemUptime - started)
@@ -369,7 +417,9 @@ if let proposal, let outcome = verifiedOutcome, outcome.didWin {
             : URL(fileURLWithPath: args[3] + ".partial.json")
         try encoder.encode(proposal).write(to: destination, options: .atomic)
     }
-    let coverage = rolloutSingle ? " waiting tick \(waitingRouteTick) single-skill rollouts \(singleSkillRollouts.count)" : ""
+    let coverage = sweepSingle
+        ? " waiting tick \(waitingRouteTick) single-skill assignments \(sweptAssignments) completed \(completedSweepContinuations) deadline \(timeExpired())"
+        : rolloutSingle ? " waiting tick \(waitingRouteTick) single-skill rollouts \(singleSkillRollouts.count)" : ""
     print("UNSOLVED \(entry.rank) \(entry.number) best saved \(s?.savedCount ?? 0)/\(base.configuration.requiredToSave) expanded \(expanded) in \(seconds)s\(coverage)")
     exit(1)
 }

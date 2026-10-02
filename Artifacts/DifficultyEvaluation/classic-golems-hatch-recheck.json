@@ -1,0 +1,158 @@
+{
+  "description": "A source-coordinate hatch correction changed seven previously selected Golems replay outcomes. All 148 affected selected levels were strictly replayed on their exact bundled archives in two disjoint sets: 125 base-audit rows and 23 fan-evidence overlay rows. Seven winning witnesses and their ten-probe scores were rebased; the other 141 retain their selected outcomes and scores. The independent source player still differs in completion timing on Diving Area.",
+  "selectedReplaysChecked": 148,
+  "baseAuditChecked": 125,
+  "fanEvidenceOverlayChecked": 23,
+  "strictFailures": 0,
+  "postMergeChangedAndNewReplaysChecked": 8,
+  "records": [
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "The lemming google pack.dat#2",
+        "packID": "fan:lldb-179"
+      },
+      "title": "Another \"o\" to serch",
+      "bundledArchiveSHA256": "4545eeb5effc99790773b4862e7c0e427ac112d5f09e484cc42d6de81362e089",
+      "initialStateHash": "daf2243722176d85d53874abe638372115738d36aab855f09184a3510468df24",
+      "previousReplaySHA256": "6cd0cf9187e8c2cd4109f751ea014a8804d7928afa2a28dbace7949b5237725b",
+      "previousSaved": 26,
+      "previousCompletionTick": 1716,
+      "previousDifficultyScore": 274.31946577314454,
+      "currentReplaySHA256": "f43deb9e592aeddd315c8924ab9553707aebe875d51f6698fa02e0645681663a",
+      "currentSaved": 26,
+      "required": 25,
+      "currentCompletionTick": 1705,
+      "currentDifficultyScore": 202.0923957094503,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/f43deb9e592aeddd315c8924ab9553707aebe875d51f6698fa02e0645681663a.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/f43deb9e592aeddd315c8924ab9553707aebe875d51f6698fa02e0645681663a.profile.json"
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "The lemming google pack.dat#5",
+        "packID": "fan:lldb-179"
+      },
+      "title": "An \"e\" to serch",
+      "bundledArchiveSHA256": "4545eeb5effc99790773b4862e7c0e427ac112d5f09e484cc42d6de81362e089",
+      "initialStateHash": "3136574785ceaec381d72cb1ee767508d95170e19e458e3847785eca964f23b9",
+      "previousReplaySHA256": "edf7cc897ed0a532689830c9d34e026c7da37f100a99051dfb01a99e241459ac",
+      "previousSaved": 47,
+      "previousCompletionTick": 3337,
+      "previousDifficultyScore": 310.9935978173968,
+      "currentReplaySHA256": "8167152250dd7c30d1bfb290b1e931e273183269a2d1dca15aaa0d983f1f6419",
+      "currentSaved": 47,
+      "required": 40,
+      "currentCompletionTick": 3336,
+      "currentDifficultyScore": 310.9889261414739,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/8167152250dd7c30d1bfb290b1e931e273183269a2d1dca15aaa0d983f1f6419.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/8167152250dd7c30d1bfb290b1e931e273183269a2d1dca15aaa0d983f1f6419.profile.json"
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Lemmings platinum Fragle part 2.dat#7",
+        "packID": "fan:lldb-181"
+      },
+      "title": "Another \"o\" to serch",
+      "bundledArchiveSHA256": "9b666aa29ad430e1c1e2655f910ebdac52b6dcac4690eb0cb9eb9a0aa8e8e27d",
+      "initialStateHash": "daf2243722176d85d53874abe638372115738d36aab855f09184a3510468df24",
+      "previousReplaySHA256": "9503af77d1b8ad5589e3ca4e681a2acabc1866844ddd376f5687757c0135d635",
+      "previousSaved": 26,
+      "previousCompletionTick": 1716,
+      "previousDifficultyScore": 274.31946577314454,
+      "currentReplaySHA256": "fc200bd67f97e430034ada368643d20ec49ae615bd8220aaf48320ae443841d1",
+      "currentSaved": 26,
+      "required": 25,
+      "currentCompletionTick": 1705,
+      "currentDifficultyScore": 202.0923957094503,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/fc200bd67f97e430034ada368643d20ec49ae615bd8220aaf48320ae443841d1.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/fc200bd67f97e430034ada368643d20ec49ae615bd8220aaf48320ae443841d1.profile.json"
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Lemmings platinum Fragle part 2.dat#10",
+        "packID": "fan:lldb-181"
+      },
+      "title": "An \"e\" to serch",
+      "bundledArchiveSHA256": "9b666aa29ad430e1c1e2655f910ebdac52b6dcac4690eb0cb9eb9a0aa8e8e27d",
+      "initialStateHash": "3136574785ceaec381d72cb1ee767508d95170e19e458e3847785eca964f23b9",
+      "previousReplaySHA256": "fb565204594ebd68d2d73b9e20050bec2eb99d1e678c7fc7da0c9054090f4f9a",
+      "previousSaved": 47,
+      "previousCompletionTick": 3337,
+      "previousDifficultyScore": 310.9935978173968,
+      "currentReplaySHA256": "1e49c2e7ef8d2659580972fdfec13a518fce3d2963a004aa261b13a25293f63a",
+      "currentSaved": 47,
+      "required": 40,
+      "currentCompletionTick": 3336,
+      "currentDifficultyScore": 310.9889261414739,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/1e49c2e7ef8d2659580972fdfec13a518fce3d2963a004aa261b13a25293f63a.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/1e49c2e7ef8d2659580972fdfec13a518fce3d2963a004aa261b13a25293f63a.profile.json"
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Gronklems 3.dat#5",
+        "packID": "fan:lldb-385"
+      },
+      "title": "Lemming go up. Lemming go down",
+      "bundledArchiveSHA256": "42588c20a8bb7981e763a0ed51070607d8cdad7482a3dd8eaab160cb2ddad83f",
+      "initialStateHash": "168ede12ce199432d653a86820da5139998b46a522de8c12c81799a9e235572f",
+      "previousReplaySHA256": "4fcd49b316f8973664cdce18575e999d65ce4658dd6482fc31eb876ae258be74",
+      "previousSaved": 100,
+      "previousCompletionTick": 615,
+      "previousDifficultyScore": 347.4017520255018,
+      "currentReplaySHA256": "5e62aa96faca3f33214e5893aeb4b7e21d641c3c7525575732a03de979889fd6",
+      "currentSaved": 100,
+      "required": 100,
+      "currentCompletionTick": 612,
+      "currentDifficultyScore": 347.39334190983817,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/5e62aa96faca3f33214e5893aeb4b7e21d641c3c7525575732a03de979889fd6.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/5e62aa96faca3f33214e5893aeb4b7e21d641c3c7525575732a03de979889fd6.profile.json"
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "pieuw02.dat#6",
+        "packID": "fan:lldb-394"
+      },
+      "title": "The Lemming Gallery",
+      "bundledArchiveSHA256": "012f8d6fde059a9781d2293d00e4426595c281d7c7a8963caaa4ff4d5c1e123c",
+      "initialStateHash": "896eecff3b87b0884073ac1f8fe469aca58a355eb5542650ae9b02acecbf0f30",
+      "previousReplaySHA256": "23e057a16ef2acdd1ffe70fe8347b62e9a4ff64fa08f99f4fcf0efd6e2106b07",
+      "previousSaved": 100,
+      "previousCompletionTick": 5904,
+      "previousDifficultyScore": 501.0158603630933,
+      "currentReplaySHA256": "9e6dfc11a843e82cfd0ad7182b58e48755a57661ef9ad35037a9ea5bfcfc89f0",
+      "currentSaved": 100,
+      "required": 100,
+      "currentCompletionTick": 5904,
+      "currentDifficultyScore": 501.0158603630933,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/9e6dfc11a843e82cfd0ad7182b58e48755a57661ef9ad35037a9ea5bfcfc89f0.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/9e6dfc11a843e82cfd0ad7182b58e48755a57661ef9ad35037a9ea5bfcfc89f0.profile.json"
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Pieuw 2007 Insane 1.DAT#0",
+        "packID": "fan:lldb-545"
+      },
+      "title": "The Lemming Gallery",
+      "bundledArchiveSHA256": "0b5e4bfede58cb4d8acee4ff5fb4d28ef912a472c1a5405271dc61453d7292f5",
+      "initialStateHash": "896eecff3b87b0884073ac1f8fe469aca58a355eb5542650ae9b02acecbf0f30",
+      "previousReplaySHA256": "d17442a9aea9c3a894e5500b14db09d9c3e73ce74a3d353bf3a7f8e32c77a7d9",
+      "previousSaved": 100,
+      "previousCompletionTick": 5904,
+      "previousDifficultyScore": 501.0158603630933,
+      "currentReplaySHA256": "cb32dabd82c9c8cdd34808f337810773aa443f9b6a0511303be196776a235c8a",
+      "currentSaved": 100,
+      "required": 100,
+      "currentCompletionTick": 5904,
+      "currentDifficultyScore": 501.0158603630933,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/cb32dabd82c9c8cdd34808f337810773aa443f9b6a0511303be196776a235c8a.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/cb32dabd82c9c8cdd34808f337810773aa443f9b6a0511303be196776a235c8a.profile.json"
+    }
+  ],
+  "newWinEvidence": "Artifacts/DifficultyEvaluation/classic-golems-hatch-coordinate.json"
+}

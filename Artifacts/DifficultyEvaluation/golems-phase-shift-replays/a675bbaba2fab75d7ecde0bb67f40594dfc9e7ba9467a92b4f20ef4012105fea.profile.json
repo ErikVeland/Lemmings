@@ -1,0 +1,93 @@
+{
+  "components" : {
+    "concurrencyBurden" : 70,
+    "constraintPressure" : 833.303819784525,
+    "deductionComplexityProxy" : 140,
+    "executionPrecision" : 436.67530664427454,
+    "solutionComplexity" : 286.0195500086539,
+    "techniqueBurden" : 260
+  },
+  "confidence" : "medium",
+  "criticalActions" : [
+    10,
+    12
+  ],
+  "detectedTechniques" : [
+    "blocker",
+    "builder",
+    "release-rate-manipulation"
+  ],
+  "explanation" : [
+    "2 used skill types; 3 assigned workers; 2 same-worker skill changes.",
+    "Maximum concurrent worker regions: 1.",
+    "Timing probes: 10. Untested alternatives remain unknown.",
+    "Deduction is a conservative proxy. Observed techniques are not proof of necessity.",
+    "Source rank: fan:lldb-544."
+  ],
+  "key" : {
+    "analyserVersion" : "difficulty-3",
+    "assetsRevision" : "bd7e200b8f27a10e23b1258c221ff8bb8b3a700a89125acbb2ea116ea6c6e04a:probes-10",
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "Pieuw 2007 Artful 1.DAT#3",
+      "packID" : "fan:lldb-544"
+    },
+    "levelRevision" : "fc9991e07984a0eecfcd19be9ec2be19e8647a93b3282aa0eef563ceb5091446",
+    "replayRevision" : "SHA256 digest: a675bbaba2fab75d7ecde0bb67f40594dfc9e7ba9467a92b4f20ef4012105fea",
+    "simulationVersion" : "neolemmix-ce-2026-09-27:golems-clock-2-limit-from-clock-1"
+  },
+  "overallScore" : 342.48885890274704,
+  "precision" : {
+    "actions" : [
+      {
+        "outcomes" : {
+          "-1" : false,
+          "1" : false
+        },
+        "sequence" : 10
+      },
+      {
+        "outcomes" : {
+          "-1" : true,
+          "1" : false
+        },
+        "sequence" : 11
+      },
+      {
+        "outcomes" : {
+          "-1" : false,
+          "1" : false
+        },
+        "sequence" : 12
+      },
+      {
+        "outcomes" : {
+          "-1" : true,
+          "1" : true
+        },
+        "sequence" : 13
+      },
+      {
+        "outcomes" : {
+          "-1" : true,
+          "1" : true
+        },
+        "sequence" : 14
+      }
+    ],
+    "alternativeRunCount" : 0,
+    "assignmentCount" : 5,
+    "completed" : false,
+    "orderingOutcomes" : [
+
+    ],
+    "runCount" : 10,
+    "selectionOutcomes" : [
+
+    ]
+  },
+  "prerequisiteConcepts" : [
+
+  ],
+  "sourceRank" : "fan:lldb-544"
+}

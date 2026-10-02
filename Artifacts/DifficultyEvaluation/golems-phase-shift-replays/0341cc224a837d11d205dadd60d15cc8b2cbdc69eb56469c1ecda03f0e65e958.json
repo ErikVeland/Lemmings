@@ -1,0 +1,354 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 55
+        }
+      },
+      "afterTick" : true,
+      "tick" : 82
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 82
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 120
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 128
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "afterTick" : true,
+      "tick" : 277
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 277
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 319
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 32,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 451
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 5,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 522
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 57,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 574
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 32,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 644
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 78,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 852
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 72,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 885
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 30,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 886
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 72,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 920
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 38,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 944
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 38,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1137
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 77,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1299
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 38,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1332
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 38,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1476
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 49,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1477
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 15,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1887
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 15,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2081
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 55,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2268
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 59,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2295
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 59,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2490
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 15,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2582
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 15,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2775
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 59,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2883
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 63,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 3083
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 75,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 3155
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 75,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 3187
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 11,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 3318
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 11,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 3337
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 80,
+    "required" : 73,
+    "saved" : 80,
+    "stateHash" : "5fe86ae6263c3a1b725fe1c33d21b5bd27ef29ac51399765c26befcafc68876b",
+    "ticks" : 3736
+  },
+  "initialStateHash" : "e2b5a3e017dc74d110d53f73d4668a048ba8d5034c6aea37369d70df6ad95b04",
+  "number" : 7,
+  "rank" : "fan:lldb-171",
+  "title" : "Good housekeeping"
+}

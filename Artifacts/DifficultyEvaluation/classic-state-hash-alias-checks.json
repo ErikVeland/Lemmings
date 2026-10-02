@@ -1,5 +1,5 @@
 {
-  "description": "Exact-bundle replay transfer check for Classic fan rows that share an initial-state hash with a scored row. The replay state hash does not include entrance or trigger geometry; a shared hash is not proof of the same puzzle or winning behaviour. No target gained a verified win or score.",
+  "description": "Historical exact-bundle replay transfer check under original Classic mechanics. A shared replay state hash omits entrance and trigger geometry and does not prove the same puzzle. One target now has a separate selected Golems win; the original-rule transfer failure remains recorded.",
   "nativeLibrarySHA256": "88cecd0189ea0d5b677e876184c919b0a8fb72ecbfdc355b23f1d2b8d6235e69",
   "checkedArchives": 20,
   "donorWins": 9,
@@ -222,6 +222,11 @@
       "targetOutcome": {
         "status": "error",
         "detail": "engine refused to queue builder for lemming 3 at tick 512"
+      },
+      "currentSelectedMechanics": {
+        "mechanics": "golems",
+        "initialStateHash": "5a62d63a37b1fa100a4d3f2194ce19f6a3f642389586fe71ca067b0e6b196058",
+        "replaySHA256": "753458f5ba802ab47104af9412f1b2762d63bbe7f69635a5ab2d0f3aa9201a2b"
       }
     },
     {

@@ -36,7 +36,7 @@
     },
     "levelRevision" : "6f5f81a6646bd04141b8a02dfe890b04b2edd1453917bf55cb526be869081c17",
     "replayRevision" : "4fe597937788d08e197962b907aac4201011db666567c0c8ddbb7ed6dca1a34e",
-    "simulationVersion" : "neolemmix-ce-2026-09-27:golems-phase-minus-one"
+    "simulationVersion" : "neolemmix-ce-2026-09-27:golems-phase-minus-one:exit-contact"
   },
   "overallScore" : 424.66237874006504,
   "precision" : {

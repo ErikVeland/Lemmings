@@ -300,6 +300,48 @@ private func testGolemsOneWayMining() throws {
         "original miner crossed a one-way wall")
     try require(golems.assign(.miner, to: 0) == .assigned,
         "Golems miner was blocked by the original one-way rule")
+
+    let rightArrow = ClassicDOSTrigger(
+        id: 1,
+        effect: .oneWayRight,
+        bounds: ClassicDOSRect(x1: 0, y1: 40, x2: 192, y2: 41)
+    )
+    for direction in [ClassicDOSDirection.left, .right] {
+        for mechanics in [ClassicDOSMechanics.original, .golems] {
+            var miner = try ClassicDOSSimulation(
+                terrain: floorTerrain(),
+                configuration: configuration(
+                    totalLemmings: 1,
+                    releaseRate: 99,
+                    entrances: [ClassicDOSPoint(x: 40, y: 30)],
+                    triggers: [rightArrow],
+                    maximumX: 191,
+                    maximumY: 95,
+                    mechanics: mechanics
+                ),
+                destructionMasks: destructionMaskSet()
+            )
+            while miner.tickCount < 100 && miner.lemmings.first?.action != .walking {
+                miner.tick()
+            }
+            try require(miner.lemmings.first?.action == .walking, "miner did not reach the arrow")
+            miner = try modifiedSimulation(miner) { root in
+                try modifyLemmings(in: &root) { lemmings in
+                    lemmings[0]["foot"] = ["x": 50, "y": 39]
+                    lemmings[0]["action"] = ClassicDOSAction.mining.rawValue
+                    lemmings[0]["animationFrame"] = 2
+                    lemmings[0]["direction"] = direction.rawValue
+                }
+            }
+            miner.tick()
+            let shouldTurn = mechanics == .original || direction == .left
+            try require(miner.lemmings[0].direction == (shouldTurn ?
+                (direction == .left ? .right : .left) : .right),
+                "\(mechanics) miner took the wrong direction on a right-facing arrow")
+            try require(miner.lemmings[0].action == (shouldTurn ? .walking : .mining),
+                "\(mechanics) miner used the wrong action on a right-facing arrow")
+        }
+    }
 }
 
 private func filledMask(

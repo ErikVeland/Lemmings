@@ -1,5 +1,6 @@
 """Combine Classic and NeoLemmix scores with explicit completion evidence."""
 
+import base64
 import csv
 import hashlib
 import json
@@ -25,10 +26,17 @@ STATE_HASH_ALIASES = ROOT / "Artifacts/DifficultyEvaluation/classic-state-hash-a
 CLASSIC_NEO_DERIVATIONS = ROOT / "Artifacts/DifficultyEvaluation/classic-neolemmix-replay-derivations.json"
 OUTPUT = ROOT / "Artifacts/DifficultyEvaluation"
 SOURCE_FAMILIES = OUTPUT / "source-engine-families.json"
+GOLEMS_SELECTED_ORDINARY = OUTPUT / "classic-golems-selected-ordinary.json"
+GOLEMS_HATCH_RECHECK = OUTPUT / "classic-golems-hatch-recheck.json"
+GOLEMS_HATCH_RECOVERY = OUTPUT / "classic-golems-hatch-recovery.json"
+GOLEMS_HATCH_REJECTIONS = OUTPUT / "classic-golems-hatch-rejections.json"
+FAN_SOLUTIONS = ROOT / "Artifacts/LearningJourney/candidate-solutions.json"
 GOLEMS_PHASE_EVIDENCE = [
     OUTPUT / f"classic-golems-phase-shift-{name}.json"
-    for name in ("alternatives", "targeted", "second", "third")
-]
+    for name in ("alternatives", "targeted", "second", "third", "fourth", "fifth", "sixth", "seventh")
+] + [OUTPUT / "classic-golems-mining-rule.json",
+     OUTPUT / "classic-golems-current-source-recheck.json",
+     OUTPUT / "classic-golems-hatch-recovery.json"]
 PARTIAL_SOURCE_ASSIGNMENTS = {
     "NeoLemmix_Introduction_Pack/Advanced_Training/Beam_Up_The_Equipment!.nxlv":
         ("aa256c48ee1bb20077d0b22b7ccfee6ed4b6835467422fc318e0770c2bdcac7d", 5),
@@ -104,13 +112,7 @@ NATIVE_OBSTRUCTIONS = {
         "issue": "Only native exit trigger starts at y=268 below the maximum playable y=163",
     },
 }
-NATIVE_RATE_SWEEPS = {
-    ("fan:lldb-433", "LDChallenge04.dat#1"): {
-        "sourceRevision": "65c251590f612944e636a2e6755b6104a9cacf65ab86b351eb0d3578371adebe",
-        "initialHash": "4f35eb052073c6c026b016024272b3ba820b612669823b3e32b43bc1e00b9413",
-        "issue": "Golems profile: all 99 fixed release rates saved 0/1; source no-input header reports 1/1",
-    },
-}
+NATIVE_RATE_SWEEPS = {}
 
 
 def read(path):
@@ -182,7 +184,13 @@ def main():
     for record in state_hash_aliases:
         target = classic[json.dumps({"engine": "classic", **record["identity"]}, sort_keys=True)]
         donor = classic[json.dumps({"engine": "classic", **record["donorIdentity"]}, sort_keys=True)]
-        assert record["initialStateHash"] == target["initialHash"] == donor["initialHash"]
+        assert record["initialStateHash"] == donor["initialHash"]
+        if superseded := record.get("currentSelectedMechanics"):
+            assert superseded["mechanics"] == "golems"
+            assert superseded["initialStateHash"] == target["initialHash"]
+            assert target["initialHash"] != record["initialStateHash"]
+        else:
+            assert record["initialStateHash"] == target["initialHash"]
         assert record["archiveSHA256"] == target["entry"]["sourceRevision"]
         assert record["sceneGeometrySHA256"] != record["donorSceneGeometrySHA256"]
         assert record["puzzleScenarioSHA256"] != record["donorPuzzleScenarioSHA256"]
@@ -199,9 +207,132 @@ def main():
     lemmini_pack_ids = {
         f"fan:lldb-{pack_id}" for pack_id in read(SOURCE_FAMILIES)["lemminiPackIDs"]
     }
+    source_families = read(SOURCE_FAMILIES)
     golems_pack_ids = {
-        f"fan:lldb-{pack_id}" for pack_id in read(SOURCE_FAMILIES)["golemsPackIDs"]
+        f"fan:lldb-{pack_id}" for pack_id in source_families["golemsPackIDs"]
     }
+    golems_level_ids = {
+        (pack_id, level_id)
+        for pack_id, level_ids in source_families["golemsLevelIDs"].items()
+        for level_id in level_ids
+    }
+    ordinary_records = read(GOLEMS_SELECTED_ORDINARY)["records"]
+    assert len(ordinary_records) == len(golems_level_ids)
+    assert {(record["identity"]["packID"], record["identity"]["levelID"])
+            for record in ordinary_records} == golems_level_ids
+    solutions = read(FAN_SOLUTIONS)
+    for record in ordinary_records:
+        row = classic[json.dumps(record["identity"], sort_keys=True)]
+        profile = row["profile"]
+        revision = profile["key"]["replayRevision"]
+        replay = solutions[revision]
+        assert record["ordinaryPlayerAssignments"]
+        assert (record["sourceActionDerivationVerified"]
+                or record.get("terminalAbandonAsNuke")
+                or record.get("nativeInputRetiming")
+                or record.get("nativeCandidateProvenanceOpen"))
+        if record.get("nativeCandidateProvenanceOpen"):
+            assert not record["sourceActionDerivationVerified"]
+        assert not replay.get("sourceRules") and replay["expected"]["didWin"]
+        assert replay["initialStateHash"] == record["initialStateHash"] == row["initialHash"]
+        assert record["bundledArchiveSHA256"] == row["entry"]["sourceRevision"]
+        assert record["nativeReplaySHA256"] == revision.rsplit(" ", 1)[-1]
+        assert record["nativeSaved"] == replay["expected"]["saved"]
+        assert record["required"] == replay["expected"]["required"]
+        assert record["nativeCompletionTick"] == replay["expected"]["ticks"]
+        assert record["difficultyScore"] == profile["overallScore"]
+    hatch_recheck = read(GOLEMS_HATCH_RECHECK)
+    assert hatch_recheck["selectedReplaysChecked"] == (
+        hatch_recheck["baseAuditChecked"] + hatch_recheck["fanEvidenceOverlayChecked"]
+    )
+    assert hatch_recheck["strictFailures"] == 0
+    assert len(hatch_recheck["records"]) == 7
+    for record in hatch_recheck["records"]:
+        row = classic[json.dumps(record["identity"], sort_keys=True)]
+        current = solutions[row["profile"]["key"]["replayRevision"]]
+        previous = solutions["SHA256 digest: " + record["previousReplaySHA256"]]
+        replay_path = ROOT / record["replayPath"]
+        profile_path = ROOT / record["profilePath"]
+        assert digest(replay_path) == record["currentReplaySHA256"]
+        assert read(profile_path) == row["profile"]
+        assert row["entry"]["sourceRevision"] == record["bundledArchiveSHA256"]
+        assert row["initialHash"] == current["initialStateHash"] == record["initialStateHash"]
+        assert previous["expected"]["saved"] == record["previousSaved"]
+        assert previous["expected"]["ticks"] == record["previousCompletionTick"]
+        assert current["expected"]["didWin"]
+        assert current["expected"]["saved"] == record["currentSaved"]
+        assert current["expected"]["required"] == record["required"]
+        assert current["expected"]["ticks"] == record["currentCompletionTick"]
+        assert row["profile"]["overallScore"] == record["currentDifficultyScore"]
+        assert row["profile"]["key"]["replayRevision"].rsplit(" ", 1)[-1] == record["currentReplaySHA256"]
+    hatch_recovery = read(GOLEMS_HATCH_RECOVERY)
+    assert hatch_recovery["unalignedHatchCandidates"] == 30
+    assert hatch_recovery["strictNativeWinningInputs"] == 18
+    assert hatch_recovery["newWinningLevels"] == hatch_recovery["strictPostMergeVerified"] == 17
+    assert hatch_recovery["sourceHeaderSavedMatches"] == 18
+    assert hatch_recovery["sourceHeaderCompletionWithinFiveTicks"] == 18
+    assert hatch_recovery["directSourceActionMappings"] == 18
+    assert len(hatch_recovery["records"]) == 17
+    hatch_recovery_by_id = {
+        (record["identity"]["packID"], record["identity"]["levelID"]): record
+        for record in hatch_recovery["records"]
+    }
+    assert len(hatch_recovery["attempts"]) == hatch_recovery["unalignedHatchCandidates"]
+    assert Counter(attempt["status"] for attempt in hatch_recovery["attempts"]) == {
+        "verified win": 18, "assignment error": 10, "completed loss": 2
+    }
+    assert all(any(delta != 0 for delta in attempt["hatchSourceDeltas"])
+               for attempt in hatch_recovery["attempts"])
+    hatch_rejections = read(GOLEMS_HATCH_REJECTIONS)
+    rejected_attempts = {
+        (attempt["identity"]["packID"], attempt["identity"]["levelID"],
+         attempt["sourceReplaySHA256"]): attempt
+        for attempt in hatch_recovery["attempts"] if attempt["status"] == "assignment error"
+    }
+    assert hatch_rejections["nativeBaselineAssignmentErrors"] == 10
+    assert hatch_rejections["scratchReplayTrialAssignmentErrors"] == 10
+    assert len(hatch_rejections["records"]) == len(rejected_attempts) == 10
+    assert Counter(record["observedCause"] for record in hatch_rejections["records"]) == {
+        "state or terrain assignment guard": 4,
+        "no stocked skill": 3,
+        "target already lost": 3,
+    }
+    for record in hatch_rejections["records"]:
+        key = (record["identity"]["packID"], record["identity"]["levelID"],
+               record["sourceReplaySHA256"])
+        attempt = rejected_attempts.pop(key)
+        assert record["bundledInitialStateHash"] == attempt["nativeInitialStateHash"]
+        assert record["firstRejectedNativeTick"] > 0
+        assert record["sourceDirectAssignmentTrialFirstRejection"]["nativeTick"] >= record["firstRejectedNativeTick"]
+    assert not rejected_attempts
+    independent_rejection = hatch_rejections["independentSourceCheck"]
+    assert independent_rejection["sourceReplayRawSHA256"] == next(
+        record["sourceReplaySHA256"] for record in hatch_rejections["records"]
+        if record["identity"] == independent_rejection["identity"]
+    )
+    assert independent_rejection["sourceSaved"] == independent_rejection["sourceRequired"] == 2
+    assert independent_rejection["sourceCompletionCycle"] == 381
+    assert not independent_rejection["sourceErrors"] and not independent_rejection["proxyErrors"]
+    height_timing_trial = independent_rejection["scratchHeightTimingTrial"]
+    assert height_timing_trial["variants"] == (
+        len(height_timing_trial["hatchYOffsets"])
+        * len(height_timing_trial["eventTickShiftsFromNativeMinusOne"])
+    ) == 56
+    assert height_timing_trial["wins"] == 0
+    for record in hatch_recovery["records"]:
+        row = classic[json.dumps(record["identity"], sort_keys=True)]
+        replay = solutions[row["profile"]["key"]["replayRevision"]]
+        assert record["identity"]["engine"] == "classic"
+        assert record["nativeReplaySHA256"] == digest(ROOT / record["replayPath"])
+        assert read(ROOT / record["profilePath"]) == row["profile"]
+        assert row["entry"]["sourceRevision"] == record["bundledArchiveSHA256"]
+        assert row["initialHash"] == replay["initialStateHash"] == record["initialStateHash"]
+        assert replay["expected"]["didWin"] and replay["expected"]["saved"] == record["nativeSaved"]
+        assert replay["expected"]["required"] == record["required"]
+        assert replay["expected"]["ticks"] == record["nativeCompletionTick"]
+        assert record["sourceActionDerivationVerified"] and record["ordinaryPlayerAssignments"]
+        assert record["sourceHeaderSaved"] == record["nativeSaved"]
+        assert abs(record["sourceHeaderTicks"] - record["nativeCompletionTick"]) <= 5
     golems_phase_records = [record for path in GOLEMS_PHASE_EVIDENCE
                             for record in read(path)["records"]]
     assert len(golems_phase_records) == len({
@@ -210,6 +341,11 @@ def main():
     })
     assert lemmini_pack_ids <= manifest_pack_ids
     assert golems_pack_ids <= manifest_pack_ids
+    assert {pack_id for pack_id, _ in golems_level_ids} <= manifest_pack_ids
+    assert golems_level_ids <= {
+        (row["entry"]["identity"]["packID"], row["entry"]["identity"]["levelID"])
+        for row in fan
+    }
     assert not lemmini_pack_ids & golems_pack_ids
     assert all(
         row["entry"]["identity"]["levelID"].lower().endswith((".ini#-1", ".lvl#-1"))
@@ -218,10 +354,12 @@ def main():
     rows = []
     for row in fan:
         profile = row["profile"]
+        revision = profile["key"]["replayRevision"]
         verified = profile["confidence"] != "low"
         level_id = row["entry"]["identity"]
         lemmini_source = level_id["packID"] in lemmini_pack_ids
-        golems_source = level_id["packID"] in golems_pack_ids
+        golems_source = (level_id["packID"] in golems_pack_ids or
+                         (level_id["packID"], level_id["levelID"]) in golems_level_ids)
         limit = structural.get((level_id["packID"], level_id["levelID"]))
         native_obstruction = NATIVE_OBSTRUCTIONS.get((level_id["packID"], level_id["levelID"]))
         rate_sweep = NATIVE_RATE_SWEEPS.get((level_id["packID"], level_id["levelID"]))
@@ -242,12 +380,40 @@ def main():
             assert source_outcome["levelSourceRevision"] == row["entry"]["sourceRevision"]
         if independent_source:
             assert independent_source["levelSourceRevision"] == row["entry"]["sourceRevision"]
-            assert independent_source["nativeInitialHash"] == row["initialHash"]
+            if fragment := independent_source.get("publishedReplayURLFragment"):
+                assert fragment.startswith("~")
+                encoded = fragment[1:]
+                raw = base64.urlsafe_b64decode(encoded + "=" * (-len(encoded) % 4))
+                assert hashlib.sha256(raw).hexdigest() == independent_source["publishedReplaySHA256"]
+                assert raw[0] & 15 == 3
+                assert raw[1] == independent_source["sourceSaved"]
+                assert int.from_bytes(raw[2:4], "little") == independent_source["sourceCompletionCycles"]
+            selected_mechanics = independent_source.get("currentSelectedMechanics")
+            if selected_mechanics:
+                assert selected_mechanics["mechanics"] == "golems"
+                assert selected_mechanics["initialStateHash"] == row["initialHash"]
+                assert selected_mechanics["replaySHA256"] == profile["key"]["replayRevision"].rsplit(" ", 1)[-1]
+                assert selected_mechanics["initialStateHash"] != independent_source["nativeInitialHash"]
+            elif independent_source.get("comparisonMechanics"):
+                assert independent_source["comparisonMechanics"] == "golems"
+                assert independent_source["auditInitialHash"] == row["initialHash"]
+                if independent_source.get("hatchCoordinateEvidencePath"):
+                    assert independent_source["nativeInitialHash"] == row["initialHash"]
+                else:
+                    assert independent_source["nativeInitialHash"] != row["initialHash"]
+            else:
+                assert independent_source["nativeInitialHash"] == row["initialHash"]
             assert independent_source["sourceRequired"] == independent_source["nativeRequired"]
             assert independent_source["sourceTotal"] == independent_source["nativeTotal"]
             if independent_source["sourcePhysicsParity"] == "outcome mismatch":
                 assert independent_source["nativeSaved"] is not None
                 assert independent_source["sourceSaved"] != independent_source["nativeSaved"]
+            elif independent_source["sourcePhysicsParity"] == "saved-count match; completion-time mismatch":
+                assert verified
+                assert independent_source["nativeSaved"] == independent_source["sourceSaved"]
+                assert abs(independent_source["sourceCompletionCycles"]
+                           - independent_source["nativeReplayEndTick"]) > 5
+                assert independent_source["nativeReplaySHA256"] == revision.rsplit(" ", 1)[-1]
             elif independent_source["sourcePhysicsParity"] == "assignment mismatch":
                 assert independent_source["nativeSaved"] is None
                 assert independent_source["nativeFirstRejectedAssignment"]
@@ -259,7 +425,7 @@ def main():
                 assert independent_source["sourceCompletionCycles"] == independent_source["nativeReplayEndTick"]
                 assert independent_source["nativeReplayEndTick"] == source_outcome["nativeCompletionTicks"]
                 assert independent_source["nativeReplaySHA256"] == profile["key"]["replayRevision"].rsplit(" ", 1)[-1]
-            if independent_source["sourcePhysicsParity"] != "outcome and completion-time match":
+            if independent_source["sourcePhysicsParity"] in ("outcome mismatch", "assignment mismatch") and not selected_mechanics:
                 assert not verified
         if object_comparison:
             assert verified
@@ -283,11 +449,19 @@ def main():
         ) > 5:
             parity_observations.append("published replay completion header differs by over 5 ticks")
         if independent_source:
-            parity_observations.append({
+            observation = {
                 "outcome mismatch": "independent source/native replay outcome mismatch",
+                "saved-count match; completion-time mismatch": "independent saved count matches; completion differs; terrain unverified",
                 "assignment mismatch": "independent source replay assignment rejected natively",
                 "outcome and completion-time match": "independent outcome and timing match; terrain unverified",
-            }[independent_source["sourcePhysicsParity"]])
+            }[independent_source["sourcePhysicsParity"]]
+            if independent_source.get("currentSelectedMechanics"):
+                observation = "historical Original-rule " + observation
+            parity_observations.append(observation)
+        recovery = hatch_recovery_by_id.get((level_id["packID"], level_id["levelID"]))
+        if recovery:
+            assert verified and recovery["nativeReplaySHA256"] == revision.rsplit(" ", 1)[-1]
+            parity_observations.append("archived Golems replay headers agree; terrain unverified")
         if limit:
             assert not verified and limit["levelSourceRevision"] == row["entry"]["sourceRevision"]
             assert limit["initialStateHash"] == row["initialHash"]
@@ -357,6 +531,10 @@ def main():
     pack_manifest = BUNDLED_FAN_PACKS / "packs.json"
     sources[str(pack_manifest.relative_to(ROOT))] = digest(pack_manifest)
     sources[str(SOURCE_FAMILIES.relative_to(ROOT))] = digest(SOURCE_FAMILIES)
+    sources[str(GOLEMS_SELECTED_ORDINARY.relative_to(ROOT))] = digest(GOLEMS_SELECTED_ORDINARY)
+    sources[str(GOLEMS_HATCH_RECHECK.relative_to(ROOT))] = digest(GOLEMS_HATCH_RECHECK)
+    sources[str(GOLEMS_HATCH_RECOVERY.relative_to(ROOT))] = digest(GOLEMS_HATCH_RECOVERY)
+    sources[str(GOLEMS_HATCH_REJECTIONS.relative_to(ROOT))] = digest(GOLEMS_HATCH_REJECTIONS)
     for path in GOLEMS_PHASE_EVIDENCE:
         sources[str(path.relative_to(ROOT))] = digest(path)
     if PASSIVE.exists():
@@ -381,7 +559,14 @@ def main():
     lemmini_rows = [row for row in rows if row["source_engine"] == "Lemmini"]
     assert len(lemmini_rows) == 299, len(lemmini_rows)
     golems_rows = [row for row in rows if row["source_engine"] == "Golems"]
-    assert len(golems_rows) == 22, len(golems_rows)
+    expected_golems_packs = Counter({
+        "fan:lldb-290": 10, "fan:lldb-433": 2,
+        "fan:lldb-495": 10, "fan:lldb-496": 10,
+    })
+    for pack_id, _ in golems_level_ids:
+        if pack_id not in golems_pack_ids:
+            expected_golems_packs[pack_id] += 1
+    assert Counter(row["pack"] for row in golems_rows) == expected_golems_packs
     unverified_official_conversions = sum(
         row["completion"] == "no verified win" and row["pack"] == "Original_Lemmings"
         for row in rows
@@ -452,15 +637,19 @@ def main():
         "Classic's 160-pixel playfield cannot represent several of these levels' hatch "
         "and exit coordinates. This is an engine-family compatibility gap, not proof that "
         "the source puzzles are unsolvable. See `validation.md` for the pack list.\n\n"
-        f"{len(golems_rows)} levels in packs 433, 495 and 496 use the Golems source player. "
+        f"{len(golems_rows)} classified levels use the Golems source player, including "
+        "exact levels in mixed-evidence packs. "
         "Their source-engine label does not establish native physics parity. "
         "See `validation.md` and `classic-independent-source-checks.json`.\n\n"
-        f"The four phase-corrected Golems evidence files hold {len(golems_phase_records)} "
-        "distinct exact-level native wins with ten-probe scores under opt-in Golems mechanics. "
-        "Most remain outside the selected ledger. `Pass Interference` now has a separate ordinary-assignment "
-        "win under the selected Golems profile for its exact bundled pack. Its selected digest and score "
-        "are in `levels.csv`. The two-player alternative stays outside the learning path. "
-        "See `classic-golems-phase-shift-third.json` and `validation.md`.\n\n"
+        f"The ten Golems replay evidence files hold {len(golems_phase_records)} "
+        "distinct exact-level native wins with ten-probe scores. "
+        f"{len(ordinary_records)} selected levels have strict ordinary-input wins under Golems "
+        "mechanics on their exact bundled levels. "
+        "The native Golems exit starts on first trigger contact, as the pinned source does. "
+        "Their selected digests and scores are in `levels.csv`. "
+        "The two-player alternative stays outside the learning path. "
+        "See `classic-golems-mining-rule.json`, "
+        "`classic-golems-selected-ordinary.json` and `validation.md`.\n\n"
         f"Verified winning replays support {summary['verifiedFanWins']} Classic fan scores and "
         f"{summary['verifiedNeoLemmixWins']} NeoLemmix scores. "
         f"The remaining {summary['unverifiedNonOfficial']} non-official levels and "
@@ -488,14 +677,15 @@ def main():
         "The full parity gate remains separate.\n\n"
         "`classic-independent-source-checks.json` records Golems browser runs of published "
         "`Holy Cow!` and `It's Raining Lemmings` replays. The source engine wins both. "
-        "The exact native `Holy Cow!` input saves 0 of 20 after the source saves 18 of 20; "
-        "the other input has a native assignment rejection. Both ledger rows flag these "
-        "parity failures and stay unscored until native winning replays exist.\n\n"
-        "An isolated Golems fall-rule trial wins `It's Raining Lemmings` with the published "
-        "input, but ends two ticks later than the source under later-release hatch rules. "
-        "Across the two confirmed Golems packs, the same trial invalidates 11 of 14 "
-        "current scored witnesses. The trial "
-        "is diagnostic evidence; it is not a shipped native replay or a new ledger score. "
+        "The earlier unshifted `Holy Cow!` input lost under Original mechanics, and "
+        "the unshifted `It's Raining Lemmings` input rejected a Builder. Their selected "
+        "Golems-rule replays now win on the exact bundled levels and have scores. "
+        "The published `Diving Area` replay saves 4 of 4 in the source player, while its "
+        "one-tick-translated native input saves 2 of 4 on matching level and graphics bytes. "
+        "Its input timing and intermediate state difference remain open.\n\n"
+        "The native Golems profile includes a later hatch rule and a raised fall limit. "
+        "The selected routes pass strict native playback; their saved counts and timing "
+        "do not establish full source physics parity. "
         "See `validation.md` and `classic-independent-source-checks.json`.\n\n"
         "Bundled Classic fan playback uses the Golems timed-level clock, which allows two more "
         "update cycles than the DOS clock. Official Classic levels retain the DOS clock. "

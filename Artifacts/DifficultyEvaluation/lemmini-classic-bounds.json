@@ -1,0 +1,1230 @@
+{
+  "method": "Exact bundled INI object placement Y; object IDs 0 and 1 are the Classic exit and entrance slots. This flags a geometry mismatch, not an impossibility proof or source parity check.",
+  "classicMaximumY": 163,
+  "lemminiINILevels": 292,
+  "bundledArchives": {
+    "fan:lldb-200": {
+      "file": "0200-Gronklems-4.zip",
+      "sha256": "df9f798f55c909c8f0ef925a70b9dea3a607455ce9b63b3d40ebded40ff0d29f"
+    },
+    "fan:lldb-201": {
+      "file": "0201-Gronklems-3.zip",
+      "sha256": "fbf2c959cc58409892dba24a87b7230c515f720b09acb533d0e147e41842fa02"
+    },
+    "fan:lldb-203": {
+      "file": "0203-Gronklems-6.zip",
+      "sha256": "1900e4554d946d2e464f8a69cff2f2a915c72294c9c57bc2b563cbea3ebb9af0"
+    },
+    "fan:lldb-204": {
+      "file": "0204-Gronklems-5.zip",
+      "sha256": "75a78c065d97fb8d712aadf84ecf22464ae05f6018758a6902737ea7e1c7d716"
+    },
+    "fan:lldb-206": {
+      "file": "0206-mobius-3.zip",
+      "sha256": "a7fbd3d48290b5fcf49cb6ca7a8b24b010546ab3d8ab1c5feb7f09821d59e9c2"
+    },
+    "fan:lldb-208": {
+      "file": "0208-Gronklems-7.zip",
+      "sha256": "653a50ccce0eac0c98c88c590d3de2b462ac3b990e26d01636d9085c22325ca8"
+    },
+    "fan:lldb-209": {
+      "file": "0209-grams88-1.zip",
+      "sha256": "df965c0277163d6af6da6ab40ba80369ad2f0a446e05929c50c9091e6015974c"
+    },
+    "fan:lldb-211": {
+      "file": "0211-grams88-2.zip",
+      "sha256": "4fc97baad0e98022cd89fd9983569a8a2961258619ed83e490491d7f75a788c2"
+    },
+    "fan:lldb-215": {
+      "file": "0215-Plinto.zip",
+      "sha256": "9ca65d28f41157293456671bdf2ff1ee84d1ec8525cb7cbc5dcf63fa574058a5"
+    },
+    "fan:lldb-369": {
+      "file": "0369-Pieuw05.zip",
+      "sha256": "50356f4c0234731587eeb93030ee4e771ab9f7b73abd76195a19af50aef284dc"
+    },
+    "fan:lldb-396": {
+      "file": "0396-Lemmings-Heaven-Contest-2008.zip",
+      "sha256": "4756264b3368e17875198269002d708cf00478b3a20d49c94678902b95f49ca5"
+    },
+    "fan:lldb-397": {
+      "file": "0397-Lemmings-Heaven-Contest-2010.zip",
+      "sha256": "7cb5a7b687cccdbe290028ae7648bb15809b3248a3cf9330d418ce16240d63f2"
+    },
+    "fan:lldb-401": {
+      "file": "0401-Christmas-2013.zip",
+      "sha256": "52aefdb8192d0a738bd0a3f53e85a54d51e15826d6548c55e987a7e07de0c89d"
+    },
+    "fan:lldb-402": {
+      "file": "0402-Grent01.zip",
+      "sha256": "8244646ee239f12ea4e238fd52e12bac2c654be2814d49f18df7a32486995538"
+    },
+    "fan:lldb-406": {
+      "file": "0406-Just-Some-Levels.zip",
+      "sha256": "a4805079be15d280761d2862cd2540dd8c32f3d83801e406912d862b8a1ede92"
+    },
+    "fan:lldb-408": {
+      "file": "0408-Just-Some-More-Levels.zip",
+      "sha256": "82ff17a97044f31b812f9f9c4701c664ac3d7f075180a7d524da265f692c6ffc"
+    },
+    "fan:lldb-415": {
+      "file": "0415-Blizzard-of-Lemm.zip",
+      "sha256": "a1107ad848d4c68d1b127efe8ca3989906414b7acc5d79be4cbb52bf61a7d7ec"
+    },
+    "fan:lldb-416": {
+      "file": "0416-grams88.zip",
+      "sha256": "b33f3e29a9f703ed3959e189f2146cf378922649a790e30316f4b82969c794e6"
+    },
+    "fan:lldb-466": {
+      "file": "0466-GrentLems.zip",
+      "sha256": "5edfa70eddd89082c2a7f6a5be86a53b6fcdbda0d7fe9efb81a3584fe0ee8b05"
+    },
+    "fan:lldb-469": {
+      "file": "0469-Skeletonskeletons-Level-Pack.zip",
+      "sha256": "96c8a2546b2b5e249c66111e6553ed3146c55f570cc47ccf33ad96b9359060c2"
+    }
+  },
+  "counts": {
+    "either": 162,
+    "allExitsBelow": 147,
+    "allEntrancesBelow": 27,
+    "both": 12,
+    "verifiedWins": 0
+  },
+  "findings": [
+    {
+      "pack": "fan:lldb-200",
+      "level": "Gronklems #4 (v3)/10) Controlled Explosion.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-200",
+      "level": "Gronklems #4 (v3)/3) Lemmite.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-200",
+      "level": "Gronklems #4 (v3)/4) The Bashers Temple.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-200",
+      "level": "Gronklems #4 (v3)/6) Welcome to Lemmingopolis.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-200",
+      "level": "Gronklems #4 (v3)/7) The Pendulemming.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-200",
+      "level": "Gronklems #4 (v3)/Extras/E1) The Pendulemming CH.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-200",
+      "level": "Gronklems #4 (v3)/Extras/E2) Controlled Explosion CH.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-201",
+      "level": "1) If Only That Pillar Wasn't There.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-201",
+      "level": "10) Lemmington under construction.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-201",
+      "level": "4) Not a Basher Tutorial.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-201",
+      "level": "6) With a Twist!.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": false,
+      "allEntrancePlacementsBelowClassicMaximum": true,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-201",
+      "level": "7) Get Your Oven Gloves Out!.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-201",
+      "level": "8) Lemming Island.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-203",
+      "level": "Gronklems 6 v2/1) Unclimb that cliff!.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-203",
+      "level": "Gronklems 6 v2/2) Lemming Storage Facility.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-203",
+      "level": "Gronklems 6 v2/7) LemDotAvi.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-203",
+      "level": "Gronklems 6 v2/8) Just Over the Hill.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-203",
+      "level": "Gronklems 6 v2/9) Emerald City.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": true,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-203",
+      "level": "Original Levels/1) Unclimb that cliff!.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-203",
+      "level": "Original Levels/2) Lemming Storage Facility.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-203",
+      "level": "Original Levels/7) Attack From Four Directions.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-203",
+      "level": "Original Levels/8) Just Over the Hill.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-203",
+      "level": "Original Levels/9) Emerald City.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": true,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-204",
+      "level": "Gronklems #5/1) Inside the Pyramid.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-204",
+      "level": "Gronklems #5/10) The Giants Leap.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": true,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-204",
+      "level": "Gronklems #5/6) Restoration in Progress.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-204",
+      "level": "Gronklems #5/7) Where Clouds are Made.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-204",
+      "level": "Gronklems #5/8) Antarctic Secret Base.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-204",
+      "level": "Gronklems #5/9) Optical Fibre Land.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-204",
+      "level": "Original levels/1) Inside the Pyramid.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-204",
+      "level": "Original levels/10) The Giants Leap.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": true,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-204",
+      "level": "Original levels/6) Restoration in Progress.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-204",
+      "level": "Original levels/7) Where Clouds are Made.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-204",
+      "level": "Original levels/8) Antarctic Secret Base.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-204",
+      "level": "Original levels/9) Optical Fibre Land.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-206",
+      "level": "1 Transit Timing Variations.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": false,
+      "allEntrancePlacementsBelowClassicMaximum": true,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-206",
+      "level": "10 Just Another Random Brick Level.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-206",
+      "level": "4 Babylon Fading.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-206",
+      "level": "5 The Lemming With the Golden Gun.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-206",
+      "level": "6 The French Connection.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-208",
+      "level": "Gronklems 7/1) Lemmings Are Not Big Trucks.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-208",
+      "level": "Gronklems 7/2) Getting Stuck in a Cave.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-208",
+      "level": "Gronklems 7/3) Crossover.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-208",
+      "level": "Gronklems 7/5) HELP.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-208",
+      "level": "Gronklems 7/6) GLITCHSPACE.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-208",
+      "level": "Gronklems 7/9) Four Quarters.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-209",
+      "level": "grams88 Levels/3)08 BC lost temple.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": false,
+      "allEntrancePlacementsBelowClassicMaximum": true,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-209",
+      "level": "grams88 Levels/6)Linear Level.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": false,
+      "allEntrancePlacementsBelowClassicMaximum": true,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-209",
+      "level": "grams88 Levels/7)Burst Pipe.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": false,
+      "allEntrancePlacementsBelowClassicMaximum": true,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-209",
+      "level": "grams88 Levels/9)Stuck in the pipe.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": false,
+      "allEntrancePlacementsBelowClassicMaximum": true,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-211",
+      "level": "More Levels/1)Go for life.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-211",
+      "level": "More Levels/10)Mr Havoc has returned.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-211",
+      "level": "More Levels/2)A tiny problem.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-211",
+      "level": "More Levels/3)House location change.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": false,
+      "allEntrancePlacementsBelowClassicMaximum": true,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-211",
+      "level": "More Levels/5)Sacrifice.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": true,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-211",
+      "level": "More Levels/6)Ten allowed to die.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": false,
+      "allEntrancePlacementsBelowClassicMaximum": true,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-211",
+      "level": "More Levels/7)Lemming Factory.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-211",
+      "level": "More Levels/9)High sand castle.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": false,
+      "allEntrancePlacementsBelowClassicMaximum": true,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-215",
+      "level": "10 suspended animation.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-215",
+      "level": "2 Over My Head.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-215",
+      "level": "3 It Takes Time to Build.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-215",
+      "level": "4 Hook Line and Sinker.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-215",
+      "level": "5 five for fighting.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-215",
+      "level": "6 Last Lemming Standing.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-215",
+      "level": "8 Operation Barbarossa.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": false,
+      "allEntrancePlacementsBelowClassicMaximum": true,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-369",
+      "level": "02 - Utopia.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": false,
+      "allEntrancePlacementsBelowClassicMaximum": true,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-369",
+      "level": "03 - Reciprocity.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-369",
+      "level": "04 - Karjalanpiirakat.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-369",
+      "level": "05 - Vertigo.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-369",
+      "level": "06 - Totem.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-369",
+      "level": "07 - Coalescing.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-369",
+      "level": "08 - Parsimony.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-369",
+      "level": "09 - Ecotone.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": true,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-369",
+      "level": "10 - Cozenage.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-396",
+      "level": "levelpack/contest10_patienceisavirtue.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-396",
+      "level": "levelpack/contest1_Rock house.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-396",
+      "level": "levelpack/contest1_RockHouse.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-396",
+      "level": "levelpack/contest4_handlewithcare.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-396",
+      "level": "levelpack/contest6_The Rambaldi Eye.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-396",
+      "level": "levelpack/contest6_TheRambaldiEye.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-396",
+      "level": "levelpack/contest7_Fall Guy.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-396",
+      "level": "levelpack/contest7_FallGuy.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-396",
+      "level": "levelpack/contest8_Out in Sixty Seconds.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-396",
+      "level": "levelpack/contest8_OutInSixtySeconds.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-397",
+      "level": "2010 CONTEST/01loftyD.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-397",
+      "level": "2010 CONTEST/02loftyD.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-397",
+      "level": "2010 CONTEST/04Dodochacalo.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-397",
+      "level": "2010 CONTEST/05pieuw.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-397",
+      "level": "2010 CONTEST/07Dodochacalo.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": true,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-397",
+      "level": "2010 CONTEST/12loftyD.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-397",
+      "level": "2010 CONTEST/13gronkling.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-397",
+      "level": "2010 CONTEST/14lacktardo.ini.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-397",
+      "level": "2010 CONTEST/19lacktardo.ini.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-402",
+      "level": "Grent01/3. Flaming Death.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-402",
+      "level": "Grent01/4. Lemming Designer.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-402",
+      "level": "Grent01/6. Backpedal Lemmings.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": true,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-406",
+      "level": "4_lem/lvl035.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-406",
+      "level": "4_lem/lvl036.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-406",
+      "level": "4_lem/lvl040.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-406",
+      "level": "4_lem/lvl044.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": false,
+      "allEntrancePlacementsBelowClassicMaximum": true,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-406",
+      "level": "4_lem/lvl049.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": false,
+      "allEntrancePlacementsBelowClassicMaximum": true,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-406",
+      "level": "4_lem/lvl051.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-406",
+      "level": "4_lem/lvl053.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-408",
+      "level": "mslevels2/frenzy.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-408",
+      "level": "mslevels2/littletitle.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-408",
+      "level": "mslevels2/mimic.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-408",
+      "level": "mslevels2/strifecircle.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-408",
+      "level": "mslevels2/substitution.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-408",
+      "level": "mslevels2/trust.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-408",
+      "level": "mslevels2/twolemmings.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-415",
+      "level": "levels/Blizzlem/001.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-415",
+      "level": "levels/Blizzlem/004.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-415",
+      "level": "levels/Blizzlem/005.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-415",
+      "level": "levels/Blizzlem/006.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-415",
+      "level": "levels/Blizzlem/008.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-415",
+      "level": "levels/Blizzlem/010.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-415",
+      "level": "levels/Blizzlem/011.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-415",
+      "level": "levels/Blizzlem/013.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-415",
+      "level": "levels/Blizzlem/014.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-415",
+      "level": "levels/Blizzlem/015.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-415",
+      "level": "levels/Blizzlem/101.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": true,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-415",
+      "level": "levels/Blizzlem/102.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": true,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-415",
+      "level": "levels/Blizzlem/104.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-415",
+      "level": "levels/Blizzlem/105.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-415",
+      "level": "levels/Blizzlem/106.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-415",
+      "level": "levels/Blizzlem/108.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": false,
+      "allEntrancePlacementsBelowClassicMaximum": true,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-415",
+      "level": "levels/Blizzlem/110.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-415",
+      "level": "levels/Blizzlem/112.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": false,
+      "allEntrancePlacementsBelowClassicMaximum": true,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-415",
+      "level": "levels/Blizzlem/113.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-415",
+      "level": "levels/Blizzlem/115.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-415",
+      "level": "levels/Blizzlem/201.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-415",
+      "level": "levels/Blizzlem/202.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-415",
+      "level": "levels/Blizzlem/203.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-415",
+      "level": "levels/Blizzlem/205.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-415",
+      "level": "levels/Blizzlem/206.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-415",
+      "level": "levels/Blizzlem/207.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": true,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-415",
+      "level": "levels/Blizzlem/210.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-415",
+      "level": "levels/Blizzlem/212.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-415",
+      "level": "levels/Blizzlem/213.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-415",
+      "level": "levels/Blizzlem/214.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-415",
+      "level": "levels/Blizzlem/305.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": true,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-415",
+      "level": "levels/Blizzlem/308.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-415",
+      "level": "levels/Blizzlem/309.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-415",
+      "level": "levels/Blizzlem/310.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-415",
+      "level": "levels/Blizzlem/311.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-415",
+      "level": "levels/Blizzlem/312.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-415",
+      "level": "levels/Blizzlem/313.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-415",
+      "level": "levels/Blizzlem/317.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-466",
+      "level": "GrentLems/01 Foreshadowing.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-466",
+      "level": "GrentLems/02 Who let the lemmings out !.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-466",
+      "level": "GrentLems/03 Complacency.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-466",
+      "level": "GrentLems/04 Lem waz' here.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-466",
+      "level": "GrentLems/06 Abandoned Palace.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-466",
+      "level": "GrentLems/08 Lemming Designer.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-466",
+      "level": "GrentLems/10 Tiptoe through the Factory.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-466",
+      "level": "GrentLems/16 A Double Rotation.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-469",
+      "level": "be_alert_theres_traps_to_avert.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-469",
+      "level": "blessed_are_the_bricks.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-469",
+      "level": "building_suspense.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-469",
+      "level": "over_and_out.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-469",
+      "level": "pole_lands_poles.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    },
+    {
+      "pack": "fan:lldb-469",
+      "level": "pyrefract.ini#-1",
+      "allExitPlacementsBelowClassicMaximum": true,
+      "allEntrancePlacementsBelowClassicMaximum": false,
+      "verifiedWin": false
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "components" : {
+    "concurrencyBurden" : 0,
+    "constraintPressure" : 749.7103718199609,
+    "deductionComplexityProxy" : 60,
+    "executionPrecision" : 481.25,
+    "solutionComplexity" : 57,
+    "techniqueBurden" : 65
+  },
+  "confidence" : "high",
+  "criticalActions" : [
+
+  ],
+  "detectedTechniques" : [
+    "builder"
+  ],
+  "explanation" : [
+    "1 used skill types; 1 assigned workers; 0 same-worker skill changes.",
+    "Maximum concurrent worker regions: 1.",
+    "Timing probes: 10. Untested alternatives remain unknown.",
+    "Deduction is a conservative proxy. Observed techniques are not proof of necessity.",
+    "Source rank: fan:lldb-430."
+  ],
+  "key" : {
+    "analyserVersion" : "difficulty-3",
+    "assetsRevision" : "3ce9042abfa73a0292819735840c775b0444970517c327d79e669c6a445b053e:probes-10",
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "LDChallenge01.dat#2",
+      "packID" : "fan:lldb-430"
+    },
+    "levelRevision" : "bdbf943f510410b7e4c304ff57a31b83134d51b32a6aeed2432eaa6f2804d835",
+    "replayRevision" : "08cdd712cc234a3e4df852a1a23148f09dd611903e902670f1a28c8660bce74a",
+    "simulationVersion" : "neolemmix-ce-2026-09-27:golems-phase-minus-one-targeted:exit-contact"
+  },
+  "overallScore" : 226.7023483365949,
+  "precision" : {
+    "actions" : [
+      {
+        "outcomes" : {
+          "-1" : true,
+          "-16" : false,
+          "-2" : true,
+          "-4" : false,
+          "-8" : false,
+          "1" : true,
+          "16" : false,
+          "2" : true,
+          "4" : false,
+          "8" : false
+        },
+        "sequence" : 1
+      }
+    ],
+    "alternativeRunCount" : 0,
+    "assignmentCount" : 1,
+    "completed" : true,
+    "orderingOutcomes" : [
+
+    ],
+    "runCount" : 10,
+    "selectionOutcomes" : [
+
+    ]
+  },
+  "prerequisiteConcepts" : [
+
+  ],
+  "sourceRank" : "fan:lldb-430"
+}

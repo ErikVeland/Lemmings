@@ -1,0 +1,33 @@
+{
+  "description": "Golems uses the stored, unaligned object X for hatch release. The exact bundled Diving Area replay now has a strict native win and a ten-probe difficulty score. Source and native completion timing still differs; this is not full physics parity.",
+  "sourceEngineSHA256": "38cb69f18f5055821a496336a948fc30596e56c607c3ddddfb4675be78a5873e",
+  "sourceReplaySHA256": "b0104e7676a965bf5d59582013ec706cc0202a637cb23815284bc43c6e38e8ac",
+  "sourceURL": "https://lldb.camanis.net/level/393/10/Diving-Area",
+  "sourceSaved": 4,
+  "sourceRequired": 4,
+  "sourceCompletionCycle": 1417,
+  "bundledArchiveSHA256": "6b599e67d0656e6a27f33f99916b9dafd21b04a1e7c88f8eda24e3083a087bc4",
+  "level": {
+    "packID": "fan:lldb-393",
+    "levelID": "pieuw01.dat#9",
+    "title": "Diving Area"
+  },
+  "hatch": {
+    "slot": 0,
+    "storedX": 564,
+    "displayAlignedX": 544,
+    "previousGolemsReleaseX": 569,
+    "correctedGolemsReleaseX": 573,
+    "sourceRule": "Gadget.X + release offset 25; render offset 16. The source decoder preserves stored X while get_AlignedX only aligns artwork."
+  },
+  "nativeInitialStateHash": "702036c9d395ad0c9eaeca798e29cf4f72e6551cada7b63c89ac5a2897f9ce5f",
+  "nativeReplaySHA256": "91610c2bc4d3bc04245c495f0b8c007844ef281a341660503429fde6d4261c74",
+  "nativeSaved": 4,
+  "nativeRequired": 4,
+  "nativeCompletionTick": 1373,
+  "difficultyScore": 483.8486705640427,
+  "probeRuns": 10,
+  "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/91610c2bc4d3bc04245c495f0b8c007844ef281a341660503429fde6d4261c74.json",
+  "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/91610c2bc4d3bc04245c495f0b8c007844ef281a341660503429fde6d4261c74.profile.json",
+  "sourcePhysicsParity": "saved-count match; completion differs by 44 ticks; full terrain and action trace parity unverified"
+}

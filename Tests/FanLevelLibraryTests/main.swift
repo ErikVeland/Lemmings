@@ -62,11 +62,78 @@ defer { try? FileManager.default.removeItem(at: temporary) }
 let golemsPack = root.appendingPathComponent("Content/LevelPacks/0433-Level-Design-Game-04.zip")
 check(FanLevelLibrary.mechanics(for: golemsPack) == .golems,
   "the exact source-checked Level Design Game pack uses Golems mechanics")
+let juanjoPack = root.appendingPathComponent("Content/LevelPacks/0290-JUANJO1N.zip")
+check(FanLevelLibrary.mechanics(for: juanjoPack) == .golems,
+  "the exact source-checked JUANJO1N pack uses Golems mechanics")
 let changedGolemsPack = temporary.appendingPathComponent("0433-replaced.zip")
 try archive.write(to: changedGolemsPack)
+let changedJuanjoPack = temporary.appendingPathComponent("0290-replaced.zip")
+try archive.write(to: changedJuanjoPack)
 check(FanLevelLibrary.mechanics(for: changedGolemsPack) == .original
+  && FanLevelLibrary.mechanics(for: changedJuanjoPack) == .original
   && FanLevelLibrary.mechanics(for: source) == .original,
   "replacement and other fan archives retain original mechanics")
+let sourceCheckedLevels: [(Int, String)] = [
+  (523, "Deceit Tricky 1.dat#5"),
+  (542, "Pieuw 2007 Peace 2.DAT#8"),
+  (277, "CRISFN13.dat#6"),
+  (552, "Lemmings Plus DOS Project - 06 - Wimpy (Part 3).dat#8"),
+  (552, "Lemmings Plus DOS Project - 05 - Wimpy (Part 2).dat#6"),
+  (268, "CRISFN04.dat#1"),
+  (268, "CRISFN04.dat#7"),
+  (327, "JM01.DAT#7"),
+  (494, "JANNPCK3.DAT#4"),
+  (232, "JANNPCK2.DAT#9"),
+  (237, "JEFFPCK3.DAT#5"),
+  (265, "CRISFN01.dat#3"),
+  (82, "Yawg01.dat#1"),
+  (179, "The lemming google pack.dat#5"),
+  (181, "Lemmings platinum Fragle part 2.dat#10"),
+  (246, "Martin Zurlinden 03.dat#2"),
+  (497, "MARTPCK3.DAT#2"),
+  (22, "ISteve08.dat#6"),
+  (223, "ANTHPCK3.DAT#9"),
+  (224, "ANTHPCK4.DAT#7"),
+  (315, "TWPAK13.dat#1"),
+  (306, "TWPAK04.dat#3"),
+  (366, "LEVIPAK2.DAT#0"),
+  (388, "geooPk2_preview2.dat#0"),
+  (388, "geooPk2_preview2.dat#1"),
+  (393, "pieuw01.dat#9"),
+  (405, "Genesis 2P 2.dat#5"),
+  (592, "LEVELPAK.DAT#1"),
+  (33, "QBeez03.dat#9"),
+  (78, "doggycharly random lvls.dat#0"),
+  (140, "Epic giga02.dat#0"),
+  (160, "Giga pack 01.dat#9"),
+  (171, "Giga pack 09.dat#6"),
+  (191, "Lemmings platinum Dangerous Part 2.dat#14"),
+  (217, "PSP Special.dat#3"),
+  (218, "PSP Special2.dat#2"),
+  (218, "PSP Special2.dat#3"),
+  (394, "pieuw02.dat#0"),
+  (394, "pieuw02.dat#2"),
+  (411, "mobius05.dat#1"),
+  (543, "Pieuw 2007 Awkward 2.DAT#6"),
+  (544, "Pieuw 2007 Artful 1.DAT#0"),
+  (544, "Pieuw 2007 Artful 1.DAT#3"),
+  (544, "Pieuw 2007 Artful 1.DAT#7"),
+  (545, "Pieuw 2007 Insane 2.DAT#4"),
+]
+let bundledPacks = FanLevelLibrary.packs(in: [root.appendingPathComponent("Content/LevelPacks")])
+for (number, levelID) in sourceCheckedLevels {
+  guard let pack = bundledPacks.first(where: { FanLevelLibrary.catalogueID($0) == "lldb-\(number)" })
+  else { fatalError("Missing bundled source-checked pack \(number)") }
+  let entries = try FanLevelLibrary.validatedEntries(in: pack)
+  guard let selected = entries.first(where: { $0.file + "#\($0.section ?? -1)" == levelID })
+  else { fatalError("Missing bundled source-checked level \(levelID)") }
+  check(FanLevelLibrary.mechanics(for: pack, entry: selected) == .golems,
+    "source-checked bundled level uses Golems rules")
+  check(FanLevelLibrary.mechanics(for: pack) == .original
+    && entries.filter { $0.file + "#\($0.section ?? -1)" != levelID }
+      .contains { FanLevelLibrary.mechanics(for: pack, entry: $0) == .original },
+    "mixed-evidence packs retain original rules for unselected levels")
+}
 let embedded = temporary.appendingPathComponent("embedded"), cache = temporary.appendingPathComponent("cache")
 try FileManager.default.createDirectory(at: embedded, withIntermediateDirectories: true)
 try FileManager.default.createDirectory(at: cache, withIntermediateDirectories: true)

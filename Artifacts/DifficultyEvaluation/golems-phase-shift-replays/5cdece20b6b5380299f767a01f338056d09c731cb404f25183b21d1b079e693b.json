@@ -1,0 +1,1127 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 1
+        }
+      },
+      "afterTick" : true,
+      "tick" : 78
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 78
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "digger"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 170
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 223
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "digger"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 237
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 318
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 391
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "digger"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 392
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 589
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 660
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 11,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 726
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 746
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 11,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 755
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 859
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1060
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1109
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1358
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1555
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1556
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "digger"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1737
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1750
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 21,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1843
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 34,
+          "skill" : "digger"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1998
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 2
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2196
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 3
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2197
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 4
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2198
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 5
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2199
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 6
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2200
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 7
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2201
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 8
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2202
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 9
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2203
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 10
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2204
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 11
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2205
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 12
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2206
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 13
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2207
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 14
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2208
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 15
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2209
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 16
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2210
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 17
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2211
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 18
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2212
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 19
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2213
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 20
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2214
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 21
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2215
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 22
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2216
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 23
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2217
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 24
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2218
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 25
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2219
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 26
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2220
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 27
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2221
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 28
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2222
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 29
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2223
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 30
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2224
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 31
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2225
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 32
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2226
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 33
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2227
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 34
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2228
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 35
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2229
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 36
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2230
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 37
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2231
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 38
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2232
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 39
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2233
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 40
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2234
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 41
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2235
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 42
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2236
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 43
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2237
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 44
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2238
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 45
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2239
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 46
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2240
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 47
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2241
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 48
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2242
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 49
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2243
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 50
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2244
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 51
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2245
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 52
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2246
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 53
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2247
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 54
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2248
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 55
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2249
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 56
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2250
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 57
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2251
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 58
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2252
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 59
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2253
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 60
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2254
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 61
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2255
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 62
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2256
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 63
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2257
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 64
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2258
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 65
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2259
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 66
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2260
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 67
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2261
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 68
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2262
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 69
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2263
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 70
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2264
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 71
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2265
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 72
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2266
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 73
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2267
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 74
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2268
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 75
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2269
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 76
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2270
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 77
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2271
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 78
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2272
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 79
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2273
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 80
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2274
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 81
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2275
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 82
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2276
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 83
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2277
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 84
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2278
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 85
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2279
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 86
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2280
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 87
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2281
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 88
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2282
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 89
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2283
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 90
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2284
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 91
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2285
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 92
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2286
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 93
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2287
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 94
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2288
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 95
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2289
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 96
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2290
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 97
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2291
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 98
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2292
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2293
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 80,
+    "required" : 50,
+    "saved" : 80,
+    "stateHash" : "d340ef4cea3a7d4a698cd8b2b8b6eff758ffb2c6066a243ece0dd3a71d1be93b",
+    "ticks" : 3326
+  },
+  "initialStateHash" : "9b676fd430ea6191a3d1a43d6212de7ca2c9f031979088873cccba4d9eef2645",
+  "number" : 9,
+  "rank" : "fan:lldb-331",
+  "title" : "Drown"
+}

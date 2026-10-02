@@ -12,11 +12,15 @@ METHODS = {
     "GameState.ctor": (0x48A4, "da3409ac72c01b59e85bf68fb9955f5c93b636beda6f93b4c5c9c26fd838a7b1"),
     "GameState.AdvanceCore": (0x67AC, "fef6cc57aae633d447a33f84b73ecf9fe550e96255dbaa5494e0acc815a44e51"),
     "GameState.AdvanceExitingGolem": (0x7CFE, "98de0448ceabff8904e6315161adb6ab9ea5d5a2a69404943988f500fe2b9766"),
+    "GameState.AdvanceWalkingGolem": (0x7D50, "d3d8e7f54edc9872bb7e0e8a6df5e866269f3fc734c604fc5c8b70900c4d8bdf"),
     "GameState.UpdateGolemEffects": (0x8070, "6fc0a9377dfed801ca9a40700ec30d6bd1dd250239e36648c631d361f520cbec"),
     "GameState.AdvanceFallingGolem": (0x6DB0, "bfaaf05ae1000f79dffd84d47b8ad028abc0d05bc2efb69c2c4fd5528562276e"),
     "GameState.AdvanceTime": (0x84D8, "460e38a579a03f2e29c597faf98a11a91bee4c2e66fbf437bc9ba19de1f32eaa"),
     "GameState.InitializeReleasePoints": (0x5CF0, "20799b18e66404d2b0be873ea841d3a77f4bb9e0cb024f282bd71f29d8291c08"),
     "GameState.AdvanceRelease": (0x68B8, "3d065401840b15707ed5ee749c48b16e3708af38da7f27b8df17913d6f1b3e0a"),
+    "GameState.get_GameMode": (0x4F53, "6ed87e64d91cd7bce344747b0e85a847127f6d8b15deb523bf9834e2d866fff2"),
+    "GameState.get_HasMiningOneWayBug": (0x5191, "61bb206ae8172c8dc93382a6b1ca80471e13f1628c561147ad5cdbbbe816d856"),
+    "GameState.AdvanceMiningGolem": (0x7994, "4ce87a9dd3ce09b5af9ae57ef763b0e482039aad309168ce41e652df83cb6b22"),
     "GameState.GetEffect": (0x8328, "4c7a87c935396cae905b3f43d462d3c6b6086133dddc80c4077f980b1e12dccb"),
     "LevelRenderer.RenderGadgetEffect": (0x9E10, "6344d09146b8e3434b249accca0c4d7e0b08dcb721e0c5b62018645674f3c43e"),
     "Golem.get_Activities": (0x184A6, "620eda81b82e7ecb84197f360c07908711584901343357f014fbd5540babcadb"),
@@ -75,6 +79,15 @@ def main():
     native = (ROOT / "Sources/NxlvKit/ClassicDOSSimulation.swift").read_text()
     assert "public static let maximumSafeFallDistance = 60" in native
 
+    # Source mode 3 disables the DOS right-arrow Miner bug. On effect 8, a
+    # left-facing Miner turns; a right-facing Miner turns only with that bug.
+    assert bodies["GameState.get_GameMode"] == bytes.fromhex("02 7b 88 00 00 04 2a")
+    assert bodies["GameState.get_HasMiningOneWayBug"] == bytes.fromhex(
+        "02 28 6d 00 00 06 19 fe 01 16 fe 01 2a")
+    assert bytes.fromhex(
+        "03 7b 24 03 00 04 16 32 27 02 28 a5 00 00 06 2d 1f 2b 15"
+    ) in bodies["GameState.AdvanceMiningGolem"]
+
     effect = bodies["GameState.GetEffect"]
     # Golems looks up a 4-pixel effect cell: x >> 2 and
     # 1 + ((YPlus16 - 16) >> 2). It does not test a pixel rectangle.
@@ -90,6 +103,7 @@ def main():
         "03 28 63 03 00 06 19 3b 31 01 00 00 "
         "03 1f 0d 28 64 03 00 06 03 16 7d 25 03 00 04"
     ) in update_effects
+    assert bytes.fromhex("02 03 28 e8 00 00 06") in bodies["GameState.AdvanceWalkingGolem"]
     release_points = bodies["GameState.InitializeReleasePoints"]
     release = bodies["GameState.AdvanceRelease"]
     # A hatch stores YPlus16 as placement y + 16 + 14, then copies it
@@ -162,7 +176,7 @@ def main():
             else:
                 seconds -= 1
     assert advance == 1022
-    print("Verified pinned Golems interactive fall guards, replay assignment path, effect-cell lookup, first-contact exit, fall limit and one-minute timer: Done is set on advance 1022.")
+    print("Verified pinned Golems replay assignment, mining one-way rule, effect-cell lookup, first-contact exit, fall limit and one-minute timer: Done is set on advance 1022.")
 
 
 if __name__ == "__main__":

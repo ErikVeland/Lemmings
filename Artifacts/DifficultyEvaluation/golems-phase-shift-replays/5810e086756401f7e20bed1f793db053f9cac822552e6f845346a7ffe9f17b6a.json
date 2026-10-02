@@ -1,0 +1,75 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "afterTick" : true,
+      "tick" : 129
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "climber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 129
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "digger"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 439
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1098
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 78,
+          "skill" : "digger"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1228
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 78,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1262
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 80,
+    "required" : 80,
+    "saved" : 80,
+    "stateHash" : "6942d81bedb962fdb64414a2744353f9e302b4f1e73d6afe82b9c845b92068a6",
+    "ticks" : 1781
+  },
+  "initialStateHash" : "c10c708751646d97fcb725fcd71d4a47fa088bd69470b4a7d8998df02f529459",
+  "number" : 4,
+  "rank" : "fan:lldb-351",
+  "title" : "Dangerous Balcony"
+}

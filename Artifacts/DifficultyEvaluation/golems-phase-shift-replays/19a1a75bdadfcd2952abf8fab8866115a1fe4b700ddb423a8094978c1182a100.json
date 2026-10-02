@@ -1,0 +1,315 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 10
+        }
+      },
+      "afterTick" : true,
+      "tick" : 82
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 82
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 279
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 479
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 5,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 695
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 12,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 758
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 12,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 777
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 12,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 814
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 15,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 959
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 9,
+          "skill" : "blocker"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 967
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 15,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1034
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 15,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1201
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 15,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1557
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 15,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1648
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 15,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 1847
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 15,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2044
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 15,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2241
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 15,
+          "skill" : "climber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2434
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 15,
+          "skill" : "digger"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2524
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 15,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2584
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 15,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2639
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 15,
+          "skill" : "digger"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2722
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 15,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2744
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 15,
+          "skill" : "digger"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2759
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 15,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2801
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 15,
+          "skill" : "digger"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2813
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 15,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2854
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 14,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2893
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 57,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2959
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 15,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 2990
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 60,
+    "required" : 50,
+    "saved" : 60,
+    "stateHash" : "4984130d078f69020c259cf2f077988cbdce0fd9291cbc0497e1e67c3f27f305",
+    "ticks" : 3660
+  },
+  "initialStateHash" : "74f12e9376866d42c0e05f05dd74216caf1af60a99c76a9fba5523f453615503",
+  "number" : 2,
+  "rank" : "fan:lldb-14",
+  "title" : "Lemmings on the tree !"
+}

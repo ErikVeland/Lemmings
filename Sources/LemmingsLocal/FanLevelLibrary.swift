@@ -209,14 +209,119 @@ enum FanLevelLibrary {
   }
 
   /**
-   * Selects Golems rules for an exact bundled pack with source replay evidence.
+   * Source-checked Golems levels in mixed packs, pinned to exact archives.
    */
-  static func mechanics(for pack: URL) -> ClassicDOSMechanics {
-    let challenge04Revision = "65c251590f612944e636a2e6755b6104a9cacf65ab86b351eb0d3578371adebe"
-    guard packID(pack) == 433, archiveFingerprint(pack) == challenge04Revision else {
-      return .original
+  private static let golemsLevelOverrides: [Int: (revision: String, levels: Set<String>)] = [
+    1: ("66ff4c33c44970e945dffee82cfe84a4787329f60ee702613f3f2cb233865bec", ["geooPk0.dat#1", "geooPk0.dat#9"]),
+    5: ("b176d65f35511c28170436b137f1543e0af5e5137146420234cc4275d4b1d677", ["Mikepak00.dat#6"]),
+    14: ("e2f7796fe41470257faf24d6519a0149be727942d334c681c29878ad2ae3562e", ["Mikepak09.dat#1"]),
+    20: ("d3e3cb52b86ba3528e3ed85ce4abbd14a9b7606a3a8a92c675f7f3d060ef881c", ["ISteve01.DAT#3", "ISteve01.DAT#9"]),
+    22: ("ed4f8f4bfe829606383dc3fb3c832f67db960e4b822d28e54d069472140aa484", ["ISteve08.dat#6"]),
+    24: ("4d59f847602022ca5bfd404856df7c1b6d0c90213fed6c6a59c4ee73550205c1", ["ISteve04.dat#9"]),
+    33: ("bbfb98aa5fb0fb3cd9ea02b186483456aaa0fb417cce9b55a8f9fbb723db08bb", ["QBeez03.dat#9"]),
+    75: ("5d2483e04b2a1a12413a02a0b7e3e22d6ee6970732328eacde946872504c4e38", ["JHIsan1.dat#9"]),
+    78: ("185e4dbcc0eae4a8b91112c40b94efd86dee5db23da3092eeb1480fd71acf403", ["doggycharly random lvls.dat#0"]),
+    82: ("dddb6c75f809935f8a093d1576a191a5ad1631dc1e9807ed9197f71014c6235a", ["Yawg01.dat#0", "Yawg01.dat#1"]),
+    105: ("cf9e243e4d743cb16c0c3367fb2be8ca138f4598668946aea7bc6a13907ceaec", ["epic02.dat#3"]),
+    140: ("9d421cf4304265ff343870b0dfef4b71740e9dc3bf91959b6f60ef22d4cd802c", ["Epic giga02.dat#0"]),
+    160: ("3a7bf1932d5e24a8229184bb2e9b9987755748597ef8f52cdac9e9437318c3e8", ["Giga pack 01.dat#9"]),
+    171: ("47e0617d94895001361db1030169ce26764aca68a61ff70de9d3edd1a0550ae9", ["Giga pack 09.dat#6"]),
+    179: ("4545eeb5effc99790773b4862e7c0e427ac112d5f09e484cc42d6de81362e089", ["The lemming google pack.dat#2", "The lemming google pack.dat#5"]),
+    181: ("9b666aa29ad430e1c1e2655f910ebdac52b6dcac4690eb0cb9eb9a0aa8e8e27d", ["Lemmings platinum Fragle part 2.dat#10", "Lemmings platinum Fragle part 2.dat#7"]),
+    191: ("a8a9340f2052f6dc167e9135979311ce6ab2db60adf526fdc5f6a9cd26260c43", ["Lemmings platinum Dangerous Part 2.dat#14"]),
+    196: ("9838610ce3ef81dbe34e23b74b3500f61f687bae8c9841b4c0f87b8feb7a671a", ["nortpack1.dat#8"]),
+    217: ("d033b19716f2dec396de130dde008e128db03feedbcb4bb7ce7d9778eabff2ba", ["PSP Special.dat#3"]),
+    218: ("ff0843de66881e067975462288b74fefcbf0f28e63b1e47e026cd8232ebfcf53", ["PSP Special2.dat#2", "PSP Special2.dat#3"]),
+    222: ("bc0f3a5a7ca4091b2d0ccaf59daa544a57ee3c62c1ec55ebf3d1432ac306c162", ["ANTHPCK2.DAT#2", "ANTHPCK2.DAT#3", "ANTHPCK2.DAT#4"]),
+    223: ("338c8cfbb37a5eaf6cb103e85aa2d5e40b90300abfb06dcbb503131b5e8095e1", ["ANTHPCK3.DAT#9"]),
+    224: ("b2818e41664bbcc98870c9a7c5e6f20258004495061503f5c373fa255188223d", ["ANTHPCK4.DAT#7"]),
+    225: ("dba9b23e61ec73dc0a22e49385a9dacbb45eb5db64bf064a794d8376617f5c1c", ["ANTHPCK5.DAT#1", "ANTHPCK5.DAT#3"]),
+    232: ("e62085da6e3e1c103fc6d01686a7a8f97ce81ab2062384b5de5fd836345e0fc6", ["JANNPCK2.DAT#7", "JANNPCK2.DAT#9"]),
+    233: ("9e1ebdd82d576bc770faff2e4cb37c5abf43c3ced24c94165087a891b3f9e801", ["jannpck3.dat#4", "jannpck3.dat#9"]),
+    234: ("6f5f81a6646bd04141b8a02dfe890b04b2edd1453917bf55cb526be869081c17", ["JANNPCK4.DAT#0", "JANNPCK4.DAT#3"]),
+    237: ("f4661115b7742bc24ceda38b5141163faf6114aac5df92316770008eada593fd", ["JEFFPCK3.DAT#5"]),
+    244: ("b3b44850317ea16a3318fc64eda54fbe68451909010971d070fe3745113a1aa4", ["Martin Zurlinden 01.dat#0", "Martin Zurlinden 01.dat#8"]),
+    245: ("ab231d4cf7985f416429c859113385b7bebccd4686d8e6acc72026b5bd89d2de", ["Martin Zurlinden 02.dat#4", "Martin Zurlinden 02.dat#5", "Martin Zurlinden 02.dat#6", "Martin Zurlinden 02.dat#7", "Martin Zurlinden 02.dat#8"]),
+    246: ("d1e2c06fd14cc00c157cc220651bbbcbb9bf401851cce5d23de76fc54085f0bf", ["Martin Zurlinden 03.dat#0", "Martin Zurlinden 03.dat#2", "Martin Zurlinden 03.dat#3", "Martin Zurlinden 03.dat#4", "Martin Zurlinden 03.dat#5"]),
+    252: ("fbfde75b1e89c442ec9b6bda652b154ab79329905f336c502ca1c20cb11a7aee", ["Conway03.DAT#9"]),
+    265: ("c3b7844f28dc81810eaef140a7e6786b0b92f2edff29f7812d8b035b308e880f", ["CRISFN01.dat#3", "CRISFN01.dat#5"]),
+    266: ("ca8350f116a45b7c71d03cc3e236ad90a91dd5f176e930f038835793c1ca2969", ["CRISFN02.dat#6"]),
+    268: ("ae52a960fb1cadef87b6dd14cb8b2f63de4e838551c265ef0a68ef8f5513257b", ["CRISFN04.dat#1", "CRISFN04.dat#7"]),
+    270: ("07cd52fc4c02914a9e8d59eae729c31b9138cf9c8849d84fc3c1e04ffb781d83", ["CRISFN06.dat#0", "CRISFN06.dat#3", "CRISFN06.dat#6"]),
+    271: ("a7199f77fa81457620998433d8675733495749cf2622a5220858c3428bfad2f3", ["CRISFN07.dat#5"]),
+    272: ("3699a1435d39ff4358c894cf55ed94b9c916751d754cb49d07491e2ea5ce687b", ["CRISFN08.dat#0", "CRISFN08.dat#7"]),
+    274: ("d4f4f470e377ee8382db6bf41749ed620aead2c15360e4416fc4873dbe290268", ["CRISFN10.dat#0"]),
+    275: ("57f9871dc77797e9de33684616a66ab82022fe70197a838fc2dea3a241595757", ["CRISFN11.dat#1"]),
+    277: ("1d52c584e24ffcbb1e76f5fd14d54b337c44fccef3bed898733c579d5627fb9b", ["CRISFN13.dat#6"]),
+    278: ("d4799509e28cf7d168f15f512a98642af7a107ce573d45659442ead54d6ab8a3", ["CRISFN14.dat#6", "CRISFN14.dat#8"]),
+    302: ("742f9b1f32285477bd4f4234cccac8b6cf64dd488bbe5a2faa6940e002c7c1f2", ["TWPAK00.dat#9"]),
+    303: ("697a9fc2adb8c4a7e2b49b2741eee766cf7d944fe40b66640827db12163f0b99", ["TWPAK01.dat#3", "TWPAK01.dat#6"]),
+    304: ("6c68eaadda259536e63c51ae8a2a5d12d476a21b211c6034ebeb62c3e242da77", ["TWPAK02.dat#6"]),
+    306: ("f601908d736e005e8c5cf4c3591b012a80227855a13d3a70274f2edcbad45c09", ["TWPAK04.dat#3"]),
+    312: ("0a836e9df23084c3d30a968c613ee4c92976108db41e070f0b2fafde3d39fe2b", ["TWPAK10.dat#7"]),
+    315: ("86a8a54b434348048c63f9b2792cddce345a2ee5f2aa445c1d0b278671c79f15", ["TWPAK13.dat#0", "TWPAK13.dat#1"]),
+    317: ("ebd0f5401693ba0038f81ce31381bca4471314ad26e16ec9bdddaeb591907405", ["joem1.dat#8"]),
+    327: ("4ed40d2dad89484a0565b4fc472ba6db8a18a36f97c174cb4ea392eac14073c2", ["JM01.DAT#7"]),
+    331: ("2d7e14e719e723aba2d4d40fa30a6e4fc7dd2134a49fb51646856ff1f694e4f3", ["JM05.DAT#8"]),
+    340: ("c36feae86ac25cb45dd682d2cb962bc3df5ab3464eb2107b0953f84bfdc3ef6c", ["JM14.DAT#5"]),
+    350: ("e9fa144400ed4a582d2b2ba3e425d358a6f9bffc8a8eedc4651f8407331a109c", ["MARSHY06.DAT#5"]),
+    351: ("5242934a769947f697468058b9827c8cce6249ea75ecdb56ef0e8a47ca284403", ["MARSHY07.DAT#3"]),
+    366: ("2058cbedd0f5a9ed82a0c5f06016b0514a17f321f93d624415f7270e8fe8b322", ["LEVIPAK2.DAT#0"]),
+    367: ("b7a0484a5d4261ff136065057418586873a133c13f357670dd3636ee6e617ca0", ["LEVIPAK3.DAT#0"]),
+    368: ("7499a209cd792fc43b3b35d7e389d780010014e5cb0ac5bbeac3510269b2e31a", ["levipak4.dat#9"]),
+    373: ("e35bad34d4579222753f3cd2580c0629a92904876f9d603b20ae6010e733c05b", ["Insulfrog+LVL+PK+1.DAT#2"]),
+    374: ("aafbe56bf545df649edde5ca3bd4e51b8f5c834e52772aaf339003420d473a26", ["justdigcomp.dat#3"]),
+    385: ("42588c20a8bb7981e763a0ed51070607d8cdad7482a3dd8eaab160cb2ddad83f", ["Gronklems 3.dat#5"]),
+    388: ("cbab658e9aa6d51ccaf562ec716cab9460e2999f4d2444d1e6120aea8e3251be", ["geooPk2_preview2.dat#0", "geooPk2_preview2.dat#1"]),
+    393: ("6b599e67d0656e6a27f33f99916b9dafd21b04a1e7c88f8eda24e3083a087bc4", ["pieuw01.dat#9"]),
+    394: ("012f8d6fde059a9781d2293d00e4426595c281d7c7a8963caaa4ff4d5c1e123c", ["pieuw02.dat#0", "pieuw02.dat#2", "pieuw02.dat#3", "pieuw02.dat#6"]),
+    405: ("9af050546e82475ff3209ef5af9c8764c6a3b6edaabd43f8314ef7c1057e3a3c", ["Genesis 2P 2.dat#5"]),
+    407: ("eb76b2ab3e2560baa62884dfc72464f0023e59f635a97eaee8712ff9f6a22997", ["Orig Extra Levels.dat#3"]),
+    411: ("6bb5948b6af1a7cd9f6ccbee0c2d6d304cb3341e3e05072c97307856d260208c", ["mobius05.dat#1"]),
+    413: ("d557c00835d843d4cae6be26d475e857735718bd18578b0a9e8de7ece008041e", ["GeoffLems_Minipack.dat#0"]),
+    430: ("bdbf943f510410b7e4c304ff57a31b83134d51b32a6aeed2432eaa6f2804d835", ["LDChallenge01.dat#2"]),
+    464: ("d7f87a4fddf92a2947fe7606b2ff2be1982a05c10a8f1e8282d26e6b36274727", ["Finland.dat#0"]),
+    471: ("2780e3a5c021c0a6d8bf12c751e08c0ed9d28ae47683b533691e67690d1d72bc", ["RSRdnt01.dat#0"]),
+    472: ("0aa4c6e70d8b2adeae926a70f881a18fbbc9dabf150fc7ee345681e3500753f8", ["LEMPACK.DAT#3", "LEMPACK.DAT#4"]),
+    489: ("d3a60e754dd580f50f3c846b76a977903ccb3ca4997613cd7cde7879d632b080", ["Genesis Tricky.dat#29", "Genesis Tricky.dat#7"]),
+    490: ("38f13b44cfdb5722c4c1438286a633a0c3f6234d72625152cd311f2294445223", ["Genesis Taxing.dat#21"]),
+    491: ("f648151520692b675936d0e254663d177e91370029534658305470bb740f89b6", ["Genesis Mayhem.dat#24", "Genesis Mayhem.dat#7"]),
+    494: ("fa2398637b4d298aaa26f2ba5d2a6a0445e3f4109126ed0aee32b35b2100a38d", ["JANNPCK3.DAT#4", "JANNPCK3.DAT#9"]),
+    495: ("02dde42ce00cffb0a126928f96abb6df8d29b45465bb761cc0a88632828ef832", ["MARTPCK1.DAT#8"]),
+    496: ("fbf2f7723f9042ccda838524e4a366e035f49c34d2d1422a7eca9017a9cb01cb", ["MARTPCK2.DAT#0", "MARTPCK2.DAT#4", "MARTPCK2.DAT#8"]),
+    497: ("eee114bbaf98654790d24c531e3a4757acaefef0002acee0dd93c4d9a3eba088", ["MARTPCK3.DAT#0", "MARTPCK3.DAT#2", "MARTPCK3.DAT#3", "MARTPCK3.DAT#4", "MARTPCK3.DAT#5"]),
+    514: ("acb58ceaf0ecb6266e4eab3d8f9bdd75029bf512858bc2dfb9ee9901c5e68cc0", ["ssam1221 Wild 2.dat#2"]),
+    523: ("d0a5a5fd593a5d0014a255e631a302f6ce35165c11ad36c685a3bdae074bd13e", ["Deceit Tricky 1.dat#5"]),
+    542: ("f1ecfbe225c1039af701815227b4af13bcf5f45ac22c7e672357b5ff485e659e", ["Pieuw 2007 Peace 2.DAT#8"]),
+    543: ("dd8cb81a28c705620de06c72a7b8c3166dcf84d6862df40974d8c6b6246d7ea8", ["Pieuw 2007 Awkward 2.DAT#6"]),
+    544: ("fc9991e07984a0eecfcd19be9ec2be19e8647a93b3282aa0eef563ceb5091446", ["Pieuw 2007 Artful 1.DAT#0", "Pieuw 2007 Artful 1.DAT#3", "Pieuw 2007 Artful 1.DAT#7"]),
+    545: ("0b5e4bfede58cb4d8acee4ff5fb4d28ef912a472c1a5405271dc61453d7292f5", ["Pieuw 2007 Insane 1.DAT#0", "Pieuw 2007 Insane 1.DAT#3", "Pieuw 2007 Insane 2.DAT#4"]),
+    548: ("be7597710bb1f6b1421623c630bb9528ac16c8968a833980f6f8441c93cfd196", ["Ji Hoon Sky 2.DAT#2"]),
+    551: ("587fa1a85d2ce0c3d0c8b50d9fa6c23a5d224c5b100e7c364088fde33e35798e", ["Lemmings Plus DOS Project - 02 - Mild (Part 2).dat#8", "Lemmings Plus DOS Project - 03 - Mild (Part 3).dat#2"]),
+    552: ("8187c19df391ea59e594bf9e4779b7ec81fb0034bc4a899ae09aee7396b3c042", ["Lemmings Plus DOS Project - 05 - Wimpy (Part 2).dat#6", "Lemmings Plus DOS Project - 06 - Wimpy (Part 3).dat#8"]),
+    553: ("b9b763a725cf6c717f0c0c4ce65619cddbc0deadb2aef9acb55f1dd87b9483ec", ["Lemmings Plus DOS Project - 07 - Medi (Part 1).dat#0", "Lemmings Plus DOS Project - 07 - Medi (Part 1).dat#9", "Lemmings Plus DOS Project - 08 - Medi (Part 2).dat#0", "Lemmings Plus DOS Project - 08 - Medi (Part 2).dat#3", "Lemmings Plus DOS Project - 08 - Medi (Part 2).dat#4", "Lemmings Plus DOS Project - 08 - Medi (Part 2).dat#9", "Lemmings Plus DOS Project - 09 - Medi (Part 3).dat#7"]),
+    554: ("bc6910d89e3d4625677d173dd9289ac64e19378a58c5ae9c2f2285875fdfeede", ["Lemmings Plus DOS Project - 11 - Danger (Part 2).dat#1", "Lemmings Plus DOS Project - 12 - Danger (Part 3).dat#9"]),
+    558: ("f117ea9ccfc582e2704c654b2e11b16a8c7cb79e99600a180e356f0cac2ab53f", ["brickpk1.dat#12", "brickpk1.dat#15"]),
+    567: ("60773562027df60b77ec90a106a813e80a8c349a530369d4bc8857af89ac280e", ["Conway06.dat#8"]),
+    592: ("c8a9891b1a18e26e7ec27896c4ca0b61ec38abd2795d2ebd6ba81d83cb4b022b", ["LEVELPAK.DAT#1"]),
+  ]
+  /**
+   * Selects source rules for an exact bundled pack or level with replay evidence.
+   */
+  static func mechanics(for pack: URL, entry: Entry? = nil) -> ClassicDOSMechanics {
+    let number = packID(pack)
+    let revision = archiveFingerprint(pack)
+    switch (number, revision) {
+    case (433, "65c251590f612944e636a2e6755b6104a9cacf65ab86b351eb0d3578371adebe"),
+         (290, "14a4717cc58d0d4e922f5faa75c4a6976fd56c37b1818a9191b04bf025aeecdb"):
+      return .golems
+    default: break
     }
-    return .golems
+    guard let entry, let number, let revision,
+          let source = golemsLevelOverrides[number], source.revision == revision
+    else { return .original }
+    let levelID = entry.file + "#\(entry.section ?? -1)"
+    return source.levels.contains(levelID) ? .golems : .original
   }
 
   /// Bundled packs have corpus load, render and run evidence. Other archives

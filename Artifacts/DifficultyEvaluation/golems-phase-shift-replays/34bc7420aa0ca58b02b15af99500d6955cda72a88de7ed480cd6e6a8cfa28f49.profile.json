@@ -1,0 +1,118 @@
+{
+  "components" : {
+    "concurrencyBurden" : 390,
+    "constraintPressure" : 672.9870638965112,
+    "deductionComplexityProxy" : 275,
+    "executionPrecision" : 0,
+    "solutionComplexity" : 678.5131794236476,
+    "techniqueBurden" : 390
+  },
+  "confidence" : "medium",
+  "criticalActions" : [
+
+  ],
+  "detectedTechniques" : [
+    "builder",
+    "climber",
+    "digger",
+    "multiple-worker-coordination"
+  ],
+  "explanation" : [
+    "3 used skill types; 2 assigned workers; 7 same-worker skill changes.",
+    "Maximum concurrent worker regions: 2.",
+    "Timing probes: 10. Untested alternatives remain unknown.",
+    "Deduction is a conservative proxy. Observed techniques are not proof of necessity.",
+    "Source rank: fan:lldb-544."
+  ],
+  "key" : {
+    "analyserVersion" : "difficulty-3",
+    "assetsRevision" : "0c2e262016f21bede3d5599abd19767d849afe61e395d5ea2ed3bc16ad89566e:probes-10",
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "Pieuw 2007 Artful 1.DAT#0",
+      "packID" : "fan:lldb-544"
+    },
+    "levelRevision" : "fc9991e07984a0eecfcd19be9ec2be19e8647a93b3282aa0eef563ceb5091446",
+    "replayRevision" : "SHA256 digest: 34bc7420aa0ca58b02b15af99500d6955cda72a88de7ed480cd6e6a8cfa28f49",
+    "simulationVersion" : "neolemmix-ce-2026-09-27:golems-clock-2-limit-from-clock-1"
+  },
+  "overallScore" : 404.21121777974895,
+  "precision" : {
+    "actions" : [
+      {
+        "outcomes" : {
+          "-1" : false
+        },
+        "sequence" : 1
+      },
+      {
+        "outcomes" : {
+          "-1" : false
+        },
+        "sequence" : 2
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 3
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 4
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 5
+      },
+      {
+        "outcomes" : {
+          "-1" : false
+        },
+        "sequence" : 6
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 7
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 8
+      },
+      {
+        "outcomes" : {
+          "-1" : false
+        },
+        "sequence" : 9
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 10
+      }
+    ],
+    "alternativeRunCount" : 0,
+    "assignmentCount" : 21,
+    "completed" : false,
+    "orderingOutcomes" : [
+
+    ],
+    "runCount" : 10,
+    "selectionOutcomes" : [
+
+    ]
+  },
+  "prerequisiteConcepts" : [
+
+  ],
+  "sourceRank" : "fan:lldb-544"
+}

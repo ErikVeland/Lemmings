@@ -4891,7 +4891,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
         level: level,
         renderedLevel: rendered,
         mainDATAssets: assets,
-        mechanics: FanLevelLibrary.mechanics(for: pack))
+        mechanics: FanLevelLibrary.mechanics(for: pack, entry: entry))
       try Task.checkCancellation()
       guard FanLevelLibrary.archiveMatches(pack, fingerprint: expectedFingerprint) else {
         return .failed("The selected archive changed. Open Level Select and choose the level again.")
@@ -5563,7 +5563,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       guard buildLevel(
         ClassicCampaignLevel.standalone(level, rank: packName), groundOverride: ground,
         specialOverride: special, assetsOverride: fanAssets,
-        mechanicsOverride: FanLevelLibrary.mechanics(for: pack)) else {
+        mechanicsOverride: FanLevelLibrary.mechanics(for: pack, entry: entry)) else {
         fanPlaying = false
         fanScreen = .levels
         renderFanScreen()

@@ -885,21 +885,21 @@
       "sourceRank": "fan:lldb-281"
     },
     {
-      "applicationSignature": "{\"changes\": [[\"basher\", \"builder\"], [\"builder\", \"miner\"], [\"climber\", \"builder\"], [\"climber\", \"digger\"], [\"climber\", \"miner\"], [\"digger\", \"basher\"], [\"miner\", \"builder\"]], \"concepts\": [\"basher\", \"builder\", \"climber\", \"digger\", \"miner\", \"multiple-worker-coordination\"], \"roles\": [[\"basher\", \"builder\", \"climber\", \"digger\", \"miner\"], [\"builder\", \"climber\"], [\"builder\", \"climber\", \"miner\"]], \"sequences\": [[\"basher\", \"builder\", \"miner\"], [\"climber\", \"digger\", \"basher\"], [\"climber\", \"miner\", \"builder\"], [\"digger\", \"basher\", \"builder\"]]}",
+      "applicationSignature": "{\"changes\": [[\"basher\", \"digger\"], [\"builder\", \"basher\"], [\"climber\", \"builder\"], [\"digger\", \"floater\"]], \"concepts\": [\"basher\", \"builder\", \"climber\", \"digger\", \"floater\", \"release-rate-manipulation\"], \"roles\": [[\"basher\", \"builder\", \"climber\"], [\"basher\", \"builder\", \"climber\", \"digger\", \"floater\"], [\"builder\"], [\"climber\"]], \"sequences\": [[\"basher\", \"digger\", \"floater\"], [\"builder\", \"basher\", \"digger\"], [\"climber\", \"builder\", \"basher\"]]}",
       "beginnerRank": false,
       "evidence": "winning replay assignments and measured profile",
       "identity": {
         "engine": "classic",
-        "levelID": "Genesis Mayhem.dat#29",
-        "packID": "fan:lldb-491"
+        "levelID": "ANTHPCK5.DAT#1",
+        "packID": "fan:lldb-225"
       },
-      "intrinsicDemand": 555.1136850060576,
+      "intrinsicDemand": 551.6483728725606,
       "lesson": "Plan five linked jobs",
-      "level": "Lemmings' Ark",
+      "level": "The delivery service",
       "objective": "sequence-five-skills",
       "purpose": "Use five distinct skills in one worker\u2019s sequence.",
       "requiresFullRescue": true,
-      "sourceRank": "fan:lldb-491"
+      "sourceRank": "fan:lldb-225"
     },
     {
       "applicationSignature": "{\"changes\": [[\"climber\", \"bomber\"], [\"climber\", \"builder\"], [\"climber\", \"miner\"]], \"concepts\": [\"bomber\", \"builder\", \"climber\", \"miner\", \"multiple-worker-coordination\"], \"roles\": [[\"bomber\", \"climber\"], [\"builder\", \"climber\"], [\"climber\"], [\"climber\", \"miner\"]], \"sequences\": []}",
@@ -934,6 +934,23 @@
       "purpose": "Carry permanent skills through a complex construction sequence.",
       "requiresFullRescue": false,
       "sourceRank": "Fun"
+    },
+    {
+      "applicationSignature": "{\"changes\": [[\"basher\", \"builder\"], [\"blocker\", \"bomber\"], [\"builder\", \"basher\"], [\"builder\", \"blocker\"], [\"builder\", \"climber\"], [\"builder\", \"floater\"], [\"builder\", \"miner\"], [\"climber\", \"builder\"], [\"floater\", \"builder\"], [\"miner\", \"blocker\"], [\"miner\", \"builder\"]], \"concepts\": [\"basher\", \"blocker\", \"bomber\", \"builder\", \"climber\", \"floater\", \"miner\", \"multiple-worker-coordination\", \"release-rate-manipulation\"], \"roles\": [[\"basher\", \"blocker\", \"builder\"], [\"basher\", \"builder\", \"climber\", \"floater\", \"miner\"], [\"blocker\"], [\"blocker\", \"bomber\", \"miner\"], [\"builder\"], [\"miner\"]], \"sequences\": [[\"basher\", \"builder\", \"blocker\"], [\"climber\", \"builder\", \"floater\"], [\"floater\", \"builder\", \"miner\"], [\"miner\", \"blocker\", \"bomber\"], [\"miner\", \"builder\", \"basher\"]]}",
+      "beginnerRank": false,
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "LEMPACK.DAT#4",
+        "packID": "fan:lldb-472"
+      },
+      "intrinsicDemand": 735.25,
+      "lesson": "Expert: linked work areas",
+      "level": "Operation Rescue",
+      "objective": "expert-sequencing",
+      "purpose": "Combine substantial coordination with long worker sequences.",
+      "requiresFullRescue": false,
+      "sourceRank": "fan:lldb-472"
     },
     {
       "applicationSignature": "{\"changes\": [[\"basher\", \"climber\"], [\"basher\", \"digger\"], [\"digger\", \"basher\"]], \"concepts\": [\"basher\", \"builder\", \"climber\", \"digger\", \"multiple-worker-coordination\", \"release-rate-manipulation\"], \"roles\": [[\"basher\", \"climber\", \"digger\"], [\"builder\"]], \"sequences\": [[\"digger\", \"basher\", \"climber\"]]}",
@@ -2687,38 +2704,38 @@
       "sourceRank": "fan:lldb-527"
     },
     {
-      "applicationSignature": "{\"changes\": [], \"concepts\": [\"bomber\", \"floater\", \"release-rate-manipulation\"], \"roles\": [[\"bomber\"], [\"floater\"]], \"sequences\": []}",
+      "applicationSignature": "{\"changes\": [[\"builder\", \"bomber\"]], \"concepts\": [\"bomber\", \"builder\", \"release-rate-manipulation\"], \"roles\": [[\"bomber\", \"builder\"], [\"builder\"]], \"sequences\": []}",
       "beginnerRank": false,
       "evidence": "winning replay assignments and measured profile",
       "identity": {
         "engine": "classic",
-        "levelID": "brickpk1.dat#6",
+        "levelID": "brickpk1.dat#12",
         "packID": "fan:lldb-558"
       },
       "intrinsicDemand": 221.0,
-      "lesson": "Share: Bomber + Floater",
-      "level": "Float and Bomb",
-      "objective": "apply:1199c262530675fde213",
-      "purpose": "Worker roles: bomber; floater. Also practise release-rate-manipulation.",
+      "lesson": "Link: Builder + Bomber",
+      "level": "Bomb and Build",
+      "objective": "apply:b04b3d08f42d844f2e5f",
+      "purpose": "Worker roles: bomber + builder; builder. Job changes: builder \u2192 bomber. Also practise release-rate-manipulation.",
       "requiresFullRescue": false,
       "sourceRank": "fan:lldb-558"
     },
     {
-      "applicationSignature": "{\"changes\": [[\"climber\", \"bomber\"]], \"concepts\": [\"bomber\", \"builder\", \"climber\", \"release-rate-manipulation\"], \"roles\": [[\"bomber\", \"climber\"], [\"builder\"]], \"sequences\": []}",
+      "applicationSignature": "{\"changes\": [], \"concepts\": [\"basher\", \"bomber\", \"builder\", \"release-rate-manipulation\"], \"roles\": [[\"basher\"], [\"bomber\"], [\"builder\"]], \"sequences\": []}",
       "beginnerRank": false,
       "evidence": "winning replay assignments and measured profile",
       "identity": {
         "engine": "classic",
-        "levelID": "TWPAK01.dat#5",
-        "packID": "fan:lldb-303"
+        "levelID": "Pieuw 2007 Peace 2.DAT#8",
+        "packID": "fan:lldb-542"
       },
       "intrinsicDemand": 276.25,
-      "lesson": "Link: Climber + Bomber",
-      "level": "Satan Loves You",
-      "objective": "apply:923d8cf140e725ea72c9",
-      "purpose": "Worker roles: bomber + climber; builder. Job changes: climber \u2192 bomber. Also practise release-rate-manipulation.",
+      "lesson": "Share: Basher + Bomber + Builder",
+      "level": "It's a Pipe-World",
+      "objective": "apply:8d59f42a1b9c9c266956",
+      "purpose": "Worker roles: basher; bomber; builder. Also practise release-rate-manipulation.",
       "requiresFullRescue": false,
-      "sourceRank": "fan:lldb-303"
+      "sourceRank": "fan:lldb-542"
     },
     {
       "applicationSignature": "{\"changes\": [[\"basher\", \"builder\"], [\"builder\", \"digger\"], [\"digger\", \"basher\"]], \"concepts\": [\"basher\", \"builder\", \"digger\", \"release-rate-manipulation\"], \"roles\": [[\"basher\", \"builder\", \"digger\"]], \"sequences\": [[\"basher\", \"builder\", \"digger\"], [\"builder\", \"digger\", \"basher\"]]}",
@@ -2755,38 +2772,38 @@
       "sourceRank": "fan:lldb-489"
     },
     {
-      "applicationSignature": "{\"changes\": [[\"floater\", \"blocker\"]], \"concepts\": [\"blocker\", \"floater\", \"release-rate-manipulation\"], \"roles\": [[\"blocker\", \"floater\"], [\"floater\"]], \"sequences\": []}",
+      "applicationSignature": "{\"changes\": [], \"concepts\": [\"bomber\", \"floater\", \"release-rate-manipulation\"], \"roles\": [[\"bomber\"], [\"floater\"]], \"sequences\": []}",
       "beginnerRank": false,
       "evidence": "winning replay assignments and measured profile",
       "identity": {
         "engine": "classic",
-        "levelID": "brickpk1.dat#7",
+        "levelID": "brickpk1.dat#6",
         "packID": "fan:lldb-558"
       },
       "intrinsicDemand": 221.0,
-      "lesson": "Link: Floater + Blocker",
-      "level": "Float and Block",
-      "objective": "apply:425d4cca2210fb5c5d52",
-      "purpose": "Worker roles: blocker + floater; floater. Job changes: floater \u2192 blocker. Also practise release-rate-manipulation.",
+      "lesson": "Share: Bomber + Floater",
+      "level": "Float and Bomb",
+      "objective": "apply:1199c262530675fde213",
+      "purpose": "Worker roles: bomber; floater. Also practise release-rate-manipulation.",
       "requiresFullRescue": false,
       "sourceRank": "fan:lldb-558"
     },
     {
-      "applicationSignature": "{\"changes\": [[\"basher\", \"builder\"], [\"builder\", \"miner\"]], \"concepts\": [\"basher\", \"builder\", \"miner\", \"release-rate-manipulation\"], \"roles\": [[\"basher\"], [\"basher\", \"builder\", \"miner\"], [\"builder\"]], \"sequences\": [[\"basher\", \"builder\", \"miner\"]]}",
+      "applicationSignature": "{\"changes\": [[\"climber\", \"bomber\"]], \"concepts\": [\"bomber\", \"builder\", \"climber\", \"release-rate-manipulation\"], \"roles\": [[\"bomber\", \"climber\"], [\"builder\"]], \"sequences\": []}",
       "beginnerRank": false,
       "evidence": "winning replay assignments and measured profile",
       "identity": {
         "engine": "classic",
-        "levelID": "TWPAK10.dat#4",
-        "packID": "fan:lldb-312"
+        "levelID": "TWPAK01.dat#5",
+        "packID": "fan:lldb-303"
       },
       "intrinsicDemand": 276.25,
-      "lesson": "Link: Basher + Builder + Miner",
-      "level": "Guess The Game",
-      "objective": "apply:bb9ed1e6a90a2d57784a",
-      "purpose": "Worker roles: basher; basher + builder + miner; builder. Job changes: basher \u2192 builder; builder \u2192 miner. Three-step plans: basher \u2192 builder \u2192 miner. Also practise release-rate-manipulation.",
-      "requiresFullRescue": true,
-      "sourceRank": "fan:lldb-312"
+      "lesson": "Link: Climber + Bomber",
+      "level": "Satan Loves You",
+      "objective": "apply:923d8cf140e725ea72c9",
+      "purpose": "Worker roles: bomber + climber; builder. Job changes: climber \u2192 bomber. Also practise release-rate-manipulation.",
+      "requiresFullRescue": false,
+      "sourceRank": "fan:lldb-303"
     },
     {
       "applicationSignature": "{\"changes\": [[\"basher\", \"builder\"], [\"builder\", \"basher\"]], \"concepts\": [\"basher\", \"builder\"], \"roles\": [[\"basher\"], [\"basher\", \"builder\"], [\"builder\"]], \"sequences\": []}",
@@ -2804,6 +2821,74 @@
       "purpose": "Worker roles: basher; basher + builder; builder. Job changes: basher \u2192 builder; builder \u2192 basher.",
       "requiresFullRescue": false,
       "sourceRank": "fan:lldb-552"
+    },
+    {
+      "applicationSignature": "{\"changes\": [[\"basher\", \"builder\"], [\"digger\", \"basher\"]], \"concepts\": [\"basher\", \"builder\", \"digger\", \"release-rate-manipulation\"], \"roles\": [[\"basher\"], [\"basher\", \"builder\", \"digger\"]], \"sequences\": [[\"digger\", \"basher\", \"builder\"]]}",
+      "beginnerRank": false,
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "TWPAK01.dat#3",
+        "packID": "fan:lldb-303"
+      },
+      "intrinsicDemand": 327.6273700121154,
+      "lesson": "Link: Digger + Basher + Builder",
+      "level": "Asy-Lemm Seekers",
+      "objective": "apply:ea51be4c6729201061aa",
+      "purpose": "Worker roles: basher; basher + builder + digger. Job changes: basher \u2192 builder; digger \u2192 basher. Three-step plans: digger \u2192 basher \u2192 builder. Also practise release-rate-manipulation.",
+      "requiresFullRescue": false,
+      "sourceRank": "fan:lldb-303"
+    },
+    {
+      "applicationSignature": "{\"changes\": [[\"floater\", \"blocker\"]], \"concepts\": [\"blocker\", \"floater\", \"release-rate-manipulation\"], \"roles\": [[\"blocker\", \"floater\"], [\"floater\"]], \"sequences\": []}",
+      "beginnerRank": false,
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "brickpk1.dat#7",
+        "packID": "fan:lldb-558"
+      },
+      "intrinsicDemand": 221.0,
+      "lesson": "Link: Floater + Blocker",
+      "level": "Float and Block",
+      "objective": "apply:425d4cca2210fb5c5d52",
+      "purpose": "Worker roles: blocker + floater; floater. Job changes: floater \u2192 blocker. Also practise release-rate-manipulation.",
+      "requiresFullRescue": false,
+      "sourceRank": "fan:lldb-558"
+    },
+    {
+      "applicationSignature": "{\"changes\": [[\"basher\", \"builder\"], [\"digger\", \"builder\"]], \"concepts\": [\"basher\", \"builder\", \"digger\", \"release-rate-manipulation\"], \"roles\": [[\"basher\", \"builder\"], [\"builder\"], [\"builder\", \"digger\"]], \"sequences\": []}",
+      "beginnerRank": false,
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "TWPAK01.dat#6",
+        "packID": "fan:lldb-303"
+      },
+      "intrinsicDemand": 276.25,
+      "lesson": "Link: Basher + Builder",
+      "level": "Both The 7's...................!",
+      "objective": "apply:3fa7dd1733839ba4361d",
+      "purpose": "Worker roles: basher + builder; builder; builder + digger. Job changes: basher \u2192 builder; digger \u2192 builder. Also practise release-rate-manipulation.",
+      "requiresFullRescue": false,
+      "sourceRank": "fan:lldb-303"
+    },
+    {
+      "applicationSignature": "{\"changes\": [[\"blocker\", \"builder\"], [\"bomber\", \"builder\"], [\"builder\", \"blocker\"]], \"concepts\": [\"blocker\", \"bomber\", \"builder\", \"release-rate-manipulation\"], \"roles\": [[\"blocker\", \"builder\"], [\"bomber\"], [\"bomber\", \"builder\"]], \"sequences\": []}",
+      "beginnerRank": false,
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "Conway07.DAT#8",
+        "packID": "fan:lldb-256"
+      },
+      "intrinsicDemand": 303.58178134528384,
+      "lesson": "Link: Bomber + Builder",
+      "level": "The great escape",
+      "objective": "apply:58bb6c53dfa0569cdd7e",
+      "purpose": "Worker roles: blocker + builder; bomber; bomber + builder. Job changes: blocker \u2192 builder; bomber \u2192 builder; builder \u2192 blocker. Also practise release-rate-manipulation.",
+      "requiresFullRescue": false,
+      "sourceRank": "fan:lldb-256"
     },
     {
       "applicationSignature": "{\"changes\": [[\"digger\", \"basher\"]], \"concepts\": [\"basher\", \"bomber\", \"digger\", \"release-rate-manipulation\"], \"roles\": [[\"basher\", \"digger\"], [\"bomber\"]], \"sequences\": []}",
@@ -2840,38 +2925,38 @@
       "sourceRank": "fan:lldb-559"
     },
     {
-      "applicationSignature": "{\"changes\": [[\"builder\", \"miner\"], [\"digger\", \"builder\"]], \"concepts\": [\"builder\", \"digger\", \"miner\", \"release-rate-manipulation\"], \"roles\": [[\"builder\", \"digger\"], [\"builder\", \"miner\"]], \"sequences\": []}",
-      "beginnerRank": true,
-      "evidence": "winning replay assignments and measured profile",
-      "identity": {
-        "engine": "classic",
-        "levelID": "cLemmings Fun 2.DAT#1",
-        "packID": "fan:lldb-526"
-      },
-      "intrinsicDemand": 276.25,
-      "lesson": "Link: Builder + Miner",
-      "level": "Crematory Chamber",
-      "objective": "apply:c992ddd444ee1d1057c4",
-      "purpose": "Worker roles: builder + digger; builder + miner. Job changes: builder \u2192 miner; digger \u2192 builder. Also practise release-rate-manipulation.",
-      "requiresFullRescue": false,
-      "sourceRank": "fan:lldb-526"
-    },
-    {
-      "applicationSignature": "{\"changes\": [[\"blocker\", \"builder\"], [\"bomber\", \"builder\"], [\"builder\", \"blocker\"]], \"concepts\": [\"blocker\", \"bomber\", \"builder\", \"release-rate-manipulation\"], \"roles\": [[\"blocker\", \"builder\"], [\"bomber\"], [\"bomber\", \"builder\"]], \"sequences\": []}",
+      "applicationSignature": "{\"changes\": [[\"basher\", \"builder\"], [\"builder\", \"miner\"]], \"concepts\": [\"basher\", \"builder\", \"miner\", \"release-rate-manipulation\"], \"roles\": [[\"basher\"], [\"basher\", \"builder\", \"miner\"], [\"builder\"]], \"sequences\": [[\"basher\", \"builder\", \"miner\"]]}",
       "beginnerRank": false,
       "evidence": "winning replay assignments and measured profile",
       "identity": {
         "engine": "classic",
-        "levelID": "Conway07.DAT#8",
-        "packID": "fan:lldb-256"
+        "levelID": "TWPAK10.dat#4",
+        "packID": "fan:lldb-312"
       },
-      "intrinsicDemand": 303.58178134528384,
-      "lesson": "Link: Bomber + Builder",
-      "level": "The great escape",
-      "objective": "apply:58bb6c53dfa0569cdd7e",
-      "purpose": "Worker roles: blocker + builder; bomber; bomber + builder. Job changes: blocker \u2192 builder; bomber \u2192 builder; builder \u2192 blocker. Also practise release-rate-manipulation.",
+      "intrinsicDemand": 276.25,
+      "lesson": "Link: Basher + Builder + Miner",
+      "level": "Guess The Game",
+      "objective": "apply:bb9ed1e6a90a2d57784a",
+      "purpose": "Worker roles: basher; basher + builder + miner; builder. Job changes: basher \u2192 builder; builder \u2192 miner. Three-step plans: basher \u2192 builder \u2192 miner. Also practise release-rate-manipulation.",
+      "requiresFullRescue": true,
+      "sourceRank": "fan:lldb-312"
+    },
+    {
+      "applicationSignature": "{\"changes\": [[\"basher\", \"digger\"], [\"digger\", \"basher\"], [\"digger\", \"builder\"]], \"concepts\": [\"basher\", \"builder\", \"digger\", \"release-rate-manipulation\"], \"roles\": [[\"basher\", \"digger\"], [\"builder\"], [\"builder\", \"digger\"]], \"sequences\": []}",
+      "beginnerRank": true,
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "KillerMaster 1 Tame 2.dat#3",
+        "packID": "fan:lldb-505"
+      },
+      "intrinsicDemand": 305.2,
+      "lesson": "Link: Digger + Builder",
+      "level": "Toy Train",
+      "objective": "apply:49313cd9451e727d6687",
+      "purpose": "Worker roles: basher + digger; builder; builder + digger. Job changes: basher \u2192 digger; digger \u2192 basher; digger \u2192 builder. Also practise release-rate-manipulation.",
       "requiresFullRescue": false,
-      "sourceRank": "fan:lldb-256"
+      "sourceRank": "fan:lldb-505"
     },
     {
       "applicationSignature": "{\"changes\": [[\"basher\", \"digger\"], [\"digger\", \"builder\"]], \"concepts\": [\"basher\", \"builder\", \"digger\", \"release-rate-manipulation\"], \"roles\": [[\"basher\", \"builder\", \"digger\"], [\"builder\"]], \"sequences\": [[\"basher\", \"digger\", \"builder\"]]}",
@@ -2908,38 +2993,38 @@
       "sourceRank": "fan:lldb-526"
     },
     {
-      "applicationSignature": "{\"changes\": [[\"miner\", \"builder\"]], \"concepts\": [\"builder\", \"climber\", \"miner\", \"release-rate-manipulation\"], \"roles\": [[\"builder\", \"miner\"], [\"climber\"]], \"sequences\": []}",
+      "applicationSignature": "{\"changes\": [[\"builder\", \"blocker\"]], \"concepts\": [\"blocker\", \"builder\", \"multiple-worker-coordination\"], \"roles\": [[\"blocker\"], [\"blocker\", \"builder\"], [\"builder\"]], \"sequences\": []}",
       "beginnerRank": false,
       "evidence": "winning replay assignments and measured profile",
       "identity": {
         "engine": "classic",
-        "levelID": "joe04.dat#8",
-        "packID": "fan:lldb-131"
+        "levelID": "brickpk1.dat#15",
+        "packID": "fan:lldb-558"
       },
       "intrinsicDemand": 276.25,
-      "lesson": "Link: Miner + Builder",
-      "level": "Eater of Luck",
-      "objective": "apply:bcfc9d52f415d9c01984",
-      "purpose": "Worker roles: builder + miner; climber. Job changes: miner \u2192 builder. Also practise release-rate-manipulation.",
+      "lesson": "Link: Builder + Blocker",
+      "level": "Block and Build",
+      "objective": "apply:29254ed510fa3113961f",
+      "purpose": "Worker roles: blocker; blocker + builder; builder. Job changes: builder \u2192 blocker. Also practise multiple-worker-coordination.",
       "requiresFullRescue": false,
-      "sourceRank": "fan:lldb-131"
+      "sourceRank": "fan:lldb-558"
     },
     {
-      "applicationSignature": "{\"changes\": [[\"basher\", \"digger\"], [\"digger\", \"basher\"], [\"digger\", \"builder\"]], \"concepts\": [\"basher\", \"builder\", \"digger\", \"release-rate-manipulation\"], \"roles\": [[\"basher\", \"digger\"], [\"builder\"], [\"builder\", \"digger\"]], \"sequences\": []}",
-      "beginnerRank": true,
+      "applicationSignature": "{\"changes\": [[\"digger\", \"basher\"], [\"digger\", \"builder\"]], \"concepts\": [\"basher\", \"blocker\", \"builder\", \"digger\"], \"roles\": [[\"basher\", \"digger\"], [\"blocker\"], [\"builder\", \"digger\"]], \"sequences\": []}",
+      "beginnerRank": false,
       "evidence": "winning replay assignments and measured profile",
       "identity": {
         "engine": "classic",
-        "levelID": "KillerMaster 1 Tame 2.dat#3",
-        "packID": "fan:lldb-505"
+        "levelID": "QBeez06.dat#6",
+        "packID": "fan:lldb-414"
       },
-      "intrinsicDemand": 305.2,
-      "lesson": "Link: Digger + Builder",
-      "level": "Toy Train",
-      "objective": "apply:49313cd9451e727d6687",
-      "purpose": "Worker roles: basher + digger; builder; builder + digger. Job changes: basher \u2192 digger; digger \u2192 basher; digger \u2192 builder. Also practise release-rate-manipulation.",
-      "requiresFullRescue": false,
-      "sourceRank": "fan:lldb-505"
+      "intrinsicDemand": 307.6804670912951,
+      "lesson": "Link: Digger + Basher",
+      "level": "What comes down must go up.",
+      "objective": "apply:25c24a98ceae25389b33",
+      "purpose": "Worker roles: basher + digger; blocker; builder + digger. Job changes: digger \u2192 basher; digger \u2192 builder.",
+      "requiresFullRescue": true,
+      "sourceRank": "fan:lldb-414"
     },
     {
       "applicationSignature": "{\"changes\": [[\"basher\", \"builder\"], [\"digger\", \"basher\"]], \"concepts\": [\"basher\", \"builder\", \"digger\", \"release-rate-manipulation\"], \"roles\": [[\"basher\"], [\"basher\", \"builder\", \"digger\"], [\"basher\", \"digger\"], [\"builder\"]], \"sequences\": [[\"digger\", \"basher\", \"builder\"]]}",
@@ -2976,38 +3061,38 @@
       "sourceRank": "fan:lldb-432"
     },
     {
-      "applicationSignature": "{\"changes\": [[\"basher\", \"blocker\"]], \"concepts\": [\"basher\", \"blocker\", \"builder\", \"release-rate-manipulation\"], \"roles\": [[\"basher\", \"blocker\"], [\"builder\"]], \"sequences\": []}",
+      "applicationSignature": "{\"changes\": [[\"builder\", \"miner\"], [\"digger\", \"builder\"]], \"concepts\": [\"builder\", \"digger\", \"miner\", \"release-rate-manipulation\"], \"roles\": [[\"builder\", \"digger\"], [\"builder\", \"miner\"]], \"sequences\": []}",
       "beginnerRank": true,
       "evidence": "winning replay assignments and measured profile",
       "identity": {
         "engine": "classic",
-        "levelID": "ssam1221 Tame 1.dat#7",
-        "packID": "fan:lldb-512"
+        "levelID": "cLemmings Fun 2.DAT#1",
+        "packID": "fan:lldb-526"
       },
       "intrinsicDemand": 276.25,
-      "lesson": "Link: Basher + Blocker",
-      "level": "LemEdit generated Level",
-      "objective": "apply:16c127e48d6496c3f8a1",
-      "purpose": "Worker roles: basher + blocker; builder. Job changes: basher \u2192 blocker. Also practise release-rate-manipulation.",
+      "lesson": "Link: Builder + Miner",
+      "level": "Crematory Chamber",
+      "objective": "apply:c992ddd444ee1d1057c4",
+      "purpose": "Worker roles: builder + digger; builder + miner. Job changes: builder \u2192 miner; digger \u2192 builder. Also practise release-rate-manipulation.",
       "requiresFullRescue": false,
-      "sourceRank": "fan:lldb-512"
+      "sourceRank": "fan:lldb-526"
     },
     {
-      "applicationSignature": "{\"changes\": [[\"digger\", \"basher\"], [\"digger\", \"builder\"]], \"concepts\": [\"basher\", \"blocker\", \"builder\", \"digger\"], \"roles\": [[\"basher\", \"digger\"], [\"blocker\"], [\"builder\", \"digger\"]], \"sequences\": []}",
+      "applicationSignature": "{\"changes\": [[\"digger\", \"builder\"]], \"concepts\": [\"builder\", \"digger\", \"release-rate-manipulation\"], \"roles\": [[\"builder\", \"digger\"]], \"sequences\": []}",
       "beginnerRank": false,
       "evidence": "winning replay assignments and measured profile",
       "identity": {
         "engine": "classic",
-        "levelID": "QBeez06.dat#6",
-        "packID": "fan:lldb-414"
+        "levelID": "TWPAK04.dat#2",
+        "packID": "fan:lldb-306"
       },
-      "intrinsicDemand": 307.6804670912951,
-      "lesson": "Link: Digger + Basher",
-      "level": "What comes down must go up.",
-      "objective": "apply:25c24a98ceae25389b33",
-      "purpose": "Worker roles: basher + digger; blocker; builder + digger. Job changes: digger \u2192 basher; digger \u2192 builder.",
+      "intrinsicDemand": 307.8745379430311,
+      "lesson": "Link: Digger + Builder",
+      "level": "Snow Way!",
+      "objective": "apply:cc25b0b00d435b3a70e5",
+      "purpose": "Worker roles: builder + digger. Job changes: digger \u2192 builder. Also practise release-rate-manipulation.",
       "requiresFullRescue": true,
-      "sourceRank": "fan:lldb-414"
+      "sourceRank": "fan:lldb-306"
     },
     {
       "applicationSignature": "{\"changes\": [[\"climber\", \"builder\"], [\"digger\", \"builder\"]], \"concepts\": [\"builder\", \"climber\", \"digger\", \"multiple-worker-coordination\"], \"roles\": [[\"builder\"], [\"builder\", \"climber\"], [\"builder\", \"digger\"]], \"sequences\": []}",
@@ -3044,89 +3129,21 @@
       "sourceRank": "fan:lldb-558"
     },
     {
-      "applicationSignature": "{\"changes\": [[\"basher\", \"builder\"], [\"builder\", \"basher\"]], \"concepts\": [\"basher\", \"builder\", \"release-rate-manipulation\"], \"roles\": [[\"basher\", \"builder\"], [\"builder\"]], \"sequences\": []}",
+      "applicationSignature": "{\"changes\": [[\"miner\", \"builder\"]], \"concepts\": [\"builder\", \"climber\", \"miner\", \"release-rate-manipulation\"], \"roles\": [[\"builder\", \"miner\"], [\"climber\"]], \"sequences\": []}",
       "beginnerRank": false,
       "evidence": "winning replay assignments and measured profile",
       "identity": {
         "engine": "classic",
-        "levelID": "Genesis Present.dat#17",
-        "packID": "fan:lldb-492"
+        "levelID": "joe04.dat#8",
+        "packID": "fan:lldb-131"
       },
-      "intrinsicDemand": 277.5592255965533,
-      "lesson": "Link: Builder + Basher",
-      "level": "King of Lemmings",
-      "objective": "apply:1463c11c3d0c0adae062",
-      "purpose": "Worker roles: basher + builder; builder. Job changes: basher \u2192 builder; builder \u2192 basher. Also practise release-rate-manipulation.",
-      "requiresFullRescue": true,
-      "sourceRank": "fan:lldb-492"
-    },
-    {
-      "applicationSignature": "{\"changes\": [[\"digger\", \"builder\"]], \"concepts\": [\"builder\", \"digger\", \"release-rate-manipulation\"], \"roles\": [[\"builder\", \"digger\"]], \"sequences\": []}",
-      "beginnerRank": false,
-      "evidence": "winning replay assignments and measured profile",
-      "identity": {
-        "engine": "classic",
-        "levelID": "TWPAK04.dat#2",
-        "packID": "fan:lldb-306"
-      },
-      "intrinsicDemand": 307.8745379430311,
-      "lesson": "Link: Digger + Builder",
-      "level": "Snow Way!",
-      "objective": "apply:cc25b0b00d435b3a70e5",
-      "purpose": "Worker roles: builder + digger. Job changes: digger \u2192 builder. Also practise release-rate-manipulation.",
-      "requiresFullRescue": true,
-      "sourceRank": "fan:lldb-306"
-    },
-    {
-      "applicationSignature": "{\"changes\": [[\"basher\", \"builder\"], [\"builder\", \"basher\"], [\"digger\", \"builder\"]], \"concepts\": [\"basher\", \"builder\", \"digger\", \"multiple-worker-coordination\"], \"roles\": [[\"basher\", \"builder\"], [\"builder\"], [\"builder\", \"digger\"]], \"sequences\": []}",
-      "beginnerRank": false,
-      "evidence": "winning replay assignments and measured profile",
-      "identity": {
-        "engine": "classic",
-        "levelID": "Lemmings Plus DOS Project - 02 - Mild (Part 2).dat#5",
-        "packID": "fan:lldb-551"
-      },
-      "intrinsicDemand": 331.5,
-      "lesson": "Link: Digger + Builder",
-      "level": "Farewell, My Lemming",
-      "objective": "apply:190491e3a8026f180223",
-      "purpose": "Worker roles: basher + builder; builder; builder + digger. Job changes: basher \u2192 builder; builder \u2192 basher; digger \u2192 builder. Also practise multiple-worker-coordination.",
+      "intrinsicDemand": 276.25,
+      "lesson": "Link: Miner + Builder",
+      "level": "Eater of Luck",
+      "objective": "apply:bcfc9d52f415d9c01984",
+      "purpose": "Worker roles: builder + miner; climber. Job changes: miner \u2192 builder. Also practise release-rate-manipulation.",
       "requiresFullRescue": false,
-      "sourceRank": "fan:lldb-551"
-    },
-    {
-      "applicationSignature": "{\"changes\": [[\"climber\", \"builder\"]], \"concepts\": [\"builder\", \"climber\", \"release-rate-manipulation\"], \"roles\": [[\"builder\", \"climber\"], [\"climber\"]], \"sequences\": []}",
-      "beginnerRank": false,
-      "evidence": "winning replay assignments and measured profile",
-      "identity": {
-        "engine": "classic",
-        "levelID": "brickpk1.dat#3",
-        "packID": "fan:lldb-558"
-      },
-      "intrinsicDemand": 236.72762900065317,
-      "lesson": "Link: Climber + Builder",
-      "level": "Climb and Build",
-      "objective": "apply:18aac37181b1ed0596c6",
-      "purpose": "Worker roles: builder + climber; climber. Job changes: climber \u2192 builder. Also practise release-rate-manipulation.",
-      "requiresFullRescue": false,
-      "sourceRank": "fan:lldb-558"
-    },
-    {
-      "applicationSignature": "{\"changes\": [[\"climber\", \"floater\"], [\"floater\", \"basher\"]], \"concepts\": [\"basher\", \"climber\", \"floater\", \"release-rate-manipulation\"], \"roles\": [[\"basher\", \"climber\", \"floater\"], [\"climber\", \"floater\"]], \"sequences\": [[\"climber\", \"floater\", \"basher\"]]}",
-      "beginnerRank": false,
-      "evidence": "winning replay assignments and measured profile",
-      "identity": {
-        "engine": "classic",
-        "levelID": "PSP Special.dat#1",
-        "packID": "fan:lldb-217"
-      },
-      "intrinsicDemand": 279.08178134528384,
-      "lesson": "Link: Climber + Floater",
-      "level": "A to B",
-      "objective": "apply:4079c2066f43690e168b",
-      "purpose": "Worker roles: basher + climber + floater; climber + floater. Job changes: climber \u2192 floater; floater \u2192 basher. Three-step plans: climber \u2192 floater \u2192 basher. Also practise release-rate-manipulation.",
-      "requiresFullRescue": true,
-      "sourceRank": "fan:lldb-217"
+      "sourceRank": "fan:lldb-131"
     },
     {
       "applicationSignature": "{\"changes\": [[\"basher\", \"builder\"], [\"blocker\", \"basher\"], [\"builder\", \"basher\"], [\"digger\", \"builder\"], [\"miner\", \"builder\"]], \"concepts\": [\"basher\", \"blocker\", \"builder\", \"digger\", \"miner\"], \"roles\": [[\"basher\"], [\"basher\", \"blocker\"], [\"basher\", \"builder\"], [\"builder\", \"digger\"], [\"builder\", \"miner\"]], \"sequences\": []}",
@@ -3197,23 +3214,6 @@
       "sourceRank": "Hail"
     },
     {
-      "applicationSignature": "{\"changes\": [[\"basher\", \"bomber\"], [\"basher\", \"builder\"], [\"builder\", \"basher\"], [\"builder\", \"blocker\"]], \"concepts\": [\"basher\", \"blocker\", \"bomber\", \"builder\", \"multiple-worker-coordination\"], \"roles\": [[\"basher\"], [\"basher\", \"bomber\", \"builder\"], [\"basher\", \"builder\"], [\"blocker\"], [\"blocker\", \"builder\"]], \"sequences\": [[\"builder\", \"basher\", \"bomber\"]]}",
-      "beginnerRank": false,
-      "evidence": "winning replay assignments and measured profile",
-      "identity": {
-        "engine": "classic",
-        "levelID": "6:Frost:7:0:6",
-        "packID": "holidayLemmings1994-MACLEVL-32"
-      },
-      "intrinsicDemand": 529.8178810031116,
-      "lesson": "Link: Builder + Blocker",
-      "level": "Happy New Year!",
-      "objective": "apply:672eb80ebed313fb0212",
-      "purpose": "Worker roles: basher; basher + bomber + builder; basher + builder; blocker; blocker + builder. Job changes: basher \u2192 bomber; basher \u2192 builder; builder \u2192 basher; builder \u2192 blocker. Three-step plans: builder \u2192 basher \u2192 bomber. Also practise multiple-worker-coordination.",
-      "requiresFullRescue": false,
-      "sourceRank": "Frost"
-    },
-    {
       "applicationSignature": "{\"changes\": [[\"blocker\", \"climber\"], [\"builder\", \"climber\"], [\"builder\", \"digger\"], [\"climber\", \"floater\"], [\"digger\", \"miner\"], [\"floater\", \"builder\"], [\"miner\", \"builder\"]], \"concepts\": [\"blocker\", \"builder\", \"climber\", \"digger\", \"floater\", \"miner\", \"multiple-worker-coordination\"], \"roles\": [[\"blocker\", \"climber\"], [\"builder\"], [\"builder\", \"climber\", \"digger\", \"floater\", \"miner\"]], \"sequences\": [[\"builder\", \"climber\", \"floater\"], [\"builder\", \"digger\", \"miner\"], [\"climber\", \"floater\", \"builder\"], [\"digger\", \"miner\", \"builder\"], [\"floater\", \"builder\", \"digger\"]]}",
       "beginnerRank": true,
       "evidence": "winning replay assignments and measured profile",
@@ -3248,6 +3248,23 @@
       "sourceRank": "Crazy"
     },
     {
+      "applicationSignature": "{\"changes\": [[\"basher\", \"bomber\"], [\"basher\", \"builder\"], [\"builder\", \"basher\"], [\"builder\", \"blocker\"]], \"concepts\": [\"basher\", \"blocker\", \"bomber\", \"builder\", \"multiple-worker-coordination\"], \"roles\": [[\"basher\"], [\"basher\", \"bomber\", \"builder\"], [\"basher\", \"builder\"], [\"blocker\"], [\"blocker\", \"builder\"]], \"sequences\": [[\"builder\", \"basher\", \"bomber\"]]}",
+      "beginnerRank": false,
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "6:Frost:7:0:6",
+        "packID": "holidayLemmings1994-MACLEVL-32"
+      },
+      "intrinsicDemand": 529.8178810031116,
+      "lesson": "Link: Builder + Blocker",
+      "level": "Happy New Year!",
+      "objective": "apply:672eb80ebed313fb0212",
+      "purpose": "Worker roles: basher; basher + bomber + builder; basher + builder; blocker; blocker + builder. Job changes: basher \u2192 bomber; basher \u2192 builder; builder \u2192 basher; builder \u2192 blocker. Three-step plans: builder \u2192 basher \u2192 bomber. Also practise multiple-worker-coordination.",
+      "requiresFullRescue": false,
+      "sourceRank": "Frost"
+    },
+    {
       "applicationSignature": "{\"changes\": [[\"basher\", \"builder\"]], \"concepts\": [\"basher\", \"builder\", \"multiple-worker-coordination\", \"release-rate-manipulation\"], \"roles\": [[\"basher\", \"builder\"], [\"builder\"]], \"sequences\": []}",
       "beginnerRank": false,
       "evidence": "winning replay assignments and measured profile",
@@ -3263,23 +3280,6 @@
       "purpose": "Worker roles: basher + builder; builder. Job changes: basher \u2192 builder. Also practise multiple-worker-coordination, release-rate-manipulation.",
       "requiresFullRescue": false,
       "sourceRank": "Flurry"
-    },
-    {
-      "applicationSignature": "{\"changes\": [[\"blocker\", \"bomber\"], [\"builder\", \"blocker\"]], \"concepts\": [\"blocker\", \"bomber\", \"builder\", \"climber\"], \"roles\": [[\"blocker\", \"bomber\"], [\"blocker\", \"bomber\", \"builder\"], [\"blocker\", \"builder\"], [\"builder\"], [\"climber\"]], \"sequences\": [[\"builder\", \"blocker\", \"bomber\"]]}",
-      "beginnerRank": false,
-      "evidence": "winning replay assignments and measured profile",
-      "identity": {
-        "engine": "classic",
-        "levelID": "42:Mega Drive Sunsoft:13:0:42",
-        "packID": "ohYesMoreLemmings-OHYES-60"
-      },
-      "intrinsicDemand": 536.4836936323851,
-      "lesson": "Link: Blocker + Bomber",
-      "level": "Doomsday",
-      "objective": "apply:4e0e03fc5e192b0ac5f4",
-      "purpose": "Worker roles: blocker + bomber; blocker + bomber + builder; blocker + builder; builder; climber. Job changes: blocker \u2192 bomber; builder \u2192 blocker. Three-step plans: builder \u2192 blocker \u2192 bomber.",
-      "requiresFullRescue": false,
-      "sourceRank": "Mega Drive Sunsoft"
     },
     {
       "applicationSignature": "{\"changes\": [[\"builder\", \"basher\"], [\"climber\", \"floater\"], [\"floater\", \"builder\"]], \"concepts\": [\"basher\", \"builder\", \"climber\", \"floater\", \"release-rate-manipulation\"], \"roles\": [[\"basher\", \"builder\", \"climber\", \"floater\"]], \"sequences\": [[\"climber\", \"floater\", \"builder\"], [\"floater\", \"builder\", \"basher\"]]}",
@@ -3314,6 +3314,23 @@
       "purpose": "Worker roles: blocker; blocker + bomber; builder + miner. Job changes: blocker \u2192 bomber; builder \u2192 miner. Also practise release-rate-manipulation.",
       "requiresFullRescue": false,
       "sourceRank": "Wicked"
+    },
+    {
+      "applicationSignature": "{\"changes\": [[\"blocker\", \"bomber\"], [\"builder\", \"blocker\"]], \"concepts\": [\"blocker\", \"bomber\", \"builder\", \"climber\"], \"roles\": [[\"blocker\", \"bomber\"], [\"blocker\", \"bomber\", \"builder\"], [\"blocker\", \"builder\"], [\"builder\"], [\"climber\"]], \"sequences\": [[\"builder\", \"blocker\", \"bomber\"]]}",
+      "beginnerRank": false,
+      "evidence": "winning replay assignments and measured profile",
+      "identity": {
+        "engine": "classic",
+        "levelID": "42:Mega Drive Sunsoft:13:0:42",
+        "packID": "ohYesMoreLemmings-OHYES-60"
+      },
+      "intrinsicDemand": 536.4836936323851,
+      "lesson": "Link: Blocker + Bomber",
+      "level": "Doomsday",
+      "objective": "apply:4e0e03fc5e192b0ac5f4",
+      "purpose": "Worker roles: blocker + bomber; blocker + bomber + builder; blocker + builder; builder; climber. Job changes: blocker \u2192 bomber; builder \u2192 blocker. Three-step plans: builder \u2192 blocker \u2192 bomber.",
+      "requiresFullRescue": false,
+      "sourceRank": "Mega Drive Sunsoft"
     },
     {
       "applicationSignature": "{\"changes\": [[\"basher\", \"blocker\"]], \"concepts\": [\"basher\", \"blocker\", \"builder\", \"digger\", \"multiple-worker-coordination\", \"release-rate-manipulation\"], \"roles\": [[\"basher\", \"blocker\"], [\"blocker\"], [\"builder\"], [\"digger\"]], \"sequences\": []}",
@@ -4064,21 +4081,21 @@
       "sourceRank": "Wicked"
     },
     {
-      "applicationSignature": "{\"changes\": [[\"blocker\", \"bomber\"], [\"builder\", \"miner\"], [\"digger\", \"floater\"], [\"floater\", \"builder\"], [\"miner\", \"builder\"]], \"concepts\": [\"blocker\", \"bomber\", \"builder\", \"digger\", \"floater\", \"miner\"], \"roles\": [[\"blocker\", \"bomber\"], [\"builder\", \"digger\", \"floater\", \"miner\"]], \"sequences\": [[\"digger\", \"floater\", \"builder\"], [\"floater\", \"builder\", \"miner\"]]}",
+      "applicationSignature": "{\"changes\": [[\"basher\", \"builder\"], [\"builder\", \"basher\"], [\"miner\", \"basher\"], [\"miner\", \"builder\"]], \"concepts\": [\"basher\", \"builder\", \"miner\", \"multiple-worker-coordination\", \"release-rate-manipulation\"], \"roles\": [[\"basher\", \"builder\"], [\"basher\", \"miner\"], [\"builder\"], [\"builder\", \"miner\"], [\"miner\"]], \"sequences\": []}",
       "beginnerRank": false,
       "evidence": "winning replay assignments and measured profile",
       "identity": {
         "engine": "classic",
-        "levelID": "OhNoMorecLemmings Wild 1.DAT#0",
-        "packID": "fan:lldb-532"
+        "levelID": "CRISFN01.dat#3",
+        "packID": "fan:lldb-265"
       },
-      "intrinsicDemand": 526.8817813452838,
-      "lesson": "Link: Blocker + Bomber",
-      "level": "Wild Lemmings",
-      "objective": "apply:0932fdf6897dbd58f42c",
-      "purpose": "Worker roles: blocker + bomber; builder + digger + floater + miner. Job changes: blocker \u2192 bomber; builder \u2192 miner; digger \u2192 floater; floater \u2192 builder; miner \u2192 builder. Three-step plans: digger \u2192 floater \u2192 builder; floater \u2192 builder \u2192 miner.",
+      "intrinsicDemand": 526.3041959970537,
+      "lesson": "Link: Basher + Builder",
+      "level": "The moon cave",
+      "objective": "apply:e3170c10377770fcfcf4",
+      "purpose": "Worker roles: basher + builder; basher + miner; builder; builder + miner; miner. Job changes: basher \u2192 builder; builder \u2192 basher; miner \u2192 basher; miner \u2192 builder. Also practise multiple-worker-coordination, release-rate-manipulation.",
       "requiresFullRescue": false,
-      "sourceRank": "fan:lldb-532"
+      "sourceRank": "fan:lldb-265"
     },
     {
       "applicationSignature": "{\"changes\": [[\"basher\", \"miner\"], [\"digger\", \"miner\"], [\"miner\", \"basher\"], [\"miner\", \"digger\"]], \"concepts\": [\"basher\", \"digger\", \"miner\"], \"roles\": [[\"basher\", \"digger\", \"miner\"]], \"sequences\": [[\"basher\", \"miner\", \"digger\"], [\"digger\", \"miner\", \"basher\"]]}",
@@ -4166,21 +4183,21 @@
       "sourceRank": "fan:lldb-563"
     },
     {
-      "applicationSignature": "{\"changes\": [[\"basher\", \"builder\"], [\"builder\", \"miner\"], [\"climber\", \"floater\"], [\"floater\", \"builder\"], [\"miner\", \"basher\"]], \"concepts\": [\"basher\", \"builder\", \"climber\", \"floater\", \"miner\", \"release-rate-manipulation\"], \"roles\": [[\"basher\", \"builder\", \"climber\", \"floater\", \"miner\"], [\"builder\", \"miner\"]], \"sequences\": [[\"builder\", \"miner\", \"basher\"], [\"climber\", \"floater\", \"builder\"], [\"floater\", \"builder\", \"miner\"], [\"miner\", \"basher\", \"builder\"]]}",
+      "applicationSignature": "{\"changes\": [[\"blocker\", \"bomber\"], [\"builder\", \"miner\"], [\"digger\", \"floater\"], [\"floater\", \"builder\"], [\"miner\", \"builder\"]], \"concepts\": [\"blocker\", \"bomber\", \"builder\", \"digger\", \"floater\", \"miner\"], \"roles\": [[\"blocker\", \"bomber\"], [\"builder\", \"digger\", \"floater\", \"miner\"]], \"sequences\": [[\"digger\", \"floater\", \"builder\"], [\"floater\", \"builder\", \"miner\"]]}",
       "beginnerRank": false,
       "evidence": "winning replay assignments and measured profile",
       "identity": {
         "engine": "classic",
-        "levelID": "LEMREMAKE.dat#1",
-        "packID": "fan:lldb-465"
+        "levelID": "OhNoMorecLemmings Wild 1.DAT#0",
+        "packID": "fan:lldb-532"
       },
-      "intrinsicDemand": 529.5592255965532,
-      "lesson": "Link: Builder + Miner",
-      "level": "Tribute to M.C.Escher (remake)",
-      "objective": "apply:2dfe0a9b5933cf29b151",
-      "purpose": "Worker roles: basher + builder + climber + floater + miner; builder + miner. Job changes: basher \u2192 builder; builder \u2192 miner; climber \u2192 floater; floater \u2192 builder; miner \u2192 basher. Three-step plans: builder \u2192 miner \u2192 basher; climber \u2192 floater \u2192 builder; floater \u2192 builder \u2192 miner; miner \u2192 basher \u2192 builder. Also practise release-rate-manipulation.",
-      "requiresFullRescue": true,
-      "sourceRank": "fan:lldb-465"
+      "intrinsicDemand": 526.8817813452838,
+      "lesson": "Link: Blocker + Bomber",
+      "level": "Wild Lemmings",
+      "objective": "apply:0932fdf6897dbd58f42c",
+      "purpose": "Worker roles: blocker + bomber; builder + digger + floater + miner. Job changes: blocker \u2192 bomber; builder \u2192 miner; digger \u2192 floater; floater \u2192 builder; miner \u2192 builder. Three-step plans: digger \u2192 floater \u2192 builder; floater \u2192 builder \u2192 miner.",
+      "requiresFullRescue": false,
+      "sourceRank": "fan:lldb-532"
     },
     {
       "applicationSignature": "{\"changes\": [[\"climber\", \"floater\"], [\"floater\", \"builder\"]], \"concepts\": [\"builder\", \"climber\", \"floater\", \"multiple-worker-coordination\", \"release-rate-manipulation\"], \"roles\": [[\"builder\"], [\"builder\", \"climber\", \"floater\"]], \"sequences\": [[\"climber\", \"floater\", \"builder\"]]}",
@@ -4285,21 +4302,21 @@
       "sourceRank": "fan:lldb-165"
     },
     {
-      "applicationSignature": "{\"changes\": [[\"basher\", \"climber\"], [\"climber\", \"floater\"], [\"climber\", \"miner\"], [\"digger\", \"basher\"], [\"digger\", \"climber\"], [\"floater\", \"digger\"]], \"concepts\": [\"basher\", \"climber\", \"digger\", \"floater\", \"miner\", \"multiple-worker-coordination\"], \"roles\": [[\"basher\", \"climber\"], [\"basher\", \"climber\", \"digger\", \"floater\"], [\"climber\"], [\"climber\", \"miner\"]], \"sequences\": [[\"climber\", \"floater\", \"digger\"], [\"digger\", \"climber\", \"floater\"], [\"floater\", \"digger\", \"basher\"]]}",
+      "applicationSignature": "{\"changes\": [[\"basher\", \"builder\"], [\"builder\", \"miner\"], [\"climber\", \"floater\"], [\"floater\", \"builder\"], [\"miner\", \"basher\"]], \"concepts\": [\"basher\", \"builder\", \"climber\", \"floater\", \"miner\", \"release-rate-manipulation\"], \"roles\": [[\"basher\", \"builder\", \"climber\", \"floater\", \"miner\"], [\"builder\", \"miner\"]], \"sequences\": [[\"builder\", \"miner\", \"basher\"], [\"climber\", \"floater\", \"builder\"], [\"floater\", \"builder\", \"miner\"], [\"miner\", \"basher\", \"builder\"]]}",
       "beginnerRank": false,
       "evidence": "winning replay assignments and measured profile",
       "identity": {
         "engine": "classic",
-        "levelID": "GARJEN09.dat#4",
-        "packID": "fan:lldb-289"
+        "levelID": "LEMREMAKE.dat#1",
+        "packID": "fan:lldb-465"
       },
-      "intrinsicDemand": 533.0592255965532,
-      "lesson": "Link: Basher + Climber",
-      "level": "Faithful Friends",
-      "objective": "apply:c4346396cb51b566649e",
-      "purpose": "Worker roles: basher + climber; basher + climber + digger + floater; climber; climber + miner. Job changes: basher \u2192 climber; climber \u2192 floater; climber \u2192 miner; digger \u2192 basher; digger \u2192 climber; floater \u2192 digger. Three-step plans: climber \u2192 floater \u2192 digger; digger \u2192 climber \u2192 floater; floater \u2192 digger \u2192 basher. Also practise multiple-worker-coordination.",
+      "intrinsicDemand": 529.5592255965532,
+      "lesson": "Link: Builder + Miner",
+      "level": "Tribute to M.C.Escher (remake)",
+      "objective": "apply:2dfe0a9b5933cf29b151",
+      "purpose": "Worker roles: basher + builder + climber + floater + miner; builder + miner. Job changes: basher \u2192 builder; builder \u2192 miner; climber \u2192 floater; floater \u2192 builder; miner \u2192 basher. Three-step plans: builder \u2192 miner \u2192 basher; climber \u2192 floater \u2192 builder; floater \u2192 builder \u2192 miner; miner \u2192 basher \u2192 builder. Also practise release-rate-manipulation.",
       "requiresFullRescue": true,
-      "sourceRank": "fan:lldb-289"
+      "sourceRank": "fan:lldb-465"
     },
     {
       "applicationSignature": "{\"changes\": [[\"builder\", \"miner\"], [\"digger\", \"builder\"], [\"miner\", \"builder\"]], \"concepts\": [\"builder\", \"digger\", \"miner\", \"multiple-worker-coordination\", \"release-rate-manipulation\"], \"roles\": [[\"builder\"], [\"builder\", \"digger\"], [\"builder\", \"miner\"]], \"sequences\": []}",
@@ -4404,21 +4421,21 @@
       "sourceRank": "fan:lldb-224"
     },
     {
-      "applicationSignature": "{\"changes\": [[\"climber\", \"blocker\"]], \"concepts\": [\"blocker\", \"climber\"], \"roles\": [[\"blocker\", \"climber\"], [\"climber\"]], \"sequences\": []}",
+      "applicationSignature": "{\"changes\": [[\"basher\", \"climber\"], [\"climber\", \"floater\"], [\"climber\", \"miner\"], [\"digger\", \"basher\"], [\"digger\", \"climber\"], [\"floater\", \"digger\"]], \"concepts\": [\"basher\", \"climber\", \"digger\", \"floater\", \"miner\", \"multiple-worker-coordination\"], \"roles\": [[\"basher\", \"climber\"], [\"basher\", \"climber\", \"digger\", \"floater\"], [\"climber\"], [\"climber\", \"miner\"]], \"sequences\": [[\"climber\", \"floater\", \"digger\"], [\"digger\", \"climber\", \"floater\"], [\"floater\", \"digger\", \"basher\"]]}",
       "beginnerRank": false,
       "evidence": "winning replay assignments and measured profile",
       "identity": {
         "engine": "classic",
-        "levelID": "PSP Special2.dat#7",
-        "packID": "fan:lldb-218"
+        "levelID": "GARJEN09.dat#4",
+        "packID": "fan:lldb-289"
       },
-      "intrinsicDemand": 533.3041959970537,
-      "lesson": "Link: Climber + Blocker",
-      "level": "Born a blocker, die a blocker",
-      "objective": "apply:e942f89ea5f5400ca5c4",
-      "purpose": "Worker roles: blocker + climber; climber. Job changes: climber \u2192 blocker.",
-      "requiresFullRescue": false,
-      "sourceRank": "fan:lldb-218"
+      "intrinsicDemand": 533.0592255965532,
+      "lesson": "Link: Basher + Climber",
+      "level": "Faithful Friends",
+      "objective": "apply:c4346396cb51b566649e",
+      "purpose": "Worker roles: basher + climber; basher + climber + digger + floater; climber; climber + miner. Job changes: basher \u2192 climber; climber \u2192 floater; climber \u2192 miner; digger \u2192 basher; digger \u2192 climber; floater \u2192 digger. Three-step plans: climber \u2192 floater \u2192 digger; digger \u2192 climber \u2192 floater; floater \u2192 digger \u2192 basher. Also practise multiple-worker-coordination.",
+      "requiresFullRescue": true,
+      "sourceRank": "fan:lldb-289"
     },
     {
       "applicationSignature": "{\"changes\": [], \"concepts\": [\"basher\", \"builder\", \"miner\", \"multiple-worker-coordination\", \"release-rate-manipulation\"], \"roles\": [[\"basher\"], [\"builder\"], [\"miner\"]], \"sequences\": []}",
@@ -4489,23 +4506,6 @@
       "sourceRank": "Tame"
     },
     {
-      "applicationSignature": "{\"changes\": [[\"basher\", \"builder\"], [\"builder\", \"basher\"], [\"builder\", \"bomber\"], [\"climber\", \"builder\"], [\"digger\", \"miner\"]], \"concepts\": [\"basher\", \"blocker\", \"bomber\", \"builder\", \"climber\", \"digger\", \"miner\", \"multiple-worker-coordination\", \"release-rate-manipulation\"], \"roles\": [[\"basher\", \"bomber\", \"builder\", \"climber\"], [\"blocker\"], [\"builder\"], [\"digger\", \"miner\"]], \"sequences\": [[\"basher\", \"builder\", \"bomber\"], [\"climber\", \"builder\", \"basher\"]]}",
-      "beginnerRank": false,
-      "evidence": "winning replay assignments and measured profile",
-      "identity": {
-        "engine": "classic",
-        "levelID": "20:Blizzard:5:6:4",
-        "packID": "holidayLemmings1993-MACLEVL-32"
-      },
-      "intrinsicDemand": 735.25,
-      "lesson": "Link: Digger + Miner",
-      "level": "It Came Upon a Lemnight Clear",
-      "objective": "apply:c111413129ba41c22e35",
-      "purpose": "Worker roles: basher + bomber + builder + climber; blocker; builder; digger + miner. Job changes: basher \u2192 builder; builder \u2192 basher; builder \u2192 bomber; climber \u2192 builder; digger \u2192 miner. Three-step plans: basher \u2192 builder \u2192 bomber; climber \u2192 builder \u2192 basher. Also practise multiple-worker-coordination, release-rate-manipulation.",
-      "requiresFullRescue": false,
-      "sourceRank": "Blizzard"
-    },
-    {
       "applicationSignature": "{\"changes\": [[\"basher\", \"digger\"], [\"blocker\", \"basher\"], [\"blocker\", \"builder\"], [\"builder\", \"basher\"], [\"builder\", \"blocker\"], [\"builder\", \"digger\"], [\"digger\", \"builder\"]], \"concepts\": [\"basher\", \"blocker\", \"builder\", \"digger\"], \"roles\": [[\"basher\", \"blocker\", \"builder\", \"digger\"], [\"basher\", \"builder\", \"digger\"], [\"blocker\"], [\"blocker\", \"builder\"]], \"sequences\": [[\"basher\", \"digger\", \"builder\"], [\"blocker\", \"basher\", \"digger\"], [\"digger\", \"builder\", \"basher\"], [\"digger\", \"builder\", \"blocker\"]]}",
       "beginnerRank": false,
       "evidence": "winning replay assignments and measured profile",
@@ -4557,21 +4557,21 @@
       "sourceRank": "Tricky"
     },
     {
-      "applicationSignature": "{\"changes\": [[\"climber\", \"miner\"]], \"concepts\": [\"builder\", \"climber\", \"miner\", \"multiple-worker-coordination\", \"release-rate-manipulation\"], \"roles\": [[\"builder\"], [\"climber\"], [\"climber\", \"miner\"]], \"sequences\": []}",
+      "applicationSignature": "{\"changes\": [[\"basher\", \"builder\"], [\"builder\", \"basher\"], [\"builder\", \"bomber\"], [\"climber\", \"builder\"], [\"digger\", \"miner\"]], \"concepts\": [\"basher\", \"blocker\", \"bomber\", \"builder\", \"climber\", \"digger\", \"miner\", \"multiple-worker-coordination\", \"release-rate-manipulation\"], \"roles\": [[\"basher\", \"bomber\", \"builder\", \"climber\"], [\"blocker\"], [\"builder\"], [\"digger\", \"miner\"]], \"sequences\": [[\"basher\", \"builder\", \"bomber\"], [\"climber\", \"builder\", \"basher\"]]}",
       "beginnerRank": false,
       "evidence": "winning replay assignments and measured profile",
       "identity": {
         "engine": "classic",
-        "levelID": "88:Havoc:9:1:1",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
+        "levelID": "20:Blizzard:5:6:4",
+        "packID": "holidayLemmings1993-MACLEVL-32"
       },
-      "intrinsicDemand": 748.0,
-      "lesson": "Link: Climber + Miner",
-      "level": "AAAAAARRRRRRGGGGGGHHHHHH!!!!!!",
-      "objective": "apply:9b67f76b377c3bdd198c",
-      "purpose": "Worker roles: builder; climber; climber + miner. Job changes: climber \u2192 miner. Also practise multiple-worker-coordination, release-rate-manipulation.",
-      "requiresFullRescue": true,
-      "sourceRank": "Havoc"
+      "intrinsicDemand": 735.25,
+      "lesson": "Link: Digger + Miner",
+      "level": "It Came Upon a Lemnight Clear",
+      "objective": "apply:c111413129ba41c22e35",
+      "purpose": "Worker roles: basher + bomber + builder + climber; blocker; builder; digger + miner. Job changes: basher \u2192 builder; builder \u2192 basher; builder \u2192 bomber; climber \u2192 builder; digger \u2192 miner. Three-step plans: basher \u2192 builder \u2192 bomber; climber \u2192 builder \u2192 basher. Also practise multiple-worker-coordination, release-rate-manipulation.",
+      "requiresFullRescue": false,
+      "sourceRank": "Blizzard"
     },
     {
       "applicationSignature": "{\"changes\": [[\"basher\", \"builder\"], [\"basher\", \"digger\"], [\"builder\", \"basher\"], [\"builder\", \"climber\"], [\"builder\", \"digger\"], [\"climber\", \"digger\"], [\"digger\", \"basher\"], [\"digger\", \"builder\"], [\"digger\", \"miner\"], [\"miner\", \"builder\"], [\"miner\", \"digger\"]], \"concepts\": [\"basher\", \"builder\", \"climber\", \"digger\", \"miner\"], \"roles\": [[\"basher\", \"builder\", \"climber\", \"digger\", \"miner\"]], \"sequences\": [[\"basher\", \"digger\", \"builder\"], [\"builder\", \"basher\", \"digger\"], [\"builder\", \"climber\", \"digger\"], [\"builder\", \"digger\", \"basher\"], [\"builder\", \"digger\", \"miner\"], [\"climber\", \"digger\", \"miner\"], [\"digger\", \"basher\", \"builder\"], [\"digger\", \"miner\", \"builder\"], [\"miner\", \"builder\", \"digger\"]]}",
@@ -4608,21 +4608,21 @@
       "sourceRank": "Tame"
     },
     {
-      "applicationSignature": "{\"changes\": [[\"blocker\", \"bomber\"], [\"builder\", \"climber\"], [\"builder\", \"miner\"], [\"climber\", \"builder\"], [\"digger\", \"builder\"], [\"floater\", \"builder\"], [\"miner\", \"builder\"]], \"concepts\": [\"blocker\", \"bomber\", \"builder\", \"climber\", \"digger\", \"floater\", \"miner\", \"multiple-worker-coordination\", \"release-rate-manipulation\"], \"roles\": [[\"blocker\", \"bomber\"], [\"builder\", \"climber\", \"floater\", \"miner\"], [\"builder\", \"digger\"]], \"sequences\": [[\"climber\", \"builder\", \"miner\"], [\"floater\", \"builder\", \"climber\"]]}",
+      "applicationSignature": "{\"changes\": [[\"climber\", \"miner\"]], \"concepts\": [\"builder\", \"climber\", \"miner\", \"multiple-worker-coordination\", \"release-rate-manipulation\"], \"roles\": [[\"builder\"], [\"climber\"], [\"climber\", \"miner\"]], \"sequences\": []}",
       "beginnerRank": false,
       "evidence": "winning replay assignments and measured profile",
       "identity": {
         "engine": "classic",
-        "levelID": "ANTHPCK5.DAT#7",
-        "packID": "fan:lldb-225"
+        "levelID": "88:Havoc:9:1:1",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
       },
-      "intrinsicDemand": 735.25,
-      "lesson": "Link: Blocker + Bomber",
-      "level": "Waste High!",
-      "objective": "apply:06bb5534f5be68b05186",
-      "purpose": "Worker roles: blocker + bomber; builder + climber + floater + miner; builder + digger. Job changes: blocker \u2192 bomber; builder \u2192 climber; builder \u2192 miner; climber \u2192 builder; digger \u2192 builder; floater \u2192 builder; miner \u2192 builder. Three-step plans: climber \u2192 builder \u2192 miner; floater \u2192 builder \u2192 climber. Also practise multiple-worker-coordination, release-rate-manipulation.",
-      "requiresFullRescue": false,
-      "sourceRank": "fan:lldb-225"
+      "intrinsicDemand": 748.0,
+      "lesson": "Link: Climber + Miner",
+      "level": "AAAAAARRRRRRGGGGGGHHHHHH!!!!!!",
+      "objective": "apply:9b67f76b377c3bdd198c",
+      "purpose": "Worker roles: builder; climber; climber + miner. Job changes: climber \u2192 miner. Also practise multiple-worker-coordination, release-rate-manipulation.",
+      "requiresFullRescue": true,
+      "sourceRank": "Havoc"
     },
     {
       "applicationSignature": "{\"changes\": [[\"basher\", \"miner\"], [\"blocker\", \"bomber\"], [\"builder\", \"climber\"], [\"climber\", \"builder\"], [\"digger\", \"builder\"], [\"miner\", \"climber\"]], \"concepts\": [\"basher\", \"blocker\", \"bomber\", \"builder\", \"climber\", \"digger\", \"miner\", \"multiple-worker-coordination\"], \"roles\": [[\"basher\", \"builder\", \"climber\", \"miner\"], [\"blocker\"], [\"blocker\", \"bomber\"], [\"builder\"], [\"builder\", \"climber\", \"digger\"], [\"climber\"]], \"sequences\": [[\"basher\", \"miner\", \"climber\"], [\"digger\", \"builder\", \"climber\"], [\"miner\", \"climber\", \"builder\"]]}",
@@ -4693,21 +4693,21 @@
       "sourceRank": "Mega Drive Sunsoft"
     },
     {
-      "applicationSignature": "{\"changes\": [[\"basher\", \"digger\"]], \"concepts\": [\"basher\", \"blocker\", \"bomber\", \"builder\", \"climber\", \"digger\", \"miner\", \"multiple-worker-coordination\", \"release-rate-manipulation\"], \"roles\": [[\"basher\", \"digger\"], [\"blocker\"], [\"bomber\"], [\"builder\"], [\"climber\"], [\"miner\"]], \"sequences\": []}",
+      "applicationSignature": "{\"changes\": [[\"blocker\", \"bomber\"], [\"builder\", \"climber\"], [\"builder\", \"miner\"], [\"climber\", \"builder\"], [\"digger\", \"builder\"], [\"floater\", \"builder\"], [\"miner\", \"builder\"]], \"concepts\": [\"blocker\", \"bomber\", \"builder\", \"climber\", \"digger\", \"floater\", \"miner\", \"multiple-worker-coordination\", \"release-rate-manipulation\"], \"roles\": [[\"blocker\", \"bomber\"], [\"builder\", \"climber\", \"floater\", \"miner\"], [\"builder\", \"digger\"]], \"sequences\": [[\"climber\", \"builder\", \"miner\"], [\"floater\", \"builder\", \"climber\"]]}",
       "beginnerRank": false,
       "evidence": "winning replay assignments and measured profile",
       "identity": {
         "engine": "classic",
-        "levelID": "AkseliPack01.dat#9",
-        "packID": "fan:lldb-220"
+        "levelID": "ANTHPCK5.DAT#7",
+        "packID": "fan:lldb-225"
       },
       "intrinsicDemand": 735.25,
-      "lesson": "Link: Basher + Digger",
-      "level": "Zygoptera",
-      "objective": "apply:36746378488e7f10129b",
-      "purpose": "Worker roles: basher + digger; blocker; bomber; builder; climber; miner. Job changes: basher \u2192 digger. Also practise multiple-worker-coordination, release-rate-manipulation.",
+      "lesson": "Link: Blocker + Bomber",
+      "level": "Waste High!",
+      "objective": "apply:06bb5534f5be68b05186",
+      "purpose": "Worker roles: blocker + bomber; builder + climber + floater + miner; builder + digger. Job changes: blocker \u2192 bomber; builder \u2192 climber; builder \u2192 miner; climber \u2192 builder; digger \u2192 builder; floater \u2192 builder; miner \u2192 builder. Three-step plans: climber \u2192 builder \u2192 miner; floater \u2192 builder \u2192 climber. Also practise multiple-worker-coordination, release-rate-manipulation.",
       "requiresFullRescue": false,
-      "sourceRank": "fan:lldb-220"
+      "sourceRank": "fan:lldb-225"
     },
     {
       "applicationSignature": "{\"changes\": [[\"climber\", \"floater\"], [\"floater\", \"builder\"]], \"concepts\": [\"builder\", \"climber\", \"floater\", \"release-rate-manipulation\"], \"roles\": [[\"builder\", \"climber\", \"floater\"], [\"climber\", \"floater\"]], \"sequences\": [[\"climber\", \"floater\", \"builder\"]]}",
@@ -4778,21 +4778,21 @@
       "sourceRank": "Havoc"
     },
     {
-      "applicationSignature": "{\"changes\": [[\"basher\", \"builder\"], [\"basher\", \"digger\"], [\"blocker\", \"bomber\"], [\"builder\", \"basher\"], [\"climber\", \"basher\"], [\"digger\", \"basher\"]], \"concepts\": [\"basher\", \"blocker\", \"bomber\", \"builder\", \"climber\", \"digger\", \"miner\", \"multiple-worker-coordination\", \"release-rate-manipulation\"], \"roles\": [[\"basher\", \"builder\"], [\"basher\", \"climber\"], [\"basher\", \"digger\"], [\"blocker\", \"bomber\"], [\"builder\"], [\"miner\"]], \"sequences\": []}",
+      "applicationSignature": "{\"changes\": [[\"basher\", \"digger\"]], \"concepts\": [\"basher\", \"blocker\", \"bomber\", \"builder\", \"climber\", \"digger\", \"miner\", \"multiple-worker-coordination\", \"release-rate-manipulation\"], \"roles\": [[\"basher\", \"digger\"], [\"blocker\"], [\"bomber\"], [\"builder\"], [\"climber\"], [\"miner\"]], \"sequences\": []}",
       "beginnerRank": false,
       "evidence": "winning replay assignments and measured profile",
       "identity": {
         "engine": "classic",
-        "levelID": "Genesis Mayhem.dat#22",
-        "packID": "fan:lldb-491"
+        "levelID": "AkseliPack01.dat#9",
+        "packID": "fan:lldb-220"
       },
       "intrinsicDemand": 735.25,
-      "lesson": "Link: Blocker + Bomber",
-      "level": "A group of entrances",
-      "objective": "apply:823beea578510d51fd51",
-      "purpose": "Worker roles: basher + builder; basher + climber; basher + digger; blocker + bomber; builder; miner. Job changes: basher \u2192 builder; basher \u2192 digger; blocker \u2192 bomber; builder \u2192 basher; climber \u2192 basher; digger \u2192 basher. Also practise multiple-worker-coordination, release-rate-manipulation.",
+      "lesson": "Link: Basher + Digger",
+      "level": "Zygoptera",
+      "objective": "apply:36746378488e7f10129b",
+      "purpose": "Worker roles: basher + digger; blocker; bomber; builder; climber; miner. Job changes: basher \u2192 digger. Also practise multiple-worker-coordination, release-rate-manipulation.",
       "requiresFullRescue": false,
-      "sourceRank": "fan:lldb-491"
+      "sourceRank": "fan:lldb-220"
     },
     {
       "applicationSignature": "{\"changes\": [[\"basher\", \"bomber\"], [\"basher\", \"builder\"], [\"blocker\", \"bomber\"], [\"builder\", \"basher\"], [\"climber\", \"blocker\"], [\"climber\", \"miner\"], [\"miner\", \"basher\"]], \"concepts\": [\"basher\", \"blocker\", \"bomber\", \"builder\", \"climber\", \"miner\", \"release-rate-manipulation\"], \"roles\": [[\"basher\", \"bomber\", \"builder\", \"climber\", \"miner\"], [\"blocker\", \"bomber\"], [\"blocker\", \"bomber\", \"climber\"], [\"bomber\"]], \"sequences\": [[\"builder\", \"basher\", \"bomber\"], [\"climber\", \"blocker\", \"bomber\"], [\"climber\", \"miner\", \"basher\"], [\"miner\", \"basher\", \"builder\"]]}",
@@ -4863,21 +4863,21 @@
       "sourceRank": "Havoc"
     },
     {
-      "applicationSignature": "{\"changes\": [[\"blocker\", \"bomber\"], [\"builder\", \"digger\"], [\"climber\", \"builder\"], [\"climber\", \"floater\"], [\"digger\", \"bomber\"], [\"floater\", \"blocker\"], [\"floater\", \"bomber\"], [\"floater\", \"miner\"]], \"concepts\": [\"blocker\", \"bomber\", \"builder\", \"climber\", \"digger\", \"floater\", \"miner\", \"multiple-worker-coordination\", \"release-rate-manipulation\"], \"roles\": [[\"blocker\", \"bomber\", \"climber\", \"floater\"], [\"bomber\", \"builder\", \"climber\", \"digger\"], [\"bomber\", \"climber\", \"floater\"], [\"builder\"], [\"climber\", \"floater\", \"miner\"], [\"floater\"]], \"sequences\": [[\"builder\", \"digger\", \"bomber\"], [\"climber\", \"builder\", \"digger\"], [\"climber\", \"floater\", \"blocker\"], [\"climber\", \"floater\", \"bomber\"], [\"climber\", \"floater\", \"miner\"], [\"floater\", \"blocker\", \"bomber\"]]}",
+      "applicationSignature": "{\"changes\": [[\"basher\", \"builder\"], [\"basher\", \"digger\"], [\"blocker\", \"bomber\"], [\"builder\", \"basher\"], [\"climber\", \"basher\"], [\"digger\", \"basher\"]], \"concepts\": [\"basher\", \"blocker\", \"bomber\", \"builder\", \"climber\", \"digger\", \"miner\", \"multiple-worker-coordination\", \"release-rate-manipulation\"], \"roles\": [[\"basher\", \"builder\"], [\"basher\", \"climber\"], [\"basher\", \"digger\"], [\"blocker\", \"bomber\"], [\"builder\"], [\"miner\"]], \"sequences\": []}",
       "beginnerRank": false,
       "evidence": "winning replay assignments and measured profile",
       "identity": {
         "engine": "classic",
-        "levelID": "Lemmings Plus DOS Project - 14 - PSYCHO (Part 2).dat#0",
-        "packID": "fan:lldb-555"
+        "levelID": "Genesis Mayhem.dat#22",
+        "packID": "fan:lldb-491"
       },
       "intrinsicDemand": 735.25,
-      "lesson": "Link: Climber + Floater + Bomber",
-      "level": "Three Birds With One Stone",
-      "objective": "apply:895ebcb21ac1368ff1c9",
-      "purpose": "Worker roles: blocker + bomber + climber + floater; bomber + builder + climber + digger; bomber + climber + floater; builder; climber + floater + miner; floater. Job changes: blocker \u2192 bomber; builder \u2192 digger; climber \u2192 builder; climber \u2192 floater; digger \u2192 bomber; floater \u2192 blocker; floater \u2192 bomber; floater \u2192 miner. Three-step plans: builder \u2192 digger \u2192 bomber; climber \u2192 builder \u2192 digger; climber \u2192 floater \u2192 blocker; climber \u2192 floater \u2192 bomber; climber \u2192 floater \u2192 miner; floater \u2192 blocker \u2192 bomber. Also practise multiple-worker-coordination, release-rate-manipulation.",
+      "lesson": "Link: Blocker + Bomber",
+      "level": "A group of entrances",
+      "objective": "apply:823beea578510d51fd51",
+      "purpose": "Worker roles: basher + builder; basher + climber; basher + digger; blocker + bomber; builder; miner. Job changes: basher \u2192 builder; basher \u2192 digger; blocker \u2192 bomber; builder \u2192 basher; climber \u2192 basher; digger \u2192 basher. Also practise multiple-worker-coordination, release-rate-manipulation.",
       "requiresFullRescue": false,
-      "sourceRank": "fan:lldb-555"
+      "sourceRank": "fan:lldb-491"
     },
     {
       "applicationSignature": "{\"changes\": [[\"builder\", \"blocker\"], [\"builder\", \"climber\"], [\"climber\", \"builder\"]], \"concepts\": [\"blocker\", \"builder\", \"climber\", \"miner\", \"multiple-worker-coordination\"], \"roles\": [[\"blocker\", \"builder\"], [\"builder\"], [\"builder\", \"climber\"], [\"miner\"]], \"sequences\": []}",
@@ -4931,21 +4931,21 @@
       "sourceRank": "Wild"
     },
     {
-      "applicationSignature": "{\"changes\": [[\"basher\", \"builder\"], [\"builder\", \"blocker\"], [\"builder\", \"floater\"], [\"builder\", \"miner\"], [\"climber\", \"builder\"], [\"floater\", \"builder\"], [\"miner\", \"basher\"]], \"concepts\": [\"basher\", \"blocker\", \"builder\", \"climber\", \"digger\", \"floater\", \"miner\", \"multiple-worker-coordination\", \"release-rate-manipulation\"], \"roles\": [[\"basher\", \"builder\", \"climber\", \"floater\", \"miner\"], [\"blocker\", \"builder\"], [\"builder\"], [\"digger\"], [\"miner\"]], \"sequences\": [[\"basher\", \"builder\", \"floater\"], [\"builder\", \"miner\", \"basher\"], [\"climber\", \"builder\", \"miner\"], [\"miner\", \"basher\", \"builder\"]]}",
+      "applicationSignature": "{\"changes\": [[\"blocker\", \"bomber\"], [\"builder\", \"digger\"], [\"climber\", \"builder\"], [\"climber\", \"floater\"], [\"digger\", \"bomber\"], [\"floater\", \"blocker\"], [\"floater\", \"bomber\"], [\"floater\", \"miner\"]], \"concepts\": [\"blocker\", \"bomber\", \"builder\", \"climber\", \"digger\", \"floater\", \"miner\", \"multiple-worker-coordination\", \"release-rate-manipulation\"], \"roles\": [[\"blocker\", \"bomber\", \"climber\", \"floater\"], [\"bomber\", \"builder\", \"climber\", \"digger\"], [\"bomber\", \"climber\", \"floater\"], [\"builder\"], [\"climber\", \"floater\", \"miner\"], [\"floater\"]], \"sequences\": [[\"builder\", \"digger\", \"bomber\"], [\"climber\", \"builder\", \"digger\"], [\"climber\", \"floater\", \"blocker\"], [\"climber\", \"floater\", \"bomber\"], [\"climber\", \"floater\", \"miner\"], [\"floater\", \"blocker\", \"bomber\"]]}",
       "beginnerRank": false,
       "evidence": "winning replay assignments and measured profile",
       "identity": {
         "engine": "classic",
-        "levelID": "cLemmings Tricky 1.DAT#3",
-        "packID": "fan:lldb-527"
+        "levelID": "Lemmings Plus DOS Project - 14 - PSYCHO (Part 2).dat#0",
+        "packID": "fan:lldb-555"
       },
       "intrinsicDemand": 735.25,
-      "lesson": "Link: Builder + Blocker",
-      "level": "Up and Over",
-      "objective": "apply:6e44d897855ede133aa0",
-      "purpose": "Worker roles: basher + builder + climber + floater + miner; blocker + builder; builder; digger; miner. Job changes: basher \u2192 builder; builder \u2192 blocker; builder \u2192 floater; builder \u2192 miner; climber \u2192 builder; floater \u2192 builder; miner \u2192 basher. Three-step plans: basher \u2192 builder \u2192 floater; builder \u2192 miner \u2192 basher; climber \u2192 builder \u2192 miner; miner \u2192 basher \u2192 builder. Also practise multiple-worker-coordination, release-rate-manipulation.",
+      "lesson": "Link: Climber + Floater + Bomber",
+      "level": "Three Birds With One Stone",
+      "objective": "apply:895ebcb21ac1368ff1c9",
+      "purpose": "Worker roles: blocker + bomber + climber + floater; bomber + builder + climber + digger; bomber + climber + floater; builder; climber + floater + miner; floater. Job changes: blocker \u2192 bomber; builder \u2192 digger; climber \u2192 builder; climber \u2192 floater; digger \u2192 bomber; floater \u2192 blocker; floater \u2192 bomber; floater \u2192 miner. Three-step plans: builder \u2192 digger \u2192 bomber; climber \u2192 builder \u2192 digger; climber \u2192 floater \u2192 blocker; climber \u2192 floater \u2192 bomber; climber \u2192 floater \u2192 miner; floater \u2192 blocker \u2192 bomber. Also practise multiple-worker-coordination, release-rate-manipulation.",
       "requiresFullRescue": false,
-      "sourceRank": "fan:lldb-527"
+      "sourceRank": "fan:lldb-555"
     },
     {
       "applicationSignature": "{\"changes\": [[\"digger\", \"builder\"], [\"floater\", \"blocker\"], [\"floater\", \"builder\"], [\"floater\", \"digger\"]], \"concepts\": [\"blocker\", \"builder\", \"digger\", \"floater\", \"multiple-worker-coordination\", \"release-rate-manipulation\"], \"roles\": [[\"blocker\", \"floater\"], [\"builder\"], [\"builder\", \"digger\", \"floater\"], [\"builder\", \"floater\"], [\"floater\"]], \"sequences\": [[\"floater\", \"digger\", \"builder\"]]}",
@@ -4966,7 +4966,7 @@
     }
   ],
   "limits": "Objectives describe observed routes. Opening introductions prefer a low-demand Fun, Easy or Tame candidate. When none is available, a low-demand non-beginner witness may introduce the skill in Intermediate. Full-rescue witnesses are excluded from introductions. Novice readability and technique necessity require playtesting.",
-  "poolSize": 1550,
+  "poolSize": 1680,
   "selectionPolicy": "Official first within comparable 35-point demand bands; distinct observed applications; known Lemmini source packs excluded from the Classic path.",
   "targetSize": 292,
   "unavailableOptionalObjectives": [
@@ -5069,8 +5069,7 @@
     "sequence:climber:digger:floater",
     "spacing-coordination",
     "integrated-plan",
-    "precision-economy",
-    "expert-sequencing"
+    "precision-economy"
   ],
   "version": "curriculum-3"
 }

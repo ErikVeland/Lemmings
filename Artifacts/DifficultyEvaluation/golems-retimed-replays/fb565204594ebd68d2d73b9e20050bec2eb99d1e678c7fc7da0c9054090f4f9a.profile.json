@@ -1,0 +1,119 @@
+{
+  "components" : {
+    "concurrencyBurden" : 0,
+    "constraintPressure" : 509.3130641861104,
+    "deductionComplexityProxy" : 245,
+    "executionPrecision" : 0,
+    "solutionComplexity" : 591.5131794236476,
+    "techniqueBurden" : 390
+  },
+  "confidence" : "medium",
+  "criticalActions" : [
+
+  ],
+  "detectedTechniques" : [
+    "basher",
+    "builder",
+    "digger",
+    "miner",
+    "release-rate-manipulation"
+  ],
+  "explanation" : [
+    "4 used skill types; 7 assigned workers; 3 same-worker skill changes.",
+    "Maximum concurrent worker regions: 1.",
+    "Timing probes: 10. Untested alternatives remain unknown.",
+    "Deduction is a conservative proxy. Observed techniques are not proof of necessity.",
+    "Source rank: fan:lldb-181."
+  ],
+  "key" : {
+    "analyserVersion" : "difficulty-3",
+    "assetsRevision" : "3136574785ceaec381d72cb1ee767508d95170e19e458e3847785eca964f23b9:probes-10",
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "Lemmings platinum Fragle part 2.dat#10",
+      "packID" : "fan:lldb-181"
+    },
+    "levelRevision" : "9b666aa29ad430e1c1e2655f910ebdac52b6dcac4690eb0cb9eb9a0aa8e8e27d",
+    "replayRevision" : "SHA256 digest: fb565204594ebd68d2d73b9e20050bec2eb99d1e678c7fc7da0c9054090f4f9a",
+    "simulationVersion" : "neolemmix-ce-2026-09-27"
+  },
+  "overallScore" : 310.9935978173968,
+  "precision" : {
+    "actions" : [
+      {
+        "outcomes" : {
+          "-1" : false
+        },
+        "sequence" : 1
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 2
+      },
+      {
+        "outcomes" : {
+          "-1" : false
+        },
+        "sequence" : 3
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 4
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 5
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 6
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 7
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 8
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 9
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 10
+      }
+    ],
+    "alternativeRunCount" : 0,
+    "assignmentCount" : 10,
+    "completed" : false,
+    "orderingOutcomes" : [
+
+    ],
+    "runCount" : 10,
+    "selectionOutcomes" : [
+
+    ]
+  },
+  "prerequisiteConcepts" : [
+
+  ],
+  "sourceRank" : "fan:lldb-181"
+}

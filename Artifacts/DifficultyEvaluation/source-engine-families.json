@@ -21,7 +21,347 @@
     466,
     469
   ],
-  "golemsPackIDs": [433, 495, 496],
-  "golemsEvidence": "The LLDB browser players for packs 433, 495 and 496 select GOLEMS.DAT (game mode 3); see https://lldb.camanis.net/levelpack/433, https://lldb.camanis.net/levelpack/495 and https://lldb.camanis.net/levelpack/496.",
-  "source": "https://lldb.camanis.net/levelpack/{id}"
+  "golemsPackIDs": [
+    290,
+    433,
+    495,
+    496
+  ],
+  "golemsEvidence": "Archived published game-mode-3 replay records identify these exact levels or whole packs as Golems source content. The level overrides have strictly verified ordinary native wins on their exact bundled revisions. A native win and source header agreement do not prove full source physics parity.",
+  "source": "https://lldb.camanis.net/levelpack/{id}",
+  "golemsLevelIDs": {
+    "fan:lldb-1": [
+      "geooPk0.dat#1",
+      "geooPk0.dat#9"
+    ],
+    "fan:lldb-5": [
+      "Mikepak00.dat#6"
+    ],
+    "fan:lldb-14": [
+      "Mikepak09.dat#1"
+    ],
+    "fan:lldb-20": [
+      "ISteve01.DAT#3",
+      "ISteve01.DAT#9"
+    ],
+    "fan:lldb-22": [
+      "ISteve08.dat#6"
+    ],
+    "fan:lldb-24": [
+      "ISteve04.dat#9"
+    ],
+    "fan:lldb-33": [
+      "QBeez03.dat#9"
+    ],
+    "fan:lldb-75": [
+      "JHIsan1.dat#9"
+    ],
+    "fan:lldb-78": [
+      "doggycharly random lvls.dat#0"
+    ],
+    "fan:lldb-82": [
+      "Yawg01.dat#0",
+      "Yawg01.dat#1"
+    ],
+    "fan:lldb-105": [
+      "epic02.dat#3"
+    ],
+    "fan:lldb-140": [
+      "Epic giga02.dat#0"
+    ],
+    "fan:lldb-160": [
+      "Giga pack 01.dat#9"
+    ],
+    "fan:lldb-171": [
+      "Giga pack 09.dat#6"
+    ],
+    "fan:lldb-179": [
+      "The lemming google pack.dat#2",
+      "The lemming google pack.dat#5"
+    ],
+    "fan:lldb-181": [
+      "Lemmings platinum Fragle part 2.dat#10",
+      "Lemmings platinum Fragle part 2.dat#7"
+    ],
+    "fan:lldb-191": [
+      "Lemmings platinum Dangerous Part 2.dat#14"
+    ],
+    "fan:lldb-196": [
+      "nortpack1.dat#8"
+    ],
+    "fan:lldb-217": [
+      "PSP Special.dat#3"
+    ],
+    "fan:lldb-218": [
+      "PSP Special2.dat#2",
+      "PSP Special2.dat#3"
+    ],
+    "fan:lldb-222": [
+      "ANTHPCK2.DAT#2",
+      "ANTHPCK2.DAT#3",
+      "ANTHPCK2.DAT#4"
+    ],
+    "fan:lldb-223": [
+      "ANTHPCK3.DAT#9"
+    ],
+    "fan:lldb-224": [
+      "ANTHPCK4.DAT#7"
+    ],
+    "fan:lldb-225": [
+      "ANTHPCK5.DAT#1",
+      "ANTHPCK5.DAT#3"
+    ],
+    "fan:lldb-232": [
+      "JANNPCK2.DAT#7",
+      "JANNPCK2.DAT#9"
+    ],
+    "fan:lldb-233": [
+      "jannpck3.dat#4",
+      "jannpck3.dat#9"
+    ],
+    "fan:lldb-234": [
+      "JANNPCK4.DAT#0",
+      "JANNPCK4.DAT#3"
+    ],
+    "fan:lldb-237": [
+      "JEFFPCK3.DAT#5"
+    ],
+    "fan:lldb-244": [
+      "Martin Zurlinden 01.dat#0",
+      "Martin Zurlinden 01.dat#8"
+    ],
+    "fan:lldb-245": [
+      "Martin Zurlinden 02.dat#4",
+      "Martin Zurlinden 02.dat#5",
+      "Martin Zurlinden 02.dat#6",
+      "Martin Zurlinden 02.dat#7",
+      "Martin Zurlinden 02.dat#8"
+    ],
+    "fan:lldb-246": [
+      "Martin Zurlinden 03.dat#0",
+      "Martin Zurlinden 03.dat#2",
+      "Martin Zurlinden 03.dat#3",
+      "Martin Zurlinden 03.dat#4",
+      "Martin Zurlinden 03.dat#5"
+    ],
+    "fan:lldb-252": [
+      "Conway03.DAT#9"
+    ],
+    "fan:lldb-265": [
+      "CRISFN01.dat#3",
+      "CRISFN01.dat#5"
+    ],
+    "fan:lldb-266": [
+      "CRISFN02.dat#6"
+    ],
+    "fan:lldb-268": [
+      "CRISFN04.dat#1",
+      "CRISFN04.dat#7"
+    ],
+    "fan:lldb-270": [
+      "CRISFN06.dat#0",
+      "CRISFN06.dat#3",
+      "CRISFN06.dat#6"
+    ],
+    "fan:lldb-271": [
+      "CRISFN07.dat#5"
+    ],
+    "fan:lldb-272": [
+      "CRISFN08.dat#0",
+      "CRISFN08.dat#7"
+    ],
+    "fan:lldb-274": [
+      "CRISFN10.dat#0"
+    ],
+    "fan:lldb-275": [
+      "CRISFN11.dat#1"
+    ],
+    "fan:lldb-277": [
+      "CRISFN13.dat#6"
+    ],
+    "fan:lldb-278": [
+      "CRISFN14.dat#6",
+      "CRISFN14.dat#8"
+    ],
+    "fan:lldb-302": [
+      "TWPAK00.dat#9"
+    ],
+    "fan:lldb-303": [
+      "TWPAK01.dat#3",
+      "TWPAK01.dat#6"
+    ],
+    "fan:lldb-304": [
+      "TWPAK02.dat#6"
+    ],
+    "fan:lldb-306": [
+      "TWPAK04.dat#3"
+    ],
+    "fan:lldb-312": [
+      "TWPAK10.dat#7"
+    ],
+    "fan:lldb-315": [
+      "TWPAK13.dat#0",
+      "TWPAK13.dat#1"
+    ],
+    "fan:lldb-317": [
+      "joem1.dat#8"
+    ],
+    "fan:lldb-327": [
+      "JM01.DAT#7"
+    ],
+    "fan:lldb-331": [
+      "JM05.DAT#8"
+    ],
+    "fan:lldb-340": [
+      "JM14.DAT#5"
+    ],
+    "fan:lldb-350": [
+      "MARSHY06.DAT#5"
+    ],
+    "fan:lldb-351": [
+      "MARSHY07.DAT#3"
+    ],
+    "fan:lldb-366": [
+      "LEVIPAK2.DAT#0"
+    ],
+    "fan:lldb-367": [
+      "LEVIPAK3.DAT#0"
+    ],
+    "fan:lldb-368": [
+      "levipak4.dat#9"
+    ],
+    "fan:lldb-373": [
+      "Insulfrog+LVL+PK+1.DAT#2"
+    ],
+    "fan:lldb-374": [
+      "justdigcomp.dat#3"
+    ],
+    "fan:lldb-385": [
+      "Gronklems 3.dat#5"
+    ],
+    "fan:lldb-388": [
+      "geooPk2_preview2.dat#0",
+      "geooPk2_preview2.dat#1"
+    ],
+    "fan:lldb-393": [
+      "pieuw01.dat#9"
+    ],
+    "fan:lldb-394": [
+      "pieuw02.dat#0",
+      "pieuw02.dat#2",
+      "pieuw02.dat#3",
+      "pieuw02.dat#6"
+    ],
+    "fan:lldb-405": [
+      "Genesis 2P 2.dat#5"
+    ],
+    "fan:lldb-407": [
+      "Orig Extra Levels.dat#3"
+    ],
+    "fan:lldb-411": [
+      "mobius05.dat#1"
+    ],
+    "fan:lldb-413": [
+      "GeoffLems_Minipack.dat#0"
+    ],
+    "fan:lldb-430": [
+      "LDChallenge01.dat#2"
+    ],
+    "fan:lldb-464": [
+      "Finland.dat#0"
+    ],
+    "fan:lldb-471": [
+      "RSRdnt01.dat#0"
+    ],
+    "fan:lldb-472": [
+      "LEMPACK.DAT#3",
+      "LEMPACK.DAT#4"
+    ],
+    "fan:lldb-489": [
+      "Genesis Tricky.dat#29",
+      "Genesis Tricky.dat#7"
+    ],
+    "fan:lldb-490": [
+      "Genesis Taxing.dat#21"
+    ],
+    "fan:lldb-491": [
+      "Genesis Mayhem.dat#24",
+      "Genesis Mayhem.dat#7"
+    ],
+    "fan:lldb-494": [
+      "JANNPCK3.DAT#4",
+      "JANNPCK3.DAT#9"
+    ],
+    "fan:lldb-495": [
+      "MARTPCK1.DAT#8"
+    ],
+    "fan:lldb-496": [
+      "MARTPCK2.DAT#0",
+      "MARTPCK2.DAT#4",
+      "MARTPCK2.DAT#8"
+    ],
+    "fan:lldb-497": [
+      "MARTPCK3.DAT#0",
+      "MARTPCK3.DAT#2",
+      "MARTPCK3.DAT#3",
+      "MARTPCK3.DAT#4",
+      "MARTPCK3.DAT#5"
+    ],
+    "fan:lldb-514": [
+      "ssam1221 Wild 2.dat#2"
+    ],
+    "fan:lldb-523": [
+      "Deceit Tricky 1.dat#5"
+    ],
+    "fan:lldb-542": [
+      "Pieuw 2007 Peace 2.DAT#8"
+    ],
+    "fan:lldb-543": [
+      "Pieuw 2007 Awkward 2.DAT#6"
+    ],
+    "fan:lldb-544": [
+      "Pieuw 2007 Artful 1.DAT#0",
+      "Pieuw 2007 Artful 1.DAT#3",
+      "Pieuw 2007 Artful 1.DAT#7"
+    ],
+    "fan:lldb-545": [
+      "Pieuw 2007 Insane 1.DAT#0",
+      "Pieuw 2007 Insane 1.DAT#3",
+      "Pieuw 2007 Insane 2.DAT#4"
+    ],
+    "fan:lldb-548": [
+      "Ji Hoon Sky 2.DAT#2"
+    ],
+    "fan:lldb-551": [
+      "Lemmings Plus DOS Project - 02 - Mild (Part 2).dat#8",
+      "Lemmings Plus DOS Project - 03 - Mild (Part 3).dat#2"
+    ],
+    "fan:lldb-552": [
+      "Lemmings Plus DOS Project - 05 - Wimpy (Part 2).dat#6",
+      "Lemmings Plus DOS Project - 06 - Wimpy (Part 3).dat#8"
+    ],
+    "fan:lldb-553": [
+      "Lemmings Plus DOS Project - 07 - Medi (Part 1).dat#0",
+      "Lemmings Plus DOS Project - 07 - Medi (Part 1).dat#9",
+      "Lemmings Plus DOS Project - 08 - Medi (Part 2).dat#0",
+      "Lemmings Plus DOS Project - 08 - Medi (Part 2).dat#3",
+      "Lemmings Plus DOS Project - 08 - Medi (Part 2).dat#4",
+      "Lemmings Plus DOS Project - 08 - Medi (Part 2).dat#9",
+      "Lemmings Plus DOS Project - 09 - Medi (Part 3).dat#7"
+    ],
+    "fan:lldb-554": [
+      "Lemmings Plus DOS Project - 11 - Danger (Part 2).dat#1",
+      "Lemmings Plus DOS Project - 12 - Danger (Part 3).dat#9"
+    ],
+    "fan:lldb-558": [
+      "brickpk1.dat#12",
+      "brickpk1.dat#15"
+    ],
+    "fan:lldb-567": [
+      "Conway06.dat#8"
+    ],
+    "fan:lldb-592": [
+      "LEVELPAK.DAT#1"
+    ]
+  }
 }

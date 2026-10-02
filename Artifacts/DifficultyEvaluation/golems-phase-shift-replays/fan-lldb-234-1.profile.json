@@ -35,8 +35,8 @@
       "packID" : "fan:lldb-234"
     },
     "levelRevision" : "6f5f81a6646bd04141b8a02dfe890b04b2edd1453917bf55cb526be869081c17",
-    "replayRevision" : "a4f73959ccd0002de3012af1adb77f7380941b168725922f2c3e3404e3d95b02",
-    "simulationVersion" : "neolemmix-ce-2026-09-27:golems-phase-minus-one"
+    "replayRevision" : "3de75e5e3279cc5db00b3637402c0ccb3ee878bcac9b092f69315f72478402c6",
+    "simulationVersion" : "neolemmix-ce-2026-09-27:golems-phase-minus-one:exit-contact"
   },
   "overallScore" : 414.24884039821904,
   "precision" : {

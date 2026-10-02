@@ -66,6 +66,7 @@ private func testClassicFanLevelVectors() throws {
     let level = try ClassicLevel(data: Data(bytes))
     try expect(level.objects.count == 3, "normal fan object with zero flags was dropped")
     try expect(level.objects[0].x == -16, "fan object X was not rounded to an eight-pixel boundary")
+    try expect(level.objects[0].sourceX == -15, "fan object source X lost its unaligned value")
     try expect(level.objects[0].id == 3, "fan object ID was not masked to its low nibble")
     try expect(!level.objects[1].draw.isUpsideDown, "partial upside-down display marker was accepted")
     try expect(level.objects[2].draw.isUpsideDown, "exact upside-down display marker was not accepted")
@@ -85,6 +86,29 @@ private func testClassicFanLevelVectors() throws {
         superLevel.isSuperLemming,
         "the exact 0xFFFF LVL marker did not enable Superlemming mode"
     )
+}
+
+private func testGolemsHatchCoordinate(projectDirectory: URL) throws {
+    var bytes = [UInt8](repeating: 0, count: ClassicLevel.recordSize)
+    for offset in 0x0120..<0x0760 { bytes[offset] = 0xFF }
+    bytes[0x0020] = 0x02
+    bytes[0x0021] = 0x34
+    bytes[0x0025] = 1
+    let level = try ClassicLevel(data: Data(bytes))
+    let ground = try ClassicGroundSet.load(
+        style: 0,
+        from: projectDirectory.appendingPathComponent("Content/lemming1.pc", isDirectory: true)
+    )
+    let rendered = try ClassicLevelRenderer.render(level, groundSet: ground)
+    let original = try ClassicDOSSimulation(level: level, renderedLevel: rendered)
+    let golems = try ClassicDOSSimulation(level: level, renderedLevel: rendered, mechanics: .golems)
+    try expect(rendered.objects[0].placement.x == 544, "hatch artwork lost its DOS alignment")
+    try expect(original.configuration.entrances[0].x == 568, "DOS hatch release moved")
+    try expect(golems.configuration.entrances[0].x == 573, "Golems hatch release lost its source coordinate")
+    try expect(original.startingWithMechanics(.golems)?.configuration.entrances[0].x == 573,
+               "switching to Golems lost the unaligned hatch coordinate")
+    try expect(golems.startingWithMechanics(.original)?.configuration.entrances[0].x == 568,
+               "switching to DOS moved the aligned hatch coordinate")
 }
 
 private func testClassicCampaign(projectDirectory: URL) throws {
@@ -494,6 +518,7 @@ do {
     let projectDirectory = URL(fileURLWithPath: CommandLine.arguments[1], isDirectory: true)
     try testClassicArchives(projectDirectory: projectDirectory)
     try testClassicFanLevelVectors()
+    try testGolemsHatchCoordinate(projectDirectory: projectDirectory)
     try testClassicCampaign(projectDirectory: projectDirectory)
     try testClassicGraphics(projectDirectory: projectDirectory)
     try testNxlvBaseline()

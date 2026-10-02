@@ -1,9 +1,9 @@
 {
-  "candidatePool": 1550,
+  "candidatePool": 1680,
   "duplicateObjectives": 0,
   "fan": 136,
   "fanPacks": 80,
-  "fullRescueRequirements": 33,
+  "fullRescueRequirements": 31,
   "largestDemandStep": 48,
   "largestScoreStep": 119.59272449985806,
   "levels": 292,
@@ -12,10 +12,10 @@
   "preparationGaps": 0,
   "skillIntroductions": 8,
   "stages": {
-    "Difficult": 108,
-    "Expert": 60,
+    "Difficult": 107,
+    "Expert": 59,
     "Fun": 7,
-    "Intermediate": 117
+    "Intermediate": 119
   },
   "supportTransitions": 3,
   "targetSize": 292,

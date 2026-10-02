@@ -11,18 +11,18 @@
         "required": 60,
         "saved": 0
       },
-      "difficultyScore": 55.03606428851431,
+      "difficultyScore": 55.02485299882399,
       "identity": {
         "levelID": "MARTPCK2.DAT#0",
         "packID": "fan:lldb-496"
       },
       "initialStateHash": "e9f26295d4ed48f4750690e754821c5513e68d0fccc1a7cc525920a76578a775",
       "mechanics": "golems",
-      "nativeCompletionTick": 3271,
+      "nativeCompletionTick": 3269,
       "probeRuns": 10,
       "profilePath": "Artifacts/DifficultyEvaluation/golems-profile-replays/its-raining-lemmings-passive.profile.json",
       "replayPath": "Artifacts/DifficultyEvaluation/golems-profile-replays/its-raining-lemmings-passive.json",
-      "replaySHA256": "4528053ecea16a43614eb58fe09e0fa1f7a1a0e5cdcf4fce3035f443bc1f2b06",
+      "replaySHA256": "5d57c073b17820c57998caf86e3ac5b95734b80370f43ee333b932667796764e",
       "required": 60,
       "routePurpose": "simplest verified native route",
       "saved": 60,
@@ -41,18 +41,18 @@
     },
     {
       "clock": "golems",
-      "difficultyScore": 269.71781406488134,
+      "difficultyScore": 269.7084737644241,
       "identity": {
         "levelID": "MARTPCK2.DAT#6",
         "packID": "fan:lldb-496"
       },
       "initialStateHash": "69fdf860149bfce9fc4f225afc9acf90a869cc1866e12954b78456d85f103c83",
       "mechanics": "golems",
-      "nativeCompletionTick": 1600,
+      "nativeCompletionTick": 1599,
       "probeRuns": 10,
       "profilePath": "Artifacts/DifficultyEvaluation/golems-profile-replays/cliffhanger.profile.json",
       "replayPath": "Artifacts/DifficultyEvaluation/golems-profile-replays/cliffhanger.json",
-      "replaySHA256": "3fd1370c53883f245c26c91104c9bdb7869a6b32b34c6236a0d675c0ba32c42b",
+      "replaySHA256": "af138e29b4c774059a4824c9d60f395dd60372493f7596c43b2b02e7d0baab56",
       "required": 30,
       "saved": 30,
       "sourceCompletionTick": 1603,

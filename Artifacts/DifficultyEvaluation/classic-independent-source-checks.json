@@ -1,5 +1,5 @@
 {
-  "description": "Independent browser source-engine outcomes for unchanged published inputs on exact bundled levels. Outcome matches alone do not establish full physics parity.",
+  "description": "Independent browser source-engine outcomes for unchanged published inputs on exact bundled levels. Some native comparisons used historical Original mechanics; current selected Golems wins are recorded separately. Outcome matches alone do not establish full physics parity.",
   "records": [
     {
       "identity": {
@@ -60,7 +60,7 @@
         "scratchNoInputLastLossTick": 125,
         "golemsObjectSemanticsResult": "same 0/10 outcome with all object slots active",
         "tracePath": ".build/full-difficulty-evaluation/clock-rescore/pinpoint-source-20261002/hatch23/trace.log",
-        "interpretation": "The 125-tick no-input ending matches the source numerically, but source frames show the first lemming only after roughly 54–58 Tick calls. The 23-tick scratch hatch is not a source-timing match. This trial does not establish the underlying physics difference."
+        "interpretation": "The 125-tick no-input ending matches the source numerically, but source frames show the first lemming only after roughly 54\u201358 Tick calls. The 23-tick scratch hatch is not a source-timing match. This trial does not establish the underlying physics difference."
       },
       "isolatedFallingBuilderTrial": {
         "scope": "Ignored scratch native library with the shipped timing and one added Builder assignment action: falling; diagnostic replay kept the source Builder but omitted its simultaneous release-rate command",
@@ -109,7 +109,12 @@
       },
       "sourcePhysicsParity": "outcome mismatch",
       "sourceResultPath": ".build/full-difficulty-evaluation/clock-rescore/pinpoint-source-20261002/firefox-golems-parity-430-3-result.json",
-      "nativeTracePath": ".build/full-difficulty-evaluation/clock-rescore/pinpoint-source-20261002/native-source-trace.log"
+      "nativeTracePath": ".build/full-difficulty-evaluation/clock-rescore/pinpoint-source-20261002/native-source-trace.log",
+      "currentSelectedMechanics": {
+        "mechanics": "golems",
+        "initialStateHash": "3ce9042abfa73a0292819735840c775b0444970517c327d79e669c6a445b053e",
+        "replaySHA256": "d98b89d13b87ff793ed0384bb4d73f73f9306b43c52f2fb13f3684a09a1f5942"
+      }
     },
     {
       "identity": {
@@ -164,7 +169,12 @@
         "laterReleaseHatchRules": "Builder for lemming 2 rejected at tick 1306",
         "interpretation": "Activating the later object slots did not resolve this source/native route difference."
       },
-      "sourcePhysicsParity": "outcome mismatch"
+      "sourcePhysicsParity": "outcome mismatch",
+      "currentSelectedMechanics": {
+        "mechanics": "golems",
+        "initialStateHash": "692aca88e0b5c6b7a95d69aa1abc1880a68c6ea2a7418e439bdc10ec34d5f5b6",
+        "replaySHA256": "461f22e0cf8643327d98a7c8981211c8e4d403d838c55ce349d76e047325bca0"
+      }
     },
     {
       "identity": {
@@ -372,7 +382,57 @@
           "shippedCurrentLibrarySHA256": "88cecd0189ea0d5b677e876184c919b0a8fb72ecbfdc355b23f1d2b8d6235e69"
         }
       },
-      "sourcePhysicsParity": "assignment mismatch"
+      "sourcePhysicsParity": "assignment mismatch",
+      "currentSelectedMechanics": {
+        "mechanics": "golems",
+        "initialStateHash": "e9f26295d4ed48f4750690e754821c5513e68d0fccc1a7cc525920a76578a775",
+        "replaySHA256": "b6c1e75697554ad3c360a75a042ae80c92b3adf2791f733f6a2f1cbd731e9a41"
+      }
+    },
+    {
+      "identity": {
+        "packID": "fan:lldb-393",
+        "levelID": "pieuw01.dat#9"
+      },
+      "title": "Diving Area",
+      "levelSourceRevision": "6b599e67d0656e6a27f33f99916b9dafd21b04a1e7c88f8eda24e3083a087bc4",
+      "sourceAndBundledLevelDataSHA256": "55644ae10ce25d8f189c7456cd3d6c397f9829cd734c31fde0412ae28101ea63",
+      "sourceAndNativeGraphicsSHA256": {
+        "GROUND2O.DAT": "52e62aeefd6cd548690c02af6474936c5e16112e115ca7808c3748e500a9412d",
+        "VGAGR2.DAT": "f8305e71295c5909ee7692e4391aae65443298faef4d96e5fe17b24afa0eadcc"
+      },
+      "sourceURL": "https://lldb.camanis.net/level/393/10/Diving-Area",
+      "publishedReplayURLFragment": "~AwSJBVsAYwcAlwYAAAIBih0AAAMBZw4AAAgClzYAAAkAdh0AAAYDlsIBAAcBmToBAAcDdw",
+      "publishedReplaySHA256": "b0104e7676a965bf5d59582013ec706cc0202a637cb23815284bc43c6e38e8ac",
+      "sourceMainJSSHA256": "c467eab99315555391542d7c79a2976b28c1c674dadd01ccf261d7792eabeace",
+      "sourceBrowser": "Firefox 151.0.2",
+      "sourceSaved": 4,
+      "sourceRequired": 4,
+      "sourceTotal": 4,
+      "sourceCompletionCycles": 1417,
+      "comparisonMechanics": "golems",
+      "auditInitialHash": "702036c9d395ad0c9eaeca798e29cf4f72e6551cada7b63c89ac5a2897f9ce5f",
+      "nativeInitialHash": "702036c9d395ad0c9eaeca798e29cf4f72e6551cada7b63c89ac5a2897f9ce5f",
+      "nativeInputTickTranslation": -1,
+      "nativeTranslatedInputSHA256": "ce478dd8012dd225dcb1a2ae21a4dbf6c2c21124fd384aa163ab2bef42564cf3",
+      "nativeSaved": 4,
+      "nativeRequired": 4,
+      "nativeTotal": 4,
+      "nativeReplayEndTick": 1373,
+      "sourcePhysicsParity": "saved-count match; completion-time mismatch",
+      "interpretation": "The exact published inputs now win 4/4 on the bundled native level after restoring the Golems hatch release X. Completion occurs 44 ticks before the independently run source player. This is partial outcome evidence, not full physics parity.",
+      "sourceResultPath": ".build/full-difficulty-evaluation/golems-source-rule-batch/pieuw-nearwin/source-browser/firefox-golems-parity-393-10-snapshots-result.json",
+      "nativeTracePath": ".build/full-difficulty-evaluation/golems-source-rule-batch/pieuw-nearwin/source-browser/native-translated.log",
+      "previousNativeComparison": {
+        "saved": 2,
+        "required": 4,
+        "completionTick": 1324,
+        "firstLoss": "Lemming 2 splats at tick 338, foot (709,135)",
+        "rule": "Golems before restoring the unaligned hatch release X",
+        "initialStateHash": "3e0c0666fff4a9b54b43b0ed9c57b5ba10d0244abe969de0b944aa16e1e0a4d7"
+      },
+      "nativeReplaySHA256": "91610c2bc4d3bc04245c495f0b8c007844ef281a341660503429fde6d4261c74",
+      "hatchCoordinateEvidencePath": "Artifacts/DifficultyEvaluation/classic-golems-hatch-coordinate.json"
     }
   ]
 }
