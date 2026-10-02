@@ -6409,7 +6409,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   private func step(at now: TimeInterval = ProcessInfo.processInfo.systemUptime) {
-    updateFailureMood()
+    updateFailureMood(at: now)
     refreshTurnDisplay()
     refreshProgressText()
     refreshHomeSavedCountsIfNeeded(at: now)
@@ -7758,12 +7758,20 @@ let achievementProgressKey = "ClassicAchievementProgress"
     updateStatus()
   }
 
-  private func updateFailureMood() {
-    let nuking = phase == .playing && !sequelIsActive && session?.isNuking == true && session?.isComplete == false && settings.hdEffectsEnabled
+  private func updateFailureMood(at now: TimeInterval = ProcessInfo.processInfo.systemUptime) {
+    let nuking = (phase == .playing || phase == .results) && !sequelIsActive
+      && session?.isNuking == true && settings.hdEffectsEnabled
+    let allPopped = session.map { session in
+      // Classic plays the pop as the explosion pose starts. Neo removes the
+      // actor on its pop; its render list can also hide live teleporting actors.
+      session.isComplete || (session is ClassicSession && session.lemmings.allSatisfy {
+        $0.pose == .explosion || $0.pose == .exiting
+      })
+    } ?? false
     nukeMood.update(active: nuking, tick: session?.currentTick ?? 0,
       durationTicks: session is NeoLemmixSession ? NeoLemmixRules.bomberCountdownTicks : 79,
-      remainingTicks: session?.lemmings.compactMap(\.countdown).min())
-    effects.setNukeActive(nuking)
+      remainingTicks: session?.lemmings.compactMap(\.countdown).min(), allPopped: allPopped, now: now)
+    effects.setNukeActive(nuking && session?.isComplete == false)
     guard phase == .playing || phase == .results, let session else {
       failureMood.set(active: false)
       return

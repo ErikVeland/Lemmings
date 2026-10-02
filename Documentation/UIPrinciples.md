@@ -65,8 +65,10 @@ An individual choice selects Custom, persists, and survives machine presets.
 Both cursors remain at the input position and use the same targeting geometry.
 Place the selected skill sprite diagonally below
 and right of the bottom-right corner, about 10 screen pixels from each edge. Offer None, 1× and 2×
-skill icon sizes in Gameplay settings. The visible 1× and 2× choices use actual
-6× and 12× artwork (three times the previous size). Modern defaults to 1×; Original hides the icon.
+skill icon sizes in Gameplay settings. The icon, empty-skill X and counter share
+a height of 14 screen points at 1× and 28 at 2×, independent of playfield zoom.
+Preserve the sprite aspect ratio and use the counter’s bitmap font for the red X.
+Modern defaults to 1×; Original hides the icon.
 Offer a separate default-off lemming count below-left, aligned with the skill icon and the same distance from the opposite corner.
 Count live sprite centres inside the reticule, regardless of skill eligibility.
 Keep the count available when the icon is hidden.

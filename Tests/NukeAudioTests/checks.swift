@@ -104,3 +104,28 @@ for duration in [75, 79, 84] {
 }
 print("PASS progressive treble sweep, retained bass, pause, speed, rewind and restored countdown")
 print("PASS nuke bass envelope, spatial origin, mass-explosion limit, reset and mute (offline only)")
+
+for duration in [75, 79, 84] {
+  let sweep = NukeMusicSweep()
+  sweep.update(active: true, tick: 100, durationTicks: duration, now: 0)
+  sweep.update(active: true, tick: 100 + duration + 20, durationTicks: duration, now: 1)
+  precondition(sweep.amount == 1) // Hold while later lemmings still have to pop.
+  sweep.update(active: true, tick: 100 + duration + 21, durationTicks: duration,
+    allPopped: true, now: 2)
+  precondition(sweep.amount == 1) // No discontinuity at the last pop.
+  sweep.advanceReturn(at: 2 + NukeMusicSweep.returnDuration / 2)
+  precondition(abs(sweep.amount - 0.5) < 0.0001)
+  // Repeated result refreshes must not restart the return sweep.
+  sweep.update(active: true, tick: 100 + duration + 21, durationTicks: duration,
+    allPopped: true, now: 2 + NukeMusicSweep.returnDuration)
+  precondition(sweep.amount < 0.0001)
+  sweep.advanceReturn(at: 4)
+  precondition(sweep.amount == 0)
+  sweep.update(active: true, tick: 100 + duration / 2, durationTicks: duration, now: 5)
+  precondition(sweep.amount > 0.45 && sweep.amount <= 0.5) // Rewind re-enters the countdown.
+  sweep.update(active: true, tick: 100 + duration, durationTicks: duration, allPopped: true, now: 6)
+  sweep.reset()
+  sweep.advanceReturn(at: 6.1)
+  precondition(sweep.amount == 0) // Retry, undo and disabling HD cannot retain a return.
+}
+print("PASS last-pop hold, 280 ms filter return, stopped simulation ticks, result refresh, rewind and cancellation")

@@ -713,7 +713,8 @@ import NxlvKit
         if screen == .practice { practiceLevel = nil; game = nil; initial = nil }
         nukeGesture.reset()
         if screen != .playing {
-            nukeMood.reset(); sounds.setNukeActive(false)
+            if screen != .results { nukeMood.reset() }
+            sounds.setNukeActive(false)
             sounds.silence(); releasePointerInput()
         }
         self.screen = screen; frontTicks = 0
@@ -1009,10 +1010,16 @@ import NxlvKit
         refreshGame()
     }
     private func refreshGame() {
-        let nuking = screen == .playing && game?.isNuking == true && game?.isComplete == false && canvas.hdEffectsEnabled
+        let nuking = (screen == .playing || screen == .results) && game?.isNuking == true && canvas.hdEffectsEnabled
+        let allPopped = game.map { game in
+            game.isComplete || game.lemmings.filter(\.active).allSatisfy {
+                // The pop runs at age 15, then the tick increments age to 16.
+                $0.state == .exiting || ($0.state == .exploding && $0.age >= 16)
+            }
+        } ?? false
         nukeMood.update(active: nuking, tick: game?.tick ?? 0, durationTicks: 75,
-            remainingTicks: game?.lemmings.compactMap(\.bombTicks).min())
-        sounds.setNukeActive(nuking)
+            remainingTicks: game?.lemmings.compactMap(\.bombTicks).min(), allPopped: allPopped)
+        sounds.setNukeActive(nuking && game?.isComplete == false)
         guard let game else { return }
         let impossible = (screen == .playing || screen == .results) && (game.isComplete ? !game.didWin : FailureMoodDecision.isUnrecoverable(
             saved: game.saved, active: game.lemmings.filter(\.active).count,
@@ -1059,6 +1066,7 @@ import NxlvKit
     }
     private func update() {
         let now = ProcessInfo.processInfo.systemUptime
+        nukeMood.advanceReturn(at: now)
         let elapsed = min(0.25, now - lastTime); lastTime = now
         let playing = screen == .playing && !paused && game?.isComplete == false && !GameScreen.shared.isPresented
         speedControl.update(at: now, active: screen == .playing && game?.isComplete == false && !GameScreen.shared.isPresented)

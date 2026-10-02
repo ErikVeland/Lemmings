@@ -820,6 +820,35 @@ extension AppDelegate {
     }
     GameScreen.shared.dismissAll()
     print("PASS a nuke before the drop ends the level from the panel and the frame loop")
+
+    let previousHD = settings.hdEffectsEnabled
+    defer { settings.hdEffectsEnabled = previousHD }
+    settings.hdEffectsEnabled = true
+    try enterFreshLevel()
+    playfield.startCountdown.cancel()
+    for _ in 0..<500 where (session?.released ?? 0) < 3 { session?.tick() }
+    try check(session?.lemmings.count == 3, "Nuke return fixture needs three live lemmings")
+    session?.nuke()
+    updateFailureMood(at: 0)
+    var pops = 0, lastPopTime = 0.0
+    for index in 1...300 {
+      session?.tick()
+      if session?.lastCues.contains(.explode) == true { pops += 1 }
+      let now = Double(index) / 17
+      updateFailureMood(at: now)
+      if pops == 3 { lastPopTime = now; break }
+      if index >= 79 {
+        nukeMood.advanceReturn(at: now + 0.14)
+        try check(nukeMood.amount == 1, "Classic opened its nuke filter before the final pop")
+      }
+    }
+    try check(pops == 3 && session?.isComplete == false, "Classic did not retain its explosion tails after three pops")
+    updateFailureMood(at: lastPopTime + 0.14)
+    try check(abs(nukeMood.amount - 0.5) < 0.0001, "Classic did not open its filter on the last audible pop")
+    phase = .results
+    updateFailureMood(at: lastPopTime + 0.3)
+    try check(nukeMood.amount == 0, "Classic results interrupted the filter return")
+    print("PASS Classic waits for all three audible nuke pops, then restores the filter through tails and results")
   }
 
   fileprivate func testPauseKeyRelease() throws {

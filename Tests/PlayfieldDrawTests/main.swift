@@ -811,10 +811,18 @@ private func testMacArtworkCropStaysPixelAligned() throws {
 @MainActor private func testSkillCursorBadgeGeometry() throws {
   let point = CGPoint(x: 60, y: 40)
   let bounds = CGRect(x: 0, y: 0, width: 300, height: 240)
+  let padded = NSImage(size: NSSize(width: 20, height: 20), flipped: true) { _ in
+    NSColor.white.setFill()
+    CGRect(x: 3, y: 6, width: 4, height: 7).fill()
+    return true
+  }
+  let trimmed = SkillCursorBadge.frame(at: point, scale: 1, size: .one, icon: padded, in: bounds)
+  try require(trimmed.width == 8 && trimmed.height == 14,
+    "Transparent sprite padding must not make the visible icon smaller than the counter")
   for scale in [1.0, 2.0, 3.0] {
     let frame = SkillCursorBadge.frame(at: point, scale: scale, size: .one, in: bounds)
-    try require(frame.width == 36 && frame.height == frame.width,
-      "The baseline icon must remain 36 screen points at \(scale)x playfield zoom")
+    try require(frame.width == 14 && frame.height == frame.width,
+      "The baseline icon must remain 14 screen points at \(scale)x playfield zoom")
     let doubled = SkillCursorBadge.frame(at: point, scale: scale, size: .two, in: bounds)
     try require(doubled.width == frame.width * 2, "2× icon frame must double 1×")
     let reticle = GameCursor.playfieldPointerFrame(at: point, scale: scale)
@@ -844,13 +852,13 @@ private func testMacArtworkCropStaysPixelAligned() throws {
   for size in SkillCursorIconSize.allCases {
     let count = SkillCursorBadge.countFrame(count: 12, at: point, scale: 2, size: size, in: bounds)
     let effective: SkillCursorIconSize = size == .none ? .one : size
-    try require(count.width == CGFloat(6 * effective.multiplier) && count.height == CGFloat(7 * effective.multiplier) / 2,
-      "Count dimensions must be half their previous size, including with the icon hidden")
+    try require(count.width == CGFloat(12 * effective.multiplier) && count.height == CGFloat(7 * effective.multiplier),
+      "Count and icon must share one height, including with the icon hidden")
     let icon = SkillCursorBadge.frame(at: point, scale: 2, size: effective, in: bounds)
     try require(count.maxX < point.x && count.minY == icon.minY,
       "Count must sit opposite the icon at the same height")
   }
-  print("PASS fixed-screen 6×/12× skill icons, offset and clamping at every edge")
+  print("PASS matching 14/28-point icons and counts, offset and clamping at every edge")
 }
 
 @MainActor private func testClassicSessionRewindBranch() throws {
@@ -1078,10 +1086,36 @@ private func testMacArtworkCropStaysPixelAligned() throws {
   }
   let highZoomScale = CGFloat(highZoomBitmap.pixelsWide) / highZoom.bounds.width
   let redWidth = (redCoordinates.map(\.x).max() ?? 0) - (redCoordinates.map(\.x).min() ?? 0) + 1
-  try require(!redCoordinates.isEmpty && redWidth / highZoomScale <= 38,
+  try require(!redCoordinates.isEmpty && redWidth / highZoomScale <= 14,
     "The empty-skill X grew with the playfield zoom")
   try highZoomBitmap.representation(using: .png, properties: [:])!.write(to:
     root.appendingPathComponent(".build/playfield-draw-tests/high-zoom-empty-skill.png"))
+  for size: SkillCursorIconSize in [.one, .two] {
+    for backing in [1, 2] {
+      let width = 220, height = 160
+      let bitmap = NSBitmapImageRep(bitmapDataPlanes: nil, pixelsWide: width * backing,
+        pixelsHigh: height * backing, bitsPerSample: 8, samplesPerPixel: 4,
+        hasAlpha: true, isPlanar: false, colorSpaceName: .deviceRGB, bytesPerRow: 0, bitsPerPixel: 0)!
+      let context = NSGraphicsContext(bitmapImageRep: bitmap)!
+      NSGraphicsContext.saveGraphicsState(); NSGraphicsContext.current = context
+      context.cgContext.scaleBy(x: CGFloat(backing), y: CGFloat(backing))
+      let bounds = CGRect(x: 0, y: 0, width: width, height: height)
+      NSColor.black.setFill(); bounds.fill()
+      let point = CGPoint(x: 110, y: 50)
+      SkillCursorBadge.drawCount(12, at: point, scale: 3, size: size, in: bounds)
+      SkillCursorBadge.draw(icon: nil, index: 0, at: point, scale: 3,
+        tint: .white, size: size, reduceMotion: true, remaining: 0, in: bounds)
+      NSGraphicsContext.restoreGraphicsState()
+      var redRows = Set<Int>(), blueRows = Set<Int>()
+      for y in 0..<bitmap.pixelsHigh { for x in 0..<bitmap.pixelsWide {
+        let c = bitmap.colorAt(x: x, y: y)!
+        if c.redComponent > 0.7 && c.greenComponent < 0.3 { redRows.insert(y) }
+        if c.blueComponent > 0.8 && c.redComponent < 0.4 { blueRows.insert(y) }
+      } }
+      try require(redRows.count == 7 * size.multiplier * backing && redRows == blueRows,
+        "The X and counter have different visible heights or alignment at \(size.title), \(backing)× backing")
+    }
+  }
   print("PASS one-use fade, reduced motion and empty-skill red X")
 }
 

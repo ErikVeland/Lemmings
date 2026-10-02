@@ -51,6 +51,11 @@ Supported output can use Apple's personal spatial profile. This does not
 provide head tracking or a spatial remix of the soundtrack. See
 [spatial audio setup](GameCenterSetup.md#spatial-sound-effects).
 
+After the last nuke pop, the low-pass filter opens and the bass lift returns to
+normal over 280 ms. The return continues through the explosion tails and result
+screen after simulation ticks stop. Undo, retry and disabling HD effects clear
+it immediately. Classic, NeoLemmix and L2 share the sweep; L3 has no mass nuke.
+
 ## Pause
 
 The opt-in Audio setting isolates classified native percussion voices without

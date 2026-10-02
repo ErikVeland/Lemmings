@@ -81,11 +81,25 @@ enum FailureMoodDecision {
 /// with the visible countdown rather than with a separate wall-clock fade.
 @MainActor final class NukeMusicSweep {
   private var startTick: Int?
+  private var returnStartedAt: TimeInterval?
+  private var returnAmount: CGFloat = 0
+  static let returnDuration: TimeInterval = 0.28
   private(set) var amount: CGFloat = 0
   var onChange: ((CGFloat) -> Void)?
 
-  func update(active: Bool, tick: Int, durationTicks: Int, remainingTicks: Int? = nil) {
+  func update(active: Bool, tick: Int, durationTicks: Int, remainingTicks: Int? = nil,
+              allPopped: Bool = false, now: TimeInterval = ProcessInfo.processInfo.systemUptime) {
     guard active else { reset(); return }
+    if allPopped {
+      if returnStartedAt == nil {
+        returnStartedAt = now
+        returnAmount = amount
+      }
+      advanceReturn(at: now)
+      return
+    }
+    // Rewind can bring a countdown back after the return sweep has begun.
+    returnStartedAt = nil
     let duration = max(1, durationTicks)
     if startTick == nil || tick < startTick! {
       let elapsed = remainingTicks.map { max(0, duration - $0) } ?? 0
@@ -97,8 +111,21 @@ enum FailureMoodDecision {
     onChange?(amount)
   }
 
+  /// Keep opening the filter after simulation ticks stop on the result screen.
+  func advanceReturn(at now: TimeInterval) {
+    guard let returnStartedAt else { return }
+    let progress = min(1, max(0, (now - returnStartedAt) / Self.returnDuration))
+    let eased = progress * progress * (3 - 2 * progress)
+    let next = returnAmount * CGFloat(1 - eased)
+    guard next != amount else { return }
+    amount = next
+    onChange?(amount)
+  }
+
   func reset() {
     startTick = nil
+    returnStartedAt = nil
+    returnAmount = 0
     guard amount != 0 else { return }
     amount = 0
     onChange?(0)
