@@ -177,6 +177,62 @@ private func testRoundTrip(_ replay: ClassicDOSReplay) throws {
     print("PASS replay JSON round trip (\(data.count) bytes)")
 }
 
+private func testGolemsSourceAssignment() throws {
+    let terrain = try ClassicDOSTerrain(
+        width: 192, height: 96,
+        solidMask: Data(repeating: 0, count: 192 * 96),
+        steelMask: Data(repeating: 0, count: 192 * 96)
+    )
+    func simulation(_ mechanics: ClassicDOSMechanics) throws -> ClassicDOSSimulation {
+        try ClassicDOSSimulation(
+            terrain: terrain,
+            configuration: ClassicDOSConfiguration(
+                totalLemmings: 1, requiredToSave: 1, timeLimitTicks: 300,
+                initialReleaseRate: 99,
+                entrances: [ClassicDOSPoint(x: 40, y: 0)],
+                initialSkills: [.builder: 1],
+                maximumX: 191, maximumY: 95,
+                mechanics: mechanics
+            )
+        )
+    }
+    let initial = try simulation(.golems)
+    let events = [ClassicDOSReplayEvent(
+        tick: 58, action: .assign(lemmingID: 0, skill: .builder), afterTick: true)]
+    let source = ClassicDOSReplay(
+        rank: "Fan", number: 1, title: "Falling Builder",
+        initialStateHash: ClassicDOSReplayRecorder.stateHash(of: initial),
+        events: events, sourceRules: .golemsFallingBuilder
+    )
+    let ordinary = ClassicDOSReplay(
+        rank: source.rank, number: source.number, title: source.title,
+        initialStateHash: source.initialStateHash, events: events
+    )
+    do {
+        _ = try ClassicDOSReplayPlayer.run(ordinary, simulation: initial)
+        throw ReplayFailure(description: "ordinary replay accepted a falling Builder")
+    } catch ClassicDOSReplayError.commandRejected(tick: 58, lemmingID: 0, skill: .builder) {}
+
+    let outcome = try ClassicDOSReplayPlayer.run(source, simulation: initial)
+    let stored = ClassicDOSReplay(
+        rank: source.rank, number: source.number, title: source.title,
+        initialStateHash: source.initialStateHash, events: events,
+        sourceRules: .golemsFallingBuilder, expected: outcome
+    )
+    let encoded = try JSONEncoder().encode(stored)
+    let decoded = try JSONDecoder().decode(ClassicDOSReplay.self, from: encoded)
+    try require(decoded == stored, "source assignment rule changed across JSON")
+    let verified = try ClassicDOSReplayPlayer.run(decoded, simulation: initial)
+    try require(verified == outcome,
+        "saved source replay failed strict verification")
+    let ordinaryObject = try JSONSerialization.jsonObject(with: JSONEncoder().encode(ordinary)) as! [String: Any]
+    try require(ordinaryObject["sourceRules"] == nil, "ordinary replay acquired source rules")
+    do {
+        _ = try ClassicDOSReplayPlayer.run(source, simulation: simulation(.original))
+        throw ReplayFailure(description: "Golems source input ran under original mechanics")
+    } catch ClassicDOSReplayError.outcomeMismatch(field: "sourceRules", expected: _, actual: _) {}
+}
+
 // MARK: - Entry point
 
 let arguments = CommandLine.arguments
@@ -220,6 +276,7 @@ do {
     print("PASS recorded replay verifies against a fresh simulation")
 
     try testRoundTrip(solved)
+    try testGolemsSourceAssignment()
     print("Classic DOS replay tests passed.")
 } catch {
     FileHandle.standardError.write(Data("Replay tests failed: \(error)\n".utf8))

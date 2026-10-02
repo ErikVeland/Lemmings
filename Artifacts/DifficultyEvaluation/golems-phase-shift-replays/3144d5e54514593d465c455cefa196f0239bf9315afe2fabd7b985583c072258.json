@@ -1,0 +1,95 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "afterTick" : true,
+      "tick" : 67
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "blocker"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 67
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "blocker"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 85
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 117
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 291
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 341
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "bomber"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 378
+    },
+    {
+      "action" : {
+        "nuke" : {
+
+        }
+      },
+      "afterTick" : true,
+      "tick" : 754
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 35,
+    "required" : 33,
+    "saved" : 33,
+    "stateHash" : "a6e80aa267cd2e48a738f1753ce0cd49ea4dbfe205895094cdf76c36bad5851a",
+    "ticks" : 902
+  },
+  "initialStateHash" : "56914cac234aae3f1554920ec002b3065eb9671d53971fd363254b54d368b2bb",
+  "number" : 1,
+  "rank" : "fan:lldb-270",
+  "sourceRules" : "golemsFallingBuilder",
+  "title" : "Crystalization"
+}

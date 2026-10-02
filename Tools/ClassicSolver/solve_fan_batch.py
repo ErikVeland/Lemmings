@@ -22,6 +22,7 @@ def main():
     parser.add_argument("--clock", choices=("dos", "golems"), default="golems")
     parser.add_argument("--adaptive-rate", action="store_true")
     parser.add_argument("--prefer-progress", action="store_true")
+    parser.add_argument("--rollout-single", action="store_true")
     parser.add_argument("--fallback", type=int, default=170)
     parser.add_argument("--refire", type=int, default=120)
     parser.add_argument("--save-partials", action="store_true")
@@ -90,6 +91,7 @@ def main():
                 and old.get("clock", "dos") == args.clock
                 and old.get("adaptiveRate", False) == args.adaptive_rate
                 and old.get("preferProgress", False) == args.prefer_progress
+                and old.get("rolloutSingle", False) == args.rollout_single
                 and old.get("fallback", 170) == args.fallback
                 and old.get("refire", 120) == args.refire
                 and (old.get("savePartials", False) or not args.save_partials)
@@ -116,6 +118,8 @@ def main():
             command.append("--adaptive-rate")
         if args.prefer_progress:
             command.append("--prefer-progress")
+        if args.rollout_single:
+            command.append("--rollout-single")
         if args.save_partials:
             command.append("--partial-out")
         started = time.monotonic()
@@ -129,6 +133,7 @@ def main():
                   "clock": args.clock,
                   "adaptiveRate": args.adaptive_rate,
                   "preferProgress": args.prefer_progress,
+                  "rolloutSingle": args.rollout_single,
                   "fallback": args.fallback, "refire": args.refire,
                   "savePartials": args.save_partials,
                   "solverRevision": solver_revision,

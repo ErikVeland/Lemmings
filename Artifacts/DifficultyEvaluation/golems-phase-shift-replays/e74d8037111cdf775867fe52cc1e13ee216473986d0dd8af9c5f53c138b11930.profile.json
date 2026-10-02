@@ -1,0 +1,117 @@
+{
+  "components" : {
+    "concurrencyBurden" : 180,
+    "constraintPressure" : 629.7876857749469,
+    "deductionComplexityProxy" : 110,
+    "executionPrecision" : 0,
+    "solutionComplexity" : 171.88268714730222,
+    "techniqueBurden" : 325
+  },
+  "confidence" : "medium",
+  "criticalActions" : [
+
+  ],
+  "detectedTechniques" : [
+    "builder",
+    "digger",
+    "multiple-worker-coordination"
+  ],
+  "explanation" : [
+    "2 used skill types; 5 assigned workers; 0 same-worker skill changes.",
+    "Maximum concurrent worker regions: 2.",
+    "Timing probes: 10. Untested alternatives remain unknown.",
+    "Deduction is a conservative proxy. Observed techniques are not proof of necessity.",
+    "Source rank: fan:lldb-545."
+  ],
+  "key" : {
+    "analyserVersion" : "difficulty-3",
+    "assetsRevision" : "586d2923b7523f584e892f8674e524c96bbba7eadce189c7500faee2c1fd18bc:probes-10",
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "Pieuw 2007 Insane 1.DAT#3",
+      "packID" : "fan:lldb-545"
+    },
+    "levelRevision" : "0b5e4bfede58cb4d8acee4ff5fb4d28ef912a472c1a5405271dc61453d7292f5",
+    "replayRevision" : "e74d8037111cdf775867fe52cc1e13ee216473986d0dd8af9c5f53c138b11930",
+    "simulationVersion" : "neolemmix-ce-2026-09-27:golems-phase-minus-one-targeted"
+  },
+  "overallScore" : 232.0365903231496,
+  "precision" : {
+    "actions" : [
+      {
+        "outcomes" : {
+          "-1" : false
+        },
+        "sequence" : 1
+      },
+      {
+        "outcomes" : {
+          "-1" : false
+        },
+        "sequence" : 2
+      },
+      {
+        "outcomes" : {
+          "-1" : false
+        },
+        "sequence" : 3
+      },
+      {
+        "outcomes" : {
+          "-1" : false
+        },
+        "sequence" : 4
+      },
+      {
+        "outcomes" : {
+          "-1" : false
+        },
+        "sequence" : 5
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 6
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 7
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 8
+      },
+      {
+        "outcomes" : {
+          "-1" : true
+        },
+        "sequence" : 9
+      },
+      {
+        "outcomes" : {
+          "-1" : false
+        },
+        "sequence" : 10
+      }
+    ],
+    "alternativeRunCount" : 0,
+    "assignmentCount" : 14,
+    "completed" : false,
+    "orderingOutcomes" : [
+
+    ],
+    "runCount" : 10,
+    "selectionOutcomes" : [
+
+    ]
+  },
+  "prerequisiteConcepts" : [
+
+  ],
+  "sourceRank" : "fan:lldb-545"
+}

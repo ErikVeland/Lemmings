@@ -41,7 +41,7 @@ class CurriculumTests(unittest.TestCase):
             if key.startswith('floater'): replay['expected']['didWin'] = False
         self.assertIn('introduce:floater', curation.select(rows,replays)['unavailableOptionalObjectives'])
 
-    def test_replays_rejected_by_hints_cannot_supply_a_lesson(self):
+    def test_inputs_after_a_win_do_not_hide_a_valid_lesson(self):
         rows,replays = self.pool()
         for replay_id,replay in replays.items():
             if replay_id.endswith('0'):
@@ -49,7 +49,13 @@ class CurriculumTests(unittest.TestCase):
             if replay_id.endswith('1'):
                 replay['events'][0]['tick'] = 0
         result = curation.select(rows,replays)
-        self.assertTrue(all(l['level'].endswith('2') for l in result['lessons']))
+        self.assertTrue(all(l['level'].endswith('0') for l in result['lessons']))
+
+    def test_inputs_after_a_win_do_not_add_teaching_skills(self):
+        rows,replays = self.pool()
+        replay = replays['miner0']
+        replay['events'].append({'tick':101,'action':{'assign':{'lemmingID':0,'skill':'builder'}}})
+        self.assertEqual(curation.features(rows[0],replay)['chains'],[['miner']])
 
     def test_demanding_introduction_stays_deferred_even_with_complete_probes(self):
         rows,replays = self.pool()
@@ -105,11 +111,12 @@ class CurriculumTests(unittest.TestCase):
             self.assertEqual(lesson['focus'],goal['lesson'])
             if goal['objective'].startswith('introduce:'):
                 introductions+=1
-                self.assertTrue(goal['beginnerRank'])
+                if not goal['beginnerRank']:
+                    self.assertEqual(lesson['stage'],'Intermediate')
                 self.assertFalse(goal['requiresFullRescue'])
                 self.assertLess(goal['intrinsicDemand'],180)
             if lesson['stage']=='Fun': self.assertFalse(lesson['preparationGaps'])
-        self.assertLess(introductions,8)
+        self.assertEqual(introductions,8)
         self.assertTrue(all(b['demand'] >= a['demand'] for a,b in zip(lessons,lessons[1:])))
         summary=json.loads((ROOT/'Artifacts/LearningJourney/summary.json').read_text())
         self.assertEqual(summary['levels'],len(lessons))

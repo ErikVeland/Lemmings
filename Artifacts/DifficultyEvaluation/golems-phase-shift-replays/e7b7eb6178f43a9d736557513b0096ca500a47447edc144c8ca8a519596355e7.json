@@ -1,0 +1,103 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 1
+        }
+      },
+      "afterTick" : true,
+      "tick" : 96
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 96
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 119
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "afterTick" : true,
+      "tick" : 157
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 50
+        }
+      },
+      "afterTick" : true,
+      "tick" : 159
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "afterTick" : true,
+      "tick" : 191
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "digger"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 228
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 229
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 3,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 282
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 20,
+    "required" : 19,
+    "saved" : 20,
+    "stateHash" : "9b9448aa837f676ac565c1efd6a9aa8983b4a6bcdf5bf1a0127facadf2793832",
+    "ticks" : 645
+  },
+  "initialStateHash" : "b9990418fcf1a2ab00e3c8fa3dc78f6285d81c5fabd341113972ff658ffe52e8",
+  "number" : 2,
+  "rank" : "fan:lldb-315",
+  "sourceRules" : "golemsFallingBuilder",
+  "title" : "Columns See 'Em"
+}

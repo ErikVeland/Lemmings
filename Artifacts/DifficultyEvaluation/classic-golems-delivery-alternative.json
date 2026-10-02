@@ -1,0 +1,29 @@
+{
+  "additionalInput": {
+    "lemmingID": 1,
+    "skill": "builder",
+    "tick": 1360
+  },
+  "bundledArchive": "Content/LevelPacks/0225-ANTHPCK5.zip",
+  "bundledArchiveSHA256": "dba9b23e61ec73dc0a22e49385a9dacbb45eb5db64bf064a794d8376617f5c1c",
+  "description": "Opt-in Golems mechanics and falling-Builder source replay assignment. A cached published input saved 78/80 natively; one additional Builder at tick 1360 yields a strict 80/80 native win on the exact bundled level. Source-engine outcome and full parity have not been checked. This is separate from the selected default-mechanics ledger.",
+  "difficultyScore": 533.0417800590277,
+  "identity": {
+    "levelID": "ANTHPCK5.DAT#1",
+    "packID": "fan:lldb-225"
+  },
+  "nativeCompletionTick": 2194,
+  "nativeInitialHash": "a9b1dc07408b9667386e8673a6752be3aeafb6847f4dcfb227d167db5ae6404d",
+  "nativeReplayPath": "Artifacts/DifficultyEvaluation/golems-profile-replays/the-delivery-service.json",
+  "nativeReplaySHA256": "32536d2527370629eb075a1f2cafb6282f3392b3fee6c031a6740d53b48a3d8a",
+  "nativeRequired": 80,
+  "nativeSaved": 80,
+  "probeRuns": 10,
+  "profilePath": "Artifacts/DifficultyEvaluation/golems-profile-replays/the-delivery-service.profile.json",
+  "selectedFanMechanics": "original",
+  "sourceInputEntryPath": ".build/full-difficulty-evaluation/clock-rescore/pinpoint-source-20261002/airbuilder/recent-replays.json",
+  "sourceInputNativeRequired": 80,
+  "sourceInputNativeSaved": 78,
+  "sourceReplayRules": "golemsFallingBuilder",
+  "title": "The delivery service"
+}

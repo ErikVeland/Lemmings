@@ -1,0 +1,292 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 75
+        }
+      },
+      "afterTick" : true,
+      "tick" : 73
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "digger"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 73
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "digger"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 106
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 187
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 76
+        }
+      },
+      "afterTick" : true,
+      "tick" : 211
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 77
+        }
+      },
+      "afterTick" : true,
+      "tick" : 212
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 78
+        }
+      },
+      "afterTick" : true,
+      "tick" : 213
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 79
+        }
+      },
+      "afterTick" : true,
+      "tick" : 214
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 80
+        }
+      },
+      "afterTick" : true,
+      "tick" : 215
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 81
+        }
+      },
+      "afterTick" : true,
+      "tick" : 216
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 82
+        }
+      },
+      "afterTick" : true,
+      "tick" : 217
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 83
+        }
+      },
+      "afterTick" : true,
+      "tick" : 218
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 84
+        }
+      },
+      "afterTick" : true,
+      "tick" : 219
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 85
+        }
+      },
+      "afterTick" : true,
+      "tick" : 220
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 86
+        }
+      },
+      "afterTick" : true,
+      "tick" : 221
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 87
+        }
+      },
+      "afterTick" : true,
+      "tick" : 222
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 88
+        }
+      },
+      "afterTick" : true,
+      "tick" : 223
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 89
+        }
+      },
+      "afterTick" : true,
+      "tick" : 224
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 90
+        }
+      },
+      "afterTick" : true,
+      "tick" : 225
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 91
+        }
+      },
+      "afterTick" : true,
+      "tick" : 226
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 92
+        }
+      },
+      "afterTick" : true,
+      "tick" : 227
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 93
+        }
+      },
+      "afterTick" : true,
+      "tick" : 228
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 94
+        }
+      },
+      "afterTick" : true,
+      "tick" : 229
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 95
+        }
+      },
+      "afterTick" : true,
+      "tick" : 230
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 96
+        }
+      },
+      "afterTick" : true,
+      "tick" : 231
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 97
+        }
+      },
+      "afterTick" : true,
+      "tick" : 232
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 98
+        }
+      },
+      "afterTick" : true,
+      "tick" : 233
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "afterTick" : true,
+      "tick" : 234
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 497
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 26,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 552
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 28,
+    "required" : 28,
+    "saved" : 28,
+    "stateHash" : "8477928a5dd2ecf89c2e07bb353e1bee49c0bc23e8ca6980e71e02f9495509d8",
+    "ticks" : 902
+  },
+  "initialStateHash" : "9c8d529be69304e3f98da4ae547d5bfed6ce488243be09b73b6e12736926fb6e",
+  "number" : 8,
+  "rank" : "fan:lldb-272",
+  "sourceRules" : "golemsFallingBuilder",
+  "title" : "It's a snowinable world"
+}

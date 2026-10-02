@@ -1,0 +1,77 @@
+{
+  "components" : {
+    "concurrencyBurden" : 0,
+    "constraintPressure" : 762.8847158719791,
+    "deductionComplexityProxy" : 95,
+    "executionPrecision" : 0,
+    "solutionComplexity" : 174.01955000865388,
+    "techniqueBurden" : 260
+  },
+  "confidence" : "medium",
+  "criticalActions" : [
+
+  ],
+  "detectedTechniques" : [
+    "builder",
+    "miner",
+    "release-rate-manipulation"
+  ],
+  "explanation" : [
+    "2 used skill types; 1 assigned workers; 1 same-worker skill changes.",
+    "Maximum concurrent worker regions: 1.",
+    "Timing probes: 10. Untested alternatives remain unknown.",
+    "Deduction is a conservative proxy. Observed techniques are not proof of necessity.",
+    "Source rank: fan:lldb-277."
+  ],
+  "key" : {
+    "analyserVersion" : "difficulty-3",
+    "assetsRevision" : "7c9457f2282225495958f40f7dc1fc6b5577a2e915157320241ee47e21be8392:probes-10",
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "CRISFN13.dat#6",
+      "packID" : "fan:lldb-277"
+    },
+    "levelRevision" : "1d52c584e24ffcbb1e76f5fd14d54b337c44fccef3bed898733c579d5627fb9b",
+    "replayRevision" : "576e91ade356196fe28c743fb2a1012cb66de4ef42b10523636cd6492853e33c",
+    "simulationVersion" : "neolemmix-ce-2026-09-27:golems-phase-minus-one-targeted"
+  },
+  "overallScore" : 209.10931406526115,
+  "precision" : {
+    "actions" : [
+      {
+        "outcomes" : {
+          "-1" : false,
+          "-2" : false,
+          "-4" : false,
+          "1" : true,
+          "2" : true
+        },
+        "sequence" : 1
+      },
+      {
+        "outcomes" : {
+          "-1" : true,
+          "-2" : true,
+          "-4" : true,
+          "1" : true,
+          "2" : true
+        },
+        "sequence" : 2
+      }
+    ],
+    "alternativeRunCount" : 0,
+    "assignmentCount" : 2,
+    "completed" : false,
+    "orderingOutcomes" : [
+
+    ],
+    "runCount" : 10,
+    "selectionOutcomes" : [
+
+    ]
+  },
+  "prerequisiteConcepts" : [
+
+  ],
+  "sourceRank" : "fan:lldb-277"
+}

@@ -12,6 +12,7 @@ METHODS = {
     "GameState.ctor": (0x48A4, "da3409ac72c01b59e85bf68fb9955f5c93b636beda6f93b4c5c9c26fd838a7b1"),
     "GameState.AdvanceCore": (0x67AC, "fef6cc57aae633d447a33f84b73ecf9fe550e96255dbaa5494e0acc815a44e51"),
     "GameState.AdvanceExitingGolem": (0x7CFE, "98de0448ceabff8904e6315161adb6ab9ea5d5a2a69404943988f500fe2b9766"),
+    "GameState.UpdateGolemEffects": (0x8070, "6fc0a9377dfed801ca9a40700ec30d6bd1dd250239e36648c631d361f520cbec"),
     "GameState.AdvanceFallingGolem": (0x6DB0, "bfaaf05ae1000f79dffd84d47b8ad028abc0d05bc2efb69c2c4fd5528562276e"),
     "GameState.AdvanceTime": (0x84D8, "460e38a579a03f2e29c597faf98a11a91bee4c2e66fbf437bc9ba19de1f32eaa"),
     "GameState.InitializeReleasePoints": (0x5CF0, "20799b18e66404d2b0be873ea841d3a77f4bb9e0cb024f282bd71f29d8291c08"),
@@ -82,6 +83,13 @@ def main():
         "17 03 7b 18 03 00 04 1f 10 59 05 58 18 63 58 0b"
     ))
     assert bytes.fromhex("07 20 a0 01 00 00 5a 06 58 a3 03 00 00 02") in effect
+    update_effects = bodies["GameState.UpdateGolemEffects"]
+    # Effect 1 enters activity 13 (Exiting) on first cell contact unless the
+    # golem is falling (activity 3). No exit-centre check appears on this path.
+    assert bytes.fromhex(
+        "03 28 63 03 00 06 19 3b 31 01 00 00 "
+        "03 1f 0d 28 64 03 00 06 03 16 7d 25 03 00 04"
+    ) in update_effects
     release_points = bodies["GameState.InitializeReleasePoints"]
     release = bodies["GameState.AdvanceRelease"]
     # A hatch stores YPlus16 as placement y + 16 + 14, then copies it
@@ -154,7 +162,7 @@ def main():
             else:
                 seconds -= 1
     assert advance == 1022
-    print("Verified pinned Golems interactive fall guards, replay assignment path, effect-cell lookup, exit, fall limit and one-minute timer: Done is set on advance 1022.")
+    print("Verified pinned Golems interactive fall guards, replay assignment path, effect-cell lookup, first-contact exit, fall limit and one-minute timer: Done is set on advance 1022.")
 
 
 if __name__ == "__main__":

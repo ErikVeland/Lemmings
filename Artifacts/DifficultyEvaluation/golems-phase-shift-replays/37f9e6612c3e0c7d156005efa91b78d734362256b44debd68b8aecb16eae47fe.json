@@ -1,0 +1,85 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 77
+        }
+      },
+      "afterTick" : true,
+      "tick" : 137
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "basher"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 137
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "digger"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 170
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 1,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 253
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 262
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "afterTick" : true,
+      "tick" : 340
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 11,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 348
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 77,
+    "required" : 60,
+    "saved" : 76,
+    "stateHash" : "2ada1c2677383c02243c9fda386960c790fed0ce6bd35513c2a1e4b4dddb5124",
+    "ticks" : 790
+  },
+  "initialStateHash" : "aa3821a6206f943123e48adf7c06ae964a92d61ebe7898bdf155e891646f24bf",
+  "number" : 7,
+  "rank" : "fan:lldb-303",
+  "sourceRules" : "golemsFallingBuilder",
+  "title" : "Both The 7's...................!"
+}

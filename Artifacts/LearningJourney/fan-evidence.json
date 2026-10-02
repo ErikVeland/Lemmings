@@ -92118,6 +92118,96 @@
   {
     "entry": {
       "catalogueRevision": "1.2-runtime-v2",
+      "id": "A7BDC8EB-BCE4-64AB-9B96-CF84CAADC404",
+      "identity": {
+        "engine": "classic",
+        "levelID": "KillerMaster 1 Wicked 1.dat#2",
+        "packID": "fan:lldb-508"
+      },
+      "levelNameSnapshot": "Funtopia",
+      "levelNumberSnapshot": 3,
+      "packNameSnapshot": "KillerMasters Lemmings 1 Wicked",
+      "sourceRevision": "8796628daeb9740224381ce7cfea7801a98dcb7ee9e4573498083928ea2f52d9"
+    },
+    "initialHash": "a41f8f76a67dbb36f50063a4c508da9cbfe8b1023bed9ea8ca91189107cde7de",
+    "official": false,
+    "order": 4906,
+    "playable": true,
+    "profile": {
+      "components": {
+        "concurrencyBurden": 0,
+        "constraintPressure": 794.6609172873383,
+        "deductionComplexityProxy": 65,
+        "executionPrecision": 360,
+        "solutionComplexity": 174.01955000865388,
+        "techniqueBurden": 260
+      },
+      "confidence": "medium",
+      "criticalActions": [
+        2
+      ],
+      "detectedTechniques": [
+        "builder",
+        "digger",
+        "release-rate-manipulation"
+      ],
+      "explanation": [
+        "2 used skill types; 1 assigned workers; 1 same-worker skill changes.",
+        "Maximum concurrent worker regions: 1.",
+        "Timing probes: 10. Untested alternatives remain unknown.",
+        "Deduction is a conservative proxy. Observed techniques are not proof of necessity.",
+        "Source rank: fan:lldb-508."
+      ],
+      "key": {
+        "analyserVersion": "difficulty-2",
+        "assetsRevision": "a41f8f76a67dbb36f50063a4c508da9cbfe8b1023bed9ea8ca91189107cde7de:probes-10",
+        "identity": {
+          "engine": "classic",
+          "levelID": "KillerMaster 1 Wicked 1.dat#2",
+          "packID": "fan:lldb-508"
+        },
+        "levelRevision": "8796628daeb9740224381ce7cfea7801a98dcb7ee9e4573498083928ea2f52d9",
+        "replayRevision": "SHA256 digest: be4996c932da6ba289a7696b057a1a36bce9a8d32ccfb8dbc3bedfb211e50c44",
+        "simulationVersion": "neolemmix-ce-2026-09-27"
+      },
+      "overallScore": 283.1402202492579,
+      "precision": {
+        "actions": [
+          {
+            "outcomes": {
+              "-1": false,
+              "-2": false,
+              "-4": false,
+              "1": false,
+              "2": false
+            },
+            "sequence": 2
+          },
+          {
+            "outcomes": {
+              "-1": false,
+              "-2": false,
+              "-4": false,
+              "1": true,
+              "2": true
+            },
+            "sequence": 3
+          }
+        ],
+        "alternativeRunCount": 0,
+        "assignmentCount": 2,
+        "completed": false,
+        "orderingOutcomes": [],
+        "runCount": 10,
+        "selectionOutcomes": []
+      },
+      "prerequisiteConcepts": [],
+      "sourceRank": "fan:lldb-508"
+    }
+  },
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
       "id": "B6514E71-94B5-6715-2F48-4F6B7E2A735B",
       "identity": {
         "engine": "classic",
@@ -95550,6 +95640,89 @@
       },
       "prerequisiteConcepts": [],
       "sourceRank": "fan:lldb-432"
+    }
+  },
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
+      "id": "A0E9E04E-9336-4C5E-B3FB-682A4B07EDDD",
+      "identity": {
+        "engine": "classic",
+        "levelID": "LDChallenge04.dat#0",
+        "packID": "fan:lldb-433"
+      },
+      "levelNameSnapshot": "Pass Interference",
+      "levelNumberSnapshot": 1,
+      "packNameSnapshot": "Level Design Game 04",
+      "sourceRevision": "65c251590f612944e636a2e6755b6104a9cacf65ab86b351eb0d3578371adebe"
+    },
+    "initialHash": "9e39430488759fbea36f11633be80658f5adca67e574bd8fc589bd2c6a872854",
+    "official": false,
+    "order": 4156,
+    "playable": true,
+    "profile": {
+      "components": {
+        "concurrencyBurden": 0,
+        "constraintPressure": 999.784735812133,
+        "deductionComplexityProxy": 30,
+        "executionPrecision": 635,
+        "solutionComplexity": 57,
+        "techniqueBurden": 65
+      },
+      "confidence": "high",
+      "criticalActions": [
+        1
+      ],
+      "detectedTechniques": [
+        "builder"
+      ],
+      "explanation": [
+        "1 used skill types; 1 assigned workers; 0 same-worker skill changes.",
+        "Maximum concurrent worker regions: 1.",
+        "Timing probes: 10. Untested alternatives remain unknown.",
+        "Deduction is a conservative proxy. Observed techniques are not proof of necessity.",
+        "Source rank: fan:lldb-433."
+      ],
+      "key": {
+        "analyserVersion": "difficulty-3",
+        "assetsRevision": "9e39430488759fbea36f11633be80658f5adca67e574bd8fc589bd2c6a872854:probes-10",
+        "identity": {
+          "engine": "classic",
+          "levelID": "LDChallenge04.dat#0",
+          "packID": "fan:lldb-433"
+        },
+        "levelRevision": "65c251590f612944e636a2e6755b6104a9cacf65ab86b351eb0d3578371adebe",
+        "replayRevision": "SHA256 digest: dc4609aad5f69abc35b1b16571f2291afcd9ea1ef9f023661d7945231a6aaec4",
+        "simulationVersion": "neolemmix-ce-2026-09-27"
+      },
+      "overallScore": 287.86201565557735,
+      "precision": {
+        "actions": [
+          {
+            "outcomes": {
+              "-1": false,
+              "-16": false,
+              "-2": false,
+              "-4": false,
+              "-8": false,
+              "1": false,
+              "16": false,
+              "2": false,
+              "4": false,
+              "8": false
+            },
+            "sequence": 1
+          }
+        ],
+        "alternativeRunCount": 0,
+        "assignmentCount": 1,
+        "completed": true,
+        "orderingOutcomes": [],
+        "runCount": 10,
+        "selectionOutcomes": []
+      },
+      "prerequisiteConcepts": [],
+      "sourceRank": "fan:lldb-433"
     }
   },
   {
@@ -249952,96 +250125,6 @@
       },
       "prerequisiteConcepts": [],
       "sourceRank": "fan:lldb-136"
-    }
-  },
-  {
-    "entry": {
-      "catalogueRevision": "1.2-runtime-v2",
-      "id": "A7BDC8EB-BCE4-64AB-9B96-CF84CAADC404",
-      "identity": {
-        "engine": "classic",
-        "levelID": "KillerMaster 1 Wicked 1.dat#2",
-        "packID": "fan:lldb-508"
-      },
-      "levelNameSnapshot": "Funtopia",
-      "levelNumberSnapshot": 3,
-      "packNameSnapshot": "KillerMasters Lemmings 1 Wicked",
-      "sourceRevision": "8796628daeb9740224381ce7cfea7801a98dcb7ee9e4573498083928ea2f52d9"
-    },
-    "initialHash": "a41f8f76a67dbb36f50063a4c508da9cbfe8b1023bed9ea8ca91189107cde7de",
-    "official": false,
-    "order": 4906,
-    "playable": true,
-    "profile": {
-      "components": {
-        "concurrencyBurden": 0,
-        "constraintPressure": 794.6609172873383,
-        "deductionComplexityProxy": 65,
-        "executionPrecision": 360,
-        "solutionComplexity": 174.01955000865388,
-        "techniqueBurden": 260
-      },
-      "confidence": "medium",
-      "criticalActions": [
-        2
-      ],
-      "detectedTechniques": [
-        "builder",
-        "digger",
-        "release-rate-manipulation"
-      ],
-      "explanation": [
-        "2 used skill types; 1 assigned workers; 1 same-worker skill changes.",
-        "Maximum concurrent worker regions: 1.",
-        "Timing probes: 10. Untested alternatives remain unknown.",
-        "Deduction is a conservative proxy. Observed techniques are not proof of necessity.",
-        "Source rank: fan:lldb-508."
-      ],
-      "key": {
-        "analyserVersion": "difficulty-2",
-        "assetsRevision": "a41f8f76a67dbb36f50063a4c508da9cbfe8b1023bed9ea8ca91189107cde7de:probes-10",
-        "identity": {
-          "engine": "classic",
-          "levelID": "KillerMaster 1 Wicked 1.dat#2",
-          "packID": "fan:lldb-508"
-        },
-        "levelRevision": "8796628daeb9740224381ce7cfea7801a98dcb7ee9e4573498083928ea2f52d9",
-        "replayRevision": "SHA256 digest: be4996c932da6ba289a7696b057a1a36bce9a8d32ccfb8dbc3bedfb211e50c44",
-        "simulationVersion": "neolemmix-ce-2026-09-27"
-      },
-      "overallScore": 283.1402202492579,
-      "precision": {
-        "actions": [
-          {
-            "outcomes": {
-              "-1": false,
-              "-2": false,
-              "-4": false,
-              "1": false,
-              "2": false
-            },
-            "sequence": 2
-          },
-          {
-            "outcomes": {
-              "-1": false,
-              "-2": false,
-              "-4": false,
-              "1": true,
-              "2": true
-            },
-            "sequence": 3
-          }
-        ],
-        "alternativeRunCount": 0,
-        "assignmentCount": 2,
-        "completed": false,
-        "orderingOutcomes": [],
-        "runCount": 10,
-        "selectionOutcomes": []
-      },
-      "prerequisiteConcepts": [],
-      "sourceRank": "fan:lldb-508"
     }
   }
 ]

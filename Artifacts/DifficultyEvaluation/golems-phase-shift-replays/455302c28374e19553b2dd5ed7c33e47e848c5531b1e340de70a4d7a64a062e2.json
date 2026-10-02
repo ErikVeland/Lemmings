@@ -1,0 +1,129 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 1
+        }
+      },
+      "afterTick" : true,
+      "tick" : 112
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 112
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "miner"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 179
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 2,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 227
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 539
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 2
+        }
+      },
+      "afterTick" : true,
+      "tick" : 654
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 3
+        }
+      },
+      "afterTick" : true,
+      "tick" : 655
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 4
+        }
+      },
+      "afterTick" : true,
+      "tick" : 656
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 5
+        }
+      },
+      "afterTick" : true,
+      "tick" : 657
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 6
+        }
+      },
+      "afterTick" : true,
+      "tick" : 658
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 7
+        }
+      },
+      "afterTick" : true,
+      "tick" : 659
+    },
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "afterTick" : true,
+      "tick" : 660
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 60,
+    "required" : 40,
+    "saved" : 54,
+    "stateHash" : "6e4d175f8f68b3d1de77a93c47256a245e6cac9dbc8679f13895f85faef1e034",
+    "ticks" : 1106
+  },
+  "initialStateHash" : "e08dc5f340d0de0ee3b930dfa632c984c2e0c7a471219f9c61676cc996fe8b89",
+  "number" : 7,
+  "rank" : "fan:lldb-266",
+  "sourceRules" : "golemsFallingBuilder",
+  "title" : "Groups in danger"
+}

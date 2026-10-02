@@ -25,6 +25,10 @@ STATE_HASH_ALIASES = ROOT / "Artifacts/DifficultyEvaluation/classic-state-hash-a
 CLASSIC_NEO_DERIVATIONS = ROOT / "Artifacts/DifficultyEvaluation/classic-neolemmix-replay-derivations.json"
 OUTPUT = ROOT / "Artifacts/DifficultyEvaluation"
 SOURCE_FAMILIES = OUTPUT / "source-engine-families.json"
+GOLEMS_PHASE_EVIDENCE = [
+    OUTPUT / f"classic-golems-phase-shift-{name}.json"
+    for name in ("alternatives", "targeted", "second", "third")
+]
 PARTIAL_SOURCE_ASSIGNMENTS = {
     "NeoLemmix_Introduction_Pack/Advanced_Training/Beam_Up_The_Equipment!.nxlv":
         ("aa256c48ee1bb20077d0b22b7ccfee6ed4b6835467422fc318e0770c2bdcac7d", 5),
@@ -103,8 +107,8 @@ NATIVE_OBSTRUCTIONS = {
 NATIVE_RATE_SWEEPS = {
     ("fan:lldb-433", "LDChallenge04.dat#1"): {
         "sourceRevision": "65c251590f612944e636a2e6755b6104a9cacf65ab86b351eb0d3578371adebe",
-        "initialHash": "a9822a2149ca78d371b258aa71041f04970d57377fb9cbf66a0ea47dd32c9e6f",
-        "issue": "No stocked skills; all 99 fixed starting release rates saved 0/1. In-level rate changes remain untested",
+        "initialHash": "4f35eb052073c6c026b016024272b3ba820b612669823b3e32b43bc1e00b9413",
+        "issue": "Golems profile: all 99 fixed release rates saved 0/1; source no-input header reports 1/1",
     },
 }
 
@@ -198,6 +202,12 @@ def main():
     golems_pack_ids = {
         f"fan:lldb-{pack_id}" for pack_id in read(SOURCE_FAMILIES)["golemsPackIDs"]
     }
+    golems_phase_records = [record for path in GOLEMS_PHASE_EVIDENCE
+                            for record in read(path)["records"]]
+    assert len(golems_phase_records) == len({
+        (record["identity"]["packID"], record["identity"]["levelID"])
+        for record in golems_phase_records
+    })
     assert lemmini_pack_ids <= manifest_pack_ids
     assert golems_pack_ids <= manifest_pack_ids
     assert not lemmini_pack_ids & golems_pack_ids
@@ -347,6 +357,8 @@ def main():
     pack_manifest = BUNDLED_FAN_PACKS / "packs.json"
     sources[str(pack_manifest.relative_to(ROOT))] = digest(pack_manifest)
     sources[str(SOURCE_FAMILIES.relative_to(ROOT))] = digest(SOURCE_FAMILIES)
+    for path in GOLEMS_PHASE_EVIDENCE:
+        sources[str(path.relative_to(ROOT))] = digest(path)
     if PASSIVE.exists():
         sources[str(PASSIVE.relative_to(ROOT))] = digest(PASSIVE)
     if STRUCTURAL.exists():
@@ -369,7 +381,7 @@ def main():
     lemmini_rows = [row for row in rows if row["source_engine"] == "Lemmini"]
     assert len(lemmini_rows) == 299, len(lemmini_rows)
     golems_rows = [row for row in rows if row["source_engine"] == "Golems"]
-    assert len(golems_rows) == 20, len(golems_rows)
+    assert len(golems_rows) == 22, len(golems_rows)
     unverified_official_conversions = sum(
         row["completion"] == "no verified win" and row["pack"] == "Original_Lemmings"
         for row in rows
@@ -440,9 +452,15 @@ def main():
         "Classic's 160-pixel playfield cannot represent several of these levels' hatch "
         "and exit coordinates. This is an engine-family compatibility gap, not proof that "
         "the source puzzles are unsolvable. See `validation.md` for the pack list.\n\n"
-        f"{len(golems_rows)} levels in packs 495 and 496 use the Golems source player. "
+        f"{len(golems_rows)} levels in packs 433, 495 and 496 use the Golems source player. "
         "Their source-engine label does not establish native physics parity. "
         "See `validation.md` and `classic-independent-source-checks.json`.\n\n"
+        f"The four phase-corrected Golems evidence files hold {len(golems_phase_records)} "
+        "distinct exact-level native wins with ten-probe scores under opt-in Golems mechanics. "
+        "Most remain outside the selected ledger. `Pass Interference` now has a separate ordinary-assignment "
+        "win under the selected Golems profile for its exact bundled pack. Its selected digest and score "
+        "are in `levels.csv`. The two-player alternative stays outside the learning path. "
+        "See `classic-golems-phase-shift-third.json` and `validation.md`.\n\n"
         f"Verified winning replays support {summary['verifiedFanWins']} Classic fan scores and "
         f"{summary['verifiedNeoLemmixWins']} NeoLemmix scores. "
         f"The remaining {summary['unverifiedNonOfficial']} non-official levels and "

@@ -59,6 +59,14 @@ let archive = try Data(contentsOf: source)
 let temporary = FileManager.default.temporaryDirectory.appendingPathComponent("FanLibraryTests-\(UUID().uuidString)")
 try FileManager.default.createDirectory(at: temporary, withIntermediateDirectories: true)
 defer { try? FileManager.default.removeItem(at: temporary) }
+let golemsPack = root.appendingPathComponent("Content/LevelPacks/0433-Level-Design-Game-04.zip")
+check(FanLevelLibrary.mechanics(for: golemsPack) == .golems,
+  "the exact source-checked Level Design Game pack uses Golems mechanics")
+let changedGolemsPack = temporary.appendingPathComponent("0433-replaced.zip")
+try archive.write(to: changedGolemsPack)
+check(FanLevelLibrary.mechanics(for: changedGolemsPack) == .original
+  && FanLevelLibrary.mechanics(for: source) == .original,
+  "replacement and other fan archives retain original mechanics")
 let embedded = temporary.appendingPathComponent("embedded"), cache = temporary.appendingPathComponent("cache")
 try FileManager.default.createDirectory(at: embedded, withIntermediateDirectories: true)
 try FileManager.default.createDirectory(at: cache, withIntermediateDirectories: true)

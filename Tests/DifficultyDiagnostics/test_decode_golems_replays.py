@@ -23,6 +23,14 @@ class GolemsReplayTests(unittest.TestCase):
         self.assertEqual(events[2]["action"],
                          {"assign": {"lemmingID": 1, "skill": "climber"}})
         self.assertEqual(events[-1]["action"], {"releaseRate": {"_0": 52}})
+        shifted = decode(raw, native_tick_offset=-1)
+        self.assertEqual([event["tick"] for event in shifted], [70, 70, 103, 104, 105])
+        self.assertEqual([event["action"] for event in shifted],
+                         [event["action"] for event in events])
+
+    def test_native_phase_keeps_cycle_zero_at_initial_state(self):
+        raw = bytes((3, 0, 0, 0)) + struct.pack("<HBBBB", 0, 0, 6, 0, 0)
+        self.assertEqual(decode(raw, native_tick_offset=-1)[0]["tick"], 0)
 
     def test_rejects_truncated_record(self):
         with self.assertRaises(ValueError):

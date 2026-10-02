@@ -2286,7 +2286,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
   @discardableResult
   private func buildLevel(
     _ entry: ClassicCampaignLevel, groundOverride: ClassicGroundSet? = nil,
-    specialOverride: ClassicSpecialGraphic? = nil, assetsOverride: ClassicMainDATAssets? = nil
+    specialOverride: ClassicSpecialGraphic? = nil, assetsOverride: ClassicMainDATAssets? = nil,
+    mechanicsOverride: ClassicDOSMechanics? = nil
   ) -> Bool {
     currentNxlvURL = nil
     currentNeoStylesRoot = nil
@@ -2313,7 +2314,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       if groundOverride == nil, dataSets.indices.contains(gamePicker.indexOfSelectedItem) {
         title = dataSets[gamePicker.indexOfSelectedItem].set.title
       }
-      let mechanics = ClassicDOSMechanics(title: title, rank: entry.rank)
+      let mechanics = mechanicsOverride ?? ClassicDOSMechanics(title: title, rank: entry.rank)
       let clock: ClassicDOSClock = groundOverride == nil ? .dos : .golems
       let simulation: ClassicDOSSimulation
       if let assets = assetsOverride ?? assets {
@@ -4890,7 +4891,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
         level: level,
         renderedLevel: rendered,
         mainDATAssets: assets,
-        mechanics: ClassicDOSMechanics(title: nil, rank: packName))
+        mechanics: FanLevelLibrary.mechanics(for: pack))
       try Task.checkCancellation()
       guard FanLevelLibrary.archiveMatches(pack, fingerprint: expectedFingerprint) else {
         return .failed("The selected archive changed. Open Level Select and choose the level again.")
@@ -5561,7 +5562,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
       fanPlaying = true
       guard buildLevel(
         ClassicCampaignLevel.standalone(level, rank: packName), groundOverride: ground,
-        specialOverride: special, assetsOverride: fanAssets) else {
+        specialOverride: special, assetsOverride: fanAssets,
+        mechanicsOverride: FanLevelLibrary.mechanics(for: pack)) else {
         fanPlaying = false
         fanScreen = .levels
         renderFanScreen()

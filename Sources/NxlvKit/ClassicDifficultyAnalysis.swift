@@ -66,7 +66,7 @@ public enum ClassicDifficultyAnalysis {
                 ClassicDOSReplayEvent(tick: frames[index] ?? event.tick, action: event.action, afterTick: event.afterTick)
             }
             let variant = ClassicDOSReplay(rank: replay.rank, number: replay.number, title: replay.title,
-                initialStateHash: replay.initialStateHash, events: events)
+                initialStateHash: replay.initialStateHash, events: events, sourceRules: replay.sourceRules)
             do {
                 return try ClassicDOSReplayPlayer.run(variant, simulation: initial,
                     tickLimit: tickLimit, verify: false) { _ in

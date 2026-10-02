@@ -14,6 +14,13 @@ The batch uses the Golems clock for bundled fan levels. Use `--clock dos` only
 for a comparison run; the attempt ledger keeps the clock setting.
 Set `FAN_ONLY_PACK=fan:lldb-N` for a targeted verification pass.
 
+Use `--golems-mechanics` in a targeted `ClassicSolver` run for the opt-in
+Golems hatch, fall and miner rules. Pair it with `--golems-clock` when testing
+packs 495 and 496. The batch wrapper and selected fan ledger still use the
+default mechanics. Replays found with this override require strict verification
+and a separate score under the same profile; see
+`Artifacts/DifficultyEvaluation/classic-golems-mechanics-alternatives.json`.
+
 The beam search is bounded. An `UNSOLVED` result means that it found no winning
 route within the chosen search limits. It does not prove that a level is
 impossible. Do not count an attempt as a scored level until
@@ -38,6 +45,15 @@ Use `--prefer-progress` to rank routes nearer an exit before routes that keep
 more spare lemmings. The default keeps the survivor-first ranking. The batch
 ledger records this mode separately, so it does not skip an earlier search
 with the other ranking. A route still needs exact-level verification.
+
+Use `--rollout-single` for a focused one-skill search. After the first skill
+input, it runs the candidate without further inputs to completion before beam
+pruning can discard it. The batch ledger records this mode separately. Start
+with a moderate fallback interval and inspect the reported waiting-route tick
+and rollout count. `--fallback 1` checks more input frames, but can use the
+whole time budget near the hatch. Use it for a known narrow timing window or
+with a longer bound. This pass does not cover routes that need a second skill.
+An unsuccessful run is only a bounded search result.
 
 `generate_solver_partial_retimes.py` makes bounded one-command timing
 candidates from these partial routes. Use `--minimum N --radius M` to search

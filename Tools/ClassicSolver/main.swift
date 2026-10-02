@@ -11,8 +11,10 @@ import NxlvKit
 //
 // Usage: ClassicSolver DATA LEVEL OUT [--width N] [--seconds S] [--rate R]
 //        [--fallback N] [--refire N] [--prefix PLAN] [--partial-out]
-//        [--golems-objects] [--golems-clock] [--prefer-progress]
-//        for fan levels whose later object slots must be active
+//        [--rollout-single]
+//        [--golems-objects] [--golems-clock] [--golems-mechanics]
+//        [--prefer-progress]
+// Use --golems-objects for fan levels whose later object slots must be active.
 // PLAN holds forced inputs as [{"tick": T, "id": N, "skill": S} or {"tick": T, "rate": R}],
 // applied after their ticks; the search fills in everything else.
 // DATA is a DOS data directory, `conversion:PORTS` for the Oh Yes! pack, or
@@ -49,8 +51,9 @@ func loadLevel(_ argument: String, _ index: Int) throws -> (ClassicDOSSimulation
                 ? .golems : .forFanLevel(level, groundSet: ground))
         let assets = try ClassicMainDATAssets.load(from: root.appendingPathComponent("Ports/lemmings_dos_1991-07-30"))
         let clock: ClassicDOSClock = CommandLine.arguments.contains("--golems-clock") ? .golems : .dos
+        let mechanics: ClassicDOSMechanics = CommandLine.arguments.contains("--golems-mechanics") ? .golems : .original
         let simulation = try ClassicDOSSimulation(level: level, renderedLevel: rendered,
-            mainDATAssets: assets, clock: clock)
+            mainDATAssets: assets, mechanics: mechanics, clock: clock)
         let entry = ClassicCampaignLevel.standalone(level, rank: "fan:" + FanLevelLibrary.catalogueID(pack), number: index + 1)
         return (simulation, entry)
     }
@@ -222,6 +225,7 @@ let width = Int(option("--width") ?? "48")!
 let budget = Double(option("--seconds") ?? "300")!
 let maxDepth = Int(option("--depth") ?? "100000")!
 let adaptiveRate = args.contains("--adaptive-rate")
+let rolloutSingle = args.contains("--rollout-single")
 let field = DistanceField(base)
 let started = ProcessInfo.processInfo.systemUptime
 let deadline = started + budget
@@ -256,11 +260,14 @@ func advance(_ c: inout Candidate) -> Bool {
 }
 
 var best: Candidate?, bestPartial: Candidate?, expanded = 0
+var singleSkillRollouts: Set<String> = []
+var waitingRouteTick = 0
 func consider(_ c: Candidate) {
     if c.sim.isComplete && c.sim.didWin, best.map({ Score($0, field) < Score(c, field) }) ?? true { best = c }
     if bestPartial.map({ Score($0, field) < Score(c, field) }) ?? true { bestPartial = c }
 }
 _ = advance(&start)
+waitingRouteTick = start.sim.tickCount
 start.key = fingerprint(start.sim) + (adaptiveRate ? "|0" : "")
 consider(start)
 var beam = start.sim.isComplete ? [] : [start]
@@ -297,9 +304,27 @@ search: while !beam.isEmpty && best == nil && !timeExpired() {
             child.depth += 1
             expanded += 1
             let alive = advance(&child)
+            if child.events.count == start.events.count {
+                waitingRouteTick = max(waitingRouteTick, child.sim.tickCount)
+            }
             child.key = fingerprint(child.sim) + (adaptiveRate ? "|\(child.rateChanges)" : "")
             consider(child)
             if best != nil { break search }
+            if rolloutSingle, child.events.count == 1,
+               case .assign = child.events[0].action,
+               forced.keys.allSatisfy({ $0 <= child.sim.tickCount }) {
+                let event = child.events[0]
+                let signature = "\(event.tick)|\(event.action)"
+                if singleSkillRollouts.insert(signature).inserted {
+                    var continuation = child
+                    while !continuation.sim.isComplete && continuation.sim.tickCount < tickLimit {
+                        if continuation.sim.tickCount.isMultiple(of: 64) && timeExpired() { break }
+                        _ = continuation.sim.tick()
+                        if continuation.sim.lostCount > continuation.sim.configuration.totalLemmings - continuation.sim.configuration.requiredToSave { break }
+                    }
+                    if continuation.sim.didWin { best = continuation; break search }
+                }
+            }
             guard alive, !child.sim.isComplete else { continue }
             if let existing = next[child.key], !(Score(existing, field) < Score(child, field)) { continue }
             next[child.key] = child
@@ -344,6 +369,7 @@ if let proposal, let outcome = verifiedOutcome, outcome.didWin {
             : URL(fileURLWithPath: args[3] + ".partial.json")
         try encoder.encode(proposal).write(to: destination, options: .atomic)
     }
-    print("UNSOLVED \(entry.rank) \(entry.number) best saved \(s?.savedCount ?? 0)/\(base.configuration.requiredToSave) expanded \(expanded) in \(seconds)s")
+    let coverage = rolloutSingle ? " waiting tick \(waitingRouteTick) single-skill rollouts \(singleSkillRollouts.count)" : ""
+    print("UNSOLVED \(entry.rank) \(entry.number) best saved \(s?.savedCount ?? 0)/\(base.configuration.requiredToSave) expanded \(expanded) in \(seconds)s\(coverage)")
     exit(1)
 }

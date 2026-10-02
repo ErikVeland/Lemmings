@@ -563,7 +563,7 @@ private enum LevelPreviewRenderer {
             level: level,
             ground: ground,
             special: special,
-            mechanics: ClassicDOSMechanics(title: nil, rank: "Fan"),
+            mechanics: FanLevelLibrary.mechanics(for: pack),
             objectSemantics: .forFanLevel(level, groundSet: ground))
         guard FanLevelLibrary.archiveMatches(pack, fingerprint: archiveFingerprint) else {
             throw LevelPreviewError.contentChanged

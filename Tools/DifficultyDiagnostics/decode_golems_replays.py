@@ -30,8 +30,8 @@ def source_bytes(page, record_index):
     return compressed if fragment.startswith("~") else zlib.decompress(compressed, -15)
 
 
-def decode(raw, abandon_as_nuke=False):
-    """Return exact Golems cycles and actions from its four-byte header and steps."""
+def decode(raw, abandon_as_nuke=False, native_tick_offset=0):
+    """Return Golems actions with an explicit source-to-native cycle offset."""
     if len(raw) < 4 or (len(raw) - 4) % 6:
         raise ValueError("invalid Golems replay length")
     cycle = -1
@@ -41,17 +41,18 @@ def decode(raw, abandon_as_nuke=False):
         cycle_delta, rate_delta, action, golem_index, _xy = struct.unpack_from(
             "<HBBBB", raw, offset)
         cycle += cycle_delta + 1
+        tick = max(0, cycle + native_tick_offset)
         rate = (rate + rate_delta) % 256
         if rate_delta:
-            events.append({"tick": cycle, "afterTick": True,
+            events.append({"tick": tick, "afterTick": True,
                            "action": {"releaseRate": {"_0": rate}}})
         if action in SKILLS:
-            events.append({"tick": cycle, "afterTick": True,
+            events.append({"tick": tick, "afterTick": True,
                            "action": {"assign": {"lemmingID": golem_index,
                                                  "skill": SKILLS[action]}}})
         elif action == 1 or (action == 10 and abandon_as_nuke
                              and offset == len(raw) - 6):
-            events.append({"tick": cycle, "afterTick": True,
+            events.append({"tick": tick, "afterTick": True,
                            "action": {"nuke": {}}})
         elif action != 0:
             raise ValueError(f"unsupported Golems action {action}")
@@ -66,6 +67,8 @@ def main():
     parser.add_argument("output", type=Path)
     parser.add_argument("--abandon-as-nuke", action="store_true",
                         help="try a native nuke for a terminal Golems abandon action")
+    parser.add_argument("--native-tick-offset", type=int, choices=(-1, 0), default=0,
+                        help="subtract one source cycle for the measured Golems replay phase")
     args = parser.parse_args()
     args.output.mkdir(parents=True, exist_ok=True)
     rows = {json.dumps(row["entry"]["identity"], sort_keys=True): row
@@ -99,7 +102,8 @@ def main():
                     "number": row["entry"]["levelNumberSnapshot"],
                     "title": row["entry"]["levelNameSnapshot"],
                     "initialStateHash": row["initialHash"],
-                    "events": decode(raw, abandon_as_nuke=args.abandon_as_nuke),
+                    "events": decode(raw, abandon_as_nuke=args.abandon_as_nuke,
+                                     native_tick_offset=args.native_tick_offset),
                 }
                 name = row["initialHash"] + "-" + record["sourceReplaySHA256"] + ".json"
                 target = args.output / name
@@ -107,6 +111,7 @@ def main():
                 translated = args.abandon_as_nuke and any(
                     raw[offset + 3] == 10 for offset in range(4, len(raw), 6))
                 candidates.append({**record, "candidate": str(target),
+                                   "nativeTickOffset": args.native_tick_offset,
                                    "translation": "terminal abandon to nuke" if translated else "exact actions"})
                 break
             except (IndexError, ValueError, zlib.error) as error:

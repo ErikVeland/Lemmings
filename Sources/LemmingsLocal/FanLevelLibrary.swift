@@ -208,6 +208,17 @@ enum FanLevelLibrary {
       ?? "file-" + url.lastPathComponent.lowercased()
   }
 
+  /**
+   * Selects Golems rules for an exact bundled pack with source replay evidence.
+   */
+  static func mechanics(for pack: URL) -> ClassicDOSMechanics {
+    let challenge04Revision = "65c251590f612944e636a2e6755b6104a9cacf65ab86b351eb0d3578371adebe"
+    guard packID(pack) == 433, archiveFingerprint(pack) == challenge04Revision else {
+      return .original
+    }
+    return .golems
+  }
+
   /// Bundled packs have corpus load, render and run evidence. Other archives
   /// stay explicit and unverified until they gain the same evidence.
   static func catalogueStatus(_ url: URL) -> LevelContentStatus {

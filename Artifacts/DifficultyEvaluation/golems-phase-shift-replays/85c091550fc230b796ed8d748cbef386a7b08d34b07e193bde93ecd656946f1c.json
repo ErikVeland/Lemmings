@@ -1,0 +1,36 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "afterTick" : true,
+      "tick" : 190
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 29,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 190
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 30,
+    "required" : 30,
+    "saved" : 30,
+    "stateHash" : "a0d45dc6ba885876057bbe920f743e6c9ff90fe03e56eecfb0add623361ce03e",
+    "ticks" : 1021
+  },
+  "initialStateHash" : "9e39430488759fbea36f11633be80658f5adca67e574bd8fc589bd2c6a872854",
+  "number" : 1,
+  "rank" : "fan:lldb-433",
+  "sourceRules" : "golemsFallingBuilder",
+  "title" : "Pass Interference"
+}
