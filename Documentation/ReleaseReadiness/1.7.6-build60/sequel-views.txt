@@ -1,0 +1,56 @@
+UI test windows: offscreen; audio: muted
+PASS front-end contour treatment differs from terrain reconstruction without changing layout
+PASS default-on artwork, explicit opt-out, and all L2 front-end picture backing sizes
+PASS L2 live canvas 0, 110 ticks, original/2x/toggle restoration
+PASS L2 speed afterimages changes only presentation
+PASS L2 super speed: engagement, explosion independence, detach, return and 1x
+PASS L2 live canvas 10, 110 ticks, original/2x/toggle restoration
+PASS L2 live canvas 20, 110 ticks, original/2x/toggle restoration
+PASS L2 live canvas 30, 110 ticks, original/2x/toggle restoration
+PASS L2 live canvas 40, 110 ticks, original/2x/toggle restoration
+PASS L2 live canvas 50, 110 ticks, original/2x/toggle restoration
+PASS L2 live canvas 60, 110 ticks, original/2x/toggle restoration
+PASS L2 live canvas 70, 110 ticks, original/2x/toggle restoration
+PASS L2 live canvas 80, 110 ticks, original/2x/toggle restoration
+PASS L2 live canvas 90, 110 ticks, original/2x/toggle restoration
+PASS L2 live canvas 100, 110 ticks, original/2x/toggle restoration
+PASS L2 live canvas 110, 110 ticks, original/2x/toggle restoration
+PASS L3 super speed: engagement, menu, resume, explosion independence and 1x
+PASS L3 live canvas 1, 110 ticks, original/2x/toggle restoration
+PASS L3 live canvas 101, 110 ticks, original/2x/toggle restoration
+PASS L3 live canvas 201, 110 ticks, original/2x/toggle restoration
+PASS Beach default and preserved Classic save selection: Quad Quirks on the Quay!
+PASS live L2 menu, map, briefing, practice, preferences, save/load and intro artwork toggles
+PASS first-run L2 replay dimensions match the attached game view
+PASS attached L2 hints pause and restore both running and paused games
+PASS attached L2 controller hints, settings, retry and end-run confirmation
+PASS Settings HD switch, dependent explosion control and preserved old-school choice across presets
+PASS Settings HD switch, dependent explosion control and preserved old-school choice across presets
+PASS Settings Original, Modern and Custom presets, variable speed and default controls
+L2 benchmark: 90 Mac-artwork ticks, speed trails and movie capture in 0.67s
+PASS native results, talisman and ending use reversible 2x front-end artwork
+PASS completed L2 run records actual skill use and rescues exactly once
+PASS L2 one-star primary action advances to the next briefing
+PASS actual Settings checkbox updates the attached Beach player and preserves its state
+PASS L3 module playback, silence, global mute, replay suspension and stopped-player safety
+PASS L3 hints pause and restore both running and paused games
+PASS L3 controller hints, settings, forward step, retry and end-run confirmation
+PASS L3 one-star advancement and no forced retry at an unavailable next level
+PASS L3 result excludes reserves, records once, and resets statistics on retry
+PASS original L3 voices, recording callback, rejection, mute, movie pause, final frame, gallery return and close lifecycle
+PASS bundled Tribes proof matches live assets, population, skills and level-start metadata
+PASS L3 hot-seat restart preserves level conditions and campaign ownership with a new guest attempt
+PASS L3 checkpoint round trip, original assets, campaign state, input journal, exact paused restore, continuation and rejected journal
+PASS L2 hot-seat restart preserves level conditions and campaign ownership with a new guest attempt
+PASS L2 checkpoint round trip, campaign, assignments, fan/aim/release, nuke undo, exact paused restore, continuation and rejection
+PASS L2 native mouse speed controls
+PASS L3 native mouse speed controls
+PASS L2 Old school and Modern presets reach the play window's controls
+PASS L3 Old school and Modern presets reach the play window's controls
+PASS L2 practice disk checkpoint, map/skills, pause, attempt identity, continuation and invalid metadata
+PASS L2 route recording replays to the played result: 60 saved in 3074 ticks, 24 events
+PASS L2 Escape exits directly to the main menu
+PASS L3 Escape exits directly to the main menu
+PASS 100% Settings stays at base point size in a large Retina window
+PASS L2 forward stepping, unsupported backward step, paused ownership and final result
+PASS L3 menu Resume preserves attempt and starts play

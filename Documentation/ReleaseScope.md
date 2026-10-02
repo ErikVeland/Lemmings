@@ -5,9 +5,10 @@ The current public macOS release is 1.7.3 build 56. The
 [1.7.3 distribution record](ReleaseReadiness/1.7.3Build56Distribution.md) records
 the published full-soundtrack update and its checks. Optional slim and additional
 target archives are not published for this build. L2 and L3 remain Preview.
-The [1.7.5 build 59 candidate](ReleaseReadiness/1.7.5Build59Candidate.md) is built and signed,
-but remains unpublished pending notarisation and foreground launch validation.
-Updated 30 September 2026 for the 1.7, 1.8 and 2.0 roadmap targets.
+The [1.7.6 build 60 candidate](ReleaseReadiness/1.7.6Build60Candidate.md) includes
+the unpublished 1.7.4/1.7.5 changes and newer fan and sequel evidence. It is built
+and signed, pending notarisation and foreground launch validation.
+Updated 2 October 2026 for the 1.7, 1.8 and 2.0 roadmap targets.
 Automated checks support the recorded routes;
 remaining compatibility and hardware claims still need validation. See the [gate register](ReleaseReadiness/gates.json)
 and the current [Classic validation](ReleaseReadiness/ClassicValidation-current.md).

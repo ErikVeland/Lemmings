@@ -1,0 +1,9 @@
+UI test windows: offscreen; audio: muted
+PASS Enter, keypad Enter and Space activate Ready once; held keys do not repeat
+PASS dialog defaults, Return/keypad Enter, focus loops, confirmations, hint arrows, replay accessibility and cursor lifecycle
+PASS same-window pages, paused clock, display changes, focus and resuming play
+PASS all 292 journey lessons resolve and can start
+PASS new solo and Hot Seat journeys start at Just dig! despite prior player progress; handover remains paused
+PASS Floating Down! uses Holiday snow artwork, retains collision through graphics changes; the current second lesson shows JOURNEY 2
+PASS saved Solo/Hot Seat choices, checkpoint, history, targets and Ready across Classic, L2 and L3
+PASS 1.7.6 focused app checks: dialog/movie controls, welcome, journey and cross-game sessions
