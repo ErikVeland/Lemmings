@@ -5,12 +5,12 @@ import AppKit
     static let seenKey = "WhatsNewSeenBuild"
     /// The release these notes describe. A test fails when Info.plist moves on
     /// to a new version and these notes stay behind.
-    static let notesVersion = "1.7.5"
-    static let subtitle = "Better sound, clearer controls, reliable sessions"
+    static let notesVersion = "1.7.6"
+    static let subtitle = "More verified routes and a refreshed learning journey"
     static let sections = [
-        ("Music and spatial sound", "Modern centres drums and softens stereo in Adaptive DJ. Sounds follow the camera. HD nuke countdowns hollow out music and add restrained bass."),
-        ("Home and Goal", "H centres Home; G centres Goal. In Lemmings 2, G selects Glider first when available. Press G again for Goal. Use / for hints and ? for controls."),
-        ("Fresh sessions and selection", "New sessions start at the beginning. Earlier progress stays saved. Fan artwork matches its terrain. Choose None, Obvious or Modern selection in Gameplay.")
+        ("Fan levels and learning", "More fan levels have recorded winning routes. The learning journey now has 292 lessons. Difficulty scores use winning replay evidence."),
+        ("Lemmings 2 and 3", "More sequel routes and compatibility checks are preserved. Both games remain Preview. The Lemmings 3 intro movie now plays its verified music cue."),
+        ("Sound, controls and sessions", "Includes Modern music, camera-relative sound and Home/Goal controls. Fresh sessions start at the beginning. Previous progress stays saved.")
     ]
     private let defaults: UserDefaults
     private let build: Int

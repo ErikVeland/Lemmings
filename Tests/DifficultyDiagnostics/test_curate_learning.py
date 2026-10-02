@@ -35,6 +35,21 @@ class CurriculumTests(unittest.TestCase):
                          {'introduce:'+s for s in curation.BASIC})
         self.assertEqual(result,curation.select(list(reversed(rows)),replays))
 
+    def test_introductions_prefer_beginner_rank_before_low_demand_fallback(self):
+        rows,replays = self.pool()
+        for row in rows:
+            row['profile']['sourceRank'] = 'Mayhem'
+            if row['entry']['levelNameSnapshot'].endswith('2'):
+                row['profile']['sourceRank'] = 'Fun'
+        preferred = curation.select(rows,replays)['lessons']
+        self.assertTrue(all(l['level'].endswith('2') for l in preferred))
+        for row in rows:
+            row['profile']['sourceRank'] = 'Mayhem'
+        fallback = curation.select(rows,replays)['lessons']
+        self.assertEqual(len(fallback), len(curation.BASIC))
+        self.assertTrue(all(not l['beginnerRank'] and l['intrinsicDemand'] < 180
+                            and not l['requiresFullRescue'] for l in fallback))
+
     def test_replay_failure_cannot_supply_a_lesson(self):
         rows,replays = self.pool()
         for key,replay in replays.items():
@@ -105,11 +120,12 @@ class CurriculumTests(unittest.TestCase):
             self.assertEqual(lesson['focus'],goal['lesson'])
             if goal['objective'].startswith('introduce:'):
                 introductions+=1
-                self.assertTrue(goal['beginnerRank'])
+                if not goal['beginnerRank']:
+                    self.assertEqual(lesson['stage'], 'Intermediate')
                 self.assertFalse(goal['requiresFullRescue'])
                 self.assertLess(goal['intrinsicDemand'],180)
             if lesson['stage']=='Fun': self.assertFalse(lesson['preparationGaps'])
-        self.assertLess(introductions,8)
+        self.assertEqual(introductions,len(curation.BASIC))
         self.assertTrue(all(b['demand'] >= a['demand'] for a,b in zip(lessons,lessons[1:])))
         summary=json.loads((ROOT/'Artifacts/LearningJourney/summary.json').read_text())
         self.assertEqual(summary['levels'],len(lessons))
