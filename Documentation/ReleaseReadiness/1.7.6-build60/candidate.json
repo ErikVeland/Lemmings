@@ -4,6 +4,6 @@
   "sourceCommit": "52266e506802eea9c145126e58dd2594935e4b31",
   "submissionSize": 1943220802,
   "submissionSHA256": "2dca2e552c1dd1f3f9b8355ece55d4ca8c114a26d9ac2e4667f8e445418cff4e",
-  "status": "signed; notarisation in progress; foreground permission pending",
+  "status": "published; notarised, Gatekeeper and remote checksum verified; foreground checks unverified",
   "notarisationSubmission": "a217275e-16a6-4b21-a25c-d2f0e9d11ecc"
 }

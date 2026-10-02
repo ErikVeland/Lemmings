@@ -1,13 +1,12 @@
 # Release scope
 
 Classic 1.0 is the historical macOS release baseline, confirmed on 13 September 2026.
-The current public macOS release is 1.7.3 build 56. The
-[1.7.3 distribution record](ReleaseReadiness/1.7.3Build56Distribution.md) records
-the published full-soundtrack update and its checks. Optional slim and additional
-target archives are not published for this build. L2 and L3 remain Preview.
-The [1.7.6 build 60 candidate](ReleaseReadiness/1.7.6Build60Candidate.md) includes
-the unpublished 1.7.4/1.7.5 changes and newer fan and sequel evidence. It is built
-and signed, pending notarisation and foreground launch validation.
+The current public macOS release is 1.7.6 build 60. The
+[1.7.6 distribution record](ReleaseReadiness/1.7.6Build60Distribution.md) records
+the published full-soundtrack update, fan and sequel evidence, and validation
+limits. It includes the unpublished 1.7.4 and 1.7.5 changes. Optional slim and
+additional target archives are not published for this build. L2 and L3 remain
+Preview. The signed-app foreground launch check remains unverified.
 Updated 2 October 2026 for the 1.7, 1.8 and 2.0 roadmap targets.
 Automated checks support the recorded routes;
 remaining compatibility and hardware claims still need validation. See the [gate register](ReleaseReadiness/gates.json)

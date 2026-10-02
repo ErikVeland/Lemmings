@@ -1,0 +1,16 @@
+{
+  "url": "https://github.com/ErikVeland/Lemmings/releases/tag/v1.7.6",
+  "publishedAt": "2026-10-02T01:09:53Z",
+  "tag": "v1.7.6",
+  "tagCommit": "52266e506802eea9c145126e58dd2594935e4b31",
+  "latestVerified": true,
+  "archive": {
+    "name": "UltimateLemmings-1.7.6-build60.zip",
+    "bytes": 1943220872,
+    "digest": "sha256:2cfcafc7c18c199509975b331baebb868bd6f2ff38f251e0b6b2ddbbbdadc685",
+    "url": "https://github.com/ErikVeland/Lemmings/releases/download/v1.7.6/UltimateLemmings-1.7.6-build60.zip"
+  },
+  "publicFeedSHA256": "e23571df2f1d2476f71fe253bec64d469b68da1da541b6c13d14fe63904b7bd2",
+  "publicFeedMatchesLocal": true,
+  "downloadHeadSucceeded": true
+}
