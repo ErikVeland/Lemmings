@@ -35,13 +35,14 @@ has no mass-nuke countdown.
 ## Fan levels and verification
 
 An exact bundled Golems challenge pack now selects its matching native mechanics
-in gameplay and previews. Pass Interference has a verified win using ordinary
-player assignments. The evidence catalogue now records 2,154 Classic fan wins
+in gameplay and previews. Pass Interference has a recorded winning route using
+ordinary player assignments. The evidence catalogue now records 2,154 Classic fan wins
 and 322 NeoLemmix wins. Additional source-rule and sequel investigations are
 retained separately from winning routes.
 
 Lemmings 2 and Lemmings 3 remain Preview. NeoLemmix remains Beta. Recorded native
-wins do not establish complete source-engine physics parity.
+wins do not establish complete source-engine physics parity. Some Golems evidence
+replays still differ in final state or completion timing.
 
 ## Update
 

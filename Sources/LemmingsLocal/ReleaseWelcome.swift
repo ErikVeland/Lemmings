@@ -8,7 +8,7 @@ import AppKit
     static let notesVersion = "1.7.7"
     static let subtitle = "Original cursors, clearer skills and a deeper nuke countdown"
     static let sections = [
-        ("Original cursors", "Old school now uses the Amiga cross and square target. Modern keeps its reticule. Choose either in Gameplay settings. Skill icons are larger, and the optional lemming count is smaller."),
+        ("Original cursors", "Old school uses the Amiga cross and square target. Choose either cursor in Gameplay settings. Skill icons are larger. The optional count is smaller."),
         ("Classic skill backpacks", "Brown marks Climbers, orange marks Floaters, and purple marks both. Backpacks are optional: on with Modern, off with Original."),
         ("Sound and fan levels", "The HD nuke countdown gradually removes high frequencies and adds bass. Fan-level compatibility and replay evidence also improve. Lemmings 2 and 3 remain Preview.")
     ]
