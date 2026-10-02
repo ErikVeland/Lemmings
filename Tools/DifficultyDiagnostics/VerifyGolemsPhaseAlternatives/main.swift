@@ -1,0 +1,84 @@
+import CryptoKit
+import Foundation
+import NxlvKit
+
+@MainActor final class ArcadeStore {
+    static let shared = ArcadeStore()
+    func progressKey(_ key: String) -> String { key }
+}
+
+private struct Evidence: Decodable {
+    let records: [Record]
+}
+
+private struct Record: Decodable {
+    let identity: LevelCatalogueIdentity
+    let bundledArchiveSHA256: String
+    let initialStateHash: String
+    let nativeReplaySHA256: String
+    let nativeSaved: Int
+    let required: Int
+    let nativeCompletionTick: Int
+    let difficultyScore: Double
+    let replayPath: String
+    let profilePath: String
+}
+
+private func digest(_ data: Data) -> String {
+    SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined()
+}
+
+let root = URL(fileURLWithPath: CommandLine.arguments[1])
+let resources = URL(fileURLWithPath: CommandLine.arguments[2])
+let ports = resources.appendingPathComponent("Ports")
+let decoder = JSONDecoder()
+private let evidenceNames = [
+    "classic-golems-phase-shift-alternatives.json",
+    "classic-golems-phase-shift-targeted.json",
+    "classic-golems-phase-shift-second.json",
+    "classic-golems-phase-shift-third.json",
+]
+private let evidences = try evidenceNames.map { name in
+    try decoder.decode(Evidence.self, from: Data(contentsOf: root.appendingPathComponent(
+        "Artifacts/DifficultyEvaluation/" + name)))
+}
+let packs = Dictionary(uniqueKeysWithValues: FanLevelLibrary.packs(in: [
+    root.appendingPathComponent("Content/LevelPacks")
+]).map { ("fan:" + FanLevelLibrary.catalogueID($0), $0) })
+let assets = try ClassicMainDATAssets.load(from: ports.appendingPathComponent("lemmings_dos_1991-07-30"))
+
+for record in evidences.flatMap(\.records) {
+    guard let pack = packs[record.identity.packID] else { fatalError("Missing pack: \(record.identity.packID)") }
+    let archiveData = try Data(contentsOf: pack)
+    precondition(digest(archiveData) == record.bundledArchiveSHA256)
+    let replayData = try Data(contentsOf: root.appendingPathComponent(record.replayPath))
+    precondition(digest(replayData) == record.nativeReplaySHA256)
+    let replay = try decoder.decode(ClassicDOSReplay.self, from: replayData)
+    precondition(replay.rank == record.identity.packID)
+    let entries = try FanLevelLibrary.validatedEntries(in: pack)
+    precondition(entries.indices.contains(replay.number - 1))
+    let entry = entries[replay.number - 1]
+    precondition(entry.file + "#" + String(entry.section ?? -1) == record.identity.levelID)
+    let (level, style) = try FanLevelLibrary.level(entry, in: pack)
+    let ground = try FanLevelLibrary.groundSet(for: level, styleName: style,
+        portsRoot: ports, pack: pack, entry: entry)
+    let special = try FanLevelLibrary.specialGraphic(for: level, entry: entry,
+        pack: pack, portsRoot: ports)
+    let rendered = try ClassicLevelRenderer.render(level, groundSet: ground,
+        specialGraphic: special, objectSemantics: .forFanLevel(level, groundSet: ground))
+    let initial = try ClassicDOSSimulation(level: level, renderedLevel: rendered,
+        mainDATAssets: assets, mechanics: .golems, clock: .golems)
+    precondition(ClassicDOSReplayRecorder.stateHash(of: initial) == record.initialStateHash)
+    let outcome = try ClassicDOSReplayPlayer.run(replay, simulation: initial, tickLimit: 20_000)
+    precondition(outcome.didWin && outcome.saved == record.nativeSaved &&
+        outcome.required == record.required && outcome.ticks == record.nativeCompletionTick)
+    let profile = try decoder.decode(DifficultyProfile.self, from: Data(contentsOf:
+        root.appendingPathComponent(record.profilePath)))
+    precondition(profile.key.identity == record.identity &&
+        profile.key.replayRevision == record.nativeReplaySHA256 &&
+        profile.overallScore == record.difficultyScore)
+    print("PASS", record.identity.packID, record.identity.levelID,
+        outcome.saved, outcome.required, outcome.ticks, profile.overallScore)
+}
+print("Verified", evidences.reduce(0) { $0 + $1.records.count },
+    "strict Golems-profile winning replays and scores")

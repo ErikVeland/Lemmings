@@ -1,0 +1,76 @@
+{
+  "components" : {
+    "concurrencyBurden" : 0,
+    "constraintPressure" : 276.56872347371853,
+    "deductionComplexityProxy" : 50,
+    "executionPrecision" : 240.625,
+    "solutionComplexity" : 64.01955000865388,
+    "techniqueBurden" : 195
+  },
+  "confidence" : "medium",
+  "criticalActions" : [
+
+  ],
+  "detectedTechniques" : [
+    "bomber",
+    "release-rate-manipulation"
+  ],
+  "explanation" : [
+    "1 used skill types; 2 assigned workers; 0 same-worker skill changes.",
+    "Maximum concurrent worker regions: 0.",
+    "Timing probes: 10. Untested alternatives remain unknown.",
+    "Deduction is a conservative proxy. Observed techniques are not proof of necessity.",
+    "Source rank: fan:lldb-327."
+  ],
+  "key" : {
+    "analyserVersion" : "difficulty-3",
+    "assetsRevision" : "cf1897bbc491e55ec3f89ae50851175fda68154e757f7870c750139ecd2ccbd5:probes-10",
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "JM01.DAT#7",
+      "packID" : "fan:lldb-327"
+    },
+    "levelRevision" : "4ed40d2dad89484a0565b4fc472ba6db8a18a36f97c174cb4ea392eac14073c2",
+    "replayRevision" : "b9b7bc52d706b3fababc9b02a0590059ddcd625b0e5c35f7b6638406d5d434f8",
+    "simulationVersion" : "neolemmix-ce-2026-09-27:golems-phase-minus-one-targeted"
+  },
+  "overallScore" : 150.41323505348726,
+  "precision" : {
+    "actions" : [
+      {
+        "outcomes" : {
+          "-1" : true,
+          "-2" : true,
+          "-4" : false,
+          "1" : true,
+          "2" : false
+        },
+        "sequence" : 1
+      },
+      {
+        "outcomes" : {
+          "-1" : true,
+          "-2" : false,
+          "-4" : false,
+          "1" : true,
+          "2" : true
+        },
+        "sequence" : 2
+      }
+    ],
+    "alternativeRunCount" : 0,
+    "assignmentCount" : 2,
+    "completed" : false,
+    "orderingOutcomes" : [
+
+    ],
+    "runCount" : 10,
+    "selectionOutcomes" : [
+
+    ]
+  },
+  "prerequisiteConcepts" : [
+
+  ],
+  "sourceRank" : "fan:lldb-327"
+}

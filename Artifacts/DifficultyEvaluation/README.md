@@ -4,9 +4,11 @@ This ledger covers 6020 bundled fan levels in the native Classic playback lane a
 
 299 rows in the Classic playback lane come from 20 packs that LLDB identifies as Lemmini. Two have a native Classic win and replay-based score; 297 remain unverified. The `source_engine` column separates known source families from the current playback lane; most other fan packs are not independently classified there. Classic's 160-pixel playfield cannot represent several of these levels' hatch and exit coordinates. This is an engine-family compatibility gap, not proof that the source puzzles are unsolvable. See `validation.md` for the pack list.
 
-20 levels in packs 495 and 496 use the Golems source player. Their source-engine label does not establish native physics parity. See `validation.md` and `classic-independent-source-checks.json`.
+22 levels in packs 433, 495 and 496 use the Golems source player. Their source-engine label does not establish native physics parity. See `validation.md` and `classic-independent-source-checks.json`.
 
-Verified winning replays support 2153 Classic fan scores and 322 NeoLemmix scores. The remaining 3870 non-official levels and 469 official conversion levels have no replay-based score. Of the non-official rows, 4 bundled Classic levels cannot win under the current native object and rescue rules recorded below.
+The four phase-corrected Golems evidence files hold 67 distinct exact-level native wins with ten-probe scores under opt-in Golems mechanics. Most remain outside the selected ledger. `Pass Interference` now has a separate ordinary-assignment win under the selected Golems profile for its exact bundled pack. Its selected digest and score are in `levels.csv`. The two-player alternative stays outside the learning path. See `classic-golems-phase-shift-third.json` and `validation.md`.
+
+Verified winning replays support 2154 Classic fan scores and 322 NeoLemmix scores. The remaining 3869 non-official levels and 469 official conversion levels have no replay-based score. Of the non-official rows, 4 bundled Classic levels cannot win under the current native object and rescue rules recorded below.
 
 The `playtest` column records the latest check. A passive loss or timeout only describes a run without player input. It does not prove that the level is impossible. Source-compatible replays can have an absent or different level version; their native wins are valid, but source parity is unverified.
 

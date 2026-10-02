@@ -1,0 +1,787 @@
+{
+  "description": "Second directed -1 native tick trial on 26 archived published Golems inputs, exact bundled levels and opt-in Golems mechanics. Fourteen distinct levels had strict native winning replays and ten-probe scores. Attempt failures remain recorded. These alternatives do not change the default-mechanics ledger and native wins do not prove full source physics parity.",
+  "sourceEngineSHA256": "38cb69f18f5055821a496336a948fc30596e56c607c3ddddfb4675be78a5873e",
+  "directAttempts": 26,
+  "directWinningInputs": 17,
+  "directUniqueWinningLevels": 14,
+  "records": [
+    {
+      "identity": {
+        "engine": "classic",
+        "packID": "fan:lldb-497",
+        "levelID": "MARTPCK3.DAT#3"
+      },
+      "title": "Guess What...",
+      "bundledArchiveSHA256": "eee114bbaf98654790d24c531e3a4757acaefef0002acee0dd93c4d9a3eba088",
+      "initialStateHash": "8b0d1666506d20dfcc7ba07747ca750d318dc818e8a724baf0a240e327d6fe2d",
+      "mechanics": "golems",
+      "clock": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeReplaySHA256": "28b346b906adef1573f572ca89ffb75e98784479435e184eda65464bc8b5e382",
+      "nativeSaved": 40,
+      "required": 32,
+      "nativeCompletionTick": 1505,
+      "difficultyScore": 335.68856918234445,
+      "probeRuns": 10,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/28b346b906adef1573f572ca89ffb75e98784479435e184eda65464bc8b5e382.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/28b346b906adef1573f572ca89ffb75e98784479435e184eda65464bc8b5e382.profile.json",
+      "sourceOriginIdentity": {
+        "engine": "classic",
+        "levelID": "MARTPCK3.DAT#3",
+        "packID": "fan:lldb-497"
+      },
+      "sourceURL": "https://lldb.camanis.net/level/497/4",
+      "sourceReplaySHA256": "5dbbc35e6b07058601d2264f04ce911d199285507b9fbfb087a78fe6b760960f",
+      "sourceHeaderSaved": 40,
+      "sourceHeaderTicks": 1504,
+      "sourceActionDerivation": "verified one-tick conversion from archived published replay",
+      "sourceActionDerivationVerified": true,
+      "sourceOutcomeParity": true,
+      "transferFromAnotherBundledPack": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "packID": "fan:lldb-388",
+        "levelID": "geooPk2_preview2.dat#1"
+      },
+      "title": "Recurrent Sacrifice",
+      "bundledArchiveSHA256": "cbab658e9aa6d51ccaf562ec716cab9460e2999f4d2444d1e6120aea8e3251be",
+      "initialStateHash": "811071bb7e99518cd7d74ca8dd0384b4cb486490dc6e416d3813e2f1d1298e5e",
+      "mechanics": "golems",
+      "clock": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeReplaySHA256": "3717b726a5215476dca193c9a8181690482700a15c93ab9882d9e25f87bbc026",
+      "nativeSaved": 16,
+      "required": 16,
+      "nativeCompletionTick": 1199,
+      "difficultyScore": 336.5959455065032,
+      "probeRuns": 10,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/3717b726a5215476dca193c9a8181690482700a15c93ab9882d9e25f87bbc026.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/3717b726a5215476dca193c9a8181690482700a15c93ab9882d9e25f87bbc026.profile.json",
+      "sourceOriginIdentity": {
+        "engine": "classic",
+        "levelID": "geooPk2_preview2.dat#1",
+        "packID": "fan:lldb-388"
+      },
+      "sourceURL": "https://lldb.camanis.net/level/388/2",
+      "sourceReplaySHA256": "daca45d93fcf1d29e06792289f05398bb14cf3f73b7d684312179dcb59b971c1",
+      "sourceHeaderSaved": 16,
+      "sourceHeaderTicks": 1198,
+      "sourceActionDerivation": "verified one-tick conversion from archived published replay",
+      "sourceActionDerivationVerified": true,
+      "sourceOutcomeParity": true,
+      "transferFromAnotherBundledPack": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "packID": "fan:lldb-303",
+        "levelID": "TWPAK01.dat#6"
+      },
+      "title": "Both The 7's...................!",
+      "bundledArchiveSHA256": "697a9fc2adb8c4a7e2b49b2741eee766cf7d944fe40b66640827db12163f0b99",
+      "initialStateHash": "aa3821a6206f943123e48adf7c06ae964a92d61ebe7898bdf155e891646f24bf",
+      "mechanics": "golems",
+      "clock": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeReplaySHA256": "37f9e6612c3e0c7d156005efa91b78d734362256b44debd68b8aecb16eae47fe",
+      "nativeSaved": 76,
+      "required": 60,
+      "nativeCompletionTick": 790,
+      "difficultyScore": 237.19359820241638,
+      "probeRuns": 10,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/37f9e6612c3e0c7d156005efa91b78d734362256b44debd68b8aecb16eae47fe.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/37f9e6612c3e0c7d156005efa91b78d734362256b44debd68b8aecb16eae47fe.profile.json",
+      "sourceOriginIdentity": {
+        "engine": "classic",
+        "levelID": "TWPAK01.dat#6",
+        "packID": "fan:lldb-303"
+      },
+      "sourceURL": "https://lldb.camanis.net/level/303/7",
+      "sourceReplaySHA256": "4f1e080ae99211f573165c52e2921c3f9231874b5660368d706af6316ee9096b",
+      "sourceHeaderSaved": 76,
+      "sourceHeaderTicks": 789,
+      "sourceActionDerivation": "verified one-tick conversion from archived published replay",
+      "sourceActionDerivationVerified": true,
+      "sourceOutcomeParity": true,
+      "transferFromAnotherBundledPack": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "packID": "fan:lldb-388",
+        "levelID": "geooPk2_preview2.dat#0"
+      },
+      "title": "About to Break",
+      "bundledArchiveSHA256": "cbab658e9aa6d51ccaf562ec716cab9460e2999f4d2444d1e6120aea8e3251be",
+      "initialStateHash": "729b2f12dd36fc133bbc2385ea9ad265ac76c90380be68b48a17a284f2208783",
+      "mechanics": "golems",
+      "clock": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeReplaySHA256": "39d0638ca62698ff7b6c7b193606876ab1e6b13df79e683a5138293d2621be86",
+      "nativeSaved": 49,
+      "required": 49,
+      "nativeCompletionTick": 2574,
+      "difficultyScore": 465.20683285008033,
+      "probeRuns": 10,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/39d0638ca62698ff7b6c7b193606876ab1e6b13df79e683a5138293d2621be86.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/39d0638ca62698ff7b6c7b193606876ab1e6b13df79e683a5138293d2621be86.profile.json",
+      "sourceOriginIdentity": {
+        "engine": "classic",
+        "levelID": "geooPk2_preview2.dat#0",
+        "packID": "fan:lldb-388"
+      },
+      "sourceURL": "https://lldb.camanis.net/level/388/1",
+      "sourceReplaySHA256": "b6790f85e2c02da90f7bb281c7bd9854ec3cbf776aaa101d282997205a486b9f",
+      "sourceHeaderSaved": 49,
+      "sourceHeaderTicks": 2574,
+      "sourceActionDerivation": "verified one-tick conversion from archived published replay",
+      "sourceActionDerivationVerified": true,
+      "sourceOutcomeParity": true,
+      "transferFromAnotherBundledPack": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "packID": "fan:lldb-246",
+        "levelID": "Martin Zurlinden 03.dat#5"
+      },
+      "title": "Deep Deep Down",
+      "bundledArchiveSHA256": "d1e2c06fd14cc00c157cc220651bbbcbb9bf401851cce5d23de76fc54085f0bf",
+      "initialStateHash": "4324e4e6dcc54273db3999106674730d2f4f60d8e3d12705cbe5d0fd5cc2fd42",
+      "mechanics": "golems",
+      "clock": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeReplaySHA256": "42568bba3345b4449d4f974c0486fdc5b29fafde20bfb07b20f7f1c243161d04",
+      "nativeSaved": 38,
+      "required": 36,
+      "nativeCompletionTick": 1466,
+      "difficultyScore": 436.6857799434833,
+      "probeRuns": 10,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/42568bba3345b4449d4f974c0486fdc5b29fafde20bfb07b20f7f1c243161d04.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/42568bba3345b4449d4f974c0486fdc5b29fafde20bfb07b20f7f1c243161d04.profile.json",
+      "sourceOriginIdentity": {
+        "engine": "classic",
+        "levelID": "Martin Zurlinden 03.dat#5",
+        "packID": "fan:lldb-246"
+      },
+      "sourceURL": "https://lldb.camanis.net/level/246/6",
+      "sourceReplaySHA256": "3587701484ce253b2ddf8fc119de1d8cf646c84e46f40d4d2aeea38e22aca206",
+      "sourceHeaderSaved": 38,
+      "sourceHeaderTicks": 1466,
+      "sourceActionDerivation": "verified one-tick conversion from archived published replay",
+      "sourceActionDerivationVerified": true,
+      "sourceOutcomeParity": true,
+      "transferFromAnotherBundledPack": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "packID": "fan:lldb-246",
+        "levelID": "Martin Zurlinden 03.dat#4"
+      },
+      "title": "Slave to the Rhythm",
+      "bundledArchiveSHA256": "d1e2c06fd14cc00c157cc220651bbbcbb9bf401851cce5d23de76fc54085f0bf",
+      "initialStateHash": "3ffe41878e84c42391ac80c4ee2fb2a266ac6934de0a4a0faf3f2eaf427f61d3",
+      "mechanics": "golems",
+      "clock": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeReplaySHA256": "5a7d6d9c5c87cbd3c4e2143a631d4e1d518c7dda76a346d5950942bae8e189f9",
+      "nativeSaved": 30,
+      "required": 30,
+      "nativeCompletionTick": 880,
+      "difficultyScore": 417.2856972088872,
+      "probeRuns": 10,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/5a7d6d9c5c87cbd3c4e2143a631d4e1d518c7dda76a346d5950942bae8e189f9.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/5a7d6d9c5c87cbd3c4e2143a631d4e1d518c7dda76a346d5950942bae8e189f9.profile.json",
+      "sourceOriginIdentity": {
+        "engine": "classic",
+        "levelID": "Martin Zurlinden 03.dat#4",
+        "packID": "fan:lldb-246"
+      },
+      "sourceURL": "https://lldb.camanis.net/level/246/5",
+      "sourceReplaySHA256": "24f06d3ad4b63541c2afcae2d0bc49489e17e3c8c182d154e97f74784111ccc0",
+      "sourceHeaderSaved": 30,
+      "sourceHeaderTicks": 879,
+      "sourceActionDerivation": "verified one-tick conversion from archived published replay",
+      "sourceActionDerivationVerified": true,
+      "sourceOutcomeParity": true,
+      "transferFromAnotherBundledPack": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "packID": "fan:lldb-246",
+        "levelID": "Martin Zurlinden 03.dat#3"
+      },
+      "title": "Guess What...",
+      "bundledArchiveSHA256": "d1e2c06fd14cc00c157cc220651bbbcbb9bf401851cce5d23de76fc54085f0bf",
+      "initialStateHash": "a762b7686c1e4ae04c805467f68b2a34a0c25969513b5c9df7492be4b262b746",
+      "mechanics": "golems",
+      "clock": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeReplaySHA256": "663fb6d36f7f5f4b392ddd3a62938671c8eee53ebbb6dfc7bc5a1bfc1e87ea81",
+      "nativeSaved": 39,
+      "required": 30,
+      "nativeCompletionTick": 1694,
+      "difficultyScore": 423.6910709783341,
+      "probeRuns": 10,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/663fb6d36f7f5f4b392ddd3a62938671c8eee53ebbb6dfc7bc5a1bfc1e87ea81.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/663fb6d36f7f5f4b392ddd3a62938671c8eee53ebbb6dfc7bc5a1bfc1e87ea81.profile.json",
+      "sourceOriginIdentity": {
+        "engine": "classic",
+        "levelID": "Martin Zurlinden 03.dat#3",
+        "packID": "fan:lldb-246"
+      },
+      "sourceURL": "https://lldb.camanis.net/level/246/4",
+      "sourceReplaySHA256": "9cbe41d06fc7bf8516a22a6bc591f1c33c1ad9076ac0b97d16277ffac4cb4f40",
+      "sourceHeaderSaved": 39,
+      "sourceHeaderTicks": 1693,
+      "sourceActionDerivation": "verified one-tick conversion from archived published replay",
+      "sourceActionDerivationVerified": true,
+      "sourceOutcomeParity": true,
+      "transferFromAnotherBundledPack": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "packID": "fan:lldb-497",
+        "levelID": "MARTPCK3.DAT#5"
+      },
+      "title": "Deep Deep Down",
+      "bundledArchiveSHA256": "eee114bbaf98654790d24c531e3a4757acaefef0002acee0dd93c4d9a3eba088",
+      "initialStateHash": "4324e4e6dcc54273db3999106674730d2f4f60d8e3d12705cbe5d0fd5cc2fd42",
+      "mechanics": "golems",
+      "clock": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeReplaySHA256": "9df6d535e9bc8428722a314d7e7fec8ffa3842fb073bbb033abc084b3ae8c7d7",
+      "nativeSaved": 38,
+      "required": 36,
+      "nativeCompletionTick": 1466,
+      "difficultyScore": 436.6857799434833,
+      "probeRuns": 10,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/9df6d535e9bc8428722a314d7e7fec8ffa3842fb073bbb033abc084b3ae8c7d7.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/9df6d535e9bc8428722a314d7e7fec8ffa3842fb073bbb033abc084b3ae8c7d7.profile.json",
+      "sourceOriginIdentity": {
+        "engine": "classic",
+        "levelID": "MARTPCK3.DAT#5",
+        "packID": "fan:lldb-497"
+      },
+      "sourceURL": "https://lldb.camanis.net/level/497/6",
+      "sourceReplaySHA256": "3587701484ce253b2ddf8fc119de1d8cf646c84e46f40d4d2aeea38e22aca206",
+      "sourceHeaderSaved": 38,
+      "sourceHeaderTicks": 1466,
+      "sourceActionDerivation": "verified one-tick conversion from archived published replay",
+      "sourceActionDerivationVerified": true,
+      "sourceOutcomeParity": true,
+      "transferFromAnotherBundledPack": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "packID": "fan:lldb-497",
+        "levelID": "MARTPCK3.DAT#0"
+      },
+      "title": "In the Countree",
+      "bundledArchiveSHA256": "eee114bbaf98654790d24c531e3a4757acaefef0002acee0dd93c4d9a3eba088",
+      "initialStateHash": "f9f168d15b3110a15121cfbf7eaa212f1f5794f15a91d3435085cb97b2c700aa",
+      "mechanics": "golems",
+      "clock": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeReplaySHA256": "a4e449c67b1b436ff9c6069a30a7a3c1ddc8d631004c511a9a9ebfce09e49378",
+      "nativeSaved": 40,
+      "required": 40,
+      "nativeCompletionTick": 3007,
+      "difficultyScore": 386.8090547671429,
+      "probeRuns": 10,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/a4e449c67b1b436ff9c6069a30a7a3c1ddc8d631004c511a9a9ebfce09e49378.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/a4e449c67b1b436ff9c6069a30a7a3c1ddc8d631004c511a9a9ebfce09e49378.profile.json",
+      "sourceOriginIdentity": {
+        "engine": "classic",
+        "levelID": "MARTPCK3.DAT#0",
+        "packID": "fan:lldb-497"
+      },
+      "sourceURL": "https://lldb.camanis.net/level/497/1",
+      "sourceReplaySHA256": "573d43ab8604de5372799f857361f542fb9d047cea2c5b0e1b69c1f873e7ff35",
+      "sourceHeaderSaved": 40,
+      "sourceHeaderTicks": 3007,
+      "sourceActionDerivation": "verified one-tick conversion from archived published replay",
+      "sourceActionDerivationVerified": true,
+      "sourceOutcomeParity": true,
+      "transferFromAnotherBundledPack": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "packID": "fan:lldb-246",
+        "levelID": "Martin Zurlinden 03.dat#0"
+      },
+      "title": "In the Countree",
+      "bundledArchiveSHA256": "d1e2c06fd14cc00c157cc220651bbbcbb9bf401851cce5d23de76fc54085f0bf",
+      "initialStateHash": "f9f168d15b3110a15121cfbf7eaa212f1f5794f15a91d3435085cb97b2c700aa",
+      "mechanics": "golems",
+      "clock": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeReplaySHA256": "dd32262b6ff083a4948a6b3d9402161a703319ef142271b12934b5d0a0824bbd",
+      "nativeSaved": 40,
+      "required": 40,
+      "nativeCompletionTick": 3007,
+      "difficultyScore": 386.8090547671429,
+      "probeRuns": 10,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/dd32262b6ff083a4948a6b3d9402161a703319ef142271b12934b5d0a0824bbd.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/dd32262b6ff083a4948a6b3d9402161a703319ef142271b12934b5d0a0824bbd.profile.json",
+      "sourceOriginIdentity": {
+        "engine": "classic",
+        "levelID": "Martin Zurlinden 03.dat#0",
+        "packID": "fan:lldb-246"
+      },
+      "sourceURL": "https://lldb.camanis.net/level/246/1",
+      "sourceReplaySHA256": "573d43ab8604de5372799f857361f542fb9d047cea2c5b0e1b69c1f873e7ff35",
+      "sourceHeaderSaved": 40,
+      "sourceHeaderTicks": 3007,
+      "sourceActionDerivation": "verified one-tick conversion from archived published replay",
+      "sourceActionDerivationVerified": true,
+      "sourceOutcomeParity": true,
+      "transferFromAnotherBundledPack": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "packID": "fan:lldb-497",
+        "levelID": "MARTPCK3.DAT#4"
+      },
+      "title": "Slave to the Rhythm",
+      "bundledArchiveSHA256": "eee114bbaf98654790d24c531e3a4757acaefef0002acee0dd93c4d9a3eba088",
+      "initialStateHash": "3ffe41878e84c42391ac80c4ee2fb2a266ac6934de0a4a0faf3f2eaf427f61d3",
+      "mechanics": "golems",
+      "clock": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeReplaySHA256": "dd45cbb92e9699403c66535a36136e0a88aa56fa2bc3b85e2cca3c0aff170cec",
+      "nativeSaved": 30,
+      "required": 30,
+      "nativeCompletionTick": 880,
+      "difficultyScore": 417.2856972088872,
+      "probeRuns": 10,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/dd45cbb92e9699403c66535a36136e0a88aa56fa2bc3b85e2cca3c0aff170cec.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/dd45cbb92e9699403c66535a36136e0a88aa56fa2bc3b85e2cca3c0aff170cec.profile.json",
+      "sourceOriginIdentity": {
+        "engine": "classic",
+        "levelID": "MARTPCK3.DAT#4",
+        "packID": "fan:lldb-497"
+      },
+      "sourceURL": "https://lldb.camanis.net/level/497/5",
+      "sourceReplaySHA256": "24f06d3ad4b63541c2afcae2d0bc49489e17e3c8c182d154e97f74784111ccc0",
+      "sourceHeaderSaved": 30,
+      "sourceHeaderTicks": 879,
+      "sourceActionDerivation": "verified one-tick conversion from archived published replay",
+      "sourceActionDerivationVerified": true,
+      "sourceOutcomeParity": true,
+      "transferFromAnotherBundledPack": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "packID": "fan:lldb-545",
+        "levelID": "Pieuw 2007 Insane 1.DAT#0"
+      },
+      "title": "The Lemming Gallery",
+      "bundledArchiveSHA256": "0b5e4bfede58cb4d8acee4ff5fb4d28ef912a472c1a5405271dc61453d7292f5",
+      "initialStateHash": "896eecff3b87b0884073ac1f8fe469aca58a355eb5542650ae9b02acecbf0f30",
+      "mechanics": "golems",
+      "clock": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeReplaySHA256": "e0e573a7478b4bbd6fc6ac3e6bf2e9b56dc114a080d64d724ba83b1cde0be6d0",
+      "nativeSaved": 100,
+      "required": 100,
+      "nativeCompletionTick": 5905,
+      "difficultyScore": 501.0205320390162,
+      "probeRuns": 10,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/e0e573a7478b4bbd6fc6ac3e6bf2e9b56dc114a080d64d724ba83b1cde0be6d0.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/e0e573a7478b4bbd6fc6ac3e6bf2e9b56dc114a080d64d724ba83b1cde0be6d0.profile.json",
+      "sourceOriginIdentity": {
+        "engine": "classic",
+        "levelID": "Pieuw 2007 Insane 1.DAT#0",
+        "packID": "fan:lldb-545"
+      },
+      "sourceURL": "https://lldb.camanis.net/level/545/1",
+      "sourceReplaySHA256": "dfafd09ea38c68ff11903cff68824960ea6334264f21137696819f185cde838a",
+      "sourceHeaderSaved": 100,
+      "sourceHeaderTicks": 5905,
+      "sourceActionDerivation": "verified one-tick conversion from archived published replay",
+      "sourceActionDerivationVerified": true,
+      "sourceOutcomeParity": true,
+      "transferFromAnotherBundledPack": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "packID": "fan:lldb-545",
+        "levelID": "Pieuw 2007 Insane 1.DAT#3"
+      },
+      "title": "Diggin' the Air",
+      "bundledArchiveSHA256": "0b5e4bfede58cb4d8acee4ff5fb4d28ef912a472c1a5405271dc61453d7292f5",
+      "initialStateHash": "586d2923b7523f584e892f8674e524c96bbba7eadce189c7500faee2c1fd18bc",
+      "mechanics": "golems",
+      "clock": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeReplaySHA256": "e74d8037111cdf775867fe52cc1e13ee216473986d0dd8af9c5f53c138b11930",
+      "nativeSaved": 20,
+      "required": 20,
+      "nativeCompletionTick": 2470,
+      "difficultyScore": 232.0365903231496,
+      "probeRuns": 10,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/e74d8037111cdf775867fe52cc1e13ee216473986d0dd8af9c5f53c138b11930.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/e74d8037111cdf775867fe52cc1e13ee216473986d0dd8af9c5f53c138b11930.profile.json",
+      "sourceOriginIdentity": {
+        "engine": "classic",
+        "levelID": "Pieuw 2007 Insane 1.DAT#3",
+        "packID": "fan:lldb-545"
+      },
+      "sourceURL": "https://lldb.camanis.net/level/545/4",
+      "sourceReplaySHA256": "1b04220b06afef3ca92288b31215a43f5cac173987019035ca967e2b0392f925",
+      "sourceHeaderSaved": 20,
+      "sourceHeaderTicks": 2473,
+      "sourceActionDerivation": "verified one-tick conversion from archived published replay",
+      "sourceActionDerivationVerified": true,
+      "sourceOutcomeParity": false,
+      "transferFromAnotherBundledPack": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "packID": "fan:lldb-303",
+        "levelID": "TWPAK01.dat#3"
+      },
+      "title": "Asy-Lemm Seekers",
+      "bundledArchiveSHA256": "697a9fc2adb8c4a7e2b49b2741eee766cf7d944fe40b66640827db12163f0b99",
+      "initialStateHash": "aa58f3289cfc02aad0de91bd65b4083d51dc81f39be24c0d3527ad793405523c",
+      "mechanics": "golems",
+      "clock": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeReplaySHA256": "f7686b6313de56462e1974007ce3769435b8b2c3d44945326919d20ee4207c36",
+      "nativeSaved": 80,
+      "required": 75,
+      "nativeCompletionTick": 876,
+      "difficultyScore": 271.7184987400186,
+      "probeRuns": 10,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/f7686b6313de56462e1974007ce3769435b8b2c3d44945326919d20ee4207c36.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/f7686b6313de56462e1974007ce3769435b8b2c3d44945326919d20ee4207c36.profile.json",
+      "sourceOriginIdentity": {
+        "engine": "classic",
+        "levelID": "TWPAK01.dat#3",
+        "packID": "fan:lldb-303"
+      },
+      "sourceURL": "https://lldb.camanis.net/level/303/4",
+      "sourceReplaySHA256": "af6f71a57e9eef31d50bcc15d868f4bb0a6ffd962a27af466c940ad6e9e54b45",
+      "sourceHeaderSaved": 80,
+      "sourceHeaderTicks": 876,
+      "sourceActionDerivation": "verified one-tick conversion from archived published replay",
+      "sourceActionDerivationVerified": true,
+      "sourceOutcomeParity": true,
+      "transferFromAnotherBundledPack": false
+    }
+  ],
+  "attempts": [
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Pieuw 2007 Artful 1.DAT#0",
+        "packID": "fan:lldb-544"
+      },
+      "sourceReplaySHA256": "65f30b0cbcb176af189467a6d1845ea29271945e55f8d6ec698a0b88a463e10a",
+      "error": "Pieuw 2007 Artful 1.DAT#0 engine refused to queue builder for lemming 0 at tick 745"
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Pieuw 2007 Artful 1.DAT#3",
+        "packID": "fan:lldb-544"
+      },
+      "sourceReplaySHA256": "5c4df3d234a4caee0c81092a543cb834883dfbcc105c2daf109e518768631b57",
+      "nativeSaved": 23,
+      "required": 47,
+      "nativeCompletionTick": 2042,
+      "didWin": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Pieuw 2007 Artful 1.DAT#3",
+        "packID": "fan:lldb-544"
+      },
+      "sourceReplaySHA256": "07993ea494147d4fc1322fd88a1229f461dae20d08eac39a2da43125af618810",
+      "nativeSaved": 23,
+      "required": 47,
+      "nativeCompletionTick": 613,
+      "didWin": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Martin Zurlinden 03.dat#3",
+        "packID": "fan:lldb-246"
+      },
+      "sourceReplaySHA256": "9cbe41d06fc7bf8516a22a6bc591f1c33c1ad9076ac0b97d16277ffac4cb4f40",
+      "nativeSaved": 39,
+      "required": 30,
+      "nativeCompletionTick": 1694,
+      "didWin": true
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "MARTPCK3.DAT#3",
+        "packID": "fan:lldb-497"
+      },
+      "sourceReplaySHA256": "5dbbc35e6b07058601d2264f04ce911d199285507b9fbfb087a78fe6b760960f",
+      "nativeSaved": 40,
+      "required": 32,
+      "nativeCompletionTick": 1505,
+      "didWin": true
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Pieuw 2007 Artful 1.DAT#7",
+        "packID": "fan:lldb-544"
+      },
+      "sourceReplaySHA256": "db9c473b4d773aedbb335d19138abe57656623a39d817f3bb8279dfc395b2133",
+      "error": "Pieuw 2007 Artful 1.DAT#7 engine refused to queue blocker for lemming 2 at tick 607"
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Martin Zurlinden 03.dat#5",
+        "packID": "fan:lldb-246"
+      },
+      "sourceReplaySHA256": "3587701484ce253b2ddf8fc119de1d8cf646c84e46f40d4d2aeea38e22aca206",
+      "nativeSaved": 38,
+      "required": 36,
+      "nativeCompletionTick": 1466,
+      "didWin": true
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "MARTPCK3.DAT#5",
+        "packID": "fan:lldb-497"
+      },
+      "sourceReplaySHA256": "3587701484ce253b2ddf8fc119de1d8cf646c84e46f40d4d2aeea38e22aca206",
+      "nativeSaved": 38,
+      "required": 36,
+      "nativeCompletionTick": 1466,
+      "didWin": true
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Martin Zurlinden 03.dat#0",
+        "packID": "fan:lldb-246"
+      },
+      "sourceReplaySHA256": "573d43ab8604de5372799f857361f542fb9d047cea2c5b0e1b69c1f873e7ff35",
+      "nativeSaved": 40,
+      "required": 40,
+      "nativeCompletionTick": 3007,
+      "didWin": true
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "MARTPCK3.DAT#0",
+        "packID": "fan:lldb-497"
+      },
+      "sourceReplaySHA256": "573d43ab8604de5372799f857361f542fb9d047cea2c5b0e1b69c1f873e7ff35",
+      "nativeSaved": 40,
+      "required": 40,
+      "nativeCompletionTick": 3007,
+      "didWin": true
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Pieuw 2007 Insane 1.DAT#3",
+        "packID": "fan:lldb-545"
+      },
+      "sourceReplaySHA256": "1b04220b06afef3ca92288b31215a43f5cac173987019035ca967e2b0392f925",
+      "nativeSaved": 20,
+      "required": 20,
+      "nativeCompletionTick": 2470,
+      "didWin": true
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "TWPAK01.dat#6",
+        "packID": "fan:lldb-303"
+      },
+      "sourceReplaySHA256": "d621a238cdb0d411468fa6d85227f31a9ae93d9c6c71a898bda59ffe454374df",
+      "nativeSaved": 77,
+      "required": 60,
+      "nativeCompletionTick": 836,
+      "didWin": true
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "TWPAK01.dat#6",
+        "packID": "fan:lldb-303"
+      },
+      "sourceReplaySHA256": "4f1e080ae99211f573165c52e2921c3f9231874b5660368d706af6316ee9096b",
+      "nativeSaved": 76,
+      "required": 60,
+      "nativeCompletionTick": 790,
+      "didWin": true
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "geooPk2_preview2.dat#0",
+        "packID": "fan:lldb-388"
+      },
+      "sourceReplaySHA256": "b6790f85e2c02da90f7bb281c7bd9854ec3cbf776aaa101d282997205a486b9f",
+      "nativeSaved": 49,
+      "required": 49,
+      "nativeCompletionTick": 2574,
+      "didWin": true
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "geooPk2_preview2.dat#0",
+        "packID": "fan:lldb-388"
+      },
+      "sourceReplaySHA256": "793750de0f260af262732b2c10e9422dd9fdd7ed791e5146c987de69bb97a690",
+      "nativeSaved": 49,
+      "required": 49,
+      "nativeCompletionTick": 2668,
+      "didWin": true
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Martin Zurlinden 03.dat#2",
+        "packID": "fan:lldb-246"
+      },
+      "sourceReplaySHA256": "8c53c89a2a6e6943637443b2da192cfdaa83f61b3a264015280c71020a8ab0f8",
+      "nativeSaved": 53,
+      "required": 54,
+      "nativeCompletionTick": 1022,
+      "didWin": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "MARTPCK3.DAT#2",
+        "packID": "fan:lldb-497"
+      },
+      "sourceReplaySHA256": "8c53c89a2a6e6943637443b2da192cfdaa83f61b3a264015280c71020a8ab0f8",
+      "nativeSaved": 53,
+      "required": 54,
+      "nativeCompletionTick": 1022,
+      "didWin": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "TWPAK01.dat#3",
+        "packID": "fan:lldb-303"
+      },
+      "sourceReplaySHA256": "af6f71a57e9eef31d50bcc15d868f4bb0a6ffd962a27af466c940ad6e9e54b45",
+      "nativeSaved": 80,
+      "required": 75,
+      "nativeCompletionTick": 876,
+      "didWin": true
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Pieuw 2007 Insane 2.DAT#4",
+        "packID": "fan:lldb-545"
+      },
+      "sourceReplaySHA256": "b5c7537d5e90751cea121873168a9e13651b6431454af87fe242d26413826ca9",
+      "error": "Pieuw 2007 Insane 2.DAT#4 engine refused to queue builder for lemming 2 at tick 797"
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Pieuw 2007 Insane 1.DAT#0",
+        "packID": "fan:lldb-545"
+      },
+      "sourceReplaySHA256": "3630e92dd027583c4d61d1602a21dbd0dffc164f09e3815540ffbedcb212c685",
+      "nativeSaved": 0,
+      "required": 100,
+      "nativeCompletionTick": 6122,
+      "didWin": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Pieuw 2007 Insane 1.DAT#0",
+        "packID": "fan:lldb-545"
+      },
+      "sourceReplaySHA256": "dfafd09ea38c68ff11903cff68824960ea6334264f21137696819f185cde838a",
+      "nativeSaved": 100,
+      "required": 100,
+      "nativeCompletionTick": 5905,
+      "didWin": true
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Martin Zurlinden 03.dat#4",
+        "packID": "fan:lldb-246"
+      },
+      "sourceReplaySHA256": "24f06d3ad4b63541c2afcae2d0bc49489e17e3c8c182d154e97f74784111ccc0",
+      "nativeSaved": 30,
+      "required": 30,
+      "nativeCompletionTick": 880,
+      "didWin": true
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "MARTPCK3.DAT#4",
+        "packID": "fan:lldb-497"
+      },
+      "sourceReplaySHA256": "24f06d3ad4b63541c2afcae2d0bc49489e17e3c8c182d154e97f74784111ccc0",
+      "nativeSaved": 30,
+      "required": 30,
+      "nativeCompletionTick": 880,
+      "didWin": true
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "TWPAK01.dat#1",
+        "packID": "fan:lldb-303"
+      },
+      "sourceReplaySHA256": "9de5102ae2c667fc94ddd537ec2cc192561b814049caec44fe8594189e66de24",
+      "error": "TWPAK01.dat#1 engine refused to queue miner for lemming 0 at tick 2583"
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "geooPk2_preview2.dat#1",
+        "packID": "fan:lldb-388"
+      },
+      "sourceReplaySHA256": "2eb68ae5c67cbac45a2ceb0034430c98025007f3ef21b172b249be1a282b4438",
+      "nativeSaved": 16,
+      "required": 16,
+      "nativeCompletionTick": 1225,
+      "didWin": true
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "geooPk2_preview2.dat#1",
+        "packID": "fan:lldb-388"
+      },
+      "sourceReplaySHA256": "daca45d93fcf1d29e06792289f05398bb14cf3f73b7d684312179dcb59b971c1",
+      "nativeSaved": 16,
+      "required": 16,
+      "nativeCompletionTick": 1199,
+      "didWin": true
+    }
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "components" : {
+    "concurrencyBurden" : 0,
+    "constraintPressure" : 686.5319743891284,
+    "deductionComplexityProxy" : 155,
+    "executionPrecision" : 256.875,
+    "solutionComplexity" : 259,
+    "techniqueBurden" : 325
+  },
+  "confidence" : "medium",
+  "criticalActions" : [
+    1
+  ],
+  "detectedTechniques" : [
+    "basher",
+    "builder",
+    "digger",
+    "release-rate-manipulation"
+  ],
+  "explanation" : [
+    "3 used skill types; 2 assigned workers; 1 same-worker skill changes.",
+    "Maximum concurrent worker regions: 1.",
+    "Timing probes: 10. Untested alternatives remain unknown.",
+    "Deduction is a conservative proxy. Observed techniques are not proof of necessity.",
+    "Source rank: fan:lldb-552."
+  ],
+  "key" : {
+    "analyserVersion" : "difficulty-3",
+    "assetsRevision" : "b59b1913e4b475e3858d15d90a8cf122aae59f69fce935103c93a1c47c20e588:probes-10",
+    "identity" : {
+      "engine" : "classic",
+      "levelID" : "Lemmings Plus DOS Project - 06 - Wimpy (Part 3).dat#8",
+      "packID" : "fan:lldb-552"
+    },
+    "levelRevision" : "8187c19df391ea59e594bf9e4779b7ec81fb0034bc4a899ae09aee7396b3c042",
+    "replayRevision" : "8013913519aca110281fa7a224ddbc295cfbe4863b62af8aa3607546b99c45f1",
+    "simulationVersion" : "neolemmix-ce-2026-09-27:golems-phase-minus-one-targeted"
+  },
+  "overallScore" : 289.7041566705867,
+  "precision" : {
+    "actions" : [
+      {
+        "outcomes" : {
+          "-1" : true,
+          "-2" : false,
+          "1" : false,
+          "2" : false
+        },
+        "sequence" : 1
+      },
+      {
+        "outcomes" : {
+          "-1" : true,
+          "-2" : true,
+          "1" : false
+        },
+        "sequence" : 2
+      },
+      {
+        "outcomes" : {
+          "-1" : true,
+          "-2" : true,
+          "1" : true
+        },
+        "sequence" : 52
+      }
+    ],
+    "alternativeRunCount" : 0,
+    "assignmentCount" : 3,
+    "completed" : false,
+    "orderingOutcomes" : [
+
+    ],
+    "runCount" : 10,
+    "selectionOutcomes" : [
+
+    ]
+  },
+  "prerequisiteConcepts" : [
+
+  ],
+  "sourceRank" : "fan:lldb-552"
+}

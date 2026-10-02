@@ -3240,8 +3240,8 @@ Classic fan,fan:lldb-432,LDChallenge03.dat#1,CCX's Finger,,low,,no verified win,
 Classic fan,fan:lldb-432,LDChallenge03.dat#2,One Piece Wonder,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-432,LDChallenge03.dat#3,A toe,165.07,medium,247c897a604dd20412fcc776f7a0333373ac14e25258a83c3d9d8e4a06624d58,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-432,LDChallenge03.dat#4,A toe Take 2,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-433,LDChallenge04.dat#0,Pass Interference,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-433,LDChallenge04.dat#1,Out of Line,,low,,no verified win,not independently checked,fixed release-rate sweep,No stocked skills; all 99 fixed starting release rates saved 0/1. In-level rate changes remain untested,not independently classified
+Classic fan,fan:lldb-433,LDChallenge04.dat#0,Pass Interference,287.86,high,dc4609aad5f69abc35b1b16571f2291afcd9ea1ef9f023661d7945231a6aaec4,verified win,not independently checked,replay verified,,Golems
+Classic fan,fan:lldb-433,LDChallenge04.dat#1,Out of Line,,low,,no verified win,not independently checked,fixed release-rate sweep,Golems profile: all 99 fixed release rates saved 0/1; source no-input header reports 1/1,Golems
 Classic fan,fan:lldb-434,LDChallenge05.dat#0,General wooden contraption no.73,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-434,LDChallenge05.dat#1,Stop and Go,240.61,medium,806601add37bba4dfdf7ca841f9ad8ce76298024a45248f000dacd5b95950af5,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-434,LDChallenge05.dat#2,Lemcon Nine,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified

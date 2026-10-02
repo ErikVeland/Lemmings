@@ -48,6 +48,10 @@ public struct ClassicDOSReplayOutcome: Codable, Equatable, Sendable {
     }
 }
 
+public enum ClassicDOSReplaySourceRules: String, Codable, Sendable {
+    case golemsFallingBuilder
+}
+
 public struct ClassicDOSReplay: Codable, Equatable, Sendable {
     /// Campaign rank, such as `Fun` or `Mayhem`.
     public let rank: String
@@ -57,6 +61,8 @@ public struct ClassicDOSReplay: Codable, Equatable, Sendable {
     /// State hash of the simulation before the first tick.
     public let initialStateHash: String
     public let events: [ClassicDOSReplayEvent]
+    /// Present only when imported source input uses a different assignment path.
+    public let sourceRules: ClassicDOSReplaySourceRules?
     /// The result a correct engine must reproduce.
     public let expected: ClassicDOSReplayOutcome?
 
@@ -66,6 +72,7 @@ public struct ClassicDOSReplay: Codable, Equatable, Sendable {
         title: String,
         initialStateHash: String,
         events: [ClassicDOSReplayEvent],
+        sourceRules: ClassicDOSReplaySourceRules? = nil,
         expected: ClassicDOSReplayOutcome? = nil
     ) {
         self.rank = rank
@@ -73,6 +80,7 @@ public struct ClassicDOSReplay: Codable, Equatable, Sendable {
         self.title = title
         self.initialStateHash = initialStateHash
         self.events = events
+        self.sourceRules = sourceRules
         self.expected = expected
     }
 }
@@ -194,6 +202,19 @@ public enum ClassicDOSReplayPlayer {
     ) throws -> ClassicDOSReplayOutcome {
         var simulation = simulation
 
+        if replay.sourceRules == .golemsFallingBuilder && simulation.configuration.mechanics != .golems {
+            throw ClassicDOSReplayError.outcomeMismatch(
+                field: "sourceRules", expected: "golems mechanics", actual: simulation.configuration.mechanics.rawValue)
+        }
+        if replay.sourceRules == .golemsFallingBuilder,
+           replay.events.contains(where: { event in
+               if case .assign = event.action { return event.afterTick != true }
+               return false
+           }) {
+            throw ClassicDOSReplayError.outcomeMismatch(
+                field: "sourceRules", expected: "after-tick assignments", actual: "scheduled assignment")
+        }
+
         if verify {
             let actual = ClassicDOSReplayRecorder.stateHash(of: simulation)
             guard actual == replay.initialStateHash else {
@@ -226,7 +247,10 @@ public enum ClassicDOSReplayPlayer {
             for action in afterTick[tick] ?? [] {
                 switch action {
                 case let .assign(lemmingID, skill):
-                    guard simulation.assign(skill, to: lemmingID) == .assigned else {
+                    let result = replay.sourceRules == .golemsFallingBuilder
+                        ? simulation.assignGolemsReplay(skill, to: lemmingID)
+                        : simulation.assign(skill, to: lemmingID)
+                    guard result == .assigned else {
                         throw ClassicDOSReplayError.commandRejected(tick: tick, lemmingID: lemmingID, skill: skill)
                     }
                 case let .releaseRate(value): simulation.setReleaseRate(value)

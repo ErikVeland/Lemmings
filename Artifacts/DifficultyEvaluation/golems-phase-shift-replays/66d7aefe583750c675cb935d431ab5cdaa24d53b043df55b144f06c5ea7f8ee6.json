@@ -1,0 +1,36 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 99
+        }
+      },
+      "afterTick" : true,
+      "tick" : 57
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "builder"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 57
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 10,
+    "required" : 4,
+    "saved" : 4,
+    "stateHash" : "94ea2416e64172e3c76937ed5ebe57fe63a4ef2da4fbdce5ab7fa5944067b00a",
+    "ticks" : 363
+  },
+  "initialStateHash" : "3ce9042abfa73a0292819735840c775b0444970517c327d79e669c6a445b053e",
+  "number" : 3,
+  "rank" : "fan:lldb-430",
+  "sourceRules" : "golemsFallingBuilder",
+  "title" : "Pinpoint Accuracy"
+}

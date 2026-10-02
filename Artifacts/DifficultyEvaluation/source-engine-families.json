@@ -21,7 +21,7 @@
     466,
     469
   ],
-  "golemsPackIDs": [495, 496],
-  "golemsEvidence": "The LLDB browser players for packs 495 and 496 select GOLEMS.DAT (game mode 3); see https://lldb.camanis.net/levelpack/495 and https://lldb.camanis.net/levelpack/496.",
+  "golemsPackIDs": [433, 495, 496],
+  "golemsEvidence": "The LLDB browser players for packs 433, 495 and 496 select GOLEMS.DAT (game mode 3); see https://lldb.camanis.net/levelpack/433, https://lldb.camanis.net/levelpack/495 and https://lldb.camanis.net/levelpack/496.",
   "source": "https://lldb.camanis.net/levelpack/{id}"
 }

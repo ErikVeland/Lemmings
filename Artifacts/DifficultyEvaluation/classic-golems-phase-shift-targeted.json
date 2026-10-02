@@ -1,0 +1,925 @@
+{
+  "description": "Directed -1 native tick trial on 33 archived published Golems inputs, exact bundled levels and opt-in Golems mechanics. Fourteen distinct direct wins were strictly replayed and scored. Two further wins were verified on exact levels in a second bundled pack using matching-titled source actions. These are alternatives until the app selects the same mechanics. Native wins do not prove full source physics parity.",
+  "sourceEngineSHA256": "38cb69f18f5055821a496336a948fc30596e56c607c3ddddfb4675be78a5873e",
+  "directAttempts": 33,
+  "directWinningInputs": 15,
+  "directUniqueWinningLevels": 14,
+  "transferredNewWinningLevels": 2,
+  "records": [
+    {
+      "identity": {
+        "engine": "classic",
+        "packID": "fan:lldb-394",
+        "levelID": "pieuw02.dat#6"
+      },
+      "title": "The Lemming Gallery",
+      "bundledArchiveSHA256": "012f8d6fde059a9781d2293d00e4426595c281d7c7a8963caaa4ff4d5c1e123c",
+      "initialStateHash": "896eecff3b87b0884073ac1f8fe469aca58a355eb5542650ae9b02acecbf0f30",
+      "mechanics": "golems",
+      "clock": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeReplaySHA256": "01f59372f9f2173a0a6e2985055266385c6968210fa95fd21570ee39e736c1d4",
+      "nativeSaved": 100,
+      "required": 100,
+      "nativeCompletionTick": 5905,
+      "difficultyScore": 501.0205320390162,
+      "probeRuns": 10,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/01f59372f9f2173a0a6e2985055266385c6968210fa95fd21570ee39e736c1d4.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/01f59372f9f2173a0a6e2985055266385c6968210fa95fd21570ee39e736c1d4.profile.json",
+      "sourceOriginIdentity": {
+        "engine": "classic",
+        "levelID": "pieuw02.dat#6",
+        "packID": "fan:lldb-394"
+      },
+      "sourceURL": "https://lldb.camanis.net/level/394/7",
+      "sourceReplaySHA256": "dfafd09ea38c68ff11903cff68824960ea6334264f21137696819f185cde838a",
+      "sourceHeaderSaved": 100,
+      "sourceHeaderTicks": 5905,
+      "sourceActionDerivation": "verified one-tick conversion from archived published replay",
+      "sourceActionDerivationVerified": true,
+      "sourceOutcomeParity": true,
+      "transferFromAnotherBundledPack": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "packID": "fan:lldb-245",
+        "levelID": "Martin Zurlinden 02.dat#6"
+      },
+      "title": "It's Raining Lemmings",
+      "bundledArchiveSHA256": "ab231d4cf7985f416429c859113385b7bebccd4686d8e6acc72026b5bd89d2de",
+      "initialStateHash": "e9f26295d4ed48f4750690e754821c5513e68d0fccc1a7cc525920a76578a775",
+      "mechanics": "golems",
+      "clock": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeReplaySHA256": "044c82b797c632eabd9ca870aa7d335da19d7f6badc98258534b0d13c38e5d60",
+      "nativeSaved": 60,
+      "required": 60,
+      "nativeCompletionTick": 744,
+      "difficultyScore": 309.45344533045875,
+      "probeRuns": 10,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/044c82b797c632eabd9ca870aa7d335da19d7f6badc98258534b0d13c38e5d60.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/044c82b797c632eabd9ca870aa7d335da19d7f6badc98258534b0d13c38e5d60.profile.json",
+      "sourceOriginIdentity": {
+        "engine": "classic",
+        "levelID": "Martin Zurlinden 02.dat#6",
+        "packID": "fan:lldb-245"
+      },
+      "sourceURL": "https://lldb.camanis.net/level/245/7",
+      "sourceReplaySHA256": "9593f795e3fa645aaca303b5f1b5a45fd563b2719c14223162c4dd7cd9ebaed5",
+      "sourceHeaderSaved": 60,
+      "sourceHeaderTicks": 743,
+      "sourceActionDerivation": "verified one-tick conversion from archived published replay",
+      "sourceActionDerivationVerified": true,
+      "sourceOutcomeParity": true,
+      "transferFromAnotherBundledPack": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "packID": "fan:lldb-553",
+        "levelID": "Lemmings Plus DOS Project - 08 - Medi (Part 2).dat#9"
+      },
+      "title": "The Diving Board",
+      "bundledArchiveSHA256": "b9b763a725cf6c717f0c0c4ce65619cddbc0deadb2aef9acb55f1dd87b9483ec",
+      "initialStateHash": "07ffa6469c888002f35e86a6aab5b2a7560bba81e1af9abe6fb54414d030c0c6",
+      "mechanics": "golems",
+      "clock": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeReplaySHA256": "1ae0764e7765e6716b37b86da747a40741fde0964192bfd9abe8d55d1df7d1ca",
+      "nativeSaved": 60,
+      "required": 57,
+      "nativeCompletionTick": 2616,
+      "difficultyScore": 329.8452247540085,
+      "probeRuns": 10,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/1ae0764e7765e6716b37b86da747a40741fde0964192bfd9abe8d55d1df7d1ca.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/1ae0764e7765e6716b37b86da747a40741fde0964192bfd9abe8d55d1df7d1ca.profile.json",
+      "sourceOriginIdentity": {
+        "engine": "classic",
+        "levelID": "Lemmings Plus DOS Project - 08 - Medi (Part 2).dat#9",
+        "packID": "fan:lldb-553"
+      },
+      "sourceURL": "https://lldb.camanis.net/level/553/20",
+      "sourceReplaySHA256": "0043809675ae45152ce721250184b16fedd23036891c9d176797f66f1431dad6",
+      "sourceHeaderSaved": 60,
+      "sourceHeaderTicks": 2615,
+      "sourceActionDerivation": "verified one-tick conversion from archived published replay",
+      "sourceActionDerivationVerified": true,
+      "sourceOutcomeParity": true,
+      "transferFromAnotherBundledPack": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "packID": "fan:lldb-553",
+        "levelID": "Lemmings Plus DOS Project - 08 - Medi (Part 2).dat#0"
+      },
+      "title": "The Long Road To Lemming High",
+      "bundledArchiveSHA256": "b9b763a725cf6c717f0c0c4ce65619cddbc0deadb2aef9acb55f1dd87b9483ec",
+      "initialStateHash": "47773050254d8201f22104a9576ae65be2d5055548d0fc9ab0aa5c1ec7931b60",
+      "mechanics": "golems",
+      "clock": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeReplaySHA256": "2f70168145cf29f0665818a1093fa8091823d699eaf4f69591396579ebb35c72",
+      "nativeSaved": 59,
+      "required": 30,
+      "nativeCompletionTick": 2918,
+      "difficultyScore": 461.31055961771364,
+      "probeRuns": 10,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/2f70168145cf29f0665818a1093fa8091823d699eaf4f69591396579ebb35c72.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/2f70168145cf29f0665818a1093fa8091823d699eaf4f69591396579ebb35c72.profile.json",
+      "sourceOriginIdentity": {
+        "engine": "classic",
+        "levelID": "Lemmings Plus DOS Project - 08 - Medi (Part 2).dat#0",
+        "packID": "fan:lldb-553"
+      },
+      "sourceURL": "https://lldb.camanis.net/level/553/11",
+      "sourceReplaySHA256": "39b13e8cff01e147160f95f327a5458c8a274fe3522955f273322e95938c4161",
+      "sourceHeaderSaved": 59,
+      "sourceHeaderTicks": 2919,
+      "sourceActionDerivation": "verified one-tick conversion from archived published replay",
+      "sourceActionDerivationVerified": true,
+      "sourceOutcomeParity": true,
+      "transferFromAnotherBundledPack": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "packID": "fan:lldb-245",
+        "levelID": "Martin Zurlinden 02.dat#5"
+      },
+      "title": "It's a Magical World",
+      "bundledArchiveSHA256": "ab231d4cf7985f416429c859113385b7bebccd4686d8e6acc72026b5bd89d2de",
+      "initialStateHash": "8e3d5c2356eab0313daae09cc12df78d3aecffe687d602b59afb0566dd15d1e8",
+      "mechanics": "golems",
+      "clock": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeReplaySHA256": "4f11591ef7a93145c93b6cbe5acf96ab16dbc153874235b94a6ead18b7631c0a",
+      "nativeSaved": 40,
+      "required": 40,
+      "nativeCompletionTick": 1938,
+      "difficultyScore": 463.4563774276943,
+      "probeRuns": 10,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/4f11591ef7a93145c93b6cbe5acf96ab16dbc153874235b94a6ead18b7631c0a.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/4f11591ef7a93145c93b6cbe5acf96ab16dbc153874235b94a6ead18b7631c0a.profile.json",
+      "sourceOriginIdentity": {
+        "engine": "classic",
+        "levelID": "Martin Zurlinden 02.dat#5",
+        "packID": "fan:lldb-245"
+      },
+      "sourceURL": "https://lldb.camanis.net/level/245/6",
+      "sourceReplaySHA256": "8ea1eae09d7cd7689b90e8cc6133df0fcdfcd814451bf0d613ca7cb684995afd",
+      "sourceHeaderSaved": 40,
+      "sourceHeaderTicks": 1938,
+      "sourceActionDerivation": "verified one-tick conversion from archived published replay",
+      "sourceActionDerivationVerified": true,
+      "sourceOutcomeParity": true,
+      "transferFromAnotherBundledPack": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "packID": "fan:lldb-553",
+        "levelID": "Lemmings Plus DOS Project - 09 - Medi (Part 3).dat#7"
+      },
+      "title": "Way Up High",
+      "bundledArchiveSHA256": "b9b763a725cf6c717f0c0c4ce65619cddbc0deadb2aef9acb55f1dd87b9483ec",
+      "initialStateHash": "eb1f6ce2a9687131990e42c53a4d32ded9436338981d0f8311057318ba5c65a6",
+      "mechanics": "golems",
+      "clock": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeReplaySHA256": "58d02fe2402ae79337ff42028aabb73e97362cf63c4e9dc0c850399eac106ca3",
+      "nativeSaved": 19,
+      "required": 19,
+      "nativeCompletionTick": 1877,
+      "difficultyScore": 427.11708894878706,
+      "probeRuns": 10,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/58d02fe2402ae79337ff42028aabb73e97362cf63c4e9dc0c850399eac106ca3.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/58d02fe2402ae79337ff42028aabb73e97362cf63c4e9dc0c850399eac106ca3.profile.json",
+      "sourceOriginIdentity": {
+        "engine": "classic",
+        "levelID": "Lemmings Plus DOS Project - 09 - Medi (Part 3).dat#7",
+        "packID": "fan:lldb-553"
+      },
+      "sourceURL": "https://lldb.camanis.net/level/553/28",
+      "sourceReplaySHA256": "3af49b709d166c6ca6d8dbd8c5fc7cb6eacac915eeda450d81a5f04678239515",
+      "sourceHeaderSaved": 19,
+      "sourceHeaderTicks": 1876,
+      "sourceActionDerivation": "verified one-tick conversion from archived published replay",
+      "sourceActionDerivationVerified": true,
+      "sourceOutcomeParity": true,
+      "transferFromAnotherBundledPack": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "packID": "fan:lldb-553",
+        "levelID": "Lemmings Plus DOS Project - 08 - Medi (Part 2).dat#3"
+      },
+      "title": "All Roads Lead To Home",
+      "bundledArchiveSHA256": "b9b763a725cf6c717f0c0c4ce65619cddbc0deadb2aef9acb55f1dd87b9483ec",
+      "initialStateHash": "1262512e1a66ee6d3eba9b974507c54182dbe10b66c0cf1553c9e801c2bf4f00",
+      "mechanics": "golems",
+      "clock": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeReplaySHA256": "5abcc8013e70afaadf1ccff25f49da08aa7cff2e657509b0a0d67003d2dcfd8e",
+      "nativeSaved": 80,
+      "required": 40,
+      "nativeCompletionTick": 1696,
+      "difficultyScore": 507.44184323380006,
+      "probeRuns": 10,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/5abcc8013e70afaadf1ccff25f49da08aa7cff2e657509b0a0d67003d2dcfd8e.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/5abcc8013e70afaadf1ccff25f49da08aa7cff2e657509b0a0d67003d2dcfd8e.profile.json",
+      "sourceOriginIdentity": {
+        "engine": "classic",
+        "levelID": "Lemmings Plus DOS Project - 08 - Medi (Part 2).dat#3",
+        "packID": "fan:lldb-553"
+      },
+      "sourceURL": "https://lldb.camanis.net/level/553/14",
+      "sourceReplaySHA256": "d1118ca7d1068da8bb3a7d00d7a9329ec094507f66b890792c3e055cb7cc2735",
+      "sourceHeaderSaved": 80,
+      "sourceHeaderTicks": 1695,
+      "sourceActionDerivation": "verified one-tick conversion from archived published replay",
+      "sourceActionDerivationVerified": true,
+      "sourceOutcomeParity": true,
+      "transferFromAnotherBundledPack": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "packID": "fan:lldb-394",
+        "levelID": "pieuw02.dat#3"
+      },
+      "title": "Diggin' the Air",
+      "bundledArchiveSHA256": "012f8d6fde059a9781d2293d00e4426595c281d7c7a8963caaa4ff4d5c1e123c",
+      "initialStateHash": "586d2923b7523f584e892f8674e524c96bbba7eadce189c7500faee2c1fd18bc",
+      "mechanics": "golems",
+      "clock": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeReplaySHA256": "7bf1d4ea0b9f7ecd1032c4dfe9450346eef3cc3a0e5f4eba007de4b73944a579",
+      "nativeSaved": 20,
+      "required": 20,
+      "nativeCompletionTick": 2470,
+      "difficultyScore": 232.0365903231496,
+      "probeRuns": 10,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/7bf1d4ea0b9f7ecd1032c4dfe9450346eef3cc3a0e5f4eba007de4b73944a579.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/7bf1d4ea0b9f7ecd1032c4dfe9450346eef3cc3a0e5f4eba007de4b73944a579.profile.json",
+      "sourceOriginIdentity": {
+        "engine": "classic",
+        "levelID": "pieuw02.dat#3",
+        "packID": "fan:lldb-394"
+      },
+      "sourceURL": "https://lldb.camanis.net/level/394/4",
+      "sourceReplaySHA256": "1b04220b06afef3ca92288b31215a43f5cac173987019035ca967e2b0392f925",
+      "sourceHeaderSaved": 20,
+      "sourceHeaderTicks": 2473,
+      "sourceActionDerivation": "verified one-tick conversion from archived published replay",
+      "sourceActionDerivationVerified": true,
+      "sourceOutcomeParity": false,
+      "transferFromAnotherBundledPack": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "packID": "fan:lldb-553",
+        "levelID": "Lemmings Plus DOS Project - 07 - Medi (Part 1).dat#0"
+      },
+      "title": "Secret to Success",
+      "bundledArchiveSHA256": "b9b763a725cf6c717f0c0c4ce65619cddbc0deadb2aef9acb55f1dd87b9483ec",
+      "initialStateHash": "f59c512240153e7ffe234b4126b8d6d18aba79bbfad4dc0d85928dd796877f52",
+      "mechanics": "golems",
+      "clock": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeReplaySHA256": "91eb1a62358bcd3617dccfb4f20edcc612f0c1d23a23a752ff4119f4e3dc8b10",
+      "nativeSaved": 60,
+      "required": 54,
+      "nativeCompletionTick": 2171,
+      "difficultyScore": 501.0092200382048,
+      "probeRuns": 10,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/91eb1a62358bcd3617dccfb4f20edcc612f0c1d23a23a752ff4119f4e3dc8b10.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/91eb1a62358bcd3617dccfb4f20edcc612f0c1d23a23a752ff4119f4e3dc8b10.profile.json",
+      "sourceOriginIdentity": {
+        "engine": "classic",
+        "levelID": "Lemmings Plus DOS Project - 07 - Medi (Part 1).dat#0",
+        "packID": "fan:lldb-553"
+      },
+      "sourceURL": "https://lldb.camanis.net/level/553/1",
+      "sourceReplaySHA256": "45ec765133a74c09b1d604f432b0309d9ffbbd4941feafe9f0f77847cd409f44",
+      "sourceHeaderSaved": 60,
+      "sourceHeaderTicks": 2170,
+      "sourceActionDerivation": "verified one-tick conversion from archived published replay",
+      "sourceActionDerivationVerified": true,
+      "sourceOutcomeParity": true,
+      "transferFromAnotherBundledPack": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "packID": "fan:lldb-553",
+        "levelID": "Lemmings Plus DOS Project - 08 - Medi (Part 2).dat#4"
+      },
+      "title": "Shooting Star",
+      "bundledArchiveSHA256": "b9b763a725cf6c717f0c0c4ce65619cddbc0deadb2aef9acb55f1dd87b9483ec",
+      "initialStateHash": "36328d3d2459ae9a28890c6757649c61c7995fd16ea869d9308a51f01dc34229",
+      "mechanics": "golems",
+      "clock": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeReplaySHA256": "95bde97b36000be2b324823a893742e5ad8e9257a87ffeb3d933dc3055c2c97c",
+      "nativeSaved": 38,
+      "required": 38,
+      "nativeCompletionTick": 1078,
+      "difficultyScore": 276.85998406338314,
+      "probeRuns": 10,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/95bde97b36000be2b324823a893742e5ad8e9257a87ffeb3d933dc3055c2c97c.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/95bde97b36000be2b324823a893742e5ad8e9257a87ffeb3d933dc3055c2c97c.profile.json",
+      "sourceOriginIdentity": {
+        "engine": "classic",
+        "levelID": "Lemmings Plus DOS Project - 08 - Medi (Part 2).dat#4",
+        "packID": "fan:lldb-553"
+      },
+      "sourceURL": "https://lldb.camanis.net/level/553/15",
+      "sourceReplaySHA256": "a700c9eadc72bdd64a90460c7a338ebed06653fbd11cb250c23d8088d2e4d5de",
+      "sourceHeaderSaved": 38,
+      "sourceHeaderTicks": 1077,
+      "sourceActionDerivation": "verified one-tick conversion from archived published replay",
+      "sourceActionDerivationVerified": true,
+      "sourceOutcomeParity": true,
+      "transferFromAnotherBundledPack": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "packID": "fan:lldb-553",
+        "levelID": "Lemmings Plus DOS Project - 07 - Medi (Part 1).dat#9"
+      },
+      "title": "Bob's Mistake",
+      "bundledArchiveSHA256": "b9b763a725cf6c717f0c0c4ce65619cddbc0deadb2aef9acb55f1dd87b9483ec",
+      "initialStateHash": "bbaf1da4db5254f658ef6845732edea8105bab1d772b4485403df0b9bad96c2f",
+      "mechanics": "golems",
+      "clock": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeReplaySHA256": "aa0c41cb75adae781ab7f97324b752f67454ba8fc2a54ecad9a8587060ff752d",
+      "nativeSaved": 50,
+      "required": 50,
+      "nativeCompletionTick": 2488,
+      "difficultyScore": 370.28113008904074,
+      "probeRuns": 10,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/aa0c41cb75adae781ab7f97324b752f67454ba8fc2a54ecad9a8587060ff752d.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/aa0c41cb75adae781ab7f97324b752f67454ba8fc2a54ecad9a8587060ff752d.profile.json",
+      "sourceOriginIdentity": {
+        "engine": "classic",
+        "levelID": "Lemmings Plus DOS Project - 07 - Medi (Part 1).dat#9",
+        "packID": "fan:lldb-553"
+      },
+      "sourceURL": "https://lldb.camanis.net/level/553/10",
+      "sourceReplaySHA256": "19c034fb27c0cffac5f385517d3e4c35e72db5de7446076f8b86528c73f8b897",
+      "sourceHeaderSaved": 50,
+      "sourceHeaderTicks": 2485,
+      "sourceActionDerivation": "verified one-tick conversion from archived published replay",
+      "sourceActionDerivationVerified": true,
+      "sourceOutcomeParity": false,
+      "transferFromAnotherBundledPack": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "packID": "fan:lldb-245",
+        "levelID": "Martin Zurlinden 02.dat#8"
+      },
+      "title": "Cliffhanger",
+      "bundledArchiveSHA256": "ab231d4cf7985f416429c859113385b7bebccd4686d8e6acc72026b5bd89d2de",
+      "initialStateHash": "69fdf860149bfce9fc4f225afc9acf90a869cc1866e12954b78456d85f103c83",
+      "mechanics": "golems",
+      "clock": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeReplaySHA256": "af76e23de81568ca7b11a8bf1c1f94c1a394e5d5479113168128f43c6a5ff905",
+      "nativeSaved": 30,
+      "required": 30,
+      "nativeCompletionTick": 1603,
+      "difficultyScore": 269.74583496625297,
+      "probeRuns": 10,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/af76e23de81568ca7b11a8bf1c1f94c1a394e5d5479113168128f43c6a5ff905.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/af76e23de81568ca7b11a8bf1c1f94c1a394e5d5479113168128f43c6a5ff905.profile.json",
+      "sourceOriginIdentity": {
+        "engine": "classic",
+        "levelID": "Martin Zurlinden 02.dat#8",
+        "packID": "fan:lldb-245"
+      },
+      "sourceURL": "https://lldb.camanis.net/level/245/9",
+      "sourceReplaySHA256": "2a3567a6c484d98138db7ff7c8caf1f8f8e377b42cec7818f57d33487071654a",
+      "sourceHeaderSaved": 30,
+      "sourceHeaderTicks": 1603,
+      "sourceActionDerivation": "verified one-tick conversion from archived published replay",
+      "sourceActionDerivationVerified": true,
+      "sourceOutcomeParity": true,
+      "transferFromAnotherBundledPack": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "packID": "fan:lldb-245",
+        "levelID": "Martin Zurlinden 02.dat#4"
+      },
+      "title": "The Leap from the Lion's Head",
+      "bundledArchiveSHA256": "ab231d4cf7985f416429c859113385b7bebccd4686d8e6acc72026b5bd89d2de",
+      "initialStateHash": "472d2ffad30b3a7c2f5a5c462797ff42b25d97115c675f74696f72da04d63f73",
+      "mechanics": "golems",
+      "clock": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeReplaySHA256": "c4f20307d5ce2bd74390aa6f50b580a2e20885c7af277a606c6978edd779dc5f",
+      "nativeSaved": 60,
+      "required": 60,
+      "nativeCompletionTick": 2117,
+      "difficultyScore": 369.3857521410088,
+      "probeRuns": 10,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/c4f20307d5ce2bd74390aa6f50b580a2e20885c7af277a606c6978edd779dc5f.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/c4f20307d5ce2bd74390aa6f50b580a2e20885c7af277a606c6978edd779dc5f.profile.json",
+      "sourceOriginIdentity": {
+        "engine": "classic",
+        "levelID": "Martin Zurlinden 02.dat#4",
+        "packID": "fan:lldb-245"
+      },
+      "sourceURL": "https://lldb.camanis.net/level/245/5",
+      "sourceReplaySHA256": "2532269d9e81d174cca3b8568ca5a707fd96407360596b9891dcc1014055c57b",
+      "sourceHeaderSaved": 60,
+      "sourceHeaderTicks": 2116,
+      "sourceActionDerivation": "verified one-tick conversion from archived published replay",
+      "sourceActionDerivationVerified": true,
+      "sourceOutcomeParity": true,
+      "transferFromAnotherBundledPack": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "packID": "fan:lldb-245",
+        "levelID": "Martin Zurlinden 02.dat#7"
+      },
+      "title": "Back in a minute...",
+      "bundledArchiveSHA256": "ab231d4cf7985f416429c859113385b7bebccd4686d8e6acc72026b5bd89d2de",
+      "initialStateHash": "570312ae18fbb706843628e205f000afdabd3c3efde00ccbdd48a73ca0b911bb",
+      "mechanics": "golems",
+      "clock": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeReplaySHA256": "ca71ad9a5bf2caa22edc88ce427b40b43748ff6b38e261565fe5cba468301821",
+      "nativeSaved": 61,
+      "required": 56,
+      "nativeCompletionTick": 4212,
+      "difficultyScore": 557.098459081006,
+      "probeRuns": 10,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/ca71ad9a5bf2caa22edc88ce427b40b43748ff6b38e261565fe5cba468301821.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/ca71ad9a5bf2caa22edc88ce427b40b43748ff6b38e261565fe5cba468301821.profile.json",
+      "sourceOriginIdentity": {
+        "engine": "classic",
+        "levelID": "Martin Zurlinden 02.dat#7",
+        "packID": "fan:lldb-245"
+      },
+      "sourceURL": "https://lldb.camanis.net/level/245/8",
+      "sourceReplaySHA256": "18500b83063eaebbbfb372b3daeebceeb075048358c8403428e1e6d4bc14b5b0",
+      "sourceHeaderSaved": 61,
+      "sourceHeaderTicks": 4213,
+      "sourceActionDerivation": "verified one-tick conversion from archived published replay",
+      "sourceActionDerivationVerified": true,
+      "sourceOutcomeParity": true,
+      "transferFromAnotherBundledPack": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "packID": "fan:lldb-496",
+        "levelID": "MARTPCK2.DAT#8"
+      },
+      "title": "Back in a minute...",
+      "bundledArchiveSHA256": "fbf2f7723f9042ccda838524e4a366e035f49c34d2d1422a7eca9017a9cb01cb",
+      "initialStateHash": "570312ae18fbb706843628e205f000afdabd3c3efde00ccbdd48a73ca0b911bb",
+      "mechanics": "golems",
+      "clock": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeReplaySHA256": "54ceb46836e7d0e598a40ce6c124ed669296ffb71e3b57b345355087011b97d2",
+      "nativeSaved": 61,
+      "required": 56,
+      "nativeCompletionTick": 4212,
+      "difficultyScore": 557.098459081006,
+      "probeRuns": 10,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/54ceb46836e7d0e598a40ce6c124ed669296ffb71e3b57b345355087011b97d2.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/54ceb46836e7d0e598a40ce6c124ed669296ffb71e3b57b345355087011b97d2.profile.json",
+      "sourceOriginIdentity": {
+        "engine": "classic",
+        "levelID": "Martin Zurlinden 02.dat#7",
+        "packID": "fan:lldb-245"
+      },
+      "sourceURL": "https://lldb.camanis.net/level/245/8",
+      "sourceReplaySHA256": "18500b83063eaebbbfb372b3daeebceeb075048358c8403428e1e6d4bc14b5b0",
+      "sourceHeaderSaved": 61,
+      "sourceHeaderTicks": 4213,
+      "sourceActionDerivation": "verified one-tick conversion from archived published replay",
+      "sourceActionDerivationVerified": true,
+      "sourceOutcomeParity": false,
+      "transferFromAnotherBundledPack": true
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "packID": "fan:lldb-496",
+        "levelID": "MARTPCK2.DAT#4"
+      },
+      "title": "It's a Magical World",
+      "bundledArchiveSHA256": "fbf2f7723f9042ccda838524e4a366e035f49c34d2d1422a7eca9017a9cb01cb",
+      "initialStateHash": "17f9b84298d41c916aacc750bcbeccd18fa98b8c2c564999445d46d6d9ebf1da",
+      "mechanics": "golems",
+      "clock": "golems",
+      "nativeTickOffsetFromSource": -1,
+      "nativeReplaySHA256": "e4c3c312be99330e9658eda766f8f5dfc4f7b936b012276a003a3562a87ad5ba",
+      "nativeSaved": 40,
+      "required": 40,
+      "nativeCompletionTick": 1938,
+      "difficultyScore": 464.85637742769427,
+      "probeRuns": 10,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/e4c3c312be99330e9658eda766f8f5dfc4f7b936b012276a003a3562a87ad5ba.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/e4c3c312be99330e9658eda766f8f5dfc4f7b936b012276a003a3562a87ad5ba.profile.json",
+      "sourceOriginIdentity": {
+        "engine": "classic",
+        "levelID": "Martin Zurlinden 02.dat#5",
+        "packID": "fan:lldb-245"
+      },
+      "sourceURL": "https://lldb.camanis.net/level/245/6",
+      "sourceReplaySHA256": "8ea1eae09d7cd7689b90e8cc6133df0fcdfcd814451bf0d613ca7cb684995afd",
+      "sourceHeaderSaved": 40,
+      "sourceHeaderTicks": 1938,
+      "sourceActionDerivation": "verified one-tick conversion from archived published replay",
+      "sourceActionDerivationVerified": true,
+      "sourceOutcomeParity": false,
+      "transferFromAnotherBundledPack": true
+    }
+  ],
+  "attempts": [
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "geooPkG.dat#4",
+        "packID": "fan:lldb-108"
+      },
+      "sourceReplaySHA256": "6a5ef1bc1a7cf2fdaecc54ee318ca2b093e55dc18536dc71478e63cb84bf04b5",
+      "nativeSaved": 0,
+      "required": 13,
+      "nativeCompletionTick": 695,
+      "didWin": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Ouch Me Head.lvl#-1",
+        "packID": "fan:lldb-202"
+      },
+      "sourceReplaySHA256": "0c1249d4218292bf5df9f708824081bdc7878d38cc925ba390d4cb0fad0da163",
+      "error": "Ouch Me Head.lvl#-1 engine refused to queue blocker for lemming 0 at tick 88"
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "pieuw02.dat#0",
+        "packID": "fan:lldb-394"
+      },
+      "sourceReplaySHA256": "023f48d4e7fbf0fc2cf438185636b1d59d5222b81937c54127b3a3ad19fa0711",
+      "nativeSaved": 23,
+      "required": 47,
+      "nativeCompletionTick": 1022,
+      "didWin": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "geooPkG.dat#5",
+        "packID": "fan:lldb-108"
+      },
+      "sourceReplaySHA256": "d3313c556ab38a31fa1f93a3904795901c40b260e0723ed1f4cbec1a2e83eef3",
+      "error": "geooPkG.dat#5 engine refused to queue basher for lemming 34 at tick 1267"
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "geooPkG.dat#5",
+        "packID": "fan:lldb-108"
+      },
+      "sourceReplaySHA256": "d3ac3b0d1b53c514338dc2e3c2f138cc90459c691ee09ef74058a0f98b18a71c",
+      "error": "geooPkG.dat#5 engine refused to queue basher for lemming 29 at tick 1051"
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Lemmings Plus DOS Project - 07 - Medi (Part 1).dat#9",
+        "packID": "fan:lldb-553"
+      },
+      "sourceReplaySHA256": "19c034fb27c0cffac5f385517d3e4c35e72db5de7446076f8b86528c73f8b897",
+      "nativeSaved": 50,
+      "required": 50,
+      "nativeCompletionTick": 2488,
+      "didWin": true
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "geooPkG.dat#2",
+        "packID": "fan:lldb-108"
+      },
+      "sourceReplaySHA256": "cab743d3ef37c844f2475f75850ee06224e5cdc3f157415293439910eb67235c",
+      "nativeSaved": 1,
+      "required": 38,
+      "nativeCompletionTick": 779,
+      "didWin": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "geooPkG.dat#2",
+        "packID": "fan:lldb-108"
+      },
+      "sourceReplaySHA256": "aadf8f34cbb9fab0aed911bd257b12b4027c06c2d661971366a480c88e299fd9",
+      "nativeSaved": 0,
+      "required": 38,
+      "nativeCompletionTick": 764,
+      "didWin": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "geooPkG.dat#2",
+        "packID": "fan:lldb-108"
+      },
+      "sourceReplaySHA256": "1c34bdf23828c7df8f6d53d1db9f57fed18e4cad76e7d67f530140bb06d0057e",
+      "nativeSaved": 0,
+      "required": 38,
+      "nativeCompletionTick": 765,
+      "didWin": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Lemmings Plus DOS Project - 08 - Medi (Part 2).dat#4",
+        "packID": "fan:lldb-553"
+      },
+      "sourceReplaySHA256": "a700c9eadc72bdd64a90460c7a338ebed06653fbd11cb250c23d8088d2e4d5de",
+      "nativeSaved": 38,
+      "required": 38,
+      "nativeCompletionTick": 1078,
+      "didWin": true
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "pieuw02.dat#2",
+        "packID": "fan:lldb-394"
+      },
+      "sourceReplaySHA256": "db9c473b4d773aedbb335d19138abe57656623a39d817f3bb8279dfc395b2133",
+      "error": "pieuw02.dat#2 engine refused to queue blocker for lemming 2 at tick 607"
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "pieuw02.dat#3",
+        "packID": "fan:lldb-394"
+      },
+      "sourceReplaySHA256": "1b04220b06afef3ca92288b31215a43f5cac173987019035ca967e2b0392f925",
+      "nativeSaved": 20,
+      "required": 20,
+      "nativeCompletionTick": 2470,
+      "didWin": true
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Askesis.lvl#-1",
+        "packID": "fan:lldb-202"
+      },
+      "sourceReplaySHA256": "79a6b7803338016e128ad12121985533ec6c522a2a39539a840f3b94133a1af1",
+      "error": "Askesis.lvl#-1 engine refused to queue builder for lemming 0 at tick 308"
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "LemmingsInMotion.lvl#-1",
+        "packID": "fan:lldb-202"
+      },
+      "sourceReplaySHA256": "9636a3f495764691e6daf070496e52e05e22147dd432ed49ffc492c6137dc692",
+      "error": "LemmingsInMotion.lvl#-1 engine refused to queue digger for lemming 2 at tick 218"
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Lemmings Plus DOS Project - 09 - Medi (Part 3).dat#7",
+        "packID": "fan:lldb-553"
+      },
+      "sourceReplaySHA256": "3af49b709d166c6ca6d8dbd8c5fc7cb6eacac915eeda450d81a5f04678239515",
+      "nativeSaved": 19,
+      "required": 19,
+      "nativeCompletionTick": 1877,
+      "didWin": true
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Lemmings Plus DOS Project - 08 - Medi (Part 2).dat#3",
+        "packID": "fan:lldb-553"
+      },
+      "sourceReplaySHA256": "d1118ca7d1068da8bb3a7d00d7a9329ec094507f66b890792c3e055cb7cc2735",
+      "nativeSaved": 80,
+      "required": 40,
+      "nativeCompletionTick": 1696,
+      "didWin": true
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "geooPkG.dat#1",
+        "packID": "fan:lldb-108"
+      },
+      "sourceReplaySHA256": "d36cc1c89f229051f483d7898e03652c4719bbb8e310bcc4d45589bb20823a48",
+      "error": "geooPkG.dat#1 engine refused to queue digger for lemming 1 at tick 296"
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "geooPkG.dat#1",
+        "packID": "fan:lldb-108"
+      },
+      "sourceReplaySHA256": "8c3e65f2ad8e28f00dd4a2c019bad152416674119bd8a6a83107e114ce136744",
+      "error": "geooPkG.dat#1 engine refused to queue digger for lemming 1 at tick 296"
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Martin Zurlinden 02.dat#5",
+        "packID": "fan:lldb-245"
+      },
+      "sourceReplaySHA256": "8ea1eae09d7cd7689b90e8cc6133df0fcdfcd814451bf0d613ca7cb684995afd",
+      "nativeSaved": 40,
+      "required": 40,
+      "nativeCompletionTick": 1938,
+      "didWin": true
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Lemmings Plus DOS Project - 08 - Medi (Part 2).dat#0",
+        "packID": "fan:lldb-553"
+      },
+      "sourceReplaySHA256": "39b13e8cff01e147160f95f327a5458c8a274fe3522955f273322e95938c4161",
+      "nativeSaved": 59,
+      "required": 30,
+      "nativeCompletionTick": 2918,
+      "didWin": true
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Lemmings Plus DOS Project - 07 - Medi (Part 1).dat#0",
+        "packID": "fan:lldb-553"
+      },
+      "sourceReplaySHA256": "45ec765133a74c09b1d604f432b0309d9ffbbd4941feafe9f0f77847cd409f44",
+      "nativeSaved": 60,
+      "required": 54,
+      "nativeCompletionTick": 2171,
+      "didWin": true
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Martin Zurlinden 02.dat#7",
+        "packID": "fan:lldb-245"
+      },
+      "sourceReplaySHA256": "18500b83063eaebbbfb372b3daeebceeb075048358c8403428e1e6d4bc14b5b0",
+      "nativeSaved": 61,
+      "required": 56,
+      "nativeCompletionTick": 4212,
+      "didWin": true
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Martin Zurlinden 02.dat#6",
+        "packID": "fan:lldb-245"
+      },
+      "sourceReplaySHA256": "9593f795e3fa645aaca303b5f1b5a45fd563b2719c14223162c4dd7cd9ebaed5",
+      "nativeSaved": 60,
+      "required": 60,
+      "nativeCompletionTick": 744,
+      "didWin": true
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Martin Zurlinden 02.dat#4",
+        "packID": "fan:lldb-245"
+      },
+      "sourceReplaySHA256": "2532269d9e81d174cca3b8568ca5a707fd96407360596b9891dcc1014055c57b",
+      "nativeSaved": 60,
+      "required": 60,
+      "nativeCompletionTick": 2117,
+      "didWin": true
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "geooPkG.dat#3",
+        "packID": "fan:lldb-108"
+      },
+      "sourceReplaySHA256": "e5f11397426b8d12bce844551e6f3aed0f96278a17279bba555cda45f01206f3",
+      "nativeSaved": 0,
+      "required": 3,
+      "nativeCompletionTick": 466,
+      "didWin": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "geooPkG.dat#3",
+        "packID": "fan:lldb-108"
+      },
+      "sourceReplaySHA256": "ddde928a1e2b9f8779bc70759f5549f3ce08d3e1c7d05af6fe083aad47fb7783",
+      "nativeSaved": 0,
+      "required": 3,
+      "nativeCompletionTick": 477,
+      "didWin": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "LemmingsInArms.lvl#-1",
+        "packID": "fan:lldb-202"
+      },
+      "sourceReplaySHA256": "75eb105de71e567f55b0fb55cb322ef9006c68e4e71f97cf7b3aa834c29a524e",
+      "error": "LemmingsInArms.lvl#-1 engine refused to queue climber for lemming 5 at tick 363"
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "pieuw02.dat#6",
+        "packID": "fan:lldb-394"
+      },
+      "sourceReplaySHA256": "3630e92dd027583c4d61d1602a21dbd0dffc164f09e3815540ffbedcb212c685",
+      "nativeSaved": 0,
+      "required": 100,
+      "nativeCompletionTick": 6122,
+      "didWin": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "pieuw02.dat#6",
+        "packID": "fan:lldb-394"
+      },
+      "sourceReplaySHA256": "dfafd09ea38c68ff11903cff68824960ea6334264f21137696819f185cde838a",
+      "nativeSaved": 100,
+      "required": 100,
+      "nativeCompletionTick": 5905,
+      "didWin": true
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Martin Zurlinden 02.dat#8",
+        "packID": "fan:lldb-245"
+      },
+      "sourceReplaySHA256": "9e8774b4d75fb63e2e76c4037545b7e727f796e27ea451fb87a86b7144b66778",
+      "nativeSaved": 15,
+      "required": 30,
+      "nativeCompletionTick": 3062,
+      "didWin": false
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Martin Zurlinden 02.dat#8",
+        "packID": "fan:lldb-245"
+      },
+      "sourceReplaySHA256": "2a3567a6c484d98138db7ff7c8caf1f8f8e377b42cec7818f57d33487071654a",
+      "nativeSaved": 30,
+      "required": 30,
+      "nativeCompletionTick": 1603,
+      "didWin": true
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Lemmings Plus DOS Project - 08 - Medi (Part 2).dat#9",
+        "packID": "fan:lldb-553"
+      },
+      "sourceReplaySHA256": "0043809675ae45152ce721250184b16fedd23036891c9d176797f66f1431dad6",
+      "nativeSaved": 60,
+      "required": 57,
+      "nativeCompletionTick": 2616,
+      "didWin": true
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Lemmings Plus DOS Project - 08 - Medi (Part 2).dat#9",
+        "packID": "fan:lldb-553"
+      },
+      "sourceReplaySHA256": "041b53e96f14aae9b3a55511f7de98c1a81ab62f0d869d99c4c8a56f8d28ebd6",
+      "nativeSaved": 60,
+      "required": 57,
+      "nativeCompletionTick": 1732,
+      "didWin": true
+    }
+  ]
+}

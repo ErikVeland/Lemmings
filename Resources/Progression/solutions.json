@@ -177653,10 +177653,73 @@
         "action": {
           "assign": {
             "lemmingID": 0,
+            "skill": "digger"
+          }
+        },
+        "tick": 66
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 0,
             "skill": "miner"
           }
         },
         "tick": 69
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "digger"
+          }
+        },
+        "tick": 70
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "miner"
+          }
+        },
+        "tick": 73
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "digger"
+          }
+        },
+        "tick": 74
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        },
+        "tick": 115
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "climber"
+          }
+        },
+        "tick": 173
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        },
+        "tick": 268
       },
       {
         "action": {
@@ -177769,6 +177832,87 @@
           }
         },
         "tick": 298
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        },
+        "tick": 467
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        },
+        "tick": 668
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "digger"
+          }
+        },
+        "tick": 1042
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        },
+        "tick": 1340
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        },
+        "tick": 1533
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "miner"
+          }
+        },
+        "tick": 1631
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "miner"
+          }
+        },
+        "tick": 2035
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        },
+        "tick": 2188
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "digger"
+          }
+        },
+        "tick": 2430
       }
     ],
     "expected": {

@@ -180,7 +180,8 @@ struct GolemsObjectComparison: Codable {
                     let rendered = try ClassicLevelRenderer.render(level, groundSet: ground, specialGraphic: special,
                         objectSemantics: (compareGolemsObjects || golemsObjects) ? .golems : .forFanLevel(level, groundSet: ground))
                     let initial = try ClassicDOSSimulation(level: level, renderedLevel: rendered,
-                        mainDATAssets: assets(ports.appendingPathComponent("lemmings_dos_1991-07-30")), clock: fanClock)
+                        mainDATAssets: assets(ports.appendingPathComponent("lemmings_dos_1991-07-30")),
+                        mechanics: FanLevelLibrary.mechanics(for: pack), clock: fanClock)
                     try describe(id, level, initial)
                     let hash = ClassicDOSReplayRecorder.stateHash(of: initial)
                     guard compareGolemsObjects || hash == rows[index].initialHash else { throw LevelPlaylistError.invalidEntry }

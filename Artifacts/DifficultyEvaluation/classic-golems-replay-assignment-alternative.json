@@ -1,0 +1,24 @@
+{
+  "bundledArchive": "Content/LevelPacks/0430-Level-Design-Game-01.zip",
+  "bundledArchiveSHA256": "bdbf943f510410b7e4c304ff57a31b83134d51b32a6aeed2432eaa6f2804d835",
+  "description": "Opt-in Golems mechanics with source replay assignment rules on the exact bundled Pinpoint Accuracy level. Native outcome differs from the independent Golems player; this does not establish source parity or replace the default fan ledger row.",
+  "difficultyScore": 209.37035225048922,
+  "identity": {
+    "levelID": "LDChallenge01.dat#2",
+    "packID": "fan:lldb-430"
+  },
+  "nativeCompletionTick": 233,
+  "nativeInitialHash": "3ce9042abfa73a0292819735840c775b0444970517c327d79e669c6a445b053e",
+  "nativeReplayPath": "Artifacts/DifficultyEvaluation/golems-profile-replays/pinpoint-accuracy.json",
+  "nativeReplaySHA256": "22042653665c046f8a6487615ad3fa42cb3bfbda9ae5958ee203d0357d3b294f",
+  "nativeRequired": 4,
+  "nativeSaved": 6,
+  "probeRuns": 10,
+  "profilePath": "Artifacts/DifficultyEvaluation/golems-profile-replays/pinpoint-accuracy.profile.json",
+  "selectedFanMechanics": "original",
+  "sourceCompletionCycle": 362,
+  "sourceReplayRules": "golemsFallingBuilder",
+  "sourceReplaySHA256": "042a6744b089fe315a2d7c4c05e91356a154d6f34b2d5b1fc4f94bd7ce2239ad",
+  "sourceRequired": 4,
+  "sourceSaved": 4
+}

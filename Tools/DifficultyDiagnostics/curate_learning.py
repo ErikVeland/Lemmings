@@ -38,7 +38,9 @@ def requires_full_rescue(row, replay):
 
 def features(row, replay):
     workers = collections.defaultdict(list)
-    for event in sorted(replay['events'], key=lambda e: (e['tick'], e.get('afterTick', False))):
+    completion_tick = replay.get('expected', {}).get('ticks', float('inf'))
+    active_events = (event for event in replay['events'] if event['tick'] <= completion_tick)
+    for event in sorted(active_events, key=lambda e: (e['tick'], e.get('afterTick', False))):
         action = event['action'].get('assign')
         if action and (not workers[action['lemmingID']] or workers[action['lemmingID']][-1] != action['skill']):
             workers[action['lemmingID']].append(action['skill'])
@@ -67,7 +69,7 @@ def select(pool, replays):
         if (replay and replay.get('expected', {}).get('didWin')
                 and replay['expected']['ticks'] > 0
                 and replay['initialStateHash'] == row['initialHash']
-                and all((0 if e.get('afterTick') else 1) <= e['tick'] <= replay['expected']['ticks']
+                and all((0 if e.get('afterTick') else 1) <= e['tick']
                         for e in replay['events'])):
             evidence[key(row)] = features(row, replay)
     chosen = {}; missing = []; used_signatures = set()
