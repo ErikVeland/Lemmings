@@ -6,7 +6,8 @@ The current public macOS release is 1.7.6 build 60. The
 the published full-soundtrack update, fan and sequel evidence, and validation
 limits. It includes the unpublished 1.7.4 and 1.7.5 changes. Optional slim and
 additional target archives are not published for this build. L2 and L3 remain
-Preview. The signed-app foreground launch check remains unverified.
+Preview. The signed-app foreground launch and controls-help checks passed after
+the user granted permission.
 Updated 2 October 2026 for the 1.7, 1.8 and 2.0 roadmap targets.
 Automated checks support the recorded routes;
 remaining compatibility and hardware claims still need validation. See the [gate register](ReleaseReadiness/gates.json)

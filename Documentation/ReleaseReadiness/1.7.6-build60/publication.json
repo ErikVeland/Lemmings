@@ -12,5 +12,19 @@
   },
   "publicFeedSHA256": "e23571df2f1d2476f71fe253bec64d469b68da1da541b6c13d14fe63904b7bd2",
   "publicFeedMatchesLocal": true,
-  "downloadHeadSucceeded": true
+  "downloadHeadSucceeded": true,
+  "postPublicationChecks": {
+    "userPermission": "explicit foreground and launch audio permission granted",
+    "signedLaunch": {
+      "result": "passed",
+      "seconds": 15,
+      "firstFrameSeconds": 4.106,
+      "musicAfterFirstFrame": true
+    },
+    "controlsHelp": {
+      "result": "passed",
+      "windowMode": "foreground",
+      "audio": "muted"
+    }
+  }
 }
