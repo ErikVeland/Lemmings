@@ -5,12 +5,12 @@ import AppKit
     static let seenKey = "WhatsNewSeenBuild"
     /// The release these notes describe. A test fails when Info.plist moves on
     /// to a new version and these notes stay behind.
-    static let notesVersion = "1.7.7"
-    static let subtitle = "Original cursors, clearer skills and a deeper nuke countdown"
+    static let notesVersion = "1.7.8"
+    static let subtitle = "Balanced cursor badges, a sharper nuke finish and more fan solutions"
     static let sections = [
-        ("Original cursors", "Old school uses the Amiga cross and square target. Choose either cursor in Gameplay settings. Skill icons are larger. The optional count is smaller."),
-        ("Classic skill backpacks", "Brown marks Climbers, orange marks Floaters, and purple marks both. Backpacks are optional: on with Modern, off with Original."),
-        ("Sound and fan levels", "The HD nuke countdown gradually removes high frequencies and adds bass. Fan-level compatibility and replay evidence also improve. Lemmings 2 and 3 remain Preview.")
+        ("Balanced cursor badges", "Skill icons, the red X and the optional count now match in height at both 1x and 2x. Sprite padding no longer makes an icon look smaller."),
+        ("A sharper nuke finish", "After the final pop, the music filter rapidly opens back up. The return continues through the explosion tails and results screen."),
+        ("More fan solutions", "The ledger now records 2,305 Classic fan wins. Golems compatibility and the learning path improve. Lemmings 2 and 3 remain Preview.")
     ]
     private let defaults: UserDefaults
     private let build: Int
