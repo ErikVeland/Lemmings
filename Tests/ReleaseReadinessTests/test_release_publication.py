@@ -20,6 +20,8 @@ class ReleasePublicationTests(unittest.TestCase):
         ).strip()
         self.archive = root / "UltimateLemmings-1.5-build45.zip"
         self.archive.write_bytes(b"test update archive")
+        self.slim = root / "UltimateLemmings-1.5-build45-slim.zip"
+        self.slim.write_bytes(b"slim download")
         self.notes = root / "ReleaseNotes.md"
         self.notes.write_text(f"Build: 45\nRelease commit: {self.commit}\n")
         self.appcast = root / "appcast.xml"
@@ -44,7 +46,8 @@ class ReleasePublicationTests(unittest.TestCase):
     def run_publication(self, *options, **extra):
         env = dict(os.environ, RELEASE_TAG="v1.5.0", RELEASE_VERSION="1.5",
                    RELEASE_COMMIT=self.commit, RELEASE_NOTES_PATH=str(self.notes),
-                   APPCAST_PATH=str(self.appcast), **extra)
+                   APPCAST_PATH=str(self.appcast), DOWNLOAD_ZIP=str(self.slim))
+        env.update(extra)
         return subprocess.run(
             ["zsh", "Scripts/publish-github-release.sh", *options, str(self.archive)],
             cwd=ROOT, env=env, capture_output=True, text=True, check=False
@@ -60,6 +63,17 @@ class ReleasePublicationTests(unittest.TestCase):
         result = self.run_publication("--check")
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("archive length", result.stderr)
+
+    def test_check_requires_a_slim_download(self):
+        result = self.run_publication("--check", DOWNLOAD_ZIP="")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("required slim fresh-install archive", result.stderr)
+
+    def test_check_rejects_a_missing_slim_download(self):
+        self.slim.unlink()
+        result = self.run_publication("--check")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("download archive does not exist", result.stderr)
 
     def test_check_rejects_wrong_feed_commit(self):
         self.write_appcast(commit="0" * 40)

@@ -22,7 +22,47 @@ private func testOptionsFollowInstalledData() throws {
         "Classic levels must follow campaign progress by default")
     try require(upgraded.skillCursorIconSize == .one && upgraded.skillCursorIconSize.multiplier == 2,
         "Existing players must default to real 2× artwork labelled 1×")
+    try require(upgraded.gameplayCursorStyle == .modern && ClassicSettings().gameplayCursorStyle == .modern,
+        "Modern cursor must be the default")
+    for style in GameplayCursorStyle.allCases {
+        var saved = ClassicSettings()
+        saved.gameplayCursorStyle = style
+        saved.experiencePreset = .custom
+        let restored = try JSONDecoder().decode(ClassicSettings.self, from: JSONEncoder().encode(saved))
+        try require(restored == saved, "Custom cursor choice must persist")
+    }
+    for (json, expected) in [
+        (#"{"experiencePreset":"original"}"#, GameplayCursorStyle.original),
+        (#"{"modernControlsEnabled":false}"#, .original),
+        (#"{"experiencePreset":"modern","modernControlsEnabled":false}"#, .modern),
+        (#"{"experiencePreset":"original","gameplayCursorStyle":"modern"}"#, .modern),
+        (#"{"experiencePreset":"modern","gameplayCursorStyle":"original"}"#, .original),
+        (#"{"experiencePreset":"original","gameplayCursorStyle":"unknown"}"#, .original)
+    ] {
+        let restored = try JSONDecoder().decode(ClassicSettings.self, from: Data(json.utf8))
+        try require(restored.gameplayCursorStyle == expected, "Cursor migration lost the saved choice or preset default")
+    }
     try require(upgraded.lemmingSelectionStyle == .modern, "Selection must default to Modern")
+    try require(upgraded.showClassicSkillBackpacks && ClassicSettings().showClassicSkillBackpacks,
+        "Modern must show skill backpacks by default")
+    for value in [false, true] {
+        var saved = ClassicSettings()
+        saved.showClassicSkillBackpacks = value
+        saved.experiencePreset = .custom
+        let restored = try JSONDecoder().decode(ClassicSettings.self, from: JSONEncoder().encode(saved))
+        try require(restored == saved, "An individual backpack choice must persist")
+    }
+    for (json, expected) in [
+        (#"{"experiencePreset":"original"}"#, false),
+        (#"{"modernControlsEnabled":false}"#, false),
+        (#"{"experiencePreset":"modern","modernControlsEnabled":false}"#, true),
+        (#"{"experiencePreset":"original","showClassicSkillBackpacks":true}"#, true),
+        (#"{"experiencePreset":"modern","showClassicSkillBackpacks":false}"#, false),
+        (#"{"experiencePreset":"original","showClassicSkillBackpacks":"invalid"}"#, false)
+    ] {
+        let restored = try JSONDecoder().decode(ClassicSettings.self, from: Data(json.utf8))
+        try require(restored.showClassicSkillBackpacks == expected, "Backpack migration changed an existing preference")
+    }
     for style in LemmingSelectionStyle.allCases {
         var settings = upgraded
         settings.lemmingSelectionStyle = style
@@ -98,12 +138,14 @@ private func testTargetingPresetsAndIconMigration() throws {
     settings.applyExperiencePreset(modern: false)
     try require(settings.experiencePreset == .original && !settings.favorApproachingLemmings
         && !settings.favorBombBlockers && !settings.favorBuilders && settings.skillCursorIconSize == .none
-        && settings.lemmingSelectionStyle == .none,
+        && settings.lemmingSelectionStyle == .none && !settings.showClassicSkillBackpacks
+        && settings.gameplayCursorStyle == .original,
         "Original must disable targeting aids and the icon")
     settings.applyExperiencePreset(modern: true)
     try require(settings.experiencePreset == .modern && settings.favorApproachingLemmings
         && settings.favorBombBlockers && settings.favorBuilders && settings.skillCursorIconSize == .one
-        && settings.lemmingSelectionStyle == .modern,
+        && settings.lemmingSelectionStyle == .modern && settings.showClassicSkillBackpacks
+        && settings.gameplayCursorStyle == .modern,
         "Modern must restore all targeting aids and the baseline icon")
     settings.experiencePreset = .custom
     settings.favorBombBlockers = false

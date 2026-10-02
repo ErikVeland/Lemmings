@@ -114,6 +114,8 @@ struct ReticleFeedback {
     }
   }
   let startCountdown = FreshLevelCountdown()
+  var gameplayCursorStyle: GameplayCursorStyle = .modern { didSet { needsDisplay = true } }
+  var showClassicSkillBackpacks = true { didSet { needsDisplay = true } }
   var showReticleCount = false
   var lemmingSelectionStyle: LemmingSelectionStyle = .modern { didSet { needsDisplay = true } }
     var skillCursorIconSize: SkillCursorIconSize = .one
@@ -721,6 +723,10 @@ struct ReticleFeedback {
     return dx * dx + dy * dy
   }
 
+  func hasLemming(at point: CGPoint) -> Bool {
+    session?.lemmings.contains { contains($0, point) } == true
+  }
+
   private func contains(_ lemming: SessionLemming, _ point: CGPoint) -> Bool {
     let box = Self.pickBox
     let x = CGFloat(lemming.x), y = CGFloat(lemming.y)
@@ -1271,6 +1277,9 @@ struct ReticleFeedback {
     guard let assets, !palette.isEmpty else { return }
     let direction: ClassicSpriteDirection = lemming.facingLeft ? .left : .right
     let pose = lemming.pose
+    let backpack = showClassicSkillBackpacks ? ClassicSkillBackpack.kind(for: lemming) : nil
+    let backpackKey = backpack.map { "-pack-\($0.rawValue)" } ?? ""
+    let backpackPadding = backpack == nil ? 0.0 : 2.0
     guard
       let animation = assets.animation(for: pose, direction: direction)
         ?? assets.animation(for: pose, direction: .none),
@@ -1278,15 +1287,17 @@ struct ReticleFeedback {
     else { return }
 
     if let frame = macArtwork?.lemming(pose: pose, left: lemming.facingLeft, tick: lemming.animationFrame) {
-      let key = "mac-\(pose.rawValue)-\(direction.rawValue)-\(lemming.animationFrame)"
-      let sprite = spriteCache[key] ?? frame.makeNSImage()
+      let key = "mac-\(pose.rawValue)-\(direction.rawValue)-\(lemming.animationFrame)\(backpackKey)"
+      let sprite = spriteCache[key] ?? (backpack == nil ? frame.makeNSImage() :
+        ClassicSkillBackpack.image(rgba: frame.rgba, width: frame.width, height: frame.height,
+          pixelScale: 2, pose: pose, left: lemming.facingLeft, kind: backpack))
       if let sprite {
         if spriteCache.count < 1500 { spriteCache[key] = sprite }
         let origin = viewport.viewPoint(fromLevel: CGPoint(
-          x: Double(lemming.x + animation.offsetX) + Double(frame.x) / 2,
+          x: Double(lemming.x + animation.offsetX) + Double(frame.x) / 2 - backpackPadding,
           y: Double(lemming.y + animation.offsetY) + Double(frame.y) / 2))
         var rect = CGRect(x: origin.x, y: origin.y,
-          width: Double(frame.width) * viewport.zoom / 2, height: Double(frame.height) * viewport.zoom / 2)
+          width: sprite.size.width * viewport.zoom / 2, height: sprite.size.height * viewport.zoom / 2)
         var fraction: CGFloat = 1
         if pose == .explosion { (rect, fraction) = bombPop(rect, tick: lemming.animationFrame) }
         guard rect.intersects(bounds), fraction > 0.01 else { return }
@@ -1305,18 +1316,18 @@ struct ReticleFeedback {
     }
 
     let index = abs(lemming.animationFrame) % animation.frames.count
-    let key = "\(pose.rawValue)-\(direction.rawValue)-\(index)"
+    let key = "\(pose.rawValue)-\(direction.rawValue)-\(index)\(backpackKey)"
     let sprite: NSImage
     if let cached = spriteCache[key] {
       sprite = cached
     } else {
-      guard let made = image(from: animation.frames[index]) else { return }
-      spriteCache[key] = made
+      guard let made = image(from: animation.frames[index], backpack: backpack, pose: pose, left: lemming.facingLeft) else { return }
+      if spriteCache.count < 1500 { spriteCache[key] = made }
       sprite = made
     }
 
     let levelOrigin = CGPoint(
-      x: CGFloat(lemming.x + animation.offsetX),
+      x: CGFloat(lemming.x + animation.offsetX) - backpackPadding,
       y: CGFloat(lemming.y + animation.offsetY))
     let origin = viewport.viewPoint(fromLevel: levelOrigin)
     var rect = CGRect(
@@ -1403,9 +1414,10 @@ struct ReticleFeedback {
     }
 
     // The reticle stays at the input position. Selection effects follow the target.
+    let occupied = hasLemming(at: point)
     GameCursor.drawPlayfieldPointer(at: cursorViewPoint, scale: viewport.zoom,
       tint: GameCursor.targetTint(eligible: target.map { session?.canAssign(skillIndex: selectedSkill(), to: $0.id) == true } == true,
-        occupied: session?.lemmings.contains { contains($0, point) } == true))
+        occupied: occupied), original: gameplayCursorStyle == .original, occupied: occupied)
 
     if showReticleCount {
       let centres = (session?.lemmings ?? []).map {
@@ -1580,7 +1592,13 @@ struct ReticleFeedback {
     }
   }
 
-  private func image(from frame: ClassicIndexedBitmap) -> NSImage? {
+  private func image(from frame: ClassicIndexedBitmap,
+                     backpack: ClassicSkillBackpack.Kind? = nil,
+                     pose: ClassicLemmingPose = .walking, left: Bool = false) -> NSImage? {
+    if let backpack, let rgba = try? frame.rgba(using: palette) {
+      return ClassicSkillBackpack.image(rgba: rgba, width: frame.width, height: frame.height,
+        pixelScale: 1, pose: pose, left: left, kind: backpack)
+    }
     guard
       let rgba = try? frame.rgba(using: palette),
       let provider = CGDataProvider(data: rgba as CFData),

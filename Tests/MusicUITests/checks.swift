@@ -151,6 +151,52 @@ extension AppUpdates {
     print("PASS upgrade notes persist only after acknowledgement, repeat for later builds and do not block a fresh install")
 }
 extension Lemmings2PlayWindow {
+    @MainActor fileprivate func checkNukeReturn() throws {
+        defer { stop() }
+        timer?.invalidate(); timer = nil
+        audioSettings.music = .silent
+        canvas.hdEffectsEnabled = true
+        prepareBriefing()
+        for tribe in [0, 1] {
+            let width = 512, height = 160
+            let solid = (0..<(width * height)).map { $0 / width >= 80 }
+            var fixture = try Lemmings2Runtime(configuration: .init(
+                width: width, height: height, pixels: solid.map { $0 ? 1 : 0 }, solid: solid,
+                palette: [UInt8](repeating: 0, count: 1024),
+                entrance: .init(x: 100, y: 40, width: 1, height: 1),
+                exits: [.init(x: 500, y: 60, width: 5, height: 20)],
+                skills: [.digger, .climber, .builder, .basher, .miner, .floater, .bomber, .blocker],
+                supplies: [Int](repeating: 10, count: 8), total: 3, timeLimit: 300,
+                releaseInterval: 2, terrainMasks: masks, firstReleaseTick: 1, tribe: tribe))
+            for _ in 0..<20 { fixture.step() }
+            try checkUI(fixture.lemmings.filter(\.active).count == 3, "L2 nuke fixture needs three live lemmings")
+            _ = fixture.drainSoundEvents()
+            fixture.nuke(); game = fixture; screen = .playing; nukeMood.reset(); refreshGame()
+            var pops = 0
+            for index in 1...200 {
+                fixture.step()
+                pops += fixture.drainSoundEvents().filter { $0.sample == Lemmings2SoundCue.explode.rawValue }.count
+                game = fixture; refreshGame()
+                if pops == 3 { break }
+                if index >= 75 {
+                    nukeMood.advanceReturn(at: ProcessInfo.processInfo.systemUptime + 0.14)
+                    try checkUI(nukeMood.amount == 1, "L2 opened its filter before the final audible pop in tribe \(tribe)")
+                }
+            }
+            try checkUI(pops == 3, "L2 nuke fixture did not produce three pops in tribe \(tribe)")
+            if tribe == 0 {
+                try checkUI(!fixture.isComplete, "L2 discarded its explosion tails")
+            }
+            nukeMood.advanceReturn(at: ProcessInfo.processInfo.systemUptime + 0.14)
+            try checkUI((0.4...0.6).contains(nukeMood.amount), "L2 did not open its filter after the last pop")
+            show(.results)
+            try checkUI(nukeMood.amount > 0, "L2 results cut the return sweep short")
+            nukeMood.advanceReturn(at: ProcessInfo.processInfo.systemUptime + 0.3)
+            try checkUI(nukeMood.amount == 0, "L2 return sweep stalled after simulation stopped")
+        }
+        print("PASS L2 waits for three audible nuke pops in Classic and non-Classic tribes, then restores through tails and results")
+    }
+
     @MainActor fileprivate func checkMusicPause() throws {
         defer { stop() }
         timer?.invalidate(); timer = nil
@@ -205,12 +251,18 @@ ArcadeStore.shared = ArcadeStore(file: temporary.appendingPathComponent("arcade.
 let window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 1120, height: 720), styleMask: [.titled], backing: .buffered, defer: false)
 window.contentView = NSView(frame: NSRect(x: 0, y: 0, width: 1120, height: 720))
 GameScreen.shared.gameWindow = window
+if ProcessInfo.processInfo.environment["TEST_SCOPE"] == "nuke" {
+    try Lemmings2PlayWindow(root: Bundle.main.resourceURL!.appendingPathComponent("Ports/Lemm2")).checkNukeReturn()
+    print("Nuke controller integration tests passed.")
+} else {
 try SettingsWindow(settings: ClassicSettings(), options: ClassicSettingsOptions(graphics: [.macintosh], music: ClassicSettingsOptions.playableMusic, sound: ClassicSettingsOptions.playableSound)).checkAudio()
 try AppUpdates().checkReminder()
 try checkReleaseWelcome()
 try MusicLibraryWindow(directory: temporary.appendingPathComponent("libraries")).checkStates()
 
 try Lemmings2PlayWindow(root: Bundle.main.resourceURL!.appendingPathComponent("Ports/Lemm2")).checkMusicPause()
+try Lemmings2PlayWindow(root: Bundle.main.resourceURL!.appendingPathComponent("Ports/Lemm2")).checkNukeReturn()
 try Lemmings3PlayWindow(root: Bundle.main.resourceURL!.appendingPathComponent("Ports/LEM3CD")).checkMusicPause()
 
 print("Music UI and sequel pause tests passed.")
+}

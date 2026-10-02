@@ -3,6 +3,31 @@
     <channel>
         <title>Ultimate Lemmings</title>
         <item>
+            <title>1.7.7</title>
+            <pubDate>Fri, 02 Oct 2026 15:09:04 +1000</pubDate>
+            <link>https://github.com/ErikVeland/Lemmings/releases</link>
+            <sparkle:version>61</sparkle:version>
+            <sparkle:shortVersionString>1.7.7</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>12.3</sparkle:minimumSystemVersion>
+            <description><![CDATA[<html><head><meta charset="utf-8"><style>:root{color-scheme:light dark}body{font:13px -apple-system,sans-serif}h3{font-size:14px;margin:14px 0 4px}h4{font-size:13px;margin:10px 0 2px}ul{padding-left:18px;margin:4px 0}.meta{color:#888;font-size:11px}</style></head><body><h3>Original cursors and clearer selection</h3>
+<p>Gameplay settings now offer Original and Modern cursors across Classic, Lemmings 2 and Lemmings 3. Original uses the supplied Amiga pixels and colours: a dotted cross over terrain and a square reticule over a lemming. The Original preset selects this cursor. Modern retains the current reticule. Manual choices are saved as Custom.</p>
+<p>Both 1× and 2× selected-skill icons are three times their previous size. The optional lemming counter is half its previous size.</p>
+<h3>Optional Classic skill backpacks</h3>
+<p>Assigned Climbers wear brown backpacks, Floaters wear orange backpacks, and lemmings with both skills wear purple backpacks. The markers follow the PC and Mac sprite artwork. Enable or disable Show skill backpacks in Gameplay settings. Modern enables them by default; Original disables them.</p>
+<h3>A deeper nuke countdown</h3>
+<p>With HD Effects enabled, the music gradually loses high frequencies and gains bass from the start to the end of a nuke countdown. The mix stays more audible instead of becoming quiet immediately. The sweep follows simulation time, including pause and speed changes, and restores correctly on undo or recovery. The original comic explosion and restrained bass impact remain.</p>
+<p>This applies to Classic, imported NeoLemmix levels and Lemmings 2. Lemmings 3 has no mass-nuke countdown.</p>
+<h3>Fan levels and verification</h3>
+<p>An exact bundled Golems challenge pack now selects its matching native mechanics in gameplay and previews. Pass Interference has a recorded winning route using ordinary player assignments. The evidence catalogue now records 2,154 Classic fan wins and 322 NeoLemmix wins. Additional source-rule and sequel investigations are retained separately from winning routes.</p>
+<p>Lemmings 2 and Lemmings 3 remain Preview. NeoLemmix remains Beta. Recorded native wins do not establish complete source-engine physics parity. Some Golems evidence replays still differ in final state or completion timing.</p>
+<h3>Update</h3>
+<p>For a fresh installation, choose <code>UltimateLemmings-1.7.7-build61-slim.zip</code>. It includes the original soundtracks and offers the extra libraries on first launch. Previously downloaded libraries are detected and retained.</p>
+<p>Existing players can use Check for Updates. Its full archive preserves music bundled inside older apps. Both downloads contain the same universal macOS app and support macOS 12.3 or later.</p>
+<p class="meta">Build: 61<br>Release commit: 17498ea029200507d6064ce897d6711f45938079<br>Release base: v1.7.6</p></body></html>
+]]></description>
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.7.7/UltimateLemmings-1.7.7-build61.zip" length="1943260816" type="application/octet-stream" sparkle:edSignature="anOj2bxCnEfbPj0xySrpVwwaXEYlpL/JrBCzkUowmI8M4B3rT+bHeTj8eSgmBQEAOaNFNdJgXll125aaSWm/BQ=="/>
+        </item>
+        <item>
             <title>1.7.6</title>
             <pubDate>Fri, 02 Oct 2026 11:00:01 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
@@ -60,25 +85,6 @@
 <p class="meta">Build: 56<br>Release commit: 4ca5f499ac1d56c01d6be7c5ae3e3fa91072fbaa<br>Release base: v1.7.1</p></body></html>
 ]]></description>
             <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.7.3/UltimateLemmings-1.7.3-build56.zip" length="1943120085" type="application/octet-stream" sparkle:edSignature="NgXmusN7cMXnopwvHSdzAmMg+5G5Jm/y2W5JkrL5O9mqoOmdb3qoTr5LpuPFGtonI18D/jTI44HSotCdWGIRBg=="/>
-        </item>
-        <item>
-            <title>1.7.1</title>
-            <pubDate>Mon, 28 Sep 2026 23:31:50 +1000</pubDate>
-            <link>https://github.com/ErikVeland/Lemmings/releases</link>
-            <sparkle:version>54</sparkle:version>
-            <sparkle:shortVersionString>1.7.1</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>12.3</sparkle:minimumSystemVersion>
-            <description><![CDATA[<html><head><meta charset="utf-8"><style>:root{color-scheme:light dark}body{font:13px -apple-system,sans-serif}h3{font-size:14px;margin:14px 0 4px}h4{font-size:13px;margin:10px 0 2px}ul{padding-left:18px;margin:4px 0}.meta{color:#888;font-size:11px}</style></head><body><h3>Oh My! All Lemmings!</h3>
-<ul><li>Solo and Hot Seat journey sessions start again. In 1.7.0, macOS could open the app from a temporary location, and then every campaign level looked changed.</li><li>The journey has updated lesson order and more verified solutions.</li><li>A saved run or playlist that uses a bundled campaign now opens after an update. Before, the game could mark these levels as changed.</li><li>If a session cannot start, the message names the level and pack that stopped it.</li></ul>
-<h3>Fixes</h3>
-<ul><li>NeoLemmix lemmings are no longer drawn upside down.</li><li>Bundled campaigns and imported level packs keep their identity when macOS opens the app from a temporary location.</li><li>The skill panel returns to full height after you start a level from a menu.</li></ul>
-<p class="meta">Build: 54<br>Release commit: 2eb5305d72a9257e77aaf3ab3f647600acbf77f6<br>Release base: v1.7.0</p></body></html>
-]]></description>
-            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.7.1/UltimateLemmings-1.7.1-build54.zip" length="1942742601" type="application/octet-stream" sparkle:edSignature="5dz2WszIZq3aSsewx6pS+nyh2jieK3eGJh9tAaRhQldxRQWyRSECDfpGXbN8X5LHsU/sYkBPGK+fzw1Xzsh5DQ=="/>
-            <sparkle:deltas>
-                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.7.1/Ultimate%20Lemmings54-53.delta" sparkle:deltaFrom="53" length="640738" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="4yh+38NHfsvXTgP5ukGizbfrUFvdtJ6Kn+/I0YmPEsMbUFlY8tdv0BHPAZOvZAqT9REUVugxCM8ft03lB1owDA=="/>
-                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.7.1/Ultimate%20Lemmings54-39.delta" sparkle:deltaFrom="39" length="1518912794" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="aC5Mbv6MUsDimV9HFoPzFvMdHoCTxaV0jy95FsNPkpL9u6VGpLHaALKmpjfHvo7HrQWKUoNI3o9b8hN+hffXCQ=="/>
-            </sparkle:deltas>
         </item>
     </channel>
 </rss>

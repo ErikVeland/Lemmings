@@ -213,7 +213,7 @@ extension DJDeck {
 
 // No engine is started: these checks render the real MOD mixer into memory.
 extension ModuleMusicPlayer {
-  fileprivate var nukeGainForTest: Float { nukeEQ.globalGain }
+  fileprivate var nukeGainForTest: Float { nukeEQ.bands[0].gain }
   fileprivate func checkModernMix() throws {
     try require(usesModernPreset, "DJ module ignored Modern")
     let mix = player!.enhancements
@@ -268,9 +268,9 @@ extension AdaptiveDJPlayer {
       "Modern did not reach both crossfade decks")
     try require(dj.makeDeck(url)?.moduleForMixTest?.usesModernPreset == true, "New deck forgot Modern")
     dj.setNukeAmount(1)
-    try require(dj.deckA?.moduleForMixTest?.nukeGainForTest == -5 && dj.deckB?.moduleForMixTest?.nukeGainForTest == -5,
+    try require(dj.deckA?.moduleForMixTest?.nukeGainForTest == 3 && dj.deckB?.moduleForMixTest?.nukeGainForTest == 3,
       "Nuke EQ did not reach both decks")
-    try require(dj.makeDeck(url)?.moduleForMixTest?.nukeGainForTest == -5, "New deck lost nuke EQ")
+    try require(dj.makeDeck(url)?.moduleForMixTest?.nukeGainForTest == 3, "New deck lost nuke EQ")
     dj.setNukeAmount(0)
     try require(dj.deckA?.moduleForMixTest?.nukeGainForTest == 0 && dj.deckB?.moduleForMixTest?.nukeGainForTest == 0,
       "Nuke undo did not restore both decks")

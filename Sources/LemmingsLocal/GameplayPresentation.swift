@@ -272,7 +272,7 @@ import NxlvKit
     "?" :[2,1,81,9,6], "=" :[20,20,20,20,20]]
   static func draw(_ text: String, in rect: CGRect, maxScale: CGFloat = 3,
                    highlighted: Character? = nil, palette: MacInterfaceRenderer.Palette = .blue,
-                   preservesCase: Bool = false) {
+                   preservesCase: Bool = false, color: NSColor? = nil) {
     let source = text.replacingOccurrences(of: "×", with: "X")
     let normalized = preservesCase ? source : source.uppercased()
     let scale = max(1, min(maxScale, floor(min(rect.height / 7, rect.width / CGFloat(max(1, normalized.count * 6))))))
@@ -282,8 +282,8 @@ import NxlvKit
     context?.saveGState()
     context?.setShouldAntialias(false)
     defer { context?.restoreGState() }
-    (palette == .green ? NSColor(calibratedRed: 0.45, green: 1, blue: 0.1, alpha: 1)
-      : NSColor(calibratedRed: 0.2, green: 0.5, blue: 1, alpha: 1)).setFill()
+    (color ?? (palette == .green ? NSColor(calibratedRed: 0.45, green: 1, blue: 0.1, alpha: 1)
+      : NSColor(calibratedRed: 0.2, green: 0.5, blue: 1, alpha: 1))).setFill()
     let highlightedIndex = highlighted.flatMap { normalized.firstIndex(of: $0) }.map { normalized.distance(from: normalized.startIndex, to: $0) }
     for (index, character) in normalized.enumerated() {
       if highlighted != nil {

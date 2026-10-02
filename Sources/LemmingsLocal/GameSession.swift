@@ -10,6 +10,8 @@ struct SessionLemming {
   let facingLeft: Bool
   let animationFrame: Int
   let countdown: Int?
+  let hasClimber: Bool
+  let hasFloater: Bool
   let neoAction: NeoLemmixAction?
   let neoTraits: Set<NeoLemmixTrait>
 
@@ -21,6 +23,8 @@ struct SessionLemming {
     facingLeft: Bool,
     animationFrame: Int,
     countdown: Int?,
+    hasClimber: Bool = false,
+    hasFloater: Bool = false,
     neoAction: NeoLemmixAction? = nil,
     neoTraits: Set<NeoLemmixTrait> = []
   ) {
@@ -31,6 +35,8 @@ struct SessionLemming {
     self.facingLeft = facingLeft
     self.animationFrame = animationFrame
     self.countdown = countdown
+    self.hasClimber = hasClimber
+    self.hasFloater = hasFloater
     self.neoAction = neoAction
     self.neoTraits = neoTraits
   }
@@ -267,7 +273,8 @@ final class ClassicSession: GameSession {
         pose: spritePose(for: $0.action),
         facingLeft: $0.direction == .left,
         animationFrame: $0.animationFrame,
-        countdown: $0.bomberCountdown)
+        countdown: $0.bomberCountdown,
+        hasClimber: $0.hasClimber, hasFloater: $0.hasFloater)
     }
   }
 

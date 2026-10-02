@@ -12,6 +12,7 @@ cat "$project_dir/Sources/LemmingsLocal/MusicFileDeck.swift" \
   "$project_dir/Sources/LemmingsLocal/MusicPlayer.swift" \
   "$project_dir/Sources/LemmingsLocal/VinylRamp.swift" \
   "$project_dir/Sources/LemmingsLocal/SoundEffectPlayer.swift" \
+  "$project_dir/Sources/LemmingsLocal/FailureMood.swift" \
   "$project_dir/Tests/NukeAudioTests/checks.swift" > "$build_dir/main.swift"
 swiftc -swift-version 6 -warnings-as-errors -target "$(uname -m)-apple-macos12.3" \
   -I "$build_dir/modules" -L "$build_dir" -lNxlvKit \

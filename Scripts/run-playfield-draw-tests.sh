@@ -26,6 +26,7 @@ swiftc -swift-version 6 -warnings-as-errors \
   "$project_dir/Sources/LemmingsLocal/ControllerPointer.swift" \
   "$project_dir/Sources/LemmingsLocal/LemmingFocusHighlight.swift" \
   "$project_dir/Sources/LemmingsLocal/GameplayPresentation.swift" \
+  "$project_dir/Sources/LemmingsLocal/ClassicSkillBackpack.swift" \
   "$project_dir/Sources/LemmingsLocal/PlayfieldView.swift" \
   "$project_dir/Sources/LemmingsLocal/PrecisionZoomLens+AppKit.swift" \
   "$project_dir/Sources/LemmingsLocal/PrecisionZoomScrollGesture+AppKit.swift" \
@@ -40,4 +41,4 @@ swiftc -swift-version 6 -warnings-as-errors \
   "$project_dir/Sources/LemmingsLocal/GameSession.swift" \
   "$project_dir/Sources/LemmingsLocal/NeoLemmixSpriteSet.swift" \
   "$project_dir/Tests/PlayfieldDrawTests/main.swift"
-"$build_dir/PlayfieldDrawTests"
+python3 "$project_dir/Tools/UITestRunner/run.py" "$build_dir/PlayfieldDrawTests"

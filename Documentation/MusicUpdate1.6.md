@@ -51,6 +51,11 @@ Supported output can use Apple's personal spatial profile. This does not
 provide head tracking or a spatial remix of the soundtrack. See
 [spatial audio setup](GameCenterSetup.md#spatial-sound-effects).
 
+After the last nuke pop, the low-pass filter opens and the bass lift returns to
+normal over 280 ms. The return continues through the explosion tails and result
+screen after simulation ticks stop. Undo, retry and disabling HD effects clear
+it immediately. Classic, NeoLemmix and L2 share the sweep; L3 has no mass nuke.
+
 ## Pause
 
 The opt-in Audio setting isolates classified native percussion voices without
@@ -96,8 +101,9 @@ See [packaging](../Tools/MusicCatalogue/README.md) and
   compensation, rhythm isolation, vinyl stop and rapid resume.
 - App tests cover pause input and retry behaviour in all three engines. Rendered
   Audio and library states have input-target and keyboard checks.
-- The local build is not a public release. The `music-1.6` asset URLs are prepared
-  but the archives are not published; live public downloads are unverified.
+- The `music-1.6` archives are public. On 2 October 2026, all 18 asset sizes and
+  hashes matched the bundled catalogue, and all download URLs returned ZIP data.
+  See the [live checks](ReleaseReadiness/1.7.7-build61/slim-live-libraries.json).
 - The fingerprint migration verified that all 105 replay-engine files are
   unchanged, validated all 268 witness hashes, and excluded four music-only files
   from future physics identities. Rescue proofs and hints use the new identity.
@@ -115,9 +121,12 @@ No replay-engine source changes were needed.
 
 ### Nuke countdown audio
 
-With HD Effects enabled, Classic and Lemmings 2 sweep the music into a hollow,
-quiet midrange over 350 ms when a nuke countdown starts. A separate EQ stage
-cuts bass by 24 dB, treble by 30 dB and overall gain by 5 dB at full depth.
+After 1.7.6, the HD nuke mix uses a low-pass sweep from 20 kHz to 450 Hz
+through the countdown, with a gradual 3 dB bass shelf at 180 Hz and no overall
+gain cut. Simulation ticks drive the sweep, so pause, speed changes and rewind
+follow the visible countdown. Classic uses 79 ticks, L2 uses 75 and the shared
+NeoLemmix path uses its 84-tick countdown. This replaces the 1.7.6 treatment
+that quickly cut both bass and treble and held the music at a quieter level.
 It composes with the DJ bass swap, Modern/Faithful mix, speed and pause controls;
 it does not restart a track. Both DJ decks and replacement tracks inherit the
 current amount. Undo, rewind before the nuke, completion and leaving gameplay
@@ -130,7 +139,8 @@ and cannot retrigger more than once per 300 ms. They use the existing effects
 volume, mute and suspension controls. HD Effects off disables these additions.
 Lemmings 3 has no mass-nuke countdown, so it does not use this treatment.
 
-`Scripts/run-nuke-audio-tests.sh` checks the recording EQ signal, restoration,
+`Scripts/run-nuke-audio-tests.sh` checks the progressive treble cut, bass lift,
+countdown timing, pause/rewind behaviour, recording EQ signal, restoration,
 bass envelope, source position, burst limit and mute without hardware output.
 The DJ mix tests also check that nuke EQ reaches both MOD decks and replacement
 tracks. These mechanical checks do not replace headphone and speaker listening.

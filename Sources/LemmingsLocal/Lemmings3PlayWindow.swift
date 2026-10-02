@@ -455,6 +455,8 @@ import NxlvKit
         canvas.startCountdown.cancel(); canvas.menuRows = nil; paused = false
         defer { if let window { gameplayKeyboard?.bind(to: window) } }
         try validatePauseKeyboard(gameplayKeyboard!, name: "Lemmings 3", paused: { self.paused })
+        try validateCursorPresets(name: "Lemmings 3",
+            apply: { self.setAudioSettings($0, muted: true) }, current: { self.canvas.gameplayCursorStyle })
     }
     var testCampaignProgress: Lemmings3ClassicCampaign.Progress { campaign.progress }
     func testSelectionRendering() async throws {
@@ -628,6 +630,7 @@ import NxlvKit
         canvas.reduceFlashes = settings.reduceFlashes
         canvas.hdEffectsEnabled = settings.hdEffectsEnabled
         canvas.fullScreenHDRFlashes = settings.cinematicExplosionsEnabled
+        canvas.gameplayCursorStyle = settings.gameplayCursorStyle
         canvas.showReticleCount = settings.showReticleCount
         canvas.skillCursorIconSize = settings.skillCursorIconSize
         canvas.lemmingSelectionStyle = settings.lemmingSelectionStyle
@@ -1403,6 +1406,7 @@ import NxlvKit
     var onCancelDirection: (() -> Void)?
     var selectedAction = 0
     let startCountdown = FreshLevelCountdown()
+    var gameplayCursorStyle: GameplayCursorStyle = .modern { didSet { needsDisplay = true } }
     var showReticleCount = false
     var lemmingSelectionStyle: LemmingSelectionStyle = .modern { didSet { needsDisplay = true } }
     var skillCursorIconSize: SkillCursorIconSize = .one
@@ -1822,7 +1826,7 @@ import NxlvKit
             let eligible = Lemmings3Runtime.Action.allCases.indices.contains(selectedAction)
                 && target.map { game.canAssign(Lemmings3Runtime.Action.allCases[selectedAction], to: $0) } == true
             GameCursor.drawPlayfieldPointer(at: point, scale: zoom,
-                tint: GameCursor.targetTint(eligible: eligible, occupied: target != nil))
+                tint: GameCursor.targetTint(eligible: eligible, occupied: target != nil), original: gameplayCursorStyle == .original, occupied: target != nil)
             if (0..<5).contains(selectedAction) {
                 let remaining: Int? = selectedAction == 3
                     ? target.flatMap { id in game.lemmings.first(where: { $0.id == id })?.quantity } : nil

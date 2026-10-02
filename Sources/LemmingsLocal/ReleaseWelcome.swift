@@ -5,12 +5,12 @@ import AppKit
     static let seenKey = "WhatsNewSeenBuild"
     /// The release these notes describe. A test fails when Info.plist moves on
     /// to a new version and these notes stay behind.
-    static let notesVersion = "1.7.6"
-    static let subtitle = "More verified routes and a refreshed learning journey"
+    static let notesVersion = "1.7.7"
+    static let subtitle = "Original cursors, clearer skills and a deeper nuke countdown"
     static let sections = [
-        ("Fan levels and learning", "More fan levels have recorded winning routes. The learning journey now has 292 lessons. Difficulty scores use winning replay evidence."),
-        ("Lemmings 2 and 3", "More sequel routes and compatibility checks are preserved. Both games remain Preview. The Lemmings 3 intro movie now plays its verified music cue."),
-        ("Sound, controls and sessions", "Includes Modern music, camera-relative sound and Home/Goal controls. Fresh sessions start at the beginning. Previous progress stays saved.")
+        ("Original cursors", "Old school uses the Amiga cross and square target. Choose either cursor in Gameplay settings. Skill icons are larger. The optional count is smaller."),
+        ("Classic skill backpacks", "Brown marks Climbers, orange marks Floaters, and purple marks both. Backpacks are optional: on with Modern, off with Original."),
+        ("Sound and fan levels", "The HD nuke countdown gradually removes high frequencies and adds bass. Fan-level compatibility and replay evidence also improve. Lemmings 2 and 3 remain Preview.")
     ]
     private let defaults: UserDefaults
     private let build: Int
