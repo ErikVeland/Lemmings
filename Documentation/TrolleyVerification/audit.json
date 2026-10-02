@@ -1,7 +1,7 @@
 {
   "engineSourceFingerprint": "caf6f373bf59d6af14c5696ca693e83e5a2749517b64f1c15465ed66a4a890cc",
   "exhaustive": false,
-  "generatedAt": "2026-09-30T14:33:19Z",
+  "generatedAt": "2026-10-02T00:01:26Z",
   "levels": [
     {
       "bestSaved": 10,
@@ -15214,6 +15214,7 @@
       }
     },
     {
+      "bestSaved": 1,
       "conditions": {
         "gameID": "lemmings2",
         "levelFingerprint": "ef251a14bb922a1bf105c47637a5a8e6e532050a40d2a8254e0851409f388b5c:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
@@ -15242,17 +15243,28 @@
         "timeLimitSeconds": 185
       },
       "gameID": "lemmings2",
+      "lossesInBestSolution": 59,
       "notes": [
-        "No recorded solution fixture is available.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 4,
       "population": 60,
       "rank": "Outdoor",
       "required": 1,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "Deliverance ?"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "Deliverance ?",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 59,
+        "path": "witnesses/lemmings2-73-60.json",
+        "released": 60,
+        "retainedReserves": 0,
+        "saved": 1,
+        "sha256": "1fb14e0a7daf731b4bc74c0fbcd9eff308c2f6e7e6d0eb2c56c06fb7644a5d38",
+        "ticks": 2775
+      }
     },
     {
       "bestSaved": 1,
@@ -16094,6 +16106,7 @@
       }
     },
     {
+      "bestSaved": 7,
       "conditions": {
         "gameID": "lemmings2",
         "levelFingerprint": "12e6e9496d1e6e37f11d49e7cac47251527d54fd7e47d75ed67abf6747544455:0bb7cc6c13d4226d3c039ccc8a90141278a6780258465a14accfe2f8847d51b4",
@@ -16123,17 +16136,28 @@
         "timeLimitSeconds": 541
       },
       "gameID": "lemmings2",
+      "lossesInBestSolution": 53,
       "notes": [
-        "No recorded solution fixture is available.",
         "The medal loss allowance is not an optimality proof."
       ],
       "number": 2,
       "population": 60,
       "rank": "Shadow",
       "required": 1,
-      "status": "UNKNOWN",
-      "testedCandidates": 1,
-      "title": "NITRAM THE HUGE!"
+      "status": "OBSERVED",
+      "testedCandidates": 2,
+      "title": "NITRAM THE HUGE!",
+      "witness": {
+        "completed": true,
+        "didWin": true,
+        "lost": 53,
+        "path": "witnesses/lemmings2-91-60.json",
+        "released": 60,
+        "retainedReserves": 0,
+        "saved": 7,
+        "sha256": "d30a72019a2e05d9afdf8ff6f62dbe23cb037fe72336d051e6087fe034c2aa00",
+        "ticks": 8115
+      }
     },
     {
       "bestSaved": 30,

@@ -1,0 +1,9 @@
+PASS undamaged base route accepted
+PASS changed starting population rejected
+PASS changed level hash rejected
+PASS changed saved count rejected
+PASS changed tick count rejected
+PASS rejected input rejected
+PASS out-of-order inputs rejected
+PASS pointer outside the viewport rejected
+PASS seven damaged Lemmings 2 routes rejected

@@ -338,7 +338,7 @@ See [method and limitations](README.md) and [exact conditions and evidence](audi
 | Outdoor 1: Pa-tent-ly Obvious | 60 | 1 | 59 | — | — | [Observed](witnesses/lemmings2-70-60.json) |
 | Outdoor 2: Swing/Roundabout Theory | 60 | 1 | 2 | — | — | [Observed](witnesses/lemmings2-71-60.json) |
 | Outdoor 3: Glide Like The Wind | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-72-60.json) |
-| Outdoor 4: Deliverance ? | 60 | 1 | — | — | — | No witness collected |
+| Outdoor 4: Deliverance ? | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-73-60.json) |
 | Outdoor 5: Friday`s Walk | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-74-60.json) |
 | Outdoor 6: The Magic of Mushrooms | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-75-60.json) |
 | Outdoor 7: Natural Selection | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-76-60.json) |
@@ -356,7 +356,7 @@ See [method and limitations](README.md) and [exact conditions and evidence](audi
 | Polar 9: Its all up hill ! | 60 | 1 | — | — | — | No witness collected |
 | Polar 10: Stay Frosty | 60 | 1 | — | — | — | No witness collected |
 | Shadow 1: Land of OZ! | 60 | 1 | 1 | — | — | [Observed](witnesses/lemmings2-90-60.json) |
-| Shadow 2: NITRAM THE HUGE! | 60 | 1 | — | — | — | No witness collected |
+| Shadow 2: NITRAM THE HUGE! | 60 | 1 | 7 | — | — | [Observed](witnesses/lemmings2-91-60.json) |
 | Shadow 3: Twin Bleeps | 60 | 1 | 30 | — | — | [Observed](witnesses/lemmings2-92-60.json) |
 | Shadow 4: The Pancake Factory. | 60 | 1 | — | — | — | No witness collected |
 | Shadow 5: Swingadingding | 60 | 1 | — | — | — | No witness collected |

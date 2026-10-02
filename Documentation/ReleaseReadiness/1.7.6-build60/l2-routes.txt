@@ -1,0 +1,133 @@
+....
+----------------------------------------------------------------------
+Ran 4 tests in 0.000s
+
+OK
+PASS 75 Lemmings 2 fixture hashes and 27 carry-over fixture hashes
+PASS 75 routes replay the same as version 1 and as converted events
+PASS version 2 rejects refused, off-viewport and out-of-order events; a lenient replay drops without a trace
+PASS incomplete campaign rejected in strict mode
+PASS changed carry-over levelSHA256 rejected
+PASS changed carry-over expectedSaved rejected
+PASS changed carry-over version rejected
+PASS changed carry-over population rejected
+PASS duplicate starting population rejected
+PASS orphan carry-over witness rejected
+PASS valid carry-over route accepted, strict gaps and six damaged cases rejected
+PASS classic-01: 60/60 Gold in 3074 ticks
+PASS classic-02: 1/60 Bronze in 4500 ticks
+PASS classic-03: 1/60 Bronze in 3600 ticks
+PASS classic-03 carry-over: 1/1 Gold in 1179 ticks
+PASS classic-04: 1/60 Bronze in 4500 ticks
+PASS classic-04 carry-over: 1/1 Gold in 1214 ticks
+PASS classic-05: 1/60 Bronze in 4500 ticks
+PASS classic-05 carry-over: 1/1 Gold in 2265 ticks
+PASS classic-08: 1/60 Bronze in 1584 ticks
+PASS classic-10: 1/60 Bronze in 4500 ticks
+PASS beach-01: 29/60 Bronze in 8100 ticks
+PASS beach-05: 54/60 Silver in 1987 ticks
+PASS beach-06: 54/60 Silver in 1670 ticks
+PASS beach-08: 1/60 Bronze in 1505 ticks
+PASS beach-10: 1/60 Bronze in 2140 ticks
+PASS cavelem-01: 47/60 Silver in 1752 ticks
+PASS cavelem-02: 1/1 Gold in 1337 ticks
+PASS cavelem-02 carry-over: 30/47 Silver in 2199 ticks
+PASS cavelem-03: 1/1 Gold in 555 ticks
+PASS cavelem-03 carry-over: 12/30 Bronze in 1102 ticks
+PASS cavelem-04: 26/60 Bronze in 1534 ticks
+PASS cavelem-04 carry-over: 3/12 Bronze in 899 ticks
+PASS cavelem-05: 2/2 Gold in 580 ticks
+PASS cavelem-05 carry-over: 2/3 Silver in 510 ticks
+PASS cavelem-06: 2/2 Gold in 2503 ticks
+PASS cavelem-07: 1/2 Silver in 8100 ticks
+PASS cavelem-08: 1/1 Gold in 2059 ticks
+PASS cavelem-09: 1/60 Bronze in 1681 ticks
+PASS cavelem-09 carry-over: 1/1 Gold in 1125 ticks
+PASS cavelem-10: 1/1 Gold in 917 ticks
+PASS circus-01: 2/60 Bronze in 8100 ticks
+PASS circus-02: 1/1 Gold in 721 ticks
+PASS circus-02 carry-over: 2/2 Gold in 1218 ticks
+PASS circus-03: 1/1 Gold in 1029 ticks
+PASS circus-03 carry-over: 2/2 Gold in 1126 ticks
+PASS circus-05: 1/60 Bronze in 1595 ticks
+PASS circus-06: 3/60 Bronze in 8985 ticks
+PASS circus-07: 1/60 Bronze in 3600 ticks
+PASS circus-08: 1/60 Bronze in 1338 ticks
+PASS circus-10: 1/60 Bronze in 8100 ticks
+PASS egyptian-01: 40/60 Silver in 8100 ticks
+PASS egyptian-02: 20/60 Bronze in 8100 ticks
+PASS egyptian-02 carry-over: 14/40 Bronze in 8100 ticks
+PASS egyptian-03: 1/60 Bronze in 1830 ticks
+PASS egyptian-03 carry-over: 1/14 Bronze in 1584 ticks
+PASS egyptian-04: 58/60 Silver in 1690 ticks
+PASS egyptian-04 carry-over: 1/1 Gold in 378 ticks
+PASS egyptian-05: 1/60 Bronze in 2700 ticks
+PASS egyptian-05 carry-over: 1/1 Gold in 1141 ticks
+PASS egyptian-06: 1/60 Bronze in 8100 ticks
+PASS egyptian-06 carry-over: 1/1 Gold in 566 ticks
+PASS egyptian-07: 1/60 Bronze in 8100 ticks
+PASS egyptian-07 carry-over: 1/1 Gold in 441 ticks
+PASS egyptian-08: 1/60 Bronze in 8100 ticks
+PASS egyptian-08 carry-over: 1/1 Gold in 724 ticks
+PASS highland-01: 60/60 Gold in 1941 ticks
+PASS highland-06: 1/60 Bronze in 2700 ticks
+PASS highland-09: 2/60 Bronze in 4500 ticks
+PASS medieval-01: 1/60 Bronze in 5400 ticks
+PASS medieval-05: 1/60 Bronze in 1558 ticks
+PASS medieval-07: 1/60 Bronze in 3600 ticks
+PASS medieval-09: 1/60 Bronze in 1403 ticks
+PASS outdoor-01: 59/60 Silver in 4491 ticks
+PASS outdoor-02: 2/60 Bronze in 5400 ticks
+PASS outdoor-02 carry-over: 14/59 Bronze in 5400 ticks
+PASS outdoor-03: 1/60 Bronze in 1892 ticks
+PASS outdoor-03 carry-over: 1/14 Bronze in 1227 ticks
+PASS outdoor-04: 1/60 Bronze in 2775 ticks
+PASS outdoor-05: 1/60 Bronze in 2700 ticks
+PASS outdoor-06: 1/60 Bronze in 1462 ticks
+PASS outdoor-07: 1/60 Bronze in 4051 ticks
+PASS outdoor-10: 1/60 Bronze in 1528 ticks
+PASS polar-01: 26/60 Bronze in 4500 ticks
+PASS polar-02: 1/60 Bronze in 4500 ticks
+PASS polar-02 carry-over: 7/26 Bronze in 4500 ticks
+PASS polar-03: 1/60 Bronze in 1691 ticks
+PASS polar-03 carry-over: 1/7 Bronze in 1194 ticks
+PASS polar-04: 42/60 Silver in 4500 ticks
+PASS polar-04 carry-over: 1/1 Gold in 1607 ticks
+PASS polar-06: 1/60 Bronze in 1864 ticks
+PASS polar-08: 1/60 Bronze in 3600 ticks
+PASS shadow-01: 1/60 Bronze in 2149 ticks
+PASS shadow-02: 7/60 Bronze in 8115 ticks
+PASS shadow-03: 30/60 Silver in 2700 ticks
+PASS shadow-06: 1/60 Bronze in 1432 ticks
+PASS space-01: 51/60 Silver in 3440 ticks
+PASS space-02: 1/3 Silver in 1105 ticks
+PASS space-02 carry-over: 1/51 Bronze in 2700 ticks
+PASS space-05: 1/60 Bronze in 1498 ticks
+PASS space-06: 1/60 Bronze in 794 ticks
+PASS space-07: 1/60 Bronze in 3600 ticks
+PASS sports-01: 2/60 Bronze in 8100 ticks
+PASS sports-02: 56/60 Silver in 8100 ticks
+PASS sports-02 carry-over: 2/2 Gold in 548 ticks
+PASS sports-03: 1/2 Silver in 8100 ticks
+PASS sports-04: 1/60 Bronze in 2376 ticks
+PASS sports-04 carry-over: 1/1 Gold in 1449 ticks
+PASS sports-05: 1/60 Bronze in 8100 ticks
+PASS sports-05 carry-over: 1/1 Gold in 745 ticks
+PASS sports-06: 1/60 Bronze in 5400 ticks
+PASS sports-06 carry-over: 1/1 Gold in 354 ticks
+PASS sports-07: 1/1 Gold in 7178 ticks
+Verified 75; missing 45.
+Verified carry-over variants: 27.
+CHAIN classic: 5/10 levels
+CHAIN beach: 1/10 levels
+CHAIN cavelem: 10/10 levels, complete
+CHAIN circus: 3/10 levels
+CHAIN egyptian: 8/10 levels
+CHAIN highland: 1/10 levels
+CHAIN medieval: 1/10 levels
+CHAIN outdoor: 3/10 levels
+CHAIN polar: 4/10 levels
+CHAIN shadow: 1/10 levels
+CHAIN space: 2/10 levels
+CHAIN sports: 7/10 levels
+Tribes chained through all ten levels: 1 of 12.
