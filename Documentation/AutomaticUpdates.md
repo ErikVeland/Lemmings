@@ -1,6 +1,6 @@
 # Automatic updates
 
-Ultimate Lemmings 1.6 uses Sparkle 2.7.3 for macOS updates.
+Ultimate Lemmings 1.7.7 uses Sparkle 2.7.3 for macOS updates.
 
 ## Runtime contract
 
@@ -20,9 +20,10 @@ commit the key or pass the key value as a command argument.
 
 ## Current releases
 
-Public 1.7.1 build 54 is the current release. The [1.7 distribution record](ReleaseReadiness/1.7Build53Distribution.md)
-covers the 1.7.0 archives, gates and live feed. Publish an appcast only with its
-matching signed and notarised archive.
+Public 1.7.7 build 61 is the current release. The
+[1.7.7 distribution record](ReleaseReadiness/1.7.7Build61Distribution.md) covers
+the notarised archive, signed live feed and validation limits. Publish an
+appcast only with its matching signed and notarised archive.
 
 ## Player experience
 

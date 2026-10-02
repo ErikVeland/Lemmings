@@ -1,0 +1,34 @@
+PASS Apple notarisation accepted b0c216ff-2dc2-4927-8152-7291837c21d3
+Successfully downloaded submission log
+  id: b0c216ff-2dc2-4927-8152-7291837c21d3
+  location: /Users/veland/Lemmings/.build/release-1.7.7/notary-log.json
+PASS Apple accepted the exact submitted archive
+Processing: /Users/veland/Lemmings/.build/release-1.7.7/standard/Ultimate Lemmings.app
+Processing: /Users/veland/Lemmings/.build/release-1.7.7/standard/Ultimate Lemmings.app
+The staple and validate action worked!
+Processing: /Users/veland/Lemmings/.build/release-1.7.7/standard/Ultimate Lemmings.app
+The validate action worked!
+/Users/veland/Lemmings/.build/release-1.7.7/standard/Ultimate Lemmings.app: valid on disk
+/Users/veland/Lemmings/.build/release-1.7.7/standard/Ultimate Lemmings.app: satisfies its Designated Requirement
+PASS ZIP integrity, app-only contents and size: 1943260816
+/Users/veland/Lemmings/.build/release-1.7.7/gatekeeper/Ultimate Lemmings.app: accepted
+source=Notarized Developer ID
+origin=Developer ID Application: Erik Veland (54WU29TRTY)
+Processing: /Users/veland/Lemmings/.build/release-1.7.7/gatekeeper/Ultimate Lemmings.app
+The validate action worked!
+/Users/veland/Lemmings/.build/release-1.7.7/gatekeeper/Ultimate Lemmings.app: valid on disk
+/Users/veland/Lemmings/.build/release-1.7.7/gatekeeper/Ultimate Lemmings.app: satisfies its Designated Requirement
+Wrote 1 new update, updated 0 existing updates, and removed 1 old update in appcast.xml
+Wrote signed appcast: /Users/veland/.codex/worktrees/release-1-7-7/Lemmings/appcast.xml
+PASS 1.7.7 update inputs: version 1.7.7, build 61, appcast items 3
+PASS data-independent 1.7.7 release checks
+PASS Ed25519 archive signature against the shipping app's public key
+{
+  "sourceCommit": "17498ea029200507d6064ce897d6711f45938079",
+  "archive": "UltimateLemmings-1.7.7-build61.zip",
+  "size": 1943260816,
+  "sha256": "da19c35b0ab5da7a2815261f1e31214eb3a670337d6fd7b0586f367d257f68b1",
+  "appcastSHA256": "c80269753c0910b3dc1226fbd251254a180b9c98460b3e11eb5a6bc9a4d3b914"
+}
+PASS publication inputs for 1.7.7 build 61 at 17498ea029200507d6064ce897d6711f45938079
+PASS release package, Gatekeeper, Sparkle signature and publication inputs
