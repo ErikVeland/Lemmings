@@ -32,7 +32,7 @@ star states, compact result layout, primary/selected actions, transport icon
 changes and concise skill names beneath HUD counts. This is not a claim that every
 sequel screen or every novice-player journey has been validated.
 
-Assignment feedback follows the engine's actual eligibility rules. Grey means no lemming is under the pointer; yellow means the lemming cannot
+Assignment feedback follows the engine's actual eligibility rules. The Modern cursor is grey when no lemming is under the pointer. Yellow means the lemming cannot
 accept the selected skill; green means the nearest target can accept the selected skill.
 Successful assignments get a 100 ms green pulse, with local HDR brightness when
 available. An existing assignment gets an 80 ms orange cue. An eligible neighbour
@@ -53,11 +53,20 @@ text from headings. Preserve accessible names and input targets.
 
 ## Gameplay pointer
 
-Use four corner brackets at the input position, with strokes one pixel
-wide at every zoom and no central crosshair. Place the selected skill sprite diagonally below
+Gameplay settings offer Original and Modern cursor styles in all three games.
+Original uses the supplied Amiga artwork: a dotted cross with a yellow centre
+over empty terrain and green square corners with yellow edge markers over a
+lemming, including an ineligible target. Preserve its colours and transparency.
+The 28-pixel source images occupy 14 game pixels and scale with playfield zoom
+without smoothing. Modern uses four corner brackets at the input position, with
+strokes one display pixel wide at every zoom and no central crosshair.
+Original and Modern presets select their matching cursor styles.
+An individual choice selects Custom, persists, and survives machine presets.
+Both cursors remain at the input position and use the same targeting geometry.
+Place the selected skill sprite diagonally below
 and right of the bottom-right corner, about 10 screen pixels from each edge. Offer None, 1× and 2×
 skill icon sizes in Gameplay settings. The visible 1× and 2× choices use actual
-2× and 4× artwork. Modern defaults to 1×; Original hides the icon.
+6× and 12× artwork (three times the previous size). Modern defaults to 1×; Original hides the icon.
 Offer a separate default-off lemming count below-left, aligned with the skill icon and the same distance from the opposite corner.
 Count live sprite centres inside the reticule, regardless of skill eligibility.
 Keep the count available when the icon is hidden.
@@ -67,6 +76,16 @@ When a finite selected skill has one use left, fade only its sprite gently.
 At zero uses, replace the sprite with a steady red X. Reduced motion and reduced
 flashes keep the one-use sprite steady. The None size still hides the badge. Lemmings 3 has no
 shared skill stock: only Use shows the hovered lemming's remaining tool uses.
+
+Classic shows assigned permanent skills with a small pixel backpack: brown for
+Climber, orange for Floater, and purple for both. Gameplay settings offer a
+Show skill backpacks checkbox, enabled by Modern and disabled by Original.
+Individual changes select Custom and persist across machine presets.
+Follow the current pose and
+facing direction in PC and Mac artwork, with hair and hands in front. Include
+the pack in the sprite used for selection, speed trails and CRT rendering.
+Remove it during death and exit animations. These markers apply to Classic;
+NeoLemmix and the sequel artwork retain their own skill presentation.
 
 Gameplay settings offer None, Obvious and Modern selection effects. None adds no
 selection highlight. Obvious restores the game-scale coloured halo and overhead

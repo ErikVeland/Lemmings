@@ -32,6 +32,8 @@ import NxlvKit
   private var modernControlsCheck: NSButton?
   private var variableSpeedCheck: NSButton?
   private var interruptionCheck: NSButton?
+  private var cursorStylePopUp: NSPopUpButton?
+  private var skillBackpacksCheck: NSButton?
   private var reticleCountCheck: NSButton?
   private var skillCursorSizePopUp: NSPopUpButton?
   private var selectionStylePopUp: NSPopUpButton?
@@ -115,7 +117,7 @@ import NxlvKit
   // MARK: - Building panes
 
   /// Lays out labelled rows down a pane.
-  private func pane(_ rows: [(String, NSView)], spacing: CGFloat = 22) -> NSView {
+  private func pane(_ rows: [(String, NSView)], spacing: CGFloat = 22, topInset: CGFloat = 32) -> NSView {
     let container = NSView()
     var previous: NSView?
     for (label, control) in rows {
@@ -138,7 +140,7 @@ import NxlvKit
           equalTo: container.trailingAnchor, constant: -18),
         control.topAnchor.constraint(
           equalTo: previous?.bottomAnchor ?? container.topAnchor,
-          constant: previous == nil ? 32 : spacing),
+          constant: previous == nil ? topInset : spacing),
       ])
       previous = control
     }
@@ -166,6 +168,9 @@ import NxlvKit
     experience.addItems(withTitles: ClassicExperiencePreset.allCases.map(\.title))
     experience.setAccessibilityLabel("Gameplay preset")
     experiencePopUp = experience
+    let backpacks = GameCheckButton(title: "Show skill backpacks", target: self, action: #selector(skillBackpacksChanged))
+    backpacks.state = settings.showClassicSkillBackpacks ? .on : .off
+    skillBackpacksCheck = backpacks
     let count = GameCheckButton(title: "Show lemming count", target: self, action: #selector(reticleCountChanged))
     count.state = settings.showReticleCount ? .on : .off
     reticleCountCheck = count
@@ -174,6 +179,10 @@ import NxlvKit
     iconSize.selectItem(at: SkillCursorIconSize.allCases.firstIndex(of: settings.skillCursorIconSize) ?? 1)
     iconSize.setAccessibilityLabel("Skill icon size")
     skillCursorSizePopUp = iconSize
+    let cursor = popUp(#selector(cursorStyleChanged))
+    cursor.addItems(withTitles: GameplayCursorStyle.allCases.map(\.title))
+    cursor.setAccessibilityLabel("Cursor style")
+    cursorStylePopUp = cursor
     let selection = popUp(#selector(selectionStyleChanged))
     selection.addItems(withTitles: LemmingSelectionStyle.allCases.map(\.title))
     selection.setAccessibilityLabel("Selection effect")
@@ -209,10 +218,19 @@ import NxlvKit
     variable.isEnabled = settings.modernControlsEnabled
     return pane([
       ("Preset", experience), ("Controls", modern), ("Speed", variable), ("Pause", interruption),
-      ("Targeting", targeting), ("Selection", selection), ("Skill icon", iconSize), ("Reticule", count), ("Level Select", levelSelection),
-    ], spacing: 8)
+      ("Targeting", targeting), ("Cursor", cursor), ("Selection", selection), ("Classic", backpacks), ("Skill icon", iconSize), ("Reticule", count), ("Level Select", levelSelection),
+    ], spacing: 4, topInset: 16)
   }
 
+  @objc private func cursorStyleChanged(_ sender: NSPopUpButton) {
+    guard GameplayCursorStyle.allCases.indices.contains(sender.indexOfSelectedItem) else { return }
+    settings.gameplayCursorStyle = GameplayCursorStyle.allCases[sender.indexOfSelectedItem]
+    changed()
+  }
+  @objc private func skillBackpacksChanged(_ sender: NSButton) {
+    settings.showClassicSkillBackpacks = sender.state == .on
+    changed()
+  }
   @objc private func reticleCountChanged(_ sender: NSButton) {
     settings.showReticleCount = sender.state == .on
     changed()
@@ -566,6 +584,8 @@ import NxlvKit
     variableSpeedCheck?.state = settings.variableSpeedEnabled ? .on : .off
     variableSpeedCheck?.isEnabled = settings.modernControlsEnabled
     interruptionCheck?.state = settings.pauseOnInterruption ? .on : .off
+    cursorStylePopUp?.selectItem(at: GameplayCursorStyle.allCases.firstIndex(of: settings.gameplayCursorStyle) ?? 1)
+    skillBackpacksCheck?.state = settings.showClassicSkillBackpacks ? .on : .off
     reticleCountCheck?.state = settings.showReticleCount ? .on : .off
     skillCursorSizePopUp?.selectItem(at: SkillCursorIconSize.allCases.firstIndex(of: settings.skillCursorIconSize) ?? 1)
     selectionStylePopUp?.selectItem(at: LemmingSelectionStyle.allCases.firstIndex(of: settings.lemmingSelectionStyle) ?? 2)
@@ -625,6 +645,8 @@ import NxlvKit
     applied.shuffleMusic = settings.shuffleMusic
     applied.modernControlsEnabled = settings.modernControlsEnabled
     applied.variableSpeedEnabled = settings.variableSpeedEnabled
+    applied.gameplayCursorStyle = settings.gameplayCursorStyle
+    applied.showClassicSkillBackpacks = settings.showClassicSkillBackpacks
     applied.showReticleCount = settings.showReticleCount
     applied.skillCursorIconSize = settings.skillCursorIconSize
     applied.lemmingSelectionStyle = settings.lemmingSelectionStyle

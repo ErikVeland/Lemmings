@@ -65,7 +65,7 @@ import NxlvKit
     private let masks: Lemmings2TerrainMasks
     private let music = ModuleMusicPlayer()
     private let failureMood = FailureMoodTransition()
-    private let nukeMood = FailureMoodTransition(duration: 0.35)
+    private let nukeMood = NukeMusicSweep()
     private var audioSettings = ClassicSettings()
     private var globallyMuted = false
     private let sounds: Lemmings2SoundPlayer
@@ -459,6 +459,8 @@ import NxlvKit
         prepareBriefing(); startLevel(); canvas.startCountdown.cancel(); paused = false
         defer { if let window { gameplayKeyboard?.bind(to: window) } }
         try validatePauseKeyboard(gameplayKeyboard!, name: "Lemmings 2", paused: { self.paused })
+        try validateCursorPresets(name: "Lemmings 2",
+            apply: { self.setAudioSettings($0, muted: true) }, current: { self.canvas.gameplayCursorStyle })
     }
     func testSelectionRendering() async throws {
         timer?.invalidate(); audioSettings.confinePointer = false
@@ -555,6 +557,7 @@ import NxlvKit
         canvas.reduceMotion = settings.reduceMotion
         canvas.reduceFlashes = settings.reduceFlashes
         canvas.hdEffectsEnabled = settings.hdEffectsEnabled
+        canvas.gameplayCursorStyle = settings.gameplayCursorStyle
         canvas.showReticleCount = settings.showReticleCount
         canvas.skillCursorIconSize = settings.skillCursorIconSize
         canvas.lemmingSelectionStyle = settings.lemmingSelectionStyle
@@ -710,7 +713,7 @@ import NxlvKit
         if screen == .practice { practiceLevel = nil; game = nil; initial = nil }
         nukeGesture.reset()
         if screen != .playing {
-            nukeMood.set(active: false); sounds.setNukeActive(false)
+            nukeMood.reset(); sounds.setNukeActive(false)
             sounds.silence(); releasePointerInput()
         }
         self.screen = screen; frontTicks = 0
@@ -1007,7 +1010,8 @@ import NxlvKit
     }
     private func refreshGame() {
         let nuking = screen == .playing && game?.isNuking == true && game?.isComplete == false && canvas.hdEffectsEnabled
-        nukeMood.set(active: nuking)
+        nukeMood.update(active: nuking, tick: game?.tick ?? 0, durationTicks: 75,
+            remainingTicks: game?.lemmings.compactMap(\.bombTicks).min())
         sounds.setNukeActive(nuking)
         guard let game else { return }
         let impossible = (screen == .playing || screen == .results) && (game.isComplete ? !game.didWin : FailureMoodDecision.isUnrecoverable(
@@ -2144,6 +2148,7 @@ import NxlvKit
     var speedChoiceLabel = "2×"
     var variableSpeedEnabled = true
     let startCountdown = FreshLevelCountdown()
+    var gameplayCursorStyle: GameplayCursorStyle = .modern { didSet { needsDisplay = true } }
     var showReticleCount = false
     var lemmingSelectionStyle: LemmingSelectionStyle = .modern { didSet { needsDisplay = true } }
     var skillCursorIconSize: SkillCursorIconSize = .one
@@ -2602,7 +2607,7 @@ import NxlvKit
                 let target = pointerTarget(slot: selectedSkillSlot)
                 GameCursor.drawPlayfieldPointer(at: point, scale: zoom,
                     tint: GameCursor.targetTint(eligible: pointerSelectionEnabled && target.map { game?.canAssign(slot: selectedSkillSlot, to: $0) == true } == true,
-                        occupied: target != nil))
+                        occupied: target != nil), original: gameplayCursorStyle == .original, occupied: target != nil)
                 if pointerSelectionEnabled {
                     let remaining = game.flatMap { game -> Int? in
                         guard game.supplies.indices.contains(selectedSkillSlot) else { return nil }

@@ -813,8 +813,8 @@ private func testMacArtworkCropStaysPixelAligned() throws {
   let bounds = CGRect(x: 0, y: 0, width: 300, height: 240)
   for scale in [1.0, 2.0, 3.0] {
     let frame = SkillCursorBadge.frame(at: point, scale: scale, size: .one, in: bounds)
-    try require(frame.width == 12 && frame.height == frame.width,
-      "The baseline icon must remain 12 screen points at \(scale)x playfield zoom")
+    try require(frame.width == 36 && frame.height == frame.width,
+      "The baseline icon must remain 36 screen points at \(scale)x playfield zoom")
     let doubled = SkillCursorBadge.frame(at: point, scale: scale, size: .two, in: bounds)
     try require(doubled.width == frame.width * 2, "2× icon frame must double 1×")
     let reticle = GameCursor.playfieldPointerFrame(at: point, scale: scale)
@@ -830,8 +830,10 @@ private func testMacArtworkCropStaysPixelAligned() throws {
       CGPoint(x: bounds.minX, y: bounds.maxY),
       CGPoint(x: bounds.maxX, y: bounds.maxY),
     ] {
-      try require(bounds.contains(SkillCursorBadge.frame(at: edge, scale: scale, in: bounds)),
-        "the selected-skill reminder leaves the playfield at \(scale)x")
+      for size: SkillCursorIconSize in [.one, .two] {
+        try require(bounds.contains(SkillCursorBadge.frame(at: edge, scale: scale, size: size, in: bounds)),
+          "the selected-skill reminder leaves the playfield at \(scale)x")
+      }
     }
   }
   let centres = [point, CGPoint(x: point.x + 2, y: point.y), CGPoint(x: 290, y: 230)]
@@ -842,11 +844,13 @@ private func testMacArtworkCropStaysPixelAligned() throws {
   for size in SkillCursorIconSize.allCases {
     let count = SkillCursorBadge.countFrame(count: 12, at: point, scale: 2, size: size, in: bounds)
     let effective: SkillCursorIconSize = size == .none ? .one : size
+    try require(count.width == CGFloat(6 * effective.multiplier) && count.height == CGFloat(7 * effective.multiplier) / 2,
+      "Count dimensions must be half their previous size, including with the icon hidden")
     let icon = SkillCursorBadge.frame(at: point, scale: 2, size: effective, in: bounds)
     try require(count.maxX < point.x && count.minY == icon.minY,
       "Count must sit opposite the icon at the same height")
   }
-  print("PASS fixed-screen 2×/4× skill icons, offset and clamping at every edge")
+  print("PASS fixed-screen 6×/12× skill icons, offset and clamping at every edge")
 }
 
 @MainActor private func testClassicSessionRewindBranch() throws {
@@ -857,7 +861,7 @@ private func testMacArtworkCropStaysPixelAligned() throws {
     steelMask: Data(repeating: 0, count: solid.count))
   let configuration = ClassicDOSConfiguration(totalLemmings: 2, requiredToSave: 1,
     timeLimitTicks: 1_000, initialReleaseRate: 99,
-    entrances: [.init(x: 100, y: 30)], initialSkills: [.climber: 1],
+    entrances: [.init(x: 100, y: 30)], initialSkills: [.climber: 1, .floater: 1],
     maximumX: width - 1, maximumY: height - 1)
   let session = ClassicSession(simulation: try ClassicDOSSimulation(terrain: terrain,
     configuration: configuration), width: width, height: height)
@@ -868,9 +872,16 @@ private func testMacArtworkCropStaysPixelAligned() throws {
   }
   try require(session.assign(skillIndex: climber, to: id) == nil && session.recoveryEvents.count == 1,
     "The test skill was not recorded")
+  try require(session.lemmings.first?.hasClimber == true && session.lemmings.first?.hasFloater == false,
+    "The renderer did not receive the assigned climber flag")
+  let floater = ClassicSkill.allCases.firstIndex(of: .floater)!
+  try require(session.assign(skillIndex: floater, to: id) == nil && session.lemmings.first?.hasFloater == true,
+    "The renderer did not receive both permanent skills")
   for _ in 0..<10 { session.tick() }
   try require(session.rewind(seconds: 2) && session.recoveryEvents.isEmpty,
     "A checkpoint at the rewind point still includes the future assignment")
+  try require(session.lemmings.allSatisfy { !$0.hasClimber && !$0.hasFloater },
+    "Rewind left a permanent-skill backpack on an unassigned lemming")
   let live: any GameSession = session
   live.resumeFromRewind()
   for _ in 0..<40 { live.tick() }
@@ -879,7 +890,104 @@ private func testMacArtworkCropStaysPixelAligned() throws {
   print("PASS Classic session checkpoints and resumed play exclude future assignments")
 }
 
+
+@MainActor private func testClassicSkillBackpacks() throws {
+  let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
+  let assets = try ClassicMainDATAssets.load(from: root.appendingPathComponent("Content/lemming1.pc"))
+  let app = ProcessInfo.processInfo.environment["LEMMINGS_TEST_APP"].map { URL(fileURLWithPath: $0) }
+    ?? root.appendingPathComponent(".build/local/Ultimate Lemmings.app")
+  let macRoot = app.appendingPathComponent("Contents/Resources/MacArtwork/lemmings")
+  let mac = FileManager.default.fileExists(atPath: macRoot.appendingPathComponent("manifest.json").path)
+    ? try ClassicMacArtwork(directory: macRoot) : nil
+  if mac == nil { print("SKIP Mac backpack artwork: no extracted Mac assets") }
+  let view = PlayfieldView(frame: NSRect(x: 0, y: 0, width: 640, height: 320))
+  let session = TargetingSession()
+  view.session = session; view.phase = .playing; view.viewport.zoom = 4
+  view.assets = assets; view.palette = ClassicLemmingPalette.panelVGA
+  view.levelImage = CGContext(data: nil, width: 320, height: 160, bitsPerComponent: 8, bytesPerRow: 1280,
+    space: CGColorSpaceCreateDeviceRGB(), bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)!.makeImage()
+  func actor(_ climber: Bool, _ floater: Bool, left: Bool = false,
+             pose: ClassicLemmingPose = .walking) -> SessionLemming {
+    .init(id: 0, x: 60, y: 40, pose: pose, facingLeft: left, animationFrame: 0,
+      countdown: nil, hasClimber: climber, hasFloater: floater)
+  }
+  func capture() -> NSBitmapImageRep {
+    let bitmap = view.bitmapImageRepForCachingDisplay(in: view.bounds)!
+    view.cacheDisplay(in: view.bounds, to: bitmap)
+    return bitmap
+  }
+  for isMac in [false, true] where !isMac || mac != nil {
+    view.macArtwork = isMac ? mac : nil
+    for left in [false, true] {
+      session.actors = [actor(false, false, left: left)]
+      let original = capture().representation(using: .png, properties: [:])!
+      for (climber, floater, kind) in [(true, false, ClassicSkillBackpack.Kind.climber),
+        (false, true, .floater), (true, true, .both)] {
+        session.actors = [actor(climber, floater, left: left)]
+        let bitmap = capture()
+        let colours = kind.colours
+        var packPixels = 0
+        for y in 0..<bitmap.pixelsHigh { for x in 0..<bitmap.pixelsWide {
+          guard let colour = bitmap.colorAt(x: x, y: y)?.usingColorSpace(.deviceRGB) else { continue }
+          let rgb = [colour.redComponent, colour.greenComponent, colour.blueComponent].map { Int(($0 * 255).rounded()) }
+          if colours.contains(where: { zip($0, rgb).allSatisfy { abs(Int($0.0) - $0.1) <= 2 } }) { packPixels += 1 }
+        } }
+        try require(packPixels > 0, "Missing \(kind) backpack in \(isMac ? "Mac" : "PC") artwork, left=\(left)")
+        view.showClassicSkillBackpacks = false
+        try require(capture().representation(using: .png, properties: [:])! == original,
+          "Disabling backpacks must restore the original artwork for assigned lemmings")
+        view.showClassicSkillBackpacks = true
+        try require(view.lemming(at: CGPoint(x: 60, y: 40))?.id == 0,
+          "A backpack changed the lemming's input target")
+        try bitmap.representation(using: .png, properties: [:])!.write(to:
+          root.appendingPathComponent(".build/playfield-draw-tests/backpack-\(isMac ? "mac" : "pc")-\(kind.rawValue)-\(left ? "left" : "right").png"))
+      }
+      session.actors = [actor(false, false, left: left)]
+      try require(capture().representation(using: .png, properties: [:])! == original,
+        "The sprite cache leaked an assigned backpack onto an unassigned lemming")
+    }
+  }
+  var checkedFrames = 0
+  for pose in ClassicLemmingPose.allCases where ClassicSkillBackpack.kind(for: actor(true, true, pose: pose)) != nil {
+    for left in [false, true] {
+      let animation = assets.animation(for: pose, direction: left ? .left : .right)
+        ?? assets.animation(for: pose, direction: .none)!
+      for tick in animation.frames.indices {
+        let pc = animation.frames[tick]
+        var artwork = [(try pc.rgba(using: view.palette), pc.width, pc.height, 1)]
+        if let mf = mac?.lemming(pose: pose, left: left, tick: tick) {
+          artwork.append((mf.rgba, mf.width, mf.height, 2))
+        }
+        for (rgba, width, height, scale) in artwork {
+          let image = ClassicSkillBackpack.image(rgba: rgba, width: width, height: height,
+            pixelScale: scale, pose: pose, left: left, kind: .both)!
+          let cg = image.cgImage(forProposedRect: nil, context: nil, hints: nil)!
+          let data = cg.dataProvider!.data! as Data
+          var visible = false
+          for i in stride(from: 0, to: data.count, by: 4) where data[i + 3] > 0 {
+            for colour in ClassicSkillBackpack.Kind.both.colours {
+              if colour[0] == data[i] && colour[1] == data[i + 1] && colour[2] == data[i + 2] { visible = true }
+            }
+          }
+          try require(visible, "Backpack disappeared: \(pose), frame \(tick), left=\(left), artwork scale=\(scale)")
+          checkedFrames += 1
+        }
+      }
+    }
+  }
+  print("PASS backpacks visible through \(checkedFrames) PC/Mac animation frames")
+  for pose: ClassicLemmingPose in [.drowning, .splatting, .frying, .explosion, .exiting] {
+    try require(ClassicSkillBackpack.kind(for: actor(true, true, pose: pose)) == nil,
+      "A backpack remained after the lemming stopped being an active skill target")
+  }
+  let neo = SessionLemming(id: 0, x: 0, y: 0, pose: .walking, facingLeft: false,
+    animationFrame: 0, countdown: nil, hasClimber: true, neoAction: .walking)
+  try require(ClassicSkillBackpack.kind(for: neo) == nil, "Classic backpacks changed NeoLemmix artwork")
+  print("PASS Classic backpack colours, both directions, available artwork, cache isolation and input targets")
+}
+
 @MainActor private final class SkillBadgePreview: NSView {
+  var iconSize: SkillCursorIconSize = .one
   override var isFlipped: Bool { true }
   override func draw(_ dirtyRect: NSRect) {
     NSColor.black.setFill()
@@ -890,10 +998,12 @@ private func testMacArtworkCropStaysPixelAligned() throws {
       return true
     }
     for (index, remaining) in [3, 1, 0, nil].enumerated() {
-      let point = CGPoint(x: 40 + index * 80, y: 25)
+      let point = CGPoint(x: 40 + index * 120, y: 25)
       GameCursor.drawPlayfieldPointer(at: point, scale: 1, tint: .white)
+      SkillCursorBadge.drawCount([0, 1, 12, 99][index], at: point, scale: 1,
+        size: iconSize, icon: icon, in: bounds)
       SkillCursorBadge.draw(icon: icon, index: 0, at: point, scale: 1,
-        tint: .white, size: .one, reduceMotion: false,
+        tint: .white, size: iconSize, reduceMotion: false,
         remaining: remaining, now: 1.2, in: bounds)
     }
   }
@@ -924,15 +1034,15 @@ private func testMacArtworkCropStaysPixelAligned() throws {
   try require(opacity(1, 1.2, true) == 1,
     "Reduced motion must keep the last-use badge steady")
 
-  let preview = SkillBadgePreview(frame: CGRect(x: 0, y: 0, width: 320, height: 80))
+  let preview = SkillBadgePreview(frame: CGRect(x: 0, y: 0, width: 480, height: 100))
   guard let bitmap = preview.bitmapImageRepForCachingDisplay(in: preview.bounds) else {
     throw Failure(description: "The badge preview could not render")
   }
   preview.cacheDisplay(in: preview.bounds, to: bitmap)
   let pixelScale = CGFloat(bitmap.pixelsWide) / preview.bounds.width
   func redPixels(in cell: Int) -> Int {
-    let first = Int(CGFloat(cell * 80) * pixelScale)
-    let last = Int(CGFloat((cell + 1) * 80) * pixelScale)
+    let first = Int(CGFloat(cell * 120) * pixelScale)
+    let last = Int(CGFloat((cell + 1) * 120) * pixelScale)
     var count = 0
     for y in 0..<bitmap.pixelsHigh {
       for x in first..<last {
@@ -949,6 +1059,13 @@ private func testMacArtworkCropStaysPixelAligned() throws {
   try bitmap.representation(using: .png, properties: [:])!.write(to:
     root.appendingPathComponent(".build/playfield-draw-tests/skill-badge-availability.png"))
 
+  let large = SkillBadgePreview(frame: CGRect(x: 0, y: 0, width: 520, height: 140))
+  large.iconSize = .two
+  let largeBitmap = large.bitmapImageRepForCachingDisplay(in: large.bounds)!
+  large.cacheDisplay(in: large.bounds, to: largeBitmap)
+  try largeBitmap.representation(using: .png, properties: [:])!.write(to:
+    root.appendingPathComponent(".build/playfield-draw-tests/skill-badge-2x.png"))
+
   let highZoom = HighZoomEmptySkillPreview(frame: CGRect(x: 0, y: 0, width: 320, height: 240))
   let highZoomBitmap = highZoom.bitmapImageRepForCachingDisplay(in: highZoom.bounds)!
   highZoom.cacheDisplay(in: highZoom.bounds, to: highZoomBitmap)
@@ -961,7 +1078,7 @@ private func testMacArtworkCropStaysPixelAligned() throws {
   }
   let highZoomScale = CGFloat(highZoomBitmap.pixelsWide) / highZoom.bounds.width
   let redWidth = (redCoordinates.map(\.x).max() ?? 0) - (redCoordinates.map(\.x).min() ?? 0) + 1
-  try require(!redCoordinates.isEmpty && redWidth / highZoomScale <= 14,
+  try require(!redCoordinates.isEmpty && redWidth / highZoomScale <= 38,
     "The empty-skill X grew with the playfield zoom")
   try highZoomBitmap.representation(using: .png, properties: [:])!.write(to:
     root.appendingPathComponent(".build/playfield-draw-tests/high-zoom-empty-skill.png"))
@@ -1086,6 +1203,14 @@ private func testMacArtworkCropStaysPixelAligned() throws {
 }
 
 @MainActor private func testGameCursorRegions() throws {
+  let view = PlayfieldView(frame: CGRect(x: 0, y: 0, width: 320, height: 160))
+  let session = TargetingSession()
+  session.actors = [.init(id: 0, x: 50, y: 60, pose: .walking, facingLeft: false, animationFrame: 0, countdown: nil)]
+  session.skills = []
+  view.session = session
+  try require(view.hasLemming(at: CGPoint(x: 50, y: 55)) && view.lemming(at: CGPoint(x: 50, y: 55)) == nil,
+    "Original cursor hover must recognise a lemming even when no skill can be assigned")
+  try require(!view.hasLemming(at: CGPoint(x: 100, y: 55)), "Empty terrain retained a hover target")
   let playfield = CGRect(x: 0, y: 0, width: 320, height: 160)
   try require(GameCursor.hidesSystemCursor(at: CGPoint(x: 160, y: 80), inside: playfield),
     "the gameplay cursor is not hidden behind the drawn pointer")
@@ -1103,6 +1228,7 @@ private func testMacArtworkCropStaysPixelAligned() throws {
     try testTickDirectionContinuity()
     try testSkillCursorBadgeGeometry()
     try testClassicSessionRewindBranch()
+    try testClassicSkillBackpacks()
     try testSkillCursorBadgeAvailability()
     try testFreshLevelCountdown()
     try testGameCursorRegions()

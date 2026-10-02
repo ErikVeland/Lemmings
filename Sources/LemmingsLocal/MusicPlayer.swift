@@ -11,6 +11,7 @@ import NxlvKit
 final class ModuleMusicPlayer: @unchecked Sendable {
   private let engine = AVAudioEngine()
   private let nukeEQ = AVAudioUnitEQ(numberOfBands: 2)
+  private var nukeFilterAmount: Float = 0
   private let speedPitch = AVAudioUnitTimePitch()
   private let reverb = AVAudioUnitReverb()
   private let mixEQ = AVAudioUnitEQ(numberOfBands: 1)
@@ -94,11 +95,8 @@ final class ModuleMusicPlayer: @unchecked Sendable {
     mixEQ.bands[0].frequency = 180
     mixEQ.bands[0].bypass = false
     engine.attach(nukeEQ)
-    nukeEQ.bands[0].filterType = .lowShelf
-    nukeEQ.bands[0].frequency = 400
-    nukeEQ.bands[1].filterType = .highShelf
-    nukeEQ.bands[1].frequency = 1800
-    nukeEQ.bands.forEach { $0.bypass = false }
+    NukeMusicFilter.configure(nukeEQ)
+    NukeMusicFilter.apply(nukeFilterAmount, to: nukeEQ)
     engine.attach(reverb)
     engine.attach(spatialMixer)
     reverb.loadFactoryPreset(.mediumRoom)
@@ -480,10 +478,8 @@ final class ModuleMusicPlayer: @unchecked Sendable {
   }
   /// Independent of the DJ bass swap and the user's normal music mix.
   func setNukeAmount(_ value: Float) {
-    let amount = value.isFinite ? min(1, max(0, value)) : 0
-    nukeEQ.bands[0].gain = -24 * amount
-    nukeEQ.bands[1].gain = -30 * amount
-    nukeEQ.globalGain = -5 * amount
+    nukeFilterAmount = value.isFinite ? min(1, max(0, value)) : 0
+    NukeMusicFilter.apply(nukeFilterAmount, to: nukeEQ)
   }
 
   func setMixBass(_ gain: Float) { mixEQ.bands[0].gain = gain }

@@ -115,9 +115,12 @@ No replay-engine source changes were needed.
 
 ### Nuke countdown audio
 
-With HD Effects enabled, Classic and Lemmings 2 sweep the music into a hollow,
-quiet midrange over 350 ms when a nuke countdown starts. A separate EQ stage
-cuts bass by 24 dB, treble by 30 dB and overall gain by 5 dB at full depth.
+After 1.7.6, the HD nuke mix uses a low-pass sweep from 20 kHz to 450 Hz
+through the countdown, with a gradual 3 dB bass shelf at 180 Hz and no overall
+gain cut. Simulation ticks drive the sweep, so pause, speed changes and rewind
+follow the visible countdown. Classic uses 79 ticks, L2 uses 75 and the shared
+NeoLemmix path uses its 84-tick countdown. This replaces the 1.7.6 treatment
+that quickly cut both bass and treble and held the music at a quieter level.
 It composes with the DJ bass swap, Modern/Faithful mix, speed and pause controls;
 it does not restart a track. Both DJ decks and replacement tracks inherit the
 current amount. Undo, rewind before the nuke, completion and leaving gameplay
@@ -130,7 +133,8 @@ and cannot retrigger more than once per 300 ms. They use the existing effects
 volume, mute and suspension controls. HD Effects off disables these additions.
 Lemmings 3 has no mass-nuke countdown, so it does not use this treatment.
 
-`Scripts/run-nuke-audio-tests.sh` checks the recording EQ signal, restoration,
+`Scripts/run-nuke-audio-tests.sh` checks the progressive treble cut, bass lift,
+countdown timing, pause/rewind behaviour, recording EQ signal, restoration,
 bass envelope, source position, burst limit and mute without hardware output.
 The DJ mix tests also check that nuke EQ reaches both MOD decks and replacement
 tracks. These mechanical checks do not replace headphone and speaker listening.

@@ -76,3 +76,31 @@ enum FailureMoodDecision {
     context.restoreGState()
   }
 }
+
+/// Follow simulation time so pause, speed changes and rewind move the filter
+/// with the visible countdown rather than with a separate wall-clock fade.
+@MainActor final class NukeMusicSweep {
+  private var startTick: Int?
+  private(set) var amount: CGFloat = 0
+  var onChange: ((CGFloat) -> Void)?
+
+  func update(active: Bool, tick: Int, durationTicks: Int, remainingTicks: Int? = nil) {
+    guard active else { reset(); return }
+    let duration = max(1, durationTicks)
+    if startTick == nil || tick < startTick! {
+      let elapsed = remainingTicks.map { max(0, duration - $0) } ?? 0
+      startTick = tick - elapsed
+    }
+    let next = CGFloat(min(1, max(0, Double(tick - startTick!) / Double(duration))))
+    guard next != amount else { return }
+    amount = next
+    onChange?(amount)
+  }
+
+  func reset() {
+    startTick = nil
+    guard amount != 0 else { return }
+    amount = 0
+    onChange?(0)
+  }
+}

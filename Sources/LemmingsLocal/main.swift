@@ -194,7 +194,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private var arcadeAutoPresent = true
   private let music = ModuleMusicPlayer()
   private let failureMood = FailureMoodTransition()
-  private let nukeMood = FailureMoodTransition(duration: 0.35)
+  private let nukeMood = NukeMusicSweep()
   /// Plays recordings the player supplied, as an alternative to the modules.
   private let soundtrack = SoundtrackPlayer()
   /// Mixes across the supplied soundtracks, moving on what the game does.
@@ -1122,6 +1122,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
     playfield.reduceMotion = settings.reduceMotion
     playfield.reduceFlashes = settings.reduceFlashes
     playfield.hdEffectsEnabled = settings.hdEffectsEnabled
+    playfield.gameplayCursorStyle = settings.gameplayCursorStyle
+    playfield.showClassicSkillBackpacks = settings.showClassicSkillBackpacks
     playfield.showReticleCount = settings.showReticleCount
     playfield.skillCursorIconSize = settings.skillCursorIconSize
     playfield.lemmingSelectionStyle = settings.lemmingSelectionStyle
@@ -1170,6 +1172,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
     playfield.reduceMotion = settings.reduceMotion
     playfield.reduceFlashes = settings.reduceFlashes
     playfield.hdEffectsEnabled = settings.hdEffectsEnabled
+    playfield.gameplayCursorStyle = settings.gameplayCursorStyle
+    playfield.showClassicSkillBackpacks = settings.showClassicSkillBackpacks
     playfield.showReticleCount = settings.showReticleCount
     playfield.skillCursorIconSize = settings.skillCursorIconSize
     playfield.lemmingSelectionStyle = settings.lemmingSelectionStyle
@@ -7754,7 +7758,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   private func updateFailureMood() {
     let nuking = phase == .playing && !sequelIsActive && session?.isNuking == true && session?.isComplete == false && settings.hdEffectsEnabled
-    nukeMood.set(active: nuking)
+    nukeMood.update(active: nuking, tick: session?.currentTick ?? 0,
+      durationTicks: session is NeoLemmixSession ? NeoLemmixRules.bomberCountdownTicks : 79,
+      remainingTicks: session?.lemmings.compactMap(\.countdown).min())
     effects.setNukeActive(nuking)
     guard phase == .playing || phase == .results, let session else {
       failureMood.set(active: false)

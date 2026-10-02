@@ -163,6 +163,11 @@ public enum ClassicExperiencePreset: String, CaseIterable, Codable, Sendable {
     public var title: String { rawValue.capitalized }
 }
 
+public enum GameplayCursorStyle: String, CaseIterable, Codable, Sendable {
+    case original, modern
+    public var title: String { rawValue.capitalized }
+}
+
 public enum LemmingSelectionStyle: String, CaseIterable, Codable, Sendable {
     case none, obvious, modern
     public var title: String { rawValue.capitalized }
@@ -183,6 +188,8 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
     public var modernControlsEnabled: Bool
     public var variableSpeedEnabled: Bool
     public var pauseOnInterruption: Bool
+    public var gameplayCursorStyle: GameplayCursorStyle
+    public var showClassicSkillBackpacks: Bool
     public var showReticleCount: Bool
     public var skillCursorIconSize: SkillCursorIconSize
     public var lemmingSelectionStyle: LemmingSelectionStyle
@@ -235,6 +242,8 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         modernControlsEnabled: Bool = true,
         variableSpeedEnabled: Bool = true,
         pauseOnInterruption: Bool = true,
+        gameplayCursorStyle: GameplayCursorStyle = .modern,
+        showClassicSkillBackpacks: Bool = true,
         showReticleCount: Bool = false,
         skillCursorIconSize: SkillCursorIconSize = .one,
         lemmingSelectionStyle: LemmingSelectionStyle = .modern,
@@ -273,6 +282,8 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         self.modernControlsEnabled = modernControlsEnabled
         self.variableSpeedEnabled = variableSpeedEnabled
         self.pauseOnInterruption = pauseOnInterruption
+        self.gameplayCursorStyle = gameplayCursorStyle
+        self.showClassicSkillBackpacks = showClassicSkillBackpacks
         self.showReticleCount = showReticleCount
         self.skillCursorIconSize = skillCursorIconSize
         self.lemmingSelectionStyle = lemmingSelectionStyle
@@ -342,6 +353,10 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         modernControlsEnabled = try values.decodeIfPresent(Bool.self, forKey: .modernControlsEnabled) ?? fallback.modernControlsEnabled
         variableSpeedEnabled = try values.decodeIfPresent(Bool.self, forKey: .variableSpeedEnabled) ?? fallback.variableSpeedEnabled
         pauseOnInterruption = try values.decodeIfPresent(Bool.self, forKey: .pauseOnInterruption) ?? modernControlsEnabled
+        let savedExperience = try? values.decodeIfPresent(ClassicExperiencePreset.self, forKey: .experiencePreset)
+        let modernPresentation = savedExperience == .original ? false : savedExperience == .modern ? true : modernControlsEnabled
+        gameplayCursorStyle = source(.gameplayCursorStyle, modernPresentation ? .modern : .original)
+        showClassicSkillBackpacks = (try? values.decodeIfPresent(Bool.self, forKey: .showClassicSkillBackpacks)) ?? modernPresentation
         showReticleCount = (try? values.decodeIfPresent(Bool.self, forKey: .showReticleCount)) ?? false
         skillCursorIconSize = (try? values.decodeIfPresent(SkillCursorIconSize.self, forKey: .skillCursorIconSize)) ?? .one
         lemmingSelectionStyle = source(.lemmingSelectionStyle, modernControlsEnabled ? .modern : .none)
@@ -401,6 +416,8 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         favorBuilders = modern
         skillCursorIconSize = modern ? .one : .none
         lemmingSelectionStyle = modern ? .modern : .none
+        gameplayCursorStyle = modern ? .modern : .original
+        showClassicSkillBackpacks = modern
         showReticleCount = false
         controllerEnabled = modern
         controllerTapSpeed = modern

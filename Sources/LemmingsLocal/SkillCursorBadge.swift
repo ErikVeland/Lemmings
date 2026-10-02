@@ -4,6 +4,9 @@ import NxlvKit
 /// Draws the selected skill as a small, pixel-aligned cursor companion.
 @MainActor enum SkillCursorBadge {
     private static let nativeSide: CGFloat = 6
+    private static func iconMultiplier(_ size: SkillCursorIconSize) -> CGFloat {
+        3 * CGFloat(size.multiplier)
+    }
     private static var displayPixel: CGFloat {
         let deviceScale = abs(NSGraphicsContext.current?.cgContext.convertToDeviceSpace(
             CGSize(width: 1, height: 0)).width ?? 1)
@@ -18,7 +21,7 @@ import NxlvKit
      */
     static func frame(at point: CGPoint, scale: CGFloat, size: SkillCursorIconSize = .one, in bounds: CGRect) -> CGRect {
         let pixel = displayPixel
-        let side = nativeSide * CGFloat(size.multiplier)
+        let side = nativeSide * iconMultiplier(size)
         let reticle = GameCursor.playfieldPointerFrame(at: point, scale: scale)
         let gap = cornerGap
         let safeBounds = bounds.insetBy(dx: pixel, dy: pixel)
@@ -38,7 +41,7 @@ import NxlvKit
     static func countFrame(count: Int, at point: CGPoint, scale: CGFloat,
                            size: SkillCursorIconSize, icon: NSImage? = nil, in bounds: CGRect) -> CGRect {
         let effectiveSize: SkillCursorIconSize = size == .none ? .one : size
-        let multiplier = CGFloat(effectiveSize.multiplier)
+        let multiplier = CGFloat(effectiveSize.multiplier) / 2
         let pixel = max(1, floor(scale))
         let badge = frame(at: point, scale: scale, size: effectiveSize, in: bounds)
         let reticle = GameCursor.playfieldPointerFrame(at: point, scale: scale)
@@ -47,7 +50,7 @@ import NxlvKit
         let available = badge
         let iconHeight: CGFloat
         if let icon {
-            let fit = min(multiplier, available.width / max(1, icon.size.width), available.height / max(1, icon.size.height))
+            let fit = min(iconMultiplier(effectiveSize), available.width / max(1, icon.size.width), available.height / max(1, icon.size.height))
             iconHeight = icon.size.height * fit
         } else { iconHeight = height }
         let y = floor(available.minY + (iconHeight - height) / 2)
@@ -60,7 +63,7 @@ import NxlvKit
                           size: SkillCursorIconSize, icon: NSImage? = nil, in bounds: CGRect) {
         let rect = countFrame(count: count, at: point, scale: scale, size: size, icon: icon, in: bounds)
         GamePixelText.draw(String(count), in: rect,
-            maxScale: CGFloat(size == .none ? 2 : size.multiplier), palette: .blue)
+            maxScale: CGFloat(size == .none ? 2 : size.multiplier) / 2, palette: .blue)
     }
 
     /**
@@ -75,7 +78,7 @@ import NxlvKit
                      tint: NSColor, size: SkillCursorIconSize = .one, reduceMotion: Bool,
                      remaining: Int?, now: TimeInterval = ProcessInfo.processInfo.systemUptime, in bounds: CGRect) {
         guard size != .none else { return }
-        let multiplier = CGFloat(size.multiplier)
+        let multiplier = iconMultiplier(size)
         let pixel = displayPixel
         let rect = frame(at: point, scale: scale, size: size, in: bounds)
         if remaining == 0 {

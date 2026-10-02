@@ -58,6 +58,19 @@ private func check(_ value: @autoclosure () throws -> Bool, _ message: String) t
   print("PASS " + name + " camera keys, repeat suppression, modifier/text guards and rendered help targets")
 }
 
+@MainActor func validateCursorPresets(name: String, apply: (ClassicSettings) -> Void,
+                                      current: () -> GameplayCursorStyle) throws {
+  for modern in [false, true] {
+    var settings = ClassicSettings(); settings.applyExperiencePreset(modern: modern)
+    apply(settings)
+    try check(current() == (modern ? .modern : .original), name + " cursor did not follow its gameplay preset")
+  }
+  var custom = ClassicSettings(); custom.gameplayCursorStyle = .original; custom.experiencePreset = .custom
+  apply(custom)
+  try check(current() == .original, name + " ignored a custom cursor choice")
+  print("PASS " + name + " Original/Modern/Custom cursor wiring")
+}
+
 @MainActor func validatePauseKeyboard(_ keyboard: GameplayKeyboard, name: String, paused: () -> Bool) throws {
   let host = SpeedTestWindow(contentRect: CGRect(x: 0, y: 0, width: 400, height: 300),
     styleMask: [], backing: .buffered, defer: false)
@@ -833,12 +846,18 @@ extension AppDelegate {
     try check(isPaused && !playfield.startCountdown.isActive, "Pause during countdown must remain paused")
     togglePause()
     let preferences = SettingsWindow(settings: ClassicSettings(), options: settingsOptions())
+    preferences.onChange = { [weak self] in self?.apply($0) }
     preferences.show()
     func descendants(_ view: NSView) -> [NSView] { [view] + view.subviews.flatMap { descendants($0) } }
     let root = window.contentView!
     guard let iconSize = descendants(root).compactMap({ $0 as? NSPopUpButton }).first(where: { $0.accessibilityLabel() == "Skill icon size" }) else {
       try check(false, "Skill icon size control is missing"); return
     }
+    guard let cursorStyle = descendants(root).compactMap({ $0 as? NSPopUpButton }).first(where: { $0.accessibilityLabel() == "Cursor style" }) else {
+      throw IntegrationFailure(message: "Cursor style control is missing")
+    }
+    try check(cursorStyle.itemTitles == ["Original", "Modern"] && cursorStyle.titleOfSelectedItem == "Modern",
+      "Cursor choices or default are wrong")
     try check(iconSize.titleOfSelectedItem == "1×" && preferences.current.skillCursorIconSize.multiplier == 2,
       "Skill icon must default to actual 2× labelled 1×")
     guard let experience = descendants(root).compactMap({ $0 as? NSPopUpButton }).first(where: { $0.accessibilityLabel() == "Gameplay preset" }) else {
@@ -850,7 +869,15 @@ extension AppDelegate {
       try check(false, "Reticule count control is missing"); return
     }
     try check(countControl.state == .off && !preferences.current.showReticleCount, "Reticule count must default off")
+    guard let backpacks = descendants(root).compactMap({ $0 as? NSButton }).first(where: { $0.title == "Show skill backpacks" }) else {
+      throw IntegrationFailure(message: "Classic backpack toggle is missing")
+    }
+    try check(backpacks.state == .on && preferences.current.showClassicSkillBackpacks,
+      "Modern must show backpacks by default")
     root.layoutSubtreeIfNeeded()
+    try check(backpacks.visibleRect.contains(backpacks.bounds.insetBy(dx: 1, dy: 1)), "Backpack toggle is clipped")
+    try check(root.hitTest(backpacks.convert(CGPoint(x: backpacks.bounds.midX, y: backpacks.bounds.midY), to: root)) === backpacks,
+      "Backpack toggle has the wrong input target")
     func click(_ point: CGPoint, in view: NSView, releaseAt: CGPoint? = nil) {
       let location = view.convert(point, to: nil)
       let down = NSEvent.mouseEvent(with: .leftMouseDown, location: location, modifierFlags: [], timestamp: 1,
@@ -866,6 +893,15 @@ extension AppDelegate {
     }
     func capturePreset(_ name: String) throws {
       root.layoutSubtreeIfNeeded()
+      for view in descendants(root) { view.needsDisplay = true }
+      if GameScreen.shared.controllerPage(in: window)?.accessibilityLabel() == "Settings",
+         let levelSelection = descendants(root).compactMap({ $0 as? NSPopUpButton }).first(where: { $0.accessibilityLabel() == "Level selection" }),
+         let back = descendants(root).compactMap({ $0 as? NSButton }).first(where: { $0.title == "Back" }) {
+        let levelRect = levelSelection.convert(levelSelection.bounds, to: root)
+        let backRect = back.convert(back.bounds, to: root)
+        try check(!levelRect.intersects(backRect), "Gameplay options overlap the Back button")
+        try check(levelSelection.visibleRect.contains(levelSelection.bounds.insetBy(dx: 1, dy: 1)), "Level selection is clipped")
+      }
       let bitmap = root.bitmapImageRepForCachingDisplay(in: root.bounds)!
       root.cacheDisplay(in: root.bounds, to: bitmap)
       try bitmap.representation(using: .png, properties: [:])!.write(to: URL(fileURLWithPath: ".build/gameplay-preset-\(name).png"))
@@ -900,12 +936,20 @@ extension AppDelegate {
       && !preferences.current.favorBombBlockers && !preferences.current.favorBuilders
       && preferences.current.skillCursorIconSize == .none && iconSize.titleOfSelectedItem == "None",
       "Original did not disable all targeting aids and the icon")
+    try check(!preferences.current.showClassicSkillBackpacks && backpacks.state == .off && !playfield.showClassicSkillBackpacks,
+      "Original did not disable backpacks in Settings and the playfield")
+    try check(preferences.current.gameplayCursorStyle == .original && playfield.gameplayCursorStyle == .original
+      && cursorStyle.titleOfSelectedItem == "Original", "Original preset did not select the original cursor")
     try capturePreset("original")
     try selectPreset("Modern", keyboard: true)
     try check(preferences.current.favorApproachingLemmings && preferences.current.favorBombBlockers
       && preferences.current.favorBuilders && preferences.current.skillCursorIconSize == .one,
       "Modern did not restore targeting aids and the baseline icon")
-    for title in ["Favor lemmings still approaching", "Favor blockers for bombs", "Favor current builders for Build"] {
+    try check(preferences.current.showClassicSkillBackpacks && backpacks.state == .on && playfield.showClassicSkillBackpacks,
+      "Modern did not restore backpacks in Settings and the playfield")
+    try check(preferences.current.gameplayCursorStyle == .modern && playfield.gameplayCursorStyle == .modern
+      && cursorStyle.titleOfSelectedItem == "Modern", "Modern preset did not restore the modern cursor")
+    for title in ["Favor lemmings still approaching", "Favor blockers for bombs", "Favor current builders for Build", "Show skill backpacks"] {
       guard let control = descendants(root).compactMap({ $0 as? NSButton }).first(where: { $0.title == title }) else {
         try check(false, "Targeting control is missing: \(title)"); return
       }
@@ -959,6 +1003,21 @@ extension AppDelegate {
       _ = iconSize.sendAction(iconSize.action, to: iconSize.target)
       try check(preferences.current.skillCursorIconSize == size, "Skill icon control did not apply its selection")
     }
+    for style: GameplayCursorStyle in [.modern, .original] {
+      root.layoutSubtreeIfNeeded()
+      let centre = CGPoint(x: cursorStyle.bounds.midX, y: cursorStyle.bounds.midY)
+      try check(root.hitTest(cursorStyle.convert(centre, to: root)) === cursorStyle, "Cursor control is obscured")
+      try check(cursorStyle.accessibilityPerformPress(), "Cursor choices did not open")
+      let page = GameScreen.shared.controllerPage(in: window)!
+      let choice = descendants(page).compactMap { $0 as? NSButton }.first { $0.title == style.title }!
+      root.layoutSubtreeIfNeeded()
+      click(CGPoint(x: choice.bounds.midX, y: choice.bounds.midY), in: choice)
+      try check(preferences.current.gameplayCursorStyle == style && playfield.gameplayCursorStyle == style
+        && preferences.current.experiencePreset == .custom, "Cursor selection did not apply immediately as Custom")
+    }
+    try check(backpacks.accessibilityPerformPress(), "Backpack toggle lacks an accessibility action")
+    try check(!preferences.current.showClassicSkillBackpacks && !playfield.showClassicSkillBackpacks,
+      "Backpack opt-out did not apply immediately")
     root.layoutSubtreeIfNeeded()
     let bitmap = root.bitmapImageRepForCachingDisplay(in: root.bounds)!
     root.cacheDisplay(in: root.bounds, to: bitmap)
@@ -969,6 +1028,12 @@ extension AppDelegate {
     reopened.show()
     let reopenedPreset = descendants(root).compactMap { $0 as? NSPopUpButton }.first { $0.accessibilityLabel() == "Gameplay preset" }
     try check(reopenedPreset?.titleOfSelectedItem == "Custom", "Custom preset did not survive save and reopen")
+    let reopenedCursor = descendants(root).compactMap { $0 as? NSPopUpButton }.first { $0.accessibilityLabel() == "Cursor style" }
+    try check(reopened.current.gameplayCursorStyle == .original && reopenedCursor?.titleOfSelectedItem == "Original",
+      "Custom cursor choice did not survive save and reopen")
+    let reopenedBackpacks = descendants(root).compactMap { $0 as? NSButton }.first { $0.title == "Show skill backpacks" }
+    try check(reopenedBackpacks?.state == .off && !reopened.current.showClassicSkillBackpacks,
+      "Backpack opt-out did not survive save and reopen")
     GameScreen.shared.dismissAll()
     print("PASS Original/Modern/Custom presets, checkbox targets, keyboard selection, persistence and rendered states")
     window.makeFirstResponder(playfield)

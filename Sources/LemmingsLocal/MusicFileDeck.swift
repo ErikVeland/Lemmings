@@ -1,5 +1,23 @@
 import AVFoundation
 
+/// Keep the countdown audible while progressively removing treble.
+enum NukeMusicFilter {
+  static func configure(_ eq: AVAudioUnitEQ) {
+    eq.bands[0].filterType = .lowShelf
+    eq.bands[0].frequency = 180
+    eq.bands[0].bypass = false
+    eq.bands[1].filterType = .lowPass
+  }
+
+  static func apply(_ value: Float, to eq: AVAudioUnitEQ) {
+    let amount = value.isFinite ? min(1, max(0, value)) : 0
+    eq.bands[0].gain = 3 * amount
+    eq.bands[1].frequency = 20000 * pow(450.0 / 20000, amount)
+    eq.bands[1].bypass = amount == 0
+    eq.globalGain = 0
+  }
+}
+
 /// Plays one decoded music file through a small modern mix chain.
 ///
 /// File segments stream through the audio engine. Two queued passes keep
@@ -8,6 +26,7 @@ import AVFoundation
 final class MusicFileDeck {
   private let engine = AVAudioEngine()
   private let nukeEQ = AVAudioUnitEQ(numberOfBands: 2)
+  private var nukeFilterAmount: Float = 0
   private let player = AVAudioPlayerNode()
   private let rhythmPlayer = AVAudioPlayerNode()
   private let musicLayer = AVAudioMixerNode()
@@ -117,11 +136,8 @@ final class MusicFileDeck {
     engine.attach(equaliser)
     engine.attach(sourceMixer)
     engine.attach(nukeEQ)
-    nukeEQ.bands[0].filterType = .lowShelf
-    nukeEQ.bands[0].frequency = 400
-    nukeEQ.bands[1].filterType = .highShelf
-    nukeEQ.bands[1].frequency = 1800
-    nukeEQ.bands.forEach { $0.bypass = false }
+    NukeMusicFilter.configure(nukeEQ)
+    NukeMusicFilter.apply(nukeFilterAmount, to: nukeEQ)
     engine.attach(reverb)
     engine.attach(spatialMixer)
     engine.attach(outputMixer)
@@ -152,10 +168,8 @@ final class MusicFileDeck {
 
   /// Independent of the DJ bass swap and the user's normal music mix.
   func setNukeAmount(_ value: Float) {
-    let amount = value.isFinite ? min(1, max(0, value)) : 0
-    nukeEQ.bands[0].gain = -24 * amount
-    nukeEQ.bands[1].gain = -30 * amount
-    nukeEQ.globalGain = -5 * amount
+    nukeFilterAmount = value.isFinite ? min(1, max(0, value)) : 0
+    NukeMusicFilter.apply(nukeFilterAmount, to: nukeEQ)
   }
 
   func setMixBass(_ gain: Float) { equaliser.bands[0].gain = 1.5 + gain; equaliser.bands[0].bypass = false }
