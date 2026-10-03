@@ -1,0 +1,54 @@
+PASS Apple accepted 60508907-8b0d-4345-9909-9073eecc8152
+Successfully downloaded submission log
+  id: 60508907-8b0d-4345-9909-9073eecc8152
+  location: /Users/veland/.codex/worktrees/release-1-7-7/Lemmings/.build/release-1.7.8/slim-notary-log.json
+PASS Apple log matches exact submitted archive
+Processing: /Users/veland/.codex/worktrees/release-1-7-7/Lemmings/.build/release-1.7.8/slim/Ultimate Lemmings.app
+Processing: /Users/veland/.codex/worktrees/release-1-7-7/Lemmings/.build/release-1.7.8/slim/Ultimate Lemmings.app
+The staple and validate action worked!
+Processing: /Users/veland/.codex/worktrees/release-1-7-7/Lemmings/.build/release-1.7.8/slim/Ultimate Lemmings.app
+The validate action worked!
+/Users/veland/.codex/worktrees/release-1-7-7/Lemmings/.build/release-1.7.8/slim/Ultimate Lemmings.app: valid on disk
+/Users/veland/.codex/worktrees/release-1-7-7/Lemmings/.build/release-1.7.8/slim/Ultimate Lemmings.app: satisfies its Designated Requirement
+PASS ZIP integrity, app-only contents and size 159238943
+/Users/veland/.codex/worktrees/release-1-7-7/Lemmings/.build/release-1.7.8/slim-gatekeeper/Ultimate Lemmings.app: accepted
+source=Notarized Developer ID
+origin=Developer ID Application: Erik Veland (54WU29TRTY)
+Processing: /Users/veland/.codex/worktrees/release-1-7-7/Lemmings/.build/release-1.7.8/slim-gatekeeper/Ultimate Lemmings.app
+The validate action worked!
+/Users/veland/.codex/worktrees/release-1-7-7/Lemmings/.build/release-1.7.8/slim-gatekeeper/Ultimate Lemmings.app: valid on disk
+/Users/veland/.codex/worktrees/release-1-7-7/Lemmings/.build/release-1.7.8/slim-gatekeeper/Ultimate Lemmings.app: satisfies its Designated Requirement
+{
+  "sourceCommit": "dbc3d25bfeee920d0941398603d87aec94c80a7f",
+  "archive": "UltimateLemmings-1.7.8-build62-slim.zip",
+  "size": 159238943,
+  "sha256": "23b75a8fc909b8627d2c854d2cb33c4cd43d2653720c19c87ec62be98ffa2b78",
+  "notarySubmission": "60508907-8b0d-4345-9909-9073eecc8152"
+}
+PASS Apple accepted cbf2db41-b841-4af5-bc22-f6c6cf132534
+Successfully downloaded submission log
+  id: cbf2db41-b841-4af5-bc22-f6c6cf132534
+  location: /Users/veland/.codex/worktrees/release-1-7-7/Lemmings/.build/release-1.7.8/standard-notary-log.json
+PASS Apple log matches exact submitted archive
+Processing: /Users/veland/.codex/worktrees/release-1-7-7/Lemmings/.build/release-1.7.8/standard/Ultimate Lemmings.app
+Processing: /Users/veland/.codex/worktrees/release-1-7-7/Lemmings/.build/release-1.7.8/standard/Ultimate Lemmings.app
+The staple and validate action worked!
+Processing: /Users/veland/.codex/worktrees/release-1-7-7/Lemmings/.build/release-1.7.8/standard/Ultimate Lemmings.app
+The validate action worked!
+/Users/veland/.codex/worktrees/release-1-7-7/Lemmings/.build/release-1.7.8/standard/Ultimate Lemmings.app: valid on disk
+/Users/veland/.codex/worktrees/release-1-7-7/Lemmings/.build/release-1.7.8/standard/Ultimate Lemmings.app: satisfies its Designated Requirement
+PASS ZIP integrity, app-only contents and size 1943295087
+/Users/veland/.codex/worktrees/release-1-7-7/Lemmings/.build/release-1.7.8/standard-gatekeeper/Ultimate Lemmings.app: accepted
+source=Notarized Developer ID
+origin=Developer ID Application: Erik Veland (54WU29TRTY)
+Processing: /Users/veland/.codex/worktrees/release-1-7-7/Lemmings/.build/release-1.7.8/standard-gatekeeper/Ultimate Lemmings.app
+The validate action worked!
+/Users/veland/.codex/worktrees/release-1-7-7/Lemmings/.build/release-1.7.8/standard-gatekeeper/Ultimate Lemmings.app: valid on disk
+/Users/veland/.codex/worktrees/release-1-7-7/Lemmings/.build/release-1.7.8/standard-gatekeeper/Ultimate Lemmings.app: satisfies its Designated Requirement
+{
+  "sourceCommit": "dbc3d25bfeee920d0941398603d87aec94c80a7f",
+  "archive": "UltimateLemmings-1.7.8-build62.zip",
+  "size": 1943295087,
+  "sha256": "7efcc2b39d219b025da8055d9514365af3b6a77988f8334548b8ad1176164c89",
+  "notarySubmission": "cbf2db41-b841-4af5-bc22-f6c6cf132534"
+}

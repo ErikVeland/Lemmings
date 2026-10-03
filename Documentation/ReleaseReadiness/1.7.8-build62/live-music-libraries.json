@@ -1,0 +1,110 @@
+[
+  {
+    "id": "composer",
+    "url": "https://github.com/ErikVeland/Lemmings/releases/download/music-1.6/composer.zip",
+    "status": 206,
+    "zipHeader": true
+  },
+  {
+    "id": "demos",
+    "url": "https://github.com/ErikVeland/Lemmings/releases/download/music-1.6/demos.zip",
+    "status": 206,
+    "zipHeader": true
+  },
+  {
+    "id": "port-arcade",
+    "url": "https://github.com/ErikVeland/Lemmings/releases/download/music-1.6/port-arcade.zip",
+    "status": 206,
+    "zipHeader": true
+  },
+  {
+    "id": "port-archimedes",
+    "url": "https://github.com/ErikVeland/Lemmings/releases/download/music-1.6/port-archimedes.zip",
+    "status": 206,
+    "zipHeader": true
+  },
+  {
+    "id": "port-dos-opl2",
+    "url": "https://github.com/ErikVeland/Lemmings/releases/download/music-1.6/port-dos-opl2.zip",
+    "status": 206,
+    "zipHeader": true
+  },
+  {
+    "id": "port-dos-opl3",
+    "url": "https://github.com/ErikVeland/Lemmings/releases/download/music-1.6/port-dos-opl3.zip",
+    "status": 206,
+    "zipHeader": true
+  },
+  {
+    "id": "port-fm-towns",
+    "url": "https://github.com/ErikVeland/Lemmings/releases/download/music-1.6/port-fm-towns.zip",
+    "status": 206,
+    "zipHeader": true
+  },
+  {
+    "id": "port-game-boy",
+    "url": "https://github.com/ErikVeland/Lemmings/releases/download/music-1.6/port-game-boy.zip",
+    "status": 206,
+    "zipHeader": true
+  },
+  {
+    "id": "port-lynx",
+    "url": "https://github.com/ErikVeland/Lemmings/releases/download/music-1.6/port-lynx.zip",
+    "status": 206,
+    "zipHeader": true
+  },
+  {
+    "id": "port-master-system",
+    "url": "https://github.com/ErikVeland/Lemmings/releases/download/music-1.6/port-master-system.zip",
+    "status": 206,
+    "zipHeader": true
+  },
+  {
+    "id": "port-mega-drive",
+    "url": "https://github.com/ErikVeland/Lemmings/releases/download/music-1.6/port-mega-drive.zip",
+    "status": 206,
+    "zipHeader": true
+  },
+  {
+    "id": "port-nes",
+    "url": "https://github.com/ErikVeland/Lemmings/releases/download/music-1.6/port-nes.zip",
+    "status": 206,
+    "zipHeader": true
+  },
+  {
+    "id": "port-pc-98",
+    "url": "https://github.com/ErikVeland/Lemmings/releases/download/music-1.6/port-pc-98.zip",
+    "status": 206,
+    "zipHeader": true
+  },
+  {
+    "id": "port-snes",
+    "url": "https://github.com/ErikVeland/Lemmings/releases/download/music-1.6/port-snes.zip",
+    "status": 206,
+    "zipHeader": true
+  },
+  {
+    "id": "port-spectrum",
+    "url": "https://github.com/ErikVeland/Lemmings/releases/download/music-1.6/port-spectrum.zip",
+    "status": 206,
+    "zipHeader": true
+  },
+  {
+    "id": "port-tandy",
+    "url": "https://github.com/ErikVeland/Lemmings/releases/download/music-1.6/port-tandy.zip",
+    "status": 206,
+    "zipHeader": true
+  },
+  {
+    "id": "port-x68000",
+    "url": "https://github.com/ErikVeland/Lemmings/releases/download/music-1.6/port-x68000.zip",
+    "status": 206,
+    "zipHeader": true
+  },
+  {
+    "id": "remixes",
+    "url": "https://github.com/ErikVeland/Lemmings/releases/download/music-1.6/remixes.zip",
+    "status": 206,
+    "zipHeader": true
+  }
+]

@@ -1,0 +1,18 @@
+[
+  {
+    "scope": "slim",
+    "path": "/Users/veland/.codex/worktrees/release-1-7-7/Lemmings/.build/release-1.7.8/slim-submission.zip",
+    "bytes": 159236993,
+    "sha256": "7db4008e414fcf5f3c4ea3d808c0b14bbd1522573981edbb91a257dc95e8e30f",
+    "signed": true,
+    "notarised": false
+  },
+  {
+    "scope": "full",
+    "path": "/Users/veland/.codex/worktrees/release-1-7-7/Lemmings/.build/release-1.7.8/notary-submission.zip",
+    "bytes": 1943293138,
+    "sha256": "07d732e60b2d40671832c17a0a82ebc26f07cb9be0b71cfe83f3b122197376b5",
+    "signed": true,
+    "notarised": false
+  }
+]

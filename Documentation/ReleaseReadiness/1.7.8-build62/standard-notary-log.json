@@ -1,0 +1,193 @@
+{
+  "logFormatVersion": 1,
+  "jobId": "cbf2db41-b841-4af5-bc22-f6c6cf132534",
+  "status": "Accepted",
+  "statusSummary": "Ready for distribution",
+  "statusCode": 0,
+  "archiveFilename": "notary-submission.zip",
+  "uploadDate": "2026-10-03T08:57:11.974Z",
+  "sha256": "07d732e60b2d40671832c17a0a82ebc26f07cb9be0b71cfe83f3b122197376b5",
+  "ticketContents": [
+    {
+      "path": "notary-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/B/Updater.app",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "e153c4bbbcd823fa239afea5860d9fa52ad33ce6",
+      "arch": "x86_64"
+    },
+    {
+      "path": "notary-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/B/Updater.app",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "4b2e056b4b1e7b3dc94da3be1172414d47063700",
+      "arch": "arm64"
+    },
+    {
+      "path": "notary-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/B/Updater.app/Contents/MacOS/Updater",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "e153c4bbbcd823fa239afea5860d9fa52ad33ce6",
+      "arch": "x86_64"
+    },
+    {
+      "path": "notary-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/B/Updater.app/Contents/MacOS/Updater",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "4b2e056b4b1e7b3dc94da3be1172414d47063700",
+      "arch": "arm64"
+    },
+    {
+      "path": "notary-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/libNxlvKit.dylib",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "d7780f20ba2fe83b5cebb0fc8c0ec0ac5a762842",
+      "arch": "x86_64"
+    },
+    {
+      "path": "notary-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/libNxlvKit.dylib",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "1095f32d216a160460780c10c3cd3254fb3a8a5b",
+      "arch": "arm64"
+    },
+    {
+      "path": "notary-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/Current/Updater.app",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "e153c4bbbcd823fa239afea5860d9fa52ad33ce6",
+      "arch": "x86_64"
+    },
+    {
+      "path": "notary-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/Current/Updater.app",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "4b2e056b4b1e7b3dc94da3be1172414d47063700",
+      "arch": "arm64"
+    },
+    {
+      "path": "notary-submission.zip/Ultimate Lemmings.app",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "52241168d1bc0854ad935268977eb7b865f85b49",
+      "arch": "x86_64"
+    },
+    {
+      "path": "notary-submission.zip/Ultimate Lemmings.app",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "a28fcd8f7c92176c02c13ad0ca8851a906ec16b0",
+      "arch": "arm64"
+    },
+    {
+      "path": "notary-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/Current",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "cd68306f76eddcd29d5a0b27918ac56572ef04cb",
+      "arch": "x86_64"
+    },
+    {
+      "path": "notary-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/Current",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "852b988ec153dd335c7b4df8bd4827cccf3bfbb6",
+      "arch": "arm64"
+    },
+    {
+      "path": "notary-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/Current/Autoupdate",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "168a1ceb19905c5486171780ddd75a5faf46d19f",
+      "arch": "x86_64"
+    },
+    {
+      "path": "notary-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/Current/Autoupdate",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "709b3764ff08b66e2c6191512f8067399d91468c",
+      "arch": "arm64"
+    },
+    {
+      "path": "notary-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/Current/XPCServices/Downloader.xpc",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "6549cfc4a0d48f5b3c834023a9aa9544fc80d9f7",
+      "arch": "x86_64"
+    },
+    {
+      "path": "notary-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/Current/XPCServices/Downloader.xpc",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "3603f6aefb5bf91ed13d49a1858f01b56ae0e4a0",
+      "arch": "arm64"
+    },
+    {
+      "path": "notary-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/Current/XPCServices/Installer.xpc",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "0e0356c9cd9427386b6a8ad493364274f93b4fa7",
+      "arch": "x86_64"
+    },
+    {
+      "path": "notary-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/Current/XPCServices/Installer.xpc",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "9ad94ef304debe9fb00f872a39d077a47f83eb58",
+      "arch": "arm64"
+    },
+    {
+      "path": "notary-submission.zip/Ultimate Lemmings.app/Contents/MacOS/LemmingsLocal",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "52241168d1bc0854ad935268977eb7b865f85b49",
+      "arch": "x86_64"
+    },
+    {
+      "path": "notary-submission.zip/Ultimate Lemmings.app/Contents/MacOS/LemmingsLocal",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "a28fcd8f7c92176c02c13ad0ca8851a906ec16b0",
+      "arch": "arm64"
+    },
+    {
+      "path": "notary-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/libNxlvKit.dylib",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "d7780f20ba2fe83b5cebb0fc8c0ec0ac5a762842",
+      "arch": "x86_64"
+    },
+    {
+      "path": "notary-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/libNxlvKit.dylib",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "1095f32d216a160460780c10c3cd3254fb3a8a5b",
+      "arch": "arm64"
+    },
+    {
+      "path": "notary-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/B/Autoupdate",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "168a1ceb19905c5486171780ddd75a5faf46d19f",
+      "arch": "x86_64"
+    },
+    {
+      "path": "notary-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/B/Autoupdate",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "709b3764ff08b66e2c6191512f8067399d91468c",
+      "arch": "arm64"
+    },
+    {
+      "path": "notary-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/B/Sparkle",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "cd68306f76eddcd29d5a0b27918ac56572ef04cb",
+      "arch": "x86_64"
+    },
+    {
+      "path": "notary-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/B/Sparkle",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "852b988ec153dd335c7b4df8bd4827cccf3bfbb6",
+      "arch": "arm64"
+    },
+    {
+      "path": "notary-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Downloader.xpc/Contents/MacOS/Downloader",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "6549cfc4a0d48f5b3c834023a9aa9544fc80d9f7",
+      "arch": "x86_64"
+    },
+    {
+      "path": "notary-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Downloader.xpc/Contents/MacOS/Downloader",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "3603f6aefb5bf91ed13d49a1858f01b56ae0e4a0",
+      "arch": "arm64"
+    },
+    {
+      "path": "notary-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Installer.xpc/Contents/MacOS/Installer",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "0e0356c9cd9427386b6a8ad493364274f93b4fa7",
+      "arch": "x86_64"
+    },
+    {
+      "path": "notary-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Installer.xpc/Contents/MacOS/Installer",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "9ad94ef304debe9fb00f872a39d077a47f83eb58",
+      "arch": "arm64"
+    }
+  ],
+  "issues": null
+}

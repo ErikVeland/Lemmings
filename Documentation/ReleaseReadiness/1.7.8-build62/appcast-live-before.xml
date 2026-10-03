@@ -3,27 +3,6 @@
     <channel>
         <title>Ultimate Lemmings</title>
         <item>
-            <title>1.7.8</title>
-            <pubDate>Sat, 03 Oct 2026 19:06:44 +1000</pubDate>
-            <link>https://github.com/ErikVeland/Lemmings/releases</link>
-            <sparkle:version>62</sparkle:version>
-            <sparkle:shortVersionString>1.7.8</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>12.3</sparkle:minimumSystemVersion>
-            <description><![CDATA[<html><head><meta charset="utf-8"><style>:root{color-scheme:light dark}body{font:13px -apple-system,sans-serif}h3{font-size:14px;margin:14px 0 4px}h4{font-size:13px;margin:10px 0 2px}ul{padding-left:18px;margin:4px 0}.meta{color:#888;font-size:11px}</style></head><body><h3>Balanced cursor badges</h3>
-<p>The selected skill icon, empty-skill red X and optional lemming counter now match in visible height and alignment at both 1× and 2×. The X uses the game's pixel font. Transparent sprite padding no longer makes an icon look smaller. The shared sizing applies to Classic, Lemmings 2 and Lemmings 3.</p>
-<h3>A sharper nuke finish</h3>
-<p>With HD Effects enabled, the music filter opens back up over 280 ms after the final nuke pop. The bass lift returns to normal with it. The transition continues through explosion tails and the results screen, even after the simulation stops. Classic and Lemmings 2 follow their own audible pop timing. Imported NeoLemmix levels also restore the mix. Lemmings 3 has no mass nuke.</p>
-<h3>Fan levels and the learning path</h3>
-<p>The evidence ledger now records 2,305 Classic fan wins, up from 2,154 in 1.7.7, alongside 322 NeoLemmix wins. Exact-level rule selection, Golems hatch placement and directional mining compatibility improve. The regenerated 292-lesson learning path draws on the expanded set of recorded solutions.</p>
-<p>Lemmings 3 includes a focused directional step-up correction supported by source investigation and retained-route checks. Lemmings 2 and Lemmings 3 remain Preview. NeoLemmix remains Beta. Native winning replays do not prove complete source-engine physics parity, and source outcome differences remain.</p>
-<h3>Download and update</h3>
-<p>For a fresh installation, choose <code>UltimateLemmings-1.7.8-build62-slim.zip</code>. It includes the original soundtracks and offers optional libraries when they are missing. Previously downloaded libraries are detected and retained.</p>
-<p>Existing players can use Check for Updates. Its full archive preserves music bundled inside older apps. Both downloads contain the same universal macOS app and support macOS 12.3 or later.</p>
-<p class="meta">Build: 62<br>Release commit: dbc3d25bfeee920d0941398603d87aec94c80a7f<br>Release base: v1.7.7</p></body></html>
-]]></description>
-            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.7.8/UltimateLemmings-1.7.8-build62.zip" length="1943295087" type="application/octet-stream" sparkle:edSignature="dDEDHZpqWCtLaCCEWZe54QckjUF3YBik2S7CSvvd/UfsccH+MRG37SjpNwwcjRMDMvQKu90qNNui41aP5W5vDw=="/>
-        </item>
-        <item>
             <title>1.7.7</title>
             <pubDate>Fri, 02 Oct 2026 15:09:04 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
@@ -79,7 +58,7 @@
 ]]></description>
             <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.7.6/UltimateLemmings-1.7.6-build60.zip" length="1943220872" type="application/octet-stream" sparkle:edSignature="oRPZX1b1vbmnKIMlujtzkPY2pZKOkBiYCIbaRrOlFc9U+lKGJH4nz/GCBDXQokUquRiBGHbxMfG4bBO9uZRNDA=="/>
         </item>
-      <item>
+        <item>
             <title>1.7.3</title>
             <pubDate>Wed, 30 Sep 2026 17:14:53 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
@@ -107,5 +86,5 @@
 ]]></description>
             <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.7.3/UltimateLemmings-1.7.3-build56.zip" length="1943120085" type="application/octet-stream" sparkle:edSignature="NgXmusN7cMXnopwvHSdzAmMg+5G5Jm/y2W5JkrL5O9mqoOmdb3qoTr5LpuPFGtonI18D/jTI44HSotCdWGIRBg=="/>
         </item>
-  </channel>
+    </channel>
 </rss>
