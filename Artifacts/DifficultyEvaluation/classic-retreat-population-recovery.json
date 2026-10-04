@@ -1,0 +1,62 @@
+{
+  "date": "2026-10-04",
+  "donorArchiveSHA256": "be7597710bb1f6b1421623c630bb9528ac16c8968a833980f6f8441c93cfd196",
+  "donorIdentity": "fan:lldb-548/Ji Hoon Sky 2.DAT#0",
+  "donorPopulation": 40,
+  "donorReplaySHA256": "dd62c79cea6fdfe0afe38684f8e3de47fd1587d9fd3040b04c67d04034aa91a5",
+  "donorStrictOutcome": {
+    "didWin": true,
+    "released": 40,
+    "required": 40,
+    "saved": 40,
+    "stateHash": "2e4ca25c78137450d740c45f4bbd8065a309465ad0356f0302c5a61941e6f44b",
+    "ticks": 346
+  },
+  "nativeLibrarySHA256": "9b795b0f5e5dd9a5cb70d1a97e233ba84da41b42fe199f1ed870fc702831d3c4",
+  "newWins": [
+    {
+      "archiveSHA256": "8d2daffec1cf660515ad4680e015d48b923b81b70afa10956729a179c81e3971",
+      "difficultyProbeRuns": 10,
+      "difficultyScore": 101.54040253071608,
+      "eventCount": 6,
+      "geometryHash": "SHA256 digest: 13d890d3c2b68f65470cc49667e7d7822c7f4d1258ca9b86409d1b16b74e3a63",
+      "population": 20,
+      "selectedReplaySHA256": "786cc48460360cb8d9c79ca9880905b80a782b54a6ce41ae79305e1aa77fe6f4",
+      "strictNativeOutcome": {
+        "didWin": true,
+        "released": 20,
+        "required": 20,
+        "saved": 20,
+        "stateHash": "3121abb06799d8945341a2543ec3972ababe5e57d9f65cbcdfbb860468ae2cb9",
+        "ticks": 266
+      },
+      "targetIdentity": "fan:lldb-547/Ji Hoon Heaven 2.DAT#6",
+      "targetInitialStateHash": "d043c426ea9089eefed94e065a43539be353fc4b3760acd468186ad2de765e02",
+      "targetTitle": "Retreat!!!"
+    },
+    {
+      "archiveSHA256": "102ffe175287b115424dbbc74fd4e409dc4ac2676dd530700418c85b76614747",
+      "difficultyProbeRuns": 10,
+      "difficultyScore": 98.95516284879862,
+      "eventCount": 6,
+      "geometryHash": "SHA256 digest: 13d890d3c2b68f65470cc49667e7d7822c7f4d1258ca9b86409d1b16b74e3a63",
+      "population": 60,
+      "selectedReplaySHA256": "dee8fb04c95c2a421eee019047dbda4ea9efaee10ab2bd1d8a3bc81658a429df",
+      "strictNativeOutcome": {
+        "didWin": true,
+        "released": 60,
+        "required": 60,
+        "saved": 60,
+        "stateHash": "76b72415a33a7a47f45e5ba0bc5816223e25f29e210b47321699ded1438763e5",
+        "ticks": 426
+      },
+      "targetIdentity": "fan:lldb-549/Ji Hoon Earth 1.DAT#2",
+      "targetInitialStateHash": "caee1827793168f44d6fcadb9c46cd5435d106e64caa2f6817589c0ff4c473e9",
+      "targetTitle": "Retreat!!!"
+    }
+  ],
+  "scope": "Population variants of the same rendered Retreat!!! puzzle with identical objects, terrain, release rate and five-Miner route",
+  "sourceBuiltScorerSHA256": "486955df10abe70221be410377dfa0eafc1b67fe930954e97324f16e9ec35314",
+  "sourcePhysicsParity": "unverified; matching native outcomes do not establish independent source-state parity",
+  "strictPostPromotionVerification": "19/19 selected scored levels in packs 547 and 549 passed exact bundled replay"
+}

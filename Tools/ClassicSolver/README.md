@@ -4,6 +4,9 @@
 `--resources RESOURCES`. A win is written as a native replay. Use `--hash-named`
 when the output argument is a directory; the replay filename then matches the
 initial simulation hash.
+The number is the sequential entry in the whole archive. For packs with
+multiple source files, it is not the zero-based `#section` in a level identity.
+Run `--describe` and check the title before a targeted search.
 
 `solve_fan_batch.py` reads an evidence audit, searches low-confidence playable
 fan levels, and records every attempt in `attempts.jsonl`. It skips attempts
@@ -14,17 +17,36 @@ The batch uses the Golems clock for bundled fan levels. Use `--clock dos` only
 for a comparison run; the attempt ledger keeps the clock setting.
 Set `FAN_ONLY_PACK=fan:lldb-N` for a targeted verification pass.
 
-Use `--golems-mechanics` in a targeted `ClassicSolver` run for the opt-in
-Golems hatch, fall and miner rules. Pair it with `--golems-clock` when testing
-packs 495 and 496. The batch wrapper and selected fan ledger still use the
-default mechanics. Replays found with this override require strict verification
-and a separate score under the same profile; see
+The solver uses the fan library's exact archive and level mechanics by default.
+For a geometry probe of an `.ini` source pack, pass `--canvas-width N` and
+`--canvas-height N` to the direct solver. The default canvas remains 1600×160.
+`--source-canvas` instead reads explicit dimensions from a text `.ini` level
+and uses the related SuperLemmini source defaults of 3200×320 when absent.
+It rejects binary Classic records. An explicit width or height overrides that
+axis of `--source-canvas`.
+Use `--source-terrain-coordinates` with the larger canvas when the text source
+places terrain below the DOS encoding limit. Add `--source-object-coordinates`
+to retain exact text object positions instead of DOS object alignment. The
+default still decodes both through the DOS record. These flags expose source
+geometry, but do not provide
+Lemmini physics. Treat any route found with them as research
+until the app can load the same source dimensions and a strict replay wins.
+Bundled fan levels use the Golems clock by default, as they do in the app.
+Use `--dos-clock` only for a focused clock comparison.
+Use `--golems-mechanics` in a targeted `ClassicSolver` run to test Golems hatch,
+fall and miner rules on a level that the library has not selected for those
+rules. Replays found with this override require strict verification and a
+separate score under the same profile. See
 `Artifacts/DifficultyEvaluation/classic-golems-mechanics-alternatives.json`.
 
 The beam search is bounded. An `UNSOLVED` result means that it found no winning
 route within the chosen search limits. It does not prove that a level is
 impossible. Do not count an attempt as a scored level until
 `ExpandFanEvidence` produces a winning profile and replay.
+Build the solver and its linked `NxlvKit` library with Swift `-O` for timed
+searches. An unoptimised native library can consume the deadline before a
+one-skill sweep reaches the rest of the waiting timeline. Record both binary
+digests with a bounded attempt so its coverage can be reproduced.
 When an exit is separated from the lemmings by solid terrain, the distance
 estimate uses geometric distance until an open route exists. This lets the
 search keep Builder and digging candidates that can cross the barrier.
@@ -45,6 +67,22 @@ Use `--prefer-progress` to rank routes nearer an exit before routes that keep
 more spare lemmings. The default keeps the survivor-first ranking. The batch
 ledger records this mode separately, so it does not skip an earlier search
 with the other ranking. A route still needs exact-level verification.
+Use `--rescue-quota-distance` when a level needs only some of its lemmings.
+The distance score then uses the nearest number still needed to meet the
+rescue target. This keeps a promising worker from being penalised for other
+lemmings far from the exit. It changes search order only and may be combined
+with `--prefer-progress`; record both options with each attempt.
+Use `--balanced-ranking` for a targeted search that reserves half the beam for
+each ranking. This can retain a route that sacrifices a lemming to open terrain
+while preserving routes that keep more lemmings alive. It cannot be combined
+with `--prefer-progress`. Record the mode and beam width with each attempt.
+Use `--focus-workers N` to offer new skill assignments only to the first N
+released lemmings. Later lemmings still move and count towards the rescue goal.
+The distance ranking also follows those workers, so a bridge-building search
+can retain a lead route when the crowd is far from the exit. This option works
+with the beam search, including `--rollout-single`. It excludes routes that
+need a later worker, so a failed focused search does not establish that a
+level is impossible.
 
 Use `--rollout-single` for a focused one-skill search. After the first skill
 input, it runs the candidate without further inputs to completion before beam
@@ -54,6 +92,34 @@ and rollout count. `--fallback 1` checks more input frames, but can use the
 whole time budget near the hatch. Use it for a known narrow timing window or
 with a longer bound. This pass does not cover routes that need a second skill.
 An unsuccessful run is only a bounded search result.
+Use `--sweep-pair FIRST,SECOND` for a focused two-skill timing check. Set
+`--first-from`, `--first-through`, `--second-gap-min` and `--second-gap-max`
+to the measured window. It tries each valid first assignment and then each
+valid second assignment in that window, completing the remaining route with
+no more input. The mode needs a fixed release rate and cannot use `--prefix`,
+`--sweep-single` or `--rollout-single`. Record the waiting-route tick and both
+assignment counts. A win still needs exact-level strict verification.
+Use `--broadcast-skill SKILL --broadcast-from N --broadcast-through N` for a
+level stocked with one copy of a skill per lemming. It tries each hatch-to-skill
+delay in the stated range and assigns that skill to each active lemming when
+available. The mode uses a fixed release rate and cannot use a prefix or another
+sweep mode. It found exact-level wins where a one-skill search could not assign
+the stocked skill to the whole crowd. Record the completed delay count; a failed
+broadcast sweep covers only this policy.
+The solver keeps the strongest completed continuation as a partial replay for
+the next focused search. A partial replay is not a winning or scored level.
+The unsolved report includes its terminal tick and released, lost and active
+counts. Use `--diagnose-active` to print the active lemmings' final positions
+and actions when a near-win needs a timing or route diagnosis.
+Before a beam search without a forced prefix, it also runs the fixed-rate,
+no-input route. This preserves a strong passive result even if the search
+deadline expires before its waiting branch reaches the end.
+An initial `--rate` command is setup input and does not count as the skill.
+The same applies to a forced `--prefix` command that has already run.
+The search keeps a waiting branch after forced prefix commands, so a second
+skill can still be tried at later ticks.
+An initial `--prefix` release-rate command at tick 0 is applied before the
+first simulation tick, matching `--rate` at the same tick.
 
 Use `--sweep-single` to try one after-tick skill assignment to every active
 lemming on each tick of a fixed-rate, no-input route. It runs each assignment

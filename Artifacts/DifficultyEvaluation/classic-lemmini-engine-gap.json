@@ -1,0 +1,271 @@
+{
+  "scope": "Text INI level members in 20 exact bundled Lemmini-tagged packs; binary Classic members excluded",
+  "sourceCodeReference": {
+    "url": "https://github.com/Blazingstix/SuperLemminiToo/blob/main/src/lemmini/game/Level.java",
+    "note": "Related public SuperLemminiToo fork, not independently identified as the exact runtime that authored each bundled level",
+    "defaultWidth": 3200,
+    "defaultHeight": 320,
+    "sourceReadsWidthHeightFields": true,
+    "sourceReadsMaxFallDistance": true,
+    "sourceReadsEntranceOrder": true
+  },
+  "nativeCodeReferences": [
+    "Sources/NxlvKit/FanLevelReader.swift",
+    "Sources/NxlvKit/ClassicDOSSimulation.swift",
+    "Sources/NxlvKit/ClassicGraphics.swift"
+  ],
+  "archives": {
+    "fan:lldb-200": {
+      "path": "Content/LevelPacks/0200-Gronklems-4.zip",
+      "sha256": "df9f798f55c909c8f0ef925a70b9dea3a607455ce9b63b3d40ebded40ff0d29f"
+    },
+    "fan:lldb-201": {
+      "path": "Content/LevelPacks/0201-Gronklems-3.zip",
+      "sha256": "fbf2c959cc58409892dba24a87b7230c515f720b09acb533d0e147e41842fa02"
+    },
+    "fan:lldb-203": {
+      "path": "Content/LevelPacks/0203-Gronklems-6.zip",
+      "sha256": "1900e4554d946d2e464f8a69cff2f2a915c72294c9c57bc2b563cbea3ebb9af0"
+    },
+    "fan:lldb-204": {
+      "path": "Content/LevelPacks/0204-Gronklems-5.zip",
+      "sha256": "75a78c065d97fb8d712aadf84ecf22464ae05f6018758a6902737ea7e1c7d716"
+    },
+    "fan:lldb-206": {
+      "path": "Content/LevelPacks/0206-mobius-3.zip",
+      "sha256": "a7fbd3d48290b5fcf49cb6ca7a8b24b010546ab3d8ab1c5feb7f09821d59e9c2"
+    },
+    "fan:lldb-208": {
+      "path": "Content/LevelPacks/0208-Gronklems-7.zip",
+      "sha256": "653a50ccce0eac0c98c88c590d3de2b462ac3b990e26d01636d9085c22325ca8"
+    },
+    "fan:lldb-209": {
+      "path": "Content/LevelPacks/0209-grams88-1.zip",
+      "sha256": "df965c0277163d6af6da6ab40ba80369ad2f0a446e05929c50c9091e6015974c"
+    },
+    "fan:lldb-211": {
+      "path": "Content/LevelPacks/0211-grams88-2.zip",
+      "sha256": "4fc97baad0e98022cd89fd9983569a8a2961258619ed83e490491d7f75a788c2"
+    },
+    "fan:lldb-215": {
+      "path": "Content/LevelPacks/0215-Plinto.zip",
+      "sha256": "9ca65d28f41157293456671bdf2ff1ee84d1ec8525cb7cbc5dcf63fa574058a5"
+    },
+    "fan:lldb-369": {
+      "path": "Content/LevelPacks/0369-Pieuw05.zip",
+      "sha256": "50356f4c0234731587eeb93030ee4e771ab9f7b73abd76195a19af50aef284dc"
+    },
+    "fan:lldb-396": {
+      "path": "Content/LevelPacks/0396-Lemmings-Heaven-Contest-2008.zip",
+      "sha256": "4756264b3368e17875198269002d708cf00478b3a20d49c94678902b95f49ca5"
+    },
+    "fan:lldb-397": {
+      "path": "Content/LevelPacks/0397-Lemmings-Heaven-Contest-2010.zip",
+      "sha256": "7cb5a7b687cccdbe290028ae7648bb15809b3248a3cf9330d418ce16240d63f2"
+    },
+    "fan:lldb-401": {
+      "path": "Content/LevelPacks/0401-Christmas-2013.zip",
+      "sha256": "52aefdb8192d0a738bd0a3f53e85a54d51e15826d6548c55e987a7e07de0c89d"
+    },
+    "fan:lldb-402": {
+      "path": "Content/LevelPacks/0402-Grent01.zip",
+      "sha256": "8244646ee239f12ea4e238fd52e12bac2c654be2814d49f18df7a32486995538"
+    },
+    "fan:lldb-406": {
+      "path": "Content/LevelPacks/0406-Just-Some-Levels.zip",
+      "sha256": "a4805079be15d280761d2862cd2540dd8c32f3d83801e406912d862b8a1ede92"
+    },
+    "fan:lldb-408": {
+      "path": "Content/LevelPacks/0408-Just-Some-More-Levels.zip",
+      "sha256": "82ff17a97044f31b812f9f9c4701c664ac3d7f075180a7d524da265f692c6ffc"
+    },
+    "fan:lldb-415": {
+      "path": "Content/LevelPacks/0415-Blizzard-of-Lemm.zip",
+      "sha256": "a1107ad848d4c68d1b127efe8ca3989906414b7acc5d79be4cbb52bf61a7d7ec"
+    },
+    "fan:lldb-416": {
+      "path": "Content/LevelPacks/0416-grams88.zip",
+      "sha256": "b33f3e29a9f703ed3959e189f2146cf378922649a790e30316f4b82969c794e6"
+    },
+    "fan:lldb-466": {
+      "path": "Content/LevelPacks/0466-GrentLems.zip",
+      "sha256": "5edfa70eddd89082c2a7f6a5be86a53b6fcdbda0d7fe9efb81a3584fe0ee8b05"
+    },
+    "fan:lldb-469": {
+      "path": "Content/LevelPacks/0469-Skeletonskeletons-Level-Pack.zip",
+      "sha256": "96c8a2546b2b5e249c66111e6553ed3146c55f570cc47ccf33ad96b9359060c2"
+    }
+  },
+  "textLevelMembers": 272,
+  "declaredWidths": {
+    "3168": 2,
+    "3200": 3,
+    "source default": 267
+  },
+  "declaredHeights": {
+    "320": 5,
+    "source default": 267
+  },
+  "membersWithMoreThanFourEntrances": [
+    {
+      "packID": "fan:lldb-203",
+      "entry": "Gronklems 6 v2/6) Radioactive Lemming!.ini",
+      "entrances": 14
+    },
+    {
+      "packID": "fan:lldb-203",
+      "entry": "Original Levels/6) Radioactive Lemming!.ini",
+      "entrances": 14
+    },
+    {
+      "packID": "fan:lldb-369",
+      "entry": "05 - Vertigo.ini",
+      "entrances": 8
+    },
+    {
+      "packID": "fan:lldb-369",
+      "entry": "06 - Totem.ini",
+      "entrances": 9
+    },
+    {
+      "packID": "fan:lldb-369",
+      "entry": "07 - Coalescing.ini",
+      "entrances": 5
+    },
+    {
+      "packID": "fan:lldb-369",
+      "entry": "08 - Parsimony.ini",
+      "entrances": 8
+    },
+    {
+      "packID": "fan:lldb-396",
+      "entry": "levelpack/contest6_The Rambaldi Eye.ini",
+      "entrances": 5
+    },
+    {
+      "packID": "fan:lldb-396",
+      "entry": "levelpack/contest6_TheRambaldiEye.ini",
+      "entrances": 5
+    },
+    {
+      "packID": "fan:lldb-406",
+      "entry": "4_lem/lvl040.ini",
+      "entrances": 5
+    },
+    {
+      "packID": "fan:lldb-408",
+      "entry": "mslevels2/substitution.ini",
+      "entrances": 5
+    },
+    {
+      "packID": "fan:lldb-408",
+      "entry": "mslevels2/twolemmings.ini",
+      "entrances": 5
+    },
+    {
+      "packID": "fan:lldb-466",
+      "entry": "GrentLems/12 Cosmic Junk.ini",
+      "entrances": 5
+    }
+  ],
+  "membersWithSecondsTimeLimit": [
+    {
+      "packID": "fan:lldb-415",
+      "entry": "levels/Blizzlem/209.ini",
+      "seconds": 600
+    },
+    {
+      "packID": "fan:lldb-415",
+      "entry": "levels/Blizzlem/212.ini",
+      "seconds": 120
+    },
+    {
+      "packID": "fan:lldb-415",
+      "entry": "levels/Blizzlem/305.ini",
+      "seconds": 60
+    },
+    {
+      "packID": "fan:lldb-415",
+      "entry": "levels/Blizzlem/314.ini",
+      "seconds": 300
+    },
+    {
+      "packID": "fan:lldb-415",
+      "entry": "levels/Blizzlem/317.ini",
+      "seconds": 240
+    }
+  ],
+  "membersWithCustomMaxFallDistance": [
+    {
+      "packID": "fan:lldb-415",
+      "entry": "levels/Blizzlem/209.ini",
+      "maxFallDistance": 126
+    },
+    {
+      "packID": "fan:lldb-415",
+      "entry": "levels/Blizzlem/212.ini",
+      "maxFallDistance": 126
+    },
+    {
+      "packID": "fan:lldb-415",
+      "entry": "levels/Blizzlem/305.ini",
+      "maxFallDistance": 126
+    },
+    {
+      "packID": "fan:lldb-415",
+      "entry": "levels/Blizzlem/314.ini",
+      "maxFallDistance": 126
+    },
+    {
+      "packID": "fan:lldb-415",
+      "entry": "levels/Blizzlem/317.ini",
+      "maxFallDistance": 126
+    }
+  ],
+  "nativeFourEntranceCap": true,
+  "nativeDefaultCanvas": [
+    1600,
+    160
+  ],
+  "sourceCoordinateProbeOnly": true,
+  "conclusion": "Current Classic playback cannot establish source-family physics parity for these text levels. The source-family canvas is generally double the native Classic canvas, and the native engine truncates entrances after four. The 3200x400 canvas probes did not use the source-family default height or sprite and movement rules. No native winning replay or score is inferred.",
+  "sourceCanvasProbe": {
+    "identity": "fan:lldb-209/grams88 Levels/3)08 BC lost temple.ini#-1",
+    "archiveSHA256": "df965c0277163d6af6da6ab40ba80369ad2f0a446e05929c50c9091e6015974c",
+    "librarySHA256": "9b795b0f5e5dd9a5cb70d1a97e233ba84da41b42fe199f1ed870fc702831d3c4",
+    "solverSHA256": "8a612649e45bb5edb81940660531c4503396ef0b0ab5304b1a0a202d4fbc7424",
+    "canvas": [
+      3200,
+      320
+    ],
+    "sourceTerrainCoordinates": true,
+    "sourceObjectCoordinates": true,
+    "policy": "width 8, 3-second bound, fallback/refire 20 ticks, rollout-single",
+    "expanded": 445,
+    "waitingRouteTick": 205,
+    "oneSkillRollouts": 50,
+    "bestSaved": 0,
+    "required": 1,
+    "winningReplay": false
+  },
+  "testResult": "FanTextTerrainTests 1/1 passed with Xcode toolchain; direct source-built solver compiled; binary source-canvas request was rejected.",
+  "relatedSourceReleaseAndEntranceRules": {
+    "sourceURL": "https://github.com/Blazingstix/SuperLemminiToo/blob/main/src/lemmini/game/GameController.java",
+    "sourceLevelURL": "https://github.com/Blazingstix/SuperLemminiToo/blob/main/src/lemmini/game/Level.java",
+    "relationship": "Related source-family fork; not identified as the exact runtime for every bundled pack",
+    "logicFrameMilliseconds": 30,
+    "entranceAnimationOpenFrame": 72,
+    "extraFramesUntilReleaseEnabled": 30,
+    "firstReleaseApproximateFrame": 103,
+    "releaseIntervalFrames": "107 - releaseRate",
+    "defaultEntranceCycle": "0..N-1, except three entrances use 0,1,2,1",
+    "sourceSpawnPosition": "object x + sprite width/2 + mask offset x + 2; object y + mask offset y + lemming height",
+    "sourceSupportsLeftFacingEntrance": true,
+    "bundledTextMembersWithCustomEntranceOrder": 0,
+    "nativeLogicTicksPerSecond": 17,
+    "nativeEntranceOpenTick": 35,
+    "nativeFirstReleaseCountdownTicks": 20,
+    "nativeEntranceCap": 4,
+    "sourceParityVerified": false
+  }
+}

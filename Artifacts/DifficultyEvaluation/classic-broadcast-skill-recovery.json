@@ -1,0 +1,60 @@
+{
+  "control": {
+    "identity": "fan:lldb-505/KillerMaster 1 Tame 1.dat#1",
+    "matchesPreviousPinnedReplaySHA256": true,
+    "replaySHA256": "b9ca8ab40c9f47693ff9a200fee04996454471c8cd184eaa382ab8247d4616fa",
+    "strictSaved": "1/1"
+  },
+  "date": "2026-10-04",
+  "exactArchiveSHA256": "375d1ae066380a27e2323441081c5912d83f7e0e973215741712da37b0c45963",
+  "limits": "Only broadcast delay 0 was needed for these two wins. Native wins are not independent source-physics parity checks. Other tested broadcast policies had no wins and do not prove impossibility.",
+  "nativeLibrarySHA256": "9b795b0f5e5dd9a5cb70d1a97e233ba84da41b42fe199f1ed870fc702831d3c4",
+  "newSolverMode": "--broadcast-skill applies the stocked skill to each lemming after its hatch, sweeping a bounded delay in native ticks",
+  "solverSHA256": "961248103122369accb5901a283a2c4e02947c5f6b671c0c9b2ddf8aa105a948",
+  "stagedArchiveSHA256": "375d1ae066380a27e2323441081c5912d83f7e0e973215741712da37b0c45963",
+  "strictVerifierSHA256": "27dadbe80919469e921d44255e672e7c0ae5a3b5d75bc6b62402595d61b66fa7",
+  "wins": [
+    {
+      "assignedSkill": "floater",
+      "assignmentCount": 10,
+      "broadcastDelay": 0,
+      "completionTick": 762,
+      "difficultyScore": 194.7069699233003,
+      "identity": {
+        "engine": "classic",
+        "levelID": "weirdy01 (version 2).dat#1",
+        "packID": "fan:lldb-133"
+      },
+      "initialStateHash": "84bdb62169b402963657a6c550c5d8efea4b7914ba476f0b48dd8568930c93ef",
+      "releaseRate": 99,
+      "replay": ".build/full-difficulty-evaluation/heartbeat-20261004-penny-broadcast.json",
+      "replaySHA256": "cc99da7a65776f1c620c3bd16d1870f03bfe12199d1ad8cc63beb7414f956f04",
+      "required": 10,
+      "saved": 10,
+      "scoreConfidence": "medium",
+      "strictExactLevelChecks": "2/2 before and after promotion",
+      "title": "Penny Lane"
+    },
+    {
+      "assignedSkill": "climber",
+      "assignmentCount": 10,
+      "broadcastDelay": 0,
+      "completionTick": 1635,
+      "difficultyScore": 194.18250770043068,
+      "identity": {
+        "engine": "classic",
+        "levelID": "weirdy01 (version 2).dat#6",
+        "packID": "fan:lldb-133"
+      },
+      "initialStateHash": "bc5935c1a5445ddf8abb3ee9611f690a7f59ab240f625d1c1006835c3ae746a0",
+      "releaseRate": 99,
+      "replay": ".build/full-difficulty-evaluation/heartbeat-20261004-pure-broadcast.json",
+      "replaySHA256": "98bffc263a8d090d43f91a24dc0f30fbe6b5ba919773f89520193281079ff903",
+      "required": 10,
+      "saved": 10,
+      "scoreConfidence": "medium",
+      "strictExactLevelChecks": "2/2 before and after promotion",
+      "title": "Pure Genius"
+    }
+  ]
+}

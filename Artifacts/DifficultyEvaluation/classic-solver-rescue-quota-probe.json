@@ -1,0 +1,47 @@
+{
+  "purpose": "Diagnose whether scoring all lemmings by distance hides a single viable worker on low-rescue targets",
+  "codeChange": "Opt-in --rescue-quota-distance ranks the nearest number of lemmings still needed for the rescue target; default ranking is unchanged.",
+  "nativeLibrarySHA256": "9b795b0f5e5dd9a5cb70d1a97e233ba84da41b42fe199f1ed870fc702831d3c4",
+  "quotaSolverSHA256": "d24b6c35e0c0e65a44a92118c0f6df523097e372b0704933538a8969adfa4913",
+  "control": {
+    "identity": "fan:lldb-505/KillerMaster 1 Tame 1.dat#1",
+    "policy": "rollout-single, prefer-progress, rescue-quota-distance, width 8, fallback/refire 12, 20-second bound",
+    "result": "1/1 winning candidate in 6 expansions",
+    "existingLedgerReplayWasAlreadyStrictlyVerified": true,
+    "newDifficultyScore": false
+  },
+  "target": {
+    "identity": "fan:lldb-416/Which Way Should we Go.ini#-1",
+    "archiveSHA256": "b33f3e29a9f703ed3959e189f2146cf378922649a790e30316f4b82969c794e6",
+    "singleSkill": {
+      "waitingRouteTick": 5102,
+      "completedContinuations": 2178,
+      "expanded": 20883,
+      "bestSaved": 0,
+      "required": 1
+    },
+    "progressWithoutQuota": {
+      "expanded": 94356,
+      "bestSaved": 0,
+      "required": 1
+    },
+    "progressWithQuota": {
+      "expanded": 92703,
+      "bestSaved": 0,
+      "required": 1
+    },
+    "bound": "width 128, 30 seconds, fallback/refire 12",
+    "winningReplay": false
+  },
+  "nearWinCheck": {
+    "identity": "fan:lldb-62/ClamSpam02.dat#5",
+    "progressWithQuota": {
+      "expanded": 76179,
+      "bestSaved": 22,
+      "required": 23
+    },
+    "bound": "width 128, 30 seconds, fallback/refire 12",
+    "winningReplay": false
+  },
+  "conclusion": "The opt-in policy compiles and preserves a known win but did not solve either target. The target failures do not prove impossibility or source physics parity."
+}

@@ -1,0 +1,89 @@
+{
+  "date": "2026-10-04",
+  "description": "Two CPs Level Pack LVL members share scenario and Golems initial-state hashes with scored DAT members in the same exact archive. Transferred event sequences strictly win on each exact bundled LVL member.",
+  "exactBundledArchive": "Content/LevelPacks/0472-CPs-Level-Pack.zip",
+  "exactBundledArchiveSHA256": "0aa4c6e70d8b2adeae926a70f881a18fbbc9dabf150fc7ee345681e3500753f8",
+  "mechanicsSelection": "Golems pinned to the four exact DAT and LVL members on this archive revision; other members retain their prior selection.",
+  "records": [
+    {
+      "donorIdentity": {
+        "engine": "classic",
+        "levelID": "LEMPACK.DAT#3",
+        "packID": "fan:lldb-472"
+      },
+      "exactBundledTargetIdentity": {
+        "engine": "classic",
+        "levelID": "levels/04.LVL#-1",
+        "packID": "fan:lldb-472"
+      },
+      "nativeLevelTitle": "Lemmingfalls",
+      "sharedPuzzleScenarioSHA256": "SHA256 digest: a3d06e6e5eb0fe79414a9f62382419de80d3b5951d0d8ac0ef2002aec94ec01c",
+      "sharedGolemsInitialStateHash": "41939eb0b27c90d5f2201b243b12b007710ba01ba801c83f9cc127265bb6071c",
+      "donorReplaySHA256": "6c8295f3a31deb6f01bed8d29de1df306d62312826a59096ee147de995f9b26b",
+      "selectedExactMemberReplaySHA256": "ac963b01f1041e88f93e2ca94d888127ec05ecef02353b6e8016219890b34ea2",
+      "nativeOutcome": {
+        "didWin": true,
+        "released": 80,
+        "required": 80,
+        "saved": 80,
+        "stateHash": "3e5a348afa8643f0d95db872e27edbfafd47bee8d7cd4e25e9cd7d6fefe8685a",
+        "ticks": 3579
+      },
+      "difficultyScore": 462.03542475956243,
+      "difficultyProbeRuns": 10,
+      "skillAndRateEvents": 23
+    },
+    {
+      "donorIdentity": {
+        "engine": "classic",
+        "levelID": "LEMPACK.DAT#4",
+        "packID": "fan:lldb-472"
+      },
+      "exactBundledTargetIdentity": {
+        "engine": "classic",
+        "levelID": "levels/05.LVL#-1",
+        "packID": "fan:lldb-472"
+      },
+      "nativeLevelTitle": "Operation Rescue",
+      "sharedPuzzleScenarioSHA256": "SHA256 digest: 2b8b3481429bbc0632ea5c2edc04fe7902e30152036357e4f5d37e731d10995e",
+      "sharedGolemsInitialStateHash": "0c042f9878590ada2bb50edd5c0b8a9443a19353cc4c50dae1402cd1e4d04cc7",
+      "donorReplaySHA256": "663d75e409e3e17068cf991512e98108ff2cccfef70a282af67538fd4f45e158",
+      "selectedExactMemberReplaySHA256": "9700f38226f82926c8fdd06374080e0cabe48efffab89921105b2432f3938a59",
+      "nativeOutcome": {
+        "didWin": true,
+        "released": 80,
+        "required": 60,
+        "saved": 63,
+        "stateHash": "0398150298d299ee881bc4e18a276fd4cb3406fbef0799c11fb57d503ab9a7c6",
+        "ticks": 5269
+      },
+      "difficultyScore": 597.9281793815258,
+      "difficultyProbeRuns": 10,
+      "skillAndRateEvents": 99
+    }
+  ],
+  "sourceBuiltNxlvKitSHA256": "9b795b0f5e5dd9a5cb70d1a97e233ba84da41b42fe199f1ed870fc702831d3c4",
+  "sourceBuiltProbeSHA256": "961e8da6fb503742c6b31af7159423b4a7967b7eeac4d65498c5fe02965c4fa2",
+  "probeLogSHA256": "9c7a712baff036a7924036d72e1cb90925c9fdcd681443b89c9980033a8d6998",
+  "sourceBuiltEvidenceToolSHA256": "54220623269b81d7a4af7e47a3c8937a42df09f0634517c0b89996cd6607e843",
+  "strictExactLevelChecks": [
+    "new LVL targets before promotion: 2/2",
+    "new LVL targets after promotion: 2/2",
+    "DAT donors after promotion: 2/2",
+    "combined four members after learning generation: 4/4"
+  ],
+  "headlessMutedFanLibraryTests": "passed",
+  "learningPath": {
+    "lessons": 292,
+    "official": 156,
+    "fan": 136,
+    "duplicateObjectives": 0,
+    "candidatePool": 1699
+  },
+  "ledger": {
+    "verifiedClassicFanWins": 2357,
+    "verifiedNeoLemmixWins": 322,
+    "nonOfficialWithoutVerifiedReplayAndScore": 3666
+  },
+  "sourcePhysicsParity": "unverified: native replay transfer and matching native scenario state do not compare source-engine state traces"
+}

@@ -1,0 +1,43 @@
+{
+  "date": "2026-10-04",
+  "identity": {
+    "engine": "classic",
+    "levelID": "Blitz.DAT#7",
+    "packID": "fan:lldb-485"
+  },
+  "title": "Presents of Mind II",
+  "exactBundledArchiveSHA256": "48a861bf42e574cdd99346fb2d9971df01db66a7bd49cbfc036c2a074c1becc0",
+  "sourceURL": "https://lldb.camanis.net/level/485/8",
+  "cachedSourcePageSHA256": "90d0dd35292b7e1ad3f622e268407d84c30c9adf8089cdb9d60f3101acc625d6",
+  "rawSourceReplaySHA256": "0e8441afc430441075f02db372b3b82a2d1c38460d7ff12004405744820cf14d",
+  "sourceReplayHeader": {
+    "gameMode": 2,
+    "saved": 80,
+    "ticks": 1397
+  },
+  "inputTranslation": "Uniform plus-two native ticks relative to the cached minus-one source decode. Nearby offsets minus three through plus three were checked; only plus two won.",
+  "nativeInitialStateHash": "bfbdc32c6f4ae44ef81defe61794e7470de210661e81741bdf640ec209ea5c1b",
+  "selectedNativeMechanics": "Golems on this exact member and archive revision",
+  "selectedReplaySHA256": "7160fcf40ed3a14053898e376d22bcc7c33a79b0ab2b3377fc2560a2c58024b4",
+  "nativeOutcome": {
+    "didWin": true,
+    "released": 80,
+    "required": 80,
+    "saved": 80,
+    "stateHash": "90f106441db4409d339d60eb34f3e33c080c53f7e885bea8dc3dc41e8bcea0ee",
+    "ticks": 1397
+  },
+  "difficultyScore": 338.0128762650996,
+  "difficultyProbeRuns": 10,
+  "strictExactLevelChecks": [
+    "before promotion: 1/1",
+    "after promotion: 1/1"
+  ],
+  "sourcePhysicsParity": "unverified: saved count and finish tick match source header, but input phase was changed and source state traces are absent",
+  "sourceBuiltProbeSHA256": "a62a564ed6c81486593ca6491be05f9bb25ab4c345db60d81917d547914ca19b",
+  "sourceBuiltEvidenceToolSHA256": "5a5a2e5aa461a777450515fbe16bdfa55d92542d3e0441fc681494866b8341ec",
+  "sourceBuiltNxlvKitSHA256": "9b795b0f5e5dd9a5cb70d1a97e233ba84da41b42fe199f1ed870fc702831d3c4",
+  "headlessMutedFanLibraryTests": "passed",
+  "sourceBuiltSolverSHA256": "0fd891b71be0fcaee1b56e6b5cd9c0c39b62d4ba0e1249ea31a4a8fdbd8a8015",
+  "solverControlReplaySHA256": "cc99da7a65776f1c620c3bd16d1870f03bfe12199d1ad8cc63beb7414f956f04"
+}

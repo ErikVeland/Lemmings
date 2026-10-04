@@ -1,0 +1,42 @@
+{
+  "date": "2026-10-03",
+  "solverSha256": "6fe2e8bdb7b3f03cdf7c84bdb7b67ed598ef49bfb19f124a866f54078065a7a8",
+  "nativeLibrarySha256": "3c5f3af7276aace14b84ba0a39abf499fcdd30758dd6e2d09a0da33a0020d331",
+  "change": "Optional balanced-ranking search reserves half the beam for survivor-first and half for progress-first ranking. The batch ledger records this mode separately and checks all completed historical configurations before repeating a search.",
+  "controls": [
+    {
+      "level": "fan:lldb-505/KillerMaster 1 Tame 1.dat#1",
+      "mode": "unchanged default one-skill rollout",
+      "strictResult": "1/1",
+      "replaySha256": "b9ca8ab40c9f47693ff9a200fee04996454471c8cd184eaa382ab8247d4616fa",
+      "matchesEarlierVerifiedReplay": true
+    },
+    {
+      "level": "fan:lldb-103/TimpackE.dat#5",
+      "mode": "balanced ranking, width 128, five-tick fallback/refire",
+      "search": "Solved in 30 seconds after 87448 expansions",
+      "separateStrictResult": "78/40 at tick 2427",
+      "replaySha256": "9bab0884b86087dd1602b1524720abf5939cc924e8b502a368a28eb18b006030"
+    },
+    {
+      "level": "fan:lldb-268/CRISFN04.dat#2",
+      "mode": "balanced ranking, width 128, one-tick fallback/refire",
+      "search": "Solved in 15 seconds after 44243 expansions",
+      "separateStrictResult": "2/2 at tick 307",
+      "replaySha256": "1b1153ff04bd09f413cad84256e02719f0ce0c2ac786f5b0436917629f2da964"
+    }
+  ],
+  "unscoredTarget": {
+    "level": "fan:lldb-49/QBeez04.dat#3",
+    "title": "The Turnaround!",
+    "archiveSha256": "1f701e96560f567e7d5168d8dabcd30198a13e03fbeeeba3d758009cca23b291",
+    "initialStateHash": "c01306c9c81e20bf312a8fc624785c0bff583752863f07b5ff952298f1597d27",
+    "balancedResult": "No win; best 99/100, 31064 expansions in 13 seconds",
+    "partialReplaySha256": "1ea83677aef5d2c7b55ab1b1956bf52fdc5893383420c66550b54d7cc75b1243",
+    "fullPrefixOneMoreSkill": "No win; 0 one-skill continuations after the forced eighth command, waiting route through tick 1022",
+    "firstSevenCommandsOneMoreSkill": "No win; 57 one-skill continuations through waiting-route tick 350",
+    "firstSevenCommandsBalancedContinuation": "No win; best 99/100 after 32682 expansions in 14 seconds"
+  },
+  "batchResumeCheck": "A synthetic two-mode attempt ledger made one default attempt and one balanced attempt. Repeating either mode made zero attempts; only two records remained.",
+  "limits": "The new policy recovered both selected, already-scored controls; it found no new level win in these targeted runs. A native win is not source-physics parity, and a bounded no-win is not impossibility."
+}

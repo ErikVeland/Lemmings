@@ -22,6 +22,7 @@ def main():
     parser.add_argument("--clock", choices=("dos", "golems"), default="golems")
     parser.add_argument("--adaptive-rate", action="store_true")
     parser.add_argument("--prefer-progress", action="store_true")
+    parser.add_argument("--balanced-ranking", action="store_true")
     parser.add_argument("--rollout-single", action="store_true")
     parser.add_argument("--fallback", type=int, default=170)
     parser.add_argument("--refire", type=int, default=120)
@@ -30,6 +31,8 @@ def main():
     parser.add_argument("--order", choices=("hash", "score", "near-win"), default="hash")
     parser.add_argument("--include-structural", action="store_true")
     args = parser.parse_args()
+    if args.prefer_progress and args.balanced_ranking:
+        parser.error("choose either --prefer-progress or --balanced-ranking")
     if args.rate is not None and not 1 <= args.rate <= 99:
         parser.error("--rate must be between 1 and 99")
     args.output.mkdir(parents=True, exist_ok=True)
@@ -43,12 +46,15 @@ def main():
         return re.search(r"\b(?:UNSOLVED|SOLVED) fan:", row["result"]) is not None
 
     previous = {}
+    completed_attempts = {}
     if ledger_path.exists():
         for line in ledger_path.read_text().splitlines():
             entry = json.loads(line)
             key = identity(entry)
             if completed_search(entry) or key not in previous:
                 previous[key] = entry
+            if completed_search(entry):
+                completed_attempts.setdefault(key, []).append(entry)
     rows = json.loads(args.audit.read_text())
     evidence_path = pathlib.Path(__file__).resolve().parents[2] / "Artifacts/LearningJourney/fan-evidence.json"
     verified_identities = set()
@@ -84,18 +90,18 @@ def main():
                 or (identity(row) in structural_identities and not args.include_structural)):
             continue
         digest = row["initialHash"]
-        old = previous.get(identity(row))
-        prior_search_ran = old and completed_search(old)
-        if (prior_search_ran and old.get("solverRevision") == solver_revision
+        if any(old.get("solverRevision") == solver_revision
                 and old.get("rate") == args.rate
                 and old.get("clock", "dos") == args.clock
                 and old.get("adaptiveRate", False) == args.adaptive_rate
                 and old.get("preferProgress", False) == args.prefer_progress
+                and old.get("balancedRanking", False) == args.balanced_ranking
                 and old.get("rolloutSingle", False) == args.rollout_single
                 and old.get("fallback", 170) == args.fallback
                 and old.get("refire", 120) == args.refire
                 and (old.get("savePartials", False) or not args.save_partials)
-                and old["seconds"] >= args.seconds and old["width"] >= args.width):
+                and old["seconds"] >= args.seconds and old["width"] >= args.width
+                for old in completed_attempts.get(identity(row), [])):
             continue
         pack = packs.get(row["entry"]["identity"]["packID"])
         if pack is None:
@@ -118,6 +124,8 @@ def main():
             command.append("--adaptive-rate")
         if args.prefer_progress:
             command.append("--prefer-progress")
+        if args.balanced_ranking:
+            command.append("--balanced-ranking")
         if args.rollout_single:
             command.append("--rollout-single")
         if args.save_partials:
@@ -133,6 +141,7 @@ def main():
                   "clock": args.clock,
                   "adaptiveRate": args.adaptive_rate,
                   "preferProgress": args.prefer_progress,
+                  "balancedRanking": args.balanced_ranking,
                   "rolloutSingle": args.rollout_single,
                   "fallback": args.fallback, "refire": args.refire,
                   "savePartials": args.save_partials,

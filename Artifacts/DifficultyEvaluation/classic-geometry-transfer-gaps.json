@@ -1,0 +1,248 @@
+{
+  "date": "2026-10-04",
+  "limits": "Every donor sequence exceeds its target skill stock in at least one skill. This does not prove that any target is impossible or that native physics matches its source engine. Alternate routes and larger timing coverage remain open.",
+  "method": "Compare current source-built port descriptors, archived scored donor replays, target stock and exact bundled archive fingerprints. The earlier direct replay transfer won none of nine targets; the two Akseli copies were recovered after mechanics selection.",
+  "records": [
+    {
+      "donorCompletionTick": 990,
+      "donorIdentity": "fan:lldb-18/Mikepak13.dat#1",
+      "donorReplaySHA256": "9757959c40acce8b6140a8449ee943bd5c151654b707b610e095c109ff17e5ce",
+      "donorSaved": 50,
+      "matchingRenderedGeometryHash": "SHA256 digest: ecf52469cf2599d7b77478b5539039e1f79ca464f7777b8391b5e4b3ccbb2529",
+      "otherDescriptorDifferences": {
+        "releaseRate": {
+          "donor": 10,
+          "target": 1
+        },
+        "requiredToSave": {
+          "donor": 50,
+          "target": 49
+        },
+        "saveRequirement": {
+          "donor": 50,
+          "target": 49
+        },
+        "timeLimitMinutes": {
+          "donor": 1,
+          "target": 4
+        }
+      },
+      "skillDeficits": {
+        "basher": {
+          "donorUses": 1,
+          "targetStock": 0
+        }
+      },
+      "targetArchiveSHA256": "51faf188e3a7633053bf8f02596be69bb8a6e506d29eef06facb2aeaf9ca4baa",
+      "targetIdentity": "fan:lldb-83/CSTame1.dat#1",
+      "targetInitialStateHash": "f1b8016faad9c3fd20821134e2f65331f6761f2ed09c7bfa29f50dad374db359",
+      "targetRequired": 49,
+      "targetTimeLimitMinutes": 4
+    },
+    {
+      "donorCompletionTick": 2847,
+      "donorIdentity": "fan:lldb-478/Crazy.DAT#1",
+      "donorReplaySHA256": "1fce026ba281582d950fdbbf0b510d124765719532693370dae04bb65d2a4fbb",
+      "donorSaved": 80,
+      "matchingRenderedGeometryHash": "SHA256 digest: 4b4d19d35b9735790361c34d9870dcf1de4a0c41f7432046e6cc85f9bf9cb880",
+      "otherDescriptorDifferences": {
+        "groundStyle": {
+          "donor": 0,
+          "target": 5
+        }
+      },
+      "skillDeficits": {
+        "builder": {
+          "donorUses": 7,
+          "targetStock": 3
+        }
+      },
+      "targetArchiveSHA256": "80f4fdcb9492527620fa84be4d649bf2348a65ddeb1f1a6b24163d531a030e0e",
+      "targetIdentity": "fan:lldb-365/LEVPAK1.DAT#4",
+      "targetInitialStateHash": "6e3a0855edb4ff70de3838f30f1a18efc50c273ccd8ec7b02fd6a3575c45674e",
+      "targetRequired": 80,
+      "targetTimeLimitMinutes": 4
+    },
+    {
+      "donorCompletionTick": 2614,
+      "donorIdentity": "fan:lldb-553/Lemmings Plus DOS Project - 08 - Medi (Part 2).dat#9",
+      "donorReplaySHA256": "5b740a12f57afc67d870d5bb689dd3f583e8e58890ff04d208e414f7653c4bef",
+      "donorSaved": 60,
+      "matchingRenderedGeometryHash": "SHA256 digest: 44c2f483a585e9bf544f55def31e4e0ae4f6625bd776f9b18d1f050c83270a5c",
+      "otherDescriptorDifferences": {
+        "requiredToSave": {
+          "donor": 57,
+          "target": 59
+        },
+        "saveRequirement": {
+          "donor": 57,
+          "target": 59
+        }
+      },
+      "skillDeficits": {
+        "basher": {
+          "donorUses": 2,
+          "targetStock": 0
+        },
+        "builder": {
+          "donorUses": 8,
+          "targetStock": 2
+        },
+        "digger": {
+          "donorUses": 2,
+          "targetStock": 0
+        }
+      },
+      "targetArchiveSHA256": "46cdcf82e7f6ae545c6302d6c3ad2b4c3f8bf3692a62b077ba26b4781eb5b7cc",
+      "targetIdentity": "fan:lldb-550/Ji Hoon Hell 2.DAT#6",
+      "targetInitialStateHash": "edb01ff1e7864610e891cd9b590df35744f6961b9c628d4a9f7dde15e855d6ad",
+      "targetRequired": 59,
+      "targetTimeLimitMinutes": 5
+    },
+    {
+      "donorCompletionTick": 1246,
+      "donorIdentity": "fan:lldb-551/Lemmings Plus DOS Project - 03 - Mild (Part 3).dat#2",
+      "donorReplaySHA256": "a4387a547fff982b781e45a2491fd706e5e7af711b5876321fb03e24a6e2a516",
+      "donorSaved": 80,
+      "matchingRenderedGeometryHash": "SHA256 digest: ee2597cccc876c3c89a536087475a85e42584a9bc4033fe9a8dbb43350da7e35",
+      "otherDescriptorDifferences": {
+        "requiredToSave": {
+          "donor": 48,
+          "target": 80
+        },
+        "saveRequirement": {
+          "donor": 48,
+          "target": 80
+        }
+      },
+      "skillDeficits": {
+        "builder": {
+          "donorUses": 3,
+          "targetStock": 0
+        }
+      },
+      "targetArchiveSHA256": "bc6910d89e3d4625677d173dd9289ac64e19378a58c5ae9c2f2285875fdfeede",
+      "targetIdentity": "fan:lldb-554/Lemmings Plus DOS Project - 11 - Danger (Part 2).dat#8",
+      "targetInitialStateHash": "6684e145900cc3393e630bff6bc32fb655034ee9f52d9c5550b71eae491579b9",
+      "targetRequired": 80,
+      "targetTimeLimitMinutes": 5
+    },
+    {
+      "donorCompletionTick": 953,
+      "donorIdentity": "fan:lldb-552/Lemmings Plus DOS Project - 04 - Wimpy (Part 1).dat#5",
+      "donorReplaySHA256": "012363e776803e29e0b8ed9e3009fcb71e779ce405a5ad1a271fea598d13aa7b",
+      "donorSaved": 66,
+      "matchingRenderedGeometryHash": "SHA256 digest: e2626af04f2744474bc0f0501b0125cd7f76fd2b2b0442fc4269bd6c340cf4ae",
+      "otherDescriptorDifferences": {
+        "requiredToSave": {
+          "donor": 64,
+          "target": 75
+        },
+        "saveRequirement": {
+          "donor": 64,
+          "target": 75
+        },
+        "timeLimitMinutes": {
+          "donor": 6,
+          "target": 2
+        }
+      },
+      "skillDeficits": {
+        "basher": {
+          "donorUses": 1,
+          "targetStock": 0
+        },
+        "digger": {
+          "donorUses": 1,
+          "targetStock": 0
+        }
+      },
+      "targetArchiveSHA256": "f0f2d7fb836a800589844b2c64b57c6eb83af930cd80b596df96c4d295dddb13",
+      "targetIdentity": "fan:lldb-555/Lemmings Plus DOS Project - 15 - PSYCHO (Part 3).dat#0",
+      "targetInitialStateHash": "2694f4510e7356cd459fe2eeb5c383ca52d99c5075471e9b5101b7501bb35f87",
+      "targetRequired": 75,
+      "targetTimeLimitMinutes": 2
+    },
+    {
+      "donorCompletionTick": 2009,
+      "donorIdentity": "fan:lldb-552/Lemmings Plus DOS Project - 06 - Wimpy (Part 3).dat#2",
+      "donorReplaySHA256": "c35d8716d817d1ea869bb1bc5e7f52d1c1febbb4bc79e885ba9ef73505c30671",
+      "donorSaved": 19,
+      "matchingRenderedGeometryHash": "SHA256 digest: 6617bdc295b5d08332fb72cf081829b06e5e0658075e93842e1003733da5e17c",
+      "otherDescriptorDifferences": {
+        "timeLimitMinutes": {
+          "donor": 7,
+          "target": 5
+        }
+      },
+      "skillDeficits": {
+        "builder": {
+          "donorUses": 6,
+          "targetStock": 4
+        }
+      },
+      "targetArchiveSHA256": "f0f2d7fb836a800589844b2c64b57c6eb83af930cd80b596df96c4d295dddb13",
+      "targetIdentity": "fan:lldb-555/Lemmings Plus DOS Project - 15 - PSYCHO (Part 3).dat#3",
+      "targetInitialStateHash": "3b1889166b123ce76331bcbd64f80eedec1fa18a07b526087147c894ccbd18cb",
+      "targetRequired": 15,
+      "targetTimeLimitMinutes": 5
+    },
+    {
+      "donorCompletionTick": 2169,
+      "donorIdentity": "fan:lldb-553/Lemmings Plus DOS Project - 07 - Medi (Part 1).dat#0",
+      "donorReplaySHA256": "efb5c944da46e5572196903122aea9ef5bb0b41f6c7cedd47a8c76d7587a00d1",
+      "donorSaved": 60,
+      "matchingRenderedGeometryHash": "SHA256 digest: d6922e23d0f1570d8dd9be9194097756aeeb664b1100afca9996eb066b893885",
+      "otherDescriptorDifferences": {
+        "timeLimitMinutes": {
+          "donor": 5,
+          "target": 2
+        }
+      },
+      "skillDeficits": {
+        "basher": {
+          "donorUses": 7,
+          "targetStock": 3
+        },
+        "builder": {
+          "donorUses": 10,
+          "targetStock": 4
+        },
+        "digger": {
+          "donorUses": 2,
+          "targetStock": 0
+        }
+      },
+      "targetArchiveSHA256": "f0f2d7fb836a800589844b2c64b57c6eb83af930cd80b596df96c4d295dddb13",
+      "targetIdentity": "fan:lldb-555/Lemmings Plus DOS Project - 14 - PSYCHO (Part 2).dat#2",
+      "targetInitialStateHash": "369dee2826d7019002e1ccfb86ec742e1968674aaa197fabcf83c04c5e2c2405",
+      "targetRequired": 54,
+      "targetTimeLimitMinutes": 2
+    }
+  ],
+  "scope": "Seven remaining rendered-geometry-matched donor-target pairs after the two Akseli copy wins",
+  "sourceBuiltSolverSHA256": "deaf7c936671f24ce7b2e29662e07bd32e0a3fcfb9c48946546456ea8a2ecc70",
+  "targetedChecks": {
+    "goneInAFlash": "All 15 ways to remove two Builder actions from the six-Builder donor replay were checked on exact fan:lldb-555 target #3; none won. Fifteen forced-prefix solver continuations also produced no win.",
+    "knownDonorCalibration": "fan:lldb-18/Mikepak13.dat#1 replayed 50/50 using current source-built ClassicSolver, two inputs",
+    "minedTheGap": "At release rate 99, one-skill Miner sweep reached waiting tick 275 and completed 5,401 continuations in 35 seconds, with no win; this is incomplete timeline coverage.",
+    "minedTheGapDecisionRollouts": [
+      {
+        "nativeWin": false,
+        "releaseRate": 99,
+        "seconds": 28,
+        "singleSkillRollouts": 1073,
+        "solverExpansions": 56283,
+        "waitingRouteTick": 4082
+      },
+      {
+        "nativeWin": false,
+        "releaseRate": 1,
+        "seconds": 32,
+        "singleSkillRollouts": 1482,
+        "solverExpansions": 70741,
+        "waitingRouteTick": 4082
+      }
+    ]
+  }
+}

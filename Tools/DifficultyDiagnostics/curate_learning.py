@@ -61,6 +61,8 @@ def application_signature(f):
 
 
 def select(pool, replays):
+    pool = [row for row in pool if not (replays.get(row['profile']['key']['replayRevision'])
+                                      or replays.get(row['initialHash']) or {}).get('sourceRules')]
     pool = sorted(pool, key=lambda r: (demand(r), r['profile']['components']['solutionComplexity'],
                                      r['profile']['overallScore'], key(r)))
     evidence = {}
@@ -251,7 +253,7 @@ def select(pool, replays):
         lesson['applicationSignature'] = application_signature(evidence[json.dumps(lesson['identity'], sort_keys=True)])
     assert len({l['objective'] for l in lessons}) == len(lessons)
     return {'version':'curriculum-3', 'targetSize':292, 'poolSize':len(pool), 'lessons':lessons,
-            'selectionPolicy':'Official first within comparable 35-point demand bands; distinct observed applications; known Lemmini source packs excluded from the Classic path.',
+            'selectionPolicy':'Official first within comparable 35-point demand bands; distinct observed applications; source-only replay commands and known Lemmini source packs excluded from the Classic path.',
             'unavailableOptionalObjectives':missing,
             'limits':'Objectives describe observed routes. Opening introductions prefer a low-demand Fun, Easy or Tame candidate. When none is available, a low-demand non-beginner witness may introduce the skill in Intermediate. Full-rescue witnesses are excluded from introductions. Novice readability and technique necessity require playtesting.'}
 
@@ -262,4 +264,4 @@ if __name__ == '__main__':
     replays.update(json.loads((ROOT/'Resources/Hints/solutions.json').read_text()))
     result = select(pool,replays)
     (OUT/'curriculum.json').write_text(json.dumps(result,indent=2,sort_keys=True)+'\n')
-    print(f"Selected {len(result['lessons'])} distinct teaching objectives from {len(pool)} candidates.")
+    print(f"Selected {len(result['lessons'])} distinct teaching objectives from {result['poolSize']} candidates.")

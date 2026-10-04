@@ -41,7 +41,13 @@ def main():
         assert entry["completion"] == "verified win"
         selected = solutions["SHA256 digest: " + entry["replay_sha256"]]
         assert selected["initialStateHash"] == sources[key]["initialHash"]
-        assert selected["initialStateHash"] == clocks[key]["newHash"]
+        if migrated := clocks[key].get("currentSelectedMechanics"):
+            assert migrated["mechanics"] == "ohNoMore"
+            assert migrated["initialStateHash"] == selected["initialStateHash"]
+            assert migrated["replaySHA256"] == entry["replay_sha256"]
+            assert selected["initialStateHash"] != clocks[key]["newHash"]
+        else:
+            assert selected["initialStateHash"] == clocks[key]["newHash"]
         assert selected["expected"]["didWin"]
         if entry["replay_sha256"] == record["nativeReplaySHA256"]:
             current += 1
@@ -75,7 +81,8 @@ def main():
         source_identity = record.get("sourceIdentity", identity)
         if source_identity != identity:
             source_row = sources[(source_identity["packID"], source_identity["levelID"])]
-            assert source_row["initialHash"] == sources[key]["initialHash"]
+            assert source_row["initialHash"] == (clocks[key]["newHash"]
+                if clocks[key].get("currentSelectedMechanics") else sources[key]["initialHash"])
         matches = [item for item in manifest if item["identity"] == source_identity
                    and item["url"] == record["publishedReplayURL"]
                    and item["sourceReplaySHA256"] == record["publishedReplaySHA256"]
@@ -88,7 +95,7 @@ def main():
         assert any(hashlib.sha256(replay_bytes(page, match["recordIndex"])).hexdigest()
                    == match["sourceReplaySHA256"] for page in pages)
     print(f"Verified {len(records)} Classic replay derivations and source records: "
-          f"{current} current, {superseded} historical DOS-clock inputs with current Golems-clock wins.")
+          f"{current} current, {superseded} historical DOS-clock inputs with current selected wins.")
 
 
 if __name__ == "__main__":

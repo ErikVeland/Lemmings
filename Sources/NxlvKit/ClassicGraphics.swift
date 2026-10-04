@@ -502,14 +502,26 @@ public enum ClassicObjectSemantics: String, Codable, Sendable {
 }
 
 public enum ClassicLevelRenderer {
+    /**
+     * Renders a Classic level into the requested canvas. The default retains DOS dimensions.
+     * An extended canvas only changes clipping; it does not select another engine's physics.
+     */
     public static func render(
         _ level: ClassicLevel,
         groundSet: ClassicGroundSet,
         specialGraphic: ClassicSpecialGraphic? = nil,
-        objectSemantics: ClassicObjectSemantics = .dos
+        objectSemantics: ClassicObjectSemantics = .dos,
+        canvasWidth: Int = ClassicLevel.width,
+        canvasHeight: Int = ClassicLevel.height
     ) throws -> ClassicRenderedLevel {
-        let width = ClassicLevel.width
-        let height = ClassicLevel.height
+        guard (1...4096).contains(canvasWidth), (1...1024).contains(canvasHeight),
+              level.specialStyle == 0 ||
+                (canvasWidth == ClassicLevel.width && canvasHeight == ClassicLevel.height) else {
+            throw ClassicGraphicsError.invalidGraphicSize(
+                label: "level canvas", width: canvasWidth, height: canvasHeight)
+        }
+        let width = canvasWidth
+        let height = canvasHeight
         var rgba: [UInt8]
         var solid: [UInt8]
 

@@ -60,7 +60,7 @@
         "scratchNoInputLastLossTick": 125,
         "golemsObjectSemanticsResult": "same 0/10 outcome with all object slots active",
         "tracePath": ".build/full-difficulty-evaluation/clock-rescore/pinpoint-source-20261002/hatch23/trace.log",
-        "interpretation": "The 125-tick no-input ending matches the source numerically, but source frames show the first lemming only after roughly 54\u201358 Tick calls. The 23-tick scratch hatch is not a source-timing match. This trial does not establish the underlying physics difference."
+        "interpretation": "The 125-tick no-input ending matches the source numerically, but source frames show the first lemming only after roughly 54–58 Tick calls. The 23-tick scratch hatch is not a source-timing match. This trial does not establish the underlying physics difference."
       },
       "isolatedFallingBuilderTrial": {
         "scope": "Ignored scratch native library with the shipped timing and one added Builder assignment action: falling; diagnostic replay kept the source Builder but omitted its simultaneous release-rate command",
@@ -433,6 +433,90 @@
       },
       "nativeReplaySHA256": "91610c2bc4d3bc04245c495f0b8c007844ef281a341660503429fde6d4261c74",
       "hatchCoordinateEvidencePath": "Artifacts/DifficultyEvaluation/classic-golems-hatch-coordinate.json"
+    },
+    {
+      "identity": {
+        "packID": "fan:lldb-165",
+        "levelID": "Giga pack 04.dat#5"
+      },
+      "levelSourceRevision": "167151878e40f998db814e208287dacc4f2ffc5885317bedb0af505a9d8fb0ce",
+      "sourceAndBundledLevelDataSHA256": "54217d3a12030db668e2f19e8efeb4701bfed925c78298c789f7c2c2ffdc45aa",
+      "sourceAndNativeGraphicsSHA256": {
+        "GROUND4O.DAT": "9669ee978e5adf5f8d5bfeb80ccc5d6c20e75e32f55e2a5c1c738f64af8faa91",
+        "VGAGR4.DAT": "40a99d3d9540609da9d6a74c07a832786818aed361326e37c01a909a1615921d"
+      },
+      "nativeInitialHash": "09b67cf20e73aa15ebfba01344e425e14a8dc558f55469ed341f88887fbd2d96",
+      "auditInitialHash": "ee61849455f8e0db3b4e0259d235c0abb5e31ab6b46941e8c729b482f257c772",
+      "comparisonMechanics": "golems",
+      "publishedReplaySHA256": "125d1e2aa6bbb65713ef486e73ff477d936a6b9597d6061c0aa913b844d38ce9",
+      "sourceURL": "https://lldb.camanis.net/level/165/6",
+      "sourceMainJSSHA256": "c467eab99315555391542d7c79a2976b28c1c674dadd01ccf261d7792eabeace",
+      "sourceBrowser": "Firefox 151.0.2",
+      "sourceSaved": 20,
+      "sourceRequired": 20,
+      "sourceTotal": 20,
+      "sourceCompletionCycles": 1733,
+      "nativeSaved": 11,
+      "nativeRequired": 20,
+      "nativeTotal": 20,
+      "nativeReplayEndTick": 6122,
+      "nativeAssignmentsAccepted": true,
+      "nativeAtSourceCycle": {
+        "tick": 1733,
+        "saved": 11,
+        "lost": 0,
+        "active": 9,
+        "activePositionRange": "x=890–929, y=78–79"
+      },
+      "sourceResultPath": ".build/golems-next-promotion/source-165-6/source-result.json",
+      "nativeTracePath": ".build/golems-next-promotion/basher-direct/worker15.log",
+      "sourcePhysicsParity": "outcome mismatch",
+      "interpretation": "The unchanged published input saves 20/20 in the independent source player but 11/20 natively. Source and bundled level DAT, terrain graphics, animations and destruction masks match. Moving only the last native Basher assignment one tick later gives a strict 20/20 native win at tick 1729. A scratch one-to-three-pixel rightward shift of that Basher mask also wins, but is not a source-backed production rule. The local retiming supplies a replay-based score without proving full physics parity.",
+      "sourceGOLEMSDATSHA256": "3caee39d724f4ae80896d0df2e51b837807b6b947bab50b5b482ac59efcaba6c",
+      "nativeMAINDATSHA256": "2aec688c334e60322998811a8b6f9d5c13f8090b46ca6c2a6cb1c8db3b733545",
+      "decodedAssetComparison": {
+        "sourceSectionSizes": [
+          21104,
+          388,
+          8384,
+          61968,
+          37052,
+          758,
+          8224
+        ],
+        "nativeSectionSizes": [
+          21104,
+          388,
+          8384,
+          61968,
+          36080,
+          758,
+          8224
+        ],
+        "animationFrames": 337,
+        "animationsEqual": true,
+        "destructionMasksEqual": true,
+        "destructionMaskFrameCount": 13,
+        "maskPixelDifferences": 0,
+        "diagnosticPath": ".build/golems-next-promotion/source-165-6/compare-masks.swift",
+        "diagnosticOutputPath": ".build/golems-next-promotion/source-165-6/compare-masks.log",
+        "diagnosticOutputSHA256": "356b50c46553022d66e49fec1acc2d9b73969a21f96400159bfb3c9756060b73"
+      },
+      "pinnedSourceAdvanceBashingGolem": {
+        "methodToken": "0x060000db",
+        "RVA": "0x7734",
+        "bodySHA256": "476e4219b4c8408059f3361e5845e219b8e2658e89aa38e45e3719e386a05ce2",
+        "observedRules": "16-frame cycle; destruction on frames 2–5; stop check at frame 5 probes direction times 8–11 at y minus 6; movement on frames 11–15"
+      },
+      "currentSelectedMechanics": {
+        "mechanics": "golems",
+        "initialStateHash": "09b67cf20e73aa15ebfba01344e425e14a8dc558f55469ed341f88887fbd2d96",
+        "replaySHA256": "a4db66ef18f70717166fd102bf5f78619ca84671c670bb91ca545edf99bad880",
+        "nativeSaved": 20,
+        "nativeRequired": 20,
+        "nativeCompletionTick": 1729,
+        "lastBasherLocalTickOffset": 1
+      }
     }
   ]
 }

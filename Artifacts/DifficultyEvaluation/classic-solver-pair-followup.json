@@ -1,0 +1,162 @@
+{
+  "attempts": [
+    {
+      "archiveSha256": "a7199f77fa81457620998433d8675733495749cf2622a5220858c3428bfad2f3",
+      "bestSaved": "0/10",
+      "completedContinuations": 8201,
+      "deadlineReached": false,
+      "firstAssignments": 67,
+      "firstTickWindow": [
+        1,
+        300
+      ],
+      "initialStateHash": "065e9697af0f9dfa64b73565b8e22a01e15effae350ff5b0ec6ee354467f1fc0",
+      "level": "fan:lldb-271/CRISFN07.dat#9",
+      "secondAssignments": 8201,
+      "secondGapWindow": [
+        1,
+        150
+      ],
+      "skills": "builder,digger",
+      "timeLimitSeconds": 30,
+      "title": "Scales on way",
+      "waitingRouteTick": 146
+    },
+    {
+      "archiveSha256": "d4f4f470e377ee8382db6bf41749ed620aead2c15360e4416fc4873dbe290268",
+      "bestSaved": "0/12",
+      "completedContinuations": 115563,
+      "deadlineReached": true,
+      "firstAssignments": 467,
+      "firstTickWindow": [
+        1,
+        300
+      ],
+      "initialStateHash": "a54515825a811c966414519ac9d48480c93cb4cf01a39020ab9a990e5a34fa6a",
+      "level": "fan:lldb-274/CRISFN10.dat#7",
+      "secondAssignments": 115564,
+      "secondGapWindow": [
+        1,
+        150
+      ],
+      "skills": "builder,basher",
+      "timeLimitSeconds": 30,
+      "title": "Lemmings must go to the right!",
+      "waitingRouteTick": 212
+    },
+    {
+      "archiveSha256": "2c6852a64160919f0afcbbcdf244877bd3bfd0fd134d745931faca723e2977a2",
+      "bestSaved": "0/1",
+      "completedContinuations": 5380,
+      "deadlineReached": false,
+      "firstAssignments": 66,
+      "firstTickWindow": [
+        1,
+        400
+      ],
+      "initialStateHash": "bb9be54ef302d7732ce4eebaf5474f76333805646266117d678e01c82b0754bb",
+      "level": "fan:lldb-282/GARJEN02.dat#3",
+      "secondAssignments": 5380,
+      "secondGapWindow": [
+        1,
+        200
+      ],
+      "skills": "builder,basher",
+      "timeLimitSeconds": 30,
+      "title": "Crazy Paving",
+      "waitingRouteTick": 167
+    },
+    {
+      "archiveSha256": "89543939c3fd2f2fdfa593653b4448889a48c4e03e22b8f83615cd9a0dd4f356",
+      "bestSaved": "0/5",
+      "completedContinuations": 12276,
+      "deadlineReached": false,
+      "firstAssignments": 117,
+      "firstTickWindow": [
+        1,
+        400
+      ],
+      "initialStateHash": "a35ee748eec09dab94c6fafcaf7379cea9c92262f3c294ad3c861d0a79448ba5",
+      "level": "fan:lldb-253/Conway04.DAT#0",
+      "secondAssignments": 12276,
+      "secondGapWindow": [
+        1,
+        200
+      ],
+      "skills": "miner,miner",
+      "timeLimitSeconds": 30,
+      "title": "Lemming's chocolate orange",
+      "waitingRouteTick": 152
+    },
+    {
+      "archiveSha256": "98fa176ef8a199a6dd421a2d163c0011d5d5dc7f17e25f10130a06d66e1a960b",
+      "bestSaved": "0/10",
+      "completedContinuations": 22979,
+      "deadlineReached": true,
+      "firstAssignments": 65,
+      "firstTickWindow": [
+        1,
+        300
+      ],
+      "initialStateHash": "bedda022794435a7ba6a4b4855cfaaa8951c64e6ed0daaa1d0b31c5d7ed80eec",
+      "level": "fan:lldb-285/GARJEN05.dat#5",
+      "secondAssignments": 22980,
+      "secondGapWindow": [
+        1,
+        150
+      ],
+      "skills": "digger,builder",
+      "timeLimitSeconds": 30,
+      "title": "Poldark",
+      "waitingRouteTick": 123
+    },
+    {
+      "archiveSha256": "b89068f77ddf464b14bf20a0de0876d27d007c888ad557dc69ea50cfd408806a",
+      "bestSaved": "0/10",
+      "completedContinuations": 70797,
+      "deadlineReached": true,
+      "firstAssignments": 52,
+      "firstTickWindow": [
+        1,
+        300
+      ],
+      "initialStateHash": "9313b28349673602505fc07fd95fea73320a1b02b27909606a035488a726ac81",
+      "level": "fan:lldb-305/TWPAK03.dat#6",
+      "secondAssignments": 70798,
+      "secondGapWindow": [
+        1,
+        150
+      ],
+      "skills": "basher,digger",
+      "timeLimitSeconds": 30,
+      "title": "The Lemming Factory",
+      "waitingRouteTick": 80
+    },
+    {
+      "archiveSha256": "12fd581c1a141bd55f498c82a90c3b981a0768c1444c65f38a1bfa7d6bd90e50",
+      "bestSaved": "0/1",
+      "completedContinuations": 283972,
+      "deadlineReached": false,
+      "firstAssignments": 754,
+      "firstTickWindow": [
+        1,
+        300
+      ],
+      "initialStateHash": "bb1794971b64373f45404e6e114b97eba849c9948632acca6126489f4783cbce",
+      "level": "fan:lldb-357/Modlvls.dat#3",
+      "secondAssignments": 283972,
+      "secondGapWindow": [
+        1,
+        200
+      ],
+      "skills": "basher,basher",
+      "timeLimitSeconds": 30,
+      "title": "Tightrope Murder",
+      "waitingRouteTick": 278
+    }
+  ],
+  "date": "2026-10-04",
+  "limits": "Each search tested only the named ordered skill pair and bounded timing windows. No result is an impossibility or source-physics parity proof.",
+  "nativeLibrarySha256": "9b795b0f5e5dd9a5cb70d1a97e233ba84da41b42fe199f1ed870fc702831d3c4",
+  "solverSha256": "d7c1717faa942ffeb08802b7a1883ea82333c8a5a26da1efba24bbba00b23792"
+}

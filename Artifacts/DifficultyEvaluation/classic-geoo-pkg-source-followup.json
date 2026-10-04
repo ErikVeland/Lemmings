@@ -1,0 +1,431 @@
+{
+  "date": "2026-10-04",
+  "scope": "Previously unprobed published records on three exact bundled geooPkG levels. Input phases minus one, zero and plus one; Original and Golems mechanics; native and 32-slot object interpretations.",
+  "archiveSHA256": "fd57fd4e5d9eebedac039e3abc8df690d0e2893d26b7599faaa89861cd55a041",
+  "sourceBuiltProbeSHA256": "6fcc89eeebd36b911aec78d181c410e41231531f530088b9ba5e067afec4ee0f",
+  "sourceBuiltNxlvKitSHA256": "9b795b0f5e5dd9a5cb70d1a97e233ba84da41b42fe199f1ed870fc702831d3c4",
+  "records": [
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "geooPkG.dat#1",
+        "packID": "fan:lldb-108"
+      },
+      "title": "One Step Ahead",
+      "sourceURL": "https://lldb.camanis.net/level/108/2",
+      "sourcePageSHA256": "cc806d091e057fd05b6b106b4fa37a171618c4df33caecdf1472670ebd88c59a",
+      "sourceGoal": "4 of 5 within 2 minutes.",
+      "sourceReplaySHA256": "d36cc1c89f229051f483d7898e03652c4719bbb8e310bcc4d45589bb20823a48",
+      "sourceHeaderSaved": 4,
+      "sourceHeaderTicks": 1167,
+      "phaseOffsetsFromCachedCandidate": [
+        -1,
+        0,
+        1
+      ],
+      "nativeOutcomesBySemanticsAndMechanics": {
+        "native/original": [
+          {
+            "phase": "+00",
+            "error": "engine refused to queue digger for lemming 1 at tick 294"
+          },
+          {
+            "phase": "+01",
+            "error": "engine refused to queue digger for lemming 1 at tick 295"
+          },
+          {
+            "phase": "-01",
+            "error": "engine refused to queue blocker for lemming 0 at tick 76"
+          }
+        ],
+        "native/golems": [
+          {
+            "phase": "+00",
+            "error": "engine refused to queue blocker for lemming 0 at tick 77"
+          },
+          {
+            "phase": "+01",
+            "error": "engine refused to queue blocker for lemming 0 at tick 78"
+          },
+          {
+            "phase": "-01",
+            "error": "engine refused to queue digger for lemming 1 at tick 293"
+          }
+        ],
+        "all/original": [
+          {
+            "phase": "+00",
+            "error": "engine refused to queue digger for lemming 1 at tick 294"
+          },
+          {
+            "phase": "+01",
+            "error": "engine refused to queue digger for lemming 1 at tick 295"
+          },
+          {
+            "phase": "-01",
+            "error": "engine refused to queue blocker for lemming 0 at tick 76"
+          }
+        ],
+        "all/golems": [
+          {
+            "phase": "+00",
+            "error": "engine refused to queue blocker for lemming 0 at tick 77"
+          },
+          {
+            "phase": "+01",
+            "error": "engine refused to queue blocker for lemming 0 at tick 78"
+          },
+          {
+            "phase": "-01",
+            "error": "engine refused to queue digger for lemming 1 at tick 293"
+          }
+        ]
+      }
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "geooPkG.dat#1",
+        "packID": "fan:lldb-108"
+      },
+      "title": "One Step Ahead",
+      "sourceURL": "https://lldb.camanis.net/level/108/2",
+      "sourcePageSHA256": "cc806d091e057fd05b6b106b4fa37a171618c4df33caecdf1472670ebd88c59a",
+      "sourceGoal": "4 of 5 within 2 minutes.",
+      "sourceReplaySHA256": "8c3e65f2ad8e28f00dd4a2c019bad152416674119bd8a6a83107e114ce136744",
+      "sourceHeaderSaved": 4,
+      "sourceHeaderTicks": 1167,
+      "phaseOffsetsFromCachedCandidate": [
+        -1,
+        0,
+        1
+      ],
+      "nativeOutcomesBySemanticsAndMechanics": {
+        "native/original": [
+          {
+            "phase": "+00",
+            "error": "engine refused to queue digger for lemming 1 at tick 294"
+          },
+          {
+            "phase": "+01",
+            "error": "engine refused to queue digger for lemming 1 at tick 295"
+          },
+          {
+            "phase": "-01",
+            "error": "engine refused to queue blocker for lemming 0 at tick 76"
+          }
+        ],
+        "native/golems": [
+          {
+            "phase": "+00",
+            "error": "engine refused to queue blocker for lemming 0 at tick 77"
+          },
+          {
+            "phase": "+01",
+            "error": "engine refused to queue blocker for lemming 0 at tick 78"
+          },
+          {
+            "phase": "-01",
+            "error": "engine refused to queue digger for lemming 1 at tick 293"
+          }
+        ],
+        "all/original": [
+          {
+            "phase": "+00",
+            "error": "engine refused to queue digger for lemming 1 at tick 294"
+          },
+          {
+            "phase": "+01",
+            "error": "engine refused to queue digger for lemming 1 at tick 295"
+          },
+          {
+            "phase": "-01",
+            "error": "engine refused to queue blocker for lemming 0 at tick 76"
+          }
+        ],
+        "all/golems": [
+          {
+            "phase": "+00",
+            "error": "engine refused to queue blocker for lemming 0 at tick 77"
+          },
+          {
+            "phase": "+01",
+            "error": "engine refused to queue blocker for lemming 0 at tick 78"
+          },
+          {
+            "phase": "-01",
+            "error": "engine refused to queue digger for lemming 1 at tick 293"
+          }
+        ]
+      }
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "geooPkG.dat#4",
+        "packID": "fan:lldb-108"
+      },
+      "title": "Cascade",
+      "sourceURL": "https://lldb.camanis.net/level/108/5",
+      "sourcePageSHA256": "8f28eb40e01203acde768811cced759855436aa3dd78be2d08a43b8ffd99d112",
+      "sourceGoal": "13 of 16 within 1 minute.",
+      "sourceReplaySHA256": "6a5ef1bc1a7cf2fdaecc54ee318ca2b093e55dc18536dc71478e63cb84bf04b5",
+      "sourceHeaderSaved": 13,
+      "sourceHeaderTicks": 831,
+      "phaseOffsetsFromCachedCandidate": [
+        -1,
+        0,
+        1
+      ],
+      "nativeOutcomesBySemanticsAndMechanics": {
+        "native/original": [
+          {
+            "phase": "+00",
+            "saved": 0,
+            "required": 13,
+            "ticks": 735,
+            "didWin": false
+          },
+          {
+            "phase": "+01",
+            "saved": 0,
+            "required": 13,
+            "ticks": 723,
+            "didWin": false
+          },
+          {
+            "phase": "-01",
+            "saved": 0,
+            "required": 13,
+            "ticks": 737,
+            "didWin": false
+          }
+        ],
+        "native/golems": [
+          {
+            "phase": "+00",
+            "saved": 0,
+            "required": 13,
+            "ticks": 722,
+            "didWin": false
+          },
+          {
+            "phase": "+01",
+            "saved": 0,
+            "required": 13,
+            "ticks": 723,
+            "didWin": false
+          },
+          {
+            "phase": "-01",
+            "saved": 0,
+            "required": 13,
+            "ticks": 734,
+            "didWin": false
+          }
+        ],
+        "all/original": [
+          {
+            "phase": "+00",
+            "saved": 0,
+            "required": 13,
+            "ticks": 735,
+            "didWin": false
+          },
+          {
+            "phase": "+01",
+            "saved": 0,
+            "required": 13,
+            "ticks": 723,
+            "didWin": false
+          },
+          {
+            "phase": "-01",
+            "saved": 0,
+            "required": 13,
+            "ticks": 737,
+            "didWin": false
+          }
+        ],
+        "all/golems": [
+          {
+            "phase": "+00",
+            "saved": 0,
+            "required": 13,
+            "ticks": 722,
+            "didWin": false
+          },
+          {
+            "phase": "+01",
+            "saved": 0,
+            "required": 13,
+            "ticks": 723,
+            "didWin": false
+          },
+          {
+            "phase": "-01",
+            "saved": 0,
+            "required": 13,
+            "ticks": 734,
+            "didWin": false
+          }
+        ]
+      }
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "geooPkG.dat#5",
+        "packID": "fan:lldb-108"
+      },
+      "title": "Feet on Fire",
+      "sourceURL": "https://lldb.camanis.net/level/108/6",
+      "sourcePageSHA256": "e437483670d18e7a20c8fa06058e98b6b3aa1fee8551e43be22bda9073453399",
+      "sourceGoal": "24 of 36 within 2 minutes.",
+      "sourceReplaySHA256": "d3313c556ab38a31fa1f93a3904795901c40b260e0723ed1f4cbec1a2e83eef3",
+      "sourceHeaderSaved": 24,
+      "sourceHeaderTicks": 1539,
+      "phaseOffsetsFromCachedCandidate": [
+        -1,
+        0,
+        1
+      ],
+      "nativeOutcomesBySemanticsAndMechanics": {
+        "native/original": [
+          {
+            "phase": "+00",
+            "error": "engine refused to queue blocker for lemming 3 at tick 265"
+          },
+          {
+            "phase": "+01",
+            "error": "engine refused to queue blocker for lemming 3 at tick 266"
+          },
+          {
+            "phase": "-01",
+            "error": "engine refused to queue blocker for lemming 3 at tick 264"
+          }
+        ],
+        "native/golems": [
+          {
+            "phase": "+00",
+            "error": "engine refused to queue blocker for lemming 3 at tick 265"
+          },
+          {
+            "phase": "+01",
+            "error": "engine refused to queue blocker for lemming 3 at tick 266"
+          },
+          {
+            "phase": "-01",
+            "error": "engine refused to queue blocker for lemming 3 at tick 264"
+          }
+        ],
+        "all/original": [
+          {
+            "phase": "+00",
+            "error": "engine refused to queue blocker for lemming 3 at tick 265"
+          },
+          {
+            "phase": "+01",
+            "error": "engine refused to queue blocker for lemming 3 at tick 266"
+          },
+          {
+            "phase": "-01",
+            "error": "engine refused to queue blocker for lemming 3 at tick 264"
+          }
+        ],
+        "all/golems": [
+          {
+            "phase": "+00",
+            "error": "engine refused to queue blocker for lemming 3 at tick 265"
+          },
+          {
+            "phase": "+01",
+            "error": "engine refused to queue blocker for lemming 3 at tick 266"
+          },
+          {
+            "phase": "-01",
+            "error": "engine refused to queue blocker for lemming 3 at tick 264"
+          }
+        ]
+      }
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "geooPkG.dat#5",
+        "packID": "fan:lldb-108"
+      },
+      "title": "Feet on Fire",
+      "sourceURL": "https://lldb.camanis.net/level/108/6",
+      "sourcePageSHA256": "e437483670d18e7a20c8fa06058e98b6b3aa1fee8551e43be22bda9073453399",
+      "sourceGoal": "24 of 36 within 2 minutes.",
+      "sourceReplaySHA256": "d3ac3b0d1b53c514338dc2e3c2f138cc90459c691ee09ef74058a0f98b18a71c",
+      "sourceHeaderSaved": 24,
+      "sourceHeaderTicks": 2042,
+      "phaseOffsetsFromCachedCandidate": [
+        -1,
+        0,
+        1
+      ],
+      "nativeOutcomesBySemanticsAndMechanics": {
+        "native/original": [
+          {
+            "phase": "+00",
+            "error": "engine refused to queue blocker for lemming 2 at tick 248"
+          },
+          {
+            "phase": "+01",
+            "error": "engine refused to queue blocker for lemming 2 at tick 249"
+          },
+          {
+            "phase": "-01",
+            "error": "engine refused to queue blocker for lemming 2 at tick 247"
+          }
+        ],
+        "native/golems": [
+          {
+            "phase": "+00",
+            "error": "engine refused to queue blocker for lemming 2 at tick 248"
+          },
+          {
+            "phase": "+01",
+            "error": "engine refused to queue builder for lemming 0 at tick 80"
+          },
+          {
+            "phase": "-01",
+            "error": "engine refused to queue blocker for lemming 2 at tick 247"
+          }
+        ],
+        "all/original": [
+          {
+            "phase": "+00",
+            "error": "engine refused to queue blocker for lemming 2 at tick 248"
+          },
+          {
+            "phase": "+01",
+            "error": "engine refused to queue blocker for lemming 2 at tick 249"
+          },
+          {
+            "phase": "-01",
+            "error": "engine refused to queue blocker for lemming 2 at tick 247"
+          }
+        ],
+        "all/golems": [
+          {
+            "phase": "+00",
+            "error": "engine refused to queue blocker for lemming 2 at tick 248"
+          },
+          {
+            "phase": "+01",
+            "error": "engine refused to queue builder for lemming 0 at tick 80"
+          },
+          {
+            "phase": "-01",
+            "error": "engine refused to queue blocker for lemming 2 at tick 247"
+          }
+        ]
+      }
+    }
+  ],
+  "conclusion": "No strict native win or replay-based score. These bounded source-route failures do not establish impossibility or full source physics parity."
+}

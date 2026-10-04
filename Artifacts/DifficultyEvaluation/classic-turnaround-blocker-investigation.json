@@ -1,0 +1,36 @@
+{
+  "date": "2026-10-03",
+  "level": "fan:lldb-49/QBeez04.dat#3",
+  "title": "The Turnaround!",
+  "archiveSha256": "1f701e96560f567e7d5168d8dabcd30198a13e03fbeeeba3d758009cca23b291",
+  "initialStateHash": "c01306c9c81e20bf312a8fc624785c0bff583752863f07b5ff952298f1597d27",
+  "nativeLibrarySha256": "3c5f3af7276aace14b84ba0a39abf499fcdd30758dd6e2d09a0da33a0020d331",
+  "probeSha256": "997db8b80b609dd4879ff748ea65899ce88b5adfaddad538fb975e536b2d99b7",
+  "probeSourceSha256": "1598c31c3a0b5fa97e9a787385f0268f55a80c26a4c0fced981a9feb980237e6",
+  "partialReplaySha256": "1ea83677aef5d2c7b55ab1b1956bf52fdc5893383420c66550b54d7cc75b1243",
+  "baseline": {
+    "saved": 99,
+    "required": 100,
+    "released": 100,
+    "completionTick": 1022,
+    "skills": "2 Bashers, 1 Blocker, 2 Builders, 2 Diggers, 1 Miner",
+    "observation": "All supplied skills are used. Lemming 1 remains an active Blocker at x=992, foot y=52 through tick 1022; 99 other lemmings exit."
+  },
+  "deletedCommands": {
+    "withoutBashAt219": 99,
+    "withoutDigAt221": 99,
+    "withoutBuildAt222": 0,
+    "withoutDigAt224": 99,
+    "withoutBashAt225": 99,
+    "withoutMineAt226": 99,
+    "withoutBuildAt227": 72,
+    "withoutBlockAt313": 0
+  },
+  "boundedChecks": [
+    "329 original, deleted-command and single-command retime variants: 259 complete native replays, no win; best 99/100.",
+    "1344 two-command retimes of the seven-command route without the Blocker: 901 complete native replays, no win; best 99/100.",
+    "2025 one-skill substitutions after deleting one redundant Basher, Digger or Miner command, over lemming IDs 2-6 and ticks 280-360: 2025 complete native replays, no win; best 99/100.",
+    "Source-built solver continuations after deleting the first Basher or first Digger completed 815 and 810 one-skill rollouts through waiting tick 1022, respectively, without a win."
+  ],
+  "conclusion": "The 99/100 route is a misleading near-win for the 100% objective: its Blocker cannot remain behind. Removing that Blocker makes this route save zero; the tested timing and one-skill substitutions do not free or replace it. A different construction or a way to release the Blocker is required. These bounded checks do not prove the level impossible and do not establish source physics parity. No winning replay or score was added."
+}

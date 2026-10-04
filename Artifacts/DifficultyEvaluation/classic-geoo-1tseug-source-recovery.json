@@ -1,0 +1,130 @@
+{
+  "date": "2026-10-04",
+  "inputTranslation": "Source actions decoded with a uniform minus-one native tick offset.",
+  "sourcePhysicsParity": "unverified: native wins match source saved counts; no source state trace was compared",
+  "sourceBuiltNxlvKitSHA256": "9b795b0f5e5dd9a5cb70d1a97e233ba84da41b42fe199f1ed870fc702831d3c4",
+  "sourceBuiltProbeSHA256": "9e513e98d56175fdf8af55bf8712fbcb07f820a656ca6bf20020030f46c05889",
+  "sourceBuiltEvidenceToolSHA256": "d1d3421a907bdd34564d8fda70f2be408fc176550141b35fd07f98088d5866ed",
+  "strictExactLevelChecks": [
+    "before promotion: 3/3",
+    "after promotion: 3/3"
+  ],
+  "levels": [
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "geooPk1.dat#7",
+        "packID": "fan:lldb-2"
+      },
+      "title": "Prepairing their ways",
+      "exactBundledArchiveSHA256": "4b7101f984e3ae81971b18a5ae393ca4012695528c1bbd5bb89bec70f188497f",
+      "sourceURL": "https://lldb.camanis.net/level/2/8",
+      "cachedSourcePageSHA256": "b7617ae07ac3c2800575cfca80fdfb69b9831b786f4dc4194d7aff9dcde03f82",
+      "rawSourceReplaySHA256": "c2036b725199102d099d0e0d810964695a123c588a99b647a777c3651da99e75",
+      "sourceReplayHeader": {
+        "gameMode": 2,
+        "saved": 4,
+        "ticks": 2042
+      },
+      "originalMechanicsResult": "rejected source action during replay",
+      "selectedNativeMechanics": "Golems on this exact member and archive revision",
+      "nativeInitialStateHash": "833e63d961b9de5d771e0f31aee955a8afbd317f465cdd0b2b8f50fa8749cf55",
+      "selectedReplaySHA256": "0e6596c2908fc0e13b4ff5969a958f1f3d3526debe79e027c3603fcbabfffc74",
+      "nativeOutcome": {
+        "didWin": true,
+        "released": 5,
+        "required": 4,
+        "saved": 4,
+        "stateHash": "e79ea27780a80993409c12d7115fdd223671186c3097944c60b073633ce8a8ad",
+        "ticks": 2042
+      },
+      "difficultyScore": 435.55289947320244,
+      "difficultyProbeRuns": 10
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "1tseug.dat#2",
+        "packID": "fan:lldb-35"
+      },
+      "title": "Ups and Downs",
+      "exactBundledArchiveSHA256": "c4b362a6a83f5a4dc03b24849adcfd28b00c6391570eed7a84b433c8a2aa2340",
+      "sourceURL": "https://lldb.camanis.net/level/35/3",
+      "cachedSourcePageSHA256": "53872b20b42c09a41cc438e291d69162a917f617bec3c58851c01b0ab10243f2",
+      "rawSourceReplaySHA256": "c7c7ec90995271098f19be97039d5b2681f9a22545d34abfadcac7ca39fb417e",
+      "sourceReplayHeader": {
+        "gameMode": 2,
+        "saved": 19,
+        "ticks": 1022
+      },
+      "originalMechanicsResult": "rejected source action during replay",
+      "selectedNativeMechanics": "Golems on this exact member and archive revision",
+      "nativeInitialStateHash": "512db31405acc39f07863a7567841ff0b6098f8dbc8850975b07fd6d8ad273c9",
+      "selectedReplaySHA256": "bd22f92fba7a4620f5f2093610454bd6274f24efb6f21045bdf494863a189c9b",
+      "nativeOutcome": {
+        "didWin": true,
+        "released": 20,
+        "required": 19,
+        "saved": 19,
+        "stateHash": "f76c84a274c7b6b4ee9ebd49e998e585f27015374ad70fc048f92077de72b467",
+        "ticks": 1022
+      },
+      "difficultyScore": 381.0391608558925,
+      "difficultyProbeRuns": 10
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "1tseug.dat#9",
+        "packID": "fan:lldb-35"
+      },
+      "title": "More Steel Works",
+      "exactBundledArchiveSHA256": "c4b362a6a83f5a4dc03b24849adcfd28b00c6391570eed7a84b433c8a2aa2340",
+      "sourceURL": "https://lldb.camanis.net/level/35/10",
+      "cachedSourcePageSHA256": "b3a10fdf6b35f7f3f95144c4664837ab4dfdd54eaeb498b4ec715167203d3a03",
+      "rawSourceReplaySHA256": "4d603eba11b0b72b705d38806272ab354a5917201bd23254141d1725051931f1",
+      "sourceReplayHeader": {
+        "gameMode": 2,
+        "saved": 40,
+        "ticks": 838
+      },
+      "originalMechanicsResult": "rejected source action during replay",
+      "selectedNativeMechanics": "Golems on this exact member and archive revision",
+      "nativeInitialStateHash": "7b0eedadf6ec3528c9e79427c6707559eb03aca90f0447c84232e36b92826bde",
+      "selectedReplaySHA256": "50c4c216c1f974d38d3135478f8e757521e64e98c0b4d33cca3ad50ca3816675",
+      "nativeOutcome": {
+        "didWin": true,
+        "released": 40,
+        "required": 40,
+        "saved": 40,
+        "stateHash": "6e8231e6337375dc6606be4013cc54b863d875cb4c19c40bf48282e5000f46cb",
+        "ticks": 837
+      },
+      "difficultyScore": 422.12431327603247,
+      "difficultyProbeRuns": 10
+    }
+  ],
+  "sourceBuiltSolverSHA256": "9503057c84c8d6884390bd6164dace1333d17eef9a7a0369b9edbc1431b67f3d",
+  "solverControlReplaySHA256": "cc99da7a65776f1c620c3bd16d1870f03bfe12199d1ad8cc63beb7414f956f04",
+  "directSourceProbeLogSHA256": "de937a3bfe0d272848d225b475ab71363c903e339e94d9c9a777c612a5c464b9",
+  "unresolvedSourceRecords": [
+    {
+      "identity": {
+        "engine": "classic",
+        "packID": "fan:lldb-2",
+        "levelID": "geooPk1.dat#6"
+      },
+      "rawSourceReplaySHA256": "511833b11a090f79da54072b6056709c8b5f4cfa86e14039a8427759a63dd788",
+      "result": "Original and Golems mechanics both reject Basher for lemming 3 at tick 499."
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "packID": "fan:lldb-2",
+        "levelID": "geooPk1.dat#9"
+      },
+      "rawSourceReplaySHA256": "31cb0c809b43d68369174c7c8106d2f71c9c7ec3095a66d145f2edb898f7754e",
+      "result": "Original rejects Basher for lemming 2 at tick 1000; Golems accepts source actions but saves 0/27."
+    }
+  ]
+}

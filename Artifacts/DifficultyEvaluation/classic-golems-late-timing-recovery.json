@@ -1,0 +1,63 @@
+{
+  "description": "A directed search retimed the published source input after a measured native fall-out. Nine exact-bundle native wins were found by moving worker 0 Builder to ticks 303–311. The selected central tick is 307. The source replay itself remains a native loss, and full physics parity is unverified.",
+  "records": [
+    {
+      "identity": {
+        "engine": "classic",
+        "packID": "fan:lldb-193",
+        "levelID": "Gronklems #1.dat#2"
+      },
+      "title": "The single pillar incedent",
+      "bundledArchiveSHA256": "f8b9a3fb9d13756772fa9ce75bd6fb9afc80ad2149c58171849e53789c18cbd9",
+      "initialStateHash": "71a1a8549eebb52751144d45a0c241605c1023a74d22bf7025752ebee6143716",
+      "sourceReplaySHA256": "03b3c96de3580c40ebc90b80715032ddc599fded10c60c42dc17670163664aca",
+      "sourceURL": "https://lldb.camanis.net/level/193/3",
+      "sourceHeaderSaved": 2,
+      "sourceHeaderTicks": 381,
+      "sourcePlayerSaved": 2,
+      "sourcePlayerRequired": 2,
+      "sourcePlayerCompletionCycle": 381,
+      "sourcePlayerScriptSHA256": "c467eab99315555391542d7c79a2976b28c1c674dadd01ccf261d7792eabeace",
+      "sourceEngineSHA256": "38cb69f18f5055821a496336a948fc30596e56c607c3ddddfb4675be78a5873e",
+      "nativeReplaySHA256": "e6faada227d405c39d66b448d3e819f58fb131b59f6f50a87bea3c6ca1e332e9",
+      "nativeSaved": 2,
+      "required": 2,
+      "nativeCompletionTick": 393,
+      "difficultyScore": 380.351510690784,
+      "probeRuns": 10,
+      "mechanics": "golems",
+      "clock": "golems",
+      "sourceRules": "golemsFallingBuilder",
+      "ordinaryPlayerAssignments": false,
+      "sourceActionDerivationVerified": false,
+      "sourceActionDerivation": "Source command order and targets retained; native ticks retimed by a bounded search",
+      "convertedSourceTicksMinusOne": [
+        61,
+        61,
+        117,
+        237,
+        265,
+        284,
+        300,
+        314,
+        322
+      ],
+      "nativeTickOffsetsFromConvertedSource": [
+        -1,
+        -1,
+        0,
+        -1,
+        -1,
+        -1,
+        -1,
+        -7,
+        -1
+      ],
+      "timingSearchVariants": 84,
+      "timingSearchWins": 9,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/e6faada227d405c39d66b448d3e819f58fb131b59f6f50a87bea3c6ca1e332e9.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/e6faada227d405c39d66b448d3e819f58fb131b59f6f50a87bea3c6ca1e332e9.profile.json",
+      "sourcePhysicsParity": "saved-count agreement only; 12-cycle completion difference and full state parity unverified"
+    }
+  ]
+}

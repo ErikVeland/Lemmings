@@ -43,6 +43,7 @@ private let evidenceNames = [
     "classic-golems-phase-shift-targeted.json",
     "classic-golems-phase-shift-second.json",
     "classic-golems-phase-shift-third.json",
+    "classic-golems-local-basher-timing-recovery.json",
 ]
 private let evidences = try evidenceNames.map { name in
     try decoder.decode(Evidence.self, from: Data(contentsOf: root.appendingPathComponent(
@@ -54,6 +55,8 @@ let packs = Dictionary(uniqueKeysWithValues: FanLevelLibrary.packs(in: [
 let assets = try ClassicMainDATAssets.load(from: ports.appendingPathComponent("lemmings_dos_1991-07-30"))
 
 for record in evidences.flatMap(\.records) {
+    print("CHECK", record.identity.packID, record.identity.levelID)
+    fflush(stdout)
     guard let pack = packs[record.identity.packID] else { fatalError("Missing pack: \(record.identity.packID)") }
     let archiveData = try Data(contentsOf: pack)
     precondition(digest(archiveData) == record.bundledArchiveSHA256)
@@ -81,7 +84,7 @@ for record in evidences.flatMap(\.records) {
     let profile = try decoder.decode(DifficultyProfile.self, from: Data(contentsOf:
         root.appendingPathComponent(record.profilePath)))
     precondition(profile.key.identity == record.identity &&
-        profile.key.replayRevision == record.nativeReplaySHA256 &&
+        profile.key.replayRevision.hasSuffix(record.nativeReplaySHA256) &&
         profile.overallScore == record.difficultyScore)
     print("PASS", record.identity.packID, record.identity.levelID,
         outcome.saved, outcome.required, outcome.ticks, profile.overallScore)
@@ -125,6 +128,8 @@ print("Verified", profileReplayNames.count, "additional Golems-profile winning r
 
 private let selectedRows = try decoder.decode([SelectedRow].self, from: Data(contentsOf:
     root.appendingPathComponent("Artifacts/LearningJourney/fan-evidence.json")))
+private let auditRows = try decoder.decode([SelectedRow].self, from: Data(contentsOf:
+    root.appendingPathComponent("Artifacts/ClassicProgression/audit.json")))
 let selectedSolutions = try decoder.decode([String: ClassicDOSReplay].self, from: Data(contentsOf:
     root.appendingPathComponent("Artifacts/LearningJourney/candidate-solutions.json")))
 let selectedIDs = [
@@ -135,9 +140,12 @@ let selectedIDs = [
 let replayEncoder = JSONEncoder()
 replayEncoder.outputFormatting = [.prettyPrinted, .sortedKeys]
 for (packID, levelID) in selectedIDs {
-    let matches = selectedRows.filter {
+    let overlayMatches = selectedRows.filter {
         $0.entry.identity.packID == packID && $0.entry.identity.levelID == levelID
     }
+    let matches = overlayMatches.isEmpty ? auditRows.filter {
+        $0.entry.identity.packID == packID && $0.entry.identity.levelID == levelID
+    } : overlayMatches
     precondition(matches.count == 1)
     let row = matches[0]
     guard let pack = packs[row.entry.identity.packID],

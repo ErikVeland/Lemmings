@@ -1,0 +1,118 @@
+{
+  "level": "fan:lldb-393/pieuw01.dat#9",
+  "archiveSHA256": "6b599e67d0656e6a27f33f99916b9dafd21b04a1e7c88f8eda24e3083a087bc4",
+  "sourceReplaySHA256": "b0104e7676a965bf5d59582013ec706cc0202a637cb23815284bc43c6e38e8ac",
+  "selectedNativeReplaySHA256": "91610c2bc4d3bc04245c495f0b8c007844ef281a341660503429fde6d4261c74",
+  "sourceEngineSHA256": "38cb69f18f5055821a496336a948fc30596e56c607c3ddddfb4675be78a5873e",
+  "sourceTransitionResultSHA256": "34b9f0fecc0a418f35b51243eb88e8ff3ec3f12ee0973ec5f385657ad931dfe9",
+  "sourceBoundaryResultSHA256": "34b9f0fecc0a418f35b51243eb88e8ff3ec3f12ee0973ec5f385657ad931dfe9",
+  "sourceScreenshotSHA256ByCycle": {
+    "900": "30d30591ee410ec34f978f9489ab2d5bee0ea8a121643f23fc30bfb04ceabd39",
+    "905": "8366d0f4555d5de4b9cf63189f8863c3230035882a7110b7a86085de1e34d358",
+    "910": "90fc65ca64fb58d1c3b04043f0bf791bfa5387a9516dda919001ecb6c96ebd23",
+    "915": "1b705af85d63ee56a54519815c5d28ef6109132c50e7ef8dd799cc800fb8dc44",
+    "920": "c2115775f10365fc1c4320cf29f857ac4bddbd1bcdd7384e0f046873c8b429c3",
+    "925": "35b1404650021224f005dd5ff793ba79f7f4cefd6b2b19f50da0373d7f4e13d1",
+    "930": "d2575032b03f64e66626a90b7535a2c9966fefc9c63b64307be5d4c560ecd0c7",
+    "960": "6e7b0f1cbdd66846b2d9c8b37b19abf1c11b7b867bd76db220dc80c2b656b062",
+    "990": "5d366e17ebbd06e55a8b882e18ee6e14a6bc1d05acf3d6a7cdda93aad376113a",
+    "911": "68e23bf533b34bf1641c98bd600720197a4859ecf072ab754eb5c43ac3cf43ec",
+    "912": "36788998799bb30cb7d3072a1cef47f41d33b55ae60e5a214fd629467ce36ae2",
+    "913": "b1afb5937ba004e02243e22e747b0378b771b0804fb94d25baa4b809e75bbb8f",
+    "914": "80fed4726ed498564f7756b5afb15da192b2266d0f9aece0a613a9693d7c8fee",
+    "918": "f9816e0fb9bf575068709a8013d36c4c7f66de4102920b867004a5d97a33802f"
+  },
+  "nativeDirectionTraceSHA256": "9ca436dcf1c552b9a19cb1b0f45a0f0bbff4e46c959361b95fc6756511a116ab",
+  "nativeResult": "strict 4/4 at tick 1373",
+  "sourceResult": "4/4 at cycle 1417",
+  "method": "The public source Watch replay was run in the pinned Golems player headlessly with muted audio. The browser player was advanced one cycle at a time near the split. Native directions and terrain came from a fresh strict run on the exact bundled archive. Source sprite locations and terrain pixels are screen observations; worker identity is inferred from continuity and is not exported by the source player.",
+  "nativeWorker2": [
+    {
+      "tick": 910,
+      "action": "walking",
+      "foot": [
+        679,
+        126
+      ],
+      "direction": "left"
+    },
+    {
+      "tick": 911,
+      "action": "walking",
+      "foot": [
+        678,
+        126
+      ],
+      "direction": "left"
+    },
+    {
+      "tick": 912,
+      "action": "walking",
+      "foot": [
+        677,
+        126
+      ],
+      "direction": "right"
+    },
+    {
+      "tick": 915,
+      "action": "walking",
+      "foot": [
+        680,
+        126
+      ],
+      "direction": "right"
+    },
+    {
+      "tick": 918,
+      "action": "falling",
+      "foot": [
+        683,
+        130
+      ],
+      "direction": "right"
+    },
+    {
+      "tick": 930,
+      "action": "walking",
+      "foot": [
+        692,
+        136
+      ],
+      "direction": "right"
+    }
+  ],
+  "sourceObservation": "At cycle 910 the two workers at the shaft are close to the native positions. By cycle 915 one source worker visibly falls to the left side of the shaft while native worker 2 is still walking right at (680,126). At cycle 930 the source has workers near world X 663 and 691, while native workers 0 and 2 are at X 683 and 692. By cycle 960 one source worker remains near X 670 while the corresponding native worker is near X 713; the other three workers remain within a few pixels of their native counterparts. Source world X estimates assume the observed viewport offset of 569 and three screen pixels per level pixel.",
+  "terrainObservation": "Native terrain at tick 910 is solid across level X 645-700 on row 126; its digger does not clear X 678-686 on that row until tick 918. Source screenshots show a partly blackened row near the shaft by cycle 912 and full clearance by cycle 925. The source sprite overlaps this row, so the screenshots alone do not prove the exact source terrain-removal tick. Earlier screenshots at cycles 670, 678 and 900 now show the left-facing Basher's tunnel one level pixel higher in the source player than in the native run. Initial source and native terrain agree at all 16,281 sampled pixels in X 600-800, Y 70-150. By cycle 900, row 126 has 53 source-empty/native-solid pixels in X 645-725; row 135 has 56 source-solid/native-empty pixels. Sprite overlap prevents treating every sampled pixel as terrain, but the long horizontal spans away from sprites establish a tunnel-height difference.",
+  "leftBasherProbe": {
+    "sourceScreenshotSHA256ByCycle": {
+      "670": "3dd2f49cee689f16099be79ef4b9bf6ebeb0f6349de759a97040d01f4ba60510",
+      "678": "68c2fca277f705c33b14a5cd3786ad5b47afacef4d96ace14fd3346c65194d05",
+      "685": "2d0546d9dbe555e3a248c582b8fa95bb76588517e7555d8c7b99897f4e9e84e2",
+      "900": "30d30591ee410ec34f978f9489ab2d5bee0ea8a121643f23fc30bfb04ceabd39"
+    },
+    "firstCutObservation": "Between source cycles 678 and 685, level row 126 becomes black at X 704-708. The native solid mask at ticks 678 and 685 retains those five row-126 pixels; its first new cleared pixels in this neighbourhood are on row 127. The source screenshots include the Basher sprite, but row 126 at those X values is above its observed coloured pixels at cycle 685.",
+    "sourceResultSHA256": "34b9f0fecc0a418f35b51243eb88e8ff3ec3f12ee0973ec5f385657ad931dfe9",
+    "baselineNativeTraceSHA256": "c28a3f9b24c9f6358272af4e9ce69ff34b64f154f5a00dd4e5b352574cec1142",
+    "scratchLibrarySHA256": "6798b5163129dc7b3f9559c8c4bff681b1cee2be37d03585a73c07de5c0b6fe3",
+    "scratchTraceSHA256": "7ad691d8812819cae7ea0c364aece20f2096ec4c7a2929693b091c69ee08f2e9",
+    "scratchAuditSHA256": "daa479b48da9af487b2e25ca552fa9212c1ffd098ae0e9802a6fd1df8ffdab42",
+    "scratchChange": "Move only Golems left-facing Basher terrain removal one level pixel upward; no production source was changed.",
+    "scratchExactLevelOutcome": "strict 4/4 at tick 1414; source 4/4 at cycle 1417; baseline native 4/4 at tick 1373",
+    "sampledTerrainDifferenceCountAtCycle900": {
+      "baseline": 183,
+      "scratch": 76,
+      "region": "level X 645-725, Y 118-140; source screenshot includes worker sprites"
+    },
+    "strictRegressionAudit": {
+      "knownWinningReplays": 152,
+      "unchangedStrictWins": 90,
+      "strictFailures": 62,
+      "stateHashMismatch": 34,
+      "completionTickMismatch": 17,
+      "commandRejected": 7,
+      "savedCountMismatch": 4
+    }
+  },
+  "interpretation": "The route split around cycles 911-915 follows a terrain difference created earlier by the left-facing Basher at cycle 678. A scratch one-pixel upward adjustment greatly reduces the measured tunnel difference and brings this level's strict win within three cycles of the source result, but breaks 62 of 152 existing strict Golems wins. The pinned preview DLL's Basher assignment IL sets Y offset -10 for either direction; the browser runs Golems.Core.wasm, whose binary identity with the preview DLL has not been established. The exact live-source mask decoding or sprite-foot relationship therefore remains unproven. Do not promote the scratch adjustment or claim full source parity until that mechanism and the replay regressions are resolved."
+}
