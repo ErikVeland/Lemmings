@@ -32,6 +32,17 @@ star states, compact result layout, primary/selected actions, transport icon
 changes and concise skill names beneath HUD counts. This is not a claim that every
 sequel screen or every novice-player journey has been validated.
 
+NeoLemmix uses Classic stone controls and bitmap counters with a compact,
+whole-pixel layout. The bar adapts to the level's skill count. Skill icons in the
+bar and beside the cursor use the level's themed sprites and actual skill names.
+Eight NeoLemmix skills must not select Classic's fixed eight-skill artwork.
+The Macintosh artwork setting substitutes verified equivalents as described in
+[NeoLemmix Mac artwork](NeoLemmixMacArtwork.md).
+Locked spawn intervals disable both rate buttons. Minimap input follows the
+visible map inside its frame. Offscreen checks cover 0, 1, 8, 10 and 21 skills,
+resizing, CRT source rendering, selection, pause, undo and unavailable controls.
+Lemmings 2 and 3 retain their separate panels and the same shared transport controls.
+
 Assignment feedback follows the engine's actual eligibility rules. The Modern cursor is grey when no lemming is under the pointer. Yellow means the lemming cannot
 accept the selected skill; green means the nearest target can accept the selected skill.
 Successful assignments get a 100 ms green pulse, with local HDR brightness when

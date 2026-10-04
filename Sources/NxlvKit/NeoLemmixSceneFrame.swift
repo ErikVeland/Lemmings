@@ -15,7 +15,8 @@ public enum NeoLemmixSceneFrame {
         secondaryAnimationStates: [Int: [NeoLemmixSecondaryAnimationState]]? = nil,
         tickCount: Int = 0,
         entranceOpenTick: Int? = nil,
-        splitterDirections: [Int: NeoLemmixDirection]? = nil
+        splitterDirections: [Int: NeoLemmixDirection]? = nil,
+        useMacArtwork: Bool = false
     ) -> [UInt8] {
         let pixelCount = rendered.width * rendered.height
         let byteCount = pixelCount * 4
@@ -75,7 +76,32 @@ public enum NeoLemmixSceneFrame {
                 terrain[offset + 3] = maskColor[3]
             }
         }
-        var result = rendered.backgroundRGBA
+        let pixelScale = useMacArtwork ? 2 : 1
+        func displayPixels(_ pixels: [UInt8]) -> [UInt8] {
+            useMacArtwork ? NeoLemmixMacArtwork.doubled(pixels, width: rendered.width, height: rendered.height) : pixels
+        }
+        if useMacArtwork {
+            var high = rendered.macTerrainRGBA.count == byteCount * 4
+                ? rendered.macTerrainRGBA : displayPixels(rendered.terrainRGBA)
+            for index in 0..<pixelCount {
+                let x = index % rendered.width, y = index / rendered.width
+                guard current.solidMask[index] == 0 || rendered.solidMask[index] == 0
+                    || current.constructionShade(x: x, y: y) != nil || current.stonerSourceIndex(x: x, y: y) != nil else { continue }
+                for dy in 0..<2 { for dx in 0..<2 {
+                    let d = ((y * 2 + dy) * rendered.width * 2 + x * 2 + dx) * 4
+                    high[d..<d + 4] = terrain[index * 4..<index * 4 + 4]
+                } }
+            }
+            terrain = high
+        }
+        func primaryPixels(_ gadget: NxlvRenderedGadget, frame: Int) -> [UInt8] {
+            if useMacArtwork, gadget.macAnimationRGBA.indices.contains(frame),
+               gadget.macAnimationRGBA[frame].count == gadget.width * gadget.height * 16 {
+                return gadget.macAnimationRGBA[frame]
+            }
+            return gadget.animationRGBA[frame]
+        }
+        var result = displayPixels(rendered.backgroundRGBA)
         let hasRetainedGadgets = !rendered.gadgets.isEmpty
             && rendered.gadgets.allSatisfy({ !$0.animationRGBA.isEmpty })
         if hasRetainedGadgets {
@@ -93,7 +119,7 @@ public enum NeoLemmixSceneFrame {
                     zIndex: Int, order: Int, rgba: [UInt8], width: Int,
                     height: Int, x: Int, y: Int
                 )] = [(
-                    gadget.primaryZIndex, 0, gadget.animationRGBA[frame],
+                    gadget.primaryZIndex, 0, primaryPixels(gadget, frame: frame),
                     gadget.width, gadget.height,
                     gadget.x + movement.x, gadget.y + movement.y
                 )]
@@ -105,6 +131,7 @@ public enum NeoLemmixSceneFrame {
                     tickCount: tickCount,
                     deltaX: movement.x,
                     deltaY: movement.y,
+                    useMacArtwork: useMacArtwork,
                     to: &layers
                 )
                 for layer in layers.sorted(by: {
@@ -120,6 +147,7 @@ public enum NeoLemmixSceneFrame {
                         noOverwrite: gadget.noOverwrite,
                         canvasWidth: rendered.width,
                         canvasHeight: rendered.height,
+                        pixelScale: pixelScale,
                         over: &result
                     )
                 }
@@ -127,7 +155,7 @@ public enum NeoLemmixSceneFrame {
         }
         composite(terrain, over: &result)
         if hasRetainedGadgets {
-            var foreground = Array(repeating: UInt8(0), count: byteCount)
+            var foreground = Array(repeating: UInt8(0), count: byteCount * pixelScale * pixelScale)
             let hasButtons = zones.contains { $0.effect == .unlockButton }
             let hasUnpressedButton = zones.contains {
                 $0.effect == .unlockButton && !disabledZoneIDs.contains($0.id)
@@ -181,7 +209,7 @@ public enum NeoLemmixSceneFrame {
                     zIndex: Int, order: Int, rgba: [UInt8], width: Int,
                     height: Int, x: Int, y: Int
                 )] = [(
-                    gadget.primaryZIndex, 0, gadget.animationRGBA[frame],
+                    gadget.primaryZIndex, 0, primaryPixels(gadget, frame: frame),
                     gadget.width, gadget.height, gadget.x, gadget.y
                 )]
                 appendSecondaryLayers(
@@ -192,6 +220,7 @@ public enum NeoLemmixSceneFrame {
                     tickCount: tickCount,
                     deltaX: 0,
                     deltaY: 0,
+                    useMacArtwork: useMacArtwork,
                     to: &layers
                 )
                 let noOverwritePrior = foreground
@@ -210,13 +239,14 @@ public enum NeoLemmixSceneFrame {
                         noOverwritePrior: noOverwritePrior,
                         canvasWidth: rendered.width,
                         canvasHeight: rendered.height,
+                        pixelScale: pixelScale,
                         over: &foreground
                     )
                 }
             }
             composite(foreground, over: &result)
         } else {
-            composite(rendered.foregroundRGBA, over: &result)
+            composite(displayPixels(rendered.foregroundRGBA), over: &result)
         }
         return result
     }
@@ -229,6 +259,7 @@ public enum NeoLemmixSceneFrame {
         tickCount: Int,
         deltaX: Int,
         deltaY: Int,
+        useMacArtwork: Bool,
         to layers: inout [(
             zIndex: Int, order: Int, rgba: [UInt8], width: Int,
             height: Int, x: Int, y: Int
@@ -266,7 +297,9 @@ public enum NeoLemmixSceneFrame {
             layers.append((
                 animation.zIndex,
                 index + 1,
-                animation.framesRGBA[secondaryFrame],
+                useMacArtwork && animation.macFramesRGBA.indices.contains(secondaryFrame)
+                    && animation.macFramesRGBA[secondaryFrame].count == animation.width * animation.height * 16
+                    ? animation.macFramesRGBA[secondaryFrame] : animation.framesRGBA[secondaryFrame],
                 animation.width,
                 animation.height,
                 animation.x + deltaX,
@@ -425,18 +458,20 @@ public enum NeoLemmixSceneFrame {
         noOverwritePrior: [UInt8]? = nil,
         canvasWidth: Int,
         canvasHeight: Int,
+        pixelScale: Int = 1,
         over destination: inout [UInt8]
     ) {
-        guard width > 0, height > 0, source.count == width * height * 4 else { return }
-        for sourceY in 0..<height {
-            let canvasY = destinationY + sourceY
-            guard canvasY >= 0, canvasY < canvasHeight else { continue }
-            for sourceX in 0..<width {
-                let canvasX = destinationX + sourceX
-                guard canvasX >= 0, canvasX < canvasWidth else { continue }
-                let sourceOffset = (sourceY * width + sourceX) * 4
+        let sourceScale = source.count == width * height * 16 ? 2 : 1
+        guard width > 0, height > 0, source.count == width * height * 4 * sourceScale * sourceScale else { return }
+        for sourceY in 0..<height * pixelScale {
+            let canvasY = destinationY * pixelScale + sourceY
+            guard canvasY >= 0, canvasY < canvasHeight * pixelScale else { continue }
+            for sourceX in 0..<width * pixelScale {
+                let canvasX = destinationX * pixelScale + sourceX
+                guard canvasX >= 0, canvasX < canvasWidth * pixelScale else { continue }
+                let sourceOffset = ((sourceY * sourceScale / pixelScale) * width * sourceScale + sourceX * sourceScale / pixelScale) * 4
                 guard source[sourceOffset + 3] > 0 else { continue }
-                let destinationOffset = (canvasY * canvasWidth + canvasX) * 4
+                let destinationOffset = (canvasY * canvasWidth * pixelScale + canvasX) * 4
                 if noOverwrite {
                     let alphaOffset = destinationOffset + 3
                     let occupied = noOverwritePrior?[safe: alphaOffset]

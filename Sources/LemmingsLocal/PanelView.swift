@@ -54,6 +54,7 @@ enum PanelButton: Equatable {
   }
   private var macInterface: MacInterfaceRenderer?
   var panelImage: CGImage?
+  var neoSprites: NeoLemmixSpriteSet?
   var terrainImage: CGImage?
   /// The skill bar belongs to a level in progress, not to a menu.
   var isMenuMode = false {
@@ -72,13 +73,13 @@ enum PanelButton: Equatable {
     override func accessibilityChildren() -> [Any]? { accessibleControls(owner: self) }
   func accessibleControls(owner: NSView, transform: (CGRect) -> CGRect = { $0 }) -> [Any] {
     guard !isMenuMode else { return [] }
-    if usesClassicSkin { layoutClassicButtons() } else { layoutButtons() }
+    layoutControls()
     var result: [Any] = []
     for (index, item) in buttonFrames.enumerated() {
       let label: String
       switch item.0 {
-      case .rateDown: label = "Decrease release rate"
-      case .rateUp: label = "Increase release rate"
+      case .rateDown: label = session is NeoLemmixSession ? "Decrease spawn interval" : "Decrease release rate"
+      case .rateUp: label = session is NeoLemmixSession ? "Increase spawn interval" : "Increase release rate"
       case .skill(let skill):
         guard let value = session?.skills[safe: skill] else { continue }
         label = "\(value.name), \(value.isInfinite ? "unlimited" : String(value.count)) remaining" + (selectedSkillIndex == skill ? ", selected" : "")
@@ -87,11 +88,13 @@ enum PanelButton: Equatable {
       case .fastForward: label = isFastForward ? "Return to normal speed" : "Start fast-forward at " + speedChoiceLabel
       }
       let action = item.0
-      result.append(accessibleElements.element(id: "button-\(index)", owner: owner, label: label, frame: transform(item.1)) { [weak self] in
-        guard let self else { return }
+      let element = accessibleElements.element(id: "button-\(index)", owner: owner, label: label, frame: transform(item.1)) { [weak self] in
+        guard let self, self.isEnabled(action) else { return }
         if action == .fastForward { self.onSpeedClick?(ProcessInfo.processInfo.systemUptime, 1) }
         else { self.onButton?(action) }
-      })
+      }
+      element.setAccessibilityEnabled(isEnabled(action))
+      result.append(element)
       if action == .fastForward, variableSpeedEnabled {
         for direction in [-1, 1] {
           let rect = CGRect(x: direction < 0 ? item.1.minX : item.1.maxX - item.1.width * 0.22,
@@ -112,10 +115,9 @@ enum PanelButton: Equatable {
   private var panelFrame = CGRect.zero
   private var panelScale = 1.0
 
-  /// The authentic skin fits the eight DOS skills only. A NeoLemmix level can
-  /// grant far more, so those fall back to the drawn panel.
+  /// The baked artwork describes DOS skill identities, not just eight slots.
   private var usesClassicSkin: Bool {
-    panelImage != nil && session?.skills.count == 8
+    panelImage != nil && session is ClassicSession
   }
 
   override var isFlipped: Bool { true }
@@ -128,11 +130,23 @@ enum PanelButton: Equatable {
     NSCursor.arrow.set()
   }
 
-  private let buttonHeight = 34.0
   private let inset = 8.0
-  private let gap = 4.0
 
   // MARK: - Layout
+
+  private func layoutControls() {
+    if usesClassicSkin { layoutClassicButtons() } else { layoutButtons() }
+  }
+
+  private var adaptivePanelWidth: CGFloat {
+    // Wider skill sockets keep NeoLemmix names readable at the same row scale.
+    max(320, CGFloat(session?.skills.count ?? 0) * 20 + (variableSpeedEnabled ? 112 : 80) + 80)
+  }
+
+  func height(for width: CGFloat, maximumScale: CGFloat) -> CGFloat {
+    let sourceWidth = usesClassicSkin ? CGFloat(panelImage?.width ?? 320) : adaptivePanelWidth
+    return 40 * max(1, floor(min(maximumScale, width / sourceWidth))) + statusStripHeight
+  }
 
   /// Places the original controls and speed button over the status bar.
   private func layoutClassicButtons() {
@@ -145,7 +159,6 @@ enum PanelButton: Equatable {
       width: CGFloat(panelImage.width) * scale, height: CGFloat(panelImage.height) * scale)
     panelFrame = CGRect(
       x: (bounds.width - size.width) / 2, y: 0, width: size.width, height: size.height)
-    _ = statusStripHeight
 
     let order: [PanelButton] = [.rateDown, .rateUp]
       + (0..<8).map(PanelButton.skill) + [.pause, .nuke, .fastForward]
@@ -180,21 +193,25 @@ enum PanelButton: Equatable {
     order.append(contentsOf: (0..<skillCount).map(PanelButton.skill))
     order.append(contentsOf: [.pause, .nuke, .fastForward])
 
-    // The minimap takes the right quarter, as it does in the original panel.
-    let minimapWidth = max(120, bounds.width * 0.24)
-    minimapFrame = CGRect(
-      x: bounds.width - minimapWidth - inset, y: inset,
-      width: minimapWidth, height: buttonHeight)
-
-    let available = minimapFrame.minX - inset * 2
-    let width = (available - gap * Double(order.count - 1)) / Double(order.count)
-    buttonFrames = order.enumerated().map { index, button in
-      let frame = CGRect(
-        x: inset + (width + gap) * Double(index), y: inset,
-        width: width, height: buttonHeight)
+    let statusHeight: CGFloat = isCRTSource || bounds.height <= 40 ? 0 : statusStripHeight
+    let scale = max(1, floor(min(bounds.width / adaptivePanelWidth, (bounds.height - statusHeight) / 40)))
+    panelScale = scale
+    panelFrame = CGRect(x: floor((bounds.width - adaptivePanelWidth * scale) / 2), y: 0,
+      width: adaptivePanelWidth * scale, height: 40 * scale)
+    var x = panelFrame.minX
+    buttonFrames = order.map { button in
+      let units: CGFloat
+      switch button {
+      case .skill: units = 20
+      case .fastForward: units = variableSpeedEnabled ? 48 : 16
+      default: units = 16
+      }
+      let frame = CGRect(x: x, y: 16 * scale, width: units * scale, height: 24 * scale)
+      x = frame.maxX
       return (button, frame)
     }
-    panelScale = 1
+    minimapFrame = CGRect(x: x + 16 * scale, y: 18 * scale,
+      width: max(0, panelFrame.maxX - x - 20 * scale), height: 20 * scale)
     layoutTimeline()
   }
 
@@ -202,6 +219,8 @@ enum PanelButton: Equatable {
 
   /// Takes a click position directly, for input arriving from the tube view.
   func handleClick(at point: CGPoint, time: TimeInterval = ProcessInfo.processInfo.systemUptime) {
+    guard !isMenuMode else { return }
+    layoutControls()
     if timeline.click(at: point) { return }
     if let match = buttonFrames.first(where: { $0.1.contains(point) }) {
       press(match.0, time: time)
@@ -217,6 +236,8 @@ enum PanelButton: Equatable {
 
   func handlePointerDown(at point: CGPoint, time: TimeInterval = ProcessInfo.processInfo.systemUptime, clickCount: Int = 1) {
     stopRepeating()
+    guard !isMenuMode else { return }
+    layoutControls()
     pointerIsDown = true
     if timeline.click(at: point) { return }
     if let match = buttonFrames.first(where: { $0.1.contains(point) }) {
@@ -229,7 +250,7 @@ enum PanelButton: Equatable {
       press(match.0, time: time, clickCount: clickCount)
       // The release rate is the one control a player holds rather than taps.
       // Stepping it one at a time makes crossing the whole range a chore.
-      if match.0 == .rateDown || match.0 == .rateUp { startRepeating(match.0) }
+      if isEnabled(match.0), match.0 == .rateDown || match.0 == .rateUp { startRepeating(match.0) }
       return
     }
     nukeGesture.reset()
@@ -241,6 +262,7 @@ enum PanelButton: Equatable {
   func resetNukeGesture() { nukeGesture.reset() }
 
   private func press(_ button: PanelButton, time: TimeInterval, clickCount: Int = 1) {
+    guard isEnabled(button) else { return }
     if button == .nuke {
       let action = nukeGesture.click(canUndo: session?.canUndoNuke == true,
         time: time, interval: NSEvent.doubleClickInterval)
@@ -316,12 +338,15 @@ enum PanelButton: Equatable {
   }
 
   func handlePointerDrag(at point: CGPoint) {
+    guard !isMenuMode else { return }
+    layoutControls()
     if minimapFrame.contains(point) { scrollFromMinimap(point) }
   }
 
   private func scrollFromMinimap(_ point: CGPoint) {
-    guard minimapFrame.width > 0, levelSize.width > 0 else { return }
-    let fraction = (point.x - minimapFrame.minX) / minimapFrame.width
+    let map = minimapContentFrame
+    guard map.width > 0, levelSize.width > 0 else { return }
+    let fraction = max(0, min(1, (point.x - map.minX) / map.width))
     onMinimapScroll?(Double(fraction) * levelSize.width)
   }
 
@@ -352,10 +377,10 @@ enum PanelButton: Equatable {
       return
     }
 
-    NSColor(calibratedWhite: 0.11, alpha: 1).setFill()
-    bounds.fill()
     layoutButtons()
     for (button, frame) in buttonFrames { draw(button, in: frame) }
+    drawClassicCounts()
+    drawSkillLabels()
     drawMinimap()
     drawStatus()
     drawSpeedControls()
@@ -366,7 +391,7 @@ enum PanelButton: Equatable {
     guard variableSpeedEnabled, let frame = buttonFrames.first(where: { $0.0 == .fastForward })?.1 else { return }
     // Match the skill sockets' bevel so the speed box reads as the same stone.
     SpeedPanelControls.draw(in: frame, label: speedLabel, active: isFastForward,
-      bevelPixel: max(1, panelScale / 2), backdrop: usesClassicSkin ? PanelGlyph.rock.image(fitting: frame.size) : nil,
+      bevelPixel: max(1, panelScale / 2), backdrop: PanelGlyph.rock.image(fitting: frame.size),
       text: { [self] text, box in drawGameLabel(text, in: box, maxPixelScale: .greatestFiniteMagnitude) })
   }
 
@@ -457,7 +482,12 @@ enum PanelButton: Equatable {
 
   private func drawSkillLabels() {
     guard panelScale >= 2 else { return }
-    let names = ["CLIMB", "FLOAT", "BOMB", "BLOCK", "BUILD", "BASH", "MINE", "DIG"]
+    let shortNames = ["walker": "WALK", "jumper": "JUMP", "shimmier": "SHIM", "slider": "SLIDE",
+      "climber": "CLIMB", "swimmer": "SWIM", "floater": "FLOAT", "glider": "GLIDE",
+      "disarmer": "DISARM", "bomber": "BOMB", "stoner": "STONE", "blocker": "BLOCK",
+      "platformer": "PLAT", "builder": "BUILD", "stacker": "STACK", "laserer": "LASER",
+      "basher": "BASH", "fencer": "FENCE", "miner": "MINE", "digger": "DIG", "cloner": "CLONE"]
+    let names = session?.skills.map { shortNames[$0.name.lowercased()] ?? $0.name.uppercased() } ?? []
     let labelWidth = buttonFrames.compactMap { button, frame -> CGFloat? in
       if case .skill = button { return max(0, frame.width - 2 * panelScale) }
       return nil
@@ -500,12 +530,6 @@ enum PanelButton: Equatable {
     return (shared ? initial : shortcuts.letters[index])?.uppercased().first
   }
 
-  private func drawSkillName(_ name: String, in box: CGRect, key: Character?) {
-    if !drawMacLabel(name, centeredIn: box, highlighted: key) {
-      GamePixelText.draw(name, in: box, highlighted: key)
-    }
-  }
-
   private func drawClassicCounts() {
     guard let session else { return }
     for (button, frame) in buttonFrames {
@@ -529,58 +553,69 @@ enum PanelButton: Equatable {
     }
   }
 
-  private func draw(_ button: PanelButton, in frame: CGRect) {
-    let title: String
-    let subtitle: String
-    var highlighted = false
-
+  private func isEnabled(_ button: PanelButton) -> Bool {
     switch button {
-    case .rateDown:
-      title = "◀"
-      subtitle = session.map { "\($0.rate)" } ?? "—"
-    case .rateUp:
-      title = "▶"
-      subtitle = session.map { "\($0.rate)" } ?? "—"
-    case let .skill(index):
-      let skill = session?.skills[safe: index]
-      title = skill?.name ?? "—"
-      subtitle = skill.map { $0.isInfinite ? "∞" : "\($0.count)" } ?? "0"
-      highlighted = index == selectedSkillIndex
-    case .pause:
-      title = ""
-      subtitle = ""
-      highlighted = isPaused
-    case .fastForward:
-      title = ""
-      subtitle = speedLabel
-      highlighted = isFastForward
-    case .nuke:
-      title = ""
-      subtitle = ""
-      highlighted = session?.canUndoNuke == true
+    case .rateDown, .rateUp:
+      return (session as? NeoLemmixSession)?.simulation.configuration.spawnIntervalLocked != true
+    default: return true
     }
+  }
 
-    GameStoneButton.draw(frame, selected: highlighted, pixel: 1)
+  private func draw(_ button: PanelButton, in frame: CGRect) {
+    let selected = button == .skill(selectedSkillIndex) || (button == .pause && isPaused)
+      || (button == .nuke && session?.canUndoNuke == true) || (button == .fastForward && isFastForward)
+    let pixel = max(1, panelScale / 2)
+    drawStoneButton(frame, selected: selected)
+    let well = GameStoneButton.well(frame, pixel: pixel)
+    switch button {
+    case .skill(let index):
+      guard let skill = session?.skills[safe: index] else { return }
+      if let image = neoSprites?.skillIcon(named: skill.name) {
+        let fit = min(well.width / image.size.width, well.height / image.size.height)
+        let scale = fit >= 1 ? floor(fit) : fit
+        let size = CGSize(width: image.size.width * scale, height: image.size.height * scale)
+        NSGraphicsContext.saveGraphicsState()
+        well.clip()
+        image.draw(in: CGRect(x: floor(well.midX - size.width / 2), y: floor(well.maxY - size.height),
+          width: size.width, height: size.height), from: .zero, operation: .sourceOver,
+          fraction: skill.isInfinite || skill.count > 0 ? 1 : 0.35,
+          respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none])
+        NSGraphicsContext.restoreGraphicsState()
+      } else {
+        drawGameLabel(skill.name, in: well)
+      }
+      if selected {
+        NSColor.white.setStroke()
+        let outline = NSBezierPath(rect: frame.insetBy(dx: 1, dy: 1))
+        outline.lineWidth = 2
+        outline.stroke()
+      }
+    case .rateDown, .rateUp:
+      NSGraphicsContext.saveGraphicsState()
+      NSGraphicsContext.current?.cgContext.setAlpha(isEnabled(button) ? 1 : 0.3)
+      drawGameLabel(button == .rateDown ? "-" : "+", in: well)
+      NSGraphicsContext.restoreGraphicsState()
+    case .fastForward where variableSpeedEnabled:
+      break
+    default:
+      guard let glyph = PanelGlyph.forButton(button, isPaused: isPaused, canUndoNuke: session?.canUndoNuke == true),
+            let image = glyph.image(fitting: glyph.isOriginalTile ? frame.size : well.size) else { return }
+      if glyph.isOriginalTile {
+        GameStoneButton.drawTile(image, in: frame, pixel: pixel)
+      } else {
+        image.draw(in: CGRect(x: floor(well.midX - image.size.width / 2), y: floor(well.midY - image.size.height / 2),
+          width: image.size.width, height: image.size.height), from: .zero, operation: .sourceOver,
+          fraction: 1, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none])
+      }
+    }
+  }
 
-    if let glyph = PanelGlyph.forButton(button, isPaused: isPaused, canUndoNuke: session?.canUndoNuke == true),
-       let image = glyph.image(fitting: CGSize(width: frame.width - 10, height: subtitle.isEmpty ? frame.height - 10 : 14)) {
-      image.draw(in: CGRect(x: frame.midX - image.size.width / 2,
-        y: subtitle.isEmpty ? frame.midY - image.size.height / 2 : frame.minY + 3,
-        width: image.size.width, height: image.size.height), from: .zero, operation: .sourceOver,
-        fraction: 1, respectFlipped: true, hints: nil)
-    }
-
-    if case let .skill(index) = button {
-      let shortcuts = SkillShortcuts(names: session?.skills.map(\.name) ?? [])
-      drawSkillName(title.uppercased(), in: CGRect(x: frame.minX + 4, y: frame.minY + 4,
-        width: frame.width - 8, height: 12), key: skillShortcut(index, shortcuts: shortcuts))
-    } else {
-    GamePixelText.draw(title.replacingOccurrences(of: "◀", with: "<").replacingOccurrences(of: "▶", with: ">"),
-      in: CGRect(x: frame.minX + 4, y: frame.minY + 4, width: frame.width - 8, height: 12))
-    }
-    if !subtitle.isEmpty {
-      GamePixelText.draw(subtitle, in: CGRect(x: frame.minX + 4, y: frame.minY + 18, width: frame.width - 8, height: 12))
-    }
+  private var minimapContentFrame: CGRect {
+    guard levelSize.width > 0, levelSize.height > 0 else { return .zero }
+    let scale = min(minimapFrame.width / levelSize.width, minimapFrame.height / levelSize.height)
+    let size = CGSize(width: levelSize.width * scale, height: levelSize.height * scale)
+    return CGRect(x: minimapFrame.midX - size.width / 2, y: minimapFrame.midY - size.height / 2,
+      width: size.width, height: size.height)
   }
 
   private func drawMinimap() {
@@ -589,15 +624,15 @@ enum PanelButton: Equatable {
     if !usesClassicSkin {
       NSColor(calibratedWhite: 0.05, alpha: 1).setFill()
       minimapFrame.fill()
+      NSColor(calibratedWhite: 0.42, alpha: 1).setStroke()
+      NSBezierPath(rect: minimapFrame).stroke()
     }
     guard levelSize.width > 0, levelSize.height > 0, let session else { return }
 
     let scale = min(
       minimapFrame.width / levelSize.width, minimapFrame.height / levelSize.height)
-    let drawn = CGSize(width: levelSize.width * scale, height: levelSize.height * scale)
-    let origin = CGPoint(
-      x: minimapFrame.minX + (minimapFrame.width - drawn.width) / 2,
-      y: minimapFrame.minY + (minimapFrame.height - drawn.height) / 2)
+    let drawn = minimapContentFrame.size
+    let origin = minimapContentFrame.origin
 
     if let terrainImage {
       NSGraphicsContext.current?.imageInterpolation = .none
@@ -668,7 +703,7 @@ enum PanelButton: Equatable {
   }
 
   private func drawStatus() {
-    let y = usesClassicSkin ? panelFrame.maxY + 4 : inset + buttonHeight + 6
+    let y = isMenuMode ? inset : panelFrame.maxY + 4
     let box = CGRect(x: inset, y: y, width: bounds.width - inset * 2, height: 20)
     let text = gameText(statusText)
     if let macInterface, let font = macInterface.font(.small), font.covers(text) {

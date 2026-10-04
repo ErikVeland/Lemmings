@@ -102,6 +102,55 @@ public struct ClassicMacArtwork: Sendable {
     }
 }
 
+/// Which pieces of a fan level's ground set still look like the release's own.
+///
+/// Mac and Amiga banks are indexed by DOS piece number. A pack that redraws one
+/// piece keeps its number, so the number alone cannot say whether the bank's
+/// picture is the one the author meant. Each piece is therefore compared with
+/// the stock set, and only identical pieces take the alternate artwork.
+public struct ClassicMacPieceMatch: Sendable, Equatable {
+    public let terrain: Set<Int>
+    public let objects: Set<Int>
+    /// Whether the level's full-screen special picture is the stock one.
+    public var special: Bool
+
+    public init(terrain: Set<Int>, objects: Set<Int>, special: Bool = false) {
+        self.terrain = terrain
+        self.objects = objects
+        self.special = special
+    }
+
+    /// Compares two ground sets piece by piece.
+    ///
+    /// A changed palette recolours every piece, so it matches nothing. Object
+    /// triggers are ignored: they steer the simulation, not the picture.
+    public static func compare(_ ground: ClassicGroundSet, with stock: ClassicGroundSet) -> Self? {
+        guard ground.style == stock.style,
+              ground.terrainPalette == stock.terrainPalette,
+              ground.objectPalette == stock.objectPalette else { return nil }
+        let terrain = ground.terrain.filter { stock.terrain[$0.key] == $0.value }.keys
+        let objects = ground.objects.filter { id, graphic in
+            guard let original = stock.objects[id] else { return false }
+            return graphic.width == original.width && graphic.height == original.height
+                && graphic.frames == original.frames
+                && graphic.animationType == original.animationType
+                && graphic.firstFrameIndex == original.firstFrameIndex
+        }.keys
+        return Self(terrain: Set(terrain), objects: Set(objects))
+    }
+
+    /// How many of the pieces a level uses still look like the stock set's.
+    /// Returns nil when no piece is in use.
+    public func share(of level: ClassicLevel) -> Double? {
+        // A special level draws one picture instead of terrain pieces.
+        let pieces = level.specialStyle > 0 ? [] : Set(level.terrain.map(\.id))
+        let used = pieces.map { terrain.contains($0) }
+            + Set(level.objects.map(\.id)).map { objects.contains($0) }
+        guard !used.isEmpty else { return nil }
+        return Double(used.filter { $0 }.count) / Double(used.count)
+    }
+}
+
 /// Macintosh terrain and object artwork over the unchanged classic simulation.
 public struct ClassicMacScene: Sendable {
     public let width: Int
@@ -110,15 +159,27 @@ public struct ClassicMacScene: Sendable {
     private let artwork: ClassicMacArtwork
     private let level: ClassicRenderedLevel
     private let style: Int
+    private let match: ClassicMacPieceMatch?
+    /// DOS frames doubled for objects the pack changed, by position in `level.objects`.
+    private let doubledObjects: [Int: [ClassicMacArtwork.Frame]]
 
-    public init(level source: ClassicLevel, rendered: ClassicRenderedLevel, artwork: ClassicMacArtwork, groundSet: ClassicGroundSet? = nil) throws {
+    /// `match` lists the pieces allowed to use the artwork. Without it every piece does.
+    /// Pieces left out are drawn from the DOS ground set at the same 2× scale.
+    public init(level source: ClassicLevel, rendered: ClassicRenderedLevel, artwork: ClassicMacArtwork, groundSet: ClassicGroundSet? = nil, match: ClassicMacPieceMatch? = nil) throws {
         width = rendered.width * 2; height = rendered.height * 2
         let style = groundSet?.style ?? source.groundStyle
-        level = rendered; self.artwork = artwork; self.style = style
+        level = rendered; self.artwork = artwork; self.style = style; self.match = match
         guard artwork.banks[1500 + style] != nil else {
             throw SequelDataError.invalid("No Mac terrain for this style.")
         }
-        for object in rendered.objects {
+        var doubled: [Int: [ClassicMacArtwork.Frame]] = [:]
+        for (position, object) in rendered.objects.enumerated() {
+            if let match, !match.objects.contains(object.placement.id) {
+                doubled[position] = object.rgbaFrames.map {
+                    Self.doubled($0, width: object.graphic.width, height: object.graphic.height)
+                }
+                continue
+            }
             guard let definitions = artwork.objects[style], definitions.indices.contains(object.placement.id) else {
                 throw SequelDataError.invalid("Missing Mac object definition.")
             }
@@ -127,9 +188,10 @@ public struct ClassicMacScene: Sendable {
                 throw SequelDataError.invalid("Missing Mac object animation.")
             }
         }
+        doubledObjects = doubled
         var pixels = [UInt8](repeating: 0, count: width * height * 4)
         if source.specialStyle > 0 {
-            guard let frame = artwork.frame(1699 + source.specialStyle) else {
+            guard match?.special ?? true, let frame = artwork.frame(1699 + source.specialStyle) else {
                 throw SequelDataError.invalid("No Mac artwork for this special level.")
             }
             Self.blit(frame, into: &pixels, width: width, height: height,
@@ -137,10 +199,11 @@ public struct ClassicMacScene: Sendable {
         }
         for tile in source.terrain where source.specialStyle == 0 {
             let frame: ClassicMacArtwork.Frame
-            if let mac = artwork.frame(1500 + style, tile.id) { frame = mac }
+            if match?.terrain.contains(tile.id) ?? true, let mac = artwork.frame(1500 + style, tile.id) { frame = mac }
             else if let groundSet, let dos = groundSet.terrain[tile.id] {
-                // Some Mac banks leave a DOS piece empty (for example fire 44).
-                // Keep that individual piece visible rather than replacing the whole scene.
+                // Some Mac banks leave a DOS piece empty (for example fire 44), and a
+                // fan pack may redraw a piece. Keep that individual piece visible
+                // rather than replacing the whole scene.
                 var fallback = [UInt8](repeating: 0, count: dos.width * dos.height * 16)
                 let indexed = [UInt8](dos.indexedPixels)
                 for py in 0..<dos.height { for px in 0..<dos.width {
@@ -176,26 +239,34 @@ public struct ClassicMacScene: Sendable {
             } }
         }
         var triggerIndex = 0
-        for object in level.objects {
+        for (position, object) in level.objects.enumerated() {
             let placement = object.placement, graphic = object.graphic
-            let interactive = placement.slot < 16 && graphic.triggerEffect != 0
+            let interactive = placement.slot < level.interactiveObjectSlotLimit && graphic.triggerEffect != 0
             let cooldown = interactive ? simulation.objectCooldown(at: triggerIndex) : 0
             if interactive { triggerIndex += 1 }
-            guard let definitions = artwork.objects[style], definitions.indices.contains(placement.id) else { continue }
-            let seq = definitions[placement.id]
-            guard seq.count > 0 else { continue }
-            let index: Int
-            switch graphic.animationType {
-            case .none: index = seq.first
-            case .continuous: index = (seq.first + simulation.tickCount) % seq.count
-            case .onceAtStart:
-                let elapsed = max(0, simulation.tickCount - ClassicDOSRules.entranceOpenTick)
-                // The Mac hatch starts at frame 1 and rests at frame 0 after opening.
-                index = elapsed >= seq.count - seq.first ? 0 : seq.first + elapsed
-            case .triggered:
-                index = cooldown > 0 ? min(max(0, seq.count - cooldown), seq.count - 1) : seq.first
+            let frame: ClassicMacArtwork.Frame
+            if let own = doubledObjects[position] {
+                let index = ClassicSceneFrame.frameIndex(of: object, cooldown: cooldown, tick: simulation.tickCount)
+                guard own.indices.contains(index) else { continue }
+                frame = own[index]
+            } else {
+                guard let definitions = artwork.objects[style], definitions.indices.contains(placement.id) else { continue }
+                let seq = definitions[placement.id]
+                guard seq.count > 0 else { continue }
+                let index: Int
+                switch graphic.animationType {
+                case .none: index = seq.first
+                case .continuous: index = (seq.first + simulation.tickCount) % seq.count
+                case .onceAtStart:
+                    let elapsed = max(0, simulation.tickCount - ClassicDOSRules.entranceOpenTick)
+                    // The Mac hatch starts at frame 1 and rests at frame 0 after opening.
+                    index = elapsed >= seq.count - seq.first ? 0 : seq.first + elapsed
+                case .triggered:
+                    index = cooldown > 0 ? min(max(0, seq.count - cooldown), seq.count - 1) : seq.first
+                }
+                guard let mac = artwork.frame(1600 + style, seq.base + index) else { continue }
+                frame = mac
             }
-            guard let frame = artwork.frame(1600 + style, seq.base + index) else { continue }
             if graphic.triggerEffect == ClassicDOSObjectEffect.water.rawValue,
                !placement.draw.isUpsideDown, !placement.draw.onlyOverwrite {
                 ClassicLiquidFill.draw(source: [UInt8](frame.rgba), sourceWidth: frame.width,
@@ -209,6 +280,20 @@ public struct ClassicMacScene: Sendable {
                 onlyTerrain: placement.draw.onlyOverwrite, solid: solid)
         }
         return Data(pixels)
+    }
+
+    /// Repeats each pixel as a 2×2 block, the scale the Mac artwork is drawn at.
+    private static func doubled(_ rgba: Data, width: Int, height: Int) -> ClassicMacArtwork.Frame {
+        let source = [UInt8](rgba)
+        var out = [UInt8](repeating: 0, count: width * height * 16)
+        for y in 0..<height { for x in 0..<width {
+            let s = (y * width + x) * 4
+            for dy in 0..<2 { for dx in 0..<2 {
+                let d = ((y * 2 + dy) * width * 2 + x * 2 + dx) * 4
+                out[d] = source[s]; out[d+1] = source[s+1]; out[d+2] = source[s+2]; out[d+3] = source[s+3]
+            } }
+        } }
+        return ClassicMacArtwork.Frame(x: 0, y: 0, width: width * 2, height: height * 2, rgba: Data(out))
     }
 
     private static func blit(_ frame: ClassicMacArtwork.Frame, into pixels: inout [UInt8],

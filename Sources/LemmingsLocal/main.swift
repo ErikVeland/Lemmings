@@ -51,6 +51,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private let gamePicker = GamePopUpButton()
   private var assets: ClassicMainDATAssets?
   private var macArtworkCache: [String: ClassicMacArtwork] = [:]
+  private lazy var neoMacArtwork = Bundle.main.resourceURL.map { NeoLemmixMacArtwork(resources: $0) }
+  private lazy var neoClassicSprites = Bundle.main.resourceURL.flatMap {
+    try? ClassicMainDATAssets.load(from: $0.appendingPathComponent("Ports/lemmings_dos_1991-07-30"))
+  }
   private var contentDirectory: URL?
   private var stylesDirectory: URL?
   private var neoLevelsDirectory: URL?
@@ -1142,9 +1146,16 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
 
     applyDisplayMode()
+    if artworkChanged, session is NeoLemmixSession {
+      playfield.neoMacArtworkEnabled = settings.graphics == .macintosh
+      playfield.neoSprites?.usesMacArtwork = playfield.neoMacArtworkEnabled
+      panel.needsDisplay = true
+      playfield.needsDisplay = true
+    }
     if artworkChanged, !sequelIsActive, let level = artworkLevel,
       let rendered = playfield.classicScene {
-      configureArtwork(level, rendered: rendered, groundOverride: artworkGroundOverride)
+      configureArtwork(level, rendered: rendered, groundOverride: artworkGroundOverride,
+        specialOverride: artworkSpecialOverride)
       panel.needsDisplay = true
       playfield.needsDisplay = true
     }
@@ -1745,7 +1756,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     let center = playfield.viewport.visibleLevelRect.midX
     let scale = max(1, floor(min(root.bounds.width / 320, (root.bounds.height - 20) / 200)))
     playfield.viewport.zoom = scale
-    panelHeightConstraint?.constant = panel.isMenuMode ? 0 : 40 * scale + 22
+    panelHeightConstraint?.constant = panel.isMenuMode ? 0 : panel.height(for: root.bounds.width, maximumScale: scale)
     root.layoutSubtreeIfNeeded()
     playfield.viewport.viewSize = playfield.bounds.size
     playfield.viewport.center(on: center)
@@ -2208,6 +2219,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   private var artworkLevel: ClassicLevel?
   private var artworkGroundOverride: ClassicGroundSet?
+  private var artworkSpecialOverride: ClassicSpecialGraphic?
 
   nonisolated private static let decodedClassicArtwork = GameAssetCache<PreparedClassicArtwork>(capacity: 8)
 
@@ -2338,7 +2350,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
       playfield.invalidateSprites()
       playfield.classicScene = rendered
       playfield.levelImage = image
-      configureArtwork(level, rendered: rendered, groundOverride: groundOverride)
+      configureArtwork(level, rendered: rendered, groundOverride: groundOverride,
+        specialOverride: specialOverride)
       if var palette = try? ClassicLemmingPalette.inLevelVGA(
         terrainPalette: ground.terrainPalette) {
         // Reducing the palette rather than the pixels means terrain, sprites
@@ -2363,24 +2376,26 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   private func configureArtwork(_ level: ClassicLevel, rendered: ClassicRenderedLevel,
-    groundOverride: ClassicGroundSet? = nil) {
+    groundOverride: ClassicGroundSet? = nil, specialOverride: ClassicSpecialGraphic? = nil) {
     playfield.macScene = nil
     playfield.macArtwork = nil
     playfield.imageScale = 1
     panel.macArtwork = nil
     artworkLevel = level
     artworkGroundOverride = groundOverride
+    artworkSpecialOverride = specialOverride
     guard [.macintosh, .amiga].contains(activeGraphics),
       groundOverride != nil || dataSets.indices.contains(gamePicker.indexOfSelectedItem),
       let resources = Bundle.main.resourceURL else { return }
     let source = activeGraphics == .amiga ? "AmigaArtwork" : "MacArtwork"
     let root = resources.appendingPathComponent(source)
     let family: String
-    let fanFamily = groundOverride.flatMap {
-      FanLevelLibrary.artworkFamily(for: $0, portsRoot: resources.appendingPathComponent("Ports"))
+    let fanMatch = groundOverride.flatMap {
+      FanLevelLibrary.artworkMatch(for: level, ground: $0, special: specialOverride,
+        portsRoot: resources.appendingPathComponent("Ports"))
     }
     if groundOverride != nil {
-      family = fanFamily ?? "lemmings"
+      family = fanMatch?.family ?? "lemmings"
     } else {
       switch dataSets[gamePicker.indexOfSelectedItem].set.title {
       case .lemmings: family = "lemmings"
@@ -2401,10 +2416,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
       }
       playfield.macArtwork = art
       panel.macArtwork = art
-      // Custom terrain and special pictures retain the pixels used by collision.
-      guard groundOverride == nil || (fanFamily != nil && level.specialStyle == 0) else { return }
+      // Pieces a pack redraws, and pictures it replaces, retain the pixels used by collision.
+      guard groundOverride == nil || fanMatch != nil else { return }
       playfield.macScene = try ClassicMacScene(level: level, rendered: rendered, artwork: art,
-        groundSet: groundOverride ?? grounds[level.groundStyle])
+        groundSet: groundOverride ?? grounds[level.groundStyle], match: fanMatch?.pieces)
     } catch {
       setStatus("\(settings.graphics.displayName) artwork unavailable for this level: \(error)")
     }
@@ -5835,7 +5850,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
         setStatus("Missing style data: \(missing.first?.message ?? "unknown")")
         return false
       }
-      let result = NxlvRenderer(retainsVisualLayers: true).render(
+      let result = NxlvRenderer(retainsVisualLayers: true, macArtwork: neoMacArtwork).render(
         level: level,
         resolution: resolution
       )
@@ -5849,7 +5864,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       let simulation = try NeoLemmixSimulation(level: level, renderedLevel: rendered)
       let neoSprites = try NeoLemmixSpriteSet(
         stylesRootURL: stylesDirectory,
-        themeStyle: level.themeStyle
+        themeStyle: level.themeStyle, macArtwork: neoMacArtwork?.lemmings, classicAssets: neoClassicSprites
       )
 
       returnToLibrary()
@@ -5863,6 +5878,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
       playfield.imageScale = 1
       playfield.levelImage = image
       playfield.neoSprites = neoSprites
+      playfield.neoMacArtworkEnabled = settings.graphics == .macintosh
+      neoSprites.usesMacArtwork = playfield.neoMacArtworkEnabled
+      panel.neoSprites = neoSprites
       currentNxlvURL = url
       currentNeoStylesRoot = stylesDirectory
       currentNeoCatalogueIdentity = catalogueIdentity
@@ -5895,6 +5913,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
     saveRunCheckpoint(immediately: true, waitForDisk: false)
     if !(new is NeoLemmixSession) {
       playfield.neoSprites = nil
+      playfield.neoMacArtworkEnabled = false
+      panel.neoSprites = nil
       playfield.neoScene = nil
     }
     lastCheckpointTime = 0

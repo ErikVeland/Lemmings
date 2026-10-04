@@ -121,6 +121,7 @@ public struct NxlvRenderedGadget: Sendable, Equatable {
   public let keyFrame: Int?
   /// Retained, transformed primary-animation frames for live app rendering.
   public let animationRGBA: [[UInt8]]
+  public let macAnimationRGBA: [[UInt8]]
   public let initialAnimationFrame: Int
   public let primaryZIndex: Int
   /// Retained secondary layers that have no state triggers. Triggered layers
@@ -150,6 +151,7 @@ public struct NxlvRenderedGadget: Sendable, Equatable {
     animationFrames: Int = 1,
     keyFrame: Int? = nil,
     animationRGBA: [[UInt8]] = [],
+    macAnimationRGBA: [[UInt8]] = [],
     initialAnimationFrame: Int = 0,
     primaryZIndex: Int = 1,
     secondaryAnimations: [NxlvRenderedGadgetAnimation] = [],
@@ -173,6 +175,7 @@ public struct NxlvRenderedGadget: Sendable, Equatable {
     self.animationFrames = max(1, animationFrames)
     self.keyFrame = keyFrame
     self.animationRGBA = animationRGBA
+    self.macAnimationRGBA = macAnimationRGBA
     self.initialAnimationFrame = min(max(0, initialAnimationFrame), max(0, animationRGBA.count - 1))
     self.primaryZIndex = primaryZIndex
     self.secondaryAnimations = secondaryAnimations
@@ -210,6 +213,7 @@ public struct NxlvRenderedGadgetAnimation: Sendable, Equatable {
   public let height: Int
   public let zIndex: Int
   public let framesRGBA: [[UInt8]]
+  public let macFramesRGBA: [[UInt8]]
   public let initialFrame: Int
   public let state: NxlvRenderedAnimationState
   public let initiallyVisible: Bool
@@ -223,6 +227,7 @@ public struct NxlvRenderedGadgetAnimation: Sendable, Equatable {
     height: Int,
     zIndex: Int,
     framesRGBA: [[UInt8]],
+    macFramesRGBA: [[UInt8]] = [],
     initialFrame: Int,
     state: NxlvRenderedAnimationState,
     initiallyVisible: Bool = true,
@@ -235,6 +240,7 @@ public struct NxlvRenderedGadgetAnimation: Sendable, Equatable {
     self.height = height
     self.zIndex = zIndex
     self.framesRGBA = framesRGBA
+    self.macFramesRGBA = macFramesRGBA
     self.initialFrame = min(max(0, initialFrame), max(0, framesRGBA.count - 1))
     self.state = state
     self.initiallyVisible = initiallyVisible
@@ -262,6 +268,8 @@ public struct NxlvRenderedLevel: Sendable {
   /// Optional source layers retained for live terrain compositing in the app.
   public let backgroundRGBA: [UInt8]
   public let terrainRGBA: [UInt8]
+  /// Optional 2× Macintosh display pixels. Never used to construct physics masks.
+  public let macTerrainRGBA: [UInt8]
   public let foregroundRGBA: [UInt8]
   /// CE's theme MASK colour, used for newly constructed terrain.
   public let constructiveRGBA: [UInt8]
@@ -278,6 +286,7 @@ public struct NxlvRenderedLevel: Sendable {
     terrainOpaqueMask: [UInt8] = [],
     backgroundRGBA: [UInt8] = [],
     terrainRGBA: [UInt8] = [],
+    macTerrainRGBA: [UInt8] = [],
     foregroundRGBA: [UInt8] = [],
     constructiveRGBA: [UInt8] = [0xD0, 0xB0, 0x80, 0xFF]
   ) {
@@ -293,6 +302,7 @@ public struct NxlvRenderedLevel: Sendable {
     self.gadgets = gadgets
     self.backgroundRGBA = backgroundRGBA
     self.terrainRGBA = terrainRGBA
+    self.macTerrainRGBA = macTerrainRGBA
     self.foregroundRGBA = foregroundRGBA
     self.constructiveRGBA = constructiveRGBA
   }
@@ -323,13 +333,16 @@ public struct NxlvRenderResult: Sendable {
 public struct NxlvRenderer: Sendable {
   public let limits: NxlvRendererLimits
   public let retainsVisualLayers: Bool
+  public let macArtwork: NeoLemmixMacArtwork?
 
   public init(
     limits: NxlvRendererLimits = NxlvRendererLimits(),
-    retainsVisualLayers: Bool = false
+    retainsVisualLayers: Bool = false,
+    macArtwork: NeoLemmixMacArtwork? = nil
   ) {
     self.limits = limits
     self.retainsVisualLayers = retainsVisualLayers
+    self.macArtwork = macArtwork
   }
 
   public func render(
@@ -340,7 +353,8 @@ public struct NxlvRenderer: Sendable {
       level: level,
       resolution: resolution,
       limits: limits,
-      retainsVisualLayers: retainsVisualLayers
+      retainsVisualLayers: retainsVisualLayers,
+      macArtwork: macArtwork
     )
     return engine.render()
   }
@@ -377,6 +391,7 @@ private struct PixelPlane {
   let width: Int
   let height: Int
   var rgba: [UInt8]
+  var macRGBA: [UInt8] = []
   var solid: [UInt8]
   var steel: [UInt8]
   var oneWayEligible: [UInt8]
@@ -430,6 +445,17 @@ private struct PixelPlane {
 
   mutating func copyPixel(from source: PixelPlane, sourceIndex: Int, to destinationIndex: Int) {
     setPixel(source.pixel(sourceIndex), at: destinationIndex)
+    if !source.macRGBA.isEmpty || !macRGBA.isEmpty {
+      ensureMacPixels()
+      for y in 0..<2 { for x in 0..<2 {
+        let s = ((sourceIndex / source.width * 2 + y) * source.width * 2 + sourceIndex % source.width * 2 + x) * 4
+        let d = ((destinationIndex / width * 2 + y) * width * 2 + destinationIndex % width * 2 + x) * 4
+        if source.macRGBA.isEmpty {
+          let p = sourceIndex * 4
+          macRGBA[d..<d + 4] = source.rgba[p..<p + 4]
+        } else { macRGBA[d..<d + 4] = source.macRGBA[s..<s + 4] }
+      } }
+    }
     if !solid.isEmpty, !source.solid.isEmpty {
       solid[destinationIndex] = source.solid[sourceIndex]
     }
@@ -444,7 +470,17 @@ private struct PixelPlane {
     }
   }
 
+  mutating func ensureMacPixels() {
+    if macRGBA.isEmpty { macRGBA = NeoLemmixMacArtwork.doubled(rgba, width: width, height: height) }
+  }
+
   mutating func clearPixel(at index: Int) {
+    if !macRGBA.isEmpty {
+      for y in 0..<2 { for x in 0..<2 {
+        let d = ((index / width * 2 + y) * width * 2 + index % width * 2 + x) * 4
+        macRGBA[d..<d + 4] = [0, 0, 0, 0]
+      } }
+    }
     setPixel(.clear, at: index)
     if !solid.isEmpty { solid[index] = 0 }
     if !steel.isEmpty { steel[index] = 0 }
@@ -520,6 +556,7 @@ private struct NxlvRenderEngine {
   let resolution: NxlvStyleResolution
   let limits: NxlvRendererLimits
   let retainsVisualLayers: Bool
+  let macArtwork: NeoLemmixMacArtwork?
 
   var diagnostics: [NxlvRenderDiagnostic] = []
   var assets: [RenderAssetKey: NxlvResolvedStyleAsset] = [:]
@@ -601,6 +638,7 @@ private struct NxlvRenderEngine {
         },
         backgroundRGBA: retainsVisualLayers ? liveBackgroundLayer.rgba : [],
         terrainRGBA: retainsVisualLayers ? terrainLayer.rgba : [],
+        macTerrainRGBA: retainsVisualLayers ? terrainLayer.macRGBA : [],
         foregroundRGBA: retainsVisualLayers ? foregroundLayer.rgba : [],
         constructiveRGBA: themeMaskRGBA()
       ),
@@ -1054,6 +1092,7 @@ private struct NxlvRenderEngine {
         animationFrames: item.prepared.animationFrames,
         keyFrame: item.prepared.keyFrame,
         animationRGBA: retainsVisualLayers ? item.prepared.frames.map(\.rgba) : [],
+        macAnimationRGBA: retainsVisualLayers ? item.prepared.frames.map(\.macRGBA) : [],
         initialAnimationFrame: item.prepared.initialFrame,
         primaryZIndex: item.prepared.primaryZIndex,
         secondaryAnimations: retainsVisualLayers ? item.prepared.secondaryAnimations.map { animation in
@@ -1065,6 +1104,7 @@ private struct NxlvRenderEngine {
             height: animation.frames[0].height,
             zIndex: animation.zIndex,
             framesRGBA: animation.frames.map(\.rgba),
+            macFramesRGBA: animation.frames.map(\.macRGBA),
             initialFrame: animation.initialFrame,
             state: animation.state,
             initiallyVisible: animation.initiallyVisible,
@@ -1210,6 +1250,10 @@ private struct NxlvRenderEngine {
               canvasHeight: terrain.height
             )
           } : [],
+          macAnimationRGBA: retainsVisualLayers ? prepared.frames.map {
+            clippedMacGadgetRGBA($0, atX: destinationX, y: destinationY, clipToSolid: clipMask,
+              canvasWidth: terrain.width, canvasHeight: terrain.height)
+          } : [],
           initialAnimationFrame: startsOpen ? 0 : prepared.initialFrame,
           primaryZIndex: prepared.primaryZIndex,
           secondaryAnimations: retainsVisualLayers ? prepared.secondaryAnimations.map { animation in
@@ -1229,6 +1273,10 @@ private struct NxlvRenderEngine {
                   canvasWidth: terrain.width,
                   canvasHeight: terrain.height
                 )
+              },
+              macFramesRGBA: animation.frames.map {
+                clippedMacGadgetRGBA($0, atX: objectX + animation.offsetX, y: objectY + animation.offsetY,
+                  clipToSolid: clipMask, canvasWidth: terrain.width, canvasHeight: terrain.height)
               },
               initialFrame: animation.initialFrame,
               state: animation.state,
@@ -2014,7 +2062,8 @@ private struct NxlvRenderEngine {
       return nil
     }
     unpremultiplyRGBA(&bytes)
-    let plane = PixelPlane(width: width, height: height, rgba: bytes)
+    var plane = PixelPlane(width: width, height: height, rgba: bytes)
+    plane.macRGBA = macArtwork?.replacement(asset: asset, url: url, width: width, height: height, rgba: bytes) ?? []
     decodedGraphicPixelCount = totalDecodedPixels
     decodedGraphics[standardized] = plane
     return plane
@@ -2257,6 +2306,16 @@ private struct NxlvRenderEngine {
           sourceIndex: sourceY * source.width + sourceX,
           to: destinationY * rotatedWidth + destinationX
         )
+        if !source.macRGBA.isEmpty {
+          for sy in 0..<2 { for sx in 0..<2 {
+            var dx = rotate ? 1 - sy : sx, dy = rotate ? sx : sy
+            if flipHorizontal { dx = 1 - dx }
+            if flipVertical { dy = 1 - dy }
+            let from = ((sourceY * 2 + sy) * source.width * 2 + sourceX * 2 + sx) * 4
+            let to = ((destinationY * 2 + dy) * rotatedWidth * 2 + destinationX * 2 + dx) * 4
+            output.macRGBA[to..<to + 4] = source.macRGBA[from..<from + 4]
+          } }
+        }
       }
     }
     return output
@@ -2347,6 +2406,21 @@ private struct NxlvRenderEngine {
     }
   }
 
+  private func clippedMacGadgetRGBA(_ plane: PixelPlane, atX x: Int, y: Int,
+    clipToSolid: [UInt8]?, canvasWidth: Int, canvasHeight: Int) -> [UInt8] {
+    guard !plane.macRGBA.isEmpty else { return [] }
+    var result = plane
+    if let mask = clipToSolid {
+      for py in 0..<plane.height { for px in 0..<plane.width {
+        let cx = x + px, cy = y + py
+        if cx < 0 || cy < 0 || cx >= canvasWidth || cy >= canvasHeight || mask[cy * canvasWidth + cx] == 0 {
+          result.clearPixel(at: py * plane.width + px)
+        }
+      } }
+    }
+    return result.macRGBA
+  }
+
   private func compositeTerrain(
     _ prepared: PreparedTerrain,
     atX destinationX: Int,
@@ -2366,6 +2440,7 @@ private struct NxlvRenderEngine {
       canvasHeight: canvas.height
     )
     guard let clip else { return }
+    if !source.macRGBA.isEmpty { canvas.ensureMacPixels() }
     for sourceY in clip.sourceY {
       let canvasY = destinationY + sourceY
       for sourceX in clip.sourceX {
@@ -2377,6 +2452,17 @@ private struct NxlvRenderEngine {
         if erase {
           canvas.clearPixel(at: destinationIndex)
           continue
+        }
+        if !canvas.macRGBA.isEmpty {
+          for dy in 0..<2 { for dx in 0..<2 {
+            let d = ((canvasY * 2 + dy) * canvas.width * 2 + canvasX * 2 + dx) * 4
+            let a = ((sourceY * 2 + dy) * source.width * 2 + sourceX * 2 + dx) * 4
+            let pixel = source.macRGBA.isEmpty ? source.pixel(sourceIndex)
+              : RGBA(red: source.macRGBA[a], green: source.macRGBA[a + 1], blue: source.macRGBA[a + 2], alpha: source.macRGBA[a + 3])
+            let old = RGBA(red: canvas.macRGBA[d], green: canvas.macRGBA[d + 1], blue: canvas.macRGBA[d + 2], alpha: canvas.macRGBA[d + 3])
+            let result = sourceOver(pixel, old)
+            canvas.macRGBA[d..<d + 4] = [result.red, result.green, result.blue, result.alpha]
+          } }
         }
         canvas.setPixel(
           sourceOver(source.pixel(sourceIndex), canvas.pixel(destinationIndex)),

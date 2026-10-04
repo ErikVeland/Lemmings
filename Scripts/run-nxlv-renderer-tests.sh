@@ -11,15 +11,7 @@ swiftc -swift-version 6 -warnings-as-errors -parse-as-library \
   -emit-module-path "$build_dir/modules/NxlvKit.swiftmodule" \
   -Xlinker -install_name -Xlinker @rpath/libNxlvKit.dylib \
   -o "$build_dir/libNxlvKit.dylib" \
-  "$project_dir/Sources/NxlvKit/NxlvDocument.swift" \
-  "$project_dir/Sources/NxlvKit/NxlvTypes.swift" \
-  "$project_dir/Sources/NxlvKit/NxlvLevel.swift" \
-  "$project_dir/Sources/NxlvKit/NxlvStyleResolver.swift" \
-  "$project_dir/Sources/NxlvKit/NeoLemmixPickupGraphics.swift" \
-  "$project_dir/Sources/NxlvKit/NxlvRenderer.swift" \
-  "$project_dir/Sources/NxlvKit/NeoLemmixCompatibility.swift" \
-  "$project_dir/Sources/NxlvKit/NeoLemmixSimulation.swift" \
-  "$project_dir/Sources/NxlvKit/NeoLemmixSceneFrame.swift"
+  "$project_dir"/Sources/NxlvKit/*.swift
 
 swiftc -swift-version 6 -warnings-as-errors -parse-as-library \
   -I "$build_dir/modules" -L "$build_dir" -lNxlvKit \

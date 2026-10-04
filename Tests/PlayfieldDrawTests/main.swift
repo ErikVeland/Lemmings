@@ -480,6 +480,218 @@ private func require(
   print("PASS real panel double-click activation, double-click undo and exact restored history")
 }
 
+@MainActor private func testNeoLemmixPanel() throws {
+  let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
+  let app = ProcessInfo.processInfo.environment["LEMMINGS_TEST_APP"].map { URL(fileURLWithPath: $0) }
+    ?? root.appendingPathComponent(".build/local/Ultimate Lemmings.app")
+  let resources = app.appendingPathComponent("Contents/Resources")
+  let styles = resources.appendingPathComponent("NeoLemmix/styles")
+  let sprites = try NeoLemmixSpriteSet(stylesRootURL: styles, themeStyle: "orig_dirt")
+  let art = try ClassicMacArtwork(directory: resources.appendingPathComponent("MacArtwork/lemmings"))
+  let output = root.appendingPathComponent(".build/neolemmix-panel-regression")
+  try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
+  let panel = PanelView()
+  panel.neoSprites = sprites; panel.interfaceArtwork = art
+  panel.levelSize = CGSize(width: 640, height: 160)
+  panel.visibleLevelRect = CGRect(x: 100, y: 0, width: 320, height: 160)
+  panel.statusText = "OUT 10/10   HOME 5/1   INTERVAL 28   SAFE"
+  panel.progressText = "SAVED 5/1"
+  func session(_ skills: [NeoLemmixSkill], locked: Bool = false) throws -> NeoLemmixSession {
+    let supplies = Dictionary(uniqueKeysWithValues: skills.enumerated().map { index, skill in
+      (skill, index == 1 ? NeoLemmixSkillSupply.infinite : .finite(index == 2 ? 0 : 9))
+    })
+    let config = try NeoLemmixConfiguration(totalLemmings: 10, requiredToSave: 1, spawnInterval: 28,
+      spawnIntervalLocked: locked, entrances: [.init(id: 0, position: .init(x: 40, y: 20))], skills: supplies)
+    return NeoLemmixSession(simulation: try NeoLemmixSimulation(terrain: NeoLemmixTerrain(width: 640, height: 160),
+      configuration: config), width: 640, height: 160)
+  }
+  func capture(_ name: String) throws -> Data {
+    let bitmap = panel.bitmapImageRepForCachingDisplay(in: panel.bounds)!
+    panel.cacheDisplay(in: panel.bounds, to: bitmap)
+    let data = bitmap.representation(using: .png, properties: [:])!
+    try data.write(to: output.appendingPathComponent(name + ".png"))
+    return data
+  }
+  for skill in NeoLemmixSkill.allCases {
+    try require(sprites.skillIcon(named: skill.rawValue) != nil, "Missing NeoLemmix icon: \(skill)")
+  }
+  let walker = NSBitmapImageRep(cgImage: sprites.skillIcon(named: "walker")!
+    .cgImage(forProposedRect: nil, context: nil, hints: nil)!)
+  var hairRows: [Int] = [], clothesRows: [Int] = []
+  for y in 0..<walker.pixelsHigh { for x in 0..<walker.pixelsWide {
+    let color = walker.colorAt(x: x, y: y)!.usingColorSpace(.deviceRGB)!
+    guard color.alphaComponent > 0 else { continue }
+    if color.greenComponent > 1.5 * max(color.redComponent, color.blueComponent) { hairRows.append(y) }
+    if color.blueComponent > 1.5 * max(color.redComponent, color.greenComponent) { clothesRows.append(y) }
+  } }
+  try require(!hairRows.isEmpty && !clothesRows.isEmpty
+    && Double(hairRows.reduce(0, +)) / Double(hairRows.count) < Double(clothesRows.reduce(0, +)) / Double(clothesRows.count),
+    "NeoLemmix icon is upside down: hair must be above the clothes")
+  try require(sprites.skillIcon(named: "walker")!.size != sprites.skillIcon(named: "cloner")!.size,
+    "Cloner must retain its two-lemming artwork")
+  let groups: [[NeoLemmixSkill]] = [[], [.digger],
+    [.walker, .jumper, .shimmier, .slider, .swimmer, .glider, .stoner, .cloner],
+    Array(NeoLemmixSkill.allCases.prefix(10)), NeoLemmixSkill.allCases]
+  var chosen: PanelButton?
+  panel.onButton = { chosen = $0 }
+  for group in groups {
+    let neo = try session(group)
+    panel.session = neo
+    let playfield = PlayfieldView()
+    playfield.session = neo; playfield.neoSprites = sprites
+    for (index, skill) in neo.skills.enumerated() {
+      try require(playfield.skillBadge(for: index) === sprites.skillIcon(named: skill.name),
+        "Cursor icon used the DOS slot instead of \(skill.name)")
+    }
+    for width in [640.0, 960.0, 1280.0, 2559.0] {
+      panel.setFrameSize(CGSize(width: width, height: panel.height(for: width, maximumScale: floor(width / 320))))
+      let elements = panel.accessibleControls(owner: panel).compactMap { $0 as? GameAccessibleElement }
+      let skillElements = elements.filter { $0.accessibilityLabel()?.contains("remaining") == true }
+      try require(skillElements.count == group.count, "NeoLemmix skill count changed during layout")
+      for (index, element) in skillElements.enumerated() {
+        let frame = element.localFrame
+        try require(panel.bounds.contains(frame) && frame.height >= 24 && frame.width < frame.height,
+          "NeoLemmix skill socket is clipped or stretched: \(frame)")
+        chosen = nil
+        panel.handlePointerDown(at: CGPoint(x: frame.midX, y: frame.midY))
+        panel.handlePointerUp()
+        try require(chosen == .skill(index), "NeoLemmix skill hit target missed \(index)")
+      }
+      try require(panel.bounds.contains(panel.minimapBounds) && panel.bounds.contains(panel.timeline.frame),
+        "Minimap or timeline escaped the panel")
+      try require(!panel.minimapBounds.intersects(panel.timeline.frame), "Timeline covers the minimap")
+      if width == 1280 || group.count == 1 || group.count == 21 {
+        _ = try capture("neo-\(group.count)-\(Int(width))")
+      }
+    }
+  }
+  // A retained Classic panel image must not change NeoLemmix skill identities.
+  for group in [groups[1], groups[2]] {
+    panel.session = try session(group)
+    panel.panelImage = nil
+    panel.setFrameSize(CGSize(width: 960, height: panel.height(for: 960, maximumScale: 3)))
+    let before = try capture("neo-\(group.count)-without-classic-image")
+    panel.panelImage = NSBitmapImageRep(data: before)!.cgImage
+    let retained = try capture("neo-\(group.count)-with-retained-classic-image")
+    try require(retained == before, "NeoLemmix reused a baked Classic panel for \(group.count) skills")
+  }
+  panel.session = try session([.digger])
+  panel.setFrameSize(CGSize(width: 960, height: 142))
+  _ = try capture("neo-one-skill")
+  panel.setFrameSize(CGSize(width: 1280, height: 182))
+  chosen = nil
+  panel.handlePointerDown(at: CGPoint(x: 168, y: 112)); panel.handlePointerUp()
+  try require(chosen == .skill(0), "Resize used stale button targets before the next draw")
+  panel.isCRTSource = true
+  panel.setFrameSize(CGSize(width: 640, height: 80))
+  _ = try capture("neo-crt-source")
+  panel.isCRTSource = false
+  panel.setFrameSize(CGSize(width: 1280, height: 182))
+  panel.isPaused = true; panel.isFastForward = true; panel.speedLabel = "5×"
+  _ = try capture("neo-paused-fast")
+  let neo = panel.session as! NeoLemmixSession
+  neo.nuke()
+  _ = try capture("neo-undo")
+  try require(panel.accessibleControls(owner: panel).compactMap { ($0 as? GameAccessibleElement)?.accessibilityLabel() }
+    .contains("Undo end run"), "Undo state has the wrong accessible action")
+  panel.isPaused = false; panel.isFastForward = false; panel.speedLabel = "1×"
+  panel.session = try session(Array(NeoLemmixSkill.allCases.prefix(10)), locked: true)
+  _ = try capture("neo-locked-empty-infinite")
+  let rates = panel.accessibleControls(owner: panel).compactMap { $0 as? GameAccessibleElement }
+    .filter { $0.accessibilityLabel()?.contains("spawn interval") == true }
+  try require(rates.count == 2 && rates.allSatisfy { !$0.isAccessibilityEnabled() }, "Locked interval is not disabled")
+  for rate in rates {
+    chosen = nil
+    panel.handlePointerDown(at: CGPoint(x: rate.localFrame.midX, y: rate.localFrame.midY)); panel.handlePointerUp()
+    try require(chosen == nil, "Locked interval consumed a rate command")
+  }
+  var direction = 0; var held = false
+  panel.onSpeedStep = { value, _ in direction = value }
+  panel.onSpeedPress = { _, _ in held = true }; panel.onSpeedRelease = { _ in held = false }
+  let speed = panel.speedControlBounds
+  for (fraction, expected) in [(0.1, -1), (0.9, 1)] {
+    panel.handlePointerDown(at: CGPoint(x: speed.minX + speed.width * fraction, y: speed.midY)); panel.handlePointerUp()
+    try require(direction == expected, "Speed arrow target changed")
+  }
+  panel.handlePointerDown(at: CGPoint(x: speed.midX, y: speed.midY))
+  try require(held, "Speed hold target missed")
+  panel.handlePointerUp(); try require(!held, "Speed hold did not release")
+  panel.levelSize = CGSize(width: 100, height: 100)
+  var position = -1.0
+  panel.onMinimapScroll = { position = $0 }
+  let map = panel.minimapBounds
+  panel.handlePointerDown(at: CGPoint(x: map.midX + map.height / 4, y: map.midY)); panel.handlePointerUp()
+  try require(abs(position - 75) < 0.001, "Minimap input does not follow the letterboxed level")
+  var timelineAction: TimelinePanelControls.Action?
+  panel.timeline.enabled = { $0 == .forward }
+  panel.timeline.perform = { timelineAction = $0 }
+  for action in TimelinePanelControls.Action.allCases {
+    timelineAction = nil; chosen = nil
+    let frame = panel.timeline.rect(for: action)
+    panel.handlePointerDown(at: CGPoint(x: frame.midX, y: frame.midY)); panel.handlePointerUp()
+    try require(timelineAction == (action == .forward ? .forward : nil) && chosen == nil,
+      "Disabled timeline action or timeline input reached another control")
+  }
+  panel.isMenuMode = true; chosen = nil
+  panel.handlePointerDown(at: CGPoint(x: rates[0].localFrame.midX, y: rates[0].localFrame.midY)); panel.handlePointerUp()
+  try require(chosen == nil && panel.accessibleControls(owner: panel).isEmpty, "Menu exposed hidden game controls")
+
+  // Capture the same one-skill level as the reported layout, using the real views.
+  let levelURL = resources.appendingPathComponent("NeoLemmix/levels/Lemmings_Redux/Gentle/Just_dig!.nxlv")
+  let level = NxlvLevel(text: try String(contentsOf: levelURL, encoding: .utf8))!
+  let resolution = NxlvStyleResolver(stylesRootURL: styles).resolve(level: level)
+  let scene = NxlvRenderer(retainsVisualLayers: true).render(level: level, resolution: resolution).renderedLevel!
+  let live = NeoLemmixSession(simulation: try NeoLemmixSimulation(level: level, renderedLevel: scene),
+    width: scene.width, height: scene.height)
+  for _ in 0..<300 { live.tick() }
+  let provider = CGDataProvider(data: Data(scene.rgba) as CFData)!
+  let terrain = CGImage(width: scene.width, height: scene.height, bitsPerComponent: 8, bitsPerPixel: 32,
+    bytesPerRow: scene.width * 4, space: CGColorSpaceCreateDeviceRGB(),
+    bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.last.rawValue), provider: provider,
+    decode: nil, shouldInterpolate: false, intent: .defaultIntent)!
+  let (window, playfield, previewPanel) = makeWindow()
+  defer { window.close() }
+  playfield.session = live; playfield.neoSprites = sprites; playfield.neoScene = scene
+  playfield.levelImage = terrain; playfield.phase = .playing
+  playfield.viewport.levelSize = CGSize(width: scene.width, height: scene.height)
+  playfield.viewport.viewSize = playfield.bounds.size; playfield.viewport.zoom = 3
+  playfield.viewport.center(on: Double(live.entranceX ?? 0))
+  previewPanel.session = live; previewPanel.neoSprites = sprites; previewPanel.interfaceArtwork = art
+  previewPanel.levelSize = playfield.viewport.levelSize; previewPanel.visibleLevelRect = playfield.viewport.visibleLevelRect
+  previewPanel.terrainImage = terrain; previewPanel.statusText = "OUT \(live.released)/10   HOME 0/1   INTERVAL 28"
+  previewPanel.timeline.enabled = { $0 == .forward }
+  let content = window.contentView!
+  let bitmap = content.bitmapImageRepForCachingDisplay(in: content.bounds)!
+  content.cacheDisplay(in: content.bounds, to: bitmap)
+  try bitmap.representation(using: .png, properties: [:])!.write(to: output.appendingPathComponent("neo-just-dig.png"))
+  let mac = NeoLemmixMacArtwork(resources: resources)
+  let macSprites = try NeoLemmixSpriteSet(stylesRootURL: styles, themeStyle: "orig_dirt", macArtwork: mac.lemmings,
+    classicAssets: try ClassicMainDATAssets.load(from: resources.appendingPathComponent("Ports/lemmings_dos_1991-07-30")))
+  let originalIcon = macSprites.skillIcon(named: "walker")!
+  macSprites.usesMacArtwork = true
+  try require(macSprites.frame(action: .walking, direction: .right, animationFrame: 0, traits: [])?.pixelScale == 2,
+    "Equivalent Mac walker was not selected")
+  try require(macSprites.frame(action: .swimming, direction: .right, animationFrame: 0, traits: [])?.pixelScale == 1,
+    "NeoLemmix-only animation lost its original artwork")
+  try require(macSprites.frame(action: .walking, direction: .right, animationFrame: 0, traits: [.neutral])?.pixelScale == 1,
+    "Mac artwork hid the neutral-lemming marker")
+  try require(macSprites.skillIcon(named: "walker")! !== originalIcon, "Artwork switch kept a stale cursor icon")
+  let macScene = NxlvRenderer(retainsVisualLayers: true, macArtwork: mac).render(level: level, resolution: resolution).renderedLevel!
+  playfield.neoScene = macScene; playfield.neoSprites = macSprites; playfield.neoMacArtworkEnabled = true
+  previewPanel.neoSprites = macSprites
+  let macBitmap = content.bitmapImageRepForCachingDisplay(in: content.bounds)!
+  content.cacheDisplay(in: content.bounds, to: macBitmap)
+  try macBitmap.representation(using: .png, properties: [:])!.write(to: output.appendingPathComponent("neo-just-dig-mac.png"))
+  try require(playfield.imageScale == 2, "Mac terrain was displayed at the wrong logical scale")
+  macSprites.usesMacArtwork = false; playfield.neoMacArtworkEnabled = false
+  let restored = content.bitmapImageRepForCachingDisplay(in: content.bounds)!
+  content.cacheDisplay(in: content.bounds, to: restored)
+  try require(restored.representation(using: .png, properties: [:]) == bitmap.representation(using: .png, properties: [:]),
+    "Switching Mac artwork off changed the original scene or simulation")
+  print("PASS NeoLemmix Mac artwork: native detail, common actions, extra-skill and trait fallbacks, cursor refresh and live switching")
+  print("PASS NeoLemmix stone panel: 0/1/8/10/21 skills, four widths, CRT, all icons, cursor mapping and input states")
+}
+
 @MainActor private func testNukeGesturesAndQueuedUndo() throws {
   var gesture = NukeClickGesture()
   try require(gesture.click(canUndo:false,time:1,interval:0.5) == .none, "first click activated")
@@ -1279,6 +1491,7 @@ private func testMacArtworkCropStaysPixelAligned() throws {
     try testFollowerBehindBuilderIsTargeted()
     try testSkillTargetPriorities()
     try testNukeGesturesAndQueuedUndo()
+    try testNeoLemmixPanel()
     try testClassicPanelLabels()
     print("PASS Xmas panel labels at multiple sizes with speed control")
     try testCameraResize()

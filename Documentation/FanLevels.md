@@ -34,6 +34,23 @@ cannot hide the embedded packs. Duplicate catalogue IDs appear once.
 The updater covers compatible releases in this database. It does not search forum
 attachments or install engines and graphics dependencies for unsupported formats.
 
+## Alternate artwork
+
+Mac and Amiga artwork use the same ground set as the classic releases. The game
+compares each piece of a fan level with the stock set of the same release. A
+piece that is identical takes the alternate picture. A piece the pack redraws
+stays in its DOS pixels, drawn at the same 2× scale. This applies to terrain and
+to objects.
+
+A level takes alternate artwork when at least half of the pieces it uses are
+unchanged. A changed palette recolours every piece, so such a level stays in DOS
+artwork. A level that uses a special picture takes the Mac picture only when the
+pack's picture is the stock one. Only the original Lemmings release carries these
+pictures.
+
+Artwork never changes collision, triggers or replays. `zsh Scripts/run-mac-artwork-tests.sh`
+and `zsh Scripts/run-fan-library-tests.sh` cover the matching and the fallback.
+
 ## Checks
 
 `Scripts/run-fan-library-tests.sh` exercises first-run discovery, duplicate IDs,
