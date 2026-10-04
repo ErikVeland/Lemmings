@@ -3,6 +3,28 @@
     <channel>
         <title>Ultimate Lemmings</title>
         <item>
+            <title>1.7.9</title>
+            <pubDate>Sun, 04 Oct 2026 22:47:54 +1000</pubDate>
+            <link>https://github.com/ErikVeland/Lemmings/releases</link>
+            <sparkle:version>63</sparkle:version>
+            <sparkle:shortVersionString>1.7.9</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>12.3</sparkle:minimumSystemVersion>
+            <description><![CDATA[<html><head><meta charset="utf-8"><style>:root{color-scheme:light dark}body{font:13px -apple-system,sans-serif}h3{font-size:14px;margin:14px 0 4px}h4{font-size:13px;margin:10px 0 2px}ul{padding-left:18px;margin:4px 0}.meta{color:#888;font-size:11px}</style></head><body><h3>Macintosh artwork for NeoLemmix</h3>
+<p>Settings → Graphics → Artwork → Macintosh now applies to NeoLemmix levels. Matching original and Oh No! terrain uses native 2× Macintosh artwork, together with supported lemming animations and skill icons. Changed pieces, custom styles, NeoLemmix-only actions and trait colours retain their authored graphics. Switching artwork preserves collision, physics and rewind history.</p>
+<p>NeoLemmix uses Classic stone controls and bitmap counters. The panel adapts to the number of skills and keeps each skill's name and themed icon. Locked spawn intervals disable both rate buttons. The minimap follows its visible input area. Classic fan levels can also use matching Macintosh pieces while preserving custom artwork. Seasonal packs select their correct snow graphics.</p>
+<h3>More fan solutions</h3>
+<p>The evidence ledger now records 2,401 Classic fan wins, up from 2,305 in 1.7.8, and 322 NeoLemmix wins. More exact bundled packs and levels select their matching Golems or later official hatch rules. Golems source replay assignments receive further compatibility corrections. These replay rules do not relax ordinary player skill assignment.</p>
+<p>The 292-lesson learning journey is refreshed from the expanded evidence. Recorded native wins do not prove complete source-engine physics parity. Some source replay outcomes still differ, and unverified levels remain unscored.</p>
+<h3>Lemmings 3</h3>
+<p>Extra lemmings now start facing the direction observed in the original game. A focused stair-contact correction improves selected rises. Preserved routes and replacement routes are checked separately from unfinished investigations. Lemmings 2 and Lemmings 3 remain Preview. NeoLemmix remains Beta.</p>
+<h3>Download and update</h3>
+<p>For a fresh installation, choose <code>UltimateLemmings-1.7.9-build63-slim.zip</code>. It includes the original soundtracks and offers missing optional libraries. Previously downloaded libraries are detected and retained.</p>
+<p>Existing players can use Check for Updates. Its full archive preserves music bundled inside older apps. Both downloads contain the same universal macOS app and support macOS 12.3 or later.</p>
+<p class="meta">Build: 63<br>Release commit: 4d8cda805cd938df919776498193cdd10ff48714<br>Release base: v1.7.8</p></body></html>
+]]></description>
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.7.9/UltimateLemmings-1.7.9-build63.zip" length="1943413088" type="application/octet-stream" sparkle:edSignature="Fj4+Gsx5k+0u5/2SIRGkdrs2Rmh30YLGXmUklg7GvGxPW0tVDLVO8kBE6W777klQ0ww+eDQhmoFzJf7y9r5MDg=="/>
+        </item>
+        <item>
             <title>1.7.8</title>
             <pubDate>Sat, 03 Oct 2026 19:06:44 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
@@ -48,7 +70,7 @@
 ]]></description>
             <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.7.7/UltimateLemmings-1.7.7-build61.zip" length="1943260816" type="application/octet-stream" sparkle:edSignature="anOj2bxCnEfbPj0xySrpVwwaXEYlpL/JrBCzkUowmI8M4B3rT+bHeTj8eSgmBQEAOaNFNdJgXll125aaSWm/BQ=="/>
         </item>
-        <item>
+    <item>
             <title>1.7.6</title>
             <pubDate>Fri, 02 Oct 2026 11:00:01 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
@@ -79,7 +101,7 @@
 ]]></description>
             <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.7.6/UltimateLemmings-1.7.6-build60.zip" length="1943220872" type="application/octet-stream" sparkle:edSignature="oRPZX1b1vbmnKIMlujtzkPY2pZKOkBiYCIbaRrOlFc9U+lKGJH4nz/GCBDXQokUquRiBGHbxMfG4bBO9uZRNDA=="/>
         </item>
-      <item>
+<item>
             <title>1.7.3</title>
             <pubDate>Wed, 30 Sep 2026 17:14:53 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
@@ -107,5 +129,5 @@
 ]]></description>
             <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.7.3/UltimateLemmings-1.7.3-build56.zip" length="1943120085" type="application/octet-stream" sparkle:edSignature="NgXmusN7cMXnopwvHSdzAmMg+5G5Jm/y2W5JkrL5O9mqoOmdb3qoTr5LpuPFGtonI18D/jTI44HSotCdWGIRBg=="/>
         </item>
-  </channel>
+    </channel>
 </rss>
