@@ -200,7 +200,7 @@ public struct Lemmings3Runtime: Sendable {
                 pickups.append(.init(id: index, tool: tool, x: placed.x, y: placed.y)); continue
             }
             if [10006, 10007].contains(placed.identifier) {
-                extras.append(.init(x: placed.x + 8, y: placed.y + 16, direction: placed.identifier == 10006 ? -1 : 1)); continue
+                extras.append(.init(x: placed.x + 8, y: placed.y + 16, direction: 1)); continue
             }
             if let kind = Creature.Kind(rawValue: placed.identifier / 2 * 2) {
                 creatures.append(.init(id: index, kind: kind,
