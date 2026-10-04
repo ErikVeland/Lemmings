@@ -1,0 +1,12 @@
+{
+  "version": "1.7.8",
+  "build": 62,
+  "sourceCommit": "dbc3d25bfeee920d0941398603d87aec94c80a7f",
+  "archive": "UltimateLemmings-1.7.8-build62.zip",
+  "archiveBytes": 1943295087,
+  "archiveSHA256": "7efcc2b39d219b025da8055d9514365af3b6a77988f8334548b8ad1176164c89",
+  "appcastSHA256": "1c99140a7d37e2faf24177598989ac37aa9f899aa5602e1cafbfb02eebe90f44",
+  "priorEnclosuresPreserved": 3,
+  "sparkleSignatureVerified": true,
+  "slimExcludedFromEnclosures": true
+}

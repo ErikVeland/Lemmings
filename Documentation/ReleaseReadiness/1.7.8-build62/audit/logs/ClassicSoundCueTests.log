@@ -1,0 +1,7 @@
+PASS the core events all produce a sound
+PASS the hazards all produce a sound
+PASS twelve lemmings entering the same state play one sound
+PASS routine events stay silent
+PASS the mapping reports which sounds are unassigned
+PASS playback pitch — 10989 Hz recorded, 20833 Hz played, ratio 1.896
+Classic sound cue tests passed.

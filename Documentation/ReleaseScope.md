@@ -1,16 +1,17 @@
 # Release scope
 
 Classic 1.0 is the historical macOS release baseline, confirmed on 13 September 2026.
-The current public macOS release is 1.7.7 build 61. The
-[1.7.7 distribution record](ReleaseReadiness/1.7.7Build61Distribution.md) records
-the notarised slim download, full-soundtrack update, signed feed and validation limits. This
-release adds Original cursors, optional Classic skill backpacks, revised icon
-and count sizes, and the nuke music sweep. Fan replay state/timing differences
-remain documented. The required [slim download is published](ReleaseReadiness/1.7.7SlimDownload.md)
-and is recommended for fresh installations. Additional target archives are not
-published. L2 and L3 remain Preview and NeoLemmix remains Beta.
-Foreground shipping-app launch and audible checks were not run for 1.7.7.
-Updated 2 October 2026 for the 1.7, 1.8 and 2.0 roadmap targets.
+The current public macOS release is 1.7.8 build 62. The
+[1.7.8 distribution record](ReleaseReadiness/1.7.8Build62Distribution.md) records
+the notarised slim download, full-soundtrack update, signed feed and validation
+limits. This release balances cursor icons and the counter at both sizes,
+restores the nuke music filter after the final pop, expands fan replay evidence
+and corrects L3 directional step-up. The slim download is recommended for fresh
+installations and offers missing optional soundtrack libraries. The full Sparkle
+update preserves music bundled inside older apps. Additional target archives
+are not published. L2 and L3 remain Preview and NeoLemmix remains Beta.
+Foreground shipping-app launch and audible checks were not run for 1.7.8.
+Updated 3 October 2026 for the 1.7, 1.8 and 2.0 roadmap targets.
 Automated checks support the recorded routes;
 remaining compatibility and hardware claims still need validation. See the [gate register](ReleaseReadiness/gates.json)
 and the current [Classic validation](ReleaseReadiness/ClassicValidation-current.md).
@@ -111,7 +112,7 @@ See [the current campaign closure evidence](ReleaseReadiness/CampaignClosure-202
 
 | Release | Levels | Proven routes | Claim |
 | --- | ---: | ---: | --- |
-| Lemmings 2: The Tribes | 120 | 73 | **Preview** |
+| Lemmings 2: The Tribes | 120 | 75 | **Preview** |
 | Lemmings 3: The Chronicles | 90 | 41 | **Preview** |
 
 Both play through their campaigns with original artwork, music and interfaces.
@@ -148,7 +149,7 @@ release does not imply support for either platform group.
 
 - The `Oh My! ALL Lemmings!` run across the sequel previews remains outside the
   completed 352-level Classic campaign gate.
-- L2 and L3 retain preview status; their 96 missing routes are tracked separately
+- L2 and L3 retain preview status; their 94 missing routes are tracked separately
   from the Classic 1.0 milestone.
 - Physical Intel, minimum macOS, HDR, multiple displays and high refresh rates
   are untested. Sustained 10x play is not established.

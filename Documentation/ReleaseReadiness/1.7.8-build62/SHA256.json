@@ -1,0 +1,418 @@
+{
+  "README.md": {
+    "size": 1206,
+    "sha256": "cf99ea9904b6d64184bbdec816749cfd04456729a5821987761fe143ae16f88e"
+  },
+  "ReleaseNotes-1.7.8-build62.md": {
+    "size": 2093,
+    "sha256": "e28f18a4280bd55d8bce78fcadc5017b4fa0bc50fcef3a96dc71260ca09dede5"
+  },
+  "appcast-live-before.xml": {
+    "size": 14168,
+    "sha256": "edf349ad35075f152556eab9e2a3dc91529479a9d32ef840fbad67b1a93d21b0"
+  },
+  "audit/inputs.json": {
+    "size": 3277503,
+    "sha256": "2fb7279327e2cf80f0ad42d6d7a83d3ce01837e768744e128d073bacb8a87c0c"
+  },
+  "audit/logs/AdaptiveDJDirectorTests.log": {
+    "size": 139,
+    "sha256": "0357ac334559117dc02a792e697836f06d01f61bee24744183148719e38bd4f8"
+  },
+  "audit/logs/AmigaSoundTests.log": {
+    "size": 292,
+    "sha256": "93b1b3ef6541f47e67847dcdde562f02309e110da3c3ae1a8fe003d375fd9652"
+  },
+  "audit/logs/AmigaVersusTests.log": {
+    "size": 1209,
+    "sha256": "1ea8f404b91b10e1d76a76016c229fcfb8c65e1fdf4651429cd4b93d525ff735"
+  },
+  "audit/logs/AudioMatrixTests.log": {
+    "size": 313,
+    "sha256": "a1cbc8c049ca1411fda51830a695a195bb028983053c6f04e8c3bc01f2df94e1"
+  },
+  "audit/logs/BundledGameResourcesTests.log": {
+    "size": 151,
+    "sha256": "6956f6bf49aed0774944d72bcc6279911f977dfdab88c55bc4c01cc5ef5f574e"
+  },
+  "audit/logs/ClassicDOSReplayTests.log": {
+    "size": 342,
+    "sha256": "6ecd523f6e58e93bbb62e9edc2b2033127fa0a8c3919f9fbb7cb6ce4a79eac41"
+  },
+  "audit/logs/ClassicDOSRewindTests.log": {
+    "size": 700,
+    "sha256": "3535d674295f19108692f6517d440a63064e1acedb03d24b8b16c324f9e3387a"
+  },
+  "audit/logs/ClassicDOSSimulationRegressions.log": {
+    "size": 502,
+    "sha256": "f658309fcec997c57e1a74aec83e8cdf2baa4288f909332999d9877b4aff30b5"
+  },
+  "audit/logs/ClassicGameFlowTests.log": {
+    "size": 655,
+    "sha256": "47ff4c93d5df83f4bc17214c1be0629edba7e9a77d8ca6dbd0bf45db5f0e48fb"
+  },
+  "audit/logs/ClassicSagaTests.log": {
+    "size": 711,
+    "sha256": "63813d817af0014884a0bce814df706809f5c6e3c2af1a52ceb2e32f6a460d96"
+  },
+  "audit/logs/ClassicSettingsTests.log": {
+    "size": 935,
+    "sha256": "4824338e29ae86a99559e430c9fd06cb7145a5bf185d03ca3dc9f09c1047711a"
+  },
+  "audit/logs/ClassicSoundCueTests.log": {
+    "size": 327,
+    "sha256": "f9d91632a0e63cc8f0a10c247068194c615ea7c0b84f8d74a1c0a816270b2f89"
+  },
+  "audit/logs/FLICTests.log": {
+    "size": 602,
+    "sha256": "cf172f4b5faf653258bc9067243b0e467be87f462a17537a863ac333a9b0799d"
+  },
+  "audit/logs/Lemmings2IntroTests.log": {
+    "size": 377,
+    "sha256": "218d922b23a8bba51d3da5ee316a4096c3deabda19b5239f003014b19b8149af"
+  },
+  "audit/logs/Lemmings2RuntimeTests.log": {
+    "size": 10828,
+    "sha256": "7ccd9984c74bc640589a9253adb90da71439c55b62df37074187b32e96649dc3"
+  },
+  "audit/logs/Lemmings3RuntimeTests.log": {
+    "size": 2923,
+    "sha256": "76710a0e99c0b629c416193c450a64fd4dce817ec6e27630537af836210403b8"
+  },
+  "audit/logs/Lemmings3SoundTests.log": {
+    "size": 225,
+    "sha256": "4f3b9df06b9a2845910d46cefd19f394c665aec10bb56f4952d35c7ca58c1f80"
+  },
+  "audit/logs/ModernEngineTests.log": {
+    "size": 27,
+    "sha256": "808600d188cd1857e699b9d4cdbdd8c39413aa9b13f755c95c671b5fe533c317"
+  },
+  "audit/logs/NeoLemmixEndToEnd.log": {
+    "size": 520,
+    "sha256": "5ab48a5d1c4cb1144f80aefc2cc3d43ef617d1d1260af4ecb2151e811d22bff0"
+  },
+  "audit/logs/NeoLemmixSimulationTests.log": {
+    "size": 845,
+    "sha256": "848406095e627611931cb17babbc58b5f18570e77476d4cf8fe48918c4261ba7"
+  },
+  "audit/logs/NxlvRendererTests.log": {
+    "size": 125,
+    "sha256": "db13fe72bd2f196db5e7218d838b6a31371c619293eb711fb3694900d7e1e1e6"
+  },
+  "audit/logs/NxlvStyleResolverTests.log": {
+    "size": 34,
+    "sha256": "14ba6dff703e72fed8d6069e65beff77be595c569c8f5896826c998ec915d5e7"
+  },
+  "audit/logs/PercussionTests.log": {
+    "size": 251,
+    "sha256": "4ae81909fb76cf794d4ea133a19ba05b5106897e1f181d171a18644089421ac8"
+  },
+  "audit/logs/PlatformExclusiveTests.log": {
+    "size": 353,
+    "sha256": "5a66b49828e075d81cabcb8039185417212dc84d895d3b64216cf4be62a20abf"
+  },
+  "audit/logs/PlatformProfileTests.log": {
+    "size": 518,
+    "sha256": "9f66961ac210c28017ab1f41a4378e493baa4a221b242ebf9a1bc57838c1c50a"
+  },
+  "audit/logs/PortableTests.log": {
+    "size": 126,
+    "sha256": "4eb9c44205f88debfcf7fa9122149e266aa9e9faeddaa55b1658f500cfee7b3b"
+  },
+  "audit/logs/ProTrackerTests.log": {
+    "size": 662,
+    "sha256": "19fd2de9ff8489be7b9c22bf5c31e045bcf83a8d013a77bc051e9fac480ef051"
+  },
+  "audit/logs/SequelDataTests.log": {
+    "size": 412,
+    "sha256": "0d10e2c307068100b84a1d7aa922052fee25e525ab362c8641eaf8bd585fdb62"
+  },
+  "audit/logs/UnifiedGameTests.log": {
+    "size": 591,
+    "sha256": "9327a0e00ad51cbdda561a98e544c8f825efc9d254089c61adc4ff74d456ea66"
+  },
+  "audit/logs/audit-integrity.log": {
+    "size": 102,
+    "sha256": "80144f3bf12d071a1497821467ab02765712cb11da3f547a5e2b5cf79f938e9a"
+  },
+  "audit/logs/automatic-updates.log": {
+    "size": 104,
+    "sha256": "d1a3bdcaa925bbf92cc120237c5ab1078f911832e5f3bbdd16fd82aab85d59fa"
+  },
+  "audit/logs/classic-panel-art.log": {
+    "size": 230,
+    "sha256": "cdb4d495fa1389d43af0241f798916df4d2fcc99026089f30075cf6d10e92196"
+  },
+  "audit/logs/controller.log": {
+    "size": 84,
+    "sha256": "c2ec799f32fb0a4274648c48ca3e23d66fa7ca95bc0dcf9f0ef3dc4d622d9e68"
+  },
+  "audit/logs/cross-build-recovery.log": {
+    "size": 122,
+    "sha256": "af73c643075c3b5b461baebf24c816a970a4fe2dd1632536cbee36bd9efbca01"
+  },
+  "audit/logs/dialog-cursor.log": {
+    "size": 212,
+    "sha256": "4802c318d1f034d86a9fea102c357a19bdadd31cafffd9c769ebe51504ee305f"
+  },
+  "audit/logs/fan-library.log": {
+    "size": 44191,
+    "sha256": "927de20fe361c365e3d3b1c48a874c89edc63ab6e525473a079c914f0985741a"
+  },
+  "audit/logs/fan-pruning.log": {
+    "size": 100,
+    "sha256": "fe008aab760eb03ccac7578e2b84665b1b50b0d7f855b17a0c7a8d039435b658"
+  },
+  "audit/logs/hdr-gpu.log": {
+    "size": 750,
+    "sha256": "9ce7a2a966d95af53afc18af5d35011d221d43b9b2257843f97afa918eb55dac"
+  },
+  "audit/logs/hint-catalogue.log": {
+    "size": 87,
+    "sha256": "ad5978a21c37b7771c029943646441a683b3a9510c6a5cfa9ce171b80b8a88d6"
+  },
+  "audit/logs/package-closure.log": {
+    "size": 104,
+    "sha256": "72e9a921e17eba08525244ec168847a408ebbf4a6b5b5f8f0dead996616318eb"
+  },
+  "audit/logs/pointer-capture.log": {
+    "size": 185,
+    "sha256": "43811db1ced67f3c163aac771a4b87740cb62e0fad585c61555aec8b17787491"
+  },
+  "audit/logs/preserved-solution-manifests.log": {
+    "size": 165,
+    "sha256": "7f3f9e032234c9420a46363092bf6d3b64893bceff7535f0edd832c3a7ae1f5d"
+  },
+  "audit/logs/rescue-certificates.log": {
+    "size": 54,
+    "sha256": "3759e06f3e98e69f49549dd6ebc56f9946793b7fc3dd0d9a183f1dab6355fe7c"
+  },
+  "audit/logs/retained-rescue-targets.log": {
+    "size": 100,
+    "sha256": "a6707d4eff38012da33ddc34bc6dc076a3b17151cfc9aef223c8790cbe64c3da"
+  },
+  "audit/logs/run-recovery-files.log": {
+    "size": 442,
+    "sha256": "09588ea12cee94df9e8c5cc3bbd66a03758d3a56a57ae13e1bb45246ec5f9b9c"
+  },
+  "audit/logs/save-recovery.log": {
+    "size": 400,
+    "sha256": "b9cb02c14f69258924eb2bc56e3b1c217f0e71ffcfd60104d775d6a738574c7c"
+  },
+  "audit/logs/shared-library.log": {
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "audit/logs/variable-speed.log": {
+    "size": 338,
+    "sha256": "30687499a8f52414aa0df6c749a65222030f69599541d372850f5bd9e73e1798"
+  },
+  "audit/report.md": {
+    "size": 3859,
+    "sha256": "d19dc9ece8b86a841ca1023b59b476ac0ed8d9cac71302e89a192a12cf614894"
+  },
+  "audit/results.json": {
+    "size": 22192,
+    "sha256": "820d50e42ae0fe1fbfb5bc66e2049c2e342b9d0677954e26e185ba4a501dcdec"
+  },
+  "audit-resolution.json": {
+    "size": 437,
+    "sha256": "bef95cdea54fb7df9676a4f88195c210d6f9c67ff1684bafbd565c58e35cace1"
+  },
+  "checks.json": {
+    "size": 3452,
+    "sha256": "174f8decd09a588e962fd2211791e371146cbdebac681ffa1fb92d3bd34b7e1f"
+  },
+  "classic-quest.json": {
+    "size": 208422,
+    "sha256": "3d2e4745049f1469358c99d9c4303337dd732bed447f3f3d7df83f23b1e00427"
+  },
+  "classic-quest.log": {
+    "size": 44946,
+    "sha256": "f734c6ed68a43876195993dc00c0242ce259f7484a43add22d51007a2fdcb328"
+  },
+  "classic-refresh.log": {
+    "size": 4279,
+    "sha256": "6a152dbd852c46018973c7058847782fb6049e51d315c5824c6173d94b38ff14"
+  },
+  "feed-verification.json": {
+    "size": 464,
+    "sha256": "a15019a4691c8b8d4d199b1d329e01ed9b49d4593d4ba560f70095fae1524a24"
+  },
+  "feed-verification.log": {
+    "size": 533,
+    "sha256": "d9bede61540b70c87a0fcae6c2b02c9d48a4246b88ff3945023348204dde3713"
+  },
+  "finalise-packages.zsh": {
+    "size": 3211,
+    "sha256": "64bf4c41cc6f6936a1cb021cbf70b8374f0521cbab4a4b5dde5fc1ae53a7f455"
+  },
+  "finalise.log": {
+    "size": 3925,
+    "sha256": "7d34add7106f181534d4379b54c5df051341763a6dcb020a1774ce45c846b768"
+  },
+  "golems/main.swift": {
+    "size": 3524,
+    "sha256": "7241774fceed1951da303d45c0c10f29362860c366d3dbb31837e2a2e9fb0529"
+  },
+  "golems.log": {
+    "size": 7228,
+    "sha256": "9d6203196b294a4e31aca90c84cfb9a0e89b13193b31e98b12b367bea8318b0b"
+  },
+  "hints.log": {
+    "size": 18415,
+    "sha256": "f3d277d99a7fa95a31f4583ff6fb257159638e6df4b44b2c248323233bba4e5f"
+  },
+  "l3-completion.log": {
+    "size": 1869,
+    "sha256": "a7952c0ae160579f3d78d68d77d8ca219788b72599fc7fbb46e9a08d94bd8945"
+  },
+  "library-welcome.png": {
+    "size": 116212,
+    "sha256": "cbc574fc6fe495dbbeaea152f78a0064bcd0bda89b456b8208a4466adbc908e3"
+  },
+  "live-music-libraries.json": {
+    "size": 3105,
+    "sha256": "96916575043f00207fd9074033e347d9492908563464b845866bdf01f42a63ec"
+  },
+  "music-assets.json": {
+    "size": 8661,
+    "sha256": "e03f359a80a1dc2726c50a3b6d4deb9a3bac95db0718c9cce225ac4c4188347a"
+  },
+  "music-libraries.log": {
+    "size": 1281,
+    "sha256": "4daaceb686f52fe3d3e279263a810a70acf8467d472abdf0913af484eff72a6a"
+  },
+  "music-ui.log": {
+    "size": 1963,
+    "sha256": "9854019d3c9b857a1130dc1b878bf801f3d1080b1c7115c324033fed649113c3"
+  },
+  "notary-submission.json": {
+    "size": 200,
+    "sha256": "35f6b270de96400db528842fede9c00d519013c1ba78914e8104ac6004cd262d"
+  },
+  "nuke-audio.log": {
+    "size": 1932,
+    "sha256": "32d029bfd73e26dc6e7d4b11e9343fb5dc9d4adef876fe6bbbbd2d6eff6b8357"
+  },
+  "percussion-asset-rerun.log": {
+    "size": 560,
+    "sha256": "3f12b23d41020a03e3c46ca7deee87f8951d73c495f383ff9741010a815d83df"
+  },
+  "playfield.log": {
+    "size": 1994,
+    "sha256": "ceee1eda2c6482a58f34ddb7d8904ab41fdf94fdc50b92bfd0ce887a2f189d6e"
+  },
+  "public-appcast.xml": {
+    "size": 17187,
+    "sha256": "1c99140a7d37e2faf24177598989ac37aa9f899aa5602e1cafbfb02eebe90f44"
+  },
+  "public-verification.log": {
+    "size": 1166,
+    "sha256": "d7e83a7d5c3a36fba7a3f3ba4f46143a9ab38202735d3b9b9a94c27f584e177b"
+  },
+  "publication-preflight.json": {
+    "size": 114,
+    "sha256": "94df1d6624c39ec521a94c8e92bf88c9550a06c3d646052e1729832740ce5a8f"
+  },
+  "publication.json": {
+    "size": 1097,
+    "sha256": "bc6a32529ace5d3a8290c548f9ea7ed2b13c87c984a45b493582ab8532da5bb6"
+  },
+  "publish-guarded.zsh": {
+    "size": 5986,
+    "sha256": "a6ad0112ea6622247ac574027fb2cea535bc519b5f7b73c2dea927bbfb4720ac"
+  },
+  "publish.log": {
+    "size": 2088,
+    "sha256": "8fdca0e2991e8dc3275ceea70c4c28968541c4082779f15503d7889d4d4eb7b6"
+  },
+  "release-inputs.log": {
+    "size": 110,
+    "sha256": "35ff6f3a82ea7fcee2aea73779a8243e2460315a93457e3777967335d3763b2c"
+  },
+  "release-tools.log": {
+    "size": 164,
+    "sha256": "c0d2cb86ff1077633d6cc346e81281c2ae574151fefca7c83c6a7ba03d0ebc90"
+  },
+  "release-ui.log": {
+    "size": 4827,
+    "sha256": "55f691d5f718495bb0d028a130637681a9da9702f7f5d8cf5c9ebb2d35562756"
+  },
+  "release-welcome.png": {
+    "size": 355232,
+    "sha256": "62bbdfc01cd3bed561f91b4c3d0b09965b3061fd47bba126dabe6509e35c6ed1"
+  },
+  "rescue-proofs.log": {
+    "size": 167,
+    "sha256": "467b51f54f84d42ab0ed389690ed5b3526df1a0ee265243c4441c32d151a64c5"
+  },
+  "resource-comparison.json": {
+    "size": 672,
+    "sha256": "556e6a83f5660797a74c9457b177486c7a8fb357745ff13a87d7fed96bd8162a"
+  },
+  "signed-candidates.json": {
+    "size": 584,
+    "sha256": "f150dd079f33b31a41d450617c80b0dbd6a1e5936d49693fddb6055f54c0994f"
+  },
+  "slim-final-archive.json": {
+    "size": 284,
+    "sha256": "72e0b27542a3c202f7bfd6e27a2b65968f2222fbbc774aaadd3fc12924648b87"
+  },
+  "slim-inputs.json": {
+    "size": 136,
+    "sha256": "7dc11fbe56dae846eb8c2fc3be40c6749953df5edd12d461734f096a4ec4f947"
+  },
+  "slim-notary-log.json": {
+    "size": 7929,
+    "sha256": "1d1a25f85f6f9d9ebcae2e8d16e897ff86e0bc499b42544cdcc4bd7270261f29"
+  },
+  "slim-notary-status.json": {
+    "size": 186,
+    "sha256": "0eb9c6d2aa520822bda99ba39c15c4c2b3ed084a6ca0595b9271e5e5128de5b7"
+  },
+  "slim-resource-comparison.json": {
+    "size": 50,
+    "sha256": "fe623da93c1074566301f01fbfbc37637a9f49ef310d7795be06755e4ba1947c"
+  },
+  "slim-submission.json": {
+    "size": 198,
+    "sha256": "31033ea21aab68eeecc5b14875006e4d4325f2d4901541c896ceca1e8c351820"
+  },
+  "solution-fixtures.log": {
+    "size": 52,
+    "sha256": "d9aa796c030dbf4380f4fec0302498c9d69927d250fdc40e06f9f3c3781c33f2"
+  },
+  "source-commit.txt": {
+    "size": 41,
+    "sha256": "820a5b44b51ee532bc5425aa97aafa820dd15ac138824179ced4f9bbe5de82cd"
+  },
+  "standard-final-archive.json": {
+    "size": 280,
+    "sha256": "96da973ca38cea3c6d7b43d173e9b8dfa501d6be0d1a6d8db2d73756990d4cf9"
+  },
+  "standard-notary-log.json": {
+    "size": 7991,
+    "sha256": "5e248614975c6bf2e74188fe8b6774af3440970d3c37158e9931b0a61c3e444c"
+  },
+  "standard-notary-status.json": {
+    "size": 188,
+    "sha256": "225850f89ce479a7ff9d19073f605e3fcb25cea6a30385ce8fa64967c3959a9d"
+  },
+  "submit-notary.log": {
+    "size": 159,
+    "sha256": "3d9266b6b6004612f45b446c2866e4d8f68ce064e17c791b1390432c86f99aeb"
+  },
+  "verify-feed.py": {
+    "size": 2175,
+    "sha256": "21122b53cfe62cb5a3449e497c78b11a49bcb554fe45dbe94cbdaab4a0a751c7"
+  },
+  "verify-public.py": {
+    "size": 3184,
+    "sha256": "e6c558f8366441e58bd657c957750271b9335a62e4c6436729fac9cb16f9d8c6"
+  },
+  "verify-signature.swift": {
+    "size": 830,
+    "sha256": "efcb4242f3d8141e032ece235ca20a2c93a876c76e3e65ea8df7fd89711c7ccd"
+  }
+}

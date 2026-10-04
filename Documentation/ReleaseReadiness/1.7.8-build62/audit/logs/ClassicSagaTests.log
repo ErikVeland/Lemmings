@@ -1,0 +1,13 @@
+PASS releases are told apart by prefix, level count and folder name
+PASS chapters sort into release order, festive titles among them
+PASS finishing a title carries on to the next, and stops at the end
+PASS a player can start at any title, rating or level
+PASS progress counts across the whole series
+PASS achievements require levels to be passed in order
+PASS festive, trilogy and full-canon achievements unlock
+PASS the full-canon achievement requires canon order
+PASS the launch screen offers the quest and each title with its progress
+PASS the quest resumes rather than restarting
+PASS a single title ends at the launch screen
+PASS the quest carries on between releases, then ends
+Classic saga tests passed.
