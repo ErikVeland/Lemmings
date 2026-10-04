@@ -214,8 +214,8 @@ func l3Fingerprint(_ game: Lemmings3Runtime) -> UInt64 {
     return value
 }
 
-/// The actions to try for one lemming at a decision point.
-func l3Actions(_ game: Lemmings3Runtime, lemming id: Int) -> [L3Replay.Input] {
+/// The input sequences to try for one lemming at a decision point.
+func l3Actions(_ game: Lemmings3Runtime, lemming id: Int) -> [[L3Replay.Input]] {
     guard let lemming = game.lemmings.first(where: { $0.id == id && $0.active }) else { return [] }
     var result: [L3Replay.Input] = []
     for action in ["walker", "blocker", "jumper"] {
@@ -235,10 +235,18 @@ func l3Actions(_ game: Lemmings3Runtime, lemming id: Int) -> [L3Replay.Input] {
         }
     }
     // Keep only actions the runtime accepts now.
-    return result.filter { input in
+    var choices = result.filter { input in
         var trial = game
         return L3Replay.apply(input, to: &trial)
+    }.map { [$0] }
+    if lemming.state == .building || lemming.state == .digging {
+        let walker = L3Replay.Input(tick: game.tick, action: "walker", lemming: id, direction: nil)
+        var trial = game
+        if L3Replay.apply(walker, to: &trial), L3Replay.apply(walker, to: &trial) {
+            choices.append([walker, walker])
+        }
     }
+    return choices
 }
 
 struct L3Report: Sendable {
@@ -288,7 +296,7 @@ func l3Search(from start: Lemmings3Runtime, limits: L3Limits) -> L3Report {
         for node in beam {
             if node.depth >= limits.maxDepth { consider(finish(node)); continue }
             var choices: [[L3Replay.Input]] = [[]]
-            for id in node.decision { choices += l3Actions(node.game, lemming: id).map { [$0] } }
+            for id in node.decision { choices += l3Actions(node.game, lemming: id) }
             for inputs in choices {
                 var child = node
                 for input in inputs { _ = L3Replay.apply(input, to: &child.game) }
