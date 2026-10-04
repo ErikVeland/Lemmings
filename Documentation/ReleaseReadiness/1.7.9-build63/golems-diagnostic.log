@@ -1,0 +1,4102 @@
+CHECK fan:lldb-100 TimpackB.dat#0
+CHECK fan:lldb-100 TimpackB.dat#1
+CHECK fan:lldb-100 TimpackB.dat#2
+CHECK fan:lldb-100 TimpackB.dat#3
+CHECK fan:lldb-100 TimpackB.dat#5
+CHECK fan:lldb-100 TimpackB.dat#6
+CHECK fan:lldb-100 TimpackB.dat#7
+CHECK fan:lldb-100 TimpackB.dat#8
+CHECK fan:lldb-100 TimpackB.dat#9
+CHECK fan:lldb-101 TimpackC.dat#0
+CHECK fan:lldb-101 TimpackC.dat#1
+CHECK fan:lldb-101 TimpackC.dat#2
+CHECK fan:lldb-101 TimpackC.dat#3
+CHECK fan:lldb-101 TimpackC.dat#4
+CHECK fan:lldb-101 TimpackC.dat#5
+CHECK fan:lldb-101 TimpackC.dat#6
+CHECK fan:lldb-101 TimpackC.dat#7
+CHECK fan:lldb-101 TimpackC.dat#8
+CHECK fan:lldb-101 TimpackC.dat#9
+CHECK fan:lldb-102 TimpackD.dat#0
+CHECK fan:lldb-102 TimpackD.dat#1
+CHECK fan:lldb-102 TimpackD.dat#2
+CHECK fan:lldb-102 TimpackD.dat#3
+CHECK fan:lldb-102 TimpackD.dat#4
+CHECK fan:lldb-102 TimpackD.dat#5
+CHECK fan:lldb-102 TimpackD.dat#6
+CHECK fan:lldb-102 TimpackD.dat#7
+CHECK fan:lldb-102 TimpackD.dat#8
+CHECK fan:lldb-102 TimpackD.dat#9
+CHECK fan:lldb-103 TimpackE.dat#0
+CHECK fan:lldb-103 TimpackE.dat#1
+CHECK fan:lldb-103 TimpackE.dat#2
+CHECK fan:lldb-103 TimpackE.dat#3
+CHECK fan:lldb-103 TimpackE.dat#4
+CHECK fan:lldb-103 TimpackE.dat#5
+CHECK fan:lldb-103 TimpackE.dat#6
+CHECK fan:lldb-103 TimpackE.dat#7
+CHECK fan:lldb-103 TimpackE.dat#8
+CHECK fan:lldb-103 TimpackE.dat#9
+CHECK fan:lldb-104 TimpackF.dat#0
+CHECK fan:lldb-104 TimpackF.dat#1
+CHECK fan:lldb-104 TimpackF.dat#2
+CHECK fan:lldb-104 TimpackF.dat#3
+CHECK fan:lldb-105 epic02.dat#0
+CHECK fan:lldb-105 epic02.dat#1
+CHECK fan:lldb-105 epic02.dat#2
+CHECK fan:lldb-105 epic02.dat#3
+PASS fan:lldb-105 epic02.dat#3 80 1727
+CHECK fan:lldb-105 epic02.dat#4
+CHECK fan:lldb-105 epic02.dat#5
+CHECK fan:lldb-105 epic02.dat#6
+CHECK fan:lldb-105 epic02.dat#7
+CHECK fan:lldb-105 epic02.dat#8
+CHECK fan:lldb-105 epic02.dat#9
+CHECK fan:lldb-106 ClamSpam05.dat#0
+CHECK fan:lldb-106 ClamSpam05.dat#1
+CHECK fan:lldb-106 ClamSpam05.dat#2
+CHECK fan:lldb-106 ClamSpam05.dat#3
+CHECK fan:lldb-106 ClamSpam05.dat#4
+CHECK fan:lldb-106 ClamSpam05.dat#5
+CHECK fan:lldb-106 ClamSpam05.dat#6
+CHECK fan:lldb-106 ClamSpam05.dat#7
+CHECK fan:lldb-106 ClamSpam05.dat#8
+CHECK fan:lldb-106 ClamSpam05.dat#9
+CHECK fan:lldb-107 Yawg03.dat#0
+CHECK fan:lldb-107 Yawg03.dat#1
+CHECK fan:lldb-107 Yawg03.dat#2
+CHECK fan:lldb-107 Yawg03.dat#3
+CHECK fan:lldb-107 Yawg03.dat#4
+CHECK fan:lldb-107 Yawg03.dat#5
+CHECK fan:lldb-107 Yawg03.dat#6
+CHECK fan:lldb-107 Yawg03.dat#7
+CHECK fan:lldb-107 Yawg03.dat#8
+CHECK fan:lldb-107 Yawg03.dat#9
+CHECK fan:lldb-108 geooPkG.dat#0
+CHECK fan:lldb-108 geooPkG.dat#1
+CHECK fan:lldb-108 geooPkG.dat#2
+CHECK fan:lldb-108 geooPkG.dat#3
+CHECK fan:lldb-108 geooPkG.dat#4
+CHECK fan:lldb-108 geooPkG.dat#5
+CHECK fan:lldb-109 Yawg04.dat#0
+CHECK fan:lldb-109 Yawg04.dat#1
+CHECK fan:lldb-109 Yawg04.dat#2
+CHECK fan:lldb-109 Yawg04.dat#3
+CHECK fan:lldb-109 Yawg04.dat#4
+CHECK fan:lldb-109 Yawg04.dat#5
+CHECK fan:lldb-109 Yawg04.dat#6
+CHECK fan:lldb-109 Yawg04.dat#7
+CHECK fan:lldb-109 Yawg04.dat#8
+CHECK fan:lldb-109 Yawg04.dat#9
+CHECK fan:lldb-10 Mikepak05.dat#0
+CHECK fan:lldb-10 Mikepak05.dat#1
+CHECK fan:lldb-10 Mikepak05.dat#2
+CHECK fan:lldb-10 Mikepak05.dat#3
+CHECK fan:lldb-10 Mikepak05.dat#4
+CHECK fan:lldb-10 Mikepak05.dat#5
+CHECK fan:lldb-10 Mikepak05.dat#6
+CHECK fan:lldb-10 Mikepak05.dat#7
+CHECK fan:lldb-10 Mikepak05.dat#8
+CHECK fan:lldb-10 Mikepak05.dat#9
+CHECK fan:lldb-110 Yawg05.dat#0
+CHECK fan:lldb-110 Yawg05.dat#1
+CHECK fan:lldb-110 Yawg05.dat#2
+CHECK fan:lldb-110 Yawg05.dat#3
+CHECK fan:lldb-110 Yawg05.dat#4
+CHECK fan:lldb-110 Yawg05.dat#5
+CHECK fan:lldb-110 Yawg05.dat#6
+CHECK fan:lldb-110 Yawg05.dat#7
+CHECK fan:lldb-110 Yawg05.dat#8
+CHECK fan:lldb-110 Yawg05.dat#9
+CHECK fan:lldb-111 Fernito pack 1.dat#0
+CHECK fan:lldb-111 Fernito pack 1.dat#1
+CHECK fan:lldb-111 Fernito pack 1.dat#2
+CHECK fan:lldb-111 Fernito pack 1.dat#3
+CHECK fan:lldb-111 Fernito pack 1.dat#4
+CHECK fan:lldb-111 Fernito pack 1.dat#5
+CHECK fan:lldb-111 Fernito pack 1.dat#6
+CHECK fan:lldb-111 Fernito pack 1.dat#7
+CHECK fan:lldb-111 Fernito pack 1.dat#8
+CHECK fan:lldb-111 Fernito pack 1.dat#9
+CHECK fan:lldb-112 Epic Fernito 1.dat#0
+CHECK fan:lldb-112 Epic Fernito 1.dat#1
+CHECK fan:lldb-112 Epic Fernito 1.dat#2
+CHECK fan:lldb-112 Epic Fernito 1.dat#3
+CHECK fan:lldb-112 Epic Fernito 1.dat#4
+CHECK fan:lldb-112 Epic Fernito 1.dat#5
+CHECK fan:lldb-112 Epic Fernito 1.dat#6
+CHECK fan:lldb-113 Mayhem 01.dat#0
+CHECK fan:lldb-113 Mayhem 01.dat#1
+CHECK fan:lldb-113 Mayhem 01.dat#2
+CHECK fan:lldb-113 Mayhem 01.dat#3
+CHECK fan:lldb-113 Mayhem 01.dat#4
+CHECK fan:lldb-113 Mayhem 01.dat#5
+CHECK fan:lldb-113 Mayhem 01.dat#6
+CHECK fan:lldb-113 Mayhem 01.dat#7
+CHECK fan:lldb-113 Mayhem 01.dat#8
+CHECK fan:lldb-113 Mayhem 01.dat#9
+CHECK fan:lldb-11 Mikepak06.dat#0
+CHECK fan:lldb-11 Mikepak06.dat#1
+CHECK fan:lldb-11 Mikepak06.dat#2
+CHECK fan:lldb-11 Mikepak06.dat#3
+CHECK fan:lldb-11 Mikepak06.dat#4
+CHECK fan:lldb-11 Mikepak06.dat#5
+CHECK fan:lldb-11 Mikepak06.dat#6
+CHECK fan:lldb-11 Mikepak06.dat#7
+CHECK fan:lldb-11 Mikepak06.dat#8
+CHECK fan:lldb-11 Mikepak06.dat#9
+CHECK fan:lldb-126 joe01.dat#0
+CHECK fan:lldb-126 joe01.dat#1
+CHECK fan:lldb-126 joe01.dat#2
+CHECK fan:lldb-126 joe01.dat#3
+CHECK fan:lldb-126 joe01.dat#4
+CHECK fan:lldb-126 joe01.dat#5
+CHECK fan:lldb-126 joe01.dat#6
+CHECK fan:lldb-126 joe01.dat#7
+CHECK fan:lldb-126 joe01.dat#8
+CHECK fan:lldb-126 joe01.dat#9
+CHECK fan:lldb-127 joe02.dat#0
+CHECK fan:lldb-127 joe02.dat#1
+CHECK fan:lldb-127 joe02.dat#2
+CHECK fan:lldb-127 joe02.dat#3
+CHECK fan:lldb-127 joe02.dat#4
+CHECK fan:lldb-127 joe02.dat#5
+CHECK fan:lldb-127 joe02.dat#6
+CHECK fan:lldb-127 joe02.dat#7
+CHECK fan:lldb-127 joe02.dat#8
+CHECK fan:lldb-127 joe02.dat#9
+CHECK fan:lldb-128 joe03.dat#0
+CHECK fan:lldb-128 joe03.dat#1
+CHECK fan:lldb-128 joe03.dat#2
+CHECK fan:lldb-128 joe03.dat#3
+CHECK fan:lldb-128 joe03.dat#4
+CHECK fan:lldb-128 joe03.dat#5
+CHECK fan:lldb-128 joe03.dat#6
+CHECK fan:lldb-128 joe03.dat#7
+CHECK fan:lldb-128 joe03.dat#8
+CHECK fan:lldb-128 joe03.dat#9
+CHECK fan:lldb-129 epic03.dat#0
+CHECK fan:lldb-129 epic03.dat#1
+CHECK fan:lldb-129 epic03.dat#2
+CHECK fan:lldb-129 epic03.dat#3
+CHECK fan:lldb-129 epic03.dat#4
+CHECK fan:lldb-129 epic03.dat#5
+CHECK fan:lldb-12 Mikepak07.dat#0
+CHECK fan:lldb-12 Mikepak07.dat#1
+CHECK fan:lldb-12 Mikepak07.dat#2
+CHECK fan:lldb-12 Mikepak07.dat#3
+CHECK fan:lldb-12 Mikepak07.dat#4
+CHECK fan:lldb-12 Mikepak07.dat#5
+CHECK fan:lldb-12 Mikepak07.dat#6
+CHECK fan:lldb-12 Mikepak07.dat#7
+CHECK fan:lldb-12 Mikepak07.dat#8
+CHECK fan:lldb-12 Mikepak07.dat#9
+CHECK fan:lldb-130 Crystal Remakes.dat#0
+CHECK fan:lldb-130 Crystal Remakes.dat#1
+CHECK fan:lldb-130 Crystal Remakes.dat#10
+CHECK fan:lldb-130 Crystal Remakes.dat#11
+CHECK fan:lldb-130 Crystal Remakes.dat#12
+CHECK fan:lldb-130 Crystal Remakes.dat#2
+CHECK fan:lldb-130 Crystal Remakes.dat#3
+CHECK fan:lldb-130 Crystal Remakes.dat#4
+CHECK fan:lldb-130 Crystal Remakes.dat#5
+CHECK fan:lldb-130 Crystal Remakes.dat#6
+CHECK fan:lldb-130 Crystal Remakes.dat#7
+CHECK fan:lldb-130 Crystal Remakes.dat#8
+CHECK fan:lldb-130 Crystal Remakes.dat#9
+CHECK fan:lldb-131 joe04.dat#0
+CHECK fan:lldb-131 joe04.dat#1
+CHECK fan:lldb-131 joe04.dat#2
+CHECK fan:lldb-131 joe04.dat#3
+CHECK fan:lldb-131 joe04.dat#4
+CHECK fan:lldb-131 joe04.dat#5
+CHECK fan:lldb-131 joe04.dat#6
+CHECK fan:lldb-131 joe04.dat#7
+CHECK fan:lldb-131 joe04.dat#8
+CHECK fan:lldb-131 joe04.dat#9
+CHECK fan:lldb-132 dstar01.dat#0
+CHECK fan:lldb-132 dstar01.dat#1
+CHECK fan:lldb-132 dstar01.dat#2
+CHECK fan:lldb-132 dstar01.dat#3
+CHECK fan:lldb-132 dstar01.dat#4
+CHECK fan:lldb-132 dstar01.dat#5
+CHECK fan:lldb-132 dstar01.dat#6
+CHECK fan:lldb-132 dstar01.dat#7
+CHECK fan:lldb-132 dstar01.dat#8
+CHECK fan:lldb-132 dstar01.dat#9
+CHECK fan:lldb-133 weirdy01 (version 2).dat#0
+CHECK fan:lldb-133 weirdy01 (version 2).dat#1
+CHECK fan:lldb-133 weirdy01 (version 2).dat#2
+CHECK fan:lldb-133 weirdy01 (version 2).dat#3
+CHECK fan:lldb-133 weirdy01 (version 2).dat#4
+CHECK fan:lldb-133 weirdy01 (version 2).dat#5
+CHECK fan:lldb-133 weirdy01 (version 2).dat#6
+CHECK fan:lldb-133 weirdy01 (version 2).dat#7
+CHECK fan:lldb-133 weirdy01 (version 2).dat#8
+CHECK fan:lldb-133 weirdy01 (version 2).dat#9
+CHECK fan:lldb-134 weirdy02 (version 2).dat#0
+CHECK fan:lldb-134 weirdy02 (version 2).dat#1
+CHECK fan:lldb-134 weirdy02 (version 2).dat#2
+CHECK fan:lldb-134 weirdy02 (version 2).dat#3
+CHECK fan:lldb-134 weirdy02 (version 2).dat#4
+CHECK fan:lldb-134 weirdy02 (version 2).dat#5
+CHECK fan:lldb-134 weirdy02 (version 2).dat#6
+CHECK fan:lldb-134 weirdy02 (version 2).dat#7
+CHECK fan:lldb-134 weirdy02 (version 2).dat#8
+CHECK fan:lldb-134 weirdy02 (version 2).dat#9
+CHECK fan:lldb-135 weirdy03 (version 2).dat#0
+CHECK fan:lldb-135 weirdy03 (version 2).dat#1
+CHECK fan:lldb-135 weirdy03 (version 2).dat#2
+CHECK fan:lldb-135 weirdy03 (version 2).dat#3
+CHECK fan:lldb-135 weirdy03 (version 2).dat#4
+CHECK fan:lldb-135 weirdy03 (version 2).dat#5
+CHECK fan:lldb-135 weirdy03 (version 2).dat#6
+CHECK fan:lldb-135 weirdy03 (version 2).dat#7
+CHECK fan:lldb-135 weirdy03 (version 2).dat#8
+CHECK fan:lldb-135 weirdy03 (version 2).dat#9
+CHECK fan:lldb-136 weirdy04 (version 2).dat#0
+CHECK fan:lldb-136 weirdy04 (version 2).dat#1
+CHECK fan:lldb-136 weirdy04 (version 2).dat#2
+CHECK fan:lldb-136 weirdy04 (version 2).dat#3
+CHECK fan:lldb-136 weirdy04 (version 2).dat#4
+CHECK fan:lldb-136 weirdy04 (version 2).dat#5
+CHECK fan:lldb-136 weirdy04 (version 2).dat#6
+CHECK fan:lldb-136 weirdy04 (version 2).dat#7
+CHECK fan:lldb-136 weirdy04 (version 2).dat#8
+CHECK fan:lldb-136 weirdy04 (version 2).dat#9
+CHECK fan:lldb-137 weirdy05 (version 2).dat#0
+CHECK fan:lldb-137 weirdy05 (version 2).dat#1
+CHECK fan:lldb-137 weirdy05 (version 2).dat#2
+CHECK fan:lldb-137 weirdy05 (version 2).dat#3
+CHECK fan:lldb-137 weirdy05 (version 2).dat#4
+CHECK fan:lldb-137 weirdy05 (version 2).dat#5
+CHECK fan:lldb-137 weirdy05 (version 2).dat#6
+CHECK fan:lldb-137 weirdy05 (version 2).dat#7
+CHECK fan:lldb-137 weirdy05 (version 2).dat#8
+CHECK fan:lldb-137 weirdy05 (version 2).dat#9
+CHECK fan:lldb-138 ISteve10.dat#0
+CHECK fan:lldb-138 ISteve10.dat#1
+CHECK fan:lldb-138 ISteve10.dat#2
+CHECK fan:lldb-138 ISteve10.dat#3
+CHECK fan:lldb-138 ISteve10.dat#4
+CHECK fan:lldb-138 ISteve10.dat#5
+CHECK fan:lldb-138 ISteve10.dat#6
+CHECK fan:lldb-138 ISteve10.dat#7
+CHECK fan:lldb-138 ISteve10.dat#8
+CHECK fan:lldb-138 ISteve10.dat#9
+CHECK fan:lldb-139 Epic giga01.dat#0
+CHECK fan:lldb-139 Epic giga01.dat#1
+CHECK fan:lldb-139 Epic giga01.dat#2
+CHECK fan:lldb-139 Epic giga01.dat#3
+CHECK fan:lldb-139 Epic giga01.dat#4
+CHECK fan:lldb-139 Epic giga01.dat#5
+CHECK fan:lldb-139 Epic giga01.dat#6
+CHECK fan:lldb-139 Epic giga01.dat#7
+CHECK fan:lldb-139 Epic giga01.dat#8
+CHECK fan:lldb-139 Epic giga01.dat#9
+CHECK fan:lldb-13 Mikepak08.dat#0
+CHECK fan:lldb-13 Mikepak08.dat#1
+CHECK fan:lldb-13 Mikepak08.dat#2
+CHECK fan:lldb-13 Mikepak08.dat#3
+CHECK fan:lldb-13 Mikepak08.dat#4
+CHECK fan:lldb-13 Mikepak08.dat#5
+CHECK fan:lldb-13 Mikepak08.dat#6
+CHECK fan:lldb-13 Mikepak08.dat#7
+CHECK fan:lldb-13 Mikepak08.dat#8
+CHECK fan:lldb-13 Mikepak08.dat#9
+CHECK fan:lldb-140 Epic giga02.dat#0
+PASS fan:lldb-140 Epic giga02.dat#0 8 1472
+CHECK fan:lldb-140 Epic giga02.dat#1
+CHECK fan:lldb-140 Epic giga02.dat#2
+CHECK fan:lldb-140 Epic giga02.dat#3
+CHECK fan:lldb-140 Epic giga02.dat#4
+CHECK fan:lldb-140 Epic giga02.dat#5
+CHECK fan:lldb-140 Epic giga02.dat#6
+CHECK fan:lldb-140 Epic giga02.dat#7
+CHECK fan:lldb-140 Epic giga02.dat#8
+CHECK fan:lldb-140 Epic giga02.dat#9
+CHECK fan:lldb-141 Epic Giga03.dat#0
+CHECK fan:lldb-141 Epic Giga03.dat#1
+CHECK fan:lldb-141 Epic Giga03.dat#2
+CHECK fan:lldb-141 Epic Giga03.dat#3
+CHECK fan:lldb-141 Epic Giga03.dat#4
+CHECK fan:lldb-141 Epic Giga03.dat#5
+CHECK fan:lldb-141 Epic Giga03.dat#6
+CHECK fan:lldb-141 Epic Giga03.dat#7
+CHECK fan:lldb-141 Epic Giga03.dat#8
+CHECK fan:lldb-141 Epic Giga03.dat#9
+CHECK fan:lldb-142 Epic Giga rating pack 01.dat#0
+CHECK fan:lldb-142 Epic Giga rating pack 01.dat#1
+CHECK fan:lldb-142 Epic Giga rating pack 01.dat#10
+CHECK fan:lldb-142 Epic Giga rating pack 01.dat#11
+CHECK fan:lldb-142 Epic Giga rating pack 01.dat#12
+CHECK fan:lldb-142 Epic Giga rating pack 01.dat#13
+CHECK fan:lldb-142 Epic Giga rating pack 01.dat#14
+CHECK fan:lldb-142 Epic Giga rating pack 01.dat#15
+CHECK fan:lldb-142 Epic Giga rating pack 01.dat#16
+CHECK fan:lldb-142 Epic Giga rating pack 01.dat#2
+CHECK fan:lldb-142 Epic Giga rating pack 01.dat#3
+CHECK fan:lldb-142 Epic Giga rating pack 01.dat#4
+CHECK fan:lldb-142 Epic Giga rating pack 01.dat#5
+CHECK fan:lldb-142 Epic Giga rating pack 01.dat#6
+CHECK fan:lldb-142 Epic Giga rating pack 01.dat#7
+CHECK fan:lldb-142 Epic Giga rating pack 01.dat#8
+CHECK fan:lldb-142 Epic Giga rating pack 01.dat#9
+CHECK fan:lldb-143 Epic giga rating pack 02.dat#0
+CHECK fan:lldb-143 Epic giga rating pack 02.dat#1
+CHECK fan:lldb-143 Epic giga rating pack 02.dat#10
+CHECK fan:lldb-143 Epic giga rating pack 02.dat#11
+CHECK fan:lldb-143 Epic giga rating pack 02.dat#2
+CHECK fan:lldb-143 Epic giga rating pack 02.dat#3
+CHECK fan:lldb-143 Epic giga rating pack 02.dat#4
+CHECK fan:lldb-143 Epic giga rating pack 02.dat#5
+CHECK fan:lldb-143 Epic giga rating pack 02.dat#6
+CHECK fan:lldb-143 Epic giga rating pack 02.dat#7
+CHECK fan:lldb-143 Epic giga rating pack 02.dat#8
+CHECK fan:lldb-143 Epic giga rating pack 02.dat#9
+CHECK fan:lldb-144 Snow remakes 01.dat#0
+CHECK fan:lldb-144 Snow remakes 01.dat#1
+CHECK fan:lldb-144 Snow remakes 01.dat#2
+CHECK fan:lldb-144 Snow remakes 01.dat#3
+CHECK fan:lldb-144 Snow remakes 01.dat#4
+CHECK fan:lldb-144 Snow remakes 01.dat#5
+CHECK fan:lldb-144 Snow remakes 01.dat#6
+CHECK fan:lldb-144 Snow remakes 01.dat#7
+CHECK fan:lldb-144 Snow remakes 01.dat#8
+CHECK fan:lldb-144 Snow remakes 01.dat#9
+CHECK fan:lldb-14 Mikepak09.dat#0
+CHECK fan:lldb-14 Mikepak09.dat#1
+PASS fan:lldb-14 Mikepak09.dat#1 60 3660
+CHECK fan:lldb-14 Mikepak09.dat#2
+CHECK fan:lldb-14 Mikepak09.dat#3
+CHECK fan:lldb-14 Mikepak09.dat#4
+CHECK fan:lldb-14 Mikepak09.dat#5
+CHECK fan:lldb-14 Mikepak09.dat#6
+CHECK fan:lldb-14 Mikepak09.dat#7
+CHECK fan:lldb-14 Mikepak09.dat#8
+CHECK fan:lldb-14 Mikepak09.dat#9
+CHECK fan:lldb-15 Mikepak10.dat#0
+CHECK fan:lldb-15 Mikepak10.dat#1
+CHECK fan:lldb-15 Mikepak10.dat#2
+CHECK fan:lldb-15 Mikepak10.dat#3
+CHECK fan:lldb-15 Mikepak10.dat#4
+CHECK fan:lldb-15 Mikepak10.dat#5
+CHECK fan:lldb-15 Mikepak10.dat#6
+CHECK fan:lldb-15 Mikepak10.dat#7
+CHECK fan:lldb-15 Mikepak10.dat#8
+CHECK fan:lldb-15 Mikepak10.dat#9
+CHECK fan:lldb-160 Giga pack 01.dat#0
+CHECK fan:lldb-160 Giga pack 01.dat#1
+CHECK fan:lldb-160 Giga pack 01.dat#2
+CHECK fan:lldb-160 Giga pack 01.dat#3
+CHECK fan:lldb-160 Giga pack 01.dat#4
+CHECK fan:lldb-160 Giga pack 01.dat#5
+CHECK fan:lldb-160 Giga pack 01.dat#6
+CHECK fan:lldb-160 Giga pack 01.dat#7
+CHECK fan:lldb-160 Giga pack 01.dat#8
+CHECK fan:lldb-160 Giga pack 01.dat#9
+PASS fan:lldb-160 Giga pack 01.dat#9 80 4442
+CHECK fan:lldb-161 Yawg06.dat#0
+CHECK fan:lldb-161 Yawg06.dat#1
+CHECK fan:lldb-161 Yawg06.dat#2
+CHECK fan:lldb-161 Yawg06.dat#3
+CHECK fan:lldb-161 Yawg06.dat#4
+CHECK fan:lldb-161 Yawg06.dat#5
+CHECK fan:lldb-161 Yawg06.dat#6
+CHECK fan:lldb-161 Yawg06.dat#7
+CHECK fan:lldb-161 Yawg06.dat#8
+CHECK fan:lldb-161 Yawg06.dat#9
+CHECK fan:lldb-162 Giga pack 02.dat#0
+CHECK fan:lldb-162 Giga pack 02.dat#1
+CHECK fan:lldb-162 Giga pack 02.dat#2
+CHECK fan:lldb-162 Giga pack 02.dat#3
+CHECK fan:lldb-162 Giga pack 02.dat#4
+CHECK fan:lldb-162 Giga pack 02.dat#5
+CHECK fan:lldb-162 Giga pack 02.dat#6
+CHECK fan:lldb-162 Giga pack 02.dat#7
+CHECK fan:lldb-162 Giga pack 02.dat#8
+CHECK fan:lldb-162 Giga pack 02.dat#9
+CHECK fan:lldb-163 Giga pack 03.dat#0
+CHECK fan:lldb-163 Giga pack 03.dat#1
+CHECK fan:lldb-163 Giga pack 03.dat#2
+CHECK fan:lldb-163 Giga pack 03.dat#3
+CHECK fan:lldb-163 Giga pack 03.dat#4
+CHECK fan:lldb-163 Giga pack 03.dat#5
+CHECK fan:lldb-163 Giga pack 03.dat#6
+CHECK fan:lldb-163 Giga pack 03.dat#7
+CHECK fan:lldb-163 Giga pack 03.dat#8
+CHECK fan:lldb-163 Giga pack 03.dat#9
+CHECK fan:lldb-164 ClamSpamXmas09.dat#0
+CHECK fan:lldb-164 ClamSpamXmas09.dat#1
+CHECK fan:lldb-164 ClamSpamXmas09.dat#2
+CHECK fan:lldb-164 ClamSpamXmas09.dat#3
+CHECK fan:lldb-165 Giga pack 04.dat#0
+CHECK fan:lldb-165 Giga pack 04.dat#1
+CHECK fan:lldb-165 Giga pack 04.dat#2
+CHECK fan:lldb-165 Giga pack 04.dat#3
+CHECK fan:lldb-165 Giga pack 04.dat#4
+CHECK fan:lldb-165 Giga pack 04.dat#5
+PASS fan:lldb-165 Giga pack 04.dat#5 20 1729
+CHECK fan:lldb-165 Giga pack 04.dat#6
+CHECK fan:lldb-165 Giga pack 04.dat#7
+CHECK fan:lldb-165 Giga pack 04.dat#8
+CHECK fan:lldb-165 Giga pack 04.dat#9
+CHECK fan:lldb-166 QBeez05.dat#0
+CHECK fan:lldb-166 QBeez05.dat#1
+CHECK fan:lldb-166 QBeez05.dat#2
+CHECK fan:lldb-166 QBeez05.dat#3
+CHECK fan:lldb-166 QBeez05.dat#4
+CHECK fan:lldb-166 QBeez05.dat#5
+CHECK fan:lldb-166 QBeez05.dat#6
+CHECK fan:lldb-166 QBeez05.dat#7
+CHECK fan:lldb-166 QBeez05.dat#8
+CHECK fan:lldb-166 QBeez05.dat#9
+CHECK fan:lldb-167 Giga pack 05.dat#0
+CHECK fan:lldb-167 Giga pack 05.dat#1
+CHECK fan:lldb-167 Giga pack 05.dat#2
+CHECK fan:lldb-167 Giga pack 05.dat#3
+CHECK fan:lldb-167 Giga pack 05.dat#4
+CHECK fan:lldb-167 Giga pack 05.dat#5
+CHECK fan:lldb-167 Giga pack 05.dat#6
+CHECK fan:lldb-167 Giga pack 05.dat#7
+CHECK fan:lldb-167 Giga pack 05.dat#8
+CHECK fan:lldb-167 Giga pack 05.dat#9
+CHECK fan:lldb-168 Giga pack 06.dat#0
+CHECK fan:lldb-168 Giga pack 06.dat#1
+CHECK fan:lldb-168 Giga pack 06.dat#2
+CHECK fan:lldb-168 Giga pack 06.dat#3
+CHECK fan:lldb-168 Giga pack 06.dat#4
+CHECK fan:lldb-168 Giga pack 06.dat#5
+CHECK fan:lldb-168 Giga pack 06.dat#6
+CHECK fan:lldb-168 Giga pack 06.dat#7
+CHECK fan:lldb-168 Giga pack 06.dat#8
+CHECK fan:lldb-168 Giga pack 06.dat#9
+CHECK fan:lldb-169 Giga pack 07.dat#0
+CHECK fan:lldb-169 Giga pack 07.dat#1
+CHECK fan:lldb-169 Giga pack 07.dat#2
+CHECK fan:lldb-169 Giga pack 07.dat#3
+CHECK fan:lldb-169 Giga pack 07.dat#4
+CHECK fan:lldb-169 Giga pack 07.dat#5
+CHECK fan:lldb-169 Giga pack 07.dat#6
+CHECK fan:lldb-169 Giga pack 07.dat#7
+CHECK fan:lldb-169 Giga pack 07.dat#8
+CHECK fan:lldb-169 Giga pack 07.dat#9
+CHECK fan:lldb-16 Mikepak11.dat#0
+CHECK fan:lldb-16 Mikepak11.dat#1
+CHECK fan:lldb-16 Mikepak11.dat#2
+CHECK fan:lldb-16 Mikepak11.dat#3
+CHECK fan:lldb-16 Mikepak11.dat#4
+CHECK fan:lldb-16 Mikepak11.dat#5
+CHECK fan:lldb-16 Mikepak11.dat#6
+CHECK fan:lldb-16 Mikepak11.dat#7
+CHECK fan:lldb-16 Mikepak11.dat#8
+CHECK fan:lldb-16 Mikepak11.dat#9
+CHECK fan:lldb-170 Giga pack 08.dat#0
+CHECK fan:lldb-170 Giga pack 08.dat#1
+CHECK fan:lldb-170 Giga pack 08.dat#2
+CHECK fan:lldb-170 Giga pack 08.dat#3
+CHECK fan:lldb-170 Giga pack 08.dat#4
+CHECK fan:lldb-170 Giga pack 08.dat#5
+CHECK fan:lldb-170 Giga pack 08.dat#6
+CHECK fan:lldb-170 Giga pack 08.dat#7
+CHECK fan:lldb-170 Giga pack 08.dat#8
+CHECK fan:lldb-170 Giga pack 08.dat#9
+CHECK fan:lldb-171 Giga pack 09.dat#0
+CHECK fan:lldb-171 Giga pack 09.dat#1
+CHECK fan:lldb-171 Giga pack 09.dat#2
+CHECK fan:lldb-171 Giga pack 09.dat#3
+CHECK fan:lldb-171 Giga pack 09.dat#4
+CHECK fan:lldb-171 Giga pack 09.dat#5
+CHECK fan:lldb-171 Giga pack 09.dat#6
+PASS fan:lldb-171 Giga pack 09.dat#6 80 3736
+CHECK fan:lldb-171 Giga pack 09.dat#7
+CHECK fan:lldb-171 Giga pack 09.dat#8
+CHECK fan:lldb-171 Giga pack 09.dat#9
+CHECK fan:lldb-172 Giga pack 10.dat#0
+CHECK fan:lldb-172 Giga pack 10.dat#1
+CHECK fan:lldb-172 Giga pack 10.dat#2
+CHECK fan:lldb-172 Giga pack 10.dat#3
+CHECK fan:lldb-172 Giga pack 10.dat#4
+CHECK fan:lldb-172 Giga pack 10.dat#5
+CHECK fan:lldb-172 Giga pack 10.dat#6
+CHECK fan:lldb-172 Giga pack 10.dat#7
+CHECK fan:lldb-172 Giga pack 10.dat#8
+CHECK fan:lldb-172 Giga pack 10.dat#9
+CHECK fan:lldb-173 hubbart.dat#0
+CHECK fan:lldb-173 hubbart.dat#1
+CHECK fan:lldb-173 hubbart.dat#2
+CHECK fan:lldb-173 hubbart.dat#3
+CHECK fan:lldb-173 hubbart.dat#4
+CHECK fan:lldb-173 hubbart.dat#5
+CHECK fan:lldb-173 hubbart.dat#6
+CHECK fan:lldb-173 hubbart.dat#7
+CHECK fan:lldb-173 hubbart.dat#8
+CHECK fan:lldb-173 hubbart.dat#9
+CHECK fan:lldb-174 hubbart2.dat#0
+CHECK fan:lldb-174 hubbart2.dat#1
+CHECK fan:lldb-174 hubbart2.dat#2
+CHECK fan:lldb-174 hubbart2.dat#3
+CHECK fan:lldb-174 hubbart2.dat#4
+CHECK fan:lldb-174 hubbart2.dat#5
+CHECK fan:lldb-174 hubbart2.dat#6
+CHECK fan:lldb-174 hubbart2.dat#7
+CHECK fan:lldb-174 hubbart2.dat#8
+CHECK fan:lldb-174 hubbart2.dat#9
+CHECK fan:lldb-175 hubbart3.dat#0
+CHECK fan:lldb-175 hubbart3.dat#1
+CHECK fan:lldb-175 hubbart3.dat#2
+CHECK fan:lldb-175 hubbart3.dat#3
+CHECK fan:lldb-175 hubbart3.dat#4
+CHECK fan:lldb-175 hubbart3.dat#5
+CHECK fan:lldb-175 hubbart3.dat#6
+CHECK fan:lldb-175 hubbart3.dat#7
+CHECK fan:lldb-175 hubbart3.dat#8
+CHECK fan:lldb-175 hubbart3.dat#9
+CHECK fan:lldb-176 hubbart4.dat#0
+CHECK fan:lldb-176 hubbart4.dat#1
+CHECK fan:lldb-176 hubbart4.dat#2
+CHECK fan:lldb-176 hubbart4.dat#3
+CHECK fan:lldb-176 hubbart4.dat#4
+CHECK fan:lldb-176 hubbart4.dat#5
+CHECK fan:lldb-176 hubbart4.dat#6
+CHECK fan:lldb-176 hubbart4.dat#7
+CHECK fan:lldb-176 hubbart4.dat#8
+CHECK fan:lldb-176 hubbart4.dat#9
+CHECK fan:lldb-177 hubbart5.dat#0
+CHECK fan:lldb-177 hubbart5.dat#1
+CHECK fan:lldb-177 hubbart5.dat#2
+CHECK fan:lldb-177 hubbart5.dat#3
+CHECK fan:lldb-177 hubbart5.dat#4
+CHECK fan:lldb-177 hubbart5.dat#5
+CHECK fan:lldb-177 hubbart5.dat#6
+CHECK fan:lldb-177 hubbart5.dat#7
+CHECK fan:lldb-177 hubbart5.dat#8
+CHECK fan:lldb-177 hubbart5.dat#9
+CHECK fan:lldb-178 hubbart6.dat#0
+CHECK fan:lldb-178 hubbart6.dat#1
+CHECK fan:lldb-178 hubbart6.dat#2
+CHECK fan:lldb-178 hubbart6.dat#3
+CHECK fan:lldb-178 hubbart6.dat#4
+CHECK fan:lldb-178 hubbart6.dat#5
+CHECK fan:lldb-178 hubbart6.dat#6
+CHECK fan:lldb-178 hubbart6.dat#7
+CHECK fan:lldb-178 hubbart6.dat#8
+CHECK fan:lldb-179 The lemming google pack.dat#0
+CHECK fan:lldb-179 The lemming google pack.dat#1
+CHECK fan:lldb-179 The lemming google pack.dat#2
+PASS fan:lldb-179 The lemming google pack.dat#2 26 1705
+CHECK fan:lldb-179 The lemming google pack.dat#3
+CHECK fan:lldb-179 The lemming google pack.dat#4
+CHECK fan:lldb-179 The lemming google pack.dat#5
+PASS fan:lldb-179 The lemming google pack.dat#5 47 3336
+CHECK fan:lldb-17 Mikepak12.dat#0
+CHECK fan:lldb-17 Mikepak12.dat#1
+CHECK fan:lldb-17 Mikepak12.dat#2
+CHECK fan:lldb-17 Mikepak12.dat#3
+CHECK fan:lldb-17 Mikepak12.dat#4
+CHECK fan:lldb-17 Mikepak12.dat#5
+CHECK fan:lldb-17 Mikepak12.dat#6
+CHECK fan:lldb-17 Mikepak12.dat#7
+CHECK fan:lldb-17 Mikepak12.dat#8
+CHECK fan:lldb-17 Mikepak12.dat#9
+CHECK fan:lldb-180 Lemmings platinum Fragle part 1.dat#0
+CHECK fan:lldb-180 Lemmings platinum Fragle part 1.dat#1
+CHECK fan:lldb-180 Lemmings platinum Fragle part 1.dat#10
+CHECK fan:lldb-180 Lemmings platinum Fragle part 1.dat#11
+CHECK fan:lldb-180 Lemmings platinum Fragle part 1.dat#12
+CHECK fan:lldb-180 Lemmings platinum Fragle part 1.dat#13
+CHECK fan:lldb-180 Lemmings platinum Fragle part 1.dat#14
+CHECK fan:lldb-180 Lemmings platinum Fragle part 1.dat#2
+CHECK fan:lldb-180 Lemmings platinum Fragle part 1.dat#3
+CHECK fan:lldb-180 Lemmings platinum Fragle part 1.dat#4
+CHECK fan:lldb-180 Lemmings platinum Fragle part 1.dat#5
+CHECK fan:lldb-180 Lemmings platinum Fragle part 1.dat#6
+CHECK fan:lldb-180 Lemmings platinum Fragle part 1.dat#7
+CHECK fan:lldb-180 Lemmings platinum Fragle part 1.dat#8
+CHECK fan:lldb-180 Lemmings platinum Fragle part 1.dat#9
+CHECK fan:lldb-181 Lemmings platinum Fragle part 2.dat#0
+CHECK fan:lldb-181 Lemmings platinum Fragle part 2.dat#1
+CHECK fan:lldb-181 Lemmings platinum Fragle part 2.dat#10
+PASS fan:lldb-181 Lemmings platinum Fragle part 2.dat#10 47 3336
+CHECK fan:lldb-181 Lemmings platinum Fragle part 2.dat#11
+CHECK fan:lldb-181 Lemmings platinum Fragle part 2.dat#12
+CHECK fan:lldb-181 Lemmings platinum Fragle part 2.dat#13
+CHECK fan:lldb-181 Lemmings platinum Fragle part 2.dat#14
+CHECK fan:lldb-181 Lemmings platinum Fragle part 2.dat#2
+CHECK fan:lldb-181 Lemmings platinum Fragle part 2.dat#3
+CHECK fan:lldb-181 Lemmings platinum Fragle part 2.dat#4
+CHECK fan:lldb-181 Lemmings platinum Fragle part 2.dat#5
+CHECK fan:lldb-181 Lemmings platinum Fragle part 2.dat#6
+CHECK fan:lldb-181 Lemmings platinum Fragle part 2.dat#7
+PASS fan:lldb-181 Lemmings platinum Fragle part 2.dat#7 26 1705
+CHECK fan:lldb-181 Lemmings platinum Fragle part 2.dat#8
+CHECK fan:lldb-181 Lemmings platinum Fragle part 2.dat#9
+CHECK fan:lldb-182 hubbart7.dat#0
+CHECK fan:lldb-182 hubbart7.dat#1
+CHECK fan:lldb-182 hubbart7.dat#2
+CHECK fan:lldb-182 hubbart7.dat#3
+CHECK fan:lldb-182 hubbart7.dat#4
+CHECK fan:lldb-182 hubbart7.dat#5
+CHECK fan:lldb-182 hubbart7.dat#6
+CHECK fan:lldb-182 hubbart7.dat#7
+CHECK fan:lldb-182 hubbart7.dat#8
+CHECK fan:lldb-182 hubbart7.dat#9
+CHECK fan:lldb-183 SeverSet1.dat#0
+CHECK fan:lldb-183 SeverSet1.dat#1
+CHECK fan:lldb-183 SeverSet1.dat#2
+CHECK fan:lldb-183 SeverSet1.dat#3
+CHECK fan:lldb-183 SeverSet1.dat#4
+CHECK fan:lldb-183 SeverSet1.dat#5
+CHECK fan:lldb-183 SeverSet1.dat#6
+CHECK fan:lldb-183 SeverSet1.dat#7
+CHECK fan:lldb-183 SeverSet1.dat#8
+CHECK fan:lldb-183 SeverSet1.dat#9
+CHECK fan:lldb-184 SeverSet2.dat#0
+CHECK fan:lldb-184 SeverSet2.dat#1
+CHECK fan:lldb-184 SeverSet2.dat#2
+CHECK fan:lldb-184 SeverSet2.dat#3
+CHECK fan:lldb-184 SeverSet2.dat#4
+CHECK fan:lldb-184 SeverSet2.dat#5
+CHECK fan:lldb-184 SeverSet2.dat#6
+CHECK fan:lldb-184 SeverSet2.dat#7
+CHECK fan:lldb-184 SeverSet2.dat#8
+CHECK fan:lldb-184 SeverSet2.dat#9
+CHECK fan:lldb-185 SeverSet3.dat#0
+CHECK fan:lldb-185 SeverSet3.dat#1
+CHECK fan:lldb-185 SeverSet3.dat#2
+CHECK fan:lldb-185 SeverSet3.dat#3
+CHECK fan:lldb-185 SeverSet3.dat#4
+CHECK fan:lldb-185 SeverSet3.dat#5
+CHECK fan:lldb-185 SeverSet3.dat#6
+CHECK fan:lldb-185 SeverSet3.dat#7
+CHECK fan:lldb-185 SeverSet3.dat#8
+CHECK fan:lldb-185 SeverSet3.dat#9
+CHECK fan:lldb-186 SeverSet4.dat#0
+CHECK fan:lldb-186 SeverSet4.dat#1
+CHECK fan:lldb-186 SeverSet4.dat#2
+CHECK fan:lldb-186 SeverSet4.dat#3
+CHECK fan:lldb-186 SeverSet4.dat#4
+CHECK fan:lldb-186 SeverSet4.dat#5
+CHECK fan:lldb-186 SeverSet4.dat#6
+CHECK fan:lldb-186 SeverSet4.dat#7
+CHECK fan:lldb-186 SeverSet4.dat#8
+CHECK fan:lldb-186 SeverSet4.dat#9
+CHECK fan:lldb-187 Siergiej02.dat#0
+CHECK fan:lldb-187 Siergiej02.dat#1
+CHECK fan:lldb-187 Siergiej02.dat#2
+CHECK fan:lldb-187 Siergiej02.dat#3
+CHECK fan:lldb-187 Siergiej02.dat#4
+CHECK fan:lldb-187 Siergiej02.dat#5
+CHECK fan:lldb-187 Siergiej02.dat#6
+CHECK fan:lldb-187 Siergiej02.dat#7
+CHECK fan:lldb-187 Siergiej02.dat#8
+CHECK fan:lldb-187 Siergiej02.dat#9
+CHECK fan:lldb-188 Lemmings platinum Careful Part 1.dat#0
+CHECK fan:lldb-188 Lemmings platinum Careful Part 1.dat#1
+CHECK fan:lldb-188 Lemmings platinum Careful Part 1.dat#10
+CHECK fan:lldb-188 Lemmings platinum Careful Part 1.dat#11
+CHECK fan:lldb-188 Lemmings platinum Careful Part 1.dat#12
+CHECK fan:lldb-188 Lemmings platinum Careful Part 1.dat#13
+CHECK fan:lldb-188 Lemmings platinum Careful Part 1.dat#14
+CHECK fan:lldb-188 Lemmings platinum Careful Part 1.dat#2
+CHECK fan:lldb-188 Lemmings platinum Careful Part 1.dat#3
+CHECK fan:lldb-188 Lemmings platinum Careful Part 1.dat#4
+CHECK fan:lldb-188 Lemmings platinum Careful Part 1.dat#5
+CHECK fan:lldb-188 Lemmings platinum Careful Part 1.dat#6
+CHECK fan:lldb-188 Lemmings platinum Careful Part 1.dat#7
+CHECK fan:lldb-188 Lemmings platinum Careful Part 1.dat#8
+CHECK fan:lldb-188 Lemmings platinum Careful Part 1.dat#9
+CHECK fan:lldb-189 Lemmings platinum Careful Part 2.dat#0
+CHECK fan:lldb-189 Lemmings platinum Careful Part 2.dat#1
+CHECK fan:lldb-189 Lemmings platinum Careful Part 2.dat#10
+CHECK fan:lldb-189 Lemmings platinum Careful Part 2.dat#11
+CHECK fan:lldb-189 Lemmings platinum Careful Part 2.dat#12
+CHECK fan:lldb-189 Lemmings platinum Careful Part 2.dat#13
+CHECK fan:lldb-189 Lemmings platinum Careful Part 2.dat#14
+CHECK fan:lldb-189 Lemmings platinum Careful Part 2.dat#2
+CHECK fan:lldb-189 Lemmings platinum Careful Part 2.dat#3
+CHECK fan:lldb-189 Lemmings platinum Careful Part 2.dat#4
+CHECK fan:lldb-189 Lemmings platinum Careful Part 2.dat#5
+CHECK fan:lldb-189 Lemmings platinum Careful Part 2.dat#6
+CHECK fan:lldb-189 Lemmings platinum Careful Part 2.dat#7
+CHECK fan:lldb-189 Lemmings platinum Careful Part 2.dat#8
+CHECK fan:lldb-189 Lemmings platinum Careful Part 2.dat#9
+CHECK fan:lldb-18 Mikepak13.dat#0
+CHECK fan:lldb-18 Mikepak13.dat#1
+CHECK fan:lldb-18 Mikepak13.dat#2
+CHECK fan:lldb-18 Mikepak13.dat#3
+CHECK fan:lldb-18 Mikepak13.dat#4
+CHECK fan:lldb-18 Mikepak13.dat#5
+CHECK fan:lldb-18 Mikepak13.dat#6
+CHECK fan:lldb-18 Mikepak13.dat#7
+CHECK fan:lldb-18 Mikepak13.dat#8
+CHECK fan:lldb-18 Mikepak13.dat#9
+CHECK fan:lldb-190 Lemmings platinum Dangerous Part 1.dat#0
+CHECK fan:lldb-190 Lemmings platinum Dangerous Part 1.dat#1
+CHECK fan:lldb-190 Lemmings platinum Dangerous Part 1.dat#10
+CHECK fan:lldb-190 Lemmings platinum Dangerous Part 1.dat#11
+CHECK fan:lldb-190 Lemmings platinum Dangerous Part 1.dat#12
+CHECK fan:lldb-190 Lemmings platinum Dangerous Part 1.dat#13
+CHECK fan:lldb-190 Lemmings platinum Dangerous Part 1.dat#14
+CHECK fan:lldb-190 Lemmings platinum Dangerous Part 1.dat#2
+CHECK fan:lldb-190 Lemmings platinum Dangerous Part 1.dat#3
+CHECK fan:lldb-190 Lemmings platinum Dangerous Part 1.dat#4
+CHECK fan:lldb-190 Lemmings platinum Dangerous Part 1.dat#5
+CHECK fan:lldb-190 Lemmings platinum Dangerous Part 1.dat#6
+CHECK fan:lldb-190 Lemmings platinum Dangerous Part 1.dat#7
+CHECK fan:lldb-190 Lemmings platinum Dangerous Part 1.dat#8
+CHECK fan:lldb-190 Lemmings platinum Dangerous Part 1.dat#9
+CHECK fan:lldb-191 Lemmings platinum Dangerous Part 2.dat#0
+CHECK fan:lldb-191 Lemmings platinum Dangerous Part 2.dat#1
+CHECK fan:lldb-191 Lemmings platinum Dangerous Part 2.dat#10
+CHECK fan:lldb-191 Lemmings platinum Dangerous Part 2.dat#11
+CHECK fan:lldb-191 Lemmings platinum Dangerous Part 2.dat#12
+CHECK fan:lldb-191 Lemmings platinum Dangerous Part 2.dat#13
+CHECK fan:lldb-191 Lemmings platinum Dangerous Part 2.dat#14
+PASS fan:lldb-191 Lemmings platinum Dangerous Part 2.dat#14 50 3209
+CHECK fan:lldb-191 Lemmings platinum Dangerous Part 2.dat#2
+CHECK fan:lldb-191 Lemmings platinum Dangerous Part 2.dat#3
+CHECK fan:lldb-191 Lemmings platinum Dangerous Part 2.dat#4
+CHECK fan:lldb-191 Lemmings platinum Dangerous Part 2.dat#5
+CHECK fan:lldb-191 Lemmings platinum Dangerous Part 2.dat#6
+CHECK fan:lldb-191 Lemmings platinum Dangerous Part 2.dat#7
+CHECK fan:lldb-191 Lemmings platinum Dangerous Part 2.dat#8
+CHECK fan:lldb-191 Lemmings platinum Dangerous Part 2.dat#9
+CHECK fan:lldb-192 hubbart8.dat#0
+CHECK fan:lldb-192 hubbart8.dat#1
+CHECK fan:lldb-192 hubbart8.dat#2
+CHECK fan:lldb-192 hubbart8.dat#3
+CHECK fan:lldb-192 hubbart8.dat#4
+CHECK fan:lldb-192 hubbart8.dat#5
+CHECK fan:lldb-192 hubbart8.dat#6
+CHECK fan:lldb-193 Gronklems #1.dat#0
+CHECK fan:lldb-193 Gronklems #1.dat#1
+CHECK fan:lldb-193 Gronklems #1.dat#2
+PASS fan:lldb-193 Gronklems #1.dat#2 2 393
+CHECK fan:lldb-193 Gronklems #1.dat#3
+CHECK fan:lldb-193 Gronklems #1.dat#4
+CHECK fan:lldb-193 Gronklems #1.dat#5
+CHECK fan:lldb-193 Gronklems #1.dat#6
+CHECK fan:lldb-193 Gronklems #1.dat#7
+CHECK fan:lldb-193 Gronklems #1.dat#8
+CHECK fan:lldb-193 Gronklems #1.dat#9
+PASS fan:lldb-193 Gronklems #1.dat#9 49 740
+CHECK fan:lldb-194 ClamSpamXmas10.dat#0
+CHECK fan:lldb-194 ClamSpamXmas10.dat#1
+CHECK fan:lldb-194 ClamSpamXmas10.dat#2
+CHECK fan:lldb-194 ClamSpamXmas10.dat#3
+CHECK fan:lldb-195 finpak01.DAT#0
+CHECK fan:lldb-195 finpak01.DAT#1
+CHECK fan:lldb-195 finpak01.DAT#2
+CHECK fan:lldb-195 finpak01.DAT#3
+CHECK fan:lldb-195 finpak01.DAT#4
+CHECK fan:lldb-195 finpak01.DAT#5
+CHECK fan:lldb-196 nortpack1.dat#0
+CHECK fan:lldb-196 nortpack1.dat#1
+CHECK fan:lldb-196 nortpack1.dat#2
+CHECK fan:lldb-196 nortpack1.dat#3
+CHECK fan:lldb-196 nortpack1.dat#4
+CHECK fan:lldb-196 nortpack1.dat#5
+CHECK fan:lldb-196 nortpack1.dat#6
+CHECK fan:lldb-196 nortpack1.dat#7
+CHECK fan:lldb-196 nortpack1.dat#8
+PASS fan:lldb-196 nortpack1.dat#8 79 1800
+CHECK fan:lldb-196 nortpack1.dat#9
+CHECK fan:lldb-197 Pack 2.DAT#0
+CHECK fan:lldb-197 Pack 2.DAT#1
+CHECK fan:lldb-197 Pack 2.DAT#2
+CHECK fan:lldb-197 Pack 2.DAT#3
+CHECK fan:lldb-197 Pack 2.DAT#4
+CHECK fan:lldb-197 Pack 2.DAT#5
+CHECK fan:lldb-197 Pack 2.DAT#6
+CHECK fan:lldb-197 Pack 2.DAT#7
+CHECK fan:lldb-198 PACK3.DAT#0
+CHECK fan:lldb-198 PACK3.DAT#1
+CHECK fan:lldb-198 PACK3.DAT#2
+CHECK fan:lldb-198 PACK3.DAT#3
+CHECK fan:lldb-198 PACK3.DAT#4
+CHECK fan:lldb-198 PACK3.DAT#5
+CHECK fan:lldb-198 PACK3.DAT#6
+CHECK fan:lldb-198 PACK3.DAT#7
+CHECK fan:lldb-199 TMChallenge.dat#0
+CHECK fan:lldb-199 TMChallenge.dat#1
+CHECK fan:lldb-199 TMChallenge.dat#2
+CHECK fan:lldb-199 TMChallenge.dat#3
+CHECK fan:lldb-199 TMChallenge.dat#4
+CHECK fan:lldb-199 TMChallenge.dat#5
+CHECK fan:lldb-199 TMChallenge.dat#6
+CHECK fan:lldb-199 TMChallenge.dat#7
+CHECK fan:lldb-199 TMChallenge.dat#8
+CHECK fan:lldb-199 TMChallenge.dat#9
+CHECK fan:lldb-19 Mikepak14.dat#0
+CHECK fan:lldb-19 Mikepak14.dat#1
+CHECK fan:lldb-19 Mikepak14.dat#2
+CHECK fan:lldb-19 Mikepak14.dat#3
+CHECK fan:lldb-19 Mikepak14.dat#4
+CHECK fan:lldb-19 Mikepak14.dat#5
+CHECK fan:lldb-19 Mikepak14.dat#6
+CHECK fan:lldb-19 Mikepak14.dat#7
+CHECK fan:lldb-19 Mikepak14.dat#8
+CHECK fan:lldb-19 Mikepak14.dat#9
+CHECK fan:lldb-1 geooPk0.dat#0
+CHECK fan:lldb-1 geooPk0.dat#1
+PASS fan:lldb-1 geooPk0.dat#1 79 7142
+CHECK fan:lldb-1 geooPk0.dat#2
+CHECK fan:lldb-1 geooPk0.dat#3
+CHECK fan:lldb-1 geooPk0.dat#4
+CHECK fan:lldb-1 geooPk0.dat#5
+CHECK fan:lldb-1 geooPk0.dat#6
+CHECK fan:lldb-1 geooPk0.dat#7
+CHECK fan:lldb-1 geooPk0.dat#8
+CHECK fan:lldb-1 geooPk0.dat#9
+PASS fan:lldb-1 geooPk0.dat#9 37 843
+CHECK fan:lldb-200 Gronklems #4 (v3)/1) Good Reception.ini#-1
+CHECK fan:lldb-200 Gronklems #4 (v3)/10) Controlled Explosion.ini#-1
+CHECK fan:lldb-200 Gronklems #4 (v3)/2) Jumble Sale.ini#-1
+CHECK fan:lldb-200 Gronklems #4 (v3)/3) Lemmite.ini#-1
+CHECK fan:lldb-200 Gronklems #4 (v3)/4) The Bashers Temple.ini#-1
+CHECK fan:lldb-200 Gronklems #4 (v3)/5) Three Lemmings with One Brick.ini#-1
+CHECK fan:lldb-200 Gronklems #4 (v3)/6) Welcome to Lemmingopolis.ini#-1
+CHECK fan:lldb-200 Gronklems #4 (v3)/7) The Pendulemming.ini#-1
+CHECK fan:lldb-200 Gronklems #4 (v3)/8) Which Way to Where.ini#-1
+CHECK fan:lldb-200 Gronklems #4 (v3)/9) One Gap from Freedom.ini#-1
+CHECK fan:lldb-200 Gronklems #4 (v3)/Extras/E1) The Pendulemming CH.ini#-1
+CHECK fan:lldb-200 Gronklems #4 (v3)/Extras/E2) Controlled Explosion CH.ini#-1
+CHECK fan:lldb-201 1) If Only That Pillar Wasn't There.ini#-1
+CHECK fan:lldb-201 10) Lemmington under construction.ini#-1
+CHECK fan:lldb-201 2) Wish you had them.ini#-1
+CHECK fan:lldb-201 3) Get on top of the problem.ini#-1
+CHECK fan:lldb-201 4) Not a Basher Tutorial.ini#-1
+CHECK fan:lldb-201 5) Not as Simple as it Looks.ini#-1
+CHECK fan:lldb-201 6) With a Twist!.ini#-1
+CHECK fan:lldb-201 7) Get Your Oven Gloves Out!.ini#-1
+CHECK fan:lldb-201 8) Lemming Island.ini#-1
+CHECK fan:lldb-201 9) Ruins of three.ini#-1
+CHECK fan:lldb-202 Askesis.lvl#-1
+CHECK fan:lldb-202 Jacob's Ladder.lvl#-1
+CHECK fan:lldb-202 LemmingsInArms.lvl#-1
+PASS fan:lldb-202 LemmingsInArms.lvl#-1 9 3272
+CHECK fan:lldb-202 LemmingsInMotion.lvl#-1
+PASS fan:lldb-202 LemmingsInMotion.lvl#-1 19 1586
+CHECK fan:lldb-202 Ouch Me Head.lvl#-1
+CHECK fan:lldb-202 PlanB.lvl#-1
+PASS fan:lldb-202 PlanB.lvl#-1 19 984
+CHECK fan:lldb-202 Roundabout.lvl#-1
+PASS fan:lldb-202 Roundabout.lvl#-1 50 3192
+CHECK fan:lldb-202 fearfulSymmetry.lvl#-1
+CHECK fan:lldb-202 hard to port!.lvl#-1
+PASS fan:lldb-202 hard to port!.lvl#-1 48 1127
+CHECK fan:lldb-202 mobius1.dat#0
+PASS fan:lldb-202 mobius1.dat#0 50 3192
+CHECK fan:lldb-202 mobius1.dat#1
+PASS fan:lldb-202 mobius1.dat#1 9 3272
+CHECK fan:lldb-202 mobius1.dat#2
+PASS fan:lldb-202 mobius1.dat#2 48 1127
+CHECK fan:lldb-202 mobius1.dat#3
+PASS fan:lldb-202 mobius1.dat#3 19 984
+CHECK fan:lldb-202 mobius1.dat#4
+PASS fan:lldb-202 mobius1.dat#4 19 1586
+CHECK fan:lldb-202 mobius1.dat#5
+CHECK fan:lldb-202 mobius1.dat#6
+CHECK fan:lldb-202 mobius1.dat#7
+CHECK fan:lldb-202 mobius1.dat#8
+CHECK fan:lldb-202 mobius1.dat#9
+CHECK fan:lldb-202 theExitIsRightThere!.lvl#-1
+CHECK fan:lldb-203 Gronklems 6 v2/1) Unclimb that cliff!.ini#-1
+CHECK fan:lldb-203 Gronklems 6 v2/10) Bring it Together!.ini#-1
+CHECK fan:lldb-203 Gronklems 6 v2/2) Lemming Storage Facility.ini#-1
+CHECK fan:lldb-203 Gronklems 6 v2/3) Mystery Machine.ini#-1
+CHECK fan:lldb-203 Gronklems 6 v2/4) Balancing Act.ini#-1
+CHECK fan:lldb-203 Gronklems 6 v2/5) Ancient Clockwork.ini#-1
+CHECK fan:lldb-203 Gronklems 6 v2/6) Radioactive Lemming!.ini#-1
+CHECK fan:lldb-203 Gronklems 6 v2/7) LemDotAvi.ini#-1
+CHECK fan:lldb-203 Gronklems 6 v2/8) Just Over the Hill.ini#-1
+CHECK fan:lldb-203 Gronklems 6 v2/9) Emerald City.ini#-1
+CHECK fan:lldb-203 Original Levels/1) Unclimb that cliff!.ini#-1
+CHECK fan:lldb-203 Original Levels/10) Bring it Together!.ini#-1
+CHECK fan:lldb-203 Original Levels/2) Lemming Storage Facility.ini#-1
+CHECK fan:lldb-203 Original Levels/3) Mystery Machine.ini#-1
+CHECK fan:lldb-203 Original Levels/4) Balancing Act.ini#-1
+CHECK fan:lldb-203 Original Levels/5) Ancient Clockwork.ini#-1
+CHECK fan:lldb-203 Original Levels/6) Radioactive Lemming!.ini#-1
+CHECK fan:lldb-203 Original Levels/7) Attack From Four Directions.ini#-1
+CHECK fan:lldb-203 Original Levels/8) Just Over the Hill.ini#-1
+CHECK fan:lldb-203 Original Levels/9) Emerald City.ini#-1
+CHECK fan:lldb-204 Gronklems #5/1) Inside the Pyramid.ini#-1
+CHECK fan:lldb-204 Gronklems #5/10) The Giants Leap.ini#-1
+CHECK fan:lldb-204 Gronklems #5/2) Crossing the Chasm.ini#-1
+CHECK fan:lldb-204 Gronklems #5/3) Drifting Away....ini#-1
+CHECK fan:lldb-204 Gronklems #5/4) Brick City.ini#-1
+CHECK fan:lldb-204 Gronklems #5/5) Bubble Bath.ini#-1
+CHECK fan:lldb-204 Gronklems #5/6) Restoration in Progress.ini#-1
+CHECK fan:lldb-204 Gronklems #5/7) Where Clouds are Made.ini#-1
+CHECK fan:lldb-204 Gronklems #5/8) Antarctic Secret Base.ini#-1
+CHECK fan:lldb-204 Gronklems #5/9) Optical Fibre Land.ini#-1
+CHECK fan:lldb-204 Original levels/1) Inside the Pyramid.ini#-1
+CHECK fan:lldb-204 Original levels/10) The Giants Leap.ini#-1
+CHECK fan:lldb-204 Original levels/2) Crossing the Chasm.ini#-1
+CHECK fan:lldb-204 Original levels/3) Drifting Away....ini#-1
+CHECK fan:lldb-204 Original levels/4) Brick City.ini#-1
+CHECK fan:lldb-204 Original levels/5) Bubble Bath.ini#-1
+CHECK fan:lldb-204 Original levels/6) Restoration in Progress.ini#-1
+CHECK fan:lldb-204 Original levels/7) Where Clouds are Made.ini#-1
+CHECK fan:lldb-204 Original levels/8) Antarctic Secret Base.ini#-1
+CHECK fan:lldb-204 Original levels/9) Optical Fibre Land.ini#-1
+CHECK fan:lldb-205 mobius2.dat#0
+CHECK fan:lldb-205 mobius2.dat#1
+CHECK fan:lldb-205 mobius2.dat#2
+CHECK fan:lldb-205 mobius2.dat#3
+CHECK fan:lldb-205 mobius2.dat#4
+CHECK fan:lldb-205 mobius2.dat#5
+CHECK fan:lldb-205 mobius2.dat#6
+CHECK fan:lldb-205 mobius2.dat#7
+CHECK fan:lldb-205 mobius2.dat#8
+CHECK fan:lldb-205 mobius2.dat#9
+CHECK fan:lldb-206 1 Transit Timing Variations.ini#-1
+CHECK fan:lldb-206 10 Just Another Random Brick Level.ini#-1
+CHECK fan:lldb-206 2 Three'sCompany.ini#-1
+CHECK fan:lldb-206 3 Baptism by Fire.ini#-1
+CHECK fan:lldb-206 4 Babylon Fading.ini#-1
+CHECK fan:lldb-206 5 The Lemming With the Golden Gun.ini#-1
+CHECK fan:lldb-206 6 The French Connection.ini#-1
+CHECK fan:lldb-206 7 The Midas Touch.ini#-1
+CHECK fan:lldb-206 8 Tres Hombres.ini#-1
+CHECK fan:lldb-206 9 Rude Mood.ini#-1
+CHECK fan:lldb-207 contest1.dat#0
+CHECK fan:lldb-207 contest1.dat#1
+CHECK fan:lldb-207 contest1.dat#2
+CHECK fan:lldb-207 contest1.dat#3
+PASS fan:lldb-207 contest1.dat#3 48 991
+CHECK fan:lldb-207 contest1.dat#4
+CHECK fan:lldb-207 contest1.dat#5
+CHECK fan:lldb-207 contest1.dat#6
+CHECK fan:lldb-207 contest1.dat#7
+CHECK fan:lldb-207 contest1.dat#8
+CHECK fan:lldb-208 Gronklems 7/1) Lemmings Are Not Big Trucks.ini#-1
+CHECK fan:lldb-208 Gronklems 7/10) A DINOSAUR BLOCKS THE WAY.ini#-1
+CHECK fan:lldb-208 Gronklems 7/2) Getting Stuck in a Cave.ini#-1
+CHECK fan:lldb-208 Gronklems 7/3) Crossover.ini#-1
+CHECK fan:lldb-208 Gronklems 7/4) Now use Miners and Builders!.ini#-1
+CHECK fan:lldb-208 Gronklems 7/5) HELP.ini#-1
+CHECK fan:lldb-208 Gronklems 7/6) GLITCHSPACE.ini#-1
+CHECK fan:lldb-208 Gronklems 7/7) Blocked Bridge.ini#-1
+CHECK fan:lldb-208 Gronklems 7/8) Industrial Park.ini#-1
+CHECK fan:lldb-208 Gronklems 7/9) Four Quarters.ini#-1
+CHECK fan:lldb-209 grams88 Levels/1)Calder Glen.ini#-1
+CHECK fan:lldb-209 grams88 Levels/10)The Havoc of three.ini#-1
+CHECK fan:lldb-209 grams88 Levels/2)Dying Lemmings.ini#-1
+CHECK fan:lldb-209 grams88 Levels/3)08 BC lost temple.ini#-1
+CHECK fan:lldb-209 grams88 Levels/4)Random Dream.ini#-1
+CHECK fan:lldb-209 grams88 Levels/5)Lemmings at work.ini#-1
+CHECK fan:lldb-209 grams88 Levels/6)Linear Level.ini#-1
+CHECK fan:lldb-209 grams88 Levels/7)Burst Pipe.ini#-1
+CHECK fan:lldb-209 grams88 Levels/8)snow endurance.ini#-1
+CHECK fan:lldb-209 grams88 Levels/9)Stuck in the pipe.ini#-1
+CHECK fan:lldb-20 ISteve01.DAT#0
+CHECK fan:lldb-20 ISteve01.DAT#1
+CHECK fan:lldb-20 ISteve01.DAT#2
+CHECK fan:lldb-20 ISteve01.DAT#3
+PASS fan:lldb-20 ISteve01.DAT#3 10 1664
+CHECK fan:lldb-20 ISteve01.DAT#4
+CHECK fan:lldb-20 ISteve01.DAT#5
+CHECK fan:lldb-20 ISteve01.DAT#6
+CHECK fan:lldb-20 ISteve01.DAT#7
+CHECK fan:lldb-20 ISteve01.DAT#8
+CHECK fan:lldb-20 ISteve01.DAT#9
+PASS fan:lldb-20 ISteve01.DAT#9 80 814
+CHECK fan:lldb-210 timelimits.dat#0
+CHECK fan:lldb-210 timelimits.dat#1
+CHECK fan:lldb-210 timelimits.dat#2
+CHECK fan:lldb-210 timelimits.dat#3
+CHECK fan:lldb-210 timelimits.dat#4
+CHECK fan:lldb-210 timelimits.dat#5
+CHECK fan:lldb-210 timelimits.dat#6
+CHECK fan:lldb-210 timelimits.dat#7
+CHECK fan:lldb-210 timelimits.dat#8
+CHECK fan:lldb-210 timelimits.dat#9
+CHECK fan:lldb-211 More Levels/1)Go for life.ini#-1
+CHECK fan:lldb-211 More Levels/10)Mr Havoc has returned.ini#-1
+CHECK fan:lldb-211 More Levels/2)A tiny problem.ini#-1
+CHECK fan:lldb-211 More Levels/3)House location change.ini#-1
+CHECK fan:lldb-211 More Levels/4)Ice morning not.ini#-1
+CHECK fan:lldb-211 More Levels/5)Sacrifice.ini#-1
+CHECK fan:lldb-211 More Levels/6)Ten allowed to die.ini#-1
+CHECK fan:lldb-211 More Levels/7)Lemming Factory.ini#-1
+CHECK fan:lldb-211 More Levels/8)Plan Carefully.ini#-1
+CHECK fan:lldb-211 More Levels/9)High sand castle.ini#-1
+CHECK fan:lldb-212 PACK4.DAT#0
+CHECK fan:lldb-212 PACK4.DAT#1
+CHECK fan:lldb-212 PACK4.DAT#2
+CHECK fan:lldb-212 PACK4.DAT#3
+CHECK fan:lldb-212 PACK4.DAT#4
+CHECK fan:lldb-212 PACK4.DAT#5
+CHECK fan:lldb-212 PACK4.DAT#6
+CHECK fan:lldb-212 PACK4.DAT#7
+CHECK fan:lldb-213 JamPack01prev.dat#0
+CHECK fan:lldb-213 JamPack01prev.dat#1
+CHECK fan:lldb-213 JamPack01prev.dat#2
+CHECK fan:lldb-213 JamPack01prev.dat#3
+CHECK fan:lldb-213 JamPack01prev.dat#4
+CHECK fan:lldb-214 LF Level Jam #1.dat#0
+CHECK fan:lldb-214 LF Level Jam #1.dat#1
+CHECK fan:lldb-214 LF Level Jam #1.dat#2
+CHECK fan:lldb-214 LF Level Jam #1.dat#3
+CHECK fan:lldb-214 LF Level Jam #1.dat#4
+CHECK fan:lldb-214 LF Level Jam #1.dat#5
+CHECK fan:lldb-214 LF Level Jam #1.dat#6
+PASS fan:lldb-214 LF Level Jam #1.dat#6 40 1399
+CHECK fan:lldb-214 LF Level Jam #1.dat#7
+CHECK fan:lldb-215 1 Fracture.ini#-1
+CHECK fan:lldb-215 10 suspended animation.ini#-1
+CHECK fan:lldb-215 2 Over My Head.ini#-1
+CHECK fan:lldb-215 3 It Takes Time to Build.ini#-1
+CHECK fan:lldb-215 4 Hook Line and Sinker.ini#-1
+CHECK fan:lldb-215 5 five for fighting.ini#-1
+CHECK fan:lldb-215 6 Last Lemming Standing.ini#-1
+CHECK fan:lldb-215 7 Fractured.ini#-1
+CHECK fan:lldb-215 8 Operation Barbarossa.ini#-1
+CHECK fan:lldb-215 9 The Lemming Lies Down on Broadway.ini#-1
+CHECK fan:lldb-216 LEVELPAK.DAT#0
+CHECK fan:lldb-216 LEVELPAK.DAT#1
+CHECK fan:lldb-216 LEVELPAK.DAT#2
+CHECK fan:lldb-216 LEVELPAK.DAT#3
+CHECK fan:lldb-216 LEVELPAK.DAT#4
+CHECK fan:lldb-216 LEVELPAK.DAT#5
+CHECK fan:lldb-216 LEVELPAK.DAT#6
+CHECK fan:lldb-216 LEVELPAK.DAT#7
+CHECK fan:lldb-216 LEVELPAK.DAT#8
+CHECK fan:lldb-216 LEVELPAK.DAT#9
+CHECK fan:lldb-217 PSP Special.dat#0
+CHECK fan:lldb-217 PSP Special.dat#1
+CHECK fan:lldb-217 PSP Special.dat#10
+CHECK fan:lldb-217 PSP Special.dat#11
+CHECK fan:lldb-217 PSP Special.dat#12
+CHECK fan:lldb-217 PSP Special.dat#13
+CHECK fan:lldb-217 PSP Special.dat#14
+CHECK fan:lldb-217 PSP Special.dat#15
+CHECK fan:lldb-217 PSP Special.dat#2
+CHECK fan:lldb-217 PSP Special.dat#3
+PASS fan:lldb-217 PSP Special.dat#3 8 2133
+CHECK fan:lldb-217 PSP Special.dat#4
+CHECK fan:lldb-217 PSP Special.dat#5
+CHECK fan:lldb-217 PSP Special.dat#6
+CHECK fan:lldb-217 PSP Special.dat#7
+CHECK fan:lldb-217 PSP Special.dat#8
+CHECK fan:lldb-217 PSP Special.dat#9
+CHECK fan:lldb-218 PSP Special2.dat#0
+CHECK fan:lldb-218 PSP Special2.dat#1
+CHECK fan:lldb-218 PSP Special2.dat#2
+PASS fan:lldb-218 PSP Special2.dat#2 10 1786
+CHECK fan:lldb-218 PSP Special2.dat#3
+PASS fan:lldb-218 PSP Special2.dat#3 25 1968
+CHECK fan:lldb-218 PSP Special2.dat#4
+CHECK fan:lldb-218 PSP Special2.dat#5
+CHECK fan:lldb-218 PSP Special2.dat#6
+CHECK fan:lldb-218 PSP Special2.dat#7
+CHECK fan:lldb-218 PSP Special2.dat#8
+CHECK fan:lldb-218 PSP Special2.dat#9
+CHECK fan:lldb-219 Nepster01_V6.DAT#0
+CHECK fan:lldb-219 Nepster01_V6.DAT#1
+CHECK fan:lldb-219 Nepster01_V6.DAT#2
+CHECK fan:lldb-219 Nepster01_V6.DAT#3
+CHECK fan:lldb-219 Nepster01_V6.DAT#4
+CHECK fan:lldb-219 Nepster01_V6.DAT#5
+CHECK fan:lldb-219 Nepster01_V6.DAT#6
+CHECK fan:lldb-219 Nepster01_V6.DAT#7
+CHECK fan:lldb-219 Nepster01_V6.DAT#8
+CHECK fan:lldb-219 Nepster01_V6.DAT#9
+CHECK fan:lldb-21 ISteve03.dat#0
+CHECK fan:lldb-21 ISteve03.dat#1
+CHECK fan:lldb-21 ISteve03.dat#2
+CHECK fan:lldb-21 ISteve03.dat#3
+CHECK fan:lldb-21 ISteve03.dat#4
+CHECK fan:lldb-21 ISteve03.dat#5
+CHECK fan:lldb-21 ISteve03.dat#6
+CHECK fan:lldb-21 ISteve03.dat#7
+CHECK fan:lldb-21 ISteve03.dat#8
+CHECK fan:lldb-21 ISteve03.dat#9
+CHECK fan:lldb-220 AkseliPack01.dat#0
+CHECK fan:lldb-220 AkseliPack01.dat#1
+CHECK fan:lldb-220 AkseliPack01.dat#2
+CHECK fan:lldb-220 AkseliPack01.dat#3
+PASS fan:lldb-220 AkseliPack01.dat#3 9 2596
+CHECK fan:lldb-220 AkseliPack01.dat#4
+PASS fan:lldb-220 AkseliPack01.dat#4 48 991
+CHECK fan:lldb-220 AkseliPack01.dat#5
+CHECK fan:lldb-220 AkseliPack01.dat#6
+PASS fan:lldb-220 AkseliPack01.dat#6 7 3310
+CHECK fan:lldb-220 AkseliPack01.dat#7
+CHECK fan:lldb-220 AkseliPack01.dat#8
+PASS fan:lldb-220 AkseliPack01.dat#8 40 1399
+CHECK fan:lldb-220 AkseliPack01.dat#9
+CHECK fan:lldb-221 ANTHPCK1.DAT#0
+CHECK fan:lldb-221 ANTHPCK1.DAT#1
+CHECK fan:lldb-221 ANTHPCK1.DAT#2
+CHECK fan:lldb-221 ANTHPCK1.DAT#3
+CHECK fan:lldb-221 ANTHPCK1.DAT#4
+CHECK fan:lldb-221 ANTHPCK1.DAT#5
+CHECK fan:lldb-221 ANTHPCK1.DAT#6
+CHECK fan:lldb-221 ANTHPCK1.DAT#7
+CHECK fan:lldb-221 ANTHPCK1.DAT#8
+CHECK fan:lldb-221 ANTHPCK1.DAT#9
+CHECK fan:lldb-222 ANTHPCK2.DAT#0
+CHECK fan:lldb-222 ANTHPCK2.DAT#1
+CHECK fan:lldb-222 ANTHPCK2.DAT#2
+PASS fan:lldb-222 ANTHPCK2.DAT#2 74 2531
+CHECK fan:lldb-222 ANTHPCK2.DAT#3
+PASS fan:lldb-222 ANTHPCK2.DAT#3 68 2428
+CHECK fan:lldb-222 ANTHPCK2.DAT#4
+PASS fan:lldb-222 ANTHPCK2.DAT#4 80 3828
+CHECK fan:lldb-222 ANTHPCK2.DAT#5
+CHECK fan:lldb-222 ANTHPCK2.DAT#6
+CHECK fan:lldb-222 ANTHPCK2.DAT#7
+CHECK fan:lldb-222 ANTHPCK2.DAT#8
+CHECK fan:lldb-222 ANTHPCK2.DAT#9
+CHECK fan:lldb-223 ANTHPCK3.DAT#0
+CHECK fan:lldb-223 ANTHPCK3.DAT#1
+CHECK fan:lldb-223 ANTHPCK3.DAT#2
+CHECK fan:lldb-223 ANTHPCK3.DAT#3
+CHECK fan:lldb-223 ANTHPCK3.DAT#4
+CHECK fan:lldb-223 ANTHPCK3.DAT#5
+CHECK fan:lldb-223 ANTHPCK3.DAT#6
+CHECK fan:lldb-223 ANTHPCK3.DAT#7
+CHECK fan:lldb-223 ANTHPCK3.DAT#8
+CHECK fan:lldb-223 ANTHPCK3.DAT#9
+PASS fan:lldb-223 ANTHPCK3.DAT#9 78 4611
+CHECK fan:lldb-224 ANTHPCK4.DAT#0
+CHECK fan:lldb-224 ANTHPCK4.DAT#1
+CHECK fan:lldb-224 ANTHPCK4.DAT#2
+CHECK fan:lldb-224 ANTHPCK4.DAT#3
+CHECK fan:lldb-224 ANTHPCK4.DAT#4
+CHECK fan:lldb-224 ANTHPCK4.DAT#6
+CHECK fan:lldb-224 ANTHPCK4.DAT#7
+PASS fan:lldb-224 ANTHPCK4.DAT#7 77 4039
+CHECK fan:lldb-224 ANTHPCK4.DAT#8
+CHECK fan:lldb-224 ANTHPCK4.DAT#9
+CHECK fan:lldb-225 ANTHPCK5.DAT#0
+CHECK fan:lldb-225 ANTHPCK5.DAT#1
+PASS fan:lldb-225 ANTHPCK5.DAT#1 80 1941
+CHECK fan:lldb-225 ANTHPCK5.DAT#2
+CHECK fan:lldb-225 ANTHPCK5.DAT#3
+PASS fan:lldb-225 ANTHPCK5.DAT#3 69 2623
+CHECK fan:lldb-225 ANTHPCK5.DAT#4
+CHECK fan:lldb-225 ANTHPCK5.DAT#5
+CHECK fan:lldb-225 ANTHPCK5.DAT#6
+CHECK fan:lldb-225 ANTHPCK5.DAT#7
+CHECK fan:lldb-225 ANTHPCK5.DAT#8
+CHECK fan:lldb-225 ANTHPCK5.DAT#9
+CHECK fan:lldb-226 ANTHPCK6.DAT#0
+CHECK fan:lldb-226 ANTHPCK6.DAT#1
+CHECK fan:lldb-226 ANTHPCK6.DAT#2
+CHECK fan:lldb-226 ANTHPCK6.DAT#3
+CHECK fan:lldb-226 ANTHPCK6.DAT#4
+CHECK fan:lldb-226 ANTHPCK6.DAT#5
+CHECK fan:lldb-226 ANTHPCK6.DAT#6
+CHECK fan:lldb-226 ANTHPCK6.DAT#7
+CHECK fan:lldb-226 ANTHPCK6.DAT#8
+CHECK fan:lldb-226 ANTHPCK6.DAT#9
+CHECK fan:lldb-227 ANTHPCK7.DAT#0
+CHECK fan:lldb-227 ANTHPCK7.DAT#1
+CHECK fan:lldb-227 ANTHPCK7.DAT#2
+CHECK fan:lldb-227 ANTHPCK7.DAT#3
+CHECK fan:lldb-227 ANTHPCK7.DAT#4
+CHECK fan:lldb-227 ANTHPCK7.DAT#5
+CHECK fan:lldb-227 ANTHPCK7.DAT#6
+CHECK fan:lldb-227 ANTHPCK7.DAT#7
+CHECK fan:lldb-227 ANTHPCK7.DAT#8
+CHECK fan:lldb-227 ANTHPCK7.DAT#9
+CHECK fan:lldb-228 CALEPCK2.DAT#0
+CHECK fan:lldb-228 CALEPCK2.DAT#1
+CHECK fan:lldb-228 CALEPCK2.DAT#2
+CHECK fan:lldb-228 CALEPCK2.DAT#3
+CHECK fan:lldb-228 CALEPCK2.DAT#4
+CHECK fan:lldb-228 CALEPCK2.DAT#5
+CHECK fan:lldb-228 CALEPCK2.DAT#6
+CHECK fan:lldb-228 CALEPCK2.DAT#7
+CHECK fan:lldb-228 CALEPCK2.DAT#8
+CHECK fan:lldb-228 CALEPCK2.DAT#9
+CHECK fan:lldb-229 CALEPCK3.DAT#0
+CHECK fan:lldb-229 CALEPCK3.DAT#1
+CHECK fan:lldb-229 CALEPCK3.DAT#2
+CHECK fan:lldb-229 CALEPCK3.DAT#3
+CHECK fan:lldb-229 CALEPCK3.DAT#4
+CHECK fan:lldb-229 CALEPCK3.DAT#5
+CHECK fan:lldb-229 CALEPCK3.DAT#6
+CHECK fan:lldb-229 CALEPCK3.DAT#7
+CHECK fan:lldb-229 CALEPCK3.DAT#8
+CHECK fan:lldb-229 CALEPCK3.DAT#9
+CHECK fan:lldb-22 ISteve08.dat#0
+CHECK fan:lldb-22 ISteve08.dat#1
+CHECK fan:lldb-22 ISteve08.dat#2
+CHECK fan:lldb-22 ISteve08.dat#3
+CHECK fan:lldb-22 ISteve08.dat#4
+CHECK fan:lldb-22 ISteve08.dat#5
+CHECK fan:lldb-22 ISteve08.dat#6
+PASS fan:lldb-22 ISteve08.dat#6 80 1734
+CHECK fan:lldb-22 ISteve08.dat#7
+CHECK fan:lldb-22 ISteve08.dat#8
+CHECK fan:lldb-22 ISteve08.dat#9
+CHECK fan:lldb-230 EMPACK.DAT#0
+CHECK fan:lldb-230 EMPACK.DAT#1
+CHECK fan:lldb-230 EMPACK.DAT#2
+CHECK fan:lldb-230 EMPACK.DAT#3
+CHECK fan:lldb-230 EMPACK.DAT#4
+CHECK fan:lldb-230 EMPACK.DAT#5
+CHECK fan:lldb-230 EMPACK.DAT#6
+CHECK fan:lldb-230 EMPACK.DAT#7
+CHECK fan:lldb-230 EMPACK.DAT#8
+CHECK fan:lldb-230 EMPACK.DAT#9
+CHECK fan:lldb-231 JANNPCK1.DAT#0
+CHECK fan:lldb-231 JANNPCK1.DAT#1
+CHECK fan:lldb-231 JANNPCK1.DAT#2
+CHECK fan:lldb-231 JANNPCK1.DAT#3
+CHECK fan:lldb-231 JANNPCK1.DAT#4
+CHECK fan:lldb-231 JANNPCK1.DAT#5
+CHECK fan:lldb-231 JANNPCK1.DAT#6
+CHECK fan:lldb-231 JANNPCK1.DAT#7
+CHECK fan:lldb-231 JANNPCK1.DAT#8
+CHECK fan:lldb-231 JANNPCK1.DAT#9
+CHECK fan:lldb-232 JANNPCK2.DAT#0
+CHECK fan:lldb-232 JANNPCK2.DAT#1
+CHECK fan:lldb-232 JANNPCK2.DAT#2
+CHECK fan:lldb-232 JANNPCK2.DAT#3
+CHECK fan:lldb-232 JANNPCK2.DAT#4
+CHECK fan:lldb-232 JANNPCK2.DAT#5
+CHECK fan:lldb-232 JANNPCK2.DAT#6
+CHECK fan:lldb-232 JANNPCK2.DAT#7
+PASS fan:lldb-232 JANNPCK2.DAT#7 79 1700
+CHECK fan:lldb-232 JANNPCK2.DAT#8
+CHECK fan:lldb-232 JANNPCK2.DAT#9
+PASS fan:lldb-232 JANNPCK2.DAT#9 43 1969
+CHECK fan:lldb-233 jannpck3.dat#0
+CHECK fan:lldb-233 jannpck3.dat#1
+CHECK fan:lldb-233 jannpck3.dat#2
+CHECK fan:lldb-233 jannpck3.dat#3
+CHECK fan:lldb-233 jannpck3.dat#4
+PASS fan:lldb-233 jannpck3.dat#4 40 1469
+CHECK fan:lldb-233 jannpck3.dat#5
+CHECK fan:lldb-233 jannpck3.dat#6
+CHECK fan:lldb-233 jannpck3.dat#7
+CHECK fan:lldb-233 jannpck3.dat#8
+CHECK fan:lldb-233 jannpck3.dat#9
+PASS fan:lldb-233 jannpck3.dat#9 78 4857
+CHECK fan:lldb-234 JANNPCK4.DAT#0
+PASS fan:lldb-234 JANNPCK4.DAT#0 59 2930
+CHECK fan:lldb-234 JANNPCK4.DAT#1
+CHECK fan:lldb-234 JANNPCK4.DAT#2
+CHECK fan:lldb-234 JANNPCK4.DAT#3
+PASS fan:lldb-234 JANNPCK4.DAT#3 60 2558
+CHECK fan:lldb-234 JANNPCK4.DAT#4
+CHECK fan:lldb-234 JANNPCK4.DAT#5
+CHECK fan:lldb-234 JANNPCK4.DAT#6
+CHECK fan:lldb-234 JANNPCK4.DAT#7
+CHECK fan:lldb-234 JANNPCK4.DAT#8
+CHECK fan:lldb-234 JANNPCK4.DAT#9
+CHECK fan:lldb-235 JEFFPCK1.DAT#0
+CHECK fan:lldb-235 JEFFPCK1.DAT#1
+CHECK fan:lldb-235 JEFFPCK1.DAT#2
+CHECK fan:lldb-235 JEFFPCK1.DAT#3
+CHECK fan:lldb-235 JEFFPCK1.DAT#4
+CHECK fan:lldb-235 JEFFPCK1.DAT#5
+CHECK fan:lldb-235 JEFFPCK1.DAT#6
+CHECK fan:lldb-235 JEFFPCK1.DAT#7
+CHECK fan:lldb-235 JEFFPCK1.DAT#8
+CHECK fan:lldb-235 JEFFPCK1.DAT#9
+CHECK fan:lldb-236 JEFFPCK2.DAT#0
+CHECK fan:lldb-236 JEFFPCK2.DAT#1
+CHECK fan:lldb-236 JEFFPCK2.DAT#2
+CHECK fan:lldb-236 JEFFPCK2.DAT#3
+CHECK fan:lldb-236 JEFFPCK2.DAT#4
+CHECK fan:lldb-236 JEFFPCK2.DAT#5
+CHECK fan:lldb-236 JEFFPCK2.DAT#6
+CHECK fan:lldb-236 JEFFPCK2.DAT#7
+CHECK fan:lldb-236 JEFFPCK2.DAT#8
+CHECK fan:lldb-236 JEFFPCK2.DAT#9
+CHECK fan:lldb-237 JEFFPCK3.DAT#0
+CHECK fan:lldb-237 JEFFPCK3.DAT#1
+CHECK fan:lldb-237 JEFFPCK3.DAT#2
+CHECK fan:lldb-237 JEFFPCK3.DAT#3
+CHECK fan:lldb-237 JEFFPCK3.DAT#4
+CHECK fan:lldb-237 JEFFPCK3.DAT#5
+PASS fan:lldb-237 JEFFPCK3.DAT#5 50 646
+CHECK fan:lldb-237 JEFFPCK3.DAT#6
+CHECK fan:lldb-237 JEFFPCK3.DAT#7
+CHECK fan:lldb-237 JEFFPCK3.DAT#8
+CHECK fan:lldb-237 JEFFPCK3.DAT#9
+CHECK fan:lldb-238 JEFFPCK4.DAT#0
+CHECK fan:lldb-238 JEFFPCK4.DAT#1
+CHECK fan:lldb-238 JEFFPCK4.DAT#2
+CHECK fan:lldb-238 JEFFPCK4.DAT#3
+CHECK fan:lldb-238 JEFFPCK4.DAT#4
+CHECK fan:lldb-238 JEFFPCK4.DAT#5
+CHECK fan:lldb-238 JEFFPCK4.DAT#6
+CHECK fan:lldb-238 JEFFPCK4.DAT#7
+CHECK fan:lldb-238 JEFFPCK4.DAT#8
+CHECK fan:lldb-238 JEFFPCK4.DAT#9
+CHECK fan:lldb-239 JEFFPCK5.DAT#0
+CHECK fan:lldb-239 JEFFPCK5.DAT#1
+CHECK fan:lldb-239 JEFFPCK5.DAT#2
+CHECK fan:lldb-239 JEFFPCK5.DAT#3
+CHECK fan:lldb-239 JEFFPCK5.DAT#4
+CHECK fan:lldb-239 JEFFPCK5.DAT#5
+CHECK fan:lldb-239 JEFFPCK5.DAT#6
+CHECK fan:lldb-239 JEFFPCK5.DAT#7
+CHECK fan:lldb-239 JEFFPCK5.DAT#8
+CHECK fan:lldb-239 JEFFPCK5.DAT#9
+CHECK fan:lldb-23 ISteve02.dat#0
+CHECK fan:lldb-23 ISteve02.dat#1
+CHECK fan:lldb-23 ISteve02.dat#2
+CHECK fan:lldb-23 ISteve02.dat#3
+CHECK fan:lldb-23 ISteve02.dat#4
+CHECK fan:lldb-23 ISteve02.dat#5
+CHECK fan:lldb-23 ISteve02.dat#6
+CHECK fan:lldb-23 ISteve02.dat#7
+CHECK fan:lldb-23 ISteve02.dat#8
+CHECK fan:lldb-23 ISteve02.dat#9
+CHECK fan:lldb-240 JEFFPCK6.DAT#0
+CHECK fan:lldb-240 JEFFPCK6.DAT#1
+CHECK fan:lldb-240 JEFFPCK6.DAT#2
+CHECK fan:lldb-240 JEFFPCK6.DAT#3
+CHECK fan:lldb-240 JEFFPCK6.DAT#4
+CHECK fan:lldb-240 JEFFPCK6.DAT#5
+CHECK fan:lldb-240 JEFFPCK6.DAT#6
+CHECK fan:lldb-240 JEFFPCK6.DAT#7
+CHECK fan:lldb-240 JEFFPCK6.DAT#8
+CHECK fan:lldb-240 JEFFPCK6.DAT#9
+CHECK fan:lldb-241 JEFFPCK7.DAT#0
+CHECK fan:lldb-241 JEFFPCK7.DAT#1
+CHECK fan:lldb-241 JEFFPCK7.DAT#2
+CHECK fan:lldb-241 JEFFPCK7.DAT#3
+CHECK fan:lldb-241 JEFFPCK7.DAT#4
+CHECK fan:lldb-241 JEFFPCK7.DAT#5
+CHECK fan:lldb-241 JEFFPCK7.DAT#6
+CHECK fan:lldb-241 JEFFPCK7.DAT#7
+CHECK fan:lldb-241 JEFFPCK7.DAT#8
+CHECK fan:lldb-241 JEFFPCK7.DAT#9
+CHECK fan:lldb-242 JOHNPACK.DAT#0
+CHECK fan:lldb-242 JOHNPACK.DAT#1
+CHECK fan:lldb-242 JOHNPACK.DAT#2
+CHECK fan:lldb-242 JOHNPACK.DAT#3
+CHECK fan:lldb-242 JOHNPACK.DAT#4
+CHECK fan:lldb-242 JOHNPACK.DAT#5
+CHECK fan:lldb-242 JOHNPACK.DAT#6
+CHECK fan:lldb-242 JOHNPACK.DAT#7
+CHECK fan:lldb-242 JOHNPACK.DAT#8
+CHECK fan:lldb-242 JOHNPACK.DAT#9
+CHECK fan:lldb-243 LARSPACK.DAT#0
+CHECK fan:lldb-243 LARSPACK.DAT#1
+CHECK fan:lldb-243 LARSPACK.DAT#2
+CHECK fan:lldb-243 LARSPACK.DAT#3
+CHECK fan:lldb-243 LARSPACK.DAT#4
+CHECK fan:lldb-243 LARSPACK.DAT#5
+CHECK fan:lldb-243 LARSPACK.DAT#6
+CHECK fan:lldb-243 LARSPACK.DAT#7
+CHECK fan:lldb-243 LARSPACK.DAT#8
+CHECK fan:lldb-243 LARSPACK.DAT#9
+CHECK fan:lldb-244 Martin Zurlinden 01.dat#0
+PASS fan:lldb-244 Martin Zurlinden 01.dat#0 48 1545
+CHECK fan:lldb-244 Martin Zurlinden 01.dat#1
+CHECK fan:lldb-244 Martin Zurlinden 01.dat#2
+CHECK fan:lldb-244 Martin Zurlinden 01.dat#3
+CHECK fan:lldb-244 Martin Zurlinden 01.dat#4
+CHECK fan:lldb-244 Martin Zurlinden 01.dat#5
+CHECK fan:lldb-244 Martin Zurlinden 01.dat#6
+CHECK fan:lldb-244 Martin Zurlinden 01.dat#7
+CHECK fan:lldb-244 Martin Zurlinden 01.dat#8
+PASS fan:lldb-244 Martin Zurlinden 01.dat#8 18 2675
+CHECK fan:lldb-244 Martin Zurlinden 01.dat#9
+CHECK fan:lldb-245 Martin Zurlinden 02.dat#0
+CHECK fan:lldb-245 Martin Zurlinden 02.dat#1
+CHECK fan:lldb-245 Martin Zurlinden 02.dat#2
+CHECK fan:lldb-245 Martin Zurlinden 02.dat#3
+CHECK fan:lldb-245 Martin Zurlinden 02.dat#4
+PASS fan:lldb-245 Martin Zurlinden 02.dat#4 60 2115
+CHECK fan:lldb-245 Martin Zurlinden 02.dat#5
+PASS fan:lldb-245 Martin Zurlinden 02.dat#5 40 1937
+CHECK fan:lldb-245 Martin Zurlinden 02.dat#6
+PASS fan:lldb-245 Martin Zurlinden 02.dat#6 60 742
+CHECK fan:lldb-245 Martin Zurlinden 02.dat#7
+PASS fan:lldb-245 Martin Zurlinden 02.dat#7 61 4212
+CHECK fan:lldb-245 Martin Zurlinden 02.dat#8
+PASS fan:lldb-245 Martin Zurlinden 02.dat#8 30 1602
+CHECK fan:lldb-245 Martin Zurlinden 02.dat#9
+CHECK fan:lldb-246 Martin Zurlinden 03.dat#0
+PASS fan:lldb-246 Martin Zurlinden 03.dat#0 40 3006
+CHECK fan:lldb-246 Martin Zurlinden 03.dat#1
+CHECK fan:lldb-246 Martin Zurlinden 03.dat#2
+PASS fan:lldb-246 Martin Zurlinden 03.dat#2 54 1022
+CHECK fan:lldb-246 Martin Zurlinden 03.dat#3
+PASS fan:lldb-246 Martin Zurlinden 03.dat#3 39 1692
+CHECK fan:lldb-246 Martin Zurlinden 03.dat#4
+PASS fan:lldb-246 Martin Zurlinden 03.dat#4 30 878
+CHECK fan:lldb-246 Martin Zurlinden 03.dat#5
+PASS fan:lldb-246 Martin Zurlinden 03.dat#5 38 1465
+CHECK fan:lldb-246 Martin Zurlinden 03.dat#6
+CHECK fan:lldb-246 Martin Zurlinden 03.dat#7
+CHECK fan:lldb-246 Martin Zurlinden 03.dat#8
+CHECK fan:lldb-246 Martin Zurlinden 03.dat#9
+CHECK fan:lldb-248 MATTPCK1.DAT#0
+CHECK fan:lldb-248 MATTPCK1.DAT#1
+CHECK fan:lldb-248 MATTPCK1.DAT#2
+CHECK fan:lldb-248 MATTPCK1.DAT#3
+CHECK fan:lldb-248 MATTPCK1.DAT#4
+CHECK fan:lldb-248 MATTPCK1.DAT#5
+CHECK fan:lldb-248 MATTPCK1.DAT#6
+CHECK fan:lldb-248 MATTPCK1.DAT#7
+CHECK fan:lldb-248 MATTPCK1.DAT#8
+CHECK fan:lldb-248 MATTPCK1.DAT#9
+CHECK fan:lldb-249 MATTPCK2.DAT#0
+CHECK fan:lldb-249 MATTPCK2.DAT#1
+CHECK fan:lldb-249 MATTPCK2.DAT#2
+CHECK fan:lldb-249 MATTPCK2.DAT#3
+CHECK fan:lldb-249 MATTPCK2.DAT#4
+CHECK fan:lldb-249 MATTPCK2.DAT#5
+CHECK fan:lldb-249 MATTPCK2.DAT#6
+CHECK fan:lldb-249 MATTPCK2.DAT#7
+CHECK fan:lldb-249 MATTPCK2.DAT#8
+CHECK fan:lldb-249 MATTPCK2.DAT#9
+CHECK fan:lldb-24 ISteve04.dat#0
+CHECK fan:lldb-24 ISteve04.dat#1
+CHECK fan:lldb-24 ISteve04.dat#2
+CHECK fan:lldb-24 ISteve04.dat#3
+CHECK fan:lldb-24 ISteve04.dat#4
+CHECK fan:lldb-24 ISteve04.dat#5
+CHECK fan:lldb-24 ISteve04.dat#6
+CHECK fan:lldb-24 ISteve04.dat#7
+CHECK fan:lldb-24 ISteve04.dat#8
+CHECK fan:lldb-24 ISteve04.dat#9
+PASS fan:lldb-24 ISteve04.dat#9 8 2827
+CHECK fan:lldb-250 Conway01.DAT#0
+CHECK fan:lldb-250 Conway01.DAT#1
+CHECK fan:lldb-250 Conway01.DAT#2
+CHECK fan:lldb-250 Conway01.DAT#3
+CHECK fan:lldb-250 Conway01.DAT#4
+CHECK fan:lldb-250 Conway01.DAT#5
+CHECK fan:lldb-250 Conway01.DAT#6
+CHECK fan:lldb-250 Conway01.DAT#7
+CHECK fan:lldb-250 Conway01.DAT#8
+CHECK fan:lldb-250 Conway01.DAT#9
+CHECK fan:lldb-251 Conway02.DAT#0
+CHECK fan:lldb-251 Conway02.DAT#1
+CHECK fan:lldb-251 Conway02.DAT#2
+CHECK fan:lldb-251 Conway02.DAT#3
+CHECK fan:lldb-251 Conway02.DAT#4
+CHECK fan:lldb-251 Conway02.DAT#5
+CHECK fan:lldb-251 Conway02.DAT#6
+CHECK fan:lldb-251 Conway02.DAT#7
+CHECK fan:lldb-251 Conway02.DAT#8
+CHECK fan:lldb-251 Conway02.DAT#9
+CHECK fan:lldb-252 Conway03.DAT#0
+CHECK fan:lldb-252 Conway03.DAT#1
+CHECK fan:lldb-252 Conway03.DAT#2
+CHECK fan:lldb-252 Conway03.DAT#3
+CHECK fan:lldb-252 Conway03.DAT#4
+CHECK fan:lldb-252 Conway03.DAT#5
+CHECK fan:lldb-252 Conway03.DAT#6
+CHECK fan:lldb-252 Conway03.DAT#7
+CHECK fan:lldb-252 Conway03.DAT#8
+CHECK fan:lldb-252 Conway03.DAT#9
+PASS fan:lldb-252 Conway03.DAT#9 73 1470
+CHECK fan:lldb-253 Conway04.DAT#0
+CHECK fan:lldb-253 Conway04.DAT#1
+CHECK fan:lldb-253 Conway04.DAT#2
+CHECK fan:lldb-253 Conway04.DAT#3
+CHECK fan:lldb-253 Conway04.DAT#4
+CHECK fan:lldb-253 Conway04.DAT#5
+CHECK fan:lldb-253 Conway04.DAT#6
+CHECK fan:lldb-253 Conway04.DAT#7
+CHECK fan:lldb-253 Conway04.DAT#8
+CHECK fan:lldb-253 Conway04.DAT#9
+CHECK fan:lldb-254 Conway05.DAT#0
+CHECK fan:lldb-254 Conway05.DAT#1
+CHECK fan:lldb-254 Conway05.DAT#2
+CHECK fan:lldb-254 Conway05.DAT#3
+CHECK fan:lldb-254 Conway05.DAT#4
+CHECK fan:lldb-254 Conway05.DAT#5
+CHECK fan:lldb-254 Conway05.DAT#6
+CHECK fan:lldb-254 Conway05.DAT#7
+CHECK fan:lldb-254 Conway05.DAT#8
+CHECK fan:lldb-254 Conway05.DAT#9
+CHECK fan:lldb-256 Conway07.DAT#0
+CHECK fan:lldb-256 Conway07.DAT#1
+CHECK fan:lldb-256 Conway07.DAT#2
+CHECK fan:lldb-256 Conway07.DAT#3
+CHECK fan:lldb-256 Conway07.DAT#4
+CHECK fan:lldb-256 Conway07.DAT#5
+CHECK fan:lldb-256 Conway07.DAT#6
+CHECK fan:lldb-256 Conway07.DAT#7
+CHECK fan:lldb-256 Conway07.DAT#8
+CHECK fan:lldb-256 Conway07.DAT#9
+CHECK fan:lldb-257 Conway08.DAT#0
+CHECK fan:lldb-257 Conway08.DAT#1
+CHECK fan:lldb-257 Conway08.DAT#2
+CHECK fan:lldb-257 Conway08.DAT#3
+CHECK fan:lldb-257 Conway08.DAT#4
+CHECK fan:lldb-257 Conway08.DAT#5
+CHECK fan:lldb-257 Conway08.DAT#6
+CHECK fan:lldb-257 Conway08.DAT#7
+CHECK fan:lldb-257 Conway08.DAT#8
+CHECK fan:lldb-257 Conway08.DAT#9
+CHECK fan:lldb-258 Conway09.DAT#0
+CHECK fan:lldb-258 Conway09.DAT#1
+CHECK fan:lldb-258 Conway09.DAT#2
+CHECK fan:lldb-258 Conway09.DAT#3
+CHECK fan:lldb-258 Conway09.DAT#4
+CHECK fan:lldb-258 Conway09.DAT#5
+CHECK fan:lldb-258 Conway09.DAT#6
+CHECK fan:lldb-258 Conway09.DAT#7
+CHECK fan:lldb-258 Conway09.DAT#8
+CHECK fan:lldb-258 Conway09.DAT#9
+CHECK fan:lldb-259 Conway10.DAT#0
+CHECK fan:lldb-259 Conway10.DAT#1
+CHECK fan:lldb-259 Conway10.DAT#2
+CHECK fan:lldb-259 Conway10.DAT#3
+CHECK fan:lldb-259 Conway10.DAT#4
+CHECK fan:lldb-259 Conway10.DAT#5
+CHECK fan:lldb-259 Conway10.DAT#6
+CHECK fan:lldb-259 Conway10.DAT#7
+CHECK fan:lldb-259 Conway10.DAT#8
+CHECK fan:lldb-259 Conway10.DAT#9
+CHECK fan:lldb-25 ISteve05.dat#0
+CHECK fan:lldb-25 ISteve05.dat#1
+CHECK fan:lldb-25 ISteve05.dat#2
+CHECK fan:lldb-25 ISteve05.dat#3
+CHECK fan:lldb-25 ISteve05.dat#4
+CHECK fan:lldb-25 ISteve05.dat#5
+CHECK fan:lldb-25 ISteve05.dat#6
+CHECK fan:lldb-25 ISteve05.dat#7
+CHECK fan:lldb-25 ISteve05.dat#8
+CHECK fan:lldb-25 ISteve05.dat#9
+CHECK fan:lldb-260 Conway11.DAT#0
+CHECK fan:lldb-260 Conway11.DAT#1
+CHECK fan:lldb-260 Conway11.DAT#2
+CHECK fan:lldb-260 Conway11.DAT#3
+CHECK fan:lldb-260 Conway11.DAT#4
+CHECK fan:lldb-260 Conway11.DAT#5
+CHECK fan:lldb-260 Conway11.DAT#6
+CHECK fan:lldb-260 Conway11.DAT#7
+CHECK fan:lldb-260 Conway11.DAT#8
+CHECK fan:lldb-260 Conway11.DAT#9
+CHECK fan:lldb-261 Conway12.DAT#0
+CHECK fan:lldb-261 Conway12.DAT#1
+CHECK fan:lldb-261 Conway12.DAT#2
+CHECK fan:lldb-261 Conway12.DAT#3
+CHECK fan:lldb-261 Conway12.DAT#4
+CHECK fan:lldb-261 Conway12.DAT#5
+CHECK fan:lldb-261 Conway12.DAT#6
+CHECK fan:lldb-261 Conway12.DAT#7
+CHECK fan:lldb-261 Conway12.DAT#8
+CHECK fan:lldb-261 Conway12.DAT#9
+CHECK fan:lldb-262 Conway13.DAT#0
+CHECK fan:lldb-262 Conway13.DAT#1
+CHECK fan:lldb-262 Conway13.DAT#2
+CHECK fan:lldb-262 Conway13.DAT#3
+CHECK fan:lldb-262 Conway13.DAT#4
+CHECK fan:lldb-262 Conway13.DAT#5
+CHECK fan:lldb-262 Conway13.DAT#6
+CHECK fan:lldb-262 Conway13.DAT#7
+CHECK fan:lldb-262 Conway13.DAT#8
+CHECK fan:lldb-262 Conway13.DAT#9
+CHECK fan:lldb-263 ConwayChallenges 1.DAT#0
+CHECK fan:lldb-263 ConwayChallenges 1.DAT#1
+CHECK fan:lldb-263 ConwayChallenges 1.DAT#2
+CHECK fan:lldb-263 ConwayChallenges 1.DAT#3
+CHECK fan:lldb-263 ConwayChallenges 1.DAT#4
+CHECK fan:lldb-263 ConwayChallenges 1.DAT#5
+CHECK fan:lldb-263 ConwayChallenges 1.DAT#6
+CHECK fan:lldb-263 ConwayChallenges 1.DAT#7
+CHECK fan:lldb-263 ConwayChallenges 1.DAT#8
+CHECK fan:lldb-263 ConwayChallenges 1.DAT#9
+CHECK fan:lldb-264 ConwayChallenges 2.DAT#0
+CHECK fan:lldb-264 ConwayChallenges 2.DAT#1
+CHECK fan:lldb-264 ConwayChallenges 2.DAT#2
+CHECK fan:lldb-264 ConwayChallenges 2.DAT#3
+CHECK fan:lldb-264 ConwayChallenges 2.DAT#4
+CHECK fan:lldb-264 ConwayChallenges 2.DAT#5
+CHECK fan:lldb-264 ConwayChallenges 2.DAT#6
+CHECK fan:lldb-264 ConwayChallenges 2.DAT#7
+CHECK fan:lldb-264 ConwayChallenges 2.DAT#8
+CHECK fan:lldb-264 ConwayChallenges 2.DAT#9
+CHECK fan:lldb-265 CRISFN01.dat#0
+CHECK fan:lldb-265 CRISFN01.dat#1
+CHECK fan:lldb-265 CRISFN01.dat#2
+CHECK fan:lldb-265 CRISFN01.dat#3
+PASS fan:lldb-265 CRISFN01.dat#3 65 2472
+CHECK fan:lldb-265 CRISFN01.dat#4
+CHECK fan:lldb-265 CRISFN01.dat#5
+PASS fan:lldb-265 CRISFN01.dat#5 39 1705
+CHECK fan:lldb-265 CRISFN01.dat#6
+CHECK fan:lldb-265 CRISFN01.dat#7
+CHECK fan:lldb-265 CRISFN01.dat#8
+CHECK fan:lldb-265 CRISFN01.dat#9
+CHECK fan:lldb-266 CRISFN02.dat#0
+CHECK fan:lldb-266 CRISFN02.dat#1
+CHECK fan:lldb-266 CRISFN02.dat#2
+CHECK fan:lldb-266 CRISFN02.dat#3
+CHECK fan:lldb-266 CRISFN02.dat#4
+CHECK fan:lldb-266 CRISFN02.dat#5
+CHECK fan:lldb-266 CRISFN02.dat#6
+PASS fan:lldb-266 CRISFN02.dat#6 54 1105
+CHECK fan:lldb-266 CRISFN02.dat#7
+CHECK fan:lldb-266 CRISFN02.dat#8
+CHECK fan:lldb-266 CRISFN02.dat#9
+CHECK fan:lldb-267 CRISFN03.dat#0
+CHECK fan:lldb-267 CRISFN03.dat#1
+CHECK fan:lldb-267 CRISFN03.dat#2
+CHECK fan:lldb-267 CRISFN03.dat#3
+CHECK fan:lldb-267 CRISFN03.dat#4
+CHECK fan:lldb-267 CRISFN03.dat#5
+CHECK fan:lldb-267 CRISFN03.dat#6
+CHECK fan:lldb-267 CRISFN03.dat#7
+CHECK fan:lldb-267 CRISFN03.dat#8
+CHECK fan:lldb-267 CRISFN03.dat#9
+CHECK fan:lldb-268 CRISFN04.dat#0
+CHECK fan:lldb-268 CRISFN04.dat#1
+PASS fan:lldb-268 CRISFN04.dat#1 19 1069
+CHECK fan:lldb-268 CRISFN04.dat#2
+CHECK fan:lldb-268 CRISFN04.dat#3
+CHECK fan:lldb-268 CRISFN04.dat#4
+CHECK fan:lldb-268 CRISFN04.dat#5
+CHECK fan:lldb-268 CRISFN04.dat#6
+CHECK fan:lldb-268 CRISFN04.dat#7
+PASS fan:lldb-268 CRISFN04.dat#7 8 691
+CHECK fan:lldb-268 CRISFN04.dat#8
+CHECK fan:lldb-268 CRISFN04.dat#9
+CHECK fan:lldb-269 CRISFN05.dat#0
+CHECK fan:lldb-269 CRISFN05.dat#1
+CHECK fan:lldb-269 CRISFN05.dat#2
+CHECK fan:lldb-269 CRISFN05.dat#3
+CHECK fan:lldb-269 CRISFN05.dat#4
+CHECK fan:lldb-269 CRISFN05.dat#5
+CHECK fan:lldb-269 CRISFN05.dat#6
+CHECK fan:lldb-269 CRISFN05.dat#7
+CHECK fan:lldb-269 CRISFN05.dat#8
+CHECK fan:lldb-269 CRISFN05.dat#9
+CHECK fan:lldb-26 ISteve06.dat#0
+CHECK fan:lldb-26 ISteve06.dat#1
+CHECK fan:lldb-26 ISteve06.dat#2
+CHECK fan:lldb-26 ISteve06.dat#3
+CHECK fan:lldb-26 ISteve06.dat#4
+CHECK fan:lldb-26 ISteve06.dat#5
+CHECK fan:lldb-26 ISteve06.dat#6
+CHECK fan:lldb-26 ISteve06.dat#7
+CHECK fan:lldb-26 ISteve06.dat#8
+CHECK fan:lldb-26 ISteve06.dat#9
+CHECK fan:lldb-270 CRISFN06.dat#0
+PASS fan:lldb-270 CRISFN06.dat#0 33 902
+CHECK fan:lldb-270 CRISFN06.dat#1
+CHECK fan:lldb-270 CRISFN06.dat#2
+CHECK fan:lldb-270 CRISFN06.dat#3
+PASS fan:lldb-270 CRISFN06.dat#3 61 2748
+CHECK fan:lldb-270 CRISFN06.dat#4
+CHECK fan:lldb-270 CRISFN06.dat#5
+CHECK fan:lldb-270 CRISFN06.dat#6
+PASS fan:lldb-270 CRISFN06.dat#6 39 1524
+CHECK fan:lldb-270 CRISFN06.dat#7
+CHECK fan:lldb-270 CRISFN06.dat#8
+CHECK fan:lldb-270 CRISFN06.dat#9
+CHECK fan:lldb-271 CRISFN07.dat#0
+CHECK fan:lldb-271 CRISFN07.dat#1
+CHECK fan:lldb-271 CRISFN07.dat#2
+CHECK fan:lldb-271 CRISFN07.dat#3
+CHECK fan:lldb-271 CRISFN07.dat#4
+CHECK fan:lldb-271 CRISFN07.dat#5
+PASS fan:lldb-271 CRISFN07.dat#5 43 1234
+CHECK fan:lldb-271 CRISFN07.dat#6
+CHECK fan:lldb-271 CRISFN07.dat#7
+CHECK fan:lldb-271 CRISFN07.dat#8
+CHECK fan:lldb-271 CRISFN07.dat#9
+CHECK fan:lldb-272 CRISFN08.dat#0
+PASS fan:lldb-272 CRISFN08.dat#0 20 3545
+CHECK fan:lldb-272 CRISFN08.dat#1
+CHECK fan:lldb-272 CRISFN08.dat#2
+CHECK fan:lldb-272 CRISFN08.dat#3
+CHECK fan:lldb-272 CRISFN08.dat#4
+CHECK fan:lldb-272 CRISFN08.dat#5
+CHECK fan:lldb-272 CRISFN08.dat#6
+CHECK fan:lldb-272 CRISFN08.dat#7
+PASS fan:lldb-272 CRISFN08.dat#7 28 902
+CHECK fan:lldb-272 CRISFN08.dat#8
+CHECK fan:lldb-272 CRISFN08.dat#9
+CHECK fan:lldb-273 CRISFN09.dat#0
+CHECK fan:lldb-273 CRISFN09.dat#1
+CHECK fan:lldb-273 CRISFN09.dat#2
+CHECK fan:lldb-273 CRISFN09.dat#3
+CHECK fan:lldb-273 CRISFN09.dat#4
+CHECK fan:lldb-273 CRISFN09.dat#5
+CHECK fan:lldb-273 CRISFN09.dat#6
+CHECK fan:lldb-273 CRISFN09.dat#7
+CHECK fan:lldb-273 CRISFN09.dat#8
+CHECK fan:lldb-273 CRISFN09.dat#9
+CHECK fan:lldb-274 CRISFN10.dat#0
+PASS fan:lldb-274 CRISFN10.dat#0 78 4389
+CHECK fan:lldb-274 CRISFN10.dat#1
+CHECK fan:lldb-274 CRISFN10.dat#2
+CHECK fan:lldb-274 CRISFN10.dat#3
+CHECK fan:lldb-274 CRISFN10.dat#4
+CHECK fan:lldb-274 CRISFN10.dat#5
+CHECK fan:lldb-274 CRISFN10.dat#6
+CHECK fan:lldb-274 CRISFN10.dat#7
+CHECK fan:lldb-274 CRISFN10.dat#8
+CHECK fan:lldb-274 CRISFN10.dat#9
+CHECK fan:lldb-275 CRISFN11.dat#0
+CHECK fan:lldb-275 CRISFN11.dat#1
+PASS fan:lldb-275 CRISFN11.dat#1 70 1273
+CHECK fan:lldb-275 CRISFN11.dat#2
+CHECK fan:lldb-275 CRISFN11.dat#3
+CHECK fan:lldb-275 CRISFN11.dat#4
+CHECK fan:lldb-275 CRISFN11.dat#5
+CHECK fan:lldb-275 CRISFN11.dat#6
+CHECK fan:lldb-275 CRISFN11.dat#7
+CHECK fan:lldb-275 CRISFN11.dat#8
+CHECK fan:lldb-275 CRISFN11.dat#9
+CHECK fan:lldb-276 CRISFN12.dat#0
+CHECK fan:lldb-276 CRISFN12.dat#1
+CHECK fan:lldb-276 CRISFN12.dat#2
+CHECK fan:lldb-276 CRISFN12.dat#3
+CHECK fan:lldb-276 CRISFN12.dat#4
+CHECK fan:lldb-276 CRISFN12.dat#5
+CHECK fan:lldb-276 CRISFN12.dat#6
+CHECK fan:lldb-276 CRISFN12.dat#7
+CHECK fan:lldb-276 CRISFN12.dat#8
+CHECK fan:lldb-276 CRISFN12.dat#9
+CHECK fan:lldb-277 CRISFN13.dat#0
+CHECK fan:lldb-277 CRISFN13.dat#1
+CHECK fan:lldb-277 CRISFN13.dat#2
+CHECK fan:lldb-277 CRISFN13.dat#3
+CHECK fan:lldb-277 CRISFN13.dat#4
+CHECK fan:lldb-277 CRISFN13.dat#5
+CHECK fan:lldb-277 CRISFN13.dat#6
+PASS fan:lldb-277 CRISFN13.dat#6 59 572
+CHECK fan:lldb-277 CRISFN13.dat#7
+CHECK fan:lldb-277 CRISFN13.dat#8
+CHECK fan:lldb-277 CRISFN13.dat#9
+CHECK fan:lldb-278 CRISFN14.dat#0
+CHECK fan:lldb-278 CRISFN14.dat#1
+CHECK fan:lldb-278 CRISFN14.dat#2
+CHECK fan:lldb-278 CRISFN14.dat#3
+CHECK fan:lldb-278 CRISFN14.dat#4
+CHECK fan:lldb-278 CRISFN14.dat#5
+CHECK fan:lldb-278 CRISFN14.dat#6
+PASS fan:lldb-278 CRISFN14.dat#6 65 2415
+CHECK fan:lldb-278 CRISFN14.dat#7
+CHECK fan:lldb-278 CRISFN14.dat#8
+PASS fan:lldb-278 CRISFN14.dat#8 80 6956
+CHECK fan:lldb-278 CRISFN14.dat#9
+CHECK fan:lldb-279 CRISFN15.dat#0
+CHECK fan:lldb-279 CRISFN15.dat#1
+CHECK fan:lldb-279 CRISFN15.dat#2
+CHECK fan:lldb-279 CRISFN15.dat#3
+CHECK fan:lldb-279 CRISFN15.dat#4
+CHECK fan:lldb-279 CRISFN15.dat#5
+CHECK fan:lldb-279 CRISFN15.dat#6
+CHECK fan:lldb-279 CRISFN15.dat#7
+CHECK fan:lldb-279 CRISFN15.dat#8
+CHECK fan:lldb-279 CRISFN15.dat#9
+CHECK fan:lldb-27 ISteve07.dat#0
+CHECK fan:lldb-27 ISteve07.dat#1
+CHECK fan:lldb-27 ISteve07.dat#2
+CHECK fan:lldb-27 ISteve07.dat#3
+CHECK fan:lldb-27 ISteve07.dat#4
+CHECK fan:lldb-27 ISteve07.dat#5
+CHECK fan:lldb-27 ISteve07.dat#6
+CHECK fan:lldb-27 ISteve07.dat#7
+CHECK fan:lldb-27 ISteve07.dat#8
+CHECK fan:lldb-27 ISteve07.dat#9
+CHECK fan:lldb-280 GARJEN00.dat#0
+CHECK fan:lldb-280 GARJEN00.dat#1
+CHECK fan:lldb-280 GARJEN00.dat#2
+CHECK fan:lldb-280 GARJEN00.dat#3
+CHECK fan:lldb-280 GARJEN00.dat#4
+CHECK fan:lldb-280 GARJEN00.dat#5
+CHECK fan:lldb-280 GARJEN00.dat#6
+CHECK fan:lldb-280 GARJEN00.dat#7
+CHECK fan:lldb-280 GARJEN00.dat#8
+CHECK fan:lldb-280 GARJEN00.dat#9
+CHECK fan:lldb-281 GARJEN01.dat#0
+CHECK fan:lldb-281 GARJEN01.dat#1
+CHECK fan:lldb-281 GARJEN01.dat#2
+CHECK fan:lldb-281 GARJEN01.dat#3
+CHECK fan:lldb-281 GARJEN01.dat#4
+CHECK fan:lldb-281 GARJEN01.dat#5
+CHECK fan:lldb-281 GARJEN01.dat#6
+CHECK fan:lldb-281 GARJEN01.dat#7
+CHECK fan:lldb-281 GARJEN01.dat#8
+CHECK fan:lldb-281 GARJEN01.dat#9
+CHECK fan:lldb-282 GARJEN02.dat#0
+CHECK fan:lldb-282 GARJEN02.dat#1
+CHECK fan:lldb-282 GARJEN02.dat#2
+CHECK fan:lldb-282 GARJEN02.dat#3
+CHECK fan:lldb-282 GARJEN02.dat#4
+CHECK fan:lldb-282 GARJEN02.dat#5
+CHECK fan:lldb-282 GARJEN02.dat#6
+CHECK fan:lldb-282 GARJEN02.dat#7
+CHECK fan:lldb-282 GARJEN02.dat#8
+CHECK fan:lldb-282 GARJEN02.dat#9
+CHECK fan:lldb-283 GARJEN03.dat#0
+CHECK fan:lldb-283 GARJEN03.dat#1
+CHECK fan:lldb-283 GARJEN03.dat#2
+CHECK fan:lldb-283 GARJEN03.dat#3
+CHECK fan:lldb-283 GARJEN03.dat#4
+CHECK fan:lldb-283 GARJEN03.dat#5
+CHECK fan:lldb-283 GARJEN03.dat#6
+CHECK fan:lldb-283 GARJEN03.dat#7
+CHECK fan:lldb-283 GARJEN03.dat#8
+CHECK fan:lldb-283 GARJEN03.dat#9
+CHECK fan:lldb-284 GARJEN04.dat#0
+CHECK fan:lldb-284 GARJEN04.dat#1
+CHECK fan:lldb-284 GARJEN04.dat#2
+CHECK fan:lldb-284 GARJEN04.dat#3
+CHECK fan:lldb-284 GARJEN04.dat#4
+CHECK fan:lldb-284 GARJEN04.dat#5
+CHECK fan:lldb-284 GARJEN04.dat#6
+CHECK fan:lldb-284 GARJEN04.dat#7
+CHECK fan:lldb-284 GARJEN04.dat#8
+CHECK fan:lldb-284 GARJEN04.dat#9
+CHECK fan:lldb-285 GARJEN05.dat#0
+CHECK fan:lldb-285 GARJEN05.dat#1
+CHECK fan:lldb-285 GARJEN05.dat#2
+CHECK fan:lldb-285 GARJEN05.dat#3
+CHECK fan:lldb-285 GARJEN05.dat#4
+CHECK fan:lldb-285 GARJEN05.dat#5
+CHECK fan:lldb-285 GARJEN05.dat#6
+CHECK fan:lldb-285 GARJEN05.dat#7
+CHECK fan:lldb-285 GARJEN05.dat#8
+CHECK fan:lldb-285 GARJEN05.dat#9
+CHECK fan:lldb-286 GARJEN06.dat#0
+CHECK fan:lldb-286 GARJEN06.dat#1
+CHECK fan:lldb-286 GARJEN06.dat#2
+CHECK fan:lldb-286 GARJEN06.dat#3
+CHECK fan:lldb-286 GARJEN06.dat#4
+CHECK fan:lldb-286 GARJEN06.dat#5
+CHECK fan:lldb-286 GARJEN06.dat#6
+CHECK fan:lldb-286 GARJEN06.dat#7
+CHECK fan:lldb-286 GARJEN06.dat#8
+CHECK fan:lldb-286 GARJEN06.dat#9
+CHECK fan:lldb-287 GARJEN07.dat#0
+CHECK fan:lldb-287 GARJEN07.dat#1
+CHECK fan:lldb-287 GARJEN07.dat#2
+CHECK fan:lldb-287 GARJEN07.dat#3
+CHECK fan:lldb-287 GARJEN07.dat#4
+CHECK fan:lldb-287 GARJEN07.dat#5
+CHECK fan:lldb-287 GARJEN07.dat#6
+CHECK fan:lldb-287 GARJEN07.dat#7
+CHECK fan:lldb-287 GARJEN07.dat#8
+CHECK fan:lldb-287 GARJEN07.dat#9
+CHECK fan:lldb-288 GARJEN08.dat#0
+CHECK fan:lldb-288 GARJEN08.dat#1
+CHECK fan:lldb-288 GARJEN08.dat#2
+CHECK fan:lldb-288 GARJEN08.dat#3
+CHECK fan:lldb-288 GARJEN08.dat#4
+CHECK fan:lldb-288 GARJEN08.dat#5
+CHECK fan:lldb-288 GARJEN08.dat#6
+CHECK fan:lldb-288 GARJEN08.dat#7
+CHECK fan:lldb-288 GARJEN08.dat#8
+CHECK fan:lldb-288 GARJEN08.dat#9
+CHECK fan:lldb-289 GARJEN09.dat#0
+CHECK fan:lldb-289 GARJEN09.dat#1
+CHECK fan:lldb-289 GARJEN09.dat#2
+CHECK fan:lldb-289 GARJEN09.dat#3
+CHECK fan:lldb-289 GARJEN09.dat#4
+CHECK fan:lldb-289 GARJEN09.dat#5
+CHECK fan:lldb-289 GARJEN09.dat#6
+CHECK fan:lldb-289 GARJEN09.dat#7
+CHECK fan:lldb-289 GARJEN09.dat#8
+CHECK fan:lldb-289 GARJEN09.dat#9
+CHECK fan:lldb-28 ISteve09.dat#0
+CHECK fan:lldb-28 ISteve09.dat#1
+CHECK fan:lldb-28 ISteve09.dat#2
+CHECK fan:lldb-28 ISteve09.dat#3
+CHECK fan:lldb-28 ISteve09.dat#4
+CHECK fan:lldb-28 ISteve09.dat#5
+CHECK fan:lldb-28 ISteve09.dat#6
+CHECK fan:lldb-28 ISteve09.dat#7
+CHECK fan:lldb-28 ISteve09.dat#8
+CHECK fan:lldb-28 ISteve09.dat#9
+CHECK fan:lldb-290 JUANJO1N.DAT#0
+CHECK fan:lldb-290 JUANJO1N.DAT#1
+CHECK fan:lldb-290 JUANJO1N.DAT#2
+CHECK fan:lldb-290 JUANJO1N.DAT#3
+CHECK fan:lldb-290 JUANJO1N.DAT#4
+CHECK fan:lldb-290 JUANJO1N.DAT#5
+CHECK fan:lldb-290 JUANJO1N.DAT#6
+CHECK fan:lldb-290 JUANJO1N.DAT#7
+CHECK fan:lldb-290 JUANJO1N.DAT#8
+CHECK fan:lldb-290 JUANJO1N.DAT#9
+PASS fan:lldb-290 JUANJO1N.DAT#9 80 929
+CHECK fan:lldb-291 JUANJO2N.DAT#0
+CHECK fan:lldb-291 JUANJO2N.DAT#1
+CHECK fan:lldb-291 JUANJO2N.DAT#2
+CHECK fan:lldb-291 JUANJO2N.DAT#3
+CHECK fan:lldb-291 JUANJO2N.DAT#4
+CHECK fan:lldb-291 JUANJO2N.DAT#5
+CHECK fan:lldb-291 JUANJO2N.DAT#6
+CHECK fan:lldb-291 JUANJO2N.DAT#7
+CHECK fan:lldb-291 JUANJO2N.DAT#8
+CHECK fan:lldb-291 JUANJO2N.DAT#9
+CHECK fan:lldb-292 JUANJO3N.DAT#0
+CHECK fan:lldb-292 JUANJO3N.DAT#1
+CHECK fan:lldb-292 JUANJO3N.DAT#2
+CHECK fan:lldb-292 JUANJO3N.DAT#3
+CHECK fan:lldb-292 JUANJO3N.DAT#4
+CHECK fan:lldb-292 JUANJO3N.DAT#5
+CHECK fan:lldb-292 JUANJO3N.DAT#6
+CHECK fan:lldb-292 JUANJO3N.DAT#7
+CHECK fan:lldb-292 JUANJO3N.DAT#8
+CHECK fan:lldb-292 JUANJO3N.DAT#9
+CHECK fan:lldb-293 JUANJO4N.DAT#0
+CHECK fan:lldb-293 JUANJO4N.DAT#1
+CHECK fan:lldb-293 JUANJO4N.DAT#2
+CHECK fan:lldb-293 JUANJO4N.DAT#3
+CHECK fan:lldb-293 JUANJO4N.DAT#4
+CHECK fan:lldb-293 JUANJO4N.DAT#5
+CHECK fan:lldb-293 JUANJO4N.DAT#6
+CHECK fan:lldb-293 JUANJO4N.DAT#7
+CHECK fan:lldb-293 JUANJO4N.DAT#8
+CHECK fan:lldb-293 JUANJO4N.DAT#9
+CHECK fan:lldb-294 JUANJO5N.DAT#0
+CHECK fan:lldb-294 JUANJO5N.DAT#1
+CHECK fan:lldb-294 JUANJO5N.DAT#2
+CHECK fan:lldb-294 JUANJO5N.DAT#3
+CHECK fan:lldb-294 JUANJO5N.DAT#4
+CHECK fan:lldb-294 JUANJO5N.DAT#5
+CHECK fan:lldb-294 JUANJO5N.DAT#6
+CHECK fan:lldb-294 JUANJO5N.DAT#7
+CHECK fan:lldb-294 JUANJO5N.DAT#8
+CHECK fan:lldb-294 JUANJO5N.DAT#9
+CHECK fan:lldb-295 JUANJO6.DAT#0
+CHECK fan:lldb-295 JUANJO6.DAT#1
+CHECK fan:lldb-295 JUANJO6.DAT#2
+CHECK fan:lldb-295 JUANJO6.DAT#3
+CHECK fan:lldb-295 JUANJO6.DAT#4
+CHECK fan:lldb-295 JUANJO6.DAT#5
+CHECK fan:lldb-295 JUANJO6.DAT#6
+CHECK fan:lldb-295 JUANJO6.DAT#7
+CHECK fan:lldb-295 JUANJO6.DAT#8
+CHECK fan:lldb-295 JUANJO6.DAT#9
+CHECK fan:lldb-296 JUANJO7.DAT#0
+CHECK fan:lldb-296 JUANJO7.DAT#1
+CHECK fan:lldb-296 JUANJO7.DAT#2
+CHECK fan:lldb-296 JUANJO7.DAT#3
+CHECK fan:lldb-296 JUANJO7.DAT#4
+CHECK fan:lldb-297 JUANJO7B.DAT#0
+CHECK fan:lldb-297 JUANJO7B.DAT#1
+CHECK fan:lldb-298 LEMERINewlvls.dat#0
+CHECK fan:lldb-298 LEMERINewlvls.dat#1
+CHECK fan:lldb-298 LEMERINewlvls.dat#2
+CHECK fan:lldb-298 LEMERINewlvls.dat#3
+CHECK fan:lldb-298 LEMERINewlvls.dat#4
+CHECK fan:lldb-298 LEMERINewlvls.dat#5
+CHECK fan:lldb-298 LEMERINewlvls.dat#6
+CHECK fan:lldb-298 LEMERINewlvls.dat#7
+CHECK fan:lldb-298 LEMERINewlvls.dat#8
+CHECK fan:lldb-299 LEMERITraplvls.dat#0
+CHECK fan:lldb-299 LEMERITraplvls.dat#1
+CHECK fan:lldb-299 LEMERITraplvls.dat#2
+CHECK fan:lldb-299 LEMERITraplvls.dat#3
+CHECK fan:lldb-299 LEMERITraplvls.dat#4
+CHECK fan:lldb-299 LEMERITraplvls.dat#5
+CHECK fan:lldb-299 LEMERITraplvls.dat#6
+CHECK fan:lldb-299 LEMERITraplvls.dat#7
+CHECK fan:lldb-299 LEMERITraplvls.dat#8
+CHECK fan:lldb-299 LEMERITraplvls.dat#9
+CHECK fan:lldb-29 QBeez01.dat#0
+CHECK fan:lldb-29 QBeez01.dat#1
+CHECK fan:lldb-29 QBeez01.dat#2
+CHECK fan:lldb-29 QBeez01.dat#3
+CHECK fan:lldb-29 QBeez01.dat#4
+CHECK fan:lldb-29 QBeez01.dat#5
+CHECK fan:lldb-29 QBeez01.dat#6
+CHECK fan:lldb-29 QBeez01.dat#7
+CHECK fan:lldb-29 QBeez01.dat#8
+CHECK fan:lldb-29 QBeez01.dat#9
+CHECK fan:lldb-2 geooPk1.dat#0
+CHECK fan:lldb-2 geooPk1.dat#1
+CHECK fan:lldb-2 geooPk1.dat#2
+CHECK fan:lldb-2 geooPk1.dat#3
+CHECK fan:lldb-2 geooPk1.dat#4
+CHECK fan:lldb-2 geooPk1.dat#5
+CHECK fan:lldb-2 geooPk1.dat#6
+CHECK fan:lldb-2 geooPk1.dat#7
+PASS fan:lldb-2 geooPk1.dat#7 4 2042
+CHECK fan:lldb-2 geooPk1.dat#8
+CHECK fan:lldb-2 geooPk1.dat#9
+CHECK fan:lldb-300 Pacpack1.dat#0
+CHECK fan:lldb-300 Pacpack1.dat#1
+CHECK fan:lldb-300 Pacpack1.dat#2
+CHECK fan:lldb-300 Pacpack1.dat#3
+CHECK fan:lldb-300 Pacpack1.dat#4
+CHECK fan:lldb-300 Pacpack1.dat#5
+CHECK fan:lldb-300 Pacpack1.dat#6
+CHECK fan:lldb-300 Pacpack1.dat#7
+CHECK fan:lldb-300 Pacpack1.dat#8
+CHECK fan:lldb-300 Pacpack1.dat#9
+CHECK fan:lldb-301 Pacpack2.dat#0
+CHECK fan:lldb-301 Pacpack2.dat#1
+CHECK fan:lldb-301 Pacpack2.dat#2
+CHECK fan:lldb-301 Pacpack2.dat#3
+CHECK fan:lldb-301 Pacpack2.dat#4
+CHECK fan:lldb-301 Pacpack2.dat#5
+CHECK fan:lldb-301 Pacpack2.dat#6
+CHECK fan:lldb-301 Pacpack2.dat#7
+CHECK fan:lldb-301 Pacpack2.dat#8
+CHECK fan:lldb-301 Pacpack2.dat#9
+CHECK fan:lldb-302 TWPAK00.dat#0
+CHECK fan:lldb-302 TWPAK00.dat#1
+CHECK fan:lldb-302 TWPAK00.dat#2
+CHECK fan:lldb-302 TWPAK00.dat#3
+CHECK fan:lldb-302 TWPAK00.dat#4
+CHECK fan:lldb-302 TWPAK00.dat#5
+CHECK fan:lldb-302 TWPAK00.dat#6
+CHECK fan:lldb-302 TWPAK00.dat#7
+CHECK fan:lldb-302 TWPAK00.dat#8
+CHECK fan:lldb-302 TWPAK00.dat#9
+PASS fan:lldb-302 TWPAK00.dat#9 10 2533
+CHECK fan:lldb-303 TWPAK01.dat#0
+CHECK fan:lldb-303 TWPAK01.dat#1
+CHECK fan:lldb-303 TWPAK01.dat#2
+CHECK fan:lldb-303 TWPAK01.dat#3
+PASS fan:lldb-303 TWPAK01.dat#3 80 875
+CHECK fan:lldb-303 TWPAK01.dat#4
+CHECK fan:lldb-303 TWPAK01.dat#5
+CHECK fan:lldb-303 TWPAK01.dat#6
+PASS fan:lldb-303 TWPAK01.dat#6 76 788
+CHECK fan:lldb-303 TWPAK01.dat#7
+CHECK fan:lldb-303 TWPAK01.dat#8
+CHECK fan:lldb-303 TWPAK01.dat#9
+CHECK fan:lldb-304 TWPAK02.dat#0
+CHECK fan:lldb-304 TWPAK02.dat#1
+CHECK fan:lldb-304 TWPAK02.dat#2
+CHECK fan:lldb-304 TWPAK02.dat#3
+CHECK fan:lldb-304 TWPAK02.dat#4
+CHECK fan:lldb-304 TWPAK02.dat#5
+CHECK fan:lldb-304 TWPAK02.dat#6
+PASS fan:lldb-304 TWPAK02.dat#6 75 2469
+CHECK fan:lldb-304 TWPAK02.dat#7
+CHECK fan:lldb-304 TWPAK02.dat#8
+CHECK fan:lldb-304 TWPAK02.dat#9
+CHECK fan:lldb-305 TWPAK03.dat#0
+CHECK fan:lldb-305 TWPAK03.dat#1
+CHECK fan:lldb-305 TWPAK03.dat#2
+CHECK fan:lldb-305 TWPAK03.dat#3
+CHECK fan:lldb-305 TWPAK03.dat#4
+CHECK fan:lldb-305 TWPAK03.dat#5
+CHECK fan:lldb-305 TWPAK03.dat#6
+CHECK fan:lldb-305 TWPAK03.dat#7
+CHECK fan:lldb-305 TWPAK03.dat#8
+CHECK fan:lldb-305 TWPAK03.dat#9
+CHECK fan:lldb-306 TWPAK04.dat#0
+CHECK fan:lldb-306 TWPAK04.dat#1
+CHECK fan:lldb-306 TWPAK04.dat#2
+CHECK fan:lldb-306 TWPAK04.dat#3
+PASS fan:lldb-306 TWPAK04.dat#3 32 516
+CHECK fan:lldb-306 TWPAK04.dat#4
+CHECK fan:lldb-306 TWPAK04.dat#5
+CHECK fan:lldb-306 TWPAK04.dat#6
+CHECK fan:lldb-306 TWPAK04.dat#7
+CHECK fan:lldb-306 TWPAK04.dat#8
+CHECK fan:lldb-306 TWPAK04.dat#9
+CHECK fan:lldb-307 TWPAK05.dat#0
+CHECK fan:lldb-307 TWPAK05.dat#1
+CHECK fan:lldb-307 TWPAK05.dat#2
+CHECK fan:lldb-307 TWPAK05.dat#3
+CHECK fan:lldb-307 TWPAK05.dat#4
+CHECK fan:lldb-307 TWPAK05.dat#5
+CHECK fan:lldb-307 TWPAK05.dat#6
+CHECK fan:lldb-307 TWPAK05.dat#7
+CHECK fan:lldb-307 TWPAK05.dat#8
+CHECK fan:lldb-307 TWPAK05.dat#9
+CHECK fan:lldb-308 TWPAK06.dat#0
+CHECK fan:lldb-308 TWPAK06.dat#1
+CHECK fan:lldb-308 TWPAK06.dat#2
+CHECK fan:lldb-308 TWPAK06.dat#3
+CHECK fan:lldb-308 TWPAK06.dat#4
+CHECK fan:lldb-308 TWPAK06.dat#5
+CHECK fan:lldb-308 TWPAK06.dat#6
+CHECK fan:lldb-308 TWPAK06.dat#7
+CHECK fan:lldb-308 TWPAK06.dat#8
+CHECK fan:lldb-308 TWPAK06.dat#9
+CHECK fan:lldb-309 TWPAK07.dat#0
+CHECK fan:lldb-309 TWPAK07.dat#1
+CHECK fan:lldb-309 TWPAK07.dat#2
+CHECK fan:lldb-309 TWPAK07.dat#3
+CHECK fan:lldb-309 TWPAK07.dat#4
+CHECK fan:lldb-309 TWPAK07.dat#5
+CHECK fan:lldb-309 TWPAK07.dat#6
+CHECK fan:lldb-309 TWPAK07.dat#7
+CHECK fan:lldb-309 TWPAK07.dat#8
+CHECK fan:lldb-309 TWPAK07.dat#9
+CHECK fan:lldb-30 QBeez02.dat#0
+CHECK fan:lldb-30 QBeez02.dat#1
+CHECK fan:lldb-30 QBeez02.dat#2
+CHECK fan:lldb-30 QBeez02.dat#3
+CHECK fan:lldb-30 QBeez02.dat#4
+CHECK fan:lldb-30 QBeez02.dat#5
+CHECK fan:lldb-30 QBeez02.dat#6
+CHECK fan:lldb-30 QBeez02.dat#7
+CHECK fan:lldb-30 QBeez02.dat#8
+CHECK fan:lldb-30 QBeez02.dat#9
+CHECK fan:lldb-310 TWPAK08.dat#0
+CHECK fan:lldb-310 TWPAK08.dat#1
+CHECK fan:lldb-310 TWPAK08.dat#2
+CHECK fan:lldb-310 TWPAK08.dat#3
+CHECK fan:lldb-310 TWPAK08.dat#4
+CHECK fan:lldb-310 TWPAK08.dat#5
+CHECK fan:lldb-310 TWPAK08.dat#6
+CHECK fan:lldb-310 TWPAK08.dat#7
+CHECK fan:lldb-310 TWPAK08.dat#8
+CHECK fan:lldb-310 TWPAK08.dat#9
+CHECK fan:lldb-311 TWPAK09.dat#0
+CHECK fan:lldb-311 TWPAK09.dat#1
+CHECK fan:lldb-311 TWPAK09.dat#2
+CHECK fan:lldb-311 TWPAK09.dat#3
+CHECK fan:lldb-311 TWPAK09.dat#4
+CHECK fan:lldb-311 TWPAK09.dat#5
+CHECK fan:lldb-311 TWPAK09.dat#6
+CHECK fan:lldb-311 TWPAK09.dat#7
+CHECK fan:lldb-311 TWPAK09.dat#8
+CHECK fan:lldb-311 TWPAK09.dat#9
+CHECK fan:lldb-312 TWPAK10.dat#0
+CHECK fan:lldb-312 TWPAK10.dat#1
+CHECK fan:lldb-312 TWPAK10.dat#2
+CHECK fan:lldb-312 TWPAK10.dat#3
+CHECK fan:lldb-312 TWPAK10.dat#4
+CHECK fan:lldb-312 TWPAK10.dat#5
+CHECK fan:lldb-312 TWPAK10.dat#6
+CHECK fan:lldb-312 TWPAK10.dat#7
+PASS fan:lldb-312 TWPAK10.dat#7 5 3075
+CHECK fan:lldb-312 TWPAK10.dat#8
+CHECK fan:lldb-312 TWPAK10.dat#9
+CHECK fan:lldb-313 TWPAK11.dat#0
+CHECK fan:lldb-313 TWPAK11.dat#1
+CHECK fan:lldb-313 TWPAK11.dat#2
+CHECK fan:lldb-313 TWPAK11.dat#3
+CHECK fan:lldb-313 TWPAK11.dat#4
+CHECK fan:lldb-313 TWPAK11.dat#5
+CHECK fan:lldb-313 TWPAK11.dat#6
+CHECK fan:lldb-313 TWPAK11.dat#7
+CHECK fan:lldb-313 TWPAK11.dat#8
+CHECK fan:lldb-313 TWPAK11.dat#9
+CHECK fan:lldb-314 TWPAK12.dat#0
+CHECK fan:lldb-314 TWPAK12.dat#1
+CHECK fan:lldb-314 TWPAK12.dat#2
+CHECK fan:lldb-314 TWPAK12.dat#3
+CHECK fan:lldb-314 TWPAK12.dat#4
+CHECK fan:lldb-314 TWPAK12.dat#5
+CHECK fan:lldb-314 TWPAK12.dat#6
+CHECK fan:lldb-314 TWPAK12.dat#7
+CHECK fan:lldb-314 TWPAK12.dat#8
+CHECK fan:lldb-314 TWPAK12.dat#9
+CHECK fan:lldb-315 TWPAK13.dat#0
+PASS fan:lldb-315 TWPAK13.dat#0 30 1348
+CHECK fan:lldb-315 TWPAK13.dat#1
+PASS fan:lldb-315 TWPAK13.dat#1 20 644
+CHECK fan:lldb-315 TWPAK13.dat#2
+CHECK fan:lldb-315 TWPAK13.dat#3
+CHECK fan:lldb-315 TWPAK13.dat#4
+CHECK fan:lldb-315 TWPAK13.dat#5
+CHECK fan:lldb-315 TWPAK13.dat#6
+CHECK fan:lldb-315 TWPAK13.dat#7
+CHECK fan:lldb-315 TWPAK13.dat#8
+CHECK fan:lldb-315 TWPAK13.dat#9
+CHECK fan:lldb-316 twbestof.dat#0
+CHECK fan:lldb-316 twbestof.dat#1
+CHECK fan:lldb-316 twbestof.dat#2
+CHECK fan:lldb-316 twbestof.dat#3
+CHECK fan:lldb-316 twbestof.dat#4
+CHECK fan:lldb-316 twbestof.dat#5
+CHECK fan:lldb-316 twbestof.dat#6
+CHECK fan:lldb-316 twbestof.dat#7
+CHECK fan:lldb-316 twbestof.dat#8
+CHECK fan:lldb-316 twbestof.dat#9
+CHECK fan:lldb-317 joem1.dat#0
+CHECK fan:lldb-317 joem1.dat#1
+CHECK fan:lldb-317 joem1.dat#2
+CHECK fan:lldb-317 joem1.dat#3
+CHECK fan:lldb-317 joem1.dat#4
+CHECK fan:lldb-317 joem1.dat#5
+CHECK fan:lldb-317 joem1.dat#6
+CHECK fan:lldb-317 joem1.dat#7
+CHECK fan:lldb-317 joem1.dat#8
+PASS fan:lldb-317 joem1.dat#8 80 1720
+CHECK fan:lldb-317 joem1.dat#9
+CHECK fan:lldb-318 joem2.dat#0
+CHECK fan:lldb-318 joem2.dat#1
+CHECK fan:lldb-318 joem2.dat#2
+CHECK fan:lldb-318 joem2.dat#3
+CHECK fan:lldb-318 joem2.dat#4
+CHECK fan:lldb-318 joem2.dat#5
+CHECK fan:lldb-318 joem2.dat#6
+CHECK fan:lldb-318 joem2.dat#7
+CHECK fan:lldb-318 joem2.dat#8
+CHECK fan:lldb-318 joem2.dat#9
+CHECK fan:lldb-319 joem3.dat#0
+CHECK fan:lldb-319 joem3.dat#1
+CHECK fan:lldb-319 joem3.dat#2
+CHECK fan:lldb-319 joem3.dat#3
+CHECK fan:lldb-319 joem3.dat#4
+CHECK fan:lldb-319 joem3.dat#5
+CHECK fan:lldb-319 joem3.dat#6
+CHECK fan:lldb-319 joem3.dat#7
+CHECK fan:lldb-319 joem3.dat#8
+CHECK fan:lldb-319 joem3.dat#9
+CHECK fan:lldb-31 Siergiej01.dat#0
+CHECK fan:lldb-31 Siergiej01.dat#1
+CHECK fan:lldb-31 Siergiej01.dat#2
+CHECK fan:lldb-31 Siergiej01.dat#3
+CHECK fan:lldb-31 Siergiej01.dat#4
+CHECK fan:lldb-31 Siergiej01.dat#5
+CHECK fan:lldb-31 Siergiej01.dat#6
+CHECK fan:lldb-31 Siergiej01.dat#7
+CHECK fan:lldb-31 Siergiej01.dat#8
+CHECK fan:lldb-31 Siergiej01.dat#9
+CHECK fan:lldb-320 joem5.dat#0
+CHECK fan:lldb-320 joem5.dat#1
+CHECK fan:lldb-320 joem5.dat#2
+CHECK fan:lldb-320 joem5.dat#3
+CHECK fan:lldb-320 joem5.dat#4
+CHECK fan:lldb-320 joem5.dat#5
+CHECK fan:lldb-320 joem5.dat#6
+CHECK fan:lldb-320 joem5.dat#7
+CHECK fan:lldb-320 joem5.dat#9
+CHECK fan:lldb-321 joem6.dat#0
+CHECK fan:lldb-321 joem6.dat#1
+CHECK fan:lldb-321 joem6.dat#2
+CHECK fan:lldb-321 joem6.dat#3
+CHECK fan:lldb-321 joem6.dat#4
+CHECK fan:lldb-321 joem6.dat#5
+CHECK fan:lldb-321 joem6.dat#6
+CHECK fan:lldb-321 joem6.dat#7
+CHECK fan:lldb-321 joem6.dat#8
+CHECK fan:lldb-321 joem6.dat#9
+CHECK fan:lldb-322 joem7.dat#0
+CHECK fan:lldb-322 joem7.dat#1
+CHECK fan:lldb-322 joem7.dat#2
+CHECK fan:lldb-322 joem7.dat#3
+CHECK fan:lldb-322 joem7.dat#4
+CHECK fan:lldb-322 joem7.dat#5
+CHECK fan:lldb-322 joem7.dat#6
+CHECK fan:lldb-322 joem7.dat#7
+CHECK fan:lldb-322 joem7.dat#8
+CHECK fan:lldb-322 joem7.dat#9
+CHECK fan:lldb-323 joem8.dat#0
+CHECK fan:lldb-323 joem8.dat#1
+CHECK fan:lldb-323 joem8.dat#2
+CHECK fan:lldb-323 joem8.dat#3
+CHECK fan:lldb-323 joem8.dat#4
+CHECK fan:lldb-323 joem8.dat#5
+CHECK fan:lldb-323 joem8.dat#6
+CHECK fan:lldb-323 joem8.dat#7
+CHECK fan:lldb-323 joem8.dat#8
+CHECK fan:lldb-323 joem8.dat#9
+CHECK fan:lldb-324 joem9.dat#0
+CHECK fan:lldb-324 joem9.dat#1
+CHECK fan:lldb-324 joem9.dat#2
+CHECK fan:lldb-324 joem9.dat#4
+CHECK fan:lldb-324 joem9.dat#5
+CHECK fan:lldb-324 joem9.dat#7
+CHECK fan:lldb-324 joem9.dat#8
+CHECK fan:lldb-324 joem9.dat#9
+CHECK fan:lldb-325 t3tesla.dat#0
+CHECK fan:lldb-325 t3tesla.dat#1
+CHECK fan:lldb-325 t3tesla.dat#2
+CHECK fan:lldb-325 t3tesla.dat#3
+CHECK fan:lldb-325 t3tesla.dat#4
+CHECK fan:lldb-325 t3tesla.dat#5
+CHECK fan:lldb-325 t3tesla.dat#6
+CHECK fan:lldb-325 t3tesla.dat#7
+CHECK fan:lldb-325 t3tesla.dat#8
+CHECK fan:lldb-325 t3tesla.dat#9
+CHECK fan:lldb-326 CALEPCK1.DAT#0
+CHECK fan:lldb-326 CALEPCK1.DAT#1
+CHECK fan:lldb-326 CALEPCK1.DAT#2
+CHECK fan:lldb-326 CALEPCK1.DAT#3
+CHECK fan:lldb-326 CALEPCK1.DAT#4
+CHECK fan:lldb-326 CALEPCK1.DAT#5
+CHECK fan:lldb-326 CALEPCK1.DAT#6
+CHECK fan:lldb-326 CALEPCK1.DAT#7
+CHECK fan:lldb-326 CALEPCK1.DAT#8
+CHECK fan:lldb-326 CALEPCK1.DAT#9
+CHECK fan:lldb-327 JM01.DAT#0
+CHECK fan:lldb-327 JM01.DAT#1
+CHECK fan:lldb-327 JM01.DAT#2
+CHECK fan:lldb-327 JM01.DAT#3
+CHECK fan:lldb-327 JM01.DAT#4
+CHECK fan:lldb-327 JM01.DAT#5
+CHECK fan:lldb-327 JM01.DAT#6
+CHECK fan:lldb-327 JM01.DAT#7
+PASS fan:lldb-327 JM01.DAT#7 58 555
+CHECK fan:lldb-327 JM01.DAT#8
+CHECK fan:lldb-327 JM01.DAT#9
+CHECK fan:lldb-328 JM02.DAT#0
+CHECK fan:lldb-328 JM02.DAT#1
+CHECK fan:lldb-328 JM02.DAT#2
+CHECK fan:lldb-328 JM02.DAT#3
+CHECK fan:lldb-328 JM02.DAT#4
+CHECK fan:lldb-328 JM02.DAT#5
+CHECK fan:lldb-328 JM02.DAT#6
+CHECK fan:lldb-328 JM02.DAT#7
+CHECK fan:lldb-328 JM02.DAT#8
+CHECK fan:lldb-328 JM02.DAT#9
+CHECK fan:lldb-329 JM03.DAT#0
+CHECK fan:lldb-329 JM03.DAT#1
+CHECK fan:lldb-329 JM03.DAT#2
+CHECK fan:lldb-329 JM03.DAT#3
+CHECK fan:lldb-329 JM03.DAT#4
+CHECK fan:lldb-329 JM03.DAT#5
+CHECK fan:lldb-329 JM03.DAT#6
+CHECK fan:lldb-329 JM03.DAT#7
+CHECK fan:lldb-329 JM03.DAT#8
+CHECK fan:lldb-329 JM03.DAT#9
+CHECK fan:lldb-32 ClamSpam01.dat#0
+CHECK fan:lldb-32 ClamSpam01.dat#1
+CHECK fan:lldb-32 ClamSpam01.dat#2
+CHECK fan:lldb-32 ClamSpam01.dat#3
+CHECK fan:lldb-32 ClamSpam01.dat#4
+CHECK fan:lldb-32 ClamSpam01.dat#5
+CHECK fan:lldb-32 ClamSpam01.dat#6
+CHECK fan:lldb-32 ClamSpam01.dat#7
+CHECK fan:lldb-32 ClamSpam01.dat#8
+CHECK fan:lldb-32 ClamSpam01.dat#9
+CHECK fan:lldb-330 JM04.DAT#0
+CHECK fan:lldb-330 JM04.DAT#1
+CHECK fan:lldb-330 JM04.DAT#2
+CHECK fan:lldb-330 JM04.DAT#3
+CHECK fan:lldb-330 JM04.DAT#4
+CHECK fan:lldb-330 JM04.DAT#5
+CHECK fan:lldb-330 JM04.DAT#6
+CHECK fan:lldb-330 JM04.DAT#7
+CHECK fan:lldb-330 JM04.DAT#8
+CHECK fan:lldb-330 JM04.DAT#9
+CHECK fan:lldb-331 JM05.DAT#0
+CHECK fan:lldb-331 JM05.DAT#1
+CHECK fan:lldb-331 JM05.DAT#2
+CHECK fan:lldb-331 JM05.DAT#3
+CHECK fan:lldb-331 JM05.DAT#4
+CHECK fan:lldb-331 JM05.DAT#5
+CHECK fan:lldb-331 JM05.DAT#6
+CHECK fan:lldb-331 JM05.DAT#7
+CHECK fan:lldb-331 JM05.DAT#8
+PASS fan:lldb-331 JM05.DAT#8 80 3326
+CHECK fan:lldb-331 JM05.DAT#9
+CHECK fan:lldb-332 JM06.DAT#0
+CHECK fan:lldb-332 JM06.DAT#1
+CHECK fan:lldb-332 JM06.DAT#2
+CHECK fan:lldb-332 JM06.DAT#3
+CHECK fan:lldb-332 JM06.DAT#4
+CHECK fan:lldb-332 JM06.DAT#5
+CHECK fan:lldb-332 JM06.DAT#6
+CHECK fan:lldb-332 JM06.DAT#7
+CHECK fan:lldb-332 JM06.DAT#8
+CHECK fan:lldb-332 JM06.DAT#9
+CHECK fan:lldb-333 JM07.DAT#0
+CHECK fan:lldb-333 JM07.DAT#1
+CHECK fan:lldb-333 JM07.DAT#2
+CHECK fan:lldb-333 JM07.DAT#4
+CHECK fan:lldb-333 JM07.DAT#5
+CHECK fan:lldb-333 JM07.DAT#6
+CHECK fan:lldb-333 JM07.DAT#7
+CHECK fan:lldb-333 JM07.DAT#8
+CHECK fan:lldb-333 JM07.DAT#9
+CHECK fan:lldb-334 JM08.DAT#0
+CHECK fan:lldb-334 JM08.DAT#1
+CHECK fan:lldb-334 JM08.DAT#2
+CHECK fan:lldb-334 JM08.DAT#3
+CHECK fan:lldb-334 JM08.DAT#4
+CHECK fan:lldb-334 JM08.DAT#5
+CHECK fan:lldb-334 JM08.DAT#6
+CHECK fan:lldb-334 JM08.DAT#7
+CHECK fan:lldb-334 JM08.DAT#8
+CHECK fan:lldb-334 JM08.DAT#9
+CHECK fan:lldb-335 JM09.DAT#0
+CHECK fan:lldb-335 JM09.DAT#1
+CHECK fan:lldb-335 JM09.DAT#2
+CHECK fan:lldb-335 JM09.DAT#3
+CHECK fan:lldb-335 JM09.DAT#4
+CHECK fan:lldb-335 JM09.DAT#5
+CHECK fan:lldb-335 JM09.DAT#6
+CHECK fan:lldb-335 JM09.DAT#7
+CHECK fan:lldb-335 JM09.DAT#8
+CHECK fan:lldb-335 JM09.DAT#9
+CHECK fan:lldb-336 JM10.DAT#0
+CHECK fan:lldb-336 JM10.DAT#1
+CHECK fan:lldb-336 JM10.DAT#2
+CHECK fan:lldb-336 JM10.DAT#3
+CHECK fan:lldb-336 JM10.DAT#4
+CHECK fan:lldb-336 JM10.DAT#5
+CHECK fan:lldb-336 JM10.DAT#6
+CHECK fan:lldb-336 JM10.DAT#7
+CHECK fan:lldb-336 JM10.DAT#8
+CHECK fan:lldb-336 JM10.DAT#9
+CHECK fan:lldb-337 JM11.DAT#0
+CHECK fan:lldb-337 JM11.DAT#1
+CHECK fan:lldb-337 JM11.DAT#2
+CHECK fan:lldb-337 JM11.DAT#3
+CHECK fan:lldb-337 JM11.DAT#4
+CHECK fan:lldb-337 JM11.DAT#5
+CHECK fan:lldb-337 JM11.DAT#6
+CHECK fan:lldb-337 JM11.DAT#7
+CHECK fan:lldb-337 JM11.DAT#8
+CHECK fan:lldb-337 JM11.DAT#9
+CHECK fan:lldb-338 JM12.DAT#0
+CHECK fan:lldb-338 JM12.DAT#1
+CHECK fan:lldb-338 JM12.DAT#2
+CHECK fan:lldb-338 JM12.DAT#3
+CHECK fan:lldb-338 JM12.DAT#4
+CHECK fan:lldb-338 JM12.DAT#5
+CHECK fan:lldb-338 JM12.DAT#6
+CHECK fan:lldb-338 JM12.DAT#7
+CHECK fan:lldb-338 JM12.DAT#8
+CHECK fan:lldb-338 JM12.DAT#9
+CHECK fan:lldb-339 JM13.DAT#0
+CHECK fan:lldb-339 JM13.DAT#1
+CHECK fan:lldb-339 JM13.DAT#2
+CHECK fan:lldb-339 JM13.DAT#3
+CHECK fan:lldb-339 JM13.DAT#4
+CHECK fan:lldb-339 JM13.DAT#5
+CHECK fan:lldb-339 JM13.DAT#6
+CHECK fan:lldb-339 JM13.DAT#7
+CHECK fan:lldb-339 JM13.DAT#8
+CHECK fan:lldb-339 JM13.DAT#9
+CHECK fan:lldb-33 QBeez03.dat#0
+CHECK fan:lldb-33 QBeez03.dat#1
+CHECK fan:lldb-33 QBeez03.dat#2
+CHECK fan:lldb-33 QBeez03.dat#3
+CHECK fan:lldb-33 QBeez03.dat#4
+CHECK fan:lldb-33 QBeez03.dat#5
+CHECK fan:lldb-33 QBeez03.dat#6
+CHECK fan:lldb-33 QBeez03.dat#7
+CHECK fan:lldb-33 QBeez03.dat#8
+CHECK fan:lldb-33 QBeez03.dat#9
+PASS fan:lldb-33 QBeez03.dat#9 99 3188
+CHECK fan:lldb-340 JM14.DAT#0
+CHECK fan:lldb-340 JM14.DAT#1
+CHECK fan:lldb-340 JM14.DAT#2
+CHECK fan:lldb-340 JM14.DAT#3
+CHECK fan:lldb-340 JM14.DAT#4
+CHECK fan:lldb-340 JM14.DAT#5
+PASS fan:lldb-340 JM14.DAT#5 59 2492
+CHECK fan:lldb-340 JM14.DAT#6
+CHECK fan:lldb-340 JM14.DAT#7
+CHECK fan:lldb-340 JM14.DAT#8
+CHECK fan:lldb-340 JM14.DAT#9
+CHECK fan:lldb-341 JM15.DAT#0
+CHECK fan:lldb-341 JM15.DAT#1
+CHECK fan:lldb-341 JM15.DAT#2
+CHECK fan:lldb-341 JM15.DAT#3
+CHECK fan:lldb-341 JM15.DAT#4
+CHECK fan:lldb-341 JM15.DAT#5
+CHECK fan:lldb-341 JM15.DAT#6
+CHECK fan:lldb-341 JM15.DAT#7
+CHECK fan:lldb-341 JM15.DAT#8
+CHECK fan:lldb-341 JM15.DAT#9
+CHECK fan:lldb-342 JM16.DAT#0
+CHECK fan:lldb-342 JM16.DAT#1
+CHECK fan:lldb-342 JM16.DAT#2
+CHECK fan:lldb-342 JM16.DAT#3
+CHECK fan:lldb-342 JM16.DAT#4
+CHECK fan:lldb-342 JM16.DAT#5
+CHECK fan:lldb-342 JM16.DAT#6
+CHECK fan:lldb-342 JM16.DAT#7
+CHECK fan:lldb-342 JM16.DAT#8
+CHECK fan:lldb-342 JM16.DAT#9
+CHECK fan:lldb-343 JM17.DAT#0
+CHECK fan:lldb-343 JM17.DAT#1
+CHECK fan:lldb-343 JM17.DAT#2
+CHECK fan:lldb-343 JM17.DAT#3
+CHECK fan:lldb-343 JM17.DAT#4
+CHECK fan:lldb-343 JM17.DAT#5
+CHECK fan:lldb-343 JM17.DAT#6
+CHECK fan:lldb-343 JM17.DAT#8
+CHECK fan:lldb-343 JM17.DAT#9
+CHECK fan:lldb-344 JM18.DAT#0
+CHECK fan:lldb-344 JM18.DAT#1
+CHECK fan:lldb-344 JM18.DAT#2
+CHECK fan:lldb-344 JM18.DAT#3
+CHECK fan:lldb-344 JM18.DAT#4
+CHECK fan:lldb-344 JM18.DAT#5
+CHECK fan:lldb-344 JM18.DAT#6
+CHECK fan:lldb-344 JM18.DAT#7
+CHECK fan:lldb-344 JM18.DAT#8
+CHECK fan:lldb-344 JM18.DAT#9
+CHECK fan:lldb-345 MARSHY01.DAT#0
+CHECK fan:lldb-345 MARSHY01.DAT#1
+CHECK fan:lldb-345 MARSHY01.DAT#2
+CHECK fan:lldb-345 MARSHY01.DAT#3
+CHECK fan:lldb-345 MARSHY01.DAT#4
+CHECK fan:lldb-345 MARSHY01.DAT#5
+CHECK fan:lldb-345 MARSHY01.DAT#6
+CHECK fan:lldb-345 MARSHY01.DAT#7
+CHECK fan:lldb-345 MARSHY01.DAT#8
+CHECK fan:lldb-345 MARSHY01.DAT#9
+CHECK fan:lldb-346 MARSHY02.DAT#0
+CHECK fan:lldb-346 MARSHY02.DAT#1
+CHECK fan:lldb-346 MARSHY02.DAT#2
+CHECK fan:lldb-346 MARSHY02.DAT#3
+CHECK fan:lldb-346 MARSHY02.DAT#4
+CHECK fan:lldb-346 MARSHY02.DAT#5
+CHECK fan:lldb-346 MARSHY02.DAT#6
+CHECK fan:lldb-346 MARSHY02.DAT#7
+CHECK fan:lldb-346 MARSHY02.DAT#8
+CHECK fan:lldb-346 MARSHY02.DAT#9
+CHECK fan:lldb-347 MARSHY03.DAT#0
+CHECK fan:lldb-347 MARSHY03.DAT#1
+CHECK fan:lldb-347 MARSHY03.DAT#2
+CHECK fan:lldb-347 MARSHY03.DAT#3
+CHECK fan:lldb-347 MARSHY03.DAT#4
+CHECK fan:lldb-347 MARSHY03.DAT#5
+CHECK fan:lldb-347 MARSHY03.DAT#6
+CHECK fan:lldb-347 MARSHY03.DAT#7
+CHECK fan:lldb-347 MARSHY03.DAT#8
+CHECK fan:lldb-347 MARSHY03.DAT#9
+CHECK fan:lldb-348 MARSHY04.DAT#0
+CHECK fan:lldb-348 MARSHY04.DAT#1
+CHECK fan:lldb-348 MARSHY04.DAT#2
+CHECK fan:lldb-348 MARSHY04.DAT#3
+CHECK fan:lldb-348 MARSHY04.DAT#4
+CHECK fan:lldb-348 MARSHY04.DAT#5
+CHECK fan:lldb-348 MARSHY04.DAT#6
+CHECK fan:lldb-348 MARSHY04.DAT#7
+CHECK fan:lldb-348 MARSHY04.DAT#8
+CHECK fan:lldb-348 MARSHY04.DAT#9
+CHECK fan:lldb-349 MARSHY05.DAT#0
+CHECK fan:lldb-349 MARSHY05.DAT#1
+CHECK fan:lldb-349 MARSHY05.DAT#2
+CHECK fan:lldb-349 MARSHY05.DAT#3
+CHECK fan:lldb-349 MARSHY05.DAT#4
+CHECK fan:lldb-349 MARSHY05.DAT#5
+CHECK fan:lldb-349 MARSHY05.DAT#6
+CHECK fan:lldb-349 MARSHY05.DAT#7
+CHECK fan:lldb-349 MARSHY05.DAT#8
+CHECK fan:lldb-349 MARSHY05.DAT#9
+CHECK fan:lldb-34 levelpack1.dat#0
+CHECK fan:lldb-34 levelpack1.dat#1
+CHECK fan:lldb-34 levelpack1.dat#2
+CHECK fan:lldb-34 levelpack1.dat#3
+CHECK fan:lldb-34 levelpack1.dat#4
+CHECK fan:lldb-34 levelpack1.dat#5
+CHECK fan:lldb-34 levelpack1.dat#6
+CHECK fan:lldb-34 levelpack1.dat#7
+CHECK fan:lldb-350 MARSHY06.DAT#0
+CHECK fan:lldb-350 MARSHY06.DAT#1
+CHECK fan:lldb-350 MARSHY06.DAT#2
+CHECK fan:lldb-350 MARSHY06.DAT#3
+CHECK fan:lldb-350 MARSHY06.DAT#4
+CHECK fan:lldb-350 MARSHY06.DAT#5
+PASS fan:lldb-350 MARSHY06.DAT#5 80 2472
+CHECK fan:lldb-350 MARSHY06.DAT#6
+CHECK fan:lldb-350 MARSHY06.DAT#7
+CHECK fan:lldb-350 MARSHY06.DAT#8
+CHECK fan:lldb-350 MARSHY06.DAT#9
+CHECK fan:lldb-351 MARSHY07.DAT#0
+CHECK fan:lldb-351 MARSHY07.DAT#1
+CHECK fan:lldb-351 MARSHY07.DAT#2
+CHECK fan:lldb-351 MARSHY07.DAT#3
+PASS fan:lldb-351 MARSHY07.DAT#3 80 1781
+CHECK fan:lldb-351 MARSHY07.DAT#4
+CHECK fan:lldb-351 MARSHY07.DAT#5
+CHECK fan:lldb-351 MARSHY07.DAT#6
+CHECK fan:lldb-351 MARSHY07.DAT#7
+CHECK fan:lldb-351 MARSHY07.DAT#8
+CHECK fan:lldb-351 MARSHY07.DAT#9
+CHECK fan:lldb-35 1tseug.dat#0
+CHECK fan:lldb-35 1tseug.dat#1
+CHECK fan:lldb-35 1tseug.dat#2
+PASS fan:lldb-35 1tseug.dat#2 19 1022
+CHECK fan:lldb-35 1tseug.dat#3
+CHECK fan:lldb-35 1tseug.dat#4
+CHECK fan:lldb-35 1tseug.dat#5
+CHECK fan:lldb-35 1tseug.dat#6
+CHECK fan:lldb-35 1tseug.dat#7
+CHECK fan:lldb-35 1tseug.dat#8
+CHECK fan:lldb-35 1tseug.dat#9
+PASS fan:lldb-35 1tseug.dat#9 40 837
+CHECK fan:lldb-352 MARSHY08.DAT#0
+CHECK fan:lldb-352 MARSHY08.DAT#1
+CHECK fan:lldb-352 MARSHY08.DAT#2
+CHECK fan:lldb-352 MARSHY08.DAT#3
+CHECK fan:lldb-352 MARSHY08.DAT#4
+CHECK fan:lldb-352 MARSHY08.DAT#5
+CHECK fan:lldb-352 MARSHY08.DAT#6
+CHECK fan:lldb-352 MARSHY08.DAT#7
+CHECK fan:lldb-352 MARSHY08.DAT#8
+CHECK fan:lldb-352 MARSHY08.DAT#9
+CHECK fan:lldb-353 Isupck02.dat#0
+CHECK fan:lldb-353 Isupck02.dat#1
+CHECK fan:lldb-353 Isupck02.dat#2
+CHECK fan:lldb-353 Isupck02.dat#3
+CHECK fan:lldb-353 Isupck02.dat#4
+CHECK fan:lldb-353 Isupck02.dat#5
+CHECK fan:lldb-353 Isupck02.dat#6
+CHECK fan:lldb-353 Isupck02.dat#7
+CHECK fan:lldb-353 Isupck02.dat#8
+CHECK fan:lldb-353 Isupck02.dat#9
+CHECK fan:lldb-354 Jeffpck1.dat#0
+CHECK fan:lldb-354 Jeffpck1.dat#1
+CHECK fan:lldb-354 Jeffpck1.dat#2
+CHECK fan:lldb-354 Jeffpck1.dat#3
+CHECK fan:lldb-354 Jeffpck1.dat#4
+CHECK fan:lldb-354 Jeffpck1.dat#5
+CHECK fan:lldb-354 Jeffpck1.dat#6
+CHECK fan:lldb-354 Jeffpck1.dat#7
+CHECK fan:lldb-355 S370PAK1.DAT#0
+CHECK fan:lldb-355 S370PAK1.DAT#1
+CHECK fan:lldb-355 S370PAK1.DAT#2
+CHECK fan:lldb-355 S370PAK1.DAT#3
+CHECK fan:lldb-355 S370PAK1.DAT#4
+CHECK fan:lldb-355 S370PAK1.DAT#5
+CHECK fan:lldb-355 S370PAK1.DAT#6
+CHECK fan:lldb-355 S370PAK1.DAT#7
+CHECK fan:lldb-355 S370PAK1.DAT#8
+CHECK fan:lldb-355 S370PAK1.DAT#9
+CHECK fan:lldb-356 Lemming Crazy Contest 1.dat#0
+CHECK fan:lldb-356 Lemming Crazy Contest 1.dat#1
+CHECK fan:lldb-356 Lemming Crazy Contest 1.dat#2
+CHECK fan:lldb-356 Lemming Crazy Contest 1.dat#3
+CHECK fan:lldb-356 Lemming Crazy Contest 1.dat#4
+CHECK fan:lldb-357 Modlvls.dat#0
+CHECK fan:lldb-357 Modlvls.dat#1
+CHECK fan:lldb-357 Modlvls.dat#2
+CHECK fan:lldb-357 Modlvls.dat#3
+CHECK fan:lldb-357 Modlvls.dat#4
+CHECK fan:lldb-357 Modlvls.dat#5
+CHECK fan:lldb-357 Modlvls.dat#6
+CHECK fan:lldb-357 Modlvls.dat#7
+CHECK fan:lldb-357 Modlvls.dat#8
+CHECK fan:lldb-357 Modlvls.dat#9
+CHECK fan:lldb-358 oldbutgo.dat#0
+CHECK fan:lldb-358 oldbutgo.dat#1
+CHECK fan:lldb-358 oldbutgo.dat#2
+CHECK fan:lldb-358 oldbutgo.dat#3
+CHECK fan:lldb-358 oldbutgo.dat#4
+CHECK fan:lldb-358 oldbutgo.dat#5
+CHECK fan:lldb-358 oldbutgo.dat#6
+CHECK fan:lldb-358 oldbutgo.dat#7
+CHECK fan:lldb-358 oldbutgo.dat#8
+CHECK fan:lldb-358 oldbutgo.dat#9
+CHECK fan:lldb-359 wade.DAT#0
+CHECK fan:lldb-359 wade.DAT#1
+CHECK fan:lldb-359 wade.DAT#2
+CHECK fan:lldb-359 wade.DAT#3
+CHECK fan:lldb-359 wade.DAT#4
+CHECK fan:lldb-359 wade.DAT#5
+CHECK fan:lldb-359 wade.DAT#6
+CHECK fan:lldb-359 wade.DAT#7
+CHECK fan:lldb-359 wade.DAT#8
+CHECK fan:lldb-359 wade.DAT#9
+CHECK fan:lldb-360 MARSHY09.DAT#0
+CHECK fan:lldb-360 MARSHY09.DAT#1
+CHECK fan:lldb-360 MARSHY09.DAT#2
+CHECK fan:lldb-360 MARSHY09.DAT#3
+CHECK fan:lldb-360 MARSHY09.DAT#4
+CHECK fan:lldb-360 MARSHY09.DAT#5
+CHECK fan:lldb-360 MARSHY09.DAT#6
+CHECK fan:lldb-360 MARSHY09.DAT#7
+CHECK fan:lldb-360 MARSHY09.DAT#8
+CHECK fan:lldb-360 MARSHY09.DAT#9
+CHECK fan:lldb-361 togpak.dat#0
+CHECK fan:lldb-361 togpak.dat#1
+CHECK fan:lldb-361 togpak.dat#2
+CHECK fan:lldb-361 togpak.dat#3
+CHECK fan:lldb-361 togpak.dat#4
+CHECK fan:lldb-361 togpak.dat#5
+CHECK fan:lldb-361 togpak.dat#6
+CHECK fan:lldb-361 togpak.dat#7
+CHECK fan:lldb-361 togpak.dat#8
+CHECK fan:lldb-361 togpak.dat#9
+CHECK fan:lldb-362 m91-1.dat#0
+CHECK fan:lldb-362 m91-1.dat#1
+CHECK fan:lldb-362 m91-1.dat#2
+CHECK fan:lldb-362 m91-1.dat#3
+CHECK fan:lldb-362 m91-1.dat#4
+CHECK fan:lldb-362 m91-1.dat#5
+CHECK fan:lldb-362 m91-1.dat#6
+CHECK fan:lldb-362 m91-1.dat#7
+CHECK fan:lldb-362 m91-1.dat#8
+CHECK fan:lldb-362 m91-1.dat#9
+CHECK fan:lldb-363 m91-2.dat#0
+CHECK fan:lldb-363 m91-2.dat#1
+CHECK fan:lldb-363 m91-2.dat#2
+CHECK fan:lldb-363 m91-2.dat#3
+CHECK fan:lldb-363 m91-2.dat#4
+CHECK fan:lldb-363 m91-2.dat#5
+CHECK fan:lldb-363 m91-2.dat#6
+CHECK fan:lldb-363 m91-2.dat#7
+CHECK fan:lldb-363 m91-2.dat#8
+CHECK fan:lldb-363 m91-2.dat#9
+CHECK fan:lldb-364 twigpak2.dat#0
+CHECK fan:lldb-364 twigpak2.dat#1
+CHECK fan:lldb-364 twigpak2.dat#2
+CHECK fan:lldb-364 twigpak2.dat#3
+CHECK fan:lldb-364 twigpak2.dat#4
+CHECK fan:lldb-364 twigpak2.dat#5
+CHECK fan:lldb-364 twigpak2.dat#6
+CHECK fan:lldb-364 twigpak2.dat#7
+CHECK fan:lldb-364 twigpak2.dat#8
+CHECK fan:lldb-364 twigpak2.dat#9
+CHECK fan:lldb-365 LEVPAK1.DAT#0
+CHECK fan:lldb-365 LEVPAK1.DAT#1
+CHECK fan:lldb-365 LEVPAK1.DAT#2
+CHECK fan:lldb-365 LEVPAK1.DAT#3
+CHECK fan:lldb-365 LEVPAK1.DAT#4
+CHECK fan:lldb-365 LEVPAK1.DAT#5
+CHECK fan:lldb-365 LEVPAK1.DAT#6
+CHECK fan:lldb-365 LEVPAK1.DAT#7
+CHECK fan:lldb-365 LEVPAK1.DAT#8
+CHECK fan:lldb-365 LEVPAK1.DAT#9
+CHECK fan:lldb-366 LEVIPAK2.DAT#0
+PASS fan:lldb-366 LEVIPAK2.DAT#0 41 499
+CHECK fan:lldb-366 LEVIPAK2.DAT#1
+CHECK fan:lldb-366 LEVIPAK2.DAT#2
+CHECK fan:lldb-366 LEVIPAK2.DAT#3
+CHECK fan:lldb-366 LEVIPAK2.DAT#4
+CHECK fan:lldb-366 LEVIPAK2.DAT#5
+CHECK fan:lldb-366 LEVIPAK2.DAT#6
+CHECK fan:lldb-366 LEVIPAK2.DAT#7
+CHECK fan:lldb-366 LEVIPAK2.DAT#8
+CHECK fan:lldb-366 LEVIPAK2.DAT#9
+CHECK fan:lldb-367 LEVIPAK3.DAT#0
+PASS fan:lldb-367 LEVIPAK3.DAT#0 80 496
+CHECK fan:lldb-367 LEVIPAK3.DAT#1
+CHECK fan:lldb-367 LEVIPAK3.DAT#2
+CHECK fan:lldb-367 LEVIPAK3.DAT#3
+CHECK fan:lldb-367 LEVIPAK3.DAT#4
+CHECK fan:lldb-367 LEVIPAK3.DAT#5
+CHECK fan:lldb-367 LEVIPAK3.DAT#6
+CHECK fan:lldb-367 LEVIPAK3.DAT#7
+CHECK fan:lldb-367 LEVIPAK3.DAT#8
+CHECK fan:lldb-367 LEVIPAK3.DAT#9
+CHECK fan:lldb-368 levipak4.dat#0
+CHECK fan:lldb-368 levipak4.dat#1
+CHECK fan:lldb-368 levipak4.dat#2
+CHECK fan:lldb-368 levipak4.dat#3
+CHECK fan:lldb-368 levipak4.dat#4
+CHECK fan:lldb-368 levipak4.dat#5
+CHECK fan:lldb-368 levipak4.dat#6
+CHECK fan:lldb-368 levipak4.dat#7
+CHECK fan:lldb-368 levipak4.dat#8
+CHECK fan:lldb-368 levipak4.dat#9
+PASS fan:lldb-368 levipak4.dat#9 80 1809
+CHECK fan:lldb-369 01 - Tolosa.ini#-1
+CHECK fan:lldb-369 02 - Utopia.ini#-1
+CHECK fan:lldb-369 03 - Reciprocity.ini#-1
+CHECK fan:lldb-369 04 - Karjalanpiirakat.ini#-1
+CHECK fan:lldb-369 05 - Vertigo.ini#-1
+CHECK fan:lldb-369 06 - Totem.ini#-1
+CHECK fan:lldb-369 07 - Coalescing.ini#-1
+CHECK fan:lldb-369 08 - Parsimony.ini#-1
+CHECK fan:lldb-369 09 - Ecotone.ini#-1
+CHECK fan:lldb-369 10 - Cozenage.ini#-1
+CHECK fan:lldb-36 BulletRide1.dat#0
+CHECK fan:lldb-36 BulletRide1.dat#1
+CHECK fan:lldb-36 BulletRide1.dat#2
+CHECK fan:lldb-36 BulletRide1.dat#3
+CHECK fan:lldb-36 BulletRide1.dat#4
+CHECK fan:lldb-36 BulletRide1.dat#5
+CHECK fan:lldb-36 BulletRide1.dat#6
+CHECK fan:lldb-36 BulletRide1.dat#7
+CHECK fan:lldb-36 BulletRide1.dat#8
+CHECK fan:lldb-36 BulletRide1.dat#9
+CHECK fan:lldb-370 andi.DAT#0
+CHECK fan:lldb-370 andi.DAT#1
+CHECK fan:lldb-370 andi.DAT#2
+CHECK fan:lldb-370 andi.DAT#3
+CHECK fan:lldb-370 andi.DAT#4
+CHECK fan:lldb-370 andi.DAT#5
+CHECK fan:lldb-370 andi.DAT#6
+CHECK fan:lldb-370 andi.DAT#7
+CHECK fan:lldb-370 andi.DAT#8
+CHECK fan:lldb-370 andi.DAT#9
+CHECK fan:lldb-371 beta.dat#0
+CHECK fan:lldb-371 beta.dat#1
+CHECK fan:lldb-371 beta.dat#2
+CHECK fan:lldb-371 beta.dat#3
+CHECK fan:lldb-372 E3Levelpack_F.dat#0
+CHECK fan:lldb-372 E3Levelpack_F.dat#1
+CHECK fan:lldb-372 E3Levelpack_F.dat#2
+CHECK fan:lldb-372 E3Levelpack_F.dat#3
+CHECK fan:lldb-372 E3Levelpack_F.dat#4
+CHECK fan:lldb-372 E3Levelpack_F.dat#5
+CHECK fan:lldb-372 E3Levelpack_F.dat#6
+CHECK fan:lldb-372 E3Levelpack_F.dat#7
+CHECK fan:lldb-372 E3Levelpack_F.dat#8
+CHECK fan:lldb-372 E3Levelpack_F.dat#9
+CHECK fan:lldb-373 Insulfrog+LVL+PK+1.DAT#0
+CHECK fan:lldb-373 Insulfrog+LVL+PK+1.DAT#1
+CHECK fan:lldb-373 Insulfrog+LVL+PK+1.DAT#2
+PASS fan:lldb-373 Insulfrog+LVL+PK+1.DAT#2 100 10585
+CHECK fan:lldb-373 Insulfrog+LVL+PK+1.DAT#3
+CHECK fan:lldb-373 Insulfrog+LVL+PK+1.DAT#4
+CHECK fan:lldb-373 Insulfrog+LVL+PK+1.DAT#5
+CHECK fan:lldb-373 Insulfrog+LVL+PK+1.DAT#6
+CHECK fan:lldb-373 Insulfrog+LVL+PK+1.DAT#7
+CHECK fan:lldb-373 Insulfrog+LVL+PK+1.DAT#8
+CHECK fan:lldb-373 Insulfrog+LVL+PK+1.DAT#9
+CHECK fan:lldb-374 justdigcomp.dat#0
+CHECK fan:lldb-374 justdigcomp.dat#1
+CHECK fan:lldb-374 justdigcomp.dat#2
+CHECK fan:lldb-374 justdigcomp.dat#3
+PASS fan:lldb-374 justdigcomp.dat#3 5 3075
+CHECK fan:lldb-374 justdigcomp.dat#4
+CHECK fan:lldb-375 twigpak1.dat#0
+CHECK fan:lldb-375 twigpak1.dat#1
+CHECK fan:lldb-375 twigpak1.dat#2
+CHECK fan:lldb-375 twigpak1.dat#3
+CHECK fan:lldb-375 twigpak1.dat#4
+CHECK fan:lldb-375 twigpak1.dat#5
+CHECK fan:lldb-375 twigpak1.dat#6
+CHECK fan:lldb-375 twigpak1.dat#7
+CHECK fan:lldb-375 twigpak1.dat#8
+CHECK fan:lldb-375 twigpak1.dat#9
+CHECK fan:lldb-376 twigpak3.dat#0
+CHECK fan:lldb-376 twigpak3.dat#1
+CHECK fan:lldb-376 twigpak3.dat#2
+CHECK fan:lldb-376 twigpak3.dat#3
+CHECK fan:lldb-376 twigpak3.dat#4
+CHECK fan:lldb-376 twigpak3.dat#5
+CHECK fan:lldb-376 twigpak3.dat#6
+CHECK fan:lldb-376 twigpak3.dat#7
+CHECK fan:lldb-376 twigpak3.dat#8
+CHECK fan:lldb-377 shveg01.dat#0
+CHECK fan:lldb-377 shveg01.dat#1
+CHECK fan:lldb-377 shveg01.dat#2
+CHECK fan:lldb-377 shveg01.dat#3
+CHECK fan:lldb-377 shveg01.dat#4
+CHECK fan:lldb-377 shveg01.dat#5
+CHECK fan:lldb-377 shveg01.dat#6
+CHECK fan:lldb-377 shveg01.dat#7
+CHECK fan:lldb-377 shveg01.dat#8
+CHECK fan:lldb-377 shveg01.dat#9
+CHECK fan:lldb-378 shveg02.dat#0
+CHECK fan:lldb-378 shveg02.dat#1
+CHECK fan:lldb-378 shveg02.dat#2
+CHECK fan:lldb-378 shveg02.dat#3
+CHECK fan:lldb-378 shveg02.dat#4
+CHECK fan:lldb-378 shveg02.dat#5
+CHECK fan:lldb-378 shveg02.dat#6
+CHECK fan:lldb-378 shveg02.dat#7
+CHECK fan:lldb-378 shveg02.dat#8
+CHECK fan:lldb-378 shveg02.dat#9
+CHECK fan:lldb-379 shveg03.dat#0
+CHECK fan:lldb-379 shveg03.dat#1
+CHECK fan:lldb-379 shveg03.dat#2
+CHECK fan:lldb-379 shveg03.dat#3
+CHECK fan:lldb-379 shveg03.dat#4
+CHECK fan:lldb-379 shveg03.dat#5
+CHECK fan:lldb-379 shveg03.dat#6
+CHECK fan:lldb-379 shveg03.dat#7
+CHECK fan:lldb-379 shveg03.dat#8
+CHECK fan:lldb-379 shveg03.dat#9
+CHECK fan:lldb-37 BulletRide2.dat#0
+CHECK fan:lldb-37 BulletRide2.dat#1
+CHECK fan:lldb-37 BulletRide2.dat#2
+CHECK fan:lldb-37 BulletRide2.dat#3
+CHECK fan:lldb-37 BulletRide2.dat#4
+CHECK fan:lldb-37 BulletRide2.dat#5
+CHECK fan:lldb-37 BulletRide2.dat#6
+CHECK fan:lldb-37 BulletRide2.dat#7
+CHECK fan:lldb-37 BulletRide2.dat#8
+CHECK fan:lldb-37 BulletRide2.dat#9
+CHECK fan:lldb-382 ClamSpam06_4lvls.dat#0
+CHECK fan:lldb-382 ClamSpam06_4lvls.dat#1
+CHECK fan:lldb-382 ClamSpam06_4lvls.dat#2
+CHECK fan:lldb-382 ClamSpam06_4lvls.dat#3
+CHECK fan:lldb-384 Gronklems 2.dat#0
+CHECK fan:lldb-384 Gronklems 2.dat#1
+CHECK fan:lldb-384 Gronklems 2.dat#2
+CHECK fan:lldb-384 Gronklems 2.dat#3
+CHECK fan:lldb-384 Gronklems 2.dat#4
+CHECK fan:lldb-384 Gronklems 2.dat#5
+CHECK fan:lldb-384 Gronklems 2.dat#6
+CHECK fan:lldb-384 Gronklems 2.dat#7
+CHECK fan:lldb-384 Gronklems 2.dat#8
+CHECK fan:lldb-384 Gronklems 2.dat#9
+CHECK fan:lldb-385 Gronklems 3.dat#0
+CHECK fan:lldb-385 Gronklems 3.dat#1
+CHECK fan:lldb-385 Gronklems 3.dat#2
+CHECK fan:lldb-385 Gronklems 3.dat#3
+CHECK fan:lldb-385 Gronklems 3.dat#4
+CHECK fan:lldb-385 Gronklems 3.dat#5
+PASS fan:lldb-385 Gronklems 3.dat#5 100 612
+CHECK fan:lldb-385 Gronklems 3.dat#6
+CHECK fan:lldb-385 Gronklems 3.dat#7
+CHECK fan:lldb-385 Gronklems 3.dat#8
+CHECK fan:lldb-385 Gronklems 3.dat#9
+CHECK fan:lldb-386 Gronklems -1.dat#0
+CHECK fan:lldb-386 Gronklems -1.dat#1
+CHECK fan:lldb-386 Gronklems -1.dat#2
+CHECK fan:lldb-386 Gronklems -1.dat#3
+CHECK fan:lldb-387 Eymerich_01.dat#0
+CHECK fan:lldb-387 Eymerich_01.dat#1
+CHECK fan:lldb-387 Eymerich_01.dat#2
+CHECK fan:lldb-387 Eymerich_01.dat#3
+CHECK fan:lldb-387 Eymerich_01.dat#4
+CHECK fan:lldb-387 Eymerich_01.dat#5
+CHECK fan:lldb-387 Eymerich_01.dat#6
+CHECK fan:lldb-387 Eymerich_01.dat#7
+CHECK fan:lldb-387 Eymerich_01.dat#8
+CHECK fan:lldb-387 Eymerich_01.dat#9
+CHECK fan:lldb-388 geooPk2_preview2.dat#0
+PASS fan:lldb-388 geooPk2_preview2.dat#0 49 2573
+CHECK fan:lldb-388 geooPk2_preview2.dat#1
+PASS fan:lldb-388 geooPk2_preview2.dat#1 16 1197
+CHECK fan:lldb-388 geooPk2_preview2.dat#2
+CHECK fan:lldb-388 geooPk2_preview2.dat#3
+CHECK fan:lldb-389 LEVELPAK.DAT#0
+CHECK fan:lldb-389 LEVELPAK.DAT#1
+CHECK fan:lldb-389 LEVELPAK.DAT#2
+CHECK fan:lldb-389 LEVELPAK.DAT#3
+CHECK fan:lldb-389 LEVELPAK.DAT#4
+CHECK fan:lldb-389 LEVELPAK.DAT#5
+CHECK fan:lldb-389 LEVELPAK.DAT#6
+CHECK fan:lldb-389 LEVELPAK.DAT#7
+CHECK fan:lldb-389 LEVELPAK.DAT#8
+CHECK fan:lldb-389 LEVELPAK.DAT#9
+CHECK fan:lldb-38 BulletRide3.dat#0
+CHECK fan:lldb-38 BulletRide3.dat#1
+CHECK fan:lldb-38 BulletRide3.dat#2
+CHECK fan:lldb-38 BulletRide3.dat#3
+CHECK fan:lldb-38 BulletRide3.dat#4
+CHECK fan:lldb-38 BulletRide3.dat#5
+CHECK fan:lldb-38 BulletRide3.dat#6
+CHECK fan:lldb-38 BulletRide3.dat#7
+CHECK fan:lldb-38 BulletRide3.dat#8
+CHECK fan:lldb-38 BulletRide3.dat#9
+CHECK fan:lldb-390 elfpak02.dat#0
+CHECK fan:lldb-390 elfpak02.dat#1
+CHECK fan:lldb-390 elfpak02.dat#2
+CHECK fan:lldb-390 elfpak02.dat#3
+CHECK fan:lldb-390 elfpak02.dat#4
+CHECK fan:lldb-390 elfpak02.dat#5
+CHECK fan:lldb-390 elfpak02.dat#6
+CHECK fan:lldb-390 elfpak02.dat#7
+CHECK fan:lldb-390 elfpak02.dat#8
+CHECK fan:lldb-390 elfpak02.dat#9
+CHECK fan:lldb-391 elfpak03.dat#0
+CHECK fan:lldb-391 elfpak03.dat#1
+CHECK fan:lldb-391 elfpak03.dat#2
+CHECK fan:lldb-391 elfpak03.dat#3
+CHECK fan:lldb-391 elfpak03.dat#4
+CHECK fan:lldb-391 elfpak03.dat#5
+CHECK fan:lldb-391 elfpak03.dat#6
+CHECK fan:lldb-391 elfpak03.dat#7
+CHECK fan:lldb-391 elfpak03.dat#8
+CHECK fan:lldb-391 elfpak03.dat#9
+CHECK fan:lldb-393 pieuw01.dat#0
+CHECK fan:lldb-393 pieuw01.dat#1
+CHECK fan:lldb-393 pieuw01.dat#2
+CHECK fan:lldb-393 pieuw01.dat#3
+CHECK fan:lldb-393 pieuw01.dat#4
+CHECK fan:lldb-393 pieuw01.dat#5
+CHECK fan:lldb-393 pieuw01.dat#6
+CHECK fan:lldb-393 pieuw01.dat#7
+CHECK fan:lldb-393 pieuw01.dat#8
+CHECK fan:lldb-393 pieuw01.dat#9
+PASS fan:lldb-393 pieuw01.dat#9 4 1373
+CHECK fan:lldb-394 pieuw02.dat#0
+PASS fan:lldb-394 pieuw02.dat#0 47 1022
+CHECK fan:lldb-394 pieuw02.dat#1
+CHECK fan:lldb-394 pieuw02.dat#2
+PASS fan:lldb-394 pieuw02.dat#2 7 1346
+CHECK fan:lldb-394 pieuw02.dat#3
+PASS fan:lldb-394 pieuw02.dat#3 20 2469
+CHECK fan:lldb-394 pieuw02.dat#4
+CHECK fan:lldb-394 pieuw02.dat#5
+CHECK fan:lldb-394 pieuw02.dat#6
+PASS fan:lldb-394 pieuw02.dat#6 100 5904
+CHECK fan:lldb-394 pieuw02.dat#7
+CHECK fan:lldb-394 pieuw02.dat#8
+CHECK fan:lldb-394 pieuw02.dat#9
+CHECK fan:lldb-395 apple.dat#0
+CHECK fan:lldb-396 levelpack/contest10_patienceisavirtue.ini#-1
+CHECK fan:lldb-396 levelpack/contest1_Rock house.ini#-1
+CHECK fan:lldb-396 levelpack/contest1_RockHouse.ini#-1
+CHECK fan:lldb-396 levelpack/contest2_So close.ini#-1
+CHECK fan:lldb-396 levelpack/contest2_SoClose.ini#-1
+CHECK fan:lldb-396 levelpack/contest3_theoilrig.ini#-1
+CHECK fan:lldb-396 levelpack/contest4_handlewithcare.ini#-1
+CHECK fan:lldb-396 levelpack/contest5_statueoflemetry.ini#-1
+CHECK fan:lldb-396 levelpack/contest6_The Rambaldi Eye.ini#-1
+CHECK fan:lldb-396 levelpack/contest6_TheRambaldiEye.ini#-1
+CHECK fan:lldb-396 levelpack/contest7_Fall Guy.ini#-1
+CHECK fan:lldb-396 levelpack/contest7_FallGuy.ini#-1
+CHECK fan:lldb-396 levelpack/contest8_Out in Sixty Seconds.ini#-1
+CHECK fan:lldb-396 levelpack/contest8_OutInSixtySeconds.ini#-1
+CHECK fan:lldb-396 levelpack/contest9_DerangementofScience.ini#-1
+CHECK fan:lldb-397 2010 CONTEST/01loftyD.ini#-1
+CHECK fan:lldb-397 2010 CONTEST/02loftyD.ini#-1
+CHECK fan:lldb-397 2010 CONTEST/03Ellischant.lvl#-1
+CHECK fan:lldb-397 2010 CONTEST/04Dodochacalo.ini#-1
+CHECK fan:lldb-397 2010 CONTEST/05pieuw.ini#-1
+CHECK fan:lldb-397 2010 CONTEST/06ftk99.lvl#-1
+CHECK fan:lldb-397 2010 CONTEST/07Dodochacalo.ini#-1
+CHECK fan:lldb-397 2010 CONTEST/08pieuw.ini#-1
+CHECK fan:lldb-397 2010 CONTEST/09ftk99.lvl#-1
+CHECK fan:lldb-397 2010 CONTEST/10karmew32.lvl#-1
+CHECK fan:lldb-397 2010 CONTEST/11Ellischant.lvl#-1
+CHECK fan:lldb-397 2010 CONTEST/12loftyD.ini#-1
+CHECK fan:lldb-397 2010 CONTEST/13gronkling.ini#-1
+CHECK fan:lldb-397 2010 CONTEST/14lacktardo.ini.ini#-1
+CHECK fan:lldb-397 2010 CONTEST/15loftyD.ini#-1
+CHECK fan:lldb-397 2010 CONTEST/16karmew32.lvl#-1
+CHECK fan:lldb-397 2010 CONTEST/17Ellischant.lvl#-1
+CHECK fan:lldb-397 2010 CONTEST/18pieuw.ini#-1
+CHECK fan:lldb-397 2010 CONTEST/19lacktardo.ini.ini#-1
+CHECK fan:lldb-397 2010 CONTEST/20lacktardo.lvl.ini#-1
+CHECK fan:lldb-398 MYSPEC.DAT#0
+CHECK fan:lldb-399 TheMon0lith.dat#0
+CHECK fan:lldb-39 BulletRide4.dat#0
+CHECK fan:lldb-39 BulletRide4.dat#1
+CHECK fan:lldb-39 BulletRide4.dat#2
+CHECK fan:lldb-39 BulletRide4.dat#3
+CHECK fan:lldb-39 BulletRide4.dat#4
+CHECK fan:lldb-39 BulletRide4.dat#5
+CHECK fan:lldb-39 BulletRide4.dat#6
+CHECK fan:lldb-39 BulletRide4.dat#7
+CHECK fan:lldb-39 BulletRide4.dat#8
+CHECK fan:lldb-39 BulletRide4.dat#9
+CHECK fan:lldb-3 Anatol00.dat#0
+CHECK fan:lldb-3 Anatol00.dat#1
+CHECK fan:lldb-3 Anatol00.dat#3
+CHECK fan:lldb-3 Anatol00.dat#4
+CHECK fan:lldb-3 Anatol00.dat#5
+CHECK fan:lldb-3 Anatol00.dat#6
+CHECK fan:lldb-3 Anatol00.dat#7
+CHECK fan:lldb-3 Anatol00.dat#8
+CHECK fan:lldb-3 Anatol00.dat#9
+CHECK fan:lldb-400 TUT.DAT#0
+CHECK fan:lldb-401 christmas/2013.ini#-1
+CHECK fan:lldb-402 Grent01/1. Lemming Sold Seperately.ini#-1
+CHECK fan:lldb-402 Grent01/10. Elegance.ini#-1
+CHECK fan:lldb-402 Grent01/2. Who doesn't love triangles.ini#-1
+CHECK fan:lldb-402 Grent01/3. Flaming Death.ini#-1
+CHECK fan:lldb-402 Grent01/4. Lemming Designer.ini#-1
+CHECK fan:lldb-402 Grent01/5. Almost Equilibrium.ini#-1
+CHECK fan:lldb-402 Grent01/6. Backpedal Lemmings.ini#-1
+CHECK fan:lldb-402 Grent01/7. It's Raining Lem.ini#-1
+CHECK fan:lldb-402 Grent01/8. Break It Down.ini#-1
+CHECK fan:lldb-402 Grent01/9. All At Once.ini#-1
+CHECK fan:lldb-403 LevelJam3.dat#0
+CHECK fan:lldb-403 LevelJam3.dat#1
+CHECK fan:lldb-403 LevelJam3.dat#2
+CHECK fan:lldb-403 LevelJam3.dat#3
+CHECK fan:lldb-403 LevelJam3.dat#4
+CHECK fan:lldb-403 LevelJam3.dat#5
+CHECK fan:lldb-404 Genesis 2P 1.dat#0
+CHECK fan:lldb-404 Genesis 2P 1.dat#1
+CHECK fan:lldb-404 Genesis 2P 1.dat#2
+CHECK fan:lldb-404 Genesis 2P 1.dat#3
+CHECK fan:lldb-404 Genesis 2P 1.dat#4
+CHECK fan:lldb-404 Genesis 2P 1.dat#5
+CHECK fan:lldb-404 Genesis 2P 1.dat#6
+CHECK fan:lldb-404 Genesis 2P 1.dat#7
+CHECK fan:lldb-404 Genesis 2P 1.dat#8
+CHECK fan:lldb-404 Genesis 2P 1.dat#9
+CHECK fan:lldb-405 Genesis 2P 2.dat#0
+CHECK fan:lldb-405 Genesis 2P 2.dat#1
+CHECK fan:lldb-405 Genesis 2P 2.dat#2
+CHECK fan:lldb-405 Genesis 2P 2.dat#3
+CHECK fan:lldb-405 Genesis 2P 2.dat#4
+CHECK fan:lldb-405 Genesis 2P 2.dat#5
+PASS fan:lldb-405 Genesis 2P 2.dat#5 98 905
+CHECK fan:lldb-405 Genesis 2P 2.dat#6
+CHECK fan:lldb-405 Genesis 2P 2.dat#7
+CHECK fan:lldb-405 Genesis 2P 2.dat#8
+CHECK fan:lldb-405 Genesis 2P 2.dat#9
+CHECK fan:lldb-406 4_lem/lvl034.ini#-1
+CHECK fan:lldb-406 4_lem/lvl035.ini#-1
+CHECK fan:lldb-406 4_lem/lvl036.ini#-1
+CHECK fan:lldb-406 4_lem/lvl040.ini#-1
+CHECK fan:lldb-406 4_lem/lvl044.ini#-1
+CHECK fan:lldb-406 4_lem/lvl046.ini#-1
+CHECK fan:lldb-406 4_lem/lvl049.ini#-1
+CHECK fan:lldb-406 4_lem/lvl051.ini#-1
+CHECK fan:lldb-406 4_lem/lvl053.ini#-1
+CHECK fan:lldb-406 4_lem/lvl054.ini#-1
+CHECK fan:lldb-407 Orig Extra Levels.dat#0
+CHECK fan:lldb-407 Orig Extra Levels.dat#1
+CHECK fan:lldb-407 Orig Extra Levels.dat#2
+CHECK fan:lldb-407 Orig Extra Levels.dat#3
+PASS fan:lldb-407 Orig Extra Levels.dat#3 80 2618
+CHECK fan:lldb-408 mslevels2/delayrelay.ini#-1
+CHECK fan:lldb-408 mslevels2/frenzy.ini#-1
+CHECK fan:lldb-408 mslevels2/littletitle.ini#-1
+CHECK fan:lldb-408 mslevels2/mimic.ini#-1
+CHECK fan:lldb-408 mslevels2/multitask.ini#-1
+CHECK fan:lldb-408 mslevels2/planking.ini#-1
+CHECK fan:lldb-408 mslevels2/strifecircle.ini#-1
+CHECK fan:lldb-408 mslevels2/substitution.ini#-1
+CHECK fan:lldb-408 mslevels2/trust.ini#-1
+CHECK fan:lldb-408 mslevels2/twolemmings.ini#-1
+CHECK fan:lldb-409 BUILDING.DAT#0
+CHECK fan:lldb-40 lemmings .dat#0
+CHECK fan:lldb-40 lemmings .dat#1
+CHECK fan:lldb-40 lemmings .dat#10
+CHECK fan:lldb-40 lemmings .dat#11
+CHECK fan:lldb-40 lemmings .dat#2
+CHECK fan:lldb-40 lemmings .dat#3
+CHECK fan:lldb-40 lemmings .dat#4
+CHECK fan:lldb-40 lemmings .dat#5
+CHECK fan:lldb-40 lemmings .dat#6
+CHECK fan:lldb-40 lemmings .dat#7
+CHECK fan:lldb-40 lemmings .dat#8
+CHECK fan:lldb-40 lemmings .dat#9
+CHECK fan:lldb-410 ClamSpam06_4lvls.dat#0
+CHECK fan:lldb-410 ClamSpam06_4lvls.dat#1
+CHECK fan:lldb-410 ClamSpam06_4lvls.dat#2
+CHECK fan:lldb-410 ClamSpam06_4lvls.dat#3
+CHECK fan:lldb-411 mobius05.dat#0
+CHECK fan:lldb-411 mobius05.dat#1
+PASS fan:lldb-411 mobius05.dat#1 4 3485
+CHECK fan:lldb-411 mobius05.dat#2
+CHECK fan:lldb-411 mobius05.dat#3
+CHECK fan:lldb-411 mobius05.dat#4
+CHECK fan:lldb-411 mobius05.dat#5
+CHECK fan:lldb-411 mobius05.dat#6
+CHECK fan:lldb-411 mobius05.dat#7
+CHECK fan:lldb-411 mobius05.dat#8
+CHECK fan:lldb-411 mobius05.dat#9
+CHECK fan:lldb-412 mobius06.dat#0
+CHECK fan:lldb-412 mobius06.dat#1
+CHECK fan:lldb-412 mobius06.dat#2
+CHECK fan:lldb-412 mobius06.dat#3
+CHECK fan:lldb-412 mobius06.dat#4
+CHECK fan:lldb-412 mobius06.dat#5
+CHECK fan:lldb-412 mobius06.dat#6
+CHECK fan:lldb-412 mobius06.dat#7
+CHECK fan:lldb-412 mobius06.dat#8
+CHECK fan:lldb-413 GeoffLems_Minipack.dat#0
+PASS fan:lldb-413 GeoffLems_Minipack.dat#0 39 2567
+CHECK fan:lldb-413 GeoffLems_Minipack.dat#1
+CHECK fan:lldb-413 GeoffLems_Minipack.dat#2
+CHECK fan:lldb-413 GeoffLems_Minipack.dat#3
+CHECK fan:lldb-413 GeoffLems_Minipack.dat#4
+CHECK fan:lldb-413 GeoffLems_Minipack.dat#5
+CHECK fan:lldb-413 GeoffLems_Minipack.dat#6
+CHECK fan:lldb-413 GeoffLems_Minipack.dat#7
+CHECK fan:lldb-413 GeoffLems_Minipack.dat#8
+CHECK fan:lldb-413 GeoffLems_Minipack.dat#9
+CHECK fan:lldb-414 QBeez06.dat#0
+CHECK fan:lldb-414 QBeez06.dat#1
+CHECK fan:lldb-414 QBeez06.dat#2
+CHECK fan:lldb-414 QBeez06.dat#3
+CHECK fan:lldb-414 QBeez06.dat#4
+CHECK fan:lldb-414 QBeez06.dat#5
+CHECK fan:lldb-414 QBeez06.dat#6
+CHECK fan:lldb-414 QBeez06.dat#7
+CHECK fan:lldb-414 QBeez06.dat#8
+CHECK fan:lldb-414 QBeez06.dat#9
+CHECK fan:lldb-415 levels/Blizzlem/001.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/002.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/003.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/004.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/005.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/006.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/007.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/008.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/009.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/010.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/011.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/012.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/013.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/014.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/015.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/016.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/101.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/102.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/103.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/104.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/105.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/106.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/107.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/108.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/109.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/110.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/111.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/112.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/113.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/114.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/115.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/116.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/201.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/202.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/203.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/204.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/205.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/206.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/207.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/208.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/209.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/210.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/211.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/212.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/213.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/214.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/215.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/216.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/301.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/302.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/303.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/304.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/305.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/306.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/307.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/308.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/309.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/310.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/311.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/312.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/313.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/314.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/315.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/316.ini#-1
+CHECK fan:lldb-415 levels/Blizzlem/317.ini#-1
+CHECK fan:lldb-416 25th Birthday of Lemmings.ini#-1
+CHECK fan:lldb-416 Above The Pepsi Max.ini#-1
+CHECK fan:lldb-416 Be Careful Where You Dig.ini#-1
+CHECK fan:lldb-416 Bomboozal Not Quite.ini#-1
+CHECK fan:lldb-416 Building Blocks.ini#-1
+CHECK fan:lldb-416 Dash.ini#-1
+CHECK fan:lldb-416 Four Entrances.ini#-1
+CHECK fan:lldb-416 Graeme's Nightmare.ini#-1
+CHECK fan:lldb-416 Hidden Sand.ini#-1
+CHECK fan:lldb-416 I Love Bubbles.ini#-1
+CHECK fan:lldb-416 It's Snowing.ini#-1
+CHECK fan:lldb-416 Little house on top.ini#-1
+CHECK fan:lldb-416 Pipe level.ini#-1
+CHECK fan:lldb-416 Puzzle Time.ini#-1
+CHECK fan:lldb-416 Revisit.ini#-1
+CHECK fan:lldb-416 Steel Works Edit.ini#-1
+CHECK fan:lldb-416 Ten Scattered lemmings.ini#-1
+CHECK fan:lldb-416 Too Much Things Going on.ini#-1
+CHECK fan:lldb-416 Up The Gap.ini#-1
+CHECK fan:lldb-416 Which Way Should we Go.ini#-1
+CHECK fan:lldb-417 bigqtwo.dat#0
+CHECK fan:lldb-417 bigqtwo.dat#1
+CHECK fan:lldb-417 bigqtwo.dat#2
+CHECK fan:lldb-417 bigqtwo.dat#3
+CHECK fan:lldb-417 bigqtwo.dat#4
+CHECK fan:lldb-417 bigqtwo.dat#5
+CHECK fan:lldb-417 bigqtwo.dat#6
+CHECK fan:lldb-417 bigqtwo.dat#7
+CHECK fan:lldb-417 bigqtwo.dat#8
+CHECK fan:lldb-417 bigqtwo.dat#9
+CHECK fan:lldb-418 bigqthree.dat#0
+CHECK fan:lldb-419 Dehodson.dat#0
+CHECK fan:lldb-41 lm_set01.dat#0
+CHECK fan:lldb-41 lm_set01.dat#1
+CHECK fan:lldb-41 lm_set01.dat#2
+CHECK fan:lldb-41 lm_set01.dat#3
+CHECK fan:lldb-41 lm_set01.dat#4
+CHECK fan:lldb-41 lm_set01.dat#5
+CHECK fan:lldb-41 lm_set01.dat#6
+CHECK fan:lldb-41 lm_set01.dat#7
+CHECK fan:lldb-41 lm_set01.dat#8
+CHECK fan:lldb-41 lm_set01.dat#9
+CHECK fan:lldb-420 2112.dat#0
+CHECK fan:lldb-421 Luis Pack.dat#0
+CHECK fan:lldb-422 fullglitch.dat#0
+CHECK fan:lldb-423 unfinisd.dat#0
+CHECK fan:lldb-424 andi2.dat#0
+CHECK fan:lldb-424 andi2.dat#1
+CHECK fan:lldb-424 andi2.dat#2
+CHECK fan:lldb-424 andi2.dat#3
+CHECK fan:lldb-424 andi2.dat#4
+CHECK fan:lldb-424 andi2.dat#5
+CHECK fan:lldb-424 andi2.dat#6
+CHECK fan:lldb-424 andi2.dat#7
+CHECK fan:lldb-424 andi2.dat#8
+CHECK fan:lldb-424 andi2.dat#9
+CHECK fan:lldb-425 Badpack.dat#0
+CHECK fan:lldb-426 GM06.dat#0
+CHECK fan:lldb-427 Neato.dat#0
+CHECK fan:lldb-428 Bipolar.dat#0
+CHECK fan:lldb-429 CYSTN.dat#0
+CHECK fan:lldb-42 lm_set02.dat#0
+CHECK fan:lldb-42 lm_set02.dat#1
+CHECK fan:lldb-42 lm_set02.dat#2
+CHECK fan:lldb-42 lm_set02.dat#3
+CHECK fan:lldb-42 lm_set02.dat#4
+CHECK fan:lldb-42 lm_set02.dat#5
+CHECK fan:lldb-42 lm_set02.dat#6
+CHECK fan:lldb-42 lm_set02.dat#7
+CHECK fan:lldb-42 lm_set02.dat#8
+CHECK fan:lldb-42 lm_set02.dat#9
+CHECK fan:lldb-430 LDChallenge01.dat#0
+CHECK fan:lldb-430 LDChallenge01.dat#1
+CHECK fan:lldb-430 LDChallenge01.dat#2
+PASS fan:lldb-430 LDChallenge01.dat#2 4 361
+CHECK fan:lldb-430 LDChallenge01.dat#3
+CHECK fan:lldb-430 LDChallenge01.dat#4
+CHECK fan:lldb-430 LDChallenge01.dat#5
+CHECK fan:lldb-431 LDChallenge02.dat#0
+CHECK fan:lldb-431 LDChallenge02.dat#1
+CHECK fan:lldb-431 LDChallenge02.dat#2
+CHECK fan:lldb-431 LDChallenge02.dat#3
+CHECK fan:lldb-432 LDChallenge03.dat#0
+CHECK fan:lldb-432 LDChallenge03.dat#1
+CHECK fan:lldb-432 LDChallenge03.dat#2
+CHECK fan:lldb-432 LDChallenge03.dat#3
+CHECK fan:lldb-432 LDChallenge03.dat#4
+CHECK fan:lldb-433 LDChallenge04.dat#0
+PASS fan:lldb-433 LDChallenge04.dat#0 30 1020
+CHECK fan:lldb-433 LDChallenge04.dat#1
+PASS fan:lldb-433 LDChallenge04.dat#1 1 1021
+CHECK fan:lldb-434 LDChallenge05.dat#0
+CHECK fan:lldb-434 LDChallenge05.dat#1
+CHECK fan:lldb-434 LDChallenge05.dat#2
+CHECK fan:lldb-434 LDChallenge05.dat#3
+CHECK fan:lldb-434 LDChallenge05.dat#4
+CHECK fan:lldb-435 LDChallenge06.dat#0
+CHECK fan:lldb-435 LDChallenge06.dat#1
+CHECK fan:lldb-435 LDChallenge06.dat#2
+CHECK fan:lldb-435 LDChallenge06.dat#3
+CHECK fan:lldb-436 LDChallenge07.dat#0
+CHECK fan:lldb-436 LDChallenge07.dat#1
+CHECK fan:lldb-436 LDChallenge07.dat#2
+CHECK fan:lldb-437 LDChallenge08.dat#0
+CHECK fan:lldb-437 LDChallenge08.dat#1
+CHECK fan:lldb-437 LDChallenge08.dat#2
+CHECK fan:lldb-437 LDChallenge08.dat#3
+CHECK fan:lldb-438 LDChallenge09.dat#0
+CHECK fan:lldb-438 LDChallenge09.dat#1
+CHECK fan:lldb-438 LDChallenge09.dat#2
+CHECK fan:lldb-438 LDChallenge09.dat#3
+CHECK fan:lldb-438 LDChallenge09.dat#4
+CHECK fan:lldb-438 LDChallenge09.dat#5
+CHECK fan:lldb-43 lm_set03.dat#0
+CHECK fan:lldb-43 lm_set03.dat#1
+CHECK fan:lldb-43 lm_set03.dat#2
+CHECK fan:lldb-43 lm_set03.dat#3
+CHECK fan:lldb-43 lm_set03.dat#4
+CHECK fan:lldb-43 lm_set03.dat#5
+CHECK fan:lldb-43 lm_set03.dat#6
+CHECK fan:lldb-43 lm_set03.dat#7
+CHECK fan:lldb-43 lm_set03.dat#8
+CHECK fan:lldb-43 lm_set03.dat#9
+CHECK fan:lldb-447 ccxtestlevels.dat#0
+CHECK fan:lldb-447 ccxtestlevels.dat#1
+CHECK fan:lldb-447 ccxtestlevels.dat#2
+CHECK fan:lldb-448 GM00.dat#0
+CHECK fan:lldb-448 GM00.dat#1
+CHECK fan:lldb-448 GM00.dat#2
+CHECK fan:lldb-448 GM00.dat#3
+CHECK fan:lldb-448 GM00.dat#4
+CHECK fan:lldb-448 GM00.dat#5
+CHECK fan:lldb-448 GM00.dat#6
+CHECK fan:lldb-448 GM00.dat#7
+CHECK fan:lldb-448 GM00.dat#8
+CHECK fan:lldb-448 GM00.dat#9
+CHECK fan:lldb-449 comppak.dat#0
+CHECK fan:lldb-449 comppak.dat#1
+CHECK fan:lldb-449 comppak.dat#2
+CHECK fan:lldb-449 comppak.dat#3
+CHECK fan:lldb-449 comppak.dat#4
+CHECK fan:lldb-449 comppak.dat#5
+CHECK fan:lldb-449 comppak.dat#6
+CHECK fan:lldb-44 lm_set04.dat#0
+CHECK fan:lldb-44 lm_set04.dat#1
+CHECK fan:lldb-44 lm_set04.dat#2
+CHECK fan:lldb-44 lm_set04.dat#3
+CHECK fan:lldb-44 lm_set04.dat#4
+CHECK fan:lldb-44 lm_set04.dat#5
+CHECK fan:lldb-44 lm_set04.dat#6
+CHECK fan:lldb-44 lm_set04.dat#7
+CHECK fan:lldb-44 lm_set04.dat#8
+CHECK fan:lldb-44 lm_set04.dat#9
+CHECK fan:lldb-450 Membercomp.dat#0
+CHECK fan:lldb-450 Membercomp.dat#1
+CHECK fan:lldb-451 insulfrogextra.dat#0
+CHECK fan:lldb-452 isuotherlevels.dat#0
+CHECK fan:lldb-452 isuotherlevels.dat#1
+CHECK fan:lldb-453 Jazzem.dat#0
+CHECK fan:lldb-454 JMGM01.dat#0
+CHECK fan:lldb-454 JMGM01.dat#1
+CHECK fan:lldb-454 JMGM01.dat#2
+CHECK fan:lldb-454 JMGM01.dat#3
+CHECK fan:lldb-454 JMGM01.dat#4
+CHECK fan:lldb-454 JMGM01.dat#5
+CHECK fan:lldb-454 JMGM01.dat#6
+CHECK fan:lldb-454 JMGM01.dat#7
+CHECK fan:lldb-454 JMGM01.dat#8
+CHECK fan:lldb-454 JMGM01.dat#9
+CHECK fan:lldb-455 JMGM02.DAT#0
+CHECK fan:lldb-455 JMGM02.DAT#1
+CHECK fan:lldb-455 JMGM02.DAT#2
+CHECK fan:lldb-455 JMGM02.DAT#3
+CHECK fan:lldb-455 JMGM02.DAT#4
+CHECK fan:lldb-455 JMGM02.DAT#5
+CHECK fan:lldb-455 JMGM02.DAT#6
+CHECK fan:lldb-455 JMGM02.DAT#7
+CHECK fan:lldb-455 JMGM02.DAT#8
+CHECK fan:lldb-455 JMGM02.DAT#9
+CHECK fan:lldb-456 JMacidbath.dat#0
+CHECK fan:lldb-457 LeviOtherLevels.dat#0
+CHECK fan:lldb-457 LeviOtherLevels.dat#1
+CHECK fan:lldb-457 LeviOtherLevels.dat#2
+CHECK fan:lldb-457 LeviOtherLevels.dat#3
+CHECK fan:lldb-457 LeviOtherLevels.dat#4
+CHECK fan:lldb-457 LeviOtherLevels.dat#5
+CHECK fan:lldb-457 LeviOtherLevels.dat#6
+CHECK fan:lldb-458 Kindness.dat#0
+CHECK fan:lldb-459 NOTEASY.dat#0
+CHECK fan:lldb-45 lm_set05.dat#0
+CHECK fan:lldb-45 lm_set05.dat#1
+CHECK fan:lldb-45 lm_set05.dat#2
+CHECK fan:lldb-45 lm_set05.dat#3
+CHECK fan:lldb-45 lm_set05.dat#4
+CHECK fan:lldb-45 lm_set05.dat#5
+CHECK fan:lldb-45 lm_set05.dat#6
+CHECK fan:lldb-45 lm_set05.dat#7
+CHECK fan:lldb-45 lm_set05.dat#8
+CHECK fan:lldb-45 lm_set05.dat#9
+CHECK fan:lldb-460 SgBPak01.dat#0
+CHECK fan:lldb-460 SgBPak01.dat#1
+CHECK fan:lldb-460 SgBPak01.dat#2
+CHECK fan:lldb-460 SgBPak01.dat#3
+CHECK fan:lldb-460 SgBPak01.dat#4
+CHECK fan:lldb-460 SgBPak01.dat#5
+CHECK fan:lldb-460 SgBPak01.dat#6
+CHECK fan:lldb-460 SgBPak01.dat#7
+CHECK fan:lldb-460 SgBPak01.dat#8
+CHECK fan:lldb-461 geoopak5.dat#0
+CHECK fan:lldb-461 geoopak5.dat#1
+CHECK fan:lldb-461 geoopak5.dat#2
+CHECK fan:lldb-462 WBUG.dat#0
+CHECK fan:lldb-463 Group Levels.dat#0
+CHECK fan:lldb-463 Group Levels.dat#1
+CHECK fan:lldb-463 Group Levels.dat#2
+CHECK fan:lldb-463 Group Levels.dat#3
+CHECK fan:lldb-463 Group Levels.dat#4
+CHECK fan:lldb-463 Group Levels.dat#5
+CHECK fan:lldb-463 Group Levels.dat#6
+CHECK fan:lldb-463 Group Levels.dat#7
+CHECK fan:lldb-464 Finland.dat#0
+PASS fan:lldb-464 Finland.dat#0 40 2096
+CHECK fan:lldb-465 LEMREMAKE.dat#0
+CHECK fan:lldb-465 LEMREMAKE.dat#1
+CHECK fan:lldb-465 LEMREMAKE.dat#2
+CHECK fan:lldb-465 LEMREMAKE.dat#3
+CHECK fan:lldb-465 LEMREMAKE.dat#4
+CHECK fan:lldb-465 LEMREMAKE.dat#5
+CHECK fan:lldb-465 LEMREMAKE.dat#6
+CHECK fan:lldb-465 LEMREMAKE.dat#7
+CHECK fan:lldb-465 LEMREMAKE.dat#8
+CHECK fan:lldb-465 LEMREMAKE.dat#9
+CHECK fan:lldb-466 GrentLems/01 Foreshadowing.ini#-1
+CHECK fan:lldb-466 GrentLems/02 Who let the lemmings out !.ini#-1
+CHECK fan:lldb-466 GrentLems/03 Complacency.ini#-1
+CHECK fan:lldb-466 GrentLems/04 Lem waz' here.ini#-1
+CHECK fan:lldb-466 GrentLems/05 Christmas Chill.ini#-1
+CHECK fan:lldb-466 GrentLems/06 Abandoned Palace.ini#-1
+CHECK fan:lldb-466 GrentLems/07 Separate the Crowd.ini#-1
+CHECK fan:lldb-466 GrentLems/08 Lemming Designer.ini#-1
+CHECK fan:lldb-466 GrentLems/09 Caught in the Symmetry.ini#-1
+CHECK fan:lldb-466 GrentLems/10 Tiptoe through the Factory.ini#-1
+CHECK fan:lldb-466 GrentLems/11 All that extra work.ini#-1
+CHECK fan:lldb-466 GrentLems/12 Cosmic Junk.ini#-1
+CHECK fan:lldb-466 GrentLems/13 Lemming Sold Separately.ini#-1
+CHECK fan:lldb-466 GrentLems/14 It's Raining Lem.ini#-1
+CHECK fan:lldb-466 GrentLems/15 All at once.ini#-1
+CHECK fan:lldb-466 GrentLems/16 A Double Rotation.ini#-1
+CHECK fan:lldb-467 Web3.dat#0
+CHECK fan:lldb-468 joem4.dat#0
+CHECK fan:lldb-468 joem4.dat#1
+CHECK fan:lldb-468 joem4.dat#2
+CHECK fan:lldb-468 joem4.dat#3
+CHECK fan:lldb-468 joem4.dat#4
+CHECK fan:lldb-468 joem4.dat#5
+CHECK fan:lldb-468 joem4.dat#6
+CHECK fan:lldb-468 joem4.dat#7
+CHECK fan:lldb-468 joem4.dat#8
+CHECK fan:lldb-468 joem4.dat#9
+CHECK fan:lldb-469 altitude_with_attitude.ini#-1
+CHECK fan:lldb-469 be_alert_theres_traps_to_avert.ini#-1
+CHECK fan:lldb-469 bedlam_in_lemmingshire.ini#-1
+CHECK fan:lldb-469 blessed_are_the_bricks.ini#-1
+CHECK fan:lldb-469 building_suspense.ini#-1
+CHECK fan:lldb-469 group_assignment.ini#-1
+CHECK fan:lldb-469 oh_chute.ini#-1
+CHECK fan:lldb-469 over_and_out.ini#-1
+CHECK fan:lldb-469 pole_lands_poles.ini#-1
+CHECK fan:lldb-469 pyrefract.ini#-1
+CHECK fan:lldb-46 lm_set06.dat#0
+CHECK fan:lldb-46 lm_set06.dat#1
+CHECK fan:lldb-46 lm_set06.dat#2
+CHECK fan:lldb-46 lm_set06.dat#3
+CHECK fan:lldb-46 lm_set06.dat#4
+CHECK fan:lldb-46 lm_set06.dat#5
+CHECK fan:lldb-46 lm_set06.dat#6
+CHECK fan:lldb-46 lm_set06.dat#7
+CHECK fan:lldb-46 lm_set06.dat#8
+CHECK fan:lldb-46 lm_set06.dat#9
+CHECK fan:lldb-470 Unreachable Heights/Unreachable Heights.dat#0
+CHECK fan:lldb-471 RSRdnt01.dat#0
+PASS fan:lldb-471 RSRdnt01.dat#0 10 1354
+CHECK fan:lldb-471 RSRdnt01.dat#1
+CHECK fan:lldb-471 RSRdnt01.dat#2
+CHECK fan:lldb-471 RSRdnt01.dat#3
+CHECK fan:lldb-471 RSRdnt01.dat#4
+CHECK fan:lldb-471 RSRdnt01.dat#5
+CHECK fan:lldb-471 RSRdnt01.dat#6
+CHECK fan:lldb-471 RSRdnt01.dat#7
+CHECK fan:lldb-471 RSRdnt01.dat#8
+CHECK fan:lldb-471 RSRdnt01.dat#9
+CHECK fan:lldb-472 LEMPACK.DAT#0
+CHECK fan:lldb-472 LEMPACK.DAT#1
+CHECK fan:lldb-472 LEMPACK.DAT#2
+CHECK fan:lldb-472 LEMPACK.DAT#3
+PASS fan:lldb-472 LEMPACK.DAT#3 80 3579
+CHECK fan:lldb-472 LEMPACK.DAT#4
+PASS fan:lldb-472 LEMPACK.DAT#4 63 5269
+CHECK fan:lldb-472 LEMPACK.DAT#5
+CHECK fan:lldb-472 LEMPACK.DAT#6
+CHECK fan:lldb-472 LEMPACK.DAT#7
+CHECK fan:lldb-472 levels/01.LVL#-1
+CHECK fan:lldb-472 levels/02.LVL#-1
+CHECK fan:lldb-472 levels/03.LVL#-1
+CHECK fan:lldb-472 levels/04.LVL#-1
+PASS fan:lldb-472 levels/04.LVL#-1 80 3579
+CHECK fan:lldb-472 levels/05.LVL#-1
+PASS fan:lldb-472 levels/05.LVL#-1 63 5269
+CHECK fan:lldb-472 levels/06.LVL#-1
+CHECK fan:lldb-472 levels/07.LVL#-1
+CHECK fan:lldb-472 levels/08.LVL#-1
+CHECK fan:lldb-473 Fun.DAT#0
+CHECK fan:lldb-473 Fun.DAT#1
+CHECK fan:lldb-473 Fun.DAT#10
+CHECK fan:lldb-473 Fun.DAT#11
+CHECK fan:lldb-473 Fun.DAT#12
+CHECK fan:lldb-473 Fun.DAT#13
+CHECK fan:lldb-473 Fun.DAT#14
+CHECK fan:lldb-473 Fun.DAT#15
+CHECK fan:lldb-473 Fun.DAT#16
+CHECK fan:lldb-473 Fun.DAT#17
+CHECK fan:lldb-473 Fun.DAT#18
+CHECK fan:lldb-473 Fun.DAT#19
+CHECK fan:lldb-473 Fun.DAT#2
+CHECK fan:lldb-473 Fun.DAT#20
+CHECK fan:lldb-473 Fun.DAT#21
+CHECK fan:lldb-473 Fun.DAT#22
+CHECK fan:lldb-473 Fun.DAT#23
+CHECK fan:lldb-473 Fun.DAT#24
+CHECK fan:lldb-473 Fun.DAT#25
+CHECK fan:lldb-473 Fun.DAT#26
+CHECK fan:lldb-473 Fun.DAT#27
+CHECK fan:lldb-473 Fun.DAT#28
+CHECK fan:lldb-473 Fun.DAT#29
+CHECK fan:lldb-473 Fun.DAT#3
+CHECK fan:lldb-473 Fun.DAT#4
+CHECK fan:lldb-473 Fun.DAT#5
+CHECK fan:lldb-473 Fun.DAT#6
+CHECK fan:lldb-473 Fun.DAT#7
+CHECK fan:lldb-473 Fun.DAT#8
+CHECK fan:lldb-473 Fun.DAT#9
+CHECK fan:lldb-474 Tricky.DAT#0
+CHECK fan:lldb-474 Tricky.DAT#1
+CHECK fan:lldb-474 Tricky.DAT#10
+CHECK fan:lldb-474 Tricky.DAT#11
+CHECK fan:lldb-474 Tricky.DAT#12
+CHECK fan:lldb-474 Tricky.DAT#13
+CHECK fan:lldb-474 Tricky.DAT#14
+CHECK fan:lldb-474 Tricky.DAT#15
+CHECK fan:lldb-474 Tricky.DAT#16
+CHECK fan:lldb-474 Tricky.DAT#17
+CHECK fan:lldb-474 Tricky.DAT#18
+CHECK fan:lldb-474 Tricky.DAT#19
+CHECK fan:lldb-474 Tricky.DAT#2
+CHECK fan:lldb-474 Tricky.DAT#20
+CHECK fan:lldb-474 Tricky.DAT#21
+CHECK fan:lldb-474 Tricky.DAT#22
+CHECK fan:lldb-474 Tricky.DAT#23
+CHECK fan:lldb-474 Tricky.DAT#24
+CHECK fan:lldb-474 Tricky.DAT#25
+CHECK fan:lldb-474 Tricky.DAT#26
+CHECK fan:lldb-474 Tricky.DAT#27
+CHECK fan:lldb-474 Tricky.DAT#28
+CHECK fan:lldb-474 Tricky.DAT#29
+CHECK fan:lldb-474 Tricky.DAT#3
+CHECK fan:lldb-474 Tricky.DAT#4
+CHECK fan:lldb-474 Tricky.DAT#5
+CHECK fan:lldb-474 Tricky.DAT#6
+CHECK fan:lldb-474 Tricky.DAT#7
+CHECK fan:lldb-474 Tricky.DAT#8
+CHECK fan:lldb-474 Tricky.DAT#9
+CHECK fan:lldb-475 Taxing.DAT#0
+CHECK fan:lldb-475 Taxing.DAT#1
+CHECK fan:lldb-475 Taxing.DAT#10
+CHECK fan:lldb-475 Taxing.DAT#11
+CHECK fan:lldb-475 Taxing.DAT#12
+CHECK fan:lldb-475 Taxing.DAT#13
+CHECK fan:lldb-475 Taxing.DAT#14
+CHECK fan:lldb-475 Taxing.DAT#15
+CHECK fan:lldb-475 Taxing.DAT#16
+CHECK fan:lldb-475 Taxing.DAT#17
+CHECK fan:lldb-475 Taxing.DAT#18
+CHECK fan:lldb-475 Taxing.DAT#19
+CHECK fan:lldb-475 Taxing.DAT#2
+CHECK fan:lldb-475 Taxing.DAT#20
+CHECK fan:lldb-475 Taxing.DAT#21
+CHECK fan:lldb-475 Taxing.DAT#22
+CHECK fan:lldb-475 Taxing.DAT#23
+CHECK fan:lldb-475 Taxing.DAT#24
+CHECK fan:lldb-475 Taxing.DAT#25
+CHECK fan:lldb-475 Taxing.DAT#26
+CHECK fan:lldb-475 Taxing.DAT#27
+CHECK fan:lldb-475 Taxing.DAT#28
+CHECK fan:lldb-475 Taxing.DAT#29
+CHECK fan:lldb-475 Taxing.DAT#3
+CHECK fan:lldb-475 Taxing.DAT#4
+CHECK fan:lldb-475 Taxing.DAT#5
+CHECK fan:lldb-475 Taxing.DAT#6
+CHECK fan:lldb-475 Taxing.DAT#7
+CHECK fan:lldb-475 Taxing.DAT#8
+CHECK fan:lldb-475 Taxing.DAT#9
+CHECK fan:lldb-476 Mayhem.DAT#0
+CHECK fan:lldb-476 Mayhem.DAT#1
+CHECK fan:lldb-476 Mayhem.DAT#10
+CHECK fan:lldb-476 Mayhem.DAT#11
+CHECK fan:lldb-476 Mayhem.DAT#12
+CHECK fan:lldb-476 Mayhem.DAT#13
+CHECK fan:lldb-476 Mayhem.DAT#14
+CHECK fan:lldb-476 Mayhem.DAT#15
+CHECK fan:lldb-476 Mayhem.DAT#16
+CHECK fan:lldb-476 Mayhem.DAT#17
+CHECK fan:lldb-476 Mayhem.DAT#18
+CHECK fan:lldb-476 Mayhem.DAT#19
+CHECK fan:lldb-476 Mayhem.DAT#2
+CHECK fan:lldb-476 Mayhem.DAT#20
+CHECK fan:lldb-476 Mayhem.DAT#21
+CHECK fan:lldb-476 Mayhem.DAT#22
+CHECK fan:lldb-476 Mayhem.DAT#23
+CHECK fan:lldb-476 Mayhem.DAT#24
+CHECK fan:lldb-476 Mayhem.DAT#25
+CHECK fan:lldb-476 Mayhem.DAT#26
+CHECK fan:lldb-476 Mayhem.DAT#27
+CHECK fan:lldb-476 Mayhem.DAT#28
+CHECK fan:lldb-476 Mayhem.DAT#29
+CHECK fan:lldb-476 Mayhem.DAT#3
+CHECK fan:lldb-476 Mayhem.DAT#4
+CHECK fan:lldb-476 Mayhem.DAT#5
+CHECK fan:lldb-476 Mayhem.DAT#6
+CHECK fan:lldb-476 Mayhem.DAT#7
+CHECK fan:lldb-476 Mayhem.DAT#8
+CHECK fan:lldb-476 Mayhem.DAT#9
+CHECK fan:lldb-477 Tame.DAT#0
+CHECK fan:lldb-477 Tame.DAT#1
+CHECK fan:lldb-477 Tame.DAT#10
+CHECK fan:lldb-477 Tame.DAT#11
+CHECK fan:lldb-477 Tame.DAT#12
+CHECK fan:lldb-477 Tame.DAT#13
+CHECK fan:lldb-477 Tame.DAT#14
+CHECK fan:lldb-477 Tame.DAT#15
+CHECK fan:lldb-477 Tame.DAT#16
+CHECK fan:lldb-477 Tame.DAT#17
+CHECK fan:lldb-477 Tame.DAT#18
+CHECK fan:lldb-477 Tame.DAT#19
+CHECK fan:lldb-477 Tame.DAT#2
+CHECK fan:lldb-477 Tame.DAT#3
+CHECK fan:lldb-477 Tame.DAT#4
+CHECK fan:lldb-477 Tame.DAT#5
+CHECK fan:lldb-477 Tame.DAT#6
+CHECK fan:lldb-477 Tame.DAT#7
+CHECK fan:lldb-477 Tame.DAT#8
+CHECK fan:lldb-477 Tame.DAT#9
+CHECK fan:lldb-478 Crazy.DAT#0
+CHECK fan:lldb-478 Crazy.DAT#1
+CHECK fan:lldb-478 Crazy.DAT#10
+CHECK fan:lldb-478 Crazy.DAT#11
+CHECK fan:lldb-478 Crazy.DAT#12
+CHECK fan:lldb-478 Crazy.DAT#13
+CHECK fan:lldb-478 Crazy.DAT#14
+CHECK fan:lldb-478 Crazy.DAT#15
+CHECK fan:lldb-478 Crazy.DAT#16
+CHECK fan:lldb-478 Crazy.DAT#17
+CHECK fan:lldb-478 Crazy.DAT#18
+CHECK fan:lldb-478 Crazy.DAT#19
+CHECK fan:lldb-478 Crazy.DAT#2
+CHECK fan:lldb-478 Crazy.DAT#3
+CHECK fan:lldb-478 Crazy.DAT#4
+CHECK fan:lldb-478 Crazy.DAT#5
+CHECK fan:lldb-478 Crazy.DAT#6
+CHECK fan:lldb-478 Crazy.DAT#7
+CHECK fan:lldb-478 Crazy.DAT#8
+CHECK fan:lldb-478 Crazy.DAT#9
+CHECK fan:lldb-479 Wild.DAT#0
+CHECK fan:lldb-479 Wild.DAT#1
+CHECK fan:lldb-479 Wild.DAT#10
+CHECK fan:lldb-479 Wild.DAT#11
+CHECK fan:lldb-479 Wild.DAT#12
+CHECK fan:lldb-479 Wild.DAT#13
+CHECK fan:lldb-479 Wild.DAT#14
+CHECK fan:lldb-479 Wild.DAT#15
+CHECK fan:lldb-479 Wild.DAT#16
+CHECK fan:lldb-479 Wild.DAT#17
+CHECK fan:lldb-479 Wild.DAT#18
+CHECK fan:lldb-479 Wild.DAT#19
+CHECK fan:lldb-479 Wild.DAT#2
+CHECK fan:lldb-479 Wild.DAT#3
+CHECK fan:lldb-479 Wild.DAT#4
+CHECK fan:lldb-479 Wild.DAT#5
+CHECK fan:lldb-479 Wild.DAT#6
+CHECK fan:lldb-479 Wild.DAT#7
+CHECK fan:lldb-479 Wild.DAT#8
+CHECK fan:lldb-479 Wild.DAT#9
+CHECK fan:lldb-47 lm_set07.dat#0
+CHECK fan:lldb-47 lm_set07.dat#1
+CHECK fan:lldb-47 lm_set07.dat#2
+CHECK fan:lldb-47 lm_set07.dat#3
+CHECK fan:lldb-47 lm_set07.dat#4
+CHECK fan:lldb-47 lm_set07.dat#5
+CHECK fan:lldb-47 lm_set07.dat#6
+CHECK fan:lldb-47 lm_set07.dat#7
+CHECK fan:lldb-47 lm_set07.dat#8
+CHECK fan:lldb-47 lm_set07.dat#9
+CHECK fan:lldb-480 Wicked.DAT#0
+CHECK fan:lldb-480 Wicked.DAT#1
+CHECK fan:lldb-480 Wicked.DAT#10
+CHECK fan:lldb-480 Wicked.DAT#11
+CHECK fan:lldb-480 Wicked.DAT#12
+CHECK fan:lldb-480 Wicked.DAT#13
+CHECK fan:lldb-480 Wicked.DAT#14
+CHECK fan:lldb-480 Wicked.DAT#15
+CHECK fan:lldb-480 Wicked.DAT#16
+CHECK fan:lldb-480 Wicked.DAT#17
+CHECK fan:lldb-480 Wicked.DAT#18
+CHECK fan:lldb-480 Wicked.DAT#19
+CHECK fan:lldb-480 Wicked.DAT#2
+CHECK fan:lldb-480 Wicked.DAT#3
+CHECK fan:lldb-480 Wicked.DAT#4
+CHECK fan:lldb-480 Wicked.DAT#5
+CHECK fan:lldb-480 Wicked.DAT#6
+CHECK fan:lldb-480 Wicked.DAT#7
+CHECK fan:lldb-480 Wicked.DAT#8
+CHECK fan:lldb-480 Wicked.DAT#9
+CHECK fan:lldb-481 Havoc.DAT#0
+CHECK fan:lldb-481 Havoc.DAT#1
+CHECK fan:lldb-481 Havoc.DAT#10
+CHECK fan:lldb-481 Havoc.DAT#11
+CHECK fan:lldb-481 Havoc.DAT#12
+CHECK fan:lldb-481 Havoc.DAT#13
+CHECK fan:lldb-481 Havoc.DAT#14
+CHECK fan:lldb-481 Havoc.DAT#15
+CHECK fan:lldb-481 Havoc.DAT#16
+CHECK fan:lldb-481 Havoc.DAT#17
+CHECK fan:lldb-481 Havoc.DAT#18
+CHECK fan:lldb-481 Havoc.DAT#19
+CHECK fan:lldb-481 Havoc.DAT#2
+CHECK fan:lldb-481 Havoc.DAT#3
+CHECK fan:lldb-481 Havoc.DAT#4
+CHECK fan:lldb-481 Havoc.DAT#5
+CHECK fan:lldb-481 Havoc.DAT#6
+CHECK fan:lldb-481 Havoc.DAT#7
+CHECK fan:lldb-481 Havoc.DAT#8
+CHECK fan:lldb-481 Havoc.DAT#9
+CHECK fan:lldb-482 Frost.DAT#0
+CHECK fan:lldb-482 Frost.DAT#1
+CHECK fan:lldb-482 Frost.DAT#10
+CHECK fan:lldb-482 Frost.DAT#11
+CHECK fan:lldb-482 Frost.DAT#12
+PASS fan:lldb-482 Frost.DAT#12 80 1480
+CHECK fan:lldb-482 Frost.DAT#13
+CHECK fan:lldb-482 Frost.DAT#14
+CHECK fan:lldb-482 Frost.DAT#15
+CHECK fan:lldb-482 Frost.DAT#2
+CHECK fan:lldb-482 Frost.DAT#3
+CHECK fan:lldb-482 Frost.DAT#4
+CHECK fan:lldb-482 Frost.DAT#5
+CHECK fan:lldb-482 Frost.DAT#6
+CHECK fan:lldb-482 Frost.DAT#7
+CHECK fan:lldb-482 Frost.DAT#8
+CHECK fan:lldb-482 Frost.DAT#9
+CHECK fan:lldb-483 Hail.DAT#0
+CHECK fan:lldb-483 Hail.DAT#1
+CHECK fan:lldb-483 Hail.DAT#10
+CHECK fan:lldb-483 Hail.DAT#11
+CHECK fan:lldb-483 Hail.DAT#12
+CHECK fan:lldb-483 Hail.DAT#13
+CHECK fan:lldb-483 Hail.DAT#14
+CHECK fan:lldb-483 Hail.DAT#15
+CHECK fan:lldb-483 Hail.DAT#2
+CHECK fan:lldb-483 Hail.DAT#3
+CHECK fan:lldb-483 Hail.DAT#4
+CHECK fan:lldb-483 Hail.DAT#5
+CHECK fan:lldb-483 Hail.DAT#6
+CHECK fan:lldb-483 Hail.DAT#7
+CHECK fan:lldb-483 Hail.DAT#8
+CHECK fan:lldb-483 Hail.DAT#9
+CHECK fan:lldb-484 Flurry.DAT#0
+CHECK fan:lldb-484 Flurry.DAT#1
+CHECK fan:lldb-484 Flurry.DAT#10
+CHECK fan:lldb-484 Flurry.DAT#11
+CHECK fan:lldb-484 Flurry.DAT#12
+CHECK fan:lldb-484 Flurry.DAT#13
+CHECK fan:lldb-484 Flurry.DAT#14
+PASS fan:lldb-484 Flurry.DAT#14 10 392
+CHECK fan:lldb-484 Flurry.DAT#15
+CHECK fan:lldb-484 Flurry.DAT#2
+CHECK fan:lldb-484 Flurry.DAT#3
+PASS fan:lldb-484 Flurry.DAT#3 50 1298
+CHECK fan:lldb-484 Flurry.DAT#4
+CHECK fan:lldb-484 Flurry.DAT#5
+CHECK fan:lldb-484 Flurry.DAT#6
+CHECK fan:lldb-484 Flurry.DAT#7
+CHECK fan:lldb-484 Flurry.DAT#8
+CHECK fan:lldb-484 Flurry.DAT#9
+CHECK fan:lldb-485 Blitz.DAT#0
+CHECK fan:lldb-485 Blitz.DAT#1
+CHECK fan:lldb-485 Blitz.DAT#10
+CHECK fan:lldb-485 Blitz.DAT#11
+CHECK fan:lldb-485 Blitz.DAT#12
+CHECK fan:lldb-485 Blitz.DAT#13
+PASS fan:lldb-485 Blitz.DAT#13 80 1151
+CHECK fan:lldb-485 Blitz.DAT#14
+CHECK fan:lldb-485 Blitz.DAT#15
+CHECK fan:lldb-485 Blitz.DAT#2
+CHECK fan:lldb-485 Blitz.DAT#3
+PASS fan:lldb-485 Blitz.DAT#3 80 3021
+CHECK fan:lldb-485 Blitz.DAT#4
+PASS fan:lldb-485 Blitz.DAT#4 80 1678
+CHECK fan:lldb-485 Blitz.DAT#5
+CHECK fan:lldb-485 Blitz.DAT#6
+CHECK fan:lldb-485 Blitz.DAT#7
+PASS fan:lldb-485 Blitz.DAT#7 80 1397
+CHECK fan:lldb-485 Blitz.DAT#8
+CHECK fan:lldb-485 Blitz.DAT#9
+PASS fan:lldb-485 Blitz.DAT#9 80 1378
+CHECK fan:lldb-486 Xmas 1991.DAT#0
+CHECK fan:lldb-486 Xmas 1991.DAT#1
+CHECK fan:lldb-486 Xmas 1991.DAT#2
+CHECK fan:lldb-486 Xmas 1991.DAT#3
+CHECK fan:lldb-487 Xmas 1992.DAT#0
+CHECK fan:lldb-487 Xmas 1992.DAT#1
+CHECK fan:lldb-487 Xmas 1992.DAT#2
+CHECK fan:lldb-487 Xmas 1992.DAT#3
+CHECK fan:lldb-488 Genesis Fun.dat#0
+CHECK fan:lldb-488 Genesis Fun.dat#1
+CHECK fan:lldb-488 Genesis Fun.dat#10
+CHECK fan:lldb-488 Genesis Fun.dat#11
+CHECK fan:lldb-488 Genesis Fun.dat#12
+CHECK fan:lldb-488 Genesis Fun.dat#13
+CHECK fan:lldb-488 Genesis Fun.dat#14
+CHECK fan:lldb-488 Genesis Fun.dat#15
+CHECK fan:lldb-488 Genesis Fun.dat#16
+CHECK fan:lldb-488 Genesis Fun.dat#17
+CHECK fan:lldb-488 Genesis Fun.dat#18
+CHECK fan:lldb-488 Genesis Fun.dat#19
+CHECK fan:lldb-488 Genesis Fun.dat#2
+CHECK fan:lldb-488 Genesis Fun.dat#20
+CHECK fan:lldb-488 Genesis Fun.dat#21
+CHECK fan:lldb-488 Genesis Fun.dat#22
+CHECK fan:lldb-488 Genesis Fun.dat#23
+CHECK fan:lldb-488 Genesis Fun.dat#24
+CHECK fan:lldb-488 Genesis Fun.dat#25
+CHECK fan:lldb-488 Genesis Fun.dat#26
+CHECK fan:lldb-488 Genesis Fun.dat#27
+CHECK fan:lldb-488 Genesis Fun.dat#28
+CHECK fan:lldb-488 Genesis Fun.dat#29
+CHECK fan:lldb-488 Genesis Fun.dat#3
+CHECK fan:lldb-488 Genesis Fun.dat#4
+CHECK fan:lldb-488 Genesis Fun.dat#5
+CHECK fan:lldb-488 Genesis Fun.dat#6
+CHECK fan:lldb-488 Genesis Fun.dat#7
+CHECK fan:lldb-488 Genesis Fun.dat#8
+CHECK fan:lldb-488 Genesis Fun.dat#9
+CHECK fan:lldb-489 Genesis Tricky.dat#0
+CHECK fan:lldb-489 Genesis Tricky.dat#1
+CHECK fan:lldb-489 Genesis Tricky.dat#10
+CHECK fan:lldb-489 Genesis Tricky.dat#11
+CHECK fan:lldb-489 Genesis Tricky.dat#12
+CHECK fan:lldb-489 Genesis Tricky.dat#13
+CHECK fan:lldb-489 Genesis Tricky.dat#14
+CHECK fan:lldb-489 Genesis Tricky.dat#15
+CHECK fan:lldb-489 Genesis Tricky.dat#16
+CHECK fan:lldb-489 Genesis Tricky.dat#17
+CHECK fan:lldb-489 Genesis Tricky.dat#18
+CHECK fan:lldb-489 Genesis Tricky.dat#19
+CHECK fan:lldb-489 Genesis Tricky.dat#2
+CHECK fan:lldb-489 Genesis Tricky.dat#20
+CHECK fan:lldb-489 Genesis Tricky.dat#21
+CHECK fan:lldb-489 Genesis Tricky.dat#22
+CHECK fan:lldb-489 Genesis Tricky.dat#23
+CHECK fan:lldb-489 Genesis Tricky.dat#24
+CHECK fan:lldb-489 Genesis Tricky.dat#25
+CHECK fan:lldb-489 Genesis Tricky.dat#26
+CHECK fan:lldb-489 Genesis Tricky.dat#27
+CHECK fan:lldb-489 Genesis Tricky.dat#28
+CHECK fan:lldb-489 Genesis Tricky.dat#29
+PASS fan:lldb-489 Genesis Tricky.dat#29 10 707
+CHECK fan:lldb-489 Genesis Tricky.dat#3
+CHECK fan:lldb-489 Genesis Tricky.dat#4
+CHECK fan:lldb-489 Genesis Tricky.dat#5
+CHECK fan:lldb-489 Genesis Tricky.dat#6
+CHECK fan:lldb-489 Genesis Tricky.dat#7
+PASS fan:lldb-489 Genesis Tricky.dat#7 100 2705
+CHECK fan:lldb-489 Genesis Tricky.dat#8
+CHECK fan:lldb-489 Genesis Tricky.dat#9
+CHECK fan:lldb-48 lm_set08.dat#0
+CHECK fan:lldb-48 lm_set08.dat#1
+CHECK fan:lldb-48 lm_set08.dat#2
+CHECK fan:lldb-48 lm_set08.dat#3
+CHECK fan:lldb-48 lm_set08.dat#4
+CHECK fan:lldb-48 lm_set08.dat#5
+CHECK fan:lldb-48 lm_set08.dat#6
+CHECK fan:lldb-48 lm_set08.dat#7
+CHECK fan:lldb-48 lm_set08.dat#8
+CHECK fan:lldb-48 lm_set08.dat#9
+CHECK fan:lldb-490 Genesis Taxing.dat#0
+CHECK fan:lldb-490 Genesis Taxing.dat#1
+CHECK fan:lldb-490 Genesis Taxing.dat#10
+CHECK fan:lldb-490 Genesis Taxing.dat#11
+CHECK fan:lldb-490 Genesis Taxing.dat#12
+CHECK fan:lldb-490 Genesis Taxing.dat#13
+CHECK fan:lldb-490 Genesis Taxing.dat#14
+CHECK fan:lldb-490 Genesis Taxing.dat#15
+CHECK fan:lldb-490 Genesis Taxing.dat#16
+CHECK fan:lldb-490 Genesis Taxing.dat#17
+CHECK fan:lldb-490 Genesis Taxing.dat#18
+CHECK fan:lldb-490 Genesis Taxing.dat#19
+CHECK fan:lldb-490 Genesis Taxing.dat#2
+CHECK fan:lldb-490 Genesis Taxing.dat#20
+CHECK fan:lldb-490 Genesis Taxing.dat#21
+PASS fan:lldb-490 Genesis Taxing.dat#21 50 2651
+CHECK fan:lldb-490 Genesis Taxing.dat#22
+CHECK fan:lldb-490 Genesis Taxing.dat#23
+CHECK fan:lldb-490 Genesis Taxing.dat#24
+CHECK fan:lldb-490 Genesis Taxing.dat#25
+CHECK fan:lldb-490 Genesis Taxing.dat#26
+CHECK fan:lldb-490 Genesis Taxing.dat#27
+CHECK fan:lldb-490 Genesis Taxing.dat#28
+CHECK fan:lldb-490 Genesis Taxing.dat#29
+CHECK fan:lldb-490 Genesis Taxing.dat#3
+CHECK fan:lldb-490 Genesis Taxing.dat#4
+CHECK fan:lldb-490 Genesis Taxing.dat#5
+CHECK fan:lldb-490 Genesis Taxing.dat#6
+CHECK fan:lldb-490 Genesis Taxing.dat#7
+CHECK fan:lldb-490 Genesis Taxing.dat#8
+CHECK fan:lldb-490 Genesis Taxing.dat#9
+CHECK fan:lldb-491 Genesis Mayhem.dat#0
+CHECK fan:lldb-491 Genesis Mayhem.dat#1
+CHECK fan:lldb-491 Genesis Mayhem.dat#10
+CHECK fan:lldb-491 Genesis Mayhem.dat#11
+CHECK fan:lldb-491 Genesis Mayhem.dat#12
+CHECK fan:lldb-491 Genesis Mayhem.dat#13
+CHECK fan:lldb-491 Genesis Mayhem.dat#14
+CHECK fan:lldb-491 Genesis Mayhem.dat#15
+CHECK fan:lldb-491 Genesis Mayhem.dat#16
+CHECK fan:lldb-491 Genesis Mayhem.dat#17
+CHECK fan:lldb-491 Genesis Mayhem.dat#18
+CHECK fan:lldb-491 Genesis Mayhem.dat#19
+CHECK fan:lldb-491 Genesis Mayhem.dat#2
+CHECK fan:lldb-491 Genesis Mayhem.dat#20
+CHECK fan:lldb-491 Genesis Mayhem.dat#21
+CHECK fan:lldb-491 Genesis Mayhem.dat#22
+CHECK fan:lldb-491 Genesis Mayhem.dat#23
+CHECK fan:lldb-491 Genesis Mayhem.dat#24
+PASS fan:lldb-491 Genesis Mayhem.dat#24 100 2723
+CHECK fan:lldb-491 Genesis Mayhem.dat#25
+CHECK fan:lldb-491 Genesis Mayhem.dat#26
+CHECK fan:lldb-491 Genesis Mayhem.dat#27
+CHECK fan:lldb-491 Genesis Mayhem.dat#28
+CHECK fan:lldb-491 Genesis Mayhem.dat#29
+CHECK fan:lldb-491 Genesis Mayhem.dat#3
+CHECK fan:lldb-491 Genesis Mayhem.dat#4
+CHECK fan:lldb-491 Genesis Mayhem.dat#5
+CHECK fan:lldb-491 Genesis Mayhem.dat#6
+CHECK fan:lldb-491 Genesis Mayhem.dat#7
+PASS fan:lldb-491 Genesis Mayhem.dat#7 100 2476
+CHECK fan:lldb-491 Genesis Mayhem.dat#8
+CHECK fan:lldb-491 Genesis Mayhem.dat#9
+CHECK fan:lldb-492 Genesis Present.dat#0
+CHECK fan:lldb-492 Genesis Present.dat#1
+CHECK fan:lldb-492 Genesis Present.dat#10
+CHECK fan:lldb-492 Genesis Present.dat#11
+CHECK fan:lldb-492 Genesis Present.dat#12
+CHECK fan:lldb-492 Genesis Present.dat#13
+CHECK fan:lldb-492 Genesis Present.dat#14
+CHECK fan:lldb-492 Genesis Present.dat#15
+CHECK fan:lldb-492 Genesis Present.dat#16
+CHECK fan:lldb-492 Genesis Present.dat#17
+CHECK fan:lldb-492 Genesis Present.dat#18
+CHECK fan:lldb-492 Genesis Present.dat#19
+CHECK fan:lldb-492 Genesis Present.dat#2
+CHECK fan:lldb-492 Genesis Present.dat#20
+CHECK fan:lldb-492 Genesis Present.dat#21
+CHECK fan:lldb-492 Genesis Present.dat#22
+CHECK fan:lldb-492 Genesis Present.dat#23
+CHECK fan:lldb-492 Genesis Present.dat#24
+CHECK fan:lldb-492 Genesis Present.dat#25
+CHECK fan:lldb-492 Genesis Present.dat#26
+CHECK fan:lldb-492 Genesis Present.dat#27
+CHECK fan:lldb-492 Genesis Present.dat#28
+CHECK fan:lldb-492 Genesis Present.dat#29
+CHECK fan:lldb-492 Genesis Present.dat#3
+CHECK fan:lldb-492 Genesis Present.dat#4
+CHECK fan:lldb-492 Genesis Present.dat#5
+CHECK fan:lldb-492 Genesis Present.dat#6
+CHECK fan:lldb-492 Genesis Present.dat#7
+CHECK fan:lldb-492 Genesis Present.dat#8
+CHECK fan:lldb-492 Genesis Present.dat#9
+CHECK fan:lldb-493 Genesis Sunsoft.dat#0
+CHECK fan:lldb-493 Genesis Sunsoft.dat#1
+CHECK fan:lldb-493 Genesis Sunsoft.dat#10
+CHECK fan:lldb-493 Genesis Sunsoft.dat#11
+CHECK fan:lldb-493 Genesis Sunsoft.dat#12
+CHECK fan:lldb-493 Genesis Sunsoft.dat#13
+CHECK fan:lldb-493 Genesis Sunsoft.dat#14
+CHECK fan:lldb-493 Genesis Sunsoft.dat#15
+CHECK fan:lldb-493 Genesis Sunsoft.dat#16
+CHECK fan:lldb-493 Genesis Sunsoft.dat#17
+CHECK fan:lldb-493 Genesis Sunsoft.dat#18
+CHECK fan:lldb-493 Genesis Sunsoft.dat#19
+CHECK fan:lldb-493 Genesis Sunsoft.dat#2
+CHECK fan:lldb-493 Genesis Sunsoft.dat#20
+CHECK fan:lldb-493 Genesis Sunsoft.dat#21
+CHECK fan:lldb-493 Genesis Sunsoft.dat#22
+CHECK fan:lldb-493 Genesis Sunsoft.dat#23
+CHECK fan:lldb-493 Genesis Sunsoft.dat#24
+CHECK fan:lldb-493 Genesis Sunsoft.dat#25
+CHECK fan:lldb-493 Genesis Sunsoft.dat#26
+CHECK fan:lldb-493 Genesis Sunsoft.dat#27
+CHECK fan:lldb-493 Genesis Sunsoft.dat#28
+CHECK fan:lldb-493 Genesis Sunsoft.dat#29
+CHECK fan:lldb-493 Genesis Sunsoft.dat#3
+CHECK fan:lldb-493 Genesis Sunsoft.dat#4
+CHECK fan:lldb-493 Genesis Sunsoft.dat#5
+CHECK fan:lldb-493 Genesis Sunsoft.dat#6
+CHECK fan:lldb-493 Genesis Sunsoft.dat#7
+CHECK fan:lldb-493 Genesis Sunsoft.dat#8
+CHECK fan:lldb-493 Genesis Sunsoft.dat#9
+CHECK fan:lldb-494 JANNPCK3.DAT#0
+CHECK fan:lldb-494 JANNPCK3.DAT#1
+CHECK fan:lldb-494 JANNPCK3.DAT#2
+CHECK fan:lldb-494 JANNPCK3.DAT#3
+CHECK fan:lldb-494 JANNPCK3.DAT#4
+PASS fan:lldb-494 JANNPCK3.DAT#4 40 1521
+CHECK fan:lldb-494 JANNPCK3.DAT#5
+CHECK fan:lldb-494 JANNPCK3.DAT#6
+CHECK fan:lldb-494 JANNPCK3.DAT#7
+CHECK fan:lldb-494 JANNPCK3.DAT#8
+CHECK fan:lldb-494 JANNPCK3.DAT#9
+PASS fan:lldb-494 JANNPCK3.DAT#9 78 4857
+CHECK fan:lldb-495 MARTPCK1.DAT#0
+CHECK fan:lldb-495 MARTPCK1.DAT#1
+CHECK fan:lldb-495 MARTPCK1.DAT#2
+CHECK fan:lldb-495 MARTPCK1.DAT#3
+CHECK fan:lldb-495 MARTPCK1.DAT#4
+CHECK fan:lldb-495 MARTPCK1.DAT#5
+CHECK fan:lldb-495 MARTPCK1.DAT#6
+CHECK fan:lldb-495 MARTPCK1.DAT#7
+CHECK fan:lldb-495 MARTPCK1.DAT#8
+PASS fan:lldb-495 MARTPCK1.DAT#8 18 2675
+CHECK fan:lldb-495 MARTPCK1.DAT#9
+CHECK fan:lldb-496 MARTPCK2.DAT#0
+PASS fan:lldb-496 MARTPCK2.DAT#0 60 742
+CHECK fan:lldb-496 MARTPCK2.DAT#1
+CHECK fan:lldb-496 MARTPCK2.DAT#2
+CHECK fan:lldb-496 MARTPCK2.DAT#3
+CHECK fan:lldb-496 MARTPCK2.DAT#4
+PASS fan:lldb-496 MARTPCK2.DAT#4 40 1937
+CHECK fan:lldb-496 MARTPCK2.DAT#5
+CHECK fan:lldb-496 MARTPCK2.DAT#6
+FAIL verify/main.swift 45

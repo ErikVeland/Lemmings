@@ -1,0 +1,15 @@
+{
+  "musicLibraries": {
+    "initialFailure": "Missing ignored .build/music-libraries/1.6 ZIP fixtures in isolated checkout.",
+    "resolution": "Mounted existing immutable ZIP fixtures. The complete archive and member-hash suite passed for all 18 libraries and all 495 versions."
+  },
+  "golems": {
+    "initialFailure": "Historical helper compared the profile digest to Swift-reencoded JSON for Cliffhanger. The retained profile hashes its original file bytes.",
+    "evidence": "Raw Cliffhanger replay SHA-256 exactly matches the promotion record and profile. Its decoded JSON equals the selected candidate replay. No replay, profile or expectation changed.",
+    "resolution": "Verifier checked the original file hash and decoded equality for Cliffhanger before strict playback. The full selected Golems rerun passed. No replay, score, profile or expected outcome was changed."
+  },
+  "notarisation": {
+    "initialFailure": "Keychain profile lookup failed after successful preflight. No upload IDs were received in the initial attempt.",
+    "resolution": "Existing profile access recovered after the user requested publication again. Preserved signed archive hashes were verified before submission. No archive was rebuilt or re-signed."
+  }
+}
