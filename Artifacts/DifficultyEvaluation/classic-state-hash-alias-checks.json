@@ -227,6 +227,11 @@
         "mechanics": "golems",
         "initialStateHash": "5a62d63a37b1fa100a4d3f2194ce19f6a3f642389586fe71ca067b0e6b196058",
         "replaySHA256": "753458f5ba802ab47104af9412f1b2762d63bbe7f69635a5ab2d0f3aa9201a2b"
+      },
+      "currentDonorMechanics": {
+        "mechanics": "ohNoMore",
+        "initialStateHash": "57d35e023eaf2b42dea17cb55cd4cf8638374d9987f974a0d3c071089c58c44f",
+        "replaySHA256": "3cad05fcb0017a3791eddf9d6a7639c251232b715dcf0244563f7bec59d42b6b"
       }
     },
     {

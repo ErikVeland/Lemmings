@@ -226,7 +226,7 @@ Classic fan,fan:lldb-130,Crystal Remakes.dat#8,Triple Trouble,,low,,no verified 
 Classic fan,fan:lldb-130,Crystal Remakes.dat#9,We all fall down.,172.25,medium,6c9166af26cfe5e1739f1656fb5726bc14dae44af3fb16cbbc2dd57acf1b01f4,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-131,joe04.dat#0,Divided Loyalties,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-131,joe04.dat#1,A beautiful view,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-131,joe04.dat#2,Mission Lempossible,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
+Classic fan,fan:lldb-131,joe04.dat#2,Mission Lempossible,493.08,medium,e209996efe9cf92774e054ce343e9b21451beb030d9d21f61f65890f348c4c1e,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-131,joe04.dat#3,Artwork gone wrong,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-131,joe04.dat#4,Mission Lempossible II,513.7,medium,5fc496c6daa85c21da0c728ab61e6e8fd6543ae4bde5c341ad352c3a0254ee3c,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-131,joe04.dat#5,Boom Boom Pow,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
@@ -245,12 +245,12 @@ Classic fan,fan:lldb-132,dstar01.dat#7,Overlooking Something?,,low,,no verified 
 Classic fan,fan:lldb-132,dstar01.dat#8,Don't let 'em fall.,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-132,dstar01.dat#9,Pi's Net,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-133,weirdy01 (version 2).dat#0,Easy Does It,248.19,medium,4edaedbb8c093911407bdfa086c3e1f4303e61b3795b1e895044451951c1ab80,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-133,weirdy01 (version 2).dat#1,Penny Lane,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
+Classic fan,fan:lldb-133,weirdy01 (version 2).dat#1,Penny Lane,194.71,medium,cc99da7a65776f1c620c3bd16d1870f03bfe12199d1ad8cc63beb7414f956f04,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-133,weirdy01 (version 2).dat#2,Masterplan,204.41,medium,e8f038f07e734d7404a5e317368b2d15a13d36e678162916fe144967d01b7a2f,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-133,weirdy01 (version 2).dat#3,A Giant Leap?,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-133,weirdy01 (version 2).dat#4,Make It Stop,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-133,weirdy01 (version 2).dat#5,Just the Trick,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-133,weirdy01 (version 2).dat#6,Pure Genius,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
+Classic fan,fan:lldb-133,weirdy01 (version 2).dat#6,Pure Genius,194.18,medium,98bffc263a8d090d43f91a24dc0f30fbe6b5ba919773f89520193281079ff903,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-133,weirdy01 (version 2).dat#7,Death Valley,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-133,weirdy01 (version 2).dat#8,Take a Bow,67.75,high,bba134ef8cdda5ae7a60d534003e54fb9499b7912fcdc2e413217e09b4289b45,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-133,weirdy01 (version 2).dat#9,Innit 2 Winnit!,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
@@ -452,7 +452,7 @@ Classic fan,fan:lldb-165,Giga pack 04.dat#1,Mission lem-possible,,low,,no verifi
 Classic fan,fan:lldb-165,Giga pack 04.dat#2,Were ready for landing,484.56,medium,244cc20cb7f363271e5709e5e59e718eaa962d782ef192bca8de54b24f969ddb,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-165,Giga pack 04.dat#3,Fallow the ruins,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-165,Giga pack 04.dat#4,The Endless basher,339.99,medium,039fe808466d028a166a2d14e11aa4cb6b9fa18a47f93c30f7ff97c12ab64885,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-165,Giga pack 04.dat#5,Hey john wheres my lemmings?,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
+Classic fan,fan:lldb-165,Giga pack 04.dat#5,Hey john wheres my lemmings?,655.91,medium,a4db66ef18f70717166fd102bf5f78619ca84671c670bb91ca545edf99bad880,verified win,"unretimed Golems replay outcome differs; retimed native win, terrain unverified",replay verified,,Golems
 Classic fan,fan:lldb-165,Giga pack 04.dat#6,Please remain calm,561.03,medium,5de9701e4c1d1a76995fcb001059eef8078416e57c4339b9abfce82e7229c1d7,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-165,Giga pack 04.dat#7,Step it up,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-165,Giga pack 04.dat#8,Lemmings mountain aventure,345.31,medium,0aff43b9bd0cc52966efdce7c8c676f0d4094758b45bbad3f0471d6ac5aea108,verified win,not independently checked,replay verified,,not independently classified
@@ -603,7 +603,7 @@ Classic fan,fan:lldb-179,The lemming google pack.dat#3,"Another ""g"" to serch",
 Classic fan,fan:lldb-179,The lemming google pack.dat#4,"An ""l"" to serch",168.55,medium,807a90ce05e06d4f25220fcdcaa97dc7f6e39ca2745a5bc39c3e59c2542cc31c,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-179,The lemming google pack.dat#5,"An ""e"" to serch",310.99,medium,8167152250dd7c30d1bfb290b1e931e273183269a2d1dca15aaa0d983f1f6419,verified win,not independently checked,replay verified,,Golems
 Classic fan,fan:lldb-18,Mikepak13.dat#0,Oh no! Level 1 more difficult!,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-18,Mikepak13.dat#1,Oh no! Level 2 more difficult!,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
+Classic fan,fan:lldb-18,Mikepak13.dat#1,Oh no! Level 2 more difficult!,319.49,high,9757959c40acce8b6140a8449ee943bd5c151654b707b610e095c109ff17e5ce,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-18,Mikepak13.dat#2,Oh no! Level 3 more difficult!,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-18,Mikepak13.dat#3,Oh no! Level 4 more difficult!,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-18,Mikepak13.dat#4,Oh no! Level 5 more difficult!,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
@@ -781,14 +781,14 @@ Classic fan,fan:lldb-192,hubbart8.dat#5,Steel works,,low,,no verified win,not in
 Classic fan,fan:lldb-192,hubbart8.dat#6,Lemsterdam,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-193,Gronklems #1.dat#0,Lemmy go,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-193,Gronklems #1.dat#1,"City lemming, Country lemming",,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-193,Gronklems #1.dat#2,The single pillar incedent,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
+Classic fan,fan:lldb-193,Gronklems #1.dat#2,The single pillar incedent,380.35,medium,e6faada227d405c39d66b448d3e819f58fb131b59f6f50a87bea3c6ca1e332e9,verified win,independent saved count matches; completion differs; terrain unverified,replay verified,,Golems
 Classic fan,fan:lldb-193,Gronklems #1.dat#3,Multitasking  island,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-193,Gronklems #1.dat#4,The case of the floating dots,409.94,medium,6f987f06fc594c05974d3e15f78e6ca15c9119f05de94966976acc6687f061d5,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-193,Gronklems #1.dat#5,Caving lemmings,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-193,Gronklems #1.dat#6,Scaffolding,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-193,Gronklems #1.dat#7,This level is not a joke,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-193,Gronklems #1.dat#8,Torture machine prototype #74,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-193,Gronklems #1.dat#9,In the lemming factory,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
+Classic fan,fan:lldb-193,Gronklems #1.dat#9,In the lemming factory,485.91,medium,a0b89acf72377817f67ed65b396c18d7b176aaf316666f844b72c93619dc9c1f,verified win,not independently checked,replay verified,,Golems
 Classic fan,fan:lldb-194,ClamSpamXmas10.dat#0,Turnaround demo #Inf,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-194,ClamSpamXmas10.dat#1,Wall hacks,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-194,ClamSpamXmas10.dat#2,A.T. on a shoestring,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
@@ -842,7 +842,7 @@ Classic fan,fan:lldb-2,geooPk1.dat#3,The way up,396.16,medium,0bc5badcd6ae0fe726
 Classic fan,fan:lldb-2,geooPk1.dat#4,More 'No Builder Problems',543.21,medium,75f2a6d377aa9e9cc4771a459300345fb7b1298a02c50e5c8312d3351388a09e,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-2,geooPk1.dat#5,Follow Me,548.74,medium,46ccf8a6f5880c20ac30e1ad25fa40ce02ee54037ebcb46c17c8800eae5831f8,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-2,geooPk1.dat#6,Palace o/t once-hacked Lemmings,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-2,geooPk1.dat#7,Prepairing their ways,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
+Classic fan,fan:lldb-2,geooPk1.dat#7,Prepairing their ways,435.55,medium,0e6596c2908fc0e13b4ff5969a958f1f3d3526debe79e027c3603fcbabfffc74,verified win,not independently checked,replay verified,,Golems
 Classic fan,fan:lldb-2,geooPk1.dat#8,Trading and Cooperating,572.32,medium,d01f48dcb55390addddbf06ab446069127803d668a83b9a4ce078db5ac2eab58,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-2,geooPk1.dat#9,Don't Stop Me Now!,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-20,ISteve01.DAT#0,Rhapsody,535.26,medium,152a08420f277ebb911219f182a2b947fe0032565b56443c0fe82caa44070ab7,verified win,not independently checked,replay verified,,not independently classified
@@ -879,18 +879,18 @@ Classic fan,fan:lldb-201,8) Lemming Island.ini#-1,8) Lemming Island.ini,,low,,no
 Classic fan,fan:lldb-201,9) Ruins of three.ini#-1,9) Ruins of three.ini,,low,,no verified win,not independently checked,bounded search or metadata only,,Lemmini
 Classic fan,fan:lldb-202,Askesis.lvl#-1,Askesis.lvl,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-202,Jacob's Ladder.lvl#-1,Jacob's Ladder.lvl,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-202,LemmingsInArms.lvl#-1,LemmingsInArms.lvl,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-202,LemmingsInMotion.lvl#-1,LemmingsInMotion.lvl,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
+Classic fan,fan:lldb-202,LemmingsInArms.lvl#-1,LemmingsInArms.lvl,518.33,medium,fc1c671b512f84fa9bb6598c4ca620d5f90d5284dcd71416f9482451f8e00939,verified win,not independently checked,replay verified,,Golems
+Classic fan,fan:lldb-202,LemmingsInMotion.lvl#-1,LemmingsInMotion.lvl,369.9,medium,998b61e361c4571f650ada091aae4894779ed42e6821e269472c9013407822a3,verified win,not independently checked,replay verified,,Golems
 Classic fan,fan:lldb-202,Ouch Me Head.lvl#-1,Ouch Me Head.lvl,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-202,PlanB.lvl#-1,PlanB.lvl,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-202,Roundabout.lvl#-1,Roundabout.lvl,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
+Classic fan,fan:lldb-202,PlanB.lvl#-1,PlanB.lvl,478.88,medium,8c543abbe0cea29a42a8a8e501d0b192f189ce28bd82b473de829c5a907c769c,verified win,not independently checked,replay verified,,Golems
+Classic fan,fan:lldb-202,Roundabout.lvl#-1,Roundabout.lvl,343.47,medium,8f49fbdf6fda1eea4fd003fd33041980c440ae4d4c03ac0e5da715b96aac617d,verified win,not independently checked,replay verified,,Golems
 Classic fan,fan:lldb-202,fearfulSymmetry.lvl#-1,fearfulSymmetry.lvl,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-202,hard to port!.lvl#-1,hard to port!.lvl,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-202,mobius1.dat#0,Roundabout,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-202,mobius1.dat#1,Lemmings in Arms,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-202,mobius1.dat#2,Hard to Port!,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-202,mobius1.dat#3,Plan B,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-202,mobius1.dat#4,Lemmings in Motion,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
+Classic fan,fan:lldb-202,hard to port!.lvl#-1,hard to port!.lvl,622.13,medium,1d6e78963d378afc7a23583f5e430a04321271e4cbeaf8ff01af67d993fd8628,verified win,not independently checked,replay verified,,Golems
+Classic fan,fan:lldb-202,mobius1.dat#0,Roundabout,343.47,medium,77f40f0341ae59956f0b223f53a4d4fc8faddb37fc8d805cb0fe2cfc6478408c,verified win,not independently checked,replay verified,,Golems
+Classic fan,fan:lldb-202,mobius1.dat#1,Lemmings in Arms,518.33,medium,0ad880bcadd9863659748e20d29bc318778f5a1a6867f52e89e9ccb9eaa92bda,verified win,not independently checked,replay verified,,Golems
+Classic fan,fan:lldb-202,mobius1.dat#2,Hard to Port!,622.13,medium,a30bdf0ef5c174d74fa146fae4d85f053f073d5fe78835192d63f0f1c9100ff3,verified win,not independently checked,replay verified,,Golems
+Classic fan,fan:lldb-202,mobius1.dat#3,Plan B,478.88,medium,84453f06d493abd17d8f095af385bd4c98766e732322ebceb2fc617e68ff474e,verified win,not independently checked,replay verified,,Golems
+Classic fan,fan:lldb-202,mobius1.dat#4,Lemmings in Motion,369.9,medium,29ad0cf8cd564fb9495973618a8067faa8cbf9996295ab646d486a89aae220cd,verified win,not independently checked,replay verified,,Golems
 Classic fan,fan:lldb-202,mobius1.dat#5,Jacob's Ladder,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-202,mobius1.dat#6,Askesis,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-202,mobius1.dat#7,A Fearful Symmetry,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
@@ -960,7 +960,7 @@ Classic fan,fan:lldb-206,9 Rude Mood.ini#-1,9 Rude Mood.ini,,low,,no verified wi
 Classic fan,fan:lldb-207,contest1.dat#0,Tres Hombres,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-207,contest1.dat#1,Prize catch,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-207,contest1.dat#2,Brute Fours,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-207,contest1.dat#3,Feel the Pressure,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
+Classic fan,fan:lldb-207,contest1.dat#3,Feel the Pressure,348.15,medium,41a4c38bfb01d9c28e1ed12be7fc15086e626454a073b235fe436c54c8a0d6da,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-207,contest1.dat#4,Evacuating a Retirement Home,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-207,contest1.dat#5,A sea of purest green,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-207,contest1.dat#6,The Isle of Skye,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
@@ -1035,7 +1035,7 @@ Classic fan,fan:lldb-214,LF Level Jam #1.dat#2,The Pillars of Creation,,low,,no 
 Classic fan,fan:lldb-214,LF Level Jam #1.dat#3,Mazeochism,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-214,LF Level Jam #1.dat#4,Switchback Symmetry,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-214,LF Level Jam #1.dat#5,Utopia,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-214,LF Level Jam #1.dat#6,Crysilis,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
+Classic fan,fan:lldb-214,LF Level Jam #1.dat#6,Crysilis,573.4,medium,7cc3a05edf3fb3412ed0a57e612c04f4ebcae897350405347218d9e8bce9f6e4,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-214,LF Level Jam #1.dat#7,Lemming Sound System,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-215,1 Fracture.ini#-1,1 Fracture.ini,,low,,no verified win,not independently checked,bounded search or metadata only,,Lemmini
 Classic fan,fan:lldb-215,10 suspended animation.ini#-1,10 suspended animation.ini,,low,,no verified win,not independently checked,bounded search or metadata only,,Lemmini
@@ -1106,12 +1106,12 @@ Classic fan,fan:lldb-22,ISteve08.dat#9,I Traded Them for Climbers,,low,,no verif
 Classic fan,fan:lldb-220,AkseliPack01.dat#0,Sparkle & Glitter,343.59,medium,3bbda40451c315b2d1102512b72cf568a1ec193c3b714c1d18de6066c369001c,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-220,AkseliPack01.dat#1,The Glade of Disbelief,337.02,medium,d638d66c0b2ce23dc401a1ef4438e7ccb4c77a718587bad0da5737c95e0db9b4,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-220,AkseliPack01.dat#2,For Mr. Dodochacalo & Mr. Pieuw,379.8,medium,eabb10f7518c01e9642751b59db82a63901590f4dbf170167263e8dccc52e3a6,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-220,AkseliPack01.dat#3,Winter Solstice,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-220,AkseliPack01.dat#4,Feel the Pressure,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
+Classic fan,fan:lldb-220,AkseliPack01.dat#3,Winter Solstice,416.13,medium,25785d13756a2f7258dc8575431c4f73a5f1905d320e4d4461c6e1436cbdb0e8,verified win,not independently checked,replay verified,,Golems
+Classic fan,fan:lldb-220,AkseliPack01.dat#4,Feel the Pressure,435.96,medium,8ebd52e8a09a8023165f9701a2820063a6588fa5c9aa1f49b1ebd2e2e78dfb91,verified win,not independently checked,replay verified,,Golems
 Classic fan,fan:lldb-220,AkseliPack01.dat#5,Why do you all look the same?,561.92,medium,8cbdb81eb7b1fa59c6f1eb8755a9c3040b77aa56d18e33283cd5a98a57910caf,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-220,AkseliPack01.dat#6,In the Core,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
+Classic fan,fan:lldb-220,AkseliPack01.dat#6,In the Core,428.81,medium,e0ff97bcdf0b89e9e98bd74d160f2edf560332776de585752858176c57520e51,verified win,not independently checked,replay verified,,Golems
 Classic fan,fan:lldb-220,AkseliPack01.dat#7,Pedantic Lemmings,581.16,medium,29e8a8dc7ef1fe885be0e69a31b0f0b21fa8c01893d9e7941ab04be0b2ca9540,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-220,AkseliPack01.dat#8,Crysilis,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
+Classic fan,fan:lldb-220,AkseliPack01.dat#8,Crysilis,573.4,medium,c0cea5f26ccc4d6cffecc571460df2290659851a711b17b003939a1475c5db2d,verified win,not independently checked,replay verified,,Golems
 Classic fan,fan:lldb-220,AkseliPack01.dat#9,Zygoptera,567.96,medium,34c56e6762f2f4e3a4349dbc4ce35818c12289c3228047f7f913b118cc604841,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-221,ANTHPCK1.DAT#0,Mount. Bashmore,177.33,medium,8bc5d67796bdbf3eb18cca30ea3d5a676ef33fbba8b81f6663f451bd06fdee35,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-221,ANTHPCK1.DAT#1,Climbing all the way,152.89,medium,35b74082ba64c3d0cb0045f7dc0b2a66e150272bbc76b5fa8045d16c2942dd5e,verified win,not independently checked,replay verified,,not independently classified
@@ -1568,7 +1568,7 @@ Classic fan,fan:lldb-264,ConwayChallenges 2.DAT#2,DIGGING FOR VICTORY (part two)
 Classic fan,fan:lldb-264,ConwayChallenges 2.DAT#3,Find it quick!,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-264,ConwayChallenges 2.DAT#4,The Boiler Room (part two),232.69,medium,474992c898cf820f15f65343c7782d33410588fe51b632406cdbba6565e2ca90,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-264,ConwayChallenges 2.DAT#5,Lemming Rhythms 2,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-264,ConwayChallenges 2.DAT#6,No time to waste,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
+Classic fan,fan:lldb-264,ConwayChallenges 2.DAT#6,No time to waste,465.73,medium,a287e654b9749485a37a24fe17312b4ad0fbbbf7bab2e81da774fb8c9b5aa8ec,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-264,ConwayChallenges 2.DAT#7,No 'PoP TiL YoU DrOp!'ing,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-264,ConwayChallenges 2.DAT#8,And then there were another four,600.17,medium,e9f448a957c04585545778f0fa668d06f6bd6ebbe00f8803a0cc70a0999113a5,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-264,ConwayChallenges 2.DAT#9,ICE SPY 2,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
@@ -1957,7 +1957,7 @@ Classic fan,fan:lldb-30,QBeez02.dat#6,Save as many as you can,,low,,no verified 
 Classic fan,fan:lldb-30,QBeez02.dat#7,YOWCH! Level,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-30,QBeez02.dat#8,Gulp the Lemmings,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-30,QBeez02.dat#9,Three Lines? Hmmmmmm...,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-300,Pacpack1.dat#0,Just a bomb away !!,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
+Classic fan,fan:lldb-300,Pacpack1.dat#0,Just a bomb away !!,290.47,medium,d295a28da8e5ca95e3c7e70a8f8698c0c70291e0f1fd106e3ae5223d640ca83e,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-300,Pacpack1.dat#1,Weight Lifting,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-300,Pacpack1.dat#2,The Lemmites I,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-300,Pacpack1.dat#3,Crazy Climber I,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
@@ -1968,7 +1968,7 @@ Classic fan,fan:lldb-300,Pacpack1.dat#7,Crazy Climber II,,low,,no verified win,n
 Classic fan,fan:lldb-300,Pacpack1.dat#8,Abracadabra...,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-300,Pacpack1.dat#9,THE AUTHOR'S SIGNATURE...,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-301,Pacpack2.dat#0,Oh no! Not again...,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-301,Pacpack2.dat#1,The race against cliches II,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
+Classic fan,fan:lldb-301,Pacpack2.dat#1,The race against cliches II,430.31,medium,c955021dc71ceddf8060097aa39302a9699a42da9821b19f97f60addb6f22f2c,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-301,Pacpack2.dat#2,Careful diggers...,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-301,Pacpack2.dat#3,The compass,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-301,Pacpack2.dat#4,Timing's the Lem (Part Two),,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
@@ -2153,7 +2153,7 @@ Classic fan,fan:lldb-318,joem2.dat#2,"SPLAT,SPLAT,SPLAT,EGG AND LEMM",,low,,no v
 Classic fan,fan:lldb-318,joem2.dat#3,Build to it,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-318,joem2.dat#4,What's this doing here?,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-318,joem2.dat#5,Looks pretty difficult!,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-318,joem2.dat#6,Know your enemy...,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
+Classic fan,fan:lldb-318,joem2.dat#6,Know your enemy...,261.85,medium,06b639e96588989eb599fd73f55ea16811a0f2198d9b1ef50277216546981fff,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-318,joem2.dat#7,Impossible mission,480.25,medium,abf71a672cd7018467857a8fae4a306e1747c60957a5afc1fc7eecf1ad8329ce,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-318,joem2.dat#8,Huck it,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-318,joem2.dat#9,Break through the stakes,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
@@ -2492,14 +2492,14 @@ Classic fan,fan:lldb-349,MARSHY05.DAT#8,Keep the crowd together,,low,,no verifie
 Classic fan,fan:lldb-349,MARSHY05.DAT#9,Time Bandits,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-35,1tseug.dat#0,Slipping,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-35,1tseug.dat#1,In Need Of Scenery,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-35,1tseug.dat#2,Ups and Downs,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
+Classic fan,fan:lldb-35,1tseug.dat#2,Ups and Downs,381.04,medium,bd22f92fba7a4620f5f2093610454bd6274f24efb6f21045bdf494863a189c9b,verified win,not independently checked,replay verified,,Golems
 Classic fan,fan:lldb-35,1tseug.dat#3,Not Quite...,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-35,1tseug.dat#4,The Gr8 Escape,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-35,1tseug.dat#5,"Oh No, Not Again!",,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-35,1tseug.dat#6,Stuff In The Way,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-35,1tseug.dat#7,NULL,411.26,medium,8b4d66cf5bcb222f736f2acb4a93ac503cfbd274bc23ddb8bf2bdd6737beffeb,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-35,1tseug.dat#8,Rush Hour,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-35,1tseug.dat#9,More Steel Works,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
+Classic fan,fan:lldb-35,1tseug.dat#9,More Steel Works,422.12,medium,50c4c216c1f974d38d3135478f8e757521e64e98c0b4d33cca3ad50ca3816675,verified win,not independently checked,replay verified,,Golems
 Classic fan,fan:lldb-350,MARSHY06.DAT#0,Darkness of the royal family,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-350,MARSHY06.DAT#1,Evil Whisper,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-350,MARSHY06.DAT#2,A Trap is a trap,347.21,medium,1516caf79ac2a53a45ecf29ce17de3b41a7d325f06c279d5f643da8b1efe1965,verified win,not independently checked,replay verified,,not independently classified
@@ -3242,7 +3242,7 @@ Classic fan,fan:lldb-432,LDChallenge03.dat#3,A toe,165.07,medium,247c897a604dd20
 Classic fan,fan:lldb-432,LDChallenge03.dat#4,A toe Take 2,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-433,LDChallenge04.dat#0,Pass Interference,287.83,high,cecb0362c116d3297b1769800b9251b7b3ab028528c6b12e46ecf04dda5bfd33,verified win,not independently checked,replay verified,,Golems
 Classic fan,fan:lldb-433,LDChallenge04.dat#1,Out of Line,37.45,high,698b46654f2348a4173379f5e0caa9ae76353562076a39fc1a9a061dfcb46ad7,verified win,not independently checked,replay verified,,Golems
-Classic fan,fan:lldb-434,LDChallenge05.dat#0,General wooden contraption no.73,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
+Classic fan,fan:lldb-434,LDChallenge05.dat#0,General wooden contraption no.73,257.33,medium,529064f42d5837ded39a6a2cde95d8c1dbde03bfc3076cba341a1d5cd2fdd86e,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-434,LDChallenge05.dat#1,Stop and Go,240.61,medium,806601add37bba4dfdf7ca841f9ad8ce76298024a45248f000dacd5b95950af5,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-434,LDChallenge05.dat#2,Lemcon Nine,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-434,LDChallenge05.dat#3,General wooden contraption no.73,322.86,medium,6d8d921a2e1843caadcaf241eea5f5ac1991b8236045e65e377279a7ec3f03b5,verified win,not independently checked,replay verified,,not independently classified
@@ -3451,8 +3451,8 @@ Classic fan,fan:lldb-472,LEMPACK.DAT#7,Divergent Missions,,low,,no verified win,
 Classic fan,fan:lldb-472,levels/01.LVL#-1,01.LVL,162.54,medium,e465de23e235209b28711f33d1dbd5998bd45f8aa67bdf1a4778f779b201d2f8,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-472,levels/02.LVL#-1,02.LVL,480.69,medium,12a1ca75d13064074b08d1eb5abd1e31779e15f694fd435df1c6fd53d2fd0b6b,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-472,levels/03.LVL#-1,03.LVL,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-472,levels/04.LVL#-1,04.LVL,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-472,levels/05.LVL#-1,05.LVL,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
+Classic fan,fan:lldb-472,levels/04.LVL#-1,04.LVL,462.04,medium,ac963b01f1041e88f93e2ca94d888127ec05ecef02353b6e8016219890b34ea2,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-472,levels/05.LVL#-1,05.LVL,597.93,medium,9700f38226f82926c8fdd06374080e0cabe48efffab89921105b2432f3938a59,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-472,levels/06.LVL#-1,06.LVL,625.38,medium,eef6242e401c75089245b9973e7b5daa0499aedfba6be21217b222ad10d7ec5e,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-472,levels/07.LVL#-1,07.LVL,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-472,levels/08.LVL#-1,08.LVL,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
@@ -3596,46 +3596,46 @@ Classic fan,fan:lldb-477,Tame.DAT#6,Who`s That Lemming,189.36,medium,8eda48464f0
 Classic fan,fan:lldb-477,Tame.DAT#7,Dangerzone,244.24,medium,41a367ba5c6ac85c65cae4243127aabc83a715961e42c3555d4063be5782b1bb,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-477,Tame.DAT#8,And now this...,96.09,medium,7ff11864e6ebac093d6a0332394468a313cadfac21c041e7e1de292759372c1b,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-477,Tame.DAT#9,New Lemmings On The Block,174.9,high,625d9ca359bc7cad834ab6f720460e49a05a6ff017aba753a3703f23a2b7d3e2,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-478,Crazy.DAT#0,"Quote: ""That`s a good level""",234.06,medium,f07609aa37c89827ffd7cc5954afb135bc5eb83d7553af15136552477ba03362,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-478,Crazy.DAT#1,Dolly Dimple,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-478,Crazy.DAT#10,No Problemming!,293.26,medium,b0e270d1945dcaecad9699327ac07eb15da52b577b8d4a3d492db4c4a184734b,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-478,Crazy.DAT#11,Lemming Friendly,357.78,medium,03d707acee788ce202ac8748c355906b1da716640856cc552488bed458951f7e,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-478,Crazy.DAT#12,It`s a trade off,395.92,medium,9d3851c0e49ae15bb0d5fbc9bfa6321f4f391e217862067edecc2d16ca77ff38,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-478,Crazy.DAT#13,Time waits for no Lemming,447.06,medium,cb880fe5bd5c7db9aec730f99664ffca19001e1b27105c1e502d93b2534d9dde,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-478,Crazy.DAT#14,Worra load of old blocks!,395.23,medium,53bc451a5244d40076143adc5ead067325c7b99499543d0b10705901828fd263,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-478,Crazy.DAT#15,Across The Gap,356.61,medium,cecd07caaac1060eb63c55313a7592f700fb45f188d6018143e2a826bbed07ed,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-478,Crazy.DAT#16,DIGGING FOR VICTORY,396.35,medium,86fd899420b5358bedd28ad73039aced1939ff88500654c4d4101814d78b0db5,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-478,Crazy.DAT#17,NO PROBLEM,356.06,medium,126494280a73a33fcbdfce159f5d811d68bc2e946364c1e83423799f6db3adf0,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-478,Crazy.DAT#18,DON`T PANIC,378.9,medium,abad2be4a54209ce391173ee1ca76a28a48cca03e0c8f1f84d8bc765554a9af6,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-478,Crazy.DAT#19,Ice Ice Lemming,363.16,medium,1060ababd298f5586719580694c4fc3aee4f62ec0fb36037fd162e99d4f29d1f,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-478,Crazy.DAT#2,Many Lemmings make level work,149.29,medium,ba7065323303d9daf00100ed460215dd23343003e0da52459512a4dc375ebdcf,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-478,Crazy.DAT#3,Lemming Express,182.82,medium,fc14dc0a2e65ebd0b6bc35d32f9ca58ca74a040aac6e3b5b3227f13e31c7b9f7,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-478,Crazy.DAT#4,24 hour Lemathon,308.09,medium,7ec938ef52fdcef8a75c1267704626eabdf82837a20be70d353c7230c8f7e16e,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-478,Crazy.DAT#5,The Stack,381.63,medium,51841d7bbde364e29f163b6f865a132e2960842c40339b005a13f613144e4927,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-478,Crazy.DAT#6,"And now, the end is near...",334.89,medium,d4e8039630515171231e2d3af03189ec7b072748425cfa9a81edd142b645a50b,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-478,Crazy.DAT#7,KEEP ON TRUCKING,355.66,medium,cfc51d18440a885401f358af4ff83f2cafee8286c35ea31f9b396d19fafcfa68,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-478,Crazy.DAT#8,On the Antarctic Coast,424.54,medium,56239b65a48aaa0d2f4968cada7da0bdf6454e483c53124cf7b5e88e95f3fb54,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-478,Crazy.DAT#9,ROCKY VI,539.33,medium,4546785e3480e5853104c333a409bd3879aa8bd6ef2b463f6caaf53f8b4773e4,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-479,Wild.DAT#0,PoP YoR ToP!!!,317.14,medium,f7921310b750e1e50aa7cafc2ab055146235b6d51daf90f541c0b697f8fb8885,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-479,Wild.DAT#1,Lemming Hotel,465.33,medium,034471759650230980b106f2f297a4265de14a4beb3cd18661670dfa42a588aa,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-479,Wild.DAT#10,Mutiny On The Bounty,543.79,medium,e2d4ad197b05f8b85ab389afb13b8e49e8725ccf0887d239d4d011fb2176e04c,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-479,Wild.DAT#11,SNOW JOKE,430.45,medium,70635abfebee15d5f06afa0115dec77e591d049a4fbfc943c36673f65469ab64,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-479,Wild.DAT#12,ONWARD AND UPWARD,542.29,medium,7c02bb295243f39a309a53b07e3b63acffb7bb24e9f503e44bc70c9cb81d97f5,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-479,Wild.DAT#13,ICE SPY,474.64,medium,575b4d19cfb352a493a51fb1d3a2fd6864fbf0d90ceb655f2f50d24979fc9ac9,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-479,Wild.DAT#14,THE SILENCE OF THE LEMMINGS,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-479,Wild.DAT#15,"Take care, Sweetie",284.86,medium,709b60025969631a05d902be5a41adf68b9c16094dfd5dd255a0d3e697f34d0f,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-479,Wild.DAT#16,The Chain with no name,388.19,medium,44227052b19841546817395614c81818039f7e8ca86d612e2a5f1603cfbc2eea,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-479,Wild.DAT#17,Dr Lemminggood,155.27,medium,109e1464600595972189f3ad813dfb8f71ab792f1e911e29449799ac5324fcb1,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-479,Wild.DAT#18,Lemmingdelica,224.58,medium,096282af742b746161d5d4a201bad07919bc37150290ff63c3cc0c02264bb964,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-479,Wild.DAT#19,Got anything....Lemmingy???,283.78,medium,c953419aa1ece5857a6bc9161a0f79fcc5ca8f0d79ebbe164f8381840e34a164,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-479,Wild.DAT#2,Lemming Rhythms,455.82,medium,f142d9b5b536dfd28333ada72fa46440f473ad8f1a2fa20f430d896598ab6331,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-479,Wild.DAT#3,Meeting Adjourned,269.13,medium,1e64cc551287f9e994b47248c7f19ffc09284e5a270669a41346dd1f873232fd,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-479,Wild.DAT#4,Lemming Head,297.54,medium,74aec095692c819343cdbb5aeb54a149c84121c163f85713cd3703d964ef6e58,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-479,Wild.DAT#5,Just A Quicky,271.22,medium,0c45070c1b81101607658740edef140a0eb3d2161f9f963fe5bec73a572cbbfa,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-479,Wild.DAT#6,You Take the High Road,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-479,Wild.DAT#7,It`s a tight fit!,442.86,medium,3cdc83e6356107ae00876bc3214884885f1236774decd87a77336cc5750d93a7,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-479,Wild.DAT#8,Ice Station Lemming,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-479,Wild.DAT#9,Higgledy Piggledy,353.29,medium,81e51647ec83cf77d3aebf3d68ff6a14c255b46acb91d2a57919524bdc27dc4b,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-478,Crazy.DAT#0,"Quote: ""That`s a good level""",271.72,medium,008f746991a18906cfa95c996313708d6cc6c4f334c32b71f6f8bf93451c4a64,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-478,Crazy.DAT#1,Dolly Dimple,312.58,medium,1fce026ba281582d950fdbbf0b510d124765719532693370dae04bb65d2a4fbb,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-478,Crazy.DAT#10,No Problemming!,260.16,medium,3cad05fcb0017a3791eddf9d6a7639c251232b715dcf0244563f7bec59d42b6b,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-478,Crazy.DAT#11,Lemming Friendly,253.65,medium,6b918de55cc2462f41f44a5130fc1845c6fb9d2f1b1969173a58438ca5e53432,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-478,Crazy.DAT#12,It`s a trade off,272.02,medium,9548bc3655bc1bac7e345710dd6c4cd3ad6d293283a9ca0e0adb08fd12ccf45d,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-478,Crazy.DAT#13,Time waits for no Lemming,397.44,medium,126f51d0b2109e12dc131ef1c248dd1846abd69944e60c18f70a86143dc504ad,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-478,Crazy.DAT#14,Worra load of old blocks!,363.14,medium,055435542249eb5c7591b5ce8c11276385d72ba21712ffc60b6b9ed52bbbbd83,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-478,Crazy.DAT#15,Across The Gap,555.35,medium,6440083d68f83b0528251787dabb9ab63320f8990218fe6a54df6fa0d5e1b574,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-478,Crazy.DAT#16,DIGGING FOR VICTORY,396.32,medium,5f3f88c2d7402f0a6f00ac8579cf29aea0b131161de71ec2cd9f0574f6ce9066,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-478,Crazy.DAT#17,NO PROBLEM,388.46,medium,7473ac8e226c2b86326d47ce7eb3f123cf3242f0970a1de62bc3f15e78fab208,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-478,Crazy.DAT#18,DON`T PANIC,325.46,medium,cd4b43d7c85e5c0552b8d5103da039da2a5520f8f9a08d7c4b2395ee88bc3dd0,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-478,Crazy.DAT#19,Ice Ice Lemming,262.47,medium,28826058b9017f01892ed40b4c2bc76516400ae0b4b29815367a6912e555de31,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-478,Crazy.DAT#2,Many Lemmings make level work,149.29,medium,4332789dd870048286b5995393e4356dacd90950c229025c0da5ff027d1280c6,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-478,Crazy.DAT#3,Lemming Express,182.03,medium,ff9732b984e5badd78b141d2bb91b98790e4b503b5d7c3c176986a5e8157185b,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-478,Crazy.DAT#4,24 hour Lemathon,328.4,medium,1b842a11925bd56c20625f1d684e1b95636f931d81d14631ab091eba65afc69f,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-478,Crazy.DAT#5,The Stack,429.61,medium,5b7793a43a4b2f91b5fcef05e06a8f5f9cb2b659cc688a7643c6555308080c75,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-478,Crazy.DAT#6,"And now, the end is near...",320.7,medium,445fa045478e0125af6522fd19caba76167be804a011aeca963c381edc54157f,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-478,Crazy.DAT#7,KEEP ON TRUCKING,434.9,medium,748cadccffe84e89b261cc0aa04e7902053c6e0c4a223e73cceefdc00299fcc1,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-478,Crazy.DAT#8,On the Antarctic Coast,362.73,medium,d1c37306f67763ed2799612bcb5da10a1796b1d33b2f7c9bf6f7b063f3d5812f,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-478,Crazy.DAT#9,ROCKY VI,310.77,medium,f8abc4d44346014b26de658400192b58c3e2a75201c54853a8b529cf1fe3911b,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-479,Wild.DAT#0,PoP YoR ToP!!!,329.66,medium,4a60cbe046cf9576304f6bd4f807852937766e9b313e6f7a6dd24b0c65816067,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-479,Wild.DAT#1,Lemming Hotel,242.85,medium,93b284998be5e63f48598d68dbafa1b60cfd38f81dc70758052618d340ed9c07,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-479,Wild.DAT#10,Mutiny On The Bounty,329.91,medium,0c291b17f5f4a04e8c13046578809bb8c1d71bf6751762a8761f295981ed8bdc,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-479,Wild.DAT#11,SNOW JOKE,266.39,medium,281f216bff905beef603a405c33d45448e6b0519caff2db39a8f6ef24f5abde9,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-479,Wild.DAT#12,ONWARD AND UPWARD,507.95,medium,e44114fe5885f5f906061b00973075b671c709708956ea14edc80c82e0792a7a,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-479,Wild.DAT#13,ICE SPY,398.25,medium,0627d5da4116ba8f6f0f3fdd8d930617e94bf32bed8f7882433603be03b9be7d,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-479,Wild.DAT#14,THE SILENCE OF THE LEMMINGS,481.37,medium,7a05adef228a8bccf02f70cc37ca76a043b940df9b7e03edd398d45bcecc605c,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-479,Wild.DAT#15,"Take care, Sweetie",338.91,medium,0dea8e9f16da79d2e737d600f4d5438b707e6f2bc18d85221d337eb4361c279a,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-479,Wild.DAT#16,The Chain with no name,315.67,medium,bf795217a369cfad7f3702815a8e77379cf0fb18a9ef240d7dc4f73ede1595d4,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-479,Wild.DAT#17,Dr Lemminggood,252.86,medium,d8070e2987214056439515543b82cdb3132e2f756ca1f5ac1d223226f94442d0,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-479,Wild.DAT#18,Lemmingdelica,267.47,medium,c3fc4e434f8b52a24682efbac380248988e8e3304f08de5b9bcfa79d5a607d3a,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-479,Wild.DAT#19,Got anything....Lemmingy???,322.96,medium,4f87919ba73c4155642c9e43bf833ab9eefb36196b6560b47627274911549105,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-479,Wild.DAT#2,Lemming Rhythms,394.95,medium,0cafaf47ccf2bf60307116c7c1c457cdd66e76cb8f26abb0ae6099f2a2b933cb,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-479,Wild.DAT#3,Meeting Adjourned,322.86,medium,5424382093aadad2c9f64a11f90f06df756af36a1a2ce2dca189fda167f27491,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-479,Wild.DAT#4,Lemming Head,297.54,medium,430007aec6e7ff68c32fa5cceebf1b647bb274368f214ec98a39715c28a7a2a0,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-479,Wild.DAT#5,Just A Quicky,439.01,medium,4fe8566efe5684a99af63a3c5978303367ddff3038bba5708c4ab68c2e67ba41,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-479,Wild.DAT#6,You Take the High Road,383.32,medium,d0cf80bd151fa845983e5431002665ce1fd72810af82699208971af2148ce43d,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-479,Wild.DAT#7,It`s a tight fit!,442.83,medium,03258c165362d0b4ae16b389ce4ddcab06232d2638ffab1200cbb9dbaf3a6707,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-479,Wild.DAT#8,Ice Station Lemming,243.01,medium,5c37c28369807a33082f79bbf96471dc5e05a2d267009fb249490b6c0fd4e2f7,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-479,Wild.DAT#9,Higgledy Piggledy,316.87,medium,9a2eab5d6b9cb11f7de4afcc341ac0c0ee9af03c4083048c2eb26b4845ae2d92,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-48,lm_set08.dat#0,The new (but frozen) boiler!,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-48,lm_set08.dat#1,The Green world (Spooky?),,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-48,lm_set08.dat#2,The diagonal barriers,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
@@ -3646,118 +3646,118 @@ Classic fan,fan:lldb-48,lm_set08.dat#6,The Crossing,,low,,no verified win,not in
 Classic fan,fan:lldb-48,lm_set08.dat#7,Brick layered lemming house,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-48,lm_set08.dat#8,Leave me alone.,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-48,lm_set08.dat#9,Now we get a little harder!,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-480,Wicked.DAT#0,LeMming ToMato KetchUp fAcilitY,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-480,Wicked.DAT#1,Inroducing SUPERLEMMING,366.72,medium,732bdb9459562e9e042145d85c7fcbf1a40aaf2e1f2dc91e66c5d8875f486a7d,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-480,Wicked.DAT#10,ROCKY ROAD,416.91,medium,eed237de5a14be4acae3deae3dc24165e34dd8651a7f1f52616a465f67c946f2,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-480,Wicked.DAT#11,Suicidal Tendencies,335.2,medium,63497ea284eecbfabe9a3f101576944ba870215fc94b929c8592637c56788f08,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-480,Wicked.DAT#12,Almost Nearly Virtual Reality,344.58,medium,91d4a7a871187c841e66cb06dc5136c609d4f8e36e5e9c6e36b5efe951ca7744,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-480,Wicked.DAT#13,The Lemming Learning Curve,325.12,medium,41b68f9aeeb38633605f7f7af3b4e9c4ef1268b7f4eaa2886f43d0374bdb447a,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-480,Wicked.DAT#14,"SPAM,SPAM,SPAM,EGG AND LEMMING",503.11,medium,c7e8ddb361ae37e760031e62fae96d30e3b1692f2af94041e64b225fd12d0f8d,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-480,Wicked.DAT#15,Five Alive,330.13,medium,f3936b713008bce0d5283bac6992ba2368b56eab2544393de256febb526e1728,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-480,Wicked.DAT#16,Down the tube,327.92,medium,09a97c66b537cedb0307fc2a522f96b41961495d9388454d39e85ae0fd3afce1,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-480,Wicked.DAT#17,LoTs moRe wHeRe TheY caMe fRom,363.98,medium,083800747b4469aa854f77100836f25005a5853d046dce50b7525692ffa7b932,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-480,Wicked.DAT#18,"Up, Down or Round and Round",245.8,medium,624914db6db6daa7229ab1e89297ba2eeb85a9f7ca3c6d2ab7be758f7dace86f,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-480,Wicked.DAT#19,The Lemming Funhouse,384.84,medium,940d5306e7c4ac482d75b1e8a47edd6d9bca9d799b0149f53f041ed073e07166,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-480,Wicked.DAT#2,This Corrosion,375.85,medium,4118b5b12ec8cb86fd673257b2b6d282ac310c210b1cbcfc62aa2e1d76ad0179,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-480,Wicked.DAT#3,Oh No! It`s the 4TH DIMENSION!,428.5,medium,c87f7e0543658c2aa360d59fe91dcc80461169f975e7af30d800a4b5501f57fc,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-480,Wicked.DAT#4,Chill out!,558.39,medium,35ce48ef52f2e58b828a8f57618bfdddc5b86385772634e05bff9635a85a4bbf,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-480,Wicked.DAT#5,PoP TiL YoU DrOp!,233.05,medium,40fda62ce3dbbf02e6f4d521d436afa0f3759db8f46d5e8b325b928018228444,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-480,Wicked.DAT#6,Last Lemming To Lemmingcentral,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-480,Wicked.DAT#7,A TOWERING PROBLEM,265.89,medium,daeba086c43ba3304e5aa0409ba16317dfd02190b2054d46e08a454800c97823,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-480,Wicked.DAT#8,How on Earth?,371.52,medium,07f822431a9364cd46db9392961112950ef7dfc3f20d090874ca0cceac6e6437,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-480,Wicked.DAT#9,Temple of Love,462.41,medium,dbd45897a98232bae7fd73e765af743098beb3932b476e1bbcc4d5d2f9322d88,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-481,Havoc.DAT#0,Tubular Lemmings,475.18,medium,3520ae876e5ce6f9068eca150aaceec81475b4f856265f470fa48138539560bb,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-481,Havoc.DAT#1,Be more than just a number,454.79,medium,b7565c84e0f3dc9f00de34e8df7b01f503be74a3707c187764348ff46d5cefd7,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-481,Havoc.DAT#10,"Welcome to the party, pal!",,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-481,Havoc.DAT#11,It`s all a matter of timing,332.05,medium,043d1162e0f1f6cbdd68f7f486141cd6abc08135ef21e4e88db52df3d7168305,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-481,Havoc.DAT#12,HIGHLAND FLING,357.83,medium,9232abb95ba12c7fd3bcf2c3f89520f463a9d351e40c1087ccdccf1a3e6400cf,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-481,Havoc.DAT#13,Synchronised Lemming,545.11,medium,12ac55786942bf1a4317bb6f09f7cbfef8b0ec6e3260a028c87b3e101a6bc640,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-481,Havoc.DAT#14,Have an ice day,403.6,medium,062a9b41026201d8be07245f03ab59e9595240027f17d47ef1f03430c7c1c827,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-481,Havoc.DAT#15,Scaling the Heights,372.17,medium,637bcd69ab2f54e84e74031a162adcd9f8419322db096dbafeddeea380dd5a49,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-481,Havoc.DAT#16,Where Lemmings Dare,255.13,medium,5267a758e349d892f916ac97c8185eee2905cdf5c27bd65b88b3fc2a54679b39,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-481,Havoc.DAT#17,Lemmings in a situation,545.7,medium,770577673fe18cf87da0d0c79b42383a42a04341ae677ceccc6cd5b58d2dcbde,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-481,Havoc.DAT#18,Looks a Bit Nippy Out There,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-481,Havoc.DAT#19,LOoK BeFoRe YoU LeAp!,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-481,Havoc.DAT#2,It`s the price you have to pay,530.3,medium,6beda0c151b6646d66857b4465562ceb62df7f39fee59bb2e50ade810cd1a972,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-481,Havoc.DAT#3,The race against cliches,535.6,medium,9ef8d5332ec90745544e8519e4007d0d781c375507d2ab297edc05a5e3bfc381,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-481,Havoc.DAT#4,There`s madness in the method,339.43,medium,70437f4ae3309ff0ff6a50b0e62e7ede18805c8fec71162b7a04e30d3e8231aa,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-481,Havoc.DAT#5,Now get out of that!,238.46,medium,fef098e407dc33edbd708daf4644f1621c6ea5f0309878a23184305381f1d8ae,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-481,Havoc.DAT#6,Creature Discomforts,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-481,Havoc.DAT#7,Lemming about town,321.72,medium,1131cfce17c07e36dff5cba2b9867f74b34e248e8bbc536f83d506f67688a1c3,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-481,Havoc.DAT#8,AAAAAARRRRRRGGGGGGHHHHHH!!!!!!,477.17,medium,3940a1c9be587ba5c50c3b6509232872134b0d440fa4461639fc31c193cccab5,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-481,Havoc.DAT#9,Flow Control,249.09,high,8d77c941a621d1d5c92cc2bff0c98e3fd64d0678a5df604ee348fc5c82583f16,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-482,Frost.DAT#0,Chains of Command,287.43,medium,de572f5851f71bc0801060868cef6d1498825df43d4511ecdab1e693c040b90b,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-482,Frost.DAT#1,Ski Jump!,170.09,medium,5e7c059a4add1a215b5a3de147577ebe602e5247be241c42054f692939657c33,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-482,Frost.DAT#10,Maybe not such a doddle,289.3,medium,2f76451a89e0013ddaa53966bf45467aea668b2f1b3a3b0acd0333c009f51dba,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-482,Frost.DAT#11,It's Boxing Day!,268.66,medium,3ef7cb769c82f2e7904364197b7751c508e6837020dbd3da1c44b477a5e32566,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-482,Frost.DAT#12,2 Minutes before midnight,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-482,Frost.DAT#13,Happy New Year II!,384.3,medium,20ca31a8cc36cf192c068fd55eac636b46cb0471cca8d74988193616ffe534d6,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-482,Frost.DAT#14,Plethora of Presents,272.14,medium,dd4234b6f2acdf7ba821c26b345cb4003ebf54053d548f0fee7c1c7fbc1b5ff1,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-482,Frost.DAT#15,Up on the Rooftops,377.51,medium,556358a9603a0d96ac476107088deffa0f470a8d30a4cebd2288faa25f38c6be,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-482,Frost.DAT#2,CindyLand,228.07,medium,511d921633392a05aa207c5453537eab3180b5e9467fddbc06bc0c101c93cfe1,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-480,Wicked.DAT#0,LeMming ToMato KetchUp fAcilitY,326.4,medium,f7884ae7fa76f75e8efbe5960a28e47e91d7ceb1940ff284b9fbfdfc98909fd3,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-480,Wicked.DAT#1,Inroducing SUPERLEMMING,366.72,medium,e9fbb388b030c11de29ce2a7efe3f954965cfe5520223fc6f7b752db1b8285ee,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-480,Wicked.DAT#10,ROCKY ROAD,413.27,medium,a4e44b1101fe6a476bc8900fea0ffb282eef722737e78d7aece0fcf1ae7e8e41,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-480,Wicked.DAT#11,Suicidal Tendencies,318.35,medium,d47d701113ecd643f2f5a1f674ba6d5be6deaf8dd62b7e904cb55265285cadad,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-480,Wicked.DAT#12,Almost Nearly Virtual Reality,305.59,medium,685fe83aacb27f51d8d3c08540c1e7fb4ff2dce8c649f76ca71a8c6e71f3937b,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-480,Wicked.DAT#13,The Lemming Learning Curve,378.86,medium,eefef5792e53f0ab0e46e3f9831da76d5ff4a6fe42a9a376532ddb29cb9cac72,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-480,Wicked.DAT#14,"SPAM,SPAM,SPAM,EGG AND LEMMING",414.48,medium,5bd90a0c97fcf4c219929d0e00592e5a7456c09e27d88cceca1eaae154d278e0,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-480,Wicked.DAT#15,Five Alive,330.13,medium,73254f067558d71539ebd624daf6650ec9432b7dc7ef6f5ae4f361010fe26a3c,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-480,Wicked.DAT#16,Down the tube,327.05,medium,85fe73909001210dabaefe07e8e97db41d330994103b79a380dcfab77f96938f,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-480,Wicked.DAT#17,LoTs moRe wHeRe TheY caMe fRom,423.89,medium,62f1928ba3c7f3dfe53da92ff41f6487b41aaab87fdb1903d4e0b10b5be6c0a1,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-480,Wicked.DAT#18,"Up, Down or Round and Round",242.65,medium,8d32b668cde02653742bd6081faac19b32b4e3c29a1439c52a9002ecbc3c9cc8,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-480,Wicked.DAT#19,The Lemming Funhouse,448.1,medium,855965fec9d5f4df858278a720bf14b62f49c3e49fd19925282515b6da61cbd3,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-480,Wicked.DAT#2,This Corrosion,342.84,medium,b595c8fb70dc3fb1ac6586ff35ff0c02e0966d60e10186fb93f58c5fec753543,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-480,Wicked.DAT#3,Oh No! It`s the 4TH DIMENSION!,332.17,medium,587ba846ed0b5113b32507140ce8dcb582c6e5cc872f276e7a484cb3c6a0cf6c,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-480,Wicked.DAT#4,Chill out!,558.36,medium,742be5a58b09c8ccc52f13e25d29c25ccf1a43067304d23d74f2aa402ab36241,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-480,Wicked.DAT#5,PoP TiL YoU DrOp!,233.05,medium,214f913f432c34ba9b3191170dfe22d2da66d1470b5d278f86daf94f46dd1928,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-480,Wicked.DAT#6,Last Lemming To Lemmingcentral,190.08,medium,b262cc0fab64dd4b8dc9e93d5f6f81e9bc48e9b48ac675e16850bb46045ff2ca,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-480,Wicked.DAT#7,A TOWERING PROBLEM,304.89,medium,bb5c65bf0458b75f0edde104bcc9d4dfc8db2f6d4ddb9818c09f7cb887873655,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-480,Wicked.DAT#8,How on Earth?,327.66,medium,8a1ff2b05ba3fd01ee065577ef8e4ec9ae68d37df011aab20d64bb21cba85268,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-480,Wicked.DAT#9,Temple of Love,408.92,medium,f948f4d8a50df0504093521958a268922f6182aabe9eeafdf1ae485297c1e752,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-481,Havoc.DAT#0,Tubular Lemmings,481.58,medium,1f0035f8c12fcfcf3a21e0288a872a1cf7abca7981b09ae0501de33495e1f088,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-481,Havoc.DAT#1,Be more than just a number,435.18,medium,20202c0fe529fd650ce5dd4123745dcfbb5f244a374bc7411f4804e06cbc21a6,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-481,Havoc.DAT#10,"Welcome to the party, pal!",366.95,medium,3ffaff908d91430bb4c932312931146de795ac7352d1e499bdafafdd8d730929,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-481,Havoc.DAT#11,It`s all a matter of timing,299.52,medium,ef6003e141e28979a04eaec89c76cef96b6630ef0a230fcda02b9a4a5cb8f7b6,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-481,Havoc.DAT#12,HIGHLAND FLING,400.71,medium,145877788627a60ae3f60ca57597da76f27cf1109ed25084c8fbe3a38a0cf475,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-481,Havoc.DAT#13,Synchronised Lemming,565.05,medium,0a4c9ed4f39d31ec0428341965b6557e8990bfbbb2ec4ecffdd1a969ad515ee9,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-481,Havoc.DAT#14,Have an ice day,284.07,medium,b0401c9e340e681c68d11c4cb1361d809ec75006340aa4413c0ace7818165395,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-481,Havoc.DAT#15,Scaling the Heights,372.17,medium,d2a4671b0edeaa87b663a3eb2c55ac55345a21072d64c0696ff6b8eec33e8345,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-481,Havoc.DAT#16,Where Lemmings Dare,497.36,medium,eafd2c01b1f238d144cb56207d5f29b5aa39bf1c89b9e7a38de2e8122ba5bfcd,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-481,Havoc.DAT#17,Lemmings in a situation,457.28,medium,3ddd3315826e384b0af2b5b784a5c3d4f00ff85cbaab094523e0d7ffa4a1a53a,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-481,Havoc.DAT#18,Looks a Bit Nippy Out There,271.13,medium,c55d1f809a1e5528d324aa45b09903b21a45089cd4273d17a248e94afa44ace8,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-481,Havoc.DAT#19,LOoK BeFoRe YoU LeAp!,296.67,medium,eb447a64ff756b85ede2f2b76fcd70bc90e58c6e141dd795f76c994ff030df2e,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-481,Havoc.DAT#2,It`s the price you have to pay,452.1,medium,73e15b71a0a2b90159814044ebddde239cc18945c7e8e39e8ffa1f4adf283d29,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-481,Havoc.DAT#3,The race against cliches,433.11,medium,17e9f8311b041eece5b4fb93e7ca32872284e82f7853342bee8b892cb12a941d,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-481,Havoc.DAT#4,There`s madness in the method,391.12,medium,ae4f6c92ce432186ab4fca999173089cd49c6f1e3d6f7b290146b647e882684b,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-481,Havoc.DAT#5,Now get out of that!,293.68,medium,30cf8ebd83916352bc467be33ee4587878cca2352f1a93b5d4a908516e205aff,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-481,Havoc.DAT#6,Creature Discomforts,517.87,medium,6be0dbadaeefcb66b4c39a99cb193bf886f44cdc350a45041d0f6c19f5249034,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-481,Havoc.DAT#7,Lemming about town,354.23,medium,0d9d2a807ce336448740e12a08a0204dd02a08c3d96b20b8c4dd9d8425f4934b,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-481,Havoc.DAT#8,AAAAAARRRRRRGGGGGGHHHHHH!!!!!!,477.17,medium,965b13d36bed24888c6568103210f0012b361c6d3018f2b697e79d82a1e1f2b3,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-481,Havoc.DAT#9,Flow Control,249.04,high,3a862ab55d41820951490d81686151553589869047fd499e9414ab29ce047721,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-482,Frost.DAT#0,Chains of Command,160.98,medium,0004b57cf990b9d57e3cf3abaddf977999c172c855f5544b7e5785d4e1a558e4,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-482,Frost.DAT#1,Ski Jump!,170.08,medium,ac3b5c82617c2d18abae7b2f2b3b9760222b1311883b9e1fac028e5f11d70d82,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-482,Frost.DAT#10,Maybe not such a doddle,343.04,medium,40801248f43190d2757fcc238a60e9b91265b8a7bbbb02ea94d65d43b383e50b,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-482,Frost.DAT#11,It's Boxing Day!,357.29,medium,de843d87032b8425c9061ffc08594c23864115c1e7025c75324698ad455186e2,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-482,Frost.DAT#12,2 Minutes before midnight,316.26,medium,6443a6968e82233f1e565d63e67583e104a87cef3a251226f2a1122af888f3e3,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-482,Frost.DAT#13,Happy New Year II!,495.6,medium,b2f5672ade819f727100658896b88dcba7c08091d665febb3a9d13e5bbbe3e1c,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-482,Frost.DAT#14,Plethora of Presents,236.94,medium,dda2718174310068d833dbe0304171003d768acb3be032849190efaec3b8466c,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-482,Frost.DAT#15,Up on the Rooftops,412.84,medium,3bd939db9401f798c5685e33cbdc1caee6457ff5711edd6a6f464e1c1c429a6d,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-482,Frost.DAT#2,CindyLand,298.85,medium,34cb549346b9359c124975ffa17ea82ab8d1532522e8b9790e80bcd2a885d3e8,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-482,Frost.DAT#3,Separate Ways,303.16,medium,700abd4999a7c6aa686aaeec3723ebdae0628178f92c7ef4a117261cb59e0c51,verified win,published replay saved header differs,replay verified,,not independently classified
-Classic fan,fan:lldb-482,Frost.DAT#4,Lemming Reunification,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-482,Frost.DAT#5,The Land of the Bizarre,258.22,medium,188029dbb5c1001e306fde4388ca640c7c7b5852eb3fe13f301bfdb225747c5b,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-482,Frost.DAT#6,Happy New Year!,302.55,medium,8d0475fbb4de0b7fb123e308e0606f205292b75fb2482062367f66b119156193,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-482,Frost.DAT#7,Division Bell,95.75,high,c6b45e177cd658d3dc4965860c5eb0571e8d419e0340ff6a9a004f76923ce067,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-482,Frost.DAT#8,Quest for Kieran,288.52,medium,00bea4f6ac66043df28cad6877c7d880d943ad63e121bd7563ffc7bef0efe2c5,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-482,Frost.DAT#9,Four Play,442.25,medium,35078c67064277d029ae4329df0741ae6861a8ad4eee713d0313535995919048,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-483,Hail.DAT#0,Go Thataway!,300.71,medium,16042f27eac7d879c558313fd356e4da353201f95585dc4a302b185afb2b0b97,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-483,Hail.DAT#1,Break On Through,191.91,medium,83d0555751d5fc494355bef1b3042e032fe68a98ae8b58874f293ce12ccce4d8,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-483,Hail.DAT#10,Emmings!  (No L),,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-483,Hail.DAT#11,Merry Christmaze,208.87,medium,366fc242c0a34a6b9fb4b6baae2f63e4e507bb3f86a1ed51ab0c329b9a748d3b,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-483,Hail.DAT#12,Polar Expedition,467.57,medium,1a2f0dbe6c114f2c678839cb99e3778321b07b7c6002a40330b74922937d6bb1,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-483,Hail.DAT#13,Rendezvous II,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-483,Hail.DAT#14,Steel Block Party,204.01,medium,5ee34e369fe45e8f5e3f79aad3a8cfc9e8820f2b41aa0cf7af6f5d337b62fcb4,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-483,Hail.DAT#15,Peak of Performance,262.6,medium,48056a57e6b56f889f0fef0df1ad1a001ff6d40178a84d7675087d05cdde882d,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-483,Hail.DAT#2,And a Happy New Year!,515.88,medium,c60e1a15db27a7ea7acd08a52b671f79b26d925af5c53760e14b1c779f481a60,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-483,Hail.DAT#3,Lemmintaschen?,474.65,medium,d31d6dbd474bb312ffa1d1eae31850a695ca53430a8f12d96711185952fbf10e,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-482,Frost.DAT#4,Lemming Reunification,289.34,medium,4f92ab38e457979cb3c75756dd583ead6f493216385dc898182e437c4ab97c1e,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-482,Frost.DAT#5,The Land of the Bizarre,271.79,medium,94f693b2203c9e7d2c6512bc3bd38d286a6a4cb24e8e9c5fb0f07aad784f1d5d,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-482,Frost.DAT#6,Happy New Year!,415.14,medium,ccb96a760e2ee7c389fd1676695468bd23265fda4add8ca84a3d3f1a480f82b1,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-482,Frost.DAT#7,Division Bell,128.48,high,84d461556a9eb2af9cc0256b265a8e27e67c73bd607772d029da26c48066fb67,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-482,Frost.DAT#8,Quest for Kieran,288.5,medium,e3eb856ddfea2e864ee05372355a43cbac4b80d30a52a95faa656396a6e48e01,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-482,Frost.DAT#9,Four Play,550.12,medium,46368d501768cca86571f498d82bfa1bbeac3361e9ace3f197c272405fb35c57,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-483,Hail.DAT#0,Go Thataway!,441.67,medium,d24e2bd808309bed93d251c6939c236c85e3b33fe60debf46ff6214ba3db885b,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-483,Hail.DAT#1,Break On Through,292.72,medium,817eb5fda513d7abbb3537d74f4330c4a8ea211da129d96254c1c150dd4cbbd2,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-483,Hail.DAT#10,Emmings!  (No L),479.41,medium,95b1c286c4ada32e24ad948f9098757902e7cfdd053fdc2dbf7ac0a477cd8876,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-483,Hail.DAT#11,Merry Christmaze,286.14,medium,dca69c9c545c36d03cce33af10530c42a44ff3e7c324142a956ce2502d890f49,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-483,Hail.DAT#12,Polar Expedition,467.56,medium,474b30907f031ed67bec57593cf3258bc793ee0e34aa0e3f6576b4585259a73f,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-483,Hail.DAT#13,Rendezvous II,410.09,medium,f7e6b7bc648f63e8224bd7454687815c85905e996b6fc73920434003495bc65d,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-483,Hail.DAT#14,Steel Block Party,236.51,medium,e755f04cb90b8dc01b0d31bfd7f8d53ba4b40a92b46da68922cc2268d8fdfb40,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-483,Hail.DAT#15,Peak of Performance,262.65,medium,1ec6cdcad217fd6d10fc05c3b8bf7c1455951785de9a337e6ea0e5746e2095c9,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-483,Hail.DAT#2,And a Happy New Year!,382.54,medium,618f7af5a56e1d125ce8070c80d00652b32edf450610eca39534b1850b8d007e,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-483,Hail.DAT#3,Lemmintaschen?,507.15,medium,8038b0bcf1598f206df5893be7673227e617f6452569d53c219699c2ea6a936a,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-483,Hail.DAT#4,Get the Point?,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-483,Hail.DAT#5,Surprise Package?,33.51,high,5f9308cc3cb06290cb125ea5ca974316f3183692d6c5c179a86137f487352433,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-483,Hail.DAT#6,Steel Ice Span,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-483,Hail.DAT#7,Sir Edmund Hilemming,389.38,medium,773eb193550d6d46885c1352bb725f634a000c170f662f5038e7e71494184ce7,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-483,Hail.DAT#8,"Up, up, and away!",352.2,medium,a87df9842519331543db0afb89593ce009da1fe673dd8cdde4522b934abef013,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-483,Hail.DAT#9,"Lemmy in the cold, cold ground",378.22,medium,10a3fdc37cf900045df6e2c2ed82f1cb9a14441060866f691946028ce3710b34,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-484,Flurry.DAT#0,Climbing to the Top!,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-484,Flurry.DAT#1,Floating Lemming Flurry,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-484,Flurry.DAT#10,At Home in a Cave,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-484,Flurry.DAT#11,Presents of Mind,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-484,Flurry.DAT#12,Yo-yo Lem-lem,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-484,Flurry.DAT#13,Marshmallow Land,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-484,Flurry.DAT#14,Head for the Hills!,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
+Classic fan,fan:lldb-483,Hail.DAT#5,Surprise Package?,65.39,high,58e073cda7125b21eaaa3996325a9912fc504536d05005463f5e6dee4e4c1641,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-483,Hail.DAT#6,Steel Ice Span,308.86,medium,25d5e1dd7d326b56abbe8c5bb663142c5c2e969126575e8790a1561930bf5b76,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-483,Hail.DAT#7,Sir Edmund Hilemming,423.18,medium,d3f595035eaded04903a00acc5696319296ea01c0f1053e49e3c12f9b633056a,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-483,Hail.DAT#8,"Up, up, and away!",305.48,medium,458ff2c792f6a88361497b5361423f58700864c6d96abf2581fe9ef77ae030cc,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-483,Hail.DAT#9,"Lemmy in the cold, cold ground",359.02,medium,de16c09b2f23bdc62af13ed37eb708ec3258f4fe2c5043343c83c72e99ad0dfd,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-484,Flurry.DAT#0,Climbing to the Top!,112.62,medium,f89de90d2640eaf10988561725b97e24161e4fcd557739b46a64a3cb284e3deb,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-484,Flurry.DAT#1,Floating Lemming Flurry,148.94,medium,7e043498cdad4bd562280c6b80969be6bc673145574a122b07c5113f01cf9f67,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-484,Flurry.DAT#10,At Home in a Cave,249.7,medium,b121bf4b297714872be0684072a42f45a32745aca3534a4739510cc90573a6bb,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-484,Flurry.DAT#11,Presents of Mind,265.74,medium,83448978ec8b722d65e6c638ea938dfe72003d32c3bf3b749cdb9878242d72dc,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-484,Flurry.DAT#12,Yo-yo Lem-lem,181.88,medium,b2963e2feb6f3675faf572393a26518b9e0fb8096d05fc2ece5c0ce40c7c1c0c,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-484,Flurry.DAT#13,Marshmallow Land,346.79,medium,9ca4266af5a1f818bd16e503b27a2b79451a2832f13eae6dbf62be0b24358d24,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-484,Flurry.DAT#14,Head for the Hills!,230.85,high,484af1936ca1aedf319e959e4ccf7ce019eaeec1fcf21035cd02623646ac0bda,verified win,not independently checked,replay verified,,Golems
 Classic fan,fan:lldb-484,Flurry.DAT#15,The Long Way Around,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-484,Flurry.DAT#2,Holiday Mining,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-484,Flurry.DAT#3,Lemming Tracks in the Snow!,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-484,Flurry.DAT#4,Christmas South of the Equator,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-484,Flurry.DAT#5,Lemming Snowfall,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-484,Flurry.DAT#6,Lemming Snowjourn,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
+Classic fan,fan:lldb-484,Flurry.DAT#2,Holiday Mining,216.73,medium,5a91f858d2846e22aa9d4c2e0cb1e1196e3ad5addb2faa6681a3eb9de1c3d6da,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-484,Flurry.DAT#3,Lemming Tracks in the Snow!,210.21,medium,af3c3a8879a1d2de8e59db3a9a1e2a51a7db78d4413a4eab7f314d314ddb7bf2,verified win,not independently checked,replay verified,,Golems
+Classic fan,fan:lldb-484,Flurry.DAT#4,Christmas South of the Equator,131.65,medium,07df13c31b48d7ee70a98441f8bc4ae7144fd3a6e8a1c08e8e06d3221dfde839,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-484,Flurry.DAT#5,Lemming Snowfall,158.98,medium,58e1c8a91aa035064e7b663d574a09b6c73fe7bdc431b5a86afb5e9033def9cc,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-484,Flurry.DAT#6,Lemming Snowjourn,185.73,medium,a86fd58c56aedcb2804280886ade5a674511cdf05d90bb62b4a13d08d2746cad,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-484,Flurry.DAT#7,Vacation in Gemland,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-484,Flurry.DAT#8,A Block from Home,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-484,Flurry.DAT#9,32 Lemmings Below Zero,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-485,Blitz.DAT#0,Oogilemming!,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-485,Blitz.DAT#1,Lemmings Up High,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-485,Blitz.DAT#10,The Search for Lem,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-485,Blitz.DAT#11,The Voyage Home...,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-485,Blitz.DAT#12,The Final Frontier,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-485,Blitz.DAT#13,The Undiscovered Country,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-485,Blitz.DAT#14,The Needs of the Many...,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-485,Blitz.DAT#15,The Next Lemeration,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-485,Blitz.DAT#2,Check Your Hints!,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-485,Blitz.DAT#3,Santus Lemmingus,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-485,Blitz.DAT#4,It Came Upon a Lemnight Clear,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-485,Blitz.DAT#5,A Single Lemming...,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-485,Blitz.DAT#6,Break on through...,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-485,Blitz.DAT#7,Presents of Mind II,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-485,Blitz.DAT#8,Lemmings...The Motion Picture,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-485,Blitz.DAT#9,The Wrath of Lem,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
+Classic fan,fan:lldb-484,Flurry.DAT#8,A Block from Home,341.98,medium,356c5d0216692c30c9dcb411f1575e77bdccb7610ddba88dc1d6d437504a4033,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-484,Flurry.DAT#9,32 Lemmings Below Zero,214.38,medium,7e06cae7a14ad4c94f8cbdfda935e92890de868b5228df032ac488ec1df8c914,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-485,Blitz.DAT#0,Oogilemming!,497.19,medium,93cbd595d012452ba697095ded1b1ae3c197070e329781b2d38879f901bcc0cc,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-485,Blitz.DAT#1,Lemmings Up High,236.12,medium,f980ab5b4cf743fd24246a21aa77acfb4edbed566af2e470ae9df191762e7b24,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-485,Blitz.DAT#10,The Search for Lem,443.09,medium,a532e1c7de521f75998db7c42663df0a6158fdca2857fef277cebdf9d33f5c44,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-485,Blitz.DAT#11,The Voyage Home...,207.4,medium,17edcbcb8df2be271f98c42d89bf9cce024af3380f68ea4b489f03a075942f86,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-485,Blitz.DAT#12,The Final Frontier,275.78,medium,7f60976fb0dcef7ebae39677d89de3704aa8dcab30235c3e9af945a0efdbb90b,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-485,Blitz.DAT#13,The Undiscovered Country,144.02,medium,5286b2db70e85c944006891fb0f37c746d269feedc60564405ed3fdfdda3faf2,verified win,not independently checked,replay verified,,Golems
+Classic fan,fan:lldb-485,Blitz.DAT#14,The Needs of the Many...,512.3,medium,868a213fc0454affcb8379fb371ca5665b7da0d39ba43f501b8bfe989b860484,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-485,Blitz.DAT#15,The Next Lemeration,388.15,medium,a91d6cf24bca5ab4a986a096447e37f4c3fc79b8b82565adfe4a6964f9a00882,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-485,Blitz.DAT#2,Check Your Hints!,259.19,high,d095cffb56fe398c051f7a6af677d5e60930e132fe244d6533a65a5febeee2d5,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-485,Blitz.DAT#3,Santus Lemmingus,313.61,medium,971182a0837c3b0791d584300b3a7b5498a510045f385dbacf7dc216fad1b471,verified win,not independently checked,replay verified,,Golems
+Classic fan,fan:lldb-485,Blitz.DAT#4,It Came Upon a Lemnight Clear,370.01,medium,f7a7f1c37dad83fdfaf39bba440f88a6dcd034df118e6538c10d7a2e98b0b0b6,verified win,not independently checked,replay verified,,Golems
+Classic fan,fan:lldb-485,Blitz.DAT#5,A Single Lemming...,238.65,high,6bf4fa505b0653d4b5ce1b6545fd4e7d8f42a317f4b12e5bad3d3dbec0380222,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-485,Blitz.DAT#6,Break on through...,297.67,medium,d8eecf54ff70bdee3a64c4f429fa2ec7a4c3046001f921f6a3e77e9d9700c9b1,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-485,Blitz.DAT#7,Presents of Mind II,338.01,medium,7160fcf40ed3a14053898e376d22bcc7c33a79b0ab2b3377fc2560a2c58024b4,verified win,not independently checked,replay verified,,Golems
+Classic fan,fan:lldb-485,Blitz.DAT#8,Lemmings...The Motion Picture,398.87,medium,c2987eaaf60090232981703cabfcd71754c792acd4aa28844ca1ee597d5027dc,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-485,Blitz.DAT#9,The Wrath of Lem,368.18,medium,c62fe20364387248e62175ea2a0cf72cfc089af9ed3376a75e5a3ffeb489ed9e,verified win,not independently checked,replay verified,,Golems
 Classic fan,fan:lldb-486,Xmas 1991.DAT#0,Merry Christmas Mr Lemming,393.92,medium,6a7439439a4f18e72fcd57f6c23a1ef3d9a7771b7114392275560b87134efc9a,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-486,Xmas 1991.DAT#1,Christmas Bonus,465.31,medium,8d30f86ef1f197b10dabf7df6844ccb7c4300e3b235cf73c4f239aa442d582ce,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-486,Xmas 1991.DAT#2,Time waits for no Lemming,447.06,medium,1ea8215b210b82dab72ae88fa633a4248cf34d9f822da8d2b8bd360aea099a47,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-486,Xmas 1991.DAT#3,This Corrosion,375.85,medium,5a071d3613edfd8de47e4a3cdb673228c5368ac3e9d80b8b58dc261455819f42,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-487,Xmas 1992.DAT#0,Jingle Lemming,109.71,high,6a11a8a69f10c995b2d1cc0aeb852004ffaaa0c60e90e0b1375a9673fac860c0,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-487,Xmas 1992.DAT#1,Happy Holidays Mr Lemming!,218.6,medium,edc285ecb69b11d132d48656c8a55371a1ad6d34465c8603971993f92a1a226a,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-487,Xmas 1992.DAT#2,A Lemming Holiday,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-487,Xmas 1992.DAT#3,The North Poles,458.9,medium,25544146dddbd1bd8061e33cf1071adb51ab0216a1cc37f2c595cf0c3cf80ee4,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-487,Xmas 1992.DAT#0,Jingle Lemming,109.7,high,f0a13c355f3f8ad26bfdb44a0942039dfd5a502539cdb0958c774f2432763382,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-487,Xmas 1992.DAT#1,Happy Holidays Mr Lemming!,179.59,medium,74616bbe72e622cfb20ad463113491363bf11f3abc5196e765e9221d5afff242,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-487,Xmas 1992.DAT#2,A Lemming Holiday,426.14,medium,47224d2e91ea858fec2ca011feade2c4e5e5e38d9ce620a682f0caeaaa1e70a8,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-487,Xmas 1992.DAT#3,The North Poles,292.81,medium,556cab93197dc3323c5b140da2e95796b6df22fbfad9a16bb8181168dd3c338a,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-488,Genesis Fun.dat#0,Just dig !,44.74,high,fc7574a517d6953a4d07456495f4c32c9cfa9feee4d01fe0e6aaa8dcf4d23802,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-488,Genesis Fun.dat#1,Only floaters can survive this,43.72,high,f7613c45f285237732dd953acd0fddcf1e57e410ff2ee3d96495beeb362e75aa,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-488,Genesis Fun.dat#10,Keep your hair on Mr.Lemming,276.35,medium,0e6570c8c1965c6163149ce1248bba723bf7b9b349d5db0cb7de23b059a992c5,verified win,not independently checked,replay verified,,not independently classified
@@ -3974,7 +3974,7 @@ Classic fan,fan:lldb-496,MARTPCK2.DAT#2,Lemming in a Cone,415.28,medium,a774b79f
 Classic fan,fan:lldb-496,MARTPCK2.DAT#3,"Up, Up and Away!",280.06,medium,b116ff41f558b64a158885fbca9cf82090627a524fe4c01e91ef416838adca8c,verified win,not independently checked,replay verified,,Golems
 Classic fan,fan:lldb-496,MARTPCK2.DAT#4,It's a Magical World,464.85,medium,5de912673ede3a12fdfbd1b19aac9eb821a4029ca47821d6e09e9634d33daee7,verified win,not independently checked,replay verified,,Golems
 Classic fan,fan:lldb-496,MARTPCK2.DAT#5,Lemming Come Back!,172.32,medium,378b85051af4a009ed5f171b9b82f945de7021fc7ce5f20d08cb54b8d8d66af4,verified win,not independently checked,replay verified,,Golems
-Classic fan,fan:lldb-496,MARTPCK2.DAT#6,Cliffhanger,,low,,no verified win,not independently checked,bounded search or metadata only,,Golems
+Classic fan,fan:lldb-496,MARTPCK2.DAT#6,Cliffhanger,269.71,medium,af138e29b4c774059a4824c9d60f395dd60372493f7596c43b2b02e7d0baab56,verified win,source saved header matches; completion differs; terrain unverified,replay verified,,Golems
 Classic fan,fan:lldb-496,MARTPCK2.DAT#7,The Only Way is Up,,low,,no verified win,not independently checked,bounded search or metadata only,,Golems
 Classic fan,fan:lldb-496,MARTPCK2.DAT#8,Back in a minute...,557.1,medium,b48e5082da33e7480dfb6fac33dfa2b6628a1dd0a9875c81b433738cd450fce2,verified win,not independently checked,replay verified,,Golems
 Classic fan,fan:lldb-496,MARTPCK2.DAT#9,The Lemmyrinth,173.38,medium,9b4ba4b6c8a7b88699b05f7f78af79f6dd733b560373e54a9425502add0ee7ad,verified win,not independently checked,replay verified,,Golems
@@ -4275,7 +4275,7 @@ Classic fan,fan:lldb-519,Van Clan Wild 1.dat#1,Only One Shot,253.5,medium,193579
 Classic fan,fan:lldb-519,Van Clan Wild 1.dat#2,5 Ways To Get Through,374.16,medium,4e28fa02305cb1757dcaf82520cb22d51ca62ee0bab58ba59ea82c9ea52f7eba,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-519,Van Clan Wild 1.dat#3,Bomberman II,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-519,Van Clan Wild 1.dat#4,Get It Right,171.31,medium,8d6f4c56a1b7985f577d007f2fb905b5b0d9f0ac875c1843890a30b6d6cec036,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-519,Van Clan Wild 1.dat#5,The Thin Blue Line,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
+Classic fan,fan:lldb-519,Van Clan Wild 1.dat#5,The Thin Blue Line,205.11,medium,f1e646ee0c4c3064d35a8b50399e03fc9816b53e42acd9f5b58bf1d3028e79e4,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-519,Van Clan Wild 1.dat#6,Get Back,293.25,medium,4442db6b86c8c00848e5d8611317382c7bcea59a5573a4b12ad2f4799cf179aa,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-519,Van Clan Wild 1.dat#7,Land Mines,109.83,medium,3655f8b25449a933bc8de9214ad2feec7f9b6c8cd76797a830159ba4399494ef,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-519,Van Clan Wild 1.dat#8,Build To The Top,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
@@ -4641,9 +4641,9 @@ Classic fan,fan:lldb-536,Holiday cLemmings Hail 2.DAT#2,Say Whaaaaa?,,low,,no ve
 Classic fan,fan:lldb-536,Holiday cLemmings Hail 2.DAT#3,No Rendezvous For You!,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-536,Holiday cLemmings Hail 2.DAT#4,"Up, Up, And Away!!!",,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-536,Holiday cLemmings Hail 2.DAT#5,Ice Party at Steel's House!,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-537,Holiday cLemmings Flurry 1.DAT#0,Ice Lemm,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
+Classic fan,fan:lldb-537,Holiday cLemmings Flurry 1.DAT#0,Ice Lemm,182.55,medium,e6d921b2e56c118ee7437c220000656a971e4cb96a9a484590ddee4fceae6b53,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-537,Holiday cLemmings Flurry 1.DAT#1,"No Entry, No Exit",,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-537,Holiday cLemmings Flurry 1.DAT#2,One Lone Lemm In The Snow,,low,,no verified win,not independently checked,native obstruction traced,Sole lemming enters fire at tick 89; no stocked skill accepts an assignment before then,not independently classified
+Classic fan,fan:lldb-537,Holiday cLemmings Flurry 1.DAT#2,One Lone Lemm In The Snow,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-537,Holiday cLemmings Flurry 1.DAT#3,The Snows of Time,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-537,Holiday cLemmings Flurry 1.DAT#4,They Killed Lemmy!,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-537,Holiday cLemmings Flurry 1.DAT#5,No Lemmings For You!,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
@@ -4767,7 +4767,7 @@ Classic fan,fan:lldb-546,Deceit Extras 1.DAT#0,Climbers can climb the wall,133.3
 Classic fan,fan:lldb-546,Deceit Extras 1.DAT#1,Floaters can land safely,134.25,medium,dd0362b1730348dd554f274bf5e98d1a75e1e94dde16a5b4f5983b473dd6876d,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-546,Deceit Extras 1.DAT#2,Bombers can blow up themselves,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-546,Deceit Extras 1.DAT#3,Blockers can block others,116.08,medium,eed5f0ca3241f4fca7d08181d7ee4cbea585a1de8b5a661701d29d0b4f17a54a,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-546,Deceit Extras 1.DAT#4,Builders can build stairs,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
+Classic fan,fan:lldb-546,Deceit Extras 1.DAT#4,Builders can build stairs,67.36,medium,520db6d10358b8cbb59f9d5be293924e7b4b3efe8dedf50895dfd504726050b2,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-546,Deceit Extras 1.DAT#5,Bashers can bash the wall,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-546,Deceit Extras 1.DAT#6,Miners Can Mine Diagonally,136.08,medium,45b245051d50f23ccf31e0ef1d71e12230f7e8809fd6b2f4e94f27cc7cddbeef,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-546,Deceit Extras 2.DAT#0,Lemmings on Fire,52.39,medium,71de1c62b0dc33941ec008473a0e961c650612a301522e57e9525b27e6720564,verified win,not independently checked,replay verified,,not independently classified
@@ -4794,9 +4794,9 @@ Classic fan,fan:lldb-547,Ji Hoon Heaven 2.DAT#2,The Room,,low,,no verified win,n
 Classic fan,fan:lldb-547,Ji Hoon Heaven 2.DAT#3,"Dude, where's my exit?",,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-547,Ji Hoon Heaven 2.DAT#4,Crystal Mine,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-547,Ji Hoon Heaven 2.DAT#5,The Ultimate Answer,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-547,Ji Hoon Heaven 2.DAT#6,Retreat!!!,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
+Classic fan,fan:lldb-547,Ji Hoon Heaven 2.DAT#6,Retreat!!!,101.54,medium,786cc48460360cb8d9c79ca9880905b80a782b54a6ce41ae79305e1aa77fe6f4,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-547,Ji Hoon Heaven 2.DAT#7,~saranghae~,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-547,Ji Hoon Heaven 2.DAT#8,"Stop, Block and Blow",,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
+Classic fan,fan:lldb-547,Ji Hoon Heaven 2.DAT#8,"Stop, Block and Blow",86.0,medium,216776a08372254298e2a13b0af3040a116c2c1987dc005a781163bb9149eefb,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-547,Ji Hoon Heaven 2.DAT#9,Lemmings on a Plane,319.86,medium,1c6c3a2b88f2dfcff19a40f3877b60b8c14cdfa10eadb00cae8c5adba11d501a,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-548,Ji Hoon Sky 1.DAT#0,Annyeonghaseyo Lemming-Nim,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-548,Ji Hoon Sky 1.DAT#1,Lemming Island,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
@@ -4812,7 +4812,7 @@ Classic fan,fan:lldb-548,Ji Hoon Sky 2.DAT#0,Retreat!!!,99.28,medium,dd62c79cea6
 Classic fan,fan:lldb-548,Ji Hoon Sky 2.DAT#1,YOUR LEM A SPLODE,222.19,medium,c9dcbe01b38c1030bf28a0f4ffbee9461e0e8fafcf8ddc30944d8054576e0d87,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-548,Ji Hoon Sky 2.DAT#2,Nuclear Lemmings,134.9,medium,396d348d072d8f8ed06af1900e708e1718e94c60703eed9925747a4f8afe3d15,verified win,not independently checked,replay verified,,Golems
 Classic fan,fan:lldb-548,Ji Hoon Sky 2.DAT#3,Do A Barrel Roll!,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-548,Ji Hoon Sky 2.DAT#4,Playing With Fire,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
+Classic fan,fan:lldb-548,Ji Hoon Sky 2.DAT#4,Playing With Fire,418.68,medium,38c61462cff7eb70d0e8a5ff97f6aadda8fcc3c178347949c2654eef3599290b,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-548,Ji Hoon Sky 2.DAT#5,Tribute To Timfoxxy,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-548,Ji Hoon Sky 2.DAT#6,Seven ways to kill a lemming,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-548,Ji Hoon Sky 2.DAT#7,"Oh snap, it's a lemmings level",390.79,medium,8dfb870e5cde4eb4ae5c7f0ac59e686215910ff379caf764cea07969e14eb43e,verified win,not independently checked,replay verified,,not independently classified
@@ -4820,7 +4820,7 @@ Classic fan,fan:lldb-548,Ji Hoon Sky 2.DAT#8,Randomly Insane Lemmings,,low,,no v
 Classic fan,fan:lldb-548,Ji Hoon Sky 2.DAT#9,Back to where we started...,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-549,Ji Hoon Earth 1.DAT#0,Death In All Directions,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-549,Ji Hoon Earth 1.DAT#1,Find your own way home,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-549,Ji Hoon Earth 1.DAT#2,Retreat!!!,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
+Classic fan,fan:lldb-549,Ji Hoon Earth 1.DAT#2,Retreat!!!,98.96,medium,dee8fb04c95c2a421eee019047dbda4ea9efaee10ab2bd1d8a3bc81658a429df,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-549,Ji Hoon Earth 1.DAT#3,All or Nothing: The Revenge,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-549,Ji Hoon Earth 1.DAT#4,Overheat,415.97,medium,6e990e328e76c8b3d4a353bc36d405f50e722476255bd7890ba4c8a10a56929f,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-549,Ji Hoon Earth 1.DAT#5,Suicide Drop,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
@@ -4858,7 +4858,7 @@ Classic fan,fan:lldb-550,Ji Hoon Hell 1.DAT#8,New Technique,,low,,no verified wi
 Classic fan,fan:lldb-550,Ji Hoon Hell 1.DAT#9,Star Unit 17,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-550,Ji Hoon Hell 2.DAT#0,HELLFIRE,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-550,Ji Hoon Hell 2.DAT#1,Mt. Lemmik,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-550,Ji Hoon Hell 2.DAT#2,Retreat!!!,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
+Classic fan,fan:lldb-550,Ji Hoon Hell 2.DAT#2,Retreat!!!,99.04,medium,0c6b59848cf729e90c3e65eeb5a178c9e6c92c117c5e5a0354b313d6468fc81c,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-550,Ji Hoon Hell 2.DAT#3,Lemming Crossover,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-550,Ji Hoon Hell 2.DAT#4,Don't Look Back!,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-550,Ji Hoon Hell 2.DAT#5,Stairing Contest,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
@@ -4972,7 +4972,7 @@ Classic fan,fan:lldb-554,Lemmings Plus DOS Project - 11 - Danger (Part 2).dat#2,
 Classic fan,fan:lldb-554,Lemmings Plus DOS Project - 11 - Danger (Part 2).dat#3,Death In All Directions,543.98,medium,cf71300b86b74869636a1f97c89523e829b76fd6d54aa757a05d716c0d80c917,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-554,Lemmings Plus DOS Project - 11 - Danger (Part 2).dat#4,Circular Wavelength,438.72,medium,1aa5422024cc803b59ef5d7ad1a4c1e5ee1be8d52cb2213a3f367601df1e5842,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-554,Lemmings Plus DOS Project - 11 - Danger (Part 2).dat#5,Grounded!,394.64,medium,25fcdef92320adfc52fa0e1a3264d5c9ea6d327f69fbded81e855f00252039b9,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-554,Lemmings Plus DOS Project - 11 - Danger (Part 2).dat#6,Livin' A Lie,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
+Classic fan,fan:lldb-554,Lemmings Plus DOS Project - 11 - Danger (Part 2).dat#6,Livin' A Lie,281.09,medium,213ba6df43818a5a5763e177c6ee3692ab5e2f82ca49e1eb98327a790ced4523,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-554,Lemmings Plus DOS Project - 11 - Danger (Part 2).dat#7,The Buildo Station,197.23,medium,5a8dc9efd2cdc2574fc34d39ba5791acdecc86f7fbfd1822bd02980ecb64708d,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-554,Lemmings Plus DOS Project - 11 - Danger (Part 2).dat#8,Antigravity,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-554,Lemmings Plus DOS Project - 11 - Danger (Part 2).dat#9,No Salvation IV,319.97,medium,f55f43dc31143011869a941a9fb6527b89e76d4cdd33488303356bb080481bed,verified win,not independently checked,replay verified,,not independently classified
@@ -5542,16 +5542,16 @@ Classic fan,fan:lldb-582,Level 06.lvl#-1,Level 06.lvl,135.16,high,318d70be0912af
 Classic fan,fan:lldb-582,Level 07.lvl#-1,Level 07.lvl,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-582,Level 08 (extra).lvl#-1,Level 08 (extra).lvl,279.53,medium,afadb5b2ae3ee95d5f87e367e913fb5ed1037a2e95b800a442a4d6f448593876,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-582,Level 09 (extra).lvl#-1,Level 09 (extra).lvl,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-583,Level 01.lvl#-1,Level 01.lvl,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-583,Level 02.lvl#-1,Level 02.lvl,83.56,medium,7668f625acb6e671699b81217c41ded11e401ad7aeb843ecad60ca191910f47b,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-583,Level 03.lvl#-1,Level 03.lvl,164.2,high,57276107ce6cbdf1e2a5a2380b8cefcfd88c372638a44501efad5cb9e9015d44,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-583,Level 04.lvl#-1,Level 04.lvl,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-583,Level 05.lvl#-1,Level 05.lvl,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-583,Level 06.lvl#-1,Level 06.lvl,48.52,high,ab6a7d50021f3abf0563af23bf585c4bcf15acc68e1abdf7762e5c2e9e1a8013,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-583,Level 07.lvl#-1,Level 07.lvl,48.2,high,732372fb703694a3acb68f899da30dac5f506499ece5e4639885d1a824322a42,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-583,Level 08.lvl#-1,Level 08.lvl,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-583,Level 09.lvl#-1,Level 09.lvl,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
-Classic fan,fan:lldb-583,Level 10.lvl#-1,Level 10.lvl,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
+Classic fan,fan:lldb-583,Level 01.lvl#-1,Level 01.lvl,142.42,medium,5fcf76b0d0590a28758ae805a070319424a48d94e36afc54a4818ca1d2fef81e,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-583,Level 02.lvl#-1,Level 02.lvl,83.56,medium,210801697ba69cc814006e659662ce17fb5b29e3606b77c984f9eae208ea8d5f,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-583,Level 03.lvl#-1,Level 03.lvl,164.2,high,4fdefccced3dcb355d9490042f47e63e6b3d7ab3ff0c32ad07d594e90e5bd542,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-583,Level 04.lvl#-1,Level 04.lvl,181.56,medium,1ba25741239693ce1ec1d5915cfa6cc87d6b288ab2ec5f5f287467673b171dac,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-583,Level 05.lvl#-1,Level 05.lvl,319.77,medium,0c4fbd3dcc5edeccdafdf39774c5166eea42f9cb62913fa5d8af039b45fc852a,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-583,Level 06.lvl#-1,Level 06.lvl,48.51,high,f35ffd7a0eaf71416d65ce9dae6053fec59ff919225851caf7e2015d6e935c73,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-583,Level 07.lvl#-1,Level 07.lvl,47.9,high,2445aae4ce08711092f0c6c86af391607aa142d4f3965badcee746b08ad8d037,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-583,Level 08.lvl#-1,Level 08.lvl,306.55,medium,265185369096c15217b2406879efca6ef5c61368c97dcfa60bac34de1c96988f,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-583,Level 09.lvl#-1,Level 09.lvl,275.37,medium,2bde8a16ee27be66fe93d2cd962899b900d19907004adf50f64587a924ba1ab9,verified win,not independently checked,replay verified,,not independently classified
+Classic fan,fan:lldb-583,Level 10.lvl#-1,Level 10.lvl,121.0,medium,703f0915d7b1531eb61811581626a8cc694a10d91bbfa672b92b16cbe856d765,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-584,LEVEL000.DAT#0,The COVOX Level,95.46,medium,87814a06a4c6e042c469bac4e8afadf2652ffc2a1fa1b483fbf01fa0a19f1880,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-584,LEVEL000.DAT#1,Bridge Away!,99.83,medium,5b0b2cb00fdf1750cb8588f51cc231539481350fb0e9c26799b60a9afbf846ec,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-584,LEVEL000.DAT#2,Animal or Vegetable?,382.46,medium,de90c38188e1e251d476904b4b0f936d28fe933d68331ed25555cd284c17165b,verified win,not independently checked,replay verified,,not independently classified
@@ -5927,7 +5927,7 @@ Classic fan,fan:lldb-90,Timpack3.dat#2,Only One Shot,253.5,medium,2502ac4a060967
 Classic fan,fan:lldb-90,Timpack3.dat#3,Five Ways To Get Through,374.16,medium,227b5aef249c32e82fdf07f6d11ab61332040d485a5ac819fa383393a93a0acc,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-90,Timpack3.dat#4,Bomberman II,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
 Classic fan,fan:lldb-90,Timpack3.dat#5,Get It Right,171.31,medium,8d6f4c56a1b7985f577d007f2fb905b5b0d9f0ac875c1843890a30b6d6cec036,verified win,not independently checked,replay verified,,not independently classified
-Classic fan,fan:lldb-90,Timpack3.dat#6,The Thin Blue Line,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified
+Classic fan,fan:lldb-90,Timpack3.dat#6,The Thin Blue Line,205.11,medium,652bf9fcd8398f980cda24d45f88a1fef74588c94a02d0b0cfaffe4a57cddcff,verified win,not independently checked,replay verified,,Golems
 Classic fan,fan:lldb-90,Timpack3.dat#7,Get Back,293.25,medium,2a9df7c90280a3640640f14dd5a73301b1799c8df17a88fa697870978d341a46,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-90,Timpack3.dat#8,Land Mines,109.83,medium,03d6bc466471876cc5c27c195f9044dcbf471780c699f2d4ab4f42a39ea1ba6f,verified win,not independently checked,replay verified,,not independently classified
 Classic fan,fan:lldb-90,Timpack3.dat#9,Build To The Top,,low,,no verified win,not independently checked,bounded search or metadata only,,not independently classified

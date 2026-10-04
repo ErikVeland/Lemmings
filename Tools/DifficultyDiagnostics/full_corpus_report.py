@@ -30,13 +30,38 @@ GOLEMS_SELECTED_ORDINARY = OUTPUT / "classic-golems-selected-ordinary.json"
 GOLEMS_HATCH_RECHECK = OUTPUT / "classic-golems-hatch-recheck.json"
 GOLEMS_HATCH_RECOVERY = OUTPUT / "classic-golems-hatch-recovery.json"
 GOLEMS_HATCH_REJECTIONS = OUTPUT / "classic-golems-hatch-rejections.json"
+GOLEMS_LATE_TIMING_RECOVERY = OUTPUT / "classic-golems-late-timing-recovery.json"
+GOLEMS_CLIFFHANGER_PROMOTION = OUTPUT / "classic-golems-cliffhanger-promotion.json"
+GOLEMS_ASSET_PARITY = OUTPUT / "classic-golems-asset-parity.json"
+GOLEMS_DIVING_RECONCILIATION = OUTPUT / "classic-golems-diving-reconciliation.json"
+GOLEMS_DIVING_LATE_PARITY = OUTPUT / "classic-golems-diving-late-parity.json"
+GOLEMS_DIVING_SHAFT_PARITY = OUTPUT / "classic-golems-diving-shaft-parity.json"
+CLASSIC_SOLVER_CLOCK_RECHECK = OUTPUT / "classic-solver-clock-recheck.json"
+CLASSIC_SOURCE_RECORD_AVAILABILITY = OUTPUT / "classic-source-record-availability.json"
+CLASSIC_SOLVER_PREFIX_COVERAGE = OUTPUT / "classic-solver-forced-prefix-coverage.json"
+CLASSIC_SOLVER_TICK_ZERO_PREFIX = OUTPUT / "classic-solver-tick-zero-prefix.json"
+CLASSIC_SOLVER_WORKERS_PARTIALS = OUTPUT / "classic-solver-workers-rollout-partials.json"
+OFFICIAL_CONVERSION_RECOVERY = OUTPUT / "classic-official-conversion-mechanics-recovery.json"
+HOLIDAY_1993_DONOR_RECOVERY = OUTPUT / "classic-holiday-1993-donor-rule-recovery.json"
+BUILDER_LEAD_RECOVERY = OUTPUT / "classic-builder-lead-recovery.json"
+AKSELI_COPY_RECOVERY = OUTPUT / "classic-akseli-copy-rule-recovery.json"
+MISSION_COPY_RECOVERY = OUTPUT / "classic-mission-copy-recovery.json"
+OHNO_OFFICIAL_COPY_RECOVERY = OUTPUT / "classic-ohno-official-copy-recovery.json"
+GEOMETRY_COPY_RECOVERY = OUTPUT / "classic-geometry-copy-recovery.json"
+HEAVEN_RATE_RECOVERY = OUTPUT / "classic-heaven-rate-retiming-recovery.json"
+RETREAT_POPULATION_RECOVERY = OUTPUT / "classic-retreat-population-recovery.json"
+GEOMETRY_TRANSFER_GAPS = OUTPUT / "classic-geometry-transfer-gaps.json"
+OBJECT_VARIANT_TRANSFER_GAPS = OUTPUT / "classic-object-variant-transfer-gaps.json"
+CACHED_RETREAT_RECOVERY = OUTPUT / "classic-cached-retreat-recovery.json"
 FAN_SOLUTIONS = ROOT / "Artifacts/LearningJourney/candidate-solutions.json"
 GOLEMS_PHASE_EVIDENCE = [
     OUTPUT / f"classic-golems-phase-shift-{name}.json"
     for name in ("alternatives", "targeted", "second", "third", "fourth", "fifth", "sixth", "seventh")
 ] + [OUTPUT / "classic-golems-mining-rule.json",
      OUTPUT / "classic-golems-current-source-recheck.json",
-     OUTPUT / "classic-golems-hatch-recovery.json"]
+     OUTPUT / "classic-golems-hatch-recovery.json",
+     OUTPUT / "classic-golems-direct-digger-recovery.json",
+     OUTPUT / "classic-golems-local-basher-timing-recovery.json"]
 PARTIAL_SOURCE_ASSIGNMENTS = {
     "NeoLemmix_Introduction_Pack/Advanced_Training/Beam_Up_The_Equipment!.nxlv":
         ("aa256c48ee1bb20077d0b22b7ccfee6ed4b6835467422fc318e0770c2bdcac7d", 5),
@@ -50,11 +75,6 @@ NATIVE_OBSTRUCTIONS = {
         "sourceRevision": "963dd4d3cd016df98aedcb0890f7eff91b6255e57858474295da25d7a8216756",
         "initialHash": "1bfbdc625156837f956e92a596690f2c704b96021276293a336d6a5598aa5774",
         "issue": "Sole lemming falls out at tick 94; no stocked skill accepts an assignment before then",
-    },
-    ("fan:lldb-537", "Holiday cLemmings Flurry 1.DAT#2"): {
-        "sourceRevision": "d4a17f5380fd0315dd62fc6947535c459088a28d620a6fa3d0ff27c34e50e540",
-        "initialHash": "e356fa325bdbfd6f7ee00a062d1e4f700fae14cbafd3360907716b91381a3113",
-        "issue": "Sole lemming enters fire at tick 89; no stocked skill accepts an assignment before then",
     },
     ("fan:lldb-211", "More Levels/5)Sacrifice.ini#-1"): {
         "sourceRevision": "4fc97baad0e98022cd89fd9983569a8a2961258619ed83e490491d7f75a788c2",
@@ -140,11 +160,261 @@ def main():
         for pack in read(BUNDLED_FAN_PACKS / "packs.json")
     }
     assert bundled_pack_revisions.keys() == manifest_pack_ids
+    if OFFICIAL_CONVERSION_RECOVERY.exists():
+        recovery = read(OFFICIAL_CONVERSION_RECOVERY)
+        records = recovery["records"]
+        assert recovery["sourcePhysicsParity"] == "unverified"
+        assert len(records) == recovery["targetedMembers"] == 123
+        assert sum(not record["previouslyVerified"] for record in records) == recovery["newlyVerifiedWins"] == 21
+        witnesses = read(FAN_SOLUTIONS)
+        for record in records:
+            row = classic[json.dumps({"engine": "classic", "packID": record["packID"],
+                                     "levelID": record["levelID"]}, sort_keys=True)]
+            revision = row["profile"]["key"]["replayRevision"]
+            replay = witnesses[revision]
+            assert record["selectedMechanics"] == "ohNoMore"
+            assert record["archiveSHA256"] == row["entry"]["sourceRevision"] == bundled_pack_revisions[record["packID"]]
+            assert record["nativeInitialHash"] == row["initialHash"] == replay["initialStateHash"]
+            assert record["nativeOutcome"] == replay["expected"] and replay["expected"]["didWin"]
+            assert record["difficultyScore"] == row["profile"]["overallScore"]
+            assert record["replaySHA256"] == revision.rsplit(" ", 1)[-1]
+    if HOLIDAY_1993_DONOR_RECOVERY.exists():
+        recovery = read(HOLIDAY_1993_DONOR_RECOVERY)
+        records = recovery["records"]
+        assert recovery["newlyVerifiedWins"] == len(records) == 10
+        assert recovery["sourcePhysicsParity"].startswith("unverified")
+        assert Counter(record["selectedMechanics"] for record in records) == {"ohNoMore": 8, "original": 2}
+        witnesses = read(FAN_SOLUTIONS)
+        for record in records:
+            row = classic[json.dumps(record["identity"], sort_keys=True)]
+            revision = row["profile"]["key"]["replayRevision"]
+            replay = witnesses[revision]
+            assert record["exactBundledArchiveSHA256"] == row["entry"]["sourceRevision"]
+            assert row["entry"]["sourceRevision"] == bundled_pack_revisions[record["identity"]["packID"]]
+            assert record["nativeInitialStateHash"] == row["initialHash"] == replay["initialStateHash"]
+            assert record["strictNativeOutcome"] == replay["expected"] and replay["expected"]["didWin"]
+            assert record["difficultyScore"] == row["profile"]["overallScore"]
+            assert record["difficultyProbeRuns"] == row["profile"]["precision"]["runCount"] == 10
+            assert record["selectedNativeReplaySHA256"] == revision.rsplit(" ", 1)[-1]
+    if BUILDER_LEAD_RECOVERY.exists():
+        recovery = read(BUILDER_LEAD_RECOVERY)["newWin"]
+        pack_id, level_id = recovery["identity"].split("/", 1)
+        row = classic[json.dumps({"engine": "classic", "packID": pack_id,
+                                 "levelID": level_id}, sort_keys=True)]
+        replay = read(FAN_SOLUTIONS)[row["profile"]["key"]["replayRevision"]]
+        assert recovery["archiveSHA256"] == row["entry"]["sourceRevision"] == bundled_pack_revisions[pack_id]
+        assert recovery["nativeInitialStateHash"] == row["initialHash"] == replay["initialStateHash"]
+        assert recovery["strictExactLevelOutcome"] == replay["expected"]
+        assert replay["expected"]["didWin"]
+        assert recovery["replaySHA256"] == row["profile"]["key"]["replayRevision"].rsplit(" ", 1)[-1]
+        assert recovery["difficultyScore"] == row["profile"]["overallScore"]
+        assert recovery["difficultyProbeCount"] == row["profile"]["precision"]["runCount"] == 10
+    if AKSELI_COPY_RECOVERY.exists():
+        records = read(AKSELI_COPY_RECOVERY)["newWins"]
+        assert len(records) == 2
+        for record in records:
+            pack_id, level_id = record["targetIdentity"].split("/", 1)
+            row = classic[json.dumps({"engine": "classic", "packID": pack_id,
+                                     "levelID": level_id}, sort_keys=True)]
+            revision = row["profile"]["key"]["replayRevision"]
+            replay = read(FAN_SOLUTIONS)[revision]
+            assert record["archiveSHA256"] == row["entry"]["sourceRevision"] == bundled_pack_revisions[pack_id]
+            assert record["nativeInitialStateHash"] == row["initialHash"] == replay["initialStateHash"]
+            assert record["strictExactLevelOutcome"] == replay["expected"] and replay["expected"]["didWin"]
+            assert record["replaySHA256"] == revision.rsplit(" ", 1)[-1]
+            assert record["difficultyScore"] == row["profile"]["overallScore"]
+            assert record["difficultyProbeCount"] == row["profile"]["precision"]["runCount"] == 10
+    if MISSION_COPY_RECOVERY.exists():
+        record = read(MISSION_COPY_RECOVERY)
+        pack_id, level_id = record["targetIdentity"].split("/", 1)
+        row = classic[json.dumps({"engine": "classic", "packID": pack_id,
+                                 "levelID": level_id}, sort_keys=True)]
+        revision = row["profile"]["key"]["replayRevision"]
+        replay = read(FAN_SOLUTIONS)[revision]
+        assert record["archiveSHA256"] == row["entry"]["sourceRevision"] == bundled_pack_revisions[pack_id]
+        assert record["nativeInitialStateHash"] == row["initialHash"] == replay["initialStateHash"]
+        assert record["strictNativeOutcome"] == replay["expected"] and replay["expected"]["didWin"]
+        assert record["selectedNativeReplaySHA256"] == revision.rsplit(" ", 1)[-1]
+        assert record["difficultyScore"] == row["profile"]["overallScore"]
+        assert record["difficultyProbeRuns"] == row["profile"]["precision"]["runCount"] == 10
+    if OHNO_OFFICIAL_COPY_RECOVERY.exists():
+        records = read(OHNO_OFFICIAL_COPY_RECOVERY)["newWins"]
+        assert len(records) == 2
+        witnesses = read(FAN_SOLUTIONS)
+        for record in records:
+            pack_id, level_id = record["targetIdentity"].split("/", 1)
+            row = classic[json.dumps({"engine": "classic", "packID": pack_id,
+                                     "levelID": level_id}, sort_keys=True)]
+            revision = row["profile"]["key"]["replayRevision"]
+            replay = witnesses[revision]
+            assert record["selectedMechanics"] == "ohNoMore"
+            assert record["archiveSHA256"] == row["entry"]["sourceRevision"] == bundled_pack_revisions[pack_id]
+            assert record["nativeInitialStateHash"] == row["initialHash"] == replay["initialStateHash"]
+            assert record["strictExactLevelOutcome"] == replay["expected"] and replay["expected"]["didWin"]
+            assert record["exactMemberSolverOutcome"] == replay["expected"]
+            assert record["replaySHA256"] == revision.rsplit(" ", 1)[-1]
+            assert record["difficultyScore"] == row["profile"]["overallScore"]
+            assert record["difficultyProbeCount"] == row["profile"]["precision"]["runCount"] == 10
+    if GEOMETRY_COPY_RECOVERY.exists():
+        records = read(GEOMETRY_COPY_RECOVERY)["newWins"]
+        assert len(records) == 3
+        witnesses = read(FAN_SOLUTIONS)
+        for record in records:
+            pack_id, level_id = record["targetIdentity"].split("/", 1)
+            row = classic[json.dumps({"engine": "classic", "packID": pack_id,
+                                     "levelID": level_id}, sort_keys=True)]
+            revision = row["profile"]["key"]["replayRevision"]
+            replay = witnesses[revision]
+            assert record["archiveSHA256"] == row["entry"]["sourceRevision"] == bundled_pack_revisions[pack_id]
+            assert record["nativeInitialStateHash"] == row["initialHash"] == replay["initialStateHash"]
+            assert record["strictExactLevelOutcome"] == replay["expected"] and replay["expected"]["didWin"]
+            assert record["replaySHA256"] == revision.rsplit(" ", 1)[-1]
+            assert record["difficultyScore"] == row["profile"]["overallScore"]
+            assert record["difficultyProbeCount"] == row["profile"]["precision"]["runCount"] == 10
+    if HEAVEN_RATE_RECOVERY.exists():
+        record = read(HEAVEN_RATE_RECOVERY)
+        pack_id, level_id = record["targetIdentity"].split("/", 1)
+        row = classic[json.dumps({"engine": "classic", "packID": pack_id,
+                                 "levelID": level_id}, sort_keys=True)]
+        revision = row["profile"]["key"]["replayRevision"]
+        replay = read(FAN_SOLUTIONS)[revision]
+        assert record["targetArchiveSHA256"] == row["entry"]["sourceRevision"] == bundled_pack_revisions[pack_id]
+        assert record["targetInitialStateHash"] == row["initialHash"] == replay["initialStateHash"]
+        assert record["strictNativeOutcome"] == replay["expected"] and replay["expected"]["didWin"]
+        assert record["selectedNativeReplaySHA256"] == revision.rsplit(" ", 1)[-1]
+        assert record["difficultyScore"] == row["profile"]["overallScore"]
+        assert record["difficultyProbeRuns"] == row["profile"]["precision"]["runCount"] == 10
+    if RETREAT_POPULATION_RECOVERY.exists():
+        records = read(RETREAT_POPULATION_RECOVERY)["newWins"]
+        assert len(records) == 2
+        witnesses = read(FAN_SOLUTIONS)
+        for record in records:
+            pack_id, level_id = record["targetIdentity"].split("/", 1)
+            row = classic[json.dumps({"engine": "classic", "packID": pack_id,
+                                     "levelID": level_id}, sort_keys=True)]
+            revision = row["profile"]["key"]["replayRevision"]
+            replay = witnesses[revision]
+            assert record["archiveSHA256"] == row["entry"]["sourceRevision"] == bundled_pack_revisions[pack_id]
+            assert record["targetInitialStateHash"] == row["initialHash"] == replay["initialStateHash"]
+            assert record["strictNativeOutcome"] == replay["expected"] and replay["expected"]["didWin"]
+            assert record["selectedReplaySHA256"] == revision.rsplit(" ", 1)[-1]
+            assert record["difficultyScore"] == row["profile"]["overallScore"]
+            assert record["difficultyProbeRuns"] == row["profile"]["precision"]["runCount"] == 10
+    if GEOMETRY_TRANSFER_GAPS.exists():
+        records = read(GEOMETRY_TRANSFER_GAPS)["records"]
+        assert len(records) == 7
+        for record in records:
+            pack_id, level_id = record["targetIdentity"].split("/", 1)
+            row = classic[json.dumps({"engine": "classic", "packID": pack_id,
+                                     "levelID": level_id}, sort_keys=True)]
+            assert record["targetArchiveSHA256"] == row["entry"]["sourceRevision"] == bundled_pack_revisions[pack_id]
+            assert record["targetInitialStateHash"] == row["initialHash"]
+            assert all(value["donorUses"] > value["targetStock"]
+                       for value in record["skillDeficits"].values())
+    if OBJECT_VARIANT_TRANSFER_GAPS.exists():
+        evidence = read(OBJECT_VARIANT_TRANSFER_GAPS)
+        assert evidence["targetedCandidates"] == evidence["targetsWithoutWin"] == len(evidence["records"]) == 18
+        for record in evidence["records"]:
+            pack_id, level_id = record["targetIdentity"].split("/", 1)
+            row = classic[json.dumps({"engine": "classic", "packID": pack_id,
+                                     "levelID": level_id}, sort_keys=True)]
+            assert row["profile"]["confidence"] == "low"
+            assert record["targetInitialHash"] == row["initialHash"]
+            assert record["targetArchiveSHA256"] == row["entry"]["sourceRevision"] == bundled_pack_revisions[pack_id]
+    if CACHED_RETREAT_RECOVERY.exists():
+        recovery = read(CACHED_RETREAT_RECOVERY)["newWin"]
+        row = classic[json.dumps(recovery["identity"], sort_keys=True)]
+        replay = read(FAN_SOLUTIONS)[row["profile"]["key"]["replayRevision"]]
+        assert recovery["archiveSHA256"] == row["entry"]["sourceRevision"] == bundled_pack_revisions["fan:lldb-550"]
+        assert recovery["nativeInitialStateHash"] == row["initialHash"] == replay["initialStateHash"]
+        assert recovery["strictNativeOutcome"] == replay["expected"] and replay["expected"]["didWin"]
+        assert recovery["replaySHA256"] == row["profile"]["key"]["replayRevision"].rsplit(" ", 1)[-1]
+        assert recovery["difficultyScore"] == row["profile"]["overallScore"]
+        assert recovery["difficultyProbeCount"] == row["profile"]["precision"]["runCount"] == 10
     fan = [
         row for row in classic.values()
         if not row["official"]
         and row["entry"]["identity"]["packID"] in bundled_pack_revisions
     ]
+    promotion = read(GOLEMS_CLIFFHANGER_PROMOTION)
+    promoted_row = classic[json.dumps(promotion["identity"], sort_keys=True)]
+    promoted_replay = read(ROOT / promotion["replay"])
+    promoted_profile = read(ROOT / promotion["profile"])
+    assert promotion["sourcePhysicsParity"] == "unverified"
+    assert promoted_row["initialHash"] == promoted_replay["initialStateHash"] == promotion["initialStateHash"]
+    assert promoted_row["profile"] == promoted_profile
+    assert promoted_profile["overallScore"] == promotion["difficultyScore"]
+    assert promoted_profile["key"]["replayRevision"].rsplit(" ", 1)[-1] == promotion["replaySHA256"]
+    assert digest(ROOT / promotion["archive"]) == promotion["archiveSHA256"]
+    assert digest(ROOT / promotion["replay"]) == promotion["replaySHA256"]
+    assert digest(ROOT / promotion["profile"]) == promotion["profileSHA256"]
+    assert promoted_replay["expected"] == promotion["nativeOutcome"]
+    diving = read(GOLEMS_DIVING_RECONCILIATION)
+    assert diving["semanticEventsMatchArchivedTranslatedSourceCandidate"] is True
+    assert diving["eventCount"] == 9
+    assert diving["archiveSHA256"] == digest(BUNDLED_FAN_PACKS / "0393-Pieuw01.zip")
+    assert diving["selectedNativeReplaySHA256"] == digest(
+        OUTPUT / "golems-phase-shift-replays/91610c2bc4d3bc04245c495f0b8c007844ef281a341660503429fde6d4261c74.json"
+    )
+    assert diving["afterHatchCorrection"]["result"] == "4/4 at tick 1373"
+    late_diving = read(GOLEMS_DIVING_LATE_PARITY)
+    assert late_diving["archiveSHA256"] == diving["archiveSHA256"]
+    assert late_diving["selectedNativeReplaySHA256"] == diving["selectedNativeReplaySHA256"]
+    assert late_diving["sourceFinal"] == "4/4 at cycle 1417"
+    assert late_diving["nativeFinal"] == "4/4 at tick 1373"
+    assert [(sample["cycleOrTick"], sample["sourceSavedFromVisibleCounter"],
+             sample["nativeSavedFromStrictTrace"]) for sample in late_diving["samples"]] == [
+        (1129, 0, 1), (1200, 1, 1), (1324, 2, 2), (1364, 2, 3), (1373, 3, 4)
+    ]
+    shaft_diving = read(GOLEMS_DIVING_SHAFT_PARITY)
+    assert shaft_diving["archiveSHA256"] == diving["archiveSHA256"]
+    assert shaft_diving["selectedNativeReplaySHA256"] == diving["selectedNativeReplaySHA256"]
+    assert shaft_diving["nativeWorker2"][2] == {
+        "tick": 912, "action": "walking", "foot": [677, 126], "direction": "right"
+    }
+    assert shaft_diving["sourceResult"] == "4/4 at cycle 1417"
+    assert shaft_diving["nativeResult"] == "strict 4/4 at tick 1373"
+    source_records = read(CLASSIC_SOURCE_RECORD_AVAILABILITY)
+    assert len(source_records["records"]) == 8
+    assert all(record["mostSavedRecord"] == "none" and
+               record["fewestSkillsRecord"] == "none" and
+               record["shortestTimeRecord"] == "none"
+               for record in source_records["records"])
+    solver_clock = read(CLASSIC_SOLVER_CLOCK_RECHECK)
+    assert solver_clock["towering"]["archiveSHA256"] == digest(BUNDLED_FAN_PACKS / "0325-t3tesla.zip")
+    assert [run["rate"] for run in solver_clock["towering"]["additionalRateSweeps"]] == [50, 60, 75, 90]
+    assert all("best saved 8/9" in run["result"] and "deadline false" in run["result"]
+               for run in solver_clock["towering"]["additionalRateSweeps"])
+    prefix_coverage = read(CLASSIC_SOLVER_PREFIX_COVERAGE)
+    assert prefix_coverage["archiveSHA256"] == solver_clock["towering"]["archiveSHA256"]
+    assert prefix_coverage["initialStateHash"] == solver_clock["towering"]["auditedInitialStateHash"]
+    assert prefix_coverage["before"]["waitingRouteTick"] == 64
+    assert prefix_coverage["after"]["waitingRouteTick"] == 388
+    assert prefix_coverage["after"]["singleSkillRollouts"] > prefix_coverage["before"]["singleSkillRollouts"]
+    tick_zero_prefix = read(CLASSIC_SOLVER_TICK_ZERO_PREFIX)
+    assert tick_zero_prefix["archiveSHA256"] == digest(BUNDLED_FAN_PACKS / "0062-ClamSpam02.zip")
+    assert tick_zero_prefix["auditedInitialStateHash"] == classic[
+        json.dumps({"engine": "classic", "packID": "fan:lldb-62", "levelID": "ClamSpam02.dat#5"}, sort_keys=True)
+    ]["initialHash"]
+    assert (tick_zero_prefix["control"]["prefixPartialReplaySHA256"]
+            == tick_zero_prefix["control"]["rateOptionPartialReplaySHA256"])
+    assert "zero single-skill rollouts" in tick_zero_prefix["targetedSearch"]["after"]["result"]
+    workers_partials = read(CLASSIC_SOLVER_WORKERS_PARTIALS)
+    assert workers_partials["archiveSHA256"] == digest(BUNDLED_FAN_PACKS / "0471-Ron-Stards-Rodents.zip")
+    assert workers_partials["auditedInitialStateHash"] == classic[
+        json.dumps({"engine": "classic", "packID": "fan:lldb-471", "levelID": "RSRdnt01.dat#7"}, sort_keys=True)
+    ]["initialHash"]
+    assert "waiting tick 1022; 301 single-skill rollouts" in workers_partials["afterPartialRetention"]["result"]
+    assert "waiting tick 1022; 160 single-skill rollouts" in workers_partials["followUp"]["result"]
+    assert solver_clock["towering"]["auditedInitialStateHash"] == classic[
+        json.dumps({"engine": "classic", "packID": "fan:lldb-325", "levelID": "t3tesla.dat#8"}, sort_keys=True)
+    ]["initialHash"]
+    assert solver_clock["towering"]["explicitDOSClockRecheck"]["initialStateHash"] == (
+        solver_clock["towering"]["oldDOSClockInitialStateHash"]
+    )
+    assert solver_clock["calibration"]["archiveSHA256"] == digest(
+        BUNDLED_FAN_PACKS / "0505-KillerMasters-Lemmings-1-Tame.zip"
+    )
     assert all(
         row["entry"]["sourceRevision"]
         == bundled_pack_revisions[row["entry"]["identity"]["packID"]]
@@ -184,7 +454,13 @@ def main():
     for record in state_hash_aliases:
         target = classic[json.dumps({"engine": "classic", **record["identity"]}, sort_keys=True)]
         donor = classic[json.dumps({"engine": "classic", **record["donorIdentity"]}, sort_keys=True)]
-        assert record["initialStateHash"] == donor["initialHash"]
+        if changed_donor := record.get("currentDonorMechanics"):
+            assert changed_donor["mechanics"] == "ohNoMore"
+            assert changed_donor["initialStateHash"] == donor["initialHash"]
+            assert changed_donor["replaySHA256"] == donor["profile"]["key"]["replayRevision"].rsplit(" ", 1)[-1]
+            assert record["initialStateHash"] != donor["initialHash"]
+        else:
+            assert record["initialStateHash"] == donor["initialHash"]
         if superseded := record.get("currentSelectedMechanics"):
             assert superseded["mechanics"] == "golems"
             assert superseded["initialStateHash"] == target["initialHash"]
@@ -226,14 +502,18 @@ def main():
         profile = row["profile"]
         revision = profile["key"]["replayRevision"]
         replay = solutions[revision]
-        assert record["ordinaryPlayerAssignments"]
         assert (record["sourceActionDerivationVerified"]
                 or record.get("terminalAbandonAsNuke")
                 or record.get("nativeInputRetiming")
+                or record.get("sourceReplayRetiming")
                 or record.get("nativeCandidateProvenanceOpen"))
         if record.get("nativeCandidateProvenanceOpen"):
             assert not record["sourceActionDerivationVerified"]
-        assert not replay.get("sourceRules") and replay["expected"]["didWin"]
+        assert replay["expected"]["didWin"]
+        if record["ordinaryPlayerAssignments"]:
+            assert not replay.get("sourceRules")
+        else:
+            assert record["sourceRules"] == replay.get("sourceRules") == "golemsFallingBuilder"
         assert replay["initialStateHash"] == record["initialStateHash"] == row["initialHash"]
         assert record["bundledArchiveSHA256"] == row["entry"]["sourceRevision"]
         assert record["nativeReplaySHA256"] == revision.rsplit(" ", 1)[-1]
@@ -319,6 +599,31 @@ def main():
         * len(height_timing_trial["eventTickShiftsFromNativeMinusOne"])
     ) == 56
     assert height_timing_trial["wins"] == 0
+    direct_replay_trial = independent_rejection["sourceReplayDirectAssignmentTrial"]
+    assert direct_replay_trial["bundledInitialStateHash"] == next(
+        record["bundledInitialStateHash"] for record in hatch_rejections["records"]
+        if record["identity"] == independent_rejection["identity"]
+    )
+    assert direct_replay_trial["allSourceAssignmentsAccepted"]
+    assert direct_replay_trial["productionNativeSaved"] == 0
+    assert direct_replay_trial["productionNativeRequired"] == 2
+    assert direct_replay_trial["productionNativeCompletionTick"] == 397
+    assert not direct_replay_trial["strictWinningReplay"]
+    assert not direct_replay_trial["difficultyScoreAssigned"]
+    production_direct_trial = hatch_rejections["productionDirectAssignmentTrial"]
+    assert production_direct_trial["inputCount"] == production_direct_trial["assignmentErrors"] == 10
+    assert production_direct_trial["strictNativeWins"] == 0
+    assert len(production_direct_trial["records"]) == 10
+    assert sum(record["advancedBeyondBaseline"] for record in production_direct_trial["records"]) == 2
+    assert {
+        (record["identity"]["packID"], record["identity"]["levelID"],
+         record["sourceReplaySHA256"])
+        for record in production_direct_trial["records"]
+    } == {
+        (record["identity"]["packID"], record["identity"]["levelID"],
+         record["sourceReplaySHA256"])
+        for record in hatch_rejections["records"]
+    }
     for record in hatch_recovery["records"]:
         row = classic[json.dumps(record["identity"], sort_keys=True)]
         replay = solutions[row["profile"]["key"]["replayRevision"]]
@@ -333,6 +638,52 @@ def main():
         assert record["sourceActionDerivationVerified"] and record["ordinaryPlayerAssignments"]
         assert record["sourceHeaderSaved"] == record["nativeSaved"]
         assert abs(record["sourceHeaderTicks"] - record["nativeCompletionTick"]) <= 5
+    late_recovery = read(GOLEMS_LATE_TIMING_RECOVERY)["records"]
+    assert len(late_recovery) == 1
+    late_recovery_by_id = {
+        (record["identity"]["packID"], record["identity"]["levelID"]): record
+        for record in late_recovery
+    }
+    for record in late_recovery:
+        row = classic[json.dumps(record["identity"], sort_keys=True)]
+        replay = solutions[row["profile"]["key"]["replayRevision"]]
+        assert record["identity"] == {"engine": "classic", "packID": "fan:lldb-193",
+                                      "levelID": "Gronklems #1.dat#2"}
+        assert digest(ROOT / record["replayPath"]) == record["nativeReplaySHA256"]
+        assert read(ROOT / record["profilePath"]) == row["profile"]
+        assert record["bundledArchiveSHA256"] == row["entry"]["sourceRevision"]
+        assert record["initialStateHash"] == row["initialHash"] == replay["initialStateHash"]
+        assert record["sourceRules"] == replay["sourceRules"] == "golemsFallingBuilder"
+        assert replay["expected"]["didWin"] and replay["expected"]["saved"] == record["nativeSaved"] == 2
+        assert replay["expected"]["required"] == record["required"] == 2
+        assert replay["expected"]["ticks"] == record["nativeCompletionTick"] == 393
+        assert row["profile"]["overallScore"] == record["difficultyScore"]
+        assert row["profile"]["precision"]["runCount"] == record["probeRuns"] == 10
+        assert [e["tick"] for e in replay["events"]] == [
+            tick + offset for tick, offset in zip(record["convertedSourceTicksMinusOne"],
+                                                  record["nativeTickOffsetsFromConvertedSource"])]
+        assert not record["sourceActionDerivationVerified"]
+    local_basher = read(OUTPUT / "classic-golems-local-basher-timing-recovery.json")["records"]
+    assert len(local_basher) == 1
+    for record in local_basher:
+        row = classic[json.dumps(record["identity"], sort_keys=True)]
+        replay = solutions[row["profile"]["key"]["replayRevision"]]
+        assert record["identity"] == {"engine": "classic", "packID": "fan:lldb-165",
+                                      "levelID": "Giga pack 04.dat#5"}
+        assert digest(ROOT / record["replayPath"]) == record["nativeReplaySHA256"]
+        assert read(ROOT / record["profilePath"]) == row["profile"]
+        assert row["entry"]["sourceRevision"] == record["bundledArchiveSHA256"]
+        assert row["initialHash"] == replay["initialStateHash"] == record["initialStateHash"]
+        assert row["profile"]["overallScore"] == record["difficultyScore"]
+        assert row["profile"]["precision"]["runCount"] == record["probeRuns"] == 10
+        assert replay["sourceRules"] == record["sourceRules"] == "golemsFallingBuilder"
+        assert replay["expected"]["didWin"] and replay["expected"]["saved"] == record["nativeSaved"] == 20
+        assert replay["expected"]["required"] == record["required"] == 20
+        assert replay["expected"]["ticks"] == record["nativeCompletionTick"] == 1729
+        assert record["selectedLastBasherTick"] == record["baselineLastBasherTick"] + 1
+        assert len(record["localTimingResults"]) == 16
+        assert sum(bool(attempt.get("didWin")) for attempt in record["localTimingResults"]) == 6
+        assert not record["ordinaryPlayerAssignments"] and not record["sourceActionDerivationVerified"]
     golems_phase_records = [record for path in GOLEMS_PHASE_EVIDENCE
                             for record in read(path)["records"]]
     assert len(golems_phase_records) == len({
@@ -372,6 +723,11 @@ def main():
             assert row["entry"]["sourceRevision"] == rate_sweep["sourceRevision"]
             assert row["initialHash"] == rate_sweep["initialHash"]
         object_comparison = golems_objects.get((level_id["packID"], level_id["levelID"]))
+        if object_comparison and object_comparison.get("supersededByMechanics"):
+            assert object_comparison["supersededByMechanics"] == "ohNoMore"
+            assert object_comparison["replayRevision"] != profile["key"]["replayRevision"]
+            assert object_comparison["nativeInitialHash"] != row["initialHash"]
+            object_comparison = None
         object_alternative = golems_alternatives.get((level_id["packID"], level_id["levelID"]))
         source_outcome = source_outcomes.get((level_id["packID"], level_id["levelID"]))
         independent_source = independent_source_checks.get((level_id["packID"], level_id["levelID"]))
@@ -393,7 +749,6 @@ def main():
                 assert selected_mechanics["mechanics"] == "golems"
                 assert selected_mechanics["initialStateHash"] == row["initialHash"]
                 assert selected_mechanics["replaySHA256"] == profile["key"]["replayRevision"].rsplit(" ", 1)[-1]
-                assert selected_mechanics["initialStateHash"] != independent_source["nativeInitialHash"]
             elif independent_source.get("comparisonMechanics"):
                 assert independent_source["comparisonMechanics"] == "golems"
                 assert independent_source["auditInitialHash"] == row["initialHash"]
@@ -455,13 +810,26 @@ def main():
                 "assignment mismatch": "independent source replay assignment rejected natively",
                 "outcome and completion-time match": "independent outcome and timing match; terrain unverified",
             }[independent_source["sourcePhysicsParity"]]
-            if independent_source.get("currentSelectedMechanics"):
-                observation = "historical Original-rule " + observation
+            if selected := independent_source.get("currentSelectedMechanics"):
+                if selected["mechanics"] == independent_source.get("comparisonMechanics"):
+                    observation = "unretimed Golems replay outcome differs; retimed native win, terrain unverified"
+                else:
+                    observation = "historical Original-rule " + observation
             parity_observations.append(observation)
         recovery = hatch_recovery_by_id.get((level_id["packID"], level_id["levelID"]))
         if recovery:
             assert verified and recovery["nativeReplaySHA256"] == revision.rsplit(" ", 1)[-1]
             parity_observations.append("archived Golems replay headers agree; terrain unverified")
+        late = late_recovery_by_id.get((level_id["packID"], level_id["levelID"]))
+        if late:
+            assert verified and late["nativeReplaySHA256"] == revision.rsplit(" ", 1)[-1]
+            assert late["sourcePlayerSaved"] == late["nativeSaved"]
+            assert late["sourcePlayerCompletionCycle"] != late["nativeCompletionTick"]
+            parity_observations.append("independent saved count matches; completion differs; terrain unverified")
+        if level_id == promotion["identity"]:
+            assert verified and promotion["sourceReplayHeader"]["saved"] == promotion["nativeOutcome"]["saved"]
+            assert promotion["sourceReplayHeader"]["completionCycle"] != promotion["nativeOutcome"]["ticks"]
+            parity_observations.append("source saved header matches; completion differs; terrain unverified")
         if limit:
             assert not verified and limit["levelSourceRevision"] == row["entry"]["sourceRevision"]
             assert limit["initialStateHash"] == row["initialHash"]
@@ -535,6 +903,17 @@ def main():
     sources[str(GOLEMS_HATCH_RECHECK.relative_to(ROOT))] = digest(GOLEMS_HATCH_RECHECK)
     sources[str(GOLEMS_HATCH_RECOVERY.relative_to(ROOT))] = digest(GOLEMS_HATCH_RECOVERY)
     sources[str(GOLEMS_HATCH_REJECTIONS.relative_to(ROOT))] = digest(GOLEMS_HATCH_REJECTIONS)
+    sources[str(GOLEMS_LATE_TIMING_RECOVERY.relative_to(ROOT))] = digest(GOLEMS_LATE_TIMING_RECOVERY)
+    sources[str(GOLEMS_CLIFFHANGER_PROMOTION.relative_to(ROOT))] = digest(GOLEMS_CLIFFHANGER_PROMOTION)
+    sources[str(GOLEMS_ASSET_PARITY.relative_to(ROOT))] = digest(GOLEMS_ASSET_PARITY)
+    sources[str(GOLEMS_DIVING_RECONCILIATION.relative_to(ROOT))] = digest(GOLEMS_DIVING_RECONCILIATION)
+    sources[str(GOLEMS_DIVING_LATE_PARITY.relative_to(ROOT))] = digest(GOLEMS_DIVING_LATE_PARITY)
+    sources[str(GOLEMS_DIVING_SHAFT_PARITY.relative_to(ROOT))] = digest(GOLEMS_DIVING_SHAFT_PARITY)
+    sources[str(CLASSIC_SOURCE_RECORD_AVAILABILITY.relative_to(ROOT))] = digest(CLASSIC_SOURCE_RECORD_AVAILABILITY)
+    sources[str(CLASSIC_SOLVER_PREFIX_COVERAGE.relative_to(ROOT))] = digest(CLASSIC_SOLVER_PREFIX_COVERAGE)
+    sources[str(CLASSIC_SOLVER_TICK_ZERO_PREFIX.relative_to(ROOT))] = digest(CLASSIC_SOLVER_TICK_ZERO_PREFIX)
+    sources[str(CLASSIC_SOLVER_WORKERS_PARTIALS.relative_to(ROOT))] = digest(CLASSIC_SOLVER_WORKERS_PARTIALS)
+    sources[str(CLASSIC_SOLVER_CLOCK_RECHECK.relative_to(ROOT))] = digest(CLASSIC_SOLVER_CLOCK_RECHECK)
     for path in GOLEMS_PHASE_EVIDENCE:
         sources[str(path.relative_to(ROOT))] = digest(path)
     if PASSIVE.exists():
@@ -558,6 +937,22 @@ def main():
     counts = Counter((row["source"], row["completion"]) for row in rows)
     lemmini_rows = [row for row in rows if row["source_engine"] == "Lemmini"]
     assert len(lemmini_rows) == 299, len(lemmini_rows)
+    classic_record_exceptions = source_families["classicRecordExceptionsInLemminiTaggedPacks"]
+    binary_pack_ids = {
+        f"fan:lldb-{pack_id}" for pack_id in classic_record_exceptions["binaryIniPackIDs"]
+    }
+    binary_level_ids = {
+        (pack_id, level_id)
+        for pack_id, level_ids in classic_record_exceptions["binaryLvlMembers"].items()
+        for level_id in level_ids
+    }
+    binary_lemmini_rows = [
+        row for row in lemmini_rows
+        if row["pack"] in binary_pack_ids or (row["pack"], row["level"]) in binary_level_ids
+    ]
+    assert len(binary_lemmini_rows) == 27, len(binary_lemmini_rows)
+    lemmini_text_rows = [row for row in lemmini_rows if row not in binary_lemmini_rows]
+    assert len(lemmini_text_rows) == 272, len(lemmini_text_rows)
     golems_rows = [row for row in rows if row["source_engine"] == "Golems"]
     expected_golems_packs = Counter({
         "fan:lldb-290": 10, "fan:lldb-433": 2,
@@ -583,6 +978,8 @@ def main():
                "unverifiedFan": counts[("Classic fan", "no verified win")],
                "fixedRateSweepFan": len(NATIVE_RATE_SWEEPS),
                "lemminiSourceLevelsInClassicLane": len(lemmini_rows),
+               "lemminiTextLevelsUsingClassicPlayback": len(lemmini_text_rows),
+               "binaryClassicRecordsInLemminiTaggedPacks": len(binary_lemmini_rows),
                "golemsSourceLevelsInClassicLane": len(golems_rows),
                "lemminiSourceLevelsWithoutVerifiedWin": sum(
                    row["completion"] == "no verified win" for row in lemmini_rows),
@@ -634,17 +1031,19 @@ def main():
         f"{summary['lemminiSourceLevelsWithoutVerifiedWin']} remain unverified. "
         "The `source_engine` column separates known source families from the current "
         "playback lane; most other fan packs are not independently classified there. "
-        "Classic's 160-pixel playfield cannot represent several of these levels' hatch "
-        "and exit coordinates. This is an engine-family compatibility gap, not proof that "
+        f"Of those rows, {len(lemmini_text_rows)} are text levels with terrain beyond "
+        f"Classic's playfield; {len(binary_lemmini_rows)} are binary Classic records "
+        "whose source physics still need checking. This is an engine-family compatibility gap, not proof that "
         "the source puzzles are unsolvable. See `validation.md` for the pack list.\n\n"
         f"{len(golems_rows)} classified levels use the Golems source player, including "
         "exact levels in mixed-evidence packs. "
         "Their source-engine label does not establish native physics parity. "
         "See `validation.md` and `classic-independent-source-checks.json`.\n\n"
-        f"The ten Golems replay evidence files hold {len(golems_phase_records)} "
+        f"The Golems replay evidence files hold {len(golems_phase_records)} "
         "distinct exact-level native wins with ten-probe scores. "
-        f"{len(ordinary_records)} selected levels have strict ordinary-input wins under Golems "
-        "mechanics on their exact bundled levels. "
+        f"{sum(record['ordinaryPlayerAssignments'] for record in ordinary_records)} selected levels "
+        "have strict ordinary-input wins under Golems mechanics. Two further exact-bundle "
+        "wins use source replay assignment rules. "
         "The native Golems exit starts on first trigger contact, as the pinned source does. "
         "Their selected digests and scores are in `levels.csv`. "
         "The two-player alternative stays outside the learning path. "
@@ -680,9 +1079,12 @@ def main():
         "The earlier unshifted `Holy Cow!` input lost under Original mechanics, and "
         "the unshifted `It's Raining Lemmings` input rejected a Builder. Their selected "
         "Golems-rule replays now win on the exact bundled levels and have scores. "
-        "The published `Diving Area` replay saves 4 of 4 in the source player, while its "
-        "one-tick-translated native input saves 2 of 4 on matching level and graphics bytes. "
-        "Its input timing and intermediate state difference remain open.\n\n"
+        "The published `Diving Area` replay saves 4 of 4 in the source player and "
+        "on the exact bundled native level after the hatch-coordinate correction. "
+        "Native completion is 44 ticks earlier. "
+        "`classic-golems-diving-reconciliation.json` compares the sampled early route before "
+        "and after that correction. `classic-golems-diving-late-parity.json` compares later "
+        "saved counts on the same commands. Full source physics parity remains open.\n\n"
         "The native Golems profile includes a later hatch rule and a raised fall limit. "
         "The selected routes pass strict native playback; their saved counts and timing "
         "do not establish full source physics parity. "

@@ -3,10 +3,10 @@
     "lost" : 13,
     "reserves" : 10,
     "saved" : 1,
-    "stateHash" : "a08fa5510cb9569938ea28a202f29f25a26dd7c30643742e30216e8b485788bc",
+    "stateHash" : "10acbee34ba177dfdd51572a65c872aa102d74fcffc686a20afe35c359466b3c",
     "ticks" : 6900
   },
-  "initialStateHash" : "496c410b66f3874ae75fc8141979b607e1dcf78e82a7d24579d34ed59dd173c6",
+  "initialStateHash" : "ffc90d14fcfd4ac8776e92538e69703bb8880590e3c59bcf887661a884561d81",
   "inputs" : [
     {
       "action" : "jumper",
@@ -387,21 +387,6 @@
       "tick" : 554
     },
     {
-      "action" : "walker",
-      "lemming" : 1,
-      "tick" : 557
-    },
-    {
-      "action" : "walker",
-      "lemming" : 1,
-      "tick" : 560
-    },
-    {
-      "action" : "walker",
-      "lemming" : 1,
-      "tick" : 561
-    },
-    {
       "action" : "jumper",
       "lemming" : 3,
       "tick" : 593
@@ -460,21 +445,6 @@
       "action" : "walker",
       "lemming" : 6,
       "tick" : 696
-    },
-    {
-      "action" : "jumper",
-      "lemming" : 1,
-      "tick" : 701
-    },
-    {
-      "action" : "walker",
-      "lemming" : 1,
-      "tick" : 704
-    },
-    {
-      "action" : "jumper",
-      "lemming" : 1,
-      "tick" : 707
     },
     {
       "action" : "jumper",
@@ -743,21 +713,6 @@
     },
     {
       "action" : "jumper",
-      "lemming" : 1,
-      "tick" : 1189
-    },
-    {
-      "action" : "walker",
-      "lemming" : 1,
-      "tick" : 1192
-    },
-    {
-      "action" : "walker",
-      "lemming" : 1,
-      "tick" : 1195
-    },
-    {
-      "action" : "jumper",
       "lemming" : 9,
       "tick" : 1199
     },
@@ -915,21 +870,6 @@
       "action" : "walker",
       "lemming" : 10,
       "tick" : 1454
-    },
-    {
-      "action" : "walker",
-      "lemming" : 1,
-      "tick" : 1457
-    },
-    {
-      "action" : "walker",
-      "lemming" : 1,
-      "tick" : 1462
-    },
-    {
-      "action" : "walker",
-      "lemming" : 1,
-      "tick" : 1463
     },
     {
       "action" : "walker",
@@ -1335,11 +1275,6 @@
       "action" : "walker",
       "lemming" : 2,
       "tick" : 2336
-    },
-    {
-      "action" : "walker",
-      "lemming" : 1,
-      "tick" : 2340
     },
     {
       "action" : "walker",

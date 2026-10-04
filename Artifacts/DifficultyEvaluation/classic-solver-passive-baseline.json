@@ -1,0 +1,25 @@
+{
+  "date": "2026-10-03",
+  "change": "For a Classic search without a forced prefix, simulate the fixed-rate route without player input before beam expansion. Retain its partial result when the beam deadline does not reach the same waiting timeline.",
+  "solverSha256": "763d2df42ce891b2fe1bf78e3415b125dc78416e13d163afdf7622caccba3c7c",
+  "nativeLibrarySha256": "3c5f3af7276aace14b84ba0a39abf499fcdd30758dd6e2d09a0da33a0020d331",
+  "target": {
+    "level": "fan:lldb-62/ClamSpam02.dat#5",
+    "title": "Go Fetch!",
+    "archiveSha256": "ea5c212dd530e2c8ea2c8b033aa2ad8e7882c455134d530ff83dac0d15100241",
+    "initialStateHash": "d82a8e5d7a200e2028125f8b977bbabc10b5f10d7fe75202e4f2a2746cefb261",
+    "separateNoInputPlayback": "22/23 saved, 45 released, completion tick 1392",
+    "oldBalancedBeam": "30 seconds, width 128, five-tick fallback/refire, best 6/23",
+    "oldPartialSha256": "ea0d7aadcdcdc2c82727744e1cf7be0998f05df0528102a00480afd6998cb709",
+    "newBalancedBeam": "Two seconds, width 32, five-tick fallback/refire, best 22/23",
+    "newPartialSha256": "7ba5b2141fab65d710d2963d60e8b8b07e01a5042057b9b1b2ba9aef904a5907"
+  },
+  "strictControl": {
+    "level": "fan:lldb-505/KillerMaster 1 Tame 1.dat#1",
+    "mode": "release rate 50, one-skill rollout",
+    "result": "strict 1/1 at tick 375",
+    "replaySha256": "b9ca8ab40c9f47693ff9a200fee04996454471c8cd184eaa382ab8247d4616fa",
+    "matchesPreviousReplay": true
+  },
+  "limits": "This fixes partial-route reporting and preserves a search lead. It did not win Go Fetch!, add a difficulty score or establish source physics parity. A bounded beam failure does not prove impossibility."
+}

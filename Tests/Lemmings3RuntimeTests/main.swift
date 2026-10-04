@@ -446,6 +446,26 @@ do {
             try require(run.creatures.count == candidate.enemyCount, "L3 native creature count \(number)")
             if [16, 20, 22].contains(number) { try require(!run.configuration.additionalEntrances.isEmpty, "L3 native multi-hatch level \(number)") }
             if number == 19 { try require(!run.configuration.traps.isEmpty, "L3 native rockfall trap") }
+            if number == 20 {
+                for _ in 0..<70 { run.step() }
+                let before = run.lemmings.first { $0.id == 2 }
+                try require(before?.x == 135 && before?.y == 138 && before?.direction == 1,
+                    "L3 Classic 20 reaches the original eight-pixel stair contact")
+                run.step()
+                let after = run.lemmings.first { $0.id == 2 }
+                try require(after?.x == 136 && after?.y == 130 && after?.direction == 1,
+                    "L3 Classic 20 climbs the original stair without a tool")
+            }
+            if number == 28 {
+                for _ in 0..<36 { run.step() }
+                let before = run.lemmings.first { $0.id == 2 }
+                try require(before?.x == 159 && before?.y == 368 && before?.direction == 1,
+                    "L3 Classic 28 reaches the eight-pixel stair contact")
+                run.step()
+                let after = run.lemmings.first { $0.id == 2 }
+                try require(after?.x == 160 && after?.y == 360 && after?.direction == 1,
+                    "L3 Classic 28 climbs the supplied stair without a tool")
+            }
             if number == 5 {
                 try require(run.creatures.count == 1 && run.creatures[0].kind == .fatale, "L3 Classic 5 decodes native Fatale placement")
                 var badHeader = candidate.rawData; badHeader[28] = 0; badHeader[29] = 0

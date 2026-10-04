@@ -1,0 +1,99 @@
+{
+  "date": "2026-10-04",
+  "description": "Bounded source-record diagnosis on two exact bundled, still-unscored Classic fan members. No win, score, ruleset change or parity claim.",
+  "records": [
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Holiday cLemmings Flurry 1.DAT#4",
+        "packID": "fan:lldb-537"
+      },
+      "title": "They Killed Lemmy!",
+      "sourceURL": "https://lldb.camanis.net/level/537/5",
+      "rawSourceReplaySHA256": "5cb602e60b10e6176c35b2cf3d67410dd664d3d0250924546f69546d81f4bc46",
+      "sourceReplayHeader": {
+        "gameMode": 2,
+        "saved": 70,
+        "ticks": 1632
+      },
+      "cachedSourcePageSHA256": "1717ee75b0629b19a55958510fe047a8c5690b5acfa1dbe9249872a50d70146b",
+      "exactBundledArchiveSHA256": "d4a17f5380fd0315dd62fc6947535c459088a28d620a6fa3d0ff27c34e50e540"
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Flurry.DAT#15",
+        "packID": "fan:lldb-484"
+      },
+      "title": "The Long Way Around",
+      "sourceURL": "https://lldb.camanis.net/level/484/16",
+      "rawSourceReplaySHA256": "b9c95640202cb4125dd0fe483f5853134c3b41da056982790ee7d0f188731a57",
+      "sourceReplayHeader": {
+        "gameMode": 2,
+        "saved": 46,
+        "ticks": 2471
+      },
+      "cachedSourcePageSHA256": "4040a5f50a561a551bf9c7589e767b70c284aba78c932a1d661469c51ef508ff",
+      "exactBundledArchiveSHA256": "a88766fb7218b24c824b4de0400c2ef124b85667d6e759bd4ee0384a46b32ae9"
+    }
+  ],
+  "baselinePhaseSweep": "Uniform source input phases minus eight through plus eight under Original and Golems mechanics and native versus all-32 object semantics.",
+  "baselineResults": {
+    "checks": 136,
+    "accepted": 40,
+    "wins": 0,
+    "logSHA256": "157842fabbbec1335f7daacc59c79c18a41b9f68b1dac50766d05a1f6be467a6",
+    "byRecord": {
+      "0": {
+        "checks": 68,
+        "accepted": 0
+      },
+      "1": {
+        "checks": 68,
+        "accepted": 40
+      }
+    }
+  },
+  "lateBuilderSweep": {
+    "scope": "On They Killed Lemmy!, fix uniform phase at plus four; move only the lemming-5 Builder at source tick 1049 by minus 24 through plus 24 native ticks.",
+    "results": {
+      "checks": 196,
+      "accepted": 0,
+      "wins": 0,
+      "logSHA256": "006d0ec35108d1d05012ec6c283be27c272ba26fc2947fa7ade50edcb0177160"
+    }
+  },
+  "precedingBasherSweep": {
+    "scope": "On They Killed Lemmy!, fix uniform phase at plus four; move only the lemming-5 Basher at source tick 910 by minus 30 through plus 30 native ticks.",
+    "results": {
+      "checks": 244,
+      "accepted": 40,
+      "wins": 0,
+      "logSHA256": "b6a711369a595624ff6e9b1f5d0664ab5e82a94d815d6fe363a75937a98f3968",
+      "acceptedSample": [
+        "result 0 native original basher-+08.json 0 69 2042 false",
+        "result 0 native original basher-+12.json 0 69 2042 false"
+      ]
+    }
+  },
+  "nativeTrace": {
+    "logSHA256": "554a6f02f1166eceb65e546ee41b8450b46c754961308c83b5a52f5037ee8fa4",
+    "sourceInputPhase": 4,
+    "mechanics": "Original",
+    "objectSemantics": "native",
+    "lemming5AtTick914": "active, bashing, foot (917,73)",
+    "lemming5AtTick1029": "lost, falling, foot (923,164)",
+    "failedSourceAssignment": "Builder for lemming 5 at native tick 1053"
+  },
+  "diagnosis": "The source page and bundled headers agree on goal, total count, release rate and skill stock. The first source Builder needs a plus-four native phase to be accepted. The later Builder is rejected because lemming 5 has already fallen out on the tested route. Moving that Builder alone does not restore eligibility; some earlier action or terrain/physics state must change. Moving the preceding Basher permits 40 fully accepted replays, but all save 0/69. On The Long Way Around, 40 phase candidates accept all actions yet save 0/45. These observations separate input translation or source-state differences from a simple lack of wider beam search, but do not isolate an engine defect.",
+  "sourceBuiltProbeSHA256": "3173dcf0db2249d54d365f9aa1b0dddaabaa6313dd78ed7a57612f6b0a21ca17",
+  "sourceBuiltFocusedProbeSHA256": "f40fe1bfc1b27510cd7151f8de1cee07d37f6e14ea08504bfdf36b87bf07641a",
+  "sourceBuiltTraceSHA256": "32e76c53d52018dc89fc757ce701cdfbc34fdd4420150fd3f5d525f4a7fec288",
+  "sourceBuiltNxlvKitSHA256": "9b795b0f5e5dd9a5cb70d1a97e233ba84da41b42fe199f1ed870fc702831d3c4",
+  "ledgerUnchanged": {
+    "verifiedClassicFanWins": 2355,
+    "verifiedNeoLemmixWins": 322,
+    "nonOfficialWithoutVerifiedReplayAndScore": 3668
+  },
+  "independentSourcePhysicsParityVerified": 0
+}

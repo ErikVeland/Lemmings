@@ -1,0 +1,49 @@
+{
+  "date": "2026-10-04",
+  "identity": {
+    "engine": "classic",
+    "packID": "fan:lldb-108",
+    "levelID": "geooPkG.dat#3"
+  },
+  "title": "Steel in Motion",
+  "exactBundledArchiveSHA256": "fd57fd4e5d9eebedac039e3abc8df690d0e2893d26b7599faaa89861cd55a041",
+  "cachedSourcePageSHA256": "df4d072d2735ea85df1f65532e3c32d912ce819b62b55d8f7ad654d5c516d0f3",
+  "sourceURL": "https://lldb.camanis.net/level/108/4",
+  "sourceHeaders": [
+    {
+      "gameMode": 3,
+      "saved": 3,
+      "ticks": 763
+    },
+    {
+      "gameMode": 3,
+      "saved": 3,
+      "ticks": 752
+    }
+  ],
+  "translation": "all source cycles shifted back one tick",
+  "candidates": [
+    {
+      "rawSourceReplaySHA256": "e5f11397426b8d12bce844551e6f3aed0f96278a17279bba555cda45f01206f3",
+      "candidateReplaySHA256": "eaa339d40d31c80536d20d73688ac670b8bef39d2e13ea932f263fab829a102d",
+      "candidatePath": ".build/heartbeat-20261003-2255-new/candidates/3bd06712a325d9a0da6cf1024aa33df6f05a2a024624c9bf5c0edc27e65b0b94-e5f11397426b.json",
+      "originalSaved": 0,
+      "originalTicks": 466,
+      "golemsSaved": 0,
+      "golemsTicks": 466
+    },
+    {
+      "rawSourceReplaySHA256": "ddde928a1e2b9f8779bc70759f5549f3ce08d3e1c7d05af6fe083aad47fb7783",
+      "candidateReplaySHA256": "ab38c8dc31f424a55f7f8e474e9c865e4f76c061a02257b21332828992236e68",
+      "candidatePath": ".build/heartbeat-20261003-2255-new/candidates/3bd06712a325d9a0da6cf1024aa33df6f05a2a024624c9bf5c0edc27e65b0b94-ddde928a1e2b.json",
+      "originalSaved": 0,
+      "originalTicks": 487,
+      "golemsSaved": 0,
+      "golemsTicks": 477
+    }
+  ],
+  "nativeObjectSemantics": "activating all 32 Golems object slots did not change either outcome",
+  "sourceBuiltProbeSHA256": "4d9ce221a2d9607de65dfdd5b9ea36d0ec60f430d18422e58ddfba2ec498bc5a",
+  "sourcePhysicsParity": "unverified; neither source-action candidate won under native Original or experimental Golems mechanics",
+  "difficultyScoreAssigned": false
+}

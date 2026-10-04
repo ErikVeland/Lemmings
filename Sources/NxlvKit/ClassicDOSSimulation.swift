@@ -789,8 +789,8 @@ public struct ClassicDOSSimulation: Codable, Equatable, Sendable {
         return result
     }
 
-    /// Applies the Golems source replay path, which skips the interactive
-    /// Builder selector while a lemming is falling.
+    /// Applies Golems source replay assignments without the interactive
+    /// Builder, Basher, Miner and Digger selectors.
     public mutating func assignGolemsReplay(_ skill: ClassicSkill, to lemmingID: Int) -> ClassicDOSAssignmentResult {
         guard configuration.mechanics == .golems else { return .invalidAction }
         var events: [ClassicDOSEvent] = []
@@ -968,8 +968,8 @@ public struct ClassicDOSSimulation: Codable, Equatable, Sendable {
 
         case .builder:
             let allowed: [ClassicDOSAction] = [.walking, .shrugging, .bashing, .mining, .digging]
-            let fallingReplay = sourceReplay && configuration.mechanics == .golems && lemming.action == .falling
-            guard allowed.contains(lemming.action) || fallingReplay,
+            let directSourceReplay = sourceReplay && configuration.mechanics == .golems
+            guard allowed.contains(lemming.action) || directSourceReplay,
                   lemming.foot.y + frameTop(for: lemming.action) >= -5 else {
                 return .invalidAction
             }
@@ -978,9 +978,11 @@ public struct ClassicDOSSimulation: Codable, Equatable, Sendable {
         case .basher:
             guard destructionMasks != nil else { return .destructionMasksUnavailable }
             let allowed: [ClassicDOSAction] = [.walking, .shrugging, .building, .mining, .digging]
-            guard allowed.contains(lemming.action) else { return .invalidAction }
-            if lemming.objectInFront == .steel { return .steel }
-            if blocksDirection(lemming.objectInFront, direction: lemming.direction) {
+            let directSourceReplay = sourceReplay && configuration.mechanics == .golems
+            guard allowed.contains(lemming.action) || directSourceReplay else { return .invalidAction }
+            if lemming.objectInFront == .steel && !directSourceReplay { return .steel }
+            if blocksDirection(lemming.objectInFront, direction: lemming.direction)
+                && !directSourceReplay {
                 return .wrongOneWayDirection
             }
             transition(&lemming, to: .bashing, events: &events)
@@ -988,7 +990,8 @@ public struct ClassicDOSSimulation: Codable, Equatable, Sendable {
         case .miner:
             guard destructionMasks != nil else { return .destructionMasksUnavailable }
             let allowed: [ClassicDOSAction] = [.walking, .shrugging, .building, .bashing, .digging]
-            guard allowed.contains(lemming.action) else { return .invalidAction }
+            let directSourceReplay = sourceReplay && configuration.mechanics == .golems
+            guard allowed.contains(lemming.action) || directSourceReplay else { return .invalidAction }
             if lemming.objectInFront == .steel || lemming.objectBelow == .steel { return .steel }
             if configuration.mechanics != .golems,
                blocksDirection(lemming.objectInFront, direction: lemming.direction) {
@@ -997,9 +1000,10 @@ public struct ClassicDOSSimulation: Codable, Equatable, Sendable {
             transition(&lemming, to: .mining, events: &events)
 
         case .digger:
-            guard lemming.objectBelow != .steel else { return .steel }
+            let directSourceReplay = sourceReplay && configuration.mechanics == .golems
+            guard lemming.objectBelow != .steel || directSourceReplay else { return .steel }
             let allowed: [ClassicDOSAction] = [.walking, .shrugging, .building, .bashing, .mining]
-            guard allowed.contains(lemming.action) else { return .invalidAction }
+            guard allowed.contains(lemming.action) || directSourceReplay else { return .invalidAction }
             transition(&lemming, to: .digging, events: &events)
         }
         lemmings[index] = lemming

@@ -1,0 +1,150 @@
+{
+  "level": "fan:lldb-393/pieuw01.dat#9",
+  "archiveSHA256": "6b599e67d0656e6a27f33f99916b9dafd21b04a1e7c88f8eda24e3083a087bc4",
+  "sourceReplaySHA256": "b0104e7676a965bf5d59582013ec706cc0202a637cb23815284bc43c6e38e8ac",
+  "selectedNativeReplaySHA256": "91610c2bc4d3bc04245c495f0b8c007844ef281a341660503429fde6d4261c74",
+  "semanticEventsMatchArchivedTranslatedSourceCandidate": true,
+  "eventCount": 9,
+  "beforeHatchCorrection": {
+    "traceSHA256": "c30baab480f0bd9bde9ef412d19854a368c546e3a9b9fb2635192194f8443853",
+    "result": "2/4 at tick 1324",
+    "releaseX": 569
+  },
+  "afterHatchCorrection": {
+    "traceSHA256": "31387be6b873874eabaa41deafcf6ac51e01cb2691d9a1a2b8a29444661b2038",
+    "result": "4/4 at tick 1373",
+    "releaseX": 573,
+    "moduleSHA256": "346051fba5ab8199c39d536d48a12bbf30e0da49f78f1d4b20291ad6f60c2dbe"
+  },
+  "workerZeroSamples": [
+    {
+      "cycleOrTick": 90,
+      "sourceSpriteWorldXApprox": [
+        600,
+        603
+      ],
+      "previousNative": [
+        "bashing",
+        "598",
+        "36"
+      ],
+      "correctedNative": [
+        "bashing",
+        "602",
+        "36"
+      ]
+    },
+    {
+      "cycleOrTick": 120,
+      "sourceSpriteWorldXApprox": [
+        610,
+        612
+      ],
+      "previousNative": [
+        "bashing",
+        "607",
+        "36"
+      ],
+      "correctedNative": [
+        "bashing",
+        "611",
+        "36"
+      ]
+    },
+    {
+      "cycleOrTick": 130,
+      "sourceSpriteWorldXApprox": [
+        613,
+        615
+      ],
+      "previousNative": [
+        "bashing",
+        "608",
+        "36"
+      ],
+      "correctedNative": [
+        "walking",
+        "615",
+        "36"
+      ]
+    },
+    {
+      "cycleOrTick": 145,
+      "sourceSpriteWorldXApprox": [
+        628,
+        631
+      ],
+      "previousNative": [
+        "bashing",
+        "613",
+        "36"
+      ],
+      "correctedNative": [
+        "walking",
+        "630",
+        "36"
+      ]
+    },
+    {
+      "cycleOrTick": 150,
+      "sourceSpriteWorldXApprox": [
+        633,
+        635
+      ],
+      "previousNative": [
+        "bashing",
+        "615",
+        "36"
+      ],
+      "correctedNative": [
+        "walking",
+        "635",
+        "36"
+      ]
+    },
+    {
+      "cycleOrTick": 180,
+      "sourceSpriteWorldXApprox": [
+        663,
+        666
+      ],
+      "previousNative": [
+        "walking",
+        "639",
+        "36"
+      ],
+      "correctedNative": [
+        "walking",
+        "665",
+        "36"
+      ]
+    },
+    {
+      "cycleOrTick": 195,
+      "sourceSpriteWorldXApprox": [
+        678,
+        681
+      ],
+      "previousNative": [
+        "walking",
+        "654",
+        "36"
+      ],
+      "correctedNative": [
+        "walking",
+        "680",
+        "36"
+      ]
+    }
+  ],
+  "terrain130": {
+    "sourceScreenshotSHA256": "5f72ea956451fd5fe2beb1bd499d0138b809f8200b97809cf8ce7304a4709771",
+    "sourceAtX617To618Y28_30_32_34": "empty",
+    "previousNativePGMSHA256": "91710b15de61050300dc2722ed58d6ad6719de3ea5691fd4a13667dc402b3c11",
+    "previousNativeAtSamePixels": "solid",
+    "correctedNativePGMSHA256": "0de38ebec0bb45865489a5ada173d2ac8937c1c155ad5bff5ef0927c7770a170",
+    "correctedNativeAtSamePixels": "empty"
+  },
+  "sourceOutcome": "4/4 at cycle 1417",
+  "interpretation": "The four-pixel hatch release correction changes Basher termination through terrain contact. It resolves the earlier sampled worker-position and terrain disagreement and makes the same commands win natively. The 44-tick completion gap remains; full source physics parity is unverified."
+}

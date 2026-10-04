@@ -25,7 +25,8 @@ def main():
                  "classic-golems-phase-shift-seventh.json",
                  "classic-golems-mining-rule.json",
                  "classic-golems-current-source-recheck.json",
-                 "classic-golems-hatch-recovery.json"):
+                 "classic-golems-hatch-recovery.json",
+                 "classic-golems-direct-digger-recovery.json"):
         records.extend(json.loads((EVIDENCE / name).read_text())["records"])
     records.extend(json.loads((EVIDENCE / "classic-golems-hatch-recovery.json").read_text())
                    ["additionalWinningInputs"])
@@ -69,7 +70,7 @@ def main():
             assert record["title"] == "Snow Lev 8"
             assert not record["sourceActionDerivationVerified"]
             unmatched += 1
-    assert (matched, unmatched, translated) == (146, 1, 2)
+    assert (matched, unmatched, translated) == (147, 1, 2)
     print(f"Verified {matched} direct source mappings and {translated} terminal translations; "
           f"{unmatched} native win has open source provenance")
 

@@ -1,0 +1,63 @@
+{
+  "attempts": [
+    {
+      "archiveSHA256": "51faf188e3a7633053bf8f02596be69bb8a6e506d29eef06facb2aeaf9ca4baa",
+      "bestSaved": "12/50",
+      "completedContinuations": 2728,
+      "deadlineReached": true,
+      "expanded": 2729,
+      "identity": "fan:lldb-83/CSTame1.dat#3",
+      "mode": "fixed-rate-99 one-Digger",
+      "partialReplaySHA256": "dbcb194a882418f8fdf5b49105ce8ca264ed80dcfa14a4660290e7a0ecb3a17e",
+      "waitingTickWindow": "1..207"
+    },
+    {
+      "archiveSHA256": "51faf188e3a7633053bf8f02596be69bb8a6e506d29eef06facb2aeaf9ca4baa",
+      "bestSaved": "14/50",
+      "completedContinuations": 1770,
+      "deadlineReached": false,
+      "expanded": 91900,
+      "identity": "fan:lldb-83/CSTame1.dat#3",
+      "mode": "forced Digger 0 at 109, one further skill, fallback/refire 20, width 64",
+      "partialReplaySHA256": "8b6b80916b5a56784bc42f2dce2fa527b115b995e3bf70b97bf538548c1f4c14",
+      "waitingTickWindow": "109..4082"
+    },
+    {
+      "archiveSHA256": "eedc49b14c4c9dcf131121960ca3e20c764bc27630870f32c90da1ca108b3c66",
+      "bestSaved": "0/40",
+      "completedContinuations": 4257,
+      "deadlineReached": true,
+      "expanded": 4258,
+      "identity": "fan:lldb-235/JEFFPCK1.DAT#3",
+      "mode": "fixed-rate-99 one-Digger",
+      "partialReplaySHA256": "b20a0245780540ef913f7609624306a2dd44e48127e79ec84941c97a8fb78e38",
+      "waitingTickWindow": "1..245"
+    },
+    {
+      "archiveSHA256": "173c146193fa36cf4c3be83f13bd59149e1a6012d1e4cfa9b5523ed81f67639c",
+      "bestSaved": "0/50",
+      "completedContinuations": 2034,
+      "deadlineReached": true,
+      "expanded": 2035,
+      "identity": "fan:lldb-19/Mikepak14.dat#2",
+      "mode": "fixed-rate-99 one-Builder",
+      "partialReplaySHA256": "cceb3e6f5ca7aa26539ae15ef6573291b36f855df798f0b29061b3ce901f24d4",
+      "waitingTickWindow": "1..193"
+    },
+    {
+      "archiveSHA256": "173c146193fa36cf4c3be83f13bd59149e1a6012d1e4cfa9b5523ed81f67639c",
+      "bestSaved": "0/50",
+      "completedContinuations": 2105,
+      "deadlineReached": true,
+      "expanded": 2106,
+      "identity": "fan:lldb-19/Mikepak14.dat#2",
+      "mode": "fixed-rate-99 ordered Builder/Builder, second gap 1..150",
+      "partialReplaySHA256": "cceb3e6f5ca7aa26539ae15ef6573291b36f855df798f0b29061b3ce901f24d4",
+      "waitingTickWindow": "1..68"
+    }
+  ],
+  "date": "2026-10-04",
+  "diagnosis": "The CSTame1 route improved from 12/50 to 14/50 with a second Digger. Its waiting route reached tick 4082 and completed 1770 single-skill continuations. The other timed sweeps covered only their recorded early windows. No failure establishes impossibility or source physics parity.",
+  "nativeLibrarySHA256": "9b795b0f5e5dd9a5cb70d1a97e233ba84da41b42fe199f1ed870fc702831d3c4",
+  "solverSHA256": "5a6b02892b8fa5d18c980c83920556fee9126613b180a04f476e7e9ce07c96b6"
+}

@@ -21,13 +21,34 @@
     466,
     469
   ],
+  "classicRecordExceptionsInLemminiTaggedPacks": {
+    "binaryIniPackIDs": [
+      416
+    ],
+    "archiveSHA256": {
+      "fan:lldb-397": "7cb5a7b687cccdbe290028ae7648bb15809b3248a3cf9330d418ce16240d63f2",
+      "fan:lldb-416": "b33f3e29a9f703ed3959e189f2146cf378922649a790e30316f4b82969c794e6"
+    },
+    "binaryLvlMembers": {
+      "fan:lldb-397": [
+        "2010 CONTEST/03Ellischant.lvl#-1",
+        "2010 CONTEST/06ftk99.lvl#-1",
+        "2010 CONTEST/09ftk99.lvl#-1",
+        "2010 CONTEST/10karmew32.lvl#-1",
+        "2010 CONTEST/11Ellischant.lvl#-1",
+        "2010 CONTEST/16karmew32.lvl#-1",
+        "2010 CONTEST/17Ellischant.lvl#-1"
+      ]
+    },
+    "meaning": "These exact bundled members are 2048-byte Classic level records despite the source pack's Lemmini label. The fan library already reads them through the binary Classic parser. Their source physics remain unverified; the exception describes file format, not parity."
+  },
   "golemsPackIDs": [
     290,
     433,
     495,
     496
   ],
-  "golemsEvidence": "Archived published game-mode-3 replay records identify these exact levels or whole packs as Golems source content. The level overrides have strictly verified ordinary native wins on their exact bundled revisions. A native win and source header agreement do not prove full source physics parity.",
+  "golemsEvidence": "Published source replay records and strict native wins identify these exact members or whole packs as Golems-compatible. The source replay game-mode header varies by level set. Some witnesses use source replay assignment rules and do not establish ordinary player-input wins. A native win and source header agreement do not prove full source physics parity.",
   "source": "https://lldb.camanis.net/levelpack/{id}",
   "golemsLevelIDs": {
     "fan:lldb-1": [
@@ -63,6 +84,9 @@
       "Yawg01.dat#0",
       "Yawg01.dat#1"
     ],
+    "fan:lldb-90": [
+      "Timpack3.dat#6"
+    ],
     "fan:lldb-105": [
       "epic02.dat#3"
     ],
@@ -71,6 +95,9 @@
     ],
     "fan:lldb-160": [
       "Giga pack 01.dat#9"
+    ],
+    "fan:lldb-165": [
+      "Giga pack 04.dat#5"
     ],
     "fan:lldb-171": [
       "Giga pack 09.dat#6"
@@ -86,8 +113,24 @@
     "fan:lldb-191": [
       "Lemmings platinum Dangerous Part 2.dat#14"
     ],
+    "fan:lldb-193": [
+      "Gronklems #1.dat#2",
+      "Gronklems #1.dat#9"
+    ],
     "fan:lldb-196": [
       "nortpack1.dat#8"
+    ],
+    "fan:lldb-202": [
+      "mobius1.dat#0",
+      "mobius1.dat#1",
+      "mobius1.dat#2",
+      "mobius1.dat#3",
+      "mobius1.dat#4",
+      "Roundabout.lvl#-1",
+      "LemmingsInArms.lvl#-1",
+      "hard to port!.lvl#-1",
+      "PlanB.lvl#-1",
+      "LemmingsInMotion.lvl#-1"
     ],
     "fan:lldb-217": [
       "PSP Special.dat#3"
@@ -95,6 +138,12 @@
     "fan:lldb-218": [
       "PSP Special2.dat#2",
       "PSP Special2.dat#3"
+    ],
+    "fan:lldb-220": [
+      "AkseliPack01.dat#3",
+      "AkseliPack01.dat#4",
+      "AkseliPack01.dat#6",
+      "AkseliPack01.dat#8"
     ],
     "fan:lldb-222": [
       "ANTHPCK2.DAT#2",
@@ -362,6 +411,24 @@
     ],
     "fan:lldb-592": [
       "LEVELPAK.DAT#1"
+    ],
+    "fan:lldb-35": [
+      "1tseug.dat#2",
+      "1tseug.dat#9"
+    ],
+    "fan:lldb-2": [
+      "geooPk1.dat#7"
+    ],
+    "fan:lldb-484": [
+      "Flurry.DAT#14",
+      "Flurry.DAT#3"
+    ],
+    "fan:lldb-485": [
+      "Blitz.DAT#13",
+      "Blitz.DAT#3",
+      "Blitz.DAT#4",
+      "Blitz.DAT#7",
+      "Blitz.DAT#9"
     ]
   }
 }

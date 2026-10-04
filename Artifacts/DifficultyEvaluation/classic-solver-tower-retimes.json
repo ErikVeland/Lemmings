@@ -1,0 +1,32 @@
+{
+  "date": "2026-10-03",
+  "level": "fan:lldb-325/t3tesla.dat#8",
+  "title": "A TOWERING PROBLEM",
+  "archiveSha256": "7003ec2cb3cc038e9bb1764bc7855def66e10f8aecabfde334b1a6459c6afe64",
+  "initialStateHash": "5ba813e550e67835e075a222efae1e30c8b85ad1d59a212a0f4c862f9e43afa5",
+  "solverSha256": "1a0a15153eb3b225c7202d0ae91869c796f94c07b3a1a82a174533e88e889876",
+  "nativeLibrarySha256": "3c5f3af7276aace14b84ba0a39abf499fcdd30758dd6e2d09a0da33a0020d331",
+  "search": {
+    "clock": "Golems",
+    "releaseRate": 90,
+    "forcedBuilder": "Lemming 0, after tick 58 through 72, excluding already tested tick 65",
+    "attempts": 14,
+    "width": 64,
+    "fallbackTicks": 5,
+    "refireTicks": 5,
+    "mode": "one additional skill continuation",
+    "timeLimitSecondsPerAttempt": 8,
+    "expansionsTotal": 113353,
+    "oneSkillContinuationsTotal": 1289,
+    "bestSavedEachAttempt": "8/9",
+    "winningAttempts": 0,
+    "detailedResults": ".build/heartbeat-20261003-1447/tower-retime-results.json",
+    "detailedResultsSha256": "ac809b23a582d8a5bd6b7c852c2d955bbaeb54d7d5de4b8953fcd9602f417f5e"
+  },
+  "validation": {
+    "fanLibraryTestCommand": "FAN_TEST_LIBRARY_DIR=.build/fan-library-tests FAN_TEST_PORTS_DIR=.build/learning-evidence/resources/Ports LEMMINGS_TEST_AUDIO=muted zsh Scripts/run-fan-library-tests.sh",
+    "fanLibraryTests": "passed",
+    "fanLibraryTestLogSha256": "638ede5d454bdaa7637435da8ba7537ee629ff6b401343b2fdb44f46508ce227"
+  },
+  "limits": "The focused searches test only one additional skill after each forced Builder, at the selected release rate and search timing policy. They add no winning replay, score or source-physics parity result."
+}

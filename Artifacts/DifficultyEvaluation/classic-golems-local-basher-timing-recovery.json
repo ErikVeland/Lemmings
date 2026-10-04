@@ -1,0 +1,183 @@
+{
+  "records": [
+    {
+      "description": "A one-event native timing check recovered a strict 20/20 win on the exact Giga pack 04 level. This tests replay timing, not a production physics change or full source parity.",
+      "identity": {
+        "engine": "classic",
+        "packID": "fan:lldb-165",
+        "levelID": "Giga pack 04.dat#5"
+      },
+      "sourceReplaySHA256": "125d1e2aa6bbb65713ef486e73ff477d936a6b9597d6061c0aa913b844d38ce9",
+      "sourceSaved": 20,
+      "sourceRequired": 20,
+      "sourceCompletionCycle": 1733,
+      "bundledArchiveSHA256": "167151878e40f998db814e208287dacc4f2ffc5885317bedb0af505a9d8fb0ce",
+      "levelDATSourceAndBundleSHA256": "54217d3a12030db668e2f19e8efeb4701bfed925c78298c789f7c2c2ffdc45aa",
+      "initialStateHash": "09b67cf20e73aa15ebfba01344e425e14a8dc558f55469ed341f88887fbd2d96",
+      "baselineLastBasherTick": 1485,
+      "selectedLastBasherTick": 1486,
+      "localTimingResults": [
+        {
+          "lastBasherTickOffset": -5,
+          "saved": 11,
+          "required": 20,
+          "completionTick": 6122,
+          "didWin": false
+        },
+        {
+          "lastBasherTickOffset": -4,
+          "saved": 20,
+          "required": 20,
+          "completionTick": 1724,
+          "didWin": true
+        },
+        {
+          "lastBasherTickOffset": -3,
+          "saved": 20,
+          "required": 20,
+          "completionTick": 1726,
+          "didWin": true
+        },
+        {
+          "lastBasherTickOffset": -2,
+          "saved": 20,
+          "required": 20,
+          "completionTick": 1728,
+          "didWin": true
+        },
+        {
+          "lastBasherTickOffset": -1,
+          "saved": 11,
+          "required": 20,
+          "completionTick": 6122,
+          "didWin": false
+        },
+        {
+          "lastBasherTickOffset": 0,
+          "saved": 11,
+          "required": 20,
+          "completionTick": 6122,
+          "didWin": false
+        },
+        {
+          "lastBasherTickOffset": 1,
+          "saved": 20,
+          "required": 20,
+          "completionTick": 1729,
+          "didWin": true
+        },
+        {
+          "lastBasherTickOffset": 2,
+          "saved": 20,
+          "required": 20,
+          "completionTick": 1729,
+          "didWin": true
+        },
+        {
+          "lastBasherTickOffset": 3,
+          "saved": 20,
+          "required": 20,
+          "completionTick": 1730,
+          "didWin": true
+        },
+        {
+          "lastBasherTickOffset": 4,
+          "saved": 11,
+          "required": 20,
+          "completionTick": 6122,
+          "didWin": false
+        },
+        {
+          "lastBasherTickOffset": 5,
+          "saved": 11,
+          "required": 20,
+          "completionTick": 6122,
+          "didWin": false
+        },
+        {
+          "lastBasherTickOffset": 6,
+          "saved": 11,
+          "required": 20,
+          "completionTick": 6122,
+          "didWin": false
+        },
+        {
+          "lastBasherTickOffset": 7,
+          "saved": 11,
+          "required": 20,
+          "completionTick": 6122,
+          "didWin": false
+        },
+        {
+          "lastBasherTickOffset": 8,
+          "saved": 11,
+          "required": 20,
+          "completionTick": 6122,
+          "didWin": false
+        },
+        {
+          "lastBasherTickOffset": 9,
+          "saved": 11,
+          "required": 20,
+          "completionTick": 6122,
+          "didWin": false
+        },
+        {
+          "lastBasherTickOffset": 10,
+          "saved": 11,
+          "required": 20,
+          "completionTick": 6122,
+          "didWin": false
+        }
+      ],
+      "scratchMaskShiftResults": [
+        {
+          "rightwardMaskShiftForLemming15": 0,
+          "saved": 11,
+          "required": 20,
+          "completionTick": 6122
+        },
+        {
+          "rightwardMaskShiftForLemming15": 1,
+          "saved": 20,
+          "required": 20,
+          "completionTick": 1729
+        },
+        {
+          "rightwardMaskShiftForLemming15": 2,
+          "saved": 20,
+          "required": 20,
+          "completionTick": 1729
+        },
+        {
+          "rightwardMaskShiftForLemming15": 3,
+          "saved": 20,
+          "required": 20,
+          "completionTick": 1730
+        },
+        {
+          "rightwardMaskShiftForLemming15": 4,
+          "saved": 11,
+          "required": 20,
+          "completionTick": 6122
+        }
+      ],
+      "difficultyScore": 655.9058990992672,
+      "probeRuns": 10,
+      "mechanics": "golems",
+      "clock": "golems",
+      "sourceRules": "golemsFallingBuilder",
+      "ordinaryPlayerAssignments": false,
+      "sourceActionDerivationVerified": false,
+      "replayPath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/a4db66ef18f70717166fd102bf5f78619ca84671c670bb91ca545edf99bad880.json",
+      "profilePath": "Artifacts/DifficultyEvaluation/golems-phase-shift-replays/a4db66ef18f70717166fd102bf5f78619ca84671c670bb91ca545edf99bad880.profile.json",
+      "independentSourceCheckPath": "Artifacts/DifficultyEvaluation/classic-independent-source-checks.json",
+      "sourcePhysicsParity": "saved-count agreement; native completion four ticks earlier; full-state parity unverified",
+      "scratchTrialPath": ".build/golems-next-promotion/giga-bash-shift",
+      "nativeReplaySHA256": "a4db66ef18f70717166fd102bf5f78619ca84671c670bb91ca545edf99bad880",
+      "nativeSaved": 20,
+      "required": 20,
+      "nativeCompletionTick": 1729
+    }
+  ]
+}

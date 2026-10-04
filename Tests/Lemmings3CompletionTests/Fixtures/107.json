@@ -6,8 +6,13 @@
     "stateHash" : "df21470e8e4e7914d56ec0445d088164cbbb1254dbc779fc4e4f7990c75876dd",
     "ticks" : 9660
   },
-  "initialStateHash" : "d7badba8c424f1083092664b8c18ee6b7443ea4af78f3e2b498be26111da78d3",
+  "initialStateHash" : "49eae049ccfd0ffe17d894e2670feefc2e1b3406b3f8a97d5ba4f3b6e5c9ed47",
   "inputs" : [
+    {
+      "action" : "walker",
+      "lemming" : 0,
+      "tick" : 1
+    },
     {
       "action" : "use",
       "direction" : "upLeft",

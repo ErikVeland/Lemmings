@@ -231,6 +231,104 @@ private func testGolemsSourceAssignment() throws {
         _ = try ClassicDOSReplayPlayer.run(source, simulation: simulation(.original))
         throw ReplayFailure(description: "Golems source input ran under original mechanics")
     } catch ClassicDOSReplayError.outcomeMismatch(field: "sourceRules", expected: _, actual: _) {}
+
+    func emptyMask(width: Int, height: Int) throws -> ClassicDOSMask {
+        try ClassicDOSMask(width: width, height: height,
+            pixels: Data(repeating: 0, count: width * height))
+    }
+    let masks = try ClassicDOSDestructionMaskSet(
+        explosion: emptyMask(width: 16, height: 22),
+        bashRight: (0..<4).map { _ in try emptyMask(width: 16, height: 10) },
+        bashLeft: (0..<4).map { _ in try emptyMask(width: 16, height: 10) },
+        mineRight: (0..<2).map { _ in try emptyMask(width: 16, height: 13) },
+        mineLeft: (0..<2).map { _ in try emptyMask(width: 16, height: 13) }
+    )
+    var floating = try ClassicDOSSimulation(
+        terrain: terrain,
+        configuration: ClassicDOSConfiguration(
+            totalLemmings: 1, requiredToSave: 1, timeLimitTicks: 300,
+            initialReleaseRate: 99,
+            entrances: [ClassicDOSPoint(x: 40, y: 0)],
+            initialSkills: [.floater: 1, .builder: 1, .basher: 1, .miner: 1, .digger: 1],
+            maximumX: 191, maximumY: 95,
+            mechanics: .golems
+        ),
+        destructionMasks: masks
+    )
+    for _ in 0..<80 {
+        if floating.lemmings.first?.action == .falling { break }
+        _ = floating.tick()
+    }
+    try require(floating.lemmings.first?.action == .falling,
+        "test worker did not enter a fall")
+    try require(floating.assign(.floater, to: 0) == .assigned,
+        "test worker did not receive Floater")
+    for _ in 0..<20 {
+        if floating.lemmings.first?.action == .floating { break }
+        _ = floating.tick()
+    }
+    try require(floating.lemmings.first?.action == .floating,
+        "test worker did not start floating")
+    var ordinaryMiner = floating
+    try require(ordinaryMiner.assign(.miner, to: 0) == .invalidAction,
+        "ordinary Miner accepted a floating worker")
+    var ordinaryBuilder = floating
+    try require(ordinaryBuilder.assign(.builder, to: 0) == .invalidAction,
+        "ordinary Builder accepted a floating worker")
+    var sourceMiner = floating
+    try require(sourceMiner.assignGolemsReplay(.miner, to: 0) == .assigned,
+        "source replay Miner rejected a floating worker")
+    try require(sourceMiner.lemmings.first?.action == .mining,
+        "source replay Miner did not enter mining")
+    var sourceBuilder = floating
+    try require(sourceBuilder.assignGolemsReplay(.builder, to: 0) == .assigned,
+        "source replay Builder rejected a floating worker")
+    try require(sourceBuilder.lemmings.first?.action == .building,
+        "source replay Builder did not enter building")
+    var ordinaryBasher = floating
+    try require(ordinaryBasher.assign(.basher, to: 0) == .invalidAction,
+        "ordinary Basher accepted a floating worker")
+    var sourceBasher = floating
+    try require(sourceBasher.assignGolemsReplay(.basher, to: 0) == .assigned,
+        "source replay Basher rejected a floating worker")
+    try require(sourceBasher.lemmings.first?.action == .bashing,
+        "source replay Basher did not enter bashing")
+    var ordinaryDigger = floating
+    try require(ordinaryDigger.assign(.digger, to: 0) == .invalidAction,
+        "ordinary Digger accepted a floating worker")
+    var sourceDigger = floating
+    try require(sourceDigger.assignGolemsReplay(.digger, to: 0) == .assigned,
+        "source replay Digger rejected a floating worker")
+    try require(sourceDigger.lemmings.first?.action == .digging,
+        "source replay Digger did not enter digging")
+
+    let steelTerrain = try ClassicDOSTerrain(
+        width: 192, height: 96,
+        solidMask: Data(repeating: 0, count: 192 * 96),
+        steelMask: Data(repeating: 1, count: 192 * 96)
+    )
+    var steelDigger = try ClassicDOSSimulation(
+        terrain: steelTerrain,
+        configuration: ClassicDOSConfiguration(
+            totalLemmings: 1, requiredToSave: 1, timeLimitTicks: 300,
+            initialReleaseRate: 99,
+            entrances: [ClassicDOSPoint(x: 40, y: 0)],
+            initialSkills: [.digger: 1],
+            maximumX: 191, maximumY: 95,
+            mechanics: .golems
+        )
+    )
+    for _ in 0..<80 {
+        _ = steelDigger.tick()
+        if steelDigger.lemmings.first?.objectBelow == .steel { break }
+    }
+    try require(steelDigger.lemmings.first?.objectBelow == .steel,
+        "steel test worker never observed steel")
+    var ordinarySteel = steelDigger
+    try require(ordinarySteel.assign(.digger, to: 0) == .steel,
+        "ordinary Digger ignored steel")
+    try require(steelDigger.assignGolemsReplay(.digger, to: 0) == .assigned,
+        "source replay Digger rejected the source direct assignment on steel")
 }
 
 // MARK: - Entry point

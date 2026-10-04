@@ -1617,7 +1617,7 @@
     "golemsTicks" : 3975,
     "identity" : {
       "engine" : "classic",
-      "levelID" : "levels\/06.LVL#-1",
+      "levelID" : "levels/06.LVL#-1",
       "packID" : "fan:lldb-472"
     },
     "nativeInitialHash" : "8f2f5e2778dbc9f210f33bba32a67d696d7561eecf041256bdc5385c8081294f",
@@ -2024,7 +2024,8 @@
     "nativeSaved" : 20,
     "nativeTicks" : 2490,
     "replayRevision" : "SHA256 digest: fc14dc0a2e65ebd0b6bc35d32f9ca58ca74a040aac6e3b5b3227f13e31c7b9f7",
-    "sourceRevision" : "8d65d85e93e941b486e9543d3b6d4435495d2e56eadb53d744bd1782eb051da6"
+    "sourceRevision" : "8d65d85e93e941b486e9543d3b6d4435495d2e56eadb53d744bd1782eb051da6",
+    "supersededByMechanics" : "ohNoMore"
   },
   {
     "golemsDidWin" : true,
@@ -2040,7 +2041,8 @@
     "nativeSaved" : 50,
     "nativeTicks" : 1512,
     "replayRevision" : "SHA256 digest: 53bc451a5244d40076143adc5ead067325c7b99499543d0b10705901828fd263",
-    "sourceRevision" : "8d65d85e93e941b486e9543d3b6d4435495d2e56eadb53d744bd1782eb051da6"
+    "sourceRevision" : "8d65d85e93e941b486e9543d3b6d4435495d2e56eadb53d744bd1782eb051da6",
+    "supersededByMechanics" : "ohNoMore"
   },
   {
     "golemsDidWin" : true,
@@ -2056,7 +2058,8 @@
     "nativeSaved" : 46,
     "nativeTicks" : 2825,
     "replayRevision" : "SHA256 digest: 126494280a73a33fcbdfce159f5d811d68bc2e946364c1e83423799f6db3adf0",
-    "sourceRevision" : "8d65d85e93e941b486e9543d3b6d4435495d2e56eadb53d744bd1782eb051da6"
+    "sourceRevision" : "8d65d85e93e941b486e9543d3b6d4435495d2e56eadb53d744bd1782eb051da6",
+    "supersededByMechanics" : "ohNoMore"
   },
   {
     "golemsDidWin" : true,
@@ -2072,7 +2075,8 @@
     "nativeSaved" : 47,
     "nativeTicks" : 2933,
     "replayRevision" : "SHA256 digest: 70635abfebee15d5f06afa0115dec77e591d049a4fbfc943c36673f65469ab64",
-    "sourceRevision" : "9447da45833dc536df6fb4e25fd7dff06423ae5e67a769a9c9e94c9416ba439a"
+    "sourceRevision" : "9447da45833dc536df6fb4e25fd7dff06423ae5e67a769a9c9e94c9416ba439a",
+    "supersededByMechanics" : "ohNoMore"
   },
   {
     "golemsDidWin" : true,
@@ -2088,7 +2092,8 @@
     "nativeSaved" : 77,
     "nativeTicks" : 2584,
     "replayRevision" : "SHA256 digest: 7c02bb295243f39a309a53b07e3b63acffb7bb24e9f503e44bc70c9cb81d97f5",
-    "sourceRevision" : "9447da45833dc536df6fb4e25fd7dff06423ae5e67a769a9c9e94c9416ba439a"
+    "sourceRevision" : "9447da45833dc536df6fb4e25fd7dff06423ae5e67a769a9c9e94c9416ba439a",
+    "supersededByMechanics" : "ohNoMore"
   },
   {
     "golemsDidWin" : true,
@@ -2104,7 +2109,8 @@
     "nativeSaved" : 80,
     "nativeTicks" : 2565,
     "replayRevision" : "SHA256 digest: 575b4d19cfb352a493a51fb1d3a2fd6864fbf0d90ceb655f2f50d24979fc9ac9",
-    "sourceRevision" : "9447da45833dc536df6fb4e25fd7dff06423ae5e67a769a9c9e94c9416ba439a"
+    "sourceRevision" : "9447da45833dc536df6fb4e25fd7dff06423ae5e67a769a9c9e94c9416ba439a",
+    "supersededByMechanics" : "ohNoMore"
   },
   {
     "golemsDidWin" : true,
@@ -2120,7 +2126,8 @@
     "nativeSaved" : 48,
     "nativeTicks" : 2951,
     "replayRevision" : "SHA256 digest: eed237de5a14be4acae3deae3dc24165e34dd8651a7f1f52616a465f67c946f2",
-    "sourceRevision" : "63ab956e498283467aba9a3dd87680abe43f00fd07ae16279a6bfd950c54a0a2"
+    "sourceRevision" : "63ab956e498283467aba9a3dd87680abe43f00fd07ae16279a6bfd950c54a0a2",
+    "supersededByMechanics" : "ohNoMore"
   },
   {
     "golemsDidWin" : true,
@@ -2136,7 +2143,8 @@
     "nativeSaved" : 78,
     "nativeTicks" : 2658,
     "replayRevision" : "SHA256 digest: 63497ea284eecbfabe9a3f101576944ba870215fc94b929c8592637c56788f08",
-    "sourceRevision" : "63ab956e498283467aba9a3dd87680abe43f00fd07ae16279a6bfd950c54a0a2"
+    "sourceRevision" : "63ab956e498283467aba9a3dd87680abe43f00fd07ae16279a6bfd950c54a0a2",
+    "supersededByMechanics" : "ohNoMore"
   },
   {
     "golemsDidWin" : true,
@@ -2152,7 +2160,8 @@
     "nativeSaved" : 78,
     "nativeTicks" : 2578,
     "replayRevision" : "SHA256 digest: 9232abb95ba12c7fd3bcf2c3f89520f463a9d351e40c1087ccdccf1a3e6400cf",
-    "sourceRevision" : "575f71040f97db65494e2fd5ab5b3a4351fa43073677480e9af4a9881b02d997"
+    "sourceRevision" : "575f71040f97db65494e2fd5ab5b3a4351fa43073677480e9af4a9881b02d997",
+    "supersededByMechanics" : "ohNoMore"
   },
   {
     "golemsDidWin" : true,
@@ -2168,7 +2177,8 @@
     "nativeSaved" : 80,
     "nativeTicks" : 927,
     "replayRevision" : "SHA256 digest: 12ac55786942bf1a4317bb6f09f7cbfef8b0ec6e3260a028c87b3e101a6bc640",
-    "sourceRevision" : "575f71040f97db65494e2fd5ab5b3a4351fa43073677480e9af4a9881b02d997"
+    "sourceRevision" : "575f71040f97db65494e2fd5ab5b3a4351fa43073677480e9af4a9881b02d997",
+    "supersededByMechanics" : "ohNoMore"
   },
   {
     "golemsDidWin" : true,
@@ -2184,7 +2194,8 @@
     "nativeSaved" : 50,
     "nativeTicks" : 7405,
     "replayRevision" : "SHA256 digest: c60e1a15db27a7ea7acd08a52b671f79b26d925af5c53760e14b1c779f481a60",
-    "sourceRevision" : "0543b9c913b9999d82112c55561fc37b9e765a299c6dc4ee7dbea6c1db569d9e"
+    "sourceRevision" : "0543b9c913b9999d82112c55561fc37b9e765a299c6dc4ee7dbea6c1db569d9e",
+    "supersededByMechanics" : "ohNoMore"
   },
   {
     "golemsDidWin" : true,
@@ -2232,7 +2243,8 @@
     "nativeSaved" : 80,
     "nativeTicks" : 4656,
     "replayRevision" : "SHA256 digest: edc285ecb69b11d132d48656c8a55371a1ad6d34465c8603971993f92a1a226a",
-    "sourceRevision" : "4361935304ac1fd403c4a5ea63b0a4be415117ff601841b501bac0130e946a91"
+    "sourceRevision" : "4361935304ac1fd403c4a5ea63b0a4be415117ff601841b501bac0130e946a91",
+    "supersededByMechanics" : "ohNoMore"
   },
   {
     "golemsDidWin" : true,
@@ -2248,7 +2260,8 @@
     "nativeSaved" : 2,
     "nativeTicks" : 2825,
     "replayRevision" : "SHA256 digest: 25544146dddbd1bd8061e33cf1071adb51ab0216a1cc37f2c595cf0c3cf80ee4",
-    "sourceRevision" : "4361935304ac1fd403c4a5ea63b0a4be415117ff601841b501bac0130e946a91"
+    "sourceRevision" : "4361935304ac1fd403c4a5ea63b0a4be415117ff601841b501bac0130e946a91",
+    "supersededByMechanics" : "ohNoMore"
   },
   {
     "golemsDidWin" : true,

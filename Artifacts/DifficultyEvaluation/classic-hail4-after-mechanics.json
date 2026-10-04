@@ -1,0 +1,645 @@
+{
+  "archiveSHA256": "0543b9c913b9999d82112c55561fc37b9e765a299c6dc4ee7dbea6c1db569d9e",
+  "assignmentRejected": 97,
+  "cachedPageSHA256": "11d3ea5d0722481734ff8b908ccf014c97fe9bdc5b00d316a42df8367246d8bc",
+  "cases": [
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-00.json",
+      "candidateFileSHA256": "0477925eb9ae4052f6512ba7994bfb9b6c4df926bc7da6a941a548fc69fd65c8",
+      "detail": "engine refused to queue floater for lemming 0 at tick 79",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-01.json",
+      "candidateFileSHA256": "27a2eaa786207ee0497558b9274a31ebd45e2e65002a74fdc30bb8795c6c04bc",
+      "detail": "engine refused to queue floater for lemming 0 at tick 78",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-02.json",
+      "candidateFileSHA256": "2a714fd0037325c0fef56dcdb2f1090fd044938958dc20d61d4ba25a803e06ee",
+      "detail": "engine refused to queue builder for lemming 0 at tick 78",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-03.json",
+      "candidateFileSHA256": "55f2d3e4dad74eb4212a063e6dce630006b475f1cee8d46e9bc0e9cf93d1ea56",
+      "detail": "engine refused to queue floater for lemming 0 at tick 78",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-04.json",
+      "candidateFileSHA256": "b640881abb0023c4ae2f00234eed3cf0a8b2b3bcb0a713036423ead4ca20b698",
+      "detail": "engine refused to queue floater for lemming 0 at tick 78",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-05.json",
+      "candidateFileSHA256": "acf65637055aba1f5bf2a1ac77091aaa13bb9849eab6e273e4a5ed6ca7887daa",
+      "detail": "engine refused to queue floater for lemming 0 at tick 78",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-06.json",
+      "candidateFileSHA256": "fe3e8c45cdd1bfc87a83658835c92bcd9c2dec3680a5bea578e053aab36fe4e6",
+      "detail": "engine refused to queue floater for lemming 0 at tick 78",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-07.json",
+      "candidateFileSHA256": "aa8d586ac74878715b80e0eb8bbfe93506289d84e38321d5049ca6b077eb8520",
+      "detail": "engine refused to queue builder for lemming 0 at tick 76",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-08.json",
+      "candidateFileSHA256": "6e125ce2399bdcddc6f041eea90f95567e5d109111ab39e2408ab76483cc427e",
+      "detail": "engine refused to queue builder for lemming 0 at tick 77",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-09.json",
+      "candidateFileSHA256": "89f80792dccf777860a1dcb1c9c280140b4811897dbdc02d3b6a904a160d5c1b",
+      "detail": "engine refused to queue floater for lemming 0 at tick 78",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-10.json",
+      "candidateFileSHA256": "bcdc0290bd0594288dc8bc7944f4e637773c8420ab3b6ad50d291911db9d3c57",
+      "detail": "engine refused to queue floater for lemming 0 at tick 78",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-11.json",
+      "candidateFileSHA256": "b5b314d6e0c937c3384a406c99a423d198edfb206c158fb5e01b3bc6c54dc58d",
+      "detail": "engine refused to queue floater for lemming 0 at tick 78",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-12.json",
+      "candidateFileSHA256": "6d26139acc0d4b91207e754d936d33491da3ffc02e85e5f8dbb03d6fc1a99e5d",
+      "detail": "engine refused to queue floater for lemming 0 at tick 78",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-13.json",
+      "candidateFileSHA256": "1398f36f7f601f891f4dc996acce146cdb6a5b6103609590c5c0a4daaf651239",
+      "detail": "engine refused to queue floater for lemming 0 at tick 78",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-14.json",
+      "candidateFileSHA256": "93de0c1be14433b726de39ca96bdaa75acf63c42babb167d6d9644980b7a817e",
+      "detail": "engine refused to queue floater for lemming 0 at tick 78",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-15.json",
+      "candidateFileSHA256": "d4f6cec97656295a725e96bebab75fd0c686720a298f78991bdf7ed81b14847b",
+      "detail": "engine refused to queue floater for lemming 0 at tick 78",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-16.json",
+      "candidateFileSHA256": "ca6376fc41cf106de98759e7b592cb1c9b9e56e1be5eaea5c4a16dfff0d221aa",
+      "detail": "engine refused to queue floater for lemming 0 at tick 78",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-17.json",
+      "candidateFileSHA256": "be59f4dc1a14697ab597f7829c4380f4af86f8c7d909628c86d2a3e2334c0aef",
+      "detail": "engine refused to queue floater for lemming 0 at tick 78",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-18.json",
+      "candidateFileSHA256": "27a2eaa786207ee0497558b9274a31ebd45e2e65002a74fdc30bb8795c6c04bc",
+      "detail": "engine refused to queue floater for lemming 0 at tick 78",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-first-builder-78.json",
+      "candidateFileSHA256": "e38cfc8cc6b7cbed85fd862e9e895e006c9751857a3a976249df918e5209bbdb",
+      "detail": "engine refused to queue builder for lemming 0 at tick 78",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-first-builder-79.json",
+      "candidateFileSHA256": "241d7afba63c7ab3d15bac1d5e3d680b63c42023438f280c7dc1d4d92af98a81",
+      "detail": "engine refused to queue floater for lemming 1 at tick 94",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-first-builder-80.json",
+      "candidateFileSHA256": "006dd0d77577f1802b27551d059c20d21ba55da05da6843c465d6ee793194f97",
+      "detail": "engine refused to queue builder for lemming 0 at tick 80",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-first-builder-81.json",
+      "candidateFileSHA256": "a79df5a23288c7743b2a9247ce747924f2702f3e9d4b9a62dca8ec34a728fb9b",
+      "detail": "engine refused to queue builder for lemming 0 at tick 81",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-first-builder-82.json",
+      "candidateFileSHA256": "b05442390929ef6e448733c4c26cba33ac6ffebdb9b9c11274ab84b844956309",
+      "detail": "engine refused to queue builder for lemming 0 at tick 82",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-first-builder-83.json",
+      "candidateFileSHA256": "fbbe60a5eb296212f8841bbcf2b0490bbc83263e00c329041051868986b0608a",
+      "detail": "engine refused to queue floater for lemming 1 at tick 94",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-first-builder-84.json",
+      "candidateFileSHA256": "4f9bc8fc1972c3bbc9dcb6740a522f0bbcb995d8be475555160b7a45d0b3f72e",
+      "detail": "engine refused to queue builder for lemming 0 at tick 84",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-first-builder-85.json",
+      "candidateFileSHA256": "475b7ce09873366a2f9b78d3d0ebec414d7d48b4e255ab8b5da8d53c8b76b099",
+      "detail": "engine refused to queue builder for lemming 0 at tick 85",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-first-builder-86.json",
+      "candidateFileSHA256": "0c82543f32ca600fb63226faba7eeee75a3be258e56ee8ea48bb70e5d9a650c5",
+      "detail": "engine refused to queue builder for lemming 0 at tick 86",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-first-builder-87.json",
+      "candidateFileSHA256": "f26c26d0049cfa9646b5538dd566217a5bfc504bd1d4017b94a5061e76632c45",
+      "detail": "engine refused to queue builder for lemming 0 at tick 87",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-first-builder-88.json",
+      "candidateFileSHA256": "cf96f2a59869f8f7e6cc196b5d3de6db6447500e0177d2f2bc8448907fb7b9b0",
+      "detail": "engine refused to queue builder for lemming 0 at tick 88",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-first-builder-89.json",
+      "candidateFileSHA256": "888616d46d63c3d1d6be6a2b4243fa793114bc631f9ea751bf7948f6c151890e",
+      "detail": "engine refused to queue builder for lemming 0 at tick 89",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-first-builder-90.json",
+      "candidateFileSHA256": "2ec3b56d1e8ca8873c8ce68e3f340ea84d0c1520dc78e0562a33455989fea161",
+      "detail": "engine refused to queue builder for lemming 0 at tick 90",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-first-builder-91.json",
+      "candidateFileSHA256": "eeb176aa9d4450a11e946b1292f0e7e9154b60f73e8b46e8689a5579f59a121a",
+      "detail": "engine refused to queue floater for lemming 1 at tick 94",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-first-builder-92.json",
+      "candidateFileSHA256": "1a192a971a03d01f7006a70b03b6bd85c2236e41e99ecf773cbebc609b2b896c",
+      "detail": "engine refused to queue builder for lemming 0 at tick 92",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-first-builder-93.json",
+      "candidateFileSHA256": "c93c56e1ab2040dd8d7f5908c76c358f1603d241309014337ba3e7c34622c519",
+      "detail": "engine refused to queue builder for lemming 0 at tick 93",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-first-builder-94.json",
+      "candidateFileSHA256": "0fb1d4e340c6d3cc3c57ef21627619a59eb13fb1fb3a9c8de6feba2cd0e2c309",
+      "detail": "engine refused to queue builder for lemming 0 at tick 94",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-first-builder-95.json",
+      "candidateFileSHA256": "c1beac7922b7dc2c67baa8fa187fa1e9c50e7e9c3f976c1730450e8bebe629ee",
+      "detail": "engine refused to queue floater for lemming 1 at tick 94",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-skillphase-F-2-B-1-O-1.json",
+      "candidateFileSHA256": "76db3d9acb9c8c787aa4b90db232130a05ef5009d561e9bae8f01cd39c9ec856",
+      "detail": "engine refused to queue builder for lemming 0 at tick 78",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-skillphase-F-2-B-1-O-2.json",
+      "candidateFileSHA256": "fe72a6460b6b480f3a13b92c428d67a8cafd1d38f5a4b57a371506d67cbba7b4",
+      "detail": "engine refused to queue builder for lemming 0 at tick 78",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-skillphase-F-2-B-1-O0.json",
+      "candidateFileSHA256": "be41eaac1ab34c3c62aca9980ae6b7855fba8c357be6d19f7aa2d57c20dde864",
+      "detail": "engine refused to queue builder for lemming 0 at tick 78",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-skillphase-F-2-B0-O-1.json",
+      "candidateFileSHA256": "44a79974a7bab4413ca64197c517dddea9786d7a0e842368cee2b7213b6e39db",
+      "detail": "engine refused to queue floater for lemming 1 at tick 94",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-skillphase-F-2-B0-O-2.json",
+      "candidateFileSHA256": "8e908053896d4056bb32d0888b06a118703b4c342933691a21ecc1f3942558ee",
+      "detail": "engine refused to queue floater for lemming 1 at tick 94",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-skillphase-F-2-B0-O0.json",
+      "candidateFileSHA256": "be96aa86f9cc11e841b4e5874218304605d3427f689e418228b64ac162ca6eff",
+      "detail": "engine refused to queue floater for lemming 1 at tick 94",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-skillphase-F-2-B1-O-1.json",
+      "candidateFileSHA256": "417853b5b2030914462d7ae573857a02b14cb41513ea9637250bbb236da37f33",
+      "detail": "engine refused to queue builder for lemming 0 at tick 80",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-skillphase-F-2-B1-O-2.json",
+      "candidateFileSHA256": "538fcc3e3e8474c9984f195fb575ff64d3b097b49ce5c0cf93e2134491f5fdd2",
+      "detail": "engine refused to queue builder for lemming 0 at tick 80",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-skillphase-F-2-B1-O0.json",
+      "candidateFileSHA256": "3e6ba64c1f7e27d88b6ff55e3969b7d6cd64866204512d787e9fa60c526c5473",
+      "detail": "engine refused to queue builder for lemming 0 at tick 80",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-skillphase-F-2-B2-O-1.json",
+      "candidateFileSHA256": "d1234564956438d1afad63e4b2c052fc46d66ca23904271a5ddcd4d3ffc10c9a",
+      "detail": "engine refused to queue builder for lemming 0 at tick 81",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-skillphase-F-2-B2-O-2.json",
+      "candidateFileSHA256": "bfde4339f2e39628c95f462b9ad3d5918689f9a4870de38921261eded1ae0967",
+      "detail": "engine refused to queue builder for lemming 0 at tick 81",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-skillphase-F-2-B2-O0.json",
+      "candidateFileSHA256": "df49a40e81d7993133a087e0765c6d6f7a6b99c6b7102d83bc6886828322c627",
+      "detail": "engine refused to queue builder for lemming 0 at tick 81",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-skillphase-F-3-B-1-O-1.json",
+      "candidateFileSHA256": "a10d6f07160a9c53a45288b1e2b71be890994166332dfb2f5f2c9f17aeea1a37",
+      "detail": "engine refused to queue builder for lemming 0 at tick 78",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-skillphase-F-3-B-1-O-2.json",
+      "candidateFileSHA256": "da2783fe4b12bf59998b7c7c1e17c471a0f23e45acefe30333a65a4ddeab238e",
+      "detail": "engine refused to queue builder for lemming 0 at tick 78",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-skillphase-F-3-B-1-O0.json",
+      "candidateFileSHA256": "3f49949402dd3442572613fda3af46bbd8ac038d9db1d70ae7b88670c110bf26",
+      "detail": "engine refused to queue builder for lemming 0 at tick 78",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-skillphase-F-3-B0-O-1.json",
+      "candidateFileSHA256": "13f5a10cce56df678a7ef72eb42e1fb8ba25f7a42e3cc346bd0a52330e4bc56b",
+      "detail": "engine refused to queue floater for lemming 1 at tick 93",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-skillphase-F-3-B0-O-2.json",
+      "candidateFileSHA256": "39250d4f454d8d8b77e5575ec6d2bc86eb34a62183afe5791a17bb3ddb83a0cd",
+      "detail": "engine refused to queue floater for lemming 1 at tick 93",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-skillphase-F-3-B0-O0.json",
+      "candidateFileSHA256": "fe9b47262c9da777125b795e2903b62a9bf693d414251d28ecdbf721e4db40c4",
+      "detail": "engine refused to queue floater for lemming 1 at tick 93",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-skillphase-F-3-B1-O-1.json",
+      "candidateFileSHA256": "a1c61ffa958701abe10446ddb7c7a6882945c5303a0e079c9acf23fbba2403cb",
+      "detail": "engine refused to queue builder for lemming 0 at tick 80",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-skillphase-F-3-B1-O-2.json",
+      "candidateFileSHA256": "5f756ee1efe1f63e5f8991f391532bcdc9bb35c49ed9fe6323a42d9bbf4ddf07",
+      "detail": "engine refused to queue builder for lemming 0 at tick 80",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-skillphase-F-3-B1-O0.json",
+      "candidateFileSHA256": "ded6d2d0da7650fb88d0fd45ed0217010eb59ae9a42feeabf90cd51b76c2a58a",
+      "detail": "engine refused to queue builder for lemming 0 at tick 80",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-skillphase-F-3-B2-O-1.json",
+      "candidateFileSHA256": "86ba215e15b4232cc30d369a137b3b6cc64cf78ce8dd5c5cb4a61cc153b4618e",
+      "detail": "engine refused to queue builder for lemming 0 at tick 81",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-skillphase-F-3-B2-O-2.json",
+      "candidateFileSHA256": "a52aec37c6efcfbe6d2e43de5098a2e2cca3c1caa330c725ba3e8c4e13e1a064",
+      "detail": "engine refused to queue builder for lemming 0 at tick 81",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-skillphase-F-3-B2-O0.json",
+      "candidateFileSHA256": "4a3895fd4bed3059ed44f9b146cdaaaf1730dc49919a0a132e4e1550cbb55751",
+      "detail": "engine refused to queue builder for lemming 0 at tick 81",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-skillphase-F-4-B-1-O-1.json",
+      "candidateFileSHA256": "9dcce3bbc7e281fd4417fa587bd711ff971c9aac2a8a2f589f12cc09a817fe0e",
+      "detail": "engine refused to queue builder for lemming 0 at tick 78",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-skillphase-F-4-B-1-O-2.json",
+      "candidateFileSHA256": "8d4854082d33d2e9747122732e2c89d9bcfc3755d794e75d34ad208c6978da50",
+      "detail": "engine refused to queue builder for lemming 0 at tick 78",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-skillphase-F-4-B-1-O0.json",
+      "candidateFileSHA256": "4967c6fc1573db66d683d0332bcc35b1080cff00612af4d56c93c8e37cd2f32b",
+      "detail": "engine refused to queue builder for lemming 0 at tick 78",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-skillphase-F-4-B0-O-1.json",
+      "candidateFileSHA256": "b7c51cfffad3b8607743826947ba1f47e035af72dbf8c242481982bab7d557fc",
+      "detail": "engine refused to queue floater for lemming 1 at tick 92",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-skillphase-F-4-B0-O-2.json",
+      "candidateFileSHA256": "dddbebba27205085f7dd8325152398dee286abbc15d0628802fcf764b371e898",
+      "detail": "engine refused to queue floater for lemming 1 at tick 92",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-skillphase-F-4-B0-O0.json",
+      "candidateFileSHA256": "6c8d19a690f45d660fa857bb7bedb9d80025b2910f48e45d55fe26412f4a0521",
+      "detail": "engine refused to queue floater for lemming 1 at tick 92",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-skillphase-F-4-B1-O-1.json",
+      "candidateFileSHA256": "e8b10fbe9594bad98264a679fa50293d4f452b82f5c95e9d05a45aeada11fd09",
+      "detail": "engine refused to queue builder for lemming 0 at tick 80",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-skillphase-F-4-B1-O-2.json",
+      "candidateFileSHA256": "89141204fc17bdb624fa4dedf75292b09f70a816e275aef76541f12893d037e5",
+      "detail": "engine refused to queue builder for lemming 0 at tick 80",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-skillphase-F-4-B1-O0.json",
+      "candidateFileSHA256": "161d29eb4344e2b3eede3bf90940e27c4a58bdae7c1ef28ca01b9b033cc6b2fa",
+      "detail": "engine refused to queue builder for lemming 0 at tick 80",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-skillphase-F-4-B2-O-1.json",
+      "candidateFileSHA256": "3f17f285672ac6d4e02125d9c8be46109d5f00b2ba2403be667105b0abf14d9d",
+      "detail": "engine refused to queue builder for lemming 0 at tick 81",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-skillphase-F-4-B2-O-2.json",
+      "candidateFileSHA256": "f61943854a73eb0dd9bbf6c12d883633815145ef674a3c7b05bddbfffd9c88d3",
+      "detail": "engine refused to queue builder for lemming 0 at tick 81",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-skillphase-F-4-B2-O0.json",
+      "candidateFileSHA256": "dd115160945d6dfa720b8b652821eb7b0912faadc6a62f5d53db71caa1e18cda",
+      "detail": "engine refused to queue builder for lemming 0 at tick 81",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-skillphase-F-5-B-1-O-1.json",
+      "candidateFileSHA256": "536dc808afed8ec3ac5bdb57833a61e2acb331296c76d81ce2800ec415ed59be",
+      "detail": "engine refused to queue builder for lemming 0 at tick 78",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-skillphase-F-5-B-1-O-2.json",
+      "candidateFileSHA256": "a9f3db63a92f7b5fbccb7d2aa72eae05db1b41bf2121e515076fd4d619f12691",
+      "detail": "engine refused to queue builder for lemming 0 at tick 78",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-skillphase-F-5-B-1-O0.json",
+      "candidateFileSHA256": "7cae6916f9a4f4aba2d9ff52f62f93f7cc2b6b1df6d1fbc00714eeed8f3c51d4",
+      "detail": "engine refused to queue builder for lemming 0 at tick 78",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-skillphase-F-5-B0-O-1.json",
+      "candidateFileSHA256": "039e07941cd657ef4073e7594fb5db8e0f6b3a624b82e0fd3cfba45c391810a2",
+      "detail": "engine refused to queue builder for lemming 0 at tick 79",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-skillphase-F-5-B0-O-2.json",
+      "candidateFileSHA256": "dfcb2a3fef9bc3081c3b561a5878320d46206866dbbb5d5f741c9c918bda5b4d",
+      "detail": "engine refused to queue builder for lemming 0 at tick 79",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-skillphase-F-5-B0-O0.json",
+      "candidateFileSHA256": "8edbed9c8b6e5ea80708d3aba6f61706eb348b198a99a8cc2511cee2ac58a386",
+      "detail": "engine refused to queue builder for lemming 0 at tick 79",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-skillphase-F-5-B1-O-1.json",
+      "candidateFileSHA256": "d4eb293e79b1d019cb12aad60c2d44213d70bec8d36da8963a2980fa00428e9c",
+      "detail": "engine refused to queue builder for lemming 0 at tick 80",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-skillphase-F-5-B1-O-2.json",
+      "candidateFileSHA256": "49619e1b755ce534f3b03aa9a50e1cacd35202192ad50dd625e6b44e4b101aa9",
+      "detail": "engine refused to queue builder for lemming 0 at tick 80",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-skillphase-F-5-B1-O0.json",
+      "candidateFileSHA256": "7aa453136d26639903877503afc0dba7dbe35a838f41c95d771438640b28a0f7",
+      "detail": "engine refused to queue builder for lemming 0 at tick 80",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-skillphase-F-5-B2-O-1.json",
+      "candidateFileSHA256": "680b4ad03ee388c24daba38db15d9557a7bf31567d4a83dc43cec7ec2231bd22",
+      "detail": "engine refused to queue builder for lemming 0 at tick 81",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-skillphase-F-5-B2-O-2.json",
+      "candidateFileSHA256": "27e2ca672f91180714ca3837097b80d1254e72949fc400599f9ecdfa9edbc0ce",
+      "detail": "engine refused to queue builder for lemming 0 at tick 81",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-skillphase-F-5-B2-O0.json",
+      "candidateFileSHA256": "c54b8803b919cb180522c5384cf67eec2b85f38834f008c2afbbfc47adb5f252",
+      "detail": "engine refused to queue builder for lemming 0 at tick 81",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-uniform-+00.json",
+      "candidateFileSHA256": "27a2eaa786207ee0497558b9274a31ebd45e2e65002a74fdc30bb8795c6c04bc",
+      "detail": "engine refused to queue floater for lemming 0 at tick 78",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-uniform-+01.json",
+      "candidateFileSHA256": "0477925eb9ae4052f6512ba7994bfb9b6c4df926bc7da6a941a548fc69fd65c8",
+      "detail": "engine refused to queue floater for lemming 0 at tick 79",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-uniform-+02.json",
+      "candidateFileSHA256": "6da2785cbcb318257d406ee6495a670a7cff5a27586bcf2ca3b400a8722856d3",
+      "detail": "engine refused to queue floater for lemming 0 at tick 80",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-uniform-+03.json",
+      "candidateFileSHA256": "68ee190d948fafcd82f679bd888a0c2038139bbe3356c734e3b5fb3d693e91f4",
+      "detail": "engine refused to queue floater for lemming 0 at tick 81",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-uniform--01.json",
+      "candidateFileSHA256": "2a714fd0037325c0fef56dcdb2f1090fd044938958dc20d61d4ba25a803e06ee",
+      "detail": "engine refused to queue builder for lemming 0 at tick 78",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-uniform--02.json",
+      "candidateFileSHA256": "b6aa69c770048059b761a0533f427a4aae8a54771586d16a9cdea23e667b803a",
+      "detail": "engine refused to queue builder for lemming 0 at tick 77",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-uniform--03.json",
+      "candidateFileSHA256": "0d7f9ef099f638df1fd8e46deb3a4b2943f75daf1b5fd3bbd26cb1aa73fd5d06",
+      "detail": "engine refused to queue builder for lemming 0 at tick 76",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-uniform--04.json",
+      "candidateFileSHA256": "39a2701e8c10fd5887015ac43dc0d7441373d94fcafc90825dd19d3829e262bc",
+      "detail": "engine refused to queue builder for lemming 0 at tick 75",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-uniform--05.json",
+      "candidateFileSHA256": "8805dd6ab730aa0921ea6616d7dd62470fd189c1be653dce86d09ceda2415bfb",
+      "detail": "engine refused to queue builder for lemming 0 at tick 74",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-uniform--06.json",
+      "candidateFileSHA256": "63ac3d56ff548f94eb073965cb17f5de935474e5fd6f0b4d7fe935fde8be26b9",
+      "detail": "engine refused to queue builder for lemming 0 at tick 73",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-uniform--07.json",
+      "candidateFileSHA256": "0d3c2a5a05a448623f93d232581d4c3415e992cf68f0fdb7b1260c9996c90b5e",
+      "detail": "engine refused to queue builder for lemming 0 at tick 72",
+      "status": "assignment rejected"
+    },
+    {
+      "candidateFile": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce-uniform--08.json",
+      "candidateFileSHA256": "f8a4952f7931f49e8cbf2968dd05cb8f8554f53daf267b3f7961a58a5f506a2f",
+      "detail": "engine refused to queue builder for lemming 0 at tick 71",
+      "status": "assignment rejected"
+    }
+  ],
+  "casesChecked": 97,
+  "currentSolverCalibration": {
+    "candidateReplaySHA256": "968d366c6c60b1f15c6485ea6549a8546887b6222006eae204b4d8ef99a6add3",
+    "identity": "fan:lldb-505/KillerMaster 1 Tame 1.dat#1",
+    "outcome": "strict-known-control route found, 1/1 saved with one Floater at tick 375",
+    "policy": "--rollout-single --fallback 12 --seconds 30",
+    "singleSkillContinuations": 1,
+    "waitingRouteTick": 59
+  },
+  "currentSolverTarget": {
+    "outcome": "UNSOLVED, best 0/79, 351 expanded, tick 136, two released and active, no timeout",
+    "partialReplaySHA256": "2fb50753d570f373b9073748f857da434b42812433087c3c7ca9bd4a8af6ff37",
+    "policy": "--prefix first Floater 77, first Builder 79 --width 16 --fallback 12 --seconds 45 --partial-out --balanced-ranking",
+    "solverSHA256": "c9311474ec27c0a730b4b6bdf95959a838f2bea1dc4222d2caee9f321d6d7714"
+  },
+  "exactOfficialCounterpart": {
+    "engine": "classic",
+    "levelID": "20:Hail:5:2:4",
+    "packID": "holidayLemmings1994-MACLEVL-32"
+  },
+  "firstWorkerState": "At native tick 77 first worker is falling at foot (633,98), fall distance 75, Floater assignable; at tick 78 it has splatted and Floater is invalid.",
+  "identity": {
+    "engine": "classic",
+    "levelID": "Hail.DAT#4",
+    "packID": "fan:lldb-483"
+  },
+  "levelDataDifferencesFanVsOfficial": {
+    "requiredToSave": [
+      79,
+      68
+    ],
+    "saveRequirement": [
+      79,
+      68
+    ]
+  },
+  "nativeInitialHash": "87d0422ebf766c3a80a9f1d68da1249f4adb1c471335b48fb34473fd93af4cce",
+  "officialInitialHash": "7ca4669f221415be2bca159f797d2de5118db2a2dd82d8d4d617f34f450b18ef",
+  "officialNativeReplayOutcome": {
+    "didWin": true,
+    "released": 80,
+    "required": 68,
+    "saved": 70,
+    "stateHash": "1a71d3b27e2a6755d235f8d1479208776fcd1cfe40331ee53d79f96b7a25fa33",
+    "ticks": 3060
+  },
+  "probeBinarySHA256": "f224e8e7573f52724d5fccdd4922bb3f182717d900f2a835f4f921263e4bdabd",
+  "publishedSourceReplaySHA256": "b5af6360b01c7d994b29e11095292afc95ac7f090d3ea4900544b6c0c527374c",
+  "renderedGeometrySHA256": "SHA256 digest: 1b29518f411e095bd2d8127e46cd635efe0e314502d6eab5623b0ad85bbf4dc4",
+  "searchBound": "19 prior phase/builder candidates, 12 new uniform shifts -8..+3, 18 first-builder ticks 78..95 with first Floater at 77, 48 class-specific Floater/Builder/other shifts. All exact bundled replays under selected Oh No! rules.",
+  "selectedMechanics": "ohNoMore",
+  "sourceHeaderSaved": 79,
+  "sourceHeaderTicks": 1343,
+  "sourcePhysicsParity": "unverified",
+  "strictWins": 0,
+  "title": "Get the Point?"
+}

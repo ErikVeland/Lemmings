@@ -158,7 +158,7 @@ struct ImportedFanReplay: Decodable {
                                 objectSemantics: .forFanLevel(loaded.0, groundSet: ground))
                             return try ClassicDOSSimulation(level: loaded.0, renderedLevel: rendered,
                                 mainDATAssets: mainAssets(ports.appendingPathComponent("lemmings_dos_1991-07-30")),
-                                clock: fanClock)
+                                mechanics: FanLevelLibrary.mechanics(for: pack, entry: item), clock: fanClock)
                         })
                     } catch { problems.append("\(pack.lastPathComponent) / \(item.label): \(error)") }
                 }
@@ -199,7 +199,7 @@ struct ImportedFanReplay: Decodable {
                         objectSemantics: .forFanLevel(level, groundSet: ground))
                     let initial = try ClassicDOSSimulation(level: level, renderedLevel: rendered,
                         mainDATAssets: mainAssets(ports.appendingPathComponent("lemmings_dos_1991-07-30")),
-                        clock: fanClock)
+                        mechanics: FanLevelLibrary.mechanics(for: pack, entry: item), clock: fanClock)
                     let hash = ClassicDOSReplayRecorder.stateHash(of: initial)
                     let replay = ClassicDOSReplay(rank: candidate.packID, number: rows[index].entry.levelNumberSnapshot,
                         title: level.title, initialStateHash: hash, events: candidate.events)

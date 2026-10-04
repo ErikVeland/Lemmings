@@ -7964,7 +7964,7 @@
     "packID" : "fan:lldb-472"
   },
   {
-    "levelID" : "levels\/01.LVL#-1",
+    "levelID" : "levels/01.LVL#-1",
     "newHash" : "29f6f32a76650f164b7e8cd58e63365f155d842c62203fec413e79009b1f6de8",
     "newSaved" : 47,
     "newTicks" : 1033,
@@ -7975,7 +7975,7 @@
     "packID" : "fan:lldb-472"
   },
   {
-    "levelID" : "levels\/02.LVL#-1",
+    "levelID" : "levels/02.LVL#-1",
     "newHash" : "d68b7ff285b2038ba5f5eb8730643fbaa2a8c9367d964282434900eebe0d84b1",
     "newSaved" : 46,
     "newTicks" : 3582,
@@ -7986,7 +7986,7 @@
     "packID" : "fan:lldb-472"
   },
   {
-    "levelID" : "levels\/06.LVL#-1",
+    "levelID" : "levels/06.LVL#-1",
     "newHash" : "8f2f5e2778dbc9f210f33bba32a67d696d7561eecf041256bdc5385c8081294f",
     "newSaved" : 49,
     "newTicks" : 3975,
@@ -9589,7 +9589,12 @@
     "oldHash" : "9e72cd566607af5ab7ab7734b12da9726d338a734981e081ead5df73482ee95d",
     "oldSaved" : 48,
     "oldTicks" : 1858,
-    "packID" : "fan:lldb-478"
+    "packID" : "fan:lldb-478",
+    "currentSelectedMechanics" : {
+      "mechanics" : "ohNoMore",
+      "initialStateHash" : "5599a2951d606da4deced2bbca5695b3f00f8797138f8e9d57b9d992c469b8b2",
+      "replaySHA256" : "126f51d0b2109e12dc131ef1c248dd1846abd69944e60c18f70a86143dc504ad"
+    }
   },
   {
     "levelID" : "Crazy.DAT#14",
@@ -9600,7 +9605,12 @@
     "oldHash" : "5f0ebf9f455d78d8715dd19565c47535380ad271791f5ed7abea2f74ddbabd97",
     "oldSaved" : 50,
     "oldTicks" : 1512,
-    "packID" : "fan:lldb-478"
+    "packID" : "fan:lldb-478",
+    "currentSelectedMechanics" : {
+      "mechanics" : "ohNoMore",
+      "initialStateHash" : "18c55c1fce77b2dfe142e7fe59274bf164d656542c3cbed1151ae3c61c38febb",
+      "replaySHA256" : "055435542249eb5c7591b5ce8c11276385d72ba21712ffc60b6b9ed52bbbbd83"
+    }
   },
   {
     "levelID" : "Crazy.DAT#15",
@@ -9633,7 +9643,12 @@
     "oldHash" : "3552f562ccd4dece49e92146aa97a0a66a45bd15f734aae5d20fd512b719e586",
     "oldSaved" : 46,
     "oldTicks" : 2825,
-    "packID" : "fan:lldb-478"
+    "packID" : "fan:lldb-478",
+    "currentSelectedMechanics" : {
+      "mechanics" : "ohNoMore",
+      "initialStateHash" : "e8566b67d3278d3ed63a2dd8d97d12881b2c567c89bbb38a27468e62c3044141",
+      "replaySHA256" : "7473ac8e226c2b86326d47ce7eb3f123cf3242f0970a1de62bc3f15e78fab208"
+    }
   },
   {
     "levelID" : "Crazy.DAT#18",
@@ -9677,7 +9692,12 @@
     "oldHash" : "a9198d9de98dbaa907b1240bb8aab3087083183487d06daa26224d6a6fc88ff8",
     "oldSaved" : 20,
     "oldTicks" : 2490,
-    "packID" : "fan:lldb-478"
+    "packID" : "fan:lldb-478",
+    "currentSelectedMechanics" : {
+      "mechanics" : "ohNoMore",
+      "initialStateHash" : "8843a8b4606ec72d53129ed7431abe8ff58b88f28fb2ad8eb734548d0b3e017c",
+      "replaySHA256" : "ff9732b984e5badd78b141d2bb91b98790e4b503b5d7c3c176986a5e8157185b"
+    }
   },
   {
     "levelID" : "Crazy.DAT#4",
@@ -9710,7 +9730,12 @@
     "oldHash" : "dc5b1ad9257351b41273e2ab11d141bf9a74053dff9db7dbaa71505818b8376c",
     "oldSaved" : 50,
     "oldTicks" : 1627,
-    "packID" : "fan:lldb-478"
+    "packID" : "fan:lldb-478",
+    "currentSelectedMechanics" : {
+      "mechanics" : "ohNoMore",
+      "initialStateHash" : "f56387799a3d0f71659c50080709a99ab6fd90a7ffa42d67447068793061c326",
+      "replaySHA256" : "445fa045478e0125af6522fd19caba76167be804a011aeca963c381edc54157f"
+    }
   },
   {
     "levelID" : "Crazy.DAT#7",
@@ -9820,7 +9845,12 @@
     "oldHash" : "4b45349cdb71c4689bcb860df86099eca871cd8dc7eecad45fd7a28f1f95ec1e",
     "oldSaved" : 1,
     "oldTicks" : 1494,
-    "packID" : "fan:lldb-479"
+    "packID" : "fan:lldb-479",
+    "currentSelectedMechanics" : {
+      "mechanics" : "ohNoMore",
+      "initialStateHash" : "e93567a63f1602b75a5ab8f2451ada12e45b3d3037c0e44ddfd897fcd6000c80",
+      "replaySHA256" : "0dea8e9f16da79d2e737d600f4d5438b707e6f2bc18d85221d337eb4361c279a"
+    }
   },
   {
     "levelID" : "Wild.DAT#16",
@@ -9864,7 +9894,12 @@
     "oldHash" : "8340bea3ee860461ceae9f096bc1124f980fc8f8816dedd97ff833143958c928",
     "oldSaved" : 29,
     "oldTicks" : 1206,
-    "packID" : "fan:lldb-479"
+    "packID" : "fan:lldb-479",
+    "currentSelectedMechanics" : {
+      "mechanics" : "ohNoMore",
+      "initialStateHash" : "d289590d748d1b1aad481bd998f2db563d61d880c0a7d8f368b450092f73ab76",
+      "replaySHA256" : "4f87919ba73c4155642c9e43bf833ab9eefb36196b6560b47627274911549105"
+    }
   },
   {
     "levelID" : "Wild.DAT#2",
@@ -9908,7 +9943,12 @@
     "oldHash" : "2dc529a89fbbc60547fdb53a8956ceacf590a4ba4b06ffb42f35edb91eb9d303",
     "oldSaved" : 80,
     "oldTicks" : 1019,
-    "packID" : "fan:lldb-479"
+    "packID" : "fan:lldb-479",
+    "currentSelectedMechanics" : {
+      "mechanics" : "ohNoMore",
+      "initialStateHash" : "4a78bc577985885afdee9905872843cddff05fafb8ef18424ab5d96d2c1ac049",
+      "replaySHA256" : "4fe8566efe5684a99af63a3c5978303367ddff3038bba5708c4ab68c2e67ba41"
+    }
   },
   {
     "levelID" : "Wild.DAT#7",
@@ -9930,7 +9970,12 @@
     "oldHash" : "c80421abe517d37c874d3681598c9503ffc0b1151c6baf7290983be841a71054",
     "oldSaved" : 70,
     "oldTicks" : 2816,
-    "packID" : "fan:lldb-479"
+    "packID" : "fan:lldb-479",
+    "currentSelectedMechanics" : {
+      "mechanics" : "ohNoMore",
+      "initialStateHash" : "a5afcf5a65bee5d5d37b49a052b7c2c11a08782744d97913954c905c3aab669d",
+      "replaySHA256" : "9a2eab5d6b9cb11f7de4afcc341ac0c0ee9af03c4083048c2eb26b4845ae2d92"
+    }
   },
   {
     "levelID" : "Wicked.DAT#1",
@@ -10018,7 +10063,12 @@
     "oldHash" : "059636c3bfe68e3236c4573d27fc42cfede41f68f0fccce43bdbea07070ea728",
     "oldSaved" : 29,
     "oldTicks" : 1099,
-    "packID" : "fan:lldb-480"
+    "packID" : "fan:lldb-480",
+    "currentSelectedMechanics" : {
+      "mechanics" : "ohNoMore",
+      "initialStateHash" : "b1d6621c5ae2611837b725639e026ac9e0592b5690404d5aefc11f2b955d3725",
+      "replaySHA256" : "85fe73909001210dabaefe07e8e97db41d330994103b79a380dcfab77f96938f"
+    }
   },
   {
     "levelID" : "Wicked.DAT#17",
@@ -10216,7 +10266,12 @@
     "oldHash" : "955bee44f32ba1c79c838a412c807677b987e333fbd72b9e86db7076b6852a6e",
     "oldSaved" : 79,
     "oldTicks" : 1731,
-    "packID" : "fan:lldb-481"
+    "packID" : "fan:lldb-481",
+    "currentSelectedMechanics" : {
+      "mechanics" : "ohNoMore",
+      "initialStateHash" : "2525a3004c4e7145c405cba70ec8a6942fcd3e112a606302bebe7b6d228f2828",
+      "replaySHA256" : "eafd2c01b1f238d144cb56207d5f29b5aa39bf1c89b9e7a38de2e8122ba5bfcd"
+    }
   },
   {
     "levelID" : "Havoc.DAT#17",
@@ -10260,7 +10315,12 @@
     "oldHash" : "6ab7fd5c7e85335b5838b3803eb285f3ba15dd2e392ca319d9e9037a96cd8ef0",
     "oldSaved" : 20,
     "oldTicks" : 2076,
-    "packID" : "fan:lldb-481"
+    "packID" : "fan:lldb-481",
+    "currentSelectedMechanics" : {
+      "mechanics" : "ohNoMore",
+      "initialStateHash" : "2ebb25e74502a5dd3a052c61096da88e24afcde99e063076098f521b4ffd5555",
+      "replaySHA256" : "ae4f6c92ce432186ab4fca999173089cd49c6f1e3d6f7b290146b647e882684b"
+    }
   },
   {
     "levelID" : "Havoc.DAT#5",
@@ -10414,7 +10474,12 @@
     "oldHash" : "d4255ade917439b2ad44d85cc6df3bf4b5460ec311bfc989064f4097f6cab418",
     "oldSaved" : 69,
     "oldTicks" : 2022,
-    "packID" : "fan:lldb-482"
+    "packID" : "fan:lldb-482",
+    "currentSelectedMechanics" : {
+      "mechanics" : "ohNoMore",
+      "initialStateHash" : "bcca55eee60d048c3c59265fc5f52e3d58eba49816ec2b4e6ecf149ab05dbf20",
+      "replaySHA256" : "94f693b2203c9e7d2c6512bc3bd38d286a6a4cb24e8e9c5fb0f07aad784f1d5d"
+    }
   },
   {
     "levelID" : "Frost.DAT#6",
@@ -10480,7 +10545,12 @@
     "oldHash" : "3c6bd6bbbfb161ca8b52d16c5f4f947a4168f35f27b0dc0c736fea2a7160411e",
     "oldSaved" : 75,
     "oldTicks" : 878,
-    "packID" : "fan:lldb-483"
+    "packID" : "fan:lldb-483",
+    "currentSelectedMechanics" : {
+      "mechanics" : "ohNoMore",
+      "initialStateHash" : "af822197006a245b3c8bb069341b4ef57009d6f71e36ae1178b9243599472248",
+      "replaySHA256" : "817eb5fda513d7abbb3537d74f4330c4a8ea211da129d96254c1c150dd4cbbd2"
+    }
   },
   {
     "levelID" : "Hail.DAT#11",

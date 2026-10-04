@@ -260,6 +260,185 @@
       "variants": 56,
       "wins": 0,
       "scope": "diagnostic altered-start simulations only; no shipped level or engine change"
+    },
+    "sourceReplayDirectAssignmentTrial": {
+      "sourceTryPerformActionILSHA256": "a90c66132fea3babb97b8fd40fd831008726650ee0551768c980e550babf2848",
+      "sourceAssignBuildSkillILSHA256": "0abbe345c92bbc6b3777891f1c7fb15962d83e5433d5c3904315fde50b86d3d8",
+      "sourceAssignMineSkillILSHA256": "886c17fd4f179980f3290a719181874ee9ba24634d9dd67b32c41bcb62115d73",
+      "candidatePath": ".build/golems-next-promotion/miner-replay-trial/timing/candidate-+1.json",
+      "candidateSHA256": "09c7f74366bc0358d8a1ee17cddaaf718c0b8efc736ee7d7298dcba1d85113a4",
+      "bundledInitialStateHash": "71a1a8549eebb52751144d45a0c241605c1023a74d22bf7025752ebee6143716",
+      "nativeTickShiftFromPreviouslySelectedMinusOne": 1,
+      "allSourceAssignmentsAccepted": true,
+      "productionNativeSaved": 0,
+      "productionNativeRequired": 2,
+      "productionNativeCompletionTick": 397,
+      "strictWinningReplay": false,
+      "difficultyScoreAssigned": false,
+      "scope": "exact bundled level and current production engine; direct source assignment path only",
+      "nativeTerminalWorkerX": [
+        797,
+        797
+      ],
+      "nativeTerminalWorkerOutcome": [
+        "lost",
+        "lost"
+      ]
     }
+  },
+  "productionDirectAssignmentTrial": {
+    "inputCount": 10,
+    "strictNativeWins": 0,
+    "assignmentErrors": 10,
+    "advancedBeyondBaseline": 2,
+    "records": [
+      {
+        "identity": {
+          "engine": "classic",
+          "levelID": "Giga pack 04.dat#5",
+          "packID": "fan:lldb-165"
+        },
+        "sourceReplaySHA256": "125d1e2aa6bbb65713ef486e73ff477d936a6b9597d6061c0aa913b844d38ce9",
+        "firstRejectedNativeTick": 1205,
+        "skill": "basher",
+        "advancedBeyondBaseline": false
+      },
+      {
+        "identity": {
+          "engine": "classic",
+          "levelID": "Jacob's Ladder.lvl#-1",
+          "packID": "fan:lldb-202"
+        },
+        "sourceReplaySHA256": "faa1e9a914ba2c59d6c1cf1247c1c462a1d02ca211a98b3d7bd6094f0caffbf8",
+        "firstRejectedNativeTick": 105,
+        "skill": "digger",
+        "advancedBeyondBaseline": false
+      },
+      {
+        "identity": {
+          "engine": "classic",
+          "levelID": "Ouch Me Head.lvl#-1",
+          "packID": "fan:lldb-202"
+        },
+        "sourceReplaySHA256": "0c1249d4218292bf5df9f708824081bdc7878d38cc925ba390d4cb0fad0da163",
+        "firstRejectedNativeTick": 88,
+        "skill": "blocker",
+        "advancedBeyondBaseline": false
+      },
+      {
+        "identity": {
+          "engine": "classic",
+          "levelID": "Askesis.lvl#-1",
+          "packID": "fan:lldb-202"
+        },
+        "sourceReplaySHA256": "79a6b7803338016e128ad12121985533ec6c522a2a39539a840f3b94133a1af1",
+        "firstRejectedNativeTick": 1180,
+        "skill": "builder",
+        "advancedBeyondBaseline": true
+      },
+      {
+        "identity": {
+          "engine": "classic",
+          "levelID": "LemmingsInMotion.lvl#-1",
+          "packID": "fan:lldb-202"
+        },
+        "sourceReplaySHA256": "9636a3f495764691e6daf070496e52e05e22147dd432ed49ffc492c6137dc692",
+        "firstRejectedNativeTick": 218,
+        "skill": "digger",
+        "advancedBeyondBaseline": false
+      },
+      {
+        "identity": {
+          "engine": "classic",
+          "levelID": "geooPkG.dat#1",
+          "packID": "fan:lldb-108"
+        },
+        "sourceReplaySHA256": "d36cc1c89f229051f483d7898e03652c4719bbb8e310bcc4d45589bb20823a48",
+        "firstRejectedNativeTick": 450,
+        "skill": "climber",
+        "advancedBeyondBaseline": false
+      },
+      {
+        "identity": {
+          "engine": "classic",
+          "levelID": "geooPkG.dat#1",
+          "packID": "fan:lldb-108"
+        },
+        "sourceReplaySHA256": "8c3e65f2ad8e28f00dd4a2c019bad152416674119bd8a6a83107e114ce136744",
+        "firstRejectedNativeTick": 457,
+        "skill": "climber",
+        "advancedBeyondBaseline": false
+      },
+      {
+        "identity": {
+          "engine": "classic",
+          "levelID": "LemmingsInArms.lvl#-1",
+          "packID": "fan:lldb-202"
+        },
+        "sourceReplaySHA256": "75eb105de71e567f55b0fb55cb322ef9006c68e4e71f97cf7b3aa834c29a524e",
+        "firstRejectedNativeTick": 363,
+        "skill": "climber",
+        "advancedBeyondBaseline": false
+      },
+      {
+        "identity": {
+          "engine": "classic",
+          "levelID": "Gronklems #1.dat#9",
+          "packID": "fan:lldb-193"
+        },
+        "sourceReplaySHA256": "89283a9e0c9ecaeb44130cbbbac858c4d09a80c7b80b0f213ac7bbded91f31ae",
+        "firstRejectedNativeTick": 130,
+        "skill": "digger",
+        "advancedBeyondBaseline": false
+      },
+      {
+        "identity": {
+          "engine": "classic",
+          "levelID": "Gronklems #1.dat#2",
+          "packID": "fan:lldb-193"
+        },
+        "sourceReplaySHA256": "03b3c96de3580c40ebc90b80715032ddc599fded10c60c42dc17670163664aca",
+        "firstRejectedNativeTick": 235,
+        "skill": "floater",
+        "advancedBeyondBaseline": true
+      }
+    ],
+    "scope": "current production engine, original one-tick source action conversion, exact bundled levels"
+  },
+  "sourceDirectBasherTrial": {
+    "identity": {
+      "engine": "classic",
+      "levelID": "Giga pack 04.dat#5",
+      "packID": "fan:lldb-165"
+    },
+    "bundledArchiveSHA256": "167151878e40f998db814e208287dacc4f2ffc5885317bedb0af505a9d8fb0ce",
+    "sourceAndBundledLevelDataSHA256": "54217d3a12030db668e2f19e8efeb4701bfed925c78298c789f7c2c2ffdc45aa",
+    "bundledInitialStateHash": "09b67cf20e73aa15ebfba01344e425e14a8dc558f55469ed341f88887fbd2d96",
+    "sourceReplaySHA256": "125d1e2aa6bbb65713ef486e73ff477d936a6b9597d6061c0aa913b844d38ce9",
+    "sourceConvertedReplaySHA256": "51c7c64770d51e9ff620aa47c983d18c0de83d21f12e52fe97de8dd31d36a586",
+    "sourceHeaderSaved": 20,
+    "sourceHeaderTicks": 1733,
+    "nativeAtSourceHeaderTick": {
+      "tick": 1733,
+      "saved": 11,
+      "lost": 0,
+      "active": 9,
+      "activePositionRange": "x=890–929, y=78–79",
+      "exitTriggerBounds": [
+        "x=1052–1056, y=40–48",
+        "x=764–768, y=120–128"
+      ]
+    },
+    "sourceDirectBasherMethodToken": "0x060000c2",
+    "sourceInteractiveBasherSelectorToken": "0x060000c1",
+    "sourceDirectBasherBodySHA256": "0e08e9f23698bbd0a90c79b497946cb2eab24e80b8773e0e6f0d7df5e75790d5",
+    "nativeShiftResults": [
+      { "shift": -2, "rejection": "Floater for lemming 14 at tick 109" },
+      { "shift": -1, "rejection": "Floater for lemming 15 at tick 113" },
+      { "shift": 0, "saved": 11, "required": 20, "completionTick": 6122, "didWin": false },
+      { "shift": 1, "rejection": "Floater for lemming 0 at tick 76" },
+      { "shift": 2, "rejection": "Floater for lemming 0 at tick 77" }
+    ],
+    "scope": "Source-built Golems replay assignment path on the exact bundled level; trial uses the archived cycle-converted input with global shift -1. No strict win or score. Full source physics parity remains unverified."
   }
 }

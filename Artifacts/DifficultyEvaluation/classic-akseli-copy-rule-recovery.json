@@ -1,0 +1,66 @@
+{
+  "date": "2026-10-04",
+  "learningPath": "292 lessons: 156 official, 136 fan, zero duplicate objectives, zero two-player levels and zero preparation gaps",
+  "limits": "The matching level geometry and strict native wins support selected playback rules. Independent full source physics parity has not been established.",
+  "nativeLibrarySHA256": "9b795b0f5e5dd9a5cb70d1a97e233ba84da41b42fe199f1ed870fc702831d3c4",
+  "newWins": [
+    {
+      "archiveSHA256": "48534ef67e558892eeced4b86cdb7c3e4cfb3c6e095c652c60e20914513b8178",
+      "descriptorDifferences": {
+        "requiredToSave": {
+          "donor": 48,
+          "target": 47
+        },
+        "saveRequirement": {
+          "donor": 48,
+          "target": 47
+        }
+      },
+      "difficultyProbeCount": 10,
+      "difficultyScore": 348.15278632480016,
+      "donorIdentity": "fan:lldb-220/AkseliPack01.dat#4",
+      "eventCount": 9,
+      "matchingGeometryHash": "SHA256 digest: 9abb969a56e74ec2df80319845c7b3bb95a78f62eea647793f5da47e5d37870f",
+      "nativeInitialStateHash": "058275071a6c23b99b79bc86d73e52a3d5a0db238e969c50ac10c9c940ede1dc",
+      "replaySHA256": "41a4c38bfb01d9c28e1ed12be7fc15086e626454a073b235fe436c54c8a0d6da",
+      "selectedMechanics": "golems",
+      "strictExactLevelOutcome": {
+        "didWin": true,
+        "released": 50,
+        "required": 47,
+        "saved": 48,
+        "stateHash": "dd522240f1c939df6a1a1b3096e584c13a4a6120089324bb5890e04f8661ea05",
+        "ticks": 991
+      },
+      "targetIdentity": "fan:lldb-207/contest1.dat#3",
+      "targetTitle": "Feel the Pressure"
+    },
+    {
+      "archiveSHA256": "e5da32379ca482123b6932a0e6c70fc933e0962097d3988c3e806ac75ac00e21",
+      "descriptorDifferences": {},
+      "difficultyProbeCount": 10,
+      "difficultyScore": 573.4022682721927,
+      "donorIdentity": "fan:lldb-220/AkseliPack01.dat#8",
+      "eventCount": 17,
+      "matchingGeometryHash": "SHA256 digest: 052304526abd4357e2176cabc52e59b7da162869c5828b838d5e387ccfa01999",
+      "nativeInitialStateHash": "746b7ba65d6eb8b676bca27cf0daa01bd733a02351fd8306fed36b2985819f28",
+      "replaySHA256": "7cc3a05edf3fb3412ed0a57e612c04f4ebcae897350405347218d9e8bce9f6e4",
+      "selectedMechanics": "golems",
+      "strictExactLevelOutcome": {
+        "didWin": true,
+        "released": 40,
+        "required": 40,
+        "saved": 40,
+        "stateHash": "928fd98a03f42a497337d23c02a14a41822c00cde9ed1e2c01ea9328f10f63b7",
+        "ticks": 1399
+      },
+      "targetIdentity": "fan:lldb-214/LF Level Jam #1.dat#6",
+      "targetTitle": "Crysilis"
+    }
+  ],
+  "originalRuleTransfer": "Nine geometry matched donor-target candidates replayed under then-selected Original rules: zero target wins. The two Akseli copies differ in selected mechanics from their Golems donor. This result does not classify the other seven failures.",
+  "scope": "Exact bundled fan puzzle copies with a scored donor but no target win",
+  "sourceBuiltScorerSHA256": "9ec406dc7f1550272283bb307d57fe776fab3e9b0958774ab7d07d6148fdeb9b",
+  "sourceBuiltSolverSHA256": "deaf7c936671f24ce7b2e29662e07bd32e0a3fcfb9c48946546456ea8a2ecc70",
+  "strictPackVerification": "2/2 currently scored members of packs 207 and 214 replayed on their exact bundled levels after selection"
+}

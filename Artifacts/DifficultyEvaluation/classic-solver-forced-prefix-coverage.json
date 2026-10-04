@@ -1,0 +1,32 @@
+{
+  "description": "Exact-archive regression for preserving the waiting search branch after a forced prefix skill. This changes solver coverage only; it adds no win or score.",
+  "level": "fan:lldb-325/t3tesla.dat#8",
+  "archiveSHA256": "7003ec2cb3cc038e9bb1764bc7855def66e10f8aecabfde334b1a6459c6afe64",
+  "initialStateHash": "5ba813e550e67835e075a222efae1e30c8b85ad1d59a212a0f4c862f9e43afa5",
+  "nativeLibrarySHA256": "346051fba5ab8199c39d536d48a12bbf30e0da49f78f1d4b20291ad6f60c2dbe",
+  "forcedPrefix": "after-tick Builder to lemming 0 at tick 65, fixed release rate 90",
+  "search": "width 1, one-tick fallback and refire, one additional skill continuation, 60-second bound",
+  "before": {
+    "solverSHA256": "c443bdb155d216c906c090f47eea9e17619e7636258a38106c2d57dc737c50ff",
+    "logSHA256": "530a5a92c7c9e25070e7d432f875167a53de179ca56bbb49e7972075d1656e56",
+    "waitingRouteTick": 64,
+    "singleSkillRollouts": 26,
+    "saved": "8/9"
+  },
+  "after": {
+    "solverSHA256": "fa126b49b21fc0880d9974143dfea05e945bfd9302ed588996106839765bcc89",
+    "logSHA256": "1dbc81e752a9c62e3dc057a0e7d20f022d74787b7b0a5adaf432efe621ba9739",
+    "partialReplaySHA256": "f18c76f57ac69756c8ce5b88589e06bd874495fb5ba13ab63507603770f15a95",
+    "waitingRouteTick": 388,
+    "singleSkillRollouts": 310,
+    "saved": "8/9"
+  },
+  "control": {
+    "level": "fan:lldb-505/KillerMaster 1 Tame 1.dat#1",
+    "archiveSHA256": "cea49c6853a73f4a693cd63586ed044e2c939a7ce2457d6e3317bbc95d8ff4c9",
+    "solverLogSHA256": "d5e57e3ac1ba27dd3bce57f3aa291adda5e2b2ee01f044c873242b6af6232483",
+    "strictWinningReplaySHA256": "968d366c6c60b1f15c6485ea6549a8546887b6222006eae204b4d8ef99a6add3",
+    "result": "1/1 at tick 375; same replay digest as before the solver change"
+  },
+  "interpretation": "Comparing total event count with the starting count misclassified the wait route after a forced prefix appended its event. Tracking solver-assigned skills preserves that route and evaluates later second-skill timings. The expanded search remains bounded and did not win this level."
+}

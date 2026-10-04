@@ -22,7 +22,9 @@ def main():
     selected = [record for record in records if record.get("nativeInputRetiming")]
     manifest = read(CACHE / "lldb-all-records/manifest.json")
     fan = {json.dumps(row["entry"]["identity"], sort_keys=True): row
-           for row in read(ROOT / "Artifacts/LearningJourney/fan-evidence.json")}
+           for row in read(ROOT / "Artifacts/ClassicProgression/audit.json")}
+    fan.update({json.dumps(row["entry"]["identity"], sort_keys=True): row
+                for row in read(ROOT / "Artifacts/LearningJourney/fan-evidence.json")})
     solutions = read(ROOT / "Artifacts/LearningJourney/candidate-solutions.json")
     for record in selected:
         identity = record["identity"]

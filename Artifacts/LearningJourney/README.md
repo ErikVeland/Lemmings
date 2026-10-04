@@ -1,6 +1,6 @@
 # Oh My! All Lemmings!
 
-292 selected lessons from 1680 validated, deduplicated single-player candidates. 156 official levels and 136 library levels.
+292 selected lessons from 1710 validated, deduplicated single-player candidates. 156 official levels and 136 library levels.
 
 ## Selection before ordering
 

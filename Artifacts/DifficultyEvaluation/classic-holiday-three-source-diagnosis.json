@@ -1,0 +1,80 @@
+{
+  "date": "2026-10-04",
+  "description": "Three previously unscored Holiday source records checked on their exact bundled members after the graphics correction. No route won.",
+  "search": "Each source action sequence was shifted uniformly from minus eight to plus eight native ticks under Original and Golems mechanics and native versus all-32-slot object semantics.",
+  "records": [
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Blitz.DAT#1",
+        "packID": "fan:lldb-485"
+      },
+      "title": "Lemmings Up High",
+      "sourceURL": "https://lldb.camanis.net/level/485/2",
+      "cachedSourcePageSHA256": "45501b417b4d737a94abd9a7c04dd33ef32587b2a8b1c5a473b4396099c6f65f",
+      "rawSourceReplaySHA256": "c8a4f5265ec95eb90adc7f67676ab6a955983ddf0aec642e3ddf2135fda38c63",
+      "sourceReplayHeader": {
+        "gameMode": 2,
+        "saved": 80,
+        "ticks": 2043
+      },
+      "exactBundledArchiveSHA256": "48a861bf42e574cdd99346fb2d9971df01db66a7bd49cbfc036c2a074c1becc0",
+      "checks": 68,
+      "accepted": 0,
+      "wins": 0,
+      "maximumSaved": null
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Blitz.DAT#10",
+        "packID": "fan:lldb-485"
+      },
+      "title": "The Search for Lem",
+      "sourceURL": "https://lldb.camanis.net/level/485/11",
+      "cachedSourcePageSHA256": "8486b436f907d2442b085c5843939cea3c08f8fe37506cd13a083dc559fe221d",
+      "rawSourceReplaySHA256": "e87c120d2e3d5c3481b24745c8089597eb095e7b9a7a472f4f22bdaff67cbe58",
+      "sourceReplayHeader": {
+        "gameMode": 2,
+        "saved": 80,
+        "ticks": 2746
+      },
+      "exactBundledArchiveSHA256": "48a861bf42e574cdd99346fb2d9971df01db66a7bd49cbfc036c2a074c1becc0",
+      "checks": 68,
+      "accepted": 12,
+      "wins": 0,
+      "maximumSaved": 0
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Flurry.DAT#9",
+        "packID": "fan:lldb-484"
+      },
+      "title": "32 Lemmings Below Zero",
+      "sourceURL": "https://lldb.camanis.net/level/484/10",
+      "cachedSourcePageSHA256": "679ef903a72595f8ca9e396d768210344a5d0fcc76228cc508756d5852e17d2a",
+      "rawSourceReplaySHA256": "11128c7e2ca952b3c420b8396b680df585fb8ad3f858435711b783d952228a38",
+      "sourceReplayHeader": {
+        "gameMode": 2,
+        "saved": 32,
+        "ticks": 4008
+      },
+      "exactBundledArchiveSHA256": "a88766fb7218b24c824b4de0400c2ef124b85667d6e759bd4ee0384a46b32ae9",
+      "checks": 68,
+      "accepted": 0,
+      "wins": 0,
+      "maximumSaved": null
+    }
+  ],
+  "sourceBuiltProbeSHA256": "2c0e5f1727a2f38b446604013be87e1468c69ad9cc3edca0ebc68331f1416e98",
+  "sourceBuiltNxlvKitSHA256": "9b795b0f5e5dd9a5cb70d1a97e233ba84da41b42fe199f1ed870fc702831d3c4",
+  "probeLogSHA256": "6b23222e8ae2f1831744f7ec9bd85bee6b3b9649e5d0b10cd09d779ba3f8b03a",
+  "interpretation": "Rejected assignments and accepted zero-save routes are bounded route failures, not proof of impossible levels or a source-physics defect. No score or mechanics selection changes.",
+  "ledgerUnchanged": {
+    "verifiedClassicFanWins": 2355,
+    "verifiedNeoLemmixWins": 322,
+    "nonOfficialWithoutVerifiedReplayAndScore": 3668
+  },
+  "independentSourcePhysicsParityVerified": 0
+}

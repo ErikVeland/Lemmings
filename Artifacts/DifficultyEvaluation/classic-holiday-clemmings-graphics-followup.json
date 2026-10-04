@@ -1,0 +1,26 @@
+{
+  "date": "2026-10-04",
+  "exactBundledArchives": {
+    "fan:lldb-537": {
+      "path": "Content/LevelPacks/0537-Holiday-cLemmings-Flurry.zip",
+      "sha256": "d4a17f5380fd0315dd62fc6947535c459088a28d620a6fa3d0ff27c34e50e540"
+    },
+    "fan:lldb-538": {
+      "path": "Content/LevelPacks/0538-Holiday-cLemmings-Blitz.zip",
+      "sha256": "dfe8ca3aeb56899499f810a00e0953a338d4b678c018496d5919c59e4f944e0d"
+    }
+  },
+  "graphicsCorrection": "Exact archives use Holiday 1994 graphics for snow style slot 2; the sole Flurry style 1 member retains original graphics. All 32 bundled members render under the selected styles.",
+  "nativeBefore": "One Lone Lemm In The Snow fell into a hazard at tick 89 and accepted no stocked skill through tick 88 under prior marble terrain.",
+  "nativeAfter": "A focused source-built one-skill rollout reached tick 2334 with its sole lemming still active, saved 0/1; waiting route reached tick 205 with 72 continuations.",
+  "targetedEvidenceToolSHA256": "5a5a2e5aa461a777450515fbe16bdfa55d92542d3e0441fc681494866b8341ec",
+  "sourceBuiltSolverSHA256": "0fd891b71be0fcaee1b56e6b5cd9c0c39b62d4ba0e1249ea31a4a8fdbd8a8015",
+  "targetedPackTrials": 32,
+  "newVerifiedWins": 0,
+  "publishedSourceRecordsChecked": 2,
+  "publishedSourceRecordResults": [
+    "Flurry 1 section 4 rejects Builder for lemming 0 at tick 65 under both Original and Golems mechanics.",
+    "Flurry 1 section 0 saves 0/37 under both mechanics."
+  ],
+  "sourcePhysicsParity": "unverified: native correction and partial route do not establish source physics agreement"
+}

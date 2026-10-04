@@ -95,6 +95,7 @@ elif sys.argv[1] == 'report':
     witnesses = read(OUT/'candidate-solutions.json')
     solutions = {r['initialHash']:witnesses[r['profile']['key']['replayRevision']] for r in fan}
     assert all(replay['expected']['didWin'] for replay in solutions.values())
+    assert not any(replay.get('sourceRules') for replay in solutions.values())
     full_rescue_count = 0
     for row in selected:
         expected = witnesses.get(row['profile']['key']['replayRevision'], {}).get('expected', {})

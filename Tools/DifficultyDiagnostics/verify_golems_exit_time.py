@@ -32,6 +32,10 @@ METHODS = {
     "GameState.TryPerformAction": (0x5E68, "a90c66132fea3babb97b8fd40fd831008726650ee0551768c980e550babf2848"),
     "GameState.GetAssignBuildSkillGolemIndex": (0x6474, "05dde6ca851a433411de33faa7ceffc4bb561438f89bd827d0e1b7dd32495d28"),
     "GameState.AssignBuildSkill": (0x64F4, "0abbe345c92bbc6b3777891f1c7fb15962d83e5433d5c3904315fde50b86d3d8"),
+    "GameState.GetAssignBashSkillGolemIndex": (0x6544, "ed4a3d441310adbc3558b1165bc3316a5bea6c5e8b180a3287b80231b0bf60c7"),
+    "GameState.AssignBashSkill": (0x65CF, "0e08e9f23698bbd0a90c79b497946cb2eab24e80b8773e0e6f0d7df5e75790d5"),
+    "GameState.GetAssignDigSkillGolemIndex": (0x66EC, "79e2a46d48525d0af5d2fe30999058d4ae3bed662509bf370f956ae6f84547de"),
+    "GameState.AssignDigSkill": (0x6770, "f97540acadfc8d1374f125ec9fc8568c239700fc4703bf1694fca68a0df5ff1b"),
     "ReplayableGameState.AdvanceCore": (0xC4B0, "0907c120a0653b0b4d6457569b87e70ce29fb47ecbafe752c5cce46a1199a568"),
 }
 
@@ -138,8 +142,16 @@ def main():
     assert bytes.fromhex("28 ac 00 00 06") in action
     assert bytes.fromhex("28 c0 00 00 06") in action
     assert bytes.fromhex("28 bf 00 00 06") not in action
+    assert bytes.fromhex("28 c2 00 00 06") in action
+    assert bytes.fromhex("28 c1 00 00 06") not in action
+    assert bytes.fromhex("28 03 01 00 06") in bodies["GameState.GetAssignBashSkillGolemIndex"]
+    assert bytes.fromhex("28 03 01 00 06") not in bodies["GameState.AssignBashSkill"]
     assert bytes.fromhex("28 02 01 00 06") in bodies["GameState.GetAssignBuildSkillGolemIndex"]
     assert bytes.fromhex("28 02 01 00 06") not in bodies["GameState.AssignBuildSkill"]
+    assert bytes.fromhex("28 c6 00 00 06") in action
+    assert bytes.fromhex("28 c5 00 00 06") not in action
+    assert bytes.fromhex("28 07 01 00 06") in bodies["GameState.GetAssignDigSkillGolemIndex"]
+    assert bytes.fromhex("28 07 01 00 06") not in bodies["GameState.AssignDigSkill"]
 
     core = bodies["GameState.AdvanceCore"]
     # The tick advances lemmings before it advances the clock.

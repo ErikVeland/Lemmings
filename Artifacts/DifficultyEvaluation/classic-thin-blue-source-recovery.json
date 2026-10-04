@@ -1,0 +1,46 @@
+{
+  "date": "2026-10-04",
+  "identity": {
+    "engine": "classic",
+    "levelID": "Timpack3.dat#6",
+    "packID": "fan:lldb-90"
+  },
+  "title": "The Thin Blue Line",
+  "exactBundledArchive": "Content/LevelPacks/0090-Timpack3.zip",
+  "exactBundledArchiveSHA256": "3a049d43042d6380f653db4196379a320bc75aaac51c7e028c1aae286e9690d4",
+  "publicSourceURL": "https://lldb.camanis.net/level/90/7",
+  "cachedSourcePageSHA256": "05e73d98714346bae0165ac34b516939e140fb6ca32e6c309672953b85f2681a",
+  "rawSourceReplaySHA256": "d25266b34eec550801b93154a8b6905017d71beb2524a5695f3b36802331db52",
+  "sourceReplayHeader": {
+    "gameMode": 2,
+    "saved": 77,
+    "ticks": 692
+  },
+  "inputTranslation": "Decode all source actions with a uniform minus-one native tick offset. Convert the final source abandon action to a native nuke.",
+  "sourceActionDerivationVerified": true,
+  "originalMechanicsResult": "A separate four-command candidate without the terminal source abandon saved 0/77 under Original mechanics. The direct six-event decoded route was not tested under Original mechanics.",
+  "selectedNativeMechanics": "golems on this exact member and archive revision",
+  "nativeInitialStateHash": "42da300537ee7ba0d258ab6cf87662233fa5d09d2bc88cb6d402b45a9420042d",
+  "candidateInputPath": ".build/heartbeat-20261003-2210/direct-candidates/42da300537ee7ba0d258ab6cf87662233fa5d09d2bc88cb6d402b45a9420042d.json",
+  "candidateInputSHA256": "3675645b618188506d807eee7a24d8fe93e95f104b8013c107ebe1f0adb7bcd2",
+  "selectedReplaySHA256": "652bf9fcd8398f980cda24d45f88a1fef74588c94a02d0b0cfaffe4a57cddcff",
+  "nativeOutcome": {
+    "didWin": true,
+    "released": 80,
+    "required": 77,
+    "saved": 77,
+    "stateHash": "665d64564abb2cdda8bc4ca7603e064b0dd5fda382608b26982e67cc02aabc42",
+    "ticks": 839
+  },
+  "difficultyScore": 205.10563602508822,
+  "difficultyProbeRuns": 10,
+  "sourceBuiltNxlvKitSHA256": "9b795b0f5e5dd9a5cb70d1a97e233ba84da41b42fe199f1ed870fc702831d3c4",
+  "sourceBuiltClassicSolverSHA256": "0e9e2189287561fcd6ff5e693fc3540956f7f8370b6c05b43e2f5c33c59b52fb",
+  "solverControlReplaySHA256": "cc99da7a65776f1c620c3bd16d1870f03bfe12199d1ad8cc63beb7414f956f04",
+  "sourceBuiltEvidenceToolSHA256": "48d9e4fa918d6a7e5958ee76d709576bfc35d5d9f46eed63029d350bb8a867db",
+  "strictExactLevelChecks": [
+    "before promotion: 1/1",
+    "after promotion: 1/1"
+  ],
+  "sourcePhysicsParity": "unverified: native completion tick 839 differs from published source tick 692, and source abandon required a native nuke translation"
+}

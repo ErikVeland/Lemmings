@@ -1,0 +1,56 @@
+{
+  "date": "2026-10-03",
+  "finding": "Ordinary bounded beam search missed several already verified two-skill levels. Forcing only the first known input let one-skill continuation find and strictly verify two of them, so these misses are solver coverage failures rather than evidence that the native engine cannot win those levels.",
+  "solverSha256": "1a0a15153eb3b225c7202d0ae91869c796f94c07b3a1a82a174533e88e889876",
+  "nativeLibrarySha256": "3c5f3af7276aace14b84ba0a39abf499fcdd30758dd6e2d09a0da33a0020d331",
+  "ordinaryBeam": {
+    "settings": "width 64; 12-second bound; fallback and refire 5 ticks",
+    "cases": [
+      {
+        "level": "fan:lldb-268/CRISFN04.dat#2",
+        "title": "Blow two lemmings",
+        "archiveSha256": "ae52a960fb1cadef87b6dd14cb8f2f63de4e838551c265ef0a68ef8f5513257b",
+        "initialStateHash": "ab97f5270488b8658594b7fbed5f3d26ae322bed551931f3c4ff3bd52baa46fc",
+        "outcome": "No win; best 0/2, 34092 expansions"
+      },
+      {
+        "level": "fan:lldb-350/MARSHY06.DAT#8",
+        "title": "Lack of builders",
+        "archiveSha256": "e9fa144400ed4a582d2b2ba3e425d358a6f9bffc8a8eedc4651f8407331a109c",
+        "initialStateHash": "200be71f4976b3829c5d76521deebd0fbd2d5004b6f5303279596ea0b6c595d5",
+        "outcome": "No win; best 0/80, 36945 expansions"
+      },
+      {
+        "level": "fan:lldb-477/Tame.DAT#1",
+        "title": "Rent-a-Lemming",
+        "archiveSha256": "4657df879d7b2e81e52d0f5e5f2d2d15d8d31176be4628dcfa67366c9c1450bc",
+        "initialStateHash": "4ce89087bb20c89edc62829c7c289329cb72a42da31994a18638c377fd8809af",
+        "outcome": "No win; best 0/25, 37116 expansions"
+      }
+    ],
+    "detailedResultsSha256": "020de64a47b3144d92c5e4c3b2941290e04b3111d2f1bdead9f4427d780c2942"
+  },
+  "timingCheck": "Blow two lemmings also missed with one-tick fallback/refire, width 64 and 15 seconds: best 0/2 after 46759 expansions.",
+  "forcedFirstInput": [
+    {
+      "level": "fan:lldb-268/CRISFN04.dat#2",
+      "prefix": "Bomber to lemming 0 after tick 66",
+      "foundSecondInput": "Bomber to lemming 3 after tick 116",
+      "search": "width 1; 20-second bound; one-tick fallback/refire; one-skill rollout",
+      "expanded": 153,
+      "strictNativeResult": "2/2 saved at tick 266",
+      "replaySha256": "392974e3f9169d54ef3133bb87fa80d602d2f4cfa09d49edc7f5a201d783c216"
+    },
+    {
+      "level": "fan:lldb-477/Tame.DAT#1",
+      "prefix": "Basher to lemming 0 after tick 232",
+      "foundSecondInput": "Basher to lemming 0 after tick 288",
+      "search": "width 1; 20-second bound; one-tick fallback/refire; one-skill rollout",
+      "expanded": 2070,
+      "strictNativeResult": "50/25 saved at tick 2930",
+      "replaySha256": "3b12b4960b66e7ef6f6e3f7efdb2a0b67ae41a785f571c8b6ac6df2622b2061e"
+    }
+  ],
+  "rejectedScratchPolicy": "Offering three walkers at every fallback instead of one failed to recover the already-scored Under The Bridge two-skill control at width 64 in 15 seconds, while the default recovered it. It added no win on A toe Take 2 or Get Out of the Pool! in the targeted checks. The policy was not promoted.",
+  "limits": "These controls isolate solver coverage on known native-solvable levels. They do not establish why each unscored level remains unsolved, prove source physics parity, or add new ledger scores."
+}

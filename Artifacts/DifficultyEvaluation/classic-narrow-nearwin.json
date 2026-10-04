@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-03",
+  "level": "fan:lldb-511/KillerMaster 2 Crazy 2.dat#1",
+  "title": "TOO NARROW!!",
+  "archiveSha256": "78ec49ae3e6923eb879130c529b6f7e4237384291110832689dcfb4d33eee717",
+  "initialStateHash": "66f8f8f603432ab298c7eaeb6f3576d3515f130f305e1bf012121d6e12414ea3",
+  "nativeLibrarySha256": "3c5f3af7276aace14b84ba0a39abf499fcdd30758dd6e2d09a0da33a0020d331",
+  "solverSha256": "28c4484064ef0fe7440f59ac9535a4254a41cca80328fc896e368663b3adf97d",
+  "probeSha256": "d0b2b8d21ded6ed7db7a190b2171700a55ef76e3aa7e4c6219cf72e9bd055fdf",
+  "probeSourceSha256": "e0aabbde33d6c74603f7def46c726bbceee372503084abca07eed821f6a390f0",
+  "partialReplaySha256": "74ad2ecc2731ae841f8391275ab5cb49d3549249087cfd7dfaf39abb3ee94742",
+  "search": "Balanced ranking, width 128, five-tick fallback/refire, 20-second limit; no win, best 3/4, 36600 expansions in 12 seconds.",
+  "nativePartialPlayback": "3/4 at tick 1188; lemming 0 drowns at x=797, foot y=148, while lemmings 1-3 exit.",
+  "skills": "15 Builders and 15 Diggers; no other skills",
+  "singleRetimes": "1038 original, deletion and single-command shifts of up to 30 ticks; 256 complete native replays, no win, best 3/4.",
+  "targetedReplacements": "Deleting one redundant early Builder and assigning the spare Builder to lemming 0 at each tick 1120-1150 produced 62 candidates, 12 complete native replays, no win. Assignments at ticks 1144-1147 leave lemming 0 oscillating near x=777-778 until the tick-5102 limit.",
+  "targetedPairs": "Using either redundant early Builder as the spare, 1680 local Digger-then-Builder or Builder-then-Digger timing pairs were tested near lemming 0's fall; 1006 completed native replays, no win, best 3/4.",
+  "limits": "The observed near-win requires a different route for the drowning lemming. These bounded checks do not prove impossibility or source physics parity. No winning replay or difficulty score was added."
+}

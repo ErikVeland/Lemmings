@@ -1,0 +1,32 @@
+{
+  "description": "Focused one-skill continuations after a forced Workers of the World prefix, with improved retention of completed non-winning routes.",
+  "level": "fan:lldb-471/RSRdnt01.dat#7",
+  "archiveSHA256": "2780e3a5c021c0a6d8bf12c751e08c0ed9d28ae47683b533691e67690d1d72bc",
+  "auditedInitialStateHash": "5a3647f6b8b1e504b4e127db71eff69e649e83ffb7d892577654a056be3672b1",
+  "nativeLibrarySHA256": "346051fba5ab8199c39d536d48a12bbf30e0da49f78f1d4b20291ad6f60c2dbe",
+  "search": "Golems clock; width 64; 60-second bound; 13-tick fallback and refire; one additional skill rollout",
+  "initialPrefixSHA256": "1018168baed5fc100a90a511fb734b649ca69263c0c79003e318e59d4d4203cb",
+  "beforePartialRetention": {
+    "solverSHA256": "a67cd00136c1b113a622d0cfcaf245cd8d61517cb3905aa28dbe974bb4b75e6e",
+    "result": "UNSOLVED; best 2/3; 15304 expansions in 9 seconds; waiting tick 1022; 301 single-skill rollouts",
+    "partialReplaySHA256": "745ea27aaeaaf5d7c38c30a4b6893dfd07e2b6a3fc600e4b13d1c7ba35a2eef4"
+  },
+  "afterPartialRetention": {
+    "solverSHA256": "26a570271c3975c75adda691cb99a9775c396a6ff0133253febdcd390aba86e8",
+    "result": "UNSOLVED; best 2/3; 15304 expansions in 9 seconds; waiting tick 1022; 301 single-skill rollouts",
+    "partialReplaySHA256": "f60c4a41790eae4678cd12d516c81148bddb7f954c9c06e5dcb80b22ed8f7186",
+    "partialRoute": "rate 99 at tick 1; Climbers to lemmings 1 and 2 at ticks 109 and 110; Basher to lemming 0 at tick 217"
+  },
+  "followUp": {
+    "prefixSHA256": "ed8f4247a234be819de7582c07640410152bea7cbaeb89c6a4aa1d03116e2fbb",
+    "result": "UNSOLVED; best 2/3; 12120 expansions in 7 seconds; waiting tick 1022; 160 single-skill rollouts",
+    "partialReplaySHA256": "5985bd8ada323bf2798395c7d281752ae8332a84af8382e1da47b89cc4fbb268"
+  },
+  "knownWinControl": {
+    "level": "fan:lldb-505/KillerMaster 1 Tame 1.dat#1",
+    "archiveSHA256": "cea49c6853a73f4a693cd63586ed044e2c939a7ce2457d6e3317bbc95d8ff4c9",
+    "result": "SOLVED; strict native 1/1 at tick 375",
+    "replaySHA256": "b9ca8ab40c9f47693ff9a200fee04996454471c8cd184eaa382ab8247d4616fa"
+  },
+  "interpretation": "Keeping each completed rollout as a partial exposes a shorter 2/3 route for staged searches. The extra focused continuation did not win. Both searches are bounded and establish neither impossibility nor independent source physics parity."
+}

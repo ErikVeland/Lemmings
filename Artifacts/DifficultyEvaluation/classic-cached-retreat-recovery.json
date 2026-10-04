@@ -1,0 +1,87 @@
+{
+  "date": "2026-10-04",
+  "scope": "Reconcile cached winning replay against exact bundled Ji Hoon Hell member",
+  "sourceBuiltSolverSHA256": "db5ab2cb9a136c73181091a4c88a4f34ece2127da26fd82051d8b9abdfa9276a",
+  "sourceBuiltScorerSHA256": "e5798bb8ca6b302e42ebf39da50f4c7830e9bc072b65715a641abd94a658e168",
+  "nativeLibrarySHA256": "9b795b0f5e5dd9a5cb70d1a97e233ba84da41b42fe199f1ed870fc702831d3c4",
+  "newWin": {
+    "identity": {
+      "engine": "classic",
+      "levelID": "Ji Hoon Hell 2.DAT#2",
+      "packID": "fan:lldb-550"
+    },
+    "title": "Retreat!!!",
+    "archiveSHA256": "46cdcf82e7f6ae545c6302d6c3ad2b4c3f8bf3692a62b077ba26b4781eb5b7cc",
+    "nativeInitialStateHash": "54baf4c4e3ba9d0422ce97f840e93245725f917058a9f3828dd79f2da5675183",
+    "replaySHA256": "0c6b59848cf729e90c3e65eeb5a178c9e6c92c117c5e5a0354b313d6468fc81c",
+    "strictNativeOutcome": {
+      "didWin": true,
+      "released": 80,
+      "required": 80,
+      "saved": 80,
+      "stateHash": "98e25e23d4890126864dc158a6e0dcdf807dbd33002b1882380a4d5e9f072dfa",
+      "ticks": 506
+    },
+    "difficultyScore": 99.03707308302786,
+    "difficultyProbeCount": 10,
+    "inputs": "One release-rate change and five Miner assignments",
+    "strictExactLevelVerification": "1/1 after promotion"
+  },
+  "batchVerification": "21/21 scored target rows passed before promotion; 22/22 selected scored rows in five packs passed after promotion",
+  "baseAuditReconciliation": "The base audit marked 21 rows low, but 20 already had fan-evidence wins and scores. Only Ji Hoon Hell 2.DAT#2 added a first ledger win.",
+  "boundedNoWinChecks": [
+    {
+      "identity": "fan:lldb-546/Deceit Extras 1.DAT#5",
+      "policy": "focus one, prefer progress, 12-tick fallback",
+      "expansions": 46292,
+      "bestSaved": 0,
+      "required": 5
+    },
+    {
+      "identity": "fan:lldb-546/Deceit Extras 1.DAT#5",
+      "policy": "focus one, one-skill rollout, 12-tick fallback",
+      "expansions": 47401,
+      "waitingTick": 3062,
+      "continuations": 144,
+      "bestSaved": 0,
+      "required": 5
+    },
+    {
+      "identity": "fan:lldb-546/Deceit Extras 1.DAT#5",
+      "policy": "broadcast Basher delay 0 through 120",
+      "expansions": 1210,
+      "completedDelays": 121,
+      "bestSaved": 0,
+      "required": 5
+    },
+    {
+      "identity": "fan:lldb-546/Deceit Extras 1.DAT#2",
+      "policy": "focus one, prefer progress, 12-tick fallback",
+      "expansions": 14064,
+      "bestSaved": 0,
+      "required": 5
+    },
+    {
+      "identity": "fan:lldb-525/Deceit Mayhem 1.dat#3",
+      "policy": "focus one, prefer progress, 12-tick fallback",
+      "expansions": 3112,
+      "bestSaved": 0,
+      "required": 50
+    },
+    {
+      "identity": "fan:lldb-409/BUILDING.DAT#0",
+      "policy": "release rate 99, focus one, one-tick fallback",
+      "expansions": 10317,
+      "bestSaved": 0,
+      "required": 80
+    },
+    {
+      "identity": "fan:lldb-14/Mikepak09.dat#0",
+      "policy": "focus one, prefer progress, 12-tick fallback",
+      "expansions": 2129,
+      "bestSaved": 0,
+      "required": 59
+    }
+  ],
+  "limits": "No independent full source-state comparison passed. Bounded search failures do not establish impossibility or a physics defect."
+}

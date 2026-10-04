@@ -12,17 +12,29 @@ import NxlvKit
 // Usage: ClassicSolver DATA LEVEL OUT [--width N] [--seconds S] [--rate R]
 //        [--fallback N] [--refire N] [--prefix PLAN] [--partial-out]
 //        [--rollout-single] [--sweep-single]
-//        [--golems-objects] [--golems-clock] [--golems-mechanics]
+//        [--broadcast-skill SKILL --broadcast-from N --broadcast-through N]
+//        [--sweep-pair FIRST,SECOND --first-from N --first-through N]
+//        [--second-gap-min N --second-gap-max N]
+//        [--golems-objects] [--dos-clock | --golems-clock]
+//        [--golems-mechanics | --ohno-mechanics] [--member FILE#SECTION]
 //        [--prefer-progress]
+//        [--rescue-quota-distance]
+//        [--focus-workers N]
+//        [--canvas-width N --canvas-height N]
+//        [--source-terrain-coordinates]
+//        [--source-object-coordinates]
+//        [--source-canvas]
 // Use --golems-objects for fan levels whose later object slots must be active.
 // PLAN holds forced inputs as [{"tick": T, "id": N, "skill": S} or {"tick": T, "rate": R}],
 // applied after their ticks; the search fills in everything else.
 // DATA is a DOS data directory, `conversion:PORTS` for the Oh Yes! pack, or
-// `fan:PACK` for a fan archive. Fan levels also require `--resources RESOURCES`.
+// `fan:PACK` for a fan archive. LEVEL is one-based. Fan levels also require
+// `--resources RESOURCES`; --member selects an exact archive member.
 
 struct Failure: Error, CustomStringConvertible { let description: String }
 
 let preferProgress = CommandLine.arguments.contains("--prefer-progress")
+let rescueQuotaDistance = CommandLine.arguments.contains("--rescue-quota-distance")
 
 func option(_ name: String) -> String? {
     let a = CommandLine.arguments
@@ -32,26 +44,53 @@ func option(_ name: String) -> String? {
 
 func loadLevel(_ argument: String, _ index: Int) throws -> (ClassicDOSSimulation, ClassicCampaignLevel) {
     if argument.hasPrefix("fan:") {
+        guard !(CommandLine.arguments.contains("--golems-mechanics")
+            && CommandLine.arguments.contains("--ohno-mechanics")) else {
+            throw Failure(description: "choose one mechanics override")
+        }
         guard let resources = option("--resources") else {
             throw Failure(description: "fan levels require --resources RESOURCES")
         }
         let pack = URL(fileURLWithPath: String(argument.dropFirst("fan:".count)))
         let root = URL(fileURLWithPath: resources)
         let entries = try FanLevelLibrary.validatedEntries(in: pack)
-        guard entries.indices.contains(index) else { throw Failure(description: "fan level index is out of range") }
-        let item = entries[index]
-        let (level, style) = try FanLevelLibrary.level(item, in: pack)
+        let item: FanLevelLibrary.Entry
+        if let member = option("--member") {
+            let matches = entries.filter { "\($0.file)#\($0.section ?? -1)" == member }
+            guard matches.count == 1, let selected = matches.first else {
+                throw Failure(description: "fan member is missing or ambiguous: \(member)")
+            }
+            item = selected
+        } else {
+            guard entries.indices.contains(index) else { throw Failure(description: "fan level index is out of range") }
+            item = entries[index]
+        }
+        let (level, style) = try FanLevelLibrary.level(item, in: pack,
+            preserveTextTerrainCoordinates: CommandLine.arguments.contains("--source-terrain-coordinates"),
+            preserveTextObjectCoordinates: CommandLine.arguments.contains("--source-object-coordinates"))
         let ground = try FanLevelLibrary.groundSet(for: level, styleName: style,
             portsRoot: root.appendingPathComponent("Ports"), pack: pack, entry: item)
         let special = try FanLevelLibrary.specialGraphic(for: level, entry: item, pack: pack,
             portsRoot: root.appendingPathComponent("Ports"))
+        let sourceCanvas = try CommandLine.arguments.contains("--source-canvas")
+            ? FanLevelLibrary.textCanvasSize(item, in: pack) : nil
         let rendered = try ClassicLevelRenderer.render(level, groundSet: ground,
             specialGraphic: special,
             objectSemantics: CommandLine.arguments.contains("--golems-objects")
-                ? .golems : .forFanLevel(level, groundSet: ground))
+                ? .golems : .forFanLevel(level, groundSet: ground),
+            canvasWidth: try option("--canvas-width").map {
+                guard let value = Int($0) else { throw Failure(description: "invalid canvas width") }
+                return value
+            } ?? sourceCanvas?.width ?? ClassicLevel.width,
+            canvasHeight: try option("--canvas-height").map {
+                guard let value = Int($0) else { throw Failure(description: "invalid canvas height") }
+                return value
+            } ?? sourceCanvas?.height ?? ClassicLevel.height)
         let assets = try ClassicMainDATAssets.load(from: root.appendingPathComponent("Ports/lemmings_dos_1991-07-30"))
-        let clock: ClassicDOSClock = CommandLine.arguments.contains("--golems-clock") ? .golems : .dos
-        let mechanics: ClassicDOSMechanics = CommandLine.arguments.contains("--golems-mechanics") ? .golems : .original
+        let clock: ClassicDOSClock = CommandLine.arguments.contains("--dos-clock") ? .dos : .golems
+        let mechanics: ClassicDOSMechanics = CommandLine.arguments.contains("--golems-mechanics")
+            ? .golems : CommandLine.arguments.contains("--ohno-mechanics")
+            ? .ohNoMore : FanLevelLibrary.mechanics(for: pack, entry: item)
         let simulation = try ClassicDOSSimulation(level: level, renderedLevel: rendered,
             mainDATAssets: assets, mechanics: mechanics, clock: clock)
         let entry = ClassicCampaignLevel.standalone(level, rank: "fan:" + FanLevelLibrary.catalogueID(pack), number: index + 1)
@@ -181,6 +220,7 @@ struct Candidate {
     var key = ""
     var depth = 0
     var rateChanges = 0
+    var searchAssignments = 0
 }
 
 enum Choice {
@@ -191,9 +231,10 @@ enum Choice {
 
 struct Score: Comparable {
     let saved: Int, remaining: Int, distance: Int, inputs: Int, key: String
+    let progressFirst: Bool
     static func < (a: Score, b: Score) -> Bool {
         if a.saved != b.saved { return a.saved < b.saved }
-        if preferProgress {
+        if a.progressFirst {
             if a.distance != b.distance { return a.distance > b.distance }
             if a.remaining != b.remaining { return a.remaining < b.remaining }
         } else {
@@ -203,13 +244,27 @@ struct Score: Comparable {
         if a.inputs != b.inputs { return a.inputs > b.inputs }
         return a.key > b.key
     }
-    init(_ c: Candidate, _ field: DistanceField) {
+    init(_ c: Candidate, _ field: DistanceField, progressFirst: Bool = preferProgress) {
         let s = c.sim
+        self.progressFirst = progressFirst
         saved = s.savedCount
         remaining = s.configuration.totalLemmings - s.lostCount - s.lemmings.filter { $0.isActive && $0.action == .blocking }.count
         let entrance = s.configuration.entrances.map { field.distance($0.x, $0.y) }.min() ?? 0
-        distance = s.lemmings.filter(\.isActive).reduce(0) { $0 + field.distance($1.foot.x, $1.foot.y) }
-            + (s.configuration.totalLemmings - s.releasedCount) * entrance
+        let distances = s.lemmings.filter { $0.isActive && (focusWorkers == 0 || $0.id < focusWorkers) }
+            .map { field.distance($0.foot.x, $0.foot.y) }
+            + Array(repeating: entrance, count: max(0,
+                (focusWorkers == 0 ? s.configuration.totalLemmings : min(focusWorkers, s.configuration.totalLemmings))
+                - s.releasedCount))
+        if rescueQuotaDistance {
+            let needed = max(0, min(
+                focusWorkers == 0 ? s.configuration.requiredToSave : focusWorkers,
+                s.configuration.requiredToSave - s.savedCount))
+            distance = distances.count >= needed
+                ? distances.sorted().prefix(needed).reduce(0, +)
+                : 1_000_000
+        } else {
+            distance = distances.reduce(0, +)
+        }
         inputs = c.events.count
         key = c.key
     }
@@ -219,7 +274,20 @@ func fingerprint(_ sim: ClassicDOSSimulation) -> String { ClassicDOSReplayRecord
 
 let args = CommandLine.arguments
 guard args.count >= 4 else { throw Failure(description: "usage: ClassicSolver DATA LEVEL OUT [--width N] [--seconds S] [--rate R]") }
+if args.contains("--dos-clock") && args.contains("--golems-clock") {
+    throw Failure(description: "choose one fan clock: --dos-clock or --golems-clock")
+}
 let (base, entry) = try loadLevel(args[1], Int(args[2])! - 1)
+if args.contains("--describe") {
+    let available = ClassicSkill.allCases.compactMap { skill -> String? in
+        let count = base.remainingSkillCount(skill)
+        return count > 0 ? "\(skill.rawValue)=\(count)" : nil
+    }
+    print("\(entry.rank) \(entry.number) \(entry.level.title): "
+        + "\(base.configuration.totalLemmings) lemmings, \(base.configuration.requiredToSave) required, "
+        + "rate \(base.releaseRate), skills \(available.joined(separator: ","))")
+    exit(0)
+}
 let tickLimit = max(ClassicDOSReplayPlayer.defaultTickLimit, base.configuration.timeLimitTicks ?? 0)
 let width = Int(option("--width") ?? "48")!
 let budget = Double(option("--seconds") ?? "300")!
@@ -227,6 +295,45 @@ let maxDepth = Int(option("--depth") ?? "100000")!
 let adaptiveRate = args.contains("--adaptive-rate")
 let rolloutSingle = args.contains("--rollout-single")
 let sweepSingle = args.contains("--sweep-single")
+let broadcastSkill: ClassicSkill? = try option("--broadcast-skill").map { value in
+    guard let skill = ClassicSkill(rawValue: value) else {
+        throw Failure(description: "--broadcast-skill requires a Classic skill name")
+    }
+    return skill
+}
+let broadcastFrom = Int(option("--broadcast-from") ?? "0")!
+let broadcastThrough = Int(option("--broadcast-through") ?? "20")!
+if broadcastFrom < 0 || broadcastThrough < broadcastFrom {
+    throw Failure(description: "invalid broadcast delay window")
+}
+let sweepPair: (ClassicSkill, ClassicSkill)? = try option("--sweep-pair").map { value in
+    let names = value.split(separator: ",").map(String.init)
+    guard names.count == 2, let first = ClassicSkill(rawValue: names[0]),
+          let second = ClassicSkill(rawValue: names[1]) else {
+        throw Failure(description: "--sweep-pair requires two comma-separated skill names")
+    }
+    return (first, second)
+}
+let firstFrom = Int(option("--first-from") ?? "0")!
+let firstThrough = Int(option("--first-through") ?? "200")!
+let secondGapMin = Int(option("--second-gap-min") ?? "1")!
+let secondGapMax = Int(option("--second-gap-max") ?? "100")!
+if sweepPair != nil && (sweepSingle || rolloutSingle || args.contains("--adaptive-rate")) {
+    throw Failure(description: "--sweep-pair requires a fixed-rate search without other sweep modes")
+}
+if broadcastSkill != nil && (sweepPair != nil || sweepSingle || rolloutSingle || adaptiveRate || option("--prefix") != nil) {
+    throw Failure(description: "--broadcast-skill requires a fixed-rate search without other sweep modes or a prefix")
+}
+if firstFrom < 0 || firstThrough < firstFrom || secondGapMin < 1 || secondGapMax < secondGapMin {
+    throw Failure(description: "invalid sweep-pair tick window")
+}
+let balancedRanking = args.contains("--balanced-ranking")
+if balancedRanking && preferProgress { throw Failure(description: "choose either --balanced-ranking or --prefer-progress") }
+let focusWorkers = Int(option("--focus-workers") ?? "0")!
+if focusWorkers < 0 { throw Failure(description: "--focus-workers must be non-negative") }
+if focusWorkers > 0 && (sweepSingle || sweepPair != nil || broadcastSkill != nil) {
+    throw Failure(description: "--focus-workers requires the beam search")
+}
 if sweepSingle && (adaptiveRate || rolloutSingle) {
     throw Failure(description: "--sweep-single requires a fixed rate and cannot be combined with --rollout-single")
 }
@@ -245,8 +352,16 @@ struct Forced: Decodable { let tick: Int; let id: Int?; let skill: ClassicSkill?
 let forced: [Int: [Forced]] = try option("--prefix").map {
     Dictionary(grouping: try JSONDecoder().decode([Forced].self, from: Data(contentsOf: URL(fileURLWithPath: $0))), by: \.tick)
 } ?? [:]
-if sweepSingle && !forced.isEmpty {
-    throw Failure(description: "--sweep-single cannot be combined with --prefix")
+if (sweepSingle || sweepPair != nil) && !forced.isEmpty {
+    throw Failure(description: "sweep modes cannot be combined with --prefix")
+}
+for f in forced[0] ?? [] {
+    if let rate = f.rate {
+        start.sim.setReleaseRate(rate)
+        start.events.append(.init(tick: 0, action: .releaseRate(rate), afterTick: true))
+    } else if let id = f.id, let skill = f.skill, start.sim.assign(skill, to: id) == .assigned {
+        start.events.append(.init(tick: 0, action: .assign(lemmingID: id, skill: skill), afterTick: true))
+    }
 }
 
 func advance(_ c: inout Candidate) -> Bool {
@@ -271,11 +386,97 @@ var singleSkillRollouts: Set<String> = []
 var waitingRouteTick = 0
 var sweptAssignments = 0
 var completedSweepContinuations = 0
-@MainActor func consider(_ c: Candidate) {
+var pairFirstAssignments = 0
+var pairSecondAssignments = 0
+var broadcastDelaysCompleted = 0
+func consider(_ c: Candidate) {
     if c.sim.isComplete && c.sim.didWin, best.map({ Score($0, field) < Score(c, field) }) ?? true { best = c }
     if bestPartial.map({ Score($0, field) < Score(c, field) }) ?? true { bestPartial = c }
 }
-if sweepSingle {
+if !sweepSingle && broadcastSkill == nil && forced.isEmpty {
+    var passive = start
+    while !passive.sim.isComplete && passive.sim.tickCount < tickLimit {
+        if passive.sim.tickCount.isMultiple(of: 64) && timeExpired() { break }
+        _ = passive.sim.tick()
+        if passive.sim.lostCount > passive.sim.configuration.totalLemmings
+            - passive.sim.configuration.requiredToSave { break }
+    }
+    consider(passive)
+}
+if let broadcastSkill {
+    broadcastSearch: for delay in broadcastFrom...broadcastThrough {
+        if timeExpired() { break }
+        var candidate = start
+        var spawnTicks: [Int: Int] = [:]
+        var assigned: Set<Int> = []
+        while !candidate.sim.isComplete && candidate.sim.tickCount < tickLimit {
+            if candidate.sim.tickCount.isMultiple(of: 64) && timeExpired() { break broadcastSearch }
+            _ = candidate.sim.tick()
+            for event in candidate.sim.lastTickEvents {
+                if case let .hatched(id, _) = event { spawnTicks[id] = candidate.sim.tickCount }
+            }
+            for lemming in candidate.sim.lemmings where lemming.isActive && !assigned.contains(lemming.id) {
+                guard let spawnTick = spawnTicks[lemming.id], candidate.sim.tickCount - spawnTick >= delay else { continue }
+                if candidate.sim.assign(broadcastSkill, to: lemming.id) == .assigned {
+                    candidate.events.append(.init(tick: candidate.sim.tickCount,
+                        action: .assign(lemmingID: lemming.id, skill: broadcastSkill), afterTick: true))
+                    assigned.insert(lemming.id)
+                    expanded += 1
+                }
+            }
+        }
+        broadcastDelaysCompleted += 1
+        consider(candidate)
+        if candidate.sim.didWin { best = candidate; break }
+    }
+} else if let (firstSkill, secondSkill) = sweepPair {
+    var waiting = start
+    bestPartial = start
+    pairSearch: while !waiting.sim.isComplete && waiting.sim.tickCount < min(tickLimit, firstThrough) && !timeExpired() {
+        _ = waiting.sim.tick()
+        waitingRouteTick = waiting.sim.tickCount
+        guard waiting.sim.tickCount >= firstFrom else { continue }
+        for lemming in waiting.sim.lemmings where lemming.isActive {
+            if timeExpired() { break pairSearch }
+            var first = waiting
+            guard first.sim.assign(firstSkill, to: lemming.id) == .assigned else { continue }
+            first.events.append(.init(tick: waiting.sim.tickCount,
+                action: .assign(lemmingID: lemming.id, skill: firstSkill), afterTick: true))
+            pairFirstAssignments += 1
+            for gap in 1...secondGapMax {
+                if timeExpired() { break pairSearch }
+                guard !first.sim.isComplete, first.sim.tickCount < tickLimit else { break }
+                _ = first.sim.tick()
+                if first.sim.lostCount > first.sim.configuration.totalLemmings
+                    - first.sim.configuration.requiredToSave { break }
+                guard gap >= secondGapMin else { continue }
+                for secondLemming in first.sim.lemmings where secondLemming.isActive {
+                    if timeExpired() { break pairSearch }
+                    var continuation = first
+                    guard continuation.sim.assign(secondSkill, to: secondLemming.id) == .assigned else { continue }
+                    continuation.events.append(.init(tick: first.sim.tickCount,
+                        action: .assign(lemmingID: secondLemming.id, skill: secondSkill), afterTick: true))
+                    pairSecondAssignments += 1
+                    expanded += 1
+                    while !continuation.sim.isComplete && continuation.sim.tickCount < tickLimit {
+                        if continuation.sim.tickCount.isMultiple(of: 64) && timeExpired() { break pairSearch }
+                        _ = continuation.sim.tick()
+                        if continuation.sim.lostCount > continuation.sim.configuration.totalLemmings
+                            - continuation.sim.configuration.requiredToSave { break }
+                    }
+                    completedSweepContinuations += 1
+                    if continuation.sim.savedCount > (bestPartial?.sim.savedCount ?? 0) {
+                        consider(continuation)
+                    }
+                    if continuation.sim.didWin { best = continuation; break pairSearch }
+                }
+            }
+        }
+        if waiting.sim.lostCount > waiting.sim.configuration.totalLemmings
+            - waiting.sim.configuration.requiredToSave { break }
+    }
+    if best == nil { consider(waiting) }
+} else if sweepSingle {
     var waiting = start
     bestPartial = start
     sweep: while !waiting.sim.isComplete && waiting.sim.tickCount < tickLimit && !timeExpired() {
@@ -324,7 +525,7 @@ if sweepSingle {
             if timeExpired() { break search }
             guard node.depth < maxDepth else { continue }
             var choices: [Choice] = [.wait]
-            for id in node.decision {
+            for id in node.decision where focusWorkers == 0 || id < focusWorkers {
                 for skill in skills where node.sim.remainingSkillCount(skill) > 0 {
                     choices.append(.assign(id, skill))
                 }
@@ -343,6 +544,7 @@ if sweepSingle {
                 case let .assign(id, skill):
                     guard child.sim.assign(skill, to: id) == .assigned else { continue }
                     child.events.append(.init(tick: child.sim.tickCount, action: .assign(lemmingID: id, skill: skill), afterTick: true))
+                    child.searchAssignments += 1
                 case let .releaseRate(rate):
                     child.sim.setReleaseRate(rate)
                     child.events.append(.init(tick: child.sim.tickCount, action: .releaseRate(rate), afterTick: true))
@@ -351,17 +553,16 @@ if sweepSingle {
                 child.depth += 1
                 expanded += 1
                 let alive = advance(&child)
-                if child.events.count == start.events.count {
+                if child.searchAssignments == 0 {
                     waitingRouteTick = max(waitingRouteTick, child.sim.tickCount)
                 }
                 child.key = fingerprint(child.sim) + (adaptiveRate ? "|\(child.rateChanges)" : "")
                 consider(child)
                 if best != nil { break search }
-                if rolloutSingle, child.events.count == 1,
-                   case .assign = child.events[0].action,
+                if rolloutSingle, node.searchAssignments == 0,
+                   case let .assign(id, skill) = choice,
                    forced.keys.allSatisfy({ $0 <= child.sim.tickCount }) {
-                    let event = child.events[0]
-                    let signature = "\(event.tick)|\(event.action)"
+                    let signature = "\(node.key)|\(id)|\(skill)"
                     if singleSkillRollouts.insert(signature).inserted {
                         var continuation = child
                         while !continuation.sim.isComplete && continuation.sim.tickCount < tickLimit {
@@ -369,6 +570,7 @@ if sweepSingle {
                             _ = continuation.sim.tick()
                             if continuation.sim.lostCount > continuation.sim.configuration.totalLemmings - continuation.sim.configuration.requiredToSave { break }
                         }
+                        consider(continuation)
                         if continuation.sim.didWin { best = continuation; break search }
                     }
                 }
@@ -378,8 +580,25 @@ if sweepSingle {
             }
             if timeExpired() { break search }
         }
-        beam = next.values.sorted { Score($1, field) < Score($0, field) }.prefix(width).map { $0 }
-        if !beam.contains(where: { $0.events.count == start.events.count }), let waiting = next.values.first(where: { $0.events.count == start.events.count }) {
+        if balancedRanking {
+            let pool = Array(next.values)
+            let survivor = pool.sorted { Score($1, field, progressFirst: false) < Score($0, field, progressFirst: false) }
+            let progress = pool.sorted { Score($1, field, progressFirst: true) < Score($0, field, progressFirst: true) }
+            var seen: Set<String> = []
+            var selected: [Candidate] = []
+            for ranking in [survivor.prefix(max(1, width / 2)), progress.prefix(max(1, width / 2))] {
+                for candidate in ranking where selected.count < width && seen.insert(candidate.key).inserted {
+                    selected.append(candidate)
+                }
+            }
+            for candidate in survivor where selected.count < width && seen.insert(candidate.key).inserted {
+                selected.append(candidate)
+            }
+            beam = selected
+        } else {
+            beam = next.values.sorted { Score($1, field) < Score($0, field) }.prefix(width).map { $0 }
+        }
+        if !beam.contains(where: { $0.searchAssignments == 0 }), let waiting = next.values.first(where: { $0.searchAssignments == 0 }) {
             if beam.count == width { beam.removeLast() }
             beam.append(waiting)
         }
@@ -398,6 +617,13 @@ let proposal = route.map {
 let verifiedOutcome = proposal.flatMap {
     try? ClassicDOSReplayPlayer.run($0, simulation: base, tickLimit: tickLimit)
 }
+let coverage = broadcastSkill != nil
+    ? " broadcast delays completed \(broadcastDelaysCompleted) deadline \(timeExpired())"
+    : sweepPair != nil
+    ? " waiting tick \(waitingRouteTick) first-skill assignments \(pairFirstAssignments) second-skill assignments \(pairSecondAssignments) completed \(completedSweepContinuations) deadline \(timeExpired())"
+    : sweepSingle
+    ? " waiting tick \(waitingRouteTick) single-skill assignments \(sweptAssignments) completed \(completedSweepContinuations) deadline \(timeExpired())"
+    : rolloutSingle ? " waiting tick \(waitingRouteTick) single-skill rollouts \(singleSkillRollouts.count)" : ""
 if let proposal, let outcome = verifiedOutcome, outcome.didWin {
     let replay = ClassicDOSReplay(rank: proposal.rank, number: proposal.number,
         title: proposal.title, initialStateHash: proposal.initialStateHash,
@@ -406,8 +632,10 @@ if let proposal, let outcome = verifiedOutcome, outcome.didWin {
     let destination = args.contains("--hash-named")
         ? URL(fileURLWithPath: args[3]).appendingPathComponent(replay.initialStateHash + ".json")
         : URL(fileURLWithPath: args[3])
+    try FileManager.default.createDirectory(at: destination.deletingLastPathComponent(),
+        withIntermediateDirectories: true)
     try encoder.encode(replay).write(to: destination, options: .atomic)
-    print("SOLVED \(entry.rank) \(entry.number) saved \(outcome.saved)/\(outcome.required) inputs \(replay.events.count) expanded \(expanded) in \(seconds)s")
+    print("SOLVED \(entry.rank) \(entry.number) saved \(outcome.saved)/\(outcome.required) inputs \(replay.events.count) expanded \(expanded) in \(seconds)s\(coverage)")
 } else {
     let s = bestPartial?.sim
     if args.contains("--partial-out"), let proposal {
@@ -415,11 +643,16 @@ if let proposal, let outcome = verifiedOutcome, outcome.didWin {
         let destination = args.contains("--hash-named")
             ? URL(fileURLWithPath: args[3]).appendingPathComponent(proposal.initialStateHash + ".partial.json")
             : URL(fileURLWithPath: args[3] + ".partial.json")
+        try FileManager.default.createDirectory(at: destination.deletingLastPathComponent(),
+            withIntermediateDirectories: true)
         try encoder.encode(proposal).write(to: destination, options: .atomic)
     }
-    let coverage = sweepSingle
-        ? " waiting tick \(waitingRouteTick) single-skill assignments \(sweptAssignments) completed \(completedSweepContinuations) deadline \(timeExpired())"
-        : rolloutSingle ? " waiting tick \(waitingRouteTick) single-skill rollouts \(singleSkillRollouts.count)" : ""
-    print("UNSOLVED \(entry.rank) \(entry.number) best saved \(s?.savedCount ?? 0)/\(base.configuration.requiredToSave) expanded \(expanded) in \(seconds)s\(coverage)")
+    let state = s.map { " tick \($0.tickCount) released \($0.releasedCount) lost \($0.lostCount) active \($0.lemmings.filter(\.isActive).count) complete \($0.isComplete)" } ?? ""
+    print("UNSOLVED \(entry.rank) \(entry.number) best saved \(s?.savedCount ?? 0)/\(base.configuration.requiredToSave) expanded \(expanded) in \(seconds)s\(coverage)\(state)")
+    if args.contains("--diagnose-active"), let s {
+        for lemming in s.lemmings where lemming.isActive {
+            print("ACTIVE id \(lemming.id) x \(lemming.foot.x) y \(lemming.foot.y) direction \(lemming.direction) action \(lemming.action)")
+        }
+    }
     exit(1)
 }

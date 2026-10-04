@@ -3,6 +3,7 @@
   "archiveSHA256": "6b599e67d0656e6a27f33f99916b9dafd21b04a1e7c88f8eda24e3083a087bc4",
   "sourceReplaySHA256": "b0104e7676a965bf5d59582013ec706cc0202a637cb23815284bc43c6e38e8ac",
   "sourceOutcome": "4/4 at cycle 1417",
+  "status": "Historical pre-hatch-correction trace. The corrected native trace matches the sampled source positions; see classic-golems-diving-reconciliation.json.",
   "nativeTraceSHA256": "c30baab480f0bd9bde9ef412d19854a368c546e3a9b9fb2635192194f8443853",
   "method": "Source headless screenshots crop 1365x480+0+42, point resize to 455x160, select rightmost green sprite cluster at y24-37 with G>125, G>1.5R, G>1.2B, add viewport offset 569. Sprite pixels approximate foot X by several pixels. Native route is unchanged translated source actions on exact archive.",
   "samples": [

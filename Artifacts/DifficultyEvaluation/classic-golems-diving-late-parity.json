@@ -1,0 +1,50 @@
+{
+  "level": "fan:lldb-393/pieuw01.dat#9",
+  "archiveSHA256": "6b599e67d0656e6a27f33f99916b9dafd21b04a1e7c88f8eda24e3083a087bc4",
+  "sourceReplaySHA256": "b0104e7676a965bf5d59582013ec706cc0202a637cb23815284bc43c6e38e8ac",
+  "selectedNativeReplaySHA256": "91610c2bc4d3bc04245c495f0b8c007844ef281a341660503429fde6d4261c74",
+  "sourceResultSHA256": "34b9f0fecc0a418f35b51243eb88e8ff3ec3f12ee0973ec5f385657ad931dfe9",
+  "sourceFinal": "4/4 at cycle 1417",
+  "nativeTraceSHA256": "ebc203df9a4da292b1750be467d3279c0aac17dcbcac5f41f581b84d9e8357e8",
+  "nativeFinal": "4/4 at tick 1373",
+  "method": "The pinned Golems browser player ran headlessly and muted. The source saved count at each sample was read from the screenshot NEED and LEFT counters. The native saved count and terminal events came from a fresh current-library strict replay on the exact bundled archive. Matching cycle and tick numbers compare progress, not complete state parity.",
+  "samples": [
+    {
+      "cycleOrTick": 1129,
+      "sourceScreenshotSHA256": "521f9e879399eb12132039f192f4b8b9acc29f49c717f4367af4209133fece8a",
+      "sourceSavedFromVisibleCounter": 0,
+      "nativeSavedFromStrictTrace": 1
+    },
+    {
+      "cycleOrTick": 1200,
+      "sourceScreenshotSHA256": "860e466d39398660a8540264224f17bcda6aa437d47aa65b8d613f1f2892c652",
+      "sourceSavedFromVisibleCounter": 1,
+      "nativeSavedFromStrictTrace": 1
+    },
+    {
+      "cycleOrTick": 1324,
+      "sourceScreenshotSHA256": "94726f85d538a5808adb04748c970016c952c631a003a1a9057995d8c09f9394",
+      "sourceSavedFromVisibleCounter": 2,
+      "nativeSavedFromStrictTrace": 2
+    },
+    {
+      "cycleOrTick": 1364,
+      "sourceScreenshotSHA256": "78c4b0218d0a85c6c2ce6de740cd7afbd522c4ab356bd230ffdd5e63f636b7e4",
+      "sourceSavedFromVisibleCounter": 2,
+      "nativeSavedFromStrictTrace": 3
+    },
+    {
+      "cycleOrTick": 1373,
+      "sourceScreenshotSHA256": "56552f1348d791c8b8c6e8ffc039f11abf3ff2973d5c3e7d99b95862324bf40c",
+      "sourceSavedFromVisibleCounter": 3,
+      "nativeSavedFromStrictTrace": 4
+    }
+  ],
+  "nativeTerminalEvents": {
+    "lemming3": 1129,
+    "lemming1": 1324,
+    "lemming2": 1364,
+    "lemming0": 1373
+  },
+  "interpretation": "The source and native saved counts differ at cycles 1129, 1364 and 1373, but agree at 1200 and 1324. The 44-tick final gap is not only a late result callback or a uniform clock offset. The earlier sampled Basher and terrain mismatch was fixed by the hatch coordinate; the later worker routes or exit timing still need direct state comparison."
+}
