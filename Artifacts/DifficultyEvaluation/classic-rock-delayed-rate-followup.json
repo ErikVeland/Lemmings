@@ -1,0 +1,54 @@
+{
+  "archiveSHA256": "5e409f1393abcb6304cfdc23c607fe2c688ee534405cc28c6f3ab2cd8d14d26d",
+  "calibration": {
+    "identity": "fan:lldb-505/KillerMaster 1 Tame 1.dat#1",
+    "outcome": "strict solver win 1/1, waiting tick 59, one continuation",
+    "policy": "rollout-single, fallback 12, focus worker 1",
+    "replaySHA256": "968d366c6c60b1f15c6485ea6549a8546887b6222006eae204b4d8ef99a6add3"
+  },
+  "date": "2026-10-04",
+  "identity": "fan:lldb-58/lm_set12.dat#5",
+  "initialStateHash": "63f9592f5916889de7508f22101dcc74f9e94bd55351b0d22a92e567dffe454f",
+  "interpretation": "The rate-300 and rate-600 prefixes fired but the bounded beam kept 80 active lemmings and found no exit. The rate-900 search stopped before its prefix fired. This is incomplete search coverage, not evidence of impossible geometry or native physics divergence.",
+  "nativeLibrarySHA256": "9b795b0f5e5dd9a5cb70d1a97e233ba84da41b42fe199f1ed870fc702831d3c4",
+  "scope": "Delayed release-rate search for The Rock Peaks on exact bundled level",
+  "searches": [
+    {
+      "bestPartialEvents": 16,
+      "bestPartialLost": 0,
+      "bestPartialReleased": 80,
+      "bestPartialSaved": 0,
+      "bestPartialTick": 1864,
+      "expanded": 38940,
+      "forcedRateReachedInPartial": true,
+      "forcedRateTick": 300,
+      "partialReplaySHA256": "dab2bc56b63b1d307c2dd9ba28ca2f8fa85cd39120751a093395bb383cd10a0a",
+      "policy": "focus worker 1, width 48, fallback 12, refire 60, 18 seconds, progress rank"
+    },
+    {
+      "bestPartialEvents": 13,
+      "bestPartialLost": 0,
+      "bestPartialReleased": 80,
+      "bestPartialSaved": 0,
+      "bestPartialTick": 1692,
+      "expanded": 40222,
+      "forcedRateReachedInPartial": true,
+      "forcedRateTick": 600,
+      "partialReplaySHA256": "23998c802e3b870bf7b7897e3410faddd8e9c160e2d9a343b853de063001ede1",
+      "policy": "focus worker 1, width 48, fallback 12, refire 60, 18 seconds, progress rank"
+    },
+    {
+      "bestPartialEvents": 11,
+      "bestPartialLost": 0,
+      "bestPartialReleased": 16,
+      "bestPartialSaved": 0,
+      "bestPartialTick": 893,
+      "expanded": 43002,
+      "forcedRateReachedInPartial": false,
+      "forcedRateTick": 900,
+      "partialReplaySHA256": "d3047d663f51be242583078b90a1002f81161c490d1fac9ade5a67dbe0ed15da",
+      "policy": "focus worker 1, width 48, fallback 12, refire 60, 18 seconds, rescue-quota-distance rank"
+    }
+  ],
+  "solverSHA256": "67e95b8e9e82b1a7777e1ec2e91a15b892e459e433b3ef68c55efb30375b8c2c"
+}

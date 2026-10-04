@@ -19,6 +19,7 @@ import NxlvKit
 //        [--golems-mechanics | --ohno-mechanics] [--member FILE#SECTION]
 //        [--prefer-progress]
 //        [--rescue-quota-distance]
+//        [--direct-exit-distance]
 //        [--focus-workers N]
 //        [--canvas-width N --canvas-height N]
 //        [--source-terrain-coordinates]
@@ -35,6 +36,7 @@ struct Failure: Error, CustomStringConvertible { let description: String }
 
 let preferProgress = CommandLine.arguments.contains("--prefer-progress")
 let rescueQuotaDistance = CommandLine.arguments.contains("--rescue-quota-distance")
+let directExitDistance = CommandLine.arguments.contains("--direct-exit-distance")
 
 func option(_ name: String) -> String? {
     let a = CommandLine.arguments
@@ -169,6 +171,9 @@ struct DistanceField {
         let unreachableBase = Self.cell * (columns + rows) * 4
         return unreachableBase + (exitCentres.map { abs(x - $0.x) + abs(y - $0.y) }.min() ?? 0)
     }
+    func directDistance(_ x: Int, _ y: Int) -> Int {
+        exitCentres.map { abs(x - $0.x) + abs(y - $0.y) }.min() ?? 0
+    }
 }
 
 /// Fires decisions at places, as the sequel solvers do. One crowd meeting one
@@ -249,9 +254,10 @@ struct Score: Comparable {
         self.progressFirst = progressFirst
         saved = s.savedCount
         remaining = s.configuration.totalLemmings - s.lostCount - s.lemmings.filter { $0.isActive && $0.action == .blocking }.count
-        let entrance = s.configuration.entrances.map { field.distance($0.x, $0.y) }.min() ?? 0
+        let distanceToExit = directExitDistance ? field.directDistance : field.distance
+        let entrance = s.configuration.entrances.map { distanceToExit($0.x, $0.y) }.min() ?? 0
         let distances = s.lemmings.filter { $0.isActive && (focusWorkers == 0 || $0.id < focusWorkers) }
-            .map { field.distance($0.foot.x, $0.foot.y) }
+            .map { distanceToExit($0.foot.x, $0.foot.y) }
             + Array(repeating: entrance, count: max(0,
                 (focusWorkers == 0 ? s.configuration.totalLemmings : min(focusWorkers, s.configuration.totalLemmings))
                 - s.releasedCount))
