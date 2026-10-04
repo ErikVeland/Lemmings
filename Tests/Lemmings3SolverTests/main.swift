@@ -17,13 +17,19 @@ guard fixture.levelSHA256 == L3Replay.digest(level.rawData),
     fatalError("Shadow 08 fixture does not match the exact source level")
 }
 var cursor = 0
+var detector = L3Detector()
+_ = detector.update(game)
+var offeredAtTurn: [Int] = []
 while game.tick < 560 {
     while cursor < fixture.inputs.count && fixture.inputs[cursor].tick == game.tick {
         guard L3Replay.apply(fixture.inputs[cursor], to: &game) else { fatalError("Shadow 08 prefix failed") }
         cursor += 1
     }
     game.step()
+    let offered = detector.update(game)
+    if game.tick == 560 { offeredAtTurn = offered ?? [] }
 }
+guard offeredAtTurn.contains(8) else { fatalError("Solver did not revisit the builder at its work step") }
 guard let before = game.lemmings.first(where: { $0.id == 8 }), before.state == .building else {
     fatalError("Shadow 08 no longer reaches its measured builder decision")
 }

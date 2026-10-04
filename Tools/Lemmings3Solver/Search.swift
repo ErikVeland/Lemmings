@@ -33,6 +33,7 @@ struct L3Detector: Sendable {
     private var lastDirection: [Int: Int] = [:]
     private var lastState: [Int: Lemmings3Runtime.State] = [:]
     private var lastTool: [Int: Int] = [:]
+    private var lastQuantity: [Int: Int] = [:]
     private var lastFired: [String: Int] = [:]
     private var lastDecisionTick = 0
 
@@ -54,14 +55,21 @@ struct L3Detector: Sendable {
         for lemming in game.lemmings where lemming.active {
             let previousDirection = lastDirection[lemming.id], previousState = lastState[lemming.id]
             let previousTool = lastTool[lemming.id]
+            let previousQuantity = lastQuantity[lemming.id]
             lastDirection[lemming.id] = lemming.direction
             lastState[lemming.id] = lemming.state
             lastTool[lemming.id] = lemming.tool?.rawValue ?? -1
+            lastQuantity[lemming.id] = lemming.quantity
             if let previousState, previousState != lemming.state, actionable.contains(lemming.state),
                claim("state-\(lemming.state.rawValue)", lemming, tick: game.tick) {
                 fired.append((2, lemming.id))
             }
             if let previousTool, previousTool != (lemming.tool?.rawValue ?? -1), claim("tool", lemming, tick: game.tick) {
+                fired.append((0, lemming.id))
+            }
+            if let previousQuantity, previousQuantity != lemming.quantity,
+               lemming.state == .building || lemming.state == .digging,
+               claim("work", lemming, tick: game.tick) {
                 fired.append((0, lemming.id))
             }
             guard lemming.state == .walking else { continue }
