@@ -6,7 +6,7 @@
     "stateHash" : "f4319b0edef01e6e16fccf7d8eb79a22a4e08012e078c0ee8662c99f17831330",
     "ticks" : 4140
   },
-  "initialStateHash" : "eb9d14dd3f93fa0a028b81f0d99b5d13daad114aa6375720014364fed35efbe8",
+  "initialStateHash" : "b60b8d6d4669a7705909c44e9640a667336304111979c1cbbb5d8c49f1d517e4",
   "inputs" : [
     {
       "action" : "jumper",
@@ -182,11 +182,6 @@
       "action" : "jumper",
       "lemming" : 10,
       "tick" : 255
-    },
-    {
-      "action" : "jumper",
-      "lemming" : 0,
-      "tick" : 256
     },
     {
       "action" : "jumper",
@@ -1410,11 +1405,6 @@
       "direction" : "upLeft",
       "lemming" : 15,
       "tick" : 911
-    },
-    {
-      "action" : "jumper",
-      "lemming" : 0,
-      "tick" : 912
     },
     {
       "action" : "jumper",
@@ -6411,11 +6401,6 @@
     },
     {
       "action" : "jumper",
-      "lemming" : 0,
-      "tick" : 1600
-    },
-    {
-      "action" : "jumper",
       "lemming" : 8,
       "tick" : 1600
     },
@@ -9303,11 +9288,6 @@
       "direction" : "upLeft",
       "lemming" : 15,
       "tick" : 1999
-    },
-    {
-      "action" : "jumper",
-      "lemming" : 0,
-      "tick" : 2000
     },
     {
       "action" : "jumper",

@@ -200,7 +200,7 @@ public struct Lemmings3Runtime: Sendable {
                 pickups.append(.init(id: index, tool: tool, x: placed.x, y: placed.y)); continue
             }
             if [10006, 10007].contains(placed.identifier) {
-                extras.append(.init(x: placed.x + 8, y: placed.y + 16, direction: placed.identifier == 10006 ? -1 : 1)); continue
+                extras.append(.init(x: placed.x + 8, y: placed.y + 16, direction: 1)); continue
             }
             if let kind = Creature.Kind(rawValue: placed.identifier / 2 * 2) {
                 creatures.append(.init(id: index, kind: kind,
@@ -597,10 +597,16 @@ public struct Lemmings3Runtime: Sendable {
                     lem.direction *= -1
                 } else if isSolid(nx, lem.y - 1) {
                     let contactPhase = lem.direction > 0 ? 5 : 3
-                    let maxRise = (nx & 7) == contactPhase ? 8 : 4
+                    let contactTag = attributes[(lem.y - 1) * configuration.width + nx]
+                    let projectedClassCount = (0..<4).filter { offset in
+                        let px = nx + lem.direction * 8, py = lem.y - 14 + 2 * offset
+                        return inBounds(px, py) && attributes[py * configuration.width + px] & 0x0040 != 0
+                    }.count
+                    let classRise = (nx & 7) == 0 && contactTag == 0x0060 && projectedClassCount == 4
+                    let maxRise = (nx & 7) == contactPhase || classRise ? 8 : 4
                     if let rise = (1...maxRise).first(where: { rise in
                         isSolid(nx, lem.y - rise) && !isSolid(nx, lem.y - rise - 1) &&
-                        (rise <= 4 || (0..<4).allSatisfy { !isSolid(nx + lem.direction * 8, lem.y - 14 + 2 * $0) })
+                        (rise <= 4 || classRise || (0..<4).allSatisfy { !isSolid(nx + lem.direction * 8, lem.y - 14 + 2 * $0) })
                     }) { lem.x = nx; lem.y -= rise }
                     else if lem.mobilityTool == .sucker { lem.state = .climbing; lem.age = 0 }
                     else { lem.direction *= -1 }
