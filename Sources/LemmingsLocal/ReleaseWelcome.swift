@@ -5,12 +5,12 @@ import AppKit
     static let seenKey = "WhatsNewSeenBuild"
     /// The release these notes describe. A test fails when Info.plist moves on
     /// to a new version and these notes stay behind.
-    static let notesVersion = "1.7.8"
-    static let subtitle = "Balanced cursor badges, a sharper nuke finish and more fan solutions"
+    static let notesVersion = "1.7.9"
+    static let subtitle = "Macintosh artwork for NeoLemmix and more fan solutions"
     static let sections = [
-        ("Balanced cursor badges", "Skill icons, the red X and the optional count now match in height at both 1x and 2x. Sprite padding no longer makes an icon look smaller."),
-        ("A sharper nuke finish", "After the final pop, the music filter rapidly opens back up. The return continues through the explosion tails and results screen."),
-        ("More fan solutions", "The ledger now records 2,305 Classic fan wins. Golems compatibility and the learning path improve. Lemmings 2 and 3 remain Preview.")
+        ("Macintosh artwork for NeoLemmix", "Choose Macintosh artwork for matching terrain, lemmings and skill icons. Custom pieces keep their own graphics. Physics and rewind stay the same."),
+        ("More fan solutions", "The ledger now records 2,401 Classic fan wins, 96 more than 1.7.8. More packs use the correct hatch rules and seasonal artwork."),
+        ("Lemmings 3 corrections", "Extra lemmings face the correct direction, and selected stair contacts improve. All 41 retained routes pass. Lemmings 2 and 3 remain Preview.")
     ]
     private let defaults: UserDefaults
     private let build: Int
