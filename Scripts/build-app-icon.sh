@@ -6,7 +6,7 @@ project_dir="${0:A:h:h}"
 iconset_dir="$project_dir/.build/AppIcon.iconset"
 output_path="${1:-$project_dir/.build/AppIcon.icns}"
 source_path="$project_dir/Resources/AppIcon/AppIcon.png"
-mkdir -p "$iconset_dir" "${output_path:h}"
+mkdir -p "$iconset_dir" "$project_dir/.build/ModuleCache" "${output_path:h}"
 
 for size in 16 32 128 256 512; do
   sips -z "$size" "$size" "$source_path" \
@@ -16,4 +16,8 @@ for size in 16 32 128 256 512; do
     --out "$iconset_dir/icon_${size}x${size}@2x.png" >/dev/null
 done
 
-iconutil -c icns "$iconset_dir" -o "$output_path"
+if ! iconutil -c icns "$iconset_dir" -o "$output_path"; then
+  print -u2 "iconutil could not encode the iconset; using ImageIO."
+  swift -module-cache-path "$project_dir/.build/ModuleCache" \
+    "$project_dir/Tools/Build/AppIconICNS.swift" "$iconset_dir" "$output_path"
+fi

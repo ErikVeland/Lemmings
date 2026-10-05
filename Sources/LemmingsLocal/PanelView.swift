@@ -43,6 +43,7 @@ enum PanelButton: Equatable {
 
   /// The original status bar, when the imported data provides it.
   var macArtwork: ClassicMacArtwork?
+  var usesMacStyleControls = false { didSet { needsDisplay = true } }
   /// The release's own character set, used for every label on the bar. It
   /// outlives a level, because the bar shows status on the menus too.
   var interfaceArtwork: ClassicMacArtwork? {
@@ -391,7 +392,9 @@ enum PanelButton: Equatable {
     guard variableSpeedEnabled, let frame = buttonFrames.first(where: { $0.0 == .fastForward })?.1 else { return }
     // Match the skill sockets' bevel so the speed box reads as the same stone.
     SpeedPanelControls.draw(in: frame, label: speedLabel, active: isFastForward,
-      bevelPixel: max(1, panelScale / 2), backdrop: PanelGlyph.rock.image(fitting: frame.size),
+      bevelPixel: max(1, panelScale / 2), backdrop: usesMacStyleControls
+        ? PanelGlyph.rock.macImage(fitting: frame.size)
+        : PanelGlyph.rock.image(fitting: frame.size),
       text: { [self] text, box in drawGameLabel(text, in: box, maxPixelScale: .greatestFiniteMagnitude) })
   }
 
@@ -446,11 +449,14 @@ enum PanelButton: Equatable {
           width: size.width, height: size.height), from: .zero, operation: .sourceOver,
           fraction: 1, respectFlipped: true, hints: nil)
       } else if let glyph = PanelGlyph.forButton(button, isPaused: isPaused, canUndoNuke: session?.canUndoNuke == true),
-        glyph.isOriginalTile, let image = glyph.image(fitting: frame.size) {
+        glyph.isOriginalTile,
+        let image = usesMacStyleControls ? glyph.macImage(fitting: frame.size) : glyph.image(fitting: frame.size) {
         GameStoneButton.drawTile(image, in: frame, pixel: max(1, panelScale / 2))
       } else if let glyph = PanelGlyph.forButton(button, isPaused: isPaused, canUndoNuke: session?.canUndoNuke == true),
         // Rasterise the control glyph to fit the recessed well.
-        let image = glyph.image(
+        let image = usesMacStyleControls ? glyph.macImage(
+          fitting: frame.insetBy(
+            dx: 4 * max(1, panelScale / 2), dy: 4 * max(1, panelScale / 2)).size) : glyph.image(
           fitting: frame.insetBy(
             dx: 4 * max(1, panelScale / 2), dy: 4 * max(1, panelScale / 2)).size) {
         image.draw(
@@ -477,7 +483,8 @@ enum PanelButton: Equatable {
   /// Every panel socket shows Amiga panel rock behind its glyph.
   private func drawStoneButton(_ frame: CGRect, selected: Bool) {
     GameStoneButton.draw(frame, selected: selected, pixel: max(1, panelScale / 2),
-      backdrop: PanelGlyph.rock.image(fitting: frame.size))
+      backdrop: usesMacStyleControls ? PanelGlyph.rock.macImage(fitting: frame.size)
+        : PanelGlyph.rock.image(fitting: frame.size))
   }
 
   private func drawSkillLabels() {
@@ -599,7 +606,9 @@ enum PanelButton: Equatable {
       break
     default:
       guard let glyph = PanelGlyph.forButton(button, isPaused: isPaused, canUndoNuke: session?.canUndoNuke == true),
-            let image = glyph.image(fitting: glyph.isOriginalTile ? frame.size : well.size) else { return }
+            let image = usesMacStyleControls
+              ? glyph.macImage(fitting: glyph.isOriginalTile ? frame.size : well.size)
+              : glyph.image(fitting: glyph.isOriginalTile ? frame.size : well.size) else { return }
       if glyph.isOriginalTile {
         GameStoneButton.drawTile(image, in: frame, pixel: pixel)
       } else {

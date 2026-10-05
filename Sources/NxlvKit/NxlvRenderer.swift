@@ -267,10 +267,13 @@ public struct NxlvRenderedLevel: Sendable {
   public let gadgets: [NxlvRenderedGadget]
   /// Optional source layers retained for live terrain compositing in the app.
   public let backgroundRGBA: [UInt8]
+  /// Optional 2× background pixels, including static background objects.
+  public let macBackgroundRGBA: [UInt8]
   public let terrainRGBA: [UInt8]
   /// Optional 2× Macintosh display pixels. Never used to construct physics masks.
   public let macTerrainRGBA: [UInt8]
   public let foregroundRGBA: [UInt8]
+  public let macForegroundRGBA: [UInt8]
   /// CE's theme MASK colour, used for newly constructed terrain.
   public let constructiveRGBA: [UInt8]
 
@@ -285,9 +288,11 @@ public struct NxlvRenderedLevel: Sendable {
     gadgets: [NxlvRenderedGadget],
     terrainOpaqueMask: [UInt8] = [],
     backgroundRGBA: [UInt8] = [],
+    macBackgroundRGBA: [UInt8] = [],
     terrainRGBA: [UInt8] = [],
     macTerrainRGBA: [UInt8] = [],
     foregroundRGBA: [UInt8] = [],
+    macForegroundRGBA: [UInt8] = [],
     constructiveRGBA: [UInt8] = [0xD0, 0xB0, 0x80, 0xFF]
   ) {
     self.width = width
@@ -301,9 +306,11 @@ public struct NxlvRenderedLevel: Sendable {
       ? terrainOpaqueMask : solidMask
     self.gadgets = gadgets
     self.backgroundRGBA = backgroundRGBA
+    self.macBackgroundRGBA = macBackgroundRGBA
     self.terrainRGBA = terrainRGBA
     self.macTerrainRGBA = macTerrainRGBA
     self.foregroundRGBA = foregroundRGBA
+    self.macForegroundRGBA = macForegroundRGBA
     self.constructiveRGBA = constructiveRGBA
   }
 }
@@ -637,9 +644,11 @@ private struct NxlvRenderEngine {
           terrainLayer.rgba[$0] == 255 ? 1 : 0
         },
         backgroundRGBA: retainsVisualLayers ? liveBackgroundLayer.rgba : [],
+        macBackgroundRGBA: retainsVisualLayers ? liveBackgroundLayer.macRGBA : [],
         terrainRGBA: retainsVisualLayers ? terrainLayer.rgba : [],
         macTerrainRGBA: retainsVisualLayers ? terrainLayer.macRGBA : [],
         foregroundRGBA: retainsVisualLayers ? foregroundLayer.rgba : [],
+        macForegroundRGBA: retainsVisualLayers ? foregroundLayer.macRGBA : [],
         constructiveRGBA: themeMaskRGBA()
       ),
       diagnostics: diagnostics,
@@ -1527,6 +1536,8 @@ private struct NxlvRenderEngine {
       )
     }
 
+    sourceFrames = recreatedFrames(sourceFrames, asset: asset)
+
     for index in sourceFrames.indices {
       setTriggerMask(
         in: &sourceFrames[index],
@@ -1787,8 +1798,22 @@ private struct NxlvRenderEngine {
       )
       return nil
     }
-    guard let strip = decodeGraphic(urls[0], asset: asset) else { return nil }
-    return animationFrames(from: strip, animation: animation, line: line, description: description)
+    guard let strip = decodeGraphic(urls[0], asset: asset),
+      let frames = animationFrames(from: strip, animation: animation, line: line, description: description)
+    else { return nil }
+    return recreatedFrames(frames, asset: asset)
+  }
+
+  private func recreatedFrames(_ frames: [PixelPlane], asset: NxlvResolvedStyleAsset) -> [PixelPlane] {
+    guard let macArtwork else { return frames }
+    return frames.map { source in
+      guard source.macRGBA.isEmpty else { return source }
+      var frame = source
+      frame.macRGBA = macArtwork.recreated(
+        asset: asset, width: frame.width, height: frame.height, rgba: frame.rgba
+      )
+      return frame
+    }
   }
 
   private func renderedAnimationState(_ value: String?) -> NxlvRenderedAnimationState {
@@ -2063,7 +2088,13 @@ private struct NxlvRenderEngine {
     }
     unpremultiplyRGBA(&bytes)
     var plane = PixelPlane(width: width, height: height, rgba: bytes)
-    plane.macRGBA = macArtwork?.replacement(asset: asset, url: url, width: width, height: height, rgba: bytes) ?? []
+    if let macArtwork {
+      plane.macRGBA = macArtwork.replacement(
+        asset: asset, url: url, width: width, height: height, rgba: bytes
+      ) ?? (asset.resolvedReference.kind == .object ? [] : macArtwork.recreated(
+        asset: asset, width: width, height: height, rgba: bytes
+      ))
+    }
     decodedGraphicPixelCount = totalDecodedPixels
     decodedGraphics[standardized] = plane
     return plane
@@ -2494,6 +2525,7 @@ private struct NxlvRenderEngine {
       canvasHeight: canvas.height
     )
     guard let clip else { return }
+    if !source.macRGBA.isEmpty { canvas.ensureMacPixels() }
     for sourceY in clip.sourceY {
       let canvasY = destinationY + sourceY
       for sourceX in clip.sourceX {
@@ -2507,6 +2539,21 @@ private struct NxlvRenderEngine {
           let offset = destinationIndex * 4 + 3
           let occupied = noOverwritePrior?[offset] ?? canvas.rgba[offset]
           if occupied > 0 || (noOverwriteAgainst?[offset] ?? 0) > 0 { continue }
+        }
+        if !canvas.macRGBA.isEmpty {
+          for dy in 0..<2 { for dx in 0..<2 {
+            let destination = ((canvasY * 2 + dy) * canvas.width * 2 + canvasX * 2 + dx) * 4
+            let original = ((sourceY * 2 + dy) * source.width * 2 + sourceX * 2 + dx) * 4
+            let high = source.macRGBA.isEmpty ? sourcePixel
+              : RGBA(red: source.macRGBA[original], green: source.macRGBA[original + 1],
+                blue: source.macRGBA[original + 2], alpha: source.macRGBA[original + 3])
+            let old = RGBA(red: canvas.macRGBA[destination], green: canvas.macRGBA[destination + 1],
+              blue: canvas.macRGBA[destination + 2], alpha: canvas.macRGBA[destination + 3])
+            let merged = sourceOver(high, old)
+            canvas.macRGBA[destination..<destination + 4] = [
+              merged.red, merged.green, merged.blue, merged.alpha
+            ]
+          } }
         }
         canvas.setPixel(
           sourceOver(sourcePixel, canvas.pixel(destinationIndex)),

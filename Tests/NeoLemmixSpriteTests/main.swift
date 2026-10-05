@@ -152,8 +152,9 @@ func syntheticStyles() throws -> URL {
   return root
 }
 
-func writeContactSheet(styles: URL, theme: String, output: URL) throws {
+func writeContactSheet(styles: URL, theme: String, output: URL, mac: Bool = false) throws {
   let sprites = try NeoLemmixSpriteSet(stylesRootURL: styles, themeStyle: theme)
+  sprites.usesMacArtwork = mac
   let actions = NeoLemmixAction.allCases.filter { ![.teleporting, .removed].contains($0) }
   let scale = 2, cellWidth = 96, cellHeight = 72, columns = 8
   let rows = (actions.count + columns - 1) / columns
@@ -302,6 +303,15 @@ do {
     print("PASS NeoLemmix sprite contact sheet")
     exit(0)
   }
+  if CommandLine.arguments.count == 5, CommandLine.arguments[1] == "--mac-contact-sheet" {
+    try writeContactSheet(
+      styles: URL(fileURLWithPath: CommandLine.arguments[2]),
+      theme: CommandLine.arguments[3],
+      output: URL(fileURLWithPath: CommandLine.arguments[4]), mac: true
+    )
+    print("PASS NeoLemmix Macintosh sprite contact sheet")
+    exit(0)
+  }
 
   let root = try syntheticStyles()
   defer { try? FileManager.default.removeItem(at: root) }
@@ -395,8 +405,56 @@ do {
     try require(alphaRows(frameImage) == alphaRows(source), "Real walker frame is not upright")
     let rgbaAlpha = (0..<walker.height).map { y in (0..<walker.width).map { walker.rgba[(y * walker.width + $0) * 4 + 3] } }
     try require(rgbaAlpha == alphaRows(source), "Real walker RGBA rows are not upright")
+
+    let swimmer = try requireValue(real.frame(action: .swimming, direction: .right,
+      animationFrame: 0, traits: []), "Real swimmer frame did not resolve")
+    real.usesMacArtwork = true
+    let recreated = try requireValue(real.frame(action: .swimming, direction: .right,
+      animationFrame: 0, traits: []), "Recreated swimmer frame did not resolve")
+    try require(recreated.pixelScale == 2 && recreated.width == swimmer.width * 2
+      && recreated.height == swimmer.height * 2 && recreated.image.size == swimmer.image.size,
+      "Recreated sprite did not retain its logical bounds at Macintosh scale")
+    try require(recreated.footX == swimmer.footX * 2 && recreated.footY == swimmer.footY * 2,
+      "Recreated sprite changed its foot anchor")
+    var detailedCells = 0
+    for y in 0..<swimmer.height { for x in 0..<swimmer.width {
+      let alpha = swimmer.rgba[(y * swimmer.width + x) * 4 + 3]
+      var colours: Set<[UInt8]> = []
+      for dy in 0..<2 { for dx in 0..<2 {
+        let pixel = ((y * 2 + dy) * recreated.width + x * 2 + dx) * 4
+        try require(recreated.rgba[pixel + 3] == alpha,
+          "Recreated sprite changed the source silhouette")
+        if alpha == 255 { colours.insert(Array(recreated.rgba[pixel..<pixel + 3])) }
+      } }
+      if colours.count > 1 { detailedCells += 1 }
+    } }
+    try require(detailedCells > 0,
+      "Recreated sprite contained only repeated source pixels")
+    try require(recreated.rgba == real.frame(action: .swimming, direction: .right,
+        animationFrame: 0, traits: [])?.rgba,
+      "Recreated sprite did not have stable 2× details")
+    let neutralRecreated = try requireValue(real.frame(action: .walking, direction: .right,
+      animationFrame: 0, traits: [.neutral]), "Neutral 2× Walker did not resolve")
+    try require(neutralRecreated.pixelScale == 2 && neutralRecreated.rgba.contains(0x88),
+      "Neutral sprite lost its grey clothing")
+    let zombieRecreated = try requireValue(real.frame(action: .walking, direction: .right,
+      animationFrame: 0, traits: [.zombie]), "Zombie 2× Walker did not resolve")
+    try require(zombieRecreated.pixelScale == 2 && zombieRecreated.rgba.contains(0x80),
+      "Zombie sprite lost its grey skin")
+    let themed = try NeoLemmixSpriteSet(stylesRootURL: realStyles, themeStyle: "l2_beach")
+    themed.usesMacArtwork = true
+    let beach = try requireValue(themed.frame(action: .swimming, direction: .right,
+      animationFrame: 0, traits: []), "Beach sprite did not resolve")
+    func containsColor(_ pixels: [UInt8], _ color: [UInt8]) -> Bool {
+      stride(from: 0, to: pixels.count, by: 4).contains { offset in
+        pixels[offset..<offset + 3].elementsEqual(color)
+      }
+    }
+    try require(beach.pixelScale == 2 && containsColor(beach.rgba, [0xCA, 0x72, 0x00])
+      && !containsColor(beach.rgba, [0xFF, 0xAA, 0x22]),
+      "Themed sprite lost its authored skin colour")
   }
-  print("PASS NeoLemmix sprite resolution, geometry, direction, shade/state recoloring, frame selection, and action coverage")
+  print("PASS NeoLemmix sprite resolution, geometry, state recolouring, action coverage, and Macintosh-scale recreation")
 } catch {
   fputs("FAIL: \(error)\n", stderr)
   exit(1)

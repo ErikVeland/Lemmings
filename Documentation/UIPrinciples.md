@@ -31,9 +31,13 @@ The shared result panel and Classic HUD now apply these rules. The changes cover
 star states, compact result layout, primary/selected actions, transport icon
 changes and concise skill names beneath HUD counts. This is not a claim that every
 sequel screen or every novice-player journey has been validated.
+Classic Macintosh mode uses release sprites and recreates the remaining stone
+and control tiles at 2× within their existing button bounds. Amiga mode keeps
+the supplied panel artwork.
 
 NeoLemmix uses Classic stone controls and bitmap counters with a compact,
-whole-pixel layout. The bar adapts to the level's skill count. Skill icons in the
+whole-pixel layout. Macintosh mode recreates the stone and control glyphs at
+2× within the same targets. The bar adapts to the level's skill count. Skill icons in the
 bar and beside the cursor use the level's themed sprites and actual skill names.
 Eight NeoLemmix skills must not select Classic's fixed eight-skill artwork.
 The Macintosh artwork setting substitutes verified equivalents as described in

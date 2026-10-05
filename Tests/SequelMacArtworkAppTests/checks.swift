@@ -242,16 +242,18 @@ for number in [1,101,201] {
     _ = try shot(view, "l3-\(number)-speed-start")
     view.game = game
     let afterimages = try shot(view, "l3-\(number)-speed")
+    let originalMultiplier = view.speedMultiplier
     for tier in [2.0, 3, 5, 10] {
         view.speedMultiplier = tier
         _ = try shot(view, "l3-\(number)-speed-\(Int(tier))x")
     }
+    view.speedMultiplier = originalMultiplier
     view.isFastForward = false
     try assertArtwork(try shot(view, "l3-\(number)-speed-off") == restored,
         "L3 normal speed retained a afterimages frame")
     let normalBitmap = NSBitmapImageRep(data: restored)!, speedBitmap = NSBitmapImageRep(data: afterimages)!
     let panelScale = CGFloat(normalBitmap.pixelsHigh) / view.bounds.height
-    for y in Int(view.panelRect.minY * panelScale)..<Int(view.panelRect.maxY * panelScale) {
+    for y in Int(ceil(view.panelRect.minY * panelScale))..<Int(view.panelRect.maxY * panelScale) {
         for x in 0..<normalBitmap.pixelsWide {
             try assertArtwork(normalBitmap.colorAt(x: x, y: y) == speedBitmap.colorAt(x: x, y: y),
                 "L3 fast-forward changed a panel pixel")
@@ -267,7 +269,7 @@ for number in [1,101,201] {
     let picker = try shot(view, "l3-\(number)-direction")
     let plainPixels = NSBitmapImageRep(data: restored)!, pickerPixels = NSBitmapImageRep(data: picker)!
     let pixelScale = CGFloat(plainPixels.pixelsHigh) / view.bounds.height
-    for y in Int(view.panelRect.minY * pixelScale)..<Int(view.panelRect.maxY * pixelScale) {
+    for y in Int(ceil(view.panelRect.minY * pixelScale))..<Int(view.panelRect.maxY * pixelScale) {
         for x in stride(from: 0, to: plainPixels.pixelsWide, by: 4) {
             try assertArtwork(plainPixels.colorAt(x: x, y: y) == pickerPixels.colorAt(x: x, y: y), "L3 direction picker overwrote panel counters")
         }

@@ -46,6 +46,8 @@ final class NeoLemmixSpriteSet {
 
   private let animations: [String: Animation]
   private let baseRecoloring: [UInt32: UInt32]
+  private let sourceColors: [String: UInt32]
+  private let sourceShades: [UInt32: UInt32]
   private let athleteRecoloring: [UInt32: UInt32]
   private let zombieRecoloring: [UInt32: UInt32]
   private let neutralRecoloring: [UInt32: UInt32]
@@ -91,12 +93,14 @@ final class NeoLemmixSpriteSet {
     }
     let scheme = NxlvParser.parse(schemeText)
     let sourceColors = Self.namedColors(in: scheme.section("spriteset_recoloring"))
+    self.sourceColors = sourceColors
     let themeColors = Self.namedColors(in: themeDocument.section("colors"))
     var themeRecoloring: [UInt32: UInt32] = [:]
     for (name, source) in sourceColors {
       if let target = themeColors[name] { themeRecoloring[source] = target }
     }
     let shades = Self.shades(in: scheme.section("shades"))
+    sourceShades = shades
     for (alternate, primary) in shades {
       if let target = themeRecoloring[primary] {
         themeRecoloring[alternate] = Self.applyColorShift(
@@ -208,6 +212,13 @@ final class NeoLemmixSpriteSet {
           let recolored = recolor(pixels, traits: traits),
           let rgba = Self.rgba(recolored) else { return nil }
     let foot = direction == .left ? animation.leftFoot : animation.rightFoot
+    if usesMacArtwork,
+       let recreated = recreatedFrame(rgba: rgba, width: animation.frameWidth,
+         height: animation.frameHeight, foot: foot, direction: direction,
+         traits: traits, key: cacheKey) {
+      if frameCache.count < 4096 { frameCache[cacheKey] = recreated }
+      return recreated
+    }
     let result = Frame(
       image: NSImage(cgImage: recolored, size: NSSize(width: animation.frameWidth, height: animation.frameHeight)),
       rgba: rgba,
@@ -258,6 +269,175 @@ final class NeoLemmixSpriteSet {
     return Frame(image: NSImage(cgImage: cg, size: NSSize(width: CGFloat(frame.width) / 2, height: CGFloat(frame.height) / 2)),
       rgba: [UInt8](frame.rgba), width: frame.width, height: frame.height,
       footX: -(animation.offsetX * 2 + frame.x), footY: -(animation.offsetY * 2 + frame.y), cacheKey: "mac-" + key, pixelScale: 2)
+  }
+
+  /**
+   * Recreates an unmatched NeoLemmix pose at Macintosh pixel scale.
+   */
+  private func recreatedFrame(rgba: [UInt8], width: Int, height: Int,
+    foot: (x: Int, y: Int), direction: NeoLemmixDirection,
+    traits: Set<NeoLemmixTrait>, key: String) -> Frame? {
+    let doubled: [UInt8]
+    if let source = try? SequelMacFrame(width: width, height: height, rgba: rgba),
+       let refined = try? SequelMacArtwork.reconstruct(source, category: .sprite) {
+      doubled = refined.rgba
+    } else {
+      doubled = Self.doubledPixels(rgba, width: width, height: height)
+    }
+    var artwork = doubled
+    refineCharacter(rgba, width: width, height: height, direction: direction,
+      traits: traits, output: &artwork)
+    guard let provider = CGDataProvider(data: Data(artwork) as CFData),
+          let image = CGImage(width: width * 2, height: height * 2,
+            bitsPerComponent: 8, bitsPerPixel: 32, bytesPerRow: width * 8,
+            space: CGColorSpaceCreateDeviceRGB(),
+            bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.last.rawValue),
+            provider: provider, decode: nil, shouldInterpolate: false,
+            intent: .defaultIntent) else { return nil }
+    return Frame(image: NSImage(cgImage: image, size: NSSize(width: width, height: height)),
+      rgba: artwork, width: width * 2, height: height * 2,
+      footX: foot.x * 2, footY: foot.y * 2, cacheKey: "recreated-" + key,
+      pixelScale: 2)
+  }
+
+  private static func doubledPixels(_ rgba: [UInt8], width: Int, height: Int) -> [UInt8] {
+    var result = [UInt8](repeating: 0, count: width * height * 16)
+    for y in 0..<height { for x in 0..<width {
+      let source = (y * width + x) * 4
+      for dy in 0..<2 { for dx in 0..<2 {
+        let target = ((y * 2 + dy) * width * 2 + x * 2 + dx) * 4
+        result[target..<target + 4] = rgba[source..<source + 4]
+      } }
+    } }
+    return result
+  }
+
+  private func themedColor(_ source: UInt32, traits: Set<NeoLemmixTrait>) -> UInt32 {
+    var color = baseRecoloring[source] ?? source
+    if !traits.isDisjoint(with: [.slider, .climber, .swimmer, .floater, .glider, .disarmer]) {
+      color = athleteRecoloring[color] ?? color
+    }
+    if traits.contains(.zombie) { color = zombieRecoloring[color] ?? color }
+    if traits.contains(.neutral) { color = neutralRecoloring[color] ?? color }
+    return color
+  }
+
+  private func roleColors(_ names: [String], traits: Set<NeoLemmixTrait>) -> Set<UInt32> {
+    var colors: Set<UInt32> = []
+    for name in names {
+      guard let primary = sourceColors[name] else { continue }
+      colors.insert(themedColor(primary, traits: traits))
+      for (alternate, base) in sourceShades where base == primary {
+        colors.insert(themedColor(alternate, traits: traits))
+      }
+    }
+    return colors
+  }
+
+  /**
+   * Adds small face, hair and cuff marks without changing the source silhouette.
+   */
+  private func refineCharacter(_ rgba: [UInt8], width: Int, height: Int,
+    direction: NeoLemmixDirection, traits: Set<NeoLemmixTrait>,
+    output: inout [UInt8]) {
+    func color(at index: Int) -> UInt32? {
+      let offset = index * 4
+      guard rgba[offset + 3] == 255 else { return nil }
+      return Self.color(rgba[offset], rgba[offset + 1], rgba[offset + 2])
+    }
+    func put(_ color: UInt32, x: Int, y: Int) {
+      let index = (y * width * 2 + x) * 4
+      guard output[index + 3] == 255 else { return }
+      output[index] = UInt8((color >> 16) & 255)
+      output[index + 1] = UInt8((color >> 8) & 255)
+      output[index + 2] = UInt8(color & 255)
+    }
+    // The measured rule can propose Classic face colours on pale clothing.
+    // Clear these proposals before placing this pose's face and eye.
+    for index in 0..<(width * height) where color(at: index) != nil {
+      let original = color(at: index)!
+      for dy in 0..<2 { for dx in 0..<2 {
+        let x = (index % width) * 2 + dx, y = (index / width) * 2 + dy
+        let offset = (y * width * 2 + x) * 4
+        let current = Self.color(output[offset], output[offset + 1], output[offset + 2])
+        if current == 0xFF_AA_22 || current == 0x66_00_11 { put(original, x: x, y: y) }
+      } }
+    }
+    let hair = roleColors(["lemming_hair", "lemming_hat_tip",
+      "lemming_athlete_hair", "lemming_athlete_hat_tip"], traits: traits)
+    let skin = roleColors(["lemming_skin", "lemming_zombie_skin"], traits: traits)
+    guard !hair.isEmpty, !skin.isEmpty else { return }
+    let hairPixels = (0..<(width * height)).filter { color(at: $0).map(hair.contains) ?? false }
+    for index in hairPixels where index / width == 0
+      || color(at: max(0, index - width)).map(hair.contains) != true {
+      let shade = Self.lift(color(at: index)!, numerator: 1, denominator: 7)
+      put(shade, x: (index % width) * 2, y: (index / width) * 2)
+    }
+    for index in 0..<(width * height) where color(at: index).map(skin.contains) ?? false {
+      let shade = Self.lift(color(at: index)!, numerator: 1, denominator: 5)
+      put(shade, x: (index % width) * 2, y: (index / width) * 2)
+    }
+    guard (2...96).contains(hairPixels.count) else { return }
+    let left = hairPixels.map { $0 % width }.min()!
+    let right = hairPixels.map { $0 % width }.max()!
+    let top = hairPixels.map { $0 / width }.min()!
+    let bottom = hairPixels.map { $0 / width }.max()!
+    guard right - left <= 15, bottom - top <= 9 else { return }
+    let candidates = (0..<(width * height)).filter { index in
+      let x = index % width, y = index / width
+      return x >= left - 2 && x <= right + 2 && y >= top && y <= bottom + 2
+        && (color(at: index).map(skin.contains) ?? false)
+    }
+    let hairPositions = Set(hairPixels)
+    let middle = (left + right) / 2
+    let face = candidates.filter { index in
+      let x = index % width, y = index / width
+      guard direction == .right ? x >= middle : x <= middle else { return false }
+      return (-1...1).contains(where: { dy in
+        (-1...1).contains(where: { dx in
+          let px = x + dx, py = y + dy
+          return px >= 0 && px < width && py >= 0 && py < height
+            && hairPositions.contains(py * width + px)
+        })
+      }) || (y > top && candidates.contains(index - width))
+    }
+    guard (1...24).contains(face.count) else { return }
+    let faceTop = face.map { $0 / width }.min()!
+    let zombie = traits.contains(.zombie)
+    let sourceSkin = face.compactMap(color).first!
+    let pale = !zombie && Self.isPaleSkin(sourceSkin)
+    let faceColor: UInt32 = pale ? 0xFF_AA_22 : sourceSkin
+    let eyeColor: UInt32 = pale ? 0x66_00_11 : Self.shade(sourceSkin, numerator: 1, denominator: 4)
+    for index in face {
+      let x = index % width, y = index / width
+      // Leave a pale forehead under the hair and shade the cheek below it.
+      for dy in 0..<2 where y > faceTop || dy == 1 {
+        for dx in 0..<2 { put(faceColor, x: x * 2 + dx, y: y * 2 + dy) }
+      }
+    }
+    let firstRow = face.filter { $0 / width == faceTop }
+    if let eye = direction == .right ? firstRow.max() : firstRow.min() {
+      let x = (eye % width) * 2 + (direction == .right ? 1 : 0)
+      put(eyeColor, x: x, y: (eye / width) * 2 + 1)
+    }
+  }
+
+  private static func isPaleSkin(_ color: UInt32) -> Bool {
+    let red = Int((color >> 16) & 255), green = Int((color >> 8) & 255)
+    let blue = Int(color & 255)
+    return red >= 220 && green >= 175 && blue >= 175 && red >= green
+  }
+
+  private static func shade(_ color: UInt32, numerator: Int, denominator: Int) -> UInt32 {
+    Self.color(Int((color >> 16) & 255) * numerator / denominator,
+      Int((color >> 8) & 255) * numerator / denominator,
+      Int(color & 255) * numerator / denominator)
+  }
+
+  private static func lift(_ color: UInt32, numerator: Int, denominator: Int) -> UInt32 {
+    Self.color(Int((color >> 16) & 255) + (255 - Int((color >> 16) & 255)) * numerator / denominator,
+      Int((color >> 8) & 255) + (255 - Int((color >> 8) & 255)) * numerator / denominator,
+      Int(color & 255) + (255 - Int(color & 255)) * numerator / denominator)
   }
 
   /// CE draws this shared 16×11 mask into the terrain when a Stoner finishes.

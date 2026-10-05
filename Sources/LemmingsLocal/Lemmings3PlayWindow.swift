@@ -1867,7 +1867,9 @@ import NxlvKit
                 drawImage(frame, x: CGFloat(creature.x) - frame.size.width / 2, y: CGFloat(creature.y) - frame.size.height)
             }
         }
-        // Tool icons and blast rings are preview art until effect sprites are mapped.
+        /**
+         * Thrown explosives reuse pickup art until their native effect frames and anchors are mapped.
+         */
         for item in game.explosives {
             if let frame = pickupImages[item.tool.rawValue] { drawImage(frame, x: CGFloat(item.x - 4), y: CGFloat(item.y - 7)) }
             let seconds = (item.fuseTicks - item.age + 22) / 23
@@ -1880,15 +1882,27 @@ import NxlvKit
                     y: origin.y + (CGFloat(blast.y) - cameraY) * zoom),
                     pixel: CGSize(width: zoom, height: zoom), phase: game.tick - blast.tick)
             }
-            NSColor.orange.setStroke()
-            let ring = NSBezierPath(ovalIn: NSRect(x: origin.x + (CGFloat(blast.x - 20) - cameraX) * zoom,
-                y: origin.y + (CGFloat(blast.y - 20) - cameraY) * zoom, width: 40 * zoom, height: 40 * zoom))
-            ring.lineWidth = 2; ring.stroke()
+            let rect = NSRect(x: origin.x + (CGFloat(blast.x - 20) - cameraX) * zoom,
+                y: origin.y + (CGFloat(blast.y - 20) - cameraY) * zoom, width: 40 * zoom, height: 40 * zoom)
+            if SequelArtworkPreference.enabled, let ring = SequelEffectArtwork.blastRingImage {
+                ring.draw(in: rect, from: .zero, operation: .sourceOver, fraction: 1,
+                    respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
+            } else {
+                NSColor.orange.setStroke()
+                let ring = NSBezierPath(ovalIn: rect)
+                ring.lineWidth = 2; ring.stroke()
+            }
         }
         for shot in game.fireballs {
-            NSColor.cyan.setFill()
-            NSBezierPath(ovalIn: NSRect(x: origin.x + (CGFloat(shot.x - 3) - cameraX) * zoom,
-                y: origin.y + (CGFloat(shot.y - 2) - cameraY) * zoom, width: 6 * zoom, height: 4 * zoom)).fill()
+            let rect = NSRect(x: origin.x + (CGFloat(shot.x - 3) - cameraX) * zoom,
+                y: origin.y + (CGFloat(shot.y - 2) - cameraY) * zoom, width: 6 * zoom, height: 4 * zoom)
+            if SequelArtworkPreference.enabled, let fireball = SequelEffectArtwork.fireballImage {
+                fireball.draw(in: rect, from: .zero, operation: .sourceOver, fraction: 1,
+                    respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
+            } else {
+                NSColor.cyan.setFill()
+                NSBezierPath(ovalIn: rect).fill()
+            }
         }
         drawLemmings(game, ghostsOnly: false)
         NSGraphicsContext.restoreGraphicsState()
@@ -2070,12 +2084,21 @@ import NxlvKit
             for direction in Lemmings3Runtime.Direction.allCases {
                 let x = rect.minX + CGFloat(direction.dx + 1) * 14, y = rect.minY + CGFloat(direction.dy + 1) * 14
                 NSColor(calibratedWhite: 0.12, alpha: 1).setFill(); CGRect(x: x, y: y, width: 13, height: 13).fill()
-                NSColor(calibratedRed: 0.8, green: 0.92, blue: 0.6, alpha: 1).setStroke()
-                let centre = CGPoint(x: x + 6, y: y + 6), dx = CGFloat(direction.dx), dy = CGFloat(direction.dy)
-                let tip = CGPoint(x: centre.x + dx * 4, y: centre.y + dy * 4)
-                let path = NSBezierPath(); path.move(to: CGPoint(x: centre.x - dx * 3, y: centre.y - dy * 3)); path.line(to: tip)
-                path.move(to: CGPoint(x: tip.x - dx * 3 - dy * 2, y: tip.y - dy * 3 + dx * 2)); path.line(to: tip)
-                path.line(to: CGPoint(x: tip.x - dx * 3 + dy * 2, y: tip.y - dy * 3 - dx * 2)); path.lineWidth = 1; path.stroke()
+                let frame = Lemmings3Panel.directionFrame(direction)
+                let animation = Lemmings3Panel.directionAnimation
+                if sprites.indices.contains(animation), sprites[animation].indices.contains(frame) {
+                    sprites[animation][frame].draw(in: CGRect(x: x, y: y, width: 13, height: 13),
+                        from: CGRect(x: 1, y: 1, width: 13, height: 13),
+                        operation: .sourceOver, fraction: 1, respectFlipped: true,
+                        hints: [.interpolation: NSImageInterpolation.none.rawValue])
+                } else {
+                    NSColor(calibratedRed: 0.8, green: 0.92, blue: 0.6, alpha: 1).setStroke()
+                    let centre = CGPoint(x: x + 6, y: y + 6), dx = CGFloat(direction.dx), dy = CGFloat(direction.dy)
+                    let tip = CGPoint(x: centre.x + dx * 4, y: centre.y + dy * 4)
+                    let path = NSBezierPath(); path.move(to: CGPoint(x: centre.x - dx * 3, y: centre.y - dy * 3)); path.line(to: tip)
+                    path.move(to: CGPoint(x: tip.x - dx * 3 - dy * 2, y: tip.y - dy * 3 + dx * 2)); path.line(to: tip)
+                    path.line(to: CGPoint(x: tip.x - dx * 3 + dy * 2, y: tip.y - dy * 3 - dx * 2)); path.lineWidth = 1; path.stroke()
+                }
             }
         }
         if let rows = menuRows {

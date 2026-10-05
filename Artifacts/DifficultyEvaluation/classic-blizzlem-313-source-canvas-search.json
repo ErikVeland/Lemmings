@@ -1,0 +1,47 @@
+{
+  "date": "2026-10-06",
+  "target": {
+    "identity": "fan:lldb-415/levels/Blizzlem/313.ini#-1",
+    "archive": "Content/LevelPacks/0415-Blizzard-of-Lemm.zip",
+    "archiveSHA256": "a1107ad848d4c68d1b127efe8ca3989906414b7acc5d79be4cbb52bf61a7d7ec",
+    "member": "levels/Blizzlem/313.ini",
+    "memberSHA256": "206443d643d92a2a522deea18aa5c48e92427ec698adc621db86805f8a37e1a8",
+    "initialStateSHA256": "8d9056fcd3af4d2a28b2be14c3030192aa2104c11a453ef2690ac645e0372643"
+  },
+  "build": {
+    "solver": "ClassicSolver source-built 2026-10-05",
+    "solverSHA256": "ba7372f65381267355110303e658f785056ba000f305daf7bfcf0cd8719585e3",
+    "nxlvKitSHA256": "6dbbb2ead99717fc3838472eed768a2fe4cc386bef4f8b09fb6b61447645aa49",
+    "solverSourceSHA256": "e9efacd6a90ebd84e2c1d20548f6ba0156f0b764fc2cbe30e7822e96def8c71a",
+    "simulationSourceSHA256": "55b522fbbd3c400908ba4b18403f40656709d93ab7fc0dbad08cc5e1e8163bdd"
+  },
+  "search": {
+    "mode": "--rollout-single",
+    "fallbackTicks": 12,
+    "beamWidth": 64,
+    "releaseRate": 20,
+    "seconds": 25,
+    "ranking": "--direct-exit-distance",
+    "geometryProbe": [
+      "--source-canvas",
+      "--source-terrain-coordinates",
+      "--source-object-coordinates"
+    ],
+    "waitingRouteTick": 377,
+    "continuations": 74,
+    "expandedStates": 15652,
+    "elapsedSeconds": 19,
+    "terminalTick": 747,
+    "released": 17,
+    "lost": 5,
+    "active": 12,
+    "complete": false,
+    "result": "UNSOLVED; no candidate replay emitted"
+  },
+  "partialReplay": {
+    "path": "Artifacts/DifficultyEvaluation/classic-blizzlem-313-source-canvas-partial.json",
+    "sha256": "3ee3890d4545a7b92399f3612c651921cd75d926586b1bf686dae7ad7a82d3c8",
+    "events": 37
+  },
+  "interpretation": "The coordinate-preserving 3200x320 source-canvas probe tests whether the Classic-height geometry mismatch alone explains the no-win. This bounded one-skill rollout still did not find a win. It does not strictly replay under the bundled app runtime, does not resolve Lemmini mechanics or source parity, and is not a score or impossibility proof."
+}

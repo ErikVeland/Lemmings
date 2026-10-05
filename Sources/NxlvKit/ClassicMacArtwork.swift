@@ -28,6 +28,7 @@ public struct ClassicMacArtwork: Sendable {
     public let version: Int
     public let banks: [Int: [Frame?]]
     public let objects: [Int: [ObjectSequence]]
+    let family: String
     /// The name the release gives each bank, such as "Charset2" or "Logo2".
     /// The front end asks for banks by name, because the numbers move between
     /// releases.
@@ -54,6 +55,7 @@ public struct ClassicMacArtwork: Sendable {
             }
         }
         self.version = manifest.version
+        self.family = directory.lastPathComponent.lowercased()
         self.banks = banks
         self.objects = Dictionary(uniqueKeysWithValues: manifest.objects.compactMap { key, value in
             Int(key).map { ($0, value) }
@@ -160,63 +162,74 @@ public struct ClassicMacScene: Sendable {
     private let level: ClassicRenderedLevel
     private let style: Int
     private let match: ClassicMacPieceMatch?
-    /// DOS frames doubled for objects the pack changed, by position in `level.objects`.
-    private let doubledObjects: [Int: [ClassicMacArtwork.Frame]]
+    /// Reconstructed frames for objects the pack changed, by position in `level.objects`.
+    private let reconstructedObjects: [Int: [ClassicMacArtwork.Frame]]
 
     /// `match` lists the pieces allowed to use the artwork. Without it every piece does.
-    /// Pieces left out are drawn from the DOS ground set at the same 2× scale.
-    public init(level source: ClassicLevel, rendered: ClassicRenderedLevel, artwork: ClassicMacArtwork, groundSet: ClassicGroundSet? = nil, match: ClassicMacPieceMatch? = nil) throws {
+    /// Pieces left out use their source geometry with inferred Macintosh detail.
+    public init(level source: ClassicLevel, rendered: ClassicRenderedLevel, artwork: ClassicMacArtwork,
+        groundSet: ClassicGroundSet? = nil, match: ClassicMacPieceMatch? = nil,
+        reconstructUnmatched: Bool = true) throws {
         width = rendered.width * 2; height = rendered.height * 2
         let style = groundSet?.style ?? source.groundStyle
         level = rendered; self.artwork = artwork; self.style = style; self.match = match
-        guard artwork.banks[1500 + style] != nil else {
-            throw SequelDataError.invalid("No Mac terrain for this style.")
-        }
-        var doubled: [Int: [ClassicMacArtwork.Frame]] = [:]
+        var reconstructedObjects: [Int: [ClassicMacArtwork.Frame]] = [:]
+        var objectFrames: [Int: [ClassicMacArtwork.Frame]] = [:]
         for (position, object) in rendered.objects.enumerated() {
-            if let match, !match.objects.contains(object.placement.id) {
-                doubled[position] = object.rgbaFrames.map {
-                    Self.doubled($0, width: object.graphic.width, height: object.graphic.height)
+            let id = object.placement.id
+            let sequence = artwork.objects[style].flatMap { $0.indices.contains(id) ? $0[id] : nil }
+            let macAvailable = (match?.objects.contains(id) ?? true) && sequence.map { seq in
+                seq.count > 0 && (0..<seq.count).allSatisfy {
+                    artwork.frame(1600 + style, seq.base + $0) != nil
                 }
+            } == true
+            if !macAvailable {
+                if objectFrames[object.placement.id] == nil {
+                    objectFrames[object.placement.id] = try object.rgbaFrames.map {
+                        reconstructUnmatched
+                            ? try Self.reconstructedObject($0, graphic: object.graphic)
+                            : Self.doubled($0, width: object.graphic.width, height: object.graphic.height)
+                    }
+                }
+                reconstructedObjects[position] = objectFrames[object.placement.id]
                 continue
             }
-            guard let definitions = artwork.objects[style], definitions.indices.contains(object.placement.id) else {
-                throw SequelDataError.invalid("Missing Mac object definition.")
-            }
-            let seq = definitions[object.placement.id]
-            guard seq.count > 0, (0..<seq.count).allSatisfy({ artwork.frame(1600 + style, seq.base + $0) != nil }) else {
-                throw SequelDataError.invalid("Missing Mac object animation.")
-            }
         }
-        doubledObjects = doubled
+        self.reconstructedObjects = reconstructedObjects
         var pixels = [UInt8](repeating: 0, count: width * height * 4)
         if source.specialStyle > 0 {
-            guard match?.special ?? true, let frame = artwork.frame(1699 + source.specialStyle) else {
-                throw SequelDataError.invalid("No Mac artwork for this special level.")
+            if (match?.special ?? true), let frame = artwork.frame(1699 + source.specialStyle) {
+                Self.blit(frame, into: &pixels, width: width, height: height,
+                    x: 304 * 2, y: 0)
+            } else {
+                let frame = try reconstructUnmatched
+                    ? Self.reconstructed(rendered.rgba, width: rendered.width,
+                        height: rendered.height, category: .architectural)
+                    : Self.doubled(rendered.rgba, width: rendered.width, height: rendered.height)
+                Self.blit(frame, into: &pixels, width: width, height: height, x: 0, y: 0)
             }
-            Self.blit(frame, into: &pixels, width: width, height: height,
-                x: 304 * 2, y: 0)
         }
+        var terrainFrames: [Int: ClassicMacArtwork.Frame] = [:]
         for tile in source.terrain where source.specialStyle == 0 {
             let frame: ClassicMacArtwork.Frame
             if match?.terrain.contains(tile.id) ?? true, let mac = artwork.frame(1500 + style, tile.id) { frame = mac }
             else if let groundSet, let dos = groundSet.terrain[tile.id] {
-                // Some Mac banks leave a DOS piece empty (for example fire 44), and a
-                // fan pack may redraw a piece. Keep that individual piece visible
-                // rather than replacing the whole scene.
-                var fallback = [UInt8](repeating: 0, count: dos.width * dos.height * 16)
-                let indexed = [UInt8](dos.indexedPixels)
-                for py in 0..<dos.height { for px in 0..<dos.width {
-                    let value = indexed[py * dos.width + px]
-                    guard value & 0x80 == 0 else { continue }
-                    let color = groundSet.objectPalette[Int(value & 15)]
-                    for dy in 0..<2 { for dx in 0..<2 {
-                        let offset = ((py * 2 + dy) * dos.width * 2 + px * 2 + dx) * 4
-                        fallback[offset] = color.red; fallback[offset+1] = color.green
-                        fallback[offset+2] = color.blue; fallback[offset+3] = 255
-                    } }
-                } }
-                frame = ClassicMacArtwork.Frame(x: 0, y: 0, width: dos.width * 2, height: dos.height * 2, rgba: Data(fallback))
+                if terrainFrames[tile.id] == nil {
+                    if reconstructUnmatched {
+                        terrainFrames[tile.id] = try Self.reconstructedTerrain(dos,
+                            palette: groundSet.objectPalette, family: artwork.family, style: style)
+                    } else {
+                        var rgba = [UInt8](repeating: 0, count: dos.width * dos.height * 4)
+                        for (i, value) in dos.indexedPixels.enumerated() where value & 0x80 == 0 {
+                            let colour = groundSet.objectPalette[Int(value & 15)]
+                            rgba[i * 4] = colour.red; rgba[i * 4 + 1] = colour.green
+                            rgba[i * 4 + 2] = colour.blue; rgba[i * 4 + 3] = 255
+                        }
+                        terrainFrames[tile.id] = Self.doubled(Data(rgba),
+                            width: dos.width, height: dos.height)
+                    }
+                }
+                frame = terrainFrames[tile.id]!
             } else { throw SequelDataError.invalid("Missing Mac terrain piece \(tile.id).") }
             Self.blit(frame, into: &pixels, width: width, height: height,
                 x: tile.x * 2 + frame.x,
@@ -245,7 +258,7 @@ public struct ClassicMacScene: Sendable {
             let cooldown = interactive ? simulation.objectCooldown(at: triggerIndex) : 0
             if interactive { triggerIndex += 1 }
             let frame: ClassicMacArtwork.Frame
-            if let own = doubledObjects[position] {
+            if let own = reconstructedObjects[position] {
                 let index = ClassicSceneFrame.frameIndex(of: object, cooldown: cooldown, tick: simulation.tickCount)
                 guard own.indices.contains(index) else { continue }
                 frame = own[index]
@@ -282,18 +295,88 @@ public struct ClassicMacScene: Sendable {
         return Data(pixels)
     }
 
-    /// Repeats each pixel as a 2×2 block, the scale the Mac artwork is drawn at.
+    /**
+     * Reconstructs a Classic terrain piece with its gameplay palette and material treatment.
+     */
+    public static func reconstructedTerrain(_ graphic: ClassicTerrainGraphic,
+        palette: [ClassicRGBColor], family: String, style: Int) throws -> ClassicMacArtwork.Frame {
+        var rgba = [UInt8](repeating: 0, count: graphic.width * graphic.height * 4)
+        for (i, value) in graphic.indexedPixels.enumerated() where value & 0x80 == 0 {
+            let colour = palette[Int(value & 15)]
+            rgba[i * 4] = colour.red; rgba[i * 4 + 1] = colour.green
+            rgba[i * 4 + 2] = colour.blue; rgba[i * 4 + 3] = 255
+        }
+        // Unused style colours can belong to another material, such as green
+        // foliage beside brown rock. Texture this piece with its own pigments.
+        return try reconstructed(Data(rgba), width: graphic.width, height: graphic.height,
+            category: terrainCategory(family: family, style: style))
+    }
+
+    /**
+     * Reconstructs one object frame without changing its source transparency.
+     */
+    public static func reconstructedObject(_ rgba: Data,
+        graphic: ClassicObjectGraphic) throws -> ClassicMacArtwork.Frame {
+        let category: SequelMacCategory = graphic.triggerEffect == ClassicDOSObjectEffect.water.rawValue
+            ? .liquid : .mechanical
+        return try reconstructed(rgba, width: graphic.width, height: graphic.height,
+            category: category)
+    }
+
+    /**
+     * Applies measured Macintosh colour-boundary rules without moving an opaque source cell.
+     */
+    public static func reconstructed(_ rgba: Data, width: Int, height: Int,
+        category: SequelMacCategory, palette: [ClassicRGBColor]? = nil) throws -> ClassicMacArtwork.Frame {
+        let source = try SequelMacFrame(width: width, height: height, rgba: [UInt8](rgba),
+            sourcePalette: palette.map(Self.paletteBytes))
+        let result = try SequelMacArtwork.reconstruct(source, category: category)
+        var output = result.rgba
+        if category == .liquid {
+            // The sequel liquid treatment fills transparent tails. Classic liquid
+            // bodies are handled by ClassicLiquidFill, so retain the source mask.
+            for i in 0..<(width * height) where rgba[i * 4 + 3] == 0 {
+                for dy in 0..<2 { for dx in 0..<2 {
+                    let p = (((i / width) * 2 + dy) * width * 2 + (i % width) * 2 + dx) * 4
+                    output[p] = 0; output[p + 1] = 0; output[p + 2] = 0; output[p + 3] = 0
+                } }
+            }
+        }
+        return ClassicMacArtwork.Frame(x: 0, y: 0, width: result.width,
+            height: result.height, rgba: Data(output))
+    }
+
+    public static func terrainCategory(family: String, style: Int) -> SequelMacCategory {
+        if family == "xmas" || family == "holiday" { return .organic }
+        if family == "lemmings" && [0, 1, 4].contains(style) { return .organic }
+        if family == "ohno" && [1, 2].contains(style) { return .organic }
+        return .architectural
+    }
+
+    private static func paletteBytes(_ palette: [ClassicRGBColor]) -> [UInt8] {
+        var bytes = [UInt8](repeating: 0, count: 256 * 4)
+        for (index, colour) in palette.prefix(256).enumerated() {
+            bytes[index * 4] = colour.red
+            bytes[index * 4 + 1] = colour.green
+            bytes[index * 4 + 2] = colour.blue
+            bytes[index * 4 + 3] = 255
+        }
+        return bytes
+    }
+
     private static func doubled(_ rgba: Data, width: Int, height: Int) -> ClassicMacArtwork.Frame {
         let source = [UInt8](rgba)
-        var out = [UInt8](repeating: 0, count: width * height * 16)
+        var output = [UInt8](repeating: 0, count: width * height * 16)
         for y in 0..<height { for x in 0..<width {
             let s = (y * width + x) * 4
             for dy in 0..<2 { for dx in 0..<2 {
                 let d = ((y * 2 + dy) * width * 2 + x * 2 + dx) * 4
-                out[d] = source[s]; out[d+1] = source[s+1]; out[d+2] = source[s+2]; out[d+3] = source[s+3]
+                output[d] = source[s]; output[d + 1] = source[s + 1]
+                output[d + 2] = source[s + 2]; output[d + 3] = source[s + 3]
             } }
         } }
-        return ClassicMacArtwork.Frame(x: 0, y: 0, width: width * 2, height: height * 2, rgba: Data(out))
+        return ClassicMacArtwork.Frame(x: 0, y: 0, width: width * 2,
+            height: height * 2, rgba: Data(output))
     }
 
     private static func blit(_ frame: ClassicMacArtwork.Frame, into pixels: inout [UInt8],

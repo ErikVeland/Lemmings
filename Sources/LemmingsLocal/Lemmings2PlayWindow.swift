@@ -2706,6 +2706,19 @@ import NxlvKit
             }
         }
         let palette = game.configuration.palette
+        let macEffects = SequelArtworkPreference.enabled
+        let ropeArt = macEffects ? SequelEffectArtwork.markImage(palette: palette, colourIndex: 4, kind: .rope) : nil
+        let particleArt = macEffects ? SequelEffectArtwork.markImage(palette: palette, colourIndex: 3, kind: .particle) : nil
+        let poleArt = macEffects ? SequelEffectArtwork.markImage(palette: palette, colourIndex: 4, kind: .pole) : nil
+        func drawPoint(_ x: Int, _ y: Int, artwork: NSImage?) {
+            let rect = NSRect(x: origin.x + (CGFloat(x) - cameraX) * zoom,
+                y: origin.y + (CGFloat(y) - cameraY) * zoom * 1.2,
+                width: zoom, height: zoom * 1.2)
+            if let artwork {
+                artwork.draw(in: rect, from: .zero, operation: .sourceOver, fraction: 1,
+                    respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
+            } else { rect.fill() }
+        }
         NSColor(red:CGFloat(palette[12])/255,green:CGFloat(palette[13])/255,blue:CGFloat(palette[14])/255,alpha:1).setFill()
         if let rope = game.rope {
             if let frames = sprites["HOOK"], frames.indices.contains(rope.frame) {
@@ -2714,21 +2727,19 @@ import NxlvKit
             }
             NSColor(red:CGFloat(palette[16])/255,green:CGFloat(palette[17])/255,blue:CGFloat(palette[18])/255,alpha:1).setFill()
             for point in rope.points {
-                NSRect(x:origin.x+(CGFloat(point.x)-cameraX)*zoom,y:origin.y+(CGFloat(point.y)-cameraY)*zoom*1.2,width:zoom,height:zoom*1.2).fill()
+                drawPoint(point.x, point.y, artwork: ropeArt)
             }
             NSColor(red:CGFloat(palette[12])/255,green:CGFloat(palette[13])/255,blue:CGFloat(palette[14])/255,alpha:1).setFill()
         }
         for particle in game.fillParticles {
-            NSRect(x:origin.x + (CGFloat(particle.x)-cameraX)*zoom,
-                   y:origin.y + (CGFloat(particle.y)-cameraY)*zoom*1.2,width:zoom,height:zoom*1.2).fill()
+            drawPoint(particle.x, particle.y, artwork: particleArt)
         }
         let poleColour = game.configuration.palette
         NSColor(srgbRed:CGFloat(poleColour[16])/255,green:CGFloat(poleColour[17])/255,
                 blue:CGFloat(poleColour[18])/255,alpha:1).setFill()
         for lem in game.lemmings where lem.state == .poleVaulting {
             for point in lem.pole {
-                NSRect(x:origin.x+(CGFloat(point.x)-cameraX)*zoom,
-                       y:origin.y+(CGFloat(point.y)-cameraY)*zoom*1.2,width:zoom,height:zoom*1.2).fill()
+                drawPoint(point.x, point.y, artwork: poleArt)
             }
         }
         drawLemmings(game, ghostsOnly: false)

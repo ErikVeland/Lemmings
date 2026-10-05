@@ -21,6 +21,10 @@ actor Server {
   }
 }
 let root = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
+if CommandLine.arguments.contains("--audit-artwork") {
+  try runArtworkAudit(root: root)
+  exit(0)
+}
 let passedKey = ArcadeStore.shared.progressKey("FanLevelsPassed")
 let installedPack = URL(fileURLWithPath: "0384-Gronklems-1.zip")
 let removedPack = URL(fileURLWithPath: "0386-Gronklems-1.zip")
@@ -325,8 +329,11 @@ check(FanLevelLibrary.artworkFamily(for: recoloured, portsRoot: ports) == nil,
 let stockMatch = FanLevelLibrary.artworkMatch(for: emptyLevel, ground: namedSnow, special: nil, portsRoot: ports)
 check(stockMatch?.family == "ohno" && stockMatch?.pieces.terrain.count == namedSnow.terrain.count,
   "an unchanged ground set matches every piece of its own release")
-check(FanLevelLibrary.artworkMatch(for: emptyLevel, ground: recoloured, special: nil, portsRoot: ports) == nil,
-  "a recoloured ground set takes no alternate pieces")
+let recolouredMatch = FanLevelLibrary.artworkMatch(for: emptyLevel,
+  ground: recoloured, special: nil, portsRoot: ports)
+check(recolouredMatch?.family == "ohno" && recolouredMatch?.pieces.terrain.isEmpty == true
+  && recolouredMatch?.pieces.objects.isEmpty == true,
+  "a recoloured ground set keeps its source pixels for reconstruction")
 var oneRedrawn = try JSONSerialization.jsonObject(with: JSONEncoder().encode(namedSnow)) as! [String: Any]
 var redrawnTerrain = oneRedrawn["terrain"] as! [String: Any]
 var firstPiece = redrawnTerrain["1"] as! [String: Any]
@@ -350,9 +357,10 @@ let partlyRedrawn = try JSONDecoder().decode(ClassicGroundSet.self, from: JSONSe
 let partlyMatch = FanLevelLibrary.artworkMatch(for: emptyLevel, ground: partlyRedrawn, special: nil, portsRoot: ports)
 check(partlyMatch?.family == "ohno" && partlyMatch?.pieces.terrain.contains(1) == false
   && partlyMatch?.pieces.terrain.count == namedSnow.terrain.count - 1,
-  "a redrawn piece falls back to DOS while the rest keep the release artwork")
+  "a redrawn piece uses reconstruction while the rest keep release artwork")
 let mostlyRedrawn = FanLevelLibrary.artworkMatch(for: emptyLevel, ground: redrawnZero, special: nil, portsRoot: ports)
-check(mostlyRedrawn == nil, "a level whose pieces are mostly redrawn keeps its own DOS look")
+check(mostlyRedrawn?.family == "ohno" && mostlyRedrawn?.pieces.terrain.contains(0) == false,
+  "a level whose visible pieces are mostly redrawn still gets reconstruction")
 for name in ["xmas", "christmas"] {
   let ground = try FanLevelLibrary.groundSet(for: emptyLevel, styleName: name, portsRoot: ports)
   check(ground == (try ClassicGroundSet.load(style: 2, from: ports.appendingPathComponent("holiday_native_1994"))), "\(name) resolves Holiday graphics")

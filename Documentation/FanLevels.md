@@ -36,20 +36,22 @@ attachments or install engines and graphics dependencies for unsupported formats
 
 ## Alternate artwork
 
-Mac and Amiga artwork use the same ground set as the classic releases. The game
-compares each piece of a fan level with the stock set of the same release. A
-piece that is identical takes the alternate picture. A piece the pack redraws
-stays in its DOS pixels, drawn at the same 2× scale. This applies to terrain and
-to objects.
+Macintosh and Amiga modes use release artwork for pieces that match the stock
+ground set. Macintosh mode reconstructs changed terrain and object frames at
+the native 2× artwork scale. It uses measured Macintosh colour-boundary rules
+and material details from the source colours. Each source cell keeps its
+opacity, and objects keep their frame order and timing.
 
-A level takes alternate artwork when at least half of the pieces it uses are
-unchanged. A changed palette recolours every piece, so such a level stays in DOS
-artwork. A level that uses a special picture takes the Mac picture only when the
-pack's picture is the stock one. Only the original Lemmings release carries these
-pictures.
+Macintosh reconstruction also covers changed palettes, mostly custom ground
+sets and changed special pictures. A stock special picture keeps its original
+Macintosh art. When no release matches a custom ground set, the source style
+slot selects the Macintosh sprite family and every piece uses reconstruction.
+Amiga mode keeps its existing 50% match rule and doubled source-pixel fallback.
 
-Artwork never changes collision, triggers or replays. `zsh Scripts/run-mac-artwork-tests.sh`
-and `zsh Scripts/run-fan-library-tests.sh` cover the matching and the fallback.
+Artwork does not change collision, triggers or replays. Run
+`zsh Scripts/run-mac-artwork-tests.sh` for matched and changed-piece checks.
+Run `zsh Scripts/run-classic-mac-artwork-audit.sh` to check every bundled fan
+level and distinct changed asset without gameplay ticks.
 
 ## Checks
 

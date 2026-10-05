@@ -4,6 +4,32 @@ import NxlvKit
 func require(_ condition: @autoclosure () -> Bool, _ message: String) throws {
     if !condition() { throw SequelDataError.invalid(message) }
 }
+func checkReconstruction(_ source: Data, width: Int, height: Int,
+    category: SequelMacCategory, palette: [ClassicRGBColor]? = nil) throws -> Int {
+    let frame = try ClassicMacScene.reconstructed(source, width: width, height: height,
+        category: category, palette: palette)
+    try require(frame.width == width * 2 && frame.height == height * 2,
+        "Reconstructed frame changed its dimensions")
+    var split = 0
+    for i in 0..<(width * height) {
+        let opaque = source[i * 4 + 3] != 0
+        var first: UInt32?
+        var detailed = false
+        for dy in 0..<2 { for dx in 0..<2 {
+            let p = (((i / width) * 2 + dy) * width * 2 + (i % width) * 2 + dx) * 4
+            try require((frame.rgba[p + 3] != 0) == opaque,
+                "Reconstructed frame changed a source cell's opacity")
+            if opaque {
+                let colour = UInt32(frame.rgba[p]) << 24 | UInt32(frame.rgba[p + 1]) << 16
+                    | UInt32(frame.rgba[p + 2]) << 8 | UInt32(frame.rgba[p + 3])
+                if let first, first != colour { detailed = true }
+                if first == nil { first = colour }
+            }
+        } }
+        if detailed { split += 1 }
+    }
+    return split
+}
 let root = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
 let exported = root.appendingPathComponent(".build/mac-artwork/export")
 let original = try ClassicMacArtwork(directory: exported.appendingPathComponent("lemmings"))
@@ -155,6 +181,26 @@ do {
     let patched = try ClassicMacScene(level: level, rendered: rendered(redrawn), artwork: art, groundSet: redrawn, match: partial)
     try require(patched.terrainRGBA != reference.terrainRGBA, "A redrawn piece still shows the Mac picture")
     try require(patched.width == 3200 && patched.height == 320, "Fallback pieces broke the 2× scale")
+    let terrainGraphic = redrawn.terrain[piece]!
+    var terrainPixels = [UInt8](repeating: 0, count: terrainGraphic.width * terrainGraphic.height * 4)
+    for (i, value) in terrainGraphic.indexedPixels.enumerated() where value & 0x80 == 0 {
+        let colour = redrawn.objectPalette[Int(value & 15)]
+        terrainPixels[i * 4] = colour.red; terrainPixels[i * 4 + 1] = colour.green
+        terrainPixels[i * 4 + 2] = colour.blue; terrainPixels[i * 4 + 3] = 255
+    }
+    let terrainSource = Data(terrainPixels)
+    let terrainCategory = ClassicMacScene.terrainCategory(family: "lemmings", style: level.groundStyle)
+    let terrainDetail = try checkReconstruction(terrainSource, width: terrainGraphic.width,
+        height: terrainGraphic.height, category: terrainCategory, palette: redrawn.objectPalette)
+    try require(terrainDetail > 0, "A redrawn terrain piece has no Macintosh-size detail")
+    let repeatedTerrain = try ClassicMacScene.reconstructed(terrainSource,
+        width: terrainGraphic.width, height: terrainGraphic.height,
+        category: terrainCategory, palette: redrawn.objectPalette)
+    let secondTerrain = try ClassicMacScene.reconstructed(terrainSource,
+        width: terrainGraphic.width, height: terrainGraphic.height,
+        category: terrainCategory, palette: redrawn.objectPalette)
+    try require(repeatedTerrain.rgba == secondTerrain.rgba,
+        "Terrain reconstruction changed between calls")
 
     let entrance = try edited { touch(&$0, "objects", id: 1, field: "frames", frame: 0) }
     let objectMatch = ClassicMacPieceMatch.compare(entrance, with: stock)!
@@ -168,6 +214,12 @@ do {
     try require(objectFrame.count == referenceFrame.count && objectFrame != referenceFrame,
         "A redrawn object still shows the Mac picture")
     try require(objectScene.terrainRGBA == reference.terrainRGBA, "An object change altered terrain")
+    let redrawnObject = objectRender.objects.first { $0.placement.id == 1 }!
+    let objectDetail = try redrawnObject.rgbaFrames.reduce(0) { total, rgba in
+        total + (try checkReconstruction(rgba, width: redrawnObject.graphic.width,
+            height: redrawnObject.graphic.height, category: .mechanical))
+    }
+    try require(objectDetail > 0, "A redrawn object animation has no Macintosh-size detail")
 
     let recoloured = try edited {
         var palette = $0["terrainPalette"] as! [[String: Any]]
@@ -181,12 +233,16 @@ do {
         let image = try ClassicLevelRenderer.render(special, groundSet: ground, specialGraphic: picture)
         let pieces = ClassicMacPieceMatch.compare(ground, with: ground)!
         var unmatched = pieces; unmatched.special = false
-        var threw = false
-        do { _ = try ClassicMacScene(level: special, rendered: image, artwork: art, groundSet: ground, match: unmatched) }
-        catch { threw = true }
-        try require(threw, "A replaced special picture still used the Mac picture")
+        let reconstructed = try ClassicMacScene(level: special, rendered: image,
+            artwork: art, groundSet: ground, match: unmatched)
+        let expected = try ClassicMacScene.reconstructed(image.rgba,
+            width: image.width, height: image.height, category: .architectural)
+        try require(reconstructed.terrainRGBA == expected.rgba,
+            "A changed special picture did not use its reconstructed source")
+        _ = try checkReconstruction(image.rgba, width: image.width,
+            height: image.height, category: .architectural)
         var matched = pieces; matched.special = true
         _ = try ClassicMacScene(level: special, rendered: image, artwork: art, groundSet: ground, match: matched)
     }
-    print("PASS fan pieces: per-piece Mac artwork, DOS fallback for redrawn pieces and objects")
+    print("PASS fan pieces: Mac artwork and reconstructed terrain, objects and special pictures")
 }

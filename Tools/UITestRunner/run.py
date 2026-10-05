@@ -42,7 +42,11 @@ def main():
     lock = Path(tempfile.gettempdir()) / f"lemmings-ui-tests-{os.getuid()}.lock"
     with lock.open("a") as handle:
         fcntl.flock(handle, fcntl.LOCK_EX)
-        os.nice(10)
+        try:
+            os.nice(10)
+        except PermissionError:
+            # A sandbox may deny priority changes while still allowing offscreen tests.
+            pass
         environment = test_environment()
         command = sys.argv[1:]
         if Path(command[0]).name == "arch" and "DYLD_INSERT_LIBRARIES" in environment:

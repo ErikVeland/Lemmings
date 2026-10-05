@@ -3,6 +3,8 @@ import Foundation
 /// Matches original-style source pixels before substituting Macintosh artwork.
 /// Physics always uses the unmodified NeoLemmix graphics and metadata.
 public struct NeoLemmixMacArtwork: Sendable {
+    private static let reconstructionRevision = 2
+
     private struct Candidate: Sendable {
         let width: Int
         let height: Int
@@ -11,17 +13,22 @@ public struct NeoLemmixMacArtwork: Sendable {
     }
     private let terrain: [String: [Candidate]]
     private let objects: [String: [Candidate]]
+    private let reconstructionCache: ReconstructionCache
     public let lemmings: ClassicMacArtwork?
 
     public init(resources: URL) {
+        reconstructionCache = ReconstructionCache()
         lemmings = try? ClassicMacArtwork(directory: resources.appendingPathComponent("MacArtwork/lemmings"))
         var terrain: [String: [Candidate]] = [:], objects: [String: [Candidate]] = [:]
         for (family, port, styles) in [
             ("lemmings", "lemmings_dos_1991-07-30", ["orig_dirt", "orig_fire", "orig_marble", "orig_pillar", "orig_crystal"]),
-            ("ohno", "oh_no_more_lemmings_dos-1991-11-14_2232", ["ohno_brick", "ohno_rock", "ohno_snow", "ohno_bubble"])
+            ("ohno", "oh_no_more_lemmings_dos-1991-11-14_2232", ["ohno_brick", "ohno_rock", "ohno_snow", "ohno_bubble"]),
+            ("xmas", "xmas_dos_XmasLemmingsV1.9", ["xmas"])
         ] {
             guard let art = try? ClassicMacArtwork(directory: resources.appendingPathComponent("MacArtwork/" + family)) else { continue }
-            for (bank, style) in styles.enumerated() {
+            let banks = family == "xmas" ? [0, 2] : Array(styles.indices)
+            for bank in banks {
+                let style = family == "xmas" ? "xmas" : styles[bank]
                 guard let ground = try? ClassicGroundSet.load(style: bank, from: resources.appendingPathComponent("Ports/" + port)) else { continue }
                 for tile in ground.terrain.values.sorted(by: { $0.id < $1.id }) {
                     guard let mac = art.frame(1500 + bank, tile.id) else { continue }
@@ -69,7 +76,134 @@ public struct NeoLemmixMacArtwork: Sendable {
                 }
             }
         }
+        // Aliases remain subject to the same source-pixel check as stock pieces.
+        for alias in ["orig_dirt_md", "orig_sega"] {
+            terrain[alias] = terrain["orig_dirt"]
+            objects[alias] = objects["orig_dirt"]
+        }
         self.terrain = terrain; self.objects = objects
+    }
+
+    /**
+     * Recreates a display asset at Macintosh scale when no verified Mac piece matches.
+     * Each source cell keeps its original alpha and logical position.
+     */
+    public func recreated(asset: NxlvResolvedStyleAsset, width: Int, height: Int, rgba: [UInt8]) -> [UInt8] {
+        guard width > 0, height > 0, width <= 4096, height <= 4096,
+              width * height <= 4 * 1024 * 1024, rgba.count == width * height * 4 else { return [] }
+        let category = Self.category(for: asset)
+        let reference = asset.resolvedReference
+        let reduceBeachFlecks = category == .organic && reference.kind == .terrain
+            && reference.style.lowercased() == "l2_beach"
+            && (reference.piece ?? "").lowercased().hasPrefix("sand_")
+        let key = ReconstructionCache.Key(
+            revision: SequelMacArtwork.revision * 100 + Self.reconstructionRevision,
+            category: category,
+            reduceBeachFlecks: reduceBeachFlecks,
+            width: width,
+            height: height,
+            sourceHash: Self.fingerprint(rgba)
+        )
+        return reconstructionCache.value(for: key, source: rgba) {
+            var opaque = rgba
+            for i in stride(from: 0, to: opaque.count, by: 4) {
+                opaque[i + 3] = rgba[i + 3] == 0 ? 0 : 255
+            }
+            let high: [UInt8]
+            if let frame = try? SequelMacFrame(width: width, height: height, rgba: opaque),
+               let reconstructed = try? SequelMacArtwork.reconstruct(frame, category: category) {
+                high = reconstructed.rgba
+            } else {
+                high = Self.doubled(rgba, width: width, height: height)
+            }
+            var result = high
+            if reduceBeachFlecks {
+                Self.removeIsolatedBeachFlecks(from: &result, source: rgba, width: width, height: height)
+            }
+            for y in 0..<height { for x in 0..<width {
+                let source = (y * width + x) * 4
+                let alpha = rgba[source + 3]
+                for dy in 0..<2 { for dx in 0..<2 {
+                    let target = ((y * 2 + dy) * width * 2 + x * 2 + dx) * 4
+                    result[target + 3] = alpha
+                    if alpha == 0 { result[target..<target + 3] = [0, 0, 0] }
+                } }
+            } }
+            return result
+        }
+    }
+
+    /**
+     * Removes lone 2× colour marks inside Beach sand without changing source pixels or edges.
+     */
+    private static func removeIsolatedBeachFlecks(from high: inout [UInt8], source: [UInt8],
+                                                   width: Int, height: Int) {
+        guard width > 2, height > 2 else { return }
+        let original = high
+        let highWidth = width * 2
+        for y in 1..<(height - 1) { for x in 1..<(width - 1) {
+            let sourceOffset = (y * width + x) * 4
+            guard source[sourceOffset + 3] == 255,
+                  source[sourceOffset - 4 + 3] == 255,
+                  source[sourceOffset + 4 + 3] == 255,
+                  source[sourceOffset - width * 4 + 3] == 255,
+                  source[sourceOffset + width * 4 + 3] == 255 else { continue }
+            var changed: (offset: Int, x: Int, y: Int)?
+            var changedCount = 0
+            for dy in 0..<2 { for dx in 0..<2 {
+                let px = x * 2 + dx, py = y * 2 + dy
+                let offset = (py * highWidth + px) * 4
+                if original[offset] != source[sourceOffset]
+                    || original[offset + 1] != source[sourceOffset + 1]
+                    || original[offset + 2] != source[sourceOffset + 2] {
+                    changedCount += 1
+                    changed = (offset, px, py)
+                }
+            } }
+            guard changedCount == 1, let mark = changed else { continue }
+            var hasNeighbour = false
+            for dy in -1...1 { for dx in -1...1 where dx != 0 || dy != 0 {
+                let neighbour = ((mark.y + dy) * highWidth + mark.x + dx) * 4
+                if original[neighbour + 3] > 0
+                    && original[neighbour] == original[mark.offset]
+                    && original[neighbour + 1] == original[mark.offset + 1]
+                    && original[neighbour + 2] == original[mark.offset + 2] {
+                    hasNeighbour = true
+                }
+            } }
+            guard !hasNeighbour else { continue }
+            high[mark.offset..<mark.offset + 3] = source[sourceOffset..<sourceOffset + 3]
+        } }
+    }
+
+    private static func category(for asset: NxlvResolvedStyleAsset) -> SequelMacCategory {
+        let reference = asset.resolvedReference
+        let style = reference.style.lowercased()
+        let piece = (reference.piece ?? "").lowercased()
+        let name = style + " " + piece
+        if ["water", "liquid", "lava", "acid", "pool", "fall"].contains(where: name.contains) {
+            return .liquid
+        }
+        if ["plant", "tree", "flower", "weed", "lizard", "frog", "dragon", "bee", "spider",
+            "cannibal", "cloud", "smoke", "steam", "moon", "face", "eyes", "clam"].contains(where: piece.contains) {
+            return .organic
+        }
+        if ["snowman", "flag"].contains(where: piece.contains) { return .architectural }
+        if reference.kind == .object { return .mechanical }
+        if asset.terrainMetadata?.isSteel == true { return .mechanical }
+        if ["snow", "ice", "brick", "steel", "metal", "marble", "pillar", "tile", "wall", "glass", "crystal", "beam", "column", "sign", "bridge", "egypt", "space", "biolab", "shadow", "circus", "sports", "sega"].contains(where: name.contains) {
+            return .architectural
+        }
+        if reference.kind == .background { return .architectural }
+        return .organic
+    }
+
+    private static func fingerprint(_ bytes: [UInt8]) -> UInt64 {
+        var value: UInt64 = 0xcbf29ce484222325
+        for byte in bytes {
+            value = (value ^ UInt64(byte)) &* 0x100000001b3
+        }
+        return value
     }
 
     /// Returns a 2× sheet only when every source frame has a verified equivalent.
@@ -187,6 +321,60 @@ extension NeoLemmixMacArtwork {
                 result[d..<d + 4] = pixels[s..<s + 4]
             } }
         } }
+        return result
+    }
+}
+
+private final class ReconstructionCache: @unchecked Sendable {
+    struct Key: Hashable {
+        let revision: Int
+        let category: SequelMacCategory
+        let reduceBeachFlecks: Bool
+        let width: Int
+        let height: Int
+        let sourceHash: UInt64
+    }
+
+    private struct Entry {
+        let source: [UInt8]
+        let result: [UInt8]
+
+        var byteCount: Int { source.count + result.count }
+    }
+
+    private let lock = NSLock()
+    private let byteLimit = 64 * 1024 * 1024
+    private var entries: [Key: Entry] = [:]
+    private var insertionOrder: [Key] = []
+    private var storedBytes = 0
+
+    func value(for key: Key, source: [UInt8], make: () -> [UInt8]) -> [UInt8] {
+        lock.lock()
+        if let entry = entries[key], entry.source == source {
+            lock.unlock()
+            return entry.result
+        }
+        lock.unlock()
+
+        let result = make()
+        let newEntry = Entry(source: source, result: result)
+        guard newEntry.byteCount <= byteLimit else { return result }
+        lock.lock()
+        defer { lock.unlock() }
+        if let entry = entries[key], entry.source == source { return entry.result }
+        if let previous = entries.removeValue(forKey: key) {
+            storedBytes -= previous.byteCount
+            insertionOrder.removeAll { $0 == key }
+        }
+        while storedBytes + newEntry.byteCount > byteLimit, !insertionOrder.isEmpty {
+            let oldest = insertionOrder.removeFirst()
+            if let evicted = entries.removeValue(forKey: oldest) {
+                storedBytes -= evicted.byteCount
+            }
+        }
+        entries[key] = newEntry
+        insertionOrder.append(key)
+        storedBytes += newEntry.byteCount
         return result
     }
 }

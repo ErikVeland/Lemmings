@@ -140,6 +140,21 @@
       "sourceBuilderTicksAfterHalfFrameScale": [68, 69],
       "result": "The source-timed Builder for lemming 1 precedes that lemming's first hatch in the exact Classic target. The forced-prefix runs reject the command before tick 68/69 and start 0 continuations."
     },
+    "initialRate99Sensitivity": {
+      "purpose": "Check whether an earlier release-rate increase alone makes the half-frame source prefix reachable; this deliberately changes the exact target's initial state.",
+      "forcedPrefixRollout": {
+        "initialRate": 99,
+        "prefix": "floor(sourceFrame/2): Builder 68, Basher 70, RR99 136",
+        "fallbackTicks": 12,
+        "result": "UNSOLVED; waiting route tick 58; 6 expansions; 0 single-skill rollouts"
+      },
+      "fixedRateSingleSweep": {
+        "initialRate": 99,
+        "mode": "sweep-single; 15-second limit; fallback 12",
+        "result": "UNSOLVED; waiting route tick 98; 0 assignments; 0 completed continuations; deadline false"
+      },
+      "interpretation": "Changing the initial release rate to 99 did not make the imported prefix succeed; the prefix run ended before the first command, and the fixed-rate sweep exposed no legal skill assignments. This sensitivity check is not the bundled level state, not a win and not a physics-parity test."
+    },
     "sourceCode": "https://github.com/Blazingstix/SuperLemminiToo/blob/main/src/lemmini/game/Lemming.java#L2481-L2482"
   },
   "assessment": "The source replay seed and two 30/35-tick early shifts all stop before their first forced action on the exact bundled target. This rules out those particular replay transfers and localises the immediate failure to a target route/state problem before the first command; it does not separate level-revision differences from source/native physics and does not establish impossibility or multi-skill coverage. No replay was emitted or strictly verified. Keep the level unscored."

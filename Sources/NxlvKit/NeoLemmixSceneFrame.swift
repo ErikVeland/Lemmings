@@ -101,7 +101,8 @@ public enum NeoLemmixSceneFrame {
             }
             return gadget.animationRGBA[frame]
         }
-        var result = displayPixels(rendered.backgroundRGBA)
+        var result = useMacArtwork && rendered.macBackgroundRGBA.count == byteCount * 4
+            ? rendered.macBackgroundRGBA : displayPixels(rendered.backgroundRGBA)
         let hasRetainedGadgets = !rendered.gadgets.isEmpty
             && rendered.gadgets.allSatisfy({ !$0.animationRGBA.isEmpty })
         if hasRetainedGadgets {
@@ -246,7 +247,9 @@ public enum NeoLemmixSceneFrame {
             }
             composite(foreground, over: &result)
         } else {
-            composite(displayPixels(rendered.foregroundRGBA), over: &result)
+            let foreground = useMacArtwork && rendered.macForegroundRGBA.count == byteCount * 4
+                ? rendered.macForegroundRGBA : displayPixels(rendered.foregroundRGBA)
+            composite(foreground, over: &result)
         }
         return result
     }

@@ -751,37 +751,65 @@ enum FanLevelLibrary {
     let pieces: ClassicMacPieceMatch
   }
 
-  /// A level takes alternate artwork when most of the pieces it draws are unchanged.
-  /// A pack that redraws more than that has its own look, and a patchwork would hide it.
-  static let minimumArtworkShare = 0.5
-
   /// Finds the release a pack's ground set was derived from, piece by piece.
   ///
-  /// Pieces the pack changed stay in DOS pixels. A level on a special picture
-  /// qualifies only when that picture is the stock one, because only the first
-  /// release carries those pictures in alternate artwork.
+  /// Changed pieces are reconstructed from the pack's source pixels. A changed
+  /// palette prevents stock pixels from replacing any of the pack's pieces.
   static func artworkMatch(for level: ClassicLevel, ground: ClassicGroundSet,
-    special: ClassicSpecialGraphic?, portsRoot: URL) -> ArtworkMatch? {
-    var best: (family: String, pieces: ClassicMacPieceMatch, share: Double, total: Int)?
+    special: ClassicSpecialGraphic?, portsRoot: URL,
+    stockGrounds: [String: ClassicGroundSet]? = nil) -> ArtworkMatch? {
+    guard (0..<5).contains(ground.style) else { return nil }
+    var best: (family: String, pieces: ClassicMacPieceMatch,
+      share: Double, samePalette: Int, total: Int)?
     for (folder, family) in artworkReleases {
-      guard let stock = stockGround(style: ground.style, folder: folder, portsRoot: portsRoot),
-        let pieces = ClassicMacPieceMatch.compare(ground, with: stock) else { continue }
-      let share = pieces.share(of: level) ?? 1
-      // Releases can share a palette and many pieces, so a tie goes to the
-      // one the whole set resembles most.
-      let total = pieces.terrain.count + pieces.objects.count
-      if let held = best, (share, total) <= (held.share, held.total) { continue }
-      best = (family, pieces, share, total)
+      let stock = stockGrounds != nil ? stockGrounds?[folder]
+        : stockGround(style: ground.style, folder: folder, portsRoot: portsRoot)
+      guard let stock else { continue }
+      let structural = ClassicMacPieceMatch(
+        terrain: Set(ground.terrain.compactMap { id, graphic in
+          stock.terrain[id] == graphic ? id : nil
+        }),
+        objects: Set(ground.objects.compactMap { id, graphic in
+          guard let original = stock.objects[id],
+            graphic.width == original.width && graphic.height == original.height,
+            graphic.frames == original.frames,
+            graphic.animationType == original.animationType,
+            graphic.firstFrameIndex == original.firstFrameIndex else { return nil }
+          return id
+        }))
+      let pieces = ClassicMacPieceMatch.compare(ground, with: stock)
+        ?? ClassicMacPieceMatch(terrain: [], objects: [])
+      let share = structural.share(of: level) ?? 1
+      let samePalette = ground.terrainPalette == stock.terrainPalette
+        && ground.objectPalette == stock.objectPalette ? 1 : 0
+      // Prefer the release whose source shapes the level actually uses.
+      let total = structural.terrain.count + structural.objects.count
+      if let held = best,
+        (share, samePalette, total) <= (held.share, held.samePalette, held.total) { continue }
+      best = (family, pieces, share, samePalette, total)
     }
-    guard var best, best.share >= minimumArtworkShare else { return nil }
+    let fallbackFamily: String
+    switch level.groundStyle {
+    case 5...8: fallbackFamily = "ohno"
+    case 9: fallbackFamily = "holiday"
+    default: fallbackFamily = "lemmings"
+    }
+    var selected = best.flatMap { $0.total > 0 ? ArtworkMatch(family: $0.family, pieces: $0.pieces) : nil }
+      ?? ArtworkMatch(family: fallbackFamily, pieces: ClassicMacPieceMatch(terrain: [], objects: []))
     if level.specialStyle > 0 {
-      guard best.family == "lemmings", let special,
+      if selected.family != "lemmings" {
+        selected = ArtworkMatch(family: "lemmings", pieces: ClassicMacPieceMatch(terrain: [], objects: []))
+      }
+      if let special,
         let stock = try? ClassicSpecialGraphic.load(index: level.specialStyle - 1,
           from: portsRoot.appendingPathComponent("lemmings_dos_1991-07-30")),
-        special == stock else { return nil }
-      best.pieces.special = true
+        special == stock {
+        var pieces = selected.pieces
+        pieces.special = true
+        selected = ArtworkMatch(family: selected.family, pieces: pieces)
+      }
     }
-    return ArtworkMatch(family: best.family, pieces: best.pieces)
+    return selected
   }
 
   static func specialGraphic(for level: ClassicLevel, entry: Entry, pack: URL, portsRoot: URL) throws -> ClassicSpecialGraphic? {

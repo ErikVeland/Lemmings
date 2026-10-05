@@ -386,6 +386,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private var levelsMenu: NSMenu?
   /// Set while an unofficial level is loaded, so retry reloads that file.
   private var currentNxlvURL: URL?
+  private var neoArtworkContext: (level: NxlvLevel, resolution: NxlvStyleResolution)?
+  private var neoArtworkGeneration = 0
+  private var neoSceneHasMacArtwork = false
   private var currentNeoCatalogueIdentity: LevelCatalogueIdentity?
   private var currentNeoPackName: String?
   private var nativeL2Window: Lemmings2PlayWindow?
@@ -1148,8 +1151,13 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
     applyDisplayMode()
     if artworkChanged, session is NeoLemmixSession {
+      neoArtworkGeneration &+= 1
       playfield.neoMacArtworkEnabled = settings.graphics == .macintosh
       playfield.neoSprites?.usesMacArtwork = playfield.neoMacArtworkEnabled
+      panel.usesMacStyleControls = playfield.neoMacArtworkEnabled
+      if playfield.neoMacArtworkEnabled && !neoSceneHasMacArtwork {
+        loadNeoMacPresentation()
+      }
       panel.needsDisplay = true
       playfield.needsDisplay = true
     }
@@ -1423,6 +1431,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
     activeTitle = nil
     currentNxlvURL = nil
     currentNeoStylesRoot = nil
+    neoArtworkContext = nil
+    neoArtworkGeneration &+= 1
+    neoSceneHasMacArtwork = false
+    panel.usesMacStyleControls = false
     currentNeoCatalogueIdentity = nil
     currentNeoPackName = nil
     window.contentView = classicContent ?? plainRoot
@@ -2102,6 +2114,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
     installClassicArtwork(prepared)
     currentNxlvURL = nil
     currentNeoStylesRoot = nil
+    neoArtworkContext = nil
+    neoArtworkGeneration &+= 1
+    neoSceneHasMacArtwork = false
     if replacement != nil {
       dataSets[index] = entry
       gamePicker.item(at: index)?.title =
@@ -2309,6 +2324,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
   ) -> Bool {
     currentNxlvURL = nil
     currentNeoStylesRoot = nil
+    neoArtworkContext = nil
+    neoArtworkGeneration &+= 1
+    neoSceneHasMacArtwork = false
     let level = entry.level
     do {
       if groundOverride == nil, dataSets.indices.contains(gamePicker.indexOfSelectedItem) {
@@ -2383,6 +2401,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     playfield.macArtwork = nil
     playfield.imageScale = 1
     panel.macArtwork = nil
+    panel.usesMacStyleControls = false
     artworkLevel = level
     artworkGroundOverride = groundOverride
     artworkSpecialOverride = specialOverride
@@ -2418,10 +2437,16 @@ let achievementProgressKey = "ClassicAchievementProgress"
       }
       playfield.macArtwork = art
       panel.macArtwork = art
-      // Pieces a pack redraws, and pictures it replaces, retain the pixels used by collision.
+      panel.usesMacStyleControls = activeGraphics == .macintosh
+      if activeGraphics == .amiga, groundOverride != nil {
+        guard let fanMatch, (fanMatch.pieces.share(of: level) ?? 1) >= 0.5,
+          level.specialStyle == 0 || fanMatch.pieces.special else { return }
+      }
+      // Macintosh mode reconstructs changed pieces from the pack's source pixels.
       guard groundOverride == nil || fanMatch != nil else { return }
       playfield.macScene = try ClassicMacScene(level: level, rendered: rendered, artwork: art,
-        groundSet: groundOverride ?? grounds[level.groundStyle], match: fanMatch?.pieces)
+        groundSet: groundOverride ?? grounds[level.groundStyle], match: fanMatch?.pieces,
+        reconstructUnmatched: activeGraphics == .macintosh)
     } catch {
       setStatus("\(settings.graphics.displayName) artwork unavailable for this level: \(error)")
     }
@@ -5804,6 +5829,59 @@ let achievementProgressKey = "ClassicAchievementProgress"
     return styles.map { _ in (url, styles) }
   }
 
+  /**
+   * Builds Macintosh display pixels after a live artwork switch without resetting gameplay.
+   */
+  private func loadNeoMacPresentation() {
+    guard let context = neoArtworkContext, let artwork = neoMacArtwork,
+      let url = currentNxlvURL, let styles = currentNeoStylesRoot,
+      let activeSession = session as? NeoLemmixSession else { return }
+    let generation = neoArtworkGeneration
+    let sessionID = ObjectIdentifier(activeSession)
+    Task.detached(priority: .userInitiated) { [weak self] in
+      let result = NxlvRenderer(retainsVisualLayers: true, macArtwork: artwork).render(
+        level: context.level, resolution: context.resolution)
+      await MainActor.run { [weak self] in
+        guard let self, self.neoArtworkGeneration == generation,
+          self.currentNxlvURL == url, self.currentNeoStylesRoot == styles,
+          self.settings.graphics == .macintosh,
+          let currentSession = self.session as? NeoLemmixSession,
+          ObjectIdentifier(currentSession) == sessionID,
+          let existing = self.playfield.neoScene,
+          !result.hasErrors, let detailed = result.renderedLevel else { return }
+        guard Self.sameNeoSourceArtwork(existing, detailed) else {
+          self.setStatus("Macintosh artwork could not be applied to this level.")
+          return
+        }
+        self.playfield.neoScene = detailed
+        self.neoSceneHasMacArtwork = true
+        self.playfield.needsDisplay = true
+      }
+    }
+  }
+
+  /**
+   * Rejects a display render if its source geometry differs from the active run.
+   */
+  private static func sameNeoSourceArtwork(_ first: NxlvRenderedLevel,
+    _ second: NxlvRenderedLevel) -> Bool {
+    guard first.width == second.width, first.height == second.height,
+      first.rgba == second.rgba, first.solidMask == second.solidMask,
+      first.steelMask == second.steelMask, first.oneWayMask == second.oneWayMask,
+      first.oneWayEligibleMask == second.oneWayEligibleMask,
+      first.terrainOpaqueMask == second.terrainOpaqueMask,
+      first.backgroundRGBA == second.backgroundRGBA,
+      first.terrainRGBA == second.terrainRGBA,
+      first.foregroundRGBA == second.foregroundRGBA,
+      first.constructiveRGBA == second.constructiveRGBA,
+      first.gadgets.count == second.gadgets.count else { return false }
+    return zip(first.gadgets, second.gadgets).allSatisfy { old, new in
+      old.x == new.x && old.y == new.y && old.effect == new.effect
+        && old.animationRGBA == new.animationRGBA
+        && old.secondaryAnimations.map(\.framesRGBA) == new.secondaryAnimations.map(\.framesRGBA)
+    }
+  }
+
   @discardableResult
   private func loadNxlv(
     _ url: URL,
@@ -5852,7 +5930,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
         setStatus("Missing style data: \(missing.first?.message ?? "unknown")")
         return false
       }
-      let result = NxlvRenderer(retainsVisualLayers: true, macArtwork: neoMacArtwork).render(
+      let wantsMacArtwork = settings.graphics == .macintosh
+      let result = NxlvRenderer(retainsVisualLayers: true,
+        macArtwork: wantsMacArtwork ? neoMacArtwork : nil).render(
         level: level,
         resolution: resolution
       )
@@ -5877,6 +5957,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       playfield.macScene = nil
       playfield.macArtwork = nil
       panel.macArtwork = nil
+      panel.usesMacStyleControls = wantsMacArtwork
       playfield.imageScale = 1
       playfield.levelImage = image
       playfield.neoSprites = neoSprites
@@ -5885,6 +5966,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
       panel.neoSprites = neoSprites
       currentNxlvURL = url
       currentNeoStylesRoot = stylesDirectory
+      neoArtworkContext = (level, resolution)
+      neoArtworkGeneration &+= 1
+      neoSceneHasMacArtwork = wantsMacArtwork && neoMacArtwork != nil
       currentNeoCatalogueIdentity = catalogueIdentity
       currentNeoPackName = packName
       setSequencePlayingIdentity(sequenceIdentity)

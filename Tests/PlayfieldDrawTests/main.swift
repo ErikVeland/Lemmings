@@ -380,6 +380,7 @@ private func require(
   let artworkRoot = testApp.appendingPathComponent("Contents/Resources/MacArtwork/lemmings")
   panel.interfaceArtwork = try ClassicMacArtwork(directory: artworkRoot)
   panel.macArtwork = panel.interfaceArtwork
+  panel.usesMacStyleControls = true
   let labelOutput = root.appendingPathComponent(".build/panel-label-regression")
   try FileManager.default.createDirectory(at: labelOutput, withIntermediateDirectories: true)
   for width in [640.0, 960.0, 1280.0, 1484.0, 1920.0] {
@@ -671,24 +672,26 @@ private func require(
   macSprites.usesMacArtwork = true
   try require(macSprites.frame(action: .walking, direction: .right, animationFrame: 0, traits: [])?.pixelScale == 2,
     "Equivalent Mac walker was not selected")
-  try require(macSprites.frame(action: .swimming, direction: .right, animationFrame: 0, traits: [])?.pixelScale == 1,
-    "NeoLemmix-only animation lost its original artwork")
-  try require(macSprites.frame(action: .walking, direction: .right, animationFrame: 0, traits: [.neutral])?.pixelScale == 1,
-    "Mac artwork hid the neutral-lemming marker")
+  try require(macSprites.frame(action: .swimming, direction: .right, animationFrame: 0, traits: [])?.pixelScale == 2,
+    "NeoLemmix-only animation was not recreated at Macintosh scale")
+  try require(macSprites.frame(action: .walking, direction: .right, animationFrame: 0, traits: [.neutral])?.pixelScale == 2,
+    "Neutral-lemming artwork was not recreated at Macintosh scale")
   try require(macSprites.skillIcon(named: "walker")! !== originalIcon, "Artwork switch kept a stale cursor icon")
   let macScene = NxlvRenderer(retainsVisualLayers: true, macArtwork: mac).render(level: level, resolution: resolution).renderedLevel!
   playfield.neoScene = macScene; playfield.neoSprites = macSprites; playfield.neoMacArtworkEnabled = true
+  previewPanel.usesMacStyleControls = true
   previewPanel.neoSprites = macSprites
   let macBitmap = content.bitmapImageRepForCachingDisplay(in: content.bounds)!
   content.cacheDisplay(in: content.bounds, to: macBitmap)
   try macBitmap.representation(using: .png, properties: [:])!.write(to: output.appendingPathComponent("neo-just-dig-mac.png"))
   try require(playfield.imageScale == 2, "Mac terrain was displayed at the wrong logical scale")
   macSprites.usesMacArtwork = false; playfield.neoMacArtworkEnabled = false
+  previewPanel.usesMacStyleControls = false
   let restored = content.bitmapImageRepForCachingDisplay(in: content.bounds)!
   content.cacheDisplay(in: content.bounds, to: restored)
   try require(restored.representation(using: .png, properties: [:]) == bitmap.representation(using: .png, properties: [:]),
     "Switching Mac artwork off changed the original scene or simulation")
-  print("PASS NeoLemmix Mac artwork: native detail, common actions, extra-skill and trait fallbacks, cursor refresh and live switching")
+  print("PASS NeoLemmix Mac artwork: native detail, recreated actions and traits, cursor refresh and live switching")
   print("PASS NeoLemmix stone panel: 0/1/8/10/21 skills, four widths, CRT, all icons, cursor mapping and input states")
 }
 
