@@ -52,6 +52,7 @@ HEAVEN_RATE_RECOVERY = OUTPUT / "classic-heaven-rate-retiming-recovery.json"
 RETREAT_POPULATION_RECOVERY = OUTPUT / "classic-retreat-population-recovery.json"
 GEOMETRY_TRANSFER_GAPS = OUTPUT / "classic-geometry-transfer-gaps.json"
 OBJECT_VARIANT_TRANSFER_GAPS = OUTPUT / "classic-object-variant-transfer-gaps.json"
+RATE_VARIANT_TRANSFER_GAPS = OUTPUT / "classic-rate-variant-transfer-gaps.json"
 CACHED_RETREAT_RECOVERY = OUTPUT / "classic-cached-retreat-recovery.json"
 FAN_SOLUTIONS = ROOT / "Artifacts/LearningJourney/candidate-solutions.json"
 GOLEMS_PHASE_EVIDENCE = [
@@ -314,6 +315,17 @@ def main():
     if OBJECT_VARIANT_TRANSFER_GAPS.exists():
         evidence = read(OBJECT_VARIANT_TRANSFER_GAPS)
         assert evidence["targetedCandidates"] == evidence["targetsWithoutWin"] == len(evidence["records"]) == 18
+        for record in evidence["records"]:
+            pack_id, level_id = record["targetIdentity"].split("/", 1)
+            row = classic[json.dumps({"engine": "classic", "packID": pack_id,
+                                     "levelID": level_id}, sort_keys=True)]
+            assert row["profile"]["confidence"] == "low"
+            assert record["targetInitialHash"] == row["initialHash"]
+            assert record["targetArchiveSHA256"] == row["entry"]["sourceRevision"] == bundled_pack_revisions[pack_id]
+    if RATE_VARIANT_TRANSFER_GAPS.exists():
+        evidence = read(RATE_VARIANT_TRANSFER_GAPS)
+        assert evidence["directRoutesTested"] == evidence["targetsWithoutWin"] == len(evidence["records"]) == 3
+        assert evidence["rateAlignedRoutesTested"] == 2
         for record in evidence["records"]:
             pack_id, level_id = record["targetIdentity"].split("/", 1)
             row = classic[json.dumps({"engine": "classic", "packID": pack_id,

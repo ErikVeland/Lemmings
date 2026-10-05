@@ -2342,7 +2342,7 @@
     },
     {
       "fixture": "Tests/Lemmings3CompletionTests/Fixtures/002.json",
-      "sha256": "6597ade99c62d27a617f32b6b690551429307c22b26c3031d9ad7c44f0620623",
+      "sha256": "70243b160057ba9f715cb099296427442fde0c9150ea7caeddb8ba440e6754e4",
       "game": "lemmings3",
       "level": 2,
       "saved": 12,
@@ -2352,7 +2352,7 @@
     },
     {
       "fixture": "Tests/Lemmings3CompletionTests/Fixtures/003.json",
-      "sha256": "77204703dec8d265733d7b47722b9672e23cae2cb07d65c1be0d7512f44dedba",
+      "sha256": "75aef0891b3d27fb4378cd58b449e0a16c93069db8d760f3519cb7393ee0fdba",
       "game": "lemmings3",
       "level": 3,
       "saved": 10,
@@ -2362,7 +2362,7 @@
     },
     {
       "fixture": "Tests/Lemmings3CompletionTests/Fixtures/004.json",
-      "sha256": "26b2bf2fca7d61dfd58638310aaeac5d05beee561140276cba143a5716266f16",
+      "sha256": "4e1aa5435ef89cf722e095f156df2cbe18e37900491f8beca7013f56ebf9ea9a",
       "game": "lemmings3",
       "level": 4,
       "saved": 10,
@@ -2372,7 +2372,7 @@
     },
     {
       "fixture": "Tests/Lemmings3CompletionTests/Fixtures/005.json",
-      "sha256": "3b7ed49f7d7e42a4ffc42ad51d41ba03735bb66c3f9c0a729c18816fd1062e10",
+      "sha256": "6f593be32c49be9991692312870d1492c9112ba8a63456ae6280edc8f8b3640c",
       "game": "lemmings3",
       "level": 5,
       "saved": 1,
@@ -2382,7 +2382,7 @@
     },
     {
       "fixture": "Tests/Lemmings3CompletionTests/Fixtures/010.json",
-      "sha256": "8d1fc8a3719d48210092bc76e99320014fa54ef494b6cb893f600bb0ccd32bb8",
+      "sha256": "211bac61a66e8dc1f9196f98f7ef3667819f2d710b4d37e49c6fcbc4b47811c5",
       "game": "lemmings3",
       "level": 10,
       "saved": 10,
@@ -2392,7 +2392,7 @@
     },
     {
       "fixture": "Tests/Lemmings3CompletionTests/Fixtures/013.json",
-      "sha256": "d352f0d1ca4cf44a8f17593247fd7d3ef3954716c868bdcf65d15823008991ad",
+      "sha256": "020663eab0d0fc849fe0d4189cf1e685e99b1b82fc0f0e339dc1d5f5fa16e207",
       "game": "lemmings3",
       "level": 13,
       "saved": 1,
@@ -2402,7 +2402,7 @@
     },
     {
       "fixture": "Tests/Lemmings3CompletionTests/Fixtures/015.json",
-      "sha256": "4302b9190f6d0ebe121756686eab573a3a54beae7ea57f929460d4fed20ae597",
+      "sha256": "affa396020c7d1c5f170c1db194c9ec03312fc00c080e90068a2d4dbeb741b8c",
       "game": "lemmings3",
       "level": 15,
       "saved": 1,
@@ -2412,7 +2412,7 @@
     },
     {
       "fixture": "Tests/Lemmings3CompletionTests/Fixtures/016.json",
-      "sha256": "d0e1aca6ec06eb3b578d832a852e17aad2dee756e0b23debd505f1e054d57517",
+      "sha256": "92441eed1868adbf7554308ae0de7c042c7a50435a8d1dfc7a8a0793db5292ff",
       "game": "lemmings3",
       "level": 16,
       "saved": 1,
@@ -2422,7 +2422,7 @@
     },
     {
       "fixture": "Tests/Lemmings3CompletionTests/Fixtures/018.json",
-      "sha256": "22fa5e6862883930164bd822d69b423f71f205ea70597de70c49c0976f15e8b0",
+      "sha256": "f4fb45496ef1e9710b1131a3c31e547bc470c35abf504bd64a25d83be02e86c8",
       "game": "lemmings3",
       "level": 18,
       "saved": 1,
@@ -2432,7 +2432,7 @@
     },
     {
       "fixture": "Tests/Lemmings3CompletionTests/Fixtures/019.json",
-      "sha256": "8d81c46e3090c865818a170cb6c3ce3eb2d8b127480651ccd089fcb2bf89452b",
+      "sha256": "f6cc4e447019e84d7f3252e7dabaea8feae6ab70447216539907c0fd959dfe65",
       "game": "lemmings3",
       "level": 19,
       "saved": 1,
@@ -2442,7 +2442,7 @@
     },
     {
       "fixture": "Tests/Lemmings3CompletionTests/Fixtures/021.json",
-      "sha256": "72658406bd6b3f5041fff0e36082bc9c69cba98446663f8ff717a9987db001c5",
+      "sha256": "72f83fbab9f39f699030a92af785258098858f2b2fbe886451a5b6bb8cc9fd25",
       "game": "lemmings3",
       "level": 21,
       "saved": 3,
@@ -2452,7 +2452,7 @@
     },
     {
       "fixture": "Tests/Lemmings3CompletionTests/Fixtures/029.json",
-      "sha256": "ecac34a81b8508748f2dd809693cdb87d2ddd71b56e3a781d4a06c5de8ba45b4",
+      "sha256": "c81bf7dfb30bb867fbe1d25639a776b740f5884805d10c4efb5c5cd3635d657f",
       "game": "lemmings3",
       "level": 29,
       "saved": 1,
@@ -2462,7 +2462,7 @@
     },
     {
       "fixture": "Tests/Lemmings3CompletionTests/Fixtures/101.json",
-      "sha256": "6952d92b29e13ae372c2533e9fa2a1cc3a747a161f594ea3c31616cba56e6e11",
+      "sha256": "d6546ee08e24ea1927b064d6ab358ac5fdb33dd28150da414418392b719ad25c",
       "game": "lemmings3",
       "level": 101,
       "saved": 9,
@@ -2472,7 +2472,7 @@
     },
     {
       "fixture": "Tests/Lemmings3CompletionTests/Fixtures/102.json",
-      "sha256": "6aa4ffd1dcde4eb18d3dab1274617ae88bb0dd0f4168f513c8d5b625d594a1b7",
+      "sha256": "c67d2b1992a3eac0c5e6a974fa0b51907a39ae98496ce1c81cdac3d8a67d159d",
       "game": "lemmings3",
       "level": 102,
       "saved": 5,
@@ -2512,7 +2512,7 @@
     },
     {
       "fixture": "Tests/Lemmings3CompletionTests/Fixtures/107.json",
-      "sha256": "a20bef0e4f99029b4c02d545a1741d36f569510541d94f7937934cd93f03c687",
+      "sha256": "8945ed1797bd8ceb3ae338b27edb96422e6e5232beacebe73e7163399f79d902",
       "game": "lemmings3",
       "level": 107,
       "saved": 6,
@@ -2522,7 +2522,7 @@
     },
     {
       "fixture": "Tests/Lemmings3CompletionTests/Fixtures/108.json",
-      "sha256": "5b540d7513351bf3eb49e3e3cf0adac1046c0d2ef4f30b495bb86cdf62874dcf",
+      "sha256": "b2fdac147b1eb9b14e79b7fc151aa48109a70980b0c3b7ef0079955a84c0db20",
       "game": "lemmings3",
       "level": 108,
       "saved": 1,
@@ -2532,7 +2532,7 @@
     },
     {
       "fixture": "Tests/Lemmings3CompletionTests/Fixtures/111.json",
-      "sha256": "6a9a5b9ab5da893f43d4f5cf4346e12b05eb2ba969301552349a50c623235112",
+      "sha256": "07f39357e77cb8593278a380f905fe3525a24d325c08ad3263d94542bfb91995",
       "game": "lemmings3",
       "level": 111,
       "saved": 1,
@@ -2542,7 +2542,7 @@
     },
     {
       "fixture": "Tests/Lemmings3CompletionTests/Fixtures/113.json",
-      "sha256": "d56db8f9b7bcacebdcb57cbe1290e0fd417f027cea9eec7240a74c70d364f539",
+      "sha256": "c710b4342acb431416a5e0febef7d9d1203ac62db264b621b1cf56ef86ca4c6c",
       "game": "lemmings3",
       "level": 113,
       "saved": 6,
@@ -2552,7 +2552,7 @@
     },
     {
       "fixture": "Tests/Lemmings3CompletionTests/Fixtures/114.json",
-      "sha256": "f458a3850f3c590ac0a43d59385c7f44432159d53b17eeab7acafd1d91aad7ec",
+      "sha256": "4e6c318b388df0e69320bed7c1eae3e80b48eb2d0234039e2d1e7651918dff92",
       "game": "lemmings3",
       "level": 114,
       "saved": 1,
@@ -2562,7 +2562,7 @@
     },
     {
       "fixture": "Tests/Lemmings3CompletionTests/Fixtures/116.json",
-      "sha256": "8ab12d220dcdd0c841de7ed9e8055071c60439abbcbc2d5f55e1c8289dbcb618",
+      "sha256": "3dcb8acee21178c2e4392336989b1f06c7dcd98b82d35411e98dd1c6bde16f8a",
       "game": "lemmings3",
       "level": 116,
       "saved": 2,
@@ -2582,7 +2582,7 @@
     },
     {
       "fixture": "Tests/Lemmings3CompletionTests/Fixtures/120.json",
-      "sha256": "491bdde631ef4a3a4a26060e8021dc73a4ff5e7ae9271fac67d3ec7b89260d27",
+      "sha256": "d7cfd4a101c86c4b15d0a4501548639101c0179d6269e5231d002f9c3f550463",
       "game": "lemmings3",
       "level": 120,
       "saved": 3,
@@ -2602,7 +2602,7 @@
     },
     {
       "fixture": "Tests/Lemmings3CompletionTests/Fixtures/202.json",
-      "sha256": "1cfb43ae63976055bca621f330440e95c880015513fd81b185a922965a1d580f",
+      "sha256": "8ac7b58aa0253c7bee29aa4a557df0350d2e33ddf67fd9c63c470c8e0000f9bd",
       "game": "lemmings3",
       "level": 202,
       "saved": 1,
@@ -2612,7 +2612,7 @@
     },
     {
       "fixture": "Tests/Lemmings3CompletionTests/Fixtures/203.json",
-      "sha256": "be86fee4a419cec32c948d282ef09fafaf4d82968b8dbaa9f8fc0aea9ba0dfb4",
+      "sha256": "f2dcc07321ba99dd322c2f3be0b6da2c84385be7d47c910a81cc10803df301c6",
       "game": "lemmings3",
       "level": 203,
       "saved": 1,
@@ -2622,7 +2622,7 @@
     },
     {
       "fixture": "Tests/Lemmings3CompletionTests/Fixtures/204.json",
-      "sha256": "fccf4e8ef4c57f843bf85b3bdaf47503ec0e0a0d52ee7c88bdd449a54b849cfe",
+      "sha256": "e2641ac10b44d5f4efdc819e0791bdaae8111eced3faae991c40a2a15f94bb69",
       "game": "lemmings3",
       "level": 204,
       "saved": 10,
@@ -2632,7 +2632,7 @@
     },
     {
       "fixture": "Tests/Lemmings3CompletionTests/Fixtures/209.json",
-      "sha256": "cf7363c6c708bfe6393c4c5ecfd39029af0cd5be572d16b0b3f438c33956b120",
+      "sha256": "38a9ce345891897fcca809e681c2c31ccd2526b6712988b330fca0ec967ff909",
       "game": "lemmings3",
       "level": 209,
       "saved": 1,
@@ -2642,7 +2642,7 @@
     },
     {
       "fixture": "Tests/Lemmings3CompletionTests/Fixtures/210.json",
-      "sha256": "9c40cb090c2dcfb65816e8cc53e6db19785d6f07365f33e0d72b23590c77e984",
+      "sha256": "555c6ba706061bf5d2732e7a1d509ce3c186b8fcaed75cda0f13b5b3cc083fd8",
       "game": "lemmings3",
       "level": 210,
       "saved": 1,
@@ -2652,7 +2652,7 @@
     },
     {
       "fixture": "Tests/Lemmings3CompletionTests/Fixtures/214.json",
-      "sha256": "67d1f3be6af7b852176ba66f44436ded06fd204931f47a3337d918af0b2a4a42",
+      "sha256": "606f1886722e5a201bcd434e106fbad54e336c2ce2da0640a063614063c51a24",
       "game": "lemmings3",
       "level": 214,
       "saved": 6,
@@ -2662,7 +2662,7 @@
     },
     {
       "fixture": "Tests/Lemmings3CompletionTests/Fixtures/215.json",
-      "sha256": "fa241f1f8dd4860cd3acfc52fb008b26e700c108b8e8c55da33570fcd08f1cee",
+      "sha256": "1c16255f4bbe0b9fef52276a2897d3f1e61eebb9e3424b9cc3e31a646b98525c",
       "game": "lemmings3",
       "level": 215,
       "saved": 2,
@@ -2692,7 +2692,7 @@
     },
     {
       "fixture": "Tests/Lemmings3CompletionTests/Fixtures/222.json",
-      "sha256": "5a7c42afccf9cfcbbad625905619a74f0d113aa0bd2972456d5437c1a849c6ce",
+      "sha256": "0e146995609ef0cc45512db8002989ae69edecfb1b179a2930cb1b2a19ee2ea9",
       "game": "lemmings3",
       "level": 222,
       "saved": 1,
@@ -2702,7 +2702,7 @@
     },
     {
       "fixture": "Tests/Lemmings3CompletionTests/Fixtures/223.json",
-      "sha256": "fd0f0dc6082d0c9ec71f481519708829e5acba64e1b0fdba9df73e1d2d5636be",
+      "sha256": "f2bf7e8c0bcd3e67ec8603c5adce9088fae0ed016e4ad7ce73ab41131c93bbae",
       "game": "lemmings3",
       "level": 223,
       "saved": 1,
@@ -2712,17 +2712,17 @@
     },
     {
       "fixture": "Tests/Lemmings3CompletionTests/Fixtures/226.json",
-      "sha256": "f118213e718e9a66c17caf4feebef92b5304afa7437e8f21a2bb9aa8488c227a",
+      "sha256": "132965ccea39fa6a6e9e0183758e744b6936224452fbd042c46d2429469d8610",
       "game": "lemmings3",
       "level": 226,
       "saved": 10,
       "lost": 0,
       "reserves": 10,
-      "ticks": 2722
+      "ticks": 2737
     },
     {
       "fixture": "Tests/Lemmings3CompletionTests/Fixtures/228.json",
-      "sha256": "46db8831e5fc6c88957300213113343a93ae8a06c063deac3b828dab0491509d",
+      "sha256": "e06aa6eecc6b18b042563b80720ddc9e55bf5929bdfc56515c8c915c6939bf1b",
       "game": "lemmings3",
       "level": 228,
       "saved": 1,
@@ -2732,7 +2732,7 @@
     },
     {
       "fixture": "Tests/Lemmings3CompletionTests/Fixtures/230.json",
-      "sha256": "b8f5a7b74de17aa64623f09c439560998fb086845976c1d19a60bce9b0d2e79b",
+      "sha256": "306050aedecf3a024b86a4c712a4b35e20e38cf53a91c72f96dad0e6375c50de",
       "game": "lemmings3",
       "level": 230,
       "saved": 1,

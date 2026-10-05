@@ -33,6 +33,7 @@ struct L3Detector: Sendable {
     private var lastDirection: [Int: Int] = [:]
     private var lastState: [Int: Lemmings3Runtime.State] = [:]
     private var lastTool: [Int: Int] = [:]
+    private var lastQuantity: [Int: Int] = [:]
     private var lastFired: [String: Int] = [:]
     private var lastDecisionTick = 0
 
@@ -54,14 +55,21 @@ struct L3Detector: Sendable {
         for lemming in game.lemmings where lemming.active {
             let previousDirection = lastDirection[lemming.id], previousState = lastState[lemming.id]
             let previousTool = lastTool[lemming.id]
+            let previousQuantity = lastQuantity[lemming.id]
             lastDirection[lemming.id] = lemming.direction
             lastState[lemming.id] = lemming.state
             lastTool[lemming.id] = lemming.tool?.rawValue ?? -1
+            lastQuantity[lemming.id] = lemming.quantity
             if let previousState, previousState != lemming.state, actionable.contains(lemming.state),
                claim("state-\(lemming.state.rawValue)", lemming, tick: game.tick) {
                 fired.append((2, lemming.id))
             }
             if let previousTool, previousTool != (lemming.tool?.rawValue ?? -1), claim("tool", lemming, tick: game.tick) {
+                fired.append((0, lemming.id))
+            }
+            if let previousQuantity, previousQuantity != lemming.quantity,
+               lemming.state == .building || lemming.state == .digging,
+               claim("work", lemming, tick: game.tick) {
                 fired.append((0, lemming.id))
             }
             guard lemming.state == .walking else { continue }
@@ -214,8 +222,8 @@ func l3Fingerprint(_ game: Lemmings3Runtime) -> UInt64 {
     return value
 }
 
-/// The actions to try for one lemming at a decision point.
-func l3Actions(_ game: Lemmings3Runtime, lemming id: Int) -> [L3Replay.Input] {
+/// The input sequences to try for one lemming at a decision point.
+func l3Actions(_ game: Lemmings3Runtime, lemming id: Int) -> [[L3Replay.Input]] {
     guard let lemming = game.lemmings.first(where: { $0.id == id && $0.active }) else { return [] }
     var result: [L3Replay.Input] = []
     for action in ["walker", "blocker", "jumper"] {
@@ -235,10 +243,18 @@ func l3Actions(_ game: Lemmings3Runtime, lemming id: Int) -> [L3Replay.Input] {
         }
     }
     // Keep only actions the runtime accepts now.
-    return result.filter { input in
+    var choices = result.filter { input in
         var trial = game
         return L3Replay.apply(input, to: &trial)
+    }.map { [$0] }
+    if lemming.state == .building || lemming.state == .digging {
+        let walker = L3Replay.Input(tick: game.tick, action: "walker", lemming: id, direction: nil)
+        var trial = game
+        if L3Replay.apply(walker, to: &trial), L3Replay.apply(walker, to: &trial) {
+            choices.append([walker, walker])
+        }
     }
+    return choices
 }
 
 struct L3Report: Sendable {
@@ -288,7 +304,7 @@ func l3Search(from start: Lemmings3Runtime, limits: L3Limits) -> L3Report {
         for node in beam {
             if node.depth >= limits.maxDepth { consider(finish(node)); continue }
             var choices: [[L3Replay.Input]] = [[]]
-            for id in node.decision { choices += l3Actions(node.game, lemming: id).map { [$0] } }
+            for id in node.decision { choices += l3Actions(node.game, lemming: id) }
             for inputs in choices {
                 var child = node
                 for input in inputs { _ = L3Replay.apply(input, to: &child.game) }
