@@ -1,0 +1,10 @@
+{
+  "testedResourceFiles": 14170,
+  "shippingResourceFiles": 14170,
+  "differences": [],
+  "focusedArtworkAssetsMatch": {
+    "NeoLemmix": true,
+    "MacArtwork": true,
+    "AmigaArtwork": true
+  }
+}

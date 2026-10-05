@@ -1,0 +1,26 @@
+[
+  {
+    "scope": "slim",
+    "archive": ".build/release-1.7.9/slim-submission.zip",
+    "bytes": 159354925,
+    "sha256": "cc25429d9fe053dd0cb03d151ea1aa75475e71604ac0356f0b9f63402a0bb287",
+    "sourceCommit": "4d8cda805cd938df919776498193cdd10ff48714",
+    "version": "1.7.9",
+    "build": 63,
+    "signed": true,
+    "zipIntegrity": "passed",
+    "notarised": false
+  },
+  {
+    "scope": "standard",
+    "archive": ".build/release-1.7.9/notary-submission.zip",
+    "bytes": 1943411141,
+    "sha256": "cc9731de728bfcfdae4726daf97d4f7345775e7982d9f898c9ab1073f1300cc7",
+    "sourceCommit": "4d8cda805cd938df919776498193cdd10ff48714",
+    "version": "1.7.9",
+    "build": 63,
+    "signed": true,
+    "zipIntegrity": "passed",
+    "notarised": false
+  }
+]

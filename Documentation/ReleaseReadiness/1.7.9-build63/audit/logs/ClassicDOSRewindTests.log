@@ -1,0 +1,11 @@
+PASS forward scrub restores old inputs, while resumed play drops future skills, rate changes and nuke
+PASS keyframe boundaries, tick zero, resumed playback, branching, replay prefix and invalid durations
+PASS rewind is exact — 400 to 150 and back reproduces the same state
+PASS commands survive rewind — the digger is reapplied at the same tick
+PASS frame stepping — back one, forward one, identical state
+PASS history is bounded — 10 keyframes, about 4.9 MB
+PASS rewind by seconds — five seconds is 85 ticks
+PASS two fresh loads of a level are identical
+     (level one finished after 252 ticks)
+PASS a rewound session still exports a replay that verifies
+Classic DOS rewind tests passed.

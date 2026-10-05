@@ -1,0 +1,97 @@
+.build/release-1.7.9/golems-selected.swift:17:30: error: expressions are not allowed at the top level
+15 | let ports = resources.appendingPathComponent("Ports")
+16 | let decoder = JSONDecoder()
+17 | let encoder = JSONEncoder(); encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+   |                              `- error: expressions are not allowed at the top level
+18 | var selected: [LevelCatalogueIdentity: Row] = [:]
+19 | for path in ["Artifacts/ClassicProgression/audit.json", "Artifacts/LearningJourney/fan-evidence.json"] {
+
+.build/release-1.7.9/golems-selected.swift:19:1: error: statements are not allowed at the top level
+17 | let encoder = JSONEncoder(); encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+18 | var selected: [LevelCatalogueIdentity: Row] = [:]
+19 | for path in ["Artifacts/ClassicProgression/audit.json", "Artifacts/LearningJourney/fan-evidence.json"] {
+   | `- error: statements are not allowed at the top level
+20 |     for row in try decoder.decode([Row].self, from: Data(contentsOf: root.appendingPathComponent(path))) {
+21 |         selected[row.entry.identity] = row
+
+.build/release-1.7.9/golems-selected.swift:32:1: error: statements are not allowed at the top level
+30 | var entries: [String: [FanLevelLibrary.Entry]] = [:]
+31 | var checked = 0
+32 | for row in selected.values.sorted(by: { $0.entry.identity.packID + $0.entry.identity.levelID < $1.entry.identity.packID + $1.entry.identity.levelID }) {
+   | `- error: statements are not allowed at the top level
+33 |     let id = row.entry.identity
+34 |     guard let pack = packs[id.packID], let replay = solutions[row.profile.key.replayRevision], replay.expected?.didWin == true else { continue }
+
+.build/release-1.7.9/golems-selected.swift:54:1: error: expressions are not allowed at the top level
+52 |     print("PASS", id.packID, id.levelID, outcome.saved, outcome.ticks)
+53 | }
+54 | precondition(checked >= 148)
+   | `- error: expressions are not allowed at the top level
+55 | print("PASS", checked, "selected Golems wins, exact archive, replay digest, starting state and final outcome")
+56 | 
+
+.build/release-1.7.9/golems-selected.swift:55:1: error: expressions are not allowed at the top level
+53 | }
+54 | precondition(checked >= 148)
+55 | print("PASS", checked, "selected Golems wins, exact archive, replay digest, starting state and final outcome")
+   | `- error: expressions are not allowed at the top level
+56 | 
+
+.build/release-1.7.9/golems-selected.swift:18:5: error: var 'selected' is not concurrency-safe because it is nonisolated global shared mutable state [#MutableGlobalVariable]
+16 | let decoder = JSONDecoder()
+17 | let encoder = JSONEncoder(); encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+18 | var selected: [LevelCatalogueIdentity: Row] = [:]
+   |     |- error: var 'selected' is not concurrency-safe because it is nonisolated global shared mutable state [#MutableGlobalVariable]
+   |     |- note: convert 'selected' to a 'let' constant to make 'Sendable' shared state immutable
+   |     |- note: add '@MainActor' to make var 'selected' part of global actor 'MainActor'
+   |     `- note: disable concurrency-safety checks if accesses are protected by an external synchronization mechanism
+19 | for path in ["Artifacts/ClassicProgression/audit.json", "Artifacts/LearningJourney/fan-evidence.json"] {
+20 |     for row in try decoder.decode([Row].self, from: Data(contentsOf: root.appendingPathComponent(path))) {
+
+.build/release-1.7.9/golems-selected.swift:24:21: error: call can throw, but errors cannot be thrown out of a global variable initializer
+22 |     }
+23 | }
+24 | let solutions = try decoder.decode([String: ClassicDOSReplay].self, from: Data(contentsOf:
+   |                     `- error: call can throw, but errors cannot be thrown out of a global variable initializer
+25 |     root.appendingPathComponent("Artifacts/LearningJourney/candidate-solutions.json")))
+26 | let packs = Dictionary(uniqueKeysWithValues: FanLevelLibrary.packs(in: [resources.appendingPathComponent("LevelPacks")]).map {
+
+.build/release-1.7.9/golems-selected.swift:24:75: error: call can throw, but errors cannot be thrown out of a global variable initializer
+22 |     }
+23 | }
+24 | let solutions = try decoder.decode([String: ClassicDOSReplay].self, from: Data(contentsOf:
+   |                                                                           `- error: call can throw, but errors cannot be thrown out of a global variable initializer
+25 |     root.appendingPathComponent("Artifacts/LearningJourney/candidate-solutions.json")))
+26 | let packs = Dictionary(uniqueKeysWithValues: FanLevelLibrary.packs(in: [resources.appendingPathComponent("LevelPacks")]).map {
+
+.build/release-1.7.9/golems-selected.swift:29:18: error: call can throw, but errors cannot be thrown out of a global variable initializer
+27 |     ("fan:" + FanLevelLibrary.catalogueID($0), $0)
+28 | })
+29 | let assets = try ClassicMainDATAssets.load(from: ports.appendingPathComponent("lemmings_dos_1991-07-30"))
+   |                  `- error: call can throw, but errors cannot be thrown out of a global variable initializer
+30 | var entries: [String: [FanLevelLibrary.Entry]] = [:]
+31 | var checked = 0
+
+.build/release-1.7.9/golems-selected.swift:30:5: error: var 'entries' is not concurrency-safe because it is nonisolated global shared mutable state [#MutableGlobalVariable]
+28 | })
+29 | let assets = try ClassicMainDATAssets.load(from: ports.appendingPathComponent("lemmings_dos_1991-07-30"))
+30 | var entries: [String: [FanLevelLibrary.Entry]] = [:]
+   |     |- error: var 'entries' is not concurrency-safe because it is nonisolated global shared mutable state [#MutableGlobalVariable]
+   |     |- note: convert 'entries' to a 'let' constant to make 'Sendable' shared state immutable
+   |     |- note: add '@MainActor' to make var 'entries' part of global actor 'MainActor'
+   |     `- note: disable concurrency-safety checks if accesses are protected by an external synchronization mechanism
+31 | var checked = 0
+32 | for row in selected.values.sorted(by: { $0.entry.identity.packID + $0.entry.identity.levelID < $1.entry.identity.packID + $1.entry.identity.levelID }) {
+
+.build/release-1.7.9/golems-selected.swift:31:5: error: var 'checked' is not concurrency-safe because it is nonisolated global shared mutable state [#MutableGlobalVariable]
+29 | let assets = try ClassicMainDATAssets.load(from: ports.appendingPathComponent("lemmings_dos_1991-07-30"))
+30 | var entries: [String: [FanLevelLibrary.Entry]] = [:]
+31 | var checked = 0
+   |     |- error: var 'checked' is not concurrency-safe because it is nonisolated global shared mutable state [#MutableGlobalVariable]
+   |     |- note: convert 'checked' to a 'let' constant to make 'Sendable' shared state immutable
+   |     |- note: add '@MainActor' to make var 'checked' part of global actor 'MainActor'
+   |     `- note: disable concurrency-safety checks if accesses are protected by an external synchronization mechanism
+32 | for row in selected.values.sorted(by: { $0.entry.identity.packID + $0.entry.identity.levelID < $1.entry.identity.packID + $1.entry.identity.levelID }) {
+33 |     let id = row.entry.identity
+
+[#MutableGlobalVariable]: <https://docs.swift.org/compiler/documentation/diagnostics/mutable-global-variable>

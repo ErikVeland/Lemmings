@@ -1,0 +1,9 @@
+{
+  "sourceCommit": "4d8cda805cd938df919776498193cdd10ff48714",
+  "status": "passed",
+  "regressionAuditPasses": 48,
+  "sourceDrift": [],
+  "nativeWindows": "offscreen",
+  "testAudio": "muted",
+  "packaging": "ready for Developer ID signing and notarisation"
+}

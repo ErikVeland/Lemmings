@@ -322,6 +322,37 @@ customGround["terrainPalette"] = customPalette
 let recoloured = try JSONDecoder().decode(ClassicGroundSet.self, from: JSONSerialization.data(withJSONObject: customGround))
 check(FanLevelLibrary.artworkFamily(for: recoloured, portsRoot: ports) == nil,
   "custom pack artwork is not replaced by an unrelated stock bank")
+let stockMatch = FanLevelLibrary.artworkMatch(for: emptyLevel, ground: namedSnow, special: nil, portsRoot: ports)
+check(stockMatch?.family == "ohno" && stockMatch?.pieces.terrain.count == namedSnow.terrain.count,
+  "an unchanged ground set matches every piece of its own release")
+check(FanLevelLibrary.artworkMatch(for: emptyLevel, ground: recoloured, special: nil, portsRoot: ports) == nil,
+  "a recoloured ground set takes no alternate pieces")
+var oneRedrawn = try JSONSerialization.jsonObject(with: JSONEncoder().encode(namedSnow)) as! [String: Any]
+var redrawnTerrain = oneRedrawn["terrain"] as! [String: Any]
+var firstPiece = redrawnTerrain["1"] as! [String: Any]
+var pixels = [UInt8](Data(base64Encoded: firstPiece["indexedPixels"] as! String)!)
+let opaque = pixels.firstIndex { $0 & 0x80 == 0 }!
+pixels[opaque] = (pixels[opaque] & 0xF0) | ((pixels[opaque] + 1) & 0x0F)
+firstPiece["indexedPixels"] = Data(pixels).base64EncodedString()
+redrawnTerrain["1"] = firstPiece
+oneRedrawn["terrain"] = redrawnTerrain
+var zeroed = redrawnTerrain
+var zeroPiece = zeroed["0"] as! [String: Any]
+var zeroPixels = [UInt8](Data(base64Encoded: zeroPiece["indexedPixels"] as! String)!)
+let zeroOpaque = zeroPixels.firstIndex { $0 & 0x80 == 0 }!
+zeroPixels[zeroOpaque] = (zeroPixels[zeroOpaque] & 0xF0) | ((zeroPixels[zeroOpaque] + 1) & 0x0F)
+zeroPiece["indexedPixels"] = Data(zeroPixels).base64EncodedString()
+zeroed["0"] = zeroPiece
+var zeroGround = oneRedrawn; zeroGround["terrain"] = zeroed
+let redrawnZero = try JSONDecoder().decode(ClassicGroundSet.self, from: JSONSerialization.data(withJSONObject: zeroGround))
+let partlyRedrawn = try JSONDecoder().decode(ClassicGroundSet.self, from: JSONSerialization.data(withJSONObject: oneRedrawn))
+// The blank record draws terrain piece 0 only, so piece 1 stays outside the share.
+let partlyMatch = FanLevelLibrary.artworkMatch(for: emptyLevel, ground: partlyRedrawn, special: nil, portsRoot: ports)
+check(partlyMatch?.family == "ohno" && partlyMatch?.pieces.terrain.contains(1) == false
+  && partlyMatch?.pieces.terrain.count == namedSnow.terrain.count - 1,
+  "a redrawn piece falls back to DOS while the rest keep the release artwork")
+let mostlyRedrawn = FanLevelLibrary.artworkMatch(for: emptyLevel, ground: redrawnZero, special: nil, portsRoot: ports)
+check(mostlyRedrawn == nil, "a level whose pieces are mostly redrawn keeps its own DOS look")
 for name in ["xmas", "christmas"] {
   let ground = try FanLevelLibrary.groundSet(for: emptyLevel, styleName: name, portsRoot: ports)
   check(ground == (try ClassicGroundSet.load(style: 2, from: ports.appendingPathComponent("holiday_native_1994"))), "\(name) resolves Holiday graphics")

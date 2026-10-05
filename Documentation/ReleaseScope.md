@@ -1,17 +1,16 @@
 # Release scope
 
 Classic 1.0 is the historical macOS release baseline, confirmed on 13 September 2026.
-The current public macOS release is 1.7.8 build 62. The
-[1.7.8 distribution record](ReleaseReadiness/1.7.8Build62Distribution.md) records
+The current public macOS release is 1.7.9 build 63. The
+[1.7.9 distribution record](ReleaseReadiness/1.7.9Build63Distribution.md) records
 the notarised slim download, full-soundtrack update, signed feed and validation
-limits. This release balances cursor icons and the counter at both sizes,
-restores the nuke music filter after the final pop, expands fan replay evidence
-and corrects L3 directional step-up. The slim download is recommended for fresh
-installations and offers missing optional soundtrack libraries. The full Sparkle
-update preserves music bundled inside older apps. Additional target archives
-are not published. L2 and L3 remain Preview and NeoLemmix remains Beta.
-Foreground shipping-app launch and audible checks were not run for 1.7.8.
-Updated 3 October 2026 for the 1.7, 1.8 and 2.0 roadmap targets.
+limits. This release adds Macintosh artwork and Classic pixel controls for
+NeoLemmix, expands fan replay evidence, and corrects L3 extra direction and
+selected stair contacts. The slim download is recommended for fresh installations.
+The full Sparkle update preserves bundled music. L2 and L3 remain Preview and
+NeoLemmix remains Beta. Separate target archives are not published.
+Foreground shipping-app launch and audible checks were not run for 1.7.9.
+Updated 4 October 2026 for this release.
 Automated checks support the recorded routes;
 remaining compatibility and hardware claims still need validation. See the [gate register](ReleaseReadiness/gates.json)
 and the current [Classic validation](ReleaseReadiness/ClassicValidation-current.md).

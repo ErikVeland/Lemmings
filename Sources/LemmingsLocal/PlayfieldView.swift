@@ -277,6 +277,7 @@ struct ReticleFeedback {
   var classicScene: ClassicRenderedLevel? {
     didSet { sceneTick = nil }
   }
+  var neoMacArtworkEnabled = false { didSet { sceneTick = nil; invalidateSprites() } }
   var neoScene: NxlvRenderedLevel? {
     didSet { sceneTick = nil }
   }
@@ -322,15 +323,16 @@ struct ReticleFeedback {
       secondaryAnimationStates: session.simulation.secondaryAnimationStates,
       tickCount: session.simulation.tickCount,
       entranceOpenTick: session.simulation.configuration.entranceOpenTick,
-      splitterDirections: session.simulation.splitterDirections
+      splitterDirections: session.simulation.splitterDirections,
+      useMacArtwork: neoMacArtworkEnabled
     )
     guard let provider = CGDataProvider(data: Data(rgba) as CFData),
           let image = CGImage(
-            width: neoScene.width,
-            height: neoScene.height,
+            width: neoScene.width * (neoMacArtworkEnabled ? 2 : 1),
+            height: neoScene.height * (neoMacArtworkEnabled ? 2 : 1),
             bitsPerComponent: 8,
             bitsPerPixel: 32,
-            bytesPerRow: neoScene.width * 4,
+            bytesPerRow: neoScene.width * 4 * (neoMacArtworkEnabled ? 2 : 1),
             space: CGColorSpaceCreateDeviceRGB(),
             bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.last.rawValue),
             provider: provider,
@@ -338,7 +340,7 @@ struct ReticleFeedback {
             shouldInterpolate: false,
             intent: .defaultIntent
           ) else { return }
-    imageScale = 1
+    imageScale = neoMacArtworkEnabled ? 2 : 1
     levelImage = image
     sceneTick = session.currentTick
   }
@@ -1249,8 +1251,8 @@ struct ReticleFeedback {
        ) {
       let key = "neo-\(frame.cacheKey)"
       let origin = viewport.viewPoint(fromLevel: CGPoint(
-        x: lemming.x - frame.footX,
-        y: lemming.y - frame.footY
+        x: Double(lemming.x) - Double(frame.footX) / Double(frame.pixelScale),
+        y: Double(lemming.y) - Double(frame.footY) / Double(frame.pixelScale)
       ))
       var rect = CGRect(
         x: origin.x,
@@ -1438,7 +1440,11 @@ struct ReticleFeedback {
       size: skillCursorIconSize, reduceMotion: reduceMotion || reduceFlashes, remaining: remaining, in: bounds)
   }
 
-  private func skillBadge(for index: Int) -> NSImage? {
+  func skillBadge(for index: Int) -> NSImage? {
+    if session is NeoLemmixSession {
+      guard let skill = session?.skills[safe: index] else { return nil }
+      return neoSprites?.skillIcon(named: skill.name)
+    }
     guard (0..<8).contains(index), let assets else { return nil }
     if let cached = skillBadgeCache[index] { return cached }
     let poses: [ClassicLemmingPose] = [.climbing, .floating, .ohNo, .blocking,

@@ -31,6 +31,7 @@ final class NeoLemmixSpriteSet {
     let footX: Int
     let footY: Int
     let cacheKey: String
+    var pixelScale: Int = 1
   }
 
   private struct Animation {
@@ -53,8 +54,16 @@ final class NeoLemmixSpriteSet {
   private let stonerTerrainWidth: Int
   private let stonerTerrainHeight: Int
   private var frameCache: [String: Frame] = [:]
+  @MainActor private var skillImages: [NeoLemmixSkill: NSImage] = [:]
+  private let skillBrickColor: UInt32
+  private let macArtwork: ClassicMacArtwork?
+  private let classicAssets: ClassicMainDATAssets?
+  var usesMacArtwork = false {
+    didSet { if usesMacArtwork != oldValue { frameCache.removeAll(); clearSkillImages = true } }
+  }
+  private var clearSkillImages = false
 
-  init(stylesRootURL: URL, themeStyle: String) throws {
+  init(stylesRootURL: URL, themeStyle: String, macArtwork: ClassicMacArtwork? = nil, classicAssets: ClassicMainDATAssets? = nil) throws {
     let resolver = NxlvStyleResolver(stylesRootURL: stylesRootURL)
     let requestedTheme = themeStyle.isEmpty ? "default" : themeStyle
     let theme = resolver.resolve(references: [
@@ -65,7 +74,11 @@ final class NeoLemmixSpriteSet {
       throw NeoLemmixSpriteSetError.missingTheme(requestedTheme)
     }
     let themeDocument = NxlvParser.parse(themeText)
+    skillBrickColor = Self.namedColors(in: themeDocument.section("colors"))["pickup_bricks"] ?? 0xFF_FF_FF
     let lemmingStyle = themeDocument.trimmedLine("lemmings") ?? "default"
+    // Custom themes and recoloured trait states retain their authored sprites.
+    self.macArtwork = lemmingStyle == "default" && (requestedTheme.hasPrefix("orig_") || requestedTheme.hasPrefix("ohno_")) ? macArtwork : nil
+    self.classicAssets = classicAssets
     let resolution = resolver.resolve(references: [
       NxlvStyleAssetReference(kind: .lemmings, style: lemmingStyle),
     ])
@@ -176,6 +189,11 @@ final class NeoLemmixSpriteSet {
     let traitKey = traits.map(\.rawValue).sorted().joined(separator: ",")
     let cacheKey = "\(name)-\(direction.rawValue)-\(index)-\(traitKey)"
     if let cached = frameCache[cacheKey] { return cached }
+    if usesMacArtwork, traits.isEmpty, let mac = macFrame(action: action, direction: direction, index: index,
+        count: animation.frames, key: cacheKey) {
+      if frameCache.count < 4096 { frameCache[cacheKey] = mac }
+      return mac
+    }
     // NeoLemmix sprite sheets store left-facing frames in the first column
     // and right-facing frames in the second. This ordering is the reverse of
     // the direction sections in scheme.nxmi.
@@ -203,8 +221,113 @@ final class NeoLemmixSpriteSet {
     return result
   }
 
+  private func macFrame(action: NeoLemmixAction, direction: NeoLemmixDirection, index: Int, count: Int, key: String) -> Frame? {
+    let pose: ClassicLemmingPose
+    var tick = index
+    switch action {
+    case .walking: pose = .walking
+    case .falling: pose = .falling
+    case .climbing: pose = .climbing
+    case .hoisting: pose = .postClimb
+    case .floating:
+      pose = index < 4 ? .umbrellaOpening : .floating
+      tick = index % 4
+    case .blocking: pose = .blocking
+    case .building: pose = .building
+    case .bashing: pose = .bashing
+    case .mining: pose = .mining
+    case .digging: pose = .digging
+    case .shrugging: pose = .shrugging
+    case .ohNo: pose = .ohNo
+    case .splatting: pose = .splatting
+    case .exiting: pose = .exiting
+    case .drowning: pose = .drowning
+    case .vaporizing: pose = .frying
+    default: return nil
+    }
+    let facing: ClassicSpriteDirection = direction == .left ? .left : .right
+    guard let classicAssets,
+      let animation = classicAssets.animation(for: pose, direction: facing) ?? classicAssets.animation(for: pose, direction: .none),
+      animation.frames.count == (action == .floating ? 4 : count),
+      let frame = macArtwork?.lemming(pose: pose, left: direction == .left, tick: tick),
+      let provider = CGDataProvider(data: frame.rgba as CFData),
+      let cg = CGImage(width: frame.width, height: frame.height, bitsPerComponent: 8, bitsPerPixel: 32,
+        bytesPerRow: frame.width * 4, space: CGColorSpaceCreateDeviceRGB(),
+        bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.last.rawValue), provider: provider,
+        decode: nil, shouldInterpolate: false, intent: .defaultIntent) else { return nil }
+    return Frame(image: NSImage(cgImage: cg, size: NSSize(width: CGFloat(frame.width) / 2, height: CGFloat(frame.height) / 2)),
+      rgba: [UInt8](frame.rgba), width: frame.width, height: frame.height,
+      footX: -(animation.offsetX * 2 + frame.x), footY: -(animation.offsetY * 2 + frame.y), cacheKey: "mac-" + key, pixelScale: 2)
+  }
+
   /// CE draws this shared 16×11 mask into the terrain when a Stoner finishes.
   func stonerTerrain() -> NSImage? { stonerTerrainImage }
+
+  /// Use the level's sprite frames for both the skill bar and cursor companion.
+  @MainActor func skillIcon(named name: String) -> NSImage? {
+    if clearSkillImages { skillImages.removeAll(); clearSkillImages = false }
+    guard let skill = NeoLemmixSkill(rawValue: name.lowercased()) else { return nil }
+    if let image = skillImages[skill] { return image }
+    let poses: [(NeoLemmixAction, Int, NeoLemmixDirection, Int, Int)]
+    switch skill {
+    case .walker: poses = [(.walking, 1, .right, 11, 18)]
+    case .jumper: poses = [(.jumping, 0, .right, 11, 16)]
+    case .shimmier: poses = [(.shimmying, 1, .right, 11, 15)]
+    case .slider: poses = [(.sliding, 0, .left, 9, 17)]
+    case .climber: poses = [(.climbing, 3, .right, 14, 18)]
+    case .swimmer: poses = [(.swimming, 2, .right, 12, 13)]
+    case .floater: poses = [(.floating, 4, .right, 10, 25)]
+    case .glider: poses = [(.gliding, 4, .right, 10, 25)]
+    case .disarmer: poses = [(.disarming, 6, .right, 9, 16)]
+    case .bomber: poses = [(.ohNo, 7, .right, 11, 16)]
+    case .stoner: poses = [(.stoneFinish, 0, .right, 12, 18)]
+    case .blocker: poses = [(.blocking, 0, .right, 11, 18)]
+    case .platformer: poses = [(.platforming, 1, .right, 11, 15)]
+    case .builder: poses = [(.building, 1, .right, 11, 16)]
+    case .stacker: poses = [(.stacking, 0, .right, 11, 17)]
+    case .laserer: poses = [(.lasering, 0, .right, 12, 17)]
+    case .basher: poses = [(.bashing, 0, .right, 12, 17)]
+    case .fencer: poses = [(.fencing, 1, .right, 11, 17)]
+    case .miner: poses = [(.mining, 12, .right, 8, 17)]
+    case .digger: poses = [(.digging, 4, .right, 12, 15)]
+    case .cloner: poses = [(.walking, 1, .left, 10, 18), (.walking, 1, .right, 13, 18)]
+    }
+    let canvas = NSImage(size: NSSize(width: 24, height: 24))
+    canvas.lockFocusFlipped(true)
+    for (action, tick, direction, x, y) in poses {
+      guard let frame = frame(action: action, direction: direction, animationFrame: tick, traits: []) else { continue }
+      frame.image.draw(in: CGRect(x: CGFloat(x) - CGFloat(frame.footX) / CGFloat(frame.pixelScale), y: CGFloat(y) - CGFloat(frame.footY) / CGFloat(frame.pixelScale), width: frame.image.size.width, height: frame.image.size.height),
+        from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true,
+        hints: [.interpolation: NSImageInterpolation.none])
+    }
+    let bricks: [(Int, Int)]
+    switch skill {
+    case .platformer: bricks = stride(from: 6, through: 14, by: 2).map { ($0, 15) }
+    case .builder: bricks = [(8, 17), (10, 16), (12, 15), (14, 14)]
+    case .stacker: bricks = (12...17).map { (13, $0) }
+    default: bricks = []
+    }
+    NSColor(calibratedRed: CGFloat((skillBrickColor >> 16) & 255) / 255,
+      green: CGFloat((skillBrickColor >> 8) & 255) / 255,
+      blue: CGFloat(skillBrickColor & 255) / 255, alpha: 1).setFill()
+    for (x, y) in bricks { CGRect(x: x, y: y, width: 2, height: 1).fill() }
+    canvas.unlockFocus()
+    guard let cg = canvas.cgImage(forProposedRect: nil, context: nil, hints: nil) else { return nil }
+    let bitmap = NSBitmapImageRep(cgImage: cg)
+    var left = cg.width, top = cg.height, right = -1, bottom = -1
+    for y in 0..<cg.height { for x in 0..<cg.width {
+      if (bitmap.colorAt(x: x, y: y)?.alphaComponent ?? 0) > 0 {
+        left = min(left, x); right = max(right, x)
+        top = min(top, y); bottom = max(bottom, y)
+      }
+    } }
+    guard right >= left, bottom >= top,
+      let cropped = cg.cropping(to: CGRect(x: left, y: top, width: right - left + 1, height: bottom - top + 1)) else { return nil }
+    let image = NSImage(cgImage: cropped, size: NSSize(width: CGFloat(cropped.width) * 24 / CGFloat(cg.width),
+      height: CGFloat(cropped.height) * 24 / CGFloat(cg.height)))
+    skillImages[skill] = image
+    return image
+  }
 
   func stonerTerrainPixels() -> (rgba: [UInt8], width: Int, height: Int)? {
     guard stonerTerrainWidth > 0, stonerTerrainHeight > 0,

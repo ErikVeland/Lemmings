@@ -718,27 +718,70 @@ enum FanLevelLibrary {
 
   private static let presentationGrounds = GameAssetCache<ClassicGroundSet>(capacity: 32)
 
+  /// The stock releases whose artwork banks a fan level might borrow, most preferred first.
+  private static let artworkReleases = [
+    ("holiday_native_1994", "holiday"),
+    ("lemmings_dos_1991-07-30", "lemmings"),
+    ("oh_no_more_lemmings_dos-1991-11-14_2232", "ohno"),
+    ("xmas_dos_XmasLemmingsV1.9", "xmas"),
+    ("xmas_dos_XmasLemmingsV1.9a1", "xmas")
+  ]
+
+  private static func stockGround(style: Int, folder: String, portsRoot: URL) -> ClassicGroundSet? {
+    let directory = portsRoot.appendingPathComponent(folder)
+    let key = GameAssetCache<ClassicGroundSet>.bundledKey(directory).map { "\($0):\(style)" }
+    if let key, let cached = presentationGrounds.value(for: key) { return cached }
+    guard let loaded = try? ClassicGroundSet.load(style: style, from: directory) else { return nil }
+    if let key { presentationGrounds.insert(loaded, for: key) }
+    return loaded
+  }
+
   /// Alternate artwork is safe only when it belongs to the exact resolved ground set.
   static func artworkFamily(for ground: ClassicGroundSet, portsRoot: URL) -> String? {
-    for (folder, family) in [
-      ("holiday_native_1994", "holiday"),
-      ("lemmings_dos_1991-07-30", "lemmings"),
-      ("oh_no_more_lemmings_dos-1991-11-14_2232", "ohno"),
-      ("xmas_dos_XmasLemmingsV1.9", "xmas"),
-      ("xmas_dos_XmasLemmingsV1.9a1", "xmas")
-    ] {
-      let directory = portsRoot.appendingPathComponent(folder)
-      let key = GameAssetCache<ClassicGroundSet>.bundledKey(directory).map { "\($0):\(ground.style)" }
-      let reference: ClassicGroundSet
-      if let key, let cached = presentationGrounds.value(for: key) { reference = cached }
-      else {
-        guard let loaded = try? ClassicGroundSet.load(style: ground.style, from: directory) else { continue }
-        reference = loaded
-        if let key { presentationGrounds.insert(loaded, for: key) }
-      }
-      if reference == ground { return family }
+    for (folder, family) in artworkReleases
+    where stockGround(style: ground.style, folder: folder, portsRoot: portsRoot) == ground {
+      return family
     }
     return nil
+  }
+
+  /// The release artwork a fan level may borrow, and which of its pieces.
+  struct ArtworkMatch: Equatable {
+    let family: String
+    let pieces: ClassicMacPieceMatch
+  }
+
+  /// A level takes alternate artwork when most of the pieces it draws are unchanged.
+  /// A pack that redraws more than that has its own look, and a patchwork would hide it.
+  static let minimumArtworkShare = 0.5
+
+  /// Finds the release a pack's ground set was derived from, piece by piece.
+  ///
+  /// Pieces the pack changed stay in DOS pixels. A level on a special picture
+  /// qualifies only when that picture is the stock one, because only the first
+  /// release carries those pictures in alternate artwork.
+  static func artworkMatch(for level: ClassicLevel, ground: ClassicGroundSet,
+    special: ClassicSpecialGraphic?, portsRoot: URL) -> ArtworkMatch? {
+    var best: (family: String, pieces: ClassicMacPieceMatch, share: Double, total: Int)?
+    for (folder, family) in artworkReleases {
+      guard let stock = stockGround(style: ground.style, folder: folder, portsRoot: portsRoot),
+        let pieces = ClassicMacPieceMatch.compare(ground, with: stock) else { continue }
+      let share = pieces.share(of: level) ?? 1
+      // Releases can share a palette and many pieces, so a tie goes to the
+      // one the whole set resembles most.
+      let total = pieces.terrain.count + pieces.objects.count
+      if let held = best, (share, total) <= (held.share, held.total) { continue }
+      best = (family, pieces, share, total)
+    }
+    guard var best, best.share >= minimumArtworkShare else { return nil }
+    if level.specialStyle > 0 {
+      guard best.family == "lemmings", let special,
+        let stock = try? ClassicSpecialGraphic.load(index: level.specialStyle - 1,
+          from: portsRoot.appendingPathComponent("lemmings_dos_1991-07-30")),
+        special == stock else { return nil }
+      best.pieces.special = true
+    }
+    return ArtworkMatch(family: best.family, pieces: best.pieces)
   }
 
   static func specialGraphic(for level: ClassicLevel, entry: Entry, pack: URL, portsRoot: URL) throws -> ClassicSpecialGraphic? {

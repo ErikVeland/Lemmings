@@ -1,0 +1,54 @@
+/Users/veland/.codex/worktrees/release-1-7-9/Lemmings/.build/app-integration-tests-arm64/main.swift:5744:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+ 5742 |       openPanel.canChooseFiles = true
+ 5743 |       openPanel.canChooseDirectories = false
+ 5744 |       openPanel.allowedFileTypes = ["nxlv"]
+      |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+ 5745 |       openPanel.message = "Choose a NeoLemmix level file."
+ 5746 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/.codex/worktrees/release-1-7-9/Lemmings/.build/app-integration-tests-arm64/main.swift:6858:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+ 6856 |       openPanel.canChooseFiles = true
+ 6857 |       openPanel.canChooseDirectories = false
+ 6858 |       openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
+      |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+ 6859 |       openPanel.message = "Choose a Macintosh Lemmings disk image."
+ 6860 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/.codex/worktrees/release-1-7-9/Lemmings/.build/app-integration-tests-arm64/main.swift:7318:22: warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+ 7316 |     keyboard.controllerRewindHeld = { [weak self] held in
+ 7317 |       guard let self else { return }
+ 7318 |       if held { self.beginContinuousRewind() }
+      |                      `- warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+ 7319 |       else if self.rewindHeld { self.endContinuousRewind() }
+ 7320 |     }
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+UI test windows: offscreen; audio: muted
+PASS checkbox box, label, release cancellation, disabled state, accessibility and menu input isolation
+PASS Original/Modern/Custom presets, checkbox targets, keyboard selection, persistence and rendered states
+PASS Space and P pause once per press, ignore repeat and remain paused on release
+PASS Classic shared Space/P pause, focused control, repeat/release, modifiers, text and menu routing
+PASS Classic and fan Space pause independently of campaign menu state
+PASS Lemmings 2 shared Space/P pause, focused control, repeat/release, modifiers, text and menu routing
+PASS Lemmings 2 Original/Modern/Custom cursor wiring
+PASS Lemmings 3 shared Space/P pause, focused control, repeat/release, modifiers, text and menu routing
+PASS Lemmings 3 Original/Modern/Custom cursor wiring
+PASS Enter, keypad Enter and Space activate Ready once; held keys do not repeat
+PASS Enter, keypad Enter and Space activate Ready once; held keys do not repeat
+PASS dialog defaults, Return/keypad Enter, focus loops, confirmations, hint arrows, replay accessibility and cursor lifecycle
+PASS same-window pages, paused clock, display changes, focus and resuming play
+PASS a nuke before the drop ends the level from the panel and the frame loop
+PASS Classic waits for all three audible nuke pops, then restores the filter through tails and results
+PASS disk checkpoint, rewind/undo journal, exact paused restoration, continuation, backups, corruption, version and stale-writer rejection
+PASS legacy text steel checkpoint, retry upgrade and exact current checkpoint restoration
+PASS legacy graphics checkpoint, retry upgrade and exact current checkpoint restoration
+PASS legacy Holiday graphics checkpoint, retry upgrade and exact current checkpoint restoration
+PASS pruned fan queue retains paused state and ownership and saves only surviving entries
+PASS Classic fan checkpoint, shuffled queue, exact paused restore, identity, continuation and missing-pack rejection
+PASS Neo checkpoint round trip, assignment, queued rate/nuke, undo, counters, continuation, changed-content rejection and transactional rejection
+PASS all 292 journey lessons resolve and can start
+PASS new solo and Hot Seat journeys start at Just dig! despite prior player progress; handover remains paused
+PASS Floating Down! uses Holiday snow artwork, retains collision through graphics changes; the current second lesson shows JOURNEY 2
+PASS saved Solo/Hot Seat choices, checkpoint, history, targets and Ready across Classic, L2 and L3
+PASS release UI: cursor presets, backpacks, input, dialogs, welcome, nuke, recovery, journey and cross-game sessions

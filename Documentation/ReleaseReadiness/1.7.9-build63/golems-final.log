@@ -1,0 +1,189 @@
+PASS fan:lldb-105 epic02.dat#3 80 1727
+PASS fan:lldb-140 Epic giga02.dat#0 8 1472
+PASS fan:lldb-14 Mikepak09.dat#1 60 3660
+PASS fan:lldb-160 Giga pack 01.dat#9 80 4442
+PASS fan:lldb-165 Giga pack 04.dat#5 20 1729
+PASS fan:lldb-171 Giga pack 09.dat#6 80 3736
+PASS fan:lldb-179 The lemming google pack.dat#2 26 1705
+PASS fan:lldb-179 The lemming google pack.dat#5 47 3336
+PASS fan:lldb-181 Lemmings platinum Fragle part 2.dat#10 47 3336
+PASS fan:lldb-181 Lemmings platinum Fragle part 2.dat#7 26 1705
+PASS fan:lldb-191 Lemmings platinum Dangerous Part 2.dat#14 50 3209
+PASS fan:lldb-193 Gronklems #1.dat#2 2 393
+PASS fan:lldb-193 Gronklems #1.dat#9 49 740
+PASS fan:lldb-196 nortpack1.dat#8 79 1800
+PASS fan:lldb-1 geooPk0.dat#1 79 7142
+PASS fan:lldb-1 geooPk0.dat#9 37 843
+PASS fan:lldb-202 LemmingsInArms.lvl#-1 9 3272
+PASS fan:lldb-202 LemmingsInMotion.lvl#-1 19 1586
+PASS fan:lldb-202 PlanB.lvl#-1 19 984
+PASS fan:lldb-202 Roundabout.lvl#-1 50 3192
+PASS fan:lldb-202 hard to port!.lvl#-1 48 1127
+PASS fan:lldb-202 mobius1.dat#0 50 3192
+PASS fan:lldb-202 mobius1.dat#1 9 3272
+PASS fan:lldb-202 mobius1.dat#2 48 1127
+PASS fan:lldb-202 mobius1.dat#3 19 984
+PASS fan:lldb-202 mobius1.dat#4 19 1586
+PASS fan:lldb-207 contest1.dat#3 48 991
+PASS fan:lldb-20 ISteve01.DAT#3 10 1664
+PASS fan:lldb-20 ISteve01.DAT#9 80 814
+PASS fan:lldb-214 LF Level Jam #1.dat#6 40 1399
+PASS fan:lldb-217 PSP Special.dat#3 8 2133
+PASS fan:lldb-218 PSP Special2.dat#2 10 1786
+PASS fan:lldb-218 PSP Special2.dat#3 25 1968
+PASS fan:lldb-220 AkseliPack01.dat#3 9 2596
+PASS fan:lldb-220 AkseliPack01.dat#4 48 991
+PASS fan:lldb-220 AkseliPack01.dat#6 7 3310
+PASS fan:lldb-220 AkseliPack01.dat#8 40 1399
+PASS fan:lldb-222 ANTHPCK2.DAT#2 74 2531
+PASS fan:lldb-222 ANTHPCK2.DAT#3 68 2428
+PASS fan:lldb-222 ANTHPCK2.DAT#4 80 3828
+PASS fan:lldb-223 ANTHPCK3.DAT#9 78 4611
+PASS fan:lldb-224 ANTHPCK4.DAT#7 77 4039
+PASS fan:lldb-225 ANTHPCK5.DAT#1 80 1941
+PASS fan:lldb-225 ANTHPCK5.DAT#3 69 2623
+PASS fan:lldb-22 ISteve08.dat#6 80 1734
+PASS fan:lldb-232 JANNPCK2.DAT#7 79 1700
+PASS fan:lldb-232 JANNPCK2.DAT#9 43 1969
+PASS fan:lldb-233 jannpck3.dat#4 40 1469
+PASS fan:lldb-233 jannpck3.dat#9 78 4857
+PASS fan:lldb-234 JANNPCK4.DAT#0 59 2930
+PASS fan:lldb-234 JANNPCK4.DAT#3 60 2558
+PASS fan:lldb-237 JEFFPCK3.DAT#5 50 646
+PASS fan:lldb-244 Martin Zurlinden 01.dat#0 48 1545
+PASS fan:lldb-244 Martin Zurlinden 01.dat#8 18 2675
+PASS fan:lldb-245 Martin Zurlinden 02.dat#4 60 2115
+PASS fan:lldb-245 Martin Zurlinden 02.dat#5 40 1937
+PASS fan:lldb-245 Martin Zurlinden 02.dat#6 60 742
+PASS fan:lldb-245 Martin Zurlinden 02.dat#7 61 4212
+PASS fan:lldb-245 Martin Zurlinden 02.dat#8 30 1602
+PASS fan:lldb-246 Martin Zurlinden 03.dat#0 40 3006
+PASS fan:lldb-246 Martin Zurlinden 03.dat#2 54 1022
+PASS fan:lldb-246 Martin Zurlinden 03.dat#3 39 1692
+PASS fan:lldb-246 Martin Zurlinden 03.dat#4 30 878
+PASS fan:lldb-246 Martin Zurlinden 03.dat#5 38 1465
+PASS fan:lldb-24 ISteve04.dat#9 8 2827
+PASS fan:lldb-252 Conway03.DAT#9 73 1470
+PASS fan:lldb-265 CRISFN01.dat#3 65 2472
+PASS fan:lldb-265 CRISFN01.dat#5 39 1705
+PASS fan:lldb-266 CRISFN02.dat#6 54 1105
+PASS fan:lldb-268 CRISFN04.dat#1 19 1069
+PASS fan:lldb-268 CRISFN04.dat#7 8 691
+PASS fan:lldb-270 CRISFN06.dat#0 33 902
+PASS fan:lldb-270 CRISFN06.dat#3 61 2748
+PASS fan:lldb-270 CRISFN06.dat#6 39 1524
+PASS fan:lldb-271 CRISFN07.dat#5 43 1234
+PASS fan:lldb-272 CRISFN08.dat#0 20 3545
+PASS fan:lldb-272 CRISFN08.dat#7 28 902
+PASS fan:lldb-274 CRISFN10.dat#0 78 4389
+PASS fan:lldb-275 CRISFN11.dat#1 70 1273
+PASS fan:lldb-277 CRISFN13.dat#6 59 572
+PASS fan:lldb-278 CRISFN14.dat#6 65 2415
+PASS fan:lldb-278 CRISFN14.dat#8 80 6956
+PASS fan:lldb-290 JUANJO1N.DAT#9 80 929
+PASS fan:lldb-2 geooPk1.dat#7 4 2042
+PASS fan:lldb-302 TWPAK00.dat#9 10 2533
+PASS fan:lldb-303 TWPAK01.dat#3 80 875
+PASS fan:lldb-303 TWPAK01.dat#6 76 788
+PASS fan:lldb-304 TWPAK02.dat#6 75 2469
+PASS fan:lldb-306 TWPAK04.dat#3 32 516
+PASS fan:lldb-312 TWPAK10.dat#7 5 3075
+PASS fan:lldb-315 TWPAK13.dat#0 30 1348
+PASS fan:lldb-315 TWPAK13.dat#1 20 644
+PASS fan:lldb-317 joem1.dat#8 80 1720
+PASS fan:lldb-327 JM01.DAT#7 58 555
+PASS fan:lldb-331 JM05.DAT#8 80 3326
+PASS fan:lldb-33 QBeez03.dat#9 99 3188
+PASS fan:lldb-340 JM14.DAT#5 59 2492
+PASS fan:lldb-350 MARSHY06.DAT#5 80 2472
+PASS fan:lldb-351 MARSHY07.DAT#3 80 1781
+PASS fan:lldb-35 1tseug.dat#2 19 1022
+PASS fan:lldb-35 1tseug.dat#9 40 837
+PASS fan:lldb-366 LEVIPAK2.DAT#0 41 499
+PASS fan:lldb-367 LEVIPAK3.DAT#0 80 496
+PASS fan:lldb-368 levipak4.dat#9 80 1809
+PASS fan:lldb-373 Insulfrog+LVL+PK+1.DAT#2 100 10585
+PASS fan:lldb-374 justdigcomp.dat#3 5 3075
+PASS fan:lldb-385 Gronklems 3.dat#5 100 612
+PASS fan:lldb-388 geooPk2_preview2.dat#0 49 2573
+PASS fan:lldb-388 geooPk2_preview2.dat#1 16 1197
+PASS fan:lldb-393 pieuw01.dat#9 4 1373
+PASS fan:lldb-394 pieuw02.dat#0 47 1022
+PASS fan:lldb-394 pieuw02.dat#2 7 1346
+PASS fan:lldb-394 pieuw02.dat#3 20 2469
+PASS fan:lldb-394 pieuw02.dat#6 100 5904
+PASS fan:lldb-405 Genesis 2P 2.dat#5 98 905
+PASS fan:lldb-407 Orig Extra Levels.dat#3 80 2618
+PASS fan:lldb-411 mobius05.dat#1 4 3485
+PASS fan:lldb-413 GeoffLems_Minipack.dat#0 39 2567
+PASS fan:lldb-430 LDChallenge01.dat#2 4 361
+PASS fan:lldb-433 LDChallenge04.dat#0 30 1020
+PASS fan:lldb-433 LDChallenge04.dat#1 1 1021
+PASS fan:lldb-464 Finland.dat#0 40 2096
+PASS fan:lldb-471 RSRdnt01.dat#0 10 1354
+PASS fan:lldb-472 LEMPACK.DAT#3 80 3579
+PASS fan:lldb-472 LEMPACK.DAT#4 63 5269
+PASS fan:lldb-472 levels/04.LVL#-1 80 3579
+PASS fan:lldb-472 levels/05.LVL#-1 63 5269
+PASS fan:lldb-482 Frost.DAT#12 80 1480
+PASS fan:lldb-484 Flurry.DAT#14 10 392
+PASS fan:lldb-484 Flurry.DAT#3 50 1298
+PASS fan:lldb-485 Blitz.DAT#13 80 1151
+PASS fan:lldb-485 Blitz.DAT#3 80 3021
+PASS fan:lldb-485 Blitz.DAT#4 80 1678
+PASS fan:lldb-485 Blitz.DAT#7 80 1397
+PASS fan:lldb-485 Blitz.DAT#9 80 1378
+PASS fan:lldb-489 Genesis Tricky.dat#29 10 707
+PASS fan:lldb-489 Genesis Tricky.dat#7 100 2705
+PASS fan:lldb-490 Genesis Taxing.dat#21 50 2651
+PASS fan:lldb-491 Genesis Mayhem.dat#24 100 2723
+PASS fan:lldb-491 Genesis Mayhem.dat#7 100 2476
+PASS fan:lldb-494 JANNPCK3.DAT#4 40 1521
+PASS fan:lldb-494 JANNPCK3.DAT#9 78 4857
+PASS fan:lldb-495 MARTPCK1.DAT#8 18 2675
+PASS fan:lldb-496 MARTPCK2.DAT#0 60 742
+PASS fan:lldb-496 MARTPCK2.DAT#4 40 1937
+PASS original-byte replay digest and decoded equality fan:lldb-496 MARTPCK2.DAT#6
+PASS fan:lldb-496 MARTPCK2.DAT#6 30 1599
+PASS fan:lldb-496 MARTPCK2.DAT#8 61 4212
+PASS fan:lldb-497 MARTPCK3.DAT#0 40 3006
+PASS fan:lldb-497 MARTPCK3.DAT#2 54 1022
+PASS fan:lldb-497 MARTPCK3.DAT#3 40 1503
+PASS fan:lldb-497 MARTPCK3.DAT#4 30 878
+PASS fan:lldb-497 MARTPCK3.DAT#5 38 1465
+PASS fan:lldb-514 ssam1221 Wild 2.dat#2 8 542
+PASS fan:lldb-519 Van Clan Wild 1.dat#5 77 839
+PASS fan:lldb-523 Deceit Tricky 1.dat#5 20 1031
+PASS fan:lldb-542 Pieuw 2007 Peace 2.DAT#8 58 875
+PASS fan:lldb-543 Pieuw 2007 Awkward 2.DAT#6 100 1733
+PASS fan:lldb-544 Pieuw 2007 Artful 1.DAT#0 2 3316
+PASS fan:lldb-544 Pieuw 2007 Artful 1.DAT#3 47 2042
+PASS fan:lldb-544 Pieuw 2007 Artful 1.DAT#7 7 1346
+PASS fan:lldb-545 Pieuw 2007 Insane 1.DAT#0 100 5904
+PASS fan:lldb-545 Pieuw 2007 Insane 1.DAT#3 20 2469
+PASS fan:lldb-545 Pieuw 2007 Insane 2.DAT#4 100 5131
+PASS fan:lldb-548 Ji Hoon Sky 2.DAT#2 51 862
+PASS fan:lldb-551 Lemmings Plus DOS Project - 02 - Mild (Part 2).dat#8 60 2305
+PASS fan:lldb-551 Lemmings Plus DOS Project - 03 - Mild (Part 3).dat#2 80 1246
+PASS fan:lldb-552 Lemmings Plus DOS Project - 05 - Wimpy (Part 2).dat#6 80 2363
+PASS fan:lldb-552 Lemmings Plus DOS Project - 06 - Wimpy (Part 3).dat#8 50 1007
+PASS fan:lldb-553 Lemmings Plus DOS Project - 07 - Medi (Part 1).dat#0 60 2169
+PASS fan:lldb-553 Lemmings Plus DOS Project - 07 - Medi (Part 1).dat#9 50 2484
+PASS fan:lldb-553 Lemmings Plus DOS Project - 08 - Medi (Part 2).dat#0 59 2918
+PASS fan:lldb-553 Lemmings Plus DOS Project - 08 - Medi (Part 2).dat#3 80 1694
+PASS fan:lldb-553 Lemmings Plus DOS Project - 08 - Medi (Part 2).dat#4 38 1076
+PASS fan:lldb-553 Lemmings Plus DOS Project - 08 - Medi (Part 2).dat#9 60 2614
+PASS fan:lldb-553 Lemmings Plus DOS Project - 09 - Medi (Part 3).dat#7 19 1876
+PASS fan:lldb-554 Lemmings Plus DOS Project - 11 - Danger (Part 2).dat#1 20 1893
+PASS fan:lldb-554 Lemmings Plus DOS Project - 12 - Danger (Part 3).dat#9 78 2123
+PASS fan:lldb-558 brickpk1.dat#12 49 2391
+PASS fan:lldb-558 brickpk1.dat#15 46 3815
+PASS fan:lldb-567 Conway06.dat#8 80 1864
+PASS fan:lldb-592 LEVELPAK.DAT#1 73 1159
+PASS fan:lldb-5 Mikepak00.dat#6 58 1545
+PASS fan:lldb-75 JHIsan1.dat#9 79 3247
+PASS fan:lldb-78 doggycharly random lvls.dat#0 68 2459
+PASS fan:lldb-82 Yawg01.dat#0 100 1942
+PASS fan:lldb-82 Yawg01.dat#1 90 3095
+PASS fan:lldb-90 Timpack3.dat#6 77 839
+PASS 187 selected Golems wins, exact archive, replay digest, starting state and final outcome
