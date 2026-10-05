@@ -49,7 +49,7 @@ func l3SeedCandidate(from base: Lemmings3Runtime, levelNumber: Int, levelData: D
         throw SequelDataError.invalid("L3 seed source, population or initial state differs.")
     }
     guard (0..<limits.maxTicks).contains(throughTick), seed.inputs.count <= 100_000,
-          seed.inputs.allSatisfy({ (0..<limits.maxTicks).contains($0.tick) }),
+          seed.inputs.prefix(while: { $0.tick <= throughTick }).allSatisfy({ $0.tick >= 0 }),
           zip(seed.inputs, seed.inputs.dropFirst()).allSatisfy({ $0.tick <= $1.tick }) else {
         throw SequelDataError.invalid("L3 seed checkpoint or input order is invalid.")
     }
@@ -233,7 +233,7 @@ struct L3DistanceField: Sendable {
     }
 }
 
-/// Ranks candidates: saved, then lemmings neither lost nor blocking, then distance to an exit, then fewer inputs.
+/// Ranks candidates: saved, then lemmings not lost, then distance to an exit, then fewer inputs.
 struct L3Score: Comparable, Sendable {
     let saved: Int, remaining: Int, distance: Int, inputs: Int, fingerprint: UInt64
 
@@ -255,8 +255,8 @@ struct L3Score: Comparable, Sendable {
         let active = game.lemmings.filter(\.active).reduce(0) { $0 + field.distance(x: $1.x, y: $1.y) }
         let entrance = field.distance(x: game.configuration.entrance.x, y: game.configuration.entrance.y)
         saved = game.saved
-        // A blocker can never reach an exit while it blocks, so it does not count as remaining.
-        remaining = game.configuration.total - game.lost - game.lemmings.filter { $0.state == .blocking }.count
+        // Walker can release a blocker, so it still has a chance to reach an exit.
+        remaining = game.configuration.total - game.lost
         distance = active + game.reserve * entrance
         inputs = candidate.inputs.count
         fingerprint = candidate.fingerprint

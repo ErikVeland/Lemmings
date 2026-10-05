@@ -132,7 +132,7 @@ let classic06Temporary = try Lemmings3Objects(data: Data(contentsOf: root.append
 let classic06Base = try Lemmings3Runtime(level: classic06Level, style: classicStyle,
                                          permanent: classic06Permanent, temporary: classic06Temporary, total: 13)
 let classic06Seed = try JSONDecoder().decode(L3Seed.self, from: Data(contentsOf: URL(fileURLWithPath:
-    "Tests/Lemmings3SolverTests/Classic006Seed.json")))
+    "Tests/Lemmings3CampaignTests/Fixtures/006-13.json")))
 var seedLimits = L3Limits()
 seedLimits.toolSiteCell = 64
 let classic06Prefix = try l3SeedCandidate(from: classic06Base, levelNumber: 6,
@@ -218,6 +218,17 @@ guard endRunBase.saved == 0, endRunBase.lemmings[0].state == .exiting,
       endRunBase.lemmings[1].state == .blocking, !endRunBase.isComplete else {
     fatalError("L3 End Run test did not reach a save with one live blocker")
 }
+let heldScore = L3Score(L3Candidate(game: endRunBase, detector: L3Detector()),
+    field: L3DistanceField(endRunBase))
+var releasedBlocker = endRunBase
+guard releasedBlocker.assign(.walker, to: 1) else {
+    fatalError("L3 Walker could not release the held blocker")
+}
+let releasedScore = L3Score(L3Candidate(game: releasedBlocker, detector: L3Detector()),
+    field: L3DistanceField(endRunBase))
+guard heldScore.remaining == releasedScore.remaining, heldScore.remaining == 2 else {
+    fatalError("Solver treated a releasable blocker as a lost survivor")
+}
 var unseededLimits = L3Limits()
 unseededLimits.maxTicks = endRunBase.tick + 2
 unseededLimits.maxDepth = 1
@@ -302,3 +313,4 @@ print("PASS L3 solver offers the retained Shadow 02 same-tick two-actor pair")
 print("PASS L3 solver validates and continues the Classic 06 exact-state seed")
 print("PASS L3 solver replay-verifies a seeded abort completion")
 print("PASS L3 solver replay-verifies an unseeded End Run after a rescue")
+print("PASS L3 solver retains releasable blockers in its survivor score")

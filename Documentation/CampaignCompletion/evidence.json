@@ -7,7 +7,7 @@
     "ohYesMoreLemmings": 60,
     "xmasLemmings1991": 4,
     "xmasLemmings1992": 4,
-    "lemmings3": 50
+    "lemmings3": 52
   },
   "fixtures": [
     {
@@ -2392,23 +2392,23 @@
     },
     {
       "fixture": "Tests/Lemmings3CompletionTests/Fixtures/007.json",
-      "sha256": "871e124be77920c0ca7969595bfe21b517e7f17b233daf11ea60bae6bf659240",
+      "sha256": "c53bd0e4af7f1bc84142fdd22ec56e4f1b0600e127bf1f3297b4a859eceb8395",
       "game": "lemmings3",
       "level": 7,
-      "saved": 1,
-      "lost": 19,
-      "reserves": 0,
-      "ticks": 949
+      "saved": 10,
+      "lost": 0,
+      "reserves": 10,
+      "ticks": 1719
     },
     {
       "fixture": "Tests/Lemmings3CompletionTests/Fixtures/008.json",
-      "sha256": "ce8805532b03afa6537c820452ce1049cdcfd67aff1c18c66eb148b06e958064",
+      "sha256": "0dffbb14191bb86ee4f677fa6f77fece5ef43922a028c99fa7fd7e5e6aff0ef4",
       "game": "lemmings3",
       "level": 8,
-      "saved": 1,
-      "lost": 20,
-      "reserves": 1,
-      "ticks": 973
+      "saved": 10,
+      "lost": 2,
+      "reserves": 10,
+      "ticks": 9660
     },
     {
       "fixture": "Tests/Lemmings3CompletionTests/Fixtures/010.json",
@@ -2601,6 +2601,16 @@
       "ticks": 4600
     },
     {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/112.json",
+      "sha256": "4bced6cff0bb6ad6e2913e71a235feaae0138a6e61836fe3dc433d222995832d",
+      "game": "lemmings3",
+      "level": 112,
+      "saved": 1,
+      "lost": 19,
+      "reserves": 0,
+      "ticks": 2115
+    },
+    {
       "fixture": "Tests/Lemmings3CompletionTests/Fixtures/113.json",
       "sha256": "a0056de9f172b214889258370bb9725e24bd09b392f0245fe9a60c68a85d9d95",
       "game": "lemmings3",
@@ -2719,6 +2729,16 @@
       "lost": 9,
       "reserves": 10,
       "ticks": 8280
+    },
+    {
+      "fixture": "Tests/Lemmings3CompletionTests/Fixtures/208.json",
+      "sha256": "b9113aeed71fd071889bca7f23d2d923d3475913d7db720fe70f8c05539670cb",
+      "game": "lemmings3",
+      "level": 208,
+      "saved": 5,
+      "lost": 7,
+      "reserves": 8,
+      "ticks": 4830
     },
     {
       "fixture": "Tests/Lemmings3CompletionTests/Fixtures/209.json",
