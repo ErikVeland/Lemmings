@@ -701,6 +701,32 @@ do {
                 let perm = try Lemmings3Objects(data: Data(contentsOf: root.appendingPathComponent(String(format: "LEVELS/PERM%03d.OBS", candidate.permanentObjectsReference))))
                 let temp = try Lemmings3Objects(data: Data(contentsOf: root.appendingPathComponent(String(format: "LEVELS/TEMP%03d.OBS", candidate.temporaryObjectsReference))))
                 var run = try Lemmings3Runtime(level: candidate, style: tribeStyle, permanent: perm, temporary: temp)
+                if tribe == .shadow && index == 17 {
+                    try require(run.lemmings.count == 8 && [4, 5, 6].allSatisfy {
+                        run.lemmings[$0].tool == .grenade && run.lemmings[$0].quantity == 4
+                    }, "L3 Shadow 18 right-hand prisoners start with four grenades")
+                    var armed = run
+                    for _ in 0..<60 { armed.step() }
+                    try require(armed.useTool(to: 4, direction: .right) && armed.lemmings[4].quantity == 3 && armed.explosives.count == 1,
+                        "L3 Shadow 18 prisoner throws a grenade from initial stock")
+                    let permBytes = try Data(contentsOf: root.appendingPathComponent("LEVELS/PERM118.OBS"))
+                    var shortPermBytes = Data()
+                    var extrasKept = 0
+                    for offset in stride(from: 0, to: permBytes.count, by: 6) {
+                        let identifier = Int(permBytes[offset]) | Int(permBytes[offset + 1]) << 8
+                        if identifier == 10007 {
+                            extrasKept += 1
+                            if extrasKept > 3 { continue }
+                        }
+                        shortPermBytes.append(contentsOf: permBytes[offset..<(offset + 6)])
+                    }
+                    var shortLevelBytes = candidate.rawData
+                    shortLevelBytes[22] = 3
+                    let short = try Lemmings3Runtime(level: Lemmings3Level(data: shortLevelBytes),
+                        style: tribeStyle, permanent: Lemmings3Objects(data: shortPermBytes), temporary: temp, total: 1)
+                    try require(short.lemmings.count == 3 && short.lemmings.allSatisfy { $0.tool == nil },
+                        "L3 Shadow 18 stock requires all three right-hand prisoners")
+                }
                 for _ in 0..<100 { run.step() }
                 try require(run.released > 0 && run.creatures.count == candidate.enemyCount, "L3 native tribe release test \(number)")
                 if tribe == .shadow && index == 0 {

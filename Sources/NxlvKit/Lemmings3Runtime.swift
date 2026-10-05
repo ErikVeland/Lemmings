@@ -257,6 +257,13 @@ public struct Lemmings3Runtime: Sendable {
             releaseDelay: level.releaseDelay, timeLimit: level.timeLimitSeconds, pickups: pickups, extras: extras,
             backgroundAttributes: scene.backgroundAttributes, sourceLevelReference: level.permanentObjectsReference,
             traps: traps, creatures: creatures, additionalEntrances: Array(entrances.dropFirst())))
+        if level.style == 2 && level.permanentObjectsReference == 118 && lemmings.indices.contains(6) {
+            // DOS Shadow 18 gives the three right-hand prisoners four grenades without pickup boxes.
+            for index in [4, 5, 6] {
+                lemmings[index].tool = .grenade
+                lemmings[index].quantity = Tool.grenade.initialQuantity
+            }
+        }
     }
     public func isSolid(_ x: Int, _ y: Int) -> Bool {
         x >= 0 && y >= 0 && x < configuration.width && y < configuration.height &&
