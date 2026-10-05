@@ -3,6 +3,26 @@
     <channel>
         <title>Ultimate Lemmings</title>
         <item>
+            <title>1.8</title>
+            <pubDate>Mon, 05 Oct 2026 18:24:15 +1000</pubDate>
+            <link>https://github.com/ErikVeland/Lemmings/releases</link>
+            <sparkle:version>64</sparkle:version>
+            <sparkle:shortVersionString>1.8</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>12.3</sparkle:minimumSystemVersion>
+            <description><![CDATA[<html><head><meta charset="utf-8"><style>:root{color-scheme:light dark}body{font:13px -apple-system,sans-serif}h3{font-size:14px;margin:14px 0 4px}h4{font-size:13px;margin:10px 0 2px}ul{padding-left:18px;margin:4px 0}.meta{color:#888;font-size:11px}</style></head><body><h3>Sharper pixels</h3>
+<p>Pixel artwork keeps crisp edges when scaled across game views, controls, level previews, hints and original movies.</p>
+<h3>Sound fixes</h3>
+<p>NeoLemmix now plays hatch, assignment, rescue, death and nuke sound effects through the selected Classic sound bank. Custom gadget samples, builder warnings and steel-contact effects remain incomplete.</p>
+<p>After the final nuke explosion, slowed music smoothly returns to normal speed in Classic, NeoLemmix and Lemmings 2, including failed results. The visual failure mood remains. Rewinding into the countdown restores the effect. Lemmings 3 has no mass-nuke control.</p>
+<h3>Lemmings 3 correction</h3>
+<p>Brick pickups provide eight uses, matching the original game. Lemmings 2 and Lemmings 3 remain Preview. Their full completion milestone moves to 1.9. NeoLemmix remains Beta. Mobile remains the separate 2.0 milestone.</p>
+<h3>Download and update</h3>
+<p>Choose the slim download for a fresh installation. Optional soundtrack libraries remain available in the app. Check for Updates uses the full archive to preserve bundled music. Both downloads support Intel and Apple silicon Macs running macOS 12.3 or later.</p>
+<p class="meta">Build: 64<br>Release commit: 0a4075fc0d293ef81b2cf1026c6f2b709ff6c4e7<br>Release base: v1.7.9</p></body></html>
+]]></description>
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.8/UltimateLemmings-1.8-build64.zip" length="1943417851" type="application/octet-stream" sparkle:edSignature="XkdmcLjgvsVge6iwVVlPbHpszlike+ANhP3+63WjMmJPgTxszl06Id+IgmsdJ0SDRLIp2StSklVJSxM77OB4Cg=="/>
+        </item>
+        <item>
             <title>1.7.9</title>
             <pubDate>Sun, 04 Oct 2026 22:47:54 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
@@ -45,7 +65,7 @@
 ]]></description>
             <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.7.8/UltimateLemmings-1.7.8-build62.zip" length="1943295087" type="application/octet-stream" sparkle:edSignature="dDEDHZpqWCtLaCCEWZe54QckjUF3YBik2S7CSvvd/UfsccH+MRG37SjpNwwcjRMDMvQKu90qNNui41aP5W5vDw=="/>
         </item>
-        <item>
+    <item>
             <title>1.7.7</title>
             <pubDate>Fri, 02 Oct 2026 15:09:04 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
@@ -70,7 +90,7 @@
 ]]></description>
             <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.7.7/UltimateLemmings-1.7.7-build61.zip" length="1943260816" type="application/octet-stream" sparkle:edSignature="anOj2bxCnEfbPj0xySrpVwwaXEYlpL/JrBCzkUowmI8M4B3rT+bHeTj8eSgmBQEAOaNFNdJgXll125aaSWm/BQ=="/>
         </item>
-    <item>
+<item>
             <title>1.7.6</title>
             <pubDate>Fri, 02 Oct 2026 11:00:01 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
