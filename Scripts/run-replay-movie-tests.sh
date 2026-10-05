@@ -14,6 +14,7 @@ swiftc -O -swift-version 6 -target "$(uname -m)-apple-macos12.3" -parse-as-libra
 fi
 sources=(Sources/LemmingsLocal/*.swift)
 sources=("${(@)sources:#*/main.swift}")
+sources=("${(@)sources:#*/AppUpdates.swift}")
 sources=("${(@)sources:#*/ReplayWindow.swift}")
 cat Sources/LemmingsLocal/ReplayWindow.swift Tests/ReplayMovieTests/main.swift > "$build_dir/main.swift"
 swiftc -O -swift-version 6 -target "$(uname -m)-apple-macos12.3" \

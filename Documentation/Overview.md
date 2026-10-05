@@ -130,8 +130,10 @@ remain open. See the [1.7 roadmap](1.7Roadmap.md).
 
 **1.8: Mac polish.** Sharper pixel rendering, NeoLemmix sound effects and
 reliable music recovery after a nuke. L2/L3 remain Preview and NeoLemmix Beta.
+The patch branch combines the current work. See the
+[1.8.x consolidation evidence](ReleaseReadiness/1.8xConsolidation.md).
 
-**1.9: complete Lemmings 2 and Lemmings 3.** The remaining 92 winning routes
+**1.9: complete Lemmings 2 and Lemmings 3.** The remaining 83 winning routes
 need proof. Both games also need engine-fidelity, campaign-progression, media
 and recovery evidence. Until the 1.9 gate passes, both games remain Preview.
 

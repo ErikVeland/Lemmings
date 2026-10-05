@@ -1304,6 +1304,8 @@ extension AppDelegate {
       settings.reduceMotion = false; settings.reduceFlashes = false
       picker.selectItem(at: 29); levelChanged()
       if phase == .briefing { advancePhase() }
+      // Measure simulation throughput without the key-window countdown.
+      playfield.startCountdown.cancel()
       isPaused = false; panel.isPaused = false; applyDisplayMode()
       session?.adjustRate(by: 99)
       speedControl.variableEnabled = true; speedControl.reset(at: ProcessInfo.processInfo.systemUptime)
@@ -3661,7 +3663,7 @@ extension AppDelegate {
         + ((view as? NSTextField).map { [$0.stringValue] } ?? [])
         + view.subviews.flatMap(labels)
     }
-    try check(labels(hub).contains(where: { $0.contains("Just dig!") })
+    try check(labels(hub).contains(where: { $0.contains(entries[0].levelNameSnapshot) })
       && buttons(hub).contains(where: { $0.title == "Let's play" })
       && !buttons(hub).contains(where: { $0.title == "Continue" }),
       "A new Hot Seat inherited another session's journey position: \(labels(hub)), \(buttons(hub).map(\.title))")
@@ -3692,18 +3694,18 @@ extension AppDelegate {
     let ready = GameScreen.shared.controllerPage(in: window)
     try check(arcade.hotSeatIsActive && store.activeRunHotSeatID == arcade.hotSeatID
       && sequencePlayingIdentity == first
-      && artworkLevel?.title == "Just dig!"
+      && artworkLevel?.title == entries[0].levelNameSnapshot
       && store.activeRun?.entries.count == journey.lessons.count
       && isPaused
       && store.savedRuns.contains(where: { $0.run.id == soloID })
       && ready.map { buttons($0).contains(where: { $0.title.hasPrefix("Ready,") }) } == true,
       "New Hot Seat did not start the learning journey or show Ready")
-    print("PASS new solo and Hot Seat journeys start at Just dig! despite prior player progress; handover remains paused")
+    print("PASS new solo and Hot Seat journeys start at the first curated lesson despite prior player progress; handover remains paused")
 
     // Follow the actual mixed-campaign route that previously drew snow as marble.
     GameScreen.shared.dismissAll()
     try check(try store.advanceLearningJourney(runID: store.activeRun!.id, won: true),
-      "The Hot Seat journey did not advance to its floater lesson")
+      "The Hot Seat journey did not advance to its second lesson")
     returnToLibrary()
     sequencePlaylistStore = store
     settings.graphics = .macintosh
@@ -3721,6 +3723,12 @@ extension AppDelegate {
 
     // Keep the snow-art regression independent of generated lesson order.
     returnToLibrary()
+    let snowFailures: Set<String> = await withCheckedContinuation { continuation in
+      ensureFanPacksResolved(forPackIDs: ["fan:lldb-535"], title: "Snow artwork test") {
+        continuation.resume(returning: $0)
+      }
+    }
+    try check(snowFailures.isEmpty, "The snow artwork pack could not be resolved")
     guard let snowEntry = levelCatalogue.packs.flatMap(\.levels).first(where: {
       $0.identity.packID == "fan:lldb-535" && $0.levelName == "Floating Down!"
     }) else { throw IntegrationFailure(message: "The snow artwork fixture is missing") }
@@ -5663,7 +5671,7 @@ Task { @MainActor in
     subject.prepareArcadeTests()
     // Match normal startup: use the packaged index before opening the home screen.
     FanLevelLibrary.Progress.seedBundledCounts()
-    #if !PROFILE_SESSION_TESTS && !SELECTION_HDR_TESTS && !CURSOR_INPUT_TESTS && !RELEASE_UI_TESTS && !LOADING_LATENCY_TESTS && !TRANSPORT_TESTS && !DIALOG_TESTS && !L3_STORY_TESTS && !NEO_RECOVERY_TESTS && !NEO_PACK_TESTS && !LEARNING_TESTS
+    #if !CONSOLIDATION_TESTS && !PROFILE_SESSION_TESTS && !SELECTION_HDR_TESTS && !CURSOR_INPUT_TESTS && !RELEASE_UI_TESTS && !LOADING_LATENCY_TESTS && !TRANSPORT_TESTS && !DIALOG_TESTS && !L3_STORY_TESTS && !NEO_RECOVERY_TESTS && !NEO_PACK_TESTS && !LEARNING_TESTS
     try subject.testFailureMoodDecision()
     try subject.testSteppedCompletion()
     try subject.testFirstLaunchEffects()
@@ -5674,7 +5682,23 @@ Task { @MainActor in
     try testPointerAssignment()
     #endif
     #endif
-    #if PROFILE_SESSION_TESTS
+    #if CONSOLIDATION_TESTS
+    try subject.testSoloHotSeatRoundTrips()
+    try subject.testReportedRecovery()
+    try subject.testProfileSessionActions()
+    try subject.testHotSeatBoundaries()
+    try subject.testHandoverPreviousLevel()
+    try subject.testRunRecovery()
+    try subject.testFanRunRecovery()
+    try subject.testNeoRunRecovery()
+    try await subject.testPlaylistSessions()
+    try subject.testSequenceNavigationGuards()
+    try await subject.testLearningJourneyEntriesResolve()
+    try await subject.testLearningJourneySessionsStart()
+    try await subject.testLevelHints()
+    try testL3OpeningStory()
+    print("1.8.x consolidation integration tests passed.")
+    #elseif PROFILE_SESSION_TESTS
     try subject.testSoloHotSeatRoundTrips()
     try subject.testReportedRecovery()
     try subject.testProfileSessionActions()
