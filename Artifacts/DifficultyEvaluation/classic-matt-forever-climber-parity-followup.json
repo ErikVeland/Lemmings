@@ -1,0 +1,132 @@
+{
+  "date": "2026-10-05",
+  "level": {
+    "packID": "fan:lldb-248",
+    "levelID": "MATTPCK1.DAT#2",
+    "title": "Forever Friends",
+    "archiveSHA256": "bffc37a79925ad47b3cc6a24472381ce3741ef0f2b83048e07faacc7edc80854",
+    "datBytes": 6381,
+    "datSHA256": "7270aee2cf59119ee9a8eca166a35238dfd24f7b5a0529020d0f14178e745fbb"
+  },
+  "source": {
+    "replaySHA256": "039fe378d33a5396e3ba0c242b6589ffcf35a8d6c6e63409dd3e1269260b98ea",
+    "mainJSSHA256": "c467eab99315555391542d7c79a2976b28c1c674dadd01ccf261d7792eabeace",
+    "browser": "Firefox 151.0.2 headless, media volume 0",
+    "outcome": {
+      "saved": 2,
+      "required": 2,
+      "cycles": 5566
+    }
+  },
+  "native": {
+    "sourceFileSHA256": "55b522fbbd3c400908ba4b18403f40656709d93ab7fc0dbad08cc5e1e8163bdd",
+    "librarySHA256": "0021228840f26fba8d92831e931a0175e1c2eb8837880f57968cc67625a13d5d",
+    "traceBinarySHA256": "700fd9d96933df5b2aec82a2d4f395520fc00e5886d035974651e5d88001b279",
+    "inputSourceRecordSHA256": "512c220f89b22e2d2d43e5eeed83e37dfd3cc0e2d54a49110079e19d731cdd92",
+    "correctedReplayJSONSHA256": "cdd30eb712b95f6179f692e726ace719653402546f71cdb964c0c9ab1dca1f3d",
+    "correctedReplayOutcome": {
+      "saved": 0,
+      "required": 2,
+      "ticks": 6122,
+      "didWin": false
+    },
+    "observedPositions": {
+      "2102": {
+        "worker0Foot": [
+          708,
+          131
+        ],
+        "action": "climbing",
+        "direction": "right"
+      },
+      "2150": {
+        "worker0Foot": [
+          708,
+          107
+        ],
+        "action": "climbing",
+        "direction": "right"
+      },
+      "2200": {
+        "worker0Foot": [
+          708,
+          82
+        ],
+        "action": "climbing",
+        "direction": "right"
+      }
+    },
+    "sourceScreenshots": {
+      "2100": "f3686c6e4be3112da3cfea200f844c375eeeb56704f60bc1b374994fbd356dea",
+      "2150": "b9584e81d6b4f12f36b7fa172c60bdf2d0f4d6fc071e2c0c04885f518e5b6c39",
+      "2200": "97cee4532e5d913aa11e0d37de44132c265b534198664e13554d1cd17b38b859"
+    },
+    "sourceVisualEvidence": {
+      "frames": [2100, 2150, 2200],
+      "observation": "In the source frames, the climber beside the wall is low at cycle 2100, visibly higher by cycle 2150, and above the inspected crop by cycle 2200. This supports continued climbing past the protrusion. It is visual progression evidence only; no exact source foot coordinates are claimed."
+    },
+    "laterRouteTrace": {
+      "stateAtSourceFinishCycle5566": {
+        "saved": 0,
+        "activeWorkers": [
+          {
+            "id": 0,
+            "foot": [
+              743,
+              138
+            ],
+            "action": "climbing",
+            "direction": "left"
+          },
+          {
+            "id": 1,
+            "foot": [
+              677,
+              134
+            ],
+            "action": "walking",
+            "direction": "right"
+          }
+        ]
+      },
+      "stateAtNativeTimeLimitTick6122": {
+        "saved": 0,
+        "activeWorkers": [
+          {
+            "id": 0,
+            "foot": [
+              715,
+              96
+            ],
+            "action": "walking",
+            "direction": "right"
+          },
+          {
+            "id": 1,
+            "foot": [
+              648,
+              132
+            ],
+            "action": "walking",
+            "direction": "left"
+          }
+        ]
+      },
+      "sourceScreenshots": {
+        "2884": "084644be19dc7fe13a07978b8fcf510419d2c91478b326c9ee09a498d3ecae5c",
+        "3147": "bb7d459153c567e06f6197634af5c23247c987d88442b332083061460a637a3b",
+        "3919": "68125a0ed7492ae06ea6570e731b02cb407b030787ae59e6edc54368d29c3d3c",
+        "5242": "9c9215ae9c391d9432f7c99f229699c6cd00d98c09e5dedb0655fec15a0a2188",
+        "5500": "7c18a1e97decf8379044fd8d48f1fc284dbc6b1054d80d935ebfdeb540786125"
+      },
+      "sourceCompletion": {
+        "saved": 2,
+        "required": 2,
+        "cycles": 5566
+      }
+    }
+  },
+  "change": "Golems climber wall-side probe now samples two pixels behind the foot. Original and Oh No retain the existing one-pixel probe.",
+  "regression": "PASS: synthetic rear-pixel protrusion turns an Original climber; Golems climbs past it. ClassicDOSSimulationRegressions passed, including the 120-level official-campaign soak.",
+  "conclusion": "The exact source route wins 2/2 at cycle 5,566. After the climbing correction, native playback follows the inspected climb positions but reaches its time limit at tick 6,122 with both workers still active. The later divergence remains unlocalised; no native win or difficulty score is claimed."
+}

@@ -1,0 +1,17 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 1
+        }
+      },
+      "afterTick" : true,
+      "tick" : 0
+    }
+  ],
+  "initialStateHash" : "a2082643643cea09fd3ef13239045c53d0e1232c3dc7f57881ca69fd900a0e10",
+  "number" : 1,
+  "rank" : "fan:lldb-1",
+  "title" : "Mission at max-fall 60"
+}

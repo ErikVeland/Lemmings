@@ -1,0 +1,88 @@
+{
+  "date": "2026-10-05",
+  "target": {
+    "packID": "fan:lldb-415",
+    "level": "levels/Blizzlem/003.ini#-1",
+    "title": "003.ini",
+    "initialStateSHA256": "28bfa1f5b999935250f0935f26cd4cc67086a7ac3f3d29d1e2d1f23ce53293b5",
+    "archiveSHA256": "a1107ad848d4c68d1b127efe8ca3989906414b7acc5d79be4cbb52bf61a7d7ec",
+    "population": 5,
+    "required": 5,
+    "releaseRate": 30,
+    "entrances": 2,
+    "sourceCandidate": ".build/full-difficulty-evaluation/blizzard-of-lemm-replays/candidates/28bfa1f5b999935250f0935f26cd4cc67086a7ac3f3d29d1e2d1f23ce53293b5-4e61263179148989.json",
+    "sourceCandidateSHA256": "84945df0bdda8717fd12ffb7c2aee3ef7b0757b3c3b3fcb6f2e238f738170fad",
+    "sourceReplaySHA256": "4e6126317914898978124681103b56fa2c146f41d7216e0648e2ed7466e3e048"
+  },
+  "currentSource": {
+    "solverPath": ".build/heartbeat-20261005-1105/ClassicSolver",
+    "solverSHA256": "5820ffc7659a3a8b6b50424f71924b4e6630439aa3d26edb60858af226ea0b5d",
+    "simulationLibrarySHA256": "4fcadccdd642b63220692316d58419a6d25661f4d64242ae543fdc2d71db0595",
+    "releaseIntervalAt30": 38,
+    "firstReleaseTick": "approximately tick 54 from open tick 35 plus initial countdown 20; checked against ClassicDOSRules",
+    "sourceSHA256": "55b522fbbd3c400908ba4b18403f40656709d93ab7fc0dbad08cc5e1e8163bdd"
+  },
+  "attempts": [
+    {
+      "prefix": [
+        {
+          "tick": 137,
+          "id": 1,
+          "skill": "builder"
+        },
+        {
+          "tick": 139,
+          "id": 0,
+          "skill": "basher"
+        },
+        {
+          "tick": 273,
+          "rate": 99
+        }
+      ],
+      "fallbackTicks": 12,
+      "result": "UNSOLVED; best 0/5; 10 expansions; waiting tick 112; 0 continuations"
+    },
+    {
+      "prefix": [
+        {
+          "tick": 107,
+          "id": 1,
+          "skill": "builder"
+        },
+        {
+          "tick": 109,
+          "id": 0,
+          "skill": "basher"
+        },
+        {
+          "tick": 243,
+          "rate": 99
+        }
+      ],
+      "fallbackTicks": 12,
+      "result": "UNSOLVED; best 0/5; 10 expansions; waiting tick 104; 0 continuations"
+    },
+    {
+      "prefix": [
+        {
+          "tick": 102,
+          "id": 1,
+          "skill": "builder"
+        },
+        {
+          "tick": 104,
+          "id": 0,
+          "skill": "basher"
+        },
+        {
+          "tick": 238,
+          "rate": 99
+        }
+      ],
+      "fallbackTicks": 12,
+      "result": "UNSOLVED; best 0/5; 9 expansions; waiting tick 92; 0 continuations"
+    }
+  ],
+  "assessment": "The source replay seed and two 30/35-tick early shifts all stop before their first forced action on the exact bundled target. This rules out those particular replay transfers and localises the immediate failure to a target route/state problem before the first command; it does not separate level-revision differences from source/native physics and does not establish impossibility or multi-skill coverage. No replay was emitted or strictly verified. Keep the level unscored."
+}
