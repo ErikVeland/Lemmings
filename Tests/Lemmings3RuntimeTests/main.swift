@@ -282,6 +282,27 @@ do {
     let twoShimmyPickups = try shimmyDistance(stock: 16)
     try require(oneShimmyPickup == 64 && twoShimmyPickups == 128,
                 "L3 Shimmy distance scales with pickup stock")
+    var ceilingTags = stockTags
+    ceilingTags[47 * 256 + 48] = 0x2020
+    ceilingTags[48 * 256 + 52] = 0x20
+    var ceilingWear = try Lemmings3Runtime(configuration: .init(width: 256, height: 96, attributes: ceilingTags,
+        entrance: .init(x: 32, y: 64), exits: [.init(x: 240, y: 64)], total: 1, releaseDelay: 1,
+        pickups: [.init(id: 0, tool: .shimmy, x: 32, y: 56),
+                  .init(id: 1, tool: .bricks, x: 48, y: 40)]))
+    ceilingWear.step()
+    try require(ceilingWear.useTool(to: 0, direction: .right), "L3 activates Shimmy below source dirt")
+    for _ in 0..<100 where ceilingWear.lemmings[0].x < 56 { ceilingWear.step() }
+    try require(ceilingWear.lemmings[0].state == .shimmying &&
+                ceilingWear.attributes[47 * 256 + 48] == 0x1000 &&
+                ceilingWear.attributes[48 * 256 + 48] == 0x1000 &&
+                ceilingWear.terrainEdits[47 * 256 + 48] == false &&
+                ceilingWear.terrainEdits[48 * 256 + 48] == false &&
+                ceilingWear.attributes[48 * 256 + 52] == 0x20 &&
+                ceilingWear.pickups[1].y == 40,
+                "L3 Shimmy wears source ceiling behind the actor and preserves permanent terrain")
+    ceilingWear.step()
+    try require(ceilingWear.pickups[1].y == 42,
+                "L3 placed Bricks fall after Shimmy removes their last support pixel")
     var interrupted = try shimmyGame()
     for _ in 0..<12 { interrupted.step() }
     _ = interrupted.useTool(to: 0, direction: .right)

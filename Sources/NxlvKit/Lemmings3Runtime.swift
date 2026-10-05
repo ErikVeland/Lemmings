@@ -743,6 +743,16 @@ public struct Lemmings3Runtime: Sendable {
                     lem.mobilityTool = nil; lem.mobilityTicks = 0
                 } else {
                     lem.x = nx
+                    let trailingX = lem.x - lem.direction * 8
+                    if inBounds(trailingX, lem.y - 17) {
+                        for y in (lem.y - 17)...(lem.y - 16) {
+                            let cell = y * configuration.width + trailingX
+                            if attributes[cell] == 0x2020 && terrainEdits[cell] != true {
+                                attributes[cell] = configuration.backgroundAttributes[cell]
+                                terrainEdits[cell] = false
+                            }
+                        }
+                    }
                     lem.mobilityTicks -= 1
                     if lem.mobilityTicks.isMultiple(of: 8) { consumeTool(&lem) }
                     if lem.mobilityTicks == 0 {
