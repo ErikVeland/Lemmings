@@ -46,6 +46,11 @@
       "tick" : 429
     },
     {
+      "action" : "walker",
+      "lemming" : 2,
+      "tick" : 700
+    },
+    {
       "action" : "abort",
       "tick" : 973
     }

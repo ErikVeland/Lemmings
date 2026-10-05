@@ -1,188 +1,188 @@
 {
-  "expected" : {
-    "lost" : 2,
-    "reserves" : 12,
-    "saved" : 10,
-    "stateHash" : "0cd6b8e5763c642cb2a0c051c82d0273502a763b9f90de8bd8fdfef8917be443",
-    "ticks" : 9660
+  "expected": {
+    "lost": 2,
+    "reserves": 12,
+    "saved": 10,
+    "stateHash": "768ed281548b88656be503606d8f7d56e1d331ed975255eb8d88836db7a71760",
+    "ticks": 9660
   },
-  "initialStateHash" : "1f5332404d92728f8a1d6a57d02b99b3119cb09dfbb049f2a35dec81496156c6",
-  "inputs" : [
+  "initialStateHash": "1f5332404d92728f8a1d6a57d02b99b3119cb09dfbb049f2a35dec81496156c6",
+  "inputs": [
     {
-      "action" : "jumper",
-      "lemming" : 2,
-      "tick" : 160
+      "action": "jumper",
+      "lemming": 2,
+      "tick": 160
     },
     {
-      "action" : "jumper",
-      "lemming" : 3,
-      "tick" : 183
+      "action": "jumper",
+      "lemming": 3,
+      "tick": 183
     },
     {
-      "action" : "jumper",
-      "lemming" : 2,
-      "tick" : 190
+      "action": "jumper",
+      "lemming": 2,
+      "tick": 190
     },
     {
-      "action" : "jumper",
-      "lemming" : 4,
-      "tick" : 206
+      "action": "jumper",
+      "lemming": 4,
+      "tick": 206
     },
     {
-      "action" : "jumper",
-      "lemming" : 3,
-      "tick" : 213
+      "action": "jumper",
+      "lemming": 3,
+      "tick": 213
     },
     {
-      "action" : "jumper",
-      "lemming" : 2,
-      "tick" : 222
+      "action": "jumper",
+      "lemming": 2,
+      "tick": 222
     },
     {
-      "action" : "jumper",
-      "lemming" : 5,
-      "tick" : 229
+      "action": "jumper",
+      "lemming": 5,
+      "tick": 229
     },
     {
-      "action" : "jumper",
-      "lemming" : 4,
-      "tick" : 236
+      "action": "jumper",
+      "lemming": 4,
+      "tick": 236
     },
     {
-      "action" : "jumper",
-      "lemming" : 3,
-      "tick" : 245
+      "action": "jumper",
+      "lemming": 3,
+      "tick": 245
     },
     {
-      "action" : "jumper",
-      "lemming" : 6,
-      "tick" : 252
+      "action": "jumper",
+      "lemming": 6,
+      "tick": 252
     },
     {
-      "action" : "jumper",
-      "lemming" : 5,
-      "tick" : 259
+      "action": "jumper",
+      "lemming": 5,
+      "tick": 259
     },
     {
-      "action" : "jumper",
-      "lemming" : 4,
-      "tick" : 268
+      "action": "jumper",
+      "lemming": 4,
+      "tick": 268
     },
     {
-      "action" : "jumper",
-      "lemming" : 7,
-      "tick" : 275
+      "action": "jumper",
+      "lemming": 7,
+      "tick": 275
     },
     {
-      "action" : "jumper",
-      "lemming" : 6,
-      "tick" : 282
+      "action": "jumper",
+      "lemming": 6,
+      "tick": 282
     },
     {
-      "action" : "jumper",
-      "lemming" : 5,
-      "tick" : 291
+      "action": "jumper",
+      "lemming": 5,
+      "tick": 291
     },
     {
-      "action" : "jumper",
-      "lemming" : 8,
-      "tick" : 298
+      "action": "jumper",
+      "lemming": 8,
+      "tick": 298
     },
     {
-      "action" : "jumper",
-      "lemming" : 7,
-      "tick" : 305
+      "action": "jumper",
+      "lemming": 7,
+      "tick": 305
     },
     {
-      "action" : "jumper",
-      "lemming" : 6,
-      "tick" : 314
+      "action": "jumper",
+      "lemming": 6,
+      "tick": 314
     },
     {
-      "action" : "jumper",
-      "lemming" : 9,
-      "tick" : 321
+      "action": "jumper",
+      "lemming": 9,
+      "tick": 321
     },
     {
-      "action" : "use",
-      "direction" : "right",
-      "lemming" : 3,
-      "tick" : 327
+      "action": "use",
+      "direction": "right",
+      "lemming": 3,
+      "tick": 327
     },
     {
-      "action" : "jumper",
-      "lemming" : 8,
-      "tick" : 328
+      "action": "jumper",
+      "lemming": 8,
+      "tick": 328
     },
     {
-      "action" : "jumper",
-      "lemming" : 7,
-      "tick" : 337
+      "action": "jumper",
+      "lemming": 7,
+      "tick": 337
     },
     {
-      "action" : "drop",
-      "lemming" : 2,
-      "tick" : 343
+      "action": "drop",
+      "lemming": 2,
+      "tick": 343
     },
     {
-      "action" : "jumper",
-      "lemming" : 10,
-      "tick" : 344
+      "action": "jumper",
+      "lemming": 10,
+      "tick": 344
     },
     {
-      "action" : "jumper",
-      "lemming" : 9,
-      "tick" : 351
+      "action": "jumper",
+      "lemming": 9,
+      "tick": 351
     },
     {
-      "action" : "walker",
-      "lemming" : 2,
-      "tick" : 356
+      "action": "walker",
+      "lemming": 2,
+      "tick": 356
     },
     {
-      "action" : "jumper",
-      "lemming" : 8,
-      "tick" : 360
+      "action": "jumper",
+      "lemming": 8,
+      "tick": 360
     },
     {
-      "action" : "use",
-      "direction" : "right",
-      "lemming" : 3,
-      "tick" : 361
+      "action": "use",
+      "direction": "right",
+      "lemming": 3,
+      "tick": 361
     },
     {
-      "action" : "jumper",
-      "lemming" : 11,
-      "tick" : 367
+      "action": "jumper",
+      "lemming": 11,
+      "tick": 367
     },
     {
-      "action" : "jumper",
-      "lemming" : 10,
-      "tick" : 374
+      "action": "jumper",
+      "lemming": 10,
+      "tick": 374
     },
     {
-      "action" : "jumper",
-      "lemming" : 9,
-      "tick" : 383
+      "action": "jumper",
+      "lemming": 9,
+      "tick": 383
     },
     {
-      "action" : "jumper",
-      "lemming" : 11,
-      "tick" : 397
+      "action": "jumper",
+      "lemming": 11,
+      "tick": 397
     },
     {
-      "action" : "jumper",
-      "lemming" : 10,
-      "tick" : 406
+      "action": "jumper",
+      "lemming": 10,
+      "tick": 406
     },
     {
-      "action" : "jumper",
-      "lemming" : 11,
-      "tick" : 429
+      "action": "jumper",
+      "lemming": 11,
+      "tick": 429
     }
   ],
-  "level" : 8,
-  "levelSHA256" : "299b6570fc6986018909afa8f4843f5cd71a5c0857a8a726be762a90b3d4c626",
-  "population" : 22,
-  "version" : 1
+  "level": 8,
+  "levelSHA256": "299b6570fc6986018909afa8f4843f5cd71a5c0857a8a726be762a90b3d4c626",
+  "population": 22,
+  "version": 1
 }

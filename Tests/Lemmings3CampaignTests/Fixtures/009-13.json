@@ -3,7 +3,7 @@
     "lost" : 1,
     "reserves" : 3,
     "saved" : 10,
-    "stateHash" : "05d613a9b4c3a31d1e57ce78522194df1d180055302f9f4d0dca96316a7b0f71",
+    "stateHash" : "67985ee779c2b854e2aec124dd5af9753fe18abb7e0c80b602a488ec88857d2d",
     "ticks" : 9660
   },
   "initialStateHash" : "8fd72323f624b047f45b74c6fc555cc3c7cc622f438a29a3cc337190bdfb8ca8",
@@ -156,63 +156,113 @@
     {
       "action" : "walker",
       "lemming" : 6,
-      "tick" : 2210
+      "tick" : 1980
     },
     {
       "action" : "walker",
       "lemming" : 7,
-      "tick" : 2210
+      "tick" : 1980
     },
     {
       "action" : "walker",
       "lemming" : 8,
-      "tick" : 2210
-    },
-    {
-      "action" : "walker",
-      "lemming" : 10,
-      "tick" : 2210
+      "tick" : 1980
     },
     {
       "action" : "walker",
       "lemming" : 9,
-      "tick" : 2210
+      "tick" : 1980
+    },
+    {
+      "action" : "walker",
+      "lemming" : 10,
+      "tick" : 1980
     },
     {
       "action" : "walker",
       "lemming" : 2,
-      "tick" : 2230
+      "tick" : 2000
     },
     {
       "action" : "walker",
       "lemming" : 3,
-      "tick" : 2230
+      "tick" : 2000
     },
     {
       "action" : "walker",
       "lemming" : 4,
-      "tick" : 2230
+      "tick" : 2000
     },
     {
       "action" : "walker",
       "lemming" : 5,
-      "tick" : 2230
+      "tick" : 2000
+    },
+    {
+      "action" : "walker",
+      "lemming" : 1,
+      "tick" : 2040
+    },
+    {
+      "action" : "walker",
+      "lemming" : 6,
+      "tick" : 2203
+    },
+    {
+      "action" : "walker",
+      "lemming" : 7,
+      "tick" : 2203
+    },
+    {
+      "action" : "walker",
+      "lemming" : 8,
+      "tick" : 2203
+    },
+    {
+      "action" : "walker",
+      "lemming" : 10,
+      "tick" : 2203
+    },
+    {
+      "action" : "walker",
+      "lemming" : 9,
+      "tick" : 2203
+    },
+    {
+      "action" : "walker",
+      "lemming" : 2,
+      "tick" : 2223
+    },
+    {
+      "action" : "walker",
+      "lemming" : 3,
+      "tick" : 2223
+    },
+    {
+      "action" : "walker",
+      "lemming" : 4,
+      "tick" : 2223
+    },
+    {
+      "action" : "walker",
+      "lemming" : 5,
+      "tick" : 2223
     },
     {
       "action" : "use",
       "direction" : "upRight",
       "lemming" : 6,
-      "tick" : 2260
+      "tick" : 2251
     },
     {
       "action" : "walker",
       "lemming" : 6,
-      "tick" : 2261
+      "tick" : 2252
     },
     {
       "action" : "walker",
       "lemming" : 1,
-      "tick" : 2273
+      "tick" : 2260
     }
   ],
   "level" : 9,

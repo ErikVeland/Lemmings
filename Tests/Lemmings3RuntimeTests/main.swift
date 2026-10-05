@@ -130,6 +130,29 @@ do {
         "L3 turns at a thin eight-pixel shelf")
     print("PASS L3 directional high rise and projected clearance")
 
+    func leftClassRise(projected: UInt16) throws -> Lemmings3Runtime {
+        let width = 64, height = 64
+        var terrain = [UInt16](repeating: 0x1000, count: width * height)
+        for y in 48..<height { for x in 0..<width { terrain[y * width + x] = 0x20 } }
+        for y in 40..<48 { terrain[y * width + 23] = 0x0060 }
+        terrain[40 * width + 15] = projected
+        var run = try Lemmings3Runtime(configuration: .init(width: width, height: height, attributes: terrain,
+            entrance: .init(x: 50, y: 40), exits: [.init(x: 55, y: 40)], total: 1,
+            releaseInterval: 1000, releaseDelay: 1000, extras: [.init(x: 24, y: 48, direction: -1)]))
+        run.step()
+        run.step()
+        return run
+    }
+    for projected: UInt16 in [0x0060, 0x2020] {
+        let run = try leftClassRise(projected: projected)
+        try require(run.lemmings[0].x == 23 && run.lemmings[0].y == 40 && run.lemmings[0].direction == -1,
+            "L3 leftward source stair rises at phase seven with one projected class or source brick cell")
+    }
+    let plainProjection = try leftClassRise(projected: 0x0020)
+    try require(plainProjection.lemmings[0].x == 24 && plainProjection.lemmings[0].direction == 1,
+        "L3 leftward source stair still turns without a qualifying projected cell")
+    print("PASS L3 leftward source stair rise")
+
     var trapTags = tags
     for y in 46..<48 { for x in 40..<56 { trapTags[y * 128 + x] = 0x4000 } }
     let trap = Lemmings3Runtime.Trap(id: 0, cells: [.init(x: 40, y: 46), .init(x: 48, y: 46)], frameCount: 12)

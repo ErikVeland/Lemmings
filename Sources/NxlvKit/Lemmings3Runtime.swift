@@ -643,16 +643,22 @@ public struct Lemmings3Runtime: Sendable {
                         let px = nx + lem.direction * 8, py = lem.y - 14 + 2 * offset
                         return inBounds(px, py) && attributes[py * configuration.width + px] & 0x0040 != 0
                     }.count
-                    let classRise = (nx & 7) == 0 && contactTag == 0x0060 && projectedClassCount == 4
+                    let classRise = (nx & 7) == (lem.direction > 0 ? 0 : 7) && contactTag == 0x0060 &&
+                        projectedClassCount >= (lem.direction > 0 ? 4 : 1)
+                    let sourceBrickRise = lem.direction < 0 && (nx & 7) == 7 &&
+                        contactTag == 0x0060 &&
+                        inBounds(nx - 8, lem.y - 8) &&
+                        attributes[(lem.y - 8) * configuration.width + nx - 8] == 0x2020 &&
+                        terrainEdits[(lem.y - 8) * configuration.width + nx - 8] != true
                     let alignedBlockRise = lem.direction > 0 && (nx & 7) == 0 && contactTag == 0x0020 &&
                         isSolid(nx + 7, lem.y - 6) && !isSolid(nx + 7, lem.y - 7)
                     let continuousEightRise = lem.direction > 0 && (nx & 7) == 0 && contactTag == 0x0020 &&
                         isSolid(nx + 7, lem.y - 8) && !isSolid(nx + 7, lem.y - 9) &&
                         (8..<16).allSatisfy { isSolid(nx + $0, lem.y) && isSolid(nx + $0, lem.y - 1) }
-                    let maxRise = (nx & 7) == contactPhase || classRise || alignedBlockRise || continuousEightRise || builtBrickRise ? 8 : 4
+                    let maxRise = (nx & 7) == contactPhase || classRise || alignedBlockRise || continuousEightRise || builtBrickRise || sourceBrickRise ? 8 : 4
                     if let rise = (1...maxRise).first(where: { rise in
                         isSolid(nx, lem.y - rise) && !isSolid(nx, lem.y - rise - 1) &&
-                        (rise <= 4 || classRise || (0..<((continuousEightRise || builtBrickRise) && rise == 8 ? 3 : 4)).allSatisfy { offset in
+                        (rise <= 4 || classRise || sourceBrickRise || (0..<((continuousEightRise || builtBrickRise) && rise == 8 ? 3 : 4)).allSatisfy { offset in
                             let px = nx + lem.direction * 8, py = lem.y - 14 + 2 * offset
                             if !isSolid(px, py) { return true }
                             let projected = py * configuration.width + px
