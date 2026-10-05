@@ -138,15 +138,16 @@ labels until every condition passes:
   Lemmings 3 levels;
 - compare Lemmings 2 rules with the original engine and resolve the provisional
   Lemmings 3 tool, movement and trap semantics;
-- verify continuous campaign progression, Lemmings 2 survivor carry-over and
-  both games' endings;
+- verify continuous campaign progression, Lemmings 2 survivor carry-over,
+  at least 50 surviving lemmings at the end of each Lemmings 3 tribe, and both
+  games' endings;
 - complete Lemmings 3 environmental effects, original movie audio and story
   transitions, and close the remaining Lemmings 2 media and fidelity gaps;
 - verify app-session completion, saved-run recovery, replay identity and result
   records against the current engine and content revisions.
 
-The current baseline is 75/120 Lemmings 2 routes and 41/90 Lemmings 3 routes.
-The missing 94 routes are an open verification gap, not evidence that those
+The current baseline is 75/120 Lemmings 2 routes and 43/90 Lemmings 3 routes.
+The missing 92 routes are an open verification gap, not evidence that those
 levels are broken. A passing load or smoke check does not close this gate.
 
 ### 2.0 — iPhone and iPad release

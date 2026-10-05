@@ -3,7 +3,7 @@ import Foundation
 /// A teaching order, independent of retail ranks. Estimates never certify human insight.
 public struct LearningJourney: Codable, Equatable, Sendable {
     public static let title = "Oh My! All Lemmings!"
-    public static let version = "learning-9"
+    public static let version = "learning-11"
     public static let playlistID = UUID(uuidString: "80368144-659B-4697-B2D0-76894BF20B18")!
     public static let maximumScoreStep = 65.0
 
@@ -105,6 +105,11 @@ public struct LearningJourney: Codable, Equatable, Sendable {
             c.constraintPressure * 0.50, combinationFloor].max()!)
     }
 
+    /// Keep source levels with tight release or rescue constraints out of the opening stages.
+    public static let demandingLevelFloor = 360.0
+    public static let highRescueRequirementRatio = 0.95
+    public static let highAssignmentCount = 12
+
     /// Work through narrow demand bands. Within each band, prepare combinations,
     /// space repeated practice and prefer a small increase in execution demands.
     /// Official puzzles take priority over other puzzles within a demand band.
@@ -141,23 +146,38 @@ public struct LearningJourney: Codable, Equatable, Sendable {
             let rankFloor = candidate.rankIsUnverified ? 180.0
                 : Self.rankDemandFloor(for: candidate.entry, sourceRank: profile.sourceRank)
             let rescueFloor = candidate.requiresFullRescue ? 360.0 : 0.0
+            let sourceConstraintFloor = candidate.startingReleaseRate == nil
+                || candidate.rescueRequirementRatio == nil
+                || candidate.startingReleaseRate == 99
+                || !profile.criticalActions.isEmpty
+                || (candidate.rescueRequirementRatio ?? 0) >= Self.highRescueRequirementRatio
+                || (candidate.skillAssignmentCount ?? 0) >= Self.highAssignmentCount
+                ? Self.demandingLevelFloor : 0.0
             let missingPracticeFloor = missingPractice(profile).isEmpty ? 0.0 : 180.0
             let sequenceFloor = lessons.last?.demand ?? 0.0
             let observed = demand(for: profile)
             guard profile.detectedTechniques.count > 1 else {
-                return [observed, rankFloor, rescueFloor, sequenceFloor].max()!
+                return [observed, rankFloor, rescueFloor, sourceConstraintFloor, sequenceFloor].max()!
             }
             // A combination cannot precede its easiest available isolated lesson.
             let preparation = profile.detectedTechniques.count > 2
                 ? profile.detectedTechniques.compactMap { secondPractice[$0] }.max() ?? 0 : 0
             return [observed, profile.detectedTechniques.compactMap { foundations[$0] }.max() ?? 0,
-                    preparation, rankFloor, rescueFloor, missingPracticeFloor, sequenceFloor].max()!
+                    preparation, rankFloor, rescueFloor, sourceConstraintFloor,
+                    missingPracticeFloor, sequenceFloor].max()!
         }
         func effectiveDemand(_ candidate: ProgressionCandidate) -> Double {
             [demand(for: candidate.profile),
              candidate.rankIsUnverified ? 180.0
                 : Self.rankDemandFloor(for: candidate.entry, sourceRank: candidate.profile.sourceRank),
-             candidate.requiresFullRescue ? 360.0 : 0.0].max()!
+             candidate.requiresFullRescue ? 360.0 : 0.0,
+             candidate.startingReleaseRate == nil
+                || candidate.rescueRequirementRatio == nil
+                || candidate.startingReleaseRate == 99
+                || !candidate.profile.criticalActions.isEmpty
+                || (candidate.rescueRequirementRatio ?? 0) >= Self.highRescueRequirementRatio
+                || (candidate.skillAssignmentCount ?? 0) >= Self.highAssignmentCount
+                ? Self.demandingLevelFloor : 0.0].max()!
         }
         var remaining = candidates.sorted { $0.stableKey < $1.stableKey }
         var previous: DifficultyProfile?

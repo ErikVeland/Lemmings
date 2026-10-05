@@ -9,6 +9,9 @@ struct Row: Codable {
     let order: Int
     let playable: Bool
     let initialHash: String?
+    var startingReleaseRate: Int? = nil
+    var rescueRequirementRatio: Double? = nil
+    var skillAssignmentCount: Int? = nil
 }
 let args = CommandLine.arguments
 var rows = try JSONDecoder().decode([Row].self, from: Data(contentsOf: URL(fileURLWithPath: args[1])))
@@ -30,7 +33,14 @@ if args.count > 3 {
               candidate.entry.sourceRevision == original.entry.sourceRevision,
               candidate.initialHash == original.initialHash,
               candidate.profile.confidence != .low else { return original }
-        return original.profile.confidence == .low || candidate.profile.overallScore < original.profile.overallScore ? candidate : original
+        guard original.profile.confidence == .low || candidate.profile.overallScore < original.profile.overallScore else {
+            return original
+        }
+        return Row(entry: candidate.entry, profile: candidate.profile, official: candidate.official,
+                   order: candidate.order, playable: candidate.playable, initialHash: candidate.initialHash,
+                   startingReleaseRate: original.startingReleaseRate,
+                   rescueRequirementRatio: original.rescueRequirementRatio,
+                   skillAssignmentCount: original.skillAssignmentCount)
     }
 }
 struct Scenarios: Decodable { let official: [String]; let fan: [String: String] }
@@ -120,10 +130,16 @@ if let data = try? Data(contentsOf: legacyURL), let legacy = try? JSONDecoder().
 let candidates = selected.map { row in
     let replay = witnesses[row.profile.key.replayRevision] ?? witnesses[row.initialHash ?? ""]
     let requiredAll = replay?.expected.map { $0.required == $0.released } ?? false
+    let skillAssignmentCount = replay?.events.reduce(into: 0) { count, event in
+        if case .assign = event.action { count += 1 }
+    }
     return ProgressionCandidate(entry: row.entry, profile: row.profile, isOfficial: row.official,
                                 campaignOrder: row.order, requiresFullRescue: requiredAll,
                                 rankIsUnverified: !LearningJourney.hasRecognisedRank(for: row.entry,
-                                    sourceRank: row.profile.sourceRank))
+                                    sourceRank: row.profile.sourceRank),
+                                startingReleaseRate: row.startingReleaseRate,
+                                rescueRequirementRatio: row.rescueRequirementRatio,
+                                skillAssignmentCount: skillAssignmentCount)
 }
 let focuses = goals.mapValues(\.lesson)
 let objectives = goals.mapValues(\.objective)

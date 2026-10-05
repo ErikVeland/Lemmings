@@ -1,0 +1,46 @@
+{
+  "date": "2026-10-05",
+  "identity": {
+    "packID": "fan:lldb-1",
+    "levelID": "geooPk0.dat#2",
+    "title": "crossing stairs"
+  },
+  "bundle": {
+    "path": ".build/learning-evidence/resources/LevelPacks/0001-geooPk0.zip",
+    "archiveSHA256": "66ff4c33c44970e945dffee82cfe84a4787329f60ee702613f3f2cb233865bec",
+    "initialStateHash": "3b15ffe941c9fb6a4a659a0d55bc8bf87907e3175e5451c3bfa443a94094df3d"
+  },
+  "search": {
+    "binarySHA256": "dc45dadab700e2792f98fe30451ac371b0b6bc36f3a25e086cabf05514fab01b",
+    "simulationLibrarySHA256": "0021228840f26fba8d92831e931a0175e1c2eb8837880f57968cc67625a13d5d",
+    "solverSourceSHA256": "e9efacd6a90ebd84e2c1d20548f6ba0156f0b764fc2cbe30e7822e96def8c71a",
+    "policy": {
+      "width": 256,
+      "timeLimitSeconds": 90,
+      "actualElapsedSeconds": 37,
+      "releaseRate": 99,
+      "ranking": [
+        "preferProgress",
+        "directExitDistance",
+        "rolloutSingle"
+      ],
+      "fallbackTicks": 12,
+      "partialReplay": ".build/heartbeat-20261005-0920/geoo-crossing-stairs-rollout.partial.json"
+    },
+    "result": {
+      "status": "unsolved",
+      "saved": 0,
+      "required": 40,
+      "expanded": 92974,
+      "waitingRouteTick": 130,
+      "singleSkillContinuations": 60,
+      "lastContinuationTick": 204,
+      "released": 38,
+      "lost": 0,
+      "active": 38,
+      "waitingRouteComplete": false,
+      "partialSHA256": "847450e02b198d5dccb8898309fdd15493481f96d0fd23af013d009b49267637"
+    }
+  },
+  "interpretation": "The focused moderate-fallback one-skill rollout found no win. Its waiting route reached tick 130 and completed 60 continuations through tick 204. This is bounded coverage only; it does not cover routes needing a second skill or establish impossibility or source-physics parity. No candidate passed strict replay, so no score or ledger change was made."
+}

@@ -278887,6 +278887,1010 @@
     "rank": "fan:lldb-543",
     "title": "Snakefood"
   },
+  "bdedd304632434a9eb11488b8618c3742ccef22e4667bf98f7aa15b48bf45842": {
+    "events": [
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 1
+          }
+        },
+        "afterTick": true,
+        "tick": 196
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "basher"
+          }
+        },
+        "afterTick": true,
+        "tick": 196
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 2,
+            "skill": "blocker"
+          }
+        },
+        "afterTick": true,
+        "tick": 366
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 3,
+            "skill": "builder"
+          }
+        },
+        "afterTick": true,
+        "tick": 404
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 1,
+            "skill": "blocker"
+          }
+        },
+        "afterTick": true,
+        "tick": 434
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 6,
+            "skill": "builder"
+          }
+        },
+        "afterTick": true,
+        "tick": 613
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 6,
+            "skill": "blocker"
+          }
+        },
+        "afterTick": true,
+        "tick": 741
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 7,
+            "skill": "builder"
+          }
+        },
+        "afterTick": true,
+        "tick": 779
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 4,
+            "skill": "basher"
+          }
+        },
+        "afterTick": true,
+        "tick": 903
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 7,
+            "skill": "builder"
+          }
+        },
+        "afterTick": true,
+        "tick": 1033
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 2
+          }
+        },
+        "afterTick": true,
+        "tick": 1053
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 3
+          }
+        },
+        "afterTick": true,
+        "tick": 1054
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 4
+          }
+        },
+        "afterTick": true,
+        "tick": 1055
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 5
+          }
+        },
+        "afterTick": true,
+        "tick": 1056
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 6
+          }
+        },
+        "afterTick": true,
+        "tick": 1057
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 7
+          }
+        },
+        "afterTick": true,
+        "tick": 1058
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 8
+          }
+        },
+        "afterTick": true,
+        "tick": 1059
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 9
+          }
+        },
+        "afterTick": true,
+        "tick": 1060
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 10
+          }
+        },
+        "afterTick": true,
+        "tick": 1061
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 11
+          }
+        },
+        "afterTick": true,
+        "tick": 1062
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 12
+          }
+        },
+        "afterTick": true,
+        "tick": 1063
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 13
+          }
+        },
+        "afterTick": true,
+        "tick": 1064
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 14
+          }
+        },
+        "afterTick": true,
+        "tick": 1065
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 15
+          }
+        },
+        "afterTick": true,
+        "tick": 1066
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 16
+          }
+        },
+        "afterTick": true,
+        "tick": 1067
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 17
+          }
+        },
+        "afterTick": true,
+        "tick": 1068
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 18
+          }
+        },
+        "afterTick": true,
+        "tick": 1069
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 19
+          }
+        },
+        "afterTick": true,
+        "tick": 1070
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 20
+          }
+        },
+        "afterTick": true,
+        "tick": 1071
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 21
+          }
+        },
+        "afterTick": true,
+        "tick": 1072
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 22
+          }
+        },
+        "afterTick": true,
+        "tick": 1073
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 23
+          }
+        },
+        "afterTick": true,
+        "tick": 1074
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 24
+          }
+        },
+        "afterTick": true,
+        "tick": 1075
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 25
+          }
+        },
+        "afterTick": true,
+        "tick": 1076
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 26
+          }
+        },
+        "afterTick": true,
+        "tick": 1077
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 27
+          }
+        },
+        "afterTick": true,
+        "tick": 1078
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 28
+          }
+        },
+        "afterTick": true,
+        "tick": 1079
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 29
+          }
+        },
+        "afterTick": true,
+        "tick": 1080
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 30
+          }
+        },
+        "afterTick": true,
+        "tick": 1081
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 31
+          }
+        },
+        "afterTick": true,
+        "tick": 1082
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 32
+          }
+        },
+        "afterTick": true,
+        "tick": 1083
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 33
+          }
+        },
+        "afterTick": true,
+        "tick": 1084
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 34
+          }
+        },
+        "afterTick": true,
+        "tick": 1085
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 35
+          }
+        },
+        "afterTick": true,
+        "tick": 1086
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 36
+          }
+        },
+        "afterTick": true,
+        "tick": 1087
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 37
+          }
+        },
+        "afterTick": true,
+        "tick": 1088
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 38
+          }
+        },
+        "afterTick": true,
+        "tick": 1089
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 39
+          }
+        },
+        "afterTick": true,
+        "tick": 1090
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 40
+          }
+        },
+        "afterTick": true,
+        "tick": 1091
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 41
+          }
+        },
+        "afterTick": true,
+        "tick": 1092
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 42
+          }
+        },
+        "afterTick": true,
+        "tick": 1093
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 43
+          }
+        },
+        "afterTick": true,
+        "tick": 1094
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 44
+          }
+        },
+        "afterTick": true,
+        "tick": 1095
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 45
+          }
+        },
+        "afterTick": true,
+        "tick": 1096
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 46
+          }
+        },
+        "afterTick": true,
+        "tick": 1097
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 47
+          }
+        },
+        "afterTick": true,
+        "tick": 1098
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 48
+          }
+        },
+        "afterTick": true,
+        "tick": 1099
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 49
+          }
+        },
+        "afterTick": true,
+        "tick": 1100
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 50
+          }
+        },
+        "afterTick": true,
+        "tick": 1101
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 51
+          }
+        },
+        "afterTick": true,
+        "tick": 1102
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 52
+          }
+        },
+        "afterTick": true,
+        "tick": 1103
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 53
+          }
+        },
+        "afterTick": true,
+        "tick": 1104
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 54
+          }
+        },
+        "afterTick": true,
+        "tick": 1105
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 55
+          }
+        },
+        "afterTick": true,
+        "tick": 1106
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 56
+          }
+        },
+        "afterTick": true,
+        "tick": 1107
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 57
+          }
+        },
+        "afterTick": true,
+        "tick": 1108
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 58
+          }
+        },
+        "afterTick": true,
+        "tick": 1109
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 59
+          }
+        },
+        "afterTick": true,
+        "tick": 1110
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 60
+          }
+        },
+        "afterTick": true,
+        "tick": 1111
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 61
+          }
+        },
+        "afterTick": true,
+        "tick": 1112
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 62
+          }
+        },
+        "afterTick": true,
+        "tick": 1113
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 63
+          }
+        },
+        "afterTick": true,
+        "tick": 1114
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 64
+          }
+        },
+        "afterTick": true,
+        "tick": 1115
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 65
+          }
+        },
+        "afterTick": true,
+        "tick": 1116
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 66
+          }
+        },
+        "afterTick": true,
+        "tick": 1117
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 67
+          }
+        },
+        "afterTick": true,
+        "tick": 1118
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 68
+          }
+        },
+        "afterTick": true,
+        "tick": 1119
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 69
+          }
+        },
+        "afterTick": true,
+        "tick": 1120
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 70
+          }
+        },
+        "afterTick": true,
+        "tick": 1121
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 71
+          }
+        },
+        "afterTick": true,
+        "tick": 1122
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 72
+          }
+        },
+        "afterTick": true,
+        "tick": 1123
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 73
+          }
+        },
+        "afterTick": true,
+        "tick": 1124
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 74
+          }
+        },
+        "afterTick": true,
+        "tick": 1125
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 75
+          }
+        },
+        "afterTick": true,
+        "tick": 1126
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 76
+          }
+        },
+        "afterTick": true,
+        "tick": 1127
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 77
+          }
+        },
+        "afterTick": true,
+        "tick": 1128
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 78
+          }
+        },
+        "afterTick": true,
+        "tick": 1129
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 79
+          }
+        },
+        "afterTick": true,
+        "tick": 1130
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 80
+          }
+        },
+        "afterTick": true,
+        "tick": 1131
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 81
+          }
+        },
+        "afterTick": true,
+        "tick": 1132
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 82
+          }
+        },
+        "afterTick": true,
+        "tick": 1133
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 83
+          }
+        },
+        "afterTick": true,
+        "tick": 1134
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 84
+          }
+        },
+        "afterTick": true,
+        "tick": 1135
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 85
+          }
+        },
+        "afterTick": true,
+        "tick": 1136
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 86
+          }
+        },
+        "afterTick": true,
+        "tick": 1137
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 87
+          }
+        },
+        "afterTick": true,
+        "tick": 1138
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 88
+          }
+        },
+        "afterTick": true,
+        "tick": 1139
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 89
+          }
+        },
+        "afterTick": true,
+        "tick": 1140
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 90
+          }
+        },
+        "afterTick": true,
+        "tick": 1141
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 91
+          }
+        },
+        "afterTick": true,
+        "tick": 1142
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 92
+          }
+        },
+        "afterTick": true,
+        "tick": 1143
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 93
+          }
+        },
+        "afterTick": true,
+        "tick": 1144
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 94
+          }
+        },
+        "afterTick": true,
+        "tick": 1145
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 95
+          }
+        },
+        "afterTick": true,
+        "tick": 1146
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 96
+          }
+        },
+        "afterTick": true,
+        "tick": 1147
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 97
+          }
+        },
+        "afterTick": true,
+        "tick": 1148
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 98
+          }
+        },
+        "afterTick": true,
+        "tick": 1149
+      },
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 99
+          }
+        },
+        "afterTick": true,
+        "tick": 1150
+      },
+      {
+        "action": {
+          "nuke": {}
+        },
+        "afterTick": true,
+        "tick": 1510
+      }
+    ],
+    "expected": {
+      "didWin": true,
+      "released": 40,
+      "required": 35,
+      "saved": 37,
+      "stateHash": "e2ac5ad963b6849f6ab3ae2e51f885e455f7cb0ddc3d11e2d813d1dbcd317543",
+      "ticks": 1660
+    },
+    "initialStateHash": "bdedd304632434a9eb11488b8618c3742ccef22e4667bf98f7aa15b48bf45842",
+    "number": 4,
+    "rank": "fan:lldb-496",
+    "title": "Up, Up and Away!"
+  },
   "bdf584e2f59e09287927615d45c060342fc2f0a984f3962dd9a0f219b0ab5c66": {
     "events": [
       {
@@ -325409,6 +326413,131 @@
     "rank": "fan:lldb-316",
     "title": "The Lemming Factory"
   },
+  "daf2243722176d85d53874abe638372115738d36aab855f09184a3510468df24": {
+    "events": [
+      {
+        "action": {
+          "releaseRate": {
+            "_0": 50
+          }
+        },
+        "afterTick": true,
+        "tick": 317
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 4,
+            "skill": "builder"
+          }
+        },
+        "afterTick": true,
+        "tick": 317
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 8,
+            "skill": "builder"
+          }
+        },
+        "afterTick": true,
+        "tick": 412
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 8,
+            "skill": "builder"
+          }
+        },
+        "afterTick": true,
+        "tick": 613
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 22,
+            "skill": "builder"
+          }
+        },
+        "afterTick": true,
+        "tick": 848
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 28,
+            "skill": "builder"
+          }
+        },
+        "afterTick": true,
+        "tick": 1021
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 12,
+            "skill": "builder"
+          }
+        },
+        "afterTick": true,
+        "tick": 1146
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 26,
+            "skill": "builder"
+          }
+        },
+        "afterTick": true,
+        "tick": 1247
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 29,
+            "skill": "basher"
+          }
+        },
+        "afterTick": true,
+        "tick": 1319
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 27,
+            "skill": "miner"
+          }
+        },
+        "afterTick": true,
+        "tick": 1409
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 23,
+            "skill": "miner"
+          }
+        },
+        "afterTick": true,
+        "tick": 1475
+      }
+    ],
+    "expected": {
+      "didWin": true,
+      "released": 30,
+      "required": 25,
+      "saved": 26,
+      "stateHash": "86becd3b5d7c1d5bb800de81704da79d782bba355ca4e0045d5db200581535db",
+      "ticks": 1705
+    },
+    "initialStateHash": "daf2243722176d85d53874abe638372115738d36aab855f09184a3510468df24",
+    "number": 3,
+    "rank": "fan:lldb-179",
+    "title": "Another \"o\" to serch"
+  },
   "dbb81700b6475ad8e3cea758749185d64bf404248fafd9cc0079788eaa0676c2": {
     "events": [
       {
@@ -343300,6 +344429,62 @@
     "number": 19,
     "rank": "fan:lldb-542",
     "title": "It's a Pipe-World"
+  },
+  "eb71a50a6953e4c57f605d75f6149108bf14e9d4c2444a344bef17164d5030bc": {
+    "events": [
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 2,
+            "skill": "digger"
+          }
+        },
+        "afterTick": true,
+        "tick": 78
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 2,
+            "skill": "digger"
+          }
+        },
+        "afterTick": true,
+        "tick": 123
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "builder"
+          }
+        },
+        "afterTick": true,
+        "tick": 139
+      },
+      {
+        "action": {
+          "assign": {
+            "lemmingID": 0,
+            "skill": "basher"
+          }
+        },
+        "afterTick": true,
+        "tick": 197
+      }
+    ],
+    "expected": {
+      "didWin": true,
+      "released": 5,
+      "required": 4,
+      "saved": 5,
+      "stateHash": "d1312f96cd29af8631cbe01a673a1a4a23fc721a64f240a732af6f1dc5ef5d75",
+      "ticks": 785
+    },
+    "initialStateHash": "eb71a50a6953e4c57f605d75f6149108bf14e9d4c2444a344bef17164d5030bc",
+    "number": 17,
+    "rank": "fan:lldb-554",
+    "title": "Livin' A Lie"
   },
   "eb93f2a70d02e3192b8e8320af012e9f7d836f5474f4f5bab45a6f81ba0d08de": {
     "events": [

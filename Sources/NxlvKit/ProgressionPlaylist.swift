@@ -23,12 +23,22 @@ public struct ProgressionCandidate: Sendable {
     public let requiresFullRescue: Bool
     /// True when the source does not identify a recognised campaign rank.
     public let rankIsUnverified: Bool
+    /// Starting release rate from the source level, when known.
+    public let startingReleaseRate: Int?
+    /// Required rescue fraction from source population and quota, when known.
+    public let rescueRequirementRatio: Double?
+    /// Number of skill assignments in the validated winning route, when known.
+    public let skillAssignmentCount: Int?
     public init(entry: LevelPlaylistEntry, profile: DifficultyProfile, isOfficial: Bool,
                 campaignOrder: Int = 0, requiresFullRescue: Bool = false,
-                rankIsUnverified: Bool = false) {
+                rankIsUnverified: Bool = false, startingReleaseRate: Int? = nil,
+                rescueRequirementRatio: Double? = nil, skillAssignmentCount: Int? = nil) {
         self.entry = entry; self.profile = profile; self.isOfficial = isOfficial
         self.campaignOrder = campaignOrder; self.requiresFullRescue = requiresFullRescue
         self.rankIsUnverified = rankIsUnverified
+        self.startingReleaseRate = startingReleaseRate
+        self.rescueRequirementRatio = rescueRequirementRatio
+        self.skillAssignmentCount = skillAssignmentCount
     }
     var stableKey: String { [entry.identity.engine.rawValue, entry.identity.packID, entry.identity.levelID].joined(separator: "\u{0}") }
 }

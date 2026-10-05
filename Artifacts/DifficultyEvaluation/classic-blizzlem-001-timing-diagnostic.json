@@ -1,0 +1,44 @@
+{
+  "date": "2026-10-05",
+  "target": {
+    "packID": "fan:lldb-415",
+    "level": "levels/Blizzlem/001.ini#-1",
+    "title": "001.ini",
+    "initialStateSHA256": "d0a68017ed92caf3bd94efebdcc54a88120e9127ec8e368b3594d932c054dc33",
+    "archiveSHA256": "a1107ad848d4c68d1b127efe8ca3989906414b7acc5d79be4cbb52bf61a7d7ec",
+    "population": 80,
+    "required": 71,
+    "releaseRate": 50,
+    "sourceRoute": "Sleet_01__2025-01-10_12-18-08.nxrp",
+    "sourceReplaySHA256": "61861c35f6d790091cbd783f1ec72f9ab2b78734dcf1f8a1a4b0edaded7943a7",
+    "transferredCandidateSHA256": "7282486590911e1ba5ba490ae31425131b21f2427aa626dcb82dd33409ce7393"
+  },
+  "currentSource": {
+    "solverPath": ".build/heartbeat-20261005-1105/ClassicSolver",
+    "solverSHA256": "5820ffc7659a3a8b6b50424f71924b4e6630439aa3d26edb60858af226ea0b5d",
+    "solverSourceSHA256": "e9efacd6a90ebd84e2c1d20548f6ba0156f0b764fc2cbe30e7822e96def8c71a",
+    "simulationLibrarySHA256": "4fcadccdd642b63220692316d58419a6d25661f4d64242ae543fdc2d71db0595",
+    "simulationSourceSHA256": "55b522fbbd3c400908ba4b18403f40656709d93ab7fc0dbad08cc5e1e8163bdd"
+  },
+  "attempts": [
+    {
+      "policy": "--rollout-single, fallback 12; forced source events: rate 99 at tick 124; Bash lemming 0 at tick 877",
+      "width": 64,
+      "budgetSeconds": 8,
+      "result": "UNSOLVED; 0/71; 14 expansions; waiting tick 167; zero single-skill continuations"
+    },
+    {
+      "policy": "--rollout-single, fallback 12; no forced commands; fixed target rate 50",
+      "width": 256,
+      "budgetSeconds": 20,
+      "result": "UNSOLVED; 0/71; 26 expansions; waiting tick 311; zero single-skill continuations; retained best state tick 302 with 9 released, 9 lost, 0 active"
+    },
+    {
+      "policy": "--rollout-single, fallback 12; forced Builder for lemming 0 at tick 100; target rate 50",
+      "width": 48,
+      "budgetSeconds": 8,
+      "result": "UNSOLVED before the forced command; 0/71; 8 expansions; waiting tick 90; zero single-skill continuations"
+    }
+  ],
+  "assessment": "These targeted current-source runs distinguish the source replay seed from exact target data and from broad search coverage. The source seed cannot be replayed to its tick-877 Bash on this target; the no-command route crosses the 9-loss allowance before that time, and the tick-100 Builder prefix is not reached. This is a precise route-transfer/state mismatch. It does not establish a source physics defect, a target impossibility, or complete multi-skill solver coverage. No candidate replay was emitted or strictly verified; leave the target unscored."
+}

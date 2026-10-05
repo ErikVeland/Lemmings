@@ -1,0 +1,35 @@
+{
+  "events" : [
+    {
+      "action" : {
+        "releaseRate" : {
+          "_0" : 50
+        }
+      },
+      "afterTick" : true,
+      "tick" : 0
+    },
+    {
+      "action" : {
+        "assign" : {
+          "lemmingID" : 0,
+          "skill" : "floater"
+        }
+      },
+      "afterTick" : true,
+      "tick" : 54
+    }
+  ],
+  "expected" : {
+    "didWin" : true,
+    "released" : 10,
+    "required" : 1,
+    "saved" : 1,
+    "stateHash" : "6e22f334a7eb6061f786b7245b8ddff0ccb07f4a96a73ea0dacc591b7c4163e0",
+    "ticks" : 375
+  },
+  "initialStateHash" : "30815afa0ba1713d2bb5819043801f6bdf7d949d3d213597c7c0452c8650de0f",
+  "number" : 1,
+  "rank" : "fan:lldb-505",
+  "title" : "Only Float is Survive"
+}

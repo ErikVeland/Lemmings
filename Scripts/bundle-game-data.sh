@@ -34,7 +34,9 @@ mkdir -p "$resources_dir/Sounds"
 rsync -a --exclude=.DS_Store "$project_dir/Resources/Sounds/" "$resources_dir/Sounds/"
 # Assets stay in the ignored app bundle. Original executable engines, machine
 # settings and development overlays are not needed by the native interpreters.
-copy_options=(-a --exclude=.DS_Store --exclude='*.[Ee][Xx][Ee]' --exclude='*.[Cc][Oo][Mm]'
+# Worktrees can link their ignored source assets to the primary checkout.
+# Copy the files into the app so the bundle remains self-contained.
+copy_options=(-aL --exclude=.DS_Store --exclude='*.[Ee][Xx][Ee]' --exclude='*.[Cc][Oo][Mm]'
   --exclude='*.[Bb][Aa][Tt]' --exclude='*.[Rr][Kk][Oo]' --exclude='*.[Rr][Kk][Bb]'
   --exclude='*.[Ii][Nn][Ii]' --exclude='*.[Ss][Aa][Vv]' --exclude='LEM3CD-2/')
 case "$2" in
@@ -100,3 +102,7 @@ python3 "$project_dir/Tools/TrolleyVerification/catalogue.py" bundle "$resources
 
 mkdir -p "$resources_dir/GameCenter"
 cp "$project_dir/Resources/GameCenter/leaderboards.json" "$resources_dir/GameCenter/leaderboards.json"
+if [[ -n "$(find "$resources_dir/Ports" -type l -print -quit)" ]]; then
+  echo "Bundled game data contains a link. Rebuild the app with local source assets." >&2
+  exit 1
+fi

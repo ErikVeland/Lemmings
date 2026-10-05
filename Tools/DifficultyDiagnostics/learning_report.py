@@ -6,7 +6,7 @@ import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 OUT = ROOT / 'Artifacts/LearningJourney'
-BASE = ROOT / 'Artifacts/ClassicProgression/audit.json'
+BASE = pathlib.Path(os.environ.get('LEARNING_AUDIT_PATH', ROOT / 'Artifacts/ClassicProgression/audit.json'))
 
 def read(path):
     return json.loads(path.read_text())
@@ -67,7 +67,12 @@ if sys.argv[1] == 'collect':
     print(f'Collected {len(changed)} upgraded fan profiles and {len(solutions)} replay references.')
 elif sys.argv[1] == 'report':
     rows = {key(r): r for r in read(BASE)}
-    rows.update({key(r): r for r in read(OUT / 'fan-evidence.json')})
+    for row in read(OUT / 'fan-evidence.json'):
+        original = rows.get(key(row), {})
+        for field in ('startingReleaseRate', 'rescueRequirementRatio'):
+            if row.get(field) is None:
+                row[field] = original.get(field)
+        rows[key(row)] = row
     manifest = read(ROOT / 'Resources/Progression/learning.json')
     lessons = manifest['lessons']
     selected = [rows[key(l)] for l in lessons]
@@ -87,6 +92,14 @@ elif sys.argv[1] == 'report':
     assert not any(any(token in (r['entry']['packNameSnapshot']+' '+r['entry']['identity']['levelID']).lower()
                        for token in ('versus','2p','two player')) for r in selected)
     assert all(l['score'] == r['profile']['overallScore'] for l,r in zip(lessons,selected))
+    assert all(l['stage'] in {'Difficult', 'Expert'} for l,r in zip(lessons,selected)
+               if r.get('startingReleaseRate') is None
+               or r.get('rescueRequirementRatio') is None
+               or r.get('startingReleaseRate') == 99
+               or bool(r['profile'].get('criticalActions'))
+               or (r.get('rescueRequirementRatio') or 0) >= .95)
+    assert all(l['stage'] in {'Difficult', 'Expert'} for l in lessons
+               if goals[key(l)].get('skillAssignmentCount', 0) >= 12)
     fan = [r for r in selected if not r['official']]
     scenarios = read(OUT/'scenarios.json')
     signatures = [scenarios['fan'][r['entry']['identity']['packID']+'\0'+r['entry']['identity']['levelID']] for r in fan]
@@ -109,6 +122,11 @@ elif sys.argv[1] == 'report':
         'targetSize':curriculum['targetSize'], 'levels':len(lessons), 'official':sum(r['official'] for r in selected), 'fan':len(fan),
         'fanPacks':len({r['entry']['identity']['packID'] for r in fan}),
         'stages':{stage:sum(l['stage']==stage for l in lessons) for stage in stages},
+        'startingRate99Levels':sum(r.get('startingReleaseRate') == 99 for r in selected),
+        'highRescueQuotaLevels':sum((r.get('rescueRequirementRatio') or 0) >= .95 for r in selected),
+        'unverifiedSourceSettings':sum(r.get('startingReleaseRate') is None or r.get('rescueRequirementRatio') is None for r in selected),
+        'narrowTimingLevels':sum(bool(r['profile'].get('criticalActions')) for r in selected),
+        'highAssignmentLoadLevels':sum(g.get('skillAssignmentCount', 0) >= 12 for g in goals.values()),
         'skillIntroductions':len(introductions), 'duplicateObjectives':0,
         'fullRescueRequirements':full_rescue_count,
         'largestDemandStep':max(b-a for a,b in zip(demands,demands[1:])),
@@ -116,7 +134,6 @@ elif sys.argv[1] == 'report':
         'preparationGaps':sum(bool(l['preparationGaps']) for l in lessons),
         'supportTransitions':sum(l['needsSupport'] for l in lessons),
         'ohNoLevels':sum(r['entry']['packNameSnapshot']=='Oh No! More Lemmings' for r in selected)}
-    assert summary['stages']['Intermediate'] > max(v for k,v in summary['stages'].items() if k != 'Intermediate')
     write(OUT/'summary.json',summary)
     expected = {'Lemmings':120, 'Oh No! More Lemmings':100, 'Xmas Lemmings 1991':4,
                 'Xmas Lemmings 1992':4, 'Holiday Lemmings 1993':32, 'Holiday Lemmings 1994':32}
@@ -154,15 +171,15 @@ elif sys.argv[1] == 'report':
         f"{len(lessons)} selected lessons from {curriculum['poolSize']} validated, deduplicated single-player candidates. {summary['official']} official levels and {len(fan)} library levels.",'',
         '## Selection before ordering','',
         'The recommended journey is a selective curriculum. The complete library and original campaigns remain available separately. It has no requirement to include every official level or every validated fan level.','',
-        'Skill introductions no longer force their way into the opening lessons. The order uses source rank and winning replay evidence. Fun, Easy and Tame levels can start the path. A low-demand witness from another rank can introduce a skill in Intermediate when no beginner-ranked witness qualifies. Levels with a Tricky or higher rank, unknown rank, or a full-rescue requirement have a higher placement floor. The model still needs novice playtesting.','',
+        'Skill introductions no longer force their way into the opening lessons. The order uses source rank and winning replay evidence. Fun, Easy and Tame levels can start the path only when their measured demand and route workload are low. A low-demand witness from another rank can introduce a skill in Intermediate when no beginner-ranked witness qualifies. Levels with a Tricky or higher rank, unknown rank, a full-rescue requirement, or at least 12 skill assignments in the winning route have a higher placement floor. The model still needs novice playtesting.','',
         'The target is roughly 292 levels: the combined size of Classic, Oh No! and the 72 seasonal levels. The path uses Classic mechanics only. Confirmed L2/L3 levels remain outside this journey. All six source campaigns are checked in corpus-coverage.json.','',
         'Packs identified as Lemmini are excluded from this Classic learning path. Two levels in those packs have native Classic wins, but source-engine behaviour is unverified. See `../DifficultyEvaluation/source-engine-families.json` and its validation notes.','',
         'Official levels take priority within comparable 35-point demand bands. Library levels supply missing applications. An application signature records the skill set, job changes, three-step sequences and worker roles. Identical signatures are excluded even across different titles. Repeated assignments, worker counts and score buckets do not create new lessons. These are evidence-based distinctions that still need human review.', '',
-        'The Fun stage contains beginner-ranked levels below the demand threshold. Unknown ranks and Tricky or higher ranks move to later stages. A winning route that must save every released lemming starts at Difficult. These rules do not prove that a level is easy. Difficult and Expert retain the existing demand boundaries.','',
+        'The Fun stage contains beginner-ranked levels below the demand threshold and with fewer than 12 skill assignments in the winning route. Unknown ranks and Tricky or higher ranks move to later stages. A source level with starting release rate 99, a rescue quota of at least 95%, a narrow measured timing window, unverified source settings, or at least 12 skill assignments starts at Difficult. A winning route that must save every released lemming also starts at Difficult. Position sensitivity is not measured.','',
         '## Evidence and limits','',
         'Objectives are inferred from winning replay commands and measured profiles. They describe an observed route, not a proved necessary technique or a human difficulty rating. Geometry-specific lessons such as steel recognition and safe digging depth are not reliably detected by the current evidence. Those require authored review before claiming complete teaching coverage.','',
         'The selector retains multiplayer and port-duplicate exclusions. The generator checks each selected fan witness against its profile digest and source identity. Basic introductions, unique objectives, source coverage of the selected list and reversed-input ordering are checked.','',
-        f"Stages: {summary['stages']}. Skill introductions: {summary['skillIntroductions']}. Full-rescue requirements: {summary['fullRescueRequirements']}. Duplicate objectives: 0. Largest demand increase: {summary['largestDemandStep']:.2f}/1000. Preparation gaps: {summary['preparationGaps']}.",'',
+        f"Stages: {summary['stages']}. Source levels at release rate 99: {summary['startingRate99Levels']}. Rescue quotas at or above 95%: {summary['highRescueQuotaLevels']}. Narrow timing levels: {summary['narrowTimingLevels']}. High assignment-load levels: {summary['highAssignmentLoadLevels']}. Levels with unverified source settings: {summary['unverifiedSourceSettings']}. Skill introductions: {summary['skillIntroductions']}. Full-rescue witness routes: {summary['fullRescueRequirements']}. Duplicate objectives: 0. Largest demand increase: {summary['largestDemandStep']:.2f}/1000. Preparation gaps: {summary['preparationGaps']}.",'',
         '## Transitions for playtesting','',
         *[f"- {t['step']}. {t['level']}: {'; '.join(t['reasons'])}." for t in transitions if t['needsSupport']], '',
         'A support flag remains a review request. An absent flag is not proof that a novice will find a solution obvious.','',

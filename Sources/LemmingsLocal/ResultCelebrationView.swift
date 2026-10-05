@@ -57,12 +57,13 @@ import NxlvKit
                 link("?", CGRect(x: 798 + 3 * size, y: 149 + 2 * size, width: 5 * size, height: 5 * size)) { [weak self] in self?.page(.goals) }
             }
         }
+        if let resultStatus { text(resultStatus, 80, 253, 960, alignment: .center) }
         drawResultLevelCard(c)
         drawResultCareerCard(c)
         resultActions(y: 453)
         let maximum = run.level.conditions.map { ArcadeStore.shared.records.trolley.maximum(conditions: $0, assisted: run.assisted) } ?? TrolleyMaximum()
         let awardText = c.newAwards.map { "New career award: \($0.award.title). \($0.award.detail)" }.joined(separator: " ")
-        setAccessibilityLabel("\(player.initials)'s attempt. \(outcome). \(run.level.title). \(rescueSummary(run, maximum: maximum)) \(c.goals.stars) of 3 stars this run. Level best: \(c.bestStars) stars. \(c.nextGoal) \(c.recordMessage). New level awards: \(c.levelAwards.map(\.title).joined(separator: ", ")). \(awardText) Career: \(c.career.stars) stars, plus \(c.addedStars). \(c.nextCareerGoal.map { $0.award.title + ": " + $0.status + ". " + $0.next } ?? "") Local Most Saved: \(c.ranks.first?.label ?? "No record"). Enter: \(primaryResultTitle). R retries. N retries as the next session player. P opens session players. V opens replay. B opens records. A opens achievements. G opens level goals. C opens career progress. D opens details. Escape returns."
+        setAccessibilityLabel("\(player.initials)'s attempt. \(outcome). \(run.level.title). \(rescueSummary(run, maximum: maximum)) \(resultStatus.map { $0 + " " } ?? "")\(c.goals.stars) of 3 stars this run. Level best: \(c.bestStars) stars. \(c.nextGoal) \(c.recordMessage). New level awards: \(c.levelAwards.map(\.title).joined(separator: ", ")). \(awardText) Career: \(c.career.stars) stars, plus \(c.addedStars). \(c.nextCareerGoal.map { $0.award.title + ": " + $0.status + ". " + $0.next } ?? "") Local Most Saved: \(c.ranks.first?.label ?? "No record"). Enter: \(primaryResultTitle). R retries. N retries as the next session player. P opens session players. V opens replay. B opens records. A opens achievements. G opens level goals. C opens career progress. D opens details. Escape returns."
             + (report.earnedLevelSkip ? " Earned a level skip." : "")
             + (availableSkips > 0 ? " \(skipTitle). K skips this level." : ""))
     }

@@ -27,6 +27,7 @@ extension AVAudioPlayer: OriginalMovieAudio {}
     }
     private let movie: FLICMovie
     private let soundtrack: (any OriginalMovieAudio)?
+    private let returnsToGameWhenFinished: Bool
     private var decoder: FLICMovie.Decoder
     private var frameImage: CGImage?
     private var timer: Timer?
@@ -42,23 +43,29 @@ extension AVAudioPlayer: OriginalMovieAudio {}
     override var acceptsFirstResponder: Bool { true }
     override var isFlipped: Bool { true }
 
-    init(url: URL, soundtrack: (any OriginalMovieAudio)? = nil) throws {
+    init(url: URL, soundtrack: (any OriginalMovieAudio)? = nil,
+         returnsToGameWhenFinished: Bool = false,
+         automaticExitDestination: String = "the game") throws {
         movie = try FLICMovie(contentsOf: url)
         guard movie.width > 0, movie.height > 0, movie.width <= 1920, movie.height <= 1080,
               movie.frameCount > 0, movie.frameOffsets.count >= movie.frameCount else {
             throw SequelDataError.invalid("The original movie has invalid frame dimensions or missing frames.")
         }
         self.soundtrack = soundtrack
+        self.returnsToGameWhenFinished = returnsToGameWhenFinished
         decoder = movie.makeDecoder()
         super.init(frame: .zero)
         try readFrame()
         playbackButton.onPress = { [weak self] in self?.togglePause() }
         backButton.onPress = { [weak self] in self?.close() }
+        if returnsToGameWhenFinished { backButton.title = "Skip" }
         addSubview(playbackButton); addSubview(backButton)
         setAccessibilityElement(true)
         setAccessibilityRole(.group)
         setAccessibilityLabel("Original Lemmings 3 movie")
-        setAccessibilityHelp("Space pauses. Escape returns to the movie list.")
+        setAccessibilityHelp(returnsToGameWhenFinished
+            ? "Space pauses. Escape skips to \(automaticExitDestination)."
+            : "Space pauses. Escape returns to the movie list.")
         updatePlaybackControls()
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
@@ -108,10 +115,17 @@ extension AVAudioPlayer: OriginalMovieAudio {}
         do {
             while accumulator >= movie.frameDuration && !finished {
                 accumulator -= movie.frameDuration
-                if displayedFrames == movie.frameCount { finished = true; stop(); break }
+                if displayedFrames == movie.frameCount {
+                    finished = true; stop()
+                    if returnsToGameWhenFinished { close(); return }
+                    break
+                }
                 try readFrame()
             }
-        } catch { failure = String(describing: error); finished = true; stop() }
+        } catch {
+            failure = String(describing: error); finished = true; stop()
+            if returnsToGameWhenFinished { close(); return }
+        }
         updatePlaybackControls(); needsDisplay = true
     }
     private func readFrame() throws {

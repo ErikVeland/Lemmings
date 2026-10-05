@@ -7,7 +7,22 @@ public struct Lemmings3Runtime: Sendable {
     public enum State: String, Sendable { case walking, falling, floating, swimming, jumping, climbing, shimmying, blocking, building, digging, drowning, trapped, exiting, saved, dead }
     public enum Tool: Int, Sendable, CaseIterable {
         case bricks = 5000, bomb = 5001, spade = 5002, shimmy = 5003, sucker = 5004, umbrella = 5005, hadoken = 5006, grenade = 5007, swimmer = 5008, clock = 5009
-        public var initialQuantity: Int { self == .bricks ? 8 : (self == .grenade ? 4 : (self == .spade ? 6 : 1)) }
+        /**
+         * Keeps saved-run identifiers stable while reading the original object numbers.
+         */
+        public init?(sourceIdentifier: Int) {
+            switch sourceIdentifier {
+            case 5003: self = .hadoken
+            case 5006: self = .shimmy
+            default:
+                guard let tool = Self(rawValue: sourceIdentifier) else { return nil }
+                self = tool
+            }
+        }
+        public var sourceIdentifier: Int {
+            switch self { case .hadoken: 5003; case .shimmy: 5006; default: rawValue }
+        }
+        public var initialQuantity: Int { self == .bricks || self == .spade || self == .shimmy || self == .sucker ? 8 : (self == .grenade ? 4 : 1) }
         public var label: String { switch self { case .bricks: "B"; case .bomb: "BO"; case .spade: "D"; case .shimmy: "SH"; case .sucker: "CL"; case .umbrella: "U"; case .hadoken: "H"; case .grenade: "G"; case .swimmer: "S"; case .clock: "C" } }
     }
     public enum Direction: String, CaseIterable, Sendable {
@@ -79,7 +94,7 @@ public struct Lemmings3Runtime: Sendable {
         public var workDirection: Direction = .right
         public var swimTicks = 0
         public var trapTicks = 0
-        /// Active climbing equipment has a provisional five-second lifetime.
+        /// Shimmy and unengaged Sucker duration, or Sucker climb ticks.
         public var mobilityTool: Tool?
         public var mobilityTicks = 0
         public var charmedBy: Int?
@@ -196,7 +211,7 @@ public struct Lemmings3Runtime: Sendable {
             guard let definition = style.permanent.objects[placed.identifier] else {
                 throw SequelDataError.invalid("Missing Chronicles object definition.")
             }
-            if let tool = Tool(rawValue: placed.identifier) {
+            if let tool = Tool(sourceIdentifier: placed.identifier) {
                 pickups.append(.init(id: index, tool: tool, x: placed.x, y: placed.y)); continue
             }
             if [10006, 10007].contains(placed.identifier) {
@@ -321,8 +336,10 @@ public struct Lemmings3Runtime: Sendable {
             guard lemmings[index].mobilityTool == nil else { return false }
             distract(index)
             lemmings[index].mobilityTool = tool; lemmings[index].mobilityTicks = 5 * Int(Self.ticksPerSecond)
-            lemmings[index].quantity -= 1
-            if lemmings[index].quantity == 0 { lemmings[index].tool = nil }
+            if tool == .shimmy {
+                lemmings[index].quantity -= 1
+                if lemmings[index].quantity == 0 { lemmings[index].tool = nil }
+            }
             lemmings[index].state = tool == .shimmy ? .jumping : .walking
             if tool == .shimmy { lemmings[index].velocityY = -4 }
             lemmings[index].age = 0
@@ -547,7 +564,7 @@ public struct Lemmings3Runtime: Sendable {
         for index in lemmings.indices where lemmings[index].active {
             var lem = lemmings[index]
             lem.charmImmunity = max(0, lem.charmImmunity - 1)
-            if lem.mobilityTicks > 0 {
+            if lem.mobilityTicks > 0 && !(lem.mobilityTool == .sucker && lem.state == .climbing) {
                 lem.mobilityTicks -= 1
                 if lem.mobilityTicks == 0 {
                     lem.mobilityTool = nil
@@ -597,18 +614,30 @@ public struct Lemmings3Runtime: Sendable {
                     lem.direction *= -1
                 } else if isSolid(nx, lem.y - 1) {
                     let contactPhase = lem.direction > 0 ? 5 : 3
-                    let contactTag = attributes[(lem.y - 1) * configuration.width + nx]
+                    let contactOffset = (lem.y - 1) * configuration.width + nx
+                    let contactTag = attributes[contactOffset]
+                    let builtBrickRise = contactTag == 0x2020 && terrainEdits[contactOffset] == true
                     let projectedClassCount = (0..<4).filter { offset in
                         let px = nx + lem.direction * 8, py = lem.y - 14 + 2 * offset
                         return inBounds(px, py) && attributes[py * configuration.width + px] & 0x0040 != 0
                     }.count
                     let classRise = (nx & 7) == 0 && contactTag == 0x0060 && projectedClassCount == 4
-                    let maxRise = (nx & 7) == contactPhase || classRise ? 8 : 4
+                    let alignedBlockRise = lem.direction > 0 && (nx & 7) == 0 && contactTag == 0x0020 &&
+                        isSolid(nx + 7, lem.y - 6) && !isSolid(nx + 7, lem.y - 7)
+                    let continuousEightRise = lem.direction > 0 && (nx & 7) == 0 && contactTag == 0x0020 &&
+                        isSolid(nx + 7, lem.y - 8) && !isSolid(nx + 7, lem.y - 9) &&
+                        (8..<16).allSatisfy { isSolid(nx + $0, lem.y) && isSolid(nx + $0, lem.y - 1) }
+                    let maxRise = (nx & 7) == contactPhase || classRise || alignedBlockRise || continuousEightRise || builtBrickRise ? 8 : 4
                     if let rise = (1...maxRise).first(where: { rise in
                         isSolid(nx, lem.y - rise) && !isSolid(nx, lem.y - rise - 1) &&
-                        (rise <= 4 || classRise || (0..<4).allSatisfy { !isSolid(nx + lem.direction * 8, lem.y - 14 + 2 * $0) })
+                        (rise <= 4 || classRise || (0..<((continuousEightRise || builtBrickRise) && rise == 8 ? 3 : 4)).allSatisfy { offset in
+                            let px = nx + lem.direction * 8, py = lem.y - 14 + 2 * offset
+                            if !isSolid(px, py) { return true }
+                            let projected = py * configuration.width + px
+                            return builtBrickRise && attributes[projected] == 0x2020 && terrainEdits[projected] == true
+                        })
                     }) { lem.x = nx; lem.y -= rise }
-                    else if lem.mobilityTool == .sucker { lem.state = .climbing; lem.age = 0 }
+                    else if lem.mobilityTool == .sucker { lem.state = .climbing; lem.age = 0; lem.mobilityTicks = 0 }
                     else { lem.direction *= -1 }
                 } else {
                     lem.x = nx
@@ -648,8 +677,27 @@ public struct Lemmings3Runtime: Sendable {
                 let nx = lem.x + lem.direction
                 if isSolid(lem.x, lem.y - 17) {
                     lem.state = .falling; lem.direction *= -1; lem.age = 0; lem.fall = 0
+                    lem.mobilityTool = nil; lem.mobilityTicks = 0
                 } else if !isSolid(nx, lem.y - 1) {
                     lem.x = nx; lem.state = .walking; lem.age = 0
+                    lem.mobilityTool = nil; lem.mobilityTicks = 0
+                } else if lem.mobilityTool == .sucker {
+                    /**
+                     * The original climb advances about two pixels per five ticks.
+                     * It steps onto a ledge when the actor's head clears its top.
+                     */
+                    lem.mobilityTicks += 1
+                    if lem.age % 5 == 0 || lem.age % 5 == 3 { lem.y -= 1 }
+                    if let rise = (1...8).first(where: { isSolid(nx, lem.y - $0) && !isSolid(nx, lem.y - $0 - 1) }) {
+                        lem.x = nx; lem.y -= rise; lem.state = .walking; lem.age = 0
+                        lem.mobilityTool = nil; lem.mobilityTicks = 0
+                    } else if lem.mobilityTicks % 10 == 0 {
+                        consumeTool(&lem)
+                        if lem.tool == nil {
+                            lem.mobilityTool = nil; lem.mobilityTicks = 0
+                            lem.state = .falling; lem.age = 0; lem.fall = 0
+                        }
+                    }
                 } else { lem.y -= 1 }
             case .shimmying:
                 let nx = lem.x + lem.direction

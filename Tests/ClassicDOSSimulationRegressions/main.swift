@@ -35,6 +35,43 @@ private func floorTerrain(width: Int = 192, height: Int = 96, floorY: Int = 40) 
     )
 }
 
+private func testGolemsClimberPassesRearPixel() throws {
+    let width = 192, height = 96
+    var solid = Data(repeating: 0, count: width * height)
+    for x in 0..<width { solid[80 * width + x] = 1 }
+    for y in 30..<80 { solid[y * width + 100] = 1 }
+    solid[55 * width + 99] = 1
+    let terrain = try ClassicDOSTerrain(width: width, height: height, solidMask: solid,
+        steelMask: Data(repeating: 0, count: width * height))
+
+    func worker(at tick: Int, mechanics: ClassicDOSMechanics) throws -> ClassicDOSLemming {
+        let config = ClassicDOSConfiguration(totalLemmings: 1, requiredToSave: 0,
+            timeLimitTicks: nil, initialReleaseRate: 50,
+            entrances: [ClassicDOSPoint(x: 40, y: 40)], initialSkills: [.climber: 1],
+            maximumX: width - 1, maximumY: height - 1, mechanics: mechanics)
+        var simulation = try ClassicDOSSimulation(terrain: terrain, configuration: config)
+        var assigned = false
+        while simulation.tickCount < tick {
+            _ = simulation.tick()
+            if !assigned, let lemming = simulation.lemmings.first, lemming.action == .walking {
+                assigned = simulation.assign(.climber, to: lemming.id) == .assigned
+            }
+        }
+        try require(assigned, "climber was not assigned")
+        guard let lemming = simulation.lemmings.first else {
+            throw RegressionFailure(description: "climber did not hatch")
+        }
+        return lemming
+    }
+
+    let original = try worker(at: 170, mechanics: .original)
+    let golems = try worker(at: 170, mechanics: .golems)
+    try require(original.action == .walking && original.direction == .left,
+        "original climber should turn at the rear pixel")
+    try require(golems.action == .climbing && golems.foot == ClassicDOSPoint(x: 100, y: 60),
+        "Golems climber should pass the rear pixel")
+}
+
 private func configuration(
     totalLemmings: Int,
     releaseRate: Int,
@@ -1230,6 +1267,7 @@ private func run() throws {
     try testHalfOpenTriggerBounds()
     try testMaximumSafeFallDistance()
     try testGolemsOneWayMining()
+    try testGolemsClimberPassesRearPixel()
     try testImmutableSteelAndDestructionMasks()
     try testDiggerMaskCanOverlapSteel()
     try testBombedBlockerOnSteelSuppressesExplosion()

@@ -1,0 +1,46 @@
+{
+  "date": "2026-10-05",
+  "target": {
+    "packID": "fan:lldb-1",
+    "levelID": "geooPk0.dat#2",
+    "title": "crossing stairs"
+  },
+  "sourceRoute": {
+    "level": "Revenge of the Lemmings v4.0 / Armageddon 4",
+    "levelID": "x8BB49AC88BB49AC8",
+    "version": 18,
+    "populationAndSave": "60/60",
+    "replaySHA256": "4cf036a9c3ce16c041838d7c304b233491a024199a0ac2e5b70b38833a141bfe"
+  },
+  "solver": {
+    "binarySHA256": "dc45dadab700e2792f98fe30451ac371b0b6bc36f3a25e086cabf05514fab01b",
+    "simulationLibrarySHA256": "0021228840f26fba8d92831e931a0175e1c2eb8837880f57968cc67625a13d5d",
+    "sourceSHA256": "e9efacd6a90ebd84e2c1d20548f6ba0156f0b764fc2cbe30e7822e96def8c71a"
+  },
+  "transferChecks": [
+    {
+      "mapping": "keep source worker indices 0-39 and omit assignments to 51, 52, and 56; preserve spawn interval timings as Classic rate 99 - 2*(interval-4)",
+      "prefixPath": ".build/heartbeat-20261005-0935/crossing-stairs-source-prefix.json",
+      "prefixSHA256": "3d5f4835ce4db2cd16be1aeaa8ec239e25e67b62fe35f60818e43561a0038282",
+      "forcedEvents": 18,
+      "skillAssignments": 13,
+      "spawnRateChanges": 5,
+      "result": "UNSOLVED, best saved 0/40, expanded 24,210 in 7 seconds"
+    },
+    {
+      "mapping": "keep indices below 40 and map source 51, 52, and 56 to target workers 37, 38, and 39; preserve spawn interval timings",
+      "prefixPath": ".build/heartbeat-20261005-0935/crossing-stairs-source-full-prefix.json",
+      "prefixSHA256": "f530e7b5ce3c05859cc2151bd2696c8e9cc1aa572c695d9bda6c14e7a33efad5",
+      "forcedEvents": 25,
+      "skillAssignments": 20,
+      "spawnRateChanges": 5,
+      "result": "UNSOLVED, best saved 0/40, expanded 6,358 in 2 seconds"
+    }
+  ],
+  "interpretation": "The public NeoLemmix replay is a concrete solution lead for a source level with the same title and author, but it is not a direct solution for this bundled Classic target: source population is 60 rather than 40, and the source route uses workers beyond the target population. Two explicit target remappings with the source spawn schedule applied did not produce a native win. These failures show that replay transfer is insufficient; they do not establish target impossibility or physics parity. No target candidate passed strict replay and no ledger score changed.",
+  "sourceReferences": [
+    "https://www.lemmingsforums.net/index.php?topic=5963.15",
+    "https://www.lemmingsforums.net/index.php?action=dlattach;attach=20991",
+    "https://www.mediafire.com/file/gp5qb3deh0ui5su/Revenge+Of+The+Lemmings2022v3.zip/file"
+  ]
+}

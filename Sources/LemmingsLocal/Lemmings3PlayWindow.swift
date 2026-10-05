@@ -40,7 +40,7 @@ import NxlvKit
         gameplayKeyboard?.bind(to: host)
         timelineTransport = makeTimelineTransport(for: host)
         usesSharedWindow = true
-        campaignFinished = Self.savedCompletion(root: dataRoot) == 90
+        campaignFinished = Self.hasEarnedEnding(root: dataRoot)
         host.contentView = content
         host.makeFirstResponder(content)
     }
@@ -52,6 +52,7 @@ import NxlvKit
 
     private var game: Lemmings3Runtime
     private var initial: Lemmings3Runtime { didSet { arcadeLevelSnapshot = nil } }
+    private var freshInitial: Lemmings3Runtime
     private let dataRoot: URL
     private var style: Lemmings3Style
     private var sprites: Lemmings3Sprites
@@ -98,8 +99,10 @@ import NxlvKit
     private var audioSettings = ClassicSettings()
     private let runMovie = RunMovie()
     private var originalMovie: OriginalMoviePlayer?
+    private var playsOpeningStory = false
     private var countdownWarning = LastSecondsWarning()
     private var campaignFinished = false
+    private var playsEndingAfterThisResult = false
     private let canvas = Lemmings3Canvas()
     private var canAdvance = false
     private var menuTribe = 0
@@ -189,6 +192,10 @@ import NxlvKit
         }
         dataRoot = root
         self.recordsCampaignProgress = recordsCampaignProgress
+        playsOpeningStory = Lemmings3StoryFlow(
+            restoring: recovery != nil, selectedLevel: selection != nil,
+            recordsCampaignProgress: recordsCampaignProgress,
+            hotSeat: ArcadeStore.shared.hotSeatIsActive).playsOpeningIntroduction
         let selectedTribe = recovery?.l3?.progress.tribe ?? selection?.tribe
             ?? Lemmings3ClassicCampaign.Tribe(rawValue: UserDefaults.standard.integer(
                 forKey: ArcadeStore.shared.progressKey("nativeL3SelectedTribe.v1." + Self.storageIdentity(root))))
@@ -216,6 +223,7 @@ import NxlvKit
         let temporary = try Lemmings3Objects(data: Data(contentsOf: root.appendingPathComponent(String(format: "LEVELS/TEMP%03d.OBS", level.temporaryObjectsReference))))
         game = try Lemmings3Runtime(level: level, style: style, permanent: permanent, temporary: temporary, total: sequence.population)
         initial = game
+        freshInitial = game
         if let recovery, let saved = recovery.l3 {
             let levelPath = root.appendingPathComponent(String(format: "LEVELS/LEVEL%03d.DAT", sequence.tribe.firstLevel + sequence.index))
             let fingerprint = ArcadeStore.fingerprint(try Data(contentsOf: levelPath)) + ":" + TrolleyCapture.contentFingerprint(root: root)
@@ -223,7 +231,9 @@ import NxlvKit
             // the replay still requires the exact saved state.
             guard fingerprint.split(separator: ":").first == recovery.levelFingerprint.split(separator: ":").first
             else { throw RunRecoveryError.differentGame }
-            game = try saved.restore(initial: initial, checkpoint: recovery)
+            let restored = try saved.restore(initial: initial, checkpoint: recovery)
+            initial = restored.initial
+            game = restored.game
         }
         let scene = try Lemmings3Scene(level: level, style: style, permanent: permanent, temporary: temporary)
         super.init(window: NSWindow(contentRect: NSRect(x: 0, y: 0, width: 1050, height: 680),
@@ -451,6 +461,18 @@ import NxlvKit
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
     #if APP_INTEGRATION_TESTS
+    static func testHasEarnedEnding(root: URL) -> Bool { hasEarnedEnding(root: root) }
+
+    func testOpenIntroduction(automatic: Bool) {
+        playOriginalMovie(.introduction, returnsToGameWhenFinished: automatic)
+    }
+
+    func testOpenEnding(afterDismiss: @escaping () -> Void) -> OriginalMoviePlayer? {
+        playOriginalMovie(.ending, returnsToGameWhenFinished: true,
+            automaticExitDestination: "the library", afterDismiss: afterDismiss)
+        return originalMovie
+    }
+
     func testPauseKeyboard() throws {
         timer?.invalidate()
         canvas.startCountdown.cancel(); canvas.menuRows = nil; paused = false
@@ -487,7 +509,13 @@ import NxlvKit
     }
     #endif
 
-    func present() { showWindow(nil); window?.makeKeyAndOrderFront(nil); window?.makeFirstResponder(canvas) }
+    func present() {
+        showWindow(nil); window?.makeKeyAndOrderFront(nil); window?.makeFirstResponder(canvas)
+        if playsOpeningStory {
+            playsOpeningStory = false
+            playOriginalMovie(.introduction, returnsToGameWhenFinished: true)
+        }
+    }
     static func browserLevels(root: URL) throws -> [BrowserLevel] {
         try browserLevels(root: root, progressData: browserProgressData(root: root))
     }
@@ -681,6 +709,17 @@ import NxlvKit
         }
     }
 
+    private static func hasEarnedEnding(root: URL) -> Bool {
+        Lemmings3ClassicCampaign.Tribe.allCases.allSatisfy { tribe in
+            guard var campaign = try? Lemmings3ClassicCampaign(root: root, tribe: tribe) else { return false }
+            let key = ArcadeStore.shared.progressKey("nativeL3\(tribe.title)Preview.v1." + storageIdentity(root))
+            guard let data = UserDefaults.standard.data(forKey: key),
+                  let saved = try? JSONDecoder().decode(Lemmings3ClassicCampaign.Progress.self, from: data),
+                  (try? campaign.restore(saved)) != nil else { return false }
+            return campaign.hasCompletedTribe
+        }
+    }
+
     @objc private func togglePause() {
         if canvas.startCountdown.isActive {
             canvas.startCountdown.cancel(); paused = true; accumulator = 0; updateUserMusicPause(); refresh(); return
@@ -865,7 +904,7 @@ import NxlvKit
     @objc private func restart() {
         saveCheckpoint(immediately: true, waitForDisk: false)
         speedControl.newLevel()
-        canvas.menuRows = nil; pendingTool = nil; canvas.directionPoint = nil; game = initial; beginReplay(); recorded = false; canvas.startCountdown.arm(); paused = true; accumulator = 0; canvas.resetCamera(campaign.levels[campaign.index]); message = "Choose an action. Bricks and spades ask for a direction. Arrow keys move the camera."; refresh() }
+        canvas.menuRows = nil; pendingTool = nil; canvas.directionPoint = nil; initial = freshInitial; game = initial; beginReplay(); recorded = false; playsEndingAfterThisResult = false; canvas.startCountdown.arm(); paused = true; accumulator = 0; canvas.resetCamera(campaign.levels[campaign.index]); message = "Choose an action. Bricks and spades ask for a direction. Arrow keys move the camera."; refresh() }
     private func save() {
         guard recordsCampaignProgress else { return }
         if let data = try? JSONEncoder().encode(campaign.progress) {
@@ -886,7 +925,7 @@ import NxlvKit
             try canvas.load(scene: scene, style: session.style, permanent: perm, temporary: temp, sprites: session.sprites, root: dataRoot, terrainStyle: level.style)
             save()
             style = session.style; sprites = session.sprites; availability = session.availability; progressKey = session.progressKey
-            campaign = session.campaign; initial = replacement
+            campaign = session.campaign; initial = replacement; freshInitial = replacement
             if recordsCampaignProgress {
                 UserDefaults.standard.set(tribe.rawValue, forKey: ArcadeStore.shared.progressKey(
                     "nativeL3SelectedTribe.v1." + Self.storageIdentity(dataRoot)))
@@ -905,7 +944,17 @@ import NxlvKit
     }
     @objc private func advance() {
         guard recordsCampaignProgress else { return }
-        if campaignFinished, let onCampaignCompleted { onCampaignCompleted(); return }
+        if playsEndingAfterThisResult {
+            playsEndingAfterThisResult = false
+            playOriginalMovie(.ending, returnsToGameWhenFinished: true,
+                automaticExitDestination: usesSharedWindow ? "the library" : "the menu") { [weak self] in
+                guard let self else { return }
+                if let onCampaignCompleted = self.onCampaignCompleted { onCampaignCompleted() }
+                else if self.usesSharedWindow { self.onReturnToLibrary?() }
+                else { self.showGameMenu() }
+            }
+            return
+        }
         var proposed = campaign
         guard proposed.advance(after: game), availability[proposed.index] == nil else { return }
         do { try load(proposed) } catch { message = String(describing: error); refresh() }
@@ -917,7 +966,7 @@ import NxlvKit
         let replacement = try Lemmings3Runtime(level: level, style: style, permanent: perm, temporary: temp, total: proposed.population)
         let scene = try Lemmings3Scene(level: level, style: style, permanent: perm, temporary: temp)
         try canvas.load(scene: scene, style: style, permanent: perm, temporary: temp, sprites: sprites, root: dataRoot, terrainStyle: level.style)
-        campaign = proposed; initial = replacement; save()
+        campaign = proposed; initial = replacement; freshInitial = replacement; save()
         window?.title = "Lemmings 3 — \(campaign.tribe.title) \(campaign.index + 1) — Experimental native preview"
         restart()
     }
@@ -1014,7 +1063,10 @@ import NxlvKit
         }
         GameScreen.shared.present(page, owner: window)
     }
-    private func playOriginalMovie(_ movie: OriginalMoviePlayer.Movie) {
+    private func playOriginalMovie(_ movie: OriginalMoviePlayer.Movie,
+                                   returnsToGameWhenFinished: Bool = false,
+                                   automaticExitDestination: String = "the game",
+                                   afterDismiss: (() -> Void)? = nil) {
         do {
             var soundtrack: AVAudioPlayer?
             if movie == .introduction, audioSettings.music != .silent, !movieMusicMuted,
@@ -1024,19 +1076,30 @@ import NxlvKit
                 soundtrack?.volume = musicGain
             }
             let player = try OriginalMoviePlayer(
-                url: dataRoot.appendingPathComponent("MOVIE/" + movie.rawValue), soundtrack: soundtrack)
+                url: dataRoot.appendingPathComponent("MOVIE/" + movie.rawValue),
+                soundtrack: soundtrack, returnsToGameWhenFinished: returnsToGameWhenFinished,
+                automaticExitDestination: automaticExitDestination)
             suspendAudioOutput()
             player.onClose = { [weak self] in
                 self?.originalMovie = nil
                 try? self?.resumeAudioOutput()
                 self?.lastTime = ProcessInfo.processInfo.systemUptime
+                afterDismiss?()
             }
             originalMovie = player
             if !player.present(owner: window) {
                 originalMovie = nil; try? resumeAudioOutput()
-                message = "The movie could not open in the game window."
+                if !returnsToGameWhenFinished {
+                    message = "The movie could not open in the game window."
+                }
+                afterDismiss?()
             }
-        } catch { GameScreen.shared.message("Original movie", detail: String(describing: error)) }
+        } catch {
+            if !returnsToGameWhenFinished {
+                GameScreen.shared.message("Original movie", detail: String(describing: error))
+            }
+            afterDismiss?()
+        }
     }
     private func update() {
         let now = ProcessInfo.processInfo.systemUptime
@@ -1166,7 +1229,8 @@ import NxlvKit
             next: { [weak self] in self?.continueArcadeResult() },
             replay: { [weak self] save in self?.runMovie.review(save: save) }, continueTitle: resultContinueTitle, background: arcadeBackdrop, rewardVolume: warningSound.muted ? 0 : warningSound.volume,
             continueHandlesHandover: onSequenceContinue != nil,
-            skip: canSkipLevel ? { [weak self] in self?.skipLevel() } : nil)
+            skip: canSkipLevel ? { [weak self] in self?.skipLevel() } : nil,
+            status: needsTribeSurvivors ? "Need 50 survivors to complete this tribe." : nil)
     }
     /// Level skips apply to a failed campaign level, not playlists.
     /// Old school turns them off with the other modern controls.
@@ -1181,9 +1245,15 @@ import NxlvKit
         guard proposed.skipLevel() else { return }
         do { try load(proposed) } catch { message = String(describing: error); refresh() }
     }
+    private var needsTribeSurvivors: Bool {
+        recordsCampaignProgress && onSequenceContinue == nil && game.isComplete && game.saved > 0
+            && campaign.index == campaign.levels.count - 1
+            && game.survivors < Lemmings3ClassicCampaign.requiredTribeSurvivors
+    }
     private var resultContinueTitle: String {
         if onSequenceContinue != nil { return game.saved == 0 ? "Retry level" : sequenceContinueTitle }
-        if canAdvance { return campaignFinished ? "Continue" : "Next level" }
+        if needsTribeSurvivors { return "Choose level" }
+        if canAdvance { return playsEndingAfterThisResult ? "Continue" : "Next level" }
         return usesSharedWindow ? "Back to library" : "Choose level"
     }
     private func continueArcadeResult() {
@@ -1192,6 +1262,10 @@ import NxlvKit
             return
         }
         if onSequenceContinue?(game.saved > 0) == true { return }
+        if needsTribeSurvivors {
+            showGameMenu()
+            return
+        }
         if canAdvance { advance() }
         else if usesSharedWindow { onReturnToLibrary?() }
         else { showGameMenu() }
@@ -1257,14 +1331,20 @@ import NxlvKit
                 do { try recoveryStore.clear(arcadeRunID) } catch { message = error.localizedDescription }
             }
             runMovie.finish(); recorded = true
+            let wasFinished = campaignFinished
+            let wasTribeCompleted = campaign.hasCompletedTribe
             if recordsCampaignProgress, campaign.record(game) {
                 save()
-                campaignFinished = Self.savedCompletion(root: dataRoot) == 90
+                campaignFinished = Self.hasEarnedEnding(root: dataRoot)
+                playsEndingAfterThisResult = Lemmings3StoryFlow.playsEnding(
+                    afterLevel: campaign.index, finalLevel: campaign.levels.count - 1,
+                    survivors: game.survivors, wasTribeCompleted: wasTribeCompleted,
+                    wasCampaignCompleted: wasFinished, isCampaignCompleted: campaignFinished)
                 onProgressChanged?()
             }
         }
         canAdvance = recordsCampaignProgress && game.isComplete && game.saved > 0
-            && ((campaignFinished && usesSharedWindow)
+            && (playsEndingAfterThisResult
             || (availability.indices.contains(campaign.index + 1) && availability[campaign.index + 1] == nil))
         canvas.selectedAction = selected; canvas.paused = paused; canvas.fast = fast
         canvas.updateSkillBadge()
@@ -1637,7 +1717,7 @@ import NxlvKit
         }
         foreground = try image(width: mapWidth, height: mapHeight, pixels: foregroundPixels, palette: palette, opaque: foregroundPixels.map { $0 != 255 }, category: terrainCategory)
         for tool in Lemmings3Runtime.Tool.allCases {
-            let frame = try style.permanent.image(object: tool.rawValue, palette: palette)
+            let frame = try style.permanent.image(object: tool.sourceIdentifier, palette: palette)
             pickupImages[tool.rawValue] = try image(width: frame.width, height: frame.height, pixels: frame.pixels, palette: palette, opaque: frame.pixels.map { $0 != 255 }, category: .mechanical)
         }
     }

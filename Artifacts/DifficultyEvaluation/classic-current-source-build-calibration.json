@@ -1,0 +1,42 @@
+{
+  "date": "2026-10-05",
+  "build": {
+    "toolchain": "Xcode 26.6 (17F113), Apple Swift 6.3.3, macOS SDK 26.5",
+    "moduleCache": ".build/heartbeat-20261005-1105/clang-cache",
+    "sourceBuild": true,
+    "simulationSourceSHA256": "55b522fbbd3c400908ba4b18403f40656709d93ab7fc0dbad08cc5e1e8163bdd",
+    "solverSourceSHA256": "e9efacd6a90ebd84e2c1d20548f6ba0156f0b764fc2cbe30e7822e96def8c71a",
+    "simulationLibrarySHA256": "4fcadccdd642b63220692316d58419a6d25661f4d64242ae543fdc2d71db0595",
+    "solverBinarySHA256": "5820ffc7659a3a8b6b50424f71924b4e6630439aa3d26edb60858af226ea0b5d",
+    "regressionRunner": "zsh Scripts/run-classic-dos-simulation-regressions.sh with CLANG_MODULE_CACHE_PATH set to the workspace cache"
+  },
+  "knownWinControl": {
+    "identity": "fan:lldb-505/KillerMaster 1 Tame 1.dat#1",
+    "title": "Only Float is Survive",
+    "archiveSHA256": "cea49c6853a73f4a693cd63586ed044e2c939a7ce2457d6e3317bbc95d8ff4c9",
+    "initialStateSHA256": "30815afa0ba1713d2bb5819043801f6bdf7d949d3d213597c7c0452c8650de0f",
+    "search": {
+      "releaseRate": 50,
+      "forcedInput": {"tick": 54, "lemmingID": 0, "skill": "floater"},
+      "beamWidth": 48,
+      "expansions": 27,
+      "result": "SOLVED, 1/1 saved"
+    },
+    "replay": {
+      "path": "classic-current-source-control-replay.json",
+      "sha256": "4424ecdc93b2be7a7bd2712d15d5f6cf231f2a9292a970614d103faeebb037ae",
+      "strictExactBundleReplay": "PASS",
+      "saved": 1,
+      "required": 1,
+      "ticks": 375,
+      "outcomeStateHash": "6e22f334a7eb6061f786b7245b8ddff0ccb07f4a96a73ea0dacc591b7c4163e0"
+    },
+    "strictVerifierBinarySHA256": "7498c0bc215fa94238ed8982db2e5e3bfbe58b8df4e7adb26ba632d9b6f6b6eb"
+  },
+  "regressions": {
+    "result": "PASS",
+    "coverage": "Classic edge cases, including fall 60/61, plus the 120-level official-campaign soak",
+    "simulationWallSeconds": 19.2
+  },
+  "assessment": "A current solver and simulation library build succeeds when Clang receives a writable workspace module cache. The current build reproduces and strictly replays a known exact-bundle win. This is search calibration only; it adds no new level score and establishes no independent source physics parity."
+}

@@ -1,0 +1,33 @@
+{
+  "date": "2026-10-05",
+  "target": {
+    "packID": "fan:lldb-1",
+    "level": "geooPk0.dat#8",
+    "title": "Mission at max-fall 60",
+    "initialStateSHA256": "a2082643643cea09fd3ef13239045c53d0e1232c3dc7f57881ca69fd900a0e10",
+    "archiveSHA256": "66ff4c33c44970e945dffee82cfe84a4787329f60ee702613f3f2cb233865bec"
+  },
+  "solver": {
+    "binary": ".build/heartbeat-20261005-0331/ClassicSolver",
+    "binarySHA256": "dc45dadab700e2792f98fe30451ac371b0b6bc36f3a25e086cabf05514fab01b",
+    "simulationLibrarySHA256": "0021228840f26fba8d92831e931a0175e1c2eb8837880f57968cc67625a13d5d"
+  },
+  "search": {
+    "mode": "--sweep-single",
+    "releaseRate": 1,
+    "beamWidth": 256,
+    "wallClockLimitSeconds": 90,
+    "result": "UNSOLVED, best saved 0/1, 7,727 assignments and continuations completed",
+    "waitingRouteTick": 1022,
+    "lastContinuationTick": 1022,
+    "deadlineExpired": false,
+    "partialReplay": "classic-geoo-maxfall-sweep-partial.json",
+    "partialReplaySHA256": "cd0a80525f803c5a49b5fc2321e27b9851af1836fd125b8267af022d8b72cf45"
+  },
+  "sourceLead": {
+    "page": "https://lldb.camanis.net/levelpack/1/geooPk0",
+    "note": "The level-pack page says the ninth level should be played in Original Lemmings mode or CustLem2 because of maximum safe-fall distance, and says it is not solvable in Lemmix.",
+    "localMechanicsSelection": "FanLevelLibrary defaults this pack/member to Original; ClassicDOSMechanics uses the Original maximum-safe-fall threshold of 60."
+  },
+  "assessment": "The exhaustive fixed-rate single-skill sweep covered the complete no-input route through tick 1,022 and all 7,727 active-worker skill assignments, with no win. The public source note confirms that this puzzle is intentionally tied to Original maximum-safe-fall rules, which the current fan profile selects. This narrows the diagnosis but does not provide a source-winning replay or establish exact source/native physics parity. Multi-skill route search remains incomplete. No score was assigned."
+}

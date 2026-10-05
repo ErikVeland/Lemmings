@@ -2,6 +2,7 @@ import Foundation
 
 /// Preview progress is separate from original saves and verified achievements.
 public struct Lemmings3ClassicCampaign: Sendable {
+    public static let requiredTribeSurvivors = 50
     public enum Tribe: Int, CaseIterable, Codable, Sendable {
         case classic = 1, shadow = 2, egyptian = 3
         public var title: String { switch self { case .classic: "Classic"; case .shadow: "Shadow"; case .egyptian: "Egyptian" } }
@@ -13,6 +14,12 @@ public struct Lemmings3ClassicCampaign: Sendable {
     public private(set) var index = 0
     public private(set) var population = 20
     public private(set) var completed: [Int: Int] = [:]
+    /**
+     * Reports completion when the recorded final result meets the original tribe target.
+     */
+    public var hasCompletedTribe: Bool {
+        (completed[levels.count - 1] ?? 0) >= Self.requiredTribeSurvivors
+    }
     public struct Progress: Codable, Equatable, Sendable {
         public var version = 1
         public var index: Int

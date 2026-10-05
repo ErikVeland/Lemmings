@@ -44,6 +44,7 @@ if [[ "${TEST_SCOPE:-all}" == selection-raster ]]; then test_flags+=(-D SELECTIO
 if [[ "${TEST_SCOPE:-all}" == sessions ]]; then test_flags+=(-D SESSION_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == music ]]; then test_flags+=(-D MUSIC_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == dialogs ]]; then test_flags+=(-D DIALOG_TESTS); fi
+if [[ "${TEST_SCOPE:-all}" == l3-story ]]; then test_flags+=(-D L3_STORY_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == transport ]]; then test_flags+=(-D TRANSPORT_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == loading-latency ]]; then test_flags+=(-D LOADING_LATENCY_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == cursor-input ]]; then test_flags+=(-D CURSOR_INPUT_TESTS); fi

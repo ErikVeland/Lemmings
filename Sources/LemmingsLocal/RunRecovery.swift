@@ -445,6 +445,10 @@ struct NeoRunRecovery: Codable, Sendable {
 }
 
 struct L3RunRecovery: Codable, Sendable {
+    struct RestoredRun {
+        let initial: Lemmings3Runtime
+        let game: Lemmings3Runtime
+    }
     struct Input: Codable, Sendable {
         let tick: Int
         let action: String
@@ -462,13 +466,107 @@ struct L3RunRecovery: Codable, Sendable {
               skillAssignments.values.allSatisfy({ (0...100_000).contains($0) }),
               toolUses.values.allSatisfy({ (0...100_000).contains($0) }) else { throw RunRecoveryError.invalid }
     }
-    func restore(initial: Lemmings3Runtime, checkpoint: RunRecovery) throws -> Lemmings3Runtime {
+    func restore(initial: Lemmings3Runtime, checkpoint: RunRecovery) throws -> RestoredRun {
         _ = try checkpoint.validated()
-        guard Self.stateHash(initial) == checkpoint.initialStateHash else { throw RunRecoveryError.differentGame }
-        let game = try Self.replay(initial: initial, inputs: inputs, through: checkpoint.tick)
+        let replayInitial: Lemmings3Runtime
+        if Self.stateHash(initial) == checkpoint.initialStateHash {
+            replayInitial = initial
+        } else if let previous = try Self.previousInitials(initial).first(where: {
+            Self.stateHash($0) == checkpoint.initialStateHash
+        }) {
+            replayInitial = previous
+        } else {
+            throw RunRecoveryError.differentGame
+        }
+        let game = try Self.replay(initial: replayInitial, inputs: inputs, through: checkpoint.tick)
         guard game.tick == checkpoint.tick, !game.isComplete,
               Self.stateHash(game) == checkpoint.stateHash else { throw RunRecoveryError.invalid }
-        return game
+        return RestoredRun(initial: replayInitial, game: game)
+    }
+    /**
+     * Finds earlier Preview pickup rules by their exact saved-run identity.
+     */
+    private static func previousInitials(_ initial: Lemmings3Runtime) throws -> [Lemmings3Runtime] {
+        var candidates: [Lemmings3Runtime] = []
+        if let previous = try previousHadokenInitial(initial) { candidates.append(previous) }
+        candidates.append(contentsOf: try previousToolMappingInitials(initial))
+        for candidate in [initial] + candidates {
+            if let previous = try previousSpadeInitial(candidate) { candidates.append(previous) }
+        }
+        return candidates
+    }
+    /**
+     * Recreates the six-use Spade pickup in earlier Preview saved runs.
+     */
+    private static func previousSpadeInitial(_ initial: Lemmings3Runtime) throws -> Lemmings3Runtime? {
+        guard initial.tick == 0 else { return nil }
+        var pickups = initial.configuration.pickups
+        var changed = false
+        for index in pickups.indices where pickups[index].tool == .spade && pickups[index].quantity == 8 {
+            pickups[index].quantity = 6
+            changed = true
+        }
+        guard changed else { return nil }
+        return try runtime(initial, pickups: pickups)
+    }
+    /**
+     * Recreates the one-use Hadoken rule used before the eight-use Preview trial.
+     */
+    private static func previousHadokenInitial(_ initial: Lemmings3Runtime) throws -> Lemmings3Runtime? {
+        guard initial.tick == 0 else { return nil }
+        let configuration = initial.configuration
+        var pickups = configuration.pickups
+        var changed = false
+        for index in pickups.indices where pickups[index].tool == .hadoken && pickups[index].quantity == 8 {
+            pickups[index].quantity = 1
+            changed = true
+        }
+        guard changed else { return nil }
+        return try runtime(initial, pickups: pickups)
+    }
+    /**
+     * Recreates Preview pickups from before the original tool numbers were checked.
+     */
+    private static func previousToolMappingInitials(_ initial: Lemmings3Runtime) throws -> [Lemmings3Runtime] {
+        guard initial.tick == 0 else { return [] }
+        let original = initial.configuration.pickups
+        guard original.contains(where: { [.hadoken, .shimmy, .sucker].contains($0.tool) }) else { return [] }
+        var candidates: [Lemmings3Runtime] = []
+        for hadokenQuantity in [8, 1] {
+            for suckerQuantity in [8, 1] {
+                let pickups = original.map { pickup -> Lemmings3Runtime.Pickup in
+                    let tool: Lemmings3Runtime.Tool
+                    let quantity: Int
+                    switch pickup.tool {
+                    case .hadoken: tool = .shimmy; quantity = 1
+                    case .shimmy: tool = .hadoken; quantity = hadokenQuantity
+                    case .sucker: tool = .sucker; quantity = suckerQuantity
+                    default: tool = pickup.tool; quantity = pickup.quantity
+                    }
+                    var previous = Lemmings3Runtime.Pickup(id: pickup.id, tool: tool, x: pickup.x,
+                        y: pickup.y, quantity: quantity)
+                    previous.ignoredBy = pickup.ignoredBy
+                    return previous
+                }
+                candidates.append(try runtime(initial, pickups: pickups))
+            }
+        }
+        return candidates
+    }
+    /**
+     * Builds a run with the same level data and replacement pickups.
+     */
+    private static func runtime(_ initial: Lemmings3Runtime, pickups: [Lemmings3Runtime.Pickup]) throws -> Lemmings3Runtime {
+        let configuration = initial.configuration
+        return try Lemmings3Runtime(configuration: .init(
+            width: configuration.width, height: configuration.height,
+            attributes: configuration.attributes, entrance: configuration.entrance, exits: configuration.exits,
+            total: configuration.total, releaseInterval: configuration.releaseInterval,
+            releaseDelay: configuration.releaseDelay, timeLimit: configuration.timeLimit,
+            pickups: pickups, extras: configuration.extras,
+            backgroundAttributes: configuration.backgroundAttributes,
+            sourceLevelReference: configuration.sourceLevelReference, traps: configuration.traps,
+            creatures: configuration.creatures, additionalEntrances: configuration.additionalEntrances))
     }
     /// Reconstructs the deterministic L3 state at a recorded tick.
     static func replay(initial: Lemmings3Runtime, inputs: [Input], through tick: Int) throws -> Lemmings3Runtime {

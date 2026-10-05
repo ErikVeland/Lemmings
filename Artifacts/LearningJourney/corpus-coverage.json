@@ -4,13 +4,13 @@
       "confirmedScored": 120,
       "corpusLevels": 120,
       "pack": "Lemmings",
-      "selected": 51
+      "selected": 30
     },
     {
       "confirmedScored": 100,
       "corpusLevels": 100,
       "pack": "Oh No! More Lemmings",
-      "selected": 51
+      "selected": 39
     },
     {
       "confirmedScored": 4,
@@ -28,13 +28,13 @@
       "confirmedScored": 32,
       "corpusLevels": 32,
       "pack": "Holiday Lemmings 1993",
-      "selected": 20
+      "selected": 9
     },
     {
       "confirmedScored": 32,
       "corpusLevels": 32,
       "pack": "Holiday Lemmings 1994",
-      "selected": 16
+      "selected": 14
     }
   ],
   "eligiblePool": 1710,
