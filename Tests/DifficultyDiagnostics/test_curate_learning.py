@@ -1,188 +1,158 @@
+import copy
 import importlib.util
 import json
 import pathlib
 import unittest
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-spec = importlib.util.spec_from_file_location('curation', ROOT/'Tools/DifficultyDiagnostics/curate_learning.py')
-curation = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(curation)
+spec = importlib.util.spec_from_file_location('human_journey', ROOT / 'Tools/DifficultyDiagnostics/human_journey.py')
+journey = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(journey)
 
 
-class CurriculumTests(unittest.TestCase):
-    def pool(self):
-        rows, replays = [], {}
-        for skill in sorted(curation.BASIC):
-            for n in range(3):
-                identity = {'engine':'classic','packID':'test','levelID':skill+str(n)}
-                replay_id = skill+str(n)
-                rows.append({'entry':{'identity':identity,'levelNameSnapshot':replay_id},
-                    'initialHash':replay_id,'profile':{'overallScore':40+n,
-                        'key':{'replayRevision':replay_id},'detectedTechniques':[skill],
-                        'sourceRank':'Fun',
-                        'components':{'techniqueBurden':65,'solutionComplexity':40+n,
-                            'executionPrecision':0,'concurrencyBurden':0,
-                            'constraintPressure':30,'deductionComplexityProxy':30,
-                            'criticalActions':[]}},
-                    'startingReleaseRate':50,'rescueRequirementRatio':.5})
-                replays[replay_id] = {'initialStateHash':replay_id,'expected':{'didWin':True,'ticks':100},
-                    'events':[{'tick':10,'action':{'assign':{'lemmingID':0,'skill':skill}}}]}
-        return rows,replays
+class CommunityJourneyTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.reference = journey.redux_reference()
+        cls.plan = journey.read(ROOT / 'Artifacts/LearningJourney/curriculum.json')
+        cls.manifest = journey.read(ROOT / 'Resources/Progression/learning.json')
+        cls.resources = journey.read(ROOT / 'Artifacts/LearningJourney/source-resources.json')
+        cls.pool = journey.load_pool(cls.resources)
+        cls.witnesses = journey.read(ROOT / 'Artifacts/LearningJourney/candidate-solutions.json')
+        cls.witnesses.update(journey.read(ROOT / 'Resources/Hints/solutions.json'))
 
-    def test_redundant_tutorials_do_not_pad_the_path(self):
-        rows,replays = self.pool()
-        result = curation.select(rows,replays)
-        self.assertEqual(len(result['lessons']),8)
-        self.assertEqual({l['objective'] for l in result['lessons']},
-                         {'introduce:'+s for s in curation.BASIC})
-        self.assertEqual(result,curation.select(list(reversed(rows)),replays))
+    def fixture(self):
+        row = next(r for r in self.pool if r['official'] and r['entry']['levelNameSnapshot'] == 'Just dig!')
+        replay = self.witnesses.get(row['profile']['key']['replayRevision']) or self.witnesses[row['initialHash']]
+        source = next(r for r in self.resources if journey.key(r) == journey.key(row))
+        return copy.deepcopy(row), copy.deepcopy(replay), copy.deepcopy(source)
 
-    def test_introductions_prefer_beginner_rank_before_low_demand_fallback(self):
-        rows,replays = self.pool()
-        for row in rows:
-            row['profile']['sourceRank'] = 'Mayhem'
-            if row['entry']['levelNameSnapshot'].endswith('2'):
-                row['profile']['sourceRank'] = 'Fun'
-        preferred = curation.select(rows,replays)['lessons']
-        self.assertTrue(all(l['level'].endswith('2') for l in preferred))
-        for row in rows:
-            row['profile']['sourceRank'] = 'Mayhem'
-        fallback = curation.select(rows,replays)['lessons']
-        self.assertEqual(len(fallback), len(curation.BASIC))
-        self.assertTrue(all(not l['beginnerRank'] and l['intrinsicDemand'] < 180
-                            and not l['requiresFullRescue'] for l in fallback))
+    def test_reference_is_pinned_to_real_pack_order_and_bytes(self):
+        self.assertEqual(len(self.reference), 160)
+        self.assertEqual([r['ordinal'] for r in self.reference], list(range(1, 161)))
+        self.assertEqual(self.reference[0]['title'], 'Just dig!')
+        self.assertEqual(self.reference[31]['rank'], 'Gentle')
+        self.assertEqual(self.reference[32]['rank'], 'Quirky')
+        stored = journey.read(ROOT / 'Artifacts/LearningJourney/redux-reference.json')
+        self.assertEqual(stored['levels'], self.reference)
 
-    def test_editorial_exclusions_survive_regeneration(self):
-        rows,replays = self.pool()
-        excluded=json.loads((ROOT/'Resources/Progression/exclusions.json').read_text())
-        for index, exclusion in enumerate(excluded):
-            rows[index]['entry']['identity']=exclusion['identity']
-        result=curation.select(rows,replays)
-        self.assertTrue(all(lesson['identity'] not in [e['identity'] for e in excluded]
-                            for lesson in result['lessons']))
-        manifest=json.loads((ROOT/'Resources/Progression/learning.json').read_text())
-        self.assertTrue(all(lesson['entry']['identity'] not in [e['identity'] for e in excluded]
-                            for lesson in manifest['lessons']))
+    def test_real_tutorials_are_not_replaced_by_low_scoring_fan_puzzles(self):
+        titles = [r['entry']['levelNameSnapshot'] for r in self.manifest['lessons'][:7]]
+        self.assertEqual(titles, ['Just dig!', 'Only floaters can survive this', 'Tailor-made for blockers',
+                                 'Now use miners and climbers', 'You need bashers this time',
+                                 'A task for blockers and bombers', 'Builders will help you here'])
+        self.assertTrue(all(l['stage'] == 'Fun' for l in self.manifest['lessons'][:7]))
 
-    def test_replay_failure_cannot_supply_a_lesson(self):
-        rows,replays = self.pool()
-        for key,replay in replays.items():
-            if key.startswith('floater'): replay['expected']['didWin'] = False
-        self.assertIn('introduce:floater', curation.select(rows,replays)['unavailableOptionalObjectives'])
+    def test_full_rescue_does_not_automatically_make_a_tutorial_difficult(self):
+        goal = next(g for g in self.plan['lessons'] if g['level'] == 'Now use miners and climbers')
+        self.assertEqual(goal['context']['rescueFraction'], 1)
+        self.assertLess(goal['placement']['position'], 180)
 
-    def test_inputs_after_a_win_cannot_supply_an_unplayable_lesson(self):
-        rows,replays = self.pool()
-        for replay_id,replay in replays.items():
-            if replay_id.endswith('0'):
-                replay['events'].append({'tick':101,'action':{'nuke':{}}})
-            if replay_id.endswith('1'):
-                replay['events'][0]['tick'] = 0
-        result = curation.select(rows,replays)
-        self.assertTrue(all(l['level'].endswith('2') for l in result['lessons']))
+    def test_rate_is_exposure_not_an_automatic_difficulty_floor(self):
+        row, replay, source = self.fixture()
+        source['releaseRate'] = 99
+        context = journey.solution_context(row, replay, source)
+        self.assertAlmostEqual(context['initialHatchIntervalSeconds'], 4 / 17)
+        self.assertNotIn('difficulty', context)
+        self.assertEqual(context['discoveryDifficulty'], 'unknown from replay')
 
-    def test_inputs_after_a_win_do_not_add_teaching_skills(self):
-        rows,replays = self.pool()
-        replay = replays['miner0']
-        replay['events'].append({'tick':101,'action':{'assign':{'lemmingID':0,'skill':'builder'}}})
-        self.assertEqual(curation.features(rows[0],replay)['chains'],[['miner']])
+    def test_skill_budget_uses_actual_used_skills_not_total_stock(self):
+        row, replay, source = self.fixture()
+        source['skills']['digger'] = 1
+        source['skills']['builder'] = 99
+        context = journey.solution_context(row, replay, source)
+        self.assertEqual(context['exhaustedUsedSkills'], ['digger'])
+        self.assertEqual(context['spareUsedSkills']['digger'], 0)
 
-    def test_demanding_introduction_stays_deferred_even_with_complete_probes(self):
-        rows,replays = self.pool()
-        for row in rows:
-            if row['profile']['detectedTechniques'] == ['miner']:
-                row['profile']['components']['executionPrecision'] = 275
-                row['profile']['precision'] = {'completed': True}
-        result = curation.select(rows,replays)
-        self.assertIn('introduce:miner', result['unavailableOptionalObjectives'])
-        self.assertFalse(any(l['objective'] == 'introduce:miner' for l in result['lessons']))
+    def test_unknown_precision_does_not_become_zero_human_difficulty(self):
+        row, replay, source = self.fixture()
+        row['profile'].pop('precision', None)
+        context = journey.solution_context(row, replay, source)
+        self.assertFalse(context['timingProbeComplete'])
+        self.assertIn('incomplete timing probes', journey.risks(context))
+        self.assertFalse(context['spatialToleranceMeasured'])
 
-    def test_source_release_rate_and_rescue_quota_raise_candidate_demand(self):
-        rows,replays = self.pool()
-        row = rows[0]
-        row['startingReleaseRate'] = 99
-        self.assertEqual(curation.demand(row), 360)
-        row['startingReleaseRate'] = 50
-        row['rescueRequirementRatio'] = .95
-        self.assertEqual(curation.demand(row), 360)
-        row['rescueRequirementRatio'] = .949
-        self.assertLess(curation.demand(row), 180)
+    def test_published_win_is_not_a_discovery_review(self):
+        row, replay, source = self.fixture()
+        context = journey.solution_context(row, replay, source)
+        self.assertTrue(journey.valid_witness(row, replay))
+        self.assertFalse(journey.review_approved({}, row, context, {}))
 
-    def test_unverified_source_constraints_are_deferred(self):
-        rows,_ = self.pool()
-        row = rows[0]
-        row.pop('startingReleaseRate')
-        self.assertGreaterEqual(curation.demand(row), 360)
+    def approved_review(self, row, context):
+        return {'status': 'approved', 'reviewer': 'Test human', 'sourceURL': 'https://example.test/review',
+                'sourceRevision': row['entry']['sourceRevision'], 'replayRevision': context['replayRevision'],
+                'ordinarySolution': 'Test ordinary completion', 'discoveryNotes': 'Visible route',
+                'resourceNotes': 'Spare builders allow mistakes', 'hiddenInformation': False,
+                'afterReference': self.reference[0]['reference'], 'beforeReference': self.reference[1]['reference']}
 
-    def test_narrow_timing_actions_are_deferred(self):
-        rows,_ = self.pool()
-        row = rows[0]
-        row['profile']['criticalActions'] = [0]
-        self.assertGreaterEqual(curation.demand(row), 360)
+    def test_reviews_are_bound_to_exact_variant_and_ordinary_solution(self):
+        row, replay, source = self.fixture(); context = journey.solution_context(row, replay, source)
+        references = {r['reference']: r for r in self.reference}
+        review = self.approved_review(row, context)
+        self.assertTrue(journey.review_approved(review, row, context, references))
+        for field in ['sourceRevision', 'replayRevision', 'ordinarySolution', 'discoveryNotes', 'resourceNotes', 'reviewer']:
+            changed = dict(review); changed[field] = ''
+            self.assertFalse(journey.review_approved(changed, row, context, references), field)
+        self.assertFalse(journey.review_approved(dict(review, hiddenInformation=True), row, context, references))
+        self.assertFalse(journey.review_approved(dict(review, beforeReference=self.reference[20]['reference']), row, context, references))
 
-    def test_repeated_builders_are_not_new_sequences(self):
-        rows,_ = self.pool()
-        row=rows[0]
-        events=[{'tick':i,'action':{'assign':{'lemmingID':0,'skill':s}}}
-                for i,s in enumerate(['builder','builder','basher','builder'])]
-        result=curation.features(row,{'events':events})
-        self.assertEqual(result['chains'],[['builder','basher','builder']])
-        self.assertEqual(result['triples'],set())
-        self.assertEqual(result['pairs'],{('builder','basher'),('basher','builder')})
+    def test_counterparts_do_not_claim_variant_equivalence(self):
+        for goal in self.plan['lessons']:
+            if goal['placement']['basis'] == 'reduxClassicCounterpart':
+                self.assertIn('not variant equivalence', goal['variantDifferences'][0])
 
-    def test_official_preference_stays_inside_comparable_difficulty(self):
-        rows,replays = self.pool()
-        for row in rows:
-            row['official'] = row['entry']['levelNameSnapshot'].endswith('1')
-        result = curation.select(rows,replays)
-        self.assertTrue(all(l['level'].endswith('1') for l in result['lessons']))
-        for row in rows:
-            if row['official']: row['profile']['overallScore'] = 300
-        result = curation.select(rows,replays)
-        self.assertTrue(all(l['level'].endswith('0') for l in result['lessons']))
+    def test_harder_classic_variant_is_held_for_review(self):
+        titles = {l['entry']['levelNameSnapshot'] for l in self.manifest['lessons']}
+        self.assertNotIn('A Block from Home', titles)
+        queue = journey.read(ROOT / 'Artifacts/LearningJourney/human-review-queue.json')
+        block = next(r for r in queue if r['title'] == 'A Block from Home')
+        self.assertTrue(any('ten percentage points' in r for r in block['risks']))
 
-    def test_roles_not_worker_count_define_an_application(self):
-        rows,_ = self.pool()
-        def signature(ids):
-            events=[{'tick':i,'action':{'assign':{'lemmingID':worker,'skill':'builder'}}}
-                    for i,worker in enumerate(ids)]
-            return curation.application_signature(curation.features(rows[0], {'events':events}))
-        self.assertEqual(signature([0]), signature([1,2,3]))
+    def test_no_unreviewed_fan_is_admitted(self):
+        reviews = {journey.key(r): r for r in journey.read(ROOT / 'Artifacts/LearningJourney/human-reviews.json')['reviews']}
+        for lesson in self.manifest['lessons']:
+            if lesson['entry']['identity']['packID'].startswith('fan:'):
+                self.assertIn(journey.key(lesson), reviews)
+                self.assertEqual(lesson['placement']['basis'], 'reviewedFan')
 
-    def test_current_path_is_selective_and_respects_placement_floors(self):
-        plan=json.loads((ROOT/'Artifacts/LearningJourney/curriculum.json').read_text())
-        manifest=json.loads((ROOT/'Resources/Progression/learning.json').read_text())
-        goals={json.dumps(l['identity'],sort_keys=True):l for l in plan['lessons']}
-        lessons=manifest['lessons']
-        self.assertLess(len(lessons),plan['poolSize'])
-        self.assertTrue(0 < len(lessons) <= plan["targetSize"])
-        self.assertEqual(len({g['applicationSignature'] for g in goals.values()}),len(lessons))
-        self.assertEqual(len({g['objective'] for g in goals.values()}),len(lessons))
-        introductions=0
-        for i,lesson in enumerate(lessons):
-            goal=goals[json.dumps(lesson['entry']['identity'],sort_keys=True)]
-            self.assertEqual(lesson['focus'],goal['lesson'])
-            if (goal.get('startingReleaseRate') is None
-                    or goal.get('rescueRequirementRatio') is None
-                    or goal['startingReleaseRate'] == 99
-                    or goal.get('hasNarrowTiming', False)
-                    or goal['rescueRequirementRatio'] >= .95):
-                self.assertIn(lesson['stage'],('Difficult','Expert'))
-            if goal['objective'].startswith('introduce:'):
-                introductions+=1
-                if not goal['beginnerRank']:
-                    self.assertEqual(lesson['stage'],'Intermediate')
-                self.assertFalse(goal['requiresFullRescue'])
-                self.assertLess(goal['intrinsicDemand'],180)
-            if lesson['stage']=='Fun': self.assertFalse(lesson['preparationGaps'])
-        self.assertEqual(introductions,7)
-        self.assertIn("introduce:miner",plan["unavailableOptionalObjectives"])
-        self.assertTrue(all(b['demand'] >= a['demand'] for a,b in zip(lessons,lessons[1:])))
-        summary=json.loads((ROOT/'Artifacts/LearningJourney/summary.json').read_text())
-        self.assertEqual(summary['levels'],len(lessons))
-        self.assertEqual(summary['stages'],{stage:sum(l['stage']==stage for l in lessons)
-                         for stage in ('Fun','Intermediate','Difficult','Expert')})
-        for a,b in zip(lessons,lessons[1:]):
-            if b['demand']-a['demand'] > 65:
-                self.assertTrue(b['needsSupport'])
+    def test_order_uses_independent_reference_positions_without_clamping(self):
+        for lesson, goal in zip(self.manifest['lessons'], self.plan['lessons']):
+            self.assertEqual(lesson['demand'], lesson['placement']['position'])
+            if lesson['placement']['basis'] == 'reduxClassicCounterpart':
+                self.assertEqual(lesson['demand'], goal['reference']['ordinal'] * 5)
+        for a, b in zip(self.manifest['lessons'], self.manifest['lessons'][1:]):
+            self.assertGreaterEqual(b['demand'], a['demand'])
+            self.assertLessEqual(b['demand'] - a['demand'], 65)
 
-if __name__=='__main__': unittest.main()
+    def test_repeated_practice_is_allowed(self):
+        skills = [tuple(l['concepts']) for l in self.manifest['lessons']]
+        self.assertLess(len(set(skills)), len(skills))
+
+    def test_excluded_hidden_exit_and_unhelpful_fan_puzzles_stay_out(self):
+        titles = {l['entry']['levelNameSnapshot'] for l in self.manifest['lessons']}
+        self.assertNotIn('Lost something?', titles)
+        self.assertNotIn('Mienrs <--- lol, typo', titles)
+
+    def test_generation_is_deterministic_and_resource_complete(self):
+        args = (self.witnesses, self.resources, self.reference, [])
+        actual = journey.build(self.pool, *args)
+        self.assertEqual(actual, journey.build(list(reversed(self.pool)), *args))
+        self.assertEqual(actual[0], self.manifest)
+        self.assertEqual(actual[1], self.plan)
+
+    def test_altered_winning_route_cannot_reuse_a_difficulty_profile(self):
+        row, replay, _ = self.fixture()
+        self.assertTrue(journey.valid_witness(row, replay))
+        replay['events'][0]['tick'] += 1
+        self.assertFalse(journey.valid_witness(row, replay))
+
+    def test_source_only_or_out_of_range_replay_is_rejected(self):
+        row, replay, _ = self.fixture()
+        replay['sourceRules'] = {'some': 'rule'}
+        self.assertFalse(journey.valid_witness(row, replay))
+        replay.pop('sourceRules')
+        replay['events'][0]['tick'] = replay['expected']['ticks'] + 1
+        self.assertFalse(journey.valid_witness(row, replay))
+
+if __name__ == '__main__':
+    unittest.main()

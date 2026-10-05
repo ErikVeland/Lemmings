@@ -1,28 +1,17 @@
 {
-  "candidatePool": 1717,
-  "duplicateObjectives": 0,
-  "fan": 87,
-  "fanPacks": 54,
-  "fullRescueRequirements": 6,
-  "highAssignmentLoadLevels": 66,
-  "highRescueQuotaLevels": 9,
-  "largestDemandStep": 61.51352410819287,
-  "largestScoreStep": 88.84128591531822,
-  "levels": 192,
-  "narrowTimingLevels": 21,
-  "official": 105,
-  "ohNoLevels": 39,
-  "preparationGaps": 1,
-  "skillIntroductions": 7,
+  "candidatePool": 1720,
+  "fan": 0,
+  "largestReferenceGap": 8.0,
+  "levels": 99,
+  "limits": "Redux ordinal positions are not equal human-difficulty units. Classic counterparts differ from Redux. A replay proves a route, not novice discovery. Fan comparisons are unapproved review aids.",
+  "official": 99,
+  "pendingReview": 1621,
+  "placementPolicy": "redux-community-1",
   "stages": {
-    "Difficult": 91,
-    "Expert": 50,
-    "Fun": 3,
-    "Intermediate": 48
+    "Difficult": 31,
+    "Expert": 25,
+    "Fun": 23,
+    "Intermediate": 20
   },
-  "startingRate99Levels": 0,
-  "supportTransitions": 6,
-  "targetSize": 292,
-  "unverifiedSourceSettings": 105,
-  "version": "learning-11"
+  "version": "learning-12"
 }

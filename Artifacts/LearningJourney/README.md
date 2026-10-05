@@ -1,239 +1,135 @@
-# Oh My! All Lemmings!
+# Oh My! All Lemmings! progression
 
-192 selected lessons from 1717 validated, deduplicated single-player candidates. 105 official levels and 87 library levels.
+99 community-anchored Classic lessons. 1621 candidates remain outside the mandatory path pending review.
 
-## Selection before ordering
+The previous curve sorted replay execution costs, imposed blanket rescue/rate floors, and raised later scores to the preceding score. Those operations could hide an easy–hard–easy sequence. The new production path does not use them.
 
-The recommended journey is a selective curriculum. The complete library and original campaigns remain available separately. It has no requirement to include every official level or every validated fan level.
+[Lemmings Redux](https://www.lemmingsforums.net/index.php?topic=4374.0) supplies community-selected ordinal reference points. Its 160 levels were discussed, reordered and edited by players. This journey uses verified Classic counterparts where available. It does not claim that Classic and Redux variants have identical difficulty.
 
-Skill introductions no longer force their way into the opening lessons. The order uses source rank and winning replay evidence. Fun, Easy and Tame levels can start the path only when their measured demand and route workload are low. A low-demand witness from another rank can introduce a skill in Intermediate when no beginner-ranked witness qualifies. Levels with a Tricky or higher rank, unknown rank, a full-rescue requirement, or at least 12 skill assignments in the winning route have a higher placement floor. The model still needs novice playtesting.
+A full rescue target or fast release rate is context, not an automatic hard rating. The audit records the actual population, permitted losses, spare skills in the winning route, release cadence, assignment bursts, remaining time and probe coverage. A saved-count margin or many spare skills cannot prove that a hidden idea is easy to discover.
 
-The target is roughly 292 levels: the combined size of Classic, Oh No! and the 72 seasonal levels. The path uses Classic mechanics only. Confirmed L2/L3 levels remain outside this journey. All six source campaigns are checked in corpus-coverage.json.
+Repeated practice is allowed. One replay skill pattern is not one complete lesson. Optional all-save, speedrun and skill-economy routes must not be confused with an ordinary completion.
 
-Packs identified as Lemmini are excluded from this Classic learning path. Two levels in those packs have native Classic wins, but source-engine behaviour is unverified. See `../DifficultyEvaluation/source-engine-families.json` and its validation notes.
+## Fan admission
 
-Official levels take priority within comparable 35-point demand bands. Library levels supply missing applications. An application signature records the skill set, job changes, three-step sequences and worker roles. Identical signatures are excluded even across different titles. Repeated assignments, worker counts and score buckets do not create new lessons. These are evidence-based distinctions that still need human review.
+`human-review-queue.json` records exact source/replay identities, route constraints, missing evidence and nearby reference routes. These comparisons are execution estimates, not human difficulty labels. Unknown discovery difficulty stays unknown. A pack named Fun or Tame is not global calibration.
 
-The Fun stage contains beginner-ranked levels below the demand threshold and with fewer than 12 skill assignments in the winning route. Unknown ranks and Tricky or higher ranks move to later stages. A source level with starting release rate 99, a rescue quota of at least 95%, a narrow measured timing window, unverified source settings, or at least 12 skill assignments starts at Difficult. A winning route that must save every released lemming also starts at Difficult. Position sensitivity is not measured.
+`human-reviews.json` accepts a named human review of the exact variant and an ordinary solution, with discovery/resource notes, an explicit hidden-information check, and nearby Redux anchors. No such reviews have been fabricated. Unreviewed fan levels remain in their packs and the full library, with their existing solutions, but no longer interrupt this mandatory progression.
 
-## Evidence and limits
+For a review, record an ordinary human completion of this exact version and its source. Note what had to be discovered, hints used, failed attempts caused by execution, and whether spare skills or rescue margin actually offered recovery. Compare it with nearby reference levels played by the same person. A polished replay, pack rank or a single completion time cannot replace those observations.
 
-Objectives are inferred from winning replay commands and measured profiles. They describe an observed route, not a proved necessary technique or a human difficulty rating. Geometry-specific lessons such as steel recognition and safe digging depth are not reliably detected by the current evidence. Those require authored review before claiming complete teaching coverage.
+## Saved journeys
 
-The selector retains multiplayer and port-duplicate exclusions. The generator checks each selected fan witness against its profile digest and source identity. Basic introductions, unique objectives, source coverage of the selected list and reversed-input ordering are checked.
+Older built-in queues migrate on load. A retained current level stays current. A withdrawn current level moves to the first unvisited reference. Past visits, progress records, run identity and Solo/Hot Seat ownership stay intact. Custom playlists and newer versions are not migrated. Exhausted queues close without adding wins.
 
-Stages: {'Fun': 3, 'Intermediate': 48, 'Difficult': 91, 'Expert': 50}. Source levels at release rate 99: 0. Rescue quotas at or above 95%: 9. Narrow timing levels: 21. High assignment-load levels: 66. Levels with unverified source settings: 105. Skill introductions: 7. Full-rescue witness routes: 6. Duplicate objectives: 0. Largest demand increase: 61.51/1000. Preparation gaps: 1.
+## Limits and validation
 
-## Transitions for playtesting
+Reference order is ordinal. Five stored position units represent one Redux position, not five units of measured human difficulty. The transition gate detects missing reference stretches; it is not evidence that all human difficulty jumps are solved. Original time limits, population, skills and timed bombers can change the experience. Every counterpart records those differences. A rescue fraction more than ten percentage points above Redux, or fewer available skills used by the solution, holds a counterpart for review. These are variant-transfer guards, not difficulty ratings. Novice observation remains necessary to approve these transfers and fan insertions.
 
-- 10. Alternate Route: New component high: deductionComplexityProxy.
-- 11. 5 miles if you love Lemmings: New component high: executionPrecision; Preparation: miner.
-- 39. The abyss: New component high: concurrencyBurden.
-- 59. Flow Control: New component high: executionPrecision.
-- 115. Ten Green Lemmings: New component high: concurrencyBurden.
-- 136. Compression Method 1: New component high: executionPrecision.
+Timing probes cover one route, often only a small part of it. Unmeasured spatial tolerance and discovery are never recorded as zero difficulty. A replay that finishes at the time limit may simply leave blockers behind; remaining time alone does not prove pressure.
 
-A support flag remains a review request. An absent flag is not proof that a novice will find a solution obvious.
+Regenerate with `zsh Scripts/generate-learning-journey.sh BUNDLED_RESOURCES`. Check outputs with `python3 Tools/DifficultyDiagnostics/human_journey.py --check`.
 
-## Reproduce
+## Current order
 
-Run `zsh Scripts/generate-learning-journey.sh`, then `python3 Tools/DifficultyDiagnostics/learning_report.py report`. The generator exports the eligible pool, selects distinct objectives with `curate_learning.py`, and builds the ordered journey. `curriculum.json` records the reason for every selection.
-
-Solved and parked levels stay saved by identity. A new curriculum version rebuilds the remaining order. Removing a level from this recommendation does not remove it from the library.
-
-## Full order
-
-| Step | Stage | Level | Source | Lesson purpose |
-| ---: | --- | --- | --- | --- |
-| 1 | Fun | Only Float is Survive | KillerMasters Lemmings 1 Tame | First assignment of the floater skill. |
-| 2 | Fun | The Broken Stair | KillerMasters Lemmings 1 Tame | First assignment of the builder skill. |
-| 3 | Fun | Just Climb Mountain! | KillerMasters Lemmings 1 Tame | First assignment of the climber skill. |
-| 4 | Intermediate | PRACTICE: DIGGER | Mikepak07 | First assignment of the digger skill. |
-| 5 | Intermediate | Cellbash | Ji Hoons Lemmings Remake Heaven | First assignment of the basher skill. |
-| 6 | Intermediate | Blow Down! | Lemmings Plus DOS Project Mild | First assignment of the bomber skill. |
-| 7 | Intermediate | Block 'n load | Ji Hoons Lemmings Remake Heaven | First assignment of the blocker skill. |
-| 8 | Intermediate | PRACTICE: CLIMBER | Mikepak07 | Apply Climber again while changing the release rate. |
-| 9 | Intermediate | Blockers can block others | Deceits Lemmings Extras | Change the release rate while preparing a route. |
-| 10 | Intermediate | Alternate Route | Lemmings The Official Companion | Change the same worker from digger to basher in a winning route. |
-| 11 | Intermediate | 5 miles if you love Lemmings | Genesis Fun | Change the same worker from miner to builder in a winning route. |
-| 12 | Intermediate | Heading on in... | Lemmings Plus DOS Project Mild | Worker roles: builder; digger. Also practise release-rate-manipulation. |
-| 13 | Intermediate | Create & Remove Collection | KillerMasters Lemmings 1 Tame | Worker roles: basher; builder. Also practise release-rate-manipulation. |
-| 14 | Intermediate | On the Outside | JM06 | Worker roles: blocker; digger. Also practise release-rate-manipulation. |
-| 15 | Intermediate | With Lemmings on Top | cLemmings Fun | Worker roles: basher + digger. Job changes: basher → digger. Also practise release-rate-manipulation. |
-| 16 | Intermediate | BashintheDirectionoftheArrows | PSP Special 1 10 of 36 | Worker roles: basher; basher + builder. Job changes: builder → basher. Also practise release-rate-manipulation. |
-| 17 | Intermediate | Avoid the Fall ! | Pieuws Lemmings 2007 Peace | Worker roles: basher + digger. Job changes: digger → basher. Also practise release-rate-manipulation. |
-| 18 | Intermediate | Merry Lemmings | Van Clan Tame | Change the same worker from blocker to miner in a winning route. |
-| 19 | Intermediate | Test map | Orig Extra Levels | Worker roles: digger + miner. Job changes: digger → miner. Also practise release-rate-manipulation. |
-| 20 | Intermediate | Dying Not Reccomended | Lemmings Plus DOS Project Mild | Worker roles: basher + digger; digger. Job changes: basher → digger. Also practise release-rate-manipulation. |
-| 21 | Intermediate | Be RiGhT bAcK! | Oh No More cLemmings Tame | Worker roles: builder; miner. Also practise release-rate-manipulation. |
-| 22 | Intermediate | Down The Wall | Lemmings Plus DOS Project Wimpy | Worker roles: basher; basher + digger. Job changes: digger → basher. Also practise release-rate-manipulation. |
-| 23 | Intermediate | Bridge Across, Mine Through | PSP Special 1 10 of 36 | Reuse a worker by returning to an earlier job after a different assignment. |
-| 24 | Intermediate | Rising to Paradise | Pieuws Lemmings 2007 Peace | Worker roles: basher; basher + builder; builder. Job changes: basher → builder. Also practise release-rate-manipulation. |
-| 25 | Intermediate | Let's go to the moon! | Genesis Tricky | Worker roles: builder + miner. Job changes: miner → builder. Also practise release-rate-manipulation. |
-| 26 | Intermediate | It is impossible to do? | CRISFN04 | Change a worker’s job and control the flow of followers. |
-| 27 | Intermediate | PRACTICE: STEEL | Mikepak07 | Use a blocker while two terrain-changing skills prepare the route. |
-| 28 | Intermediate | Climb and Block | brickpk1 | Worker roles: blocker + climber; climber. Job changes: climber → blocker. Also practise release-rate-manipulation. |
-| 29 | Intermediate | Looks easy but its not | JMGM01 | Worker roles: basher + miner. Job changes: miner → basher. Also practise release-rate-manipulation. |
-| 30 | Intermediate | You Want Me To Go Where??? | Van Clan Tame | Worker roles: basher + builder. Job changes: basher → builder. Also practise release-rate-manipulation. |
-| 31 | Intermediate | Climb and Build | brickpk1 | Worker roles: builder + climber; climber. Job changes: climber → builder. Also practise release-rate-manipulation. |
-| 32 | Intermediate | The Great Lemming Road | Oh No More cLemmings Tame | Plan a three-skill sequence on one worker: basher, builder, miner. |
-| 33 | Intermediate | Tricky Hit | Lemmings Plus DOS Project Mild | Worker roles: basher + digger + miner. Job changes: basher → miner; digger → basher. Three-step plans: digger → basher → miner. Also practise release-rate-manipulation. |
-| 34 | Intermediate | We want to escape! | KillerMasters Lemmings 2 Tame | Worker roles: basher; basher + builder; blocker. Job changes: builder → basher. Also practise release-rate-manipulation. |
-| 35 | Intermediate | LemEdit generated Level | ssam1221s Lemmings Tame | Worker roles: basher + blocker; builder. Job changes: basher → blocker. Also practise release-rate-manipulation. |
-| 36 | Intermediate | The gauntlet | Giga pack 08 | Worker roles: builder; builder + digger; digger. Job changes: digger → builder. Also practise release-rate-manipulation. |
-| 37 | Intermediate | Crematory Chamber | cLemmings Fun | Worker roles: builder + digger; builder + miner. Job changes: builder → miner; digger → builder. Also practise release-rate-manipulation. |
-| 38 | Intermediate | Level 01.lvl | Amiga Demo | Worker roles: basher + builder; builder; builder + digger. Job changes: builder → basher; digger → builder. Also practise release-rate-manipulation. |
-| 39 | Intermediate | The abyss | CRISFN03 | Manage two working regions in one route. |
-| 40 | Intermediate | The Flagpole | Lemmings Plus DOS Project Wimpy | Worker roles: basher + builder + climber. Job changes: basher → builder; climber → basher. Three-step plans: climber → basher → builder. Also practise release-rate-manipulation. |
-| 41 | Intermediate | Get up, up, up! | Lemmings Plus DOS Project Wimpy | Change the same worker from basher to builder in a winning route. |
-| 42 | Intermediate | The lemming paradox | LEVIPAK3 | Worker roles: basher + builder + digger. Job changes: basher → builder; builder → digger; digger → basher. Three-step plans: basher → builder → digger; builder → digger → basher. Also practise release-rate-manipulation. |
-| 43 | Intermediate | Pink pyramid | CRISFN14 | Worker roles: basher + builder + digger. Job changes: basher → builder; digger → basher. Three-step plans: digger → basher → builder. Also practise release-rate-manipulation. |
-| 44 | Intermediate | Another "o" to serch | The lemming google pack | Worker roles: basher; builder; miner. |
-| 45 | Intermediate | Lemstart by one side | CRISFN11 | Worker roles: builder; builder + miner. Job changes: miner → builder. Also practise release-rate-manipulation. |
-| 46 | Intermediate | Maniacal Lemmings | cLemmings Tricky | Complete a short route with higher measured resource pressure. |
-| 47 | Intermediate | Save the Lemmings with Floaters | PSP Special 1 10 of 36 | Change the same worker from climber to floater in a winning route. |
-| 48 | Intermediate | Float and Block | brickpk1 | Worker roles: blocker + floater; floater. Job changes: floater → blocker. Also practise release-rate-manipulation. |
-| 49 | Intermediate | Asy-Lemm Seekers | TWPAK01 | Worker roles: basher; basher + builder + digger. Job changes: basher → builder; digger → basher. Three-step plans: digger → basher → builder. Also practise release-rate-manipulation. |
-| 50 | Intermediate | Falling Away From Everything... | Lemmings Plus DOS Project Mild | Worker roles: basher + builder; builder; builder + digger. Job changes: basher → builder; digger → builder. Also practise multiple-worker-coordination. |
-| 51 | Intermediate | A long way to go | Giga pack 09 | Worker roles: basher + builder + climber; builder. Job changes: basher → climber; climber → builder. Three-step plans: basher → climber → builder. Also practise multiple-worker-coordination. |
-| 52 | Difficult | Lemmings For Presidents! | Oh No! More Lemmings | Worker roles: basher; miner. |
-| 53 | Difficult | Take good care of my Lemmings | Lemmings | Worker roles: basher; builder. Also practise multiple-worker-coordination. |
-| 54 | Difficult | If only they could fly | Lemmings | Organise a route using four familiar skills. |
-| 55 | Difficult | Down And Out Lemmings | Oh No! More Lemmings | Worker roles: blocker + digger + miner; miner. Job changes: blocker → miner; digger → blocker; miner → blocker; miner → digger. Three-step plans: blocker → miner → digger; miner → digger → blocker. |
-| 56 | Difficult | Gone With The Lemming | Oh No! More Lemmings | Manage several changes of job on one worker. |
-| 57 | Difficult | Easy when you know how | Lemmings | Worker roles: basher; basher + builder + digger; basher + digger. Job changes: basher → builder; digger → basher. Three-step plans: digger → basher → builder. Also practise multiple-worker-coordination. |
-| 58 | Difficult | Yo-yo Lem-lem | Holiday Lemmings 1993 | Worker roles: builder; builder + climber. Job changes: climber → builder. Also practise multiple-worker-coordination. |
-| 59 | Difficult | Flow Control | Oh No! More Lemmings | Combine timing-sensitive assignments with release-rate control. |
-| 60 | Difficult | The Long Way Around | Holiday Lemmings 1993 | Worker roles: basher + builder; blocker. Job changes: basher → builder; builder → basher. Also practise release-rate-manipulation. |
-| 61 | Difficult | Have an ice day | Oh No! More Lemmings | Worker roles: basher + builder + digger. Job changes: basher → builder; builder → basher; digger → builder. Three-step plans: digger → builder → basher. Also practise release-rate-manipulation. |
-| 62 | Difficult | Maybe not such a doddle | Holiday Lemmings 1994 | Worker roles: blocker; builder; digger + miner. Job changes: digger → miner. Also practise multiple-worker-coordination. |
-| 63 | Difficult | Let's be careful out there | Lemmings | Worker roles: builder; builder + digger + floater; floater; floater + miner. Job changes: digger → floater; floater → builder; miner → floater. Three-step plans: digger → floater → builder. Also practise multiple-worker-coordination. |
-| 64 | Difficult | This should be a doddle! | Lemmings | Worker roles: basher + builder; blocker; builder + miner. Job changes: builder → basher; miner → builder. Also practise multiple-worker-coordination. |
-| 65 | Difficult | Lemmings in the attic | Lemmings | Worker roles: basher; basher + builder + climber + miner; builder. Job changes: basher → builder; builder → basher; builder → miner; climber → builder. Three-step plans: basher → builder → miner; climber → builder → basher. Also practise multiple-worker-coordination. |
-| 66 | Difficult | Perseverance | Lemmings | Combine four skills under high measured resource pressure. |
-| 67 | Difficult | The Lemming Learning Curve | Oh No! More Lemmings | Worker roles: basher; builder; builder + miner; climber. Job changes: miner → builder. Also practise multiple-worker-coordination. |
-| 68 | Difficult | Triple Trouble | Lemmings | Worker roles: basher + builder + climber; builder; builder + climber; digger. Job changes: builder → basher; climber → builder. Three-step plans: climber → builder → basher. Also practise multiple-worker-coordination. |
-| 69 | Difficult | No world without you | Oh Yes! More Lemmings! | Worker roles: basher + builder + digger; builder + climber. Job changes: basher → builder; basher → digger; climber → builder; digger → basher. Three-step plans: digger → basher → builder. Also practise multiple-worker-coordination. |
-| 70 | Difficult | Separate Ways | Holiday Lemmings 1994 | Worker roles: basher; builder. |
-| 71 | Difficult | Rules to fall | Oh Yes! More Lemmings! | Worker roles: digger + floater; floater. Job changes: digger → floater. |
-| 72 | Difficult | Plethora of Presents | Holiday Lemmings 1994 | Worker roles: basher; basher + builder; miner. Job changes: basher → builder. |
-| 73 | Difficult | Lemmings Up High | Holiday Lemmings 1993 | Worker roles: basher + builder; builder. Job changes: builder → basher. Also practise release-rate-manipulation. |
-| 74 | Difficult | Undercover Lemming | Oh No! More Lemmings | Worker roles: basher + digger + miner. Job changes: basher → miner; digger → miner; miner → basher; miner → digger. Three-step plans: basher → miner → digger; digger → miner → basher. |
-| 75 | Difficult | A Single Lemming... | Holiday Lemmings 1993 | Worker roles: builder + digger. Job changes: digger → builder. Also practise release-rate-manipulation. |
-| 76 | Difficult | Lemming about town | Oh No! More Lemmings | Combine a long single-worker sequence with a restricted skill budget. |
-| 77 | Difficult | Hunt the Nessy.... | Lemmings | Worker roles: basher + builder + miner; builder + digger. Job changes: basher → miner; builder → basher; digger → builder; miner → builder. Three-step plans: basher → miner → builder; builder → basher → miner. Also practise multiple-worker-coordination. |
-| 78 | Difficult | Quest for Kieran | Holiday Lemmings 1994 | Worker roles: builder; miner. Also practise multiple-worker-coordination, release-rate-manipulation. |
-| 79 | Difficult | CindyLand | Holiday Lemmings 1994 | Worker roles: basher; blocker. Also practise multiple-worker-coordination, release-rate-manipulation. |
-| 80 | Difficult | Steel Ice Span | Holiday Lemmings 1994 | Worker roles: builder; builder + climber. Job changes: climber → builder. Also practise multiple-worker-coordination, release-rate-manipulation. |
-| 81 | Difficult | Up, up, and away! | Holiday Lemmings 1994 | Worker roles: basher + builder; builder. Job changes: builder → basher. Also practise multiple-worker-coordination, release-rate-manipulation. |
-| 82 | Difficult | How on Earth? | Oh No! More Lemmings | Worker roles: blocker; blocker + builder; builder. Job changes: builder → blocker. Also practise multiple-worker-coordination, release-rate-manipulation. |
-| 83 | Difficult | Presents of Mind | Holiday Lemmings 1993 | Worker roles: basher + builder; builder. Job changes: basher → builder. Also practise multiple-worker-coordination, release-rate-manipulation. |
-| 84 | Difficult | Inside the bone | Oh Yes! More Lemmings! | Worker roles: basher + builder; builder. Job changes: basher → builder; builder → basher. Also practise multiple-worker-coordination. |
-| 85 | Difficult | Evacuating a coal mine | Oh Yes! More Lemmings! | Worker roles: basher + builder + climber + miner; builder. Job changes: basher → miner; builder → basher; builder → miner; climber → basher; miner → builder. Three-step plans: basher → miner → builder; climber → basher → miner; miner → builder → basher. |
-| 86 | Difficult | This Corrosion | Oh No! More Lemmings | Worker roles: builder; builder + digger; digger. Job changes: digger → builder. Also practise multiple-worker-coordination, release-rate-manipulation. |
-| 87 | Difficult | Marshmallow Land | Holiday Lemmings 1993 | Combine measured timing pressure with concurrent work. |
-| 88 | Difficult | Libra | Oh Yes! More Lemmings! | Worker roles: blocker + bomber. Job changes: blocker → bomber. |
-| 89 | Difficult | Float and Bomb | brickpk1 | Worker roles: bomber; floater. Also practise release-rate-manipulation. |
-| 90 | Difficult | Jungle!! | CRISFN01 | Worker roles: blocker + bomber; builder. Job changes: blocker → bomber. |
-| 91 | Difficult | Lake in the Cavern | CPs Level Pack | Worker roles: basher + bomber; bomber. Job changes: basher → bomber. Also practise release-rate-manipulation. |
-| 92 | Difficult | BOMB!!!!!!!!! | Lemmy556 My little levels | Worker roles: blocker; bomber. Also practise release-rate-manipulation. |
-| 93 | Difficult | Subterranean Exit | Pieuws Lemmings 2007 Peace | Worker roles: bomber; bomber + miner. Job changes: miner → bomber. Also practise release-rate-manipulation. |
-| 94 | Difficult | It's a Pipe-World | Pieuws Lemmings 2007 Peace | Worker roles: basher; bomber; builder. Also practise release-rate-manipulation. |
-| 95 | Difficult | Expansion & compression | CRISFN09 | Worker roles: basher; bomber. Also practise release-rate-manipulation. |
-| 96 | Difficult | PRACTICE: DIRECTIONNAL ARROWS | Mikepak07 | Worker roles: basher + climber; blocker + bomber + climber. Job changes: blocker → bomber; climber → basher; climber → blocker. Three-step plans: climber → blocker → bomber. |
-| 97 | Difficult | Sacrifice | ssam1221s Lemmings Tame | Worker roles: blocker + bomber. Job changes: blocker → bomber. Also practise release-rate-manipulation. |
-| 98 | Difficult | Be careful! | CRISFN01 | Worker roles: blocker; blocker + bomber; builder. Job changes: blocker → bomber. Also practise release-rate-manipulation. |
-| 99 | Difficult | Six Feet Under | Lemmings Plus DOS Project Medi | Worker roles: blocker + bomber; bomber. Job changes: blocker → bomber. Also practise release-rate-manipulation. |
-| 100 | Difficult | The Emerald Grotto | Pieuws Lemmings 2007 Peace | Worker roles: blocker; blocker + bomber; blocker + builder; builder. Job changes: blocker → bomber; builder → blocker. Also practise release-rate-manipulation. |
-| 101 | Difficult | Down, Down, down in the ground | beta | Worker roles: bomber; builder. Also practise release-rate-manipulation. |
-| 102 | Difficult | The pit of doom | CRISFN13 | Worker roles: blocker + bomber; builder. Job changes: blocker → bomber. Also practise release-rate-manipulation. |
-| 103 | Difficult | Lovely jubilee | Genesis Tricky | Worker roles: basher + miner; bomber. Job changes: miner → basher. Also practise release-rate-manipulation. |
-| 104 | Difficult | Just four in each room | CRISFN09 | Change a worker’s job while managing another working region. |
-| 105 | Difficult | Rising to Heaven | Pieuws Lemmings 2007 Artful | Give a permanent skill to one worker while other workers modify the route. |
-| 106 | Difficult | Suicidal Tendencies | Oh No! More Lemmings | Worker roles: blocker; blocker + bomber; builder + miner. Job changes: blocker → bomber; builder → miner. Also practise release-rate-manipulation. |
-| 107 | Difficult | Santus Lemmingus | Holiday Lemmings 1993 | Worker roles: basher + digger; builder + climber + digger + floater. Job changes: climber → floater; digger → basher; digger → builder; floater → digger. Three-step plans: climber → floater → digger; floater → digger → builder. |
-| 108 | Difficult | Watch right or left (Part two) | Oh Yes! More Lemmings! | Worker roles: basher + bomber + builder + digger; bomber. Job changes: basher → bomber; basher → builder; builder → basher; digger → basher. Three-step plans: builder → basher → bomber; digger → basher → builder. Also practise release-rate-manipulation. |
-| 109 | Difficult | Every Lemming for himself!!! | Lemmings | Worker roles: basher; bomber + builder; builder + climber. Job changes: bomber → builder; climber → builder. Also practise multiple-worker-coordination. |
-| 110 | Difficult | Inroducing SUPERLEMMING | Oh No! More Lemmings | Worker roles: basher + builder + climber + digger + miner. Job changes: basher → climber; builder → basher; builder → digger; climber → digger; digger → builder; miner → basher. Three-step plans: basher → climber → digger; climber → digger → builder; digger → builder → basher; miner → basher → climber. |
-| 111 | Difficult | Up on the Rooftops | Holiday Lemmings 1994 | Worker roles: builder; builder + climber + floater. Job changes: climber → floater; floater → builder. Three-step plans: climber → floater → builder. Also practise multiple-worker-coordination, release-rate-manipulation. |
-| 112 | Difficult | Sir Edmund Hilemming | Holiday Lemmings 1994 | Worker roles: builder; builder + digger; builder + miner. Job changes: builder → miner; digger → builder; miner → builder. Also practise multiple-worker-coordination, release-rate-manipulation. |
-| 113 | Difficult | The gate trap Lemmings. | Oh Yes! More Lemmings! | Worker roles: basher; basher + builder + digger; blocker; builder. Job changes: basher → builder; builder → basher; digger → basher. Three-step plans: digger → basher → builder. Also practise multiple-worker-coordination. |
-| 114 | Difficult | Three-way Call | GARJEN01 | Combine a high resource pressure with work across several regions. |
-| 115 | Difficult | Ten Green Lemmings | cLemmings Taxing | Bridge moderate coordination and expert concurrency with a busier familiar-skill route. |
-| 116 | Difficult | Doomsday | Oh Yes! More Lemmings! | Worker roles: blocker + bomber; blocker + bomber + builder; blocker + builder; builder; climber. Job changes: blocker → bomber; builder → blocker. Three-step plans: builder → blocker → bomber. |
-| 117 | Difficult | Tribute to M.C.Escher (remake) | LEMREMAKE | Worker roles: basher + builder + climber + floater + miner; builder + miner. Job changes: basher → builder; builder → miner; climber → floater; floater → builder; miner → basher. Three-step plans: builder → miner → basher; climber → floater → builder; floater → builder → miner; miner → basher → builder. Also practise release-rate-manipulation. |
-| 118 | Difficult | One way digging to freedom | Lemmings | Worker roles: basher + builder + climber + digger + floater. Job changes: basher → builder; basher → digger; basher → floater; builder → basher; climber → basher; digger → basher; digger → builder; floater → digger. Three-step plans: basher → floater → digger; climber → basher → digger; digger → basher → floater; digger → builder → basher; floater → digger → builder. |
-| 119 | Difficult | A ladder would be handy | Lemmings | Worker roles: basher + digger; builder + climber + floater + miner. Job changes: builder → climber; builder → miner; climber → builder; digger → basher; floater → builder. Three-step plans: climber → builder → miner; floater → builder → climber. Also practise multiple-worker-coordination. |
-| 120 | Difficult | Happy New Year! | Holiday Lemmings 1994 | Worker roles: basher; basher + bomber + builder; basher + builder; blocker; blocker + builder. Job changes: basher → bomber; basher → builder; builder → basher; builder → blocker. Three-step plans: builder → basher → bomber. Also practise multiple-worker-coordination. |
-| 121 | Difficult | SPAM,SPAM,SPAM,EGG AND LEMMING | Oh No! More Lemmings | Worker roles: basher + builder + floater + miner; blocker; blocker + bomber. Job changes: basher → miner; blocker → bomber; builder → basher; floater → builder; miner → builder. Three-step plans: basher → miner → builder; builder → basher → miner; floater → builder → basher. Also practise release-rate-manipulation. |
-| 122 | Difficult | Lemming Productions Present... | Oh No! More Lemmings | Worker roles: basher + bomber + builder + climber; blocker; blocker + bomber + climber; miner. Job changes: blocker → bomber; bomber → builder; bomber → climber; builder → basher; climber → bomber. Three-step plans: blocker → bomber → climber; bomber → builder → basher; climber → bomber → builder. Also practise multiple-worker-coordination. |
-| 123 | Difficult | The delivery service | ANTHPCK5 | Use five distinct skills in one worker’s sequence. |
-| 124 | Difficult | The moon cave | CRISFN01 | Worker roles: basher + builder; basher + miner; builder; builder + miner; miner. Job changes: basher → builder; builder → basher; miner → basher; miner → builder. Also practise multiple-worker-coordination, release-rate-manipulation. |
-| 125 | Difficult | Faithful Friends | GARJEN09 | Worker roles: basher + climber; basher + climber + digger + floater; climber; climber + miner. Job changes: basher → climber; climber → floater; climber → miner; digger → basher; digger → climber; floater → digger. Three-step plans: climber → floater → digger; digger → climber → floater; floater → digger → basher. Also practise multiple-worker-coordination. |
-| 126 | Difficult | A Beast of a level | Lemmings | Worker roles: basher; basher + blocker; basher + builder; builder + digger; builder + miner. Job changes: basher → builder; blocker → basher; builder → basher; digger → builder; miner → builder. |
-| 127 | Difficult | Ecsape From Nightmare | ssam1221s Lemmings Havoc | Worker roles: basher; basher + builder; builder. Job changes: basher → builder; builder → basher. Also practise multiple-worker-coordination, release-rate-manipulation. |
-| 128 | Difficult | Snow Lev 7 | ANTHPCK4 | Worker roles: blocker; builder + digger; builder + miner. Job changes: builder → digger; digger → builder; miner → builder. Also practise multiple-worker-coordination, release-rate-manipulation. |
-| 129 | Difficult | Seeing double! | PSP Special 11 26 of 36 | Worker roles: basher + builder; basher + builder + climber; basher + climber; blocker + bomber; climber. Job changes: basher → builder; blocker → bomber; builder → basher; builder → climber; climber → basher. Three-step plans: basher → builder → climber. Also practise release-rate-manipulation. |
-| 130 | Difficult | Water processing plant | Oh Yes! More Lemmings! | Worker roles: basher + builder + miner; builder; builder + floater. Job changes: builder → miner; floater → builder; miner → basher. Three-step plans: builder → miner → basher. Also practise multiple-worker-coordination, release-rate-manipulation. |
-| 131 | Difficult | Just a minute (Part Three) | Oh Yes! More Lemmings! | Worker roles: basher + climber + miner; basher + digger. Job changes: basher → miner; climber → miner; digger → basher; miner → basher. Three-step plans: climber → miner → basher. Also practise multiple-worker-coordination, release-rate-manipulation. |
-| 132 | Difficult | It`s the price you have to pay | Oh No! More Lemmings | Worker roles: basher; basher + builder + digger + miner; basher + builder + miner. Job changes: basher → builder; builder → digger; digger → miner; miner → basher. Three-step plans: builder → digger → miner; digger → miner → basher; miner → basher → builder. Also practise multiple-worker-coordination, release-rate-manipulation. |
-| 133 | Difficult | X marks the spot | Lemmings | Worker roles: builder; builder + climber + miner; miner. Job changes: builder → climber; builder → miner; climber → miner; miner → builder. Three-step plans: builder → climber → miner; climber → miner → builder. Also practise multiple-worker-coordination. |
-| 134 | Difficult | Emmings!  (No L) | Holiday Lemmings 1994 | Worker roles: builder; builder + climber + digger; builder + climber + digger + miner; miner. Job changes: climber → digger; digger → builder; miner → climber. Three-step plans: climber → digger → builder; miner → climber → digger. Also practise multiple-worker-coordination, release-rate-manipulation. |
-| 135 | Difficult | Were ready for landing | Giga pack 04 | Worker roles: basher + builder; builder; builder + climber + miner; digger; miner. Job changes: basher → builder; builder → basher; builder → miner; climber → builder; miner → builder. Three-step plans: climber → builder → miner. Also practise multiple-worker-coordination. |
-| 136 | Difficult | Compression Method 1 | Lemmings | Worker roles: basher; basher + digger. Job changes: digger → basher. |
-| 137 | Difficult | Lemming City | Pieuws Lemmings 2007 Awkward | Worker roles: basher; basher + builder + climber + floater. Job changes: basher → builder; basher → floater; builder → basher; climber → basher; floater → basher. Three-step plans: climber → basher → floater; floater → basher → builder. Also practise multiple-worker-coordination. |
-| 138 | Difficult | Patience | Lemmings | Worker roles: blocker + climber; builder; builder + climber + digger + floater + miner. Job changes: blocker → climber; builder → climber; builder → digger; climber → floater; digger → miner; floater → builder; miner → builder. Three-step plans: builder → climber → floater; builder → digger → miner; climber → floater → builder; digger → miner → builder; floater → builder → digger. Also practise multiple-worker-coordination. |
-| 139 | Difficult | Go Thataway! | Holiday Lemmings 1994 | Worker roles: basher + builder + climber + floater. Job changes: builder → basher; climber → floater; floater → builder. Three-step plans: climber → floater → builder; floater → builder → basher. Also practise release-rate-manipulation. |
-| 140 | Difficult | Science from the 4th dimension | Mikes Lemmix Pack | Worker roles: basher + blocker; basher + builder + climber; basher + digger; blocker; blocker + climber; digger; miner. Job changes: blocker → basher; builder → basher; climber → blocker; climber → builder; digger → basher. Three-step plans: climber → builder → basher. Also practise release-rate-manipulation. |
-| 141 | Difficult | Fall and no life (Part Two) | Oh Yes! More Lemmings! | Worker roles: basher; basher + builder + floater + miner; builder; miner. Job changes: basher → builder; basher → miner; builder → basher; floater → builder; miner → basher. Three-step plans: builder → basher → miner; floater → builder → basher; miner → basher → builder. Also practise multiple-worker-coordination. |
-| 142 | Difficult | Four Play | Holiday Lemmings 1994 | Worker roles: basher + builder + digger; digger. Job changes: basher → builder; digger → basher. Three-step plans: digger → basher → builder. Also practise multiple-worker-coordination, release-rate-manipulation. |
-| 143 | Expert | Mind the step..... | Lemmings | Worker roles: basher + builder + digger. Job changes: basher → digger; builder → basher. Three-step plans: builder → basher → digger. |
-| 144 | Expert | The Steel Mines of Kessel | Lemmings | Worker roles: blocker + builder; bomber; builder. Job changes: blocker → builder; builder → blocker. |
-| 145 | Expert | Dr Lemminggood | Oh No! More Lemmings | Worker roles: bomber; builder. Also practise multiple-worker-coordination, release-rate-manipulation. |
-| 146 | Expert | Lemming Net | Lemmings Plus DOS Project Wimpy | Apply familiar skills with demanding assignment timing. |
-| 147 | Expert | It`s all a matter of timing | Oh No! More Lemmings | Apply the learned techniques across highly concurrent work. |
-| 148 | Expert | Time to get up! | Lemmings | Manage a route with higher measured coordination demands. |
-| 149 | Expert | ROCKY VI | Oh No! More Lemmings | Worker roles: basher + builder; bomber + builder; builder. Job changes: basher → builder; builder → bomber. Also practise release-rate-manipulation. |
-| 150 | Expert | Got anything....Lemmingy??? | Oh No! More Lemmings | Worker roles: builder; digger. Also practise multiple-worker-coordination, release-rate-manipulation. |
-| 151 | Expert | DON`T PANIC | Oh No! More Lemmings | Worker roles: basher + builder + digger. Job changes: basher → builder; builder → basher; builder → digger. Three-step plans: basher → builder → digger. Also practise release-rate-manipulation. |
-| 152 | Expert | The Great Lemming Caper | Lemmings | Worker roles: basher + builder; basher + climber + floater. Job changes: basher → climber; builder → basher; floater → basher. Three-step plans: floater → basher → climber. Also practise multiple-worker-coordination. |
-| 153 | Expert | Take care, Sweetie | Oh No! More Lemmings | Worker roles: builder + climber. Job changes: builder → climber. |
-| 154 | Expert | Who`s That Lemming | Oh No! More Lemmings | Worker roles: basher; blocker + bomber + floater; bomber + climber; builder; builder + floater; climber; floater; miner. Job changes: blocker → bomber; bomber → floater; builder → floater; climber → bomber. Three-step plans: blocker → bomber → floater. |
-| 155 | Expert | SUNSOFT Special | Oh Yes! More Lemmings! | Worker roles: basher + builder + digger; blocker; blocker + bomber. Job changes: basher → builder; blocker → bomber; builder → basher; digger → basher. Three-step plans: digger → basher → builder. Also practise release-rate-manipulation. |
-| 156 | Expert | Time waits for no Lemming | Oh No! More Lemmings | Worker roles: basher + blocker; blocker; builder; digger. Job changes: basher → blocker. Also practise multiple-worker-coordination, release-rate-manipulation. |
-| 157 | Expert | NO PROBLEM | Oh No! More Lemmings | Worker roles: basher + builder + miner. Job changes: basher → builder; basher → miner; builder → basher; builder → miner; miner → builder. Three-step plans: basher → builder → miner; builder → basher → miner; miner → builder → basher. Also practise release-rate-manipulation. |
-| 158 | Expert | DIGGING FOR VICTORY | Oh No! More Lemmings | Control crowd spacing through a route that uses five skills. |
-| 159 | Expert | Lemming Rhythms | Oh No! More Lemmings | Worker roles: basher + builder + miner. Job changes: basher → builder; builder → basher; builder → miner; miner → builder. Three-step plans: basher → builder → miner; miner → builder → basher. Also practise release-rate-manipulation. |
-| 160 | Expert | The Stack | Oh No! More Lemmings | Worker roles: builder; builder + climber + digger. Job changes: builder → digger; climber → builder; climber → digger; digger → builder. Three-step plans: climber → builder → digger; climber → digger → builder. Also practise multiple-worker-coordination. |
-| 161 | Expert | KEEP ON TRUCKING | Oh No! More Lemmings | Combine a complex multi-skill route with high resource pressure. |
-| 162 | Expert | Wild Lemmings | Oh No More cLemmings Wild | Worker roles: blocker + bomber; builder + digger + floater + miner. Job changes: blocker → bomber; builder → miner; digger → floater; floater → builder; miner → builder. Three-step plans: digger → floater → builder; floater → builder → miner. |
-| 163 | Expert | Just A Quicky | Oh No! More Lemmings | Worker roles: basher + builder + digger + miner. Job changes: basher → builder; basher → digger; builder → basher; builder → miner; digger → builder; miner → builder; miner → digger. Three-step plans: basher → builder → miner; basher → digger → builder; builder → basher → digger; digger → builder → basher; miner → builder → basher; miner → digger → builder. Also practise release-rate-manipulation. |
-| 164 | Expert | Have a nice day! | Lemmings | Worker roles: basher; blocker; builder; builder + digger + floater; builder + miner. Job changes: builder → digger; builder → miner; digger → builder; floater → builder. Three-step plans: floater → builder → digger. Also practise multiple-worker-coordination. |
-| 165 | Expert | Tubular Lemmings | Oh No! More Lemmings | Worker roles: builder + digger. Job changes: builder → digger; digger → builder. Also practise multiple-worker-coordination, release-rate-manipulation. |
-| 166 | Expert | Save Me | Lemmings | Worker roles: basher + blocker + builder + digger; basher + builder + digger; blocker; blocker + builder. Job changes: basher → digger; blocker → basher; blocker → builder; builder → basher; builder → blocker; builder → digger; digger → builder. Three-step plans: basher → digger → builder; blocker → basher → digger; digger → builder → basher; digger → builder → blocker. |
-| 167 | Expert | It`s a tight fit! | Oh No! More Lemmings | Worker roles: builder + climber + floater; climber + floater. Job changes: climber → floater; floater → builder. Three-step plans: climber → floater → builder. Also practise release-rate-manipulation. |
-| 168 | Expert | There's a lot of them about | Lemmings | Worker roles: blocker + builder; builder; builder + climber; miner. Job changes: builder → blocker; builder → climber; climber → builder. Also practise multiple-worker-coordination. |
-| 169 | Expert | Not just a pretty Lemming | Oh No! More Lemmings | Worker roles: basher; basher + miner; blocker + bomber + climber; bomber + floater; builder; climber; floater; miner. Job changes: blocker → bomber; bomber → climber; bomber → floater; miner → basher. Three-step plans: blocker → bomber → climber. Also practise multiple-worker-coordination. |
-| 170 | Expert | Creature Discomforts | Oh No! More Lemmings | Worker roles: basher + builder + climber + miner; blocker; blocker + bomber; builder; builder + climber + digger; climber. Job changes: basher → miner; blocker → bomber; builder → climber; climber → builder; digger → builder; miner → climber. Three-step plans: basher → miner → climber; digger → builder → climber; miner → climber → builder. Also practise multiple-worker-coordination. |
-| 171 | Expert | ONWARD AND UPWARD | Oh No! More Lemmings | Worker roles: basher + bomber + builder + climber + miner; blocker + bomber; blocker + bomber + climber; bomber. Job changes: basher → bomber; basher → builder; blocker → bomber; builder → basher; climber → blocker; climber → miner; miner → basher. Three-step plans: builder → basher → bomber; climber → blocker → bomber; climber → miner → basher; miner → basher → builder. Also practise release-rate-manipulation. |
-| 172 | Expert | And now this... | Oh No! More Lemmings | Worker roles: basher; basher + climber; blocker + bomber + builder + digger + floater; builder; climber; floater. Job changes: basher → climber; blocker → bomber; bomber → floater; builder → blocker; climber → basher; digger → builder. Three-step plans: blocker → bomber → floater; builder → blocker → bomber; digger → builder → blocker. |
-| 173 | Expert | I have a cunning plan | Lemmings | Worker roles: basher + blocker; basher + builder + digger; blocker + builder; builder + digger + miner. Job changes: basher → blocker; blocker → builder; builder → basher; builder → digger; builder → miner; digger → builder; digger → miner; miner → builder. Three-step plans: builder → digger → miner; digger → builder → basher; digger → miner → builder; miner → builder → digger. |
-| 174 | Expert | Lemmings in a situation | Oh No! More Lemmings | Worker roles: basher + bomber + builder + climber + digger + floater. Job changes: basher → builder; builder → basher; builder → digger; climber → floater; digger → bomber; digger → builder; floater → builder. Three-step plans: basher → builder → digger; builder → digger → bomber; climber → floater → builder; digger → builder → basher; floater → builder → digger. |
-| 175 | Expert | Snuggle up to a Lemming | Oh No! More Lemmings | Worker roles: basher + digger; blocker + bomber; blocker + bomber + climber + miner; bomber; climber; digger; floater. Job changes: blocker → bomber; bomber → climber; digger → basher; miner → blocker. Three-step plans: blocker → bomber → climber; miner → blocker → bomber. Also practise multiple-worker-coordination. |
-| 176 | Expert | Origins and Lemmings | Lemmings | Carry permanent skills through a complex construction sequence. |
-| 177 | Expert | Oogilemming! | Holiday Lemmings 1993 | Worker roles: basher + builder + digger; blocker; builder + climber + floater. Job changes: basher → builder; builder → basher; climber → floater; digger → builder; floater → builder. Three-step plans: climber → floater → builder; digger → builder → basher. Also practise multiple-worker-coordination, release-rate-manipulation. |
-| 178 | Expert | Get the Point? | Holiday Lemmings 1994 | Worker roles: blocker + floater; builder; builder + digger + floater; builder + floater; floater. Job changes: digger → builder; floater → blocker; floater → builder; floater → digger. Three-step plans: floater → digger → builder. Also practise multiple-worker-coordination, release-rate-manipulation. |
-| 179 | Expert | Merry Christmas Mr Lemming | Xmas Lemmings 1991 | Worker roles: basher + builder + climber + digger + miner. Job changes: basher → builder; basher → climber; basher → miner; builder → basher; builder → miner; climber → digger; digger → builder; miner → basher; miner → builder. Three-step plans: basher → builder → miner; basher → climber → digger; basher → miner → builder; builder → basher → miner; builder → miner → basher; climber → digger → builder; digger → builder → miner; miner → basher → builder. |
-| 180 | Expert | The Far Side | Lemmings | Worker roles: basher + builder + climber + digger + miner. Job changes: basher → builder; basher → digger; builder → basher; builder → climber; builder → digger; climber → digger; digger → basher; digger → builder; digger → miner; miner → builder; miner → digger. Three-step plans: basher → digger → builder; builder → basher → digger; builder → climber → digger; builder → digger → basher; builder → digger → miner; climber → digger → miner; digger → basher → builder; digger → miner → builder; miner → builder → digger. |
-| 181 | Expert | Stepping Stones | Lemmings | Worker roles: basher + blocker + digger; basher + builder + climber + digger + miner; basher + miner; blocker; builder. Job changes: basher → digger; basher → miner; blocker → digger; builder → miner; climber → miner; digger → basher; digger → builder; miner → climber; miner → digger. Three-step plans: basher → digger → builder; blocker → digger → basher; climber → miner → digger; digger → builder → miner; miner → digger → basher. |
-| 182 | Expert | Don't let your eyes deceive you | Lemmings | Worker roles: blocker + climber + floater; builder; builder + climber + digger + floater + miner; builder + climber + floater; climber + digger + floater + miner. Job changes: blocker → floater; builder → digger; climber → floater; digger → miner; floater → blocker; floater → builder; floater → climber; floater → digger; miner → climber. Three-step plans: blocker → floater → climber; builder → digger → miner; climber → floater → blocker; climber → floater → builder; digger → miner → climber; floater → builder → digger; floater → digger → miner. Also practise multiple-worker-coordination. |
-| 183 | Expert | Rendezvous at the Mountain | Lemmings | Worker roles: builder; builder + climber + digger + miner; builder + climber + miner; builder + digger; climber + digger + miner. Job changes: builder → digger; builder → miner; climber → builder; climber → digger; climber → miner; digger → builder; digger → miner; miner → builder. Three-step plans: climber → builder → digger; climber → digger → miner; climber → miner → builder; digger → builder → miner. Also practise multiple-worker-coordination. |
-| 184 | Expert | The Fast Food Kitchen... | Lemmings | Worker roles: basher; basher + blocker + builder + digger; basher + builder; basher + builder + digger; basher + miner; blocker; builder; builder + climber + digger; builder + climber + floater. Job changes: basher → builder; basher → digger; blocker → digger; builder → basher; climber → builder; climber → digger; digger → basher; digger → builder; floater → climber; miner → basher. Three-step plans: basher → digger → builder; blocker → digger → builder; climber → digger → builder; digger → builder → basher; floater → climber → builder. Also practise multiple-worker-coordination. |
-| 185 | Expert | Chill out! | Oh No! More Lemmings | Combine long worker sequences, crowd spacing and concurrent work. |
-| 186 | Expert | AAAAAARRRRRRGGGGGGHHHHHH!!!!!! | Oh No! More Lemmings | Worker roles: builder; climber; climber + miner. Job changes: climber → miner. Also practise multiple-worker-coordination, release-rate-manipulation. |
-| 187 | Expert | It Came Upon a Lemnight Clear | Holiday Lemmings 1993 | Worker roles: basher + bomber + builder + climber; blocker; builder; digger + miner. Job changes: basher → builder; builder → basher; builder → bomber; climber → builder; digger → miner. Three-step plans: basher → builder → bomber; climber → builder → basher. Also practise multiple-worker-coordination, release-rate-manipulation. |
-| 188 | Expert | Zygoptera | AkseliPack01 | Worker roles: basher + digger; blocker; bomber; builder; climber; miner. Job changes: basher → digger. Also practise multiple-worker-coordination, release-rate-manipulation. |
-| 189 | Expert | Waste High! | ANTHPCK5 | Worker roles: blocker + bomber; builder + climber + floater + miner; builder + digger. Job changes: blocker → bomber; builder → climber; builder → miner; climber → builder; digger → builder; floater → builder; miner → builder. Three-step plans: climber → builder → miner; floater → builder → climber. Also practise multiple-worker-coordination, release-rate-manipulation. |
-| 190 | Expert | A group of entrances | Genesis Mayhem | Worker roles: basher + builder; basher + climber; basher + digger; blocker + bomber; builder; miner. Job changes: basher → builder; basher → digger; blocker → bomber; builder → basher; climber → basher; digger → basher. Also practise multiple-worker-coordination, release-rate-manipulation. |
-| 191 | Expert | Three Birds With One Stone | Lemmings Plus DOS Project PSYCHO | Worker roles: blocker + bomber + climber + floater; bomber + builder + climber + digger; bomber + climber + floater; builder; climber + floater + miner; floater. Job changes: blocker → bomber; builder → digger; climber → builder; climber → floater; digger → bomber; floater → blocker; floater → bomber; floater → miner. Three-step plans: builder → digger → bomber; climber → builder → digger; climber → floater → blocker; climber → floater → bomber; climber → floater → miner; floater → blocker → bomber. Also practise multiple-worker-coordination, release-rate-manipulation. |
-| 192 | Expert | Operation Rescue | CPs Level Pack | Combine substantial coordination with long worker sequences. |
+| Step | Reference | Classic level | Stage |
+| ---: | --- | --- | --- |
+| 1 | Gentle 1 | Just dig! | Fun |
+| 2 | Gentle 2 | Only floaters can survive this | Fun |
+| 3 | Gentle 3 | Tailor-made for blockers | Fun |
+| 4 | Gentle 4 | Now use miners and climbers | Fun |
+| 5 | Gentle 5 | You need bashers this time | Fun |
+| 6 | Gentle 6 | A task for blockers and bombers | Fun |
+| 7 | Gentle 7 | Builders will help you here | Fun |
+| 8 | Gentle 8 | Snuggle up to a Lemming | Fun |
+| 9 | Gentle 9 | Get a little extra help | Fun |
+| 10 | Gentle 10 | Downwardly Mobile Lemmings | Fun |
+| 11 | Gentle 11 | Keep your hair on Mr. Lemming | Fun |
+| 12 | Gentle 16 | A Beast of a level | Fun |
+| 13 | Gentle 17 | You Live and Lem | Fun |
+| 14 | Gentle 20 | Patience | Fun |
+| 15 | Gentle 22 | Let's be careful out there | Fun |
+| 16 | Gentle 24 | Rainbow Island | Fun |
+| 17 | Gentle 25 | The Crankshaft | Fun |
+| 18 | Gentle 26 | Careless clicking costs lives | Fun |
+| 19 | Gentle 27 | Quest for Kieran | Fun |
+| 20 | Gentle 30 | Turn around young lemmings! | Fun |
+| 21 | Gentle 31 | Doomsday | Fun |
+| 22 | Quirky 1 | PoP YoR ToP!!! | Fun |
+| 23 | Quirky 2 | It's Lemmingentry Watson | Fun |
+| 24 | Quirky 6 | Just A Quicky | Intermediate |
+| 25 | Quirky 9 | Exodus! | Intermediate |
+| 26 | Quirky 10 | The Needs of the Many... | Intermediate |
+| 27 | Quirky 11 | DON`T PANIC | Intermediate |
+| 28 | Quirky 13 | Haunted botanical garden | Intermediate |
+| 29 | Quirky 14 | Meeting Adjourned | Intermediate |
+| 30 | Quirky 15 | Plethora of Presents | Intermediate |
+| 31 | Quirky 18 | One way or another | Intermediate |
+| 32 | Quirky 20 | Perseverance | Intermediate |
+| 33 | Quirky 21 | The Long Way Around | Intermediate |
+| 34 | Quirky 22 | The Far Side | Intermediate |
+| 35 | Quirky 23 | Emmings!  (No L) | Intermediate |
+| 36 | Quirky 26 | Take care, Sweetie | Intermediate |
+| 37 | Quirky 27 | The Island of the Wicker people | Intermediate |
+| 38 | Quirky 30 | Izzie Wizzie lemmings get busy | Intermediate |
+| 39 | Quirky 31 | Cascade | Intermediate |
+| 40 | Quirky 32 | And then there were four.... | Intermediate |
+| 41 | Zany 3 | Last one out is a rotten egg! | Intermediate |
+| 42 | Zany 5 | Watch out, there`s traps about | Intermediate |
+| 43 | Zany 6 | Compression Method 1 | Intermediate |
+| 44 | Zany 8 | Lemmy in the cold, cold ground | Difficult |
+| 45 | Zany 10 | Flow Control | Difficult |
+| 46 | Zany 18 | KEEP ON TRUCKING | Difficult |
+| 47 | Zany 19 | Postcard from Lemmingland | Difficult |
+| 48 | Zany 20 | Dolly Dimple | Difficult |
+| 49 | Zany 21 | Mutiny On The Bounty | Difficult |
+| 50 | Zany 22 | SNOW JOKE | Difficult |
+| 51 | Zany 23 | ONWARD AND UPWARD | Difficult |
+| 52 | Zany 24 | I have a cunning plan | Difficult |
+| 53 | Zany 26 | Across The Gap | Difficult |
+| 54 | Zany 28 | Worra load of old blocks! | Difficult |
+| 55 | Zany 29 | Four Play | Difficult |
+| 56 | Zany 30 | Got anything....Lemmingy??? | Difficult |
+| 57 | Zany 32 | The North Poles | Difficult |
+| 58 | Manic 2 | The Lemming Funhouse | Difficult |
+| 59 | Manic 3 | If at first you don`t succeed.. | Difficult |
+| 60 | Manic 4 | No world without you | Difficult |
+| 61 | Manic 5 | Synchronised Lemming | Difficult |
+| 62 | Manic 6 | Chill out! | Difficult |
+| 63 | Manic 7 | Down the tube | Difficult |
+| 64 | Manic 8 | Is this a circus? | Difficult |
+| 65 | Manic 9 | AAAAAARRRRRRGGGGGGHHHHHH!!!!!! | Difficult |
+| 66 | Manic 10 | ROCKY VI | Difficult |
+| 67 | Manic 11 | With a twist of lemming please | Difficult |
+| 68 | Manic 12 | Steel Block Party | Difficult |
+| 69 | Manic 13 | Upsidedown World | Difficult |
+| 70 | Manic 14 | Come on over to my place | Difficult |
+| 71 | Manic 15 | THE SILENCE OF THE LEMMINGS | Difficult |
+| 72 | Manic 17 | Just a Minute... | Difficult |
+| 73 | Manic 18 | The gate trap Lemmings. | Difficult |
+| 74 | Manic 19 | Poles Apart | Difficult |
+| 75 | Manic 24 | The race against cliches | Expert |
+| 76 | Manic 26 | Triple Trouble | Expert |
+| 77 | Manic 29 | Just a Minute (Part Two) | Expert |
+| 78 | Manic 31 | Where Lemmings Dare | Expert |
+| 79 | Manic 32 | Temple of Love | Expert |
+| 80 | Lunatic 1 | It`s hero time! | Expert |
+| 81 | Lunatic 2 | The Boiler Room | Expert |
+| 82 | Lunatic 3 | Anxiety | Expert |
+| 83 | Lunatic 4 | No added colours or Lemmings | Expert |
+| 84 | Lunatic 5 | There`s madness in the method | Expert |
+| 85 | Lunatic 8 | Lemming about town | Expert |
+| 86 | Lunatic 9 | Evacuating a coal mine | Expert |
+| 87 | Lunatic 10 | Be more than just a number | Expert |
+| 88 | Lunatic 12 | Water processing plant | Expert |
+| 89 | Lunatic 13 | This Corrosion | Expert |
+| 90 | Lunatic 14 | Move on in two separate groups. | Expert |
+| 91 | Lunatic 17 | Creature Discomforts | Expert |
+| 92 | Lunatic 18 | Scaling the Heights | Expert |
+| 93 | Lunatic 21 | The Steel Mines of Kessel | Expert |
+| 94 | Lunatic 23 | The Great Lemming Caper | Expert |
+| 95 | Lunatic 27 | Let's go camping. | Expert |
+| 96 | Lunatic 28 | Lemmings in a situation | Expert |
+| 97 | Lunatic 29 | Save Me | Expert |
+| 98 | Lunatic 31 | I am A.T. | Expert |
+| 99 | Lunatic 32 | Fall and no life (Part Two) | Expert |

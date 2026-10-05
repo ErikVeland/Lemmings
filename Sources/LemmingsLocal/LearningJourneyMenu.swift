@@ -12,7 +12,8 @@ enum LearningJourneyLibrary {
     static let journey: LearningJourney? = {
         guard let url = Bundle.main.resourceURL?.appendingPathComponent("Progression/learning.json"),
               let data = try? Data(contentsOf: url),
-              let value = try? JSONDecoder().decode(LearningJourney.self, from: data) else { return nil }
+              let value = try? JSONDecoder().decode(LearningJourney.self, from: data),
+              value.placementPolicy == LearningJourney.communityPlacementPolicy else { return nil }
         return try? value.excluding(excludedIdentities).validated()
     }()
 }

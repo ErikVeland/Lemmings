@@ -103,62 +103,6 @@ guard pool.filter(\.official).count == uniqueOfficial.count else { throw LevelPl
 let poolEncoder = JSONEncoder(); poolEncoder.outputFormatting = [.prettyPrinted, .sortedKeys]
 let poolURL = project.appendingPathComponent(".build/learning-journey/pool.json")
 try poolEncoder.encode(pool).write(to: poolURL, options: .atomic)
-if ProcessInfo.processInfo.environment["LEARNING_EXPORT_POOL"] == "1" { exit(0) }
-struct Curriculum: Decodable {
-    struct Goal: Decodable { let identity: LevelCatalogueIdentity; let objective: String; let lesson: String }
-    let lessons: [Goal]
-}
-let curriculum = try JSONDecoder().decode(Curriculum.self, from: Data(contentsOf: project.appendingPathComponent("Artifacts/LearningJourney/curriculum.json")))
-struct EditorialExclusion: Decodable { let identity: LevelCatalogueIdentity }
-let excluded = Set(try JSONDecoder().decode([EditorialExclusion].self, from: Data(contentsOf:
-    project.appendingPathComponent("Resources/Progression/exclusions.json"))).map(\.identity))
-let goals = Dictionary(uniqueKeysWithValues: curriculum.lessons.filter { !excluded.contains($0.identity) }.map { ($0.identity, $0) })
-guard Set(curriculum.lessons.map(\.objective)).count == curriculum.lessons.count else { throw LevelPlaylistError.invalidPool }
-let selected = pool.filter { goals[$0.entry.identity] != nil }
-guard selected.count == goals.count else { throw LevelPlaylistError.invalidPool }
-let encoder = JSONEncoder(); encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
-let indexURL = URL(fileURLWithPath: args[3]).deletingLastPathComponent().appendingPathComponent("candidate-solutions.json")
-var witnesses = try JSONDecoder().decode([String: ClassicDOSReplay].self, from: Data(contentsOf: indexURL))
-let legacyURL = URL(fileURLWithPath: args[1]).deletingLastPathComponent().appendingPathComponent("verified-fan-replays.json")
-if let data = try? Data(contentsOf: legacyURL), let legacy = try? JSONDecoder().decode([ClassicDOSReplay].self, from: data) {
-    for replay in legacy {
-        let digest = SHA256.hash(data: try encoder.encode(replay))
-        witnesses[digest.description] = replay
-        witnesses[digest.map { String(format: "%02x", $0) }.joined()] = replay
-    }
-}
-let candidates = selected.map { row in
-    let replay = witnesses[row.profile.key.replayRevision] ?? witnesses[row.initialHash ?? ""]
-    let requiredAll = replay?.expected.map { $0.required == $0.released } ?? false
-    let skillAssignmentCount = replay?.events.reduce(into: 0) { count, event in
-        if case .assign = event.action { count += 1 }
-    }
-    return ProgressionCandidate(entry: row.entry, profile: row.profile, isOfficial: row.official,
-                                campaignOrder: row.order, requiresFullRescue: requiredAll,
-                                rankIsUnverified: !LearningJourney.hasRecognisedRank(for: row.entry,
-                                    sourceRank: row.profile.sourceRank),
-                                startingReleaseRate: row.startingReleaseRate,
-                                rescueRequirementRatio: row.rescueRequirementRatio,
-                                skillAssignmentCount: skillAssignmentCount)
-}
-let focuses = goals.mapValues(\.lesson)
-let objectives = goals.mapValues(\.objective)
-let journey = try LearningJourney.generate(candidates, focuses: focuses, objectives: objectives)
-let repeated = try LearningJourney.generate(candidates.reversed(), focuses: focuses, objectives: objectives)
-guard journey == repeated else { throw LevelPlaylistError.invalidSequence }
-// Keep each profile tied to the exact replay that produced its measurements.
-for row in selected where !row.official {
-    guard let replay = witnesses[row.profile.key.replayRevision], replay.expected?.didWin == true,
-          replay.initialStateHash == row.initialHash else { throw LevelPlaylistError.invalidEntry }
-    let digest = SHA256.hash(data: try encoder.encode(replay))
-    guard row.profile.key.replayRevision == digest.description || row.profile.key.replayRevision == digest.map({ String(format: "%02x", $0) }).joined() else {
-        throw LevelPlaylistError.invalidEntry
-    }
-}
-try encoder.encode(witnesses).write(to: indexURL, options: .atomic)
-let output = URL(fileURLWithPath: args[2])
-try FileManager.default.createDirectory(at: output.deletingLastPathComponent(), withIntermediateDirectories: true)
-try encoder.encode(journey).write(to: output, options: .atomic)
-let jumps = zip(journey.lessons, journey.lessons.dropFirst()).map { $1.demand - $0.demand }
-print("\(journey.lessons.count) lessons; \(selected.filter(\.official).count) official; \(selected.filter { !$0.official }.count) fan. Largest curriculum demand step: \(jumps.max() ?? 0). Support flags: \(journey.lessons.filter(\.needsSupport).count).")
-for lesson in journey.lessons.prefix(20) { print("\(Int(lesson.score)): \(lesson.entry.levelNameSnapshot) — \(lesson.focus)") }
+// This executable exports evidence only. Production placement is community-curated
+// by human_journey.py; the replay-only experimental generator cannot publish it.
+print("Exported \(pool.count) candidates for source and human-review audit.")

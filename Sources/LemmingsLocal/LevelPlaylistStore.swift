@@ -174,6 +174,7 @@ import NxlvKit
         self.file = file
         try load()
         try removeExcludedLearningLessons(LearningJourneyLibrary.excludedIdentities)
+        if let journey = LearningJourneyLibrary.journey { try migrateLearningJourney(journey) }
     }
 
     /// Retain run identity, owner and completed visits when an editorial lesson is withdrawn.
@@ -195,6 +196,21 @@ import NxlvKit
         if active == nil { document.activeRunHotSeatID = nil; document.activeRunL2Progress = nil }
         document.savedRuns = try savedRuns.compactMap { saved in
             guard let run = try revised(saved.run) else { changed = true; return nil }
+            changed = changed || run != saved.run
+            return SavedRun(run: run, hotSeatID: saved.hotSeatID, l2Progress: saved.l2Progress)
+        }
+        guard changed else { document = previous; return }
+        do { try save() } catch { document = previous; throw error }
+    }
+
+    func migrateLearningJourney(_ journey: LearningJourney) throws {
+        let previous = document
+        let active = try document.activeRun.flatMap { try journey.migrating($0) }
+        var changed = active != document.activeRun
+        document.activeRun = active
+        if active == nil { document.activeRunHotSeatID = nil; document.activeRunL2Progress = nil }
+        document.savedRuns = try savedRuns.compactMap { saved in
+            guard let run = try journey.migrating(saved.run) else { changed = true; return nil }
             changed = changed || run != saved.run
             return SavedRun(run: run, hotSeatID: saved.hotSeatID, l2Progress: saved.l2Progress)
         }

@@ -3628,6 +3628,48 @@ extension AppDelegate {
     try store.add(journey.playlist())
     playlistStoreCache = (arcade.records.activeProfileID, store)
     let entries = journey.lessons.map(\.entry)
+    // Migrate both Solo and Hot Seat queues without changing ownership or progress.
+    let migrationFile = directory.appendingPathComponent("migration.json")
+    let migrationStore = try LevelPlaylistStore(file: migrationFile)
+    try migrationStore.add(journey.playlist())
+    let oldPool = try LevelPool(id: "learning-11", summary: "Earlier journey")
+    let solo = try LevelSequenceRun(source: .playlist(LearningJourney.playlistID), pool: oldPool,
+      entries: Array(entries.prefix(3)), currentIndex: 1)
+    try migrationStore.startRun(solo, hotSeatID: nil)
+    let withdrawn = try LevelPlaylistEntry(identity: .init(engine: .classic, packID: "fan:withdrawn", levelID: "1"),
+      catalogueRevision: "test", sourceRevision: "test", packNameSnapshot: "Withdrawn", levelNameSnapshot: "Withdrawn", levelNumberSnapshot: 1)
+    let shared = try LevelSequenceRun(source: solo.source, pool: oldPool,
+      entries: [entries[0], withdrawn, entries[2]], currentIndex: 1)
+    try migrationStore.startRun(shared, hotSeatID: "shared-owner")
+    let progressBefore = migrationStore.learningProgress
+    try migrationStore.migrateLearningJourney(journey)
+    try check(migrationStore.activeRun?.id == shared.id && migrationStore.activeRunHotSeatID == "shared-owner"
+      && migrationStore.activeRun?.currentEntry.identity == entries[1].identity
+      && migrationStore.activeRun?.pool.id == LearningJourney.version,
+      "Community migration lost owner/run identity or retained a withdrawn lesson")
+    try check(migrationStore.savedRuns.first?.run.id == solo.id && migrationStore.savedRuns.first?.hotSeatID == nil
+      && migrationStore.savedRuns.first?.run.currentEntry.identity == entries[1].identity
+      && migrationStore.learningProgress == progressBefore,
+      "Community migration changed saved Solo ownership or fabricated progress")
+    let restored = try LevelPlaylistStore(file: migrationFile)
+    try check(restored.activeRun == migrationStore.activeRun && restored.savedRuns.map(\.run) == migrationStore.savedRuns.map(\.run)
+      && restored.savedRuns.map(\.hotSeatID) == migrationStore.savedRuns.map(\.hotSeatID),
+      "Community migration was not persistent and idempotent")
+    let futureRun = try LevelSequenceRun(source: solo.source, pool: .init(id: "learning-999", summary: "Future"), entries: [withdrawn])
+    try check(try journey.migrating(futureRun) == futureRun, "Community migration downgraded a future journey")
+    let custom = try LevelSequenceRun(source: .playlist(UUID()), pool: oldPool, entries: [withdrawn])
+    try check(try journey.migrating(custom) == custom, "Community migration changed a user playlist")
+    let finished = try LevelSequenceRun(source: solo.source, pool: oldPool, entries: entries + [withdrawn], currentIndex: entries.count)
+    try check(try journey.migrating(finished) == nil, "An exhausted revised path repeated completed visits")
+    var encoded = try JSONSerialization.jsonObject(with: JSONEncoder().encode(journey)) as! [String: Any]
+    var rows = encoded["lessons"] as! [[String: Any]]
+    var placement = rows[0]["placement"] as! [String: Any]
+    placement["sourceRevision"] = "stale"; rows[0]["placement"] = placement; encoded["lessons"] = rows
+    let invalid = try JSONDecoder().decode(LearningJourney.self, from: JSONSerialization.data(withJSONObject: encoded))
+    var rejected = false
+    do { _ = try invalid.validated() } catch { rejected = true }
+    try check(rejected, "Runtime accepted stale community placement evidence")
+    print("PASS community placement validation and saved Solo/Hot Seat migration")
     let first = entries[0].identity
     func waitForLaunch() async throws {
       for _ in 0..<3000 where playlistFanLoadTask != nil || levelBrowserLaunchTask != nil {

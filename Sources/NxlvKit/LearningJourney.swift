@@ -3,7 +3,8 @@ import Foundation
 /// A teaching order, independent of retail ranks. Estimates never certify human insight.
 public struct LearningJourney: Codable, Equatable, Sendable {
     public static let title = "Oh My! All Lemmings!"
-    public static let version = "learning-11"
+    public static let version = "learning-12"
+    public static let communityPlacementPolicy = "redux-community-1"
     public static let playlistID = UUID(uuidString: "80368144-659B-4697-B2D0-76894BF20B18")!
     public static let maximumScoreStep = 65.0
 
@@ -32,6 +33,18 @@ public struct LearningJourney: Codable, Equatable, Sendable {
         }
     }
 
+    /// Community order is ordinal evidence, not a measured interval scale.
+    public struct Placement: Codable, Equatable, Sendable {
+        public let basis: String
+        public let reference: String
+        public let sourceURL: String
+        public let position: Double
+        public let lower: Double
+        public let upper: Double
+        public let sourceRevision: String
+        public let replayRevision: String
+    }
+
     public struct Lesson: Codable, Equatable, Sendable {
         public let entry: LevelPlaylistEntry
         public let objective: String?
@@ -46,12 +59,15 @@ public struct LearningJourney: Codable, Equatable, Sendable {
         public let introduced: [String]
         public let focus: String
         public let needsSupport: Bool
+        public var placement: Placement? = nil
     }
     public let version: String
     public let lessons: [Lesson]
+    public var placementPolicy: String? = nil
 
     public func excluding(_ identities: Set<LevelCatalogueIdentity>) -> Self {
-        Self(version: version, lessons: lessons.filter { !identities.contains($0.entry.identity) })
+        Self(version: version, lessons: lessons.filter { !identities.contains($0.entry.identity) },
+             placementPolicy: placementPolicy)
     }
 
     public func validated() throws -> Self {
@@ -67,7 +83,46 @@ public struct LearningJourney: Codable, Equatable, Sendable {
               }) else {
             throw LevelPlaylistError.invalidPool
         }
+        if placementPolicy != nil {
+            guard placementPolicy == Self.communityPlacementPolicy,
+                  lessons.allSatisfy({ lesson in
+                      guard let p = lesson.placement else { return false }
+                      return ["reduxClassicCounterpart", "reviewedFan"].contains(p.basis)
+                          && !p.reference.isEmpty && p.sourceURL.hasPrefix("https://")
+                          && p.position.isFinite && p.lower.isFinite && p.upper.isFinite
+                          && 0 <= p.lower && p.lower <= p.position && p.position <= p.upper
+                          && p.upper <= 1000 && p.upper - p.lower <= 20
+                          && lesson.demand == p.position && p.sourceRevision == lesson.entry.sourceRevision
+                          && !p.replayRevision.isEmpty
+                          && (!lesson.entry.identity.packID.hasPrefix("fan:") || p.basis == "reviewedFan")
+                  }),
+                  zip(lessons, lessons.dropFirst()).allSatisfy({
+                      (0...Self.maximumScoreStep).contains($1.demand - $0.demand)
+                  }) else { throw LevelPlaylistError.invalidPool }
+        }
         return self
+    }
+
+    /// Replace an older built-in queue without inventing wins or changing its owner.
+    /// Keep a retained current lesson; a withdrawn lesson returns to the first unvisited reference.
+    public func migrating(_ run: LevelSequenceRun) throws -> LevelSequenceRun? {
+        guard run.source == .playlist(Self.playlistID),
+              run.pool.id.hasPrefix("learning-"),
+              let oldVersion = Int(run.pool.id.dropFirst("learning-".count)),
+              let newVersion = Int(version.dropFirst("learning-".count)),
+              oldVersion < newVersion else { return run }
+        _ = try validated()
+        guard placementPolicy == Self.communityPlacementPolicy else { return run }
+        let visited = Set(run.entries.prefix(run.currentIndex).map(\.identity))
+        let current = lessons.firstIndex { $0.entry.identity == run.currentEntry.identity
+            && $0.entry.sourceRevision == run.currentEntry.sourceRevision }
+        let future = lessons.dropFirst(current ?? 0).map(\.entry).filter { !visited.contains($0.identity) }
+        guard !future.isEmpty else { return nil }
+        // Past visits are history, not proof of completion. Progress records stay untouched.
+        let past = Array(run.entries.prefix(run.currentIndex))
+        return try LevelSequenceRun(id: run.id, source: run.source,
+            pool: LevelPool(id: version, summary: run.pool.summary), entries: past + future,
+            currentIndex: past.count, seed: run.seed, algorithm: run.algorithm, createdAt: run.createdAt)
     }
 
     public func playlist() throws -> LevelPlaylist {
@@ -110,6 +165,8 @@ public struct LearningJourney: Codable, Equatable, Sendable {
     public static let highRescueRequirementRatio = 0.95
     public static let highAssignmentCount = 12
 
+    /// Experimental replay-only ordering. The bundled journey must use the
+    /// community placement policy, which does not use these heuristic floors.
     /// Work through narrow demand bands. Within each band, prepare combinations,
     /// space repeated practice and prefer a small increase in execution demands.
     /// Official puzzles take priority over other puzzles within a demand band.

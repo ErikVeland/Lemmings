@@ -1,197 +1,172 @@
 [
   {
-    "level": "Lemmings For Presidents!",
-    "objective": "apply:4b6716396a3ea9d67bbc",
-    "step": 52
+    "level": "Snuggle up to a Lemming",
+    "objective": "community:Gentle/Snuggle_up_to_a_Lemming.nxlv",
+    "step": 8
   },
   {
-    "level": "Down And Out Lemmings",
-    "objective": "apply:a3096f4fe7561f62faca",
-    "step": 55
+    "level": "Get a little extra help",
+    "objective": "community:Gentle/Get_a_little_extra_help.nxlv",
+    "step": 9
   },
   {
-    "level": "Gone With The Lemming",
-    "objective": "long-sequence",
-    "step": 56
+    "level": "Downwardly Mobile Lemmings",
+    "objective": "community:Gentle/Downwardly_Mobile_Lemmings.nxlv",
+    "step": 10
   },
   {
-    "level": "Flow Control",
-    "objective": "precision-spacing",
-    "step": 59
-  },
-  {
-    "level": "Have an ice day",
-    "objective": "apply:9c66baa011691a27091f",
-    "step": 61
-  },
-  {
-    "level": "The Lemming Learning Curve",
-    "objective": "apply:2fd99bf0932cf7f0dabe",
-    "step": 67
-  },
-  {
-    "level": "Undercover Lemming",
-    "objective": "apply:c18e1f4945f167a62b0b",
-    "step": 74
-  },
-  {
-    "level": "Lemming about town",
-    "objective": "sequence-economy",
-    "step": 76
-  },
-  {
-    "level": "How on Earth?",
-    "objective": "apply:3b855df4e4a1e58b82a2",
-    "step": 82
-  },
-  {
-    "level": "This Corrosion",
-    "objective": "apply:33f271848130193249fc",
-    "step": 86
-  },
-  {
-    "level": "Suicidal Tendencies",
-    "objective": "apply:cb9c5a0048d500e33fb4",
-    "step": 106
-  },
-  {
-    "level": "Inroducing SUPERLEMMING",
-    "objective": "apply:548ae95f6f6ae34db6ca",
-    "step": 110
-  },
-  {
-    "level": "SPAM,SPAM,SPAM,EGG AND LEMMING",
-    "objective": "apply:607360f878508b44cf06",
-    "step": 121
-  },
-  {
-    "level": "Lemming Productions Present...",
-    "objective": "apply:3fd25d7602891214436c",
-    "step": 122
-  },
-  {
-    "level": "It`s the price you have to pay",
-    "objective": "apply:3d04cd5f742105bfb979",
-    "step": 132
-  },
-  {
-    "level": "Dr Lemminggood",
-    "objective": "apply:3e0120e51625d6d372dc",
-    "step": 145
-  },
-  {
-    "level": "It`s all a matter of timing",
-    "objective": "expert-coordination",
-    "step": 147
-  },
-  {
-    "level": "ROCKY VI",
-    "objective": "apply:35bd7fecfe845ca8304a",
-    "step": 149
-  },
-  {
-    "level": "Got anything....Lemmingy???",
-    "objective": "apply:d66eba3e13c35631b4d1",
-    "step": 150
-  },
-  {
-    "level": "DON`T PANIC",
-    "objective": "apply:1489db3e0652b4130ec0",
-    "step": 151
-  },
-  {
-    "level": "Take care, Sweetie",
-    "objective": "apply:8eb4e2395128b35e52f0",
-    "step": 153
-  },
-  {
-    "level": "Who`s That Lemming",
-    "objective": "apply:f024e3640710e68285f5",
-    "step": 154
-  },
-  {
-    "level": "Time waits for no Lemming",
-    "objective": "apply:dafc7a18582aaca1788c",
-    "step": 156
-  },
-  {
-    "level": "NO PROBLEM",
-    "objective": "apply:e09e8ebb96bc871c444b",
-    "step": 157
-  },
-  {
-    "level": "DIGGING FOR VICTORY",
-    "objective": "spacing-long-plan",
-    "step": 158
-  },
-  {
-    "level": "Lemming Rhythms",
-    "objective": "apply:ecd103c2839c77a032fa",
-    "step": 159
-  },
-  {
-    "level": "The Stack",
-    "objective": "apply:1da6b6b1821eae6f8bcd",
-    "step": 160
-  },
-  {
-    "level": "KEEP ON TRUCKING",
-    "objective": "expert-budget",
-    "step": 161
+    "level": "PoP YoR ToP!!!",
+    "objective": "community:Quirky/PoP_YoR_ToP!!!.nxlv",
+    "step": 22
   },
   {
     "level": "Just A Quicky",
-    "objective": "apply:a4b763153949836d4f7c",
-    "step": 163
+    "objective": "community:Quirky/Just_a_Quicky.nxlv",
+    "step": 24
   },
   {
-    "level": "Tubular Lemmings",
-    "objective": "apply:eb94c9a0fdbc63193177",
-    "step": 165
+    "level": "DON`T PANIC",
+    "objective": "community:Quirky/DON'T_PANIC.nxlv",
+    "step": 27
   },
   {
-    "level": "It`s a tight fit!",
-    "objective": "apply:ede376fce23379103642",
-    "step": 167
+    "level": "Meeting Adjourned",
+    "objective": "community:Quirky/Meeting_Adjourned.nxlv",
+    "step": 29
   },
   {
-    "level": "Not just a pretty Lemming",
-    "objective": "apply:bc2e072ea781c51d0128",
-    "step": 169
+    "level": "Take care, Sweetie",
+    "objective": "community:Quirky/Take_care,_Sweetie.nxlv",
+    "step": 36
   },
   {
-    "level": "Creature Discomforts",
-    "objective": "apply:5a43d24cc697dd8e6166",
-    "step": 170
+    "level": "Flow Control",
+    "objective": "community:Zany/Flow_Control.nxlv",
+    "step": 45
+  },
+  {
+    "level": "KEEP ON TRUCKING",
+    "objective": "community:Zany/KEEP_ON_TRUCKING.nxlv",
+    "step": 46
+  },
+  {
+    "level": "Dolly Dimple",
+    "objective": "community:Zany/Dolly_Dimple.nxlv",
+    "step": 48
+  },
+  {
+    "level": "Mutiny On The Bounty",
+    "objective": "community:Zany/Mutiny_on_the_Bounty.nxlv",
+    "step": 49
+  },
+  {
+    "level": "SNOW JOKE",
+    "objective": "community:Zany/SNOW_JOKE.nxlv",
+    "step": 50
   },
   {
     "level": "ONWARD AND UPWARD",
-    "objective": "apply:d0487298848a6403c731",
-    "step": 171
+    "objective": "community:Zany/ONWARD_AND_UPWARD.nxlv",
+    "step": 51
   },
   {
-    "level": "And now this...",
-    "objective": "apply:5b0e05ba56fb1a2949d8",
-    "step": 172
+    "level": "Across The Gap",
+    "objective": "community:Zany/Across_the_Gap.nxlv",
+    "step": 53
   },
   {
-    "level": "Lemmings in a situation",
-    "objective": "apply:8a07e62006f2977c8957",
-    "step": 174
+    "level": "Worra load of old blocks!",
+    "objective": "community:Zany/Worra_load_of_old_blocks!.nxlv",
+    "step": 54
   },
   {
-    "level": "Snuggle up to a Lemming",
-    "objective": "apply:0f8172bd8289e941f2eb",
-    "step": 175
+    "level": "Got anything....Lemmingy???",
+    "objective": "community:Zany/Got_anything..._Lemmingy___.nxlv",
+    "step": 56
+  },
+  {
+    "level": "The Lemming Funhouse",
+    "objective": "community:Manic/The_Lemming_Funhouse.nxlv",
+    "step": 58
+  },
+  {
+    "level": "Synchronised Lemming",
+    "objective": "community:Manic/Synchronised_Lemming.nxlv",
+    "step": 61
   },
   {
     "level": "Chill out!",
-    "objective": "expert-integration",
-    "step": 185
+    "objective": "community:Manic/Chill_out!.nxlv",
+    "step": 62
+  },
+  {
+    "level": "Down the tube",
+    "objective": "community:Manic/Down_the_tube.nxlv",
+    "step": 63
   },
   {
     "level": "AAAAAARRRRRRGGGGGGHHHHHH!!!!!!",
-    "objective": "apply:9b67f76b377c3bdd198c",
-    "step": 186
+    "objective": "community:Manic/AAAAAARRRRRRGGGGGGHHHHHH!!!!!!.nxlv",
+    "step": 65
+  },
+  {
+    "level": "ROCKY VI",
+    "objective": "community:Manic/ROCKY_VI.nxlv",
+    "step": 66
+  },
+  {
+    "level": "THE SILENCE OF THE LEMMINGS",
+    "objective": "community:Manic/THE_SILENCE_OF_THE_LEMMINGS.nxlv",
+    "step": 71
+  },
+  {
+    "level": "The race against cliches",
+    "objective": "community:Manic/The_race_against_cliches.nxlv",
+    "step": 75
+  },
+  {
+    "level": "Where Lemmings Dare",
+    "objective": "community:Manic/Where_Lemmings_Dare.nxlv",
+    "step": 78
+  },
+  {
+    "level": "Temple of Love",
+    "objective": "community:Manic/Temple_of_Love.nxlv",
+    "step": 79
+  },
+  {
+    "level": "There`s madness in the method",
+    "objective": "community:Lunatic/There's_madness_in_the_method.nxlv",
+    "step": 84
+  },
+  {
+    "level": "Lemming about town",
+    "objective": "community:Lunatic/Lemming_about_town.nxlv",
+    "step": 85
+  },
+  {
+    "level": "Be more than just a number",
+    "objective": "community:Lunatic/Be_more_than_just_a_number.nxlv",
+    "step": 87
+  },
+  {
+    "level": "This Corrosion",
+    "objective": "community:Lunatic/This_Corrosion.nxlv",
+    "step": 89
+  },
+  {
+    "level": "Creature Discomforts",
+    "objective": "community:Lunatic/Creature_Discomforts.nxlv",
+    "step": 91
+  },
+  {
+    "level": "Scaling the Heights",
+    "objective": "community:Lunatic/Scaling_the_Heights.nxlv",
+    "step": 92
+  },
+  {
+    "level": "Lemmings in a situation",
+    "objective": "community:Lunatic/Lemmings_in_a_situation.nxlv",
+    "step": 96
   }
 ]
