@@ -110,8 +110,10 @@ available. The mode uses a fixed release rate and cannot use a prefix or another
 sweep mode. It found exact-level wins where a one-skill search could not assign
 the stocked skill to the whole crowd. Record the completed delay count; a failed
 broadcast sweep covers only this policy.
-The solver keeps the strongest completed continuation as a partial replay for
-the next focused search. A partial replay is not a winning or scored level.
+The solver keeps a partial route for the next focused search. It prefers more
+rescues, then a viable route with more tested skill inputs and released workers.
+This prevents an unreleased, no-input state from hiding a useful skill prefix.
+A partial replay is not a winning or scored level.
 The unsolved report includes its terminal tick and released, lost and active
 counts. Use `--diagnose-active` to print the active lemmings' final positions
 and actions when a near-win needs a timing or route diagnosis.
@@ -124,6 +126,9 @@ The search keeps a waiting branch after forced prefix commands, so a second
 skill can still be tried at later ticks.
 An initial `--prefix` release-rate command at tick 0 is applied before the
 first simulation tick, matching `--rate` at the same tick.
+The solver rejects a search branch when it cannot apply a forced skill.
+A reported win or partial replay must contain every forced command at its
+requested tick. An earlier skill can make a later forced assignment invalid.
 
 Use `--sweep-single` to try one after-tick skill assignment to every active
 lemming on each tick of a fixed-rate, no-input route. It runs each assignment

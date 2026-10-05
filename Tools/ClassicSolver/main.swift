@@ -226,6 +226,7 @@ struct Candidate {
     var depth = 0
     var rateChanges = 0
     var searchAssignments = 0
+    var invalidForced = false
 }
 
 enum Choice {
@@ -358,6 +359,14 @@ struct Forced: Decodable { let tick: Int; let id: Int?; let skill: ClassicSkill?
 let forced: [Int: [Forced]] = try option("--prefix").map {
     Dictionary(grouping: try JSONDecoder().decode([Forced].self, from: Data(contentsOf: URL(fileURLWithPath: $0))), by: \.tick)
 } ?? [:]
+let lastForcedTick = forced.keys.max() ?? 0
+for command in forced.values.flatMap({ $0 }) {
+    guard command.tick >= 0,
+          (command.rate != nil && command.id == nil && command.skill == nil)
+            || (command.rate == nil && command.id != nil && command.skill != nil) else {
+        throw Failure(description: "forced prefix contains an invalid command")
+    }
+}
 if (sweepSingle || sweepPair != nil) && !forced.isEmpty {
     throw Failure(description: "sweep modes cannot be combined with --prefix")
 }
@@ -365,7 +374,10 @@ for f in forced[0] ?? [] {
     if let rate = f.rate {
         start.sim.setReleaseRate(rate)
         start.events.append(.init(tick: 0, action: .releaseRate(rate), afterTick: true))
-    } else if let id = f.id, let skill = f.skill, start.sim.assign(skill, to: id) == .assigned {
+    } else if let id = f.id, let skill = f.skill {
+        guard start.sim.assign(skill, to: id) == .assigned else {
+            throw Failure(description: "forced skill assignment rejected at tick 0")
+        }
         start.events.append(.init(tick: 0, action: .assign(lemmingID: id, skill: skill), afterTick: true))
     }
 }
@@ -377,7 +389,11 @@ func advance(_ c: inout Candidate) -> Bool {
         for f in forced[c.sim.tickCount] ?? [] {
             if let rate = f.rate {
                 c.sim.setReleaseRate(rate); c.events.append(.init(tick: c.sim.tickCount, action: .releaseRate(rate), afterTick: true))
-            } else if let id = f.id, let skill = f.skill, c.sim.assign(skill, to: id) == .assigned {
+            } else if let id = f.id, let skill = f.skill {
+                guard c.sim.assign(skill, to: id) == .assigned else {
+                    c.invalidForced = true
+                    return false
+                }
                 c.events.append(.init(tick: c.sim.tickCount, action: .assign(lemmingID: id, skill: skill), afterTick: true))
             }
         }
@@ -395,9 +411,23 @@ var completedSweepContinuations = 0
 var pairFirstAssignments = 0
 var pairSecondAssignments = 0
 var broadcastDelaysCompleted = 0
-func consider(_ c: Candidate) {
+func isBetterPartial(_ candidate: Candidate, than current: Candidate) -> Bool {
+    let proposed = candidate.sim
+    let previous = current.sim
+    if proposed.savedCount != previous.savedCount { return proposed.savedCount > previous.savedCount }
+    let proposedViable = proposed.lostCount <= proposed.configuration.totalLemmings - proposed.configuration.requiredToSave
+    let previousViable = previous.lostCount <= previous.configuration.totalLemmings - previous.configuration.requiredToSave
+    if proposedViable != previousViable { return proposedViable }
+    if candidate.searchAssignments != current.searchAssignments {
+        return candidate.searchAssignments > current.searchAssignments
+    }
+    if proposed.releasedCount != previous.releasedCount { return proposed.releasedCount > previous.releasedCount }
+    return Score(current, field) < Score(candidate, field)
+}
+@MainActor func consider(_ c: Candidate) {
+    if c.sim.tickCount < lastForcedTick { return }
     if c.sim.isComplete && c.sim.didWin, best.map({ Score($0, field) < Score(c, field) }) ?? true { best = c }
-    if bestPartial.map({ Score($0, field) < Score(c, field) }) ?? true { bestPartial = c }
+    if bestPartial.map({ isBetterPartial(c, than: $0) }) ?? true { bestPartial = c }
 }
 if !sweepSingle && broadcastSkill == nil && forced.isEmpty {
     var passive = start
@@ -521,6 +551,7 @@ if let broadcastSkill {
     if best == nil { consider(waiting) }
 } else {
     _ = advance(&start)
+    if start.invalidForced { throw Failure(description: "forced skill assignment rejected before search") }
     waitingRouteTick = start.sim.tickCount
     start.key = fingerprint(start.sim) + (adaptiveRate ? "|0" : "")
     consider(start)
@@ -559,6 +590,7 @@ if let broadcastSkill {
                 child.depth += 1
                 expanded += 1
                 let alive = advance(&child)
+                if child.invalidForced { continue }
                 if child.searchAssignments == 0 {
                     waitingRouteTick = max(waitingRouteTick, child.sim.tickCount)
                 }
@@ -620,6 +652,18 @@ let proposal = route.map {
         title: entry.level.title.trimmingCharacters(in: .whitespaces),
         initialStateHash: ClassicDOSReplayRecorder.stateHash(of: base), events: $0.events)
 }
+let forcedInputsSatisfied = proposal.map { replay in
+    forced.values.flatMap { $0 }.allSatisfy { command in
+        replay.events.contains { event in
+            guard event.tick == command.tick && event.afterTick == true else { return false }
+            if let rate = command.rate { return event.action == .releaseRate(rate) }
+            if let id = command.id, let skill = command.skill {
+                return event.action == .assign(lemmingID: id, skill: skill)
+            }
+            return false
+        }
+    }
+} ?? forced.isEmpty
 let verifiedOutcome = proposal.flatMap {
     try? ClassicDOSReplayPlayer.run($0, simulation: base, tickLimit: tickLimit)
 }
@@ -630,7 +674,7 @@ let coverage = broadcastSkill != nil
     : sweepSingle
     ? " waiting tick \(waitingRouteTick) single-skill assignments \(sweptAssignments) completed \(completedSweepContinuations) deadline \(timeExpired())"
     : rolloutSingle ? " waiting tick \(waitingRouteTick) single-skill rollouts \(singleSkillRollouts.count)" : ""
-if let proposal, let outcome = verifiedOutcome, outcome.didWin {
+if let proposal, let outcome = verifiedOutcome, outcome.didWin, forcedInputsSatisfied {
     let replay = ClassicDOSReplay(rank: proposal.rank, number: proposal.number,
         title: proposal.title, initialStateHash: proposal.initialStateHash,
         events: proposal.events, expected: outcome)
@@ -644,7 +688,7 @@ if let proposal, let outcome = verifiedOutcome, outcome.didWin {
     print("SOLVED \(entry.rank) \(entry.number) saved \(outcome.saved)/\(outcome.required) inputs \(replay.events.count) expanded \(expanded) in \(seconds)s\(coverage)")
 } else {
     let s = bestPartial?.sim
-    if args.contains("--partial-out"), let proposal {
+    if args.contains("--partial-out"), let proposal, forcedInputsSatisfied {
         let encoder = JSONEncoder(); encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
         let destination = args.contains("--hash-named")
             ? URL(fileURLWithPath: args[3]).appendingPathComponent(proposal.initialStateHash + ".partial.json")

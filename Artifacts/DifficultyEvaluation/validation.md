@@ -775,7 +775,7 @@ Eleven still-unscored bundled fan entries share a native initial-state hash with
 
 A full strict recheck of the current selected Classic fan corpus passed **2,129/2,129** entries across 338 bundled packs, with no failed archive, initial-state, replay-digest or native-win check. The input manifest and verifier log are in ignored `.build/full-difficulty-evaluation/strict-selected-2129`. The 3,891 remaining Classic fan entries are still unverified.
 
-A forced-prefix continuation of the current solver's `Go Fetch!` partial route started from its 22/23 rescue result. With progress-first ranking and width 192, it expanded 49,091 nodes in 17 seconds, exhausted its beam, and still saved at most 22/23. Its prefix and log are in ignored `.build/full-difficulty-evaluation/near-solver-prefix`. This bounded result does not prove the level impossible.
+A search described as a forced-prefix continuation of the `Go Fetch!` 22/23 route expanded 49,091 nodes in 17 seconds and saved at most 22/23. A later audit found that its selected partial replay had zero events, so that run did not verify the forced prefix. Its prefix and log remain in ignored `.build/full-difficulty-evaluation/near-solver-prefix`. This bounded result does not prove the level impossible.
 
 A separate finer-decision current-physics search tested 20 previously unverified fan levels at width 128 and up to 15 seconds each. It found no win. Its distinct attempt ledger is in ignored `.build/solver-experiments/distance-priority/finer-decisions-20`.
 
@@ -1559,7 +1559,7 @@ The previous current-library `Blocked Bridge` sweep used an unoptimised native b
 
 ## A TOWERING PROBLEM Builder retimes, 3 October 2026
 
-The optimised solver tested **14** forced first-Builder timings from tick **58** through **72** (excluding the already tested tick **65**) on the exact bundled `t3tesla.dat#8` level at release rate **90**. Each run allowed one additional skill continuation with width **64** and five-tick fallback/refire intervals. All retained **8/9** at best and none won. The runs made **113,353** expansions and **1,289** completed one-skill continuations. [The retime record](classic-solver-tower-retimes.json) pins the archive, initial state, binary and detailed-result digests. This bounded timing search does not rule out other first skills, later multi-skill routes or source-physics differences. No score or parity result changed.
+The optimised solver attempted **14** forced first-Builder timings from tick **58** through **72** (excluding tick **65**) on the exact bundled `t3tesla.dat#8` level at release rate **90**. Each run allowed one additional skill continuation with width **64** and five-tick fallback/refire intervals. All retained **8/9** at best and none won. The runs made **113,353** expansions and **1,289** completed one-skill continuations. A later input audit found that the selected partials for ticks **58–60** omitted their forced Builder, so those three runs do not test the stated retimings. The other **11** selected partials contain their forced Builder. [The retime record](classic-solver-tower-retimes.json) pins the original results; [the corrected check](classic-tower-invalid-prefix-recheck.json) records this limit. No score or parity result changed.
 
 ## Two-skill control and small-population no-win probes, 3 October 2026
 
@@ -1906,3 +1906,19 @@ Two further unscored, low-population Builder-only levels, `2 lemmings` and `King
 ## Four-worker Builder search scope, 4 October 2026
 
 `Pillars and builders` has four entrances, four lemmings to save and four Builders. A one-worker-focused search cannot assign Builders to the other three workers. The current direct-distance search under that focus made **47** expansions without a win; a one-tick single-skill pass reached waiting tick **111** with **10** continuations. Removing the focus limit made **671** expansions, also without a win. A separate four-worker Builder broadcast completed **101** hatch-to-assignment delays and made **108** successful assignments without a win. Its cached 29 September source page has no published record. [The updated small-puzzle record](classic-small-builder-search-bound.json) pins the exact archive, page, solver and partial replay digests. The focused search was insufficient for this level, while the unrestricted and broadcast bounds remain incomplete. No physics change, score or parity claim follows from these results.
+
+## Forced-prefix solver correction, 4 October 2026
+
+The `Pillars and builders` no-win data exposed two solver problems. The solver selected a no-input state before the first hatch as its best partial. It also silently skipped a forced Builder at tick **78** when an earlier search input made that assignment invalid. That search's partial replay started with a Builder at tick **76**, so it did not test the requested prefix.
+
+`ClassicSolver` now prefers viable partial routes with skill inputs and released workers when saved counts match. It rejects a branch if a forced skill fails, and it reports a win or partial only when every forced input appears in the replay at the requested tick. The same focused run now retains a legal tick-**78** Builder partial. The corrected forced-prefix continuation made **947** expansions and found no win. A known one-Floater control still wins **1/1** with its prior replay digest. [The calibration record](classic-prefix-enforcement-calibration.json) pins the archive, binaries, before-and-after partials and control replay. No level score or source parity result changed.
+
+A valid forced Floater at tick **54** still produced the same strict **1/1** control replay digest. Adding a later rate command at tick **1,000**, after that route completes, reported `UNSOLVED` and emitted no replay. This checks both a valid prefix and a prefix that the route cannot complete.
+
+## Go Fetch! forced-prefix recheck, 4 October 2026
+
+The earlier `Go Fetch!` forced-prefix search retained a partial replay with **zero inputs**. It did not test the six requested commands. The corrected source-built solver replayed the same exact bundled archive and prefix. Its beam search retained all six forced inputs, expanded **57,909** states and saved at most **22/23**. A separate one-skill rollout also retained all six inputs, reached waiting tick **2,042** and completed **27** continuations after **40,094** expansions. It saved at most **22/23**. [The recheck record](classic-go-fetch-prefix-recheck.json) pins the old and new replay digests, archive, prefix and source-built binaries. These bounds do not cover other timing or multi-skill routes. No new win, score or source parity result was added.
+
+## Tower forced-Builder input audit, 4 October 2026
+
+The historical `A TOWERING PROBLEM` retime batch included three partial replays that omitted their requested Builders at ticks **58–60**. A native trace on the exact bundled level shows lemming 0 falling at those ticks. Its first legal Builder assignment is tick **61**. The corrected solver rejects each of the three early prefixes before a one-skill continuation. It found no win. The other **11** historical retime partials contain their requested Builder. The cached source page lists no winning record, so this native assignment check does not establish source physics parity. [The audit record](classic-tower-invalid-prefix-recheck.json) pins all fourteen old prefix and replay digests, the current archive and solver, and the native trace.
