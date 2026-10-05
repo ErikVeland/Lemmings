@@ -66,6 +66,23 @@ do {
     try require(aborted.isComplete && aborted.lost == 1 && aborted.tick == abortedTick, "L3 abort is terminal")
     print("PASS experimental L3 landing, blocker, turn, jump, exit and deterministic ticks")
 
+    var softTags = tags
+    for x in 24..<32 { softTags[48 * 128 + x] = 0x2020 }
+    var worn = try Lemmings3Runtime(configuration: .init(width: 128, height: 64, attributes: softTags,
+        entrance: .init(x: 100, y: 40), exits: [.init(x: 110, y: 46)], total: 1,
+        releaseInterval: 1000, releaseDelay: 1000, extras: [.init(x: 24, y: 48, direction: 1)]))
+    worn.step()
+    try require(worn.lemmings[0].state == .walking && worn.attributes[48 * 128 + 24] == 0x2020,
+        "L3 landing leaves source soft terrain intact")
+    worn.step()
+    try require(worn.lemmings[0].x == 25 && worn.attributes[48 * 128 + 24] == 0x1000 &&
+                worn.attributes[48 * 128 + 25] == 0x2020 && worn.terrainEdits[48 * 128 + 24] == false,
+        "L3 walking wears the departed source soft-terrain foot pixel")
+    worn.step()
+    try require(worn.attributes[48 * 128 + 25] == 0x1000 && worn.terrainEdits[48 * 128 + 25] == false,
+        "L3 walking wear follows successive foot positions")
+    print("PASS L3 source soft terrain wears under walking feet")
+
     func riseGame(direction: Int, blockedAhead: Bool = false) throws -> Lemmings3Runtime {
         var terrain = [UInt16](repeating: 0x1000, count: 128 * 64)
         for y in 48..<64 { for x in 0..<128 { terrain[y * 128 + x] = 0x20 } }
@@ -368,6 +385,8 @@ do {
     for _ in 0..<8 { stair.step() }
     try require(stair.lemmings[1].x == 29 && stair.lemmings[1].y == 32,
         "L3 follower climbs adjacent constructed steps")
+    try require(stair.terrainEdits[40 * 128 + 37] == true && stair.attributes[40 * 128 + 37] == 0x2020,
+        "L3 walking preserves a departed constructed brick")
     var digger = try toolGame(.spade)
     try require(digger.useTool(to: 0, direction: .down), "L3 spade direction")
     digger.step()

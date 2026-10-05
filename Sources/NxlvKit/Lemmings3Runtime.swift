@@ -563,6 +563,7 @@ public struct Lemmings3Runtime: Sendable {
         }
         for index in lemmings.indices where lemmings[index].active {
             var lem = lemmings[index]
+            let oldX = lem.x, oldY = lem.y, oldState = lem.state
             lem.charmImmunity = max(0, lem.charmImmunity - 1)
             if lem.mobilityTicks > 0 && !(lem.mobilityTool == .sucker && lem.state == .climbing) {
                 lem.mobilityTicks -= 1
@@ -730,6 +731,13 @@ public struct Lemmings3Runtime: Sendable {
             case .trapped: if lem.age >= lem.trapTicks { lem.state = .dead }
             case .exiting: if lem.age >= 8 { lem.state = .saved }
             case .saved, .dead: break
+            }
+            if oldState == .walking && lem.state == .walking && (lem.x != oldX || lem.y != oldY) && inBounds(oldX, oldY) {
+                let foot = oldY * configuration.width + oldX
+                if attributes[foot] == 0x2020 && terrainEdits[foot] != true {
+                    attributes[foot] = configuration.backgroundAttributes[foot]
+                    terrainEdits[foot] = false
+                }
             }
             if lem.x < 0 || lem.x >= configuration.width || lem.y < -32 || lem.y >= configuration.height { lem.state = .dead }
             lem.age += 1; lemmings[index] = lem
