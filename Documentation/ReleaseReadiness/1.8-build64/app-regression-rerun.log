@@ -1,0 +1,58 @@
+/Users/veland/.codex/worktrees/release-1-7-9/Lemmings/.build/release-1.8/app-regression-arm64/main.swift:5746:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+ 5744 |       openPanel.canChooseFiles = true
+ 5745 |       openPanel.canChooseDirectories = false
+ 5746 |       openPanel.allowedFileTypes = ["nxlv"]
+      |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+ 5747 |       openPanel.message = "Choose a NeoLemmix level file."
+ 5748 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/.codex/worktrees/release-1-7-9/Lemmings/.build/release-1.8/app-regression-arm64/main.swift:6860:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+ 6858 |       openPanel.canChooseFiles = true
+ 6859 |       openPanel.canChooseDirectories = false
+ 6860 |       openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
+      |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+ 6861 |       openPanel.message = "Choose a Macintosh Lemmings disk image."
+ 6862 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/veland/.codex/worktrees/release-1-7-9/Lemmings/.build/release-1.8/app-regression-arm64/main.swift:7320:22: warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+ 7318 |     keyboard.controllerRewindHeld = { [weak self] held in
+ 7319 |       guard let self else { return }
+ 7320 |       if held { self.beginContinuousRewind() }
+      |                      `- warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+ 7321 |       else if self.rewindHeld { self.endContinuousRewind() }
+ 7322 |     }
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+UI test windows: offscreen; audio: muted
+PASS unrecoverable-run failure mood decision
+PASS closing the main window preserves ownership for delayed screen refreshes
+PASS final single-step handles wins, losses, campaign and fan progress
+PASS first-launch HD/old-school choices, default action, live application, persistence and one-time presentation
+PASS seven home content families and the Settings gear use distinct targets
+PASS home families filter the typed catalogue without changing release identities
+PASS context-aware help, scalable pages, accessible actions and turn badge
+PASS nearest eligible targeting, overlap, edge allowance, moving green target, exhausted skills and mutation-free Classic/fan probes
+PASS 16 available music source transitions and settings applied during shuffled playback
+PASS saved silence, volume and preset; Macintosh/Amiga sound coverage
+PASS global mute persists and title suspension stops all players
+PASS CRT-to-menu transition, mismatched phase, native menu resolution and full-screen resize
+PASS CRT dimensions, shader coordinates, held rate, release and minimap drag
+PASS overlapping DJ cues, fade completion and stop/start cancellation
+PASS R brakes the music like a record and the retry releases it
+PASS elapsed-time catch-up and audio interruption recovery
+PASS game typography, settings tab targets, title hierarchy, actions and bitmap search editing
+PASS same-window pages, paused clock, display changes, focus and resuming play
+PASS restart preserves selected skills, including empty slots, while level selection uses its default
+PASS level skips: offered only when owned, owner pays, next level opens, Hot Seat hands over
+PASS bundled proof matches live Classic conditions and replays to a full rescue
+PASS live Oh Yes! rank changes load the original, Oh No and Sunsoft artwork
+PASS super speed controls: flat/CRT, pause, resume, 1x, menus, results and independent explosion settings
+PASS actual controller dispatch: RT tiers/hold/release, rapid and B exits, reconnect, hints, sheets, settings and ownership
+PASS native mouse toggle, arrows, complete double-click sequence, hold and emergency release
+PASS real key events: tap/hold/release, repeats, rapid exits, shortcut routing, window attachment and OG mode
+PASS actual Classic simulation clock at 2x, 3x, 5x, 10x and quick return to 1x
+PASS completed player route persistence, exact live timing, deduplication and rejection of invalid wins
+PASS timeline controls: active, unavailable, hit regions and gap capture
+PASS checked hints, confirmed winning ghosts, exact before/after-tick playback, unchanged live runs, flat/CRT and fallback coaching
+Desktop activation requires LEMMINGS_TEST_WINDOWS=foreground.

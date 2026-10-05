@@ -14,9 +14,9 @@ before distributing a build.
 
 ## Download
 
-Download [1.7.1 build 54](https://github.com/ErikVeland/Lemmings/releases/tag/v1.7.1),
+Download [1.8 build 64](https://github.com/ErikVeland/Lemmings/releases/tag/v1.8),
 the current public release. Installed copies update automatically. Read the
-[1.7.1 release notes](Documentation/ReleaseNotes-1.7.1-build54.md) and the
+[1.8 release notes](Documentation/ReleaseNotes-1.8-build64.md) and the
 [tester guide](Documentation/BetaTesting.md).
 
 ## Start here

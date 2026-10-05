@@ -1,0 +1,5 @@
+PASS immediate toggle, remembered tiers, bounded arrows and double-click absorption
+PASS F, mouse, Shift and controller holds, overlapping inputs, emergency exits and level reset
+PASS original fixed-speed controls
+PASS toolbar 1× floor and rapid remembered-speed toggles
+PASS per-tier music pitch, 120 ms glides, reversals and pitch cap
