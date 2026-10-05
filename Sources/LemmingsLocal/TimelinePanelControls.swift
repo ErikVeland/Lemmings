@@ -41,7 +41,7 @@ import AppKit
             if let image = action.glyph?.image(fitting: box.insetBy(dx: 4, dy: 4).size) {
                 image.draw(in: CGRect(x: box.midX - image.size.width / 2, y: box.midY - image.size.height / 2,
                     width: image.size.width, height: image.size.height), from: .zero, operation: .sourceOver,
-                    fraction: alpha, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none])
+                    fraction: alpha, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
             } else {
                 NSGraphicsContext.saveGraphicsState()
                 NSGraphicsContext.current?.cgContext.setAlpha(alpha)

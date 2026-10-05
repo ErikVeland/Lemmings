@@ -205,7 +205,7 @@ import NxlvKit
         let rect = CGRect(x: area.midX - CGFloat(right - left) * fit / 2, y: area.midY - CGFloat(stage.height) * fit / 2,
                           width: CGFloat(right - left) * fit, height: CGFloat(stage.height) * fit)
         NSImage(cgImage: cropped, size: rect.size).draw(in: rect, from: .zero, operation: .sourceOver, fraction: 1,
-            respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none])
+            respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
         var labels: [CGPoint] = []
         for (index, move) in stage.moves.enumerated() {
             let point = CGPoint(x: rect.minX + CGFloat(move.x - left) * fit, y: rect.minY + CGFloat(move.y) * fit)

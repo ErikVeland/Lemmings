@@ -298,7 +298,7 @@ final class NeoLemmixSpriteSet {
       guard let frame = frame(action: action, direction: direction, animationFrame: tick, traits: []) else { continue }
       frame.image.draw(in: CGRect(x: CGFloat(x) - CGFloat(frame.footX) / CGFloat(frame.pixelScale), y: CGFloat(y) - CGFloat(frame.footY) / CGFloat(frame.pixelScale), width: frame.image.size.width, height: frame.image.size.height),
         from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true,
-        hints: [.interpolation: NSImageInterpolation.none])
+        hints: [.interpolation: NSImageInterpolation.none.rawValue])
     }
     let bricks: [(Int, Int)]
     switch skill {

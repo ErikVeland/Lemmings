@@ -73,3 +73,37 @@ External projects can help identify formats and guide future decoder work, but
 they do not automatically grant redistribution rights. A future import tool
 can render raw formats into the supported lossless formats after the required
 permissions and source-engine fidelity have been confirmed.
+
+## NeoLemmix gameplay effects
+
+The development build routes NeoLemmix hatch, successful skill assignment,
+rescue, death and nuke events through the selected Classic sound bank and
+spatial sound player. This fixes the empty sound output in 1.7.9. Assignment
+cues play between ticks. Queued nuke cues play when the simulation processes
+the command. Undo and saved-run restoration clear pending presentation cues.
+
+Death sounds play at the start of their animation, without repeating when the
+lemming is removed. Immediate trap deaths and falls out of the level retain
+the lemming's position. The existing bottom-fall preference still applies.
+
+This is shared-bank playback, not complete NeoLemmix audio parity. Custom
+gadget samples, constructive-skill warnings and steel-contact cues are not
+yet routed by this adapter. The simulation and saved-state format are unchanged.
+
+Four muted regression tests cover hatch and assignment delivery, queued nuke
+and undo, a full nuke run with unchanged simulation state, and positioned
+death and rescue mappings. No audible playback test was run.
+
+## Music after a nuke
+
+The development build separates funeral tempo from the failed-run visual
+transition. Classic, NeoLemmix and Lemmings 2 restore normal music speed over
+0.9 seconds after their final pop, including when the run ends in failure.
+The return continues without simulation ticks on the result screen. The nuke
+filter keeps its existing shorter return. A normal loss still keeps the dirge,
+and rewinding into an unfinished nuke can restore it. This tempo recovery also
+works with HD Effects disabled.
+
+Lemmings 3 has no mass nuke. Its ordinary funeral transition is unchanged.
+Regression checks for tempo recovery run with audio muted; audible playback
+was not tested.

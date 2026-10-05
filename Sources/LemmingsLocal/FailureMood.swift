@@ -62,6 +62,26 @@ enum FailureMoodDecision {
   deinit { timer?.invalidate() }
 }
 
+/// Restore the track after a nuke without clearing the failed-run visuals.
+@MainActor final class FailureMusicTransition {
+  private let transition: FailureMoodTransition
+  private(set) var rate: Double = 1
+  var onChange: ((Double) -> Void)?
+
+  init(duration: Double = 0.9) {
+    transition = FailureMoodTransition(duration: duration)
+    transition.onChange = { [weak self] amount in
+      guard let self else { return }
+      self.rate = 1 - 0.28 * Double(amount)
+      self.onChange?(self.rate)
+    }
+  }
+
+  func update(failed: Bool, isNuking: Bool, allPopped: Bool) {
+    transition.set(active: failed && !(isNuking && allPopped))
+  }
+}
+
 @MainActor enum FailureMoodOverlay {
   static func draw(in rect: CGRect, amount: CGFloat) {
     guard amount > 0 else { return }

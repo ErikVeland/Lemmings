@@ -458,7 +458,7 @@ enum PanelButton: Equatable {
             y: frame.midY - image.size.height / 2,
             width: image.size.width, height: image.size.height),
           from: .zero, operation: .sourceOver, fraction: 1,
-          respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none])
+          respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
       } else {
         let symbol: String
         switch button {
@@ -579,7 +579,7 @@ enum PanelButton: Equatable {
         image.draw(in: CGRect(x: floor(well.midX - size.width / 2), y: floor(well.maxY - size.height),
           width: size.width, height: size.height), from: .zero, operation: .sourceOver,
           fraction: skill.isInfinite || skill.count > 0 ? 1 : 0.35,
-          respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none])
+          respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
         NSGraphicsContext.restoreGraphicsState()
       } else {
         drawGameLabel(skill.name, in: well)
@@ -605,7 +605,7 @@ enum PanelButton: Equatable {
       } else {
         image.draw(in: CGRect(x: floor(well.midX - image.size.width / 2), y: floor(well.midY - image.size.height / 2),
           width: image.size.width, height: image.size.height), from: .zero, operation: .sourceOver,
-          fraction: 1, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none])
+          fraction: 1, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
       }
     }
   }

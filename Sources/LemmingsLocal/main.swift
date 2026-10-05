@@ -198,6 +198,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private var arcadeAutoPresent = true
   private let music = ModuleMusicPlayer()
   private let failureMood = FailureMoodTransition()
+  private let failureMusic = FailureMusicTransition()
   private let nukeMood = NukeMusicSweep()
   /// Plays recordings the player supplied, as an alternative to the modules.
   private let soundtrack = SoundtrackPlayer()
@@ -1645,11 +1646,12 @@ let achievementProgressKey = "ClassicAchievementProgress"
     failureMood.onChange = { [weak self] amount in
       guard let self else { return }
       self.playfield.failureMoodAmount = amount
-      let tempo = 1 - 0.28 * Double(amount)
-      self.music.setTempoScale(tempo)
-      self.soundtrack.setPlaybackRate(tempo)
-      self.dj.setPlaybackRate(tempo)
       self.playfield.needsDisplay = true
+    }
+    failureMusic.onChange = { [weak self] tempo in
+      self?.music.setTempoScale(tempo)
+      self?.soundtrack.setPlaybackRate(tempo)
+      self?.dj.setPlaybackRate(tempo)
     }
     window.isReleasedWhenClosed = false
     window.delegate = self
@@ -7794,9 +7796,12 @@ let achievementProgressKey = "ClassicAchievementProgress"
     effects.setNukeActive(nuking && session?.isComplete == false)
     guard phase == .playing || phase == .results, let session else {
       failureMood.set(active: false)
+      failureMusic.update(failed: false, isNuking: false, allPopped: false)
       return
     }
-    failureMood.set(active: session.isComplete ? !session.didWin : !session.canStillReachRequirement)
+    let failed = session.isComplete ? !session.didWin : !session.canStillReachRequirement
+    failureMood.set(active: failed)
+    failureMusic.update(failed: failed, isNuking: session.isNuking, allPopped: allPopped)
   }
 
   private func focusLemming(_ id: Int) {

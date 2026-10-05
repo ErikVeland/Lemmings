@@ -283,7 +283,7 @@ import NxlvKit
             let fit = max(bounds.width / image.size.width, bounds.height / image.size.height)
             let size = CGSize(width: image.size.width * fit, height: image.size.height * fit)
             image.draw(in: CGRect(x: bounds.midX - size.width / 2, y: bounds.midY - size.height / 2, width: size.width, height: size.height),
-                from: .zero, operation: .sourceOver, fraction: 0.6, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none])
+                from: .zero, operation: .sourceOver, fraction: 0.6, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
         }
         NSGraphicsContext.saveGraphicsState()
         let transform = NSAffineTransform(); transform.translateX(by: offset.x, yBy: offset.y)
@@ -531,7 +531,7 @@ import NxlvKit
         let size = NSSize(width: image.size.width * scale, height: image.size.height * scale)
         image.draw(in: CGRect(x: rect.midX - size.width / 2, y: rect.midY - size.height / 2, width: size.width, height: size.height),
                    from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true,
-                   hints: [.interpolation: NSImageInterpolation.none])
+                   hints: [.interpolation: NSImageInterpolation.none.rawValue])
     }
     var profilesReturnToHotSeat = false
     var isNewProfile: Bool { selectedProfileID == nil }

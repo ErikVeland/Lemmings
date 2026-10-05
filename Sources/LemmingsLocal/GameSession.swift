@@ -445,6 +445,7 @@ final class NeoLemmixSession: GameSession {
   /// Continue a saved run: replay its inputs, or continue from its saved
   /// state when this build no longer replays them to the same result.
   func restore(_ checkpoint: RunRecovery) throws {
+    lastPositionedCues = []
     _ = try checkpoint.validated()
     guard let saved = checkpoint.neo, currentTick == 0 else { throw RunRecoveryError.differentGame }
     guard saved.initialState.configuration == initialSimulation.configuration,
@@ -552,8 +553,14 @@ final class NeoLemmixSession: GameSession {
     }
   }
 
-  /// NeoLemmix events are not mapped to sounds yet.
-  let lastCues: [ClassicSoundEffect] = []
+  private(set) var lastPositionedCues: [PositionedSoundCue] = []
+  var lastCues: [ClassicSoundEffect] { lastPositionedCues.map(\.effect) }
+
+  private func updateSoundCues() {
+    lastPositionedCues = NeoLemmixSoundCue.positionedCues(
+      for: simulation.lastTickEvents, lemmings: simulation.lemmings,
+      entrances: simulation.configuration.entrances)
+  }
 
   var supportsRewind: Bool { false }
   var currentTick: Int { simulation.tickCount }
@@ -565,7 +572,10 @@ final class NeoLemmixSession: GameSession {
     return true
   }
 
-  func tick() { _ = simulation.tick() }
+  func tick() {
+    _ = simulation.tick()
+    updateSoundCues()
+  }
 
   func assignmentState(skillIndex: Int, to lemmingID: Int) -> AssignmentState {
     guard skillOrder.indices.contains(skillIndex) else { return .unavailable }
@@ -581,8 +591,10 @@ final class NeoLemmixSession: GameSession {
   }
 
   func assign(skillIndex: Int, to lemmingID: Int) -> String? {
+    lastPositionedCues = []
     guard skillOrder.indices.contains(skillIndex) else { return "no such skill" }
     let result = simulation.assign(skill: skillOrder[skillIndex], to: lemmingID)
+    updateSoundCues()
     if case let .rejected(_, _, reason) = result { return "\(reason)" }
     recoveryInputs.append(.init(tick: currentTick, action: .assign(skill: skillIndex, lemming: lemmingID)))
     skillAssignments[skillOrder[skillIndex].rawValue, default: 0] += 1
@@ -607,6 +619,7 @@ final class NeoLemmixSession: GameSession {
 
   var canUndoNuke: Bool { beforeNuke != nil }
   func nuke() {
+    lastPositionedCues = []
     guard !simulation.isComplete, !simulation.isNuking, beforeNuke == nil else { return }
     nukeCount += 1
     beforeNukeInputCount = recoveryInputs.count
@@ -616,6 +629,7 @@ final class NeoLemmixSession: GameSession {
     _ = simulation.enqueue(.nuke)
   }
   func undoNuke() {
+    lastPositionedCues = []
     guard let beforeNuke else { return }
     recoveryInputs = Array(recoveryInputs.prefix(beforeNukeInputCount))
     simulation = beforeNuke

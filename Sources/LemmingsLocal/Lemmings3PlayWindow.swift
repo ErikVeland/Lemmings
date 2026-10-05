@@ -1965,12 +1965,12 @@ import NxlvKit
         let status = "OUT \(game.released) SAVE \(game.saved) LEFT \(game.reserve) LOST \(game.lost)"
         art.text(menuRows == nil ? status + " " + deathCountdownText : status, x: 2, y: 3, scale: 0.65)
         art.text("MENU", x: 286, y: 3, scale: 0.8)
-        art.normal.draw(in: CGRect(x: 0, y: 172, width: 320, height: 40), from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none])
+        art.normal.draw(in: CGRect(x: 0, y: 172, width: 320, height: 40), from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
         for slot in [selectedAction] + (fast ? [6] : []) + (paused ? [7] : []) {
             let left = CGFloat(Lemmings3Panel.edges[slot]), width = CGFloat(Lemmings3Panel.edges[slot + 1]) - left
             NSGraphicsContext.saveGraphicsState()
             NSBezierPath(rect: CGRect(x: left, y: 172, width: width, height: 40)).addClip()
-            art.pressed.draw(in: CGRect(x: 0, y: 172, width: 320, height: 40), from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none])
+            art.pressed.draw(in: CGRect(x: 0, y: 172, width: 320, height: 40), from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
             NSGraphicsContext.restoreGraphicsState()
         }
         if variableSpeedEnabled { SpeedPanelControls.draw(in: CGRect(x: 214, y: 172, width: 35, height: 40), label: speedLabel, active: fast) }
@@ -1982,7 +1982,7 @@ import NxlvKit
         if let id = hoveredLemming, let lem = game.lemmings.first(where: { $0.id == id }),
            let tool = lem.tool ?? lem.mobilityTool, let icon = pickupImages[tool.rawValue] {
             NSColor.black.setFill(); CGRect(x: 108, y: 176, width: 29, height: 32).fill()
-            icon.draw(in: CGRect(x: 114, y: 177, width: 16, height: 16), from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none])
+            icon.draw(in: CGRect(x: 114, y: 177, width: 16, height: 16), from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
             art.text(String(lem.quantity), x: 116, y: 198, scale: 0.8)
         }
         if directionPoint != nil {

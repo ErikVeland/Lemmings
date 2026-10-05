@@ -133,7 +133,7 @@ extension AVAudioPlayer: OriginalMovieAudio {}
             let rect = CGRect(x: (bounds.width - size.width) / 2, y: (bounds.height - 76 - size.height) / 2,
                 width: size.width, height: size.height)
             NSImage(cgImage: frameImage, size: size).draw(in: rect, from: .zero, operation: .sourceOver,
-                fraction: 1, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none])
+                fraction: 1, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
         }
         if let status = failure ?? (finished ? "Movie ended" : nil) {
             GamePixelText.draw(MacInterfaceRenderer.menuText(status),

@@ -1092,7 +1092,7 @@ struct LevelCoverFlowItem: Equatable, Sendable {
                 height: ceil(size.height))
             artwork.draw(in: destination, from: .zero, operation: .sourceOver,
                 fraction: alpha, respectFlipped: true,
-                hints: [.interpolation: NSImageInterpolation.none])
+                hints: [.interpolation: NSImageInterpolation.none.rawValue])
         } else if artworkFailed {
             GamePixelText.draw("PREVIEW UNAVAILABLE", in: frame.insetBy(dx: 8, dy: 8), maxScale: 1)
         }

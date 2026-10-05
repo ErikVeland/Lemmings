@@ -65,6 +65,7 @@ import NxlvKit
     private let masks: Lemmings2TerrainMasks
     private let music = ModuleMusicPlayer()
     private let failureMood = FailureMoodTransition()
+    private let failureMusic = FailureMusicTransition()
     private let nukeMood = NukeMusicSweep()
     private var audioSettings = ClassicSettings()
     private var globallyMuted = false
@@ -214,10 +215,11 @@ import NxlvKit
         failureMood.onChange = { [weak self] amount in
             guard let self else { return }
             self.canvas.failureMoodAmount = amount
-            let tempo = 1 - 0.28 * Double(amount)
-            self.music.setTempoScale(tempo)
-            self.dj.setPlaybackRate(tempo)
             self.canvas.needsDisplay = true
+        }
+        failureMusic.onChange = { [weak self] tempo in
+            self?.music.setTempoScale(tempo)
+            self?.dj.setPlaybackRate(tempo)
         }
         NotificationCenter.default.addObserver(self, selector: #selector(artworkChanged),
             name: SequelArtworkPreference.changed, object: nil)
@@ -1025,6 +1027,7 @@ import NxlvKit
             saved: game.saved, active: game.lemmings.filter(\.active).count,
             unreleased: game.configuration.total - game.released, required: 1))
         failureMood.set(active: impossible)
+        failureMusic.update(failed: impossible, isNuking: game.isNuking, allPopped: allPopped)
         let turn = ArcadeStore.shared.hotSeatIsActive ? ArcadeStore.shared.records.profile(arcadeProfileID) : nil
         canvas.turnBadge.show(initials: turn?.initials, portrait: turn.flatMap { ArcadeWindow.shared.arcadeView.portraitImage($0.portrait) })
         canvas.speedMultiplier = speedControl.multiplier

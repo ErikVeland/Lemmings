@@ -966,7 +966,7 @@ struct ReticleFeedback {
           operation: .sourceOver,
           fraction: 1,
           respectFlipped: true,
-          hints: [.interpolation: NSImageInterpolation.none])
+          hints: [.interpolation: NSImageInterpolation.none.rawValue])
       }
     }
     if let update = overlayUpdateButtonFrame(layout) {
@@ -977,7 +977,7 @@ struct ReticleFeedback {
       if let image = PanelGlyph.download.image(fitting: well.size) {
         image.draw(in: CGRect(x: floor(well.midX - image.size.width / 2), y: floor(well.midY - image.size.height / 2),
           width: image.size.width, height: image.size.height), from: .zero, operation: .sourceOver,
-          fraction: 1, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none])
+          fraction: 1, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
       }
     }
     y += headerHeight
@@ -1516,7 +1516,7 @@ struct ReticleFeedback {
     image.draw(in: CGRect(x: row.minX + 8 * scale, y: row.midY - size.height / 2,
         width: size.width, height: size.height),
       from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true,
-      hints: [.interpolation: NSImageInterpolation.none])
+      hints: [.interpolation: NSImageInterpolation.none.rawValue])
   }
 
   /// A quiet reminder during play. It must not compete with the level.
@@ -1538,7 +1538,7 @@ struct ReticleFeedback {
     if let image {
       image.draw(in: CGRect(x: badge.minX + 5 * scale, y: badge.minY, width: spriteWidth, height: height),
         from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true,
-        hints: [.interpolation: NSImageInterpolation.none])
+        hints: [.interpolation: NSImageInterpolation.none.rawValue])
     }
     drawMenuGameText(initials, in: CGRect(x: badge.minX + spriteWidth + 9 * scale,
       y: badge.minY, width: textWidth, height: height), face: .small, scale: Int(scale))

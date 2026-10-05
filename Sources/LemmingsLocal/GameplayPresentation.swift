@@ -389,7 +389,7 @@ struct PrecisionZoomStatus: Equatable {
         if let portrait {
             let width = min(28, portrait.size.width / portrait.size.height * 28)
             portrait.draw(in: CGRect(x: 4, y: 2, width: width, height: 28), from: .zero,
-                operation: .sourceOver, fraction: 1, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none])
+                operation: .sourceOver, fraction: 1, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
         }
         GamePixelText.draw(initials, in: CGRect(x: portrait == nil ? 4 : 36, y: 4,
             width: bounds.width - (portrait == nil ? 8 : 40), height: 24))

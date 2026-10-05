@@ -66,7 +66,7 @@ import NxlvKit
             let code = Int(scalar.value)
             let index = (48...57).contains(code) ? code - 48 : (65...90).contains(code) ? code - 65 + 10 : 36
             glyphs[index].draw(in: rect,
-                from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none])
+                from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
         }
     }
     static func slot(at x: CGFloat) -> Int? {

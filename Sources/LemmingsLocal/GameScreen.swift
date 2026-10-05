@@ -274,7 +274,7 @@ import NxlvKit
         if let background {
             let image = NSImage(cgImage: background, size: CGSize(width: background.width, height: background.height))
             image.draw(in: bounds, from: .zero, operation: .sourceOver, fraction: 0.6, respectFlipped: true,
-                hints: [.interpolation: NSImageInterpolation.none])
+                hints: [.interpolation: NSImageInterpolation.none.rawValue])
         }
     }
     // A menu owns pointer input until it closes, including gaps and disabled controls.
