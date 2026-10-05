@@ -112,7 +112,7 @@ See [the current campaign closure evidence](ReleaseReadiness/CampaignClosure-202
 | Release | Levels | Proven routes | Claim |
 | --- | ---: | ---: | --- |
 | Lemmings 2: The Tribes | 120 | 75 | **Preview** |
-| Lemmings 3: The Chronicles | 90 | 41 | **Preview** |
+| Lemmings 3: The Chronicles | 90 | 43 | **Preview** |
 
 Both play through their campaigns with original artwork, music and interfaces.
 Lemmings 3 keeps provisional rules in several areas, and its environmental
@@ -148,7 +148,7 @@ release does not imply support for either platform group.
 
 - The `Oh My! ALL Lemmings!` run across the sequel previews remains outside the
   completed 352-level Classic campaign gate.
-- L2 and L3 retain preview status; their 94 missing routes are tracked separately
+- L2 and L3 retain preview status; their 92 missing routes are tracked separately
   from the Classic 1.0 milestone.
 - Physical Intel, minimum macOS, HDR, multiple displays and high refresh rates
   are untested. Sustained 10x play is not established.

@@ -165,4 +165,133 @@ do {
     throw Failure(description: "NeoLemmix recovery accepted changed level content")
 } catch RunRecoveryError.differentGame {}
 
-print("PASS cross-build recovery: Classic and NeoLemmix replay, saved-state fallback, encoded state, and changed-content refusal")
+// 7. A saved L3 attempt keeps the old Hadoken rule after the pickup was changed
+// from one use to eight. Rewind must replay from that same old initial state.
+func l3Initial(hadokenQuantity: Int, changedTerrain: Bool = false) throws -> Lemmings3Runtime {
+    let width = 64, height = 64
+    var attributes = Array(repeating: UInt16(0x1000), count: width * height)
+    for x in 0..<width { attributes[48 * width + x] = 0x2020 }
+    if changedTerrain { attributes[40 * width + 40] = 0x2020 }
+    return try Lemmings3Runtime(configuration: .init(
+        width: width, height: height, attributes: attributes,
+        entrance: .init(x: 16, y: 48), exits: [.init(x: 56, y: 48)],
+        total: 1, releaseInterval: 23, releaseDelay: 1, timeLimit: 100,
+        pickups: [.init(id: 0, tool: .hadoken, x: 16, y: 36, quantity: hadokenQuantity)]))
+}
+
+let oldL3Initial = try l3Initial(hadokenQuantity: 1)
+let currentL3Initial = try l3Initial(hadokenQuantity: 8)
+var oldL3Game = oldL3Initial
+oldL3Game.step(); oldL3Game.step()
+try require(oldL3Game.lemmings.first?.tool == .hadoken && oldL3Game.lemmings.first?.quantity == 1,
+    "old L3 fixture did not collect the one-use Hadoken")
+let oldL3Input = L3RunRecovery.Input(tick: oldL3Game.tick, action: "use", lemming: 0, direction: "right")
+try require(L3RunRecovery.apply(oldL3Input, to: &oldL3Game), "old L3 fixture could not use the Hadoken")
+for _ in 0..<5 { oldL3Game.step() }
+try require(!oldL3Game.isComplete, "old L3 fixture completed before its checkpoint")
+let l3Journal = L3RunRecovery(progress: .init(index: 0, population: 1, completed: [:], tribe: .classic),
+    inputs: [oldL3Input], skillAssignments: [:], toolUses: [:])
+func l3Checkpoint(initialHash: String, stateHash: String, tick: Int) -> RunRecovery {
+    var checkpoint = RunRecovery(engine: "an earlier L3 engine", profileID: "player", runID: UUID(),
+        dataSetID: "lemmings3", levelIndex: 0, levelFingerprint: "fixture-level",
+        initialStateHash: initialHash, tick: tick, events: [], stateHash: stateHash,
+        usedRewind: false, nukeCount: 0, rewindCount: 0, undoCount: 0, selectedSkill: 0,
+        scrollX: 0, scrollY: 0)
+    checkpoint.sourcePath = "/fixture/LEM3CD"
+    checkpoint.l3 = l3Journal
+    return checkpoint
+}
+let oldL3Checkpoint = l3Checkpoint(initialHash: L3RunRecovery.stateHash(oldL3Initial),
+    stateHash: L3RunRecovery.stateHash(oldL3Game), tick: oldL3Game.tick)
+let resumedL3 = try l3Journal.restore(initial: currentL3Initial, checkpoint: oldL3Checkpoint)
+try require(L3RunRecovery.stateHash(resumedL3.initial) == oldL3Checkpoint.initialStateHash,
+    "old L3 run lost its starting rules for rewind and later saves")
+try require(L3RunRecovery.stateHash(resumedL3.game) == oldL3Checkpoint.stateHash,
+    "old L3 run restored to a different state")
+let currentL3Game = try L3RunRecovery.replay(initial: currentL3Initial,
+    inputs: [oldL3Input], through: oldL3Game.tick)
+let currentL3Checkpoint = l3Checkpoint(initialHash: L3RunRecovery.stateHash(currentL3Initial),
+    stateHash: L3RunRecovery.stateHash(currentL3Game), tick: currentL3Game.tick)
+let currentL3Restored = try l3Journal.restore(initial: currentL3Initial, checkpoint: currentL3Checkpoint)
+try require(L3RunRecovery.stateHash(currentL3Restored.initial) == currentL3Checkpoint.initialStateHash &&
+    L3RunRecovery.stateHash(currentL3Restored.game) == currentL3Checkpoint.stateHash,
+    "current-rule L3 checkpoint did not restore exactly")
+func l3SpadeInitial(quantity: Int) throws -> Lemmings3Runtime {
+    try Lemmings3Runtime(configuration: .init(
+        width: 64, height: 64, attributes: currentL3Initial.configuration.attributes,
+        entrance: .init(x: 16, y: 48), exits: [.init(x: 56, y: 48)],
+        total: 1, releaseInterval: 23, releaseDelay: 1, timeLimit: 100,
+        pickups: [.init(id: 0, tool: .spade, x: 16, y: 36, quantity: quantity)]))
+}
+let legacySpadeInitial = try l3SpadeInitial(quantity: 6)
+let currentSpadeInitial = try l3SpadeInitial(quantity: 8)
+var legacySpadeRun = legacySpadeInitial
+legacySpadeRun.step(); legacySpadeRun.step()
+try require(legacySpadeRun.lemmings[0].tool == .spade && legacySpadeRun.lemmings[0].quantity == 6,
+    "old L3 fixture did not collect the six-use Spade")
+let spadeInput = L3RunRecovery.Input(tick: legacySpadeRun.tick, action: "use", lemming: 0, direction: "down")
+try require(L3RunRecovery.apply(spadeInput, to: &legacySpadeRun),
+    "old L3 fixture could not use the Spade")
+for _ in 0..<5 { legacySpadeRun.step() }
+try require(!legacySpadeRun.isComplete, "old L3 Spade fixture completed before its checkpoint")
+let spadeJournal = L3RunRecovery(progress: .init(index: 0, population: 1, completed: [:], tribe: .classic),
+    inputs: [spadeInput], skillAssignments: [:], toolUses: [:])
+var spadeCheckpoint = l3Checkpoint(initialHash: L3RunRecovery.stateHash(legacySpadeInitial),
+    stateHash: L3RunRecovery.stateHash(legacySpadeRun), tick: legacySpadeRun.tick)
+spadeCheckpoint.l3 = spadeJournal
+let restoredSpade = try spadeJournal.restore(initial: currentSpadeInitial, checkpoint: spadeCheckpoint)
+try require(L3RunRecovery.stateHash(restoredSpade.initial) == spadeCheckpoint.initialStateHash &&
+    L3RunRecovery.stateHash(restoredSpade.game) == spadeCheckpoint.stateHash &&
+    restoredSpade.game.lemmings[0].quantity == legacySpadeRun.lemmings[0].quantity,
+    "old L3 Spade run did not restore and replay its six-use rule")
+let mappedAttributes = currentL3Initial.configuration.attributes
+func l3MappedInitial(legacy: Bool) throws -> Lemmings3Runtime {
+    try Lemmings3Runtime(configuration: .init(
+        width: 64, height: 64, attributes: mappedAttributes,
+        entrance: .init(x: 16, y: 48), exits: [.init(x: 56, y: 48)],
+        total: 1, releaseInterval: 23, releaseDelay: 1, timeLimit: 100,
+        pickups: [
+            .init(id: 0, tool: legacy ? .hadoken : .shimmy, x: 16, y: 36, quantity: 8),
+            .init(id: 1, tool: legacy ? .shimmy : .hadoken, x: 32, y: 36, quantity: 1),
+            .init(id: 2, tool: .sucker, x: 48, y: 36, quantity: legacy ? 1 : 8),
+            .init(id: 3, tool: .spade, x: 40, y: 36, quantity: legacy ? 6 : 8)
+        ]))
+}
+let legacyMappedInitial = try l3MappedInitial(legacy: true)
+let currentMappedInitial = try l3MappedInitial(legacy: false)
+var legacyMappedRun = legacyMappedInitial
+legacyMappedRun.step(); legacyMappedRun.step()
+try require(legacyMappedRun.lemmings[0].tool == .hadoken && legacyMappedRun.lemmings[0].quantity == 8,
+    "old L3 tool mapping did not collect the former Hadoken")
+let mappedInput = L3RunRecovery.Input(tick: legacyMappedRun.tick, action: "use", lemming: 0, direction: "right")
+try require(L3RunRecovery.apply(mappedInput, to: &legacyMappedRun),
+    "old L3 tool mapping could not fire the former Hadoken")
+for _ in 0..<5 { legacyMappedRun.step() }
+let mappedJournal = L3RunRecovery(progress: .init(index: 0, population: 1, completed: [:], tribe: .classic),
+    inputs: [mappedInput], skillAssignments: [:], toolUses: [:])
+var mappedCheckpoint = l3Checkpoint(initialHash: L3RunRecovery.stateHash(legacyMappedInitial),
+    stateHash: L3RunRecovery.stateHash(legacyMappedRun), tick: legacyMappedRun.tick)
+mappedCheckpoint.l3 = mappedJournal
+let restoredMapping = try mappedJournal.restore(initial: currentMappedInitial, checkpoint: mappedCheckpoint)
+try require(L3RunRecovery.stateHash(restoredMapping.initial) == mappedCheckpoint.initialStateHash &&
+    L3RunRecovery.stateHash(restoredMapping.game) == mappedCheckpoint.stateHash,
+    "old L3 tool mapping did not replay its former Hadoken action")
+let rewoundL3 = try L3RunRecovery.replay(initial: resumedL3.initial, inputs: [], through: 1)
+try require(rewoundL3.lemmings.first?.quantity == 1, "old L3 run rewound with the eight-use Hadoken")
+var oldL3Continued = oldL3Game, resumedL3Continued = resumedL3.game
+for _ in 0..<15 { oldL3Continued.step(); resumedL3Continued.step() }
+try require(L3RunRecovery.stateHash(oldL3Continued) == L3RunRecovery.stateHash(resumedL3Continued),
+    "old L3 run diverged after restore")
+do {
+    _ = try l3Journal.restore(initial: try l3Initial(hadokenQuantity: 8, changedTerrain: true),
+        checkpoint: oldL3Checkpoint)
+    throw Failure(description: "L3 recovery accepted changed terrain")
+} catch RunRecoveryError.differentGame {}
+do {
+    _ = try l3Journal.restore(initial: currentL3Initial,
+        checkpoint: l3Checkpoint(initialHash: oldL3Checkpoint.initialStateHash,
+            stateHash: "wrong saved state", tick: oldL3Game.tick))
+    throw Failure(description: "L3 recovery accepted a mismatched saved state")
+} catch RunRecoveryError.invalid {}
+
+print("PASS cross-build recovery: Classic, NeoLemmix and L3 legacy replay, continuation, and changed-content refusal")

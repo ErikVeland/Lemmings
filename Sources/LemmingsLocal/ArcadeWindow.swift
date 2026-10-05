@@ -21,12 +21,14 @@ import NxlvKit
     func showResult(_ report: ArcadeReport, owner: NSWindow? = nil, retry: @escaping () -> Void,
                     next: @escaping () -> Void, replay: @escaping (Bool) -> Void, continueTitle: String = "Next level", background: CGImage? = nil, rewardVolume: Double = 0,
                     continueHandlesHandover: Bool = false, skip: (() -> Void)? = nil,
-                    later: (() -> Void)? = nil, hints: (() -> Void)? = nil) {
+                    later: (() -> Void)? = nil, hints: (() -> Void)? = nil,
+                    status: String? = nil) {
         arcadeView.rewardVolume = rewardVolume
         arcadeView.mode = .result; arcadeView.report = report; arcadeView.level = report.run.level
         arcadeView.assisted = report.run.assisted; arcadeView.board = .rescue; arcadeView.trolleyBoard = .mostSaved
         arcadeView.boardScope = .level
         arcadeView.continueTitle = continueTitle; arcadeView.background = background
+        arcadeView.resultStatus = status
         arcadeView.continueHandlesHandover = continueHandlesHandover
         arcadeView.onRetry = { [weak self] in self?.close(); retry() }
         arcadeView.onContinue = { [weak self] in self?.close(); next() }
@@ -160,6 +162,7 @@ import NxlvKit
     var onReplay: ((Bool) -> Void)?
     var onClose: (() -> Void)?
     var continueTitle = "Next level"
+    var resultStatus: String?
     var continueHandlesHandover = false
     var cleared: Bool { report?.run.qualifies == true }
     var nextSessionPlayer: ArcadeProfile? { ArcadeStore.shared.nextSessionProfile(after: player.id) }

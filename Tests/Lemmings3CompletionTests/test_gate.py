@@ -31,4 +31,7 @@ with tempfile.TemporaryDirectory(prefix='l3-replay-negative-') as directory:
         elif change == 'actor': changed['inputs'][0]['lemming'] = 999
         else: changed['inputs'].append(dict(changed['inputs'][0], tick=0))
         run(changed, False)
-print('PASS L3 missing fixture, population, level hash, level number, outcome, rejected input and ordering gates')
+    file.write_text(json.dumps(original))
+    strict_subset = subprocess.run([binary, 'verify', '--require-all', '1'], env=env, capture_output=True)
+    assert strict_subset.returncode != 0, 'Strict gate accepted a selected-level subset'
+print('PASS L3 missing fixture, population, level hash, level number, outcome, rejected input, ordering and strict-scope gates')

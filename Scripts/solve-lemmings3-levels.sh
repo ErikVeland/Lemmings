@@ -1,7 +1,8 @@
 #!/bin/zsh
 # Builds the Lemmings 3 route solver and searches the named levels.
 # Usage: zsh Scripts/solve-lemmings3-levels.sh <level number>... | missing [--budget SECONDS] [--beam N]
-#        [--fewer-inputs-first] [--promote] [--out DIR]
+#        [--fewer-inputs-first] [--population N] [--tool-site-cell PIXELS] [--paired-actors]
+#        [--seed FILE --seed-through TICK] [--promote] [--out DIR]
 # A route counts only after two replays agree. --promote writes it into
 # Tests/Lemmings3CompletionTests/Fixtures when it keeps more lemmings than the existing route.
 # Then run python3 Tools/CampaignCompletion/report.py and Scripts/verify-l3-completion.sh.
@@ -26,7 +27,7 @@ import subprocess
 import sys
 
 solver, *args = sys.argv[1:]
-options = {"--budget", "--beam", "--depth", "--out"}
+options = {"--budget", "--beam", "--depth", "--population", "--tool-site-cell", "--out", "--seed", "--seed-through"}
 budget = 600.0
 levels = 0
 skip = False
@@ -45,6 +46,40 @@ for index, argument in enumerate(args):
         levels = 90
     elif argument.isdigit():
         levels += 1
+
+if "--tool-site-cell" in args:
+    index = args.index("--tool-site-cell")
+    try:
+        cell = int(args[index + 1])
+    except (IndexError, ValueError):
+        cell = 0
+    if cell <= 0:
+        print("--tool-site-cell requires a positive pixel count", file=sys.stderr)
+        sys.exit(2)
+
+if "--population" in args:
+    index = args.index("--population")
+    try:
+        population = int(args[index + 1])
+    except (IndexError, ValueError):
+        population = 0
+    if not 1 <= population <= 1000:
+        print("--population requires an integer from 1 to 1000", file=sys.stderr)
+        sys.exit(2)
+    if population != 20 and "--promote" in args:
+        print("--promote requires population 20; save carried-population routes as candidates", file=sys.stderr)
+        sys.exit(2)
+
+if "--seed" in args or "--seed-through" in args:
+    try:
+        seed = args[args.index("--seed") + 1]
+        checkpoint = int(args[args.index("--seed-through") + 1])
+    except (ValueError, IndexError):
+        print("--seed FILE and --seed-through TICK require one level and a valid checkpoint tick", file=sys.stderr)
+        sys.exit(2)
+    if seed.startswith("--") or not 0 <= checkpoint < 30000 or levels != 1 or "missing" in args:
+        print("--seed FILE and --seed-through TICK require one level and a valid checkpoint tick", file=sys.stderr)
+        sys.exit(2)
 
 limit = max(1, levels) * (max(1.0, budget) + 15.0)
 try:
