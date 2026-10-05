@@ -19,8 +19,12 @@ struct AuditedClassicLevel: Codable {
     let playable: Bool
     let initialHash: String?
     let issue: String?
+    var startingReleaseRate: Int? = nil
+    var rescueRequirementRatio: Double? = nil
     var candidate: ProgressionCandidate {
-        .init(entry: entry, profile: profile, isOfficial: official, campaignOrder: order)
+        .init(entry: entry, profile: profile, isOfficial: official, campaignOrder: order,
+              startingReleaseRate: startingReleaseRate,
+              rescueRequirementRatio: rescueRequirementRatio)
     }
 }
 
@@ -93,7 +97,10 @@ struct ImportedFanReplay: Decodable {
                 }
             } catch { issue = String(describing: error) }
             return .init(entry: entry, profile: profile, official: official, order: order,
-                         playable: playable, initialHash: hash, issue: issue)
+                         playable: playable, initialHash: hash, issue: issue,
+                         startingReleaseRate: level.releaseRate,
+                         rescueRequirementRatio: level.lemmingCount > 0
+                            ? Double(level.saveRequirement) / Double(level.lemmingCount) : nil)
         }
         func entry(_ identity: LevelCatalogueIdentity, revision: String, pack: String, title: String, number: Int) throws -> LevelPlaylistEntry {
             let digest = Array(SHA256.hash(data: Data((identity.packID + "\u{0}" + identity.levelID).utf8)))
@@ -214,7 +221,9 @@ struct ImportedFanReplay: Decodable {
                     let profile = try ClassicDifficultyAnalysis.analyse(initial: initial, replay: witness, key: key, maximumProbeRuns: 10)
                     if old.profile.confidence == .low || profile.overallScore < old.profile.overallScore {
                         rows[index] = .init(entry: old.entry, profile: profile, official: false, order: old.order,
-                                            playable: true, initialHash: hash, issue: nil)
+                                            playable: true, initialHash: hash, issue: nil,
+                                            startingReleaseRate: old.startingReleaseRate,
+                                            rescueRequirementRatio: old.rescueRequirementRatio)
                     }
                     verified.append(witness)
                     importResults.append("\(candidate.title): verified native win")

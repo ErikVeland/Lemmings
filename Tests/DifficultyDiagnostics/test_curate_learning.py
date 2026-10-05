@@ -22,7 +22,9 @@ class CurriculumTests(unittest.TestCase):
                         'sourceRank':'Fun',
                         'components':{'techniqueBurden':65,'solutionComplexity':40+n,
                             'executionPrecision':0,'concurrencyBurden':0,
-                            'constraintPressure':30,'deductionComplexityProxy':30}}})
+                            'constraintPressure':30,'deductionComplexityProxy':30,
+                            'criticalActions':[]}},
+                    'startingReleaseRate':50,'rescueRequirementRatio':.5})
                 replays[replay_id] = {'initialStateHash':replay_id,'expected':{'didWin':True,'ticks':100},
                     'events':[{'tick':10,'action':{'assign':{'lemmingID':0,'skill':skill}}}]}
         return rows,replays
@@ -82,6 +84,29 @@ class CurriculumTests(unittest.TestCase):
         self.assertIn('introduce:miner', result['unavailableOptionalObjectives'])
         self.assertFalse(any(l['objective'] == 'introduce:miner' for l in result['lessons']))
 
+    def test_source_release_rate_and_rescue_quota_raise_candidate_demand(self):
+        rows,replays = self.pool()
+        row = rows[0]
+        row['startingReleaseRate'] = 99
+        self.assertEqual(curation.demand(row), 360)
+        row['startingReleaseRate'] = 50
+        row['rescueRequirementRatio'] = .95
+        self.assertEqual(curation.demand(row), 360)
+        row['rescueRequirementRatio'] = .949
+        self.assertLess(curation.demand(row), 180)
+
+    def test_unverified_source_constraints_are_deferred(self):
+        rows,_ = self.pool()
+        row = rows[0]
+        row.pop('startingReleaseRate')
+        self.assertGreaterEqual(curation.demand(row), 360)
+
+    def test_narrow_timing_actions_are_deferred(self):
+        rows,_ = self.pool()
+        row = rows[0]
+        row['profile']['criticalActions'] = [0]
+        self.assertGreaterEqual(curation.demand(row), 360)
+
     def test_repeated_builders_are_not_new_sequences(self):
         rows,_ = self.pool()
         row=rows[0]
@@ -117,13 +142,19 @@ class CurriculumTests(unittest.TestCase):
         goals={json.dumps(l['identity'],sort_keys=True):l for l in plan['lessons']}
         lessons=manifest['lessons']
         self.assertLess(len(lessons),plan['poolSize'])
-        self.assertTrue(280 <= len(lessons) <= 305)
+        self.assertTrue(200 <= len(lessons) <= 305)
         self.assertEqual(len({g['applicationSignature'] for g in goals.values()}),len(lessons))
         self.assertEqual(len({g['objective'] for g in goals.values()}),len(lessons))
         introductions=0
         for i,lesson in enumerate(lessons):
             goal=goals[json.dumps(lesson['entry']['identity'],sort_keys=True)]
             self.assertEqual(lesson['focus'],goal['lesson'])
+            if (goal.get('startingReleaseRate') is None
+                    or goal.get('rescueRequirementRatio') is None
+                    or goal['startingReleaseRate'] == 99
+                    or goal.get('hasNarrowTiming', False)
+                    or goal['rescueRequirementRatio'] >= .95):
+                self.assertIn(lesson['stage'],('Difficult','Expert'))
             if goal['objective'].startswith('introduce:'):
                 introductions+=1
                 if not goal['beginnerRank']:

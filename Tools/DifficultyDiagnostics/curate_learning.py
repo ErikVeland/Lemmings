@@ -25,10 +25,17 @@ def beginner_rank(row):
 
 def demand(row):
     p = row['profile']; c = p['components']
-    return max(p['overallScore'], c['techniqueBurden']*.85, c['solutionComplexity']*.7,
+    observed = max(p['overallScore'], c['techniqueBurden']*.85, c['solutionComplexity']*.7,
                c['executionPrecision']*.85, c['concurrencyBurden']*.85,
                c['deductionComplexityProxy']*.85, c['constraintPressure']*.5,
                max(0, len(p['detectedTechniques'])-1)*90)
+    constrained = (row.get('startingReleaseRate') is None
+                   or row.get('rescueRequirementRatio') is None
+                   or row.get('startingReleaseRate') == 99
+                   or bool(p.get('criticalActions'))
+                   or (row.get('rescueRequirementRatio') or 0) >= .95)
+    action_heavy = (row.get('skillAssignmentCount') or 0) >= 12
+    return max(observed, 360 if constrained or action_heavy else 0)
 
 
 def requires_full_rescue(row, replay):
@@ -68,6 +75,8 @@ def select(pool, replays):
     evidence = {}
     for row in pool:
         replay = replays.get(row['profile']['key']['replayRevision']) or replays.get(row['initialHash'])
+        row['skillAssignmentCount'] = (sum('assign' in event.get('action', {}) for event in replay.get('events', []))
+                                       if replay else None)
         if (replay and replay.get('expected', {}).get('didWin')
                 and replay['expected']['ticks'] > 0
                 and replay['initialStateHash'] == row['initialHash']
@@ -100,6 +109,10 @@ def select(pool, replays):
             'lesson': lesson, 'purpose': purpose, 'evidence': 'winning replay assignments and measured profile',
             'level': row['entry']['levelNameSnapshot'], 'intrinsicDemand': demand(row),
             'sourceRank': row['profile'].get('sourceRank'), 'beginnerRank': beginner_rank(row),
+            'startingReleaseRate': row.get('startingReleaseRate'),
+            'rescueRequirementRatio': row.get('rescueRequirementRatio'),
+            'skillAssignmentCount': row.get('skillAssignmentCount'),
+            'hasNarrowTiming': bool(row['profile'].get('criticalActions')),
             'requiresFullRescue': requires_full_rescue(row, witness)}
 
     # Prefer a low-demand Fun, Easy or Tame source. A low-demand witness from
@@ -244,6 +257,10 @@ def select(pool, replays):
                 'evidence': 'winning replay assignments and measured profile',
                 'level': row['entry']['levelNameSnapshot'], 'intrinsicDemand': demand(row),
                 'sourceRank': row['profile'].get('sourceRank'), 'beginnerRank': beginner_rank(row),
+                'startingReleaseRate': row.get('startingReleaseRate'),
+                'rescueRequirementRatio': row.get('rescueRequirementRatio'),
+                'skillAssignmentCount': row.get('skillAssignmentCount'),
+                'hasNarrowTiming': bool(row['profile'].get('criticalActions')),
                 'requiresFullRescue': requires_full_rescue(row, replays.get(row['profile']['key']['replayRevision'])
                                                            or replays.get(row['initialHash'], {}))}
             used_signatures.add(signature)
@@ -252,10 +269,10 @@ def select(pool, replays):
     for lesson in lessons:
         lesson['applicationSignature'] = application_signature(evidence[json.dumps(lesson['identity'], sort_keys=True)])
     assert len({l['objective'] for l in lessons}) == len(lessons)
-    return {'version':'curriculum-3', 'targetSize':292, 'poolSize':len(pool), 'lessons':lessons,
+    return {'version':'curriculum-5', 'targetSize':292, 'poolSize':len(pool), 'lessons':lessons,
             'selectionPolicy':'Official first within comparable 35-point demand bands; distinct observed applications; source-only replay commands and known Lemmini source packs excluded from the Classic path.',
             'unavailableOptionalObjectives':missing,
-            'limits':'Objectives describe observed routes. Opening introductions prefer a low-demand Fun, Easy or Tame candidate. When none is available, a low-demand non-beginner witness may introduce the skill in Intermediate. Full-rescue witnesses are excluded from introductions. Novice readability and technique necessity require playtesting.'}
+            'limits':'Objectives describe observed routes. Starting release rate 99, source rescue quotas of at least 95% of the population, narrow measured timing windows, levels without verified source settings, and routes with at least 12 skill assignments start at Difficult. Opening introductions prefer a low-demand Fun, Easy or Tame candidate. Full-rescue witnesses are excluded from introductions. Novice readability and technique necessity require playtesting.'}
 
 
 if __name__ == '__main__':

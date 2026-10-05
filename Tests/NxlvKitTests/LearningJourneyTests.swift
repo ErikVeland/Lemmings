@@ -12,7 +12,8 @@ struct LearningJourneyTests {
             detectedTechniques: concepts)
         let entry = try LevelPlaylistEntry(identity: identity, catalogueRevision: "v1", sourceRevision: "v1",
             packNameSnapshot: "Test", levelNameSnapshot: "Level \(index)", levelNumberSnapshot: index + 1)
-        return .init(entry: entry, profile: profile, isOfficial: true, campaignOrder: index)
+        return .init(entry: entry, profile: profile, isOfficial: true, campaignOrder: index,
+                     startingReleaseRate: 50, rescueRequirementRatio: 0.5)
     }
     @Test func keepsTheWholeCampaignAndFillsTheRetailJump() throws {
         let values = try (0..<352).map { try candidate($0, score: Double($0) * 2) }
@@ -25,11 +26,15 @@ struct LearningJourneyTests {
     @Test func officialLevelsLeadComparablePortLevelsWithoutOverridingDifficulty() throws {
         let low = try candidate(7, score: 40, concepts: ["miner"])
         let high = try candidate(0, score: 300, concepts: ["digger"])
-        let fan = ProgressionCandidate(entry: low.entry, profile: low.profile, isOfficial: false, campaignOrder: 999)
+        let fan = ProgressionCandidate(entry: low.entry, profile: low.profile, isOfficial: false,
+            campaignOrder: 999, startingReleaseRate: low.startingReleaseRate,
+            rescueRequirementRatio: low.rescueRequirementRatio)
         let journey = try LearningJourney.generate([high, fan])
         #expect(journey.lessons.map(\.score) == [40, 300])
         #expect(journey.lessons.first?.entry.identity == fan.entry.identity)
-        let reversedOrigins = [ProgressionCandidate(entry: high.entry, profile: high.profile, isOfficial: false, campaignOrder: 0), low]
+        let reversedOrigins = [ProgressionCandidate(entry: high.entry, profile: high.profile, isOfficial: false,
+            campaignOrder: 0, startingReleaseRate: high.startingReleaseRate,
+            rescueRequirementRatio: high.rescueRequirementRatio), low]
         #expect(try LearningJourney.generate(reversedOrigins) == journey)
         let official = try candidate(1, score: 40, concepts: ["miner"])
         let comparable = try LearningJourney.generate([fan, official])
@@ -47,6 +52,36 @@ struct LearningJourneyTests {
         #expect(throws: LevelPlaylistError.self) {
             try LearningJourney.generate([dig, build], objectives: [dig.entry.identity: "same", build.entry.identity: "same"])
         }
+    }
+    @Test func highSourceConstraintsStartAtDifficult() throws {
+        let baseline = try candidate(0, score: 40, concepts: ["digger"])
+        let fastStart = ProgressionCandidate(entry: baseline.entry, profile: baseline.profile,
+            isOfficial: true, startingReleaseRate: 99)
+        let highQuota = ProgressionCandidate(entry: baseline.entry, profile: baseline.profile,
+            isOfficial: true, rescueRequirementRatio: 0.95)
+        for constrained in [fastStart, highQuota] {
+            let journey = try LearningJourney.generate([constrained])
+            #expect(journey.lessons.first?.stage == .difficult)
+            #expect(journey.lessons.first?.demand == LearningJourney.demandingLevelFloor)
+        }
+        let belowThreshold = ProgressionCandidate(entry: baseline.entry, profile: baseline.profile,
+            isOfficial: true, startingReleaseRate: 50, rescueRequirementRatio: 0.949)
+        #expect(try LearningJourney.generate([belowThreshold]).lessons.first?.stage == .fun)
+        let unverified = ProgressionCandidate(entry: baseline.entry, profile: baseline.profile,
+            isOfficial: true)
+        #expect(try LearningJourney.generate([unverified]).lessons.first?.stage == .difficult)
+    }
+    @Test func measuredNarrowTimingStartsAtDifficult() throws {
+        let baseline = try candidate(0, score: 40, concepts: ["digger"])
+        let precision = DifficultyPrecisionEvidence(
+            actions: [.init(sequence: 0, outcomes: [-1: false, 1: false])],
+            assignmentCount: 1, runCount: 2, completed: true)
+        let profile = DifficultyProfile(key: baseline.profile.key, confidence: .high,
+            components: .init(), detectedTechniques: ["digger"], precision: precision)
+        #expect(profile.criticalActions == [0])
+        let narrow = ProgressionCandidate(entry: baseline.entry, profile: profile, isOfficial: true,
+            startingReleaseRate: 50, rescueRequirementRatio: 0.5)
+        #expect(try LearningJourney.generate([narrow]).lessons.first?.stage == .difficult)
     }
     @Test func complexRoutesWaitForSecondBasicSkillPractice() throws {
         let climb = try candidate(0, score: 55, concepts: ["climber"])
@@ -110,7 +145,9 @@ struct LearningJourneyTests {
         let precise = DifficultyProfile(key: low.profile.key, confidence: .medium,
             components: .init(executionPrecision: 300), detectedTechniques: ["builder"])
         #expect(precise.overallScore + 10 < high.profile.overallScore)
-        let fan = ProgressionCandidate(entry: low.entry, profile: precise, isOfficial: false)
+        let fan = ProgressionCandidate(entry: low.entry, profile: precise, isOfficial: false,
+            startingReleaseRate: low.startingReleaseRate,
+            rescueRequirementRatio: low.rescueRequirementRatio)
         let result = try LearningJourney.generate([high, fan, first])
         #expect(result.lessons.map(\.entry.identity) == [first.entry.identity, low.entry.identity, high.entry.identity])
         #expect(result.lessons.allSatisfy { $0.preparationGaps.isEmpty })
