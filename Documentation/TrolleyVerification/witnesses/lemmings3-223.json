@@ -3,10 +3,10 @@
     "lost" : 11,
     "reserves" : 10,
     "saved" : 1,
-    "stateHash" : "f322162d4554461dec6f4f5e4aca4811d0d26ebf61b1a5b9380f2562455ed481",
+    "stateHash" : "35975d6d9e0f109cd38f8c853ca71481a8044c5d24a04e463dd7e3e9ea9f388f",
     "ticks" : 6210
   },
-  "initialStateHash" : "944d25b68598a2d2eeca58bd7410f07374ff404f0674ab8624379c43d7eaf71b",
+  "initialStateHash" : "a4cabc0c63c86d1b095ef8e62677f1b4ca9bb4e1ced9f634ee9d3f30b130cb53",
   "inputs" : [
     {
       "action" : "use",
@@ -472,11 +472,6 @@
     },
     {
       "action" : "jumper",
-      "lemming" : 2,
-      "tick" : 807
-    },
-    {
-      "action" : "jumper",
       "lemming" : 7,
       "tick" : 811
     },
@@ -552,11 +547,6 @@
     },
     {
       "action" : "jumper",
-      "lemming" : 2,
-      "tick" : 867
-    },
-    {
-      "action" : "jumper",
       "lemming" : 7,
       "tick" : 872
     },
@@ -604,16 +594,6 @@
       "action" : "jumper",
       "lemming" : 10,
       "tick" : 903
-    },
-    {
-      "action" : "walker",
-      "lemming" : 2,
-      "tick" : 906
-    },
-    {
-      "action" : "jumper",
-      "lemming" : 2,
-      "tick" : 907
     },
     {
       "action" : "jumper",
@@ -812,11 +792,6 @@
     },
     {
       "action" : "jumper",
-      "lemming" : 2,
-      "tick" : 1023
-    },
-    {
-      "action" : "jumper",
       "lemming" : 8,
       "tick" : 1027
     },
@@ -914,11 +889,6 @@
       "action" : "jumper",
       "lemming" : 9,
       "tick" : 1080
-    },
-    {
-      "action" : "walker",
-      "lemming" : 2,
-      "tick" : 1082
     },
     {
       "action" : "jumper",

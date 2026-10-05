@@ -18,6 +18,20 @@ class AutomaticUpdateTests(unittest.TestCase):
         self.assertTrue(build.isdigit())
         self.assertGreaterEqual(items, 0)
 
+    def test_polish_release_versions(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "Info.plist"
+            info = plistlib.loads((ROOT / "Resources/Info.plist").read_bytes())
+            for version in ("1.7.9", "1.8", "1.8.1"):
+                info["CFBundleShortVersionString"] = version
+                path.write_bytes(plistlib.dumps(info))
+                self.assertEqual(validate_info_plist(path)[0], version)
+            for version in ("1.8-beta", "1.8.1.2", "1.9"):
+                info["CFBundleShortVersionString"] = version
+                path.write_bytes(plistlib.dumps(info))
+                with self.assertRaisesRegex(ValueError, "application"):
+                    validate_info_plist(path)
+
     def test_info_plist_rejects_an_invalid_public_key(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "Info.plist"

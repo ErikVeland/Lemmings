@@ -1,8 +1,8 @@
 # Modern Lemmings release plan
 
-Updated 30 September 2026. This is the current engineering plan, not an announcement of an official release.
+Updated 5 October 2026. This is the current engineering plan, not an announcement of an official release.
 
-The next planned release milestones are 1.7 NeoLemmix compatibility, 1.8
+The next planned release milestones are 1.8 Mac polish, 1.9
 Lemmings 2 and Lemmings 3 completion, and 2.0 iPhone and iPad. The existing
 1.3 mobile and 1.5 NeoLemmix source work is development evidence for those
 later gates. See the [project overview](Overview.md) for current release status.

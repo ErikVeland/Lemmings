@@ -128,9 +128,12 @@ failures from known unsupported mechanics. Fencer, Laserer, interactive
 gadgets, zombie infection, Superlemming and native reference-replay comparison
 remain open. See the [1.7 roadmap](1.7Roadmap.md).
 
-**1.8: complete Lemmings 2 and Lemmings 3.** The remaining 96 winning routes
+**1.8: Mac polish.** Sharper pixel rendering, NeoLemmix sound effects and
+reliable music recovery after a nuke. L2/L3 remain Preview and NeoLemmix Beta.
+
+**1.9: complete Lemmings 2 and Lemmings 3.** The remaining 94 winning routes
 need proof. Both games also need engine-fidelity, campaign-progression, media
-and recovery evidence. Until the 1.8 gate passes, both games remain Preview.
+and recovery evidence. Until the 1.9 gate passes, both games remain Preview.
 
 **2.0: complete physical iPhone and iPad acceptance, including launch support
 for iPhone Duo.** The repository has a UIKit/Metal app target, player-owned

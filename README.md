@@ -25,7 +25,7 @@ the current public release. Installed copies update automatically. Read the
 - [Project overview](Documentation/Overview.md) — player-facing status and roadmap.
 - [2.0 mobile roadmap](Documentation/2.0Roadmap.md) — iPhone/iPad scope, source state and device gates.
 - [1.7 NeoLemmix roadmap](Documentation/1.7Roadmap.md) — pinned oracle, executable gates and compatibility limits.
-- [1.8 sequel gate](Documentation/ContentUniverseRoadmap.md#18--lemmings-2-and-lemmings-3-completion) — winning routes, engine fidelity and campaign evidence.
+- [1.9 sequel gate](Documentation/ContentUniverseRoadmap.md#19--lemmings-2-and-lemmings-3-completion) — winning routes, engine fidelity and campaign evidence.
 - [1.5 NeoLemmix source handoff](Documentation/ReleaseReadiness/1.5NeoLemmixHandoff.md) — verified source and corpus evidence, open release gates and non-claims.
 - [Precision Zoom](Documentation/PrecisionZoom.md) — Z, Shift-Z and scroll controls, earnings and retry rules.
 - [Play insights](Documentation/PlayInsights.md) — home-screen saved counts, consent and collector setup.
@@ -48,7 +48,7 @@ Lemmings 2 and Lemmings 3 are labelled Preview. The bundled corpus contains
 6,020 Classic-format fan levels in 535 packs; this is not a claim of NeoLemmix
 fan-pack compatibility. NeoLemmix support remains Beta or Preview until its
 real-pack and reference-replay gates pass. Lemmings 2 and Lemmings 3 completion
-targets 1.8.
+targets 1.9.
 
 ## Requirements
 
