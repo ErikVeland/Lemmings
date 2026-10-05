@@ -7,7 +7,7 @@ public struct Lemmings3Runtime: Sendable {
     public enum State: String, Sendable { case walking, falling, floating, swimming, jumping, climbing, shimmying, blocking, building, digging, drowning, trapped, exiting, saved, dead }
     public enum Tool: Int, Sendable, CaseIterable {
         case bricks = 5000, bomb = 5001, spade = 5002, shimmy = 5003, sucker = 5004, umbrella = 5005, hadoken = 5006, grenade = 5007, swimmer = 5008, clock = 5009
-        public var initialQuantity: Int { self == .bricks ? 8 : (self == .grenade ? 4 : (self == .spade ? 6 : 1)) }
+        public var initialQuantity: Int { self == .bricks || self == .hadoken ? 8 : (self == .grenade ? 4 : (self == .spade ? 6 : 1)) }
         public var label: String { switch self { case .bricks: "B"; case .bomb: "BO"; case .spade: "D"; case .shimmy: "SH"; case .sucker: "CL"; case .umbrella: "U"; case .hadoken: "H"; case .grenade: "G"; case .swimmer: "S"; case .clock: "C" } }
     }
     public enum Direction: String, CaseIterable, Sendable {

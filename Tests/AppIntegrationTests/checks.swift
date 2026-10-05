@@ -5422,7 +5422,7 @@ Task { @MainActor in
     subject.prepareArcadeTests()
     // Match normal startup: use the packaged index before opening the home screen.
     FanLevelLibrary.Progress.seedBundledCounts()
-    #if !SELECTION_HDR_TESTS && !CURSOR_INPUT_TESTS && !RELEASE_UI_TESTS && !LOADING_LATENCY_TESTS && !TRANSPORT_TESTS && !DIALOG_TESTS && !NEO_RECOVERY_TESTS && !NEO_PACK_TESTS && !LEARNING_TESTS
+    #if !SELECTION_HDR_TESTS && !CURSOR_INPUT_TESTS && !RELEASE_UI_TESTS && !LOADING_LATENCY_TESTS && !TRANSPORT_TESTS && !DIALOG_TESTS && !L3_STORY_TESTS && !NEO_RECOVERY_TESTS && !NEO_PACK_TESTS && !LEARNING_TESTS
     try subject.testFailureMoodDecision()
     try subject.testSteppedCompletion()
     try subject.testFirstLaunchEffects()
@@ -5459,6 +5459,9 @@ Task { @MainActor in
     try await subject.testLevelHints()
     try await subject.testHintsFromControlsHelp()
     try subject.testTimelineToolbar()
+    #elseif L3_STORY_TESTS
+    try testL3OpeningStory()
+    print("Lemmings 3 opening story tests passed.")
     #elseif TRANSPORT_TESTS
     try subject.testTimelineToolbar()
     try subject.testPrecisionZoomWallet()
@@ -5762,6 +5765,169 @@ extension AppDelegate {
   func play() -> Bool { playCount += 1; return true }
   func pause() { pauseCount += 1 }
   func stop() { stopCount += 1 }
+}
+
+@MainActor private func testL3OpeningStory() throws {
+  func shouldOpen(_ restoring: Bool, _ selectedLevel: Bool, _ records: Bool, _ hotSeat: Bool) -> Bool {
+    Lemmings3StoryFlow(restoring: restoring, selectedLevel: selectedLevel,
+      recordsCampaignProgress: records, hotSeat: hotSeat).playsOpeningIntroduction
+  }
+  try check(shouldOpen(false, false, true, false), "Fresh L3 title entry skipped the introduction")
+  try check(!shouldOpen(true, false, true, false), "Recovered L3 run restarted the introduction")
+  try check(!shouldOpen(false, true, true, false), "Selected L3 level started the introduction")
+  try check(!shouldOpen(false, false, false, false), "L3 playlist started the introduction")
+  try check(!shouldOpen(false, false, true, true), "L3 Hot Seat started the introduction")
+
+  func shouldEnd(_ level: Int, _ survivors: Int, _ wasTribeCompleted: Bool,
+                 _ wasCampaignCompleted: Bool, _ isCampaignCompleted: Bool) -> Bool {
+    Lemmings3StoryFlow.playsEnding(afterLevel: level, finalLevel: 29, survivors: survivors,
+      wasTribeCompleted: wasTribeCompleted, wasCampaignCompleted: wasCampaignCompleted,
+      isCampaignCompleted: isCampaignCompleted)
+  }
+  try check(shouldEnd(29, 50, false, false, true), "Last eligible L3 tribe did not start the ending")
+  try check(!shouldEnd(29, 50, true, false, true), "Repeated eligible L3 finale restarted the ending")
+  try check(!shouldEnd(29, 49, false, false, true), "L3 ending accepted fewer than 50 survivors")
+  try check(!shouldEnd(28, 50, false, false, true), "Earlier L3 level replay restarted the ending")
+  try check(!shouldEnd(29, 50, true, true, true), "L3 finale replay restarted the ending")
+  try check(!shouldEnd(29, 50, false, false, false), "L3 ending started before all tribes qualified")
+
+  let host = SpeedTestWindow(contentRect: CGRect(x: 0, y: 0, width: 1120, height: 720),
+    styleMask: [], backing: .buffered, defer: false)
+  host.contentView = NSView(frame: CGRect(x: 0, y: 0, width: 1120, height: 720))
+  let priorWindow = GameScreen.shared.gameWindow
+  defer { GameScreen.shared.dismissAll(); GameScreen.shared.gameWindow = priorWindow }
+  let url = URL(fileURLWithPath: "Sources/Ports/LEM3CD/MOVIE/INTRO.FLI")
+  let audio = OriginalMovieAudioProbe()
+  let opening = try OriginalMoviePlayer(url: url, soundtrack: audio, returnsToGameWhenFinished: true)
+  var handovers = 0
+  opening.onClose = { handovers += 1 }
+  try check(opening.present(owner: host), "L3 introduction did not open")
+  opening.layoutSubtreeIfNeeded()
+  let controls = opening.subviews.compactMap { $0 as? NSButton }
+  try check(controls.count == 2 && controls.contains { $0.title == "Skip" },
+    "Automatic introduction did not offer Skip")
+  try check(controls.allSatisfy { opening.hitTest(CGPoint(x: $0.frame.midX, y: $0.frame.midY)) === $0 },
+    "L3 introduction controls lost their input targets")
+  let bitmap = opening.bitmapImageRepForCachingDisplay(in: opening.bounds)!
+  opening.cacheDisplay(in: opening.bounds, to: bitmap)
+  let output = URL(fileURLWithPath: ".build/l3-story")
+  try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
+  try bitmap.representation(using: .png, properties: [:])!.write(to: output.appendingPathComponent("opening.png"))
+  for _ in 0..<600 where GameScreen.shared.isPresented { opening.advance(seconds: 0.25) }
+  try check(opening.finished && handovers == 1 && !GameScreen.shared.isPresented,
+    "Completed L3 introduction did not hand over to the game")
+  try check(audio.playCount == 1 && audio.stopCount > 0, "L3 introduction audio did not stop at the handover")
+
+  let skipAudio = OriginalMovieAudioProbe()
+  let skipped = try OriginalMoviePlayer(url: url, soundtrack: skipAudio, returnsToGameWhenFinished: true)
+  var skips = 0
+  skipped.onClose = { skips += 1 }
+  try check(skipped.present(owner: host), "Skippable L3 introduction did not open")
+  let escape = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 0,
+    windowNumber: host.windowNumber, context: nil, characters: "\u{1b}",
+    charactersIgnoringModifiers: "\u{1b}", isARepeat: false, keyCode: 53)!
+  try check(GameScreen.shared.handleDialogKey(escape), "Escape did not skip the L3 introduction")
+  try check(skips == 1 && !GameScreen.shared.isPresented && skipAudio.stopCount > 0,
+    "Skipped L3 introduction did not return to the game")
+
+  let source = URL(fileURLWithPath: "Sources/Ports/LEM3CD")
+  let isolated = output.appendingPathComponent("missing-media-root")
+  try? FileManager.default.removeItem(at: isolated)
+  try FileManager.default.createDirectory(at: isolated, withIntermediateDirectories: true)
+  for asset in try FileManager.default.contentsOfDirectory(atPath: source.path) where asset != "MOVIE" {
+    try FileManager.default.createSymbolicLink(
+      at: isolated.appendingPathComponent(asset), withDestinationURL: source.appendingPathComponent(asset))
+  }
+  let endingKeys = Lemmings3ClassicCampaign.Tribe.allCases.map { tribe in
+    ArcadeStore.shared.progressKey("nativeL3\(tribe.title)Preview.v1." + isolated.standardizedFileURL.path)
+  }
+  let previousProgress = endingKeys.map { UserDefaults.standard.data(forKey: $0) }
+  defer {
+    for (key, data) in zip(endingKeys, previousProgress) {
+      if let data { UserDefaults.standard.set(data, forKey: key) }
+      else { UserDefaults.standard.removeObject(forKey: key) }
+    }
+  }
+  try check(!Lemmings3PlayWindow.testHasEarnedEnding(root: isolated),
+    "L3 ending opened without three tribe results")
+  for (tribe, key) in zip(Lemmings3ClassicCampaign.Tribe.allCases, endingKeys) {
+    var completed = Dictionary(uniqueKeysWithValues: (0..<30).map { ($0, 1) })
+    completed[29] = 50
+    let progress = Lemmings3ClassicCampaign.Progress(index: 29, population: 20,
+      completed: completed, tribe: tribe)
+    UserDefaults.standard.set(try JSONEncoder().encode(progress), forKey: key)
+  }
+  try check(Lemmings3PlayWindow.testHasEarnedEnding(root: isolated),
+    "L3 ending rejected three complete tribes with 50 survivors each")
+  var skippedProgress = Lemmings3ClassicCampaign.Progress(index: 29, population: 20,
+    completed: Dictionary(uniqueKeysWithValues: (0..<30).map { ($0, 1) }), tribe: .shadow)
+  skippedProgress.completed.removeValue(forKey: 15)
+  skippedProgress.completed[29] = 50
+  UserDefaults.standard.set(try JSONEncoder().encode(skippedProgress), forKey: endingKeys[1])
+  try check(Lemmings3PlayWindow.testHasEarnedEnding(root: isolated),
+    "L3 ending rejected a 50-survivor finale after an earlier level skip")
+  var short = Lemmings3ClassicCampaign.Progress(index: 29, population: 20,
+    completed: Dictionary(uniqueKeysWithValues: (0..<30).map { ($0, 1) }), tribe: .shadow)
+  short.completed[29] = 49
+  UserDefaults.standard.set(try JSONEncoder().encode(short), forKey: endingKeys[1])
+  try check(!Lemmings3PlayWindow.testHasEarnedEnding(root: isolated),
+    "L3 ending accepted a tribe finale with 49 survivors")
+  let game = try Lemmings3PlayWindow(root: isolated, recordsCampaignProgress: false)
+  defer { game.stop(); game.close() }
+  var endingHandovers = 0
+  try check(game.testOpenEnding { endingHandovers += 1 } == nil && endingHandovers == 1
+    && !GameScreen.shared.isPresented, "Missing L3 ending blocked the completion handover")
+  game.testOpenIntroduction(automatic: true)
+  try check(!GameScreen.shared.isPresented, "Missing automatic introduction blocked gameplay")
+  game.testOpenIntroduction(automatic: false)
+  try check(GameScreen.shared.isPresented, "Missing gallery movie hid its error")
+  GameScreen.shared.dismissAll()
+  let movieFolder = isolated.appendingPathComponent("MOVIE")
+  try FileManager.default.createDirectory(at: movieFolder, withIntermediateDirectories: true)
+  try Data([0, 1, 2]).write(to: movieFolder.appendingPathComponent("INTRO.FLI"))
+  try Data([0, 1, 2]).write(to: movieFolder.appendingPathComponent("THE-END.FLI"))
+  try check(game.testOpenEnding { endingHandovers += 1 } == nil && endingHandovers == 2
+    && !GameScreen.shared.isPresented, "Unreadable L3 ending blocked the completion handover")
+  game.testOpenIntroduction(automatic: true)
+  try check(!GameScreen.shared.isPresented, "Unreadable automatic introduction blocked gameplay")
+  game.testOpenIntroduction(automatic: false)
+  try check(GameScreen.shared.isPresented, "Unreadable gallery movie hid its error")
+  GameScreen.shared.dismissAll()
+  try FileManager.default.removeItem(at: movieFolder.appendingPathComponent("THE-END.FLI"))
+  try FileManager.default.createSymbolicLink(at: movieFolder.appendingPathComponent("THE-END.FLI"),
+    withDestinationURL: source.appendingPathComponent("MOVIE/THE-END.FLI"))
+  guard let ending = game.testOpenEnding(afterDismiss: { endingHandovers += 1 }) else {
+    throw IntegrationFailure(message: "Original L3 ending did not open")
+  }
+  for _ in 0..<900 where GameScreen.shared.isPresented { ending.advance(seconds: 0.25) }
+  try check(ending.finished && endingHandovers == 3 && !GameScreen.shared.isPresented,
+    "Completed L3 ending did not hand over to the library")
+  let level = ArcadeLevel(id: "l3-finale-result-test", title: "Shadow 30", game: "Lemmings 3",
+    rules: "native-test", total: 50, required: 1)
+  let run = ArcadeRun(profileID: ArcadeStore.shared.records.activeProfileID, level: level,
+    saved: 30, didWin: true, skills: [:], seconds: 42)
+  guard let report = ArcadeStore.shared.previewReport(for: run) else {
+    throw IntegrationFailure(message: "L3 finale result could not be prepared")
+  }
+  var selectedLevel = 0
+  ArcadeWindow.shared.showResult(report, owner: host, retry: {}, next: { selectedLevel += 1 },
+    replay: { _ in }, continueTitle: "Choose level", rewardVolume: 0,
+    status: "Need 50 survivors to complete this tribe.")
+  let result = ArcadeWindow.shared.arcadeView
+  result.layoutSubtreeIfNeeded()
+  let resultBitmap = result.bitmapImageRepForCachingDisplay(in: result.bounds)!
+  result.cacheDisplay(in: result.bounds, to: resultBitmap)
+  try resultBitmap.representation(using: .png, properties: [:])!.write(
+    to: output.appendingPathComponent("under-50-result.png"))
+  let resultControls = result.accessibilityChildren()?.compactMap { $0 as? GameAccessibleElement } ?? []
+  guard let chooseLevel = resultControls.first(where: { $0.accessibilityLabel() == "Choose level" }) else {
+    throw IntegrationFailure(message: "L3 under-50 result lost its Choose level action")
+  }
+  try check(resultControls.contains(where: { $0.accessibilityLabel() == "Need 50 survivors to complete this tribe." })
+    && chooseLevel.accessibilityFrame().width > 0, "L3 under-50 result hid the tribe target or action")
+  try check(chooseLevel.accessibilityPerformPress() && selectedLevel == 1 && !GameScreen.shared.isPresented,
+    "L3 under-50 result action lost its input target")
+  print("PASS L3 opening and ending policies, controls, handovers and optional-media failure paths")
 }
 
 extension AppDelegate {

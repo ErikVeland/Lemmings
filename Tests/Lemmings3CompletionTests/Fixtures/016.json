@@ -3,10 +3,10 @@
     "lost" : 11,
     "reserves" : 10,
     "saved" : 1,
-    "stateHash" : "021af1a57970ca4bd4e65bb6495b5a9cea4037cfec524d9133f4f36823a674fb",
+    "stateHash" : "1d82db72821418ed041246e5a4f7ed335efcc98333603bdbf94381fd7d0d7b8b",
     "ticks" : 5520
   },
-  "initialStateHash" : "ba92ad8b825da036dcbbbe4ac95393830e3fc24ef5cddfb895167307a278a4dc",
+  "initialStateHash" : "242ad3a7c90543bf0566de1f43d175d06c85e33ad45adb25e843a7deb5f0310e",
   "inputs" : [
     {
       "action" : "walker",
@@ -606,16 +606,6 @@
       "tick" : 842
     },
     {
-      "action" : "walker",
-      "lemming" : 3,
-      "tick" : 844
-    },
-    {
-      "action" : "jumper",
-      "lemming" : 3,
-      "tick" : 845
-    },
-    {
       "action" : "jumper",
       "lemming" : 1,
       "tick" : 849
@@ -822,12 +812,6 @@
       "tick" : 1000
     },
     {
-      "action" : "use",
-      "direction" : "right",
-      "lemming" : 3,
-      "tick" : 1005
-    },
-    {
       "action" : "walker",
       "lemming" : 8,
       "tick" : 1008
@@ -1014,16 +998,6 @@
     },
     {
       "action" : "walker",
-      "lemming" : 3,
-      "tick" : 1134
-    },
-    {
-      "action" : "walker",
-      "lemming" : 3,
-      "tick" : 1135
-    },
-    {
-      "action" : "walker",
       "lemming" : 7,
       "tick" : 1138
     },
@@ -1036,11 +1010,6 @@
       "action" : "jumper",
       "lemming" : 4,
       "tick" : 1141
-    },
-    {
-      "action" : "jumper",
-      "lemming" : 3,
-      "tick" : 1144
     },
     {
       "action" : "jumper",
@@ -1059,11 +1028,6 @@
     },
     {
       "action" : "jumper",
-      "lemming" : 3,
-      "tick" : 1154
-    },
-    {
-      "action" : "jumper",
       "lemming" : 7,
       "tick" : 1156
     },
@@ -1074,11 +1038,6 @@
     },
     {
       "action" : "jumper",
-      "lemming" : 3,
-      "tick" : 1170
-    },
-    {
-      "action" : "jumper",
       "lemming" : 7,
       "tick" : 1173
     },
@@ -1086,11 +1045,6 @@
       "action" : "walker",
       "lemming" : 1,
       "tick" : 1176
-    },
-    {
-      "action" : "jumper",
-      "lemming" : 3,
-      "tick" : 1189
     },
     {
       "action" : "jumper",

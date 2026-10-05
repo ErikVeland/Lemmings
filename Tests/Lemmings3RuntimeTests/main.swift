@@ -205,9 +205,10 @@ do {
     try require(grenadier.explosives.isEmpty && grenadier.terrainEdits.values.contains(false), "L3 grenade blast creates a crater")
     print("PASS L3 bomb and grenade inventory, fuses, terrain, permanent protection and tool-box survival")
     var fighter = try explosiveGame(.hadoken)
+    try require(fighter.lemmings[0].tool == .hadoken && fighter.lemmings[0].quantity == 8, "L3 Hadoken box has eight charges")
     let fireballX = fighter.lemmings[0].x
     try require(fighter.useTool(to: 0, direction: .left), "L3 Hadoken activation")
-    try require(fighter.lemmings[0].tool == nil && fighter.fireballs.count == 1, "L3 Hadoken consumes a charge")
+    try require(fighter.lemmings[0].tool == .hadoken && fighter.lemmings[0].quantity == 7 && fighter.fireballs.count == 1, "L3 Hadoken consumes one charge")
     fighter.step()
     try require(fighter.fireballs[0].x == fireballX + 4, "L3 Hadoken follows facing, not work direction")
     for _ in 0..<80 { fighter.step() }
@@ -421,6 +422,19 @@ do {
         var restored = try Lemmings3ClassicCampaign(root: root)
         try restored.restore(progress)
         try require(restored.progress == campaign.progress, "L3 progress round trip")
+        let finalIndex = restored.levels.count - 1
+        var completion = Lemmings3ClassicCampaign.Progress(index: finalIndex, population: 20,
+            completed: Dictionary(uniqueKeysWithValues: (0...finalIndex).map { ($0, 1) }), tribe: .classic)
+        completion.completed[finalIndex] = 49
+        try restored.restore(completion)
+        try require(!restored.hasCompletedTribe, "L3 accepted a tribe finale below 50 survivors")
+        completion.completed[finalIndex] = Lemmings3ClassicCampaign.requiredTribeSurvivors
+        try restored.restore(completion)
+        try require(restored.hasCompletedTribe, "L3 rejected a recorded 50-survivor tribe finale")
+        completion.completed.removeValue(forKey: 15)
+        try restored.restore(completion)
+        try require(restored.hasCompletedTribe, "L3 rejected a 50-survivor finale after an earlier level skip")
+        try restored.restore(progress)
         var invalid = restored.progress
         invalid.population = 1000
         var rejectedProgress = false
