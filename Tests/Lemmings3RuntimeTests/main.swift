@@ -710,6 +710,18 @@ do {
                         inert.lemmings.filter { $0.id >= candidate.extraLemmings }.allSatisfy { $0.state != .dead },
                         "L3 Shadow 4 hatch avoids the inactive Buzzard")
                 }
+                if tribe == .shadow && index == 6 {
+                    var corridor = try Lemmings3Runtime(level: candidate, style: tribeStyle,
+                        permanent: perm, temporary: temp, total: 22)
+                    for _ in 0..<200 { corridor.step() }
+                    try require(corridor.creatures.contains { $0.kind == .mole && $0.x == 118 && $0.y == 112 &&
+                        $0.digDirection == .right } && corridor.attributes[104 * 320 + 110] == 0x20,
+                        "L3 Shadow 7 Mole turns at the intact left wall")
+                    for _ in 200..<3000 { corridor.step() }
+                    try require(corridor.creatures.contains { $0.kind == .mole && (116...204).contains($0.x) && $0.y == 112 } &&
+                        corridor.attributes[104 * 320 + 110] == 0x20 && corridor.lost == 0,
+                        "L3 Shadow 7 Mole patrols the DOS corridor without losing the hatch")
+                }
                 if tribe == .shadow && index == 17 {
                     try require(run.lemmings.count == 8 && [4, 5, 6].allSatisfy {
                         run.lemmings[$0].tool == .grenade && run.lemmings[$0].quantity == 4

@@ -544,6 +544,13 @@ public struct Lemmings3Runtime: Sendable {
             configuration.backgroundAttributes[cell.y * configuration.width + cell.x] & 0x20 != 0 ||
             attributes[cell.y * configuration.width + cell.x] & 0x2000 != 0
         }
+        if configuration.sourceLevelReference == 107 && configuration.width == 320 &&
+            configuration.height == 288 && !blocked && direction.dy == 0 &&
+            cells.contains(where: { isSolid($0.x, $0.y) }) {
+            creature.digDirection = direction == .left ? .right : .left
+            creature.direction = creature.digDirection.dx
+            return
+        }
         if blocked {
             switch direction {
             case .right: creature.digDirection = .down
