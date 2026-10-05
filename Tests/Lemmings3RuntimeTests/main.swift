@@ -189,7 +189,7 @@ do {
     try require(bomber.lost == 0 && bomber.terrainEdits.isEmpty, "L3 bomb waits five seconds")
     bomber.step()
     try require(bomber.lost == 1 && bomber.explosives.isEmpty && bomber.terrainEdits.values.contains(false), "L3 bomb blast kills and removes terrain")
-    try require(bomber.pickups[1].quantity == 6, "L3 blast leaves tool boxes intact")
+    try require(bomber.pickups[1].quantity == 8, "L3 blast leaves tool boxes intact")
     var protectedBomb = try explosiveGame(.bomb, protected: true)
     _ = protectedBomb.useTool(to: 0, direction: .right); _ = protectedBomb.assign(.blocker, to: 0)
     for _ in 0..<115 { protectedBomb.step() }
@@ -293,14 +293,14 @@ do {
         return run
     }
     var builder = try toolGame(.bricks)
-    try require(builder.lemmings[0].tool == .bricks && builder.lemmings[0].quantity == 6 && builder.pickups[0].quantity == 0, "L3 automatic pickup")
+    try require(builder.lemmings[0].tool == .bricks && builder.lemmings[0].quantity == 8 && builder.pickups[0].quantity == 0, "L3 automatic pickup")
     try require(!builder.useTool(to: 0, direction: .down), "L3 rejects straight-down building")
     try require(builder.useTool(to: 0, direction: .upRight), "L3 direction selection")
     builder.step()
-    try require(builder.lemmings[0].quantity == 5 && builder.terrainEdits.values.contains(true), "L3 building changes terrain and consumes one brick")
+    try require(builder.lemmings[0].quantity == 7 && builder.terrainEdits.values.contains(true), "L3 building changes terrain and consumes one brick")
     try require(builder.assign(.walker, to: 0), "L3 interrupts building")
     try require(builder.assign(.drop, to: 0), "L3 drops remaining inventory")
-    try require(builder.lemmings[0].tool == nil && builder.pickups.last?.quantity == 5, "L3 preserves quantity on drop")
+    try require(builder.lemmings[0].tool == nil && builder.pickups.last?.quantity == 7, "L3 preserves quantity on drop")
     builder.step()
     try require(builder.lemmings[0].tool == nil, "L3 does not immediately reclaim its dropped box")
     var digger = try toolGame(.spade)
