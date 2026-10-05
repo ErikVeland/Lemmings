@@ -3,8 +3,8 @@
     "lost" : 0,
     "reserves" : 3,
     "saved" : 10,
-    "stateHash" : "cfffaad12ee79aa6765017f610045c3db28051f792c6df22bdbf2ab084ebad02",
-    "ticks" : 1920
+    "stateHash" : "56c008bedc3fbdad62e70e7c6300da69cbf2628828ffa11eca1c61fe9b31a8aa",
+    "ticks" : 1903
   },
   "initialStateHash" : "6c55a1601d26f6c62ed3b038b54be24a24b108d3281f62cc6ef4f356f718e60a",
   "inputs" : [
@@ -192,82 +192,122 @@
     {
       "action" : "jumper",
       "lemming" : 2,
-      "tick" : 1699
+      "tick" : 1600
     },
     {
       "action" : "jumper",
       "lemming" : 5,
-      "tick" : 1709
+      "tick" : 1610
     },
     {
       "action" : "jumper",
       "lemming" : 4,
-      "tick" : 1712
+      "tick" : 1613
     },
     {
       "action" : "jumper",
       "lemming" : 3,
-      "tick" : 1715
+      "tick" : 1616
     },
     {
       "action" : "jumper",
       "lemming" : 9,
-      "tick" : 1723
+      "tick" : 1624
     },
     {
       "action" : "jumper",
       "lemming" : 8,
-      "tick" : 1726
+      "tick" : 1627
     },
     {
       "action" : "jumper",
       "lemming" : 7,
-      "tick" : 1729
+      "tick" : 1630
     },
     {
       "action" : "jumper",
       "lemming" : 6,
-      "tick" : 1732
+      "tick" : 1633
     },
     {
       "action" : "jumper",
       "lemming" : 2,
-      "tick" : 1847
+      "tick" : 1679
     },
     {
       "action" : "jumper",
       "lemming" : 5,
-      "tick" : 1857
+      "tick" : 1689
     },
     {
       "action" : "jumper",
       "lemming" : 4,
-      "tick" : 1860
+      "tick" : 1692
     },
     {
       "action" : "jumper",
       "lemming" : 3,
-      "tick" : 1863
+      "tick" : 1695
     },
     {
       "action" : "jumper",
       "lemming" : 9,
-      "tick" : 1871
+      "tick" : 1703
     },
     {
       "action" : "jumper",
       "lemming" : 8,
-      "tick" : 1874
+      "tick" : 1706
     },
     {
       "action" : "jumper",
       "lemming" : 7,
-      "tick" : 1877
+      "tick" : 1709
     },
     {
       "action" : "jumper",
       "lemming" : 6,
-      "tick" : 1880
+      "tick" : 1712
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 2,
+      "tick" : 1820
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 5,
+      "tick" : 1830
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 4,
+      "tick" : 1833
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 3,
+      "tick" : 1836
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 9,
+      "tick" : 1844
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 8,
+      "tick" : 1847
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 7,
+      "tick" : 1850
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 6,
+      "tick" : 1853
     }
   ],
   "level" : 6,
