@@ -8,7 +8,7 @@ This ledger covers 6020 bundled fan levels in the native Classic playback lane a
 
 The Golems replay evidence files hold 150 distinct exact-level native wins with ten-probe scores. 174 selected levels have strict ordinary-input wins under Golems mechanics. Two further exact-bundle wins use source replay assignment rules. The native Golems exit starts on first trigger contact, as the pinned source does. Their selected digests and scores are in `levels.csv`. The two-player alternative stays outside the learning path. See `classic-golems-mining-rule.json`, `classic-golems-selected-ordinary.json` and `validation.md`.
 
-Verified winning replays support 2401 Classic fan scores and 322 NeoLemmix scores. The remaining 3622 non-official levels and 469 official conversion levels have no replay-based score. Of the non-official rows, 4 bundled Classic levels cannot win under the current native object and rescue rules recorded below.
+Verified winning replays support 2409 Classic fan scores and 322 NeoLemmix scores. The remaining 3614 non-official levels and 469 official conversion levels have no replay-based score. Of the non-official rows, 4 bundled Classic levels cannot win under the current native object and rescue rules recorded below.
 
 The `playtest` column records the latest check. A passive loss or timeout only describes a run without player input. It does not prove that the level is impossible. Source-compatible replays can have an absent or different level version; their native wins are valid, but source parity is unverified.
 

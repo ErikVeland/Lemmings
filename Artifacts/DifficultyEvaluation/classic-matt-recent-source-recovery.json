@@ -1,0 +1,141 @@
+{
+  "date": "2026-10-05",
+  "source": "Public Lemmings Level Database Watch records observed on 5 October 2026",
+  "sourcePackURL": "https://lldb.camanis.net/levelpack/248/MATTPCK1",
+  "sourceDownloadURL": "https://lldb.camanis.net/levelpack/download/248/MATTPCK1?i=530",
+  "sourceAndBundledArchiveSHA256": "bffc37a79925ad47b3cc6a24472381ce3741ef0f2b83048e07faacc7edc80854",
+  "selectedMechanicsAtTrial": "original",
+  "nativeLibrarySHA256": "9b795b0f5e5dd9a5cb70d1a97e233ba84da41b42fe199f1ed870fc702831d3c4",
+  "sourceBuiltScorerSHA256": "490486af3da474662e5b9b8d1a2900b95eda18b4c0947aaba8462ea7cadd6460",
+  "strictExactPackVerification": "4/4 selected scored MATTPCK1 members after promotion (three recovered routes plus existing Award)",
+  "recovered": [
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "MATTPCK1.DAT#0",
+        "packID": "fan:lldb-248"
+      },
+      "title": "Lemmings, go home!",
+      "initialStateHash": "d2b56bc50b849e6f6a947a7df2f287c9b33c7cca7690c5ef5c58b067874b478c",
+      "sourcePage": "https://lldb.camanis.net/level/248/1",
+      "sourceReplaySHA256": "6b4147857651e42d0b91cd48d2ad4efd640a09d2b72e0db39453180d4d194196",
+      "sourceReplayHeader": {
+        "gameMode": 3,
+        "saved": 10,
+        "completionCycle": 1470
+      },
+      "nativeTickOffsetFromSource": 0,
+      "nativeReplaySHA256": "6b1ecd76aa4d2b8284373d7a9d04dc98d06db3c99d65e9c54b2ba40515141dea",
+      "nativeOutcome": {
+        "didWin": true,
+        "released": 10,
+        "required": 10,
+        "saved": 10,
+        "stateHash": "6b2028e5c527b8134dcf372a8df4c7ef99ab62770d6e288ce598234200a1fc95",
+        "ticks": 1471
+      },
+      "difficultyScore": 402.538803040431,
+      "difficultyProbeRuns": 10
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "MATTPCK1.DAT#1",
+        "packID": "fan:lldb-248"
+      },
+      "title": "Beethoven's Revenge",
+      "initialStateHash": "68eb654a4b74d674388d5bf7a0f36c47f97446a2a81fd662709bd0add30820a8",
+      "sourcePage": "https://lldb.camanis.net/level/248/2",
+      "sourceReplaySHA256": "769c5978086ba93b6e935d205251209c9e97f3ddc501051b21327b14e2152811",
+      "sourceReplayHeader": {
+        "gameMode": 3,
+        "saved": 20,
+        "completionCycle": 1618
+      },
+      "nativeTickOffsetFromSource": 0,
+      "nativeReplaySHA256": "30721f3eb194dcdb643c9fa23ce1a43665550f6a5435a50ae1d204a57963e43a",
+      "nativeOutcome": {
+        "didWin": true,
+        "released": 20,
+        "required": 20,
+        "saved": 20,
+        "stateHash": "1738db9ae324a435bacd526d2dde3ddab920ffeabcb88fa6a3af01f3c2595ddc",
+        "ticks": 1623
+      },
+      "difficultyScore": 458.5493785779248,
+      "difficultyProbeRuns": 10
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "MATTPCK1.DAT#4",
+        "packID": "fan:lldb-248"
+      },
+      "title": "Per aspera ad astra",
+      "initialStateHash": "f53a98544294bdab51b9bf0f705944bdccb2e0b8c49e4712a7d575610b4c30bc",
+      "sourcePage": "https://lldb.camanis.net/level/248/5",
+      "sourceReplaySHA256": "2d87b755f5a1908a1df4dc380cf852f5f155c093a387449e995e5f889204bfe9",
+      "sourceReplayHeader": {
+        "gameMode": 3,
+        "saved": 50,
+        "completionCycle": 4598
+      },
+      "nativeTickOffsetFromSource": 0,
+      "nativeReplaySHA256": "77a0ec2ef7b028451b3707302b5ccf5a12a458d57c9c317a48f4990373aef4ff",
+      "nativeOutcome": {
+        "didWin": true,
+        "released": 50,
+        "required": 50,
+        "saved": 50,
+        "stateHash": "32966b482d4074df11cf76c105322cd9cb412f28538f2bfa1201d764d0a89453",
+        "ticks": 4598
+      },
+      "difficultyScore": 528.6747549980399,
+      "difficultyProbeRuns": 10
+    }
+  ],
+  "stillUnverifiedSourceRoutes": [
+    {
+      "identity": {
+        "engine": "classic",
+        "packID": "fan:lldb-248",
+        "levelID": "MATTPCK1.DAT#2"
+      },
+      "sourcePage": "https://lldb.camanis.net/level/248/3",
+      "sourceReplaySHA256": "039fe378d33a5396e3ba0c242b6589ffcf35a8d6c6e63409dd3e1269260b98ea",
+      "sourceReplayHeader": {
+        "gameMode": 3,
+        "saved": 2,
+        "completionCycle": 5566
+      },
+      "nativeTickOffsetsTried": [
+        -1,
+        0,
+        1
+      ],
+      "result": "No strict native win in this phase check; ledger replay digest and score remain blank."
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "packID": "fan:lldb-248",
+        "levelID": "MATTPCK1.DAT#3"
+      },
+      "sourcePage": "https://lldb.camanis.net/level/248/4",
+      "sourceReplaySHA256": "f44a4944535783c6e7f8aac120c7e802cc3d5d184bf95216b422fa97593eedcb",
+      "sourceReplayHeader": {
+        "gameMode": 3,
+        "saved": 57,
+        "completionCycle": 1748
+      },
+      "nativeTickOffsetsTried": [
+        -1,
+        0,
+        1
+      ],
+      "result": "No strict native win in this phase check; ledger replay digest and score remain blank."
+    }
+  ],
+  "subsequentRuleRecovery": "classic-matt-golems-rule-recovery.json resolves Exodus under source-compatible Golems rules; Forever Friends remains unverified.",
+  "sourcePhysicsParity": "Not independently verified: published source headers and native outcomes do not compare intermediate states."
+}
