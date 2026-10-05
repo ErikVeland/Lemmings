@@ -39,8 +39,8 @@ Both paths run the same simulation and produce the same win.
 | **Official Classic total** | **292** | **292** | **Complete** |
 | Oh Yes! More Lemmings (conversions) | 60 | 60 | Complete |
 | **Classic release total** | **352** | **352** | **Complete** |
-| Lemmings 2: The Tribes | 120 | 73 | Preview |
-| Lemmings 3: The Chronicles | 90 | 41 | Preview |
+| Lemmings 2: The Tribes | 120 | 75 | Preview |
+| Lemmings 3: The Chronicles | 90 | 43 | Preview |
 
 "Complete" means every level has a winning route, recorded once and
 reproduced by the current engine on every check. "Preview" means the game
@@ -128,7 +128,7 @@ failures from known unsupported mechanics. Fencer, Laserer, interactive
 gadgets, zombie infection, Superlemming and native reference-replay comparison
 remain open. See the [1.7 roadmap](1.7Roadmap.md).
 
-**1.8: complete Lemmings 2 and Lemmings 3.** The remaining 96 winning routes
+**1.8: complete Lemmings 2 and Lemmings 3.** The remaining 92 winning routes
 need proof. Both games also need engine-fidelity, campaign-progression, media
 and recovery evidence. Until the 1.8 gate passes, both games remain Preview.
 

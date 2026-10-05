@@ -421,6 +421,10 @@ struct NeoRunRecovery: Codable, Sendable {
 }
 
 struct L3RunRecovery: Codable, Sendable {
+    struct RestoredRun {
+        let initial: Lemmings3Runtime
+        let game: Lemmings3Runtime
+    }
     struct Input: Codable, Sendable {
         let tick: Int
         let action: String
@@ -438,13 +442,44 @@ struct L3RunRecovery: Codable, Sendable {
               skillAssignments.values.allSatisfy({ (0...100_000).contains($0) }),
               toolUses.values.allSatisfy({ (0...100_000).contains($0) }) else { throw RunRecoveryError.invalid }
     }
-    func restore(initial: Lemmings3Runtime, checkpoint: RunRecovery) throws -> Lemmings3Runtime {
+    func restore(initial: Lemmings3Runtime, checkpoint: RunRecovery) throws -> RestoredRun {
         _ = try checkpoint.validated()
-        guard Self.stateHash(initial) == checkpoint.initialStateHash else { throw RunRecoveryError.differentGame }
-        let game = try Self.replay(initial: initial, inputs: inputs, through: checkpoint.tick)
+        let replayInitial: Lemmings3Runtime
+        if Self.stateHash(initial) == checkpoint.initialStateHash {
+            replayInitial = initial
+        } else if let previous = try Self.previousHadokenInitial(initial),
+                  Self.stateHash(previous) == checkpoint.initialStateHash {
+            replayInitial = previous
+        } else {
+            throw RunRecoveryError.differentGame
+        }
+        let game = try Self.replay(initial: replayInitial, inputs: inputs, through: checkpoint.tick)
         guard game.tick == checkpoint.tick, !game.isComplete,
               Self.stateHash(game) == checkpoint.stateHash else { throw RunRecoveryError.invalid }
-        return game
+        return RestoredRun(initial: replayInitial, game: game)
+    }
+    /**
+     * Recreates the one-use Hadoken rule for runs saved before its quantity was corrected.
+     */
+    private static func previousHadokenInitial(_ initial: Lemmings3Runtime) throws -> Lemmings3Runtime? {
+        guard initial.tick == 0 else { return nil }
+        let configuration = initial.configuration
+        var pickups = configuration.pickups
+        var changed = false
+        for index in pickups.indices where pickups[index].tool == .hadoken && pickups[index].quantity == 8 {
+            pickups[index].quantity = 1
+            changed = true
+        }
+        guard changed else { return nil }
+        return try Lemmings3Runtime(configuration: .init(
+            width: configuration.width, height: configuration.height,
+            attributes: configuration.attributes, entrance: configuration.entrance, exits: configuration.exits,
+            total: configuration.total, releaseInterval: configuration.releaseInterval,
+            releaseDelay: configuration.releaseDelay, timeLimit: configuration.timeLimit,
+            pickups: pickups, extras: configuration.extras,
+            backgroundAttributes: configuration.backgroundAttributes,
+            sourceLevelReference: configuration.sourceLevelReference, traps: configuration.traps,
+            creatures: configuration.creatures, additionalEntrances: configuration.additionalEntrances))
     }
     /// Reconstructs the deterministic L3 state at a recorded tick.
     static func replay(initial: Lemmings3Runtime, inputs: [Input], through tick: Int) throws -> Lemmings3Runtime {

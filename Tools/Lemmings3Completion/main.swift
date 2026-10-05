@@ -4,6 +4,10 @@ import NxlvKit
 let project = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
 let root = project.appendingPathComponent("Sources/Ports/LEM3CD")
 let fixtures = URL(fileURLWithPath: ProcessInfo.processInfo.environment["L3_COMPLETION_FIXTURES"] ?? "Tests/Lemmings3CompletionTests/Fixtures")
+let arguments = Array(CommandLine.arguments.dropFirst())
+if arguments.contains("--require-all"), arguments != ["--require-all"], arguments != ["verify", "--require-all"] {
+    throw SequelDataError.invalid("--require-all must be the only verifier option.")
+}
 let discover = CommandLine.arguments.contains("discover")
 let selected = CommandLine.arguments.compactMap(Int.init).first
 let encoder = JSONEncoder(); encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
