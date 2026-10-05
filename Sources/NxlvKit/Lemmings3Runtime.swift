@@ -335,11 +335,8 @@ public struct Lemmings3Runtime: Sendable {
         if tool == .sucker || tool == .shimmy {
             guard lemmings[index].mobilityTool == nil else { return false }
             distract(index)
-            lemmings[index].mobilityTool = tool; lemmings[index].mobilityTicks = 5 * Int(Self.ticksPerSecond)
-            if tool == .shimmy {
-                lemmings[index].quantity -= 1
-                if lemmings[index].quantity == 0 { lemmings[index].tool = nil }
-            }
+            lemmings[index].mobilityTool = tool
+            lemmings[index].mobilityTicks = tool == .shimmy ? lemmings[index].quantity * 8 : 5 * Int(Self.ticksPerSecond)
             lemmings[index].state = tool == .shimmy ? .jumping : .walking
             if tool == .shimmy { lemmings[index].velocityY = -4 }
             lemmings[index].age = 0
@@ -565,7 +562,7 @@ public struct Lemmings3Runtime: Sendable {
             var lem = lemmings[index]
             let oldX = lem.x, oldY = lem.y, oldState = lem.state
             lem.charmImmunity = max(0, lem.charmImmunity - 1)
-            if lem.mobilityTicks > 0 && !(lem.mobilityTool == .sucker && lem.state == .climbing) {
+            if lem.mobilityTicks > 0 && lem.mobilityTool != .shimmy && !(lem.mobilityTool == .sucker && lem.state == .climbing) {
                 lem.mobilityTicks -= 1
                 if lem.mobilityTicks == 0 {
                     lem.mobilityTool = nil
@@ -705,7 +702,15 @@ public struct Lemmings3Runtime: Sendable {
                 if !isSolid(nx, lem.y - 16) || isSolid(nx, lem.y - 15) {
                     lem.state = .falling; lem.age = 0; lem.fall = 0
                     lem.mobilityTool = nil; lem.mobilityTicks = 0
-                } else { lem.x = nx }
+                } else {
+                    lem.x = nx
+                    lem.mobilityTicks -= 1
+                    if lem.mobilityTicks.isMultiple(of: 8) { consumeTool(&lem) }
+                    if lem.mobilityTicks == 0 {
+                        lem.state = .falling; lem.age = 0; lem.fall = 0
+                        lem.mobilityTool = nil
+                    }
+                }
             case .jumping:
                 let nx = lem.x + (lem.mobilityTool == .shimmy ? 0 : lem.direction * 2)
                 if !isSolid(nx, lem.y - 8) { lem.x = nx }

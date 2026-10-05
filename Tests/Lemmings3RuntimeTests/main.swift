@@ -202,7 +202,8 @@ do {
     func shimmyGame() throws -> Lemmings3Runtime {
         try Lemmings3Runtime(configuration: .init(width: 128, height: 128, attributes: shimmyTags,
             entrance: .init(x: 20, y: 88), exits: [.init(x: 110, y: 94)], total: 1, releaseInterval: 1, releaseDelay: 0,
-            pickups: [.init(id: 0, tool: .shimmy, x: 20, y: 88)]))
+            pickups: [.init(id: 0, tool: .shimmy, x: 20, y: 88),
+                      .init(id: 1, tool: .shimmy, x: 20, y: 88)]))
     }
     var shimmier = try shimmyGame()
     for _ in 0..<12 { shimmier.step() }
@@ -210,6 +211,40 @@ do {
     var sawShimmying = false
     for _ in 0..<250 { shimmier.step(); sawShimmying = sawShimmying || shimmier.lemmings[0].state == .shimmying }
     try require(sawShimmying && shimmier.saved == 1, "L3 crosses a gap along a flat ceiling")
+    var stockTags = [UInt16](repeating: 0x1000, count: 256 * 96)
+    for x in 0..<256 { stockTags[64 * 256 + x] = 0x2020; stockTags[48 * 256 + x] = 0x2020 }
+    func shimmyDistance(stock: Int) throws -> Int {
+        var run = try Lemmings3Runtime(configuration: .init(width: 256, height: 96, attributes: stockTags,
+            entrance: .init(x: 32, y: 64), exits: [.init(x: 240, y: 64)], total: 1, releaseDelay: 1,
+            pickups: [.init(id: 0, tool: .shimmy, x: 32, y: 56, quantity: stock)]))
+        run.step()
+        try require(run.lemmings[0].quantity == stock && run.useTool(to: 0, direction: .right),
+                    "L3 Shimmy pickup supplies the expected stock")
+        var distance = 0
+        var grabbed = false
+        for _ in 0..<300 {
+            let before = run.lemmings[0]
+            run.step()
+            let actor = run.lemmings[0]
+            grabbed = grabbed || actor.state == .shimmying
+            if before.state == .shimmying {
+                distance += actor.x - before.x
+                if distance > 0 && distance.isMultiple(of: 8) {
+                    try require(actor.quantity == stock - distance / 8,
+                                "L3 Shimmy spends one stock per eight hanging steps")
+                }
+                if actor.state == .falling { break }
+            }
+        }
+        try require(grabbed && distance == stock * 8 && run.lemmings[0].quantity == 0 &&
+                    run.lemmings[0].tool == nil && run.lemmings[0].mobilityTool == nil,
+                    "L3 Shimmy releases when its stock is exhausted")
+        return distance
+    }
+    let oneShimmyPickup = try shimmyDistance(stock: 8)
+    let twoShimmyPickups = try shimmyDistance(stock: 16)
+    try require(oneShimmyPickup == 64 && twoShimmyPickups == 128,
+                "L3 Shimmy distance scales with pickup stock")
     var interrupted = try shimmyGame()
     for _ in 0..<12 { interrupted.step() }
     _ = interrupted.useTool(to: 0, direction: .right)
