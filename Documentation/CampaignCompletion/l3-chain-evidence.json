@@ -1,13 +1,13 @@
 {
   "gaps" : [
     {
-      "level" : 12,
-      "population" : 23,
+      "level" : 14,
+      "population" : 14,
       "tribe" : "Classic"
     },
     {
-      "level" : 121,
-      "population" : 1,
+      "level" : 107,
+      "population" : 17,
       "tribe" : "Shadow"
     },
     {
@@ -140,6 +140,28 @@
       "ticks" : 3523
     },
     {
+      "fixture" : "Tests\/Lemmings3CampaignTests\/Fixtures\/012-23.json",
+      "fixtureSHA256" : "29131ec173b4adf6dbff9f2a53e66cfa477b12def557198e2a1e5dcf59af4ba4",
+      "level" : 12,
+      "lost" : 0,
+      "population" : 23,
+      "reserves" : 13,
+      "saved" : 10,
+      "stateHash" : "41a7563576ea4bb255c87ebc9e795fddf586784a1fd526b962bf09f0edc62fac",
+      "ticks" : 3467
+    },
+    {
+      "fixture" : "Tests\/Lemmings3CompletionTests\/Fixtures\/013.json",
+      "fixtureSHA256" : "2421ed7ceccb58af1bd4e58d606e47297e920b7d1d4e75dd50638251c2f8d730",
+      "level" : 13,
+      "lost" : 12,
+      "population" : 23,
+      "reserves" : 13,
+      "saved" : 1,
+      "stateHash" : "3919ef4ec3c95c74b439c74592ddd5152c036d9a9abc729a6b1b5ebc7c00713b",
+      "ticks" : 5520
+    },
+    {
       "fixture" : "Tests\/Lemmings3CompletionTests\/Fixtures\/101.json",
       "fixtureSHA256" : "d6546ee08e24ea1927b064d6ab358ac5fdb33dd28150da414418392b719ad25c",
       "level" : 101,
@@ -185,179 +207,25 @@
     },
     {
       "fixture" : "Tests\/Lemmings3CampaignTests\/Fixtures\/105-16.json",
-      "fixtureSHA256" : "743065d06dd32be00245cf9ab95f7aacac4e531866929d2baa3d3ad484e0667c",
+      "fixtureSHA256" : "0e7fc5cfcf3e8c8027740f5979b8f7053c7f916fa64acd6a2a658c36ada6a130",
       "level" : 105,
-      "lost" : 6,
+      "lost" : 0,
       "population" : 16,
       "reserves" : 6,
-      "saved" : 5,
-      "stateHash" : "4fc5418ae4eb2cb392f8dc0112da86239d2fd4780a062f0d7f034bac3e87bf00",
-      "ticks" : 8000
+      "saved" : 11,
+      "stateHash" : "80eec15bff2bf58a06b3bc0d5601b660ad973c0e55f042e005c9f69221e83489",
+      "ticks" : 853
     },
     {
-      "fixture" : "Tests\/Lemmings3CampaignTests\/Fixtures\/106-11.json",
-      "fixtureSHA256" : "afbb6032a9189e8891fc36c30072091bae6537f0a63bf6a7a7aaade534df1c77",
+      "fixture" : "Tests\/Lemmings3CampaignTests\/Fixtures\/106-17.json",
+      "fixtureSHA256" : "e108511e118a7881015671905914c78c7e0d726b14e2d86b32f0cbb8d5c32301",
       "level" : 106,
-      "lost" : 10,
-      "population" : 11,
-      "reserves" : 0,
-      "saved" : 1,
-      "stateHash" : "f159bc579790553266436ad48a99894351de266987dafcf5c4c7f0078f97a41c",
-      "ticks" : 782
-    },
-    {
-      "fixture" : "Tests\/Lemmings3CampaignTests\/Fixtures\/107-1.json",
-      "fixtureSHA256" : "2ede8a93465968ac6a11b4a2e2dbaa46fb0dd43119dc5508c153438c46284e45",
-      "level" : 107,
-      "lost" : 1,
-      "population" : 1,
-      "reserves" : 0,
-      "saved" : 1,
-      "stateHash" : "473d37b6c7faf4438ca24f35ffb6b13679de1c407778da1f090c36d2c36fee49",
-      "ticks" : 9660
-    },
-    {
-      "fixture" : "Tests\/Lemmings3CampaignTests\/Fixtures\/108-1.json",
-      "fixtureSHA256" : "94a050fbb24e5a5b23f061a97e4e6195a6e73ef68736f0dbe8ed60ffefb47be9",
-      "level" : 108,
       "lost" : 0,
-      "population" : 1,
-      "reserves" : 0,
-      "saved" : 1,
-      "stateHash" : "a507c8d5ba647b6f1e9124570f8e008500f9cd666f41ec1d42e3295349c6e0bd",
-      "ticks" : 768
-    },
-    {
-      "fixture" : "Tests\/Lemmings3CampaignTests\/Fixtures\/109-1.json",
-      "fixtureSHA256" : "6feb8235e1fddad5ffa2559dc7c384f19ae70d9f0cff2980cbc769baf15a700e",
-      "level" : 109,
-      "lost" : 2,
-      "population" : 1,
-      "reserves" : 0,
-      "saved" : 1,
-      "stateHash" : "a993e304984b92e999a525188308fc2ef9b1758712cefe608cf75bbf0d7a74cc",
-      "ticks" : 4140
-    },
-    {
-      "fixture" : "Tests\/Lemmings3CampaignTests\/Fixtures\/110-1.json",
-      "fixtureSHA256" : "5d48d43fb5321c224394e139c595a28977aa3f8ea2ab8caa20592e360b2116f5",
-      "level" : 110,
-      "lost" : 0,
-      "population" : 1,
-      "reserves" : 0,
-      "saved" : 2,
-      "stateHash" : "ad02d3f9714ca09e5b0f29fbc4963218ccabb53a468196f0852a304a8ca87506",
-      "ticks" : 593
-    },
-    {
-      "fixture" : "Tests\/Lemmings3CampaignTests\/Fixtures\/111-2.json",
-      "fixtureSHA256" : "06d547580ad346b9537413e85da16bbda434f6a6259ce55cfeae4779a4aae484",
-      "level" : 111,
-      "lost" : 0,
-      "population" : 2,
-      "reserves" : 0,
-      "saved" : 2,
-      "stateHash" : "cbc2ae3a7df4264e3bae23c40a3257f2e2489c751a364a1f7176e8d923771078",
-      "ticks" : 341
-    },
-    {
-      "fixture" : "Tests\/Lemmings3CampaignTests\/Fixtures\/112-2.json",
-      "fixtureSHA256" : "5ce238a30c37529a8f241265a0cbb6593a48f496a59ae487ad902b5b0da6b7bd",
-      "level" : 112,
-      "lost" : 1,
-      "population" : 2,
-      "reserves" : 0,
-      "saved" : 1,
-      "stateHash" : "b56a70db748417f38fba9df8eb3521ac8e161def44424b235dbee825573ad06e",
-      "ticks" : 2115
-    },
-    {
-      "fixture" : "Tests\/Lemmings3CampaignTests\/Fixtures\/113-1.json",
-      "fixtureSHA256" : "2939d208cd0e6dfb63e14bd66a92ea5247706686207bc62d8ca447a37eeaf415",
-      "level" : 113,
-      "lost" : 0,
-      "population" : 1,
-      "reserves" : 0,
-      "saved" : 1,
-      "stateHash" : "0fa57826c01e8f3a5558720b86364df371b62a0454696204f00c15b9a1426668",
-      "ticks" : 119
-    },
-    {
-      "fixture" : "Tests\/Lemmings3CampaignTests\/Fixtures\/114-1.json",
-      "fixtureSHA256" : "f4fa33247ee563aabae90e24555a52fc61914ca63b1a3ffc5b906ee71947c8a8",
-      "level" : 114,
-      "lost" : 1,
-      "population" : 1,
-      "reserves" : 0,
-      "saved" : 1,
-      "stateHash" : "0efcde311f7d335b5901202de23aba60344613715e1f52b44a6661829d5e9ced",
-      "ticks" : 873
-    },
-    {
-      "fixture" : "Tests\/Lemmings3CampaignTests\/Fixtures\/115-1.json",
-      "fixtureSHA256" : "9d8dcfcb55b4a4bf69049c83a0c5f1a91daf6cb74a7b91162b16635f2d0e0430",
-      "level" : 115,
-      "lost" : 2,
-      "population" : 1,
-      "reserves" : 0,
-      "saved" : 1,
-      "stateHash" : "ec7e54c2ba81a54366bae48142a5b314817b6c222d484151bfaceec796e44c0f",
-      "ticks" : 3220
-    },
-    {
-      "fixture" : "Tests\/Lemmings3CampaignTests\/Fixtures\/116-1.json",
-      "fixtureSHA256" : "ad6d97cbacd25d069a1c87b0a4df586cd27e6f8d9647389a72cf9170c1b6fd34",
-      "level" : 116,
-      "lost" : 2,
-      "population" : 1,
-      "reserves" : 0,
-      "saved" : 1,
-      "stateHash" : "07a6d03f15d1775748ad30cd7ba034314cdae3bc2ffed946ce59800803da796b",
-      "ticks" : 4140
-    },
-    {
-      "fixture" : "Tests\/Lemmings3CampaignTests\/Fixtures\/117-1.json",
-      "fixtureSHA256" : "5d66aa96c166df573c345468b7078da72fd76dfa7570f1f19f25edb4e2986d72",
-      "level" : 117,
-      "lost" : 0,
-      "population" : 1,
-      "reserves" : 0,
-      "saved" : 1,
-      "stateHash" : "4b6e90d835be79b97b6bafd5cfbfc17e149a78f68624c4a784aaa29f8a8a4f2f",
-      "ticks" : 1139
-    },
-    {
-      "fixture" : "Tests\/Lemmings3CampaignTests\/Fixtures\/118-1.json",
-      "fixtureSHA256" : "dd1d2148361cf3e32fe3641fb3b21b8ccfffb6ebf15b5f0d6bbbb03ab8ec8b11",
-      "level" : 118,
-      "lost" : 8,
-      "population" : 1,
-      "reserves" : 0,
-      "saved" : 1,
-      "stateHash" : "8fe94521f669a7f3575738c6e198aca1f4c8e25bd3d6dca15e67db8dbeacbf3a",
-      "ticks" : 8970
-    },
-    {
-      "fixture" : "Tests\/Lemmings3CampaignTests\/Fixtures\/119-1.json",
-      "fixtureSHA256" : "564f24d7a4d94c1cee4e97e93707f719653d8f0355ca4baea13c71c5dcb7a774",
-      "level" : 119,
-      "lost" : 4,
-      "population" : 1,
-      "reserves" : 0,
-      "saved" : 1,
-      "stateHash" : "7890868877aa8bb98222a9fe016a52adec7874460d7b62d750c5dfceb2e565f7",
-      "ticks" : 8000
-    },
-    {
-      "fixture" : "Tests\/Lemmings3CampaignTests\/Fixtures\/120-1.json",
-      "fixtureSHA256" : "b0ab6137091e10f7d2603e191694c83b7a76164fa5c897217b5b3bd20a813599",
-      "level" : 120,
-      "lost" : 1,
-      "population" : 1,
-      "reserves" : 0,
-      "saved" : 1,
-      "stateHash" : "a0721969012056286b06fdfeb52100e1161d521a66ac9498aa02949b68e8069a",
-      "ticks" : 330
+      "population" : 17,
+      "reserves" : 7,
+      "saved" : 10,
+      "stateHash" : "11f10ddf0b1939c01b57ae0d0a42cad3eda941615fece49201fafca3c54db93d",
+      "ticks" : 1462
     },
     {
       "fixture" : "Tests\/Lemmings3CompletionTests\/Fixtures\/201.json",
