@@ -43,6 +43,38 @@ private func play(_ inputs: [L3Replay.Input], from start: Lemmings3Runtime) thro
     return game
 }
 
+private func verifyCarriedFixtures(root: URL, directory: URL) throws -> Int {
+    let files = try FileManager.default.contentsOfDirectory(at: directory, includingPropertiesForKeys: nil)
+        .filter { $0.pathExtension == "json" }.sorted { $0.lastPathComponent < $1.lastPathComponent }
+    for file in files {
+        do {
+            let replay = try JSONDecoder().decode(L3Replay.self, from: Data(contentsOf: file))
+            guard (1...1000).contains(replay.population),
+                  file.lastPathComponent == String(format: "%03d-%d.json", replay.level, replay.population),
+                  let tribe = Lemmings3ClassicCampaign.Tribe.allCases.first(where: {
+                      ($0.firstLevel...($0.firstLevel + 29)).contains(replay.level)
+                  }) else { throw SequelDataError.invalid("Carried fixture name, level or population differs.") }
+            let campaign = try Lemmings3ClassicCampaign(root: root, tribe: tribe)
+            let level = campaign.levels[replay.level - tribe.firstLevel]
+            let style = try Lemmings3Style(directory: root.appendingPathComponent("STYLES"), number: tribe.rawValue)
+            let permanent = try Lemmings3Objects(data: Data(contentsOf: root.appendingPathComponent(
+                String(format: "LEVELS/PERM%03d.OBS", level.permanentObjectsReference))))
+            let temporary = try Lemmings3Objects(data: Data(contentsOf: root.appendingPathComponent(
+                String(format: "LEVELS/TEMP%03d.OBS", level.temporaryObjectsReference))))
+            let initial = try Lemmings3Runtime(level: level, style: style, permanent: permanent,
+                temporary: temporary, total: replay.population)
+            let first = try replay.replay(from: initial, levelData: level.rawData)
+            let second = try replay.replay(from: initial, levelData: level.rawData)
+            guard L3Replay.Outcome(first) == L3Replay.Outcome(second) else {
+                throw SequelDataError.invalid("Carried fixture replays disagree.")
+            }
+        } catch {
+            throw SequelDataError.invalid("Carried fixture \(file.lastPathComponent) failed: \(error)")
+        }
+    }
+    return files.count
+}
+
 @main private enum Lemmings3CampaignProof {
     static func main() throws {
         let arguments = Set(CommandLine.arguments.dropFirst())
@@ -54,6 +86,7 @@ private func play(_ inputs: [L3Replay.Input], from start: Lemmings3Runtime) thro
         let manifest = project.appendingPathComponent("Documentation/CampaignCompletion/l3-chain-evidence.json")
         let originalFixtures = project.appendingPathComponent("Tests/Lemmings3CompletionTests/Fixtures")
         let carriedFixtures = project.appendingPathComponent("Tests/Lemmings3CampaignTests/Fixtures")
+        let carriedCount = try verifyCarriedFixtures(root: root, directory: carriedFixtures)
         var steps: [ChainStep] = []
         var gaps: [ChainGap] = []
         for tribe in Lemmings3ClassicCampaign.Tribe.allCases {
@@ -95,8 +128,13 @@ private func play(_ inputs: [L3Replay.Input], from start: Lemmings3Runtime) thro
                     let standaloneStart = try Lemmings3Runtime(level: level, style: style,
                         permanent: permanent, temporary: temporary, total: replay.population)
                     _ = try replay.replay(from: standaloneStart, levelData: level.rawData)
-                    first = try play(replay.inputs, from: start)
-                    second = try play(replay.inputs, from: start)
+                    do {
+                        first = try play(replay.inputs, from: start)
+                        second = try play(replay.inputs, from: start)
+                    } catch {
+                        gaps.append(.init(tribe: tribe.title, level: number, population: campaign.population))
+                        break
+                    }
                 }
                 let outcome = L3Replay.Outcome(first)
                 guard outcome == L3Replay.Outcome(second) else {
@@ -136,6 +174,7 @@ private func play(_ inputs: [L3Replay.Input], from start: Lemmings3Runtime) thro
             }
         }
         print("PASS L3 campaign prefixes: \(steps.count) carried results, \(gaps.count) open chains")
+        print("PASS \(carriedCount) carried-population fixtures double-replayed")
         for gap in gaps {
             let noun = gap.population == 1 ? "lemming" : "lemmings"
             print("GAP \(gap.tribe) \(gap.level): \(gap.population) \(noun)")

@@ -6,6 +6,17 @@ func require(_ value: Bool, _ message: String) throws {
 }
 
 do {
+    try require(Lemmings3Runtime.Tool(sourceIdentifier: 5003) == .hadoken &&
+                Lemmings3Runtime.Tool.hadoken.sourceIdentifier == 5003 &&
+                Lemmings3Runtime.Tool.hadoken.initialQuantity == 1,
+                "L3 source object 5003 is a one-use Hadoken")
+    try require(Lemmings3Runtime.Tool(sourceIdentifier: 5006) == .shimmy &&
+                Lemmings3Runtime.Tool.shimmy.sourceIdentifier == 5006 &&
+                Lemmings3Runtime.Tool.shimmy.initialQuantity == 8,
+                "L3 source object 5006 is an eight-use Shimmy")
+    try require(Lemmings3Runtime.Tool(sourceIdentifier: 5002) == .spade &&
+                Lemmings3Runtime.Tool.spade.initialQuantity == 8,
+                "L3 source object 5002 is an eight-use Spade")
     let record = Data([7, 0, 32, 0, 0, 0, 2, 0, 1, 1, 1, 0, 0, 0, 0])
     let sequential = try Lemmings3StyleBank(objects: record, frames: Data([0, 0, 1, 1, 0, 0, 16]), blocks: Data())
     try require(try sequential.attributes(object: 7) == [0x1000], "L3 sequential native attribute words")
@@ -77,6 +88,29 @@ do {
     let blockedRise = try riseGame(direction: 1, blockedAhead: true)
     try require(blockedRise.lemmings[0].x == 20 && blockedRise.lemmings[0].direction == -1,
         "L3 checks projected clearance before a high rise")
+    var alignedTags = tags
+    for y in 42..<48 { for x in 24..<32 { alignedTags[y * 128 + x] = 0x20 } }
+    var alignedRise = try Lemmings3Runtime(configuration: .init(width: 128, height: 64, attributes: alignedTags,
+        entrance: .init(x: 20, y: 40), exits: [.init(x: 110, y: 46)], total: 1,
+        releaseInterval: 1, releaseDelay: 0))
+    for _ in 0..<10 { alignedRise.step() }
+    try require(alignedRise.lemmings[0].x == 24 && alignedRise.lemmings[0].y == 42,
+        "L3 crosses a six-pixel rise at the leading block edge")
+    var eightTags = tags
+    for y in 40..<48 { for x in 24..<128 { eightTags[y * 128 + x] = 0x20 } }
+    var eightRise = try Lemmings3Runtime(configuration: .init(width: 128, height: 64, attributes: eightTags,
+        entrance: .init(x: 20, y: 40), exits: [.init(x: 110, y: 46)], total: 1,
+        releaseInterval: 1, releaseDelay: 0))
+    for _ in 0..<10 { eightRise.step() }
+    try require(eightRise.lemmings[0].x == 24 && eightRise.lemmings[0].y == 40,
+        "L3 crosses a continuous eight-pixel rise at the leading block edge")
+    for y in 40..<48 { for x in 32..<128 { eightTags[y * 128 + x] = 0x1000 } }
+    var thinRise = try Lemmings3Runtime(configuration: .init(width: 128, height: 64, attributes: eightTags,
+        entrance: .init(x: 20, y: 40), exits: [.init(x: 110, y: 46)], total: 1,
+        releaseInterval: 1, releaseDelay: 0))
+    for _ in 0..<10 { thinRise.step() }
+    try require(thinRise.lemmings[0].x == 23 && thinRise.lemmings[0].direction == -1,
+        "L3 turns at a thin eight-pixel shelf")
     print("PASS L3 directional high rise and projected clearance")
 
     var trapTags = tags
@@ -127,13 +161,24 @@ do {
     for y in 48..<96 { for x in 48..<128 { climbTags[y * 128 + x] = 0x20 } }
     var climber = try Lemmings3Runtime(configuration: .init(width: 128, height: 128, attributes: climbTags,
         entrance: .init(x: 20, y: 88), exits: [.init(x: 110, y: 46)], total: 1, releaseInterval: 1, releaseDelay: 0,
-        pickups: [.init(id: 0, tool: .sucker, x: 20, y: 88)]))
+        pickups: (0..<4).map { .init(id: $0, tool: .sucker, x: 20, y: 88) }))
     for _ in 0..<12 { climber.step() }
+    try require(climber.lemmings[0].quantity == 32, "L3 stacked Sucker pickups grant eight charges each")
     try require(climber.useTool(to: 0, direction: .up), "L3 activates suckers")
-    try require(climber.lemmings[0].tool == nil && climber.lemmings[0].mobilityTool == .sucker, "L3 consumes activated climbing equipment")
+    try require(climber.lemmings[0].quantity == 32 && climber.lemmings[0].mobilityTool == .sucker, "L3 Sucker stock remains until climbing")
     var sawClimbing = false
     for _ in 0..<250 { climber.step(); sawClimbing = sawClimbing || climber.lemmings[0].state == .climbing }
-    try require(sawClimbing && climber.saved == 1, "L3 climbs a wall and steps onto its top")
+    try require(sawClimbing && climber.saved == 1 && climber.lemmings[0].quantity > 0, "L3 climbs a wall past five seconds and keeps unused charges")
+    var ledgeTags = [UInt16](repeating: 0x1000, count: 128 * 128)
+    for y in 96..<128 { for x in 0..<128 { ledgeTags[y * 128 + x] = 0x20 } }
+    for y in 56..<96 { for x in 48..<128 { ledgeTags[y * 128 + x] = 0x20 } }
+    var ledge = try Lemmings3Runtime(configuration: .init(width: 128, height: 128, attributes: ledgeTags,
+        entrance: .init(x: 20, y: 88), exits: [.init(x: 110, y: 54)], total: 1, releaseInterval: 1, releaseDelay: 0,
+        pickups: [.init(id: 0, tool: .sucker, x: 20, y: 88)]))
+    for _ in 0..<12 { ledge.step() }
+    try require(ledge.useTool(to: 0, direction: .right), "L3 activates Sucker before the 40-pixel wall")
+    for _ in 0..<250 { ledge.step() }
+    try require(ledge.saved == 1 && ledge.lemmings[0].quantity == 1, "L3 Sucker steps onto a 40-pixel ledge with one pickup")
     var shimmyTags = [UInt16](repeating: 0x1000, count: 128 * 128)
     for y in 96..<128 { for x in 0..<128 where x < 36 || x >= 92 { shimmyTags[y * 128 + x] = 0x20 } }
     for x in 20..<100 { shimmyTags[64 * 128 + x] = 0x20 }
@@ -167,10 +212,13 @@ do {
         pickups: [.init(id: 0, tool: .sucker, x: 20, y: 472)]))
     for _ in 0..<12 { exhausted.step() }
     _ = exhausted.useTool(to: 0, direction: .up)
-    for _ in 0..<114 { exhausted.step() }
-    try require(exhausted.lemmings[0].state == .climbing && exhausted.lemmings[0].mobilityTicks == 1, "L3 active sucker lifetime counts down")
-    exhausted.step()
-    try require(exhausted.lemmings[0].state == .falling && exhausted.lemmings[0].mobilityTool == nil, "L3 exhausted climber falls")
+    for _ in 0..<100 where exhausted.lemmings[0].state != .climbing { exhausted.step() }
+    try require(exhausted.lemmings[0].state == .climbing, "L3 reaches a tall wall with Sucker equipped")
+    let startingHeight = exhausted.lemmings[0].y
+    for _ in 0..<150 where exhausted.lemmings[0].state == .climbing { exhausted.step() }
+    try require(exhausted.lemmings[0].state == .falling && exhausted.lemmings[0].mobilityTool == nil &&
+                exhausted.lemmings[0].quantity == 0 && startingHeight - exhausted.lemmings[0].y == 32,
+                "L3 exhausts one Sucker pickup after 32 pixels of climb")
     print("PASS L3 sucker activation, wall climbing, shimmy jump, ceiling traversal and release")
 
     func explosiveGame(_ tool: Lemmings3Runtime.Tool, protected: Bool = false) throws -> Lemmings3Runtime {
@@ -205,10 +253,10 @@ do {
     try require(grenadier.explosives.isEmpty && grenadier.terrainEdits.values.contains(false), "L3 grenade blast creates a crater")
     print("PASS L3 bomb and grenade inventory, fuses, terrain, permanent protection and tool-box survival")
     var fighter = try explosiveGame(.hadoken)
-    try require(fighter.lemmings[0].tool == .hadoken && fighter.lemmings[0].quantity == 8, "L3 Hadoken box has eight charges")
+    try require(fighter.lemmings[0].tool == .hadoken && fighter.lemmings[0].quantity == 1, "L3 Hadoken box has one charge")
     let fireballX = fighter.lemmings[0].x
     try require(fighter.useTool(to: 0, direction: .left), "L3 Hadoken activation")
-    try require(fighter.lemmings[0].tool == .hadoken && fighter.lemmings[0].quantity == 7 && fighter.fireballs.count == 1, "L3 Hadoken consumes one charge")
+    try require(fighter.lemmings[0].tool == nil && fighter.lemmings[0].quantity == 0 && fighter.fireballs.count == 1, "L3 Hadoken consumes one charge")
     fighter.step()
     try require(fighter.fireballs[0].x == fireballX + 4, "L3 Hadoken follows facing, not work direction")
     for _ in 0..<80 { fighter.step() }
@@ -304,14 +352,30 @@ do {
     try require(builder.lemmings[0].tool == nil && builder.pickups.last?.quantity == 7, "L3 preserves quantity on drop")
     builder.step()
     try require(builder.lemmings[0].tool == nil, "L3 does not immediately reclaim its dropped box")
+    var stair = try Lemmings3Runtime(configuration: .init(width: 128, height: 64, attributes: tags,
+        entrance: .init(x: 100, y: 40), exits: [.init(x: 110, y: 46)], total: 2,
+        releaseInterval: 1000, releaseDelay: 1000,
+        pickups: [.init(id: 0, tool: .bricks, x: 32, y: 40)],
+        extras: [.init(x: 40, y: 48, direction: -1), .init(x: 56, y: 48, direction: -1)]))
+    for _ in 0..<3 { stair.step() }
+    try require(stair.useTool(to: 0, direction: .upLeft), "L3 starts a constructed staircase")
+    for _ in 0..<16 { stair.step() }
+    try require(stair.lemmings[1].x == 38 && stair.lemmings[1].y == 48,
+        "L3 follower reaches the first constructed step")
+    stair.step()
+    try require(stair.lemmings[1].x == 37 && stair.lemmings[1].y == 40,
+        "L3 follower climbs an eight-pixel constructed step")
+    for _ in 0..<8 { stair.step() }
+    try require(stair.lemmings[1].x == 29 && stair.lemmings[1].y == 32,
+        "L3 follower climbs adjacent constructed steps")
     var digger = try toolGame(.spade)
     try require(digger.useTool(to: 0, direction: .down), "L3 spade direction")
     digger.step()
-    try require(digger.lemmings[0].y == 56 && digger.lemmings[0].quantity == 5 && digger.terrainEdits.values.contains(false), "L3 spade cuts eight-pixel work step")
+    try require(digger.lemmings[0].y == 56 && digger.lemmings[0].quantity == 7 && digger.terrainEdits.values.contains(false), "L3 spade cuts eight-pixel work step")
     var protected = try toolGame(.spade, permanent: true)
     try require(protected.useTool(to: 0, direction: .down), "L3 starts work before collision check")
     protected.step()
-    try require(protected.terrainEdits.isEmpty && protected.lemmings[0].quantity == 6, "L3 permanent terrain blocks digging without consumption")
+    try require(protected.terrainEdits.isEmpty && protected.lemmings[0].quantity == 8, "L3 permanent terrain blocks digging without consumption")
     var reserveRun = try Lemmings3Runtime(configuration: .init(width: 128, height: 64, attributes: tags,
         entrance: .init(x: 20, y: 40), exits: [.init(x: 110, y: 46)], total: 20, releaseInterval: 1, releaseDelay: 0))
     for _ in 0..<200 { reserveRun.step() }
@@ -455,6 +519,10 @@ do {
             let temp = try Lemmings3Objects(data: Data(contentsOf: root.appendingPathComponent(String(format: "LEVELS/TEMP%03d.OBS", candidate.temporaryObjectsReference))))
             var run = try Lemmings3Runtime(level: candidate, style: style, permanent: perm, temporary: temp,
                 total: number == 3 ? campaign.population : 20)
+            if number == 7 {
+                try require(run.configuration.pickups.contains { $0.tool == .shimmy && $0.quantity == 8 },
+                    "L3 Classic 7 imports the original Shimmy pickup")
+            }
             for _ in 0..<100 { run.step() }
             try require(run.released > 0, "L3 native level smoke test \(number)")
             try require(run.creatures.count == candidate.enemyCount, "L3 native creature count \(number)")

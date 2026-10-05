@@ -1716,7 +1716,7 @@ import NxlvKit
         }
         foreground = try image(width: mapWidth, height: mapHeight, pixels: foregroundPixels, palette: palette, opaque: foregroundPixels.map { $0 != 255 }, category: terrainCategory)
         for tool in Lemmings3Runtime.Tool.allCases {
-            let frame = try style.permanent.image(object: tool.rawValue, palette: palette)
+            let frame = try style.permanent.image(object: tool.sourceIdentifier, palette: palette)
             pickupImages[tool.rawValue] = try image(width: frame.width, height: frame.height, pixels: frame.pixels, palette: palette, opaque: frame.pixels.map { $0 != 255 }, category: .mechanical)
         }
     }

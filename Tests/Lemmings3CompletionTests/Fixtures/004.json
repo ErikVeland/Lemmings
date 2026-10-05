@@ -3,10 +3,10 @@
     "lost" : 2,
     "reserves" : 10,
     "saved" : 10,
-    "stateHash" : "4c951d4a1583ba868dd8848e9bd6380b007393df6653055751cee584e9a0d710",
+    "stateHash" : "f0085ab72db4e0d68978ae779b5a10add6c601c5947fea2d9435549e1fbfba44",
     "ticks" : 9660
   },
-  "initialStateHash" : "8e84bfdd7e1aa5163b9c71eda644552fa3b151eb971bea46af0bd4b51ab806ac",
+  "initialStateHash" : "1500cdc5bb9a10b260677014f0c29babe0dd4522f6b8a09363cdad72fc7ab9f7",
   "inputs" : [
     {
       "action" : "walker",
@@ -31,99 +31,9 @@
       "tick" : 313
     },
     {
-      "action" : "jumper",
-      "lemming" : 6,
-      "tick" : 517
-    },
-    {
-      "action" : "jumper",
-      "lemming" : 6,
-      "tick" : 527
-    },
-    {
-      "action" : "jumper",
-      "lemming" : 8,
-      "tick" : 817
-    },
-    {
-      "action" : "jumper",
-      "lemming" : 8,
-      "tick" : 827
-    },
-    {
-      "action" : "jumper",
-      "lemming" : 10,
-      "tick" : 1117
-    },
-    {
-      "action" : "jumper",
-      "lemming" : 10,
-      "tick" : 1127
-    },
-    {
-      "action" : "jumper",
-      "lemming" : 2,
-      "tick" : 1442
-    },
-    {
-      "action" : "jumper",
-      "lemming" : 2,
-      "tick" : 1452
-    },
-    {
       "action" : "walker",
       "lemming" : 0,
       "tick" : 1665
-    },
-    {
-      "action" : "jumper",
-      "lemming" : 4,
-      "tick" : 1777
-    },
-    {
-      "action" : "jumper",
-      "lemming" : 4,
-      "tick" : 1787
-    },
-    {
-      "action" : "jumper",
-      "lemming" : 7,
-      "tick" : 2097
-    },
-    {
-      "action" : "jumper",
-      "lemming" : 7,
-      "tick" : 2107
-    },
-    {
-      "action" : "jumper",
-      "lemming" : 11,
-      "tick" : 2437
-    },
-    {
-      "action" : "jumper",
-      "lemming" : 11,
-      "tick" : 2447
-    },
-    {
-      "action" : "jumper",
-      "lemming" : 9,
-      "tick" : 2657
-    },
-    {
-      "action" : "jumper",
-      "lemming" : 9,
-      "tick" : 2667
-    },
-    {
-      "action" : "jumper",
-      "lemming" : 5,
-      "tick" : 3097
-    },
-    {
-      "action" : "jumper",
-      "lemming" : 5,
-      "tick" : 3107
     }
   ],
   "level" : 4,
