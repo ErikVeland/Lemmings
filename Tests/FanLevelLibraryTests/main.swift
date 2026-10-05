@@ -104,6 +104,16 @@ check(akseliEntries.filter { akseliGolemsMembers.contains($0.file + "#\($0.secti
   && akseliEntries.filter { !akseliGolemsMembers.contains($0.file + "#\($0.section ?? -1)") }
     .allSatisfy { FanLevelLibrary.mechanics(for: akseliPack, entry: $0) == .original },
   "the pinned Akseli source replays select Golems mechanics for four levels")
+let mattPack = root.appendingPathComponent("Content/LevelPacks/0248-MATTPCK1.zip")
+let mattEntries = try FanLevelLibrary.validatedEntries(in: mattPack)
+let mattGolemsMembers: Set<String> = [
+  "MATTPCK1.DAT#3", "MATTPCK1.DAT#5", "MATTPCK1.DAT#6", "MATTPCK1.DAT#8",
+]
+check(mattEntries.filter { mattGolemsMembers.contains($0.file + "#\($0.section ?? -1)") }.count == 4
+  && mattEntries.allSatisfy { entry in
+    FanLevelLibrary.mechanics(for: mattPack, entry: entry)
+      == (mattGolemsMembers.contains(entry.file + "#\(entry.section ?? -1)") ? .golems : .original)
+  }, "the pinned MATTPCK1 source replays select Golems mechanics only for four members")
 for (name, selectedMember) in [
   ("0207-LF-level-design-contest-1.zip", "contest1.dat#3"),
   ("0214-LF-Level-Jam-1.zip", "LF Level Jam #1.dat#6"),

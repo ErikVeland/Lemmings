@@ -1224,7 +1224,8 @@ public struct ClassicDOSSimulation: Codable, Equatable, Sendable {
             lemming.foot.y -= 1
             if lemming.foot.y + frameTop(for: .climbing) < -5 ||
                 hasPixelClipped(
-                    x: lemming.foot.x - lemming.direction.delta,
+                    x: lemming.foot.x - lemming.direction.delta
+                        * (configuration.mechanics == .golems ? 2 : 1),
                     y: lemming.foot.y - 8,
                     minimumY: -8
                 ) {

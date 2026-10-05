@@ -131056,6 +131056,1032 @@
   {
     "entry": {
       "catalogueRevision": "1.2-runtime-v2",
+      "id": "780410A2-67DD-3722-F371-445C89B8A7CC",
+      "identity": {
+        "engine": "classic",
+        "levelID": "MATTPCK1.DAT#0",
+        "packID": "fan:lldb-248"
+      },
+      "levelNameSnapshot": "Lemmings, go home!",
+      "levelNumberSnapshot": 1,
+      "packNameSnapshot": "MATTPCK1",
+      "sourceRevision": "bffc37a79925ad47b3cc6a24472381ce3741ef0f2b83048e07faacc7edc80854"
+    },
+    "initialHash": "d2b56bc50b849e6f6a947a7df2f287c9b33c7cca7690c5ef5c58b067874b478c",
+    "official": false,
+    "order": 2517,
+    "playable": true,
+    "profile": {
+      "components": {
+        "concurrencyBurden": 250,
+        "constraintPressure": 675.4300274402195,
+        "deductionComplexityProxy": 300,
+        "executionPrecision": 0,
+        "solutionComplexity": 596.5131794236476,
+        "techniqueBurden": 520
+      },
+      "confidence": "medium",
+      "criticalActions": [],
+      "detectedTechniques": [
+        "basher",
+        "builder",
+        "climber",
+        "digger",
+        "miner",
+        "multiple-worker-coordination"
+      ],
+      "explanation": [
+        "5 used skill types; 5 assigned workers; 4 same-worker skill changes.",
+        "Maximum concurrent worker regions: 2.",
+        "Timing probes: 10. Untested alternatives remain unknown.",
+        "Deduction is a conservative proxy. Observed techniques are not proof of necessity.",
+        "Source rank: fan:lldb-248."
+      ],
+      "key": {
+        "analyserVersion": "difficulty-3",
+        "assetsRevision": "d2b56bc50b849e6f6a947a7df2f287c9b33c7cca7690c5ef5c58b067874b478c:probes-10",
+        "identity": {
+          "engine": "classic",
+          "levelID": "MATTPCK1.DAT#0",
+          "packID": "fan:lldb-248"
+        },
+        "levelRevision": "bffc37a79925ad47b3cc6a24472381ce3741ef0f2b83048e07faacc7edc80854",
+        "replayRevision": "SHA256 digest: 6b1ecd76aa4d2b8284373d7a9d04dc98d06db3c99d65e9c54b2ba40515141dea",
+        "simulationVersion": "neolemmix-ce-2026-09-27"
+      },
+      "overallScore": 402.538803040431,
+      "precision": {
+        "actions": [
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 1
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 2
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 3
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 4
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 5
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 6
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 7
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 8
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 9
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 10
+          }
+        ],
+        "alternativeRunCount": 0,
+        "assignmentCount": 10,
+        "completed": false,
+        "orderingOutcomes": [],
+        "runCount": 10,
+        "selectionOutcomes": []
+      },
+      "prerequisiteConcepts": [],
+      "sourceRank": "fan:lldb-248"
+    }
+  },
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
+      "id": "FE99770E-E07A-BF74-1D90-DE9C232F7395",
+      "identity": {
+        "engine": "classic",
+        "levelID": "MATTPCK1.DAT#1",
+        "packID": "fan:lldb-248"
+      },
+      "levelNameSnapshot": "Beethoven's Revenge",
+      "levelNumberSnapshot": 2,
+      "packNameSnapshot": "MATTPCK1",
+      "sourceRevision": "bffc37a79925ad47b3cc6a24472381ce3741ef0f2b83048e07faacc7edc80854"
+    },
+    "initialHash": "68eb654a4b74d674388d5bf7a0f36c47f97446a2a81fd662709bd0add30820a8",
+    "official": false,
+    "order": 2518,
+    "playable": true,
+    "profile": {
+      "components": {
+        "concurrencyBurden": 180,
+        "constraintPressure": 674.984319874559,
+        "deductionComplexityProxy": 380,
+        "executionPrecision": 0,
+        "solutionComplexity": 770.6882590646912,
+        "techniqueBurden": 605
+      },
+      "confidence": "medium",
+      "criticalActions": [],
+      "detectedTechniques": [
+        "basher",
+        "builder",
+        "digger",
+        "multiple-worker-coordination",
+        "release-rate-manipulation"
+      ],
+      "explanation": [
+        "3 used skill types; 5 assigned workers; 8 same-worker skill changes.",
+        "Maximum concurrent worker regions: 2.",
+        "Timing probes: 10. Untested alternatives remain unknown.",
+        "Deduction is a conservative proxy. Observed techniques are not proof of necessity.",
+        "Source rank: fan:lldb-248."
+      ],
+      "key": {
+        "analyserVersion": "difficulty-3",
+        "assetsRevision": "68eb654a4b74d674388d5bf7a0f36c47f97446a2a81fd662709bd0add30820a8:probes-10",
+        "identity": {
+          "engine": "classic",
+          "levelID": "MATTPCK1.DAT#1",
+          "packID": "fan:lldb-248"
+        },
+        "levelRevision": "bffc37a79925ad47b3cc6a24472381ce3741ef0f2b83048e07faacc7edc80854",
+        "replayRevision": "SHA256 digest: 30721f3eb194dcdb643c9fa23ce1a43665550f6a5435a50ae1d204a57963e43a",
+        "simulationVersion": "neolemmix-ce-2026-09-27"
+      },
+      "overallScore": 458.5493785779248,
+      "precision": {
+        "actions": [
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 1
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 2
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 3
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 4
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 5
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 6
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 7
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 8
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 10
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 11
+          }
+        ],
+        "alternativeRunCount": 0,
+        "assignmentCount": 13,
+        "completed": false,
+        "orderingOutcomes": [],
+        "runCount": 10,
+        "selectionOutcomes": []
+      },
+      "prerequisiteConcepts": [],
+      "sourceRank": "fan:lldb-248"
+    }
+  },
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
+      "id": "A23B098D-23AF-1631-F832-5A6001132B84",
+      "identity": {
+        "engine": "classic",
+        "levelID": "MATTPCK1.DAT#3",
+        "packID": "fan:lldb-248"
+      },
+      "levelNameSnapshot": "Exodus",
+      "levelNumberSnapshot": 4,
+      "packNameSnapshot": "MATTPCK1",
+      "sourceRevision": "bffc37a79925ad47b3cc6a24472381ce3741ef0f2b83048e07faacc7edc80854"
+    },
+    "initialHash": "d1573ea966750b5476543daf592cbf68341121c880c879cc603b2ba65028d441",
+    "official": false,
+    "order": 2520,
+    "playable": true,
+    "profile": {
+      "components": {
+        "concurrencyBurden": 0,
+        "constraintPressure": 959.2174338883448,
+        "deductionComplexityProxy": 155,
+        "executionPrecision": 649.5696796730189,
+        "solutionComplexity": 383.68825906469124,
+        "techniqueBurden": 390
+      },
+      "confidence": "medium",
+      "criticalActions": [
+        2,
+        3,
+        4
+      ],
+      "detectedTechniques": [
+        "blocker",
+        "bomber",
+        "climber",
+        "miner",
+        "release-rate-manipulation"
+      ],
+      "explanation": [
+        "4 used skill types; 5 assigned workers; 1 same-worker skill changes.",
+        "Maximum concurrent worker regions: 1.",
+        "Timing probes: 10. Untested alternatives remain unknown.",
+        "Deduction is a conservative proxy. Observed techniques are not proof of necessity.",
+        "Source rank: fan:lldb-248."
+      ],
+      "key": {
+        "analyserVersion": "difficulty-3",
+        "assetsRevision": "d1573ea966750b5476543daf592cbf68341121c880c879cc603b2ba65028d441:probes-10",
+        "identity": {
+          "engine": "classic",
+          "levelID": "MATTPCK1.DAT#3",
+          "packID": "fan:lldb-248"
+        },
+        "levelRevision": "bffc37a79925ad47b3cc6a24472381ce3741ef0f2b83048e07faacc7edc80854",
+        "replayRevision": "SHA256 digest: 7a62f84eb83e306b9160ffb46fb8c5d30baba2bae2b19394c4aaedef8928e1b0",
+        "simulationVersion": "neolemmix-ce-2026-09-27"
+      },
+      "overallScore": 447.3736193343207,
+      "precision": {
+        "actions": [
+          {
+            "outcomes": {
+              "-1": false,
+              "1": false
+            },
+            "sequence": 2
+          },
+          {
+            "outcomes": {
+              "-1": false,
+              "1": false
+            },
+            "sequence": 3
+          },
+          {
+            "outcomes": {
+              "-1": false,
+              "1": false
+            },
+            "sequence": 4
+          },
+          {
+            "outcomes": {
+              "-1": true,
+              "1": true
+            },
+            "sequence": 5
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 55
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 56
+          }
+        ],
+        "alternativeRunCount": 0,
+        "assignmentCount": 6,
+        "completed": false,
+        "orderingOutcomes": [],
+        "runCount": 10,
+        "selectionOutcomes": []
+      },
+      "prerequisiteConcepts": [],
+      "sourceRank": "fan:lldb-248"
+    }
+  },
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
+      "id": "E5DBDB6F-445C-0AA3-2E69-4EBD21198E3B",
+      "identity": {
+        "engine": "classic",
+        "levelID": "MATTPCK1.DAT#4",
+        "packID": "fan:lldb-248"
+      },
+      "levelNameSnapshot": "Per aspera ad astra",
+      "levelNumberSnapshot": 5,
+      "packNameSnapshot": "MATTPCK1",
+      "sourceRevision": "bffc37a79925ad47b3cc6a24472381ce3741ef0f2b83048e07faacc7edc80854"
+    },
+    "initialHash": "f53a98544294bdab51b9bf0f705944bdccb2e0b8c49e4712a7d575610b4c30bc",
+    "official": false,
+    "order": 2521,
+    "playable": true,
+    "profile": {
+      "components": {
+        "concurrencyBurden": 390,
+        "constraintPressure": 558.2673461387691,
+        "deductionComplexityProxy": 720,
+        "executionPrecision": 0,
+        "solutionComplexity": 1000,
+        "techniqueBurden": 540
+      },
+      "confidence": "medium",
+      "criticalActions": [],
+      "detectedTechniques": [
+        "builder",
+        "miner",
+        "multiple-worker-coordination",
+        "release-rate-manipulation"
+      ],
+      "explanation": [
+        "2 used skill types; 14 assigned workers; 18 same-worker skill changes.",
+        "Maximum concurrent worker regions: 2.",
+        "Timing probes: 10. Untested alternatives remain unknown.",
+        "Deduction is a conservative proxy. Observed techniques are not proof of necessity.",
+        "Source rank: fan:lldb-248."
+      ],
+      "key": {
+        "analyserVersion": "difficulty-3",
+        "assetsRevision": "f53a98544294bdab51b9bf0f705944bdccb2e0b8c49e4712a7d575610b4c30bc:probes-10",
+        "identity": {
+          "engine": "classic",
+          "levelID": "MATTPCK1.DAT#4",
+          "packID": "fan:lldb-248"
+        },
+        "levelRevision": "bffc37a79925ad47b3cc6a24472381ce3741ef0f2b83048e07faacc7edc80854",
+        "replayRevision": "SHA256 digest: 77a0ec2ef7b028451b3707302b5ccf5a12a458d57c9c317a48f4990373aef4ff",
+        "simulationVersion": "neolemmix-ce-2026-09-27"
+      },
+      "overallScore": 528.6747549980399,
+      "precision": {
+        "actions": [
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 1
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 2
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 3
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 4
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 5
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 6
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 7
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 8
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 9
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 10
+          }
+        ],
+        "alternativeRunCount": 0,
+        "assignmentCount": 60,
+        "completed": false,
+        "orderingOutcomes": [],
+        "runCount": 10,
+        "selectionOutcomes": []
+      },
+      "prerequisiteConcepts": [],
+      "sourceRank": "fan:lldb-248"
+    }
+  },
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
+      "id": "757D365F-F12A-6469-E6B5-35D11A07C33F",
+      "identity": {
+        "engine": "classic",
+        "levelID": "MATTPCK1.DAT#5",
+        "packID": "fan:lldb-248"
+      },
+      "levelNameSnapshot": "Oh No! Fewer Lemmings",
+      "levelNumberSnapshot": 6,
+      "packNameSnapshot": "MATTPCK1",
+      "sourceRevision": "bffc37a79925ad47b3cc6a24472381ce3741ef0f2b83048e07faacc7edc80854"
+    },
+    "initialHash": "d150d2caa492acf796ffd6cf3ab886ac5100551ab12c05cb038dd11f0905c10b",
+    "official": false,
+    "order": 2522,
+    "playable": true,
+    "profile": {
+      "components": {
+        "concurrencyBurden": 320,
+        "constraintPressure": 870.3096015676028,
+        "deductionComplexityProxy": 410,
+        "executionPrecision": 0,
+        "solutionComplexity": 983,
+        "techniqueBurden": 670
+      },
+      "confidence": "medium",
+      "criticalActions": [],
+      "detectedTechniques": [
+        "basher",
+        "builder",
+        "digger",
+        "miner",
+        "multiple-worker-coordination",
+        "release-rate-manipulation"
+      ],
+      "explanation": [
+        "4 used skill types; 4 assigned workers; 10 same-worker skill changes.",
+        "Maximum concurrent worker regions: 2.",
+        "Timing probes: 10. Untested alternatives remain unknown.",
+        "Deduction is a conservative proxy. Observed techniques are not proof of necessity.",
+        "Source rank: fan:lldb-248."
+      ],
+      "key": {
+        "analyserVersion": "difficulty-3",
+        "assetsRevision": "d150d2caa492acf796ffd6cf3ab886ac5100551ab12c05cb038dd11f0905c10b:probes-10",
+        "identity": {
+          "engine": "classic",
+          "levelID": "MATTPCK1.DAT#5",
+          "packID": "fan:lldb-248"
+        },
+        "levelRevision": "bffc37a79925ad47b3cc6a24472381ce3741ef0f2b83048e07faacc7edc80854",
+        "replayRevision": "SHA256 digest: 369752d994d7b3d9d991f7d9ff67c7cf52b5f3059111f06f7c85bb3a13b2e8ab",
+        "simulationVersion": "neolemmix-ce-2026-09-27"
+      },
+      "overallScore": 567.2002482037884,
+      "precision": {
+        "actions": [
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 1
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 2
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 3
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 4
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 5
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 6
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 7
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 8
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 9
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 10
+          }
+        ],
+        "alternativeRunCount": 0,
+        "assignmentCount": 15,
+        "completed": false,
+        "orderingOutcomes": [],
+        "runCount": 10,
+        "selectionOutcomes": []
+      },
+      "prerequisiteConcepts": [],
+      "sourceRank": "fan:lldb-248"
+    }
+  },
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
+      "id": "D33D6E28-60A6-A385-31F6-CDCEF46CB6F6",
+      "identity": {
+        "engine": "classic",
+        "levelID": "MATTPCK1.DAT#6",
+        "packID": "fan:lldb-248"
+      },
+      "levelNameSnapshot": "Lemming sanctuary inside",
+      "levelNumberSnapshot": 7,
+      "packNameSnapshot": "MATTPCK1",
+      "sourceRevision": "bffc37a79925ad47b3cc6a24472381ce3741ef0f2b83048e07faacc7edc80854"
+    },
+    "initialHash": "96b1d3a5772f4247d552895135a5885dc475a763b96286183bd074d9eb7eac19",
+    "official": false,
+    "order": 2523,
+    "playable": true,
+    "profile": {
+      "components": {
+        "concurrencyBurden": 430,
+        "constraintPressure": 898.0470280862181,
+        "deductionComplexityProxy": 230,
+        "executionPrecision": 0,
+        "solutionComplexity": 541.5131794236476,
+        "techniqueBurden": 605
+      },
+      "confidence": "medium",
+      "criticalActions": [],
+      "detectedTechniques": [
+        "builder",
+        "digger",
+        "miner",
+        "multiple-worker-coordination",
+        "release-rate-manipulation"
+      ],
+      "explanation": [
+        "3 used skill types; 4 assigned workers; 4 same-worker skill changes.",
+        "Maximum concurrent worker regions: 3.",
+        "Timing probes: 10. Untested alternatives remain unknown.",
+        "Deduction is a conservative proxy. Observed techniques are not proof of necessity.",
+        "Source rank: fan:lldb-248."
+      ],
+      "key": {
+        "analyserVersion": "difficulty-3",
+        "assetsRevision": "96b1d3a5772f4247d552895135a5885dc475a763b96286183bd074d9eb7eac19:probes-10",
+        "identity": {
+          "engine": "classic",
+          "levelID": "MATTPCK1.DAT#6",
+          "packID": "fan:lldb-248"
+        },
+        "levelRevision": "bffc37a79925ad47b3cc6a24472381ce3741ef0f2b83048e07faacc7edc80854",
+        "replayRevision": "SHA256 digest: de4ea1579c72bc79c2a9229d3a5681f29aab18ef9f4fffc67834018b64976470",
+        "simulationVersion": "neolemmix-ce-2026-09-27"
+      },
+      "overallScore": 459.1290131244108,
+      "precision": {
+        "actions": [
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 1
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 10
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 11
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 12
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 13
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 14
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 15
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 16
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 17
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 18
+          }
+        ],
+        "alternativeRunCount": 0,
+        "assignmentCount": 10,
+        "completed": false,
+        "orderingOutcomes": [],
+        "runCount": 10,
+        "selectionOutcomes": []
+      },
+      "prerequisiteConcepts": [],
+      "sourceRank": "fan:lldb-248"
+    }
+  },
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
+      "id": "9E12241D-4F41-6F7E-64F2-5305BCD675B9",
+      "identity": {
+        "engine": "classic",
+        "levelID": "MATTPCK1.DAT#7",
+        "packID": "fan:lldb-248"
+      },
+      "levelNameSnapshot": "Someone must help us!",
+      "levelNumberSnapshot": 8,
+      "packNameSnapshot": "MATTPCK1",
+      "sourceRevision": "bffc37a79925ad47b3cc6a24472381ce3741ef0f2b83048e07faacc7edc80854"
+    },
+    "initialHash": "29cd03b02b25e84db26c219ca85a2a35c6e60b4cdbbf79ce9e5af9741f660b78",
+    "official": false,
+    "order": 2524,
+    "playable": true,
+    "profile": {
+      "components": {
+        "concurrencyBurden": 0,
+        "constraintPressure": 852.695933365997,
+        "deductionComplexityProxy": 300,
+        "executionPrecision": 0,
+        "solutionComplexity": 693.0195500086538,
+        "techniqueBurden": 455
+      },
+      "confidence": "medium",
+      "criticalActions": [],
+      "detectedTechniques": [
+        "basher",
+        "builder",
+        "climber",
+        "floater",
+        "miner",
+        "release-rate-manipulation"
+      ],
+      "explanation": [
+        "5 used skill types; 2 assigned workers; 6 same-worker skill changes.",
+        "Maximum concurrent worker regions: 1.",
+        "Timing probes: 10. Untested alternatives remain unknown.",
+        "Deduction is a conservative proxy. Observed techniques are not proof of necessity.",
+        "Source rank: fan:lldb-248."
+      ],
+      "key": {
+        "analyserVersion": "difficulty-3",
+        "assetsRevision": "29cd03b02b25e84db26c219ca85a2a35c6e60b4cdbbf79ce9e5af9741f660b78:probes-10",
+        "identity": {
+          "engine": "classic",
+          "levelID": "MATTPCK1.DAT#7",
+          "packID": "fan:lldb-248"
+        },
+        "levelRevision": "bffc37a79925ad47b3cc6a24472381ce3741ef0f2b83048e07faacc7edc80854",
+        "replayRevision": "SHA256 digest: ec8aaa29dd9ae62460e1de5afce1c4087c3ae9754042b7d8ea994c4c3c3c5219",
+        "simulationVersion": "neolemmix-ce-2026-09-27"
+      },
+      "overallScore": 398.06477233948345,
+      "precision": {
+        "actions": [
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 1
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 2
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 3
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 4
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 5
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 6
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 7
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 8
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 9
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 59
+          }
+        ],
+        "alternativeRunCount": 0,
+        "assignmentCount": 11,
+        "completed": false,
+        "orderingOutcomes": [],
+        "runCount": 10,
+        "selectionOutcomes": []
+      },
+      "prerequisiteConcepts": [],
+      "sourceRank": "fan:lldb-248"
+    }
+  },
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
+      "id": "4A02F1BC-9DD4-FE3B-53F6-04A2379C0F4D",
+      "identity": {
+        "engine": "classic",
+        "levelID": "MATTPCK1.DAT#8",
+        "packID": "fan:lldb-248"
+      },
+      "levelNameSnapshot": "Toy Lemmings",
+      "levelNumberSnapshot": 9,
+      "packNameSnapshot": "MATTPCK1",
+      "sourceRevision": "bffc37a79925ad47b3cc6a24472381ce3741ef0f2b83048e07faacc7edc80854"
+    },
+    "initialHash": "644edf1cffe56d3b15b739809ab815cc26b39f0d495229cbb7dd987a2c09c8e8",
+    "official": false,
+    "order": 2525,
+    "playable": true,
+    "profile": {
+      "components": {
+        "concurrencyBurden": 180,
+        "constraintPressure": 785.55519268452,
+        "deductionComplexityProxy": 395,
+        "executionPrecision": 0,
+        "solutionComplexity": 915.6882590646912,
+        "techniqueBurden": 455
+      },
+      "confidence": "medium",
+      "criticalActions": [],
+      "detectedTechniques": [
+        "basher",
+        "builder",
+        "climber",
+        "miner",
+        "multiple-worker-coordination"
+      ],
+      "explanation": [
+        "4 used skill types; 4 assigned workers; 9 same-worker skill changes.",
+        "Maximum concurrent worker regions: 2.",
+        "Timing probes: 10. Untested alternatives remain unknown.",
+        "Deduction is a conservative proxy. Observed techniques are not proof of necessity.",
+        "Source rank: fan:lldb-248."
+      ],
+      "key": {
+        "analyserVersion": "difficulty-3",
+        "assetsRevision": "644edf1cffe56d3b15b739809ab815cc26b39f0d495229cbb7dd987a2c09c8e8:probes-10",
+        "identity": {
+          "engine": "classic",
+          "levelID": "MATTPCK1.DAT#8",
+          "packID": "fan:lldb-248"
+        },
+        "levelRevision": "bffc37a79925ad47b3cc6a24472381ce3741ef0f2b83048e07faacc7edc80854",
+        "replayRevision": "SHA256 digest: e11293d0e0f20c7b1a80af922cdabf8f167dd7d6af6a896816e1c08d67c3ec30",
+        "simulationVersion": "neolemmix-ce-2026-09-27"
+      },
+      "overallScore": 468.3735920432197,
+      "precision": {
+        "actions": [
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 1
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 2
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 3
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 4
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 5
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 6
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 7
+          },
+          {
+            "outcomes": {
+              "-1": false
+            },
+            "sequence": 8
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 9
+          },
+          {
+            "outcomes": {
+              "-1": true
+            },
+            "sequence": 10
+          }
+        ],
+        "alternativeRunCount": 0,
+        "assignmentCount": 13,
+        "completed": false,
+        "orderingOutcomes": [],
+        "runCount": 10,
+        "selectionOutcomes": []
+      },
+      "prerequisiteConcepts": [],
+      "sourceRank": "fan:lldb-248"
+    }
+  },
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
       "id": "EF367978-B095-08A2-CF17-8C9111BD7EA3",
       "identity": {
         "engine": "classic",

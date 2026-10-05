@@ -1,0 +1,70 @@
+{
+  "date": "2026-10-05",
+  "identity": "fan:lldb-61/lm_set15.dat#1",
+  "title": "Sorry, it can't be helped",
+  "archiveLevelNumber": 2,
+  "archiveSHA256": "4fb22ca4ef883e331f68c551bd0d3039bc42d306a8852533e9edc0b544e29525",
+  "initialStateHash": "788ca86e84fc6a64d06c11e8d4331e21646224ca1cda46c409b3b0b7ad9ec048",
+  "sourceBuiltSolverSHA256": "dc45dadab700e2792f98fe30451ac371b0b6bc36f3a25e086cabf05514fab01b",
+  "nativeLibrarySHA256": "bb2e421d2c9c078d61c20a89030772156f8ad88dc5fde7bcc5e366cf2cbc19e2",
+  "calibrations": [
+    {
+      "identity": "fan:lldb-133/weirdy01 (version 2).dat#1",
+      "policy": "--rate 99 --broadcast-skill floater --broadcast-from 0 --broadcast-through 0",
+      "result": "Regenerated the exact previously strict-verified 10/10 Penny Lane replay"
+    },
+    {
+      "identity": "fan:lldb-275/CRISFN11.dat#3",
+      "archiveSHA256": "57f9871dc77797e9de33684616a66ab82022fe70197a838fc2dea3a241595757",
+      "policy": "--sweep-pair builder,builder --first-from 60 --first-through 60 --second-gap-min 192 --second-gap-max 192",
+      "result": "Recovered both known Builder inputs at ticks 60 and 252 and a 1/1 native win at tick 822",
+      "nativeReplaySHA256": "3bacc32c8a4f5567a54e00202dc5bc61f5a88fa853a03fa737d1bc5fba0c2994"
+    }
+  ],
+  "searches": [
+    {
+      "policy": "--rollout-single --fallback 12 --refire 12 --seconds 45 --width 64",
+      "expanded": 27581,
+      "waitingRouteTick": 222,
+      "oneSkillRolloutsStarted": 21,
+      "bestSavedRequired": "0/5",
+      "bestPartialTick": 1643,
+      "bestPartialInputs": 60,
+      "partialReplaySHA256": "02f4f6836227b4a85888b45befc9b86aeeb009e87b60d0cc62d67bff41c9eb75"
+    },
+    {
+      "policy": "--focus-workers 1 --prefer-progress --direct-exit-distance --fallback 12 --refire 60 --width 48 --seconds 30",
+      "expanded": 1108,
+      "bestSavedRequired": "0/5",
+      "bestPartialTick": 271,
+      "partialReplaySHA256": "3a7c881b1d5c0afd2dd2cb7d9e9611b1eed323de6450f7f30a7c4aa30b0deac6"
+    },
+    {
+      "policy": "--rate 99 --focus-workers 1 --prefer-progress --direct-exit-distance --fallback 6 --refire 24 --width 96 --seconds 30",
+      "expanded": 2351,
+      "bestSavedRequired": "0/5",
+      "bestPartialTick": 209,
+      "partialReplaySHA256": "7a7386da1683d95d05260647b22017e4afc285987ca3a0da3f37e630016d1d40"
+    },
+    {
+      "policy": "--sweep-single --rate 99 --seconds 45",
+      "waitingRouteTick": 222,
+      "oneSkillAssignments": 763,
+      "continuationsCompleted": 763,
+      "deadlineExpired": false,
+      "bestSavedRequired": "0/5",
+      "partialReplaySHA256": "92bcf264c9baf3342f7c1f9830888e18e4528cbdabea063b8bb99e812ec99"
+    },
+    {
+      "policy": "--sweep-pair builder,builder --first-from 85 --first-through 100 --second-gap-min 20 --second-gap-max 60 --seconds 45",
+      "waitingRouteTick": 100,
+      "firstSkillAssignments": 16,
+      "secondSkillAssignments": 846,
+      "continuationsCompleted": 846,
+      "deadlineExpired": false,
+      "bestSavedRequired": "0/5",
+      "partialReplaySHA256": "5b0d594a7e95532c87ba6d56869dbe157834f43a4956de2beeb592f762e479ce"
+    }
+  ],
+  "interpretation": "These bounded searches do not cover a complete multi-Builder solution. No winning replay or score was assigned, and no source physics parity was inferred."
+}

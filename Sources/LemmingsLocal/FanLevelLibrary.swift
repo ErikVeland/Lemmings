@@ -261,6 +261,7 @@ enum FanLevelLibrary {
     244: ("b3b44850317ea16a3318fc64eda54fbe68451909010971d070fe3745113a1aa4", ["Martin Zurlinden 01.dat#0", "Martin Zurlinden 01.dat#8"]),
     245: ("ab231d4cf7985f416429c859113385b7bebccd4686d8e6acc72026b5bd89d2de", ["Martin Zurlinden 02.dat#4", "Martin Zurlinden 02.dat#5", "Martin Zurlinden 02.dat#6", "Martin Zurlinden 02.dat#7", "Martin Zurlinden 02.dat#8"]),
     246: ("d1e2c06fd14cc00c157cc220651bbbcbb9bf401851cce5d23de76fc54085f0bf", ["Martin Zurlinden 03.dat#0", "Martin Zurlinden 03.dat#2", "Martin Zurlinden 03.dat#3", "Martin Zurlinden 03.dat#4", "Martin Zurlinden 03.dat#5"]),
+    248: ("bffc37a79925ad47b3cc6a24472381ce3741ef0f2b83048e07faacc7edc80854", ["MATTPCK1.DAT#3", "MATTPCK1.DAT#5", "MATTPCK1.DAT#6", "MATTPCK1.DAT#8"]),
     252: ("fbfde75b1e89c442ec9b6bda652b154ab79329905f336c502ca1c20cb11a7aee", ["Conway03.DAT#9"]),
     265: ("c3b7844f28dc81810eaef140a7e6786b0b92f2edff29f7812d8b035b308e880f", ["CRISFN01.dat#3", "CRISFN01.dat#5"]),
     266: ("ca8350f116a45b7c71d03cc3e236ad90a91dd5f176e930f038835793c1ca2969", ["CRISFN02.dat#6"]),
