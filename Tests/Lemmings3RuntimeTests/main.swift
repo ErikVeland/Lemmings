@@ -66,6 +66,37 @@ do {
     try require(aborted.isComplete && aborted.lost == 1 && aborted.tick == abortedTick, "L3 abort is terminal")
     print("PASS experimental L3 landing, blocker, turn, jump, exit and deterministic ticks")
 
+    var softTags = tags
+    for x in 24..<32 { softTags[48 * 128 + x] = 0x2020 }
+    var worn = try Lemmings3Runtime(configuration: .init(width: 128, height: 64, attributes: softTags,
+        entrance: .init(x: 100, y: 40), exits: [.init(x: 110, y: 46)], total: 1,
+        releaseInterval: 1000, releaseDelay: 1000, extras: [.init(x: 24, y: 48, direction: 1)]))
+    worn.step()
+    try require(worn.lemmings[0].state == .walking && worn.attributes[48 * 128 + 24] == 0x2020,
+        "L3 landing leaves source soft terrain intact")
+    worn.step()
+    try require(worn.lemmings[0].x == 25 && worn.attributes[48 * 128 + 24] == 0x1000 &&
+                worn.attributes[48 * 128 + 25] == 0x2020 && worn.terrainEdits[48 * 128 + 24] == false,
+        "L3 walking wears the departed source soft-terrain foot pixel")
+    worn.step()
+    try require(worn.attributes[48 * 128 + 25] == 0x1000 && worn.terrainEdits[48 * 128 + 25] == false,
+        "L3 walking wear follows successive foot positions")
+    print("PASS L3 source soft terrain wears under walking feet")
+    var wornBoxTags = softTags
+    for y in 49..<56 { wornBoxTags[y * 128 + 24] = 0x1000 }
+    var wornPickup = Lemmings3Runtime.Pickup(id: 0, tool: .bricks, x: 24, y: 40)
+    wornPickup.ignoredBy = 0
+    var wornBox = try Lemmings3Runtime(configuration: .init(width: 128, height: 64, attributes: wornBoxTags,
+        entrance: .init(x: 100, y: 40), exits: [.init(x: 110, y: 46)], total: 1,
+        releaseInterval: 1000, releaseDelay: 1000, pickups: [wornPickup],
+        extras: [.init(x: 24, y: 48, direction: 1)]))
+    wornBox.step(); wornBox.step()
+    try require(wornBox.pickups[0].y == 40 && wornBox.attributes[48 * 128 + 24] == 0x1000,
+                "L3 original box stays while support first wears")
+    wornBox.step()
+    try require(wornBox.pickups[0].y == 42,
+                "L3 original box falls after its source support wears")
+
     func riseGame(direction: Int, blockedAhead: Bool = false) throws -> Lemmings3Runtime {
         var terrain = [UInt16](repeating: 0x1000, count: 128 * 64)
         for y in 48..<64 { for x in 0..<128 { terrain[y * 128 + x] = 0x20 } }
@@ -112,6 +143,29 @@ do {
     try require(thinRise.lemmings[0].x == 23 && thinRise.lemmings[0].direction == -1,
         "L3 turns at a thin eight-pixel shelf")
     print("PASS L3 directional high rise and projected clearance")
+
+    func leftClassRise(projected: UInt16) throws -> Lemmings3Runtime {
+        let width = 64, height = 64
+        var terrain = [UInt16](repeating: 0x1000, count: width * height)
+        for y in 48..<height { for x in 0..<width { terrain[y * width + x] = 0x20 } }
+        for y in 40..<48 { terrain[y * width + 23] = 0x0060 }
+        terrain[40 * width + 15] = projected
+        var run = try Lemmings3Runtime(configuration: .init(width: width, height: height, attributes: terrain,
+            entrance: .init(x: 50, y: 40), exits: [.init(x: 55, y: 40)], total: 1,
+            releaseInterval: 1000, releaseDelay: 1000, extras: [.init(x: 24, y: 48, direction: -1)]))
+        run.step()
+        run.step()
+        return run
+    }
+    for projected: UInt16 in [0x0060, 0x2020] {
+        let run = try leftClassRise(projected: projected)
+        try require(run.lemmings[0].x == 23 && run.lemmings[0].y == 40 && run.lemmings[0].direction == -1,
+            "L3 leftward source stair rises at phase seven with one projected class or source brick cell")
+    }
+    let plainProjection = try leftClassRise(projected: 0x0020)
+    try require(plainProjection.lemmings[0].x == 24 && plainProjection.lemmings[0].direction == 1,
+        "L3 leftward source stair still turns without a qualifying projected cell")
+    print("PASS L3 leftward source stair rise")
 
     var trapTags = tags
     for y in 46..<48 { for x in 40..<56 { trapTags[y * 128 + x] = 0x4000 } }
@@ -185,7 +239,8 @@ do {
     func shimmyGame() throws -> Lemmings3Runtime {
         try Lemmings3Runtime(configuration: .init(width: 128, height: 128, attributes: shimmyTags,
             entrance: .init(x: 20, y: 88), exits: [.init(x: 110, y: 94)], total: 1, releaseInterval: 1, releaseDelay: 0,
-            pickups: [.init(id: 0, tool: .shimmy, x: 20, y: 88)]))
+            pickups: [.init(id: 0, tool: .shimmy, x: 20, y: 88),
+                      .init(id: 1, tool: .shimmy, x: 20, y: 88)]))
     }
     var shimmier = try shimmyGame()
     for _ in 0..<12 { shimmier.step() }
@@ -193,6 +248,40 @@ do {
     var sawShimmying = false
     for _ in 0..<250 { shimmier.step(); sawShimmying = sawShimmying || shimmier.lemmings[0].state == .shimmying }
     try require(sawShimmying && shimmier.saved == 1, "L3 crosses a gap along a flat ceiling")
+    var stockTags = [UInt16](repeating: 0x1000, count: 256 * 96)
+    for x in 0..<256 { stockTags[64 * 256 + x] = 0x2020; stockTags[48 * 256 + x] = 0x2020 }
+    func shimmyDistance(stock: Int) throws -> Int {
+        var run = try Lemmings3Runtime(configuration: .init(width: 256, height: 96, attributes: stockTags,
+            entrance: .init(x: 32, y: 64), exits: [.init(x: 240, y: 64)], total: 1, releaseDelay: 1,
+            pickups: [.init(id: 0, tool: .shimmy, x: 32, y: 56, quantity: stock)]))
+        run.step()
+        try require(run.lemmings[0].quantity == stock && run.useTool(to: 0, direction: .right),
+                    "L3 Shimmy pickup supplies the expected stock")
+        var distance = 0
+        var grabbed = false
+        for _ in 0..<300 {
+            let before = run.lemmings[0]
+            run.step()
+            let actor = run.lemmings[0]
+            grabbed = grabbed || actor.state == .shimmying
+            if before.state == .shimmying {
+                distance += actor.x - before.x
+                if distance > 0 && distance.isMultiple(of: 8) {
+                    try require(actor.quantity == stock - distance / 8,
+                                "L3 Shimmy spends one stock per eight hanging steps")
+                }
+                if actor.state == .falling { break }
+            }
+        }
+        try require(grabbed && distance == stock * 8 && run.lemmings[0].quantity == 0 &&
+                    run.lemmings[0].tool == nil && run.lemmings[0].mobilityTool == nil,
+                    "L3 Shimmy releases when its stock is exhausted")
+        return distance
+    }
+    let oneShimmyPickup = try shimmyDistance(stock: 8)
+    let twoShimmyPickups = try shimmyDistance(stock: 16)
+    try require(oneShimmyPickup == 64 && twoShimmyPickups == 128,
+                "L3 Shimmy distance scales with pickup stock")
     var interrupted = try shimmyGame()
     for _ in 0..<12 { interrupted.step() }
     _ = interrupted.useTool(to: 0, direction: .right)
@@ -352,6 +441,26 @@ do {
     try require(builder.lemmings[0].tool == nil && builder.pickups.last?.quantity == 7, "L3 preserves quantity on drop")
     builder.step()
     try require(builder.lemmings[0].tool == nil, "L3 does not immediately reclaim its dropped box")
+    var dropTags = [UInt16](repeating: 0x1000, count: 128 * 64)
+    for y in 48..<64 { for x in 0..<128 { dropTags[y * 128 + x] = 0x20 } }
+    for y in 24..<32 { for x in 40..<64 { dropTags[y * 128 + x] = 0x20 } }
+    var fallingBox = try Lemmings3Runtime(configuration: .init(width: 128, height: 64,
+        attributes: dropTags, entrance: .init(x: 100, y: 40), exits: [.init(x: 110, y: 46)],
+        total: 1, releaseInterval: 1000, releaseDelay: 1000,
+        pickups: [.init(id: 0, tool: .sucker, x: 40, y: 16),
+                  .init(id: 1, tool: .spade, x: 80, y: 16)],
+        extras: [.init(x: 40, y: 24, direction: 1)]))
+    fallingBox.step()
+    try require(fallingBox.lemmings[0].tool == .sucker, "L3 ledge actor collects Sucker")
+    try require(fallingBox.assign(.drop, to: 0), "L3 ledge actor drops Sucker")
+    let droppedID = fallingBox.pickups.last!.id
+    let droppedY = fallingBox.pickups.last!.y
+    fallingBox.step()
+    try require(fallingBox.pickups.last!.id == droppedID && fallingBox.pickups.last!.y == droppedY + 2,
+                "L3 dropped Sucker falls from an open ledge")
+    for _ in 0..<20 { fallingBox.step() }
+    try require(fallingBox.pickups.last!.y == 40 && fallingBox.pickups[1].y == 16,
+                "L3 dropped Sucker lands on lower terrain while source pickup remains fixed")
     var stair = try Lemmings3Runtime(configuration: .init(width: 128, height: 64, attributes: tags,
         entrance: .init(x: 100, y: 40), exits: [.init(x: 110, y: 46)], total: 2,
         releaseInterval: 1000, releaseDelay: 1000,
@@ -368,6 +477,8 @@ do {
     for _ in 0..<8 { stair.step() }
     try require(stair.lemmings[1].x == 29 && stair.lemmings[1].y == 32,
         "L3 follower climbs adjacent constructed steps")
+    try require(stair.terrainEdits[40 * 128 + 37] == true && stair.attributes[40 * 128 + 37] == 0x2020,
+        "L3 walking preserves a departed constructed brick")
     var digger = try toolGame(.spade)
     try require(digger.useTool(to: 0, direction: .down), "L3 spade direction")
     digger.step()
@@ -647,6 +758,53 @@ do {
                 let perm = try Lemmings3Objects(data: Data(contentsOf: root.appendingPathComponent(String(format: "LEVELS/PERM%03d.OBS", candidate.permanentObjectsReference))))
                 let temp = try Lemmings3Objects(data: Data(contentsOf: root.appendingPathComponent(String(format: "LEVELS/TEMP%03d.OBS", candidate.temporaryObjectsReference))))
                 var run = try Lemmings3Runtime(level: candidate, style: tribeStyle, permanent: perm, temporary: temp)
+                if tribe == .shadow && index == 3 {
+                    try require(run.creatures.count == 1 && run.creatures[0].kind == .buzzard && !run.creatures[0].alive,
+                        "L3 Shadow 4 placed Buzzard stays inert as in the original DOS hatch run")
+                    var inert = run
+                    for _ in 0..<451 { inert.step() }
+                    try require(inert.creatures[0].x == run.creatures[0].x && inert.creatures[0].y == run.creatures[0].y &&
+                        inert.lemmings.filter { $0.id >= candidate.extraLemmings }.allSatisfy { $0.state != .dead },
+                        "L3 Shadow 4 hatch avoids the inactive Buzzard")
+                }
+                if tribe == .shadow && index == 6 {
+                    var corridor = try Lemmings3Runtime(level: candidate, style: tribeStyle,
+                        permanent: perm, temporary: temp, total: 22)
+                    for _ in 0..<200 { corridor.step() }
+                    try require(corridor.creatures.contains { $0.kind == .mole && $0.x == 118 && $0.y == 112 &&
+                        $0.digDirection == .right } && corridor.attributes[104 * 320 + 110] == 0x20,
+                        "L3 Shadow 7 Mole turns at the intact left wall")
+                    for _ in 200..<3000 { corridor.step() }
+                    try require(corridor.creatures.contains { $0.kind == .mole && (116...204).contains($0.x) && $0.y == 112 } &&
+                        corridor.attributes[104 * 320 + 110] == 0x20 && corridor.lost == 0,
+                        "L3 Shadow 7 Mole patrols the DOS corridor without losing the hatch")
+                }
+                if tribe == .shadow && index == 17 {
+                    try require(run.lemmings.count == 8 && [4, 5, 6].allSatisfy {
+                        run.lemmings[$0].tool == .grenade && run.lemmings[$0].quantity == 4
+                    }, "L3 Shadow 18 right-hand prisoners start with four grenades")
+                    var armed = run
+                    for _ in 0..<60 { armed.step() }
+                    try require(armed.useTool(to: 4, direction: .right) && armed.lemmings[4].quantity == 3 && armed.explosives.count == 1,
+                        "L3 Shadow 18 prisoner throws a grenade from initial stock")
+                    let permBytes = try Data(contentsOf: root.appendingPathComponent("LEVELS/PERM118.OBS"))
+                    var shortPermBytes = Data()
+                    var extrasKept = 0
+                    for offset in stride(from: 0, to: permBytes.count, by: 6) {
+                        let identifier = Int(permBytes[offset]) | Int(permBytes[offset + 1]) << 8
+                        if identifier == 10007 {
+                            extrasKept += 1
+                            if extrasKept > 3 { continue }
+                        }
+                        shortPermBytes.append(contentsOf: permBytes[offset..<(offset + 6)])
+                    }
+                    var shortLevelBytes = candidate.rawData
+                    shortLevelBytes[22] = 3
+                    let short = try Lemmings3Runtime(level: Lemmings3Level(data: shortLevelBytes),
+                        style: tribeStyle, permanent: Lemmings3Objects(data: shortPermBytes), temporary: temp, total: 1)
+                    try require(short.lemmings.count == 3 && short.lemmings.allSatisfy { $0.tool == nil },
+                        "L3 Shadow 18 stock requires all three right-hand prisoners")
+                }
                 for _ in 0..<100 { run.step() }
                 try require(run.released > 0 && run.creatures.count == candidate.enemyCount, "L3 native tribe release test \(number)")
                 if tribe == .shadow && index == 0 {

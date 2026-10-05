@@ -148,6 +148,7 @@ public struct Lemmings3Runtime: Sendable {
     public private(set) var creatures: [Creature] = []
     private var nextExplosiveID = 0
     private var nextPickupID: Int
+    private var gravityPickupIDs: Set<Int> = []
     private var trapStarted: [Int: Int] = [:]
     /// Native OBJ timing includes a delay counter and a pause at the cycle boundary.
     public func trapFrame(id: Int) -> Int {
@@ -193,6 +194,7 @@ public struct Lemmings3Runtime: Sendable {
             var lem = Lemming(id: index, x: extra.x, y: extra.y)
             lem.direction = extra.direction; return lem
         }
+        gravityPickupIDs = Set(pickups.filter { isSolid($0.x, $0.y + 8) }.map(\.id))
     }
 
     public init(level: Lemmings3Level, style: Lemmings3Style, permanent: Lemmings3Objects,
@@ -257,6 +259,23 @@ public struct Lemmings3Runtime: Sendable {
             releaseDelay: level.releaseDelay, timeLimit: level.timeLimitSeconds, pickups: pickups, extras: extras,
             backgroundAttributes: scene.backgroundAttributes, sourceLevelReference: level.permanentObjectsReference,
             traps: traps, creatures: creatures, additionalEntrances: Array(entrances.dropFirst())))
+        if level.style == 2 && level.permanentObjectsReference == 104 &&
+            level.temporaryObjectsReference == 104 && level.caveMapReference == 0 &&
+            level.caveGraphicsReference == 0 && level.width == 320 && level.height == 160 &&
+            level.extraLemmings == 2 && level.enemyCount == 1 &&
+            permanent.placements.contains(where: { $0.identifier == 10014 && $0.x == 192 && $0.y == 0 }) {
+            // Original DOS Shadow 4 leaves this placed Buzzard inert during the hatch run.
+            for index in self.creatures.indices where self.creatures[index].kind == .buzzard {
+                self.creatures[index].alive = false
+            }
+        }
+        if level.style == 2 && level.permanentObjectsReference == 118 && lemmings.indices.contains(6) {
+            // DOS Shadow 18 gives the three right-hand prisoners four grenades without pickup boxes.
+            for index in [4, 5, 6] {
+                lemmings[index].tool = .grenade
+                lemmings[index].quantity = Tool.grenade.initialQuantity
+            }
+        }
     }
     public func isSolid(_ x: Int, _ y: Int) -> Bool {
         x >= 0 && y >= 0 && x < configuration.width && y < configuration.height &&
@@ -291,6 +310,7 @@ public struct Lemmings3Runtime: Sendable {
             var pickup = Pickup(id: nextPickupID, tool: tool, x: max(0, min(configuration.width - 8, lemmings[index].x - 4)),
                 y: max(0, lemmings[index].y - 8), quantity: lemmings[index].quantity)
             nextPickupID += 1; pickup.ignoredBy = id; pickups.append(pickup)
+            gravityPickupIDs.insert(pickup.id)
             lemmings[index].tool = nil; lemmings[index].quantity = 0; lemmings[index].state = .walking
         }
         distract(index)
@@ -335,11 +355,8 @@ public struct Lemmings3Runtime: Sendable {
         if tool == .sucker || tool == .shimmy {
             guard lemmings[index].mobilityTool == nil else { return false }
             distract(index)
-            lemmings[index].mobilityTool = tool; lemmings[index].mobilityTicks = 5 * Int(Self.ticksPerSecond)
-            if tool == .shimmy {
-                lemmings[index].quantity -= 1
-                if lemmings[index].quantity == 0 { lemmings[index].tool = nil }
-            }
+            lemmings[index].mobilityTool = tool
+            lemmings[index].mobilityTicks = tool == .shimmy ? lemmings[index].quantity * 8 : 5 * Int(Self.ticksPerSecond)
             lemmings[index].state = tool == .shimmy ? .jumping : .walking
             if tool == .shimmy { lemmings[index].velocityY = -4 }
             lemmings[index].age = 0
@@ -530,6 +547,13 @@ public struct Lemmings3Runtime: Sendable {
             configuration.backgroundAttributes[cell.y * configuration.width + cell.x] & 0x20 != 0 ||
             attributes[cell.y * configuration.width + cell.x] & 0x2000 != 0
         }
+        if configuration.sourceLevelReference == 107 && configuration.width == 320 &&
+            configuration.height == 288 && !blocked && direction.dy == 0 &&
+            cells.contains(where: { isSolid($0.x, $0.y) }) {
+            creature.digDirection = direction == .left ? .right : .left
+            creature.direction = creature.digDirection.dx
+            return
+        }
         if blocked {
             switch direction {
             case .right: creature.digDirection = .down
@@ -552,6 +576,12 @@ public struct Lemmings3Runtime: Sendable {
     public mutating func step() {
         guard !isComplete else { return }
         tick += 1
+        for pickupIndex in pickups.indices where gravityPickupIDs.contains(pickups[pickupIndex].id) && pickups[pickupIndex].quantity > 0 {
+            let x = pickups[pickupIndex].x
+            for _ in 0..<2 where pickups[pickupIndex].y + 8 < configuration.height && !isSolid(x, pickups[pickupIndex].y + 8) {
+                pickups[pickupIndex].y += 1
+            }
+        }
         updateExplosives()
         updateFireballs()
         updateCreatures()
@@ -563,8 +593,9 @@ public struct Lemmings3Runtime: Sendable {
         }
         for index in lemmings.indices where lemmings[index].active {
             var lem = lemmings[index]
+            let oldX = lem.x, oldY = lem.y, oldState = lem.state
             lem.charmImmunity = max(0, lem.charmImmunity - 1)
-            if lem.mobilityTicks > 0 && !(lem.mobilityTool == .sucker && lem.state == .climbing) {
+            if lem.mobilityTicks > 0 && lem.mobilityTool != .shimmy && !(lem.mobilityTool == .sucker && lem.state == .climbing) {
                 lem.mobilityTicks -= 1
                 if lem.mobilityTicks == 0 {
                     lem.mobilityTool = nil
@@ -621,16 +652,22 @@ public struct Lemmings3Runtime: Sendable {
                         let px = nx + lem.direction * 8, py = lem.y - 14 + 2 * offset
                         return inBounds(px, py) && attributes[py * configuration.width + px] & 0x0040 != 0
                     }.count
-                    let classRise = (nx & 7) == 0 && contactTag == 0x0060 && projectedClassCount == 4
+                    let classRise = (nx & 7) == (lem.direction > 0 ? 0 : 7) && contactTag == 0x0060 &&
+                        projectedClassCount >= (lem.direction > 0 ? 4 : 1)
+                    let sourceBrickRise = lem.direction < 0 && (nx & 7) == 7 &&
+                        contactTag == 0x0060 &&
+                        inBounds(nx - 8, lem.y - 8) &&
+                        attributes[(lem.y - 8) * configuration.width + nx - 8] == 0x2020 &&
+                        terrainEdits[(lem.y - 8) * configuration.width + nx - 8] != true
                     let alignedBlockRise = lem.direction > 0 && (nx & 7) == 0 && contactTag == 0x0020 &&
                         isSolid(nx + 7, lem.y - 6) && !isSolid(nx + 7, lem.y - 7)
                     let continuousEightRise = lem.direction > 0 && (nx & 7) == 0 && contactTag == 0x0020 &&
                         isSolid(nx + 7, lem.y - 8) && !isSolid(nx + 7, lem.y - 9) &&
                         (8..<16).allSatisfy { isSolid(nx + $0, lem.y) && isSolid(nx + $0, lem.y - 1) }
-                    let maxRise = (nx & 7) == contactPhase || classRise || alignedBlockRise || continuousEightRise || builtBrickRise ? 8 : 4
+                    let maxRise = (nx & 7) == contactPhase || classRise || alignedBlockRise || continuousEightRise || builtBrickRise || sourceBrickRise ? 8 : 4
                     if let rise = (1...maxRise).first(where: { rise in
                         isSolid(nx, lem.y - rise) && !isSolid(nx, lem.y - rise - 1) &&
-                        (rise <= 4 || classRise || (0..<((continuousEightRise || builtBrickRise) && rise == 8 ? 3 : 4)).allSatisfy { offset in
+                        (rise <= 4 || classRise || sourceBrickRise || (0..<((continuousEightRise || builtBrickRise) && rise == 8 ? 3 : 4)).allSatisfy { offset in
                             let px = nx + lem.direction * 8, py = lem.y - 14 + 2 * offset
                             if !isSolid(px, py) { return true }
                             let projected = py * configuration.width + px
@@ -704,7 +741,15 @@ public struct Lemmings3Runtime: Sendable {
                 if !isSolid(nx, lem.y - 16) || isSolid(nx, lem.y - 15) {
                     lem.state = .falling; lem.age = 0; lem.fall = 0
                     lem.mobilityTool = nil; lem.mobilityTicks = 0
-                } else { lem.x = nx }
+                } else {
+                    lem.x = nx
+                    lem.mobilityTicks -= 1
+                    if lem.mobilityTicks.isMultiple(of: 8) { consumeTool(&lem) }
+                    if lem.mobilityTicks == 0 {
+                        lem.state = .falling; lem.age = 0; lem.fall = 0
+                        lem.mobilityTool = nil
+                    }
+                }
             case .jumping:
                 let nx = lem.x + (lem.mobilityTool == .shimmy ? 0 : lem.direction * 2)
                 if !isSolid(nx, lem.y - 8) { lem.x = nx }
@@ -730,6 +775,13 @@ public struct Lemmings3Runtime: Sendable {
             case .trapped: if lem.age >= lem.trapTicks { lem.state = .dead }
             case .exiting: if lem.age >= 8 { lem.state = .saved }
             case .saved, .dead: break
+            }
+            if oldState == .walking && lem.state == .walking && (lem.x != oldX || lem.y != oldY) && inBounds(oldX, oldY) {
+                let foot = oldY * configuration.width + oldX
+                if attributes[foot] == 0x2020 && terrainEdits[foot] != true {
+                    attributes[foot] = configuration.backgroundAttributes[foot]
+                    terrainEdits[foot] = false
+                }
             }
             if lem.x < 0 || lem.x >= configuration.width || lem.y < -32 || lem.y >= configuration.height { lem.state = .dead }
             lem.age += 1; lemmings[index] = lem

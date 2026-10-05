@@ -1,0 +1,82 @@
+{
+  "expected" : {
+    "lost" : 2,
+    "reserves" : 3,
+    "saved" : 10,
+    "stateHash" : "cb09244bdd3ba48d64e4dcd76d727251a95430e7f07f33c827f02a5f5d06249e",
+    "ticks" : 9660
+  },
+  "initialStateHash" : "14d13fe4d365ab5aa2cb248468a5dcd9fa18ced9d68dc64922fdb58365cc511c",
+  "inputs" : [
+    {
+      "action" : "walker",
+      "lemming" : 2,
+      "tick" : 74
+    },
+    {
+      "action" : "jumper",
+      "lemming" : 2,
+      "tick" : 75
+    },
+    {
+      "action" : "blocker",
+      "lemming" : 4,
+      "tick" : 120
+    },
+    {
+      "action" : "use",
+      "direction" : "left",
+      "lemming" : 3,
+      "tick" : 416
+    },
+    {
+      "action" : "use",
+      "direction" : "left",
+      "lemming" : 2,
+      "tick" : 465
+    },
+    {
+      "action" : "use",
+      "direction" : "right",
+      "lemming" : 3,
+      "tick" : 477
+    },
+    {
+      "action" : "drop",
+      "lemming" : 3,
+      "tick" : 496
+    },
+    {
+      "action" : "walker",
+      "lemming" : 2,
+      "tick" : 514
+    },
+    {
+      "action" : "use",
+      "direction" : "right",
+      "lemming" : 3,
+      "tick" : 526
+    },
+    {
+      "action" : "use",
+      "direction" : "upRight",
+      "lemming" : 3,
+      "tick" : 615
+    },
+    {
+      "action" : "use",
+      "direction" : "upRight",
+      "lemming" : 2,
+      "tick" : 641
+    },
+    {
+      "action" : "walker",
+      "lemming" : 4,
+      "tick" : 660
+    }
+  ],
+  "level" : 10,
+  "levelSHA256" : "638ad85e6f9a638cc1d651d08b48358e01bef5d3da2a9378ae02d983929347df",
+  "population" : 13,
+  "version" : 1
+}
