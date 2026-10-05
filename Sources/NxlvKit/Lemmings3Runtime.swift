@@ -148,6 +148,7 @@ public struct Lemmings3Runtime: Sendable {
     public private(set) var creatures: [Creature] = []
     private var nextExplosiveID = 0
     private var nextPickupID: Int
+    private var gravityPickupIDs: Set<Int> = []
     private var trapStarted: [Int: Int] = [:]
     /// Native OBJ timing includes a delay counter and a pause at the cycle boundary.
     public func trapFrame(id: Int) -> Int {
@@ -193,6 +194,7 @@ public struct Lemmings3Runtime: Sendable {
             var lem = Lemming(id: index, x: extra.x, y: extra.y)
             lem.direction = extra.direction; return lem
         }
+        gravityPickupIDs = Set(pickups.filter { isSolid($0.x, $0.y + 8) }.map(\.id))
     }
 
     public init(level: Lemmings3Level, style: Lemmings3Style, permanent: Lemmings3Objects,
@@ -308,6 +310,7 @@ public struct Lemmings3Runtime: Sendable {
             var pickup = Pickup(id: nextPickupID, tool: tool, x: max(0, min(configuration.width - 8, lemmings[index].x - 4)),
                 y: max(0, lemmings[index].y - 8), quantity: lemmings[index].quantity)
             nextPickupID += 1; pickup.ignoredBy = id; pickups.append(pickup)
+            gravityPickupIDs.insert(pickup.id)
             lemmings[index].tool = nil; lemmings[index].quantity = 0; lemmings[index].state = .walking
         }
         distract(index)
@@ -573,6 +576,12 @@ public struct Lemmings3Runtime: Sendable {
     public mutating func step() {
         guard !isComplete else { return }
         tick += 1
+        for pickupIndex in pickups.indices where gravityPickupIDs.contains(pickups[pickupIndex].id) && pickups[pickupIndex].quantity > 0 {
+            let x = pickups[pickupIndex].x
+            for _ in 0..<2 where pickups[pickupIndex].y + 8 < configuration.height && !isSolid(x, pickups[pickupIndex].y + 8) {
+                pickups[pickupIndex].y += 1
+            }
+        }
         updateExplosives()
         updateFireballs()
         updateCreatures()

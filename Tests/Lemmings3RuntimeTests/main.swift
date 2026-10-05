@@ -82,6 +82,20 @@ do {
     try require(worn.attributes[48 * 128 + 25] == 0x1000 && worn.terrainEdits[48 * 128 + 25] == false,
         "L3 walking wear follows successive foot positions")
     print("PASS L3 source soft terrain wears under walking feet")
+    var wornBoxTags = softTags
+    for y in 49..<56 { wornBoxTags[y * 128 + 24] = 0x1000 }
+    var wornPickup = Lemmings3Runtime.Pickup(id: 0, tool: .bricks, x: 24, y: 40)
+    wornPickup.ignoredBy = 0
+    var wornBox = try Lemmings3Runtime(configuration: .init(width: 128, height: 64, attributes: wornBoxTags,
+        entrance: .init(x: 100, y: 40), exits: [.init(x: 110, y: 46)], total: 1,
+        releaseInterval: 1000, releaseDelay: 1000, pickups: [wornPickup],
+        extras: [.init(x: 24, y: 48, direction: 1)]))
+    wornBox.step(); wornBox.step()
+    try require(wornBox.pickups[0].y == 40 && wornBox.attributes[48 * 128 + 24] == 0x1000,
+                "L3 original box stays while support first wears")
+    wornBox.step()
+    try require(wornBox.pickups[0].y == 42,
+                "L3 original box falls after its source support wears")
 
     func riseGame(direction: Int, blockedAhead: Bool = false) throws -> Lemmings3Runtime {
         var terrain = [UInt16](repeating: 0x1000, count: 128 * 64)
@@ -427,6 +441,26 @@ do {
     try require(builder.lemmings[0].tool == nil && builder.pickups.last?.quantity == 7, "L3 preserves quantity on drop")
     builder.step()
     try require(builder.lemmings[0].tool == nil, "L3 does not immediately reclaim its dropped box")
+    var dropTags = [UInt16](repeating: 0x1000, count: 128 * 64)
+    for y in 48..<64 { for x in 0..<128 { dropTags[y * 128 + x] = 0x20 } }
+    for y in 24..<32 { for x in 40..<64 { dropTags[y * 128 + x] = 0x20 } }
+    var fallingBox = try Lemmings3Runtime(configuration: .init(width: 128, height: 64,
+        attributes: dropTags, entrance: .init(x: 100, y: 40), exits: [.init(x: 110, y: 46)],
+        total: 1, releaseInterval: 1000, releaseDelay: 1000,
+        pickups: [.init(id: 0, tool: .sucker, x: 40, y: 16),
+                  .init(id: 1, tool: .spade, x: 80, y: 16)],
+        extras: [.init(x: 40, y: 24, direction: 1)]))
+    fallingBox.step()
+    try require(fallingBox.lemmings[0].tool == .sucker, "L3 ledge actor collects Sucker")
+    try require(fallingBox.assign(.drop, to: 0), "L3 ledge actor drops Sucker")
+    let droppedID = fallingBox.pickups.last!.id
+    let droppedY = fallingBox.pickups.last!.y
+    fallingBox.step()
+    try require(fallingBox.pickups.last!.id == droppedID && fallingBox.pickups.last!.y == droppedY + 2,
+                "L3 dropped Sucker falls from an open ledge")
+    for _ in 0..<20 { fallingBox.step() }
+    try require(fallingBox.pickups.last!.y == 40 && fallingBox.pickups[1].y == 16,
+                "L3 dropped Sucker lands on lower terrain while source pickup remains fixed")
     var stair = try Lemmings3Runtime(configuration: .init(width: 128, height: 64, attributes: tags,
         entrance: .init(x: 100, y: 40), exits: [.init(x: 110, y: 46)], total: 2,
         releaseInterval: 1000, releaseDelay: 1000,
