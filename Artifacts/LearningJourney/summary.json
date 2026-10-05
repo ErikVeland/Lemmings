@@ -1,21 +1,22 @@
 {
   "candidatePool": 1710,
   "duplicateObjectives": 0,
-  "fan": 136,
-  "fanPacks": 80,
+  "editorialExclusions": 2,
+  "fan": 135,
+  "fanPacks": 79,
   "fullRescueRequirements": 31,
   "largestDemandStep": 48,
   "largestScoreStep": 119.59272449985806,
-  "levels": 292,
-  "official": 156,
+  "levels": 290,
+  "official": 155,
   "ohNoLevels": 51,
   "preparationGaps": 0,
-  "skillIntroductions": 8,
+  "skillIntroductions": 7,
   "stages": {
     "Difficult": 107,
     "Expert": 59,
     "Fun": 7,
-    "Intermediate": 119
+    "Intermediate": 117
   },
   "supportTransitions": 3,
   "targetSize": 292,

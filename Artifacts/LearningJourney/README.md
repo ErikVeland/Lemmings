@@ -1,6 +1,6 @@
 # Oh My! All Lemmings!
 
-292 selected lessons from 1710 validated, deduplicated single-player candidates. 156 official levels and 136 library levels.
+290 selected lessons from 1710 validated, deduplicated single-player candidates. 155 official levels and 135 library levels.
 
 ## Selection before ordering
 
@@ -334,3 +334,7 @@ Solved and parked levels stay saved by identity. A new curriculum version rebuil
 | 290 | Expert | A group of entrances | Genesis Mayhem | Worker roles: basher + builder; basher + climber; basher + digger; blocker + bomber; builder; miner. Job changes: basher → builder; basher → digger; blocker → bomber; builder → basher; climber → basher; digger → basher. Also practise multiple-worker-coordination, release-rate-manipulation. |
 | 291 | Expert | Three Birds With One Stone | Lemmings Plus DOS Project PSYCHO | Worker roles: blocker + bomber + climber + floater; bomber + builder + climber + digger; bomber + climber + floater; builder; climber + floater + miner; floater. Job changes: blocker → bomber; builder → digger; climber → builder; climber → floater; digger → bomber; floater → blocker; floater → bomber; floater → miner. Three-step plans: builder → digger → bomber; climber → builder → digger; climber → floater → blocker; climber → floater → bomber; climber → floater → miner; floater → blocker → bomber. Also practise multiple-worker-coordination, release-rate-manipulation. |
 | 292 | Expert | Operation Rescue | CPs Level Pack | Combine substantial coordination with long worker sequences. |
+
+## Editorial withdrawals
+
+“Lost something?” (hidden exit) and “Mienrs <--- lol, typo” (unsupported miner introduction) are excluded from the current journey. Their source campaigns remain available. The exclusion manifest is `Resources/Progression/exclusions.json`. The current curriculum and summary reflect this withdrawal; the earlier solver audits remain historical evidence, not a new validation of the reduced journey.

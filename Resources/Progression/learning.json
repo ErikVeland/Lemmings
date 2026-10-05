@@ -220,37 +220,6 @@
     },
     {
       "concepts" : [
-        "miner"
-      ],
-      "demand" : 180,
-      "entry" : {
-        "catalogueRevision" : "1.2-runtime-v2",
-        "id" : "53A340B5-1FB4-A93D-EEF2-DFD30AD5D57E",
-        "identity" : {
-          "engine" : "classic",
-          "levelID" : "Ji Hoon Heaven 1.DAT#6",
-          "packID" : "fan:lldb-547"
-        },
-        "levelNameSnapshot" : "Mienrs <--- lol, typo",
-        "levelNumberSnapshot" : 7,
-        "packNameSnapshot" : "Ji Hoons Lemmings Remake Heaven",
-        "sourceRevision" : "8d2daffec1cf660515ad4680e015d48b923b81b70afa10956729a179c81e3971"
-      },
-      "focus" : "Discover: Miner",
-      "intrinsicDemand" : 61.41604050963738,
-      "introduced" : [
-        "miner"
-      ],
-      "needsSupport" : false,
-      "objective" : "introduce:miner",
-      "preparationGaps" : [
-
-      ],
-      "score" : 46.85817053250572,
-      "stage" : "Intermediate"
-    },
-    {
-      "concepts" : [
         "blocker"
       ],
       "demand" : 180,
@@ -566,39 +535,6 @@
 
       ],
       "score" : 135.11153198181864,
-      "stage" : "Intermediate"
-    },
-    {
-      "concepts" : [
-        "basher",
-        "builder",
-        "miner"
-      ],
-      "demand" : 196.203431372549,
-      "entry" : {
-        "catalogueRevision" : "1.2-runtime-v2",
-        "id" : "544A9C6D-45D9-37E0-BA4B-80C76D76A89E",
-        "identity" : {
-          "engine" : "classic",
-          "levelID" : "57:Tricky:28:1:5",
-          "packID" : "lemmings-LEVEL-120"
-        },
-        "levelNameSnapshot" : "Lost something?",
-        "levelNumberSnapshot" : 58,
-        "packNameSnapshot" : "Lemmings",
-        "sourceRevision" : "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7"
-      },
-      "focus" : "Share: Basher + Builder + Miner",
-      "intrinsicDemand" : 180,
-      "introduced" : [
-
-      ],
-      "needsSupport" : false,
-      "objective" : "apply:b46b95fcfe91fb465742",
-      "preparationGaps" : [
-
-      ],
-      "score" : 148.88073984370524,
       "stage" : "Intermediate"
     },
     {

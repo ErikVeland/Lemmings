@@ -50,13 +50,25 @@ class CurriculumTests(unittest.TestCase):
         self.assertTrue(all(not l['beginnerRank'] and l['intrinsicDemand'] < 180
                             and not l['requiresFullRescue'] for l in fallback))
 
+    def test_editorial_exclusions_survive_regeneration(self):
+        rows,replays = self.pool()
+        excluded=json.loads((ROOT/'Resources/Progression/exclusions.json').read_text())
+        for index, exclusion in enumerate(excluded):
+            rows[index]['entry']['identity']=exclusion['identity']
+        result=curation.select(rows,replays)
+        self.assertTrue(all(lesson['identity'] not in [e['identity'] for e in excluded]
+                            for lesson in result['lessons']))
+        manifest=json.loads((ROOT/'Resources/Progression/learning.json').read_text())
+        self.assertTrue(all(lesson['entry']['identity'] not in [e['identity'] for e in excluded]
+                            for lesson in manifest['lessons']))
+
     def test_replay_failure_cannot_supply_a_lesson(self):
         rows,replays = self.pool()
         for key,replay in replays.items():
             if key.startswith('floater'): replay['expected']['didWin'] = False
         self.assertIn('introduce:floater', curation.select(rows,replays)['unavailableOptionalObjectives'])
 
-    def test_inputs_after_a_win_do_not_hide_a_valid_lesson(self):
+    def test_inputs_after_a_win_cannot_supply_an_unplayable_lesson(self):
         rows,replays = self.pool()
         for replay_id,replay in replays.items():
             if replay_id.endswith('0'):
@@ -64,7 +76,7 @@ class CurriculumTests(unittest.TestCase):
             if replay_id.endswith('1'):
                 replay['events'][0]['tick'] = 0
         result = curation.select(rows,replays)
-        self.assertTrue(all(l['level'].endswith('0') for l in result['lessons']))
+        self.assertTrue(all(l['level'].endswith('2') for l in result['lessons']))
 
     def test_inputs_after_a_win_do_not_add_teaching_skills(self):
         rows,replays = self.pool()
@@ -131,7 +143,8 @@ class CurriculumTests(unittest.TestCase):
                 self.assertFalse(goal['requiresFullRescue'])
                 self.assertLess(goal['intrinsicDemand'],180)
             if lesson['stage']=='Fun': self.assertFalse(lesson['preparationGaps'])
-        self.assertEqual(introductions,8)
+        self.assertEqual(introductions,7)
+        self.assertIn("introduce:miner",plan["unavailableOptionalObjectives"])
         self.assertTrue(all(b['demand'] >= a['demand'] for a,b in zip(lessons,lessons[1:])))
         summary=json.loads((ROOT/'Artifacts/LearningJourney/summary.json').read_text())
         self.assertEqual(summary['levels'],len(lessons))

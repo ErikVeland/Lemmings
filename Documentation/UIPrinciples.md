@@ -90,7 +90,7 @@ At zero uses, replace the sprite with a steady red X. Reduced motion and reduced
 flashes keep the one-use sprite steady. The None size still hides the badge. Lemmings 3 has no
 shared skill stock: only Use shows the hovered lemming's remaining tool uses.
 
-Classic shows assigned permanent skills with a small pixel backpack: brown for
+Classic and Santa sprites show assigned permanent skills with a small pixel backpack: brown for
 Climber, orange for Floater, and purple for both. Gameplay settings offer a
 Show skill backpacks checkbox, enabled by Modern and disabled by Original.
 Individual changes select Custom and persist across machine presets.
@@ -200,3 +200,41 @@ Effect positions follow the visible playfield, including camera movement, aspect
 ratio and precision zoom. Keep events on the correct side when offscreen and
 reduce their level with distance. Global warnings and interface sounds stay
 centred. Do not add continuous construction loops over the original soundtrack.
+
+## Liquid fill
+
+Classic DOS and Mac artwork extend liquid columns only as far as the first solid
+terrain pixel. Do not resume the fill in cavities below a shelf or floor. Use the
+current terrain mask so digging, construction and rewind update the boundary.
+This visual extension does not change water collision or level data.
+
+## Transition timing
+
+Avoid abrupt visual and audio transitions. Ease from the current value when a
+transition changes direction, and do not restart a fade on repeated updates.
+After the final nuke explosion, restore music tempo and filter over 2.4 seconds
+with smooth easing. Keep this recovery running on the result screen.
+
+Journey and playlist continuation keeps the current level visible while the next
+level prepares. Do not show the library, title screen or level browser between
+turns. Present the next Hot Seat player’s Ready handover only after loading.
+
+## Solution replays and curated lessons
+
+Solution replays fill the current game window, with a compact stone control bar.
+Use the shared 1×, 2×, 3×, 5× and 10× speed model, including held F and Shift.
+Keep pause, single-step and rewind separate from the live attempt. Home and Goal,
+unassigned-lemming cycling, last-assignment tracking, drag/scroll panning and
+2×/4× zoom affect only the replay camera. Manual camera movement cancels automatic
+following. Zoom has no gameplay charge or saved-profile cost.
+These controls apply to simulated Classic solution replays. Recorded movies from
+Classic, L2 and L3 contain their original camera view and cannot track individual
+lemmings. A simulation replay format for the sequels remains separate work.
+
+The curated journey excludes known hidden-exit puzzles and unsuitable introductory
+lessons in `Resources/Progression/exclusions.json`. Original campaigns and fan packs
+keep their levels. Generation respects these exclusions and rejects replay commands
+after the winning tick. Existing journey runs retain their ID, owner and visit
+history when excluded entries are removed. The next retained entry becomes current.
+This is an editorial exclusion list, not a claim that all hidden exits have been
+automatically detected or that every lesson has a level-specific hint deck.

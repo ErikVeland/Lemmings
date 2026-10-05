@@ -18,7 +18,9 @@ is available when the roster has at least two players. The host stays in the ros
 
 The previous shared campaign, roster and next turn return when available.
 Otherwise, the host and one other profile form the first roster. **New Hot Seat**
-starts the shared campaign again from the beginning with the same players.
+starts the shared campaign again from the beginning with the same players, then
+returns to the library. The home screen refreshes the player badge and Resume
+action for the selected session. A new session cannot resume the previous one's attempt.
 The previous campaign stays in **Saved Hot Seats**, with its roster, next turn
 and house rule. Resume it there, then choose a game or its saved attempt.
 
@@ -51,6 +53,8 @@ A failed records save blocks the handover and level advancement.
 Classic, L2 and L3 playfields show the active attempt owner. Selecting the next
 player does not rename an attempt already in progress. Shared checkpoints can
 only resume in their matching shared campaign. Solo recovery cannot load them.
+A player/session mismatch preserves the run and asks you to resume its session.
+It does not report changed game rules or offer to discard that valid run.
 
 ## Playlists and shuffle
 
@@ -82,6 +86,11 @@ solution completed by two people does not become one person's individual record.
 
 ## Validation
 
+- `TEST_SCOPE=profile-sessions zsh Scripts/run-app-integration-tests.sh`: the
+  rendered New Hot Seat mouse target, confirmation, home Resume ownership,
+  confirmed profile switching, recovery and cross-engine session boundaries.
+  Repeated Solo/Hot Seat round trips keep campaign progress in separate save
+  namespaces and reload the selected mode before the library becomes available.
 - `Scripts/run-arcade-records-tests.sh`: roster, rotation, relaunch, shared-save
   persistence, solo namespaces, explicit Ready, keyboard repeats, controller
   focus and failed-save handovers.

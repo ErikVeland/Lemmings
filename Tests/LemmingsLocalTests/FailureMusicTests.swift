@@ -3,7 +3,7 @@ import XCTest
 
 final class FailureMusicTests: XCTestCase {
     @MainActor func testFinalPopRestoresTempoWhileFailureVisualsRemain() async throws {
-        let music = FailureMusicTransition(duration: 0.12)
+        let music = FailureMusicTransition(duration: 0.12, recoveryDuration: 0.12)
         let visual = FailureMoodTransition(duration: 0.12)
         var rates: [Double] = []
         music.onChange = { rates.append($0) }
@@ -34,7 +34,7 @@ final class FailureMusicTests: XCTestCase {
     }
 
     @MainActor func testOrdinaryLossAndWinningNukeKeepTheirMusicPolicy() async throws {
-        let music = FailureMusicTransition(duration: 0.05)
+        let music = FailureMusicTransition(duration: 0.05, recoveryDuration: 0.05)
         music.update(failed: true, isNuking: false, allPopped: true)
         try await Task.sleep(nanoseconds: 150_000_000)
         XCTAssertEqual(music.rate, 0.72, accuracy: 0.0001)

@@ -61,7 +61,9 @@ def application_signature(f):
 
 
 def select(pool, replays):
-    pool = [row for row in pool if not (replays.get(row['profile']['key']['replayRevision'])
+    excluded = {json.dumps(row['identity'], sort_keys=True) for row in json.loads(
+        (ROOT / 'Resources/Progression/exclusions.json').read_text())}
+    pool = [row for row in pool if key(row) not in excluded and not (replays.get(row['profile']['key']['replayRevision'])
                                       or replays.get(row['initialHash']) or {}).get('sourceRules')]
     pool = sorted(pool, key=lambda r: (demand(r), r['profile']['components']['solutionComplexity'],
                                      r['profile']['overallScore'], key(r)))
@@ -71,7 +73,7 @@ def select(pool, replays):
         if (replay and replay.get('expected', {}).get('didWin')
                 and replay['expected']['ticks'] > 0
                 and replay['initialStateHash'] == row['initialHash']
-                and all((0 if e.get('afterTick') else 1) <= e['tick']
+                and all((0 if e.get('afterTick') else 1) <= e['tick'] <= replay['expected']['ticks']
                         for e in replay['events'])):
             evidence[key(row)] = features(row, replay)
     chosen = {}; missing = []; used_signatures = set()
@@ -253,7 +255,7 @@ def select(pool, replays):
         lesson['applicationSignature'] = application_signature(evidence[json.dumps(lesson['identity'], sort_keys=True)])
     assert len({l['objective'] for l in lessons}) == len(lessons)
     return {'version':'curriculum-3', 'targetSize':292, 'poolSize':len(pool), 'lessons':lessons,
-            'selectionPolicy':'Official first within comparable 35-point demand bands; distinct observed applications; source-only replay commands and known Lemmini source packs excluded from the Classic path.',
+            'selectionPolicy':'Official first within comparable 35-point demand bands; distinct observed applications; editorial exclusions, source-only replay commands and known Lemmini source packs excluded from the Classic path; replay events must end by the winning tick.',
             'unavailableOptionalObjectives':missing,
             'limits':'Objectives describe observed routes. Opening introductions prefer a low-demand Fun, Easy or Tame candidate. When none is available, a low-demand non-beginner witness may introduce the skill in Intermediate. Full-rescue witnesses are excluded from introductions. Novice readability and technique necessity require playtesting.'}
 

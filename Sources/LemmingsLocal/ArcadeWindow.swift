@@ -89,7 +89,7 @@ import NxlvKit
         page.onBack = { [weak page] in if let page { GameScreen.shared.dismiss(page) } }
         GameScreen.shared.present(page, owner: owner, focus: carousel)
     }
-    func showProfiles(canSwitch: Bool, owner: NSWindow? = nil, beforeSwitch: @escaping () -> Void, afterSwitch: @escaping () -> Void, background: CGImage? = nil) {
+    func showProfiles(canSwitch: Bool, owner: NSWindow? = nil, beforeSwitch: @escaping () throws -> Void, afterSwitch: @escaping () -> Void, background: CGImage? = nil) {
         arcadeView.background = background
         arcadeView.highlightedAwards = []; arcadeView.focusedNewAward = nil
         arcadeView.mode = .profiles; arcadeView.canSwitch = canSwitch; arcadeView.profilesReturnToHotSeat = false
@@ -149,7 +149,7 @@ import NxlvKit
     }
     var sessionReturnMode: Mode?
     var canSwitch = true
-    var beforeSwitch: (() -> Void)?
+    var beforeSwitch: (() throws -> Void)?
     var afterSwitch: (() -> Void)?
     var onRetry: (() -> Void)?
     var onContinue: (() -> Void)?
@@ -557,9 +557,24 @@ import NxlvKit
     func playAsSelected() {
         let store = ArcadeStore.shared
         guard canSwitch, let id = selectedProfileID, id != store.records.activeProfileID else { return }
-        beforeSwitch?()
+        if store.hotSeatIsActive {
+            let sessionID = store.hotSeatID
+            GameScreen.shared.confirm("Switch player?", detail: "Your Hot Seat stays saved. Continue with this player's solo progress.",
+                actionTitle: "Play as \(initials)", owner: window) { [weak self] in
+                    guard let self, store === ArcadeStore.shared, store.hotSeatID == sessionID,
+                          self.selectedProfileID == id else { return }
+                    self.switchToSelectedProfile(id, store: store)
+                }
+        } else { switchToSelectedProfile(id, store: store) }
+    }
+    private func switchToSelectedProfile(_ id: String, store: ArcadeStore) {
+        do { try beforeSwitch?() }
+        catch { GameScreen.shared.message("Cannot switch player", detail: error.localizedDescription); return }
         guard store.saveProfile(id: id, initials: initials.isEmpty ? store.records.profile(id)?.initials ?? "LEM" : initials,
-                                portrait: portrait, select: true) != nil else { needsDisplay = true; return }
+                                portrait: portrait, select: true) != nil else {
+            GameScreen.shared.message("Cannot switch player", detail: store.storageError ?? "The player is no longer available.")
+            return
+        }
         afterSwitch?()
         onClose?()
     }
@@ -596,9 +611,12 @@ import NxlvKit
         let store = ArcadeStore.shared
         guard store.canDeleteProfile(id, runInProgress: runInProgress) else { return }
         let switching = id == store.records.activeProfileID
-        if switching { beforeSwitch?() }
-        let deleted = store.deleteProfile(id)
-        if switching { afterSwitch?() }
+        if switching {
+            do { try beforeSwitch?() }
+            catch { GameScreen.shared.message("Cannot delete player", detail: error.localizedDescription); return }
+        }
+        let deleted = store.deleteProfile(id, backgroundCleanup: true)
+        if switching && deleted { afterSwitch?() }
         if deleted { selectProfile(store.records.activeProfile) }
         needsDisplay = true
     }
@@ -698,15 +716,18 @@ import NxlvKit
             }
     }
     func confirmNewHotSeat() {
+        let store = ArcadeStore.shared
+        let previousSession = store.hotSeatID
         GameScreen.shared.confirm("Start a new Hot Seat?",
             detail: "Start with these players. Your current Hot Seat will stay saved.",
             actionTitle: "Start new Hot Seat", owner: window) { [weak self] in
-                guard ArcadeStore.shared.startNewHotSeat() else {
-                    GameScreen.shared.message("Cannot start Hot Seat", detail: ArcadeStore.shared.storageError
+                guard store === ArcadeStore.shared, store.hotSeatID == previousSession,
+                      store.startNewHotSeat() else {
+                    GameScreen.shared.message("Cannot start Hot Seat", detail: store.storageError
                         ?? "Choose at least two players, then try again.")
                     return
                 }
-                self?.needsDisplay = true
+                self?.closeSession()
             }
     }
     private func drawProfiles() {

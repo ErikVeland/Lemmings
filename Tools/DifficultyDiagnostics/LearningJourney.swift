@@ -99,7 +99,10 @@ struct Curriculum: Decodable {
     let lessons: [Goal]
 }
 let curriculum = try JSONDecoder().decode(Curriculum.self, from: Data(contentsOf: project.appendingPathComponent("Artifacts/LearningJourney/curriculum.json")))
-let goals = Dictionary(uniqueKeysWithValues: curriculum.lessons.map { ($0.identity, $0) })
+struct EditorialExclusion: Decodable { let identity: LevelCatalogueIdentity }
+let excluded = Set(try JSONDecoder().decode([EditorialExclusion].self, from: Data(contentsOf:
+    project.appendingPathComponent("Resources/Progression/exclusions.json"))).map(\.identity))
+let goals = Dictionary(uniqueKeysWithValues: curriculum.lessons.filter { !excluded.contains($0.identity) }.map { ($0.identity, $0) })
 guard Set(curriculum.lessons.map(\.objective)).count == curriculum.lessons.count else { throw LevelPlaylistError.invalidPool }
 let selected = pool.filter { goals[$0.entry.identity] != nil }
 guard selected.count == goals.count else { throw LevelPlaylistError.invalidPool }

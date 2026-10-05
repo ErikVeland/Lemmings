@@ -1,4 +1,24 @@
 {
+  "editorialExclusions": [
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "Ji Hoon Heaven 1.DAT#6",
+        "packID": "fan:lldb-547"
+      },
+      "reason": "Unsuitable miner introduction: no usable solution replay and no level-specific hints.",
+      "title": "Mienrs <--- lol, typo"
+    },
+    {
+      "identity": {
+        "engine": "classic",
+        "levelID": "57:Tricky:28:1:5",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "reason": "Hidden exit requires prior knowledge.",
+      "title": "Lost something?"
+    }
+  ],
   "lessons": [
     {
       "applicationSignature": "{\"changes\": [], \"concepts\": [\"basher\"], \"roles\": [[\"basher\"]], \"sequences\": []}",
@@ -118,23 +138,6 @@
       "purpose": "First assignment of the floater skill.",
       "requiresFullRescue": false,
       "sourceRank": "fan:lldb-505"
-    },
-    {
-      "applicationSignature": "{\"changes\": [[\"builder\", \"climber\"], [\"builder\", \"digger\"], [\"climber\", \"builder\"], [\"digger\", \"builder\"], [\"digger\", \"miner\"], [\"miner\", \"digger\"]], \"concepts\": [\"miner\"], \"roles\": [[\"builder\", \"climber\", \"digger\", \"miner\"]], \"sequences\": [[\"climber\", \"builder\", \"digger\"], [\"digger\", \"builder\", \"climber\"], [\"miner\", \"digger\", \"builder\"]]}",
-      "beginnerRank": false,
-      "evidence": "winning replay assignments and measured profile",
-      "identity": {
-        "engine": "classic",
-        "levelID": "Ji Hoon Heaven 1.DAT#6",
-        "packID": "fan:lldb-547"
-      },
-      "intrinsicDemand": 61.41604050963738,
-      "lesson": "Discover: Miner",
-      "level": "Mienrs <--- lol, typo",
-      "objective": "introduce:miner",
-      "purpose": "First assignment of the miner skill.",
-      "requiresFullRescue": false,
-      "sourceRank": "fan:lldb-547"
     },
     {
       "applicationSignature": "{\"changes\": [], \"concepts\": [\"climber\", \"release-rate-manipulation\"], \"roles\": [[\"climber\"]], \"sequences\": []}",
@@ -1240,23 +1243,6 @@
       "purpose": "Worker roles: bomber + builder; bomber + builder + climber; builder. Job changes: builder \u2192 bomber; climber \u2192 builder. Three-step plans: climber \u2192 builder \u2192 bomber. Also practise multiple-worker-coordination.",
       "requiresFullRescue": false,
       "sourceRank": "Mayhem"
-    },
-    {
-      "applicationSignature": "{\"changes\": [], \"concepts\": [\"basher\", \"builder\", \"miner\"], \"roles\": [[\"basher\"], [\"builder\"], [\"miner\"]], \"sequences\": []}",
-      "beginnerRank": false,
-      "evidence": "winning replay assignments and measured profile",
-      "identity": {
-        "engine": "classic",
-        "levelID": "57:Tricky:28:1:5",
-        "packID": "lemmings-LEVEL-120"
-      },
-      "intrinsicDemand": 180,
-      "lesson": "Share: Basher + Builder + Miner",
-      "level": "Lost something?",
-      "objective": "apply:b46b95fcfe91fb465742",
-      "purpose": "Worker roles: basher; builder; miner.",
-      "requiresFullRescue": false,
-      "sourceRank": "Tricky"
     },
     {
       "applicationSignature": "{\"changes\": [[\"blocker\", \"bomber\"]], \"concepts\": [\"blocker\", \"bomber\", \"release-rate-manipulation\"], \"roles\": [[\"blocker\", \"bomber\"]], \"sequences\": []}",
@@ -4967,7 +4953,7 @@
   ],
   "limits": "Objectives describe observed routes. Opening introductions prefer a low-demand Fun, Easy or Tame candidate. When none is available, a low-demand non-beginner witness may introduce the skill in Intermediate. Full-rescue witnesses are excluded from introductions. Novice readability and technique necessity require playtesting.",
   "poolSize": 1710,
-  "selectionPolicy": "Official first within comparable 35-point demand bands; distinct observed applications; source-only replay commands and known Lemmini source packs excluded from the Classic path.",
+  "selectionPolicy": "Official first within comparable 35-point demand bands; distinct observed applications; source-only replay commands and known Lemmini source packs excluded from the Classic path. Editorial exclusions are applied from Resources/Progression/exclusions.json.",
   "targetSize": 292,
   "unavailableOptionalObjectives": [
     "chain:basher:blocker",
@@ -5011,28 +4997,9 @@
     "chain:miner:bomber",
     "chain:miner:climber",
     "chain:miner:digger",
-    "split:basher:blocker",
-    "split:basher:bomber",
-    "split:basher:climber",
-    "split:basher:digger",
-    "split:basher:floater",
-    "split:blocker:bomber",
-    "split:blocker:climber",
-    "split:blocker:floater",
-    "split:blocker:miner",
-    "split:bomber:climber",
-    "split:bomber:digger",
-    "split:bomber:floater",
-    "split:bomber:miner",
-    "split:builder:climber",
-    "split:builder:digger",
-    "split:builder:floater",
-    "split:builder:miner",
-    "split:climber:digger",
-    "split:climber:floater",
-    "split:climber:miner",
-    "split:digger:floater",
-    "split:floater:miner",
+    "integrated-plan",
+    "introduce:miner",
+    "precision-economy",
     "sequence:basher:blocker:bomber",
     "sequence:basher:blocker:builder",
     "sequence:basher:blocker:digger",
@@ -5068,8 +5035,28 @@
     "sequence:builder:floater:miner",
     "sequence:climber:digger:floater",
     "spacing-coordination",
-    "integrated-plan",
-    "precision-economy"
+    "split:basher:blocker",
+    "split:basher:bomber",
+    "split:basher:climber",
+    "split:basher:digger",
+    "split:basher:floater",
+    "split:blocker:bomber",
+    "split:blocker:climber",
+    "split:blocker:floater",
+    "split:blocker:miner",
+    "split:bomber:climber",
+    "split:bomber:digger",
+    "split:bomber:floater",
+    "split:bomber:miner",
+    "split:builder:climber",
+    "split:builder:digger",
+    "split:builder:floater",
+    "split:builder:miner",
+    "split:climber:digger",
+    "split:climber:floater",
+    "split:climber:miner",
+    "split:digger:floater",
+    "split:floater:miner"
   ],
   "version": "curriculum-3"
 }

@@ -99,6 +99,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
   /// The whole game, from title to end.
   private var flow: ClassicGameFlow?
+  // Keep loaded progress attached to its owner while the session selection changes.
+  private var loadedFlowProgressKey: String?
   private var classicSelectionRecordsCampaignProgress = true
   private var launchChoice = 0
   private var launchMode: UnifiedGameLibrary.Mode = .quest
@@ -490,7 +492,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       // A newer engine must not strand a saved run. The session restores from
       // the saved inputs or state, and rejects only a state it cannot reproduce.
       guard checkpoint.profileID == ArcadeStore.shared.playingProfileID,
-        checkpoint.hotSeatID == ArcadeStore.shared.hotSeatID else { throw RunRecoveryError.differentGame }
+        checkpoint.hotSeatID == ArcadeStore.shared.hotSeatID else { throw RunRecoveryError.differentSession }
       if checkpoint.l2 != nil {
         guard let path = checkpoint.sourcePath else { throw RunRecoveryError.invalid }
         let next = try Lemmings2PlayWindow(root: URL(fileURLWithPath: path), recovery: checkpoint)
@@ -592,6 +594,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
       window.makeFirstResponder(playfield)
     } catch {
       isPaused = true; panel.isPaused = true
+      if case RunRecoveryError.differentSession = error {
+        GameScreen.shared.message("Cannot restore run", detail: error.localizedDescription)
+        return
+      }
       if case RunRecoveryError.busy = error {
         GameScreen.shared.message("Cannot restore run", detail: error.localizedDescription)
         return
@@ -1884,6 +1890,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     session = nil
     gamePicker.removeAllItems()
     picker.removeAllItems()
+    loadedFlowProgressKey = nil
     flow = ClassicGameFlow(ranks: [])
     rebuildLibrary()
     renderScreen()
@@ -2127,6 +2134,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       built.restore(entry.set.migrateProgress(saved))
     }
     flow = built
+    loadedFlowProgressKey = ArcadeStore.shared.progressKey("\(flowProgressKey).\(dataSetID(entry))")
     saveProgress()
     rankChoice = 0
     picker.removeAllItems()
@@ -4100,9 +4108,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
       guard arcade.profilesAreWritable, arcade.storageError == nil else { return }
       let advanced = try store.advanceLearningJourney(runID: run.id, won: false)
       if arcade.hotSeatIsActive { _ = arcade.passSessionTurn(after: playerID) }
-      returnToLibrary()
       if advanced { sequencePlaylistStore = store; startActiveSequence() }
-      else { try store.setActiveRun(nil); presentLearningJourney() }
+      else { returnToLibrary(); try store.setActiveRun(nil); presentLearningJourney() }
     } catch { GameScreen.shared.message("Journey not advanced", detail: error.localizedDescription) }
   }
 
@@ -4804,7 +4811,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
       let learning = run.source == .playlist(LearningJourney.playlistID)
       let advanced = try (learning ? store.advanceLearningJourney(runID: runID, won: true) : store.advanceActiveRun())
       if advanced, let next = store.activeRun {
-        returnToLibrary()
+        // Keep the completed level visible while the next level prepares.
+        // The commit path retires the previous engine once its replacement is ready.
         sequencePlaylistStore = store
         startBrowserLevel(next.currentEntry.identity, sequenceRunID: runID)
       } else {
@@ -5871,6 +5879,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
       returnToLibrary()
       flow = nil
+      loadedFlowProgressKey = nil
       activeTitle = nil
       playfield.classicScene = nil
       playfield.neoScene = rendered
@@ -6022,14 +6031,33 @@ let achievementProgressKey = "ClassicAchievementProgress"
   /// Saves progress for the game currently loaded.
   private func saveProgress() {
     guard !sequenceIsActive else { return }
-    guard let flow, dataSets.indices.contains(gamePicker.indexOfSelectedItem) else { return }
-    let key = ArcadeStore.shared.progressKey(
-      "\(flowProgressKey).\(dataSetID(dataSets[gamePicker.indexOfSelectedItem]))")
+    guard let flow, let key = loadedFlowProgressKey else { return }
     if let data = try? JSONEncoder().encode(flow.progress) {
       UserDefaults.standard.set(data, forKey: key)
     }
     refreshClassicLevelPickerAvailability()
     rebuildLibrary()
+  }
+
+  /// Reloads the selected campaign after changing the player or shared session.
+  private func reloadSessionCampaign() {
+    session = nil; panel.session = nil; playfield.session = nil
+    arcadeLevel = nil; arcadeReport = nil
+    checkpointLocation = nil; checkpointFan = nil; checkpointSourceURL = nil
+    arcadeProfileID = ArcadeStore.shared.playingProfileID
+    arcadeHotSeatID = ArcadeStore.shared.hotSeatID
+    refreshTurnDisplay()
+    guard dataSets.indices.contains(gamePicker.indexOfSelectedItem) else { return }
+    let entry = dataSets[gamePicker.indexOfSelectedItem]
+    var restored = ClassicGameFlow(campaign: entry.set.campaign)
+    if let data = savedClassicProgressData(for: entry),
+       let saved = try? JSONDecoder().decode(ClassicGameFlow.Progress.self, from: data) {
+      restored.restore(entry.set.migrateProgress(saved))
+    }
+    campaign = entry.set.campaign
+    flow = restored
+    loadedFlowProgressKey = ArcadeStore.shared.progressKey("\(flowProgressKey).\(dataSetID(entry))")
+    refreshClassicLevelPickerAvailability()
   }
 
   /// Draws whichever screen the game is on.
@@ -7193,9 +7221,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   @objc private func showProfiles() {
-    let canSwitch = !sequenceIsActive && !ArcadeStore.shared.hotSeatIsActive && (nativeL2Window?.canSwitchProfile ?? nativeL3Window?.canSwitchProfile
+    let canSwitch = !sequenceIsActive && (nativeL2Window?.canSwitchProfile ?? nativeL3Window?.canSwitchProfile
       ?? (phase != .playing || session == nil || session?.isComplete == true))
     ArcadeWindow.shared.showProfiles(canSwitch: canSwitch, owner: window, beforeSwitch: { [weak self] in
+        try self?.saveBeforeSessionChange()
         ReplayMovieWindow.shared.close(); self?.returnToLibrary()
       },
       afterSwitch: { [weak self] in
@@ -7205,7 +7234,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
         self.achievements = UserDefaults.standard.data(forKey: ArcadeStore.shared.progressKey(achievementProgressKey))
           .flatMap { try? JSONDecoder().decode(ClassicAchievementProgress.self, from: $0) } ?? ClassicAchievementProgress()
         self.achievementsWindow.update(progress: self.achievements)
-        self.arcadeLevel = nil; self.arcadeReport = nil
+        self.reloadSessionCampaign()
         if self.dataSets.indices.contains(self.gamePicker.indexOfSelectedItem) { self.selectDataSet() }
         self.refreshSequelProgress(); self.renderScreen()
       }, background: nativeL2Window?.arcadeBackdrop ?? nativeL3Window?.arcadeBackdrop ?? playfield.levelImage)
@@ -7286,7 +7315,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
       guard playing || sharedRun else { proceed(); return }
       GameScreen.shared.confirm("Change Hot Seat players?",
         detail: "Return to the library to change players. The current attempt keeps its owner and is saved for later.",
-        actionTitle: "Save and return to library", owner: self.window, action: proceed)
+        actionTitle: "Save and return to library", owner: self.window) { [weak self] in
+          do { try self?.saveBeforeSessionChange(); proceed() }
+          catch { GameScreen.shared.message("Session not changed", detail: error.localizedDescription) }
+        }
     }
     ArcadeWindow.shared.prepareSession = { [weak self] in
       guard let self else { return nil }
@@ -7295,12 +7327,14 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
     ArcadeWindow.shared.finishSession = { [weak self] in
       guard let self else { return }
+      self.reloadSessionCampaign()
       self.progress = UserDefaults.standard.data(forKey: ArcadeStore.shared.progressKey(progressKey))
         .flatMap { try? ModernCampaignProgress(encoded: $0) } ?? ModernCampaignProgress()
       self.achievements = UserDefaults.standard.data(forKey: ArcadeStore.shared.progressKey(achievementProgressKey))
         .flatMap { try? JSONDecoder().decode(ClassicAchievementProgress.self, from: $0) } ?? ClassicAchievementProgress()
       self.achievementsWindow.update(progress: self.achievements)
       self.refreshSequelProgress(); self.rebuildLibrary()
+      self.renderScreen()
     }
     let keyboard = GameplayKeyboard(window: window)
     gameplayKeyboard = keyboard
@@ -7521,7 +7555,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       return nil
     }
 
-    if event.keyCode == 122 || ["h", "i"].contains(event.charactersIgnoringModifiers?.lowercased() ?? "") {
+    if event.keyCode == 122 || event.charactersIgnoringModifiers?.lowercased() == "i" {
       if !event.isARepeat { self.showLevelHints() }
       return nil
     }

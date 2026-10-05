@@ -52,14 +52,14 @@ do {
     try check(Array(liquidPixels[(3 * 4 + 1) * 4..<(3 * 4 + 1) * 4 + 4]) == blue,
         "Liquid did not extend in its own colour")
     try check(liquidPixels[(4 * 4 + 1) * 4] == 200, "Liquid covered its floor")
-    try check(liquidPixels[(5 * 4 + 1) * 4 + 3] == 255, "Terrain cut off the liquid beneath it")
+    try check(liquidPixels[(5 * 4 + 1) * 4 + 3] == 0, "Liquid leaked through its floor")
     try check(liquidPixels[(5 * 4 + 2) * 4 + 3] == 255, "Open liquid did not reach the level bottom")
     try check(liquidPixels[(5 * 4) * 4 + 3] == 0, "Liquid extended beyond the tile width")
     var covered = [UInt8](repeating: 0, count: 4 * 6 * 4)
     liquidMask[1 * 4 + 1] = 1
     ClassicLiquidFill.draw(source: surface, sourceWidth: 2, sourceHeight: 2,
         x: 1, y: 0, into: &covered, width: 4, height: 6, solid: liquidMask, scale: 1)
-    try check(covered[(2 * 4 + 1) * 4 + 3] == 255, "Bridge covering the surface cut off the liquid below")
+    try check(covered[(2 * 4 + 1) * 4 + 3] == 0, "Covered surface leaked liquid below terrain")
     for scale in [1, 2] {
         for body: [UInt8] in [[32, 64, 192, 255], [192, 48, 0, 255], [48, 160, 48, 255]] {
             let width = 4 * scale, height = 6 * scale
@@ -79,9 +79,12 @@ do {
                     let offset = (y * width + x) * 4
                     if mask[(y / scale) * 4 + x / scale] != 0 {
                         try check(pixels[offset] == 200, "Liquid overwrote terrain at scale \(scale)")
+                    } else if (0...y).contains(where: { mask[($0 / scale) * 4 + x / scale] != 0 }) {
+                        try check(pixels[offset + 3] == 0,
+                            "Liquid leaked into a cavity below terrain at scale \(scale)")
                     } else {
                         try check(Array(pixels[offset..<offset + 4]) == body,
-                            "Liquid column has a gap below terrain at scale \(scale)")
+                            "Unobstructed liquid column has a gap at scale \(scale)")
                     }
                 }
             }
@@ -119,6 +122,6 @@ do {
         try bitmap.representation(using: .png, properties: [:])!.write(to: URL(fileURLWithPath: ".build/liquid-bridge-preview.png"))
         break
     }
-    print("PASS liquid colours, tile bounds, bridge occlusion and full-depth fill at DOS and Mac scales")
+    print("PASS liquid colours, tile bounds, terrain floors and open-column fill at DOS and Mac scales")
     print("PASS visible entrance and exit, animated objects, digging, and frame restoration after rewind")
 } catch { print("FAIL \(error)"); exit(1) }

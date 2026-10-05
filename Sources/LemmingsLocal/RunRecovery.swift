@@ -104,7 +104,7 @@ struct FanRunRecovery: Codable, Sendable {
 }
 
 enum RunRecoveryError: Error, LocalizedError {
-    case version, invalid, changed, busy, differentGame
+    case version, invalid, changed, busy, differentGame, differentSession
     var errorDescription: String? {
         switch self {
         case .version: return "This saved run needs a different app version. Its files were preserved."
@@ -112,6 +112,7 @@ enum RunRecoveryError: Error, LocalizedError {
         case .changed: return "The saved run changed in another app. Reopen the game before saving again."
         case .busy: return "Another app is saving this run. Try again."
         case .differentGame: return "The saved run uses different game data or rules. Its files were preserved."
+        case .differentSession: return "This run belongs to another player or Hot Seat. Resume that session first. Its files were preserved."
         }
     }
 }
@@ -147,6 +148,20 @@ final class RunRecoveryFile {
     /// Reads the primary file's header without the lock or backup recovery. Callers fall back to `load()`.
     func header() throws -> Header? {
         try verifiedPayload(read(url)).map { try JSONDecoder().decode(Header.self, from: $0) }
+    }
+    /// Keep ownership verification and removal under the same writer lock.
+    /// The lock file stays in place so another process cannot acquire a new inode.
+    func discard(profileID: String) throws -> Bool {
+        try locked {
+            let manager = FileManager.default
+            let data = try current() ?? (manager.fileExists(atPath: backupURL.path) ? read(backupURL) : nil)
+            guard let data, let payload = try verifiedPayload(data),
+                  try JSONDecoder().decode(Header.self, from: payload).profileID == profileID else { return false }
+            if manager.fileExists(atPath: backupURL.path) { try manager.removeItem(at: backupURL) }
+            if manager.fileExists(atPath: url.path) { try manager.removeItem(at: url) }
+            expected = nil
+            return true
+        }
     }
     private func read(_ path: URL) throws -> Data {
         var freshPath = path
@@ -274,10 +289,19 @@ final class RunRecoveryStore: @unchecked Sendable {
     func discard(profileID: String) throws {
         try queue.sync {
             for id in try runIDs() {
-                guard let value = try? file(id).load(), value.profileID == profileID else { continue }
-                files[id] = nil
-                for suffix in [".json", ".json.backup", ".json.lock"] {
-                    try? FileManager.default.removeItem(at: directory.appendingPathComponent(id.uuidString + suffix))
+                let candidate = RunRecoveryFile(url: directory.appendingPathComponent(id.uuidString + ".json"))
+                do {
+                    if try candidate.discard(profileID: profileID) {
+                        files[id] = nil; summaries[id] = nil
+                        if loadedRun?.id == id { loadedRun = nil }
+                    }
+                } catch RunRecoveryError.invalid {
+                    continue
+                } catch RunRecoveryError.version {
+                    continue
+                } catch is DecodingError {
+                    // Unknown or damaged data must not be deleted on behalf of a player.
+                    continue
                 }
             }
         }

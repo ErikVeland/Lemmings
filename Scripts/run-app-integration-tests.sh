@@ -38,6 +38,7 @@ rsync -a --delete "$sparkle_framework" "$test_app/Contents/Frameworks/"
 resource_app="${LEMMINGS_TEST_APP:-$project_dir/.build/local/Ultimate Lemmings.app}"
 ln -sfn "$resource_app/Contents/Resources" "$test_app/Contents/Resources"
 test_flags=()
+if [[ "${TEST_SCOPE:-all}" == profile-sessions ]]; then test_flags+=(-D PROFILE_SESSION_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == selection-hdr ]]; then test_flags+=(-D SELECTION_HDR_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == selection-raster ]]; then test_flags+=(-D SELECTION_HDR_TESTS -D SELECTION_RASTER_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == sessions ]]; then test_flags+=(-D SESSION_TESTS); fi

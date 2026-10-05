@@ -119,7 +119,7 @@ for duration in [75, 79, 84] {
   sweep.update(active: true, tick: 100 + duration + 21, durationTicks: duration,
     allPopped: true, now: 2 + NukeMusicSweep.returnDuration)
   precondition(sweep.amount < 0.0001)
-  sweep.advanceReturn(at: 4)
+  sweep.advanceReturn(at: 2 + NukeMusicSweep.returnDuration + 1)
   precondition(sweep.amount == 0)
   sweep.update(active: true, tick: 100 + duration / 2, durationTicks: duration, now: 5)
   precondition(sweep.amount > 0.45 && sweep.amount <= 0.5) // Rewind re-enters the countdown.
@@ -128,4 +128,4 @@ for duration in [75, 79, 84] {
   sweep.advanceReturn(at: 6.1)
   precondition(sweep.amount == 0) // Retry, undo and disabling HD cannot retain a return.
 }
-print("PASS last-pop hold, 280 ms filter return, stopped simulation ticks, result refresh, rewind and cancellation")
+print("PASS last-pop hold, 2.4 s filter return, stopped simulation ticks, result refresh, rewind and cancellation")

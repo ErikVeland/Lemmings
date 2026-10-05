@@ -50,6 +50,10 @@ public struct LearningJourney: Codable, Equatable, Sendable {
     public let version: String
     public let lessons: [Lesson]
 
+    public func excluding(_ identities: Set<LevelCatalogueIdentity>) -> Self {
+        Self(version: version, lessons: lessons.filter { !identities.contains($0.entry.identity) })
+    }
+
     public func validated() throws -> Self {
         guard version == Self.version, !lessons.isEmpty,
               lessons.count <= LevelPlaylist.maximumEntries,

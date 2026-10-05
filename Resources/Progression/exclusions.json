@@ -1,0 +1,20 @@
+[
+  {
+    "identity": {
+      "engine": "classic",
+      "levelID": "Ji Hoon Heaven 1.DAT#6",
+      "packID": "fan:lldb-547"
+    },
+    "title": "Mienrs <--- lol, typo",
+    "reason": "Unsuitable miner introduction: no usable solution replay and no level-specific hints."
+  },
+  {
+    "identity": {
+      "engine": "classic",
+      "levelID": "57:Tricky:28:1:5",
+      "packID": "lemmings-LEVEL-120"
+    },
+    "title": "Lost something?",
+    "reason": "Hidden exit requires prior knowledge."
+  }
+]
